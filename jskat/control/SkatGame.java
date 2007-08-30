@@ -1191,11 +1191,6 @@ public class SkatGame extends Observable {
 						throw new WrongCardException(
 								"AIPlayerMJL played a card that is not allowed");
 
-					} else if (currPlayer instanceof jskat.player.AIPlayerJS.AIPlayerJS) {
-
-						throw new WrongCardException(
-								"AIPlayerJS played a card that is not allowed");
-
 					} else if (currPlayer instanceof jskat.player.AIPlayerRND.AIPlayerRND) {
 
 						throw new WrongCardException(
