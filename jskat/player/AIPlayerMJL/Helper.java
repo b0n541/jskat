@@ -1,0 +1,280 @@
+/*
+
+@ShortLicense@
+
+Author: @MJL@
+
+Released: @ReleaseDate@
+
+*/
+
+package jskat.player.AIPlayerMJL;
+
+import org.apache.log4j.Logger;
+
+import jskat.share.CardVector;
+import jskat.share.Card;
+import jskat.share.SkatConstants;
+import jskat.share.SkatRules;
+
+/**
+ * @author Markus J. Luzius <markus@luzius.de>
+ *
+ */
+public class Helper {
+
+    private static final Logger log = Logger.getLogger(jskat.player.AIPlayerMJL.Helper.class);
+
+	/**
+	 * Checks whether the current trick would be won by the single player,
+	 * so that the AIPlayer can decide which card to play
+	 * @param trick All the necessary trick infos
+	 * @return true, if the single player would win the trick
+	 */
+	// public static boolean isSinglePlayerWin(CardVector trick, int trump, int gameType, int singlePlayerPos) {
+	public static boolean isSinglePlayerWin(TrickInfo trick) {
+		if(trick.getTrick().size()<2) return false;
+		if(trick.getTrick().size()<trick.getSinglePlayerPos()-1) return false;
+		if(trick.getSinglePlayerPos() == 0) {
+			if(trick.getCard(0).beats(trick.getCard(1), trick.getGameInfo().getGameType(), trick.getGameInfo().getTrump(), trick.getCard(0).getSuit()))
+					return true;
+				else
+					return false;
+		}
+		else if (trick.getSinglePlayerPos() == 1){
+			if(trick.getCard(1).beats(trick.getCard(0), trick.getGameInfo().getGameType(), trick.getGameInfo().getTrump(), trick.getCard(0).getSuit()))
+					return true;
+				else
+					return false;
+		}
+		else {
+			log.warn("Request for wrong singlePlayerPos ("+trick.getSinglePlayerPos()+")!");
+			return false;
+		}
+	}
+
+	/** Decides whether a player is able to beat a certain card 
+	 * @param cards hand of the player
+	 * @param cardToBeat card that should be beaten
+	 * @param trump current trump color
+	 * @param initialCard initial card of the trick
+	 * @param gameType game type
+	 * @return true, if <b>cards</b> contain a card that can beat the <b>cardToBeat</b>
+	 */
+	public static int isAbleToBeat(CardVector cards, Card cardToBeat, int trump, Card initialCard, int gameType) {
+		int result = -1;
+		for(int i=0; i<cards.size();i++) {
+			if(SkatRules.isCardAllowed(cards.getCard(i), cards, initialCard, gameType, trump)) {
+				if(cards.getCard(i).beats(cardToBeat, gameType, trump, initialCard.getSuit())) {
+					log.debug(cards.getCard(i)+" can beat "+cardToBeat+".");
+					result = i;
+					break;				
+				}
+			}
+		}
+		return result;
+	}
+
+	/** Decides whether a player is able to match a certain initial card
+	 * @param cards
+	 * @param trump
+	 * @param initialCard
+	 * @param gameType
+	 * @return true if there is at least one card in the hand that can match <b>initialCard</b>
+	 */
+	public static boolean isAbleToMatch(CardVector cards, int trump, Card initialCard, int gameType) {
+		boolean result = false;
+		for(int i=0; i<cards.size();i++) {
+			boolean sameSuit = (cards.getCard(i).getSuit() == initialCard.getSuit());
+			if(SkatRules.isCardAllowed(cards.getCard(i), cards, initialCard, gameType, trump)) {
+				if(gameType != SkatConstants.NULL) {
+					if(cards.getCard(i).isTrump(trump) && initialCard.isTrump(trump)) {
+						result = true;
+					}
+					else if (!cards.getCard(i).isTrump(trump) && !initialCard.isTrump(trump) && sameSuit) {
+						result = true;
+					}
+				}
+				else if(sameSuit) {
+					result = true;
+				}
+				
+			}
+			if(result) break;
+		}
+		return result;
+	}
+	
+	/** Gets the highest trump card out of a given hand
+	 * @param cards a hand
+	 * @param currTrump the current trump color
+	 * @return index of the highest trump, 0 if there is no trump
+	 */
+	public static int getHighestTrump(CardVector cards, int currTrump) {
+		if(cards.size()<1) return 0;
+		int index = 0;
+		for (int i=1;i<cards.size();i++) {
+			if(cards.getCard(i).beats(cards.getCard(index), SkatConstants.SUIT, currTrump, currTrump))
+				index = i;
+		}
+		return index;
+	}
+
+	/** Checks, whether there is at least one trump card in a given hand
+	 * @param cards a hand
+	 * @param currTrump trump color
+	 * @return true, if there is at least one trump card in the hand
+	 */
+	public static boolean hasTrump(CardVector cards, int currTrump) {
+		return (cards.hasSuit(currTrump) ||
+		cards.contains(SkatConstants.CLUBS, SkatConstants.JACK) ||
+		cards.contains(SkatConstants.SPADES, SkatConstants.JACK) ||
+		cards.contains(SkatConstants.HEARTS, SkatConstants.JACK) ||
+		cards.contains(SkatConstants.DIAMONDS, SkatConstants.JACK));
+	}
+
+	/** Gets the game multiplier
+	 * @param cards a hand
+	 * @return multiplier (only positive values)
+	 */
+	public static int getMultiplier(CardVector cards) {
+		int multiplier = 2;
+		if (cards.contains(SkatConstants.CLUBS, SkatConstants.JACK)) {
+			// game was played with jacks
+			if (cards.contains(SkatConstants.SPADES, SkatConstants.JACK)) {
+				multiplier++;
+				if (cards.contains(SkatConstants.HEARTS, SkatConstants.JACK)) {
+					multiplier++;
+					if (cards.contains(SkatConstants.DIAMONDS, SkatConstants.JACK)) {
+						multiplier++;
+					}
+				}
+			}
+		}
+		else {
+			// game was played without jacks
+			if (!cards.contains(SkatConstants.SPADES, SkatConstants.JACK)) {
+				multiplier++;
+				if (!cards.contains(SkatConstants.HEARTS, SkatConstants.JACK)) {
+					multiplier++;
+					if (!cards.contains(SkatConstants.DIAMONDS, SkatConstants.JACK)) {
+						multiplier++;
+					}
+				}
+			}
+		}
+		return multiplier;
+	}
+
+	/** Converts a hand's and the skat's cards of a certain suit to a binary stream  
+	 * @param cards a hand
+	 * @param skat the skat
+	 * @param suit only cards of this suit are considered
+	 * @return binary value of the available cards
+	 */
+	public static int suitCardsToBinaryWithSkat(CardVector cards, CardVector skat, int suit) {
+		int counter = 0;
+		if (cards.contains(suit, SkatConstants.SEVEN) || skat.contains(suit, SkatConstants.SEVEN)) counter+=1;
+		if (cards.contains(suit, SkatConstants.EIGHT) || skat.contains(suit, SkatConstants.EIGHT)) counter+=2;
+		if (cards.contains(suit, SkatConstants.NINE)  || skat.contains(suit, SkatConstants.NINE))  counter+=4;
+		if (cards.contains(suit, SkatConstants.QUEEN) || skat.contains(suit, SkatConstants.QUEEN)) counter+=8;
+		if (cards.contains(suit, SkatConstants.KING)  || skat.contains(suit, SkatConstants.KING))  counter+=16;
+		if (cards.contains(suit, SkatConstants.TEN)   || skat.contains(suit, SkatConstants.TEN))   counter+=32;
+		if (cards.contains(suit, SkatConstants.ACE)   || skat.contains(suit, SkatConstants.ACE))   counter+=64;
+		if (cards.contains(suit, SkatConstants.JACK)   || skat.contains(suit, SkatConstants.JACK))   counter+=128;
+		return counter;
+	}
+
+	/** Converts a hand's cards of a certain suit to a binary stream
+	 * @param cards a hand
+	 * @param suit only cards of this suit are considered
+	 * @return binary value of the available cards
+	 */
+	public static int suitCardsToBinary(CardVector cards, int suit) {
+		int counter = 0;
+		if (cards.contains(suit, SkatConstants.SEVEN)) counter+=1;
+		if (cards.contains(suit, SkatConstants.EIGHT)) counter+=2;
+		if (cards.contains(suit, SkatConstants.NINE)) counter+=4;
+		if (cards.contains(suit, SkatConstants.QUEEN)) counter+=8;
+		if (cards.contains(suit, SkatConstants.KING)) counter+=16;
+		if (cards.contains(suit, SkatConstants.TEN)) counter+=32;
+		if (cards.contains(suit, SkatConstants.ACE)) counter+=64;
+		if (cards.contains(suit, SkatConstants.JACK))   counter+=128;
+		return counter;
+	}
+	
+	/** Converts a hand's cards of a certain suit to a binary stream for a null game
+	 * (which means that jacks are also considered)
+	 * @param cards a hand
+	 * @param suit only cards of this suit are considered
+	 * @return binary value of the available cards
+	 */
+	public static int suitCardsToBinaryNullGame(CardVector cards, int suit) {
+		int counter = 0;
+		if (cards.contains(suit, SkatConstants.SEVEN)) counter+=1;
+		if (cards.contains(suit, SkatConstants.EIGHT)) counter+=2;
+		if (cards.contains(suit, SkatConstants.NINE)) counter+=4;
+		if (cards.contains(suit, SkatConstants.TEN)) counter+=8;
+		if (cards.contains(suit, SkatConstants.JACK)) counter+=16;
+		if (cards.contains(suit, SkatConstants.QUEEN)) counter+=32;
+		if (cards.contains(suit, SkatConstants.KING)) counter+=64;
+		if (cards.contains(suit, SkatConstants.ACE)) counter+=128;
+		return counter;
+	}
+
+	/** Gets a binary representation of the jacks in the given hand
+	 * @param cards a hand
+	 * @return binary value of the available jacks
+	 */
+	public static int getJacks(CardVector cards) {
+		int counter = 0;
+		if (cards.contains(SkatConstants.CLUBS, SkatConstants.JACK)) counter+=1;
+		if (cards.contains(SkatConstants.SPADES, SkatConstants.JACK)) counter+=2;
+		if (cards.contains(SkatConstants.HEARTS, SkatConstants.JACK)) counter+=4;
+		if (cards.contains(SkatConstants.DIAMONDS, SkatConstants.JACK)) counter+=8;
+		return counter;
+	}
+
+	/** Gets the number of jacks in the given hand
+	 * @param cards a hand
+	 * @return number of jacks
+	 */
+	public static int countJacks(CardVector cards) {
+		int counter = 0;
+		if (cards.contains(SkatConstants.CLUBS, SkatConstants.JACK)) counter++;
+		if (cards.contains(SkatConstants.SPADES, SkatConstants.JACK)) counter++;
+		if (cards.contains(SkatConstants.HEARTS, SkatConstants.JACK)) counter++;
+		if (cards.contains(SkatConstants.DIAMONDS, SkatConstants.JACK)) counter++;
+		return counter;
+	}
+
+	/** Converts a binary stream to a suit color
+	 * @param binary binary stream (four bits)
+	 * @return suit color, -1 if more than one bit is set
+	 */
+	public static int binaryToSuit(int binary) {
+		int result = -1;
+		if(!(binary==1 || binary==2 || binary==4 || binary==8)) {
+			log.warn(".binaryToSuit(): warning: more than one suit possible! -->"+binary);
+			return result;
+		}
+		if((binary & 1) > 0) result = SkatConstants.DIAMONDS;
+		if((binary & 2) > 0) result = SkatConstants.HEARTS;
+		if((binary & 4) > 0) result = SkatConstants.SPADES;
+		if((binary & 8) > 0) result = SkatConstants.CLUBS;
+		return result;
+	}
+
+	/** Converts the suit value to a suit name (one character) <br>
+	 * "D" for Diamonds, "H" for Hearts, "S" for Spades, "C" for Clubs 
+	 * @param suit suit value
+	 * @return suit name ("x" if not recognized)
+	 */
+	public static String suitName(int suit) {
+		if(suit == SkatConstants.DIAMONDS) return "D";
+		else if(suit == SkatConstants.HEARTS) return "H";
+		else if(suit == SkatConstants.SPADES) return "S";
+		else if(suit == SkatConstants.CLUBS) return "C";
+		else return "x";
+	}
+}

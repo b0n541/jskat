@@ -1,0 +1,155 @@
+/*
+
+@ShortLicense@
+
+Authors: @JS@
+         @MJL@
+
+Released: @ReleaseDate@
+
+*/
+
+package jskat.test.share;
+
+import java.util.HashSet;
+import java.util.Iterator;
+
+import jskat.share.Card;
+import jskat.share.CardVector;
+import jskat.share.SkatConstants;
+
+/**
+ * @author Markus J. Luzius <markus@luzius.de>
+ * 
+ */
+public class TestHelper {
+
+	/**
+	 * Build a CardVector out of a given string of cards. suit and value must be
+	 * separated by any character, as well as each card.<br>
+	 * Suits are represented by D (Diamonds), H (Hearts), S (Spades) and C
+	 * (Clubs)<br>
+	 * Values are represented by A (Ace), T (10), K (King), Q (Queen), J (Jack),
+	 * 9, 8 and 7<br>
+	 * <b>Example:</b> S-J,D-J,H-A,H-T,C-T
+	 * 
+	 * @param cards
+	 *            string with the CardVector to build
+	 * @return a valid CardVector
+	 */
+	public static CardVector buildDeck(String cards) {
+		// TODO (mjl) use new constructor in Card
+		System.out.println("cards: [" + cards + "], length=" + cards.length());
+		CardVector deck = new CardVector();
+		int suit = -1;
+		int value = -1;
+		int i = 0;
+		while (cards.length() > i * 4) {
+			System.out.println("i=" + i + ", substring of " + cards + " from "
+					+ i * 4);
+
+			String card = cards.toUpperCase().substring(i * 4, i * 4 + 3);
+			System.out.println("i=" + i + ", card: [" + card + "]");
+			suit = convertSuit(card.charAt(0));
+			if (suit >= 0) {
+				value = convertValue(card.charAt(2));
+			} else {
+				suit = convertSuit(card.charAt(2));
+				value = convertValue(card.charAt(0));
+			}
+			if (suit >= 0 && value >= 0)
+				deck.add(new Card(suit, value));
+			i++;
+		}
+
+		System.out.println("deck: [" + deck + "]");
+
+		return deck;
+	}
+
+	private static int convertSuit(char c) {
+		int result = -1;
+		System.out.println("suit: [" + c + "]");
+		switch (c) {
+		case 'D':
+			result = SkatConstants.DIAMONDS;
+			break;
+		case 'H':
+			result = SkatConstants.HEARTS;
+			break;
+		case 'S':
+			result = SkatConstants.SPADES;
+			break;
+		case 'C':
+			result = SkatConstants.CLUBS;
+			break;
+		}
+		return result;
+	}
+
+	private static int convertValue(char c) {
+		int result = -1;
+		System.out.println("value: [" + c + "]");
+		switch (c) {
+		case 'A':
+			result = SkatConstants.ACE;
+			break;
+		case '1':
+		case 'T':
+			result = SkatConstants.TEN;
+			break;
+		case 'K':
+			result = SkatConstants.KING;
+			break;
+		case 'Q':
+			result = SkatConstants.QUEEN;
+			break;
+		case 'J':
+			result = SkatConstants.JACK;
+			break;
+		case '9':
+			result = SkatConstants.NINE;
+			break;
+		case '8':
+			result = SkatConstants.EIGHT;
+			break;
+		case '7':
+			result = SkatConstants.SEVEN;
+			break;
+		}
+		return result;
+	}
+
+	public static void dealCardset(HashSet[] dealtCards, int selection) {
+		switch (selection) {
+		// One of the "perfect" grand hand card distributions
+		// for playing durchmarsch or grand hand
+		case 0:
+			dealtCards[0] = convertCardsToHashSet(buildDeck("Q-C,9-C,8-C,7-C,Q-S,9-S,8-S,7-S,A-H,T-H"));
+			dealtCards[1] = convertCardsToHashSet(buildDeck("K-H,Q-H,9-H,8-H,7-H,A-D,T-D,K-D,Q-D,9-D"));
+			dealtCards[2] = convertCardsToHashSet(buildDeck("J-C,J-S,J-H,J-D,A-C,T-C,K-C,A-S,T-S,K-S"));
+			dealtCards[3] = convertCardsToHashSet(buildDeck("8-D,7-D"));
+			break;
+		// a distribution for playing a jungfrau ramsch
+		case 1:
+			dealtCards[0] = convertCardsToHashSet(buildDeck("Q-C,9-C,8-C,7-C,Q-S,9-S,8-S,7-S,7-H,8-H"));
+			dealtCards[1] = convertCardsToHashSet(buildDeck("A-C,T-S,A-S,Q-H,K-H,T-H,A-H,9-D,Q-D,K-D"));
+			dealtCards[2] = convertCardsToHashSet(buildDeck("J-C,J-S,J-H,J-D,9-H,K-S,7-D,8-D,K-C,T-C"));
+			dealtCards[3] = convertCardsToHashSet(buildDeck("A-D,T-D"));
+			break;
+		}
+	}
+
+	private static HashSet convertCardsToHashSet(CardVector cards) {
+		
+		HashSet<Card> result = new HashSet<Card>();
+		Iterator iter = cards.iterator();
+		
+		while (iter.hasNext()) {
+			
+			result.add((Card) iter.next());
+		}
+		
+		return result;
+	}
+}
