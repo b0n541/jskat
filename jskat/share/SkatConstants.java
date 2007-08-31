@@ -91,9 +91,10 @@ public final class SkatConstants {
     96,  99, 100, 108, 110,
     117, 120, 121, 126, 130,
     132, 135, 140, 143, 144,
-    150, 154, 156, 165, 168,
-    180, 192, 216, 240, 264,
-    288, 332, 356, 380};
+    150, 153, 154, 156, 160, 
+    162, 165, 168, 170, 176,
+    180, 187, 192, 198, 204,
+    216, 240, 264};
     
     // Values for the different cards for win and loss calculation
     public final static int SEVEN_VAL =  0;
