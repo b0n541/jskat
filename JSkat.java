@@ -113,9 +113,9 @@ public class JSkat {
 	 * 
 	 * @return Vector of class names
 	 */
-	private static Vector getAIPlayer() {
+	private static Vector<String> getAIPlayer() {
 
-		Vector aiPlayer = new Vector();
+		Vector<String> aiPlayer = new Vector<String>();
 		URL dirURL = ClassLoader.getSystemResource("jskat/player");
 		
 		log.debug(dirURL.getProtocol());
@@ -130,20 +130,20 @@ public class JSkat {
 			File playerPath = new File(ClassLoader.getSystemResource("jskat/player").getPath());
 
 			// no exception --> we are in a file system
-			aiPlayer = getAIPlayerFromFileSystem(playerPath);
+			aiPlayer.addAll(getAIPlayerFromFileSystem(playerPath));
 
 		} else {
 
 			// we are in the JAR file
 			log.debug("in JAR file");
 
-			aiPlayer = getAIPlayerFromJARFile();
+			aiPlayer.addAll(getAIPlayerFromJARFile());
 		}
 
 		return aiPlayer;
 	}
 
-	private static Vector getAIPlayerFromFileSystem(File playerPath) {
+	private static Vector<String> getAIPlayerFromFileSystem(File playerPath) {
 
 		Vector<String> aiPlayer = new Vector<String>();
 //		File currPathFile = null;
@@ -186,7 +186,7 @@ public class JSkat {
 		return aiPlayer;
 	}
 
-	private static Vector getAIPlayerFromJARFile() {
+	private static Vector<String> getAIPlayerFromJARFile() {
 
 		Vector<String> aiPlayer = new Vector<String>();
 
