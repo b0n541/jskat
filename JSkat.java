@@ -16,11 +16,16 @@ import javax.swing.UIManager;
 
 import org.apache.log4j.Logger;
 
+import java.util.Enumeration;
 import java.util.Vector;
 import java.util.StringTokenizer;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import jskat.data.JSkatDataModel;
@@ -116,8 +121,11 @@ public class JSkat {
 	private static Vector<String> getAIPlayer() {
 
 		Vector<String> aiPlayer = new Vector<String>();
-		URL dirURL = ClassLoader.getSystemResource("jskat/player");
 		
+		log.debug(ClassLoader.getSystemResource("jskat/player"));
+		
+		URL dirURL = ClassLoader.getSystemResource("jskat/player");
+		log.debug(dirURL);
 		log.debug(dirURL.getProtocol());
 		
 		// get the path to the player directory
@@ -136,28 +144,25 @@ public class JSkat {
 
 			// we are in the JAR file
 			log.debug("in JAR file");
-
-			aiPlayer.addAll(getAIPlayerFromJARFile());
+			log.debug(dirURL.getPath().substring(0, dirURL.getPath().indexOf('!')));
+			
+			JarFile jarFile;
+			try {
+				jarFile = new JarFile(dirURL.getPath().substring(0, dirURL.getPath().indexOf('!')));
+				aiPlayer.addAll(getAIPlayerFromJARFile(jarFile));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
-
+		
 		return aiPlayer;
 	}
 
 	private static Vector<String> getAIPlayerFromFileSystem(File playerPath) {
 
 		Vector<String> aiPlayer = new Vector<String>();
-//		File currPathFile = null;
-/*
-		try {
 
-			currPathFile = new File(ClassLoader.getSystemResource(
-					"jskat/player").toURI().getPath());
-
-		} catch (URISyntaxException except) {
-
-			except.printStackTrace();
-		}
-*/
 		log.debug(playerPath.isDirectory() + " " + playerPath.isFile());
 		log.debug(playerPath.getAbsolutePath());
 
@@ -186,43 +191,36 @@ public class JSkat {
 		return aiPlayer;
 	}
 
-	private static Vector<String> getAIPlayerFromJARFile() {
+	private static Vector<String> getAIPlayerFromJARFile(JarFile jarFile) {
 
 		Vector<String> aiPlayer = new Vector<String>();
 
-		try {
+		// take the JAR-File and search there
+		Enumeration<JarEntry> jarFileEntries = jarFile.entries();
 
-			// take the JAR-File and search there
-			java.util.jar.JarFile jarFile = new java.util.jar.JarFile(System
-					.getProperty("java.class.path"));
-			java.util.Enumeration jarFileEntries = jarFile.entries();
+		while (jarFileEntries.hasMoreElements()) {
 
-			while (jarFileEntries.hasMoreElements()) {
+			String currEntry = jarFileEntries.nextElement().toString();
+			
+			log.debug(currEntry);
+			
+			StringTokenizer tokenizer = new StringTokenizer(currEntry, "/");
+			if (tokenizer.countTokens() == 4
+					&& tokenizer.nextToken().compareTo("jskat") == 0
+					&& tokenizer.nextToken().compareTo("player") == 0) {
 
-				String currEntry = jarFileEntries.nextElement().toString();
+				// entry has the structure "jskat/player/*
+				String newAIPlayer = tokenizer.nextToken();
 
-				StringTokenizer tokenizer = new StringTokenizer(currEntry, "/");
-				if (tokenizer.countTokens() == 4
-						&& tokenizer.nextToken().compareTo("jskat") == 0
-						&& tokenizer.nextToken().compareTo("player") == 0) {
+				if (tokenizer.nextToken().compareTo(newAIPlayer + ".class") == 0) {
 
-					// entry has the structure "jskat/player/*
-					String newAIPlayer = tokenizer.nextToken();
-
-					if (tokenizer.nextToken().compareTo(newAIPlayer + ".class") == 0) {
-
-						// there is a file
-						// jskat/player/AIPlayerName/AIPlayer.class
-						log.debug(currEntry);
-						log.debug("AIPlayer found: " + newAIPlayer);
-						aiPlayer.add(newAIPlayer);
-					}
+					// there is a file
+					// jskat/player/AIPlayerName/AIPlayer.class
+					log.debug(currEntry);
+					log.debug("AIPlayer found: " + newAIPlayer);
+					aiPlayer.add(newAIPlayer);
 				}
 			}
-
-		} catch (java.io.IOException e) {
-
-			log.error("No JAR-File!");
 		}
 
 		return aiPlayer;
