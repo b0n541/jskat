@@ -31,7 +31,7 @@ public class JSkatActions {
                         JSkatDataModel dataModel,
                         JSkatFrame mainFrame,
                         JSkatGraphicRepository jskatBitmaps,
-                        Vector aiPlayer) {
+                        Vector<String> aiPlayer) {
 
         // Actions definition
         aboutDialogAction = new AboutDialogAction(dataModel, mainFrame);

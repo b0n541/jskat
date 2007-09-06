@@ -46,7 +46,7 @@ public class NewSkatSeriesDialogAction implements ActionListener {
 	 *            The AIPlayer class names that were found during startup
 	 */
 	public NewSkatSeriesDialogAction(JSkatMaster jskatMaster,
-			JSkatDataModel dataModel, JFrame parent, Vector aiPlayer) {
+			JSkatDataModel dataModel, JFrame parent, Vector<String> aiPlayer) {
 
 		newSkatTableDialog = new NewSkatSeriesDialog(jskatMaster, dataModel,
 				aiPlayer, parent, true);

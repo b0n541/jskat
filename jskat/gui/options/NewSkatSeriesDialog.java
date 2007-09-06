@@ -70,7 +70,7 @@ public class NewSkatSeriesDialog extends JDialog {
 	 *            TRUE if the dialog is modal
 	 */
 	public NewSkatSeriesDialog(JSkatMaster jskatMaster,
-			JSkatDataModel dataModel, Vector aiPlayer, JFrame parent,
+			JSkatDataModel dataModel, Vector<String> aiPlayer, JFrame parent,
 			boolean modal) {
 
 		super(parent, modal);
@@ -86,7 +86,7 @@ public class NewSkatSeriesDialog extends JDialog {
 	/**
 	 * This method is called from within the constructor to initialize the form.
 	 */
-	private void initComponents(Vector aiPlayer) {
+	private void initComponents(Vector<String> aiPlayer) {
 
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setTitle(jskatStrings.getString("new_skat_round"));
@@ -210,7 +210,7 @@ public class NewSkatSeriesDialog extends JDialog {
 			for (int i = 0; i < aiPlayer.size(); i++) {
 
 				// Now all AI player classes that were found at startup
-				comboBoxModel.addElement(((String) aiPlayer.get(i)));
+				comboBoxModel.addElement(aiPlayer.get(i));
 			}
 
 			JComboBox currentPlayerClass = new JComboBox();

@@ -50,7 +50,7 @@ public class JSkat {
 	 * @param aiPlayer
 	 * @param splashScreen
 	 */
-	public JSkat(Vector aiPlayer, JFrame splashScreen) {
+	public JSkat(Vector<String> aiPlayer, JFrame splashScreen) {
 
 		JSkatOptions jskatOptions = JSkatOptions.instance();
 		

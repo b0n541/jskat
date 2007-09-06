@@ -66,7 +66,7 @@ public class JSkatFrame extends JFrame {
      *            All AIPlayer classes that were found during startup
      */
     public JSkatFrame(JSkatMaster jskatMaster, JSkatDataModel dataModel,
-            JSkatGraphicRepository jskatBitmaps, Vector aiPlayer) {
+            JSkatGraphicRepository jskatBitmaps, Vector<String> aiPlayer) {
 
         this.dataModel = dataModel;
         jskatStrings = dataModel.getResourceBundle();
@@ -76,13 +76,13 @@ public class JSkatFrame extends JFrame {
 
         this.jskatActions = new JSkatActions(jskatMaster, dataModel, this, jskatBitmaps, aiPlayer);
 
-        initComponents(aiPlayer);
+        initComponents();
     }
 
     /**
      * This method is called from within the constructor to initialize the form.
      */
-    private void initComponents(Vector aiPlayer) {
+    private void initComponents() {
 
         // Frame definition
         setTitle("JSkat");
