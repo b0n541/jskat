@@ -25,7 +25,6 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 import jskat.data.JSkatDataModel;
@@ -120,9 +119,9 @@ public class JSkat {
 	 */
 	private static Vector<String> getAIPlayer() {
 
-		Vector<String> aiPlayer = new Vector<String>();
+		log.debug("getAIPlayer");
 		
-		log.debug(ClassLoader.getSystemResource("jskat/player"));
+		Vector<String> aiPlayer = new Vector<String>();
 		
 		URL dirURL = ClassLoader.getSystemResource("jskat/player");
 		log.debug(dirURL);
@@ -144,11 +143,10 @@ public class JSkat {
 
 			// we are in the JAR file
 			log.debug("in JAR file");
-			log.debug(dirURL.getPath().substring(0, dirURL.getPath().indexOf('!')));
 			
 			JarFile jarFile;
 			try {
-				jarFile = new JarFile(dirURL.getPath().substring(0, dirURL.getPath().indexOf('!')));
+				jarFile = new JarFile(dirURL.getPath().substring(dirURL.getPath().indexOf(':') + 1, dirURL.getPath().indexOf('!')));
 				aiPlayer.addAll(getAIPlayerFromJARFile(jarFile));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -201,8 +199,6 @@ public class JSkat {
 		while (jarFileEntries.hasMoreElements()) {
 
 			String currEntry = jarFileEntries.nextElement().toString();
-			
-			log.debug(currEntry);
 			
 			StringTokenizer tokenizer = new StringTokenizer(currEntry, "/");
 			if (tokenizer.countTokens() == 4
