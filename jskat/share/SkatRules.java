@@ -240,8 +240,8 @@ public final class SkatRules {
 		// value for a Null game
 		int multiplier = 1;
 
-		if (gameData.isHand() && !gameData.isGameLost()) {
-
+		if (gameData.isHand()) {
+			
 			// if it was played Hand and game was not lost
 			gameValue = SkatConstants.NULLHAND_VAL;
 

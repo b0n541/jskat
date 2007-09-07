@@ -7,7 +7,7 @@ Authors: @JS@
 
 Released: @ReleaseDate@
 
-*/
+ */
 
 package jskat.control;
 
@@ -66,9 +66,9 @@ public class SkatGame extends Observable {
 
 		// 20.05.07 mjl: set forehand correctly...
 		gameData.setDealer(dealer);
-		playerOrder[0]=(dealer+1)%3;
-		playerOrder[1]=(playerOrder[0]+1)%3;
-		playerOrder[2]=(playerOrder[0]+2)%3;
+		playerOrder[0] = (dealer + 1) % 3;
+		playerOrder[1] = (playerOrder[0] + 1) % 3;
+		playerOrder[2] = (playerOrder[0] + 2) % 3;
 
 		// notify all players
 		gameData.getPlayers()[0].newGame();
@@ -81,7 +81,7 @@ public class SkatGame extends Observable {
 
 		setState(GAMESTATE_CREATED);
 
-		log.debug("Skat game created (Dealer=Player "+dealer+").");
+		log.debug("Skat game created (Dealer=Player " + dealer + ").");
 	}
 
 	/**
@@ -91,7 +91,8 @@ public class SkatGame extends Observable {
 	 */
 	public void playing(GameAnnouncement newGame) {
 
-		log.debug("=============================================================================");
+		log
+				.debug("=============================================================================");
 		log.debug("playing()");
 
 		if (newGame == null) {
@@ -126,6 +127,7 @@ public class SkatGame extends Observable {
 		gameData.setAnnouncement(newGame);
 		gameData.setGameType(newGame.getGameType());
 		gameData.setTrump(newGame.getTrump());
+		gameData.setOuvert(newGame.isOuvert());
 
 		if (gameData.getGameType() == 0 || gameData.getGameType() == 1
 				|| gameData.getGameType() == 2) {
@@ -224,7 +226,7 @@ public class SkatGame extends Observable {
 			message = message
 					+ jskatStrings.getString("forehand")
 					+ ": "
-					+ gameData.getPlayers()[(gameData.getDealer()+1)%3]
+					+ gameData.getPlayers()[(gameData.getDealer() + 1) % 3]
 							.getPlayerName();
 
 			JOptionPane.showMessageDialog(mainWindow, message, jskatStrings
@@ -236,34 +238,39 @@ public class SkatGame extends Observable {
 		}
 
 		// Set the values to the game
-		gameData.setGameType(newGame.getGameType());
-		gameData.setTrump(newGame.getTrump());
-		gameData.setHand(false);
-		gameData.setOuvert(false);
-
 		currPlayerID = 0;
 
-		// remember the jacks of the single player for calculating the game result
+		// remember the jacks of the single player for calculating the game
+		// result
 
-		CardVector singlePlayerCards = gameData.getDealtCards().get(gameData.getSinglePlayer());
-		log.debug("SinglePlayerCards("+gameData.getSinglePlayer()+"): "+singlePlayerCards);
+		CardVector singlePlayerCards = gameData.getDealtCards().get(
+				gameData.getSinglePlayer());
+		
+		log.debug("SinglePlayerCards(" + gameData.getSinglePlayer() + "): "
+				+ singlePlayerCards);
+		
 		if (singlePlayerCards.contains(SkatConstants.CLUBS, SkatConstants.JACK)) {
 			gameData.setClubJack(true);
 		}
-		if (singlePlayerCards.contains(SkatConstants.SPADES, SkatConstants.JACK)) {
+		if (singlePlayerCards
+				.contains(SkatConstants.SPADES, SkatConstants.JACK)) {
 			gameData.setSpadeJack(true);
 		}
-		if (singlePlayerCards.contains(SkatConstants.HEARTS, SkatConstants.JACK)) {
+		if (singlePlayerCards
+				.contains(SkatConstants.HEARTS, SkatConstants.JACK)) {
 			gameData.setHeartJack(true);
 		}
-		if (singlePlayerCards.contains(SkatConstants.DIAMONDS, SkatConstants.JACK)) {
+		if (singlePlayerCards.contains(SkatConstants.DIAMONDS,
+				SkatConstants.JACK)) {
 			gameData.setDiamondJack(true);
 		}
 
-		log.debug("C-J:"+gameData.getClubJack()+" S-J:"+gameData.getSpadeJack()+" H-J:"+gameData.getHeartJack()+" D-J:"+gameData.getDiamondJack());
+		log.debug("C-J:" + gameData.getClubJack() + " S-J:"
+				+ gameData.getSpadeJack() + " H-J:" + gameData.getHeartJack()
+				+ " D-J:" + gameData.getDiamondJack());
 		log.debug("trying to start game...");
 
-		startGame(gameData.getGameType(), gameData.getTrump(), false, false);
+		startGame();
 
 		log.debug("game started...");
 
@@ -323,11 +330,10 @@ public class SkatGame extends Observable {
 										.getPlayerName()
 								+ ") wants to play a grand hand");
 
-						gameData.setHand(false);
+						gameData.setHand(true);
 						gameData.setSinglePlayer(currPlayer);
 
 						GameAnnouncement newGame = new GameAnnouncement();
-						newGame.setHand(true);
 						newGame.setGameType(SkatConstants.RAMSCHGRAND);
 						newGame.setTrump(SkatConstants.SUIT_GRAND);
 
@@ -344,7 +350,8 @@ public class SkatGame extends Observable {
 					if (isJSkatPlayedByHuman()) {
 						JOptionPane.showMessageDialog(mainWindow, gameData
 								.getPlayers()[currPlayer].getPlayerName()
-								+ " " + jskatStrings.getString("ramsch_no_grand"),
+								+ " "
+								+ jskatStrings.getString("ramsch_no_grand"),
 								jskatStrings.getString("ramsch_game"),
 								JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -589,7 +596,6 @@ public class SkatGame extends Observable {
 			// }
 		}
 
-
 		// skatSeries.startNewGame();
 		setState(GAMESTATE_NEXT_GAME);
 	}
@@ -783,8 +789,7 @@ public class SkatGame extends Observable {
 
 		// add the trick value to the trick winner's score
 		gameData.addToScore(playerOrder[trickWinner], trickValue);
-		
-		
+
 		trickNumber++;
 		currPlayerID = 0;
 
@@ -806,12 +811,12 @@ public class SkatGame extends Observable {
 			gameData.addTrick(dealer);
 
 			setState(GAMESTATE_NEW_TRICK_STARTED);
-			
+
 			// 18.05.07 mjl: added new player order
-			playerOrder[0]=dealer;
-			playerOrder[1]=(dealer+1)%3;
-			playerOrder[2]=(dealer+2)%3;
-			
+			playerOrder[0] = dealer;
+			playerOrder[1] = (dealer + 1) % 3;
+			playerOrder[2] = (dealer + 2) % 3;
+
 			if (gameData.getPlayers()[dealer].isAIPlayer()) {
 
 				setState(GAMESTATE_AI_PLAYER_PLAYING);
@@ -951,13 +956,15 @@ public class SkatGame extends Observable {
 		CardVector skat = gameData.getSkat();
 		Vector<CardVector> dealtCards = gameData.getDealtCards();
 
-		log.debug("Updating dealt cards (old):"+dealtCards.get(playerID)+", old Skat="+dealtCards.get(3)+", new Skat="+skat);
-		
+		log.debug("Updating dealt cards (old):" + dealtCards.get(playerID)
+				+ ", old Skat=" + dealtCards.get(3) + ", new Skat=" + skat);
+
 		helperCard = skat.getCard(0);
 
 		if (!dealtCards.get(3).contains(helperCard)) {
 
-			// player has put a different card into skat, so remove it and put it in the new skat
+			// player has put a different card into skat, so remove it and put
+			// it in the new skat
 			dealtCards.get(playerID).remove(helperCard);
 			dealtCards.get(3).add(helperCard);
 		}
@@ -971,7 +978,8 @@ public class SkatGame extends Observable {
 			dealtCards.get(3).add(helperCard);
 		}
 
-		log.debug("Updating dealt cards (tmp):"+dealtCards.get(playerID)+", Skat="+dealtCards.get(3));
+		log.debug("Updating dealt cards (tmp):" + dealtCards.get(playerID)
+				+ ", Skat=" + dealtCards.get(3));
 
 		Iterator iter = dealtCards.get(3).iterator();
 
@@ -979,8 +987,10 @@ public class SkatGame extends Observable {
 
 			helperCard = (Card) iter.next();
 
-			// fixed: NEVER use object comparison (== or !=) - always use .equals() !!!!!
-			if (!helperCard.equals(skat.getCard(0)) && !helperCard.equals(skat.getCard(1))) {
+			// fixed: NEVER use object comparison (== or !=) - always use
+			// .equals() !!!!!
+			if (!helperCard.equals(skat.getCard(0))
+					&& !helperCard.equals(skat.getCard(1))) {
 
 				// player has taken card from skat
 				iter.remove();
@@ -988,8 +998,9 @@ public class SkatGame extends Observable {
 			}
 		}
 
-		log.debug("Updating dealt cards (new):"+dealtCards.get(playerID)+", Skat="+dealtCards.get(3));
-		
+		log.debug("Updating dealt cards (new):" + dealtCards.get(playerID)
+				+ ", Skat=" + dealtCards.get(3));
+
 	}
 
 	/**
@@ -1018,7 +1029,6 @@ public class SkatGame extends Observable {
 	public void showSkat() {
 
 		log.debug("showSkat()");
-
 
 		if (gameData.getGameType() == SkatConstants.RAMSCH) {
 
@@ -1072,11 +1082,13 @@ public class SkatGame extends Observable {
 
 				int choice;
 
-				choice = JOptionPane.showConfirmDialog(mainWindow,
-							jskatStrings.getString("look_into_skat"),
-							jskatStrings.getString("look_into_skat"),
-							JOptionPane.YES_NO_OPTION);
-					
+				
+				choice = JOptionPane
+						.showConfirmDialog(mainWindow, jskatStrings
+								.getString("look_into_skat"), jskatStrings
+								.getString("look_into_skat"),
+								JOptionPane.YES_NO_OPTION);
+
 				if (choice == JOptionPane.YES_OPTION) {
 
 					gameData.setHand(false);
@@ -1110,10 +1122,11 @@ public class SkatGame extends Observable {
 										+ gameData.getSkat().size() + ")");
 					} else {
 						// update dealtCards[]
-						gameData.updatePlayerCards(gameData.getSinglePlayer(), oldSkat);
+						gameData.updatePlayerCards(gameData.getSinglePlayer(),
+								oldSkat);
 						updateDealtCards(gameData.getSinglePlayer());
 					}
-					
+
 				} else {
 
 					gameData.setHand(true);
@@ -1145,7 +1158,7 @@ public class SkatGame extends Observable {
 	private void playTrickCard() throws WrongCardException {
 
 		// TODO bad design, this method is only valid for AIPlayer
-		log.debug("playTrickCard() for trick "+trickNumber);
+		log.debug("playTrickCard() for trick " + trickNumber);
 
 		JSkatPlayer currPlayer = gameData.getPlayers()[playerOrder[currPlayerID]];
 		CardVector playerCards = gameData
@@ -1174,17 +1187,19 @@ public class SkatGame extends Observable {
 					log.debug("PLAYER IS GOOD");
 
 					playerCards.remove(cardPlayed);
-					
 
 				} else {
 
 					// Card is not allowed
 					log.error("PLAYER IS EVIL");
-					log.debug("1st card    : "+trickVector.getCard(0));
-					log.debug("Player cards: "+playerCards);
-					log.debug("Card played : "+cardPlayed);
-					log.debug("GameType    : "+gameData.getGameType()+" ("+SkatConstants.getGameType(gameData.getGameType())+")");
-					log.debug("Trump       : "+gameData.getTrump()+" ("+SkatConstants.getSuit(gameData.getTrump())+")");
+					log.debug("1st card    : " + trickVector.getCard(0));
+					log.debug("Player cards: " + playerCards);
+					log.debug("Card played : " + cardPlayed);
+					log.debug("GameType    : " + gameData.getGameType() + " ("
+							+ SkatConstants.getGameType(gameData.getGameType())
+							+ ")");
+					log.debug("Trump       : " + gameData.getTrump() + " ("
+							+ SkatConstants.getSuit(gameData.getTrump()) + ")");
 
 					if (currPlayer instanceof jskat.player.AIPlayerMJL.AIPlayerMJL) {
 
@@ -1202,11 +1217,11 @@ public class SkatGame extends Observable {
 
 				// Player doesn't have the card
 				log.error("PLAYER IS EVIL");
-				log.debug("1st card    : "+trickVector.getCard(0));
-				log.debug("Player cards: "+playerCards);
-				log.debug("Card played : "+cardPlayed);
-				log.debug("GameType    : "+gameData.getGameType());
-				log.debug("Trump       : "+gameData.getTrump());
+				log.debug("1st card    : " + trickVector.getCard(0));
+				log.debug("Player cards: " + playerCards);
+				log.debug("Card played : " + cardPlayed);
+				log.debug("GameType    : " + gameData.getGameType());
+				log.debug("Trump       : " + gameData.getTrump());
 
 				throw new WrongCardException(
 						"AI player played a card he doesn't own");
@@ -1253,11 +1268,12 @@ public class SkatGame extends Observable {
 	 */
 	protected void playTrickCard(int suit, int value) {
 
-		log.debug("Human player plays card as player #"+currPlayerID);
-		
+		log.debug("Human player plays card as player #" + currPlayerID);
+
 		// TODO bad design, this method is only valid for human players
 
-		log.debug("playTrickCard() for trick "+trickNumber+": suit: " + suit + ", value:" + value);
+		log.debug("playTrickCard() for trick " + trickNumber + ": suit: "
+				+ suit + ", value:" + value);
 
 		boolean cardAllowed = false;
 
@@ -1283,14 +1299,16 @@ public class SkatGame extends Observable {
 		}
 
 		if (cardAllowed) {
- 
-			log.debug("card count trick #"+trickNumber+"=" + trickVector.size());
+
+			log.debug("card count trick #" + trickNumber + "="
+					+ trickVector.size());
 
 			Card cardPlayed = new Card(suit, value);
 
 			gameData.setTrickCard(trickNumber, currPlayerID, cardPlayed);
-			
-			gameData.getPlayerCards(playerOrder[currPlayerID]).remove(cardPlayed);
+
+			gameData.getPlayerCards(playerOrder[currPlayerID]).remove(
+					cardPlayed);
 
 			currPlayerID++;
 
@@ -1323,8 +1341,7 @@ public class SkatGame extends Observable {
 	 * @param ouvertGame
 	 *            true if a ouvert game will be played
 	 */
-	private void startGame(int gameType, int trump, boolean handGame,
-			boolean ouvertGame) {
+	private void startGame() {
 
 		log.debug("startGame() begin");
 
@@ -1333,23 +1350,13 @@ public class SkatGame extends Observable {
 
 			log.debug("tell player " + i);
 
-			gameData.getPlayers()[i].startGame(gameData.getSinglePlayer(),
-					playerOrder[0], gameType, trump, handGame, ouvertGame);
+			gameData.getPlayers()[i]
+					.startGame(gameData.getSinglePlayer(), playerOrder[0],
+							gameData.getGameType(), gameData.getTrump(),
+							gameData.isHand(), gameData.isOuvert());
 		}
 
 		trickNumber = 0;
-
-		if (handGame) {
-			gameData.setHand(true);
-		} else {
-			gameData.setHand(false);
-		}
-
-		if (ouvertGame) {
-			gameData.setOuvert(true);
-		} else {
-			gameData.setOuvert(false);
-		}
 
 		setState(GAMESTATE_STARTED);
 
@@ -1466,7 +1473,7 @@ public class SkatGame extends Observable {
 	public SkatTableOptions getSkatTableOptions() {
 		return skatTableOptions;
 	}
-	
+
 	/**
 	 * Status of the game
 	 * 
@@ -1497,7 +1504,8 @@ public class SkatGame extends Observable {
 
 	public final static int GAMESTATE_GAME_OVER = 12;
 
-	// 18.05.2007 mjl: new game state to distinguish between game over (for messages) and next game
+	// 18.05.2007 mjl: new game state to distinguish between game over (for
+	// messages) and next game
 	public final static int GAMESTATE_NEXT_GAME = 13;
 
 	private int gameState;
@@ -1527,7 +1535,7 @@ public class SkatGame extends Observable {
 
 	/** Does the bidding */
 	private BiddingThread bidThread;
-	
+
 	private SchieberRamschThread schieberRamschThread;
 
 	private int[] playerOrder = { 0, 1, 2 };
