@@ -72,14 +72,6 @@ public class GameAnnouncement {
 		}
 	}
 
-	public boolean isHand() {
-		return hand;
-	}
-
-	public void setHand(boolean hand) {
-		this.hand = hand;
-	}
-
 	public boolean isOuvert() {
 		return ouvert;
 	}
@@ -90,7 +82,6 @@ public class GameAnnouncement {
 
 	private int gameType;
 	private int trump;
-	private boolean hand = false;
 	private boolean ouvert = false;
 	private boolean schneider = false;
 	private boolean schwarz = false;
