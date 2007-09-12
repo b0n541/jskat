@@ -149,7 +149,7 @@ public class JSkat {
 				jarFile = new JarFile(dirURL.getPath().substring(dirURL.getPath().indexOf(':') + 1, dirURL.getPath().indexOf('!')));
 				aiPlayer.addAll(getAIPlayerFromJARFile(jarFile));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				// TODO (js) Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

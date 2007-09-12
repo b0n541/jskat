@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
  * @author Jan Schäfer
  */
 
-// TODO refactor implementation of find() method!!! 
+// TODO (js) refactor implementation of find() method!!! 
 
 public class CardVector extends Observable {
 

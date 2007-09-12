@@ -72,7 +72,5 @@ public class HumanPlayer extends JSkatPlayerImpl {
     }
 
 	public void showTrick(CardVector trick, int trickWinner) {
-		// TODO Auto-generated method stub
-		
 	}
 }

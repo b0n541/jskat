@@ -298,7 +298,7 @@ public class BiddingThread implements Runnable {
 
 		log.debug("BiddingThread ("+Thread.currentThread().getId()+") DONE");
 
-		// TODO (21.05.07 mjl): This should be done in SkatGame, not in BiddingThread
+		// TODO (2007/09/11 mjl) This should be done via GameState, not explicitly in BiddingThread
 		skatGame.showSkat();
 
 		log.debug("BiddingThread ("+Thread.currentThread().getId()+") TERMINATED");

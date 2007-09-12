@@ -169,7 +169,7 @@ public class JSkatFrame extends JFrame {
         statusBarLabel.setFont(new Font("Dialog", 0, 12));
         statusBarLabel.setText(jskatStrings.getString("greetings"));
         statusBarPanel.add(statusBarLabel);
-        // TODO end
+        // TODO_end
 
         getContentPane().add(statusBarPanel, BorderLayout.SOUTH);
 
