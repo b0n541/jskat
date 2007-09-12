@@ -120,7 +120,8 @@ public class TestHelper {
 		return result;
 	}
 
-	public static void dealCardset(HashSet[] dealtCards, int selection) {
+	public static HashSet[] dealCardset(int selection) {
+		HashSet dealtCards[] = {null, null, null, null};
 		switch (selection) {
 		// One of the "perfect" grand hand card distributions
 		// for playing durchmarsch or grand hand
@@ -132,12 +133,16 @@ public class TestHelper {
 			break;
 		// a distribution for playing a jungfrau ramsch
 		case 1:
-			dealtCards[0] = convertCardsToHashSet(buildDeck("Q-C,9-C,8-C,7-C,Q-S,9-S,8-S,7-S,7-H,8-H"));
-			dealtCards[1] = convertCardsToHashSet(buildDeck("A-C,T-S,A-S,Q-H,K-H,T-H,A-H,9-D,Q-D,K-D"));
-			dealtCards[2] = convertCardsToHashSet(buildDeck("J-C,J-S,J-H,J-D,9-H,K-S,7-D,8-D,K-C,T-C"));
+			dealtCards[0] = convertCardsToHashSet(buildDeck("A-C,T-S,A-S,Q-H,K-H,T-H,A-H,9-D,Q-D,K-D"));
+			dealtCards[1] = convertCardsToHashSet(buildDeck("J-C,J-S,J-H,J-D,9-H,K-S,7-D,8-D,K-C,T-C"));
+			dealtCards[2] = convertCardsToHashSet(buildDeck("Q-C,9-C,8-C,7-C,Q-S,9-S,8-S,7-S,7-H,8-H"));
 			dealtCards[3] = convertCardsToHashSet(buildDeck("A-D,T-D"));
 			break;
+		default:
+			throw new IllegalArgumentException("Illegal predefined cardset!");
 		}
+		
+		return dealtCards;
 	}
 
 	private static HashSet convertCardsToHashSet(CardVector cards) {

@@ -14,14 +14,13 @@ package jskat.data;
 import java.util.Observable;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
-
 import jskat.player.JSkatPlayer;
+import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
 import jskat.share.SkatRules;
-import jskat.share.Card;
-import jskat.data.Trick;
+
+import org.apache.log4j.Logger;
 
 /**
  * A skat game
@@ -65,7 +64,7 @@ public class SkatGameData extends Observable {
 		 */
 
 		if (result == 0) {
-
+			log.warn("Game result hasn't been calculated yet!");
 			result = SkatRules.getResult(this);
 		}
 
@@ -157,9 +156,11 @@ public class SkatGameData extends Observable {
 	 */
 	public boolean getOverBidded() {
 
-		// FIXME This should not be possible when a Null or Ramsch game is
-		// played
-		// TODO throw an exception instead
+		// TODO This should not be possible when a Null or Ramsch game is played
+		// maybe throw an exception instead?
+		if (gameType == SkatConstants.RAMSCH || gameType == SkatConstants.RAMSCHGRAND) {
+			log.warn("Overbidding cannot happen in Ramsch games: gameType="+gameType);
+		}
 		return overBidded;
 	}
 
@@ -409,27 +410,6 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Gets the points of a ramsch game
-	 * 
-	 * @return The points of a ramsch game
-	 */
-	public int getRamschAugen() {
-
-		return ramschAugen;
-	}
-
-	/**
-	 * Sets the points of a ramsch game
-	 * 
-	 * @param ramschAugen
-	 *            The points of a ramsch game to be set
-	 */
-	public void setRamschAugen(int ramschAugen) {
-
-		this.ramschAugen = ramschAugen;
-	}
-
-	/**
 	 * Gets whether a durchmarsch was done in a ramsch game or not
 	 * 
 	 * @return TRUE if someone did a durchmarsch in a ramsch game
@@ -536,69 +516,33 @@ public class SkatGameData extends Observable {
 	}
 
 	public void calcResult() {
-
-		if (gameType != SkatConstants.RAMSCH) {
-
-			result = SkatRules.getResult(this);
-
-		} else {
-
-			calcRamschResult();
-		}
+		result = SkatRules.getResult(this);
 	}
 
-	/**
-	 * Calculates the result of a Ramsch game
-	 * 
-	 */
-	public void calcRamschResult() {
-
+	public void finishRamschGame() {
 		int ramschLoser = -1;
 
 		if (playerScores[0] > playerScores[1]) {
 			if (playerScores[0] > playerScores[2]) {
-
 				ramschLoser = 0;
 			} else {
-
 				ramschLoser = 2;
 			}
 		} else {
 			if (playerScores[1] > playerScores[2]) {
-
 				ramschLoser = 1;
 			} else {
-
 				ramschLoser = 2;
 			}
 		}
-
 		setSinglePlayer(ramschLoser);
-
-		result = getScore(getSinglePlayer()) * getGeschobenMultiplier();
-
 		if (isDurchMarsch()) {
-
 			setGameLost(false);
-
 		} else {
-
-			result = result * -1;
 			setGameLost(true);
 		}
-
-		log.debug("Score: " + getScore(getSinglePlayer()) + ", geschoben: "
-				+ getGeschoben() + " (--> * " + getGeschobenMultiplier() + ") "
-				+ " ==> result=" + result);
-
-		if (isJungFrau()) {
-
-			result = result * 2;
-		}
-
-		log.debug("Final result = " + result);
 	}
-
+	
 	/**
 	 * Gets the result of a game
 	 * 
@@ -999,8 +943,6 @@ public class SkatGameData extends Observable {
 	private boolean re = false;
 
 	private boolean bock = false;
-
-	private int ramschAugen = 0;
 
 	private boolean durchMarsch = false;
 

@@ -194,6 +194,7 @@ public final class SkatRules {
 			}
 			break;
 		case (SkatConstants.GRAND):
+		case (SkatConstants.RAMSCHGRAND):
 			gameValue = SkatConstants.GRAND_VAL;
 			break;
 		}
@@ -304,16 +305,16 @@ public final class SkatRules {
 		int multiplier = 1;
 
 		if (gameData.isJungFrau()) {
-
 			multiplier = multiplier * 2;
 		}
 
-		if (gameData.isGameLost()) {
+		multiplier = multiplier * (new Double(Math.pow(2, gameData.getGeschoben()))).intValue();
 
+		if (gameData.isGameLost()) {
 			multiplier = multiplier * -1;
 		}
 
-		return gameData.getRamschAugen() * multiplier;
+		return gameData.getScore(gameData.getSinglePlayer()) * multiplier;
 	}
 
 	/**
