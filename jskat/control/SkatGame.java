@@ -1531,5 +1531,5 @@ public class SkatGame extends Observable {
 
 	// mjl 2007/09/11: set to -1 for random distribution
 	// i.e. -1 ==> no preset !!!
-	private static final int PRESET_CARDSET = 0;
+	private static final int PRESET_CARDSET = -1;
 }
