@@ -109,8 +109,6 @@ public class LastTricksDialog extends JDialog implements Observer {
 		secondPlayerNamePanel = new JPanel();
 		thirdPlayerNameLabel = new JLabel(" ");
 		thirdPlayerNamePanel = new JPanel();
-		// TODO don't give null pointer as parameter to a card
-		//      maybe we need a ClickableCard class
 		firstCardPanel = new CardPanel(null, jskatBitmaps, false);
 		firstCardPanel.setPreferredSize(new Dimension(73, 97));
 		firstCardPanel.setMinimumSize(new Dimension(73, 97));
@@ -329,16 +327,19 @@ public class LastTricksDialog extends JDialog implements Observer {
 
 		// log.debug("UPDATE " + observ + ": " + obj + " has changed...");
 
-		if (observ instanceof SkatGame && obj instanceof Integer && ((Integer) obj).intValue() == SkatGame.GAMESTATE_TRICK_COMPLETED) {
+		if (observ instanceof SkatGame && obj instanceof Integer) {
 			
-			Vector tricks = ((SkatGame) observ).getSkatGameData().getTricks();
-			log.debug("Updating trick in LastTricksDialog ("+tricks.size()+" available)...");
-
-			if (tricks.size() > 0) {
-
-				lastTricks = tricks.size() - 1;
-				refresh((Trick) skatTable.getSkatTableData().getCurrGameData().getTricks().get(
-						lastTricks));
+			if (((Integer) obj).intValue() == SkatGame.GAMESTATE_TRICK_COMPLETED) {
+			
+				Vector<Trick> tricks = ((SkatGame) observ).getSkatGameData().getTricks();
+				log.debug("Updating trick in LastTricksDialog ("+tricks.size()+" available)...");
+	
+				if (tricks.size() > 0) {
+	
+					lastTricks = tricks.size() - 1;
+					refresh((Trick) skatTable.getSkatTableData().getCurrGameData().getTricks().get(
+							lastTricks));
+				}
 			}
 		}
 			
