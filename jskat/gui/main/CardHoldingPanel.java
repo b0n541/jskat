@@ -173,9 +173,6 @@ public class CardHoldingPanel extends JPanel implements Observer {
 
 			// Show player name on the player panels
 			JPanel playerNamePanel = new JPanel();
-			// TODO (js) get the player name later
-			// playerName = new JLabel(skatTable.getSkatTableData()
-			// .getCurrGameData().getPlayers()[player].getPlayerName());
 			playerName = new JLabel(" ");
 			playerNamePanel.add(playerName);
 			playerNamePanel.setPreferredSize(new Dimension(150,
@@ -490,6 +487,21 @@ public class CardHoldingPanel extends JPanel implements Observer {
 		playerName.setText(newName);
 	}
 
+	/**
+	 * Clears the card holding panel
+	 */
+	public void clearPanel() {
+		
+		Iterator<CardPanel> panelIterator = cardPanels.iterator();
+		
+		while (panelIterator.hasNext()) {
+		
+			panelIterator.next().setCard(-1, -1);
+		}
+		
+		repaint();
+	}
+	
 	/**
 	 * An empty CardHoldingPanel
 	 */
