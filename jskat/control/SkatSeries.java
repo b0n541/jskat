@@ -13,6 +13,7 @@ package jskat.control;
 
 import java.util.Observable;
 import java.util.Observer;
+import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
@@ -45,6 +46,7 @@ public class SkatSeries extends Observable implements Observer {
 			long roundsToPlay) {
 
 		this.dataModel = dataModel;
+		jskatStrings = dataModel.getResourceBundle();
 		this.mainWindow = dataModel.getMainWindow();
 		
 		skatSeriesData = new SkatSeriesData(players, roundsToPlay);
@@ -152,13 +154,11 @@ public class SkatSeries extends Observable implements Observer {
 			
 		} else {
 			
-			// TODO clean desk panel of last trick before repainting
-			mainWindow.repaint();
-
-			JOptionPane.showMessageDialog(mainWindow, "Game Over.",
-					"Game Over", JOptionPane.INFORMATION_MESSAGE);
-
 			setState(SERIES_FINISHED);
+
+			JOptionPane.showMessageDialog(mainWindow, jskatStrings.getString("skatseries_finished"),
+					jskatStrings.getString("skatseries_finished_title"), JOptionPane.INFORMATION_MESSAGE);
+
 		}
 		
 		return result;
@@ -180,6 +180,7 @@ public class SkatSeries extends Observable implements Observer {
 	private JSkatFrame mainWindow;
 	
 	private JSkatDataModel dataModel;
+	private ResourceBundle jskatStrings;
 	
 	public final static int NEW_SERIES = 0;
 	public final static int NEW_GAME = 1;
