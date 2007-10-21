@@ -56,7 +56,7 @@ public class JSkatOptions extends Observable {
 
 			jskatProperties.load(stream);
 
-			Enumeration props = jskatProperties.keys();
+			Enumeration<Object> props = jskatProperties.keys();
 			String property;
 			String value;
 
