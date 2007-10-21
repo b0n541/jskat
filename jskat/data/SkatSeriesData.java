@@ -111,38 +111,6 @@ public class SkatSeriesData extends Observable {
 	}
 
 	/**
-	 * Calculates all wins and losses of the players
-	 * 
-	 * @return A Vector with the wins and losses of the players
-	 */
-	public Vector calculateWinsAndLosses() {
-
-		Vector<Integer> winsAndLosses = new Vector<Integer>();
-		int playerResult;
-
-		for (int i = 0; i < players.length; i++) {
-
-			playerResult = 0;
-
-			for (int j = 0; j < games.size(); j++) {
-
-				SkatGameData currGameData = ((SkatGame) games.get(j))
-						.getSkatGameData();
-
-				if (currGameData.getSinglePlayer() == i) {
-
-					playerResult = playerResult
-							+ SkatRules.getResult(currGameData);
-				}
-			}
-
-			winsAndLosses.add(new Integer(playerResult));
-		}
-
-		return winsAndLosses;
-	}
-
-	/**
 	 * Returns the number of ramsch games to be played
 	 * 
 	 * @return The number of ramsch games to be played
