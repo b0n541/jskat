@@ -124,28 +124,4 @@ public final class SkatConstants {
     public final static int SCHNEIDER   = 2;
     public final static int SCHWARZ     = 3;
     public final static int OUVERT      = 4;
-    
-    public static String getGameType(int i) {
-    	switch(i) {
-	    	case PASSED_IN:   return "Passed in";
-	    	case SUIT:        return "Suit game";
-	    	case GRAND:       return "Grand";
-	    	case NULL:        return "Null";
-	    	case RAMSCH:      return "Ramsch";
-	    	case RAMSCHGRAND: return "Grand Hand (Ramsch)";
-    	}
-    	return "unknown";
-    }
-    
-    public static String getSuit(int i) {
-    	switch(i) {
-	    	case CLUBS:      return "Clubs";
-	    	case HEARTS:     return "Hearts";
-	    	case DIAMONDS:   return "Diamonds";
-	    	case SPADES:     return "Spades";
-	    	case SUIT_GRAND: return "Grand";
-    	}
-    	return "unknown";
-    }
-
 }
