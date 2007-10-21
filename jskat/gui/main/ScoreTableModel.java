@@ -7,7 +7,7 @@ Authors: @JS@
 
 Released: @ReleaseDate@
 
-*/
+ */
 
 package jskat.gui.main;
 
@@ -108,7 +108,7 @@ public class ScoreTableModel extends AbstractTableModel implements Observer {
 	 */
 	public Object getValueAt(int row, int col) {
 
-		return ((Vector) data.get(row)).get(col);
+		return data.get(row).get(col);
 	}
 
 	/*
@@ -132,26 +132,6 @@ public class ScoreTableModel extends AbstractTableModel implements Observer {
 			return java.lang.Integer.class;
 	}
 
-	/*
-	 * Don't need to implement this method unless your table's editable.
-	 */
-	/**
-	 * Returns whether a cell is editable or not
-	 * 
-	 * @param row
-	 *            row of the table cell
-	 * @param col
-	 *            column of the table cell
-	 * @return TRUE if the cell is editable
-	 */
-	public boolean isCellEditable(int row, int col) {
-
-		return false;
-	}
-
-	/*
-	 * Don't need to implement this method unless your table's data can change.
-	 */
 	/**
 	 * Sets a value for a table cell
 	 * 
@@ -164,22 +144,19 @@ public class ScoreTableModel extends AbstractTableModel implements Observer {
 	 */
 	public void setValueAt(Object value, int row, int col) {
 
-		if (true) {
-
-			log.debug("Setting value at " + row + "," + col + " to " + value
-					+ " (an instance of " + value.getClass() + ")");
-		}
+		log.debug("Setting value at " + row + "," + col + " to " + value
+				+ " (an instance of " + value.getClass() + ")");
 
 		// data[row][col] = value;
 		fireTableCellUpdated(row, col);
 
-		if (true) {
-
-			log.debug("New value of data:");
-			printDebugData();
-		}
+		log.debug("New value of data:");
+		printDebugData();
 	}
-
+	
+	/**
+	 * Prints the data of the table
+	 */
 	private void printDebugData() {
 
 		int numRows = getRowCount();
@@ -190,7 +167,7 @@ public class ScoreTableModel extends AbstractTableModel implements Observer {
 
 			rowString = "    row " + i + ":";
 			for (int j = 0; j < numCols; j++) {
-				rowString = rowString + "  " + ((Vector) data.get(i)).get(j);
+				rowString = rowString + "  " + data.get(i).get(j);
 			}
 
 			log.debug(rowString);
@@ -209,34 +186,34 @@ public class ScoreTableModel extends AbstractTableModel implements Observer {
 	 */
 	public void update(Observable observ, Object obj) {
 
-		// log.debug("UPDATE " + observ + ": " + obj + " has changed...");
-		
+		log.debug("UPDATE " + observ + ": " + obj + " has changed...");
+
 		if (observ instanceof JSkatMaster && obj instanceof SkatTable) {
-			
+
 			((SkatTable) obj).addObserver(this);
-			
+
 		} else if (observ instanceof SkatTable && obj instanceof SkatSeries) {
-			
+
 			((SkatSeries) obj).addObserver(this);
-			
-			if( ((SkatTable) observ).getSkatTableData().getCurrSkatSeries() != null) {
+
+			if (((SkatTable) observ).getSkatTableData().getCurrSkatSeries() != null) {
 				JSkatPlayer[] players = ((SkatTable) observ).getPlayers();
-				
-				if(players!=null) {
+
+				if (players != null) {
 					// Update the player names
 					columnNames[0] = players[0].getPlayerName();
 					columnNames[1] = players[1].getPlayerName();
 					columnNames[2] = players[2].getPlayerName();
-			
+
 					this.fireTableStructureChanged();
 				}
-				
+
 			}
-			
+
 			data.clear();
-			
+
 			this.fireTableDataChanged();
-	
+
 		} else if (observ instanceof SkatSeries && obj instanceof SkatGame) {
 			((SkatGame) obj).addObserver(this);
 		} else if (observ instanceof SkatGame) {
@@ -253,7 +230,8 @@ public class ScoreTableModel extends AbstractTableModel implements Observer {
 
 						if (data.size() == 0) {
 
-							// first game in series --> just put in the game value
+							// first game in series --> just put in the game
+							// value
 							newRow.add(new Integer(currGame.getSkatGameData()
 									.getGameResult()).toString());
 
@@ -271,20 +249,17 @@ public class ScoreTableModel extends AbstractTableModel implements Observer {
 
 							while (j > 0 && oldScore == 0) {
 
-								if (((Vector) data.get(j - 1)).get(i)
-										.toString() != "-") {
+								if (data.get(j - 1).get(i) != "-") {
 
-									// TODO: this works but is terrible, go and change it
-									oldScore = new Integer((String) ((Vector)data.get(
-											j - 1)).get(i)).intValue();
+									oldScore = new Integer(data.get(j - 1).get(i)).intValue();
 								}
 
 								j--;
 							}
 
 							newRow.add(new Integer(oldScore
-									+ currGame.getSkatGameData().getGameResult())
-									.toString());
+									+ currGame.getSkatGameData()
+											.getGameResult()).toString());
 						}
 
 					} else if (i == 3) {
@@ -298,11 +273,20 @@ public class ScoreTableModel extends AbstractTableModel implements Observer {
 						// it's the game type column --> put in the game type
 						int gameType = currGame.getSkatGameData().getGameType();
 						String text = "";
-						if(gameType == SkatConstants.RAMSCH || gameType == SkatConstants.GRAND) {
-							text = SkatConstants.getGameType(gameType);
-						}
-						else {
-							text = SkatConstants.getSuit(currGame.getSkatGameData().getTrump());
+						
+						switch(gameType) {
+						case SkatConstants.NULL:
+							text = jskatStrings.getString("null");
+							break;
+						case SkatConstants.GRAND:
+							text = jskatStrings.getString("grand");
+							break;
+						case SkatConstants.RAMSCH:
+							text = jskatStrings.getString("ramsch");
+							break;
+						case SkatConstants.SUIT:
+							text = jskatStrings.getString("suit_game");
+							break;
 						}
 						newRow.add(text);
 

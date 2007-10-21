@@ -855,10 +855,7 @@ public class SkatGame extends Observable {
 	 */
 	public void dealCards() {
 
-		// xTODO please do these thing in the unit testing parts
-		// xFIXME yes please, it is confusing at this point
-		// mjl: imho it makes sense to allow an explicit card distribution for in-game testing!
-		// if you want to debug with a given card set, set this to true
+		// TODO please do these thing in the unit testing parts
 		
 		if (PRESET_CARDSET >= 0) {
 			HashSet presetCardset[] = TestHelper.dealCardset(PRESET_CARDSET);
@@ -1178,11 +1175,8 @@ public class SkatGame extends Observable {
 					log.debug("1st card    : " + trickVector.getCard(0));
 					log.debug("Player cards: " + playerCards);
 					log.debug("Card played : " + cardPlayed);
-					log.debug("GameType    : " + gameData.getGameType() + " ("
-							+ SkatConstants.getGameType(gameData.getGameType())
-							+ ")");
-					log.debug("Trump       : " + gameData.getTrump() + " ("
-							+ SkatConstants.getSuit(gameData.getTrump()) + ")");
+					log.debug("GameType    : " + gameData.getGameType());
+					log.debug("Trump       : " + gameData.getTrump());
 
 					if (currPlayer instanceof jskat.player.AIPlayerMJL.AIPlayerMJL) {
 
