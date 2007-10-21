@@ -175,6 +175,26 @@ public class JSkatPlayArea extends JPanel implements Observer {
 			gameData.addObserver(getTrickPanel());
 			gameData.getSkat().addObserver(getSkatPanel());
 
+		
+		} else if (observ instanceof SkatSeries && obj instanceof Integer) {
+
+			// state of current series has changed
+			Integer state = (Integer) obj;
+
+			log.debug("Skat series state changed to " + state);
+
+			switch (state.intValue()) {
+
+			case SkatSeries.SERIES_FINISHED:
+				getCardHoldingPanel(0).clearPanel();
+				getCardHoldingPanel(1).clearPanel();
+				getCardHoldingPanel(2).clearPanel();
+				getTrickPanel().clearPanel();
+				((CardLayout) skatTrickHoldingPanel.getLayout()).show(
+						skatTrickHoldingPanel, "trick");
+				break;
+			}
+
 		} else if (observ instanceof SkatGame && obj instanceof Integer) {
 
 			// state of current game has changed
@@ -199,11 +219,6 @@ public class JSkatPlayArea extends JPanel implements Observer {
 				((CardLayout) skatTrickHoldingPanel.getLayout()).show(
 						skatTrickHoldingPanel, "skat");
 				break;
-/*
-			case SkatGame.GAMESTATE_NEW_TRICK_STARTED:
-				skatTrickHoldingPanel.repaint();
-				break;
-				*/
 			}
 		}
 	}
