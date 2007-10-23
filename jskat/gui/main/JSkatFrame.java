@@ -126,9 +126,9 @@ public class JSkatFrame extends JFrame {
         scorePanel.setLayout(new GridLayout(1, 0));
 
         JTable table = new JTable(new ScoreTableModel(dataModel));
-        table.setDefaultRenderer(table.getColumnClass(0), new ScoreTableCellRenderer());
+        table.setDefaultRenderer(String.class, new ScoreTableCellRenderer());
+        table.setDefaultRenderer(Integer.class, new ScoreTableCellRenderer());
         table.setShowHorizontalLines(false);
-        table.setFont(new Font("Dialog", 0, 10));
 
         TableColumn column = null;
 

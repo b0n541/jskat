@@ -126,10 +126,14 @@ public class ScoreTableModel extends AbstractTableModel implements Observer {
 	@SuppressWarnings("unchecked")
 	public Class getColumnClass(int c) {
 
-		if (c == 4)
+		if (c == 4) {
+		
 			return java.lang.String.class;
-		else
+		}
+		else {
+		
 			return java.lang.Integer.class;
+		}
 	}
 
 	/**
