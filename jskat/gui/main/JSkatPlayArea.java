@@ -7,7 +7,7 @@ Authors: @JS@
 
 Released: @ReleaseDate@
 
-*/
+ */
 
 package jskat.gui.main;
 
@@ -175,7 +175,6 @@ public class JSkatPlayArea extends JPanel implements Observer {
 			gameData.addObserver(getTrickPanel());
 			gameData.getSkat().addObserver(getSkatPanel());
 
-		
 		} else if (observ instanceof SkatSeries && obj instanceof Integer) {
 
 			// state of current series has changed
@@ -218,6 +217,23 @@ public class JSkatPlayArea extends JPanel implements Observer {
 			case SkatGame.GAMESTATE_SHOWING_SKAT:
 				((CardLayout) skatTrickHoldingPanel.getLayout()).show(
 						skatTrickHoldingPanel, "skat");
+				break;
+			case SkatGame.GAMESTATE_STARTED:
+				// check whether the game is an ouvert game
+				SkatGameData gameData = game.getSkatGameData();
+
+				if (gameData.isOuvert()
+						&& (gameData.getSinglePlayer() == PLAYER_ZERO || gameData
+								.getSinglePlayer() == PLAYER_ONE)) {
+					
+					// flip cards of single player
+					getCardHoldingPanel(gameData.getSinglePlayer()).showCards();
+				}
+				break;
+			case SkatGame.GAMESTATE_GAME_OVER:
+				// hide all cards
+				getCardHoldingPanel(PLAYER_ZERO).hideCards();
+				getCardHoldingPanel(PLAYER_ONE).hideCards();
 				break;
 			}
 		}
@@ -335,5 +351,5 @@ public class JSkatPlayArea extends JPanel implements Observer {
 	private final int TRICK = 3;
 	private final int BIDDING = 4;
 	private final int SKAT = 5;
-	
+
 }
