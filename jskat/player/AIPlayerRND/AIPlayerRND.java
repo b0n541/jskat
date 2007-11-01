@@ -11,6 +11,8 @@ Released: @ReleaseDate@
 
 package jskat.player.AIPlayerRND;
 
+import java.util.Random;
+
 import org.apache.log4j.Logger;
 
 import jskat.share.Card;
@@ -55,7 +57,8 @@ public class AIPlayerRND extends JSkatPlayerImpl implements JSkatPlayer {
 	}
 
 	public boolean lookIntoSkat(boolean isRamsch) {
-		return true;
+		
+		return rand.nextBoolean();
 	}
 
 	public GameAnnouncement announceGame() {
@@ -64,13 +67,14 @@ public class AIPlayerRND extends JSkatPlayerImpl implements JSkatPlayer {
 
 		newGame.setGameType(SkatConstants.SUIT);
 		newGame.setTrump(cards.getMostFrequentSuitColor());
+		newGame.setOuvert(rand.nextBoolean());
 
 		return newGame;
 	}
 
 	public boolean bidMore(int currBidValue) {
 
-		return false;
+		return rand.nextBoolean();
 	}
 
 	public Card playCard(CardVector trick) {
@@ -118,4 +122,6 @@ public class AIPlayerRND extends JSkatPlayerImpl implements JSkatPlayer {
 
 		return false;
 	}
+	
+	Random rand = new Random();
 }
