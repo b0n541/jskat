@@ -96,6 +96,16 @@ public abstract class JSkatPlayerImpl implements JSkatPlayer {
         //cards.sortWithTrump((currGameType==SkatConstants.NULL ? SkatConstants.NULL_SORT : SkatConstants.SUIT_SORT), currTrump);
     }
     
+    /**
+     * Shows the cards of the single player to the opponents in ouvert games
+     * 
+     * @param ouvertCards The cards of the single player
+     */
+    public void discloseOuvertCards(CardVector ouvertCards) {
+    	
+    	singlePlayerCards = ouvertCards;
+    }
+    
     /** 
      * Makes the current trick known to the players when it is complete
      * 
@@ -214,6 +224,7 @@ public abstract class JSkatPlayerImpl implements JSkatPlayer {
     protected int playerState;
     protected CardVector cards;
     protected CardVector skat;
+    protected CardVector singlePlayerCards;
     protected int currGameType;
     protected int currTrump;
     protected boolean handGame;

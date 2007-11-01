@@ -54,6 +54,9 @@ public interface JSkatPlayer {
 	public void startGame(int singlePlayer, int forehandPlayer, int gameType,
 			int trump, boolean handGame, boolean ouvertGame);
 
+	/** Shows the cards of the single player to the opponents in ouvert games */
+	public void discloseOuvertCards(CardVector ouvertCards);
+	
 	/**
 	 * Get next Card to play
 	 *
