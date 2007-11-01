@@ -459,6 +459,33 @@ public class CardHoldingPanel extends JPanel implements Observer {
 	}
 
 	/**
+	 * Shows all cards
+	 * 
+	 */
+	public void showCards() {
+		
+		for (int i = 0; i < cardPanels.size(); i++) {
+
+			cardPanels.get(i).showCard();
+		}
+
+		repaint();
+	}
+	
+	/**
+	 * Hides all cards
+	 */
+	public void hideCards() {
+		
+		for (int i = 0; i < cardPanels.size(); i++) {
+
+			cardPanels.get(i).hideCard();
+		}
+
+		repaint();
+	}
+	
+	/**
 	 * Sets the reference to the skat table
 	 * 
 	 * @param newTable

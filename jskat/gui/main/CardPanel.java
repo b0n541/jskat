@@ -95,13 +95,30 @@ public class CardPanel extends JPanel implements Observer {
 
 		if (showBack) {
 
-			showBack = false;
-		} else {
+			showCard();
+		} 
+		else {
 
-			showBack = true;
+			hideCard();
 		}
 	}
 
+	/**
+	 * Shows the card
+	 */
+	public void showCard() {
+		
+		showBack = false;
+	}
+	
+	/**
+	 * Hides the card
+	 */
+	public void hideCard() {
+		
+		showBack = true;
+	}
+	
 	/**
 	 * Gets the suit of the card
 	 * 
