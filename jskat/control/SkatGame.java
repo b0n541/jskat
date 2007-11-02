@@ -250,10 +250,10 @@ public class SkatGame extends Observable {
 
 		CardVector singlePlayerCards = gameData.getDealtCards().get(
 				gameData.getSinglePlayer());
-		
+
 		log.debug("SinglePlayerCards(" + gameData.getSinglePlayer() + "): "
 				+ singlePlayerCards);
-		
+
 		if (singlePlayerCards.contains(SkatConstants.CLUBS, SkatConstants.JACK)) {
 			gameData.setClubJack(true);
 		}
@@ -348,7 +348,8 @@ public class SkatGame extends Observable {
 
 				} else {
 
-					// TODO (mjl) ask AI players if they want to play a grand hand
+					// TODO (mjl) ask AI players if they want to play a grand
+					// hand
 					// log.debug("player " + currPlayer +
 					// "("+players[currPlayer].getPlayerName()+") wants to play
 					// a grand hand");
@@ -407,11 +408,13 @@ public class SkatGame extends Observable {
 			gameData.setGameResult(0);
 		}
 
-		// TODO (mjl) Here the decision should be made, whether any events should trigger a bockramsch round
+		// TODO (mjl) Here the decision should be made, whether any events
+		// should trigger a bockramsch round
 		// - i.e. check ramsch options from option dialog
 		// --> call dataModel.getCurrentRound().addRoundOfRamschGames();
 
-		// if the game was a ramsch grand hand, the same player is forehand again
+		// if the game was a ramsch grand hand, the same player is forehand
+		// again
 		// TODO (js) This should be adjustable in the table options
 		if (gameData.getGameType() != SkatConstants.RAMSCHGRAND) {
 
@@ -465,8 +468,7 @@ public class SkatGame extends Observable {
 
 			if (skatTableOptions.getRamschSkat() == SkatTableOptions.SKAT_TO_LOSER) {
 
-				scoreMessage.append(jskatStrings
-						.getString("skat_to_loser"));
+				scoreMessage.append(jskatStrings.getString("skat_to_loser"));
 
 			} else if (skatTableOptions.getRamschSkat() == SkatTableOptions.SKAT_TO_LAST_TRICK) {
 
@@ -548,10 +550,8 @@ public class SkatGame extends Observable {
 
 			scoreMessage.append("\n"
 					+ gameData.getPlayers()[gameData.getSinglePlayer()]
-							.getPlayerName()
-					+ " "
-					+ jskatStrings
-							.getString("ramsch_durchmarsch_winner")
+							.getPlayerName() + " "
+					+ jskatStrings.getString("ramsch_durchmarsch_winner")
 					+ " (" + gameData.getResult() + ")");
 		}
 
@@ -801,23 +801,27 @@ public class SkatGame extends Observable {
 			// regular end of game
 			setState(GAMESTATE_GAME_OVER);
 
-			// set the game to won, just to make sure that a null game is evaluated properly
+			// set the game to won, just to make sure that a null game is
+			// evaluated properly
 			gameData.setGameLost(false);
 
 			if (gameData.getGameType() == SkatConstants.RAMSCH) {
 
 				log.debug("Ramsch Skat option: "
 						+ skatTableOptions.getRamschSkat());
-				// check options, if ramsch skat goes to the winner of the final trick
+				// check options, if ramsch skat goes to the winner of the final
+				// trick
 				if (skatTableOptions.getRamschSkat() == SkatTableOptions.SKAT_TO_LAST_TRICK) {
 
-					log.debug("Ramsch game - skat goes to winner of the last trick: "
-							+ playerOrder[trickWinner] + " ("
-							+ gameData.getPlayers()[playerOrder[trickWinner]].getPlayerName() + ")");
+					log
+							.debug("Ramsch game - skat goes to winner of the last trick: "
+									+ playerOrder[trickWinner]
+									+ " ("
+									+ gameData.getPlayers()[playerOrder[trickWinner]]
+											.getPlayerName() + ")");
 
 					gameData.setSkatOwner(playerOrder[trickWinner]);
-				} 
-				else {
+				} else {
 					if (gameData.getScore(0) > gameData.getScore(1)) {
 						if (gameData.getScore(0) > gameData.getScore(2)) {
 							gameData.setSkatOwner(0);
@@ -831,9 +835,13 @@ public class SkatGame extends Observable {
 							gameData.setSkatOwner(2);
 						}
 					}
-					log.debug("Ramsch game - skat goes to player with the most points: "
-							+ gameData.getSkatOwner() + " ("
-							+ gameData.getPlayers()[gameData.getSkatOwner()].getPlayerName() + ")");
+					log
+							.debug("Ramsch game - skat goes to player with the most points: "
+									+ gameData.getSkatOwner()
+									+ " ("
+									+ gameData.getPlayers()[gameData
+											.getSkatOwner()].getPlayerName()
+									+ ")");
 				}
 
 			} else {
@@ -844,7 +852,7 @@ public class SkatGame extends Observable {
 			gameData.addToScore(gameData.getSkatOwner(), gameData.getSkat()
 					.getCard(0).getCalcValue()
 					+ gameData.getSkat().getCard(1).getCalcValue());
-			
+
 			finishGame();
 		}
 	}
@@ -856,37 +864,36 @@ public class SkatGame extends Observable {
 	public void dealCards() {
 
 		// TODO please do these thing in the unit testing parts
-		
+
 		if (PRESET_CARDSET >= 0) {
 			HashSet presetCardset[] = TestHelper.dealCardset(PRESET_CARDSET);
-			
+
 			for (int i = 0; i < 3; i++) {
-				Iterator iter = presetCardset[i].iterator(); 
+				Iterator iter = presetCardset[i].iterator();
 				while (iter.hasNext()) {
-					Card toDeal = (Card) iter.next(); 
+					Card toDeal = (Card) iter.next();
 					gameData.setDealtCard(i, toDeal);
-					gameData.getPlayers()[i].takeCard(cardDeck.remove(toDeal)); 
-				} 
+					gameData.getPlayers()[i].takeCard(cardDeck.remove(toDeal));
+				}
 			}
-			Iterator iter = presetCardset[3].iterator(); 
+			Iterator iter = presetCardset[3].iterator();
 			while (iter.hasNext()) {
-				Card toDeal = (Card) iter.next(); 
-				gameData.setDealtCard(3, cardDeck.remove(toDeal)); 
+				Card toDeal = (Card) iter.next();
+				gameData.setDealtCard(3, cardDeck.remove(toDeal));
 			}
-		}
-		else {
+		} else {
 
 			int cardsToDeal = 0;
 			cardDeck.shuffle();
-	
+
 			// Deal in three steps
 			for (int step = 0; step < 3; step++) {
 				for (int player = 0; player < 3; player++) {
-	
+
 					int receivingPlayer = (playerOrder[0] + player) % 3;
-	
+
 					switch (step) {
-	
+
 					case (0):
 					case (2):
 						cardsToDeal = 3;
@@ -895,21 +902,22 @@ public class SkatGame extends Observable {
 						cardsToDeal = 4;
 						break;
 					}
-	
+
 					// Deal cards to Skat player
 					for (int k = 0; k < cardsToDeal; k++) {
-	
+
 						// recall card
-						gameData.setDealtCard(receivingPlayer, cardDeck.getCard(0));
+						gameData.setDealtCard(receivingPlayer, cardDeck
+								.getCard(0));
 						// inform player
-						gameData.getPlayers()[receivingPlayer].takeCard(cardDeck
-								.remove(0));
+						gameData.getPlayers()[receivingPlayer]
+								.takeCard(cardDeck.remove(0));
 					}
 				}
-	
+
 				// After dealing the first round
 				if (step == 0) {
-	
+
 					// Put two cards into the Skat
 					gameData.setDealtCard(3, cardDeck.remove(0));
 					gameData.setDealtCard(3, cardDeck.remove(0));
@@ -1063,7 +1071,6 @@ public class SkatGame extends Observable {
 
 				int choice;
 
-				
 				choice = JOptionPane
 						.showConfirmDialog(mainWindow, jskatStrings
 								.getString("look_into_skat"), jskatStrings
@@ -1111,20 +1118,24 @@ public class SkatGame extends Observable {
 				} else {
 
 					gameData.setHand(true);
-					JOptionPane.showMessageDialog(mainWindow,
-							gameData.getPlayers()[gameData.getSinglePlayer()]
-									.getPlayerName()
-									+ " "
-									+ jskatStrings
-											.getString("aiplayer_handgame"),
-							jskatStrings.getString("game_announcement"),
-							JOptionPane.INFORMATION_MESSAGE);
+					
+					if (isJSkatPlayedByHuman()) {
+						// show dialog only when a human being is playing in the series
+						JOptionPane.showMessageDialog(mainWindow, gameData
+								.getPlayers()[gameData.getSinglePlayer()]
+								.getPlayerName()
+								+ " "
+								+ jskatStrings.getString("aiplayer_handgame"),
+								jskatStrings.getString("game_announcement"),
+								JOptionPane.INFORMATION_MESSAGE);
+					}
 				}
 
 				playing(gameData.getPlayers()[gameData.getSinglePlayer()]
 						.announceGame());
 
-				// TODO (mjl) Show a game announce dialog when the AIPlayer is single player, too
+				// TODO (mjl) Show a game announce dialog when the AIPlayer is
+				// single player, too
 
 			}
 		}
@@ -1331,6 +1342,13 @@ public class SkatGame extends Observable {
 					.startGame(gameData.getSinglePlayer(), playerOrder[0],
 							gameData.getGameType(), gameData.getTrump(),
 							gameData.isHand(), gameData.isOuvert());
+
+			if (gameData.isOuvert()) {
+				// in ouvert games disclose the single player cards to all
+				// players
+				gameData.getPlayers()[i].discloseOuvertCards(gameData
+						.getPlayerCards(gameData.getSinglePlayer()));
+			}
 		}
 
 		trickNumber = 0;
