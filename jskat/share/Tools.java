@@ -85,13 +85,13 @@ public class Tools {
 	 *            int array
 	 * @return string
 	 */
-	public static String dumpCards(HashSet[] values) {
+	public static String dumpCards(HashSet<Card>[] values) {
 		StringBuffer sb = new StringBuffer("{");
 		for (int i = 0; i < values.length; i++) {
-			Iterator iter = values[i].iterator();
+			Iterator<Card> iter = values[i].iterator();
 			sb.append("[");
 			while (iter.hasNext()) {
-				sb.append(((Card) iter.next()).toString()).append(",");
+				sb.append(iter.next().toString()).append(",");
 			}
 			sb.deleteCharAt(sb.length() - 1);
 			sb.append("],");
