@@ -11,6 +11,7 @@ Released: @ReleaseDate@
 
 package jskat.control;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Observable;
@@ -866,17 +867,17 @@ public class SkatGame extends Observable {
 		// TODO please do these thing in the unit testing parts
 
 		if (PRESET_CARDSET >= 0) {
-			HashSet presetCardset[] = TestHelper.dealCardset(PRESET_CARDSET);
+			ArrayList<HashSet<Card>> presetCardset = TestHelper.dealCardset(PRESET_CARDSET);
 
 			for (int i = 0; i < 3; i++) {
-				Iterator iter = presetCardset[i].iterator();
+				Iterator<Card> iter = presetCardset.get(i).iterator();
 				while (iter.hasNext()) {
-					Card toDeal = (Card) iter.next();
+					Card toDeal = iter.next();
 					gameData.setDealtCard(i, toDeal);
 					gameData.getPlayers()[i].takeCard(cardDeck.remove(toDeal));
 				}
 			}
-			Iterator iter = presetCardset[3].iterator();
+			Iterator<Card> iter = presetCardset.get(3).iterator();
 			while (iter.hasNext()) {
 				Card toDeal = (Card) iter.next();
 				gameData.setDealtCard(3, cardDeck.remove(toDeal));
@@ -970,7 +971,7 @@ public class SkatGame extends Observable {
 		log.debug("Updating dealt cards (tmp):" + dealtCards.get(playerID)
 				+ ", Skat=" + dealtCards.get(3));
 
-		Iterator iter = dealtCards.get(3).iterator();
+		Iterator<Card> iter = dealtCards.get(3).iterator();
 
 		while (iter.hasNext()) {
 
