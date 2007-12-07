@@ -37,10 +37,11 @@ public class CardVector extends Observable {
 	 * @see jskat.data.SkatGameData#getDealtCards() 
 	 */
 	public CardVector(HashSet<Card> cardSet) {
+		
 		cards = new Vector<Card>();
 		Iterator<Card> i = cardSet.iterator();
 		while(i.hasNext()) {
-			Card c = (Card) i.next();
+			Card c = i.next();
 			cards.add(new Card(c.getSuit(), c.getValue()));
 		}
 	}
@@ -84,7 +85,7 @@ public class CardVector extends Observable {
 	 */
 	public Card getCard(int index) {
 
-		return (Card) cards.get(index);
+		return cards.get(index);
 	}
 
 	/**
@@ -96,7 +97,7 @@ public class CardVector extends Observable {
 	 */
 	public Card remove(int index) {
 		
-		Card removedCard = (Card) cards.remove(index);
+		Card removedCard = cards.remove(index);
 
 		//log.debug("remove card " + removedCard + " " + countObservers() + " observers will be informed.");
 		
