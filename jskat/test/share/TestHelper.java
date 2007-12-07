@@ -11,6 +11,7 @@ Released: @ReleaseDate@
 
 package jskat.test.share;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -120,30 +121,32 @@ public class TestHelper {
 		return result;
 	}
 
-	public static HashSet[] dealCardset(int selection) {
-		HashSet dealtCards[] = {null, null, null, null};
+	public static ArrayList<HashSet<Card>> dealCardset(int selection) {
+		
+		ArrayList<HashSet<Card>> dealtCards = new ArrayList<HashSet<Card>>();
+		
 		switch (selection) {
 		// One of the "perfect" grand hand card distributions
 		// for playing durchmarsch or grand hand
 		case 0:
-			dealtCards[0] = convertCardsToHashSet(buildDeck("Q-C,9-C,8-C,7-C,Q-S,9-S,8-S,7-S,A-H,T-H"));
-			dealtCards[1] = convertCardsToHashSet(buildDeck("K-H,Q-H,9-H,8-H,7-H,A-D,T-D,K-D,Q-D,9-D"));
-			dealtCards[2] = convertCardsToHashSet(buildDeck("J-C,J-S,J-H,J-D,A-C,T-C,K-C,A-S,T-S,K-S"));
-			dealtCards[3] = convertCardsToHashSet(buildDeck("8-D,7-D"));
+			dealtCards.add(convertCardsToHashSet(buildDeck("Q-C,9-C,8-C,7-C,Q-S,9-S,8-S,7-S,A-H,T-H")));
+			dealtCards.add(convertCardsToHashSet(buildDeck("K-H,Q-H,9-H,8-H,7-H,A-D,T-D,K-D,Q-D,9-D")));
+			dealtCards.add(convertCardsToHashSet(buildDeck("J-C,J-S,J-H,J-D,A-C,T-C,K-C,A-S,T-S,K-S")));
+			dealtCards.add(convertCardsToHashSet(buildDeck("8-D,7-D")));
 			break;
 			// a distribution for playing a jungfrau ramsch
 		case 1:
-			dealtCards[0] = convertCardsToHashSet(buildDeck("A-C,T-S,A-S,Q-H,K-H,T-H,A-H,9-D,Q-D,K-D"));
-			dealtCards[1] = convertCardsToHashSet(buildDeck("J-C,J-S,J-H,J-D,9-H,K-S,7-D,8-D,K-C,T-C"));
-			dealtCards[2] = convertCardsToHashSet(buildDeck("Q-C,9-C,8-C,7-C,Q-S,9-S,8-S,7-S,7-H,8-H"));
-			dealtCards[3] = convertCardsToHashSet(buildDeck("A-D,T-D"));
+			dealtCards.add(convertCardsToHashSet(buildDeck("A-C,T-S,A-S,Q-H,K-H,T-H,A-H,9-D,Q-D,K-D")));
+			dealtCards.add(convertCardsToHashSet(buildDeck("J-C,J-S,J-H,J-D,9-H,K-S,7-D,8-D,K-C,T-C")));
+			dealtCards.add(convertCardsToHashSet(buildDeck("Q-C,9-C,8-C,7-C,Q-S,9-S,8-S,7-S,7-H,8-H")));
+			dealtCards.add(convertCardsToHashSet(buildDeck("A-D,T-D")));
 			break;
 		// a distribution for playing a null ouvert
 		case 2:
-			dealtCards[0] = convertCardsToHashSet(buildDeck("J-H,Q-H,K-H,A-H,7-D,8-D,9-D,T-D,J-D,Q-D"));
-			dealtCards[1] = convertCardsToHashSet(buildDeck("9-S,T-S,J-S,Q-S,K-S,A-S,7-H,8-H,9-H,T-H"));
-			dealtCards[2] = convertCardsToHashSet(buildDeck("7-C,8-C,9-C,T-C,J-C,Q-C,K-C,A-C,7-S,8-S"));
-			dealtCards[3] = convertCardsToHashSet(buildDeck("K-D,A-D"));
+			dealtCards.add(convertCardsToHashSet(buildDeck("J-H,Q-H,K-H,A-H,7-D,8-D,9-D,T-D,J-D,Q-D")));
+			dealtCards.add(convertCardsToHashSet(buildDeck("9-S,T-S,J-S,Q-S,K-S,A-S,7-H,8-H,9-H,T-H")));
+			dealtCards.add(convertCardsToHashSet(buildDeck("7-C,8-C,9-C,T-C,J-C,Q-C,K-C,A-C,7-S,8-S")));
+			dealtCards.add(convertCardsToHashSet(buildDeck("K-D,A-D")));
 			break;
 		default:
 			throw new IllegalArgumentException("Illegal predefined cardset!");
@@ -152,14 +155,14 @@ public class TestHelper {
 		return dealtCards;
 	}
 
-	private static HashSet convertCardsToHashSet(CardVector cards) {
+	private static HashSet<Card> convertCardsToHashSet(CardVector cards) {
 		
 		HashSet<Card> result = new HashSet<Card>();
-		Iterator iter = cards.iterator();
+		Iterator<Card> iter = cards.iterator();
 		
 		while (iter.hasNext()) {
 			
-			result.add((Card) iter.next());
+			result.add(iter.next());
 		}
 		
 		return result;
