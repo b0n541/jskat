@@ -411,9 +411,9 @@ public class CardHoldingPanel extends JPanel implements Observer {
 			i++;
 		}
 
-		for (Iterator iterator = updCardVector.iterator(); iterator.hasNext();) {
+		for (Iterator<Card> iterator = updCardVector.iterator(); iterator.hasNext();) {
 
-			Card newCard = (Card) iterator.next();
+			Card newCard = iterator.next();
 
 			if (newCard.getSuit() != cardPanels.get(i).getSuit()
 					|| newCard.getValue() != cardPanels.get(i).getValue()) {
