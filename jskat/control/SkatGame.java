@@ -879,7 +879,7 @@ public class SkatGame extends Observable {
 			}
 			Iterator<Card> iter = presetCardset.get(3).iterator();
 			while (iter.hasNext()) {
-				Card toDeal = (Card) iter.next();
+				Card toDeal = iter.next();
 				gameData.setDealtCard(3, cardDeck.remove(toDeal));
 			}
 		} else {
@@ -975,7 +975,7 @@ public class SkatGame extends Observable {
 
 		while (iter.hasNext()) {
 
-			helperCard = (Card) iter.next();
+			helperCard = iter.next();
 
 			// fixed: NEVER use object comparison (== or !=) - always use
 			// .equals() !!!!!
