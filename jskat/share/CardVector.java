@@ -38,7 +38,7 @@ public class CardVector extends Observable {
 	 */
 	public CardVector(HashSet<Card> cardSet) {
 		cards = new Vector<Card>();
-		Iterator i = cardSet.iterator();
+		Iterator<Card> i = cardSet.iterator();
 		while(i.hasNext()) {
 			Card c = (Card) i.next();
 			cards.add(new Card(c.getSuit(), c.getValue()));
@@ -678,7 +678,7 @@ public class CardVector extends Observable {
 		return output.toString();
 	}
 
-	public Iterator iterator() {
+	public Iterator<Card> iterator() {
 		
 		return cards.iterator();
 	}
