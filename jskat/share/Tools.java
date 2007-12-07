@@ -101,23 +101,23 @@ public class Tools {
 	}
 
 	/**
-	 * Converts a HashSet Vector of Cards to a String
+	 * Converts a Vector of CardVectors to a String
 	 * 
 	 * @param values
 	 *            int array
 	 * @return string
 	 */
-	public static String dumpCards(Vector values) {
+	public static String dumpCards(Vector<CardVector> values) {
 		
 		StringBuffer sb = new StringBuffer("\n{");
 		
 		for (int i = 0; i < values.size(); i++) {
 		
-			Iterator iter = ((CardVector)values.get(i)).iterator();
+			Iterator<Card> iter = values.get(i).iterator();
 			sb.append("\n[");
 			
 			while (iter.hasNext()) {
-				sb.append(((Card) iter.next()).toString()).append(",");
+				sb.append(iter.next().toString()).append(",");
 			}
 			
 			sb.deleteCharAt(sb.length() - 1);
