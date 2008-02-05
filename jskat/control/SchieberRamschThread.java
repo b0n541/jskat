@@ -110,7 +110,7 @@ public class SchieberRamschThread implements Runnable {
 					// it needs to be checked again, whether there are illegal Jacks in the skat
 					// (there might have been some by dealing - the player cannot put them there)
 					while (!skatGame.getSkatTableOptions().isSchieberRamschJacksInSkat()
-							&& (skat.hasTrump(SkatConstants.RAMSCH, 0))  ) {
+							&& (skat.hasTrump(SkatConstants.GameTypes.RAMSCH, null))  ) {
 
 						log.info("Human player has tried to put a Jack into skat although it's not allowed!");
 						
@@ -146,8 +146,8 @@ public class SchieberRamschThread implements Runnable {
 
 					} else if (!skatGame.getSkatTableOptions()
 							.isSchieberRamschJacksInSkat()
-							&& (skat.getCard(0).getValue() == SkatConstants.JACK
-							|| skat.getCard(1).getValue() == SkatConstants.JACK)) {
+							&& (skat.getCard(0).getRank() == SkatConstants.Ranks.JACK
+							|| skat.getCard(1).getRank() == SkatConstants.Ranks.JACK)) {
 
 						log.error("AIPlayer has put a Jack into skat although it's not allowed!");
 					}
@@ -191,8 +191,8 @@ public class SchieberRamschThread implements Runnable {
 		gameData.setSinglePlayer(skatGame.getPlayerOrder()[0]);
 
 		GameAnnouncement newGame = new GameAnnouncement();
-		newGame.setGameType(SkatConstants.RAMSCH);
-		newGame.setTrump(SkatConstants.SUIT_GRAND);
+		newGame.setGameType(SkatConstants.GameTypes.RAMSCH);
+		newGame.setTrump(null);
 
 		skatGame.playing(newGame);
 	}
