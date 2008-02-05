@@ -30,25 +30,21 @@ public final class SkatRules {
 
 		int result = 0;
 
-		switch (gameData.getGameType()) {
+		SkatConstants.GameTypes gameType = gameData.getGameType();
+		
+		if (gameType == SkatConstants.GameTypes.SUIT ||
+				gameType == SkatConstants.GameTypes.GRAND ||
+				gameType == SkatConstants.GameTypes.RAMSCHGRAND) {
 
-		case (SkatConstants.SUIT):
-		case (SkatConstants.GRAND):
-		case (SkatConstants.RAMSCHGRAND):
 			result = calculateSuitGrandGame(gameData);
-			break;
-
-		case (SkatConstants.NULL):
+		}
+		else if (gameType == SkatConstants.GameTypes.NULL) {
+			
 			result = calculateNullGame(gameData);
-			break;
-
-		case (SkatConstants.RAMSCH):
+		}
+		else if (gameType == SkatConstants.GameTypes.RAMSCH) {
+			
 			result = calculateRamschGame(gameData);
-			break;
-		default:
-			log.warn("Game type [" + gameData.getGameType()
-					+ "] is not defined! Result could not be calculated!");
-			break;
 		}
 
 		if (gameData.isContra()) {
@@ -122,18 +118,18 @@ public final class SkatRules {
 
 		log.debug("calcSuitResult: after Jacks: multiplier " + multiplier);
 
+		// TODO: evaluate higher game levels
 		// in a suit game, there can even be higher multipliers
-		if (multiplier == 5 && gameData.getGameType() == SkatConstants.SUIT) {
-			int valCounter = SkatConstants.ACE;
-			// TODO: evaluate higher game levels
+//		if (multiplier == 5 && gameData.getGameType() == SkatConstants.GameTypes.SUIT) {
+//			SkatConstants.Ranks valCounter = SkatConstants.Ranks.ACE;
 			// with something like this:
 			// while(valCount>=0 && game.getCards().hasCard(game.getTrump(),
 			// valCounter)) {
-			while (valCounter >= 0) {
-				// multiplier++;
-				valCounter--;
-			}
-		}
+//			while (valCounter >= 0) {
+//				// multiplier++;
+//				valCounter--;
+//			}
+//		}
 
 		if (gameData.isHand() && !gameData.isGameLost()) {
 
@@ -174,29 +170,33 @@ public final class SkatRules {
 
 		int gameValue = 0; // the multiplier for the game type
 
-		switch (gameData.getGameType()) {
+		SkatConstants.GameTypes gameType = gameData.getGameType();
+		
+		if (gameType == SkatConstants.GameTypes.SUIT) {
 
-		case (SkatConstants.SUIT):
-
-			switch (gameData.getTrump()) {
-			case (SkatConstants.CLUBS):
+			SkatConstants.Suits trump = gameData.getTrump();
+			
+			if (trump == SkatConstants.Suits.CLUBS) {
+				
 				gameValue = SkatConstants.CLUBS_VAL;
-				break;
-			case (SkatConstants.SPADES):
-				gameValue = SkatConstants.SPADES_VAL;
-				break;
-			case (SkatConstants.HEARTS):
-				gameValue = SkatConstants.HEARTS_VAL;
-				break;
-			case (SkatConstants.DIAMONDS):
-				gameValue = SkatConstants.DIAMONDS_VAL;
-				break;
 			}
-			break;
-		case (SkatConstants.GRAND):
-		case (SkatConstants.RAMSCHGRAND):
+			else if (trump == SkatConstants.Suits.SPADES) {
+				
+				gameValue = SkatConstants.SPADES_VAL;
+			}
+			else if (trump == SkatConstants.Suits.HEARTS) {
+				
+				gameValue = SkatConstants.HEARTS_VAL;
+			}
+			else if (trump == SkatConstants.Suits.DIAMONDS) {
+				
+				gameValue = SkatConstants.DIAMONDS_VAL;
+			}
+		}
+		else if (gameType == SkatConstants.GameTypes.GRAND ||
+					gameType == SkatConstants.GameTypes.RAMSCHGRAND) {
+			
 			gameValue = SkatConstants.GRAND_VAL;
-			break;
 		}
 
 		log.debug("gameMultiplier " + gameValue);
@@ -323,7 +323,7 @@ public final class SkatRules {
 	 * 
 	 */
 	public static boolean isCardAllowed(Card card, CardVector hand,
-			Card initialCard, int gameType, int currentTrump) {
+			Card initialCard, SkatConstants.GameTypes gameType, SkatConstants.Suits currentTrump) {
 
 		log.debug("isCardAllowed card: " + card + " initialCard: "
 				+ initialCard + " gameType: " + gameType + " currentTrump: "
