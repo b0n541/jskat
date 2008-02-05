@@ -46,15 +46,6 @@ public class HumanPlayer extends JSkatPlayerImpl {
         return new GameAnnouncement();
     }
     
-    /**
-     * This method should wait for human player
-     * 
-     */
-    public Card playCard(CardVector trick) {
-        
-        return new Card(-1, -1);
-    }
-    
     public void takeRamschSkat(CardVector skat, boolean jacksAllowed) {
         
     }
@@ -72,5 +63,11 @@ public class HumanPlayer extends JSkatPlayerImpl {
     }
 
 	public void showTrick(CardVector trick, int trickWinner) {
+	}
+
+	@Override
+	public Card playCard(CardVector trick) {
+		// TODO Refactor player classes
+		return null;
 	}
 }
