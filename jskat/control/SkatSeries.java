@@ -115,8 +115,7 @@ public class SkatSeries extends Observable implements Observer {
 		log.debug("a=" + (gamesPlayed % 3) + ", b=" + (gamesPlayed / 3)
 				+ " of " + skatSeriesData.getMaxRounds());
 
-		if (skatSeriesData.isUnlimitedNumberOfGames()
-				|| skatSeriesData.isGameLeft()) {
+		if (skatSeriesData.isGameLeft()) {
 
 			// Add a new game to the data model
 			SkatGame newGame = new SkatGame(dataModel, this, dealer);
