@@ -65,7 +65,7 @@ public class AIPlayerRND extends JSkatPlayerImpl implements JSkatPlayer {
 
 		GameAnnouncement newGame = new GameAnnouncement();
 
-		newGame.setGameType(SkatConstants.SUIT);
+		newGame.setGameType(SkatConstants.GameTypes.SUIT);
 		newGame.setTrump(cards.getMostFrequentSuitColor());
 		newGame.setOuvert(rand.nextBoolean());
 
@@ -102,7 +102,7 @@ public class AIPlayerRND extends JSkatPlayerImpl implements JSkatPlayer {
 
 		log.debug("choosing card " + rand);
 		index = cards.getIndexOf(possibleCards.getCard(rand).getSuit(),
-				possibleCards.getCard(rand).getValue());
+				possibleCards.getCard(rand).getRank());
 
 		log.debug("as player " + playerID + ": " + cards.getCard(index));
 
