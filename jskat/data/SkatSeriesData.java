@@ -20,15 +20,18 @@ import jskat.control.SkatGame;
 import jskat.player.JSkatPlayer;
 
 /**
- * A skat round
- * 
- * @author Jan Sch&auml;fer <jan.schaefer@b0n541.net
+ * Data class for a Skat series
  */
 public class SkatSeriesData extends Observable {
 
 	static Logger log = Logger.getLogger(jskat.data.SkatSeriesData.class);
 
-	/** Creates a new instance of a skat round */
+	/**
+	 * Constructor
+	 * 
+	 * @param players Array of Skat players
+	 * @param roundsToPlay Number of rounds to be played in the series
+	 */
 	public SkatSeriesData(JSkatPlayer[] players, long roundsToPlay) {
 
 		this.players = players;
@@ -41,7 +44,7 @@ public class SkatSeriesData extends Observable {
 		} else {
 
 			maxRounds = -1;
-			unlimitedNumberOfGames = true;
+			unlimitedNumberOfRounds = true;
 		}
 
 		currRound = 0;
@@ -62,7 +65,7 @@ public class SkatSeriesData extends Observable {
 	}
 
 	/**
-	 * Adds a new skat game
+	 * Adds a new Skat game
 	 * 
 	 * @param newGame
 	 *            The new game
@@ -85,14 +88,20 @@ public class SkatSeriesData extends Observable {
 		return currGameData;
 	}
 
+	/**
+	 * Gets the Skat game currently played
+	 * 
+	 * @return Skat game
+	 */
 	public SkatGame getCurrGame() {
 
 		return (SkatGame) games.get(currGameID);
 	}
 
 	/**
-	 * Get the player as ArrayList
+	 * Gets the players as ArrayList
 	 * 
+	 * @return The players
 	 */
 	public JSkatPlayer[] getPlayers() {
 
@@ -110,9 +119,9 @@ public class SkatSeriesData extends Observable {
 	}
 
 	/**
-	 * Returns the number of ramsch games to be played
+	 * Returns the number of ramsch games still to be played
 	 * 
-	 * @return The number of ramsch games to be played
+	 * @return The number of ramsch games still to be played
 	 */
 	public int getRamschGamesToPlay() {
 
@@ -120,19 +129,8 @@ public class SkatSeriesData extends Observable {
 	}
 
 	/**
-	 * Sets the number of ramsch games to be played
-	 * 
-	 * @param ramschGameCount
-	 *            The number of ramsch games to be played
-	 */
-	public void setRamschGamesToPlay(int ramschGameCount) {
-
-		ramschGamesToPlay = ramschGameCount;
-	}
-
-	/**
-	 * 
-	 * 
+	 * Notifies the Skat series that a ramsch game was finished
+	 *  
 	 */
 	public void ramschGameFinished() {
 
@@ -144,7 +142,6 @@ public class SkatSeriesData extends Observable {
 
 	/**
 	 * Adds a new round of ramsch games
-	 * 
 	 */
 	public void addRoundOfRamschGames() {
 
@@ -164,7 +161,7 @@ public class SkatSeriesData extends Observable {
 	}
 
 	/**
-	 * Adds an additional Bock round to be played
+	 * Adds an additional bock round to be played
 	 * 
 	 * @param multipleRoundsAllowed
 	 *            the option whether multiple bock rounds are allowed, i.e. can
@@ -196,6 +193,7 @@ public class SkatSeriesData extends Observable {
 	 * if(bockRoundsToPlay > 0) { bockRoundsToPlay--; bockGamesToPlay =
 	 * players.length; } }
 	 */
+	
 	/**
 	 * Checks, whether there are any ramsch games left to be played
 	 * 
@@ -207,7 +205,9 @@ public class SkatSeriesData extends Observable {
 	}
 
 	/**
-	 * @return Returns the bockGamesToPlay.
+	 * Gets the number of bock games still to be played
+	 * 
+	 * @return Number of bock games still to be played
 	 */
 	public int getBockGamesToPlay() {
 
@@ -215,7 +215,9 @@ public class SkatSeriesData extends Observable {
 	}
 
 	/**
-	 * @return Returns the bockRoundsToPlay.
+	 * Gets the number of bock rounds still to be played
+	 * 
+	 * @return Number of bock rounds still to be played
 	 */
 	public int getBockRoundsToPlay() {
 
@@ -289,24 +291,24 @@ public class SkatSeriesData extends Observable {
 	}
 
 	/**
-	 * Sets whether unlimited number of games should be played
+	 * Sets whether unlimited number of rounds should be played
 	 * 
-	 * @param unlimitedNumberOfGames
-	 *            TRUE if unlimited number of games should be played
+	 * @param unlimitedNumberOfRounds
+	 *            TRUE if unlimited number of rounds should be played
 	 */
-	public void setUnlimitedNumberOfGames(boolean unlimitedNumberOfGames) {
+	public void setUnlimitedNumberOfRounds(boolean unlimitedNumberOfRounds) {
 
-		this.unlimitedNumberOfGames = unlimitedNumberOfGames;
+		this.unlimitedNumberOfRounds = unlimitedNumberOfRounds;
 	}
 
 	/**
-	 * Gets whether unlimited number of games should be played
+	 * Gets whether unlimited number of rounds should be played
 	 * 
-	 * @return TRUE when ulimited number of games should be played
+	 * @return TRUE when unlimited number of rounds should be played
 	 */
-	public boolean isUnlimitedNumberOfGames() {
+	private boolean isUnlimitedNumberOfRounds() {
 
-		return unlimitedNumberOfGames;
+		return unlimitedNumberOfRounds;
 	}
 
 	/**
@@ -319,7 +321,8 @@ public class SkatSeriesData extends Observable {
 		// TODO unit testing for this method
 		boolean result = false;
 
-		if (games.size() < maxRounds * playerCount) {
+		if (isUnlimitedNumberOfRounds() ||
+				games.size() < maxRounds * playerCount) {
 
 			result = true;
 		}
@@ -362,25 +365,34 @@ public class SkatSeriesData extends Observable {
 	 */
 	private int currGameID;
 
+	/**
+	 * The status of the series
+	 */
 	private int seriesState;
 
-	public final int NEW_SERIES = 0;
+	/**
+	 * Enum type for all series states
+	 */
+	public enum SeriesStates {NEW_SERIES, PLAYERS_READY, 
+								GAMES_IN_PROGRESS, SERIES_FINISHED};
 
-	public final int PLAYERS_READY = 1;
-
-	public final int GAMES_IN_PROGRESS = 2;
-
-	public final int SERIES_FINISHED = 3;
-
+	/**
+	 * Number of ramsch games still to be played
+	 */
 	private int ramschGamesToPlay = 0;
 
+	/**
+	 * Number of bock rounds still to be played
+	 */
 	private int bockRoundsToPlay = 0;
 
+	/**
+	 * Number of bock games still to be played
+	 */
 	private int bockGamesToPlay = 0;
 
-	private boolean unlimitedNumberOfGames = false;
-
-	/*
-	 * private int roundState;
+	/**
+	 * Flag for playing unlimited number of rounds
 	 */
+	private boolean unlimitedNumberOfRounds = false;
 }
