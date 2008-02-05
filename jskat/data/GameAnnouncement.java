@@ -28,11 +28,29 @@ public class GameAnnouncement {
 		
 	}
 
+	/**
+	 * Game type
+	 */
 	private SkatConstants.GameTypes gameType;
+	/**
+	 * Trump color for suit games
+	 */
 	private SkatConstants.Suits trump;
+	/**
+	 * Hand announcement
+	 */
 	private boolean hand = false;
+	/**
+	 * Ouvert announcement
+	 */
 	private boolean ouvert = false;
+	/**
+	 * Schneider announcement
+	 */
 	private boolean schneider = false;
+	/**
+	 * Schwarz announcement
+	 */
 	private boolean schwarz = false;
 	
 	/**
