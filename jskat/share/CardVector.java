@@ -42,7 +42,7 @@ public class CardVector extends Observable {
 		Iterator<Card> i = cardSet.iterator();
 		while(i.hasNext()) {
 			Card c = i.next();
-			cards.add(new Card(c.getSuit(), c.getValue()));
+			cards.add(new Card(c.getSuit(), c.getRank()));
 		}
 	}
 
@@ -53,7 +53,7 @@ public class CardVector extends Observable {
 	 */
 	public void addNew(Card card) {
 
-		Card newCard = new Card(card.getSuit(), card.getValue());
+		Card newCard = new Card(card.getSuit(), card.getRank());
 		cards.add(newCard);
 		
 		//log.debug("add card " + card + " " + countObservers() + " observers will be informed.");
@@ -134,9 +134,9 @@ public class CardVector extends Observable {
 	 * @param value The value of the card to remove
 	 * @return The Card
 	 */
-	public Card remove(int suit, int value) {
+	public Card remove(SkatConstants.Suits suit, SkatConstants.Ranks rank) {
 
-		int index = find(suit, value);
+		int index = find(suit, rank);
 
 		return remove(index);
 	}
@@ -148,7 +148,7 @@ public class CardVector extends Observable {
 	 * @param value The value of the card
 	 * @return TRUE if the card is in the CardVector
 	 */
-	public boolean contains(int suit, int value) {
+	public boolean contains(SkatConstants.Suits suit, SkatConstants.Ranks value) {
 
 		boolean result = false;
 		Card currCard = null;
@@ -158,7 +158,7 @@ public class CardVector extends Observable {
 			currCard = getCard(i);
 			
 			if (currCard.getSuit() == suit 
-					&& currCard.getValue() == value) {
+					&& currCard.getRank() == value) {
 			
 				result = true;
 			}
@@ -175,7 +175,7 @@ public class CardVector extends Observable {
 	 */
 	public boolean contains(Card card) {
 
-		return contains(card.getSuit(), card.getValue());
+		return contains(card.getSuit(), card.getRank());
 	}
 
 	/**
@@ -188,7 +188,7 @@ public class CardVector extends Observable {
 	 * @param suit Suit to be tested
 	 * @return TRUE, when the suit is on the hand
 	 */
-	public boolean hasSuit(int suit) {
+	public boolean hasSuit(SkatConstants.Suits suit) {
 
 		boolean hasCard = false;
 
@@ -208,37 +208,28 @@ public class CardVector extends Observable {
 	 * @param suit Suit color
 	 * @return TRUE, when a card with the suit is found
 	 */
-	public boolean hasSuit(int gameType, int suit) {
+	public boolean hasSuit(SkatConstants.GameTypes gameType, SkatConstants.Suits suit) {
 
+		// TODO what about suit == trump color
 		boolean result = false;
 
 		// Got through all cards
 		for (int i = 0; i < cards.size(); i++) {
 
-			if (gameType == SkatConstants.NULL
+			if (gameType == SkatConstants.GameTypes.NULL
 					&& (getCard(i).getSuit() == suit)) {
 				
 				result = true;
 			}
-			else if ((gameType == SkatConstants.SUIT
-						|| gameType == SkatConstants.GRAND
-						|| gameType == SkatConstants.RAMSCH
-						|| gameType == SkatConstants.RAMSCHGRAND)
+			else if ((gameType == SkatConstants.GameTypes.SUIT
+						|| gameType == SkatConstants.GameTypes.GRAND
+						|| gameType == SkatConstants.GameTypes.RAMSCH
+						|| gameType == SkatConstants.GameTypes.RAMSCHGRAND)
 					&& (getCard(i).getSuit() == suit)
-					&& (getCard(i).getValue() != SkatConstants.JACK)) {
+					&& (getCard(i).getRank() != SkatConstants.Ranks.JACK)) {
 				
 				result = true;
 			}
-			
-			/*
-			if (getCard(i).getSuit() == suit
-					&& (gameType == SkatConstants.NULL || getCard(i).getValue() != SkatConstants.JACK)) {
-
-				// if Suit, Grand or Ramsch game is played
-				// Jacks don't count as suit --> they are trump
-				hasCard = true;
-			}
-			*/
 		}
 
 		return result;
@@ -254,13 +245,13 @@ public class CardVector extends Observable {
 	 * @param trump Current trump color
 	 * @return TRUE, when a trump card is found
 	 */
-	public boolean hasTrump(int trump) {
+	public boolean hasTrump(SkatConstants.Suits trump) {
 		
 		return (hasSuit(trump)
-				|| contains(SkatConstants.CLUBS, SkatConstants.JACK)
-				|| contains(SkatConstants.SPADES, SkatConstants.JACK)
-				|| contains(SkatConstants.HEARTS, SkatConstants.JACK) || contains(
-				SkatConstants.DIAMONDS, SkatConstants.JACK));
+				|| contains(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.JACK)
+				|| contains(SkatConstants.Suits.SPADES, SkatConstants.Ranks.JACK)
+				|| contains(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.JACK) 
+				|| contains(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK));
 	}
 
 	/**
@@ -270,22 +261,28 @@ public class CardVector extends Observable {
 	 * @param trump Trump color
 	 * @return TRUE, when a trump card was found in the CardVector
 	 */
-	public boolean hasTrump(int gameType, int trump) {
+	public boolean hasTrump(SkatConstants.GameTypes gameType, SkatConstants.Suits trump) {
+		
+		if (gameType == SkatConstants.GameTypes.SUIT &&
+				trump == null) {
+			
+			throw new IllegalArgumentException("Trump color is missing!");
+		}
 		
 		boolean result = false;
 		
 		for (int i = 0; i < cards.size(); i++) {
 		
-			if (gameType == SkatConstants.SUIT
+			if (gameType == SkatConstants.GameTypes.SUIT
 				&& (getCard(i).getSuit() == trump
-						|| getCard(i).getValue() == SkatConstants.JACK)) {
+						|| getCard(i).getRank() == SkatConstants.Ranks.JACK)) {
 				
 				result = true;
 			}
-			else if ((gameType == SkatConstants.GRAND
-						|| gameType == SkatConstants.RAMSCH
-						|| gameType == SkatConstants.RAMSCHGRAND)
-					&& (getCard(i).getValue() == SkatConstants.JACK)) {
+			else if ((gameType == SkatConstants.GameTypes.GRAND
+						|| gameType == SkatConstants.GameTypes.RAMSCH
+						|| gameType == SkatConstants.GameTypes.RAMSCHGRAND)
+					&& (getCard(i).getRank() == SkatConstants.Ranks.JACK)) {
 				
 				result = true;
 			}
@@ -298,24 +295,24 @@ public class CardVector extends Observable {
 	 * Gets the index of a card in the Vector
 	 */
 	public int getIndexOf(Card c) {
-		return getIndexOf(c.getSuit(), c.getValue());
+		return getIndexOf(c.getSuit(), c.getRank());
 	}
 
 	/**
 	 * Gets the index of a card in the Vector
 	 */
-	public int getIndexOf(int suit, int value) {
+	public int getIndexOf(SkatConstants.Suits suit, SkatConstants.Ranks rank) {
 
 		int index = -1;
 
-		if (contains(suit, value)) {
+		if (contains(suit, rank)) {
 
 			int currIndex = 0;
 
 			while (index == -1 || currIndex < cards.size()) {
 
 				if (getCard(currIndex).getSuit() == suit
-						&& getCard(currIndex).getValue() == value) {
+						&& getCard(currIndex).getRank() == rank) {
 
 					index = currIndex;
 				}
@@ -330,15 +327,15 @@ public class CardVector extends Observable {
 	/**
 	 * Gets the index of a card in the Vector
 	 */
-	public int getFirstIndexOfSuit(int suit) {
+	public int getFirstIndexOfSuit(SkatConstants.Suits suit) {
 
-		return getFirstIndexOfSuit(SkatConstants.NULL, suit);
+		return getFirstIndexOfSuit(SkatConstants.GameTypes.NULL, suit);
 	}
 
 	/**
 	 * Gets the index of a card in the Vector
 	 */
-	public int getFirstIndexOfSuit(int gameType, int suit) {
+	public int getFirstIndexOfSuit(SkatConstants.GameTypes gameType, SkatConstants.Suits suit) {
 
 		int index = -1;
 
@@ -349,8 +346,8 @@ public class CardVector extends Observable {
 			while (index == -1 || currIndex < cards.size()) {
 
 				if (getCard(currIndex).getSuit() == suit
-						&& (gameType == SkatConstants.NULL || getCard(currIndex)
-								.getValue() != SkatConstants.JACK)) {
+						&& (gameType == SkatConstants.GameTypes.NULL ||
+								getCard(currIndex).getRank() != SkatConstants.Ranks.JACK)) {
 
 					index = currIndex;
 				}
@@ -365,15 +362,15 @@ public class CardVector extends Observable {
 	/**
 	 * Gets the index of a card in the Vector
 	 */
-	public int getLastIndexOfSuit(int suit) {
+	public int getLastIndexOfSuit(SkatConstants.Suits suit) {
 
-		return getLastIndexOfSuit(SkatConstants.NULL, suit);
+		return getLastIndexOfSuit(SkatConstants.GameTypes.NULL, suit);
 	}
 
 	/**
 	 * Gets the index of a card in the Vector
 	 */
-	public int getLastIndexOfSuit(int gameType, int suit) {
+	public int getLastIndexOfSuit(SkatConstants.GameTypes gameType, SkatConstants.Suits suit) {
 
 		int index = -1;
 
@@ -384,8 +381,8 @@ public class CardVector extends Observable {
 			while (index == -1 || currIndex >= 0) {
 
 				if (getCard(currIndex).getSuit() == suit
-						&& (gameType == SkatConstants.NULL || getCard(currIndex)
-								.getValue() != SkatConstants.JACK)) {
+						&& (gameType == SkatConstants.GameTypes.NULL || 
+								getCard(currIndex).getRank() != SkatConstants.Ranks.JACK)) {
 
 					index = currIndex;
 				}
@@ -397,33 +394,33 @@ public class CardVector extends Observable {
 		return index;
 	}
 
-	public int getMostFrequentSuitColor() {
+	public SkatConstants.Suits getMostFrequentSuitColor() {
 
-		int mostFrequentSuitColor = SkatConstants.CLUBS;
-		int highestCardCount = getSuitColorCount(SkatConstants.CLUBS);
+		SkatConstants.Suits mostFrequentSuitColor = SkatConstants.Suits.CLUBS;
+		int highestCardCount = getSuitColorCount(SkatConstants.Suits.CLUBS);
 		int currentCardCount = 0;
 
-		currentCardCount = getSuitColorCount(SkatConstants.SPADES);
+		currentCardCount = getSuitColorCount(SkatConstants.Suits.SPADES);
 
 		if (currentCardCount > highestCardCount) {
 
 			highestCardCount = currentCardCount;
-			mostFrequentSuitColor = SkatConstants.SPADES;
+			mostFrequentSuitColor = SkatConstants.Suits.SPADES;
 		}
 
-		currentCardCount = getSuitColorCount(SkatConstants.HEARTS);
+		currentCardCount = getSuitColorCount(SkatConstants.Suits.HEARTS);
 
 		if (currentCardCount > highestCardCount) {
 
 			highestCardCount = currentCardCount;
-			mostFrequentSuitColor = SkatConstants.HEARTS;
+			mostFrequentSuitColor = SkatConstants.Suits.HEARTS;
 		}
-		currentCardCount = getSuitColorCount(SkatConstants.DIAMONDS);
+		currentCardCount = getSuitColorCount(SkatConstants.Suits.DIAMONDS);
 
 		if (currentCardCount > highestCardCount) {
 
 			highestCardCount = currentCardCount;
-			mostFrequentSuitColor = SkatConstants.DIAMONDS;
+			mostFrequentSuitColor = SkatConstants.Suits.DIAMONDS;
 		}
 
 		return mostFrequentSuitColor;
@@ -438,14 +435,14 @@ public class CardVector extends Observable {
 	 * @param suit The suit to search for
 	 * @return Number of cards with this suit
 	 */
-	public int getSuitColorCount(int suit) {
+	public int getSuitColorCount(SkatConstants.Suits suit) {
 
 		int count = 0;
 
 		for (int i = 0; i < cards.size(); i++) {
 
 			if (getCard(i).getSuit() == suit
-					&& !(getCard(i).getValue() == SkatConstants.JACK))
+					&& !(getCard(i).getRank() == SkatConstants.Ranks.JACK))
 				count++;
 		}
 
@@ -453,19 +450,19 @@ public class CardVector extends Observable {
 	}
 
 	/**
-	 * Returns the numer of cards with a given suit dependent on a game type
+	 * Returns the number of cards with a given suit dependent on a game type
 	 * 
 	 * @param gameType The game type
 	 * @param suit The suit to search for
 	 * @return Number of cards with this suit
 	 */
-	public int getSuitColorCount(int gameType, int suit) {
+	public int getSuitColorCount(SkatConstants.GameTypes gameType, SkatConstants.Suits suit) {
 
 		int count = 0;
 
 		for (int i = 0; i < cards.size(); i++) {
 
-			if (gameType == SkatConstants.NULL) {
+			if (gameType == SkatConstants.GameTypes.NULL) {
 				
 				if (getCard(i).getSuit() == suit) {
 					
@@ -473,7 +470,7 @@ public class CardVector extends Observable {
 				}
 			}
 			else if (getCard(i).getSuit() == suit
-					&& getCard(i).getValue() != SkatConstants.JACK) {
+					&& getCard(i).getRank() != SkatConstants.Ranks.JACK) {
 					
 				count++;
 			}
@@ -494,57 +491,60 @@ public class CardVector extends Observable {
 		helper = null;
 	}
 
-	public void sort(int sortType) {
+	public void sort(SkatConstants.GameTypes gameType) {
 
-		sort(sortType, -1);
+		sort(gameType, null);
 	}
 
 	/**
 	 * Sorts the cards in the Vector according the sort type SkatConstants
 	 */
-	public void sort(int gameType, int trump) {
+	public void sort(SkatConstants.GameTypes gameType, SkatConstants.Suits trump) {
 
+		// TODO refactor it in seperate methods
+		
+		if (gameType == SkatConstants.GameTypes.SUIT) {
+		
+			throw new IllegalArgumentException("No trump color given!");
+		}
+		
 		int sortedCards = 0;
-		int currentSuit;
 
-		switch (gameType) {
-
-		case SkatConstants.PASSED_IN:
-		case SkatConstants.SUIT:
-		case SkatConstants.GRAND:
-		case SkatConstants.RAMSCH:
-		case SkatConstants.RAMSCHGRAND:
+		if (gameType == SkatConstants.GameTypes.SUIT ||
+				gameType == SkatConstants.GameTypes.GRAND ||
+				gameType == SkatConstants.GameTypes.RAMSCH ||
+				gameType == SkatConstants.GameTypes.RAMSCHGRAND) {
 
 			// First find the Jacks
-			if (contains(SkatConstants.CLUBS, SkatConstants.JACK)) {
-				changeCards(sortedCards, getIndexOf(SkatConstants.CLUBS,
-						SkatConstants.JACK));
+			if (contains(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.JACK)) {
+				changeCards(sortedCards, getIndexOf(SkatConstants.Suits.CLUBS,
+						SkatConstants.Ranks.JACK));
 				sortedCards++;
 			}
-			if (contains(SkatConstants.SPADES, SkatConstants.JACK)) {
-				changeCards(sortedCards, getIndexOf(SkatConstants.SPADES,
-						SkatConstants.JACK));
+			if (contains(SkatConstants.Suits.SPADES, SkatConstants.Ranks.JACK)) {
+				changeCards(sortedCards, getIndexOf(SkatConstants.Suits.SPADES,
+						SkatConstants.Ranks.JACK));
 				sortedCards++;
 			}
-			if (contains(SkatConstants.HEARTS, SkatConstants.JACK)) {
-				changeCards(sortedCards, getIndexOf(SkatConstants.HEARTS,
-						SkatConstants.JACK));
+			if (contains(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.JACK)) {
+				changeCards(sortedCards, getIndexOf(SkatConstants.Suits.HEARTS,
+						SkatConstants.Ranks.JACK));
 				sortedCards++;
 			}
-			if (contains(SkatConstants.DIAMONDS, SkatConstants.JACK)) {
-				changeCards(sortedCards, getIndexOf(SkatConstants.DIAMONDS,
-						SkatConstants.JACK));
+			if (contains(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK)) {
+				changeCards(sortedCards, getIndexOf(SkatConstants.Suits.DIAMONDS,
+						SkatConstants.Ranks.JACK));
 				sortedCards++;
 			}
 
 			// then sort all other cards
 
 			// first cycle through the colors for trump cards
-			for (currentSuit = SkatConstants.CLUBS; currentSuit<=SkatConstants.DIAMONDS ; currentSuit++) {
-				if(currentSuit==trump) {
-					for (int i = SkatConstants.ACE; i >= SkatConstants.SEVEN; i--) {
-						if (contains(currentSuit, i)) {
-							changeCards(sortedCards, getIndexOf(currentSuit, i));
+			for (SkatConstants.Suits currentSuit : SkatConstants.Suits.values()) {
+				if(currentSuit == trump) {
+					for (SkatConstants.Ranks currentRank : SkatConstants.Ranks.values()) {
+						if (contains(currentSuit, currentRank)) {
+							changeCards(sortedCards, getIndexOf(currentSuit, currentRank));
 							sortedCards++;
 						}
 					}
@@ -552,11 +552,11 @@ public class CardVector extends Observable {
 			}
 			
 			// then cycle through the colors for the remaining colors
-			for (currentSuit = SkatConstants.CLUBS; currentSuit<=SkatConstants.DIAMONDS ; currentSuit++) {
-				if(currentSuit!=trump) {
-					for (int i = SkatConstants.ACE; i >= SkatConstants.SEVEN; i--) {
-						if (contains(currentSuit, i)) {
-							changeCards(sortedCards, getIndexOf(currentSuit, i));
+			for (SkatConstants.Suits currentSuit : SkatConstants.Suits.values()) {
+				if(currentSuit != trump) {
+					for (SkatConstants.Ranks currentRank : SkatConstants.Ranks.values()) {
+						if (contains(currentSuit, currentRank)) {
+							changeCards(sortedCards, getIndexOf(currentSuit, currentRank));
 							sortedCards++;
 						}
 					}
@@ -566,17 +566,15 @@ public class CardVector extends Observable {
 			if(sortedCards!=cards.size()) {
 				log.warn("Not all cards have been sorted: sortedCards="+sortedCards+", cards.size()="+cards.size());
 			}
-
-			break;
-
-		case SkatConstants.NULL:
+		}
+		else if (gameType == SkatConstants.GameTypes.NULL) {
 
 			for (int i = 0; i < this.size() - 1; i++) {
 				for (int j = i + 1; j < this.size(); j++) {
-					if (getCard(j).getSuit() < getCard(i).getSuit()
+					if (getCard(j).getSuit().getSuitOrder() < getCard(i).getSuit().getSuitOrder()
 							|| (getCard(j).getSuit() == getCard(i).getSuit() && getCard(
-									j).getNullValue() >= getCard(i)
-									.getNullValue())) {
+									j).getNullOrder() >= getCard(i)
+									.getNullOrder())) {
 						log.debug("i=" + i + ", j=" + j + ", " + getCard(i)
 								+ " vs. " + getCard(j) + ", cards(1): [" + this
 								+ "]");
@@ -584,7 +582,6 @@ public class CardVector extends Observable {
 					}
 				}
 			}
-			break;
 		}
 		
 		setChanged();
@@ -599,7 +596,7 @@ public class CardVector extends Observable {
 	 */
 	private int find(Card card) {
 		
-		return find(card.getSuit(), card.getValue());
+		return find(card.getSuit(), card.getRank());
 	}
 
 	/**
@@ -609,7 +606,7 @@ public class CardVector extends Observable {
 	 * @param value The value of the card to find
 	 * @return The index of the card
 	 */
-	private int find(int suit, int value) {
+	private int find(SkatConstants.Suits suit, SkatConstants.Ranks rank) {
 		
 		int result = -1;
 		
@@ -618,7 +615,7 @@ public class CardVector extends Observable {
 			Card currCard = cards.get(i);
 			
 			if (currCard.getSuit() == suit &&
-					currCard.getValue() == value) {
+					currCard.getRank() == rank) {
 				
 				if (result < 0) {
 					
