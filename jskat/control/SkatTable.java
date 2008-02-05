@@ -196,10 +196,10 @@ public class SkatTable extends Observable implements Observer {
 	 * @param value
 	 *            value of the card that was clicked
 	 */
-	public void cardPanelClicked(int panelType, int suit, int value) {
+	public void cardPanelClicked(int panelType, SkatConstants.Suits suit, SkatConstants.Ranks rank) {
 
 		log.debug("card panel clicked: type: " + panelType + " suit: " + suit
-				+ " value: " + value);
+				+ " value: " + rank);
 		log.debug("SkatTable state: " + state);
 
 		SkatGame currGame = tableData.getCurrSkatSeries().getCurrSkatGame();
@@ -213,7 +213,7 @@ public class SkatTable extends Observable implements Observer {
 			if (panelType == CardHoldingPanel.PLAYER_PANEL) {
 
 				if (!skatTableOptions.isSchieberRamschJacksInSkat()
-						&& value == SkatConstants.JACK ) {
+						&& rank == SkatConstants.Ranks.JACK ) {
 
 					log.info("Human player has tried to put a Jack into skat although it's not allowed!");
 					
@@ -223,13 +223,13 @@ public class SkatTable extends Observable implements Observer {
 							JOptionPane.WARNING_MESSAGE);
 				}
 				else {
-					currGame.putCardIntoSkat(suit, value);
+					currGame.putCardIntoSkat(suit, rank);
 				}
 					
 
 			} else if (panelType == CardHoldingPanel.SKAT_PANEL) {
 
-				currGame.takeCardFromSkat(suit, value);
+				currGame.takeCardFromSkat(suit, rank);
 			
 			}
 
@@ -238,7 +238,7 @@ public class SkatTable extends Observable implements Observer {
 
 			log.debug("Waiting for player input and received click");
 
-			currGame.playTrickCard(suit, value);
+			currGame.playTrickCard(suit, rank);
 
 		} else if (currGame.getState() == SkatGame.GAMESTATE_TRICK_COMPLETED
 				&& panelType == CardHoldingPanel.TRICK_PANEL) {
