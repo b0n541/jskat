@@ -17,9 +17,6 @@ import org.apache.log4j.Logger;
 
 /**
  * Card class
- * 
- * @author Jan Schäfer
- * @author Markus J. Luzius
  */
 public class Card {
 
@@ -29,7 +26,8 @@ public class Card {
 	 * Creates a new instance of Card by a definition string in the form of "SUIT-VALUE",
 	 * each being a one-character abbreviation:<br>
 	 * e.g. "D-K" for king of diamonds, "S-1" for ten of spades
-	 * @param card
+	 * 
+	 * @param card String representing the card
 	 */
 	public Card(String card) {
 
@@ -41,16 +39,16 @@ public class Card {
 		
 		switch(card.toUpperCase().charAt(0)) {
 		case 'D':
-			suit = SkatConstants.DIAMONDS;
+			suit = SkatConstants.Suits.DIAMONDS;
 			break;
 		case 'H':
-			suit = SkatConstants.HEARTS;
+			suit = SkatConstants.Suits.HEARTS;
 			break;
 		case 'S':
-			suit = SkatConstants.SPADES;
+			suit = SkatConstants.Suits.SPADES;
 			break;
 		case 'C':
-			suit = SkatConstants.CLUBS;
+			suit = SkatConstants.Suits.CLUBS;
 			break;
 		default:
 			throw new IllegalArgumentException("Wrong card string - no valid suit: "+card);
@@ -58,198 +56,141 @@ public class Card {
 		
 		switch(card.toUpperCase().charAt(2)) {
 		case '7':
-			value = SkatConstants.SEVEN;
+			rank = SkatConstants.Ranks.SEVEN;
 			break;
 		case '8':
-			value = SkatConstants.EIGHT;
+			rank = SkatConstants.Ranks.EIGHT;
 			break;
 		case '9':
-			value = SkatConstants.NINE;
+			rank = SkatConstants.Ranks.NINE;
 			break;
 		case '1':
 		case 'T':
-			value = SkatConstants.TEN;
+			rank = SkatConstants.Ranks.TEN;
 			break;
 		case 'J':
-			value = SkatConstants.JACK;
+			rank = SkatConstants.Ranks.JACK;
 			break;
 		case 'Q':
-			value = SkatConstants.QUEEN;
+			rank = SkatConstants.Ranks.QUEEN;
 			break;
 		case 'K':
-			value = SkatConstants.KING;
+			rank = SkatConstants.Ranks.KING;
 			break;
 		case 'A':
-			value = SkatConstants.ACE;
+			rank = SkatConstants.Ranks.ACE;
 			break;
 		default:
 			throw new IllegalArgumentException("Wrong card string - no valid value: "+card);
 		}
-		
-		setCardEnv();
 	}
 	
 	/** Creates a new instance of Card */
-	public Card(int suit, int value) {
+	public Card(SkatConstants.Suits suit, SkatConstants.Ranks rank) {
 
 		this.suit = suit;
-		this.value = value;
-		
-		setCardEnv();
-
-	}
-
-	private void setCardEnv() {
-		switch (suit) {
-
-		case (SkatConstants.CLUBS):
-			this.suitValue = SkatConstants.CLUBS_VAL;
-			break;
-		case (SkatConstants.SPADES):
-			this.suitValue = SkatConstants.SPADES_VAL;
-			break;
-		case (SkatConstants.HEARTS):
-			this.suitValue = SkatConstants.HEARTS_VAL;
-			break;
-		case (SkatConstants.DIAMONDS):
-			this.suitValue = SkatConstants.DIAMONDS_VAL;
-			break;
-		}
-
-		switch (value) {
-
-		case (SkatConstants.SEVEN):
-			this.calcValue = SkatConstants.SEVEN_VAL;
-			this.suitGrandValue = SkatConstants.SEVEN_SUIT_GRAND_VAL;
-			this.nullValue = SkatConstants.SEVEN_NULL_VAL;
-			this.ramschValue = SkatConstants.SEVEN_RAMSCH_VAL;
-			break;
-		case (SkatConstants.EIGHT):
-			this.calcValue = SkatConstants.EIGHT_VAL;
-			this.suitGrandValue = SkatConstants.EIGHT_SUIT_GRAND_VAL;
-			this.nullValue = SkatConstants.EIGHT_NULL_VAL;
-			this.ramschValue = SkatConstants.EIGHT_RAMSCH_VAL;
-			break;
-		case (SkatConstants.NINE):
-			this.calcValue = SkatConstants.NINE_VAL;
-			this.suitGrandValue = SkatConstants.NINE_SUIT_GRAND_VAL;
-			this.nullValue = SkatConstants.NINE_NULL_VAL;
-			this.ramschValue = SkatConstants.NINE_RAMSCH_VAL;
-			break;
-		case (SkatConstants.JACK):
-			this.calcValue = SkatConstants.JACK_VAL;
-			this.suitGrandValue = SkatConstants.JACK_SUIT_GRAND_VAL;
-			this.nullValue = SkatConstants.JACK_NULL_VAL;
-			this.ramschValue = SkatConstants.JACK_RAMSCH_VAL;
-			break;
-		case (SkatConstants.QUEEN):
-			this.calcValue = SkatConstants.QUEEN_VAL;
-			this.suitGrandValue = SkatConstants.QUEEN_SUIT_GRAND_VAL;
-			this.nullValue = SkatConstants.QUEEN_NULL_VAL;
-			this.ramschValue = SkatConstants.QUEEN_RAMSCH_VAL;
-			break;
-		case (SkatConstants.KING):
-			this.calcValue = SkatConstants.KING_VAL;
-			this.suitGrandValue = SkatConstants.KING_SUIT_GRAND_VAL;
-			this.nullValue = SkatConstants.KING_NULL_VAL;
-			this.ramschValue = SkatConstants.KING_RAMSCH_VAL;
-			break;
-		case (SkatConstants.TEN):
-			this.calcValue = SkatConstants.TEN_VAL;
-			this.suitGrandValue = SkatConstants.TEN_SUIT_GRAND_VAL;
-			this.nullValue = SkatConstants.TEN_NULL_VAL;
-			this.ramschValue = SkatConstants.TEN_RAMSCH_VAL;
-			break;
-		case (SkatConstants.ACE):
-			this.calcValue = SkatConstants.ACE_VAL;
-			this.suitGrandValue = SkatConstants.ACE_SUIT_GRAND_VAL;
-			this.nullValue = SkatConstants.ACE_NULL_VAL;
-			this.ramschValue = SkatConstants.ACE_RAMSCH_VAL;
-			break;
-		}
+		this.rank = rank;
 	}
 	
-	/** Compares the Cards whether the suit is the same or not */
+	/** 
+	 * Compares the Cards whether the suit is the same or not 
+	 */
 	public boolean isSameSuit(Card cardToCompare) {
 
 		return this.getSuit() == cardToCompare.getSuit();
 	}
 
-	/** Compares the Cards whether the value is the same or not */
-	public boolean isSameValue(Card cardToCompare) {
+	/** 
+	 * Compares the Cards whether the value is the same or not 
+	 */
+	public boolean isSameRank(Card cardToCompare) {
 
-		return this.getValue() == cardToCompare.getValue();
+		return this.getRank() == cardToCompare.getRank();
 	}
 
-	/** Compares the Cards whether the value is the same or not */
+	/** 
+	 * Compares the Cards whether the value is the same or not 
+	 */
 	public boolean isSameCalcValue(Card cardToCompare) {
 
 		return this.getCalcValue() == cardToCompare.getCalcValue();
 	}
 
-	/** Compares the Cards whether the value is the same or not */
-	public boolean isSameSuitGrandValue(Card cardToCompare) {
+	/** 
+	 * Compares the Cards whether the value is the same or not 
+	 */
+	public boolean isSameSuitGrandOrder(Card cardToCompare) {
 
-		return this.getSuitGrandValue() == cardToCompare.getSuitGrandValue();
+		return this.getSuitGrandOrder() == cardToCompare.getSuitGrandOrder();
 	}
 
-	/** Compares the Cards whether the value is the same or not */
-	public boolean isSameNullValue(Card cardToCompare) {
+	/**
+	 * Compares the Cards whether the value is the same or not 
+	 */
+	public boolean isSameNullOrder(Card cardToCompare) {
 
-		return this.getNullValue() == cardToCompare.getNullValue();
+		return this.getNullOrder() == cardToCompare.getNullOrder();
 	}
 
-	/** Compares the Cards whether the value is the same or not */
-	public boolean isSameRamschValue(Card cardToCompare) {
+	/** 
+	 * Compares the Cards whether the value is the same or not 
+	 */
+	public boolean isSameRamschOrder(Card cardToCompare) {
 
-		return this.getRamschValue() == cardToCompare.getRamschValue();
+		return this.getRamschOrder() == cardToCompare.getRamschOrder();
 	}
 
-	/** Get the Card suit */
-	public int getSuit() {
+	/** 
+	 * Get the Card suit 
+	 */
+	public SkatConstants.Suits getSuit() {
 
 		return suit;
 	}
 
-	/** Get the Card suit value */
-	public int getSuitValue() {
+	/** 
+	 * Get the Card value 
+	 */
+	public SkatConstants.Ranks getRank() {
 
-		return suitValue;
+		return rank;
 	}
 
-	/** Get the Card value */
-	public int getValue() {
-
-		return value;
-	}
-
-	/** Get the Card value for calculations */
+	/** 
+	 * Get the Card value for calculations 
+	 */
 	public int getCalcValue() {
 
 		return calcValue;
 	}
 
-	/** Get the Card value for suit or grand games */
-	public int getSuitGrandValue() {
+	/** 
+	 * Get the card order value for suit or grand games 
+	 */
+	public int getSuitGrandOrder() {
 
-		return suitGrandValue;
+		return rank.getSuitGrandOrder();
 	}
 
-	/** Get the Card value for null games */
-	public int getNullValue() {
+	/** 
+	 * Get the card order value for null games 
+	 */
+	public int getNullOrder() {
 
-		return nullValue;
+		return rank.getNullOrder();
 	}
 
-	/** Get the Card value for ramsch games */
-	public int getRamschValue() {
+	/** 
+	 * Get the card order value for ramsch games 
+	 */
+	public int getRamschOrder() {
 
-		return ramschValue;
+		return rank.getRamschOrder();
 	}
 
 	/**
 	 * Checks whether the card beats another given card under the current game
-	 * type and trumpf color with respect to the initial card on the table
+	 * type and trump color with respect to the initial card on the table
 	 * 
 	 * @deprecated
 	 * 
@@ -259,21 +200,20 @@ public class Card {
 	 * @param initialColor
 	 * @return TRUE if the card beats the other one
 	 */
-	public boolean beats(Card cardToCompare, int gameType,
-			int currentTrumpColor, int initialColor) {
+	public boolean beats(Card cardToCompare, SkatConstants.GameTypes gameType,
+			SkatConstants.Suits currentTrumpColor, Card firstCard) {
 
 		GameAnnouncement gameAnnouncement = new GameAnnouncement();
 
 		gameAnnouncement.setGameType(gameType);
 		gameAnnouncement.setTrump(currentTrumpColor);
 
-		return beats(cardToCompare, gameAnnouncement,
-				new Card(initialColor, -1));
+		return beats(cardToCompare, gameAnnouncement, firstCard);
 	}
 
 	/**
 	 * Checks whether the card beats another given card under the current game
-	 * type and trumpf color with respect to the initial card on the table
+	 * type and trump color with respect to the initial card on the table
 	 * 
 	 * @param cardToCompare
 	 * @param gameAnnouncement
@@ -285,7 +225,7 @@ public class Card {
 
 		boolean result = false;
 
-		if (gameAnnouncement.getGameType() == SkatConstants.NULL) {
+		if (gameAnnouncement.getGameType() == SkatConstants.GameTypes.NULL) {
 
 			log.debug(".beats(): NULL GAME: this card: " + toString()
 					+ " /-/ other card: " + cardToCompare + " [initial="
@@ -295,30 +235,30 @@ public class Card {
 				if (cardToCompare.getSuit() != firstTrickCard.getSuit()) {
 					result = true;
 				} else {
-					result = (nullValue > cardToCompare.getNullValue());
+					result = (getNullOrder() > cardToCompare.getNullOrder());
 				}
 			}
-		} else if (gameAnnouncement.getGameType() == SkatConstants.GRAND
-				|| gameAnnouncement.getGameType() == SkatConstants.RAMSCH
-				|| gameAnnouncement.getGameType() == SkatConstants.RAMSCHGRAND) {
+		} else if (gameAnnouncement.getGameType() == SkatConstants.GameTypes.GRAND
+				|| gameAnnouncement.getGameType() == SkatConstants.GameTypes.RAMSCH
+				|| gameAnnouncement.getGameType() == SkatConstants.GameTypes.RAMSCHGRAND) {
 
 			log.debug(".beats(): GRAND GAME: this card: " + toString()
 					+ " /-/ other card: " + cardToCompare + " [initial="
 					+ firstTrickCard.getSuit() + "]");
 
-			if (value == SkatConstants.JACK) {
+			if (rank == SkatConstants.Ranks.JACK) {
 
-				if (cardToCompare.getValue() != SkatConstants.JACK) {
+				if (cardToCompare.getRank() != SkatConstants.Ranks.JACK) {
 					// only this card is a jack, so it wins
 					result = true;
 				} else {
 					// both cards are Jacks, so the higher one wins
-					result = (suit < cardToCompare.getSuit());
+					result = (suit.getSuitOrder() < cardToCompare.getSuit().getSuitOrder());
 				}
 			} else if (suit == firstTrickCard.getSuit()) {
 
 				if (cardToCompare.getSuit() != firstTrickCard.getSuit()
-						&& cardToCompare.getValue() != SkatConstants.JACK) {
+						&& cardToCompare.getRank() != SkatConstants.Ranks.JACK) {
 					result = true;
 				} else {
 
@@ -326,12 +266,11 @@ public class Card {
 					// wins
 					// and I only have to consider the case where both aren't
 					// jacks
-					if (cardToCompare.getValue() != SkatConstants.JACK) {
-						if (gameAnnouncement.getGameType() == SkatConstants.GRAND) {
-							result = (value > cardToCompare.getValue());
+					if (cardToCompare.getRank() != SkatConstants.Ranks.JACK) {
+						if (gameAnnouncement.getGameType() == SkatConstants.GameTypes.GRAND) {
+							result = (getSuitGrandOrder() > cardToCompare.getSuitGrandOrder());
 						} else {
-							result = (ramschValue > cardToCompare
-									.getRamschValue());
+							result = (getRamschOrder() > cardToCompare.getRamschOrder());
 						}
 					}
 
@@ -339,7 +278,7 @@ public class Card {
 			}
 		}
 		// must be a suit game then
-		else if (gameAnnouncement.getGameType() == SkatConstants.SUIT) {
+		else if (gameAnnouncement.getGameType() == SkatConstants.GameTypes.SUIT) {
 
 			log.debug(".beats(): SUIT GAME: this card: " + toString()
 					+ " /-/ other card: " + cardToCompare + " [initial="
@@ -354,15 +293,15 @@ public class Card {
 					&& cardToCompare.isTrump(gameAnnouncement.getTrump())) {
 
 				log.debug("both cards are trump");
-				if (value == SkatConstants.JACK) {
-					if (cardToCompare.getValue() != SkatConstants.JACK) {
+				if (rank == SkatConstants.Ranks.JACK) {
+					if (cardToCompare.getRank() != SkatConstants.Ranks.JACK) {
 						result = true;
 					} else {
 						// both cards are Jacks
-						result = (suit < cardToCompare.getSuit());
+						result = (suit.getSuitOrder() < cardToCompare.getSuit().getSuitOrder());
 					}
 				} else {
-					result = (value > cardToCompare.getValue());
+					result = (getSuitGrandOrder() > cardToCompare.getSuitGrandOrder());
 				}
 				log
 						.debug("both cards are trump - "
@@ -375,7 +314,7 @@ public class Card {
 						log.debug("correct suit beats false one");
 						result = true;
 					} else {
-						result = (value > cardToCompare.getValue());
+						result = (getSuitGrandOrder() > cardToCompare.getSuitGrandOrder());
 						log.debug("both cards are same suit - "
 								+ (result ? "this one beats"
 										: "this one doesn't beat"));
@@ -396,9 +335,9 @@ public class Card {
 	 * @param currentTrumpColor
 	 * @return TRUE, when the card is a trump card
 	 */
-	public boolean isTrump(int currentTrumpColor) {
+	public boolean isTrump(SkatConstants.Suits currentTrumpColor) {
 		
-		return (suit == currentTrumpColor || value == SkatConstants.JACK);
+		return (suit == currentTrumpColor || rank == SkatConstants.Ranks.JACK);
 	}
 	
 	/**
@@ -408,47 +347,54 @@ public class Card {
 	 * @param trumpColor The trump color, only needed in suit games
 	 * @return TRUE, when the card is a trump card
 	 */
-	public boolean isTrump(int gameType, int trumpColor) {
+	public boolean isTrump(SkatConstants.GameTypes gameType, SkatConstants.Suits trumpColor) {
 		
 		boolean result = false;
 		
-		switch(gameType) {
-		
-			case SkatConstants.SUIT:
+		if (gameType == SkatConstants.GameTypes.SUIT) {
 				
-				result = (suit == trumpColor || value == SkatConstants.JACK);
-				break;
+			result = (suit == trumpColor || rank == SkatConstants.Ranks.JACK);
+		}
+		else if (gameType == SkatConstants.GameTypes.GRAND ||
+				 gameType == SkatConstants.GameTypes.RAMSCH ||
+				 gameType == SkatConstants.GameTypes.RAMSCHGRAND) {
 				
-			case SkatConstants.GRAND:
-			case SkatConstants.RAMSCH:
-			case SkatConstants.RAMSCHGRAND:
-				
-				result = (value == SkatConstants.JACK);
-				break;
+			result = (rank == SkatConstants.Ranks.JACK);
 		}
 		
 		return result;
 	}
 
-	public boolean equals(Object card) {
-		if(!(card instanceof Card)) {
-			return false;
+	/**
+	 * Implementation of the equals() method
+	 * 
+	 * @param obj An object
+	 * @return TRUE if the object is a Card object and has the same suit and rank
+	 */
+	public boolean equals(Object obj) {
+		
+		boolean result = false;
+		
+		if(obj instanceof Card) {
+			
+			result = equals((Card) obj);
 		}
-		return equals((Card) card);
+		
+		return result;
 	}
 	
 	/**
 	 * Implementation of the equals() method
 	 * 
 	 * @param card The Card to compare
-	 * @return TRUE, when the Cards are equal
+	 * @return TRUE if the Cards are equal
 	 */
 	public boolean equals(Card card) {
 		
 		boolean result = false;
 		
 		if (card != null &&
-			card.getSuit() == suit && card.getValue() == value) {
+			card.getSuit() == suit && card.getRank() == rank) {
 			
 			result = true;
 		}
@@ -462,68 +408,21 @@ public class Card {
 	 * @return A human readable String for the card
 	 */
 	public String toString() {
-		String cardName = "";
-		switch (suit) {
-		case 0:
-			cardName = "C";
-			break;
-		case 1:
-			cardName = "S";
-			break;
-		case 2:
-			cardName = "H";
-			break;
-		case 3:
-			cardName = "D";
-			break;
-		default:
-			cardName = "undefined";
-			break;
-		}
-		cardName = cardName + "-";
-		switch (value) {
-		case 0:
-			cardName = cardName + "7";
-			break;
-		case 1:
-			cardName = cardName + "8";
-			break;
-		case 2:
-			cardName = cardName + "9";
-			break;
-		case 3:
-			cardName = cardName + "Q";
-			break;
-		case 4:
-			cardName = cardName + "K";
-			break;
-		case 5:
-			cardName = cardName + "10";
-			break;
-		case 6:
-			cardName = cardName + "A";
-			break;
-		case 7:
-			cardName = cardName + "J";
-			break;
-		default:
-			cardName = "undefined";
-			break;
-		}
-		return cardName;
+		
+		return suit.shortString() + "-" + rank.shortString();
 	}
 
-	private int suit;
+	/**
+	 * Suit of the card
+	 */
+	private final SkatConstants.Suits suit;
 
-	private int suitValue;
-
-	private int value;
-
+	/**
+	 * Rank of the card
+	 */
+	private final SkatConstants.Ranks rank;
+	/**
+	 * Calculation value for the player points
+	 */
 	private int calcValue;
-
-	private int suitGrandValue;
-
-	private int nullValue;
-
-	private int ramschValue;
 }
