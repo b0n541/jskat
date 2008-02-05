@@ -17,6 +17,10 @@ import java.util.Vector;
 import jskat.control.SkatGame;
 import jskat.control.SkatSeries;
 
+/**
+ * Data Class for a Skat table
+ *
+ */
 public class SkatTableData extends Observable {
 
 	public SkatTableData() {

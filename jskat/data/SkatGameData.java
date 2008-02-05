@@ -23,15 +23,16 @@ import jskat.share.SkatRules;
 import org.apache.log4j.Logger;
 
 /**
- * A skat game
- * 
- * @author Jan Schäfer <jan.schaefer@b0n514.net>
+ * Data class for a Skat game
  */
 public class SkatGameData extends Observable {
 
 	static Logger log = Logger.getLogger(jskat.data.SkatGameData.class);
 
-	/** Creates a new instance of a new game */
+	/** 
+	 * Creates a new instance of a Skat game 
+	 *
+	 */
 	public SkatGameData() {
 
 		result = -1;
@@ -55,7 +56,11 @@ public class SkatGameData extends Observable {
 		log.debug("Game created");
 	}
 
-	/** Returns the result of the game */
+	/** 
+	 * Returns the result of the game 
+	 *
+	 * @return Value of the game
+	 */
 	public int getGameResult() {
 
 		/*
@@ -71,7 +76,11 @@ public class SkatGameData extends Observable {
 		return result;
 	}
 
-	/** Sets the result of the game manually (for overbidded games) */
+	/** 
+	 * Sets the result of the game manually (for overbidded games) 
+	 *
+	 * @deprecated
+	 */
 	public void setGameResult(int result) {
 
 		this.result = result;
@@ -80,7 +89,7 @@ public class SkatGameData extends Observable {
 	/** Returns the single player of the game */
 	public int getSinglePlayer() {
 
-		return singlePlayer;
+		return declarer;
 	}
 
 	/** Set the single player of the game */
@@ -88,44 +97,57 @@ public class SkatGameData extends Observable {
 
 		log.debug("Current Single Player " + singlePlayer);
 
-		this.singlePlayer = singlePlayer;
+		this.declarer = singlePlayer;
 	}
 
 	/** Returns the bid value of the game */
 	public int getBidValue() {
 
-		return bidValue;
+		return highestBidValue;
 	}
 
 	/** Set the bid value of the game */
 	public void setBidValue(int value) {
 
-		this.bidValue = value;
+		this.highestBidValue = value;
 		log.debug("setBidValue(" + value + ")");
 	}
 
-	/** Returns the type of the game */
-	public int getGameType() {
+	/** 
+	 * Returns game type
+	 * 
+	 * @return Game type
+	 */
+	public SkatConstants.GameTypes getGameType() {
 
 		return gameType;
 	}
 
-	/** Set the type of the game */
-	public void setGameType(int gameType) {
+	/** 
+	 * Set the type of the game
+	 * 
+	 * @param gameType Game type
+	 */
+	public void setGameType(SkatConstants.GameTypes gameType) {
 
 		this.gameType = gameType;
+		
+		if (gameType == SkatConstants.GameTypes.PASSED_IN) {
+			// a passed in game has no value
+			result = 0;
+		}
 	}
 
 	/** Returns the type of the game */
-	public int getTrump() {
+	public SkatConstants.Suits getTrump() {
 
 		return trump;
 	}
 
 	/** Set the type of the game */
-	public void setTrump(int trump) {
+	public void setTrump(SkatConstants.Suits newTrump) {
 
-		this.trump = trump;
+		trump = newTrump;
 	}
 
 	/**
@@ -135,7 +157,7 @@ public class SkatGameData extends Observable {
 	 */
 	public boolean isGameLost() {
 
-		return gameLost;
+		return lost;
 	}
 
 	/**
@@ -146,7 +168,7 @@ public class SkatGameData extends Observable {
 	 */
 	public void setGameLost(boolean gameLost) {
 
-		this.gameLost = gameLost;
+		this.lost = gameLost;
 
 		log.debug("setGameLost(): Game lost = " + gameLost);
 	}
@@ -158,7 +180,8 @@ public class SkatGameData extends Observable {
 
 		// TODO This should not be possible when a Null or Ramsch game is played
 		// maybe throw an exception instead?
-		if (gameType == SkatConstants.RAMSCH || gameType == SkatConstants.RAMSCHGRAND) {
+		if (gameType == SkatConstants.GameTypes.RAMSCH || 
+				gameType == SkatConstants.GameTypes.RAMSCHGRAND) {
 			log.warn("Overbidding cannot happen in Ramsch games: gameType="+gameType);
 		}
 		return overBidded;
@@ -452,19 +475,21 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Adds the value of a trick to the score of a player
+	 * Adds the value of a trick to the points of a player
 	 * 
 	 * @param player
 	 *            The ID of the player
 	 * @param trickValue
 	 *            The value of the trick
 	 */
-	public void addToScore(int player, int trickValue) {
+	public void addToPlayerPoints(int player, int trickValue) {
 
-		if (player < 0 || player > 2)
-			return;
+		if (player < 0 || player > 2) {
+			
+			throw new IllegalArgumentException("Illegal player ID: " + player);
+		}
 
-		playerScores[player] = playerScores[player] + trickValue;
+		playerPoints[player] += trickValue;
 	}
 
 	/**
@@ -480,7 +505,7 @@ public class SkatGameData extends Observable {
 
 		if (player > -1 || player < 3) {
 
-			score = playerScores[player];
+			score = playerPoints[player];
 		}
 
 		return score;
@@ -495,9 +520,9 @@ public class SkatGameData extends Observable {
 
 		int score = 0;
 
-		if (singlePlayer > -1) {
+		if (declarer > -1) {
 
-			score = getScore(singlePlayer);
+			score = getScore(declarer);
 		}
 
 		return score;
@@ -508,34 +533,43 @@ public class SkatGameData extends Observable {
 	 */
 	public int getOpponentScore() {
 
-		if (singlePlayer < 0)
+		if (declarer < 0)
 			return 0;
 		else
-			return getScore((singlePlayer + 1) % 3)
-					+ getScore((singlePlayer + 2) % 3);
+			return getScore((declarer + 1) % 3)
+					+ getScore((declarer + 2) % 3);
 	}
 
 	public void calcResult() {
 		result = SkatRules.getResult(this);
 	}
 
+	/**
+	 * Calculates final results of a ramsch game 
+	 */
 	public void finishRamschGame() {
+		
 		int ramschLoser = -1;
 
-		if (playerScores[0] > playerScores[1]) {
-			if (playerScores[0] > playerScores[2]) {
+		if (playerPoints[0] > playerPoints[1]) {
+			
+			if (playerPoints[0] > playerPoints[2]) {
 				ramschLoser = 0;
 			} else {
 				ramschLoser = 2;
 			}
+			
 		} else {
-			if (playerScores[1] > playerScores[2]) {
+			
+			if (playerPoints[1] > playerPoints[2]) {
 				ramschLoser = 1;
 			} else {
 				ramschLoser = 2;
 			}
 		}
+		
 		setSinglePlayer(ramschLoser);
+		
 		if (isDurchMarsch()) {
 			setGameLost(false);
 		} else {
@@ -877,9 +911,9 @@ public class SkatGameData extends Observable {
 	}
 */
 	/**
-	 * Sets the game annoucement
+	 * Sets the game announcement
 	 * 
-	 * @param announcement The game annoucement
+	 * @param announcement The game announcement
 	 */
 	public void setAnnouncement(GameAnnouncement announcement) {
 		
@@ -887,77 +921,204 @@ public class SkatGameData extends Observable {
 	}
 	
 	/**
-	 * Gets the game annoucement
+	 * Gets the game announcement
 	 * 
-	 * @return The game annoucement
+	 * @return The game announcement
 	 */
 	public GameAnnouncement getAnnoucement() {
 		
 		return announcement;
 	}
 	
+	/**
+	 * Checks whether the game was played under ISPA rules or not
+	 * 
+	 * @return TRUE when the game was played under ISPA rules
+	 */
+	public boolean isIspaRules() {
+		return ispaRules;
+	}
+
+	/**
+	 * Sets the flag for ISPA rules
+	 * 
+	 * @param ispaRules TRUE when the game was played under ISPA rules
+	 */
+	public void setIspaRules(boolean ispaRules) {
+		this.ispaRules = ispaRules;
+	}
+
+	
+	/**
+	 * Flag for the Skat rules
+	 */
+	private boolean ispaRules = true;
+	
+	/**
+	 * The game announcement made by the declarer
+	 */
 	private GameAnnouncement announcement;
 	
+	/**
+	 * All players
+	 */
 	private JSkatPlayer[] players;
 
-	private int singlePlayer = -1;
+	/**
+	 * Declarer player
+	 */
+	private int declarer = -1;
 
+	/**
+	 * Dealer of the cards
+	 */
 	private int dealer = -1;
 
-	private int[] playerScores = { 0, 0, 0 };
+	/**
+	 * Points the player made during the game
+	 */
+	private int[] playerPoints = { 0, 0, 0 };
 
+	/**
+	 * Game result
+	 */
 	private int result = 0;
 
-	private int bidValue = -1;
+	/**
+	 * Highest bid value made during bidding
+	 */
+	private int highestBidValue = -1;
 
-	private int gameType = -1;
+	/**
+	 * Bids the players made during bidding
+	 */
+	private int[] playerBids = { 0, 0, 0 };
+	
+	/**
+	 * Type of the game
+	 */
+	private SkatConstants.GameTypes gameType;
 
-	private int trump = -1;
+	/**
+	 * Trump color in suit games
+	 */
+	private SkatConstants.Suits trump;
 
-	private boolean gameLost = false;
+	/**
+	 * Flag for lost games
+	 */
+	private boolean lost = false;
 
+	/**
+	 * Flag for an over bidded game
+	 */
 	private boolean overBidded = false;
 
+	/**
+	 * Flag for the club jack on declarers hand
+	 */
 	private boolean clubJack = false;
 
+	/**
+	 * Flag for the spade jack on declarers hand
+	 */
 	private boolean spadeJack = false;
 
+	/**
+	 * Flag for the heart jack on declarers hand
+	 */
 	private boolean heartJack = false;
 
+	/**
+	 * Flag for the diamond jack on declarers hand
+	 */
 	private boolean diamondJack = false;
 
+	/**
+	 * Flag for a hand game
+	 */
 	private boolean hand = false;
 
+	/**
+	 * Flag for an ouvert game
+	 */
 	private boolean ouvert = false;
 
+	/**
+	 * Flag for a schneider game
+	 */
 	private boolean schneider = false;
 
+	/**
+	 * Flag for an announced schneider game 
+	 */
 	private boolean schneiderAnnounced = false;
 
+	/**
+	 * Flag for a schwarz game
+	 */
 	private boolean schwarz = false;
 
+	/**
+	 * Flag for an announced schwarz game
+	 */
 	private boolean schwarzAnnounced = false;
 
+	/**
+	 * Flag for a contra announced game
+	 */
 	private boolean contra = false;
 
+	/**
+	 * Flag for a re announced game
+	 */
 	private boolean re = false;
 
+	/**
+	 * Flag for a bock announced game
+	 */
 	private boolean bock = false;
 
+	/**
+	 * Flag for a durchmarsch game
+	 * (one player made all tricks in a ramsch game)
+	 */
 	private boolean durchMarsch = false;
 
+	/**
+	 * Flag for a jungfrau game
+	 * (one player made no tricks in a ramsch game)
+	 */
 	private boolean jungFrau = false;
 
+	/**
+	 * Flag for a geschoben game
+	 * (the skat was handed over from player to player at the beginning of a ramsch game)
+	 */
 	private int geschoben = 0;
 
+	/**
+	 * Player that owned the skat
+	 */
 	private int skatOwner = -1;
 
+	/**
+	 * Tricks made in the game
+	 */
 	private Vector<Trick> tricks;
 
+	/**
+	 * Cards on player hands
+	 */
 	private Vector<CardVector> playerHands;
 
+	/**
+	 * Cards in the skat
+	 */
 	private CardVector skat;
 
-	/** Holds all cards dealt to the skat players */
+	/**
+	 * Holds all cards dealt to the players and to the skat
+	 */
 	private Vector<CardVector> dealtCards = new Vector<CardVector>();
 }

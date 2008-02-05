@@ -80,7 +80,7 @@ public class Trick {
      */
     public Card getCard(int player) {
     	
-    	Card returnCard = new Card(-1, -1);
+    	Card returnCard = null;
     	
     	switch(player) {
     	
@@ -141,7 +141,7 @@ public class Trick {
     private int foreHand;
     private int trickWinner;
     
-    private Card firstCard = new Card(-1, -1);
-    private Card secondCard = new Card(-1, -1);;
-    private Card thirdCard = new Card(-1, -1);;
+    private Card firstCard;
+    private Card secondCard;
+    private Card thirdCard;
 }
