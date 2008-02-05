@@ -42,16 +42,16 @@ public class CardTest extends TestCase {
 
     public void testBeats() {
     	
-        Card card001 = new Card(SkatConstants.DIAMONDS, SkatConstants.JACK);
-        Card card002 = new Card(SkatConstants.DIAMONDS, SkatConstants.EIGHT);
+        Card card001 = new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK);
+        Card card002 = new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.EIGHT);
         GameAnnouncement gameAnn = new GameAnnouncement();
-        gameAnn.setGameType(SkatConstants.RAMSCH);
-        gameAnn.setTrump(-1);
+        gameAnn.setGameType(SkatConstants.GameTypes.RAMSCH);
+        gameAnn.setTrump(null);
         assertTrue(card001.beats(card002, gameAnn, card001));
         assertFalse(card002.beats(card001, gameAnn, card001));
 
-        card001 = new Card(SkatConstants.SPADES, SkatConstants.NINE);
-        card002 = new Card(SkatConstants.CLUBS, SkatConstants.JACK);
+        card001 = new Card(SkatConstants.Suits.SPADES, SkatConstants.Ranks.NINE);
+        card002 = new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.JACK);
         assertTrue(card002.beats(card001, gameAnn, card001));
         assertFalse(card001.beats(card002, gameAnn, card001));
 

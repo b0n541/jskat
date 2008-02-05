@@ -42,8 +42,8 @@ public class TestHelper {
 		// TODO (mjl) use new constructor in Card
 		System.out.println("cards: [" + cards + "], length=" + cards.length());
 		CardVector deck = new CardVector();
-		int suit = -1;
-		int value = -1;
+		SkatConstants.Suits suit;
+		SkatConstants.Ranks rank;
 		int i = 0;
 		while (cards.length() > i * 4) {
 			System.out.println("i=" + i + ", substring of " + cards + " from "
@@ -52,14 +52,14 @@ public class TestHelper {
 			String card = cards.toUpperCase().substring(i * 4, i * 4 + 3);
 			System.out.println("i=" + i + ", card: [" + card + "]");
 			suit = convertSuit(card.charAt(0));
-			if (suit >= 0) {
-				value = convertValue(card.charAt(2));
+			if (suit != null) {
+				rank = convertRank(card.charAt(2));
 			} else {
 				suit = convertSuit(card.charAt(2));
-				value = convertValue(card.charAt(0));
+				rank = convertRank(card.charAt(0));
 			}
-			if (suit >= 0 && value >= 0)
-				deck.add(new Card(suit, value));
+			if (suit != null && rank != null)
+				deck.add(new Card(suit, rank));
 			i++;
 		}
 
@@ -68,54 +68,54 @@ public class TestHelper {
 		return deck;
 	}
 
-	private static int convertSuit(char c) {
-		int result = -1;
+	private static SkatConstants.Suits convertSuit(char c) {
+		SkatConstants.Suits result = null;
 		System.out.println("suit: [" + c + "]");
 		switch (c) {
 		case 'D':
-			result = SkatConstants.DIAMONDS;
+			result = SkatConstants.Suits.DIAMONDS;
 			break;
 		case 'H':
-			result = SkatConstants.HEARTS;
+			result = SkatConstants.Suits.HEARTS;
 			break;
 		case 'S':
-			result = SkatConstants.SPADES;
+			result = SkatConstants.Suits.SPADES;
 			break;
 		case 'C':
-			result = SkatConstants.CLUBS;
+			result = SkatConstants.Suits.CLUBS;
 			break;
 		}
 		return result;
 	}
 
-	private static int convertValue(char c) {
-		int result = -1;
+	private static SkatConstants.Ranks convertRank(char c) {
+		SkatConstants.Ranks result = null;
 		System.out.println("value: [" + c + "]");
 		switch (c) {
 		case 'A':
-			result = SkatConstants.ACE;
+			result = SkatConstants.Ranks.ACE;
 			break;
 		case '1':
 		case 'T':
-			result = SkatConstants.TEN;
+			result = SkatConstants.Ranks.TEN;
 			break;
 		case 'K':
-			result = SkatConstants.KING;
+			result = SkatConstants.Ranks.KING;
 			break;
 		case 'Q':
-			result = SkatConstants.QUEEN;
+			result = SkatConstants.Ranks.QUEEN;
 			break;
 		case 'J':
-			result = SkatConstants.JACK;
+			result = SkatConstants.Ranks.JACK;
 			break;
 		case '9':
-			result = SkatConstants.NINE;
+			result = SkatConstants.Ranks.NINE;
 			break;
 		case '8':
-			result = SkatConstants.EIGHT;
+			result = SkatConstants.Ranks.EIGHT;
 			break;
 		case '7':
-			result = SkatConstants.SEVEN;
+			result = SkatConstants.Ranks.SEVEN;
 			break;
 		}
 		return result;
