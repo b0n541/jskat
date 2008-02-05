@@ -16,73 +16,146 @@ import jskat.share.SkatConstants;
 /**
  * Game announcement
  * 
- * An object of this class is returned by a AI player
+ * An object of this class is returned by an AI player
  * for game announcement
- *
- * @author  Jan Schäfer <j@nschaefer.net>
  */
-
 public class GameAnnouncement {
 
-	public int getGameType() {
+	/**
+	 * Constructor
+	 */
+	public GameAnnouncement() {
+		
+	}
+
+	private SkatConstants.GameTypes gameType;
+	private SkatConstants.Suits trump;
+	private boolean hand = false;
+	private boolean ouvert = false;
+	private boolean schneider = false;
+	private boolean schwarz = false;
+	
+	/**
+	 * Gets the game type
+	 * 
+	 * @return Game type
+	 */
+	public SkatConstants.GameTypes getGameType() {
 		
 		return gameType;
 	}
 
-	public void setGameType(int gameType) {
+	/**
+	 * Sets the game type
+	 * 
+	 * @param newGameType
+	 */
+	public void setGameType(SkatConstants.GameTypes newGameType) {
 		
-		this.gameType = gameType;
+		gameType = newGameType;
 		
-		if (gameType != SkatConstants.SUIT) {
+		if (gameType != SkatConstants.GameTypes.SUIT) {
 			
-			setTrump(-1);
+			setTrump(null);
 		}
 	}
 	
+	/**
+	 * Checks whether schneider was announced or not
+	 * 
+	 * @return TRUE if schneider was announced
+	 */
 	public boolean isSchneider() {
 		return schneider;
 	}
 	
-	public void setSchneider(boolean schneider) {
-		this.schneider = schneider;
+	/**
+	 * Sets flag for schneider announcement
+	 * 
+	 * @param isSchneider TRUE if schneider was announced
+	 */
+	public void setSchneider(boolean isSchneider) {
+		schneider = isSchneider;
 	}
 	
+	/**
+	 * Checks whether schwarz was announced or not
+	 * 
+	 * @return TRUE if schwarz was announced
+	 */
 	public boolean isSchwarz() {
 		return schwarz;
 	}
 	
-	public void setSchwarz(boolean schwarz) {
-		this.schwarz = schwarz;
+	/**
+	 * Sets flag for schwarz announcement
+	 * 
+	 * @param isSchwarz TRUE if schwarz was announced
+	 */
+	public void setSchwarz(boolean isSchwarz) {
+		schwarz = isSchwarz;
 	}
 	
-	public int getTrump() {
+	/**
+	 * Gets the trump color for suit games
+	 * 
+	 * @return Trump color
+	 */
+	public SkatConstants.Suits getTrump() {
 		return trump;
 	}
 	
-	public void setTrump(int trump) {
+	/**
+	 * Sets the trump color for suit games
+	 * 
+	 * @param trump Trump color
+	 */
+	public void setTrump(SkatConstants.Suits newTrump) {
 		
-		this.trump = trump;
+		trump = newTrump;
 		
-		if (trump == SkatConstants.CLUBS ||
-				trump == SkatConstants.SPADES ||
-				trump == SkatConstants.HEARTS ||
-				trump == SkatConstants.DIAMONDS) {
+		if (trump == SkatConstants.Suits.CLUBS ||
+				trump == SkatConstants.Suits.SPADES ||
+				trump == SkatConstants.Suits.HEARTS ||
+				trump == SkatConstants.Suits.DIAMONDS) {
 			
-			setGameType(SkatConstants.SUIT);
+			setGameType(SkatConstants.GameTypes.SUIT);
 		}
 	}
 
+	/**
+	 * Checks whether an ouvert game was announced or not
+	 * 
+	 * @return TRUE if an ouvert game was announced
+	 */
 	public boolean isOuvert() {
 		return ouvert;
 	}
 
-	public void setOuvert(boolean ouvert) {
-		this.ouvert = ouvert;
+	/**
+	 * Sets flag for an ouvert announcement
+	 * 
+	 * @param isOuvert TRUE if ouvert was announced
+	 */
+	public void setOuvert(boolean isOuvert) {
+		ouvert = isOuvert;
 	}
 
-	private int gameType;
-	private int trump;
-	private boolean ouvert = false;
-	private boolean schneider = false;
-	private boolean schwarz = false;
+	/**
+	 * Checks whether a hand game was announced or not
+	 * 
+	 * @return TRUE fi a hand game was announced
+	 */
+	public boolean isHand() {
+		return hand;
+	}
+
+	/**
+	 * Sets the flag for a hand announcement
+	 * 
+	 * @param isHand TRUE if hand was announced
+	 */
+	public void setHand(boolean isHand) {
+		hand = isHand;
+	}
 }
