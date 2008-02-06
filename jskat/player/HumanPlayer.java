@@ -65,9 +65,8 @@ public class HumanPlayer extends JSkatPlayerImpl {
 	public void showTrick(CardVector trick, int trickWinner) {
 	}
 
-	@Override
 	public Card playCard(CardVector trick) {
-		// TODO Refactor player classes
+		// TODO Auto-generated method stub
 		return null;
 	}
 }
