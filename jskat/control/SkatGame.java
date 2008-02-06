@@ -119,7 +119,7 @@ public class SkatGame extends Observable {
 			} else {
 
 				setState(GAMESTATE_GAME_OVER);
-				gameData.setGameType(SkatConstants.PASSED_IN);
+				gameData.setGameType(SkatConstants.GameTypes.PASSED_IN);
 				gameData.setGameLost(true);
 				finishGame();
 			}
@@ -132,7 +132,7 @@ public class SkatGame extends Observable {
 		gameData.setTrump(newGame.getTrump());
 		gameData.setOuvert(newGame.isOuvert());
 
-		if (gameData.getGameType() == 0 || gameData.getGameType() == 1
+		if (gameData.getGameType() != SkatConstants.GameTypes. || gameData.getGameType() == 1
 				|| gameData.getGameType() == 2) {
 
 			updateDealtCards(gameData.getSinglePlayer());
@@ -220,7 +220,7 @@ public class SkatGame extends Observable {
 					+ gameTypeText + " " + trumpColorText + "\n";
 
 			// When playing ramsch, there is no single player
-			if (gameData.getGameType() != SkatConstants.RAMSCH) {
+			if (gameData.getGameType() != SkatConstants.GameTypes.RAMSCH) {
 
 				message = message
 						+ jskatStrings.getString("player")
@@ -255,19 +255,19 @@ public class SkatGame extends Observable {
 		log.debug("SinglePlayerCards(" + gameData.getSinglePlayer() + "): "
 				+ singlePlayerCards);
 
-		if (singlePlayerCards.contains(SkatConstants.CLUBS, SkatConstants.JACK)) {
+		if (singlePlayerCards.contains(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.JACK)) {
 			gameData.setClubJack(true);
 		}
 		if (singlePlayerCards
-				.contains(SkatConstants.SPADES, SkatConstants.JACK)) {
+				.contains(SkatConstants.Suits.SPADES, SkatConstants.Ranks.JACK)) {
 			gameData.setSpadeJack(true);
 		}
 		if (singlePlayerCards
-				.contains(SkatConstants.HEARTS, SkatConstants.JACK)) {
+				.contains(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.JACK)) {
 			gameData.setHeartJack(true);
 		}
-		if (singlePlayerCards.contains(SkatConstants.DIAMONDS,
-				SkatConstants.JACK)) {
+		if (singlePlayerCards.contains(SkatConstants.Suits.DIAMONDS,
+				SkatConstants.Ranks.JACK)) {
 			gameData.setDiamondJack(true);
 		}
 
@@ -304,8 +304,8 @@ public class SkatGame extends Observable {
 	 */
 	private void prepareRamschGame() {
 
-		gameData.setGameType(SkatConstants.RAMSCH);
-		gameData.setTrump(SkatConstants.SUIT_GRAND);
+		gameData.setGameType(SkatConstants.GameTypes.RAMSCH);
+		gameData.setTrump(null);
 
 		// first ask if anyone wants to play a grand hand
 		if (skatTableOptions.getRules() == SkatTableOptions.PUB_RULES
@@ -340,8 +340,8 @@ public class SkatGame extends Observable {
 						gameData.setSinglePlayer(currPlayer);
 
 						GameAnnouncement newGame = new GameAnnouncement();
-						newGame.setGameType(SkatConstants.RAMSCHGRAND);
-						newGame.setTrump(SkatConstants.SUIT_GRAND);
+						newGame.setGameType(SkatConstants.GameTypes.RAMSCHGRAND);
+						newGame.setTrump(null);
 
 						playing(newGame);
 						return;
@@ -382,8 +382,8 @@ public class SkatGame extends Observable {
 
 			// TODO (mjl) Test this bit
 			GameAnnouncement newGame = new GameAnnouncement();
-			newGame.setGameType(SkatConstants.RAMSCH);
-			newGame.setTrump(SkatConstants.SUIT_GRAND);
+			newGame.setGameType(SkatConstants.GameTypes.RAMSCH);
+			newGame.setTrump(null);
 
 			playing(newGame);
 		}
@@ -394,19 +394,13 @@ public class SkatGame extends Observable {
 	 */
 	private void finishGame() {
 
-		if (gameData.getGameType() != SkatConstants.PASSED_IN) {
+		if (gameData.getGameType() != SkatConstants.GameTypes.PASSED_IN) {
 
-			if (gameData.getGameType() == SkatConstants.RAMSCH) {
+			if (gameData.getGameType() == SkatConstants.GameTypes.RAMSCH) {
 				calculateRamschResult();
 			} else {
 				calculateResult();
 			}
-
-		} else {
-
-			// passed in
-			log.debug("finishGame: passed in");
-			gameData.setGameResult(0);
 		}
 
 		// TODO (mjl) Here the decision should be made, whether any events
@@ -417,7 +411,7 @@ public class SkatGame extends Observable {
 		// if the game was a ramsch grand hand, the same player is forehand
 		// again
 		// TODO (js) This should be adjustable in the table options
-		if (gameData.getGameType() != SkatConstants.RAMSCHGRAND) {
+		if (gameData.getGameType() != SkatConstants.GameTypes.RAMSCHGRAND) {
 
 			dealer = (gameData.getDealer() + 1) % 3;
 
@@ -578,13 +572,14 @@ public class SkatGame extends Observable {
 		int opponentScore = gameData.getOpponentScore();
 
 		String theWinnerIs;
-
-		if (gameData.getGameType() == SkatConstants.NULL
+		
+		// TODO Refactor it, because it hurts so much ;-)
+		if (gameData.getGameType() == SkatConstants.GameTypes.NULL
 				&& gameData.isGameLost()) {
 
 			theWinnerIs = jskatStrings.getString("opponent_player_win_null");
 
-		} else if (gameData.getGameType() == SkatConstants.NULL) {
+		} else if (gameData.getGameType() == SkatConstants.GameTypes.NULL) {
 
 			theWinnerIs = jskatStrings.getString("single_player_wins_null");
 			gameData.setGameLost(false);
@@ -600,7 +595,7 @@ public class SkatGame extends Observable {
 			gameData.setGameLost(true);
 		}
 
-		if (gameData.getGameType() != SkatConstants.NULL) {
+		if (gameData.getGameType() != SkatConstants.GameTypes.NULL) {
 			theWinnerIs = theWinnerIs + " " + playerScore + " "
 					+ jskatStrings.getString("to") + " " + opponentScore + " "
 					+ jskatStrings.getString("points") + ".";
@@ -755,12 +750,12 @@ public class SkatGame extends Observable {
 		log.debug("TrickValue: " + trickValue);
 
 		// add the trick value to the trick winner's score
-		gameData.addToScore(playerOrder[trickWinner], trickValue);
+		gameData.addToPlayerPoints(playerOrder[trickWinner], trickValue);
 
 		trickNumber++;
 		currPlayerID = 0;
 
-		if (gameData.getGameType() == SkatConstants.NULL
+		if (gameData.getGameType() == SkatConstants.GameTypes.NULL
 				&& playerOrder[trickWinner] == gameData.getSinglePlayer()) {
 
 			// null game is lost because single player made a trick
@@ -806,7 +801,7 @@ public class SkatGame extends Observable {
 			// evaluated properly
 			gameData.setGameLost(false);
 
-			if (gameData.getGameType() == SkatConstants.RAMSCH) {
+			if (gameData.getGameType() == SkatConstants.GameTypes.RAMSCH) {
 
 				log.debug("Ramsch Skat option: "
 						+ skatTableOptions.getRamschSkat());
@@ -850,7 +845,7 @@ public class SkatGame extends Observable {
 				gameData.setSkatOwner(gameData.getSinglePlayer());
 			}
 
-			gameData.addToScore(gameData.getSkatOwner(), gameData.getSkat()
+			gameData.addToPlayerPoints(gameData.getSkatOwner(), gameData.getSkat()
 					.getCard(0).getCalcValue()
 					+ gameData.getSkat().getCard(1).getCalcValue());
 
@@ -1020,7 +1015,7 @@ public class SkatGame extends Observable {
 
 		log.debug("showSkat()");
 
-		if (gameData.getGameType() == SkatConstants.RAMSCH) {
+		if (gameData.getGameType() == SkatConstants.GameTypes.RAMSCH) {
 
 			// we play a ramsch game
 			setState(GAMESTATE_SHOWING_SKAT);
@@ -1255,36 +1250,33 @@ public class SkatGame extends Observable {
 	 * @param value
 	 *            value for human card
 	 */
-	protected void playTrickCard(int suit, int value) {
+	protected void playTrickCard(SkatConstants.Suits suit, SkatConstants.Ranks rank) {
 
 		log.debug("Human player plays card as player #" + currPlayerID);
 
 		// TODO bad design, this method is only valid for human players
 
 		log.debug("playTrickCard() for trick " + trickNumber + ": suit: "
-				+ suit + ", value:" + value);
+				+ suit + ", value:" + rank);
 
 		boolean cardAllowed = false;
 
 		CardVector trickVector = ((Trick) gameData.getTricks().get(trickNumber))
 				.getCardVector();
 
-		if (suit != -1 && value != -1) {
+		// only if the user has clicked on a card not an empty panel
+		Card cardToBePlayed = new Card(suit, rank);
 
-			// only if the user has clicked on a card not an empty panel
-			Card cardToBePlayed = new Card(suit, value);
+		if (trickVector.size() == 0) {
 
-			if (trickVector.size() == 0) {
+			// First card in the trick is always allowed
+			cardAllowed = true;
 
-				// First card in the trick is always allowed
-				cardAllowed = true;
+		} else if (SkatRules.isCardAllowed(cardToBePlayed, gameData
+				.getPlayerCards(playerOrder[currPlayerID]), trickVector
+				.getCard(0), gameData.getGameType(), gameData.getTrump())) {
 
-			} else if (SkatRules.isCardAllowed(cardToBePlayed, gameData
-					.getPlayerCards(playerOrder[currPlayerID]), trickVector
-					.getCard(0), gameData.getGameType(), gameData.getTrump())) {
-
-				cardAllowed = true;
-			}
+			cardAllowed = true;
 		}
 
 		if (cardAllowed) {
@@ -1292,7 +1284,7 @@ public class SkatGame extends Observable {
 			log.debug("card count trick #" + trickNumber + "="
 					+ trickVector.size());
 
-			Card cardPlayed = new Card(suit, value);
+			Card cardPlayed = new Card(suit, rank);
 
 			gameData.setTrickCard(trickNumber, currPlayerID, cardPlayed);
 
@@ -1365,14 +1357,14 @@ public class SkatGame extends Observable {
 	 * @param suit
 	 * @param value
 	 */
-	protected void putCardIntoSkat(int suit, int value) {
+	protected void putCardIntoSkat(SkatConstants.Suits suit, SkatConstants.Ranks rank) {
 
 		CardVector playerCards = gameData.getPlayerCards(2);
 		CardVector skatCards = gameData.getSkat();
 
-		if (skatCards.size() < 4 && playerCards.contains(suit, value)) {
+		if (skatCards.size() < 4 && playerCards.contains(suit, rank)) {
 
-			skatCards.add(playerCards.remove(suit, value));
+			skatCards.add(playerCards.remove(suit, rank));
 		}
 	}
 
@@ -1382,14 +1374,14 @@ public class SkatGame extends Observable {
 	 * @param suit
 	 * @param value
 	 */
-	protected void takeCardFromSkat(int suit, int value) {
+	protected void takeCardFromSkat(SkatConstants.Suits suit, SkatConstants.Ranks rank) {
 
 		CardVector playerCards = gameData.getPlayerCards(2);
 		CardVector skatCards = gameData.getSkat();
 
-		if (playerCards.size() < 10 && skatCards.contains(suit, value)) {
+		if (playerCards.size() < 10 && skatCards.contains(suit, rank)) {
 
-			playerCards.add(skatCards.remove(suit, value));
+			playerCards.add(skatCards.remove(suit, rank));
 		}
 	}
 
@@ -1451,7 +1443,8 @@ public class SkatGame extends Observable {
 
 		// if this is not a ramsch game, ask the player to
 		// announce his game
-		if (gameData.getGameType() != SkatConstants.RAMSCH) {
+		if (gameData.getGameType() != SkatConstants.GameTypes.RAMSCH &&
+				gameData.getGameType() != SkatConstants.GameTypes.RAMSCHGRAND) {
 
 			new GameAnnounceDialog(mainWindow, true, jskatStrings, skatSeries
 					.getCurrSkatGame()).setVisible(true);
