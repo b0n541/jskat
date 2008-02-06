@@ -40,29 +40,29 @@ public class SkatGameTest extends TestCase {
 		super.setUp();
 
 		game001 = new SkatGameData();
-		game001.setGameType(SkatConstants.RAMSCH);
+		game001.setGameType(SkatConstants.GameTypes.RAMSCH);
 		game001.geschoben();
-		game001.addToScore(0, 56);
-		game001.addToScore(1, 64);
-		game001.addToScore(2, 0);
+		game001.addToPlayerPoints(0, 56);
+		game001.addToPlayerPoints(1, 64);
+		game001.addToPlayerPoints(2, 0);
 		game001.setJungFrau(true);
 		game001.calcResult();
 
 		game002 = new SkatGameData();
-		game002.setGameType(SkatConstants.RAMSCH);
-		game002.addToScore(0, 11);
-		game002.addToScore(1, 45);
-		game002.addToScore(2, 64);
+		game002.setGameType(SkatConstants.GameTypes.RAMSCH);
+		game002.addToPlayerPoints(0, 11);
+		game002.addToPlayerPoints(1, 45);
+		game002.addToPlayerPoints(2, 64);
 		game002.calcResult();
 
 		game003 = new SkatGameData();
-		game003.setGameType(SkatConstants.RAMSCH);
+		game003.setGameType(SkatConstants.GameTypes.RAMSCH);
 		game003.geschoben();
 		game003.geschoben();
 		game003.geschoben();
-		game003.addToScore(0, 64);
-		game003.addToScore(1, 28);
-		game003.addToScore(2, 28);
+		game003.addToPlayerPoints(0, 64);
+		game003.addToPlayerPoints(1, 28);
+		game003.addToPlayerPoints(2, 28);
 		game003.calcResult();
 	}
 

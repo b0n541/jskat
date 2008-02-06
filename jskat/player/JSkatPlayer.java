@@ -14,6 +14,7 @@ package jskat.player;
 import jskat.data.GameAnnouncement;
 import jskat.share.CardVector;
 import jskat.share.Card;
+import jskat.share.SkatConstants;
 
 /**
  * The JSkat Player Interface
@@ -51,8 +52,8 @@ public interface JSkatPlayer {
 	public GameAnnouncement announceGame();
 
 	/** Start the game: inform player of game type, trumpf and special options */
-	public void startGame(int singlePlayer, int forehandPlayer, int gameType,
-			int trump, boolean handGame, boolean ouvertGame);
+	public void startGame(int singlePlayer, int forehandPlayer, SkatConstants.GameTypes gameType,
+			SkatConstants.Suits trump, boolean handGame, boolean ouvertGame);
 
 	/** Shows the cards of the single player to the opponents in ouvert games */
 	public void discloseOuvertCards(CardVector ouvertCards);
@@ -81,7 +82,7 @@ public interface JSkatPlayer {
 	public void showTrick(CardVector trick, int trickWinner);
 
 	/** Get the selected card from the player's hand */
-	public Card removeCard(int suit, int value);
+	public Card removeCard(SkatConstants.Suits suit, SkatConstants.Ranks rank);
 
 	/**
 	 * Get the selected card from the player's hand
