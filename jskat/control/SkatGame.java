@@ -132,8 +132,7 @@ public class SkatGame extends Observable {
 		gameData.setTrump(newGame.getTrump());
 		gameData.setOuvert(newGame.isOuvert());
 
-		if (gameData.getGameType() != SkatConstants.GameTypes. || gameData.getGameType() == 1
-				|| gameData.getGameType() == 2) {
+		if (gameData.getGameType() != SkatConstants.GameTypes.PASSED_IN) {
 
 			updateDealtCards(gameData.getSinglePlayer());
 		}
@@ -144,10 +143,9 @@ public class SkatGame extends Observable {
 		String trumpColorText = new String();
 
 		int cardFace = jskatOptions.getCardFace();
+		SkatConstants.Suits trump = gameData.getTrump();
 
-		switch (gameData.getTrump()) {
-
-		case (SkatConstants.CLUBS):
+		if (trump == SkatConstants.Suits.CLUBS) {
 
 			if (cardFace == JSkatOptions.CARD_FACE_FRENCH) {
 
@@ -157,9 +155,8 @@ public class SkatGame extends Observable {
 
 				trumpColorText = jskatStrings.getString("acorns");
 			}
-			break;
-
-		case (SkatConstants.SPADES):
+		}
+		else if (trump == SkatConstants.Suits.SPADES) {
 
 			if (cardFace == JSkatOptions.CARD_FACE_FRENCH) {
 
@@ -169,14 +166,12 @@ public class SkatGame extends Observable {
 
 				trumpColorText = jskatStrings.getString("greens");
 			}
-			break;
-
-		case (SkatConstants.HEARTS):
+		}
+		else if (trump == SkatConstants.Suits.HEARTS) {
 
 			trumpColorText = jskatStrings.getString("hearts");
-			break;
-
-		case (SkatConstants.DIAMONDS):
+		}
+		else if (trump == SkatConstants.Suits.DIAMONDS) {
 
 			if (cardFace == JSkatOptions.CARD_FACE_FRENCH) {
 
@@ -186,30 +181,30 @@ public class SkatGame extends Observable {
 
 				trumpColorText = jskatStrings.getString("bells");
 			}
-			break;
 		}
 
-		String gameTypeText;
-		switch (gameData.getGameType()) {
+		String gameTypeText = "";
+		SkatConstants.GameTypes gameType = gameData.getGameType();
+		
+		if (gameType == SkatConstants.GameTypes.SUIT) {
 
-		case (0):
 			gameTypeText = jskatStrings.getString("suit_game");
-			break;
-		case (1):
+		}
+		else if (gameType == SkatConstants.GameTypes.GRAND) {
+
 			gameTypeText = jskatStrings.getString("grand");
-			break;
-		case (2):
+		}
+		else if (gameType == SkatConstants.GameTypes.NULL) {
+
 			gameTypeText = jskatStrings.getString("null");
-			break;
-		case (3):
+		}
+		else if (gameType == SkatConstants.GameTypes.RAMSCH) {
+
 			gameTypeText = jskatStrings.getString("ramsch");
-			break;
-		case (4):
+		}
+		else if (gameType == SkatConstants.GameTypes.RAMSCHGRAND) {
+
 			gameTypeText = jskatStrings.getString("ramsch_grand");
-			break;
-		default:
-			gameTypeText = jskatStrings.getString("suit_game");
-			break;
 		}
 
 		if (isJSkatPlayedByHuman()) {
