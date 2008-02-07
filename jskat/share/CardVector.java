@@ -309,14 +309,13 @@ public class CardVector extends Observable {
 
 			int currIndex = 0;
 
-			while (index == -1 || currIndex < cards.size()) {
+			while (index == -1 && currIndex < cards.size()) {
 
 				if (getCard(currIndex).getSuit() == suit
 						&& getCard(currIndex).getRank() == rank) {
 
 					index = currIndex;
 				}
-
 				currIndex++;
 			}
 		}
@@ -493,7 +492,7 @@ public class CardVector extends Observable {
 
 	public void sort(SkatConstants.GameTypes gameType) {
 
-		sort(gameType, null);
+		sort(gameType, SkatConstants.Suits.CLUBS);
 	}
 
 	/**
@@ -503,7 +502,7 @@ public class CardVector extends Observable {
 
 		// TODO refactor it in seperate methods
 		
-		if (gameType == SkatConstants.GameTypes.SUIT) {
+		if (gameType == SkatConstants.GameTypes.SUIT && trump == null) {
 		
 			throw new IllegalArgumentException("No trump color given!");
 		}
@@ -543,7 +542,8 @@ public class CardVector extends Observable {
 			for (SkatConstants.Suits currentSuit : SkatConstants.Suits.values()) {
 				if(currentSuit == trump) {
 					for (SkatConstants.Ranks currentRank : SkatConstants.Ranks.values()) {
-						if (contains(currentSuit, currentRank)) {
+						if (currentRank != SkatConstants.Ranks.JACK &&
+								contains(currentSuit, currentRank)) {
 							changeCards(sortedCards, getIndexOf(currentSuit, currentRank));
 							sortedCards++;
 						}
@@ -555,7 +555,8 @@ public class CardVector extends Observable {
 			for (SkatConstants.Suits currentSuit : SkatConstants.Suits.values()) {
 				if(currentSuit != trump) {
 					for (SkatConstants.Ranks currentRank : SkatConstants.Ranks.values()) {
-						if (contains(currentSuit, currentRank)) {
+						if (currentRank != SkatConstants.Ranks.JACK &&
+								contains(currentSuit, currentRank)) {
 							changeCards(sortedCards, getIndexOf(currentSuit, currentRank));
 							sortedCards++;
 						}
