@@ -36,13 +36,13 @@ public class Helper {
 		if(trick.getTrick().size()<2) return false;
 		if(trick.getTrick().size()<trick.getSinglePlayerPos()-1) return false;
 		if(trick.getSinglePlayerPos() == 0) {
-			if(trick.getCard(0).beats(trick.getCard(1), trick.getGameInfo().getGameType(), trick.getGameInfo().getTrump(), trick.getCard(0).getSuit()))
+			if(trick.getCard(0).beats(trick.getCard(1), trick.getGameInfo().getGameType(), trick.getGameInfo().getTrump(), trick.getCard(0)))
 					return true;
 				else
 					return false;
 		}
 		else if (trick.getSinglePlayerPos() == 1){
-			if(trick.getCard(1).beats(trick.getCard(0), trick.getGameInfo().getGameType(), trick.getGameInfo().getTrump(), trick.getCard(0).getSuit()))
+			if(trick.getCard(1).beats(trick.getCard(0), trick.getGameInfo().getGameType(), trick.getGameInfo().getTrump(), trick.getCard(0)))
 					return true;
 				else
 					return false;
@@ -61,11 +61,11 @@ public class Helper {
 	 * @param gameType game type
 	 * @return true, if <b>cards</b> contain a card that can beat the <b>cardToBeat</b>
 	 */
-	public static int isAbleToBeat(CardVector cards, Card cardToBeat, int trump, Card initialCard, int gameType) {
+	public static int isAbleToBeat(CardVector cards, Card cardToBeat, SkatConstants.Suits trump, Card initialCard, SkatConstants.GameTypes gameType) {
 		int result = -1;
 		for(int i=0; i<cards.size();i++) {
 			if(SkatRules.isCardAllowed(cards.getCard(i), cards, initialCard, gameType, trump)) {
-				if(cards.getCard(i).beats(cardToBeat, gameType, trump, initialCard.getSuit())) {
+				if(cards.getCard(i).beats(cardToBeat, gameType, trump, initialCard)) {
 					log.debug(cards.getCard(i)+" can beat "+cardToBeat+".");
 					result = i;
 					break;				
@@ -82,12 +82,12 @@ public class Helper {
 	 * @param gameType
 	 * @return true if there is at least one card in the hand that can match <b>initialCard</b>
 	 */
-	public static boolean isAbleToMatch(CardVector cards, int trump, Card initialCard, int gameType) {
+	public static boolean isAbleToMatch(CardVector cards, SkatConstants.Suits trump, Card initialCard, SkatConstants.GameTypes gameType) {
 		boolean result = false;
 		for(int i=0; i<cards.size();i++) {
 			boolean sameSuit = (cards.getCard(i).getSuit() == initialCard.getSuit());
 			if(SkatRules.isCardAllowed(cards.getCard(i), cards, initialCard, gameType, trump)) {
-				if(gameType != SkatConstants.NULL) {
+				if(gameType != SkatConstants.GameTypes.NULL) {
 					if(cards.getCard(i).isTrump(trump) && initialCard.isTrump(trump)) {
 						result = true;
 					}
@@ -110,11 +110,11 @@ public class Helper {
 	 * @param currTrump the current trump color
 	 * @return index of the highest trump, 0 if there is no trump
 	 */
-	public static int getHighestTrump(CardVector cards, int currTrump) {
+	public static int getHighestTrump(CardVector cards, SkatConstants.Suits currTrump) {
 		if(cards.size()<1) return 0;
 		int index = 0;
 		for (int i=1;i<cards.size();i++) {
-			if(cards.getCard(i).beats(cards.getCard(index), SkatConstants.SUIT, currTrump, currTrump))
+			if(cards.getCard(i).beats(cards.getCard(index), SkatConstants.GameTypes.SUIT, currTrump, cards.getCard(i)))
 				index = i;
 		}
 		return index;
@@ -125,12 +125,12 @@ public class Helper {
 	 * @param currTrump trump color
 	 * @return true, if there is at least one trump card in the hand
 	 */
-	public static boolean hasTrump(CardVector cards, int currTrump) {
+	public static boolean hasTrump(CardVector cards, SkatConstants.Suits currTrump) {
 		return (cards.hasSuit(currTrump) ||
-		cards.contains(SkatConstants.CLUBS, SkatConstants.JACK) ||
-		cards.contains(SkatConstants.SPADES, SkatConstants.JACK) ||
-		cards.contains(SkatConstants.HEARTS, SkatConstants.JACK) ||
-		cards.contains(SkatConstants.DIAMONDS, SkatConstants.JACK));
+		cards.contains(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.JACK) ||
+		cards.contains(SkatConstants.Suits.SPADES, SkatConstants.Ranks.JACK) ||
+		cards.contains(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.JACK) ||
+		cards.contains(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK));
 	}
 
 	/** Gets the game multiplier
@@ -138,14 +138,17 @@ public class Helper {
 	 * @return multiplier (only positive values)
 	 */
 	public static int getMultiplier(CardVector cards) {
+		
+		// TODO (js) this might be a candidate for SkatRules
+		
 		int multiplier = 2;
-		if (cards.contains(SkatConstants.CLUBS, SkatConstants.JACK)) {
+		if (cards.contains(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.JACK)) {
 			// game was played with jacks
-			if (cards.contains(SkatConstants.SPADES, SkatConstants.JACK)) {
+			if (cards.contains(SkatConstants.Suits.SPADES, SkatConstants.Ranks.JACK)) {
 				multiplier++;
-				if (cards.contains(SkatConstants.HEARTS, SkatConstants.JACK)) {
+				if (cards.contains(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.JACK)) {
 					multiplier++;
-					if (cards.contains(SkatConstants.DIAMONDS, SkatConstants.JACK)) {
+					if (cards.contains(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK)) {
 						multiplier++;
 					}
 				}
@@ -153,11 +156,11 @@ public class Helper {
 		}
 		else {
 			// game was played without jacks
-			if (!cards.contains(SkatConstants.SPADES, SkatConstants.JACK)) {
+			if (!cards.contains(SkatConstants.Suits.SPADES, SkatConstants.Ranks.JACK)) {
 				multiplier++;
-				if (!cards.contains(SkatConstants.HEARTS, SkatConstants.JACK)) {
+				if (!cards.contains(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.JACK)) {
 					multiplier++;
-					if (!cards.contains(SkatConstants.DIAMONDS, SkatConstants.JACK)) {
+					if (!cards.contains(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK)) {
 						multiplier++;
 					}
 				}
@@ -172,16 +175,16 @@ public class Helper {
 	 * @param suit only cards of this suit are considered
 	 * @return binary value of the available cards
 	 */
-	public static int suitCardsToBinaryWithSkat(CardVector cards, CardVector skat, int suit) {
+	public static int suitCardsToBinaryWithSkat(CardVector cards, CardVector skat, SkatConstants.Suits suit) {
 		int counter = 0;
-		if (cards.contains(suit, SkatConstants.SEVEN) || skat.contains(suit, SkatConstants.SEVEN)) counter+=1;
-		if (cards.contains(suit, SkatConstants.EIGHT) || skat.contains(suit, SkatConstants.EIGHT)) counter+=2;
-		if (cards.contains(suit, SkatConstants.NINE)  || skat.contains(suit, SkatConstants.NINE))  counter+=4;
-		if (cards.contains(suit, SkatConstants.QUEEN) || skat.contains(suit, SkatConstants.QUEEN)) counter+=8;
-		if (cards.contains(suit, SkatConstants.KING)  || skat.contains(suit, SkatConstants.KING))  counter+=16;
-		if (cards.contains(suit, SkatConstants.TEN)   || skat.contains(suit, SkatConstants.TEN))   counter+=32;
-		if (cards.contains(suit, SkatConstants.ACE)   || skat.contains(suit, SkatConstants.ACE))   counter+=64;
-		if (cards.contains(suit, SkatConstants.JACK)   || skat.contains(suit, SkatConstants.JACK))   counter+=128;
+		if (cards.contains(suit, SkatConstants.Ranks.SEVEN) || skat.contains(suit, SkatConstants.Ranks.SEVEN)) counter+=1;
+		if (cards.contains(suit, SkatConstants.Ranks.EIGHT) || skat.contains(suit, SkatConstants.Ranks.EIGHT)) counter+=2;
+		if (cards.contains(suit, SkatConstants.Ranks.NINE)  || skat.contains(suit, SkatConstants.Ranks.NINE))  counter+=4;
+		if (cards.contains(suit, SkatConstants.Ranks.QUEEN) || skat.contains(suit, SkatConstants.Ranks.QUEEN)) counter+=8;
+		if (cards.contains(suit, SkatConstants.Ranks.KING)  || skat.contains(suit, SkatConstants.Ranks.KING))  counter+=16;
+		if (cards.contains(suit, SkatConstants.Ranks.TEN)   || skat.contains(suit, SkatConstants.Ranks.TEN))   counter+=32;
+		if (cards.contains(suit, SkatConstants.Ranks.ACE)   || skat.contains(suit, SkatConstants.Ranks.ACE))   counter+=64;
+		if (cards.contains(suit, SkatConstants.Ranks.JACK)   || skat.contains(suit, SkatConstants.Ranks.JACK))   counter+=128;
 		return counter;
 	}
 
@@ -190,16 +193,16 @@ public class Helper {
 	 * @param suit only cards of this suit are considered
 	 * @return binary value of the available cards
 	 */
-	public static int suitCardsToBinary(CardVector cards, int suit) {
+	public static int suitCardsToBinary(CardVector cards, SkatConstants.Suits suit) {
 		int counter = 0;
-		if (cards.contains(suit, SkatConstants.SEVEN)) counter+=1;
-		if (cards.contains(suit, SkatConstants.EIGHT)) counter+=2;
-		if (cards.contains(suit, SkatConstants.NINE)) counter+=4;
-		if (cards.contains(suit, SkatConstants.QUEEN)) counter+=8;
-		if (cards.contains(suit, SkatConstants.KING)) counter+=16;
-		if (cards.contains(suit, SkatConstants.TEN)) counter+=32;
-		if (cards.contains(suit, SkatConstants.ACE)) counter+=64;
-		if (cards.contains(suit, SkatConstants.JACK))   counter+=128;
+		if (cards.contains(suit, SkatConstants.Ranks.SEVEN)) counter+=1;
+		if (cards.contains(suit, SkatConstants.Ranks.EIGHT)) counter+=2;
+		if (cards.contains(suit, SkatConstants.Ranks.NINE)) counter+=4;
+		if (cards.contains(suit, SkatConstants.Ranks.QUEEN)) counter+=8;
+		if (cards.contains(suit, SkatConstants.Ranks.KING)) counter+=16;
+		if (cards.contains(suit, SkatConstants.Ranks.TEN)) counter+=32;
+		if (cards.contains(suit, SkatConstants.Ranks.ACE)) counter+=64;
+		if (cards.contains(suit, SkatConstants.Ranks.JACK))   counter+=128;
 		return counter;
 	}
 	
@@ -209,16 +212,16 @@ public class Helper {
 	 * @param suit only cards of this suit are considered
 	 * @return binary value of the available cards
 	 */
-	public static int suitCardsToBinaryNullGame(CardVector cards, int suit) {
+	public static int suitCardsToBinaryNullGame(CardVector cards, SkatConstants.Suits suit) {
 		int counter = 0;
-		if (cards.contains(suit, SkatConstants.SEVEN)) counter+=1;
-		if (cards.contains(suit, SkatConstants.EIGHT)) counter+=2;
-		if (cards.contains(suit, SkatConstants.NINE)) counter+=4;
-		if (cards.contains(suit, SkatConstants.TEN)) counter+=8;
-		if (cards.contains(suit, SkatConstants.JACK)) counter+=16;
-		if (cards.contains(suit, SkatConstants.QUEEN)) counter+=32;
-		if (cards.contains(suit, SkatConstants.KING)) counter+=64;
-		if (cards.contains(suit, SkatConstants.ACE)) counter+=128;
+		if (cards.contains(suit, SkatConstants.Ranks.SEVEN)) counter+=1;
+		if (cards.contains(suit, SkatConstants.Ranks.EIGHT)) counter+=2;
+		if (cards.contains(suit, SkatConstants.Ranks.NINE)) counter+=4;
+		if (cards.contains(suit, SkatConstants.Ranks.TEN)) counter+=8;
+		if (cards.contains(suit, SkatConstants.Ranks.JACK)) counter+=16;
+		if (cards.contains(suit, SkatConstants.Ranks.QUEEN)) counter+=32;
+		if (cards.contains(suit, SkatConstants.Ranks.KING)) counter+=64;
+		if (cards.contains(suit, SkatConstants.Ranks.ACE)) counter+=128;
 		return counter;
 	}
 
@@ -228,10 +231,10 @@ public class Helper {
 	 */
 	public static int getJacks(CardVector cards) {
 		int counter = 0;
-		if (cards.contains(SkatConstants.CLUBS, SkatConstants.JACK)) counter+=1;
-		if (cards.contains(SkatConstants.SPADES, SkatConstants.JACK)) counter+=2;
-		if (cards.contains(SkatConstants.HEARTS, SkatConstants.JACK)) counter+=4;
-		if (cards.contains(SkatConstants.DIAMONDS, SkatConstants.JACK)) counter+=8;
+		if (cards.contains(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.JACK)) counter+=1;
+		if (cards.contains(SkatConstants.Suits.SPADES, SkatConstants.Ranks.JACK)) counter+=2;
+		if (cards.contains(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.JACK)) counter+=4;
+		if (cards.contains(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK)) counter+=8;
 		return counter;
 	}
 
@@ -241,10 +244,10 @@ public class Helper {
 	 */
 	public static int countJacks(CardVector cards) {
 		int counter = 0;
-		if (cards.contains(SkatConstants.CLUBS, SkatConstants.JACK)) counter++;
-		if (cards.contains(SkatConstants.SPADES, SkatConstants.JACK)) counter++;
-		if (cards.contains(SkatConstants.HEARTS, SkatConstants.JACK)) counter++;
-		if (cards.contains(SkatConstants.DIAMONDS, SkatConstants.JACK)) counter++;
+		if (cards.contains(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.JACK)) counter++;
+		if (cards.contains(SkatConstants.Suits.SPADES, SkatConstants.Ranks.JACK)) counter++;
+		if (cards.contains(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.JACK)) counter++;
+		if (cards.contains(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK)) counter++;
 		return counter;
 	}
 
@@ -252,16 +255,16 @@ public class Helper {
 	 * @param binary binary stream (four bits)
 	 * @return suit color, -1 if more than one bit is set
 	 */
-	public static int binaryToSuit(int binary) {
-		int result = -1;
+	public static SkatConstants.Suits binaryToSuit(int binary) {
+		SkatConstants.Suits result = null;
 		if(!(binary==1 || binary==2 || binary==4 || binary==8)) {
 			log.warn(".binaryToSuit(): warning: more than one suit possible! -->"+binary);
 			return result;
 		}
-		if((binary & 1) > 0) result = SkatConstants.DIAMONDS;
-		if((binary & 2) > 0) result = SkatConstants.HEARTS;
-		if((binary & 4) > 0) result = SkatConstants.SPADES;
-		if((binary & 8) > 0) result = SkatConstants.CLUBS;
+		if((binary & 1) > 0) result = SkatConstants.Suits.DIAMONDS;
+		if((binary & 2) > 0) result = SkatConstants.Suits.HEARTS;
+		if((binary & 4) > 0) result = SkatConstants.Suits.SPADES;
+		if((binary & 8) > 0) result = SkatConstants.Suits.CLUBS;
 		return result;
 	}
 
@@ -270,11 +273,11 @@ public class Helper {
 	 * @param suit suit value
 	 * @return suit name ("x" if not recognized)
 	 */
-	public static String suitName(int suit) {
-		if(suit == SkatConstants.DIAMONDS) return "D";
-		else if(suit == SkatConstants.HEARTS) return "H";
-		else if(suit == SkatConstants.SPADES) return "S";
-		else if(suit == SkatConstants.CLUBS) return "C";
+	public static String suitName(SkatConstants.Suits suit) {
+		if(suit == SkatConstants.Suits.DIAMONDS) return "D";
+		else if(suit == SkatConstants.Suits.HEARTS) return "H";
+		else if(suit == SkatConstants.Suits.SPADES) return "S";
+		else if(suit == SkatConstants.Suits.CLUBS) return "C";
 		else return "x";
 	}
 }

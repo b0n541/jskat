@@ -37,7 +37,7 @@ public class OpponentPlayer implements CardPlayer {
 	 * @see jskat.player.AIPlayerMJL.CardPlayer#playNextCard(jskat.share.CardVector, jskat.player.AIPlayerMJL.TrickInfo)
 	 */
 	public int playNextCard(CardVector cards, TrickInfo trickInfo) {
-		if(trickInfo.getGameType()==SkatConstants.NULL) {
+		if(trickInfo.getGameType()==SkatConstants.GameTypes.NULL) {
 			return playNextCardNullGame(cards, trickInfo);
 		}
     	
@@ -56,7 +56,7 @@ public class OpponentPlayer implements CardPlayer {
 					log.debug(".playNextCard(): Trick is SinglePlayerWin");
 					// 1.1.1: if yes: can beat?
 					Card currentWinner;
-					if (trickInfo.getTrick().getCard(0).beats(trickInfo.getTrick().getCard(1), trickInfo.getGameType(), trickInfo.getTrump(), trickInfo.getDemandSuit())) {
+					if (trickInfo.getTrick().getCard(0).beats(trickInfo.getTrick().getCard(1), trickInfo.getGameType(), trickInfo.getTrump(), trickInfo.getCard(0))) {
 						currentWinner = trickInfo.getCard(0);
 					}
 					else {
@@ -75,7 +75,7 @@ public class OpponentPlayer implements CardPlayer {
 							if(bestToBePlayed < 0) {
 								log.debug(".playNextCard(): Damn! I have to play a Jack...");
 								bestToBePlayed = 0;
-								while(cards.size()>bestToBePlayed+1 && cards.getCard(bestToBePlayed+1).getValue()==SkatConstants.JACK) bestToBePlayed++;
+								while(cards.size()>bestToBePlayed+1 && cards.getCard(bestToBePlayed+1).getRank()==SkatConstants.Ranks.JACK) bestToBePlayed++;
 							}
 						}
 						else {
@@ -91,7 +91,7 @@ public class OpponentPlayer implements CardPlayer {
 						if(bestToBePlayed < 0) {
 							log.debug(".playNextCard(): Damn! I have to play a Jack...");
 							bestToBePlayed = 0;
-							while(cards.size()>bestToBePlayed+1 && cards.getCard(bestToBePlayed+1).getValue()==SkatConstants.JACK) bestToBePlayed++;
+							while(cards.size()>bestToBePlayed+1 && cards.getCard(bestToBePlayed+1).getRank()==SkatConstants.Ranks.JACK) bestToBePlayed++;
 						}
 					}
 					else {
@@ -142,7 +142,7 @@ public class OpponentPlayer implements CardPlayer {
             
 			// At first: Is trump played?
 			if (trickInfo.getTrick().getCard(0).getSuit() == trickInfo.getTrump() ||
-			trickInfo.getTrick().getCard(0).getValue() == SkatConstants.JACK) {
+			trickInfo.getTrick().getCard(0).getRank() == SkatConstants.Ranks.JACK) {
                 
 				// Trump is played
 				// Does the player have trump?
@@ -150,17 +150,17 @@ public class OpponentPlayer implements CardPlayer {
                     
 					// Play the highest trump
 					// Check whether there is a Jack in the cards or not
-					if (cards.contains(SkatConstants.CLUBS, SkatConstants.JACK)) {
-						bestToBePlayed = cards.getIndexOf(SkatConstants.CLUBS, SkatConstants.JACK);
-					} else if (cards.contains(SkatConstants.SPADES, SkatConstants.JACK)) {
-						bestToBePlayed = cards.getIndexOf(SkatConstants.SPADES, SkatConstants.JACK);
-					} else if (cards.contains(SkatConstants.HEARTS, SkatConstants.JACK)) {
-						bestToBePlayed = cards.getIndexOf(SkatConstants.HEARTS, SkatConstants.JACK);
-					} else if (cards.contains(SkatConstants.DIAMONDS, SkatConstants.JACK)) {
-						bestToBePlayed = cards.getIndexOf(SkatConstants.DIAMONDS, SkatConstants.JACK);
+					if (cards.contains(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.JACK)) {
+						bestToBePlayed = cards.getIndexOf(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.JACK);
+					} else if (cards.contains(SkatConstants.Suits.SPADES, SkatConstants.Ranks.JACK)) {
+						bestToBePlayed = cards.getIndexOf(SkatConstants.Suits.SPADES, SkatConstants.Ranks.JACK);
+					} else if (cards.contains(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.JACK)) {
+						bestToBePlayed = cards.getIndexOf(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.JACK);
+					} else if (cards.contains(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK)) {
+						bestToBePlayed = cards.getIndexOf(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK);
 					} else {
 						// No Jack in the cards
-						bestToBePlayed = cards.getLastIndexOfSuit(SkatConstants.SUIT, trickInfo.getTrump());
+						bestToBePlayed = cards.getLastIndexOfSuit(SkatConstants.GameTypes.SUIT, trickInfo.getTrump());
 					}
                     
 				} else {
@@ -175,19 +175,19 @@ public class OpponentPlayer implements CardPlayer {
                 
 				// If trump is not played the player is forced
 				// to play the color of the first card
-				if (cards.hasSuit(SkatConstants.SUIT, trickInfo.getTrick().getCard(0).getSuit())) {
+				if (cards.hasSuit(SkatConstants.GameTypes.SUIT, trickInfo.getTrick().getCard(0).getSuit())) {
                     
 					// Player has the color
 					// check if it's ours or if I can beat 
 					if(Helper.isSinglePlayerWin(trickInfo)) {
 						bestToBePlayed = Helper.isAbleToBeat(cards, trickInfo.getCard(0), trickInfo.getTrump(), trickInfo.getCard(0), trickInfo.getGameType()); 
 						if(bestToBePlayed < 0) {
-							bestToBePlayed = cards.getFirstIndexOfSuit(SkatConstants.SUIT, trickInfo.getTrick().getCard(0).getSuit());
+							bestToBePlayed = cards.getFirstIndexOfSuit(SkatConstants.GameTypes.SUIT, trickInfo.getTrick().getCard(0).getSuit());
 						}
 					}
 					else {
 						// Play the card with the highest value
-						bestToBePlayed = cards.getLastIndexOfSuit(SkatConstants.SUIT, trickInfo.getTrick().getCard(0).getSuit());
+						bestToBePlayed = cards.getLastIndexOfSuit(SkatConstants.GameTypes.SUIT, trickInfo.getTrick().getCard(0).getSuit());
 					}
 					
                     
@@ -199,26 +199,26 @@ public class OpponentPlayer implements CardPlayer {
                         
 						// Play the highest trump
 						// Check whether there is a Jack in the cards or not
-						if (cards.contains(SkatConstants.CLUBS, SkatConstants.JACK)) {
+						if (cards.contains(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.JACK)) {
                             
-							bestToBePlayed = cards.getIndexOf(SkatConstants.CLUBS, SkatConstants.JACK);
+							bestToBePlayed = cards.getIndexOf(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.JACK);
                             
-						} else if (cards.contains(SkatConstants.SPADES, SkatConstants.JACK)) {
+						} else if (cards.contains(SkatConstants.Suits.SPADES, SkatConstants.Ranks.JACK)) {
                             
-							bestToBePlayed = cards.getIndexOf(SkatConstants.SPADES, SkatConstants.JACK);
+							bestToBePlayed = cards.getIndexOf(SkatConstants.Suits.SPADES, SkatConstants.Ranks.JACK);
                             
-						} else if (cards.contains(SkatConstants.HEARTS, SkatConstants.JACK)) {
+						} else if (cards.contains(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.JACK)) {
                             
-							bestToBePlayed = cards.getIndexOf(SkatConstants.HEARTS, SkatConstants.JACK);
+							bestToBePlayed = cards.getIndexOf(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.JACK);
                             
-						} else if (cards.contains(SkatConstants.DIAMONDS, SkatConstants.JACK)) {
+						} else if (cards.contains(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK)) {
                             
-							bestToBePlayed = cards.getIndexOf(SkatConstants.DIAMONDS, SkatConstants.JACK);
+							bestToBePlayed = cards.getIndexOf(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK);
                             
 						} else {
                             
 							// No Jack in the cards
-							bestToBePlayed = cards.getLastIndexOfSuit(SkatConstants.SUIT, trickInfo.getTrump());
+							bestToBePlayed = cards.getLastIndexOfSuit(SkatConstants.GameTypes.SUIT, trickInfo.getTrump());
 						}
                         
 					} else {
@@ -259,7 +259,7 @@ public class OpponentPlayer implements CardPlayer {
 		log.debug(".playNextCardNullGame(): cards: ["+cards+"]");
         
 		if (trickInfo.getTrick().size() > 0) {
-			if(!cards.hasSuit(SkatConstants.NULL, trickInfo.getTrick().getCard(0).getSuit())) {
+			if(!cards.hasSuit(SkatConstants.GameTypes.NULL, trickInfo.getTrick().getCard(0).getSuit())) {
 				// TODO null game: abwerfen
 				log.debug(".playNextCardNullGame(): abwerfen...");
 				bestToBePlayed = 0;
@@ -290,7 +290,7 @@ public class OpponentPlayer implements CardPlayer {
 	 * @param trump
 	 * @return index of the card
 	 */
-	private int findValuableTrump(CardVector cards, int trump) {
+	private int findValuableTrump(CardVector cards, SkatConstants.Suits trump) {
 		// TODO consider, which other trumps have already been played
 		if (cards.size()<1) return 0;
 		int highCard = 0;
@@ -312,14 +312,14 @@ public class OpponentPlayer implements CardPlayer {
 	 * @param trump
 	 * @return index of the card
 	 */
-	private int findMostValuableMatchingCard(CardVector cards, int suit, int trump) {
+	private int findMostValuableMatchingCard(CardVector cards, SkatConstants.Suits suit, SkatConstants.Suits trump) {
 		if (cards.size()<1) return 0;
 		int highCard = 0;
 		int index = 0;
 		while (++index<cards.size()) {
 			if(!cards.getCard(index).isTrump(trump) 
 					&& cards.getCard(index).getCalcValue() > cards.getCard(highCard).getCalcValue() 
-					&& cards.getCard(index).getValue() != SkatConstants.ACE 
+					&& cards.getCard(index).getRank() != SkatConstants.Ranks.ACE 
 					&& cards.getCard(index).getSuit() == suit) { 
 				highCard = index;
 			}
@@ -333,7 +333,7 @@ public class OpponentPlayer implements CardPlayer {
 	 * @param trump
 	 * @return index of the card
 	 */
-	private int findHighCard(CardVector cards, int trump) {
+	private int findHighCard(CardVector cards, SkatConstants.Suits trump) {
 	    // TODO: add a flag whether aces should be included
 	    //       or just consider the CardMemory
 	    if (cards.size()<1) return 0;
@@ -342,12 +342,12 @@ public class OpponentPlayer implements CardPlayer {
 		while (++index<cards.size()) {
 		    if(cards.getCard(highCard).isTrump(trump) && 
 		            !cards.getCard(index).isTrump(trump) &&
-		            cards.getCard(index).getValue() != SkatConstants.ACE) {
+		            cards.getCard(index).getRank() != SkatConstants.Ranks.ACE) {
 				highCard = index;
 		    }
 			else if(!cards.getCard(index).isTrump(trump) && 
 			        cards.getCard(index).getCalcValue() > cards.getCard(highCard).getCalcValue() && 
-			        cards.getCard(index).getValue() != SkatConstants.ACE) { 
+			        cards.getCard(index).getRank() != SkatConstants.Ranks.ACE) { 
 				highCard = index;
 			}
 		}
@@ -360,7 +360,7 @@ public class OpponentPlayer implements CardPlayer {
 	 * @param trump
 	 * @return index of the card
 	 */
-	private int findLowCard(CardVector cards, int trump) {
+	private int findLowCard(CardVector cards, SkatConstants.Suits trump) {
 		if (cards.size()<2) return 0;
 		int lowCard = 0;
 		int index = 0;
@@ -385,7 +385,7 @@ public class OpponentPlayer implements CardPlayer {
 		int index = -1;
 		int possibleCards = Helper.suitCardsToBinaryNullGame(cards, card.getSuit());
 		int counter = 0;
-		while(possibleCards > 0 && card.getNullValue()>counter && counter < 8) {
+		while(possibleCards > 0 && card.getNullOrder()>counter && counter < 8) {
 			if((possibleCards & (2^counter)) == 1) index = counter;
 			counter++;
 		}
@@ -413,7 +413,7 @@ public class OpponentPlayer implements CardPlayer {
 	private int findInitial(CardVector cards, GameInfo game) {
 		for(int x=0;x<cards.size();x++)
 		{
-			if (cards.getCard(x).getValue() == SkatConstants.ACE)
+			if (cards.getCard(x).getRank() == SkatConstants.Ranks.ACE)
 					if(cards.getCard(x).getSuit() != game.getTrump()) return x;
 		}
 		// If you don't have any, find a low face card
@@ -421,10 +421,11 @@ public class OpponentPlayer implements CardPlayer {
 		int store = 0;
 		for(int x=0;x<cards.size();x++)
 		{
-			switch (cards.getCard(x).getValue()) {
-			case SkatConstants.SEVEN: // "7"
-			case SkatConstants.EIGHT: // "8"
-			case SkatConstants.NINE: // "9"
+			SkatConstants.Ranks cardRank = cards.getCard(x).getRank();
+			
+			if (cardRank == SkatConstants.Ranks.SEVEN || // "7"
+					cardRank == SkatConstants.Ranks.EIGHT || // "8"
+					cardRank == SkatConstants.Ranks.NINE) { // "9"
 				// If you find one and it is a trumpf, remember it for later (in case you find nothing else)
 				if(cards.getCard(x).getSuit() != game.getTrump()) return x;
 					// else {store = x; break; };

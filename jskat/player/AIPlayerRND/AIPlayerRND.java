@@ -84,6 +84,9 @@ public class AIPlayerRND extends JSkatPlayerImpl implements JSkatPlayer {
 		CardVector possibleCards = new CardVector();
 		
 		if (trick.size() > 0) {
+			
+			log.debug("trick size: " + trick.size() + " initial card: " + trick.getCard(0));
+			
 			for (int i = 0; i < cards.size(); i++) {
 				if (SkatRules.isCardAllowed(cards.getCard(i), cards, trick
 						.getCard(0), currGameType, currTrump)) {

@@ -53,12 +53,12 @@ public class RamschPlayer implements CardPlayer {
 		    result = playOtherCard(cards, trick.getCard(0));
 		}
 		else {
-		    if(trick.getCard(0).beats(trick.getCard(1), SkatConstants.RAMSCH, -1, trick.getCard(1).getSuit())) {
+		    if(trick.getCard(0).beats(trick.getCard(1), SkatConstants.GameTypes.RAMSCH, null, trick.getCard(1))) {
 			    result = playOtherCard(cards, trick.getCard(0));
 		    } 
 		    else {
-		        if(trick.getCard(1).getValue() == SkatConstants.JACK) {
-		            if(trick.getCard(0).getValue() == SkatConstants.JACK) {
+		        if(trick.getCard(1).getRank() == SkatConstants.Ranks.JACK) {
+		            if(trick.getCard(0).getRank() == SkatConstants.Ranks.JACK) {
 					    result = playOtherCard(cards, trick.getCard(1));
 		            }
 		            else {

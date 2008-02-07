@@ -94,7 +94,7 @@ public class AIPlayerMJL extends JSkatPlayerImpl implements JSkatPlayer {
         isSinglePlayer = true;
     	GameAnnouncement newGame = new GameAnnouncement();
         
-        newGame.setGameType(SkatConstants.SUIT);
+        newGame.setGameType(SkatConstants.GameTypes.SUIT);
         newGame.setTrump(selectedTrump);
         
         return newGame;
@@ -142,7 +142,8 @@ public class AIPlayerMJL extends JSkatPlayerImpl implements JSkatPlayer {
      * @param handGame
      * @param ouvertGame
 	 */
-	public void startGame(int singlePlayer, int forehandPlayer, int gameType, int trump, boolean handGame, boolean ouvertGame) {
+	public void startGame(int singlePlayer, int forehandPlayer, SkatConstants.GameTypes gameType,
+			SkatConstants.Suits trump, boolean handGame, boolean ouvertGame) {
 		super.startGame(singlePlayer, forehandPlayer, gameType, trump, handGame, ouvertGame);
 		singlePlayerPos = singlePlayer - forehandPlayer;
 		if(singlePlayerPos<0) singlePlayerPos +=3;
@@ -220,7 +221,7 @@ public class AIPlayerMJL extends JSkatPlayerImpl implements JSkatPlayer {
 		} 
 		else if(newState == JSkatPlayerStates.PLAYER_PLAYING) {
 			myBid = null;
-			if(game!=null && game.getGameType() == SkatConstants.RAMSCH) {
+			if(game!=null && game.getGameType() == SkatConstants.GameTypes.RAMSCH) {
 				log.debug("Player "+playerID+" ("+playerName+"): is a ramsch player");
 			    playerType = new RamschPlayer(playerID);
 			}
@@ -299,5 +300,5 @@ public class AIPlayerMJL extends JSkatPlayerImpl implements JSkatPlayer {
 	private int initialForehandPlayer;
 	private int singlePlayerPos;
 	private GameInfo game;
-	private int selectedTrump;
+	private SkatConstants.Suits selectedTrump;
 }

@@ -13,6 +13,7 @@ package jskat.player.AIPlayerMJL;
 import org.apache.log4j.Logger;
 
 import jskat.share.CardVector;
+import jskat.share.SkatConstants;
 //import jskat.share.Card;
 /**
  * CardMemory builds the memory of all the cards that have been played during a certain game. 
@@ -42,7 +43,7 @@ public class CardMemory {
 	 * @param gameType
 	 * @param trump
 	 */
-	public CardMemory(int gameType, int trump) {
+	public CardMemory(SkatConstants.GameTypes gameType, SkatConstants.Suits trump) {
 		this.gameType = gameType;
 		this.trump = trump;
 		cardsPlayed = new CardVector[3];
@@ -113,10 +114,10 @@ public class CardMemory {
 	private int tricksPlayed;
 	/**	 type of the game
 	 * @see jskat.share.SkatConstants */
-	private int gameType = -1;
+	private SkatConstants.GameTypes gameType;
 	/**	 trump suit in the current game
 	 * @see jskat.share.SkatConstants */
-	private int trump = -1;
+	private SkatConstants.Suits trump;
 	/**	 a vector of all the cards that have been played in this game so far */
 	private CardVector allCardsPlayed;
 	/**	 reflects all the cards that have been played by each player in this game so far */

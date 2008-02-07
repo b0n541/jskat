@@ -29,7 +29,7 @@ public class Bidding {
 	public Bidding(CardVector cards) {
 	    log.debug("Checking out what to bid with ["+cards+"]");
 
-		int mostFrequentSuitColor = 0;
+		SkatConstants.Suits mostFrequentSuitColor;
 		int mostFrequentSuitColorValue = 0;
 		int multiplier = Helper.getMultiplier(cards);
         
@@ -37,16 +37,16 @@ public class Bidding {
 		int noOfTrumps = cards.getSuitColorCount(mostFrequentSuitColor);
 		int noOfJacks = Helper.countJacks(cards);
         
-		if (mostFrequentSuitColor == SkatConstants.CLUBS) {
+		if (mostFrequentSuitColor == SkatConstants.Suits.CLUBS) {
 			mostFrequentSuitColorValue = SkatConstants.CLUBS_VAL;
 		}
-		else if (mostFrequentSuitColor == SkatConstants.SPADES) {
+		else if (mostFrequentSuitColor == SkatConstants.Suits.SPADES) {
 			mostFrequentSuitColorValue = SkatConstants.SPADES_VAL;
 		}
-		else if (mostFrequentSuitColor == SkatConstants.HEARTS) {
+		else if (mostFrequentSuitColor == SkatConstants.Suits.HEARTS) {
 			mostFrequentSuitColorValue = SkatConstants.HEARTS_VAL;
 		}
-		else if (mostFrequentSuitColor == SkatConstants.DIAMONDS) {
+		else if (mostFrequentSuitColor == SkatConstants.Suits.DIAMONDS) {
 			mostFrequentSuitColorValue = SkatConstants.DIAMONDS_VAL;
 		}
 		maxBid = mostFrequentSuitColorValue * multiplier;

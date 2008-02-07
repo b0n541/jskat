@@ -30,24 +30,24 @@ public class SkatProcessor {
      * @param skat the skat
      * @return suit to be played (0-3), grand (4), null (-1)
      */
-    public static int processSkat(CardVector cards, CardVector skat) {
+    public static SkatConstants.Suits processSkat(CardVector cards, CardVector skat) {
         log.debug("My cards:"+cards+", Skat="+skat);
-        int cDiamonds = cards.getSuitColorCount(SkatConstants.SUIT, SkatConstants.DIAMONDS);
-        int cHearts = cards.getSuitColorCount(SkatConstants.SUIT, SkatConstants.HEARTS);
-        int cSpades = cards.getSuitColorCount(SkatConstants.SUIT, SkatConstants.SPADES);
-        int cClubs = cards.getSuitColorCount(SkatConstants.SUIT, SkatConstants.CLUBS);
+        int cDiamonds = cards.getSuitColorCount(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.DIAMONDS);
+        int cHearts = cards.getSuitColorCount(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.HEARTS);
+        int cSpades = cards.getSuitColorCount(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.SPADES);
+        int cClubs = cards.getSuitColorCount(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.CLUBS);
         
-        cDiamonds += skat.getSuitColorCount(SkatConstants.SUIT, SkatConstants.DIAMONDS);
-        cHearts   += skat.getSuitColorCount(SkatConstants.SUIT, SkatConstants.HEARTS);
-        cSpades   += skat.getSuitColorCount(SkatConstants.SUIT, SkatConstants.SPADES);
-        cClubs    += skat.getSuitColorCount(SkatConstants.SUIT, SkatConstants.CLUBS);
+        cDiamonds += skat.getSuitColorCount(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.DIAMONDS);
+        cHearts   += skat.getSuitColorCount(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.HEARTS);
+        cSpades   += skat.getSuitColorCount(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.SPADES);
+        cClubs    += skat.getSuitColorCount(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.CLUBS);
         
         log.debug("C="+cClubs+", S="+cSpades+", H="+cHearts+", D="+cDiamonds);
         
-        int diamonds = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.DIAMONDS);
-        int hearts   = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.HEARTS);
-        int spades   = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.SPADES);
-        int clubs    = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.CLUBS);
+        int diamonds = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.Suits.DIAMONDS);
+        int hearts   = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.Suits.HEARTS);
+        int spades   = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.Suits.SPADES);
+        int clubs    = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.Suits.CLUBS);
         
         log.debug("C="+clubs+", S="+spades+", H="+hearts+", D="+diamonds);
         
@@ -61,8 +61,8 @@ public class SkatProcessor {
         Card skatTwo = skat.remove(0);
         
         if (possibleSkatSuits > 0) {
-            int skatSuit = Helper.binaryToSuit(possibleSkatSuits);
-            if(skatSuit<0) {
+            SkatConstants.Suits skatSuit = Helper.binaryToSuit(possibleSkatSuits);
+            if(skatSuit != null) {
                 // if more than one possible color: do nothing for the time being
                 // TODO: skat processing with more than one possible color
                 skat.add(skatOne);
@@ -70,13 +70,13 @@ public class SkatProcessor {
             }
             else {
                 log.debug("Color for skat:"+skatSuit);
-                if(skatOne.getSuit() == skatSuit || cards.getSuitColorCount(SkatConstants.SUIT, skatSuit)<1) {
+                if(skatOne.getSuit() == skatSuit || cards.getSuitColorCount(SkatConstants.GameTypes.SUIT, skatSuit)<1) {
                     skat.add(skatOne);
                 } else {
                     skat.add(cards.remove(cards.getFirstIndexOfSuit(skatSuit)));
                     cards.add(skatOne);
                 }
-                if(skatTwo.getSuit()==skatSuit || cards.getSuitColorCount(SkatConstants.SUIT, skatSuit)<1) {
+                if(skatTwo.getSuit()==skatSuit || cards.getSuitColorCount(SkatConstants.GameTypes.SUIT, skatSuit)<1) {
                     skat.add(skatTwo);
                 } else {
                     skat.add(cards.remove(cards.getFirstIndexOfSuit(skatSuit)));

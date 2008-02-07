@@ -13,6 +13,7 @@ package jskat.player.AIPlayerMJL;
 
 import jskat.share.Card;
 import jskat.share.CardVector;
+import jskat.share.SkatConstants;
 /**
  * @author Markus J. Luzius <markus@luzius.de>
  *
@@ -109,8 +110,8 @@ public class TrickInfo {
 	/** Convenience method for getting the suit color of the initial card
 	 * @return suit value
 	 */
-	public int getDemandSuit() {
-		if (trick.size()<1) return -1;
+	public SkatConstants.Suits getDemandSuit() {
+		if (trick.size()<1) return null;
 		return trick.getCard(0).getSuit();
 	}
 	
@@ -130,14 +131,14 @@ public class TrickInfo {
 	/** Convenience method for getting the current game type
 	 * @return game type
 	 */
-	public int getGameType() {
+	public SkatConstants.GameTypes getGameType() {
 		return gameInfo.getGameType();
 	}
 
 	/** Concenience method for getting the current trump color
 	 * @return trump color
 	 */
-	public int getTrump() {
+	public SkatConstants.Suits getTrump() {
 		return gameInfo.getTrump();
 	}
 

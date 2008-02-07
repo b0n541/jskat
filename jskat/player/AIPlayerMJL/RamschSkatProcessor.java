@@ -29,22 +29,28 @@ public class RamschSkatProcessor {
 
     private void testProcessor(CardVector cards, CardVector skat) {
     	int[] cardBin = new int[4];
-        cardBin[3] = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.DIAMONDS);
-        cardBin[2] = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.HEARTS);
-        cardBin[1] = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.SPADES);
-        cardBin[0] = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.CLUBS);
+        cardBin[3] = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.Suits.DIAMONDS);
+        cardBin[2] = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.Suits.HEARTS);
+        cardBin[1] = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.Suits.SPADES);
+        cardBin[0] = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.Suits.CLUBS);
 
         Vector<Double> relevance = new Vector<Double>();
         cards.add(skat.remove(0));
         cards.add(skat.remove(0));
         for (int i=0;i<cards.size();i++) {
         	Card c = cards.getCard(i);
-        	double rel = 1.0 * (double) c.getValue() / 6.0;
-        	if(c.getValue()==SkatConstants.JACK) {
+        	// TODO (js) changed due to refactoring,
+        	//           don't know if it's still work as intended
+        	//double rel = 1.0 * (double) c.getRank() / 6.0;
+        	double rel = 1.0 * (double) c.getRank().getSuitGrandOrder() / 6.0;
+        	if(c.getRank()==SkatConstants.Ranks.JACK) {
         		rel = 0.0;
         	}
         	log.debug("Card("+i+"): "+c+", Rel="+rel);
-        	int tmpBin = cardBin[c.getSuit()];
+        	// TODO (js) changed due to refactoring,
+        	//           don't know if it's still work as intended
+        	//int tmpBin = cardBin[c.getSuit()];
+        	int tmpBin = Helper.suitCardsToBinaryWithSkat(cards, skat, c.getSuit());
         	log.debug("suit="+bin(tmpBin, 8)+" & 15 = "+(tmpBin & 15));
         	if(Tools.isIn(tmpBin & 15, new int[] {7, 11, 13})) {
         		rel = 0.0;
@@ -86,22 +92,22 @@ public class RamschSkatProcessor {
     	log.debug("\n================================================================\n\n");
     	// TODO (mjl) check for potential Durchmarsch when processing the skat
         log.debug("My cards:"+cards+", Skat="+skat);
-        int cDiamonds = cards.getSuitColorCount(SkatConstants.RAMSCH, SkatConstants.DIAMONDS);
-        int cHearts = cards.getSuitColorCount(SkatConstants.RAMSCH, SkatConstants.HEARTS);
-        int cSpades = cards.getSuitColorCount(SkatConstants.RAMSCH, SkatConstants.SPADES);
-        int cClubs = cards.getSuitColorCount(SkatConstants.RAMSCH, SkatConstants.CLUBS);
+        int cDiamonds = cards.getSuitColorCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.DIAMONDS);
+        int cHearts = cards.getSuitColorCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.HEARTS);
+        int cSpades = cards.getSuitColorCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.SPADES);
+        int cClubs = cards.getSuitColorCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.CLUBS);
         
-        cDiamonds += skat.getSuitColorCount(SkatConstants.RAMSCH, SkatConstants.DIAMONDS);
-        cHearts   += skat.getSuitColorCount(SkatConstants.RAMSCH, SkatConstants.HEARTS);
-        cSpades   += skat.getSuitColorCount(SkatConstants.RAMSCH, SkatConstants.SPADES);
-        cClubs    += skat.getSuitColorCount(SkatConstants.RAMSCH, SkatConstants.CLUBS);
+        cDiamonds += skat.getSuitColorCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.DIAMONDS);
+        cHearts   += skat.getSuitColorCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.HEARTS);
+        cSpades   += skat.getSuitColorCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.SPADES);
+        cClubs    += skat.getSuitColorCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.CLUBS);
         
         log.debug("#: C="+cClubs+", S="+cSpades+", H="+cHearts+", D="+cDiamonds);
         
-        int diamonds = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.DIAMONDS);
-        int hearts   = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.HEARTS);
-        int spades   = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.SPADES);
-        int clubs    = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.CLUBS);
+        int diamonds = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.Suits.DIAMONDS);
+        int hearts   = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.Suits.HEARTS);
+        int spades   = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.Suits.SPADES);
+        int clubs    = Helper.suitCardsToBinaryWithSkat(cards, skat, SkatConstants.Suits.CLUBS);
         
         log.debug("cards: C="+bin(clubs,8)+", S="+bin(spades,8)+", H="+bin(hearts,8)+", D="+bin(diamonds,8));
         
@@ -123,22 +129,22 @@ public class RamschSkatProcessor {
         Card skatTwo = skat.remove(0);
         
         if (possibleSkatSuits > 0) {
-            int skatSuit = Helper.binaryToSuit(possibleSkatSuits);
-            if(skatSuit<0) {
+            SkatConstants.Suits skatSuit = Helper.binaryToSuit(possibleSkatSuits);
+            if(skatSuit != null) {
                 // if more than one possible color: do nothing for the time being
                 // TODO (mjl): skat processing with more than one possible color
             	log.debug("More than one possible color found...");
-            	if(skatOne.getValue()==SkatConstants.JACK) {
+            	if(skatOne.getRank()==SkatConstants.Ranks.JACK) {
             		int index = 0;
-            		while(cards.getCard(index).getValue()==SkatConstants.JACK) index++;
+            		while(cards.getCard(index).getRank()==SkatConstants.Ranks.JACK) index++;
                     skat.add(cards.remove(index));
                     cards.add(skatOne);
             	} else {
                     skat.add(skatOne);
             	}
-            	if(skatTwo.getValue()==SkatConstants.JACK) {
+            	if(skatTwo.getRank()==SkatConstants.Ranks.JACK) {
             		int index = 0;
-            		while(cards.getCard(index).getValue()==SkatConstants.JACK) index++;
+            		while(cards.getCard(index).getRank()==SkatConstants.Ranks.JACK) index++;
                     skat.add(cards.remove(index));
                     cards.add(skatTwo);
             	} else {
@@ -147,10 +153,10 @@ public class RamschSkatProcessor {
             }
             else {
                 log.debug("Color for skat:"+skatSuit);
-                if(skatOne.getSuit() == skatSuit || cards.getSuitColorCount(SkatConstants.RAMSCH, skatSuit)<1) {
-                	if(skatOne.getValue()==SkatConstants.JACK) {
+                if(skatOne.getSuit() == skatSuit || cards.getSuitColorCount(SkatConstants.GameTypes.RAMSCH, skatSuit)<1) {
+                	if(skatOne.getRank()==SkatConstants.Ranks.JACK) {
                 		int index = 0;
-                		while(cards.getCard(index).getValue()==SkatConstants.JACK) index++;
+                		while(cards.getCard(index).getRank()==SkatConstants.Ranks.JACK) index++;
                         skat.add(cards.remove(index));
                         cards.add(skatOne);
                 	} else {
@@ -160,10 +166,10 @@ public class RamschSkatProcessor {
                     skat.add(cards.remove(cards.getFirstIndexOfSuit(skatSuit)));
                     cards.add(skatOne);
                 }
-                if(skatTwo.getSuit()==skatSuit || cards.getSuitColorCount(SkatConstants.RAMSCH, skatSuit)<1) {
-                	if(skatTwo.getValue()==SkatConstants.JACK) {
+                if(skatTwo.getSuit()==skatSuit || cards.getSuitColorCount(SkatConstants.GameTypes.RAMSCH, skatSuit)<1) {
+                	if(skatTwo.getRank()==SkatConstants.Ranks.JACK) {
                 		int index = 0;
-                		while(cards.getCard(index).getValue()==SkatConstants.JACK) index++;
+                		while(cards.getCard(index).getRank()==SkatConstants.Ranks.JACK) index++;
                         skat.add(cards.remove(index));
                         cards.add(skatTwo);
                 	} else {
@@ -177,17 +183,17 @@ public class RamschSkatProcessor {
         } else {
             // if more than one possible color: do nothing for the time being
             // TODO: skat processing with no possible color from the first iteration
-        	if(skatOne.getValue()==SkatConstants.JACK) {
+        	if(skatOne.getRank()==SkatConstants.Ranks.JACK) {
         		int index = 0;
-        		while(cards.getCard(index).getValue()==SkatConstants.JACK) index++;
+        		while(cards.getCard(index).getRank()==SkatConstants.Ranks.JACK) index++;
                 skat.add(cards.remove(index));
                 cards.add(skatOne);
         	} else {
                 skat.add(skatOne);
         	}
-        	if(skatTwo.getValue()==SkatConstants.JACK) {
+        	if(skatTwo.getRank()==SkatConstants.Ranks.JACK) {
         		int index = 0;
-        		while(cards.getCard(index).getValue()==SkatConstants.JACK) index++;
+        		while(cards.getCard(index).getRank()==SkatConstants.Ranks.JACK) index++;
                 skat.add(cards.remove(index));
                 cards.add(skatTwo);
         	} else {

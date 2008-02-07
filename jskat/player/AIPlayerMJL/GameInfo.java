@@ -10,6 +10,8 @@ Released: @ReleaseDate@
 
 package jskat.player.AIPlayerMJL;
 
+import jskat.share.SkatConstants;
+
 /**
  * @author Markus J. Luzius <markus@luzius.de>
  *
@@ -27,7 +29,7 @@ public class GameInfo {
 	 * @param suit trump color
 	 * @param player id of the single player
 	 */
-	public GameInfo(int type, int suit, int player) {
+	public GameInfo(SkatConstants.GameTypes type, SkatConstants.Suits suit, int player) {
 		gameType = type;
 		trump = suit;
 		singlePlayer = player;
@@ -37,7 +39,7 @@ public class GameInfo {
 	 * get the current game type
 	 * @return current game type
 	 */
-	public int getGameType() {
+	public SkatConstants.GameTypes getGameType() {
 		return gameType;
 	}
 
@@ -53,7 +55,7 @@ public class GameInfo {
 	 * get the current trump suit
 	 * @return current trump suit
 	 */
-	public int getTrump() {
+	public SkatConstants.Suits getTrump() {
 		return trump;
 	}
 
@@ -61,7 +63,7 @@ public class GameInfo {
 	 * set the current game type
 	 * @param gameType game type
 	 */
-	public void setGameType(int gameType) {
+	public void setGameType(SkatConstants.GameTypes gameType) {
 		this.gameType= gameType;
 	}
 
@@ -77,16 +79,16 @@ public class GameInfo {
 	 * set the trump suit
 	 * @param suit trump suit
 	 */
-	public void setTrump(int suit) {
+	public void setTrump(SkatConstants.Suits suit) {
 		trump= suit;
 	}
 
 	/**	 type of the game
 	 * @see jskat.share.SkatConstants */
-	private int gameType;
+	private SkatConstants.GameTypes gameType;
 	/**	 trump suit in the current game
 	 * @see jskat.share.SkatConstants */
-	private int trump;
+	private SkatConstants.Suits trump;
 	/** id of the single player */
 	private int singlePlayer;
 }
