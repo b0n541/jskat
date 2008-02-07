@@ -122,7 +122,7 @@ public class TrickInfo {
 		int result = 0;
 		int count = 0;
 		while (++count<trick.size()) {
-			result += trick.getCard(count-1).getCalcValue();
+			result += trick.getCard(count-1).getPoints();
 		}
 		
 		return result;

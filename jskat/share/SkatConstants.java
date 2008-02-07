@@ -124,6 +124,11 @@ public final class SkatConstants {
 			public int getRamschOrder() {
 				return 0;
 			}
+			
+			public int getPoints() {
+				
+				return 0;
+			}
 		},
 		EIGHT {
 			public String shortString() {
@@ -144,6 +149,11 @@ public final class SkatConstants {
 			
 			public int getRamschOrder() {
 				return 1;
+			}
+			
+			public int getPoints() {
+				
+				return 0;
 			}
 		},
 		NINE {
@@ -166,6 +176,11 @@ public final class SkatConstants {
 			public int getRamschOrder() {
 				return 2;
 			}
+			
+			public int getPoints() {
+				
+				return 0;
+			}
 		},
 		QUEEN {
 			public String shortString() {
@@ -186,6 +201,11 @@ public final class SkatConstants {
 			
 			public int getRamschOrder() {
 				return 4;
+			}
+			
+			public int getPoints() {
+				
+				return 3;
 			}
 		},
 		KING {
@@ -208,6 +228,11 @@ public final class SkatConstants {
 			public int getRamschOrder() {
 				return 5;
 			}
+			
+			public int getPoints() {
+				
+				return 4;
+			}
 		},
 		TEN {
 			public String shortString() {
@@ -228,6 +253,11 @@ public final class SkatConstants {
 			
 			public int getRamschOrder() {
 				return 3;
+			}
+			
+			public int getPoints() {
+				
+				return 10;
 			}
 		},
 		ACE {
@@ -250,6 +280,11 @@ public final class SkatConstants {
 			public int getRamschOrder() {
 				return 6;
 			}
+			
+			public int getPoints() {
+				
+				return 11;
+			}
 		},
 		JACK {
 			public String shortString() {
@@ -270,6 +305,11 @@ public final class SkatConstants {
 			
 			public int getRamschOrder() {
 				return 7;
+			}
+			
+			public int getPoints() {
+				
+				return 2;
 			}
 		};
 
@@ -307,6 +347,13 @@ public final class SkatConstants {
 		 * @return Order in ramsch games
 		 */
 		public abstract int getRamschOrder();
+		
+		/**
+		 * Gets the points of the card for game value calculation
+		 * 
+		 * @return Points of the card
+		 */
+		public abstract int getPoints();
 	};
 
 	// Codes for fore-, middle- and backhand
@@ -337,16 +384,6 @@ public final class SkatConstants {
 			72, 77, 80, 81, 84, 88, 90, 96, 99, 100, 108, 110, 117, 120, 121,
 			126, 130, 132, 135, 140, 143, 144, 150, 153, 154, 156, 160, 162,
 			165, 168, 170, 176, 180, 187, 192, 198, 204, 216, 240, 264 };
-
-	// Values for the different cards for win and loss calculation
-	public final static int SEVEN_VAL = 0;
-	public final static int EIGHT_VAL = 0;
-	public final static int NINE_VAL = 0;
-	public final static int JACK_VAL = 2;
-	public final static int QUEEN_VAL = 3;
-	public final static int KING_VAL = 4;
-	public final static int TEN_VAL = 10;
-	public final static int ACE_VAL = 11;
 
 	// Values for the different Skat games for win and loss calculation
 	public final static int CLUBS_VAL = 12;

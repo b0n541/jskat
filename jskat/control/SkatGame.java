@@ -451,8 +451,8 @@ public class SkatGame extends Observable {
 		scoreMessage.append(gameData.getPlayers()[2].getPlayerName() + ": "
 				+ gameData.getScore(2) + "\n");
 		scoreMessage.append("(Skat: "
-				+ (gameData.getSkat().getCard(0).getCalcValue() + gameData
-						.getSkat().getCard(1).getCalcValue()) + ")\n");
+				+ (gameData.getSkat().getCard(0).getPoints() + gameData
+						.getSkat().getCard(1).getPoints()) + ")\n");
 
 		if (true) {
 
@@ -596,11 +596,16 @@ public class SkatGame extends Observable {
 					+ jskatStrings.getString("points") + ".";
 		}
 
-		if (playerScore <= 30 || opponentScore <= 30)
+		if (playerScore <= 30 || opponentScore <= 30) {
+			
 			gameData.setSchneider(true);
+		}
 
-		if (playerScore == 0 || opponentScore == 0)
+		// FIXME This is wrong, in schwarz games no trick can be made
+		if (playerScore == 0 || opponentScore == 0) {
+			
 			gameData.setSchwarz(true);
+		}
 
 		gameData.calcResult();
 
@@ -739,7 +744,7 @@ public class SkatGame extends Observable {
 
 		for (int i = 0; i < trickVector.size(); i++) {
 
-			trickValue = trickValue + trick.getCard(i).getCalcValue();
+			trickValue = trickValue + trick.getCard(i).getPoints();
 		}
 
 		log.debug("TrickValue: " + trickValue);
@@ -841,8 +846,8 @@ public class SkatGame extends Observable {
 			}
 
 			gameData.addToPlayerPoints(gameData.getSkatOwner(), gameData.getSkat()
-					.getCard(0).getCalcValue()
-					+ gameData.getSkat().getCard(1).getCalcValue());
+					.getCard(0).getPoints()
+					+ gameData.getSkat().getCard(1).getPoints());
 
 			finishGame();
 		}

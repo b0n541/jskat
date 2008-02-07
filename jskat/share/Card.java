@@ -111,9 +111,9 @@ public class Card {
 	/** 
 	 * Compares the Cards whether the value is the same or not 
 	 */
-	public boolean isSameCalcValue(Card cardToCompare) {
+	public boolean isSamePoints(Card cardToCompare) {
 
-		return this.getCalcValue() == cardToCompare.getCalcValue();
+		return this.getPoints() == cardToCompare.getPoints();
 	}
 
 	/** 
@@ -159,9 +159,9 @@ public class Card {
 	/** 
 	 * Get the Card value for calculations 
 	 */
-	public int getCalcValue() {
+	public int getPoints() {
 
-		return calcValue;
+		return rank.getPoints();
 	}
 
 	/** 
@@ -421,8 +421,8 @@ public class Card {
 	 * Rank of the card
 	 */
 	private final SkatConstants.Ranks rank;
-	/**
-	 * Calculation value for the player points
-	 */
-	private int calcValue;
+//	/**
+//	 * Calculation value for the player points
+//	 */
+//	private int calcValue;
 }

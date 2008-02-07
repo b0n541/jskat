@@ -296,7 +296,7 @@ public class OpponentPlayer implements CardPlayer {
 		int highCard = 0;
 		int index = 0;
 		while (++index<cards.size()) {
-			if(cards.getCard(index).isTrump(trump) && cards.getCard(index).getCalcValue() > cards.getCard(highCard).getCalcValue()) { 
+			if(cards.getCard(index).isTrump(trump) && cards.getCard(index).getPoints() > cards.getCard(highCard).getPoints()) { 
 				highCard = index;
 				log.debug("     highest card set to "+index);
 			}
@@ -318,7 +318,7 @@ public class OpponentPlayer implements CardPlayer {
 		int index = 0;
 		while (++index<cards.size()) {
 			if(!cards.getCard(index).isTrump(trump) 
-					&& cards.getCard(index).getCalcValue() > cards.getCard(highCard).getCalcValue() 
+					&& cards.getCard(index).getPoints() > cards.getCard(highCard).getPoints() 
 					&& cards.getCard(index).getRank() != SkatConstants.Ranks.ACE 
 					&& cards.getCard(index).getSuit() == suit) { 
 				highCard = index;
@@ -346,7 +346,7 @@ public class OpponentPlayer implements CardPlayer {
 				highCard = index;
 		    }
 			else if(!cards.getCard(index).isTrump(trump) && 
-			        cards.getCard(index).getCalcValue() > cards.getCard(highCard).getCalcValue() && 
+			        cards.getCard(index).getPoints() > cards.getCard(highCard).getPoints() && 
 			        cards.getCard(index).getRank() != SkatConstants.Ranks.ACE) { 
 				highCard = index;
 			}
@@ -366,10 +366,10 @@ public class OpponentPlayer implements CardPlayer {
 		int index = 0;
 		boolean found = false;
 		while (!found && ++index<cards.size()) {
-			if(!cards.getCard(index).isTrump(trump) && cards.getCard(index).getCalcValue() < cards.getCard(lowCard).getCalcValue()) {
+			if(!cards.getCard(index).isTrump(trump) && cards.getCard(index).getPoints() < cards.getCard(lowCard).getPoints()) {
 			    lowCard = index;
 			}
-			if(cards.getCard(lowCard).getCalcValue() == 0) found = true;
+			if(cards.getCard(lowCard).getPoints() == 0) found = true;
 		}
 		return (index<cards.size()?index:0);
 	}
