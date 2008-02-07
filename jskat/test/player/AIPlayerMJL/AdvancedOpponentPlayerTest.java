@@ -53,36 +53,36 @@ public class AdvancedOpponentPlayerTest {
 						0, 
 						TestHelper.buildDeck("J-H,J-D,A-S,T-S,7-H,K-D,9-D,7-D"), 
 						TestHelper.buildDeck("A-D,J-C"), 
-						SkatConstants.SUIT, 
-						SkatConstants.SPADES)
+						SkatConstants.GameTypes.SUIT, 
+						SkatConstants.Suits.SPADES)
 					, new Card("D-K")},
 				{new OpponentPlayerTestCase(
 						0, 
 						TestHelper.buildDeck("J-S,J-D,9-S,8-S,T-H,K-D,Q-D,9-D"), 
 						TestHelper.buildDeck("J-C,9-H"), 
-						SkatConstants.SUIT, 
-						SkatConstants.HEARTS)
+						SkatConstants.GameTypes.SUIT, 
+						SkatConstants.Suits.HEARTS)
 					, new Card("D-J")},
 				{new OpponentPlayerTestCase(
 						0, 
 						TestHelper.buildDeck("Q-C,A-S,Q-S,7-S"), 
 						TestHelper.buildDeck("8-H"), 
-						SkatConstants.SUIT, 
-						SkatConstants.HEARTS)
+						SkatConstants.GameTypes.SUIT, 
+						SkatConstants.Suits.HEARTS)
 					, new Card("S-Q")},
 				{new OpponentPlayerTestCase(
 						2, 
 						TestHelper.buildDeck("J-H,J-D,A-C,9-C,8-S,T-H,9-H"), 
 						TestHelper.buildDeck(""), 
-						SkatConstants.SUIT, 
-						SkatConstants.CLUBS)
+						SkatConstants.GameTypes.SUIT, 
+						SkatConstants.Suits.CLUBS)
 					, new Card("S-8")},
 				{new OpponentPlayerTestCase(
 						2, 
 						TestHelper.buildDeck("J-S,J-D,T-C,9-S,8-S,T-H,K-D,Q-D,9-D,7-D"), 
 						new CardVector(), 
-						SkatConstants.SUIT, 
-						SkatConstants.HEARTS)
+						SkatConstants.GameTypes.SUIT, 
+						SkatConstants.Suits.HEARTS)
 					, new Card("S-9")}
 				}
 			);

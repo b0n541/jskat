@@ -47,53 +47,53 @@ public class OpponentPlayerTest extends TestCase {
 		super.setUp();
 		Tools.checkLog();
 
-		gi001 = new GameInfo(SkatConstants.SUIT, SkatConstants.HEARTS, 0);
+		gi001 = new GameInfo(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.HEARTS, 0);
 
 		cards001 = new CardVector();
-		cards001.add(new Card(SkatConstants.SPADES, SkatConstants.JACK));
-		cards001.add(new Card(SkatConstants.DIAMONDS, SkatConstants.JACK));
-		cards001.add(new Card(SkatConstants.HEARTS, SkatConstants.ACE));
-		cards001.add(new Card(SkatConstants.CLUBS, SkatConstants.TEN));
-		cards001.add(new Card(SkatConstants.CLUBS, SkatConstants.KING));
-		cards001.add(new Card(SkatConstants.CLUBS, SkatConstants.QUEEN));
-		cards001.add(new Card(SkatConstants.DIAMONDS, SkatConstants.QUEEN));
-		cards001.add(new Card(SkatConstants.DIAMONDS, SkatConstants.NINE));
-		cards001.add(new Card(SkatConstants.DIAMONDS, SkatConstants.EIGHT));
-		cards001.add(new Card(SkatConstants.DIAMONDS, SkatConstants.SEVEN));
-		cards001.sort(SkatConstants.SUIT, SkatConstants.HEARTS);
+		cards001.add(new Card(SkatConstants.Suits.SPADES, SkatConstants.Ranks.JACK));
+		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK));
+		cards001.add(new Card(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.ACE));
+		cards001.add(new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.TEN));
+		cards001.add(new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.KING));
+		cards001.add(new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.QUEEN));
+		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.QUEEN));
+		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.NINE));
+		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.EIGHT));
+		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.SEVEN));
+		cards001.sort(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.HEARTS);
 
 		trick001 = new CardVector();
-		trick001.add(new Card(SkatConstants.SPADES, SkatConstants.ACE));
-		trick001.add(new Card(SkatConstants.SPADES, SkatConstants.SEVEN));
+		trick001.add(new Card(SkatConstants.Suits.SPADES, SkatConstants.Ranks.ACE));
+		trick001.add(new Card(SkatConstants.Suits.SPADES, SkatConstants.Ranks.SEVEN));
 
 		trick002 = new CardVector();
-		trick002.add(new Card(SkatConstants.CLUBS, SkatConstants.ACE));
-		trick002.add(new Card(SkatConstants.CLUBS, SkatConstants.SEVEN));
+		trick002.add(new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.ACE));
+		trick002.add(new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.SEVEN));
 
 		trick003 = new CardVector();
-		trick003.add(new Card(SkatConstants.CLUBS, SkatConstants.NINE));
-		trick003.add(new Card(SkatConstants.CLUBS, SkatConstants.SEVEN));
+		trick003.add(new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.NINE));
+		trick003.add(new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.SEVEN));
 
 		// Hand [J-H, J-D, A-S, 10-S, 7-H, K-D, 9-D, 7-D] with trick [A-D, J-C].
 		cards002 = TestHelper.buildDeck("J-H,J-D,A-S,T-S,7-H,K-D,9-D,7-D");
 		System.out.println("generated hand: "+cards002);
 		cards002 = new CardVector();
-		cards002.add(new Card(SkatConstants.HEARTS, SkatConstants.JACK));
-		cards002.add(new Card(SkatConstants.DIAMONDS, SkatConstants.JACK));
-		cards002.add(new Card(SkatConstants.SPADES, SkatConstants.ACE));
-		cards002.add(new Card(SkatConstants.SPADES, SkatConstants.TEN));
-		cards002.add(new Card(SkatConstants.HEARTS, SkatConstants.SEVEN));
-		cards002.add(new Card(SkatConstants.DIAMONDS, SkatConstants.KING));
-		cards002.add(new Card(SkatConstants.DIAMONDS, SkatConstants.NINE));
-		cards002.add(new Card(SkatConstants.DIAMONDS, SkatConstants.SEVEN));
+		cards002.add(new Card(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.JACK));
+		cards002.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK));
+		cards002.add(new Card(SkatConstants.Suits.SPADES, SkatConstants.Ranks.ACE));
+		cards002.add(new Card(SkatConstants.Suits.SPADES, SkatConstants.Ranks.TEN));
+		cards002.add(new Card(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.SEVEN));
+		cards002.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.KING));
+		cards002.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.NINE));
+		cards002.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.SEVEN));
 
 		trick004 = new CardVector();
-		trick004.add(new Card(SkatConstants.DIAMONDS, SkatConstants.ACE));
-		trick004.add(new Card(SkatConstants.CLUBS, SkatConstants.JACK));
+		trick004.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.ACE));
+		trick004.add(new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.JACK));
 
 		trick005 = new CardVector();
-		trick005.add(new Card(SkatConstants.CLUBS, SkatConstants.JACK));
-		trick005.add(new Card(SkatConstants.DIAMONDS, SkatConstants.ACE));
+		trick005.add(new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.JACK));
+		trick005.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.ACE));
 
 		cards003 = TestHelper.buildDeck("J-C,9-H,T-C,Q-C,7-C,T-S,8-S,7-S,8-D");
 		trick006 = TestHelper.buildDeck("J-D,7-H");
@@ -133,7 +133,7 @@ public class OpponentPlayerTest extends TestCase {
 		assertEquals(5, op.playNextCard(cards001, ti));
 
 		ti.setTrick(trick001);
-		ti.getGameInfo().setTrump(SkatConstants.SPADES);
+		ti.getGameInfo().setTrump(SkatConstants.Suits.SPADES);
 		// should play jack of diamonds
 		// -- plays jack of spades right now (to be improved)
 		assertEquals(0, op.playNextCard(cards001, ti));
@@ -161,7 +161,7 @@ public class OpponentPlayerTest extends TestCase {
 		// should play jack of diamonds 
 		assertEquals(1, op.playNextCard(cards001, ti));
 
-		ti.getGameInfo().setTrump(SkatConstants.DIAMONDS);
+		ti.getGameInfo().setTrump(SkatConstants.Suits.DIAMONDS);
 		// should play seven of diamonds 
 		assertEquals(9, op.playNextCard(cards001, ti));
 		
@@ -171,7 +171,7 @@ public class OpponentPlayerTest extends TestCase {
 		// --> should have played 7-S instead!!! 
 
 		// Problem with Jacks being played as first card
-		gi001.setTrump(SkatConstants.HEARTS);
+		gi001.setTrump(SkatConstants.Suits.HEARTS);
 		ti.setGameInfo(gi001);
 		ti.setTrick(trick006);
 		ti.setSinglePlayerPos(0);
@@ -179,7 +179,7 @@ public class OpponentPlayerTest extends TestCase {
 		assertEquals(0, op.playNextCard(cards003, ti));
 
 		// and again....
-		gi001.setTrump(SkatConstants.SPADES);
+		gi001.setTrump(SkatConstants.Suits.SPADES);
 		ti.setGameInfo(gi001);
 		ti.setTrick(trick008);
 		ti.setSinglePlayerPos(0);
@@ -188,7 +188,7 @@ public class OpponentPlayerTest extends TestCase {
 
 		
 		// Problem with giving a value card
-		gi001.setTrump(SkatConstants.SPADES);
+		gi001.setTrump(SkatConstants.Suits.SPADES);
 		ti.setGameInfo(gi001);
 		ti.setTrick(trick007);
 		ti.setSinglePlayerPos(1);

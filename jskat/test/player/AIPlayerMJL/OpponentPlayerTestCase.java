@@ -27,7 +27,7 @@ public class OpponentPlayerTestCase {
 	private TrickInfo ti;
 	private CardVector myCards;
 	
-	public OpponentPlayerTestCase(int singlePlayerPos, CardVector cards, CardVector trick, int gameType, int trump) {
+	public OpponentPlayerTestCase(int singlePlayerPos, CardVector cards, CardVector trick, SkatConstants.GameTypes gameType, SkatConstants.Suits trump) {
 		myCards = cards;
 
 		GameInfo gi = new GameInfo(gameType, trump, 0);

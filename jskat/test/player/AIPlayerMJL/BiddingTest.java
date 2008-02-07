@@ -42,17 +42,17 @@ public class BiddingTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		cards001 = new CardVector();
-		cards001.add(new Card(SkatConstants.HEARTS, SkatConstants.JACK));
-		cards001.add(new Card(SkatConstants.DIAMONDS, SkatConstants.JACK));
-		cards001.add(new Card(SkatConstants.HEARTS, SkatConstants.ACE));
-		cards001.add(new Card(SkatConstants.CLUBS, SkatConstants.TEN));
-		cards001.add(new Card(SkatConstants.CLUBS, SkatConstants.KING));
-		cards001.add(new Card(SkatConstants.CLUBS, SkatConstants.QUEEN));
-		cards001.add(new Card(SkatConstants.DIAMONDS, SkatConstants.QUEEN));
-		cards001.add(new Card(SkatConstants.DIAMONDS, SkatConstants.NINE));
-		cards001.add(new Card(SkatConstants.DIAMONDS, SkatConstants.EIGHT));
-		cards001.add(new Card(SkatConstants.DIAMONDS, SkatConstants.SEVEN));
-		cards001.sort(SkatConstants.SUIT, SkatConstants.HEARTS);
+		cards001.add(new Card(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.JACK));
+		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK));
+		cards001.add(new Card(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.ACE));
+		cards001.add(new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.TEN));
+		cards001.add(new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.KING));
+		cards001.add(new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.QUEEN));
+		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.QUEEN));
+		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.NINE));
+		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.EIGHT));
+		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.SEVEN));
+		cards001.sort(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.HEARTS);
 
 	}
 

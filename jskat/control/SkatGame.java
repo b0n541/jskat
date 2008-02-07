@@ -710,7 +710,7 @@ public class SkatGame extends Observable {
 
 		int trickWinner = 0;
 
-		Trick trick = (Trick) gameData.getTricks().get(trickNumber);
+		Trick trick = gameData.getTricks().get(trickNumber);
 
 		if (trick.getSecondCard().beats(trick.getFirstCard(),
 				gameData.getAnnoucement(), trick.getFirstCard())) {

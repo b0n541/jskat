@@ -40,21 +40,21 @@ public class HelperTest extends TestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		cards001 = new CardVector();
-		cards001.add(new Card(SkatConstants.SPADES, SkatConstants.JACK));
-		cards001.add(new Card(SkatConstants.DIAMONDS, SkatConstants.JACK));
-		cards001.add(new Card(SkatConstants.HEARTS, SkatConstants.ACE));
-		cards001.add(new Card(SkatConstants.CLUBS, SkatConstants.TEN));
-		cards001.add(new Card(SkatConstants.CLUBS, SkatConstants.KING));
-		cards001.add(new Card(SkatConstants.CLUBS, SkatConstants.QUEEN));
-		cards001.add(new Card(SkatConstants.DIAMONDS, SkatConstants.QUEEN));
-		cards001.add(new Card(SkatConstants.DIAMONDS, SkatConstants.NINE));
-		cards001.add(new Card(SkatConstants.DIAMONDS, SkatConstants.EIGHT));
-		cards001.add(new Card(SkatConstants.DIAMONDS, SkatConstants.SEVEN));
-		cards001.sort(SkatConstants.SUIT, SkatConstants.HEARTS);
+		cards001.add(new Card(SkatConstants.Suits.SPADES, SkatConstants.Ranks.JACK));
+		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK));
+		cards001.add(new Card(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.ACE));
+		cards001.add(new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.TEN));
+		cards001.add(new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.KING));
+		cards001.add(new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.QUEEN));
+		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.QUEEN));
+		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.NINE));
+		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.EIGHT));
+		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.SEVEN));
+		cards001.sort(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.HEARTS);
 
 		trick001 = new CardVector();
-		trick001.add(new Card(SkatConstants.SPADES, SkatConstants.ACE));
-		trick001.add(new Card(SkatConstants.SPADES, SkatConstants.SEVEN));
+		trick001.add(new Card(SkatConstants.Suits.SPADES, SkatConstants.Ranks.ACE));
+		trick001.add(new Card(SkatConstants.Suits.SPADES, SkatConstants.Ranks.SEVEN));
 
 	}
 
@@ -76,12 +76,12 @@ public class HelperTest extends TestCase {
 	 * Test for isAbleToMatch() method
 	 */
 	public void testIsAbleToMatch() {
-		trump = SkatConstants.HEARTS;
-		gameType = SkatConstants.SUIT;
+		trump = SkatConstants.Suits.HEARTS;
+		gameType = SkatConstants.GameTypes.SUIT;
 		assertEquals(false, Helper.isAbleToMatch(cards001, trump, trick001.getCard(0), gameType));
 		System.out.println("----------------------------------------------------------");
-		trump = SkatConstants.SPADES;
-		gameType = SkatConstants.SUIT;
+		trump = SkatConstants.Suits.SPADES;
+		gameType = SkatConstants.GameTypes.SUIT;
 		assertEquals(true, Helper.isAbleToMatch(cards001, trump, trick001.getCard(0), gameType));
 	}
 
@@ -104,6 +104,6 @@ public class HelperTest extends TestCase {
 	CardVector trick001;
 	Card played;
 	Card initialCard;
-	int gameType;
-	int trump;
+	SkatConstants.GameTypes gameType;
+	SkatConstants.Suits trump;
 }

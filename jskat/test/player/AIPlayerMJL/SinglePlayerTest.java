@@ -54,13 +54,13 @@ public class SinglePlayerTest extends TestCase {
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		gi001 = new GameInfo(SkatConstants.SUIT, SkatConstants.SPADES, 0);
+		gi001 = new GameInfo(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.SPADES, 0);
 
 		cards001 = TestHelper.buildDeck("J-H,J-D,A-S,T-S,7-H,K-D,9-D,7-D");
 
 		trick001 = new CardVector();
-		trick001.add(new Card(SkatConstants.DIAMONDS, SkatConstants.ACE));
-		trick001.add(new Card(SkatConstants.DIAMONDS, SkatConstants.EIGHT));
+		trick001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.ACE));
+		trick001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.EIGHT));
 }
 
 	/**
