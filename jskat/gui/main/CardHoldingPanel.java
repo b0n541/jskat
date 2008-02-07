@@ -301,14 +301,20 @@ public class CardHoldingPanel extends JPanel implements Observer {
 				// only the trick panel should change
 				Trick trick = (Trick) obj;
 				Card card = trick.getCard(0);
-				cardPanels.get(0).setCard(card.getSuit(), card
-						.getRank());
+				if (card != null) {
+					cardPanels.get(0).setCard(card.getSuit(), card
+							.getRank());
+				}
 				card = trick.getCard(1);
-				cardPanels.get(1).setCard(card.getSuit(), card
-						.getRank());
+				if (card != null) {
+					cardPanels.get(1).setCard(card.getSuit(), card
+							.getRank());
+				}
 				card = trick.getCard(2);
-				cardPanels.get(2).setCard(card.getSuit(), card
-						.getRank());
+				if (card != null) {
+					cardPanels.get(2).setCard(card.getSuit(), card
+							.getRank());
+				}
 			}
 
 			repaint();

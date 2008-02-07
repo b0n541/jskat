@@ -154,54 +154,63 @@ public class JSkatGraphicRepository extends Observable implements Observer {
 	 *            The directory name for the card set to be loaded
 	 */
 	public void loadCards(String cardType) {
-
+		
+		// TODO this is ugly, refactor it!
 		String suitString = new String();
 		String valueString = new String();
 
-		for (int i = SkatConstants.CLUBS; i <= SkatConstants.DIAMONDS; i++) {
+		for (SkatConstants.Suits currSuit : SkatConstants.Suits.values()) {
 
-			switch (i) {
-			case SkatConstants.CLUBS:
+			if (currSuit == SkatConstants.Suits.CLUBS) {
+				
 				suitString = "clubs_";
-				break;
-			case SkatConstants.SPADES:
+			}
+			else if (currSuit == SkatConstants.Suits.SPADES) {
+				
 				suitString = "spades_";
-				break;
-			case SkatConstants.HEARTS:
+			}
+			else if (currSuit == SkatConstants.Suits.HEARTS) {
+				
 				suitString = "hearts_";
-				break;
-			case SkatConstants.DIAMONDS:
+			}
+			else if (currSuit == SkatConstants.Suits.DIAMONDS) {
+				
 				suitString = "diamonds_";
-				break;
 			}
 
-			for (int j = SkatConstants.SEVEN; j <= SkatConstants.JACK; j++) {
+			for (SkatConstants.Ranks currRank : SkatConstants.Ranks.values()) {
 
-				switch (j) {
-				case SkatConstants.SEVEN:
+				if (currRank == SkatConstants.Ranks.SEVEN) {
+					
 					valueString = "07";
-					break;
-				case SkatConstants.EIGHT:
+				}
+				else if (currRank == SkatConstants.Ranks.EIGHT) {
+					
 					valueString = "08";
-					break;
-				case SkatConstants.NINE:
+				}
+				else if (currRank == SkatConstants.Ranks.NINE) {
+					
 					valueString = "09";
-					break;
-				case SkatConstants.TEN:
+				}
+				else if (currRank == SkatConstants.Ranks.TEN) {
+					
 					valueString = "10";
-					break;
-				case SkatConstants.QUEEN:
+				}
+				else if (currRank == SkatConstants.Ranks.QUEEN) {
+					
 					valueString = "queen";
-					break;
-				case SkatConstants.KING:
+				}
+				else if (currRank == SkatConstants.Ranks.KING) {
+					
 					valueString = "king";
-					break;
-				case SkatConstants.ACE:
+				}
+				else if (currRank == SkatConstants.Ranks.ACE) {
+					
 					valueString = "ace";
-					break;
-				case SkatConstants.JACK:
+				}
+				else if (currRank == SkatConstants.Ranks.JACK) {
+					
 					valueString = "jack";
-					break;
 				}
 
 				// --[DEBUG]--//
@@ -209,11 +218,11 @@ public class JSkatGraphicRepository extends Observable implements Observer {
 				// + cardType + "/" + suitString + valueString + ".gif"));
 				// --[DEBUG]--//
 
-				cards[i][j] = Toolkit.getDefaultToolkit().getImage(
+				cards[currSuit.getSuitOrder()][currRank.getSuitGrandOrder()] = Toolkit.getDefaultToolkit().getImage(
 						ClassLoader.getSystemResource("jskat/gui/img/cards/"
 								+ cardType + "/" + suitString + valueString
 								+ ".gif"));
-				tracker.addImage(cards[i][j], 2);
+				tracker.addImage(cards[currSuit.getSuitOrder()][currRank.getSuitGrandOrder()], 2);
 			}
 		}
 
@@ -256,12 +265,12 @@ public class JSkatGraphicRepository extends Observable implements Observer {
 	 *            The value of the card
 	 * @return The card image
 	 */
-	public Image getCardImage(int suit, int value) {
+	public Image getCardImage(SkatConstants.Suits suit, SkatConstants.Ranks value) {
 
-		if (suit >= 0 && value >= 0) {
+		if (suit != null && value != null) {
 
 			try {
-				return cards[suit][value];
+				return cards[suit.getSuitOrder()][value.getSuitGrandOrder()];
 			} catch (IndexOutOfBoundsException exc) {
 				return null;
 			}
