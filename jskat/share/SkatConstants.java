@@ -25,54 +25,54 @@ public final class SkatConstants {
 
 	public enum Suits {
 		CLUBS {
-			String shortString() {
+			public String shortString() {
 				return "C";
 			}
 
-			String longString() {
+			public String longString() {
 				return "Clubs";
 			}
 			
-			int getSuitOrder() {
+			public int getSuitOrder() {
 				return 3;
 			}
 		},
 		SPADES {
-			String shortString() {
+			public String shortString() {
 				return "S";
 			}
 
-			String longString() {
+			public String longString() {
 				return "Spades";
 			}
 			
-			int getSuitOrder() {
+			public int getSuitOrder() {
 				return 2;
 			}
 		},
 		HEARTS {
-			String shortString() {
+			public String shortString() {
 				return "H";
 			}
 
-			String longString() {
+			public String longString() {
 				return "Hearts";
 			}
 			
-			int getSuitOrder() {
+			public int getSuitOrder() {
 				return 1;
 			}
 		},
 		DIAMONDS {
-			String shortString() {
+			public String shortString() {
 				return "D";
 			}
 
-			String longString() {
+			public String longString() {
 				return "Diamonds";
 			}
 			
-			int getSuitOrder() {
+			public int getSuitOrder() {
 				return 0;
 			}
 		};
@@ -82,190 +82,190 @@ public final class SkatConstants {
 		 * 
 		 * @return Short string representation of the constant
 		 */
-		abstract String shortString();
+		public abstract String shortString();
 
 		/**
 		 * Gets a long string representation of the constant
 		 * 
 		 * @return Long string representation of the constant
 		 */
-		abstract String longString();
+		public abstract String longString();
 
 		/**
 		 * Gets the order of the constant
 		 * 
 		 * @return Order of the constant
 		 */
-		abstract int getSuitOrder();
+		public abstract int getSuitOrder();
 	};
 
 	// Codes of the different cards (value)
 	public enum Ranks {
 		SEVEN {
-			String shortString() {
+			public String shortString() {
 				return "7";
 			}
 
-			String longString() {
+			public String longString() {
 				return "Seven";
 			}
 			
-			int getSuitGrandOrder() {
+			public int getSuitGrandOrder() {
 				return 0;
 			}
 
-			int getNullOrder() {
+			public int getNullOrder() {
 				return 0;
 			}
 			
-			int getRamschOrder() {
+			public int getRamschOrder() {
 				return 0;
 			}
 		},
 		EIGHT {
-			String shortString() {
+			public String shortString() {
 				return "8";
 			}
 
-			String longString() {
+			public String longString() {
 				return "Eight";
 			}
 			
-			int getSuitGrandOrder() {
+			public int getSuitGrandOrder() {
 				return 1;
 			}
 
-			int getNullOrder() {
+			public int getNullOrder() {
 				return 1;
 			}
 			
-			int getRamschOrder() {
+			public int getRamschOrder() {
 				return 1;
 			}
 		},
 		NINE {
-			String shortString() {
+			public String shortString() {
 				return "9";
 			}
 
-			String longString() {
+			public String longString() {
 				return "Nine";
 			}
 			
-			int getSuitGrandOrder() {
+			public int getSuitGrandOrder() {
 				return 2;
 			}
 
-			int getNullOrder() {
+			public int getNullOrder() {
 				return 2;
 			}
 			
-			int getRamschOrder() {
+			public int getRamschOrder() {
 				return 2;
 			}
 		},
 		QUEEN {
-			String shortString() {
+			public String shortString() {
 				return "Q";
 			}
 
-			String longString() {
+			public String longString() {
 				return "Queen";
 			}
 			
-			int getSuitGrandOrder() {
+			public int getSuitGrandOrder() {
 				return 3;
 			}
 
-			int getNullOrder() {
+			public int getNullOrder() {
 				return 5;
 			}
 			
-			int getRamschOrder() {
+			public int getRamschOrder() {
 				return 4;
 			}
 		},
 		KING {
-			String shortString() {
+			public String shortString() {
 				return "K";
 			}
 
-			String longString() {
+			public String longString() {
 				return "King";
 			}
 			
-			int getSuitGrandOrder() {
+			public int getSuitGrandOrder() {
 				return 4;
 			}
 
-			int getNullOrder() {
+			public int getNullOrder() {
 				return 6;
 			}
 			
-			int getRamschOrder() {
+			public int getRamschOrder() {
 				return 5;
 			}
 		},
 		TEN {
-			String shortString() {
+			public String shortString() {
 				return "T";
 			}
 
-			String longString() {
+			public String longString() {
 				return "Ten";
 			}
 			
-			int getSuitGrandOrder() {
+			public int getSuitGrandOrder() {
 				return 5;
 			}
 
-			int getNullOrder() {
+			public int getNullOrder() {
 				return 3;
 			}
 			
-			int getRamschOrder() {
+			public int getRamschOrder() {
 				return 3;
 			}
 		},
 		ACE {
-			String shortString() {
+			public String shortString() {
 				return "A";
 			}
 
-			String longString() {
+			public String longString() {
 				return "Ace";
 			}
 			
-			int getSuitGrandOrder() {
+			public int getSuitGrandOrder() {
 				return 6;
 			}
 
-			int getNullOrder() {
+			public int getNullOrder() {
 				return 7;
 			}
 			
-			int getRamschOrder() {
+			public int getRamschOrder() {
 				return 6;
 			}
 		},
 		JACK {
-			String shortString() {
+			public String shortString() {
 				return "J";
 			}
 
-			String longString() {
+			public String longString() {
 				return "Jack";
 			}
 			
-			int getSuitGrandOrder() {
+			public int getSuitGrandOrder() {
 				return 7;
 			}
 
-			int getNullOrder() {
+			public int getNullOrder() {
 				return 4;
 			}
 			
-			int getRamschOrder() {
+			public int getRamschOrder() {
 				return 7;
 			}
 		};
@@ -275,35 +275,35 @@ public final class SkatConstants {
 		 * 
 		 * @return Short string representation of the constant
 		 */
-		abstract String shortString();
+		public abstract String shortString();
 
 		/**
 		 * Gets a long string representation of the constant
 		 * 
 		 * @return Long string representation of the constant
 		 */
-		abstract String longString();
+		public abstract String longString();
 
 		/**
 		 * Gets the order of the constant in suit and grand games
 		 * 
 		 * @return Order in suit and grand games
 		 */
-		abstract int getSuitGrandOrder();
+		public abstract int getSuitGrandOrder();
 
 		/**
 		 * Gets the order of the constant in null games
 		 * 
 		 * @return Order in null games
 		 */
-		abstract int getNullOrder();
+		public abstract int getNullOrder();
 
 		/**
 		 * Gets the order of the constant in ramsch games
 		 * 
 		 * @return Order in ramsch games
 		 */
-		abstract int getRamschOrder();
+		public abstract int getRamschOrder();
 	};
 
 	// Codes for fore-, middle- and backhand
