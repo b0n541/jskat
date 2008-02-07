@@ -131,9 +131,15 @@ public class Trick {
     	
     	CardVector returnVector = new CardVector();
     	
-    	returnVector.add(firstCard);
-    	returnVector.add(secondCard);
-    	returnVector.add(thirdCard);
+    	if (firstCard != null) {
+    		returnVector.add(firstCard);
+    	}
+    	if (secondCard != null) {
+    		returnVector.add(secondCard);
+    	}
+    	if (thirdCard != null) {
+    		returnVector.add(thirdCard);
+    	}
     	
     	return returnVector;
     }
