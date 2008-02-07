@@ -219,7 +219,7 @@ public class BiddingPanel extends JPanel implements Observer {
 			BidStatus currBidStatus = (BidStatus) observ;
 
 			int currentForeHandPlayer = currBidStatus.getForeHandPlayer();
-			int currentHumanPlayerPosition = 0;
+			SkatConstants.Player currentHumanPlayerPosition = null;
 
 			JTextField[] textFields = new JTextField[3];
 
@@ -230,7 +230,7 @@ public class BiddingPanel extends JPanel implements Observer {
 				textFields[0] = leftAIPlayerBidField;
 				textFields[1] = rightAIPlayerBidField;
 				textFields[2] = humanPlayerBidField;
-				currentHumanPlayerPosition = SkatConstants.BACK_HAND;
+				currentHumanPlayerPosition = SkatConstants.Player.BACK_HAND;
 
 				break;
 			case (1):
@@ -238,7 +238,7 @@ public class BiddingPanel extends JPanel implements Observer {
 				textFields[0] = rightAIPlayerBidField;
 				textFields[1] = humanPlayerBidField;
 				textFields[2] = leftAIPlayerBidField;
-				currentHumanPlayerPosition = SkatConstants.MIDDLE_HAND;
+				currentHumanPlayerPosition = SkatConstants.Player.MIDDLE_HAND;
 
 				break;
 			case (2):
@@ -246,32 +246,32 @@ public class BiddingPanel extends JPanel implements Observer {
 				textFields[0] = humanPlayerBidField;
 				textFields[1] = leftAIPlayerBidField;
 				textFields[2] = rightAIPlayerBidField;
-				currentHumanPlayerPosition = SkatConstants.FORE_HAND;
+				currentHumanPlayerPosition = SkatConstants.Player.FORE_HAND;
 
 				break;
 			}
 
-			if (obj instanceof Integer) {
+			if (obj instanceof SkatConstants.Player) {
 
-				int currentPlayer = ((Integer) obj).intValue();
+				SkatConstants.Player currentPlayer = ((SkatConstants.Player) obj);
 
 				// Value for player changed
-				textFields[currentPlayer]
+				textFields[currentPlayer.getOrder()]
 						.setText(Integer.toString(currBidStatus
 								.getBidValue(currentPlayer)));
-				textFields[currentPlayer].setEnabled(currBidStatus
+				textFields[currentPlayer.getOrder()].setEnabled(currBidStatus
 						.getHandDoesBid(currentPlayer));
 
-				if (skatGame.getPlayerOrder()[currentPlayer] == 2
+				if (skatGame.getPlayerOrder()[currentPlayer.getOrder()] == 2
 						&& currBidStatus
 								.getWasAsked(currentHumanPlayerPosition)) {
 
-					if (Integer.parseInt(textFields[currentPlayer]
+					if (Integer.parseInt(textFields[currentPlayer.getOrder()]
 							.getText()) == currBidStatus
 							.getHighestBidValue()
-							|| Integer.parseInt(textFields[currentPlayer]
+							|| Integer.parseInt(textFields[currentPlayer.getOrder()]
 									.getText()) == 0
-							&& currentHumanPlayerPosition == SkatConstants.BACK_HAND) {
+							&& currentHumanPlayerPosition == SkatConstants.Player.BACK_HAND) {
 
 						nextBidButton.setText(currBidStatus
 								.getNextBidValue()

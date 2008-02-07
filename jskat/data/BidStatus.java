@@ -77,32 +77,27 @@ public class BidStatus extends Observable {
      * SkatConstants.BACK_HAND)
      * @param handDoesBid TRUE if hand does the bid otherwise FALSE
      */
-    public void setHandDoesBid(int hand, boolean handDoesBid) {
+    public void setHandDoesBid(SkatConstants.Player hand, boolean handDoesBid) {
         
-        switch(hand) {
-            
-            case(SkatConstants.FORE_HAND):
-                
-                foreHandDoesBid = handDoesBid;
-                break;
-                
-            case(SkatConstants.MIDDLE_HAND):
-                
-                middleHandDoesBid = handDoesBid;
-                break;
-                
-            case(SkatConstants.BACK_HAND):
-                
-                hindHandDoesBid = handDoesBid;
-                break;
-        }
+		if (hand == SkatConstants.Player.FORE_HAND) {
+		        
+	       foreHandDoesBid = handDoesBid;
+		}
+		else if (hand == SkatConstants.Player.MIDDLE_HAND) {
+			
+			middleHandDoesBid = handDoesBid;
+		}
+		else if (hand == SkatConstants.Player.BACK_HAND) {
+			
+			hindHandDoesBid = handDoesBid;
+		}
         
         foreHandWasAsked = false;
         middleHandWasAsked = false;
         hindHandWasAsked = false;
         
         setChanged();
-        notifyObservers(new Integer(hand));
+        notifyObservers(hand);
     }
     
     /** Gets the status whether the hand does the bid or not
@@ -110,26 +105,21 @@ public class BidStatus extends Observable {
      * @param hand The player that should be asked (SkatConstants.FORE_HAND,
      * SkatConstants.MIDDLE_HAND, SkatConstants.HINDHAND)
      */
-    public boolean getHandDoesBid(int hand) {
+    public boolean getHandDoesBid(SkatConstants.Player hand) {
         
         boolean returnValue = false;
         
-        switch(hand) {
-            
-            case(SkatConstants.FORE_HAND):
-                returnValue = foreHandDoesBid;
-                break;
-                
-            case(SkatConstants.MIDDLE_HAND):
-                returnValue = middleHandDoesBid;
-                break;
-                
-            case(SkatConstants.BACK_HAND):
-                returnValue = hindHandDoesBid;
-                break;
-                
-            default:
-            	break;
+        if (hand == SkatConstants.Player.FORE_HAND) {
+        	
+        	returnValue = foreHandDoesBid;
+        }
+        else if (hand == SkatConstants.Player.MIDDLE_HAND) {
+        	
+        	returnValue = middleHandDoesBid;
+        }
+        else if (hand == SkatConstants.Player.BACK_HAND) {
+        	
+        	returnValue = hindHandDoesBid;
         }
         
         return returnValue;
@@ -139,61 +129,54 @@ public class BidStatus extends Observable {
      * @param hand The hand for which the bid value should be set
      * @param newBidValue The new bid value that should be set
      */
-    public void setBidValue(int hand, int newBidValue) {
+    public void setBidValue(SkatConstants.Player hand, int newBidValue) {
         
-        switch(hand) {
-            
-            case(SkatConstants.FORE_HAND):
-                
-                foreHandBidValue = newBidValue;
-                
-                break;
-            case(SkatConstants.MIDDLE_HAND):
-                
-                middleHandBidValue = newBidValue;
-                
-                break;
-            case(SkatConstants.BACK_HAND):
-                
-                hindHandBidValue = newBidValue;
-                
-                break;
+        if (hand == SkatConstants.Player.FORE_HAND) {
+        	
+        	foreHandBidValue = newBidValue;
+        }
+        else if (hand == SkatConstants.Player.MIDDLE_HAND) {
+        	
+        	middleHandBidValue = newBidValue;
+        }
+        else if (hand == SkatConstants.Player.BACK_HAND) {
+        	
+        	hindHandBidValue = newBidValue;
         }
         
         setChanged();
-        notifyObservers(new Integer(hand));
+        notifyObservers(hand);
     }
     
     /** Gets the current bid value for a hand
      * @param hand The hand from where the bid value should be retrieved.
      * @return The current bid value for this hand
      */
-    public int getBidValue(int hand) {
+    public int getBidValue(SkatConstants.Player hand) {
         
         int returnValue = 0;
         
-        switch(hand) {
-            
-            case(SkatConstants.FORE_HAND):
-                
-                returnValue = foreHandBidValue;
-                
-                break;
-            case(SkatConstants.MIDDLE_HAND):
-                
-                returnValue = middleHandBidValue;
-                
-                break;
-            case(SkatConstants.BACK_HAND):
-                
-                returnValue = hindHandBidValue;
-                
-                break;
+        if (hand == SkatConstants.Player.FORE_HAND) {
+        	
+        	returnValue = foreHandBidValue;
+        }
+        else if (hand == SkatConstants.Player.MIDDLE_HAND) {
+        	
+        	returnValue = middleHandBidValue;
+        }
+        else if (hand == SkatConstants.Player.BACK_HAND) {
+        	
+        	returnValue = hindHandBidValue;
         }
         
         return returnValue;
     }
     
+    /**
+     * Gets highest bid value
+     * 
+     * @return Highest bid value
+     */
     public int getHighestBidValue() {
         
         int highestBidValue = foreHandBidValue;
@@ -210,6 +193,11 @@ public class BidStatus extends Observable {
         return highestBidValue;
     }
     
+    /**
+     * Gets next bid value
+     * 
+     * @return Next bid value
+     */
     public int getNextBidValue() {
         
         int highestBidValue = getHighestBidValue();
@@ -230,58 +218,57 @@ public class BidStatus extends Observable {
         }
     }
     
-    public void setWasAsked(int hand) {
+    /**
+     * Sets flag for player that was asked
+     * 
+     * @param Player that was asked
+     */
+    public void setWasAsked(SkatConstants.Player hand) {
         
-        switch(hand) {
-            
-            case(SkatConstants.FORE_HAND):
-                
-                foreHandWasAsked = true;
-                middleHandWasAsked = false;
-                hindHandWasAsked = false;
-                
-                break;
-            case(SkatConstants.MIDDLE_HAND):
-                
-                foreHandWasAsked = false;
-                middleHandWasAsked = true;
-                hindHandWasAsked = false;
-                
-                break;
-            case(SkatConstants.BACK_HAND):
-                
-                foreHandWasAsked = false;
-                middleHandWasAsked = false;
-                hindHandWasAsked = true;
-                
-                break;
+        if (hand == SkatConstants.Player.FORE_HAND) {
+        	
+        	foreHandWasAsked = true;
+        	middleHandWasAsked = false;
+        	hindHandWasAsked = false;
+        }
+        else if (hand == SkatConstants.Player.MIDDLE_HAND) {
+        	
+        	foreHandWasAsked = false;
+        	middleHandWasAsked = true;
+        	hindHandWasAsked = false;
+        }
+        else if (hand == SkatConstants.Player.BACK_HAND) {
+        	
+        	foreHandWasAsked = false;
+        	middleHandWasAsked = false;
+        	hindHandWasAsked = true;
         }
         
         setChanged();
-        notifyObservers(new Integer(hand));
+        notifyObservers(hand);
     }
     
-    public boolean getWasAsked(int hand) {
+    /**
+     * Gets the flag for a player
+     * 
+     * @param hand Player
+     * @return TRUE if the player was asked
+     */
+    public boolean getWasAsked(SkatConstants.Player hand) {
         
         boolean returnValue = false;
         
-        switch(hand) {
-            
-            case(SkatConstants.FORE_HAND):
-                
-                returnValue = foreHandWasAsked;
-                
-                break;
-            case(SkatConstants.MIDDLE_HAND):
-                
-                returnValue = middleHandWasAsked;
-                
-                break;
-            case(SkatConstants.BACK_HAND):
-                
-                returnValue = hindHandWasAsked;
-                
-                break;
+        if (hand == SkatConstants.Player.FORE_HAND) {
+        	
+        	returnValue = foreHandWasAsked;
+        }
+        else if (hand == SkatConstants.Player.MIDDLE_HAND) {
+        	
+        	returnValue = middleHandWasAsked;
+        }
+        else if (hand == SkatConstants.Player.BACK_HAND) {
+        	
+        	returnValue = hindHandWasAsked;
         }
         
         return returnValue;

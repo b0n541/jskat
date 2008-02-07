@@ -20,9 +20,10 @@ public final class SkatConstants {
 	public final static String HUMANPLAYER = "HumanPlayer";
 
 	// Codes of the different cards (suit)
-	// TODO is this really needed?
-	public final static int SUIT_GRAND = -1;
-
+	/**
+	 * Contains all suits
+	 * 
+	 */
 	public enum Suits {
 		CLUBS {
 			public String shortString() {
@@ -99,7 +100,9 @@ public final class SkatConstants {
 		public abstract int getSuitOrder();
 	};
 
-	// Codes of the different cards (value)
+	/**
+	 * Contains all ranks
+	 */
 	public enum Ranks {
 		SEVEN {
 			public String shortString() {
@@ -307,9 +310,19 @@ public final class SkatConstants {
 	};
 
 	// Codes for fore-, middle- and backhand
-	public final static int FORE_HAND = 0;
-	public final static int MIDDLE_HAND = 1;
-	public final static int BACK_HAND = 2;
+	/**
+	 * Contains all player positions in a trick
+	 */
+	public enum Player {
+		FORE_HAND { public int getOrder() { return 0; } }, 
+		MIDDLE_HAND { public int getOrder() { return 1; } }, 
+		BACK_HAND { public int getOrder() { return 2; } };
+		
+		/**
+		 * Gets order of player
+		 */
+		public abstract int getOrder();
+	};
 
 	// Codes of the different Skat game types
 	public enum GameTypes {
