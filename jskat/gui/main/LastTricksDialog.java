@@ -260,13 +260,13 @@ public class LastTricksDialog extends JDialog implements Observer {
 
 		Card card = trick.getFirstCard();
 		// log.debug("First card: " + card.getSuit() + " " + card.getValue());
-		firstCardPanel.setCard(card.getSuit(), card.getValue());
+		firstCardPanel.setCard(card.getSuit(), card.getRank());
 		card = trick.getSecondCard();
 		// log.debug("Second card: " + card.getSuit() + " " + card.getValue());
-		secondCardPanel.setCard(card.getSuit(), card.getValue());
+		secondCardPanel.setCard(card.getSuit(), card.getRank());
 		card = trick.getThirdCard();
 		// log.debug("Third card: " + card.getSuit() + " " + card.getValue());
-		thirdCardPanel.setCard(card.getSuit(), card.getValue());
+		thirdCardPanel.setCard(card.getSuit(), card.getRank());
 	}
 
 	private void setSkipButtons() {
@@ -307,11 +307,11 @@ public class LastTricksDialog extends JDialog implements Observer {
 		nextTrickButton.setEnabled(false);
 		lastTrickButton.setEnabled(false);
 		firstPlayerNameLabel.setText(" ");
-		firstCardPanel.setCard(-1, -1);
+		firstCardPanel.setCard(null, null);
 		secondPlayerNameLabel.setText(" ");
-		secondCardPanel.setCard(-1, -1);
+		secondCardPanel.setCard(null, null);
 		thirdPlayerNameLabel.setText(" ");
-		thirdCardPanel.setCard(-1, -1);
+		thirdCardPanel.setCard(null, null);
 		centerPanel.repaint();
 	}
 	

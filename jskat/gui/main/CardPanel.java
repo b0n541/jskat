@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 
 import jskat.gui.JSkatGraphicRepository;
+import jskat.share.SkatConstants;
 
 /**
  * CardPanel for showing a card
@@ -61,15 +62,15 @@ public class CardPanel extends JPanel implements Observer {
 
 		super.paintComponent(g);
 
-		if (suit >= 0 && value >= 0) {
+		if (suit != null && rank != null) {
 
 			if (showBack) {
 
-				g.drawImage(jskatBitmaps.getCardImage(-1, -1), 0, 0, this);
+				g.drawImage(jskatBitmaps.getCardImage(null, null), 0, 0, this);
 
 			} else {
 
-				g.drawImage(jskatBitmaps.getCardImage(suit, value), 0, 0, this);
+				g.drawImage(jskatBitmaps.getCardImage(suit, rank), 0, 0, this);
 			}
 		}
 	}
@@ -82,10 +83,10 @@ public class CardPanel extends JPanel implements Observer {
 	 * @param newValue
 	 *            value of the card
 	 */
-	public void setCard(int newSuit, int newValue) {
+	public void setCard(SkatConstants.Suits newSuit, SkatConstants.Ranks newRank) {
 
 		suit = newSuit;
-		value = newValue;
+		rank = newRank;
 	}
 
 	/**
@@ -124,19 +125,19 @@ public class CardPanel extends JPanel implements Observer {
 	 * 
 	 * @return ID of the suit
 	 */
-	public int getSuit() {
+	public SkatConstants.Suits getSuit() {
 
 		return suit;
 	}
 
 	/**
-	 * Gets the value of the card
+	 * Gets the rank of the card
 	 * 
-	 * @return The value of the card
+	 * @return The rank of the card
 	 */
-	public int getValue() {
+	public SkatConstants.Ranks getRank() {
 
-		return value;
+		return rank;
 	}
 
 	/**
@@ -144,7 +145,7 @@ public class CardPanel extends JPanel implements Observer {
 	 */
 	public void cardClicked() {
 
-		cardHoldingPanel.cardPanelClicked(suit, value);
+		cardHoldingPanel.cardPanelClicked(suit, rank);
 	}
 
 	/**
@@ -164,9 +165,9 @@ public class CardPanel extends JPanel implements Observer {
 
 	private JSkatGraphicRepository jskatBitmaps;
 
-	private int suit = -1;
+	private SkatConstants.Suits suit;
 
-	private int value = -1;
+	private SkatConstants.Ranks rank;
 
 	private boolean showBack = true;
 }

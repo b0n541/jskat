@@ -243,19 +243,28 @@ public class GameAnnounceDialog extends JDialog {
 					switch (gameType) {
 
 					case (0):
+						newGame.setGameType(SkatConstants.GameTypes.SUIT);
+						newGame.setTrump(SkatConstants.Suits.CLUBS);
+						break;
 					case (1):
+						newGame.setGameType(SkatConstants.GameTypes.SUIT);
+						newGame.setTrump(SkatConstants.Suits.SPADES);
+						break;
 					case (2):
+						newGame.setGameType(SkatConstants.GameTypes.SUIT);
+						newGame.setTrump(SkatConstants.Suits.HEARTS);
+						break;
 					case (3):
-						newGame.setGameType(SkatConstants.SUIT);
-						newGame.setTrump(gameType);
+						newGame.setGameType(SkatConstants.GameTypes.SUIT);
+						newGame.setTrump(SkatConstants.Suits.DIAMONDS);
 						break;
 					case (4):
-						newGame.setGameType(SkatConstants.NULL);
-						newGame.setTrump(-1);
+						newGame.setGameType(SkatConstants.GameTypes.NULL);
+						newGame.setTrump(null);
 						break;
 					case (5):
-						newGame.setGameType(SkatConstants.GRAND);
-						newGame.setTrump(SkatConstants.SUIT_GRAND);
+						newGame.setGameType(SkatConstants.GameTypes.GRAND);
+						newGame.setTrump(null);
 						break;
 					}
 

@@ -107,41 +107,46 @@ public class GameScore extends JPanel implements Observer {
 			case SkatGame.GAMESTATE_NEW_TRICK_STARTED:
 				
 				SkatGameData data = game.getSkatGameData();
-				
-				switch(data.getGameType()) {
+				SkatConstants.GameTypes gameType = data.getGameType();
                 
-                case(SkatConstants.SUIT):
-                    gameTypeLabel.setText(jskatStrings.getString("suit_game"));
-                    break;
-                case(SkatConstants.GRAND):
-                    gameTypeLabel.setText(jskatStrings.getString("grand_game"));
-                    break;
-                case(SkatConstants.NULL):
-                    gameTypeLabel.setText(jskatStrings.getString("null_game"));
-                    break;
-                case(SkatConstants.RAMSCH):
-                    gameTypeLabel.setText(jskatStrings.getString("ramsch_game"));
-                    break;
-				}		
+				if (gameType == SkatConstants.GameTypes.SUIT) {
+					
+					gameTypeLabel.setText(jskatStrings.getString("suit_game"));
 
-	            switch(data.getTrump()) {
-	                
-	                case(SkatConstants.CLUBS):
-	                    gameTrumpLabel.setText(jskatStrings.getString("clubs"));
-	                    break;
-	                case(SkatConstants.SPADES):
-	                    gameTrumpLabel.setText(jskatStrings.getString("spades"));
-	                    break;
-	                case(SkatConstants.HEARTS):
-	                    gameTrumpLabel.setText(jskatStrings.getString("hearts"));
-	                    break;
-	                case(SkatConstants.DIAMONDS):
-	                    gameTrumpLabel.setText(jskatStrings.getString("diamonds"));
-	                    break;
-	                default:
-	                    gameTrumpLabel.setText("");
-	                    break;
-	            }
+					SkatConstants.Suits trump = data.getTrump();
+					
+					if (trump == SkatConstants.Suits.CLUBS) {
+						
+						gameTrumpLabel.setText(jskatStrings.getString("clubs"));
+					}
+					else if (trump == SkatConstants.Suits.SPADES) {
+						
+						gameTrumpLabel.setText(jskatStrings.getString("spades"));
+					}
+					else if (trump == SkatConstants.Suits.HEARTS) {
+						
+						gameTrumpLabel.setText(jskatStrings.getString("hearts"));
+					}
+					else if (trump == SkatConstants.Suits.DIAMONDS) {
+						
+						gameTrumpLabel.setText(jskatStrings.getString("diamonds"));
+					}
+				}
+				else if (gameType == SkatConstants.GameTypes.GRAND) {
+					
+					gameTypeLabel.setText(jskatStrings.getString("grand_game"));
+					gameTrumpLabel.setText("");
+				}
+				else if (gameType == SkatConstants.GameTypes.NULL) {
+					
+					gameTypeLabel.setText(jskatStrings.getString("null_game"));
+					gameTrumpLabel.setText("");
+				}
+				else if (gameType == SkatConstants.GameTypes.RAMSCH) {
+					
+					gameTypeLabel.setText(jskatStrings.getString("ramsch_game"));
+					gameTrumpLabel.setText("");
+				}
 
 	            // only set the name when there actually is a single player
 	            if(data.getSinglePlayer()>=0) {
@@ -151,7 +156,7 @@ public class GameScore extends JPanel implements Observer {
 	            	playerNameLabel.setText("---");
 	            }
 	            
-	            if(data.getGameType() != SkatConstants.RAMSCH) {
+	            if(data.getGameType() != SkatConstants.GameTypes.RAMSCH) {
 		            playerScoreLabel.setText("" + data.getSinglePlayerScore());
 		            opponentScoreLabel.setText("" + data.getOpponentScore());
 	            }

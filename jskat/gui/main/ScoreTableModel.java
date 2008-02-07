@@ -275,22 +275,24 @@ public class ScoreTableModel extends AbstractTableModel implements Observer {
 					} else if (i == 4) {
 
 						// it's the game type column --> put in the game type
-						int gameType = currGame.getSkatGameData().getGameType();
+						SkatConstants.GameTypes gameType = currGame.getSkatGameData().getGameType();
 						String text = "";
 						
-						switch(gameType) {
-						case SkatConstants.NULL:
+						if (gameType == SkatConstants.GameTypes.NULL) {
+							
 							text = jskatStrings.getString("null");
-							break;
-						case SkatConstants.GRAND:
+						}
+						else if (gameType == SkatConstants.GameTypes.GRAND) {
+							
 							text = jskatStrings.getString("grand");
-							break;
-						case SkatConstants.RAMSCH:
+						}
+						else if (gameType == SkatConstants.GameTypes.RAMSCH) {
+							
 							text = jskatStrings.getString("ramsch");
-							break;
-						case SkatConstants.SUIT:
+						}
+						else if (gameType == SkatConstants.GameTypes.SUIT) {
+							
 							text = jskatStrings.getString("suit_game");
-							break;
 						}
 						newRow.add(text);
 

@@ -249,17 +249,16 @@ public class CardHoldingPanel extends JPanel implements Observer {
 				// first, make a CardVector out of the card panels
 				CardVector cv = new CardVector();
 				for(int i=0;i<cardPanels.size();i++) {
-					if( cardPanels.get(i).getSuit()>=0) {
-						cv
-							.add(new Card(
-								cardPanels.get(i).getSuit(),
-								cardPanels.get(i).getValue() ));
+					if( cardPanels.get(i).getSuit() != null) {
+						cv.add(new Card(
+							cardPanels.get(i).getSuit(),
+							cardPanels.get(i).getRank() ));
 					}
 				}
 
 				// then sort the CardVector
-				int gameType = ((SkatGame) observ).getSkatGameData().getGameType();
-				int trump = ((SkatGame) observ).getSkatGameData().getTrump();
+				SkatConstants.GameTypes gameType = ((SkatGame) observ).getSkatGameData().getGameType();
+				SkatConstants.Suits trump = ((SkatGame) observ).getSkatGameData().getTrump();
 				log.debug("GameType:"+gameType+", Trump:"+trump+", Cards: "+cv);
 				cv.sort(gameType, trump);
 				
@@ -279,7 +278,7 @@ public class CardHoldingPanel extends JPanel implements Observer {
 
 					// new card was added to the CardVector
 					addCard(obsCardVector);
-					obsCardVector.sort(SkatConstants.SUIT);
+					obsCardVector.sort(SkatConstants.GameTypes.SUIT);
 					
 				} else {
 
@@ -303,13 +302,13 @@ public class CardHoldingPanel extends JPanel implements Observer {
 				Trick trick = (Trick) obj;
 				Card card = trick.getCard(0);
 				cardPanels.get(0).setCard(card.getSuit(), card
-						.getValue());
+						.getRank());
 				card = trick.getCard(1);
 				cardPanels.get(1).setCard(card.getSuit(), card
-						.getValue());
+						.getRank());
 				card = trick.getCard(2);
 				cardPanels.get(2).setCard(card.getSuit(), card
-						.getValue());
+						.getRank());
 			}
 
 			repaint();
@@ -354,14 +353,14 @@ public class CardHoldingPanel extends JPanel implements Observer {
 		while (i < updCardVector.size()) {
 
 			cardPanels.get(i).setCard(updCardVector.getCard(i)
-					.getSuit(), updCardVector.getCard(i).getValue());
+					.getSuit(), updCardVector.getCard(i).getRank());
 
 			i++;
 		}
 
 		while (i < maxCardCount) {
 
-			cardPanels.get(i).setCard(-1, -1);
+			cardPanels.get(i).setCard(null, null);
 			i++;
 		}
 
@@ -379,9 +378,9 @@ public class CardHoldingPanel extends JPanel implements Observer {
 			currCardPanel = cardPanels.get(i);
 
 			if (!updCardVector.contains(currCardPanel.getSuit(), currCardPanel
-					.getValue())) {
+					.getRank())) {
 
-				currCardPanel.setCard(-1, -1);
+				currCardPanel.setCard(null, null);
 			}
 		}
 
@@ -407,7 +406,7 @@ public class CardHoldingPanel extends JPanel implements Observer {
 
 		while (i < maxCardCount - updCardVector.size()) {
 
-			cardPanels.get(i).setCard(-1, -1);
+			cardPanels.get(i).setCard(null, null);
 			i++;
 		}
 
@@ -416,10 +415,10 @@ public class CardHoldingPanel extends JPanel implements Observer {
 			Card newCard = iterator.next();
 
 			if (newCard.getSuit() != cardPanels.get(i).getSuit()
-					|| newCard.getValue() != cardPanels.get(i).getValue()) {
+					|| newCard.getRank() != cardPanels.get(i).getRank()) {
 
 				cardPanels.get(i).setCard(newCard.getSuit(),
-						newCard.getValue());
+						newCard.getRank());
 			}
 			i++;
 		}
@@ -504,7 +503,7 @@ public class CardHoldingPanel extends JPanel implements Observer {
 	 * @param value
 	 *            The value of the clicked card panel
 	 */
-	public void cardPanelClicked(int suit, int value) {
+	public void cardPanelClicked(SkatConstants.Suits suit, SkatConstants.Ranks value) {
 
 		skatTable.cardPanelClicked(panelType, suit, value);
 	}
@@ -523,7 +522,7 @@ public class CardHoldingPanel extends JPanel implements Observer {
 		
 		while (panelIterator.hasNext()) {
 		
-			panelIterator.next().setCard(-1, -1);
+			panelIterator.next().setCard(null, null);
 		}
 		
 		repaint();
