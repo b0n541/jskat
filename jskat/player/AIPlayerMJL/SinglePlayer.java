@@ -13,7 +13,7 @@ package jskat.player.AIPlayerMJL;
 import org.apache.log4j.Logger;
 
 import jskat.share.CardVector;
-import jskat.share.rules.SkatRules;
+import jskat.share.rules.AbstractSkatRules;
 
 /**
  * @author Markus J. Luzius <markus@luzius.de>
@@ -44,7 +44,7 @@ public class SinglePlayer implements CardPlayer {
 		if(trick.size()==0) return 0;
 		int result = 0;
 		for(int i=0;i<cards.size();i++) {
-			if(SkatRules.isCardAllowed(cards.getCard(i), cards, trick.getCard(0), trick.getGameType(), trick.getTrump())) {
+			if(AbstractSkatRules.isCardAllowed(cards.getCard(i), cards, trick.getCard(0), trick.getGameType(), trick.getTrump())) {
 				result = i;
 				break;
 			}

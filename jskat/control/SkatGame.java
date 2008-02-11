@@ -38,6 +38,7 @@ import jskat.share.SkatConstants;
 import jskat.share.Tools;
 import jskat.share.exception.SkatHandlingException;
 import jskat.share.exception.WrongCardException;
+import jskat.share.rules.AbstractSkatRules;
 import jskat.share.rules.SkatRules;
 import jskat.test.share.TestHelper;
 
@@ -488,17 +489,17 @@ public class SkatGame extends Observable {
 		log.debug("Tricks: player 0: " + trickWins[0] + ", player 1: "
 				+ trickWins[1] + ", player 2: " + trickWins[2]);
 
-		if (SkatRules.isDurchmarsch(trickWins) >= 0) {
+		if (SkatRules.isDurchmarsch(gameData) >= 0) {
 
-			log.info("Player " + SkatRules.isDurchmarsch(trickWins)
+			log.info("Player " + SkatRules.isDurchmarsch(gameData)
 					+ " did a Durschmarsch!");
 
 			gameData.setDurchMarsch(true);
 			gameData.setJungFrau(false);
 
-		} else if (SkatRules.isJungfrau(trickWins) >= 0) {
+		} else if (SkatRules.isJungfrau(gameData) >= 0) {
 
-			log.info("Player " + SkatRules.isJungfrau(trickWins)
+			log.info("Player " + SkatRules.isJungfrau(gameData)
 					+ " is Jungfrau!");
 			// only one player can be jungfrau - otherwise it's a
 			// durchmarsch
@@ -523,7 +524,7 @@ public class SkatGame extends Observable {
 
 		if (gameData.isJungFrau()) {
 
-			scoreMessage.append(gameData.getPlayers()[SkatRules
+			scoreMessage.append(gameData.getPlayers()[AbstractSkatRules
 					.isJungfrau(trickWins)].getPlayerName()
 					+ " " + jskatStrings.getString("jungfrau") + "\n");
 		}
@@ -1163,7 +1164,7 @@ public class SkatGame extends Observable {
 
 				// Player has the card
 				if ((trickVector.size() == 0)
-						|| (trickVector.size() > 0 && SkatRules.isCardAllowed(
+						|| (trickVector.size() > 0 && AbstractSkatRules.isCardAllowed(
 								cardPlayed, playerCards,
 								trickVector.getCard(0), gameData.getGameType(),
 								gameData.getTrump()))) {
@@ -1272,7 +1273,7 @@ public class SkatGame extends Observable {
 			// First card in the trick is always allowed
 			cardAllowed = true;
 
-		} else if (SkatRules.isCardAllowed(cardToBePlayed, gameData
+		} else if (AbstractSkatRules.isCardAllowed(cardToBePlayed, gameData
 				.getPlayerCards(playerOrder[currPlayerID]), trickVector
 				.getCard(0), gameData.getGameType(), gameData.getTrump())) {
 
@@ -1476,6 +1477,8 @@ public class SkatGame extends Observable {
 
 	private GameState gameState;
 
+	private SkatRules rules;
+	
 	/**
 	 * The skat series where the game is played
 	 */

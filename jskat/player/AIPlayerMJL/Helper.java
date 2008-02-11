@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 import jskat.share.CardVector;
 import jskat.share.Card;
 import jskat.share.SkatConstants;
-import jskat.share.rules.SkatRules;
+import jskat.share.rules.AbstractSkatRules;
 
 /**
  * @author Markus J. Luzius <markus@luzius.de>
@@ -64,7 +64,7 @@ public class Helper {
 	public static int isAbleToBeat(CardVector cards, Card cardToBeat, SkatConstants.Suits trump, Card initialCard, SkatConstants.GameTypes gameType) {
 		int result = -1;
 		for(int i=0; i<cards.size();i++) {
-			if(SkatRules.isCardAllowed(cards.getCard(i), cards, initialCard, gameType, trump)) {
+			if(AbstractSkatRules.isCardAllowed(cards.getCard(i), cards, initialCard, gameType, trump)) {
 				if(cards.getCard(i).beats(cardToBeat, gameType, trump, initialCard)) {
 					log.debug(cards.getCard(i)+" can beat "+cardToBeat+".");
 					result = i;
@@ -86,7 +86,7 @@ public class Helper {
 		boolean result = false;
 		for(int i=0; i<cards.size();i++) {
 			boolean sameSuit = (cards.getCard(i).getSuit() == initialCard.getSuit());
-			if(SkatRules.isCardAllowed(cards.getCard(i), cards, initialCard, gameType, trump)) {
+			if(AbstractSkatRules.isCardAllowed(cards.getCard(i), cards, initialCard, gameType, trump)) {
 				if(gameType != SkatConstants.GameTypes.NULL) {
 					if(cards.getCard(i).isTrump(trump) && initialCard.isTrump(trump)) {
 						result = true;

@@ -1,9 +1,31 @@
 package jskat.share.rules;
 
+import jskat.data.SkatGameData;
 import jskat.share.Tools;
 
 public class SkatRulesRamsch extends AbstractSkatRules {
 
+	/** 
+	 * @see jskat.share.rules.SkatRules
+	 */
+	public int getGameResult(SkatGameData gameData) {
+
+		int multiplier = 1;
+
+		// TODO two player can be jungfrau
+		if (gameData.isJungFrau()) {
+			multiplier = multiplier * 2;
+		}
+
+		multiplier = multiplier * (new Double(Math.pow(2, gameData.getGeschoben()))).intValue();
+
+		if (gameData.isGameLost()) {
+			multiplier = multiplier * -1;
+		}
+
+		return gameData.getScore(gameData.getSinglePlayer()) * multiplier;
+	}
+	
 	/**
 	 * Checks whether a player did a durchmarsch
 	 * 

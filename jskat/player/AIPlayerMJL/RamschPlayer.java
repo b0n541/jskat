@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
-import jskat.share.rules.SkatRules;
+import jskat.share.rules.AbstractSkatRules;
 
 /**
  * @author Markus J. Luzius <markus@luzius.de>
@@ -72,10 +72,10 @@ public class RamschPlayer implements CardPlayer {
 		}
 		
 		// make sure that the card is allowed
-		if(!SkatRules.isCardAllowed(cards.getCard(result), cards, trick.getCard(0), trick.getGameType(), trick.getTrump())) {
+		if(!AbstractSkatRules.isCardAllowed(cards.getCard(result), cards, trick.getCard(0), trick.getGameType(), trick.getTrump())) {
 			// if it's not allowed, take another one
 		    for(int i=0;i<cards.size();i++) {
-				if(SkatRules.isCardAllowed(cards.getCard(i), cards, trick.getCard(0), trick.getGameType(), trick.getTrump())) {
+				if(AbstractSkatRules.isCardAllowed(cards.getCard(i), cards, trick.getCard(0), trick.getGameType(), trick.getTrump())) {
 					result = i;
 				}
 			}

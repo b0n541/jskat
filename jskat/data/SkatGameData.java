@@ -18,7 +18,7 @@ import jskat.player.JSkatPlayer;
 import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
-import jskat.share.rules.SkatRules;
+import jskat.share.rules.AbstractSkatRules;
 
 import org.apache.log4j.Logger;
 
@@ -70,7 +70,7 @@ public class SkatGameData extends Observable {
 
 		if (result == 0) {
 			log.warn("Game result hasn't been calculated yet!");
-			result = SkatRules.getResult(this);
+			result = AbstractSkatRules.getResult(this);
 		}
 
 		return result;
@@ -541,7 +541,7 @@ public class SkatGameData extends Observable {
 	}
 
 	public void calcResult() {
-		result = SkatRules.getResult(this);
+		result = AbstractSkatRules.getResult(this);
 	}
 
 	/**

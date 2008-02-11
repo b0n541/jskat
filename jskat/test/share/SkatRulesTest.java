@@ -14,7 +14,7 @@ package jskat.test.share;
 import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
-import jskat.share.rules.SkatRules;
+import jskat.share.rules.AbstractSkatRules;
 import junit.framework.TestCase;
 
 /**
@@ -54,21 +54,21 @@ public class SkatRulesTest extends TestCase {
 		initialCard = new Card(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.EIGHT);
 		gameType = SkatConstants.GameTypes.SUIT;
 		trump = SkatConstants.Suits.HEARTS;
-		assertFalse(SkatRules.isCardAllowed(played, cards001, initialCard, gameType, trump));
+		assertFalse(AbstractSkatRules.isCardAllowed(played, cards001, initialCard, gameType, trump));
 
 		// queen of clubs allowed on eight of spades: YES (can't match)
 		played = cards001.getCard(cards001.getIndexOf(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.QUEEN));
 		initialCard = new Card(SkatConstants.Suits.SPADES, SkatConstants.Ranks.EIGHT);
 		gameType = SkatConstants.GameTypes.SUIT;
 		trump = SkatConstants.Suits.HEARTS;
-		assertTrue(SkatRules.isCardAllowed(played, cards001, initialCard, gameType, trump));
+		assertTrue(AbstractSkatRules.isCardAllowed(played, cards001, initialCard, gameType, trump));
 
 		// queen of clubs allowed on eight of clubs: YES (matching suit)
 		played = cards001.getCard(cards001.getIndexOf(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.QUEEN));
 		initialCard = new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.EIGHT);
 		gameType = SkatConstants.GameTypes.SUIT;
 		trump = SkatConstants.Suits.DIAMONDS;
-		assertTrue(SkatRules.isCardAllowed(played, cards001, initialCard, gameType, trump));
+		assertTrue(AbstractSkatRules.isCardAllowed(played, cards001, initialCard, gameType, trump));
 
 		// queen of clubs allowed on eight of spades: NO (has other trump - the Jack!)
 		// Test for Bug # 
@@ -76,14 +76,14 @@ public class SkatRulesTest extends TestCase {
 		initialCard = new Card(SkatConstants.Suits.SPADES, SkatConstants.Ranks.EIGHT);
 		gameType = SkatConstants.GameTypes.SUIT;
 		trump = SkatConstants.Suits.SPADES;
-		assertFalse(SkatRules.isCardAllowed(played, cards001, initialCard, gameType, trump));
+		assertFalse(AbstractSkatRules.isCardAllowed(played, cards001, initialCard, gameType, trump));
 
 		// queen of clubs allowed on eight of spades: YES (can't match)
 		played = cards001.getCard(cards001.getIndexOf(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.QUEEN));
 		initialCard = new Card(SkatConstants.Suits.SPADES, SkatConstants.Ranks.EIGHT);
 		gameType = SkatConstants.GameTypes.SUIT;
 		trump = SkatConstants.Suits.DIAMONDS;
-		assertTrue(SkatRules.isCardAllowed(played, cards001, initialCard, gameType, trump));
+		assertTrue(AbstractSkatRules.isCardAllowed(played, cards001, initialCard, gameType, trump));
 
 		
 		// Problem was in playing ramsch - 8 of Clubs was not allowed ("Player is evil")
@@ -92,7 +92,7 @@ public class SkatRulesTest extends TestCase {
 		initialCard = new Card(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.EIGHT);
 		gameType = SkatConstants.GameTypes.RAMSCH;
 		trump = null;
-		assertTrue(SkatRules.isCardAllowed(played, cards001, initialCard, gameType, trump));
+		assertTrue(AbstractSkatRules.isCardAllowed(played, cards001, initialCard, gameType, trump));
 		
 	}
 
