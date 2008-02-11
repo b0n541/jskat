@@ -143,7 +143,7 @@ public class JSkatPlayArea extends JPanel implements Observer {
 			// the skat panel
 			// and the trick panel
 			// --> clicks on the cards are recognized from now on
-			getCardHoldingPanel(PLAYER_TWO).setSkatTable(skatTable);
+			getCardHoldingPanel(PanelTypes.PLAYER_TWO).setSkatTable(skatTable);
 			getSkatPanel().setSkatTable(skatTable);
 			getTrickPanel().setSkatTable(skatTable);
 
@@ -161,17 +161,17 @@ public class JSkatPlayArea extends JPanel implements Observer {
 
 			SkatGame game = ((SkatGame) obj);
 			game.addObserver(this);
-			game.addObserver(getCardHoldingPanel(PLAYER_ZERO));
-			game.addObserver(getCardHoldingPanel(PLAYER_ONE));
-			game.addObserver(getCardHoldingPanel(PLAYER_TWO));
+			game.addObserver(getCardHoldingPanel(PanelTypes.PLAYER_ZERO));
+			game.addObserver(getCardHoldingPanel(PanelTypes.PLAYER_ONE));
+			game.addObserver(getCardHoldingPanel(PanelTypes.PLAYER_TWO));
 			SkatGameData gameData = game.getSkatGameData();
 			gameData.addObserver(this);
 			gameData.getPlayerCards(0).addObserver(
-					getCardHoldingPanel(PLAYER_ZERO));
+					getCardHoldingPanel(PanelTypes.PLAYER_ZERO));
 			gameData.getPlayerCards(1).addObserver(
-					getCardHoldingPanel(PLAYER_ONE));
+					getCardHoldingPanel(PanelTypes.PLAYER_ONE));
 			gameData.getPlayerCards(2).addObserver(
-					getCardHoldingPanel(PLAYER_TWO));
+					getCardHoldingPanel(PanelTypes.PLAYER_TWO));
 			gameData.addObserver(getTrickPanel());
 			gameData.getSkat().addObserver(getSkatPanel());
 
@@ -184,9 +184,9 @@ public class JSkatPlayArea extends JPanel implements Observer {
 
 			if (state == SkatSeries.SeriesStates.SERIES_FINISHED) {
 				
-				getCardHoldingPanel(0).clearPanel();
-				getCardHoldingPanel(1).clearPanel();
-				getCardHoldingPanel(2).clearPanel();
+				getCardHoldingPanel(PanelTypes.PLAYER_ZERO).clearPanel();
+				getCardHoldingPanel(PanelTypes.PLAYER_ONE).clearPanel();
+				getCardHoldingPanel(PanelTypes.PLAYER_TWO).clearPanel();
 				getTrickPanel().clearPanel();
 				((CardLayout) skatTrickHoldingPanel.getLayout()).show(
 						skatTrickHoldingPanel, "trick");
@@ -220,19 +220,23 @@ public class JSkatPlayArea extends JPanel implements Observer {
 				// check whether the game is an ouvert game
 				SkatGameData gameData = game.getSkatGameData();
 
-				if (gameData.isOuvert()
-						&& (gameData.getSinglePlayer() == PLAYER_ZERO || gameData
-								.getSinglePlayer() == PLAYER_ONE)) {
-					
+				if (gameData.isOuvert()) {
 					// flip cards of single player
-					getCardHoldingPanel(gameData.getSinglePlayer()).showCards();
+					if (gameData.getSinglePlayer() == 0) {
+						
+						getCardHoldingPanel(PanelTypes.PLAYER_ZERO).showCards();
+					}
+					else if (gameData.getSinglePlayer() == 1) {
+
+						getCardHoldingPanel(PanelTypes.PLAYER_ONE).showCards();
+					}
 				}
 			}
 			else if (state == SkatGame.GameState.GAME_OVER) {
 				
 				// hide all cards
-				getCardHoldingPanel(PLAYER_ZERO).hideCards();
-				getCardHoldingPanel(PLAYER_ONE).hideCards();
+				getCardHoldingPanel(PanelTypes.PLAYER_ZERO).hideCards();
+				getCardHoldingPanel(PanelTypes.PLAYER_ONE).hideCards();
 			}
 		}
 	}
@@ -242,8 +246,8 @@ public class JSkatPlayArea extends JPanel implements Observer {
 	 */
 	public void flipCards() {
 
-		getCardHoldingPanel(PLAYER_ZERO).flipCards();
-		getCardHoldingPanel(PLAYER_ONE).flipCards();
+		getCardHoldingPanel(PanelTypes.PLAYER_ZERO).flipCards();
+		getCardHoldingPanel(PanelTypes.PLAYER_ONE).flipCards();
 	}
 
 	/**
@@ -254,11 +258,11 @@ public class JSkatPlayArea extends JPanel implements Observer {
 	 */
 	private void setPlayerData(JSkatPlayer players[]) {
 
-		getCardHoldingPanel(PLAYER_ZERO).setPlayerName(
+		getCardHoldingPanel(PanelTypes.PLAYER_ZERO).setPlayerName(
 				players[0].getPlayerName());
-		getCardHoldingPanel(PLAYER_ONE).setPlayerName(
+		getCardHoldingPanel(PanelTypes.PLAYER_ONE).setPlayerName(
 				players[1].getPlayerName());
-		getCardHoldingPanel(PLAYER_TWO).setPlayerName(
+		getCardHoldingPanel(PanelTypes.PLAYER_TWO).setPlayerName(
 				players[2].getPlayerName());
 	}
 
@@ -269,7 +273,7 @@ public class JSkatPlayArea extends JPanel implements Observer {
 	 *            The panel type
 	 * @return The CardHoldingPanel
 	 */
-	public CardHoldingPanel getCardHoldingPanel(int panelID) {
+	public CardHoldingPanel getCardHoldingPanel(PanelTypes panelID) {
 
 		CardHoldingPanel panel;
 
@@ -343,11 +347,8 @@ public class JSkatPlayArea extends JPanel implements Observer {
 
 	private JPanel playerPanel;
 
-	private final int PLAYER_ZERO = 0;
-	private final int PLAYER_ONE = 1;
-	private final int PLAYER_TWO = 2;
-	private final int TRICK = 3;
-	private final int BIDDING = 4;
-	private final int SKAT = 5;
+	private enum PanelTypes {
+		PLAYER_ZERO, PLAYER_ONE, PLAYER_TWO, TRICK, BIDDING, SKAT
+	}
 
 }
