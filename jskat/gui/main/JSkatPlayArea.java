@@ -175,23 +175,21 @@ public class JSkatPlayArea extends JPanel implements Observer {
 			gameData.addObserver(getTrickPanel());
 			gameData.getSkat().addObserver(getSkatPanel());
 
-		} else if (observ instanceof SkatSeries && obj instanceof Integer) {
+		} else if (observ instanceof SkatSeries && obj instanceof SkatSeries.SeriesStates) {
 
 			// state of current series has changed
-			Integer state = (Integer) obj;
+			SkatSeries.SeriesStates state = (SkatSeries.SeriesStates) obj;
 
 			log.debug("Skat series state changed to " + state);
 
-			switch (state.intValue()) {
-
-			case SkatSeries.SERIES_FINISHED:
+			if (state == SkatSeries.SeriesStates.SERIES_FINISHED) {
+				
 				getCardHoldingPanel(0).clearPanel();
 				getCardHoldingPanel(1).clearPanel();
 				getCardHoldingPanel(2).clearPanel();
 				getTrickPanel().clearPanel();
 				((CardLayout) skatTrickHoldingPanel.getLayout()).show(
 						skatTrickHoldingPanel, "trick");
-				break;
 			}
 
 		} else if (observ instanceof SkatGame && obj instanceof SkatGame.GameState) {

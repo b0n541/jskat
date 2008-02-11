@@ -279,9 +279,9 @@ public class SkatTable extends Observable implements Observer {
 		
 		if (o instanceof SkatSeries) {
 			
-			if (arg instanceof Integer) {
+			if (arg instanceof SkatSeries.SeriesStates) {
 				
-				if (((Integer) arg).intValue() == SkatSeries.SERIES_FINISHED) {
+				if ((SkatSeries.SeriesStates) arg == SkatSeries.SeriesStates.SERIES_FINISHED) {
 					
 					setState(SERIES_FINISHED);
 				}

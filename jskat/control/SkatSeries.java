@@ -51,7 +51,7 @@ public class SkatSeries extends Observable implements Observer {
 		
 		skatSeriesData = new SkatSeriesData(players, roundsToPlay);
 		
-		setState(NEW_SERIES);
+		setState(SeriesStates.NEW_SERIES);
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class SkatSeries extends Observable implements Observer {
 		
 		boolean result = false;
 		
-		if (state == NEW_SERIES) {
+		if (state == SeriesStates.NEW_SERIES) {
 			
 			result = startNewGame(0);
 		}
@@ -122,7 +122,7 @@ public class SkatSeries extends Observable implements Observer {
 			newGame.addObserver(this);
 			skatSeriesData.addNewGame(newGame);
 
-			setState(NEW_GAME);
+			setState(SeriesStates.NEW_GAME);
 			
 			// 21.05.07 mjl: notify observers of new game
 			setChanged();
@@ -153,7 +153,7 @@ public class SkatSeries extends Observable implements Observer {
 			
 		} else {
 			
-			setState(SERIES_FINISHED);
+			setState(SeriesStates.SERIES_FINISHED);
 
 			JOptionPane.showMessageDialog(mainWindow, jskatStrings.getString("skatseries_finished"),
 					jskatStrings.getString("skatseries_finished_title"), JOptionPane.INFORMATION_MESSAGE);
@@ -168,12 +168,12 @@ public class SkatSeries extends Observable implements Observer {
 	 * 
 	 * @param newState
 	 */
-	private void setState(int newState) {
+	private void setState(SeriesStates newState) {
 
 		state = newState;
 		
 		setChanged();
-		notifyObservers(new Integer(newState));
+		notifyObservers(newState);
 	}
 
 	private JSkatFrame mainWindow;
@@ -181,11 +181,11 @@ public class SkatSeries extends Observable implements Observer {
 	private JSkatDataModel dataModel;
 	private ResourceBundle jskatStrings;
 	
-	public final static int NEW_SERIES = 0;
-	public final static int NEW_GAME = 1;
-	public final static int SERIES_FINISHED = 2;
+	public enum SeriesStates {
+		NEW_SERIES, NEW_GAME, SERIES_FINISHED
+	}
 	
-	private int state;
+	private SeriesStates state;
 
 	private SkatSeriesData skatSeriesData;
 
