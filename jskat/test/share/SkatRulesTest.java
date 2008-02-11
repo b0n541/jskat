@@ -14,7 +14,7 @@ package jskat.test.share;
 import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
-import jskat.share.SkatRules;
+import jskat.share.rules.SkatRules;
 import junit.framework.TestCase;
 
 /**

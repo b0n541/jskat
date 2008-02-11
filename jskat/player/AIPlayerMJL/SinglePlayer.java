@@ -13,7 +13,7 @@ package jskat.player.AIPlayerMJL;
 import org.apache.log4j.Logger;
 
 import jskat.share.CardVector;
-import jskat.share.SkatRules;
+import jskat.share.rules.SkatRules;
 
 /**
  * @author Markus J. Luzius <markus@luzius.de>

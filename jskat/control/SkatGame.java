@@ -35,10 +35,10 @@ import jskat.share.Card;
 import jskat.share.CardDeck;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
-import jskat.share.SkatRules;
 import jskat.share.Tools;
 import jskat.share.exception.SkatHandlingException;
 import jskat.share.exception.WrongCardException;
+import jskat.share.rules.SkatRules;
 import jskat.test.share.TestHelper;
 
 import org.apache.log4j.Logger;

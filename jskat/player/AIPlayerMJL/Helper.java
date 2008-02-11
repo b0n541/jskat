@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 import jskat.share.CardVector;
 import jskat.share.Card;
 import jskat.share.SkatConstants;
-import jskat.share.SkatRules;
+import jskat.share.rules.SkatRules;
 
 /**
  * @author Markus J. Luzius <markus@luzius.de>

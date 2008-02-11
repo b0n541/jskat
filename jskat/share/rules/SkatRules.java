@@ -9,12 +9,17 @@ Released: @ReleaseDate@
 
 */
 
-package jskat.share;
+package jskat.share.rules;
 
 import org.apache.log4j.Logger;
 
 import jskat.data.SkatGameData;
+import jskat.share.Card;
+import jskat.share.CardVector;
 import jskat.share.SkatConstants;
+import jskat.share.Tools;
+import jskat.share.SkatConstants.GameTypes;
+import jskat.share.SkatConstants.Suits;
 
 /**
  * Skat rules
@@ -23,7 +28,7 @@ import jskat.share.SkatConstants;
  */
 public final class SkatRules {
 
-	static Logger log = Logger.getLogger(jskat.share.SkatRules.class);
+	static Logger log = Logger.getLogger(jskat.share.rules.SkatRules.class);
 
 	/** Computes the value for a game */
 	public final static int getResult(SkatGameData gameData) {
