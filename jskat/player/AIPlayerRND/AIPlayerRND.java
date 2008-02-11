@@ -20,10 +20,10 @@ import jskat.share.CardVector;
 import jskat.share.SkatConstants;
 import jskat.share.SkatRules;
 import jskat.data.GameAnnouncement;
-import jskat.player.JSkatPlayerImpl;
+import jskat.player.AbstractJSkatPlayer;
 import jskat.player.JSkatPlayer;
 
-public class AIPlayerRND extends JSkatPlayerImpl implements JSkatPlayer {
+public class AIPlayerRND extends AbstractJSkatPlayer implements JSkatPlayer {
 
 	private static final Logger log = Logger.getLogger(AIPlayerRND.class);
 

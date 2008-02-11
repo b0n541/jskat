@@ -18,7 +18,7 @@ import jskat.data.GameAnnouncement;
 /** The JSkat Player
  * @author Jan Schäfer <jan.schaefer@b0n541.net>
  */
-public class HumanPlayer extends JSkatPlayerImpl {
+public class HumanPlayer extends AbstractJSkatPlayer {
     
     /** Creates a new instance of SkatPlayer */
     public HumanPlayer(int playerID) {

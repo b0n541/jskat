@@ -23,12 +23,12 @@ import jskat.share.SkatConstants;
  * 
  * @author Jan Schäfer
  */
-public abstract class JSkatPlayerImpl implements JSkatPlayer {
+public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
-	static Logger log = Logger.getLogger(JSkatPlayerImpl.class);
+	static Logger log = Logger.getLogger(AbstractJSkatPlayer.class);
 
 	/** Creates a new instance of SkatPlayer */
-	public JSkatPlayerImpl() {
+	public AbstractJSkatPlayer() {
 
 		this.playerID = -1;
 		this.playerName = "AI Player";

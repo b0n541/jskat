@@ -18,12 +18,12 @@ import jskat.share.JSkatPlayerStates;
 import jskat.share.SkatConstants;
 import jskat.data.GameAnnouncement;
 import jskat.player.JSkatPlayer;
-import jskat.player.JSkatPlayerImpl;
+import jskat.player.AbstractJSkatPlayer;
 
 /** A JSkat AI Player
  * @author Markus J. Luzius <markus@luzius.de>
  */
-public class AIPlayerMJL extends JSkatPlayerImpl implements JSkatPlayer {
+public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
     
     /** 
      * Creates a new instance of SkatPlayer (default constructor)
@@ -209,7 +209,7 @@ public class AIPlayerMJL extends JSkatPlayerImpl implements JSkatPlayer {
 	 * Sets the state of the current game <br>
 	 * If necessary, a new bid is initialized.
 	 * @see jskat.player.AIPlayerMJL.Bidding  
-	 * @see jskat.player.JSkatPlayerImpl#setState(int)
+	 * @see jskat.player.AbstractJSkatPlayer#setState(int)
 	 */
 	public final void setState(int newState) {
         
