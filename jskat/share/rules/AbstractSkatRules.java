@@ -18,17 +18,15 @@ import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
 import jskat.share.Tools;
-import jskat.share.SkatConstants.GameTypes;
-import jskat.share.SkatConstants.Suits;
 
 /**
  * Skat rules
  * 
  * @author Jan Sch&auml;fer
  */
-public final class SkatRules {
+public abstract class AbstractSkatRules {
 
-	static Logger log = Logger.getLogger(jskat.share.rules.SkatRules.class);
+	static Logger log = Logger.getLogger(jskat.share.rules.AbstractSkatRules.class);
 
 	/** Computes the value for a game */
 	public final static int getResult(SkatGameData gameData) {
@@ -413,48 +411,9 @@ public final class SkatRules {
 		return result;
 	}
 
-	public static int isDurchmarsch(int[] tricks) {
-		log.debug("isDurschmarsch: tricks=" + Tools.dump(tricks));
-		int result = -1;
-		boolean checker = false;
-		for (int i = 0; i < tricks.length; i++) {
-			if (tricks[i] == 10) {
-				if (!checker) {
-					result = i;
-				} else {
-					log.warn("There are more than 10 tricks! tricks="
-							+ Tools.dump(tricks));
-					result = i;
-				}
-			} else if (tricks[i] > 0) {
-				if (result < 0) {
-					checker = true;
-				} else {
-					log.warn("There are more than 10 tricks! tricks="
-							+ Tools.dump(tricks));
-					checker = true;
-				}
-			}
-		}
-		return result;
-	}
-
-	public static int isJungfrau(int[] tricks) {
-		log.debug("isJungfrau: tricks=" + Tools.dump(tricks));
-		int result = -1;
-		for (int i = 0; i < tricks.length; i++) {
-			if (tricks[i] == 0) {
-				if (result < 0) {
-					result = i;
-				} else {
-					log
-							.warn("There is more than one player with no tricks! tricks="
-									+ Tools.dump(tricks));
-					result = i;
-				}
-			}
-		}
-		return result;
-	}
-
+	public abstract boolean isSchneider(SkatGameData data);
+	
+	public abstract boolean isSchwarz(SkatGameData data);
+	
+	public abstract boolean isCardBeats(Card card, Card cardToBeat, Card initialTrickCard);
 }
