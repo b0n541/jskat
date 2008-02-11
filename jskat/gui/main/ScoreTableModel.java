@@ -218,13 +218,16 @@ public class ScoreTableModel extends AbstractTableModel implements Observer {
 
 			this.fireTableDataChanged();
 
-		} else if (observ instanceof SkatSeries && obj instanceof SkatGame) {
+		} 
+		else if (observ instanceof SkatSeries && obj instanceof SkatGame) {
+			
 			((SkatGame) obj).addObserver(this);
-		} else if (observ instanceof SkatGame) {
+		} 
+		else if (observ instanceof SkatGame) {
 
 			SkatGame currGame = (SkatGame) observ;
 
-			if (currGame.getState() == SkatGame.GAMESTATE_NEXT_GAME) {
+			if (currGame.getState() == SkatGame.GameState.WAIT_FOR_NEXT_GAME) {
 
 				Vector<String> newRow = new Vector<String>();
 

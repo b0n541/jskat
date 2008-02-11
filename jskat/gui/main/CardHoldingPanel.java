@@ -243,8 +243,8 @@ public class CardHoldingPanel extends JPanel implements Observer {
 
 			repaint();
 			
-		} else if (observ instanceof SkatGame && obj instanceof Integer) {
-			if(((Integer) obj).intValue()==SkatGame.GAMESTATE_PLAYING) {
+		} else if (observ instanceof SkatGame && obj instanceof SkatGame.GameState) {
+			if((SkatGame.GameState) obj == SkatGame.GameState.PLAYING) {
 
 				// first, make a CardVector out of the card panels
 				CardVector cv = new CardVector();

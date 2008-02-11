@@ -194,31 +194,31 @@ public class JSkatPlayArea extends JPanel implements Observer {
 				break;
 			}
 
-		} else if (observ instanceof SkatGame && obj instanceof Integer) {
+		} else if (observ instanceof SkatGame && obj instanceof SkatGame.GameState) {
 
 			// state of current game has changed
 			SkatGame game = (SkatGame) observ;
-			Integer state = (Integer) obj;
+			SkatGame.GameState state = (SkatGame.GameState) obj;
 
-			switch (state.intValue()) {
-
-			case BIDDING:
+			if (state == SkatGame.GameState.BIDDING) {
+				
 				game.getBidStatus().addObserver(bidPanel);
 				((CardLayout) skatTrickHoldingPanel.getLayout()).show(
 						skatTrickHoldingPanel, "bidding");
-				break;
+			}
+			else if (state == SkatGame.GameState.DEALING ||
+						state == SkatGame.GameState.PLAYING) {
 
-			case SkatGame.GAMESTATE_DEALING:
-			case SkatGame.GAMESTATE_PLAYING:
 				((CardLayout) skatTrickHoldingPanel.getLayout()).show(
 						skatTrickHoldingPanel, "trick");
-				break;
+			}
+			else if (state == SkatGame.GameState.SHOWING_SKAT) {
 
-			case SkatGame.GAMESTATE_SHOWING_SKAT:
 				((CardLayout) skatTrickHoldingPanel.getLayout()).show(
 						skatTrickHoldingPanel, "skat");
-				break;
-			case SkatGame.GAMESTATE_STARTED:
+			}
+			else if (state == SkatGame.GameState.STARTED) {
+
 				// check whether the game is an ouvert game
 				SkatGameData gameData = game.getSkatGameData();
 
@@ -229,12 +229,12 @@ public class JSkatPlayArea extends JPanel implements Observer {
 					// flip cards of single player
 					getCardHoldingPanel(gameData.getSinglePlayer()).showCards();
 				}
-				break;
-			case SkatGame.GAMESTATE_GAME_OVER:
+			}
+			else if (state == SkatGame.GameState.GAME_OVER) {
+				
 				// hide all cards
 				getCardHoldingPanel(PLAYER_ZERO).hideCards();
 				getCardHoldingPanel(PLAYER_ONE).hideCards();
-				break;
 			}
 		}
 	}

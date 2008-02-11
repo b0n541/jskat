@@ -95,16 +95,14 @@ public class GameScore extends JPanel implements Observer {
 			((SkatGame) obj).addObserver(this);
 			((SkatGame) obj).getSkatGameData().addObserver(this);
 		}
-		else if (observ instanceof SkatGame && obj instanceof Integer) {
+		else if (observ instanceof SkatGame && obj instanceof SkatGame.GameState) {
 	
 			// state of current game has changed
 			SkatGame game = (SkatGame) observ;
-			Integer state = (Integer) obj;
+			SkatGame.GameState state = (SkatGame.GameState) obj;
 	
-			switch (state.intValue()) {
-			
-			case SkatGame.GAMESTATE_STARTED:
-			case SkatGame.GAMESTATE_NEW_TRICK_STARTED:
+			if (state == SkatGame.GameState.STARTED ||
+					state == SkatGame.GameState.NEW_TRICK_STARTED) {
 				
 				SkatGameData data = game.getSkatGameData();
 				SkatConstants.GameTypes gameType = data.getGameType();
@@ -166,65 +164,6 @@ public class GameScore extends JPanel implements Observer {
 	            }
 			}
 		}
-        else {
-        	// log.debug("UPDATE " + observ + ": " + obj + " unhandled...");
-        }
-        
-        /*
-        else if (observ instanceof SkatSeriesData && obj instanceof SkatGameData) {
-            
-            ((SkatGameData)obj).addObserver(this);
-        }
-        else if (observ instanceof SkatGameData) {
-            
-            SkatGameData gameData = (SkatGameData)observ;
-            
-            // TODO take card face into account
-            switch(gameData.getGameType()) {
-                
-                case(SkatConstants.SUIT):
-                    gameTypeLabel.setText(jskatStrings.getString("suit_game"));
-                    break;
-                case(SkatConstants.GRAND):
-                    gameTypeLabel.setText(jskatStrings.getString("grand_game"));
-                    break;
-                case(SkatConstants.NULL):
-                    gameTypeLabel.setText(jskatStrings.getString("null_game"));
-                    break;
-                case(SkatConstants.RAMSCH):
-                    gameTypeLabel.setText(jskatStrings.getString("ramsch_game"));
-                    break;
-            }
-            
-            switch(gameData.getTrump()) {
-                
-                case(SkatConstants.CLUBS):
-                    gameTrumpLabel.setText(jskatStrings.getString("clubs"));
-                    break;
-                case(SkatConstants.SPADES):
-                    gameTrumpLabel.setText(jskatStrings.getString("spades"));
-                    break;
-                case(SkatConstants.HEARTS):
-                    gameTrumpLabel.setText(jskatStrings.getString("hearts"));
-                    break;
-                case(SkatConstants.DIAMONDS):
-                    gameTrumpLabel.setText(jskatStrings.getString("diamonds"));
-                    break;
-                default:
-                    gameTrumpLabel.setText("");
-                    break;
-            }
-
-            // only set the name when there actually is a single player
-            if(gameData.getSinglePlayer()>=0) {
-            	
-            	playerNameLabel.setText(gameData.getPlayers()[gameData.getSinglePlayer()].getPlayerName());
-            }
-            
-            playerScoreLabel.setText("" + ((SkatGameData)observ).getSinglePlayerScore());
-            opponentScoreLabel.setText("" + ((SkatGameData)observ).getOpponentScore());
-        }
-        */
     }
     
     private JLabel gameTypeLabel;

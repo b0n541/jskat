@@ -193,9 +193,9 @@ public class SkatSeries extends Observable implements Observer {
 		
 		// log.debug("UPDATE " + observ + ": " + obj + " has changed...");
 
-		if (observ instanceof SkatGame && obj instanceof Integer) {
+		if (observ instanceof SkatGame && obj instanceof SkatGame.GameState) {
 			
-			if (((Integer) obj).intValue() == SkatGame.GAMESTATE_NEXT_GAME) {
+			if (((SkatGame.GameState) obj) == SkatGame.GameState.WAIT_FOR_NEXT_GAME) {
 				
 				int dealer = ((SkatGame)observ).getDealer();
 				// Game finished --> start next game

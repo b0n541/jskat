@@ -15,7 +15,9 @@ import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.data.GameAnnouncement;
 
-/** The JSkat Player
+/** 
+ * Human Player
+ * 
  * @author Jan Schäfer <jan.schaefer@b0n541.net>
  */
 public class HumanPlayer extends AbstractJSkatPlayer {

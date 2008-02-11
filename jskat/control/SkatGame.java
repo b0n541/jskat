@@ -82,7 +82,7 @@ public class SkatGame extends Observable {
 
 		bidThread = BiddingThread.getInstance(dataModel, this, playerOrder);
 
-		setState(GAMESTATE_CREATED);
+		setState(GameState.CREATED);
 
 		log.debug("Skat game created (Dealer=Player " + dealer + ").");
 	}
@@ -118,7 +118,7 @@ public class SkatGame extends Observable {
 
 			} else {
 
-				setState(GAMESTATE_GAME_OVER);
+				setState(GameState.GAME_OVER);
 				gameData.setGameType(SkatConstants.GameTypes.PASSED_IN);
 				gameData.setGameLost(true);
 				finishGame();
@@ -137,7 +137,7 @@ public class SkatGame extends Observable {
 			updateDealtCards(gameData.getSinglePlayer());
 		}
 
-		setState(GAMESTATE_PLAYING);
+		setState(GameState.PLAYING);
 
 		// TODO (mjl) Make a better game announcement
 		String trumpColorText = new String();
@@ -281,7 +281,7 @@ public class SkatGame extends Observable {
 
 			log.debug("AI player has to move...");
 
-			setState(GAMESTATE_AI_PLAYER_PLAYING);
+			setState(GameState.AI_PLAYER_PLAYING);
 
 			wait(jskatOptions.getTrickRemoveDelayTime());
 
@@ -290,7 +290,7 @@ public class SkatGame extends Observable {
 
 			log.debug("Human player has to move...");
 
-			setState(GAMESTATE_WAIT_FOR_HUMAN_PLAYER_INPUT);
+			setState(GameState.WAIT_FOR_HUMAN_PLAYER_INPUT);
 		}
 	}
 
@@ -435,7 +435,7 @@ public class SkatGame extends Observable {
 		}
 
 		// skatSeries.startNewGame();
-		setState(GAMESTATE_NEXT_GAME);
+		setState(GameState.WAIT_FOR_NEXT_GAME);
 	}
 
 	/**
@@ -674,7 +674,7 @@ public class SkatGame extends Observable {
 			 */
 			public void run() {
 
-				if (getState() == GAMESTATE_AI_PLAYER_PLAYING) {
+				if (getState() == GameState.AI_PLAYER_PLAYING) {
 
 					try {
 
@@ -692,11 +692,11 @@ public class SkatGame extends Observable {
 								.debug(gameData.getPlayers()[playerOrder[currPlayerID]]
 										.getPlayerName()
 										+ " (" + except.getMessage() + ")");
-						setState(GAMESTATE_GAME_OVER);
+						setState(GameState.GAME_OVER);
 						finishGame();
 					}
 
-				} else if (getState() == GAMESTATE_TRICK_COMPLETED) {
+				} else if (getState() == GameState.TRICK_COMPLETED) {
 
 					if (!jskatOptions.isTrickRemoveAfterClick()) {
 
@@ -761,7 +761,7 @@ public class SkatGame extends Observable {
 			// null game is lost because single player made a trick
 			log.debug("Null game is lost!");
 
-			setState(GAMESTATE_GAME_OVER);
+			setState(GameState.GAME_OVER);
 			gameData.setGameLost(true);
 			finishGame();
 
@@ -772,7 +772,7 @@ public class SkatGame extends Observable {
 			// tricks later on
 			gameData.addTrick(dealer);
 
-			setState(GAMESTATE_NEW_TRICK_STARTED);
+			setState(GameState.NEW_TRICK_STARTED);
 
 			// 18.05.07 mjl: added new player order
 			playerOrder[0] = dealer;
@@ -781,12 +781,12 @@ public class SkatGame extends Observable {
 
 			if (gameData.getPlayers()[dealer].isAIPlayer()) {
 
-				setState(GAMESTATE_AI_PLAYER_PLAYING);
+				setState(GameState.AI_PLAYER_PLAYING);
 				wait(jskatOptions.getTrickRemoveDelayTime());
 
 			} else {
 
-				setState(GAMESTATE_WAIT_FOR_HUMAN_PLAYER_INPUT);
+				setState(GameState.WAIT_FOR_HUMAN_PLAYER_INPUT);
 			}
 
 		} else {
@@ -795,7 +795,7 @@ public class SkatGame extends Observable {
 			wait(jskatOptions.getTrickRemoveDelayTime());
 
 			// regular end of game
-			setState(GAMESTATE_GAME_OVER);
+			setState(GameState.GAME_OVER);
 
 			// set the game to won, just to make sure that a null game is
 			// evaluated properly
@@ -923,7 +923,7 @@ public class SkatGame extends Observable {
 
 		log.debug("Dealt cards: " + Tools.dumpCards(gameData.getDealtCards()));
 
-		setState(GAMESTATE_BIDDING);
+		setState(GameState.BIDDING);
 
 		mainWindow.getPlayArea().getBiddingPanel().setSkatGame(this);
 		bidThread.start();
@@ -1018,7 +1018,7 @@ public class SkatGame extends Observable {
 		if (gameData.getGameType() == SkatConstants.GameTypes.RAMSCH) {
 
 			// we play a ramsch game
-			setState(GAMESTATE_SHOWING_SKAT);
+			setState(GameState.SHOWING_SKAT);
 
 		} else {
 
@@ -1042,7 +1042,7 @@ public class SkatGame extends Observable {
 								JOptionPane.INFORMATION_MESSAGE);
 					}
 
-					setState(GAMESTATE_DOING_SCHIEBERRAMSCH);
+					setState(GameState.DOING_SCHIEBERRAMSCH);
 					prepareRamschGame();
 
 				} else {
@@ -1076,7 +1076,7 @@ public class SkatGame extends Observable {
 				if (choice == JOptionPane.YES_OPTION) {
 
 					gameData.setHand(false);
-					setState(GAMESTATE_SHOWING_SKAT);
+					setState(GameState.SHOWING_SKAT);
 
 				} else {
 
@@ -1151,7 +1151,7 @@ public class SkatGame extends Observable {
 		CardVector playerCards = gameData
 				.getPlayerCards(playerOrder[currPlayerID]);
 
-		if (getState() == GAMESTATE_AI_PLAYER_PLAYING) {
+		if (getState() == GameState.AI_PLAYER_PLAYING) {
 
 			CardVector trickVector = ((Trick) gameData.getTricks().get(
 					trickNumber)).getCardVector();
@@ -1226,12 +1226,12 @@ public class SkatGame extends Observable {
 
 				} else {
 
-					setState(GAMESTATE_WAIT_FOR_HUMAN_PLAYER_INPUT);
+					setState(GameState.WAIT_FOR_HUMAN_PLAYER_INPUT);
 				}
 
 			} else {
 
-				setState(GAMESTATE_TRICK_COMPLETED);
+				setState(GameState.TRICK_COMPLETED);
 
 				if (!jskatOptions.isTrickRemoveAfterClick()) {
 
@@ -1295,14 +1295,14 @@ public class SkatGame extends Observable {
 
 			if (currPlayerID < 3) {
 
-				setState(GAMESTATE_AI_PLAYER_PLAYING);
+				setState(GameState.AI_PLAYER_PLAYING);
 
 				// Ask all computer players for their cards
 				wait(jskatOptions.getTrickRemoveDelayTime());
 
 			} else {
 
-				setState(GAMESTATE_TRICK_COMPLETED);
+				setState(GameState.TRICK_COMPLETED);
 
 				if (!jskatOptions.isTrickRemoveAfterClick())
 					wait(jskatOptions.getTrickRemoveDelayTime());
@@ -1346,7 +1346,7 @@ public class SkatGame extends Observable {
 
 		trickNumber = 0;
 
-		setState(GAMESTATE_STARTED);
+		setState(GameState.STARTED);
 
 		log.debug("startGame() end");
 	}
@@ -1415,7 +1415,7 @@ public class SkatGame extends Observable {
 	 * 
 	 * @return The state of the game
 	 */
-	public int getState() {
+	public GameState getState() {
 
 		return gameState;
 	}
@@ -1426,12 +1426,12 @@ public class SkatGame extends Observable {
 	 * @param newGameState
 	 *            The new state of the game to be set
 	 */
-	private void setState(int newGameState) {
+	private void setState(GameState newGameState) {
 
 		gameState = newGameState;
 
 		setChanged();
-		notifyObservers(new Integer(newGameState));
+		notifyObservers(newGameState);
 	}
 
 	/**
@@ -1467,37 +1467,14 @@ public class SkatGame extends Observable {
 	 * Status of the game
 	 * 
 	 */
-	public final static int GAMESTATE_CREATED = 0;
+	public enum GameState {
+		CREATED, INITIALISED, STARTED, DEALING, BIDDING, SHOWING_SKAT,
+		DOING_SCHIEBERRAMSCH, PLAYING, AI_PLAYER_PLAYING, 
+		WAIT_FOR_HUMAN_PLAYER_INPUT, TRICK_COMPLETED, NEW_TRICK_STARTED,
+		GAME_OVER, WAIT_FOR_NEXT_GAME
+	}
 
-	public final static int GAMESTATE_INITIALISED = 1;
-
-	public final static int GAMESTATE_STARTED = 2;
-
-	public final static int GAMESTATE_DEALING = 3;
-
-	public final static int GAMESTATE_BIDDING = 4;
-
-	public final static int GAMESTATE_SHOWING_SKAT = 5;
-
-	public final static int GAMESTATE_PLAYING = 6;
-
-	public final static int GAMESTATE_DOING_SCHIEBERRAMSCH = 7;
-
-	public final static int GAMESTATE_AI_PLAYER_PLAYING = 8;
-
-	public final static int GAMESTATE_WAIT_FOR_HUMAN_PLAYER_INPUT = 9;
-
-	public final static int GAMESTATE_TRICK_COMPLETED = 10;
-
-	public final static int GAMESTATE_NEW_TRICK_STARTED = 11;
-
-	public final static int GAMESTATE_GAME_OVER = 12;
-
-	// 18.05.2007 mjl: new game state to distinguish between game over (for
-	// messages) and next game
-	public final static int GAMESTATE_NEXT_GAME = 13;
-
-	private int gameState;
+	private GameState gameState;
 
 	/**
 	 * The skat series where the game is played

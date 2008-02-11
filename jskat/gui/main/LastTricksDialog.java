@@ -327,9 +327,9 @@ public class LastTricksDialog extends JDialog implements Observer {
 
 		// log.debug("UPDATE " + observ + ": " + obj + " has changed...");
 
-		if (observ instanceof SkatGame && obj instanceof Integer) {
+		if (observ instanceof SkatGame && obj instanceof SkatGame.GameState) {
 			
-			if (((Integer) obj).intValue() == SkatGame.GAMESTATE_TRICK_COMPLETED) {
+			if ((SkatGame.GameState) obj == SkatGame.GameState.TRICK_COMPLETED) {
 			
 				Vector<Trick> tricks = ((SkatGame) observ).getSkatGameData().getTricks();
 				log.debug("Updating trick in LastTricksDialog ("+tricks.size()+" available)...");

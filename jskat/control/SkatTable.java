@@ -203,12 +203,12 @@ public class SkatTable extends Observable implements Observer {
 		log.debug("SkatTable state: " + state);
 
 		SkatGame currGame = tableData.getCurrSkatSeries().getCurrSkatGame();
-		int gameState = currGame.getState();
+		SkatGame.GameState gameState = currGame.getState();
 		
 		log.debug("SkatGame state: " + gameState);
 		log.debug("CardHoldingPanel: " + panelType);
 		
-		if (gameState == SkatGame.GAMESTATE_SHOWING_SKAT) {
+		if (gameState == SkatGame.GameState.SHOWING_SKAT) {
 
 			if (panelType == CardHoldingPanel.PLAYER_PANEL) {
 
@@ -233,14 +233,14 @@ public class SkatTable extends Observable implements Observer {
 			
 			}
 
-		} else if (currGame.getState() == SkatGame.GAMESTATE_WAIT_FOR_HUMAN_PLAYER_INPUT
+		} else if (currGame.getState() == SkatGame.GameState.WAIT_FOR_HUMAN_PLAYER_INPUT
 				&& panelType == CardHoldingPanel.PLAYER_PANEL) {
 
 			log.debug("Waiting for player input and received click");
 
 			currGame.playTrickCard(suit, rank);
 
-		} else if (currGame.getState() == SkatGame.GAMESTATE_TRICK_COMPLETED
+		} else if (currGame.getState() == SkatGame.GameState.TRICK_COMPLETED
 				&& panelType == CardHoldingPanel.TRICK_PANEL) {
 
 			currGame.calculateTrickWinner();
