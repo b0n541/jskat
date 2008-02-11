@@ -18,7 +18,7 @@ import jskat.player.JSkatPlayer;
 import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
-import jskat.share.rules.AbstractSkatRules;
+import jskat.share.rules.SkatRules;
 
 import org.apache.log4j.Logger;
 

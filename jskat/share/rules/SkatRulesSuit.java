@@ -1,13 +1,27 @@
+/*
+
+@ShortLicense@
+
+Authors: @JS@
+         @MJL@
+
+Released: @ReleaseDate@
+
+*/
 package jskat.share.rules;
 
+import org.apache.log4j.Logger;
+
 import jskat.data.SkatGameData;
+import jskat.share.Card;
+import jskat.share.CardVector;
 import jskat.share.SkatConstants;
 
-public class SkatRulesSuit extends AbstractSkatRules {
+public class SkatRulesSuit extends SkatRulesSuitGrand implements SkatRules {
 
-	/** 
-	 * @see jskat.share.rules.SkatRules
-	 */
+	static Logger log = Logger.getLogger(jskat.share.rules.SkatRulesSuit.class);
+
+	@Override
 	public int getGameResult(SkatGameData gameData) {
 
 		// TODO: multiplier should already be calculated at the beginning of the
@@ -133,5 +147,18 @@ public class SkatRulesSuit extends AbstractSkatRules {
 		}
 
 		return result;
+	}
+
+	@Override
+	public boolean isCardAllowed(Card card, CardVector hand, Card initialCard,
+			SkatGameData gameData) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isCardBeats(Card card, Card cardToBeat, Card initialTrickCard) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

@@ -39,6 +39,14 @@ public interface SkatRules {
 	 */
 	public boolean isCardBeats(Card card, Card cardToBeat, Card initialTrickCard);
 
+	/**
+	 * Checks whether a game is won
+	 * 
+	 * @param gameData Game data
+	 * @return TRUE if the game was won
+	 */
+	public boolean isGameWon(SkatGameData gameData);
+	
 	/** 
 	 * Computes the value for a game 
 	 *
@@ -53,7 +61,7 @@ public interface SkatRules {
 	 * @param data Game data
 	 * @return TRUE if the game was a schneider game
 	 */
-	public boolean isSchneider(SkatGameData data);
+	public boolean isSchneider(SkatGameData gameData);
 		
 	/**
 	 * Checks whether a game was a schwarz game
@@ -62,8 +70,8 @@ public interface SkatRules {
 	 * @param data Game data
 	 * @return TRUE if the game was a schwarz game
 	 */
-	public boolean isSchwarz(SkatGameData data);
-	
+	public boolean isSchwarz(SkatGameData gameData);
+
 	/**
 	 * Checks whether a player did a durchmarsch (walkthrough) in a ramsch game
 	 * durchmarsch means one player made all tricks
@@ -72,7 +80,7 @@ public interface SkatRules {
 	 * @param data Game data
 	 * @return TRUE if the player played a durchmarsch
 	 */
-	public boolean isDurchMarsch(int playerID, SkatGameData data);
+	public boolean isDurchMarsch(int playerID, SkatGameData gameData);
 	
 	/**
 	 * Checks whether a player was jungfrau (virgin) in a ramsch game
@@ -83,5 +91,5 @@ public interface SkatRules {
 	 * @param data Game data
 	 * @return TRUE if the player was jungfrau
 	 */
-	public boolean isJungFrau(int playerID, SkatGameData data);
+	public boolean isJungFrau(int playerID, SkatGameData gameData);
 }

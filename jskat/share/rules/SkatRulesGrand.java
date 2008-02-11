@@ -1,14 +1,37 @@
+/*
+
+@ShortLicense@
+
+Authors: @JS@
+         @MJL@
+
+Released: @ReleaseDate@
+
+*/
 package jskat.share.rules;
 
 import jskat.data.SkatGameData;
+import jskat.share.Card;
+import jskat.share.CardVector;
 
-public class SkatRulesGrand extends AbstractSkatRules {
+public class SkatRulesGrand extends SkatRulesSuitGrand implements SkatRules {
 
-	/** 
-	 * @see jskat.share.rules.SkatRules
-	 */
+	@Override
+	public boolean isCardBeats(Card card, Card cardToBeat, Card initialTrickCard) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isCardAllowed(Card card, CardVector hand, Card initialCard,
+			SkatGameData gameData) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
 	public int getGameResult(SkatGameData gameData) {
-		// TODO implement it
+		// TODO Auto-generated method stub
 		return 0;
 	}
 }

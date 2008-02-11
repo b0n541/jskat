@@ -1,14 +1,27 @@
+/*
+
+@ShortLicense@
+
+Authors: @JS@
+         @MJL@
+
+Released: @ReleaseDate@
+
+*/
 package jskat.share.rules;
+
+import org.apache.log4j.Logger;
 
 import jskat.data.SkatGameData;
 import jskat.share.Card;
+import jskat.share.CardVector;
 import jskat.share.SkatConstants;
 
-public class SkatRulesNull extends AbstractSkatRules {
+public class SkatRulesNull implements SkatRules {
 
-	/** 
-	 * @see jskat.share.rules.SkatRules
-	 */
+	static Logger log = Logger.getLogger(jskat.share.rules.SkatRulesNull.class);
+
+	@Override
 	public int getGameResult(SkatGameData gameData) {
 
 
@@ -70,12 +83,41 @@ public class SkatRulesNull extends AbstractSkatRules {
 	}
 
 	@Override
-	public boolean isSchneider(SkatGameData data) {
+	public boolean isCardBeats(Card card, Card cardToBeat, Card initialTrickCard) {
+		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean isSchwarz(SkatGameData data) {
+	public boolean isCardAllowed(Card card, CardVector hand, Card initialCard,
+			SkatGameData gameData) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isGameWon(SkatGameData gameData) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isSchneider(SkatGameData gameData) {
+		return false;
+	}
+
+	@Override
+	public boolean isSchwarz(SkatGameData gameData) {
+		return false;
+	}
+
+	@Override
+	public boolean isDurchMarsch(int playerID, SkatGameData gameData) {
+		return false;
+	}
+
+	@Override
+	public boolean isJungFrau(int playerID, SkatGameData gameData) {
 		return false;
 	}
 }

@@ -1,13 +1,22 @@
+/*
+
+@ShortLicense@
+
+Authors: @JS@
+         @MJL@
+
+Released: @ReleaseDate@
+
+*/
 package jskat.share.rules;
 
 import jskat.data.SkatGameData;
-import jskat.share.Tools;
+import jskat.share.Card;
+import jskat.share.CardVector;
 
-public class SkatRulesRamsch extends AbstractSkatRules {
+public class SkatRulesRamsch implements SkatRules {
 
-	/** 
-	 * @see jskat.share.rules.SkatRules
-	 */
+	@Override
 	public int getGameResult(SkatGameData gameData) {
 
 		int multiplier = 1;
@@ -26,66 +35,47 @@ public class SkatRulesRamsch extends AbstractSkatRules {
 		return gameData.getScore(gameData.getSinglePlayer()) * multiplier;
 	}
 	
-	/**
-	 * Checks whether a player did a durchmarsch
-	 * 
-	 * @param playerID Player ID of the player to be checked
-	 * @param tricks Tricks of the game
-	 * @return TRUE if the player did a durchmarsch
-	 */
-	public static boolean getDurchmarsch(int playerID, int[] tricks) {
-		
-		// TODO check whether the implementation is correct
-		log.debug("isDurschmarsch: tricks=" + Tools.dump(tricks));
-		boolean result = false;
-		boolean checker = false;
-		for (int i = 0; i < tricks.length; i++) {
-			if (tricks[i] == 10) {
-				if (!checker) {
-					result = i;
-				} else {
-					log.warn("There are more than 10 tricks! tricks="
-							+ Tools.dump(tricks));
-					result = i;
-				}
-			} else if (tricks[i] > 0) {
-				if (result < 0) {
-					checker = true;
-				} else {
-					log.warn("There are more than 10 tricks! tricks="
-							+ Tools.dump(tricks));
-					checker = true;
-				}
-			}
-		}
-		return result;
+	@Override
+	public boolean isCardBeats(Card card, Card cardToBeat, Card initialTrickCard) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
-	/**
-	 * Checks whether a player is jungfrau or not
-	 * 
-	 * @param playerID Player ID of the player to be checked
-	 * @param tricks Tricks of the game
-	 * @return TRUE if the player is jungfrau
-	 */
-	public static boolean isJungfrau(int playerID, int[] tricks) {
-		
-		// TODO check whether the implementation is correct
-		log.debug("isJungfrau: tricks=" + Tools.dump(tricks));
-		boolean result = false;
-		for (int i = 0; i < tricks.length; i++) {
-			if (tricks[i] == 0) {
-				if (result < 0) {
-					result = i;
-				} else {
-					log
-							.warn("There is more than one player with no tricks! tricks="
-									+ Tools.dump(tricks));
-					result = i;
-				}
-			}
-		}
-		return result;
+	@Override
+	public boolean isSchneider(SkatGameData gameData) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
+	@Override
+	public boolean isSchwarz(SkatGameData gameData) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isCardAllowed(Card card, CardVector hand, Card initialCard,
+			SkatGameData gameData) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isDurchMarsch(int playerID, SkatGameData gameData) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isGameWon(SkatGameData gameData) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean isJungFrau(int playerID, SkatGameData gameData) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
 }
