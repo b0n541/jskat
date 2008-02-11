@@ -14,7 +14,6 @@ import org.apache.log4j.Logger;
 
 import jskat.share.Card;
 import jskat.share.CardVector;
-import jskat.share.JSkatPlayerStates;
 import jskat.share.SkatConstants;
 import jskat.data.GameAnnouncement;
 import jskat.player.JSkatPlayer;
@@ -123,7 +122,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
 		
 		// set the game state
 		if(myBid==null) {
-			this.setState(JSkatPlayerStates.PLAYER_BIDDING);
+			this.setState(JSkatPlayer.PlayerStates.BIDDING);
 		}
 		
 	    int maxBid = myBid.getMaxBid();
@@ -158,7 +157,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
 		myBid = null;
 		myMemory = new CardMemory(gameType, trump);
 		game = new GameInfo(gameType, trump, singlePlayer);		
-		this.setState(JSkatPlayerStates.PLAYER_PLAYING);
+		this.setState(JSkatPlayer.PlayerStates.PLAYING);
 	}
 
 
@@ -168,7 +167,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
     public int playNextCard(CardVector trick) {
 		// set the current game state
 		if(playerType==null) {
-			this.setState(JSkatPlayerStates.PLAYER_PLAYING);
+			this.setState(JSkatPlayer.PlayerStates.PLAYING);
 		}
         TrickInfo thisTrick = new TrickInfo();
         thisTrick.setGameInfo(game);
@@ -211,15 +210,15 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
 	 * @see jskat.player.AIPlayerMJL.Bidding  
 	 * @see jskat.player.AbstractJSkatPlayer#setState(int)
 	 */
-	public final void setState(int newState) {
+	public final void setState(JSkatPlayer.PlayerStates newState) {
         
 		log.debug("Player "+playerID+" ("+playerName+"): Setting new state:"+newState);
 		super.setState(newState);
-		if(newState == JSkatPlayerStates.PLAYER_BIDDING) {
+		if(newState == JSkatPlayer.PlayerStates.BIDDING) {
 			myBid = new Bidding(cards);
 			playerType = null;
 		} 
-		else if(newState == JSkatPlayerStates.PLAYER_PLAYING) {
+		else if(newState == JSkatPlayer.PlayerStates.PLAYING) {
 			myBid = null;
 			if(game!=null && game.getGameType() == SkatConstants.GameTypes.RAMSCH) {
 				log.debug("Player "+playerID+" ("+playerName+"): is a ramsch player");

@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 
 import jskat.share.CardVector;
 import jskat.share.Card;
-import jskat.share.JSkatPlayerStates;
 import jskat.share.SkatConstants;
 
 /**
@@ -32,7 +31,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
 		this.playerID = -1;
 		this.playerName = "AI Player";
-		this.playerState = JSkatPlayerStates.PLAYER_WAITING;
+		this.playerState = JSkatPlayer.PlayerStates.WAITING;
 		this.cards = new CardVector();
 		this.skat = new CardVector();
 	}
@@ -88,7 +87,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 			SkatConstants.GameTypes gameType, SkatConstants.Suits trump,
 			boolean handGame, boolean ouvertGame) {
 
-		this.playerState = JSkatPlayerStates.PLAYER_PLAYING;
+		this.playerState = JSkatPlayer.PlayerStates.PLAYING;
 		this.singlePlayer = singlePlayer;
 		this.forehandPlayer = forehandPlayer;
 		this.currGameType = gameType;
@@ -135,7 +134,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 		return cards;
 	}
 
-	protected void setState(int newState) {
+	protected void setState(JSkatPlayer.PlayerStates newState) {
 
 		playerState = newState;
 	}
@@ -231,7 +230,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	protected int singlePlayer;
 	protected int forehandPlayer;
 	protected String playerName;
-	protected int playerState;
+	protected JSkatPlayer.PlayerStates playerState;
 	protected CardVector cards;
 	protected CardVector skat;
 	protected CardVector singlePlayerCards;

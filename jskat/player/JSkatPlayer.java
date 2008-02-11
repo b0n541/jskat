@@ -122,4 +122,8 @@ public interface JSkatPlayer {
 	 * @return true, if the player is an AI player
 	 */
 	public boolean isAIPlayer();
+
+	public enum PlayerStates {
+		WAITING, DEALING, BIDDING, PLAYING
+	}
 }
