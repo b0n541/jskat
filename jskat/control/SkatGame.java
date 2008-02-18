@@ -38,8 +38,8 @@ import jskat.share.SkatConstants;
 import jskat.share.Tools;
 import jskat.share.exception.SkatHandlingException;
 import jskat.share.exception.WrongCardException;
-import jskat.share.rules.AbstractSkatRules;
 import jskat.share.rules.SkatRules;
+import jskat.share.rules.SkatRulesFactory;
 import jskat.test.share.TestHelper;
 
 import org.apache.log4j.Logger;
@@ -130,6 +130,7 @@ public class SkatGame extends Observable {
 
 		gameData.setAnnouncement(newGame);
 		gameData.setGameType(newGame.getGameType());
+		rules = SkatRulesFactory.getSkatRules(newGame.getGameType());
 		gameData.setTrump(newGame.getTrump());
 		gameData.setOuvert(newGame.isOuvert());
 
@@ -489,20 +490,25 @@ public class SkatGame extends Observable {
 		log.debug("Tricks: player 0: " + trickWins[0] + ", player 1: "
 				+ trickWins[1] + ", player 2: " + trickWins[2]);
 
-		if (SkatRules.isDurchmarsch(gameData) >= 0) {
+		// TODO re-implement this a.s.a.p.
+		if (rules.isDurchMarsch(0, gameData) ||
+				rules.isDurchMarsch(1, gameData) ||
+				rules.isDurchMarsch(2, gameData)) {
 
-			log.info("Player " + SkatRules.isDurchmarsch(gameData)
-					+ " did a Durschmarsch!");
+			log.info("One player did a Durschmarsch!");
 
 			gameData.setDurchMarsch(true);
+			// TODO this is wrong
 			gameData.setJungFrau(false);
 
-		} else if (SkatRules.isJungfrau(gameData) >= 0) {
+		} else if (rules.isJungFrau(0, gameData) ||
+					rules.isJungFrau(1, gameData) ||
+					rules.isJungFrau(2, gameData)) {
 
-			log.info("Player " + SkatRules.isJungfrau(gameData)
-					+ " is Jungfrau!");
+			log.info("One or two players is/are Jungfrau!");
 			// only one player can be jungfrau - otherwise it's a
 			// durchmarsch
+			// TODO wrong!
 			gameData.setJungFrau(true);
 			gameData.setDurchMarsch(false);
 		}
@@ -524,9 +530,10 @@ public class SkatGame extends Observable {
 
 		if (gameData.isJungFrau()) {
 
-			scoreMessage.append(gameData.getPlayers()[AbstractSkatRules
-					.isJungfrau(trickWins)].getPlayerName()
-					+ " " + jskatStrings.getString("jungfrau") + "\n");
+			// TODO re-implement it!
+//			scoreMessage.append(gameData.getPlayers()[AbstractSkatRules
+//					.isJungfrau(trickWins)].getPlayerName()
+//					+ " " + jskatStrings.getString("jungfrau") + "\n");
 		}
 
 		if (!gameData.isDurchMarsch()) {
@@ -1164,10 +1171,9 @@ public class SkatGame extends Observable {
 
 				// Player has the card
 				if ((trickVector.size() == 0)
-						|| (trickVector.size() > 0 && AbstractSkatRules.isCardAllowed(
+						|| (trickVector.size() > 0 && rules.isCardAllowed(
 								cardPlayed, playerCards,
-								trickVector.getCard(0), gameData.getGameType(),
-								gameData.getTrump()))) {
+								trickVector.getCard(0), gameData.getTrump()))) {
 
 					// Card is allowed because it's the first card in the trick
 					// or the card is allowed to be played after the first card
@@ -1273,9 +1279,9 @@ public class SkatGame extends Observable {
 			// First card in the trick is always allowed
 			cardAllowed = true;
 
-		} else if (AbstractSkatRules.isCardAllowed(cardToBePlayed, gameData
+		} else if (rules.isCardAllowed(cardToBePlayed, gameData
 				.getPlayerCards(playerOrder[currPlayerID]), trickVector
-				.getCard(0), gameData.getGameType(), gameData.getTrump())) {
+				.getCard(0), gameData.getTrump())) {
 
 			cardAllowed = true;
 		}

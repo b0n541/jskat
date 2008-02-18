@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import jskat.share.CardVector;
 import jskat.share.Card;
 import jskat.share.SkatConstants;
+import jskat.share.rules.SkatRules;
 
 /**
  * @author Markus J. Luzius <markus@luzius.de>
@@ -25,9 +26,10 @@ public class OpponentPlayer implements CardPlayer {
 	/** Constructor
 	 * @param id playerID
 	 */
-	public OpponentPlayer(int id) {
+	public OpponentPlayer(int id, SkatRules rules) {
 		log.debug("Constructing new opponent player.");
 		this.playerID = id;
+		this.rules = rules;
 	}
 
 	/** Gets the next card that the player wants to play
@@ -49,7 +51,7 @@ public class OpponentPlayer implements CardPlayer {
         
 		if (trickInfo.size() > 1) {
 			// 1: check if player can match initial suit
-			if(Helper.isAbleToMatch(cards, trickInfo.getTrump(), trickInfo.getCard(0), trickInfo.getGameType())) {
+			if(Helper.isAbleToMatch(rules, cards, trickInfo.getTrump(), trickInfo.getCard(0), trickInfo.getGameType())) {
 				// 1.1 if yes (i.e. I can match the initial suit): check if necessary to beat
 				log.debug(".playNextCard(): I can match the demanded color");
 				if(Helper.isSinglePlayerWin(trickInfo)) {
@@ -62,7 +64,7 @@ public class OpponentPlayer implements CardPlayer {
 					else {
 						currentWinner = trickInfo.getCard(1);
 					}
-					bestToBePlayed = Helper.isAbleToBeat(cards, currentWinner, trickInfo.getTrump(), trickInfo.getCard(0), trickInfo.getGameType()); 
+					bestToBePlayed = Helper.isAbleToBeat(rules, cards, currentWinner, trickInfo.getTrump(), trickInfo.getCard(0), trickInfo.getGameType()); 
 					if(bestToBePlayed > -1) {
 						// 1.1.1.1: if I can beat: do it
 						log.debug(this+".playNextCard(): ...but I can beat it...");
@@ -180,7 +182,7 @@ public class OpponentPlayer implements CardPlayer {
 					// Player has the color
 					// check if it's ours or if I can beat 
 					if(Helper.isSinglePlayerWin(trickInfo)) {
-						bestToBePlayed = Helper.isAbleToBeat(cards, trickInfo.getCard(0), trickInfo.getTrump(), trickInfo.getCard(0), trickInfo.getGameType()); 
+						bestToBePlayed = Helper.isAbleToBeat(rules, cards, trickInfo.getCard(0), trickInfo.getTrump(), trickInfo.getCard(0), trickInfo.getGameType()); 
 						if(bestToBePlayed < 0) {
 							bestToBePlayed = cards.getFirstIndexOfSuit(SkatConstants.GameTypes.SUIT, trickInfo.getTrick().getCard(0).getSuit());
 						}
@@ -467,6 +469,8 @@ public class OpponentPlayer implements CardPlayer {
 	 */
 	private int playerID = -1;
 
+	private SkatRules rules;
+	
 	/**
 	 * log
 	 */

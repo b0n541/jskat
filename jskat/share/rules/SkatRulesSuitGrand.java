@@ -13,6 +13,7 @@ package jskat.share.rules;
 import jskat.data.SkatGameData;
 import jskat.share.Card;
 import jskat.share.CardVector;
+import jskat.share.SkatConstants;
 
 /**
  * Implements some methods of the interface SkatRules that are the same
@@ -53,7 +54,7 @@ public abstract class SkatRulesSuitGrand implements SkatRules {
 
 	@Override
 	public abstract boolean isCardAllowed(Card card, CardVector hand, Card initialCard,
-			SkatGameData gameData);
+			SkatConstants.Suits trump);
 
 	@Override
 	public abstract boolean isCardBeats(Card card, Card cardToBeat, Card initialTrickCard);

@@ -20,6 +20,8 @@ import jskat.player.AIPlayerMJL.TrickInfo;
 import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
+import jskat.share.rules.SkatRules;
+import jskat.share.rules.SkatRulesFactory;
 import jskat.test.share.TestHelper;
 
 /**
@@ -67,7 +69,9 @@ public class SinglePlayerTest extends TestCase {
 	 * Tests for playing the next card
 	 */
 	public void testPlayNextCard() {
-		SinglePlayer sp = new SinglePlayer(1);
+		
+		rules = SkatRulesFactory.getSkatRules(gi001.getGameType());
+		SinglePlayer sp = new SinglePlayer(1, rules);
 		TrickInfo ti = new TrickInfo();
 		ti.setGameInfo(gi001);
 		ti.setTrick(trick001);		
@@ -84,4 +88,5 @@ public class SinglePlayerTest extends TestCase {
 	Card initialCard;
 	int gameType;
 	int trump;
+	SkatRules rules;
 }

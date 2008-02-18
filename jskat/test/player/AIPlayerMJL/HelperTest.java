@@ -15,6 +15,8 @@ import jskat.player.AIPlayerMJL.Helper;
 import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
+import jskat.share.rules.SkatRules;
+import jskat.share.rules.SkatRulesFactory;
 
 /**
  * @author Markus J. Luzius <markus@luzius.de>
@@ -78,11 +80,12 @@ public class HelperTest extends TestCase {
 	public void testIsAbleToMatch() {
 		trump = SkatConstants.Suits.HEARTS;
 		gameType = SkatConstants.GameTypes.SUIT;
-		assertEquals(false, Helper.isAbleToMatch(cards001, trump, trick001.getCard(0), gameType));
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertEquals(false, Helper.isAbleToMatch(rules, cards001, trump, trick001.getCard(0), gameType));
 		System.out.println("----------------------------------------------------------");
 		trump = SkatConstants.Suits.SPADES;
 		gameType = SkatConstants.GameTypes.SUIT;
-		assertEquals(true, Helper.isAbleToMatch(cards001, trump, trick001.getCard(0), gameType));
+		assertEquals(true, Helper.isAbleToMatch(rules, cards001, trump, trick001.getCard(0), gameType));
 	}
 
 	/**
@@ -106,4 +109,5 @@ public class HelperTest extends TestCase {
 	Card initialCard;
 	SkatConstants.GameTypes gameType;
 	SkatConstants.Suits trump;
+	SkatRules rules;
 }

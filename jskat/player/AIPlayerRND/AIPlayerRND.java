@@ -18,7 +18,6 @@ import org.apache.log4j.Logger;
 import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
-import jskat.share.rules.AbstractSkatRules;
 import jskat.data.GameAnnouncement;
 import jskat.player.AbstractJSkatPlayer;
 import jskat.player.JSkatPlayer;
@@ -88,8 +87,8 @@ public class AIPlayerRND extends AbstractJSkatPlayer implements JSkatPlayer {
 			log.debug("trick size: " + trick.size() + " initial card: " + trick.getCard(0));
 			
 			for (int i = 0; i < cards.size(); i++) {
-				if (AbstractSkatRules.isCardAllowed(cards.getCard(i), cards, trick
-						.getCard(0), currGameType, currTrump)) {
+				if (rules.isCardAllowed(cards.getCard(i), cards, trick
+						.getCard(0), currTrump)) {
 					
 					possibleCards.add(cards.getCard(i));
 				}

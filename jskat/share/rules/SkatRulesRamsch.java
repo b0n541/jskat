@@ -13,6 +13,7 @@ package jskat.share.rules;
 import jskat.data.SkatGameData;
 import jskat.share.Card;
 import jskat.share.CardVector;
+import jskat.share.SkatConstants;
 
 public class SkatRulesRamsch implements SkatRules {
 
@@ -55,7 +56,7 @@ public class SkatRulesRamsch implements SkatRules {
 
 	@Override
 	public boolean isCardAllowed(Card card, CardVector hand, Card initialCard,
-			SkatGameData gameData) {
+			SkatConstants.Suits trump) {
 		// TODO Auto-generated method stub
 		return false;
 	}

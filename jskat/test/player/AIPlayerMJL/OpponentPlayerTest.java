@@ -17,6 +17,8 @@ import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
 import jskat.share.Tools;
+import jskat.share.rules.SkatRules;
+import jskat.share.rules.SkatRulesFactory;
 import jskat.test.share.TestHelper;
 import junit.framework.TestCase;
 
@@ -111,7 +113,9 @@ public class OpponentPlayerTest extends TestCase {
 	 * Tests for playing the next card
 	 */
 	public void testGetNextCard() {
-		OpponentPlayer op = new OpponentPlayer(1);
+		
+		rules = SkatRulesFactory.getSkatRules(gi001.getGameType());
+		OpponentPlayer op = new OpponentPlayer(1, rules);
 		TrickInfo ti = new TrickInfo();
 		ti.setGameInfo(gi001);
 		ti.setTrick(trick001);		
@@ -215,6 +219,7 @@ public class OpponentPlayerTest extends TestCase {
 	Card initialCard;
 	int gameType;
 	int trump;
+	SkatRules rules;
 
 	static Logger log = Logger.getLogger(OpponentPlayerTest.class);
 }

@@ -8,11 +8,13 @@ Authors: @JS@
 Released: @ReleaseDate@
 
 */
+
 package jskat.share.rules;
 
 import jskat.data.SkatGameData;
 import jskat.share.Card;
 import jskat.share.CardVector;
+import jskat.share.SkatConstants;
 
 public interface SkatRules {
 
@@ -23,11 +25,11 @@ public interface SkatRules {
 	 * @param card Card to be checked
 	 * @param hand All cards on the hand
 	 * @param initialCard First card in the trick
-	 * @param gameData Game data
+	 * @param trump Trump color
 	 * @return TRUE if the card is allowed to be played
 	 */
 	public boolean isCardAllowed(Card card, CardVector hand,
-				Card initialCard, SkatGameData gameData);
+				Card initialCard, SkatConstants.Suits trump);
 
 	/**
 	 * Checks whether a card beats another card

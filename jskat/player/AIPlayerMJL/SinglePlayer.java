@@ -13,7 +13,7 @@ package jskat.player.AIPlayerMJL;
 import org.apache.log4j.Logger;
 
 import jskat.share.CardVector;
-import jskat.share.rules.AbstractSkatRules;
+import jskat.share.rules.SkatRules;
 
 /**
  * @author Markus J. Luzius <markus@luzius.de>
@@ -27,9 +27,10 @@ public class SinglePlayer implements CardPlayer {
 	/** Constructor
 	 * @param id playerID
 	 */
-	public SinglePlayer(int id) {
+	public SinglePlayer(int id, SkatRules rules) {
 		log.debug("Constructing new single player.");
 		this.playerID = id;
+		this.rules = rules;
 	}
 
 	/** Gets the next card, that the player wants to play
@@ -44,7 +45,7 @@ public class SinglePlayer implements CardPlayer {
 		if(trick.size()==0) return 0;
 		int result = 0;
 		for(int i=0;i<cards.size();i++) {
-			if(AbstractSkatRules.isCardAllowed(cards.getCard(i), cards, trick.getCard(0), trick.getGameType(), trick.getTrump())) {
+			if(rules.isCardAllowed(cards.getCard(i), cards, trick.getCard(0), trick.getTrump())) {
 				result = i;
 				break;
 			}
@@ -69,4 +70,6 @@ public class SinglePlayer implements CardPlayer {
 
 	/** player id */
 	private int playerID = -1;
+	
+	private SkatRules rules;
 }

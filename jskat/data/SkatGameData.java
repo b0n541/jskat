@@ -19,6 +19,7 @@ import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
 import jskat.share.rules.SkatRules;
+import jskat.share.rules.SkatRulesFactory;
 
 import org.apache.log4j.Logger;
 
@@ -63,14 +64,10 @@ public class SkatGameData extends Observable {
 	 */
 	public int getGameResult() {
 
-		/*
-		 * if (result < 0) { throw new IllegalStateException("Cannot return
-		 * result - call calcResult() first."); }
-		 */
-
-		if (result == 0) {
+		if (result == 0 && gameType != SkatConstants.GameTypes.PASSED_IN) {
+			
 			log.warn("Game result hasn't been calculated yet!");
-			result = AbstractSkatRules.getResult(this);
+			calcResult();
 		}
 
 		return result;
@@ -131,6 +128,8 @@ public class SkatGameData extends Observable {
 	public void setGameType(SkatConstants.GameTypes gameType) {
 
 		this.gameType = gameType;
+		
+		rules = SkatRulesFactory.getSkatRules(gameType);
 		
 		if (gameType == SkatConstants.GameTypes.PASSED_IN) {
 			// a passed in game has no value
@@ -541,7 +540,8 @@ public class SkatGameData extends Observable {
 	}
 
 	public void calcResult() {
-		result = AbstractSkatRules.getResult(this);
+		
+		result = rules.getGameResult(this);
 	}
 
 	/**
@@ -953,6 +953,11 @@ public class SkatGameData extends Observable {
 	 * Flag for the Skat rules
 	 */
 	private boolean ispaRules = true;
+	
+	/**
+	 * Skat rules according the game type
+	 */
+	private SkatRules rules;
 	
 	/**
 	 * The game announcement made by the declarer

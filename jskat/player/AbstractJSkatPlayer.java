@@ -16,6 +16,8 @@ import org.apache.log4j.Logger;
 import jskat.share.CardVector;
 import jskat.share.Card;
 import jskat.share.SkatConstants;
+import jskat.share.rules.SkatRules;
+import jskat.share.rules.SkatRulesFactory;
 
 /**
  * The JSkat Player implementation
@@ -95,6 +97,8 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 		this.handGame = handGame;
 		this.ouvertGame = ouvertGame;
 
+		this.rules = SkatRulesFactory.getSkatRules(gameType);
+		
 		// TODO reimplement sorting
 		// cards.sortWithTrump((currGameType==SkatConstants.NULL ?
 		// SkatConstants.NULL_SORT : SkatConstants.SUIT_SORT), currTrump);
@@ -238,4 +242,5 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	protected SkatConstants.Suits currTrump;
 	protected boolean handGame;
 	protected boolean ouvertGame;
+	protected SkatRules rules;
 }

@@ -222,15 +222,15 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
 			myBid = null;
 			if(game!=null && game.getGameType() == SkatConstants.GameTypes.RAMSCH) {
 				log.debug("Player "+playerID+" ("+playerName+"): is a ramsch player");
-			    playerType = new RamschPlayer(playerID);
+			    playerType = new RamschPlayer(playerID, rules);
 			}
 			else if(isSinglePlayer) {
 				log.debug("Player "+playerID+" ("+playerName+"): is the single player");
-				playerType = new SinglePlayer(playerID);
+				playerType = new SinglePlayer(playerID, rules);
 			}
 			else {
 				log.debug("Player "+playerID+" ("+playerName+"): is an opponent player");
-				playerType = new OpponentPlayer(playerID);
+				playerType = new OpponentPlayer(playerID, rules);
 			}
 		} 
 		else {

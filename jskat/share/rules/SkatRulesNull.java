@@ -90,7 +90,7 @@ public class SkatRulesNull implements SkatRules {
 
 	@Override
 	public boolean isCardAllowed(Card card, CardVector hand, Card initialCard,
-			SkatGameData gameData) {
+			SkatConstants.Suits trump) {
 		// TODO Auto-generated method stub
 		return false;
 	}

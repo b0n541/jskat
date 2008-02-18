@@ -15,7 +15,7 @@ import org.apache.log4j.Logger;
 import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
-import jskat.share.rules.AbstractSkatRules;
+import jskat.share.rules.SkatRules;
 
 /**
  * @author Markus J. Luzius <markus@luzius.de>
@@ -29,9 +29,10 @@ public class RamschPlayer implements CardPlayer {
 	/** Constructor
 	 * @param id playerID
 	 */
-	public RamschPlayer(int id) {
+	public RamschPlayer(int id, SkatRules rules) {
 		log.debug("Constructing new single player.");
 		this.playerID = id;
+		this.rules = rules;
 	}
 
 	/** Gets the next card, that the player wants to play
@@ -72,10 +73,10 @@ public class RamschPlayer implements CardPlayer {
 		}
 		
 		// make sure that the card is allowed
-		if(!AbstractSkatRules.isCardAllowed(cards.getCard(result), cards, trick.getCard(0), trick.getGameType(), trick.getTrump())) {
+		if(!rules.isCardAllowed(cards.getCard(result), cards, trick.getCard(0), null)) {
 			// if it's not allowed, take another one
 		    for(int i=0;i<cards.size();i++) {
-				if(AbstractSkatRules.isCardAllowed(cards.getCard(i), cards, trick.getCard(0), trick.getGameType(), trick.getTrump())) {
+				if(rules.isCardAllowed(cards.getCard(i), cards, trick.getCard(0), null)) {
 					result = i;
 				}
 			}
@@ -109,4 +110,5 @@ public class RamschPlayer implements CardPlayer {
 
 	/** player id */
 	private int playerID = -1;
+	private SkatRules rules;
 }

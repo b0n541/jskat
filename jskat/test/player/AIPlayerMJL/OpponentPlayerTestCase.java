@@ -23,7 +23,8 @@ import jskat.share.SkatConstants;
  *
  */
 public class OpponentPlayerTestCase {
-	private OpponentPlayer op = new OpponentPlayer(1);
+	
+	private OpponentPlayer op = new OpponentPlayer(1, null);
 	private TrickInfo ti;
 	private CardVector myCards;
 	
