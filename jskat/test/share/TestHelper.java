@@ -19,10 +19,6 @@ import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
 
-/**
- * @author Markus J. Luzius <markus@luzius.de>
- * 
- */
 public class TestHelper {
 
 	/**

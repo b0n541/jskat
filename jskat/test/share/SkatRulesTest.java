@@ -37,7 +37,7 @@ public class SkatRulesTest {
 	}
 	
 	@Test
-	public void testGetResult() {
+	public void getResult() {
 		assertTrue(false);
 	}
 	
@@ -109,10 +109,10 @@ public class SkatRulesTest {
 		assertTrue(rules.isCardAllowed(played, cards001, initialCard, null));
 	}
 
-	CardVector cards001;
-	Card played;
-	Card initialCard;
-	SkatConstants.GameTypes gameType;
-	SkatConstants.Suits trump;
-	SkatRules rules;
+	private CardVector cards001;
+	private Card played;
+	private Card initialCard;
+	private SkatConstants.GameTypes gameType;
+	private SkatConstants.Suits trump;
+	private SkatRules rules;
 }
