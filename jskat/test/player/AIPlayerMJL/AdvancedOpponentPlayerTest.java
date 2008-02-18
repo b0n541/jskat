@@ -2,7 +2,7 @@
 
 @ShortLicense@
 
-Authos: @MJL@
+Author: @MJL@
 
 Released: @ReleaseDate@
 
@@ -22,7 +22,6 @@ import jskat.share.Tools;
 import jskat.test.share.TestHelper;
 
 import org.apache.log4j.Logger;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;

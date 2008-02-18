@@ -2,7 +2,7 @@
 
 @ShortLicense@
 
-Authos: @MJL@
+Author: @MJL@
 
 Released: @ReleaseDate@
 
@@ -10,37 +10,24 @@ Released: @ReleaseDate@
 
 package jskat.test.player.AIPlayerMJL;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import jskat.player.AIPlayerMJL.Bidding;
 import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
+import jskat.share.Tools;
 
-/**
- * @author Markus J. Luzius <markus@luzius.de>
- *
- */
-public class BiddingTest extends TestCase {
-	/**
-	 * Constructor for BiddingTest.
-	 * @param arg0
-	 */
-	public BiddingTest(String arg0) {
-		super(arg0);
-	}
+public class BiddingTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		junit.textui.TestRunner.run(BiddingTest.class);
-	}
+	@BeforeClass
+	public static void setUp() {
 
-	/**
-	 * @see TestCase#setUp()
-	 */
-	protected void setUp() throws Exception {
-		super.setUp();
+		Tools.checkLog();
+		
 		cards001 = new CardVector();
 		cards001.add(new Card(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.JACK));
 		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK));
@@ -53,16 +40,14 @@ public class BiddingTest extends TestCase {
 		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.EIGHT));
 		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.SEVEN));
 		cards001.sort(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.HEARTS);
-
 	}
 
-	/**
-	 * Test for bidding values
-	 */
-	public void testGetMaxBid() {
+	@Test
+	public void getMaxBid() {
+		
 		Bidding bid = new Bidding(cards001);
 		assertEquals(27, bid.getMaxBid());
 	}
 
-	CardVector cards001;
+	private static CardVector cards001;
 }

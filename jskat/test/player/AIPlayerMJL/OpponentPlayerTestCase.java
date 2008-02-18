@@ -2,7 +2,7 @@
 
 @ShortLicense@
 
-Authos: @MJL@
+Author: @MJL@
 
 Released: @ReleaseDate@
 

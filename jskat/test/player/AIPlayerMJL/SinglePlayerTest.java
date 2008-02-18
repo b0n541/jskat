@@ -2,7 +2,7 @@
 
 @ShortLicense@
 
-Authos: @MJL@
+Author: @MJL@
 
 Released: @ReleaseDate@
 
@@ -10,52 +10,32 @@ Released: @ReleaseDate@
 
 package jskat.test.player.AIPlayerMJL;
 
-import org.apache.log4j.BasicConfigurator;
-import org.apache.log4j.Logger;
+import static org.junit.Assert.*;
 
-import junit.framework.TestCase;
+import org.apache.log4j.Logger;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import jskat.player.AIPlayerMJL.GameInfo;
 import jskat.player.AIPlayerMJL.SinglePlayer;
 import jskat.player.AIPlayerMJL.TrickInfo;
 import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
+import jskat.share.Tools;
 import jskat.share.rules.SkatRules;
 import jskat.share.rules.SkatRulesFactory;
 import jskat.test.share.TestHelper;
 
-/**
- * @author Markus J. Luzius <markus@luzius.de>
- *
- */
-public class SinglePlayerTest extends TestCase {
+public class SinglePlayerTest {
 
 	static Logger log = Logger.getLogger(SinglePlayerTest.class);
-	
-	/**
-	 * Constructor for OpponentPlayerTest.
-	 * @param arg0
-	 */
-	public SinglePlayerTest(String arg0) {
-		super(arg0);
-	}
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-	    //PropertyConfigurator.configure("C:\\Programme\\Tools\\dev\\eclipse\\workspace\\jskat\\lib\\log4j.properties");
-		BasicConfigurator.configure();
-	    
-	    log.debug(".....");
-	    log.info(".....");
-	    
-		junit.textui.TestRunner.run(SinglePlayerTest.class);
-	}
-	/**
-	 * @see TestCase#setUp()
-	 */
-	protected void setUp() throws Exception {
-		super.setUp();
+
+	@BeforeClass
+	public static void setUp() {
+
+		Tools.checkLog();
+		
 		gi001 = new GameInfo(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.SPADES, 0);
 
 		cards001 = TestHelper.buildDeck("J-H,J-D,A-S,T-S,7-H,K-D,9-D,7-D");
@@ -63,12 +43,10 @@ public class SinglePlayerTest extends TestCase {
 		trick001 = new CardVector();
 		trick001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.ACE));
 		trick001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.EIGHT));
-}
+	}
 
-	/**
-	 * Tests for playing the next card
-	 */
-	public void testPlayNextCard() {
+	@Test
+	public void playNextCard() {
 		
 		rules = SkatRulesFactory.getSkatRules(gi001.getGameType());
 		SinglePlayer sp = new SinglePlayer(1, rules);
@@ -78,12 +56,11 @@ public class SinglePlayerTest extends TestCase {
 		ti.setSinglePlayerPos(2);
 		// should play king of diamonds (seven would be better though...) 
 		assertEquals(5, sp.playNextCard(cards001, ti));
-
 	}
 
-	CardVector cards001;
-	CardVector trick001;
-	GameInfo gi001;
+	private static CardVector cards001;
+	private static CardVector trick001;
+	private static GameInfo gi001;
 	Card played;
 	Card initialCard;
 	int gameType;

@@ -2,7 +2,7 @@
 
 @ShortLicense@
 
-Authos: @MJL@
+Author: @MJL@
 
 Released: @ReleaseDate@
 
@@ -10,37 +10,28 @@ Released: @ReleaseDate@
 
 package jskat.test.player.AIPlayerMJL;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
+
+import org.apache.log4j.Logger;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import jskat.player.AIPlayerMJL.SkatProcessor;
 import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
+import jskat.share.Tools;
 import jskat.test.share.TestHelper;
 
-/**
- * @author Markus J. Luzius <markus@luzius.de>
- *
- */
-public class SkatProcessorTest extends TestCase {
-	/**
-	 * Constructor for SkatProcessorTest.
-	 * @param arg0
-	 */
-	public SkatProcessorTest(String arg0) {
-		super(arg0);
-	}
+public class SkatProcessorTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		junit.textui.TestRunner.run(SkatProcessorTest.class);
-	}
-	/**
-	 * @see TestCase#setUp()
-	 */
-	protected void setUp() throws Exception {
-		super.setUp();
+	static Logger log = Logger.getLogger(SkatProcessorTest.class);
+
+	@BeforeClass
+	public static void setUp() {
+
+		Tools.checkLog();
+		
 		cards001 = new CardVector();
 		cards001.add(new Card(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.JACK));
 		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK));
@@ -92,36 +83,40 @@ public class SkatProcessorTest extends TestCase {
 		skat003.add(new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.TEN));
 
 		cards004 = TestHelper.buildDeck("S-J,D-J,H-A,H-T,C-T");
-}
+	}
 
-	/**
-	 * Tests for processing the skat
-	 */
-	public void testProcessSkat() {
-		System.out.println("-------------------------------------------------------------");
-		System.out.println(this);
-		System.out.println("-------------------------------------------------------------");
+	@Test
+	public void processSkat001() {
+		log.debug("-------------------------------------------------------------");
+		log.debug(this);
+		log.debug("-------------------------------------------------------------");
 
-		System.out.println("Skat001 [before]:"+skat001);
+		log.debug("Skat001 [before]:"+skat001);
 		assertEquals(SkatConstants.Suits.DIAMONDS, SkatProcessor.processSkat(cards001, skat001));
-		System.out.println("Skat001 [after]: "+skat001);
-		System.out.println("-------------------------------------------------------------");
+		log.debug("Skat001 [after]: "+skat001);
+		log.debug("-------------------------------------------------------------");
+	}
 
+	@Test
+	public void processSkat002() {
 		System.out.println("Skat002 [before]:"+skat002);
 		assertEquals(SkatConstants.Suits.HEARTS, SkatProcessor.processSkat(cards002, skat002));
 		System.out.println("Skat002 [after]: "+skat002);
 		System.out.println("-------------------------------------------------------------");
-		
+	}
+
+	@Test
+	public void processSkat003() {
 		System.out.println("Skat003 [before]:"+skat003);
 		assertEquals(SkatConstants.Suits.HEARTS, SkatProcessor.processSkat(cards003, skat003));
 		System.out.println("Skat003 [after]: "+skat003);
 	}
 
-	CardVector cards001;
-	CardVector skat001;
-	CardVector cards002;
-	CardVector skat002;
-	CardVector cards003;
-	CardVector skat003;
-	CardVector cards004;
+	private static CardVector cards001;
+	private static CardVector skat001;
+	private static CardVector cards002;
+	private static CardVector skat002;
+	private static CardVector cards003;
+	private static CardVector skat003;
+	private static CardVector cards004;
 }

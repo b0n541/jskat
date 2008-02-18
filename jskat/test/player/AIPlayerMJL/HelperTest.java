@@ -2,7 +2,7 @@
 
 @ShortLicense@
 
-Authos: @MJL@
+Author: @MJL@
 
 Released: @ReleaseDate@
 
@@ -10,7 +10,11 @@ Released: @ReleaseDate@
 
 package jskat.test.player.AIPlayerMJL;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.*;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import jskat.player.AIPlayerMJL.Helper;
 import jskat.share.Card;
 import jskat.share.CardVector;
@@ -18,29 +22,11 @@ import jskat.share.SkatConstants;
 import jskat.share.rules.SkatRules;
 import jskat.share.rules.SkatRulesFactory;
 
-/**
- * @author Markus J. Luzius <markus@luzius.de>
- *
- */
-public class HelperTest extends TestCase {
-	/**
-	 * Constructor for HelperTest.
-	 * @param arg0
-	 */
-	public HelperTest(String arg0) {
-		super(arg0);
-	}
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		junit.textui.TestRunner.run(HelperTest.class);
-	}
-	/**
-	 * @see TestCase#setUp()
-	 */
-	protected void setUp() throws Exception {
-		super.setUp();
+public class HelperTest {
+
+	@BeforeClass
+	public static void setUp() {
+
 		cards001 = new CardVector();
 		cards001.add(new Card(SkatConstants.Suits.SPADES, SkatConstants.Ranks.JACK));
 		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK));
@@ -60,51 +46,45 @@ public class HelperTest extends TestCase {
 
 	}
 
-	/**
-	 * Test for isSinglePlayerWin/() method
-	 */
-	public void testIsSinglePlayerWin() {
+	@Test
+	public void isSinglePlayerWin() {
 		//TODO Implement isSinglePlayerWin().
 	}
 
-	/**
-	 * Test for isAbleToBeat() method
-	 */
-	public void testIsAbleToBeat() {
+	@Test
+	public void isAbleToBeat() {
 		//TODO Implement isAbleToBeat().
 	}
 
-	/**
-	 * Test for isAbleToMatch() method
-	 */
-	public void testIsAbleToMatch() {
+	@Test
+	public void isAbleToMatch001() {
 		trump = SkatConstants.Suits.HEARTS;
 		gameType = SkatConstants.GameTypes.SUIT;
 		rules = SkatRulesFactory.getSkatRules(gameType);
 		assertEquals(false, Helper.isAbleToMatch(rules, cards001, trump, trick001.getCard(0), gameType));
-		System.out.println("----------------------------------------------------------");
+	}
+	
+	@Test
+	public void isAbleToMatch002() {
 		trump = SkatConstants.Suits.SPADES;
 		gameType = SkatConstants.GameTypes.SUIT;
+		rules = SkatRulesFactory.getSkatRules(gameType);
 		assertEquals(true, Helper.isAbleToMatch(rules, cards001, trump, trick001.getCard(0), gameType));
 	}
 
-	/**
-	 * Test for getHighestTrump() method
-	 */
-	public void testGetHighestTrump() {
+	@Test
+	public void getHighestTrump() {
 		//TODO Implement getHighestTrump().
 	}
 
-	/**
-	 * Test for hasTrump() method
-	 */
-	public void testHasTrump() {
+	@Test
+	public void hasTrump() {
 		//TODO Implement hasTrump().
 	}
 
-	CardVector cards001;
+	private static CardVector cards001;
 	CardVector cards002;
-	CardVector trick001;
+	private static CardVector trick001;
 	Card played;
 	Card initialCard;
 	SkatConstants.GameTypes gameType;
