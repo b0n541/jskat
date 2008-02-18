@@ -11,33 +11,21 @@ Released: @ReleaseDate@
 
 package jskat.test.data;
 
+import static org.junit.Assert.*;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
 import jskat.data.SkatGameData;
 import jskat.share.SkatConstants;
-import junit.framework.TestCase;
+import jskat.share.Tools;
 
-/**
- * @author Markus J. Luzius <markus@luzius.de>
- * 
- */
-public class SkatGameTest extends TestCase {
-	/**
-	 * Constructor for SkatGameTest.
-	 * 
-	 * @param arg0
-	 */
-	public SkatGameTest(String arg0) {
-		super(arg0);
-	}
+public class SkatGameDataTest {
 
-	public static void main(String[] args) {
-		junit.textui.TestRunner.run(SkatGameTest.class);
-	}
+	@BeforeClass
+	public static void setUp() {
 
-	/*
-	 * @see TestCase#setUp()
-	 */
-	protected void setUp() throws Exception {
-		super.setUp();
+		Tools.checkLog();
 
 		game001 = new SkatGameData();
 		game001.setGameType(SkatConstants.GameTypes.RAMSCH);
@@ -66,33 +54,79 @@ public class SkatGameTest extends TestCase {
 		game003.calcResult();
 	}
 
-	public void testGetSinglePlayer() {
+	@Test
+	public void getSinglePlayer001() {
+		
 		assertEquals(1, game001.getSinglePlayer());
+	}
+	
+	@Test
+	public void getSinglePlayer002() {
+		
 		assertEquals(2, game002.getSinglePlayer());
+	}
+	
+	@Test
+	public void getSinglePlayer003() {
+			
 		assertEquals(0, game003.getSinglePlayer());
 	}
 
-	public void testGetPlayerScore() {
+	@Test
+	public void getPlayerScore001() {
+		
 		assertEquals(64, game001.getSinglePlayerScore());
+	}
+
+	@Test
+	public void getPlayerScore002() {
+		
 		assertEquals(64, game002.getSinglePlayerScore());
+	}
+	
+	@Test
+	public void getPlayerScore003() {
+		
 		assertEquals(64, game003.getSinglePlayerScore());
 	}
 
-	public void testGetGameLost() {
+	@Test
+	public void isGameLost001() {
+		
 		assertTrue(game001.isGameLost());
+	}
+
+	@Test
+	public void isGameLost002() {
+		
 		assertTrue(game002.isGameLost());
+	}
+
+	@Test
+	public void isGameLost003() {
+		
 		assertTrue(game003.isGameLost());
 	}
 
-	public void testGetGameResult() {
+	@Test
+	public void getGameResult001() {
+		
 		assertEquals(-4 * 64, game001.getGameResult());
+	}
+
+	@Test
+	public void getGameResult002() {
+		
 		assertEquals(-64, game002.getGameResult());
+	}
+
+	@Test
+	public void getGameResult003() {
+		
 		assertEquals(-8 * 64, game003.getGameResult());
 	}
 
-	private SkatGameData game001;
-
-	private SkatGameData game002;
-
-	private SkatGameData game003;
+	private static SkatGameData game001;
+	private static SkatGameData game002;
+	private static SkatGameData game003;
 }

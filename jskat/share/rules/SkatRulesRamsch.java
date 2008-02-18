@@ -33,6 +33,7 @@ public class SkatRulesRamsch implements SkatRules {
 			multiplier = multiplier * -1;
 		}
 
+		// FIXME Ramsch games have no single player
 		return gameData.getScore(gameData.getSinglePlayer()) * multiplier;
 	}
 	

@@ -14,47 +14,56 @@ package jskat.test.share;
 import jskat.data.GameAnnouncement;
 import jskat.share.Card;
 import jskat.share.SkatConstants;
-import junit.framework.TestCase;
+import jskat.share.Tools;
 
-/**
- * @author markusl
- *
- */
-public class CardTest extends TestCase {
-	/**
-	 * Constructor for SkatRulesTest.
-	 * @param arg0
-	 */
-	public CardTest(String arg0) {
-		super(arg0);
+import org.junit.BeforeClass;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+public class CardTest {
+
+	@BeforeClass
+	public static void setUp() {
+		
+		Tools.checkLog();
+		
+		cardDJ = new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK);
+		cardD8 = new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.EIGHT);
+		cardS9 = new Card(SkatConstants.Suits.SPADES, SkatConstants.Ranks.NINE);
+		cardCJ = new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.JACK);
+
+        gameAnnRamsch = new GameAnnouncement();
+        gameAnnRamsch.setGameType(SkatConstants.GameTypes.RAMSCH);
 	}
 
-    public static void main(String[] args) {
-		junit.textui.TestRunner.run(CardTest.class);
-    }
-
-    /*
-     * @see TestCase#setUp()
-     */
-    protected void setUp() throws Exception {
-        super.setUp();
-    }
-
-    public void testBeats() {
+	@Test 
+	public void beats001() {
     	
-        Card card001 = new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK);
-        Card card002 = new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.EIGHT);
-        GameAnnouncement gameAnn = new GameAnnouncement();
-        gameAnn.setGameType(SkatConstants.GameTypes.RAMSCH);
-        gameAnn.setTrump(null);
-        assertTrue(card001.beats(card002, gameAnn, card001));
-        assertFalse(card002.beats(card001, gameAnn, card001));
-
-        card001 = new Card(SkatConstants.Suits.SPADES, SkatConstants.Ranks.NINE);
-        card002 = new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.JACK);
-        assertTrue(card002.beats(card001, gameAnn, card001));
-        assertFalse(card001.beats(card002, gameAnn, card001));
-
+        gameAnnRamsch.setTrump(null);
+        assertTrue(cardDJ.beats(cardD8, gameAnnRamsch, cardDJ));
+	}
+	
+	@Test
+	public void beats002() {
+		
+        assertFalse(cardD8.beats(cardDJ, gameAnnRamsch, cardDJ));
+	}
+	
+	@Test
+	public void beats003() {
+		
+        assertTrue(cardCJ.beats(cardS9, gameAnnRamsch, cardS9));
+	}
+	
+	@Test
+	public void beats004() {
+		
+        assertFalse(cardS9.beats(cardCJ, gameAnnRamsch, cardS9));
     }
-    
+	
+	private static Card cardDJ;
+	private static Card cardD8;
+	private static Card cardS9;
+	private static Card cardCJ;
+	private static GameAnnouncement gameAnnRamsch;
 }
