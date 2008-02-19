@@ -21,7 +21,6 @@ public class SkatRulesNull implements SkatRules {
 
 	static Logger log = Logger.getLogger(jskat.share.rules.SkatRulesNull.class);
 
-	@Override
 	public int getGameResult(SkatGameData gameData) {
 
 
@@ -82,41 +81,34 @@ public class SkatRulesNull implements SkatRules {
 		return gameValue * multiplier;
 	}
 
-	@Override
 	public boolean isCardBeats(Card card, Card cardToBeat, Card initialTrickCard) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
 	public boolean isCardAllowed(Card card, CardVector hand, Card initialCard,
 			SkatConstants.Suits trump) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
 	public boolean isGameWon(SkatGameData gameData) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	@Override
 	public boolean isSchneider(SkatGameData gameData) {
 		return false;
 	}
 
-	@Override
 	public boolean isSchwarz(SkatGameData gameData) {
 		return false;
 	}
 
-	@Override
 	public boolean isDurchMarsch(int playerID, SkatGameData gameData) {
 		return false;
 	}
 
-	@Override
 	public boolean isJungFrau(int playerID, SkatGameData gameData) {
 		return false;
 	}

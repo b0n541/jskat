@@ -57,7 +57,7 @@ public interface SkatRules {
 	public int getGameResult(SkatGameData gameData);
 
 	/**
-	 * Checks whether a game was a schneider game
+	 * Checks whether a game was a schneider game<br>
 	 * schneider means one party made only 30 points or below
 	 * 
 	 * @param data Game data
@@ -66,7 +66,7 @@ public interface SkatRules {
 	public boolean isSchneider(SkatGameData gameData);
 		
 	/**
-	 * Checks whether a game was a schwarz game
+	 * Checks whether a game was a schwarz game<br>
 	 * schwarz means one party made no trick
 	 * 
 	 * @param data Game data
@@ -75,7 +75,7 @@ public interface SkatRules {
 	public boolean isSchwarz(SkatGameData gameData);
 
 	/**
-	 * Checks whether a player did a durchmarsch (walkthrough) in a ramsch game
+	 * Checks whether a player did a durchmarsch (walkthrough) in a ramsch game<br>
 	 * durchmarsch means one player made all tricks
 	 * 
 	 * @param playerID Player ID of the player to be checked
@@ -85,8 +85,8 @@ public interface SkatRules {
 	public boolean isDurchMarsch(int playerID, SkatGameData gameData);
 	
 	/**
-	 * Checks whether a player was jungfrau (virgin) in a ramsch game
-	 * jungfrau means one player made no trick
+	 * Checks whether a player was jungfrau (virgin) in a ramsch game<br>
+	 * jungfrau means one player made no trick<br>
 	 * two players who played jungfrau means a durchmarsch for the third player
 	 * 
 	 * @param playerID Player ID of the player to be checked
