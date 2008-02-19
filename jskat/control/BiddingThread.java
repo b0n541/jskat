@@ -28,6 +28,14 @@ public class BiddingThread implements Runnable {
 
 	static Logger log = Logger.getLogger(jskat.control.BiddingThread.class);
 
+	/**
+	 * Gets an instance of BiddingThread
+	 * 
+	 * @param dataModel Data model
+	 * @param game Game
+	 * @param playerOrder Order of players
+	 * @return Instance of BiddingThread
+	 */
 	public static BiddingThread getInstance(JSkatDataModel dataModel, SkatGame game, int[] playerOrder) {
 		if(myself==null) {
 			myself = new BiddingThread(dataModel, game, playerOrder);
@@ -38,7 +46,6 @@ public class BiddingThread implements Runnable {
 		return myself;
 	}
 	
-	/** Creates a new instance of BiddingThread */
 	private BiddingThread(JSkatDataModel dataModel, SkatGame game, int[] playerOrder) {
 		this.dataModel = dataModel;
 		this.skatGame = game;
@@ -71,7 +78,7 @@ public class BiddingThread implements Runnable {
 	/**
 	 * Is called if a user places a higher bid
 	 * 
-	 * @param userBidsMore
+	 * @param userBidsMore 
 	 */
 	public void notifyMe(boolean userBidsMore) {
 
