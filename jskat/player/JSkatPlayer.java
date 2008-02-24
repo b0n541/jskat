@@ -17,57 +17,94 @@ import jskat.share.Card;
 import jskat.share.SkatConstants;
 
 /**
- * The JSkat Player Interface
- * 
- * @author Jan Schäfer <jan.schaefer@b0n541.net>
+ * Player interface for AI players
  */
 public interface JSkatPlayer {
 
-	/** Informs the player about the start of a new game */
+	/** 
+	 * Informs the player about the start of a new game 
+	 */
 	public void newGame();
 	
-	/** Notifies the player of the start of bidding for a new game */
+	/** 
+	 * Notifies the player of the start of bidding for a new game 
+	 * 
+	 * @param initialForehandPlayer Player ID of the initial fore hand player 
+	 */
 	public void setUpBidding(int initialForehandPlayer);
 
-	/** Asks the player whether it wants to bid higher or not */
+	/** 
+	 * Asks the player whether it wants to bid higher or not 
+	 * 
+	 * @param currBidValue Current bid value
+	 * @return TRUE if the player wants to make the bid
+	 */
 	public boolean bidMore(int currBidValue);
 
-	/** Take a card from someone */
+	/** 
+	 * Takes a card from the dealer
+	 *  
+	 * @param newCard New Card 
+	 */
 	public void takeCard(Card newCard);
 
-	/** Check if you want to look in the skat */
+	/** 
+	 * Checks whether the player wants to look into the skat
+	 *  
+	 * @param isRamsch TRUE if the current game is a ramsch game
+	 * @return TRUE if the player wants to look into the skat 
+	 */
 	public boolean lookIntoSkat(boolean isRamsch);
 
 	/**
 	 * Take the skat as a single player.<br>
 	 * When the method is done, the skat CardVector must still contain exactly
 	 * two cards. Otherwise a SkatHandlingException might be thrown.
+	 * 
+	 * @param skat The skat Cards 
 	 */
 	public void takeSkat(CardVector skat);
 
-	/** Take the skat in a ramsch round */
+	/** 
+	 * Take the skat in a ramsch round 
+	 * 
+	 * @param skat The skat Cards
+	 * @param jacksAllowed TRUE if jacks are allowed to be discarded
+	 */
 	public void takeRamschSkat(CardVector skat, boolean jacksAllowed);
 
-	/** Asks the player for the game he wants to play */
+	/** 
+	 * Asks the player for the game he wants to play
+	 *  
+	 * @return Game announcement 
+	 */
 	public GameAnnouncement announceGame();
 
-	/** Start the game: inform player of game type, trumpf and special options */
+	/** 
+	 * Start the game: inform player of game type, trumpf and special options 
+	 * 
+	 * @param singlePlayer Player ID of the single player 
+	 * @param forehandPlayer Player ID of the fore hand player
+	 * @param gameType Game type
+	 * @param trump Trump suit
+	 * @param handGame TRUE if the game is a hand game
+	 * @param ouvertGame TRUE if the game is an ouvert game
+	 */
 	public void startGame(int singlePlayer, int forehandPlayer, SkatConstants.GameTypes gameType,
 			SkatConstants.Suits trump, boolean handGame, boolean ouvertGame);
 
-	/** Shows the cards of the single player to the opponents in ouvert games */
+	/** 
+	 * Shows the cards of the single player to the opponents in ouvert games
+	 *  
+	 * @param ouvertCards Cards of the single player in an ouver game 
+	 */
 	public void discloseOuvertCards(CardVector ouvertCards);
 	
 	/**
 	 * Get next Card to play
-	 *
-	 * @deprecated
-	 */
-	public int playNextCard(CardVector trick);
-
-	/**
-	 * Get next Card to play
 	 * 
+	 * @param trick Cards of the trick
+	 * @return Card to be played
 	 */
 	public Card playCard(CardVector trick);
 	
@@ -78,52 +115,82 @@ public interface JSkatPlayer {
 	 */
 	public void cardPlayed(Card card);
 	
-	/** Makes the current trick known to the players when it is complete */
+	/** 
+	 * Makes the current trick known to the players when it is complete
+	 *  
+	 * @param trick Cards of the trick
+	 * @param trickWinner Player ID of the trick winner
+	 */
 	public void showTrick(CardVector trick, int trickWinner);
 
-	/** Get the selected card from the player's hand */
+	/** 
+	 * Get the selected card from the player's hand
+	 *  
+	 * @param suit Suit of the card to be removed 
+	 * @param rank Rank of the card to be removed
+	 * @return Card that was removed 
+	 */
 	public Card removeCard(SkatConstants.Suits suit, SkatConstants.Ranks rank);
 
-	/**
-	 * Get the selected card from the player's hand
+	/** Gets the name of the skat player 
 	 *
-	 * @deprecated
+	 * @return Player name
 	 */
-	public Card removeCard(Card card);
-
-	/**
-	 * Get the selected card from the player's hand
-	 *
-	 * @deprecated
-	 */
-	public Card removeCard(int index);
-
-	/** Returns a reference to the CardVector of the SkatPlayer */
-	//public CardVector getCardVector();
-
-	/** Returns the name of the SkatPlayer */
 	public String getPlayerName();
 
-	/** Sets the name of the SkatPlayer */
+	/** 
+	 * Sets the name of the skat player 
+	 *
+	 * @param newPlayerName Player name to be set
+	 */
 	public void setPlayerName(String newPlayerName);
 
-	/** Returns the ID of the SkatPlayer */
+	/** Gets the ID of the skat player
+	 *
+	 * @return Player ID
+	 */
 	public int getPlayerID();
 
-	/** Returns the ID of the SkatPlayer */
+	/** 
+	 * Sets the ID of the skat player
+	 * 
+	 * @param newPlayerID Player ID to be set
+	 */
 	public void setPlayerID(int newPlayerID);
 
 	/**
-	 * @return true, if the player is a human player
+	 * Checks whether the player is a human player
+	 * 
+	 * @return TRUE if the player is a human player
 	 */
 	public boolean isHumanPlayer();
 
 	/**
-	 * @return true, if the player is an AI player
+	 * Checks whether the player is an AI player
+	 * 
+	 * @return TRUE if the player is an AI player
 	 */
 	public boolean isAIPlayer();
 
+	/**
+	 * Holds all player states
+	 */
 	public enum PlayerStates {
-		WAITING, DEALING, BIDDING, PLAYING
+		/**
+		 * Player waits
+		 */
+		WAITING, 
+		/**
+		 * Player receives cards during dealing
+		 */
+		DEALING, 
+		/**
+		 * Player takes part in bidding
+		 */
+		BIDDING, 
+		/**
+		 * Player plays the tricks
+		 */
+		PLAYING
 	}
 }

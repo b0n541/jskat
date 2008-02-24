@@ -21,54 +21,57 @@ import jskat.share.rules.SkatRulesFactory;
 
 /**
  * The JSkat Player implementation
- * 
- * @author Jan Schäfer
  */
 public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
 	static Logger log = Logger.getLogger(AbstractJSkatPlayer.class);
 
-	/** Creates a new instance of SkatPlayer */
-	public AbstractJSkatPlayer() {
-
-		this.playerID = -1;
-		this.playerName = "AI Player";
-		this.playerState = JSkatPlayer.PlayerStates.WAITING;
-		this.cards = new CardVector();
-		this.skat = new CardVector();
-	}
-
-	/** Returns the ID of the SkatPlayer */
+	/**
+	 * @see jskat.player.JSkatPlayer#getPlayerID()
+	 */
+	@Override
 	public final int getPlayerID() {
 
 		return playerID;
 	}
 
-	/** Returns the ID of the SkatPlayer */
+	/**
+	 * @see jskat.player.JSkatPlayer#setPlayerID(int)
+	 */
+	@Override
 	public final void setPlayerID(int newPlayerID) {
 		playerID = newPlayerID;
 	}
 
-	/** Sets the name of the SkatPlayer */
+	/**
+	 * @see jskat.player.JSkatPlayer#setPlayerName(java.lang.String)
+	 */
+	@Override
 	public final void setPlayerName(String newPlayerName) {
 
 		playerName = newPlayerName;
 	}
 
-	/** Returns the name of the SkatPlayer */
+	/**
+	 * @see jskat.player.JSkatPlayer#getPlayerName()
+	 */
+	@Override
 	public final String getPlayerName() {
 
 		return playerName;
 	}
 
-	/** Take a card from someone */
+	/**
+	 * @see jskat.player.JSkatPlayer#takeCard(jskat.share.Card)
+	 */
 	public final void takeCard(Card newCard) {
 
 		cards.add(newCard);
 
 		// TODO: Do sorting only on demand
-		if (cards.size() == 10)
+		if (cards.size() == 10) {
 			sortCards(SkatConstants.GameTypes.SUIT);
+		}
 	}
 
 	protected final void sortCards(SkatConstants.GameTypes gameType) {
@@ -76,15 +79,22 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 		cards.sort(gameType);
 	}
 
-	/** Notifies the player of the start of bidding for a new game */
-	public void setUpBidding(int initialForehandPlayer) {
-	}
+	/**
+	 * @see jskat.player.JSkatPlayer#setUpBidding(int)
+	 */
+	@Override
+	public abstract void setUpBidding(int initialForehandPlayer);
 
-	/** Take the skat */
-	public void takeSkat(CardVector skat) {
-	}
+	/**
+	 * @see jskat.player.JSkatPlayer#takeSkat(jskat.share.CardVector)
+	 */
+	@Override
+	public abstract void takeSkat(CardVector skat);
 
-	/** Start the game: inform player of game type, trumpf and special options */
+	/**
+	 * @see jskat.player.JSkatPlayer#startGame(int, int, jskat.share.SkatConstants.GameTypes, jskat.share.SkatConstants.Suits, boolean, boolean)
+	 */
+	@Override
 	public void startGame(int singlePlayer, int forehandPlayer,
 			SkatConstants.GameTypes gameType, SkatConstants.Suits trump,
 			boolean handGame, boolean ouvertGame) {
@@ -105,124 +115,33 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	}
 
 	/**
-	 * Shows the cards of the single player to the opponents in ouvert games
-	 * 
-	 * @param ouvertCards
-	 *            The cards of the single player
+	 * @see jskat.player.JSkatPlayer#discloseOuvertCards(jskat.share.CardVector)
 	 */
-	public void discloseOuvertCards(CardVector ouvertCards) {
-
-		singlePlayerCards = ouvertCards;
-	}
-
+	@Override
+	public abstract void discloseOuvertCards(CardVector ouvertCards);
+	
 	/**
-	 * Makes the current trick known to the players when it is complete
-	 * 
-	 * @param trick
-	 *            The CardVector of the current trick
-	 * @param trickWinner
-	 *            The trick winner
+	 * @see jskat.player.JSkatPlayer#showTrick(jskat.share.CardVector, int)
 	 */
+	@Override
 	public abstract void showTrick(CardVector trick, int trickWinner);
 
-	/**
-	 * Returns a reference to the CardVector of the SkatPlayer
-	 * 
-	 * This won't be needed anymore when bidding and game announcing is fully
-	 * implemented (therefore defined as deprecated)
-	 * 
-	 * @deprecated
-	 */
-	public CardVector getCardVector() {
-
-		return cards;
-	}
-
+	
 	protected void setState(JSkatPlayer.PlayerStates newState) {
 
 		playerState = newState;
 	}
 
 	/**
-	 * Get the selected card from the player's hand
-	 * 
-	 * @see jskat.player.JSkatPlayer#removeCard(int)
+	 * @see jskat.player.JSkatPlayer#cardPlayed(jskat.share.Card)
 	 */
-	public final Card removeCard(int index) {
-		return cards.remove(index);
-	}
-
+	@Override
+	public abstract void cardPlayed(Card card);
+	
 	/**
-	 * Get the selected card from the player's hand
-	 * 
-	 * This method should not be used anymore, player has to remove cards for
-	 * their own after playing them out
-	 * 
-	 * @deprecated
-	 * @see jskat.player.JSkatPlayer#removeCard(jskat.share.Card)
+	 * @see jskat.player.JSkatPlayer#newGame()
 	 */
-	public final Card removeCard(Card card) {
-
-		return cards.remove(card.getSuit(), card.getRank());
-	}
-
-	/**
-	 * Get the selected card from the player's hand
-	 * 
-	 * This method should not be used anymore, player has to remove cards for
-	 * their own after playing them out
-	 * 
-	 * @deprecated
-	 * @see jskat.player.JSkatPlayer#removeCard(int, int)
-	 */
-	public Card removeCard(SkatConstants.Suits suit, SkatConstants.Ranks rank) {
-
-		return cards.remove(suit, rank);
-	}
-
-	/**
-	 * Get the selected card from the player's hand
-	 * 
-	 * This method should not be used anymore
-	 * 
-	 * @deprecated
-	 */
-	// FIXME (mjl) getCard should not remove a card (inconsistent
-	// implementation)
-	public final Card getCard(SkatConstants.Suits suit, SkatConstants.Ranks rank) {
-
-		int i = 0;
-
-		while (cards.getCard(i).getSuit() != suit
-				|| cards.getCard(i).getRank() != rank) {
-
-			i++;
-		}
-
-		Card removedCard = cards.remove(i);
-
-		// --[DEBUG]--//
-		log.debug("Player " + playerID + ": " + removedCard.toString());
-		// --[DEBUG]--//
-
-		return removedCard;
-	}
-
-	/**
-	 * Only for satisfying the JSkatPlayer interface
-	 * 
-	 * @deprecated
-	 */
-	public int playNextCard(CardVector trick) {
-
-		return -1;
-	}
-
-	public void cardPlayed(Card card) {
-
-		cards.remove(card);
-	}
-
+	@Override
 	public final void newGame() {
 
 		cards.clear();

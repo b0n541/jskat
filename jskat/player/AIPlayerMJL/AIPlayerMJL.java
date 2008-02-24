@@ -15,6 +15,8 @@ import org.apache.log4j.Logger;
 import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
+import jskat.share.SkatConstants.Ranks;
+import jskat.share.SkatConstants.Suits;
 import jskat.data.GameAnnouncement;
 import jskat.player.JSkatPlayer;
 import jskat.player.AbstractJSkatPlayer;
@@ -300,4 +302,21 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
 	private int singlePlayerPos;
 	private GameInfo game;
 	private SkatConstants.Suits selectedTrump;
+	@Override
+	public void cardPlayed(Card card) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void discloseOuvertCards(CardVector ouvertCards) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Card removeCard(Suits suit, Ranks rank) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
