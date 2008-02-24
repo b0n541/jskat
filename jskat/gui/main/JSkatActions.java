@@ -16,6 +16,13 @@ import java.util.Vector;
 import jskat.control.JSkatMaster;
 import jskat.data.JSkatDataModel;
 import jskat.gui.JSkatGraphicRepository;
+import jskat.gui.main.actions.AboutDialogAction;
+import jskat.gui.main.actions.ExitJSkatAction;
+import jskat.gui.main.actions.FlipCardsAction;
+import jskat.gui.main.actions.HelpDialogAction;
+import jskat.gui.main.actions.LastTricksDialogAction;
+import jskat.gui.main.actions.NewSkatSeriesDialogAction;
+import jskat.gui.main.actions.OptionsDialogAction;
 
 /**
  * Holds all actions for the JSkat GUI

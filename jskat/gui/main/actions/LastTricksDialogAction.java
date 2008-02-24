@@ -9,7 +9,7 @@ Released: @ReleaseDate@
 
 */
 
-package jskat.gui.main;
+package jskat.gui.main.actions;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 
 import jskat.data.JSkatDataModel;
 import jskat.gui.JSkatGraphicRepository;
+import jskat.gui.main.LastTricksDialog;
 
 /**
  * Action for showing the LastTrickDialog
@@ -26,7 +27,7 @@ import jskat.gui.JSkatGraphicRepository;
 public class LastTricksDialogAction implements ActionListener {
 
 	static Logger log = Logger
-			.getLogger(jskat.gui.main.LastTricksDialogAction.class);
+			.getLogger(jskat.gui.main.actions.LastTricksDialogAction.class);
 
 	/**
 	 * Creates a new instance of LastTricksDialogAction

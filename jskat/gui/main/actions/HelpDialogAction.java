@@ -9,7 +9,7 @@ Released: @ReleaseDate@
 
 */
 
-package jskat.gui.main;
+package jskat.gui.main.actions;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -26,7 +26,7 @@ import jskat.gui.help.JSkatHelpDialog;
  */
 public class HelpDialogAction implements ActionListener {
 
-	static Logger log = Logger.getLogger(jskat.gui.main.HelpDialogAction.class);
+	static Logger log = Logger.getLogger(jskat.gui.main.actions.HelpDialogAction.class);
 
     /**
      * Creates a new instance of HelpDialogAction

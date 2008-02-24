@@ -9,7 +9,7 @@ Released: @ReleaseDate@
 
 */
 
-package jskat.gui.main;
+package jskat.gui.main.actions;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -24,7 +24,7 @@ import jskat.control.JSkatMaster;
  */
 public class ExitJSkatAction implements ActionListener {
     
-	static Logger log = Logger.getLogger(jskat.gui.main.ExitJSkatAction.class);
+	static Logger log = Logger.getLogger(jskat.gui.main.actions.ExitJSkatAction.class);
 
 	/**
      * Creates a new instance of AboutDialogAction

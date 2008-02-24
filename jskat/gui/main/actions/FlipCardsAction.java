@@ -9,10 +9,12 @@ Released: @ReleaseDate@
 
 */
 
-package jskat.gui.main;
+package jskat.gui.main.actions;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import jskat.gui.main.JSkatFrame;
 
 import org.apache.log4j.Logger;
 
@@ -22,7 +24,7 @@ import org.apache.log4j.Logger;
  */
 public class FlipCardsAction implements ActionListener {
     
-	static Logger log = Logger.getLogger(jskat.gui.main.FlipCardsAction.class);
+	static Logger log = Logger.getLogger(jskat.gui.main.actions.FlipCardsAction.class);
 
 	/**
      * Creates a new instance of FlipCardsAction

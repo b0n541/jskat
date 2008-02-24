@@ -9,7 +9,7 @@ Released: @ReleaseDate@
 
 */
 
-package jskat.gui.main;
+package jskat.gui.main.actions;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -27,7 +27,7 @@ import jskat.gui.options.JSkatOptionsDialog;
  */
 public class OptionsDialogAction implements ActionListener {
     
-    static Logger log = Logger.getLogger(jskat.gui.main.OptionsDialogAction.class);
+    static Logger log = Logger.getLogger(jskat.gui.main.actions.OptionsDialogAction.class);
 
     /**
      * Creates a new instance of OptionsDialogAction

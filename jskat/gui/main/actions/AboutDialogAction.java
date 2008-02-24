@@ -9,7 +9,7 @@ Released: @ReleaseDate@
 
 */
 
-package jskat.gui.main;
+package jskat.gui.main.actions;
 
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -26,6 +26,7 @@ import org.apache.log4j.Logger;
 import java.util.ResourceBundle;
 
 import jskat.data.JSkatDataModel;
+import jskat.gui.main.JSkatFrame;
 
 /**
  * The action for showing the About dialog
@@ -33,7 +34,7 @@ import jskat.data.JSkatDataModel;
  */
 public class AboutDialogAction implements ActionListener {
 
-    private static final Logger log = Logger.getLogger(jskat.gui.main.AboutDialogAction.class);
+    private static final Logger log = Logger.getLogger(jskat.gui.main.actions.AboutDialogAction.class);
     
     /**
      * Creates a new instance of AboutDialogAction
