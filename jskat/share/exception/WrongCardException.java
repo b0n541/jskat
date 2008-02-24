@@ -12,21 +12,17 @@ Released: @ReleaseDate@
 package jskat.share.exception;
 
 /**
- * Is raised when a player plays a card that he doesn't own
- * 
- * @author Jan Sch&auml;fer
- *
+ * RuntimeException for wrong card play
  */
 public class WrongCardException extends RuntimeException {
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 7111950744832918538L;
 
 	/**
-     * 
-     */
+	 * Creates a special RuntimeException for wrong card play
+	 * 
+	 * @param msg Message
+	 */
     public WrongCardException(String msg) {
         super(msg);
     }
