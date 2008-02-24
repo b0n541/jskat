@@ -23,26 +23,23 @@ import jskat.gui.JSkatGraphicRepository;
 import jskat.share.SkatConstants;
 
 /**
- * CardPanel for showing a card
- * 
- * @author Jan Schäfer <jan.schaefer@b0n541.net>
+ * Panel for showing a Card
  */
 public class CardPanel extends JPanel implements Observer {
 
 	static Logger log = Logger.getLogger(CardPanel.class);
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 8931526586921335864L;
 
 	/**
 	 * Creates a new instance of CardPanel
 	 * 
+	 * @param holdingPanel 
+	 * 			  CardHoldingPanel where the CardPanel is hold
 	 * @param jskatBitmaps
-	 *            The JSkatGraphicRepository the holds all images used in JSkat
+	 *            Graphic repository that holds all images used in JSkat
 	 * @param showBack
-	 *            TRUE if the card should hide its face
+	 *            TRUE if the Card should hide its face
 	 */
 	public CardPanel(CardHoldingPanel holdingPanel, JSkatGraphicRepository jskatBitmaps, boolean showBack) {
 
@@ -79,9 +76,9 @@ public class CardPanel extends JPanel implements Observer {
 	 * Sets the card suit and value
 	 * 
 	 * @param newSuit
-	 *            ID of the suit
-	 * @param newValue
-	 *            value of the card
+	 *            New suit of the card
+	 * @param newRank
+	 *            New rank of the card
 	 */
 	public void setCard(SkatConstants.Suits newSuit, SkatConstants.Ranks newRank) {
 
@@ -149,7 +146,7 @@ public class CardPanel extends JPanel implements Observer {
 	}
 
 	/**
-	 * 
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
 	 */
 	public void update(Observable observ, Object obj) {
 

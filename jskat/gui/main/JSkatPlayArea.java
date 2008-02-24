@@ -34,15 +34,10 @@ import jskat.gui.JSkatGraphicRepository;
 import jskat.player.JSkatPlayer;
 
 /**
- * The JSkatPlayArea that holds all CardHoldingPanels and the BiddingPanel
- * 
- * @author Jan Schäfer <jan.schaefer@b0n541.net>
+ * Play area that holds all CardHoldingPanels and the BiddingPanel
  */
 public class JSkatPlayArea extends JPanel implements Observer {
 
-	/**
-	 * 
-	 */
 	private static final Logger log = Logger
 			.getLogger(jskat.gui.main.JSkatPlayArea.class);
 
@@ -314,16 +309,31 @@ public class JSkatPlayArea extends JPanel implements Observer {
 		return panel;
 	}
 
+	/**
+	 * Gets the bidding panel
+	 * 
+	 * @return Bidding panel
+	 */
 	public BiddingPanel getBiddingPanel() {
 
 		return bidPanel;
 	}
 
+	/**
+	 * Gets the trick panel
+	 * 
+	 * @return Trick panel
+	 */
 	public CardHoldingPanel getTrickPanel() {
 
 		return (CardHoldingPanel) trickPanel.getComponent(0);
 	}
 
+	/**
+	 * Gets the skat panel
+	 * 
+	 * @return Skat panel
+	 */
 	public CardHoldingPanel getSkatPanel() {
 
 		return (CardHoldingPanel) skatPanel.getComponent(0);
@@ -347,8 +357,34 @@ public class JSkatPlayArea extends JPanel implements Observer {
 
 	private JPanel playerPanel;
 
+	/**
+	 * Holds all panel types
+	 */
 	private enum PanelTypes {
-		PLAYER_ZERO, PLAYER_ONE, PLAYER_TWO, TRICK, BIDDING, SKAT
+		/**
+		 * Player panel for player 0 (upper left)
+		 */
+		PLAYER_ZERO, 
+		/**
+		 * Player panel for player 1 (upper right)
+		 */
+		PLAYER_ONE, 
+		/**
+		 * Player panel for player 2 (bottom)
+		 */
+		PLAYER_TWO, 
+		/**
+		 * Trick panel (center)
+		 */
+		TRICK, 
+		/**
+		 * Bidding panel (center)
+		 */
+		BIDDING, 
+		/**
+		 * Skat panel (center)
+		 */
+		SKAT
 	}
 
 }

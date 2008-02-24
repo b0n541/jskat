@@ -21,9 +21,7 @@ import jskat.data.JSkatDataModel;
 import jskat.gui.JSkatGraphicRepository;
 
 /**
- * The LastTricksDialog Action for showing the LastTrickDialog
- * 
- * @author Jan Sch&auml;fer
+ * Action for showing the LastTrickDialog
  */
 public class LastTricksDialogAction implements ActionListener {
 

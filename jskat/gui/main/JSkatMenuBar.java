@@ -20,9 +20,7 @@ import jskat.data.JSkatDataModel;
 import jskat.gui.JSkatGraphicRepository;
 
 /**
- * The MenuBar for JSkat
- * 
- * @author Jan Schäfer <jan.schaefer@b0n541.net>
+ * Menu bar for JSkat
  */
 public class JSkatMenuBar extends JMenuBar {
 
@@ -50,7 +48,7 @@ public class JSkatMenuBar extends JMenuBar {
 		initComponents();
 
 		newRoundMenuItem.addActionListener(jskatActions
-				.getNewSkatRoundDialogAction());
+				.getNewSkatSeriesDialogAction());
 		aboutJSkatMenuItem.addActionListener(jskatActions
 				.getAboutDialogAction());
 		helpMenuItem.addActionListener(jskatActions.getHelpDialogAction());

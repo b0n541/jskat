@@ -18,10 +18,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
- * A special table cell renderer for the score table
- * 
- * @author Jan Sch&auml;fer
- * 
+ * Special table cell renderer for the score table
  */
 public class ScoreTableCellRenderer extends DefaultTableCellRenderer {
 
@@ -30,6 +27,9 @@ public class ScoreTableCellRenderer extends DefaultTableCellRenderer {
 	 */
 	private static final long serialVersionUID = 361464758473283201L;
 
+	/**
+	 * @see javax.swing.table.DefaultTableCellRenderer#getTableCellRendererComponent(javax.swing.JTable, java.lang.Object, boolean, boolean, int, int)
+	 */
 	public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column) {
 

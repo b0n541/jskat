@@ -42,18 +42,13 @@ import jskat.share.CardVector;
 import jskat.share.SkatConstants;
 
 /**
- * A JPanel that holds the CardPanels
- * 
- * @author Jan Sch&auml;fer <jan.schaefer@b0n541.net>
+ * Panel that holds the CardPanels
  */
 public class CardHoldingPanel extends JPanel implements Observer {
 
 	private static final Logger log = Logger
 			.getLogger(jskat.gui.main.CardHoldingPanel.class);
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -2913589400367875369L;
 
 	/**
@@ -514,6 +509,11 @@ public class CardHoldingPanel extends JPanel implements Observer {
 		skatTable.cardPanelClicked(panelType, suit, value);
 	}
 
+	/**
+	 * Sets the player name
+	 * 
+	 * @param newName Player name to be set
+	 */
 	public void setPlayerName(String newName) {
 
 		playerName.setText(newName);

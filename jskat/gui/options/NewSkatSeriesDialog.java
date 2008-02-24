@@ -41,15 +41,10 @@ import jskat.data.JSkatDataModel;
 import jskat.share.SkatConstants;
 
 /**
- * The dialog for a new game
- * 
- * @author Jan Sch&auml;fer
+ * Dialog for a new game series
  */
 public class NewSkatSeriesDialog extends JDialog {
 
-	/**
-	 * 
-	 */
 	private static final Logger log = Logger
 			.getLogger(jskat.gui.options.NewSkatSeriesDialog.class);
 
@@ -279,7 +274,11 @@ public class NewSkatSeriesDialog extends JDialog {
 		setLocationRelativeTo(parent);
 	}
 
-	/** Shows the OptionsDialog */
+	/** 
+	 * Shows the OptionsDialog 
+	 *
+	 * @param visible Shows the dialog if set to TRUE
+	 */
 	public void setVisible(boolean visible) {
 
 		if (visible) {

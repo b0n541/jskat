@@ -43,9 +43,7 @@ import jskat.data.JSkatOptions;
 import jskat.data.SkatTableOptions;
 
 /**
- * The Option dialog
- * 
- * @author Jan Sch&auml;fer <jan.schaefer@b0n541.net>
+ * Option dialog
  */
 public class JSkatOptionsDialog extends JDialog {
 
@@ -689,12 +687,24 @@ public class JSkatOptionsDialog extends JDialog {
 		// set all widgets to the values of the JSkatOptions
 		JSkatOptions options = jskatMaster.getJSkatOptions();
 
-		language.setSelectedIndex(options.getLanguage() - 1);
-		if (options.getCardFace() == JSkatOptions.CARD_FACE_FRENCH) {
+		if (options.getLanguage() == JSkatOptions.Languages.GERMAN) {
+			
+			language.setSelectedIndex(0);
+		}
+		else  {
+			
+			language.setSelectedIndex(1);
+		}
+		if (options.getCardFace() == JSkatOptions.CardFaces.FRENCH) {
+			
 			cardFaceFrench.setSelected(true);
-		} else if (options.getCardFace() == JSkatOptions.CARD_FACE_GERMAN) {
+		} 
+		else if (options.getCardFace() == JSkatOptions.CardFaces.GERMAN) {
+			
 			cardFaceGerman.setSelected(true);
-		} else {
+		} 
+		else {
+			
 			cardFaceTournament.setSelected(true);
 		}
 		savePath.setText(options.getSavePath());
@@ -764,7 +774,11 @@ public class JSkatOptionsDialog extends JDialog {
 		}
 	}
 
-	/** Shows the OptionsDialog */
+	/** 
+	 * Shows the OptionsDialog
+	 * 
+	 * @param visible Shows the dialog if set to TRUE
+	 */
 	public void setVisible(boolean visible) {
 
 		if (visible) {
@@ -807,14 +821,24 @@ public class JSkatOptionsDialog extends JDialog {
 	 * 
 	 * @return String of the card face
 	 */
-	public int getCardFace() {
+	public JSkatOptions.CardFaces getCardFace() {
 
-		if (cardFaceFrench.isSelected())
-			return JSkatOptions.CARD_FACE_FRENCH;
-		else if (cardFaceGerman.isSelected())
-			return JSkatOptions.CARD_FACE_GERMAN;
-		else
-			return JSkatOptions.CARD_FACE_TOURNAMENT;
+		JSkatOptions.CardFaces result = null;
+		
+		if (cardFaceFrench.isSelected()) {
+			
+			result = JSkatOptions.CardFaces.FRENCH;
+		}
+		else if (cardFaceGerman.isSelected()) {
+			
+			result = JSkatOptions.CardFaces.GERMAN;
+		}
+		else {
+			
+			result = JSkatOptions.CardFaces.TOURNAMENT;
+		}
+		
+		return result;
 	}
 
 	/**

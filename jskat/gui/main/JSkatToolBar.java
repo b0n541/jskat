@@ -21,9 +21,7 @@ import jskat.gui.JSkatGraphicRepository;
 import jskat.data.JSkatDataModel;
 
 /**
- * The JSkatToolbar
- * 
- * @author Jan Schäfer <jan.schaefer@b0n541.net>
+ * Tool bar for JSkat
  */
 public class JSkatToolBar extends JToolBar {
 
@@ -51,7 +49,7 @@ public class JSkatToolBar extends JToolBar {
 		initComponents();
 
 		newSkatRoundButton.addActionListener(jskatActions
-				.getNewSkatRoundDialogAction());
+				.getNewSkatSeriesDialogAction());
 		aboutJSkatButton.addActionListener(jskatActions.getAboutDialogAction());
 		helpButton.addActionListener(jskatActions.getHelpDialogAction());
 		exitJSkatButton.addActionListener(jskatActions.getExitJSkatAction());

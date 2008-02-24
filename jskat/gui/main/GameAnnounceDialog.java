@@ -35,15 +35,10 @@ import jskat.share.SkatConstants;
 import jskat.data.GameAnnouncement;
 
 /**
- * A dialog for annoucing the next game
- * 
- * @author Jan Sch&auml;fer
+ * Dialog for announcing the next game
  */
 public class GameAnnounceDialog extends JDialog {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -4438019795900464680L;
 
 	/**
@@ -321,7 +316,7 @@ public class GameAnnounceDialog extends JDialog {
 	}
 
 	/**
-	 * Shows the dialog
+	 * @see java.awt.Dialog#setVisible(boolean)
 	 */
 	public void setVisible(boolean visible) {
 

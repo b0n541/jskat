@@ -24,16 +24,18 @@ import jskat.share.SkatConstants;
 import jskat.data.JSkatOptions;
 
 /**
- * The JSkatGraphicRepository that holds all images used in JSkat
- * 
- * @author Jan Sch&auml;fer <jan.schaefer@b0n541.net>
+ * Repository that holds all images used in JSkat
  */
 public class JSkatGraphicRepository extends Observable implements Observer {
 
 	private static final Logger log = Logger
 			.getLogger(jskat.gui.JSkatGraphicRepository.class);
 
-	/** Creates a new instance of JSkatGraphicRepository */
+	/** 
+	 * Creates a new instance of JSkatGraphicRepository 
+	 *
+	 * @param jskatOptions Current JSkatOptions 
+	 */
 	public JSkatGraphicRepository(JSkatOptions jskatOptions) {
 
 		jskatOptions.addObserver(this);
@@ -70,15 +72,17 @@ public class JSkatGraphicRepository extends Observable implements Observer {
 	 * 
 	 * @param cardFace
 	 */
-	private void loadIcons(int cardFace) {
+	private void loadIcons(JSkatOptions.CardFaces cardFace) {
 
-		if (cardFace == JSkatOptions.CARD_FACE_FRENCH) {
+		if (cardFace == JSkatOptions.CardFaces.FRENCH) {
 			
 			loadCards("french");
-		} else if (cardFace == JSkatOptions.CARD_FACE_GERMAN) {
+		} 
+		else if (cardFace == JSkatOptions.CardFaces.GERMAN) {
 			
 			loadCards("german");
-		} else {
+		} 
+		else {
 			
 			loadCards("tournament");
 		}
@@ -302,7 +306,7 @@ public class JSkatGraphicRepository extends Observable implements Observer {
 	}
 
 	/**
-	 * 
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
 	 */
 	public void update(Observable observ, Object obj) {
 		
@@ -310,7 +314,7 @@ public class JSkatGraphicRepository extends Observable implements Observer {
 		
 		if (observ instanceof JSkatOptions) {
 
-			int newCardFace = ((JSkatOptions) observ).getCardFace();
+			JSkatOptions.CardFaces newCardFace = ((JSkatOptions) observ).getCardFace();
 
 			if (cardFace != newCardFace) {
 
@@ -324,7 +328,7 @@ public class JSkatGraphicRepository extends Observable implements Observer {
 		}
 	}
 
-	private int cardFace;
+	private JSkatOptions.CardFaces cardFace;
 
 	private MediaTracker tracker;
 

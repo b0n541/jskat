@@ -32,9 +32,7 @@ import jskat.data.BidStatus;
 import jskat.share.SkatConstants;
 
 /**
- * The BiddingPanel that shows the progress of the bidding
- * 
- * @author Jan Sch&auml;fer
+ * Panel that shows the progress of the bidding
  */
 public class BiddingPanel extends JPanel implements Observer {
 
@@ -297,6 +295,9 @@ public class BiddingPanel extends JPanel implements Observer {
 		}
 	}
 
+	/**
+	 * @see javax.swing.JComponent#setVisible(boolean)
+	 */
 	public void setVisible(boolean b) {
 		
 		log.debug("Setting BiddingPanel visibility to "+b);
@@ -307,6 +308,11 @@ public class BiddingPanel extends JPanel implements Observer {
 		super.setVisible(b);
 	}
 	
+	/**
+	 * Sets the current skat game
+	 * 
+	 * @param newSkatGame Current skat game
+	 */
 	public void setSkatGame(SkatGame newSkatGame) {
 		
 		this.skatGame = newSkatGame;

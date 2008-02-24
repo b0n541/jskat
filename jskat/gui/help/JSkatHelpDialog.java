@@ -32,8 +32,7 @@ import java.util.ResourceBundle;
 import jskat.data.JSkatDataModel;
 
 /**
- * The Help dialog for JSkat
- * @author Jan Schäfer <jan.schaefer@b0n541.net>
+ * Help dialog for JSkat
  */
 public class JSkatHelpDialog extends JDialog {
     
@@ -133,12 +132,14 @@ public class JSkatHelpDialog extends JDialog {
     
     /**
      * Shows the Help dialog
+     * 
+     * @param visible Shows the dialog if set to TRUE 
      */    
     public void setVisible(boolean visible) {
         
-    		if (visible) {
-    			setToInitialState();
-    		}
+		if (visible) {
+			setToInitialState();
+		}
     		
         super.setVisible(visible);
     }

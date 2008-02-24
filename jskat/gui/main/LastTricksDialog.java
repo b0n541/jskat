@@ -53,11 +53,24 @@ public class LastTricksDialog extends JDialog implements Observer {
 
 	static Logger log = Logger.getLogger(jskat.gui.main.LastTricksDialog.class);
 	
+	/**
+	 * Gets an instance of the LastTricksDialog
+	 * 
+	 * @return Reference to the dialog
+	 */
 	public static LastTricksDialog getInstance() {
 		if(myInstance==null) throw new IllegalStateException("LastTricksDialog has not been initialized!");
 		return myInstance;
 	}
 
+	/**
+	 * Creates a new LastTricksDialog
+	 * 
+	 * @param dataModel Data model
+	 * @param jskatBitmaps Graphic repository that holds all graphics used in JSkat
+	 * @param parent Parent frame
+	 * @return Last tricks dialog
+	 */
 	public static LastTricksDialog createInstance(JSkatDataModel dataModel,
 			JSkatGraphicRepository jskatBitmaps, JFrame parent) {
 		return myInstance = new LastTricksDialog(dataModel, jskatBitmaps, parent);
@@ -223,7 +236,9 @@ public class LastTricksDialog extends JDialog implements Observer {
 		setResizable(false);
 	}
 
-	/** Shows the OptionsDialog */
+	/**
+	 * @see java.awt.Dialog#setVisible(boolean)
+	 */
 	public void setVisible(boolean visible) {
 
 		if (visible) {
@@ -292,11 +307,21 @@ public class LastTricksDialog extends JDialog implements Observer {
 		}
 	}
 
-	public void initNewSkatTable(SkatTable skatTable) {
+	/**
+	 * Sets a new skat table
+	 * 
+	 * @param skatTable
+	 */
+	public void setSkatTable(SkatTable skatTable) {
 		this.skatTable = skatTable;
 	}
 
 	
+	/**
+	 * Initializes the dialog for a new game
+	 * 
+	 * @param series Current skat series
+	 */
 	public void initForNewGame(SkatSeries series) {
 		
 		setTitle(dataModel.getResourceBundle().getString("last_tricks"));
@@ -316,12 +341,7 @@ public class LastTricksDialog extends JDialog implements Observer {
 	}
 	
 	/**
-	 * Implementation of the Observer pattern
-	 * 
-	 * @param observ
-	 *            The Observable that is observed
-	 * @param obj
-	 *            The Object that has changed in the Observable
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
 	 */
 	public void update(Observable observ, Object obj) {
 
