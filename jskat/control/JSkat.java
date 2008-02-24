@@ -9,6 +9,8 @@ Released: @ReleaseDate@
 
 */
 
+package jskat.control;
+
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -29,7 +31,6 @@ import java.net.URL;
 
 import jskat.data.JSkatDataModel;
 import jskat.data.JSkatOptions;
-import jskat.control.JSkatMaster;
 import jskat.gui.JSkatGraphicRepository;
 import jskat.gui.main.JSkatFrame;
 import jskat.share.Tools;
