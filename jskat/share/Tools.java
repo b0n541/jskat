@@ -26,16 +26,13 @@ import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.RollingFileAppender;
 
 /**
- * @author Markus J. Luzius <markus@luzius.de>
- * @author Jan Sch&auml;fer <jan.schaefer@b0n541.net>
- * 
+ * Some tools that are used in the whole application and by the skat players
  */
 public class Tools {
 
 	/**
 	 * Makes sure that a log4j appender exists. If no appenders can be found,
 	 * then a simple console logger is created.
-	 * 
 	 */
 	public static void checkLog() {
 		if (log.getAllAppenders() == null
@@ -127,7 +124,13 @@ public class Tools {
 		return sb.append("\n}").toString();
 	}
 
-	public static void setNewLogfile(String filename) {
+	/**
+	 * Sets the name of the new logfile
+	 * 
+	 * @param fileName Name of the new logfile
+	 */
+	public static void setNewLogfile(String fileName) {
+		
 		Logger logCheck = Logger.getRootLogger();
 		Enumeration allAppenders = logCheck.getAllAppenders();
 		while (allAppenders.hasMoreElements()) {
@@ -136,13 +139,20 @@ public class Tools {
 				RollingFileAppender app2 = (RollingFileAppender) app;
 				log.debug("RollingFileAppender: " + app2.getName()
 						+ ": old file " + app2.getFile() + ", new file "
-						+ filename);
-				app2.setFile(filename);
+						+ fileName);
+				app2.setFile(fileName);
 				app2.activateOptions();
 			}
 		}
 	}
 
+	/**
+	 * Checks whether a path exists and creates it if desired
+	 * 
+	 * @param path Name of the path to check
+	 * @param doCreate Create the path if it not exists
+	 * @return TRUE if the path exists or was created successfully
+	 */
 	public static boolean checkPath(String path, boolean doCreate) {
 		boolean result = false;
 		File testFile = new File(path);
@@ -168,10 +178,11 @@ public class Tools {
 	}
 	
 	/**
-	 * Checks whether a number is in a given set of numbers 
-	 * @param toCheck the number that should be checked
-	 * @param list a list, usually defined by new int[] {a, b, c, ...}
-	 * @return
+	 * Checks whether a number is in a given set of numbers
+	 *  
+	 * @param toCheck Number that should be checked
+	 * @param list List of numbers, usually defined by new int[] {a, b, c, ...}
+	 * @return TRUE if the number exists in the list
 	 */
 	public static boolean isIn(int toCheck, int[] list) {
 		for(int i=0;i<list.length;i++) {

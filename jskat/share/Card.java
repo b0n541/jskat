@@ -16,7 +16,7 @@ import jskat.data.GameAnnouncement;
 import org.apache.log4j.Logger;
 
 /**
- * Card class
+ * Playing card
  */
 public class Card {
 
@@ -85,7 +85,12 @@ public class Card {
 		}
 	}
 	
-	/** Creates a new instance of Card */
+	/** 
+	 * Creates a new instance of Card
+	 *  
+	 * @param suit Suit of the card
+	 * @param rank Rank of the card 
+	 */
 	public Card(SkatConstants.Suits suit, SkatConstants.Ranks rank) {
 
 		this.suit = suit;
@@ -93,7 +98,10 @@ public class Card {
 	}
 	
 	/** 
-	 * Compares the Cards whether the suit is the same or not 
+	 * Compares the Cards whether the suit is the same or not
+	 *  
+	 * @param cardToCompare Card to compare to
+	 * @return TRUE if the suits are the same
 	 */
 	public boolean isSameSuit(Card cardToCompare) {
 
@@ -101,7 +109,10 @@ public class Card {
 	}
 
 	/** 
-	 * Compares the Cards whether the value is the same or not 
+	 * Compares the Cards whether the rank is the same or not 
+	 * 
+	 * @param cardToCompare Card to compare to
+	 * @return TRUE if the ranks are the same
 	 */
 	public boolean isSameRank(Card cardToCompare) {
 
@@ -109,7 +120,10 @@ public class Card {
 	}
 
 	/** 
-	 * Compares the Cards whether the value is the same or not 
+	 * Compares the Cards whether the points is the same or not 
+	 * 
+	 * @param cardToCompare Card to compare to 
+	 * @return TRUE if the points are the same
 	 */
 	public boolean isSamePoints(Card cardToCompare) {
 
@@ -117,7 +131,10 @@ public class Card {
 	}
 
 	/** 
-	 * Compares the Cards whether the value is the same or not 
+	 * Compares the Cards whether the order in suit or grand games is the same or not 
+	 * 
+	 * @param cardToCompare Card to compare to
+	 * @return TRUE if the order is the same
 	 */
 	public boolean isSameSuitGrandOrder(Card cardToCompare) {
 
@@ -125,7 +142,10 @@ public class Card {
 	}
 
 	/**
-	 * Compares the Cards whether the value is the same or not 
+	 * Compares the Cards whether the order in null games is the same or not
+	 *  
+	 * @param cardToCompare Card to compare to 
+	 * @return TRUE if the order is the same
 	 */
 	public boolean isSameNullOrder(Card cardToCompare) {
 
@@ -133,7 +153,10 @@ public class Card {
 	}
 
 	/** 
-	 * Compares the Cards whether the value is the same or not 
+	 * Compares the Cards whether the order in Ramsch games is the same or not 
+	 * 
+	 * @param cardToCompare Card to compare to
+	 * @return TRUE if the order is the same
 	 */
 	public boolean isSameRamschOrder(Card cardToCompare) {
 
@@ -141,7 +164,9 @@ public class Card {
 	}
 
 	/** 
-	 * Get the Card suit 
+	 * Get the Card suit
+	 * 
+	 * @return Suit of the card 
 	 */
 	public SkatConstants.Suits getSuit() {
 
@@ -149,7 +174,9 @@ public class Card {
 	}
 
 	/** 
-	 * Get the Card value 
+	 * Get the Card rank
+	 * 
+	 * @return Rank of the card
 	 */
 	public SkatConstants.Ranks getRank() {
 
@@ -158,6 +185,8 @@ public class Card {
 
 	/** 
 	 * Get the Card value for calculations 
+	 * 
+	 * @return Points of the card
 	 */
 	public int getPoints() {
 
@@ -166,6 +195,8 @@ public class Card {
 
 	/** 
 	 * Get the card order value for suit or grand games 
+	 * 
+	 * @return Order of the card in suit or Grand games
 	 */
 	public int getSuitGrandOrder() {
 
@@ -173,7 +204,9 @@ public class Card {
 	}
 
 	/** 
-	 * Get the card order value for null games 
+	 * Get the card order value for null games
+	 * 
+	 * @return Order of the card in null games
 	 */
 	public int getNullOrder() {
 
@@ -182,6 +215,8 @@ public class Card {
 
 	/** 
 	 * Get the card order value for ramsch games 
+	 * 
+	 * @return Order of the card in ramsch games
 	 */
 	public int getRamschOrder() {
 
@@ -197,7 +232,7 @@ public class Card {
 	 * @param cardToCompare
 	 * @param gameType
 	 * @param currentTrumpColor
-	 * @param initialColor
+	 * @param firstCard
 	 * @return TRUE if the card beats the other one
 	 */
 	public boolean beats(Card cardToCompare, SkatConstants.GameTypes gameType,
@@ -214,6 +249,8 @@ public class Card {
 	/**
 	 * Checks whether the card beats another given card under the current game
 	 * type and trump color with respect to the initial card on the table
+	 * 
+	 * @deprecated
 	 * 
 	 * @param cardToCompare
 	 * @param gameAnnouncement
@@ -343,6 +380,8 @@ public class Card {
 	/**
 	 * Checks whether a Card is a trump card or not
 	 * 
+	 * @deprecated
+	 * 
 	 * @param gameType The game type within the card is checked
 	 * @param trumpColor The trump color, only needed in suit games
 	 * @return TRUE, when the card is a trump card
@@ -421,8 +460,4 @@ public class Card {
 	 * Rank of the card
 	 */
 	private final SkatConstants.Ranks rank;
-//	/**
-//	 * Calculation value for the player points
-//	 */
-//	private int calcValue;
 }

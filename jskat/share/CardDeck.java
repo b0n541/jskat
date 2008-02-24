@@ -14,9 +14,7 @@ package jskat.share;
 import jskat.share.SkatConstants;
 
 /**
- * CardDeck class representing a complete card deck for Skat
- *
- * @author  Jan Schäfer <jan.schaefer@b0n541.net>
+ * Represents a complete card deck for Skat
  */
 public class CardDeck extends CardVector {
     
