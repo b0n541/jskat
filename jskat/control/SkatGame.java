@@ -112,7 +112,7 @@ public class SkatGame extends Observable {
 			// actually, this code should never be executed
 			// as passed in games are already considered in showSkat()
 
-			if (skatTableOptions.getRules() == SkatTableOptions.PUB_RULES
+			if (skatTableOptions.getRules() == SkatTableOptions.RuleSets.PUB
 					&& skatTableOptions.isPlayRamsch()
 					&& skatTableOptions.isRamschEventNoBid()) {
 
@@ -149,29 +149,29 @@ public class SkatGame extends Observable {
 		// TODO (mjl) Make a better game announcement
 		String trumpColorText = new String();
 
-		int cardFace = jskatOptions.getCardFace();
+		JSkatOptions.CardFaces cardFace = jskatOptions.getCardFace();
 		SkatConstants.Suits trump = gameData.getTrump();
 
 		if (trump == SkatConstants.Suits.CLUBS) {
 
-			if (cardFace == JSkatOptions.CARD_FACE_FRENCH) {
-
-				trumpColorText = jskatStrings.getString("clubs");
-
-			} else if (cardFace == JSkatOptions.CARD_FACE_GERMAN) {
+			if (cardFace == JSkatOptions.CardFaces.GERMAN) {
 
 				trumpColorText = jskatStrings.getString("acorns");
+			}
+			else {
+				
+				trumpColorText = jskatStrings.getString("clubs");
 			}
 		}
 		else if (trump == SkatConstants.Suits.SPADES) {
 
-			if (cardFace == JSkatOptions.CARD_FACE_FRENCH) {
-
-				trumpColorText = jskatStrings.getString("spades");
-
-			} else if (cardFace == JSkatOptions.CARD_FACE_GERMAN) {
+			if (cardFace == JSkatOptions.CardFaces.GERMAN) {
 
 				trumpColorText = jskatStrings.getString("greens");
+			}
+			else {
+				
+				trumpColorText = jskatStrings.getString("spades");
 			}
 		}
 		else if (trump == SkatConstants.Suits.HEARTS) {
@@ -180,13 +180,13 @@ public class SkatGame extends Observable {
 		}
 		else if (trump == SkatConstants.Suits.DIAMONDS) {
 
-			if (cardFace == JSkatOptions.CARD_FACE_FRENCH) {
-
-				trumpColorText = jskatStrings.getString("diamonds");
-
-			} else if (cardFace == JSkatOptions.CARD_FACE_GERMAN) {
-
+			if (cardFace == JSkatOptions.CardFaces.GERMAN) {
+				
 				trumpColorText = jskatStrings.getString("bells");
+			}
+			else {
+				
+				trumpColorText = jskatStrings.getString("diamonds");
 			}
 		}
 
@@ -310,7 +310,7 @@ public class SkatGame extends Observable {
 		gameData.setTrump(null);
 
 		// first ask if anyone wants to play a grand hand
-		if (skatTableOptions.getRules() == SkatTableOptions.PUB_RULES
+		if (skatTableOptions.getRules() == SkatTableOptions.RuleSets.PUB
 				&& skatTableOptions.isPlayRamsch() == true
 				&& skatTableOptions.isRamschGrandHandPossible() == true) {
 
@@ -370,7 +370,7 @@ public class SkatGame extends Observable {
 			log.debug("No one wants to play a grand hand...");
 		}
 
-		if (skatTableOptions.getRules() == SkatTableOptions.PUB_RULES
+		if (skatTableOptions.getRules() == SkatTableOptions.RuleSets.PUB
 				&& skatTableOptions.isPlayRamsch() == true
 				&& skatTableOptions.isSchieberRamsch() == true) {
 
@@ -463,11 +463,11 @@ public class SkatGame extends Observable {
 
 		if (true) {
 
-			if (skatTableOptions.getRamschSkat() == SkatTableOptions.SKAT_TO_LOSER) {
+			if (skatTableOptions.getRamschSkat() == SkatTableOptions.RamschSkatOwners.LOSER) {
 
 				scoreMessage.append(jskatStrings.getString("skat_to_loser"));
 
-			} else if (skatTableOptions.getRamschSkat() == SkatTableOptions.SKAT_TO_LAST_TRICK) {
+			} else if (skatTableOptions.getRamschSkat() == SkatTableOptions.RamschSkatOwners.LAST_TRICK) {
 
 				scoreMessage.append(jskatStrings
 						.getString("skat_to_last_trick"));
@@ -820,7 +820,7 @@ public class SkatGame extends Observable {
 						+ skatTableOptions.getRamschSkat());
 				// check options, if ramsch skat goes to the winner of the final
 				// trick
-				if (skatTableOptions.getRamschSkat() == SkatTableOptions.SKAT_TO_LAST_TRICK) {
+				if (skatTableOptions.getRamschSkat() == SkatTableOptions.RamschSkatOwners.LAST_TRICK) {
 
 					log
 							.debug("Ramsch game - skat goes to winner of the last trick: "
@@ -1040,7 +1040,7 @@ public class SkatGame extends Observable {
 			// Was any bidding done?
 			if (gameData.getBidValue() < 18) {
 				// check if ramsch should be played
-				if (jskatOptions.getRules() == SkatTableOptions.PUB_RULES
+				if (jskatOptions.getRules() == SkatTableOptions.RuleSets.PUB
 						&& jskatOptions.isPlayRamsch()
 						&& jskatOptions.isRamschEventNoBid()) {
 

@@ -63,7 +63,16 @@ public class JSkatMaster extends Observable {
 	 */
 	public void setJSkatOptions(JSkatOptionsDialog optionsDialog) {
 
-		jskatOptions.setLanguage(optionsDialog.getLanguage() + 1);
+		switch (optionsDialog.getLanguage() + 1) {
+			case 1:
+				jskatOptions.setLanguage(JSkatOptions.Languages.GERMAN);
+				break;
+			case 2:
+				jskatOptions.setLanguage(JSkatOptions.Languages.ENGLISH);
+				break;
+			default:
+				jskatOptions.setLanguage(JSkatOptions.Languages.ENGLISH);
+		}
 		jskatOptions.setCardFace(optionsDialog.getCardFace());
 		jskatOptions.setSavePath(optionsDialog.getSavePath());
 		jskatOptions.setTrickRemoveDelayTime(optionsDialog

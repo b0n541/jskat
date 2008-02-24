@@ -166,7 +166,7 @@ public class SkatTable extends Observable implements Observer {
 			notifyObservers(series);
 
 			// TODO (28.05.07 mjl): This is a "dirty" initialization of LastTricksDialog!!!
-			LastTricksDialog.getInstance().initNewSkatTable(this);
+			LastTricksDialog.getInstance().setSkatTable(this);
 
 			setState(SERIES_STARTED);
 

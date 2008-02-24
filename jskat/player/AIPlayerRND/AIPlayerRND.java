@@ -22,11 +22,20 @@ import jskat.data.GameAnnouncement;
 import jskat.player.AbstractJSkatPlayer;
 import jskat.player.JSkatPlayer;
 
+/**
+ * Random player for testing
+ * 
+ * @author Jan Sch&auml;fer <j@nschaefer.net>
+ */
 public class AIPlayerRND extends AbstractJSkatPlayer implements JSkatPlayer {
 
 	private static final Logger log = Logger.getLogger(AIPlayerRND.class);
 
-	/** Creates a new instance of SkatPlayer */
+	/** 
+	 * Creates a new instance of AIPlayerRND
+	 *  
+	 * @param playerID Player ID for the player 
+	 */
 	public AIPlayerRND(int playerID) {
 
 		super();
@@ -35,14 +44,21 @@ public class AIPlayerRND extends AbstractJSkatPlayer implements JSkatPlayer {
 		setPlayerName("Nobody");
 	}
 
-	/** Creates a new instance of SkatPlayer */
+	/** 
+	 * Creates a new instance of AIPlayerRND 
+	 */
 	public AIPlayerRND() {
 
 		super();
 		log.debug("Constructing new AIPlayerRND");
 	}
 
-	/** Creates a new instance of SkatPlayer */
+	/** 
+	 * Creates a new instance of AIPlayerRND
+	 * 
+	 * @param playerID Player ID for the player 
+	 * @param playerName Player's name
+	 */
 	public AIPlayerRND(int playerID, String playerName) {
 
 		super();
@@ -51,31 +67,46 @@ public class AIPlayerRND extends AbstractJSkatPlayer implements JSkatPlayer {
 		setPlayerName(playerName);
 	}
 
+	/**
+	 * @see jskat.player.JSkatPlayer#takeRamschSkat(jskat.share.CardVector, boolean)
+	 */
 	public void takeRamschSkat(CardVector skat, boolean jacksAllowed) {
 
 	}
 
+	/**
+	 * @see jskat.player.JSkatPlayer#lookIntoSkat(boolean)
+	 */
 	public boolean lookIntoSkat(boolean isRamsch) {
 		
 		return rand.nextBoolean();
 	}
 
+	/**
+	 * @see jskat.player.JSkatPlayer#announceGame()
+	 */
 	public GameAnnouncement announceGame() {
 
 		GameAnnouncement newGame = new GameAnnouncement();
 
 		newGame.setGameType(SkatConstants.GameTypes.SUIT);
-		newGame.setTrump(cards.getMostFrequentSuitColor());
+		newGame.setTrump(cards.getMostFrequentSuit());
 		newGame.setOuvert(rand.nextBoolean());
 
 		return newGame;
 	}
 
+	/**
+	 * @see jskat.player.JSkatPlayer#bidMore(int)
+	 */
 	public boolean bidMore(int currBidValue) {
 
 		return rand.nextBoolean();
 	}
 
+	/**
+	 * @see jskat.player.JSkatPlayer#playCard(jskat.share.CardVector)
+	 */
 	public Card playCard(CardVector trick) {
 
 		int index = -1;
@@ -111,15 +142,24 @@ public class AIPlayerRND extends AbstractJSkatPlayer implements JSkatPlayer {
 		return cards.remove(index);
 	}
 
+	/**
+	 * @see jskat.player.AbstractJSkatPlayer#showTrick(jskat.share.CardVector, int)
+	 */
 	public void showTrick(CardVector trick, int trickWinner) {
 		// just ignore it
 	}
 
+	/**
+	 * @see jskat.player.JSkatPlayer#isAIPlayer()
+	 */
 	public boolean isAIPlayer() {
 
 		return true;
 	}
 
+	/**
+	 * @see jskat.player.JSkatPlayer#isHumanPlayer()
+	 */
 	public boolean isHumanPlayer() {
 
 		return false;

@@ -33,8 +33,8 @@ public class Bidding {
 		int mostFrequentSuitColorValue = 0;
 		int multiplier = Helper.getMultiplier(cards);
         
-		mostFrequentSuitColor = cards.getMostFrequentSuitColor();
-		int noOfTrumps = cards.getSuitColorCount(mostFrequentSuitColor);
+		mostFrequentSuitColor = cards.getMostFrequentSuit();
+		int noOfTrumps = cards.getSuitCount(SkatConstants.GameTypes.SUIT, mostFrequentSuitColor);
 		int noOfJacks = Helper.countJacks(cards);
         
 		if (mostFrequentSuitColor == SkatConstants.Suits.CLUBS) {

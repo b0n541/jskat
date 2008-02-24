@@ -92,15 +92,15 @@ public class RamschSkatProcessor {
     	log.debug("\n================================================================\n\n");
     	// TODO (mjl) check for potential Durchmarsch when processing the skat
         log.debug("My cards:"+cards+", Skat="+skat);
-        int cDiamonds = cards.getSuitColorCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.DIAMONDS);
-        int cHearts = cards.getSuitColorCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.HEARTS);
-        int cSpades = cards.getSuitColorCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.SPADES);
-        int cClubs = cards.getSuitColorCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.CLUBS);
+        int cDiamonds = cards.getSuitCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.DIAMONDS);
+        int cHearts = cards.getSuitCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.HEARTS);
+        int cSpades = cards.getSuitCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.SPADES);
+        int cClubs = cards.getSuitCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.CLUBS);
         
-        cDiamonds += skat.getSuitColorCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.DIAMONDS);
-        cHearts   += skat.getSuitColorCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.HEARTS);
-        cSpades   += skat.getSuitColorCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.SPADES);
-        cClubs    += skat.getSuitColorCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.CLUBS);
+        cDiamonds += skat.getSuitCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.DIAMONDS);
+        cHearts   += skat.getSuitCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.HEARTS);
+        cSpades   += skat.getSuitCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.SPADES);
+        cClubs    += skat.getSuitCount(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.CLUBS);
         
         log.debug("#: C="+cClubs+", S="+cSpades+", H="+cHearts+", D="+cDiamonds);
         
@@ -153,7 +153,7 @@ public class RamschSkatProcessor {
             }
             else {
                 log.debug("Color for skat:"+skatSuit);
-                if(skatOne.getSuit() == skatSuit || cards.getSuitColorCount(SkatConstants.GameTypes.RAMSCH, skatSuit)<1) {
+                if(skatOne.getSuit() == skatSuit || cards.getSuitCount(SkatConstants.GameTypes.RAMSCH, skatSuit)<1) {
                 	if(skatOne.getRank()==SkatConstants.Ranks.JACK) {
                 		int index = 0;
                 		while(cards.getCard(index).getRank()==SkatConstants.Ranks.JACK) index++;
@@ -166,7 +166,7 @@ public class RamschSkatProcessor {
                     skat.add(cards.remove(cards.getFirstIndexOfSuit(skatSuit)));
                     cards.add(skatOne);
                 }
-                if(skatTwo.getSuit()==skatSuit || cards.getSuitColorCount(SkatConstants.GameTypes.RAMSCH, skatSuit)<1) {
+                if(skatTwo.getSuit()==skatSuit || cards.getSuitCount(SkatConstants.GameTypes.RAMSCH, skatSuit)<1) {
                 	if(skatTwo.getRank()==SkatConstants.Ranks.JACK) {
                 		int index = 0;
                 		while(cards.getCard(index).getRank()==SkatConstants.Ranks.JACK) index++;

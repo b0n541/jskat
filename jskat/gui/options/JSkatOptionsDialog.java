@@ -720,7 +720,7 @@ public class JSkatOptionsDialog extends JDialog {
 		} else {
 			cheatDebugModeNo.setSelected(true);
 		}
-		if (options.getRules() == SkatTableOptions.ISPA_RULES) {
+		if (options.getRules() == SkatTableOptions.RuleSets.ISPA) {
 			officialRules.setSelected(true);
 		} else {
 			pubRules.setSelected(true);
@@ -761,7 +761,7 @@ public class JSkatOptionsDialog extends JDialog {
 		if (options.isRamschGrandHandPossible()) {
 			ramschGrandHandPossible.setSelected(true);
 		}
-		if (options.getRamschSkat() == SkatTableOptions.SKAT_TO_LAST_TRICK) {
+		if (options.getRamschSkat() == SkatTableOptions.RamschSkatOwners.LAST_TRICK) {
 			ramschSkatLastTrick.setSelected(true);
 		} else {
 			ramschSkatLoser.setSelected(true);
@@ -902,12 +902,12 @@ public class JSkatOptionsDialog extends JDialog {
 	 * 
 	 * @return The state of the radio button group
 	 */
-	public int getRules() {
+	public SkatTableOptions.RuleSets getRules() {
 
 		if (officialRules.isSelected())
-			return SkatTableOptions.ISPA_RULES;
+			return SkatTableOptions.RuleSets.ISPA;
 		else
-			return SkatTableOptions.PUB_RULES;
+			return SkatTableOptions.RuleSets.PUB;
 	}
 
 	/**
@@ -1005,15 +1005,15 @@ public class JSkatOptionsDialog extends JDialog {
 	 * 
 	 * @return The state of the radio button group
 	 */
-	public int getRamschSkat() {
+	public SkatTableOptions.RamschSkatOwners getRamschSkat() {
 
 		if (ramschSkatLastTrick.isSelected()) {
 			
-			return SkatTableOptions.SKAT_TO_LAST_TRICK;
+			return SkatTableOptions.RamschSkatOwners.LAST_TRICK;
 
 		} else {
 			
-			return SkatTableOptions.SKAT_TO_LOSER;
+			return SkatTableOptions.RamschSkatOwners.LOSER;
 		}
 	}
 
