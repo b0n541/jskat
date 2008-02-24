@@ -17,10 +17,17 @@ import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
 
+/**
+ * Implementation of skat rules for Suit games
+ *
+ */
 public class SkatRulesSuit extends SkatRulesSuitGrand implements SkatRules {
 
 	static Logger log = Logger.getLogger(jskat.share.rules.SkatRulesSuit.class);
 
+	/**
+	 * @see jskat.share.rules.SkatRulesSuitGrand#getGameResult(jskat.data.SkatGameData)
+	 */
 	@Override
 	public int getGameResult(SkatGameData gameData) {
 
@@ -149,6 +156,9 @@ public class SkatRulesSuit extends SkatRulesSuitGrand implements SkatRules {
 		return result;
 	}
 
+	/**
+	 * @see jskat.share.rules.SkatRulesSuitGrand#isCardAllowed(jskat.share.Card, jskat.share.CardVector, jskat.share.Card, jskat.share.SkatConstants.Suits)
+	 */
 	@Override
 	public boolean isCardAllowed(Card card, CardVector hand, Card initialCard,
 			SkatConstants.Suits trump) {
@@ -156,6 +166,9 @@ public class SkatRulesSuit extends SkatRulesSuitGrand implements SkatRules {
 		return false;
 	}
 
+	/**
+	 * @see jskat.share.rules.SkatRulesSuitGrand#isCardBeats(jskat.share.Card, jskat.share.Card, jskat.share.Card)
+	 */
 	@Override
 	public boolean isCardBeats(Card card, Card cardToBeat, Card initialTrickCard) {
 		// TODO Auto-generated method stub
