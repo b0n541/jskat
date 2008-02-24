@@ -31,15 +31,17 @@ import org.apache.log4j.Logger;
 
 /**
  * SkatTable controls a SkatSeries
- * 
- * @author Jan Sch&auml;fer <j@nschaefer.net>
- * 
  */
 public class SkatTable extends Observable implements Observer {
 
 	private static final Logger log = Logger
 			.getLogger(jskat.control.SkatTable.class);
 
+	/**
+	 * Constructor
+	 * 
+	 * @param dataModel The JSkatDataModel
+	 */
 	public SkatTable(JSkatDataModel dataModel) {
 
 		// initialize all variables
@@ -57,6 +59,11 @@ public class SkatTable extends Observable implements Observer {
 		log.debug("SkatTable is ready.");
 	}
 
+	/**
+	 * Gets the player objects sitting on the table
+	 * 
+	 * @return Players
+	 */
 	public JSkatPlayer[] getPlayers() {
 		return players;
 	}
@@ -101,6 +108,10 @@ public class SkatTable extends Observable implements Observer {
 
 	/**
 	 * Starts a new skat series at this table
+	 * 
+	 * @param numberOfRounds Maximal number of rounds to be played 
+	 * @param playerNames Names of the players
+	 * @param playerClasses Class names of the players
 	 * 
 	 * @return TRUE, if the new series has started successfully Otherwise, FALSE
 	 */
@@ -192,9 +203,9 @@ public class SkatTable extends Observable implements Observer {
 	 *            ID of the CardHoldingPanel that holds the card that was
 	 *            clicked
 	 * @param suit
-	 *            suit of the card that was clicked
-	 * @param value
-	 *            value of the card that was clicked
+	 *            Suit of the card that was clicked
+	 * @param rank
+	 *            Rank of the card that was clicked
 	 */
 	public void cardPanelClicked(int panelType, SkatConstants.Suits suit, SkatConstants.Ranks rank) {
 
@@ -259,6 +270,8 @@ public class SkatTable extends Observable implements Observer {
 
 	/**
 	 * Gets the table options
+	 * 
+	 * @return Table options
 	 */
 	public SkatTableOptions getSkatTableOptions() {
 
@@ -275,6 +288,9 @@ public class SkatTable extends Observable implements Observer {
 		return tableData;
 	}
 
+	/**
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
 	public void update(Observable o, Object arg) {
 		
 		if (o instanceof SkatSeries) {

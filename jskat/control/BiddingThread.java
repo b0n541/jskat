@@ -20,9 +20,8 @@ import jskat.player.JSkatPlayer;
 import jskat.player.HumanPlayer;
 
 /**
- * BiddingThread
- * 
- * @author Jan Sch&auml;fer <jan.schaefer@b0n541.net>
+ * Controls the bidding
+ * Implements Singleton pattern
  */
 public class BiddingThread implements Runnable {
 
@@ -37,15 +36,25 @@ public class BiddingThread implements Runnable {
 	 * @return Instance of BiddingThread
 	 */
 	public static BiddingThread getInstance(JSkatDataModel dataModel, SkatGame game, int[] playerOrder) {
+		
 		if(myself==null) {
+			
 			myself = new BiddingThread(dataModel, game, playerOrder);
 		}
 		else {
+			
 			myself.resetBiddingThread(dataModel, game, playerOrder);
 		}
 		return myself;
 	}
 	
+	/**
+	 * Constructor is private because of Singleton pattern
+	 * 
+	 * @param dataModel The JSkatDataModel
+	 * @param game Current game
+	 * @param playerOrder Player order
+	 */
 	private BiddingThread(JSkatDataModel dataModel, SkatGame game, int[] playerOrder) {
 		this.dataModel = dataModel;
 		this.skatGame = game;

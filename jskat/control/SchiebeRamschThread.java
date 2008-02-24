@@ -26,8 +26,6 @@ import jskat.player.JSkatPlayer;
 
 /**
  * Controls the Schieberramsch
- * 
- * @author Jan Sch&auml;fer
  */
 public class SchiebeRamschThread implements Runnable {
 
@@ -37,14 +35,19 @@ public class SchiebeRamschThread implements Runnable {
 	/**
 	 * Initializes the SchiebeRamschThread
 	 * 
-	 * @param dataModel
+	 * @param dataModel The JSkatDataModel
 	 */
 	public static void init(JSkatDataModel dataModel) {
+		
 		SchiebeRamschThread.dataModel = dataModel;
 		jskatStrings = dataModel.getResourceBundle();
 	}
 	
-	/** Creates a new instance of SchieberRamschThread */
+	/** 
+	 * Creates a new instance of SchieberRamschThread
+	 *  
+	 * @param game The current skat game 
+	 */
 	public SchiebeRamschThread(SkatGame game) {
 
 		this.skatGame = game;
@@ -67,7 +70,6 @@ public class SchiebeRamschThread implements Runnable {
 
 	/**
 	 * Is called if the user has looked into the skat
-	 * 
 	 */
 	public void notifyMe() {
 
@@ -204,7 +206,6 @@ public class SchiebeRamschThread implements Runnable {
 
 	/**
 	 * Thread waits until an exception occurs
-	 * 
 	 */
 	private synchronized void waitMe() {
 

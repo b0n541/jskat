@@ -21,10 +21,7 @@ import jskat.data.JSkatOptions;
 import jskat.gui.options.JSkatOptionsDialog;
 
 /**
- * The JSkatMaster controls the whole application and all events
- * 
- * @author Jan Sch&auml;fer
- * @author Markus Luzius
+ * Controls the whole application and all events
  */
 public class JSkatMaster extends Observable {
 
@@ -49,7 +46,11 @@ public class JSkatMaster extends Observable {
 		currSkatTable = -1;
 	}
 
-	/** Gets the JSkatOptions */
+	/** 
+	 * Gets the JSkatOptions
+	 *  
+	 * @return Current options 
+	 */
 	public JSkatOptions getJSkatOptions() {
 
 		return jskatOptions;

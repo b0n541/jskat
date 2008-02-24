@@ -26,6 +26,9 @@ import jskat.gui.main.JSkatFrame;
 import jskat.gui.main.LastTricksDialog;
 import jskat.player.JSkatPlayer;
 
+/**
+ * Controls a skat series
+ */
 public class SkatSeries extends Observable implements Observer {
 
 	private static final Logger log = Logger
@@ -87,6 +90,7 @@ public class SkatSeries extends Observable implements Observer {
 	/**
 	 * Starts the skat series
 	 * 
+	 * @return TRUE if the start was successful
 	 */
 	public boolean startPlaying() {
 		
@@ -181,14 +185,32 @@ public class SkatSeries extends Observable implements Observer {
 	private JSkatDataModel dataModel;
 	private ResourceBundle jskatStrings;
 	
+	/**
+	 * All skat series states
+	 *
+	 */
 	public enum SeriesStates {
-		NEW_SERIES, NEW_GAME, SERIES_FINISHED
+		/**
+		 * Series started
+		 */
+		NEW_SERIES, 
+		/**
+		 * New game started
+		 */
+		NEW_GAME, 
+		/**
+		 * Series finished
+		 */
+		SERIES_FINISHED
 	}
 	
 	private SeriesStates state;
 
 	private SkatSeriesData skatSeriesData;
 
+	/**
+	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
+	 */
 	public void update(Observable observ, Object obj) {
 		
 		// log.debug("UPDATE " + observ + ": " + obj + " has changed...");

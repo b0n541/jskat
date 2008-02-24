@@ -44,17 +44,22 @@ import jskat.test.share.TestHelper;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Controls a skat game
+ */
 public class SkatGame extends Observable {
 
 	private static final Logger log = Logger
 			.getLogger(jskat.control.SkatGame.class);
 
 	/**
+	 * Constructor
 	 * 
 	 * @param dataModel
 	 *            The data model of JSkat
 	 * @param skatSeries
 	 *            The skat series where the game is played
+	 * @param dealer ID of the dealer
 	 */
 	public SkatGame(JSkatDataModel dataModel, SkatSeries skatSeries, int dealer) {
 
@@ -1050,7 +1055,7 @@ public class SkatGame extends Observable {
 								JOptionPane.INFORMATION_MESSAGE);
 					}
 
-					setState(GameState.DOING_SCHIEBERRAMSCH);
+					setState(GameState.SCHIEBERRAMSCH);
 					prepareRamschGame();
 
 				} else {
@@ -1253,9 +1258,9 @@ public class SkatGame extends Observable {
 	 * after the human player
 	 * 
 	 * @param suit
-	 *            suit for human card
-	 * @param value
-	 *            value for human card
+	 *            suit of human card
+	 * @param rank
+	 *            rank of human card
 	 */
 	protected void playTrickCard(SkatConstants.Suits suit, SkatConstants.Ranks rank) {
 
@@ -1361,8 +1366,8 @@ public class SkatGame extends Observable {
 	/**
 	 * Puts a card into the skat
 	 * 
-	 * @param suit
-	 * @param value
+	 * @param suit Suit of the card
+	 * @param rank Rank of the card
 	 */
 	protected void putCardIntoSkat(SkatConstants.Suits suit, SkatConstants.Ranks rank) {
 
@@ -1378,8 +1383,8 @@ public class SkatGame extends Observable {
 	/**
 	 * Gives a card from the skat to a player
 	 * 
-	 * @param suit
-	 * @param value
+	 * @param suit Suit of the card
+	 * @param rank Rank of the card
 	 */
 	protected void takeCardFromSkat(SkatConstants.Suits suit, SkatConstants.Ranks rank) {
 
@@ -1412,6 +1417,11 @@ public class SkatGame extends Observable {
 		return (gameData.getPlayers()[2].isHumanPlayer());
 	}
 
+	/**
+	 * Gets the order of the players
+	 * 
+	 * @return Player order
+	 */
 	public int[] getPlayerOrder() {
 
 		return playerOrder;
@@ -1462,11 +1472,23 @@ public class SkatGame extends Observable {
 		}
 	}
 
+	/**
+	 * Gets the ID of the dealer
+	 * 
+	 * @return ID of the dealer
+	 */
 	public int getDealer() {
+		
 		return dealer;
 	}
 
+	/**
+	 * Gets the current skat options of the table
+	 * 
+	 * @return Skat options of the table
+	 */
 	public SkatTableOptions getSkatTableOptions() {
+		
 		return skatTableOptions;
 	}
 
@@ -1475,10 +1497,62 @@ public class SkatGame extends Observable {
 	 * 
 	 */
 	public enum GameState {
-		CREATED, INITIALISED, STARTED, DEALING, BIDDING, SHOWING_SKAT,
-		DOING_SCHIEBERRAMSCH, PLAYING, AI_PLAYER_PLAYING, 
-		WAIT_FOR_HUMAN_PLAYER_INPUT, TRICK_COMPLETED, NEW_TRICK_STARTED,
-		GAME_OVER, WAIT_FOR_NEXT_GAME
+		/**
+		 * Game created
+		 */
+		CREATED,
+		/**
+		 * Variables initialized
+		 */
+		INITIALISED,
+		/**
+		 * Game started
+		 */
+		STARTED,
+		/**
+		 * Dealing in progress
+		 */
+		DEALING,
+		/**
+		 * Bidding in progress
+		 */
+		BIDDING, 
+		/**
+		 * Skat is shown to a player
+		 */
+		SHOWING_SKAT,
+		/**
+		 * Schieberamsch in progress
+		 */
+		SCHIEBERRAMSCH, 
+		/**
+		 * Trick playing in progress
+		 */
+		PLAYING, 
+		/**
+		 * AI player is playing
+		 */
+		AI_PLAYER_PLAYING, 
+		/**
+		 * Human player is playing
+		 */
+		WAIT_FOR_HUMAN_PLAYER_INPUT, 
+		/**
+		 * Trick completed
+		 */
+		TRICK_COMPLETED, 
+		/**
+		 * Next trick started
+		 */
+		NEW_TRICK_STARTED,
+		/**
+		 * Game over
+		 */
+		GAME_OVER, 
+		/**
+		 * Waiting for next game
+		 */
+		WAIT_FOR_NEXT_GAME
 	}
 
 	private GameState gameState;
