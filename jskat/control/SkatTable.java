@@ -52,7 +52,7 @@ public class SkatTable extends Observable implements Observer {
 		tableData = new SkatTableData();
 		player = new Vector<JSkatPlayer>();
 		state = NEW_SERIES;
-		SchieberRamschThread.init(dataModel);
+		SchiebeRamschThread.init(dataModel);
 		
 		log.debug("SkatTable is ready.");
 	}

@@ -29,18 +29,23 @@ import jskat.player.JSkatPlayer;
  * 
  * @author Jan Sch&auml;fer
  */
-public class SchieberRamschThread implements Runnable {
+public class SchiebeRamschThread implements Runnable {
 
 	private static final Logger log = Logger
 			.getLogger(jskat.control.JSkatMaster.class);
 
+	/**
+	 * Initializes the SchiebeRamschThread
+	 * 
+	 * @param dataModel
+	 */
 	public static void init(JSkatDataModel dataModel) {
-		SchieberRamschThread.dataModel = dataModel;
+		SchiebeRamschThread.dataModel = dataModel;
 		jskatStrings = dataModel.getResourceBundle();
 	}
 	
 	/** Creates a new instance of SchieberRamschThread */
-	public SchieberRamschThread(SkatGame game) {
+	public SchiebeRamschThread(SkatGame game) {
 
 		this.skatGame = game;
 		isInterruptable = false;

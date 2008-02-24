@@ -369,8 +369,8 @@ public class SkatGame extends Observable {
 				&& skatTableOptions.isPlayRamsch() == true
 				&& skatTableOptions.isSchieberRamsch() == true) {
 
-			schieberRamschThread = new SchieberRamschThread(this);
-			schieberRamschThread.start();
+			schiebeRamschThread = new SchiebeRamschThread(this);
+			schiebeRamschThread.start();
 		} else {
 
 			// when no Schieberramsch is played
@@ -1012,7 +1012,7 @@ public class SkatGame extends Observable {
 	 */
 	public void notifySchieberRamschThread() {
 
-		schieberRamschThread.notifyMe();
+		schiebeRamschThread.notifyMe();
 	}
 
 	/**
@@ -1511,7 +1511,7 @@ public class SkatGame extends Observable {
 	/** Does the bidding */
 	private BiddingThread bidThread;
 
-	private SchieberRamschThread schieberRamschThread;
+	private SchiebeRamschThread schiebeRamschThread;
 
 	private int[] playerOrder = { 0, 1, 2 };
 
