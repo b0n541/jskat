@@ -81,7 +81,9 @@ public class SkatSeriesData extends Observable {
 	}
 
 	/**
-	 * Get the data of the current skat game
+	 * Gets the data of the current skat game
+	 * 
+	 * @return Data of the current skat game
 	 */
 	public SkatGameData getCurrGameData() {
 
@@ -371,10 +373,25 @@ public class SkatSeriesData extends Observable {
 	private int seriesState;
 
 	/**
-	 * Enum type for all series states
+	 * Holds all skat series states
 	 */
-	public enum SeriesStates {NEW_SERIES, PLAYERS_READY, 
-								GAMES_IN_PROGRESS, SERIES_FINISHED};
+	public enum SeriesStates {
+		/**
+		 * New series started
+		 */
+		NEW_SERIES, 
+		/**
+		 * Players are ready to play
+		 */
+		PLAYERS_READY,
+		/**
+		 * Games are in progress
+		 */
+		GAMES_IN_PROGRESS, 
+		/**
+		 * Series has finished
+		 */
+		SERIES_FINISHED};
 
 	/**
 	 * Number of ramsch games still to be played

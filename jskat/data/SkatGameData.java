@@ -77,19 +77,29 @@ public class SkatGameData extends Observable {
 	 * Sets the result of the game manually (for overbidded games) 
 	 *
 	 * @deprecated
+	 * 
+	 * @param result Result of the game
 	 */
 	public void setGameResult(int result) {
 
 		this.result = result;
 	}
 
-	/** Returns the single player of the game */
+	/** 
+	 * Returns the single player of the game 
+	 *
+	 * @return Player ID of the single player
+	 */
 	public int getSinglePlayer() {
 
 		return declarer;
 	}
 
-	/** Set the single player of the game */
+	/** 
+	 * Set the single player of the game 
+	 *
+	 * @param singlePlayer Player ID of the single player
+	 */
 	public void setSinglePlayer(int singlePlayer) {
 
 		log.debug("Current Single Player " + singlePlayer);
@@ -97,13 +107,21 @@ public class SkatGameData extends Observable {
 		this.declarer = singlePlayer;
 	}
 
-	/** Returns the bid value of the game */
+	/** 
+	 * Returns the highest bid value of the game 
+	 *
+	 * @return Highest bid value
+	 */
 	public int getBidValue() {
 
 		return highestBidValue;
 	}
 
-	/** Set the bid value of the game */
+	/** 
+	 * Sets the highest bid value of the game 
+	 * 
+	 * @param value Highest bid value
+	 */
 	public void setBidValue(int value) {
 
 		this.highestBidValue = value;
@@ -137,13 +155,21 @@ public class SkatGameData extends Observable {
 		}
 	}
 
-	/** Returns the type of the game */
+	/** 
+	 * Returns the trump suit 
+	 * 
+	 * @return Trump suit 
+	 */
 	public SkatConstants.Suits getTrump() {
 
 		return trump;
 	}
 
-	/** Set the type of the game */
+	/** 
+	 * Sets the trump suit
+	 * 
+	 * @param newTrump Trump suit
+	 */
 	public void setTrump(SkatConstants.Suits newTrump) {
 
 		trump = newTrump;
@@ -173,7 +199,9 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Returns TRUE if the player has overbidded
+	 * Checks whether the single player overbidded
+	 * 
+	 * @return TRUE if the single player overbidded
 	 */
 	public boolean getOverBidded() {
 
@@ -187,63 +215,97 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Set TRUE if the player has overbidded
+	 * Sets the flag for overbidding
+	 * 
+	 * @param overBidded TRUE if the single player overbidded
 	 */
 	public void setOverBidded(boolean overBidded) {
 
 		this.overBidded = overBidded;
 	}
 
-	/** Returns TRUE if the player had the club jack */
+	/** 
+	 * Checks whether the single player had the club jack 
+	 *
+	 * @return TRUE if the player hat the club jack
+	 */
 	public boolean getClubJack() {
 
 		return clubJack;
 	}
 
-	/** Set TRUE if the player had the club jack */
+	/**
+	 * Sets the flag for the club jack
+	 * 
+	 * @param clubJack TRUE if the single player had the club jack
+	 */
 	public void setClubJack(boolean clubJack) {
 
 		this.clubJack = clubJack;
 	}
 
-	/** Returns TRUE if the player had the spade jack */
+	/** 
+	 * Checks whether the single player had the spade jack 
+	 *
+	 * @return TRUE if the player hat the spade jack
+	 */
 	public boolean getSpadeJack() {
 
 		return spadeJack;
 	}
 
-	/** Set TRUE if the player had the spade jack */
+	/**
+	 * Sets the flag for the spade jack
+	 * 
+	 * @param spadeJack TRUE if the single player had the spade jack
+	 */
 	public void setSpadeJack(boolean spadeJack) {
 
 		this.spadeJack = spadeJack;
 	}
 
-	/** Returns TRUE if the player had the heart jack */
+	/** 
+	 * Checks whether the single player had the heart jack 
+	 *
+	 * @return TRUE if the player hat the heart jack
+	 */
 	public boolean getHeartJack() {
 
 		return heartJack;
 	}
 
-	/** Set TRUE if the player had the heart jack */
+	/**
+	 * Sets the flag for the heart jack
+	 * 
+	 * @param heartJack TRUE if the single player had the heart jack
+	 */
 	public void setHeartJack(boolean heartJack) {
 
 		this.heartJack = heartJack;
 	}
 
-	/** Returns TRUE if the player had the diamond jack */
+	/** 
+	 * Checks whether the single player had the diamond jack 
+	 *
+	 * @return TRUE if the player hat the diamond jack
+	 */
 	public boolean getDiamondJack() {
 
 		return diamondJack;
 	}
 
-	/** Set TRUE if the player had the diamond jack */
+	/**
+	 * Sets the flag for the diamond jack
+	 * 
+	 * @param diamondJack TRUE if the single player had the diamond jack
+	 */
 	public void setDiamondJack(boolean diamondJack) {
 
 		this.diamondJack = diamondJack;
 	}
 
 	/**
-	 * Gets whether the single player has played a hand game or not
+	 * Checks whether the single player has played a hand game
 	 * 
 	 * @return TRUE if the single player has played a hand game
 	 */
@@ -253,7 +315,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Set TRUE if the single player has played a hand game
+	 * Sets the flag for hand game
 	 * 
 	 * @param hand
 	 *            TRUE if the single player has played a hand game
@@ -264,7 +326,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Gets whether the single player has played an ouvert game or not
+	 * Checks whether the single player has played an ouvert
 	 * 
 	 * @return TRUE if the single player has played an ouvert game
 	 */
@@ -274,7 +336,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Sets whether the single player has played an ouvert game or not
+	 * Sets the flag for ouvert game
 	 * 
 	 * @param ouvert
 	 *            TRUE if the single player has played an ouvert game
@@ -285,7 +347,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Gets whether one party played schneider or not
+	 * Checks whether one party played schneider
 	 * 
 	 * @return TRUE if the single player or the opponents played schneider
 	 */
@@ -295,7 +357,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Sets whether one party played schneider or not
+	 * Sets the flag for schneider
 	 * 
 	 * @param schneider
 	 *            TRUE if the single player or the opponents played schneider
@@ -306,7 +368,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Gets whether schneider was announced or not
+	 * Checks whether schneider was announced
 	 * 
 	 * @return TRUE if Schneider was announced
 	 */
@@ -316,7 +378,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Sets whether schneider was announced or not
+	 * Sets the flag for schneider announced
 	 * 
 	 * @param schneiderAnnounced
 	 *            TRUE if Schneider was announced
@@ -327,7 +389,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Gets whether schwarz was played or not
+	 * Checks whether schwarz was played
 	 * 
 	 * @return TRUE if the player or the opponents played schwarz
 	 */
@@ -337,7 +399,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Sets whether schwarz was played or not
+	 * Sets the flag for schwarz
 	 * 
 	 * @param schwarz
 	 *            TRUE if the player or the opponents played schwarz
@@ -348,7 +410,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Gets whether schwarz was announced or not
+	 * Checks whether schwarz was announced
 	 * 
 	 * @return TRUE if schwarz was announced
 	 */
@@ -358,7 +420,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Sets whether schwarz was announced or not
+	 * Sets the flag for schwarz announced
 	 * 
 	 * @param schwarzAnnounced
 	 *            TRUE if schwarz was announced
@@ -369,7 +431,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Gets whether contra was announced or not
+	 * Checks whether contra was announced
 	 * 
 	 * @return TRUE if contra was announced
 	 */
@@ -379,7 +441,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Sets whether contra was announced or not
+	 * Sets the flag for contra announced
 	 * 
 	 * @param contra
 	 *            TRUE if contra was announced
@@ -390,7 +452,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Gets whether re was announced or not
+	 * Checks whether re was announced
 	 * 
 	 * @return TRUE if re was announced
 	 */
@@ -400,7 +462,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Sets whether re was announced or not
+	 * Sets the flag for re announced
 	 * 
 	 * @param re
 	 *            TRUE if re was announced
@@ -411,7 +473,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Gets whether bock was announced or not
+	 * Checks whether bock was announced
 	 * 
 	 * @return TRUE if bock was announced
 	 */
@@ -421,7 +483,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Sets whether bock was announced or not
+	 * Sets the flag for bock announced
 	 * 
 	 * @param bock
 	 *            TRUE if bock was announced
@@ -432,7 +494,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Gets whether a durchmarsch was done in a ramsch game or not
+	 * Checks whether a durchmarsch was done in a ramsch game or not
 	 * 
 	 * @return TRUE if someone did a durchmarsch in a ramsch game
 	 */
@@ -442,7 +504,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Sets a durchmarsch was done in a ramsch game or not
+	 * Sets the flag for durchmarsch in a ramsch game
 	 * 
 	 * @param durchMarsch
 	 *            TRUE if someone did a durchmarsch in a ramsch game
@@ -453,7 +515,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Gets whether someone was jungfrau in a ramsch game or not
+	 * Checks whether someone was jungfrau in a ramsch game
 	 * 
 	 * @return TRUE if someone was jungfrau in a ramsch game
 	 */
@@ -463,7 +525,7 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Sets whether someone was jungfrau in a ramsch game or not
+	 * Sets the flag for jungfrau in a ramsch
 	 * 
 	 * @param jungFrau
 	 *            TRUE if someone was jungfrau in a ramsch game
@@ -539,6 +601,9 @@ public class SkatGameData extends Observable {
 					+ getScore((declarer + 2) % 3);
 	}
 
+	/**
+	 * Calculates the result of a game
+	 */
 	public void calcResult() {
 		
 		result = rules.getGameResult(this);
@@ -757,7 +822,10 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
+	 * Get the player cards
 	 * 
+	 * @param playerID Player ID
+	 * @return Vector of Cards from the player
 	 */
 	public CardVector getPlayerCards(int playerID) {
 		
@@ -765,7 +833,10 @@ public class SkatGameData extends Observable {
 	}
 	
 	/**
+	 * Updates player cards
 	 * 
+	 * @param playerID Player ID
+	 * @param oldSkat Old skat before the exchange of some cards
 	 */
 	public void updatePlayerCards(int playerID, CardVector oldSkat) {
 
@@ -797,15 +868,14 @@ public class SkatGameData extends Observable {
 			log.debug(""+playerHands.get(playerID));
 			log.debug(""+skat);
 		}
-		
 	}
 	
 
 	/**
-	 * Sets the first forehand for the game
+	 * Sets the first fore hand for the game
 	 * 
 	 * @param firstForeHand
-	 *            The player ID of the first forehand
+	 *            The player ID of the first fore hand
 	 */
 	public void setDealer(int firstForeHand) {
 
@@ -814,9 +884,9 @@ public class SkatGameData extends Observable {
 	}
 
 	/**
-	 * Gets the first forehand for the game
+	 * Gets the first fore hand for the game
 	 * 
-	 * @return The player ID of the first forehand
+	 * @return The player ID of the first fore hand
 	 */
 	public int getDealer() {
 
@@ -855,7 +925,8 @@ public class SkatGameData extends Observable {
 	/**
 	 * Sets a dealt card
 	 * 
-	 * 
+	 * @param playerID Player ID of the player that got the Card
+	 * @param card Card that was dealt
 	 */
 	public void setDealtCard(int playerID, Card card) {
 		

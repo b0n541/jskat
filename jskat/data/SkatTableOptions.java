@@ -20,6 +20,9 @@ import java.util.Enumeration;
 import java.util.Observable;
 import java.util.Properties;
 
+/**
+ * Skat table options
+ */
 public class SkatTableOptions extends Observable {
 
 	/** Creates a new instance of JSkatOptions */
@@ -59,7 +62,12 @@ public class SkatTableOptions extends Observable {
 				} else if (property.equals("thirdPlayerType")) {
 					setThirdPlayerType(Integer.parseInt(value));
 				} else if (property.equals("rules")) {
-					setRules(Integer.parseInt(value));
+					if (value.equals("PUB")) {
+						setRules(RuleSets.PUB);
+					}
+					else {
+						setRules(RuleSets.ISPA);
+					}
 				} else if (property.equals("playContra")) {
 					setPlayContra(Boolean.valueOf(value).booleanValue());
 				} else if (property.equals("playBock")) {
@@ -83,7 +91,12 @@ public class SkatTableOptions extends Observable {
 					setBockEventPlayerHasX00Points(Boolean.valueOf(value)
 							.booleanValue());
 				} else if (property.equals("ramschSkat")) {
-					setRamschSkat(Integer.parseInt(value));
+					if (value.equals("LAST_TRICK")) {
+						setRamschSkat(RamschSkatOwners.LAST_TRICK);
+					}
+					else {
+						setRamschSkat(RamschSkatOwners.LOSER);
+					}
 				} else if (property.equals("schieberRamsch")) {
 					setSchieberRamsch(Boolean.valueOf(value).booleanValue());
 				} else if (property.equals("schieberRamschJacksInSkat")) {
@@ -332,7 +345,7 @@ public class SkatTableOptions extends Observable {
 	 * 
 	 * @return Value of property rules.
 	 */
-	public int getRules() {
+	public RuleSets getRules() {
 		return rules;
 	}
 
@@ -342,13 +355,10 @@ public class SkatTableOptions extends Observable {
 	 * @param rules
 	 *            New value of property rules.
 	 */
-	public void setRules(int rules) {
+	public void setRules(RuleSets rules) {
 
-		if (rules == ISPA_RULES || rules == PUB_RULES) {
-
-			this.rules = rules;
-			jskatProperties.setProperty("rules", String.valueOf(rules));
-		}
+		this.rules = rules;
+		jskatProperties.setProperty("rules", String.valueOf(rules));
 	}
 
 	/**
@@ -552,7 +562,7 @@ public class SkatTableOptions extends Observable {
 	 * 
 	 * @return Value of property ramschSkat.
 	 */
-	public int getRamschSkat() {
+	public RamschSkatOwners getRamschSkat() {
 		return ramschSkat;
 	}
 
@@ -562,7 +572,7 @@ public class SkatTableOptions extends Observable {
 	 * @param ramschSkat
 	 *            New value of property ramschSkat.
 	 */
-	public void setRamschSkat(int ramschSkat) {
+	public void setRamschSkat(RamschSkatOwners ramschSkat) {
 
 		this.ramschSkat = ramschSkat;
 		jskatProperties.setProperty("ramschSkat", String.valueOf(ramschSkat));
@@ -678,13 +688,33 @@ public class SkatTableOptions extends Observable {
 				.valueOf(ramschGrandHandPossible));
 	}
 
-	public final static int ISPA_RULES = 1;
+	/**
+	 * Holds the different rule sets
+	 */
+	public enum RuleSets {
+		/**
+		 * Official rules according the ISPA
+		 */
+		ISPA,
+		/**
+		 * Extensions to the ISPA rules, played in the pubs
+		 */
+		PUB
+	};
 
-	public final static int PUB_RULES = 2;
-
-	public final static int SKAT_TO_LAST_TRICK = 1;
-
-	public final static int SKAT_TO_LOSER = 2;
+	/**
+	 * Holds different rules for the owner of the skat after a ramsch game
+	 */
+	public enum RamschSkatOwners {
+		/**
+		 * Skat goes to winner of last trick
+		 */
+		LAST_TRICK,
+		/**
+		 * Skat goes to player with the most points
+		 */
+		LOSER
+	};
 
 	private Properties jskatProperties = new Properties();
 
@@ -700,7 +730,7 @@ public class SkatTableOptions extends Observable {
 
 	private int thirdPlayerType = 0;
 
-	private int rules = ISPA_RULES;
+	private RuleSets rules = RuleSets.ISPA;
 
 	private boolean playContra = false;
 
@@ -720,7 +750,7 @@ public class SkatTableOptions extends Observable {
 
 	private boolean bockEventPlayerHasX00Points = false;
 
-	private int ramschSkat = SKAT_TO_LAST_TRICK;
+	private RamschSkatOwners ramschSkat = RamschSkatOwners.LAST_TRICK;
 
 	private boolean schieberRamsch = false;
 

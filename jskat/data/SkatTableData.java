@@ -23,6 +23,9 @@ import jskat.control.SkatSeries;
  */
 public class SkatTableData extends Observable {
 
+	/**
+	 * Constructor
+	 */
 	public SkatTableData() {
 		
 		skatSeries = new Vector<SkatSeries>();
@@ -30,6 +33,11 @@ public class SkatTableData extends Observable {
 		
 	}
 	
+	/**
+	 * Gets the current skat series
+	 * 
+	 * @return Current skat series
+	 */
 	public SkatSeries getCurrSkatSeries() {
 		
 		// 19.05.2007 mjl: return null, if there is no series yet...

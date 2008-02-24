@@ -29,31 +29,6 @@ public class GameAnnouncement {
 	}
 
 	/**
-	 * Game type
-	 */
-	private SkatConstants.GameTypes gameType;
-	/**
-	 * Trump color for suit games
-	 */
-	private SkatConstants.Suits trump;
-	/**
-	 * Hand announcement
-	 */
-	private boolean hand = false;
-	/**
-	 * Ouvert announcement
-	 */
-	private boolean ouvert = false;
-	/**
-	 * Schneider announcement
-	 */
-	private boolean schneider = false;
-	/**
-	 * Schwarz announcement
-	 */
-	private boolean schwarz = false;
-	
-	/**
 	 * Gets the game type
 	 * 
 	 * @return Game type
@@ -126,7 +101,7 @@ public class GameAnnouncement {
 	/**
 	 * Sets the trump color for suit games
 	 * 
-	 * @param trump Trump color
+	 * @param newTrump Trump color
 	 */
 	public void setTrump(SkatConstants.Suits newTrump) {
 		
@@ -176,4 +151,29 @@ public class GameAnnouncement {
 	public void setHand(boolean isHand) {
 		hand = isHand;
 	}
+
+	/**
+	 * Game type
+	 */
+	private SkatConstants.GameTypes gameType;
+	/**
+	 * Trump color for suit games
+	 */
+	private SkatConstants.Suits trump;
+	/**
+	 * Hand announcement
+	 */
+	private boolean hand = false;
+	/**
+	 * Ouvert announcement
+	 */
+	private boolean ouvert = false;
+	/**
+	 * Schneider announcement
+	 */
+	private boolean schneider = false;
+	/**
+	 * Schwarz announcement
+	 */
+	private boolean schwarz = false;
 }

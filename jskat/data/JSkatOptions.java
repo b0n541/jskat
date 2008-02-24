@@ -22,8 +22,6 @@ import java.util.Properties;
 
 /**
  * Holds all options of JSkat
- * 
- * @author Jan Sch&auml;fer
  */
 public class JSkatOptions extends Observable {
 
@@ -67,9 +65,29 @@ public class JSkatOptions extends Observable {
 				value = jskatProperties.getProperty(property);
 
 				if (property.equals("language")) {
-					setLanguage(Integer.parseInt(value));
+					
+					if (value.equals("GERMAN")) {
+						
+						setLanguage(JSkatOptions.Languages.GERMAN);
+					}
+					else {
+						
+						setLanguage(JSkatOptions.Languages.ENGLISH);
+					}
 				} else if (property.equals("cardFace")) {
-					setCardFace(Integer.parseInt(value));
+					
+					if (value.equals("GERMAN")) {
+						
+						setCardFace(JSkatOptions.CardFaces.GERMAN);
+					}
+					else if (value.equals("FRENCH")) {
+						
+						setCardFace(JSkatOptions.CardFaces.FRENCH);
+					}
+					else {
+						
+						setCardFace(JSkatOptions.CardFaces.TOURNAMENT);
+					}
 				} else if (property.equals("savePath")) {
 					setSavePath(value);
 				} else if (property.equals("trickRemoveDelayTime")) {
@@ -94,7 +112,12 @@ public class JSkatOptions extends Observable {
 				} else if (property.equals("thirdPlayerType")) {
 					setThirdPlayerType(Integer.parseInt(value));
 				} else if (property.equals("rules")) {
-					setRules(Integer.parseInt(value));
+					if (value.equals("PUB")) {
+						setRules(SkatTableOptions.RuleSets.PUB);
+					}
+					else {
+						setRules(SkatTableOptions.RuleSets.ISPA);
+					}
 				} else if (property.equals("playContra")) {
 					setPlayContra(Boolean.valueOf(value).booleanValue());
 				} else if (property.equals("playBock")) {
@@ -118,7 +141,12 @@ public class JSkatOptions extends Observable {
 					setBockEventPlayerHasX00Points(Boolean.valueOf(value)
 							.booleanValue());
 				} else if (property.equals("ramschSkat")) {
-					setRamschSkat(Integer.parseInt(value));
+					if (value.equals("LAST_TRICK")) {
+						setRamschSkat(SkatTableOptions.RamschSkatOwners.LAST_TRICK);
+					}
+					else {
+						setRamschSkat(SkatTableOptions.RamschSkatOwners.LOSER);
+					}
 				} else if (property.equals("schieberRamsch")) {
 					setSchieberRamsch(Boolean.valueOf(value).booleanValue());
 				} else if (property.equals("schieberRamschJacksInSkat")) {
@@ -257,7 +285,8 @@ public class JSkatOptions extends Observable {
 	 * 
 	 * @return Value of property language.
 	 */
-	public int getLanguage() {
+	public Languages getLanguage() {
+		
 		return language;
 	}
 
@@ -267,14 +296,10 @@ public class JSkatOptions extends Observable {
 	 * @param language
 	 *            New value of property language.
 	 */
-	public void setLanguage(int language) {
+	public void setLanguage(Languages language) {
 
-		if (language == GERMAN || language == ENGLISH) {
-
-			this.language = language;
-
-			jskatProperties.setProperty("language", String.valueOf(language));
-		}
+		this.language = language;
+		jskatProperties.setProperty("language", String.valueOf(language));
 	}
 
 	/**
@@ -526,7 +551,7 @@ public class JSkatOptions extends Observable {
 	 * 
 	 * @return Value of property rules.
 	 */
-	public int getRules() {
+	public SkatTableOptions.RuleSets getRules() {
 
 		return skatTableOptions.getRules();
 	}
@@ -537,14 +562,10 @@ public class JSkatOptions extends Observable {
 	 * @param rules
 	 *            New value of property rules.
 	 */
-	public void setRules(int rules) {
+	public void setRules(SkatTableOptions.RuleSets rules) {
 
-		if (rules == SkatTableOptions.ISPA_RULES
-				|| rules == SkatTableOptions.PUB_RULES) {
-
-			skatTableOptions.setRules(rules);
-			jskatProperties.setProperty("rules", String.valueOf(rules));
-		}
+		skatTableOptions.setRules(rules);
+		jskatProperties.setProperty("rules", String.valueOf(rules));
 	}
 
 	/**
@@ -759,7 +780,7 @@ public class JSkatOptions extends Observable {
 	 * 
 	 * @return Value of property ramschSkat.
 	 */
-	public int getRamschSkat() {
+	public SkatTableOptions.RamschSkatOwners getRamschSkat() {
 
 		return skatTableOptions.getRamschSkat();
 	}
@@ -770,7 +791,7 @@ public class JSkatOptions extends Observable {
 	 * @param ramschSkat
 	 *            New value of property ramschSkat.
 	 */
-	public void setRamschSkat(int ramschSkat) {
+	public void setRamschSkat(SkatTableOptions.RamschSkatOwners ramschSkat) {
 
 		skatTableOptions.setRamschSkat(ramschSkat);
 		jskatProperties.setProperty("ramschSkat", String.valueOf(ramschSkat));
@@ -898,7 +919,7 @@ public class JSkatOptions extends Observable {
 	 * 
 	 * @return Value of property cardFace
 	 */
-	public int getCardFace() {
+	public CardFaces getCardFace() {
 
 		return cardFace;
 	}
@@ -909,7 +930,7 @@ public class JSkatOptions extends Observable {
 	 * @param cardFace
 	 *            New value of property cardFace
 	 */
-	public void setCardFace(int cardFace) {
+	public void setCardFace(CardFaces cardFace) {
 
 		if (this.cardFace != cardFace) {
 
@@ -943,20 +964,42 @@ public class JSkatOptions extends Observable {
 	}
 	
 	static private JSkatOptions optionsInstance = null;
+	
+	/**
+	 * Languages supported by JSkat
+	 */
+	public enum Languages {
+		/**
+		 * German
+		 */
+		GERMAN,
+		/**
+		 * English
+		 */
+		ENGLISH
+	};
 
-	public final static int GERMAN = 1;
-
-	public final static int ENGLISH = 2;
-
-	public final static int CARD_FACE_FRENCH = 1;
-
-	public final static int CARD_FACE_GERMAN = 2;
-
-	public final static int CARD_FACE_TOURNAMENT = 3;
+	/**
+	 * Card faces supported by JSkat
+	 */
+	public enum CardFaces {
+		/**
+		 * French (Clubs, Spades, Hearts, Diamonds)
+		 */
+		FRENCH,
+		/**
+		 * German (Eichel, Grün, Herz, Schellen)
+		 */
+		GERMAN,
+		/**
+		 * Tournament (Clubs (black), Spades (green), Hearts (red), Diamonds (orange))
+		 */
+		TOURNAMENT
+	}
 
 	private Properties jskatProperties = new Properties();
 
-	private int language = GERMAN;
+	private Languages language = Languages.GERMAN;
 
 	private String savePath = "";
 
@@ -968,7 +1011,7 @@ public class JSkatOptions extends Observable {
 
 	private boolean cheatDebugMode = false;
 
-	private int cardFace = CARD_FACE_FRENCH;
+	private CardFaces cardFace = CardFaces.FRENCH;
 
 	private SkatTableOptions skatTableOptions = new SkatTableOptions();
 }

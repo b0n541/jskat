@@ -21,12 +21,21 @@ import jskat.share.CardVector;
  */
 public class Trick {
     
-    /** Creates a new instance of Trick */
+    /** 
+     * Creates a new instance of Trick 
+     *
+     * @param foreHand Player ID of the fore hand player
+     */
     public Trick(int foreHand) {
         
         this.foreHand = foreHand;
     }
     
+    /**
+     * Gets the fore hand player
+     * 
+     * @return Player ID of the fore hand player
+     */
     public int getForeHand() {
         
         return foreHand;

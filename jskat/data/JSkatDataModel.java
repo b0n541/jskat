@@ -35,6 +35,8 @@ public class JSkatDataModel extends Observable {
 	 * 
 	 * @param mainClass
 	 *            A reference to the Main class
+	 * @param jskatOptions
+	 * 			  Current options
 	 */
 	public JSkatDataModel(Object mainClass, JSkatOptions jskatOptions) {
 
@@ -44,16 +46,15 @@ public class JSkatDataModel extends Observable {
 		this.jskatOptions = jskatOptions;
 		
 		// set the Locale Variable
-		switch(jskatOptions.getLanguage()) {
-			
-			case 1:
-				setLocale(new Locale("de", "DE"));
-				break;
-			case 2:
-				setLocale(new Locale("en", "GB"));
-				break;
-			default:
-				setLocale(Locale.getDefault());
+		JSkatOptions.Languages lang = jskatOptions.getLanguage();
+		if (lang == JSkatOptions.Languages.GERMAN) {
+			setLocale(new Locale("de", "DE"));
+		}
+		else if (lang == JSkatOptions.Languages.ENGLISH) {
+			setLocale(new Locale("en", "GB"));
+		}
+		else {
+			setLocale(new Locale("en", "GB"));
 		}
 
 		log.debug("Datamodel created.");
@@ -69,6 +70,12 @@ public class JSkatDataModel extends Observable {
 		return jskatStrings;
 	}
 
+	/**
+	 * Sets Locale variable
+	 * 
+	 * @param newLocale New Locale to be set
+	 * @return Strings under the new Locale
+	 */
 	public ResourceBundle setLocale(Locale newLocale) {
 
 		jskatLocale = newLocale;
@@ -100,6 +107,11 @@ public class JSkatDataModel extends Observable {
 		this.mainWindow = mainWindow;
 	}
 
+	/**
+	 * Gets a reference to the main window
+	 * 
+	 * @return Main window
+	 */
 	public JSkatFrame getMainWindow() {
 
 		return mainWindow;

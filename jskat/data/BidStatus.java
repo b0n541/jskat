@@ -15,17 +15,21 @@ import java.util.Observable;
 
 import jskat.share.SkatConstants;
 
-/** Holds all bidding data during the bidding
- * @author Jan Schäfer <jan.schaefer@b0n541.net>
+/** 
+ * Holds all bidding data during the bidding
  */
 public class BidStatus extends Observable {
     
-    /** Creates a new instance of BidStatus */
+    /** 
+     * Creates a new instance of BidStatus 
+     */
     public BidStatus() {
     }
     
-    /** Resets the BidStatus to default values at the beginning of the bidding
-     * @param foreHandPlayer The ID of the current Forehand player
+    /** 
+     * Resets the BidStatus to default values at the beginning of the bidding
+     * 
+     * @param foreHandPlayer The ID of the current fore hand player
      */
     public void resetBidStatus(int foreHandPlayer) {
         
@@ -45,15 +49,19 @@ public class BidStatus extends Observable {
         notifyObservers(new Integer(foreHandPlayer));
     }
     
-    /** Gets the current Forehand player
-     * @return The ID of the current Forehand player
+    /** 
+     * Gets the current fore hand player
+     * 
+     * @return ID of the current fore hand player
      */
     public int getForeHandPlayer() {
         
         return foreHandPlayer;
     }
     
-    /** Enable/Disable the Bidding buttons
+    /** 
+     * Enable/Disable the Bidding buttons
+     * 
      * @param enabled TRUE if the buttons should be enabled otherwise FALSE
      */
     public void setButtonsEnabled(boolean enabled) {
@@ -64,7 +72,9 @@ public class BidStatus extends Observable {
         notifyObservers();
     }
     
-    /** Gets the information whether the buttons are enabled or not
+    /** 
+     * Gets the information whether the buttons are enabled or not
+     * 
      * @return TRUE if the Bidding buttons are enabled otherwise FALSE
      */
     public boolean getButtonsEnabled() {
@@ -72,9 +82,10 @@ public class BidStatus extends Observable {
         return buttonsEnabled;
     }
     
-    /** Sets the status whether the player does the bid or not
-     * @param hand Which hand should be set (SkatConstants.FORE_HAND, SkatConstants.MIDDLE_HAND,
-     * SkatConstants.BACK_HAND)
+    /** 
+     * Sets the status whether the player does the bid or not
+     * 
+     * @param hand Which hand should be set
      * @param handDoesBid TRUE if hand does the bid otherwise FALSE
      */
     public void setHandDoesBid(SkatConstants.Player hand, boolean handDoesBid) {
@@ -100,10 +111,11 @@ public class BidStatus extends Observable {
         notifyObservers(hand);
     }
     
-    /** Gets the status whether the hand does the bid or not
+    /** 
+     * Gets the status whether the hand does the bid or not
+     * 
+     * @param hand Hand that should be asked
      * @return TRUE if the hand does the bid otherwise FALSE
-     * @param hand The player that should be asked (SkatConstants.FORE_HAND,
-     * SkatConstants.MIDDLE_HAND, SkatConstants.HINDHAND)
      */
     public boolean getHandDoesBid(SkatConstants.Player hand) {
         
@@ -125,7 +137,9 @@ public class BidStatus extends Observable {
         return returnValue;
     }
     
-    /** Sets current bid value for a hand
+    /** 
+     * Sets current bid value for a hand
+     * 
      * @param hand The hand for which the bid value should be set
      * @param newBidValue The new bid value that should be set
      */
@@ -148,7 +162,9 @@ public class BidStatus extends Observable {
         notifyObservers(hand);
     }
     
-    /** Gets the current bid value for a hand
+    /** 
+     * Gets the current bid value for a hand
+     * 
      * @param hand The hand from where the bid value should be retrieved.
      * @return The current bid value for this hand
      */
@@ -221,7 +237,7 @@ public class BidStatus extends Observable {
     /**
      * Sets flag for player that was asked
      * 
-     * @param Player that was asked
+     * @param hand Player that was asked
      */
     public void setWasAsked(SkatConstants.Player hand) {
         
