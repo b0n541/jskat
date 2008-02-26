@@ -29,7 +29,6 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	/**
 	 * @see jskat.player.JSkatPlayer#getPlayerID()
 	 */
-	@Override
 	public final int getPlayerID() {
 
 		return playerID;
@@ -38,7 +37,6 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	/**
 	 * @see jskat.player.JSkatPlayer#setPlayerID(int)
 	 */
-	@Override
 	public final void setPlayerID(int newPlayerID) {
 		playerID = newPlayerID;
 	}
@@ -46,7 +44,6 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	/**
 	 * @see jskat.player.JSkatPlayer#setPlayerName(java.lang.String)
 	 */
-	@Override
 	public final void setPlayerName(String newPlayerName) {
 
 		playerName = newPlayerName;
@@ -55,10 +52,18 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	/**
 	 * @see jskat.player.JSkatPlayer#getPlayerName()
 	 */
-	@Override
 	public final String getPlayerName() {
 
 		return playerName;
+	}
+
+	/**
+	 * @see jskat.player.JSkatPlayer#newGame()
+	 */
+	public final void newGame() {
+
+		cards.clear();
+		skat.clear();
 	}
 
 	/**
@@ -80,21 +85,8 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	}
 
 	/**
-	 * @see jskat.player.JSkatPlayer#setUpBidding(int)
-	 */
-	@Override
-	public abstract void setUpBidding(int initialForehandPlayer);
-
-	/**
-	 * @see jskat.player.JSkatPlayer#takeSkat(jskat.share.CardVector)
-	 */
-	@Override
-	public abstract void takeSkat(CardVector skat);
-
-	/**
 	 * @see jskat.player.JSkatPlayer#startGame(int, int, jskat.share.SkatConstants.GameTypes, jskat.share.SkatConstants.Suits, boolean, boolean)
 	 */
-	@Override
 	public void startGame(int singlePlayer, int forehandPlayer,
 			SkatConstants.GameTypes gameType, SkatConstants.Suits trump,
 			boolean handGame, boolean ouvertGame) {
@@ -115,15 +107,23 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	}
 
 	/**
+	 * @see jskat.player.JSkatPlayer#setUpBidding(int)
+	 */
+	public abstract void setUpBidding(int initialForehandPlayer);
+
+	/**
+	 * @see jskat.player.JSkatPlayer#takeSkat(jskat.share.CardVector)
+	 */
+	public abstract void takeSkat(CardVector skat);
+
+	/**
 	 * @see jskat.player.JSkatPlayer#discloseOuvertCards(jskat.share.CardVector)
 	 */
-	@Override
 	public abstract void discloseOuvertCards(CardVector ouvertCards);
 	
 	/**
 	 * @see jskat.player.JSkatPlayer#showTrick(jskat.share.CardVector, int)
 	 */
-	@Override
 	public abstract void showTrick(CardVector trick, int trickWinner);
 
 	
@@ -135,19 +135,8 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	/**
 	 * @see jskat.player.JSkatPlayer#cardPlayed(jskat.share.Card)
 	 */
-	@Override
 	public abstract void cardPlayed(Card card);
 	
-	/**
-	 * @see jskat.player.JSkatPlayer#newGame()
-	 */
-	@Override
-	public final void newGame() {
-
-		cards.clear();
-		skat.clear();
-	}
-
 	/** Variables */
 	protected int playerID;
 	protected int singlePlayer;

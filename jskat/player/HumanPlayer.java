@@ -52,7 +52,6 @@ public class HumanPlayer extends AbstractJSkatPlayer {
     /**
      * @see jskat.player.JSkatPlayer#bidMore(int)
      */
-    @Override
     public boolean bidMore(int currBidValue) {
         
         return false;
@@ -61,7 +60,6 @@ public class HumanPlayer extends AbstractJSkatPlayer {
     /**
      * @see jskat.player.JSkatPlayer#announceGame()
      */
-    @Override
     public GameAnnouncement announceGame() {
         
         return new GameAnnouncement();
@@ -70,7 +68,6 @@ public class HumanPlayer extends AbstractJSkatPlayer {
     /**
      * @see jskat.player.JSkatPlayer#takeRamschSkat(jskat.share.CardVector, boolean)
      */
-    @Override
     public void takeRamschSkat(CardVector skat, boolean jacksAllowed) {
         
     }
@@ -78,7 +75,6 @@ public class HumanPlayer extends AbstractJSkatPlayer {
     /**
      * @see jskat.player.JSkatPlayer#lookIntoSkat(boolean)
      */
-    @Override
 	public boolean lookIntoSkat(boolean isRamsch) {
         return true;
     }
@@ -86,7 +82,6 @@ public class HumanPlayer extends AbstractJSkatPlayer {
     /**
      * @see jskat.player.JSkatPlayer#isHumanPlayer()
      */
-    @Override
     public final boolean isHumanPlayer() {
         return true;
     }
@@ -94,7 +89,6 @@ public class HumanPlayer extends AbstractJSkatPlayer {
     /**
      * @see jskat.player.JSkatPlayer#isAIPlayer()
      */
-    @Override
     public final boolean isAIPlayer() {
         return false;
     }
@@ -109,7 +103,6 @@ public class HumanPlayer extends AbstractJSkatPlayer {
 	/**
 	 * @see jskat.player.JSkatPlayer#playCard(jskat.share.CardVector)
 	 */
-	@Override
 	public Card playCard(CardVector trick) {
 		// TODO Auto-generated method stub
 		return null;
@@ -143,20 +136,19 @@ public class HumanPlayer extends AbstractJSkatPlayer {
 	}
 
 	/**
+	 * @see jskat.player.JSkatPlayer#removeCard(jskat.share.SkatConstants.Suits, jskat.share.SkatConstants.Ranks)
+	 */
+	public Card removeCard(Suits suit, Ranks rank) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/**
 	 * @see jskat.player.AbstractJSkatPlayer#takeSkat(jskat.share.CardVector)
 	 */
 	@Override
 	public void takeSkat(CardVector skat) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	/**
-	 * @see jskat.player.JSkatPlayer#removeCard(jskat.share.SkatConstants.Suits, jskat.share.SkatConstants.Ranks)
-	 */
-	@Override
-	public Card removeCard(Suits suit, Ranks rank) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

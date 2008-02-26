@@ -72,15 +72,13 @@ public class AIPlayerRND extends AbstractJSkatPlayer implements JSkatPlayer {
 	/**
 	 * @see jskat.player.JSkatPlayer#takeRamschSkat(jskat.share.CardVector, boolean)
 	 */
-	@Override
 	public void takeRamschSkat(CardVector skat, boolean jacksAllowed) {
-
+		// TODO implement it
 	}
 
 	/**
 	 * @see jskat.player.JSkatPlayer#lookIntoSkat(boolean)
 	 */
-	@Override
 	public boolean lookIntoSkat(boolean isRamsch) {
 		
 		return rand.nextBoolean();
@@ -89,7 +87,6 @@ public class AIPlayerRND extends AbstractJSkatPlayer implements JSkatPlayer {
 	/**
 	 * @see jskat.player.JSkatPlayer#announceGame()
 	 */
-	@Override
 	public GameAnnouncement announceGame() {
 
 		GameAnnouncement newGame = new GameAnnouncement();
@@ -104,7 +101,6 @@ public class AIPlayerRND extends AbstractJSkatPlayer implements JSkatPlayer {
 	/**
 	 * @see jskat.player.JSkatPlayer#bidMore(int)
 	 */
-	@Override
 	public boolean bidMore(int currBidValue) {
 
 		return rand.nextBoolean();
@@ -113,7 +109,6 @@ public class AIPlayerRND extends AbstractJSkatPlayer implements JSkatPlayer {
 	/**
 	 * @see jskat.player.JSkatPlayer#playCard(jskat.share.CardVector)
 	 */
-	@Override
 	public Card playCard(CardVector trick) {
 
 		int index = -1;
@@ -160,7 +155,6 @@ public class AIPlayerRND extends AbstractJSkatPlayer implements JSkatPlayer {
 	/**
 	 * @see jskat.player.JSkatPlayer#isAIPlayer()
 	 */
-	@Override
 	public boolean isAIPlayer() {
 
 		return true;
@@ -169,7 +163,6 @@ public class AIPlayerRND extends AbstractJSkatPlayer implements JSkatPlayer {
 	/**
 	 * @see jskat.player.JSkatPlayer#isHumanPlayer()
 	 */
-	@Override
 	public boolean isHumanPlayer() {
 
 		return false;
@@ -216,7 +209,6 @@ public class AIPlayerRND extends AbstractJSkatPlayer implements JSkatPlayer {
 	/**
 	 * @see jskat.player.JSkatPlayer#removeCard(jskat.share.SkatConstants.Suits, jskat.share.SkatConstants.Ranks)
 	 */
-	@Override
 	public Card removeCard(Suits suit, Ranks rank) {
 		// TODO Auto-generated method stub
 		return null;

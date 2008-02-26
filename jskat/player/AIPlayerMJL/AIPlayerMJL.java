@@ -179,6 +179,9 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
         return playerType.playNextCard(cards, thisTrick);
     }
     
+    /**
+     * @see jskat.player.JSkatPlayer#playCard(jskat.share.CardVector)
+     */
     public Card playCard(CardVector trick) {
     	return cards.remove(playNextCard(trick));
     }
@@ -210,7 +213,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
 	 * Sets the state of the current game <br>
 	 * If necessary, a new bid is initialized.
 	 * @see jskat.player.AIPlayerMJL.Bidding  
-	 * @see jskat.player.AbstractJSkatPlayer#setState(int)
+	 * @see jskat.player.AbstractJSkatPlayer#setState(JSkatPlayer.PlayerStates)
 	 */
 	public final void setState(JSkatPlayer.PlayerStates newState) {
         
@@ -282,16 +285,48 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
 		singlePlayerPos = i;
 	}
 
+	/**
+	 * @see jskat.player.JSkatPlayer#isAIPlayer()
+	 */
 	public boolean isAIPlayer() {
 
 		return true;
 	}
 
+	/**
+	 * @see jskat.player.JSkatPlayer#isHumanPlayer()
+	 */
 	public boolean isHumanPlayer() {
 
 		return false;
 	}
 	
+	/**
+	 * @see jskat.player.AbstractJSkatPlayer#cardPlayed(jskat.share.Card)
+	 */
+	@Override
+	public void cardPlayed(Card card) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * @see jskat.player.AbstractJSkatPlayer#discloseOuvertCards(jskat.share.CardVector)
+	 */
+	@Override
+	public void discloseOuvertCards(CardVector ouvertCards) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * @see jskat.player.JSkatPlayer#removeCard(jskat.share.SkatConstants.Suits, jskat.share.SkatConstants.Ranks)
+	 */
+	public Card removeCard(Suits suit, Ranks rank) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	/** log */
 	private static final Logger log = Logger.getLogger(AIPlayerMJL.class);
 	private CardMemory myMemory;
@@ -302,21 +337,4 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
 	private int singlePlayerPos;
 	private GameInfo game;
 	private SkatConstants.Suits selectedTrump;
-	@Override
-	public void cardPlayed(Card card) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void discloseOuvertCards(CardVector ouvertCards) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Card removeCard(Suits suit, Ranks rank) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 }
