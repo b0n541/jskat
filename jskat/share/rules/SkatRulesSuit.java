@@ -192,7 +192,7 @@ public class SkatRulesSuit extends SkatRulesSuitGrand implements SkatRules {
 	 * @see jskat.share.rules.SkatRules#isCardBeatsCard(jskat.share.Card, jskat.share.Card, jskat.share.Card, jskat.share.SkatConstants.Suits)
 	 */
 	@Override
-	public boolean isCardBeatsCard(Card card, Card cardToBeat, Card initialTrickCard, SkatConstants.Suits trump) {
+	public boolean isCardBeatsCard(Card card, Card cardToBeat, Card initialCard, SkatConstants.Suits trump) {
 		// TODO Auto-generated method stub
 		return false;
 	}

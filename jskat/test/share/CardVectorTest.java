@@ -82,7 +82,7 @@ public class CardVectorTest {
 	 * Suit game, trump CLUBS, suit CLUBS
 	 */
 	@Test
-	public void hasSuit005() {
+	public void hasSuit201() {
 		
 		assertFalse(hand001.hasSuit(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.CLUBS, SkatConstants.Suits.CLUBS));
 	}
@@ -91,7 +91,7 @@ public class CardVectorTest {
 	 * Suit game, trump CLUBS, suit SPADES
 	 */
 	@Test
-	public void hasSuit006() {
+	public void hasSuit202() {
 		
 		assertFalse(hand001.hasSuit(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.CLUBS, SkatConstants.Suits.SPADES));
 	}
@@ -100,7 +100,7 @@ public class CardVectorTest {
 	 * Suit game, trump CLUBS, suit HEARTS
 	 */
 	@Test
-	public void hasSuit007() {
+	public void hasSuit203() {
 		
 		assertFalse(hand001.hasSuit(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.CLUBS, SkatConstants.Suits.HEARTS));
 	}
@@ -109,7 +109,7 @@ public class CardVectorTest {
 	 * Suit game, trump CLUBS, suit DIAMONDS
 	 */
 	@Test
-	public void hasSuit008() {
+	public void hasSuit204() {
 		
 		assertTrue(hand001.hasSuit(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.CLUBS, SkatConstants.Suits.DIAMONDS));
 	}
@@ -118,7 +118,7 @@ public class CardVectorTest {
 	 * Grand game, suit CLUBS
 	 */
 	@Test
-	public void hasSuit009() {
+	public void hasSuit401() {
 		
 		assertTrue(hand001.hasSuit(SkatConstants.GameTypes.GRAND, SkatConstants.Suits.CLUBS));
 	}
@@ -127,7 +127,7 @@ public class CardVectorTest {
 	 * Grand game, suit SPADES
 	 */
 	@Test
-	public void hasSuit010() {
+	public void hasSuit402() {
 		
 		assertFalse(hand001.hasSuit(SkatConstants.GameTypes.GRAND, SkatConstants.Suits.SPADES));
 	}
@@ -136,7 +136,7 @@ public class CardVectorTest {
 	 * Grand game, suit HEARTS
 	 */
 	@Test
-	public void hasSuit011() {
+	public void hasSuit403() {
 		
 		assertFalse(hand001.hasSuit(SkatConstants.GameTypes.GRAND, SkatConstants.Suits.HEARTS));
 	}
@@ -145,10 +145,46 @@ public class CardVectorTest {
 	 * Grand game, suit DIAMONDS
 	 */
 	@Test
-	public void hasSuit012() {
+	public void hasSuit404() {
 		
 		assertTrue(hand001.hasSuit(SkatConstants.GameTypes.GRAND, SkatConstants.Suits.DIAMONDS));
 	}
 	
+	/**
+	 * Ramsch game, suit CLUBS
+	 */
+	@Test
+	public void hasSuit601() {
+		
+		assertTrue(hand001.hasSuit(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.CLUBS));
+	}
+	
+	/**
+	 * Ramsch game, suit SPADES
+	 */
+	@Test
+	public void hasSuit602() {
+		
+		assertFalse(hand001.hasSuit(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.SPADES));
+	}
+	
+	/**
+	 * Ramsch game, suit HEARTS
+	 */
+	@Test
+	public void hasSuit603() {
+		
+		assertFalse(hand001.hasSuit(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.HEARTS));
+	}
+	
+	/**
+	 * Ramsch game, suit DIAMONDS
+	 */
+	@Test
+	public void hasSuit604() {
+		
+		assertTrue(hand001.hasSuit(SkatConstants.GameTypes.RAMSCH, SkatConstants.Suits.DIAMONDS));
+	}
+
 	private static CardVector hand001;
 }

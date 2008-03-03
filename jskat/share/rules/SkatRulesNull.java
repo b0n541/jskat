@@ -92,14 +92,14 @@ public class SkatRulesNull implements SkatRules {
 	 * @see jskat.share.rules.SkatRules#isCardBeatsCard(jskat.share.Card,
 	 *      jskat.share.Card, jskat.share.Card, jskat.share.SkatConstants.Suits)
 	 */
-	public boolean isCardBeatsCard(Card card, Card cardToBeat,
-			Card initialTrickCard, SkatConstants.Suits trump) {
+	public boolean isCardBeatsCard(Card card, Card cardToBeat, Card initialCard,
+			SkatConstants.Suits trump) {
 
 		boolean result = false;
 
-		if (card.getSuit() == initialTrickCard.getSuit()) {
+		if (card.getSuit() == initialCard.getSuit()) {
 
-			if (cardToBeat.getSuit() != initialTrickCard.getSuit()) {
+			if (cardToBeat.getSuit() != initialCard.getSuit()) {
 
 				result = true;
 			} 

@@ -240,23 +240,21 @@ public class Card {
 	 * Checks whether the card beats another given card under the current game
 	 * type and trump color with respect to the initial card on the table
 	 * 
-	 * @deprecated
-	 * 
 	 * @param cardToCompare
 	 * 			Card to compare
 	 * @param gameType
 	 * 			Game type
 	 * @param trump
 	 * 			Trump suit
-	 * @param initialTrickCard
-	 * 			First card played in the trick
+	 * @param initialCard 
+	 * 			First card in trick
 	 * @return TRUE if the card beats the other one
 	 */
 	public boolean beats(Card cardToCompare, SkatConstants.GameTypes gameType,
-			SkatConstants.Suits trump, Card initialTrickCard) {
+			SkatConstants.Suits trump, Card initialCard) {
 
 		return SkatRulesFactory.getSkatRules(gameType).isCardBeatsCard(this,
-				cardToCompare, initialTrickCard, trump);
+				cardToCompare, initialCard, trump);
 
 		/*
 		 * boolean result = false;
@@ -328,21 +326,45 @@ public class Card {
 
 	/**
 	 * Checks whether the card beats another given card under the current game
+	 * type and trump color with respect to the initial card on the table
+	 * 
+	 * @param cardToCompare
+	 * 			Card to compare
+	 * @param gameType
+	 * 			Game type
+	 * @param initialCard 
+	 * 			First card in trick
+	 * @return TRUE if the card beats the other one
+	 */
+	public boolean beats(Card cardToCompare, SkatConstants.GameTypes gameType,
+			Card initialCard) {
+
+		if (gameType == SkatConstants.GameTypes.SUIT) {
+			
+			throw new IllegalArgumentException("Method is not valid for SUIT games.");
+		}
+		
+		return SkatRulesFactory.getSkatRules(gameType).isCardBeatsCard(this,
+				cardToCompare, initialCard, null);
+	}
+	
+	/**
+	 * Checks whether the card beats another given card under the current game
 	 * type and trump suit with respect to the initial card on the table
 	 * 
 	 * @param cardToCompare
 	 * 			Card to compare
 	 * @param gameAnnouncement
 	 * 			Game announcement, contains game type and trump suit
-	 * @param initialTrickCard
-	 * 			First card played in the trick
+	 * @param initialCard 
+	 * 			First card in trick
 	 * @return TRUE if the card beats the other one
 	 */
 	public boolean beats(Card cardToCompare, GameAnnouncement gameAnnouncement,
-			Card initialTrickCard) {
+							Card initialCard) {
 
 		return beats(cardToCompare, gameAnnouncement.getGameType(),
-				gameAnnouncement.getTrump(), initialTrickCard);
+				gameAnnouncement.getTrump(), initialCard);
 	}
 
 	/**
