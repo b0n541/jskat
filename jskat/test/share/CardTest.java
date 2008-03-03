@@ -20,8 +20,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+/**
+ * Unit tests for class Card<br />
+ * @see jskat.share.Card
+ */
 public class CardTest {
 
+	/**
+	 * Set up for the object used in the tests
+	 */
 	@BeforeClass
 	public static void setUp() {
 		
