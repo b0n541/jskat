@@ -231,25 +231,53 @@ public class CardVector extends Observable {
 	 */
 	public boolean hasSuit(SkatConstants.GameTypes gameType,
 			SkatConstants.Suits suit) {
+		
+		return hasSuit(gameType, null, suit);
+	}
+	
+	/**
+	 * Tests whether a card with a suit is in the CardVector or not
+	 * 
+	 * @param gameType
+	 *            Game type of the game played
+	 * @param trump 
+	 * 			  Trump color in suit games, otherwise NULL
+	 * @param suit
+	 *            Suit color
+	 * @return TRUE, when a card with the suit is found
+	 */
+	public boolean hasSuit(SkatConstants.GameTypes gameType,
+			SkatConstants.Suits trump,
+			SkatConstants.Suits suit) {
 
-		// TODO what about suit == trump color
 		boolean result = false;
 
 		// Got through all cards
-		for (int i = 0; i < cards.size(); i++) {
+		int index = 0;
+		while (index < cards.size() && result == false) {
 
 			if (gameType == SkatConstants.GameTypes.NULL
-					&& (getCard(i).getSuit() == suit)) {
-
-				result = true;
-			} else if ((gameType == SkatConstants.GameTypes.SUIT
-					|| gameType == SkatConstants.GameTypes.GRAND
-					|| gameType == SkatConstants.GameTypes.RAMSCH || gameType == SkatConstants.GameTypes.RAMSCHGRAND)
-					&& (getCard(i).getSuit() == suit)
-					&& (getCard(i).getRank() != SkatConstants.Ranks.JACK)) {
-
+					&& (getCard(index).getSuit() == suit)) {
+				// null games
 				result = true;
 			}
+			else if ((gameType == SkatConstants.GameTypes.SUIT)
+						&& (getCard(index).getSuit() == suit)
+						&& (getCard(index).getRank() != SkatConstants.Ranks.JACK)
+						&& (getCard(index).getSuit() != trump)) {
+				// suit games
+				result = true;
+			}
+			else if ((gameType == SkatConstants.GameTypes.GRAND
+							|| gameType == SkatConstants.GameTypes.RAMSCH 
+							|| gameType == SkatConstants.GameTypes.RAMSCHGRAND)
+						&& (getCard(index).getSuit() == suit)
+						&& (getCard(index).getRank() != SkatConstants.Ranks.JACK)) {
+				// grand and ramsch games
+				result = true;
+			}
+			
+			index++;
 		}
 
 		return result;
