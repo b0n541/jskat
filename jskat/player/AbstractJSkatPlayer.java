@@ -143,9 +143,9 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	protected int forehandPlayer;
 	protected String playerName;
 	protected JSkatPlayer.PlayerStates playerState;
-	protected CardVector cards;
-	protected CardVector skat;
-	protected CardVector singlePlayerCards;
+	protected CardVector cards = new CardVector();
+	protected CardVector skat = new CardVector();
+	protected CardVector singlePlayerCards = new CardVector();
 	protected SkatConstants.GameTypes currGameType;
 	protected SkatConstants.Suits currTrump;
 	protected boolean handGame;
