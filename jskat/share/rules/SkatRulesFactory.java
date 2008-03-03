@@ -32,21 +32,26 @@ public class SkatRulesFactory {
 		
 		if (gameType == SkatConstants.GameTypes.SUIT) {
 			
-			rules = new SkatRulesSuit();
+			rules = suitRules;
 		}
 		else if (gameType == SkatConstants.GameTypes.GRAND) {
 			
-			rules = new SkatRulesGrand();
+			rules = grandRules;
 		}
 		else if (gameType == SkatConstants.GameTypes.NULL) {
 			
-			rules = new SkatRulesNull();
+			rules = nullRules;
 		}
 		else if (gameType == SkatConstants.GameTypes.RAMSCH) {
 			
-			rules = new SkatRulesRamsch();
+			rules = ramschRules;
 		}
 		
 		return rules;
 	}
+
+	private static SkatRules suitRules = new SkatRulesSuit();
+	private static SkatRules grandRules = new SkatRulesGrand();
+	private static SkatRules nullRules = new SkatRulesNull();
+	private static SkatRules ramschRules = new SkatRulesRamsch();
 }

@@ -72,7 +72,7 @@ public class OpponentPlayer implements CardPlayer {
 					else {
 						log.debug(".playNextCard(): ...which I can't beat...");
 						// 1.1.1.2: if I can't beat: find lowest matching card
-						if(trickInfo.getCard(0).isTrump(trickInfo.getTrump())) {
+						if(trickInfo.getCard(0).isTrump(SkatConstants.GameTypes.SUIT, trickInfo.getTrump())) {
 							bestToBePlayed = cards.getFirstIndexOfSuit(trickInfo.getGameType(), trickInfo.getTrump());
 							if(bestToBePlayed < 0) {
 								log.debug(".playNextCard(): Damn! I have to play a Jack...");
@@ -88,7 +88,7 @@ public class OpponentPlayer implements CardPlayer {
 				else {
 					log.debug(".playNextCard(): I can match the demanded color, and it's our trick already...");
 					// 1.1.2: if no: find highest matching card
-					if(trickInfo.getTrick().getCard(0).isTrump(trickInfo.getTrump())) {
+					if(trickInfo.getTrick().getCard(0).isTrump(SkatConstants.GameTypes.SUIT, trickInfo.getTrump())) {
 					    bestToBePlayed = cards.getLastIndexOfSuit(trickInfo.getGameType(), trickInfo.getTrump());
 						if(bestToBePlayed < 0) {
 							log.debug(".playNextCard(): Damn! I have to play a Jack...");
@@ -106,7 +106,7 @@ public class OpponentPlayer implements CardPlayer {
 				if(Helper.isSinglePlayerWin(trickInfo)) {
 					// 1.2.1: if no: do I have trump? 
 					log.debug(".playNextCard(): I cannot match and trick is SinglePlayerWin");
-					if(cards.hasTrump(trickInfo.getTrump())) {
+					if(cards.hasTrump(SkatConstants.GameTypes.SUIT, trickInfo.getTrump())) {
 						// 1.2.1.1: if yes: do I want to trump
 						if(trickInfo.getTrickValue() > 3) {
 							log.debug(".playNextCard(): But I can and will take it...");
@@ -298,7 +298,7 @@ public class OpponentPlayer implements CardPlayer {
 		int highCard = 0;
 		int index = 0;
 		while (++index<cards.size()) {
-			if(cards.getCard(index).isTrump(trump) && cards.getCard(index).getPoints() > cards.getCard(highCard).getPoints()) { 
+			if(cards.getCard(index).isTrump(SkatConstants.GameTypes.SUIT, trump) && cards.getCard(index).getPoints() > cards.getCard(highCard).getPoints()) { 
 				highCard = index;
 				log.debug("     highest card set to "+index);
 			}
@@ -319,7 +319,7 @@ public class OpponentPlayer implements CardPlayer {
 		int highCard = 0;
 		int index = 0;
 		while (++index<cards.size()) {
-			if(!cards.getCard(index).isTrump(trump) 
+			if(!cards.getCard(index).isTrump(SkatConstants.GameTypes.SUIT, trump) 
 					&& cards.getCard(index).getPoints() > cards.getCard(highCard).getPoints() 
 					&& cards.getCard(index).getRank() != SkatConstants.Ranks.ACE 
 					&& cards.getCard(index).getSuit() == suit) { 
@@ -342,12 +342,12 @@ public class OpponentPlayer implements CardPlayer {
 		int highCard = 0;
 		int index = 0;
 		while (++index<cards.size()) {
-		    if(cards.getCard(highCard).isTrump(trump) && 
-		            !cards.getCard(index).isTrump(trump) &&
+		    if(cards.getCard(highCard).isTrump(SkatConstants.GameTypes.SUIT, trump) && 
+		            !cards.getCard(index).isTrump(SkatConstants.GameTypes.SUIT, trump) &&
 		            cards.getCard(index).getRank() != SkatConstants.Ranks.ACE) {
 				highCard = index;
 		    }
-			else if(!cards.getCard(index).isTrump(trump) && 
+			else if(!cards.getCard(index).isTrump(SkatConstants.GameTypes.SUIT, trump) && 
 			        cards.getCard(index).getPoints() > cards.getCard(highCard).getPoints() && 
 			        cards.getCard(index).getRank() != SkatConstants.Ranks.ACE) { 
 				highCard = index;
@@ -368,7 +368,7 @@ public class OpponentPlayer implements CardPlayer {
 		int index = 0;
 		boolean found = false;
 		while (!found && ++index<cards.size()) {
-			if(!cards.getCard(index).isTrump(trump) && cards.getCard(index).getPoints() < cards.getCard(lowCard).getPoints()) {
+			if(!cards.getCard(index).isTrump(SkatConstants.GameTypes.SUIT, trump) && cards.getCard(index).getPoints() < cards.getCard(lowCard).getPoints()) {
 			    lowCard = index;
 			}
 			if(cards.getCard(lowCard).getPoints() == 0) found = true;

@@ -16,12 +16,14 @@ import java.util.Iterator;
 import java.util.Observable;
 import java.util.Vector;
 
+import jskat.share.rules.SkatRulesFactory;
+
 import org.apache.log4j.Logger;
 
 // TODO (js) refactor implementation of find() method!!!
 
 /**
- * Holds a some Cards
+ * Holds some Cards
  */
 public class CardVector extends Observable {
 
@@ -196,31 +198,6 @@ public class CardVector extends Observable {
 	}
 
 	/**
-	 * Searches in the Vector for the given card Returns true if the card is in
-	 * the Vector
-	 * 
-	 * This method doesn't take the game type into account
-	 * 
-	 * @deprecated
-	 * 
-	 * @param suit
-	 *            Suit to be tested
-	 * @return TRUE, when the suit is on the hand
-	 */
-	public boolean hasSuit(SkatConstants.Suits suit) {
-
-		boolean hasCard = false;
-
-		for (int i = 0; i < cards.size(); i++) {
-			if (getCard(i).getSuit() == suit) {
-				hasCard = true;
-			}
-		}
-
-		return hasCard;
-	}
-
-	/**
 	 * Tests whether a card with a suit is in the CardVector or not
 	 * 
 	 * @param gameType
@@ -231,6 +208,11 @@ public class CardVector extends Observable {
 	 */
 	public boolean hasSuit(SkatConstants.GameTypes gameType,
 			SkatConstants.Suits suit) {
+		
+		if (gameType == SkatConstants.GameTypes.SUIT) {
+		
+			throw new IllegalArgumentException("This method is not suitable for SUIT games.");
+		}
 		
 		return hasSuit(gameType, null, suit);
 	}
@@ -250,59 +232,7 @@ public class CardVector extends Observable {
 			SkatConstants.Suits trump,
 			SkatConstants.Suits suit) {
 
-		boolean result = false;
-
-		// Got through all cards
-		int index = 0;
-		while (index < cards.size() && result == false) {
-
-			if (gameType == SkatConstants.GameTypes.NULL
-					&& (getCard(index).getSuit() == suit)) {
-				// null games
-				result = true;
-			}
-			else if ((gameType == SkatConstants.GameTypes.SUIT)
-						&& (getCard(index).getSuit() == suit)
-						&& (getCard(index).getRank() != SkatConstants.Ranks.JACK)
-						&& (getCard(index).getSuit() != trump)) {
-				// suit games
-				result = true;
-			}
-			else if ((gameType == SkatConstants.GameTypes.GRAND
-							|| gameType == SkatConstants.GameTypes.RAMSCH 
-							|| gameType == SkatConstants.GameTypes.RAMSCHGRAND)
-						&& (getCard(index).getSuit() == suit)
-						&& (getCard(index).getRank() != SkatConstants.Ranks.JACK)) {
-				// grand and ramsch games
-				result = true;
-			}
-			
-			index++;
-		}
-
-		return result;
-	}
-
-	/**
-	 * Searches in the Vector for any trump cards. Returns true if at least one
-	 * trump card is in the Vector
-	 * 
-	 * This is only valid for suit games
-	 * 
-	 * @deprecated
-	 * @param trump
-	 *            Current trump color
-	 * @return TRUE, when a trump card is found
-	 */
-	public boolean hasTrump(SkatConstants.Suits trump) {
-
-		return (hasSuit(trump)
-				|| contains(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.JACK)
-				|| contains(SkatConstants.Suits.SPADES,
-						SkatConstants.Ranks.JACK)
-				|| contains(SkatConstants.Suits.HEARTS,
-						SkatConstants.Ranks.JACK) || contains(
-				SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK));
+		return SkatRulesFactory.getSkatRules(gameType).hasSuit(this, trump, suit);
 	}
 
 	/**

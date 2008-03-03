@@ -117,11 +117,11 @@ public class Helper {
 			if (rules
 					.isCardAllowed(cards.getCard(i), cards, initialCard, trump)) {
 				if (gameType != SkatConstants.GameTypes.NULL) {
-					if (cards.getCard(i).isTrump(trump)
-							&& initialCard.isTrump(trump)) {
+					if (cards.getCard(i).isTrump(gameType, trump)
+							&& initialCard.isTrump(gameType, trump)) {
 						result = true;
-					} else if (!cards.getCard(i).isTrump(trump)
-							&& !initialCard.isTrump(trump) && sameSuit) {
+					} else if (!cards.getCard(i).isTrump(gameType, trump)
+							&& !initialCard.isTrump(gameType, trump) && sameSuit) {
 						result = true;
 					}
 				} else if (sameSuit) {
@@ -168,14 +168,7 @@ public class Helper {
 	 */
 	public static boolean hasTrump(CardVector cards,
 			SkatConstants.Suits currTrump) {
-		return (cards.hasSuit(currTrump)
-				|| cards.contains(SkatConstants.Suits.CLUBS,
-						SkatConstants.Ranks.JACK)
-				|| cards.contains(SkatConstants.Suits.SPADES,
-						SkatConstants.Ranks.JACK)
-				|| cards.contains(SkatConstants.Suits.HEARTS,
-						SkatConstants.Ranks.JACK) || cards.contains(
-				SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK));
+		return (cards.hasTrump(SkatConstants.GameTypes.SUIT, currTrump));
 	}
 
 	/**

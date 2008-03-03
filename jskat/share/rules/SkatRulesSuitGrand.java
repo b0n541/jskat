@@ -71,7 +71,7 @@ public abstract class SkatRulesSuitGrand implements SkatRules {
 			SkatConstants.Suits trump);
 
 	/**
-	 * @see jskat.share.rules.SkatRules#isCardBeats(jskat.share.Card, jskat.share.Card, jskat.share.Card)
+	 * @see jskat.share.rules.SkatRules#isCardBeatsCard(jskat.share.Card, jskat.share.Card, jskat.share.Card, jskat.share.SkatConstants.Suits)
 	 */
-	public abstract boolean isCardBeats(Card card, Card cardToBeat, Card initialTrickCard);
+	public abstract boolean isCardBeatsCard(Card card, Card cardToBeat, Card initialTrickCard, SkatConstants.Suits trump);
 }

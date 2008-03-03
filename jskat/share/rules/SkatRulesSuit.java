@@ -16,6 +16,7 @@ import jskat.data.SkatGameData;
 import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
+import jskat.share.SkatConstants.Suits;
 
 /**
  * Implementation of skat rules for Suit games
@@ -162,16 +163,71 @@ public class SkatRulesSuit extends SkatRulesSuitGrand implements SkatRules {
 	@Override
 	public boolean isCardAllowed(Card card, CardVector hand, Card initialCard,
 			SkatConstants.Suits trump) {
+		
+		boolean result = false;
+		
+		if (initialCard.isTrump(SkatConstants.GameTypes.SUIT, trump)) {
+			
+			if (card.isTrump(SkatConstants.GameTypes.SUIT, trump)) {
+				
+				result = true;
+			}
+		}
+		else {
+			
+			if (initialCard.getSuit() == card.getSuit()) {
+				
+				result = true;
+			}
+			else if (!hand.hasSuit(SkatConstants.GameTypes.SUIT, trump, initialCard.getSuit())) {
+				
+				result = true;
+			}
+		}
+		
+		return result;
+	}
+
+	/**
+	 * @see jskat.share.rules.SkatRules#isCardBeatsCard(jskat.share.Card, jskat.share.Card, jskat.share.Card, jskat.share.SkatConstants.Suits)
+	 */
+	@Override
+	public boolean isCardBeatsCard(Card card, Card cardToBeat, Card initialTrickCard, SkatConstants.Suits trump) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	/**
-	 * @see jskat.share.rules.SkatRulesSuitGrand#isCardBeats(jskat.share.Card, jskat.share.Card, jskat.share.Card)
+	 * @see jskat.share.rules.SkatRules#hasSuit(jskat.share.CardVector, jskat.share.SkatConstants.Suits, jskat.share.SkatConstants.Suits)
 	 */
 	@Override
-	public boolean isCardBeats(Card card, Card cardToBeat, Card initialTrickCard) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean hasSuit(CardVector hand, Suits trump, Suits suit) {
+		
+		boolean result = false;
+		
+		int index = 0;
+		while (result == false && index < hand.size()) {
+			
+			if (hand.getCard(index).getSuit() == suit
+					&& hand.getCard(index).getSuit() != trump
+					&& hand.getCard(index).getRank() != SkatConstants.Ranks.JACK) {
+				
+				result = true;
+			}
+			
+			index++;
+		}
+		
+		return result;
+	}
+
+	/**
+	 * @see jskat.share.rules.SkatRules#isTrump(jskat.share.Card, jskat.share.SkatConstants.Suits)
+	 */
+	@Override
+	public boolean isTrump(Card card, Suits trump) {
+		
+		return (card.getRank() == SkatConstants.Ranks.JACK
+					|| card.getSuit() == trump);
 	}
 }
