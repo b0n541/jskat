@@ -42,7 +42,7 @@ import jskat.share.Tools;
  */
 public class JSkat {
 
-	static Logger log = Logger.getLogger(JSkat.class);
+	static Logger log = Logger.getLogger(jskat.control.JSkat.class);
 
 	/**
 	 * Creates a new instance of JSkat
@@ -52,6 +52,8 @@ public class JSkat {
 	 */
 	public JSkat(Vector<String> aiPlayer, JFrame splashScreen) {
 
+		Tools.checkLog();
+		
 		JSkatOptions jskatOptions = JSkatOptions.instance();
 		
 		// At first the data model
