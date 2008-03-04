@@ -7,7 +7,7 @@ Authors: @JS@
 
 Released: @ReleaseDate@
 
-*/
+ */
 package jskat.share.rules;
 
 import org.apache.log4j.Logger;
@@ -20,7 +20,7 @@ import jskat.share.SkatConstants.Suits;
 
 /**
  * Implementation of skat rules for Suit games
- *
+ * 
  */
 public class SkatRulesSuit extends SkatRulesSuitGrand implements SkatRules {
 
@@ -34,8 +34,8 @@ public class SkatRulesSuit extends SkatRulesSuitGrand implements SkatRules {
 
 		// TODO: multiplier should already be calculated at the beginning of the
 		// game - skat & suit cards also need to be considered
-		int multiplier = 2; // it's the lowest multiplier, 
-							// "with/without one play two"
+		int multiplier = 2; // it's the lowest multiplier,
+		// "with/without one play two"
 
 		if (gameData.getClubJack()) {
 			// game was played with jacks
@@ -48,7 +48,7 @@ public class SkatRulesSuit extends SkatRulesSuitGrand implements SkatRules {
 					}
 				}
 			}
-			log.debug("game played with "+(multiplier-1)+" jack(s)");
+			log.debug("game played with " + (multiplier - 1) + " jack(s)");
 		} else {
 			// game was played without jacks
 			if (!gameData.getSpadeJack()) {
@@ -60,7 +60,7 @@ public class SkatRulesSuit extends SkatRulesSuitGrand implements SkatRules {
 					}
 				}
 			}
-			log.debug("game played without "+(multiplier-1)+" jack(s)");
+			log.debug("game played without " + (multiplier - 1) + " jack(s)");
 		}
 
 		log.debug("calcSuitResult: after Jacks: multiplier " + multiplier);
@@ -109,21 +109,18 @@ public class SkatRulesSuit extends SkatRulesSuitGrand implements SkatRules {
 		int gameValue = 0; // the multiplier for the game type
 
 		SkatConstants.Suits trump = gameData.getTrump();
-				
+
 		if (trump == SkatConstants.Suits.CLUBS) {
-			
+
 			gameValue = SkatConstants.CLUBS_VAL;
-		}
-		else if (trump == SkatConstants.Suits.SPADES) {
-			
+		} else if (trump == SkatConstants.Suits.SPADES) {
+
 			gameValue = SkatConstants.SPADES_VAL;
-		}
-		else if (trump == SkatConstants.Suits.HEARTS) {
-			
+		} else if (trump == SkatConstants.Suits.HEARTS) {
+
 			gameValue = SkatConstants.HEARTS_VAL;
-		}
-		else if (trump == SkatConstants.Suits.DIAMONDS) {
-			
+		} else if (trump == SkatConstants.Suits.DIAMONDS) {
+
 			gameValue = SkatConstants.DIAMONDS_VAL;
 		}
 
@@ -158,76 +155,86 @@ public class SkatRulesSuit extends SkatRulesSuitGrand implements SkatRules {
 	}
 
 	/**
-	 * @see jskat.share.rules.SkatRulesSuitGrand#isCardAllowed(jskat.share.Card, jskat.share.CardVector, jskat.share.Card, jskat.share.SkatConstants.Suits)
+	 * @see jskat.share.rules.SkatRulesSuitGrand#isCardAllowed(jskat.share.Card,
+	 *      jskat.share.CardVector, jskat.share.Card,
+	 *      jskat.share.SkatConstants.Suits)
 	 */
 	@Override
 	public boolean isCardAllowed(Card card, CardVector hand, Card initialCard,
 			SkatConstants.Suits trump) {
-		
+
 		boolean result = false;
-		
+
+		log.debug(card + " " + hand + " " + initialCard + " " + trump);
+
 		if (initialCard.isTrump(SkatConstants.GameTypes.SUIT, trump)) {
-			
+
 			if (card.isTrump(SkatConstants.GameTypes.SUIT, trump)) {
+
+				result = true;
+			}
+			else if (!hand.hasTrump(SkatConstants.GameTypes.SUIT, trump)) {
 				
 				result = true;
 			}
-		}
-		else {
-			
+		} else {
+
 			if (initialCard.getSuit() == card.getSuit()) {
-				
+
 				result = true;
-			}
-			else if (!hand.hasSuit(SkatConstants.GameTypes.SUIT, trump, initialCard.getSuit())) {
 				
+			} else if (!hand.hasSuit(SkatConstants.GameTypes.SUIT, trump,
+					initialCard.getSuit())) {
+
 				result = true;
 			}
 		}
-		
+
 		return result;
 	}
 
 	/**
-	 * @see jskat.share.rules.SkatRules#isCardBeatsCard(jskat.share.Card, jskat.share.Card, jskat.share.Card, jskat.share.SkatConstants.Suits)
+	 * @see jskat.share.rules.SkatRules#isCardBeatsCard(jskat.share.Card,
+	 *      jskat.share.Card, jskat.share.Card, jskat.share.SkatConstants.Suits)
 	 */
 	@Override
-	public boolean isCardBeatsCard(Card card, Card cardToBeat, Card initialCard, SkatConstants.Suits trump) {
+	public boolean isCardBeatsCard(Card card, Card cardToBeat,
+			Card initialCard, SkatConstants.Suits trump) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	/**
-	 * @see jskat.share.rules.SkatRules#hasSuit(jskat.share.CardVector, jskat.share.SkatConstants.Suits, jskat.share.SkatConstants.Suits)
+	 * @see jskat.share.rules.SkatRules#hasSuit(jskat.share.CardVector,
+	 *      jskat.share.SkatConstants.Suits, jskat.share.SkatConstants.Suits)
 	 */
-	@Override
 	public boolean hasSuit(CardVector hand, Suits trump, Suits suit) {
-		
+
 		boolean result = false;
-		
+
 		int index = 0;
 		while (result == false && index < hand.size()) {
-			
-			if (hand.getCard(index).getSuit() == suit
-					&& hand.getCard(index).getSuit() != trump
-					&& hand.getCard(index).getRank() != SkatConstants.Ranks.JACK) {
-				
+
+			Card currCard = hand.getCard(index);
+
+			if (currCard.getSuit() == suit && currCard.getSuit() != trump
+					&& currCard.getRank() != SkatConstants.Ranks.JACK) {
+
 				result = true;
 			}
-			
+
 			index++;
 		}
-		
+
 		return result;
 	}
 
 	/**
-	 * @see jskat.share.rules.SkatRules#isTrump(jskat.share.Card, jskat.share.SkatConstants.Suits)
+	 * @see jskat.share.rules.SkatRules#isTrump(jskat.share.Card,
+	 *      jskat.share.SkatConstants.Suits)
 	 */
-	@Override
 	public boolean isTrump(Card card, Suits trump) {
-		
-		return (card.getRank() == SkatConstants.Ranks.JACK
-					|| card.getSuit() == trump);
+
+		return (card.getRank() == SkatConstants.Ranks.JACK || card.getSuit() == trump);
 	}
 }

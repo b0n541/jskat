@@ -76,7 +76,6 @@ public class SkatRulesGrand extends SkatRulesSuitGrand implements SkatRules {
 	/**
 	 * @see jskat.share.rules.SkatRules#hasSuit(jskat.share.CardVector, jskat.share.SkatConstants.Suits, jskat.share.SkatConstants.Suits)
 	 */
-	@Override
 	public boolean hasSuit(CardVector hand, Suits trump, Suits suit) {
 		
 		boolean result = false;
@@ -99,7 +98,6 @@ public class SkatRulesGrand extends SkatRulesSuitGrand implements SkatRules {
 	/**
 	 * @see jskat.share.rules.SkatRules#isTrump(jskat.share.Card, jskat.share.SkatConstants.Suits)
 	 */
-	@Override
 	public boolean isTrump(Card card, Suits trump) {
 		
 		return card.getRank() == SkatConstants.Ranks.JACK;

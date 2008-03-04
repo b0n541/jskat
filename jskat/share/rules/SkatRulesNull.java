@@ -175,7 +175,6 @@ public class SkatRulesNull implements SkatRules {
 	 * @see jskat.share.rules.SkatRules#hasSuit(jskat.share.CardVector,
 	 *      jskat.share.SkatConstants.Suits, jskat.share.SkatConstants.Suits)
 	 */
-	@Override
 	public boolean hasSuit(CardVector hand, Suits trump, Suits suit) {
 
 		boolean result = false;
@@ -197,7 +196,6 @@ public class SkatRulesNull implements SkatRules {
 	/**
 	 * @see jskat.share.rules.SkatRules#isTrump(jskat.share.Card, jskat.share.SkatConstants.Suits)
 	 */
-	@Override
 	public boolean isTrump(Card card, Suits trump) {
 
 		// null games don't have trump cards at all
