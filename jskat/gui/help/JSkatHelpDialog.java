@@ -92,7 +92,7 @@ public class JSkatHelpDialog extends JDialog {
         String oneLine = new String();
         String gplText = new String();
         try {
-            InputStream is = ClassLoader.getSystemResourceAsStream("jskat/gui/help/gpl.html");
+            InputStream is = ClassLoader.getSystemResourceAsStream("jskat/gui/help/gpl.txt");
             InputStreamReader isr = new java.io.InputStreamReader(is);
             BufferedReader bfr = new java.io.BufferedReader(isr);
             
