@@ -223,7 +223,8 @@ public class SkatTable extends Observable implements Observer {
 
 			if (panelType == CardHoldingPanel.PLAYER_PANEL) {
 
-				if (!skatTableOptions.isSchieberRamschJacksInSkat()
+				if (currGame.getSkatGameData().getGameType() == SkatConstants.GameTypes.RAMSCH
+						&& !skatTableOptions.isSchieberRamschJacksInSkat()
 						&& rank == SkatConstants.Ranks.JACK ) {
 
 					log.info("Human player has tried to put a Jack into skat although it's not allowed!");
