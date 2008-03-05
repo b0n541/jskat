@@ -55,7 +55,7 @@ public class AboutDialogAction implements ActionListener {
      */    
     public void actionPerformed(ActionEvent e) {
 
-        JLabel jskatLabel = new JLabel("JSkat 0.6");
+        JLabel jskatLabel = new JLabel("JSkat 0.7");
         jskatLabel.setFont(new Font("Dialog", Font.BOLD, 20));
         JPanel jskatPanel = new JPanel();
         jskatPanel.setLayout(new GridLayout(9, 1));
