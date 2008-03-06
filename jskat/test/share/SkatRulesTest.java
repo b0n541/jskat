@@ -24,10 +24,23 @@ import jskat.share.Tools;
 import jskat.share.rules.SkatRules;
 import jskat.share.rules.SkatRulesFactory;
 
+/**
+ * Runs all unit tests for skat rule classes
+ * 
+ * @see jskat.share.rules.SkatRules
+ * @see jskat.share.rules.SkatRulesGrand
+ * @see jskat.share.rules.SkatRulesNull
+ * @see jskat.share.rules.SkatRulesRamsch
+ * @see jskat.share.rules.SkatRulesSuit
+ * @see jskat.share.rules.SkatRulesSuitGrand
+ */
 public class SkatRulesTest {
 
 	static Logger log = Logger.getLogger(jskat.test.share.SkatRulesTest.class);
 
+	/**
+	 * Setup for all tests
+	 */
 	@Before
 	public void setUp() {
 		
@@ -76,11 +89,21 @@ public class SkatRulesTest {
 		hand004.add(cardCK);
 	}
 	
+	/**
+	 * Test 001 for method getGameResult()
+	 * 
+	 * @see jskat.share.rules.SkatRules#getGameResult(jskat.data.SkatGameData)
+	 */
 	@Test
-	public void getResult() {
+	public void getGameResult001() {
 		assertTrue(false);
 	}
 	
+	/**
+	 * Test 001 for method isCardAllowed()
+	 * 
+	 * @see jskat.share.rules.SkatRules#isCardAllowed(Card, CardVector, Card, jskat.share.SkatConstants.Suits)
+	 */
 	@Test
 	public void isCardAllowed001() {
 		
@@ -93,6 +116,11 @@ public class SkatRulesTest {
 		assertFalse(rules.isCardAllowed(played, hand001, initialCard, trump));
 	}
 	
+	/**
+	 * Test 002 for method isCardAllowed()
+	 * 
+	 * @see jskat.share.rules.SkatRules#isCardAllowed(Card, CardVector, Card, jskat.share.SkatConstants.Suits)
+	 */
 	@Test
 	public void isCardAllowed002() {
 		// queen of clubs allowed on eight of spades: YES (can't match)
@@ -104,6 +132,11 @@ public class SkatRulesTest {
 		assertTrue(rules.isCardAllowed(played, hand001, initialCard, trump));
 	}
 	
+	/**
+	 * Test 003 for method isCardAllowed()
+	 * 
+	 * @see jskat.share.rules.SkatRules#isCardAllowed(Card, CardVector, Card, jskat.share.SkatConstants.Suits)
+	 */
 	@Test
 	public void isCardAllowed003() {
 		// queen of clubs allowed on eight of clubs: YES (matching suit)
@@ -115,6 +148,11 @@ public class SkatRulesTest {
 		assertTrue(rules.isCardAllowed(played, hand001, initialCard, trump));
 	}
 	
+	/**
+	 * Test 004 for method isCardAllowed()
+	 * 
+	 * @see jskat.share.rules.SkatRules#isCardAllowed(Card, CardVector, Card, jskat.share.SkatConstants.Suits)
+	 */
 	@Test
 	public void isCardAllowed004() {
 		// queen of clubs allowed on eight of spades: NO (has other trump - the Jack!)
@@ -127,6 +165,11 @@ public class SkatRulesTest {
 		assertFalse(rules.isCardAllowed(played, hand001, initialCard, trump));
 	}
 	
+	/**
+	 * Test 005 for method isCardAllowed()
+	 * 
+	 * @see jskat.share.rules.SkatRules#isCardAllowed(Card, CardVector, Card, jskat.share.SkatConstants.Suits)
+	 */
 	@Test
 	public void isCardAllowed005() {
 		// queen of clubs allowed on eight of spades: YES (can't match)
@@ -138,6 +181,11 @@ public class SkatRulesTest {
 		assertTrue(rules.isCardAllowed(played, hand001, initialCard, trump));
 	}
 		
+	/**
+	 * Test 006 for method isCardAllowed()
+	 * 
+	 * @see jskat.share.rules.SkatRules#isCardAllowed(Card, CardVector, Card, jskat.share.SkatConstants.Suits)
+	 */
 	@Test
 	public void isCardAllowed006() {
 		// Problem was in playing ramsch - 8 of Clubs was not allowed ("Player is evil")
@@ -150,7 +198,10 @@ public class SkatRulesTest {
 	}
 
 	/**
+	 * Test 201 for method isCardAllowed() <br />
 	 * Suit game, Spades trump, D7 allowed on C7 and hand {D-7, D-8, D-9, D-Q}
+	 * 
+	 * @see jskat.share.rules.SkatRules#isCardAllowed(Card, CardVector, Card, jskat.share.SkatConstants.Suits)
 	 */
 	@Test
 	public void isCardAllowed201() {
@@ -163,7 +214,10 @@ public class SkatRulesTest {
 	}
 
 	/**
+	 * Test 202 for method isCardAllowed() <br />
 	 * Suit game, Spades trump, D7 allowed on C7 and hand {D-7, D-8, D-9, D-Q}
+	 * 
+	 * @see jskat.share.rules.SkatRules#isCardAllowed(Card, CardVector, Card, jskat.share.SkatConstants.Suits)
 	 */
 	@Test
 	public void isCardAllowed202() {
@@ -176,7 +230,10 @@ public class SkatRulesTest {
 	}
 
 	/**
+	 * Test 203 for method isCardAllowed() <br />
 	 * Suit game, Clubs trump, S7 not allowed on C7 with hand {S-7, S-8, S-Q, S-T, D-7, D-8, C-Q}
+	 * 
+	 * @see jskat.share.rules.SkatRules#isCardAllowed(Card, CardVector, Card, jskat.share.SkatConstants.Suits)
 	 */
 	@Test
 	public void isCardAllowed203() {
@@ -189,7 +246,10 @@ public class SkatRulesTest {
 	}
 
 	/**
+	 * Test 204 for method isCardAllowed() <br />
 	 * Suit game, Spades trump, CQ allowed on SA with hand {C-Q, C-K}
+	 * 
+	 * @see jskat.share.rules.SkatRules#isCardAllowed(Card, CardVector, Card, jskat.share.SkatConstants.Suits)
 	 */
 	@Test
 	public void isCardAllowed204() {

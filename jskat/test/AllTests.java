@@ -24,6 +24,9 @@ import jskat.test.share.SkatRulesTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+/**
+ * Runs all unit tests for JSkat
+ */
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
 		// JSkat classes
