@@ -19,6 +19,9 @@ import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
 
+/**
+ * Provides some helper methods for unit tests
+ */
 public class TestHelper {
 
 	/**
@@ -117,6 +120,12 @@ public class TestHelper {
 		return result;
 	}
 
+	/**
+	 * Predifined card distributions
+	 * 
+	 * @param selection ID of the desired distribution
+	 * @return Distribution
+	 */
 	public static ArrayList<HashSet<Card>> dealCardset(int selection) {
 		
 		ArrayList<HashSet<Card>> dealtCards = new ArrayList<HashSet<Card>>();
