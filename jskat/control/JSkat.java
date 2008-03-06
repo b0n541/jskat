@@ -37,8 +37,6 @@ import jskat.share.Tools;
 
 /**
  * Main class of JSkat
- * 
- * @author @JS@
  */
 public class JSkat {
 
@@ -106,7 +104,7 @@ public class JSkat {
 
 			UIManager
 					.setLookAndFeel(new net.sourceforge.mlf.metouia.MetouiaLookAndFeel());
-
+			
 		} catch (Exception ext) {
 
 			log.error("Look and Feel Metouia not found!");
