@@ -170,22 +170,27 @@ public class SkatRulesSuit extends SkatRulesSuitGrand implements SkatRules {
 		if (initialCard.isTrump(SkatConstants.GameTypes.SUIT, trump)) {
 
 			if (card.isTrump(SkatConstants.GameTypes.SUIT, trump)) {
-
+				// only trump cards are allowed
 				result = true;
 			}
 			else if (!hand.hasTrump(SkatConstants.GameTypes.SUIT, trump)) {
-				
+				// no trump cards on players hand
 				result = true;
 			}
-		} else {
-
-			if (initialCard.getSuit() == card.getSuit()) {
-
-				result = true;
-				
-			} else if (!hand.hasSuit(SkatConstants.GameTypes.SUIT, trump,
+		} 
+		else {
+			
+			if (hand.hasSuit(SkatConstants.GameTypes.SUIT, trump,
 					initialCard.getSuit())) {
-
+				
+				if (initialCard.getSuit() == card.getSuit()
+						&& !card.isTrump(SkatConstants.GameTypes.SUIT, trump)) {
+					// card has to follow suit 
+					result = true;
+				}
+			} 
+			else {
+				// no suit of initial card on players hand
 				result = true;
 			}
 		}

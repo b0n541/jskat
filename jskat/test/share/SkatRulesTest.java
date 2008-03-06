@@ -261,6 +261,25 @@ public class SkatRulesTest {
 		assertTrue(rules.isCardAllowed(cardCQ, hand004, cardSA, trump));
 	}
 	
+	/**
+	 * Test 205 for method isCardAllowed() <br />
+	 * Suit game, Diamonds trump, DJ not allowed on D8 with hand {J-H,J-D,D-A,Q-S,T-C,8-C} 
+	 * 
+	 * @see jskat.share.rules.SkatRules#isCardAllowed(Card, CardVector, Card, jskat.share.SkatConstants.Suits)
+	 */
+	@Test
+	public void isCardAllowed205() {
+		
+		log.debug("====> isCardAllowed205 <====");
+		hand001 = TestHelper.buildDeck("J-H,J-D,A-D,Q-S,T-C,8-C");
+		played = new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK);
+		initialCard = new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.EIGHT);
+		gameType = SkatConstants.GameTypes.SUIT;
+		trump = SkatConstants.Suits.HEARTS;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertFalse(rules.isCardAllowed(played, hand001, initialCard, trump));
+	}
+
 	private CardVector hand001;
 	private CardVector hand002;
 	private CardVector hand003;
