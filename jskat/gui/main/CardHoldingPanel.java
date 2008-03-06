@@ -104,7 +104,7 @@ public class CardHoldingPanel extends JPanel implements Observer {
 
 		switch (panelType) {
 		case CardHoldingPanel.OPPONENT_PANEL:
-			// no gab between the cards of the opponent panels
+			// no gap between the cards of the opponent panels
 			((FlowLayout) centerPanel.getLayout()).setHgap(0);
 			break;
 		case CardHoldingPanel.PLAYER_PANEL:
@@ -232,14 +232,17 @@ public class CardHoldingPanel extends JPanel implements Observer {
 	 */
 	public void update(Observable observ, Object obj) {
 
-		// log.debug("UPDATE panel #" + panelType + ", player " + player + " " + observ + ": " + obj + " has changed...");
+		log.debug("UPDATE panel #" + panelType + ", player " + player + " " + observ + ": " + obj + " has changed...");
 
 		if (observ instanceof JSkatGraphicRepository) {
 
 			repaint();
 			
 		} else if (observ instanceof SkatGame && obj instanceof SkatGame.GameState) {
-			if((SkatGame.GameState) obj == SkatGame.GameState.PLAYING) {
+
+			SkatGame.GameState gameState = (SkatGame.GameState) obj;
+			
+			if(gameState == SkatGame.GameState.PLAYING) {
 
 				// first, make a CardVector out of the card panels
 				CardVector cv = new CardVector();
@@ -260,8 +263,15 @@ public class CardHoldingPanel extends JPanel implements Observer {
 				// and now reorganize the cards to reflect the new sorting order
 				reorganizeCards(cv);
 				repaint();
-				
 			}
+			else if (gameState == SkatGame.GameState.GAME_OVER
+						&& panelType == TRICK_PANEL) {
+				// clear the trick panel
+				cardPanels.get(0).setCard(null, null);				
+				cardPanels.get(1).setCard(null, null);				
+				cardPanels.get(2).setCard(null, null);				
+			}
+			
 		} else if (observ instanceof CardVector) {
 
 			CardVector obsCardVector = ((CardVector) observ);
@@ -291,7 +301,7 @@ public class CardHoldingPanel extends JPanel implements Observer {
 
 		} else if (observ instanceof SkatGameData && obj instanceof Trick) {
 
-			if (panelType == 4) {
+			if (panelType == TRICK_PANEL) {
 
 				// only the trick panel should change
 				Trick trick = (Trick) obj;
@@ -300,15 +310,24 @@ public class CardHoldingPanel extends JPanel implements Observer {
 					cardPanels.get(0).setCard(card.getSuit(), card
 							.getRank());
 				}
+				else {
+					cardPanels.get(0).setCard(null, null);
+				}
 				card = trick.getCard(1);
 				if (card != null) {
 					cardPanels.get(1).setCard(card.getSuit(), card
 							.getRank());
 				}
+				else {
+					cardPanels.get(1).setCard(null, null);
+				}
 				card = trick.getCard(2);
 				if (card != null) {
 					cardPanels.get(2).setCard(card.getSuit(), card
 							.getRank());
+				}
+				else {
+					cardPanels.get(2).setCard(null, null);
 				}
 			}
 
