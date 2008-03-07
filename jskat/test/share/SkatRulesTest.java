@@ -51,6 +51,7 @@ public class SkatRulesTest {
 		cardD9 = new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.NINE);
 		cardDQ = new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.QUEEN);
 		cardDA = new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.ACE);
+		cardDJ = new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK);
 		cardHQ = new Card(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.QUEEN);
 		cardHJ = new Card(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.JACK);
 		cardS7 = new Card(SkatConstants.Suits.SPADES, SkatConstants.Ranks.SEVEN);
@@ -263,7 +264,7 @@ public class SkatRulesTest {
 	
 	/**
 	 * Test 205 for method isCardAllowed() <br />
-	 * Suit game, Diamonds trump, DJ not allowed on D8 with hand {J-H,J-D,D-A,Q-S,T-C,8-C} 
+	 * Suit game, Diamonds trump, DJ not allowed on D8 with hand {J-H,J-D,A-D,Q-S,T-C,8-C} 
 	 * 
 	 * @see jskat.share.rules.SkatRules#isCardAllowed(Card, CardVector, Card, jskat.share.SkatConstants.Suits)
 	 */
@@ -272,12 +273,31 @@ public class SkatRulesTest {
 		
 		log.debug("====> isCardAllowed205 <====");
 		hand001 = TestHelper.buildDeck("J-H,J-D,A-D,Q-S,T-C,8-C");
-		played = new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK);
-		initialCard = new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.EIGHT);
+		played = cardDJ;
+		initialCard = cardD8;
 		gameType = SkatConstants.GameTypes.SUIT;
 		trump = SkatConstants.Suits.HEARTS;
 		rules = SkatRulesFactory.getSkatRules(gameType);
 		assertFalse(rules.isCardAllowed(played, hand001, initialCard, trump));
+	}
+
+	/**
+	 * Test 206 for method isCardAllowed() <br />
+	 * Suit game, Diamonds trump, DJ allowed on D8 with hand {J-H,J-D,A-H,Q-S,T-C,8-C} 
+	 * 
+	 * @see jskat.share.rules.SkatRules#isCardAllowed(Card, CardVector, Card, jskat.share.SkatConstants.Suits)
+	 */
+	@Test
+	public void isCardAllowed206() {
+		
+		log.debug("====> isCardAllowed206 <====");
+		hand001 = TestHelper.buildDeck("J-H,J-D,A-H,Q-S,T-C,8-C");
+		played = cardDJ;
+		initialCard = cardD8;
+		gameType = SkatConstants.GameTypes.SUIT;
+		trump = SkatConstants.Suits.HEARTS;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertTrue(rules.isCardAllowed(played, hand001, initialCard, trump));
 	}
 
 	private CardVector hand001;
@@ -291,6 +311,7 @@ public class SkatRulesTest {
 	private Card cardD9;
 	private Card cardDQ;
 	private Card cardDA;
+	private Card cardDJ;
 	private Card cardHQ;
 	private Card cardHJ;
 	private Card cardS7;
