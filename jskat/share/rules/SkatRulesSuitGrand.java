@@ -7,7 +7,7 @@ Authors: @JS@
 
 Released: @ReleaseDate@
 
-*/
+ */
 package jskat.share.rules;
 
 import jskat.data.SkatGameData;
@@ -16,21 +16,25 @@ import jskat.share.CardVector;
 import jskat.share.SkatConstants;
 
 /**
- * Implements some methods of the interface SkatRules that are the same
- * in suit and grand games
+ * Implements some methods of the interface SkatRules that are the same in suit
+ * and grand games
  */
 public abstract class SkatRulesSuitGrand implements SkatRules {
 
 	/**
-	 * @see jskat.share.rules.SkatRules#isCardAllowed(jskat.share.Card, jskat.share.CardVector, jskat.share.Card, jskat.share.SkatConstants.Suits)
+	 * @see jskat.share.rules.SkatRules#isCardAllowed(jskat.share.Card,
+	 *      jskat.share.CardVector, jskat.share.Card,
+	 *      jskat.share.SkatConstants.Suits)
 	 */
-	public abstract boolean isCardAllowed(Card card, CardVector hand, Card initialCard,
-			SkatConstants.Suits trump);
+	public abstract boolean isCardAllowed(Card card, CardVector hand,
+			Card initialCard, SkatConstants.Suits trump);
 
 	/**
-	 * @see jskat.share.rules.SkatRules#isCardBeatsCard(jskat.share.Card, jskat.share.Card, jskat.share.Card, jskat.share.SkatConstants.Suits)
+	 * @see jskat.share.rules.SkatRules#isCardBeatsCard(jskat.share.Card,
+	 *      jskat.share.Card, jskat.share.Card, jskat.share.SkatConstants.Suits)
 	 */
-	public abstract boolean isCardBeatsCard(Card card, Card cardToBeat, Card initialCard, SkatConstants.Suits trump);
+	public abstract boolean isCardBeatsCard(Card card, Card cardToBeat,
+			Card initialCard, SkatConstants.Suits trump);
 
 	/**
 	 * @see jskat.share.rules.SkatRules#getGameResult(jskat.data.SkatGameData)
@@ -62,7 +66,8 @@ public abstract class SkatRulesSuitGrand implements SkatRules {
 	}
 
 	/**
-	 * @see jskat.share.rules.SkatRules#isDurchMarsch(int, jskat.data.SkatGameData)
+	 * @see jskat.share.rules.SkatRules#isDurchMarsch(int,
+	 *      jskat.data.SkatGameData)
 	 */
 	public boolean isDurchMarsch(int playerID, SkatGameData gameData) {
 		// there is no durchmarsch in suit or grand games

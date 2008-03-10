@@ -47,12 +47,13 @@ public interface SkatRules {
 	 * @param cardToBeat
 	 *            Card to be beaten
 	 * @param initialCard
-	 *            First card in the trick
-	 * @param trump 
-	 * 			  Trump suit in suit games, NULL otherwise
+	 *            First card of the trick
+	 * @param trump
+	 *            Trump suit in suit games, NULL otherwise
 	 * @return TRUE if the card beats the other card
 	 */
-	public boolean isCardBeatsCard(Card card, Card cardToBeat, Card initialCard, SkatConstants.Suits trump);
+	public boolean isCardBeatsCard(Card card, Card cardToBeat,
+			Card intitialCard, SkatConstants.Suits trump);
 
 	/**
 	 * Checks whether a game is won
@@ -130,14 +131,14 @@ public interface SkatRules {
 	 */
 	public boolean hasSuit(CardVector hand, SkatConstants.Suits trump,
 			SkatConstants.Suits suit);
-	
+
 	/**
 	 * Checks whether a card is a trump card
 	 * 
 	 * @param card
-	 * 			Card to be checked
+	 *            Card to be checked
 	 * @param trump
-	 * 			Trump suit in suit games, NULL otherwise
+	 *            Trump suit in suit games, NULL otherwise
 	 * @return TRUE if the card is a trump card
 	 */
 	public boolean isTrump(Card card, SkatConstants.Suits trump);

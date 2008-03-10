@@ -200,13 +200,38 @@ public class SkatRulesSuit extends SkatRulesSuitGrand implements SkatRules {
 
 	/**
 	 * @see jskat.share.rules.SkatRules#isCardBeatsCard(jskat.share.Card,
-	 *      jskat.share.Card, jskat.share.Card, jskat.share.SkatConstants.Suits)
+	 *      jskat.share.Card, jskat.share.SkatConstants.Suits)
 	 */
 	@Override
 	public boolean isCardBeatsCard(Card card, Card cardToBeat,
 			Card initialCard, SkatConstants.Suits trump) {
-		// TODO Auto-generated method stub
-		return false;
+
+		boolean result = false;
+		
+		log.debug(card + " " + cardToBeat + " " + trump);
+	
+		if (cardToBeat.isTrump(SkatConstants.GameTypes.SUIT, trump)) {
+			// card must be trump to beat other card
+			if (card.isTrump(SkatConstants.GameTypes.SUIT, trump) &&
+					cardToBeat.getSuitGrandOrder() < card.getSuitGrandOrder()) {
+				// card is trump and has higher order in suit/grand games
+				result = true;
+			}
+		}
+		else {
+			// other card was not trump
+			if (card.isTrump(SkatConstants.GameTypes.SUIT, trump)) {
+				// card is a trump card 
+				result = true;
+			}
+			else if (card.getSuit() == cardToBeat.getSuit() &&
+						cardToBeat.getSuitGrandOrder() < card.getSuitGrandOrder()) {
+				// card has higher order in suit/grand games
+				result = true;
+			}
+		}
+
+		return result;
 	}
 
 	/**
