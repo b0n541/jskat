@@ -207,7 +207,7 @@ public class SkatTable extends Observable implements Observer {
 	 * @param rank
 	 *            Rank of the card that was clicked
 	 */
-	public void cardPanelClicked(int panelType, SkatConstants.Suits suit, SkatConstants.Ranks rank) {
+	public void cardPanelClicked(CardHoldingPanel.PanelTypes panelType, SkatConstants.Suits suit, SkatConstants.Ranks rank) {
 
 		log.debug("card panel clicked: type: " + panelType + " suit: " + suit
 				+ " value: " + rank);
@@ -221,7 +221,7 @@ public class SkatTable extends Observable implements Observer {
 		
 		if (gameState == SkatGame.GameState.SHOWING_SKAT) {
 
-			if (panelType == CardHoldingPanel.PLAYER_PANEL) {
+			if (panelType == CardHoldingPanel.PanelTypes.PLAYER) {
 
 				if (currGame.getSkatGameData().getGameType() == SkatConstants.GameTypes.RAMSCH
 						&& !skatTableOptions.isSchieberRamschJacksInSkat()
@@ -239,21 +239,21 @@ public class SkatTable extends Observable implements Observer {
 				}
 					
 
-			} else if (panelType == CardHoldingPanel.SKAT_PANEL) {
+			} else if (panelType == CardHoldingPanel.PanelTypes.SKAT) {
 
 				currGame.takeCardFromSkat(suit, rank);
 			
 			}
 
 		} else if (currGame.getState() == SkatGame.GameState.WAIT_FOR_HUMAN_PLAYER_INPUT
-				&& panelType == CardHoldingPanel.PLAYER_PANEL) {
+				&& panelType == CardHoldingPanel.PanelTypes.PLAYER) {
 
 			log.debug("Waiting for player input and received click");
 
 			currGame.playTrickCard(suit, rank);
 
 		} else if (currGame.getState() == SkatGame.GameState.TRICK_COMPLETED
-				&& panelType == CardHoldingPanel.TRICK_PANEL) {
+				&& panelType == CardHoldingPanel.PanelTypes.TRICK) {
 
 			currGame.calculateTrickWinner();
 		}

@@ -67,7 +67,7 @@ public class CardHoldingPanel extends JPanel implements Observer {
 	 *            used in JSkat
 	 */
 	public CardHoldingPanel(JSkatDataModel dataModel, int player,
-			int panelType, int maxCardCount, JSkatGraphicRepository jskatBitmaps) {
+			PanelTypes panelType, int maxCardCount, JSkatGraphicRepository jskatBitmaps) {
 
 		this.player = player;
 		this.maxCardCount = maxCardCount;
@@ -102,17 +102,9 @@ public class CardHoldingPanel extends JPanel implements Observer {
 		// let the skat table shining through
 		setOpaque(false);
 
-		switch (panelType) {
-		case CardHoldingPanel.OPPONENT_PANEL:
+		if (panelType == CardHoldingPanel.PanelTypes.OPPONENT) {
 			// no gap between the cards of the opponent panels
 			((FlowLayout) centerPanel.getLayout()).setHgap(0);
-			break;
-		case CardHoldingPanel.PLAYER_PANEL:
-			break;
-		case CardHoldingPanel.SKAT_PANEL:
-			break;
-		case CardHoldingPanel.TRICK_PANEL:
-			break;
 		}
 
 		CardPanelMouseAdapter mouseAdapter = new CardPanelMouseAdapter();
@@ -123,7 +115,7 @@ public class CardHoldingPanel extends JPanel implements Observer {
 			CardPanel panel;
 
 			// create a card
-			if (panelType == CardHoldingPanel.OPPONENT_PANEL) {
+			if (panelType == CardHoldingPanel.PanelTypes.OPPONENT) {
 
 				// show the back of the opponent cards
 				panel = new CardPanel(this, jskatBitmaps, true);
@@ -135,7 +127,7 @@ public class CardHoldingPanel extends JPanel implements Observer {
 
 			// different sizes for card panels
 			if (i != (maxCardCount - 1)
-					&& panelType == CardHoldingPanel.OPPONENT_PANEL) {
+					&& panelType == CardHoldingPanel.PanelTypes.OPPONENT) {
 
 				// some card panels for the opponent cards are smaller
 				panel.setPreferredSize(new Dimension(25, 97));
@@ -148,9 +140,9 @@ public class CardHoldingPanel extends JPanel implements Observer {
 			// let the skat table shining through if there is no card shown
 			panel.setOpaque(false);
 
-			if (panelType == CardHoldingPanel.PLAYER_PANEL
-					|| panelType == CardHoldingPanel.SKAT_PANEL
-					|| panelType == CardHoldingPanel.TRICK_PANEL) {
+			if (panelType == CardHoldingPanel.PanelTypes.PLAYER
+					|| panelType == CardHoldingPanel.PanelTypes.SKAT
+					|| panelType == CardHoldingPanel.PanelTypes.TRICK) {
 
 				// the mouse adapter listens to user clicks
 				panel.addMouseListener(mouseAdapter);
@@ -163,8 +155,8 @@ public class CardHoldingPanel extends JPanel implements Observer {
 			centerPanel.add(panel);
 		}
 
-		if (panelType == CardHoldingPanel.PLAYER_PANEL
-				|| panelType == CardHoldingPanel.OPPONENT_PANEL) {
+		if (panelType == CardHoldingPanel.PanelTypes.PLAYER
+				|| panelType == CardHoldingPanel.PanelTypes.OPPONENT) {
 
 			// Show player name on the player panels
 			JPanel playerNamePanel = new JPanel();
@@ -173,15 +165,15 @@ public class CardHoldingPanel extends JPanel implements Observer {
 			playerNamePanel.setPreferredSize(new Dimension(150,
 					(int) playerNamePanel.getPreferredSize().getHeight()));
 
-			if (panelType == CardHoldingPanel.PLAYER_PANEL) {
+			if (panelType == CardHoldingPanel.PanelTypes.PLAYER) {
 
 				southPanel.add(playerNamePanel);
-			} else if (panelType == CardHoldingPanel.OPPONENT_PANEL) {
+			} else if (panelType == CardHoldingPanel.PanelTypes.OPPONENT) {
 
 				northPanel.add(playerNamePanel);
 			}
 
-		} else if (panelType == CardHoldingPanel.SKAT_PANEL) {
+		} else if (panelType == CardHoldingPanel.PanelTypes.SKAT) {
 
 			// OK-Button for starting game after looking into the skat
 			JButton okButton = new JButton(jskatStrings.getString("ok"));
@@ -265,11 +257,13 @@ public class CardHoldingPanel extends JPanel implements Observer {
 				repaint();
 			}
 			else if (gameState == SkatGame.GameState.GAME_OVER
-						&& panelType == TRICK_PANEL) {
+						&& panelType == CardHoldingPanel.PanelTypes.TRICK) {
+				
 				// clear the trick panel
 				cardPanels.get(0).setCard(null, null);				
 				cardPanels.get(1).setCard(null, null);				
-				cardPanels.get(2).setCard(null, null);				
+				cardPanels.get(2).setCard(null, null);
+				repaint();
 			}
 			
 		} else if (observ instanceof CardVector) {
@@ -301,7 +295,7 @@ public class CardHoldingPanel extends JPanel implements Observer {
 
 		} else if (observ instanceof SkatGameData && obj instanceof Trick) {
 
-			if (panelType == TRICK_PANEL) {
+			if (panelType == CardHoldingPanel.PanelTypes.TRICK) {
 
 				// only the trick panel should change
 				Trick trick = (Trick) obj;
@@ -404,7 +398,7 @@ public class CardHoldingPanel extends JPanel implements Observer {
 			}
 		}
 
-		if (panelType == OPPONENT_PANEL) {
+		if (panelType == CardHoldingPanel.PanelTypes.OPPONENT) {
 
 			reorganizeCards(updCardVector);
 		}
@@ -449,7 +443,7 @@ public class CardHoldingPanel extends JPanel implements Observer {
 	 * 
 	 * @return The type of the CardHoldingPanel
 	 */
-	public int getPanelType() {
+	public CardHoldingPanel.PanelTypes getPanelType() {
 
 		return panelType;
 	}
@@ -554,30 +548,31 @@ public class CardHoldingPanel extends JPanel implements Observer {
 	}
 	
 	/**
-	 * An empty CardHoldingPanel
+	 * Panel types that can hold cards
 	 */
-	public static final int EMPTY_PANEL = 0;
-
-	/**
-	 * CardHoldingPanel for the opponent players
-	 */
-	public static final int OPPONENT_PANEL = 1;
-
-	/**
-	 * CardHoldingPanel for the Human player
-	 */
-	public static final int PLAYER_PANEL = 2;
-
-	/**
-	 * CardHoldingPanel for the Skat
-	 */
-	public static final int SKAT_PANEL = 3;
-
-	/**
-	 * CardHoldingPanel for the tricks
-	 */
-	public static final int TRICK_PANEL = 4;
-
+	public enum PanelTypes {
+		/**
+		 * Empty panel
+		 */
+		EMPTY, 
+		/**
+		 * Opponent player panel (upper left and right)
+		 */
+		OPPONENT, 
+		/**
+		 * Player panel (south)
+		 */
+		PLAYER, 
+		/**
+		 * Skat panel (center)
+		 */
+		SKAT, 
+		/**
+		 * Trick panel (center)
+		 */
+		TRICK
+	}
+	
 	private JSkatGraphicRepository jskatBitmaps;
 
 	private ResourceBundle jskatStrings;
@@ -588,7 +583,7 @@ public class CardHoldingPanel extends JPanel implements Observer {
 
 	private int player;
 
-	private int panelType;
+	private PanelTypes panelType;
 
 	private int maxCardCount;
 

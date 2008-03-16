@@ -71,9 +71,9 @@ public class JSkatPlayArea extends JPanel implements Observer {
 		opponentPanel.setLayout(new GridLayout(1, 2));
 		opponentPanel.setOpaque(false);
 		opponentPanel.add(new CardHoldingPanel(dataModel, 0,
-				CardHoldingPanel.OPPONENT_PANEL, 10, jskatBitmaps));
+				CardHoldingPanel.PanelTypes.OPPONENT, 10, jskatBitmaps));
 		opponentPanel.add(new CardHoldingPanel(dataModel, 1,
-				CardHoldingPanel.OPPONENT_PANEL, 10, jskatBitmaps));
+				CardHoldingPanel.PanelTypes.OPPONENT, 10, jskatBitmaps));
 		add(opponentPanel);
 
 		skatTrickHoldingPanel = new JPanel();
@@ -82,12 +82,12 @@ public class JSkatPlayArea extends JPanel implements Observer {
 		trickPanel = new JPanel();
 		trickPanel.setOpaque(false);
 		trickPanel.add(new CardHoldingPanel(dataModel, 3,
-				CardHoldingPanel.TRICK_PANEL, 3, jskatBitmaps));
+				CardHoldingPanel.PanelTypes.TRICK, 3, jskatBitmaps));
 		skatTrickHoldingPanel.add(trickPanel, "trick");
 		skatPanel = new JPanel();
 		skatPanel.setOpaque(false);
 		skatPanel.add(new CardHoldingPanel(dataModel, 4,
-				CardHoldingPanel.SKAT_PANEL, 4, jskatBitmaps));
+				CardHoldingPanel.PanelTypes.SKAT, 4, jskatBitmaps));
 		skatTrickHoldingPanel.add(skatPanel, "skat");
 		bidPanel = new BiddingPanel(dataModel);
 		skatTrickHoldingPanel.add(bidPanel, "bidding");
@@ -97,7 +97,7 @@ public class JSkatPlayArea extends JPanel implements Observer {
 		playerPanel.setLayout(new GridLayout(1, 1));
 		playerPanel.setOpaque(false);
 		playerPanel.add(new CardHoldingPanel(dataModel, 2,
-				CardHoldingPanel.PLAYER_PANEL, 10, jskatBitmaps));
+				CardHoldingPanel.PanelTypes.PLAYER, 10, jskatBitmaps));
 		add(playerPanel);
 	}
 
@@ -159,6 +159,7 @@ public class JSkatPlayArea extends JPanel implements Observer {
 			game.addObserver(getCardHoldingPanel(PanelTypes.PLAYER_ZERO));
 			game.addObserver(getCardHoldingPanel(PanelTypes.PLAYER_ONE));
 			game.addObserver(getCardHoldingPanel(PanelTypes.PLAYER_TWO));
+			game.addObserver(getCardHoldingPanel(PanelTypes.TRICK));
 			SkatGameData gameData = game.getSkatGameData();
 			gameData.addObserver(this);
 			gameData.getPlayerCards(0).addObserver(
