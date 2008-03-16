@@ -102,7 +102,7 @@ public class CardHoldingPanel extends JPanel implements Observer {
 		// let the skat table shining through
 		setOpaque(false);
 
-		if (panelType == CardHoldingPanel.PanelTypes.OPPONENT) {
+		if (panelType == PanelTypes.OPPONENT) {
 			// no gap between the cards of the opponent panels
 			((FlowLayout) centerPanel.getLayout()).setHgap(0);
 		}
@@ -115,7 +115,7 @@ public class CardHoldingPanel extends JPanel implements Observer {
 			CardPanel panel;
 
 			// create a card
-			if (panelType == CardHoldingPanel.PanelTypes.OPPONENT) {
+			if (panelType == PanelTypes.OPPONENT) {
 
 				// show the back of the opponent cards
 				panel = new CardPanel(this, jskatBitmaps, true);
@@ -127,7 +127,7 @@ public class CardHoldingPanel extends JPanel implements Observer {
 
 			// different sizes for card panels
 			if (i != (maxCardCount - 1)
-					&& panelType == CardHoldingPanel.PanelTypes.OPPONENT) {
+					&& panelType == PanelTypes.OPPONENT) {
 
 				// some card panels for the opponent cards are smaller
 				panel.setPreferredSize(new Dimension(25, 97));
@@ -140,9 +140,9 @@ public class CardHoldingPanel extends JPanel implements Observer {
 			// let the skat table shining through if there is no card shown
 			panel.setOpaque(false);
 
-			if (panelType == CardHoldingPanel.PanelTypes.PLAYER
-					|| panelType == CardHoldingPanel.PanelTypes.SKAT
-					|| panelType == CardHoldingPanel.PanelTypes.TRICK) {
+			if (panelType == PanelTypes.PLAYER
+					|| panelType == PanelTypes.SKAT
+					|| panelType == PanelTypes.TRICK) {
 
 				// the mouse adapter listens to user clicks
 				panel.addMouseListener(mouseAdapter);
@@ -155,8 +155,8 @@ public class CardHoldingPanel extends JPanel implements Observer {
 			centerPanel.add(panel);
 		}
 
-		if (panelType == CardHoldingPanel.PanelTypes.PLAYER
-				|| panelType == CardHoldingPanel.PanelTypes.OPPONENT) {
+		if (panelType == PanelTypes.PLAYER
+				|| panelType == PanelTypes.OPPONENT) {
 
 			// Show player name on the player panels
 			JPanel playerNamePanel = new JPanel();
@@ -165,15 +165,15 @@ public class CardHoldingPanel extends JPanel implements Observer {
 			playerNamePanel.setPreferredSize(new Dimension(150,
 					(int) playerNamePanel.getPreferredSize().getHeight()));
 
-			if (panelType == CardHoldingPanel.PanelTypes.PLAYER) {
+			if (panelType == PanelTypes.PLAYER) {
 
 				southPanel.add(playerNamePanel);
-			} else if (panelType == CardHoldingPanel.PanelTypes.OPPONENT) {
+			} else if (panelType == PanelTypes.OPPONENT) {
 
 				northPanel.add(playerNamePanel);
 			}
 
-		} else if (panelType == CardHoldingPanel.PanelTypes.SKAT) {
+		} else if (panelType == PanelTypes.SKAT) {
 
 			// OK-Button for starting game after looking into the skat
 			JButton okButton = new JButton(jskatStrings.getString("ok"));
@@ -257,7 +257,7 @@ public class CardHoldingPanel extends JPanel implements Observer {
 				repaint();
 			}
 			else if (gameState == SkatGame.GameState.GAME_OVER
-						&& panelType == CardHoldingPanel.PanelTypes.TRICK) {
+						&& panelType == PanelTypes.TRICK) {
 				
 				// clear the trick panel
 				cardPanels.get(0).setCard(null, null);				
@@ -295,7 +295,7 @@ public class CardHoldingPanel extends JPanel implements Observer {
 
 		} else if (observ instanceof SkatGameData && obj instanceof Trick) {
 
-			if (panelType == CardHoldingPanel.PanelTypes.TRICK) {
+			if (panelType == PanelTypes.TRICK) {
 
 				// only the trick panel should change
 				Trick trick = (Trick) obj;
@@ -398,7 +398,7 @@ public class CardHoldingPanel extends JPanel implements Observer {
 			}
 		}
 
-		if (panelType == CardHoldingPanel.PanelTypes.OPPONENT) {
+		if (panelType == PanelTypes.OPPONENT) {
 
 			reorganizeCards(updCardVector);
 		}
@@ -443,7 +443,7 @@ public class CardHoldingPanel extends JPanel implements Observer {
 	 * 
 	 * @return The type of the CardHoldingPanel
 	 */
-	public CardHoldingPanel.PanelTypes getPanelType() {
+	public PanelTypes getPanelType() {
 
 		return panelType;
 	}
