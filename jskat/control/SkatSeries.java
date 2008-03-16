@@ -97,8 +97,9 @@ public class SkatSeries extends Observable implements Observer {
 		boolean result = false;
 		
 		if (state == SeriesStates.NEW_SERIES) {
-			
-			result = startNewGame(0);
+			// first dealer is player
+			// first fore hand is upper left player
+			result = startNewGame(2);
 		}
 		
 		return result;
@@ -219,7 +220,7 @@ public class SkatSeries extends Observable implements Observer {
 			
 			if (((SkatGame.GameState) obj) == SkatGame.GameState.WAIT_FOR_NEXT_GAME) {
 				
-				int dealer = ((SkatGame)observ).getDealer();
+				int dealer = (((SkatGame)observ).getDealer() + 1) % 3;
 				// Game finished --> start next game
 				startNewGame(dealer);
 			}

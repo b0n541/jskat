@@ -16,6 +16,7 @@ import org.apache.log4j.Logger;
 import jskat.data.JSkatDataModel;
 import jskat.data.BidStatus;
 import jskat.share.SkatConstants;
+import jskat.share.SkatConstants.Player;
 import jskat.player.JSkatPlayer;
 import jskat.player.HumanPlayer;
 
@@ -119,6 +120,7 @@ public class BiddingThread implements Runnable {
 		log.debug("BiddingThread ("+Thread.currentThread().getId()+") START");
 
 		int currBidValue = 0;
+		int currBidOrderIndex = -1;
 
 		bidStatus.resetBidStatus(playerOrder[0]);
 
@@ -129,85 +131,84 @@ public class BiddingThread implements Runnable {
 			players[i].setUpBidding(playerOrder[0]);
 		}
 
-		while (bidStatus.getHandDoesBid(SkatConstants.Player.FORE_HAND)
-				&& bidStatus.getHandDoesBid(SkatConstants.Player.MIDDLE_HAND)) {
+		while (bidStatus.getHandDoesBid(Player.FORE_HAND)
+				&& bidStatus.getHandDoesBid(Player.MIDDLE_HAND)) {
 
 			// get next valid bid value
-			int i = 0;
-
-			while (currBidValue >= SkatConstants.bidOrder[i]
-					&& i < SkatConstants.bidOrder.length)
-				i++;
-
-			currBidValue = SkatConstants.bidOrder[i];
+			currBidOrderIndex++;
+			currBidValue = SkatConstants.bidOrder[currBidOrderIndex];
 			log.debug("currBidValue=" + currBidValue);
 
 			// ask Middlehand Player
-			bidStatus.setHandDoesBid(SkatConstants.Player.MIDDLE_HAND, askForBidValue(
-					SkatConstants.Player.MIDDLE_HAND, currBidValue, false));
+			bidStatus.setHandDoesBid(Player.MIDDLE_HAND, askForBidValue(
+					Player.MIDDLE_HAND, currBidValue, false));
 
 			// ask Forehand Player (only if middlehand holds the bid)
-			if (bidStatus.getHandDoesBid(SkatConstants.Player.MIDDLE_HAND)) {
+			if (bidStatus.getHandDoesBid(Player.MIDDLE_HAND)) {
 
 				log.debug("Middlehand: " + currBidValue);
 
-				bidStatus.setBidValue(SkatConstants.Player.MIDDLE_HAND, currBidValue);
+				bidStatus.setBidValue(Player.MIDDLE_HAND, currBidValue);
 
-				bidStatus.setHandDoesBid(SkatConstants.Player.FORE_HAND,
-						askForBidValue(SkatConstants.Player.FORE_HAND, currBidValue,
+				bidStatus.setHandDoesBid(Player.FORE_HAND,
+						askForBidValue(Player.FORE_HAND, currBidValue,
 								true));
 
-				if (bidStatus.getHandDoesBid(SkatConstants.Player.FORE_HAND)) {
+				if (bidStatus.getHandDoesBid(Player.FORE_HAND)) {
 
 					log.debug("Forehand: Yes");
 
 					bidStatus
-							.setBidValue(SkatConstants.Player.FORE_HAND, currBidValue);
+							.setBidValue(Player.FORE_HAND, currBidValue);
+				}
+				else {
+					log.debug("Forehand: Passe");
 				}
 			} else {
-				log.debug("Middlehand: No");
+				log.debug("Middlehand: Passe");
 			}
 
 		}
 
-		if (bidStatus.getHandDoesBid(SkatConstants.Player.MIDDLE_HAND)) {
+		if (bidStatus.getHandDoesBid(Player.MIDDLE_HAND)) {
 
-			while (bidStatus.getHandDoesBid(SkatConstants.Player.MIDDLE_HAND)
-					&& bidStatus.getHandDoesBid(SkatConstants.Player.BACK_HAND)) {
+			while (bidStatus.getHandDoesBid(Player.MIDDLE_HAND)
+					&& bidStatus.getHandDoesBid(Player.BACK_HAND)) {
 
 				// get next valid bid value
-				int i = 0;
-
-				while (currBidValue >= SkatConstants.bidOrder[i]
-						&& i < SkatConstants.bidOrder.length)
-					i++;
-
-				currBidValue = SkatConstants.bidOrder[i];
+				currBidOrderIndex++;
+				currBidValue = SkatConstants.bidOrder[currBidOrderIndex];
 
 				// ask Hindhand Player
-				bidStatus.setHandDoesBid(SkatConstants.Player.BACK_HAND,
-						askForBidValue(SkatConstants.Player.BACK_HAND, currBidValue,
+				bidStatus.setHandDoesBid(Player.BACK_HAND,
+						askForBidValue(Player.BACK_HAND, currBidValue,
 								false));
 
 				// ask Middlehand Player
-				if (bidStatus.getHandDoesBid(SkatConstants.Player.BACK_HAND)) {
+				if (bidStatus.getHandDoesBid(Player.BACK_HAND)) {
 
 					log.debug("Hindhand: " + currBidValue);
 
 					bidStatus
-							.setBidValue(SkatConstants.Player.BACK_HAND, currBidValue);
+							.setBidValue(Player.BACK_HAND, currBidValue);
 
-					bidStatus.setHandDoesBid(SkatConstants.Player.MIDDLE_HAND,
-							askForBidValue(SkatConstants.Player.MIDDLE_HAND,
+					bidStatus.setHandDoesBid(Player.MIDDLE_HAND,
+							askForBidValue(Player.MIDDLE_HAND,
 									currBidValue, true));
 
-					if (bidStatus.getHandDoesBid(SkatConstants.Player.MIDDLE_HAND)) {
+					if (bidStatus.getHandDoesBid(Player.MIDDLE_HAND)) {
 
 						log.debug("Middlehand: Yes");
 
-						bidStatus.setBidValue(SkatConstants.Player.MIDDLE_HAND,
+						bidStatus.setBidValue(Player.MIDDLE_HAND,
 								currBidValue);
 					}
+					else {
+						log.debug("Middlehand: Passe");
+					}
+				}
+				else {
+					log.debug("Backhand: Passe");
 				}
 			}
 		} else {
@@ -216,90 +217,91 @@ public class BiddingThread implements Runnable {
 			// that's why the same current bid value is used here
 			log.debug("Middlehand is out.");
 
-			while (bidStatus.getHandDoesBid(SkatConstants.Player.FORE_HAND)
-					&& bidStatus.getHandDoesBid(SkatConstants.Player.BACK_HAND)) {
+			while (bidStatus.getHandDoesBid(Player.FORE_HAND)
+					&& bidStatus.getHandDoesBid(Player.BACK_HAND)) {
 
 				// ask Middlehand Player
-				bidStatus.setHandDoesBid(SkatConstants.Player.BACK_HAND,
-						askForBidValue(SkatConstants.Player.BACK_HAND, currBidValue,
+				bidStatus.setHandDoesBid(Player.BACK_HAND,
+						askForBidValue(Player.BACK_HAND, currBidValue,
 								false));
 
 				// ask Forehand Player
-				if (bidStatus.getHandDoesBid(SkatConstants.Player.BACK_HAND)) {
+				if (bidStatus.getHandDoesBid(Player.BACK_HAND)) {
 
 					log.debug("Hindhand: " + currBidValue);
 
 					bidStatus
-							.setBidValue(SkatConstants.Player.BACK_HAND, currBidValue);
+							.setBidValue(Player.BACK_HAND, currBidValue);
 
-					bidStatus.setHandDoesBid(SkatConstants.Player.FORE_HAND,
-							askForBidValue(SkatConstants.Player.FORE_HAND,
+					bidStatus.setHandDoesBid(Player.FORE_HAND,
+							askForBidValue(Player.FORE_HAND,
 									currBidValue, true));
 
-					if (bidStatus.getHandDoesBid(SkatConstants.Player.FORE_HAND)) {
+					if (bidStatus.getHandDoesBid(Player.FORE_HAND)) {
 
 						log.debug("Forehand: Yes");
 
-						bidStatus.setBidValue(SkatConstants.Player.FORE_HAND,
+						bidStatus.setBidValue(Player.FORE_HAND,
 								currBidValue);
+					}
+					else {
+						log.debug("Forehand: Passe");
 					}
 				} else if (currBidValue == SkatConstants.bidOrder[0]) {
 					log.debug("Hindhand: No on 18");
 					// here forehand should be asked again...??
-					bidStatus.setHandDoesBid(SkatConstants.Player.FORE_HAND,
-							askForBidValue(SkatConstants.Player.FORE_HAND,
+					bidStatus.setHandDoesBid(Player.FORE_HAND,
+							askForBidValue(Player.FORE_HAND,
 									currBidValue, true));
 
-					if (bidStatus.getHandDoesBid(SkatConstants.Player.FORE_HAND)) {
+					if (bidStatus.getHandDoesBid(Player.FORE_HAND)) {
 
 						log.debug("Forehand: 18 I have");
 
-						bidStatus.setBidValue(SkatConstants.Player.FORE_HAND,
+						bidStatus.setBidValue(Player.FORE_HAND,
 								currBidValue);
+					}
+					else {
+						log.debug("Forehand: Passe");
 					}
 				}
 
 				// get next valid bid value
-				int i = 0;
-
-				while (currBidValue >= SkatConstants.bidOrder[i]
-						&& i < SkatConstants.bidOrder.length)
-					i++;
-
-				currBidValue = SkatConstants.bidOrder[i];
+				currBidOrderIndex++;
+				currBidValue = SkatConstants.bidOrder[currBidOrderIndex];
 			}
 		}
 
 		log.debug("Next bid value " + currBidValue);
 		log.debug("Forehand bids "
-				+ bidStatus.getBidValue(SkatConstants.Player.FORE_HAND)
+				+ bidStatus.getBidValue(Player.FORE_HAND)
 				+ ", still in: "
-				+ bidStatus.getHandDoesBid(SkatConstants.Player.FORE_HAND));
+				+ bidStatus.getHandDoesBid(Player.FORE_HAND));
 		log.debug("Middlehand bids "
-				+ bidStatus.getBidValue(SkatConstants.Player.MIDDLE_HAND)
+				+ bidStatus.getBidValue(Player.MIDDLE_HAND)
 				+ ", still in: "
-				+ bidStatus.getHandDoesBid(SkatConstants.Player.MIDDLE_HAND));
+				+ bidStatus.getHandDoesBid(Player.MIDDLE_HAND));
 		log.debug("Hindhand bids "
-				+ bidStatus.getBidValue(SkatConstants.Player.BACK_HAND)
+				+ bidStatus.getBidValue(Player.BACK_HAND)
 				+ ", still in: "
-				+ bidStatus.getHandDoesBid(SkatConstants.Player.BACK_HAND));
+				+ bidStatus.getHandDoesBid(Player.BACK_HAND));
 
-		if (bidStatus.getHandDoesBid(SkatConstants.Player.FORE_HAND)) {
-
-			skatGame.getSkatGameData().setSinglePlayer(
-					playerOrder[0]);
-		}
-
-		if (bidStatus.getHandDoesBid(SkatConstants.Player.MIDDLE_HAND)) {
+		if (bidStatus.getHandDoesBid(Player.FORE_HAND)) {
 
 			skatGame.getSkatGameData().setSinglePlayer(
 					playerOrder[0]);
 		}
 
-		if (bidStatus.getHandDoesBid(SkatConstants.Player.BACK_HAND)) {
+		if (bidStatus.getHandDoesBid(Player.MIDDLE_HAND)) {
 
 			skatGame.getSkatGameData().setSinglePlayer(
-					playerOrder[0]);
+					playerOrder[1]);
+		}
+
+		if (bidStatus.getHandDoesBid(Player.BACK_HAND)) {
+
+			skatGame.getSkatGameData().setSinglePlayer(
+					playerOrder[2]);
 		}
 
 		if (skatGame.getSkatGameData().getSinglePlayer() >= 0) {
@@ -320,7 +322,7 @@ public class BiddingThread implements Runnable {
 		log.debug("BiddingThread ("+Thread.currentThread().getId()+") TERMINATED");
 }
 
-	private boolean askForBidValue(SkatConstants.Player currentPlayer, int currBidValue,
+	private boolean askForBidValue(Player currentPlayer, int currBidValue,
 			boolean wasAsked) {
 
 		log.debug("askForBidValue(): player " + currentPlayer);
@@ -400,7 +402,7 @@ public class BiddingThread implements Runnable {
 
 	private BidStatus bidStatus;
 
-	private SkatConstants.Player currentBidHand;
+	private Player currentBidHand;
 
 	private JSkatPlayer[] players;
 

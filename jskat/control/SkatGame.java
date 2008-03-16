@@ -413,33 +413,33 @@ public class SkatGame extends Observable {
 		// if the game was a ramsch grand hand, the same player is forehand
 		// again
 		// TODO (js) This should be adjustable in the table options
-		if (gameData.getGameType() != SkatConstants.GameTypes.RAMSCHGRAND) {
-
-			dealer = (gameData.getDealer() + 1) % 3;
-
-			log
-					.debug("Rotating forehand player. Dealer for next game is player "
-							+ dealer
-							+ " ("
-							+ gameData.getPlayers()[dealer].getPlayerName()
-							+ ")");
-
-		} else {
-
-			log
-					.debug("No rotation of dealer (ramsch grand hand). Dealer for next game is again player "
-							+ dealer
-							+ " ("
-							+ gameData.getPlayers()[dealer].getPlayerName()
-							+ ")");
-
-			// TODO (js) comment about what does this mean
-			// TODO (mjl) is this needed anymore?
-			// if (!skatSeries.isRamschGamesRemaining()) {
-
-			// skatSeries.addRamschGame();
-			// }
-		}
+//		if (gameData.getGameType() != SkatConstants.GameTypes.RAMSCHGRAND) {
+//
+//			dealer = (gameData.getDealer() + 1) % 3;
+//
+//			log
+//					.debug("Rotating forehand player. Dealer for next game is player "
+//							+ dealer
+//							+ " ("
+//							+ gameData.getPlayers()[dealer].getPlayerName()
+//							+ ")");
+//
+//		} else {
+//
+//			log
+//					.debug("No rotation of dealer (ramsch grand hand). Dealer for next game is again player "
+//							+ dealer
+//							+ " ("
+//							+ gameData.getPlayers()[dealer].getPlayerName()
+//							+ ")");
+//
+//			// TODO (js) comment about what does this mean
+//			// TODO (mjl) is this needed anymore?
+//			// if (!skatSeries.isRamschGamesRemaining()) {
+//
+//			// skatSeries.addRamschGame();
+//			// }
+//		}
 
 		// skatSeries.startNewGame();
 		setState(GameState.WAIT_FOR_NEXT_GAME);
