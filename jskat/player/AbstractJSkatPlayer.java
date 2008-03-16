@@ -106,36 +106,10 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 		// SkatConstants.NULL_SORT : SkatConstants.SUIT_SORT), currTrump);
 	}
 
-	/**
-	 * @see jskat.player.JSkatPlayer#setUpBidding(int)
-	 */
-	public abstract void setUpBidding(int initialForehandPlayer);
-
-	/**
-	 * @see jskat.player.JSkatPlayer#takeSkat(jskat.share.CardVector)
-	 */
-	public abstract void takeSkat(CardVector skat);
-
-	/**
-	 * @see jskat.player.JSkatPlayer#discloseOuvertCards(jskat.share.CardVector)
-	 */
-	public abstract void discloseOuvertCards(CardVector ouvertCards);
-	
-	/**
-	 * @see jskat.player.JSkatPlayer#showTrick(jskat.share.CardVector, int)
-	 */
-	public abstract void showTrick(CardVector trick, int trickWinner);
-
-	
 	protected void setState(JSkatPlayer.PlayerStates newState) {
 
 		playerState = newState;
 	}
-
-	/**
-	 * @see jskat.player.JSkatPlayer#cardPlayed(jskat.share.Card)
-	 */
-	public abstract void cardPlayed(Card card);
 	
 	/** Variables */
 	protected int playerID;
