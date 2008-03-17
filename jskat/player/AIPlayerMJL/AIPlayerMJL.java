@@ -304,7 +304,6 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
 	/**
 	 * @see jskat.player.AbstractJSkatPlayer#cardPlayed(jskat.share.Card)
 	 */
-	@Override
 	public void cardPlayed(Card card) {
 		// TODO Auto-generated method stub
 		
@@ -313,7 +312,6 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
 	/**
 	 * @see jskat.player.AbstractJSkatPlayer#discloseOuvertCards(jskat.share.CardVector)
 	 */
-	@Override
 	public void discloseOuvertCards(CardVector ouvertCards) {
 		// TODO Auto-generated method stub
 		

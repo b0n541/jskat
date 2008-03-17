@@ -111,7 +111,6 @@ public class HumanPlayer extends AbstractJSkatPlayer {
 	/**
 	 * @see jskat.player.AbstractJSkatPlayer#cardPlayed(jskat.share.Card)
 	 */
-	@Override
 	public void cardPlayed(Card card) {
 		// TODO Auto-generated method stub
 		
@@ -120,7 +119,6 @@ public class HumanPlayer extends AbstractJSkatPlayer {
 	/**
 	 * @see jskat.player.AbstractJSkatPlayer#discloseOuvertCards(jskat.share.CardVector)
 	 */
-	@Override
 	public void discloseOuvertCards(CardVector ouvertCards) {
 		// TODO Auto-generated method stub
 		
@@ -129,7 +127,6 @@ public class HumanPlayer extends AbstractJSkatPlayer {
 	/**
 	 * @see jskat.player.AbstractJSkatPlayer#setUpBidding(int)
 	 */
-	@Override
 	public void setUpBidding(int initialForehandPlayer) {
 		// TODO Auto-generated method stub
 		
@@ -146,7 +143,6 @@ public class HumanPlayer extends AbstractJSkatPlayer {
 	/**
 	 * @see jskat.player.AbstractJSkatPlayer#takeSkat(jskat.share.CardVector)
 	 */
-	@Override
 	public void takeSkat(CardVector skat) {
 		// TODO Auto-generated method stub
 		

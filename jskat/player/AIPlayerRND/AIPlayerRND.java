@@ -147,7 +147,6 @@ public class AIPlayerRND extends AbstractJSkatPlayer implements JSkatPlayer {
 	/**
 	 * @see jskat.player.AbstractJSkatPlayer#showTrick(jskat.share.CardVector, int)
 	 */
-	@Override
 	public void showTrick(CardVector trick, int trickWinner) {
 		// just ignore it
 	}
@@ -173,7 +172,6 @@ public class AIPlayerRND extends AbstractJSkatPlayer implements JSkatPlayer {
 	/**
 	 * @see jskat.player.AbstractJSkatPlayer#cardPlayed(jskat.share.Card)
 	 */
-	@Override
 	public void cardPlayed(Card card) {
 		// TODO Auto-generated method stub
 		
@@ -182,7 +180,6 @@ public class AIPlayerRND extends AbstractJSkatPlayer implements JSkatPlayer {
 	/**
 	 * @see jskat.player.AbstractJSkatPlayer#discloseOuvertCards(jskat.share.CardVector)
 	 */
-	@Override
 	public void discloseOuvertCards(CardVector ouvertCards) {
 		// TODO Auto-generated method stub
 		
@@ -191,7 +188,6 @@ public class AIPlayerRND extends AbstractJSkatPlayer implements JSkatPlayer {
 	/**
 	 * @see jskat.player.AbstractJSkatPlayer#setUpBidding(int)
 	 */
-	@Override
 	public void setUpBidding(int initialForehandPlayer) {
 		// TODO Auto-generated method stub
 		
@@ -200,7 +196,6 @@ public class AIPlayerRND extends AbstractJSkatPlayer implements JSkatPlayer {
 	/**
 	 * @see jskat.player.AbstractJSkatPlayer#takeSkat(jskat.share.CardVector)
 	 */
-	@Override
 	public void takeSkat(CardVector skat) {
 		// TODO Auto-generated method stub
 		
