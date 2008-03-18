@@ -53,7 +53,7 @@ public interface SkatRules {
 	 * @return TRUE if the card beats the other card
 	 */
 	public boolean isCardBeatsCard(Card card, Card cardToBeat,
-			Card intitialCard, SkatConstants.Suits trump);
+			Card initialCard, SkatConstants.Suits trump);
 
 	/**
 	 * Checks whether a game is won

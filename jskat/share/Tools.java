@@ -129,12 +129,13 @@ public class Tools {
 	 * 
 	 * @param fileName Name of the new logfile
 	 */
+	@SuppressWarnings("unchecked")
 	public static void setNewLogfile(String fileName) {
 		
 		Logger logCheck = Logger.getRootLogger();
-		Enumeration allAppenders = logCheck.getAllAppenders();
+		Enumeration<Appender> allAppenders = logCheck.getAllAppenders();
 		while (allAppenders.hasMoreElements()) {
-			Appender app = (Appender) allAppenders.nextElement();
+			Appender app = allAppenders.nextElement();
 			if (app instanceof RollingFileAppender) {
 				RollingFileAppender app2 = (RollingFileAppender) app;
 				log.debug("RollingFileAppender: " + app2.getName()
