@@ -564,7 +564,7 @@ public class SkatGameData extends Observable {
 
 		int score = 0;
 
-		if (player > -1 || player < 3) {
+		if (player > -1 && player < 3) {
 
 			score = playerPoints[player];
 		}
