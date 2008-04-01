@@ -74,18 +74,6 @@ public class SkatGameData extends Observable {
 	}
 
 	/** 
-	 * Sets the result of the game manually (for overbidded games) 
-	 *
-	 * @deprecated
-	 * 
-	 * @param result Result of the game
-	 */
-	public void setGameResult(int result) {
-
-		this.result = result;
-	}
-
-	/** 
 	 * Returns the single player of the game 
 	 *
 	 * @return Player ID of the single player
