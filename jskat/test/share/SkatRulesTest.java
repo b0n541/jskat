@@ -15,6 +15,7 @@ import static org.junit.Assert.*;
 
 import org.apache.log4j.Logger;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import jskat.share.Card;
@@ -23,7 +24,6 @@ import jskat.share.SkatConstants;
 import jskat.share.Tools;
 import jskat.share.SkatConstants.GameTypes;
 import jskat.share.SkatConstants.Suits;
-import jskat.share.rules.SkatRules;
 import jskat.share.rules.*;
 
 /**
@@ -43,8 +43,8 @@ public class SkatRulesTest {
 	/**
 	 * Setup for all tests
 	 */
-	@Before
-	public void setUp() {
+	@BeforeClass
+	public static void setUp() {
 		
 		Tools.checkLog();
 		
@@ -548,30 +548,30 @@ public class SkatRulesTest {
 		assertFalse(rules.isTrump(cardC7, null));
 	}
 
-	private CardVector hand001;
-	private CardVector hand002;
-	private CardVector hand003;
-	private CardVector hand004;
-	private Card played;
-	private Card initialCard;
-	private Card cardD7;
-	private Card cardD8;
-	private Card cardD9;
-	private Card cardDQ;
-	private Card cardDA;
-	private Card cardDJ;
-	private Card cardHQ;
-	private Card cardHJ;
-	private Card cardS7;
-	private Card cardS8;
-	private Card cardSQ;
-	private Card cardST;
-	private Card cardSA;
-	private Card cardCQ;
-	private Card cardCK;
-	private Card cardCJ;
-	private Card cardC7;
-	private GameTypes gameType;
-	private Suits trump;
-	private SkatRules rules;
+	private static CardVector hand001;
+	private static CardVector hand002;
+	private static CardVector hand003;
+	private static CardVector hand004;
+	private static Card played;
+	private static Card initialCard;
+	private static Card cardD7;
+	private static Card cardD8;
+	private static Card cardD9;
+	private static Card cardDQ;
+	private static Card cardDA;
+	private static Card cardDJ;
+	private static Card cardHQ;
+	private static Card cardHJ;
+	private static Card cardS7;
+	private static Card cardS8;
+	private static Card cardSQ;
+	private static Card cardST;
+	private static Card cardSA;
+	private static Card cardCQ;
+	private static Card cardCK;
+	private static Card cardCJ;
+	private static Card cardC7;
+	private static GameTypes gameType;
+	private static Suits trump;
+	private static SkatRules rules;
 }
