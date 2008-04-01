@@ -138,14 +138,25 @@ public class SkatRulesNull implements SkatRules {
 	 * @see jskat.share.rules.SkatRules#isGameWon(jskat.data.SkatGameData)
 	 */
 	public boolean isGameWon(SkatGameData gameData) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		boolean result = true;
+		
+		for (int i = 0; i < gameData.getTricks().size(); i++) {
+			
+			if (gameData.getTrickWinner(i) == gameData.getSinglePlayer()) {
+				// the single player won at least one trick
+				result = false;
+			}
+		}
+		
+		return result;
 	}
 
 	/**
 	 * @see jskat.share.rules.SkatRules#isSchneider(jskat.data.SkatGameData)
 	 */
 	public boolean isSchneider(SkatGameData gameData) {
+		// there is no schneider in null games
 		return false;
 	}
 
@@ -153,6 +164,7 @@ public class SkatRulesNull implements SkatRules {
 	 * @see jskat.share.rules.SkatRules#isSchwarz(jskat.data.SkatGameData)
 	 */
 	public boolean isSchwarz(SkatGameData gameData) {
+		// there is no schwarz in null games
 		return false;
 	}
 
@@ -161,6 +173,7 @@ public class SkatRulesNull implements SkatRules {
 	 *      jskat.data.SkatGameData)
 	 */
 	public boolean isDurchMarsch(int playerID, SkatGameData gameData) {
+		// there is no durchmarsch in null games
 		return false;
 	}
 
@@ -168,6 +181,7 @@ public class SkatRulesNull implements SkatRules {
 	 * @see jskat.share.rules.SkatRules#isJungFrau(int, jskat.data.SkatGameData)
 	 */
 	public boolean isJungFrau(int playerID, SkatGameData gameData) {
+		// there is no jungfrau in null games
 		return false;
 	}
 

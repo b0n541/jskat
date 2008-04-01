@@ -45,24 +45,78 @@ public abstract class SkatRulesSuitGrand implements SkatRules {
 	 * @see jskat.share.rules.SkatRules#isGameWon(jskat.data.SkatGameData)
 	 */
 	public boolean isGameWon(SkatGameData gameData) {
-		// TODO implement it
-		return false;
+		
+		boolean result = false;
+		
+		if (gameData.getScore(gameData.getSinglePlayer()) > 60) {
+			// the single player has made more than 60 points
+			result = true;
+		}
+		
+		return result;
 	}
 
 	/**
 	 * @see jskat.share.rules.SkatRules#isSchneider(jskat.data.SkatGameData)
 	 */
 	public boolean isSchneider(SkatGameData gameData) {
-		// TODO implement it
-		return false;
+		
+		boolean result = false;
+		
+		int singlePlayer = gameData.getSinglePlayer();
+		
+		if (gameData.isGameLost()) {
+			
+			if (gameData.getScore(singlePlayer) < 31) {
+				// single player lost and has also played schneider
+				result = true;
+			}
+		}
+		else {
+			
+			if (gameData.getScore((singlePlayer + 1) % 3) < 31 ||
+					gameData.getScore((singlePlayer + 3) % 3) < 31) {
+				// one of the opponents has played schneider
+				result = true;
+			}
+		}
+		
+		return result;
 	}
 
 	/**
 	 * @see jskat.share.rules.SkatRules#isSchwarz(jskat.data.SkatGameData)
 	 */
 	public boolean isSchwarz(SkatGameData gameData) {
-		// TODO implement it
-		return false;
+		
+		boolean result = false;
+		
+		int trickWinnerCount[] = {0, 0, 0};
+		
+		for (int i = 0; i < gameData.getTricks().size(); i++) {
+			// count all tricks made by the players
+			trickWinnerCount[gameData.getTrickWinner(i)]++;
+		}
+		
+		int singlePlayer = gameData.getSinglePlayer();
+		
+		if (gameData.isGameLost()) {
+			
+			if (trickWinnerCount[singlePlayer] == 0) {
+				// single player lost and has also played schwarz
+				result = true;
+			}
+			else {
+				
+				if (trickWinnerCount[(singlePlayer + 1) % 3] == 0 ||
+						trickWinnerCount[(singlePlayer + 2) % 3] == 0) {
+					// one of the opponents has played schwarz
+					result = true;
+				}
+			}
+		}
+		
+		return result;
 	}
 
 	/**
