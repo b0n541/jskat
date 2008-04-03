@@ -494,12 +494,12 @@ public class SkatGameData extends Observable {
 	/**
 	 * Sets the flag for durchmarsch in a ramsch game
 	 * 
-	 * @param durchMarsch
+	 * @param durchmarsch
 	 *            TRUE if someone did a durchmarsch in a ramsch game
 	 */
-	public void setDurchmarsch(boolean durchMarsch) {
+	public void setDurchmarsch(boolean durchmarsch) {
 
-		this.durchmarsch = durchMarsch;
+		this.durchmarsch = durchmarsch;
 	}
 
 	/**
@@ -515,12 +515,12 @@ public class SkatGameData extends Observable {
 	/**
 	 * Sets the flag for jungfrau in a ramsch
 	 * 
-	 * @param jungFrau
+	 * @param jungfrau
 	 *            TRUE if someone was jungfrau in a ramsch game
 	 */
-	public void setJungfrau(boolean jungFrau) {
+	public void setJungfrau(boolean jungfrau) {
 
-		this.jungfrau = jungFrau;
+		this.jungfrau = jungfrau;
 	}
 
 	/**
