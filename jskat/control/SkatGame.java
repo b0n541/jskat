@@ -493,26 +493,26 @@ public class SkatGame extends Observable {
 		RamschRules ramschRules = (RamschRules) rules;
 
 		// TODO re-implement this a.s.a.p.
-		if (ramschRules.isDurchMarsch(0, gameData)
-				|| ramschRules.isDurchMarsch(1, gameData)
-				|| ramschRules.isDurchMarsch(2, gameData)) {
+		if (ramschRules.isDurchmarsch(0, gameData)
+				|| ramschRules.isDurchmarsch(1, gameData)
+				|| ramschRules.isDurchmarsch(2, gameData)) {
 
 			log.info("One player did a Durschmarsch!");
 
-			gameData.setDurchMarsch(true);
+			gameData.setDurchmarsch(true);
 			// TODO this is wrong
-			gameData.setJungFrau(false);
+			gameData.setJungfrau(false);
 
-		} else if (ramschRules.isJungFrau(0, gameData)
-				|| ramschRules.isJungFrau(1, gameData)
-				|| ramschRules.isJungFrau(2, gameData)) {
+		} else if (ramschRules.isJungfrau(0, gameData)
+				|| ramschRules.isJungfrau(1, gameData)
+				|| ramschRules.isJungfrau(2, gameData)) {
 
 			log.info("One or two players is/are Jungfrau!");
 			// only one player can be jungfrau - otherwise it's a
 			// durchmarsch
 			// TODO wrong!
-			gameData.setJungFrau(true);
-			gameData.setDurchMarsch(false);
+			gameData.setJungfrau(true);
+			gameData.setDurchmarsch(false);
 		}
 
 		gameData.finishRamschGame();
@@ -530,7 +530,7 @@ public class SkatGame extends Observable {
 					+ jskatStrings.getString("skipped1") + "\n");
 		}
 
-		if (gameData.isJungFrau()) {
+		if (gameData.isJungfrau()) {
 
 			// TODO re-implement it!
 			// scoreMessage.append(gameData.getPlayers()[AbstractSkatRules
@@ -538,7 +538,7 @@ public class SkatGame extends Observable {
 			// + " " + jskatStrings.getString("jungfrau") + "\n");
 		}
 
-		if (!gameData.isDurchMarsch()) {
+		if (!gameData.isDurchmarsch()) {
 
 			scoreMessage.append("\n"
 					+ gameData.getPlayers()[gameData.getSinglePlayer()]

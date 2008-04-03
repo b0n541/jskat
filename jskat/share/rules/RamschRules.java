@@ -31,7 +31,7 @@ public class RamschRules implements SkatRules {
 		int multiplier = 1;
 
 		// TODO two player can be jungfrau
-		if (gameData.isJungFrau()) {
+		if (gameData.isJungfrau()) {
 			multiplier = multiplier * 2;
 		}
 
@@ -128,7 +128,7 @@ public class RamschRules implements SkatRules {
 	 *            Game data
 	 * @return TRUE if the player played a durchmarsch
 	 */
-	public final boolean isDurchMarsch(int playerID, SkatGameData gameData) {
+	public final boolean isDurchmarsch(int playerID, SkatGameData gameData) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -144,7 +144,7 @@ public class RamschRules implements SkatRules {
 	 *            Game data
 	 * @return TRUE if the player was jungfrau
 	 */
-	public final boolean isJungFrau(int playerID, SkatGameData gameData) {
+	public final boolean isJungfrau(int playerID, SkatGameData gameData) {
 		// TODO Auto-generated method stub
 		return false;
 	}

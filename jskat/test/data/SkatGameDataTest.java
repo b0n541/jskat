@@ -41,7 +41,7 @@ public class SkatGameDataTest {
 		game001.addToPlayerPoints(0, 56);
 		game001.addToPlayerPoints(1, 64);
 		game001.addToPlayerPoints(2, 0);
-		game001.setJungFrau(true);
+		game001.setJungfrau(true);
 		game001.calcResult();
 
 		game002 = new SkatGameData();

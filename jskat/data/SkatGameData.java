@@ -486,9 +486,9 @@ public class SkatGameData extends Observable {
 	 * 
 	 * @return TRUE if someone did a durchmarsch in a ramsch game
 	 */
-	public boolean isDurchMarsch() {
+	public boolean isDurchmarsch() {
 
-		return durchMarsch;
+		return durchmarsch;
 	}
 
 	/**
@@ -497,9 +497,9 @@ public class SkatGameData extends Observable {
 	 * @param durchMarsch
 	 *            TRUE if someone did a durchmarsch in a ramsch game
 	 */
-	public void setDurchMarsch(boolean durchMarsch) {
+	public void setDurchmarsch(boolean durchMarsch) {
 
-		this.durchMarsch = durchMarsch;
+		this.durchmarsch = durchMarsch;
 	}
 
 	/**
@@ -507,9 +507,9 @@ public class SkatGameData extends Observable {
 	 * 
 	 * @return TRUE if someone was jungfrau in a ramsch game
 	 */
-	public boolean isJungFrau() {
+	public boolean isJungfrau() {
 
-		return jungFrau;
+		return jungfrau;
 	}
 
 	/**
@@ -518,9 +518,9 @@ public class SkatGameData extends Observable {
 	 * @param jungFrau
 	 *            TRUE if someone was jungfrau in a ramsch game
 	 */
-	public void setJungFrau(boolean jungFrau) {
+	public void setJungfrau(boolean jungFrau) {
 
-		this.jungFrau = jungFrau;
+		this.jungfrau = jungFrau;
 	}
 
 	/**
@@ -623,7 +623,7 @@ public class SkatGameData extends Observable {
 		
 		setSinglePlayer(ramschLoser);
 		
-		if (isDurchMarsch()) {
+		if (isDurchmarsch()) {
 			setGameLost(false);
 		} else {
 			setGameLost(true);
@@ -1147,13 +1147,13 @@ public class SkatGameData extends Observable {
 	 * Flag for a durchmarsch game
 	 * (one player made all tricks in a ramsch game)
 	 */
-	private boolean durchMarsch = false;
+	private boolean durchmarsch = false;
 
 	/**
 	 * Flag for a jungfrau game
 	 * (one player made no tricks in a ramsch game)
 	 */
-	private boolean jungFrau = false;
+	private boolean jungfrau = false;
 
 	/**
 	 * Flag for a geschoben game
