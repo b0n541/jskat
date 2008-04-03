@@ -11,6 +11,8 @@ Released: @ReleaseDate@
 
 package jskat.share.rules;
 
+import org.apache.log4j.Logger;
+
 import jskat.data.SkatGameData;
 import jskat.share.Card;
 import jskat.share.CardVector;
@@ -21,6 +23,8 @@ import jskat.share.SkatConstants;
  * 
  */
 public interface SkatRules {
+
+	static Logger log = Logger.getLogger(jskat.share.rules.SkatRules.class);
 
 	/**
 	 * Checks, whether the given card is allowed to be played, also considering
@@ -74,51 +78,6 @@ public interface SkatRules {
 	public int getGameResult(SkatGameData gameData);
 
 	/**
-	 * Checks whether a game was a schneider game<br>
-	 * schneider means one party made only 30 points or below
-	 * 
-	 * @param gameData
-	 *            Game data
-	 * @return TRUE if the game was a schneider game
-	 */
-	public boolean isSchneider(SkatGameData gameData);
-
-	/**
-	 * Checks whether a game was a schwarz game<br>
-	 * schwarz means one party made no trick
-	 * 
-	 * @param gameData
-	 *            Game data
-	 * @return TRUE if the game was a schwarz game
-	 */
-	public boolean isSchwarz(SkatGameData gameData);
-
-	/**
-	 * Checks whether a player did a durchmarsch (walkthrough) in a ramsch game<br>
-	 * durchmarsch means one player made all tricks
-	 * 
-	 * @param playerID
-	 *            Player ID of the player to be checked
-	 * @param gameData
-	 *            Game data
-	 * @return TRUE if the player played a durchmarsch
-	 */
-	public boolean isDurchMarsch(int playerID, SkatGameData gameData);
-
-	/**
-	 * Checks whether a player was jungfrau (virgin) in a ramsch game<br>
-	 * jungfrau means one player made no trick<br>
-	 * two players who played jungfrau means a durchmarsch for the third player
-	 * 
-	 * @param playerID
-	 *            Player ID of the player to be checked
-	 * @param gameData
-	 *            Game data
-	 * @return TRUE if the player was jungfrau
-	 */
-	public boolean isJungFrau(int playerID, SkatGameData gameData);
-
-	/**
 	 * Checks whether one or more cards of a given suit are on the hand
 	 * 
 	 * @param hand
@@ -131,15 +90,4 @@ public interface SkatRules {
 	 */
 	public boolean hasSuit(CardVector hand, SkatConstants.Suits trump,
 			SkatConstants.Suits suit);
-
-	/**
-	 * Checks whether a card is a trump card
-	 * 
-	 * @param card
-	 *            Card to be checked
-	 * @param trump
-	 *            Trump suit in suit games, NULL otherwise
-	 * @return TRUE if the card is a trump card
-	 */
-	public boolean isTrump(Card card, SkatConstants.Suits trump);
 }

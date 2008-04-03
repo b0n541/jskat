@@ -50,8 +50,13 @@ public class SkatRulesFactory {
 		return rules;
 	}
 
-	private static SkatRules suitRules = new SkatRulesSuit();
-	private static SkatRules grandRules = new SkatRulesGrand();
-	private static SkatRules nullRules = new SkatRulesNull();
-	private static SkatRules ramschRules = new SkatRulesRamsch();
+	private static SkatRules suitRules = new SchneiderSchwarzRules(
+											new SuitTrumpRules(
+													new SuitRules()));
+	private static SkatRules grandRules = new SchneiderSchwarzRules(
+												new GrandRamschTrumpRules(
+														new GrandRules()));
+	private static SkatRules nullRules = new NullRules();
+	private static SkatRules ramschRules = new GrandRamschTrumpRules(
+												new RamschRules());
 }

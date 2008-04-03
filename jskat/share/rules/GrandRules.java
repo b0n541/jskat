@@ -8,6 +8,7 @@ Authors: @JS@
 Released: @ReleaseDate@
 
  */
+
 package jskat.share.rules;
 
 import jskat.data.SkatGameData;
@@ -20,7 +21,7 @@ import jskat.share.SkatConstants.Suits;
  * Implementation of skat rules for Grand games
  * 
  */
-public class SkatRulesGrand extends SkatRulesSuitGrand implements SkatRules {
+public class GrandRules extends SuitGrandRules implements SkatRules {
 
 	/**
 	 * @see jskat.share.rules.SkatRules#isCardBeatsCard(jskat.share.Card,
@@ -67,7 +68,7 @@ public class SkatRulesGrand extends SkatRulesSuitGrand implements SkatRules {
 	}
 
 	/**
-	 * @see jskat.share.rules.SkatRulesSuitGrand#isCardAllowed(jskat.share.Card,
+	 * @see jskat.share.rules.SuitGrandRules#isCardAllowed(jskat.share.Card,
 	 *      jskat.share.CardVector, jskat.share.Card,
 	 *      jskat.share.SkatConstants.Suits)
 	 */
@@ -99,7 +100,7 @@ public class SkatRulesGrand extends SkatRulesSuitGrand implements SkatRules {
 	}
 
 	/**
-	 * @see jskat.share.rules.SkatRulesSuitGrand#getGameResult(jskat.data.SkatGameData)
+	 * @see jskat.share.rules.SuitGrandRules#getGameResult(jskat.data.SkatGameData)
 	 */
 	@Override
 	public int getGameResult(SkatGameData gameData) {
@@ -128,14 +129,5 @@ public class SkatRulesGrand extends SkatRulesSuitGrand implements SkatRules {
 		}
 
 		return result;
-	}
-
-	/**
-	 * @see jskat.share.rules.SkatRules#isTrump(jskat.share.Card,
-	 *      jskat.share.SkatConstants.Suits)
-	 */
-	public boolean isTrump(Card card, Suits trump) {
-
-		return card.getRank() == SkatConstants.Ranks.JACK;
 	}
 }

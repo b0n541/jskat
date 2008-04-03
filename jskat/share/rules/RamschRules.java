@@ -8,6 +8,7 @@ Authors: @JS@
 Released: @ReleaseDate@
 
 */
+
 package jskat.share.rules;
 
 import jskat.data.SkatGameData;
@@ -20,7 +21,7 @@ import jskat.share.SkatConstants.Suits;
  * Implementation of skat rules for Ramsch games
  *
  */
-public class SkatRulesRamsch implements SkatRules {
+public class RamschRules implements SkatRules {
 
 	/**
 	 * @see jskat.share.rules.SkatRules#getGameResult(jskat.data.SkatGameData)
@@ -109,22 +110,6 @@ public class SkatRulesRamsch implements SkatRules {
 	}
 
 	/**
-	 * @see jskat.share.rules.SkatRules#isSchneider(jskat.data.SkatGameData)
-	 */
-	public boolean isSchneider(SkatGameData gameData) {
-		// there is no schneider in Ramsch games
-		return false;
-	}
-
-	/**
-	 * @see jskat.share.rules.SkatRules#isSchwarz(jskat.data.SkatGameData)
-	 */
-	public boolean isSchwarz(SkatGameData gameData) {
-		// there is no schwarz in Ramsch games
-		return false;
-	}
-
-	/**
 	 * @see jskat.share.rules.SkatRules#isCardAllowed(jskat.share.Card, jskat.share.CardVector, jskat.share.Card, jskat.share.SkatConstants.Suits)
 	 */
 	public boolean isCardAllowed(Card card, CardVector hand, Card initialCard,
@@ -134,9 +119,32 @@ public class SkatRulesRamsch implements SkatRules {
 	}
 
 	/**
-	 * @see jskat.share.rules.SkatRules#isDurchMarsch(int, jskat.data.SkatGameData)
+	 * Checks whether a player did a durchmarsch (walkthrough) in a ramsch game<br>
+	 * durchmarsch means one player made all tricks
+	 * 
+	 * @param playerID
+	 *            Player ID of the player to be checked
+	 * @param gameData
+	 *            Game data
+	 * @return TRUE if the player played a durchmarsch
 	 */
-	public boolean isDurchMarsch(int playerID, SkatGameData gameData) {
+	public final boolean isDurchMarsch(int playerID, SkatGameData gameData) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/**
+	 * Checks whether a player was jungfrau (virgin) in a ramsch game<br>
+	 * jungfrau means one player made no trick<br>
+	 * two players who played jungfrau means a durchmarsch for the third player
+	 * 
+	 * @param playerID
+	 *            Player ID of the player to be checked
+	 * @param gameData
+	 *            Game data
+	 * @return TRUE if the player was jungfrau
+	 */
+	public final boolean isJungFrau(int playerID, SkatGameData gameData) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -145,14 +153,6 @@ public class SkatRulesRamsch implements SkatRules {
 	 * @see jskat.share.rules.SkatRules#isGameWon(jskat.data.SkatGameData)
 	 */
 	public boolean isGameWon(SkatGameData gameData) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	/**
-	 * @see jskat.share.rules.SkatRules#isJungFrau(int, jskat.data.SkatGameData)
-	 */
-	public boolean isJungFrau(int playerID, SkatGameData gameData) {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -177,13 +177,5 @@ public class SkatRulesRamsch implements SkatRules {
 		}
 		
 		return result;
-	}
-
-	/**
-	 * @see jskat.share.rules.SkatRules#isTrump(jskat.share.Card, jskat.share.SkatConstants.Suits)
-	 */
-	public boolean isTrump(Card card, Suits trump) {
-		
-		return card.getRank() == SkatConstants.Ranks.JACK;
 	}
 }
