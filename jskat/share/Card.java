@@ -13,6 +13,7 @@ package jskat.share;
 
 import jskat.data.GameAnnouncement;
 import jskat.share.rules.SkatRulesFactory;
+import jskat.share.rules.TrumpDecorator;
 
 import org.apache.log4j.Logger;
 
@@ -395,7 +396,7 @@ public class Card {
 	public boolean isTrump(SkatConstants.GameTypes gameType,
 			SkatConstants.Suits trump) {
 
-		return SkatRulesFactory.getSkatRules(gameType).isTrump(this, trump);
+		return ((TrumpDecorator)SkatRulesFactory.getSkatRules(gameType)).isTrump(this, trump);
 	}
 
 	/**
