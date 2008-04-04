@@ -12,13 +12,15 @@ Released: @ReleaseDate@
 package jskat.share.rules;
 
 import jskat.data.SkatGameData;
+import jskat.share.Card;
+import jskat.share.SkatConstants.Suits;
 
 /**
  * Implements schneider and schwarz rules
  */
-public class SchneiderSchwarzRules extends RuleDecorator {
+public class SchneiderSchwarzRules extends TrumpDecorator {
 
-	SchneiderSchwarzRules(SkatRules rules) {
+	SchneiderSchwarzRules(TrumpDecorator rules) {
 		
 		decoratedRules = rules;
 	}
@@ -47,7 +49,7 @@ public class SchneiderSchwarzRules extends RuleDecorator {
 		else {
 			
 			if (gameData.getScore((singlePlayer + 1) % 3) < 31 ||
-					gameData.getScore((singlePlayer + 3) % 3) < 31) {
+					gameData.getScore((singlePlayer + 2) % 3) < 31) {
 				// one of the opponents has played schneider
 				result = true;
 			}
@@ -94,5 +96,14 @@ public class SchneiderSchwarzRules extends RuleDecorator {
 		}
 		
 		return result;
+	}
+
+	/**
+	 * @see jskat.share.rules.TrumpDecorator#isTrump(jskat.share.Card, jskat.share.SkatConstants.Suits)
+	 */
+	@Override
+	public boolean isTrump(Card card, Suits trump) {
+		
+		return ((TrumpDecorator)decoratedRules).isTrump(card, trump);
 	}
 }
