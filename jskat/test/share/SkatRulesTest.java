@@ -314,7 +314,7 @@ public class SkatRulesTest {
 		gameType = GameTypes.SUIT;
 		rules = SkatRulesFactory.getSkatRules(gameType);
 		trump = Suits.CLUBS;
-		assertFalse(((SuitTrumpRules)rules).isTrump(cardD7, trump));
+		assertFalse(((TrumpDecorator)rules).isTrump(cardD7, trump));
 	}
 	
 	/**
@@ -330,7 +330,7 @@ public class SkatRulesTest {
 		gameType = GameTypes.SUIT;
 		rules = SkatRulesFactory.getSkatRules(gameType);
 		trump = Suits.CLUBS;
-		assertTrue(((SuitTrumpRules)rules).isTrump(cardDJ, trump));
+		assertTrue(((TrumpDecorator)rules).isTrump(cardDJ, trump));
 	}
 	
 	/**
@@ -346,7 +346,7 @@ public class SkatRulesTest {
 		gameType = GameTypes.SUIT;
 		rules = SkatRulesFactory.getSkatRules(gameType);
 		trump = Suits.CLUBS;
-		assertTrue(((SuitTrumpRules)rules).isTrump(cardC7, trump));
+		assertTrue(((TrumpDecorator)rules).isTrump(cardC7, trump));
 	}
 	
 	/**
@@ -362,7 +362,7 @@ public class SkatRulesTest {
 		gameType = GameTypes.SUIT;
 		rules = SkatRulesFactory.getSkatRules(gameType);
 		trump = Suits.CLUBS;
-		assertTrue(((SuitTrumpRules)rules).isTrump(cardCJ, trump));
+		assertTrue(((TrumpDecorator)rules).isTrump(cardCJ, trump));
 	}
 	
 	/**
@@ -378,7 +378,7 @@ public class SkatRulesTest {
 		gameType = GameTypes.SUIT;
 		rules = SkatRulesFactory.getSkatRules(gameType);
 		trump = Suits.CLUBS;
-		assertTrue(((SuitTrumpRules)rules).isTrump(cardHJ, trump));
+		assertTrue(((TrumpDecorator)rules).isTrump(cardHJ, trump));
 	}
 
 	/**
@@ -393,7 +393,7 @@ public class SkatRulesTest {
 		log.debug("====> isTrump200 <====");
 		gameType = GameTypes.GRAND;
 		rules = SkatRulesFactory.getSkatRules(gameType);
-		assertTrue(((GrandRamschTrumpRules)rules).isTrump(cardHJ, null));
+		assertTrue(((TrumpDecorator)rules).isTrump(cardHJ, null));
 	}
 
 	/**
@@ -408,7 +408,7 @@ public class SkatRulesTest {
 		log.debug("====> isTrump201 <====");
 		gameType = GameTypes.GRAND;
 		rules = SkatRulesFactory.getSkatRules(gameType);
-		assertTrue(((GrandRamschTrumpRules)rules).isTrump(cardCJ, null));
+		assertTrue(((TrumpDecorator)rules).isTrump(cardCJ, null));
 	}
 
 	/**
@@ -423,7 +423,7 @@ public class SkatRulesTest {
 		log.debug("====> isTrump202 <====");
 		gameType = GameTypes.GRAND;
 		rules = SkatRulesFactory.getSkatRules(gameType);
-		assertFalse(((GrandRamschTrumpRules)rules).isTrump(cardSA, null));
+		assertFalse(((TrumpDecorator)rules).isTrump(cardSA, null));
 	}
 
 	/**
@@ -438,7 +438,7 @@ public class SkatRulesTest {
 		log.debug("====> isTrump203 <====");
 		gameType = GameTypes.GRAND;
 		rules = SkatRulesFactory.getSkatRules(gameType);
-		assertFalse(((GrandRamschTrumpRules)rules).isTrump(cardC7, null));
+		assertFalse(((TrumpDecorator)rules).isTrump(cardC7, null));
 	}
 
 	/**
@@ -453,7 +453,7 @@ public class SkatRulesTest {
 		log.debug("====> isTrump300 <====");
 		gameType = GameTypes.RAMSCH;
 		rules = SkatRulesFactory.getSkatRules(gameType);
-		assertTrue(((GrandRamschTrumpRules)rules).isTrump(cardHJ, null));
+		assertTrue(((TrumpDecorator)rules).isTrump(cardHJ, null));
 	}
 
 	/**
@@ -468,7 +468,7 @@ public class SkatRulesTest {
 		log.debug("====> isTrump301 <====");
 		gameType = GameTypes.RAMSCH;
 		rules = SkatRulesFactory.getSkatRules(gameType);
-		assertTrue(((GrandRamschTrumpRules)rules).isTrump(cardCJ, null));
+		assertTrue(((TrumpDecorator)rules).isTrump(cardCJ, null));
 	}
 
 	/**
@@ -483,7 +483,7 @@ public class SkatRulesTest {
 		log.debug("====> isTrump302 <====");
 		gameType = GameTypes.RAMSCH;
 		rules = SkatRulesFactory.getSkatRules(gameType);
-		assertFalse(((GrandRamschTrumpRules)rules).isTrump(cardSA, null));
+		assertFalse(((TrumpDecorator)rules).isTrump(cardSA, null));
 	}
 
 	/**
@@ -498,7 +498,7 @@ public class SkatRulesTest {
 		log.debug("====> isTrump303 <====");
 		gameType = GameTypes.RAMSCH;
 		rules = SkatRulesFactory.getSkatRules(gameType);
-		assertFalse(((GrandRamschTrumpRules)rules).isTrump(cardC7, null));
+		assertFalse(((TrumpDecorator)rules).isTrump(cardC7, null));
 	}
 
 	private static CardVector hand001;
