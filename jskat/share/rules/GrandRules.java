@@ -16,6 +16,7 @@ import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
 import jskat.share.SkatConstants.Suits;
+import jskat.share.SkatConstants.GameTypes;
 
 /**
  * Implementation of skat rules for Grand games
@@ -25,42 +26,30 @@ public class GrandRules extends SuitGrandRules implements SkatRules {
 
 	/**
 	 * @see jskat.share.rules.SkatRules#isCardBeatsCard(jskat.share.Card,
-	 *      jskat.share.Card, jskat.share.Card, jskat.share.SkatConstants.Suits)
+	 *      jskat.share.Card, jskat.share.SkatConstants.Suits)
 	 */
 	public boolean isCardBeatsCard(Card card, Card cardToBeat,
-			Card initialCard, SkatConstants.Suits trump) {
+			SkatConstants.Suits trump) {
 
 		boolean result = false;
 
-		if (initialCard.isTrump(SkatConstants.GameTypes.GRAND)) {
-			if (card.isTrump(SkatConstants.GameTypes.GRAND)) {
-				if (cardToBeat.isTrump(SkatConstants.GameTypes.GRAND)) {
-					if (cardToBeat.getSuit().getSuitOrder() < card.getSuit().getSuitOrder()) {
-						result = true;
-					}
-				}
-				else {
-					result = true;
-				}
+		if (cardToBeat.isTrump(GameTypes.GRAND)) {
+			// card to beat is a trump card
+			if (card.isTrump(GameTypes.GRAND) &&
+					cardToBeat.getSuit().getSuitOrder() < card.getSuit().getSuitOrder()) {
+				// card is a trump card too and has higher suit order
+				result = true;
 			}
-		}
-		else {
-			if (card.isTrump(SkatConstants.GameTypes.GRAND)) {
-				if (cardToBeat.isTrump(SkatConstants.GameTypes.GRAND)) {
-					if (cardToBeat.getSuit().getSuitOrder() < card.getSuit().getSuitOrder()) {
-						result = true;
-					}
-				}
-				else {
-					result = true;
-				}
+		} else {
+			// card to beat is not a trump card
+			if (card.isTrump(GameTypes.GRAND)) {
+				// card is a trump card
+				result = true;
 			}
-			else {
-				if (!cardToBeat.isTrump(SkatConstants.GameTypes.GRAND)) {
-					if (cardToBeat.getSuitGrandOrder() < card.getSuitGrandOrder()) {
-						result = true;
-					}
-				}
+			else if (cardToBeat.getSuit() == card.getSuit() &&
+				cardToBeat.getSuitGrandOrder() < card.getSuitGrandOrder()) {
+				// cards have the same suit and card has higher order in suit/grand games
+				result = true;
 			}
 		}
 		

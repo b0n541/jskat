@@ -59,6 +59,8 @@ public class SkatRulesTest {
 		cardST = new Card(Suits.SPADES, SkatConstants.Ranks.TEN);
 		cardSA = new Card(Suits.SPADES, SkatConstants.Ranks.ACE);
 		cardSQ = new Card(Suits.SPADES, SkatConstants.Ranks.QUEEN);
+		cardSK = new Card(Suits.SPADES, SkatConstants.Ranks.KING);
+		cardSJ = new Card(Suits.SPADES, SkatConstants.Ranks.JACK);
 		cardC7 = new Card(Suits.CLUBS, SkatConstants.Ranks.SEVEN);
 		cardCQ = new Card(Suits.CLUBS, SkatConstants.Ranks.QUEEN);
 		cardCK = new Card(Suits.CLUBS, SkatConstants.Ranks.KING);
@@ -501,6 +503,336 @@ public class SkatRulesTest {
 		assertFalse(((TrumpDecorator)rules).isTrump(cardC7, null));
 	}
 
+	/**
+	 * Test 100 for method isCardBeatsCard() <br />
+	 * Null game
+	 * 
+	 * @see NullRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard100() {
+		
+		log.debug("====> isCardBeatsCard100 <====");
+		gameType = GameTypes.NULL;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertTrue(rules.isCardBeatsCard(cardST, cardS8, null));
+	}
+
+	/**
+	 * Test 101 for method isCardBeatsCard() <br />
+	 * Null game
+	 * 
+	 * @see NullRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard101() {
+		
+		log.debug("====> isCardBeatsCard101 <====");
+		gameType = GameTypes.NULL;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertFalse(rules.isCardBeatsCard(cardS8, cardST, null));
+	}
+
+	/**
+	 * Test 102 for method isCardBeatsCard() <br />
+	 * Null game
+	 * 
+	 * @see NullRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard102() {
+		
+		log.debug("====> isCardBeatsCard102 <====");
+		gameType = GameTypes.NULL;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertFalse(rules.isCardBeatsCard(cardHJ, cardS8, null));
+	}
+
+	/**
+	 * Test 103 for method isCardBeatsCard() <br />
+	 * Null game
+	 * 
+	 * @see NullRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard103() {
+		
+		log.debug("====> isCardBeatsCard103 <====");
+		gameType = GameTypes.NULL;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertFalse(rules.isCardBeatsCard(cardHJ, cardDJ, null));
+	}
+
+	/**
+	 * Test 104 for method isCardBeatsCard() <br />
+	 * Null game
+	 * 
+	 * @see NullRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard104() {
+		
+		log.debug("====> isCardBeatsCard104 <====");
+		gameType = GameTypes.NULL;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertTrue(rules.isCardBeatsCard(cardSQ, cardST, null));
+	}
+
+	/**
+	 * Test 200 for method isCardBeatsCard() <br />
+	 * Suit game
+	 * 
+	 * @see SuitRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard200() {
+		
+		log.debug("====> isCardBeatsCard200 <====");
+		gameType = GameTypes.SUIT;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertFalse(rules.isCardBeatsCard(cardSQ, cardST, Suits.CLUBS));
+	}
+
+	/**
+	 * Test 201 for method isCardBeatsCard() <br />
+	 * Suit game
+	 * 
+	 * @see SuitRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard201() {
+		
+		log.debug("====> isCardBeatsCard201 <====");
+		gameType = GameTypes.SUIT;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertTrue(rules.isCardBeatsCard(cardST, cardSQ, Suits.CLUBS));
+	}
+
+	/**
+	 * Test 202 for method isCardBeatsCard() <br />
+	 * Suit game
+	 * 
+	 * @see SuitRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard202() {
+		
+		log.debug("====> isCardBeatsCard202 <====");
+		gameType = GameTypes.SUIT;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertFalse(rules.isCardBeatsCard(cardSQ, cardST, Suits.SPADES));
+	}
+
+	/**
+	 * Test 203 for method isCardBeatsCard() <br />
+	 * Suit game
+	 * 
+	 * @see SuitRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard203() {
+		
+		log.debug("====> isCardBeatsCard203 <====");
+		gameType = GameTypes.SUIT;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertTrue(rules.isCardBeatsCard(cardST, cardSQ, Suits.SPADES));
+	}
+
+	/**
+	 * Test 204 for method isCardBeatsCard() <br />
+	 * Suit game
+	 * 
+	 * @see SuitRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard204() {
+		
+		log.debug("====> isCardBeatsCard204 <====");
+		gameType = GameTypes.SUIT;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertTrue(rules.isCardBeatsCard(cardSQ, cardCK, Suits.SPADES));
+	}
+
+	/**
+	 * Test 205 for method isCardBeatsCard() <br />
+	 * Suit game
+	 * 
+	 * @see SuitRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard205() {
+		
+		log.debug("====> isCardBeatsCard205 <====");
+		gameType = GameTypes.SUIT;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertTrue(rules.isCardBeatsCard(cardHJ, cardDJ, Suits.SPADES));
+	}
+
+	/**
+	 * Test 206 for method isCardBeatsCard() <br />
+	 * Suit game
+	 * 
+	 * @see SuitRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard206() {
+		
+		log.debug("====> isCardBeatsCard206 <====");
+		gameType = GameTypes.SUIT;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertTrue(rules.isCardBeatsCard(cardSJ, cardST, Suits.SPADES));
+	}
+
+	/**
+	 * Test 300 for method isCardBeatsCard() <br />
+	 * Grand game
+	 * 
+	 * @see GrandRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard300() {
+		
+		log.debug("====> isCardBeatsCard300 <====");
+		gameType = GameTypes.GRAND;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertFalse(rules.isCardBeatsCard(cardSQ, cardST, null));
+	}
+
+	/**
+	 * Test 301 for method isCardBeatsCard() <br />
+	 * Grand game
+	 * 
+	 * @see GrandRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard301() {
+		
+		log.debug("====> isCardBeatsCard301 <====");
+		gameType = GameTypes.GRAND;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertTrue(rules.isCardBeatsCard(cardST, cardSQ, null));
+	}
+
+	/**
+	 * Test 302 for method isCardBeatsCard() <br />
+	 * Grand game
+	 * 
+	 * @see GrandRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard302() {
+		
+		log.debug("====> isCardBeatsCard302 <====");
+		gameType = GameTypes.GRAND;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertFalse(rules.isCardBeatsCard(cardSQ, cardCK, null));
+	}
+
+	/**
+	 * Test 303 for method isCardBeatsCard() <br />
+	 * Grand game
+	 * 
+	 * @see GrandRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard303() {
+		
+		log.debug("====> isCardBeatsCard303 <====");
+		gameType = GameTypes.GRAND;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertTrue(rules.isCardBeatsCard(cardHJ, cardDJ, null));
+	}
+
+	/**
+	 * Test 304 for method isCardBeatsCard() <br />
+	 * Grand game
+	 * 
+	 * @see GrandRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard304() {
+		
+		log.debug("====> isCardBeatsCard304 <====");
+		gameType = GameTypes.GRAND;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertTrue(rules.isCardBeatsCard(cardSJ, cardST, null));
+	}
+
+	/**
+	 * Test 400 for method isCardBeatsCard() <br />
+	 * Ramsch game
+	 * 
+	 * @see RamschRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard400() {
+		
+		log.debug("====> isCardBeatsCard400 <====");
+		gameType = GameTypes.RAMSCH;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertTrue(rules.isCardBeatsCard(cardSQ, cardST, null));
+	}
+
+	/**
+	 * Test 401 for method isCardBeatsCard() <br />
+	 * Ramsch game
+	 * 
+	 * @see RamschRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard401() {
+		
+		log.debug("====> isCardBeatsCard401 <====");
+		gameType = GameTypes.RAMSCH;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertTrue(rules.isCardBeatsCard(cardSK, cardST, null));
+	}
+
+	/**
+	 * Test 402 for method isCardBeatsCard() <br />
+	 * Ramsch game
+	 * 
+	 * @see RamschRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard402() {
+		
+		log.debug("====> isCardBeatsCard402 <====");
+		gameType = GameTypes.RAMSCH;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertTrue(rules.isCardBeatsCard(cardSJ, cardST, null));
+	}
+
+	/**
+	 * Test 403 for method isCardBeatsCard() <br />
+	 * Ramsch game
+	 * 
+	 * @see RamschRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard403() {
+		
+		log.debug("====> isCardBeatsCard403 <====");
+		gameType = GameTypes.RAMSCH;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertTrue(rules.isCardBeatsCard(cardSJ, cardHJ, null));
+	}
+
+	/**
+	 * Test 404 for method isCardBeatsCard() <br />
+	 * Ramsch game
+	 * 
+	 * @see RamschRules#isCardBeatsCard(Card, Card, Suits)
+	 */
+	@Test
+	public void isCardBeatsCard404() {
+		
+		log.debug("====> isCardBeatsCard404 <====");
+		gameType = GameTypes.RAMSCH;
+		rules = SkatRulesFactory.getSkatRules(gameType);
+		assertFalse(rules.isCardBeatsCard(cardSQ, cardD8, null));
+	}
+
 	private static CardVector hand001;
 	private static CardVector hand002;
 	private static CardVector hand003;
@@ -516,7 +848,9 @@ public class SkatRulesTest {
 	private static Card cardHJ;
 	private static Card cardS7;
 	private static Card cardS8;
+	private static Card cardSJ;
 	private static Card cardSQ;
+	private static Card cardSK;
 	private static Card cardST;
 	private static Card cardSA;
 	private static Card cardCQ;

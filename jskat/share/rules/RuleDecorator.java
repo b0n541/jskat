@@ -49,12 +49,12 @@ public abstract class RuleDecorator implements SkatRules {
 	}
 
 	/**
-	 * @see jskat.share.rules.SkatRules#isCardBeatsCard(jskat.share.Card, jskat.share.Card, jskat.share.Card, jskat.share.SkatConstants.Suits)
+	 * @see jskat.share.rules.SkatRules#isCardBeatsCard(jskat.share.Card, jskat.share.Card, jskat.share.SkatConstants.Suits)
 	 */
 	public boolean isCardBeatsCard(Card card, Card cardToBeat,
-			Card initialCard, Suits trump) {
+			Suits trump) {
 		
-		return decoratedRules.isCardBeatsCard(card, cardToBeat, initialCard, trump);
+		return decoratedRules.isCardBeatsCard(card, cardToBeat, trump);
 	}
 
 	/**

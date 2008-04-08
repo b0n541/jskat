@@ -16,6 +16,7 @@ import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
 import jskat.share.SkatConstants.Suits;
+import jskat.share.SkatConstants.GameTypes;
 
 /**
  * Implementation of skat rules for Ramsch games
@@ -47,63 +48,32 @@ public class RamschRules implements SkatRules {
 	
 	/**
 	 * @see jskat.share.rules.SkatRules#isCardBeatsCard(jskat.share.Card, 
-	 * jskat.share.Card, jskat.share.Card, jskat.share.SkatConstants.Suits)
+	 * jskat.share.Card, jskat.share.SkatConstants.Suits)
 	 */
-	public boolean isCardBeatsCard(Card card, Card cardToBeat, Card initialCard, 
+	public boolean isCardBeatsCard(Card card, Card cardToBeat, 
 			SkatConstants.Suits trump) {
-		// TODO Auto-generated method stub
+
 		boolean result = false;
 		
-		if (initialCard.isTrump(SkatConstants.GameTypes.RAMSCH)) {
-			// trump card was played as first card
-			if (card.isTrump(SkatConstants.GameTypes.RAMSCH)) {
+		if (cardToBeat.isTrump(GameTypes.RAMSCH)) {
+			// card to beat is a trump card
+			if (card.isTrump(GameTypes.GRAND) &&
+					cardToBeat.getSuit().getSuitOrder() < card.getSuit().getSuitOrder()) {
+				// card is a trump card too (jack) and has higher suit order
+				result = true;
+			}
+		} else {
+			// card to beat is not a trump card
+			if (card.isTrump(GameTypes.GRAND)) {
 				// card is a trump card
-				if (cardToBeat.isTrump(SkatConstants.GameTypes.RAMSCH)) {
-					// card to beat is a trump card too
-					if (card.getSuit().getSuitOrder() > cardToBeat.getSuit().getSuitOrder()) {
-						// only JACKS are trump
-						result = true;
-					}
-				}
-				else {
-					// card to beat is not a trump card
-					result = true;
-				}
+				result = true;
 			}
-		}
-		else {
-			// first card was not a trump card
-			if (card.isTrump(SkatConstants.GameTypes.RAMSCH)) {
-				// card is a trump card
-				if (cardToBeat.isTrump(SkatConstants.GameTypes.RAMSCH)) {
-					// card to beat is a trump card too
-					if (card.getSuit().getSuitOrder() > cardToBeat.getSuit().getSuitOrder()) {
-						// only JACKS are trump
-						result = true;
-					}
-				}
-				else {
-					// card to beat is not a trump card
-					result = true;
-				}
+			else if (cardToBeat.getSuit() == card.getSuit() &&
+						cardToBeat.getRamschOrder() < card.getRamschOrder()) {
+				// cards have the same suit, but card has higher ramsch order
+				result = true;
 			}
-			else {
-				// card is not a trump card
-				if (initialCard.getSuit() == card.getSuit()) {
-					// card has same suit as first card
-					if (card.getSuit() == cardToBeat.getSuit()) {
-						// card to beat has same suit as first card
-						if (card.getRamschOrder() > cardToBeat.getRamschOrder()) {
-							// card has higher order in ramsch games
-							result = true;
-						}
-					}
-					else {
-						// card to beat has not same suit as first card
-						result = true;
-					}
-				}
-			}
+			
 		}
 		
 		return result;

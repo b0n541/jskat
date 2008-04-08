@@ -50,14 +50,12 @@ public interface SkatRules {
 	 *            Card to be checked
 	 * @param cardToBeat
 	 *            Card to be beaten
-	 * @param initialCard
-	 *            First card of the trick
 	 * @param trump
 	 *            Trump suit in suit games, NULL otherwise
 	 * @return TRUE if the card beats the other card
 	 */
 	public boolean isCardBeatsCard(Card card, Card cardToBeat,
-			Card initialCard, SkatConstants.Suits trump);
+			SkatConstants.Suits trump);
 
 	/**
 	 * Checks whether a game is won

@@ -16,6 +16,7 @@ import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
 import jskat.share.SkatConstants.Suits;
+import jskat.share.SkatConstants.Ranks;
 
 /**
  * Implementation of skat rules for Suit games
@@ -197,22 +198,34 @@ public class SuitRules extends SuitGrandRules implements SkatRules {
 
 	/**
 	 * @see jskat.share.rules.SkatRules#isCardBeatsCard(jskat.share.Card,
-	 *      jskat.share.Card, jskat.share.Card, jskat.share.SkatConstants.Suits)
+	 *      jskat.share.Card, jskat.share.SkatConstants.Suits)
 	 */
 	@Override
 	public boolean isCardBeatsCard(Card card, Card cardToBeat,
-			Card initialCard, SkatConstants.Suits trump) {
+			SkatConstants.Suits trump) {
 
 		boolean result = false;
 		
-		log.debug(card + " " + cardToBeat + " " + trump);
-	
 		if (cardToBeat.isTrump(SkatConstants.GameTypes.SUIT, trump)) {
 			// card must be trump to beat other card
-			if (card.isTrump(SkatConstants.GameTypes.SUIT, trump) &&
-					cardToBeat.getSuitGrandOrder() < card.getSuitGrandOrder()) {
-				// card is trump and has higher order in suit/grand games
-				result = true;
+			if (card.isTrump(SkatConstants.GameTypes.SUIT, trump)) {
+				// card is trump
+				if (cardToBeat.getSuitGrandOrder() < card.getSuitGrandOrder()) {
+					// card has higher order in suit/grand games
+					result = true;
+				}
+				else if (cardToBeat.getRank() == Ranks.JACK) {
+					// card to beat is a jack
+					if (card.getRank() == Ranks.JACK &&
+							cardToBeat.getSuit().getSuitOrder() < card.getSuit().getSuitOrder()) {
+						// card is also a jack and has higher suit order
+						result = true;
+					}
+				}
+				else if (card.getRank() == Ranks.JACK) {
+					// card to beat is not a jack, but card is
+					result = true;
+				}
 			}
 		}
 		else {
@@ -223,7 +236,7 @@ public class SuitRules extends SuitGrandRules implements SkatRules {
 			}
 			else if (card.getSuit() == cardToBeat.getSuit() &&
 						cardToBeat.getSuitGrandOrder() < card.getSuitGrandOrder()) {
-				// card has higher order in suit/grand games
+				// cards have the same suit and card has higher order in suit/grand games
 				result = true;
 			}
 		}

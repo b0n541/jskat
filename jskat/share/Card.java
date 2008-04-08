@@ -255,7 +255,7 @@ public class Card {
 			SkatConstants.Suits trump, Card initialCard) {
 
 		return SkatRulesFactory.getSkatRules(gameType).isCardBeatsCard(this,
-				cardToCompare, initialCard, trump);
+				cardToCompare, trump);
 
 		/*
 		 * boolean result = false;
@@ -346,7 +346,7 @@ public class Card {
 		}
 		
 		return SkatRulesFactory.getSkatRules(gameType).isCardBeatsCard(this,
-				cardToCompare, initialCard, null);
+				cardToCompare, null);
 	}
 	
 	/**

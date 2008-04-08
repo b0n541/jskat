@@ -32,10 +32,10 @@ public abstract class SuitGrandRules implements SkatRules {
 
 	/**
 	 * @see jskat.share.rules.SkatRules#isCardBeatsCard(jskat.share.Card,
-	 *      jskat.share.Card, jskat.share.Card, jskat.share.SkatConstants.Suits)
+	 *      jskat.share.Card, jskat.share.SkatConstants.Suits)
 	 */
 	public abstract boolean isCardBeatsCard(Card card, Card cardToBeat,
-			Card initialCard, SkatConstants.Suits trump);
+			SkatConstants.Suits trump);
 
 	/**
 	 * @see jskat.share.rules.SkatRules#getGameResult(jskat.data.SkatGameData)

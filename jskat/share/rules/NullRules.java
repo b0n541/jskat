@@ -87,20 +87,16 @@ public class NullRules implements SkatRules {
 
 	/**
 	 * @see jskat.share.rules.SkatRules#isCardBeatsCard(jskat.share.Card,
-	 *      jskat.share.Card, jskat.share.Card, jskat.share.SkatConstants.Suits)
+	 *      jskat.share.Card, jskat.share.SkatConstants.Suits)
 	 */
-	public boolean isCardBeatsCard(Card card, Card cardToBeat, Card initialCard,
+	public boolean isCardBeatsCard(Card card, Card cardToBeat,
 			SkatConstants.Suits trump) {
 
 		boolean result = false;
 
-		if (card.getSuit() == initialCard.getSuit()) {
-
-			if (cardToBeat.getSuit() != initialCard.getSuit()) {
-
-				result = true;
-			} 
-			else if (card.getNullOrder() > cardToBeat.getNullOrder()) {
+		if (cardToBeat.getSuit() == card.getSuit()) {
+			
+			if (cardToBeat.getNullOrder() < card.getNullOrder()) {
 				
 				result = true;
 			}
