@@ -9,7 +9,7 @@ Released: @ReleaseDate@
 
 */
 
-package jskat.gui;
+package jskat.gui.img;
 
 import java.awt.Image;
 import java.awt.MediaTracker;
@@ -29,7 +29,7 @@ import jskat.data.JSkatOptions;
 public class JSkatGraphicRepository extends Observable implements Observer {
 
 	private static final Logger log = Logger
-			.getLogger(jskat.gui.JSkatGraphicRepository.class);
+			.getLogger(jskat.gui.img.JSkatGraphicRepository.class);
 
 	/** 
 	 * Creates a new instance of JSkatGraphicRepository 
