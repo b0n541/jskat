@@ -36,7 +36,7 @@ import jskat.control.SkatTable;
 import jskat.data.JSkatDataModel;
 import jskat.data.SkatGameData;
 import jskat.data.Trick;
-import jskat.gui.JSkatGraphicRepository;
+import jskat.gui.img.JSkatGraphicRepository;
 import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;

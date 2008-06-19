@@ -17,7 +17,7 @@ import javax.swing.ImageIcon;
 import javax.swing.border.EtchedBorder;
 import java.util.ResourceBundle;
 
-import jskat.gui.JSkatGraphicRepository;
+import jskat.gui.img.JSkatGraphicRepository;
 import jskat.data.JSkatDataModel;
 
 /**

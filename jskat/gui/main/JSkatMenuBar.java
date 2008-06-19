@@ -17,7 +17,7 @@ import javax.swing.ImageIcon;
 import java.util.ResourceBundle;
 
 import jskat.data.JSkatDataModel;
-import jskat.gui.JSkatGraphicRepository;
+import jskat.gui.img.JSkatGraphicRepository;
 
 /**
  * Menu bar for JSkat

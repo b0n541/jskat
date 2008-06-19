@@ -134,9 +134,10 @@ public class SkatSeries extends Observable implements Observer {
 			notifyObservers(newGame);
 
 			// 28.05.07 mjl: set up LastTricksDialog for this game
-			LastTricksDialog ltd = LastTricksDialog.getInstance();
-			ltd.initForNewGame(this);
-			newGame.addObserver(ltd);
+			if (mainWindow != null) {
+				mainWindow.initForNewGame(this);
+				newGame.addObserver(mainWindow);
+			}
 
 			// TODO do this in SkatGame
 			skatSeriesData.getCurrGame().dealCards();

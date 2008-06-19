@@ -18,7 +18,7 @@ import javax.swing.JFrame;
 import org.apache.log4j.Logger;
 
 import jskat.data.JSkatDataModel;
-import jskat.gui.JSkatGraphicRepository;
+import jskat.gui.img.JSkatGraphicRepository;
 import jskat.gui.main.LastTricksDialog;
 
 /**

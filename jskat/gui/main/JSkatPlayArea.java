@@ -30,7 +30,7 @@ import jskat.data.JSkatDataModel;
 import jskat.data.SkatGameData;
 import jskat.data.SkatSeriesData;
 import jskat.data.SkatTableData;
-import jskat.gui.JSkatGraphicRepository;
+import jskat.gui.img.JSkatGraphicRepository;
 import jskat.player.JSkatPlayer;
 
 /**

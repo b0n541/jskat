@@ -15,7 +15,7 @@ import java.util.Vector;
 
 import jskat.control.JSkatMaster;
 import jskat.data.JSkatDataModel;
-import jskat.gui.JSkatGraphicRepository;
+import jskat.gui.img.JSkatGraphicRepository;
 import jskat.gui.main.actions.AboutDialogAction;
 import jskat.gui.main.actions.ExitJSkatAction;
 import jskat.gui.main.actions.FlipCardsAction;

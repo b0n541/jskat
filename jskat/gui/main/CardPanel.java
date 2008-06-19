@@ -19,7 +19,7 @@ import javax.swing.JPanel;
 
 import org.apache.log4j.Logger;
 
-import jskat.gui.JSkatGraphicRepository;
+import jskat.gui.img.JSkatGraphicRepository;
 import jskat.share.SkatConstants;
 
 /**

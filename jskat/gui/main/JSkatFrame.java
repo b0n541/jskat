@@ -31,19 +31,23 @@ import javax.swing.border.EtchedBorder;
 
 import org.apache.log4j.Logger;
 
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Vector;
 import java.util.ResourceBundle;
 
 import jskat.control.JSkatMaster;
+import jskat.control.SkatGame;
+import jskat.control.SkatSeries;
 import jskat.data.JSkatDataModel;
-import jskat.gui.JSkatGraphicRepository;
+import jskat.gui.img.JSkatGraphicRepository;
 
 /**
  * The main window for JSkat
  * 
  * @author Jan Sch&auml;fer <jan.schaefer@b0n541.net>
  */
-public class JSkatFrame extends JFrame {
+public class JSkatFrame extends JFrame implements Observer {
 
 	/**
 	 * 
@@ -178,6 +182,33 @@ public class JSkatFrame extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    /**
+     * Initializes the GUI for a new game
+     * 
+     * @param series
+     */
+    public void initForNewGame(SkatSeries series) {
+    	
+		LastTricksDialog.getInstance().initForNewGame(series);
+    }
+    
+    /**
+     * Updates view when observed objects changes
+     * 
+     * @param o Observed object 
+     * @param arg Changed value
+     */
+	public void update(Observable o, Object arg) {
+		
+		if (o instanceof SkatSeries) {
+			
+			if (arg instanceof SkatGame) {
+				
+				((SkatGame)arg).addObserver(LastTricksDialog.getInstance());
+			}
+		}
+	}
+    
     /**
      * Gets the JSkatPlayArea
      * 

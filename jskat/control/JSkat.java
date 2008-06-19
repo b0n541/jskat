@@ -31,7 +31,7 @@ import java.net.URL;
 
 import jskat.data.JSkatDataModel;
 import jskat.data.JSkatOptions;
-import jskat.gui.JSkatGraphicRepository;
+import jskat.gui.img.JSkatGraphicRepository;
 import jskat.gui.main.JSkatFrame;
 import jskat.share.Tools;
 
