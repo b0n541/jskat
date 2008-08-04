@@ -10,7 +10,8 @@ Released: @ReleaseDate@
 
 package jskat.player.AIPlayerMJL;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
@@ -21,7 +22,7 @@ import jskat.share.SkatConstants;
  */
 public class Bidding {
 
-    private static final Logger log = Logger.getLogger(Bidding.class);
+	private Log log = LogFactory.getLog(Bidding.class);
 
     /** default constructor
 	 * @param cards hand of the player

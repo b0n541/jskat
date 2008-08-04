@@ -14,7 +14,8 @@ package jskat.gui.main.actions;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import jskat.control.JSkatMaster;
 
@@ -24,7 +25,7 @@ import jskat.control.JSkatMaster;
  */
 public class ExitJSkatAction implements ActionListener {
     
-	static Logger log = Logger.getLogger(jskat.gui.main.actions.ExitJSkatAction.class);
+	private Log log = LogFactory.getLog(ExitJSkatAction.class);
 
 	/**
      * Creates a new instance of AboutDialogAction

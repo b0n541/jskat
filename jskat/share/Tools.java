@@ -18,6 +18,8 @@ import java.util.Vector;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Appender;
 import org.apache.log4j.ConsoleAppender;
 import org.apache.log4j.Logger;
@@ -34,30 +36,30 @@ public class Tools {
 	 * Makes sure that a log4j appender exists. If no appenders can be found,
 	 * then a simple console logger is created.
 	 */
-	public static void checkLog() {
-		if (log.getAllAppenders() == null
-				|| !log.getAllAppenders().hasMoreElements()) {
-
-			try {
-				PropertyConfigurator.configure(ClassLoader
-						.getSystemResource("jskat/config/log4j.properties"));
-				log.debug("log4j initialized using property file.");
-			} catch (Exception e) {
-				Logger rootLog = Logger.getRootLogger();
-				ConsoleAppender ca = new ConsoleAppender();
-				ca.setName("console");
-				PrintWriter pw = new PrintWriter(System.out);
-				ca.setWriter(pw);
-				PatternLayout layout = new PatternLayout();
-				layout
-						.setConversionPattern("[%-5p] %d{yyMMdd HH:mm:ss.SSS} %-30.30c - %m\n");
-				ca.setLayout(layout);
-				rootLog.addAppender(ca);
-				log
-						.debug("New appender created as log4j wasn't properly initialized.");
-			}
-		}
-	}
+//	public static void checkLog() {
+//		if (log.getAllAppenders() == null
+//				|| !log.getAllAppenders().hasMoreElements()) {
+//
+//			try {
+//				PropertyConfigurator.configure(ClassLoader
+//						.getSystemResource("jskat/config/log4j.properties"));
+//				log.debug("log4j initialized using property file.");
+//			} catch (Exception e) {
+//				Logger rootLog = Logger.getRootLogger();
+//				ConsoleAppender ca = new ConsoleAppender();
+//				ca.setName("console");
+//				PrintWriter pw = new PrintWriter(System.out);
+//				ca.setWriter(pw);
+//				PatternLayout layout = new PatternLayout();
+//				layout
+//						.setConversionPattern("[%-5p] %d{yyMMdd HH:mm:ss.SSS} %-30.30c - %m\n");
+//				ca.setLayout(layout);
+//				rootLog.addAppender(ca);
+//				log
+//						.debug("New appender created as log4j wasn't properly initialized.");
+//			}
+//		}
+//	}
 
 	/**
 	 * Converts an int array to a String
@@ -192,5 +194,5 @@ public class Tools {
 		return false;
 	}
 
-	private static Logger log = Logger.getLogger(Tools.class);
+	private static Log log = LogFactory.getLog(Tools.class);
 }

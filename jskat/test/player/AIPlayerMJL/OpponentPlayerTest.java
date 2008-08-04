@@ -22,6 +22,8 @@ import jskat.share.rules.SkatRulesFactory;
 import jskat.test.share.TestHelper;
 import junit.framework.TestCase;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
 
 /**
@@ -46,8 +48,8 @@ public class OpponentPlayerTest extends TestCase {
 	 * @see TestCase#setUp()
 	 */
 	protected void setUp() throws Exception {
+
 		super.setUp();
-		Tools.checkLog();
 
 		gi001 = new GameInfo(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.HEARTS, 0);
 
@@ -221,5 +223,5 @@ public class OpponentPlayerTest extends TestCase {
 	int trump;
 	SkatRules rules;
 
-	static Logger log = Logger.getLogger(OpponentPlayerTest.class);
+	private Log log = LogFactory.getLog(OpponentPlayerTest.class);
 }

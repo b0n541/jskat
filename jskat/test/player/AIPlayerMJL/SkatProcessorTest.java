@@ -12,7 +12,8 @@ package jskat.test.player.AIPlayerMJL;
 
 import static org.junit.Assert.*;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -20,18 +21,15 @@ import jskat.player.AIPlayerMJL.SkatProcessor;
 import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
-import jskat.share.Tools;
 import jskat.test.share.TestHelper;
 
 public class SkatProcessorTest {
 
-	static Logger log = Logger.getLogger(SkatProcessorTest.class);
+	private Log log = LogFactory.getLog(SkatProcessorTest.class);
 
 	@BeforeClass
 	public static void setUp() {
 
-		Tools.checkLog();
-		
 		cards001 = new CardVector();
 		cards001.add(new Card(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.JACK));
 		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK));

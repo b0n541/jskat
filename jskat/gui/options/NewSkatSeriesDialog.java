@@ -23,7 +23,8 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.JDialog;
 import javax.swing.DefaultComboBoxModel;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
@@ -45,8 +46,7 @@ import jskat.share.SkatConstants;
  */
 public class NewSkatSeriesDialog extends JDialog {
 
-	private static final Logger log = Logger
-			.getLogger(jskat.gui.options.NewSkatSeriesDialog.class);
+	private Log log = LogFactory.getLog(NewSkatSeriesDialog.class);
 
 	private static final long serialVersionUID = 7666044764313126479L;
 

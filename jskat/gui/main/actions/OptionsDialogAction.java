@@ -15,7 +15,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JFrame;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import jskat.control.JSkatMaster;
 import jskat.data.JSkatDataModel;
@@ -27,7 +28,7 @@ import jskat.gui.options.JSkatOptionsDialog;
  */
 public class OptionsDialogAction implements ActionListener {
     
-    static Logger log = Logger.getLogger(jskat.gui.main.actions.OptionsDialogAction.class);
+	private Log log = LogFactory.getLog(OptionsDialogAction.class);
 
     /**
      * Creates a new instance of OptionsDialogAction

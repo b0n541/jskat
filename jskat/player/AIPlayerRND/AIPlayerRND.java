@@ -13,6 +13,8 @@ package jskat.player.AIPlayerRND;
 
 import java.util.Random;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
 
 import jskat.share.Card;
@@ -31,7 +33,7 @@ import jskat.player.JSkatPlayer;
  */
 public class AIPlayerRND extends AbstractJSkatPlayer implements JSkatPlayer {
 
-	private static final Logger log = Logger.getLogger(AIPlayerRND.class);
+	private Log log = LogFactory.getLog(AIPlayerRND.class);
 
 	/** 
 	 * Creates a new instance of AIPlayerRND

@@ -16,7 +16,8 @@ import java.awt.event.ActionEvent;
 
 import jskat.gui.main.JSkatFrame;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * The action for flipping the cards
@@ -24,7 +25,7 @@ import org.apache.log4j.Logger;
  */
 public class FlipCardsAction implements ActionListener {
     
-	static Logger log = Logger.getLogger(jskat.gui.main.actions.FlipCardsAction.class);
+	private Log log = LogFactory.getLog(FlipCardsAction.class);
 
 	/**
      * Creates a new instance of FlipCardsAction

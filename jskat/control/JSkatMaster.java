@@ -14,7 +14,8 @@ package jskat.control;
 import java.util.Vector;
 import java.util.Observable;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import jskat.data.JSkatDataModel;
 import jskat.data.JSkatOptions;
@@ -25,8 +26,7 @@ import jskat.gui.options.JSkatOptionsDialog;
  */
 public class JSkatMaster extends Observable {
 
-	private static final Logger log = Logger
-			.getLogger(jskat.control.JSkatMaster.class);
+	private Log log = LogFactory.getLog(JSkatMaster.class);
 
 	/**
 	 * Creates a new instance of JSkatMaster

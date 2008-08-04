@@ -29,7 +29,8 @@ import javax.swing.table.TableColumn;
 import javax.swing.JScrollPane;
 import javax.swing.border.EtchedBorder;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -54,7 +55,7 @@ public class JSkatFrame extends JFrame implements Observer {
 	 */
 	private static final long serialVersionUID = -4583028823455278964L;
 
-	static Logger log = Logger.getLogger(jskat.gui.main.JSkatFrame.class);
+	private Log log = LogFactory.getLog(JSkatFrame.class);
 	
     /**
      * Creates new JSkatFrame

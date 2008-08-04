@@ -17,7 +17,8 @@ import java.awt.GridLayout;
 import java.awt.CardLayout;
 import javax.swing.JPanel;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.Observer;
 import java.util.Observable;
@@ -38,8 +39,7 @@ import jskat.player.JSkatPlayer;
  */
 public class JSkatPlayArea extends JPanel implements Observer {
 
-	private static final Logger log = Logger
-			.getLogger(jskat.gui.main.JSkatPlayArea.class);
+	private Log log = LogFactory.getLog(JSkatPlayArea.class);
 
 	private static final long serialVersionUID = -5438519797373764725L;
 

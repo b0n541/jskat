@@ -17,13 +17,13 @@ import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import jskat.data.JSkatDataModel;
 import jskat.data.SkatGameData;
 import jskat.data.SkatSeriesData;
 import jskat.gui.main.JSkatFrame;
-import jskat.gui.main.LastTricksDialog;
 import jskat.player.JSkatPlayer;
 
 /**
@@ -31,8 +31,7 @@ import jskat.player.JSkatPlayer;
  */
 public class SkatSeries extends Observable implements Observer {
 
-	private static final Logger log = Logger
-			.getLogger(jskat.control.SkatSeries.class);
+	private Log log = LogFactory.getLog(SkatSeries.class);
 
 	/**
 	 * Constructor

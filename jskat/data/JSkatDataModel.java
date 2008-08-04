@@ -19,7 +19,8 @@ import java.util.ResourceBundle;
 import jskat.control.JSkatMaster;
 import jskat.gui.main.JSkatFrame;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Holds all data of JSkat
@@ -28,7 +29,7 @@ import org.apache.log4j.Logger;
  */
 public class JSkatDataModel extends Observable {
 
-	static Logger log = Logger.getLogger(jskat.data.JSkatDataModel.class);
+	private Log log = LogFactory.getLog(JSkatDataModel.class);
 
 	/**
 	 * Creates a new instance of JSkatDataModel

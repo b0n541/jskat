@@ -11,7 +11,8 @@ Released: @ReleaseDate@
 
 package jskat.share.rules;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import jskat.data.SkatGameData;
 import jskat.share.Card;
@@ -24,7 +25,7 @@ import jskat.share.SkatConstants;
  */
 public interface SkatRules {
 
-	static Logger log = Logger.getLogger(jskat.share.rules.SkatRules.class);
+	Log log = LogFactory.getLog(SkatRules.class);
 
 	/**
 	 * Checks, whether the given card is allowed to be played, also considering

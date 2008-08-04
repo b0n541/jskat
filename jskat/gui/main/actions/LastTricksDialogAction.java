@@ -15,7 +15,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JFrame;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import jskat.data.JSkatDataModel;
 import jskat.gui.img.JSkatGraphicRepository;
@@ -26,8 +27,7 @@ import jskat.gui.main.LastTricksDialog;
  */
 public class LastTricksDialogAction implements ActionListener {
 
-	static Logger log = Logger
-			.getLogger(jskat.gui.main.actions.LastTricksDialogAction.class);
+	private Log log = LogFactory.getLog(LastTricksDialogAction.class);
 
 	/**
 	 * Creates a new instance of LastTricksDialogAction

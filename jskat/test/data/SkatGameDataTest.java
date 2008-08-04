@@ -33,8 +33,6 @@ public class SkatGameDataTest {
 	@BeforeClass
 	public static void setUp() {
 
-		Tools.checkLog();
-
 		game001 = new SkatGameData();
 		game001.setGameType(SkatConstants.GameTypes.RAMSCH);
 		game001.geschoben();

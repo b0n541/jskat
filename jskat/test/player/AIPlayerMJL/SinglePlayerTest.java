@@ -12,6 +12,8 @@ package jskat.test.player.AIPlayerMJL;
 
 import static org.junit.Assert.*;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -29,13 +31,11 @@ import jskat.test.share.TestHelper;
 
 public class SinglePlayerTest {
 
-	static Logger log = Logger.getLogger(SinglePlayerTest.class);
+	private Log log = LogFactory.getLog(SinglePlayerTest.class);
 
 	@BeforeClass
 	public static void setUp() {
 
-		Tools.checkLog();
-		
 		gi001 = new GameInfo(SkatConstants.GameTypes.SUIT, SkatConstants.Suits.SPADES, 0);
 
 		cards001 = TestHelper.buildDeck("J-H,J-D,A-S,T-S,7-H,K-D,9-D,7-D");

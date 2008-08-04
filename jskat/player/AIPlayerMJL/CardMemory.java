@@ -10,11 +10,12 @@ Released: @ReleaseDate@
 
 package jskat.player.AIPlayerMJL;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
-//import jskat.share.Card;
+
 /**
  * CardMemory builds the memory of all the cards that have been played during a certain game. 
  * It remembers all the initial cards as well as the individual hands of all players. 
@@ -23,7 +24,7 @@ import jskat.share.SkatConstants;
  */
 public class CardMemory {
 
-    private static final Logger log = Logger.getLogger(CardMemory.class);
+	private Log log = LogFactory.getLog(CardMemory.class);
 
     /**
 	 * Default constructor

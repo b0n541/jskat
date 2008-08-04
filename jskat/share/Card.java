@@ -15,14 +15,15 @@ import jskat.data.GameAnnouncement;
 import jskat.share.rules.SkatRulesFactory;
 import jskat.share.rules.TrumpDecorator;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Playing card
  */
 public class Card {
 
-	static Logger log = Logger.getLogger(jskat.share.Card.class);
+	Log log = LogFactory.getLog(Card.class);
 
 	/**
 	 * Creates a new instance of Card by a definition string in the form of

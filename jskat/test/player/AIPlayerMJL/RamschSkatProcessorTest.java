@@ -12,6 +12,8 @@ package jskat.test.player.AIPlayerMJL;
 
 import static org.junit.Assert.*;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,8 +28,6 @@ public class RamschSkatProcessorTest {
 	@BeforeClass
 	public static void setUp() {
 
-		Tools.checkLog();
-		
 		cards001 = TestHelper.buildDeck("C-J,D-J,C-T,C-8,S-Q,S-8,S-7,H-T,D-9,D-8");
 		skat001 = TestHelper.buildDeck("C-K,C-7");
 	}
@@ -46,7 +46,7 @@ public class RamschSkatProcessorTest {
 		log.debug("-------------------------------------------------------------");
 	}
 
-	private static final Logger log = Logger.getLogger(RamschSkatProcessorTest.class);
+	private Log log = LogFactory.getLog(RamschSkatProcessorTest.class);
 
 	private static CardVector cards001;
 	private static CardVector skat001;

@@ -16,7 +16,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.PropertyConfigurator;
 
 import java.util.Enumeration;
 import java.util.Vector;
@@ -40,7 +42,7 @@ import jskat.share.Tools;
  */
 public class JSkat {
 
-	static Logger log = Logger.getLogger(jskat.control.JSkat.class);
+	private static Log log = LogFactory.getLog(JSkat.class);
 
 	/**
 	 * Creates a new instance of JSkat
@@ -50,7 +52,7 @@ public class JSkat {
 	 */
 	public JSkat(Vector<String> aiPlayer, JFrame splashScreen) {
 
-		Tools.checkLog();
+		//Tools.checkLog();
 		
 		JSkatOptions jskatOptions = JSkatOptions.instance();
 		
@@ -90,7 +92,8 @@ public class JSkat {
 
 		JFrame splashScreen = showSplashScreen();
 
-		Tools.checkLog();
+//		Tools.checkLog();
+		PropertyConfigurator.configure(ClassLoader.getSystemResource("jskat/config/log4j.properties"));
 
 		log.debug("starting up...");
 

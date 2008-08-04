@@ -12,7 +12,8 @@ package jskat.player.AIPlayerMJL;
 
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import jskat.share.CardVector;
 import jskat.share.Card;
@@ -25,7 +26,7 @@ import jskat.share.Tools;
  */
 public class RamschSkatProcessor {
     
-    private static final Logger log = Logger.getLogger(RamschSkatProcessor.class);
+	private Log log = LogFactory.getLog(RamschSkatProcessor.class);
 
     private void testProcessor(CardVector cards, CardVector skat) {
     	int[] cardBin = new int[4];

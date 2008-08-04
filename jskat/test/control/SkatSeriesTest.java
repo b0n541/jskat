@@ -26,15 +26,6 @@ import org.junit.Test;
  */
 
 public class SkatSeriesTest {
-
-	/**
-	 * Setup for all tests
-	 */
-	@BeforeClass
-	public static void setUp() {
-		
-		Tools.checkLog();
-	}
 	
 	/**
 	 * Tests the play of a skat series
@@ -45,7 +36,7 @@ public class SkatSeriesTest {
 		JSkatOptions jskatOptions = JSkatOptions.instance();
 		JSkatDataModel dataModel = new JSkatDataModel(null, jskatOptions);
 		JSkatPlayer[] player = {new AIPlayerRND(), new AIPlayerRND(), new AIPlayerRND()};
-		SkatSeries series = new SkatSeries(dataModel, player, 0);
+		SkatSeries series = new SkatSeries(dataModel, player, 1);
 		
 		series.startPlaying();
 	}

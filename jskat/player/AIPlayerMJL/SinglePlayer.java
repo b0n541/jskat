@@ -10,7 +10,8 @@ Released: @ReleaseDate@
 
 package jskat.player.AIPlayerMJL;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import jskat.share.CardVector;
 import jskat.share.rules.SkatRules;
@@ -22,7 +23,7 @@ import jskat.share.rules.SkatRules;
 public class SinglePlayer implements CardPlayer {
 
 	/** log */
-	private static final Logger log = Logger.getLogger(SinglePlayer.class);
+	private Log log = LogFactory.getLog(SinglePlayer.class);
 	
 	/** Constructor
 	 * @param id playerID

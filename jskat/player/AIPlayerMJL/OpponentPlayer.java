@@ -10,7 +10,8 @@ Released: @ReleaseDate@
 
 package jskat.player.AIPlayerMJL;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import jskat.share.CardVector;
 import jskat.share.Card;
@@ -474,5 +475,5 @@ public class OpponentPlayer implements CardPlayer {
 	/**
 	 * log
 	 */
-	private static final Logger log = Logger.getLogger(OpponentPlayer.class);
+	private Log log = LogFactory.getLog(OpponentPlayer.class);
 }

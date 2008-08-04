@@ -14,7 +14,8 @@ package jskat.gui.main;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.Observer;
 import java.util.Observable;
@@ -41,7 +42,7 @@ public class ScoreTableModel extends AbstractTableModel implements Observer {
 	 */
 	private static final long serialVersionUID = -5600052721425524314L;
 
-	static Logger log = Logger.getLogger(jskat.gui.main.ScoreTableModel.class);
+	private Log log = LogFactory.getLog(ScoreTableModel.class);
 
 	/**
 	 * Creates a new ScoreTableDataModel

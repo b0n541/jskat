@@ -11,7 +11,8 @@ Released: @ReleaseDate@
 
 package jskat.player;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import jskat.share.CardVector;
 import jskat.share.Card;
@@ -24,7 +25,7 @@ import jskat.share.rules.SkatRulesFactory;
  */
 public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
-	static Logger log = Logger.getLogger(AbstractJSkatPlayer.class);
+	private Log log = LogFactory.getLog(AbstractJSkatPlayer.class);
 
 	/**
 	 * @see jskat.player.JSkatPlayer#getPlayerID()

@@ -14,7 +14,8 @@ package jskat.data;
 import java.util.Observable;
 import java.util.Vector;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import jskat.control.SkatGame;
 import jskat.player.JSkatPlayer;
@@ -24,7 +25,7 @@ import jskat.player.JSkatPlayer;
  */
 public class SkatSeriesData extends Observable {
 
-	static Logger log = Logger.getLogger(jskat.data.SkatSeriesData.class);
+	private Log log = LogFactory.getLog(SkatSeriesData.class);
 
 	/**
 	 * Constructor

@@ -18,11 +18,10 @@ import java.util.Collection;
 import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
-import jskat.share.Tools;
 import jskat.test.share.TestHelper;
 
-import org.apache.log4j.Logger;
-import org.junit.BeforeClass;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -37,7 +36,7 @@ import org.junit.runners.Parameterized.Parameters;
  */
 public class AdvancedOpponentPlayerTest {
 
-	private static Logger log = Logger.getLogger(AdvancedOpponentPlayerTest.class);
+	private Log log = LogFactory.getLog(AdvancedOpponentPlayerTest.class);
 
 	private OpponentPlayerTestCase optc;
 	private Card result;
@@ -90,11 +89,6 @@ public class AdvancedOpponentPlayerTest {
 	public AdvancedOpponentPlayerTest(OpponentPlayerTestCase optc, Card expectedCard) {
 		this.optc = optc;
 		result = expectedCard;
-	}
-	
-	@BeforeClass
-	public static void setEnv() {
-		Tools.checkLog();
 	}
 	
 	/**

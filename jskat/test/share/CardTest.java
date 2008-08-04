@@ -31,8 +31,6 @@ public class CardTest {
 	@BeforeClass
 	public static void setUp() {
 		
-		Tools.checkLog();
-		
 		cardCJ = new Card(SkatConstants.Suits.CLUBS, SkatConstants.Ranks.JACK);
 		cardSJ = new Card(SkatConstants.Suits.SPADES, SkatConstants.Ranks.JACK);
 		cardS9 = new Card(SkatConstants.Suits.SPADES, SkatConstants.Ranks.NINE);

@@ -26,8 +26,6 @@ public class BiddingTest {
 	@BeforeClass
 	public static void setUp() {
 
-		Tools.checkLog();
-		
 		cards001 = new CardVector();
 		cards001.add(new Card(SkatConstants.Suits.HEARTS, SkatConstants.Ranks.JACK));
 		cards001.add(new Card(SkatConstants.Suits.DIAMONDS, SkatConstants.Ranks.JACK));

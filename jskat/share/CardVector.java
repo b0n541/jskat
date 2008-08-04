@@ -18,6 +18,8 @@ import java.util.Vector;
 
 import jskat.share.rules.SkatRulesFactory;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
 
 // TODO (js) refactor implementation of find() method!!!
@@ -720,5 +722,5 @@ public class CardVector extends Observable {
 
 	private Vector<Card> cards;
 
-	private static final Logger log = Logger.getLogger(CardVector.class);
+	private Log log = LogFactory.getLog(CardVector.class);
 }

@@ -10,7 +10,8 @@ Released: @ReleaseDate@
 
 package jskat.player.AIPlayerMJL;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import jskat.share.CardVector;
 import jskat.share.Card;
@@ -22,7 +23,7 @@ import jskat.share.SkatConstants;
  */
 public class SkatProcessor {
     
-    private static final Logger log = Logger.getLogger(SkatProcessor.class);
+	private static Log log = LogFactory.getLog(SkatProcessor.class);
 
     /**
      * Processes the skat after the player has won the bidding.

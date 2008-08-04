@@ -27,6 +27,8 @@ import jskat.player.HumanPlayer;
 import jskat.player.JSkatPlayer;
 import jskat.share.SkatConstants;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.Logger;
 
 /**
@@ -34,8 +36,7 @@ import org.apache.log4j.Logger;
  */
 public class SkatTable extends Observable implements Observer {
 
-	private static final Logger log = Logger
-			.getLogger(jskat.control.SkatTable.class);
+	private Log log = LogFactory.getLog(SkatTable.class);
 
 	/**
 	 * Constructor

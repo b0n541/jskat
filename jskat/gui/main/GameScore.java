@@ -17,7 +17,8 @@ import java.util.ResourceBundle;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.awt.GridLayout;
 
@@ -39,7 +40,7 @@ public class GameScore extends JPanel implements Observer {
     
 	private static final long serialVersionUID = 2079176251942408942L;
 
-	static Logger log = Logger.getLogger(GameScore.class);
+	private Log log = LogFactory.getLog(GameScore.class);
 
 	/**
      * Creates a new instance of GameScore

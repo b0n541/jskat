@@ -43,15 +43,15 @@ import jskat.share.rules.SkatRules;
 import jskat.share.rules.SkatRulesFactory;
 import jskat.test.share.TestHelper;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Controls a skat game
  */
 public class SkatGame extends Observable {
 
-	private static final Logger log = Logger
-			.getLogger(jskat.control.SkatGame.class);
+	private Log log = LogFactory.getLog(SkatGame.class);
 
 	/**
 	 * Constructor
@@ -935,8 +935,9 @@ public class SkatGame extends Observable {
 		log.debug("Dealt cards: " + Tools.dumpCards(gameData.getDealtCards()));
 
 		setState(GameState.BIDDING);
-
-		mainWindow.getPlayArea().getBiddingPanel().setSkatGame(this);
+		
+// FIXME don't do such things in a controller class
+//		mainWindow.getPlayArea().getBiddingPanel().setSkatGame(this);
 		bidThread.start();
 	}
 

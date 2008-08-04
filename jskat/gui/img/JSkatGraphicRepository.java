@@ -18,7 +18,8 @@ import java.awt.Canvas;
 import java.util.Observable;
 import java.util.Observer;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import jskat.share.SkatConstants;
 import jskat.data.JSkatOptions;
@@ -28,8 +29,7 @@ import jskat.data.JSkatOptions;
  */
 public class JSkatGraphicRepository extends Observable implements Observer {
 
-	private static final Logger log = Logger
-			.getLogger(jskat.gui.img.JSkatGraphicRepository.class);
+	private Log log = LogFactory.getLog(JSkatGraphicRepository.class);
 
 	/** 
 	 * Creates a new instance of JSkatGraphicRepository 

@@ -23,7 +23,8 @@ import javax.swing.JLabel;
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.Observer;
 import java.util.Observable;
@@ -51,7 +52,7 @@ public class LastTricksDialog extends JDialog implements Observer {
 	 */
 	private static final long serialVersionUID = -1460201094382175326L;
 
-	static Logger log = Logger.getLogger(jskat.gui.main.LastTricksDialog.class);
+	private Log log = LogFactory.getLog(LastTricksDialog.class);
 	
 	/**
 	 * Gets an instance of the LastTricksDialog

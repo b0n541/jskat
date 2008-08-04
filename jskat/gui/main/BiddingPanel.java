@@ -18,7 +18,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.awt.GridBagLayout;
 import java.awt.Dimension;
@@ -36,7 +37,7 @@ import jskat.share.SkatConstants;
  */
 public class BiddingPanel extends JPanel implements Observer {
 
-	static Logger log = Logger.getLogger(BiddingPanel.class);
+	private Log log = LogFactory.getLog(BiddingPanel.class);
 	
 	/**
 	 * 

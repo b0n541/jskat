@@ -10,7 +10,8 @@ Released: @ReleaseDate@
 
 package jskat.player.AIPlayerMJL;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import jskat.share.Card;
 import jskat.share.CardVector;
@@ -63,7 +64,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
     }
     
     /** (non-Javadoc)
-     * @see jskat.player.JSkatPlayer#takeRamschSkat(jskat.share.CardVector)
+     * @see jskat.player.JSkatPlayer#takeRamschSkat(jskat.share.CardVector, boolean)
      */
 	public void takeRamschSkat(CardVector skat, boolean jacksAllowed) {
 		RamschSkatProcessor rsp = new RamschSkatProcessor();
@@ -135,7 +136,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
     
 	/** 
 	 * Start the game: inform player of game type, trumpf and special options
-	 * @see jskat.player.JSkatPlayer#startGame(int, int, int, int, boolean, boolean)
+	 * @see jskat.player.JSkatPlayer#startGame(int, int, SkatConstants.GameTypes, SkatConstants.Suits, boolean, boolean)
      * @param singlePlayer
      * @param forehandPlayer
      * @param gameType
@@ -326,7 +327,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
 	}
 
 	/** log */
-	private static final Logger log = Logger.getLogger(AIPlayerMJL.class);
+	private Log log = LogFactory.getLog(AIPlayerMJL.class);
 	private CardMemory myMemory;
 	private CardPlayer playerType;
 	private Bidding myBid;

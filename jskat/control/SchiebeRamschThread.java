@@ -15,7 +15,8 @@ import java.util.ResourceBundle;
 
 import javax.swing.JOptionPane;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import jskat.data.GameAnnouncement;
 import jskat.data.JSkatDataModel;
@@ -25,12 +26,11 @@ import jskat.share.SkatConstants;
 import jskat.player.JSkatPlayer;
 
 /**
- * Controls the Schieberramsch
+ * Controls the Schieberamsch
  */
 public class SchiebeRamschThread implements Runnable {
 
-	private static final Logger log = Logger
-			.getLogger(jskat.control.JSkatMaster.class);
+	private Log log = LogFactory.getLog(SchiebeRamschThread.class);
 
 	/**
 	 * Initializes the SchiebeRamschThread

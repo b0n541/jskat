@@ -21,14 +21,15 @@ import jskat.share.SkatConstants;
 import jskat.share.rules.SkatRules;
 import jskat.share.rules.SkatRulesFactory;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 /**
  * Data class for a Skat game
  */
 public class SkatGameData extends Observable {
 
-	static Logger log = Logger.getLogger(jskat.data.SkatGameData.class);
+	private Log log = LogFactory.getLog(SkatGameData.class);
 
 	/** 
 	 * Creates a new instance of a Skat game 

@@ -11,7 +11,8 @@ Released: @ReleaseDate@
 
 package jskat.control;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import jskat.data.JSkatDataModel;
 import jskat.data.BidStatus;
@@ -26,7 +27,7 @@ import jskat.player.HumanPlayer;
  */
 public class BiddingThread implements Runnable {
 
-	static Logger log = Logger.getLogger(jskat.control.BiddingThread.class);
+	private Log log = LogFactory.getLog(BiddingThread.class);
 
 	/**
 	 * Gets an instance of BiddingThread

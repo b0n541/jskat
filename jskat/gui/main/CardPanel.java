@@ -17,7 +17,8 @@ import java.util.Observer;
 
 import javax.swing.JPanel;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import jskat.gui.img.JSkatGraphicRepository;
 import jskat.share.SkatConstants;
@@ -27,7 +28,7 @@ import jskat.share.SkatConstants;
  */
 public class CardPanel extends JPanel implements Observer {
 
-	static Logger log = Logger.getLogger(CardPanel.class);
+	private Log log = LogFactory.getLog(CardPanel.class);
 
 	private static final long serialVersionUID = 8931526586921335864L;
 

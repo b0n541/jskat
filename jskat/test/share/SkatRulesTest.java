@@ -13,14 +13,14 @@ package jskat.test.share;
 
 import static org.junit.Assert.*;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import jskat.share.Card;
 import jskat.share.CardVector;
 import jskat.share.SkatConstants;
-import jskat.share.Tools;
 import jskat.share.SkatConstants.GameTypes;
 import jskat.share.SkatConstants.Suits;
 import jskat.share.rules.*;
@@ -37,15 +37,13 @@ import jskat.share.rules.*;
  */
 public class SkatRulesTest {
 
-	static Logger log = Logger.getLogger(jskat.test.share.SkatRulesTest.class);
+	private Log log = LogFactory.getLog(SkatRulesTest.class);
 
 	/**
 	 * Setup for all tests
 	 */
 	@BeforeClass
 	public static void setUp() {
-		
-		Tools.checkLog();
 		
 		cardD7 = new Card(Suits.DIAMONDS, SkatConstants.Ranks.SEVEN);
 		cardD8 = new Card(Suits.DIAMONDS, SkatConstants.Ranks.EIGHT);

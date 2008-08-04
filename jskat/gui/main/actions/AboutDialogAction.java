@@ -21,7 +21,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.ResourceBundle;
 
@@ -34,7 +35,7 @@ import jskat.gui.main.JSkatFrame;
  */
 public class AboutDialogAction implements ActionListener {
 
-    private static final Logger log = Logger.getLogger(jskat.gui.main.actions.AboutDialogAction.class);
+	private Log log = LogFactory.getLog(AboutDialogAction.class);
     
     /**
      * Creates a new instance of AboutDialogAction

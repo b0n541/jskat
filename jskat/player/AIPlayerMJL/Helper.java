@@ -10,7 +10,8 @@ Released: @ReleaseDate@
 
 package jskat.player.AIPlayerMJL;
 
-import org.apache.log4j.Logger;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import jskat.share.CardVector;
 import jskat.share.Card;
@@ -23,8 +24,7 @@ import jskat.share.rules.SkatRules;
  */
 public class Helper {
 
-	private static final Logger log = Logger
-			.getLogger(jskat.player.AIPlayerMJL.Helper.class);
+	private static Log log = LogFactory.getLog(Helper.class);
 
 	/**
 	 * Checks whether the current trick would be won by the single player, so
