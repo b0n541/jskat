@@ -115,15 +115,17 @@ public class AIPlayerRND extends AbstractJSkatPlayer implements JSkatPlayer {
 
 		int index = -1;
 
-		CardVector possibleCards = new CardVector();
+		CardVector possibleCards = null;
 		
 		if (trick.size() > 0) {
 			
 			log.debug("trick size: " + trick.size() + " initial card: " + trick.getCard(0));
 			
+			possibleCards = new CardVector();
+			
 			for (int i = 0; i < cards.size(); i++) {
 				if (rules.isCardAllowed(cards.getCard(i), cards, trick
-						.getCard(0), currTrump)) {
+						.getCard(0), trump)) {
 					
 					possibleCards.add(cards.getCard(i));
 				}
