@@ -11,9 +11,6 @@ Released: @ReleaseDate@
 
 package jskat.player;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import jskat.share.CardVector;
 import jskat.share.Card;
 import jskat.share.SkatConstants;
@@ -24,8 +21,6 @@ import jskat.share.rules.SkatRulesFactory;
  * The JSkat Player implementation
  */
 public abstract class AbstractJSkatPlayer implements JSkatPlayer {
-
-	private Log log = LogFactory.getLog(AbstractJSkatPlayer.class);
 
 	/**
 	 * @see jskat.player.JSkatPlayer#getPlayerID()
@@ -80,6 +75,11 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 		}
 	}
 
+	/**
+	 * Sorts the card according a game type
+	 * 
+	 * @param gameType Game type
+	 */
 	protected final void sortCards(SkatConstants.GameTypes gameType) {
 
 		cards.sort(gameType);
@@ -95,8 +95,8 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 		this.playerState = JSkatPlayer.PlayerStates.PLAYING;
 		this.singlePlayer = singlePlayer;
 		this.forehandPlayer = forehandPlayer;
-		this.currGameType = gameType;
-		this.currTrump = trump;
+		this.gameType = gameType;
+		this.trump = trump;
 		this.handGame = handGame;
 		this.ouvertGame = ouvertGame;
 
@@ -107,23 +107,41 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 		// SkatConstants.NULL_SORT : SkatConstants.SUIT_SORT), currTrump);
 	}
 
+	/**
+	 * Sets the state of the player
+	 * 
+	 * @param newState State to be set
+	 */
 	protected void setState(JSkatPlayer.PlayerStates newState) {
 
 		playerState = newState;
 	}
 	
-	/** Variables */
+	/* Variables */
+	/** Player ID */
 	protected int playerID;
+	/** ID of the single player (declaring player) */
 	protected int singlePlayer;
+	/** ID of the forehand player */
 	protected int forehandPlayer;
+	/** Player name */
 	protected String playerName;
+	/** Player state */
 	protected JSkatPlayer.PlayerStates playerState;
+	/** Player cards */
 	protected CardVector cards = new CardVector();
+	/** Skat cards */
 	protected CardVector skat = new CardVector();
+	/** Cards of the single player */
 	protected CardVector singlePlayerCards = new CardVector();
-	protected SkatConstants.GameTypes currGameType;
-	protected SkatConstants.Suits currTrump;
+	/** Game type of the current game */
+	protected SkatConstants.GameTypes gameType;
+	/** Trump of the current game */
+	protected SkatConstants.Suits trump;
+	/** Flag for hand game */
 	protected boolean handGame;
+	/** Flag for ouvert game */
 	protected boolean ouvertGame;
+	/** Skat rules for the current skat series */
 	protected SkatRules rules;
 }
