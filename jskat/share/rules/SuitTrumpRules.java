@@ -26,7 +26,7 @@ public class SuitTrumpRules extends TrumpDecorator {
 	}
 
 	/**
-	 * @see jskat.share.rules.TrumpDecorator#isTrump(jskat.share.Card, jskat.share.SkatConstants.Suits)
+	 * @see TrumpDecorator#isTrump(Card, Suits)
 	 */
 	@Override
 	public boolean isTrump(Card card, Suits trump) {

@@ -305,7 +305,7 @@ public class SkatRulesTest {
 	 * Test 100 for method isTrump() <br />
 	 * Suit game
 	 * 
-	 * @see SuitTrumpRules#isTrump(Card, Suits)
+	 * @see TrumpDecorator#isTrump(Card, Suits)
 	 */
 	@Test
 	public void isTrump100() {
@@ -321,7 +321,7 @@ public class SkatRulesTest {
 	 * Test 101 for method isTrump() <br />
 	 * Suit game
 	 * 
-	 * @see SuitTrumpRules#isTrump(Card, Suits)
+	 * @see TrumpDecorator#isTrump(Card, Suits)
 	 */
 	@Test
 	public void isTrump101() {
@@ -337,7 +337,7 @@ public class SkatRulesTest {
 	 * Test 102 for method isTrump() <br />
 	 * Suit game
 	 * 
-	 * @see SuitTrumpRules#isTrump(Card, Suits)
+	 * @see TrumpDecorator#isTrump(Card, Suits)
 	 */
 	@Test
 	public void isTrump102() {
@@ -353,7 +353,7 @@ public class SkatRulesTest {
 	 * Test 103 for method isTrump() <br />
 	 * Suit game
 	 * 
-	 * @see SuitTrumpRules#isTrump(Card, Suits)
+	 * @see TrumpDecorator#isTrump(Card, Suits)
 	 */
 	@Test
 	public void isTrump103() {
@@ -369,7 +369,7 @@ public class SkatRulesTest {
 	 * Test 104 for method isTrump() <br />
 	 * Suit game
 	 * 
-	 * @see SuitTrumpRules#isTrump(Card, Suits)
+	 * @see TrumpDecorator#isTrump(Card, Suits)
 	 */
 	@Test
 	public void isTrump104() {
