@@ -37,11 +37,11 @@ public class CreateTableAction extends AbstractJSkatAction {
 		
 		putValue(Action.NAME, "Create table");
 		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.NEW_ICON, 
-				JSkatGraphicRepository.SMALL_ICON)));
+				JSkatGraphicRepository.Icon.TABLE, 
+				JSkatGraphicRepository.IconSize.SMALL)));
 		putValue(Action.LARGE_ICON_KEY, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.NEW_ICON, 
-				JSkatGraphicRepository.BIG_ICON)));
+				JSkatGraphicRepository.Icon.TABLE, 
+				JSkatGraphicRepository.IconSize.BIG)));
 	}
 
 	/**

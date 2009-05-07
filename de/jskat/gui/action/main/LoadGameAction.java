@@ -22,35 +22,34 @@ import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
 
 /**
- * Implements the action for exiting JSkat
+ * Implements the action for showing about dialog
  */
-public class ExitAction extends AbstractJSkatAction {
+public class LoadGameAction extends AbstractJSkatAction {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
-	public ExitAction(JSkatMaster controller, JSkatGraphicRepository bitmaps) {
+	public LoadGameAction(JSkatMaster controller, JSkatGraphicRepository bitmaps) {
 		
 		super(controller);
 		
-		putValue(Action.NAME, "Exit JSkat");
-		putValue(Action.SHORT_DESCRIPTION, "Exits JSkat");
+		putValue(Action.NAME, "Load game");
 		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.EXIT, 
+				JSkatGraphicRepository.Icon.LOAD, 
 				JSkatGraphicRepository.IconSize.SMALL)));
 		putValue(Action.LARGE_ICON_KEY, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.EXIT, 
-				JSkatGraphicRepository.IconSize.SMALL)));
+				JSkatGraphicRepository.Icon.LOAD, 
+				JSkatGraphicRepository.IconSize.BIG)));
 	}
-
+	
 	/**
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		this.jskat.exitJSkat();
+		this.jskat.loadGame();
 	}
 }

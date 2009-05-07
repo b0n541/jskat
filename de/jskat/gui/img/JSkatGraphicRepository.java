@@ -15,13 +15,13 @@ import java.awt.Canvas;
 import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
+import java.util.ArrayList;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.JSkatOptions;
 import de.jskat.util.Rank;
-import de.jskat.util.SkatConstants;
 import de.jskat.util.Suit;
 
 /**
@@ -56,13 +56,12 @@ public class JSkatGraphicRepository {
 
 		log.debug("Bitmaps for JSkat logo and skat table loaded...");
 
-		this.icons = new Image[PREFERENCES_ICON + 1][2];
+		this.icons = new ArrayList<ArrayList<Image>>();
 		loadIcons();
 
 		log.debug("Bitmaps for icons loaded...");
 
-		this.cards = new Image[4][8];
-
+		this.cards = new ArrayList<ArrayList<Image>>();
 		loadCards(this.cardFace);
 
 		log.debug("Bitmaps for cards loaded...");
@@ -73,55 +72,20 @@ public class JSkatGraphicRepository {
 	 */
 	public void loadIcons() {
 
-		String fileName = new String();
+		// for all icons
+		for (Icon icon : Icon.values()) {
 
-		for (int i = ABOUT_ICON; i <= PREFERENCES_ICON; i++) {
-
-			switch (i) {
-			case ABOUT_ICON:
-				fileName = "about";
-				break;
-			case EXIT_ICON:
-				fileName = "exit";
-				break;
-			case HELP_ICON:
-				fileName = "help";
-				break;
-			case NEW_ICON:
-				fileName = "new";
-				break;
-			case OPEN_ICON:
-				fileName = "open";
-				break;
-			case SAVE_ICON:
-				fileName = "save";
-				break;
-			case FIRST_ICON:
-				fileName = "first";
-				break;
-			case PREVIOUS_ICON:
-				fileName = "previous";
-				break;
-			case NEXT_ICON:
-				fileName = "next";
-				break;
-			case LAST_ICON:
-				fileName = "last";
-				break;
-			case PREFERENCES_ICON:
-				fileName = "preferences";
-				break;
-			}
-
-			for (int j = BIG_ICON; j <= SMALL_ICON; j++) {
-
-				if (j == SMALL_ICON)
-					fileName += "_16";
-
-				this.icons[i][j] = Toolkit.getDefaultToolkit().getImage(
-						ClassLoader.getSystemResource("de/jskat/gui/img/gui/"
-								+ fileName + ".png"));
-				this.tracker.addImage(this.icons[i][j], 1);
+			// new array list for all sizes
+			this.icons.add(new ArrayList<Image>());
+			
+			// for all sizes
+			for (IconSize size : IconSize.values()) {
+				
+				// add icon
+				this.icons.get(icon.ordinal()).add(Toolkit.getDefaultToolkit().getImage(
+						ClassLoader.getSystemResource("de/jskat/gui/img/gui/" //$NON-NLS-1$
+								+ icon.toString().toLowerCase() + "_" + size.toString().toLowerCase() + ".png")));
+				this.tracker.addImage(this.icons.get(icon.ordinal()).get(size.ordinal()), 1);
 			}
 		}
 
@@ -140,40 +104,22 @@ public class JSkatGraphicRepository {
 	 */
 	public void loadCards(CardFaces cardFace) {
 		
-		String cardType;
-		
-		if (cardFace == CardFaces.FRENCH) {
+		for (Suit suit : Suit.values()) {
+
+			this.cards.add(new ArrayList<Image>());
 			
-			cardType = "french";
-		} 
-		else if (cardFace == CardFaces.GERMAN) {
-			
-			cardType = "german";
-		} 
-		else {
-			
-			cardType = "tournament";
-		}
+			for (Rank rank : Rank.values()) {
 
-		// TODO this is ugly, refactor it!
-		String card = null;
-
-		for (Suit currSuit : Suit.values()) {
-
-			for (Rank currRank : Rank.values()) {
-
-				card = currSuit.shortString() + '-' + currRank.shortString();
-				
-				this.cards[currSuit.getSuitOrder()][currRank.getSuitGrandOrder()] = Toolkit.getDefaultToolkit().getImage(
+				this.cards.get(suit.ordinal()).add(Toolkit.getDefaultToolkit().getImage(
 						ClassLoader.getSystemResource("de/jskat/gui/img/cards/"
-								+ cardType + "/gnome/" + card + ".gif"));
+								+ cardFace.toString().toLowerCase() + "/gnome/" + suit.shortString() + "-" + rank.shortString() + ".gif")));
 				
-				this.tracker.addImage(this.cards[currSuit.getSuitOrder()][currRank.getSuitGrandOrder()], 2);
+				this.tracker.addImage(this.cards.get(suit.ordinal()).get(rank.ordinal()), 2);
 			}
 		}
 
 		this.cardBack = Toolkit.getDefaultToolkit().getImage(
-				ClassLoader.getSystemResource("de/jskat/gui/img/cards/" + cardType
+				ClassLoader.getSystemResource("de/jskat/gui/img/cards/" + cardFace.toString().toLowerCase()
 						+ "/jskat/back.gif"));
 		this.tracker.addImage(this.cardBack, 2);
 
@@ -193,10 +139,10 @@ public class JSkatGraphicRepository {
 	 *            code for big or small icons
 	 * @return The icon image
 	 */
-	public Image getIconImage(int iconNo, int bigSmall) {
+	public Image getIconImage(Icon icon, IconSize size) {
 
 		try {
-			return this.icons[iconNo][bigSmall];
+			return this.icons.get(icon.ordinal()).get(size.ordinal());
 		} catch (IndexOutOfBoundsException exc) {
 			return null;
 		}
@@ -217,7 +163,7 @@ public class JSkatGraphicRepository {
 		
 		if (suit != null && value != null) {
 
-			result = this.cards[suit.getSuitOrder()][value.getSuitGrandOrder()];
+			result = this.cards.get(suit.ordinal()).get(value.ordinal());
 		}
 		else {
 		
@@ -253,78 +199,112 @@ public class JSkatGraphicRepository {
 
 	private Image skatTable;
 
-	private Image cards[][];
+	private ArrayList<ArrayList<Image>> cards;
 
 	private Image cardBack;
 
-	private Image icons[][];
+	private ArrayList<ArrayList<Image>> icons;
 
 	private Image jskatLogo;
 
-	// TODO move to an enumeration
 	/**
-	 * Code for the About icon
+	 * Holds all icon types
 	 */
-	public static final int ABOUT_ICON = 0;
-
+	public enum Icon {
+		/**
+		 * About
+		 */
+		ABOUT,
+		/**
+		 * Exit
+		 */
+		EXIT,
+		/**
+		 * Help
+		 */
+		HELP,
+		/**
+		 * New skat round
+		 */
+		NEW,
+		/**
+		 * Load skat round
+		 */
+		LOAD,
+		/**
+		 * Save
+		 */
+		SAVE,
+		/**
+		 * Save under new name
+		 */
+		SAVE_AS,
+		/**
+		 * First
+		 */
+		FIRST,
+		/**
+		 * Previous
+		 */
+		PREVIOUS,
+		/**
+		 * Next
+		 */
+		NEXT,
+		/**
+		 * Last
+		 */
+		LAST,
+		/**
+		 * Preferences
+		 */
+		PREFERENCES,
+		/**
+		 * Table
+		 */
+		TABLE,
+		/**
+		 * Start series
+		 */
+		START_SERIES,
+		/**
+		 * Pause series
+		 */
+		PAUSE,
+		/**
+		 * Connect ISS
+		 */
+		CONNECT_ISS;
+	}
+	
 	/**
-	 * Code for the Exit icon
+	 * Holds all icon sizes
 	 */
-	public static final int EXIT_ICON = 1;
+	public enum IconSize {
+		/**
+		 * Big
+		 */
+		BIG {
+			@Override
+			public String getSize() {
+				return "48"; //$NON-NLS-1$
+			}
+		},
+		/**
+		 * Small
+		 */
+		SMALL {
+			@Override
+			public String getSize() {
+				return "22"; //$NON-NLS-1$
+			}
+		};
 
-	/**
-	 * Code for the Help icon
-	 */
-	public static final int HELP_ICON = 2;
-
-	/**
-	 * Code for the New Skat Round icon
-	 */
-	public static final int NEW_ICON = 3;
-
-	/**
-	 * Code for the Open Skat Round icon
-	 */
-	public static final int OPEN_ICON = 4;
-
-	/**
-	 * Code for the Save Skat Round Icon
-	 */
-	public static final int SAVE_ICON = 5;
-
-	/**
-	 * Code for the First Trick icon
-	 */
-	public static final int FIRST_ICON = 6;
-
-	/**
-	 * Code for the Previous Trick icon
-	 */
-	public static final int PREVIOUS_ICON = 7;
-
-	/**
-	 * Code for the Next Trick icon
-	 */
-	public static final int NEXT_ICON = 8;
-
-	/**
-	 * Code for the Last Trick icon
-	 */
-	public static final int LAST_ICON = 9;
-
-	/**
-	 * Code for the Preferences icon
-	 */
-	public static final int PREFERENCES_ICON = 10;
-
-	/**
-	 * Code for big icons
-	 */
-	public static final int BIG_ICON = 0;
-
-	/**
-	 * Code for small icons
-	 */
-	public static final int SMALL_ICON = 1;
-
+		/**
+		 * Gets a string representing the size of the icon
+		 * 
+		 * @return Size string
+		 */
+		public abstract String getSize();
+	}
 }

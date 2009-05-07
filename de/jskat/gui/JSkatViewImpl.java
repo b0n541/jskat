@@ -51,7 +51,10 @@ import de.jskat.gui.action.main.ContinueSkatSeriesAction;
 import de.jskat.gui.action.main.CreateTableAction;
 import de.jskat.gui.action.main.ExitAction;
 import de.jskat.gui.action.main.HelpAction;
+import de.jskat.gui.action.main.LoadGameAction;
 import de.jskat.gui.action.main.LoadNeuralNetworksAction;
+import de.jskat.gui.action.main.SaveGameAction;
+import de.jskat.gui.action.main.SaveGameAsAction;
 import de.jskat.gui.action.main.SaveNeuralNetworksAction;
 import de.jskat.gui.action.main.StartSkatSeriesAction;
 import de.jskat.gui.action.main.TrainNeuralNetworksAction;
@@ -59,8 +62,8 @@ import de.jskat.gui.help.JSkatHelpDialog;
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.gui.iss.ISSLoginPanel;
 import de.jskat.gui.iss.ISSTablePanel;
-import de.jskat.util.CardList;
 import de.jskat.util.Card;
+import de.jskat.util.CardList;
 import de.jskat.util.Player;
 
 /**
@@ -101,6 +104,12 @@ public class JSkatViewImpl implements JSkatView {
 		this.actions = new ActionMap();
 
 		// common actions
+		this.actions.put(JSkatActions.LOAD_GAME, new LoadGameAction(this.jskat,
+				this.bitmaps));
+		this.actions.put(JSkatActions.SAVE_GAME, new SaveGameAction(this.jskat,
+				this.bitmaps));
+		this.actions.put(JSkatActions.SAVE_GAME_AS, new SaveGameAsAction(this.jskat,
+				this.bitmaps));
 		this.actions.put(JSkatActions.HELP,
 				new HelpAction(this.jskat, this.bitmaps));
 		this.actions.put(JSkatActions.EXIT_JSKAT, new ExitAction(this.jskat,
@@ -111,19 +120,19 @@ public class JSkatViewImpl implements JSkatView {
 		this.actions.put(JSkatActions.CREATE_LOCAL_TABLE,
 				new CreateTableAction(this.jskat, this.bitmaps));
 		this.actions.put(JSkatActions.START_LOCAL_SERIES,
-				new StartSkatSeriesAction(this.jskat));
+				new StartSkatSeriesAction(this.jskat, this.bitmaps));
 		this.actions.put(JSkatActions.CONTINUE_LOCAL_SERIES,
 				new ContinueSkatSeriesAction(this.jskat));
 		// ISS actions
 		this.actions.put(JSkatActions.CONNECT_TO_ISS,
-				new ShowLoginPanelAction(this.jskat));
+				new ShowLoginPanelAction(this.jskat, this.bitmaps));
 		// Neural network actions
 		this.actions.put(JSkatActions.TRAIN_NEURAL_NETWORKS,
 				new TrainNeuralNetworksAction(this.jskat));
 		this.actions.put(JSkatActions.LOAD_NEURAL_NETWORKS,
-				new LoadNeuralNetworksAction(this.jskat));
+				new LoadNeuralNetworksAction(this.jskat, this.bitmaps));
 		this.actions.put(JSkatActions.SAVE_NEURAL_NETWORKS,
-				new SaveNeuralNetworksAction(this.jskat));
+				new SaveNeuralNetworksAction(this.jskat, this.bitmaps));
 		// Human player actions
 		this.actions.put(JSkatActions.HOLD_BID,
 				new HoldBidAction(this.jskat));
@@ -161,9 +170,6 @@ public class JSkatViewImpl implements JSkatView {
 		buttonPanel.setLayout(new MigLayout());
 		buttonPanel.add(new JButton(this.actions.get(JSkatActions.CREATE_LOCAL_TABLE)));
 		buttonPanel.add(new JButton(this.actions.get(JSkatActions.START_LOCAL_SERIES)));
-		buttonPanel.add(new JButton(this.actions.get(JSkatActions.LOAD_NEURAL_NETWORKS)));
-		buttonPanel.add(new JButton(this.actions.get(JSkatActions.TRAIN_NEURAL_NETWORKS)));
-		buttonPanel.add(new JButton(this.actions.get(JSkatActions.SAVE_NEURAL_NETWORKS)));
 		buttonPanel.add(new JButton(this.actions.get(JSkatActions.CONNECT_TO_ISS)));
 		buttonPanel.add(new JButton(this.actions.get(JSkatActions.HELP)));
 		mainPanel.add(buttonPanel, BorderLayout.NORTH);
@@ -184,9 +190,9 @@ public class JSkatViewImpl implements JSkatView {
 		JMenuBar menu = new JMenuBar();
 
 		JMenu fileMenu = new JMenu("File");
-		fileMenu.add(new JMenuItem("Load game"));
-		fileMenu.add(new JMenuItem("Save game"));
-		fileMenu.add(new JMenuItem("Save game as"));
+		fileMenu.add(new JMenuItem(this.actions.get(JSkatActions.LOAD_GAME)));
+		fileMenu.add(new JMenuItem(this.actions.get(JSkatActions.SAVE_GAME)));
+		fileMenu.add(new JMenuItem(this.actions.get(JSkatActions.SAVE_GAME_AS)));
 		fileMenu.add(new JSeparator());
 		fileMenu.add(new JMenuItem(this.actions.get(JSkatActions.EXIT_JSKAT)));
 		menu.add(fileMenu);
@@ -320,7 +326,9 @@ public class JSkatViewImpl implements JSkatView {
 	public void showAboutMessage() {
 
 		JOptionPane.showMessageDialog(this.mainFrame,
-				"JSkat V0.7\nAuthors: Jan Schaefer, Markus J. Luzius",
+				"JSkat V0.7\n\n" +
+				"Authors: Jan Schaefer, Markus J. Luzius\n\n" +
+				"Icons: Tango project and Silvestre Herrera",
 				"About JSkat", JOptionPane.INFORMATION_MESSAGE);
 	}
 

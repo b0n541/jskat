@@ -37,11 +37,11 @@ public class HelpAction extends AbstractJSkatAction {
 		
 		putValue(Action.NAME, "Help");
 		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.HELP_ICON, 
-				JSkatGraphicRepository.SMALL_ICON)));
+				JSkatGraphicRepository.Icon.HELP, 
+				JSkatGraphicRepository.IconSize.SMALL)));
 		putValue(Action.LARGE_ICON_KEY, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.HELP_ICON, 
-				JSkatGraphicRepository.BIG_ICON)));
+				JSkatGraphicRepository.Icon.HELP, 
+				JSkatGraphicRepository.IconSize.BIG)));
 	}
 	
 	/**

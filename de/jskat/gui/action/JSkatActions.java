@@ -13,6 +13,9 @@ package de.jskat.gui.action;
 
 public enum JSkatActions {
 
+	LOAD_GAME,
+	SAVE_GAME,
+	SAVE_GAME_AS,
 	EXIT_JSKAT,
 	ABOUT_JSKAT,
 	HELP,

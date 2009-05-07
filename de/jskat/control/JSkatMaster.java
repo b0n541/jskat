@@ -419,4 +419,14 @@ public class JSkatMaster {
 
 		this.view.putCardIntoSkat(this.data.getActiveTable(), (Card) e.getSource());
 	}
+
+	public void loadGame() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void saveGame(boolean newName) {
+		// TODO Auto-generated method stub
+		
+	}
 }

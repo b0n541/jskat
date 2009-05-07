@@ -37,11 +37,11 @@ public class AboutAction extends AbstractJSkatAction {
 		
 		putValue(Action.NAME, "About JSkat");
 		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.ABOUT_ICON, 
-				JSkatGraphicRepository.SMALL_ICON)));
+				JSkatGraphicRepository.Icon.ABOUT, 
+				JSkatGraphicRepository.IconSize.SMALL)));
 		putValue(Action.LARGE_ICON_KEY, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.ABOUT_ICON, 
-				JSkatGraphicRepository.BIG_ICON)));
+				JSkatGraphicRepository.Icon.ABOUT, 
+				JSkatGraphicRepository.IconSize.BIG)));
 	}
 	
 	/**
