@@ -1,0 +1,35 @@
+/*
+
+@ShortLicense@
+
+Authors: @JS@
+         @MJL@
+
+Released: @ReleaseDate@
+
+ */
+
+package de.jskat.gui.action;
+
+public enum JSkatActions {
+
+	EXIT_JSKAT,
+	ABOUT_JSKAT,
+	HELP,
+	CREATE_LOCAL_TABLE,
+	START_LOCAL_SERIES,
+	CONNECT_TO_ISS,
+	TRAIN_NEURAL_NETWORKS,
+	LOAD_NEURAL_NETWORKS,
+	SAVE_NEURAL_NETWORKS,
+	HOLD_BID,
+	PASS_BID,
+	LOOK_INTO_SKAT,
+	PLAY_HAND_GAME,
+	PUT_CARD_INTO_SKAT,
+	TAKE_CARD_FROM_SKAT, 
+	DISCARD_CARDS, 
+	ANNOUNCE_GAME, 
+	PLAY_CARD,
+	CONTINUE_LOCAL_SERIES
+}
