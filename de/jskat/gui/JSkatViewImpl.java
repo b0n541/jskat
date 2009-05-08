@@ -27,6 +27,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 
 import net.miginfocom.swing.MigLayout;
 import de.jskat.control.JSkatMaster;
@@ -168,10 +169,10 @@ public class JSkatViewImpl implements JSkatView {
 		// symbol button panel 
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new MigLayout());
-		buttonPanel.add(new JButton(this.actions.get(JSkatActions.CREATE_LOCAL_TABLE)));
-		buttonPanel.add(new JButton(this.actions.get(JSkatActions.START_LOCAL_SERIES)));
-		buttonPanel.add(new JButton(this.actions.get(JSkatActions.CONNECT_TO_ISS)));
-		buttonPanel.add(new JButton(this.actions.get(JSkatActions.HELP)));
+		buttonPanel.add(new ToolbarButton(this.actions.get(JSkatActions.CREATE_LOCAL_TABLE)));
+		buttonPanel.add(new ToolbarButton(this.actions.get(JSkatActions.START_LOCAL_SERIES)));
+		buttonPanel.add(new ToolbarButton(this.actions.get(JSkatActions.CONNECT_TO_ISS)));
+		buttonPanel.add(new ToolbarButton(this.actions.get(JSkatActions.HELP)));
 		mainPanel.add(buttonPanel, BorderLayout.NORTH);
 
 		// main area
