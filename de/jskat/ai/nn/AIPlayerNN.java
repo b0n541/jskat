@@ -76,10 +76,13 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 * @see JSkatPlayer#bidMore(int)
 	 */
 	public int bidMore(int nextBidValue) {
-
+		// TODO replace random bidding
 		int result = -1;
 		
-		simulateGames();
+		if (this.rand.nextBoolean()) {
+			
+			result = nextBidValue;
+		}
 		
 		return result;
 	}
@@ -88,15 +91,11 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 * @see JSkatPlayer#holdBid(int)
 	 */
 	public boolean holdBid(int currBidValue) {
-		
-		boolean result = false;
-		
-		simulateGames();
-		
-		return result;
+		// TODO replace random bidding
+		return this.rand.nextBoolean();
 	}
 	
-	public void simulateGames() {
+	private void simulateGames() {
 		
 		GameSimulationThread gameSimThread = new GameSimulationThread();
 		gameSimThread.setPlayerPosition(this.knowledge.getPlayerPosition());
@@ -108,7 +107,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 * @see JSkatPlayer#announceGame()
 	 */
 	public GameAnnouncement announceGame() {
-		// TODO implement it
+		// TODO replace random game announcing
 		log.debug("position: " + this.knowledge.getPlayerPosition()); //$NON-NLS-1$
 		log.debug("bids: " + this.knowledge.getHighestBid(Player.FORE_HAND) +  //$NON-NLS-1$
 					" " + this.knowledge.getHighestBid(Player.MIDDLE_HAND) +  //$NON-NLS-1$
@@ -127,16 +126,26 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 * @see JSkatPlayer#lookIntoSkat()
 	 */
 	public boolean lookIntoSkat() {
-		// TODO Auto-generated method stub
-		return false;
+		// TODO replace random skat looking
+		return this.rand.nextBoolean();
 	}
 
 	/**
 	 * @see JSkatPlayer#discardSkat()
 	 */
 	public CardList discardSkat() {
-		// TODO Auto-generated method stub
-		return null;
+		// TODO replace random discarding
+		CardList result = new CardList();
+		
+		log.debug("Player cards before discarding: " + this.cards); //$NON-NLS-1$
+
+		// just discard two random cards
+		result.add(this.cards.remove(this.rand.nextInt(this.cards.size())));
+		result.add(this.cards.remove(this.rand.nextInt(this.cards.size())));
+
+		log.debug("Player cards after discarding: " + this.cards); //$NON-NLS-1$
+
+		return result;
 	}
 
 	/**

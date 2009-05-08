@@ -132,6 +132,7 @@ public class JSkatMaster {
 		else if ("Neuronal Network Player".equals(playerName)) {
 			
 			player = new AIPlayerNN();
+			((AIPlayerNN) player).setIsLearning(true);
 		}
 		else if ("Human Player".equals(playerName)) {
 			
