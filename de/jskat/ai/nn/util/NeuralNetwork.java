@@ -122,7 +122,7 @@ public class NeuralNetwork {
 	 * @param inputs
 	 *            Input parameters
 	 */
-	public void setInputParameter(double[] inputs) {
+	private void setInputParameter(double[] inputs) {
 
 		((InputLayer) this.layers.get(0)).setInputParameter(inputs);
 	}
@@ -130,7 +130,7 @@ public class NeuralNetwork {
 	/**
 	 * Propagates the input parameters forward to the output layer
 	 */
-	public void propagateForward() {
+	private void propagateForward() {
 
 		for (int i = 1; i < this.layers.size(); i++) {
 			for (Neuron neuron : this.layers.get(i).getNeurons()) {
@@ -145,7 +145,7 @@ public class NeuralNetwork {
 	 * @param outputs
 	 *            Output parameter
 	 */
-	public void setOutputParameter(double[] outputs) {
+	private void setOutputParameter(double[] outputs) {
 
 		((OutputLayer) this.layers.get(this.layers.size() - 1))
 				.setOuputParameter(outputs, this.learningRate);

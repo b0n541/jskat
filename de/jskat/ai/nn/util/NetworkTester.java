@@ -133,10 +133,8 @@ public class NetworkTester {
 		int i = 0;
 		
 		while (goodGuess < input.length) {
-			net.setInputParameter(input[i % input.length]);
-			net.propagateForward();
-			net.setOutputParameter(output[i % input.length]);
-			net.propagateBackward();
+			
+			net.adjustWeights(input[i % input.length], output[i % input.length]);
 			
 			if (Math.abs(net.getAvgDiff()) < 0.1) {
 				goodGuess++;
@@ -156,8 +154,7 @@ public class NetworkTester {
 //		
 		for (i = 0; i < input.length; i++) {
 			
-			net.setInputParameter(input[i]);
-			net.propagateForward();
+			net.getPredictedOutcome(input[i % input.length]);
 			log.debug(net.getInputParameters());
 			log.debug(net.getOutputParameters());
 		}
@@ -172,10 +169,7 @@ public class NetworkTester {
 		goodGuess = 0;
 		i = 0;
 		while (goodGuess < input.length) {
-			net.setInputParameter(input[i % input.length]);
-			net.propagateForward();
-			net.setOutputParameter(output[i % input.length]);
-			net.propagateBackward();
+			net.adjustWeights(input[i % input.length], output[i % input.length]);
 			
 			if (Math.abs(net.getAvgDiff()) < 0.1) {
 				goodGuess++;
@@ -194,8 +188,7 @@ public class NetworkTester {
 
 		for (i = 0; i < input.length; i++) {
 			
-			net.setInputParameter(input[i]);
-			net.propagateForward();
+			net.getPredictedOutcome(input[i]);
 			log.debug(net.getInputParameters());
 			log.debug(net.getOutputParameters());
 		}
@@ -232,10 +225,7 @@ public class NetworkTester {
 		int goodGuess = 0;
 		
 		for (int i = 0; i < 10000; i++) {
-			net.setInputParameter(input[i % input.length]);
-			net.propagateForward();
-			net.setOutputParameter(output[i % input.length]);
-			net.propagateBackward();
+			net.adjustWeights(input[i % input.length], output[i % input.length]);
 			
 			if (net.getAvgDiff() < 0.1) {
 				goodGuess++;
@@ -254,8 +244,7 @@ public class NetworkTester {
 //		
 		for (int i = 0; i < input.length; i++) {
 			
-			net.setInputParameter(input[i]);
-			net.propagateForward();
+			net.getPredictedOutcome(input[i]);
 			log.debug(net.getInputParameters());
 			log.debug(net.getOutputParameters());
 		}
