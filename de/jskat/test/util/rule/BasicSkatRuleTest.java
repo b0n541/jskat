@@ -15,15 +15,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.log4j.PropertyConfigurator;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.jskat.util.CardDeck;
-import de.jskat.util.CardList;
 import de.jskat.util.Card;
+import de.jskat.util.CardList;
 import de.jskat.util.GameType;
 import de.jskat.util.rule.BasicSkatRules;
 import de.jskat.util.rule.SkatRuleFactory;
@@ -33,8 +29,7 @@ import de.jskat.util.rule.SkatRuleFactory;
  */
 public class BasicSkatRuleTest {
 
-	private static CardDeck deck = new CardDeck();
-	private static CardList hand = new CardList();
+	private CardList hand = new CardList();
 
 	private static BasicSkatRules clubRules = SkatRuleFactory
 			.getSkatRules(GameType.CLUBS);
@@ -51,6 +46,9 @@ public class BasicSkatRuleTest {
 	private static BasicSkatRules ramschRules = SkatRuleFactory
 			.getSkatRules(GameType.RAMSCH);
 
+	/**
+	 * Initializes the logger
+	 */
 	@BeforeClass
 	public static void setUpBeforeClass() {
 
@@ -58,36 +56,33 @@ public class BasicSkatRuleTest {
 				.getSystemResource("de/jskat/config/log4j.properties")); //$NON-NLS-1$
 	}
 
-	@AfterClass
-	public static void tearDownAfterClass() {
-		// TODO implement it
-	}
-
-	@Before
-	public void setUp() {
-		// TODO implement it
-	}
-
-	@After
-	public void tearDown() {
-		// TODO implement it
-	}
-
+	/**
+	 * Checks @see NullRules#isCardAllowed(GameType, Card, CardList, Card)
+	 */
 	@Test
 	public void isCardAllowedNull001() {
-		assertTrue(nullRules.isCardAllowed(GameType.NULL, Card.CA, hand, Card.CK));
+		assertTrue(nullRules.isCardAllowed(GameType.NULL, Card.CA, this.hand, Card.CK));
 	}
 
+	/**
+	 * Checks @see GrandRules#isCardAllowed(GameType, Card, CardList, Card)
+	 */
 	@Test
 	public void isCardAllowedGrand001() {
-		assertTrue(grandRules.isCardAllowed(GameType.GRAND, Card.CA, hand, Card.CK));
+		assertTrue(grandRules.isCardAllowed(GameType.GRAND, Card.CA, this.hand, Card.CK));
 	}
 
+	/**
+	 * Checks @see SuitRules#isCardAllowed(GameType, Card, CardList, Card)
+	 */
 	@Test
 	public void isCardAllowedSuit001() {
-		assertTrue(clubRules.isCardAllowed(GameType.CLUBS, Card.CA, hand, Card.CK));
+		assertTrue(clubRules.isCardAllowed(GameType.CLUBS, Card.CA, this.hand, Card.CK));
 	}
 	
+	/**
+	 * Checks @see SuitRules#isCardAllowed(GameType, Card, CardList, Card)
+	 */
 	@Test
 	public void isCardAllowedSuit002() {
 		
@@ -96,9 +91,12 @@ public class BasicSkatRuleTest {
 		this.hand.add(Card.HK);
 		this.hand.add(Card.HJ);
 		
-		assertFalse(diamondRules.isCardAllowed(GameType.DIAMONDS, Card.HT, hand, Card.HJ));
+		assertFalse(diamondRules.isCardAllowed(GameType.DIAMONDS, Card.HT, this.hand, Card.HJ));
 	}
 
+	/**
+	 * Checks @see SuitRules#isCardAllowed(GameType, Card, CardList, Card)
+	 */
 	@Test
 	public void isCardAllowedSuit003() {
 		
@@ -107,44 +105,68 @@ public class BasicSkatRuleTest {
 		this.hand.add(Card.HK);
 		this.hand.add(Card.HJ);
 		
-		assertTrue(diamondRules.isCardAllowed(GameType.DIAMONDS, Card.HT, hand, Card.HK));
+		assertTrue(diamondRules.isCardAllowed(GameType.DIAMONDS, Card.HT, this.hand, Card.HK));
 	}
 
+	/**
+	 * Checks @see RamschRules#isCardAllowed(GameType, Card, CardList, Card)
+	 */
 	@Test
 	public void isCardAllowedRamsch001() {
-		assertTrue(ramschRules.isCardAllowed(GameType.RAMSCH, Card.CA, hand, Card.CK));
+		assertTrue(ramschRules.isCardAllowed(GameType.RAMSCH, Card.CA, this.hand, Card.CK));
 	}
 
+	/**
+	 * Checks @see NullRules#isCardBeatsCard(GameType, Card, Card)
+	 */
 	@Test
 	public void isCardBeatsCardNull001() {
 		assertTrue(nullRules.isCardBeatsCard(GameType.NULL, Card.C7, Card.C8));
 	}
 
+	/**
+	 * Checks @see GrandRules#isCardBeatsCard(GameType, Card, Card)
+	 */
 	@Test
 	public void isCardBeatsCardGrand001() {
 		assertTrue(grandRules.isCardBeatsCard(GameType.GRAND, Card.C7, Card.C8));
 	}
 
+	/**
+	 * Checks @see SuitRules#isCardBeatsCard(GameType, Card, Card)
+	 */
 	@Test
 	public void isCardBeatsCardSuit001() {
 		assertTrue(clubRules.isCardBeatsCard(GameType.CLUBS, Card.C7, Card.C8));
 	}
 
+	/**
+	 * Checks @see SuitRules#isCardBeatsCard(GameType, Card, Card)
+	 */
 	@Test
 	public void isCardBeatsCardSuit002() {
 		assertTrue(clubRules.isCardBeatsCard(GameType.CLUBS, Card.C7, Card.HJ));
 	}
 
+	/**
+	 * Checks @see SuitRules#isCardBeatsCard(GameType, Card, Card)
+	 */
 	@Test
 	public void isCardBeatsCardSuit003() {
 		assertTrue(clubRules.isCardBeatsCard(GameType.CLUBS, Card.CA, Card.CJ));
 	}
 
+	/**
+	 * Checks @see SuitRules#isCardBeatsCard(GameType, Card, Card)
+	 */
 	@Test
 	public void isCardBeatsCardSuit004() {
 		assertTrue(clubRules.isCardBeatsCard(GameType.CLUBS, Card.SJ, Card.CJ));
 	}
 
+	/**
+	 * Checks @see RamschRules#isCardBeatsCard(GameType, Card, Card)
+	 */
 	@Test
 	public void isCardBeatsCardRamsch001() {
 		assertTrue(ramschRules.isCardBeatsCard(GameType.RAMSCH, Card.C7, Card.C8));

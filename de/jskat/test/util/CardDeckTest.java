@@ -11,14 +11,12 @@ Released: @ReleaseDate@
 
 package de.jskat.test.util;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import de.jskat.util.Card;
 import de.jskat.util.CardDeck;
 
 /**
@@ -45,6 +43,9 @@ public class CardDeckTest {
 		assertTrue(CardDeck.getAllCards().size() == 32);		
 	}
 	
+	/**
+	 * Checks setting a card position to null
+	 */
 	@Test 
 	public void setNullCard001() {
 		

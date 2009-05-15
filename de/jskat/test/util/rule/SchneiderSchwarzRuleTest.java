@@ -49,30 +49,6 @@ public class SchneiderSchwarzRuleTest {
 	}
 
 	/**
-	 * @see AfterClass
-	 */
-	@AfterClass
-	public static void tearDownAfterClass() {
-		// TODO implement it
-	}
-
-	/**
-	 * @see Before
-	 */
-	@Before
-	public void setUp() {
-		// TODO implement it
-	}
-
-	/**
-	 * @see After
-	 */
-	@After
-	public void tearDown() {
-		// TODO implement it
-	}
-
-	/**
 	 * Test case 000 for schneider rule
 	 */
 	@Test
@@ -90,6 +66,9 @@ public class SchneiderSchwarzRuleTest {
 		assertTrue(clubRules.isSchwarz(data));
 	}
 
+	/**
+	 * Test for casting null rules into suit/grand rules
+	 */
 	@Test (expected=ClassCastException.class)
 	public void testCast001() {
 
@@ -97,6 +76,9 @@ public class SchneiderSchwarzRuleTest {
 				.getSkatRules(GameType.NULL);
 	}
 
+	/**
+	 * Test for casting ramsch rules into suit/grand rules
+	 */
 	@Test (expected=ClassCastException.class)
 	public void testCast002() {
 
@@ -109,12 +91,4 @@ public class SchneiderSchwarzRuleTest {
 
 	private static SuitGrandRules clubRules = (SuitGrandRules) SkatRuleFactory
 			.getSkatRules(GameType.CLUBS);
-	private static SuitGrandRules spadeRules = (SuitGrandRules) SkatRuleFactory
-			.getSkatRules(GameType.SPADES);
-	private static SuitGrandRules heartRules = (SuitGrandRules) SkatRuleFactory
-			.getSkatRules(GameType.HEARTS);
-	private static SuitGrandRules diamondRules = (SuitGrandRules) SkatRuleFactory
-			.getSkatRules(GameType.DIAMONDS);
-	private static SuitGrandRules grandRules = (SuitGrandRules) SkatRuleFactory
-			.getSkatRules(GameType.GRAND);
 }

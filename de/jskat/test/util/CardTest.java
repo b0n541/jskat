@@ -72,21 +72,33 @@ public class CardTest {
 		assertFalse(Card.CJ.equals(null));
 	}
 
+	/**
+	 * Checks @see Card#isTrump(GameType)
+	 */
 	@Test
 	public void isTrump001() {
 		assertTrue(Card.HJ.isTrump(GameType.HEARTS));
 	}
 	
+	/**
+	 * Checks @see Card#isTrump(GameType)
+	 */
 	@Test
 	public void isTrump002() {
 		assertTrue(Card.HJ.isTrump(GameType.DIAMONDS));
 	}
 	
+	/**
+	 * Checks @see Card#isTrump(GameType)
+	 */
 	@Test
 	public void isTrump003() {
 		assertTrue(Card.DJ.isTrump(GameType.HEARTS));
 	}
 	
+	/**
+	 * Checks @see Card#isTrump(GameType)
+	 */
 	@Test
 	public void isTrump004() {
 		assertFalse(Card.HT.isTrump(GameType.DIAMONDS));
