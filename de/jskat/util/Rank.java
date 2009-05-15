@@ -20,9 +20,9 @@ public enum Rank {
 	 */
 	SEVEN {
 		@Override
-		public String shortString() { return "7"; }
+		public String shortString() { return "7"; } //$NON-NLS-1$
 		@Override
-		public String longString() { return "Seven"; }
+		public String longString() { return "Seven"; } //$NON-NLS-1$
 		@Override
 		public int getSuitGrandOrder() { return 0; }
 		@Override
@@ -37,9 +37,9 @@ public enum Rank {
 	 */
 	EIGHT {
 		@Override
-		public String shortString() { return "8"; }
+		public String shortString() { return "8"; } //$NON-NLS-1$
 		@Override
-		public String longString() { return "Eight"; }
+		public String longString() { return "Eight"; } //$NON-NLS-1$
 		@Override
 		public int getSuitGrandOrder() { return 1; }
 		@Override
@@ -54,9 +54,9 @@ public enum Rank {
 	 */
 	NINE {
 		@Override
-		public String shortString() { return "9"; }
+		public String shortString() { return "9"; } //$NON-NLS-1$
 		@Override
-		public String longString() { return "Nine"; }
+		public String longString() { return "Nine"; } //$NON-NLS-1$
 		@Override
 		public int getSuitGrandOrder() { return 2; }
 		@Override
@@ -71,9 +71,9 @@ public enum Rank {
 	 */
 	QUEEN {
 		@Override
-		public String shortString() { return "Q"; }
+		public String shortString() { return "Q"; } //$NON-NLS-1$
 		@Override
-		public String longString() { return "Queen"; }
+		public String longString() { return "Queen"; } //$NON-NLS-1$
 		@Override
 		public int getSuitGrandOrder() { return 3; }
 		@Override
@@ -88,9 +88,9 @@ public enum Rank {
 	 */
 	KING {
 		@Override
-		public String shortString() { return "K"; }
+		public String shortString() { return "K"; } //$NON-NLS-1$
 		@Override
-		public String longString() { return "King";	}
+		public String longString() { return "King";	} //$NON-NLS-1$
 		@Override
 		public int getSuitGrandOrder() { return 4; }
 		@Override
@@ -105,9 +105,9 @@ public enum Rank {
 	 */
 	TEN {
 		@Override
-		public String shortString() { return "T"; }
+		public String shortString() { return "T"; } //$NON-NLS-1$
 		@Override
-		public String longString() { return "Ten"; }
+		public String longString() { return "Ten"; } //$NON-NLS-1$
 		@Override
 		public int getSuitGrandOrder() { return 5; }
 		@Override
@@ -122,9 +122,9 @@ public enum Rank {
 	 */
 	ACE {
 		@Override
-		public String shortString() { return "A"; }
+		public String shortString() { return "A"; } //$NON-NLS-1$
 		@Override
-		public String longString() { return "Ace"; }
+		public String longString() { return "Ace"; } //$NON-NLS-1$
 		@Override
 		public int getSuitGrandOrder() { return 6; }
 		@Override
@@ -139,9 +139,9 @@ public enum Rank {
 	 */
 	JACK {
 		@Override
-		public String shortString() { return "J"; }
+		public String shortString() { return "J"; } //$NON-NLS-1$
 		@Override
-		public String longString() { return "Jack"; }
+		public String longString() { return "Jack"; } //$NON-NLS-1$
 		@Override
 		public int getSuitGrandOrder() { return 7; }
 		@Override

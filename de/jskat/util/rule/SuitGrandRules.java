@@ -42,20 +42,20 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 	}
 
 	/**
-	 * @see SuitGrandRules#calcGameResult(SkatGameData)
+	 * @see SuitGrandRamschRules#calcGameResult(SkatGameData)
 	 */
 	public int calcGameResult(SkatGameData gameData) {
 
 		int multiplier = getBaseMultiplier(gameData);
 		
-		log.debug("calcSuitResult: after Jacks and Trump: multiplier " + multiplier);
+		log.debug("calcSuitResult: after Jacks and Trump: multiplier " + multiplier); //$NON-NLS-1$
 
 		if (gameData.isHand() && !gameData.isGameLost()) {
 
 			// Hand game is only counted when game was not lost
 			multiplier++;
 
-			log.debug("calcSuitResult: hand game: multiplier " + multiplier);
+			log.debug("calcSuitResult: hand game: multiplier " + multiplier); //$NON-NLS-1$
 		}
 
 		if (gameData.isOuvert()) {
@@ -72,7 +72,7 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 				multiplier++;
 			}
 
-			log.debug("calcSuitResult: Schneider: multiplier " + multiplier);
+			log.debug("calcSuitResult: Schneider: multiplier " + multiplier); //$NON-NLS-1$
 		}
 
 		if (gameData.isSchwarz()) {
@@ -84,12 +84,12 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 				multiplier++;
 			}
 
-			log.debug("calcSuitResult: Schwarz: multiplier " + multiplier);
+			log.debug("calcSuitResult: Schwarz: multiplier " + multiplier); //$NON-NLS-1$
 		}
 
 		int gameValue = SkatConstants.getGameBaseValue(gameData.getGameType(), gameData.isHand(), gameData.isOuvert());
 
-		log.debug("gameMultiplier " + gameValue);
+		log.debug("gameMultiplier " + gameValue); //$NON-NLS-1$
 
 		int result = gameValue * multiplier;
 
@@ -126,7 +126,7 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 					}
 				}
 			}
-			log.debug("game played with " + (multiplier - 1) + " jack(s)");
+			log.debug("game played with " + (multiplier - 1) + " jack(s)"); //$NON-NLS-1$ //$NON-NLS-2$
 		} else {
 			// game was played without jacks
 			if (!gameData.getSpadeJack()) {
@@ -138,7 +138,7 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 					}
 				}
 			}
-			log.debug("game played without " + (multiplier - 1) + " jack(s)");
+			log.debug("game played without " + (multiplier - 1) + " jack(s)"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		
 		return multiplier;

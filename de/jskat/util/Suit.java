@@ -9,9 +9,9 @@ public enum Suit {
 	 */
 	CLUBS {
 		@Override
-		public String shortString() { return "C"; }
+		public String shortString() { return "C"; } //$NON-NLS-1$
 		@Override
-		public String longString() { return "Clubs"; }
+		public String longString() { return "Clubs"; } //$NON-NLS-1$
 		@Override
 		public int getSuitOrder() { return 3; }
 	},
@@ -20,9 +20,9 @@ public enum Suit {
 	 */
 	SPADES {
 		@Override
-		public String shortString() { return "S"; }
+		public String shortString() { return "S"; } //$NON-NLS-1$
 		@Override
-		public String longString() { return "Spades"; }
+		public String longString() { return "Spades"; } //$NON-NLS-1$
 		@Override
 		public int getSuitOrder() { return 2; }
 	},
@@ -31,9 +31,9 @@ public enum Suit {
 	 */
 	HEARTS {
 		@Override
-		public String shortString() { return "H"; }
+		public String shortString() { return "H"; } //$NON-NLS-1$
 		@Override
-		public String longString() { return "Hearts"; }
+		public String longString() { return "Hearts"; } //$NON-NLS-1$
 		@Override
 		public int getSuitOrder() { return 1; }
 	},
@@ -42,9 +42,9 @@ public enum Suit {
 	 */
 	DIAMONDS {
 		@Override
-		public String shortString() { return "D"; }
+		public String shortString() { return "D"; } //$NON-NLS-1$
 		@Override
-		public String longString() { return "Diamonds"; }
+		public String longString() { return "Diamonds"; } //$NON-NLS-1$
 		@Override
 		public int getSuitOrder() { return 0; }
 	};

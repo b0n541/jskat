@@ -24,7 +24,7 @@ public class CardDeck extends CardList {
 
 	private Random rand;
 
-	private static final int MAX_CARDS = 32;
+	private final int MAX_CARDS = 32;
 	
 	/** 
      * Creates a new instance of CardDeck

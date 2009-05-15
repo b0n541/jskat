@@ -12,7 +12,6 @@ Released: @ReleaseDate@
 package de.jskat.util;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.commons.logging.Log;

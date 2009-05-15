@@ -11,12 +11,9 @@ Released: @ReleaseDate@
 
 package de.jskat.util.rule;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import de.jskat.data.SkatGameData;
-import de.jskat.util.CardList;
 import de.jskat.util.Card;
+import de.jskat.util.CardList;
 import de.jskat.util.GameType;
 import de.jskat.util.SkatConstants;
 import de.jskat.util.Suit;
@@ -27,8 +24,6 @@ import de.jskat.util.Suit;
  */
 public class NullRules implements BasicSkatRules {
 
-	private static Log log = LogFactory.getLog(NullRules.class);
-	
 	/**
 	 * @see BasicSkatRules#calcGameResult(SkatGameData)
 	 */
