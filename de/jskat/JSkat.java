@@ -39,11 +39,11 @@ public class JSkat {
 		PropertyConfigurator.configure(ClassLoader
 				.getSystemResource("de/jskat/config/log4j.properties")); //$NON-NLS-1$
 
-		log.debug("Welcome to JSkat!");
+		log.debug("Welcome to JSkat!"); //$NON-NLS-1$
 
 		for (LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
 
-			if ("Nimbus".equals(laf.getName())) {
+			if ("Nimbus".equals(laf.getName())) { //$NON-NLS-1$
 				
 				LookAndFeelSetter.setLookAndFeel();
 			}
