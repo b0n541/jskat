@@ -47,7 +47,7 @@ class HiddenLayer extends Layer {
 			outputWeightStrings.append(neuron.getOutputWeightString()).append(' ');
 		}
 		
-		return "hidden layer\n" +
+		return "hidden layer\n" + //$NON-NLS-1$
 				outputWeightStrings.toString() + '\n';
 	}
 	

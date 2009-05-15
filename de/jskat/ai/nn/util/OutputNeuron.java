@@ -15,6 +15,8 @@ package de.jskat.ai.nn.util;
  */
 class OutputNeuron extends Neuron {
 
+	private double diff = 0.0;
+
 	/**
 	 * @see Neuron#Neuron(ActivationFunction)
 	 */
@@ -29,7 +31,7 @@ class OutputNeuron extends Neuron {
 	 * @param targetValue
 	 * @param learningRate
 	 */
-	public void calculateError(double targetValue, double learningRate) {
+	protected void calculateError(double targetValue, double learningRate) {
 			
 			// first calculate error for output neuron
 			this.diff = (targetValue - this.activationValue);
@@ -47,10 +49,8 @@ class OutputNeuron extends Neuron {
 	 * 
 	 * @return Difference between output and desired value
 	 */
-	public double getDiff() {
+	protected double getDiff() {
 		
 		return this.diff;
 	}
-
-	private double diff = 0.0;
 }

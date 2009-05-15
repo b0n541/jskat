@@ -165,7 +165,7 @@ public class NeuralNetwork {
 	/**
 	 * Propagates the error signal back to the input layer
 	 */
-	public void propagateBackward() {
+	private void propagateBackward() {
 
 		for (int i = this.layers.size() - 2; i > 0; i--) {
 			for (Neuron neuron : this.layers.get(i).getNeurons()) {
@@ -217,47 +217,16 @@ public class NeuralNetwork {
 	}
 
 	/**
-	 * Gets a string representation of the current input parameters
-	 * 
-	 * @return Input parameters as String
-	 */
-	public String getInputParameters() {
-
-		return getNeuronActivationValues(this.layers.get(0).getNeurons());
-	}
-
-	/**
-	 * Gets a string representation of the current output parameters
-	 * 
-	 * @return Output parameters as String
-	 */
-	public String getOutputParameters() {
-
-		return getNeuronActivationValues(this.layers.get(this.layers.size() - 1).getNeurons());
-	}
-
-	/**
 	 * Gets the value of an output node
 	 * 
 	 * @param outputNodeIndex Index of the output node
 	 * @return Value of the output node
 	 */
-	public double getOutputValue(int outputNodeIndex) {
+	private double getOutputValue(int outputNodeIndex) {
 		
 		return this.layers.get(this.layers.size() - 1).getNeurons().get(outputNodeIndex).getActivationValue();
 	}
 	
-	private String getNeuronActivationValues(List<Neuron> neurons) {
-
-		StringBuffer result = new StringBuffer();
-
-		for (Neuron neuron : neurons) {
-			result.append(neuron.getActivationValue()).append(' ');
-		}
-
-		return result.toString();
-	}
-
 	/**
 	 * Save the network parameters to a file
 	 * 

@@ -15,6 +15,10 @@ package de.jskat.ai.nn.util;
  */
 class Weight {
 
+	private double weightValue;
+	private Neuron inputNeuron;
+	private Neuron outputNeuron;
+
 	/**
 	 * Constructor
 	 * 
@@ -22,7 +26,7 @@ class Weight {
 	 * @param newOutputNeuron Output neuron
 	 * @param weight Weight value
 	 */
-	public Weight(Neuron newInputNeuron, Neuron newOutputNeuron, double weight) {
+	Weight(Neuron newInputNeuron, Neuron newOutputNeuron, double weight) {
 		
 		this.inputNeuron = newInputNeuron;
 		this.outputNeuron = newOutputNeuron;
@@ -34,7 +38,7 @@ class Weight {
 	 * 
 	 * @return The weight value
 	 */
-	public double getWeightValue() {
+	double getWeightValue() {
 		
 		return this.weightValue;
 	}
@@ -44,7 +48,7 @@ class Weight {
 	 * 
 	 * @param newWeightValue The weight value to set
 	 */
-	public void setWeightValue(double newWeightValue) {
+	void setWeightValue(double newWeightValue) {
 
 		this.weightValue = newWeightValue;
 	}
@@ -54,7 +58,7 @@ class Weight {
 	 * 
 	 * @return Input neuron
 	 */
-	public Neuron getInputNeuron() {
+	Neuron getInputNeuron() {
 		
 		return this.inputNeuron;
 	}
@@ -64,7 +68,7 @@ class Weight {
 	 * 
 	 * @return Output neuron
 	 */
-	public Neuron getOutputNeuron() {
+	Neuron getOutputNeuron() {
 		
 		return this.outputNeuron;
 	}
@@ -77,8 +81,4 @@ class Weight {
 		
 		return Double.toString(this.weightValue);
 	}
-	
-	private double weightValue;
-	private Neuron inputNeuron;
-	private Neuron outputNeuron;
 }

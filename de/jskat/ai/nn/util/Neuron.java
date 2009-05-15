@@ -21,7 +21,7 @@ class Neuron {
 	/**
 	 * All activation functions supported by the Neuron
 	 */
-	public enum ActivationFunction {
+	protected enum ActivationFunction {
 		/**
 		 * Sigmoid function (quasi standard)
 		 */
@@ -58,7 +58,7 @@ class Neuron {
 	 * 
 	 * @param activationFunction Activation function 
 	 */
-	public Neuron(ActivationFunction activationFunction) {
+	Neuron(ActivationFunction activationFunction) {
 		
 		this.activationValue = 0.0;
 		this.errorSignal = 0.0;
@@ -70,7 +70,7 @@ class Neuron {
 	 * 
 	 * @param input Activation value
 	 */
-	public void setActivationValue(double input) {
+	void setActivationValue(double input) {
 		
 		this.activationValue = input;
 	}
@@ -78,7 +78,7 @@ class Neuron {
 	/**
 	 * Calculates the activation value
 	 */
-	public void calcActivationValue() {
+	void calcActivationValue() {
 		
 		this.inputSum = 0.0;
 		for (Weight weight : this.incomingWeights) {
@@ -92,7 +92,7 @@ class Neuron {
 	 * 
 	 * @return Activation value
 	 */
-	public double getActivationValue() {
+	double getActivationValue() {
 		
 		return this.activationValue;
 	}
@@ -161,7 +161,7 @@ class Neuron {
 	 * 
 	 * @param learningRate
 	 */
-	public void adjustWeights(double learningRate) {
+	protected void adjustWeights(double learningRate) {
 
 		// first calculate error from output weights
 		double errorSum = 0.0;
@@ -183,7 +183,7 @@ class Neuron {
 	 * 
 	 * @return Error signal
 	 */
-	public double getErrorSignal() {
+	double getErrorSignal() {
 
 		return this.errorSignal;
 	}
@@ -193,7 +193,7 @@ class Neuron {
 	 * 
 	 * @param incomingWeight New incoming weight
 	 */
-	public void addIncomingWeight(Weight incomingWeight) {
+	void addIncomingWeight(Weight incomingWeight) {
 		
 		this.incomingWeights.add(incomingWeight);
 	}
@@ -203,7 +203,7 @@ class Neuron {
 	 * 
 	 * @param outgoingWeight New outgoing weight
 	 */
-	public void addOutgoingWeight(Weight outgoingWeight) {
+	void addOutgoingWeight(Weight outgoingWeight) {
 		
 		this.outgoingWeights.add(outgoingWeight);
 	}
@@ -222,7 +222,7 @@ class Neuron {
 	 * 
 	 * @return All incoming weights as String
 	 */
-	public String getInputWeightString() {
+	String getInputWeightString() {
 		
 		StringBuffer result = new StringBuffer();
 		
@@ -239,7 +239,7 @@ class Neuron {
 	 * 
 	 * @return All outgoing weights as String
 	 */
-	public String getOutputWeightString() {
+	String getOutputWeightString() {
 		
 		StringBuffer result = new StringBuffer();
 		

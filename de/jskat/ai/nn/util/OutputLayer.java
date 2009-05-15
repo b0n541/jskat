@@ -27,7 +27,7 @@ class OutputLayer extends Layer {
 	 * 
 	 * @param numberOfNeurons 
 	 */
-	public OutputLayer(int numberOfNeurons) {
+	OutputLayer(int numberOfNeurons) {
 		
 		super(numberOfNeurons);
 		
@@ -54,10 +54,10 @@ class OutputLayer extends Layer {
 	 * @param outputs Output parameter
 	 * @param learningRate Learning rate
 	 */
-	public void setOuputParameter(double[] outputs, double learningRate) {
+	void setOuputParameter(double[] outputs, double learningRate) {
 		
 		if (outputs.length > this.neurons.size()) {
-			throw new IllegalArgumentException("Wrong number of output values.");
+			throw new IllegalArgumentException("Wrong number of output values."); //$NON-NLS-1$
 		}
 
 		for (int i = 0; i < outputs.length; i++) {
@@ -70,7 +70,7 @@ class OutputLayer extends Layer {
 	 * 
 	 * @return Average difference
 	 */
-	public double getAvgDiff() {
+	double getAvgDiff() {
 		
 		double diffSum = 0.0;
 		
@@ -88,6 +88,7 @@ class OutputLayer extends Layer {
 	@Override
 	public String toString() {
 		
-		return "output layer\n";
+		return "output layer\n" + //$NON-NLS-1$
+			this.outNeurons.get(0).toString() + '\n';
 	}
 }

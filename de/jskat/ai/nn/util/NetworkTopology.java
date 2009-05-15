@@ -14,6 +14,11 @@ package de.jskat.ai.nn.util;
  * Holds information about the topology of a neural network
  */
 public class NetworkTopology {
+	
+	private int inputSignals;
+	private int outputSignals;
+	private int hiddenLayers;
+	private int[] hiddenNeurons;
 
 	/**
 	 * Constructor
@@ -27,7 +32,7 @@ public class NetworkTopology {
 		
 		if (hiddenNeuronCounts.length != hiddenLayerCount) {
 			
-			throw new IllegalArgumentException("Number of hidden layers and number of hidden neurons don't correspond.");
+			throw new IllegalArgumentException("Number of hidden layers and number of hidden neurons don't correspond."); //$NON-NLS-1$
 		}
 		
 		this.inputSignals = inputs;
@@ -42,7 +47,7 @@ public class NetworkTopology {
 	 * 
 	 * @return Number of input neurons
 	 */
-	public int getInputNeuronCount() {
+	int getInputNeuronCount() {
 		
 		return this.inputSignals;
 	}
@@ -52,7 +57,7 @@ public class NetworkTopology {
 	 * 
 	 * @return Number of hidden layers
 	 */
-	public int getHiddenLayerCount() {
+	int getHiddenLayerCount() {
 		
 		return this.hiddenLayers;
 	}
@@ -63,7 +68,7 @@ public class NetworkTopology {
 	 * @param layerID ID of the hidden layer
 	 * @return Number of hidden neurons in the hidden layer
 	 */
-	public int getHiddenNeuronCount(int layerID) {
+	int getHiddenNeuronCount(int layerID) {
 		
 		return this.hiddenNeurons[layerID];
 	}
@@ -73,7 +78,7 @@ public class NetworkTopology {
 	 * 
 	 * @return Number of output neurons
 	 */
-	public int getOutputNeuronCount() {
+	int getOutputNeuronCount() {
 		
 		return this.outputSignals;
 	}
@@ -102,23 +107,18 @@ public class NetworkTopology {
 //		result.append("\t</layer>\n");
 //		result.append("</topo>\n");
 		
-		result.append("input\n");
+		result.append("input\n"); //$NON-NLS-1$
 		result.append(getInputNeuronCount()).append('\n');
 		
-		result.append("hidden ").append(this.hiddenLayers).append('\n');
+		result.append("hidden ").append(this.hiddenLayers).append('\n'); //$NON-NLS-1$
 		for (int i = 0; i < this.hiddenLayers; i++) {
 		
 			result.append(getHiddenNeuronCount(i)).append('\n');
 		}
 		
-		result.append("output\n");
+		result.append("output\n"); //$NON-NLS-1$
 		result.append(getOutputNeuronCount()).append('\n');
 		
 		return result.toString();
 	}
-	
-	private int inputSignals;
-	private int outputSignals;
-	private int hiddenLayers;
-	private int[] hiddenNeurons;
 }

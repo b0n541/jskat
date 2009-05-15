@@ -30,7 +30,7 @@ abstract class Layer {
 	 * 
 	 * @param numberOfNeurons Number of Neurons
 	 */
-	public Layer(int numberOfNeurons) {
+	Layer(int numberOfNeurons) {
 		
 		// create neurons
 		for (int i = 0; i < numberOfNeurons; i++) {
@@ -51,7 +51,7 @@ abstract class Layer {
 	 * 
 	 * @return All Neurons of the Layer
 	 */
-	public List<Neuron> getNeurons() {
+	List<Neuron> getNeurons() {
 		
 		return this.neurons;
 	}

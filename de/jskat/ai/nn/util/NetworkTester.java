@@ -15,6 +15,7 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.log4j.PropertyConfigurator;
 
 /**
  * Test class for NeuralNetwork
@@ -28,6 +29,9 @@ public class NetworkTester {
 	 */
 	public static void main(String[] args) {
 		
+		PropertyConfigurator.configure(ClassLoader
+				.getSystemResource("de/jskat/config/log4j.properties")); //$NON-NLS-1$
+
 		//testBooleanFunction();
 		testSkat();
 	}
@@ -154,9 +158,9 @@ public class NetworkTester {
 //		
 		for (i = 0; i < input.length; i++) {
 			
-			net.getPredictedOutcome(input[i % input.length]);
-			log.debug(net.getInputParameters());
-			log.debug(net.getOutputParameters());
+			double predOutput = net.getPredictedOutcome(input[i % input.length]);
+			log.debug(input[i % input.length]);
+			log.debug(predOutput);
 		}
 		
 		net.saveNetwork("asdf.net");
@@ -188,9 +192,9 @@ public class NetworkTester {
 
 		for (i = 0; i < input.length; i++) {
 			
-			net.getPredictedOutcome(input[i]);
-			log.debug(net.getInputParameters());
-			log.debug(net.getOutputParameters());
+			double predOutput = net.getPredictedOutcome(input[i]);
+			log.debug(input[i]);
+			log.debug(predOutput);
 		}
 	}
 	
@@ -244,9 +248,9 @@ public class NetworkTester {
 //		
 		for (int i = 0; i < input.length; i++) {
 			
-			net.getPredictedOutcome(input[i]);
-			log.debug(net.getInputParameters());
-			log.debug(net.getOutputParameters());
+			double predOutput = net.getPredictedOutcome(input[i]);
+			log.debug(input[i]);
+			log.debug(predOutput);
 		}
 	}
 }
