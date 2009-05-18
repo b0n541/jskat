@@ -11,9 +11,7 @@ Released: @ReleaseDate@
 
 package de.jskat.control.iss;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
@@ -29,8 +27,7 @@ public class ISSConnector {
 
 	private Socket socket;
 	private PrintWriter output;
-	private BufferedReader input;
-	private ISSInputThread issIn;
+	private ISSInputChannel issIn;
 	private ISSOutputChannel issOut;
 	
 	private String loginName;
@@ -65,7 +62,10 @@ public class ISSConnector {
 		try {
 			this.socket = new Socket("bodo1.cs.ualberta.ca", port);
 			this.output = new PrintWriter(this.socket.getOutputStream(), true);
-			this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+			this.issOut = new ISSOutputChannel(this.output);
+			this.issIn = new ISSInputChannel(this, this.socket.getInputStream());
+			this.issIn.start();
+			
 		} catch (java.net.UnknownHostException e) {
 			log.error("Cannot open connection to ISS");
 		} catch (java.io.IOException e) {
@@ -73,10 +73,6 @@ public class ISSConnector {
 		}
 		
 		log.debug("Connection established...");
-		
-		this.issIn = new ISSInputThread(this, this.input);
-		this.issIn.start();
-		this.issOut = new ISSOutputChannel(this.output);
 		
 		this.issOut.send(this.loginName);
 		
@@ -88,14 +84,6 @@ public class ISSConnector {
 		this.issOut.send(this.password);
 	}
 	
-	private void startTable() {
-		
-//		this.issOut.send("create / 3");
-//		this.issOut.send("join .1 ");
-//		this.issOut.send("table .3 foo invite xskat bernie");
-//		this.issOut.send("table .3 foo ready");
-	}
-
 	/**
 	 * Closes the connection to ISS
 	 */
@@ -103,16 +91,15 @@ public class ISSConnector {
 		
 		try {
 			log.debug("closing connection");
-//			this.issIn.interrupt();
-//			log.debug("iss thread interrupted");
-			this.input.close();
-//			log.debug("input reader closed");
+			this.issIn.interrupt();
+			log.debug("input channel closed");
 			this.output.close();
-			log.debug("output writer closed");
+			log.debug("output channel closed");
 			this.socket.close();
 			log.debug("socket closed");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			log.debug("ISS connector IOException");
 			e.printStackTrace();
 		}
 	}

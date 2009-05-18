@@ -13,52 +13,70 @@ package de.jskat.control.iss;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 /**
- * Handles all incoming messages from ISS
+ * Reads data from ISS until an interrupt signal occures
+ * 
+ * Idea was taken from the book Java Threads by Scott Oaks and Henry Wong
  */
-class ISSInputThread extends Thread {
+public class ISSInputChannel extends Thread {
 
-	private Log log = LogFactory.getLog(ISSInputThread.class);
+	private Log log = LogFactory.getLog(ISSInputChannel.class);
 	
 	private ISSConnector connect;
-	private BufferedReader input;
-	private final int protocolVersion = 14;
+	private final static int protocolVersion = 14;
 
-	/**
-	 * Constructor
-	 * 
-	 * @param newInput Input stream from ISS
-	 */
-	ISSInputThread(ISSConnector newConnect, BufferedReader newInput) {
-		
-		this.connect = newConnect;
-		this.input = newInput;
-	}
-	
-	/**
-	 * @see Thread#run()
-	 */
-	@Override
-	public void run() {
-		
-		String issInput;
-		
-		try {
-			while ((issInput = this.input.readLine()) != null) {
-				// handle messages
-				handleMessage(issInput);
-			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
+    Object lock = new Object();
+    InputStream stream;
+    BufferedReader reader;
+    boolean done = false;
+    
+    /**
+     * Constructor
+     * 
+     * @param is Input stream
+     */
+    public ISSInputChannel(ISSConnector conn, InputStream is) {
+
+    	this.connect = conn;
+    	this.stream = is;
+        this.reader = new BufferedReader(new InputStreamReader(this.stream));
+    }
+
+    /**
+     * @see Thread#run()
+     */
+    @Override
+    public void run() {
+
+        ReaderClass rc = new ReaderClass( );
+
+        synchronized(this.lock) {
+
+            rc.start( );
+
+            while (!this.done) {
+                try {
+                    this.lock.wait( );
+                } catch (InterruptedException ie) {
+                    this.done = true;
+                    rc.interrupt( );
+                    try {
+                        this.stream.close( );
+                    } catch (IOException e) {
+                    	e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
 	private void handleMessage(String message) {
 		
 		log.debug("ISS: " + message);
@@ -68,7 +86,7 @@ class ISSInputThread extends Thread {
 		
 		if (first.equals("password:")) {
 			
-			handlePasswordMassage(token);
+			handlePasswordMessage(token);
 		}
 		else if (first.equals("Welcome")) {
 			
@@ -100,11 +118,11 @@ class ISSInputThread extends Thread {
 		}
 		else {
 			
-			System.err.println("UNHANDLED MESSAGE: " + message);
+			log.error("UNHANDLED MESSAGE: " + message);
 		}
 	}
 	
-	private void handlePasswordMassage(StringTokenizer token) {
+	private void handlePasswordMessage(StringTokenizer token) {
 		
 		this.connect.sendPassword();
 	}
@@ -118,7 +136,7 @@ class ISSInputThread extends Thread {
 			textMessage.append(token.nextToken()).append(' ');
 		}
 		
-		System.err.println(textMessage);
+		log.error(textMessage);
 	}
 
 	private void handleErrorMessage(StringTokenizer token) {
@@ -130,7 +148,7 @@ class ISSInputThread extends Thread {
 			errorMessage.append(token.nextToken()).append(' ');
 		}
 		
-		System.err.println(errorMessage);
+		log.error(errorMessage);
 	}
 
 	private void handleTableMessage(StringTokenizer token) {
@@ -144,8 +162,17 @@ class ISSInputThread extends Thread {
 	}
 
 	private void handleTableListMessage(StringTokenizer token) {
-		// TODO Auto-generated method stub
+
+		String plusMinus = token.nextToken();
 		
+		if (plusMinus.equals("+")) {
+			
+			log.debug("addTableToList();");
+		}
+		else if (plusMinus.equals("-")) {
+			
+			log.debug("removeTableFromList();");
+		}
 	}
 
 	private void handleClientListMessage(StringTokenizer token) {
@@ -175,7 +202,28 @@ class ISSInputThread extends Thread {
 		
 		if ((int)issProtocolVersion != this.protocolVersion) {
 			// TODO handle this in JSkatMaster
-			System.err.println("Wrong protocol version!!!");
+			log.error("Wrong protocol version!!!");
 		}
 	}
+
+    class ReaderClass extends Thread {
+
+        @Override
+		public void run() {
+
+        	String line;
+            while (!ISSInputChannel.this.done) {
+                try {
+                	line = ISSInputChannel.this.reader.readLine();
+                	handleMessage(line);
+                } catch (IOException ioe) {
+                    ISSInputChannel.this.done = true;
+                }
+            }
+
+            synchronized(ISSInputChannel.this.lock) {
+                ISSInputChannel.this.lock.notify( );
+            }
+        }
+    }
 }
