@@ -27,40 +27,65 @@ public class ISSConnector {
 
 	private static Log log = LogFactory.getLog(ISSConnector.class);
 
+	private Socket socket;
+	private PrintWriter output;
+	private BufferedReader input;
+	private ISSInputThread issIn;
+	private ISSOutputChannel issOut;
+	
+	private String loginName;
+	private String password;
+	private int port;
+
+	public void setConnectionData(String newLoginName, String newPassword, int newPort) {
+		
+		this.loginName = newLoginName;
+		this.password = newPassword;
+		
+		if (newPort == 80 || newPort == 7000 || newPort == 8000) {
+			
+			this.port = newPort;
+		}
+		else {
+			
+			throw new IllegalArgumentException("Unsupported port number: " + newPort);
+		}
+	}
+	
 	/**
-	 * Logs into ISS
+	 * Establishes a connection with ISS
 	 * 
-	 * @param login Login name
-	 * @param password Password
 	 * @param port (e.g. 80, 7000, 8000)
 	 * @return TRUE if the connection was successful
 	 */
-	public boolean login(String login, String password, int port) {
+	public boolean establishConnection() {
 
-		log.debug("Login");
+		log.debug("ISSConnector.establishConnection()");
 		
 		try {
 			this.socket = new Socket("bodo1.cs.ualberta.ca", port);
 			this.output = new PrintWriter(this.socket.getOutputStream(), true);
 			this.input = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 		} catch (java.net.UnknownHostException e) {
-			log.error("Cannot open localhost");
+			log.error("Cannot open connection to ISS");
 		} catch (java.io.IOException e) {
 			log.error("IOException: " + e.toString());
 		}
 		
 		log.debug("Connection established...");
 		
-		this.issIn = new ISSInputThread(this.input);
+		this.issIn = new ISSInputThread(this, this.input);
 		this.issIn.start();
 		this.issOut = new ISSOutputChannel(this.output);
 		
-		log.debug("Sending credentials...");
-		
-		this.issOut.send(login);
-		this.issOut.send(password);
+		this.issOut.send(this.loginName);
 		
 		return true;
+	}
+
+	void sendPassword() {
+		
+		this.issOut.send(this.password);
 	}
 	
 	private void startTable() {
@@ -77,18 +102,28 @@ public class ISSConnector {
 	public void closeConnection() {
 		
 		try {
+			log.debug("closing connection");
+//			this.issIn.interrupt();
+//			log.debug("iss thread interrupted");
 			this.input.close();
+//			log.debug("input reader closed");
 			this.output.close();
+			log.debug("output writer closed");
 			this.socket.close();
+			log.debug("socket closed");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	private Socket socket;
-	private PrintWriter output;
-	private BufferedReader input;
-	private ISSInputThread issIn;
-	private ISSOutputChannel issOut;
+
+	/**
+	 * Checks whether there is an open connection
+	 * 
+	 * @return TRUE if there is an open connection
+	 */
+	public boolean isConnected() {
+		
+		return this.socket != null && this.socket.isBound();
+	}
 }

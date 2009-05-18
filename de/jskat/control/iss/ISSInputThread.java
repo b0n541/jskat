@@ -21,10 +21,11 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Handles all incoming messages from ISS
  */
-public class ISSInputThread extends Thread {
+class ISSInputThread extends Thread {
 
 	private Log log = LogFactory.getLog(ISSInputThread.class);
 	
+	private ISSConnector connect;
 	private BufferedReader input;
 	private final int protocolVersion = 14;
 
@@ -33,8 +34,9 @@ public class ISSInputThread extends Thread {
 	 * 
 	 * @param newInput Input stream from ISS
 	 */
-	public ISSInputThread(BufferedReader newInput) {
+	ISSInputThread(ISSConnector newConnect, BufferedReader newInput) {
 		
+		this.connect = newConnect;
 		this.input = newInput;
 	}
 	
@@ -59,12 +61,16 @@ public class ISSInputThread extends Thread {
 	
 	private void handleMessage(String message) {
 		
-		log.debug("ISS --> " + message);
+		log.debug("ISS: " + message);
 		
 		StringTokenizer token = new StringTokenizer(message);
 		String first = token.nextToken();
 		
-		if (first.equals("Welcome")) {
+		if (first.equals("password:")) {
+			
+			handlePasswordMassage(token);
+		}
+		else if (first.equals("Welcome")) {
 			
 			handleWelcomeMessage(token);
 		}
@@ -98,6 +104,11 @@ public class ISSInputThread extends Thread {
 		}
 	}
 	
+	private void handlePasswordMassage(StringTokenizer token) {
+		
+		this.connect.sendPassword();
+	}
+
 	private void handleTextMessage(StringTokenizer token) {
 		
 		StringBuffer textMessage = new StringBuffer();

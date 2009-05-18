@@ -23,9 +23,12 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import de.jskat.gui.JSkatView;
-
 import net.miginfocom.swing.MigLayout;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
+import de.jskat.gui.JSkatView;
 
 /**
  * Panel for login into International Skat Server (ISS)
@@ -33,6 +36,8 @@ import net.miginfocom.swing.MigLayout;
 public class ISSLoginPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+
+	private static Log log = LogFactory.getLog(ISSLoginPanel.class);
 
 	/**
 	 * Constructor
@@ -70,22 +75,6 @@ public class ISSLoginPanel extends JPanel {
 	            login();  // code to execute when button is pressed
 	        }
 	    });
-		loginButton.addKeyListener(new KeyListener() {
-			public void keyPressed(KeyEvent e) {
-				
-				if (e.getKeyChar() == 10) {
-					login();
-				}
-			}
-
-			public void keyReleased(KeyEvent e) {
-				// TODO implement it
-			}
-
-			public void keyTyped(KeyEvent e) {
-				// TODO implement it
-			}
-		});
 		login.add(loginButton, "span 2, align center"); //$NON-NLS-1$
 
 		return login;
@@ -98,6 +87,8 @@ public class ISSLoginPanel extends JPanel {
 	 */
 	protected boolean login() {
 		
+		log.debug("login");
+		
 		boolean result;
 		String login = this.loginField.getText();
 		String password = new String(this.passwordField.getPassword());
@@ -108,8 +99,8 @@ public class ISSLoginPanel extends JPanel {
 			result = false;
 		}
 		else {
-		
-			result = this.mainView.loginToISS(login, password, 80);
+			// TODO make the port number adjustable
+			result = this.mainView.connectToISS(login, password, 80);
 			
 			if (!result) {
 				

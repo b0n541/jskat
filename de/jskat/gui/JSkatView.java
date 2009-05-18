@@ -77,12 +77,12 @@ public interface JSkatView {
 	/**
 	 * Logs into ISS
 	 * 
-	 * @param login Login name on ISS 
+	 * @param login Login name
 	 * @param password Password
 	 * @param port Port number
 	 * @return TRUE if the login was successful
 	 */
-	public abstract boolean loginToISS(String login, String password, int port);
+	public abstract boolean connectToISS(String login, String password, int port);
 	
 	/**
 	 * Creates ISS table panel

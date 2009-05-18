@@ -298,8 +298,22 @@ public class JSkatMaster {
 	 */
 	public boolean connectToISS(String login, String password, int port) {
 		
-		this.issConnect = new ISSConnector();
-		return this.issConnect.login(login, password, port);
+		log.debug("connectToISS");
+		
+		if (this.issConnect == null) {
+		
+			this.issConnect = new ISSConnector();
+		}
+		
+		log.debug("connector created");
+		
+		if (!this.issConnect.isConnected()) {
+			
+			this.issConnect.setConnectionData(login, password, port);
+			this.issConnect.establishConnection();
+		}
+		
+		return this.issConnect.isConnected();
 	}
 	
 	/**
@@ -310,6 +324,14 @@ public class JSkatMaster {
 		if (this.view.showExitDialog() == JOptionPane.YES_OPTION) {
 			
 			this.options.saveJSkatProperties();
+			
+			if (this.issConnect.isConnected()) {
+				
+				log.debug("connection to ISS still open");
+				
+				this.issConnect.closeConnection();
+			}
+			
 			System.exit(0);
 		}
 	}

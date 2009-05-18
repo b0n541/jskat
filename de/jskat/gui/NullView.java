@@ -45,7 +45,7 @@ public class NullView implements JSkatView {
 	}
 
 	@Override
-	public boolean loginToISS(String login, String password, int port) {
+	public boolean connectToISS(String login, String password, int port) {
 		// TODO Auto-generated method stub
 		return false;
 	}

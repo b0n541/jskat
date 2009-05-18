@@ -290,9 +290,9 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#loginToISS(String, String, int)
+	 * @see JSkatView#connectToISS(String, String, int)
 	 */
-	public boolean loginToISS(String login, String password, int port) {
+	public boolean connectToISS(String login, String password, int port) {
 
 		return this.jskat.connectToISS(login, password, port);
 	}

@@ -19,7 +19,7 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Handles all incoming messages from ISS
  */
-public class ISSOutputChannel {
+class ISSOutputChannel {
 
 	private static Log log = LogFactory.getLog(ISSOutputChannel.class);
 	
@@ -28,7 +28,7 @@ public class ISSOutputChannel {
 	 * 
 	 * @param newOutput Input stream from ISS
 	 */
-	public ISSOutputChannel(PrintWriter newOutput) {
+	ISSOutputChannel(PrintWriter newOutput) {
 		
 		this.output = newOutput;
 	}
@@ -38,9 +38,9 @@ public class ISSOutputChannel {
 	 * 
 	 * @param message Message text
 	 */
-	public void send(String message) {
+	void send(String message) {
 		
-		log.debug("--> ISS " + message);
+		log.debug(message + " --> ISS ");
 		this.output.println(message);
 	}
 	
