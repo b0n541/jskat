@@ -29,11 +29,11 @@ public class OpponentPlayer implements CardPlayer {
 	/** Constructor
 	 * @param id playerID
 	 */
-	public OpponentPlayer(int id, SkatRules rules) {
-		log.debug("Constructing new opponent player.");
-		this.playerID = id;
-		this.rules = rules;
-	}
+//	public OpponentPlayer(int id, SkatRules rules) {
+//		log.debug("Constructing new opponent player.");
+//		this.playerID = id;
+//		this.rules = rules;
+//	}
 
 	/** Gets the next card that the player wants to play
 	 * @param cards hand of the player
@@ -472,7 +472,7 @@ public class OpponentPlayer implements CardPlayer {
 	 */
 	private int playerID = -1;
 
-	private SkatRules rules;
+//	private SkatRules rules;
 	
 	/**
 	 * log

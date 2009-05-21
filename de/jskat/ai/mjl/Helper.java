@@ -76,10 +76,10 @@ public class Helper {
 	 * @return true, if <b>cards</b> contain a card that can beat the
 	 *         <b>cardToBeat</b>
 	 */
-	public static int isAbleToBeat(SkatRules rules, CardList cards,
-			Card cardToBeat, Suit trump, Card initialCard,
-			GameType gameType) {
-		int result = -1;
+//	public static int isAbleToBeat(SkatRules rules, CardList cards,
+//			Card cardToBeat, Suit trump, Card initialCard,
+//			GameType gameType) {
+//		int result = -1;
 //		for (int i = 0; i < cards.size(); i++) {
 //			if (rules
 //					.isCardAllowed(cards.get(i), cards, initialCard, trump)) {
@@ -92,8 +92,8 @@ public class Helper {
 //				}
 //			}
 //		}
-		return result;
-	}
+//		return result;
+//	}
 
 	/**
 	 * Decides whether a player is able to match a certain initial card
@@ -105,10 +105,10 @@ public class Helper {
 	 * @return true if there is at least one card in the hand that can match
 	 *         <b>initialCard</b>
 	 */
-	public static boolean isAbleToMatch(SkatRules rules, CardList cards,
-			Suit trump, Card initialCard,
-			GameType gameType) {
-		boolean result = false;
+//	public static boolean isAbleToMatch(SkatRules rules, CardList cards,
+//			Suit trump, Card initialCard,
+//			GameType gameType) {
+//		boolean result = false;
 //		for (int i = 0; i < cards.size(); i++) {
 //			boolean sameSuit = (cards.get(i).getSuit() == initialCard
 //					.getSuit());
@@ -130,8 +130,8 @@ public class Helper {
 //			if (result)
 //				break;
 //		}
-		return result;
-	}
+//		return result;
+//	}
 
 	/**
 	 * Gets the highest trump card out of a given hand
