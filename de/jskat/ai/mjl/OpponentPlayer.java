@@ -49,7 +49,7 @@ public class OpponentPlayer implements CardPlayer {
 		// TODO refactor method calls: just include CardMemory instead of all the details
 
 		int bestToBePlayed = -1;
-		log.debug("--------------------- start ----------------------------------");
+/*		log.debug("--------------------- start ----------------------------------");
         log.debug(".playNextCard(): Processing hand ["+cards+"] with trick ["+trickInfo.getTrick()+"]. Trump is "+Helper.suitName(trickInfo.getTrump())+".");
         
 		if (trickInfo.size() > 1) {
@@ -250,7 +250,7 @@ public class OpponentPlayer implements CardPlayer {
 		
 		log.debug("Playing "+cards.get(bestToBePlayed));
 		log.debug("--------------------- done -----------------------------------");
-		return bestToBePlayed;
+*/		return bestToBePlayed;
 	}
 
 	/**
@@ -301,10 +301,10 @@ public class OpponentPlayer implements CardPlayer {
 		int highCard = 0;
 		int index = 0;
 		while (++index<cards.size()) {
-			if(cards.get(index).isTrump(GameType.SUIT, trump) && cards.get(index).getPoints() > cards.get(highCard).getPoints()) { 
-				highCard = index;
-				log.debug("     highest card set to "+index);
-			}
+//			if(cards.get(index).isTrump(GameType.SUIT, trump) && cards.get(index).getPoints() > cards.get(highCard).getPoints()) { 
+//				highCard = index;
+//				log.debug("     highest card set to "+index);
+//			}
 		}
 		return (highCard<cards.size()?highCard:0);
 	}
@@ -322,12 +322,12 @@ public class OpponentPlayer implements CardPlayer {
 		int highCard = 0;
 		int index = 0;
 		while (++index<cards.size()) {
-			if(!cards.get(index).isTrump(GameType.SUIT, trump) 
-					&& cards.get(index).getPoints() > cards.get(highCard).getPoints() 
-					&& cards.get(index).getRank() != Rank.ACE 
-					&& cards.get(index).getSuit() == suit) { 
-				highCard = index;
-			}
+//			if(!cards.get(index).isTrump(GameType.SUIT, trump) 
+//					&& cards.get(index).getPoints() > cards.get(highCard).getPoints() 
+//					&& cards.get(index).getRank() != Rank.ACE 
+//					&& cards.get(index).getSuit() == suit) { 
+//				highCard = index;
+//			}
 		}
 		return (highCard<cards.size()?highCard:0);
 	}
@@ -345,16 +345,16 @@ public class OpponentPlayer implements CardPlayer {
 		int highCard = 0;
 		int index = 0;
 		while (++index<cards.size()) {
-		    if(cards.get(highCard).isTrump(GameType.SUIT, trump) && 
-		            !cards.get(index).isTrump(GameType.SUIT, trump) &&
-		            cards.get(index).getRank() != Rank.ACE) {
-				highCard = index;
-		    }
-			else if(!cards.get(index).isTrump(GameType.SUIT, trump) && 
-			        cards.get(index).getPoints() > cards.get(highCard).getPoints() && 
-			        cards.get(index).getRank() != Rank.ACE) { 
-				highCard = index;
-			}
+//		    if(cards.get(highCard).isTrump(GameType.SUIT, trump) && 
+//		            !cards.get(index).isTrump(GameType.SUIT, trump) &&
+//		            cards.get(index).getRank() != Rank.ACE) {
+//				highCard = index;
+//		    }
+//			else if(!cards.get(index).isTrump(GameType.SUIT, trump) && 
+//			        cards.get(index).getPoints() > cards.get(highCard).getPoints() && 
+//			        cards.get(index).getRank() != Rank.ACE) { 
+//				highCard = index;
+//			}
 		}
 		return (highCard<cards.size()?highCard:0);
 	}
@@ -371,10 +371,10 @@ public class OpponentPlayer implements CardPlayer {
 		int index = 0;
 		boolean found = false;
 		while (!found && ++index<cards.size()) {
-			if(!cards.get(index).isTrump(GameType.SUIT, trump) && cards.get(index).getPoints() < cards.get(lowCard).getPoints()) {
-			    lowCard = index;
-			}
-			if(cards.get(lowCard).getPoints() == 0) found = true;
+//			if(!cards.get(index).isTrump(GameType.SUIT, trump) && cards.get(index).getPoints() < cards.get(lowCard).getPoints()) {
+//			    lowCard = index;
+//			}
+//			if(cards.get(lowCard).getPoints() == 0) found = true;
 		}
 		return (index<cards.size()?index:0);
 	}

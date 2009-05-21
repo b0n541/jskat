@@ -56,33 +56,33 @@ public class RamschPlayer implements CardPlayer {
 		    result = playOtherCard(cards, trick.getCard(0));
 		}
 		else {
-		    if(trick.getCard(0).beats(trick.getCard(1), GameType.RAMSCH, null, trick.getCard(1))) {
-			    result = playOtherCard(cards, trick.getCard(0));
-		    } 
-		    else {
-		        if(trick.getCard(1).getRank() == Rank.JACK) {
-		            if(trick.getCard(0).getRank() == Rank.JACK) {
-					    result = playOtherCard(cards, trick.getCard(1));
-		            }
-		            else {
-					    result = playOtherCard(cards, trick.getCard(0));
-		            }
-		        }
-		        else {
-				    result = playOtherCard(cards, trick.getCard(1));
-		        }
-		    }
+//		    if(trick.getCard(0).beats(trick.getCard(1), GameType.RAMSCH, null, trick.getCard(1))) {
+//			    result = playOtherCard(cards, trick.getCard(0));
+//		    } 
+//		    else {
+//		        if(trick.getCard(1).getRank() == Rank.JACK) {
+//		            if(trick.getCard(0).getRank() == Rank.JACK) {
+//					    result = playOtherCard(cards, trick.getCard(1));
+//		            }
+//		            else {
+//					    result = playOtherCard(cards, trick.getCard(0));
+//		            }
+//		        }
+//		        else {
+//				    result = playOtherCard(cards, trick.getCard(1));
+//		        }
+//		    }
 		}
 		
 		// make sure that the card is allowed
-		if(!rules.isCardAllowed(cards.get(result), cards, trick.getCard(0), null)) {
-			// if it's not allowed, take another one
-		    for(int i=0;i<cards.size();i++) {
-				if(rules.isCardAllowed(cards.get(i), cards, trick.getCard(0), null)) {
-					result = i;
-				}
-			}
-		}
+//		if(!rules.isCardAllowed(cards.get(result), cards, trick.getCard(0), null)) {
+//			// if it's not allowed, take another one
+//		    for(int i=0;i<cards.size();i++) {
+//				if(rules.isCardAllowed(cards.get(i), cards, trick.getCard(0), null)) {
+//					result = i;
+//				}
+//			}
+//		}
 	    log.info(".playNextCard(): playing "+(cards.get(result)));
 		return result;
 	}

@@ -19,6 +19,7 @@ import de.jskat.data.GameAnnouncement;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
 import de.jskat.util.GameType;
+import de.jskat.util.Player;
 import de.jskat.util.Rank;
 import de.jskat.util.SkatConstants;
 import de.jskat.util.Suit;
@@ -38,18 +39,6 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
 		log.debug("Player "+playerID+": Constructing AIPlayerMJL ("+playerName+")");
     }
     
-    /** 
-     * Creates a new instance of SkatPlayer with a player ID
-     * @param playerID
-     */
-    public AIPlayerMJL(int playerID) {
-        
-        super();
-        setPlayerID(playerID);
-        setPlayerName("---undefined---");
-        isSinglePlayer = false;
-    }
-    
     /**
      * Creates a new instance of SkatPlayer with a player ID and a name
      * @param playerID
@@ -58,7 +47,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
     public AIPlayerMJL(int playerID, String playerName) {
         
         super();
-        setPlayerID(playerID);
+        playerID = (int) System.currentTimeMillis();
         setPlayerName(playerName);
         isSinglePlayer = false;
 		log.debug("Player "+playerID+": Constructing AIPlayerMJL ("+playerName+")");
@@ -81,13 +70,6 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
     	return rsp.lookAtSkat(cards);
     }
 
-    /** (non-Javadoc)
-     * @see jskat.player.JSkatPlayer#takeSkat(jskat.share.CardList)
-     */
-    public void takeSkat(CardList skat) {
-    	selectedTrump = SkatProcessor.processSkat(cards, skat);
-    }
-
     /** 
      * Asks the player for the game he wants to play
      * @see jskat.player.JSkatPlayer#announceGame()
@@ -97,8 +79,23 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
         isSinglePlayer = true;
     	GameAnnouncement newGame = new GameAnnouncement();
         
-        newGame.setGameType(GameTypes.SUIT);
-        newGame.setTrump(selectedTrump);
+        switch(selectedTrump.getSuitOrder()) {
+	        case 3:
+	        	newGame.setGameType(GameType.CLUBS);
+	        	break;
+	        case 2:
+	        	newGame.setGameType(GameType.SPADES);
+	        	break;
+	        case 1:
+	        	newGame.setGameType(GameType.HEARTS);
+	        	break;
+	        case 0:
+	        	newGame.setGameType(GameType.DIAMONDS);
+	        	break;
+	        default:
+	        	newGame.setGameType(GameType.GRAND);
+	        	break;
+        }
         
         return newGame;
     }
@@ -121,7 +118,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
      * @see jskat.player.JSkatPlayer#bidMore(int)
      * @param currBidValue
      */
-    public boolean bidMore(int currBidValue) {
+    public int bidMore(int currBidValue) {
 		boolean iDoThisBid = true;
 		
 		// set the game state
@@ -132,7 +129,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
 	    int maxBid = myBid.getMaxBid();
 		if (maxBid < currBidValue)
 			iDoThisBid = false;
-        return iDoThisBid;
+        return currBidValue;
     }
     
 	/** 
@@ -145,24 +142,24 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
      * @param handGame
      * @param ouvertGame
 	 */
-	public void startGame(int singlePlayer, int forehandPlayer, GameType gameType,
-			Suit trump, boolean handGame, boolean ouvertGame) {
-		super.startGame(singlePlayer, forehandPlayer, gameType, trump, handGame, ouvertGame);
-		singlePlayerPos = singlePlayer - forehandPlayer;
-		if(singlePlayerPos<0) singlePlayerPos +=3;
-		log.debug("SinglePlayer is in position "+singlePlayerPos+", when single player is "+singlePlayer+" and forehand is "+forehandPlayer+" (and I am player "+playerID+")");
-		if(singlePlayer==playerID) {
-	        isSinglePlayer = true;
-		}
-		else {
-	        isSinglePlayer = false;
-		}
-		
-		myBid = null;
-		myMemory = new CardMemory(gameType, trump);
-		game = new GameInfo(gameType, trump, singlePlayer);		
-		this.setState(JSkatPlayer.PlayerStates.PLAYING);
-	}
+//    public void startGame(int singlePlayer, int forehandPlayer, GameType gameType,
+//			Suit trump, boolean handGame, boolean ouvertGame) {
+//		super.startGame(singlePlayer, forehandPlayer, gameType, trump, handGame, ouvertGame);
+//		singlePlayerPos = singlePlayer - forehandPlayer;
+//		if(singlePlayerPos<0) singlePlayerPos +=3;
+//		log.debug("SinglePlayer is in position "+singlePlayerPos+", when single player is "+singlePlayer+" and forehand is "+forehandPlayer+" (and I am player "+playerID+")");
+//		if(singlePlayer==playerID) {
+//	        isSinglePlayer = true;
+//		}
+//		else {
+//	        isSinglePlayer = false;
+//		}
+//		
+//		myBid = null;
+//		myMemory = new CardMemory(gameType, trump);
+//		game = new GameInfo(gameType, trump, singlePlayer);		
+//		this.setState(JSkatPlayer.PlayerStates.PLAYING);
+//	}
 
 
     /** Get next Card to play
@@ -177,7 +174,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
         thisTrick.setGameInfo(game);
         thisTrick.setTrick(trick);
 		thisTrick.setSinglePlayerPos(singlePlayerPos);
-		thisTrick.setForehandPlayer(forehandPlayer);
+//		thisTrick.setForehandPlayer(forehandPlayer);
         return playerType.playNextCard(cards, thisTrick);
     }
     
@@ -192,24 +189,24 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
 	 * Makes the current trick known to the players when it is complete
 	 * @see jskat.player.JSkatPlayer#showTrick(jskat.share.CardList, int)
 	 */
-	public void showTrick(CardList trick, int trickWinner) {
-		// remember the cards that have been played by each player
-		log.debug("Player "+playerID+" received the trick ["+trick+"], where the winner is player "+trickWinner);
-
-		if(myMemory != null)
-			myMemory.addTrick(trick, forehandPlayer);
-		else {
-			log.warn("CardMemory should exist, but is null!");
-			myMemory = new CardMemory();
-			myMemory.addTrick(trick, forehandPlayer);
-		}
-		// set the forehand player for the next trick
-		forehandPlayer = trickWinner;
-		singlePlayerPos = singlePlayer - forehandPlayer;
-		if(singlePlayerPos<0) singlePlayerPos +=3;
-		log.debug("SinglePlayer is now in position "+singlePlayerPos+", when single player is "+singlePlayer+" and forehand is "+forehandPlayer);
-		
-	}
+//	public void showTrick(CardList trick, int trickWinner) {
+//		// remember the cards that have been played by each player
+//		log.debug("Player "+playerID+" received the trick ["+trick+"], where the winner is player "+trickWinner);
+//
+//		if(myMemory != null)
+//			myMemory.addTrick(trick, forehandPlayer);
+//		else {
+//			log.warn("CardMemory should exist, but is null!");
+//			myMemory = new CardMemory();
+//			myMemory.addTrick(trick, forehandPlayer);
+//		}
+//		// set the forehand player for the next trick
+//		forehandPlayer = trickWinner;
+//		singlePlayerPos = singlePlayer - forehandPlayer;
+//		if(singlePlayerPos<0) singlePlayerPos +=3;
+//		log.debug("SinglePlayer is now in position "+singlePlayerPos+", when single player is "+singlePlayer+" and forehand is "+forehandPlayer);
+//		
+//	}
 
 	/** 
 	 * Sets the state of the current game <br>
@@ -217,33 +214,33 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
 	 * @see de.jskat.ai.mjl.Bidding  
 	 * @see jskat.player.AbstractJSkatPlayer#setState(JSkatPlayer.PlayerStates)
 	 */
-	public final void setState(JSkatPlayer.PlayerStates newState) {
-        
-		log.debug("Player "+playerID+" ("+playerName+"): Setting new state:"+newState);
-		super.setState(newState);
-		if(newState == JSkatPlayer.PlayerStates.BIDDING) {
-			myBid = new Bidding(cards);
-			playerType = null;
-		} 
-		else if(newState == JSkatPlayer.PlayerStates.PLAYING) {
-			myBid = null;
-			if(game!=null && game.getGameType() == GameType.RAMSCH) {
-				log.debug("Player "+playerID+" ("+playerName+"): is a ramsch player");
-			    playerType = new RamschPlayer(playerID, rules);
-			}
-			else if(isSinglePlayer) {
-				log.debug("Player "+playerID+" ("+playerName+"): is the single player");
-				playerType = new SinglePlayer(playerID, rules);
-			}
-			else {
-				log.debug("Player "+playerID+" ("+playerName+"): is an opponent player");
-				playerType = new OpponentPlayer(playerID, rules);
-			}
-		} 
-		else {
-			myBid = null;
-		}
-	}
+//	public final void setState(JSkatPlayer.PlayerStates newState) {
+//        
+//		log.debug("Player "+playerID+" ("+playerName+"): Setting new state:"+newState);
+//		super.setState(newState);
+//		if(newState == JSkatPlayer.PlayerStates.BIDDING) {
+//			myBid = new Bidding(cards);
+//			playerType = null;
+//		} 
+//		else if(newState == JSkatPlayer.PlayerStates.PLAYING) {
+//			myBid = null;
+//			if(game!=null && game.getGameType() == GameType.RAMSCH) {
+//				log.debug("Player "+playerID+" ("+playerName+"): is a ramsch player");
+//			    playerType = new RamschPlayer(playerID, rules);
+//			}
+//			else if(isSinglePlayer) {
+//				log.debug("Player "+playerID+" ("+playerName+"): is the single player");
+//				playerType = new SinglePlayer(playerID, rules);
+//			}
+//			else {
+//				log.debug("Player "+playerID+" ("+playerName+"): is an opponent player");
+//				playerType = new OpponentPlayer(playerID, rules);
+//			}
+//		} 
+//		else {
+//			myBid = null;
+//		}
+//	}
 		
 
 	/**
@@ -321,6 +318,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
 
 	/** log */
 	private Log log = LogFactory.getLog(AIPlayerMJL.class);
+	private int playerID;
 	private CardMemory myMemory;
 	private CardPlayer playerType;
 	private Bidding myBid;
@@ -332,6 +330,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer implements JSkatPlayer {
 	@Override
 	public CardList discardSkat() {
 		// TODO Auto-generated method stub
+    	selectedTrump = SkatProcessor.processSkat(cards, skat);
 		return null;
 	}
 

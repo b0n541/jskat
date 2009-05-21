@@ -37,7 +37,7 @@ public class Bidding {
 		int multiplier = Helper.getMultiplier(cards);
         
 		mostFrequentSuitColor = cards.getMostFrequentSuit();
-		int noOfTrumps = cards.getSuitCount(GameType.SUIT, mostFrequentSuitColor);
+		int noOfTrumps = cards.getSuitCount(mostFrequentSuitColor, true);
 		int noOfJacks = Helper.countJacks(cards);
         
 		if (mostFrequentSuitColor == Suit.CLUBS) {

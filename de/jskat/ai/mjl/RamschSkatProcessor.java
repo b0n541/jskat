@@ -95,114 +95,114 @@ public class RamschSkatProcessor {
     	log.debug("\n================================================================\n\n");
     	// TODO (mjl) check for potential Durchmarsch when processing the skat
         log.debug("My cards:"+cards+", Skat="+skat);
-        int cDiamonds = cards.getSuitCount(GameType.RAMSCH, Suit.DIAMONDS);
-        int cHearts = cards.getSuitCount(GameType.RAMSCH, Suit.HEARTS);
-        int cSpades = cards.getSuitCount(GameType.RAMSCH, Suit.SPADES);
-        int cClubs = cards.getSuitCount(GameType.RAMSCH, Suit.CLUBS);
-        
-        cDiamonds += skat.getSuitCount(GameType.RAMSCH, Suit.DIAMONDS);
-        cHearts   += skat.getSuitCount(GameType.RAMSCH, Suit.HEARTS);
-        cSpades   += skat.getSuitCount(GameType.RAMSCH, Suit.SPADES);
-        cClubs    += skat.getSuitCount(GameType.RAMSCH, Suit.CLUBS);
-        
-        log.debug("#: C="+cClubs+", S="+cSpades+", H="+cHearts+", D="+cDiamonds);
-        
-        int diamonds = Helper.suitCardsToBinaryWithSkat(cards, skat, Suit.DIAMONDS);
-        int hearts   = Helper.suitCardsToBinaryWithSkat(cards, skat, Suit.HEARTS);
-        int spades   = Helper.suitCardsToBinaryWithSkat(cards, skat, Suit.SPADES);
-        int clubs    = Helper.suitCardsToBinaryWithSkat(cards, skat, Suit.CLUBS);
-        
-        log.debug("cards: C="+bin(clubs,8)+", S="+bin(spades,8)+", H="+bin(hearts,8)+", D="+bin(diamonds,8));
-        
-        int saveSuits = 0;
-        if(Tools.isIn((diamonds & 31), new int[] {7,11,13,15,19,21})) saveSuits += 1;
-        if(Tools.isIn((hearts & 31),   new int[] {7,11,13,15,19,21})) saveSuits += 2;
-        if(Tools.isIn((spades & 31),   new int[] {7,11,13,15,19,21})) saveSuits += 4;
-        if(Tools.isIn((clubs & 31),    new int[] {7,11,13,15,19,21})) saveSuits += 8;
-        log.debug("saveSuits="+bin(saveSuits,4));
-
-        int possibleSkatSuits = 0;
-        if (cDiamonds > 0 && cDiamonds < 3 && (diamonds & 64) == 0 && !Tools.isIn((diamonds & 7), new int[] {1,3,5})) possibleSkatSuits += 1;
-        if (cHearts > 0   && cHearts < 3   && (hearts & 64)   == 0 && !Tools.isIn((hearts & 7),   new int[] {1,3,5})) possibleSkatSuits += 2;
-        if (cSpades > 0   && cSpades < 3   && (spades & 64)   == 0 && !Tools.isIn((spades & 7),   new int[] {1,3,5})) possibleSkatSuits += 4;
-        if (cClubs > 0    && cClubs < 3    && (clubs & 64)    == 0 && !Tools.isIn((clubs & 7),    new int[] {1,3,5})) possibleSkatSuits += 8;
-        log.debug("possibleSkatSuits="+bin(possibleSkatSuits,4));
-        
-        Card skatOne = skat.remove(0);
-        Card skatTwo = skat.remove(0);
-        
-        if (possibleSkatSuits > 0) {
-            Suit skatSuit = Helper.binaryToSuit(possibleSkatSuits);
-            if(skatSuit != null) {
-                // if more than one possible color: do nothing for the time being
-                // TODO (mjl): skat processing with more than one possible color
-            	log.debug("More than one possible color found...");
-            	if(skatOne.getRank()==Rank.JACK) {
-            		int index = 0;
-            		while(cards.get(index).getRank()==Rank.JACK) index++;
-                    skat.add(cards.remove(index));
-                    cards.add(skatOne);
-            	} else {
-                    skat.add(skatOne);
-            	}
-            	if(skatTwo.getRank()==Rank.JACK) {
-            		int index = 0;
-            		while(cards.get(index).getRank()==Rank.JACK) index++;
-                    skat.add(cards.remove(index));
-                    cards.add(skatTwo);
-            	} else {
-                    skat.add(skatTwo);
-            	}
-            }
-            else {
-                log.debug("Color for skat:"+skatSuit);
-                if(skatOne.getSuit() == skatSuit || cards.getSuitCount(GameType.RAMSCH, skatSuit)<1) {
-                	if(skatOne.getRank()==Rank.JACK) {
-                		int index = 0;
-                		while(cards.get(index).getRank()==Rank.JACK) index++;
-                        skat.add(cards.remove(index));
-                        cards.add(skatOne);
-                	} else {
-                        skat.add(skatOne);
-                	}
-                } else {
-                    skat.add(cards.remove(cards.getFirstIndexOfSuit(skatSuit)));
-                    cards.add(skatOne);
-                }
-                if(skatTwo.getSuit()==skatSuit || cards.getSuitCount(GameType.RAMSCH, skatSuit)<1) {
-                	if(skatTwo.getRank()==Rank.JACK) {
-                		int index = 0;
-                		while(cards.get(index).getRank()==Rank.JACK) index++;
-                        skat.add(cards.remove(index));
-                        cards.add(skatTwo);
-                	} else {
-                        skat.add(skatTwo);
-                	}
-                } else {
-                    skat.add(cards.remove(cards.getFirstIndexOfSuit(skatSuit)));
-                    cards.add(skatTwo);
-                }
-            }
-        } else {
-            // if more than one possible color: do nothing for the time being
-            // TODO: skat processing with no possible color from the first iteration
-        	if(skatOne.getRank()==Rank.JACK) {
-        		int index = 0;
-        		while(cards.get(index).getRank()==Rank.JACK) index++;
-                skat.add(cards.remove(index));
-                cards.add(skatOne);
-        	} else {
-                skat.add(skatOne);
-        	}
-        	if(skatTwo.getRank()==Rank.JACK) {
-        		int index = 0;
-        		while(cards.get(index).getRank()==Rank.JACK) index++;
-                skat.add(cards.remove(index));
-                cards.add(skatTwo);
-        	} else {
-                skat.add(skatTwo);
-        	}
-        }
+//        int cDiamonds = cards.getSuitCount(GameType.RAMSCH, Suit.DIAMONDS);
+//        int cHearts = cards.getSuitCount(GameType.RAMSCH, Suit.HEARTS);
+//        int cSpades = cards.getSuitCount(GameType.RAMSCH, Suit.SPADES);
+//        int cClubs = cards.getSuitCount(GameType.RAMSCH, Suit.CLUBS);
+//        
+//        cDiamonds += skat.getSuitCount(GameType.RAMSCH, Suit.DIAMONDS);
+//        cHearts   += skat.getSuitCount(GameType.RAMSCH, Suit.HEARTS);
+//        cSpades   += skat.getSuitCount(GameType.RAMSCH, Suit.SPADES);
+//        cClubs    += skat.getSuitCount(GameType.RAMSCH, Suit.CLUBS);
+//        
+//        log.debug("#: C="+cClubs+", S="+cSpades+", H="+cHearts+", D="+cDiamonds);
+//        
+//        int diamonds = Helper.suitCardsToBinaryWithSkat(cards, skat, Suit.DIAMONDS);
+//        int hearts   = Helper.suitCardsToBinaryWithSkat(cards, skat, Suit.HEARTS);
+//        int spades   = Helper.suitCardsToBinaryWithSkat(cards, skat, Suit.SPADES);
+//        int clubs    = Helper.suitCardsToBinaryWithSkat(cards, skat, Suit.CLUBS);
+//        
+//        log.debug("cards: C="+bin(clubs,8)+", S="+bin(spades,8)+", H="+bin(hearts,8)+", D="+bin(diamonds,8));
+//        
+//        int saveSuits = 0;
+//        if(Tools.isIn((diamonds & 31), new int[] {7,11,13,15,19,21})) saveSuits += 1;
+//        if(Tools.isIn((hearts & 31),   new int[] {7,11,13,15,19,21})) saveSuits += 2;
+//        if(Tools.isIn((spades & 31),   new int[] {7,11,13,15,19,21})) saveSuits += 4;
+//        if(Tools.isIn((clubs & 31),    new int[] {7,11,13,15,19,21})) saveSuits += 8;
+//        log.debug("saveSuits="+bin(saveSuits,4));
+//
+//        int possibleSkatSuits = 0;
+//        if (cDiamonds > 0 && cDiamonds < 3 && (diamonds & 64) == 0 && !Tools.isIn((diamonds & 7), new int[] {1,3,5})) possibleSkatSuits += 1;
+//        if (cHearts > 0   && cHearts < 3   && (hearts & 64)   == 0 && !Tools.isIn((hearts & 7),   new int[] {1,3,5})) possibleSkatSuits += 2;
+//        if (cSpades > 0   && cSpades < 3   && (spades & 64)   == 0 && !Tools.isIn((spades & 7),   new int[] {1,3,5})) possibleSkatSuits += 4;
+//        if (cClubs > 0    && cClubs < 3    && (clubs & 64)    == 0 && !Tools.isIn((clubs & 7),    new int[] {1,3,5})) possibleSkatSuits += 8;
+//        log.debug("possibleSkatSuits="+bin(possibleSkatSuits,4));
+//        
+//        Card skatOne = skat.remove(0);
+//        Card skatTwo = skat.remove(0);
+//        
+//        if (possibleSkatSuits > 0) {
+//            Suit skatSuit = Helper.binaryToSuit(possibleSkatSuits);
+//            if(skatSuit != null) {
+//                // if more than one possible color: do nothing for the time being
+//                // TODO (mjl): skat processing with more than one possible color
+//            	log.debug("More than one possible color found...");
+//            	if(skatOne.getRank()==Rank.JACK) {
+//            		int index = 0;
+//            		while(cards.get(index).getRank()==Rank.JACK) index++;
+//                    skat.add(cards.remove(index));
+//                    cards.add(skatOne);
+//            	} else {
+//                    skat.add(skatOne);
+//            	}
+//            	if(skatTwo.getRank()==Rank.JACK) {
+//            		int index = 0;
+//            		while(cards.get(index).getRank()==Rank.JACK) index++;
+//                    skat.add(cards.remove(index));
+//                    cards.add(skatTwo);
+//            	} else {
+//                    skat.add(skatTwo);
+//            	}
+//            }
+//            else {
+//                log.debug("Color for skat:"+skatSuit);
+//                if(skatOne.getSuit() == skatSuit || cards.getSuitCount(GameType.RAMSCH, skatSuit)<1) {
+//                	if(skatOne.getRank()==Rank.JACK) {
+//                		int index = 0;
+//                		while(cards.get(index).getRank()==Rank.JACK) index++;
+//                        skat.add(cards.remove(index));
+//                        cards.add(skatOne);
+//                	} else {
+//                        skat.add(skatOne);
+//                	}
+//                } else {
+//                    skat.add(cards.remove(cards.getFirstIndexOfSuit(skatSuit)));
+//                    cards.add(skatOne);
+//                }
+//                if(skatTwo.getSuit()==skatSuit || cards.getSuitCount(GameType.RAMSCH, skatSuit)<1) {
+//                	if(skatTwo.getRank()==Rank.JACK) {
+//                		int index = 0;
+//                		while(cards.get(index).getRank()==Rank.JACK) index++;
+//                        skat.add(cards.remove(index));
+//                        cards.add(skatTwo);
+//                	} else {
+//                        skat.add(skatTwo);
+//                	}
+//                } else {
+//                    skat.add(cards.remove(cards.getFirstIndexOfSuit(skatSuit)));
+//                    cards.add(skatTwo);
+//                }
+//            }
+//        } else {
+//            // if more than one possible color: do nothing for the time being
+//            // TODO: skat processing with no possible color from the first iteration
+//        	if(skatOne.getRank()==Rank.JACK) {
+//        		int index = 0;
+//        		while(cards.get(index).getRank()==Rank.JACK) index++;
+//                skat.add(cards.remove(index));
+//                cards.add(skatOne);
+//        	} else {
+//                skat.add(skatOne);
+//        	}
+//        	if(skatTwo.getRank()==Rank.JACK) {
+//        		int index = 0;
+//        		while(cards.get(index).getRank()==Rank.JACK) index++;
+//                skat.add(cards.remove(index));
+//                cards.add(skatTwo);
+//        	} else {
+//                skat.add(skatTwo);
+//        	}
+//        }
         
         log.debug("Done - my cards:"+cards+", Skat="+skat);
     }

@@ -46,10 +46,10 @@ public class SinglePlayer implements CardPlayer {
 		if(trick.size()==0) return 0;
 		int result = 0;
 		for(int i=0;i<cards.size();i++) {
-			if(rules.isCardAllowed(cards.get(i), cards, trick.getCard(0), trick.getTrump())) {
-				result = i;
-				break;
-			}
+//			if(rules.isCardAllowed(cards.get(i), cards, trick.getCard(0), trick.getTrump())) {
+//				result = i;
+//				break;
+//			}
 		}
 		return result;
 	}

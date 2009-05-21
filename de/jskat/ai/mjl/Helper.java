@@ -44,16 +44,12 @@ public class Helper {
 		if (trick.getTrick().size() < trick.getSinglePlayerPos() - 1)
 			return false;
 		if (trick.getSinglePlayerPos() == 0) {
-			if (trick.getCard(0).beats(trick.getCard(1),
-					trick.getGameInfo().getGameType(),
-					trick.getGameInfo().getTrump(), trick.getCard(0)))
+			if (trick.getCard(0).beats(trick.getGameInfo().getGameType(), trick.getCard(1)))
 				return true;
 			else
 				return false;
 		} else if (trick.getSinglePlayerPos() == 1) {
-			if (trick.getCard(1).beats(trick.getCard(0),
-					trick.getGameInfo().getGameType(),
-					trick.getGameInfo().getTrump(), trick.getCard(0)))
+			if (trick.getCard(1).beats(trick.getGameInfo().getGameType(), trick.getCard(0)))
 				return true;
 			else
 				return false;
@@ -84,18 +80,18 @@ public class Helper {
 			Card cardToBeat, Suit trump, Card initialCard,
 			GameType gameType) {
 		int result = -1;
-		for (int i = 0; i < cards.size(); i++) {
-			if (rules
-					.isCardAllowed(cards.get(i), cards, initialCard, trump)) {
-				if (cards.get(i).beats(cardToBeat, gameType, trump,
-						initialCard)) {
-					log.debug(cards.get(i) + " can beat " + cardToBeat
-							+ ".");
-					result = i;
-					break;
-				}
-			}
-		}
+//		for (int i = 0; i < cards.size(); i++) {
+//			if (rules
+//					.isCardAllowed(cards.get(i), cards, initialCard, trump)) {
+//				if (cards.get(i).beats(cardToBeat, gameType, trump,
+//						initialCard)) {
+//					log.debug(cards.get(i) + " can beat " + cardToBeat
+//							+ ".");
+//					result = i;
+//					break;
+//				}
+//			}
+//		}
 		return result;
 	}
 
@@ -113,27 +109,27 @@ public class Helper {
 			Suit trump, Card initialCard,
 			GameType gameType) {
 		boolean result = false;
-		for (int i = 0; i < cards.size(); i++) {
-			boolean sameSuit = (cards.get(i).getSuit() == initialCard
-					.getSuit());
-			if (rules
-					.isCardAllowed(cards.get(i), cards, initialCard, trump)) {
-				if (gameType != GameType.NULL) {
-					if (cards.get(i).isTrump(gameType, trump)
-							&& initialCard.isTrump(gameType, trump)) {
-						result = true;
-					} else if (!cards.get(i).isTrump(gameType, trump)
-							&& !initialCard.isTrump(gameType, trump) && sameSuit) {
-						result = true;
-					}
-				} else if (sameSuit) {
-					result = true;
-				}
-
-			}
-			if (result)
-				break;
-		}
+//		for (int i = 0; i < cards.size(); i++) {
+//			boolean sameSuit = (cards.get(i).getSuit() == initialCard
+//					.getSuit());
+//			if (rules
+//					.isCardAllowed(cards.get(i), cards, initialCard, trump)) {
+//				if (gameType != GameType.NULL) {
+//					if (cards.get(i).isTrump(gameType, trump)
+//							&& initialCard.isTrump(gameType, trump)) {
+//						result = true;
+//					} else if (!cards.get(i).isTrump(gameType, trump)
+//							&& !initialCard.isTrump(gameType, trump) && sameSuit) {
+//						result = true;
+//					}
+//				} else if (sameSuit) {
+//					result = true;
+//				}
+//
+//			}
+//			if (result)
+//				break;
+//		}
 		return result;
 	}
 
@@ -148,14 +144,14 @@ public class Helper {
 	 */
 	public static int getHighestTrump(CardList cards,
 			Suit currTrump) {
-		if (cards.size() < 1)
-			return 0;
+//		if (cards.size() < 1)
+//			return 0;
 		int index = 0;
-		for (int i = 1; i < cards.size(); i++) {
-			if (cards.get(i).beats(cards.get(index),
-					GameType.SUIT, currTrump, cards.get(i)))
-				index = i;
-		}
+//		for (int i = 1; i < cards.size(); i++) {
+//			if (cards.get(i).beats(cards.get(index),
+//					GameType.SUIT, currTrump, cards.get(i)))
+//				index = i;
+//		}
 		return index;
 	}
 
@@ -170,7 +166,8 @@ public class Helper {
 	 */
 	public static boolean hasTrump(CardList cards,
 			Suit currTrump) {
-		return (cards.hasTrump(GameType.SUIT, currTrump));
+		return false;
+//		return (cards.hasTrump(GameType.SUIT, currTrump));
 	}
 
 	/**
