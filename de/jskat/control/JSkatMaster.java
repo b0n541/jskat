@@ -325,7 +325,8 @@ public class JSkatMaster {
 			
 			this.options.saveJSkatProperties();
 			
-			if (this.issConnect.isConnected()) {
+			if (this.issConnect != null &&
+					this.issConnect.isConnected()) {
 				
 				log.debug("connection to ISS still open");
 				
