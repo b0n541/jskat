@@ -44,13 +44,11 @@ import de.jskat.util.Player;
 /**
  * Panel for a skat table
  */
-public class SkatTablePanel extends JPanel {
+public class SkatTablePanel extends JSkatTabPanel {
 
 	private static final long serialVersionUID = 1L;
 	private static Log log = LogFactory.getLog(SkatTablePanel.class);
 
-	private String tableName;
-	private JSkatGraphicRepository bitmaps;
 	private HandPanel foreHand;
 	private HandPanel middleHand;
 	private HandPanel hindHand;
@@ -69,31 +67,32 @@ public class SkatTablePanel extends JPanel {
 	private DiscardPanel discardPanel;
 
 	/**
-	 * Constructor
+	 * @see JSkatTabPanel#JSkatTabPanel(String, JSkatGraphicRepository, ActionMap)
 	 */
 	protected SkatTablePanel(String newTableName,
 			JSkatGraphicRepository jskatBitmaps, ActionMap actions) {
 
-		log.debug("SkatTablePanel: name: " + newTableName);
+		super(newTableName, jskatBitmaps, actions);
 
-		this.setActionMap(actions);
-		this.tableName = newTableName;
-		this.bitmaps = jskatBitmaps;
-		initPanel();
+		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
 	}
 
-	private void initPanel() {
+	/**
+	 * @see JSkatTabPanel#initPanel()
+	 */
+	@Override
+	protected void initPanel() {
 
-		setLayout(new MigLayout("fill", "fill", "fill"));
+		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 				getSkatListPanel(), getPlayGroundPanel());
-		add(splitPane, "grow");
+		add(splitPane, "grow"); //$NON-NLS-1$
 	}
 
 	private JPanel getSkatListPanel() {
 
-		JPanel panel = new JPanel(new MigLayout("fill", "fill", "fill"));
+		JPanel panel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		this.skatListTableModel = new SkatListTableModel();
 		this.skatListTable = new JTable(this.skatListTableModel);
@@ -330,7 +329,7 @@ public class SkatTablePanel extends JPanel {
 	 */
 	String getTableName() {
 
-		return this.tableName;
+		return this.panelName;
 	}
 
 	/**

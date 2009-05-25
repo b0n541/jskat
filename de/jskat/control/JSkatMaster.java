@@ -27,9 +27,12 @@ import de.jskat.ai.rnd.AIPlayerRND;
 import de.jskat.control.iss.ISSConnector;
 import de.jskat.data.JSkatApplicationData;
 import de.jskat.data.JSkatOptions;
+import de.jskat.data.iss.ISSLoginCredentials;
 import de.jskat.gui.JSkatView;
+import de.jskat.gui.action.JSkatActions;
 import de.jskat.gui.human.HumanPlayer;
 import de.jskat.util.Card;
+import de.jskat.util.CardList;
 import de.jskat.util.GameType;
 
 /**
@@ -83,20 +86,6 @@ public class JSkatMaster {
 	public void startSeries() {
 		
 		log.debug(this.data.getActiveTable());
-		
-//		SkatTable table = this.data.getSkatTable(this.data.getActiveTable());
-//		
-//		if (table.getPlayerCount() == 0) {
-//			// TODO this is a dirty hack
-//	//		table.placePlayer(new AIPlayerNN());
-//			table.placePlayer(new AIPlayerRND());
-//			table.placePlayer(new AIPlayerRND());
-//			HumanPlayer human = new HumanPlayer();
-//			human.setView(this.view);
-//			table.placePlayer(human);
-//		}
-//		
-//		table.startSkatSeries(1);
 		
 		this.view.showStartSkatSeriesDialog();
 	}
@@ -291,26 +280,38 @@ public class JSkatMaster {
 	/**
 	 * Connects to the ISS
 	 * 
-	 * @param login
-	 * @param password
-	 * @param port
+	 * @param login Login credentials
 	 * @return TRUE if the connection was established successfully
 	 */
-	public boolean connectToISS(String login, String password, int port) {
+	public boolean connectToISS(ActionEvent e) {
 		
 		log.debug("connectToISS");
-		
+
 		if (this.issConnect == null) {
-		
+			
 			this.issConnect = new ISSConnector();
 		}
 		
 		log.debug("connector created");
+
+		Object source = e.getSource();
+		String command = e.getActionCommand();
 		
-		if (!this.issConnect.isConnected()) {
-			
-			this.issConnect.setConnectionData(login, password, port);
-			this.issConnect.establishConnection();
+		if (JSkatActions.CONNECT_TO_ISS.toString().equals(command)) {
+			if (source instanceof ISSLoginCredentials) {
+				
+				ISSLoginCredentials login = (ISSLoginCredentials) source;
+				
+				if (!this.issConnect.isConnected()) {
+
+					this.issConnect.setConnectionData(login.getLoginName(), login.getPassword(), login.getPort());
+					this.issConnect.establishConnection();
+				}
+			}
+			else {
+				
+				log.error("Wrong source for " + command);
+			}
 		}
 		
 		return this.issConnect.isConnected();

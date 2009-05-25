@@ -102,7 +102,7 @@ public class ISSInputChannel extends Thread {
 		}
 		else if (first.equals("create")) {
 			
-			handleTableCreationMessage(token);
+			handleTableUpdateMessage(token);
 		}
 		else if (first.equals("table")) {
 			
@@ -156,7 +156,7 @@ public class ISSInputChannel extends Thread {
 		
 	}
 
-	private void handleTableCreationMessage(StringTokenizer token) {
+	private void handleTableUpdateMessage(StringTokenizer token) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -167,26 +167,46 @@ public class ISSInputChannel extends Thread {
 		
 		if (plusMinus.equals("+")) {
 			
-			log.debug("addTableToList();");
+			addOrUpdateTableList(token);
 		}
 		else if (plusMinus.equals("-")) {
 			
-			log.debug("removeTableFromList();");
+			removeTableFromList(token);
 		}
 	}
 
+	private void addOrUpdateTableList(StringTokenizer token) {
+		
+		log.debug("addOrUpdateTableList()");
+	}
+	
+	private void removeTableFromList(StringTokenizer token) {
+		
+		log.debug("removeTableFromList();");
+	}
+	
 	private void handleClientListMessage(StringTokenizer token) {
 		
 		String plusMinus = token.nextToken();
 		
 		if (plusMinus.equals("+")) {
 			
-			log.debug("addClientToList();");
+			addOrUpdateClientList(token);
 		}
 		else if (plusMinus.equals("-")) {
 			
-			log.debug("removeClientFromList();");
+			removeClientFromList(token);
 		}
+	}
+
+	private void addOrUpdateClientList(StringTokenizer token) {
+		
+		log.debug("addOrUpdateClientList()");
+	}
+	
+	private void removeClientFromList(StringTokenizer token) {
+		
+		log.debug("removeClientFromList()");
 	}
 	
 	private void handleWelcomeMessage(StringTokenizer token) {

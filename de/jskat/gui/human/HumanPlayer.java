@@ -209,16 +209,17 @@ public class HumanPlayer extends AbstractJSkatPlayer
 		}
 		else if (JSkatActions.DISCARD_CARDS.toString().equals(command)) {
 			
-			if (source instanceof JButton) {
-				log.debug("ONLY JBUTTON");
-				interrupt = false;
-			}
-			else {
+			if (source instanceof CardList) {
 				// player discarded cards
 				this.discardSkat = (CardList) source;
 				
 				this.cards.remove(this.discardSkat.get(0));
 				this.cards.remove(this.discardSkat.get(1));
+			}
+			else {
+				
+				log.error("Wrong source for " + command);
+				interrupt = false;
 			}
 		}
 		else if (JSkatActions.ANNOUNCE_GAME.toString().equals(command)) {

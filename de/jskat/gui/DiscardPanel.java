@@ -65,7 +65,7 @@ class DiscardPanel extends HandPanel {
 		add(cardPanels, "grow, wrap"); //$NON-NLS-1$
 		
 		JPanel buttonPanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-3$
-		ActionMap actions = parent.getActionMap();
+		ActionMap actions = this.parent.getActionMap();
 		final JButton discardButton = new JButton(actions.get(JSkatActions.DISCARD_CARDS));
 		discardButton.addActionListener(new ActionListener() {
 			@Override

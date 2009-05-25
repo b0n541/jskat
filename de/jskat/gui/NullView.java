@@ -45,12 +45,6 @@ public class NullView implements JSkatView {
 	}
 
 	@Override
-	public boolean connectToISS(String login, String password, int port) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public void removeCard(String tableName, Player player, Card card) {
 		// TODO Auto-generated method stub
 

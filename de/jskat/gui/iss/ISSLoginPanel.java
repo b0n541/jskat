@@ -13,12 +13,10 @@ package de.jskat.gui.iss;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
+import javax.swing.ActionMap;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -28,32 +26,42 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import de.jskat.gui.JSkatView;
+import de.jskat.data.iss.ISSLoginCredentials;
+import de.jskat.gui.JSkatTabPanel;
+import de.jskat.gui.action.JSkatActions;
+import de.jskat.gui.img.JSkatGraphicRepository;
+import de.jskat.util.CardList;
 
 /**
  * Panel for login into International Skat Server (ISS)
  */
-public class ISSLoginPanel extends JPanel {
+public class ISSLoginPanel extends JSkatTabPanel {
 
 	private static final long serialVersionUID = 1L;
-
 	private static Log log = LogFactory.getLog(ISSLoginPanel.class);
 
+	private JTextField loginField;
+	private JPasswordField passwordField;
+	
 	/**
-	 * Constructor
-	 * 
-	 * @param newMainView Main view
+	 * @param newTableName
+	 * @param jskatBitmaps
+	 * @param actions
 	 */
-	public ISSLoginPanel(JSkatView newMainView) {
+	public ISSLoginPanel(String newTableName,
+			JSkatGraphicRepository jskatBitmaps, ActionMap actions) {
 		
-		super();
-		initPanel();
-		this.mainView = newMainView;
+		super(newTableName, jskatBitmaps, actions);
+		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
 	}
 	
-	private void initPanel() {
+	/**
+	 * @see JSkatTabPanel#initPanel()
+	 */
+	@Override
+	protected void initPanel() {
 		
-		setLayout(new MigLayout("fill")); //$NON-NLS-1$
+		setLayout(new MigLayout("fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
 		add(getLoginPanel(), "center"); //$NON-NLS-1$
 	}
@@ -69,50 +77,25 @@ public class ISSLoginPanel extends JPanel {
 		login.add(new JLabel("Password"));
 		this.passwordField = new JPasswordField(10);
 		login.add(this.passwordField, "growx, wrap"); //$NON-NLS-1$
-		JButton loginButton = new JButton("Connect");
+		final JButton loginButton = new JButton(this.getActionMap().get(JSkatActions.CONNECT_TO_ISS));
 		loginButton.addActionListener(new ActionListener() {
-	        public void actionPerformed(ActionEvent e) {
-	            login();  // code to execute when button is pressed
-	        }
-	    });
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				ISSLoginCredentials login = new ISSLoginCredentials();
+				login.setLoginName(loginField.getText());
+				login.setPassword(new String(passwordField.getPassword()));
+				// FIXME must be setable
+				login.setPort(80);
+				
+				e.setSource(login);  
+				// fire event again
+				loginButton.dispatchEvent(e);
+			}
+		});
+
 		login.add(loginButton, "span 2, align center"); //$NON-NLS-1$
 
 		return login;
 	}
-	
-	/**
-	 * Processes the login into ISS
-	 * 
-	 * @return TRUE, if the login was successful
-	 */
-	protected boolean login() {
-		
-		log.debug("login");
-		
-		boolean result;
-		String login = this.loginField.getText();
-		String password = new String(this.passwordField.getPassword());
-		
-		if (login.length() == 0 || password.length() == 0) {
-			
-			JOptionPane.showMessageDialog(this, "Please provide credentials for ISS.", "No credentials", JOptionPane.ERROR_MESSAGE);
-			result = false;
-		}
-		else {
-			// TODO make the port number adjustable
-			result = this.mainView.connectToISS(login, password, 80);
-			
-			if (!result) {
-				
-				JOptionPane.showMessageDialog(this, "Login to ISS failed.", "Login failed", JOptionPane.ERROR_MESSAGE);
-			}
-		}
-		
-		return true;
-	}
-	
-	private JSkatView mainView;
-	
-	private JTextField loginField;
-	private JPasswordField passwordField;
 }

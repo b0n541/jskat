@@ -18,7 +18,6 @@ import java.util.Map;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -27,7 +26,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
-import javax.swing.SwingConstants;
 
 import net.miginfocom.swing.MigLayout;
 import de.jskat.control.JSkatMaster;
@@ -46,6 +44,7 @@ import de.jskat.gui.action.human.PlayCardAction;
 import de.jskat.gui.action.human.PlayHandGameAction;
 import de.jskat.gui.action.human.PutCardIntoSkatAction;
 import de.jskat.gui.action.human.TakeCardFromSkatAction;
+import de.jskat.gui.action.iss.ConnectToISSAction;
 import de.jskat.gui.action.iss.ShowLoginPanelAction;
 import de.jskat.gui.action.main.AboutAction;
 import de.jskat.gui.action.main.ContinueSkatSeriesAction;
@@ -76,7 +75,6 @@ public class JSkatViewImpl implements JSkatView {
 	private SkatSeriesStartDialog skatSeriesStartDialog;
 	private JTabbedPane tabs;
 	private Map<String, SkatTablePanel> tables;
-	private JSkatMaster jskat;
 	private JSkatGraphicRepository bitmaps;
 	private ActionMap actions;
 
@@ -87,75 +85,76 @@ public class JSkatViewImpl implements JSkatView {
 	 *            JSkatMaster
 	 * @param jskatBitmaps Bitmaps for JSkat
 	 */
-	public JSkatViewImpl(JSkatMaster master, JSkatGraphicRepository jskatBitmaps) {
+	public JSkatViewImpl(JSkatMaster jskat, JSkatGraphicRepository jskatBitmaps) {
 
-		this.jskat = master;
 		this.bitmaps = jskatBitmaps;
 		this.tables = new HashMap<String, SkatTablePanel>();
-		initActionMap();
-		initGUI();
+		initActionMap(jskat);
+		initGUI(jskat);
 
-		this.skatSeriesStartDialog = new SkatSeriesStartDialog(this.jskat, this.mainFrame);
+		this.skatSeriesStartDialog = new SkatSeriesStartDialog(jskat, this.mainFrame);
 
 		this.mainFrame.setVisible(true);
 	}
 
-	private void initActionMap() {
+	private void initActionMap(JSkatMaster jskat) {
 
 		this.actions = new ActionMap();
 
 		// common actions
-		this.actions.put(JSkatActions.LOAD_GAME, new LoadGameAction(this.jskat,
+		this.actions.put(JSkatActions.LOAD_SERIES, new LoadGameAction(jskat,
 				this.bitmaps));
-		this.actions.put(JSkatActions.SAVE_GAME, new SaveGameAction(this.jskat,
+		this.actions.put(JSkatActions.SAVE_SERIES, new SaveGameAction(jskat,
 				this.bitmaps));
-		this.actions.put(JSkatActions.SAVE_GAME_AS, new SaveGameAsAction(this.jskat,
+		this.actions.put(JSkatActions.SAVE_SERIES_AS, new SaveGameAsAction(jskat,
 				this.bitmaps));
 		this.actions.put(JSkatActions.HELP,
-				new HelpAction(this.jskat, this.bitmaps));
-		this.actions.put(JSkatActions.EXIT_JSKAT, new ExitAction(this.jskat,
+				new HelpAction(jskat, this.bitmaps));
+		this.actions.put(JSkatActions.EXIT_JSKAT, new ExitAction(jskat,
 				this.bitmaps));
-		this.actions.put(JSkatActions.ABOUT_JSKAT, new AboutAction(this.jskat,
+		this.actions.put(JSkatActions.ABOUT_JSKAT, new AboutAction(jskat,
 				this.bitmaps));
 		// skat table actions
 		this.actions.put(JSkatActions.CREATE_LOCAL_TABLE,
-				new CreateTableAction(this.jskat, this.bitmaps));
+				new CreateTableAction(jskat, this.bitmaps));
 		this.actions.put(JSkatActions.START_LOCAL_SERIES,
-				new StartSkatSeriesAction(this.jskat, this.bitmaps));
+				new StartSkatSeriesAction(jskat, this.bitmaps));
 		this.actions.put(JSkatActions.CONTINUE_LOCAL_SERIES,
-				new ContinueSkatSeriesAction(this.jskat));
+				new ContinueSkatSeriesAction(jskat));
 		// ISS actions
+		this.actions.put(JSkatActions.SHOW_ISS_LOGIN,
+				new ShowLoginPanelAction(jskat, this.bitmaps));
 		this.actions.put(JSkatActions.CONNECT_TO_ISS,
-				new ShowLoginPanelAction(this.jskat, this.bitmaps));
+				new ConnectToISSAction(jskat, this.bitmaps));
 		// Neural network actions
 		this.actions.put(JSkatActions.TRAIN_NEURAL_NETWORKS,
-				new TrainNeuralNetworksAction(this.jskat));
+				new TrainNeuralNetworksAction(jskat));
 		this.actions.put(JSkatActions.LOAD_NEURAL_NETWORKS,
-				new LoadNeuralNetworksAction(this.jskat, this.bitmaps));
+				new LoadNeuralNetworksAction(jskat, this.bitmaps));
 		this.actions.put(JSkatActions.SAVE_NEURAL_NETWORKS,
-				new SaveNeuralNetworksAction(this.jskat, this.bitmaps));
+				new SaveNeuralNetworksAction(jskat, this.bitmaps));
 		// Human player actions
 		this.actions.put(JSkatActions.HOLD_BID,
-				new HoldBidAction(this.jskat));
+				new HoldBidAction(jskat));
 		this.actions.put(JSkatActions.PASS_BID,
-				new PassBidAction(this.jskat));
+				new PassBidAction(jskat));
 		this.actions.put(JSkatActions.LOOK_INTO_SKAT,
-				new LookIntoSkatAction(this.jskat));
+				new LookIntoSkatAction(jskat));
 		this.actions.put(JSkatActions.PLAY_HAND_GAME,
-				new PlayHandGameAction(this.jskat));
+				new PlayHandGameAction(jskat));
 		this.actions.put(JSkatActions.ANNOUNCE_GAME,
-				new GameAnnounceAction(this.jskat));
+				new GameAnnounceAction(jskat));
 		this.actions.put(JSkatActions.PUT_CARD_INTO_SKAT,
-				new PutCardIntoSkatAction(this.jskat));
+				new PutCardIntoSkatAction(jskat));
 		this.actions.put(JSkatActions.TAKE_CARD_FROM_SKAT,
-				new TakeCardFromSkatAction(this.jskat));
+				new TakeCardFromSkatAction(jskat));
 		this.actions.put(JSkatActions.DISCARD_CARDS,
-				new DiscardAction(this.jskat));
+				new DiscardAction(jskat));
 		this.actions.put(JSkatActions.PLAY_CARD,
-				new PlayCardAction(this.jskat));
+				new PlayCardAction(jskat));
 	}
 
-	private void initGUI() {
+	private void initGUI(JSkatMaster jskat) {
 
 		this.mainFrame = new JFrame("JSkat"); //$NON-NLS-1$
 		this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -171,7 +170,7 @@ public class JSkatViewImpl implements JSkatView {
 		buttonPanel.setLayout(new MigLayout());
 		buttonPanel.add(new ToolbarButton(this.actions.get(JSkatActions.CREATE_LOCAL_TABLE)));
 		buttonPanel.add(new ToolbarButton(this.actions.get(JSkatActions.START_LOCAL_SERIES)));
-		buttonPanel.add(new ToolbarButton(this.actions.get(JSkatActions.CONNECT_TO_ISS)));
+		buttonPanel.add(new ToolbarButton(this.actions.get(JSkatActions.SHOW_ISS_LOGIN)));
 		buttonPanel.add(new ToolbarButton(this.actions.get(JSkatActions.HELP)));
 		mainPanel.add(buttonPanel, BorderLayout.NORTH);
 
@@ -180,7 +179,7 @@ public class JSkatViewImpl implements JSkatView {
 		this.tabs.setAutoscrolls(true);
 		mainPanel.add(this.tabs, BorderLayout.CENTER);
 
-		this.tabs.addChangeListener(new JSkatViewChangeListener(this.jskat));
+		this.tabs.addChangeListener(new JSkatViewChangeListener(jskat));
 		
 		this.mainFrame.setContentPane(mainPanel);
 		this.mainFrame.pack();
@@ -191,9 +190,9 @@ public class JSkatViewImpl implements JSkatView {
 		JMenuBar menu = new JMenuBar();
 
 		JMenu fileMenu = new JMenu("File");
-		fileMenu.add(new JMenuItem(this.actions.get(JSkatActions.LOAD_GAME)));
-		fileMenu.add(new JMenuItem(this.actions.get(JSkatActions.SAVE_GAME)));
-		fileMenu.add(new JMenuItem(this.actions.get(JSkatActions.SAVE_GAME_AS)));
+		fileMenu.add(new JMenuItem(this.actions.get(JSkatActions.LOAD_SERIES)));
+		fileMenu.add(new JMenuItem(this.actions.get(JSkatActions.SAVE_SERIES)));
+		fileMenu.add(new JMenuItem(this.actions.get(JSkatActions.SAVE_SERIES_AS)));
 		fileMenu.add(new JSeparator());
 		fileMenu.add(new JMenuItem(this.actions.get(JSkatActions.EXIT_JSKAT)));
 		menu.add(fileMenu);
@@ -211,7 +210,7 @@ public class JSkatViewImpl implements JSkatView {
 		menu.add(neuralNetworkMenu);
 
 		JMenu issMenu = new JMenu("ISS");
-		issMenu.add(new JMenuItem(this.actions.get(JSkatActions.CONNECT_TO_ISS)));
+		issMenu.add(new JMenuItem(this.actions.get(JSkatActions.SHOW_ISS_LOGIN)));
 		issMenu.add(new JMenuItem("Create new skat table"));
 		issMenu.add(new JMenuItem("Invite player"));
 		menu.add(issMenu);
@@ -286,15 +285,15 @@ public class JSkatViewImpl implements JSkatView {
 	 */
 	public void showISSLoginPanel() {
 
-		this.tabs.add("ISS login", new ISSLoginPanel(this));
+		this.tabs.add("ISS login", new ISSLoginPanel("ISS login", this.bitmaps, this.actions));
 	}
 
 	/**
 	 * @see JSkatView#connectToISS(String, String, int)
 	 */
-	public boolean connectToISS(String login, String password, int port) {
+	public void connectToISS(String login, String password, int port) {
 
-		return this.jskat.connectToISS(login, password, port);
+//		this.actions.get(CONNECT_TO_ISS)(login, password, port);
 	}
 
 	/**
@@ -393,7 +392,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#addTrickCard(String, Player, Card)
+	 * @see JSkatView#setTrickCard(String, Player, Card)
 	 */
 	@Override
 	public void setTrickCard(String tableName, Player position, Card card) {
