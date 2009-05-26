@@ -25,15 +25,12 @@ import de.jskat.ai.nn.AIPlayerNN;
 import de.jskat.ai.nn.data.SkatNetworks;
 import de.jskat.ai.nn.train.NNTrainer;
 import de.jskat.ai.rnd.AIPlayerRND;
-import de.jskat.control.iss.ISSConnector;
+import de.jskat.control.iss.ISSController;
 import de.jskat.data.JSkatApplicationData;
 import de.jskat.data.JSkatOptions;
-import de.jskat.data.iss.ISSLoginCredentials;
 import de.jskat.gui.JSkatView;
-import de.jskat.gui.action.JSkatActions;
 import de.jskat.gui.human.HumanPlayer;
 import de.jskat.util.Card;
-import de.jskat.util.CardList;
 import de.jskat.util.GameType;
 
 /**
@@ -46,7 +43,8 @@ public class JSkatMaster {
 	private JSkatOptions options;
 	private JSkatApplicationData data;
 	private JSkatView view;
-	private ISSConnector issConnect;
+	
+	private ISSController issControl;
 	
 	/**
 	 * Constructor
@@ -57,6 +55,8 @@ public class JSkatMaster {
 		
 		this.data = new JSkatApplicationData(jskatOptions);
 		this.options = jskatOptions;
+		
+		this.issControl = new ISSController(this, this.view);
 	}
 
 	/**
@@ -280,48 +280,11 @@ public class JSkatMaster {
 	public void setView(JSkatView newView) {
 		
 		this.view = newView;
+		
+		// TODO check whether this is a dirty hack or not
+		this.issControl = new ISSController(this, this.view);
 	}
 
-	/**
-	 * Connects to the ISS
-	 * 
-	 * @param login Login credentials
-	 * @return TRUE if the connection was established successfully
-	 */
-	public boolean connectToISS(ActionEvent e) {
-		
-		log.debug("connectToISS");
-
-		if (this.issConnect == null) {
-			
-			this.issConnect = new ISSConnector();
-		}
-		
-		log.debug("connector created");
-
-		Object source = e.getSource();
-		String command = e.getActionCommand();
-		
-		if (JSkatActions.CONNECT_TO_ISS.toString().equals(command)) {
-			if (source instanceof ISSLoginCredentials) {
-				
-				ISSLoginCredentials login = (ISSLoginCredentials) source;
-				
-				if (!this.issConnect.isConnected()) {
-
-					this.issConnect.setConnectionData(login.getLoginName(), login.getPassword(), login.getPort());
-					this.issConnect.establishConnection();
-				}
-			}
-			else {
-				
-				log.error("Wrong source for " + command);
-			}
-		}
-		
-		return this.issConnect.isConnected();
-	}
-	
 	/**
 	 * Exits JSkat
 	 */
@@ -330,14 +293,6 @@ public class JSkatMaster {
 		if (this.view.showExitDialog() == JOptionPane.YES_OPTION) {
 			
 			this.options.saveJSkatProperties();
-			
-			if (this.issConnect != null &&
-					this.issConnect.isConnected()) {
-				
-				log.debug("connection to ISS still open");
-				
-				this.issConnect.closeConnection();
-			}
 			
 			System.exit(0);
 		}
@@ -351,14 +306,6 @@ public class JSkatMaster {
 		this.view.showAboutMessage();
 	}
 
-	/**
-	 * Shows the login panel for ISS
-	 */
-	public void showISSLoginPanel() {
-		
-		this.view.showISSLoginPanel();
-	}
-	
 	/**
 	 * Set the active table
 	 * 
@@ -458,5 +405,10 @@ public class JSkatMaster {
 	public void saveGame(boolean newName) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public ISSController getISSController() {
+		
+		return this.issControl;
 	}
 }
