@@ -20,16 +20,20 @@ import java.util.StringTokenizer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.jskat.control.JSkatMaster;
+
 /**
  * Reads data from ISS until an interrupt signal occures
  * 
  * Idea was taken from the book Java Threads by Scott Oaks and Henry Wong
  */
-public class ISSInputChannel extends Thread {
+public class InputChannel extends Thread {
 
-	private Log log = LogFactory.getLog(ISSInputChannel.class);
+	private Log log = LogFactory.getLog(InputChannel.class);
 	
-	private ISSConnector connect;
+	private ISSController issControl;
+	
+	private Connector connect;
 	private final static int protocolVersion = 14;
 
     Object lock = new Object();
@@ -42,8 +46,9 @@ public class ISSInputChannel extends Thread {
      * 
      * @param is Input stream
      */
-    public ISSInputChannel(ISSConnector conn, InputStream is) {
+    public InputChannel(ISSController controller, Connector conn, InputStream is) {
 
+    	this.issControl = controller;
     	this.connect = conn;
     	this.stream = is;
         this.reader = new BufferedReader(new InputStreamReader(this.stream));
@@ -191,7 +196,7 @@ public class ISSInputChannel extends Thread {
 		
 		if (plusMinus.equals("+")) {
 			
-			addOrUpdateClientList(token);
+			updatePlayerList(token);
 		}
 		else if (plusMinus.equals("-")) {
 			
@@ -199,9 +204,17 @@ public class ISSInputChannel extends Thread {
 		}
 	}
 
-	private void addOrUpdateClientList(StringTokenizer token) {
+	private void updatePlayerList(StringTokenizer token) {
 		
-		log.debug("addOrUpdateClientList()");
+		String playerName = token.nextToken();
+		// ignore next token
+		token.nextToken();
+		String language = token.nextToken();
+		long gamesPlayed = Long.parseLong(token.nextToken());
+		double strength = Double.parseDouble(token.nextToken());
+		// ignore rest of the tokens
+		
+		this.issControl.updateISSPlayerList(playerName, language, gamesPlayed, strength);
 	}
 	
 	private void removeClientFromList(StringTokenizer token) {
@@ -232,17 +245,17 @@ public class ISSInputChannel extends Thread {
 		public void run() {
 
         	String line;
-            while (!ISSInputChannel.this.done) {
+            while (!InputChannel.this.done) {
                 try {
-                	line = ISSInputChannel.this.reader.readLine();
+                	line = InputChannel.this.reader.readLine();
                 	handleMessage(line);
                 } catch (IOException ioe) {
-                    ISSInputChannel.this.done = true;
+                    InputChannel.this.done = true;
                 }
             }
 
-            synchronized(ISSInputChannel.this.lock) {
-                ISSInputChannel.this.lock.notify( );
+            synchronized(InputChannel.this.lock) {
+                InputChannel.this.lock.notify( );
             }
         }
     }

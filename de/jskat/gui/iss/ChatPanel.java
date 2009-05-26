@@ -27,14 +27,14 @@ import net.miginfocom.swing.MigLayout;
 /**
  * Chat panel for ISS
  */
-class ISSChatPanel extends JPanel implements ActionListener {
+class ChatPanel extends JPanel implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * Constructor
 	 */
-	public ISSChatPanel() {
+	public ChatPanel() {
 		
 		super();
 		initPanel();

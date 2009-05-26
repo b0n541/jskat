@@ -18,22 +18,31 @@ import java.net.Socket;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.jskat.control.JSkatMaster;
+
 /**
  * Connector to Internation Skat Server ISS
  */
-public class ISSConnector {
+public class Connector {
 
-	private static Log log = LogFactory.getLog(ISSConnector.class);
+	private static Log log = LogFactory.getLog(Connector.class);
 
 	private Socket socket;
 	private PrintWriter output;
-	private ISSInputChannel issIn;
-	private ISSOutputChannel issOut;
+	private InputChannel issIn;
+	private OutputChannel issOut;
 	
 	private String loginName;
 	private String password;
 	private int port;
 
+	private ISSController issControl;
+
+	public Connector(ISSController controller) {
+		
+		this.issControl = controller;
+	}
+	
 	public void setConnectionData(String newLoginName, String newPassword, int newPort) {
 		
 		this.loginName = newLoginName;
@@ -62,8 +71,8 @@ public class ISSConnector {
 		try {
 			this.socket = new Socket("bodo1.cs.ualberta.ca", port);
 			this.output = new PrintWriter(this.socket.getOutputStream(), true);
-			this.issOut = new ISSOutputChannel(this.output);
-			this.issIn = new ISSInputChannel(this, this.socket.getInputStream());
+			this.issOut = new OutputChannel(this.output);
+			this.issIn = new InputChannel(this.issControl, this, this.socket.getInputStream());
 			this.issIn.start();
 			
 		} catch (java.net.UnknownHostException e) {

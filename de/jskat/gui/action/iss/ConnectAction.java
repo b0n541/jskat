@@ -22,19 +22,19 @@ import de.jskat.data.iss.ISSLoginCredentials;
 import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.action.JSkatActions;
 import de.jskat.gui.img.JSkatGraphicRepository;
-import de.jskat.gui.iss.ISSLoginPanel;
+import de.jskat.gui.iss.LoginPanel;
 
 /**
  * Implements the action for showing about dialog
  */
-public class ConnectToISSAction extends AbstractJSkatAction {
+public class ConnectAction extends AbstractJSkatAction {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
-	public ConnectToISSAction(JSkatMaster controller, JSkatGraphicRepository bitmaps) {
+	public ConnectAction(JSkatMaster controller, JSkatGraphicRepository bitmaps) {
 		
 		super(controller);
 		
@@ -57,6 +57,6 @@ public class ConnectToISSAction extends AbstractJSkatAction {
 
 		System.out.println(e.getSource() + " " + e.getActionCommand());
 		
-		this.jskat.connectToISS(e);
+		this.jskat.getISSController().connectToISS(e);
 	}
 }

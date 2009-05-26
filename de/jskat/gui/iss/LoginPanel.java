@@ -30,15 +30,14 @@ import de.jskat.data.iss.ISSLoginCredentials;
 import de.jskat.gui.JSkatTabPanel;
 import de.jskat.gui.action.JSkatActions;
 import de.jskat.gui.img.JSkatGraphicRepository;
-import de.jskat.util.CardList;
 
 /**
  * Panel for login into International Skat Server (ISS)
  */
-public class ISSLoginPanel extends JSkatTabPanel {
+public class LoginPanel extends JSkatTabPanel {
 
 	private static final long serialVersionUID = 1L;
-	private static Log log = LogFactory.getLog(ISSLoginPanel.class);
+	private static Log log = LogFactory.getLog(LoginPanel.class);
 
 	private JTextField loginField;
 	private JPasswordField passwordField;
@@ -48,7 +47,7 @@ public class ISSLoginPanel extends JSkatTabPanel {
 	 * @param jskatBitmaps
 	 * @param actions
 	 */
-	public ISSLoginPanel(String newTableName,
+	public LoginPanel(String newTableName,
 			JSkatGraphicRepository jskatBitmaps, ActionMap actions) {
 		
 		super(newTableName, jskatBitmaps, actions);
@@ -61,7 +60,7 @@ public class ISSLoginPanel extends JSkatTabPanel {
 	@Override
 	protected void initPanel() {
 		
-		setLayout(new MigLayout("fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		setLayout(new MigLayout("fill")); //$NON-NLS-1$
 		
 		add(getLoginPanel(), "center"); //$NON-NLS-1$
 	}

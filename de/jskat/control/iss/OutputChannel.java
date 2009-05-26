@@ -19,16 +19,16 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Handles all incoming messages from ISS
  */
-class ISSOutputChannel {
+class OutputChannel {
 
-	private static Log log = LogFactory.getLog(ISSOutputChannel.class);
+	private static Log log = LogFactory.getLog(OutputChannel.class);
 	
 	/**
 	 * Constructor
 	 * 
 	 * @param newOutput Input stream from ISS
 	 */
-	ISSOutputChannel(PrintWriter newOutput) {
+	OutputChannel(PrintWriter newOutput) {
 		
 		this.output = newOutput;
 	}
