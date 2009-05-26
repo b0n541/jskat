@@ -33,7 +33,7 @@ public class NullView implements JSkatView {
 	}
 
 	@Override
-	public void createISSTablePanel(String name) {
+	public void createISSTable(String name) {
 		// TODO Auto-generated method stub
 
 	}
@@ -82,7 +82,7 @@ public class NullView implements JSkatView {
 	}
 
 	@Override
-	public void showISSLoginPanel() {
+	public void showISSLogin() {
 		// TODO Auto-generated method stub
 
 	}
@@ -207,5 +207,24 @@ public class NullView implements JSkatView {
 	@Override
 	public void showStartSkatSeriesDialog() {
 		// empty method
+	}
+
+	@Override
+	public void updateISSLobbyPlayerList(String playerName, String language,
+			long gamesPlayed, double strength) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeFromISSLobbyPlayerList() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void showISSLobby() {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -70,16 +70,21 @@ public interface JSkatView {
 	public abstract void showGameResults();
 	
 	/**
-	 * Shows the login panel for ISS
+	 * Shows the login for ISS
 	 */
-	public abstract void showISSLoginPanel();
+	public abstract void showISSLogin();
 
 	/**
-	 * Creates ISS table panel
+	 * Shows the lobby for ISS
+	 */
+	public abstract void showISSLobby();
+
+	/**
+	 * Creates ISS table
 	 * 
 	 * @param name Name of the table
 	 */
-	public abstract void createISSTablePanel(String name);
+	public abstract void createISSTable(String name);
 
 	/**
 	 * Creates a local table panel
@@ -252,4 +257,16 @@ public interface JSkatView {
 	 * Shows the start dialog for skat series
 	 */
 	public abstract void showStartSkatSeriesDialog();
+
+	/**
+	 * Updates the client list of the ISS lobby
+	 * 
+	 * @param playerName Name of the player 
+	 * @param language Languages spoken by the human player or '-' for AI player 
+	 * @param gamesPlayed Number of games played so far
+	 * @param strength Playing strength after ISS evaluation
+	 */
+	public abstract void updateISSLobbyPlayerList(String playerName, String language, long gamesPlayed, double strength);
+	
+	public abstract void removeFromISSLobbyPlayerList();
 }

@@ -44,7 +44,7 @@ import de.jskat.gui.action.human.PlayCardAction;
 import de.jskat.gui.action.human.PlayHandGameAction;
 import de.jskat.gui.action.human.PutCardIntoSkatAction;
 import de.jskat.gui.action.human.TakeCardFromSkatAction;
-import de.jskat.gui.action.iss.ConnectToISSAction;
+import de.jskat.gui.action.iss.ConnectAction;
 import de.jskat.gui.action.iss.ShowLoginPanelAction;
 import de.jskat.gui.action.main.AboutAction;
 import de.jskat.gui.action.main.ContinueSkatSeriesAction;
@@ -60,8 +60,9 @@ import de.jskat.gui.action.main.StartSkatSeriesAction;
 import de.jskat.gui.action.main.TrainNeuralNetworksAction;
 import de.jskat.gui.help.JSkatHelpDialog;
 import de.jskat.gui.img.JSkatGraphicRepository;
-import de.jskat.gui.iss.ISSLoginPanel;
-import de.jskat.gui.iss.ISSTablePanel;
+import de.jskat.gui.iss.LobbyPanel;
+import de.jskat.gui.iss.LoginPanel;
+import de.jskat.gui.iss.TablePanel;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
 import de.jskat.util.Player;
@@ -77,6 +78,8 @@ public class JSkatViewImpl implements JSkatView {
 	private Map<String, SkatTablePanel> tables;
 	private JSkatGraphicRepository bitmaps;
 	private ActionMap actions;
+	
+	private LobbyPanel issLobby;
 
 	/**
 	 * Constructor
@@ -125,7 +128,7 @@ public class JSkatViewImpl implements JSkatView {
 		this.actions.put(JSkatActions.SHOW_ISS_LOGIN,
 				new ShowLoginPanelAction(jskat, this.bitmaps));
 		this.actions.put(JSkatActions.CONNECT_TO_ISS,
-				new ConnectToISSAction(jskat, this.bitmaps));
+				new ConnectAction(jskat, this.bitmaps));
 		// Neural network actions
 		this.actions.put(JSkatActions.TRAIN_NEURAL_NETWORKS,
 				new TrainNeuralNetworksAction(jskat));
@@ -281,14 +284,6 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showISSLoginPanel()
-	 */
-	public void showISSLoginPanel() {
-
-		this.tabs.add("ISS login", new ISSLoginPanel("ISS login", this.bitmaps, this.actions));
-	}
-
-	/**
 	 * @see JSkatView#connectToISS(String, String, int)
 	 */
 	public void connectToISS(String login, String password, int port) {
@@ -297,15 +292,15 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#createISSTablePanel(String)
+	 * @see JSkatView#createISSTable(String)
 	 */
-	public void createISSTablePanel(String name) {
+	public void createISSTable(String name) {
 		// FIXME not needed, do it in createSkatTablePanel
-		this.tabs.add("ISS table no. #", new ISSTablePanel(name, this.bitmaps, this.actions));
+		this.tabs.add("ISS table no. #", new TablePanel(name, this.bitmaps, this.actions));
 	}
 
 	/**
-	 * @see JSkatView#createISSTablePanel(String)
+	 * @see JSkatView#createSkatTablePanel(String)
 	 */
 	public SkatTablePanel createSkatTablePanel(String name) {
 
@@ -487,8 +482,8 @@ public class JSkatViewImpl implements JSkatView {
 	 */
 	@Override
 	public void setSkat(String tableName, CardList skat) {
-		
-		this.tables.get(tableName).setSkat(skat);
+// TODO maybe this is not needed anymore
+//		this.tables.get(tableName).setSkat(skat);
 	}
 
 	/**
@@ -516,5 +511,34 @@ public class JSkatViewImpl implements JSkatView {
 	public void showStartSkatSeriesDialog() {
 		
 		this.skatSeriesStartDialog.setVisible(true);
+	}
+
+	/**
+	 * @see JSkatView#showISSLogin()
+	 */
+	public void showISSLogin() {
+
+		this.tabs.add("ISS login", new LoginPanel("ISS login", this.bitmaps, this.actions));
+	}
+
+	@Override
+	public void updateISSLobbyPlayerList(String playerName, String language,
+			long gamesPlayed, double strength) {
+		
+		this.issLobby.updatePlayer(playerName, language, gamesPlayed, strength);
+	}
+
+	@Override
+	public void removeFromISSLobbyPlayerList() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void showISSLobby() {
+		
+		this.issLobby = new LobbyPanel("ISS lobby", this.bitmaps, this.actions);
+		this.tabs.add("ISS lobby", issLobby);
+		this.tabs.setSelectedComponent(this.issLobby);
 	}
 }
