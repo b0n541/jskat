@@ -164,8 +164,7 @@ abstract class HandPanel extends JPanel {
 		int i = 0;
 		for (Card card : this.cards) {
 			
-			// FIXME dirty hack
-			if (i < 10) {
+			if (i < this.cards.size()) {
 				
 				this.panels.get(i).setCard(card.getSuit(), card.getRank());
 			}

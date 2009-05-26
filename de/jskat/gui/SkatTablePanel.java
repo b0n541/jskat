@@ -195,7 +195,7 @@ public class SkatTablePanel extends JSkatTabPanel {
 
 	private PlayerPanel getPlayerPanel() {
 
-		return new PlayerPanel(this, this.bitmaps, 10);
+		return new PlayerPanel(this, this.bitmaps, 12);
 	}
 
 	/**
@@ -481,8 +481,8 @@ public class SkatTablePanel extends JSkatTabPanel {
 	}
 
 	void setSkat(CardList skat) {
-
-		this.discardPanel.setSkat(skat);
+// TODO maybe this is not needed anymore
+//		this.discardPanel.setSkat(skat);
 	}
 
 	void takeCardFromSkat(Card card) {
