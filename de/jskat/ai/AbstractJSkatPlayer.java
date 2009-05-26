@@ -15,11 +15,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.Trick;
-import de.jskat.util.CardList;
 import de.jskat.util.Card;
+import de.jskat.util.CardList;
 import de.jskat.util.GameType;
 import de.jskat.util.Player;
-import de.jskat.util.SkatConstants;
 import de.jskat.util.rule.BasicSkatRules;
 import de.jskat.util.rule.SkatRuleFactory;
 
