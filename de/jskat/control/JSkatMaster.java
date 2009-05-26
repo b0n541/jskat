@@ -20,6 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.ai.JSkatPlayer;
+import de.jskat.ai.mjl.AIPlayerMJL;
 import de.jskat.ai.nn.AIPlayerNN;
 import de.jskat.ai.nn.data.SkatNetworks;
 import de.jskat.ai.nn.train.NNTrainer;
@@ -122,6 +123,10 @@ public class JSkatMaster {
 			
 			player = new AIPlayerNN();
 			((AIPlayerNN) player).setIsLearning(true);
+		}
+		else if ("Algorithmic Player".equals(playerName)) {
+			
+			player = new AIPlayerMJL();
 		}
 		else if ("Human Player".equals(playerName)) {
 			
