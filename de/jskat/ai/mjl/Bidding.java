@@ -22,14 +22,14 @@ import de.jskat.util.Suit;
  * @author Markus J. Luzius <markus@luzius.de>
  *
  */
-public class Bidding {
+class Bidding {
 
 	private Log log = LogFactory.getLog(Bidding.class);
 
     /** default constructor
 	 * @param cards hand of the player
 	 */
-	public Bidding(CardList cards) {
+	Bidding(CardList cards) {
 	    log.debug("Checking out what to bid with ["+cards+"]");
 
 		Suit mostFrequentSuitColor;
@@ -66,7 +66,7 @@ public class Bidding {
 	/** Gets the maximum bid value of the player
 	 * @return value
 	 */
-	public int getMaxBid() {
+	int getMaxBid() {
 		return maxBid;
 	}
 
