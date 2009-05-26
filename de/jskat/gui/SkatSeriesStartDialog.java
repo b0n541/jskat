@@ -52,6 +52,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 		
 		playerTypes.add("Random Player");
 		playerTypes.add("Neuronal Network Player");
+		playerTypes.add("Algorithmic Player");
 
 		root.add(new JLabel("Player 1"));
 		this.player1 = new JComboBox(playerTypes.toArray());
@@ -60,6 +61,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 		this.player2 = new JComboBox(playerTypes.toArray());
 		root.add(this.player2, "span2, growx, wrap");
 		root.add(new JLabel("Player 3"));
+		// Human player can only be player 3
 		playerTypes.add("Human Player");
 		this.player3 = new JComboBox(playerTypes.toArray());
 		root.add(this.player3, "span2, growx, wrap");
