@@ -151,7 +151,7 @@ public class SkatTablePanel extends JSkatTabPanel {
 
 	private OpponentPanel getOpponentPanel() {
 
-		return new OpponentPanel(this, this.bitmaps, 10);
+		return new OpponentPanel(this, this.bitmaps, 12);
 	}
 
 	private JPanel getContextPanel() {
