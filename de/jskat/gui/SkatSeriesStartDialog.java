@@ -80,7 +80,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 		JButton cancel = new JButton("Cancel");
 		cancel.setActionCommand("CANCEL");
 		cancel.addActionListener(this);
-		buttonPanel.add(new JButton("Cancel"));
+		buttonPanel.add(cancel);
 		root.add(buttonPanel, "span 3, center");
 		
 		this.pack();
