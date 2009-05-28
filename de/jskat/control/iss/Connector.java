@@ -18,8 +18,6 @@ import java.net.Socket;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import de.jskat.control.JSkatMaster;
-
 /**
  * Connector to Internation Skat Server ISS
  */
@@ -38,11 +36,23 @@ public class Connector {
 
 	private ISSController issControl;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param controller Controller for ISS connection
+	 */
 	public Connector(ISSController controller) {
 		
 		this.issControl = controller;
 	}
 	
+	/**
+	 * Sets login credentials
+	 * 
+	 * @param newLoginName Login name
+	 * @param newPassword Password
+	 * @param newPort Port number (80, 7000, 8000 are allowed)
+	 */
 	public void setConnectionData(String newLoginName, String newPassword, int newPort) {
 		
 		this.loginName = newLoginName;
@@ -54,34 +64,33 @@ public class Connector {
 		}
 		else {
 			
-			throw new IllegalArgumentException("Unsupported port number: " + newPort);
+			throw new IllegalArgumentException("Unsupported port number: " + newPort); //$NON-NLS-1$
 		}
 	}
 	
 	/**
 	 * Establishes a connection with ISS
 	 * 
-	 * @param port (e.g. 80, 7000, 8000)
 	 * @return TRUE if the connection was successful
 	 */
 	public boolean establishConnection() {
 
-		log.debug("ISSConnector.establishConnection()");
+		log.debug("ISSConnector.establishConnection()"); //$NON-NLS-1$
 		
 		try {
-			this.socket = new Socket("bodo1.cs.ualberta.ca", port);
+			this.socket = new Socket("bodo1.cs.ualberta.ca", this.port); //$NON-NLS-1$
 			this.output = new PrintWriter(this.socket.getOutputStream(), true);
 			this.issOut = new OutputChannel(this.output);
 			this.issIn = new InputChannel(this.issControl, this, this.socket.getInputStream());
 			this.issIn.start();
 			
 		} catch (java.net.UnknownHostException e) {
-			log.error("Cannot open connection to ISS");
+			log.error("Cannot open connection to ISS"); //$NON-NLS-1$
 		} catch (java.io.IOException e) {
-			log.error("IOException: " + e.toString());
+			log.error("IOException: " + e.toString()); //$NON-NLS-1$
 		}
 		
-		log.debug("Connection established...");
+		log.debug("Connection established..."); //$NON-NLS-1$
 		
 		this.issOut.send(this.loginName);
 		
@@ -99,16 +108,16 @@ public class Connector {
 	public void closeConnection() {
 		
 		try {
-			log.debug("closing connection");
+			log.debug("closing connection"); //$NON-NLS-1$
 			this.issIn.interrupt();
-			log.debug("input channel closed");
+			log.debug("input channel closed"); //$NON-NLS-1$
 			this.output.close();
-			log.debug("output channel closed");
+			log.debug("output channel closed"); //$NON-NLS-1$
 			this.socket.close();
-			log.debug("socket closed");
+			log.debug("socket closed"); //$NON-NLS-1$
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			log.debug("ISS connector IOException");
+			log.debug("ISS connector IOException"); //$NON-NLS-1$
 			e.printStackTrace();
 		}
 	}
