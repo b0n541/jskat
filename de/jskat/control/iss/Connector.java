@@ -18,10 +18,12 @@ import java.net.Socket;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.jskat.data.iss.ISSChatMessage;
+
 /**
  * Connector to Internation Skat Server ISS
  */
-public class Connector {
+class Connector {
 
 	private static Log log = LogFactory.getLog(Connector.class);
 
@@ -41,7 +43,7 @@ public class Connector {
 	 * 
 	 * @param controller Controller for ISS connection
 	 */
-	public Connector(ISSController controller) {
+	Connector(ISSController controller) {
 		
 		this.issControl = controller;
 	}
@@ -53,7 +55,7 @@ public class Connector {
 	 * @param newPassword Password
 	 * @param newPort Port number (80, 7000, 8000 are allowed)
 	 */
-	public void setConnectionData(String newLoginName, String newPassword, int newPort) {
+	void setConnectionData(String newLoginName, String newPassword, int newPort) {
 		
 		this.loginName = newLoginName;
 		this.password = newPassword;
@@ -73,7 +75,7 @@ public class Connector {
 	 * 
 	 * @return TRUE if the connection was successful
 	 */
-	public boolean establishConnection() {
+	boolean establishConnection() {
 
 		log.debug("ISSConnector.establishConnection()"); //$NON-NLS-1$
 		
@@ -105,7 +107,7 @@ public class Connector {
 	/**
 	 * Closes the connection to ISS
 	 */
-	public void closeConnection() {
+	void closeConnection() {
 		
 		try {
 			log.debug("closing connection"); //$NON-NLS-1$
@@ -127,8 +129,13 @@ public class Connector {
 	 * 
 	 * @return TRUE if there is an open connection
 	 */
-	public boolean isConnected() {
+	boolean isConnected() {
 		
 		return this.socket != null && this.socket.isBound();
+	}
+
+	void send(ISSChatMessage message) {
+	
+		this.issOut.send("yell " + message.getMessage()); //$NON-NLS-1$
 	}
 }

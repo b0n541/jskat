@@ -13,11 +13,13 @@ package de.jskat.gui;
 
 import de.jskat.control.SkatGame;
 import de.jskat.control.SkatTable;
+import de.jskat.control.iss.ChatMessageType;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameStates;
-import de.jskat.util.CardList;
+import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.util.Card;
+import de.jskat.util.CardList;
 import de.jskat.util.Player;
 
 /**
@@ -261,12 +263,46 @@ public interface JSkatView {
 	/**
 	 * Updates the client list of the ISS lobby
 	 * 
-	 * @param playerName Name of the player 
+	 * @param playerName Player name
 	 * @param language Languages spoken by the human player or '-' for AI player 
 	 * @param gamesPlayed Number of games played so far
 	 * @param strength Playing strength after ISS evaluation
 	 */
 	public abstract void updateISSLobbyPlayerList(String playerName, String language, long gamesPlayed, double strength);
 	
-	public abstract void removeFromISSLobbyPlayerList();
+	/**
+	 * Removes a client from the list of the ISS lobby
+	 * 
+	 * @param playerName Player name
+	 */
+	public abstract void removeFromISSLobbyPlayerList(String playerName);
+
+	/**
+	 * Updates the table list of the ISS lobby
+	 * 
+	 * @param tableName Table name
+	 * @param maxPlayers Maximum players allowed on the table
+	 * @param gamesPlayed Games played so far
+	 * @param player1 Player 1 (? for free seat)
+	 * @param player2 Player 2 (? for free seat)
+	 * @param player3 Player 3 (? for free seat)
+	 */
+	public abstract void updateISSLobbyTableList(String tableName,
+			int maxPlayers, long gamesPlayed, String player1, String player2,
+			String player3);
+
+	/**
+	 * Removes a table from the table list of the ISS lobby
+	 * 
+	 * @param tableName
+	 */
+	public abstract void removeFromISSLobbyTableList(String tableName);
+
+	/**
+	 * Appends a new chat message to a chat
+	 * 
+	 * @param messageType Type of message
+	 * @param message Message
+	 */
+	public abstract void appendISSChatMessage(ChatMessageType messageType, ISSChatMessage message);
 }

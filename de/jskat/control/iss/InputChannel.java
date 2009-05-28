@@ -20,16 +20,14 @@ import java.util.StringTokenizer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import de.jskat.control.JSkatMaster;
-
 /**
  * Reads data from ISS until an interrupt signal occures
  * 
  * Idea was taken from the book Java Threads by Scott Oaks and Henry Wong
  */
-public class InputChannel extends Thread {
+class InputChannel extends Thread {
 
-	private Log log = LogFactory.getLog(InputChannel.class);
+	private static Log log = LogFactory.getLog(InputChannel.class);
 	
 	private ISSController issControl;
 	
@@ -44,9 +42,11 @@ public class InputChannel extends Thread {
     /**
      * Constructor
      * 
+     * @param controller 
+     * @param conn 
      * @param is Input stream
      */
-    public InputChannel(ISSController controller, Connector conn, InputStream is) {
+    InputChannel(ISSController controller, Connector conn, InputStream is) {
 
     	this.issControl = controller;
     	this.connect = conn;
@@ -82,52 +82,61 @@ public class InputChannel extends Thread {
         }
     }
 
-	private void handleMessage(String message) {
+	void handleMessage(String message) {
 		
-		log.debug("ISS: " + message);
+		log.debug("ISS: " + message); //$NON-NLS-1$
 		
 		StringTokenizer token = new StringTokenizer(message);
 		String first = token.nextToken();
 		
-		if (first.equals("password:")) {
+		if (first.equals("password:")) { //$NON-NLS-1$
 			
-			handlePasswordMessage(token);
+			handlePasswordMessage();
 		}
-		else if (first.equals("Welcome")) {
+		else if (first.equals("Welcome")) { //$NON-NLS-1$
 			
 			handleWelcomeMessage(token);
 		}
-		else if (first.equals("clients")) {
+		else if (first.equals("clients")) { //$NON-NLS-1$
 			
 			handleClientListMessage(token);
 		}
-		else if (first.equals("tables")) {
+		else if (first.equals("tables")) { //$NON-NLS-1$
 			
 			handleTableListMessage(token);
 		}
-		else if (first.equals("create")) {
+		else if (first.equals("create")) { //$NON-NLS-1$
 			
 			handleTableUpdateMessage(token);
 		}
-		else if (first.equals("table")) {
+		else if (first.equals("table")) { //$NON-NLS-1$
 			
 			handleTableMessage(token);
 		}
-		else if (first.equals("error")) {
+		else if (first.equals("error")) { //$NON-NLS-1$
 			
 			handleErrorMessage(token);
 		}
-		else if (first.equals("text")) {
+		else if (first.equals("text")) { //$NON-NLS-1$
 			
 			handleTextMessage(token);
 		}
+		else if (first.equals("yell")) { //$NON-NLS-1$
+			
+			handleLobbyChatMessage(token);
+		}
 		else {
 			
-			log.error("UNHANDLED MESSAGE: " + message);
+			log.error("UNHANDLED MESSAGE: " + message); //$NON-NLS-1$
 		}
 	}
 	
-	private void handlePasswordMessage(StringTokenizer token) {
+	private void handleLobbyChatMessage(StringTokenizer token) {
+		
+		this.issControl.addChatMessage(ChatMessageType.LOBBY, token);
+	}
+
+	private void handlePasswordMessage() {
 		
 		this.connect.sendPassword();
 	}
@@ -166,44 +175,76 @@ public class InputChannel extends Thread {
 		
 	}
 
+	/**
+	 * Handles a table list message
+	 * 
+	 * @param Table information
+	 */
 	private void handleTableListMessage(StringTokenizer token) {
 
 		String plusMinus = token.nextToken();
 		
-		if (plusMinus.equals("+")) {
+		if (plusMinus.equals("+")) { //$NON-NLS-1$
 			
-			addOrUpdateTableList(token);
+			updateTableList(token);
 		}
-		else if (plusMinus.equals("-")) {
+		else if (plusMinus.equals("-")) { //$NON-NLS-1$
 			
 			removeTableFromList(token);
 		}
 	}
 
-	private void addOrUpdateTableList(StringTokenizer token) {
+	/**
+	 * Adds or updates a table on the table list
+	 * 
+	 * @param token Table information
+	 */
+	private void updateTableList(StringTokenizer token) {
 		
-		log.debug("addOrUpdateTableList()");
+		String tableName = token.nextToken();
+		int maxPlayers = Integer.parseInt(token.nextToken());
+		long gamesPlayed = Long.parseLong(token.nextToken());
+		String player1 = token.nextToken();
+		String player2 = token.nextToken();
+		String player3 = token.nextToken();
+		
+		this.issControl.updateISSTableList(tableName, maxPlayers, gamesPlayed, player1, player2, player3);
 	}
 	
+	/**
+	 * Removes a table from the table list
+	 * 
+	 * @param token Table information
+	 */
 	private void removeTableFromList(StringTokenizer token) {
 		
-		log.debug("removeTableFromList();");
+		this.issControl.removeISSTableFromList(token.nextToken());
 	}
 	
+	/**
+	 * Handles a client list message
+	 * 
+	 * @param token Client information
+	 */
 	private void handleClientListMessage(StringTokenizer token) {
 		
 		String plusMinus = token.nextToken();
 		
-		if (plusMinus.equals("+")) {
+		if (plusMinus.equals("+")) { //$NON-NLS-1$
 			
 			updatePlayerList(token);
 		}
-		else if (plusMinus.equals("-")) {
+		else if (plusMinus.equals("-")) { //$NON-NLS-1$
 			
 			removeClientFromList(token);
 		}
 	}
 
+	/**
+	 * Adds or updates a player on the client list
+	 * 
+	 * @param token Player information
+	 */
 	private void updatePlayerList(StringTokenizer token) {
 		
 		String playerName = token.nextToken();
@@ -217,11 +258,21 @@ public class InputChannel extends Thread {
 		this.issControl.updateISSPlayerList(playerName, language, gamesPlayed, strength);
 	}
 	
+	/**
+	 * Removes a player from the client list
+	 * 
+	 * @param token Player information
+	 */
 	private void removeClientFromList(StringTokenizer token) {
 		
-		log.debug("removeClientFromList()");
+		this.issControl.removeISSPlayerFromList(token.nextToken());
 	}
 	
+	/**
+	 * Handles the welcome message and checks the protocol version
+	 * 
+	 * @param token Welcome information
+	 */
 	private void handleWelcomeMessage(StringTokenizer token) {
 		
 		while(!token.nextToken().equals("version")) {
@@ -230,15 +281,18 @@ public class InputChannel extends Thread {
 		
 		double issProtocolVersion = Double.parseDouble(token.nextToken());
 		
-		log.debug("iss version: " + issProtocolVersion);
-		log.debug("local version: " + this.protocolVersion);
+		log.debug("iss version: " + issProtocolVersion); //$NON-NLS-1$
+		log.debug("local version: " + InputChannel.protocolVersion); //$NON-NLS-1$
 		
-		if ((int)issProtocolVersion != this.protocolVersion) {
+		if ((int)issProtocolVersion != InputChannel.protocolVersion) {
 			// TODO handle this in JSkatMaster
-			log.error("Wrong protocol version!!!");
+			log.error("Wrong protocol version!!!"); //$NON-NLS-1$
 		}
 	}
 
+	/**
+	 * Helper class for reading incoming information
+	 */
     class ReaderClass extends Thread {
 
         @Override

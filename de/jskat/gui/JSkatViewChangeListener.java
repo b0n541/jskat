@@ -34,9 +34,9 @@ public class JSkatViewChangeListener implements ChangeListener {
 			JTabbedPane tabs = (JTabbedPane) e.getSource();
 			Component tab = tabs.getSelectedComponent();
 			
-			if (tab instanceof SkatTablePanel) {
+			if (tab instanceof JSkatTabPanel) {
 			
-				String tableName = ((SkatTablePanel) tab).getTableName();
+				String tableName = ((JSkatTabPanel) tab).getName();
 				this.jskat.setActiveTable(tableName);
 			}
 		}

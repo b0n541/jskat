@@ -323,16 +323,6 @@ public class SkatTablePanel extends JSkatTabPanel {
 	}
 	
 	/**
-	 * Returns the name of the table
-	 * 
-	 * @return Table name
-	 */
-	String getTableName() {
-
-		return this.panelName;
-	}
-
-	/**
 	 * Sets the game state
 	 * 
 	 * @param state

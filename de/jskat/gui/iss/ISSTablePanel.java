@@ -20,10 +20,10 @@ import de.jskat.gui.img.JSkatGraphicRepository;
 /**
  * Panel for ISS table
  */
-public class TablePanel extends SkatTablePanel {
+public class ISSTablePanel extends SkatTablePanel {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	/**
 	 * Constructor
 	 * 
@@ -31,7 +31,7 @@ public class TablePanel extends SkatTablePanel {
 	 * @param jskatBitmaps Bitmap repository
 	 * @param actions Action map
 	 */
-	public TablePanel(String tableName, JSkatGraphicRepository jskatBitmaps, ActionMap actions) {
+	public ISSTablePanel(String tableName, JSkatGraphicRepository jskatBitmaps, ActionMap actions) {
 		
 		super(tableName, jskatBitmaps, actions);
 	}
@@ -50,7 +50,7 @@ public class TablePanel extends SkatTablePanel {
 
 	private JPanel getChatPanel() {
 		
-		return new ChatPanel();
+		return new ChatPanel(this);
 	}
 
 	private JSkatGraphicRepository bitmaps;

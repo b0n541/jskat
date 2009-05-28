@@ -48,6 +48,10 @@ public enum JSkatActions {
 	 */
 	CREATE_LOCAL_TABLE,
 	/**
+	 * Recognizes a change of the acitve skat table
+	 */
+	CHANGE_ACTIVE_TABLE,
+	/**
 	 * Starts a local skat series
 	 */
 	START_LOCAL_SERIES,
@@ -105,6 +109,10 @@ public enum JSkatActions {
 	 * Connects to the International Skat Server
 	 */
 	CONNECT_TO_ISS,
+	/**
+	 * Sends a chat message
+	 */
+	SEND_CHAT_MESSAGE,
 //----------------------------------------------------------------------------//
 //-- Neural Network Player related actions -----------------------------------//
 //----------------------------------------------------------------------------//

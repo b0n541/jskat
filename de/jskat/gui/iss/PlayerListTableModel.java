@@ -107,7 +107,7 @@ class PlayerListTableModel extends AbstractTableModel {
 		row.set(2, Long.toString(gamesPlayed));
 		row.set(3, Double.toString(strength));
 		
-		this.fireTableRowsUpdated(index, index);
+		this.fireTableDataChanged();
 	}
 	
 	private void addRow(String playerName, String language,
@@ -120,6 +120,23 @@ class PlayerListTableModel extends AbstractTableModel {
 		newLine.add(Double.toString(strength));
 		this.data.add(newLine);
 
-		this.fireTableRowsInserted(this.data.size() - 2, this.data.size() - 1);
+		this.fireTableDataChanged();
+	}
+
+	public void removePlayer(String playerName) {
+
+		int index = 0;
+		int removeIndex = 0;
+		for (List<String> currRow : this.data) {
+			
+			if (currRow.get(0).equals(playerName)) {
+				
+				removeIndex = index;
+			}
+			index++;
+		}
+		this.data.remove(removeIndex);
+		
+		this.fireTableDataChanged();
 	}
 }

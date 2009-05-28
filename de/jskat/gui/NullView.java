@@ -2,11 +2,13 @@ package de.jskat.gui;
 
 import de.jskat.control.SkatGame;
 import de.jskat.control.SkatTable;
+import de.jskat.control.iss.ChatMessageType;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameStates;
-import de.jskat.util.CardList;
+import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.util.Card;
+import de.jskat.util.CardList;
 import de.jskat.util.Player;
 
 /**
@@ -14,191 +16,278 @@ import de.jskat.util.Player;
  */
 public class NullView implements JSkatView {
 
-	@Override
-	public void addCard(String tableName, Player player, Card card) {
-		// TODO Auto-generated method stub
+	private String language;
 
+	/**
+	 * @see JSkatView#addCard(String, Player, Card)
+	 */
+	@Override
+	public void addCard(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player player,
+			@SuppressWarnings("unused") Card card) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#clearHand(String, Player)
+	 */
 	@Override
-	public void clearHand(String tableName, Player player) {
-		// TODO Auto-generated method stub
-
+	public void clearHand(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player player) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#clearTrickCards(String)
+	 */
 	@Override
-	public void clearTrickCards(String tableName) {
-		// TODO Auto-generated method stub
-
+	public void clearTrickCards(@SuppressWarnings("unused") String tableName) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#createISSTable(String)
+	 */
 	@Override
-	public void createISSTable(String name) {
-		// TODO Auto-generated method stub
-
+	public void createISSTable(@SuppressWarnings("unused") String name) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#createSkatTablePanel(String)
+	 */
 	@Override
-	public SkatTablePanel createSkatTablePanel(String name) {
-		// TODO Auto-generated method stub
+	public SkatTablePanel createSkatTablePanel(
+			@SuppressWarnings("unused") String name) {
 		return null;
 	}
 
+	/**
+	 * @see JSkatView#removeCard(String, Player, Card)
+	 */
 	@Override
-	public void removeCard(String tableName, Player player, Card card) {
-		// TODO Auto-generated method stub
-
+	public void removeCard(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player player,
+			@SuppressWarnings("unused") Card card) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#setPositions(String, Player, Player, Player)
+	 */
 	@Override
-	public void setPositions(String tableName, Player leftPosition,
-			Player rightPosition, Player playerPosition) {
-		// TODO Auto-generated method stub
-
+	public void setPositions(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player leftPosition,
+			@SuppressWarnings("unused") Player rightPosition,
+			@SuppressWarnings("unused") Player playerPosition) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#setTrickCard(String, Player, Card)
+	 */
 	@Override
-	public void setTrickCard(String tableName, Player position, Card card) {
-		// TODO Auto-generated method stub
-
+	public void setTrickCard(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player position,
+			@SuppressWarnings("unused") Card card) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#showAboutMessage()
+	 */
 	@Override
 	public void showAboutMessage() {
-		// TODO Auto-generated method stub
-
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#showExitDialog()
+	 */
 	@Override
 	public int showExitDialog() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
+	/**
+	 * @see JSkatView#showGameResults()
+	 */
 	@Override
 	public void showGameResults() {
-		// TODO Auto-generated method stub
-
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#showISSLogin()
+	 */
 	@Override
 	public void showISSLogin() {
-		// TODO Auto-generated method stub
-
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#showSeriesResults()
+	 */
 	@Override
 	public void showSeriesResults() {
-		// TODO Auto-generated method stub
-
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#showTable(SkatTable)
+	 */
 	@Override
-	public void showTable(SkatTable table) {
-		// TODO Auto-generated method stub
-
+	public void showTable(@SuppressWarnings("unused") SkatTable table) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#startBidding()
+	 */
 	@Override
 	public void startBidding() {
-		// TODO Auto-generated method stub
-
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#startDiscarding()
+	 */
 	@Override
 	public void startDiscarding() {
-		// TODO Auto-generated method stub
-
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#startGame(SkatGame)
+	 */
 	@Override
-	public void startGame(SkatGame game) {
-		// TODO Auto-generated method stub
-
+	public void startGame(@SuppressWarnings("unused") SkatGame game) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#startPlaying()
+	 */
 	@Override
 	public void startPlaying() {
-		// TODO Auto-generated method stub
-
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#startSeries()
+	 */
 	@Override
 	public void startSeries() {
-		// TODO Auto-generated method stub
-
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#setGameAnnouncement(String, GameAnnouncement, boolean)
+	 */
 	@Override
-	public void setGameAnnouncement(String tableName, GameAnnouncement ann, boolean hand) {
-		// TODO Auto-generated method stub
-		
+	public void setGameAnnouncement(
+			@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") GameAnnouncement ann,
+			@SuppressWarnings("unused") boolean hand) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#setGameState(String, GameStates)
+	 */
 	@Override
-	public void setGameState(String tableName, GameStates state) {
-		// TODO Auto-generated method stub
-		
+	public void setGameState(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") GameStates state) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#addGameResult(String, SkatGameData)
+	 */
 	@Override
-	public void addGameResult(String tableName, SkatGameData data) {
-		// TODO Auto-generated method stub
-		
+	public void addGameResult(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") SkatGameData data) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#showHelpDialog()
+	 */
 	@Override
 	public void showHelpDialog() {
-		// TODO Auto-generated method stub
-		
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#clearTable(String)
+	 */
 	@Override
-	public void clearTable(String tableName) {
-		// TODO Auto-generated method stub
-		
+	public void clearTable(@SuppressWarnings("unused") String tableName) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#setNextBidValue(String, int)
+	 */
 	@Override
-	public void setNextBidValue(String tableName, int nextBidValue) {
-		// TODO Auto-generated method stub
-		
+	public void setNextBidValue(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") int nextBidValue) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#showMessage(int, String)
+	 */
 	@Override
-	public void showMessage(int messageType, String message) {
-		// TODO Auto-generated method stub
-		
+	public void showMessage(@SuppressWarnings("unused") int messageType,
+			@SuppressWarnings("unused") String message) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#setBid(String, Player, int)
+	 */
 	@Override
-	public void setBid(String tableName, Player player, int bidValue) {
-		// TODO Auto-generated method stub
-		
+	public void setBid(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player player,
+			@SuppressWarnings("unused") int bidValue) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#setTrickForeHand(String, Player)
+	 */
 	@Override
-	public void setTrickForeHand(String tableName, Player trickForeHand) {
-		// TODO Auto-generated method stub
-		
+	public void setTrickForeHand(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player trickForeHand) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#setSkat(String, CardList)
+	 */
 	@Override
-	public void setSkat(String tableName, CardList skat) {
-		// TODO Auto-generated method stub
-		
+	public void setSkat(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") CardList skat) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#putCardIntoSkat(String, Card)
+	 */
 	@Override
-	public void putCardIntoSkat(String tableName, Card card) {
-		// TODO Auto-generated method stub
-		
+	public void putCardIntoSkat(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Card card) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#takeCardFromSkat(String, Card)
+	 */
 	@Override
-	public void takeCardFromSkat(String tableName, Card card) {
-		// TODO Auto-generated method stub
-		
+	public void takeCardFromSkat(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Card card) {
+		// empty method by indent
 	}
 
 	/**
@@ -206,25 +295,69 @@ public class NullView implements JSkatView {
 	 */
 	@Override
 	public void showStartSkatSeriesDialog() {
-		// empty method
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#updateISSLobbyPlayerList(String, String, long, double)
+	 */
 	@Override
-	public void updateISSLobbyPlayerList(String playerName, String language,
-			long gamesPlayed, double strength) {
-		// TODO Auto-generated method stub
-		
+	public void updateISSLobbyPlayerList(
+			@SuppressWarnings("unused") String playerName,
+			@SuppressWarnings("unused") String playerLanguage1,
+			@SuppressWarnings("unused") long gamesPlayed,
+			@SuppressWarnings("unused") double strength) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#removeFromISSLobbyPlayerList(String)
+	 */
 	@Override
-	public void removeFromISSLobbyPlayerList() {
-		// TODO Auto-generated method stub
-		
+	public void removeFromISSLobbyPlayerList(
+			@SuppressWarnings("unused") String playerName) {
+		// empty method by indent
 	}
 
+	/**
+	 * @see JSkatView#showISSLobby()
+	 */
 	@Override
 	public void showISSLobby() {
-		// TODO Auto-generated method stub
-		
+		// empty method by indent
+	}
+
+	/**
+	 * @see JSkatView#removeFromISSLobbyTableList(String)
+	 */
+	@Override
+	public void removeFromISSLobbyTableList(
+			@SuppressWarnings("unused") String tableName) {
+		// empty method by indent
+	}
+
+	/**
+	 * @see JSkatView#updateISSLobbyTableList(String, int, long, String, String,
+	 *      String)
+	 */
+	@Override
+	public void updateISSLobbyTableList(
+			@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") int maxPlayers,
+			@SuppressWarnings("unused") long gamesPlayed,
+			@SuppressWarnings("unused") String player1,
+			@SuppressWarnings("unused") String player2,
+			@SuppressWarnings("unused") String player3) {
+		// empty method by indent
+	}
+
+	/**
+	 * @see JSkatView#appendISSChatMessage(ChatMessageType, ISSChatMessage)
+	 */
+	@Override
+	public void appendISSChatMessage(
+			@SuppressWarnings("unused") ChatMessageType messageType,
+			@SuppressWarnings("unused") ISSChatMessage message) {
+		// empty method by indent
 	}
 }

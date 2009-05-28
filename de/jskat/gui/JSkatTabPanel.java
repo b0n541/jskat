@@ -14,10 +14,6 @@ public abstract class JSkatTabPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Panel name
-	 */
-	protected String panelName;
-	/**
 	 * JSkat bitmaps
 	 */
 	protected JSkatGraphicRepository bitmaps;
@@ -29,10 +25,11 @@ public abstract class JSkatTabPanel extends JPanel {
 	 * @param jskatBitmaps JSkat bitmaps
 	 * @param actions JSkat actions
 	 */
-	protected JSkatTabPanel(String newTableName, JSkatGraphicRepository jskatBitmaps, ActionMap actions) {
+	protected JSkatTabPanel(String tabName, JSkatGraphicRepository jskatBitmaps, ActionMap actions) {
 
+		super();
+		this.setName(tabName);
 		this.setActionMap(actions);
-		this.panelName = newTableName;
 		this.bitmaps = jskatBitmaps;
 		initPanel();
 	}
