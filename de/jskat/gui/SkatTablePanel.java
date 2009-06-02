@@ -500,4 +500,9 @@ public class SkatTablePanel extends JSkatTabPanel {
 			log.debug("Discard panel full!!!");
 		}
 	}
+	
+	void clearSkatList() {
+		
+		this.skatListTableModel.clearList();
+	}
 }

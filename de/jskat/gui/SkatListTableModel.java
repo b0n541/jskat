@@ -72,7 +72,7 @@ class SkatListTableModel extends AbstractTableModel {
 	 * @param p3 Value for player 3
 	 * @param game Game value
 	 */
-	public void addRow(String p1, String p2, String p3, String game) {
+	void addRow(String p1, String p2, String p3, String game) {
 
 		ArrayList<String> newLine = new ArrayList<String>();
 		newLine.add(p1);
@@ -82,5 +82,15 @@ class SkatListTableModel extends AbstractTableModel {
 		this.data.add(newLine);
 
 		this.fireTableRowsInserted(this.data.size() - 1, this.data.size() - 1);
+	}
+	
+	/**
+	 * Clears the complete list
+	 */
+	void clearList() {
+		
+		this.data.clear();
+		
+		this.fireTableDataChanged();
 	}
 }

@@ -282,10 +282,11 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#startSeries()
+	 * @see JSkatView#startSeries(String)
 	 */
-	public void startSeries() {
-		// TODO implement it
+	public void startSeries(String tableName) {
+		
+		this.tables.get(tableName).clearSkatList();
 	}
 
 	/**

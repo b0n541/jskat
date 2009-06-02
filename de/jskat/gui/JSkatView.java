@@ -36,8 +36,10 @@ public interface JSkatView {
 	
 	/**
 	 * Opens a new series
+	 * 
+	 * @param tableName Table name 
 	 */
-	public abstract void startSeries();
+	public abstract void startSeries(String tableName);
 
 	/**
 	 * Shows the results of a series

@@ -78,7 +78,8 @@ public class SkatTable {
 		}
 		
 		if (this.player.size() >= 3) {
-			
+		
+			this.view.startSeries(this.tableName);
 			this.series.setPlayer(this.player);
 			this.series.startSeries(rounds);
 			this.series.start();

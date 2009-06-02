@@ -174,10 +174,10 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#startSeries()
+	 * @see JSkatView#startSeries(String)
 	 */
 	@Override
-	public void startSeries() {
+	public void startSeries(@SuppressWarnings("unused") String tableName) {
 		// empty method by indent
 	}
 
