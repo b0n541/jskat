@@ -17,24 +17,23 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import de.jskat.control.JSkatMaster;
-import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.gui.action.AbstractJSkatAction;
 
 /**
- * Implements the action for sending a chat message
+ * Implements the action for joining a skat table on ISS
  */
-public class SendChatMessageAction extends AbstractJSkatAction {
+public class JoinISSTableAction extends AbstractJSkatAction {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
-	public SendChatMessageAction(JSkatMaster controller) {
+	public JoinISSTableAction(JSkatMaster controller) {
 		
 		super(controller);
 		
-		putValue(Action.NAME, "Send chat message");
+		putValue(Action.NAME, "Join table");
 	}
 	
 	/**
@@ -43,10 +42,9 @@ public class SendChatMessageAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		if (e.getSource() instanceof ISSChatMessage) {
+		if (e.getSource() instanceof String) {
 		
-			ISSChatMessage message = (ISSChatMessage) e.getSource();
-			this.jskat.getISSController().sendChatMessage(message);
+			this.jskat.getISSController().joinTable((String) e.getSource());
 		}
 	}
 }

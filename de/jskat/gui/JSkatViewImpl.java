@@ -16,6 +16,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -54,6 +55,10 @@ import de.jskat.gui.action.human.PlayHandGameAction;
 import de.jskat.gui.action.human.PutCardIntoSkatAction;
 import de.jskat.gui.action.human.TakeCardFromSkatAction;
 import de.jskat.gui.action.iss.ConnectAction;
+import de.jskat.gui.action.iss.CreateISSTableAction;
+import de.jskat.gui.action.iss.ISSPlayer;
+import de.jskat.gui.action.iss.JoinISSTableAction;
+import de.jskat.gui.action.iss.LeaveISSTableAction;
 import de.jskat.gui.action.iss.SendChatMessageAction;
 import de.jskat.gui.action.iss.ShowLoginPanelAction;
 import de.jskat.gui.action.main.AboutAction;
@@ -70,6 +75,7 @@ import de.jskat.gui.action.main.SaveNeuralNetworksAction;
 import de.jskat.gui.action.main.StartSkatSeriesAction;
 import de.jskat.gui.action.main.TrainNeuralNetworksAction;
 import de.jskat.gui.help.JSkatHelpDialog;
+import de.jskat.gui.human.HumanPlayer;
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.gui.iss.ISSTablePanel;
 import de.jskat.gui.iss.LobbyPanel;
@@ -148,6 +154,9 @@ public class JSkatViewImpl implements JSkatView {
 				this.bitmaps));
 		this.actions.put(JSkatActions.SEND_CHAT_MESSAGE,
 				new SendChatMessageAction(jskat));
+		this.actions.put(JSkatActions.CREATE_ISS_TABLE, new CreateISSTableAction(jskat));
+		this.actions.put(JSkatActions.JOIN_ISS_TABLE, new JoinISSTableAction(jskat));
+		this.actions.put(JSkatActions.LEAVE_ISS_TABLE, new LeaveISSTableAction(jskat));
 		// Neural network actions
 		this.actions.put(JSkatActions.TRAIN_NEURAL_NETWORKS,
 				new TrainNeuralNetworksAction(jskat));
@@ -332,20 +341,16 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#connectToISS(String, String, int)
-	 */
-	public void connectToISS(String login, String password, int port) {
-
-		// this.actions.get(CONNECT_TO_ISS)(login, password, port);
-	}
-
-	/**
 	 * @see JSkatView#createISSTable(String)
 	 */
 	public void createISSTable(String name) {
-		// FIXME not needed, do it in createSkatTablePanel
-		this.tabs.add("ISS table no. #", new ISSTablePanel(name, this.bitmaps,
-				this.actions));
+		// FIXME not needed as separate method,
+		// do it in createSkatTablePanel
+		ISSTablePanel newTable = new ISSTablePanel(name, this.bitmaps,
+				this.actions);
+		this.tables.put(name, newTable);
+
+		this.tabs.add("ISS table: " + name, newTable); //$NON-NLS-1$
 	}
 
 	/**
@@ -634,5 +639,58 @@ public class JSkatViewImpl implements JSkatView {
 		log.debug("appendISSChatMessage");
 		
 		this.issLobby.appendChatMessage(message);
+	}
+	
+	/**
+	 * @see de.jskat.gui.JSkatView#updateISSTable(java.lang.String, java.util.StringTokenizer)
+	 */
+	@Override
+	public void updateISSTable(String tableName, StringTokenizer token) {
+		
+		SkatTablePanel panel = this.tables.get(tableName);
+		
+		if (panel == null) {
+			
+			this.createISSTable(tableName);
+		}
+		
+		/*
+		3 		-- max. number of players (3 or 4 player)
+		tazelaar 	-- player 1
+		zoot 		-- player 2
+		kermit		-- player 3
+		.		-- player 4
+		tazelaar 	-- player 1
+		.		-- IP
+		27		-- games played
+		19		-- games won
+		40		-- last game
+		1211		-- total sum
+		0		-- 34
+		0		-- ???
+		1		-- talk enabled
+		0		-- ready to play
+		zoot $ 23 16 -98 1345 0 0 1 0 
+		kermit $ 14 11 40 1408 0 0 1 0 
+		. 		-- ???
+		. 		-- ???
+		0 		-- ???
+		0 		-- ???
+		0 		-- ???
+		0 		-- ???
+		0 		-- ???
+		0 		-- ???
+		0 		-- ???
+		0 		-- ???
+		true		-- kiebitz at table
+		*/
+		
+		int maxPlayers = Integer.parseInt(token.nextToken());
+		String playerName1 = token.nextToken();
+		String playerName2 = token.nextToken();
+		String playerName3 = token.nextToken();
+		String playerName4 = token.nextToken();
+		
+		//panel.set
 	}
 }

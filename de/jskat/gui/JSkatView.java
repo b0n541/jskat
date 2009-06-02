@@ -11,6 +11,8 @@ Released: @ReleaseDate@
 
 package de.jskat.gui;
 
+import java.util.StringTokenizer;
+
 import de.jskat.control.SkatGame;
 import de.jskat.control.SkatTable;
 import de.jskat.control.iss.ChatMessageType;
@@ -307,4 +309,12 @@ public interface JSkatView {
 	 * @param message Message
 	 */
 	public abstract void appendISSChatMessage(ChatMessageType messageType, ISSChatMessage message);
+
+	/**
+	 * Updates an ISS table 
+	 * 
+	 * @param tableName Table name
+	 * @param token New state
+	 */
+	public abstract void updateISSTable(String tableName, StringTokenizer token);
 }

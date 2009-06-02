@@ -107,11 +107,11 @@ class InputChannel extends Thread {
 		}
 		else if (first.equals("create")) { //$NON-NLS-1$
 			
-			handleTableUpdateMessage(token);
+			handleTableCreateMessage(token);
 		}
 		else if (first.equals("table")) { //$NON-NLS-1$
 			
-			handleTableMessage(token);
+			handleTableUpdateMessage(token);
 		}
 		else if (first.equals("error")) { //$NON-NLS-1$
 			
@@ -170,9 +170,31 @@ class InputChannel extends Thread {
 		
 	}
 
-	private void handleTableUpdateMessage(StringTokenizer token) {
-		// TODO Auto-generated method stub
+	private void handleTableCreateMessage(StringTokenizer token) {
+
+		log.debug("table creation message");
 		
+		this.issControl.createTable(token.nextToken(), token.nextToken(), Integer.parseInt(token.nextToken()));
+	}
+	
+	private void handleTableUpdateMessage(StringTokenizer token) {
+		
+		log.debug("table update message");
+		
+		// table .1 bar state 3 bar xskat xskat:2 . bar . 0 0 0 0 0 0 1 0 xskat $ 0 0 0 0 0 0 1 1 xskat:2 $ 0 0 0 0 0 0 1 1 . . 0 0 0 0 0 0 0 0 false
+		
+		String tableName = token.nextToken();
+		String creator = token.nextToken();
+		String actionCommand = token.nextToken();
+		
+		if (actionCommand.equals("state")) {
+		
+			this.issControl.updateISSTableState(tableName, token);
+		}
+		else {
+			
+			log.debug("unhandled action command: " + actionCommand + " for table " + tableName);
+		}
 	}
 
 	/**

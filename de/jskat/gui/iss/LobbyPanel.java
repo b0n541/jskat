@@ -3,6 +3,7 @@ package de.jskat.gui.iss;
 import java.awt.Dimension;
 
 import javax.swing.ActionMap;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -16,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.gui.JSkatTabPanel;
+import de.jskat.gui.action.JSkatActions;
 import de.jskat.gui.img.JSkatGraphicRepository;
 
 /**
@@ -75,6 +77,8 @@ public class LobbyPanel extends JSkatTabPanel {
 		lobby.add(getPlayerListPanel());
 		lobby.add(getTableListPanel(), "wrap"); //$NON-NLS-1$
 
+		lobby.add(getActionButtonPanel(), "span 2, wrap");
+		
 		this.chatPanel = new ChatPanel(this);
 		lobby.add(this.chatPanel, "span 2, growx, align center"); //$NON-NLS-1$
 		
@@ -119,6 +123,16 @@ public class LobbyPanel extends JSkatTabPanel {
 		return panel;
 	}
 
+	private JPanel getActionButtonPanel() {
+		
+		JPanel panel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		
+		panel.add(new JButton(this.getActionMap().get(JSkatActions.CREATE_ISS_TABLE)));
+		panel.add(new JButton("Join table"));
+		
+		return panel;
+	}
+	
 	/**
 	 * Updates player information
 	 * 

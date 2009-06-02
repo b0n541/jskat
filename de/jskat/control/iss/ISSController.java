@@ -204,4 +204,29 @@ public class ISSController {
 		
 		this.view.appendISSChatMessage(ChatMessageType.LOBBY, chatMessage);
 	}
+
+	public void requestTableCreation() {
+		
+		this.issConnect.requestTableCreation();
+	}
+	
+	public void createTable(String tableName, String creator, int maxPlayers) {
+		
+		this.view.createISSTable(tableName);
+	}
+	
+	public void joinTable(String tableName) {
+		
+		this.issConnect.joinTable(tableName);
+	}
+	
+	public void leaveTable(String tableName, String playerName) {
+		
+		this.issConnect.leaveTable(tableName, playerName);
+	}
+
+	public void updateISSTableState(String tableName, StringTokenizer token) {
+		
+		this.view.updateISSTable(tableName, token);
+	}
 }

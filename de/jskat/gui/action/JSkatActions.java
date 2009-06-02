@@ -113,6 +113,18 @@ public enum JSkatActions {
 	 * Sends a chat message
 	 */
 	SEND_CHAT_MESSAGE,
+	/**
+	 * Creates a table
+	 */
+	CREATE_ISS_TABLE,
+	/**
+	 * Sit on table
+	 */
+	JOIN_ISS_TABLE,
+	/**
+	 * Leave a table
+	 */
+	LEAVE_ISS_TABLE,
 //----------------------------------------------------------------------------//
 //-- Neural Network Player related actions -----------------------------------//
 //----------------------------------------------------------------------------//

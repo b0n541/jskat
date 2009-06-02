@@ -138,4 +138,19 @@ class Connector {
 	
 		this.issOut.send("yell " + message.getMessage()); //$NON-NLS-1$
 	}
+
+	void requestTableCreation() {
+		
+		this.issOut.send("create / 3"); //$NON-NLS-1$
+	}
+
+	void joinTable(String tableName) {
+
+		this.issOut.send("join " + tableName); //$NON-NLS-1$
+	}
+
+	void leaveTable(String tableName, String playerName) {
+		
+		this.issOut.send("table " + tableName + ' ' + playerName + " leave"); //$NON-NLS-1$ //$NON-NLS-2$
+	}
 }
