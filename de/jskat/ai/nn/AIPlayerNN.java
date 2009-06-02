@@ -148,6 +148,15 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		return result;
 	}
 
+	/** 
+	 * @see de.jskat.ai.AbstractJSkatPlayer#startGame()
+	 */
+	@Override
+	protected void startGame() {
+		// CHECK Auto-generated method stub
+		
+	}
+
 	/**
 	 * @see JSkatPlayer#playCard()
 	 */
@@ -525,4 +534,5 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		
 		this.isLearning = newIsLearning;
 	}
+
 }

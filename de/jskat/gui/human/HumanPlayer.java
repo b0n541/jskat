@@ -308,4 +308,13 @@ public class HumanPlayer extends AbstractJSkatPlayer
     	private boolean doWait = true;
     	private Object monitor = null;
     }
+
+	/* (non-Javadoc)
+	 * @see de.jskat.ai.AbstractJSkatPlayer#startGame()
+	 */
+	@Override
+	protected void startGame() {
+		// CHECK Auto-generated method stub
+		
+	}
 }

@@ -17,6 +17,7 @@ import de.jskat.ai.AbstractJSkatPlayer;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
+import de.jskat.util.rule.BasicSkatRules;
 
 /** A JSkat AI Player
  * @author Markus J. Luzius <markus@luzius.de>
@@ -25,17 +26,18 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 
 	private int maxBidValue = -1;
 	private Log log = LogFactory.getLog(AIPlayerMJL.class);
-	
+	private CardPlayer aiPlayer;
+
 	/* (non-Javadoc)
-	 * @see de.jskat.ai.JSkatPlayer#announceGame()
+	 * @see de.jskat.ai.JSkatPlayer#preparateForNewGame()
 	 */
 	@Override
-	public GameAnnouncement announceGame() {
-		// TODO game announcement
-		log.debug("game announcement probably causes an exception...");
-		return null;
+	public void preparateForNewGame() {
+		// reset maxBidValue, so it is recalculated next time a game starts... 
+		maxBidValue = -1;
+		// nothing else to do right now...
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see de.jskat.ai.JSkatPlayer#bidMore(int)
 	 */
@@ -46,25 +48,6 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 		}
 		if(maxBidValue<18) return -1;
 		return (maxBidValue>=nextBidValue?nextBidValue:-1);
-	}
-
-	/* (non-Javadoc)
-	 * @see de.jskat.ai.JSkatPlayer#discardSkat()
-	 */
-	@Override
-	public CardList discardSkat() {
-		// TODO check which cards should best be discarded
-		log.debug("no algorithm yet, discarding original skat of ["+skat+"]");
-		return skat;
-	}
-
-	/* (non-Javadoc)
-	 * @see de.jskat.ai.JSkatPlayer#finalizeGame()
-	 */
-	@Override
-	public void finalizeGame() {
-		// don't know what to do here (yet)...
-		log.debug("finalizing game...");
 	}
 
 	/* (non-Javadoc)
@@ -80,20 +63,53 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	}
 
 	/* (non-Javadoc)
-	 * @see de.jskat.ai.JSkatPlayer#isAIPlayer()
-	 */
-	@Override
-	public boolean isAIPlayer() {
-		return true;
-	}
-
-	/* (non-Javadoc)
 	 * @see de.jskat.ai.JSkatPlayer#lookIntoSkat()
 	 */
 	@Override
 	public boolean lookIntoSkat() {
 		// TODO really look into skat?
+		aiPlayer = new SinglePlayer(1, rules);
 		return true;
+	}
+
+	/* (non-Javadoc)
+	 * @see de.jskat.ai.JSkatPlayer#announceGame()
+	 */
+	@Override
+	public GameAnnouncement announceGame() {
+		// TODO game announcement
+		log.debug("game announcement probably causes an exception...");
+		return null;
+	}
+	
+	/* (non-Javadoc)
+	 * @see de.jskat.ai.JSkatPlayer#discardSkat()
+	 */
+	@Override
+	public CardList discardSkat() {
+		// TODO check which cards should best be discarded
+		log.debug("no algorithm yet, discarding original skat of ["+skat+"]");
+		return skat;
+	}
+
+	/* (non-Javadoc)
+	 * @see de.jskat.ai.AbstractJSkatPlayer#startGame()
+	 */
+	@Override
+	protected void startGame() {
+		if(singlePlayer!=knowledge.getPlayerPosition()) {
+			log.debug("AIPlayerMJL set to OpponentPlayer");
+			aiPlayer = new OpponentPlayer();
+		}
+		else {
+			if(aiPlayer==null) {
+				log.warn("AIPlayerMJL should already have been set to SinglePlayer!");
+				aiPlayer = new SinglePlayer(2, rules);
+			}
+			else {
+				log.debug("AIPlayerMJL already set to SinglePlayer");
+			}
+		}
 	}
 
 	/* (non-Javadoc)
@@ -113,12 +129,21 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	}
 
 	/* (non-Javadoc)
-	 * @see de.jskat.ai.JSkatPlayer#preparateForNewGame()
+	 * @see de.jskat.ai.JSkatPlayer#finalizeGame()
 	 */
 	@Override
-	public void preparateForNewGame() {
-		// reset maxBidValue, so it is recalculated next time a game starts... 
-		maxBidValue = -1;
-		// nothing else to do right now...
+	public void finalizeGame() {
+		// don't know what to do here (yet)...
+		log.debug("finalizing game...");
 	}
+
+	
+	/* (non-Javadoc)
+	 * @see de.jskat.ai.JSkatPlayer#isAIPlayer()
+	 */
+	@Override
+	public boolean isAIPlayer() {
+		return true;
+	}
+
 }

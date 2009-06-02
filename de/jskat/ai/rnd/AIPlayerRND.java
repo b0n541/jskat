@@ -101,6 +101,15 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 		return this.rand.nextBoolean();
 	}
 
+	/** 
+	 * @see de.jskat.ai.AbstractJSkatPlayer#startGame()
+	 */
+	@Override
+	protected void startGame() {
+		// CHECK Auto-generated method stub
+		
+	}
+	
 	/**
 	 * @see JSkatPlayer#playCard()
 	 */
@@ -170,4 +179,5 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	 * Random generator
 	 */
 	private Random rand = new Random();
+
 }

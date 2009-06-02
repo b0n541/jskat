@@ -145,8 +145,18 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 		this.gameValue = 0;
 
 		this.rules = SkatRuleFactory.getSkatRules(this.gameType);
+		
+		startGame();
 	}
 
+	/**
+	 * does certain startGame operations
+	 * 
+	 * A method that is called by the abstract player to allow individual players
+	 * to implement certain start-up operations
+	 */
+	protected abstract void startGame();
+	
 	/**
 	 * @see JSkatPlayer#takeSkat(CardList)
 	 */
