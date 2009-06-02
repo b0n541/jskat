@@ -18,11 +18,9 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 
 import de.jskat.control.JSkatMaster;
-import de.jskat.data.iss.ISSLoginCredentials;
 import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.action.JSkatActions;
 import de.jskat.gui.img.JSkatGraphicRepository;
-import de.jskat.gui.iss.LoginPanel;
 
 /**
  * Implements the action for showing about dialog

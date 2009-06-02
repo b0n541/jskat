@@ -60,4 +60,10 @@ public class ISSPlayer extends AbstractJSkatPlayer {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	protected void startGame() {
+		// TODO Auto-generated method stub
+		
+	}
 }

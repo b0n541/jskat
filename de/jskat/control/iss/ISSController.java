@@ -1,3 +1,14 @@
+/*
+
+@ShortLicense@
+
+Authors: @JS@
+         @MJL@
+
+Released: @ReleaseDate@
+
+ */
+
 package de.jskat.control.iss;
 
 import java.awt.event.ActionEvent;

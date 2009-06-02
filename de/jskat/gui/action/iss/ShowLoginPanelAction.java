@@ -18,7 +18,6 @@ import javax.swing.Action;
 import javax.swing.ImageIcon;
 
 import de.jskat.control.JSkatMaster;
-import de.jskat.control.iss.ISSController;
 import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
 
