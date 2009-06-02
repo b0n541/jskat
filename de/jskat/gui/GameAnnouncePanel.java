@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ActionMap;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -60,7 +61,15 @@ class GameAnnouncePanel extends JPanel {
 		
 		JPanel panel = new JPanel(new MigLayout("fill"));
 		
-		this.gameTypeList = new JComboBox(GameType.values());
+		this.gameTypeList = new JComboBox();
+		DefaultComboBoxModel model = new DefaultComboBoxModel();
+		model.addElement(GameType.CLUBS.toString());
+		model.addElement(GameType.SPADES.toString());
+		model.addElement(GameType.HEARTS.toString());
+		model.addElement(GameType.DIAMONDS.toString());
+		model.addElement(GameType.NULL.toString());
+		model.addElement(GameType.GRAND.toString());
+		this.gameTypeList.setModel(model);
 		this.gameTypeList.setSelectedIndex(-1);
 
 		this.ouvertBox = new JCheckBox("ouvert");
