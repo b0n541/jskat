@@ -377,7 +377,11 @@ public class SkatTablePanel extends JSkatTabPanel {
 	 */
 	void setContextPanel(ContextPanelTypes panelType) {
 
-		if (panelType == ContextPanelTypes.DECLARING) {
+		if (panelType == ContextPanelTypes.DISCARDING) {
+			
+			this.discardPanel.resetPanel();
+		}
+		else if (panelType == ContextPanelTypes.DECLARING) {
 
 			this.gameAnnouncePanel.resetPanel();
 		}

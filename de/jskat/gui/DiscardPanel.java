@@ -15,6 +15,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -23,6 +24,7 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 import de.jskat.gui.action.JSkatActions;
 import de.jskat.gui.img.JSkatGraphicRepository;
+import de.jskat.util.Card;
 import de.jskat.util.CardList;
 
 /**
@@ -31,7 +33,9 @@ import de.jskat.util.CardList;
 class DiscardPanel extends HandPanel {
 
 	private static final long serialVersionUID = 1L;
-
+	
+	private Action discardAction;
+	
 	/**
 	 * Constructor
 	 * 
@@ -64,9 +68,8 @@ class DiscardPanel extends HandPanel {
 		}
 		add(cardPanels, "grow, wrap"); //$NON-NLS-1$
 		
-		JPanel buttonPanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-3$
-		ActionMap actions = this.parent.getActionMap();
-		final JButton discardButton = new JButton(actions.get(JSkatActions.DISCARD_CARDS));
+		this.discardAction = this.parent.getActionMap().get(JSkatActions.DISCARD_CARDS);
+		final JButton discardButton = new JButton(this.discardAction);
 		discardButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -83,8 +86,9 @@ class DiscardPanel extends HandPanel {
 				}
 			}
 		});
-		buttonPanel.add(discardButton);
-		add(buttonPanel, "center");
+		JPanel buttonPanel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
+		buttonPanel.add(discardButton, "center"); //$NON-NLS-1$
+		add(buttonPanel);
 		
 		this.showCards();
 	}
@@ -93,5 +97,39 @@ class DiscardPanel extends HandPanel {
 		
 		addCard(skat.get(0));
 		addCard(skat.get(1));
+	}
+	
+	@Override
+	void addCard(Card card) {
+		
+		super.addCard(card);
+
+		setDiscardButton();
+	}
+
+	@Override
+	void removeCard(Card card) {
+		
+		super.removeCard(card);
+		
+		setDiscardButton();
+	}
+	
+	public void resetPanel() {
+		
+		this.cards.clear();
+		setDiscardButton();
+	}
+
+	private void setDiscardButton() {
+		
+		if (this.cards.size() == 2) {
+			
+			this.getActionMap().get(JSkatActions.DISCARD_CARDS).setEnabled(true);
+		}
+		else {
+			
+			this.getActionMap().get(JSkatActions.DISCARD_CARDS).setEnabled(false);
+		}
 	}
 }
