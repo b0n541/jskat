@@ -63,12 +63,13 @@ class GameAnnouncePanel extends JPanel {
 		
 		this.gameTypeList = new JComboBox();
 		DefaultComboBoxModel model = new DefaultComboBoxModel();
-		model.addElement(GameType.CLUBS.toString());
-		model.addElement(GameType.SPADES.toString());
-		model.addElement(GameType.HEARTS.toString());
-		model.addElement(GameType.DIAMONDS.toString());
-		model.addElement(GameType.NULL.toString());
-		model.addElement(GameType.GRAND.toString());
+		// FIXME change entries to internationalized strings
+		model.addElement(GameType.CLUBS);
+		model.addElement(GameType.SPADES);
+		model.addElement(GameType.HEARTS);
+		model.addElement(GameType.DIAMONDS);
+		model.addElement(GameType.NULL);
+		model.addElement(GameType.GRAND);
 		this.gameTypeList.setModel(model);
 		this.gameTypeList.setSelectedIndex(-1);
 
