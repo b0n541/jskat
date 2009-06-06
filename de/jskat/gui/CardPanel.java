@@ -30,9 +30,8 @@ import de.jskat.data.SkatGameData.GameStates;
 import de.jskat.gui.action.JSkatActions;
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.util.Card;
-import de.jskat.util.Rank;
-import de.jskat.util.SkatConstants;
-import de.jskat.util.Suit;
+import de.jskat.util.CardList;
+import de.jskat.util.GameType;
 
 /**
  * Panel for showing a Card
@@ -43,8 +42,14 @@ class CardPanel extends JPanel {
 	private static Log log = LogFactory.getLog(CardPanel.class);
 
 	private JSkatGraphicRepository bitmaps;
-	private Suit suit;
-	private Rank rank;
+	
+	/**
+	 * Holds the game type for the sorting order
+	 */
+	GameType gameType = GameType.GRAND;
+
+	CardList cards;
+
 	private boolean showBackside = true;
 	private HandPanel parent = null;
 
@@ -65,14 +70,16 @@ class CardPanel extends JPanel {
 		this.bitmaps = jSkatBitmaps;
 		this.showBackside = newShowBackside;
 
+		this.cards = new CardList();
+		
 		this.setOpaque(false);
 
 		this.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
 
-				cardClicked();
 			}
 
 			@Override
@@ -95,12 +102,31 @@ class CardPanel extends JPanel {
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				// TODO Auto-generated method stub
 
+				cardClicked(e);
 			}
 		});
 	}
 
+	protected void addCard(Card newCard) {
+		
+		this.cards.add(newCard);
+		this.cards.sort(this.gameType);
+		repaint();
+	}
+	
+	protected void removeCard(Card cardToRemove) {
+		
+		this.cards.remove(cardToRemove);
+		this.cards.sort(this.gameType);
+		repaint();
+	}
+	
+	protected Card get(int index) {
+		
+		return this.cards.get(index);
+	}
+	
 	/**
 	 * @see JPanel#paintComponent(Graphics)
 	 */
@@ -114,64 +140,38 @@ class CardPanel extends JPanel {
 				RenderingHints.VALUE_RENDER_QUALITY);
 		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
-
-		if (this.suit != null && this.rank != null) {
-
+		
+		int imgWidth = this.getWidth() / (this.cards.size() + 1);
+		
+		int cardNo = 0;
+		for (Card card : this.cards) {
+			
 			Image image = null;
-
 			if (this.showBackside) {
-
+			
 				image = this.bitmaps.getCardImage(null, null);
-			} else {
-
-				image = this.bitmaps.getCardImage(this.suit, this.rank);
+			} 
+			else {
+				
+				image = this.bitmaps.getCardImage(card.getSuit(), card.getRank());
 			}
-
-			double scaleFactor = 1.0d / ((double) image.getHeight(null) / (double) this
-					.getHeight());
+			double scaleFactor = 1.0d;
+			
 			AffineTransform transform = new AffineTransform();
 			transform.scale(scaleFactor, scaleFactor);
+			transform.translate(cardNo * imgWidth, 0);
 			g2D.drawImage(image, transform, this);
-
-			// g2D.drawString(this.suit.shortString()+"-"+this.rank.shortString(),
-			// 20, 20);
-			// g2D.drawString(this.getWidth()+" "+this.getHeight(), 20, 40);
+			
+			cardNo++;
 		}
-	}
-
-	/**
-	 * Sets the card suit and value
-	 * 
-	 * @param newSuit
-	 *            New suit of the card
-	 * @param newRank
-	 *            New rank of the card
-	 */
-	void setCard(Suit newSuit, Rank newRank) {
-
-		this.suit = newSuit;
-		this.rank = newRank;
-		repaint();
-	}
-
-	/**
-	 * Sets the card
-	 * 
-	 * @param card
-	 *            Card
-	 */
-	void setCard(Card card) {
-
-		this.setCard(card.getSuit(), card.getRank());
 	}
 
 	/**
 	 * Clears the card panel
 	 */
-	void clear() {
+	void clearCards() {
 
-		this.suit = null;
-		this.rank = null;
+		this.cards.clear();
 		repaint();
 	}
 
@@ -182,17 +182,17 @@ class CardPanel extends JPanel {
 
 		if (this.showBackside) {
 
-			showCard();
+			showCards();
 		} else {
 
-			hideCard();
+			hideCards();
 		}
 	}
 
 	/**
 	 * Shows the card
 	 */
-	void showCard() {
+	void showCards() {
 
 		this.showBackside = false;
 		repaint();
@@ -201,75 +201,86 @@ class CardPanel extends JPanel {
 	/**
 	 * Hides the card
 	 */
-	void hideCard() {
+	void hideCards() {
 
 		this.showBackside = true;
 		repaint();
 	}
-
-	/**
-	 * Gets the suit of the card
-	 * 
-	 * @return ID of the suit
-	 */
-	Suit getSuit() {
-
-		return this.suit;
+	
+	int getCardCount() {
+		
+		return this.cards.size();
 	}
-
-	/**
-	 * Gets the rank of the card
-	 * 
-	 * @return The rank of the card
-	 */
-	Rank getRank() {
-
-		return this.rank;
-	}
-
+	
 	/**
 	 * Tells the JSkatMaster when the panel was clicked by the user
 	 */
-	void cardClicked() {
+	void cardClicked(MouseEvent e) {
 		
-		log.debug("Card panel clicked: " + this.suit + " " + this.rank);
+		int xVal = e.getX();
+		int yVal = e.getY();
 		
-		if (this.suit != null && this.rank != null) {
-			// send event only, if the card panel shows a card
+		log.debug("Card panel clicked at: " + xVal + " x " + yVal); //$NON-NLS-1$ //$NON-NLS-2$
+		
+		if (xVal > -1 && xVal < this.getWidth() &&
+				yVal > -1 && yVal < this.getHeight()) {
+			
+			log.debug("Mouse button release inside panel"); //$NON-NLS-1$
+			
+			// get card
+			int imgWidth = this.getWidth() / (this.cards.size() + 1);
+			int cardIndex = xVal / imgWidth;
 
-			Action action = null;
-		
-			if (this.parent instanceof DiscardPanel) {
-				// card panel in discard panel was clicked
-				action = getActionMap().get(JSkatActions.TAKE_CARD_FROM_SKAT);
-			}
-			else if (this.parent instanceof PlayerPanel) {
-				// card panel in player panel was clicked
-				
-				GameStates state = ((PlayerPanel) this.parent).getGameState();
-				
-				if (state == GameStates.DISCARDING) {
-					// discarding phase
-					action = getActionMap().get(JSkatActions.PUT_CARD_INTO_SKAT);
-				}
-				else if (state == GameStates.TRICK_PLAYING) {
-					// trick playing phase
-					action = getActionMap().get(JSkatActions.PLAY_CARD);
-				}
-			}
-			else {
-				
-				log.debug("Other parent " + this.parent);
+			Card card = null;
+			if (cardIndex < this.cards.size()) {
+
+				card = this.cards.get(cardIndex);
+				log.debug("card index: " + cardIndex + " card: " + this.cards.get(cardIndex)); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			
-			if (action != null) {
+			if (card != null) {
+				// send event only, if the card panel shows a card
+				Action action = null;
+			
+				if (this.parent instanceof DiscardPanel) {
+					// card panel in discard panel was clicked
+					action = getActionMap().get(JSkatActions.TAKE_CARD_FROM_SKAT);
+				}
+				else if (this.parent instanceof PlayerPanel) {
+					// card panel in player panel was clicked
+					
+					GameStates state = ((PlayerPanel) this.parent).getGameState();
+					
+					if (state == GameStates.DISCARDING) {
+						// discarding phase
+						action = getActionMap().get(JSkatActions.PUT_CARD_INTO_SKAT);
+					}
+					else if (state == GameStates.TRICK_PLAYING) {
+						// trick playing phase
+						action = getActionMap().get(JSkatActions.PLAY_CARD);
+					}
+				}
+				else {
+					
+					log.debug("Other parent " + this.parent); //$NON-NLS-1$
+				}
 				
-				action.actionPerformed(new ActionEvent(Card.getCardFromString(this.suit.shortString() + this.rank.shortString()), ActionEvent.ACTION_PERFORMED, (String) action.getValue(Action.ACTION_COMMAND_KEY)));
-			}
-			else {
-				
-				log.debug("Action is null");
+				if (action != null) {
+					
+					action.actionPerformed(new ActionEvent(Card.getCardFromString(card.getSuit().shortString() + card.getRank().shortString()), ActionEvent.ACTION_PERFORMED, (String) action.getValue(Action.ACTION_COMMAND_KEY)));
+				}
+				else {
+					
+					log.debug("Action is null"); //$NON-NLS-1$
+				}
 			}
 		}
+	}
+
+	void setSortType(GameType newGameType) {
+	
+		this.gameType = newGameType;
+		this.cards.sort(this.gameType);
+		repaint();
 	}
 }

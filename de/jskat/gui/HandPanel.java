@@ -11,14 +11,10 @@ Released: @ReleaseDate@
 
 package de.jskat.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import de.jskat.gui.img.JSkatGraphicRepository;
-import de.jskat.util.CardList;
 import de.jskat.util.Card;
 import de.jskat.util.GameType;
 import de.jskat.util.Player;
@@ -43,27 +39,16 @@ abstract class HandPanel extends JPanel {
 	 */
 	JSkatGraphicRepository bitmaps;
 	/**
-	 * Players hand
-	 */
-	CardList cards;
-	/**
-	 * Card panels
-	 */
-	List<CardPanel> panels;
-	/**
 	 * Header label
 	 */
 	JLabel headerLabel;
 
+	CardPanel cardPanel;
+	
 	/**
 	 * Maximum card count
 	 */
 	int maxCardCount = 0;
-
-	/**
-	 * Holds the game type for the sorting order
-	 */
-	GameType gameType = GameType.GRAND;
 
 	/**
 	 * Constructor
@@ -77,15 +62,9 @@ abstract class HandPanel extends JPanel {
 		setActionMap(this.parent.getActionMap());
 		this.bitmaps = jskatBitmaps;
 		this.maxCardCount = maxCards;
-		this.cards = new CardList();
-		this.panels = new ArrayList<CardPanel>();
 		
 		this.setOpaque(false);
-		
-		for (int i = 0; i < this.maxCardCount; i++) {
-			
-			this.panels.add(new CardPanel(this, this.bitmaps, true));
-		}
+
 		this.headerLabel = new JLabel(" "); //$NON-NLS-1$
 		
 		initPanel();
@@ -143,9 +122,7 @@ abstract class HandPanel extends JPanel {
 	 */
 	void addCard(Card newCard) {
 		
-		this.cards.add(newCard);
-		this.cards.sort(this.gameType);
-		refreshCardPanels();
+		this.cardPanel.addCard(newCard);
 	}
 	
 	/**
@@ -155,28 +132,7 @@ abstract class HandPanel extends JPanel {
 	 */
 	void removeCard(Card cardToRemove) {
 		
-		this.cards.remove(cardToRemove);
-		refreshCardPanels();
-	}
-	
-	private void refreshCardPanels() {
-		
-		int i = 0;
-		for (Card card : this.cards) {
-			
-			if (i < this.cards.size()) {
-				
-				this.panels.get(i).setCard(card.getSuit(), card.getRank());
-			}
-			
-			i++;
-		}
-		
-		while (i < this.panels.size()) {
-			// delete unused panels
-			this.panels.get(i).clear();
-			i++;
-		}
+		this.cardPanel.removeCard(cardToRemove);
 	}
 	
 	/**
@@ -184,8 +140,7 @@ abstract class HandPanel extends JPanel {
 	 */
 	void clearHandPanel() {
 		
-		this.cards.clear();
-		refreshCardPanels();
+		this.cardPanel.clearCards();
 	}
 	
 	/**
@@ -193,10 +148,7 @@ abstract class HandPanel extends JPanel {
 	 */
 	void hideCards() {
 		
-		for (CardPanel card : this.panels) {
-			
-			card.hideCard();
-		}
+		this.cardPanel.hideCards();
 	}
 	
 	/**
@@ -204,21 +156,16 @@ abstract class HandPanel extends JPanel {
 	 */
 	void showCards() {
 		
-		for (CardPanel card : this.panels) {
-			
-			card.showCard();
-		}
+		this.cardPanel.showCards();
+	}
+		
+	void setSortGameType(GameType newGameType) {
+		
+		this.cardPanel.setSortType(newGameType);
 	}
 	
 	boolean isHandFull() {
 		
-		return this.cards.size() >= this.maxCardCount;
-	}
-	
-	void setSortGameType(GameType newGameType) {
-		
-		this.gameType = newGameType;
-		this.cards.sort(this.gameType);
-		refreshCardPanels();
+		return this.cardPanel.getCardCount() == this.maxCardCount;
 	}
 }

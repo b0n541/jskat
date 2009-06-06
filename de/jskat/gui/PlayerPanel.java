@@ -14,7 +14,6 @@ package de.jskat.gui;
 import java.awt.Color;
 
 import javax.swing.BorderFactory;
-import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -53,17 +52,14 @@ class PlayerPanel extends HandPanel {
 		setBackground(Color.WHITE);
 		setBorder(BorderFactory.createLineBorder(Color.black));
 		
-		setLayout(new MigLayout("fill", "fill", "fill"));
+		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
 		add(this.headerLabel, "wrap"); //$NON-NLS-1$
 		
-		JPanel cardPanels = new JPanel(new MigLayout("fill, gapx 0", "fill", "fill"));
-		for (CardPanel panel : this.panels) {
-			
-			cardPanels.add(panel, "grow"); //$NON-NLS-1$
-		}
-		
-		add(cardPanels, "grow");
+		this.cardPanel = new CardPanel(this, this.bitmaps, false);
+		this.cardPanel.setBorder(BorderFactory.createLineBorder(Color.red));
+
+		add(this.cardPanel, "grow"); //$NON-NLS-1$
 	}
 
 	CardPanel getLastClickedCardPanel() {

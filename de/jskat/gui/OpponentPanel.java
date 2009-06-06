@@ -14,7 +14,6 @@ package de.jskat.gui;
 import java.awt.Color;
 
 import javax.swing.BorderFactory;
-import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
 import de.jskat.gui.img.JSkatGraphicRepository;
@@ -46,13 +45,10 @@ class OpponentPanel extends HandPanel {
 		setBorder(BorderFactory.createLineBorder(Color.black));
 		
 		add(this.headerLabel, "wrap"); //$NON-NLS-1$
+
+		this.cardPanel = new CardPanel(this, this.bitmaps, true);
+		this.cardPanel.setBorder(BorderFactory.createLineBorder(Color.red));
 		
-		JPanel cardPanels = new JPanel(new MigLayout("fill, gapx 0, righttoleft", "fill", "fill"));
-		for (CardPanel panel : this.panels) {
-			
-			cardPanels.add(panel, "grow"); //$NON-NLS-1$
-		}
-		
-		add(cardPanels, "grow");
+		add(this.cardPanel, "grow"); //$NON-NLS-1$
 	}
 }
