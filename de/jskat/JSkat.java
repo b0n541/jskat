@@ -32,7 +32,9 @@ public class JSkat {
 	private static Log log = LogFactory.getLog(JSkat.class);
 
 	/**
-	 * @param args
+	 * Main method
+	 * 
+	 * @param args Command line arguments
 	 */
 	public static void main(String[] args) {
 
