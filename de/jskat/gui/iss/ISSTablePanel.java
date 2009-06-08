@@ -11,9 +11,13 @@ Released: @ReleaseDate@
 
 package de.jskat.gui.iss;
 
+import java.util.Map;
+
 import javax.swing.ActionMap;
 import javax.swing.JPanel;
 
+import de.jskat.data.iss.ISSPlayerStatus;
+import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.gui.SkatTablePanel;
 import de.jskat.gui.img.JSkatGraphicRepository;
 
@@ -53,5 +57,15 @@ public class ISSTablePanel extends SkatTablePanel {
 		return new ChatPanel(this);
 	}
 
-	private JSkatGraphicRepository bitmaps;
+	/**
+	 * Updates the panel with the new status
+	 * 
+	 * @param tableStatus New table status
+	 */
+	public void setTableStatus(ISSTablePanelStatus tableStatus) {
+		
+		this.setMaxPlayers(tableStatus.getMaxPlayers());
+		
+		Map<String, ISSPlayerStatus> playerInfo = tableStatus.getPlayerInformation();
+	}
 }

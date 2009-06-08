@@ -9,6 +9,7 @@ import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameStates;
 import de.jskat.data.iss.ISSChatMessage;
+import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
 import de.jskat.util.Player;
@@ -364,11 +365,11 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#updateISSTable(String, StringTokenizer)
+	 * @see JSkatView#updateISSTable(String, ISSTablePanelStatus)
 	 */
 	@Override
 	public void updateISSTable(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") StringTokenizer token) {
+			@SuppressWarnings("unused") ISSTablePanelStatus status) {
 		// empty method by indent
 	}
 }

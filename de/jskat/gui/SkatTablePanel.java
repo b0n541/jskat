@@ -49,22 +49,25 @@ public class SkatTablePanel extends JSkatTabPanel {
 	private static final long serialVersionUID = 1L;
 	private static Log log = LogFactory.getLog(SkatTablePanel.class);
 
-	private HandPanel foreHand;
-	private HandPanel middleHand;
-	private HandPanel hindHand;
-	private OpponentPanel leftOpponentPanel;
-	private OpponentPanel rightOpponentPanel;
-	private PlayerPanel playerPanel;
-	private GameInformationPanel gameInfoPanel;
-	private JPanel gameContextPanel;
-	private Map<ContextPanelTypes, JPanel> contextPanels;
-	private GameAnnouncePanel gameAnnouncePanel;
-	private TrickPlayPanel trickPanel;
-	private SkatListTableModel skatListTableModel;
-	private JTable skatListTable;
-	private JScrollPane skatListScrollPane;
-	private BiddingPanel biddingPanel;
-	private DiscardPanel discardPanel;
+	protected HandPanel foreHand;
+	protected HandPanel middleHand;
+	protected HandPanel hindHand;
+	protected OpponentPanel leftOpponentPanel;
+	protected OpponentPanel rightOpponentPanel;
+	protected PlayerPanel playerPanel;
+	protected GameInformationPanel gameInfoPanel;
+	protected JPanel gameContextPanel;
+	protected Map<ContextPanelTypes, JPanel> contextPanels;
+	protected GameAnnouncePanel gameAnnouncePanel;
+	protected TrickPlayPanel trickPanel;
+	/**
+	 * Table model for skat list
+	 */
+	protected SkatListTableModel skatListTableModel;
+	protected JTable skatListTable;
+	protected JScrollPane skatListScrollPane;
+	protected BiddingPanel biddingPanel;
+	protected DiscardPanel discardPanel;
 
 	/**
 	 * @see JSkatTabPanel#JSkatTabPanel(String, JSkatGraphicRepository, ActionMap)
@@ -509,4 +512,10 @@ public class SkatTablePanel extends JSkatTabPanel {
 		
 		this.skatListTableModel.clearList();
 	}
+	
+	protected void setMaxPlayers(int maxPlayers) {
+		
+		this.skatListTableModel.setPlayerCount(maxPlayers);
+	}
+
 }

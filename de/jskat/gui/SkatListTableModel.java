@@ -93,4 +93,19 @@ class SkatListTableModel extends AbstractTableModel {
 		
 		this.fireTableDataChanged();
 	}
+	
+	public void setPlayerCount(int playerCount) {
+		
+		this.data.clear();
+		
+		this.columns.clear();
+		for (int i = 0; i < playerCount; i++) {
+			
+			this.columns.add("P" + i);
+		}
+		this.columns.add("Games");
+		
+		this.fireTableStructureChanged();
+		this.fireTableDataChanged();
+	}
 }

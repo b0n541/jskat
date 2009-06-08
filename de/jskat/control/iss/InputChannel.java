@@ -15,10 +15,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
+import de.jskat.data.iss.ISSPlayerStatus;
+import de.jskat.data.iss.ISSTablePanelStatus;
 
 /**
  * Reads data from ISS until an interrupt signal occures
@@ -189,11 +194,65 @@ class InputChannel extends Thread {
 		
 		if (actionCommand.equals("state")) {
 		
-			this.issControl.updateISSTableState(tableName, token);
+			this.issControl.updateISSTableState(tableName, getTableStatus(token));
 		}
 		else {
 			
 			log.debug("unhandled action command: " + actionCommand + " for table " + tableName);
+		}
+	}
+	
+	private ISSTablePanelStatus getTableStatus(StringTokenizer token) {
+		
+		ISSTablePanelStatus status = new ISSTablePanelStatus();
+		
+		status.setMaxPlayers(Integer.parseInt(token.nextToken()));
+		
+		List<String> playerNames = new ArrayList<String>(); 
+		for (int i = 0; i < 4; i++) {
+		
+			playerNames.add(token.nextToken());
+		}
+
+		for (int i = 0; i < status.getMaxPlayers(); i++) {
+			
+			if (!playerNames.get(i).equals(".")) {
+			
+				status.addPlayer(playerNames.get(i), parsePlayerStatus(token));
+			}
+			else {
+				
+				skipTokens(token, 9);
+			}
+		}
+		
+		return status;
+	}
+
+	private ISSPlayerStatus parsePlayerStatus(StringTokenizer token) {
+		
+		ISSPlayerStatus status = new ISSPlayerStatus();
+		
+		// skip player name
+		token.nextToken();
+		status.setIP(token.nextToken());
+		status.setGamesPlayed(Integer.parseInt(token.nextToken()));
+		status.setGamesWon(Integer.parseInt(token.nextToken()));
+		status.setLastGameResult(Integer.parseInt(token.nextToken()));
+		status.setTotalPoints(Integer.parseInt(token.nextToken()));
+		status.setSwitch34(Integer.parseInt(token.nextToken()) == 1);
+		token.nextToken(); // ignore next information, unknown purpose
+		status.setTalkEnabled(Integer.parseInt(token.nextToken()) == 1);
+		status.setReadyToPlay(Integer.parseInt(token.nextToken()) == 1);
+		
+		return status;
+	}
+	
+	private void skipTokens(StringTokenizer token, int skipCount) {
+		
+		for (int i = 0; i < skipCount; i++) {
+			
+			token.nextToken();
 		}
 	}
 

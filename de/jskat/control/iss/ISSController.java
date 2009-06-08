@@ -20,6 +20,7 @@ import org.apache.commons.logging.LogFactory;
 import de.jskat.control.JSkatMaster;
 import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.data.iss.ISSLoginCredentials;
+import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.gui.JSkatView;
 import de.jskat.gui.action.JSkatActions;
 
@@ -236,8 +237,8 @@ public class ISSController {
 		this.issConnect.leaveTable(tableName, playerName);
 	}
 
-	public void updateISSTableState(String tableName, StringTokenizer token) {
+	public void updateISSTableState(String tableName, ISSTablePanelStatus status) {
 		
-		this.view.updateISSTable(tableName, token);
+		this.view.updateISSTable(tableName, status);
 	}
 }

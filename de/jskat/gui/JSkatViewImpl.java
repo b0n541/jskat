@@ -44,6 +44,8 @@ import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameStates;
 import de.jskat.data.iss.ISSChatMessage;
+import de.jskat.data.iss.ISSPlayerStatus;
+import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.gui.action.JSkatActions;
 import de.jskat.gui.action.human.DiscardAction;
 import de.jskat.gui.action.human.GameAnnounceAction;
@@ -56,7 +58,6 @@ import de.jskat.gui.action.human.PutCardIntoSkatAction;
 import de.jskat.gui.action.human.TakeCardFromSkatAction;
 import de.jskat.gui.action.iss.ConnectAction;
 import de.jskat.gui.action.iss.CreateISSTableAction;
-import de.jskat.gui.action.iss.ISSPlayer;
 import de.jskat.gui.action.iss.JoinISSTableAction;
 import de.jskat.gui.action.iss.LeaveISSTableAction;
 import de.jskat.gui.action.iss.SendChatMessageAction;
@@ -75,7 +76,6 @@ import de.jskat.gui.action.main.SaveNeuralNetworksAction;
 import de.jskat.gui.action.main.StartSkatSeriesAction;
 import de.jskat.gui.action.main.TrainNeuralNetworksAction;
 import de.jskat.gui.help.JSkatHelpDialog;
-import de.jskat.gui.human.HumanPlayer;
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.gui.iss.ISSTablePanel;
 import de.jskat.gui.iss.LobbyPanel;
@@ -642,55 +642,22 @@ public class JSkatViewImpl implements JSkatView {
 	}
 	
 	/**
-	 * @see de.jskat.gui.JSkatView#updateISSTable(java.lang.String, java.util.StringTokenizer)
+	 * @see de.jskat.gui.JSkatView#updateISSTable(String, ISSTablePanelStatus)
 	 */
 	@Override
-	public void updateISSTable(String tableName, StringTokenizer token) {
+	public void updateISSTable(String tableName, ISSTablePanelStatus tableStatus) {
 		
 		SkatTablePanel panel = this.tables.get(tableName);
 		
 		if (panel == null) {
 			
 			this.createISSTable(tableName);
+			panel = this.tables.get(tableName);
 		}
 		
-		/*
-		3 		-- max. number of players (3 or 4 player)
-		tazelaar 	-- player 1
-		zoot 		-- player 2
-		kermit		-- player 3
-		.		-- player 4
-		tazelaar 	-- player 1
-		.		-- IP
-		27		-- games played
-		19		-- games won
-		40		-- last game
-		1211		-- total sum
-		0		-- 34
-		0		-- ???
-		1		-- talk enabled
-		0		-- ready to play
-		zoot $ 23 16 -98 1345 0 0 1 0 
-		kermit $ 14 11 40 1408 0 0 1 0 
-		. 		-- ???
-		. 		-- ???
-		0 		-- ???
-		0 		-- ???
-		0 		-- ???
-		0 		-- ???
-		0 		-- ???
-		0 		-- ???
-		0 		-- ???
-		0 		-- ???
-		true		-- kiebitz at table
-		*/
-		
-		int maxPlayers = Integer.parseInt(token.nextToken());
-		String playerName1 = token.nextToken();
-		String playerName2 = token.nextToken();
-		String playerName3 = token.nextToken();
-		String playerName4 = token.nextToken();
-		
-		//panel.set
+		if (panel instanceof ISSTablePanel) {
+			
+			((ISSTablePanel) panel).setTableStatus(tableStatus);
+		}
 	}
 }
