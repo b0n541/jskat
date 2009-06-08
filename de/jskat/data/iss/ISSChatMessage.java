@@ -1,3 +1,14 @@
+/*
+
+@ShortLicense@
+
+Authors: @JS@
+         @MJL@
+
+Released: @ReleaseDate@
+
+*/
+
 package de.jskat.data.iss;
 
 /**
@@ -8,6 +19,12 @@ public class ISSChatMessage {
 	private String chatName;
 	private String message;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param newChatName Chat name
+	 * @param messageText Message text
+	 */
 	public ISSChatMessage(String newChatName, String messageText) {
 		
 		this.chatName = newChatName;
