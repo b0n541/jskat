@@ -15,7 +15,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.util.GameType;
-import de.jskat.util.SkatConstants;
 
 /**
  * Game announcement
