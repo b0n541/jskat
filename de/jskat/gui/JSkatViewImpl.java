@@ -16,7 +16,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.StringTokenizer;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -44,7 +43,6 @@ import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameStates;
 import de.jskat.data.iss.ISSChatMessage;
-import de.jskat.data.iss.ISSPlayerStatus;
 import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.gui.action.JSkatActions;
 import de.jskat.gui.action.human.DiscardAction;
