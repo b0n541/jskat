@@ -274,7 +274,11 @@ public class JSkatGraphicRepository {
 		/**
 		 * Connect ISS
 		 */
-		CONNECT_ISS;
+		CONNECT_ISS,
+		/**
+		 * License
+		 */
+		LICENSE;
 	}
 	
 	/**
