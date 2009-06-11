@@ -222,6 +222,14 @@ public class NullView implements JSkatView {
 	}
 
 	/**
+	 * @see JSkatView#showLicenseDialog()
+	 */
+	@Override
+	public void showLicenseDialog() {
+		// empty method by indent
+	}
+
+	/**
 	 * @see JSkatView#clearTable(String)
 	 */
 	@Override

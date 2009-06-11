@@ -66,6 +66,7 @@ import de.jskat.gui.action.main.ContinueSkatSeriesAction;
 import de.jskat.gui.action.main.CreateTableAction;
 import de.jskat.gui.action.main.ExitAction;
 import de.jskat.gui.action.main.HelpAction;
+import de.jskat.gui.action.main.LicenseAction;
 import de.jskat.gui.action.main.LoadGameAction;
 import de.jskat.gui.action.main.LoadNeuralNetworksAction;
 import de.jskat.gui.action.main.SaveGameAction;
@@ -132,6 +133,8 @@ public class JSkatViewImpl implements JSkatView {
 				jskat, this.bitmaps));
 		this.actions
 				.put(JSkatActions.HELP, new HelpAction(jskat, this.bitmaps));
+		this.actions
+				.put(JSkatActions.LICENSE, new LicenseAction(jskat, this.bitmaps));
 		this.actions.put(JSkatActions.EXIT_JSKAT, new ExitAction(jskat,
 				this.bitmaps));
 		this.actions.put(JSkatActions.ABOUT_JSKAT, new AboutAction(jskat,
@@ -273,8 +276,8 @@ public class JSkatViewImpl implements JSkatView {
 		menu.add(issMenu);
 
 		JMenu helpMenu = new JMenu("Help");
+		helpMenu.add(new JMenuItem(this.actions.get(JSkatActions.LICENSE)));
 		helpMenu.add(new JMenuItem(this.actions.get(JSkatActions.HELP)));
-		helpMenu.add(new JSeparator());
 		helpMenu.add(new JMenuItem(this.actions.get(JSkatActions.ABOUT_JSKAT)));
 		menu.add(helpMenu);
 
@@ -491,7 +494,16 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showHelpDialog() {
 
-		new JSkatHelpDialog(null, this.mainFrame, true).setVisible(true);
+		new JSkatHelpDialog(null, this.mainFrame, true, "Help", "de/jskat/gui/help/jskat_help.html").setVisible(true);
+	}
+
+	/**
+	 * @see JSkatView#showLicenseDialog()
+	 */
+	@Override
+	public void showLicenseDialog() {
+
+		new JSkatHelpDialog(null, this.mainFrame, true, "License", "de/jskat/gui/help/gpl2.txt").setVisible(true);
 	}
 
 	/**

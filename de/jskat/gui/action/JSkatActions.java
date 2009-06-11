@@ -44,6 +44,10 @@ public enum JSkatActions {
 	 */
 	HELP,
 	/**
+	 * Shows the license information
+	 */
+	LICENSE,
+	/**
 	 * Creates a local skat table
 	 */
 	CREATE_LOCAL_TABLE,
