@@ -42,6 +42,8 @@ public class JSkatHelpDialog extends JDialog {
     private JFrame parent;
     private JScrollPane scrollPane;
     private JTextPane textPane;
+    private String contentURL;
+    private String dlgTitle;
 
     /**
      * Creates new form JSkatHelpDialog
@@ -49,11 +51,13 @@ public class JSkatHelpDialog extends JDialog {
      * @param parentFrame The parent JFrame
      * @param modal TRUE if the dialog is modal
      */
-    public JSkatHelpDialog(JSkatApplicationData dataModel, JFrame parentFrame, boolean modal) {
+    public JSkatHelpDialog(JSkatApplicationData dataModel, JFrame parentFrame, boolean modal, String title, String contentPath) {
         
         super(parentFrame, modal);
         
         this.parent = parentFrame;
+        this.dlgTitle = title;
+        this.contentURL = contentPath;
         initComponents();
         setLocationRelativeTo(this.parent);
     }
@@ -78,7 +82,7 @@ public class JSkatHelpDialog extends JDialog {
         this.scrollPane = new JScrollPane();
         this.textPane = new JTextPane();
         
-        setTitle("Help/Licence");
+        setTitle(dlgTitle);
         addWindowListener(new WindowAdapter() {
             @Override
 			public void windowClosing(WindowEvent evt) {
@@ -91,14 +95,15 @@ public class JSkatHelpDialog extends JDialog {
         this.textPane.setEditorKit(new HTMLEditorKit());
         this.textPane.setEditable(false);
         
-        StringBuilder gplText = new StringBuilder();
+        StringBuilder message = new StringBuilder();
         try {
-            InputStream is = ClassLoader.getSystemResourceAsStream("de/jskat/gui/help/gpl2.txt");
+            InputStream is = ClassLoader.getSystemResourceAsStream(contentURL);
+//            InputStream is = ClassLoader.getSystemResourceAsStream("de/jskat/gui/help/gpl2.txt");
             InputStreamReader isr = new java.io.InputStreamReader(is);
             BufferedReader bfr = new java.io.BufferedReader(isr);
             
             while ( bfr.ready() ) {
-                gplText.append(bfr.readLine()).append("\n");
+                message.append(bfr.readLine()).append("\n");
             }
             
         } catch (java.io.IOException e) {
@@ -106,7 +111,7 @@ public class JSkatHelpDialog extends JDialog {
         	e.printStackTrace();
         }
         
-        this.textPane.setText(gplText.toString());
+        this.textPane.setText(message.toString());
         this.textPane.setCaretPosition(0);
         
         this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
