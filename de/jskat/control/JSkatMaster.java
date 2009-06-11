@@ -366,6 +366,14 @@ public class JSkatMaster {
 	}
 
 	/**
+	 * Shows the license dialog
+	 */
+	public void showLicense() {
+		
+		this.view.showLicenseDialog();
+	}
+
+	/**
 	 * Triggers the human player interface to stop waiting
 	 * 
 	 * @param event Action event
