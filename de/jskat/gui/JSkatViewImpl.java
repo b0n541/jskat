@@ -276,8 +276,9 @@ public class JSkatViewImpl implements JSkatView {
 		menu.add(issMenu);
 
 		JMenu helpMenu = new JMenu("Help");
-		helpMenu.add(new JMenuItem(this.actions.get(JSkatActions.LICENSE)));
 		helpMenu.add(new JMenuItem(this.actions.get(JSkatActions.HELP)));
+		helpMenu.add(new JSeparator());
+		helpMenu.add(new JMenuItem(this.actions.get(JSkatActions.LICENSE)));
 		helpMenu.add(new JMenuItem(this.actions.get(JSkatActions.ABOUT_JSKAT)));
 		menu.add(helpMenu);
 
@@ -378,7 +379,7 @@ public class JSkatViewImpl implements JSkatView {
 
 		JOptionPane.showMessageDialog(this.mainFrame, "JSkat V0.7\n\n"
 				+ "Authors: Jan Schaefer, Markus J. Luzius\n\n"
-				+ "Icons: Tango project and Silvestre Herrera", "About JSkat",
+				+ "Icons: Tango project, Silvestre Herrera and Alex Roberts", "About JSkat",
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
