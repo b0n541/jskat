@@ -10,31 +10,19 @@ Released: @ReleaseDate@
 
 package de.jskat.ai.mjl;
 
-import de.jskat.util.CardList;
+import de.jskat.util.Card;
 
 
 /**
  * @author Markus J. Luzius <markus@luzius.de>
  *
  */
-public interface CardPlayer {
+interface CardPlayer {
 
 	/** Gets the next card, that the player wants to play
-	 * @param cards hand of the player
 	 * @param trickInfo all necessary information about the trick
-	 * @return index of the card to play
+	 * @return the card to play
 	 */
-	public int playNextCard(CardList cards, TrickInfo trickInfo);
+	Card playNextCard(TrickInfo trickInfo);
 
-	/**
-	 *
-	 * @return player id
-	 */
-	public int getPlayerID();
-
-	/**
-	 *
-	 * @param i
-	 */
-	public void setPlayerID(int i);
 }

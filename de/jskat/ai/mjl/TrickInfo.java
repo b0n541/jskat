@@ -24,8 +24,7 @@ public class TrickInfo {
 	/**
 	 * Constructor
 	 */
-	public TrickInfo() {
-	}
+	public TrickInfo() {}
 	
 	/**
 	 * get the current gameInfo

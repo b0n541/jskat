@@ -15,8 +15,6 @@ import org.apache.commons.logging.LogFactory;
 
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
-import de.jskat.util.GameType;
-import de.jskat.util.Rank;
 import de.jskat.util.rule.BasicSkatRules;
 
 /**
@@ -27,6 +25,7 @@ public class RamschPlayer implements CardPlayer {
 
 	/** log */
 	private Log log = LogFactory.getLog(RamschPlayer.class);
+	private CardList cards;
 	
 	/** Constructor
 	 * @param id playerID
@@ -43,14 +42,14 @@ public class RamschPlayer implements CardPlayer {
 	 * @param trick all necessary information about the trick
 	 * @return index of the card to play
 	 */
-	public int playNextCard(CardList cards, TrickInfo trick) {
+	public Card playNextCard(TrickInfo trick) {
 		log.debug(".playNextCard(): Processing hand: "+cards);
 		log.debug(".playNextCard(): Not really implemented yet...");
 		int result = 0;
 		if(trick.size() == 0) {
 		    result = playInitialCard(cards);
 		    log.info(".playNextCard(): playing "+(cards.get(result)));
-			return result;
+			return cards.remove(result);
 		}
 		else if(trick.size() == 1) {
 		    result = playOtherCard(cards, trick.getCard(0));
@@ -84,7 +83,7 @@ public class RamschPlayer implements CardPlayer {
 //			}
 //		}
 	    log.info(".playNextCard(): playing "+(cards.get(result)));
-		return result;
+		return cards.remove(result);
 	}
 	
 	private int playInitialCard(CardList cards) {
@@ -113,4 +112,5 @@ public class RamschPlayer implements CardPlayer {
 	/** player id */
 	private int playerID = -1;
 	private BasicSkatRules rules;
+
 }

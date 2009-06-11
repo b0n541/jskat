@@ -26,6 +26,12 @@ class Bidding {
 
 	private Log log = LogFactory.getLog(Bidding.class);
 
+	/**
+	 * Maximum value that the player will bid
+	 */
+	private int maxBid = -1;
+	private GameType suggestedGameType = null;
+
     /** default constructor
 	 * @param cards hand of the player
 	 */
@@ -60,18 +66,20 @@ class Bidding {
 		else if (noOfJacks < 1 && noOfTrumps < 6) maxBid = 0;
 		else if ((Helper.getJacks(cards)&12)==0 && noOfTrumps < 5) maxBid = 0;
         
+		if(maxBid>0) suggestedGameType = mostFrequentSuitColor.getGameType();
+		
 		log.debug("I will bid until " + maxBid +" - I have "+noOfJacks+" Jacks and "+noOfTrumps+" Trumps in suit "+mostFrequentSuitColor);
 	}
 
 	/** Gets the maximum bid value of the player
-	 * @return value
+	 * @return maximum bid value
 	 */
 	int getMaxBid() {
 		return maxBid;
 	}
 
-	/**
-	 * Maximum value that the player will bid
-	 */
-	private int maxBid = -1;
+	GameType getSuggestedGameType() {
+		return suggestedGameType;
+	}
+	
 }

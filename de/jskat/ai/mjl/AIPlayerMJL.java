@@ -24,16 +24,17 @@ import de.jskat.util.rule.BasicSkatRules;
  */
 public class AIPlayerMJL extends AbstractJSkatPlayer {
 
-	private int maxBidValue = -1;
 	private Log log = LogFactory.getLog(AIPlayerMJL.class);
 	private CardPlayer aiPlayer;
+	int maxBidValue = -1;
 
 	/* (non-Javadoc)
 	 * @see de.jskat.ai.JSkatPlayer#preparateForNewGame()
 	 */
 	@Override
 	public void preparateForNewGame() {
-		// reset maxBidValue, so it is recalculated next time a game starts... 
+		// reset implementation of aiPlayer
+		aiPlayer = new SinglePlayer(cards, rules);
 		maxBidValue = -1;
 		// nothing else to do right now...
 	}
@@ -46,8 +47,11 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 		if(maxBidValue<0) {
 			maxBidValue = new Bidding(cards).getMaxBid();
 		}
-		if(maxBidValue<18) return -1;
-		return (maxBidValue>=nextBidValue?nextBidValue:-1);
+		if(maxBidValue<nextBidValue) {
+			aiPlayer = new OpponentPlayer(cards);
+			return -1;
+		}
+		return nextBidValue;
 	}
 
 	/* (non-Javadoc)
@@ -58,8 +62,11 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 		if(maxBidValue<0) {
 			maxBidValue = new Bidding(cards).getMaxBid();
 		}
-		if(maxBidValue<18) return false;
-		return (maxBidValue>=currBidValue?true:false);
+		boolean result = !(maxBidValue<18) && maxBidValue>=currBidValue;
+		if(!result) {
+			aiPlayer = new OpponentPlayer(cards);
+		}
+		return result; 
 	}
 
 	/* (non-Javadoc)
@@ -68,7 +75,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	@Override
 	public boolean lookIntoSkat() {
 		// TODO really look into skat?
-		aiPlayer = new SinglePlayer(1, rules);
+		aiPlayer = new SinglePlayer(cards, rules);
 		return true;
 	}
 
@@ -77,9 +84,9 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public GameAnnouncement announceGame() {
-		// TODO game announcement
-		log.debug("game announcement probably causes an exception...");
-		return null;
+		GameAnnouncement game = new GameAnnouncement();
+		game.setGameType(new Bidding(cards).getSuggestedGameType());
+		return game;
 	}
 	
 	/* (non-Javadoc)
@@ -98,16 +105,15 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	@Override
 	protected void startGame() {
 		if(singlePlayer!=knowledge.getPlayerPosition()) {
-			log.debug("AIPlayerMJL set to OpponentPlayer");
-			aiPlayer = new OpponentPlayer();
+			log.debug("ok? AIPlayerMJL should be OpponentPlayer - actually is: "+(aiPlayer==null?"null":aiPlayer.getClass().getName()));
 		}
 		else {
 			if(aiPlayer==null) {
-				log.warn("AIPlayerMJL should already have been set to SinglePlayer!");
-				aiPlayer = new SinglePlayer(2, rules);
+				log.warn("todo: AIPlayerMJL should already have been set to SinglePlayer! "+(aiPlayer==null?"null":aiPlayer.getClass().getName()));
+				aiPlayer = new SinglePlayer(cards, rules);
 			}
 			else {
-				log.debug("AIPlayerMJL already set to SinglePlayer");
+				log.debug("ok! AIPlayerMJL already set to SinglePlayer: "+(aiPlayer==null?"null":aiPlayer.getClass().getName()));
 			}
 		}
 	}
@@ -117,8 +123,15 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public Card playCard() {
-		// TODO implementation!!!
-		// but make sure, that card is valid!!!
+        TrickInfo thisTrick = new TrickInfo();
+        GameInfo game = new GameInfo(gameType, gameType.getTrumpSuit(), singlePlayer.getOrder());
+        thisTrick.setGameInfo(game);
+        thisTrick.setTrick(knowledge.getTrickCards());
+		thisTrick.setSinglePlayerPos(singlePlayer.getOrder());
+		Card toPlay = aiPlayer.playNextCard(thisTrick);
+		// make sure, that there is a card 
+		if(toPlay!=null) return toPlay;
+		// if there is none, just play the first valid card
 		CardList result = getPlayableCards(this.knowledge.getTrickCards());
 		if(result.size()<1) {
 			log.warn("no playable cards - shouldn't be possible!");

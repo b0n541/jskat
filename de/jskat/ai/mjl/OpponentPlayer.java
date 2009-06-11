@@ -17,7 +17,6 @@ import de.jskat.util.Card;
 import de.jskat.util.CardList;
 import de.jskat.util.GameType;
 import de.jskat.util.Rank;
-import de.jskat.util.SkatConstants;
 import de.jskat.util.Suit;
 
 /**
@@ -26,32 +25,34 @@ import de.jskat.util.Suit;
  */
 public class OpponentPlayer implements CardPlayer {
 
-	/** Constructor
-	 * @param id playerID
+	private CardList cards = null;
+	
+	/**
+	 * 
 	 */
-//	public OpponentPlayer(int id, SkatRules rules) {
-//		log.debug("Constructing new opponent player.");
-//		this.playerID = id;
-//		this.rules = rules;
-//	}
-
+	OpponentPlayer(CardList cards) {
+		log.debug("Constructing new opponent player...");
+		this.cards = cards;
+	}
+	
 	/** Gets the next card that the player wants to play
 	 * @param cards hand of the player
 	 * @param trickInfo all necessary information about the trick
 	 * @return index of the card to play
 	 * @see de.jskat.ai.mjl.CardPlayer#playNextCard(jskat.share.CardList, de.jskat.ai.mjl.TrickInfo)
 	 */
-	public int playNextCard(CardList cards, TrickInfo trickInfo) {
+	public Card playNextCard(TrickInfo trickInfo) {
+		log.debug("Play next card with trick size "+trickInfo.size());
 		if(trickInfo.getGameType()==GameType.NULL) {
-			return playNextCardNullGame(cards, trickInfo);
+			return playNextCardNullGame(trickInfo);
 		}
     	
 		// TODO refactor method calls: just include CardMemory instead of all the details
 
 		int bestToBePlayed = -1;
-/*		log.debug("--------------------- start ----------------------------------");
+		log.debug("--------------------- start ----------------------------------");
         log.debug(".playNextCard(): Processing hand ["+cards+"] with trick ["+trickInfo.getTrick()+"]. Trump is "+Helper.suitName(trickInfo.getTrump())+".");
-        
+/*        
 		if (trickInfo.size() > 1) {
 			// 1: check if player can match initial suit
 			if(Helper.isAbleToMatch(rules, cards, trickInfo.getTrump(), trickInfo.getCard(0), trickInfo.getGameType())) {
@@ -250,7 +251,9 @@ public class OpponentPlayer implements CardPlayer {
 		
 		log.debug("Playing "+cards.get(bestToBePlayed));
 		log.debug("--------------------- done -----------------------------------");
-*/		return bestToBePlayed;
+		*/
+		if(bestToBePlayed<0) return null;
+		return cards.remove(bestToBePlayed);
 	}
 
 	/**
@@ -259,7 +262,7 @@ public class OpponentPlayer implements CardPlayer {
 	 * @param trickInfo
 	 * @return the index of the card that should be played
 	 */
-	private int playNextCardNullGame(CardList cards, TrickInfo trickInfo) {
+	private Card playNextCardNullGame(TrickInfo trickInfo) {
 		int bestToBePlayed = -1;
 		log.debug(".playNextCardNullGame(): cards: ["+cards+"]");
         
@@ -286,7 +289,8 @@ public class OpponentPlayer implements CardPlayer {
 			bestToBePlayed = toBePlayed;
 		}
 		log.debug(".playNextCardNullGame(): playing: ["+cards.get(bestToBePlayed)+"]");
-		return bestToBePlayed;
+		if(bestToBePlayed<0) return null;
+		return cards.remove(bestToBePlayed);
 	}
 
 	/**
@@ -450,32 +454,9 @@ public class OpponentPlayer implements CardPlayer {
 		// e.g. "Kurzer Weg, lange Farbe - langer Weg, kurze Farbe"
 	}
 
-
-	/**
-	 * Getter for playerID
-	 * @return playerID
-	 */
-	public int getPlayerID() {
-		return playerID;
-	}
-
-	/**
-	 * Setter for playerID
-	 * @param i
-	 */
-	public void setPlayerID(int i) {
-		playerID= i;
-	}
-
-	/**
-	 * The id of the player
-	 */
-	private int playerID = -1;
-
-//	private SkatRules rules;
-	
 	/**
 	 * log
 	 */
 	private Log log = LogFactory.getLog(OpponentPlayer.class);
+
 }

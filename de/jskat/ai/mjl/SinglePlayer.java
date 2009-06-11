@@ -13,6 +13,7 @@ package de.jskat.ai.mjl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.jskat.util.Card;
 import de.jskat.util.CardList;
 import de.jskat.util.rule.BasicSkatRules;
 
@@ -24,14 +25,16 @@ public class SinglePlayer implements CardPlayer {
 
 	/** log */
 	private Log log = LogFactory.getLog(SinglePlayer.class);
-	
+	private BasicSkatRules rules;
+	private CardList cards;
+
 	/** Constructor
 	 * @param id playerID
 	 */
-	public SinglePlayer(int id, BasicSkatRules rules) {
+	public SinglePlayer(CardList cards, BasicSkatRules rules) {
 		log.debug("Constructing new single player.");
-		this.playerID = id;
 		this.rules = rules;
+		this.cards = cards;
 	}
 
 	/** Gets the next card, that the player wants to play
@@ -40,37 +43,13 @@ public class SinglePlayer implements CardPlayer {
 	 * @param trick all necessary information about the trick
 	 * @return index of the card to play
 	 */
-	public int playNextCard(CardList cards, TrickInfo trick) {
+	public Card playNextCard(TrickInfo trick) {
 		log.debug(".playNextCard(): Processing hand: "+cards);
 		log.debug(".playNextCard(): Not really implemented yet...");
-		if(trick.size()==0) return 0;
-		int result = 0;
-		for(int i=0;i<cards.size();i++) {
-//			if(rules.isCardAllowed(cards.get(i), cards, trick.getCard(0), trick.getTrump())) {
-//				result = i;
-//				break;
-//			}
-		}
-		return result;
+		int result = -1;
+		// TODO implementation of single player strategies...
+		if(result<0) return null;
+		return cards.remove(result);
 	}
 
-	/** Gets the player ID
-	 * @return player id
-	 */
-	public int getPlayerID() {
-		return playerID;
-	}
-
-	/**
-	 * Sets the player ID
-	 * @param i
-	 */
-	public void setPlayerID(int i) {
-		playerID= i;
-	}
-
-	/** player id */
-	private int playerID = -1;
-	
-	private BasicSkatRules rules;
 }
