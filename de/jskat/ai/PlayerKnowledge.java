@@ -22,7 +22,6 @@ import de.jskat.util.CardList;
 import de.jskat.util.Card;
 import de.jskat.util.Player;
 import de.jskat.util.Rank;
-import de.jskat.util.SkatConstants;
 import de.jskat.util.Suit;
 
 /**
@@ -47,12 +46,22 @@ public class PlayerKnowledge {
 	/**
 	 * Holds the highest bid every player has made during bidding
 	 */
+	// TODO use player position for accessing the values
 	private int[] highestBid = new int[3];
 	
-	private CardDeck completeDeck = new CardDeck();
+	/**
+	 * A complete card deck for doing some boolean operations with a subset of a deck
+	 */
+	private final CardDeck completeDeck = new CardDeck();
 	
+	/**
+	 * Card played by the player on the left, represents first card in a trick or is NULL otherwise
+	 */
 	private Card leftPlayerTrickCard;
 	
+	/**
+	 * Card played by the player on the right, represents the first or second card in a trick or is NULL otherwise
+	 */
 	private Card rightPlayerTrickCard;
 
 	/**
@@ -63,11 +72,13 @@ public class PlayerKnowledge {
 	/**
 	 * Counts the number of cards on players hand for every card
 	 */
+	// TODO use suit for accessing the values
 	private int[] suitCount = new int[4];
 	
 	/**
 	 * Counts the points for every suit on players hand
 	 */
+	// TODO use suit for accessing the values
 	private int[] suitPoints = new int[4];
 
 	/**
@@ -113,11 +124,6 @@ public class PlayerKnowledge {
 		this.tricks.clear();
 	}
 
-	private int getCardIndex(Suit suit, Rank rank) {
-		
-		return suit.ordinal() * 8 + rank.ordinal();
-	}
-	
 	/**
 	 * Checks whether a card was played already
 	 * 
@@ -263,7 +269,8 @@ public class PlayerKnowledge {
 	}
 
 	/**
-	 * Checks whether a player could have a card information is uncertain
+	 * Checks whether a player could have a card information,
+	 * this is an uncertain information
 	 * 
 	 * @param player
 	 *            Player ID
@@ -445,6 +452,11 @@ public class PlayerKnowledge {
 		return null;
 	}
 
+	/**
+	 * Gets all cards that are already known
+	 * 
+	 * @return String of card symbols
+	 */
 	public CardDeck getKnownCards() {
 		// FIXME returns complete card deck
 		CardDeck deck = new CardDeck();
