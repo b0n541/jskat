@@ -223,7 +223,7 @@ public class JSkatViewImpl implements JSkatView {
 					if (tab instanceof JSkatTabPanel) {
 
 						String tableName = ((JSkatTabPanel) tab).getName();
-						log.debug(tableName);
+						log.debug("showing table pane of table "+tableName);
 
 						// FIXME set active table name in JSkatMasters data
 					}
@@ -670,5 +670,13 @@ public class JSkatViewImpl implements JSkatView {
 			
 			((ISSTablePanel) panel).setTableStatus(tableStatus);
 		}
+	}
+
+	/**
+	 * @see de.jskat.gui.JSkatView#getRootFrame()
+	 */
+	@Override
+	public JFrame getRootFrame() {
+		return this.mainFrame;
 	}
 }

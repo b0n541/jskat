@@ -2,6 +2,8 @@ package de.jskat.gui;
 
 import java.util.StringTokenizer;
 
+import javax.swing.JFrame;
+
 import de.jskat.control.SkatGame;
 import de.jskat.control.SkatTable;
 import de.jskat.control.iss.ChatMessageType;
@@ -379,5 +381,13 @@ public class NullView implements JSkatView {
 	public void updateISSTable(@SuppressWarnings("unused") String tableName,
 			@SuppressWarnings("unused") ISSTablePanelStatus status) {
 		// empty method by indent
+	}
+
+	/** 
+	 * @see de.jskat.gui.JSkatView#getRootFrame()
+	 */
+	@Override
+	public JFrame getRootFrame() {
+		return null;
 	}
 }

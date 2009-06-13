@@ -45,11 +45,11 @@ public class SkatTable {
 	 * @param master JSkatMaster
 	 * @param maximumPlayerCount Number of players
 	 */
-	public SkatTable(JSkatMaster master, SkatTableOptions tableOptions, int maximumPlayerCount) {
+	public SkatTable(JSkatMaster master, SkatTableOptions tableOptions) {
 		
 		this.jskat = master;
 		this.options = tableOptions;
-		startSkatSeries(3);
+		startSkatSeries(this.options.getMaxPlayerCount());
 		
 		log.debug("SkatTable created with max. " + this.options.getMaxPlayerCount() + " players."); //$NON-NLS-1$ //$NON-NLS-2$
 	}
@@ -228,6 +228,17 @@ public class SkatTable {
 		this.view = newView;
 	}
 
+	/**
+	 * Gets the name of this skat table
+	 * 
+	 * @return name of the table
+	 * 
+	 */
+	public String getName() {
+		
+		return tableName;
+	}
+	
 	/**
 	 * Sets the table name
 	 * 

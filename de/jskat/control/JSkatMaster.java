@@ -62,23 +62,27 @@ public class JSkatMaster {
 	/**
 	 * Creates a new skat table
 	 * 
-	 * @return Table name
 	 */
-	public String createTable() {
+	public void createTable() {
 		
 		// TODO check whether a connection to ISS is established
 		// TODO ask whether a local or a remote tabel should be created
 		
-		SkatTable table = new SkatTable(this, this.data.getTableOptions(), 3);
-		String tableName = this.data.addLocalSkatTable(table);
-		table.setName(tableName);
+		String tableName = JOptionPane.showInputDialog(this.view.getRootFrame(), "Please name your table:", "New skat table", JOptionPane.OK_CANCEL_OPTION);
+		if(tableName==null) {
+			log.debug("Create table was cancelled...");
+			return;
+		}
 		
-		this.view.createSkatTablePanel(tableName);
-		this.data.setActiveTable(tableName);
+		SkatTable table = new SkatTable(this, this.data.getTableOptions());
+		table.setName(tableName);
+		this.data.addLocalSkatTable(table);
+		
+		this.view.createSkatTablePanel(table.getName());
+		this.data.setActiveTable(table.getName());
 		
 		table.setView(this.view);
 
-		return tableName;
 	}
 	
 	/**
