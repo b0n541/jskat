@@ -22,9 +22,15 @@ import java.util.StringTokenizer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.jskat.data.GameAnnouncement;
 import de.jskat.data.iss.ISSGameStatus;
+import de.jskat.data.iss.ISSMoveInformation;
 import de.jskat.data.iss.ISSPlayerStatus;
 import de.jskat.data.iss.ISSTablePanelStatus;
+import de.jskat.data.iss.MovePlayer;
+import de.jskat.data.iss.MoveType;
+import de.jskat.util.Card;
+import de.jskat.util.GameType;
 import de.jskat.util.Player;
 
 /**
@@ -202,6 +208,18 @@ class InputChannel extends Thread {
 			
 			this.issControl.startGame(tableName, getGameStartStatus(token));
 		}
+		else if (actionCommand.equals("go")) {
+			
+			this.issControl.startGame(tableName);
+		}
+		else if (actionCommand.equals("play")) {
+			
+			this.issControl.updateMove(tableName, getMoveInformation(token));
+		}
+		else if (actionCommand.equals("end")) {
+			
+			//this.issControl.endGame(tableName, getGameInformation(token));
+		}
 		else {
 			
 			log.debug("unhandled action command: " + actionCommand + " for table " + tableName);
@@ -234,7 +252,7 @@ class InputChannel extends Thread {
 		
 		return status;
 	}
-
+	
 	private ISSGameStatus getGameStartStatus(StringTokenizer token) {
 
 		ISSGameStatus status = new ISSGameStatus();
@@ -248,6 +266,154 @@ class InputChannel extends Thread {
 		status.putPlayerTime(Player.HIND_HAND, new Double(token.nextToken()));
 		
 		return status;
+	}
+	
+	private ISSMoveInformation getMoveInformation(StringTokenizer token) {
+		
+		ISSMoveInformation info = new ISSMoveInformation();
+		
+		String movePlayer = token.nextToken();
+		log.debug("Move player: " + movePlayer);
+		if (movePlayer.equals("w")) {
+			// world move
+			info.setPosition(MovePlayer.WORLD);
+		}
+		else if (movePlayer.equals("0")) {
+			// fore hand move
+			info.setPosition(MovePlayer.FORE_HAND);
+		}
+		else if (movePlayer.equals("1")) {
+			// middle hand move
+			info.setPosition(MovePlayer.MIDDLE_HAND);
+		}
+		else if (movePlayer.equals("2")) {
+			// hind hand move
+			info.setPosition(MovePlayer.HIND_HAND);
+		}
+		
+		String move = token.nextToken();
+		log.debug("Move: " + move);
+		if (move.equals("y")) {
+			// holding bid move
+			info.setType(MoveType.BID);
+		}
+		else if (move.equals("p")) {
+			// pass move
+			info.setType(MoveType.PASS);
+		}
+		else if (move.equals("??.??")) {
+			// hidden skat request move
+			info.setType(MoveType.SKAT_REQUEST);
+		}
+		else {
+			// extensive parsing needed
+			
+			// test card move
+			Card card = Card.getCardFromString(move);
+			if (card != null) {
+				
+				info.setType(MoveType.CARD_PLAY);
+				info.setCard(card);
+			}
+			else {
+				// card parsing failed
+				if (move.length() == 96) {
+					// card dealing
+					info.setType(MoveType.DEAL);
+					// TODO parse cards
+				}
+				else if (move.length() == 5) {
+					// open skat request
+					info.setType(MoveType.SKAT_REQUEST);
+					// TODO parse cards
+				}
+				else if (move.length() < 5) {
+					// bidding
+					info.setType(MoveType.BID);
+					info.setBidValue(Integer.parseInt(move));
+				}
+				else {
+					// game announcement
+					info.setType(MoveType.GAME_ANNOUNCEMENT);
+					/*
+					<game-type> :: (G | C | S | H | D | N)  (type Grand .. Null)
+		               [O]        (ouvert)
+		               [H]        (hand, not given if O + trump game)
+		               [S]        (schneider announced, only in H games, not if O or Z)
+		               [Z]        (schwarz announced, only in H games)
+					*/
+					StringTokenizer annToken = new StringTokenizer(move, ".");
+					String gameType = annToken.nextToken();
+					
+					GameAnnouncement ann = new GameAnnouncement();
+					
+					if (gameType.startsWith("G")) {
+						
+						ann.setGameType(GameType.GRAND);
+					}
+					else if (gameType.startsWith("C")) {
+						
+						ann.setGameType(GameType.CLUBS);
+					}
+					else if (gameType.startsWith("S")) {
+						
+						ann.setGameType(GameType.SPADES);
+					}
+					else if (gameType.startsWith("H")) {
+						
+						ann.setGameType(GameType.HEARTS);
+					}
+					else if (gameType.startsWith("D")) {
+						
+						ann.setGameType(GameType.DIAMONDS);
+					}
+					else if (gameType.startsWith("N")) {
+						
+						ann.setGameType(GameType.NULL);
+					}
+					
+					for (int i = 1; i < gameType.length(); i++) {
+						// parse other game modifiers
+						char mod = gameType.charAt(i);
+						
+						if (mod == 'O') {
+							
+							ann.setOuvert(true);
+						}
+						else if (mod == 'H') {
+							
+							// FIXME hand not setable in game announcement
+						}
+						else if (mod == 'S') {
+							
+							ann.setSchneider(true);
+						}
+						else if (mod == 'Z') {
+							
+							ann.setSchwarz(true);
+						}
+					}
+					info.setGameAnnouncement(ann);
+					
+					Card skatCard0 = Card.getCardFromString(annToken.nextToken());
+					Card skatCard1 = Card.getCardFromString(annToken.nextToken());
+					
+					info.setSkatCards(skatCard0, skatCard1);
+					
+					while(annToken.hasMoreTokens()) {
+						// ouvert cards
+						info.addOuvertCard(Card.getCardFromString(annToken.nextToken()));
+					}
+				}
+			}
+		}
+		
+		// parse player times
+		info.putPlayerTime(Player.FORE_HAND, new Double(token.nextToken()));
+		info.putPlayerTime(Player.MIDDLE_HAND, new Double(token.nextToken()));
+		info.putPlayerTime(Player.FORE_HAND, new Double(token.nextToken()));
+		
+		return info;
 	}
 	
 	private ISSPlayerStatus parsePlayerStatus(StringTokenizer token) {

@@ -591,8 +591,11 @@ public class SkatGame extends JSkatThread {
 			// card was on players hand and is valid
 			trick.addCard(card);
 			this.data.getPlayerCards(currPlayer).remove(card);
+			/*
 			this.view.removeCard(this.tableName, currPlayer, card);
 			this.view.setTrickCard(this.tableName, currPlayer, card);
+			*/
+			this.view.playTrickCard(this.tableName, currPlayer, card);
 			
 			for (int i = 0; i < 3; i++) {
 				// inform all players

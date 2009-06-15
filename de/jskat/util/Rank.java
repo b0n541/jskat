@@ -204,37 +204,40 @@ public enum Rank {
 		
 		Rank rank = null;
 		
-		if (cardAsString.endsWith("A")) { //$NON-NLS-1$
-			
-			rank = ACE;
-		}
-		else if (cardAsString.endsWith("T")) { //$NON-NLS-1$
-			
-			rank = TEN;
-		}
-		else if (cardAsString.endsWith("K")) { //$NON-NLS-1$
-			
-			rank = KING;
-		}
-		else if (cardAsString.endsWith("Q")) { //$NON-NLS-1$
-			
-			rank = QUEEN;
-		}
-		else if (cardAsString.endsWith("J")) { //$NON-NLS-1$
-			
-			rank = JACK;
-		}
-		else if (cardAsString.endsWith("9")) { //$NON-NLS-1$
-			
-			rank = NINE;
-		}
-		else if (cardAsString.endsWith("8")) { //$NON-NLS-1$
-			
-			rank = EIGHT;
-		}
-		else if (cardAsString.endsWith("7")) { //$NON-NLS-1$
-			
-			rank = SEVEN;
+		if (cardAsString.length() == 2) {
+			// parse only, iff the string is two characters long
+			if (cardAsString.endsWith("A")) { //$NON-NLS-1$
+				
+				rank = ACE;
+			}
+			else if (cardAsString.endsWith("T")) { //$NON-NLS-1$
+				
+				rank = TEN;
+			}
+			else if (cardAsString.endsWith("K")) { //$NON-NLS-1$
+				
+				rank = KING;
+			}
+			else if (cardAsString.endsWith("Q")) { //$NON-NLS-1$
+				
+				rank = QUEEN;
+			}
+			else if (cardAsString.endsWith("J")) { //$NON-NLS-1$
+				
+				rank = JACK;
+			}
+			else if (cardAsString.endsWith("9")) { //$NON-NLS-1$
+				
+				rank = NINE;
+			}
+			else if (cardAsString.endsWith("8")) { //$NON-NLS-1$
+				
+				rank = EIGHT;
+			}
+			else if (cardAsString.endsWith("7")) { //$NON-NLS-1$
+				
+				rank = SEVEN;
+			}
 		}
 		
 		return rank;

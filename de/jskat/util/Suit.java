@@ -80,21 +80,24 @@ public enum Suit {
 		
 		Suit suit = null;
 		
-		if (cardAsString.startsWith("C")) { //$NON-NLS-1$
-			
-			suit = CLUBS;
-		}
-		else if (cardAsString.startsWith("S")) { //$NON-NLS-1$
-			
-			suit = SPADES;
-		}
-		else if (cardAsString.startsWith("H")) { //$NON-NLS-1$
-			
-			suit = HEARTS;
-		}
-		else if (cardAsString.startsWith("D")) { //$NON-NLS-1$
-			
-			suit = DIAMONDS;
+		if (cardAsString.length() == 2) {
+			// parse only, iff the string is two characters long
+			if (cardAsString.startsWith("C")) { //$NON-NLS-1$
+				
+				suit = CLUBS;
+			}
+			else if (cardAsString.startsWith("S")) { //$NON-NLS-1$
+				
+				suit = SPADES;
+			}
+			else if (cardAsString.startsWith("H")) { //$NON-NLS-1$
+				
+				suit = HEARTS;
+			}
+			else if (cardAsString.startsWith("D")) { //$NON-NLS-1$
+				
+				suit = DIAMONDS;
+			}
 		}
 		
 		return suit;

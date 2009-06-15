@@ -44,6 +44,7 @@ import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameStates;
 import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.data.iss.ISSGameStatus;
+import de.jskat.data.iss.ISSMoveInformation;
 import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.action.human.DiscardAction;
@@ -712,5 +713,38 @@ public class JSkatViewImpl implements JSkatView {
 		return JOptionPane.showInputDialog(this.mainFrame,
 				"Please name your table:", "New skat table",
 				JOptionPane.OK_CANCEL_OPTION);
+	}
+
+	/**
+	 * @see JSkatView#updateISSMove(String, ISSMoveInformation)
+	 */
+	@Override
+	public void updateISSMove(String tableName,
+			ISSMoveInformation moveInformation) {
+
+		switch(moveInformation.getType()) {
+		// TODO add other types too
+		case CARD_PLAY:
+			switch(moveInformation.getPosition()) {
+			case FORE_HAND:
+				this.playTrickCard(tableName, Player.FORE_HAND, moveInformation.getCard());
+				break;
+			case MIDDLE_HAND:
+				this.playTrickCard(tableName, Player.MIDDLE_HAND, moveInformation.getCard());
+				break;
+			case HIND_HAND:
+				this.playTrickCard(tableName, Player.HIND_HAND, moveInformation.getCard());
+				break;
+			}
+		}
+	}
+
+	/**
+	 * @see JSkatView#playTrickCard(String, Player, Card)
+	 */
+	@Override
+	public void playTrickCard(String tableName, Player position, Card card) {
+		// TODO Auto-generated method stub
+		
 	}
 }

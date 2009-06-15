@@ -12,6 +12,7 @@ import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameStates;
 import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.data.iss.ISSGameStatus;
+import de.jskat.data.iss.ISSMoveInformation;
 import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
@@ -400,5 +401,24 @@ public class NullView implements JSkatView {
 	public String getNewTableName() {
 		// empty method by indent
 		return null;
+	}
+
+	/**
+	 * @see JSkatView#updateISSMove(String, ISSMoveInformation)
+	 */
+	@Override
+	public void updateISSMove(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") ISSMoveInformation moveInformation) {
+		// empty method by indent
+	}
+
+	/**
+	 * @see JSkatView#playTrickCard(String, Player, Card)
+	 */
+	@Override
+	public void playTrickCard(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player position,
+			@SuppressWarnings("unused") Card card) {
+		// empty method by indent
 	}
 }

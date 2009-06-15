@@ -19,6 +19,7 @@ import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameStates;
 import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.data.iss.ISSGameStatus;
+import de.jskat.data.iss.ISSMoveInformation;
 import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
@@ -190,6 +191,15 @@ public interface JSkatView {
 	public void clearTrickCards(String tableName);
 
 	/**
+	 * Plays a card during card play
+	 * 
+	 * @param tableName Table name
+	 * @param position Player position
+	 * @param card Card
+	 */
+	public void playTrickCard(String tableName, Player position, Card card);
+	
+	/**
 	 * Sets the game announcement
 	 * 
 	 * @param tableName Table name
@@ -337,4 +347,13 @@ public interface JSkatView {
 	 * @param status New game state
 	 */
 	public abstract void updateISSTable(String tableName, ISSGameStatus status);
+
+	/**
+	 * Updates move information
+	 * 
+	 * @param tableName Table name
+	 * @param moveInformation Move information
+	 */
+	public abstract void updateISSMove(String tableName,
+			ISSMoveInformation moveInformation);
 }
