@@ -58,6 +58,7 @@ import de.jskat.gui.action.iss.ConnectAction;
 import de.jskat.gui.action.iss.CreateISSTableAction;
 import de.jskat.gui.action.iss.JoinISSTableAction;
 import de.jskat.gui.action.iss.LeaveISSTableAction;
+import de.jskat.gui.action.iss.ObserveISSTableAction;
 import de.jskat.gui.action.iss.SendChatMessageAction;
 import de.jskat.gui.action.iss.ShowLoginPanelAction;
 import de.jskat.gui.action.main.AboutAction;
@@ -158,6 +159,7 @@ public class JSkatViewImpl implements JSkatView {
 		this.actions.put(JSkatAction.CREATE_ISS_TABLE, new CreateISSTableAction(jskat));
 		this.actions.put(JSkatAction.JOIN_ISS_TABLE, new JoinISSTableAction(jskat));
 		this.actions.put(JSkatAction.LEAVE_ISS_TABLE, new LeaveISSTableAction(jskat));
+		this.actions.put(JSkatAction.OBSERVE_ISS_TABLE, new ObserveISSTableAction(jskat));
 		// Neural network actions
 		this.actions.put(JSkatAction.TRAIN_NEURAL_NETWORKS,
 				new TrainNeuralNetworksAction(jskat));

@@ -52,7 +52,7 @@ public class LobbyPanel extends JSkatTabPanel {
 	private JScrollPane tableListScrollPane;
 	private ChatPanel chatPanel;
 	
-	private static ActionMap actions;
+	static ActionMap actions;
 	
 	/**
 	 * Constructor
@@ -164,7 +164,8 @@ public class LobbyPanel extends JSkatTabPanel {
 				String value = (String) LobbyPanel.this.tableListTable.getValueAt(row, column);
 				
 				if (column == 0) {
-					// TODO kiebitz
+					// observe a table
+					LobbyPanel.actions.get(JSkatAction.OBSERVE_ISS_TABLE).actionPerformed(new ActionEvent(tableName, 1, null));
 				}
 				else if (value.equals("?")) {
 					// sit down on free seat at table

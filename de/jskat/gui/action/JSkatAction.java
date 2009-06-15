@@ -129,6 +129,10 @@ public enum JSkatAction {
 	 * Leave a table
 	 */
 	LEAVE_ISS_TABLE,
+	/**
+	 * Observe a table
+	 */
+	OBSERVE_ISS_TABLE,
 //----------------------------------------------------------------------------//
 //-- Neural Network Player related actions -----------------------------------//
 //----------------------------------------------------------------------------//

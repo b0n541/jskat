@@ -232,6 +232,11 @@ public class ISSController {
 		this.issConnect.joinTable(tableName);
 	}
 	
+	public void observeTable(String tableName) {
+		
+		this.issConnect.observeTable(tableName);
+	}
+	
 	public void leaveTable(String tableName, String playerName) {
 		
 		this.issConnect.leaveTable(tableName, playerName);
