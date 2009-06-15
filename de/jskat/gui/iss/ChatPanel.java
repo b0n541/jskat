@@ -34,7 +34,7 @@ import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.gui.JSkatTabPanel;
-import de.jskat.gui.action.JSkatActions;
+import de.jskat.gui.action.JSkatAction;
 
 /**
  * Chat panel for ISS
@@ -74,7 +74,7 @@ class ChatPanel extends JPanel implements ChangeListener {
 		addNewChat("Lobby");
 		
 		this.inputLine = new JTextField(20);
-		this.inputLine.setAction(actions.get(JSkatActions.SEND_CHAT_MESSAGE));
+		this.inputLine.setAction(actions.get(JSkatAction.SEND_CHAT_MESSAGE));
 		this.inputLine.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

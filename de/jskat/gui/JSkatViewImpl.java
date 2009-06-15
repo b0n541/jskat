@@ -44,7 +44,7 @@ import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameStates;
 import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.data.iss.ISSTablePanelStatus;
-import de.jskat.gui.action.JSkatActions;
+import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.action.human.DiscardAction;
 import de.jskat.gui.action.human.GameAnnounceAction;
 import de.jskat.gui.action.human.HoldBidAction;
@@ -125,61 +125,61 @@ public class JSkatViewImpl implements JSkatView {
 		this.actions = new ActionMap();
 
 		// common actions
-		this.actions.put(JSkatActions.LOAD_SERIES, new LoadGameAction(jskat,
+		this.actions.put(JSkatAction.LOAD_SERIES, new LoadGameAction(jskat,
 				this.bitmaps));
-		this.actions.put(JSkatActions.SAVE_SERIES, new SaveGameAction(jskat,
+		this.actions.put(JSkatAction.SAVE_SERIES, new SaveGameAction(jskat,
 				this.bitmaps));
-		this.actions.put(JSkatActions.SAVE_SERIES_AS, new SaveGameAsAction(
+		this.actions.put(JSkatAction.SAVE_SERIES_AS, new SaveGameAsAction(
 				jskat, this.bitmaps));
 		this.actions
-				.put(JSkatActions.HELP, new HelpAction(jskat, this.bitmaps));
+				.put(JSkatAction.HELP, new HelpAction(jskat, this.bitmaps));
 		this.actions
-				.put(JSkatActions.LICENSE, new LicenseAction(jskat, this.bitmaps));
-		this.actions.put(JSkatActions.EXIT_JSKAT, new ExitAction(jskat,
+				.put(JSkatAction.LICENSE, new LicenseAction(jskat, this.bitmaps));
+		this.actions.put(JSkatAction.EXIT_JSKAT, new ExitAction(jskat,
 				this.bitmaps));
-		this.actions.put(JSkatActions.ABOUT_JSKAT, new AboutAction(jskat,
+		this.actions.put(JSkatAction.ABOUT_JSKAT, new AboutAction(jskat,
 				this.bitmaps));
-		this.actions.put(JSkatActions.CHANGE_ACTIVE_TABLE,
+		this.actions.put(JSkatAction.CHANGE_ACTIVE_TABLE,
 				new ChangeActiveTableAction(jskat));
 		// skat table actions
-		this.actions.put(JSkatActions.CREATE_LOCAL_TABLE,
+		this.actions.put(JSkatAction.CREATE_LOCAL_TABLE,
 				new CreateTableAction(jskat, this.bitmaps));
-		this.actions.put(JSkatActions.START_LOCAL_SERIES,
+		this.actions.put(JSkatAction.START_LOCAL_SERIES,
 				new StartSkatSeriesAction(jskat, this.bitmaps));
-		this.actions.put(JSkatActions.CONTINUE_LOCAL_SERIES,
+		this.actions.put(JSkatAction.CONTINUE_LOCAL_SERIES,
 				new ContinueSkatSeriesAction(jskat));
 		// ISS actions
-		this.actions.put(JSkatActions.SHOW_ISS_LOGIN, new ShowLoginPanelAction(
+		this.actions.put(JSkatAction.SHOW_ISS_LOGIN, new ShowLoginPanelAction(
 				jskat, this.bitmaps));
-		this.actions.put(JSkatActions.CONNECT_TO_ISS, new ConnectAction(jskat,
+		this.actions.put(JSkatAction.CONNECT_TO_ISS, new ConnectAction(jskat,
 				this.bitmaps));
-		this.actions.put(JSkatActions.SEND_CHAT_MESSAGE,
+		this.actions.put(JSkatAction.SEND_CHAT_MESSAGE,
 				new SendChatMessageAction(jskat));
-		this.actions.put(JSkatActions.CREATE_ISS_TABLE, new CreateISSTableAction(jskat));
-		this.actions.put(JSkatActions.JOIN_ISS_TABLE, new JoinISSTableAction(jskat));
-		this.actions.put(JSkatActions.LEAVE_ISS_TABLE, new LeaveISSTableAction(jskat));
+		this.actions.put(JSkatAction.CREATE_ISS_TABLE, new CreateISSTableAction(jskat));
+		this.actions.put(JSkatAction.JOIN_ISS_TABLE, new JoinISSTableAction(jskat));
+		this.actions.put(JSkatAction.LEAVE_ISS_TABLE, new LeaveISSTableAction(jskat));
 		// Neural network actions
-		this.actions.put(JSkatActions.TRAIN_NEURAL_NETWORKS,
+		this.actions.put(JSkatAction.TRAIN_NEURAL_NETWORKS,
 				new TrainNeuralNetworksAction(jskat));
-		this.actions.put(JSkatActions.LOAD_NEURAL_NETWORKS,
+		this.actions.put(JSkatAction.LOAD_NEURAL_NETWORKS,
 				new LoadNeuralNetworksAction(jskat, this.bitmaps));
-		this.actions.put(JSkatActions.SAVE_NEURAL_NETWORKS,
+		this.actions.put(JSkatAction.SAVE_NEURAL_NETWORKS,
 				new SaveNeuralNetworksAction(jskat, this.bitmaps));
 		// Human player actions
-		this.actions.put(JSkatActions.HOLD_BID, new HoldBidAction(jskat));
-		this.actions.put(JSkatActions.PASS_BID, new PassBidAction(jskat));
-		this.actions.put(JSkatActions.LOOK_INTO_SKAT, new LookIntoSkatAction(
+		this.actions.put(JSkatAction.HOLD_BID, new HoldBidAction(jskat));
+		this.actions.put(JSkatAction.PASS_BID, new PassBidAction(jskat));
+		this.actions.put(JSkatAction.LOOK_INTO_SKAT, new LookIntoSkatAction(
 				jskat));
-		this.actions.put(JSkatActions.PLAY_HAND_GAME, new PlayHandGameAction(
+		this.actions.put(JSkatAction.PLAY_HAND_GAME, new PlayHandGameAction(
 				jskat));
-		this.actions.put(JSkatActions.ANNOUNCE_GAME, new GameAnnounceAction(
+		this.actions.put(JSkatAction.ANNOUNCE_GAME, new GameAnnounceAction(
 				jskat));
-		this.actions.put(JSkatActions.PUT_CARD_INTO_SKAT,
+		this.actions.put(JSkatAction.PUT_CARD_INTO_SKAT,
 				new PutCardIntoSkatAction(jskat));
-		this.actions.put(JSkatActions.TAKE_CARD_FROM_SKAT,
+		this.actions.put(JSkatAction.TAKE_CARD_FROM_SKAT,
 				new TakeCardFromSkatAction(jskat));
-		this.actions.put(JSkatActions.DISCARD_CARDS, new DiscardAction(jskat));
-		this.actions.put(JSkatActions.PLAY_CARD, new PlayCardAction(jskat));
+		this.actions.put(JSkatAction.DISCARD_CARDS, new DiscardAction(jskat));
+		this.actions.put(JSkatAction.PLAY_CARD, new PlayCardAction(jskat));
 	}
 
 	private void initGUI(JSkatMaster jskat) {
@@ -197,12 +197,12 @@ public class JSkatViewImpl implements JSkatView {
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new MigLayout());
 		buttonPanel.add(new ToolbarButton(this.actions
-				.get(JSkatActions.CREATE_LOCAL_TABLE)));
+				.get(JSkatAction.CREATE_LOCAL_TABLE)));
 		buttonPanel.add(new ToolbarButton(this.actions
-				.get(JSkatActions.START_LOCAL_SERIES)));
+				.get(JSkatAction.START_LOCAL_SERIES)));
 		buttonPanel.add(new ToolbarButton(this.actions
-				.get(JSkatActions.SHOW_ISS_LOGIN)));
-		buttonPanel.add(new ToolbarButton(this.actions.get(JSkatActions.HELP)));
+				.get(JSkatAction.SHOW_ISS_LOGIN)));
+		buttonPanel.add(new ToolbarButton(this.actions.get(JSkatAction.HELP)));
 		mainPanel.add(buttonPanel, BorderLayout.NORTH);
 
 		// main area
@@ -242,44 +242,44 @@ public class JSkatViewImpl implements JSkatView {
 		JMenuBar menu = new JMenuBar();
 
 		JMenu fileMenu = new JMenu("File");
-		fileMenu.add(new JMenuItem(this.actions.get(JSkatActions.LOAD_SERIES)));
-		fileMenu.add(new JMenuItem(this.actions.get(JSkatActions.SAVE_SERIES)));
+		fileMenu.add(new JMenuItem(this.actions.get(JSkatAction.LOAD_SERIES)));
+		fileMenu.add(new JMenuItem(this.actions.get(JSkatAction.SAVE_SERIES)));
 		fileMenu.add(new JMenuItem(this.actions
-				.get(JSkatActions.SAVE_SERIES_AS)));
+				.get(JSkatAction.SAVE_SERIES_AS)));
 		fileMenu.add(new JSeparator());
-		fileMenu.add(new JMenuItem(this.actions.get(JSkatActions.EXIT_JSKAT)));
+		fileMenu.add(new JMenuItem(this.actions.get(JSkatAction.EXIT_JSKAT)));
 		menu.add(fileMenu);
 
 		JMenu tableMenu = new JMenu("Skat table");
 		tableMenu.add(new JMenuItem(this.actions
-				.get(JSkatActions.CREATE_LOCAL_TABLE)));
+				.get(JSkatAction.CREATE_LOCAL_TABLE)));
 		tableMenu.add(new JMenuItem(this.actions
-				.get(JSkatActions.START_LOCAL_SERIES)));
+				.get(JSkatAction.START_LOCAL_SERIES)));
 		tableMenu.add(new JMenuItem("Pause skat series"));
 		menu.add(tableMenu);
 
 		JMenu neuralNetworkMenu = new JMenu("Neural networks");
 		neuralNetworkMenu.add(new JMenuItem(this.actions
-				.get(JSkatActions.LOAD_NEURAL_NETWORKS)));
+				.get(JSkatAction.LOAD_NEURAL_NETWORKS)));
 		neuralNetworkMenu.add(new JMenuItem(this.actions
-				.get(JSkatActions.TRAIN_NEURAL_NETWORKS)));
+				.get(JSkatAction.TRAIN_NEURAL_NETWORKS)));
 		neuralNetworkMenu.add(new JMenuItem(this.actions
-				.get(JSkatActions.SAVE_NEURAL_NETWORKS)));
+				.get(JSkatAction.SAVE_NEURAL_NETWORKS)));
 		menu.add(neuralNetworkMenu);
 
 		JMenu issMenu = new JMenu("ISS");
 		issMenu
 				.add(new JMenuItem(this.actions
-						.get(JSkatActions.SHOW_ISS_LOGIN)));
+						.get(JSkatAction.SHOW_ISS_LOGIN)));
 		issMenu.add(new JMenuItem("Create new skat table"));
 		issMenu.add(new JMenuItem("Invite player"));
 		menu.add(issMenu);
 
 		JMenu helpMenu = new JMenu("Help");
-		helpMenu.add(new JMenuItem(this.actions.get(JSkatActions.HELP)));
+		helpMenu.add(new JMenuItem(this.actions.get(JSkatAction.HELP)));
 		helpMenu.add(new JSeparator());
-		helpMenu.add(new JMenuItem(this.actions.get(JSkatActions.LICENSE)));
-		helpMenu.add(new JMenuItem(this.actions.get(JSkatActions.ABOUT_JSKAT)));
+		helpMenu.add(new JMenuItem(this.actions.get(JSkatAction.LICENSE)));
+		helpMenu.add(new JMenuItem(this.actions.get(JSkatAction.ABOUT_JSKAT)));
 		menu.add(helpMenu);
 
 		return menu;
@@ -365,7 +365,7 @@ public class JSkatViewImpl implements JSkatView {
 		this.tabs.addTab(name, newPanel);
 		this.tabs.setSelectedComponent(newPanel);
 
-		this.actions.get(JSkatActions.START_LOCAL_SERIES).setEnabled(true);
+		this.actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(true);
 
 		this.tables.put(name, newPanel);
 
@@ -523,7 +523,7 @@ public class JSkatViewImpl implements JSkatView {
 	public void setNextBidValue(String tableName, int nextBidValue) {
 
 		// TODO this should be set for every table seperately
-		this.actions.get(JSkatActions.HOLD_BID).putValue(Action.NAME,
+		this.actions.get(JSkatAction.HOLD_BID).putValue(Action.NAME,
 				Integer.toString(nextBidValue));
 	}
 

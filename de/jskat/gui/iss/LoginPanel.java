@@ -28,7 +28,7 @@ import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.iss.ISSLoginCredentials;
 import de.jskat.gui.JSkatTabPanel;
-import de.jskat.gui.action.JSkatActions;
+import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
 
 /**
@@ -76,7 +76,7 @@ public class LoginPanel extends JSkatTabPanel {
 		login.add(new JLabel("Password"));
 		this.passwordField = new JPasswordField(10);
 		login.add(this.passwordField, "growx, wrap"); //$NON-NLS-1$
-		final JButton loginButton = new JButton(this.getActionMap().get(JSkatActions.CONNECT_TO_ISS));
+		final JButton loginButton = new JButton(this.getActionMap().get(JSkatAction.CONNECT_TO_ISS));
 		loginButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

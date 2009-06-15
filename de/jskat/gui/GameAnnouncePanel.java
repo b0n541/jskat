@@ -23,7 +23,7 @@ import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
 import de.jskat.data.GameAnnouncement;
-import de.jskat.gui.action.JSkatActions;
+import de.jskat.gui.action.JSkatAction;
 import de.jskat.util.GameType;
 
 /**
@@ -82,7 +82,7 @@ class GameAnnouncePanel extends JPanel {
 		panel.add(this.schneiderBox, "wrap");
 		panel.add(this.schwarzBox, "wrap");
 
-		final JButton playButton = new JButton(actions.get(JSkatActions.ANNOUNCE_GAME));
+		final JButton playButton = new JButton(actions.get(JSkatAction.ANNOUNCE_GAME));
 		playButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

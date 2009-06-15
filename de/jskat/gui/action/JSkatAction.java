@@ -14,7 +14,7 @@ package de.jskat.gui.action;
 /**
  * All actions that can be invoked by a view
  */
-public enum JSkatActions {
+public enum JSkatAction {
 
 //----------------------------------------------------------------------------//
 //-- General actions ---------------------------------------------------------//

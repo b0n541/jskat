@@ -12,6 +12,9 @@ Released: @ReleaseDate@
 package de.jskat.gui.iss;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.ActionMap;
 import javax.swing.JButton;
@@ -28,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.gui.JSkatTabPanel;
-import de.jskat.gui.action.JSkatActions;
+import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
 
 /**
@@ -45,9 +48,11 @@ public class LobbyPanel extends JSkatTabPanel {
 	private JScrollPane playerListScrollPane;
 
 	private TableListTableModel tableListTableModel;
-	private JTable tableListTable;
+	JTable tableListTable;
 	private JScrollPane tableListScrollPane;
 	private ChatPanel chatPanel;
+	
+	private static ActionMap actions;
 	
 	/**
 	 * Constructor
@@ -73,6 +78,8 @@ public class LobbyPanel extends JSkatTabPanel {
 		setLayout(new MigLayout("fill")); //$NON-NLS-1$
 
 		add(getLobbyPanel(), "center"); //$NON-NLS-1$
+		
+		this.actions = this.getActionMap();
 	}
 
 	private JPanel getLobbyPanel() {
@@ -122,6 +129,54 @@ public class LobbyPanel extends JSkatTabPanel {
 		this.tableListTableModel = new TableListTableModel();
 		this.tableListTable = new JTable(this.tableListTableModel);
 
+		this.tableListTable.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+
+				int column = LobbyPanel.this.tableListTable.getSelectedColumn();
+				int row = LobbyPanel.this.tableListTable.getSelectedRow();
+				String tableName = (String) LobbyPanel.this.tableListTable.getValueAt(row, 0);
+				String value = (String) LobbyPanel.this.tableListTable.getValueAt(row, column);
+				
+				if (column == 0) {
+					// TODO kiebitz
+				}
+				else if (value.equals("?")) {
+					// sit down on free seat at table
+					LobbyPanel.actions.get(JSkatAction.JOIN_ISS_TABLE).actionPerformed(new ActionEvent(tableName, 1, null));
+				}
+				else {
+					
+					log.debug("No free seat!");
+				}
+			}
+		});
+		
 		this.tableListTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
 		this.tableListScrollPane = new JScrollPane(this.tableListTable);
@@ -138,7 +193,7 @@ public class LobbyPanel extends JSkatTabPanel {
 		
 		JPanel panel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
-		panel.add(new JButton(this.getActionMap().get(JSkatActions.CREATE_ISS_TABLE)));
+		panel.add(new JButton(this.getActionMap().get(JSkatAction.CREATE_ISS_TABLE)));
 		panel.add(new JButton("Join table"));
 		
 		return panel;

@@ -13,7 +13,7 @@ import de.jskat.ai.AbstractJSkatPlayer;
 import de.jskat.ai.JSkatPlayer;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.gui.JSkatView;
-import de.jskat.gui.action.JSkatActions;
+import de.jskat.gui.action.JSkatAction;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
 
@@ -191,23 +191,23 @@ public class HumanPlayer extends AbstractJSkatPlayer
 		String command = e.getActionCommand();
 		boolean interrupt = true;
 		
-		if (JSkatActions.PASS_BID.toString().equals(command)) {
+		if (JSkatAction.PASS_BID.toString().equals(command)) {
 			// player passed
 			this.holdBid = false;
 		}
-		else if (JSkatActions.HOLD_BID.toString().equals(command)) {
+		else if (JSkatAction.HOLD_BID.toString().equals(command)) {
 			// player hold bid
 			this.holdBid = true;
 		}
-		else if (JSkatActions.LOOK_INTO_SKAT.toString().equals(command)) {
+		else if (JSkatAction.LOOK_INTO_SKAT.toString().equals(command)) {
 			// player wants to look into the skat
 			this.lookIntoSkat = true;
 		}
-		else if (JSkatActions.PLAY_HAND_GAME.toString().equals(command)) {
+		else if (JSkatAction.PLAY_HAND_GAME.toString().equals(command)) {
 			// player wants to play a hand game
 			this.lookIntoSkat = false;
 		}
-		else if (JSkatActions.DISCARD_CARDS.toString().equals(command)) {
+		else if (JSkatAction.DISCARD_CARDS.toString().equals(command)) {
 			
 			if (source instanceof CardList) {
 				// player discarded cards
@@ -222,7 +222,7 @@ public class HumanPlayer extends AbstractJSkatPlayer
 				interrupt = false;
 			}
 		}
-		else if (JSkatActions.ANNOUNCE_GAME.toString().equals(command)) {
+		else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
 
 			if (source instanceof JButton) {
 				log.debug("ONLY JBUTTON");
@@ -233,7 +233,7 @@ public class HumanPlayer extends AbstractJSkatPlayer
 				this.gameAnnouncement = (GameAnnouncement) source;
 			}
 		}
-		else if (JSkatActions.PLAY_CARD.toString().equals(command) &&
+		else if (JSkatAction.PLAY_CARD.toString().equals(command) &&
 					source instanceof Card) {
 			// player played card
 			// check card first

@@ -18,7 +18,7 @@ import javax.swing.Action;
 
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
-import de.jskat.gui.action.JSkatActions;
+import de.jskat.gui.action.JSkatAction;
 
 /**
  * Implements the action for handling card panel clicks during discarding
@@ -33,7 +33,7 @@ public class PutCardIntoSkatAction extends AbstractJSkatAction {
 	public PutCardIntoSkatAction(JSkatMaster controller) {
 		
 		super(controller);
-		putValue(Action.ACTION_COMMAND_KEY, JSkatActions.PUT_CARD_INTO_SKAT.toString());
+		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.PUT_CARD_INTO_SKAT.toString());
 	}
 	
 	/**

@@ -19,7 +19,7 @@ import javax.swing.ImageIcon;
 
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
-import de.jskat.gui.action.JSkatActions;
+import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
 
 /**
@@ -44,7 +44,7 @@ public class ConnectAction extends AbstractJSkatAction {
 		putValue(Action.LARGE_ICON_KEY, new ImageIcon(bitmaps.getIconImage(
 				JSkatGraphicRepository.Icon.CONNECT_ISS, 
 				JSkatGraphicRepository.IconSize.BIG)));
-		putValue(Action.ACTION_COMMAND_KEY, JSkatActions.CONNECT_TO_ISS.toString());
+		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.CONNECT_TO_ISS.toString());
 	}
 	
 	/**

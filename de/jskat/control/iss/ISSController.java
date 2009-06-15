@@ -22,7 +22,7 @@ import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.data.iss.ISSLoginCredentials;
 import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.gui.JSkatView;
-import de.jskat.gui.action.JSkatActions;
+import de.jskat.gui.action.JSkatAction;
 
 /**
  * Controls all ISS related actions
@@ -92,7 +92,7 @@ public class ISSController {
 		Object source = e.getSource();
 		String command = e.getActionCommand();
 
-		if (JSkatActions.CONNECT_TO_ISS.toString().equals(command)) {
+		if (JSkatAction.CONNECT_TO_ISS.toString().equals(command)) {
 			if (source instanceof ISSLoginCredentials) {
 
 				ISSLoginCredentials login = (ISSLoginCredentials) source;

@@ -32,7 +32,7 @@ import org.apache.commons.logging.LogFactory;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameStates;
-import de.jskat.gui.action.JSkatActions;
+import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.action.main.ContinueSkatSeriesAction;
 import de.jskat.gui.action.main.StartSkatSeriesAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
@@ -165,7 +165,7 @@ public class SkatTablePanel extends JSkatTabPanel {
 
 		this.gameContextPanel.add(new GameStartPanel(
 				(StartSkatSeriesAction) getActionMap().get(
-						JSkatActions.START_LOCAL_SERIES)),
+						JSkatAction.START_LOCAL_SERIES)),
 				ContextPanelTypes.START_SERIES.toString());
 
 		this.biddingPanel = new BiddingPanel(getActionMap());
@@ -190,7 +190,7 @@ public class SkatTablePanel extends JSkatTabPanel {
 				ContextPanelTypes.TRICK_PLAYING.toString());
 
 		this.gameContextPanel.add(new GameOverPanel(
-				(ContinueSkatSeriesAction) getActionMap().get(JSkatActions.CONTINUE_LOCAL_SERIES)),
+				(ContinueSkatSeriesAction) getActionMap().get(JSkatAction.CONTINUE_LOCAL_SERIES)),
 				ContextPanelTypes.GAME_OVER.toString());
 
 		return this.gameContextPanel;

@@ -21,7 +21,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
-import de.jskat.gui.action.JSkatActions;
+import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
@@ -63,7 +63,7 @@ class DiscardPanel extends HandPanel {
 		this.cardPanel = new CardPanel(this, this.bitmaps, false);
 		add(this.cardPanel, "grow, wrap"); //$NON-NLS-1$
 		
-		this.discardAction = this.parent.getActionMap().get(JSkatActions.DISCARD_CARDS);
+		this.discardAction = this.parent.getActionMap().get(JSkatAction.DISCARD_CARDS);
 		final JButton discardButton = new JButton(this.discardAction);
 		discardButton.addActionListener(new ActionListener() {
 			@Override
@@ -120,11 +120,11 @@ class DiscardPanel extends HandPanel {
 		
 		if (this.cardPanel.getCardCount() == 2) {
 			
-			this.getActionMap().get(JSkatActions.DISCARD_CARDS).setEnabled(true);
+			this.getActionMap().get(JSkatAction.DISCARD_CARDS).setEnabled(true);
 		}
 		else {
 			
-			this.getActionMap().get(JSkatActions.DISCARD_CARDS).setEnabled(false);
+			this.getActionMap().get(JSkatAction.DISCARD_CARDS).setEnabled(false);
 		}
 	}
 }

@@ -27,7 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.SkatGameData.GameStates;
-import de.jskat.gui.action.JSkatActions;
+import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
@@ -244,7 +244,7 @@ class CardPanel extends JPanel {
 			
 				if (this.parent instanceof DiscardPanel) {
 					// card panel in discard panel was clicked
-					action = getActionMap().get(JSkatActions.TAKE_CARD_FROM_SKAT);
+					action = getActionMap().get(JSkatAction.TAKE_CARD_FROM_SKAT);
 				}
 				else if (this.parent instanceof PlayerPanel) {
 					// card panel in player panel was clicked
@@ -253,11 +253,11 @@ class CardPanel extends JPanel {
 					
 					if (state == GameStates.DISCARDING) {
 						// discarding phase
-						action = getActionMap().get(JSkatActions.PUT_CARD_INTO_SKAT);
+						action = getActionMap().get(JSkatAction.PUT_CARD_INTO_SKAT);
 					}
 					else if (state == GameStates.TRICK_PLAYING) {
 						// trick playing phase
-						action = getActionMap().get(JSkatActions.PLAY_CARD);
+						action = getActionMap().get(JSkatAction.PLAY_CARD);
 					}
 				}
 				else {

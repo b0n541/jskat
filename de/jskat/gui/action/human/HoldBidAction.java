@@ -18,7 +18,7 @@ import javax.swing.Action;
 
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
-import de.jskat.gui.action.JSkatActions;
+import de.jskat.gui.action.JSkatAction;
 
 /**
  * Implements the action for handling card panel clicks
@@ -36,7 +36,7 @@ public class HoldBidAction extends AbstractJSkatAction {
 		
 		putValue(Action.NAME, "18");
 		putValue(Action.SHORT_DESCRIPTION, "Hold this bid");
-		putValue(Action.ACTION_COMMAND_KEY, JSkatActions.HOLD_BID.toString());
+		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.HOLD_BID.toString());
 	}
 	
 	/**

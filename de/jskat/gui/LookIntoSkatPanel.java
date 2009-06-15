@@ -15,7 +15,7 @@ import javax.swing.ActionMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import de.jskat.gui.action.JSkatActions;
+import de.jskat.gui.action.JSkatAction;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -49,8 +49,8 @@ class LookIntoSkatPanel extends JPanel {
 		ActionMap actions = this.parent.getActionMap();
 		
 		JPanel panel = new JPanel(new MigLayout("fill"));
-		panel.add(new JButton(actions.get(JSkatActions.LOOK_INTO_SKAT)));
-		panel.add(new JButton(actions.get(JSkatActions.PLAY_HAND_GAME)));
+		panel.add(new JButton(actions.get(JSkatAction.LOOK_INTO_SKAT)));
+		panel.add(new JButton(actions.get(JSkatAction.PLAY_HAND_GAME)));
 		this.add(panel, "center");
 	}
 }

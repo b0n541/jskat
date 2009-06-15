@@ -17,7 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
-import de.jskat.gui.action.JSkatActions;
+import de.jskat.gui.action.JSkatAction;
 import de.jskat.util.Player;
 
 /**
@@ -59,8 +59,8 @@ class BiddingPanel extends JPanel {
 		biddingPanel.add(this.leftOpponentBid, "left"); //$NON-NLS-1$
 		biddingPanel.add(this.rightOpponentBid, "right, wrap"); //$NON-NLS-1$
 		biddingPanel.add(this.playerBid, "span 2, center, wrap"); //$NON-NLS-1$
-		this.bidButton = new JButton(newActions.get(JSkatActions.HOLD_BID));
-		this.passButton = new JButton(newActions.get(JSkatActions.PASS_BID));
+		this.bidButton = new JButton(newActions.get(JSkatAction.HOLD_BID));
+		this.passButton = new JButton(newActions.get(JSkatAction.PASS_BID));
 		biddingPanel.add(this.bidButton, "left"); //$NON-NLS-1$
 		biddingPanel.add(this.passButton, "right"); //$NON-NLS-1$
 		

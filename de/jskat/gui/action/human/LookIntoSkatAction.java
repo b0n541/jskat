@@ -18,7 +18,7 @@ import javax.swing.Action;
 
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
-import de.jskat.gui.action.JSkatActions;
+import de.jskat.gui.action.JSkatAction;
 
 /**
  * Implements the action for handling card panel clicks
@@ -36,7 +36,7 @@ public class LookIntoSkatAction extends AbstractJSkatAction {
 		
 		putValue(Action.NAME, "Look into skat");
 		putValue(Action.SHORT_DESCRIPTION, "Look into skat");
-		putValue(Action.ACTION_COMMAND_KEY, JSkatActions.LOOK_INTO_SKAT.toString());
+		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.LOOK_INTO_SKAT.toString());
 	}
 	
 	/**

@@ -18,7 +18,7 @@ import javax.swing.Action;
 
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
-import de.jskat.gui.action.JSkatActions;
+import de.jskat.gui.action.JSkatAction;
 
 /**
  * Implements the action for handling card panel clicks during trick play
@@ -33,7 +33,7 @@ public class PlayCardAction extends AbstractJSkatAction {
 	public PlayCardAction(JSkatMaster controller) {
 		
 		super(controller);
-		putValue(Action.ACTION_COMMAND_KEY, JSkatActions.PLAY_CARD.toString());
+		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.PLAY_CARD.toString());
 	}
 	
 	/**

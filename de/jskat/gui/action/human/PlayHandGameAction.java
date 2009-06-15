@@ -18,7 +18,7 @@ import javax.swing.Action;
 
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
-import de.jskat.gui.action.JSkatActions;
+import de.jskat.gui.action.JSkatAction;
 
 /**
  * Implements the action for handling card panel clicks
@@ -36,7 +36,7 @@ public class PlayHandGameAction extends AbstractJSkatAction {
 		
 		putValue(Action.NAME, "Play hand game");
 		putValue(Action.SHORT_DESCRIPTION, "Play hand game");
-		putValue(Action.ACTION_COMMAND_KEY, JSkatActions.PLAY_HAND_GAME.toString());
+		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.PLAY_HAND_GAME.toString());
 	}
 	
 	/**
