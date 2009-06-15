@@ -42,6 +42,14 @@ abstract class HandPanel extends JPanel {
 	 * Header label
 	 */
 	JLabel headerLabel;
+	/**
+	 * Player name
+	 */
+	String playerName;
+	/**
+	 * Player time
+	 */
+	double playerTime;
 
 	CardPanel cardPanel;
 	
@@ -100,6 +108,8 @@ abstract class HandPanel extends JPanel {
 		
 		StringBuffer headerText = new StringBuffer();
 		
+		headerText.append(this.playerName).append(": ");
+		
 		switch(this.position) {
 		case FORE_HAND:
 			headerText.append("Fore hand");
@@ -111,6 +121,8 @@ abstract class HandPanel extends JPanel {
 			headerText.append("Hind hand");
 			break;
 		}
+		headerText.append(' ');
+		headerText.append(this.playerTime);
 		
 		this.headerLabel.setText(headerText.toString());
 	}
@@ -167,5 +179,19 @@ abstract class HandPanel extends JPanel {
 	boolean isHandFull() {
 		
 		return this.cardPanel.getCardCount() == this.maxCardCount;
+	}
+	
+	void setPlayerName(String newName) {
+		
+		this.playerName = newName;
+		
+		this.refreshHeaderText();
+	}
+	
+	void setPlayerTime(double newTime) {
+		
+		this.playerTime = newTime;
+		
+		this.refreshHeaderText();
 	}
 }

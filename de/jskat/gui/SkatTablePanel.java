@@ -518,4 +518,21 @@ public class SkatTablePanel extends JSkatTabPanel {
 		this.skatListTableModel.setPlayerCount(maxPlayers);
 	}
 
+	void setPlayerInformation(HandPanelType type, String name, double time) {
+		
+		switch(type) {
+		case LEFT_OPPONENT:
+			this.leftOpponentPanel.setPlayerName(name);
+			this.leftOpponentPanel.setPlayerTime(time);
+			break;
+		case RIGHT_OPPONENT:
+			this.rightOpponentPanel.setPlayerName(name);
+			this.rightOpponentPanel.setPlayerTime(time);
+			break;
+		case PLAYER:
+			this.playerPanel.setPlayerName(name);
+			this.playerPanel.setPlayerTime(time);
+			break;
+		}
+	}
 }

@@ -22,8 +22,10 @@ import java.util.StringTokenizer;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.jskat.data.iss.ISSGameStatus;
 import de.jskat.data.iss.ISSPlayerStatus;
 import de.jskat.data.iss.ISSTablePanelStatus;
+import de.jskat.util.Player;
 
 /**
  * Reads data from ISS until an interrupt signal occures
@@ -196,6 +198,10 @@ class InputChannel extends Thread {
 		
 			this.issControl.updateISSTableState(tableName, getTableStatus(token));
 		}
+		else if (actionCommand.equals("start")) {
+			
+			this.issControl.startGame(tableName, getGameStartStatus(token));
+		}
 		else {
 			
 			log.debug("unhandled action command: " + actionCommand + " for table " + tableName);
@@ -229,6 +235,21 @@ class InputChannel extends Thread {
 		return status;
 	}
 
+	private ISSGameStatus getGameStartStatus(StringTokenizer token) {
+
+		ISSGameStatus status = new ISSGameStatus();
+		
+		status.setGameNo(Integer.parseInt(token.nextToken()));
+		status.putPlayerName(Player.FORE_HAND, token.nextToken());
+		status.putPlayerTime(Player.FORE_HAND, new Double(token.nextToken()));
+		status.putPlayerName(Player.MIDDLE_HAND, token.nextToken());
+		status.putPlayerTime(Player.MIDDLE_HAND, new Double(token.nextToken()));
+		status.putPlayerName(Player.HIND_HAND, token.nextToken());
+		status.putPlayerTime(Player.HIND_HAND, new Double(token.nextToken()));
+		
+		return status;
+	}
+	
 	private ISSPlayerStatus parsePlayerStatus(StringTokenizer token) {
 		
 		ISSPlayerStatus status = new ISSPlayerStatus();

@@ -19,6 +19,7 @@ import org.apache.commons.logging.LogFactory;
 
 import de.jskat.control.JSkatMaster;
 import de.jskat.data.iss.ISSChatMessage;
+import de.jskat.data.iss.ISSGameStatus;
 import de.jskat.data.iss.ISSLoginCredentials;
 import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.gui.JSkatView;
@@ -243,6 +244,11 @@ public class ISSController {
 	}
 
 	public void updateISSTableState(String tableName, ISSTablePanelStatus status) {
+		
+		this.view.updateISSTable(tableName, status);
+	}
+
+	public void startGame(String tableName, ISSGameStatus status) {
 		
 		this.view.updateISSTable(tableName, status);
 	}

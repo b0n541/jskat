@@ -11,6 +11,7 @@ import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameStates;
 import de.jskat.data.iss.ISSChatMessage;
+import de.jskat.data.iss.ISSGameStatus;
 import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
@@ -380,6 +381,15 @@ public class NullView implements JSkatView {
 	@Override
 	public void updateISSTable(@SuppressWarnings("unused") String tableName,
 			@SuppressWarnings("unused") ISSTablePanelStatus status) {
+		// empty method by indent
+	}
+
+	/**
+	 * @see JSkatView#updateISSTable(String, ISSGameStatus)
+	 */
+	@Override
+	public void updateISSTable(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") ISSGameStatus status) {
 		// empty method by indent
 	}
 
