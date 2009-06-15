@@ -42,12 +42,9 @@ public class JSkatApplicationData {
 	 * 
 	 * @param newSkatTable New local table
 	 */
-	synchronized public String addLocalSkatTable(SkatTable newSkatTable) {
+	synchronized public void addLocalSkatTable(SkatTable newSkatTable) {
 		
-		String tableName = Integer.toString(this.localSkatTables.size()) + "_JSKAT";
-		this.localSkatTables.put(tableName, newSkatTable);
-		
-		return tableName;
+		this.localSkatTables.put(newSkatTable.getName(), newSkatTable);
 	}
 	
 	/**
