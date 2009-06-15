@@ -21,7 +21,7 @@ public abstract class JSkatTabPanel extends JPanel {
 	/**
 	 * Constructor
 	 * 
-	 * @param newTableName Table name
+	 * @param tabName Table name
 	 * @param jskatBitmaps JSkat bitmaps
 	 * @param actions JSkat actions
 	 */
