@@ -68,6 +68,8 @@ public class JSkatMaster {
 		// TODO check whether a connection to ISS is established
 		// TODO ask whether a local or a remote tabel should be created
 		
+		// FIXME don't do GUI things in the controller
+		// let the view obtain a table name
 		String tableName = JOptionPane.showInputDialog(this.view.getRootFrame(), "Please name your table:", "New skat table", JOptionPane.OK_CANCEL_OPTION);
 		if(tableName==null) {
 			log.debug("Create table was cancelled...");

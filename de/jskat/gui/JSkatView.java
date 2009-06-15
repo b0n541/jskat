@@ -35,6 +35,10 @@ public interface JSkatView {
 	 * 
 	 * @return the root frame
 	 */
+	// FIXME not needed
+	// this method is a swing related thing
+	// view interface should not depend on swing
+	// consider e.g. text view
 	public abstract JFrame getRootFrame();
 	
 	/**
