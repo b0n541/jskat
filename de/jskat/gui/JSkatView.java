@@ -11,8 +11,6 @@ Released: @ReleaseDate@
 
 package de.jskat.gui;
 
-import javax.swing.JFrame;
-
 import de.jskat.control.SkatGame;
 import de.jskat.control.SkatTable;
 import de.jskat.control.iss.ChatMessageType;
@@ -31,15 +29,11 @@ import de.jskat.util.Player;
 public interface JSkatView {
 
 	/**
-	 * Gets the root frame of the view
+	 * Gets a new table name from the view
 	 * 
-	 * @return the root frame
+	 * @return New table name
 	 */
-	// FIXME not needed
-	// this method is a swing related thing
-	// view interface should not depend on swing
-	// consider e.g. text view
-	public abstract JFrame getRootFrame();
+	public abstract String getNewTableName();
 	
 	/**
 	 * Shows a table

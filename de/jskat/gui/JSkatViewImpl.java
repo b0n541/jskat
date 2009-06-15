@@ -673,10 +673,11 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see de.jskat.gui.JSkatView#getRootFrame()
+	 * @see JSkatView#getNewTableName()
 	 */
 	@Override
-	public JFrame getRootFrame() {
-		return this.mainFrame;
+	public String getNewTableName() {
+		
+		return JOptionPane.showInputDialog(this.mainFrame, "Please name your table:", "New skat table", JOptionPane.OK_CANCEL_OPTION);
 	}
 }

@@ -383,11 +383,12 @@ public class NullView implements JSkatView {
 		// empty method by indent
 	}
 
-	/** 
-	 * @see de.jskat.gui.JSkatView#getRootFrame()
+	/**
+	 * @see JSkatView#getNewTableName()
 	 */
 	@Override
-	public JFrame getRootFrame() {
+	public String getNewTableName() {
+		// empty method by indent
 		return null;
 	}
 }
