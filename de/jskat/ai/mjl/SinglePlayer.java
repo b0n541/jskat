@@ -13,6 +13,7 @@ package de.jskat.ai.mjl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.jskat.ai.PlayerKnowledge;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
 import de.jskat.util.rule.BasicSkatRules;
@@ -43,7 +44,7 @@ public class SinglePlayer implements CardPlayer {
 	 * @param trick all necessary information about the trick
 	 * @return index of the card to play
 	 */
-	public Card playNextCard(TrickInfo trick) {
+	public Card playNextCard(PlayerKnowledge knowledge) {
 		log.debug(".playNextCard(): Processing hand: "+cards);
 		log.debug(".playNextCard(): Not really implemented yet...");
 		int result = -1;

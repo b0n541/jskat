@@ -13,6 +13,7 @@ package de.jskat.ai.mjl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.jskat.ai.PlayerKnowledge;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
 import de.jskat.util.GameType;
@@ -41,17 +42,17 @@ public class OpponentPlayer implements CardPlayer {
 	 * @return index of the card to play
 	 * @see de.jskat.ai.mjl.CardPlayer#playNextCard(jskat.share.CardList, de.jskat.ai.mjl.TrickInfo)
 	 */
-	public Card playNextCard(TrickInfo trickInfo) {
-		log.debug("Play next card with trick size "+trickInfo.size());
-		if(trickInfo.getGameType()==GameType.NULL) {
-			return playNextCardNullGame(trickInfo);
+	public Card playNextCard(PlayerKnowledge knowledge) {
+		log.debug("Play next card with trick size "+knowledge.getTrickCards().size());
+		if(knowledge.getGame().getGameType()==GameType.NULL) {
+			return playNextCardNullGame(knowledge);
 		}
     	
 		// TODO refactor method calls: just include CardMemory instead of all the details
 
 		int bestToBePlayed = -1;
 		log.debug("--------------------- start ----------------------------------");
-        log.debug(".playNextCard(): Processing hand ["+cards+"] with trick ["+trickInfo.getTrick()+"]. Trump is "+Helper.suitName(trickInfo.getTrump())+".");
+        log.debug(".playNextCard(): Processing hand ["+cards+"] with trick ["+knowledge.getTrickCards()+"]. Game type is "+knowledge.getGame().getGameType()+".");
 /*        
 		if (trickInfo.size() > 1) {
 			// 1: check if player can match initial suit
@@ -262,22 +263,22 @@ public class OpponentPlayer implements CardPlayer {
 	 * @param trickInfo
 	 * @return the index of the card that should be played
 	 */
-	private Card playNextCardNullGame(TrickInfo trickInfo) {
+	private Card playNextCardNullGame(PlayerKnowledge knowledge) {
 		int bestToBePlayed = -1;
 		log.debug(".playNextCardNullGame(): cards: ["+cards+"]");
         
-		if (trickInfo.getTrick().size() > 0) {
-			if(!cards.hasSuit(GameType.NULL, trickInfo.getTrick().get(0).getSuit())) {
+		if (knowledge.getTrickCards().size() > 0) {
+			if(!cards.hasSuit(GameType.NULL, knowledge.getTrickCards().get(0).getSuit())) {
 				// TODO null game: abwerfen
 				log.debug(".playNextCardNullGame(): abwerfen...");
 				bestToBePlayed = 0;
 			}
 			else {
 				// do I have a lower card?
-				int toBePlayed = findLowerCard(cards, trickInfo.getTrick().get(0));
+				int toBePlayed = findLowerCard(cards, knowledge.getTrickCards().get(0));
 				if(toBePlayed < 0) {
 					// no: take the highest one of that suit
-					bestToBePlayed = cards.getFirstIndexOfSuit(trickInfo.getTrick().get(0).getSuit());
+					bestToBePlayed = cards.getFirstIndexOfSuit(knowledge.getTrickCards().get(0).getSuit());
 				} else {
 					bestToBePlayed = toBePlayed;
 				}

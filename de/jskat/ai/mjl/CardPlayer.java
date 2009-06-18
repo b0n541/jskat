@@ -10,6 +10,7 @@ Released: @ReleaseDate@
 
 package de.jskat.ai.mjl;
 
+import de.jskat.ai.PlayerKnowledge;
 import de.jskat.util.Card;
 
 
@@ -23,6 +24,6 @@ interface CardPlayer {
 	 * @param trickInfo all necessary information about the trick
 	 * @return the card to play
 	 */
-	Card playNextCard(TrickInfo trickInfo);
+	Card playNextCard(PlayerKnowledge knowledge);
 
 }

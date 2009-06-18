@@ -123,12 +123,8 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public Card playCard() {
-        TrickInfo thisTrick = new TrickInfo();
-        GameInfo game = new GameInfo(gameType, gameType.getTrumpSuit(), singlePlayer.getOrder());
-        thisTrick.setGameInfo(game);
-        thisTrick.setTrick(knowledge.getTrickCards());
-		thisTrick.setSinglePlayerPos(singlePlayer.getOrder());
-		Card toPlay = aiPlayer.playNextCard(thisTrick);
+		log.debug(".playCard(): my position: "+knowledge.getPlayerPosition()+", single player: "+singlePlayer);
+		Card toPlay = aiPlayer.playNextCard(knowledge);
 		// make sure, that there is a card 
 		if(toPlay!=null) return toPlay;
 		// if there is none, just play the first valid card
