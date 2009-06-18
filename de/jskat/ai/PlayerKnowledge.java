@@ -16,6 +16,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
+import de.jskat.data.GameAnnouncement;
 import de.jskat.data.Trick;
 import de.jskat.util.CardDeck;
 import de.jskat.util.CardList;
@@ -29,6 +30,9 @@ import de.jskat.util.Suit;
  * information
  */
 public class PlayerKnowledge {
+
+	/** the basic game information */
+	private GameAnnouncement game;
 
 	/** Player position */
 	private Player playerPosition;
@@ -462,5 +466,19 @@ public class PlayerKnowledge {
 		CardDeck deck = new CardDeck();
 		
 		return null;
+	}
+
+	/**
+	 * @param game the game to set
+	 */
+	public void setGame(GameAnnouncement game) {
+		this.game = game;
+	}
+
+	/**
+	 * @return the game
+	 */
+	public GameAnnouncement getGame() {
+		return game;
 	}
 }
