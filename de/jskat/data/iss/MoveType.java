@@ -7,6 +7,7 @@ public enum MoveType {
 	HOLD_BID,
 	PASS,
 	SKAT_REQUEST,
+	SKAT_LOOKING,
 	GAME_ANNOUNCEMENT,
 	CARD_PLAY
 }

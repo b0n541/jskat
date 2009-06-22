@@ -12,12 +12,14 @@ Released: @ReleaseDate@
 package de.jskat.gui;
 
 import java.awt.CardLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Map;
 
 import javax.swing.ActionMap;
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -60,6 +62,7 @@ public class SkatTablePanel extends JSkatTabPanel {
 	protected Map<ContextPanelTypes, JPanel> contextPanels;
 	protected GameAnnouncePanel gameAnnouncePanel;
 	protected TrickPlayPanel trickPanel;
+	protected TrickPlayPanel lastTrickPanel;
 	/**
 	 * Table model for skat list
 	 */
@@ -184,9 +187,13 @@ public class SkatTablePanel extends JSkatTabPanel {
 		this.gameContextPanel.add(this.gameAnnouncePanel,
 				ContextPanelTypes.DECLARING.toString());
 
+		JPanel trickHoldingPanel = new JPanel(new MigLayout("fill", "fill", "fill"));
+		this.lastTrickPanel = new TrickPlayPanel(this.bitmaps);
+		trickHoldingPanel.add(this.lastTrickPanel, "width 25%");
 		this.trickPanel = new TrickPlayPanel(this.bitmaps);
+		trickHoldingPanel.add(this.trickPanel, "grow");
 
-		this.gameContextPanel.add(this.trickPanel,
+		this.gameContextPanel.add(trickHoldingPanel,
 				ContextPanelTypes.TRICK_PLAYING.toString());
 
 		this.gameContextPanel.add(new GameOverPanel(
@@ -219,7 +226,8 @@ public class SkatTablePanel extends JSkatTabPanel {
 		this.playerPanel.setPosition(playerPosition);
 
 		this.biddingPanel.setPlayerPosition(playerPosition);
-		this.trickPanel.setPlayerPosition(playerPosition);
+		this.trickPanel.setUserPosition(playerPosition);
+		this.lastTrickPanel.setUserPosition(playerPosition);
 
 		switch (playerPosition) {
 		case FORE_HAND:
@@ -276,6 +284,14 @@ public class SkatTablePanel extends JSkatTabPanel {
 		this.trickPanel.clearCards();
 	}
 
+	/**
+	 * Clears last trick cards
+	 */
+	void clearLastTrickCards() {
+
+		this.lastTrickPanel.clearCards();
+	}
+	
 	void removeCard(Player position, Card card) {
 
 		switch (position) {
@@ -461,6 +477,7 @@ public class SkatTablePanel extends JSkatTabPanel {
 		this.clearHand(Player.MIDDLE_HAND);
 		this.clearHand(Player.HIND_HAND);
 		this.clearTrickCards();
+		this.clearLastTrickCards();
 		// default sorting is grand sorting
 		this.leftOpponentPanel.setSortGameType(GameType.GRAND);
 		this.rightOpponentPanel.setSortGameType(GameType.GRAND);
@@ -534,5 +551,15 @@ public class SkatTablePanel extends JSkatTabPanel {
 			this.playerPanel.setPlayerTime(time);
 			break;
 		}
+	}
+
+	void setLastTrick(Player trickForeHand, Card foreHandCard,
+			Card middleHandCard, Card hindHandCard) {
+		
+		this.lastTrickPanel.setTrickForeHand(trickForeHand);
+		this.lastTrickPanel.clearCards();
+		this.lastTrickPanel.setCard(trickForeHand, foreHandCard);
+		this.lastTrickPanel.setCard(trickForeHand.getLeftNeighbor(), middleHandCard);
+		this.lastTrickPanel.setCard(trickForeHand.getRightNeighbor(), hindHandCard);
 	}
 }

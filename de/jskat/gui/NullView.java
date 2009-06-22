@@ -1,9 +1,5 @@
 package de.jskat.gui;
 
-import java.util.StringTokenizer;
-
-import javax.swing.JFrame;
-
 import de.jskat.control.SkatGame;
 import de.jskat.control.SkatTable;
 import de.jskat.control.iss.ChatMessageType;
@@ -419,6 +415,18 @@ public class NullView implements JSkatView {
 	public void playTrickCard(@SuppressWarnings("unused") String tableName,
 			@SuppressWarnings("unused") Player position,
 			@SuppressWarnings("unused") Card card) {
+		// empty method by indent
+	}
+
+	/**
+	 * @see JSkatView#setLastTrick(String, Player, Card, Card, Card)
+	 */
+	@Override
+	public void setLastTrick(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player trickForeHand,
+			@SuppressWarnings("unused") Card foreHandCard,
+			@SuppressWarnings("unused") Card middleHandCard,
+			@SuppressWarnings("unused") Card hindHandCard) {
 		// empty method by indent
 	}
 }

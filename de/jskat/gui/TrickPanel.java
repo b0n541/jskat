@@ -38,7 +38,7 @@ class TrickPanel extends JPanel {
 	private List<Player> positions;
 	private CardList trick;
 	private Random rand = new Random();
-	private Player playerPosition;
+	private Player userPosition;
 	private Player rightOpponent;
 	private Player leftOpponent;
 
@@ -75,6 +75,11 @@ class TrickPanel extends JPanel {
 	 */
 	void addCard(Player player, Card card) {
 		
+		if (this.trick.size() == 3) {
+			// trick is full -> clear it first
+			this.positions.clear();
+			this.trick.clear();
+		}
 		this.positions.add(player);
 		this.trick.add(card);
 		repaint();
@@ -114,6 +119,8 @@ class TrickPanel extends JPanel {
 		double xPos = 0.0d;
 		double yPos = 0.0d;
 
+		Graphics2D g2D = (Graphics2D) g;
+
 		for (int i = 0; i < this.trick.size(); i++) {
 			
 			Card card = this.trick.get(i);
@@ -140,7 +147,7 @@ class TrickPanel extends JPanel {
 				xPos = (2 * (xScaleSize / 3.0d)) + centerTranslate;
 				yPos = 0.0d;
 			}
-			else if (player == this.playerPosition) {
+			else if (player == this.userPosition) {
 				xPos = (xScaleSize / 3.0d) + centerTranslate;
 				yPos = 2 * (yScaleSize / 4.0d);
 			}
@@ -149,8 +156,8 @@ class TrickPanel extends JPanel {
 			transform.setToIdentity();
 			transform.translate(xPos, yPos);
 			transform.scale(scaleFactor, scaleFactor);
+//			transform.rotate(rand.nextDouble());
 			
-			Graphics2D g2D = (Graphics2D) g;
 			g2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
 			g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 			g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
@@ -160,10 +167,10 @@ class TrickPanel extends JPanel {
 		}
 	}
 
-	void setPlayerPosition(Player newPlayerPosition) {
+	void setUserPosition(Player newUserPosition) {
 		
-		this.playerPosition = newPlayerPosition;
-		this.leftOpponent = this.playerPosition.getLeftNeighbor();
-		this.rightOpponent = this.playerPosition.getRightNeighbor();
+		this.userPosition = newUserPosition;
+		this.leftOpponent = this.userPosition.getLeftNeighbor();
+		this.rightOpponent = this.userPosition.getRightNeighbor();
 	}
 }

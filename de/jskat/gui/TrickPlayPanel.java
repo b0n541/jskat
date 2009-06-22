@@ -32,9 +32,7 @@ class TrickPlayPanel extends JPanel {
 		
 		this.setLayout(new MigLayout("fill, fill, fill")); //$NON-NLS-1$
 		this.trickPanel = new TrickPanel(jskatBitmaps);
-		this.add(new JPanel(), "growx, growy, center"); //$NON-NLS-1$
 		this.add(this.trickPanel, "growx, growy, center"); //$NON-NLS-1$
-		this.add(new JPanel(), "growx, growy, center"); //$NON-NLS-1$
 	}
 	
 	/**
@@ -66,8 +64,8 @@ class TrickPlayPanel extends JPanel {
 		this.trickPanel.setTrickForeHand(trickForeHand);
 	}
 
-	void setPlayerPosition(Player playerPosition) {
+	void setUserPosition(Player userPosition) {
 		
-		this.trickPanel.setPlayerPosition(playerPosition);
+		this.trickPanel.setUserPosition(userPosition);
 	}
 }

@@ -29,9 +29,11 @@ class GameStartPanel extends JPanel {
 	
 	public void initPanel() {
 		
-		this.setLayout(new MigLayout("fill"));
+		this.setLayout(new MigLayout("fill", "fill", "fill"));
 		
-		this.add(new JButton(this.action), "center");
+		JPanel panel = new JPanel(new MigLayout("fill"));
+		panel.add(new JButton(this.action), "center");
+		this.add(panel, "center, grow");
 	}
 
 	private StartSkatSeriesAction action;

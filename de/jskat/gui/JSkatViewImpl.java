@@ -46,6 +46,7 @@ import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.data.iss.ISSGameStatus;
 import de.jskat.data.iss.ISSMoveInformation;
 import de.jskat.data.iss.ISSTablePanelStatus;
+import de.jskat.data.iss.MovePlayer;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.action.human.DiscardAction;
 import de.jskat.gui.action.human.GameAnnounceAction;
@@ -722,20 +723,36 @@ public class JSkatViewImpl implements JSkatView {
 	public void updateISSMove(String tableName,
 			ISSMoveInformation moveInformation) {
 
-		switch(moveInformation.getType()) {
+		switch (moveInformation.getType()) {
 		// TODO add other types too
 		case CARD_PLAY:
-			switch(moveInformation.getPosition()) {
+			switch (moveInformation.getPosition()) {
 			case FORE_HAND:
-				this.playTrickCard(tableName, Player.FORE_HAND, moveInformation.getCard());
+				this.playTrickCard(tableName, Player.FORE_HAND, moveInformation
+						.getCard());
 				break;
 			case MIDDLE_HAND:
-				this.playTrickCard(tableName, Player.MIDDLE_HAND, moveInformation.getCard());
+				this.playTrickCard(tableName, Player.MIDDLE_HAND,
+						moveInformation.getCard());
 				break;
 			case HIND_HAND:
-				this.playTrickCard(tableName, Player.HIND_HAND, moveInformation.getCard());
+				this.playTrickCard(tableName, Player.HIND_HAND, moveInformation
+						.getCard());
 				break;
 			}
+		}
+
+		if (moveInformation.getPosition() != MovePlayer.WORLD) {
+			// dirty hack
+			SkatTablePanel table = this.tables.get(tableName);
+			table.setPlayerInformation(HandPanelType.PLAYER, null,
+					moveInformation.getPlayerTime(Player.FORE_HAND));
+			table.setPlayerInformation(HandPanelType.LEFT_OPPONENT, null,
+					moveInformation.getPlayerTime(Player.MIDDLE_HAND));
+			table.setPlayerInformation(HandPanelType.RIGHT_OPPONENT, null,
+					moveInformation.getPlayerTime(Player.HIND_HAND));
+
+			table.setContextPanel(ContextPanelTypes.TRICK_PLAYING);
 		}
 	}
 
@@ -744,7 +761,21 @@ public class JSkatViewImpl implements JSkatView {
 	 */
 	@Override
 	public void playTrickCard(String tableName, Player position, Card card) {
-		// TODO Auto-generated method stub
-		
+
+		this.removeCard(tableName, position, card);
+		this.setTrickCard(tableName, position, card);
+	}
+
+	/**
+	 * @see JSkatView#setLastTrick(String, Player, Card, Card, Card)
+	 */
+	@Override
+	public void setLastTrick(String tableName, Player trickForeHand,
+			Card foreHandCard, Card middleHandCard, Card hindHandCard) {
+
+		SkatTablePanel table = this.tables.get(tableName);
+
+		table.setLastTrick(trickForeHand, foreHandCard, middleHandCard,
+				hindHandCard);
 	}
 }

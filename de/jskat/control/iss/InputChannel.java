@@ -301,9 +301,13 @@ class InputChannel extends Thread {
 			// pass move
 			info.setType(MoveType.PASS);
 		}
-		else if (move.equals("??.??")) {
-			// hidden skat request move
+		else if (move.equals("s")) {
+			// skat request move
 			info.setType(MoveType.SKAT_REQUEST);
+		}
+		else if (move.equals("??.??")) {
+			// hidden skat given to a player
+			info.setType(MoveType.SKAT_LOOKING);
 		}
 		else {
 			// extensive parsing needed
@@ -311,7 +315,7 @@ class InputChannel extends Thread {
 			// test card move
 			Card card = Card.getCardFromString(move);
 			if (card != null) {
-				
+				// card play move
 				info.setType(MoveType.CARD_PLAY);
 				info.setCard(card);
 			}
@@ -323,8 +327,8 @@ class InputChannel extends Thread {
 					// TODO parse cards
 				}
 				else if (move.length() == 5) {
-					// open skat request
-					info.setType(MoveType.SKAT_REQUEST);
+					// open skat given to a player
+					info.setType(MoveType.SKAT_LOOKING);
 					// TODO parse cards
 				}
 				else if (move.length() < 5) {
@@ -411,7 +415,7 @@ class InputChannel extends Thread {
 		// parse player times
 		info.putPlayerTime(Player.FORE_HAND, new Double(token.nextToken()));
 		info.putPlayerTime(Player.MIDDLE_HAND, new Double(token.nextToken()));
-		info.putPlayerTime(Player.FORE_HAND, new Double(token.nextToken()));
+		info.putPlayerTime(Player.HIND_HAND, new Double(token.nextToken()));
 		
 		return info;
 	}
