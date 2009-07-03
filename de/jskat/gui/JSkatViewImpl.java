@@ -387,7 +387,10 @@ public class JSkatViewImpl implements JSkatView {
 
 		JOptionPane.showMessageDialog(this.mainFrame, "JSkat V0.7\n\n"
 				+ "Authors: Jan Schaefer, Markus J. Luzius\n\n"
-				+ "Icons: Tango project, Silvestre Herrera and Alex Roberts",
+				+ "Icons: Tango project, Silvestre Herrera and Alex Roberts\n\n"
+				+ "This program comes with ABSOLUTELY NO WARRANTY; for details see licence dialog\n"
+				+ "This is free software, and you are welcome to redistribute it\n"
+				+ "under certain conditions; see licence dialog for details.",
 				"About JSkat", JOptionPane.INFORMATION_MESSAGE);
 	}
 
@@ -514,7 +517,7 @@ public class JSkatViewImpl implements JSkatView {
 	public void showLicenseDialog() {
 
 		new JSkatHelpDialog(null, this.mainFrame, true, "License",
-				"de/jskat/gui/help/gpl2.txt").setVisible(true);
+				"de/jskat/gui/help/gpl3.html").setVisible(true);
 	}
 
 	/**

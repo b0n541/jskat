@@ -98,7 +98,6 @@ public class JSkatHelpDialog extends JDialog {
         StringBuilder message = new StringBuilder();
         try {
             InputStream is = ClassLoader.getSystemResourceAsStream(contentURL);
-//            InputStream is = ClassLoader.getSystemResourceAsStream("de/jskat/gui/help/gpl2.txt");
             InputStreamReader isr = new java.io.InputStreamReader(is);
             BufferedReader bfr = new java.io.BufferedReader(isr);
             
