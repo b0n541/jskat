@@ -196,7 +196,7 @@ public class JSkatViewImpl implements JSkatView {
 		this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.mainFrame.setPreferredSize(new Dimension(1000, 700));
 
-		this.mainFrame.setIconImage(this.bitmaps.getIconImage(JSkatGraphicRepository.Icon.TABLE, JSkatGraphicRepository.IconSize.BIG));
+		this.mainFrame.setIconImage(this.bitmaps.getIconImage(JSkatGraphicRepository.Icon.JSKAT, JSkatGraphicRepository.IconSize.BIG));
 		
 		this.mainFrame.setJMenuBar(getMenuBar());
 

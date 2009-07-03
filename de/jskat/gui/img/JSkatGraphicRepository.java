@@ -278,7 +278,11 @@ public class JSkatGraphicRepository {
 		/**
 		 * License
 		 */
-		LICENSE;
+		LICENSE,
+		/**
+		 * JSkat logo
+		 */
+		JSKAT;
 	}
 	
 	/**
