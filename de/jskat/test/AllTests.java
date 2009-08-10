@@ -17,7 +17,9 @@ import org.junit.runners.Suite.SuiteClasses;
 
 import de.jskat.test.ai.nn.CardDeckSimulatorTest;
 import de.jskat.test.util.CardDeckTest;
+import de.jskat.test.util.CardListTest;
 import de.jskat.test.util.CardTest;
+import de.jskat.test.util.SkatConstantsTest;
 import de.jskat.test.util.rule.BasicSkatRuleTest;
 import de.jskat.test.util.rule.NullRuleTest;
 import de.jskat.test.util.rule.SchneiderSchwarzRuleTest;
@@ -31,8 +33,10 @@ import de.jskat.test.util.rule.SchneiderSchwarzRuleTest;
 	NullRuleTest.class,
 	SchneiderSchwarzRuleTest.class,
 	CardTest.class,
+	CardListTest.class,
 	CardDeckTest.class,
-	CardDeckSimulatorTest.class
+	CardDeckSimulatorTest.class,
+	SkatConstantsTest.class
 })
 
 public class AllTests {
