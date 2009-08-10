@@ -1,3 +1,14 @@
+/*
+
+@ShortLicense@
+
+Authors: @JS@
+         @MJL@
+
+Released: @ReleaseDate@
+
+ */
+
 package de.jskat.gui.human;
 
 import java.awt.event.ActionEvent;
