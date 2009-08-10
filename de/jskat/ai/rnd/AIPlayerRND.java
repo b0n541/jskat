@@ -84,8 +84,6 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 		int result = -1;
 		
 		if (this.rand.nextBoolean()) {
-//		if (true) {
-//		if (false) {
 			
 			result = nextBidValue;
 		}

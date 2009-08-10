@@ -114,7 +114,7 @@ public class SkatGameData {
 	 * Game result
 	 */
 	private int result = 0;
-
+	
 	/**
 	 * Highest bid value made during bidding
 	 */
