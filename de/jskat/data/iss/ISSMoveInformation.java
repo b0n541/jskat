@@ -33,88 +33,192 @@ public class ISSMoveInformation {
 	private Card skat0;
 	private Card skat1;
 	private List<Card> ouvertCards = new ArrayList<Card>();
-	
+	private Card card;
+
+	/**
+	 * Gets the game announcement
+	 * 
+	 * @return Game announcement
+	 */
 	public GameAnnouncement getGameAnnouncement() {
 		return this.announcement;
 	}
+	
+	/**
+	 * Sets the game announcement
+	 * 
+	 * @param ann Game announcement
+	 */
 	public void setGameAnnouncement(GameAnnouncement ann) {
 		this.announcement = ann;
 	}
+	
+	/**
+	 * Gets a card from the skat
+	 * 
+	 * @param index Index of card
+	 * @return Card
+	 */
 	public Card getSkat(int index) {
 		// TODO dirty hack
 		Card result = null;
 		if (index == 0) {
 		
-			result = skat0;
+			result = this.skat0;
 		}
 		else if (index == 1) {
 			
-			result = skat1;
+			result = this.skat1;
 		}
 		
 		return result;
 	}
-	public void setSkatCards(Card skat0, Card skat1) {
-		this.skat0 = skat0;
-		this.skat1 = skat1;
-	}
-	public Card getSkat1() {
-		return skat1;
-	}
-	public void setSkat1(Card skat1) {
-		this.skat1 = skat1;
-	}
-	private Card card;
 	
+	/**
+	 * Sets the skat cards
+	 * 
+	 * @param newSkat0 First card
+	 * @param newSkat1 Second card
+	 */
+	public void setSkatCards(Card newSkat0, Card newSkat1) {
+		
+		this.skat0 = newSkat0;
+		this.skat1 = newSkat1;
+	}
+
+	/**
+	 * Gets the position of the player who made the last move
+	 * 
+	 * @return Position of the player
+	 */
 	public MovePlayer getPosition() {
+		
 		return this.position;
 	}
+
+	/**
+	 * Sets the position of the player who made the last move
+	 * 
+	 * @param newPosition Position of the player
+	 */
 	public void setPosition(MovePlayer newPosition) {
+		
 		this.position = newPosition;
 	}
+	
+	/**
+	 * Clears all player times
+	 */
 	public void clearPlayerTimes() {
 		
 		this.playerTimes.clear();
 	}
 	
-	public void putPlayerTime(Player position, Double time) {
+	/**
+	 * Sets a player times
+	 * 
+	 * @param playerPosition Player position
+	 * @param time Time
+	 */
+	public void putPlayerTime(Player playerPosition, Double time) {
 		
-		this.playerTimes.put(position, time);
+		this.playerTimes.put(playerPosition, time);
 	}
 	
-	public double getPlayerTime(Player position) {
+	/**
+	 * Gets a player time
+	 * 
+	 * @param playerPosition Player position
+	 * @return Time
+	 */
+	public double getPlayerTime(Player playerPosition) {
 		
-		return this.playerTimes.get(position).doubleValue();
+		return this.playerTimes.get(playerPosition).doubleValue();
 	}
+	
+	/**
+	 * Gets the move type
+	 * 
+	 * @return Move type
+	 */
 	public MoveType getType() {
-		return type;
+		
+		return this.type;
 	}
-	public void setType(MoveType type) {
-		this.type = type;
+	
+	/**
+	 * Sets the move type
+	 * 
+	 * @param newType Move type
+	 */
+	public void setType(MoveType newType) {
+	
+		this.type = newType;
 	}
+	
+	/**
+	 * Gets the bid value
+	 * 
+	 * @return Bid value
+	 */
 	public int getBidValue() {
-		return bidValue;
+	
+		return this.bidValue;
 	}
-	public void setBidValue(int bidValue) {
-		this.bidValue = bidValue;
+	
+	/**
+	 * Sets the bid value
+	 * 
+	 * @param newBidValue Bid value
+	 */
+	public void setBidValue(int newBidValue) {
+	
+		this.bidValue = newBidValue;
 	}
+	
+	/**
+	 * Gets the played card
+	 * 
+	 * @return Card
+	 */
 	public Card getCard() {
-		return card;
+	
+		return this.card;
 	}
-	public void setCard(Card card) {
-		this.card = card;
+	
+	/**
+	 * Sets the played card
+	 * 
+	 * @param newCard
+	 */
+	public void setCard(Card newCard) {
+	
+		this.card = newCard;
 	}
 
+	/**
+	 * Clears the ouvert cards
+	 */
 	public void clearOuvertCards() {
 		
 		this.ouvertCards.clear();
 	}
 	
-	public void addOuvertCard(Card card) {
+	/**
+	 * Add an ouvert card
+	 * 
+	 * @param newCard Card
+	 */
+	public void addOuvertCard(Card newCard) {
 		
-		this.ouvertCards.add(card);
+		this.ouvertCards.add(newCard);
 	}
 	
+	/**
+	 * Gets the ouvert cards
+	 * 
+	 * @return Ouvert cards
+	 */
 	public List<Card> getOuvertCards() {
 		
 		return this.ouvertCards;
