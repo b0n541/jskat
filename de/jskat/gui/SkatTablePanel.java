@@ -12,14 +12,12 @@ Released: @ReleaseDate@
 package de.jskat.gui;
 
 import java.awt.CardLayout;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Map;
 
 import javax.swing.ActionMap;
-import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -438,11 +436,8 @@ public class SkatTablePanel extends JSkatTabPanel {
 			}
 		}
 		
-		this.skatListTableModel.addRow(Integer.toString(foreHandValue),
-				Integer.toString(middleHandValue),
-				Integer.toString(hindHandValue), 
-				Integer.toString(gameResult));
-
+		this.skatListTableModel.addResult(declarer, gameResult);
+		
 		Rectangle bounds = this.skatListTable.getCellRect(this.skatListTableModel.getRowCount(), 0, true);
 		Point loc = bounds.getLocation();
 		loc.move(loc.x, loc.y + bounds.height - 1);
