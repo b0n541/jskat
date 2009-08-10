@@ -136,6 +136,11 @@ public interface JSkatView {
 	public abstract int showExitDialog();
 
 	/**
+	 * Shows preferences dialog
+	 */
+	public abstract void showPreferences();
+
+	/**
 	 * Adds a card to a players hand
 	 * 
 	 * @param tableName

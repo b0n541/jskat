@@ -15,7 +15,10 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -73,6 +76,7 @@ import de.jskat.gui.action.main.HelpAction;
 import de.jskat.gui.action.main.LicenseAction;
 import de.jskat.gui.action.main.LoadGameAction;
 import de.jskat.gui.action.main.LoadNeuralNetworksAction;
+import de.jskat.gui.action.main.PreferencesAction;
 import de.jskat.gui.action.main.SaveGameAction;
 import de.jskat.gui.action.main.SaveGameAsAction;
 import de.jskat.gui.action.main.SaveNeuralNetworksAction;
@@ -96,9 +100,11 @@ public class JSkatViewImpl implements JSkatView {
 
 	private JFrame mainFrame;
 	private SkatSeriesStartDialog skatSeriesStartDialog;
+	private JSkatPreferencesDialog preferencesDialog;
 	private JTabbedPane tabs;
 	private Map<String, SkatTablePanel> tables;
 	private JSkatGraphicRepository bitmaps;
+	private ResourceBundle strings;
 	ActionMap actions;
 
 	private LobbyPanel issLobby;
@@ -114,11 +120,16 @@ public class JSkatViewImpl implements JSkatView {
 	public JSkatViewImpl(JSkatMaster jskat, JSkatGraphicRepository jskatBitmaps) {
 
 		this.bitmaps = jskatBitmaps;
+		// TODO make this setable
+		this.strings = PropertyResourceBundle.getBundle("de/jskat/i18n/i18n",
+				new Locale("de", "DE"));
 		this.tables = new HashMap<String, SkatTablePanel>();
 		initActionMap(jskat);
 		initGUI(jskat);
 
 		this.skatSeriesStartDialog = new SkatSeriesStartDialog(jskat,
+				this.mainFrame);
+		this.preferencesDialog = new JSkatPreferencesDialog(jskat,
 				this.mainFrame);
 
 		this.mainFrame.setVisible(true);
@@ -139,6 +150,8 @@ public class JSkatViewImpl implements JSkatView {
 		this.actions.put(JSkatAction.LICENSE, new LicenseAction(jskat,
 				this.bitmaps));
 		this.actions.put(JSkatAction.EXIT_JSKAT, new ExitAction(jskat,
+				this.bitmaps, this.strings));
+		this.actions.put(JSkatAction.PREFERENCES, new PreferencesAction(jskat,
 				this.bitmaps));
 		this.actions.put(JSkatAction.ABOUT_JSKAT, new AboutAction(jskat,
 				this.bitmaps));
@@ -196,8 +209,10 @@ public class JSkatViewImpl implements JSkatView {
 		this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.mainFrame.setPreferredSize(new Dimension(1000, 700));
 
-		this.mainFrame.setIconImage(this.bitmaps.getIconImage(JSkatGraphicRepository.Icon.JSKAT, JSkatGraphicRepository.IconSize.BIG));
-		
+		this.mainFrame.setIconImage(this.bitmaps.getIconImage(
+				JSkatGraphicRepository.Icon.JSKAT,
+				JSkatGraphicRepository.IconSize.BIG));
+
 		this.mainFrame.setJMenuBar(getMenuBar());
 
 		JPanel mainPanel = new JPanel();
@@ -251,7 +266,7 @@ public class JSkatViewImpl implements JSkatView {
 
 		JMenuBar menu = new JMenuBar();
 
-		JMenu fileMenu = new JMenu("File");
+		JMenu fileMenu = new JMenu(this.strings.getString("game"));
 		fileMenu.add(new JMenuItem(this.actions.get(JSkatAction.LOAD_SERIES)));
 		fileMenu.add(new JMenuItem(this.actions.get(JSkatAction.SAVE_SERIES)));
 		fileMenu
@@ -280,9 +295,14 @@ public class JSkatViewImpl implements JSkatView {
 		JMenu issMenu = new JMenu("ISS");
 		issMenu
 				.add(new JMenuItem(this.actions.get(JSkatAction.SHOW_ISS_LOGIN)));
+		issMenu.add(new JSeparator());
 		issMenu.add(new JMenuItem("Create new skat table"));
 		issMenu.add(new JMenuItem("Invite player"));
 		menu.add(issMenu);
+
+		JMenu extraMenu = new JMenu("Extras");
+		extraMenu.add(new JMenuItem(this.actions.get(JSkatAction.PREFERENCES)));
+		menu.add(extraMenu);
 
 		JMenu helpMenu = new JMenu("Help");
 		helpMenu.add(new JMenuItem(this.actions.get(JSkatAction.HELP)));
@@ -387,13 +407,16 @@ public class JSkatViewImpl implements JSkatView {
 	 */
 	public void showAboutMessage() {
 
-		JOptionPane.showMessageDialog(this.mainFrame, "JSkat V0.7\n\n"
-				+ "Authors: Jan Schaefer, Markus J. Luzius\n\n"
-				+ "Icons: Tango project, Silvestre Herrera and Alex Roberts\n\n"
-				+ "This program comes with ABSOLUTELY NO WARRANTY; for details see licence dialog\n"
-				+ "This is free software, and you are welcome to redistribute it\n"
-				+ "under certain conditions; see licence dialog for details.",
-				"About JSkat", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane
+				.showMessageDialog(
+						this.mainFrame,
+						"JSkat V0.7\n\n"
+								+ "Authors: Jan Schaefer, Markus J. Luzius\n\n"
+								+ "Icons: Tango project, Silvestre Herrera and Alex Roberts\n\n"
+								+ "This program comes with ABSOLUTELY NO WARRANTY; for details see licence dialog\n"
+								+ "This is free software, and you are welcome to redistribute it\n"
+								+ "under certain conditions; see licence dialog for details.",
+						"About JSkat", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	/**
@@ -782,5 +805,14 @@ public class JSkatViewImpl implements JSkatView {
 
 		table.setLastTrick(trickForeHand, foreHandCard, middleHandCard,
 				hindHandCard);
+	}
+
+	/**
+	 * @see JSkatView#showPreferences()
+	 */
+	@Override
+	public void showPreferences() {
+
+		this.preferencesDialog.setVisible(true);
 	}
 }

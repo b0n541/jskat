@@ -423,4 +423,9 @@ public class JSkatMaster {
 		
 		return this.issControl;
 	}
+
+	public void showPreferences() {
+		
+		this.view.showPreferences();
+	}
 }

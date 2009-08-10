@@ -1,3 +1,14 @@
+/*
+
+@ShortLicense@
+
+Authors: @JS@
+         @MJL@
+
+Released: @ReleaseDate@
+
+ */
+
 package de.jskat.gui;
 
 import de.jskat.control.SkatGame;
@@ -18,8 +29,6 @@ import de.jskat.util.Player;
  * Doesn't do anything
  */
 public class NullView implements JSkatView {
-
-	private String language;
 
 	/**
 	 * @see JSkatView#addCard(String, Player, Card)
@@ -428,5 +437,14 @@ public class NullView implements JSkatView {
 			@SuppressWarnings("unused") Card middleHandCard,
 			@SuppressWarnings("unused") Card hindHandCard) {
 		// empty method by indent
+	}
+
+	/**
+	 * @see JSkatView#showPreferences()
+	 */
+	@Override
+	public void showPreferences() {
+		// TODO Auto-generated method stub
+		
 	}
 }
