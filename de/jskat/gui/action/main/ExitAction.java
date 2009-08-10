@@ -12,6 +12,7 @@ Released: @ReleaseDate@
 package de.jskat.gui.action.main;
 
 import java.awt.event.ActionEvent;
+import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -31,17 +32,18 @@ public class ExitAction extends AbstractJSkatAction {
 	/**
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
-	public ExitAction(JSkatMaster controller, JSkatGraphicRepository bitmaps) {
-		
+	public ExitAction(JSkatMaster controller, JSkatGraphicRepository bitmaps,
+			ResourceBundle strings) {
+
 		super(controller);
-		
-		putValue(Action.NAME, "Exit JSkat");
+
+		putValue(Action.NAME, strings.getString("exit_jskat"));
 		putValue(Action.SHORT_DESCRIPTION, "Exits JSkat");
 		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.EXIT, 
+				JSkatGraphicRepository.Icon.EXIT,
 				JSkatGraphicRepository.IconSize.SMALL)));
 		putValue(Action.LARGE_ICON_KEY, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.EXIT, 
+				JSkatGraphicRepository.Icon.EXIT,
 				JSkatGraphicRepository.IconSize.SMALL)));
 	}
 
