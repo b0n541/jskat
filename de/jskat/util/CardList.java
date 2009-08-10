@@ -32,10 +32,10 @@ public class CardList extends ArrayList<Card> {
 	 * Constructor
 	 */
 	public CardList() {
-		
+
 		super();
 	}
-	
+
 	/**
 	 * Tests whether a card with a suit is in the CardList or not
 	 * 
@@ -47,7 +47,8 @@ public class CardList extends ArrayList<Card> {
 	 */
 	public boolean hasSuit(GameType gameType, Suit suit) {
 
-		return SkatRuleFactory.getSkatRules(gameType).hasSuit(gameType, this, suit);
+		return SkatRuleFactory.getSkatRules(gameType).hasSuit(gameType, this,
+				suit);
 	}
 
 	/**
@@ -77,27 +78,28 @@ public class CardList extends ArrayList<Card> {
 	/**
 	 * Checks whether a jack of a given suit is in the CardList
 	 * 
-	 * @param suit Suit to check
+	 * @param suit
+	 *            Suit to check
 	 * @return TRUE if the jack of the tested suit is in the CardList
 	 */
 	public boolean hasJack(Suit suit) {
-		
+
 		boolean result = false;
-		
+
 		for (Card card : this) {
-			
+
 			if (card.getRank() == Rank.JACK) {
-				
+
 				if (card.getSuit() == suit) {
-					
+
 					result = true;
 				}
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Gets the index of a card in the CardList
 	 * 
@@ -135,7 +137,7 @@ public class CardList extends ArrayList<Card> {
 	public Suit getMostFrequentSuit() {
 
 		// TODO re-implement it
-		
+
 		Suit mostFrequentSuitColor = Suit.CLUBS;
 		int highestCardCount = getSuitCount(Suit.CLUBS, true);
 		int currentCardCount = 0;
@@ -172,7 +174,7 @@ public class CardList extends ArrayList<Card> {
 	 * @param suit
 	 *            The suit to search for
 	 * @param countJacks
-	 * 			  TRUE if the jacks should count to the number of suit cards
+	 *            TRUE if the jacks should count to the number of suit cards
 	 * @return Number of cards with this suit
 	 */
 	public int getSuitCount(Suit suit, boolean countJacks) {
@@ -180,14 +182,13 @@ public class CardList extends ArrayList<Card> {
 		int count = 0;
 
 		for (Card card : this) {
-			
+
 			if (card.getSuit() == suit) {
-				
+
 				if (card.getRank() == Rank.JACK && countJacks) {
 					// count jacks only if needed
 					count++;
-				}
-				else {
+				} else {
 					// count every other card with the same suit
 					count++;
 				}
@@ -217,7 +218,7 @@ public class CardList extends ArrayList<Card> {
 	 */
 	public void sort(GameType gameType) {
 
-		switch(gameType) {
+		switch (gameType) {
 		case NULL:
 			sortNullGame();
 			break;
@@ -240,16 +241,16 @@ public class CardList extends ArrayList<Card> {
 	}
 
 	private void sortNullGame() {
-		
+
 		for (int i = 0; i < this.size() - 1; i++) {
 			for (int j = i + 1; j < this.size(); j++) {
 
-				if (get(j).getSuit().getSuitOrder() > get(i).getSuit().getSuitOrder()
-						|| 
-						(get(j).getSuit() == get(i).getSuit() 
-								&& get(j).getNullOrder() >= get(i).getNullOrder())) {
+				if (get(j).getSuit().getSuitOrder() > get(i).getSuit()
+						.getSuitOrder()
+						|| (get(j).getSuit() == get(i).getSuit() && get(j)
+								.getNullOrder() >= get(i).getNullOrder())) {
 
-					log.debug("i=" + i + ", j=" + j + ", " + get(i)   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+					log.debug("i=" + i + ", j=" + j + ", " + get(i) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 							+ " vs. " + get(j) + ", cards(1): [" + this //$NON-NLS-1$ //$NON-NLS-2$
 							+ "]"); //$NON-NLS-1$
 
@@ -258,42 +259,38 @@ public class CardList extends ArrayList<Card> {
 			}
 		}
 	}
-	
+
 	private int sortJacks() {
-		
+
 		int sortedCards = 0;
-		
+
 		// First find the Jacks
 		if (contains(Card.CJ)) {
-			
-			changeCards(sortedCards, 
-						getIndexOf(Card.CJ));
+
+			changeCards(sortedCards, getIndexOf(Card.CJ));
 			sortedCards++;
 		}
 		if (contains(Card.SJ)) {
 
-			changeCards(sortedCards, 
-						getIndexOf(Card.SJ));
+			changeCards(sortedCards, getIndexOf(Card.SJ));
 			sortedCards++;
 		}
 		if (contains(Card.HJ)) {
 
-			changeCards(sortedCards, 
-						getIndexOf(Card.HJ));
+			changeCards(sortedCards, getIndexOf(Card.HJ));
 			sortedCards++;
 		}
 		if (contains(Card.DJ)) {
-			
-			changeCards(sortedCards, 
-						getIndexOf(Card.DJ));
+
+			changeCards(sortedCards, getIndexOf(Card.DJ));
 			sortedCards++;
 		}
-		
+
 		return sortedCards;
 	}
-	
+
 	private void sortRamschGame() {
-		
+
 		// first sort jacks
 		int sortedCards = sortJacks();
 
@@ -301,13 +298,12 @@ public class CardList extends ArrayList<Card> {
 		for (int i = sortedCards; i < this.size() - 1; i++) {
 			for (int j = i + 1; j < this.size(); j++) {
 
-				if (get(j).getSuit().getSuitOrder() > get(i)
-						.getSuit().getSuitOrder()
-						|| (get(j).getSuit() == get(i).getSuit() && get(
-								j).getRamschOrder() >= get(i)
-								.getRamschOrder())) {
+				if (get(j).getSuit().getSuitOrder() > get(i).getSuit()
+						.getSuitOrder()
+						|| (get(j).getSuit() == get(i).getSuit() && get(j)
+								.getRamschOrder() >= get(i).getRamschOrder())) {
 
-					log.debug("i=" + i + ", j=" + j + ", " + get(i)   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+					log.debug("i=" + i + ", j=" + j + ", " + get(i) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 							+ " vs. " + get(j) + ", cards(1): [" + this //$NON-NLS-1$ //$NON-NLS-2$
 							+ "]"); //$NON-NLS-1$
 
@@ -318,27 +314,31 @@ public class CardList extends ArrayList<Card> {
 	}
 
 	private void sortSuitGame(GameType gameType) {
-		
+
+		log.debug("sort " + this + " according " + gameType);
 		// first sort jacks
 		int sortedCards = sortJacks();
-		
+
 		Suit trumpSuit = gameType.getTrumpSuit();
-		
+
 		// then cycle through the colors for the remaining colors
 		for (int i = sortedCards; i < this.size() - 1; i++) {
 			for (int j = i + 1; j < this.size(); j++) {
 
 				if (// prefer trump cards
-					(get(j).getSuit() == trumpSuit && get(i).getSuit() != trumpSuit ||
-							get(j).getSuit() == trumpSuit && get(i).getSuit() == trumpSuit &&
-							get(j).getSuitGrandOrder() >= get(i).getSuitGrandOrder()) ||
-					// normal sorting, different suits
-						get(j).getSuit().getSuitOrder() > get(i).getSuit().getSuitOrder() ||
-					// normal sorting, same suits	
-						(get(j).getSuit() == get(i).getSuit() && 
-								get(j).getSuitGrandOrder() >= get(i).getSuitGrandOrder())) {
+						(get(j).getSuit() == trumpSuit && get(i).getSuit() != trumpSuit || 
+						 get(j).getSuit() == trumpSuit && get(i).getSuit() == trumpSuit
+						 	&& get(j).getSuitGrandOrder() >= get(i).getSuitGrandOrder())
+						||
+						// normal sorting, different suits
+						(get(j).getSuit() != trumpSuit && get(i).getSuit() != trumpSuit
+							&& get(j).getSuit().getSuitOrder() > get(i).getSuit().getSuitOrder()) 
+						||
+						// normal sorting, same suits
+						(get(j).getSuit() == get(i).getSuit() 
+							&& get(j).getSuitGrandOrder() >= get(i).getSuitGrandOrder())) {
 
-					log.debug("i=" + i + ", j=" + j + ", " + get(i)   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+					log.debug("i=" + i + ", j=" + j + ", " + get(i) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 							+ " vs. " + get(j) + ", cards(1): [" + this //$NON-NLS-1$ //$NON-NLS-2$
 							+ "]"); //$NON-NLS-1$
 
@@ -346,33 +346,16 @@ public class CardList extends ArrayList<Card> {
 				}
 			}
 		}
+		
+		log.debug("result: " + this);
 	}
-	
+
 	private void sortGrandGame() {
-		
-		// first sort jacks
-		int sortedCards = sortJacks();
-		
-		// then cycle through the colors for the remaining colors
-		for (int i = sortedCards; i < this.size() - 1; i++) {
-			for (int j = i + 1; j < this.size(); j++) {
 
-				if (// different suits
-						get(j).getSuit().getSuitOrder() > get(i).getSuit().getSuitOrder() ||
-					// same suits	
-						(get(j).getSuit() == get(i).getSuit() && 
-								get(j).getSuitGrandOrder() >= get(i).getSuitGrandOrder())) {
-
-					log.debug("i=" + i + ", j=" + j + ", " + get(i)   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-							+ " vs. " + get(j) + ", cards(1): [" + this //$NON-NLS-1$ //$NON-NLS-2$
-							+ "]"); //$NON-NLS-1$
-
-					changeCards(i, j);
-				}
-			}
-		}
+		// same order as club order
+		this.sortSuitGame(GameType.CLUBS);
 	}
-	
+
 	/**
 	 * @see Object#toString()
 	 */
@@ -387,7 +370,7 @@ public class CardList extends ArrayList<Card> {
 		while (iter.hasNext()) {
 
 			output.append(iter.next());
-			
+
 			if (iter.hasNext()) {
 				output.append(' ');
 			}
@@ -403,38 +386,40 @@ public class CardList extends ArrayList<Card> {
 	 * @return Sum of all card points
 	 */
 	public int getCardValueSum() {
-		
+
 		int sum = 0;
-		
+
 		for (Card card : this) {
-			
+
 			sum += card.getRank().getPoints();
 		}
-		
+
 		return sum;
 	}
 
 	/**
 	 * Returns the first index of a card with the given suit
 	 * 
-	 * @param suit Suit to search
-	 * @return First index of a card with the given suit, -1 if there is no such card
+	 * @param suit
+	 *            Suit to search
+	 * @return First index of a card with the given suit, -1 if there is no such
+	 *         card
 	 */
 	public int getFirstIndexOfSuit(Suit suit) {
-		
+
 		int result = -1;
-		
+
 		int index = 0;
 		for (Card card : this) {
-			
+
 			if (result == -1 && card.getSuit() == suit) {
-				
+
 				result = index;
 			}
-			
+
 			index++;
 		}
-		
+
 		return result;
 	}
 }
