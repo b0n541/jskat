@@ -15,6 +15,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -85,16 +88,15 @@ class Connector {
 			this.issOut = new OutputChannel(this.output);
 			this.issIn = new InputChannel(this.issControl, this, this.socket.getInputStream());
 			this.issIn.start();
+			log.debug("Connection established..."); //$NON-NLS-1$
+			this.issOut.send(this.loginName);
 			
 		} catch (java.net.UnknownHostException e) {
 			log.error("Cannot open connection to ISS"); //$NON-NLS-1$
+			this.issControl.showMessage(JOptionPane.ERROR_MESSAGE, "Can't establish connection to ISS");
 		} catch (java.io.IOException e) {
 			log.error("IOException: " + e.toString()); //$NON-NLS-1$
 		}
-		
-		log.debug("Connection established..."); //$NON-NLS-1$
-		
-		this.issOut.send(this.loginName);
 		
 		return true;
 	}

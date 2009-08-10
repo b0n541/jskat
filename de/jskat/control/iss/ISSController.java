@@ -263,4 +263,9 @@ public class ISSController {
 		
 		this.view.updateISSMove(tableName, moveInformation);
 	}
+	
+	public void showMessage(int messageType, String message) {
+		
+		this.view.showMessage(messageType, message);
+	}
 }
