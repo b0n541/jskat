@@ -81,4 +81,45 @@ public final class SkatConstants {
 		
 		return multiplier;
 	}
+	
+	/**
+	 * Returns the game value after the Seeger-Fabian system
+	 * 
+	 * @param Calculation for declarer of game
+	 * @param Game value
+	 * @param Number of players on the skat table
+	 * @return Tournament value
+	 */
+	public final static int getTournamentGameValue(boolean declarer, int gameValue, int numberOfPlayers) {
+		
+		int result = 0;
+
+		if (declarer) {
+			// calculation for declarer of the game
+			if (gameValue > 0) {
+				
+				result = gameValue + 50;
+			}
+			else {
+				
+				result = gameValue - 50;
+			}
+		}
+		else {
+			// calculation for opponents
+			if (gameValue < 0) {
+				
+				if (numberOfPlayers == 3) {
+					
+					result = 40;
+				}
+				else if (numberOfPlayers == 4) {
+					
+					result = 30;
+				}
+			}
+		}
+		
+		return result;
+	}
 }
