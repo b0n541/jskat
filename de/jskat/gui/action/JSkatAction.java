@@ -36,6 +36,10 @@ public enum JSkatAction {
 	 */
 	EXIT_JSKAT,
 	/**
+	 * Shows the preferences dialog
+	 */
+	PREFERENCES,
+	/**
 	 * Shows the about information
 	 */
 	ABOUT_JSKAT,
