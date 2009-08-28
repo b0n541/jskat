@@ -12,6 +12,7 @@ Released: @ReleaseDate@
 package de.jskat.gui.action.main;
 
 import java.awt.event.ActionEvent;
+import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -31,19 +32,21 @@ public class AboutAction extends AbstractJSkatAction {
 	/**
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
-	public AboutAction(JSkatMaster controller, JSkatGraphicRepository bitmaps) {
-		
+	public AboutAction(JSkatMaster controller, JSkatGraphicRepository bitmaps,
+			ResourceBundle strings) {
+
 		super(controller);
-		
-		putValue(Action.NAME, "About JSkat");
+
+		putValue(Action.NAME, strings.getString("about"));
+		putValue(Action.SHORT_DESCRIPTION, strings.getString("about_tooltip"));
 		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.ABOUT, 
+				JSkatGraphicRepository.Icon.ABOUT,
 				JSkatGraphicRepository.IconSize.SMALL)));
 		putValue(Action.LARGE_ICON_KEY, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.ABOUT, 
+				JSkatGraphicRepository.Icon.ABOUT,
 				JSkatGraphicRepository.IconSize.BIG)));
 	}
-	
+
 	/**
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */

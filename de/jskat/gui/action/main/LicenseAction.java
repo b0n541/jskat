@@ -12,6 +12,7 @@ Released: @ReleaseDate@
 package de.jskat.gui.action.main;
 
 import java.awt.event.ActionEvent;
+import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -31,19 +32,21 @@ public class LicenseAction extends AbstractJSkatAction {
 	/**
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
-	public LicenseAction(JSkatMaster controller, JSkatGraphicRepository bitmaps) {
-		
+	public LicenseAction(JSkatMaster controller,
+			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
+
 		super(controller);
-		
-		putValue(Action.NAME, "License");
+
+		putValue(Action.NAME, strings.getString("license"));
+		putValue(Action.SHORT_DESCRIPTION, strings.getString("license_tooltip"));
 		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.LICENSE, 
+				JSkatGraphicRepository.Icon.LICENSE,
 				JSkatGraphicRepository.IconSize.SMALL)));
 		putValue(Action.LARGE_ICON_KEY, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.LICENSE, 
+				JSkatGraphicRepository.Icon.LICENSE,
 				JSkatGraphicRepository.IconSize.BIG)));
 	}
-	
+
 	/**
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */

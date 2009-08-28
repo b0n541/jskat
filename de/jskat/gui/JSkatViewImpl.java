@@ -146,15 +146,16 @@ public class JSkatViewImpl implements JSkatView {
 				this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.SAVE_SERIES_AS, new SaveSeriesAsAction(
 				jskat, this.bitmaps, this.strings));
-		this.actions.put(JSkatAction.HELP, new HelpAction(jskat, this.bitmaps));
+		this.actions.put(JSkatAction.HELP, new HelpAction(jskat, this.bitmaps,
+				this.strings));
 		this.actions.put(JSkatAction.LICENSE, new LicenseAction(jskat,
-				this.bitmaps));
+				this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.EXIT_JSKAT, new ExitAction(jskat,
 				this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.PREFERENCES, new PreferencesAction(jskat,
 				this.bitmaps));
 		this.actions.put(JSkatAction.ABOUT_JSKAT, new AboutAction(jskat,
-				this.bitmaps));
+				this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.CHANGE_ACTIVE_TABLE,
 				new ChangeActiveTableAction(jskat));
 		// skat table actions
@@ -304,7 +305,7 @@ public class JSkatViewImpl implements JSkatView {
 		extraMenu.add(new JMenuItem(this.actions.get(JSkatAction.PREFERENCES)));
 		menu.add(extraMenu);
 
-		JMenu helpMenu = new JMenu("Help");
+		JMenu helpMenu = new JMenu(this.strings.getString("help"));
 		helpMenu.add(new JMenuItem(this.actions.get(JSkatAction.HELP)));
 		helpMenu.add(new JSeparator());
 		helpMenu.add(new JMenuItem(this.actions.get(JSkatAction.LICENSE)));
