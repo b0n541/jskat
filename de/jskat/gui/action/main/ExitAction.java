@@ -38,7 +38,7 @@ public class ExitAction extends AbstractJSkatAction {
 		super(controller);
 
 		putValue(Action.NAME, strings.getString("exit_jskat"));
-		putValue(Action.SHORT_DESCRIPTION, "Exits JSkat");
+		putValue(Action.SHORT_DESCRIPTION, strings.getString("exit_jskat_tooltip"));
 		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
 				JSkatGraphicRepository.Icon.EXIT,
 				JSkatGraphicRepository.IconSize.SMALL)));

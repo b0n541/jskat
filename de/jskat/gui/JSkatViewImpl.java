@@ -74,7 +74,7 @@ import de.jskat.gui.action.main.CreateTableAction;
 import de.jskat.gui.action.main.ExitAction;
 import de.jskat.gui.action.main.HelpAction;
 import de.jskat.gui.action.main.LicenseAction;
-import de.jskat.gui.action.main.LoadGameAction;
+import de.jskat.gui.action.main.LoadSeriesAction;
 import de.jskat.gui.action.main.LoadNeuralNetworksAction;
 import de.jskat.gui.action.main.PreferencesAction;
 import de.jskat.gui.action.main.SaveGameAction;
@@ -140,8 +140,8 @@ public class JSkatViewImpl implements JSkatView {
 		this.actions = new ActionMap();
 
 		// common actions
-		this.actions.put(JSkatAction.LOAD_SERIES, new LoadGameAction(jskat,
-				this.bitmaps));
+		this.actions.put(JSkatAction.LOAD_SERIES, new LoadSeriesAction(jskat,
+				this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.SAVE_SERIES, new SaveGameAction(jskat,
 				this.bitmaps));
 		this.actions.put(JSkatAction.SAVE_SERIES_AS, new SaveGameAsAction(
@@ -266,7 +266,7 @@ public class JSkatViewImpl implements JSkatView {
 
 		JMenuBar menu = new JMenuBar();
 
-		JMenu fileMenu = new JMenu(this.strings.getString("game"));
+		JMenu fileMenu = new JMenu(this.strings.getString("file"));
 		fileMenu.add(new JMenuItem(this.actions.get(JSkatAction.LOAD_SERIES)));
 		fileMenu.add(new JMenuItem(this.actions.get(JSkatAction.SAVE_SERIES)));
 		fileMenu

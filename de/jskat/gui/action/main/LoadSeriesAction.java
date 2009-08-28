@@ -12,6 +12,7 @@ Released: @ReleaseDate@
 package de.jskat.gui.action.main;
 
 import java.awt.event.ActionEvent;
+import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -24,26 +25,28 @@ import de.jskat.gui.img.JSkatGraphicRepository;
 /**
  * Implements the action for showing about dialog
  */
-public class LoadGameAction extends AbstractJSkatAction {
+public class LoadSeriesAction extends AbstractJSkatAction {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
-	public LoadGameAction(JSkatMaster controller, JSkatGraphicRepository bitmaps) {
-		
+	public LoadSeriesAction(JSkatMaster controller,
+			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
+
 		super(controller);
-		
-		putValue(Action.NAME, "Load game");
+
+		putValue(Action.NAME, strings.getString("load_series"));
+		putValue(Action.SHORT_DESCRIPTION, strings.getString("load_series_tooltip"));
 		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.LOAD, 
+				JSkatGraphicRepository.Icon.LOAD,
 				JSkatGraphicRepository.IconSize.SMALL)));
 		putValue(Action.LARGE_ICON_KEY, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.LOAD, 
+				JSkatGraphicRepository.Icon.LOAD,
 				JSkatGraphicRepository.IconSize.BIG)));
 	}
-	
+
 	/**
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */
