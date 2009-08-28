@@ -17,11 +17,11 @@ import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -74,13 +74,13 @@ import de.jskat.gui.action.main.CreateTableAction;
 import de.jskat.gui.action.main.ExitAction;
 import de.jskat.gui.action.main.HelpAction;
 import de.jskat.gui.action.main.LicenseAction;
-import de.jskat.gui.action.main.LoadSeriesAction;
 import de.jskat.gui.action.main.LoadNeuralNetworksAction;
+import de.jskat.gui.action.main.LoadSeriesAction;
 import de.jskat.gui.action.main.PauseSkatSeriesAction;
 import de.jskat.gui.action.main.PreferencesAction;
+import de.jskat.gui.action.main.SaveNeuralNetworksAction;
 import de.jskat.gui.action.main.SaveSeriesAction;
 import de.jskat.gui.action.main.SaveSeriesAsAction;
-import de.jskat.gui.action.main.SaveNeuralNetworksAction;
 import de.jskat.gui.action.main.StartSkatSeriesAction;
 import de.jskat.gui.action.main.TrainNeuralNetworksAction;
 import de.jskat.gui.help.JSkatHelpDialog;
@@ -122,8 +122,8 @@ public class JSkatViewImpl implements JSkatView {
 
 		this.bitmaps = jskatBitmaps;
 		// TODO make this setable
-		this.strings = PropertyResourceBundle.getBundle("de/jskat/i18n/i18n",
-				new Locale("de", "DE"));
+		this.strings = ResourceBundle.getBundle("de/jskat/i18n/i18n", //$NON-NLS-1$
+				new Locale("de", "DE")); //$NON-NLS-1$//$NON-NLS-2$
 		this.tables = new HashMap<String, SkatTablePanel>();
 		initActionMap(jskat);
 		initGUI(jskat);
@@ -260,7 +260,7 @@ public class JSkatViewImpl implements JSkatView {
 					if (tab instanceof JSkatTabPanel) {
 
 						String tableName = ((JSkatTabPanel) tab).getName();
-						log.debug("showing table pane of table " + tableName);
+						log.debug("showing table pane of table " + tableName); //$NON-NLS-1$
 
 						// FIXME set active table name in JSkatMasters data
 					}
@@ -278,7 +278,7 @@ public class JSkatViewImpl implements JSkatView {
 
 		JMenuBar menu = new JMenuBar();
 
-		JMenu fileMenu = new JMenu(this.strings.getString("file"));
+		JMenu fileMenu = new JMenu(this.strings.getString("file")); //$NON-NLS-1$
 		fileMenu.add(new JMenuItem(this.actions.get(JSkatAction.LOAD_SERIES)));
 		fileMenu.add(new JMenuItem(this.actions.get(JSkatAction.SAVE_SERIES)));
 		fileMenu
@@ -287,7 +287,7 @@ public class JSkatViewImpl implements JSkatView {
 		fileMenu.add(new JMenuItem(this.actions.get(JSkatAction.EXIT_JSKAT)));
 		menu.add(fileMenu);
 
-		JMenu tableMenu = new JMenu(this.strings.getString("skat_table"));
+		JMenu tableMenu = new JMenu(this.strings.getString("skat_table")); //$NON-NLS-1$
 		tableMenu.add(new JMenuItem(this.actions
 				.get(JSkatAction.CREATE_LOCAL_TABLE)));
 		tableMenu.add(new JSeparator());
@@ -300,7 +300,7 @@ public class JSkatViewImpl implements JSkatView {
 		menu.add(tableMenu);
 
 		JMenu neuralNetworkMenu = new JMenu(this.strings
-				.getString("neural_networks"));
+				.getString("neural_networks")); //$NON-NLS-1$
 		neuralNetworkMenu.add(new JMenuItem(this.actions
 				.get(JSkatAction.LOAD_NEURAL_NETWORKS)));
 		neuralNetworkMenu.add(new JMenuItem(this.actions
@@ -318,11 +318,11 @@ public class JSkatViewImpl implements JSkatView {
 		issMenu.add(new JMenuItem("Invite player"));
 		menu.add(issMenu);
 
-		JMenu extraMenu = new JMenu(this.strings.getString("extras"));
+		JMenu extraMenu = new JMenu(this.strings.getString("extras")); //$NON-NLS-1$
 		extraMenu.add(new JMenuItem(this.actions.get(JSkatAction.PREFERENCES)));
 		menu.add(extraMenu);
 
-		JMenu helpMenu = new JMenu(this.strings.getString("help"));
+		JMenu helpMenu = new JMenu(this.strings.getString("help")); //$NON-NLS-1$
 		helpMenu.add(new JMenuItem(this.actions.get(JSkatAction.HELP)));
 		helpMenu.add(new JSeparator());
 		helpMenu.add(new JMenuItem(this.actions.get(JSkatAction.LICENSE)));
@@ -428,13 +428,14 @@ public class JSkatViewImpl implements JSkatView {
 		JOptionPane
 				.showMessageDialog(
 						this.mainFrame,
-						"JSkat V0.7\n\n"
+						"JSkat Version 0.7\n\n"
 								+ "Authors: Jan Schaefer, Markus J. Luzius\n\n"
 								+ "Icons: Tango project, Silvestre Herrera and Alex Roberts\n\n"
 								+ "This program comes with ABSOLUTELY NO WARRANTY; for details see licence dialog\n"
 								+ "This is free software, and you are welcome to redistribute it\n"
 								+ "under certain conditions; see licence dialog for details.",
-						"About JSkat", JOptionPane.INFORMATION_MESSAGE);
+						this.strings.getString("about"), JOptionPane.INFORMATION_MESSAGE, //$NON-NLS-1$
+						new ImageIcon(this.bitmaps.getJSkatLogoImage()));
 	}
 
 	/**
@@ -442,7 +443,7 @@ public class JSkatViewImpl implements JSkatView {
 	 */
 	public void showMessage(int messageType, String message) {
 
-		JOptionPane.showMessageDialog(this.mainFrame, message, "Message",
+		JOptionPane.showMessageDialog(this.mainFrame, message, null,
 				messageType);
 	}
 
@@ -452,9 +453,8 @@ public class JSkatViewImpl implements JSkatView {
 	public int showExitDialog() {
 
 		return JOptionPane.showOptionDialog(this.mainFrame, this.strings
-				.getString("exit_dialog_message"), this.strings
-				.getString("exit_dialog_title"), JOptionPane.YES_NO_OPTION,
-				//JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+				.getString("exit_dialog_message"), this.strings //$NON-NLS-1$
+				.getString("exit_dialog_title"), JOptionPane.YES_NO_OPTION, //$NON-NLS-1$
 				JOptionPane.QUESTION_MESSAGE, null, null, null);
 	}
 
@@ -549,7 +549,7 @@ public class JSkatViewImpl implements JSkatView {
 	public void showHelpDialog() {
 
 		new JSkatHelpDialog(null, this.mainFrame, true, this.strings
-				.getString("help"), "de/jskat/gui/help/jskat_help.html")
+				.getString("help"), "de/jskat/gui/help/jskat_help.html") //$NON-NLS-1$ //$NON-NLS-2$
 				.setVisible(true);
 	}
 
@@ -559,8 +559,8 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showLicenseDialog() {
 
-		new JSkatHelpDialog(null, this.mainFrame, true, "License",
-				"de/jskat/gui/help/gpl3.html").setVisible(true);
+		new JSkatHelpDialog(null, this.mainFrame, true, this.strings
+				.getString("license"), "de/jskat/gui/help/gpl3.html").setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
@@ -671,7 +671,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showISSLobby() {
 
-		this.issLobby = new LobbyPanel("ISS lobby", this.bitmaps, this.actions); //$NON-NLS-1$
+		this.issLobby = new LobbyPanel("ISS lobby", this.bitmaps, this.actions);
 		this.tabs.add("ISS lobby", this.issLobby); //$NON-NLS-1$
 		this.tabs.setSelectedComponent(this.issLobby);
 	}
@@ -704,7 +704,7 @@ public class JSkatViewImpl implements JSkatView {
 	public void appendISSChatMessage(ChatMessageType messageType,
 			ISSChatMessage message) {
 
-		log.debug("appendISSChatMessage");
+		log.debug("appendISSChatMessage"); //$NON-NLS-1$
 
 		this.issLobby.appendChatMessage(message);
 	}
@@ -757,9 +757,9 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public String getNewTableName() {
 
-		return JOptionPane.showInputDialog(this.mainFrame,
-				this.strings.getString("new_table_dialog_message"), 
-				this.strings.getString("table"));
+		return JOptionPane.showInputDialog(this.mainFrame, this.strings
+				.getString("new_table_dialog_message"), this.strings //$NON-NLS-1$
+				.getString("table")); //$NON-NLS-1$
 	}
 
 	/**
