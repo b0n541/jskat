@@ -12,6 +12,7 @@ Released: @ReleaseDate@
 package de.jskat.gui.action.main;
 
 import java.awt.event.ActionEvent;
+import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -31,19 +32,21 @@ public class SaveNeuralNetworksAction extends AbstractJSkatAction {
 	/**
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
-	public SaveNeuralNetworksAction(JSkatMaster controller, JSkatGraphicRepository bitmaps) {
-		
+	public SaveNeuralNetworksAction(JSkatMaster controller,
+			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
+
 		super(controller);
-		
-		putValue(Action.NAME, "Save neural networks");
+
+		putValue(Action.NAME, strings.getString("save_nn"));
+		putValue(Action.SHORT_DESCRIPTION, strings.getString("save_nn_tooltip"));
 		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.SAVE, 
+				JSkatGraphicRepository.Icon.SAVE,
 				JSkatGraphicRepository.IconSize.SMALL)));
 		putValue(Action.LARGE_ICON_KEY, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.SAVE, 
+				JSkatGraphicRepository.Icon.SAVE,
 				JSkatGraphicRepository.IconSize.BIG)));
 	}
-	
+
 	/**
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */

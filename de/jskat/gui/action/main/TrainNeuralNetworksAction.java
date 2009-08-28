@@ -12,12 +12,15 @@ Released: @ReleaseDate@
 package de.jskat.gui.action.main;
 
 import java.awt.event.ActionEvent;
+import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ImageIcon;
 
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
+import de.jskat.gui.img.JSkatGraphicRepository;
 
 /**
  * Implements the action for showing about dialog
@@ -29,11 +32,15 @@ public class TrainNeuralNetworksAction extends AbstractJSkatAction {
 	/**
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
-	public TrainNeuralNetworksAction(JSkatMaster controller) {
+	public TrainNeuralNetworksAction(JSkatMaster controller,
+			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
 		
 		super(controller);
 		
-		putValue(Action.NAME, "Train neural networks");
+		putValue(Action.NAME, strings.getString("train_nn"));
+		putValue(Action.SHORT_DESCRIPTION, strings.getString("train_nn_tooltip"));
+		putValue(Action.SMALL_ICON, null);
+		putValue(Action.LARGE_ICON_KEY, null);
 	}
 	
 	/**

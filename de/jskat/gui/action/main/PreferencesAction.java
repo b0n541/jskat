@@ -12,6 +12,7 @@ Released: @ReleaseDate@
 package de.jskat.gui.action.main;
 
 import java.awt.event.ActionEvent;
+import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -31,19 +32,21 @@ public class PreferencesAction extends AbstractJSkatAction {
 	/**
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
-	public PreferencesAction(JSkatMaster controller, JSkatGraphicRepository bitmaps) {
-		
+	public PreferencesAction(JSkatMaster controller,
+			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
+
 		super(controller);
-		
-		putValue(Action.NAME, "Preferences");
+
+		putValue(Action.NAME, strings.getString("preferences"));
+		putValue(Action.SHORT_DESCRIPTION, strings.getString("preferences_tooltip"));
 		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.PREFERENCES, 
+				JSkatGraphicRepository.Icon.PREFERENCES,
 				JSkatGraphicRepository.IconSize.SMALL)));
 		putValue(Action.LARGE_ICON_KEY, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.PREFERENCES, 
+				JSkatGraphicRepository.Icon.PREFERENCES,
 				JSkatGraphicRepository.IconSize.BIG)));
 	}
-	
+
 	/**
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */

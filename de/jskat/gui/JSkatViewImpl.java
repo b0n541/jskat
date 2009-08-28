@@ -153,7 +153,7 @@ public class JSkatViewImpl implements JSkatView {
 		this.actions.put(JSkatAction.EXIT_JSKAT, new ExitAction(jskat,
 				this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.PREFERENCES, new PreferencesAction(jskat,
-				this.bitmaps));
+				this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.ABOUT_JSKAT, new AboutAction(jskat,
 				this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.CHANGE_ACTIVE_TABLE,
@@ -181,12 +181,18 @@ public class JSkatViewImpl implements JSkatView {
 		this.actions.put(JSkatAction.OBSERVE_ISS_TABLE,
 				new ObserveISSTableAction(jskat));
 		// Neural network actions
-		this.actions.put(JSkatAction.TRAIN_NEURAL_NETWORKS,
-				new TrainNeuralNetworksAction(jskat));
-		this.actions.put(JSkatAction.LOAD_NEURAL_NETWORKS,
-				new LoadNeuralNetworksAction(jskat, this.bitmaps));
-		this.actions.put(JSkatAction.SAVE_NEURAL_NETWORKS,
-				new SaveNeuralNetworksAction(jskat, this.bitmaps));
+		this.actions
+				.put(JSkatAction.TRAIN_NEURAL_NETWORKS,
+						new TrainNeuralNetworksAction(jskat, this.bitmaps,
+								this.strings));
+		this.actions
+				.put(JSkatAction.LOAD_NEURAL_NETWORKS,
+						new LoadNeuralNetworksAction(jskat, this.bitmaps,
+								this.strings));
+		this.actions
+				.put(JSkatAction.SAVE_NEURAL_NETWORKS,
+						new SaveNeuralNetworksAction(jskat, this.bitmaps,
+								this.strings));
 		// Human player actions
 		this.actions.put(JSkatAction.HOLD_BID, new HoldBidAction(jskat));
 		this.actions.put(JSkatAction.PASS_BID, new PassBidAction(jskat));
@@ -284,13 +290,15 @@ public class JSkatViewImpl implements JSkatView {
 		tableMenu.add(new JMenuItem("Pause skat series"));
 		menu.add(tableMenu);
 
-		JMenu neuralNetworkMenu = new JMenu("Neural networks");
+		JMenu neuralNetworkMenu = new JMenu(this.strings
+				.getString("neural_networks"));
 		neuralNetworkMenu.add(new JMenuItem(this.actions
 				.get(JSkatAction.LOAD_NEURAL_NETWORKS)));
 		neuralNetworkMenu.add(new JMenuItem(this.actions
-				.get(JSkatAction.TRAIN_NEURAL_NETWORKS)));
-		neuralNetworkMenu.add(new JMenuItem(this.actions
 				.get(JSkatAction.SAVE_NEURAL_NETWORKS)));
+		neuralNetworkMenu.add(new JSeparator());
+		neuralNetworkMenu.add(new JMenuItem(this.actions
+				.get(JSkatAction.TRAIN_NEURAL_NETWORKS)));
 		menu.add(neuralNetworkMenu);
 
 		JMenu issMenu = new JMenu("ISS");
@@ -301,7 +309,7 @@ public class JSkatViewImpl implements JSkatView {
 		issMenu.add(new JMenuItem("Invite player"));
 		menu.add(issMenu);
 
-		JMenu extraMenu = new JMenu("Extras");
+		JMenu extraMenu = new JMenu(this.strings.getString("extras"));
 		extraMenu.add(new JMenuItem(this.actions.get(JSkatAction.PREFERENCES)));
 		menu.add(extraMenu);
 

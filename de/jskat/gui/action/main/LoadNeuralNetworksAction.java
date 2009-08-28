@@ -12,10 +12,13 @@ Released: @ReleaseDate@
 package de.jskat.gui.action.main;
 
 import java.awt.event.ActionEvent;
+import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
+
+import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
 
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
@@ -31,19 +34,21 @@ public class LoadNeuralNetworksAction extends AbstractJSkatAction {
 	/**
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
-	public LoadNeuralNetworksAction(JSkatMaster controller, JSkatGraphicRepository bitmaps) {
-		
+	public LoadNeuralNetworksAction(JSkatMaster controller,
+			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
+
 		super(controller);
-		
-		putValue(Action.NAME, "Load neural networks");
+
+		putValue(Action.NAME, strings.getString("load_nn"));
+		putValue(Action.SHORT_DESCRIPTION, strings.getString("load_nn_tooltip"));
 		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.LOAD, 
+				JSkatGraphicRepository.Icon.LOAD,
 				JSkatGraphicRepository.IconSize.SMALL)));
 		putValue(Action.LARGE_ICON_KEY, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.LOAD, 
+				JSkatGraphicRepository.Icon.LOAD,
 				JSkatGraphicRepository.IconSize.BIG)));
 	}
-	
+
 	/**
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */
