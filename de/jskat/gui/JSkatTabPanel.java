@@ -11,6 +11,8 @@ Released: @ReleaseDate@
 
 package de.jskat.gui;
 
+import java.util.ResourceBundle;
+
 import javax.swing.ActionMap;
 import javax.swing.JPanel;
 
@@ -28,6 +30,10 @@ public abstract class JSkatTabPanel extends JPanel {
 	 * JSkat bitmaps
 	 */
 	protected JSkatGraphicRepository bitmaps;
+	/**
+	 * JSkat strings
+	 */
+	protected ResourceBundle strings;
 
 	/**
 	 * Constructor
@@ -36,12 +42,13 @@ public abstract class JSkatTabPanel extends JPanel {
 	 * @param jskatBitmaps JSkat bitmaps
 	 * @param actions JSkat actions
 	 */
-	protected JSkatTabPanel(String tabName, JSkatGraphicRepository jskatBitmaps, ActionMap actions) {
+	protected JSkatTabPanel(String tabName, JSkatGraphicRepository jskatBitmaps, ActionMap actions, ResourceBundle jskatStrings) {
 
 		super();
 		this.setName(tabName);
 		this.setActionMap(actions);
 		this.bitmaps = jskatBitmaps;
+		this.strings = jskatStrings;
 		initPanel();
 	}
 	

@@ -16,6 +16,7 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.swing.ActionMap;
 import javax.swing.JPanel;
@@ -74,9 +75,10 @@ public class SkatTablePanel extends JSkatTabPanel {
 	 * @see JSkatTabPanel#JSkatTabPanel(String, JSkatGraphicRepository, ActionMap)
 	 */
 	protected SkatTablePanel(String newTableName,
-			JSkatGraphicRepository jskatBitmaps, ActionMap actions) {
+			JSkatGraphicRepository jskatBitmaps, ActionMap actions,
+			ResourceBundle jskatStrings) {
 
-		super(newTableName, jskatBitmaps, actions);
+		super(newTableName, jskatBitmaps, actions, jskatStrings);
 
 		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
 	}
@@ -180,7 +182,7 @@ public class SkatTablePanel extends JSkatTabPanel {
 		this.gameContextPanel.add(this.discardPanel,
 				ContextPanelTypes.DISCARDING.toString());
 
-		this.gameAnnouncePanel = new GameAnnouncePanel(this);
+		this.gameAnnouncePanel = new GameAnnouncePanel(this, this.strings);
 
 		this.gameContextPanel.add(this.gameAnnouncePanel,
 				ContextPanelTypes.DECLARING.toString());

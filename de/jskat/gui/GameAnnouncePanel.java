@@ -13,6 +13,7 @@ package de.jskat.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
 
 import javax.swing.ActionMap;
 import javax.swing.DefaultComboBoxModel;
@@ -47,19 +48,19 @@ class GameAnnouncePanel extends JPanel {
 	 * 
 	 * @param newParent Parent panel
 	 */
-	public GameAnnouncePanel(SkatTablePanel newParent) {
+	public GameAnnouncePanel(SkatTablePanel newParent, ResourceBundle strings) {
 		
 		this.parent = newParent;
-		initPanel();
+		initPanel(strings);
 	}
 	
-	private void initPanel() {
+	private void initPanel(ResourceBundle strings) {
 		
-		this.setLayout(new MigLayout("fill"));
+		this.setLayout(new MigLayout("fill")); //$NON-NLS-1$
 		
 		ActionMap actions = this.parent.getActionMap();
 		
-		JPanel panel = new JPanel(new MigLayout("fill"));
+		JPanel panel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
 		
 		this.gameTypeList = new JComboBox();
 		DefaultComboBoxModel model = new DefaultComboBoxModel();
@@ -73,9 +74,9 @@ class GameAnnouncePanel extends JPanel {
 		this.gameTypeList.setModel(model);
 		this.gameTypeList.setSelectedIndex(-1);
 
-		this.ouvertBox = new JCheckBox("ouvert");
-		this.schneiderBox = new JCheckBox("schneider");
-		this.schwarzBox = new JCheckBox("schwarz");
+		this.ouvertBox = new JCheckBox(strings.getString("ouvert")); //$NON-NLS-1$
+		this.schneiderBox = new JCheckBox(strings.getString("schneider")); //$NON-NLS-1$
+		this.schwarzBox = new JCheckBox(strings.getString("schwarz")); //$NON-NLS-1$
 		
 		panel.add(this.gameTypeList, "wrap"); //$NON-NLS-1$
 		panel.add(this.ouvertBox, "wrap"); //$NON-NLS-1$

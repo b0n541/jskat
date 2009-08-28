@@ -409,7 +409,7 @@ public class JSkatViewImpl implements JSkatView {
 	public SkatTablePanel createSkatTablePanel(String name) {
 
 		SkatTablePanel newPanel = new SkatTablePanel(name, this.bitmaps,
-				this.actions);
+				this.actions, this.strings);
 		this.tabs.addTab(name, newPanel);
 		this.tabs.setSelectedComponent(newPanel);
 
