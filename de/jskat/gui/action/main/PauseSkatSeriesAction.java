@@ -39,8 +39,12 @@ public class PauseSkatSeriesAction extends AbstractJSkatAction {
 
 		putValue(Action.NAME, strings.getString("pause_series"));
 		putValue(Action.SHORT_DESCRIPTION, strings.getString("pause_series_tooltip"));
-		putValue(Action.SMALL_ICON, null);
-		putValue(Action.LARGE_ICON_KEY, null);
+		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
+				JSkatGraphicRepository.Icon.PAUSE,
+				JSkatGraphicRepository.IconSize.SMALL)));
+		putValue(Action.LARGE_ICON_KEY, new ImageIcon(bitmaps.getIconImage(
+				JSkatGraphicRepository.Icon.PAUSE,
+				JSkatGraphicRepository.IconSize.BIG)));
 		setEnabled(false);
 	}
 
