@@ -548,8 +548,9 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showHelpDialog() {
 
-		new JSkatHelpDialog(null, this.mainFrame, true, this.strings
-				.getString("help"), "de/jskat/gui/help/jskat_help.html") //$NON-NLS-1$ //$NON-NLS-2$
+		new JSkatHelpDialog(
+				this.mainFrame,
+				this.strings.getString("help"), "de/jskat/gui/help/jskat_help.html", this.strings) //$NON-NLS-1$ //$NON-NLS-2$
 				.setVisible(true);
 	}
 
@@ -559,8 +560,9 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showLicenseDialog() {
 
-		new JSkatHelpDialog(null, this.mainFrame, true, this.strings
-				.getString("license"), "de/jskat/gui/help/gpl3.html").setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
+		new JSkatHelpDialog(
+				this.mainFrame,
+				this.strings.getString("license"), "de/jskat/gui/help/gpl3.html", this.strings).setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

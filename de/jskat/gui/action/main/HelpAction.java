@@ -37,8 +37,8 @@ public class HelpAction extends AbstractJSkatAction {
 
 		super(controller);
 
-		putValue(Action.NAME, strings.getString("help"));
-		putValue(Action.SHORT_DESCRIPTION, strings.getString("help_tooltip"));
+		putValue(Action.NAME, strings.getString("help")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, strings.getString("help_tooltip")); //$NON-NLS-1$
 		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
 				JSkatGraphicRepository.Icon.HELP,
 				JSkatGraphicRepository.IconSize.SMALL)));

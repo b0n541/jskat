@@ -20,6 +20,7 @@ import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -29,8 +30,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.text.html.HTMLEditorKit;
-
-import de.jskat.data.JSkatApplicationData;
 
 /**
  * Help dialog for JSkat
@@ -43,33 +42,35 @@ public class JSkatHelpDialog extends JDialog {
     private JScrollPane scrollPane;
     private JTextPane textPane;
     private String contentURL;
-    private String dlgTitle;
+    private String title;
 
     /**
      * Creates new form JSkatHelpDialog
-     * @param dataModel The JSkatDataModel that holds all data
      * @param parentFrame The parent JFrame
-     * @param modal TRUE if the dialog is modal
+     * @param dialogTitle Dialog title
+     * @param contentPath Path to dialog content
+     * @param strings i18n strings
      */
-    public JSkatHelpDialog(JSkatApplicationData dataModel, JFrame parentFrame, boolean modal, String title, String contentPath) {
+    public JSkatHelpDialog(JFrame parentFrame, String dialogTitle, String contentPath,
+    		ResourceBundle strings) {
         
-        super(parentFrame, modal);
+        super(parentFrame, true);
         
         this.parent = parentFrame;
-        this.dlgTitle = title;
+        this.title = dialogTitle;
         this.contentURL = contentPath;
-        initComponents();
+        initComponents(strings);
         setLocationRelativeTo(this.parent);
     }
     
     /** This method is called from within the constructor to
      * initialize the form.
      */
-    private void initComponents() {
+    private void initComponents(ResourceBundle strings) {
         
         JPanel northPanel = new JPanel();
         JPanel southPanel = new JPanel();
-        JButton closeButton = new JButton("Close");
+        JButton closeButton = new JButton(strings.getString("close")); //$NON-NLS-1$
         closeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 closeDialog();
@@ -82,7 +83,7 @@ public class JSkatHelpDialog extends JDialog {
         this.scrollPane = new JScrollPane();
         this.textPane = new JTextPane();
         
-        setTitle(dlgTitle);
+        setTitle(this.title);
         addWindowListener(new WindowAdapter() {
             @Override
 			public void windowClosing(WindowEvent evt) {
@@ -97,12 +98,12 @@ public class JSkatHelpDialog extends JDialog {
         
         StringBuilder message = new StringBuilder();
         try {
-            InputStream is = ClassLoader.getSystemResourceAsStream(contentURL);
+            InputStream is = ClassLoader.getSystemResourceAsStream(this.contentURL);
             InputStreamReader isr = new java.io.InputStreamReader(is);
             BufferedReader bfr = new java.io.BufferedReader(isr);
             
             while ( bfr.ready() ) {
-                message.append(bfr.readLine()).append("\n");
+                message.append(bfr.readLine()).append("\n"); //$NON-NLS-1$
             }
             
         } catch (java.io.IOException e) {

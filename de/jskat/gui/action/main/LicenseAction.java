@@ -37,8 +37,8 @@ public class LicenseAction extends AbstractJSkatAction {
 
 		super(controller);
 
-		putValue(Action.NAME, strings.getString("license"));
-		putValue(Action.SHORT_DESCRIPTION, strings.getString("license_tooltip"));
+		putValue(Action.NAME, strings.getString("license")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, strings.getString("license_tooltip")); //$NON-NLS-1$
 		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
 				JSkatGraphicRepository.Icon.LICENSE,
 				JSkatGraphicRepository.IconSize.SMALL)));
