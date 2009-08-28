@@ -38,9 +38,9 @@ class GameAnnouncePanel extends JPanel {
 	 */
 	protected SkatTablePanel parent = null;
 	private JComboBox gameTypeList = null;
-	private JCheckBox ouvertBox = null;
-	private JCheckBox schneiderBox = null;
-	private JCheckBox schwarzBox = null;
+	JCheckBox ouvertBox = null;
+	JCheckBox schneiderBox = null;
+	JCheckBox schwarzBox = null;
 
 	/**
 	 * Constructor
@@ -77,10 +77,10 @@ class GameAnnouncePanel extends JPanel {
 		this.schneiderBox = new JCheckBox("schneider");
 		this.schwarzBox = new JCheckBox("schwarz");
 		
-		panel.add(this.gameTypeList, "wrap");
-		panel.add(this.ouvertBox, "wrap");
-		panel.add(this.schneiderBox, "wrap");
-		panel.add(this.schwarzBox, "wrap");
+		panel.add(this.gameTypeList, "wrap"); //$NON-NLS-1$
+		panel.add(this.ouvertBox, "wrap"); //$NON-NLS-1$
+		panel.add(this.schneiderBox, "wrap"); //$NON-NLS-1$
+		panel.add(this.schwarzBox, "wrap"); //$NON-NLS-1$
 
 		final JButton playButton = new JButton(actions.get(JSkatAction.ANNOUNCE_GAME));
 		playButton.addActionListener(new ActionListener() {
@@ -92,9 +92,9 @@ class GameAnnouncePanel extends JPanel {
 					GameAnnouncement ann = new GameAnnouncement();
 					ann.setGameType((GameType) gameTypeList.getSelectedItem());
 					
-					ann.setOuvert(ouvertBox.isSelected());
-					ann.setSchneider(schneiderBox.isSelected());
-					ann.setSchwarz(schwarzBox.isSelected());
+					ann.setOuvert(GameAnnouncePanel.this.ouvertBox.isSelected());
+					ann.setSchneider(GameAnnouncePanel.this.schneiderBox.isSelected());
+					ann.setSchwarz(GameAnnouncePanel.this.schwarzBox.isSelected());
 					
 					e.setSource(ann);  
 					// fire event again
