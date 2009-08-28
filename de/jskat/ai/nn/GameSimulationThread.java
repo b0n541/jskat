@@ -81,7 +81,7 @@ class GameSimulationThread extends JSkatThread {
 				NeuralNetwork declarerNet = SkatNetworks.getNetwork(gameType, true);
 				NeuralNetwork opponentNet = SkatNetworks.getNetwork(gameType, false);
 
-				SkatGame game = new SkatGame(null, null, nnPlayer1, nnPlayer2, nnPlayer3);
+				SkatGame game = new SkatGame(null, nnPlayer1, nnPlayer2, nnPlayer3);
 				game.setView(new NullView());
 				game.setMaxSleep(0);
 		

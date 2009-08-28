@@ -177,7 +177,7 @@ public class NNTrainer extends JSkatThread {
 
 			for (Player currPlayer : Player.values()) {
 			
-				SkatGame game = new SkatGame(null, null, nnPlayer1, nnPlayer2, nnPlayer3);
+				SkatGame game = new SkatGame(null, nnPlayer1, nnPlayer2, nnPlayer3);
 				game.setView(new NullView());
 				game.setMaxSleep(0);
 		
