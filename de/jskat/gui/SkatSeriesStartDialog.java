@@ -26,6 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import net.miginfocom.swing.MigLayout;
+import de.jskat.ai.PlayerType;
 import de.jskat.control.JSkatMaster;
 
 /**
@@ -33,6 +34,8 @@ import de.jskat.control.JSkatMaster;
  */
 public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
+	private static final long serialVersionUID = 1L;
+	
 	private JSkatMaster jskat;
 	private JFrame parent;
 	private JComboBox player1;
@@ -41,6 +44,12 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 	private JTextField numberOfRounds;
 	private JCheckBox unlimited;
 	
+	/**
+	 * Constructor
+	 * 
+	 * @param skatMaster JSkat master
+	 * @param mainFrame Main frame
+	 */
 	public SkatSeriesStartDialog(JSkatMaster skatMaster, JFrame mainFrame) {
 		
 		this.jskat = skatMaster;
@@ -61,38 +70,38 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 		
 		ArrayList<String> playerTypes = new ArrayList<String>();
 		
-		playerTypes.add("Random Player");
-		playerTypes.add("Neuronal Network Player");
-		playerTypes.add("Algorithmic Player");
+		playerTypes.add(PlayerType.RANDOM.toString());
+		playerTypes.add(PlayerType.NEURAL_NETWORK.toString());
+		playerTypes.add(PlayerType.ALGORITHMIC.toString());
 
 		root.add(new JLabel("Player 1"));
 		this.player1 = new JComboBox(playerTypes.toArray());
-		root.add(this.player1, "span2, growx, wrap");
+		root.add(this.player1, "span2, growx, wrap"); //$NON-NLS-1$
 		root.add(new JLabel("Player 2"));
 		this.player2 = new JComboBox(playerTypes.toArray());
-		root.add(this.player2, "span2, growx, wrap");
+		root.add(this.player2, "span2, growx, wrap"); //$NON-NLS-1$
 		root.add(new JLabel("Player 3"));
 		// Human player can only be player 3
-		playerTypes.add("Human Player");
+		playerTypes.add(PlayerType.HUMAN.toString());
 		this.player3 = new JComboBox(playerTypes.toArray());
-		root.add(this.player3, "span2, growx, wrap");
+		root.add(this.player3, "span2, growx, wrap"); //$NON-NLS-1$
 		root.add(new JLabel("Number of rounds"));
 		this.numberOfRounds = new JTextField(10);
-		this.numberOfRounds.setText("1");
+		this.numberOfRounds.setText("1"); //$NON-NLS-1$
 		root.add(this.numberOfRounds);
 		this.unlimited = new JCheckBox("unlimited");
-		root.add(this.unlimited, "wrap");
+		root.add(this.unlimited, "wrap"); //$NON-NLS-1$
 		
 		JPanel buttonPanel = new JPanel(new MigLayout());
 		JButton start = new JButton("Start");
-		start.setActionCommand("START");
+		start.setActionCommand("START"); //$NON-NLS-1$
 		start.addActionListener(this);
 		buttonPanel.add(start);
 		JButton cancel = new JButton("Cancel");
-		cancel.setActionCommand("CANCEL");
+		cancel.setActionCommand("CANCEL"); //$NON-NLS-1$
 		cancel.addActionListener(this);
 		buttonPanel.add(cancel);
-		root.add(buttonPanel, "span 3, center");
+		root.add(buttonPanel, "span 3, center"); //$NON-NLS-1$
 		
 		this.pack();
 	}
@@ -111,19 +120,22 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 		super.setVisible(isVisible);
 	}
 
+	/**
+	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		if ("CANCEL".equals(e.getActionCommand())) {
+		if ("CANCEL".equals(e.getActionCommand())) { //$NON-NLS-1$
 			
 			this.setVisible(false);
 		}
-		else if ("START".equals(e.getActionCommand())) {
+		else if ("START".equals(e.getActionCommand())) { //$NON-NLS-1$
 			
-			ArrayList<String> playerNames = new ArrayList<String>();
-			playerNames.add((String) this.player1.getSelectedItem());
-			playerNames.add((String) this.player2.getSelectedItem());
-			playerNames.add((String) this.player3.getSelectedItem());
+			ArrayList<PlayerType> playerNames = new ArrayList<PlayerType>();
+			playerNames.add(PlayerType.getPlayerTypeFromString((String) this.player1.getSelectedItem()));
+			playerNames.add(PlayerType.getPlayerTypeFromString((String) this.player2.getSelectedItem()));
+			playerNames.add(PlayerType.getPlayerTypeFromString((String) this.player3.getSelectedItem()));
 			
 			this.setVisible(false);
 

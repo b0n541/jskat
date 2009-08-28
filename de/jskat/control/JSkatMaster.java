@@ -20,6 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.ai.JSkatPlayer;
+import de.jskat.ai.PlayerType;
 import de.jskat.ai.mjl.AIPlayerMJL;
 import de.jskat.ai.nn.AIPlayerNN;
 import de.jskat.ai.nn.data.SkatNetworks;
@@ -97,11 +98,11 @@ public class JSkatMaster {
 	
 	/**
 	 * Starts a new series with given parameters
-	 * @param playerNames Player names
+	 * @param allPlayer Player names
 	 * @param numberOfRounds Number of rounds to be played
 	 * @param unlimited TRUE, if unlimited rounds should be played
 	 */
-	public void startSeries(ArrayList<String> playerNames, int numberOfRounds, boolean unlimited) {
+	public void startSeries(ArrayList<PlayerType> allPlayer, int numberOfRounds, boolean unlimited) {
 		
 		log.debug(this.data.getActiveTable());
 		
@@ -109,7 +110,7 @@ public class JSkatMaster {
 		
 		table.removePlayers();
 		
-		for (String player : playerNames) {
+		for (PlayerType player : allPlayer) {
 
 			table.placePlayer(getPlayerInstance(player));
 		}
@@ -117,29 +118,27 @@ public class JSkatMaster {
 		table.startSkatSeries(numberOfRounds);
 	}
 	
-	private JSkatPlayer getPlayerInstance(String playerName) {
+	private JSkatPlayer getPlayerInstance(PlayerType playerType) {
 
 		// FIXME dirty hack
 		JSkatPlayer player = null;
 		
-		if ("Random Player".equals(playerName)) {
-			
+		switch(playerType) {
+		case RANDOM:
 			player = new AIPlayerRND();
-		}
-		else if ("Neuronal Network Player".equals(playerName)) {
-			
+			break;
+		case NEURAL_NETWORK:
 			player = new AIPlayerNN();
 			((AIPlayerNN) player).setIsLearning(true);
-		}
-		else if ("Algorithmic Player".equals(playerName)) {
-			
+		break;
+		case ALGORITHMIC:
 			player = new AIPlayerMJL();
-		}
-		else if ("Human Player".equals(playerName)) {
-			
+			break;
+		case HUMAN:
 			HumanPlayer human = new HumanPlayer();
 			human.setView(this.view);
 			player = human;
+		break;
 		}
 		
 		return player;
