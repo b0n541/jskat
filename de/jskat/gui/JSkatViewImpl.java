@@ -77,8 +77,8 @@ import de.jskat.gui.action.main.LicenseAction;
 import de.jskat.gui.action.main.LoadSeriesAction;
 import de.jskat.gui.action.main.LoadNeuralNetworksAction;
 import de.jskat.gui.action.main.PreferencesAction;
-import de.jskat.gui.action.main.SaveGameAction;
-import de.jskat.gui.action.main.SaveGameAsAction;
+import de.jskat.gui.action.main.SaveSeriesAction;
+import de.jskat.gui.action.main.SaveSeriesAsAction;
 import de.jskat.gui.action.main.SaveNeuralNetworksAction;
 import de.jskat.gui.action.main.StartSkatSeriesAction;
 import de.jskat.gui.action.main.TrainNeuralNetworksAction;
@@ -142,10 +142,10 @@ public class JSkatViewImpl implements JSkatView {
 		// common actions
 		this.actions.put(JSkatAction.LOAD_SERIES, new LoadSeriesAction(jskat,
 				this.bitmaps, this.strings));
-		this.actions.put(JSkatAction.SAVE_SERIES, new SaveGameAction(jskat,
-				this.bitmaps));
-		this.actions.put(JSkatAction.SAVE_SERIES_AS, new SaveGameAsAction(
-				jskat, this.bitmaps));
+		this.actions.put(JSkatAction.SAVE_SERIES, new SaveSeriesAction(jskat,
+				this.bitmaps, this.strings));
+		this.actions.put(JSkatAction.SAVE_SERIES_AS, new SaveSeriesAsAction(
+				jskat, this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.HELP, new HelpAction(jskat, this.bitmaps));
 		this.actions.put(JSkatAction.LICENSE, new LicenseAction(jskat,
 				this.bitmaps));
