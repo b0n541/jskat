@@ -53,6 +53,6 @@ public class SaveSeriesAsAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		this.jskat.saveGame(true);
+		this.jskat.saveSeries(true);
 	}
 }

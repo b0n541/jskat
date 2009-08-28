@@ -53,6 +53,6 @@ public class LoadSeriesAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		this.jskat.loadGame();
+		this.jskat.loadSeries();
 	}
 }

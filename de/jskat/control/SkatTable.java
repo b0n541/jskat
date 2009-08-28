@@ -32,7 +32,6 @@ public class SkatTable {
 
 	private String tableName;
 	private SkatTableOptions options;
-	private JSkatMaster jskat;
 	private SkatSeries series;
 	private List<JSkatPlayer> player = new ArrayList<JSkatPlayer>();
 	private HumanPlayer human;
@@ -42,12 +41,10 @@ public class SkatTable {
 	/**
 	 * Constructor
 	 * 
-	 * @param master JSkatMaster
-	 * @param maximumPlayerCount Number of players
+	 * @param tableOptions Preferences for the table
 	 */
-	public SkatTable(JSkatMaster master, SkatTableOptions tableOptions) {
+	public SkatTable(SkatTableOptions tableOptions) {
 		
-		this.jskat = master;
 		this.options = tableOptions;
 		startSkatSeries(this.options.getMaxPlayerCount());
 		
@@ -73,7 +70,7 @@ public class SkatTable {
 		
 		if (!isSeriesRunning()) {
 			// TODO save old series data?
-			this.series = new SkatSeries(this.jskat, this.tableName);
+			this.series = new SkatSeries(this.tableName);
 			this.series.setView(this.view);
 		}
 		
@@ -236,7 +233,7 @@ public class SkatTable {
 	 */
 	public String getName() {
 		
-		return tableName;
+		return this.tableName;
 	}
 	
 	/**

@@ -33,7 +33,6 @@ public class SkatSeries extends JSkatThread {
 
 
 	private int maxSleep = 0;
-	private JSkatMaster jskat;
 	private SkatSeriesData data;
 	private int roundsToGo = 0;
 	private List<JSkatPlayer> player;
@@ -45,14 +44,11 @@ public class SkatSeries extends JSkatThread {
 	/**
 	 * Constructor
 	 * 
-	 * @param master
-	 *            JSkatMaster
 	 * @param tableName
 	 *            Table name
 	 */
-	public SkatSeries(JSkatMaster master, String tableName) {
+	public SkatSeries(String tableName) {
 
-		this.jskat = master;
 		this.data = new SkatSeriesData();
 		this.data.setState(SeriesStates.WAITING);
 		this.data.setTableName(tableName);
@@ -71,12 +67,12 @@ public class SkatSeries extends JSkatThread {
 	 */
 	public void setPlayer(List<JSkatPlayer> newPlayer) {
 
-		for (JSkatPlayer player : newPlayer) {
+		for (JSkatPlayer currPlayer : newPlayer) {
 		
-			this.player.add(player);
+			this.player.add(currPlayer);
 		}
 		
-		log.debug("Player order: " + player);
+		log.debug("Player order: " + this.player); //$NON-NLS-1$
 	}
 
 	/**
@@ -128,7 +124,7 @@ public class SkatSeries extends JSkatThread {
 					this.viewPositions.set(0, helper2);
 				}
 
-				this.currSkatGame = new SkatGame(this.jskat, this.data.getTableName(),
+				this.currSkatGame = new SkatGame(this.data.getTableName(),
 						this.player.get(0), this.player.get(1), this.player
 								.get(2));
 				this.view.setPositions(this.data.getTableName(),

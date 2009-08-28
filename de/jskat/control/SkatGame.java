@@ -51,8 +51,6 @@ public class SkatGame extends JSkatThread {
 	/**
 	 * Constructor
 	 * 
-	 * @param jskat
-	 *            JSkatMaster
 	 * @param newTableName
 	 *            Table name
 	 * @param newForeHand
@@ -62,7 +60,7 @@ public class SkatGame extends JSkatThread {
 	 * @param newHindHand
 	 *            Hind hand player
 	 */
-	public SkatGame(JSkatMaster jskat, String newTableName,
+	public SkatGame(String newTableName,
 			JSkatPlayer newForeHand, JSkatPlayer newMiddleHand,
 			JSkatPlayer newHindHand) {
 
@@ -196,11 +194,11 @@ public class SkatGame extends JSkatThread {
 		}
 		doSleep(this.maxSleep);
 
-		log.debug("Fore hand: " + this.data.getPlayerCards(Player.FORE_HAND));
-		log.debug("Middle hand: "
+		log.debug("Fore hand: " + this.data.getPlayerCards(Player.FORE_HAND)); //$NON-NLS-1$
+		log.debug("Middle hand: " //$NON-NLS-1$
 				+ this.data.getPlayerCards(Player.MIDDLE_HAND));
-		log.debug("Hind hand: " + this.data.getPlayerCards(Player.HIND_HAND));
-		log.debug("Skat: " + this.data.getSkat());
+		log.debug("Hind hand: " + this.data.getPlayerCards(Player.HIND_HAND)); //$NON-NLS-1$
+		log.debug("Skat: " + this.data.getSkat()); //$NON-NLS-1$
 	}
 
 	/**
@@ -267,16 +265,16 @@ public class SkatGame extends JSkatThread {
 
 		if (secondWinner == Player.FORE_HAND && bidOrderIndex == 0) {
 
-			log.debug("Check whether fore hand holds at least one bid");
+			log.debug("Check whether fore hand holds at least one bid"); //$NON-NLS-1$
 
 			// check whether fore hand holds at least one bid
 			if (!(this.player[Player.FORE_HAND.getOrder()].bidMore(18) > -1)) {
 
-				log.debug("Fore hand passes too");
+				log.debug("Fore hand passes too"); //$NON-NLS-1$
 				secondWinner = null;
 			} else {
 
-				log.debug("Fore hand holds 18");
+				log.debug("Fore hand holds 18"); //$NON-NLS-1$
 			}
 		}
 
@@ -327,7 +325,7 @@ public class SkatGame extends JSkatThread {
 
 			if (announcerBidValue > -1) {
 
-				log.debug("announcer holds " + announcerBidValue);
+				log.debug("announcer holds " + announcerBidValue); //$NON-NLS-1$
 
 				// announcing hand holds bid
 				this.data.setBidValue(announcerBidValue);
@@ -344,7 +342,7 @@ public class SkatGame extends JSkatThread {
 
 				if (this.player[hearer.getOrder()].holdBid(announcerBidValue)) {
 
-					log.debug("hearer holds " + announcerBidValue);
+					log.debug("hearer holds " + announcerBidValue); //$NON-NLS-1$
 
 					// hearing hand holds bid
 					this.data.setBidValue(announcerBidValue);
@@ -360,14 +358,14 @@ public class SkatGame extends JSkatThread {
 					}
 				} else {
 
-					log.debug("hearer passed at " + announcerBidValue);
+					log.debug("hearer passed at " + announcerBidValue); //$NON-NLS-1$
 
 					// hearing hand passed
 					hearerPassed = true;
 				}
 			} else {
 
-				log.debug("announcer passed at " + nextBidValue);
+				log.debug("announcer passed at " + nextBidValue); //$NON-NLS-1$
 
 				// announcing hand passes
 				announcerPassed = true;
@@ -404,16 +402,16 @@ public class SkatGame extends JSkatThread {
 	private void discarding() {
 
 		log.debug("Player looks into the skat..."); //$NON-NLS-1$
-		log.debug("Skat before discarding: " + this.data.getSkat());
+		log.debug("Skat before discarding: " + this.data.getSkat()); //$NON-NLS-1$
 
 		// create a clone of the skat before sending it to the player
 		// otherwise the player could change the skat after discarding
 		this.declarer.takeSkat((CardList) this.data.getSkat().clone());
 
 		// adjust cards in display too
-		this.view.addCard(tableName, this.data.getDeclarer(), this.data
+		this.view.addCard(this.tableName, this.data.getDeclarer(), this.data
 				.getSkat().get(0));
-		this.view.addCard(tableName, this.data.getDeclarer(), this.data
+		this.view.addCard(this.tableName, this.data.getDeclarer(), this.data
 				.getSkat().get(1));
 
 		// ask player for the cards to be discarded
@@ -429,9 +427,9 @@ public class SkatGame extends JSkatThread {
 		log.debug("Discarded cards: " + discardedSkat); //$NON-NLS-1$
 
 		this.data.setDiscardedSkat(getPlayerID(this.declarer), discardedSkat);
-		this.view.removeCard(tableName, this.data.getDeclarer(), discardedSkat
+		this.view.removeCard(this.tableName, this.data.getDeclarer(), discardedSkat
 				.get(0));
-		this.view.removeCard(tableName, this.data.getDeclarer(), discardedSkat
+		this.view.removeCard(this.tableName, this.data.getDeclarer(), discardedSkat
 				.get(1));
 	}
 
@@ -511,15 +509,15 @@ public class SkatGame extends JSkatThread {
 
 			// Ask players for their cards
 			log.debug("fore hand plays"); //$NON-NLS-1$
-			playCard(this.rules, trick, this.trickForeHand);
+			playCard(trick, this.trickForeHand);
 			doSleep(this.maxSleep);
 
 			log.debug("middle hand plays"); //$NON-NLS-1$
-			playCard(this.rules, trick, this.trickForeHand.getLeftNeighbor());
+			playCard(trick, this.trickForeHand.getLeftNeighbor());
 			doSleep(this.maxSleep);
 
 			log.debug("hind hand plays"); //$NON-NLS-1$
-			playCard(this.rules, trick, this.trickForeHand.getRightNeighbor());
+			playCard(trick, this.trickForeHand.getRightNeighbor());
 
 			doSleep(this.maxSleep);
 
@@ -546,11 +544,10 @@ public class SkatGame extends JSkatThread {
 			log.debug("Trick cards: " + trick.getCardList()); //$NON-NLS-1$
 			log
 					.debug("Points: fore hand: " + this.data.getPlayerPoints(Player.FORE_HAND) + //$NON-NLS-1$
-							" middle hand: "
+							" middle hand: " //$NON-NLS-1$
 							+ this.data.getPlayerPoints(Player.MIDDLE_HAND)
-							+ //$NON-NLS-1$
-							" hind hand: "
-							+ this.data.getPlayerPoints(Player.HIND_HAND)); //$NON-NLS-1$
+							+ " hind hand: " //$NON-NLS-1$
+							+ this.data.getPlayerPoints(Player.HIND_HAND));
 
 			if (isFinished()) {
 				break;
@@ -587,7 +584,7 @@ public class SkatGame extends JSkatThread {
 		}
 	}
 
-	private void playCard(BasicSkatRules rules, Trick trick, Player currPlayer) {
+	private void playCard(Trick trick, Player currPlayer) {
 
 		Card card = null;
 		JSkatPlayer skatPlayer = getPlayerObject(currPlayer);
@@ -603,7 +600,7 @@ public class SkatGame extends JSkatThread {
 		} else if (!playerHasCard(currPlayer, card)) {
 			// TODO throw appropriate exception
 			log.error("Player is fooling!!! Doesn't have card " + card + "!"); //$NON-NLS-1$//$NON-NLS-2$
-		} else if (!rules.isCardAllowed(this.data.getGameType(), trick
+		} else if (!this.rules.isCardAllowed(this.data.getGameType(), trick
 				.getFirstCard(), this.data.getPlayerCards(currPlayer), card)) {
 			// TODO throw appropriate exception
 			log.error("Player is fooling!!! Card " + card + " is not allowed!"); //$NON-NLS-1$//$NON-NLS-2$
@@ -752,13 +749,13 @@ public class SkatGame extends JSkatThread {
 
 		this.data.calcResult();
 
-		log.debug("game value=" + this.data.getResult() + ", bid value="
+		log.debug("game value=" + this.data.getResult() + ", bid value=" //$NON-NLS-1$ //$NON-NLS-2$
 				+ this.data.getBidValue());
 
 		if (this.data.isGameWon()
 				&& this.data.getBidValue() > this.data.getGameResult()) {
 
-			log.debug("Overbidding: Game is lost");
+			log.debug("Overbidding: Game is lost"); //$NON-NLS-1$
 			// Game was overbidded
 			// game is lost despite the winning of the single player
 			this.data.setOverBidded(true);
@@ -895,16 +892,31 @@ public class SkatGame extends JSkatThread {
 		return this.data.isGameWon();
 	}
 
+	/**
+	 * Gets the maximum sleep time
+	 * 
+	 * @return Maximum sleep time
+	 */
 	public int getMaxSleep() {
 
 		return this.maxSleep;
 	}
 
+	/**
+	 * Sets the maximum sleep time
+	 * 
+	 * @param newMaxSleep Maximum sleep time
+	 */
 	public void setMaxSleep(int newMaxSleep) {
 
 		this.maxSleep = newMaxSleep;
 	}
 
+	/**
+	 * Gets the game result
+	 * 
+	 * @return Game result
+	 */
 	public int getGameResult() {
 
 		return this.data.getGameResult();

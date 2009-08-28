@@ -70,11 +70,11 @@ public class JSkatMaster {
 		
 		String tableName = this.view.getNewTableName();
 		if(tableName==null) {
-			log.debug("Create table was cancelled...");
+			log.debug("Create table was cancelled..."); //$NON-NLS-1$
 			return;
 		}
 		
-		SkatTable table = new SkatTable(this, this.data.getTableOptions());
+		SkatTable table = new SkatTable(this.data.getTableOptions());
 		table.setName(tableName);
 		this.data.addLocalSkatTable(table);
 		
@@ -97,6 +97,9 @@ public class JSkatMaster {
 	
 	/**
 	 * Starts a new series with given parameters
+	 * @param playerNames Player names
+	 * @param numberOfRounds Number of rounds to be played
+	 * @param unlimited TRUE, if unlimited rounds should be played
 	 */
 	public void startSeries(ArrayList<String> playerNames, int numberOfRounds, boolean unlimited) {
 		
@@ -164,7 +167,7 @@ public class JSkatMaster {
 		
 		log.debug(this.data.getActiveTable());
 		
-		resumeSkatSeries(data.getActiveTable());
+		resumeSkatSeries(this.data.getActiveTable());
 	}
 	
 	/**
@@ -350,7 +353,7 @@ public class JSkatMaster {
 	 */
 	public void loadNeuralNetworks() {
 		
-		SkatNetworks.loadNetworks(System.getProperty("user.home").concat(System.getProperty("file.separator")).concat(".jskat"));
+		SkatNetworks.loadNetworks(System.getProperty("user.home").concat(System.getProperty("file.separator")).concat(".jskat"));  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 	}
 	
 	/**
@@ -358,7 +361,7 @@ public class JSkatMaster {
 	 */
 	public void saveNeuralNetworks() {
 		
-		SkatNetworks.saveNetworks(System.getProperty("user.home").concat(System.getProperty("file.separator")).concat(".jskat"));
+		SkatNetworks.saveNetworks(System.getProperty("user.home").concat(System.getProperty("file.separator")).concat(".jskat")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 	
 	/**
@@ -389,6 +392,11 @@ public class JSkatMaster {
 		table.getHuman().actionPerformed(event);
 	}
 
+	/**
+	 * Takes a card from the skat on the active skat table
+	 * 
+	 * @param e Event
+	 */
 	public void takeCardFromSkat(ActionEvent e) {
 		
 		if (!(e.getSource() instanceof Card)) {
@@ -399,6 +407,11 @@ public class JSkatMaster {
 		this.view.takeCardFromSkat(this.data.getActiveTable(), (Card) e.getSource());
 	}
 
+	/**
+	 * Put a card into the skat on the active skat table
+	 * 
+	 * @param e
+	 */
 	public void putCardIntoSkat(ActionEvent e) {
 		
 		if (!(e.getSource() instanceof Card)) {
@@ -409,21 +422,37 @@ public class JSkatMaster {
 		this.view.putCardIntoSkat(this.data.getActiveTable(), (Card) e.getSource());
 	}
 
-	public void loadGame() {
+	/**
+	 * Loads a series
+	 */
+	public void loadSeries() {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void saveGame(boolean newName) {
+	/**
+	 * Saves a series
+	 * 
+	 * @param newName TRUE, if a new name should be given to the save file
+	 */
+	public void saveSeries(boolean newName) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	/**
+	 * Gets the controller for playing on the ISS
+	 * 
+	 * @return ISS controller
+	 */
 	public ISSController getISSController() {
 		
 		return this.issControl;
 	}
 
+	/**
+	 * Shows the preference dialog
+	 */
 	public void showPreferences() {
 		
 		this.view.showPreferences();
