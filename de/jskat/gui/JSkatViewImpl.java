@@ -164,8 +164,10 @@ public class JSkatViewImpl implements JSkatView {
 				jskat, this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.START_LOCAL_SERIES,
 				new StartSkatSeriesAction(jskat, this.bitmaps, this.strings));
-		this.actions.put(JSkatAction.CONTINUE_LOCAL_SERIES,
-				new ContinueSkatSeriesAction(jskat, this.bitmaps, this.strings));
+		this.actions
+				.put(JSkatAction.CONTINUE_LOCAL_SERIES,
+						new ContinueSkatSeriesAction(jskat, this.bitmaps,
+								this.strings));
 		this.actions.put(JSkatAction.PAUSE_LOCAL_SERIES,
 				new PauseSkatSeriesAction(jskat, this.bitmaps, this.strings));
 		// ISS actions
@@ -449,12 +451,11 @@ public class JSkatViewImpl implements JSkatView {
 	 */
 	public int showExitDialog() {
 
-		String[] options = { "Yes", "No" };
-
-		return JOptionPane.showOptionDialog(this.mainFrame,
-				"Do you really want to quit?", "Really quit?",
-				JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-				options, options[0]);
+		return JOptionPane.showOptionDialog(this.mainFrame, this.strings
+				.getString("exit_dialog_message"), this.strings
+				.getString("exit_dialog_title"), JOptionPane.YES_NO_OPTION,
+				//JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+				JOptionPane.QUESTION_MESSAGE, null, null, null);
 	}
 
 	/**
@@ -547,8 +548,9 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showHelpDialog() {
 
-		new JSkatHelpDialog(null, this.mainFrame, true, "Help",
-				"de/jskat/gui/help/jskat_help.html").setVisible(true);
+		new JSkatHelpDialog(null, this.mainFrame, true, this.strings
+				.getString("help"), "de/jskat/gui/help/jskat_help.html")
+				.setVisible(true);
 	}
 
 	/**
@@ -756,8 +758,8 @@ public class JSkatViewImpl implements JSkatView {
 	public String getNewTableName() {
 
 		return JOptionPane.showInputDialog(this.mainFrame,
-				"Please name your table:", "New skat table",
-				JOptionPane.OK_CANCEL_OPTION);
+				this.strings.getString("new_table_dialog_message"), 
+				this.strings.getString("table"));
 	}
 
 	/**
