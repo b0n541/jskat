@@ -76,6 +76,7 @@ import de.jskat.gui.action.main.HelpAction;
 import de.jskat.gui.action.main.LicenseAction;
 import de.jskat.gui.action.main.LoadSeriesAction;
 import de.jskat.gui.action.main.LoadNeuralNetworksAction;
+import de.jskat.gui.action.main.PauseSkatSeriesAction;
 import de.jskat.gui.action.main.PreferencesAction;
 import de.jskat.gui.action.main.SaveSeriesAction;
 import de.jskat.gui.action.main.SaveSeriesAsAction;
@@ -160,11 +161,13 @@ public class JSkatViewImpl implements JSkatView {
 				new ChangeActiveTableAction(jskat));
 		// skat table actions
 		this.actions.put(JSkatAction.CREATE_LOCAL_TABLE, new CreateTableAction(
-				jskat, this.bitmaps));
+				jskat, this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.START_LOCAL_SERIES,
-				new StartSkatSeriesAction(jskat, this.bitmaps));
+				new StartSkatSeriesAction(jskat, this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.CONTINUE_LOCAL_SERIES,
-				new ContinueSkatSeriesAction(jskat));
+				new ContinueSkatSeriesAction(jskat, this.bitmaps, this.strings));
+		this.actions.put(JSkatAction.PAUSE_LOCAL_SERIES,
+				new PauseSkatSeriesAction(jskat, this.bitmaps, this.strings));
 		// ISS actions
 		this.actions.put(JSkatAction.SHOW_ISS_LOGIN, new ShowLoginPanelAction(
 				jskat, this.bitmaps));
@@ -282,12 +285,16 @@ public class JSkatViewImpl implements JSkatView {
 		fileMenu.add(new JMenuItem(this.actions.get(JSkatAction.EXIT_JSKAT)));
 		menu.add(fileMenu);
 
-		JMenu tableMenu = new JMenu("Skat table");
+		JMenu tableMenu = new JMenu(this.strings.getString("skat_table"));
 		tableMenu.add(new JMenuItem(this.actions
 				.get(JSkatAction.CREATE_LOCAL_TABLE)));
+		tableMenu.add(new JSeparator());
 		tableMenu.add(new JMenuItem(this.actions
 				.get(JSkatAction.START_LOCAL_SERIES)));
-		tableMenu.add(new JMenuItem("Pause skat series"));
+		tableMenu.add(new JMenuItem(this.actions
+				.get(JSkatAction.PAUSE_LOCAL_SERIES)));
+		tableMenu.add(new JMenuItem(this.actions
+				.get(JSkatAction.CONTINUE_LOCAL_SERIES)));
 		menu.add(tableMenu);
 
 		JMenu neuralNetworkMenu = new JMenu(this.strings

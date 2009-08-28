@@ -63,6 +63,14 @@ public enum JSkatAction {
 	 * Starts a local skat series
 	 */
 	START_LOCAL_SERIES,
+	/**
+	 * Pauses a local skat series
+	 */
+	PAUSE_LOCAL_SERIES,
+	/**
+	 * Continues a local skat series
+	 */
+	CONTINUE_LOCAL_SERIES,
 //----------------------------------------------------------------------------//
 //-- Human player actions ----------------------------------------------------//
 //----------------------------------------------------------------------------//
@@ -102,10 +110,6 @@ public enum JSkatAction {
 	 * Plays a card
 	 */
 	PLAY_CARD,
-	/**
-	 * Continues a series
-	 */
-	CONTINUE_LOCAL_SERIES,
 //----------------------------------------------------------------------------//
 //-- ISS related actions -----------------------------------------------------//
 //----------------------------------------------------------------------------//

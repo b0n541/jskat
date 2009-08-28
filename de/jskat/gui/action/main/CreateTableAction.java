@@ -12,6 +12,7 @@ Released: @ReleaseDate@
 package de.jskat.gui.action.main;
 
 import java.awt.event.ActionEvent;
+import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -31,16 +32,18 @@ public class CreateTableAction extends AbstractJSkatAction {
 	/**
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
-	public CreateTableAction(JSkatMaster controller, JSkatGraphicRepository bitmaps) {
-		
+	public CreateTableAction(JSkatMaster controller,
+			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
+
 		super(controller);
-		
-		putValue(Action.NAME, "Create table");
+
+		putValue(Action.NAME, strings.getString("new_table"));
+		putValue(Action.SHORT_DESCRIPTION, strings.getString("new_table_tooltip"));
 		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.TABLE, 
+				JSkatGraphicRepository.Icon.TABLE,
 				JSkatGraphicRepository.IconSize.SMALL)));
 		putValue(Action.LARGE_ICON_KEY, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.TABLE, 
+				JSkatGraphicRepository.Icon.TABLE,
 				JSkatGraphicRepository.IconSize.BIG)));
 	}
 
@@ -49,7 +52,7 @@ public class CreateTableAction extends AbstractJSkatAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+
 		this.jskat.createTable();
 	}
 
