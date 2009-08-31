@@ -148,9 +148,7 @@ public class JSkatMaster {
 		JSkatPlayer player = null;
 		
 		try {
-			Class<?> clazz = Class.forName(className);
-			Constructor<?> constructor = clazz.getConstructor(null);
-			player = (JSkatPlayer) constructor.newInstance();
+			player = (JSkatPlayer) Class.forName(className).newInstance();
 		} catch (ClassNotFoundException ex) {
 			// handle exception case
 			player = getPlayerInstanceFromName("de.jskat.ai.rnd.AIPlayerRND"); //$NON-NLS-1$
@@ -163,13 +161,7 @@ public class JSkatMaster {
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
