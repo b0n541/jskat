@@ -12,8 +12,6 @@ Released: @ReleaseDate@
 package de.jskat.control;
 
 import java.awt.event.ActionEvent;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
