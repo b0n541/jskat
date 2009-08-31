@@ -85,9 +85,10 @@ public final class SkatConstants {
 	/**
 	 * Returns the game value after the Seeger-Fabian system
 	 * 
-	 * @param Calculation for declarer of game
-	 * @param Game value
-	 * @param Number of players on the skat table
+	 * @param declarer TRUE, if calculation should be done for declarer of game
+	 * @param gameValue Game value
+	 * @param numberOfPlayers Number of players on the skat table
+	 * 
 	 * @return Tournament value
 	 */
 	public final static int getTournamentGameValue(boolean declarer, int gameValue, int numberOfPlayers) {

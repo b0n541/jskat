@@ -14,7 +14,7 @@ package de.jskat.gui.img;
 /**
  * Different card face types supported by JSkat
  */
-public enum CardFaces {
+public enum CardFace {
 
 	/**
 	 * German card faces

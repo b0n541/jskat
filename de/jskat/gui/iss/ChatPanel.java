@@ -68,7 +68,7 @@ class ChatPanel extends JPanel implements ChangeListener {
 		this.chatTabs.setTabPlacement(JTabbedPane.BOTTOM);
 		this.chatTabs.setAutoscrolls(true);
 		this.chatTabs.addChangeListener(this);
-		add(this.chatTabs, "growx, wrap");
+		add(this.chatTabs, "growx, wrap"); //$NON-NLS-1$
 		
 		addNewChat("ISS debug");
 		addNewChat("Lobby");

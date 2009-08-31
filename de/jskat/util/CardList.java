@@ -315,7 +315,7 @@ public class CardList extends ArrayList<Card> {
 
 	private void sortSuitGame(GameType gameType) {
 
-		log.debug("sort " + this + " according " + gameType);
+		log.debug("sort " + this + " according " + gameType); //$NON-NLS-1$ //$NON-NLS-2$
 		// first sort jacks
 		int sortedCards = sortJacks();
 
@@ -347,7 +347,7 @@ public class CardList extends ArrayList<Card> {
 			}
 		}
 		
-		log.debug("result: " + this);
+		log.debug("result: " + this); //$NON-NLS-1$
 	}
 
 	private void sortGrandGame() {

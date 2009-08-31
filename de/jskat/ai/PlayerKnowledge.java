@@ -447,13 +447,14 @@ public class PlayerKnowledge {
 	/**
 	 * Gets card positions according the player knowledge
 	 * 
+	 * @param position Player position 
+	 * 
 	 * @return String of card symbols
 	 */
 	public String getPossibleCardPositions(Player position) {
-		// FIXME returns only an empty string!
-		StringBuffer cards = new StringBuffer();
-		
-		return null;
+
+		// FIXME returns only null!
+		return new String();
 	}
 
 	/**
@@ -462,23 +463,26 @@ public class PlayerKnowledge {
 	 * @return String of card symbols
 	 */
 	public CardDeck getKnownCards() {
-		// FIXME returns complete card deck
-		CardDeck deck = new CardDeck();
 		
-		return null;
+		// FIXME returns complete card deck
+		return new CardDeck();
 	}
 
 	/**
-	 * @param game the game to set
+	 * Sets the game announcement
+	 * 
+	 * @param gameAnn Game announcement to set
 	 */
-	public void setGame(GameAnnouncement game) {
-		this.game = game;
+	public void setGame(GameAnnouncement gameAnn) {
+		
+		this.game = gameAnn;
 	}
 
 	/**
 	 * @return the game
 	 */
 	public GameAnnouncement getGame() {
-		return game;
+		
+		return this.game;
 	}
 }

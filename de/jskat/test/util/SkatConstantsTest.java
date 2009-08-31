@@ -34,6 +34,9 @@ public class SkatConstantsTest {
 				.getSystemResource("de/jskat/config/log4j.properties")); //$NON-NLS-1$
 	}
 	
+	/**
+	 * Tests calculation of game values after tournament rules
+	 */
 	@Test
 	public void getTournamentGameValue001() {
 		

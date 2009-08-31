@@ -24,7 +24,7 @@ import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.SkatTableOptions.RamschSkatOwners;
 import de.jskat.data.SkatTableOptions.RuleSets;
-import de.jskat.gui.img.CardFaces;
+import de.jskat.gui.img.CardFace;
 
 /**
  * Holds all options of JSkat
@@ -63,7 +63,7 @@ public class JSkatOptions {
 
 	private boolean cheatDebugMode = false;
 
-	private CardFaces cardFace = CardFaces.TOURNAMENT;
+	private CardFace cardFace = CardFace.TOURNAMENT;
 
 	private SkatTableOptions tableOptions = new SkatTableOptions();
 
@@ -120,15 +120,15 @@ public class JSkatOptions {
 					
 					if (value.equals("GERMAN")) {
 						
-						setCardFace(CardFaces.GERMAN);
+						setCardFace(CardFace.GERMAN);
 					}
 					else if (value.equals("FRENCH")) {
 						
-						setCardFace(CardFaces.FRENCH);
+						setCardFace(CardFace.FRENCH);
 					}
 					else {
 						
-						setCardFace(CardFaces.TOURNAMENT);
+						setCardFace(CardFace.TOURNAMENT);
 					}
 				} else if (property.equals("savePath")) {
 					setSavePath(value);
@@ -1031,7 +1031,7 @@ public class JSkatOptions {
 	 * 
 	 * @return Value of property cardFace
 	 */
-	public CardFaces getCardFace() {
+	public CardFace getCardFace() {
 
 		return this.cardFace;
 	}
@@ -1042,7 +1042,7 @@ public class JSkatOptions {
 	 * @param cardFace
 	 *            New value of property cardFace
 	 */
-	public void setCardFace(CardFaces newCardFace) {
+	public void setCardFace(CardFace newCardFace) {
 
 		if (this.cardFace != newCardFace) {
 

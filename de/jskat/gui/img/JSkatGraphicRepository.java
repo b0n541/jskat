@@ -54,17 +54,17 @@ public class JSkatGraphicRepository {
 			e.printStackTrace();
 		}
 
-		log.debug("Bitmaps for JSkat logo and skat table loaded...");
+		log.debug("Bitmaps for JSkat logo and skat table loaded..."); //$NON-NLS-1$
 
 		this.icons = new ArrayList<ArrayList<Image>>();
 		loadIcons();
 
-		log.debug("Bitmaps for icons loaded...");
+		log.debug("Bitmaps for icons loaded..."); //$NON-NLS-1$
 
 		this.cards = new ArrayList<ArrayList<Image>>();
 		loadCards(this.cardFace);
 
-		log.debug("Bitmaps for cards loaded...");
+		log.debug("Bitmaps for cards loaded..."); //$NON-NLS-1$
 	}
 
 	/**
@@ -84,7 +84,7 @@ public class JSkatGraphicRepository {
 				// add icon
 				this.icons.get(icon.ordinal()).add(Toolkit.getDefaultToolkit().getImage(
 						ClassLoader.getSystemResource("de/jskat/gui/img/gui/" //$NON-NLS-1$
-								+ icon.toString().toLowerCase() + "_" + size.toString().toLowerCase() + ".png")));
+								+ icon.toString().toLowerCase() + '_' + size.toString().toLowerCase() + ".png"))); //$NON-NLS-1$
 				this.tracker.addImage(this.icons.get(icon.ordinal()).get(size.ordinal()), 1);
 			}
 		}
@@ -102,7 +102,7 @@ public class JSkatGraphicRepository {
 	 * @param cardType
 	 *            The directory name for the card set to be loaded
 	 */
-	public void loadCards(CardFaces cardFace) {
+	public void loadCards(CardFace cardType) {
 		
 		for (Suit suit : Suit.values()) {
 
@@ -111,16 +111,16 @@ public class JSkatGraphicRepository {
 			for (Rank rank : Rank.values()) {
 
 				this.cards.get(suit.ordinal()).add(Toolkit.getDefaultToolkit().getImage(
-						ClassLoader.getSystemResource("de/jskat/gui/img/cards/"
-								+ cardFace.toString().toLowerCase() + "/gnome/" + suit.shortString() + "-" + rank.shortString() + ".gif")));
+						ClassLoader.getSystemResource("de/jskat/gui/img/cards/" //$NON-NLS-1$
+								+ cardType.toString().toLowerCase() + "/gnome/" + suit.shortString() + '-' + rank.shortString() + ".gif")));  //$NON-NLS-1$//$NON-NLS-2$
 				
 				this.tracker.addImage(this.cards.get(suit.ordinal()).get(rank.ordinal()), 2);
 			}
 		}
 
 		this.cardBack = Toolkit.getDefaultToolkit().getImage(
-				ClassLoader.getSystemResource("de/jskat/gui/img/cards/" + cardFace.toString().toLowerCase()
-						+ "/jskat/back.gif"));
+				ClassLoader.getSystemResource("de/jskat/gui/img/cards/" + cardType.toString().toLowerCase() //$NON-NLS-1$
+						+ "/jskat/back.gif")); //$NON-NLS-1$
 		this.tracker.addImage(this.cardBack, 2);
 
 		try {
@@ -133,10 +133,10 @@ public class JSkatGraphicRepository {
 	/**
 	 * Gets an icon image
 	 * 
-	 * @param iconNo
-	 *            The icon code
-	 * @param bigSmall
-	 *            code for big or small icons
+	 * @param icon
+	 *            Icon name
+	 * @param size
+	 *            Icon size
 	 * @return The icon image
 	 */
 	public Image getIconImage(Icon icon, IconSize size) {
@@ -193,7 +193,7 @@ public class JSkatGraphicRepository {
 		return this.jskatLogo;
 	}
 
-	private CardFaces cardFace;
+	private CardFace cardFace;
 
 	private MediaTracker tracker;
 
