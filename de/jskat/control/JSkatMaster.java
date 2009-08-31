@@ -12,6 +12,8 @@ Released: @ReleaseDate@
 package de.jskat.control;
 
 import java.awt.event.ActionEvent;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
@@ -21,11 +23,9 @@ import org.apache.commons.logging.LogFactory;
 
 import de.jskat.ai.JSkatPlayer;
 import de.jskat.ai.PlayerType;
-import de.jskat.ai.mjl.AIPlayerMJL;
 import de.jskat.ai.nn.AIPlayerNN;
 import de.jskat.ai.nn.data.SkatNetworks;
 import de.jskat.ai.nn.train.NNTrainer;
-import de.jskat.ai.rnd.AIPlayerRND;
 import de.jskat.control.iss.ISSController;
 import de.jskat.data.JSkatApplicationData;
 import de.jskat.data.JSkatOptions;
@@ -120,25 +120,58 @@ public class JSkatMaster {
 	
 	private JSkatPlayer getPlayerInstance(PlayerType playerType) {
 
-		// FIXME dirty hack
 		JSkatPlayer player = null;
 		
 		switch(playerType) {
 		case RANDOM:
-			player = new AIPlayerRND();
+			player = getPlayerInstanceFromName("de.jskat.ai.rnd.AIPlayerRND"); //$NON-NLS-1$
 			break;
 		case NEURAL_NETWORK:
-			player = new AIPlayerNN();
+			player = getPlayerInstanceFromName("de.jskat.ai.nn.AIPlayerNN"); //$NON-NLS-1$
 			((AIPlayerNN) player).setIsLearning(true);
 		break;
 		case ALGORITHMIC:
-			player = new AIPlayerMJL();
+			player = getPlayerInstanceFromName("de.jskat.ai.mjl.AIPlayerMJL"); //$NON-NLS-1$
 			break;
 		case HUMAN:
 			HumanPlayer human = new HumanPlayer();
 			human.setView(this.view);
 			player = human;
 		break;
+		}
+		
+		return player;
+	}
+	
+	private JSkatPlayer getPlayerInstanceFromName(String className) {
+		
+		JSkatPlayer player = null;
+		
+		try {
+			Class<?> clazz = Class.forName(className);
+			Constructor<?> constructor = clazz.getConstructor(null);
+			player = (JSkatPlayer) constructor.newInstance();
+		} catch (ClassNotFoundException ex) {
+			// handle exception case
+			player = getPlayerInstanceFromName("de.jskat.ai.rnd.AIPlayerRND"); //$NON-NLS-1$
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		return player;
