@@ -43,8 +43,8 @@ public class ISSController {
 	 * 
 	 * @param controller
 	 *            JSkat master controller
-	 * @param newOutput
-	 *            Output channel to ISS
+	 * @param newView
+	 *            View for ISS controller
 	 */
 	public ISSController(JSkatMaster controller, JSkatView newView) {
 

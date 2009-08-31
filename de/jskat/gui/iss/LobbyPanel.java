@@ -196,7 +196,6 @@ public class LobbyPanel extends JSkatTabPanel {
 		JPanel panel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
 		panel.add(new JButton(this.getActionMap().get(JSkatAction.CREATE_ISS_TABLE)));
-		panel.add(new JButton("Join table"));
 		
 		return panel;
 	}

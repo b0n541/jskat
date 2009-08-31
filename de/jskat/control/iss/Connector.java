@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.logging.Log;
@@ -159,5 +158,10 @@ class Connector {
 	void leaveTable(String tableName, String playerName) {
 		
 		this.issOut.send("table " + tableName + ' ' + playerName + " leave"); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+	
+	void invitePlayer(String tableName, String invitor, String invitee) {
+		
+		this.issOut.send("table " + tableName + ' ' + invitor + " invite " + invitee);  //$NON-NLS-1$//$NON-NLS-2$
 	}
 }
