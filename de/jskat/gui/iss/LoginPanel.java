@@ -13,6 +13,7 @@ package de.jskat.gui.iss;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
 
 import javax.swing.ActionMap;
 import javax.swing.JButton;
@@ -46,11 +47,12 @@ public class LoginPanel extends JSkatTabPanel {
 	 * @param newTableName
 	 * @param jskatBitmaps
 	 * @param actions
+	 * @param strings i18n strings
 	 */
 	public LoginPanel(String newTableName,
-			JSkatGraphicRepository jskatBitmaps, ActionMap actions) {
+			JSkatGraphicRepository jskatBitmaps, ActionMap actions, ResourceBundle strings) {
 		
-		super(newTableName, jskatBitmaps, actions);
+		super(newTableName, jskatBitmaps, actions, strings);
 		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
 	}
 	

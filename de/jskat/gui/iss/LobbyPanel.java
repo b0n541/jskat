@@ -15,6 +15,7 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ResourceBundle;
 
 import javax.swing.ActionMap;
 import javax.swing.JButton;
@@ -62,9 +63,9 @@ public class LobbyPanel extends JSkatTabPanel {
 	 * @param actions
 	 */
 	public LobbyPanel(String tableName, JSkatGraphicRepository jskatBitmaps,
-			ActionMap actions) {
+			ActionMap actions, ResourceBundle strings) {
 
-		super(tableName, jskatBitmaps, actions);
+		super(tableName, jskatBitmaps, actions, strings);
 		
 		log.debug("SkatTablePanel: name: " + tableName); //$NON-NLS-1$
 	}

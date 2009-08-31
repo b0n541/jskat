@@ -396,7 +396,7 @@ public class JSkatViewImpl implements JSkatView {
 		// FIXME not needed as separate method,
 		// do it in createSkatTablePanel
 		ISSTablePanel newTable = new ISSTablePanel(name, this.bitmaps,
-				this.actions);
+				this.actions, this.strings);
 		this.tables.put(name, newTable);
 
 		this.tabs.add("ISS table: " + name, newTable); //$NON-NLS-1$
@@ -645,7 +645,7 @@ public class JSkatViewImpl implements JSkatView {
 	public void showISSLogin() {
 
 		this.tabs.add("ISS login", new LoginPanel("ISS login", this.bitmaps, //$NON-NLS-1$ //$NON-NLS-2$
-				this.actions));
+				this.actions, this.strings));
 	}
 
 	/**
@@ -673,7 +673,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showISSLobby() {
 
-		this.issLobby = new LobbyPanel("ISS lobby", this.bitmaps, this.actions);
+		this.issLobby = new LobbyPanel("ISS lobby", this.bitmaps, this.actions, this.strings);
 		this.tabs.add("ISS lobby", this.issLobby); //$NON-NLS-1$
 		this.tabs.setSelectedComponent(this.issLobby);
 	}

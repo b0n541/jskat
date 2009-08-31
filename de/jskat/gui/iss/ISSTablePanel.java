@@ -12,6 +12,7 @@ Released: @ReleaseDate@
 package de.jskat.gui.iss;
 
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javax.swing.ActionMap;
 import javax.swing.JPanel;
@@ -35,9 +36,9 @@ public class ISSTablePanel extends SkatTablePanel {
 	 * @param jskatBitmaps Bitmap repository
 	 * @param actions Action map
 	 */
-	public ISSTablePanel(String tableName, JSkatGraphicRepository jskatBitmaps, ActionMap actions) {
+	public ISSTablePanel(String tableName, JSkatGraphicRepository jskatBitmaps, ActionMap actions, ResourceBundle strings) {
 		
-		super(tableName, jskatBitmaps, actions);
+		super(tableName, jskatBitmaps, actions, strings);
 	}
 
 	/**
