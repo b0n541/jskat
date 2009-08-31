@@ -71,7 +71,7 @@ public class LoginPanel extends JSkatTabPanel {
 		
 		JPanel login = new JPanel(new MigLayout());
 		
-		login.add(new JLabel("Connect to International Skat Server"), "span 2, align center, wrap");
+		login.add(new JLabel("Connect to International Skat Server"), "span 2, align center, wrap"); //$NON-NLS-2$
 		login.add(new JLabel("Login"));
 		this.loginField = new JTextField(10);
 		login.add(this.loginField, "growx, wrap"); //$NON-NLS-1$
@@ -84,8 +84,8 @@ public class LoginPanel extends JSkatTabPanel {
 			public void actionPerformed(ActionEvent e) {
 				
 				ISSLoginCredentials login = new ISSLoginCredentials();
-				login.setLoginName(loginField.getText());
-				login.setPassword(new String(passwordField.getPassword()));
+				login.setLoginName(LoginPanel.this.loginField.getText());
+				login.setPassword(new String(LoginPanel.this.passwordField.getPassword()));
 				// FIXME must be setable
 				login.setPort(80);
 				

@@ -29,11 +29,11 @@ class GameOverPanel extends JPanel {
 	
 	public void initPanel() {
 		
-		this.setLayout(new MigLayout("fill", "fill", "fill"));
+		this.setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		
-		JPanel panel = new JPanel(new MigLayout("fill"));
-		panel.add(new JButton(this.action), "center");
-		this.add(panel, "center, grow");
+		JPanel panel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
+		panel.add(new JButton(this.action), "center"); //$NON-NLS-1$
+		this.add(panel, "center, grow"); //$NON-NLS-1$
 	}
 
 	private ContinueSkatSeriesAction action;

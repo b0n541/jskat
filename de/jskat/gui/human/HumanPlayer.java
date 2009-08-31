@@ -72,7 +72,7 @@ public class HumanPlayer extends AbstractJSkatPlayer
 	@Override
 	public GameAnnouncement announceGame() {
 		
-		log.debug("Waiting for human game announcing...");
+		log.debug("Waiting for human game announcing..."); //$NON-NLS-1$
 		
 		waitForUserInput();
 		
@@ -85,7 +85,7 @@ public class HumanPlayer extends AbstractJSkatPlayer
 	@Override
 	public int bidMore(int nextBidValue) {
 		
-		log.debug("Waiting for human next bid value...");
+		log.debug("Waiting for human next bid value..."); //$NON-NLS-1$
 		
 		waitForUserInput();
 		
@@ -107,7 +107,7 @@ public class HumanPlayer extends AbstractJSkatPlayer
 	@Override
 	public CardList discardSkat() {
 		
-		log.debug("Waiting for human discarding...");
+		log.debug("Waiting for human discarding..."); //$NON-NLS-1$
 		
 		waitForUserInput();
 		
@@ -142,7 +142,7 @@ public class HumanPlayer extends AbstractJSkatPlayer
 	@Override
 	public boolean holdBid(int currBidValue) {
 		
-		log.debug("Waiting for human holding bid...");
+		log.debug("Waiting for human holding bid..."); //$NON-NLS-1$
 		
 		waitForUserInput();
 		
@@ -155,7 +155,7 @@ public class HumanPlayer extends AbstractJSkatPlayer
 	@Override
 	public boolean lookIntoSkat() {
 		
-		log.debug("Waiting for human looking into skat...");
+		log.debug("Waiting for human looking into skat..."); //$NON-NLS-1$
 		
 		waitForUserInput();
 
@@ -168,7 +168,7 @@ public class HumanPlayer extends AbstractJSkatPlayer
 	@Override
 	public Card playCard() {
 		
-		log.debug("Waiting for human playing next card...");
+		log.debug("Waiting for human playing next card..."); //$NON-NLS-1$
 		
 		waitForUserInput();
 		
@@ -229,14 +229,14 @@ public class HumanPlayer extends AbstractJSkatPlayer
 			}
 			else {
 				
-				log.error("Wrong source for " + command);
+				log.error("Wrong source for " + command); //$NON-NLS-1$
 				interrupt = false;
 			}
 		}
 		else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
 
 			if (source instanceof JButton) {
-				log.debug("ONLY JBUTTON");
+				log.debug("ONLY JBUTTON"); //$NON-NLS-1$
 				interrupt = false;
 			}
 			else {
@@ -255,14 +255,14 @@ public class HumanPlayer extends AbstractJSkatPlayer
 			}
 			else {
 				
-				log.debug("Card " + card + " is not allowed to be played...");
+				log.debug("Card " + card + " is not allowed to be played..."); //$NON-NLS-1$ //$NON-NLS-2$
 				this.view.showMessage(JOptionPane.ERROR_MESSAGE, "Card " + card + " is not allowed to be played!");
 				interrupt = false;
 			}
 		}
 		else {
 			
-			log.error("Unknown action event occured: " + command + " from " + source);
+			log.error("Unknown action event occured: " + command + " from " + source); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		
 		if (interrupt) {
@@ -320,7 +320,7 @@ public class HumanPlayer extends AbstractJSkatPlayer
     	private Object monitor = null;
     }
 
-	/* (non-Javadoc)
+	/**
 	 * @see de.jskat.ai.AbstractJSkatPlayer#startGame()
 	 */
 	@Override
