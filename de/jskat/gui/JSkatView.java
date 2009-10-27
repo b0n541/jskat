@@ -61,10 +61,10 @@ public interface JSkatView {
 	/**
 	 * Starts a new game
 	 * 
-	 * @param game
-	 *            Skat game
+	 * @param tableName
+	 *            Table name
 	 */
-	public abstract void startGame(SkatGame game);
+	public abstract void startGame(String tableName);
 
 	/**
 	 * Starts bidding
@@ -111,7 +111,7 @@ public interface JSkatView {
 	 *            Name of the table
 	 * @return Reference to the table panel
 	 */
-	public SkatTablePanel createSkatTablePanel(String name);
+	public void createSkatTablePanel(String name);
 
 	/**
 	 * Shows the about dialog
@@ -216,7 +216,8 @@ public interface JSkatView {
 	/**
 	 * Sets the cards for the last trick
 	 * 
-	 * @param tableName tableName
+	 * @param tableName
+	 *            tableName
 	 * @param trickForeHand
 	 *            Fore hand player in this trick
 	 * @param foreHandCard

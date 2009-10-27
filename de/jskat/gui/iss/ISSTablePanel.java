@@ -68,5 +68,7 @@ public class ISSTablePanel extends SkatTablePanel {
 		this.setMaxPlayers(tableStatus.getMaxPlayers());
 		
 		Map<String, ISSPlayerStatus> playerInfo = tableStatus.getPlayerInformation();
+		
+		// FIXME set player informations
 	}
 }

@@ -69,9 +69,8 @@ public class NullView implements JSkatView {
 	 * @see JSkatView#createSkatTablePanel(String)
 	 */
 	@Override
-	public SkatTablePanel createSkatTablePanel(
-			@SuppressWarnings("unused") String name) {
-		return null;
+	public void createSkatTablePanel(@SuppressWarnings("unused") String name) {
+		// empty method by indent
 	}
 
 	/**
@@ -170,10 +169,10 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#startGame(SkatGame)
+	 * @see JSkatView#startGame(String)
 	 */
 	@Override
-	public void startGame(@SuppressWarnings("unused") SkatGame game) {
+	public void startGame(@SuppressWarnings("unused") String tableName) {
 		// empty method by indent
 	}
 
@@ -445,6 +444,6 @@ public class NullView implements JSkatView {
 	@Override
 	public void showPreferences() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

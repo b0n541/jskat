@@ -178,16 +178,18 @@ class InputChannel extends Thread {
 		log.error(errorMessage);
 	}
 
-	private void handleTableMessage(StringTokenizer token) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	private void handleTableCreateMessage(StringTokenizer token) {
 
 		log.debug("table creation message");
 		
-		this.issControl.createTable(token.nextToken(), token.nextToken(), Integer.parseInt(token.nextToken()));
+		String tableName = token.nextToken();
+		String creator = token.nextToken();
+		this.issControl.createTable(tableName, creator, Integer.parseInt(token.nextToken()));
+		
+		// FIXME remove it
+		this.issControl.invitePlayer(tableName, creator, "xskat");
+		this.issControl.invitePlayer(tableName, creator, "xskat");
+		this.issControl.startGame(tableName);
 	}
 	
 	private void handleTableUpdateMessage(StringTokenizer token) {

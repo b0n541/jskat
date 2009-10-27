@@ -355,10 +355,11 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#startGame(SkatGame)
+	 * @see JSkatView#startGame(String)
 	 */
-	public void startGame(SkatGame game) {
-		// TODO implement it
+	public void startGame(String tableName) {
+		
+		this.tables.get(tableName).startGame();
 	}
 
 	/**
@@ -406,7 +407,7 @@ public class JSkatViewImpl implements JSkatView {
 	/**
 	 * @see JSkatView#createSkatTablePanel(String)
 	 */
-	public SkatTablePanel createSkatTablePanel(String name) {
+	public void createSkatTablePanel(String name) {
 
 		SkatTablePanel newPanel = new SkatTablePanel(name, this.bitmaps,
 				this.actions, this.strings);
@@ -416,8 +417,6 @@ public class JSkatViewImpl implements JSkatView {
 		this.actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(true);
 
 		this.tables.put(name, newPanel);
-
-		return newPanel;
 	}
 
 	/**

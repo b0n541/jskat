@@ -256,7 +256,7 @@ public class ISSController {
 
 	public void startGame(String tableName) {
 		
-		this.view.startGame(null);
+		this.view.startGame(tableName);
 	}
 
 	public void updateMove(String tableName, ISSMoveInformation moveInformation) {
@@ -267,5 +267,10 @@ public class ISSController {
 	public void showMessage(int messageType, String message) {
 		
 		this.view.showMessage(messageType, message);
+	}
+	
+	public void invitePlayer(String tableName, String invitor, String invitee) {
+		
+		this.issConnect.invitePlayer(tableName, invitor, invitee);
 	}
 }

@@ -82,6 +82,7 @@ class Connector {
 		log.debug("ISSConnector.establishConnection()"); //$NON-NLS-1$
 		
 		try {
+			// TODO make this configurable
 			this.socket = new Socket("bodo1.cs.ualberta.ca", this.port); //$NON-NLS-1$
 			this.output = new PrintWriter(this.socket.getOutputStream(), true);
 			this.issOut = new OutputChannel(this.output);
@@ -142,6 +143,7 @@ class Connector {
 
 	void requestTableCreation() {
 		
+		// TODO table creation for four player
 		this.issOut.send("create / 3"); //$NON-NLS-1$
 	}
 

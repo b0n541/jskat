@@ -54,8 +54,8 @@ public class SkatTablePanel extends JSkatTabPanel {
 	protected HandPanel middleHand;
 	protected HandPanel hindHand;
 	protected OpponentPanel leftOpponentPanel;
-	protected OpponentPanel rightOpponentPanel;
-	protected PlayerPanel playerPanel;
+	OpponentPanel rightOpponentPanel;
+	PlayerPanel playerPanel;
 	protected GameInformationPanel gameInfoPanel;
 	protected JPanel gameContextPanel;
 	protected Map<ContextPanelTypes, JPanel> contextPanels;
@@ -72,7 +72,8 @@ public class SkatTablePanel extends JSkatTabPanel {
 	protected DiscardPanel discardPanel;
 
 	/**
-	 * @see JSkatTabPanel#JSkatTabPanel(String, JSkatGraphicRepository, ActionMap)
+	 * @see JSkatTabPanel#JSkatTabPanel(String, JSkatGraphicRepository,
+	 *      ActionMap)
 	 */
 	protected SkatTablePanel(String newTableName,
 			JSkatGraphicRepository jskatBitmaps, ActionMap actions,
@@ -102,25 +103,28 @@ public class SkatTablePanel extends JSkatTabPanel {
 
 		this.skatListTableModel = new SkatListTableModel();
 		this.skatListTable = new JTable(this.skatListTableModel);
-		
-		for (int i = 0; i < this.skatListTable.getColumnModel().getColumnCount(); i++) {
+
+		for (int i = 0; i < this.skatListTable.getColumnModel()
+				.getColumnCount(); i++) {
 
 			if (i == 3) {
 
 				// game colum is bigger
-				this.skatListTable.getColumnModel().getColumn(i).setPreferredWidth(40);
-			} 
-			else {
+				this.skatListTable.getColumnModel().getColumn(i)
+						.setPreferredWidth(40);
+			} else {
 
-				this.skatListTable.getColumnModel().getColumn(i).setPreferredWidth(20);
+				this.skatListTable.getColumnModel().getColumn(i)
+						.setPreferredWidth(20);
 			}
 		}
 
 		this.skatListTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-		
+
 		this.skatListScrollPane = new JScrollPane(this.skatListTable);
 		this.skatListScrollPane.setPreferredSize(new Dimension(250, 100));
-		this.skatListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		this.skatListScrollPane
+				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		panel.add(this.skatListScrollPane);
 
@@ -187,7 +191,8 @@ public class SkatTablePanel extends JSkatTabPanel {
 		this.gameContextPanel.add(this.gameAnnouncePanel,
 				ContextPanelTypes.DECLARING.toString());
 
-		JPanel trickHoldingPanel = new JPanel(new MigLayout("fill", "fill", "fill"));
+		JPanel trickHoldingPanel = new JPanel(new MigLayout("fill", "fill",
+				"fill"));
 		this.lastTrickPanel = new TrickPlayPanel(this.bitmaps);
 		trickHoldingPanel.add(this.lastTrickPanel, "width 25%");
 		this.trickPanel = new TrickPlayPanel(this.bitmaps);
@@ -197,7 +202,8 @@ public class SkatTablePanel extends JSkatTabPanel {
 				ContextPanelTypes.TRICK_PLAYING.toString());
 
 		this.gameContextPanel.add(new GameOverPanel(
-				(ContinueSkatSeriesAction) getActionMap().get(JSkatAction.CONTINUE_LOCAL_SERIES)),
+				(ContinueSkatSeriesAction) getActionMap().get(
+						JSkatAction.CONTINUE_LOCAL_SERIES)),
 				ContextPanelTypes.GAME_OVER.toString());
 
 		return this.gameContextPanel;
@@ -291,7 +297,7 @@ public class SkatTablePanel extends JSkatTabPanel {
 
 		this.lastTrickPanel.clearCards();
 	}
-	
+
 	void removeCard(Player position, Card card) {
 
 		switch (position) {
@@ -328,19 +334,18 @@ public class SkatTablePanel extends JSkatTabPanel {
 	void setGameAnnouncement(GameAnnouncement ann, boolean hand) {
 
 		this.gameInfoPanel.setText(getGameString(ann, hand));
-		
+
 		this.leftOpponentPanel.setSortGameType(ann.getGameType());
 		this.rightOpponentPanel.setSortGameType(ann.getGameType());
 		this.playerPanel.setSortGameType(ann.getGameType());
 	}
 
 	private String getGameString(GameAnnouncement ann, boolean hand) {
-		
-		return ann.getGameType()
-					+ (hand ? " Hand" : "")
-					+ (ann.isOuvert() ? " Ouvert" : "");
+
+		return ann.getGameType() + (hand ? " Hand" : "")
+				+ (ann.isOuvert() ? " Ouvert" : "");
 	}
-	
+
 	/**
 	 * Sets the game state
 	 * 
@@ -363,7 +368,8 @@ public class SkatTablePanel extends JSkatTabPanel {
 			break;
 		case LOOK_INTO_SKAT:
 			this.gameInfoPanel.setText(state.toString());
-			// FIXME show panel only if the human player is looking into the skat
+			// FIXME show panel only if the human player is looking into the
+			// skat
 			setContextPanel(ContextPanelTypes.LOOK_INTO_SKAT);
 			break;
 		case DISCARDING:
@@ -397,10 +403,9 @@ public class SkatTablePanel extends JSkatTabPanel {
 	void setContextPanel(ContextPanelTypes panelType) {
 
 		if (panelType == ContextPanelTypes.DISCARDING) {
-			
+
 			this.discardPanel.resetPanel();
-		}
-		else if (panelType == ContextPanelTypes.DECLARING) {
+		} else if (panelType == ContextPanelTypes.DECLARING) {
 
 			this.gameAnnouncePanel.resetPanel();
 		}
@@ -419,11 +424,11 @@ public class SkatTablePanel extends JSkatTabPanel {
 
 		int gameResult = data.getGameResult();
 		Player declarer = data.getDeclarer();
-		
+
 		int foreHandValue = 0;
 		int middleHandValue = 0;
 		int hindHandValue = 0;
-		
+
 		if (declarer != null) {
 			switch (declarer) {
 			case FORE_HAND:
@@ -437,21 +442,28 @@ public class SkatTablePanel extends JSkatTabPanel {
 				break;
 			}
 		}
-		
+
 		this.skatListTableModel.addResult(declarer, gameResult);
-		
-		Rectangle bounds = this.skatListTable.getCellRect(this.skatListTableModel.getRowCount(), 0, true);
+
+		Rectangle bounds = this.skatListTable.getCellRect(
+				this.skatListTableModel.getRowCount(), 0, true);
 		Point loc = bounds.getLocation();
 		loc.move(loc.x, loc.y + bounds.height - 1);
 		this.skatListScrollPane.getViewport().setViewPosition(loc);
-		
+
 		if (data.getGameType() != GameType.PASSED_IN) {
-			this.gameInfoPanel.setText(getGameString(data.getAnnoucement(), data.isHand()) + 
-										" won: " + data.isGameWon() + " result: " +
-										data.getGameResult() + " player: " +
-										data.getPlayerPoints(data.getDeclarer()) + 
-										" opponents: " + (data.getPlayerPoints(data.getDeclarer().getLeftNeighbor()) +
-														 data.getPlayerPoints(data.getDeclarer().getRightNeighbor())));
+			this.gameInfoPanel.setText(getGameString(data.getAnnoucement(),
+					data.isHand())
+					+ " won: "
+					+ data.isGameWon()
+					+ " result: "
+					+ data.getGameResult()
+					+ " player: "
+					+ data.getPlayerPoints(data.getDeclarer())
+					+ " opponents: "
+					+ (data.getPlayerPoints(data.getDeclarer()
+							.getLeftNeighbor()) + data.getPlayerPoints(data
+							.getDeclarer().getRightNeighbor())));
 		}
 	}
 
@@ -491,72 +503,86 @@ public class SkatTablePanel extends JSkatTabPanel {
 		this.biddingPanel.setBid(player, bidValue);
 	}
 
+	void startGame() {
+
+		this.clearTable();
+	}
+
 	void setSkat(CardList skat) {
-// TODO maybe this is not needed anymore
-//		this.discardPanel.setSkat(skat);
+		// TODO maybe this is not needed anymore
+		// this.discardPanel.setSkat(skat);
 	}
 
 	void takeCardFromSkat(Card card) {
-		
+
 		if (!this.playerPanel.isHandFull()) {
-			
+
 			this.discardPanel.removeCard(card);
 			this.playerPanel.addCard(card);
-		}
-		else {
-			
+		} else {
+
 			log.debug("Player panel full!!!");
 		}
 	}
 
 	void putCardIntoSkat(Card card) {
-		
+
 		if (!this.discardPanel.isHandFull()) {
-			
+
 			this.playerPanel.removeCard(card);
 			this.discardPanel.addCard(card);
-		}
-		else {
+		} else {
 
 			log.debug("Discard panel full!!!");
 		}
 	}
-	
+
 	void clearSkatList() {
-		
+
 		this.skatListTableModel.clearList();
 	}
-	
+
+	/**
+	 * Sets maximum number of players
+	 * 
+	 * @param maxPlayers Maximum number of players
+	 */
 	protected void setMaxPlayers(int maxPlayers) {
-		
+
 		this.skatListTableModel.setPlayerCount(maxPlayers);
 	}
 
 	void setPlayerInformation(HandPanelType type, String name, double time) {
-		
-		switch(type) {
+
+		HandPanel panel = null;
+
+		switch (type) {
 		case LEFT_OPPONENT:
-			this.leftOpponentPanel.setPlayerName(name);
-			this.leftOpponentPanel.setPlayerTime(time);
+			panel = this.leftOpponentPanel;
 			break;
 		case RIGHT_OPPONENT:
-			this.rightOpponentPanel.setPlayerName(name);
-			this.rightOpponentPanel.setPlayerTime(time);
+			panel = this.rightOpponentPanel;
 			break;
 		case PLAYER:
-			this.playerPanel.setPlayerName(name);
-			this.playerPanel.setPlayerTime(time);
+			panel = this.playerPanel;
 			break;
+		}
+
+		if (panel != null) {
+			panel.setPlayerName(name);
+			panel.setPlayerTime(time);
 		}
 	}
 
 	void setLastTrick(Player trickForeHand, Card foreHandCard,
 			Card middleHandCard, Card hindHandCard) {
-		
+
 		this.lastTrickPanel.setTrickForeHand(trickForeHand);
 		this.lastTrickPanel.clearCards();
 		this.lastTrickPanel.setCard(trickForeHand, foreHandCard);
-		this.lastTrickPanel.setCard(trickForeHand.getLeftNeighbor(), middleHandCard);
-		this.lastTrickPanel.setCard(trickForeHand.getRightNeighbor(), hindHandCard);
+		this.lastTrickPanel.setCard(trickForeHand.getLeftNeighbor(),
+				middleHandCard);
+		this.lastTrickPanel.setCard(trickForeHand.getRightNeighbor(),
+				hindHandCard);
 	}
 }

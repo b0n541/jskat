@@ -60,9 +60,8 @@ public class SkatGame extends JSkatThread {
 	 * @param newHindHand
 	 *            Hind hand player
 	 */
-	public SkatGame(String newTableName,
-			JSkatPlayer newForeHand, JSkatPlayer newMiddleHand,
-			JSkatPlayer newHindHand) {
+	public SkatGame(String newTableName, JSkatPlayer newForeHand,
+			JSkatPlayer newMiddleHand, JSkatPlayer newHindHand) {
 
 		this.tableName = newTableName;
 		this.foreHand = newForeHand;
@@ -427,10 +426,10 @@ public class SkatGame extends JSkatThread {
 		log.debug("Discarded cards: " + discardedSkat); //$NON-NLS-1$
 
 		this.data.setDiscardedSkat(getPlayerID(this.declarer), discardedSkat);
-		this.view.removeCard(this.tableName, this.data.getDeclarer(), discardedSkat
-				.get(0));
-		this.view.removeCard(this.tableName, this.data.getDeclarer(), discardedSkat
-				.get(1));
+		this.view.removeCard(this.tableName, this.data.getDeclarer(),
+				discardedSkat.get(0));
+		this.view.removeCard(this.tableName, this.data.getDeclarer(),
+				discardedSkat.get(1));
 	}
 
 	private boolean checkDiscardedCards(CardList discardedSkat) {
@@ -849,9 +848,11 @@ public class SkatGame extends JSkatThread {
 			if (newState == GameStates.NEW_GAME) {
 
 				this.view.clearTable(this.tableName);
+
 			} else if (newState == GameStates.DISCARDING) {
 
 				this.view.setSkat(this.tableName, this.data.getSkat());
+				
 			} else if (newState == GameStates.GAME_OVER) {
 
 				this.view.addGameResult(this.tableName, this.data);
@@ -905,7 +906,8 @@ public class SkatGame extends JSkatThread {
 	/**
 	 * Sets the maximum sleep time
 	 * 
-	 * @param newMaxSleep Maximum sleep time
+	 * @param newMaxSleep
+	 *            Maximum sleep time
 	 */
 	public void setMaxSleep(int newMaxSleep) {
 
