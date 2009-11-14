@@ -41,224 +41,209 @@ import de.jskat.util.Player;
 class InputChannel extends Thread {
 
 	private static Log log = LogFactory.getLog(InputChannel.class);
-	
+
 	private ISSController issControl;
-	
+
 	private Connector connect;
 	private final static int protocolVersion = 14;
 
-    Object lock = new Object();
-    InputStream stream;
-    BufferedReader reader;
-    boolean done = false;
-    
-    /**
-     * Constructor
-     * 
-     * @param controller 
-     * @param conn 
-     * @param is Input stream
-     */
-    InputChannel(ISSController controller, Connector conn, InputStream is) {
+	Object lock = new Object();
+	InputStream stream;
+	BufferedReader reader;
+	boolean done = false;
 
-    	this.issControl = controller;
-    	this.connect = conn;
-    	this.stream = is;
-        this.reader = new BufferedReader(new InputStreamReader(this.stream));
-    }
+	/**
+	 * Constructor
+	 * 
+	 * @param controller
+	 * @param conn
+	 * @param is
+	 *            Input stream
+	 */
+	InputChannel(ISSController controller, Connector conn, InputStream is) {
 
-    /**
-     * @see Thread#run()
-     */
-    @Override
-    public void run() {
+		this.issControl = controller;
+		this.connect = conn;
+		this.stream = is;
+		this.reader = new BufferedReader(new InputStreamReader(this.stream));
+	}
 
-        ReaderClass rc = new ReaderClass( );
+	/**
+	 * @see Thread#run()
+	 */
+	@Override
+	public void run() {
 
-        synchronized(this.lock) {
+		ReaderClass rc = new ReaderClass();
 
-            rc.start( );
+		synchronized (this.lock) {
 
-            while (!this.done) {
-                try {
-                    this.lock.wait( );
-                } catch (InterruptedException ie) {
-                    this.done = true;
-                    rc.interrupt( );
-                    try {
-                        this.stream.close( );
-                    } catch (IOException e) {
-                    	e.printStackTrace();
-                    }
-                }
-            }
-        }
-    }
+			rc.start();
+
+			while (!this.done) {
+				try {
+					this.lock.wait();
+				} catch (InterruptedException ie) {
+					this.done = true;
+					rc.interrupt();
+					try {
+						this.stream.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
 
 	void handleMessage(String message) {
-		
-		log.debug("ISS: " + message); //$NON-NLS-1$
-		
+
+		log.debug("ISS |--> " + message); //$NON-NLS-1$
+
 		StringTokenizer token = new StringTokenizer(message);
 		String first = token.nextToken();
-		
+
 		if (first.equals("password:")) { //$NON-NLS-1$
-			
+
 			handlePasswordMessage();
-		}
-		else if (first.equals("Welcome")) { //$NON-NLS-1$
-			
+		} else if (first.equals("Welcome")) { //$NON-NLS-1$
+
 			handleWelcomeMessage(token);
-		}
-		else if (first.equals("clients")) { //$NON-NLS-1$
-			
+		} else if (first.equals("clients")) { //$NON-NLS-1$
+
 			handleClientListMessage(token);
-		}
-		else if (first.equals("tables")) { //$NON-NLS-1$
-			
+		} else if (first.equals("tables")) { //$NON-NLS-1$
+
 			handleTableListMessage(token);
-		}
-		else if (first.equals("create")) { //$NON-NLS-1$
-			
+		} else if (first.equals("create")) { //$NON-NLS-1$
+
 			handleTableCreateMessage(token);
-		}
-		else if (first.equals("table")) { //$NON-NLS-1$
-			
+		} else if (first.equals("table")) { //$NON-NLS-1$
+
 			handleTableUpdateMessage(token);
-		}
-		else if (first.equals("error")) { //$NON-NLS-1$
-			
+		} else if (first.equals("error")) { //$NON-NLS-1$
+
 			handleErrorMessage(token);
-		}
-		else if (first.equals("text")) { //$NON-NLS-1$
-			
+		} else if (first.equals("text")) { //$NON-NLS-1$
+
 			handleTextMessage(token);
-		}
-		else if (first.equals("yell")) { //$NON-NLS-1$
-			
+		} else if (first.equals("yell")) { //$NON-NLS-1$
+
 			handleLobbyChatMessage(token);
-		}
-		else {
-			
+		} else {
+
 			log.error("UNHANDLED MESSAGE: " + message); //$NON-NLS-1$
 		}
 	}
-	
+
 	private void handleLobbyChatMessage(StringTokenizer token) {
-		
+
 		this.issControl.addChatMessage(ChatMessageType.LOBBY, token);
 	}
 
 	private void handlePasswordMessage() {
-		
+
 		this.connect.sendPassword();
 	}
 
 	private void handleTextMessage(StringTokenizer token) {
-		
+
 		StringBuffer textMessage = new StringBuffer();
-		
-		while(token.hasMoreTokens()) {
-			
+
+		while (token.hasMoreTokens()) {
+
 			textMessage.append(token.nextToken()).append(' ');
 		}
-		
+
 		log.error(textMessage);
 	}
 
 	private void handleErrorMessage(StringTokenizer token) {
-		
+
 		StringBuffer errorMessage = new StringBuffer();
-		
-		while(token.hasMoreTokens()) {
-			
+
+		while (token.hasMoreTokens()) {
+
 			errorMessage.append(token.nextToken()).append(' ');
 		}
-		
+
 		log.error(errorMessage);
 	}
 
 	private void handleTableCreateMessage(StringTokenizer token) {
 
-		log.debug("table creation message");
-		
+		log.debug("table creation message"); //$NON-NLS-1$
+
 		String tableName = token.nextToken();
 		String creator = token.nextToken();
-		this.issControl.createTable(tableName, creator, Integer.parseInt(token.nextToken()));
-		
-		// FIXME remove it
-		this.issControl.invitePlayer(tableName, creator, "xskat");
-		this.issControl.invitePlayer(tableName, creator, "xskat");
-		this.issControl.startGame(tableName);
+		this.issControl.createTable(tableName, creator, Integer.parseInt(token
+				.nextToken()));
 	}
-	
+
 	private void handleTableUpdateMessage(StringTokenizer token) {
-		
-		log.debug("table update message");
-		
-		// table .1 bar state 3 bar xskat xskat:2 . bar . 0 0 0 0 0 0 1 0 xskat $ 0 0 0 0 0 0 1 1 xskat:2 $ 0 0 0 0 0 0 1 1 . . 0 0 0 0 0 0 0 0 false
-		
+
+		log.debug("table update message"); //$NON-NLS-1$
+
+		// table .1 bar state 3 bar xskat xskat:2 . bar . 0 0 0 0 0 0 1 0 xskat
+		// $ 0 0 0 0 0 0 1 1 xskat:2 $ 0 0 0 0 0 0 1 1 . . 0 0 0 0 0 0 0 0 false
+
 		String tableName = token.nextToken();
 		String creator = token.nextToken();
 		String actionCommand = token.nextToken();
-		
-		if (actionCommand.equals("state")) {
-		
-			this.issControl.updateISSTableState(tableName, getTableStatus(token));
-		}
-		else if (actionCommand.equals("start")) {
-			
+
+		if (actionCommand.equals("state")) { //$NON-NLS-1$
+
+			this.issControl.updateISSTableState(tableName,
+					getTableStatus(token));
+		} else if (actionCommand.equals("start")) { //$NON-NLS-1$
+
 			this.issControl.startGame(tableName, getGameStartStatus(token));
-		}
-		else if (actionCommand.equals("go")) {
-			
+		} else if (actionCommand.equals("go")) { //$NON-NLS-1$
+
 			this.issControl.startGame(tableName);
-		}
-		else if (actionCommand.equals("play")) {
-			
+		} else if (actionCommand.equals("play")) { //$NON-NLS-1$
+
 			this.issControl.updateMove(tableName, getMoveInformation(token));
-		}
-		else if (actionCommand.equals("end")) {
-			
-			//this.issControl.endGame(tableName, getGameInformation(token));
-		}
-		else {
-			
-			log.debug("unhandled action command: " + actionCommand + " for table " + tableName);
+		} else if (actionCommand.equals("end")) { //$NON-NLS-1$
+
+			// this.issControl.endGame(tableName, getGameInformation(token));
+		} else {
+
+			log
+					.debug("unhandled action command: " + actionCommand + " for table " + tableName); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
-	
+
 	private ISSTablePanelStatus getTableStatus(StringTokenizer token) {
-		
+
 		ISSTablePanelStatus status = new ISSTablePanelStatus();
-		
+
 		status.setMaxPlayers(Integer.parseInt(token.nextToken()));
-		
-		List<String> playerNames = new ArrayList<String>(); 
+
+		List<String> playerNames = new ArrayList<String>();
 		for (int i = 0; i < 4; i++) {
-		
+
 			playerNames.add(token.nextToken());
 		}
 
 		for (int i = 0; i < status.getMaxPlayers(); i++) {
-			
-			if (!playerNames.get(i).equals(".")) {
-			
+
+			if (!(".".equals(playerNames.get(i)))) { //$NON-NLS-1$
+
 				status.addPlayer(playerNames.get(i), parsePlayerStatus(token));
-			}
-			else {
-				
+			} else {
+
 				skipTokens(token, 9);
 			}
 		}
-		
+
 		return status;
 	}
-	
+
 	private ISSGameStatus getGameStartStatus(StringTokenizer token) {
 
 		ISSGameStatus status = new ISSGameStatus();
-		
+
 		status.setGameNo(Integer.parseInt(token.nextToken()));
 		status.putPlayerName(Player.FORE_HAND, token.nextToken());
 		status.putPlayerTime(Player.FORE_HAND, new Double(token.nextToken()));
@@ -266,166 +251,165 @@ class InputChannel extends Thread {
 		status.putPlayerTime(Player.MIDDLE_HAND, new Double(token.nextToken()));
 		status.putPlayerName(Player.HIND_HAND, token.nextToken());
 		status.putPlayerTime(Player.HIND_HAND, new Double(token.nextToken()));
-		
+
 		return status;
 	}
-	
+
 	private ISSMoveInformation getMoveInformation(StringTokenizer token) {
-		
+
 		ISSMoveInformation info = new ISSMoveInformation();
-		
+
 		String movePlayer = token.nextToken();
-		log.debug("Move player: " + movePlayer);
-		if (movePlayer.equals("w")) {
+		log.debug("Move player: " + movePlayer); //$NON-NLS-1$
+		if ("w".equals(movePlayer)) { //$NON-NLS-1$
 			// world move
 			info.setPosition(MovePlayer.WORLD);
-		}
-		else if (movePlayer.equals("0")) {
+		} else if ("0".equals(movePlayer)) { //$NON-NLS-1$
 			// fore hand move
 			info.setPosition(MovePlayer.FORE_HAND);
-		}
-		else if (movePlayer.equals("1")) {
+		} else if ("1".equals(movePlayer)) { //$NON-NLS-1$
 			// middle hand move
 			info.setPosition(MovePlayer.MIDDLE_HAND);
-		}
-		else if (movePlayer.equals("2")) {
+		} else if ("2".equals(movePlayer)) { //$NON-NLS-1$
 			// hind hand move
 			info.setPosition(MovePlayer.HIND_HAND);
 		}
-		
+
 		String move = token.nextToken();
-		log.debug("Move: " + move);
-		if (move.equals("y")) {
+		log.debug("Move: " + move); //$NON-NLS-1$
+		if ("y".equals(move)) { //$NON-NLS-1$
 			// holding bid move
 			info.setType(MoveType.BID);
-		}
-		else if (move.equals("p")) {
+		} else if ("p".equals(move)) { //$NON-NLS-1$
 			// pass move
 			info.setType(MoveType.PASS);
-		}
-		else if (move.equals("s")) {
+		} else if ("s".equals(move)) { //$NON-NLS-1$
 			// skat request move
 			info.setType(MoveType.SKAT_REQUEST);
-		}
-		else if (move.equals("??.??")) {
+		} else if ("??.??".equals(move)) { //$NON-NLS-1$
 			// hidden skat given to a player
 			info.setType(MoveType.SKAT_LOOKING);
-		}
-		else {
+		} else {
 			// extensive parsing needed
-			
+
 			// test card move
 			Card card = Card.getCardFromString(move);
 			if (card != null) {
 				// card play move
 				info.setType(MoveType.CARD_PLAY);
 				info.setCard(card);
-			}
-			else {
+			} else {
 				// card parsing failed
-				if (move.length() == 96) {
-					// card dealing
-					info.setType(MoveType.DEAL);
-					// TODO parse cards
+
+				// test bidding
+				int bid = -1;
+				try {
+
+					bid = Integer.parseInt(move);
+				} catch (NumberFormatException e) {
+
+					bid = -1;
 				}
-				else if (move.length() == 5) {
-					// open skat given to a player
-					info.setType(MoveType.SKAT_LOOKING);
-					// TODO parse cards
-				}
-				else if (move.length() < 5) {
+				if (bid > -1) {
 					// bidding
 					info.setType(MoveType.BID);
 					info.setBidValue(Integer.parseInt(move));
-				}
-				else {
-					// game announcement
-					info.setType(MoveType.GAME_ANNOUNCEMENT);
-					/*
-					<game-type> :: (G | C | S | H | D | N)  (type Grand .. Null)
-		               [O]        (ouvert)
-		               [H]        (hand, not given if O + trump game)
-		               [S]        (schneider announced, only in H games, not if O or Z)
-		               [Z]        (schwarz announced, only in H games)
-					*/
-					StringTokenizer annToken = new StringTokenizer(move, ".");
-					String gameType = annToken.nextToken();
-					
-					GameAnnouncement ann = new GameAnnouncement();
-					
-					if (gameType.startsWith("G")) {
-						
-						ann.setGameType(GameType.GRAND);
-					}
-					else if (gameType.startsWith("C")) {
-						
-						ann.setGameType(GameType.CLUBS);
-					}
-					else if (gameType.startsWith("S")) {
-						
-						ann.setGameType(GameType.SPADES);
-					}
-					else if (gameType.startsWith("H")) {
-						
-						ann.setGameType(GameType.HEARTS);
-					}
-					else if (gameType.startsWith("D")) {
-						
-						ann.setGameType(GameType.DIAMONDS);
-					}
-					else if (gameType.startsWith("N")) {
-						
-						ann.setGameType(GameType.NULL);
-					}
-					
-					for (int i = 1; i < gameType.length(); i++) {
-						// parse other game modifiers
-						char mod = gameType.charAt(i);
-						
-						if (mod == 'O') {
-							
-							ann.setOuvert(true);
-						}
-						else if (mod == 'H') {
-							
-							// FIXME hand not setable in game announcement
-						}
-						else if (mod == 'S') {
-							
-							ann.setSchneider(true);
-						}
-						else if (mod == 'Z') {
-							
-							ann.setSchwarz(true);
-						}
-					}
-					info.setGameAnnouncement(ann);
-					
-					Card skatCard0 = Card.getCardFromString(annToken.nextToken());
-					Card skatCard1 = Card.getCardFromString(annToken.nextToken());
-					
-					info.setSkatCards(skatCard0, skatCard1);
-					
-					while(annToken.hasMoreTokens()) {
-						// ouvert cards
-						info.addOuvertCard(Card.getCardFromString(annToken.nextToken()));
+				} else {
+
+					if (move.length() == 96) {
+						// card dealing
+						info.setType(MoveType.DEAL);
+						// TODO parse cards
+					} else if (move.length() == 5) {
+						// open skat given to a player
+						info.setType(MoveType.SKAT_LOOKING);
+						// TODO parse cards
+					} else {
+						// game announcement
+						info.setType(MoveType.GAME_ANNOUNCEMENT);
+						parseGameAnnoucement(info, move);
 					}
 				}
 			}
 		}
-		
+
 		// parse player times
 		info.putPlayerTime(Player.FORE_HAND, new Double(token.nextToken()));
 		info.putPlayerTime(Player.MIDDLE_HAND, new Double(token.nextToken()));
 		info.putPlayerTime(Player.HIND_HAND, new Double(token.nextToken()));
-		
+
 		return info;
 	}
-	
+
+	void parseGameAnnoucement(ISSMoveInformation info, String move) {
+		/*
+		 * <game-type> :: (G | C | S | H | D | N) (type Grand .. Null) [O]
+		 * (ouvert) [H] (hand, not given if O + trump game) [S] (schneider
+		 * announced, only in H games, not if O or Z) [Z] (schwarz announced,
+		 * only in H games)
+		 */
+		StringTokenizer annToken = new StringTokenizer(move, "."); //$NON-NLS-1$
+		String gameType = annToken.nextToken();
+
+		GameAnnouncement ann = new GameAnnouncement();
+
+		// at first the game type
+		if (gameType.startsWith("G")) { //$NON-NLS-1$
+
+			ann.setGameType(GameType.GRAND);
+		} else if (gameType.startsWith("C")) { //$NON-NLS-1$
+
+			ann.setGameType(GameType.CLUBS);
+		} else if (gameType.startsWith("S")) { //$NON-NLS-1$
+
+			ann.setGameType(GameType.SPADES);
+		} else if (gameType.startsWith("H")) { //$NON-NLS-1$
+
+			ann.setGameType(GameType.HEARTS);
+		} else if (gameType.startsWith("D")) { //$NON-NLS-1$
+
+			ann.setGameType(GameType.DIAMONDS);
+		} else if (gameType.startsWith("N")) { //$NON-NLS-1$
+
+			ann.setGameType(GameType.NULL);
+		}
+
+		// parse other game modifiers
+		for (int i = 1; i < gameType.length(); i++) {
+
+			char mod = gameType.charAt(i);
+
+			if (mod == 'O') {
+
+				ann.setOuvert(true);
+			} else if (mod == 'H') {
+
+				ann.setHand(true);
+			} else if (mod == 'S') {
+
+				ann.setSchneider(true);
+			} else if (mod == 'Z') {
+
+				ann.setSchwarz(true);
+			}
+		}
+		info.setGameAnnouncement(ann);
+
+		Card skatCard0 = Card.getCardFromString(annToken.nextToken());
+		Card skatCard1 = Card.getCardFromString(annToken.nextToken());
+
+		info.setSkatCards(skatCard0, skatCard1);
+
+		while (annToken.hasMoreTokens()) {
+			// ouvert cards
+			info.addOuvertCard(Card.getCardFromString(annToken.nextToken()));
+		}
+	}
+
 	private ISSPlayerStatus parsePlayerStatus(StringTokenizer token) {
-		
+
 		ISSPlayerStatus status = new ISSPlayerStatus();
-		
+
 		// skip player name
 		token.nextToken();
 		status.setIP(token.nextToken());
@@ -437,14 +421,14 @@ class InputChannel extends Thread {
 		token.nextToken(); // ignore next information, unknown purpose
 		status.setTalkEnabled(Integer.parseInt(token.nextToken()) == 1);
 		status.setReadyToPlay(Integer.parseInt(token.nextToken()) == 1);
-		
+
 		return status;
 	}
-	
+
 	private void skipTokens(StringTokenizer token, int skipCount) {
-		
+
 		for (int i = 0; i < skipCount; i++) {
-			
+
 			token.nextToken();
 		}
 	}
@@ -452,18 +436,18 @@ class InputChannel extends Thread {
 	/**
 	 * Handles a table list message
 	 * 
-	 * @param Table information
+	 * @param Table
+	 *            information
 	 */
 	private void handleTableListMessage(StringTokenizer token) {
 
 		String plusMinus = token.nextToken();
-		
+
 		if (plusMinus.equals("+")) { //$NON-NLS-1$
-			
+
 			updateTableList(token);
-		}
-		else if (plusMinus.equals("-")) { //$NON-NLS-1$
-			
+		} else if (plusMinus.equals("-")) { //$NON-NLS-1$
+
 			removeTableFromList(token);
 		}
 	}
@@ -471,45 +455,48 @@ class InputChannel extends Thread {
 	/**
 	 * Adds or updates a table on the table list
 	 * 
-	 * @param token Table information
+	 * @param token
+	 *            Table information
 	 */
 	private void updateTableList(StringTokenizer token) {
-		
+
 		String tableName = token.nextToken();
 		int maxPlayers = Integer.parseInt(token.nextToken());
 		long gamesPlayed = Long.parseLong(token.nextToken());
 		String player1 = token.nextToken();
 		String player2 = token.nextToken();
 		String player3 = token.nextToken();
-		
-		this.issControl.updateISSTableList(tableName, maxPlayers, gamesPlayed, player1, player2, player3);
+
+		this.issControl.updateISSTableList(tableName, maxPlayers, gamesPlayed,
+				player1, player2, player3);
 	}
-	
+
 	/**
 	 * Removes a table from the table list
 	 * 
-	 * @param token Table information
+	 * @param token
+	 *            Table information
 	 */
 	private void removeTableFromList(StringTokenizer token) {
-		
+
 		this.issControl.removeISSTableFromList(token.nextToken());
 	}
-	
+
 	/**
 	 * Handles a client list message
 	 * 
-	 * @param token Client information
+	 * @param token
+	 *            Client information
 	 */
 	private void handleClientListMessage(StringTokenizer token) {
-		
+
 		String plusMinus = token.nextToken();
-		
+
 		if (plusMinus.equals("+")) { //$NON-NLS-1$
-			
+
 			updatePlayerList(token);
-		}
-		else if (plusMinus.equals("-")) { //$NON-NLS-1$
-			
+		} else if (plusMinus.equals("-")) { //$NON-NLS-1$
+
 			removeClientFromList(token);
 		}
 	}
@@ -517,10 +504,11 @@ class InputChannel extends Thread {
 	/**
 	 * Adds or updates a player on the client list
 	 * 
-	 * @param token Player information
+	 * @param token
+	 *            Player information
 	 */
 	private void updatePlayerList(StringTokenizer token) {
-		
+
 		String playerName = token.nextToken();
 		// ignore next token
 		token.nextToken();
@@ -528,37 +516,40 @@ class InputChannel extends Thread {
 		long gamesPlayed = Long.parseLong(token.nextToken());
 		double strength = Double.parseDouble(token.nextToken());
 		// ignore rest of the tokens
-		
-		this.issControl.updateISSPlayerList(playerName, language, gamesPlayed, strength);
+
+		this.issControl.updateISSPlayerList(playerName, language, gamesPlayed,
+				strength);
 	}
-	
+
 	/**
 	 * Removes a player from the client list
 	 * 
-	 * @param token Player information
+	 * @param token
+	 *            Player information
 	 */
 	private void removeClientFromList(StringTokenizer token) {
-		
+
 		this.issControl.removeISSPlayerFromList(token.nextToken());
 	}
-	
+
 	/**
 	 * Handles the welcome message and checks the protocol version
 	 * 
-	 * @param token Welcome information
+	 * @param token
+	 *            Welcome information
 	 */
 	private void handleWelcomeMessage(StringTokenizer token) {
-		
-		while(!token.nextToken().equals("version")) {
+
+		while (!("version".equals(token.nextToken()))) { //$NON-NLS-1$
 			// search for token "version"
 		}
-		
+
 		double issProtocolVersion = Double.parseDouble(token.nextToken());
-		
+
 		log.debug("iss version: " + issProtocolVersion); //$NON-NLS-1$
 		log.debug("local version: " + InputChannel.protocolVersion); //$NON-NLS-1$
-		
-		if ((int)issProtocolVersion != InputChannel.protocolVersion) {
+
+		if ((int) issProtocolVersion != InputChannel.protocolVersion) {
 			// TODO handle this in JSkatMaster
 			log.error("Wrong protocol version!!!"); //$NON-NLS-1$
 		}
@@ -567,24 +558,24 @@ class InputChannel extends Thread {
 	/**
 	 * Helper class for reading incoming information
 	 */
-    class ReaderClass extends Thread {
+	class ReaderClass extends Thread {
 
-        @Override
+		@Override
 		public void run() {
 
-        	String line;
-            while (!InputChannel.this.done) {
-                try {
-                	line = InputChannel.this.reader.readLine();
-                	handleMessage(line);
-                } catch (IOException ioe) {
-                    InputChannel.this.done = true;
-                }
-            }
+			String line;
+			while (!InputChannel.this.done) {
+				try {
+					line = InputChannel.this.reader.readLine();
+					handleMessage(line);
+				} catch (IOException ioe) {
+					InputChannel.this.done = true;
+				}
+			}
 
-            synchronized(InputChannel.this.lock) {
-                InputChannel.this.lock.notify( );
-            }
-        }
-    }
+			synchronized (InputChannel.this.lock) {
+				InputChannel.this.lock.notify();
+			}
+		}
+	}
 }

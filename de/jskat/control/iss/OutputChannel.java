@@ -40,7 +40,7 @@ class OutputChannel {
 	 */
 	void send(String message) {
 		
-		log.debug(message + " --> ISS ");
+		log.debug("ISS <--| " + message); //$NON-NLS-1$
 		this.output.println(message);
 	}
 	
