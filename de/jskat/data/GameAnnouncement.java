@@ -7,7 +7,7 @@ Authors: @JS@
 
 Released: @ReleaseDate@
 
-*/
+ */
 
 package de.jskat.data;
 
@@ -19,8 +19,7 @@ import de.jskat.util.GameType;
 /**
  * Game announcement
  * 
- * An object of this class is returned by an AI player
- * for game announcement
+ * An object of this class is returned by an AI player for game announcement
  */
 public class GameAnnouncement {
 
@@ -34,6 +33,10 @@ public class GameAnnouncement {
 	 * Ouvert announcement
 	 */
 	private boolean ouvert;
+	/**
+	 * Hand announcement
+	 */
+	private boolean hand;
 	/**
 	 * Schneider announcement
 	 */
@@ -59,7 +62,7 @@ public class GameAnnouncement {
 	 * Constructor
 	 */
 	public GameAnnouncement() {
-		
+
 		initializeVariables();
 	}
 
@@ -67,7 +70,7 @@ public class GameAnnouncement {
 	 * Initializes all variables
 	 */
 	public void initializeVariables() {
-		
+
 		this.gameType = null;
 		this.ouvert = false;
 		this.schneider = false;
@@ -76,14 +79,14 @@ public class GameAnnouncement {
 		this.re = false;
 		this.bock = false;
 	}
-	
+
 	/**
 	 * Gets the game type
 	 * 
 	 * @return Game type
 	 */
 	public GameType getGameType() {
-		
+
 		return this.gameType;
 	}
 
@@ -93,68 +96,91 @@ public class GameAnnouncement {
 	 * @param newGameType
 	 */
 	public void setGameType(GameType newGameType) {
-		
+
 		this.gameType = newGameType;
 	}
-	
+
 	/**
 	 * Checks whether schneider was announced or not
 	 * 
 	 * @return TRUE if schneider was announced
 	 */
 	public boolean isSchneider() {
-		
+
 		return this.schneider;
 	}
-	
+
 	/**
 	 * Sets flag for schneider announcement
 	 * 
-	 * @param isSchneider TRUE if schneider was announced
+	 * @param isSchneider
+	 *            TRUE if schneider was announced
 	 */
 	public void setSchneider(boolean isSchneider) {
-		
+
 		this.schneider = isSchneider;
 	}
-	
+
 	/**
 	 * Checks whether schwarz was announced or not
 	 * 
 	 * @return TRUE if schwarz was announced
 	 */
 	public boolean isSchwarz() {
-		
+
 		return this.schwarz;
 	}
-	
+
 	/**
 	 * Sets flag for schwarz announcement
 	 * 
-	 * @param isSchwarz TRUE if schwarz was announced
+	 * @param isSchwarz
+	 *            TRUE if schwarz was announced
 	 */
 	public void setSchwarz(boolean isSchwarz) {
-		
+
 		this.schwarz = isSchwarz;
 	}
-	
+
 	/**
 	 * Checks whether an ouvert game was announced or not
 	 * 
 	 * @return TRUE if an ouvert game was announced
 	 */
 	public boolean isOuvert() {
-		
+
 		return this.ouvert;
 	}
 
 	/**
 	 * Sets flag for an ouvert announcement
 	 * 
-	 * @param isOuvert TRUE if ouvert was announced
+	 * @param isOuvert
+	 *            TRUE if ouvert was announced
 	 */
 	public void setOuvert(boolean isOuvert) {
-		
+
 		this.ouvert = isOuvert;
+	}
+
+	/**
+	 * Checks whether a hand game was announced or not
+	 * 
+	 * @return TRUE if a hand game was announced
+	 */
+	public boolean isHand() {
+
+		return this.hand;
+	}
+
+	/**
+	 * Sets flag for a hand announcement
+	 * 
+	 * @param isHand
+	 */
+	public void setHand(boolean isHand) {
+		
+		this.hand = isHand;
 	}
 
 	/**
@@ -163,98 +189,101 @@ public class GameAnnouncement {
 	 * @return TRUE if contra was announced
 	 */
 	public boolean isContra() {
-		
+
 		return this.contra;
 	}
-	
+
 	/**
 	 * Sets the flag for contra announcement
 	 * 
-	 * @param isContra TRUE if contra was announced
+	 * @param isContra
+	 *            TRUE if contra was announced
 	 */
 	public void setContra(boolean isContra) {
-		
+
 		this.contra = isContra;
 	}
-	
+
 	/**
 	 * Checks whether re was announced for the game
 	 * 
 	 * @return TRUE if re was announced
 	 */
 	public boolean isRe() {
-		
+
 		return this.re;
 	}
-	
+
 	/**
 	 * Sets the flag for re announcement
 	 * 
-	 * @param isRe TRUE if re was announced
+	 * @param isRe
+	 *            TRUE if re was announced
 	 */
 	public void setRe(boolean isRe) {
-		
+
 		this.re = isRe;
 	}
-	
+
 	/**
 	 * Checks whether bock was announced for the game
 	 * 
 	 * @return TRUE if bock was announced
 	 */
 	public boolean isBock() {
-		
+
 		return this.bock;
 	}
-	
+
 	/**
 	 * Sets the flag for bock announcement
 	 * 
-	 * @param isBock TRUE if bock was announced
+	 * @param isBock
+	 *            TRUE if bock was announced
 	 */
 	public void setBock(boolean isBock) {
-		
+
 		this.contra = isBock;
 	}
-	
+
 	/**
 	 * @see Object#toString()
 	 */
 	@Override
 	public String toString() {
-		
+
 		StringBuffer result = new StringBuffer();
-		
+
 		result.append("Game announcement: ").append(this.gameType);
-		
+
 		if (this.ouvert) {
-			
+
 			result.append(" ouvert");
 		}
-		
+
 		if (this.schneider) {
-			
+
 			result.append(" schneider");
 		}
-		
+
 		if (this.schwarz) {
-			
+
 			result.append(" schwarz");
 		}
-		
+
 		return result.toString();
 	}
-	
+
 	/**
 	 * @see Object#clone()
 	 */
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		
+
 		log.debug("Cloning GameAnnouncement...");
-		
+
 		GameAnnouncement clone = new GameAnnouncement();
-		
+
 		clone.setGameType(this.gameType);
 		clone.setOuvert(this.ouvert);
 		clone.setSchneider(this.schneider);
@@ -262,9 +291,9 @@ public class GameAnnouncement {
 		clone.setContra(this.contra);
 		clone.setRe(this.re);
 		clone.setBock(this.bock);
-		
+
 		log.debug(this + " " + clone);
-		
+
 		return clone;
 	}
 }
