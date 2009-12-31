@@ -11,7 +11,10 @@ Released: @ReleaseDate@
 
 package de.jskat.gui;
 
-enum ContextPanelTypes {
+/**
+ * Panel types for all game contexts
+ */
+public enum ContextPanelTypes {
 
 	/**
 	 * Start panel

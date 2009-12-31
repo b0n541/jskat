@@ -39,7 +39,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.control.JSkatMaster;
-import de.jskat.control.SkatGame;
 import de.jskat.control.SkatTable;
 import de.jskat.control.iss.ChatMessageType;
 import de.jskat.data.GameAnnouncement;
@@ -65,8 +64,11 @@ import de.jskat.gui.action.iss.CreateISSTableAction;
 import de.jskat.gui.action.iss.JoinISSTableAction;
 import de.jskat.gui.action.iss.LeaveISSTableAction;
 import de.jskat.gui.action.iss.ObserveISSTableAction;
+import de.jskat.gui.action.iss.ReadyAction;
 import de.jskat.gui.action.iss.SendChatMessageAction;
 import de.jskat.gui.action.iss.ShowLoginPanelAction;
+import de.jskat.gui.action.iss.ChangeTableSeatsAction;
+import de.jskat.gui.action.iss.TalkEnableAction;
 import de.jskat.gui.action.main.AboutAction;
 import de.jskat.gui.action.main.ChangeActiveTableAction;
 import de.jskat.gui.action.main.ContinueSkatSeriesAction;
@@ -185,6 +187,10 @@ public class JSkatViewImpl implements JSkatView {
 				jskat));
 		this.actions.put(JSkatAction.OBSERVE_ISS_TABLE,
 				new ObserveISSTableAction(jskat));
+		this.actions.put(JSkatAction.READY_TO_PLAY, new ReadyAction(jskat));
+		this.actions.put(JSkatAction.TALK_ENABLED, new TalkEnableAction(jskat));
+		this.actions.put(JSkatAction.CHANGE_TABLE_SEATS, new ChangeTableSeatsAction(
+				jskat));
 		// Neural network actions
 		this.actions
 				.put(JSkatAction.TRAIN_NEURAL_NETWORKS,

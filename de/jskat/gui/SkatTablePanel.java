@@ -15,6 +15,7 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -54,11 +55,11 @@ public class SkatTablePanel extends JSkatTabPanel {
 	protected HandPanel middleHand;
 	protected HandPanel hindHand;
 	protected OpponentPanel leftOpponentPanel;
-	OpponentPanel rightOpponentPanel;
+	protected OpponentPanel rightOpponentPanel;
 	PlayerPanel playerPanel;
 	protected GameInformationPanel gameInfoPanel;
 	protected JPanel gameContextPanel;
-	protected Map<ContextPanelTypes, JPanel> contextPanels;
+	protected Map<String, JPanel> contextPanels;
 	protected GameAnnouncePanel gameAnnouncePanel;
 	protected TrickPlayPanel trickPanel;
 	protected TrickPlayPanel lastTrickPanel;
@@ -91,6 +92,8 @@ public class SkatTablePanel extends JSkatTabPanel {
 	protected void initPanel() {
 
 		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		
+		this.contextPanels = new HashMap<String, JPanel>();
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 				getSkatListPanel(), getPlayGroundPanel());
@@ -164,44 +167,54 @@ public class SkatTablePanel extends JSkatTabPanel {
 		return new OpponentPanel(this, this.bitmaps, 12);
 	}
 
+	protected void addContextPanel(JPanel panel, String name) {
+
+		if (this.contextPanels.containsKey(name)) {
+			// remove existing panel first
+			this.gameContextPanel.remove(this.contextPanels.get(name));
+			this.contextPanels.remove(name);
+		}
+		
+		this.contextPanels.put(name, panel);
+		this.gameContextPanel.add(panel, name);
+	}
+	
 	private JPanel getContextPanel() {
 
 		this.gameContextPanel = new JPanel();
 		this.gameContextPanel.setOpaque(false);
 		this.gameContextPanel.setLayout(new CardLayout());
-
-		this.gameContextPanel.add(new GameStartPanel(
+		
+		addContextPanel(new GameStartPanel(
 				(StartSkatSeriesAction) getActionMap().get(
 						JSkatAction.START_LOCAL_SERIES)),
 				ContextPanelTypes.START_SERIES.toString());
 
 		this.biddingPanel = new BiddingPanel(getActionMap());
-		this.gameContextPanel.add(this.biddingPanel, ContextPanelTypes.BIDDING
+		addContextPanel(this.biddingPanel, ContextPanelTypes.BIDDING
 				.toString());
 
 		this.gameContextPanel.add(new LookIntoSkatPanel(this),
 				ContextPanelTypes.LOOK_INTO_SKAT.toString());
 
 		this.discardPanel = new DiscardPanel(this, this.bitmaps, 4);
-		this.gameContextPanel.add(this.discardPanel,
+		addContextPanel(this.discardPanel,
 				ContextPanelTypes.DISCARDING.toString());
 
 		this.gameAnnouncePanel = new GameAnnouncePanel(this, this.strings);
-
-		this.gameContextPanel.add(this.gameAnnouncePanel,
+		addContextPanel(this.gameAnnouncePanel,
 				ContextPanelTypes.DECLARING.toString());
 
-		JPanel trickHoldingPanel = new JPanel(new MigLayout("fill", "fill",
-				"fill"));
+		JPanel trickHoldingPanel = new JPanel(new MigLayout("fill", "fill", //$NON-NLS-1$ //$NON-NLS-2$
+				"fill")); //$NON-NLS-1$
 		this.lastTrickPanel = new TrickPlayPanel(this.bitmaps);
-		trickHoldingPanel.add(this.lastTrickPanel, "width 25%");
+		trickHoldingPanel.add(this.lastTrickPanel, "width 25%"); //$NON-NLS-1$
 		this.trickPanel = new TrickPlayPanel(this.bitmaps);
-		trickHoldingPanel.add(this.trickPanel, "grow");
-
-		this.gameContextPanel.add(trickHoldingPanel,
+		trickHoldingPanel.add(this.trickPanel, "grow"); //$NON-NLS-1$
+		addContextPanel(trickHoldingPanel,
 				ContextPanelTypes.TRICK_PLAYING.toString());
 
-		this.gameContextPanel.add(new GameOverPanel(
+		addContextPanel(new GameOverPanel(
 				(ContinueSkatSeriesAction) getActionMap().get(
 						JSkatAction.CONTINUE_LOCAL_SERIES)),
 				ContextPanelTypes.GAME_OVER.toString());
@@ -352,7 +365,7 @@ public class SkatTablePanel extends JSkatTabPanel {
 	 * @param state
 	 *            Game state
 	 */
-	void setGameState(GameStates state) {
+	protected void setGameState(GameStates state) {
 
 		log.debug(state);
 

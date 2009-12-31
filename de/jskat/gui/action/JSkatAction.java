@@ -141,6 +141,18 @@ public enum JSkatAction {
 	 * Observe a table
 	 */
 	OBSERVE_ISS_TABLE,
+	/**
+	 * Ready to play
+	 */
+	READY_TO_PLAY,
+	/**
+	 * Enable talking
+	 */
+	TALK_ENABLED,
+	/**
+	 * Change table seats
+	 */
+	CHANGE_TABLE_SEATS,
 //----------------------------------------------------------------------------//
 //-- Neural Network Player related actions -----------------------------------//
 //----------------------------------------------------------------------------//
