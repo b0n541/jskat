@@ -16,7 +16,7 @@ import de.jskat.control.SkatTable;
 import de.jskat.control.iss.ChatMessageType;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
-import de.jskat.data.SkatGameData.GameStates;
+import de.jskat.data.SkatGameData.GameState;
 import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.data.iss.ISSGameStatus;
 import de.jskat.data.iss.ISSMoveInformation;
@@ -271,7 +271,7 @@ public interface JSkatView {
 	 * @param state
 	 *            New game state
 	 */
-	public void setGameState(String tableName, GameStates state);
+	public void setGameState(String tableName, GameState state);
 
 	/**
 	 * Adds a game result

@@ -20,7 +20,7 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import de.jskat.data.SkatGameData.GameStates;
+import de.jskat.data.SkatGameData.GameState;
 import de.jskat.gui.img.JSkatGraphicRepository;
 
 /**
@@ -32,7 +32,7 @@ class PlayerPanel extends HandPanel {
 	private static Log log = LogFactory.getLog(PlayerPanel.class);
 
 	private CardPanel lastClickedCardPanel;
-	private GameStates gameState;
+	private GameState gameState;
 
 	/**
 	 * @see HandPanel#HandPanel(SkatTablePanel, JSkatGraphicRepository)
@@ -67,11 +67,11 @@ class PlayerPanel extends HandPanel {
 		return this.lastClickedCardPanel;
 	}
 
-	void setGameState(GameStates newGameState) {
+	void setGameState(GameState newGameState) {
 		this.gameState = newGameState;
 	}
 
-	GameStates getGameState() {
+	GameState getGameState() {
 		return this.gameState;
 	}
 }

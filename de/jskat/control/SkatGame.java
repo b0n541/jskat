@@ -18,7 +18,7 @@ import de.jskat.ai.JSkatPlayer;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.Trick;
-import de.jskat.data.SkatGameData.GameStates;
+import de.jskat.data.SkatGameData.GameState;
 import de.jskat.gui.JSkatView;
 import de.jskat.util.CardDeck;
 import de.jskat.util.CardList;
@@ -78,7 +78,7 @@ public class SkatGame extends JSkatThread {
 		this.player[2].newGame(Player.HIND_HAND);
 
 		this.data = new SkatGameData();
-		setGameState(GameStates.NEW_GAME);
+		setGameState(GameState.NEW_GAME);
 	}
 
 	/**
@@ -95,55 +95,55 @@ public class SkatGame extends JSkatThread {
 
 			switch (this.data.getGameState()) {
 			case NEW_GAME:
-				setGameState(GameStates.DEALING);
+				setGameState(GameState.DEALING);
 				break;
 			case DEALING:
 				dealCards();
-				setGameState(GameStates.BIDDING);
+				setGameState(GameState.BIDDING);
 				break;
 			case BIDDING:
 				bidding();
 				if (this.data.getGameType() == GameType.PASSED_IN) {
 
-					setGameState(GameStates.PRELIMINARY_GAME_END);
+					setGameState(GameState.PRELIMINARY_GAME_END);
 				} else {
 
-					setGameState(GameStates.LOOK_INTO_SKAT);
+					setGameState(GameState.LOOK_INTO_SKAT);
 				}
 				break;
 			case LOOK_INTO_SKAT:
 				if (lookIntoSkat()) {
-					setGameState(GameStates.DISCARDING);
+					setGameState(GameState.DISCARDING);
 				} else {
 					this.data.setHand(true);
-					setGameState(GameStates.DECLARING);
+					setGameState(GameState.DECLARING);
 				}
 				break;
 			case DISCARDING:
 				discarding();
-				setGameState(GameStates.DECLARING);
+				setGameState(GameState.DECLARING);
 				break;
 			case DECLARING:
 				announceGame();
-				setGameState(GameStates.TRICK_PLAYING);
+				setGameState(GameState.TRICK_PLAYING);
 				break;
 			case TRICK_PLAYING:
 				playTricks();
-				setGameState(GameStates.CALC_GAME_VALUE);
+				setGameState(GameState.CALC_GAME_VALUE);
 				break;
 			case PRELIMINARY_GAME_END:
-				setGameState(GameStates.CALC_GAME_VALUE);
+				setGameState(GameState.CALC_GAME_VALUE);
 				break;
 			case CALC_GAME_VALUE:
 				calculateGameValue();
-				setGameState(GameStates.GAME_OVER);
+				setGameState(GameState.GAME_OVER);
 				break;
 			case GAME_OVER:
 				break;
 			}
 
 			checkWaitCondition();
-		} while (this.data.getGameState() != GameStates.GAME_OVER);
+		} while (this.data.getGameState() != GameState.GAME_OVER);
 
 		log.debug(this.data.getGameState());
 	}
@@ -726,7 +726,7 @@ public class SkatGame extends JSkatThread {
 
 			if (trickWinner == this.data.getDeclarer()) {
 				// declarer has won a trick
-				setGameState(GameStates.PRELIMINARY_GAME_END);
+				setGameState(GameState.PRELIMINARY_GAME_END);
 			}
 		}
 
@@ -738,8 +738,8 @@ public class SkatGame extends JSkatThread {
 
 	private boolean isFinished() {
 
-		return this.data.getGameState() == GameStates.PRELIMINARY_GAME_END
-				|| this.data.getGameState() == GameStates.GAME_OVER;
+		return this.data.getGameState() == GameState.PRELIMINARY_GAME_END
+				|| this.data.getGameState() == GameState.GAME_OVER;
 	}
 
 	private void calculateGameValue() {
@@ -837,7 +837,7 @@ public class SkatGame extends JSkatThread {
 	 * @param newState
 	 *            Game state
 	 */
-	public void setGameState(GameStates newState) {
+	public void setGameState(GameState newState) {
 
 		this.data.setGameState(newState);
 
@@ -845,15 +845,15 @@ public class SkatGame extends JSkatThread {
 
 			this.view.setGameState(this.tableName, newState);
 
-			if (newState == GameStates.NEW_GAME) {
+			if (newState == GameState.NEW_GAME) {
 
 				this.view.clearTable(this.tableName);
 
-			} else if (newState == GameStates.DISCARDING) {
+			} else if (newState == GameState.DISCARDING) {
 
 				this.view.setSkat(this.tableName, this.data.getSkat());
 				
-			} else if (newState == GameStates.GAME_OVER) {
+			} else if (newState == GameState.GAME_OVER) {
 
 				this.view.addGameResult(this.tableName, this.data);
 			}

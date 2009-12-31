@@ -43,7 +43,7 @@ import de.jskat.control.SkatTable;
 import de.jskat.control.iss.ChatMessageType;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
-import de.jskat.data.SkatGameData.GameStates;
+import de.jskat.data.SkatGameData.GameState;
 import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.data.iss.ISSGameStatus;
 import de.jskat.data.iss.ISSMoveInformation;
@@ -530,10 +530,10 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#setGameState(String, GameStates)
+	 * @see JSkatView#setGameState(String, GameState)
 	 */
 	@Override
-	public void setGameState(String tableName, GameStates state) {
+	public void setGameState(String tableName, GameState state) {
 
 		this.tables.get(tableName).setGameState(state);
 	}

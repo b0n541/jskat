@@ -35,7 +35,7 @@ public class SkatGameData {
 	/**
 	 * All possible game states
 	 */
-	public enum GameStates {
+	public enum GameState {
 
 		/**
 		 * New game started
@@ -79,7 +79,7 @@ public class SkatGameData {
 		GAME_OVER;
 	}
 
-	private GameStates gameState;
+	private GameState gameState;
 	/**
 	 * Flag for the Skat rules
 	 */
@@ -1031,7 +1031,7 @@ public class SkatGameData {
 
 		if (getGameType() == GameType.PASSED_IN) {
 
-			this.gameState = GameStates.GAME_OVER;
+			this.gameState = GameState.GAME_OVER;
 			this.calcResult();
 		}
 	}
@@ -1116,7 +1116,7 @@ public class SkatGameData {
 	 * @param newState
 	 *            New game state
 	 */
-	public void setGameState(GameStates newState) {
+	public void setGameState(GameState newState) {
 
 		this.gameState = newState;
 	}
@@ -1126,7 +1126,7 @@ public class SkatGameData {
 	 * 
 	 * @return The game state
 	 */
-	public GameStates getGameState() {
+	public GameState getGameState() {
 
 		return this.gameState;
 	}

@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 import javax.swing.ActionMap;
 import javax.swing.JPanel;
 
-import de.jskat.data.SkatGameData.GameStates;
+import de.jskat.data.SkatGameData.GameState;
 import de.jskat.data.iss.ISSPlayerStatus;
 import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.gui.ContextPanelTypes;
@@ -53,7 +53,7 @@ public class ISSTablePanel extends SkatTablePanel {
 		// replace game start context panel
 		addContextPanel(new GameStartPanel(this.getActionMap()),
 				ContextPanelTypes.START_SERIES.toString());
-		setGameState(GameStates.NEW_GAME);
+		setGameState(GameState.NEW_GAME);
 		panel.add(getChatPanel(), "span 2, growx, align center"); //$NON-NLS-1$
 		
 		return panel;

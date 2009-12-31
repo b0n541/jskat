@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import de.jskat.data.SkatGameData.GameStates;
+import de.jskat.data.SkatGameData.GameState;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.util.Card;
@@ -249,13 +249,13 @@ class CardPanel extends JPanel {
 				else if (this.parent instanceof PlayerPanel) {
 					// card panel in player panel was clicked
 					
-					GameStates state = ((PlayerPanel) this.parent).getGameState();
+					GameState state = ((PlayerPanel) this.parent).getGameState();
 					
-					if (state == GameStates.DISCARDING) {
+					if (state == GameState.DISCARDING) {
 						// discarding phase
 						action = getActionMap().get(JSkatAction.PUT_CARD_INTO_SKAT);
 					}
-					else if (state == GameStates.TRICK_PLAYING) {
+					else if (state == GameState.TRICK_PLAYING) {
 						// trick playing phase
 						action = getActionMap().get(JSkatAction.PLAY_CARD);
 					}

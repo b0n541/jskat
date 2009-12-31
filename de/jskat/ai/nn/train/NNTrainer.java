@@ -24,7 +24,7 @@ import de.jskat.ai.nn.util.NeuralNetwork;
 import de.jskat.control.JSkatThread;
 import de.jskat.control.SkatGame;
 import de.jskat.data.GameAnnouncement;
-import de.jskat.data.SkatGameData.GameStates;
+import de.jskat.data.SkatGameData.GameState;
 import de.jskat.gui.NullView;
 import de.jskat.util.CardDeck;
 import de.jskat.util.GameType;
@@ -195,7 +195,7 @@ public class NNTrainer extends JSkatThread {
 				ann.setGameType(this.gameType);
 				game.setGameAnnouncement(ann);
 				
-				game.setGameState(GameStates.TRICK_PLAYING);
+				game.setGameState(GameState.TRICK_PLAYING);
 				
 				game.start();
 				try {

@@ -33,7 +33,7 @@ import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
-import de.jskat.data.SkatGameData.GameStates;
+import de.jskat.data.SkatGameData.GameState;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.action.main.ContinueSkatSeriesAction;
 import de.jskat.gui.action.main.StartSkatSeriesAction;
@@ -365,7 +365,7 @@ public class SkatTablePanel extends JSkatTabPanel {
 	 * @param state
 	 *            Game state
 	 */
-	protected void setGameState(GameStates state) {
+	protected void setGameState(GameState state) {
 
 		log.debug(state);
 
@@ -388,14 +388,14 @@ public class SkatTablePanel extends JSkatTabPanel {
 		case DISCARDING:
 			this.gameInfoPanel.setText(state.toString());
 			setContextPanel(ContextPanelTypes.DISCARDING);
-			this.playerPanel.setGameState(GameStates.DISCARDING);
+			this.playerPanel.setGameState(GameState.DISCARDING);
 			break;
 		case DECLARING:
 			setContextPanel(ContextPanelTypes.DECLARING);
 			break;
 		case TRICK_PLAYING:
 			setContextPanel(ContextPanelTypes.TRICK_PLAYING);
-			this.playerPanel.setGameState(GameStates.TRICK_PLAYING);
+			this.playerPanel.setGameState(GameState.TRICK_PLAYING);
 			break;
 		case PRELIMINARY_GAME_END:
 		case CALC_GAME_VALUE:
