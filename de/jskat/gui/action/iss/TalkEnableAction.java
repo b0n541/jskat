@@ -42,6 +42,7 @@ public class TalkEnableAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		//this.jskat.getISSController().leaveTable(tableName, playerName);
+		this.jskat.getISSController().sendTalkEnabledSignal(
+				this.jskat.getActiveTableName(), this.jskat.getIssLoginName());
 	}
 }

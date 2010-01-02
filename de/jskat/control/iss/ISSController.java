@@ -286,4 +286,9 @@ public class ISSController {
 
 		this.issConnect.sendReadySignal(tableName, playerName);
 	}
+	
+	public void sendTalkEnabledSignal(String tableName, String playerName) {
+
+		this.issConnect.sendTalkEnabledSignal(tableName, playerName);
+	}
 }
