@@ -42,7 +42,6 @@ public class ReadyAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		this.jskat.getISSController().sendReadySignal(
-				this.jskat.getActiveTableName(), this.jskat.getIssLoginName());
+		this.jskat.sendReadySignal();
 	}
 }

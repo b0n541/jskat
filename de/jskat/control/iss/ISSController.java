@@ -118,8 +118,8 @@ public class ISSController {
 		if (this.issConnect.isConnected()) {
 			
 			// show ISS lobby if connection was successfull
-			this.jskat.setIssLoginName(login);
 			this.view.showISSLobby();
+			this.jskat.setIssLogin(login);
 		}
 
 		return this.issConnect.isConnected();
@@ -238,19 +238,18 @@ public class ISSController {
 	public void destroyTable(String tableName) {
 
 		this.view.closeTable(tableName);
+		// TODO set to next table
 		this.jskat.setActiveTable(null);
 	}
 	
 	public void joinTable(String tableName) {
 		
 		this.issConnect.joinTable(tableName);
-		this.jskat.setActiveTable(tableName);
 	}
 	
 	public void observeTable(String tableName) {
 		
 		this.issConnect.observeTable(tableName);
-		this.jskat.setActiveTable(tableName);
 	}
 	
 	public void leaveTable(String tableName, String playerName) {

@@ -42,7 +42,6 @@ public class LeaveISSTableAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		this.jskat.getISSController().leaveTable(
-				this.jskat.getActiveTableName(), this.jskat.getIssLoginName());
+		this.jskat.leaveTable();
 	}
 }

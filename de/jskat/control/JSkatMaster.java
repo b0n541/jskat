@@ -469,9 +469,9 @@ public class JSkatMaster {
 		
 		this.view.showPreferences();
 	}
-
+	
 	/**
-	 * Set the active table
+	 * Sets the name of the active table
 	 * 
 	 * @param tableName
 	 *            Table name
@@ -480,35 +480,53 @@ public class JSkatMaster {
 
 		this.data.setActiveTable(tableName);
 	}
-
+	
 	/**
-	 * Gets the name of the active skat table
+	 * Sets the login name for ISS
 	 * 
-	 * @return Name of the active skat table
-	 */
-	public String getActiveTableName() {
-
-		return this.data.getActiveTable();
-	}
-
-	/**
-	 * Set the active login name for ISS
-	 * 
-	 * @param loginName
+	 * @param login
 	 *            Login name
 	 */
-	public void setIssLoginName(String loginName) {
+	public void setIssLogin(String login) {
 
-		this.data.setIssLoginName(loginName);
+		this.data.setIssLoginName(login);
 	}
 
 	/**
-	 * Gets the login name for the current login on ISS
-	 * 
-	 * @return Login name
+	 * Sends the table seat change signal to ISS
 	 */
-	public String getIssLoginName() {
+	public void sendTableSeatChangeSignal() {
 
-		return this.data.getIssLoginName();
+		this.issControl.sendTableSeatChangeSignal(this.data.getActiveTable(),
+				this.data.getIssLoginName());
+	}
+
+	/**
+	 * Sends the ready to play signal to ISS
+	 */
+	public void sendReadySignal() {
+
+		this.issControl.sendReadySignal(this.data.getActiveTable(), this.data
+				.getIssLoginName());
+	}
+
+	/**
+	 * Sends the talk enabled signal to ISS
+	 */
+	public void sendTalkEnabledSignal() {
+
+		this.issControl.sendTalkEnabledSignal(this.data.getActiveTable(),
+				this.data.getIssLoginName());
+	}
+
+	/**
+	 * Leaves a skat table
+	 */
+	public void leaveTable() {
+
+		String tableName = this.data.getActiveTable();
+
+		// FIXME distinguish between ISS and local skat table
+		this.issControl.leaveTable(tableName, this.data.getIssLoginName());
 	}
 }

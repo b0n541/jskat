@@ -42,7 +42,6 @@ public class ChangeTableSeatsAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		this.jskat.getISSController().sendTableSeatChangeSignal(
-				this.jskat.getActiveTableName(), this.jskat.getIssLoginName());
+		this.jskat.sendTableSeatChangeSignal();
 	}
 }
