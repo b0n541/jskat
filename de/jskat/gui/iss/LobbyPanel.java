@@ -52,9 +52,9 @@ public class LobbyPanel extends JSkatTabPanel {
 	JTable tableListTable;
 	private JScrollPane tableListScrollPane;
 	private ChatPanel chatPanel;
-	
+
 	static ActionMap actions;
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -66,7 +66,7 @@ public class LobbyPanel extends JSkatTabPanel {
 			ActionMap actions, ResourceBundle strings) {
 
 		super(tableName, jskatBitmaps, actions, strings);
-		
+
 		log.debug("SkatTablePanel: name: " + tableName); //$NON-NLS-1$
 	}
 
@@ -79,7 +79,7 @@ public class LobbyPanel extends JSkatTabPanel {
 		setLayout(new MigLayout("fill")); //$NON-NLS-1$
 
 		add(getLobbyPanel(), "center"); //$NON-NLS-1$
-		
+
 		this.actions = this.getActionMap();
 	}
 
@@ -97,10 +97,10 @@ public class LobbyPanel extends JSkatTabPanel {
 		lobby.add(getTableListPanel(), "wrap"); //$NON-NLS-1$
 
 		lobby.add(getActionButtonPanel(), "span 2, wrap");
-		
+
 		this.chatPanel = new ChatPanel(this);
 		lobby.add(this.chatPanel, "span 2, growx, align center"); //$NON-NLS-1$
-		
+
 		return lobby;
 	}
 
@@ -135,25 +135,25 @@ public class LobbyPanel extends JSkatTabPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
@@ -161,24 +161,28 @@ public class LobbyPanel extends JSkatTabPanel {
 
 				int column = LobbyPanel.this.tableListTable.getSelectedColumn();
 				int row = LobbyPanel.this.tableListTable.getSelectedRow();
-				String tableName = (String) LobbyPanel.this.tableListTable.getValueAt(row, 0);
-				String value = (String) LobbyPanel.this.tableListTable.getValueAt(row, column);
-				
+				String tableName = (String) LobbyPanel.this.tableListTable
+						.getValueAt(row, 0);
+				String value = (String) LobbyPanel.this.tableListTable
+						.getValueAt(row, column);
+
 				if (column == 0) {
 					// observe a table
-					LobbyPanel.actions.get(JSkatAction.OBSERVE_ISS_TABLE).actionPerformed(new ActionEvent(tableName, 1, null));
-				}
-				else if (value.equals("?")) {
+					LobbyPanel.actions.get(JSkatAction.OBSERVE_ISS_TABLE)
+							.actionPerformed(
+									new ActionEvent(tableName, 1, null));
+				} else if (value.equals("?")) {
 					// sit down on free seat at table
-					LobbyPanel.actions.get(JSkatAction.JOIN_ISS_TABLE).actionPerformed(new ActionEvent(tableName, 1, null));
-				}
-				else {
-					
+					LobbyPanel.actions.get(JSkatAction.JOIN_ISS_TABLE)
+							.actionPerformed(
+									new ActionEvent(tableName, 1, null));
+				} else {
+
 					log.debug("No free seat!");
 				}
 			}
 		});
-		
+
 		this.tableListTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
 		this.tableListScrollPane = new JScrollPane(this.tableListTable);
@@ -192,14 +196,15 @@ public class LobbyPanel extends JSkatTabPanel {
 	}
 
 	private JPanel getActionButtonPanel() {
-		
+
 		JPanel panel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		
-		panel.add(new JButton(this.getActionMap().get(JSkatAction.CREATE_ISS_TABLE)));
-		
+
+		panel.add(new JButton(this.getActionMap().get(
+				JSkatAction.CREATE_ISS_TABLE)));
+
 		return panel;
 	}
-	
+
 	/**
 	 * Updates player information
 	 * 
@@ -256,22 +261,24 @@ public class LobbyPanel extends JSkatTabPanel {
 	/**
 	 * Removes a table from the table list
 	 * 
-	 * @param tableName Table name
+	 * @param tableName
+	 *            Table name
 	 */
 	public void removeTable(String tableName) {
 
 		this.tableListTableModel.removeTable(tableName);
 	}
-	
+
 	/**
 	 * Adds a new chat message
 	 * 
-	 * @param message New message
+	 * @param message
+	 *            New message
 	 */
 	public void appendChatMessage(ISSChatMessage message) {
-		
+
 		log.debug("appendChatMessage");
-		
+
 		this.chatPanel.addMessage(message);
 	}
 }

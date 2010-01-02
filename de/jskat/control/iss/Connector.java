@@ -162,6 +162,11 @@ class Connector {
 		this.issOut.send("table " + tableName + ' ' + playerName + " leave"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
+	void sendReadySignal(String tableName, String playerName) {
+
+		this.issOut.send("table " + tableName + ' ' + playerName + " ready"); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+	
 	void invitePlayer(String tableName, String invitor, String invitee) {
 		
 		this.issOut.send("table " + tableName + ' ' + invitor + " invite " + invitee);  //$NON-NLS-1$//$NON-NLS-2$

@@ -40,7 +40,7 @@ public class LoginPanel extends JSkatTabPanel {
 	private static final long serialVersionUID = 1L;
 	private static Log log = LogFactory.getLog(LoginPanel.class);
 
-	private JTextField loginField;
+	JTextField loginField;
 	private JPasswordField passwordField;
 	
 	/**
@@ -83,13 +83,15 @@ public class LoginPanel extends JSkatTabPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				ISSLoginCredentials login = new ISSLoginCredentials();
-				login.setLoginName(LoginPanel.this.loginField.getText());
-				login.setPassword(new String(LoginPanel.this.passwordField.getPassword()));
+				ISSLoginCredentials loginCredentials = new ISSLoginCredentials();
+				loginCredentials.setLoginName(LoginPanel.this.loginField
+						.getText());
+				loginCredentials.setPassword(new String(
+						LoginPanel.this.passwordField.getPassword()));
 				// FIXME must be setable
-				login.setPort(80);
+				loginCredentials.setPort(80);
 				
-				e.setSource(login);  
+				e.setSource(loginCredentials);  
 				// fire event again
 				loginButton.dispatchEvent(e);
 			}

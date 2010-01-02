@@ -41,7 +41,7 @@ public class JoinISSTableAction extends AbstractJSkatAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
+		
 		if (e.getSource() instanceof String) {
 		
 			this.jskat.getISSController().joinTable((String) e.getSource());

@@ -26,6 +26,7 @@ public class JSkatApplicationData {
 	private Map<String, SkatTable> localSkatTables;
 	private Map<String, SkatTable> remoteSkatTables;
 	private String activeTable;
+	private String issLoginName;
 
 	/**
 	 * Contructor
@@ -111,5 +112,13 @@ public class JSkatApplicationData {
 	public ResourceBundle getResourceBundle() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public void setIssLoginName(String issLoginName) {
+		this.issLoginName = issLoginName;
+	}
+
+	public String getIssLoginName() {
+		return issLoginName;
 	}
 }

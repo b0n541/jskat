@@ -20,7 +20,7 @@ import de.jskat.gui.img.JSkatGraphicRepository;
 
 /**
  * Generic Tab Panel for JSkat
- *
+ * 
  */
 public abstract class JSkatTabPanel extends JPanel {
 
@@ -38,11 +38,16 @@ public abstract class JSkatTabPanel extends JPanel {
 	/**
 	 * Constructor
 	 * 
-	 * @param tabName Table name
-	 * @param jskatBitmaps JSkat bitmaps
-	 * @param actions JSkat actions
+	 * @param tabName
+	 *            Table name
+	 * @param jskatBitmaps
+	 *            JSkat bitmaps
+	 * @param actions
+	 *            JSkat actions
 	 */
-	protected JSkatTabPanel(String tabName, JSkatGraphicRepository jskatBitmaps, ActionMap actions, ResourceBundle jskatStrings) {
+	protected JSkatTabPanel(String tabName,
+			JSkatGraphicRepository jskatBitmaps, ActionMap actions,
+			ResourceBundle jskatStrings) {
 
 		super();
 		this.setName(tabName);
@@ -51,7 +56,7 @@ public abstract class JSkatTabPanel extends JPanel {
 		this.strings = jskatStrings;
 		initPanel();
 	}
-	
+
 	/**
 	 * Initializes the tab panel
 	 */

@@ -336,16 +336,6 @@ public class JSkatMaster {
 	}
 
 	/**
-	 * Set the active table
-	 * 
-	 * @param tableName Table name
-	 */
-	public void setActiveTable(String tableName) {
-		
-		this.data.setActiveTable(tableName);
-	}
-
-	/**
 	 * Trains the neural networks
 	 */
 	public void trainNeuralNetworks() {
@@ -478,5 +468,47 @@ public class JSkatMaster {
 	public void showPreferences() {
 		
 		this.view.showPreferences();
+	}
+
+	/**
+	 * Set the active table
+	 * 
+	 * @param tableName
+	 *            Table name
+	 */
+	public void setActiveTable(String tableName) {
+
+		this.data.setActiveTable(tableName);
+	}
+
+	/**
+	 * Gets the name of the active skat table
+	 * 
+	 * @return Name of the active skat table
+	 */
+	public String getActiveTableName() {
+
+		return this.data.getActiveTable();
+	}
+
+	/**
+	 * Set the active login name for ISS
+	 * 
+	 * @param loginName
+	 *            Login name
+	 */
+	public void setIssLoginName(String loginName) {
+
+		this.data.setIssLoginName(loginName);
+	}
+
+	/**
+	 * Gets the login name for the current login on ISS
+	 * 
+	 * @return Login name
+	 */
+	public String getIssLoginName() {
+
+		return this.data.getIssLoginName();
 	}
 }

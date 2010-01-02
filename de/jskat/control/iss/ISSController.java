@@ -93,16 +93,20 @@ public class ISSController {
 
 		Object source = e.getSource();
 		String command = e.getActionCommand();
+		String login = null;
+		String password = null;
 
 		if (JSkatAction.CONNECT_TO_ISS.toString().equals(command)) {
 			if (source instanceof ISSLoginCredentials) {
 
-				ISSLoginCredentials login = (ISSLoginCredentials) source;
+				ISSLoginCredentials loginCredentials = (ISSLoginCredentials) source;
+				login = loginCredentials.getLoginName();
+				password = loginCredentials.getPassword();
 
 				if (!this.issConnect.isConnected()) {
 
-					this.issConnect.setConnectionData(login.getLoginName(),
-							login.getPassword(), login.getPort());
+					this.issConnect.setConnectionData(login,
+							password, loginCredentials.getPort());
 					this.issConnect.establishConnection();
 				}
 			} else {
@@ -114,6 +118,7 @@ public class ISSController {
 		if (this.issConnect.isConnected()) {
 			
 			// show ISS lobby if connection was successfull
+			this.jskat.setIssLoginName(login);
 			this.view.showISSLobby();
 		}
 
@@ -227,16 +232,19 @@ public class ISSController {
 	public void createTable(String tableName, String creator, int maxPlayers) {
 		
 		this.view.createISSTable(tableName);
+		this.jskat.setActiveTable(tableName);
 	}
 	
 	public void joinTable(String tableName) {
 		
 		this.issConnect.joinTable(tableName);
+		this.jskat.setActiveTable(tableName);
 	}
 	
 	public void observeTable(String tableName) {
 		
 		this.issConnect.observeTable(tableName);
+		this.jskat.setActiveTable(tableName);
 	}
 	
 	public void leaveTable(String tableName, String playerName) {
@@ -272,5 +280,10 @@ public class ISSController {
 	public void invitePlayer(String tableName, String invitor, String invitee) {
 		
 		this.issConnect.invitePlayer(tableName, invitor, invitee);
+	}
+	
+	public void sendReadySignal(String tableName, String playerName) {
+
+		this.issConnect.sendReadySignal(tableName, playerName);
 	}
 }
