@@ -235,6 +235,12 @@ public class ISSController {
 		this.jskat.setActiveTable(tableName);
 	}
 	
+	public void destroyTable(String tableName) {
+
+		this.view.closeTable(tableName);
+		this.jskat.setActiveTable(null);
+	}
+	
 	public void joinTable(String tableName) {
 		
 		this.issConnect.joinTable(tableName);

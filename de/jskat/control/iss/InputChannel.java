@@ -130,6 +130,9 @@ class InputChannel extends Thread {
 		} else if (first.equals("yell")) { //$NON-NLS-1$
 
 			handleLobbyChatMessage(token);
+		} else if (first.equals("destroy")) { //$NON-NLS-1$
+
+			handleTableDestroyMessage(token);
 		} else {
 
 			log.error("UNHANDLED MESSAGE: " + message); //$NON-NLS-1$
@@ -176,10 +179,19 @@ class InputChannel extends Thread {
 
 		String tableName = token.nextToken();
 		String creator = token.nextToken();
-		this.issControl.createTable(tableName, creator, Integer.parseInt(token
-				.nextToken()));
+		int seats = Integer.parseInt(token.nextToken());
+		this.issControl.createTable(tableName, creator, seats);
 	}
 
+	private void handleTableDestroyMessage(StringTokenizer token) {
+
+		log.debug("table destroy message"); //$NON-NLS-1$
+
+		String tableName = token.nextToken();
+		String playername = token.nextToken();
+		this.issControl.destroyTable(tableName);
+	}
+	
 	private void handleTableUpdateMessage(StringTokenizer token) {
 
 		log.debug("table update message"); //$NON-NLS-1$

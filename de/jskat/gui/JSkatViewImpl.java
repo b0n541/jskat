@@ -59,6 +59,7 @@ import de.jskat.gui.action.human.PlayCardAction;
 import de.jskat.gui.action.human.PlayHandGameAction;
 import de.jskat.gui.action.human.PutCardIntoSkatAction;
 import de.jskat.gui.action.human.TakeCardFromSkatAction;
+import de.jskat.gui.action.iss.ChangeTableSeatsAction;
 import de.jskat.gui.action.iss.ConnectAction;
 import de.jskat.gui.action.iss.CreateISSTableAction;
 import de.jskat.gui.action.iss.JoinISSTableAction;
@@ -67,7 +68,6 @@ import de.jskat.gui.action.iss.ObserveISSTableAction;
 import de.jskat.gui.action.iss.ReadyAction;
 import de.jskat.gui.action.iss.SendChatMessageAction;
 import de.jskat.gui.action.iss.ShowLoginPanelAction;
-import de.jskat.gui.action.iss.ChangeTableSeatsAction;
 import de.jskat.gui.action.iss.TalkEnableAction;
 import de.jskat.gui.action.main.AboutAction;
 import de.jskat.gui.action.main.ChangeActiveTableAction;
@@ -839,5 +839,15 @@ public class JSkatViewImpl implements JSkatView {
 	public void showPreferences() {
 
 		this.preferencesDialog.setVisible(true);
+	}
+
+	/**
+	 * @see de.jskat.gui.JSkatView#closeSkatTable(java.lang.String)
+	 */
+	@Override
+	public void closeTable(String tableName) {
+
+		this.tabs.remove(this.tables.get(tableName));
+		this.tables.remove(tableName);
 	}
 }

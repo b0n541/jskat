@@ -11,7 +11,6 @@ Released: @ReleaseDate@
 
 package de.jskat.gui;
 
-import de.jskat.control.SkatGame;
 import de.jskat.control.SkatTable;
 import de.jskat.control.iss.ChatMessageType;
 import de.jskat.data.GameAnnouncement;
@@ -443,7 +442,14 @@ public class NullView implements JSkatView {
 	 */
 	@Override
 	public void showPreferences() {
-		// TODO Auto-generated method stub
+		// empty method by indent
+	}
 
+	/**
+	 * @see de.jskat.gui.JSkatView#closeTable(java.lang.String)
+	 */
+	@Override
+	public void closeTable(@SuppressWarnings("unused") String name) {
+		// empty method by indent
 	}
 }

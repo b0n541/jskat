@@ -11,7 +11,6 @@ Released: @ReleaseDate@
 
 package de.jskat.gui;
 
-import de.jskat.control.SkatGame;
 import de.jskat.control.SkatTable;
 import de.jskat.control.iss.ChatMessageType;
 import de.jskat.data.GameAnnouncement;
@@ -109,9 +108,16 @@ public interface JSkatView {
 	 * 
 	 * @param name
 	 *            Name of the table
-	 * @return Reference to the table panel
 	 */
 	public void createSkatTablePanel(String name);
+
+	/**
+	 * Closes a skat table
+	 * 
+	 * @param name
+	 *            Name of the skat table
+	 */
+	public void closeTable(String name);
 
 	/**
 	 * Shows the about dialog
