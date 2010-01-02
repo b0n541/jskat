@@ -291,4 +291,9 @@ public class ISSController {
 
 		this.issConnect.sendTalkEnabledSignal(tableName, playerName);
 	}
+	
+	public void sendTableSeatChangeSignal(String tableName, String playerName) {
+
+		this.issConnect.sendTableSeatChangeSignal(tableName, playerName);
+	}
 }

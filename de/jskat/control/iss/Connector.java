@@ -167,9 +167,14 @@ class Connector {
 		this.issOut.send("table " + tableName + ' ' + playerName + " ready"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 	
-	public void sendTalkEnabledSignal(String tableName, String playerName) {
+	void sendTalkEnabledSignal(String tableName, String playerName) {
 
 		this.issOut.send("table " + tableName + ' ' + playerName + " gametalk"); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+	
+	void sendTableSeatChangeSignal(String tableName, String playerName) {
+
+		this.issOut.send("table " + tableName + ' ' + playerName + " 34"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	void invitePlayer(String tableName, String invitor, String invitee) {
