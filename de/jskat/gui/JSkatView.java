@@ -112,12 +112,12 @@ public interface JSkatView {
 	public void createSkatTablePanel(String name);
 
 	/**
-	 * Closes a skat table
+	 * Closes a tab panel
 	 * 
 	 * @param name
-	 *            Name of the skat table
+	 *            Name of the tab panel
 	 */
-	public void closeTable(String name);
+	public void closeTabPanel(String name);
 
 	/**
 	 * Shows the about dialog

@@ -842,12 +842,25 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see de.jskat.gui.JSkatView#closeSkatTable(java.lang.String)
+	 * @see de.jskat.gui.JSkatView#closeTabPanel(java.lang.String)
 	 */
 	@Override
-	public void closeTable(String tableName) {
+	public void closeTabPanel(String tabName) {
 
-		this.tabs.remove(this.tables.get(tableName));
-		this.tables.remove(tableName);
+		JSkatTabPanel panel = (JSkatTabPanel) this.tabs.getSelectedComponent();
+		if (!tabName.equals(panel.getName())) {
+			for (Component currPanel : this.tabs.getComponents()) {
+				if (tabName.equals(currPanel.getName())) {
+					panel = (JSkatTabPanel) currPanel;
+				}
+			}
+		}
+
+		if (panel instanceof SkatTablePanel || panel instanceof ISSTablePanel) {
+			// remove from table list
+			this.tables.remove(panel.getName());
+		}
+
+		this.tabs.remove(panel);
 	}
 }

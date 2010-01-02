@@ -118,6 +118,7 @@ public class ISSController {
 		if (this.issConnect.isConnected()) {
 			
 			// show ISS lobby if connection was successfull
+			this.view.closeTabPanel("ISS login");
 			this.view.showISSLobby();
 			this.jskat.setIssLogin(login);
 		}
@@ -237,7 +238,7 @@ public class ISSController {
 	
 	public void destroyTable(String tableName) {
 
-		this.view.closeTable(tableName);
+		this.view.closeTabPanel(tableName);
 		// TODO set to next table
 		this.jskat.setActiveTable(null);
 	}
