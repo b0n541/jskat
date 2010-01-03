@@ -446,10 +446,10 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see de.jskat.gui.JSkatView#closeTable(java.lang.String)
+	 * @see JSkatView#closeTabPanel(java.lang.String)
 	 */
 	@Override
-	public void closeTable(@SuppressWarnings("unused") String name) {
+	public void closeTabPanel(String name) {
 		// empty method by indent
 	}
 }
