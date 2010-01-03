@@ -34,12 +34,13 @@ class GameStartPanel extends JPanel {
 		JPanel panel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
 		panel
 				.add(new JButton(actions.get(JSkatAction.READY_TO_PLAY)),
-						"center");
-		panel.add(new JButton(actions.get(JSkatAction.TALK_ENABLED)), "center");
+						"center"); //$NON-NLS-1$
+		panel.add(new JButton(actions.get(JSkatAction.TALK_ENABLED)),
+				"center, wrap"); //$NON-NLS-1$
 		panel.add(new JButton(actions.get(JSkatAction.CHANGE_TABLE_SEATS)),
-				"center");
+				"center"); //$NON-NLS-1$
 		panel.add(new JButton(actions.get(JSkatAction.LEAVE_ISS_TABLE)),
-				"center");
+				"center"); //$NON-NLS-1$
 		this.add(panel, "center, grow"); //$NON-NLS-1$
 	}
 }
