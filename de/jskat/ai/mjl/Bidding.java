@@ -66,7 +66,22 @@ class Bidding {
 		else if (noOfJacks < 1 && noOfTrumps < 6) maxBid = 0;
 		else if ((Helper.getJacks(cards)&12)==0 && noOfTrumps < 5) maxBid = 0;
         
-		if(maxBid>0) suggestedGameType = mostFrequentSuitColor.getGameType();
+		if (maxBid > 0) {
+			switch (mostFrequentSuitColor) {
+			case CLUBS:
+				suggestedGameType = GameType.CLUBS;
+				break;
+			case SPADES:
+				suggestedGameType = GameType.SPADES;
+				break;
+			case HEARTS:
+				suggestedGameType = GameType.HEARTS;
+				break;
+			case DIAMONDS:
+				suggestedGameType = GameType.DIAMONDS;
+				break;
+			}
+		}
 		
 		log.debug("I will bid until " + maxBid +" - I have "+noOfJacks+" Jacks and "+noOfTrumps+" Trumps in suit "+mostFrequentSuitColor);
 	}
