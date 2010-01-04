@@ -11,8 +11,13 @@ Released: @ReleaseDate@
 
 package de.jskat.gui;
 
+import java.awt.Color;
+
+import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import net.miginfocom.swing.MigLayout;
 
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.util.Card;
@@ -81,7 +86,18 @@ abstract class HandPanel extends JPanel {
 	/**
 	 * Initializes the panel
 	 */
-	abstract void initPanel();
+	void initPanel() {
+		
+		setLayout(new MigLayout("fill", "fill", "fill"));   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+		
+		setBorder(BorderFactory.createLineBorder(Color.black));
+		
+		add(this.headerLabel, "wrap"); //$NON-NLS-1$
+
+		this.cardPanel = new CardPanel(this, this.bitmaps, true);
+		
+		add(this.cardPanel, "grow"); //$NON-NLS-1$
+	}
 
 	/**
 	 * Sets the player position

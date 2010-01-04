@@ -32,23 +32,4 @@ class OpponentPanel extends HandPanel {
 
 		super(newParent, jskatBitmaps, maxCards);
 	}
-
-	/**
-	 * @see HandPanel#initPanel()
-	 */
-	@Override
-	void initPanel() {
-		
-		setLayout(new MigLayout("fill", "fill", "fill"));   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-		
-		setBackground(Color.RED);
-		setBorder(BorderFactory.createLineBorder(Color.black));
-		
-		add(this.headerLabel, "wrap"); //$NON-NLS-1$
-
-		this.cardPanel = new CardPanel(this, this.bitmaps, true);
-		this.cardPanel.setBorder(BorderFactory.createLineBorder(Color.red));
-		
-		add(this.cardPanel, "grow"); //$NON-NLS-1$
-	}
 }

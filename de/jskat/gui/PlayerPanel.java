@@ -43,25 +43,6 @@ class PlayerPanel extends HandPanel {
 		this.showCards();
 	}
 
-	/**
-	 * @see HandPanel#initPanel()
-	 */
-	@Override
-	void initPanel() {
-		
-		setBackground(Color.WHITE);
-		setBorder(BorderFactory.createLineBorder(Color.black));
-		
-		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		
-		add(this.headerLabel, "wrap"); //$NON-NLS-1$
-		
-		this.cardPanel = new CardPanel(this, this.bitmaps, false);
-		this.cardPanel.setBorder(BorderFactory.createLineBorder(Color.red));
-
-		add(this.cardPanel, "grow"); //$NON-NLS-1$
-	}
-
 	CardPanel getLastClickedCardPanel() {
 		
 		return this.lastClickedCardPanel;
