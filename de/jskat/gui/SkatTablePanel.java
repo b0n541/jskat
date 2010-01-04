@@ -146,13 +146,13 @@ public class SkatTablePanel extends JSkatTabPanel {
 		this.gameInfoPanel = getGameInfoPanel();
 		panel.add(this.gameInfoPanel, "span 2, growx, align center, wrap"); //$NON-NLS-1$
 		this.leftOpponentPanel = getOpponentPanel();
-		panel.add(this.leftOpponentPanel, "growx, growy, align left"); //$NON-NLS-1$
+		panel.add(this.leftOpponentPanel, "growx, growy, hmin 20%, align left"); //$NON-NLS-1$
 		this.rightOpponentPanel = getOpponentPanel();
-		panel.add(this.rightOpponentPanel, "growx, growy, align right, wrap"); //$NON-NLS-1$
+		panel.add(this.rightOpponentPanel, "growx, growy, hmin 20%, align right, wrap"); //$NON-NLS-1$
 		panel.add(this.getContextPanel(),
 				"span 2, growx, growy, align center, wrap"); //$NON-NLS-1$
 		this.playerPanel = getPlayerPanel();
-		panel.add(this.playerPanel, "span 2, growx, growy, align center, wrap"); //$NON-NLS-1$
+		panel.add(this.playerPanel, "span 2, growx, growy, hmin 20%, align center, wrap"); //$NON-NLS-1$
 
 		return panel;
 	}
