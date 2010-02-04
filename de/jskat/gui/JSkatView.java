@@ -11,6 +11,8 @@ Released: @ReleaseDate@
 
 package de.jskat.gui;
 
+import javax.swing.JDialog;
+
 import de.jskat.control.SkatTable;
 import de.jskat.control.iss.ChatMessageType;
 import de.jskat.data.GameAnnouncement;
@@ -124,14 +126,14 @@ public interface JSkatView {
 	 */
 	public abstract void showAboutMessage();
 
-	/**
-	 * Shows a message dialog
-	 * 
-	 * @param messageType
-	 *            Message type
-	 * @param message
-	 *            Message text
-	 */
+    /**
+     * Shows a message dialog
+     * 
+     * @param messageType
+     *            Message type @see {@link JDialog}
+     * @param message
+     *            Message text
+     */
 	public abstract void showMessage(int messageType, String message);
 
 	/**
