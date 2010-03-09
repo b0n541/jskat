@@ -18,8 +18,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ImageIcon;
 
-import com.sun.org.apache.bcel.internal.generic.GETSTATIC;
-
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
