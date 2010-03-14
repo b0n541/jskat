@@ -33,7 +33,7 @@ public class ChangeActiveTableAction extends AbstractJSkatAction {
 		
 		super(controller);
 		
-		putValue(Action.NAME, "Change active table");
+		putValue(Action.NAME, "Change active table"); //$NON-NLS-1$
 	}
 
 	/**
@@ -42,7 +42,7 @@ public class ChangeActiveTableAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		this.jskat.setActiveTable("Blubb");
+		this.jskat.setActiveTable(e.getActionCommand());
 	}
 
 }

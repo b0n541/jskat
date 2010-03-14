@@ -469,7 +469,7 @@ public class JSkatMaster {
 		
 		this.view.showPreferences();
 	}
-	
+
 	/**
 	 * Sets the name of the active table
 	 * 

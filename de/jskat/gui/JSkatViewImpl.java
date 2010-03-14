@@ -14,6 +14,7 @@ package de.jskat.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -105,6 +106,7 @@ public class JSkatViewImpl implements JSkatView {
 	private SkatSeriesStartDialog skatSeriesStartDialog;
 	private JSkatPreferencesDialog preferencesDialog;
 	private JTabbedPane tabs;
+	private String activeTableName;
 	private Map<String, SkatTablePanel> tables;
 	private JSkatGraphicRepository bitmaps;
 	private ResourceBundle strings;
@@ -189,8 +191,8 @@ public class JSkatViewImpl implements JSkatView {
 				new ObserveISSTableAction(jskat));
 		this.actions.put(JSkatAction.READY_TO_PLAY, new ReadyAction(jskat));
 		this.actions.put(JSkatAction.TALK_ENABLED, new TalkEnableAction(jskat));
-		this.actions.put(JSkatAction.CHANGE_TABLE_SEATS, new ChangeTableSeatsAction(
-				jskat));
+		this.actions.put(JSkatAction.CHANGE_TABLE_SEATS,
+				new ChangeTableSeatsAction(jskat));
 		// Neural network actions
 		this.actions
 				.put(JSkatAction.TRAIN_NEURAL_NETWORKS,
@@ -268,7 +270,11 @@ public class JSkatViewImpl implements JSkatView {
 						String tableName = ((JSkatTabPanel) tab).getName();
 						log.debug("showing table pane of table " + tableName); //$NON-NLS-1$
 
-						// FIXME set active table name in JSkatMasters data
+						JSkatViewImpl.this.actions.get(
+								JSkatAction.CHANGE_ACTIVE_TABLE)
+								.actionPerformed(
+										new ActionEvent(e.getSource(), 1,
+												tableName));
 					}
 				}
 			}
@@ -364,7 +370,7 @@ public class JSkatViewImpl implements JSkatView {
 	 * @see JSkatView#startGame(String)
 	 */
 	public void startGame(String tableName) {
-		
+
 		this.tables.get(tableName).startGame();
 	}
 
@@ -408,6 +414,7 @@ public class JSkatViewImpl implements JSkatView {
 
 		this.tabs.add("ISS table: " + name, newTable); //$NON-NLS-1$
 		this.tabs.setSelectedComponent(newTable);
+		this.activeTableName = name;
 	}
 
 	/**
@@ -423,6 +430,7 @@ public class JSkatViewImpl implements JSkatView {
 		this.actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(true);
 
 		this.tables.put(name, newPanel);
+		this.activeTableName = name;
 	}
 
 	/**
@@ -678,7 +686,8 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showISSLobby() {
 
-		this.issLobby = new LobbyPanel("ISS lobby", this.bitmaps, this.actions, this.strings);
+		this.issLobby = new LobbyPanel("ISS lobby", this.bitmaps, this.actions,
+				this.strings);
 		this.tabs.add("ISS lobby", this.issLobby); //$NON-NLS-1$
 		this.tabs.setSelectedComponent(this.issLobby);
 	}
@@ -842,7 +851,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see de.jskat.gui.JSkatView#closeTabPanel(java.lang.String)
+	 * @see JSkatView#closeTabPanel(java.lang.String)
 	 */
 	@Override
 	public void closeTabPanel(String tabName) {
