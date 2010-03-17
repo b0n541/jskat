@@ -792,6 +792,21 @@ public class JSkatViewImpl implements JSkatView {
 
 		switch (moveInformation.getType()) {
 		// TODO add other types too
+		case DEAL:
+			this.setGameState(tableName, GameState.DEALING);
+			// TODO update player cards
+			break;
+		case BID:
+		case PASS:
+			this.setGameState(tableName, GameState.BIDDING);
+			// TODO show whos bidding or passing
+			break;
+		case SKAT_LOOKING:
+			this.setGameState(tableName, GameState.LOOK_INTO_SKAT);
+			break;
+		case GAME_ANNOUNCEMENT:
+			this.setGameState(tableName, GameState.DECLARING);
+			break;
 		case CARD_PLAY:
 			switch (moveInformation.getPosition()) {
 			case FORE_HAND:

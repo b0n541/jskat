@@ -7,7 +7,7 @@ Authors: @JS@
 
 Released: @ReleaseDate@
 
-*/
+ */
 
 package de.jskat.data.iss;
 
@@ -32,7 +32,9 @@ public class ISSMoveInformation {
 	private GameAnnouncement announcement;
 	private Card skat0;
 	private Card skat1;
-	private List<Card> ouvertCards = new ArrayList<Card>();
+	private List<Card> foreHandCards = new ArrayList<Card>();
+	private List<Card> middleHandCards = new ArrayList<Card>();
+	private List<Card> hindHandCards = new ArrayList<Card>();
 	private Card card;
 
 	/**
@@ -43,45 +45,48 @@ public class ISSMoveInformation {
 	public GameAnnouncement getGameAnnouncement() {
 		return this.announcement;
 	}
-	
+
 	/**
 	 * Sets the game announcement
 	 * 
-	 * @param ann Game announcement
+	 * @param ann
+	 *            Game announcement
 	 */
 	public void setGameAnnouncement(GameAnnouncement ann) {
 		this.announcement = ann;
 	}
-	
+
 	/**
 	 * Gets a card from the skat
 	 * 
-	 * @param index Index of card
+	 * @param index
+	 *            Index of card
 	 * @return Card
 	 */
 	public Card getSkat(int index) {
 		// TODO dirty hack
 		Card result = null;
 		if (index == 0) {
-		
+
 			result = this.skat0;
-		}
-		else if (index == 1) {
-			
+		} else if (index == 1) {
+
 			result = this.skat1;
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Sets the skat cards
 	 * 
-	 * @param newSkat0 First card
-	 * @param newSkat1 Second card
+	 * @param newSkat0
+	 *            First card
+	 * @param newSkat1
+	 *            Second card
 	 */
 	public void setSkatCards(Card newSkat0, Card newSkat1) {
-		
+
 		this.skat0 = newSkat0;
 		this.skat1 = newSkat1;
 	}
@@ -92,135 +97,183 @@ public class ISSMoveInformation {
 	 * @return Position of the player
 	 */
 	public MovePlayer getPosition() {
-		
+
 		return this.position;
 	}
 
 	/**
 	 * Sets the position of the player who made the last move
 	 * 
-	 * @param newPosition Position of the player
+	 * @param newPosition
+	 *            Position of the player
 	 */
 	public void setPosition(MovePlayer newPosition) {
-		
+
 		this.position = newPosition;
 	}
-	
+
 	/**
 	 * Clears all player times
 	 */
 	public void clearPlayerTimes() {
-		
+
 		this.playerTimes.clear();
 	}
-	
+
 	/**
 	 * Sets a player times
 	 * 
-	 * @param playerPosition Player position
-	 * @param time Time
+	 * @param playerPosition
+	 *            Player position
+	 * @param time
+	 *            Time
 	 */
 	public void putPlayerTime(Player playerPosition, Double time) {
-		
+
 		this.playerTimes.put(playerPosition, time);
 	}
-	
+
 	/**
 	 * Gets a player time
 	 * 
-	 * @param playerPosition Player position
+	 * @param playerPosition
+	 *            Player position
 	 * @return Time
 	 */
 	public double getPlayerTime(Player playerPosition) {
-		
+
 		return this.playerTimes.get(playerPosition).doubleValue();
 	}
-	
+
 	/**
 	 * Gets the move type
 	 * 
 	 * @return Move type
 	 */
 	public MoveType getType() {
-		
+
 		return this.type;
 	}
-	
+
 	/**
 	 * Sets the move type
 	 * 
-	 * @param newType Move type
+	 * @param newType
+	 *            Move type
 	 */
 	public void setType(MoveType newType) {
-	
+
 		this.type = newType;
 	}
-	
+
 	/**
 	 * Gets the bid value
 	 * 
 	 * @return Bid value
 	 */
 	public int getBidValue() {
-	
+
 		return this.bidValue;
 	}
-	
+
 	/**
 	 * Sets the bid value
 	 * 
-	 * @param newBidValue Bid value
+	 * @param newBidValue
+	 *            Bid value
 	 */
 	public void setBidValue(int newBidValue) {
-	
+
 		this.bidValue = newBidValue;
 	}
-	
+
 	/**
 	 * Gets the played card
 	 * 
 	 * @return Card
 	 */
 	public Card getCard() {
-	
+
 		return this.card;
 	}
-	
+
 	/**
 	 * Sets the played card
 	 * 
 	 * @param newCard
 	 */
 	public void setCard(Card newCard) {
-	
+
 		this.card = newCard;
 	}
 
 	/**
-	 * Clears the ouvert cards
-	 */
-	public void clearOuvertCards() {
-		
-		this.ouvertCards.clear();
-	}
-	
-	/**
-	 * Add an ouvert card
+	 * Clears cards of a player
 	 * 
-	 * @param newCard Card
+	 * @param player
+	 *            Player
 	 */
-	public void addOuvertCard(Card newCard) {
-		
-		this.ouvertCards.add(newCard);
+	public void clearCards(Player player) {
+
+		switch (player) {
+		case FORE_HAND:
+			this.foreHandCards.clear();
+			break;
+		case MIDDLE_HAND:
+			this.middleHandCards.clear();
+			break;
+		case HIND_HAND:
+			this.hindHandCards.clear();
+			break;
+		}
 	}
-	
+
 	/**
-	 * Gets the ouvert cards
+	 * Adds an card to a player
 	 * 
-	 * @return Ouvert cards
+	 * @param player
+	 *            Player
+	 * @param newCard
+	 *            Card
 	 */
-	public List<Card> getOuvertCards() {
-		
-		return this.ouvertCards;
+	public void addCard(Player player, Card newCard) {
+
+		switch (player) {
+		case FORE_HAND:
+			this.foreHandCards.add(newCard);
+			break;
+		case MIDDLE_HAND:
+			this.middleHandCards.add(newCard);
+			break;
+		case HIND_HAND:
+			this.hindHandCards.add(newCard);
+			break;
+		}
+	}
+
+	/**
+	 * Gets cards from a player
+	 * 
+	 * @param player
+	 *            Player
+	 * @return Cards of a player
+	 */
+	public List<Card> getCards(Player player) {
+
+		List<Card> result = null;
+
+		switch (player) {
+		case FORE_HAND:
+			result = this.foreHandCards;
+			break;
+		case MIDDLE_HAND:
+			result = this.middleHandCards;
+			break;
+		case HIND_HAND:
+			result = this.hindHandCards;
+			break;
+		}
+
+		return result;
 	}
 }

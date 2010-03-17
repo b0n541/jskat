@@ -363,7 +363,7 @@ class InputChannel extends Thread {
 			info.setPosition(MovePlayer.HIND_HAND);
 		}
 
-		// TODO Unhandled moves
+		// FIXME Unhandled moves
 		// TI.1 time out
 		String move = params.get(1);
 		log.debug("Move: " + move); //$NON-NLS-1$
@@ -502,9 +502,12 @@ class InputChannel extends Thread {
 
 		info.setSkatCards(skatCard0, skatCard1);
 
-		while (annToken.hasMoreTokens()) {
-			// ouvert cards
-			info.addOuvertCard(Card.getCardFromString(annToken.nextToken()));
+		while (annToken.hasMoreTokens()
+				&& info.getGameAnnouncement().isOuvert()) {
+			// player has shown the cards
+			// ouvert game
+
+			// FIXME show cards
 		}
 	}
 
