@@ -12,8 +12,10 @@ Released: @ReleaseDate@
 package de.jskat.data;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import de.jskat.control.SkatTable;
 
@@ -27,15 +29,20 @@ public class JSkatApplicationData {
 	private Map<String, SkatTable> remoteSkatTables;
 	private String activeTable;
 	private String issLoginName;
+	private Set<String> availableISSPlayer;
 
 	/**
 	 * Contructor
+	 * 
+	 * @param jskatOptions
+	 *            JSkat options
 	 */
 	public JSkatApplicationData(JSkatOptions jskatOptions) {
 		
 		this.options = jskatOptions;
 		this.localSkatTables = new HashMap<String, SkatTable>();
 		this.remoteSkatTables = new HashMap<String, SkatTable>();
+		this.availableISSPlayer = new HashSet<String>();
 	}
 
 	/**
@@ -65,8 +72,8 @@ public class JSkatApplicationData {
 	 * @param newRemoteSkatTable New remote table
 	 */
 	public void addRemoteSkatTables(SkatTable newRemoteSkatTable) {
-		// TODO implement it correctly
-		this.remoteSkatTables.put("Blubb", newRemoteSkatTable);
+		this.remoteSkatTables.put(newRemoteSkatTable.getName(),
+				newRemoteSkatTable);
 	}
 
 	/**
@@ -109,16 +116,61 @@ public class JSkatApplicationData {
 		return this.activeTable;
 	}
 
+	/**
+	 * Gets the resource bundle
+	 * 
+	 * @return Resource bundle
+	 */
 	public ResourceBundle getResourceBundle() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void setIssLoginName(String issLoginName) {
-		this.issLoginName = issLoginName;
+	/**
+	 * Sets the login name on ISS
+	 * 
+	 * @param newISSLoginName
+	 *            Login name
+	 */
+	public void setIssLoginName(String newISSLoginName) {
+		this.issLoginName = newISSLoginName;
 	}
 
+	/**
+	 * Gets the login name on ISS
+	 * 
+	 * @return Login name
+	 */
 	public String getIssLoginName() {
-		return issLoginName;
+		return this.issLoginName;
+	}
+
+	/**
+	 * Gets available player on ISS
+	 * 
+	 * @return Available player
+	 */
+	public Set<String> getAvailableISSPlayer() {
+		return this.availableISSPlayer;
+	}
+
+	/**
+	 * Adds an available player on ISS
+	 * 
+	 * @param newPlayer
+	 *            New player
+	 */
+	public void addAvailableISSPlayer(String newPlayer) {
+		this.availableISSPlayer.add(newPlayer);
+	}
+
+	/**
+	 * Removes a player from the available player on ISS
+	 * 
+	 * @param player
+	 *            Player to be removed
+	 */
+	public void removeAvailableISSPlayer(String player) {
+		this.availableISSPlayer.remove(player);
 	}
 }

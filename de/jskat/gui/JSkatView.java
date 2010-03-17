@@ -11,6 +11,9 @@ Released: @ReleaseDate@
 
 package de.jskat.gui;
 
+import java.util.List;
+import java.util.Set;
+
 import javax.swing.JDialog;
 
 import de.jskat.control.SkatTable;
@@ -120,6 +123,14 @@ public interface JSkatView {
 	 *            Name of the tab panel
 	 */
 	public void closeTabPanel(String name);
+
+	/**
+	 * Gets the players to invite
+	 * 
+	 * @param playerNames
+	 *            Available players
+	 */
+	public List<String> getPlayerForInvitation(Set<String> playerNames);
 
 	/**
 	 * Shows the about dialog

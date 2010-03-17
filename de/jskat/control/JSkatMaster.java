@@ -13,6 +13,7 @@ package de.jskat.control;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -60,7 +61,6 @@ public class JSkatMaster {
 
 	/**
 	 * Creates a new skat table
-	 * 
 	 */
 	public void createTable() {
 		
@@ -81,9 +81,21 @@ public class JSkatMaster {
 		this.data.setActiveTable(table.getName());
 		
 		table.setView(this.view);
-
 	}
 	
+	/**
+	 * Invites players on ISS to the current table
+	 */
+	public void invitePlayer() {
+
+		List<String> player = this.view.getPlayerForInvitation(this.data
+				.getAvailableISSPlayer());
+		for (String currPlayer : player) {
+			getISSController().invitePlayer(this.data.getActiveTable(),
+					this.data.getIssLoginName(), currPlayer);
+		}
+	}
+
 	/**
 	 * Starts a new skat series
 	 */
@@ -529,4 +541,37 @@ public class JSkatMaster {
 		// FIXME distinguish between ISS and local skat table
 		this.issControl.leaveTable(tableName, this.data.getIssLoginName());
 	}
+
+	/**
+	 * Updates ISS player information
+	 * 
+	 * @param playerName
+	 *            Player name
+	 * @param language
+	 *            Language
+	 * @param gamesPlayed
+	 *            Games played
+	 * @param strength
+	 *            Playing strength
+	 */
+	public void updateISSPlayer(String playerName, String language,
+			long gamesPlayed, double strength) {
+
+		this.data.addAvailableISSPlayer(playerName);
+		this.view.updateISSLobbyPlayerList(playerName, language, gamesPlayed,
+				strength);
+	}
+
+	/**
+	 * Removes an ISS player
+	 * 
+	 * @param playerName
+	 *            Player name
+	 */
+	public void removeISSPlayer(String playerName) {
+
+		this.data.removeAvailableISSPlayer(playerName);
+		this.view.removeFromISSLobbyPlayerList(playerName);
+	}
+
 }

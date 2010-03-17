@@ -142,6 +142,10 @@ public enum JSkatAction {
 	 */
 	OBSERVE_ISS_TABLE,
 	/**
+	 * Invite a player on ISS
+	 */
+	INVITE_ISS_PLAYER,
+	/**
 	 * Ready to play
 	 */
 	READY_TO_PLAY,

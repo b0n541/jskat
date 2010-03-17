@@ -32,6 +32,8 @@ class GameStartPanel extends JPanel {
 		this.setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 
 		JPanel panel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
+		panel.add(new JButton(actions.get(JSkatAction.INVITE_ISS_PLAYER)),
+				"center"); //$NON-NLS-1$
 		panel
 				.add(new JButton(actions.get(JSkatAction.READY_TO_PLAY)),
 						"center"); //$NON-NLS-1$

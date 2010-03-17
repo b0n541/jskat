@@ -141,8 +141,7 @@ public class ISSController {
 	public void updateISSPlayerList(String playerName, String language,
 			long gamesPlayed, double strength) {
 
-		this.view.updateISSLobbyPlayerList(playerName, language, gamesPlayed,
-				strength);
+		this.jskat.updateISSPlayer(playerName, language, gamesPlayed, strength);
 	}
 
 	/**
@@ -153,7 +152,7 @@ public class ISSController {
 	 */
 	public void removeISSPlayerFromList(String playerName) {
 
-		this.view.removeFromISSLobbyPlayerList(playerName);
+		this.jskat.removeISSPlayer(playerName);
 	}
 
 	/**

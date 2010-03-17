@@ -16,9 +16,11 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -63,6 +65,7 @@ import de.jskat.gui.action.human.TakeCardFromSkatAction;
 import de.jskat.gui.action.iss.ChangeTableSeatsAction;
 import de.jskat.gui.action.iss.ConnectAction;
 import de.jskat.gui.action.iss.CreateISSTableAction;
+import de.jskat.gui.action.iss.InvitePlayerAction;
 import de.jskat.gui.action.iss.JoinISSTableAction;
 import de.jskat.gui.action.iss.LeaveISSTableAction;
 import de.jskat.gui.action.iss.ObserveISSTableAction;
@@ -193,6 +196,8 @@ public class JSkatViewImpl implements JSkatView {
 		this.actions.put(JSkatAction.TALK_ENABLED, new TalkEnableAction(jskat));
 		this.actions.put(JSkatAction.CHANGE_TABLE_SEATS,
 				new ChangeTableSeatsAction(jskat));
+		this.actions.put(JSkatAction.INVITE_ISS_PLAYER, new InvitePlayerAction(
+				jskat));
 		// Neural network actions
 		this.actions
 				.put(JSkatAction.TRAIN_NEURAL_NETWORKS,
@@ -871,5 +876,28 @@ public class JSkatViewImpl implements JSkatView {
 		}
 
 		this.tabs.remove(panel);
+	}
+
+	/**
+	 * @see JSkatView#getPlayerForInvitation(Set)
+	 */
+	@Override
+	public List<String> getPlayerForInvitation(Set<String> playerNames) {
+
+		List<String> result = null;
+
+		PlayerInvitationPanel invitationPanel = new PlayerInvitationPanel(
+				playerNames);
+		int dialogResult = JOptionPane.showConfirmDialog(this.mainFrame,
+				invitationPanel, "Player invitation",
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+		if (dialogResult == JOptionPane.OK_OPTION) {
+			result = invitationPanel.getPlayer();
+		}
+
+		log.debug("Players to invite: " + result);
+
+		return result;
 	}
 }
