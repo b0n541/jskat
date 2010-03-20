@@ -392,10 +392,11 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#updateISSTable(String, ISSGameStatus)
+	 * @see JSkatView#updateISSTable(String, String, ISSGameStatus)
 	 */
 	@Override
 	public void updateISSTable(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") String playerName,
 			@SuppressWarnings("unused") ISSGameStatus status) {
 		// empty method by indent
 	}
@@ -464,5 +465,15 @@ public class NullView implements JSkatView {
 			@SuppressWarnings("unused") Set<String> playerNames) {
 		// empty method by indent
 		return null;
+	}
+
+	/**
+	 * @see JSkatView#addCards(String, Player, CardList)
+	 */
+	@Override
+	public void addCards(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player player,
+			@SuppressWarnings("unused") CardList cards) {
+		// empty method by indent
 	}
 }

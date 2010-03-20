@@ -32,6 +32,7 @@ import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.data.iss.MovePlayer;
 import de.jskat.data.iss.MoveType;
 import de.jskat.util.Card;
+import de.jskat.util.CardList;
 import de.jskat.util.GameType;
 import de.jskat.util.Player;
 
@@ -85,7 +86,7 @@ class InputChannel extends Thread {
 					try {
 						handleMessage(line);
 					} catch (Exception except) {
-						log.error("Error in ISS protocoll", except); //$NON-NLS-1$
+						log.error("Error in parsing ISS protocoll", except); //$NON-NLS-1$
 						InputChannel.this.issControl.showMessage(
 								JOptionPane.ERROR_MESSAGE,
 								"Error in parsing ISS protocoll.");
@@ -290,9 +291,8 @@ class InputChannel extends Thread {
 			// parse only non empty seats
 			if (!(".".equals(params.get(i * 10 + 5)))) { //$NON-NLS-1$
 				// there is a player
-				status.addPlayer(params.get(i * 10 + 5),
-						parsePlayerStatus(params.subList(i * 10 + 6,
-								i * 10 + 16)));
+				status.addPlayer(parsePlayerStatus(params.subList(i * 10 + 5,
+						i * 10 + 16)));
 			}
 		}
 
@@ -313,15 +313,16 @@ class InputChannel extends Thread {
 
 		ISSPlayerStatus status = new ISSPlayerStatus();
 
-		status.setIP(params.get(0));
-		status.setGamesPlayed(Integer.parseInt(params.get(1)));
-		status.setGamesWon(Integer.parseInt(params.get(2)));
-		status.setLastGameResult(Integer.parseInt(params.get(3)));
-		status.setTotalPoints(Integer.parseInt(params.get(4)));
-		status.setSwitch34(Integer.parseInt(params.get(5)) == 1);
+		status.setName(params.get(0));
+		status.setIP(params.get(1));
+		status.setGamesPlayed(Integer.parseInt(params.get(2)));
+		status.setGamesWon(Integer.parseInt(params.get(3)));
+		status.setLastGameResult(Integer.parseInt(params.get(4)));
+		status.setTotalPoints(Integer.parseInt(params.get(5)));
+		status.setSwitch34(Integer.parseInt(params.get(6)) == 1);
 		// ignore next information, unknown purpose
-		status.setTalkEnabled(Integer.parseInt(params.get(6)) == 1);
-		status.setReadyToPlay(Integer.parseInt(params.get(7)) == 1);
+		status.setTalkEnabled(Integer.parseInt(params.get(8)) == 1);
+		status.setReadyToPlay(Integer.parseInt(params.get(9)) == 1);
 
 		return status;
 	}
@@ -410,10 +411,10 @@ class InputChannel extends Thread {
 					info.setBidValue(Integer.parseInt(move));
 				} else {
 
-					if (move.length() == 96) {
+					if (move.length() == 95) {
 						// card dealing
 						info.setType(MoveType.DEAL);
-						// TODO parse cards
+						info.setDealCards(parseCardDeal(move));
 					} else if (move.length() == 5) {
 						// open skat given to a player
 						info.setType(MoveType.SKAT_LOOKING);
@@ -509,6 +510,36 @@ class InputChannel extends Thread {
 
 			// FIXME show cards
 		}
+	}
+
+	/**
+	 * ??.??.??.??.??.??.??.??.??.??|D9.S9.ST.S8.C9.DT.DQ.CJ.SA.HA|??.??.??.??.?
+	 * ?.??.??.??.??.??|??.??
+	 * 
+	 * ?? - hidden card fore hand cards|middle hand cards|hind hand cards|skat
+	 */
+	List<CardList> parseCardDeal(String move) {
+
+		StringTokenizer handTokens = new StringTokenizer(move, "|"); //$NON-NLS-1$
+		List<CardList> result = new ArrayList<CardList>();
+
+		while (handTokens.hasMoreTokens()) {
+			result.add(parseHand(handTokens.nextToken()));
+		}
+
+		return result;
+	}
+
+	CardList parseHand(String hand) {
+
+		StringTokenizer cardTokens = new StringTokenizer(hand, "."); //$NON-NLS-1$
+		CardList result = new CardList();
+
+		while (cardTokens.hasMoreTokens()) {
+			result.add(Card.getCardFromString(cardTokens.nextToken()));
+		}
+
+		return result;
 	}
 
 	/**

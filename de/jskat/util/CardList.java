@@ -218,26 +218,41 @@ public class CardList extends ArrayList<Card> {
 	 */
 	public void sort(GameType gameType) {
 
-		switch (gameType) {
-		case NULL:
-			sortNullGame();
-			break;
-		case GRAND:
-			sortGrandGame();
-			break;
-		case RAMSCH:
-			sortRamschGame();
-			break;
-		case CLUBS:
-		case SPADES:
-		case HEARTS:
-		case DIAMONDS:
-			sortSuitGame(gameType);
-			break;
-		default:
-			sortGrandGame();
-			break;
+		if (!containsHiddenCards()) {
+			switch (gameType) {
+			case NULL:
+				sortNullGame();
+				break;
+			case GRAND:
+				sortGrandGame();
+				break;
+			case RAMSCH:
+				sortRamschGame();
+				break;
+			case CLUBS:
+			case SPADES:
+			case HEARTS:
+			case DIAMONDS:
+				sortSuitGame(gameType);
+				break;
+			default:
+				sortGrandGame();
+				break;
+			}
 		}
+	}
+
+	private boolean containsHiddenCards() {
+
+		boolean result = false;
+
+		for (Card card : this) {
+			if (null == card) {
+				result = true;
+			}
+		}
+
+		return result;
 	}
 
 	private void sortNullGame() {
@@ -326,17 +341,21 @@ public class CardList extends ArrayList<Card> {
 			for (int j = i + 1; j < this.size(); j++) {
 
 				if (// prefer trump cards
-						(get(j).getSuit() == trumpSuit && get(i).getSuit() != trumpSuit || 
-						 get(j).getSuit() == trumpSuit && get(i).getSuit() == trumpSuit
-						 	&& get(j).getSuitGrandOrder() >= get(i).getSuitGrandOrder())
+				(get(j).getSuit() == trumpSuit && get(i).getSuit() != trumpSuit || get(
+						j).getSuit() == trumpSuit
+						&& get(i).getSuit() == trumpSuit
+						&& get(j).getSuitGrandOrder() >= get(i)
+								.getSuitGrandOrder())
 						||
 						// normal sorting, different suits
-						(get(j).getSuit() != trumpSuit && get(i).getSuit() != trumpSuit
-							&& get(j).getSuit().getSuitOrder() > get(i).getSuit().getSuitOrder()) 
-						||
+						(get(j).getSuit() != trumpSuit
+								&& get(i).getSuit() != trumpSuit && get(j)
+								.getSuit().getSuitOrder() > get(i).getSuit()
+								.getSuitOrder()) ||
 						// normal sorting, same suits
-						(get(j).getSuit() == get(i).getSuit() 
-							&& get(j).getSuitGrandOrder() >= get(i).getSuitGrandOrder())) {
+						(get(j).getSuit() == get(i).getSuit() && get(j)
+								.getSuitGrandOrder() >= get(i)
+								.getSuitGrandOrder())) {
 
 					log.debug("i=" + i + ", j=" + j + ", " + get(i) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 							+ " vs. " + get(j) + ", cards(1): [" + this //$NON-NLS-1$ //$NON-NLS-2$
@@ -346,7 +365,7 @@ public class CardList extends ArrayList<Card> {
 				}
 			}
 		}
-		
+
 		log.debug("result: " + this); //$NON-NLS-1$
 	}
 

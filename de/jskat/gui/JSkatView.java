@@ -39,7 +39,7 @@ public interface JSkatView {
 	 * 
 	 * @return New table name
 	 */
-	public abstract String getNewTableName();
+	public String getNewTableName();
 
 	/**
 	 * Shows a table
@@ -47,7 +47,7 @@ public interface JSkatView {
 	 * @param table
 	 *            Skat table
 	 */
-	public abstract void showTable(SkatTable table);
+	public void showTable(SkatTable table);
 
 	/**
 	 * Opens a new series
@@ -55,12 +55,12 @@ public interface JSkatView {
 	 * @param tableName
 	 *            Table name
 	 */
-	public abstract void startSeries(String tableName);
+	public void startSeries(String tableName);
 
 	/**
 	 * Shows the results of a series
 	 */
-	public abstract void showSeriesResults();
+	public void showSeriesResults();
 
 	/**
 	 * Starts a new game
@@ -68,37 +68,37 @@ public interface JSkatView {
 	 * @param tableName
 	 *            Table name
 	 */
-	public abstract void startGame(String tableName);
+	public void startGame(String tableName);
 
 	/**
 	 * Starts bidding
 	 */
-	public abstract void startBidding();
+	public void startBidding();
 
 	/**
 	 * Starts discarding
 	 */
-	public abstract void startDiscarding();
+	public void startDiscarding();
 
 	/**
 	 * Starts playing
 	 */
-	public abstract void startPlaying();
+	public void startPlaying();
 
 	/**
 	 * Shows the results of a game
 	 */
-	public abstract void showGameResults();
+	public void showGameResults();
 
 	/**
 	 * Shows the login for ISS
 	 */
-	public abstract void showISSLogin();
+	public void showISSLogin();
 
 	/**
 	 * Shows the lobby for ISS
 	 */
-	public abstract void showISSLobby();
+	public void showISSLobby();
 
 	/**
 	 * Creates ISS table
@@ -106,7 +106,7 @@ public interface JSkatView {
 	 * @param name
 	 *            Name of the table
 	 */
-	public abstract void createISSTable(String name);
+	public void createISSTable(String name);
 
 	/**
 	 * Creates a local table panel
@@ -135,29 +135,29 @@ public interface JSkatView {
 	/**
 	 * Shows the about dialog
 	 */
-	public abstract void showAboutMessage();
+	public void showAboutMessage();
 
-    /**
-     * Shows a message dialog
-     * 
-     * @param messageType
-     *            Message type @see {@link JDialog}
-     * @param message
-     *            Message text
-     */
-	public abstract void showMessage(int messageType, String message);
+	/**
+	 * Shows a message dialog
+	 * 
+	 * @param messageType
+	 *            Message type @see {@link JDialog}
+	 * @param message
+	 *            Message text
+	 */
+	public void showMessage(int messageType, String message);
 
 	/**
 	 * Shows the exit dialog
 	 * 
 	 * @return User decision
 	 */
-	public abstract int showExitDialog();
+	public int showExitDialog();
 
 	/**
 	 * Shows preferences dialog
 	 */
-	public abstract void showPreferences();
+	public void showPreferences();
 
 	/**
 	 * Adds a card to a players hand
@@ -169,7 +169,19 @@ public interface JSkatView {
 	 * @param card
 	 *            Card
 	 */
-	public abstract void addCard(String tableName, Player player, Card card);
+	public void addCard(String tableName, Player player, Card card);
+
+	/**
+	 * Adds a list of cards to a players hand
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param player
+	 *            Player
+	 * @param cards
+	 *            List of cards
+	 */
+	public void addCards(String tableName, Player player, CardList cards);
 
 	/**
 	 * Removes a card from a players hand
@@ -181,7 +193,7 @@ public interface JSkatView {
 	 * @param card
 	 *            Card
 	 */
-	public abstract void removeCard(String tableName, Player player, Card card);
+	public void removeCard(String tableName, Player player, Card card);
 
 	/**
 	 * Removes all cards from a players hand
@@ -191,7 +203,7 @@ public interface JSkatView {
 	 * @param player
 	 *            Player
 	 */
-	public abstract void clearHand(String tableName, Player player);
+	public void clearHand(String tableName, Player player);
 
 	/**
 	 * Sets the bid value for a player
@@ -338,7 +350,7 @@ public interface JSkatView {
 	 * @param trickForeHand
 	 *            Trick fore hand
 	 */
-	public abstract void setTrickForeHand(String tableName, Player trickForeHand);
+	public void setTrickForeHand(String tableName, Player trickForeHand);
 
 	/**
 	 * Sets the skat cards
@@ -348,7 +360,7 @@ public interface JSkatView {
 	 * @param skat
 	 *            Skat cards
 	 */
-	public abstract void setSkat(String tableName, CardList skat);
+	public void setSkat(String tableName, CardList skat);
 
 	/**
 	 * Takes a card from the skat
@@ -358,7 +370,7 @@ public interface JSkatView {
 	 * @param card
 	 *            Card
 	 */
-	public abstract void takeCardFromSkat(String tableName, Card card);
+	public void takeCardFromSkat(String tableName, Card card);
 
 	/**
 	 * Puts a card into the skat
@@ -368,12 +380,12 @@ public interface JSkatView {
 	 * @param card
 	 *            Card
 	 */
-	public abstract void putCardIntoSkat(String tableName, Card card);
+	public void putCardIntoSkat(String tableName, Card card);
 
 	/**
 	 * Shows the start dialog for skat series
 	 */
-	public abstract void showStartSkatSeriesDialog();
+	public void showStartSkatSeriesDialog();
 
 	/**
 	 * Updates the client list of the ISS lobby
@@ -387,8 +399,8 @@ public interface JSkatView {
 	 * @param strength
 	 *            Playing strength after ISS evaluation
 	 */
-	public abstract void updateISSLobbyPlayerList(String playerName,
-			String language, long gamesPlayed, double strength);
+	public void updateISSLobbyPlayerList(String playerName, String language,
+			long gamesPlayed, double strength);
 
 	/**
 	 * Removes a client from the list of the ISS lobby
@@ -396,7 +408,7 @@ public interface JSkatView {
 	 * @param playerName
 	 *            Player name
 	 */
-	public abstract void removeFromISSLobbyPlayerList(String playerName);
+	public void removeFromISSLobbyPlayerList(String playerName);
 
 	/**
 	 * Updates the table list of the ISS lobby
@@ -414,16 +426,15 @@ public interface JSkatView {
 	 * @param player3
 	 *            Player 3 (? for free seat)
 	 */
-	public abstract void updateISSLobbyTableList(String tableName,
-			int maxPlayers, long gamesPlayed, String player1, String player2,
-			String player3);
+	public void updateISSLobbyTableList(String tableName, int maxPlayers,
+			long gamesPlayed, String player1, String player2, String player3);
 
 	/**
 	 * Removes a table from the table list of the ISS lobby
 	 * 
 	 * @param tableName
 	 */
-	public abstract void removeFromISSLobbyTableList(String tableName);
+	public void removeFromISSLobbyTableList(String tableName);
 
 	/**
 	 * Appends a new chat message to a chat
@@ -433,7 +444,7 @@ public interface JSkatView {
 	 * @param message
 	 *            Message
 	 */
-	public abstract void appendISSChatMessage(ChatMessageType messageType,
+	public void appendISSChatMessage(ChatMessageType messageType,
 			ISSChatMessage message);
 
 	/**
@@ -444,18 +455,20 @@ public interface JSkatView {
 	 * @param status
 	 *            New table state
 	 */
-	public abstract void updateISSTable(String tableName,
-			ISSTablePanelStatus status);
+	public void updateISSTable(String tableName, ISSTablePanelStatus status);
 
 	/**
 	 * Updates an ISS table
 	 * 
 	 * @param tableName
 	 *            Table name
+	 * @param playerName
+	 *            Player name
 	 * @param status
 	 *            New game state
 	 */
-	public abstract void updateISSTable(String tableName, ISSGameStatus status);
+	public void updateISSTable(String tableName, String playerName,
+			ISSGameStatus status);
 
 	/**
 	 * Updates move information
@@ -465,6 +478,6 @@ public interface JSkatView {
 	 * @param moveInformation
 	 *            Move information
 	 */
-	public abstract void updateISSMove(String tableName,
+	public void updateISSMove(String tableName,
 			ISSMoveInformation moveInformation);
 }

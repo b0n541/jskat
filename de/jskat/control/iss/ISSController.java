@@ -18,6 +18,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.control.JSkatMaster;
+import de.jskat.data.JSkatApplicationData;
 import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.data.iss.ISSGameStatus;
 import de.jskat.data.iss.ISSLoginCredentials;
@@ -35,6 +36,7 @@ public class ISSController {
 
 	private JSkatMaster jskat;
 	private JSkatView view;
+	private JSkatApplicationData data;
 
 	private Connector issConnect;
 
@@ -43,12 +45,23 @@ public class ISSController {
 	 * 
 	 * @param controller
 	 *            JSkat master controller
-	 * @param newView
-	 *            View for ISS controller
+	 * @param newData
+	 *            Application data
 	 */
-	public ISSController(JSkatMaster controller, JSkatView newView) {
+	public ISSController(JSkatMaster controller, JSkatApplicationData newData) {
 
 		this.jskat = controller;
+		this.data = newData;
+	}
+
+	/**
+	 * Sets the view (MVC)
+	 * 
+	 * @param newView
+	 *            View
+	 */
+	public void setView(JSkatView newView) {
+
 		this.view = newView;
 	}
 
@@ -335,7 +348,8 @@ public class ISSController {
 	 */
 	public void updateISSGame(String tableName, ISSGameStatus status) {
 
-		this.view.updateISSTable(tableName, status);
+		this.view
+				.updateISSTable(tableName, this.data.getIssLoginName(), status);
 	}
 
 	/**

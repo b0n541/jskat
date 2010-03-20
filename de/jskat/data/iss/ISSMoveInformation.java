@@ -11,13 +11,13 @@ Released: @ReleaseDate@
 
 package de.jskat.data.iss;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import de.jskat.data.GameAnnouncement;
 import de.jskat.util.Card;
+import de.jskat.util.CardList;
 import de.jskat.util.Player;
 
 /**
@@ -32,9 +32,9 @@ public class ISSMoveInformation {
 	private GameAnnouncement announcement;
 	private Card skat0;
 	private Card skat1;
-	private List<Card> foreHandCards = new ArrayList<Card>();
-	private List<Card> middleHandCards = new ArrayList<Card>();
-	private List<Card> hindHandCards = new ArrayList<Card>();
+	private CardList foreHandCards = new CardList();
+	private CardList middleHandCards = new CardList();
+	private CardList hindHandCards = new CardList();
 	private Card card;
 
 	/**
@@ -252,15 +252,30 @@ public class ISSMoveInformation {
 	}
 
 	/**
+	 * Sets all cards after dealing, list contains cards from fore hand, middle
+	 * hand, hind hand and skat
+	 * 
+	 * @param deal
+	 */
+	public void setDealCards(List<CardList> deal) {
+
+		this.foreHandCards = deal.get(0);
+		this.middleHandCards = deal.get(1);
+		this.hindHandCards = deal.get(2);
+		this.skat0 = deal.get(3).get(0);
+		this.skat1 = deal.get(3).get(1);
+	}
+
+	/**
 	 * Gets cards from a player
 	 * 
 	 * @param player
 	 *            Player
 	 * @return Cards of a player
 	 */
-	public List<Card> getCards(Player player) {
+	public CardList getCards(Player player) {
 
-		List<Card> result = null;
+		CardList result = null;
 
 		switch (player) {
 		case FORE_HAND:

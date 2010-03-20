@@ -56,7 +56,7 @@ public class SkatTablePanel extends JSkatTabPanel {
 	protected HandPanel hindHand;
 	protected OpponentPanel leftOpponentPanel;
 	protected OpponentPanel rightOpponentPanel;
-	PlayerPanel playerPanel;
+	protected PlayerPanel playerPanel;
 	protected GameInformationPanel gameInfoPanel;
 	protected JPanel gameContextPanel;
 	protected Map<String, JPanel> contextPanels;
@@ -92,7 +92,7 @@ public class SkatTablePanel extends JSkatTabPanel {
 	protected void initPanel() {
 
 		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		
+
 		this.contextPanels = new HashMap<String, JPanel>();
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
@@ -146,13 +146,16 @@ public class SkatTablePanel extends JSkatTabPanel {
 		this.gameInfoPanel = getGameInfoPanel();
 		panel.add(this.gameInfoPanel, "span 2, growx, align center, wrap"); //$NON-NLS-1$
 		this.leftOpponentPanel = getOpponentPanel();
-		panel.add(this.leftOpponentPanel, "width 50%, growx, growy, hmin 20%, align left"); //$NON-NLS-1$
+		panel.add(this.leftOpponentPanel,
+				"width 50%, growx, growy, hmin 20%, align left"); //$NON-NLS-1$
 		this.rightOpponentPanel = getOpponentPanel();
-		panel.add(this.rightOpponentPanel, "width 50%, growx, growy, hmin 20%, align right, wrap"); //$NON-NLS-1$
+		panel.add(this.rightOpponentPanel,
+				"width 50%, growx, growy, hmin 20%, align right, wrap"); //$NON-NLS-1$
 		panel.add(this.getContextPanel(),
 				"span 2, growx, growy, align center, wrap"); //$NON-NLS-1$
 		this.playerPanel = getPlayerPanel();
-		panel.add(this.playerPanel, "span 2, growx, growy, hmin 20%, align center, wrap"); //$NON-NLS-1$
+		panel.add(this.playerPanel,
+				"span 2, growx, growy, hmin 20%, align center, wrap"); //$NON-NLS-1$
 
 		return panel;
 	}
@@ -174,36 +177,35 @@ public class SkatTablePanel extends JSkatTabPanel {
 			this.gameContextPanel.remove(this.contextPanels.get(name));
 			this.contextPanels.remove(name);
 		}
-		
+
 		this.contextPanels.put(name, panel);
 		this.gameContextPanel.add(panel, name);
 	}
-	
+
 	private JPanel getContextPanel() {
 
 		this.gameContextPanel = new JPanel();
 		this.gameContextPanel.setOpaque(false);
 		this.gameContextPanel.setLayout(new CardLayout());
-		
+
 		addContextPanel(new GameStartPanel(
 				(StartSkatSeriesAction) getActionMap().get(
 						JSkatAction.START_LOCAL_SERIES)),
 				ContextPanelTypes.START_SERIES.toString());
 
 		this.biddingPanel = new BiddingPanel(getActionMap());
-		addContextPanel(this.biddingPanel, ContextPanelTypes.BIDDING
-				.toString());
+		addContextPanel(this.biddingPanel, ContextPanelTypes.BIDDING.toString());
 
 		this.gameContextPanel.add(new LookIntoSkatPanel(this),
 				ContextPanelTypes.LOOK_INTO_SKAT.toString());
 
 		this.discardPanel = new DiscardPanel(this, this.bitmaps, 4);
-		addContextPanel(this.discardPanel,
-				ContextPanelTypes.DISCARDING.toString());
+		addContextPanel(this.discardPanel, ContextPanelTypes.DISCARDING
+				.toString());
 
 		this.gameAnnouncePanel = new GameAnnouncePanel(this, this.strings);
-		addContextPanel(this.gameAnnouncePanel,
-				ContextPanelTypes.DECLARING.toString());
+		addContextPanel(this.gameAnnouncePanel, ContextPanelTypes.DECLARING
+				.toString());
 
 		JPanel trickHoldingPanel = new JPanel(new MigLayout("fill", "fill", //$NON-NLS-1$ //$NON-NLS-2$
 				"fill")); //$NON-NLS-1$
@@ -211,8 +213,8 @@ public class SkatTablePanel extends JSkatTabPanel {
 		trickHoldingPanel.add(this.lastTrickPanel, "width 25%"); //$NON-NLS-1$
 		this.trickPanel = new TrickPlayPanel(this.bitmaps);
 		trickHoldingPanel.add(this.trickPanel, "grow"); //$NON-NLS-1$
-		addContextPanel(trickHoldingPanel,
-				ContextPanelTypes.TRICK_PLAYING.toString());
+		addContextPanel(trickHoldingPanel, ContextPanelTypes.TRICK_PLAYING
+				.toString());
 
 		addContextPanel(new GameOverPanel(
 				(ContinueSkatSeriesAction) getActionMap().get(
@@ -558,7 +560,8 @@ public class SkatTablePanel extends JSkatTabPanel {
 	/**
 	 * Sets maximum number of players
 	 * 
-	 * @param maxPlayers Maximum number of players
+	 * @param maxPlayers
+	 *            Maximum number of players
 	 */
 	protected void setMaxPlayers(int maxPlayers) {
 
@@ -582,7 +585,9 @@ public class SkatTablePanel extends JSkatTabPanel {
 		}
 
 		if (panel != null) {
-			panel.setPlayerName(name);
+			if (name != null) {
+				panel.setPlayerName(name);
+			}
 			panel.setPlayerTime(time);
 		}
 	}
