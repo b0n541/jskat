@@ -352,20 +352,19 @@ class InputChannel extends Thread {
 		log.debug("Move player: " + movePlayer); //$NON-NLS-1$
 		if ("w".equals(movePlayer)) { //$NON-NLS-1$
 			// world move
-			info.setPosition(MovePlayer.WORLD);
+			info.setMovePlayer(MovePlayer.WORLD);
 		} else if ("0".equals(movePlayer)) { //$NON-NLS-1$
 			// fore hand move
-			info.setPosition(MovePlayer.FORE_HAND);
+			info.setMovePlayer(MovePlayer.FORE_HAND);
 		} else if ("1".equals(movePlayer)) { //$NON-NLS-1$
 			// middle hand move
-			info.setPosition(MovePlayer.MIDDLE_HAND);
+			info.setMovePlayer(MovePlayer.MIDDLE_HAND);
 		} else if ("2".equals(movePlayer)) { //$NON-NLS-1$
 			// hind hand move
-			info.setPosition(MovePlayer.HIND_HAND);
+			info.setMovePlayer(MovePlayer.HIND_HAND);
 		}
 
 		// FIXME Unhandled moves
-		// TI.1 time out
 		String move = params.get(1);
 		log.debug("Move: " + move); //$NON-NLS-1$
 		if ("y".equals(move)) { //$NON-NLS-1$
@@ -383,6 +382,7 @@ class InputChannel extends Thread {
 		} else if (move.startsWith("TI.")) { //$NON-NLS-1$
 			// time out for player
 			info.setType(MoveType.TIME_OUT);
+			info.setTimeOutPlayer(parseTimeOut(move));
 		} else {
 			// extensive parsing needed
 
@@ -537,6 +537,28 @@ class InputChannel extends Thread {
 
 		while (cardTokens.hasMoreTokens()) {
 			result.add(Card.getCardFromString(cardTokens.nextToken()));
+		}
+
+		return result;
+	}
+
+	/**
+	 * TI.0
+	 */
+	Player parseTimeOut(String timeOut) {
+
+		Player result = null;
+
+		switch (timeOut.charAt(3)) {
+		case '0':
+			result = Player.FORE_HAND;
+			break;
+		case '1':
+			result = Player.MIDDLE_HAND;
+			break;
+		case '2':
+			result = Player.HIND_HAND;
+			break;
 		}
 
 		return result;

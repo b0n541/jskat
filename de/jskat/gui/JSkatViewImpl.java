@@ -824,12 +824,16 @@ public class JSkatViewImpl implements JSkatView {
 					.getCards(Player.MIDDLE_HAND));
 			this.addCards(tableName, Player.HIND_HAND, moveInformation
 					.getCards(Player.HIND_HAND));
+			this.setGameState(tableName, GameState.BIDDING);
 			break;
 		case BID:
 		case PASS:
 			this.setGameState(tableName, GameState.BIDDING);
+			this.setBid(tableName, getPlayer(moveInformation.getMovePlayer()),
+					moveInformation.getBidValue());
 			// TODO show whos bidding or passing
 			break;
+		case SKAT_REQUEST:
 		case SKAT_LOOKING:
 			this.setGameState(tableName, GameState.LOOK_INTO_SKAT);
 			break;
@@ -837,23 +841,15 @@ public class JSkatViewImpl implements JSkatView {
 			this.setGameState(tableName, GameState.DECLARING);
 			break;
 		case CARD_PLAY:
-			switch (moveInformation.getPosition()) {
-			case FORE_HAND:
-				this.playTrickCard(tableName, Player.FORE_HAND, moveInformation
-						.getCard());
-				break;
-			case MIDDLE_HAND:
-				this.playTrickCard(tableName, Player.MIDDLE_HAND,
-						moveInformation.getCard());
-				break;
-			case HIND_HAND:
-				this.playTrickCard(tableName, Player.HIND_HAND, moveInformation
-						.getCard());
-				break;
-			}
+			this.playTrickCard(tableName, getPlayer(moveInformation
+					.getMovePlayer()), moveInformation.getCard());
+			break;
+		case TIME_OUT:
+			// TODO show time out message box
+			break;
 		}
 
-		if (moveInformation.getPosition() != MovePlayer.WORLD) {
+		if (moveInformation.getMovePlayer() != MovePlayer.WORLD) {
 			// dirty hack
 			SkatTablePanel table = this.tables.get(tableName);
 			table.setPlayerInformation(HandPanelType.PLAYER, null,
@@ -867,10 +863,30 @@ public class JSkatViewImpl implements JSkatView {
 		}
 	}
 
+	Player getPlayer(MovePlayer movePlayer) {
+
+		Player result = null;
+
+		switch (movePlayer) {
+		case FORE_HAND:
+			result = Player.FORE_HAND;
+			break;
+		case HIND_HAND:
+			result = Player.MIDDLE_HAND;
+			break;
+		case MIDDLE_HAND:
+			result = Player.HIND_HAND;
+			break;
+		case WORLD:
+			break;
+		}
+
+		return result;
+	}
+
 	/**
 	 * @see JSkatView#playTrickCard(String, Player, Card)
 	 */
-
 	public void playTrickCard(String tableName, Player position, Card card) {
 
 		this.removeCard(tableName, position, card);

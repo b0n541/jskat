@@ -25,7 +25,7 @@ import de.jskat.util.Player;
  */
 public class ISSMoveInformation {
 
-	private MovePlayer position;
+	private MovePlayer movePlayer;
 	private Map<Player, Double> playerTimes = new HashMap<Player, Double>();
 	private MoveType type;
 	private int bidValue;
@@ -36,6 +36,7 @@ public class ISSMoveInformation {
 	private CardList middleHandCards = new CardList();
 	private CardList hindHandCards = new CardList();
 	private Card card;
+	private Player timeOutPlayer;
 
 	/**
 	 * Gets the game announcement
@@ -92,24 +93,24 @@ public class ISSMoveInformation {
 	}
 
 	/**
-	 * Gets the position of the player who made the last move
+	 * Gets the player who made the last move
 	 * 
 	 * @return Position of the player
 	 */
-	public MovePlayer getPosition() {
+	public MovePlayer getMovePlayer() {
 
-		return this.position;
+		return this.movePlayer;
 	}
 
 	/**
-	 * Sets the position of the player who made the last move
+	 * Sets the player who made the last move
 	 * 
-	 * @param newPosition
+	 * @param newMovePlayer
 	 *            Position of the player
 	 */
-	public void setPosition(MovePlayer newPosition) {
+	public void setMovePlayer(MovePlayer newMovePlayer) {
 
-		this.position = newPosition;
+		this.movePlayer = newMovePlayer;
 	}
 
 	/**
@@ -290,5 +291,26 @@ public class ISSMoveInformation {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Sets the time out player
+	 * 
+	 * @param newTimeOutPlayer
+	 *            Time out player
+	 */
+	public void setTimeOutPlayer(Player newTimeOutPlayer) {
+
+		this.timeOutPlayer = newTimeOutPlayer;
+	}
+
+	/**
+	 * Gets the time out player
+	 * 
+	 * @return Time out player
+	 */
+	public Player getTimeOutPlayer() {
+
+		return this.timeOutPlayer;
 	}
 }
