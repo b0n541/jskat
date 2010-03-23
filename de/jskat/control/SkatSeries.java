@@ -31,7 +31,6 @@ public class SkatSeries extends JSkatThread {
 
 	private static Log log = LogFactory.getLog(SkatSeries.class);
 
-
 	private int maxSleep = 0;
 	private SkatSeriesData data;
 	private int roundsToGo = 0;
@@ -68,10 +67,10 @@ public class SkatSeries extends JSkatThread {
 	public void setPlayer(List<JSkatPlayer> newPlayer) {
 
 		for (JSkatPlayer currPlayer : newPlayer) {
-		
+
 			this.player.add(currPlayer);
 		}
-		
+
 		log.debug("Player order: " + this.player); //$NON-NLS-1$
 	}
 
@@ -142,7 +141,7 @@ public class SkatSeries extends JSkatThread {
 					log.debug("Game ended: join"); //$NON-NLS-1$
 
 					sleep(this.maxSleep);
-					
+
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -167,20 +166,20 @@ public class SkatSeries extends JSkatThread {
 	}
 
 	private boolean isHumanPlayerInvolved() {
-		
+
 		boolean result = false;
-		
+
 		for (JSkatPlayer currPlayer : this.player) {
-			
+
 			if (currPlayer instanceof HumanPlayer) {
-				
+
 				result = true;
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Gets the state of the series
 	 * 

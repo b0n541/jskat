@@ -53,6 +53,7 @@ import de.jskat.data.iss.ISSMoveInformation;
 import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.data.iss.MovePlayer;
 import de.jskat.gui.action.JSkatAction;
+import de.jskat.gui.action.human.ContinueSkatSeriesAction;
 import de.jskat.gui.action.human.DiscardAction;
 import de.jskat.gui.action.human.GameAnnounceAction;
 import de.jskat.gui.action.human.HoldBidAction;
@@ -75,7 +76,6 @@ import de.jskat.gui.action.iss.ShowLoginPanelAction;
 import de.jskat.gui.action.iss.TalkEnableAction;
 import de.jskat.gui.action.main.AboutAction;
 import de.jskat.gui.action.main.ChangeActiveTableAction;
-import de.jskat.gui.action.main.ContinueSkatSeriesAction;
 import de.jskat.gui.action.main.CreateTableAction;
 import de.jskat.gui.action.main.ExitAction;
 import de.jskat.gui.action.main.HelpAction;
@@ -548,7 +548,22 @@ public class JSkatViewImpl implements JSkatView {
 
 	public void setGameState(String tableName, GameState state) {
 
+		setActions(state);
 		this.tables.get(tableName).setGameState(state);
+	}
+
+	void setActions(GameState state) {
+
+		switch (state) {
+		case NEW_GAME:
+			this.actions.get(JSkatAction.CONTINUE_LOCAL_SERIES).setEnabled(
+					false);
+			break;
+		case GAME_OVER:
+			this.actions.get(JSkatAction.CONTINUE_LOCAL_SERIES)
+					.setEnabled(true);
+			break;
+		}
 	}
 
 	/**

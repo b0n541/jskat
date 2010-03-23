@@ -35,7 +35,7 @@ import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameState;
 import de.jskat.gui.action.JSkatAction;
-import de.jskat.gui.action.main.ContinueSkatSeriesAction;
+import de.jskat.gui.action.human.ContinueSkatSeriesAction;
 import de.jskat.gui.action.main.StartSkatSeriesAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.util.Card;
@@ -420,9 +420,11 @@ public class SkatTablePanel extends JSkatTabPanel {
 		if (panelType == ContextPanelTypes.DISCARDING) {
 
 			this.discardPanel.resetPanel();
+
 		} else if (panelType == ContextPanelTypes.DECLARING) {
 
 			this.gameAnnouncePanel.resetPanel();
+
 		}
 
 		((CardLayout) this.gameContextPanel.getLayout()).show(

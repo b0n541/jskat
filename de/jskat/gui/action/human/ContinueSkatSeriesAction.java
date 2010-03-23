@@ -9,14 +9,13 @@ Released: @ReleaseDate@
 
  */
 
-package de.jskat.gui.action.main;
+package de.jskat.gui.action.human;
 
 import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.ImageIcon;
 
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;

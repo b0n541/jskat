@@ -15,7 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
-import de.jskat.gui.action.main.ContinueSkatSeriesAction;
+import de.jskat.gui.action.human.ContinueSkatSeriesAction;
 
 class GameOverPanel extends JPanel {
 
