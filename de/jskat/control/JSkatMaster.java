@@ -43,6 +43,7 @@ public class JSkatMaster {
 	private JSkatOptions options;
 	private JSkatApplicationData data;
 	private JSkatView view;
+	private HumanPlayer human;
 
 	private ISSController issControl;
 
@@ -58,6 +59,8 @@ public class JSkatMaster {
 		this.options = jskatOptions;
 
 		this.issControl = new ISSController(this, this.data);
+
+		this.human = new HumanPlayer();
 	}
 
 	/**
@@ -150,7 +153,8 @@ public class JSkatMaster {
 			player = getPlayerInstanceFromName("de.jskat.ai.mjl.AIPlayerMJL"); //$NON-NLS-1$
 			break;
 		case HUMAN:
-			HumanPlayer human = new HumanPlayer();
+			HumanPlayer human = this.human;
+			// FIXME this won't work on multiple tables
 			human.setView(this.view);
 			player = human;
 			break;
@@ -431,7 +435,7 @@ public class JSkatMaster {
 
 		SkatTable table = this.data.getSkatTable(this.data.getActiveTable());
 
-		table.getHuman().actionPerformed(event);
+		human.actionPerformed(event);
 	}
 
 	/**

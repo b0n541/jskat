@@ -858,8 +858,6 @@ public class JSkatViewImpl implements JSkatView {
 					moveInformation.getPlayerTime(Player.MIDDLE_HAND));
 			table.setPlayerInformation(HandPanelType.RIGHT_OPPONENT, null,
 					moveInformation.getPlayerTime(Player.HIND_HAND));
-
-			table.setContextPanel(ContextPanelTypes.TRICK_PLAYING);
 		}
 	}
 

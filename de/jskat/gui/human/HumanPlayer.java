@@ -31,32 +31,31 @@ import de.jskat.util.CardList;
 /**
  * Human player
  */
-public class HumanPlayer extends AbstractJSkatPlayer
-							implements ActionListener {
+public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 
 	private static Log log = LogFactory.getLog(HumanPlayer.class);
 
-    private Idler idler = null;
-    
-    private JSkatView view = null;
-    
-	private boolean holdBid;
-    private int bidValue;
-    private boolean lookIntoSkat;
-    private CardList discardSkat;
-    private GameAnnouncement gameAnnouncement;
-    private Card nextCard;
+	private Idler idler = null;
 
-    /**
-     * Sets the view
-     * 
-     * @param newView
-     */
-    public void setView(JSkatView newView) {
-    	
-    	this.view = newView;
-    }
-    
+	private JSkatView view = null;
+
+	private boolean holdBid;
+	private int bidValue;
+	private boolean lookIntoSkat;
+	private CardList discardSkat;
+	private GameAnnouncement gameAnnouncement;
+	private Card nextCard;
+
+	/**
+	 * Sets the view
+	 * 
+	 * @param newView
+	 */
+	public void setView(JSkatView newView) {
+
+		this.view = newView;
+	}
+
 	/**
 	 * @see JSkatPlayer#isAIPlayer()
 	 */
@@ -66,16 +65,16 @@ public class HumanPlayer extends AbstractJSkatPlayer
 		return false;
 	}
 
-    /**
-     * @see JSkatPlayer#announceGame()
-     */
+	/**
+	 * @see JSkatPlayer#announceGame()
+	 */
 	@Override
 	public GameAnnouncement announceGame() {
-		
+
 		log.debug("Waiting for human game announcing..."); //$NON-NLS-1$
-		
+
 		waitForUserInput();
-		
+
 		return this.gameAnnouncement;
 	}
 
@@ -84,20 +83,19 @@ public class HumanPlayer extends AbstractJSkatPlayer
 	 */
 	@Override
 	public int bidMore(int nextBidValue) {
-		
+
 		log.debug("Waiting for human next bid value..."); //$NON-NLS-1$
-		
+
 		waitForUserInput();
-		
+
 		if (this.holdBid) {
-			
+
 			this.bidValue = nextBidValue;
-		}
-		else {
-			
+		} else {
+
 			this.bidValue = -1;
 		}
-		
+
 		return this.bidValue;
 	}
 
@@ -106,11 +104,11 @@ public class HumanPlayer extends AbstractJSkatPlayer
 	 */
 	@Override
 	public CardList discardSkat() {
-		
+
 		log.debug("Waiting for human discarding..."); //$NON-NLS-1$
-		
+
 		waitForUserInput();
-		
+
 		return this.discardSkat;
 	}
 
@@ -119,13 +117,13 @@ public class HumanPlayer extends AbstractJSkatPlayer
 	 */
 	@Override
 	public void preparateForNewGame() {
-		
+
 		this.holdBid = false;
-	    this.bidValue = 0;
-	    this.lookIntoSkat = false;
-	    this.discardSkat = null;
-	    this.gameAnnouncement = null;
-	    this.nextCard = null;
+		this.bidValue = 0;
+		this.lookIntoSkat = false;
+		this.discardSkat = null;
+		this.gameAnnouncement = null;
+		this.nextCard = null;
 	}
 
 	/**
@@ -141,11 +139,11 @@ public class HumanPlayer extends AbstractJSkatPlayer
 	 */
 	@Override
 	public boolean holdBid(int currBidValue) {
-		
+
 		log.debug("Waiting for human holding bid..."); //$NON-NLS-1$
-		
+
 		waitForUserInput();
-		
+
 		return this.holdBid;
 	}
 
@@ -154,9 +152,9 @@ public class HumanPlayer extends AbstractJSkatPlayer
 	 */
 	@Override
 	public boolean lookIntoSkat() {
-		
+
 		log.debug("Waiting for human looking into skat..."); //$NON-NLS-1$
-		
+
 		waitForUserInput();
 
 		return this.lookIntoSkat;
@@ -167,11 +165,11 @@ public class HumanPlayer extends AbstractJSkatPlayer
 	 */
 	@Override
 	public Card playCard() {
-		
+
 		log.debug("Waiting for human playing next card..."); //$NON-NLS-1$
-		
+
 		waitForUserInput();
-		
+
 		return this.nextCard;
 	}
 
@@ -179,10 +177,10 @@ public class HumanPlayer extends AbstractJSkatPlayer
 	 * Starts waiting for user input
 	 */
 	public void waitForUserInput() {
-		
+
 		this.idler = new Idler();
 		this.idler.setMonitor(this);
-		
+
 		this.idler.start();
 		try {
 			this.idler.join();
@@ -191,134 +189,130 @@ public class HumanPlayer extends AbstractJSkatPlayer
 			e.printStackTrace();
 		}
 	}
-	
+
 	/**
-	 *  @see ActionListener#actionPerformed(ActionEvent)
+	 * @see ActionListener#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+
 		Object source = e.getSource();
 		String command = e.getActionCommand();
 		boolean interrupt = true;
-		
+
 		if (JSkatAction.PASS_BID.toString().equals(command)) {
 			// player passed
 			this.holdBid = false;
-		}
-		else if (JSkatAction.HOLD_BID.toString().equals(command)) {
+		} else if (JSkatAction.HOLD_BID.toString().equals(command)) {
 			// player hold bid
 			this.holdBid = true;
-		}
-		else if (JSkatAction.LOOK_INTO_SKAT.toString().equals(command)) {
+		} else if (JSkatAction.LOOK_INTO_SKAT.toString().equals(command)) {
 			// player wants to look into the skat
 			this.lookIntoSkat = true;
-		}
-		else if (JSkatAction.PLAY_HAND_GAME.toString().equals(command)) {
+		} else if (JSkatAction.PLAY_HAND_GAME.toString().equals(command)) {
 			// player wants to play a hand game
 			this.lookIntoSkat = false;
-		}
-		else if (JSkatAction.DISCARD_CARDS.toString().equals(command)) {
-			
+		} else if (JSkatAction.DISCARD_CARDS.toString().equals(command)) {
+
 			if (source instanceof CardList) {
 				// player discarded cards
 				this.discardSkat = (CardList) source;
-				
+
 				this.cards.remove(this.discardSkat.get(0));
 				this.cards.remove(this.discardSkat.get(1));
-			}
-			else {
-				
+			} else {
+
 				log.error("Wrong source for " + command); //$NON-NLS-1$
 				interrupt = false;
 			}
-		}
-		else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
+		} else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
 
 			if (source instanceof JButton) {
 				log.debug("ONLY JBUTTON"); //$NON-NLS-1$
 				interrupt = false;
-			}
-			else {
+			} else {
 				// player did game announcement
 				this.gameAnnouncement = (GameAnnouncement) source;
 			}
-		}
-		else if (JSkatAction.PLAY_CARD.toString().equals(command) &&
-					source instanceof Card) {
+		} else if (JSkatAction.PLAY_CARD.toString().equals(command)
+				&& source instanceof Card) {
 			// player played card
 			// check card first
 			Card card = (Card) source;
-			if (this.getPlayableCards(this.knowledge.getTrickCards()).contains(card)) {
+			if (this.getPlayableCards(this.knowledge.getTrickCards()).contains(
+					card)) {
 				// card is playable
 				this.nextCard = card;
-			}
-			else {
-				
+			} else {
+
 				log.debug("Card " + card + " is not allowed to be played..."); //$NON-NLS-1$ //$NON-NLS-2$
-				this.view.showMessage(JOptionPane.ERROR_MESSAGE, "Card " + card + " is not allowed to be played!");
+				// FIXME this must be deleted
+				// it's GUI code
+				this.view.showMessage(JOptionPane.ERROR_MESSAGE, "Card " + card
+						+ " is not allowed to be played!");
 				interrupt = false;
 			}
+		} else {
+
+			log
+					.error("Unknown action event occured: " + command + " from " + source); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		else {
-			
-			log.error("Unknown action event occured: " + command + " from " + source); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-		
+
 		if (interrupt) {
-		
+
 			this.idler.interrupt();
 		}
 	}
 
-/*-------------------------------------------------------------------
- * Inner class
- *-------------------------------------------------------------------*/
-	
-    /**
-     * Protected class implementing the waiting thread for user input
-     */
-    protected class Idler extends Thread {
+	/*-------------------------------------------------------------------
+	 * Inner class
+	 *-------------------------------------------------------------------*/
 
-    	/**
-    	 * Sets the monitoring object
-    	 * 
-    	 * @param newMonitor Monitor
-    	 */
-    	public void setMonitor(Object newMonitor) {
-    		
-    		this.monitor = newMonitor;
-    	}
-    	
-    	/**
-    	 * Stops the waiting
-    	 */
-    	public void stopWaiting() {
-    		
-    		this.doWait = false;
-    	}
-    	
-    	/**
-    	 * @see Thread#run()
-    	 */
-    	@Override
+	/**
+	 * Protected class implementing the waiting thread for user input
+	 */
+	protected class Idler extends Thread {
+
+		/**
+		 * Sets the monitoring object
+		 * 
+		 * @param newMonitor
+		 *            Monitor
+		 */
+		public void setMonitor(Object newMonitor) {
+
+			this.monitor = newMonitor;
+		}
+
+		/**
+		 * Stops the waiting
+		 */
+		public void stopWaiting() {
+
+			this.doWait = false;
+		}
+
+		/**
+		 * @see Thread#run()
+		 */
+		@Override
 		public void run() {
-    		
-    		synchronized(this.monitor) {
-    			
-    			while(this.doWait) {
-	    			try {
+
+			synchronized (this.monitor) {
+
+				while (this.doWait) {
+					try {
 						this.monitor.wait();
 					} catch (InterruptedException e) {
 						this.doWait = false;
 					}
-    			}
-    		}
-    	}
-    	
-    	private boolean doWait = true;
-    	private Object monitor = null;
-    }
+				}
+			}
+		}
+
+		private boolean doWait = true;
+		private Object monitor = null;
+	}
 
 	/**
 	 * @see de.jskat.ai.AbstractJSkatPlayer#startGame()
@@ -326,6 +320,6 @@ public class HumanPlayer extends AbstractJSkatPlayer
 	@Override
 	protected void startGame() {
 		// CHECK Auto-generated method stub
-		
+
 	}
 }
