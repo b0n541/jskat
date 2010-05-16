@@ -27,18 +27,23 @@ public abstract class AbstractJSkatAction extends AbstractAction {
 	/**
 	 * Constructor
 	 * 
-	 * @param controller JSkat master
+	 * @param controller
+	 *            JSkat master
 	 */
 	public AbstractJSkatAction(JSkatMaster controller) {
-		
+
 		this.jskat = controller;
 	}
-	
+
 	/**
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */
-	public abstract void actionPerformed(ActionEvent e);
-	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+
+		this.jskat.takeCardFromSkat(e);
+	}
+
 	/**
 	 * Controller class
 	 */

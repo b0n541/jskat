@@ -31,22 +31,21 @@ public class DiscardAction extends AbstractJSkatAction {
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
 	public DiscardAction(JSkatMaster controller) {
-		
+
 		super(controller);
-		
+
 		putValue(Action.NAME, "Discard");
 		putValue(Action.SHORT_DESCRIPTION, "Discard cards");
-		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.DISCARD_CARDS.toString());
+		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.DISCARD_CARDS
+				.toString());
 	}
-	
+
 	/**
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		System.out.println(e.getSource() + " " + e.getActionCommand());
-		
 		this.jskat.triggerHuman(e);
 	}
 }

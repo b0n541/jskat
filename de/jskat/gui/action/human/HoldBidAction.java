@@ -31,22 +31,20 @@ public class HoldBidAction extends AbstractJSkatAction {
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
 	public HoldBidAction(JSkatMaster controller) {
-		
+
 		super(controller);
-		
+
 		putValue(Action.NAME, "18");
 		putValue(Action.SHORT_DESCRIPTION, "Hold this bid");
 		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.HOLD_BID.toString());
 	}
-	
+
 	/**
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		System.out.println(e.getActionCommand());
-		
 		this.jskat.triggerHuman(e);
 	}
 }

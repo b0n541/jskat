@@ -31,19 +31,18 @@ public class PutCardIntoSkatAction extends AbstractJSkatAction {
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
 	public PutCardIntoSkatAction(JSkatMaster controller) {
-		
+
 		super(controller);
-		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.PUT_CARD_INTO_SKAT.toString());
+		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.PUT_CARD_INTO_SKAT
+				.toString());
 	}
-	
+
 	/**
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		System.out.println(e.getActionCommand());
-		
 		this.jskat.putCardIntoSkat(e);
 	}
 }

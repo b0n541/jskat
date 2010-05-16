@@ -31,22 +31,20 @@ public class PassBidAction extends AbstractJSkatAction {
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
 	public PassBidAction(JSkatMaster controller) {
-		
+
 		super(controller);
-		
+
 		putValue(Action.NAME, "Pass");
 		putValue(Action.SHORT_DESCRIPTION, "Pass this bid");
 		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.PASS_BID.toString());
 	}
-	
+
 	/**
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		System.out.println(e.getActionCommand());
-		
 		this.jskat.triggerHuman(e);
 	}
 }

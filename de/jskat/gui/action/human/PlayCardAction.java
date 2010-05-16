@@ -31,19 +31,17 @@ public class PlayCardAction extends AbstractJSkatAction {
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
 	public PlayCardAction(JSkatMaster controller) {
-		
+
 		super(controller);
 		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.PLAY_CARD.toString());
 	}
-	
+
 	/**
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		System.out.println(e.getActionCommand());
-		
 		this.jskat.triggerHuman(e);
 	}
 }

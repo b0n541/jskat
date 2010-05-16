@@ -33,28 +33,27 @@ public class ConnectAction extends AbstractJSkatAction {
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
 	public ConnectAction(JSkatMaster controller, JSkatGraphicRepository bitmaps) {
-		
+
 		super(controller);
-		
+
 		putValue(Action.NAME, "Connect to ISS");
 		putValue(Action.SHORT_DESCRIPTION, "Opens a connection to ISS");
 		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.CONNECT_ISS, 
+				JSkatGraphicRepository.Icon.CONNECT_ISS,
 				JSkatGraphicRepository.IconSize.SMALL)));
 		putValue(Action.LARGE_ICON_KEY, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.CONNECT_ISS, 
+				JSkatGraphicRepository.Icon.CONNECT_ISS,
 				JSkatGraphicRepository.IconSize.BIG)));
-		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.CONNECT_TO_ISS.toString());
+		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.CONNECT_TO_ISS
+				.toString());
 	}
-	
+
 	/**
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		System.out.println(e.getSource() + " " + e.getActionCommand());
-		
 		this.jskat.getISSController().connectToISS(e);
 	}
 }

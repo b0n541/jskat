@@ -31,22 +31,21 @@ public class PlayHandGameAction extends AbstractJSkatAction {
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
 	public PlayHandGameAction(JSkatMaster controller) {
-		
+
 		super(controller);
-		
+
 		putValue(Action.NAME, "Play hand game");
 		putValue(Action.SHORT_DESCRIPTION, "Play hand game");
-		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.PLAY_HAND_GAME.toString());
+		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.PLAY_HAND_GAME
+				.toString());
 	}
-	
+
 	/**
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		System.out.println(e.getActionCommand());
-		
 		this.jskat.triggerHuman(e);
 	}
 }

@@ -31,19 +31,18 @@ public class TakeCardFromSkatAction extends AbstractJSkatAction {
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
 	public TakeCardFromSkatAction(JSkatMaster controller) {
-		
+
 		super(controller);
-		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.TAKE_CARD_FROM_SKAT.toString());
+		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.TAKE_CARD_FROM_SKAT
+				.toString());
 	}
-	
+
 	/**
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		System.out.println(e.getActionCommand());
-		
 		this.jskat.takeCardFromSkat(e);
 	}
 }

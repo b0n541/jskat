@@ -31,22 +31,21 @@ public class GameAnnounceAction extends AbstractJSkatAction {
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
 	public GameAnnounceAction(JSkatMaster controller) {
-		
+
 		super(controller);
-		
+
 		putValue(Action.NAME, "Play!");
 		putValue(Action.SHORT_DESCRIPTION, "Play game");
-		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.ANNOUNCE_GAME.toString());
+		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.ANNOUNCE_GAME
+				.toString());
 	}
-	
+
 	/**
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		System.out.println(e.getSource() + " " + e.getActionCommand());
-		
 		this.jskat.triggerHuman(e);
 	}
 }

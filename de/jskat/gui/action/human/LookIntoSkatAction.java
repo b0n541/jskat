@@ -31,22 +31,21 @@ public class LookIntoSkatAction extends AbstractJSkatAction {
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
 	public LookIntoSkatAction(JSkatMaster controller) {
-		
+
 		super(controller);
-		
+
 		putValue(Action.NAME, "Look into skat");
 		putValue(Action.SHORT_DESCRIPTION, "Look into skat");
-		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.LOOK_INTO_SKAT.toString());
+		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.LOOK_INTO_SKAT
+				.toString());
 	}
-	
+
 	/**
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		System.out.println(e.getActionCommand());
-		
 		this.jskat.triggerHuman(e);
 	}
 }
