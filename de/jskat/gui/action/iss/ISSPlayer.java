@@ -39,7 +39,7 @@ public class ISSPlayer extends AbstractJSkatPlayer {
 	@Override
 	public void finalizeGame() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -69,12 +69,12 @@ public class ISSPlayer extends AbstractJSkatPlayer {
 	@Override
 	public void preparateForNewGame() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
-	protected void startGame() {
+	public void startGame() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

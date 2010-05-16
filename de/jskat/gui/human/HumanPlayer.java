@@ -22,7 +22,6 @@ import org.apache.commons.logging.LogFactory;
 import de.jskat.ai.AbstractJSkatPlayer;
 import de.jskat.ai.JSkatPlayer;
 import de.jskat.data.GameAnnouncement;
-import de.jskat.gui.JSkatView;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
@@ -36,24 +35,12 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 
 	private Idler idler = new Idler();
 
-	private JSkatView view = null;
-
 	private boolean holdBid;
 	private int bidValue;
 	private boolean lookIntoSkat;
 	private CardList discardSkat;
 	private GameAnnouncement gameAnnouncement;
 	private Card nextCard;
-
-	/**
-	 * Sets the view
-	 * 
-	 * @param newView
-	 */
-	public void setView(JSkatView newView) {
-
-		this.view = newView;
-	}
 
 	/**
 	 * @see JSkatPlayer#isAIPlayer()
@@ -304,8 +291,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	 * @see de.jskat.ai.AbstractJSkatPlayer#startGame()
 	 */
 	@Override
-	protected void startGame() {
-		// CHECK Auto-generated method stub
-
+	public void startGame() {
+		// TODO implement it
 	}
 }

@@ -153,10 +153,7 @@ public class JSkatMaster {
 			player = getPlayerInstanceFromName("de.jskat.ai.mjl.AIPlayerMJL"); //$NON-NLS-1$
 			break;
 		case HUMAN:
-			HumanPlayer human = this.human;
-			// FIXME this won't work on multiple tables
-			human.setView(this.view);
-			player = human;
+			player = this.human;
 			break;
 		}
 

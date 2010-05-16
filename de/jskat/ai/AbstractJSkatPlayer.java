@@ -7,7 +7,7 @@ Authors: @JS@
 
 Released: @ReleaseDate@
 
-*/
+ */
 
 package de.jskat.ai;
 
@@ -104,7 +104,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 		this.gameValue = 0;
 		this.knowledge.initializeVariables();
 		this.knowledge.setPlayerPosition(newPosition);
-		
+
 		preparateForNewGame();
 	}
 
@@ -120,7 +120,8 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	/**
 	 * Sorts the card according a game type
 	 * 
-	 * @param sortGameType Game type
+	 * @param sortGameType
+	 *            Game type
 	 */
 	protected final void sortCards(GameType sortGameType) {
 
@@ -128,11 +129,12 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	}
 
 	/**
-	 * @see JSkatPlayer#startGame(Player, GameType, boolean, boolean, boolean, boolean)
+	 * @see JSkatPlayer#startGame(Player, GameType, boolean, boolean, boolean,
+	 *      boolean)
 	 */
-	public final void startGame(Player newSinglePlayer, GameType newGameType, 
-							boolean newHandGame, boolean newOuvertGame,
-							boolean newSchneiderAnnounced, boolean newSchwarzAnnounced) {
+	public final void startGame(Player newSinglePlayer, GameType newGameType,
+			boolean newHandGame, boolean newOuvertGame,
+			boolean newSchneiderAnnounced, boolean newSchwarzAnnounced) {
 
 		this.playerState = PlayerStates.PLAYING;
 		this.singlePlayer = newSinglePlayer;
@@ -145,44 +147,45 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 		this.gameValue = 0;
 
 		this.rules = SkatRuleFactory.getSkatRules(this.gameType);
-		
+
 		startGame();
 	}
 
 	/**
 	 * does certain startGame operations
 	 * 
-	 * A method that is called by the abstract player to allow individual players
-	 * to implement certain start-up operations
+	 * A method that is called by the abstract player to allow individual
+	 * players to implement certain start-up operations
 	 */
-	protected abstract void startGame();
-	
+	public abstract void startGame();
+
 	/**
 	 * @see JSkatPlayer#takeSkat(CardList)
 	 */
 	public final void takeSkat(CardList skatCards) {
-		
+
 		log.debug("Skat cards: " + skatCards); //$NON-NLS-1$
-		
+
 		this.skat = skatCards;
 		this.cards.addAll(skatCards);
 	}
-	
+
 	/**
 	 * Sets the state of the player
 	 * 
-	 * @param newState State to be set
+	 * @param newState
+	 *            State to be set
 	 */
 	protected final void setState(JSkatPlayer.PlayerStates newState) {
 
 		this.playerState = newState;
 	}
-	
+
 	/**
 	 * @see JSkatPlayer#bidByPlayer(Player, int)
 	 */
 	public final void bidByPlayer(Player player, int bidValue) {
-		
+
 		this.knowledge.setHighestBid(player, bidValue);
 	}
 
@@ -193,48 +196,46 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * @return CardList with all playable cards
 	 */
 	protected final CardList getPlayableCards(CardList trick) {
-		
+
 		boolean isCardAllowed = false;
 		CardList result = new CardList();
-		
+
 		log.debug("game type: " + this.gameType); //$NON-NLS-1$
 		log.debug("player cards (" + this.cards.size() + "): " + this.cards); //$NON-NLS-1$ //$NON-NLS-2$
 		log.debug("trick size: " + trick.size()); //$NON-NLS-1$
-			
+
 		for (Card card : this.cards) {
-			
-			if (trick.size() > 0 &&
-				this.rules.isCardAllowed(this.gameType, trick.get(0), 
-												this.cards, card)) {
-				
+
+			if (trick.size() > 0
+					&& this.rules.isCardAllowed(this.gameType, trick.get(0),
+							this.cards, card)) {
+
 				log.debug("initial card: " + trick.get(0)); //$NON-NLS-1$
 				isCardAllowed = true;
-			}
-			else if (trick.size() == 0) {
-				
+			} else if (trick.size() == 0) {
+
 				isCardAllowed = true;
-			}
-			else {
-				
+			} else {
+
 				isCardAllowed = false;
 			}
-			
+
 			if (isCardAllowed) {
-				
+
 				result.add(card);
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * @see JSkatPlayer#cardPlayed(Player, Card)
 	 */
 	public final void cardPlayed(Player player, Card card) {
-		
+
 		this.knowledge.setCardPlayed(player, card);
-		
+
 		if (player == this.knowledge.getPlayerPosition()) {
 			// remove this card from counter
 			this.knowledge.removeCard(card);
@@ -263,17 +264,17 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * @see JSkatPlayer#isDeclarer()
 	 */
 	public final boolean isDeclarer() {
-		
+
 		boolean result = false;
-		
+
 		if (this.singlePlayer == this.knowledge.getPlayerPosition()) {
-			
+
 			result = true;
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * @see JSkatPlayer#getOuvertCards(CardList)
 	 */
@@ -286,7 +287,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 */
 	@Override
 	public void setGameResult(boolean pGameWon, int pGameValue) {
-		
+
 		this.gameWon = pGameWon;
 		this.gameValue = pGameValue;
 	}

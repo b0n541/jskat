@@ -6,7 +6,7 @@ Author: @MJL@
 
 Released: @ReleaseDate@
 
-*/
+ */
 
 package de.jskat.ai.mjl;
 
@@ -17,9 +17,10 @@ import de.jskat.ai.AbstractJSkatPlayer;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
-import de.jskat.util.rule.BasicSkatRules;
 
-/** A JSkat AI Player
+/**
+ * A JSkat AI Player
+ * 
  * @author Markus J. Luzius <markus@luzius.de>
  */
 public class AIPlayerMJL extends AbstractJSkatPlayer {
@@ -28,7 +29,9 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	private CardPlayer aiPlayer;
 	int maxBidValue = -1;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.jskat.ai.JSkatPlayer#preparateForNewGame()
 	 */
 	@Override
@@ -38,38 +41,44 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 		maxBidValue = -1;
 		// nothing else to do right now...
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.jskat.ai.JSkatPlayer#bidMore(int)
 	 */
 	@Override
 	public int bidMore(int nextBidValue) {
-		if(maxBidValue<0) {
+		if (maxBidValue < 0) {
 			maxBidValue = new Bidding(cards).getMaxBid();
 		}
-		if(maxBidValue<nextBidValue) {
+		if (maxBidValue < nextBidValue) {
 			aiPlayer = new OpponentPlayer(cards);
 			return -1;
 		}
 		return nextBidValue;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.jskat.ai.JSkatPlayer#holdBid(int)
 	 */
 	@Override
 	public boolean holdBid(int currBidValue) {
-		if(maxBidValue<0) {
+		if (maxBidValue < 0) {
 			maxBidValue = new Bidding(cards).getMaxBid();
 		}
-		boolean result = !(maxBidValue<18) && maxBidValue>=currBidValue;
-		if(!result) {
+		boolean result = !(maxBidValue < 18) && maxBidValue >= currBidValue;
+		if (!result) {
 			aiPlayer = new OpponentPlayer(cards);
 		}
-		return result; 
+		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.jskat.ai.JSkatPlayer#lookIntoSkat()
 	 */
 	@Override
@@ -79,7 +88,9 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.jskat.ai.JSkatPlayer#announceGame()
 	 */
 	@Override
@@ -88,56 +99,74 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 		game.setGameType(new Bidding(cards).getSuggestedGameType());
 		return game;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.jskat.ai.JSkatPlayer#discardSkat()
 	 */
 	@Override
 	public CardList discardSkat() {
 		// TODO check which cards should best be discarded
-		log.debug("no algorithm yet, discarding original skat of ["+skat+"]");
+		log.debug("no algorithm yet, discarding original skat of [" + skat
+				+ "]");
 		return skat;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.jskat.ai.AbstractJSkatPlayer#startGame()
 	 */
 	@Override
-	protected void startGame() {
-		if(singlePlayer!=knowledge.getPlayerPosition()) {
-			log.debug("ok? AIPlayerMJL should be OpponentPlayer - actually is: "+(aiPlayer==null?"null":aiPlayer.getClass().getName()));
-		}
-		else {
-			if(aiPlayer==null) {
-				log.warn("todo: AIPlayerMJL should already have been set to SinglePlayer! "+(aiPlayer==null?"null":aiPlayer.getClass().getName()));
+	public void startGame() {
+		if (singlePlayer != knowledge.getPlayerPosition()) {
+			log
+					.debug("ok? AIPlayerMJL should be OpponentPlayer - actually is: "
+							+ (aiPlayer == null ? "null" : aiPlayer.getClass()
+									.getName()));
+		} else {
+			if (aiPlayer == null) {
+				log
+						.warn("todo: AIPlayerMJL should already have been set to SinglePlayer! "
+								+ (aiPlayer == null ? "null" : aiPlayer
+										.getClass().getName()));
 				aiPlayer = new SinglePlayer(cards, rules);
-			}
-			else {
-				log.debug("ok! AIPlayerMJL already set to SinglePlayer: "+(aiPlayer==null?"null":aiPlayer.getClass().getName()));
+			} else {
+				log.debug("ok! AIPlayerMJL already set to SinglePlayer: "
+						+ (aiPlayer == null ? "null" : aiPlayer.getClass()
+								.getName()));
 			}
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.jskat.ai.JSkatPlayer#playCard()
 	 */
 	@Override
 	public Card playCard() {
-		log.debug(".playCard(): my position: "+knowledge.getPlayerPosition()+", single player: "+singlePlayer);
+		log.debug(".playCard(): my position: " + knowledge.getPlayerPosition()
+				+ ", single player: " + singlePlayer);
 		Card toPlay = aiPlayer.playNextCard(knowledge);
-		// make sure, that there is a card 
-		if(toPlay!=null) return toPlay;
+		// make sure, that there is a card
+		if (toPlay != null)
+			return toPlay;
 		// if there is none, just play the first valid card
 		CardList result = getPlayableCards(this.knowledge.getTrickCards());
-		if(result.size()<1) {
+		if (result.size() < 1) {
 			log.warn("no playable cards - shouldn't be possible!");
-			log.debug("my cards: "+cards+", trick: "+this.knowledge.getTrickCards());
+			log.debug("my cards: " + cards + ", trick: "
+					+ this.knowledge.getTrickCards());
 			return null;
 		}
 		return result.get(0);
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.jskat.ai.JSkatPlayer#finalizeGame()
 	 */
 	@Override
@@ -146,8 +175,9 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 		log.debug("finalizing game...");
 	}
 
-	
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see de.jskat.ai.JSkatPlayer#isAIPlayer()
 	 */
 	@Override

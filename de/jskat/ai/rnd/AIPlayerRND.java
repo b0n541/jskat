@@ -6,7 +6,7 @@ Author: @JS@
 
 Released: @ReleaseDate@
 
-*/
+ */
 
 package de.jskat.ai.rnd;
 
@@ -18,8 +18,8 @@ import org.apache.commons.logging.LogFactory;
 import de.jskat.ai.AbstractJSkatPlayer;
 import de.jskat.ai.JSkatPlayer;
 import de.jskat.data.GameAnnouncement;
-import de.jskat.util.CardList;
 import de.jskat.util.Card;
+import de.jskat.util.CardList;
 import de.jskat.util.GameType;
 import de.jskat.util.Player;
 
@@ -30,18 +30,19 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 
 	private static Log log = LogFactory.getLog(AIPlayerRND.class);
 
-	/** 
-	 * Creates a new instance of AIPlayerRND 
+	/**
+	 * Creates a new instance of AIPlayerRND
 	 */
 	public AIPlayerRND() {
 
 		this("unknown"); //$NON-NLS-1$
 	}
 
-	/** 
+	/**
 	 * Creates a new instance of AIPlayerRND
 	 * 
-	 * @param newPlayerName Player's name
+	 * @param newPlayerName
+	 *            Player's name
 	 */
 	public AIPlayerRND(String newPlayerName) {
 
@@ -53,7 +54,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	 * @see JSkatPlayer#lookIntoSkat()
 	 */
 	public boolean lookIntoSkat() {
-		
+
 		return this.rand.nextBoolean();
 	}
 
@@ -63,14 +64,15 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	public GameAnnouncement announceGame() {
 
 		log.debug("position: " + this.knowledge.getPlayerPosition()); //$NON-NLS-1$
-		log.debug("bids: " + this.knowledge.getHighestBid(Player.FORE_HAND) +  //$NON-NLS-1$
-					" " + this.knowledge.getHighestBid(Player.MIDDLE_HAND) +  //$NON-NLS-1$
-					" " + this.knowledge.getHighestBid(Player.HIND_HAND)); //$NON-NLS-1$
-		
+		log.debug("bids: " + this.knowledge.getHighestBid(Player.FORE_HAND) + //$NON-NLS-1$
+				" " + this.knowledge.getHighestBid(Player.MIDDLE_HAND) + //$NON-NLS-1$
+				" " + this.knowledge.getHighestBid(Player.HIND_HAND)); //$NON-NLS-1$
+
 		GameAnnouncement newGame = new GameAnnouncement();
 
 		// select a random game type (without RAMSCH and PASSED_IN)
-		newGame.setGameType(GameType.values()[this.rand.nextInt(GameType.values().length - 2)]);
+		newGame.setGameType(GameType.values()[this.rand.nextInt(GameType
+				.values().length - 2)]);
 		newGame.setOuvert(this.rand.nextBoolean());
 
 		return newGame;
@@ -82,12 +84,12 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	public int bidMore(int nextBidValue) {
 
 		int result = -1;
-		
+
 		if (this.rand.nextBoolean()) {
-			
+
 			result = nextBidValue;
 		}
-		
+
 		return result;
 	}
 
@@ -99,34 +101,37 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 		return this.rand.nextBoolean();
 	}
 
-	/** 
+	/**
 	 * @see de.jskat.ai.AbstractJSkatPlayer#startGame()
 	 */
 	@Override
-	protected void startGame() {
+	public void startGame() {
 		// CHECK Auto-generated method stub
-		
+
 	}
-	
+
 	/**
 	 * @see JSkatPlayer#playCard()
 	 */
 	public Card playCard() {
 
 		int index = -1;
-		
-		log.debug('\n' + this.knowledge.toString());
-		
-		// first find all possible cards
-		CardList possibleCards = getPlayableCards(this.knowledge.getTrickCards());
 
-		log.debug("found " + possibleCards.size() + " possible cards: " + possibleCards);  //$NON-NLS-1$//$NON-NLS-2$
+		log.debug('\n' + this.knowledge.toString());
+
+		// first find all possible cards
+		CardList possibleCards = getPlayableCards(this.knowledge
+				.getTrickCards());
+
+		log
+				.debug("found " + possibleCards.size() + " possible cards: " + possibleCards); //$NON-NLS-1$//$NON-NLS-2$
 
 		// then choose a random one
-		index = this.rand.nextInt(possibleCards.size()); 
+		index = this.rand.nextInt(possibleCards.size());
 
 		log.debug("choosing card " + index); //$NON-NLS-1$
-		log.debug("as player " + this.knowledge.getPlayerPosition() + ": " + possibleCards.get(index));  //$NON-NLS-1$//$NON-NLS-2$
+		log
+				.debug("as player " + this.knowledge.getPlayerPosition() + ": " + possibleCards.get(index)); //$NON-NLS-1$//$NON-NLS-2$
 
 		return possibleCards.get(index);
 	}
@@ -143,9 +148,9 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	 * @see de.jskat.ai.JSkatPlayer#discardSkat()
 	 */
 	public CardList discardSkat() {
-		
+
 		CardList result = new CardList();
-		
+
 		log.debug("Player cards before discarding: " + this.cards); //$NON-NLS-1$
 
 		// just discard two random cards
