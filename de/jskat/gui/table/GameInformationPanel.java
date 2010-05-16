@@ -9,7 +9,7 @@ Released: @ReleaseDate@
 
  */
 
-package de.jskat.gui;
+package de.jskat.gui.table;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -32,37 +32,38 @@ class GameInformationPanel extends JPanel {
 	 * Constructor
 	 */
 	GameInformationPanel() {
-		
+
 		super();
 		initPanel();
 	}
-	
+
 	private void initPanel() {
-		
+
 		setLayout(new MigLayout("fill"));
-		
+
 		setBackground(Color.GREEN);
 		setOpaque(false);
-		
+
 		this.label = new JLabel();
 		this.label.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-		setText(" ");
-		
+		setText(" "); //$NON-NLS-1$
+
 		add(this.label);
 	}
-	
+
 	/**
 	 * Sets the text of the game information label
 	 * 
-	 * @param newText Text to be set
+	 * @param newText
+	 *            Text to be set
 	 */
 	void setText(String newText) {
-		
+
 		this.label.setText(newText);
 	}
-	
+
 	void clear() {
-		
+
 		this.label.setText(" ");
 	}
 }

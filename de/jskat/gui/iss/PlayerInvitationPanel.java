@@ -9,7 +9,7 @@ Released: @ReleaseDate@
 
  */
 
-package de.jskat.gui;
+package de.jskat.gui.iss;
 
 import java.util.ArrayList;
 import java.util.List;

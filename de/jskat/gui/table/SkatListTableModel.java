@@ -9,7 +9,7 @@ Released: @ReleaseDate@
 
  */
 
-package de.jskat.gui;
+package de.jskat.gui.table;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,49 +120,51 @@ class SkatListTableModel extends AbstractTableModel {
 
 		this.displayValues.clear();
 
-		for (int i = 0; i < this.gameResults.size(); i++) {
+		for (int game = 0; game < this.gameResults.size(); game++) {
 
 			this.displayValues.add(new ArrayList<Integer>());
 
-			for (int j = 0; j < this.playerCount; j++) {
+			// add player values
+			for (int player = 0; player < this.playerCount; player++) {
 
 				int previousResult = 0;
 				currResult = 0;
 
-				if (this.declarers.get(i) != null) {
+				if (this.declarers.get(game) != null) {
 
-					if (i > 0) {
+					if (game > 0) {
 						// get previous result for player values
 						// from second game on
-						previousResult = this.displayValues.get(i - 1).get(j);
+						previousResult = this.displayValues.get(game - 1).get(
+								player);
 					} else {
 						previousResult = 0;
 					}
 
 					// get player results from current game
-					boolean declarer = this.declarers.get(i).getOrder() == j;
 					switch (this.mode) {
 					case NORMAL:
-						if (declarer) {
-							currResult = this.gameResults.get(i);
-						}
+						currResult = this.playerResults.get(player).get(game);
 						break;
 					case TOURNAMENT:
+						boolean isDeclarer = (this.playerResults.get(player)
+								.get(game) != 0);
 						currResult = SkatConstants.getTournamentGameValue(
-								declarer, this.gameResults.get(i),
+								isDeclarer, this.gameResults.get(game),
 								this.playerCount);
 						break;
 					case BIERLACHS:
 						break;
 					}
 				}
-				
+
 				if (currResult != 0) {
 
-					this.displayValues.get(i).add(previousResult + currResult);
+					this.displayValues.get(game).add(
+							new Integer(previousResult + currResult));
 				} else {
 
-					this.displayValues.get(i).add(0);
+					this.displayValues.get(game).add(0);
 				}
 			}
 
@@ -170,36 +172,72 @@ class SkatListTableModel extends AbstractTableModel {
 			switch (this.mode) {
 			case NORMAL:
 			case BIERLACHS:
-				currResult = this.gameResults.get(i);
+				currResult = this.gameResults.get(game);
 				break;
 			case TOURNAMENT:
 				currResult = SkatConstants.getTournamentGameValue(true,
-						this.gameResults.get(i), this.playerCount);
+						this.gameResults.get(game), this.playerCount);
 				break;
 			}
-			this.displayValues.get(i).add(currResult);
+			this.displayValues.get(game).add(currResult);
 		}
 	}
 
-	void addResult(Player singlePlayer, int gameResult) {
+	/**
+	 * Adds a game result to the model
+	 * 
+	 * @param leftOpponent
+	 *            Position of the upper left opponent
+	 * @param rightOpponent
+	 *            Position of the upper right opponent
+	 * @param player
+	 *            Position of the player
+	 * @param declarer
+	 *            Position of the game declarer
+	 * @param gameResult
+	 *            Game result
+	 */
+	void addResult(Player leftOpponent, Player rightOpponent, Player player,
+			Player declarer, int gameResult) {
 
-		this.declarers.add(singlePlayer);
-		this.gameResults.add(gameResult);
-		if (singlePlayer != null) {
-			this.playerResults.get(singlePlayer.getOrder()).add(gameResult);
-			this.playerResults.get(singlePlayer.getLeftNeighbor().getOrder())
-					.add(0);
-			this.playerResults.get(singlePlayer.getRightNeighbor().getOrder())
-					.add(0);
+		// FIXME works only on 3 player series
+		this.declarers.add(declarer);
+		this.gameResults.add(new Integer(gameResult));
+
+		int declarerColumn = getDeclarerColumn(leftOpponent, rightOpponent,
+				player, declarer);
+
+		if (declarer != null) {
+			this.playerResults.get(declarerColumn).add(new Integer(gameResult));
+			this.playerResults.get((declarerColumn + 1) % 3)
+					.add(new Integer(0));
+			this.playerResults.get((declarerColumn + 2) % 3)
+					.add(new Integer(0));
 		} else {
 			// game was passed in
-			for (int i = 0; i < playerCount; i++) {
+			for (int i = 0; i < this.playerCount; i++) {
 				this.playerResults.get(i).add(0);
 			}
 		}
 		calculateDisplayValues();
 
 		this.fireTableDataChanged();
+	}
+
+	int getDeclarerColumn(Player leftOpponent, Player rightOpponent,
+			Player player, Player declarer) {
+
+		int result = -1;
+
+		if (declarer == leftOpponent) {
+			result = 0;
+		} else if (declarer == rightOpponent) {
+			result = 1;
+		} else if (declarer == player) {
+			result = 2;
+		}
+
+		return result;
 	}
 
 	/**

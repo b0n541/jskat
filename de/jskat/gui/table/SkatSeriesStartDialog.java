@@ -9,7 +9,7 @@ Released: @ReleaseDate@
 
  */
 
-package de.jskat.gui;
+package de.jskat.gui.table;
 
 import java.awt.Container;
 import java.awt.event.ActionEvent;

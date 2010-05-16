@@ -44,11 +44,11 @@ public class SkatGameData {
 		/**
 		 * Dealing phase
 		 */
-		DEALING, 
+		DEALING,
 		/**
 		 * Bidding phase
 		 */
-		BIDDING, 
+		BIDDING,
 		/**
 		 * Look into skat or play hand game phase
 		 */
@@ -60,7 +60,7 @@ public class SkatGameData {
 		/**
 		 * Declaring phase
 		 */
-		DECLARING, 
+		DECLARING,
 		/**
 		 * Trick playing phase
 		 */
@@ -114,7 +114,7 @@ public class SkatGameData {
 	 * Game result
 	 */
 	private int result = 0;
-	
+
 	/**
 	 * Highest bid value made during bidding
 	 */
@@ -130,11 +130,6 @@ public class SkatGameData {
 	 */
 	private Suit trump;
 
-	/**
-	 * Flag vor hand games
-	 */
-	private boolean hand = false;
-	
 	/**
 	 * Flag for won games
 	 */
@@ -169,12 +164,12 @@ public class SkatGameData {
 	 * Flag for a schneider game
 	 */
 	private boolean schneider = false;
-	
+
 	/**
 	 * Flag for a schwarz game
 	 */
 	private boolean schwarz = false;
-	
+
 	/**
 	 * Flag for a durchmarsch game (one player made all tricks in a ramsch game)
 	 */
@@ -217,12 +212,13 @@ public class SkatGameData {
 	public SkatGameData() {
 
 		intializeVariables();
-		
+
 		log.debug("Game created");
 	}
 
 	private void intializeVariables() {
-		
+
+		this.announcement = new GameAnnouncement();
 		this.result = -1;
 		this.tricks = new ArrayList<Trick>();
 
@@ -240,9 +236,9 @@ public class SkatGameData {
 
 			this.dealtCards.add(new CardList());
 		}
-		
+
 	}
-	
+
 	/**
 	 * Returns the result of the game
 	 * 
@@ -250,8 +246,7 @@ public class SkatGameData {
 	 */
 	public int getGameResult() {
 
-		if (this.result == 0
-				&& getGameType() != GameType.PASSED_IN) {
+		if (this.result == 0 && getGameType() != GameType.PASSED_IN) {
 
 			log.warn("Game result hasn't been calculated yet!");
 			calcResult();
@@ -342,10 +337,10 @@ public class SkatGameData {
 	 * @return TRUE if the game was won
 	 */
 	public boolean isGameWon() {
-		
+
 		return this.won;
 	}
-	
+
 	/**
 	 * Sets whether the game was won or not
 	 * 
@@ -370,7 +365,7 @@ public class SkatGameData {
 		// maybe throw an exception instead?
 		if (getGameType() == GameType.RAMSCH) {
 			log.warn("Overbidding cannot happen in Ramsch games: gameType="
-							+ getGameType());
+					+ getGameType());
 		}
 		return this.overBidded;
 	}
@@ -384,7 +379,7 @@ public class SkatGameData {
 	public void setOverBidded(boolean newOverBidded) {
 
 		this.overBidded = newOverBidded;
-		
+
 		if (this.overBidded) {
 			// game was overbidded
 			this.won = false;
@@ -479,21 +474,22 @@ public class SkatGameData {
 	/**
 	 * Checks whether the single player has played a hand game
 	 * 
-	 * @return TRUE if the single player has played a hand game
+	 * @return TRUE, if the single player has played a hand game
 	 */
 	public boolean isHand() {
 
-		return this.hand;
+		return this.announcement.isHand();
 	}
 
 	/**
-	 * Checks whether the single player has played a hand game
+	 * Sets whether the single player has played a hand game
 	 * 
-	 * @return TRUE if the single player has played a hand game
+	 * @param isHand
+	 *            TRUE, if the single player has played a hand game
 	 */
 	public void setHand(boolean isHand) {
 
-		this.hand = isHand;
+		this.announcement.setHand(isHand);
 	}
 
 	/**
@@ -597,7 +593,7 @@ public class SkatGameData {
 
 		return this.announcement.isBock();
 	}
-	
+
 	/**
 	 * Checks whether a durchmarsch was done in a ramsch game or not
 	 * 
@@ -705,12 +701,11 @@ public class SkatGameData {
 	public void calcResult() {
 
 		if (this.getGameType() == GameType.PASSED_IN) {
-		
+
 			this.won = false;
 			this.result = 0;
-		}
-		else {
-			
+		} else {
+
 			this.won = this.rules.calcGameWon(this);
 			this.result = this.rules.calcGameResult(this);
 		}
@@ -786,8 +781,8 @@ public class SkatGameData {
 	 */
 	public void setTrickCard(int trickNumber, Player player, Card card) {
 
-		log.debug(this + ".setTrickCard(" + trickNumber + ", " + player
-				+ ", " + card + ")");
+		log.debug(this + ".setTrickCard(" + trickNumber + ", " + player + ", "
+				+ card + ")");
 
 		switch (player) {
 
@@ -858,8 +853,8 @@ public class SkatGameData {
 	 */
 	public int getGeschobenMultiplier() {
 
-		log.debug("geschoben=" + this.geschoben + ", 2^" + this.geschoben
-				+ "=" + (1 << this.geschoben));
+		log.debug("geschoben=" + this.geschoben + ", 2^" + this.geschoben + "="
+				+ (1 << this.geschoben));
 
 		int multiplier = 0;
 
@@ -910,20 +905,22 @@ public class SkatGameData {
 	/**
 	 * Sets a new skat after discarding
 	 * 
-	 * @param player Player ID of the discarding player
-	 * @param newSkat CardList of the new skat
+	 * @param player
+	 *            Player ID of the discarding player
+	 * @param newSkat
+	 *            CardList of the new skat
 	 */
 	public void setDiscardedSkat(Player player, CardList newSkat) {
-		
+
 		CardList hand = this.playerHands.get(player.getOrder());
-		
+
 		// add old skat to player's hand
 		hand.add(this.skat.get(0));
 		hand.add(this.skat.get(1));
-		
+
 		// clear skat
 		this.skat.clear();
-		
+
 		// add new cards to skat
 		hand.remove(newSkat.get(0));
 		this.skat.add(newSkat.get(0));
@@ -961,37 +958,42 @@ public class SkatGameData {
 	/**
 	 * Sets cards for the skat
 	 * 
-	 * @param card0 First card
-	 * @param card1 Second card
+	 * @param card0
+	 *            First card
+	 * @param card1
+	 *            Second card
 	 */
 	public void setSkatCards(Card card0, Card card1) {
-		
+
 		this.skat.add(card0);
 		this.skat.add(card1);
 	}
-	
+
 	/**
 	 * Adds points to player points
 	 * 
-	 * @param player Player to whom the points should be added
-	 * @param points Points to be added
+	 * @param player
+	 *            Player to whom the points should be added
+	 * @param points
+	 *            Points to be added
 	 */
 	public void addPlayerPoints(Player player, int points) {
-		
+
 		this.playerPoints[player.getOrder()] += points;
 	}
-	
+
 	/**
 	 * Gets the points of a player
 	 * 
-	 * @param player Player
+	 * @param player
+	 *            Player
 	 * @return Points of the player
 	 */
 	public int getPlayerPoints(Player player) {
-		
+
 		return this.playerPoints[player.getOrder()];
 	}
-	
+
 	/**
 	 * Sets the highest bid value for a player
 	 * 
@@ -1025,7 +1027,10 @@ public class SkatGameData {
 	 */
 	public void setAnnouncement(GameAnnouncement newAnnouncement) {
 
-		this.announcement = newAnnouncement;
+		this.announcement.setGameType(newAnnouncement.getGameType());
+		this.announcement.setOuvert(newAnnouncement.isOuvert());
+		this.announcement.setSchneider(newAnnouncement.isSchneider());
+		this.announcement.setSchwarz(newAnnouncement.isSchwarz());
 
 		this.rules = SkatRuleFactory.getSkatRules(getGameType());
 
@@ -1044,11 +1049,11 @@ public class SkatGameData {
 	public GameType getGameType() {
 
 		GameType result = null;
-		
+
 		if (this.announcement != null) {
 			result = this.announcement.getGameType();
 		}
-		
+
 		return result;
 	}
 
@@ -1086,30 +1091,31 @@ public class SkatGameData {
 	 * Calculates the counts of jacks
 	 */
 	public void calcJackInformation() {
-		
-		CardList declarerCards = (CardList) this.playerHands.get(this.declarer.getOrder()).clone();
+
+		CardList declarerCards = (CardList) this.playerHands.get(
+				this.declarer.getOrder()).clone();
 
 		declarerCards.add(this.skat.get(0));
 		declarerCards.add(this.skat.get(1));
-		
+
 		if (declarerCards.hasJack(Suit.CLUBS)) {
-			
+
 			setClubJack(true);
 		}
 		if (declarerCards.hasJack(Suit.SPADES)) {
-			
+
 			setSpadeJack(true);
 		}
 		if (declarerCards.hasJack(Suit.HEARTS)) {
-			
+
 			setHeartJack(true);
 		}
 		if (declarerCards.hasJack(Suit.DIAMONDS)) {
-			
+
 			this.setDiamondJack(true);
 		}
 	}
-	
+
 	/**
 	 * Sets the game state
 	 * 
@@ -1135,32 +1141,32 @@ public class SkatGameData {
 	 * Sets the schneider and schwarz flag according the player points
 	 */
 	public void setSchneiderSchwarz() {
-		
+
 		int playerPoints = getPlayerPoints(this.declarer);
-		
+
 		if (playerPoints >= 89 || playerPoints <= 30) {
-			
+
 			setSchneider(true);
 		}
-		
+
 		if (playerPoints == 120 || playerPoints == 0) {
-			
+
 			setSchwarz(true);
 		}
 	}
 
 	public void setJungfrauDurchmarsch() {
-		
+
 		for (Player currPlayer : Player.values()) {
-			
+
 			int playerPoints = getPlayerPoints(currPlayer);
-			
+
 			if (playerPoints == 0) {
-				
+
 				setJungfrau(true);
 			}
 			if (playerPoints == 120) {
-				
+
 				setDurchmarsch(true);
 			}
 		}

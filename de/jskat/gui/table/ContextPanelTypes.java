@@ -9,7 +9,7 @@ Released: @ReleaseDate@
 
  */
 
-package de.jskat.gui;
+package de.jskat.gui.table;
 
 /**
  * Panel types for all game contexts

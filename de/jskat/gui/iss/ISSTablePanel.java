@@ -18,9 +18,9 @@ import javax.swing.JPanel;
 
 import de.jskat.data.SkatGameData.GameState;
 import de.jskat.data.iss.ISSTablePanelStatus;
-import de.jskat.gui.ContextPanelTypes;
-import de.jskat.gui.SkatTablePanel;
 import de.jskat.gui.img.JSkatGraphicRepository;
+import de.jskat.gui.table.ContextPanelTypes;
+import de.jskat.gui.table.SkatTablePanel;
 
 /**
  * Panel for ISS table

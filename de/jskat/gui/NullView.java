@@ -195,13 +195,12 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#setGameAnnouncement(String, GameAnnouncement, boolean)
+	 * @see JSkatView#setGameAnnouncement(String, GameAnnouncement)
 	 */
 	@Override
 	public void setGameAnnouncement(
 			@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") GameAnnouncement ann,
-			@SuppressWarnings("unused") boolean hand) {
+			@SuppressWarnings("unused") GameAnnouncement ann) {
 		// empty method by indent
 	}
 
@@ -281,15 +280,6 @@ public class NullView implements JSkatView {
 	@Override
 	public void setTrickForeHand(@SuppressWarnings("unused") String tableName,
 			@SuppressWarnings("unused") Player trickForeHand) {
-		// empty method by indent
-	}
-
-	/**
-	 * @see JSkatView#setSkat(String, CardList)
-	 */
-	@Override
-	public void setSkat(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") CardList skat) {
 		// empty method by indent
 	}
 

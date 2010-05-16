@@ -45,9 +45,8 @@ public abstract class JSkatTabPanel extends JPanel {
 	 * @param actions
 	 *            JSkat actions
 	 */
-	protected JSkatTabPanel(String tabName,
-			JSkatGraphicRepository jskatBitmaps, ActionMap actions,
-			ResourceBundle jskatStrings) {
+	public JSkatTabPanel(String tabName, JSkatGraphicRepository jskatBitmaps,
+			ActionMap actions, ResourceBundle jskatStrings) {
 
 		super();
 		this.setName(tabName);

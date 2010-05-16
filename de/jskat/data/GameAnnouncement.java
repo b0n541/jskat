@@ -177,9 +177,10 @@ public class GameAnnouncement {
 	 * Sets flag for a hand announcement
 	 * 
 	 * @param isHand
+	 *            TRUE, if hand was announced
 	 */
 	public void setHand(boolean isHand) {
-		
+
 		this.hand = isHand;
 	}
 
@@ -256,6 +257,9 @@ public class GameAnnouncement {
 
 		result.append("Game announcement: ").append(this.gameType);
 
+		if (this.hand) {
+			result.append(" hand");
+		}
 		if (this.ouvert) {
 
 			result.append(" ouvert");

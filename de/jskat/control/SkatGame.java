@@ -460,7 +460,6 @@ public class SkatGame extends JSkatThread {
 
 		// TODO check for valid game announcements
 		try {
-
 			GameAnnouncement ann = (GameAnnouncement) this.declarer
 					.announceGame().clone();
 
@@ -843,7 +842,7 @@ public class SkatGame extends JSkatThread {
 							.isSchwarzAnnounced());
 		}
 
-		this.view.setGameAnnouncement(this.tableName, ann, this.data.isHand());
+		this.view.setGameAnnouncement(this.tableName, ann);
 
 		log.debug(this.data.getAnnoucement());
 	}
@@ -865,10 +864,6 @@ public class SkatGame extends JSkatThread {
 			if (newState == GameState.NEW_GAME) {
 
 				this.view.clearTable(this.tableName);
-
-			} else if (newState == GameState.DISCARDING) {
-
-				this.view.setSkat(this.tableName, this.data.getSkat());
 
 			} else if (newState == GameState.GAME_OVER) {
 

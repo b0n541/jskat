@@ -29,9 +29,10 @@ public class NullRules implements BasicSkatRules {
 	 */
 	public int calcGameResult(SkatGameData gameData) {
 
-		int gameValue = SkatConstants.getGameBaseValue(gameData.getGameType(), gameData.isHand(), gameData.isOuvert());
+		int gameValue = SkatConstants.getGameBaseValue(gameData.getGameType(),
+				gameData.isHand(), gameData.isOuvert());
 		int multiplier = 1;
-		
+
 		if (gameData.isGameLost()) {
 
 			// Lost game is always counted double
@@ -62,18 +63,18 @@ public class NullRules implements BasicSkatRules {
 	/**
 	 * @see BasicSkatRules#isCardAllowed(GameType, Card, CardList, Card)
 	 */
-	public boolean isCardAllowed(GameType gameType, Card initialCard, CardList hand, Card card) {
+	public boolean isCardAllowed(GameType gameType, Card initialCard,
+			CardList hand, Card card) {
 
 		boolean result = false;
 
 		if (initialCard == null) {
 			// no intial card is given --> every card is allowed
 			result = true;
-		}
-		else if (card.getSuit() == initialCard.getSuit()) {
+		} else if (card.getSuit() == initialCard.getSuit()) {
 			// card must serve same suit
 			result = true;
-			
+
 		} else if (!hand.hasSuit(gameType, initialCard.getSuit())) {
 			// hand has no card of same suit --> every card is allowed
 			result = true;

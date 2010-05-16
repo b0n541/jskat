@@ -286,11 +286,8 @@ public interface JSkatView {
 	 *            Table name
 	 * @param ann
 	 *            Game announcement
-	 * @param hand
-	 *            TRUE if the game is a hand game
 	 */
-	public void setGameAnnouncement(String tableName, GameAnnouncement ann,
-			boolean hand);
+	public void setGameAnnouncement(String tableName, GameAnnouncement ann);
 
 	/**
 	 * Set a new game state
@@ -349,16 +346,6 @@ public interface JSkatView {
 	 *            Trick fore hand
 	 */
 	public void setTrickForeHand(String tableName, Player trickForeHand);
-
-	/**
-	 * Sets the skat cards
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param skat
-	 *            Skat cards
-	 */
-	public void setSkat(String tableName, CardList skat);
 
 	/**
 	 * Takes a card from the skat
