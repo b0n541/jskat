@@ -15,7 +15,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -35,7 +34,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 
 	private static Log log = LogFactory.getLog(HumanPlayer.class);
 
-	private Idler idler = null;
+	private Idler idler = new Idler();
 
 	private JSkatView view = null;
 
@@ -236,22 +235,9 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 			}
 		} else if (JSkatAction.PLAY_CARD.toString().equals(command)
 				&& source instanceof Card) {
-			// player played card
-			// check card first
-			Card card = (Card) source;
-			if (this.getPlayableCards(this.knowledge.getTrickCards()).contains(
-					card)) {
-				// card is playable
-				this.nextCard = card;
-			} else {
 
-				log.debug("Card " + card + " is not allowed to be played..."); //$NON-NLS-1$ //$NON-NLS-2$
-				// FIXME this must be deleted
-				// it's GUI code
-				this.view.showMessage(JOptionPane.ERROR_MESSAGE, "Card " + card
-						+ " is not allowed to be played!");
-				interrupt = false;
-			}
+			this.nextCard = (Card) source;
+
 		} else {
 
 			log

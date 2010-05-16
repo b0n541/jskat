@@ -14,8 +14,6 @@ package de.jskat.gui;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.JDialog;
-
 import de.jskat.control.SkatTable;
 import de.jskat.control.iss.ChatMessageType;
 import de.jskat.data.GameAnnouncement;
@@ -141,7 +139,7 @@ public interface JSkatView {
 	 * Shows a message dialog
 	 * 
 	 * @param messageType
-	 *            Message type @see {@link JDialog}
+	 *            Message type @see {@link JOPtionPane}
 	 * @param message
 	 *            Message text
 	 */

@@ -11,6 +11,8 @@ Released: @ReleaseDate@
 
 package de.jskat.control;
 
+import javax.swing.JOptionPane;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -20,9 +22,9 @@ import de.jskat.data.SkatGameData;
 import de.jskat.data.Trick;
 import de.jskat.data.SkatGameData.GameState;
 import de.jskat.gui.JSkatView;
+import de.jskat.util.Card;
 import de.jskat.util.CardDeck;
 import de.jskat.util.CardList;
-import de.jskat.util.Card;
 import de.jskat.util.GameType;
 import de.jskat.util.Player;
 import de.jskat.util.SkatConstants;
@@ -588,36 +590,41 @@ public class SkatGame extends JSkatThread {
 		Card card = null;
 		JSkatPlayer skatPlayer = getPlayerObject(currPlayer);
 
-		// ask player for the next card
-		card = skatPlayer.playCard();
+		boolean isCardAccepted = false;
+		while (!isCardAccepted) {
+			// ask player for the next card
+			card = skatPlayer.playCard();
 
-		log.debug(card + " " + this.data); //$NON-NLS-1$
+			log.debug(card + " " + this.data); //$NON-NLS-1$
 
-		if (card == null) {
-			// TODO throw appropriate exception
-			log.error("Player is fooling!!! Did not play a card!"); //$NON-NLS-1$
-		} else if (!playerHasCard(currPlayer, card)) {
-			// TODO throw appropriate exception
-			log.error("Player is fooling!!! Doesn't have card " + card + "!"); //$NON-NLS-1$//$NON-NLS-2$
-		} else if (!this.rules.isCardAllowed(this.data.getGameType(), trick
-				.getFirstCard(), this.data.getPlayerCards(currPlayer), card)) {
-			// TODO throw appropriate exception
-			log.error("Player is fooling!!! Card " + card + " is not allowed!"); //$NON-NLS-1$//$NON-NLS-2$
-		} else {
-			// card was on players hand and is valid
-			trick.addCard(card);
-			this.data.getPlayerCards(currPlayer).remove(card);
-			/*
-			 * this.view.removeCard(this.tableName, currPlayer, card);
-			 * this.view.setTrickCard(this.tableName, currPlayer, card);
-			 */
-			this.view.playTrickCard(this.tableName, currPlayer, card);
+			if (card == null) {
+				// TODO throw appropriate exception
+				log.error("Player is fooling!!! Did not play a card!"); //$NON-NLS-1$
+			} else if (!playerHasCard(currPlayer, card)) {
+				// TODO throw appropriate exception
+				log
+						.error("Player is fooling!!! Doesn't have card " + card + "!"); //$NON-NLS-1$//$NON-NLS-2$
+			} else if (!this.rules
+					.isCardAllowed(this.data.getGameType(), trick
+							.getFirstCard(), this.data
+							.getPlayerCards(currPlayer), card)) {
 
-			for (int i = 0; i < 3; i++) {
-				// inform all players
-				// cloning of card is not neccessary, because Card is immutable
-				this.player[i].cardPlayed(currPlayer, card);
+				this.view.showMessage(JOptionPane.INFORMATION_MESSAGE,
+						"Card " + card + " is not allowed!"); //$NON-NLS-1$ //$NON-NLS-2$
+			} else {
+				isCardAccepted = true;
 			}
+		}
+
+		// card was on players hand and is valid
+		trick.addCard(card);
+		this.data.getPlayerCards(currPlayer).remove(card);
+		this.view.playTrickCard(this.tableName, currPlayer, card);
+
+		for (int i = 0; i < 3; i++) {
+			// inform all players
+			// cloning of card is not neccessary, because Card is immutable
+			this.player[i].cardPlayed(currPlayer, card);
 		}
 
 		log.debug("playing card " + card); //$NON-NLS-1$
@@ -852,7 +859,7 @@ public class SkatGame extends JSkatThread {
 			} else if (newState == GameState.DISCARDING) {
 
 				this.view.setSkat(this.tableName, this.data.getSkat());
-				
+
 			} else if (newState == GameState.GAME_OVER) {
 
 				this.view.addGameResult(this.tableName, this.data);
