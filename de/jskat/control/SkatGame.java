@@ -22,6 +22,7 @@ import de.jskat.data.SkatGameData;
 import de.jskat.data.Trick;
 import de.jskat.data.SkatGameData.GameState;
 import de.jskat.gui.JSkatView;
+import de.jskat.gui.human.HumanPlayer;
 import de.jskat.util.Card;
 import de.jskat.util.CardDeck;
 import de.jskat.util.CardList;
@@ -598,12 +599,14 @@ public class SkatGame extends JSkatThread {
 			log.debug(card + " " + this.data); //$NON-NLS-1$
 
 			if (card == null) {
-				// TODO throw appropriate exception
+
 				log.error("Player is fooling!!! Did not play a card!"); //$NON-NLS-1$
+
 			} else if (!playerHasCard(currPlayer, card)) {
-				// TODO throw appropriate exception
+
 				log
 						.error("Player is fooling!!! Doesn't have card " + card + "!"); //$NON-NLS-1$//$NON-NLS-2$
+
 			} else if (!this.rules
 					.isCardAllowed(this.data.getGameType(), trick
 							.getFirstCard(), this.data
@@ -611,7 +614,14 @@ public class SkatGame extends JSkatThread {
 
 				this.view.showMessage(JOptionPane.INFORMATION_MESSAGE,
 						"Card " + card + " is not allowed!"); //$NON-NLS-1$ //$NON-NLS-2$
+
+				if (!(skatPlayer instanceof HumanPlayer)) {
+					// TODO create option for switching playing schwarz on/off
+					isCardAccepted = true;
+				}
+
 			} else {
+
 				isCardAccepted = true;
 			}
 		}
