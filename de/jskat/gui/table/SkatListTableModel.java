@@ -75,7 +75,7 @@ class SkatListTableModel extends AbstractTableModel {
 
 		Object result = null;
 
-		if (this.displayValues.get(rowIndex).get(columnIndex).intValue() != 0) {
+		if (this.displayValues.get(rowIndex).get(columnIndex) != null) {
 			result = this.displayValues.get(rowIndex).get(columnIndex);
 		} else {
 			result = "-";
@@ -117,6 +117,7 @@ class SkatListTableModel extends AbstractTableModel {
 	void calculateDisplayValues() {
 
 		int currResult = 0;
+		List<Integer> playerResultsSoFar = new ArrayList<Integer>();
 
 		this.displayValues.clear();
 
@@ -132,13 +133,14 @@ class SkatListTableModel extends AbstractTableModel {
 
 				if (this.declarers.get(game) != null) {
 
-					if (game > 0) {
+					if (game == 0) {
+						// set previous player result to 0
+						playerResultsSoFar.add(new Integer(0));
+					} else {
 						// get previous result for player values
 						// from second game on
-						previousResult = this.displayValues.get(game - 1).get(
-								player);
-					} else {
-						previousResult = 0;
+						previousResult = playerResultsSoFar.get(player)
+								.intValue();
 					}
 
 					// get player results from current game
@@ -154,17 +156,20 @@ class SkatListTableModel extends AbstractTableModel {
 								this.playerCount);
 						break;
 					case BIERLACHS:
+						// FIXME jan 31.05.2010 add bierlachs value
 						break;
 					}
 				}
 
 				if (currResult != 0) {
 
-					this.displayValues.get(game).add(
-							new Integer(previousResult + currResult));
+					Integer newResult = new Integer(previousResult + currResult);
+					this.displayValues.get(game).add(newResult);
+					playerResultsSoFar.set(player, newResult);
+
 				} else {
 
-					this.displayValues.get(game).add(0);
+					this.displayValues.get(game).add(null);
 				}
 			}
 
