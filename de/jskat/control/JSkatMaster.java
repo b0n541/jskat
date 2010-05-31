@@ -29,7 +29,6 @@ import de.jskat.control.iss.ISSController;
 import de.jskat.data.JSkatApplicationData;
 import de.jskat.data.JSkatOptions;
 import de.jskat.gui.JSkatView;
-import de.jskat.gui.human.HumanPlayer;
 import de.jskat.util.Card;
 import de.jskat.util.GameType;
 
@@ -43,8 +42,6 @@ public class JSkatMaster {
 	private JSkatOptions options;
 	private JSkatApplicationData data;
 	private JSkatView view;
-	private HumanPlayer human;
-
 	private ISSController issControl;
 
 	/**
@@ -59,8 +56,6 @@ public class JSkatMaster {
 		this.options = jskatOptions;
 
 		this.issControl = new ISSController(this, this.data);
-
-		this.human = new HumanPlayer();
 	}
 
 	/**
@@ -131,13 +126,14 @@ public class JSkatMaster {
 
 		for (PlayerType player : allPlayer) {
 
-			table.placePlayer(getPlayerInstance(player));
+			table.placePlayer(getPlayerInstance(table.getName(), player));
 		}
 
 		table.startSkatSeries(numberOfRounds);
 	}
 
-	private JSkatPlayer getPlayerInstance(PlayerType playerType) {
+	private JSkatPlayer getPlayerInstance(String tableName,
+			PlayerType playerType) {
 
 		JSkatPlayer player = null;
 
@@ -153,7 +149,7 @@ public class JSkatMaster {
 			player = getPlayerInstanceFromName("de.jskat.ai.mjl.AIPlayerMJL"); //$NON-NLS-1$
 			break;
 		case HUMAN:
-			player = this.human;
+			player = this.data.getHumanPlayer(tableName);
 			break;
 		}
 
@@ -432,7 +428,7 @@ public class JSkatMaster {
 
 		SkatTable table = this.data.getSkatTable(this.data.getActiveTable());
 
-		human.actionPerformed(event);
+		this.data.getHumanPlayer(table.getName()).actionPerformed(event);
 	}
 
 	/**

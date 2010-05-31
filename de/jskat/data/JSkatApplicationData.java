@@ -18,6 +18,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 
 import de.jskat.control.SkatTable;
+import de.jskat.gui.human.HumanPlayer;
 
 /**
  * Holds all application data
@@ -25,11 +26,13 @@ import de.jskat.control.SkatTable;
 public class JSkatApplicationData {
 
 	private JSkatOptions options;
+	// FIXME jan 31.05.2010 hold only one map of tables
 	private Map<String, SkatTable> localSkatTables;
 	private Map<String, SkatTable> remoteSkatTables;
 	private String activeTable;
 	private String issLoginName;
 	private Set<String> availableISSPlayer;
+	private Map<String, HumanPlayer> humanPlayers;
 
 	/**
 	 * Contructor
@@ -38,42 +41,48 @@ public class JSkatApplicationData {
 	 *            JSkat options
 	 */
 	public JSkatApplicationData(JSkatOptions jskatOptions) {
-		
+
 		this.options = jskatOptions;
 		this.localSkatTables = new HashMap<String, SkatTable>();
 		this.remoteSkatTables = new HashMap<String, SkatTable>();
+		this.humanPlayers = new HashMap<String, HumanPlayer>();
 		this.availableISSPlayer = new HashSet<String>();
 	}
 
 	/**
 	 * Adds a new local skat table
 	 * 
-	 * @param newSkatTable New local table
+	 * @param newSkatTable
+	 *            New local table
 	 */
 	synchronized public void addLocalSkatTable(SkatTable newSkatTable) {
-		
+
 		this.localSkatTables.put(newSkatTable.getName(), newSkatTable);
+		this.humanPlayers.put(newSkatTable.getName(), new HumanPlayer());
 	}
-	
+
 	/**
 	 * Returns a reference to a skat table
 	 * 
-	 * @param tableName Table name
+	 * @param tableName
+	 *            Table name
 	 * @return Skat table
 	 */
 	public SkatTable getSkatTable(String tableName) {
-		
+
 		return this.localSkatTables.get(tableName);
 	}
-	
+
 	/**
 	 * Adds a new remote skat table
-	 *  
-	 * @param newRemoteSkatTable New remote table
+	 * 
+	 * @param newRemoteSkatTable
+	 *            New remote table
 	 */
 	public void addRemoteSkatTables(SkatTable newRemoteSkatTable) {
 		this.remoteSkatTables.put(newRemoteSkatTable.getName(),
 				newRemoteSkatTable);
+		this.humanPlayers.put(newRemoteSkatTable.getName(), new HumanPlayer());
 	}
 
 	/**
@@ -82,27 +91,28 @@ public class JSkatApplicationData {
 	 * @return All options for JSkat
 	 */
 	public JSkatOptions getOptions() {
-		
+
 		return this.options;
 	}
-	
+
 	/**
 	 * Gets current options for a new table
 	 * 
 	 * @return Current options for a new table
 	 */
 	public SkatTableOptions getTableOptions() {
-		
+
 		return this.options.getSkatTableOptions();
 	}
-	
+
 	/**
 	 * Sets the active table
 	 * 
-	 * @param newActiveTable New active table
+	 * @param newActiveTable
+	 *            New active table
 	 */
 	public void setActiveTable(String newActiveTable) {
-		
+
 		this.activeTable = newActiveTable;
 	}
 
@@ -112,7 +122,7 @@ public class JSkatApplicationData {
 	 * @return Active table
 	 */
 	public String getActiveTable() {
-		
+
 		return this.activeTable;
 	}
 
@@ -172,5 +182,16 @@ public class JSkatApplicationData {
 	 */
 	public void removeAvailableISSPlayer(String player) {
 		this.availableISSPlayer.remove(player);
+	}
+
+	/**
+	 * Gets the human player for a table
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @return Human player
+	 */
+	public HumanPlayer getHumanPlayer(String tableName) {
+		return this.humanPlayers.get(tableName);
 	}
 }
