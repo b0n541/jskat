@@ -26,9 +26,7 @@ import de.jskat.gui.human.HumanPlayer;
 public class JSkatApplicationData {
 
 	private JSkatOptions options;
-	// FIXME jan 31.05.2010 hold only one map of tables
-	private Map<String, SkatTable> localSkatTables;
-	private Map<String, SkatTable> remoteSkatTables;
+	private Map<String, SkatTable> skatTables;
 	private String activeTable;
 	private String issLoginName;
 	private Set<String> availableISSPlayer;
@@ -43,8 +41,7 @@ public class JSkatApplicationData {
 	public JSkatApplicationData(JSkatOptions jskatOptions) {
 
 		this.options = jskatOptions;
-		this.localSkatTables = new HashMap<String, SkatTable>();
-		this.remoteSkatTables = new HashMap<String, SkatTable>();
+		this.skatTables = new HashMap<String, SkatTable>();
 		this.humanPlayers = new HashMap<String, HumanPlayer>();
 		this.availableISSPlayer = new HashSet<String>();
 	}
@@ -55,9 +52,9 @@ public class JSkatApplicationData {
 	 * @param newSkatTable
 	 *            New local table
 	 */
-	synchronized public void addLocalSkatTable(SkatTable newSkatTable) {
+	synchronized public void addSkatTable(SkatTable newSkatTable) {
 
-		this.localSkatTables.put(newSkatTable.getName(), newSkatTable);
+		this.skatTables.put(newSkatTable.getName(), newSkatTable);
 		this.humanPlayers.put(newSkatTable.getName(), new HumanPlayer());
 	}
 
@@ -70,19 +67,7 @@ public class JSkatApplicationData {
 	 */
 	public SkatTable getSkatTable(String tableName) {
 
-		return this.localSkatTables.get(tableName);
-	}
-
-	/**
-	 * Adds a new remote skat table
-	 * 
-	 * @param newRemoteSkatTable
-	 *            New remote table
-	 */
-	public void addRemoteSkatTables(SkatTable newRemoteSkatTable) {
-		this.remoteSkatTables.put(newRemoteSkatTable.getName(),
-				newRemoteSkatTable);
-		this.humanPlayers.put(newRemoteSkatTable.getName(), new HumanPlayer());
+		return this.skatTables.get(tableName);
 	}
 
 	/**
@@ -112,6 +97,13 @@ public class JSkatApplicationData {
 	 *            New active table
 	 */
 	public void setActiveTable(String newActiveTable) {
+
+		if (!this.skatTables.containsKey(newActiveTable)
+				&& !this.humanPlayers.containsKey(newActiveTable)) {
+			// table is not known yet --> comes from ISS
+			// create a human player to handle player inputs
+			this.humanPlayers.put(newActiveTable, new HumanPlayer());
+		}
 
 		this.activeTable = newActiveTable;
 	}

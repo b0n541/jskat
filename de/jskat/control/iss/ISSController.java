@@ -12,15 +12,19 @@ Released: @ReleaseDate@
 package de.jskat.control.iss;
 
 import java.awt.event.ActionEvent;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.control.JSkatMaster;
 import de.jskat.data.JSkatApplicationData;
+import de.jskat.data.SkatGameData;
+import de.jskat.data.SkatGameData.GameState;
 import de.jskat.data.iss.ISSChatMessage;
-import de.jskat.data.iss.ISSGameStatus;
+import de.jskat.data.iss.ISSGameStartInformation;
 import de.jskat.data.iss.ISSLoginCredentials;
 import de.jskat.data.iss.ISSMoveInformation;
 import de.jskat.data.iss.ISSTablePanelStatus;
@@ -40,6 +44,8 @@ public class ISSController {
 
 	private Connector issConnect;
 
+	private Map<String, SkatGameData> gameData;
+
 	/**
 	 * Constructor
 	 * 
@@ -52,6 +58,7 @@ public class ISSController {
 
 		this.jskat = controller;
 		this.data = newData;
+		this.gameData = new HashMap<String, SkatGameData>();
 	}
 
 	/**
@@ -346,10 +353,21 @@ public class ISSController {
 	 * @param status
 	 *            New game status
 	 */
-	public void updateISSGame(String tableName, ISSGameStatus status) {
+	public void updateISSGame(String tableName, ISSGameStartInformation status) {
 
 		this.view
 				.updateISSTable(tableName, this.data.getIssLoginName(), status);
+
+		this.gameData.put(tableName, getSkatGameData(status));
+	}
+
+	SkatGameData getSkatGameData(ISSGameStartInformation status) {
+
+		SkatGameData result = new SkatGameData();
+
+		result.setGameState(GameState.NEW_GAME);
+
+		return result;
 	}
 
 	/**
@@ -361,6 +379,7 @@ public class ISSController {
 	public void startGame(String tableName) {
 
 		this.view.startGame(tableName);
+
 	}
 
 	/**
@@ -374,6 +393,27 @@ public class ISSController {
 	public void updateMove(String tableName, ISSMoveInformation moveInformation) {
 
 		this.view.updateISSMove(tableName, moveInformation);
+		updateGameData(tableName, moveInformation);
+	}
+
+	void updateGameData(String tableName, ISSMoveInformation moveInformation) {
+
+		SkatGameData currGame = this.gameData.get(tableName);
+
+		switch (moveInformation.getType()) {
+		case DEAL:
+			break;
+		case BID:
+			break;
+		case HOLD_BID:
+			break;
+		case PASS:
+			break;
+		case GAME_ANNOUNCEMENT:
+			break;
+		case CARD_PLAY:
+			break;
+		}
 	}
 
 	/**

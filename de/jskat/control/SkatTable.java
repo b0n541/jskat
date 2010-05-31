@@ -224,10 +224,9 @@ public class SkatTable {
 	}
 
 	/**
-	 * Gets the name of this skat table
+	 * Gets table name
 	 * 
-	 * @return name of the table
-	 * 
+	 * @return Table name
 	 */
 	public String getName() {
 
@@ -235,7 +234,7 @@ public class SkatTable {
 	}
 
 	/**
-	 * Sets the table name
+	 * Sets table name
 	 * 
 	 * @param newTableName
 	 *            Table name

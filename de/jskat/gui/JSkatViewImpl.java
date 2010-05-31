@@ -48,7 +48,7 @@ import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameState;
 import de.jskat.data.iss.ISSChatMessage;
-import de.jskat.data.iss.ISSGameStatus;
+import de.jskat.data.iss.ISSGameStartInformation;
 import de.jskat.data.iss.ISSMoveInformation;
 import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.data.iss.MovePlayer;
@@ -774,11 +774,11 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#updateISSTable(String, String, ISSGameStatus)
+	 * @see JSkatView#updateISSTable(String, String, ISSGameStartInformation)
 	 */
 	@Override
 	public void updateISSTable(String tableName, String playerName,
-			ISSGameStatus status) {
+			ISSGameStartInformation status) {
 
 		if (playerName.equals(status.getPlayerName(Player.FORE_HAND))) {
 
@@ -796,7 +796,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	void updateISSTable(String tableName, Player leftOpponent,
-			Player rightOpponent, Player player, ISSGameStatus status) {
+			Player rightOpponent, Player player, ISSGameStartInformation status) {
 
 		SkatTablePanel table = this.tables.get(tableName);
 

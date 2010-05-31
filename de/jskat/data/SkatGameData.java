@@ -12,7 +12,9 @@ Released: @ReleaseDate@
 package de.jskat.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -108,7 +110,7 @@ public class SkatGameData {
 	/**
 	 * Points the player made during the game
 	 */
-	private int[] playerPoints = { 0, 0, 0 };
+	private Map<Player, Integer> playerPoints;
 
 	/**
 	 * Game result
@@ -121,9 +123,14 @@ public class SkatGameData {
 	private int highestBidValue = -1;
 
 	/**
+	 * Player names
+	 */
+	private Map<Player, String> playerNames;
+
+	/**
 	 * Bids the players made during bidding
 	 */
-	private int[] playerBids = { 0, 0, 0 };
+	private Map<Player, Integer> playerBids;
 
 	/**
 	 * Trump color in suit games
@@ -220,7 +227,8 @@ public class SkatGameData {
 
 		this.announcement = new GameAnnouncement();
 		this.result = -1;
-		this.tricks = new ArrayList<Trick>();
+
+		this.playerNames = new HashMap<Player, String>();
 
 		this.playerHands = new ArrayList<CardList>();
 		for (int i = 0; i < 3; i++) {
@@ -228,15 +236,24 @@ public class SkatGameData {
 			this.playerHands.add(new CardList());
 		}
 
-		this.skat = new CardList();
-
 		this.dealtCards = new ArrayList<CardList>();
-
 		for (int i = 0; i < 4; i++) {
 
 			this.dealtCards.add(new CardList());
 		}
+		this.skat = new CardList();
 
+		this.playerBids = new HashMap<Player, Integer>();
+		this.playerBids.put(Player.FORE_HAND, new Integer(0));
+		this.playerBids.put(Player.MIDDLE_HAND, new Integer(0));
+		this.playerBids.put(Player.HIND_HAND, new Integer(0));
+
+		this.tricks = new ArrayList<Trick>();
+
+		this.playerPoints = new HashMap<Player, Integer>();
+		this.playerPoints.put(Player.FORE_HAND, new Integer(0));
+		this.playerPoints.put(Player.MIDDLE_HAND, new Integer(0));
+		this.playerPoints.put(Player.HIND_HAND, new Integer(0));
 	}
 
 	/**
@@ -646,7 +663,7 @@ public class SkatGameData {
 	 */
 	public void addToPlayerPoints(Player player, int trickValue) {
 
-		this.playerPoints[player.getOrder()] += trickValue;
+		this.playerPoints.put(player, new Integer(trickValue));
 	}
 
 	/**
@@ -658,7 +675,7 @@ public class SkatGameData {
 	 */
 	public int getScore(Player player) {
 
-		return this.playerPoints[player.ordinal()];
+		return this.playerPoints.get(player).intValue();
 	}
 
 	/**
@@ -719,11 +736,11 @@ public class SkatGameData {
 		Player ramschLoser;
 
 		// TODO what happens if two or more players have the same points?
-		if (this.playerPoints[Player.FORE_HAND.ordinal()] > this.playerPoints[Player.MIDDLE_HAND
-				.ordinal()]) {
+		if (this.playerPoints.get(Player.FORE_HAND) > this.playerPoints
+				.get(Player.MIDDLE_HAND)) {
 
-			if (this.playerPoints[Player.FORE_HAND.ordinal()] > this.playerPoints[Player.HIND_HAND
-					.ordinal()]) {
+			if (this.playerPoints.get(Player.FORE_HAND) > this.playerPoints
+					.get(Player.HIND_HAND)) {
 				ramschLoser = Player.FORE_HAND;
 			} else {
 				ramschLoser = Player.HIND_HAND;
@@ -731,8 +748,8 @@ public class SkatGameData {
 
 		} else {
 
-			if (this.playerPoints[Player.MIDDLE_HAND.ordinal()] > this.playerPoints[Player.HIND_HAND
-					.ordinal()]) {
+			if (this.playerPoints.get(Player.MIDDLE_HAND) > this.playerPoints
+					.get(Player.HIND_HAND)) {
 				ramschLoser = Player.MIDDLE_HAND;
 			} else {
 				ramschLoser = Player.HIND_HAND;
@@ -979,7 +996,8 @@ public class SkatGameData {
 	 */
 	public void addPlayerPoints(Player player, int points) {
 
-		this.playerPoints[player.getOrder()] += points;
+		this.playerPoints.put(player, this.playerPoints.get(player).intValue()
+				+ points);
 	}
 
 	/**
@@ -991,7 +1009,7 @@ public class SkatGameData {
 	 */
 	public int getPlayerPoints(Player player) {
 
-		return this.playerPoints[player.getOrder()];
+		return this.playerPoints.get(player);
 	}
 
 	/**
@@ -1004,19 +1022,19 @@ public class SkatGameData {
 	 */
 	public void setPlayerBid(Player player, int bidValue) {
 
-		this.playerBids[player.getOrder()] = bidValue;
+		this.playerBids.put(player, bidValue);
 	}
 
 	/**
 	 * Gets the highest bid value for a player
 	 * 
-	 * @param playerID
-	 *            Player ID
+	 * @param player
+	 *            Player
 	 * @return Highest bid value so far
 	 */
-	public int getPlayerBid(int playerID) {
+	public int getPlayerBid(Player player) {
 
-		return this.playerBids[playerID];
+		return this.playerBids.get(player);
 	}
 
 	/**
@@ -1170,5 +1188,21 @@ public class SkatGameData {
 				setDurchmarsch(true);
 			}
 		}
+	}
+
+	public Player getDealer() {
+		return dealer;
+	}
+
+	public void setDealer(Player dealer) {
+		this.dealer = dealer;
+	}
+
+	public String getPlayerName(Player player) {
+		return this.playerNames.get(player);
+	}
+
+	public void setPlayerName(Player player, String playerName) {
+		this.playerNames.put(player, playerName);
 	}
 }

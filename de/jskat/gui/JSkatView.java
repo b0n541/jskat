@@ -20,7 +20,7 @@ import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameState;
 import de.jskat.data.iss.ISSChatMessage;
-import de.jskat.data.iss.ISSGameStatus;
+import de.jskat.data.iss.ISSGameStartInformation;
 import de.jskat.data.iss.ISSMoveInformation;
 import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.util.Card;
@@ -453,7 +453,7 @@ public interface JSkatView {
 	 *            New game state
 	 */
 	public void updateISSTable(String tableName, String playerName,
-			ISSGameStatus status);
+			ISSGameStartInformation status);
 
 	/**
 	 * Updates move information

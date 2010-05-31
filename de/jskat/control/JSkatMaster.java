@@ -74,7 +74,7 @@ public class JSkatMaster {
 
 		SkatTable table = new SkatTable(this.data.getTableOptions());
 		table.setName(tableName);
-		this.data.addLocalSkatTable(table);
+		this.data.addSkatTable(table);
 
 		this.view.createSkatTablePanel(table.getName());
 		this.data.setActiveTable(table.getName());
@@ -426,9 +426,8 @@ public class JSkatMaster {
 	 */
 	public void triggerHuman(ActionEvent event) {
 
-		SkatTable table = this.data.getSkatTable(this.data.getActiveTable());
-
-		this.data.getHumanPlayer(table.getName()).actionPerformed(event);
+		this.data.getHumanPlayer(this.data.getActiveTable()).actionPerformed(
+				event);
 	}
 
 	/**

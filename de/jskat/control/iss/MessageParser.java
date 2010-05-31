@@ -19,7 +19,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.GameAnnouncement;
-import de.jskat.data.iss.ISSGameStatus;
+import de.jskat.data.iss.ISSGameStartInformation;
 import de.jskat.data.iss.ISSMoveInformation;
 import de.jskat.data.iss.ISSPlayerStatus;
 import de.jskat.data.iss.ISSTablePanelStatus;
@@ -94,11 +94,11 @@ public class MessageParser {
 		return status;
 	}
 
-	static ISSGameStatus getGameStartStatus(List<String> params) {
+	static ISSGameStartInformation getGameStartStatus(List<String> params) {
 
 		log.debug("game start parameter: " + params); //$NON-NLS-1$
 
-		ISSGameStatus status = new ISSGameStatus();
+		ISSGameStartInformation status = new ISSGameStartInformation();
 
 		status.setGameNo(Integer.parseInt(params.get(0)));
 		status.putPlayerName(Player.FORE_HAND, params.get(1));

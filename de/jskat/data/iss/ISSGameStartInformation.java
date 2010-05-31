@@ -19,7 +19,7 @@ import de.jskat.util.Player;
 /**
  * Holds all data for a ISS skat game
  */
-public class ISSGameStatus {
+public class ISSGameStartInformation {
 
 	private int gameNo = 0;
 	private Map<Player, String> playerNames = new HashMap<Player, String>();

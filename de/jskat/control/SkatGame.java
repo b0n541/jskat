@@ -381,19 +381,16 @@ public class SkatGame extends JSkatThread {
 
 		Player biddingWinner = null;
 
-		if (this.data.getPlayerBid(announcer.getOrder()) == this.data
-				.getBidValue()) {
+		if (this.data.getPlayerBid(announcer) == this.data.getBidValue()) {
 
-			if (this.data.getPlayerBid(hearer.getOrder()) == this.data
-					.getBidValue()) {
+			if (this.data.getPlayerBid(hearer) == this.data.getBidValue()) {
 
 				biddingWinner = hearer;
 			} else {
 
 				biddingWinner = announcer;
 			}
-		} else if (this.data.getPlayerBid(hearer.getOrder()) == this.data
-				.getBidValue()) {
+		} else if (this.data.getPlayerBid(hearer) == this.data.getBidValue()) {
 
 			biddingWinner = hearer;
 		}
