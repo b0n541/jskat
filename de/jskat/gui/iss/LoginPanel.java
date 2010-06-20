@@ -42,56 +42,60 @@ public class LoginPanel extends JSkatTabPanel {
 
 	JTextField loginField;
 	private JPasswordField passwordField;
-	
+
 	/**
 	 * @param newTableName
 	 * @param jskatBitmaps
 	 * @param actions
-	 * @param strings i18n strings
+	 * @param strings
+	 *            i18n strings
 	 */
-	public LoginPanel(String newTableName,
-			JSkatGraphicRepository jskatBitmaps, ActionMap actions, ResourceBundle strings) {
-		
+	public LoginPanel(String newTableName, JSkatGraphicRepository jskatBitmaps,
+			ActionMap actions, ResourceBundle strings) {
+
 		super(newTableName, jskatBitmaps, actions, strings);
 		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
 	}
-	
+
 	/**
 	 * @see JSkatTabPanel#initPanel()
 	 */
 	@Override
 	protected void initPanel() {
-		
+
 		setLayout(new MigLayout("fill")); //$NON-NLS-1$
-		
+
 		add(getLoginPanel(), "center"); //$NON-NLS-1$
 	}
-	
+
 	private JPanel getLoginPanel() {
-		
+
 		JPanel login = new JPanel(new MigLayout());
-		
-		login.add(new JLabel("Connect to International Skat Server"), "span 2, align center, wrap"); //$NON-NLS-2$
+
+		login
+				.add(
+						new JLabel("Connect to International Skat Server"), "span 2, align center, wrap"); //$NON-NLS-2$
 		login.add(new JLabel("Login"));
 		this.loginField = new JTextField(10);
 		login.add(this.loginField, "growx, wrap"); //$NON-NLS-1$
 		login.add(new JLabel("Password"));
 		this.passwordField = new JPasswordField(10);
 		login.add(this.passwordField, "growx, wrap"); //$NON-NLS-1$
-		final JButton loginButton = new JButton(this.getActionMap().get(JSkatAction.CONNECT_TO_ISS));
+		final JButton loginButton = new JButton(this.getActionMap().get(
+				JSkatAction.CONNECT_TO_ISS));
 		loginButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+
 				ISSLoginCredentials loginCredentials = new ISSLoginCredentials();
 				loginCredentials.setLoginName(LoginPanel.this.loginField
 						.getText());
 				loginCredentials.setPassword(new String(
 						LoginPanel.this.passwordField.getPassword()));
 				// FIXME must be setable
-				loginCredentials.setPort(80);
-				
-				e.setSource(loginCredentials);  
+				loginCredentials.setPort(7000);
+
+				e.setSource(loginCredentials);
 				// fire event again
 				loginButton.dispatchEvent(e);
 			}

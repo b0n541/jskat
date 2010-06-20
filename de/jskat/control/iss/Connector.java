@@ -33,7 +33,7 @@ class Connector {
 	private PrintWriter output;
 	private InputChannel issIn;
 	private OutputChannel issOut;
-	
+
 	private String loginName;
 	private String password;
 	private int port;
@@ -43,35 +43,39 @@ class Connector {
 	/**
 	 * Constructor
 	 * 
-	 * @param controller Controller for ISS connection
+	 * @param controller
+	 *            Controller for ISS connection
 	 */
 	Connector(ISSController controller) {
-		
+
 		this.issControl = controller;
 	}
-	
+
 	/**
 	 * Sets login credentials
 	 * 
-	 * @param newLoginName Login name
-	 * @param newPassword Password
-	 * @param newPort Port number (80, 7000, 8000 are allowed)
+	 * @param newLoginName
+	 *            Login name
+	 * @param newPassword
+	 *            Password
+	 * @param newPort
+	 *            Port number (80, 7000, 8000 are allowed)
 	 */
 	void setConnectionData(String newLoginName, String newPassword, int newPort) {
-		
+
 		this.loginName = newLoginName;
 		this.password = newPassword;
-		
+
 		if (newPort == 80 || newPort == 7000 || newPort == 8000) {
-			
+
 			this.port = newPort;
-		}
-		else {
-			
-			throw new IllegalArgumentException("Unsupported port number: " + newPort); //$NON-NLS-1$
+		} else {
+
+			throw new IllegalArgumentException(
+					"Unsupported port number: " + newPort); //$NON-NLS-1$
 		}
 	}
-	
+
 	/**
 	 * Establishes a connection with ISS
 	 * 
@@ -80,37 +84,39 @@ class Connector {
 	boolean establishConnection() {
 
 		log.debug("ISSConnector.establishConnection()"); //$NON-NLS-1$
-		
+
 		try {
 			// TODO make this configurable
-			this.socket = new Socket("bodo1.cs.ualberta.ca", this.port); //$NON-NLS-1$
+			this.socket = new Socket("skatgame.net", this.port); //$NON-NLS-1$
 			this.output = new PrintWriter(this.socket.getOutputStream(), true);
 			this.issOut = new OutputChannel(this.output);
-			this.issIn = new InputChannel(this.issControl, this, this.socket.getInputStream());
+			this.issIn = new InputChannel(this.issControl, this, this.socket
+					.getInputStream());
 			this.issIn.start();
 			log.debug("Connection established..."); //$NON-NLS-1$
 			this.issOut.send(this.loginName);
-			
+
 		} catch (java.net.UnknownHostException e) {
 			log.error("Cannot open connection to ISS"); //$NON-NLS-1$
-			this.issControl.showMessage(JOptionPane.ERROR_MESSAGE, "Can't establish connection to ISS");
+			this.issControl.showMessage(JOptionPane.ERROR_MESSAGE,
+					"Can't establish connection to ISS");
 		} catch (java.io.IOException e) {
 			log.error("IOException: " + e.toString()); //$NON-NLS-1$
 		}
-		
+
 		return true;
 	}
 
 	void sendPassword() {
-		
+
 		this.issOut.send(this.password);
 	}
-	
+
 	/**
 	 * Closes the connection to ISS
 	 */
 	void closeConnection() {
-		
+
 		try {
 			log.debug("closing connection"); //$NON-NLS-1$
 			this.issIn.interrupt();
@@ -132,17 +138,17 @@ class Connector {
 	 * @return TRUE if there is an open connection
 	 */
 	boolean isConnected() {
-		
+
 		return this.socket != null && this.socket.isBound();
 	}
 
 	void send(ISSChatMessage message) {
-	
+
 		this.issOut.send("yell " + message.getMessage()); //$NON-NLS-1$
 	}
 
 	void requestTableCreation() {
-		
+
 		// TODO table creation for four player
 		this.issOut.send("create / 3"); //$NON-NLS-1$
 	}
@@ -158,27 +164,28 @@ class Connector {
 	}
 
 	void leaveTable(String tableName, String playerName) {
-		
+
 		this.issOut.send("table " + tableName + ' ' + playerName + " leave"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
-	
+
 	void sendReadySignal(String tableName, String playerName) {
 
 		this.issOut.send("table " + tableName + ' ' + playerName + " ready"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
-	
+
 	void sendTalkEnabledSignal(String tableName, String playerName) {
 
 		this.issOut.send("table " + tableName + ' ' + playerName + " gametalk"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
-	
+
 	void sendTableSeatChangeSignal(String tableName, String playerName) {
 
 		this.issOut.send("table " + tableName + ' ' + playerName + " 34"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	void invitePlayer(String tableName, String invitor, String invitee) {
-		
-		this.issOut.send("table " + tableName + ' ' + invitor + " invite " + invitee);  //$NON-NLS-1$//$NON-NLS-2$
+
+		this.issOut
+				.send("table " + tableName + ' ' + invitor + " invite " + invitee); //$NON-NLS-1$//$NON-NLS-2$
 	}
 }
