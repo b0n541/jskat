@@ -428,11 +428,8 @@ public class JSkatViewImpl implements JSkatView {
 		// do it in createSkatTablePanel
 		ISSTablePanel newTable = new ISSTablePanel(name, this.bitmaps,
 				this.actions, this.strings);
+		addTabPanel(newTable, "ISS table: " + name);
 		this.tables.put(name, newTable);
-
-		this.tabs.add("ISS table: " + name, newTable); //$NON-NLS-1$
-		this.tabs.setSelectedComponent(newTable);
-		this.activeTableName = name;
 	}
 
 	/**
@@ -443,13 +440,10 @@ public class JSkatViewImpl implements JSkatView {
 
 		SkatTablePanel newPanel = new SkatTablePanel(name, this.bitmaps,
 				this.actions, this.strings);
-		this.tabs.addTab(name, newPanel);
-		this.tabs.setSelectedComponent(newPanel);
+		addTabPanel(newPanel, name);
+		this.tables.put(name, newPanel);
 
 		this.actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(true);
-
-		this.tables.put(name, newPanel);
-		this.activeTableName = name;
 	}
 
 	/**
@@ -463,7 +457,7 @@ public class JSkatViewImpl implements JSkatView {
 						this.mainFrame,
 						"JSkat Version 0.7\n\n"
 								+ "Authors: Jan Schaefer, Markus J. Luzius\n\n"
-								+ "Icons: Tango project, Silvestre Herrera and Alex Roberts\n\n"
+								+ "Icons: Gnome Desktop Icons, Tango project, Silvestre Herrera and Alex Roberts\n\n"
 								+ "This program comes with ABSOLUTELY NO WARRANTY; for details see licence dialog\n"
 								+ "This is free software, and you are welcome to redistribute it\n"
 								+ "under certain conditions; see licence dialog for details.",
@@ -685,8 +679,9 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showISSLogin() {
 
-		this.tabs.add("ISS login", new LoginPanel("ISS login", this.bitmaps, //$NON-NLS-1$ //$NON-NLS-2$
-				this.actions, this.strings));
+		LoginPanel loginPanel = new LoginPanel("ISS login", this.bitmaps, //$NON-NLS-1$ //$NON-NLS-2$
+				this.actions, this.strings);
+		addTabPanel(loginPanel, "ISS login");
 	}
 
 	/**
@@ -716,8 +711,7 @@ public class JSkatViewImpl implements JSkatView {
 
 		this.issLobby = new LobbyPanel("ISS lobby", this.bitmaps, this.actions,
 				this.strings);
-		this.tabs.add("ISS lobby", this.issLobby); //$NON-NLS-1$
-		this.tabs.setSelectedComponent(this.issLobby);
+		addTabPanel(this.issLobby, "ISS lobby");
 	}
 
 	/**
@@ -992,5 +986,13 @@ public class JSkatViewImpl implements JSkatView {
 		for (Card card : cards) {
 			addCard(tableName, player, card);
 		}
+	}
+
+	private void addTabPanel(JPanel newPanel, String title) {
+
+		this.tabs.addTab(title, newPanel);
+		this.tabs.setTabComponentAt(this.tabs.indexOfComponent(newPanel),
+				new JSkatTabComponent(this.tabs, this.bitmaps));
+		this.tabs.setSelectedComponent(newPanel);
 	}
 }

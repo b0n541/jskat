@@ -7,7 +7,7 @@ Authors: @JS@
 
 Released: @ReleaseDate@
 
-*/
+ */
 
 package de.jskat.gui.img;
 
@@ -31,22 +31,27 @@ public class JSkatGraphicRepository {
 
 	private static Log log = LogFactory.getLog(JSkatGraphicRepository.class);
 
-	/** 
-	 * Creates a new instance of JSkatGraphicRepository 
-	 *
-	 * @param jskatOptions Current JSkatOptions 
+	/**
+	 * Creates a new instance of JSkatGraphicRepository
+	 * 
+	 * @param jskatOptions
+	 *            Current JSkatOptions
 	 */
 	public JSkatGraphicRepository(JSkatOptions jskatOptions) {
 
 		this.cardFace = jskatOptions.getCardFace();
 		this.tracker = new MediaTracker(new Canvas());
-		this.skatTable = Toolkit.getDefaultToolkit().getImage(
-				ClassLoader
-						.getSystemResource("de/jskat/gui/img/gui/skatTable.png")); //$NON-NLS-1$
+		this.skatTable = Toolkit
+				.getDefaultToolkit()
+				.getImage(
+						ClassLoader
+								.getSystemResource("de/jskat/gui/img/gui/skatTable.png")); //$NON-NLS-1$
 		this.tracker.addImage(this.skatTable, 0);
-		this.jskatLogo = Toolkit.getDefaultToolkit().getImage(
-				ClassLoader
-						.getSystemResource("de/jskat/gui/img/gui/jskatLogo.png")); //$NON-NLS-1$
+		this.jskatLogo = Toolkit
+				.getDefaultToolkit()
+				.getImage(
+						ClassLoader
+								.getSystemResource("de/jskat/gui/img/gui/jskatLogo.png")); //$NON-NLS-1$
 		this.tracker.addImage(this.jskatLogo, 0);
 		try {
 			this.tracker.waitForID(0);
@@ -77,15 +82,29 @@ public class JSkatGraphicRepository {
 
 			// new array list for all sizes
 			this.icons.add(new ArrayList<Image>());
-			
+
 			// for all sizes
 			for (IconSize size : IconSize.values()) {
-				
+
 				// add icon
-				this.icons.get(icon.ordinal()).add(Toolkit.getDefaultToolkit().getImage(
-						ClassLoader.getSystemResource("de/jskat/gui/img/gui/" //$NON-NLS-1$
-								+ icon.toString().toLowerCase() + '_' + size.toString().toLowerCase() + ".png"))); //$NON-NLS-1$
-				this.tracker.addImage(this.icons.get(icon.ordinal()).get(size.ordinal()), 1);
+				this.icons
+						.get(icon.ordinal())
+						.add(
+								Toolkit
+										.getDefaultToolkit()
+										.getImage(
+												ClassLoader
+														.getSystemResource("de/jskat/gui/img/gui/" //$NON-NLS-1$
+																+ icon
+																		.toString()
+																		.toLowerCase()
+																+ '_'
+																+ size
+																		.toString()
+																		.toLowerCase()
+																+ ".png"))); //$NON-NLS-1$
+				this.tracker.addImage(this.icons.get(icon.ordinal()).get(
+						size.ordinal()), 1);
 			}
 		}
 
@@ -103,24 +122,37 @@ public class JSkatGraphicRepository {
 	 *            The directory name for the card set to be loaded
 	 */
 	public void loadCards(CardFace cardType) {
-		
+
 		for (Suit suit : Suit.values()) {
 
 			this.cards.add(new ArrayList<Image>());
-			
+
 			for (Rank rank : Rank.values()) {
 
-				this.cards.get(suit.ordinal()).add(Toolkit.getDefaultToolkit().getImage(
-						ClassLoader.getSystemResource("de/jskat/gui/img/cards/" //$NON-NLS-1$
-								+ cardType.toString().toLowerCase() + "/gnome/" + suit.shortString() + '-' + rank.shortString() + ".gif")));  //$NON-NLS-1$//$NON-NLS-2$
-				
-				this.tracker.addImage(this.cards.get(suit.ordinal()).get(rank.ordinal()), 2);
+				this.cards
+						.get(suit.ordinal())
+						.add(
+								Toolkit
+										.getDefaultToolkit()
+										.getImage(
+												ClassLoader
+														.getSystemResource("de/jskat/gui/img/cards/" //$NON-NLS-1$
+																+ cardType
+																		.toString()
+																		.toLowerCase()
+																+ "/gnome/" + suit.shortString() + '-' + rank.shortString() + ".gif"))); //$NON-NLS-1$//$NON-NLS-2$
+
+				this.tracker.addImage(this.cards.get(suit.ordinal()).get(
+						rank.ordinal()), 2);
 			}
 		}
 
-		this.cardBack = Toolkit.getDefaultToolkit().getImage(
-				ClassLoader.getSystemResource("de/jskat/gui/img/cards/" + cardType.toString().toLowerCase() //$NON-NLS-1$
-						+ "/jskat/back.gif")); //$NON-NLS-1$
+		this.cardBack = Toolkit
+				.getDefaultToolkit()
+				.getImage(
+						ClassLoader
+								.getSystemResource("de/jskat/gui/img/cards/" + cardType.toString().toLowerCase() //$NON-NLS-1$
+										+ "/jskat/back.gif")); //$NON-NLS-1$
 		this.tracker.addImage(this.cardBack, 2);
 
 		try {
@@ -160,16 +192,15 @@ public class JSkatGraphicRepository {
 	public Image getCardImage(Suit suit, Rank value) {
 
 		Image result = null;
-		
+
 		if (suit != null && value != null) {
 
 			result = this.cards.get(suit.ordinal()).get(value.ordinal());
-		}
-		else {
-		
+		} else {
+
 			result = this.cardBack;
 		}
-		
+
 		return result;
 	}
 
@@ -280,11 +311,15 @@ public class JSkatGraphicRepository {
 		 */
 		LICENSE,
 		/**
+		 * Close icon for windows and tabs
+		 */
+		WINDOW_CLOSE,
+		/**
 		 * JSkat logo
 		 */
 		JSKAT;
 	}
-	
+
 	/**
 	 * Holds all icon sizes
 	 */
