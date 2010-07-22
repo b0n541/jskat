@@ -435,6 +435,10 @@ public class ISSController {
 			currGame.setGameState(GameState.PRELIMINARY_GAME_END);
 			break;
 		}
+
+		// FIXME (jan 22.07.2010) set correct expected move from human player!!!
+		this.data.getHumanPlayer(tableName).bidMore(
+				moveInformation.getBidValue());
 	}
 
 	/**
