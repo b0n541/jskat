@@ -22,7 +22,7 @@ import de.jskat.gui.img.JSkatGraphicRepository;
  * Generic Tab Panel for JSkat
  * 
  */
-public abstract class JSkatTabPanel extends JPanel {
+public abstract class AbstractTabPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -45,7 +45,7 @@ public abstract class JSkatTabPanel extends JPanel {
 	 * @param actions
 	 *            JSkat actions
 	 */
-	public JSkatTabPanel(String tabName, JSkatGraphicRepository jskatBitmaps,
+	public AbstractTabPanel(String tabName, JSkatGraphicRepository jskatBitmaps,
 			ActionMap actions, ResourceBundle jskatStrings) {
 
 		super();
@@ -60,4 +60,9 @@ public abstract class JSkatTabPanel extends JPanel {
 	 * Initializes the tab panel
 	 */
 	protected abstract void initPanel();
+
+	/**
+	 * Sets the focus
+	 */
+	protected abstract void setFocus();
 }

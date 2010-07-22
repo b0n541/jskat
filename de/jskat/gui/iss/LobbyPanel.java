@@ -31,7 +31,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.iss.ISSChatMessage;
-import de.jskat.gui.JSkatTabPanel;
+import de.jskat.gui.AbstractTabPanel;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
 
@@ -39,7 +39,7 @@ import de.jskat.gui.img.JSkatGraphicRepository;
  * Represents the lobby of the ISS with an overview about players and tables
  * that are currently online
  */
-public class LobbyPanel extends JSkatTabPanel {
+public class LobbyPanel extends AbstractTabPanel {
 
 	private static final long serialVersionUID = 1L;
 	private static Log log = LogFactory.getLog(LobbyPanel.class);
@@ -71,7 +71,7 @@ public class LobbyPanel extends JSkatTabPanel {
 	}
 
 	/**
-	 * @see de.jskat.gui.JSkatTabPanel#initPanel()
+	 * @see de.jskat.gui.AbstractTabPanel#initPanel()
 	 */
 	@Override
 	protected void initPanel() {
@@ -280,5 +280,10 @@ public class LobbyPanel extends JSkatTabPanel {
 		log.debug("appendChatMessage");
 
 		this.chatPanel.addMessage(message);
+	}
+
+	@Override
+	protected void setFocus() {
+		this.chatPanel.setFocus();
 	}
 }

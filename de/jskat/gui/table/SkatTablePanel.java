@@ -34,7 +34,7 @@ import org.apache.commons.logging.LogFactory;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameState;
-import de.jskat.gui.JSkatTabPanel;
+import de.jskat.gui.AbstractTabPanel;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.action.human.ContinueSkatSeriesAction;
 import de.jskat.gui.action.main.StartSkatSeriesAction;
@@ -47,7 +47,7 @@ import de.jskat.util.Player;
 /**
  * Panel for a skat table
  */
-public class SkatTablePanel extends JSkatTabPanel {
+public class SkatTablePanel extends AbstractTabPanel {
 
 	private static final long serialVersionUID = 1L;
 	private static Log log = LogFactory.getLog(SkatTablePanel.class);
@@ -74,7 +74,7 @@ public class SkatTablePanel extends JSkatTabPanel {
 	protected DiscardPanel discardPanel;
 
 	/**
-	 * @see JSkatTabPanel#JSkatTabPanel(String, JSkatGraphicRepository,
+	 * @see AbstractTabPanel#JSkatTabPanel(String, JSkatGraphicRepository,
 	 *      ActionMap, ResourceBundle)
 	 */
 	public SkatTablePanel(String newTableName,
@@ -87,7 +87,7 @@ public class SkatTablePanel extends JSkatTabPanel {
 	}
 
 	/**
-	 * @see JSkatTabPanel#initPanel()
+	 * @see AbstractTabPanel#initPanel()
 	 */
 	@Override
 	protected void initPanel() {
@@ -603,5 +603,11 @@ public class SkatTablePanel extends JSkatTabPanel {
 				middleHandCard);
 		this.lastTrickPanel.setCard(trickForeHand.getRightNeighbor(),
 				hindHandCard);
+	}
+
+	@Override
+	protected void setFocus() {
+		// TODO Auto-generated method stub
+
 	}
 }

@@ -28,14 +28,14 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.iss.ISSLoginCredentials;
-import de.jskat.gui.JSkatTabPanel;
+import de.jskat.gui.AbstractTabPanel;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
 
 /**
  * Panel for login into International Skat Server (ISS)
  */
-public class LoginPanel extends JSkatTabPanel {
+public class LoginPanel extends AbstractTabPanel {
 
 	private static final long serialVersionUID = 1L;
 	private static Log log = LogFactory.getLog(LoginPanel.class);
@@ -58,7 +58,7 @@ public class LoginPanel extends JSkatTabPanel {
 	}
 
 	/**
-	 * @see JSkatTabPanel#initPanel()
+	 * @see AbstractTabPanel#initPanel()
 	 */
 	@Override
 	protected void initPanel() {
@@ -104,5 +104,9 @@ public class LoginPanel extends JSkatTabPanel {
 		login.add(loginButton, "span 2, align center"); //$NON-NLS-1$
 
 		return login;
+	}
+
+	public void setFocus() {
+		this.loginField.requestFocus();
 	}
 }

@@ -426,6 +426,7 @@ public class JSkatMaster {
 	 */
 	public void triggerHuman(ActionEvent event) {
 
+		log.debug(event);
 		this.data.getHumanPlayer(this.data.getActiveTable()).actionPerformed(
 				event);
 	}

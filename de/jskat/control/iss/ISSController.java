@@ -379,7 +379,6 @@ public class ISSController {
 	public void startGame(String tableName) {
 
 		this.view.startGame(tableName);
-
 	}
 
 	/**
@@ -407,6 +406,7 @@ public class ISSController {
 			break;
 		case BID:
 			currGame.setGameState(GameState.BIDDING);
+			currGame.setBidValue(moveInformation.getBidValue());
 			break;
 		case HOLD_BID:
 			currGame.setGameState(GameState.BIDDING);
@@ -422,6 +422,7 @@ public class ISSController {
 			break;
 		case GAME_ANNOUNCEMENT:
 			currGame.setGameState(GameState.DECLARING);
+			currGame.setAnnouncement(moveInformation.getGameAnnouncement());
 			break;
 		case CARD_PLAY:
 			currGame.setGameState(GameState.TRICK_PLAYING);

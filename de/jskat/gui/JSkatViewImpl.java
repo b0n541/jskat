@@ -113,7 +113,6 @@ public class JSkatViewImpl implements IJSkatView {
 	private SkatSeriesStartDialog skatSeriesStartDialog;
 	private JSkatPreferencesDialog preferencesDialog;
 	private JTabbedPane tabs;
-	private String activeTableName;
 	private Map<String, SkatTablePanel> tables;
 	private JSkatGraphicRepository bitmaps;
 	private ResourceBundle strings;
@@ -274,9 +273,9 @@ public class JSkatViewImpl implements IJSkatView {
 					JTabbedPane changedTabs = (JTabbedPane) e.getSource();
 					Component tab = changedTabs.getSelectedComponent();
 
-					if (tab instanceof JSkatTabPanel) {
+					if (tab instanceof AbstractTabPanel) {
 
-						String tableName = ((JSkatTabPanel) tab).getName();
+						String tableName = ((AbstractTabPanel) tab).getName();
 						log.debug("showing table pane of table " + tableName); //$NON-NLS-1$
 
 						JSkatViewImpl.this.actions.get(
@@ -715,8 +714,8 @@ public class JSkatViewImpl implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#updateISSLobbyTableList(String, int, long, String, String,
-	 *      String)
+	 * @see IJSkatView#updateISSLobbyTableList(String, int, long, String,
+	 *      String, String)
 	 */
 	@Override
 	public void updateISSLobbyTableList(String tableName, int maxPlayers,
@@ -937,11 +936,11 @@ public class JSkatViewImpl implements IJSkatView {
 	@Override
 	public void closeTabPanel(String tabName) {
 
-		JSkatTabPanel panel = (JSkatTabPanel) this.tabs.getSelectedComponent();
+		AbstractTabPanel panel = (AbstractTabPanel) this.tabs.getSelectedComponent();
 		if (!tabName.equals(panel.getName())) {
 			for (Component currPanel : this.tabs.getComponents()) {
 				if (tabName.equals(currPanel.getName())) {
-					panel = (JSkatTabPanel) currPanel;
+					panel = (AbstractTabPanel) currPanel;
 				}
 			}
 		}
@@ -988,11 +987,12 @@ public class JSkatViewImpl implements IJSkatView {
 		}
 	}
 
-	private void addTabPanel(JPanel newPanel, String title) {
+	private void addTabPanel(AbstractTabPanel newPanel, String title) {
 
 		this.tabs.addTab(title, newPanel);
 		this.tabs.setTabComponentAt(this.tabs.indexOfComponent(newPanel),
 				new JSkatTabComponent(this.tabs, this.bitmaps));
 		this.tabs.setSelectedComponent(newPanel);
+		newPanel.setFocus();
 	}
 }

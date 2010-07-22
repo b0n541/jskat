@@ -33,7 +33,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.iss.ISSChatMessage;
-import de.jskat.gui.JSkatTabPanel;
+import de.jskat.gui.AbstractTabPanel;
 import de.jskat.gui.action.JSkatAction;
 
 /**
@@ -47,13 +47,13 @@ class ChatPanel extends JPanel implements ChangeListener {
 	private JTextField inputLine;
 	private Map<String, JTextArea> chats;
 	private JTabbedPane chatTabs;
-	
+
 	private String activeChatName;
 
 	/**
 	 * Constructor
 	 */
-	ChatPanel(JSkatTabPanel parent) {
+	ChatPanel(AbstractTabPanel parent) {
 
 		super();
 		initPanel(parent.getActionMap());
@@ -69,10 +69,10 @@ class ChatPanel extends JPanel implements ChangeListener {
 		this.chatTabs.setAutoscrolls(true);
 		this.chatTabs.addChangeListener(this);
 		add(this.chatTabs, "growx, wrap"); //$NON-NLS-1$
-		
+
 		addNewChat("ISS debug");
 		addNewChat("Lobby");
-		
+
 		this.inputLine = new JTextField(20);
 		this.inputLine.setAction(actions.get(JSkatAction.SEND_CHAT_MESSAGE));
 		this.inputLine.addActionListener(new ActionListener() {
@@ -82,11 +82,12 @@ class ChatPanel extends JPanel implements ChangeListener {
 				String message = ChatPanel.this.inputLine.getText();
 				log.debug("Chat message: " + message); //$NON-NLS-1$
 
-				ISSChatMessage chatMessage = new ISSChatMessage(ChatPanel.this.activeChatName, message);
-				e.setSource(chatMessage);  
+				ISSChatMessage chatMessage = new ISSChatMessage(
+						ChatPanel.this.activeChatName, message);
+				e.setSource(chatMessage);
 				// fire event again
 				ChatPanel.this.inputLine.dispatchEvent(e);
-				
+
 				ChatPanel.this.inputLine.setText(null);
 			}
 		});
@@ -104,7 +105,7 @@ class ChatPanel extends JPanel implements ChangeListener {
 
 		this.chatTabs.add(name, scrollPane);
 		this.activeChatName = name;
-		
+
 		return chat;
 	}
 
@@ -116,18 +117,18 @@ class ChatPanel extends JPanel implements ChangeListener {
 
 		return chat;
 	}
-	
+
 	void addMessage(ISSChatMessage message) {
-		
+
 		log.debug("addMessage");
-		
+
 		JTextArea chat = this.chats.get(message.getChatName());
-		
+
 		if (chat == null) {
 			// new chat --> create chat text area first
 			chat = this.addNewChat(message.getChatName());
 		}
-		
+
 		chat.append(message.getMessage() + '\n');
 	}
 
@@ -135,12 +136,16 @@ class ChatPanel extends JPanel implements ChangeListener {
 	public void stateChanged(ChangeEvent e) {
 		// TODO Auto-generated method stub
 		if (e.getSource() instanceof JTabbedPane) {
-			
+
 			JTabbedPane tabs = (JTabbedPane) e.getSource();
 			Component tab = tabs.getSelectedComponent();
-			
+
 			this.activeChatName = tab.getName();
 			log.debug("Chat " + this.activeChatName + " activated.");
 		}
+	}
+
+	public void setFocus() {
+		this.inputLine.requestFocus();
 	}
 }
