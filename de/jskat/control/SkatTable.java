@@ -20,7 +20,7 @@ import org.apache.commons.logging.LogFactory;
 import de.jskat.ai.JSkatPlayer;
 import de.jskat.data.SkatTableOptions;
 import de.jskat.data.SkatSeriesData.SeriesStates;
-import de.jskat.gui.JSkatView;
+import de.jskat.gui.IJSkatView;
 
 /**
  * Controls a table for playing a series of skat games
@@ -34,7 +34,7 @@ public class SkatTable {
 	private SkatSeries series;
 	private List<JSkatPlayer> player = new ArrayList<JSkatPlayer>();
 
-	private JSkatView view;
+	private IJSkatView view;
 
 	/**
 	 * Constructor
@@ -218,7 +218,7 @@ public class SkatTable {
 	 * @param newView
 	 *            View
 	 */
-	public void setView(JSkatView newView) {
+	public void setView(IJSkatView newView) {
 
 		this.view = newView;
 	}

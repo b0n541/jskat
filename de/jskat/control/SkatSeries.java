@@ -20,7 +20,7 @@ import org.apache.commons.logging.LogFactory;
 import de.jskat.ai.JSkatPlayer;
 import de.jskat.data.SkatSeriesData;
 import de.jskat.data.SkatSeriesData.SeriesStates;
-import de.jskat.gui.JSkatView;
+import de.jskat.gui.IJSkatView;
 import de.jskat.gui.human.HumanPlayer;
 import de.jskat.util.Player;
 
@@ -38,7 +38,7 @@ public class SkatSeries extends JSkatThread {
 	private List<Player> viewPositions;
 	private SkatGame currSkatGame;
 
-	private JSkatView view;
+	private IJSkatView view;
 
 	/**
 	 * Constructor
@@ -239,7 +239,7 @@ public class SkatSeries extends JSkatThread {
 	 * @param newView
 	 *            View
 	 */
-	public void setView(JSkatView newView) {
+	public void setView(IJSkatView newView) {
 
 		this.view = newView;
 	}

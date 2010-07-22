@@ -21,7 +21,7 @@ import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.Trick;
 import de.jskat.data.SkatGameData.GameState;
-import de.jskat.gui.JSkatView;
+import de.jskat.gui.IJSkatView;
 import de.jskat.gui.human.HumanPlayer;
 import de.jskat.util.Card;
 import de.jskat.util.CardDeck;
@@ -48,7 +48,7 @@ public class SkatGame extends JSkatThread {
 	private JSkatPlayer[] player;
 	private JSkatPlayer declarer;
 	private String tableName;
-	private JSkatView view;
+	private IJSkatView view;
 	private BasicSkatRules rules;
 
 	/**
@@ -802,7 +802,7 @@ public class SkatGame extends JSkatThread {
 	 * 
 	 * @param newView
 	 */
-	public void setView(JSkatView newView) {
+	public void setView(IJSkatView newView) {
 
 		this.view = newView;
 	}

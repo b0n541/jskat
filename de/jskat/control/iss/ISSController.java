@@ -28,7 +28,7 @@ import de.jskat.data.iss.ISSGameStartInformation;
 import de.jskat.data.iss.ISSLoginCredentials;
 import de.jskat.data.iss.ISSMoveInformation;
 import de.jskat.data.iss.ISSTablePanelStatus;
-import de.jskat.gui.JSkatView;
+import de.jskat.gui.IJSkatView;
 import de.jskat.gui.action.JSkatAction;
 
 /**
@@ -39,7 +39,7 @@ public class ISSController {
 	private static Log log = LogFactory.getLog(ISSController.class);
 
 	private JSkatMaster jskat;
-	private JSkatView view;
+	private IJSkatView view;
 	private JSkatApplicationData data;
 
 	private Connector issConnect;
@@ -67,7 +67,7 @@ public class ISSController {
 	 * @param newView
 	 *            View
 	 */
-	public void setView(JSkatView newView) {
+	public void setView(IJSkatView newView) {
 
 		this.view = newView;
 	}
@@ -396,22 +396,38 @@ public class ISSController {
 		updateGameData(tableName, moveInformation);
 	}
 
-	void updateGameData(String tableName, ISSMoveInformation moveInformation) {
+	private void updateGameData(String tableName,
+			ISSMoveInformation moveInformation) {
 
 		SkatGameData currGame = this.gameData.get(tableName);
 
 		switch (moveInformation.getType()) {
 		case DEAL:
+			currGame.setGameState(GameState.DEALING);
 			break;
 		case BID:
+			currGame.setGameState(GameState.BIDDING);
 			break;
 		case HOLD_BID:
+			currGame.setGameState(GameState.BIDDING);
 			break;
 		case PASS:
+			currGame.setGameState(GameState.BIDDING);
+			break;
+		case SKAT_REQUEST:
+			currGame.setGameState(GameState.DISCARDING);
+			break;
+		case SKAT_LOOKING:
+			currGame.setGameState(GameState.DISCARDING);
 			break;
 		case GAME_ANNOUNCEMENT:
+			currGame.setGameState(GameState.DECLARING);
 			break;
 		case CARD_PLAY:
+			currGame.setGameState(GameState.TRICK_PLAYING);
+			break;
+		case TIME_OUT:
+			currGame.setGameState(GameState.PRELIMINARY_GAME_END);
 			break;
 		}
 	}

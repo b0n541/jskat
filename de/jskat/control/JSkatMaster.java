@@ -28,7 +28,7 @@ import de.jskat.ai.nn.train.NNTrainer;
 import de.jskat.control.iss.ISSController;
 import de.jskat.data.JSkatApplicationData;
 import de.jskat.data.JSkatOptions;
-import de.jskat.gui.JSkatView;
+import de.jskat.gui.IJSkatView;
 import de.jskat.util.Card;
 import de.jskat.util.GameType;
 
@@ -41,7 +41,7 @@ public class JSkatMaster {
 
 	private JSkatOptions options;
 	private JSkatApplicationData data;
-	private JSkatView view;
+	private IJSkatView view;
 	private ISSController issControl;
 
 	/**
@@ -330,7 +330,7 @@ public class JSkatMaster {
 	 * @param newView
 	 *            View
 	 */
-	public void setView(JSkatView newView) {
+	public void setView(IJSkatView newView) {
 
 		this.view = newView;
 		this.issControl.setView(this.view);
