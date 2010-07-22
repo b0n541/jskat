@@ -30,7 +30,7 @@ import de.jskat.util.Player;
 /**
  * Interface for JSkat views
  */
-public interface JSkatView {
+public interface IJSkatView {
 
 	/**
 	 * Gets a new table name from the view

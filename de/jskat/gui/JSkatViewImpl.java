@@ -105,7 +105,7 @@ import de.jskat.util.Player;
 /**
  * Implementation of JSkatView interface
  */
-public class JSkatViewImpl implements JSkatView {
+public class JSkatViewImpl implements IJSkatView {
 
 	static Log log = LogFactory.getLog(JSkatViewImpl.class);
 
@@ -354,7 +354,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showTable(SkatTable)
+	 * @see IJSkatView#showTable(SkatTable)
 	 */
 	@Override
 	public void showTable(SkatTable table) {
@@ -362,7 +362,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#startSeries(String)
+	 * @see IJSkatView#startSeries(String)
 	 */
 	@Override
 	public void startSeries(String tableName) {
@@ -371,7 +371,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showSeriesResults()
+	 * @see IJSkatView#showSeriesResults()
 	 */
 	@Override
 	public void showSeriesResults() {
@@ -379,7 +379,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#startGame(String)
+	 * @see IJSkatView#startGame(String)
 	 */
 	@Override
 	public void startGame(String tableName) {
@@ -388,7 +388,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#startBidding()
+	 * @see IJSkatView#startBidding()
 	 */
 	@Override
 	public void startBidding() {
@@ -396,7 +396,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#startDiscarding()
+	 * @see IJSkatView#startDiscarding()
 	 */
 	@Override
 	public void startDiscarding() {
@@ -404,7 +404,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#startPlaying()
+	 * @see IJSkatView#startPlaying()
 	 */
 	@Override
 	public void startPlaying() {
@@ -412,7 +412,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showGameResults()
+	 * @see IJSkatView#showGameResults()
 	 */
 	@Override
 	public void showGameResults() {
@@ -420,7 +420,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#createISSTable(String)
+	 * @see IJSkatView#createISSTable(String)
 	 */
 	@Override
 	public void createISSTable(String name) {
@@ -433,7 +433,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#createSkatTablePanel(String)
+	 * @see IJSkatView#createSkatTablePanel(String)
 	 */
 	@Override
 	public void createSkatTablePanel(String name) {
@@ -447,7 +447,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showAboutMessage()
+	 * @see IJSkatView#showAboutMessage()
 	 */
 	@Override
 	public void showAboutMessage() {
@@ -466,7 +466,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showMessage(int, String)
+	 * @see IJSkatView#showMessage(int, String)
 	 */
 	@Override
 	public void showMessage(int messageType, String message) {
@@ -476,7 +476,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showExitDialog()
+	 * @see IJSkatView#showExitDialog()
 	 */
 	@Override
 	public int showExitDialog() {
@@ -488,7 +488,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#addCard(String, Player, Card)
+	 * @see IJSkatView#addCard(String, Player, Card)
 	 */
 	@Override
 	public void addCard(String tableName, Player player, Card card) {
@@ -497,7 +497,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#clearHand(String, Player)
+	 * @see IJSkatView#clearHand(String, Player)
 	 */
 	@Override
 	public void clearHand(String tableName, Player player) {
@@ -506,7 +506,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#removeCard(String, Player, Card)
+	 * @see IJSkatView#removeCard(String, Player, Card)
 	 */
 	@Override
 	public void removeCard(String tableName, Player player, Card card) {
@@ -515,7 +515,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#setPositions(String, Player, Player, Player)
+	 * @see IJSkatView#setPositions(String, Player, Player, Player)
 	 */
 	@Override
 	public void setPositions(String tableName, Player leftPosition,
@@ -526,7 +526,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#setTrickCard(String, Player, Card)
+	 * @see IJSkatView#setTrickCard(String, Player, Card)
 	 */
 	@Override
 	public void setTrickCard(String tableName, Player position, Card card) {
@@ -535,7 +535,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#clearTrickCards(String)
+	 * @see IJSkatView#clearTrickCards(String)
 	 */
 	@Override
 	public void clearTrickCards(String tableName) {
@@ -544,7 +544,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#setGameAnnouncement(String, GameAnnouncement)
+	 * @see IJSkatView#setGameAnnouncement(String, GameAnnouncement)
 	 */
 	@Override
 	public void setGameAnnouncement(String tableName, GameAnnouncement ann) {
@@ -553,7 +553,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#setGameState(String, GameState)
+	 * @see IJSkatView#setGameState(String, GameState)
 	 */
 	@Override
 	public void setGameState(String tableName, GameState state) {
@@ -577,7 +577,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#addGameResult(String, SkatGameData)
+	 * @see IJSkatView#addGameResult(String, SkatGameData)
 	 */
 	@Override
 	public void addGameResult(String tableName, SkatGameData data) {
@@ -586,7 +586,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showHelpDialog()
+	 * @see IJSkatView#showHelpDialog()
 	 */
 	@Override
 	public void showHelpDialog() {
@@ -598,7 +598,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showLicenseDialog()
+	 * @see IJSkatView#showLicenseDialog()
 	 */
 	@Override
 	public void showLicenseDialog() {
@@ -609,7 +609,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#clearTable(String)
+	 * @see IJSkatView#clearTable(String)
 	 */
 	@Override
 	public void clearTable(String tableName) {
@@ -618,7 +618,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#setNextBidValue(String, int)
+	 * @see IJSkatView#setNextBidValue(String, int)
 	 */
 	@Override
 	public void setNextBidValue(String tableName, int nextBidValue) {
@@ -629,7 +629,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#setBid(String, Player, int)
+	 * @see IJSkatView#setBid(String, Player, int)
 	 */
 	@Override
 	public void setBid(String tableName, Player player, int bidValue) {
@@ -638,7 +638,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#setTrickForeHand(String, Player)
+	 * @see IJSkatView#setTrickForeHand(String, Player)
 	 */
 	@Override
 	public void setTrickForeHand(String tableName, Player trickForeHand) {
@@ -647,7 +647,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#putCardIntoSkat(String, Card)
+	 * @see IJSkatView#putCardIntoSkat(String, Card)
 	 */
 	@Override
 	public void putCardIntoSkat(String tableName, Card card) {
@@ -656,7 +656,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#takeCardFromSkat(String, Card)
+	 * @see IJSkatView#takeCardFromSkat(String, Card)
 	 */
 	@Override
 	public void takeCardFromSkat(String tableName, Card card) {
@@ -665,7 +665,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showStartSkatSeriesDialog()
+	 * @see IJSkatView#showStartSkatSeriesDialog()
 	 */
 	@Override
 	public void showStartSkatSeriesDialog() {
@@ -674,7 +674,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showISSLogin()
+	 * @see IJSkatView#showISSLogin()
 	 */
 	@Override
 	public void showISSLogin() {
@@ -685,7 +685,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#updateISSLobbyPlayerList(String, String, long, double)
+	 * @see IJSkatView#updateISSLobbyPlayerList(String, String, long, double)
 	 */
 	@Override
 	public void updateISSLobbyPlayerList(String playerName, String language,
@@ -695,7 +695,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#removeFromISSLobbyPlayerList(String)
+	 * @see IJSkatView#removeFromISSLobbyPlayerList(String)
 	 */
 	@Override
 	public void removeFromISSLobbyPlayerList(String playerName) {
@@ -704,7 +704,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showISSLobby()
+	 * @see IJSkatView#showISSLobby()
 	 */
 	@Override
 	public void showISSLobby() {
@@ -715,7 +715,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#updateISSLobbyTableList(String, int, long, String, String,
+	 * @see IJSkatView#updateISSLobbyTableList(String, int, long, String, String,
 	 *      String)
 	 */
 	@Override
@@ -727,7 +727,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#removeFromISSLobbyTableList(String)
+	 * @see IJSkatView#removeFromISSLobbyTableList(String)
 	 */
 	@Override
 	public void removeFromISSLobbyTableList(String tableName) {
@@ -736,7 +736,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#appendISSChatMessage(ChatMessageType, ISSChatMessage)
+	 * @see IJSkatView#appendISSChatMessage(ChatMessageType, ISSChatMessage)
 	 */
 	@Override
 	public void appendISSChatMessage(ChatMessageType messageType,
@@ -748,7 +748,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see de.jskat.gui.JSkatView#updateISSTable(String, ISSTablePanelStatus)
+	 * @see de.jskat.gui.IJSkatView#updateISSTable(String, ISSTablePanelStatus)
 	 */
 	@Override
 	public void updateISSTable(String tableName, ISSTablePanelStatus tableStatus) {
@@ -768,7 +768,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#updateISSTable(String, String, ISSGameStartInformation)
+	 * @see IJSkatView#updateISSTable(String, String, ISSGameStartInformation)
 	 */
 	@Override
 	public void updateISSTable(String tableName, String playerName,
@@ -814,7 +814,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#getNewTableName()
+	 * @see IJSkatView#getNewTableName()
 	 */
 	@Override
 	public String getNewTableName() {
@@ -825,7 +825,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#updateISSMove(String, ISSMoveInformation)
+	 * @see IJSkatView#updateISSMove(String, ISSMoveInformation)
 	 */
 	@Override
 	public void updateISSMove(String tableName,
@@ -900,7 +900,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#playTrickCard(String, Player, Card)
+	 * @see IJSkatView#playTrickCard(String, Player, Card)
 	 */
 	@Override
 	public void playTrickCard(String tableName, Player position, Card card) {
@@ -910,7 +910,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#setLastTrick(String, Player, Card, Card, Card)
+	 * @see IJSkatView#setLastTrick(String, Player, Card, Card, Card)
 	 */
 	@Override
 	public void setLastTrick(String tableName, Player trickForeHand,
@@ -923,7 +923,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showPreferences()
+	 * @see IJSkatView#showPreferences()
 	 */
 	@Override
 	public void showPreferences() {
@@ -932,7 +932,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#closeTabPanel(java.lang.String)
+	 * @see IJSkatView#closeTabPanel(java.lang.String)
 	 */
 	@Override
 	public void closeTabPanel(String tabName) {
@@ -955,7 +955,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#getPlayerForInvitation(Set)
+	 * @see IJSkatView#getPlayerForInvitation(Set)
 	 */
 	@Override
 	public List<String> getPlayerForInvitation(Set<String> playerNames) {
@@ -978,7 +978,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#addCards(String, Player, CardList)
+	 * @see IJSkatView#addCards(String, Player, CardList)
 	 */
 	@Override
 	public void addCards(String tableName, Player player, CardList cards) {

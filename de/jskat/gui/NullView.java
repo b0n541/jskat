@@ -30,10 +30,10 @@ import de.jskat.util.Player;
 /**
  * Doesn't do anything
  */
-public class NullView implements JSkatView {
+public class NullView implements IJSkatView {
 
 	/**
-	 * @see JSkatView#addCard(String, Player, Card)
+	 * @see IJSkatView#addCard(String, Player, Card)
 	 */
 	@Override
 	public void addCard(@SuppressWarnings("unused") String tableName,
@@ -43,7 +43,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#clearHand(String, Player)
+	 * @see IJSkatView#clearHand(String, Player)
 	 */
 	@Override
 	public void clearHand(@SuppressWarnings("unused") String tableName,
@@ -52,7 +52,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#clearTrickCards(String)
+	 * @see IJSkatView#clearTrickCards(String)
 	 */
 	@Override
 	public void clearTrickCards(@SuppressWarnings("unused") String tableName) {
@@ -60,7 +60,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#createISSTable(String)
+	 * @see IJSkatView#createISSTable(String)
 	 */
 	@Override
 	public void createISSTable(@SuppressWarnings("unused") String name) {
@@ -68,7 +68,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#createSkatTablePanel(String)
+	 * @see IJSkatView#createSkatTablePanel(String)
 	 */
 	@Override
 	public void createSkatTablePanel(@SuppressWarnings("unused") String name) {
@@ -76,7 +76,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#removeCard(String, Player, Card)
+	 * @see IJSkatView#removeCard(String, Player, Card)
 	 */
 	@Override
 	public void removeCard(@SuppressWarnings("unused") String tableName,
@@ -86,7 +86,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#setPositions(String, Player, Player, Player)
+	 * @see IJSkatView#setPositions(String, Player, Player, Player)
 	 */
 	@Override
 	public void setPositions(@SuppressWarnings("unused") String tableName,
@@ -97,7 +97,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#setTrickCard(String, Player, Card)
+	 * @see IJSkatView#setTrickCard(String, Player, Card)
 	 */
 	@Override
 	public void setTrickCard(@SuppressWarnings("unused") String tableName,
@@ -107,7 +107,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showAboutMessage()
+	 * @see IJSkatView#showAboutMessage()
 	 */
 	@Override
 	public void showAboutMessage() {
@@ -115,7 +115,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showExitDialog()
+	 * @see IJSkatView#showExitDialog()
 	 */
 	@Override
 	public int showExitDialog() {
@@ -123,7 +123,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showGameResults()
+	 * @see IJSkatView#showGameResults()
 	 */
 	@Override
 	public void showGameResults() {
@@ -131,7 +131,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showISSLogin()
+	 * @see IJSkatView#showISSLogin()
 	 */
 	@Override
 	public void showISSLogin() {
@@ -139,7 +139,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showSeriesResults()
+	 * @see IJSkatView#showSeriesResults()
 	 */
 	@Override
 	public void showSeriesResults() {
@@ -147,7 +147,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showTable(SkatTable)
+	 * @see IJSkatView#showTable(SkatTable)
 	 */
 	@Override
 	public void showTable(@SuppressWarnings("unused") SkatTable table) {
@@ -155,7 +155,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#startBidding()
+	 * @see IJSkatView#startBidding()
 	 */
 	@Override
 	public void startBidding() {
@@ -163,7 +163,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#startDiscarding()
+	 * @see IJSkatView#startDiscarding()
 	 */
 	@Override
 	public void startDiscarding() {
@@ -171,7 +171,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#startGame(String)
+	 * @see IJSkatView#startGame(String)
 	 */
 	@Override
 	public void startGame(@SuppressWarnings("unused") String tableName) {
@@ -179,7 +179,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#startPlaying()
+	 * @see IJSkatView#startPlaying()
 	 */
 	@Override
 	public void startPlaying() {
@@ -187,7 +187,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#startSeries(String)
+	 * @see IJSkatView#startSeries(String)
 	 */
 	@Override
 	public void startSeries(@SuppressWarnings("unused") String tableName) {
@@ -195,7 +195,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#setGameAnnouncement(String, GameAnnouncement)
+	 * @see IJSkatView#setGameAnnouncement(String, GameAnnouncement)
 	 */
 	@Override
 	public void setGameAnnouncement(
@@ -205,7 +205,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#setGameState(String, GameState)
+	 * @see IJSkatView#setGameState(String, GameState)
 	 */
 	@Override
 	public void setGameState(@SuppressWarnings("unused") String tableName,
@@ -214,7 +214,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#addGameResult(String, SkatGameData)
+	 * @see IJSkatView#addGameResult(String, SkatGameData)
 	 */
 	@Override
 	public void addGameResult(@SuppressWarnings("unused") String tableName,
@@ -223,7 +223,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showHelpDialog()
+	 * @see IJSkatView#showHelpDialog()
 	 */
 	@Override
 	public void showHelpDialog() {
@@ -231,7 +231,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showLicenseDialog()
+	 * @see IJSkatView#showLicenseDialog()
 	 */
 	@Override
 	public void showLicenseDialog() {
@@ -239,7 +239,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#clearTable(String)
+	 * @see IJSkatView#clearTable(String)
 	 */
 	@Override
 	public void clearTable(@SuppressWarnings("unused") String tableName) {
@@ -247,7 +247,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#setNextBidValue(String, int)
+	 * @see IJSkatView#setNextBidValue(String, int)
 	 */
 	@Override
 	public void setNextBidValue(@SuppressWarnings("unused") String tableName,
@@ -256,7 +256,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showMessage(int, String)
+	 * @see IJSkatView#showMessage(int, String)
 	 */
 	@Override
 	public void showMessage(@SuppressWarnings("unused") int messageType,
@@ -265,7 +265,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#setBid(String, Player, int)
+	 * @see IJSkatView#setBid(String, Player, int)
 	 */
 	@Override
 	public void setBid(@SuppressWarnings("unused") String tableName,
@@ -275,7 +275,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#setTrickForeHand(String, Player)
+	 * @see IJSkatView#setTrickForeHand(String, Player)
 	 */
 	@Override
 	public void setTrickForeHand(@SuppressWarnings("unused") String tableName,
@@ -284,7 +284,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#putCardIntoSkat(String, Card)
+	 * @see IJSkatView#putCardIntoSkat(String, Card)
 	 */
 	@Override
 	public void putCardIntoSkat(@SuppressWarnings("unused") String tableName,
@@ -293,7 +293,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#takeCardFromSkat(String, Card)
+	 * @see IJSkatView#takeCardFromSkat(String, Card)
 	 */
 	@Override
 	public void takeCardFromSkat(@SuppressWarnings("unused") String tableName,
@@ -302,7 +302,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showStartSkatSeriesDialog()
+	 * @see IJSkatView#showStartSkatSeriesDialog()
 	 */
 	@Override
 	public void showStartSkatSeriesDialog() {
@@ -310,7 +310,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#updateISSLobbyPlayerList(String, String, long, double)
+	 * @see IJSkatView#updateISSLobbyPlayerList(String, String, long, double)
 	 */
 	@Override
 	public void updateISSLobbyPlayerList(
@@ -322,7 +322,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#removeFromISSLobbyPlayerList(String)
+	 * @see IJSkatView#removeFromISSLobbyPlayerList(String)
 	 */
 	@Override
 	public void removeFromISSLobbyPlayerList(
@@ -331,7 +331,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showISSLobby()
+	 * @see IJSkatView#showISSLobby()
 	 */
 	@Override
 	public void showISSLobby() {
@@ -339,7 +339,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#removeFromISSLobbyTableList(String)
+	 * @see IJSkatView#removeFromISSLobbyTableList(String)
 	 */
 	@Override
 	public void removeFromISSLobbyTableList(
@@ -348,7 +348,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#updateISSLobbyTableList(String, int, long, String, String,
+	 * @see IJSkatView#updateISSLobbyTableList(String, int, long, String, String,
 	 *      String)
 	 */
 	@Override
@@ -363,7 +363,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#appendISSChatMessage(ChatMessageType, ISSChatMessage)
+	 * @see IJSkatView#appendISSChatMessage(ChatMessageType, ISSChatMessage)
 	 */
 	@Override
 	public void appendISSChatMessage(
@@ -373,7 +373,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#updateISSTable(String, ISSTablePanelStatus)
+	 * @see IJSkatView#updateISSTable(String, ISSTablePanelStatus)
 	 */
 	@Override
 	public void updateISSTable(@SuppressWarnings("unused") String tableName,
@@ -382,7 +382,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#updateISSTable(String, String, ISSGameStartInformation)
+	 * @see IJSkatView#updateISSTable(String, String, ISSGameStartInformation)
 	 */
 	@Override
 	public void updateISSTable(@SuppressWarnings("unused") String tableName,
@@ -392,7 +392,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#getNewTableName()
+	 * @see IJSkatView#getNewTableName()
 	 */
 	@Override
 	public String getNewTableName() {
@@ -401,7 +401,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#updateISSMove(String, ISSMoveInformation)
+	 * @see IJSkatView#updateISSMove(String, ISSMoveInformation)
 	 */
 	@Override
 	public void updateISSMove(@SuppressWarnings("unused") String tableName,
@@ -410,7 +410,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#playTrickCard(String, Player, Card)
+	 * @see IJSkatView#playTrickCard(String, Player, Card)
 	 */
 	@Override
 	public void playTrickCard(@SuppressWarnings("unused") String tableName,
@@ -420,7 +420,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#setLastTrick(String, Player, Card, Card, Card)
+	 * @see IJSkatView#setLastTrick(String, Player, Card, Card, Card)
 	 */
 	@Override
 	public void setLastTrick(@SuppressWarnings("unused") String tableName,
@@ -432,7 +432,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#showPreferences()
+	 * @see IJSkatView#showPreferences()
 	 */
 	@Override
 	public void showPreferences() {
@@ -440,7 +440,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#closeTabPanel(java.lang.String)
+	 * @see IJSkatView#closeTabPanel(java.lang.String)
 	 */
 	@Override
 	public void closeTabPanel(@SuppressWarnings("unused") String name) {
@@ -448,7 +448,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#getPlayerForInvitation(Set)
+	 * @see IJSkatView#getPlayerForInvitation(Set)
 	 */
 	@Override
 	public List<String> getPlayerForInvitation(
@@ -458,7 +458,7 @@ public class NullView implements JSkatView {
 	}
 
 	/**
-	 * @see JSkatView#addCards(String, Player, CardList)
+	 * @see IJSkatView#addCards(String, Player, CardList)
 	 */
 	@Override
 	public void addCards(@SuppressWarnings("unused") String tableName,
