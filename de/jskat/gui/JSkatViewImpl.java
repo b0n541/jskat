@@ -275,8 +275,10 @@ public class JSkatViewImpl implements IJSkatView {
 
 					if (tab instanceof AbstractTabPanel) {
 
-						String tableName = ((AbstractTabPanel) tab).getName();
+						AbstractTabPanel panel = (AbstractTabPanel) tab;
+						String tableName = panel.getName();
 						log.debug("showing table pane of table " + tableName); //$NON-NLS-1$
+						panel.setFocus();
 
 						JSkatViewImpl.this.actions.get(
 								JSkatAction.CHANGE_ACTIVE_TABLE)
@@ -936,7 +938,8 @@ public class JSkatViewImpl implements IJSkatView {
 	@Override
 	public void closeTabPanel(String tabName) {
 
-		AbstractTabPanel panel = (AbstractTabPanel) this.tabs.getSelectedComponent();
+		AbstractTabPanel panel = (AbstractTabPanel) this.tabs
+				.getSelectedComponent();
 		if (!tabName.equals(panel.getName())) {
 			for (Component currPanel : this.tabs.getComponents()) {
 				if (tabName.equals(currPanel.getName())) {
