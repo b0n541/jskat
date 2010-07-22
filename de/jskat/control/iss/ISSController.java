@@ -30,6 +30,7 @@ import de.jskat.data.iss.ISSMoveInformation;
 import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.gui.IJSkatView;
 import de.jskat.gui.action.JSkatAction;
+import de.jskat.util.Player;
 
 /**
  * Controls all ISS related actions
@@ -358,14 +359,17 @@ public class ISSController {
 		this.view
 				.updateISSTable(tableName, this.data.getIssLoginName(), status);
 
-		this.gameData.put(tableName, getSkatGameData(status));
+		this.gameData.put(tableName, createSkatGameData(status));
 	}
 
-	SkatGameData getSkatGameData(ISSGameStartInformation status) {
+	private SkatGameData createSkatGameData(ISSGameStartInformation status) {
 
 		SkatGameData result = new SkatGameData();
 
 		result.setGameState(GameState.NEW_GAME);
+		for (Player player : Player.values()) {
+			result.setPlayerName(player, status.getPlayerName(player));
+		}
 
 		return result;
 	}
