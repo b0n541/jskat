@@ -90,8 +90,8 @@ class Connector {
 			this.socket = new Socket("skatgame.net", this.port); //$NON-NLS-1$
 			this.output = new PrintWriter(this.socket.getOutputStream(), true);
 			this.issOut = new OutputChannel(this.output);
-			this.issIn = new InputChannel(this.issControl, this, this.socket
-					.getInputStream());
+			this.issIn = new InputChannel(this.issControl, this,
+					this.socket.getInputStream());
 			this.issIn.start();
 			log.debug("Connection established..."); //$NON-NLS-1$
 			this.issOut.send(this.loginName);
@@ -163,29 +163,45 @@ class Connector {
 		this.issOut.send("observe " + tableName); //$NON-NLS-1$
 	}
 
-	void leaveTable(String tableName, String playerName) {
+	void leaveTable(String tableName) {
 
-		this.issOut.send("table " + tableName + ' ' + playerName + " leave"); //$NON-NLS-1$ //$NON-NLS-2$
+		this.issOut.send("table " + tableName + ' ' + loginName + " leave"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	void sendReadySignal(String tableName, String playerName) {
+	void sendReadySignal(String tableName) {
 
-		this.issOut.send("table " + tableName + ' ' + playerName + " ready"); //$NON-NLS-1$ //$NON-NLS-2$
+		this.issOut.send("table " + tableName + ' ' + loginName + " ready"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	void sendTalkEnabledSignal(String tableName, String playerName) {
+	void sendTalkEnabledSignal(String tableName) {
 
-		this.issOut.send("table " + tableName + ' ' + playerName + " gametalk"); //$NON-NLS-1$ //$NON-NLS-2$
+		this.issOut.send("table " + tableName + ' ' + loginName + " gametalk"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	void sendTableSeatChangeSignal(String tableName, String playerName) {
+	void sendTableSeatChangeSignal(String tableName) {
 
-		this.issOut.send("table " + tableName + ' ' + playerName + " 34"); //$NON-NLS-1$ //$NON-NLS-2$
+		this.issOut.send("table " + tableName + ' ' + loginName + " 34"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	void invitePlayer(String tableName, String invitor, String invitee) {
+	void invitePlayer(String tableName, String invitee) {
 
 		this.issOut
-				.send("table " + tableName + ' ' + invitor + " invite " + invitee); //$NON-NLS-1$//$NON-NLS-2$
+				.send("table " + tableName + ' ' + loginName + " invite " + invitee); //$NON-NLS-1$//$NON-NLS-2$
+	}
+
+	void sendBidValue(String tableName, int bidValue) {
+
+		this.issOut.send("table " + tableName + ' ' + loginName + " play "
+				+ bidValue);
+	}
+
+	void sendPass(String tableName) {
+
+		this.issOut.send("table " + tableName + ' ' + loginName + " play p");
+	}
+
+	void sendHoldBid(String tableName) {
+
+		this.issOut.send("table " + tableName + ' ' + loginName + " play y");
 	}
 }

@@ -19,6 +19,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.jskat.ai.IJSkatPlayer;
 import de.jskat.control.JSkatMaster;
 import de.jskat.data.JSkatApplicationData;
 import de.jskat.data.SkatGameData;
@@ -31,6 +32,7 @@ import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.gui.IJSkatView;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.util.Player;
+import de.jskat.util.SkatConstants;
 
 /**
  * Controls all ISS related actions
@@ -255,8 +257,8 @@ public class ISSController {
 			message.append(params.get(i)).append(' ');
 		}
 
-		ISSChatMessage chatMessage = new ISSChatMessage("Lobby", message
-				.toString());
+		ISSChatMessage chatMessage = new ISSChatMessage("Lobby",
+				message.toString());
 
 		this.view.appendISSChatMessage(ChatMessageType.LOBBY, chatMessage);
 	}
@@ -325,12 +327,9 @@ public class ISSController {
 	 * 
 	 * @param tableName
 	 *            Table name
-	 * @param playerName
-	 *            Player name
 	 */
-	public void leaveTable(String tableName, String playerName) {
-		// TODO player name is own name, controller should know is already
-		this.issConnect.leaveTable(tableName, playerName);
+	public void leaveTable(String tableName) {
+		this.issConnect.leaveTable(tableName);
 	}
 
 	/**
@@ -383,6 +382,8 @@ public class ISSController {
 	public void startGame(String tableName) {
 
 		this.view.startGame(tableName);
+
+		// TODO inform human player
 	}
 
 	/**
@@ -403,26 +404,44 @@ public class ISSController {
 			ISSMoveInformation moveInformation) {
 
 		SkatGameData currGame = this.gameData.get(tableName);
+		IJSkatPlayer human = this.data.getHumanPlayer(tableName);
 
 		switch (moveInformation.getType()) {
 		case DEAL:
 			currGame.setGameState(GameState.DEALING);
+			human.setUpBidding();
 			break;
 		case BID:
 			currGame.setGameState(GameState.BIDDING);
 			currGame.setBidValue(moveInformation.getBidValue());
+			human.bidByPlayer(
+					Player.valueOf(moveInformation.getMovePlayer().name()),
+					moveInformation.getBidValue());
+			if (human.holdBid(moveInformation.getBidValue())) {
+				issConnect.sendHoldBid(tableName);
+			} else {
+				issConnect.sendPass(tableName);
+			}
 			break;
 		case HOLD_BID:
-			currGame.setGameState(GameState.BIDDING);
-			break;
 		case PASS:
 			currGame.setGameState(GameState.BIDDING);
+			int nextBidValue = human.bidMore(SkatConstants
+					.getNextBidValue(moveInformation.getBidValue()));
+			if (nextBidValue > 0) {
+				issConnect.sendBidValue(tableName, nextBidValue);
+			} else {
+				issConnect.sendPass(tableName);
+			}
 			break;
 		case SKAT_REQUEST:
 			currGame.setGameState(GameState.DISCARDING);
+			human.lookIntoSkat();
 			break;
 		case SKAT_LOOKING:
 			currGame.setGameState(GameState.DISCARDING);
+			human.discardSkat();
+			human.announceGame();
 			break;
 		case GAME_ANNOUNCEMENT:
 			currGame.setGameState(GameState.DECLARING);
@@ -430,15 +449,16 @@ public class ISSController {
 			break;
 		case CARD_PLAY:
 			currGame.setGameState(GameState.TRICK_PLAYING);
+			human.cardPlayed(
+					Player.valueOf(moveInformation.getMovePlayer().name()),
+					moveInformation.getCard());
+			human.playCard();
 			break;
 		case TIME_OUT:
 			currGame.setGameState(GameState.PRELIMINARY_GAME_END);
+			human.finalizeGame();
 			break;
 		}
-
-		// FIXME (jan 22.07.2010) set correct expected move from human player!!!
-		this.data.getHumanPlayer(tableName).bidMore(
-				moveInformation.getBidValue());
 	}
 
 	/**
@@ -457,14 +477,11 @@ public class ISSController {
 	 * 
 	 * @param tableName
 	 *            Table name
-	 * @param invitor
-	 *            Invitor
 	 * @param invitee
 	 *            Invitee
 	 */
-	public void invitePlayer(String tableName, String invitor, String invitee) {
-		// TODO invitor should be known by ISS controller
-		this.issConnect.invitePlayer(tableName, invitor, invitee);
+	public void invitePlayer(String tableName, String invitee) {
+		this.issConnect.invitePlayer(tableName, invitee);
 	}
 
 	/**
@@ -472,12 +489,9 @@ public class ISSController {
 	 * 
 	 * @param tableName
 	 *            Table name
-	 * @param playerName
-	 *            Player name
 	 */
-	public void sendReadySignal(String tableName, String playerName) {
-		// TODO player name should be known by ISS controller
-		this.issConnect.sendReadySignal(tableName, playerName);
+	public void sendReadySignal(String tableName) {
+		this.issConnect.sendReadySignal(tableName);
 	}
 
 	/**
@@ -485,12 +499,9 @@ public class ISSController {
 	 * 
 	 * @param tableName
 	 *            Table name
-	 * @param playerName
-	 *            Player name
 	 */
-	public void sendTalkEnabledSignal(String tableName, String playerName) {
-		// TODO player name should be known by ISS controller
-		this.issConnect.sendTalkEnabledSignal(tableName, playerName);
+	public void sendTalkEnabledSignal(String tableName) {
+		this.issConnect.sendTalkEnabledSignal(tableName);
 	}
 
 	/**
@@ -498,11 +509,8 @@ public class ISSController {
 	 * 
 	 * @param tableName
 	 *            Table name
-	 * @param playerName
-	 *            Player name
 	 */
-	public void sendTableSeatChangeSignal(String tableName, String playerName) {
-		// TODO player name should be known by ISS controller
-		this.issConnect.sendTableSeatChangeSignal(tableName, playerName);
+	public void sendTableSeatChangeSignal(String tableName) {
+		this.issConnect.sendTableSeatChangeSignal(tableName);
 	}
 }

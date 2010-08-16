@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import de.jskat.ai.JSkatPlayer;
+import de.jskat.ai.IJSkatPlayer;
 import de.jskat.ai.PlayerType;
 import de.jskat.ai.nn.AIPlayerNN;
 import de.jskat.ai.nn.data.SkatNetworks;
@@ -91,7 +91,7 @@ public class JSkatMaster {
 				.getAvailableISSPlayer());
 		for (String currPlayer : player) {
 			getISSController().invitePlayer(this.data.getActiveTable(),
-					this.data.getIssLoginName(), currPlayer);
+					currPlayer);
 		}
 	}
 
@@ -132,10 +132,10 @@ public class JSkatMaster {
 		table.startSkatSeries(numberOfRounds);
 	}
 
-	private JSkatPlayer getPlayerInstance(String tableName,
+	private IJSkatPlayer getPlayerInstance(String tableName,
 			PlayerType playerType) {
 
-		JSkatPlayer player = null;
+		IJSkatPlayer player = null;
 
 		switch (playerType) {
 		case RANDOM:
@@ -156,12 +156,12 @@ public class JSkatMaster {
 		return player;
 	}
 
-	private JSkatPlayer getPlayerInstanceFromName(String className) {
+	private IJSkatPlayer getPlayerInstanceFromName(String className) {
 
-		JSkatPlayer player = null;
+		IJSkatPlayer player = null;
 
 		try {
-			player = (JSkatPlayer) Class.forName(className).newInstance();
+			player = (IJSkatPlayer) Class.forName(className).newInstance();
 		} catch (ClassNotFoundException ex) {
 			// handle exception case
 			player = getPlayerInstanceFromName("de.jskat.ai.rnd.AIPlayerRND"); //$NON-NLS-1$
@@ -307,7 +307,7 @@ public class JSkatMaster {
 	 *            Skat player
 	 * @return TRUE if the placing was successful
 	 */
-	public synchronized boolean placePlayer(String tableName, JSkatPlayer player) {
+	public synchronized boolean placePlayer(String tableName, IJSkatPlayer player) {
 
 		boolean result = false;
 
@@ -444,8 +444,8 @@ public class JSkatMaster {
 			throw new IllegalArgumentException();
 		}
 
-		this.view.takeCardFromSkat(this.data.getActiveTable(), (Card) e
-				.getSource());
+		this.view.takeCardFromSkat(this.data.getActiveTable(),
+				(Card) e.getSource());
 	}
 
 	/**
@@ -460,8 +460,8 @@ public class JSkatMaster {
 			throw new IllegalArgumentException();
 		}
 
-		this.view.putCardIntoSkat(this.data.getActiveTable(), (Card) e
-				.getSource());
+		this.view.putCardIntoSkat(this.data.getActiveTable(),
+				(Card) e.getSource());
 	}
 
 	/**
@@ -528,8 +528,7 @@ public class JSkatMaster {
 	 */
 	public void sendTableSeatChangeSignal() {
 
-		this.issControl.sendTableSeatChangeSignal(this.data.getActiveTable(),
-				this.data.getIssLoginName());
+		this.issControl.sendTableSeatChangeSignal(this.data.getActiveTable());
 	}
 
 	/**
@@ -537,8 +536,7 @@ public class JSkatMaster {
 	 */
 	public void sendReadySignal() {
 
-		this.issControl.sendReadySignal(this.data.getActiveTable(), this.data
-				.getIssLoginName());
+		this.issControl.sendReadySignal(this.data.getActiveTable());
 	}
 
 	/**
@@ -546,8 +544,7 @@ public class JSkatMaster {
 	 */
 	public void sendTalkEnabledSignal() {
 
-		this.issControl.sendTalkEnabledSignal(this.data.getActiveTable(),
-				this.data.getIssLoginName());
+		this.issControl.sendTalkEnabledSignal(this.data.getActiveTable());
 	}
 
 	/**
@@ -558,7 +555,7 @@ public class JSkatMaster {
 		String tableName = this.data.getActiveTable();
 
 		// FIXME distinguish between ISS and local skat table
-		this.issControl.leaveTable(tableName, this.data.getIssLoginName());
+		this.issControl.leaveTable(tableName);
 	}
 
 	/**
