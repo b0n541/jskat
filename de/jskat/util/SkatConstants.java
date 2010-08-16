@@ -11,7 +11,6 @@ Released: @ReleaseDate@
 
 package de.jskat.util;
 
-
 /**
  * Skat constants
  */
@@ -27,18 +26,40 @@ public final class SkatConstants {
 			165, 168, 170, 176, 180, 187, 192, 198, 204, 216, 240, 264 };
 
 	/**
+	 * Gets the next valid bid value
+	 * 
+	 * @param currBidValue
+	 *            Current bid value
+	 * @return Next valid bid value or the last possible bid value
+	 */
+	public final static int getNextBidValue(int currBidValue) {
+
+		int index = 0;
+
+		while (bidOrder[index] <= currBidValue && index < (bidOrder.length - 1)) {
+			index++;
+		}
+
+		return bidOrder[index];
+	}
+
+	/**
 	 * Returns the multiplier for the game
 	 * 
-	 * @param gameType Game type
-	 * @param hand TRUE if game is a hand game
-	 * @param ouvert TRUE if game is an ouvert game
+	 * @param gameType
+	 *            Game type
+	 * @param hand
+	 *            TRUE if game is a hand game
+	 * @param ouvert
+	 *            TRUE if game is an ouvert game
 	 * @return Multiplier
 	 */
-	public final static int getGameBaseValue(GameType gameType, boolean hand, boolean ouvert) {
-		
+	public final static int getGameBaseValue(GameType gameType, boolean hand,
+			boolean ouvert) {
+
 		int multiplier = 0;
-		
-		switch(gameType) {
+
+		switch (gameType) {
 		case PASSED_IN:
 			break;
 		case CLUBS:
@@ -57,16 +78,13 @@ public final class SkatConstants {
 			if (hand) {
 				if (ouvert) {
 					multiplier = 59;
-				}
-				else {
+				} else {
 					multiplier = 35;
 				}
-			}
-			else {
+			} else {
 				if (ouvert) {
 					multiplier = 46;
-				}
-				else {
+				} else {
 					multiplier = 23;
 				}
 			}
@@ -78,49 +96,50 @@ public final class SkatConstants {
 			multiplier = 1;
 			break;
 		}
-		
+
 		return multiplier;
 	}
-	
+
 	/**
 	 * Returns the game value after the Seeger-Fabian system
 	 * 
-	 * @param declarer TRUE, if calculation should be done for declarer of game
-	 * @param gameValue Game value
-	 * @param numberOfPlayers Number of players on the skat table
+	 * @param declarer
+	 *            TRUE, if calculation should be done for declarer of game
+	 * @param gameValue
+	 *            Game value
+	 * @param numberOfPlayers
+	 *            Number of players on the skat table
 	 * 
 	 * @return Tournament value
 	 */
-	public final static int getTournamentGameValue(boolean declarer, int gameValue, int numberOfPlayers) {
-		
+	public final static int getTournamentGameValue(boolean declarer,
+			int gameValue, int numberOfPlayers) {
+
 		int result = 0;
 
 		if (declarer) {
 			// calculation for declarer of the game
 			if (gameValue > 0) {
-				
+
 				result = gameValue + 50;
-			}
-			else {
-				
+			} else {
+
 				result = gameValue - 50;
 			}
-		}
-		else {
+		} else {
 			// calculation for opponents
 			if (gameValue < 0) {
-				
+
 				if (numberOfPlayers == 3) {
-					
+
 					result = 40;
-				}
-				else if (numberOfPlayers == 4) {
-					
+				} else if (numberOfPlayers == 4) {
+
 					result = 30;
 				}
 			}
 		}
-		
+
 		return result;
 	}
 }
