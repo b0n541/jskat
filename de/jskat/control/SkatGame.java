@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import de.jskat.ai.JSkatPlayer;
+import de.jskat.ai.IJSkatPlayer;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.Trick;
@@ -41,12 +41,12 @@ public class SkatGame extends JSkatThread {
 	private int maxSleep = 100;
 	private SkatGameData data;
 	private CardDeck deck;
-	private JSkatPlayer foreHand;
-	private JSkatPlayer middleHand;
-	private JSkatPlayer hindHand;
+	private IJSkatPlayer foreHand;
+	private IJSkatPlayer middleHand;
+	private IJSkatPlayer hindHand;
 	private Player trickForeHand;
-	private JSkatPlayer[] player;
-	private JSkatPlayer declarer;
+	private IJSkatPlayer[] player;
+	private IJSkatPlayer declarer;
 	private String tableName;
 	private IJSkatView view;
 	private BasicSkatRules rules;
@@ -63,14 +63,14 @@ public class SkatGame extends JSkatThread {
 	 * @param newHindHand
 	 *            Hind hand player
 	 */
-	public SkatGame(String newTableName, JSkatPlayer newForeHand,
-			JSkatPlayer newMiddleHand, JSkatPlayer newHindHand) {
+	public SkatGame(String newTableName, IJSkatPlayer newForeHand,
+			IJSkatPlayer newMiddleHand, IJSkatPlayer newHindHand) {
 
 		this.tableName = newTableName;
 		this.foreHand = newForeHand;
 		this.middleHand = newMiddleHand;
 		this.hindHand = newHindHand;
-		this.player = new JSkatPlayer[3];
+		this.player = new IJSkatPlayer[3];
 		this.player[0] = this.foreHand;
 		this.player[1] = this.middleHand;
 		this.player[2] = this.hindHand;
@@ -585,7 +585,7 @@ public class SkatGame extends JSkatThread {
 	private void playCard(Trick trick, Player currPlayer) {
 
 		Card card = null;
-		JSkatPlayer skatPlayer = getPlayerObject(currPlayer);
+		IJSkatPlayer skatPlayer = getPlayerObject(currPlayer);
 
 		boolean isCardAccepted = false;
 		while (!isCardAccepted) {
@@ -636,9 +636,9 @@ public class SkatGame extends JSkatThread {
 		log.debug("playing card " + card); //$NON-NLS-1$
 	}
 
-	private JSkatPlayer getPlayerObject(Player currPlayer) {
+	private IJSkatPlayer getPlayerObject(Player currPlayer) {
 
-		JSkatPlayer result = null;
+		IJSkatPlayer result = null;
 
 		switch (currPlayer) {
 		case FORE_HAND:
@@ -679,7 +679,7 @@ public class SkatGame extends JSkatThread {
 		return result;
 	}
 
-	private Player getPlayerID(JSkatPlayer skatPlayer) {
+	private Player getPlayerID(IJSkatPlayer skatPlayer) {
 
 		Player result = null;
 
@@ -776,7 +776,7 @@ public class SkatGame extends JSkatThread {
 		log.debug("Final game result: lost:" + this.data.isGameLost() + //$NON-NLS-1$
 				" game value: " + this.data.getResult()); //$NON-NLS-1$
 
-		for (JSkatPlayer currPlayer : this.player) {
+		for (IJSkatPlayer currPlayer : this.player) {
 			// no cloning neccessary because all parameters are primitive data
 			// types
 			currPlayer.setGameResult(this.data.isGameWon(), this.data
@@ -830,7 +830,7 @@ public class SkatGame extends JSkatThread {
 		this.rules = SkatRuleFactory.getSkatRules(this.data.getGameType());
 
 		// inform all players
-		for (JSkatPlayer currPlayer : this.player) {
+		for (IJSkatPlayer currPlayer : this.player) {
 			// no cloning neccessary, because all parameters are primitive data
 			// types
 			currPlayer.startGame(this.data.getDeclarer(), this.data

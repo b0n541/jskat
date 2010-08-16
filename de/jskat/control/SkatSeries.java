@@ -17,7 +17,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import de.jskat.ai.JSkatPlayer;
+import de.jskat.ai.IJSkatPlayer;
 import de.jskat.data.SkatSeriesData;
 import de.jskat.data.SkatSeriesData.SeriesStates;
 import de.jskat.gui.IJSkatView;
@@ -34,7 +34,7 @@ public class SkatSeries extends JSkatThread {
 	private int maxSleep = 0;
 	private SkatSeriesData data;
 	private int roundsToGo = 0;
-	private List<JSkatPlayer> player;
+	private List<IJSkatPlayer> player;
 	private List<Player> viewPositions;
 	private SkatGame currSkatGame;
 
@@ -51,7 +51,7 @@ public class SkatSeries extends JSkatThread {
 		this.data = new SkatSeriesData();
 		this.data.setState(SeriesStates.WAITING);
 		this.data.setTableName(tableName);
-		this.player = new ArrayList<JSkatPlayer>();
+		this.player = new ArrayList<IJSkatPlayer>();
 		this.viewPositions = new ArrayList<Player>();
 		this.viewPositions.add(Player.FORE_HAND);
 		this.viewPositions.add(Player.MIDDLE_HAND);
@@ -64,9 +64,9 @@ public class SkatSeries extends JSkatThread {
 	 * @param newPlayer
 	 *            New skat series player
 	 */
-	public void setPlayer(List<JSkatPlayer> newPlayer) {
+	public void setPlayer(List<IJSkatPlayer> newPlayer) {
 
-		for (JSkatPlayer currPlayer : newPlayer) {
+		for (IJSkatPlayer currPlayer : newPlayer) {
 
 			this.player.add(currPlayer);
 		}
@@ -112,7 +112,7 @@ public class SkatSeries extends JSkatThread {
 
 				if (j > 0 || roundsPlayed > 0) {
 					// change player positions after first game
-					JSkatPlayer helper = this.player.get(2);
+					IJSkatPlayer helper = this.player.get(2);
 					this.player.set(2, this.player.get(0));
 					this.player.set(0, this.player.get(1));
 					this.player.set(1, helper);
@@ -169,7 +169,7 @@ public class SkatSeries extends JSkatThread {
 
 		boolean result = false;
 
-		for (JSkatPlayer currPlayer : this.player) {
+		for (IJSkatPlayer currPlayer : this.player) {
 
 			if (currPlayer instanceof HumanPlayer) {
 

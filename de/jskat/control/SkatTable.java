@@ -17,7 +17,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import de.jskat.ai.JSkatPlayer;
+import de.jskat.ai.IJSkatPlayer;
 import de.jskat.data.SkatTableOptions;
 import de.jskat.data.SkatSeriesData.SeriesStates;
 import de.jskat.gui.IJSkatView;
@@ -32,7 +32,7 @@ public class SkatTable {
 	private String tableName;
 	private SkatTableOptions options;
 	private SkatSeries series;
-	private List<JSkatPlayer> player = new ArrayList<JSkatPlayer>();
+	private List<IJSkatPlayer> player = new ArrayList<IJSkatPlayer>();
 
 	private IJSkatView view;
 
@@ -170,7 +170,7 @@ public class SkatTable {
 	 *            New Player
 	 * @return TRUE if the player was placed correctly
 	 */
-	public boolean placePlayer(JSkatPlayer newPlayer) {
+	public boolean placePlayer(IJSkatPlayer newPlayer) {
 
 		boolean result = false;
 

@@ -21,7 +21,7 @@ import de.jskat.util.Player;
 /**
  * Player interface for AI players
  */
-public interface JSkatPlayer {
+public interface IJSkatPlayer {
 
 	/**
 	 * This function can be used to do some clean up
@@ -119,7 +119,7 @@ public interface JSkatPlayer {
 	 *  
 	 * @param ouvertCards Cards of the single player in an ouver game 
 	 */
-	public void getOuvertCards(CardList ouvertCards);
+	public void lookAtOuvertCards(CardList ouvertCards);
 	
 	/**
 	 * Get next Card to play

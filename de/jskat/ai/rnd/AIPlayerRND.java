@@ -16,7 +16,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.ai.AbstractJSkatPlayer;
-import de.jskat.ai.JSkatPlayer;
+import de.jskat.ai.IJSkatPlayer;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
@@ -51,7 +51,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see JSkatPlayer#lookIntoSkat()
+	 * @see IJSkatPlayer#lookIntoSkat()
 	 */
 	public boolean lookIntoSkat() {
 
@@ -59,7 +59,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see JSkatPlayer#announceGame()
+	 * @see IJSkatPlayer#announceGame()
 	 */
 	public GameAnnouncement announceGame() {
 
@@ -79,7 +79,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see JSkatPlayer#bidMore(int)
+	 * @see IJSkatPlayer#bidMore(int)
 	 */
 	public int bidMore(int nextBidValue) {
 
@@ -94,7 +94,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see JSkatPlayer#holdBid(int)
+	 * @see IJSkatPlayer#holdBid(int)
 	 */
 	public boolean holdBid(int currBidValue) {
 
@@ -111,7 +111,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see JSkatPlayer#playCard()
+	 * @see IJSkatPlayer#playCard()
 	 */
 	public Card playCard() {
 
@@ -137,7 +137,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see JSkatPlayer#isAIPlayer()
+	 * @see IJSkatPlayer#isAIPlayer()
 	 */
 	public boolean isAIPlayer() {
 
@@ -145,7 +145,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see de.jskat.ai.JSkatPlayer#discardSkat()
+	 * @see de.jskat.ai.IJSkatPlayer#discardSkat()
 	 */
 	public CardList discardSkat() {
 
@@ -163,7 +163,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see de.jskat.ai.JSkatPlayer#preparateForNewGame()
+	 * @see de.jskat.ai.IJSkatPlayer#preparateForNewGame()
 	 */
 	@Override
 	public void preparateForNewGame() {
@@ -171,7 +171,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see de.jskat.ai.JSkatPlayer#finalizeGame()
+	 * @see de.jskat.ai.IJSkatPlayer#finalizeGame()
 	 */
 	@Override
 	public void finalizeGame() {

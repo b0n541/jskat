@@ -25,7 +25,7 @@ import de.jskat.util.rule.SkatRuleFactory;
 /**
  * The JSkat Player implementation
  */
-public abstract class AbstractJSkatPlayer implements JSkatPlayer {
+public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 
 	private static Log log = LogFactory.getLog(AbstractJSkatPlayer.class);
 
@@ -34,7 +34,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	/** Player name */
 	protected String playerName;
 	/** Player state */
-	protected JSkatPlayer.PlayerStates playerState;
+	protected IJSkatPlayer.PlayerStates playerState;
 	/** Player knowledge */
 	protected PlayerKnowledge knowledge = new PlayerKnowledge();
 	/** Player cards */
@@ -61,7 +61,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	protected int gameValue;
 
 	/**
-	 * @see JSkatPlayer#setPlayerName(java.lang.String)
+	 * @see IJSkatPlayer#setPlayerName(java.lang.String)
 	 */
 	public final void setPlayerName(String newPlayerName) {
 
@@ -69,7 +69,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	}
 
 	/**
-	 * @see JSkatPlayer#getPlayerName()
+	 * @see IJSkatPlayer#getPlayerName()
 	 */
 	public final String getPlayerName() {
 
@@ -77,7 +77,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	}
 
 	/**
-	 * @see JSkatPlayer#setUpBidding()
+	 * @see IJSkatPlayer#setUpBidding()
 	 */
 	public final void setUpBidding() {
 
@@ -85,7 +85,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	}
 
 	/**
-	 * @see JSkatPlayer#newGame(Player)
+	 * @see IJSkatPlayer#newGame(Player)
 	 */
 	public final void newGame(Player newPosition) {
 
@@ -109,7 +109,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	}
 
 	/**
-	 * @see JSkatPlayer#takeCard(Card)
+	 * @see IJSkatPlayer#takeCard(Card)
 	 */
 	public final void takeCard(Card newCard) {
 
@@ -129,7 +129,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	}
 
 	/**
-	 * @see JSkatPlayer#startGame(Player, GameType, boolean, boolean, boolean,
+	 * @see IJSkatPlayer#startGame(Player, GameType, boolean, boolean, boolean,
 	 *      boolean)
 	 */
 	public final void startGame(Player newSinglePlayer, GameType newGameType,
@@ -160,7 +160,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	public abstract void startGame();
 
 	/**
-	 * @see JSkatPlayer#takeSkat(CardList)
+	 * @see IJSkatPlayer#takeSkat(CardList)
 	 */
 	public final void takeSkat(CardList skatCards) {
 
@@ -176,13 +176,13 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * @param newState
 	 *            State to be set
 	 */
-	protected final void setState(JSkatPlayer.PlayerStates newState) {
+	protected final void setState(IJSkatPlayer.PlayerStates newState) {
 
 		this.playerState = newState;
 	}
 
 	/**
-	 * @see JSkatPlayer#bidByPlayer(Player, int)
+	 * @see IJSkatPlayer#bidByPlayer(Player, int)
 	 */
 	public final void bidByPlayer(Player player, int bidValue) {
 
@@ -230,7 +230,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	}
 
 	/**
-	 * @see JSkatPlayer#cardPlayed(Player, Card)
+	 * @see IJSkatPlayer#cardPlayed(Player, Card)
 	 */
 	public final void cardPlayed(Player player, Card card) {
 
@@ -244,7 +244,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	}
 
 	/**
-	 * @see JSkatPlayer#showTrick(Trick)
+	 * @see IJSkatPlayer#showTrick(Trick)
 	 */
 	public final void showTrick(Trick trick) {
 
@@ -253,7 +253,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	}
 
 	/**
-	 * @see JSkatPlayer#isHumanPlayer()
+	 * @see IJSkatPlayer#isHumanPlayer()
 	 */
 	public final boolean isHumanPlayer() {
 
@@ -261,7 +261,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	}
 
 	/**
-	 * @see JSkatPlayer#isDeclarer()
+	 * @see IJSkatPlayer#isDeclarer()
 	 */
 	public final boolean isDeclarer() {
 
@@ -276,14 +276,15 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	}
 
 	/**
-	 * @see JSkatPlayer#getOuvertCards(CardList)
+	 * @see IJSkatPlayer#lookAtOuvertCards(CardList)
 	 */
-	public final void getOuvertCards(CardList ouvertCards) {
-		// TODO Auto-generated method stub
+	public final void lookAtOuvertCards(CardList ouvertCards) {
+
+		this.singlePlayerCards.addAll(ouvertCards);
 	}
 
 	/**
-	 * @see JSkatPlayer#setGameResult(boolean, int)
+	 * @see IJSkatPlayer#setGameResult(boolean, int)
 	 */
 	@Override
 	public void setGameResult(boolean pGameWon, int pGameValue) {

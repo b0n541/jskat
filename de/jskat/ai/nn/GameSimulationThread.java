@@ -13,7 +13,7 @@ package de.jskat.ai.nn;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import de.jskat.ai.JSkatPlayer;
+import de.jskat.ai.IJSkatPlayer;
 import de.jskat.ai.nn.data.SkatNetworks;
 import de.jskat.ai.nn.util.NeuralNetwork;
 import de.jskat.control.JSkatThread;
@@ -59,11 +59,11 @@ class GameSimulationThread extends JSkatThread {
 	 */
 	private void simulateGames() {
 		
-		JSkatPlayer nnPlayer1 = new AIPlayerNN();
+		IJSkatPlayer nnPlayer1 = new AIPlayerNN();
 		((AIPlayerNN) nnPlayer1).setIsLearning(true);
-		JSkatPlayer nnPlayer2 = new AIPlayerNN();
+		IJSkatPlayer nnPlayer2 = new AIPlayerNN();
 		((AIPlayerNN) nnPlayer2).setIsLearning(true);
-		JSkatPlayer nnPlayer3 = new AIPlayerNN();
+		IJSkatPlayer nnPlayer3 = new AIPlayerNN();
 		((AIPlayerNN) nnPlayer3).setIsLearning(true);
 		double avgDeclDiff = 0.0d;
 		double avgOppDiff = 0.0d;
