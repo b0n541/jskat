@@ -90,8 +90,8 @@ class Connector {
 			this.socket = new Socket("skatgame.net", this.port); //$NON-NLS-1$
 			this.output = new PrintWriter(this.socket.getOutputStream(), true);
 			this.issOut = new OutputChannel(this.output);
-			this.issIn = new InputChannel(this.issControl, this,
-					this.socket.getInputStream());
+			this.issIn = new InputChannel(this.issControl, this, this.socket
+					.getInputStream());
 			this.issIn.start();
 			log.debug("Connection established..."); //$NON-NLS-1$
 			this.issOut.send(this.loginName);
@@ -189,19 +189,19 @@ class Connector {
 				.send("table " + tableName + ' ' + loginName + " invite " + invitee); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
-	void sendBidValue(String tableName, int bidValue) {
-
-		this.issOut.send("table " + tableName + ' ' + loginName + " play "
-				+ bidValue);
-	}
-
-	void sendPass(String tableName) {
+	void sendPassMove(String tableName) {
 
 		this.issOut.send("table " + tableName + ' ' + loginName + " play p");
 	}
 
-	void sendHoldBid(String tableName) {
+	void sendHoldBidMove(String tableName) {
 
 		this.issOut.send("table " + tableName + ' ' + loginName + " play y");
+	}
+
+	public void sendBidMove(String tableName, int bidValue) {
+
+		this.issOut.send("table " + tableName + ' ' + loginName + " play "
+				+ bidValue);
 	}
 }

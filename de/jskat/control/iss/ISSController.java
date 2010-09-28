@@ -141,7 +141,7 @@ public class ISSController {
 		if (this.issConnect.isConnected()) {
 
 			// show ISS lobby if connection was successfull
-			this.view.closeTabPanel("ISS login");
+			this.view.closeTabPanel("ISS login"); //$NON-NLS-1$
 			this.view.showISSLobby();
 			this.jskat.setIssLogin(login);
 		}
@@ -251,13 +251,13 @@ public class ISSController {
 		StringBuffer message = new StringBuffer();
 
 		// first the sender of the message
-		message.append(params.get(0)).append(": ");
+		message.append(params.get(0)).append(": "); //$NON-NLS-1$
 		// then the text
 		for (int i = 1; i < params.size(); i++) {
 			message.append(params.get(i)).append(' ');
 		}
 
-		ISSChatMessage chatMessage = new ISSChatMessage("Lobby",
+		ISSChatMessage chatMessage = new ISSChatMessage("Lobby", //$NON-NLS-1$
 				message.toString());
 
 		this.view.appendISSChatMessage(ChatMessageType.LOBBY, chatMessage);
@@ -408,54 +408,67 @@ public class ISSController {
 
 		switch (moveInformation.getType()) {
 		case DEAL:
+			log.debug("dealing on ISS"); //$NON-NLS-1$
 			currGame.setGameState(GameState.DEALING);
 			human.setUpBidding();
+			int bid = this.data.getHumanPlayer(tableName).bidMore(18);
+			if (bid == -1) {
+				issConnect.sendPassMove(tableName);
+			} else {
+				issConnect.sendBidMove(tableName, bid);
+			}
 			break;
 		case BID:
 			currGame.setGameState(GameState.BIDDING);
 			currGame.setBidValue(moveInformation.getBidValue());
-			human.bidByPlayer(
-					Player.valueOf(moveInformation.getMovePlayer().name()),
-					moveInformation.getBidValue());
+			log.debug("bid was done on ISS: " + moveInformation.getBidValue()); //$NON-NLS-1$
+			human.bidByPlayer(Player.valueOf(moveInformation.getMovePlayer()
+					.name()), moveInformation.getBidValue());
 			if (human.holdBid(moveInformation.getBidValue())) {
-				issConnect.sendHoldBid(tableName);
+				issConnect.sendHoldBidMove(tableName);
 			} else {
-				issConnect.sendPass(tableName);
+				issConnect.sendPassMove(tableName);
 			}
 			break;
 		case HOLD_BID:
 		case PASS:
 			currGame.setGameState(GameState.BIDDING);
+			log.debug("bid was hold on ISS: " + moveInformation.getBidValue()); //$NON-NLS-1$
 			int nextBidValue = human.bidMore(SkatConstants
 					.getNextBidValue(moveInformation.getBidValue()));
 			if (nextBidValue > 0) {
-				issConnect.sendBidValue(tableName, nextBidValue);
+				issConnect.sendBidMove(tableName, nextBidValue);
 			} else {
-				issConnect.sendPass(tableName);
+				issConnect.sendPassMove(tableName);
 			}
 			break;
 		case SKAT_REQUEST:
 			currGame.setGameState(GameState.DISCARDING);
+			log.debug("discarding on ISS"); //$NON-NLS-1$
 			human.lookIntoSkat();
 			break;
 		case SKAT_LOOKING:
 			currGame.setGameState(GameState.DISCARDING);
+			log.debug("skat looking on ISS"); //$NON-NLS-1$
 			human.discardSkat();
 			human.announceGame();
 			break;
 		case GAME_ANNOUNCEMENT:
 			currGame.setGameState(GameState.DECLARING);
 			currGame.setAnnouncement(moveInformation.getGameAnnouncement());
+			log.debug("game announcing on ISS"); //$NON-NLS-1$
+			human.announceGame();
 			break;
 		case CARD_PLAY:
 			currGame.setGameState(GameState.TRICK_PLAYING);
-			human.cardPlayed(
-					Player.valueOf(moveInformation.getMovePlayer().name()),
-					moveInformation.getCard());
+			log.debug("card play on ISS"); //$NON-NLS-1$
+			human.cardPlayed(Player.valueOf(moveInformation.getMovePlayer()
+					.name()), moveInformation.getCard());
 			human.playCard();
 			break;
 		case TIME_OUT:
 			currGame.setGameState(GameState.PRELIMINARY_GAME_END);
+			log.debug("time out on ISS"); //$NON-NLS-1$
 			human.finalizeGame();
 			break;
 		}
@@ -478,7 +491,7 @@ public class ISSController {
 	 * @param tableName
 	 *            Table name
 	 * @param invitee
-	 *            Invitee
+	 *            Invited player
 	 */
 	public void invitePlayer(String tableName, String invitee) {
 		this.issConnect.invitePlayer(tableName, invitee);
@@ -495,7 +508,7 @@ public class ISSController {
 	}
 
 	/**
-	 * Send talk enabled singal to ISS
+	 * Send talk enabled signal to ISS
 	 * 
 	 * @param tableName
 	 *            Table name
