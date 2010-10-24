@@ -201,7 +201,7 @@ public class SkatGameData {
 	/**
 	 * Cards on player hands
 	 */
-	private List<CardList> playerHands;
+	private Map<Player, CardList> playerHands;
 
 	/**
 	 * Cards in the skat
@@ -211,7 +211,7 @@ public class SkatGameData {
 	/**
 	 * Holds all cards dealt to the players and to the skat
 	 */
-	private List<CardList> dealtCards;
+	private Map<Player, CardList> dealtCards;
 
 	/**
 	 * Creates a new instance of a Skat game data
@@ -220,7 +220,7 @@ public class SkatGameData {
 
 		intializeVariables();
 
-		log.debug("Game created");
+		log.debug("Game created"); //$NON-NLS-1$
 	}
 
 	private void intializeVariables() {
@@ -229,31 +229,22 @@ public class SkatGameData {
 		this.result = -1;
 
 		this.playerNames = new HashMap<Player, String>();
+		this.playerHands = new HashMap<Player, CardList>();
+		this.dealtCards = new HashMap<Player, CardList>();
+		this.playerPoints = new HashMap<Player, Integer>();
+		this.playerBids = new HashMap<Player, Integer>();
 
-		this.playerHands = new ArrayList<CardList>();
-		for (int i = 0; i < 3; i++) {
-
-			this.playerHands.add(new CardList());
+		for (Player player : Player.values()) {
+			this.playerNames.put(player, ""); //$NON-NLS-1$
+			this.playerHands.put(player, new CardList());
+			this.dealtCards.put(player, new CardList());
+			this.playerPoints.put(player, Integer.valueOf(0));
+			this.playerBids.put(player, Integer.valueOf(0));
 		}
 
-		this.dealtCards = new ArrayList<CardList>();
-		for (int i = 0; i < 4; i++) {
-
-			this.dealtCards.add(new CardList());
-		}
 		this.skat = new CardList();
 
-		this.playerBids = new HashMap<Player, Integer>();
-		this.playerBids.put(Player.FORE_HAND, new Integer(0));
-		this.playerBids.put(Player.MIDDLE_HAND, new Integer(0));
-		this.playerBids.put(Player.HIND_HAND, new Integer(0));
-
 		this.tricks = new ArrayList<Trick>();
-
-		this.playerPoints = new HashMap<Player, Integer>();
-		this.playerPoints.put(Player.FORE_HAND, new Integer(0));
-		this.playerPoints.put(Player.MIDDLE_HAND, new Integer(0));
-		this.playerPoints.put(Player.HIND_HAND, new Integer(0));
 	}
 
 	/**
@@ -265,7 +256,7 @@ public class SkatGameData {
 
 		if (this.result == 0 && getGameType() != GameType.PASSED_IN) {
 
-			log.warn("Game result hasn't been calculated yet!");
+			log.warn("Game result hasn't been calculated yet!"); //$NON-NLS-1$
 			calcResult();
 		}
 
@@ -290,7 +281,7 @@ public class SkatGameData {
 	 */
 	public void setDeclarer(Player singlePlayer) {
 
-		log.debug("Current single Player " + singlePlayer);
+		log.debug("Current single Player " + singlePlayer); //$NON-NLS-1$
 
 		this.declarer = singlePlayer;
 	}
@@ -314,7 +305,7 @@ public class SkatGameData {
 	public void setBidValue(int value) {
 
 		this.highestBidValue = value;
-		log.debug("setBidValue(" + value + ")");
+		log.debug("setBidValue(" + value + ")"); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
 	/**
@@ -368,7 +359,7 @@ public class SkatGameData {
 
 		this.won = gameWon;
 
-		log.debug("setGameLost(): Game lost = " + this.won);
+		log.debug("setGameLost(): Game lost = " + this.won); //$NON-NLS-1$
 	}
 
 	/**
@@ -381,7 +372,7 @@ public class SkatGameData {
 		// TODO This should not be possible when a Ramsch game is played
 		// maybe throw an exception instead?
 		if (getGameType() == GameType.RAMSCH) {
-			log.warn("Overbidding cannot happen in Ramsch games: gameType="
+			log.warn("Overbidding cannot happen in Ramsch games: gameType=" //$NON-NLS-1$
 					+ getGameType());
 		}
 		return this.overBidded;
@@ -736,6 +727,7 @@ public class SkatGameData {
 		Player ramschLoser;
 
 		// TODO what happens if two or more players have the same points?
+		// FIXME this is rule logic --> remove it from data object!!!
 		if (this.playerPoints.get(Player.FORE_HAND) > this.playerPoints
 				.get(Player.MIDDLE_HAND)) {
 
@@ -798,8 +790,8 @@ public class SkatGameData {
 	 */
 	public void setTrickCard(int trickNumber, Player player, Card card) {
 
-		log.debug(this + ".setTrickCard(" + trickNumber + ", " + player + ", "
-				+ card + ")");
+		log.debug(this + ".setTrickCard(" + trickNumber + ", " + player + ", " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				+ card + ")"); //$NON-NLS-1$
 
 		switch (player) {
 
@@ -825,7 +817,7 @@ public class SkatGameData {
 	 */
 	public void setTrickWinner(int trickNumber, Player winner) {
 
-		log.debug("setTrickWinner(" + trickNumber + ", " + winner + ")");
+		log.debug("setTrickWinner(" + trickNumber + ", " + winner + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		this.tricks.get(trickNumber).setTrickWinner(winner);
 	}
@@ -870,7 +862,7 @@ public class SkatGameData {
 	 */
 	public int getGeschobenMultiplier() {
 
-		log.debug("geschoben=" + this.geschoben + ", 2^" + this.geschoben + "="
+		log.debug("geschoben=" + this.geschoben + ", 2^" + this.geschoben + "=" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				+ (1 << this.geschoben));
 
 		int multiplier = 0;
@@ -906,7 +898,7 @@ public class SkatGameData {
 	 */
 	public CardList getPlayerCards(Player player) {
 
-		return this.playerHands.get(player.getOrder());
+		return this.playerHands.get(player);
 	}
 
 	/**
@@ -929,7 +921,7 @@ public class SkatGameData {
 	 */
 	public void setDiscardedSkat(Player player, CardList newSkat) {
 
-		CardList hand = this.playerHands.get(player.getOrder());
+		CardList hand = this.playerHands.get(player);
 
 		// add old skat to player's hand
 		hand.add(this.skat.get(0));
@@ -950,7 +942,7 @@ public class SkatGameData {
 	 * 
 	 * @return The dealt cards
 	 */
-	public List<CardList> getDealtCards() {
+	public Map<Player, CardList> getDealtCards() {
 
 		return this.dealtCards;
 	}
@@ -966,10 +958,10 @@ public class SkatGameData {
 	public void setDealtCard(Player player, Card card) {
 
 		// remember the dealt cards
-		this.dealtCards.get(player.getOrder()).add(card);
+		this.dealtCards.get(player).add(card);
 
 		// current cards are hold in playerHands and skat
-		this.playerHands.get(player.getOrder()).add(card);
+		this.playerHands.get(player).add(card);
 	}
 
 	/**
@@ -996,8 +988,10 @@ public class SkatGameData {
 	 */
 	public void addPlayerPoints(Player player, int points) {
 
-		this.playerPoints.put(player, this.playerPoints.get(player).intValue()
-				+ points);
+		this.playerPoints.put(
+				player,
+				Integer.valueOf(this.playerPoints.get(player).intValue()
+						+ points));
 	}
 
 	/**
@@ -1009,7 +1003,7 @@ public class SkatGameData {
 	 */
 	public int getPlayerPoints(Player player) {
 
-		return this.playerPoints.get(player);
+		return this.playerPoints.get(player).intValue();
 	}
 
 	/**
@@ -1022,7 +1016,7 @@ public class SkatGameData {
 	 */
 	public void setPlayerBid(Player player, int bidValue) {
 
-		this.playerBids.put(player, bidValue);
+		this.playerBids.put(player, Integer.valueOf(bidValue));
 	}
 
 	/**
@@ -1034,7 +1028,7 @@ public class SkatGameData {
 	 */
 	public int getPlayerBid(Player player) {
 
-		return this.playerBids.get(player);
+		return this.playerBids.get(player).intValue();
 	}
 
 	/**
@@ -1066,13 +1060,13 @@ public class SkatGameData {
 	 */
 	public GameType getGameType() {
 
-		GameType result = null;
+		GameType gameType = null;
 
 		if (this.announcement != null) {
-			result = this.announcement.getGameType();
+			gameType = this.announcement.getGameType();
 		}
 
-		return result;
+		return gameType;
 	}
 
 	/**
@@ -1110,8 +1104,8 @@ public class SkatGameData {
 	 */
 	public void calcJackInformation() {
 
-		CardList declarerCards = (CardList) this.playerHands.get(
-				this.declarer.getOrder()).clone();
+		CardList declarerCards = (CardList) this.playerHands.get(this.declarer)
+				.clone();
 
 		declarerCards.add(this.skat.get(0));
 		declarerCards.add(this.skat.get(1));
@@ -1159,22 +1153,22 @@ public class SkatGameData {
 	 * Sets the schneider and schwarz flag according the player points
 	 */
 	public void setSchneiderSchwarz() {
+		// FIXME this is rule logic --> remove it
+		int declarerPoints = getPlayerPoints(this.declarer);
 
-		int playerPoints = getPlayerPoints(this.declarer);
-
-		if (playerPoints >= 89 || playerPoints <= 30) {
+		if (declarerPoints >= 89 || declarerPoints <= 30) {
 
 			setSchneider(true);
 		}
 
-		if (playerPoints == 120 || playerPoints == 0) {
+		if (declarerPoints == 120 || declarerPoints == 0) {
 
 			setSchwarz(true);
 		}
 	}
 
 	public void setJungfrauDurchmarsch() {
-
+		// FIXME this is rule logic --> remove it
 		for (Player currPlayer : Player.values()) {
 
 			int playerPoints = getPlayerPoints(currPlayer);
@@ -1190,18 +1184,44 @@ public class SkatGameData {
 		}
 	}
 
+	/**
+	 * Gets the dealing player
+	 * 
+	 * @return Dealing player
+	 */
 	public Player getDealer() {
-		return dealer;
+		return this.dealer;
 	}
 
-	public void setDealer(Player dealer) {
-		this.dealer = dealer;
+	/**
+	 * Sets the dealer player
+	 * 
+	 * @param newDealer
+	 *            Dealing player
+	 */
+	public void setDealer(Player newDealer) {
+		this.dealer = newDealer;
 	}
 
+	/**
+	 * Gets the player name
+	 * 
+	 * @param player
+	 *            Player
+	 * @return Player name
+	 */
 	public String getPlayerName(Player player) {
 		return this.playerNames.get(player);
 	}
 
+	/**
+	 * Sets the player name
+	 * 
+	 * @param player
+	 *            Player
+	 * @param playerName
+	 *            Player name
+	 */
 	public void setPlayerName(Player player, String playerName) {
 		this.playerNames.put(player, playerName);
 	}
