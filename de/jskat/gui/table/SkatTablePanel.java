@@ -189,8 +189,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 		this.gameContextPanel.setOpaque(false);
 		this.gameContextPanel.setLayout(new CardLayout());
 
-		addContextPanel(new GameStartPanel(
-				(StartSkatSeriesAction) getActionMap().get(
+		addContextPanel(
+				new GameStartPanel((StartSkatSeriesAction) getActionMap().get(
 						JSkatAction.START_LOCAL_SERIES)),
 				ContextPanelTypes.START_SERIES.toString());
 
@@ -201,12 +201,12 @@ public class SkatTablePanel extends AbstractTabPanel {
 				ContextPanelTypes.LOOK_INTO_SKAT.toString());
 
 		this.discardPanel = new DiscardPanel(this, this.bitmaps, 4);
-		addContextPanel(this.discardPanel, ContextPanelTypes.DISCARDING
-				.toString());
+		addContextPanel(this.discardPanel,
+				ContextPanelTypes.DISCARDING.toString());
 
 		this.gameAnnouncePanel = new GameAnnouncePanel(this, this.strings);
-		addContextPanel(this.gameAnnouncePanel, ContextPanelTypes.DECLARING
-				.toString());
+		addContextPanel(this.gameAnnouncePanel,
+				ContextPanelTypes.DECLARING.toString());
 
 		JPanel trickHoldingPanel = new JPanel(new MigLayout("fill", "fill", //$NON-NLS-1$ //$NON-NLS-2$
 				"fill")); //$NON-NLS-1$
@@ -214,12 +214,12 @@ public class SkatTablePanel extends AbstractTabPanel {
 		trickHoldingPanel.add(this.lastTrickPanel, "width 25%"); //$NON-NLS-1$
 		this.trickPanel = new TrickPlayPanel(this.bitmaps);
 		trickHoldingPanel.add(this.trickPanel, "grow"); //$NON-NLS-1$
-		addContextPanel(trickHoldingPanel, ContextPanelTypes.TRICK_PLAYING
-				.toString());
+		addContextPanel(trickHoldingPanel,
+				ContextPanelTypes.TRICK_PLAYING.toString());
 
-		addContextPanel(new GameOverPanel(
-				(ContinueSkatSeriesAction) getActionMap().get(
-						JSkatAction.CONTINUE_LOCAL_SERIES)),
+		addContextPanel(
+				new GameOverPanel((ContinueSkatSeriesAction) getActionMap()
+						.get(JSkatAction.CONTINUE_LOCAL_SERIES)),
 				ContextPanelTypes.GAME_OVER.toString());
 
 		return this.gameContextPanel;
@@ -440,7 +440,6 @@ public class SkatTablePanel extends AbstractTabPanel {
 		} else if (panelType == ContextPanelTypes.DECLARING) {
 
 			this.gameAnnouncePanel.resetPanel();
-
 		}
 
 		((CardLayout) this.gameContextPanel.getLayout()).show(
@@ -456,9 +455,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 	public void addGameResult(SkatGameData data) {
 
 		this.skatListTableModel.addResult(this.leftOpponentPanel.getPosition(),
-				this.rightOpponentPanel.getPosition(), this.playerPanel
-						.getPosition(), data.getDeclarer(), data
-						.getGameResult());
+				this.rightOpponentPanel.getPosition(),
+				this.playerPanel.getPosition(), data.getDeclarer(),
+				data.getGameResult());
 
 		// scroll skat list if the new result is out of scope
 		Rectangle bounds = this.skatListTable.getCellRect(
