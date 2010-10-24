@@ -34,7 +34,8 @@ public class JSkat {
 	/**
 	 * Main method
 	 * 
-	 * @param args Command line arguments
+	 * @param args
+	 *            Command line arguments
 	 */
 	public static void main(String[] args) {
 
@@ -43,14 +44,8 @@ public class JSkat {
 
 		log.debug("Welcome to JSkat!"); //$NON-NLS-1$
 
-		for (LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
+		trySettingNimbusLookAndFeel();
 
-			if ("Nimbus".equals(laf.getName())) { //$NON-NLS-1$
-				
-				LookAndFeelSetter.setLookAndFeel();
-			}
-		}
-		
 		JSkatOptions jskatOptions = JSkatOptions.instance();
 
 		// Preparing all graphics
@@ -60,5 +55,15 @@ public class JSkat {
 		JSkatMaster jskat = new JSkatMaster(jskatOptions);
 
 		jskat.setView(new JSkatViewImpl(jskat, jskatBitmaps));
+	}
+
+	private static void trySettingNimbusLookAndFeel() {
+		for (LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
+
+			if ("Nimbus".equals(laf.getName())) { //$NON-NLS-1$
+
+				LookAndFeelSetter.setLookAndFeel();
+			}
+		}
 	}
 }
