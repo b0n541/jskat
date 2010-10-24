@@ -32,7 +32,6 @@ import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.gui.IJSkatView;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.util.Player;
-import de.jskat.util.SkatConstants;
 
 /**
  * Controls all ISS related actions
@@ -397,81 +396,140 @@ public class ISSController {
 	public void updateMove(String tableName, ISSMoveInformation moveInformation) {
 
 		this.view.updateISSMove(tableName, moveInformation);
-		updateGameData(tableName, moveInformation);
-	}
-
-	private void updateGameData(String tableName,
-			ISSMoveInformation moveInformation) {
 
 		SkatGameData currGame = this.gameData.get(tableName);
-		IJSkatPlayer human = this.data.getHumanPlayer(tableName);
+		updateGameData(currGame, moveInformation);
+		if (isHumanOnNextMove(tableName, currGame, moveInformation)) {
+			IJSkatPlayer human = this.data.getHumanPlayer(tableName);
+			activateHumanPlayer(human, tableName, currGame, moveInformation);
+		}
+	}
+
+	private void updateGameData(SkatGameData currGame,
+			ISSMoveInformation moveInformation) {
 
 		switch (moveInformation.getType()) {
 		case DEAL:
-			log.debug("dealing on ISS"); //$NON-NLS-1$
 			currGame.setGameState(GameState.DEALING);
-			human.setUpBidding();
-			int bid = this.data.getHumanPlayer(tableName).bidMore(18);
-			if (bid == -1) {
-				issConnect.sendPassMove(tableName);
-			} else {
-				issConnect.sendBidMove(tableName, bid);
-			}
 			break;
 		case BID:
 			currGame.setGameState(GameState.BIDDING);
 			currGame.setBidValue(moveInformation.getBidValue());
-			log.debug("bid was done on ISS: " + moveInformation.getBidValue()); //$NON-NLS-1$
-			human.bidByPlayer(Player.valueOf(moveInformation.getMovePlayer()
-					.name()), moveInformation.getBidValue());
-			if (human.holdBid(moveInformation.getBidValue())) {
-				issConnect.sendHoldBidMove(tableName);
-			} else {
-				issConnect.sendPassMove(tableName);
-			}
 			break;
 		case HOLD_BID:
+			currGame.setGameState(GameState.BIDDING);
+			break;
 		case PASS:
 			currGame.setGameState(GameState.BIDDING);
-			log.debug("bid was hold on ISS: " + moveInformation.getBidValue()); //$NON-NLS-1$
-			int nextBidValue = human.bidMore(SkatConstants
-					.getNextBidValue(moveInformation.getBidValue()));
-			if (nextBidValue > 0) {
-				issConnect.sendBidMove(tableName, nextBidValue);
-			} else {
-				issConnect.sendPassMove(tableName);
-			}
 			break;
 		case SKAT_REQUEST:
 			currGame.setGameState(GameState.DISCARDING);
-			log.debug("discarding on ISS"); //$NON-NLS-1$
-			human.lookIntoSkat();
 			break;
 		case SKAT_LOOKING:
 			currGame.setGameState(GameState.DISCARDING);
-			log.debug("skat looking on ISS"); //$NON-NLS-1$
-			human.discardSkat();
-			human.announceGame();
 			break;
 		case GAME_ANNOUNCEMENT:
 			currGame.setGameState(GameState.DECLARING);
 			currGame.setAnnouncement(moveInformation.getGameAnnouncement());
-			log.debug("game announcing on ISS"); //$NON-NLS-1$
-			human.announceGame();
 			break;
 		case CARD_PLAY:
 			currGame.setGameState(GameState.TRICK_PLAYING);
-			log.debug("card play on ISS"); //$NON-NLS-1$
-			human.cardPlayed(Player.valueOf(moveInformation.getMovePlayer()
-					.name()), moveInformation.getCard());
-			human.playCard();
 			break;
 		case TIME_OUT:
 			currGame.setGameState(GameState.PRELIMINARY_GAME_END);
-			log.debug("time out on ISS"); //$NON-NLS-1$
-			human.finalizeGame();
 			break;
 		}
+	}
+
+	private boolean isHumanOnNextMove(String tableName, SkatGameData currGame,
+			ISSMoveInformation moveInformation) {
+		// FIXME Here it must be decided whether the human player shall be
+		// activated according the current game state
+		// activation should only be done if neccessary
+
+		boolean result = false;
+
+		switch (currGame.getGameState()) {
+		case BIDDING:
+			if (currGame.getPlayerName(Player.FORE_HAND).equals(
+					this.data.getIssLoginName())) {
+				result = true;
+			}
+			break;
+		}
+
+		return result;
+	}
+
+	private void activateHumanPlayer(IJSkatPlayer human, String tableName,
+			SkatGameData currGame, ISSMoveInformation moveInformation) {
+
+		// FIXME (jan 24.10.2010) activate correct move on human player
+
+		switch (currGame.getGameState()) {
+		case BIDDING:
+			break;
+		case TRICK_PLAYING:
+			human.cardPlayed(
+					Player.valueOf(moveInformation.getMovePlayer().name()),
+					moveInformation.getCard());
+			human.playCard();
+			// issConnect.sendCardMove();
+			break;
+		}
+		// // Dealing
+		// human.setUpBidding();
+		// int bid = human.bidMore(18);
+		// if (bid == -1) {
+		// issConnect.sendPassMove(tableName);
+		// } else {
+		// issConnect.sendBidMove(tableName, bid);
+		// }
+		//
+		// // Bidding
+		//		log.debug("bid was done on ISS: " + moveInformation.getBidValue()); //$NON-NLS-1$
+		// human.bidByPlayer(
+		// Player.valueOf(moveInformation.getMovePlayer().name()),
+		// moveInformation.getBidValue());
+		// if (human.holdBid(moveInformation.getBidValue())) {
+		// issConnect.sendHoldBidMove(tableName);
+		// } else {
+		// issConnect.sendPassMove(tableName);
+		// }
+		//
+		// // Bidding hold/pass
+		//		log.debug("bid was hold on ISS: " + moveInformation.getBidValue()); //$NON-NLS-1$
+		// int nextBidValue = human.bidMore(SkatConstants
+		// .getNextBidValue(moveInformation.getBidValue()));
+		// if (nextBidValue > 0) {
+		// issConnect.sendBidMove(tableName, nextBidValue);
+		// } else {
+		// issConnect.sendPassMove(tableName);
+		// }
+		//
+		// // Discarding
+		//		log.debug("discarding on ISS"); //$NON-NLS-1$
+		// human.lookIntoSkat();
+		//
+		// // Skat looking
+		//		log.debug("skat looking on ISS"); //$NON-NLS-1$
+		// human.discardSkat();
+		// human.announceGame();
+		//
+		// // Game announcement
+		//		log.debug("game announcing on ISS"); //$NON-NLS-1$
+		// human.announceGame();
+		//
+		// // Card play
+		//		log.debug("card play on ISS"); //$NON-NLS-1$
+		// human.cardPlayed(
+		// Player.valueOf(moveInformation.getMovePlayer().name()),
+		// moveInformation.getCard());
+		// human.playCard();
+		//
+		// // Time out
+		//		log.debug("time out on ISS"); //$NON-NLS-1$
+		// human.finalizeGame();
 	}
 
 	/**
