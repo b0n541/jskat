@@ -37,11 +37,10 @@ public class ContinueSkatSeriesAction extends AbstractJSkatAction {
 		super(controller);
 
 		putValue(Action.NAME, strings.getString("continue_series"));
-		putValue(Action.SHORT_DESCRIPTION, strings
-				.getString("continue_series_tooltip"));
+		putValue(Action.SHORT_DESCRIPTION,
+				strings.getString("continue_series_tooltip"));
 		putValue(Action.SMALL_ICON, null);
 		putValue(Action.LARGE_ICON_KEY, null);
-		setEnabled(false);
 	}
 
 	/**
