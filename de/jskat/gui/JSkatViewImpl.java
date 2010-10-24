@@ -168,7 +168,7 @@ public class JSkatViewImpl implements IJSkatView {
 		this.actions.put(JSkatAction.ABOUT_JSKAT, new AboutAction(jskat,
 				this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.CHANGE_ACTIVE_TABLE,
-				new ChangeActiveTableAction(jskat));
+				new ChangeActiveTableAction(jskat, this.bitmaps, this.strings));
 		// skat table actions
 		this.actions.put(JSkatAction.CREATE_LOCAL_TABLE, new CreateTableAction(
 				jskat, this.bitmaps, this.strings));
@@ -182,23 +182,25 @@ public class JSkatViewImpl implements IJSkatView {
 				new PauseSkatSeriesAction(jskat, this.bitmaps, this.strings));
 		// ISS actions
 		this.actions.put(JSkatAction.SHOW_ISS_LOGIN, new ShowLoginPanelAction(
-				jskat, this.bitmaps));
+				jskat, this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.CONNECT_TO_ISS, new ConnectAction(jskat,
-				this.bitmaps));
+				this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.SEND_CHAT_MESSAGE,
-				new SendChatMessageAction(jskat));
+				new SendChatMessageAction(jskat, this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.CREATE_ISS_TABLE,
 				new CreateISSTableAction(jskat, this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.JOIN_ISS_TABLE, new JoinISSTableAction(
-				jskat));
+				jskat, this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.LEAVE_ISS_TABLE, new LeaveISSTableAction(
-				jskat));
+				jskat, this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.OBSERVE_ISS_TABLE,
-				new ObserveISSTableAction(jskat));
-		this.actions.put(JSkatAction.READY_TO_PLAY, new ReadyAction(jskat));
-		this.actions.put(JSkatAction.TALK_ENABLED, new TalkEnableAction(jskat));
+				new ObserveISSTableAction(jskat, this.bitmaps, this.strings));
+		this.actions.put(JSkatAction.READY_TO_PLAY, new ReadyAction(jskat,
+				this.bitmaps, this.strings));
+		this.actions.put(JSkatAction.TALK_ENABLED, new TalkEnableAction(jskat,
+				this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.CHANGE_TABLE_SEATS,
-				new ChangeTableSeatsAction(jskat));
+				new ChangeTableSeatsAction(jskat, this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.INVITE_ISS_PLAYER, new InvitePlayerAction(
 				jskat, this.bitmaps, this.strings));
 		// Neural network actions
@@ -215,20 +217,24 @@ public class JSkatViewImpl implements IJSkatView {
 						new SaveNeuralNetworksAction(jskat, this.bitmaps,
 								this.strings));
 		// Human player actions
-		this.actions.put(JSkatAction.HOLD_BID, new HoldBidAction(jskat));
-		this.actions.put(JSkatAction.PASS_BID, new PassBidAction(jskat));
+		this.actions.put(JSkatAction.HOLD_BID, new HoldBidAction(jskat,
+				this.bitmaps, this.strings));
+		this.actions.put(JSkatAction.PASS_BID, new PassBidAction(jskat,
+				this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.LOOK_INTO_SKAT, new LookIntoSkatAction(
-				jskat));
+				jskat, this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.PLAY_HAND_GAME, new PlayHandGameAction(
-				jskat));
+				jskat, this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.ANNOUNCE_GAME, new GameAnnounceAction(
-				jskat));
+				jskat, this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.PUT_CARD_INTO_SKAT,
-				new PutCardIntoSkatAction(jskat));
+				new PutCardIntoSkatAction(jskat, this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.TAKE_CARD_FROM_SKAT,
-				new TakeCardFromSkatAction(jskat));
-		this.actions.put(JSkatAction.DISCARD_CARDS, new DiscardAction(jskat));
-		this.actions.put(JSkatAction.PLAY_CARD, new PlayCardAction(jskat));
+				new TakeCardFromSkatAction(jskat, this.bitmaps, this.strings));
+		this.actions.put(JSkatAction.DISCARD_CARDS, new DiscardAction(jskat,
+				this.bitmaps, this.strings));
+		this.actions.put(JSkatAction.PLAY_CARD, new PlayCardAction(jskat,
+				this.bitmaps, this.strings));
 
 		// disable some actions
 		actions.get(JSkatAction.LOAD_SERIES).setEnabled(false);

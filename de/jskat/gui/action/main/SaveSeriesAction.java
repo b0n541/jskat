@@ -16,7 +16,6 @@ import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.ImageIcon;
 
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
@@ -35,16 +34,13 @@ public class SaveSeriesAction extends AbstractJSkatAction {
 	public SaveSeriesAction(JSkatMaster controller,
 			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
 
-		super(controller);
+		super(controller, bitmaps);
 
 		putValue(Action.NAME, strings.getString("save_series"));
-		putValue(Action.SHORT_DESCRIPTION, strings.getString("save_series_tooltip"));
-		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.SAVE,
-				JSkatGraphicRepository.IconSize.SMALL)));
-		putValue(Action.LARGE_ICON_KEY, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.SAVE,
-				JSkatGraphicRepository.IconSize.BIG)));
+		putValue(Action.SHORT_DESCRIPTION,
+				strings.getString("save_series_tooltip"));
+
+		setIcons(JSkatGraphicRepository.Icon.SAVE);
 	}
 
 	/**

@@ -15,7 +15,6 @@ import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
-import javax.swing.ImageIcon;
 
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
@@ -34,20 +33,10 @@ public class InvitePlayerAction extends AbstractJSkatAction {
 	public InvitePlayerAction(JSkatMaster controller,
 			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
 
-		super(controller);
+		super(controller, bitmaps);
 
 		putValue(NAME, "Invite player");
 		putValue(SHORT_DESCRIPTION, "Invite player on ISS");
-		putValue(
-				SMALL_ICON,
-				new ImageIcon(bitmaps.getIconImage(
-						JSkatGraphicRepository.Icon.BLANK,
-						JSkatGraphicRepository.IconSize.SMALL)));
-		putValue(
-				LARGE_ICON_KEY,
-				new ImageIcon(bitmaps.getIconImage(
-						JSkatGraphicRepository.Icon.BLANK,
-						JSkatGraphicRepository.IconSize.BIG)));
 	}
 
 	/**

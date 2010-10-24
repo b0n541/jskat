@@ -16,7 +16,6 @@ import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.ImageIcon;
 
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
@@ -35,16 +34,12 @@ public class LicenseAction extends AbstractJSkatAction {
 	public LicenseAction(JSkatMaster controller,
 			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
 
-		super(controller);
+		super(controller, bitmaps);
 
 		putValue(Action.NAME, strings.getString("license")); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION, strings.getString("license_tooltip")); //$NON-NLS-1$
-		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.LICENSE,
-				JSkatGraphicRepository.IconSize.SMALL)));
-		putValue(Action.LARGE_ICON_KEY, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.LICENSE,
-				JSkatGraphicRepository.IconSize.BIG)));
+
+		setIcons(JSkatGraphicRepository.Icon.LICENSE);
 	}
 
 	/**

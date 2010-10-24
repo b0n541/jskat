@@ -16,7 +16,6 @@ import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.ImageIcon;
 
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
@@ -35,16 +34,13 @@ public class ExitAction extends AbstractJSkatAction {
 	public ExitAction(JSkatMaster controller, JSkatGraphicRepository bitmaps,
 			ResourceBundle strings) {
 
-		super(controller);
+		super(controller, bitmaps);
 
 		putValue(Action.NAME, strings.getString("exit_jskat"));
-		putValue(Action.SHORT_DESCRIPTION, strings.getString("exit_jskat_tooltip"));
-		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.EXIT,
-				JSkatGraphicRepository.IconSize.SMALL)));
-		putValue(Action.LARGE_ICON_KEY, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.EXIT,
-				JSkatGraphicRepository.IconSize.SMALL)));
+		putValue(Action.SHORT_DESCRIPTION,
+				strings.getString("exit_jskat_tooltip"));
+
+		setIcons(JSkatGraphicRepository.Icon.EXIT);
 	}
 
 	/**

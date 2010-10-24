@@ -16,7 +16,6 @@ import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.ImageIcon;
 
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
@@ -35,16 +34,13 @@ public class CreateTableAction extends AbstractJSkatAction {
 	public CreateTableAction(JSkatMaster controller,
 			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
 
-		super(controller);
+		super(controller, bitmaps);
 
 		putValue(Action.NAME, strings.getString("new_table"));
-		putValue(Action.SHORT_DESCRIPTION, strings.getString("new_table_tooltip"));
-		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.TABLE,
-				JSkatGraphicRepository.IconSize.SMALL)));
-		putValue(Action.LARGE_ICON_KEY, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.TABLE,
-				JSkatGraphicRepository.IconSize.BIG)));
+		putValue(Action.SHORT_DESCRIPTION,
+				strings.getString("new_table_tooltip"));
+
+		setIcons(JSkatGraphicRepository.Icon.TABLE);
 	}
 
 	/**
