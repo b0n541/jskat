@@ -188,7 +188,7 @@ public class JSkatViewImpl implements IJSkatView {
 		this.actions.put(JSkatAction.SEND_CHAT_MESSAGE,
 				new SendChatMessageAction(jskat));
 		this.actions.put(JSkatAction.CREATE_ISS_TABLE,
-				new CreateISSTableAction(jskat));
+				new CreateISSTableAction(jskat, this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.JOIN_ISS_TABLE, new JoinISSTableAction(
 				jskat));
 		this.actions.put(JSkatAction.LEAVE_ISS_TABLE, new LeaveISSTableAction(
@@ -200,7 +200,7 @@ public class JSkatViewImpl implements IJSkatView {
 		this.actions.put(JSkatAction.CHANGE_TABLE_SEATS,
 				new ChangeTableSeatsAction(jskat));
 		this.actions.put(JSkatAction.INVITE_ISS_PLAYER, new InvitePlayerAction(
-				jskat));
+				jskat, this.bitmaps, this.strings));
 		// Neural network actions
 		this.actions
 				.put(JSkatAction.TRAIN_NEURAL_NETWORKS,

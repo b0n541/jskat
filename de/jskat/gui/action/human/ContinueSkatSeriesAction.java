@@ -15,7 +15,7 @@ import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
-import javax.swing.Action;
+import javax.swing.ImageIcon;
 
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
@@ -36,11 +36,19 @@ public class ContinueSkatSeriesAction extends AbstractJSkatAction {
 
 		super(controller);
 
-		putValue(Action.NAME, strings.getString("continue_series"));
-		putValue(Action.SHORT_DESCRIPTION,
+		putValue(NAME, strings.getString("continue_series"));
+		putValue(SHORT_DESCRIPTION,
 				strings.getString("continue_series_tooltip"));
-		putValue(Action.SMALL_ICON, null);
-		putValue(Action.LARGE_ICON_KEY, null);
+		putValue(
+				SMALL_ICON,
+				new ImageIcon(bitmaps.getIconImage(
+						JSkatGraphicRepository.Icon.BLANK,
+						JSkatGraphicRepository.IconSize.SMALL)));
+		putValue(
+				LARGE_ICON_KEY,
+				new ImageIcon(bitmaps.getIconImage(
+						JSkatGraphicRepository.Icon.BLANK,
+						JSkatGraphicRepository.IconSize.BIG)));
 	}
 
 	/**

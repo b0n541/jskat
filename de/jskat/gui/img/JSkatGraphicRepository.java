@@ -89,22 +89,19 @@ public class JSkatGraphicRepository {
 				// add icon
 				this.icons
 						.get(icon.ordinal())
-						.add(
-								Toolkit
-										.getDefaultToolkit()
-										.getImage(
-												ClassLoader
-														.getSystemResource("de/jskat/gui/img/gui/" //$NON-NLS-1$
-																+ icon
-																		.toString()
-																		.toLowerCase()
-																+ '_'
-																+ size
-																		.toString()
-																		.toLowerCase()
-																+ ".png"))); //$NON-NLS-1$
-				this.tracker.addImage(this.icons.get(icon.ordinal()).get(
-						size.ordinal()), 1);
+						.add(Toolkit
+								.getDefaultToolkit()
+								.getImage(
+										ClassLoader
+												.getSystemResource("de/jskat/gui/img/gui/" //$NON-NLS-1$
+														+ icon.toString()
+																.toLowerCase()
+														+ '_'
+														+ size.toString()
+																.toLowerCase()
+														+ ".png"))); //$NON-NLS-1$
+				this.tracker.addImage(
+						this.icons.get(icon.ordinal()).get(size.ordinal()), 1);
 			}
 		}
 
@@ -131,19 +128,17 @@ public class JSkatGraphicRepository {
 
 				this.cards
 						.get(suit.ordinal())
-						.add(
-								Toolkit
-										.getDefaultToolkit()
-										.getImage(
-												ClassLoader
-														.getSystemResource("de/jskat/gui/img/cards/" //$NON-NLS-1$
-																+ cardType
-																		.toString()
-																		.toLowerCase()
-																+ "/gnome/" + suit.shortString() + '-' + rank.shortString() + ".gif"))); //$NON-NLS-1$//$NON-NLS-2$
+						.add(Toolkit
+								.getDefaultToolkit()
+								.getImage(
+										ClassLoader
+												.getSystemResource("de/jskat/gui/img/cards/" //$NON-NLS-1$
+														+ cardType.toString()
+																.toLowerCase()
+														+ "/gnome/" + suit.shortString() + '-' + rank.shortString() + ".gif"))); //$NON-NLS-1$//$NON-NLS-2$
 
-				this.tracker.addImage(this.cards.get(suit.ordinal()).get(
-						rank.ordinal()), 2);
+				this.tracker.addImage(
+						this.cards.get(suit.ordinal()).get(rank.ordinal()), 2);
 			}
 		}
 
@@ -246,6 +241,10 @@ public class JSkatGraphicRepository {
 		 * About
 		 */
 		ABOUT,
+		/**
+		 * Blank
+		 */
+		BLANK,
 		/**
 		 * Exit
 		 */
