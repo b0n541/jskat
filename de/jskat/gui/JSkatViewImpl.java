@@ -303,8 +303,7 @@ public class JSkatViewImpl implements IJSkatView {
 		JMenu fileMenu = new JMenu(this.strings.getString("file")); //$NON-NLS-1$
 		fileMenu.add(new JMenuItem(this.actions.get(JSkatAction.LOAD_SERIES)));
 		fileMenu.add(new JMenuItem(this.actions.get(JSkatAction.SAVE_SERIES)));
-		fileMenu
-				.add(new JMenuItem(this.actions.get(JSkatAction.SAVE_SERIES_AS)));
+		fileMenu.add(new JMenuItem(this.actions.get(JSkatAction.SAVE_SERIES_AS)));
 		fileMenu.add(new JSeparator());
 		fileMenu.add(new JMenuItem(this.actions.get(JSkatAction.EXIT_JSKAT)));
 		menu.add(fileMenu);
@@ -321,8 +320,8 @@ public class JSkatViewImpl implements IJSkatView {
 				.get(JSkatAction.CONTINUE_LOCAL_SERIES)));
 		menu.add(tableMenu);
 
-		JMenu neuralNetworkMenu = new JMenu(this.strings
-				.getString("neural_networks")); //$NON-NLS-1$
+		JMenu neuralNetworkMenu = new JMenu(
+				this.strings.getString("neural_networks")); //$NON-NLS-1$
 		neuralNetworkMenu.add(new JMenuItem(this.actions
 				.get(JSkatAction.LOAD_NEURAL_NETWORKS)));
 		neuralNetworkMenu.add(new JMenuItem(this.actions
@@ -332,12 +331,13 @@ public class JSkatViewImpl implements IJSkatView {
 				.get(JSkatAction.TRAIN_NEURAL_NETWORKS)));
 		menu.add(neuralNetworkMenu);
 
-		JMenu issMenu = new JMenu("ISS");
-		issMenu
-				.add(new JMenuItem(this.actions.get(JSkatAction.SHOW_ISS_LOGIN)));
+		JMenu issMenu = new JMenu(this.strings.getString("iss")); //$NON-NLS-1$
+		issMenu.add(new JMenuItem(this.actions.get(JSkatAction.SHOW_ISS_LOGIN)));
 		issMenu.add(new JSeparator());
-		issMenu.add(new JMenuItem("Create new skat table"));
-		issMenu.add(new JMenuItem("Invite player"));
+		issMenu.add(new JMenuItem(this.actions
+				.get(JSkatAction.CREATE_ISS_TABLE)));
+		issMenu.add(new JMenuItem(this.actions
+				.get(JSkatAction.INVITE_ISS_PLAYER)));
 		menu.add(issMenu);
 
 		JMenu extraMenu = new JMenu(this.strings.getString("extras")); //$NON-NLS-1$
@@ -482,10 +482,12 @@ public class JSkatViewImpl implements IJSkatView {
 	@Override
 	public int showExitDialog() {
 
-		return JOptionPane.showOptionDialog(this.mainFrame, this.strings
-				.getString("exit_dialog_message"), this.strings //$NON-NLS-1$
-				.getString("exit_dialog_title"), JOptionPane.YES_NO_OPTION, //$NON-NLS-1$
-				JOptionPane.QUESTION_MESSAGE, null, null, null);
+		return JOptionPane
+				.showOptionDialog(
+						this.mainFrame,
+						this.strings.getString("exit_dialog_message"), this.strings //$NON-NLS-1$
+								.getString("exit_dialog_title"), JOptionPane.YES_NO_OPTION, //$NON-NLS-1$
+						JOptionPane.QUESTION_MESSAGE, null, null, null);
 	}
 
 	/**
@@ -797,14 +799,14 @@ public class JSkatViewImpl implements IJSkatView {
 
 		table.setPositions(leftOpponent, rightOpponent, player);
 
-		table.setPlayerInformation(HandPanelType.LEFT_OPPONENT, status
-				.getPlayerName(leftOpponent), status
-				.getPlayerTime(leftOpponent));
-		table.setPlayerInformation(HandPanelType.RIGHT_OPPONENT, status
-				.getPlayerName(rightOpponent), status
-				.getPlayerTime(rightOpponent));
-		table.setPlayerInformation(HandPanelType.PLAYER, status
-				.getPlayerName(player), status.getPlayerTime(player));
+		table.setPlayerInformation(HandPanelType.LEFT_OPPONENT,
+				status.getPlayerName(leftOpponent),
+				status.getPlayerTime(leftOpponent));
+		table.setPlayerInformation(HandPanelType.RIGHT_OPPONENT,
+				status.getPlayerName(rightOpponent),
+				status.getPlayerTime(rightOpponent));
+		table.setPlayerInformation(HandPanelType.PLAYER,
+				status.getPlayerName(player), status.getPlayerTime(player));
 	}
 
 	void updateISSTablePanel(String tableName, HandPanelType panel,
@@ -820,9 +822,11 @@ public class JSkatViewImpl implements IJSkatView {
 	@Override
 	public String getNewTableName() {
 
-		return JOptionPane.showInputDialog(this.mainFrame, this.strings
-				.getString("new_table_dialog_message"), this.strings //$NON-NLS-1$
-				.getString("table")); //$NON-NLS-1$
+		return JOptionPane
+				.showInputDialog(
+						this.mainFrame,
+						this.strings.getString("new_table_dialog_message"), this.strings //$NON-NLS-1$
+								.getString("table")); //$NON-NLS-1$
 	}
 
 	/**
@@ -836,16 +840,17 @@ public class JSkatViewImpl implements IJSkatView {
 		// TODO add other types too
 		case DEAL:
 			this.setGameState(tableName, GameState.DEALING);
-			this.addCards(tableName, Player.FORE_HAND, moveInformation
-					.getCards(Player.FORE_HAND));
-			this.addCards(tableName, Player.MIDDLE_HAND, moveInformation
-					.getCards(Player.MIDDLE_HAND));
-			this.addCards(tableName, Player.HIND_HAND, moveInformation
-					.getCards(Player.HIND_HAND));
+			this.addCards(tableName, Player.FORE_HAND,
+					moveInformation.getCards(Player.FORE_HAND));
+			this.addCards(tableName, Player.MIDDLE_HAND,
+					moveInformation.getCards(Player.MIDDLE_HAND));
+			this.addCards(tableName, Player.HIND_HAND,
+					moveInformation.getCards(Player.HIND_HAND));
 			this.setGameState(tableName, GameState.BIDDING);
 			break;
 		case BID:
 		case PASS:
+		case HOLD_BID:
 			this.setGameState(tableName, GameState.BIDDING);
 			this.setBid(tableName, getPlayer(moveInformation.getMovePlayer()),
 					moveInformation.getBidValue());
@@ -859,8 +864,9 @@ public class JSkatViewImpl implements IJSkatView {
 			this.setGameState(tableName, GameState.DECLARING);
 			break;
 		case CARD_PLAY:
-			this.playTrickCard(tableName, getPlayer(moveInformation
-					.getMovePlayer()), moveInformation.getCard());
+			this.playTrickCard(tableName,
+					getPlayer(moveInformation.getMovePlayer()),
+					moveInformation.getCard());
 			break;
 		case TIME_OUT:
 			// TODO show time out message box
