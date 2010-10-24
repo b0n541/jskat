@@ -38,14 +38,18 @@ public class StartSkatSeriesAction extends AbstractJSkatAction {
 		super(controller);
 
 		putValue(Action.NAME, strings.getString("start_series"));
-		putValue(Action.SHORT_DESCRIPTION, strings.getString("start_series_tooltip"));
-		putValue(Action.SMALL_ICON, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.START_SERIES,
-				JSkatGraphicRepository.IconSize.SMALL)));
-		putValue(Action.LARGE_ICON_KEY, new ImageIcon(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.START_SERIES,
-				JSkatGraphicRepository.IconSize.BIG)));
-		setEnabled(false);
+		putValue(Action.SHORT_DESCRIPTION,
+				strings.getString("start_series_tooltip"));
+		putValue(
+				Action.SMALL_ICON,
+				new ImageIcon(bitmaps.getIconImage(
+						JSkatGraphicRepository.Icon.START_SERIES,
+						JSkatGraphicRepository.IconSize.SMALL)));
+		putValue(
+				Action.LARGE_ICON_KEY,
+				new ImageIcon(bitmaps.getIconImage(
+						JSkatGraphicRepository.Icon.START_SERIES,
+						JSkatGraphicRepository.IconSize.BIG)));
 	}
 
 	/**
