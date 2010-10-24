@@ -229,6 +229,16 @@ public class JSkatViewImpl implements IJSkatView {
 				new TakeCardFromSkatAction(jskat));
 		this.actions.put(JSkatAction.DISCARD_CARDS, new DiscardAction(jskat));
 		this.actions.put(JSkatAction.PLAY_CARD, new PlayCardAction(jskat));
+
+		// disable some actions
+		actions.get(JSkatAction.LOAD_SERIES).setEnabled(false);
+		actions.get(JSkatAction.SAVE_SERIES).setEnabled(false);
+		actions.get(JSkatAction.SAVE_SERIES_AS).setEnabled(false);
+		actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(false);
+		actions.get(JSkatAction.PAUSE_LOCAL_SERIES).setEnabled(false);
+		actions.get(JSkatAction.CONTINUE_LOCAL_SERIES).setEnabled(false);
+		actions.get(JSkatAction.CREATE_ISS_TABLE).setEnabled(false);
+		actions.get(JSkatAction.INVITE_ISS_PLAYER).setEnabled(false);
 	}
 
 	private void initGUI(JSkatMaster jskat) {
