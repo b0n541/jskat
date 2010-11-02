@@ -399,9 +399,9 @@ public class ISSController {
 
 		SkatGameData currGame = this.gameData.get(tableName);
 		updateGameData(currGame, moveInformation);
+
 		if (isHumanOnNextMove(tableName, currGame, moveInformation)) {
-			IJSkatPlayer human = this.data.getHumanPlayer(tableName);
-			activateHumanPlayer(human, tableName, currGame, moveInformation);
+			// FIXME (jan 02.11.2010) wait for user input
 		}
 	}
 
