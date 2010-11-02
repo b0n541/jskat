@@ -496,8 +496,7 @@ public class JSkatMaster {
 
 	private boolean isIssTable(String tableName) {
 
-		// FIXME (jan 02.11.2010) this is not sufficient
-		return tableName.startsWith("."); //$NON-NLS-1$
+		return data.isTableJoined(tableName);
 	}
 
 	/**

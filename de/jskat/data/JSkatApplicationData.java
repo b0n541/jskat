@@ -29,7 +29,8 @@ public class JSkatApplicationData {
 	private Map<String, SkatTable> skatTables;
 	private String activeTable;
 	private String issLoginName;
-	private Set<String> availableISSPlayer;
+	private Set<String> availableIssPlayer;
+	private Set<String> joinedIssTables;
 	private Map<String, HumanPlayer> humanPlayers;
 
 	/**
@@ -43,7 +44,8 @@ public class JSkatApplicationData {
 		this.options = jskatOptions;
 		this.skatTables = new HashMap<String, SkatTable>();
 		this.humanPlayers = new HashMap<String, HumanPlayer>();
-		this.availableISSPlayer = new HashSet<String>();
+		this.availableIssPlayer = new HashSet<String>();
+		this.joinedIssTables = new HashSet<String>();
 	}
 
 	/**
@@ -98,11 +100,9 @@ public class JSkatApplicationData {
 	 */
 	public void setActiveTable(String newActiveTable) {
 
-		if (!this.skatTables.containsKey(newActiveTable)
-				&& !this.humanPlayers.containsKey(newActiveTable)) {
+		if (!this.skatTables.containsKey(newActiveTable)) {
 			// table is not known yet --> comes from ISS
-			// create a human player to handle player inputs
-			this.humanPlayers.put(newActiveTable, new HumanPlayer());
+			this.joinedIssTables.add(newActiveTable);
 		}
 
 		this.activeTable = newActiveTable;
@@ -153,7 +153,7 @@ public class JSkatApplicationData {
 	 * @return Available player
 	 */
 	public Set<String> getAvailableISSPlayer() {
-		return this.availableISSPlayer;
+		return this.availableIssPlayer;
 	}
 
 	/**
@@ -163,7 +163,17 @@ public class JSkatApplicationData {
 	 *            New player
 	 */
 	public void addAvailableISSPlayer(String newPlayer) {
-		this.availableISSPlayer.add(newPlayer);
+		this.availableIssPlayer.add(newPlayer);
+	}
+
+	/**
+	 * Adds a joined skat table on ISS
+	 * 
+	 * @param newSkatTable
+	 *            Skat table
+	 */
+	public void addJoinedIssSkatTable(String newSkatTable) {
+		this.joinedIssTables.add(newSkatTable);
 	}
 
 	/**
@@ -173,7 +183,28 @@ public class JSkatApplicationData {
 	 *            Player to be removed
 	 */
 	public void removeAvailableISSPlayer(String player) {
-		this.availableISSPlayer.remove(player);
+		this.availableIssPlayer.remove(player);
+	}
+
+	/**
+	 * Removes a joined skat table on ISS
+	 * 
+	 * @param skatTable
+	 *            Skat table
+	 */
+	public void removeJoinedIssSkatTable(String skatTable) {
+		this.joinedIssTables.remove(skatTable);
+	}
+
+	/**
+	 * Checks whether a table is in the set of joined ISS tables
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @return TRUE, if the table was joined on ISS
+	 */
+	public boolean isTableJoined(String tableName) {
+		return joinedIssTables.contains(tableName);
 	}
 
 	/**

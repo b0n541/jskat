@@ -254,7 +254,7 @@ public class LobbyPanel extends AbstractTabPanel {
 	public void updateTable(String tableName, int maxPlayers, long gamesPlayed,
 			String player1, String player2, String player3) {
 
-		this.tableListTableModel.updatePlayer(tableName, maxPlayers,
+		this.tableListTableModel.updateTable(tableName, maxPlayers,
 				gamesPlayed, player1, player2, player3);
 	}
 

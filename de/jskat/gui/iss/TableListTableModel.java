@@ -93,8 +93,8 @@ class TableListTableModel extends AbstractTableModel {
 	 * @param player3
 	 *            Player 3
 	 */
-	public void updatePlayer(String tableName, int maxPlayers,
-			long gamesPlayed, String player1, String player2, String player3) {
+	public void updateTable(String tableName, int maxPlayers, long gamesPlayed,
+			String player1, String player2, String player3) {
 
 		boolean tableFound = false;
 		int index = 0;
@@ -103,9 +103,9 @@ class TableListTableModel extends AbstractTableModel {
 		while (!tableFound && index < this.data.size()) {
 
 			List<String> currRow = this.data.get(index);
-			// check player name
+			// check table name
 			if (currRow.get(0).equals(tableName)) {
-				// player found
+				// table found
 				updateRow(index, maxPlayers, gamesPlayed, player1, player2,
 						player3);
 				tableFound = true;
@@ -116,7 +116,8 @@ class TableListTableModel extends AbstractTableModel {
 		if (!tableFound) {
 			// table not found --> new table
 			// add this table
-			addRow(tableName, maxPlayers, gamesPlayed, player1, player2, player3);
+			addRow(tableName, maxPlayers, gamesPlayed, player1, player2,
+					player3);
 		}
 	}
 

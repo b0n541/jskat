@@ -217,10 +217,8 @@ class Connector {
 		String gameAnnouncement = getGameTypeString(gameType, hand, ouvert);
 
 		if (!hand) {
-			// FIXME (jan 02.11.2010) don't rely on toString() for card string
-			// generation
-			gameAnnouncement += "." + discardedCards[0].toString() + "." //$NON-NLS-1$ //$NON-NLS-2$
-					+ discardedCards[1].toString();
+			gameAnnouncement += "." + getIssCardString(discardedCards[0]) + "." //$NON-NLS-1$ //$NON-NLS-2$
+					+ getIssCardString(discardedCards[1]);
 		}
 
 		this.issOut
@@ -264,9 +262,11 @@ class Connector {
 	}
 
 	public void sendCardMove(String tableName, Card card) {
-		// FIXME (jan 02.11.2010) don't rely on toString() for card string
-		// generation
 		this.issOut
-				.send("table " + tableName + ' ' + loginName + " play " + card.toString()); //$NON-NLS-1$//$NON-NLS-2$
+				.send("table " + tableName + ' ' + loginName + " play " + getIssCardString(card)); //$NON-NLS-1$//$NON-NLS-2$
+	}
+
+	private String getIssCardString(Card card) {
+		return card.getSuit().shortString() + card.getRank().shortString();
 	}
 }
