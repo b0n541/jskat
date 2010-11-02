@@ -96,6 +96,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		this.contextPanels = new HashMap<String, JPanel>();
 
+		getActionMap().get(JSkatAction.INVITE_ISS_PLAYER).setEnabled(true);
+
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
 				getSkatListPanel(), getPlayGroundPanel());
 		add(splitPane, "grow"); //$NON-NLS-1$
@@ -142,7 +144,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	protected JPanel getPlayGroundPanel() {
 
-		JPanel panel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
+		JPanel panel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$
 
 		this.gameInfoPanel = getGameInfoPanel();
 		panel.add(this.gameInfoPanel, "span 2, growx, align center, wrap"); //$NON-NLS-1$

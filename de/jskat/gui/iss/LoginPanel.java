@@ -65,6 +65,8 @@ public class LoginPanel extends AbstractTabPanel {
 
 		setLayout(new MigLayout("fill")); //$NON-NLS-1$
 
+		getActionMap().get(JSkatAction.CREATE_ISS_TABLE).setEnabled(true);
+
 		add(getLoginPanel(), "center"); //$NON-NLS-1$
 	}
 
@@ -72,9 +74,8 @@ public class LoginPanel extends AbstractTabPanel {
 
 		JPanel login = new JPanel(new MigLayout());
 
-		login
-				.add(
-						new JLabel("Connect to International Skat Server"), "span 2, align center, wrap"); //$NON-NLS-2$
+		login.add(
+				new JLabel("Connect to International Skat Server"), "span 2, align center, wrap"); //$NON-NLS-2$
 		login.add(new JLabel("Login"));
 		this.loginField = new JTextField(10);
 		login.add(this.loginField, "growx, wrap"); //$NON-NLS-1$

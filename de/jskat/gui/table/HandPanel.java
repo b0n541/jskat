@@ -18,7 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
-
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.util.Card;
 import de.jskat.util.GameType;
@@ -44,6 +43,10 @@ abstract class HandPanel extends JPanel {
 	 */
 	JSkatGraphicRepository bitmaps;
 	/**
+	 * Header panel
+	 */
+	JPanel header;
+	/**
 	 * Header label
 	 */
 	JLabel headerLabel;
@@ -57,7 +60,7 @@ abstract class HandPanel extends JPanel {
 	double playerTime;
 
 	CardPanel cardPanel;
-	
+
 	/**
 	 * Maximum card count
 	 */
@@ -66,20 +69,23 @@ abstract class HandPanel extends JPanel {
 	/**
 	 * Constructor
 	 * 
-	 * @param newParent Skat table panel
-	 * @param jskatBitmaps Card images
+	 * @param newParent
+	 *            Skat table panel
+	 * @param jskatBitmaps
+	 *            Card images
 	 */
-	HandPanel(SkatTablePanel newParent, JSkatGraphicRepository jskatBitmaps, int maxCards) {
-		
+	HandPanel(SkatTablePanel newParent, JSkatGraphicRepository jskatBitmaps,
+			int maxCards) {
+
 		this.parent = newParent;
 		setActionMap(this.parent.getActionMap());
 		this.bitmaps = jskatBitmaps;
 		this.maxCardCount = maxCards;
-		
+
 		this.setOpaque(false);
 
 		this.headerLabel = new JLabel(" "); //$NON-NLS-1$
-		
+
 		initPanel();
 	}
 
@@ -87,46 +93,48 @@ abstract class HandPanel extends JPanel {
 	 * Initializes the panel
 	 */
 	void initPanel() {
-		
-		setLayout(new MigLayout("fill", "fill", "fill"));   //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-		
+
+		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+
 		setBorder(BorderFactory.createLineBorder(Color.black));
-		
-		add(this.headerLabel, "wrap"); //$NON-NLS-1$
+
+		header = new JPanel(new MigLayout("fill", "fill", "fill"));
+		header.add(headerLabel);
+		add(header, "wrap"); //$NON-NLS-1$
 
 		this.cardPanel = new CardPanel(this, this.bitmaps, true);
-		
 		add(this.cardPanel, "grow"); //$NON-NLS-1$
 	}
 
 	/**
 	 * Sets the player position
 	 * 
-	 * @param newPosition Position
+	 * @param newPosition
+	 *            Position
 	 */
 	void setPosition(Player newPosition) {
-		
+
 		this.position = newPosition;
 		refreshHeaderText();
 	}
-	
+
 	/**
 	 * Gets the player position
 	 * 
 	 * @return Player position
 	 */
 	Player getPosition() {
-		
+
 		return this.position;
 	}
-	
+
 	private void refreshHeaderText() {
-		
+
 		StringBuffer headerText = new StringBuffer();
-		
+
 		headerText.append(this.playerName).append(": ");
-		
-		switch(this.position) {
+
+		switch (this.position) {
 		case FORE_HAND:
 			headerText.append("Fore hand");
 			break;
@@ -139,75 +147,77 @@ abstract class HandPanel extends JPanel {
 		}
 		headerText.append(' ');
 		headerText.append(this.playerTime);
-		
+
 		this.headerLabel.setText(headerText.toString());
 	}
-	
+
 	/**
 	 * Adds a card to the panel
 	 * 
-	 * @param newCard Card
+	 * @param newCard
+	 *            Card
 	 */
 	void addCard(Card newCard) {
-		
+
 		this.cardPanel.addCard(newCard);
 	}
-	
+
 	/**
 	 * Removes a card from the panel
 	 * 
-	 * @param cardToRemove Card
+	 * @param cardToRemove
+	 *            Card
 	 */
 	void removeCard(Card cardToRemove) {
-		
+
 		this.cardPanel.removeCard(cardToRemove);
 	}
-	
+
 	/**
 	 * Removes all cards from the panel
 	 */
 	void clearHandPanel() {
-		
+
 		this.cardPanel.clearCards();
 	}
-	
+
 	/**
 	 * Hides all cards on the panel
 	 */
 	void hideCards() {
-		
+
 		this.cardPanel.hideCards();
 	}
-	
+
 	/**
 	 * Shows all cards on the panel
 	 */
 	void showCards() {
-		
+
 		this.cardPanel.showCards();
 	}
-		
+
 	void setSortGameType(GameType newGameType) {
-		
+
 		this.cardPanel.setSortType(newGameType);
 	}
-	
+
 	boolean isHandFull() {
-		
+
 		return this.cardPanel.getCardCount() == this.maxCardCount;
 	}
-	
+
 	void setPlayerName(String newName) {
-		
+
 		this.playerName = newName;
-		
+
 		this.refreshHeaderText();
 	}
-	
+
 	void setPlayerTime(double newTime) {
-		
+
 		this.playerTime = newTime;
-		
+
 		this.refreshHeaderText();
 	}
 }

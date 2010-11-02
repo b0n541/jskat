@@ -32,9 +32,9 @@ import de.jskat.util.CardList;
 class DiscardPanel extends HandPanel {
 
 	private static final long serialVersionUID = 1L;
-	
+
 	private Action discardAction;
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -51,31 +51,32 @@ class DiscardPanel extends HandPanel {
 	 */
 	@Override
 	void initPanel() {
-		
+
 		setBackground(Color.WHITE);
 		setBorder(BorderFactory.createLineBorder(Color.black));
-		
+
 		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		
+
 		this.headerLabel.setText("Skat");
 		add(this.headerLabel, "wrap"); //$NON-NLS-1$
-		
+
 		this.cardPanel = new CardPanel(this, this.bitmaps, false);
 		add(this.cardPanel, "grow, wrap"); //$NON-NLS-1$
-		
-		this.discardAction = this.parent.getActionMap().get(JSkatAction.DISCARD_CARDS);
+
+		this.discardAction = this.parent.getActionMap().get(
+				JSkatAction.DISCARD_CARDS);
 		final JButton discardButton = new JButton(this.discardAction);
 		discardButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
 				if (DiscardPanel.this.cardPanel.getCardCount() == 2) {
-					
+
 					CardList newSkat = new CardList();
 					newSkat.add(DiscardPanel.this.cardPanel.get(0));
 					newSkat.add(DiscardPanel.this.cardPanel.get(1));
-					
-					e.setSource(newSkat);  
+
+					e.setSource(newSkat);
 					// fire event again
 					discardButton.dispatchEvent(e);
 				}
@@ -84,19 +85,19 @@ class DiscardPanel extends HandPanel {
 		JPanel buttonPanel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
 		buttonPanel.add(discardButton, "center"); //$NON-NLS-1$
 		add(buttonPanel);
-		
+
 		this.showCards();
 	}
-	
+
 	protected void setSkat(CardList skat) {
-		
+
 		addCard(skat.get(0));
 		addCard(skat.get(1));
 	}
-	
+
 	@Override
 	void addCard(Card card) {
-		
+
 		super.addCard(card);
 
 		setDiscardButton();
@@ -104,27 +105,27 @@ class DiscardPanel extends HandPanel {
 
 	@Override
 	void removeCard(Card card) {
-		
+
 		super.removeCard(card);
-		
+
 		setDiscardButton();
 	}
-	
+
 	public void resetPanel() {
-		
+
 		this.cardPanel.clearCards();
 		setDiscardButton();
 	}
 
 	private void setDiscardButton() {
-		
+
 		if (this.cardPanel.getCardCount() == 2) {
-			
+
 			this.getActionMap().get(JSkatAction.DISCARD_CARDS).setEnabled(true);
-		}
-		else {
-			
-			this.getActionMap().get(JSkatAction.DISCARD_CARDS).setEnabled(false);
+		} else {
+
+			this.getActionMap().get(JSkatAction.DISCARD_CARDS)
+					.setEnabled(false);
 		}
 	}
 }
