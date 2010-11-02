@@ -21,6 +21,7 @@ import org.apache.commons.logging.LogFactory;
 
 import de.jskat.ai.IJSkatPlayer;
 import de.jskat.control.JSkatMaster;
+import de.jskat.data.GameAnnouncement;
 import de.jskat.data.JSkatApplicationData;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameState;
@@ -31,6 +32,7 @@ import de.jskat.data.iss.ISSMoveInformation;
 import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.gui.IJSkatView;
 import de.jskat.gui.action.JSkatAction;
+import de.jskat.util.Card;
 import de.jskat.util.Player;
 
 /**
@@ -583,5 +585,66 @@ public class ISSController {
 	 */
 	public void sendTableSeatChangeSignal(String tableName) {
 		this.issConnect.sendTableSeatChangeSignal(tableName);
+	}
+
+	/**
+	 * Send pass bid move to ISS
+	 * 
+	 * @param tableName
+	 *            Table name
+	 */
+	public void sendPassBidMove(String tableName) {
+		this.issConnect.sendPassMove(tableName);
+	}
+
+	/**
+	 * Send hold bid move to ISS
+	 * 
+	 * @param tableName
+	 *            Table name
+	 */
+	public void sendHoldBidMove(String tableName) {
+		this.issConnect.sendHoldBidMove(tableName);
+	}
+
+	/**
+	 * Send look into skat move to ISS
+	 * 
+	 * @param tableName
+	 *            Table name
+	 */
+	public void sendLookIntoSkatMove(String tableName) {
+		this.issConnect.sendLookIntoSkatMove(tableName);
+	}
+
+	/**
+	 * Send game announcement to ISS
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param gameAnnouncement
+	 *            Game announcement
+	 * @param discardedCards
+	 *            Discarded cards
+	 */
+	public void sendGameAnnouncementMove(String tableName,
+			GameAnnouncement gameAnnouncement, Card... discardedCards) {
+
+		this.issConnect.sendGameAnnouncementMove(tableName,
+				gameAnnouncement.getGameType(), gameAnnouncement.isHand(),
+				gameAnnouncement.isOuvert(), discardedCards);
+
+	}
+
+	/**
+	 * Send card move to ISS
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param nextCard
+	 *            Card
+	 */
+	public void sendCardMove(String tableName, Card nextCard) {
+		this.issConnect.sendCardMove(tableName, nextCard);
 	}
 }

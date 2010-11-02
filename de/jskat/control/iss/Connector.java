@@ -21,9 +21,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.iss.ISSChatMessage;
+import de.jskat.util.Card;
+import de.jskat.util.GameType;
 
 /**
- * Connector to Internation Skat Server ISS
+ * Connector to International Skat Server ISS
  */
 class Connector {
 
@@ -90,8 +92,8 @@ class Connector {
 			this.socket = new Socket("skatgame.net", this.port); //$NON-NLS-1$
 			this.output = new PrintWriter(this.socket.getOutputStream(), true);
 			this.issOut = new OutputChannel(this.output);
-			this.issIn = new InputChannel(this.issControl, this, this.socket
-					.getInputStream());
+			this.issIn = new InputChannel(this.issControl, this,
+					this.socket.getInputStream());
 			this.issIn.start();
 			log.debug("Connection established..."); //$NON-NLS-1$
 			this.issOut.send(this.loginName);
@@ -191,17 +193,80 @@ class Connector {
 
 	void sendPassMove(String tableName) {
 
-		this.issOut.send("table " + tableName + ' ' + loginName + " play p");
+		this.issOut.send("table " + tableName + ' ' + loginName + " play p"); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
 	void sendHoldBidMove(String tableName) {
 
-		this.issOut.send("table " + tableName + ' ' + loginName + " play y");
+		this.issOut.send("table " + tableName + ' ' + loginName + " play y"); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
 	public void sendBidMove(String tableName, int bidValue) {
 
-		this.issOut.send("table " + tableName + ' ' + loginName + " play "
+		this.issOut.send("table " + tableName + ' ' + loginName + " play " //$NON-NLS-1$//$NON-NLS-2$
 				+ bidValue);
+	}
+
+	public void sendLookIntoSkatMove(String tableName) {
+		this.issOut.send("table " + tableName + ' ' + loginName + " play s"); //$NON-NLS-1$//$NON-NLS-2$
+	}
+
+	public void sendGameAnnouncementMove(String tableName, GameType gameType,
+			boolean hand, boolean ouvert, Card... discardedCards) {
+
+		String gameAnnouncement = getGameTypeString(gameType, hand, ouvert);
+
+		if (!hand) {
+			// FIXME (jan 02.11.2010) don't rely on toString() for card string
+			// generation
+			gameAnnouncement += "." + discardedCards[0].toString() + "." //$NON-NLS-1$ //$NON-NLS-2$
+					+ discardedCards[1].toString();
+		}
+
+		this.issOut
+				.send("table " + tableName + ' ' + loginName + " play " + gameAnnouncement); //$NON-NLS-1$//$NON-NLS-2$
+	}
+
+	private String getGameTypeString(GameType gameType, boolean hand,
+			boolean ouvert) {
+
+		String result = getGameTypeString(gameType);
+
+		if (hand) {
+			result += "H"; //$NON-NLS-1$
+		}
+
+		if (ouvert) {
+			result += "O"; //$NON-NLS-1$
+		}
+
+		return result;
+	}
+
+	private String getGameTypeString(GameType gameType) {
+		switch (gameType) {
+		case CLUBS:
+			return "C"; //$NON-NLS-1$
+		case SPADES:
+			return "S"; //$NON-NLS-1$
+		case HEARTS:
+			return "H"; //$NON-NLS-1$
+		case DIAMONDS:
+			return "D"; //$NON-NLS-1$
+		case NULL:
+			return "N"; //$NON-NLS-1$
+		case GRAND:
+			return "G"; //$NON-NLS-1$
+		default:
+			// FIXME (jan 02.11.2010) Ramsch games are not allowed on ISS
+			return null;
+		}
+	}
+
+	public void sendCardMove(String tableName, Card card) {
+		// FIXME (jan 02.11.2010) don't rely on toString() for card string
+		// generation
+		this.issOut
+				.send("table " + tableName + ' ' + loginName + " play " + card.toString()); //$NON-NLS-1$//$NON-NLS-2$
 	}
 }

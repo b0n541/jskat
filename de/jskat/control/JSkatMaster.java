@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 import org.apache.commons.logging.Log;
@@ -26,10 +27,13 @@ import de.jskat.ai.nn.AIPlayerNN;
 import de.jskat.ai.nn.data.SkatNetworks;
 import de.jskat.ai.nn.train.NNTrainer;
 import de.jskat.control.iss.ISSController;
+import de.jskat.data.GameAnnouncement;
 import de.jskat.data.JSkatApplicationData;
 import de.jskat.data.JSkatOptions;
 import de.jskat.gui.IJSkatView;
+import de.jskat.gui.action.JSkatAction;
 import de.jskat.util.Card;
+import de.jskat.util.CardList;
 import de.jskat.util.GameType;
 
 /**
@@ -307,7 +311,8 @@ public class JSkatMaster {
 	 *            Skat player
 	 * @return TRUE if the placing was successful
 	 */
-	public synchronized boolean placePlayer(String tableName, IJSkatPlayer player) {
+	public synchronized boolean placePlayer(String tableName,
+			IJSkatPlayer player) {
 
 		boolean result = false;
 
@@ -427,8 +432,72 @@ public class JSkatMaster {
 	public void triggerHuman(ActionEvent event) {
 
 		log.debug(event);
-		this.data.getHumanPlayer(this.data.getActiveTable()).actionPerformed(
-				event);
+
+		String tableName = data.getActiveTable();
+		SkatTable table = data.getSkatTable(tableName);
+		String command = event.getActionCommand();
+		Object source = event.getSource();
+
+		if (isIssTable(tableName)) {
+			if (JSkatAction.PASS_BID.toString().equals(command)) {
+				// player passed
+				this.issControl.sendPassBidMove(tableName);
+			} else if (JSkatAction.HOLD_BID.toString().equals(command)) {
+				// player hold bid
+				this.issControl.sendHoldBidMove(tableName);
+			} else if (JSkatAction.LOOK_INTO_SKAT.toString().equals(command)) {
+				// player wants to look into the skat
+				this.issControl.sendLookIntoSkatMove(tableName);
+			} else if (JSkatAction.PLAY_HAND_GAME.toString().equals(command)) {
+				// player wants to play a hand game
+				// FIXME (jan 02.11.2010) decision is not sent to ISS
+			} else if (JSkatAction.DISCARD_CARDS.toString().equals(command)) {
+
+				if (source instanceof CardList) {
+					// player discarded cards
+					CardList discardSkat = (CardList) source;
+
+					// FIXME (jan 02.11.2010) Discarded cards are sent with the
+					// game announcement to ISS
+
+					// this.issControl.sendDiscardMove(tableName,
+					// discardSkat.get(0), discardSkat.get(1));
+				} else {
+
+					log.error("Wrong source for " + command); //$NON-NLS-1$
+				}
+			} else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
+
+				if (source instanceof JButton) {
+					log.debug("ONLY JBUTTON"); //$NON-NLS-1$
+				} else {
+					// player did game announcement
+					// FIXME (jan 02.11.2010) Discarded cards are sent with the
+					// game announcement to ISS
+					GameAnnouncement gameAnnouncement = (GameAnnouncement) source;
+					this.issControl.sendGameAnnouncementMove(tableName,
+							gameAnnouncement);
+				}
+			} else if (JSkatAction.PLAY_CARD.toString().equals(command)
+					&& source instanceof Card) {
+
+				Card nextCard = (Card) source;
+				this.issControl.sendCardMove(tableName, nextCard);
+			} else {
+
+				log.error("Unknown action event occured: " + command + " from " + source); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+
+		} else {
+			this.data.getHumanPlayer(this.data.getActiveTable())
+					.actionPerformed(event);
+		}
+	}
+
+	private boolean isIssTable(String tableName) {
+
+		// FIXME (jan 02.11.2010) this is not sufficient
+		return tableName.startsWith("."); //$NON-NLS-1$
 	}
 
 	/**
