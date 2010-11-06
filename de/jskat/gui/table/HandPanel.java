@@ -17,6 +17,7 @@ import java.util.Collection;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 
 import net.miginfocom.swing.MigLayout;
 import de.jskat.gui.img.JSkatGraphicRepository;
@@ -67,6 +68,8 @@ abstract class HandPanel extends JPanel {
 	 */
 	int maxCardCount = 0;
 
+	boolean activePlayer = false;
+
 	/**
 	 * Constructor
 	 * 
@@ -97,7 +100,7 @@ abstract class HandPanel extends JPanel {
 
 		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
-		setBorder(BorderFactory.createLineBorder(Color.black));
+		setBorder(getPanelBorder());
 
 		header = new JPanel(new MigLayout("fill", "fill", "fill"));
 		header.add(headerLabel);
@@ -105,6 +108,19 @@ abstract class HandPanel extends JPanel {
 
 		this.cardPanel = new CardPanel(this, this.bitmaps, true);
 		add(this.cardPanel, "grow"); //$NON-NLS-1$
+	}
+
+	private Border getPanelBorder() {
+
+		Border result = null;
+
+		if (activePlayer) {
+			result = BorderFactory.createLineBorder(Color.red);
+		} else {
+			result = BorderFactory.createLineBorder(Color.red);
+		}
+
+		return result;
 	}
 
 	/**
@@ -231,5 +247,15 @@ abstract class HandPanel extends JPanel {
 		this.playerTime = newTime;
 
 		this.refreshHeaderText();
+	}
+
+	boolean isActivePlayer() {
+		return activePlayer;
+	}
+
+	void setActivePlayer(boolean isActivePlayer) {
+		activePlayer = isActivePlayer;
+
+		setBorder(getPanelBorder());
 	}
 }
