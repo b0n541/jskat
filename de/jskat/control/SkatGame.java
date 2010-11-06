@@ -11,6 +11,8 @@ Released: @ReleaseDate@
 
 package de.jskat.control;
 
+import java.util.Map;
+
 import javax.swing.JOptionPane;
 
 import org.apache.commons.logging.Log;
@@ -19,8 +21,8 @@ import org.apache.commons.logging.LogFactory;
 import de.jskat.ai.IJSkatPlayer;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
-import de.jskat.data.Trick;
 import de.jskat.data.SkatGameData.GameState;
+import de.jskat.data.Trick;
 import de.jskat.gui.IJSkatView;
 import de.jskat.gui.human.HumanPlayer;
 import de.jskat.util.Card;
@@ -194,6 +196,15 @@ public class SkatGame extends JSkatThread {
 				break;
 			}
 		}
+
+		// show cards in the view
+		Map<Player, CardList> dealtCards = data.getDealtCards();
+		for (Player currPlayer : Player.values()) {
+
+			this.view.addCards(this.tableName, currPlayer,
+					dealtCards.get(currPlayer));
+		}
+
 		doSleep(this.maxSleep);
 
 		log.debug("Fore hand: " + this.data.getPlayerCards(Player.FORE_HAND)); //$NON-NLS-1$
@@ -221,7 +232,6 @@ public class SkatGame extends JSkatThread {
 				// player can get original card object because Card is immutable
 				this.player[hand.getOrder()].takeCard(card);
 				this.data.setDealtCard(hand, card);
-				this.view.addCard(this.tableName, hand, card);
 			}
 		}
 	}
@@ -492,9 +502,9 @@ public class SkatGame extends JSkatThread {
 				Trick lastTrick = this.data.getTricks().get(
 						this.data.getTricks().size() - 1);
 				this.view.setLastTrick(this.tableName, this.trickForeHand,
-						lastTrick.getCard(Player.FORE_HAND), lastTrick
-								.getCard(Player.MIDDLE_HAND), lastTrick
-								.getCard(Player.HIND_HAND));
+						lastTrick.getCard(Player.FORE_HAND),
+						lastTrick.getCard(Player.MIDDLE_HAND),
+						lastTrick.getCard(Player.HIND_HAND));
 				this.view.clearTrickCards(this.tableName);
 				// renew trickForeHand
 				this.trickForeHand = this.data.getTrickWinner(this.data
@@ -540,12 +550,11 @@ public class SkatGame extends JSkatThread {
 			doSleep(this.maxSleep);
 
 			log.debug("Trick cards: " + trick.getCardList()); //$NON-NLS-1$
-			log
-					.debug("Points: fore hand: " + this.data.getPlayerPoints(Player.FORE_HAND) + //$NON-NLS-1$
-							" middle hand: " //$NON-NLS-1$
-							+ this.data.getPlayerPoints(Player.MIDDLE_HAND)
-							+ " hind hand: " //$NON-NLS-1$
-							+ this.data.getPlayerPoints(Player.HIND_HAND));
+			log.debug("Points: fore hand: " + this.data.getPlayerPoints(Player.FORE_HAND) + //$NON-NLS-1$
+					" middle hand: " //$NON-NLS-1$
+					+ this.data.getPlayerPoints(Player.MIDDLE_HAND)
+					+ " hind hand: " //$NON-NLS-1$
+					+ this.data.getPlayerPoints(Player.HIND_HAND));
 
 			if (isFinished()) {
 				break;
@@ -600,13 +609,11 @@ public class SkatGame extends JSkatThread {
 
 			} else if (!playerHasCard(currPlayer, card)) {
 
-				log
-						.error("Player is fooling!!! Doesn't have card " + card + "!"); //$NON-NLS-1$//$NON-NLS-2$
+				log.error("Player is fooling!!! Doesn't have card " + card + "!"); //$NON-NLS-1$//$NON-NLS-2$
 
-			} else if (!this.rules
-					.isCardAllowed(this.data.getGameType(), trick
-							.getFirstCard(), this.data
-							.getPlayerCards(currPlayer), card)) {
+			} else if (!this.rules.isCardAllowed(this.data.getGameType(),
+					trick.getFirstCard(), this.data.getPlayerCards(currPlayer),
+					card)) {
 
 				this.view.showMessage(JOptionPane.INFORMATION_MESSAGE,
 						"Card " + card + " is not allowed!"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -779,8 +786,8 @@ public class SkatGame extends JSkatThread {
 		for (IJSkatPlayer currPlayer : this.player) {
 			// no cloning neccessary because all parameters are primitive data
 			// types
-			currPlayer.setGameResult(this.data.isGameWon(), this.data
-					.getGameResult());
+			currPlayer.setGameResult(this.data.isGameWon(),
+					this.data.getGameResult());
 			currPlayer.finalizeGame();
 		}
 
@@ -833,10 +840,10 @@ public class SkatGame extends JSkatThread {
 		for (IJSkatPlayer currPlayer : this.player) {
 			// no cloning neccessary, because all parameters are primitive data
 			// types
-			currPlayer.startGame(this.data.getDeclarer(), this.data
-					.getGameType(), this.data.isHand(), this.data.isOuvert(),
-					this.data.isSchneiderAnnounced(), this.data
-							.isSchwarzAnnounced());
+			currPlayer.startGame(this.data.getDeclarer(),
+					this.data.getGameType(), this.data.isHand(),
+					this.data.isOuvert(), this.data.isSchneiderAnnounced(),
+					this.data.isSchwarzAnnounced());
 		}
 
 		this.view.setGameAnnouncement(this.tableName, ann);

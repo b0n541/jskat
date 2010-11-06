@@ -383,8 +383,6 @@ public class ISSController {
 	public void startGame(String tableName) {
 
 		this.view.startGame(tableName);
-
-		// TODO inform human player
 	}
 
 	/**

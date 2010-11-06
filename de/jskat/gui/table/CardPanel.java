@@ -19,6 +19,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
+import java.util.Collection;
 
 import javax.swing.Action;
 import javax.swing.JPanel;
@@ -120,10 +121,16 @@ class CardPanel extends JPanel {
 		repaint();
 	}
 
+	protected void addCards(Collection<Card> newCards) {
+
+		this.cards.addAll(newCards);
+		this.cards.sort(this.gameType);
+		repaint();
+	}
+
 	protected void removeCard(Card cardToRemove) {
 
 		this.cards.remove(cardToRemove);
-		this.cards.sort(this.gameType);
 		repaint();
 	}
 

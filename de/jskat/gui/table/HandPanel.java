@@ -12,6 +12,7 @@ Released: @ReleaseDate@
 package de.jskat.gui.table;
 
 import java.awt.Color;
+import java.util.Collection;
 
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
@@ -160,6 +161,17 @@ abstract class HandPanel extends JPanel {
 	void addCard(Card newCard) {
 
 		this.cardPanel.addCard(newCard);
+	}
+
+	/**
+	 * Adds a card to the panel
+	 * 
+	 * @param newCard
+	 *            Card
+	 */
+	void addCards(Collection<Card> newCards) {
+
+		this.cardPanel.addCards(newCards);
 	}
 
 	/**

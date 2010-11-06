@@ -1008,9 +1008,7 @@ public class JSkatViewImpl implements IJSkatView {
 	@Override
 	public void addCards(String tableName, Player player, CardList cards) {
 
-		for (Card card : cards) {
-			addCard(tableName, player, card);
-		}
+		this.tables.get(tableName).addCards(player, cards);
 	}
 
 	private void addTabPanel(AbstractTabPanel newPanel, String title) {

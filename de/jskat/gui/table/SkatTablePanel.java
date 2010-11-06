@@ -15,6 +15,7 @@ import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -283,6 +284,21 @@ public class SkatTablePanel extends AbstractTabPanel {
 			break;
 		case HIND_HAND:
 			this.hindHand.addCard(card);
+			break;
+		}
+	}
+
+	public void addCards(Player position, Collection<Card> cards) {
+
+		switch (position) {
+		case FORE_HAND:
+			this.foreHand.addCards(cards);
+			break;
+		case MIDDLE_HAND:
+			this.middleHand.addCards(cards);
+			break;
+		case HIND_HAND:
+			this.hindHand.addCards(cards);
 			break;
 		}
 	}
