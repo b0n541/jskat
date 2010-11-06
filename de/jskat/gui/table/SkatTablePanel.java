@@ -427,9 +427,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 			this.playerPanel.setGameState(GameState.DISCARDING);
 			break;
 		case DECLARING:
+			this.gameInfoPanel.setText(state.toString());
 			setContextPanel(ContextPanelTypes.DECLARING);
 			break;
 		case TRICK_PLAYING:
+			this.gameInfoPanel.setText(state.toString());
 			setContextPanel(ContextPanelTypes.TRICK_PLAYING);
 			this.playerPanel.setGameState(GameState.TRICK_PLAYING);
 			break;
@@ -438,6 +440,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 			setContextPanel(ContextPanelTypes.TRICK_PLAYING);
 			break;
 		case GAME_OVER:
+			this.gameInfoPanel.setText(state.toString());
 			setContextPanel(ContextPanelTypes.GAME_OVER);
 			break;
 		}

@@ -19,7 +19,6 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import de.jskat.ai.IJSkatPlayer;
 import de.jskat.control.JSkatMaster;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.JSkatApplicationData;
@@ -399,10 +398,6 @@ public class ISSController {
 
 		SkatGameData currGame = this.gameData.get(tableName);
 		updateGameData(currGame, moveInformation);
-
-		if (isHumanOnNextMove(tableName, currGame, moveInformation)) {
-			// FIXME (jan 02.11.2010) wait for user input
-		}
 	}
 
 	private void updateGameData(SkatGameData currGame,
@@ -439,97 +434,6 @@ public class ISSController {
 			currGame.setGameState(GameState.PRELIMINARY_GAME_END);
 			break;
 		}
-	}
-
-	private boolean isHumanOnNextMove(String tableName, SkatGameData currGame,
-			ISSMoveInformation moveInformation) {
-		// FIXME Here it must be decided whether the human player shall be
-		// activated according the current game state
-		// activation should only be done if neccessary
-
-		boolean result = false;
-
-		switch (currGame.getGameState()) {
-		case BIDDING:
-			if (currGame.getPlayerName(Player.FORE_HAND).equals(
-					this.data.getIssLoginName())) {
-				result = true;
-			}
-			break;
-		}
-
-		return result;
-	}
-
-	private void activateHumanPlayer(IJSkatPlayer human, String tableName,
-			SkatGameData currGame, ISSMoveInformation moveInformation) {
-
-		// FIXME (jan 24.10.2010) activate correct move on human player
-
-		switch (currGame.getGameState()) {
-		case BIDDING:
-			break;
-		case TRICK_PLAYING:
-			human.cardPlayed(
-					Player.valueOf(moveInformation.getMovePlayer().name()),
-					moveInformation.getCard());
-			human.playCard();
-			// issConnect.sendCardMove();
-			break;
-		}
-		// // Dealing
-		// human.setUpBidding();
-		// int bid = human.bidMore(18);
-		// if (bid == -1) {
-		// issConnect.sendPassMove(tableName);
-		// } else {
-		// issConnect.sendBidMove(tableName, bid);
-		// }
-		//
-		// // Bidding
-		//		log.debug("bid was done on ISS: " + moveInformation.getBidValue()); //$NON-NLS-1$
-		// human.bidByPlayer(
-		// Player.valueOf(moveInformation.getMovePlayer().name()),
-		// moveInformation.getBidValue());
-		// if (human.holdBid(moveInformation.getBidValue())) {
-		// issConnect.sendHoldBidMove(tableName);
-		// } else {
-		// issConnect.sendPassMove(tableName);
-		// }
-		//
-		// // Bidding hold/pass
-		//		log.debug("bid was hold on ISS: " + moveInformation.getBidValue()); //$NON-NLS-1$
-		// int nextBidValue = human.bidMore(SkatConstants
-		// .getNextBidValue(moveInformation.getBidValue()));
-		// if (nextBidValue > 0) {
-		// issConnect.sendBidMove(tableName, nextBidValue);
-		// } else {
-		// issConnect.sendPassMove(tableName);
-		// }
-		//
-		// // Discarding
-		//		log.debug("discarding on ISS"); //$NON-NLS-1$
-		// human.lookIntoSkat();
-		//
-		// // Skat looking
-		//		log.debug("skat looking on ISS"); //$NON-NLS-1$
-		// human.discardSkat();
-		// human.announceGame();
-		//
-		// // Game announcement
-		//		log.debug("game announcing on ISS"); //$NON-NLS-1$
-		// human.announceGame();
-		//
-		// // Card play
-		//		log.debug("card play on ISS"); //$NON-NLS-1$
-		// human.cardPlayed(
-		// Player.valueOf(moveInformation.getMovePlayer().name()),
-		// moveInformation.getCard());
-		// human.playCard();
-		//
-		// // Time out
-		//		log.debug("time out on ISS"); //$NON-NLS-1$
-		// human.finalizeGame();
 	}
 
 	/**
