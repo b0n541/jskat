@@ -97,11 +97,14 @@ public class MessageParser {
 		return status;
 	}
 
-	static ISSGameStartInformation getGameStartStatus(List<String> params) {
+	static ISSGameStartInformation getGameStartStatus(String loginName,
+			List<String> params) {
 
 		log.debug("game start parameter: " + params); //$NON-NLS-1$
 
 		ISSGameStartInformation status = new ISSGameStartInformation();
+
+		status.setLoginName(loginName);
 
 		status.setGameNo(Integer.parseInt(params.get(0)));
 		status.putPlayerName(Player.FORE_HAND, params.get(1));

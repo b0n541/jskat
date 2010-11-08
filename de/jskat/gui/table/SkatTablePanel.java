@@ -548,20 +548,19 @@ public class SkatTablePanel extends AbstractTabPanel {
 		this.skatListTableModel.setPlayerCount(maxPlayers);
 	}
 
-	public void setPlayerInformation(HandPanelType type, String name,
-			double time) {
+	public void setPlayerInformation(Player player, String name, double time) {
 
 		HandPanel panel = null;
 
-		switch (type) {
-		case LEFT_OPPONENT:
-			panel = this.leftOpponentPanel;
+		switch (player) {
+		case FORE_HAND:
+			panel = this.foreHand;
 			break;
-		case RIGHT_OPPONENT:
-			panel = this.rightOpponentPanel;
+		case MIDDLE_HAND:
+			panel = this.middleHand;
 			break;
-		case PLAYER:
-			panel = this.playerPanel;
+		case HIND_HAND:
+			panel = this.hindHand;
 			break;
 		}
 

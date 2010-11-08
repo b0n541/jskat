@@ -95,7 +95,6 @@ import de.jskat.gui.iss.ISSTablePanel;
 import de.jskat.gui.iss.LobbyPanel;
 import de.jskat.gui.iss.LoginPanel;
 import de.jskat.gui.iss.PlayerInvitationPanel;
-import de.jskat.gui.table.HandPanelType;
 import de.jskat.gui.table.SkatSeriesStartDialog;
 import de.jskat.gui.table.SkatTablePanel;
 import de.jskat.util.Card;
@@ -808,21 +807,21 @@ public class JSkatViewImpl implements IJSkatView {
 		}
 	}
 
-	void updateISSTable(String tableName, Player leftOpponent,
+	private void updateISSTable(String tableName, Player leftOpponent,
 			Player rightOpponent, Player player, ISSGameStartInformation status) {
 
 		SkatTablePanel table = this.tables.get(tableName);
 
 		table.setPositions(leftOpponent, rightOpponent, player);
 
-		table.setPlayerInformation(HandPanelType.LEFT_OPPONENT,
+		table.setPlayerInformation(leftOpponent,
 				status.getPlayerName(leftOpponent),
 				status.getPlayerTime(leftOpponent));
-		table.setPlayerInformation(HandPanelType.RIGHT_OPPONENT,
+		table.setPlayerInformation(rightOpponent,
 				status.getPlayerName(rightOpponent),
 				status.getPlayerTime(rightOpponent));
-		table.setPlayerInformation(HandPanelType.PLAYER,
-				status.getPlayerName(player), status.getPlayerTime(player));
+		table.setPlayerInformation(player, status.getPlayerName(player),
+				status.getPlayerTime(player));
 	}
 
 	/**
@@ -888,11 +887,12 @@ public class JSkatViewImpl implements IJSkatView {
 		if (moveInformation.getMovePlayer() != MovePlayer.WORLD) {
 			// FIXME dirty hack
 			SkatTablePanel table = this.tables.get(tableName);
-			table.setPlayerInformation(HandPanelType.PLAYER, null,
+
+			table.setPlayerInformation(Player.FORE_HAND, null,
 					moveInformation.getPlayerTime(Player.FORE_HAND));
-			table.setPlayerInformation(HandPanelType.LEFT_OPPONENT, null,
+			table.setPlayerInformation(Player.FORE_HAND, null,
 					moveInformation.getPlayerTime(Player.MIDDLE_HAND));
-			table.setPlayerInformation(HandPanelType.RIGHT_OPPONENT, null,
+			table.setPlayerInformation(Player.FORE_HAND, null,
 					moveInformation.getPlayerTime(Player.HIND_HAND));
 		}
 	}

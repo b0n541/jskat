@@ -180,7 +180,7 @@ public class MessageHandler {
 		} else if (actionCommand.equals("start")) { //$NON-NLS-1$
 
 			this.issControl.updateISSGame(tableName,
-					MessageParser.getGameStartStatus(detailParams));
+					MessageParser.getGameStartStatus(creator, detailParams));
 
 		} else if (actionCommand.equals("go")) { //$NON-NLS-1$
 
