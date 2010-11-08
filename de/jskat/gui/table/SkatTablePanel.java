@@ -367,32 +367,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void setGameAnnouncement(GameAnnouncement ann) {
 
-		this.gameInfoPanel.setText(getGameString(ann));
+		this.gameInfoPanel.setGameAnnouncement(ann);
 
 		this.leftOpponentPanel.setSortGameType(ann.getGameType());
 		this.rightOpponentPanel.setSortGameType(ann.getGameType());
 		this.playerPanel.setSortGameType(ann.getGameType());
-	}
-
-	private String getGameString(GameAnnouncement ann) {
-
-		// TODO i18n
-		String result = ann.getGameType().toString();
-
-		if (ann.isHand()) {
-			result += " " + this.strings.getString("hand"); //$NON-NLS-1$//$NON-NLS-2$
-		}
-		if (ann.isOuvert()) {
-			result += " " + this.strings.getString("ouvert"); //$NON-NLS-1$//$NON-NLS-2$
-		}
-		if (ann.isSchneider()) {
-			result += " " + this.strings.getString("schneider"); //$NON-NLS-1$//$NON-NLS-2$
-		}
-		if (ann.isSchwarz()) {
-			result += " " + this.strings.getString("schwarz"); //$NON-NLS-1$//$NON-NLS-2$
-		}
-
-		return result;
 	}
 
 	/**
@@ -405,33 +384,29 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		log.debug(state);
 
+		this.gameInfoPanel.setGameState(state);
+
 		switch (state) {
 		case NEW_GAME:
 		case DEALING:
-			this.gameInfoPanel.setText(state.toString());
 			setContextPanel(ContextPanelTypes.START_SERIES);
 			break;
 		case BIDDING:
-			this.gameInfoPanel.setText(state.toString());
 			setContextPanel(ContextPanelTypes.BIDDING);
 			break;
 		case LOOK_INTO_SKAT:
-			this.gameInfoPanel.setText(state.toString());
 			// FIXME show panel only if the human player is looking into the
 			// skat
 			setContextPanel(ContextPanelTypes.LOOK_INTO_SKAT);
 			break;
 		case DISCARDING:
-			this.gameInfoPanel.setText(state.toString());
 			setContextPanel(ContextPanelTypes.DISCARDING);
 			this.playerPanel.setGameState(GameState.DISCARDING);
 			break;
 		case DECLARING:
-			this.gameInfoPanel.setText(state.toString());
 			setContextPanel(ContextPanelTypes.DECLARING);
 			break;
 		case TRICK_PLAYING:
-			this.gameInfoPanel.setText(state.toString());
 			setContextPanel(ContextPanelTypes.TRICK_PLAYING);
 			this.playerPanel.setGameState(GameState.TRICK_PLAYING);
 			break;
@@ -440,7 +415,6 @@ public class SkatTablePanel extends AbstractTabPanel {
 			setContextPanel(ContextPanelTypes.TRICK_PLAYING);
 			break;
 		case GAME_OVER:
-			this.gameInfoPanel.setText(state.toString());
 			setContextPanel(ContextPanelTypes.GAME_OVER);
 			break;
 		}
@@ -488,17 +462,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		this.skatListScrollPane.getViewport().setViewPosition(loc);
 
 		if (data.getGameType() != GameType.PASSED_IN) {
-			this.gameInfoPanel.setText(getGameString(data.getAnnoucement())
-					+ " won: "
-					+ data.isGameWon()
-					+ " result: "
-					+ data.getGameResult()
-					+ " player: "
-					+ data.getPlayerPoints(data.getDeclarer())
-					+ " opponents: "
-					+ (data.getPlayerPoints(data.getDeclarer()
-							.getLeftNeighbor()) + data.getPlayerPoints(data
-							.getDeclarer().getRightNeighbor())));
+			this.gameInfoPanel.setGameResult(data);
 		}
 	}
 
