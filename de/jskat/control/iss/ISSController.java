@@ -283,7 +283,7 @@ public class ISSController {
 	 */
 	public void createTable(String tableName, String creator, int maxPlayers) {
 
-		this.view.createISSTable(tableName);
+		this.view.createISSTable(tableName, creator);
 		this.jskat.setActiveTable(tableName);
 	}
 

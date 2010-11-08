@@ -60,10 +60,11 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#createISSTable(String)
+	 * @see IJSkatView#createISSTable(String, String)
 	 */
 	@Override
-	public void createISSTable(@SuppressWarnings("unused") String name) {
+	public void createISSTable(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") String loginName) {
 		// empty method by indent
 	}
 
@@ -348,8 +349,8 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#updateISSLobbyTableList(String, int, long, String, String,
-	 *      String)
+	 * @see IJSkatView#updateISSLobbyTableList(String, int, long, String,
+	 *      String, String)
 	 */
 	@Override
 	public void updateISSLobbyTableList(

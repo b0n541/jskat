@@ -47,9 +47,12 @@ public class MessageParser {
 	 * xskat:2 $ 0 0 0 0 0 0 1 1 <br>
 	 * . . 0 0 0 0 0 0 0 0 false <br>
 	 */
-	static ISSTablePanelStatus getTableStatus(List<String> params) {
+	static ISSTablePanelStatus getTableStatus(String loginName,
+			List<String> params) {
 
 		ISSTablePanelStatus status = new ISSTablePanelStatus();
+
+		status.setLoginName(loginName);
 
 		status.setMaxPlayers(Integer.parseInt(params.get(0)));
 
@@ -196,12 +199,12 @@ public class MessageParser {
 		}
 
 		// parse player times
-		info.putPlayerTime(Player.FORE_HAND, new Double(params.get(params
-				.size() - 3)));
-		info.putPlayerTime(Player.MIDDLE_HAND, new Double(params.get(params
-				.size() - 2)));
-		info.putPlayerTime(Player.HIND_HAND, new Double(params.get(params
-				.size() - 1)));
+		info.putPlayerTime(Player.FORE_HAND,
+				new Double(params.get(params.size() - 3)));
+		info.putPlayerTime(Player.MIDDLE_HAND,
+				new Double(params.get(params.size() - 2)));
+		info.putPlayerTime(Player.HIND_HAND,
+				new Double(params.get(params.size() - 1)));
 
 		return info;
 	}

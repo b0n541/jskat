@@ -440,13 +440,12 @@ public class JSkatViewImpl implements IJSkatView {
 	 * @see IJSkatView#createISSTable(String)
 	 */
 	@Override
-	public void createISSTable(String name) {
-		// FIXME not needed as separate method,
-		// do it in createSkatTablePanel
-		ISSTablePanel newTable = new ISSTablePanel(name, this.bitmaps,
-				this.actions, this.strings);
-		addTabPanel(newTable, "ISS table: " + name);
-		this.tables.put(name, newTable);
+	public void createISSTable(String tableName, String loginName) {
+
+		ISSTablePanel newTable = new ISSTablePanel(tableName, bitmaps, actions,
+				strings, loginName);
+		addTabPanel(newTable, "ISS table: " + tableName);
+		this.tables.put(tableName, newTable);
 	}
 
 	/**
@@ -772,11 +771,12 @@ public class JSkatViewImpl implements IJSkatView {
 	@Override
 	public void updateISSTable(String tableName, ISSTablePanelStatus tableStatus) {
 
+		// FIXME (jan 08.11.2010) seems very complicated
 		SkatTablePanel panel = this.tables.get(tableName);
 
 		if (panel == null) {
 
-			this.createISSTable(tableName);
+			this.createISSTable(tableName, tableStatus.getLoginName());
 			panel = this.tables.get(tableName);
 		}
 
@@ -823,13 +823,6 @@ public class JSkatViewImpl implements IJSkatView {
 				status.getPlayerTime(rightOpponent));
 		table.setPlayerInformation(HandPanelType.PLAYER,
 				status.getPlayerName(player), status.getPlayerTime(player));
-	}
-
-	void updateISSTablePanel(String tableName, HandPanelType panel,
-			String playerName, double playerTime) {
-
-		this.tables.get(tableName).setPlayerInformation(panel, playerName,
-				playerTime);
 	}
 
 	/**

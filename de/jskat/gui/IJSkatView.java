@@ -101,10 +101,12 @@ public interface IJSkatView {
 	/**
 	 * Creates ISS table
 	 * 
-	 * @param name
-	 *            Name of the table
+	 * @param tableName
+	 *            Table name
+	 * @param loginName
+	 *            Login name on ISS
 	 */
-	public void createISSTable(String name);
+	public void createISSTable(String tableName, String loginName);
 
 	/**
 	 * Creates a local table panel

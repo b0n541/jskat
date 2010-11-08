@@ -175,7 +175,7 @@ public class MessageHandler {
 		if (actionCommand.equals("state")) { //$NON-NLS-1$
 
 			this.issControl.updateISSTableState(tableName,
-					MessageParser.getTableStatus(detailParams));
+					MessageParser.getTableStatus(creator, detailParams));
 
 		} else if (actionCommand.equals("start")) { //$NON-NLS-1$
 

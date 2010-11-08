@@ -61,7 +61,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	protected PlayerPanel playerPanel;
 	protected GameInformationPanel gameInfoPanel;
 	protected JPanel gameContextPanel;
-	protected Map<String, JPanel> contextPanels;
+	protected Map<ContextPanelTypes, JPanel> contextPanels;
 	protected GameAnnouncePanel gameAnnouncePanel;
 	protected TrickPlayPanel trickPanel;
 	protected TrickPlayPanel lastTrickPanel;
@@ -75,7 +75,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	protected DiscardPanel discardPanel;
 
 	/**
-	 * @see AbstractTabPanel#JSkatTabPanel(String, JSkatGraphicRepository,
+	 * @see AbstractTabPanel#AbstractTabPanel(String, JSkatGraphicRepository,
 	 *      ActionMap, ResourceBundle)
 	 */
 	public SkatTablePanel(String newTableName,
@@ -95,7 +95,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		this.contextPanels = new HashMap<String, JPanel>();
+		this.contextPanels = new HashMap<ContextPanelTypes, JPanel>();
 
 		getActionMap().get(JSkatAction.INVITE_ISS_PLAYER).setEnabled(true);
 
@@ -174,16 +174,16 @@ public class SkatTablePanel extends AbstractTabPanel {
 		return new OpponentPanel(this, this.bitmaps, 12);
 	}
 
-	protected void addContextPanel(JPanel panel, String name) {
+	protected void addContextPanel(ContextPanelTypes panelType, JPanel panel) {
 
-		if (this.contextPanels.containsKey(name)) {
+		if (this.contextPanels.containsKey(panelType)) {
 			// remove existing panel first
-			this.gameContextPanel.remove(this.contextPanels.get(name));
-			this.contextPanels.remove(name);
+			this.gameContextPanel.remove(this.contextPanels.get(panelType));
+			this.contextPanels.remove(panelType);
 		}
 
-		this.contextPanels.put(name, panel);
-		this.gameContextPanel.add(panel, name);
+		this.contextPanels.put(panelType, panel);
+		this.gameContextPanel.add(panel, panelType.toString());
 	}
 
 	private JPanel getContextPanel() {
@@ -193,23 +193,21 @@ public class SkatTablePanel extends AbstractTabPanel {
 		this.gameContextPanel.setLayout(new CardLayout());
 
 		addContextPanel(
+				ContextPanelTypes.START_SERIES,
 				new GameStartPanel((StartSkatSeriesAction) getActionMap().get(
-						JSkatAction.START_LOCAL_SERIES)),
-				ContextPanelTypes.START_SERIES.toString());
+						JSkatAction.START_LOCAL_SERIES)));
 
 		this.biddingPanel = new BiddingPanel(getActionMap());
-		addContextPanel(this.biddingPanel, ContextPanelTypes.BIDDING.toString());
+		addContextPanel(ContextPanelTypes.BIDDING, this.biddingPanel);
 
 		this.gameContextPanel.add(new LookIntoSkatPanel(this),
 				ContextPanelTypes.LOOK_INTO_SKAT.toString());
 
 		this.discardPanel = new DiscardPanel(this, this.bitmaps, 4);
-		addContextPanel(this.discardPanel,
-				ContextPanelTypes.DISCARDING.toString());
+		addContextPanel(ContextPanelTypes.DISCARDING, this.discardPanel);
 
 		this.gameAnnouncePanel = new GameAnnouncePanel(this, this.strings);
-		addContextPanel(this.gameAnnouncePanel,
-				ContextPanelTypes.DECLARING.toString());
+		addContextPanel(ContextPanelTypes.DECLARING, this.gameAnnouncePanel);
 
 		JPanel trickHoldingPanel = new JPanel(new MigLayout("fill", "fill", //$NON-NLS-1$ //$NON-NLS-2$
 				"fill")); //$NON-NLS-1$
@@ -217,13 +215,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 		trickHoldingPanel.add(this.lastTrickPanel, "width 25%"); //$NON-NLS-1$
 		this.trickPanel = new TrickPlayPanel(this.bitmaps);
 		trickHoldingPanel.add(this.trickPanel, "grow"); //$NON-NLS-1$
-		addContextPanel(trickHoldingPanel,
-				ContextPanelTypes.TRICK_PLAYING.toString());
+		addContextPanel(ContextPanelTypes.TRICK_PLAYING, trickHoldingPanel);
 
-		addContextPanel(
+		addContextPanel(ContextPanelTypes.GAME_OVER,
 				new GameOverPanel((ContinueSkatSeriesAction) getActionMap()
-						.get(JSkatAction.CONTINUE_LOCAL_SERIES)),
-				ContextPanelTypes.GAME_OVER.toString());
+						.get(JSkatAction.CONTINUE_LOCAL_SERIES)));
 
 		return this.gameContextPanel;
 	}

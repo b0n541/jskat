@@ -20,6 +20,7 @@ import de.jskat.data.SkatGameData.GameState;
 import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.gui.table.ContextPanelTypes;
+import de.jskat.gui.table.HandPanelType;
 import de.jskat.gui.table.SkatTablePanel;
 
 /**
@@ -28,6 +29,8 @@ import de.jskat.gui.table.SkatTablePanel;
 public class ISSTablePanel extends SkatTablePanel {
 
 	private static final long serialVersionUID = 1L;
+
+	String loginName;
 
 	/**
 	 * Constructor
@@ -38,11 +41,17 @@ public class ISSTablePanel extends SkatTablePanel {
 	 *            Bitmap repository
 	 * @param actions
 	 *            Action map
+	 * @param strings
+	 *            i18n strings
+	 * @param newLoginName
+	 *            Login name on ISS
 	 */
 	public ISSTablePanel(String tableName, JSkatGraphicRepository jskatBitmaps,
-			ActionMap actions, ResourceBundle strings) {
+			ActionMap actions, ResourceBundle strings, String newLoginName) {
 
 		super(tableName, jskatBitmaps, actions, strings);
+
+		loginName = newLoginName;
 	}
 
 	/**
@@ -53,10 +62,10 @@ public class ISSTablePanel extends SkatTablePanel {
 
 		JPanel panel = super.getPlayGroundPanel();
 		// replace game start context panel
-		addContextPanel(new GameStartPanel(this.getActionMap()),
-				ContextPanelTypes.START_SERIES.toString());
-		addContextPanel(new GameStartPanel(this.getActionMap()),
-				ContextPanelTypes.GAME_OVER.toString());
+		addContextPanel(ContextPanelTypes.START_SERIES,
+				new GameStartPanel(this.getActionMap()));
+		addContextPanel(ContextPanelTypes.GAME_OVER,
+				new GameStartPanel(this.getActionMap()));
 		setGameState(GameState.NEW_GAME);
 		panel.add(getChatPanel(), "span 2, growx, align center"); //$NON-NLS-1$
 
@@ -76,8 +85,28 @@ public class ISSTablePanel extends SkatTablePanel {
 	 */
 	public void setTableStatus(ISSTablePanelStatus tableStatus) {
 
-		this.setMaxPlayers(tableStatus.getMaxPlayers());
+		setMaxPlayers(tableStatus.getMaxPlayers());
 
-		// TODO what todo with player information?
+		int playerCount = tableStatus.getNumberOfPlayers();
+		int playerPosition = tableStatus.getPlayerPosition();
+
+		if (playerPosition != -1) {
+			setPlayerInformation(HandPanelType.PLAYER, tableStatus
+					.getPlayerInformation().get(playerPosition).getName(), 0.0);
+		}
+
+		if (playerCount > 1) {
+			setPlayerInformation(HandPanelType.LEFT_OPPONENT, tableStatus
+					.getPlayerInformation().get((playerPosition + 1) % 3)
+					.getName(), 0.0);
+		}
+
+		if (playerCount > 2) {
+			setPlayerInformation(HandPanelType.RIGHT_OPPONENT, tableStatus
+					.getPlayerInformation().get((playerPosition + 2) % 3)
+					.getName(), 0.0);
+		}
+
+		// FIXME (jan 08.11.2010) what about four players?
 	}
 }

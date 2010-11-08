@@ -151,19 +151,21 @@ abstract class HandPanel extends JPanel {
 
 		headerText.append(this.playerName).append(": ");
 
-		switch (this.position) {
-		case FORE_HAND:
-			headerText.append("Fore hand");
-			break;
-		case MIDDLE_HAND:
-			headerText.append("Middle hand");
-			break;
-		case HIND_HAND:
-			headerText.append("Hind hand");
-			break;
+		if (position != null) {
+			switch (this.position) {
+			case FORE_HAND:
+				headerText.append("Fore hand");
+				break;
+			case MIDDLE_HAND:
+				headerText.append("Middle hand");
+				break;
+			case HIND_HAND:
+				headerText.append("Hind hand");
+				break;
+			}
+			headerText.append(' ');
+			headerText.append(this.playerTime);
 		}
-		headerText.append(' ');
-		headerText.append(this.playerTime);
 
 		this.headerLabel.setText(headerText.toString());
 	}
