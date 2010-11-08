@@ -293,7 +293,7 @@ public class JSkatViewImpl implements IJSkatView {
 
 						AbstractTabPanel panel = (AbstractTabPanel) tab;
 						String tableName = panel.getName();
-						log.debug("showing table pane of table " + tableName); //$NON-NLS-1$
+						log.debug("showing table panel of table " + tableName); //$NON-NLS-1$
 						panel.setFocus();
 
 						JSkatViewImpl.this.actions.get(

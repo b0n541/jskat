@@ -87,9 +87,8 @@ public class LobbyPanel extends AbstractTabPanel {
 
 		JPanel lobby = new JPanel(new MigLayout());
 
-		lobby
-				.add(
-						new JLabel("Welcome to the International Skat Server"), "span 2, align center, wrap"); //$NON-NLS-1$ //$NON-NLS-2$
+		lobby.add(
+				new JLabel("Welcome to the International Skat Server"), "span 2, align center, wrap"); //$NON-NLS-1$ //$NON-NLS-2$
 		lobby.add(new JLabel("Players")); //$NON-NLS-1$
 		lobby.add(new JLabel("Tables"), "wrap"); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -171,7 +170,7 @@ public class LobbyPanel extends AbstractTabPanel {
 					LobbyPanel.actions.get(JSkatAction.OBSERVE_ISS_TABLE)
 							.actionPerformed(
 									new ActionEvent(tableName, 1, null));
-				} else if (value.equals("?")) {
+				} else if (value.equals(".")) {
 					// sit down on free seat at table
 					LobbyPanel.actions.get(JSkatAction.JOIN_ISS_TABLE)
 							.actionPerformed(
