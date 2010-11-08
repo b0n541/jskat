@@ -145,10 +145,12 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	protected JPanel getPlayGroundPanel() {
 
-		JPanel panel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$
+		JPanel panel = new JPanel(new MigLayout(
+				"fill", "fill", "[shrink][grow][grow][grow][grow]")); //$NON-NLS-1$
 
 		this.gameInfoPanel = getGameInfoPanel();
-		panel.add(this.gameInfoPanel, "span 2, growx, align center, wrap"); //$NON-NLS-1$
+		panel.add(this.gameInfoPanel,
+				"span 2, growx, shrinky, align center, wrap"); //$NON-NLS-1$
 		this.leftOpponentPanel = getOpponentPanel();
 		panel.add(this.leftOpponentPanel,
 				"width 50%, growx, growy, hmin 20%, align left"); //$NON-NLS-1$

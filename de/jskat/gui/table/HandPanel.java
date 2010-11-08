@@ -98,16 +98,16 @@ abstract class HandPanel extends JPanel {
 	 */
 	void initPanel() {
 
-		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+		setLayout(new MigLayout("fill", "fill", "[shrink][grow]")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
 		setBorder(getPanelBorder());
 
-		header = new JPanel(new MigLayout("fill", "fill", "fill"));
+		header = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		header.add(headerLabel);
-		add(header, "wrap"); //$NON-NLS-1$
+		add(header, "shrinky, wrap"); //$NON-NLS-1$
 
 		this.cardPanel = new CardPanel(this, this.bitmaps, true);
-		add(this.cardPanel, "grow"); //$NON-NLS-1$
+		add(this.cardPanel, "growy"); //$NON-NLS-1$
 	}
 
 	private Border getPanelBorder() {
