@@ -436,6 +436,12 @@ public class ISSController {
 		}
 	}
 
+	public void endGame(String tableName, SkatGameData completeGameData) {
+
+		view.setGameState(tableName, GameState.GAME_OVER);
+		gameData.put(tableName, completeGameData);
+	}
+
 	/**
 	 * Shows a message from ISS
 	 * 

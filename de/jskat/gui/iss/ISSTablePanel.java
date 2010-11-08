@@ -55,6 +55,8 @@ public class ISSTablePanel extends SkatTablePanel {
 		// replace game start context panel
 		addContextPanel(new GameStartPanel(this.getActionMap()),
 				ContextPanelTypes.START_SERIES.toString());
+		addContextPanel(new GameStartPanel(this.getActionMap()),
+				ContextPanelTypes.GAME_OVER.toString());
 		setGameState(GameState.NEW_GAME);
 		panel.add(getChatPanel(), "span 2, growx, align center"); //$NON-NLS-1$
 

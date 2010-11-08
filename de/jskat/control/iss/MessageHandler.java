@@ -20,6 +20,8 @@ import javax.swing.JOptionPane;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.jskat.data.SkatGameData;
+
 /**
  * Handles messages from ISS
  */
@@ -172,13 +174,13 @@ public class MessageHandler {
 
 		if (actionCommand.equals("state")) { //$NON-NLS-1$
 
-			this.issControl.updateISSTableState(tableName, MessageParser
-					.getTableStatus(detailParams));
+			this.issControl.updateISSTableState(tableName,
+					MessageParser.getTableStatus(detailParams));
 
 		} else if (actionCommand.equals("start")) { //$NON-NLS-1$
 
-			this.issControl.updateISSGame(tableName, MessageParser
-					.getGameStartStatus(detailParams));
+			this.issControl.updateISSGame(tableName,
+					MessageParser.getGameStartStatus(detailParams));
 
 		} else if (actionCommand.equals("go")) { //$NON-NLS-1$
 
@@ -186,17 +188,21 @@ public class MessageHandler {
 
 		} else if (actionCommand.equals("play")) { //$NON-NLS-1$
 
-			this.issControl.updateMove(tableName, MessageParser
-					.getMoveInformation(detailParams));
+			this.issControl.updateMove(tableName,
+					MessageParser.getMoveInformation(detailParams));
 
 		} else if (actionCommand.equals("end")) { //$NON-NLS-1$
-			// TODO implement it
-			// this.issControl.endGame(tableName, getGameInformation(token));
+			this.issControl
+					.endGame(tableName, getGameInformation(detailParams));
 		} else {
 
-			log
-					.debug("unhandled action command: " + actionCommand + " for table " + tableName); //$NON-NLS-1$ //$NON-NLS-2$
+			log.debug("unhandled action command: " + actionCommand + " for table " + tableName); //$NON-NLS-1$ //$NON-NLS-2$
 		}
+	}
+
+	private SkatGameData getGameInformation(List<String> params) {
+
+		return new SkatGameData();
 	}
 
 	/**
@@ -255,8 +261,8 @@ public class MessageHandler {
 	 */
 	void handleWelcomeMessage(List<String> params) {
 
-		double issProtocolVersion = Double.parseDouble(params
-				.get(params.size() - 1));
+		double issProtocolVersion = Double
+				.parseDouble(params.get(params.size() - 1));
 
 		log.debug("iss version: " + issProtocolVersion); //$NON-NLS-1$
 		log.debug("local version: " + protocolVersion); //$NON-NLS-1$
