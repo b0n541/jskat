@@ -128,7 +128,9 @@ class GameInformationPanel extends JPanel {
 			text += " schwarz";
 		}
 
-		text += " Trick " + (trick + 1);
+		if (gameState.equals(GameState.TRICK_PLAYING)) {
+			text += " Trick " + (trick + 1);
+		}
 
 		if (gameState.equals(GameState.GAME_OVER)) {
 
@@ -149,5 +151,7 @@ class GameInformationPanel extends JPanel {
 		gameWon = data.isGameWon();
 		declarerPoints = data.getDeclarerScore();
 		opponentPoints = data.getOpponentScore();
+
+		refreshText();
 	}
 }

@@ -93,6 +93,7 @@ public class SkatGame extends JSkatThread {
 	public void run() {
 
 		this.view.clearTable(this.tableName);
+		this.view.setGameState(this.tableName, this.data.getGameState());
 
 		do {
 
