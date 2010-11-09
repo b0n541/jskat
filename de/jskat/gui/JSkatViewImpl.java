@@ -640,7 +640,7 @@ public class JSkatViewImpl implements IJSkatView {
 	@Override
 	public void setNextBidValue(String tableName, int nextBidValue) {
 
-		// TODO this should be set for every table seperately
+		// TODO this should be set for every table separately
 		this.actions.get(JSkatAction.HOLD_BID).putValue(Action.NAME,
 				Integer.toString(nextBidValue));
 	}
@@ -844,6 +844,8 @@ public class JSkatViewImpl implements IJSkatView {
 	public void updateISSMove(String tableName,
 			ISSMoveInformation moveInformation) {
 
+		Player movePlayer = moveInformation.getPlayer();
+		
 		switch (moveInformation.getType()) {
 		// TODO add other types too
 		case DEAL:
@@ -857,12 +859,13 @@ public class JSkatViewImpl implements IJSkatView {
 			this.setGameState(tableName, GameState.BIDDING);
 			break;
 		case BID:
-		case PASS:
 		case HOLD_BID:
 			this.setGameState(tableName, GameState.BIDDING);
-			this.setBid(tableName, getPlayer(moveInformation.getMovePlayer()),
+			this.setBid(tableName, movePlayer,
 					moveInformation.getBidValue());
 			// TODO show whos bidding or passing
+			break;
+		case PASS:
 			break;
 		case SKAT_REQUEST:
 		case SKAT_LOOKING:
@@ -876,7 +879,7 @@ public class JSkatViewImpl implements IJSkatView {
 		case CARD_PLAY:
 			this.setGameState(tableName, GameState.TRICK_PLAYING);
 			this.playTrickCard(tableName,
-					getPlayer(moveInformation.getMovePlayer()),
+					movePlayer,
 					moveInformation.getCard());
 			break;
 		case TIME_OUT:
@@ -895,27 +898,6 @@ public class JSkatViewImpl implements IJSkatView {
 			table.setPlayerInformation(Player.HIND_HAND, null,
 					moveInformation.getPlayerTime(Player.HIND_HAND));
 		}
-	}
-
-	Player getPlayer(MovePlayer movePlayer) {
-
-		Player result = null;
-
-		switch (movePlayer) {
-		case FORE_HAND:
-			result = Player.FORE_HAND;
-			break;
-		case HIND_HAND:
-			result = Player.MIDDLE_HAND;
-			break;
-		case MIDDLE_HAND:
-			result = Player.HIND_HAND;
-			break;
-		case WORLD:
-			break;
-		}
-
-		return result;
 	}
 
 	/**

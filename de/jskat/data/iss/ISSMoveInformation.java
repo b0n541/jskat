@@ -26,6 +26,7 @@ import de.jskat.util.Player;
 public class ISSMoveInformation {
 
 	private MovePlayer movePlayer;
+	private Player playerPosition;
 	private Map<Player, Double> playerTimes = new HashMap<Player, Double>();
 	private MoveType type;
 	private int bidValue;
@@ -102,6 +103,10 @@ public class ISSMoveInformation {
 		return this.movePlayer;
 	}
 
+	public Player getPlayer() {
+		return getPlayer(movePlayer);
+	}
+	
 	/**
 	 * Sets the player who made the last move
 	 * 
@@ -312,5 +317,26 @@ public class ISSMoveInformation {
 	public Player getTimeOutPlayer() {
 
 		return this.timeOutPlayer;
+	}
+
+	private static Player getPlayer(MovePlayer movePlayer) {
+
+		Player result = null;
+
+		switch (movePlayer) {
+		case FORE_HAND:
+			result = Player.FORE_HAND;
+			break;
+		case HIND_HAND:
+			result = Player.MIDDLE_HAND;
+			break;
+		case MIDDLE_HAND:
+			result = Player.HIND_HAND;
+			break;
+		case WORLD:
+			break;
+		}
+
+		return result;
 	}
 }

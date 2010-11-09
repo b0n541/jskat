@@ -231,6 +231,25 @@ public class SkatTablePanel extends AbstractTabPanel {
 		return new PlayerPanel(this, this.bitmaps, 12);
 	}
 
+	private HandPanel getPlayerPanel(Player player) {
+
+		HandPanel result = null;
+
+		switch (player) {
+		case FORE_HAND:
+			result = foreHand;
+			break;
+		case MIDDLE_HAND:
+			result = middleHand;
+			break;
+		case HIND_HAND:
+			result = hindHand;
+			break;
+		}
+
+		return result;
+	}
+
 	/**
 	 * Sets player positions
 	 * 
@@ -273,32 +292,12 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	public void addCard(Player position, Card card) {
 
-		switch (position) {
-		case FORE_HAND:
-			this.foreHand.addCard(card);
-			break;
-		case MIDDLE_HAND:
-			this.middleHand.addCard(card);
-			break;
-		case HIND_HAND:
-			this.hindHand.addCard(card);
-			break;
-		}
+		getPlayerPanel(position).addCard(card);
 	}
 
 	public void addCards(Player position, Collection<Card> cards) {
 
-		switch (position) {
-		case FORE_HAND:
-			this.foreHand.addCards(cards);
-			break;
-		case MIDDLE_HAND:
-			this.middleHand.addCards(cards);
-			break;
-		case HIND_HAND:
-			this.hindHand.addCards(cards);
-			break;
-		}
+		getPlayerPanel(position).addCards(cards);
 	}
 
 	/**
@@ -347,17 +346,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	public void clearHand(Player position) {
 
-		switch (position) {
-		case FORE_HAND:
-			this.foreHand.clearHandPanel();
-			break;
-		case MIDDLE_HAND:
-			this.middleHand.clearHandPanel();
-			break;
-		case HIND_HAND:
-			this.hindHand.clearHandPanel();
-			break;
-		}
+		getPlayerPanel(position).clearHandPanel();
 	}
 
 	/**
@@ -498,6 +487,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	public void setBid(Player player, int bidValue) {
 
 		this.biddingPanel.setBid(player, bidValue);
+		getPlayerPanel(player).setBidValue(bidValue);
 	}
 
 	public void startGame() {

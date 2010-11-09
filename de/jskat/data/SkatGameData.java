@@ -1103,7 +1103,8 @@ public class SkatGameData {
 	 * Calculates the counts of jacks
 	 */
 	public void calcJackInformation() {
-
+		
+		// FIXME (jansch 09.11.2010) this is code for skat rules
 		CardList declarerCards = (CardList) this.playerHands.get(this.declarer)
 				.clone();
 

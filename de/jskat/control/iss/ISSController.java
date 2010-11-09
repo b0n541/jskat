@@ -29,6 +29,7 @@ import de.jskat.data.iss.ISSGameStartInformation;
 import de.jskat.data.iss.ISSLoginCredentials;
 import de.jskat.data.iss.ISSMoveInformation;
 import de.jskat.data.iss.ISSTablePanelStatus;
+import de.jskat.data.iss.MovePlayer;
 import de.jskat.gui.IJSkatView;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.util.Card;
@@ -403,6 +404,8 @@ public class ISSController {
 	private void updateGameData(SkatGameData currGame,
 			ISSMoveInformation moveInformation) {
 
+		Player movePlayer = moveInformation.getPlayer();
+		
 		switch (moveInformation.getType()) {
 		case DEAL:
 			currGame.setGameState(GameState.DEALING);
@@ -410,9 +413,11 @@ public class ISSController {
 		case BID:
 			currGame.setGameState(GameState.BIDDING);
 			currGame.setBidValue(moveInformation.getBidValue());
+			currGame.setPlayerBid(movePlayer, moveInformation.getBidValue());
 			break;
 		case HOLD_BID:
 			currGame.setGameState(GameState.BIDDING);
+			currGame.setPlayerBid(movePlayer, currGame.getBidValue());
 			break;
 		case PASS:
 			currGame.setGameState(GameState.BIDDING);
