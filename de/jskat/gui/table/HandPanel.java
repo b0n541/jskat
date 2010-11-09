@@ -164,12 +164,20 @@ abstract class HandPanel extends JPanel {
 				break;
 			}
 			headerText.append(' ');
-			headerText.append(this.playerTime);
+			headerText.append(getPlayerTimeString(this.playerTime));
 		}
 
 		this.headerLabel.setText(headerText.toString());
 	}
 
+	private String getPlayerTimeString(double playerTimeInSeconds) {
+
+		int minutes = (int) Math.floor(playerTimeInSeconds / 60);
+		int seconds = (int) (playerTimeInSeconds - (minutes * 60));
+		
+		return minutes + ":" + seconds;
+	}
+	
 	/**
 	 * Adds a card to the panel
 	 * 
