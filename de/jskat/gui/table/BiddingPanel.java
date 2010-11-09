@@ -29,7 +29,7 @@ class BiddingPanel extends JPanel {
 
 	private JLabel leftOpponentBid;
 	private JLabel rightOpponentBid;
-	private JLabel playerBid;
+	private JLabel userBid;
 	private JLabel foreHandBidLabel;
 	private JLabel middleHandBidLabel;
 	private JLabel hindHandBidLabel;
@@ -55,10 +55,10 @@ class BiddingPanel extends JPanel {
 		
 		this.leftOpponentBid = new JLabel("0"); //$NON-NLS-1$
 		this.rightOpponentBid = new JLabel("0"); //$NON-NLS-1$
-		this.playerBid = new JLabel("0"); //$NON-NLS-1$
+		this.userBid = new JLabel("0"); //$NON-NLS-1$
 		biddingPanel.add(this.leftOpponentBid, "left"); //$NON-NLS-1$
 		biddingPanel.add(this.rightOpponentBid, "right, wrap"); //$NON-NLS-1$
-		biddingPanel.add(this.playerBid, "span 2, center, wrap"); //$NON-NLS-1$
+		biddingPanel.add(this.userBid, "span 2, center, wrap"); //$NON-NLS-1$
 		this.bidButton = new JButton(newActions.get(JSkatAction.HOLD_BID));
 		this.passButton = new JButton(newActions.get(JSkatAction.PASS_BID));
 		biddingPanel.add(this.bidButton, "left"); //$NON-NLS-1$
@@ -67,23 +67,24 @@ class BiddingPanel extends JPanel {
 		this.add(biddingPanel, "center"); //$NON-NLS-1$
 	}
 
-	void setPlayerPosition(Player player) {
-		
+	void setUserPosition(Player player) {
+		// FIXME (jansch 09.11.2010) code duplication with
+		// SkatTablePanel.setPositions()
 		switch(player) {
 		case FORE_HAND:
-			this.foreHandBidLabel = this.playerBid;
+			this.foreHandBidLabel = this.userBid;
 			this.middleHandBidLabel = this.leftOpponentBid;
 			this.hindHandBidLabel = this.rightOpponentBid;
 			break;
 		case MIDDLE_HAND:
 			this.foreHandBidLabel = this.rightOpponentBid;
-			this.middleHandBidLabel = this.playerBid;
+			this.middleHandBidLabel = this.userBid;
 			this.hindHandBidLabel = this.leftOpponentBid;
 			break;
 		case HIND_HAND:
 			this.foreHandBidLabel = this.leftOpponentBid;
 			this.middleHandBidLabel = this.rightOpponentBid;
-			this.hindHandBidLabel = this.playerBid;
+			this.hindHandBidLabel = this.userBid;
 			break;
 		}
 	}
@@ -108,10 +109,5 @@ class BiddingPanel extends JPanel {
 		this.foreHandBidLabel.setText("0");
 		this.middleHandBidLabel.setText("0");
 		this.hindHandBidLabel.setText("0");
-	}
-
-	public void setTrickForeHand(Player trickForeHand) {
-		// TODO Auto-generated method stub
-		
 	}
 }

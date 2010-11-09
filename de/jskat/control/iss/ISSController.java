@@ -29,7 +29,6 @@ import de.jskat.data.iss.ISSGameStartInformation;
 import de.jskat.data.iss.ISSLoginCredentials;
 import de.jskat.data.iss.ISSMoveInformation;
 import de.jskat.data.iss.ISSTablePanelStatus;
-import de.jskat.data.iss.MovePlayer;
 import de.jskat.gui.IJSkatView;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.util.Card;

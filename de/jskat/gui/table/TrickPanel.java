@@ -23,8 +23,8 @@ import java.util.Random;
 import javax.swing.JPanel;
 
 import de.jskat.gui.img.JSkatGraphicRepository;
-import de.jskat.util.CardList;
 import de.jskat.util.Card;
+import de.jskat.util.CardList;
 import de.jskat.util.Player;
 
 /**

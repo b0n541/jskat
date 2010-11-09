@@ -810,10 +810,10 @@ public class JSkatViewImpl implements IJSkatView {
 	private void updateISSTable(String tableName, Player leftOpponent,
 			Player rightOpponent, Player player, ISSGameStartInformation status) {
 
+		setPositions(tableName, leftOpponent, rightOpponent, player);
+
+		// FIXME (jansch 09.11.2010) this is only done for ISS games
 		SkatTablePanel table = this.tables.get(tableName);
-
-		table.setPositions(leftOpponent, rightOpponent, player);
-
 		table.setPlayerInformation(leftOpponent,
 				status.getPlayerName(leftOpponent),
 				status.getPlayerTime(leftOpponent));
