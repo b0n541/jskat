@@ -890,9 +890,9 @@ public class JSkatViewImpl implements IJSkatView {
 
 			table.setPlayerInformation(Player.FORE_HAND, null,
 					moveInformation.getPlayerTime(Player.FORE_HAND));
-			table.setPlayerInformation(Player.FORE_HAND, null,
+			table.setPlayerInformation(Player.MIDDLE_HAND, null,
 					moveInformation.getPlayerTime(Player.MIDDLE_HAND));
-			table.setPlayerInformation(Player.FORE_HAND, null,
+			table.setPlayerInformation(Player.HIND_HAND, null,
 					moveInformation.getPlayerTime(Player.HIND_HAND));
 		}
 	}
