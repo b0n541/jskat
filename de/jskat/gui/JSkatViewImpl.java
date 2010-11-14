@@ -891,6 +891,7 @@ public class JSkatViewImpl implements IJSkatView {
 			this.setGameState(tableName, GameState.DECLARING);
 			this.setGameAnnouncement(tableName,
 					moveInformation.getGameAnnouncement());
+			setTrickForeHand(tableName, Player.FORE_HAND);
 			break;
 		case CARD_PLAY:
 			this.setGameState(tableName, GameState.TRICK_PLAYING);
