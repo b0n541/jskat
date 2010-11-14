@@ -266,12 +266,13 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#setBid(String, Player, int)
+	 * @see IJSkatView#setBid(String, Player, int, boolean)
 	 */
 	@Override
 	public void setBid(@SuppressWarnings("unused") String tableName,
 			@SuppressWarnings("unused") Player player,
-			@SuppressWarnings("unused") int bidValue) {
+			@SuppressWarnings("unused") int bidValue,
+			@SuppressWarnings("unused") boolean madeBid) {
 		// empty method by indent
 	}
 
@@ -465,6 +466,24 @@ public class NullView implements IJSkatView {
 	public void addCards(@SuppressWarnings("unused") String tableName,
 			@SuppressWarnings("unused") Player player,
 			@SuppressWarnings("unused") CardList cards) {
+		// empty method by indent
+	}
+
+	/**
+	 * @see IJSkatView#setActivePlayer(String, Player)
+	 */
+	@Override
+	public void setActivePlayer(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player player) {
+		// empty method by indent
+	}
+
+	/**
+	 * @see IJSkatView#setPass(String, Player)
+	 */
+	@Override
+	public void setPass(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player player) {
 		// empty method by indent
 	}
 }

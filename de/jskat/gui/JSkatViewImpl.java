@@ -646,12 +646,22 @@ public class JSkatViewImpl implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#setBid(String, Player, int)
+	 * @see IJSkatView#setBid(String, Player, int, boolean)
 	 */
 	@Override
-	public void setBid(String tableName, Player player, int bidValue) {
+	public void setBid(String tableName, Player player, int bidValue,
+			boolean madeBid) {
 
-		this.tables.get(tableName).setBid(player, bidValue);
+		this.tables.get(tableName).setBid(player, bidValue, madeBid);
+	}
+
+	/**
+	 * @see IJSkatView#setPass(String, Player)
+	 */
+	@Override
+	public void setPass(String tableName, Player player) {
+
+		this.tables.get(tableName).setPass(player);
 	}
 
 	/**
@@ -845,7 +855,7 @@ public class JSkatViewImpl implements IJSkatView {
 			ISSMoveInformation moveInformation) {
 
 		Player movePlayer = moveInformation.getPlayer();
-		
+
 		switch (moveInformation.getType()) {
 		// TODO add other types too
 		case DEAL:
@@ -857,15 +867,21 @@ public class JSkatViewImpl implements IJSkatView {
 			this.addCards(tableName, Player.HIND_HAND,
 					moveInformation.getCards(Player.HIND_HAND));
 			this.setGameState(tableName, GameState.BIDDING);
+			this.setActivePlayer(tableName, Player.MIDDLE_HAND);
 			break;
 		case BID:
+			this.setGameState(tableName, GameState.BIDDING);
+			this.setBid(tableName, movePlayer, moveInformation.getBidValue(),
+					true);
+			break;
 		case HOLD_BID:
 			this.setGameState(tableName, GameState.BIDDING);
-			this.setBid(tableName, movePlayer,
-					moveInformation.getBidValue());
-			// TODO show whos bidding or passing
+			this.setBid(tableName, movePlayer, moveInformation.getBidValue(),
+					false);
 			break;
 		case PASS:
+			this.setGameState(tableName, GameState.BIDDING);
+			this.setPass(tableName, movePlayer);
 			break;
 		case SKAT_REQUEST:
 		case SKAT_LOOKING:
@@ -878,9 +894,7 @@ public class JSkatViewImpl implements IJSkatView {
 			break;
 		case CARD_PLAY:
 			this.setGameState(tableName, GameState.TRICK_PLAYING);
-			this.playTrickCard(tableName,
-					movePlayer,
-					moveInformation.getCard());
+			this.playTrickCard(tableName, movePlayer, moveInformation.getCard());
 			break;
 		case TIME_OUT:
 			// TODO show time out message box
@@ -995,5 +1009,14 @@ public class JSkatViewImpl implements IJSkatView {
 				new JSkatTabComponent(this.tabs, this.bitmaps));
 		this.tabs.setSelectedComponent(newPanel);
 		newPanel.setFocus();
+	}
+
+	/**
+	 * @see IJSkatView#setActivePlayer(String, Player)
+	 */
+	@Override
+	public void setActivePlayer(String tableName, Player player) {
+
+		this.tables.get(tableName).setActivePlayer(player);
 	}
 }

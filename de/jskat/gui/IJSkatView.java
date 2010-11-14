@@ -214,8 +214,22 @@ public interface IJSkatView {
 	 *            Player
 	 * @param bidValue
 	 *            Bid value
+	 * @param madeBid
+	 *            TRUE, if the player made the bid, FALSE if the player hold the
+	 *            bid
 	 */
-	public void setBid(String tableName, Player player, int bidValue);
+	public void setBid(String tableName, Player player, int bidValue,
+			boolean madeBid);
+
+	/**
+	 * Sets the pass bid for a player
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param player
+	 *            Player
+	 */
+	public void setPass(String tableName, Player player);
 
 	/**
 	 * Sets the player positions for a table
@@ -467,4 +481,14 @@ public interface IJSkatView {
 	 */
 	public void updateISSMove(String tableName,
 			ISSMoveInformation moveInformation);
+
+	/**
+	 * Sets the active player
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param player
+	 *            Active player
+	 */
+	public void setActivePlayer(String tableName, Player player);
 }

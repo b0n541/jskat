@@ -52,6 +52,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	private static final long serialVersionUID = 1L;
 	private static Log log = LogFactory.getLog(SkatTablePanel.class);
+	// FIXME (jan 14.11.2010) looks wrong to me, was made static to avoid
+	// NullPointerException during table creation
+	protected static Map<Player, Boolean> playerPassed = new HashMap<Player, Boolean>();
 
 	protected HandPanel foreHand;
 	protected HandPanel middleHand;
@@ -271,7 +274,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 		this.trickPanel.setUserPosition(playerPosition);
 		this.lastTrickPanel.setUserPosition(playerPosition);
 
-		// FIXME (jansch 09.11.2010) code duplication with BiddingPanel.setPlayerPositions()
+		// FIXME (jansch 09.11.2010) code duplication with
+		// BiddingPanel.setPlayerPositions()
 		switch (playerPosition) {
 		case FORE_HAND:
 			this.foreHand = this.userPanel;
@@ -376,6 +380,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		switch (state) {
 		case NEW_GAME:
+			setContextPanel(ContextPanelTypes.START_SERIES);
+			resetGameData();
+			break;
 		case DEALING:
 			setContextPanel(ContextPanelTypes.START_SERIES);
 			break;
@@ -406,6 +413,13 @@ public class SkatTablePanel extends AbstractTabPanel {
 			setContextPanel(ContextPanelTypes.GAME_OVER);
 			break;
 		}
+	}
+
+	private void resetGameData() {
+
+		playerPassed.put(Player.FORE_HAND, Boolean.FALSE);
+		playerPassed.put(Player.MIDDLE_HAND, Boolean.FALSE);
+		playerPassed.put(Player.HIND_HAND, Boolean.FALSE);
 	}
 
 	/**
@@ -483,12 +497,37 @@ public class SkatTablePanel extends AbstractTabPanel {
 	public void setTrickForeHand(Player trickForeHand) {
 
 		this.trickPanel.setTrickForeHand(trickForeHand);
+		setActivePlayer(trickForeHand);
 	}
 
-	public void setBid(Player player, int bidValue) {
+	public void setBid(Player player, int bidValue, boolean madeBid) {
 
 		this.biddingPanel.setBid(player, bidValue);
 		getPlayerPanel(player).setBidValue(bidValue);
+
+		switch (player) {
+		case FORE_HAND:
+			if (playerPassed.get(Player.MIDDLE_HAND).booleanValue()) {
+				setActivePlayer(Player.HIND_HAND);
+			} else {
+				setActivePlayer(Player.MIDDLE_HAND);
+			}
+			break;
+		case MIDDLE_HAND:
+			if (madeBid) {
+				setActivePlayer(Player.FORE_HAND);
+			} else {
+				setActivePlayer(Player.HIND_HAND);
+			}
+			break;
+		case HIND_HAND:
+			if (playerPassed.get(Player.FORE_HAND).booleanValue()) {
+				setActivePlayer(Player.MIDDLE_HAND);
+			} else {
+				setActivePlayer(Player.FORE_HAND);
+			}
+			break;
+		}
 	}
 
 	public void startGame() {
@@ -565,6 +604,14 @@ public class SkatTablePanel extends AbstractTabPanel {
 		}
 	}
 
+	/**
+	 * Sets the last trick
+	 * 
+	 * @param trickForeHand
+	 * @param foreHandCard
+	 * @param middleHandCard
+	 * @param hindHandCard
+	 */
 	public void setLastTrick(Player trickForeHand, Card foreHandCard,
 			Card middleHandCard, Card hindHandCard) {
 
@@ -581,5 +628,50 @@ public class SkatTablePanel extends AbstractTabPanel {
 	protected void setFocus() {
 		// TODO Auto-generated method stub
 
+	}
+
+	/**
+	 * Sets the active player
+	 * 
+	 * @param player
+	 *            Active player
+	 */
+	public void setActivePlayer(Player player) {
+		switch (player) {
+		case FORE_HAND:
+			foreHand.setActivePlayer(true);
+			middleHand.setActivePlayer(false);
+			hindHand.setActivePlayer(false);
+			break;
+		case MIDDLE_HAND:
+			foreHand.setActivePlayer(false);
+			middleHand.setActivePlayer(true);
+			hindHand.setActivePlayer(false);
+			break;
+		case HIND_HAND:
+			foreHand.setActivePlayer(false);
+			middleHand.setActivePlayer(false);
+			hindHand.setActivePlayer(true);
+			break;
+		}
+	}
+
+	public void setPass(Player player) {
+
+		playerPassed.put(player, Boolean.TRUE);
+
+		switch (player) {
+		case FORE_HAND:
+		case MIDDLE_HAND:
+			setActivePlayer(Player.HIND_HAND);
+			break;
+		case HIND_HAND:
+			if (playerPassed.get(Player.FORE_HAND).booleanValue()) {
+				setActivePlayer(Player.MIDDLE_HAND);
+			} else {
+				setActivePlayer(Player.FORE_HAND);
+			}
+			break;
+		}
 	}
 }

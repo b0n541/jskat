@@ -195,7 +195,7 @@ abstract class HandPanel extends JPanel {
 
 		return format.format(minutes) + ":" + format.format(seconds);
 	}
-	
+
 	/**
 	 * Adds a card to the panel
 	 * 
@@ -286,5 +286,9 @@ abstract class HandPanel extends JPanel {
 
 		activePlayer = isActivePlayer;
 		setBorder(getPanelBorder());
+	}
+
+	public void setPass() {
+		// TODO Auto-generated method stub
 	}
 }

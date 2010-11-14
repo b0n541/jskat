@@ -343,7 +343,8 @@ public class SkatGame extends JSkatThread {
 				// announcing hand holds bid
 				this.data.setBidValue(announcerBidValue);
 				this.data.setPlayerBid(announcer, announcerBidValue);
-				this.view.setBid(this.tableName, announcer, announcerBidValue);
+				this.view.setBid(this.tableName, announcer, announcerBidValue,
+						true);
 
 				if (nextBidValue < announcerBidValue) {
 					// increment bidOrderIndex accordingly
@@ -360,7 +361,8 @@ public class SkatGame extends JSkatThread {
 					// hearing hand holds bid
 					this.data.setBidValue(announcerBidValue);
 					this.data.setPlayerBid(hearer, announcerBidValue);
-					this.view.setBid(this.tableName, hearer, announcerBidValue);
+					this.view.setBid(this.tableName, hearer, announcerBidValue,
+							false);
 
 					// raise index to next bid in bid order
 					bidOrderIndex++;
@@ -375,6 +377,7 @@ public class SkatGame extends JSkatThread {
 
 					// hearing hand passed
 					hearerPassed = true;
+					view.setPass(tableName, hearer);
 				}
 			} else {
 
@@ -382,6 +385,7 @@ public class SkatGame extends JSkatThread {
 
 				// announcing hand passes
 				announcerPassed = true;
+				view.setPass(tableName, announcer);
 			}
 		}
 
@@ -522,10 +526,12 @@ public class SkatGame extends JSkatThread {
 			doSleep(this.maxSleep);
 
 			log.debug("middle hand plays"); //$NON-NLS-1$
+			view.setActivePlayer(tableName, trickForeHand.getLeftNeighbor());
 			playCard(trick, this.trickForeHand.getLeftNeighbor());
 			doSleep(this.maxSleep);
 
 			log.debug("hind hand plays"); //$NON-NLS-1$
+			view.setActivePlayer(tableName, trickForeHand.getRightNeighbor());
 			playCard(trick, this.trickForeHand.getRightNeighbor());
 
 			doSleep(this.maxSleep);

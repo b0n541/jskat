@@ -121,21 +121,7 @@ public class MessageParser {
 
 		ISSMoveInformation info = new ISSMoveInformation();
 
-		String movePlayer = params.get(0);
-		log.debug("Move player: " + movePlayer); //$NON-NLS-1$
-		if ("w".equals(movePlayer)) { //$NON-NLS-1$
-			// world move
-			info.setMovePlayer(MovePlayer.WORLD);
-		} else if ("0".equals(movePlayer)) { //$NON-NLS-1$
-			// fore hand move
-			info.setMovePlayer(MovePlayer.FORE_HAND);
-		} else if ("1".equals(movePlayer)) { //$NON-NLS-1$
-			// middle hand move
-			info.setMovePlayer(MovePlayer.MIDDLE_HAND);
-		} else if ("2".equals(movePlayer)) { //$NON-NLS-1$
-			// hind hand move
-			info.setMovePlayer(MovePlayer.HIND_HAND);
-		}
+		getMovePlayer(params.get(0), info);
 
 		// FIXME Unhandled moves
 		String move = params.get(1);
@@ -210,6 +196,24 @@ public class MessageParser {
 				new Double(params.get(params.size() - 1)));
 
 		return info;
+	}
+
+	private static void getMovePlayer(String movePlayer, ISSMoveInformation info) {
+
+		log.debug("Move player: " + movePlayer); //$NON-NLS-1$
+		if ("w".equals(movePlayer)) { //$NON-NLS-1$
+			// world move
+			info.setMovePlayer(MovePlayer.WORLD);
+		} else if ("0".equals(movePlayer)) { //$NON-NLS-1$
+			// fore hand move
+			info.setMovePlayer(MovePlayer.FORE_HAND);
+		} else if ("1".equals(movePlayer)) { //$NON-NLS-1$
+			// middle hand move
+			info.setMovePlayer(MovePlayer.MIDDLE_HAND);
+		} else if ("2".equals(movePlayer)) { //$NON-NLS-1$
+			// hind hand move
+			info.setMovePlayer(MovePlayer.HIND_HAND);
+		}
 	}
 
 	/**
