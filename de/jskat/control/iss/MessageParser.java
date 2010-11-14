@@ -276,17 +276,19 @@ public class MessageParser {
 		}
 		info.setGameAnnouncement(ann);
 
-		Card skatCard0 = Card.getCardFromString(annToken.nextToken());
-		Card skatCard1 = Card.getCardFromString(annToken.nextToken());
+		if (annToken.hasMoreTokens()) {
+			Card skatCard0 = Card.getCardFromString(annToken.nextToken());
+			Card skatCard1 = Card.getCardFromString(annToken.nextToken());
 
-		info.setSkatCards(skatCard0, skatCard1);
+			info.setSkatCards(skatCard0, skatCard1);
 
-		while (annToken.hasMoreTokens()
-				&& info.getGameAnnouncement().isOuvert()) {
-			// player has shown the cards
-			// ouvert game
+			while (annToken.hasMoreTokens()
+					&& info.getGameAnnouncement().isOuvert()) {
+				// player has shown the cards
+				// ouvert game
 
-			// FIXME show cards
+				// FIXME show cards
+			}
 		}
 
 		return ann;
