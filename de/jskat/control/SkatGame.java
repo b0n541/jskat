@@ -108,6 +108,7 @@ public class SkatGame extends JSkatThread {
 				setGameState(GameState.BIDDING);
 				break;
 			case BIDDING:
+				view.setActivePlayer(tableName, Player.MIDDLE_HAND);
 				bidding();
 				if (this.data.getGameType() == GameType.PASSED_IN) {
 
@@ -517,6 +518,7 @@ public class SkatGame extends JSkatThread {
 			}
 
 			this.view.setTrickForeHand(this.tableName, this.trickForeHand);
+			view.setActivePlayer(tableName, trickForeHand);
 
 			Trick trick = new Trick(this.trickForeHand);
 
