@@ -128,7 +128,7 @@ public class MessageParser {
 		log.debug("Move: " + move); //$NON-NLS-1$
 		if ("y".equals(move)) { //$NON-NLS-1$
 			// holding bid move
-			info.setType(MoveType.BID);
+			info.setType(MoveType.HOLD_BID);
 		} else if ("p".equals(move)) { //$NON-NLS-1$
 			// pass move
 			info.setType(MoveType.PASS);

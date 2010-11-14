@@ -463,12 +463,12 @@ public interface IJSkatView {
 	 * 
 	 * @param tableName
 	 *            Table name
-	 * @param playerName
-	 *            Player name
+	 * @param loginName
+	 *            Login name on ISS
 	 * @param status
 	 *            New game state
 	 */
-	public void updateISSTable(String tableName, String playerName,
+	public void updateISSTable(String tableName, String loginName,
 			ISSGameStartInformation status);
 
 	/**

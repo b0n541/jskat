@@ -799,18 +799,18 @@ public class JSkatViewImpl implements IJSkatView {
 	 * @see IJSkatView#updateISSTable(String, String, ISSGameStartInformation)
 	 */
 	@Override
-	public void updateISSTable(String tableName, String playerName,
+	public void updateISSTable(String tableName, String issLogin,
 			ISSGameStartInformation status) {
 
-		if (playerName.equals(status.getPlayerName(Player.FORE_HAND))) {
+		if (issLogin.equals(status.getPlayerName(Player.FORE_HAND))) {
 
 			updateISSTable(tableName, Player.MIDDLE_HAND, Player.HIND_HAND,
 					Player.FORE_HAND, status);
-		} else if (playerName.equals(status.getPlayerName(Player.MIDDLE_HAND))) {
+		} else if (issLogin.equals(status.getPlayerName(Player.MIDDLE_HAND))) {
 
 			updateISSTable(tableName, Player.HIND_HAND, Player.FORE_HAND,
 					Player.MIDDLE_HAND, status);
-		} else if (playerName.equals(status.getPlayerName(Player.HIND_HAND))) {
+		} else if (issLogin.equals(status.getPlayerName(Player.HIND_HAND))) {
 
 			updateISSTable(tableName, Player.FORE_HAND, Player.MIDDLE_HAND,
 					Player.HIND_HAND, status);

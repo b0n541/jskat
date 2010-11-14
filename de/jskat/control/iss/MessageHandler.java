@@ -52,6 +52,7 @@ public class MessageHandler {
 
 		log.debug("ISS    |--> " + message); //$NON-NLS-1$
 
+		// FIXME (jan 14.11.2010) check for NULL
 		StringTokenizer tokenizer = new StringTokenizer(message); // get first
 		// command
 		String first = tokenizer.nextToken();
