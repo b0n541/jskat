@@ -242,6 +242,9 @@ abstract class HandPanel extends JPanel {
 
 		this.cardPanel.clearCards();
 		bidValue = 0;
+		playerPassed = false;
+		refreshHeaderText();
+		setActivePlayer(false);
 	}
 
 	/**
@@ -294,7 +297,7 @@ abstract class HandPanel extends JPanel {
 		setBorder(getPanelBorder());
 	}
 
-	public void setPass() {
+	void setPass() {
 		playerPassed = true;
 		refreshHeaderText();
 	}
