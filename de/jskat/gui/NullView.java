@@ -19,6 +19,7 @@ import de.jskat.control.iss.ChatMessageType;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameState;
+import de.jskat.data.SkatSeriesData.SeriesState;
 import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.data.iss.ISSGameStartInformation;
 import de.jskat.data.iss.ISSMoveInformation;
@@ -484,6 +485,15 @@ public class NullView implements IJSkatView {
 	@Override
 	public void setPass(@SuppressWarnings("unused") String tableName,
 			@SuppressWarnings("unused") Player player) {
+		// empty method by indent
+	}
+
+	/**
+	 * @see IJSkatView#setSeriesState(String, SeriesState)
+	 */
+	@Override
+	public void setSeriesState(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") SeriesState state) {
 		// empty method by indent
 	}
 }

@@ -36,23 +36,22 @@ class BiddingPanel extends JPanel {
 	private JButton bidButton;
 	private JButton passButton;
 
-
 	/**
 	 * Bidding panel
 	 * 
 	 * @param newActions
 	 */
 	BiddingPanel(ActionMap newActions) {
-		
+
 		initPanel(newActions);
 	}
-	
+
 	private void initPanel(ActionMap newActions) {
-		
+
 		this.setLayout(new MigLayout("fill")); //$NON-NLS-1$
-		
+
 		JPanel biddingPanel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
-		
+
 		this.leftOpponentBid = new JLabel("0"); //$NON-NLS-1$
 		this.rightOpponentBid = new JLabel("0"); //$NON-NLS-1$
 		this.userBid = new JLabel("0"); //$NON-NLS-1$
@@ -63,14 +62,14 @@ class BiddingPanel extends JPanel {
 		this.passButton = new JButton(newActions.get(JSkatAction.PASS_BID));
 		biddingPanel.add(this.bidButton, "left"); //$NON-NLS-1$
 		biddingPanel.add(this.passButton, "right"); //$NON-NLS-1$
-		
+
 		this.add(biddingPanel, "center"); //$NON-NLS-1$
 	}
 
 	void setUserPosition(Player player) {
 		// FIXME (jansch 09.11.2010) code duplication with
 		// SkatTablePanel.setPositions()
-		switch(player) {
+		switch (player) {
 		case FORE_HAND:
 			this.foreHandBidLabel = this.userBid;
 			this.middleHandBidLabel = this.leftOpponentBid;
@@ -88,10 +87,10 @@ class BiddingPanel extends JPanel {
 			break;
 		}
 	}
-	
+
 	void setBid(Player player, int bidValue) {
-		
-		switch(player) {
+
+		switch (player) {
 		case FORE_HAND:
 			this.foreHandBidLabel.setText(Integer.toString(bidValue));
 			break;
@@ -103,9 +102,9 @@ class BiddingPanel extends JPanel {
 			break;
 		}
 	}
-	
-	void clearBids() {
-		
+
+	void resetPanel() {
+
 		this.foreHandBidLabel.setText("0");
 		this.middleHandBidLabel.setText("0");
 		this.hindHandBidLabel.setText("0");

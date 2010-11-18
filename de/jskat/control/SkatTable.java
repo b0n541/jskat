@@ -19,7 +19,7 @@ import org.apache.commons.logging.LogFactory;
 
 import de.jskat.ai.IJSkatPlayer;
 import de.jskat.data.SkatTableOptions;
-import de.jskat.data.SkatSeriesData.SeriesStates;
+import de.jskat.data.SkatSeriesData.SeriesState;
 import de.jskat.gui.IJSkatView;
 
 /**
@@ -197,7 +197,7 @@ public class SkatTable {
 	 * 
 	 * @return State of the skat series
 	 */
-	public SeriesStates getSeriesState() {
+	public SeriesState getSeriesState() {
 
 		return this.series.getSeriesState();
 	}

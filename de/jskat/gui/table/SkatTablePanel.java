@@ -35,6 +35,7 @@ import org.apache.commons.logging.LogFactory;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameState;
+import de.jskat.data.SkatSeriesData.SeriesState;
 import de.jskat.gui.AbstractTabPanel;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.action.human.ContinueSkatSeriesAction;
@@ -430,7 +431,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	void setContextPanel(ContextPanelTypes panelType) {
 
-		if (panelType == ContextPanelTypes.DISCARDING) {
+		if (ContextPanelTypes.DISCARDING.equals(panelType)) {
+
+			this.biddingPanel.resetPanel();
+
+		} else if (ContextPanelTypes.DISCARDING.equals(panelType)) {
 
 			this.discardPanel.resetPanel();
 
@@ -481,7 +486,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	public void clearTable() {
 
 		this.gameInfoPanel.clear();
-		this.biddingPanel.clearBids();
+		this.biddingPanel.resetPanel();
 		this.discardPanel.clearHandPanel();
 		this.clearHand(Player.FORE_HAND);
 		this.clearHand(Player.MIDDLE_HAND);
@@ -674,6 +679,14 @@ public class SkatTablePanel extends AbstractTabPanel {
 				setActivePlayer(Player.FORE_HAND);
 			}
 			break;
+		}
+	}
+
+	public void setSeriesState(SeriesState state) {
+
+		if (SeriesState.SERIES_FINISHED.equals(state)) {
+
+			setContextPanel(ContextPanelTypes.START_SERIES);
 		}
 	}
 }

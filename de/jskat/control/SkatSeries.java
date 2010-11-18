@@ -21,7 +21,7 @@ import org.apache.commons.logging.LogFactory;
 
 import de.jskat.ai.IJSkatPlayer;
 import de.jskat.data.SkatSeriesData;
-import de.jskat.data.SkatSeriesData.SeriesStates;
+import de.jskat.data.SkatSeriesData.SeriesState;
 import de.jskat.gui.IJSkatView;
 import de.jskat.gui.human.HumanPlayer;
 import de.jskat.util.Player;
@@ -50,7 +50,7 @@ public class SkatSeries extends JSkatThread {
 	public SkatSeries(String tableName) {
 
 		this.data = new SkatSeriesData();
-		this.data.setState(SeriesStates.WAITING);
+		this.data.setState(SeriesState.WAITING);
 		this.data.setTableName(tableName);
 		this.player = new HashMap<Player, IJSkatPlayer>();
 	}
@@ -84,7 +84,7 @@ public class SkatSeries extends JSkatThread {
 	 */
 	public boolean isRunning() {
 
-		return this.data.getState() == SeriesStates.RUNNING;
+		return this.data.getState() == SeriesState.RUNNING;
 	}
 
 	/**
@@ -96,7 +96,7 @@ public class SkatSeries extends JSkatThread {
 	public void startSeries(int rounds) {
 
 		this.roundsToGo = rounds;
-		this.data.setState(SeriesStates.RUNNING);
+		this.data.setState(SeriesState.RUNNING);
 	}
 
 	/**
@@ -162,7 +162,9 @@ public class SkatSeries extends JSkatThread {
 			checkWaitCondition();
 		}
 
-		this.data.setState(SeriesStates.SERIES_FINISHED);
+		this.data.setState(SeriesState.SERIES_FINISHED);
+		view.setSeriesState(data.getTableName(), SeriesState.SERIES_FINISHED);
+
 		log.debug(this.data.getState());
 	}
 
@@ -174,7 +176,7 @@ public class SkatSeries extends JSkatThread {
 		} else if (player.get(Player.MIDDLE_HAND) instanceof HumanPlayer) {
 			view.setPositions(data.getTableName(), Player.HIND_HAND,
 					Player.FORE_HAND, Player.MIDDLE_HAND);
-		} else if (player.get(Player.HIND_HAND) instanceof HumanPlayer) {
+		} else {
 			view.setPositions(data.getTableName(), Player.FORE_HAND,
 					Player.MIDDLE_HAND, Player.HIND_HAND);
 		}
@@ -200,7 +202,7 @@ public class SkatSeries extends JSkatThread {
 	 * 
 	 * @return State of the series
 	 */
-	public SeriesStates getSeriesState() {
+	public SeriesState getSeriesState() {
 
 		return this.data.getState();
 	}
