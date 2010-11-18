@@ -24,11 +24,13 @@ import de.jskat.data.GameAnnouncement;
 import de.jskat.data.JSkatApplicationData;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameState;
+import de.jskat.data.Trick;
 import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.data.iss.ISSGameStartInformation;
 import de.jskat.data.iss.ISSLoginCredentials;
 import de.jskat.data.iss.ISSMoveInformation;
 import de.jskat.data.iss.ISSTablePanelStatus;
+import de.jskat.data.iss.MoveType;
 import de.jskat.gui.IJSkatView;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.util.Card;
@@ -398,6 +400,29 @@ public class ISSController {
 
 		SkatGameData currGame = this.gameData.get(tableName);
 		updateGameData(currGame, moveInformation);
+
+		if (MoveType.CARD_PLAY.equals(moveInformation.getType())) {
+
+			// handle trick playing
+			Trick trick = currGame.getCurrentTrick();
+
+			if (trick.getThirdCard() != null) {
+				// trick completed
+				view.setLastTrick(tableName, trick.getForeHand(),
+						trick.getFirstCard(), trick.getSecondCard(),
+						trick.getThirdCard());
+				trick.setTrickWinner(Player.FORE_HAND);
+				currGame.addTrick(new Trick(trick.getTrickWinner()));
+				view.setActivePlayer(tableName, currGame.getCurrentTrick()
+						.getForeHand());
+			} else if (trick.getSecondCard() != null) {
+				view.setActivePlayer(tableName, trick.getForeHand()
+						.getRightNeighbor());
+			} else if (trick.getFirstCard() != null) {
+				view.setActivePlayer(tableName, trick.getForeHand()
+						.getLeftNeighbor());
+			}
+		}
 	}
 
 	private void updateGameData(SkatGameData currGame,
@@ -430,10 +455,11 @@ public class ISSController {
 		case GAME_ANNOUNCEMENT:
 			currGame.setGameState(GameState.DECLARING);
 			currGame.setAnnouncement(moveInformation.getGameAnnouncement());
+			currGame.addTrick(new Trick(movePlayer));
 			break;
 		case CARD_PLAY:
 			currGame.setGameState(GameState.TRICK_PLAYING);
-			// currGame.setTrickCard(movePlayer, moveInformation.getCard());
+			currGame.setTrickCard(movePlayer, moveInformation.getCard());
 			break;
 		case TIME_OUT:
 			currGame.setGameState(GameState.PRELIMINARY_GAME_END);

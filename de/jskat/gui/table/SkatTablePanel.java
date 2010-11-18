@@ -309,14 +309,14 @@ public class SkatTablePanel extends AbstractTabPanel {
 	/**
 	 * Sets a card played in a trick
 	 * 
-	 * @param position
+	 * @param player
 	 *            Player position
 	 * @param card
 	 *            Card
 	 */
-	public void setTrickCard(Player position, Card card) {
+	public void setTrickCard(Player player, Card card) {
 
-		this.trickPanel.setCard(position, card);
+		this.trickPanel.setCard(player, card);
 	}
 
 	/**

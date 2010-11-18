@@ -755,28 +755,25 @@ public class SkatGameData {
 	/**
 	 * Sets a trick card
 	 * 
-	 * @param trickPosition
+	 * @param player
 	 *            The player of the card in the trick
 	 * @param card
 	 *            The ID of the card that was played
 	 */
-	public void setTrickCard(Player trickPosition, Card card) {
+	public void setTrickCard(Player player, Card card) {
 
-		log.debug(this + ".setTrickCard(" + trickPosition + ", " //$NON-NLS-1$ //$NON-NLS-2$
+		log.debug(this + ".setTrickCard(" + player + ", " //$NON-NLS-1$ //$NON-NLS-2$
 				+ card + ")"); //$NON-NLS-1$
 
 		Trick currentTrick = getCurrentTrick();
+		Player trickForeHand = currentTrick.getForeHand();
 
-		switch (trickPosition) {
-		case FORE_HAND:
+		if (trickForeHand.equals(player)) {
 			currentTrick.setFirstCard(card);
-			break;
-		case MIDDLE_HAND:
+		} else if (trickForeHand.getLeftNeighbor().equals(player)) {
 			currentTrick.setSecondCard(card);
-			break;
-		case HIND_HAND:
+		} else if (trickForeHand.getRightNeighbor().equals(player)) {
 			currentTrick.setThirdCard(card);
-			break;
 		}
 	}
 

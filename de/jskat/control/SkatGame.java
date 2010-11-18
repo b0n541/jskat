@@ -523,19 +523,17 @@ public class SkatGame extends JSkatThread {
 
 			// Ask players for their cards
 			log.debug("fore hand plays"); //$NON-NLS-1$
-			playCard(trick, newTrickForeHand, Player.FORE_HAND);
+			playCard(trick, newTrickForeHand);
 			doSleep(this.maxSleep);
 
 			log.debug("middle hand plays"); //$NON-NLS-1$
 			view.setActivePlayer(tableName, newTrickForeHand.getLeftNeighbor());
-			playCard(trick, newTrickForeHand.getLeftNeighbor(),
-					Player.MIDDLE_HAND);
+			playCard(trick, newTrickForeHand.getLeftNeighbor());
 			doSleep(this.maxSleep);
 
 			log.debug("hind hand plays"); //$NON-NLS-1$
 			view.setActivePlayer(tableName, newTrickForeHand.getRightNeighbor());
-			playCard(trick, newTrickForeHand.getRightNeighbor(),
-					Player.HIND_HAND);
+			playCard(trick, newTrickForeHand.getRightNeighbor());
 
 			doSleep(this.maxSleep);
 
@@ -601,7 +599,7 @@ public class SkatGame extends JSkatThread {
 		}
 	}
 
-	private void playCard(Trick trick, Player currPlayer, Player trickPosition) {
+	private void playCard(Trick trick, Player currPlayer) {
 
 		Card card = null;
 		IJSkatPlayer skatPlayer = getPlayerObject(currPlayer);
@@ -646,7 +644,7 @@ public class SkatGame extends JSkatThread {
 
 		// card was on players hand and is valid
 		data.getPlayerCards(currPlayer).remove(card);
-		data.setTrickCard(trickPosition, card);
+		data.setTrickCard(currPlayer, card);
 		view.playTrickCard(this.tableName, currPlayer, card);
 
 		for (Player currPosition : Player.values()) {
