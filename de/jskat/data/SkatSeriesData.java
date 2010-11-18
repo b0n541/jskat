@@ -24,7 +24,7 @@ public class SkatSeriesData {
 	/**
 	 * Series states
 	 */
-	public enum SeriesStates {
+	public enum SeriesState {
 		
 		/**
 		 * Series waits for the start of the game
@@ -40,7 +40,7 @@ public class SkatSeriesData {
 		SERIES_FINISHED;
 	}
 	
-	private SeriesStates state;
+	private SeriesState state;
 	private List<SkatGame> games;
 	private String tableName;
 
@@ -50,7 +50,7 @@ public class SkatSeriesData {
 	public SkatSeriesData() {
 		
 		this.games = new ArrayList<SkatGame>();
-		setState(SeriesStates.WAITING);
+		setState(SeriesState.WAITING);
 	}
 	
 	/**
@@ -58,7 +58,7 @@ public class SkatSeriesData {
 	 * 
 	 * @return State of the series
 	 */
-	public SeriesStates getState() {
+	public SeriesState getState() {
 		
 		return this.state;
 	}
@@ -68,7 +68,7 @@ public class SkatSeriesData {
 	 * 
 	 * @param newState New state
 	 */
-	public void setState(SeriesStates newState) {
+	public void setState(SeriesState newState) {
 		
 		this.state = newState;
 	}
