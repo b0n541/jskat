@@ -903,6 +903,7 @@ public class JSkatViewImpl implements IJSkatView {
 			break;
 		}
 
+		// adjust player times
 		if (moveInformation.getMovePlayer() != MovePlayer.WORLD) {
 			// FIXME dirty hack
 			SkatTablePanel table = tables.get(tableName);

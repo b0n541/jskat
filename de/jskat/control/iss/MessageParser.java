@@ -61,8 +61,9 @@ public class MessageParser {
 			// parse only non empty seats
 			if (!(".".equals(params.get(i * 10 + 5)))) { //$NON-NLS-1$
 				// there is a player
-				status.addPlayer(parsePlayerStatus(params.subList(i * 10 + 5,
-						i * 10 + 16)));
+				ISSPlayerStatus playerStatus = parsePlayerStatus(params
+						.subList(i * 10 + 5, i * 10 + 16));
+				status.addPlayer(playerStatus.getName(), playerStatus);
 			}
 		}
 

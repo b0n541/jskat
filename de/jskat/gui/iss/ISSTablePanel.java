@@ -21,7 +21,6 @@ import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.gui.table.ContextPanelTypes;
 import de.jskat.gui.table.SkatTablePanel;
-import de.jskat.util.Player;
 
 /**
  * Panel for ISS table
@@ -85,29 +84,8 @@ public class ISSTablePanel extends SkatTablePanel {
 	 */
 	public void setTableStatus(ISSTablePanelStatus tableStatus) {
 
-		// FIXME (jan 08.11.2010) find a better solution
 		setMaxPlayers(tableStatus.getMaxPlayers());
 
-		int playerCount = tableStatus.getNumberOfPlayers();
-		int playerPosition = tableStatus.getPlayerPosition();
-
-		if (playerPosition != -1) {
-			setPlayerInformation(Player.FORE_HAND, tableStatus
-					.getPlayerInformation().get(playerPosition).getName(), 0.0);
-		}
-
-		if (playerCount > 1) {
-			setPlayerInformation(Player.MIDDLE_HAND, tableStatus
-					.getPlayerInformation().get((playerPosition + 1) % 3)
-					.getName(), 0.0);
-		}
-
-		if (playerCount > 2) {
-			setPlayerInformation(Player.HIND_HAND, tableStatus
-					.getPlayerInformation().get((playerPosition + 2) % 3)
-					.getName(), 0.0);
-		}
-
-		// FIXME (jan 08.11.2010) what about four players?
+		// TODO set player informations
 	}
 }

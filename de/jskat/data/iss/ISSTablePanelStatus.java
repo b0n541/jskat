@@ -11,8 +11,8 @@ Released: @ReleaseDate@
 
 package de.jskat.data.iss;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Holds all data for a ISS table
@@ -21,7 +21,7 @@ public class ISSTablePanelStatus {
 
 	private int maxPlayers;
 
-	List<ISSPlayerStatus> playerInfos = new ArrayList<ISSPlayerStatus>();
+	Map<String, ISSPlayerStatus> playerInfos = new HashMap<String, ISSPlayerStatus>();
 
 	private String loginName;
 
@@ -35,9 +35,9 @@ public class ISSTablePanelStatus {
 	 * @param status
 	 *            Player status
 	 */
-	public void addPlayer(ISSPlayerStatus status) {
+	public void addPlayer(String playerName, ISSPlayerStatus status) {
 
-		this.playerInfos.add(status);
+		this.playerInfos.put(playerName, status);
 	}
 
 	public int getNumberOfPlayers() {
@@ -45,9 +45,14 @@ public class ISSTablePanelStatus {
 		return this.playerInfos.size();
 	}
 
-	public List<ISSPlayerStatus> getPlayerInformation() {
+	public Map<String, ISSPlayerStatus> getPlayerInformations() {
 
-		return this.playerInfos;
+		return playerInfos;
+	}
+
+	public ISSPlayerStatus getPlayerInformation(String playerName) {
+
+		return playerInfos.get(playerName);
 	}
 
 	public int getMaxPlayers() {
@@ -68,20 +73,5 @@ public class ISSTablePanelStatus {
 	public String getLoginName() {
 
 		return loginName;
-	}
-
-	public int getPlayerPosition() {
-
-		int result = -1;
-
-		int index = 0;
-		for (ISSPlayerStatus status : playerInfos) {
-			if (status.getName() != null && status.getName().equals(loginName)) {
-				result = index;
-			}
-			index++;
-		}
-
-		return result;
 	}
 }
