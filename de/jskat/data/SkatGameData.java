@@ -133,11 +133,6 @@ public class SkatGameData {
 	private Map<Player, Integer> playerBids;
 
 	/**
-	 * Trump color in suit games
-	 */
-	private Suit trump;
-
-	/**
 	 * Flag for won games
 	 */
 	private boolean won = false;
@@ -306,27 +301,6 @@ public class SkatGameData {
 
 		this.highestBidValue = value;
 		log.debug("setBidValue(" + value + ")"); //$NON-NLS-1$//$NON-NLS-2$
-	}
-
-	/**
-	 * Returns the trump suit
-	 * 
-	 * @return Trump suit
-	 */
-	public Suit getTrump() {
-
-		return this.trump;
-	}
-
-	/**
-	 * Sets the trump suit
-	 * 
-	 * @param newTrump
-	 *            Trump suit
-	 */
-	public void setTrump(Suit newTrump) {
-
-		this.trump = newTrump;
 	}
 
 	/**
@@ -1103,7 +1077,7 @@ public class SkatGameData {
 	 * Calculates the counts of jacks
 	 */
 	public void calcJackInformation() {
-		
+
 		// FIXME (jansch 09.11.2010) this is code for skat rules
 		CardList declarerCards = (CardList) this.playerHands.get(this.declarer)
 				.clone();
