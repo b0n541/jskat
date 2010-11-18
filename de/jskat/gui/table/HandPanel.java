@@ -78,6 +78,8 @@ abstract class HandPanel extends JPanel {
 
 	boolean activePlayer = false;
 
+	boolean playerPassed = false;
+
 	/**
 	 * Constructor
 	 * 
@@ -183,6 +185,10 @@ abstract class HandPanel extends JPanel {
 			headerText.append(getPlayerTimeString(this.playerTime));
 			headerText.append(" Bid: ");
 			headerText.append(bidValue);
+
+			if (playerPassed) {
+				headerText.append(" (passed)");
+			}
 		}
 
 		this.headerLabel.setText(headerText.toString());
@@ -289,6 +295,7 @@ abstract class HandPanel extends JPanel {
 	}
 
 	public void setPass() {
-		// TODO Auto-generated method stub
+		playerPassed = true;
+		refreshHeaderText();
 	}
 }
