@@ -11,6 +11,7 @@ Released: @ReleaseDate@
 
 package de.jskat.control;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JOptionPane;
@@ -43,12 +44,8 @@ public class SkatGame extends JSkatThread {
 	private int maxSleep = 100;
 	private SkatGameData data;
 	private CardDeck deck;
-	private IJSkatPlayer foreHand;
-	private IJSkatPlayer middleHand;
-	private IJSkatPlayer hindHand;
 	private Player trickForeHand;
-	private IJSkatPlayer[] player;
-	private IJSkatPlayer declarer;
+	private Map<Player, IJSkatPlayer> player;
 	private String tableName;
 	private IJSkatView view;
 	private BasicSkatRules rules;
@@ -69,18 +66,15 @@ public class SkatGame extends JSkatThread {
 			IJSkatPlayer newMiddleHand, IJSkatPlayer newHindHand) {
 
 		this.tableName = newTableName;
-		this.foreHand = newForeHand;
-		this.middleHand = newMiddleHand;
-		this.hindHand = newHindHand;
-		this.player = new IJSkatPlayer[3];
-		this.player[0] = this.foreHand;
-		this.player[1] = this.middleHand;
-		this.player[2] = this.hindHand;
+		this.player = new HashMap<Player, IJSkatPlayer>();
+		this.player.put(Player.FORE_HAND, newForeHand);
+		this.player.put(Player.MIDDLE_HAND, newMiddleHand);
+		this.player.put(Player.HIND_HAND, newHindHand);
 
 		// inform all players about the starting of the new game
-		this.player[0].newGame(Player.FORE_HAND);
-		this.player[1].newGame(Player.MIDDLE_HAND);
-		this.player[2].newGame(Player.HIND_HAND);
+		for (Player currPlayerPosition : player.keySet()) {
+			player.get(currPlayerPosition).newGame(currPlayerPosition);
+		}
 
 		this.data = new SkatGameData();
 		setGameState(GameState.NEW_GAME);
@@ -157,7 +151,7 @@ public class SkatGame extends JSkatThread {
 
 	private boolean lookIntoSkat() {
 
-		return this.declarer.lookIntoSkat();
+		return player.get(data.getDeclarer()).lookIntoSkat();
 	}
 
 	/**
@@ -232,7 +226,7 @@ public class SkatGame extends JSkatThread {
 				// deal amount of cards
 				Card card = this.deck.remove(0);
 				// player can get original card object because Card is immutable
-				this.player[hand.getOrder()].takeCard(card);
+				player.get(hand).takeCard(card);
 				this.data.setDealtCard(hand, card);
 			}
 		}
@@ -282,7 +276,7 @@ public class SkatGame extends JSkatThread {
 			log.debug("Check whether fore hand holds at least one bid"); //$NON-NLS-1$
 
 			// check whether fore hand holds at least one bid
-			if (!(this.player[Player.FORE_HAND.getOrder()].bidMore(18) > -1)) {
+			if (!(player.get(Player.FORE_HAND).bidMore(18) > -1)) {
 
 				log.debug("Fore hand passes too"); //$NON-NLS-1$
 				secondWinner = null;
@@ -334,8 +328,7 @@ public class SkatGame extends JSkatThread {
 			int nextBidValue = SkatConstants.bidOrder[bidOrderIndex];
 			this.view.setNextBidValue(this.tableName, nextBidValue);
 			// ask player
-			int announcerBidValue = this.player[announcer.getOrder()]
-					.bidMore(nextBidValue);
+			int announcerBidValue = player.get(announcer).bidMore(nextBidValue);
 
 			if (announcerBidValue > -1) {
 
@@ -355,7 +348,7 @@ public class SkatGame extends JSkatThread {
 					}
 				}
 
-				if (this.player[hearer.getOrder()].holdBid(announcerBidValue)) {
+				if (player.get(hearer).holdBid(announcerBidValue)) {
 
 					log.debug("hearer holds " + announcerBidValue); //$NON-NLS-1$
 
@@ -419,9 +412,11 @@ public class SkatGame extends JSkatThread {
 		log.debug("Player looks into the skat..."); //$NON-NLS-1$
 		log.debug("Skat before discarding: " + this.data.getSkat()); //$NON-NLS-1$
 
+		IJSkatPlayer declarer = player.get(data.getDeclarer());
+
 		// create a clone of the skat before sending it to the player
 		// otherwise the player could change the skat after discarding
-		this.declarer.takeSkat((CardList) this.data.getSkat().clone());
+		declarer.takeSkat((CardList) this.data.getSkat().clone());
 
 		// adjust cards in display too
 		this.view.addCard(this.tableName, this.data.getDeclarer(), this.data
@@ -432,7 +427,7 @@ public class SkatGame extends JSkatThread {
 		// ask player for the cards to be discarded
 		// cloning is done to prevent the player
 		// from manipulating the skat afterwards
-		CardList discardedSkat = (CardList) this.declarer.discardSkat().clone();
+		CardList discardedSkat = (CardList) declarer.discardSkat().clone();
 
 		if (!checkDiscardedCards(discardedSkat)) {
 			// TODO throw an appropriate exceptions
@@ -441,7 +436,7 @@ public class SkatGame extends JSkatThread {
 
 		log.debug("Discarded cards: " + discardedSkat); //$NON-NLS-1$
 
-		this.data.setDiscardedSkat(getPlayerID(this.declarer), discardedSkat);
+		this.data.setDiscardedSkat(this.data.getDeclarer(), discardedSkat);
 		this.view.removeCard(this.tableName, this.data.getDeclarer(),
 				discardedSkat.get(0));
 		this.view.removeCard(this.tableName, this.data.getDeclarer(),
@@ -473,8 +468,8 @@ public class SkatGame extends JSkatThread {
 
 		// TODO check for valid game announcements
 		try {
-			GameAnnouncement ann = (GameAnnouncement) this.declarer
-					.announceGame().clone();
+			GameAnnouncement ann = (GameAnnouncement) player
+					.get(data.getDeclarer()).announceGame().clone();
 
 			setGameAnnouncement(ann);
 		} catch (NullPointerException e) {
@@ -544,12 +539,12 @@ public class SkatGame extends JSkatThread {
 			this.data.getTricks().add(trick);
 			this.data.addPlayerPoints(trickWinner, trick.getCardValueSum());
 
-			for (int j = 0; j < 3; j++) {
+			for (Player currPosition : Player.values()) {
 				// inform all players
 				// cloning of trick information to prevent manipulation by
 				// player
 				try {
-					this.player[j].showTrick((Trick) trick.clone());
+					player.get(currPosition).showTrick((Trick) trick.clone());
 				} catch (CloneNotSupportedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -643,10 +638,10 @@ public class SkatGame extends JSkatThread {
 		this.data.getPlayerCards(currPlayer).remove(card);
 		this.view.playTrickCard(this.tableName, currPlayer, card);
 
-		for (int i = 0; i < 3; i++) {
+		for (Player currPosition : Player.values()) {
 			// inform all players
 			// cloning of card is not neccessary, because Card is immutable
-			this.player[i].cardPlayed(currPlayer, card);
+			player.get(currPosition).cardPlayed(currPlayer, card);
 		}
 
 		log.debug("playing card " + card); //$NON-NLS-1$
@@ -654,21 +649,7 @@ public class SkatGame extends JSkatThread {
 
 	private IJSkatPlayer getPlayerObject(Player currPlayer) {
 
-		IJSkatPlayer result = null;
-
-		switch (currPlayer) {
-		case FORE_HAND:
-			result = this.foreHand;
-			break;
-		case MIDDLE_HAND:
-			result = this.middleHand;
-			break;
-		case HIND_HAND:
-			result = this.hindHand;
-			break;
-		}
-
-		return result;
+		return player.get(currPlayer);
 	}
 
 	/**
@@ -690,24 +671,6 @@ public class SkatGame extends JSkatThread {
 
 				result = true;
 			}
-		}
-
-		return result;
-	}
-
-	private Player getPlayerID(IJSkatPlayer skatPlayer) {
-
-		Player result = null;
-
-		if (skatPlayer == this.foreHand) {
-
-			result = Player.FORE_HAND;
-		} else if (skatPlayer == this.middleHand) {
-
-			result = Player.MIDDLE_HAND;
-		} else if (skatPlayer == this.hindHand) {
-
-			result = Player.HIND_HAND;
 		}
 
 		return result;
@@ -792,7 +755,7 @@ public class SkatGame extends JSkatThread {
 		log.debug("Final game result: lost:" + this.data.isGameLost() + //$NON-NLS-1$
 				" game value: " + this.data.getResult()); //$NON-NLS-1$
 
-		for (IJSkatPlayer currPlayer : this.player) {
+		for (IJSkatPlayer currPlayer : player.values()) {
 			// no cloning neccessary because all parameters are primitive data
 			// types
 			currPlayer.setGameResult(this.data.isGameWon(),
@@ -846,7 +809,7 @@ public class SkatGame extends JSkatThread {
 		this.rules = SkatRuleFactory.getSkatRules(this.data.getGameType());
 
 		// inform all players
-		for (IJSkatPlayer currPlayer : this.player) {
+		for (IJSkatPlayer currPlayer : player.values()) {
 			// no cloning neccessary, because all parameters are primitive data
 			// types
 			currPlayer.startGame(this.data.getDeclarer(),
@@ -894,18 +857,6 @@ public class SkatGame extends JSkatThread {
 	public void setSinglePlayer(Player singlePlayer) {
 
 		this.data.setDeclarer(singlePlayer);
-
-		switch (singlePlayer) {
-		case FORE_HAND:
-			this.declarer = this.foreHand;
-			break;
-		case MIDDLE_HAND:
-			this.declarer = this.middleHand;
-			break;
-		case HIND_HAND:
-			this.declarer = this.hindHand;
-			break;
-		}
 	}
 
 	/**

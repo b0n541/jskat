@@ -108,11 +108,11 @@ public class MessageParser {
 
 		status.setGameNo(Integer.parseInt(params.get(0)));
 		status.putPlayerName(Player.FORE_HAND, params.get(1));
-		status.putPlayerTime(Player.FORE_HAND, new Double(params.get(2)));
+		status.putPlayerTime(Player.FORE_HAND, Double.valueOf(params.get(2)));
 		status.putPlayerName(Player.MIDDLE_HAND, params.get(3));
-		status.putPlayerTime(Player.MIDDLE_HAND, new Double(params.get(4)));
+		status.putPlayerTime(Player.MIDDLE_HAND, Double.valueOf(params.get(4)));
 		status.putPlayerName(Player.HIND_HAND, params.get(5));
-		status.putPlayerTime(Player.HIND_HAND, new Double(params.get(6)));
+		status.putPlayerTime(Player.HIND_HAND, Double.valueOf(params.get(6)));
 
 		return status;
 	}

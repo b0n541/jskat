@@ -11,8 +11,10 @@ Released: @ReleaseDate@
 
 package de.jskat.control;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -34,8 +36,7 @@ public class SkatSeries extends JSkatThread {
 	private int maxSleep = 0;
 	private SkatSeriesData data;
 	private int roundsToGo = 0;
-	private List<IJSkatPlayer> player;
-	private List<Player> viewPositions;
+	private Map<Player, IJSkatPlayer> player;
 	private SkatGame currSkatGame;
 
 	private IJSkatView view;
@@ -51,11 +52,7 @@ public class SkatSeries extends JSkatThread {
 		this.data = new SkatSeriesData();
 		this.data.setState(SeriesStates.WAITING);
 		this.data.setTableName(tableName);
-		this.player = new ArrayList<IJSkatPlayer>();
-		this.viewPositions = new ArrayList<Player>();
-		this.viewPositions.add(Player.FORE_HAND);
-		this.viewPositions.add(Player.MIDDLE_HAND);
-		this.viewPositions.add(Player.HIND_HAND);
+		this.player = new HashMap<Player, IJSkatPlayer>();
 	}
 
 	/**
@@ -66,10 +63,16 @@ public class SkatSeries extends JSkatThread {
 	 */
 	public void setPlayer(List<IJSkatPlayer> newPlayer) {
 
-		for (IJSkatPlayer currPlayer : newPlayer) {
-
-			this.player.add(currPlayer);
+		if (newPlayer.size() != 3) {
+			throw new IllegalArgumentException(
+					"Only three players are allowed at the moment."); //$NON-NLS-1$
 		}
+
+		// set players in random order
+		Collections.shuffle(newPlayer);
+		player.put(Player.FORE_HAND, newPlayer.get(0));
+		player.put(Player.MIDDLE_HAND, newPlayer.get(1));
+		player.put(Player.HIND_HAND, newPlayer.get(2));
 
 		log.debug("Player order: " + this.player); //$NON-NLS-1$
 	}
@@ -112,23 +115,21 @@ public class SkatSeries extends JSkatThread {
 
 				if (j > 0 || roundsPlayed > 0) {
 					// change player positions after first game
-					IJSkatPlayer helper = this.player.get(2);
-					this.player.set(2, this.player.get(0));
-					this.player.set(0, this.player.get(1));
-					this.player.set(1, helper);
-					// change view positions too
-					Player helper2 = this.viewPositions.get(2);
-					this.viewPositions.set(2, this.viewPositions.get(1));
-					this.viewPositions.set(1, this.viewPositions.get(0));
-					this.viewPositions.set(0, helper2);
+					IJSkatPlayer helper = this.player.get(Player.HIND_HAND);
+					this.player.put(Player.HIND_HAND,
+							this.player.get(Player.FORE_HAND));
+					this.player.put(Player.FORE_HAND,
+							this.player.get(Player.MIDDLE_HAND));
+					this.player.put(Player.MIDDLE_HAND, helper);
 				}
 
 				this.currSkatGame = new SkatGame(this.data.getTableName(),
-						this.player.get(0), this.player.get(1), this.player
-								.get(2));
-				this.view.setPositions(this.data.getTableName(),
-						this.viewPositions.get(0), this.viewPositions.get(1),
-						this.viewPositions.get(2));
+						this.player.get(Player.FORE_HAND),
+						this.player.get(Player.MIDDLE_HAND),
+						this.player.get(Player.HIND_HAND));
+
+				setViewPositions();
+
 				this.currSkatGame.setView(this.view);
 
 				log.debug("Playing game " + (j + 1)); //$NON-NLS-1$
@@ -165,11 +166,25 @@ public class SkatSeries extends JSkatThread {
 		log.debug(this.data.getState());
 	}
 
+	private void setViewPositions() {
+
+		if (player.get(Player.FORE_HAND) instanceof HumanPlayer) {
+			view.setPositions(data.getTableName(), Player.MIDDLE_HAND,
+					Player.HIND_HAND, Player.FORE_HAND);
+		} else if (player.get(Player.MIDDLE_HAND) instanceof HumanPlayer) {
+			view.setPositions(data.getTableName(), Player.HIND_HAND,
+					Player.FORE_HAND, Player.MIDDLE_HAND);
+		} else if (player.get(Player.HIND_HAND) instanceof HumanPlayer) {
+			view.setPositions(data.getTableName(), Player.FORE_HAND,
+					Player.MIDDLE_HAND, Player.HIND_HAND);
+		}
+	}
+
 	private boolean isHumanPlayerInvolved() {
 
 		boolean result = false;
 
-		for (IJSkatPlayer currPlayer : this.player) {
+		for (IJSkatPlayer currPlayer : player.values()) {
 
 			if (currPlayer instanceof HumanPlayer) {
 

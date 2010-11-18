@@ -26,7 +26,7 @@ import de.jskat.util.Player;
 public class ISSMoveInformation {
 
 	private MovePlayer movePlayer;
-	private Player playerPosition;
+	// private Player playerPosition;
 	private Map<Player, Double> playerTimes = new HashMap<Player, Double>();
 	private MoveType type;
 	private int bidValue;
@@ -103,10 +103,15 @@ public class ISSMoveInformation {
 		return this.movePlayer;
 	}
 
+	/**
+	 * Gets the {@link Player} from a move player
+	 * 
+	 * @return Player, NULL if the move was done by WORLD (ISS)
+	 */
 	public Player getPlayer() {
 		return getPlayer(movePlayer);
 	}
-	
+
 	/**
 	 * Sets the player who made the last move
 	 * 
