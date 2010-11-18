@@ -169,6 +169,8 @@ public class MessageHandler {
 		log.debug("table update message"); //$NON-NLS-1$
 
 		String tableName = params.get(0);
+		// FIXME (jan 18.11.2010) is this the name of the creator or the
+		// login name of the current player?
 		String creator = params.get(1);
 		String actionCommand = params.get(2);
 		List<String> detailParams = params.subList(3, params.size());

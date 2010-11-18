@@ -332,10 +332,10 @@ public class ISSMoveInformation {
 		case FORE_HAND:
 			result = Player.FORE_HAND;
 			break;
-		case HIND_HAND:
+		case MIDDLE_HAND:
 			result = Player.MIDDLE_HAND;
 			break;
-		case MIDDLE_HAND:
+		case HIND_HAND:
 			result = Player.HIND_HAND;
 			break;
 		case WORLD:

@@ -433,10 +433,6 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		if (ContextPanelTypes.DISCARDING.equals(panelType)) {
 
-			this.biddingPanel.resetPanel();
-
-		} else if (ContextPanelTypes.DISCARDING.equals(panelType)) {
-
 			this.discardPanel.resetPanel();
 
 		} else if (panelType == ContextPanelTypes.DECLARING) {
@@ -506,6 +502,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	}
 
 	public void setBid(Player player, int bidValue, boolean madeBid) {
+
+		log.debug(player + " " + (madeBid ? "bids" : "holds") + ": " + bidValue); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
 		this.biddingPanel.setBid(player, bidValue);
 		getPlayerPanel(player).setBidValue(bidValue);
@@ -585,6 +583,16 @@ public class SkatTablePanel extends AbstractTabPanel {
 		this.skatListTableModel.setPlayerCount(maxPlayers);
 	}
 
+	/**
+	 * Sets player information
+	 * 
+	 * @param player
+	 *            Player position
+	 * @param name
+	 *            Player name
+	 * @param time
+	 *            Player time
+	 */
 	public void setPlayerInformation(Player player, String name, double time) {
 
 		HandPanel panel = null;
@@ -662,6 +670,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	}
 
 	public void setPass(Player player) {
+
+		log.debug(player + " passes"); //$NON-NLS-1$
 
 		playerPassed.put(player, Boolean.TRUE);
 
