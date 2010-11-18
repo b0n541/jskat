@@ -44,7 +44,6 @@ public class SkatGame extends JSkatThread {
 	private int maxSleep = 100;
 	private SkatGameData data;
 	private CardDeck deck;
-	private Player trickForeHand;
 	private Map<Player, IJSkatPlayer> player;
 	private String tableName;
 	private IJSkatView view;
@@ -494,42 +493,49 @@ public class SkatGame extends JSkatThread {
 			log.debug("Play trick " + (i + 1)); //$NON-NLS-1$
 			doSleep(this.maxSleep);
 
+			Player newTrickForeHand = null;
 			if (i == 0) {
 				// first trick
-				this.trickForeHand = Player.FORE_HAND;
+				newTrickForeHand = Player.FORE_HAND;
 			} else {
 				// all the other tricks
-				// set last trick cards
 				Trick lastTrick = this.data.getTricks().get(
 						this.data.getTricks().size() - 1);
-				this.view.setLastTrick(this.tableName, this.trickForeHand,
+
+				// set new trick fore hand
+				newTrickForeHand = lastTrick.getTrickWinner();
+
+				// remove all cards from current trick
+				view.clearTrickCards(this.tableName);
+
+				// set last trick cards
+				view.setLastTrick(this.tableName, lastTrick.getForeHand(),
 						lastTrick.getCard(Player.FORE_HAND),
 						lastTrick.getCard(Player.MIDDLE_HAND),
 						lastTrick.getCard(Player.HIND_HAND));
-				this.view.clearTrickCards(this.tableName);
-				// renew trickForeHand
-				this.trickForeHand = this.data.getTrickWinner(this.data
-						.getTricks().size() - 1);
 			}
 
-			this.view.setTrickForeHand(this.tableName, this.trickForeHand);
-			view.setActivePlayer(tableName, trickForeHand);
+			this.view.setTrickForeHand(this.tableName, newTrickForeHand);
+			view.setActivePlayer(tableName, newTrickForeHand);
 
-			Trick trick = new Trick(this.trickForeHand);
+			Trick trick = new Trick(newTrickForeHand);
+			data.addTrick(trick);
 
 			// Ask players for their cards
 			log.debug("fore hand plays"); //$NON-NLS-1$
-			playCard(trick, this.trickForeHand);
+			playCard(trick, newTrickForeHand, Player.FORE_HAND);
 			doSleep(this.maxSleep);
 
 			log.debug("middle hand plays"); //$NON-NLS-1$
-			view.setActivePlayer(tableName, trickForeHand.getLeftNeighbor());
-			playCard(trick, this.trickForeHand.getLeftNeighbor());
+			view.setActivePlayer(tableName, newTrickForeHand.getLeftNeighbor());
+			playCard(trick, newTrickForeHand.getLeftNeighbor(),
+					Player.MIDDLE_HAND);
 			doSleep(this.maxSleep);
 
 			log.debug("hind hand plays"); //$NON-NLS-1$
-			view.setActivePlayer(tableName, trickForeHand.getRightNeighbor());
-			playCard(trick, this.trickForeHand.getRightNeighbor());
+			view.setActivePlayer(tableName, newTrickForeHand.getRightNeighbor());
+			playCard(trick, newTrickForeHand.getRightNeighbor(),
+					Player.HIND_HAND);
 
 			doSleep(this.maxSleep);
 
@@ -595,7 +601,7 @@ public class SkatGame extends JSkatThread {
 		}
 	}
 
-	private void playCard(Trick trick, Player currPlayer) {
+	private void playCard(Trick trick, Player currPlayer, Player trickPosition) {
 
 		Card card = null;
 		IJSkatPlayer skatPlayer = getPlayerObject(currPlayer);
@@ -619,6 +625,11 @@ public class SkatGame extends JSkatThread {
 					trick.getFirstCard(), this.data.getPlayerCards(currPlayer),
 					card)) {
 
+				log.debug("card not allowed: " + card + " game type: "
+						+ data.getGameType() + " first trick card: "
+						+ trick.getFirstCard() + " player cards: "
+						+ this.data.getPlayerCards(currPlayer));
+
 				this.view.showMessage(JOptionPane.INFORMATION_MESSAGE,
 						"Card " + card + " is not allowed!"); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -634,9 +645,9 @@ public class SkatGame extends JSkatThread {
 		}
 
 		// card was on players hand and is valid
-		trick.addCard(card);
-		this.data.getPlayerCards(currPlayer).remove(card);
-		this.view.playTrickCard(this.tableName, currPlayer, card);
+		data.getPlayerCards(currPlayer).remove(card);
+		data.setTrickCard(trickPosition, card);
+		view.playTrickCard(this.tableName, currPlayer, card);
 
 		for (Player currPosition : Player.values()) {
 			// inform all players
@@ -692,24 +703,25 @@ public class SkatGame extends JSkatThread {
 		Card first = trick.getFirstCard();
 		Card second = trick.getSecondCard();
 		Card third = trick.getThirdCard();
+		Player trickForeHand = trick.getForeHand();
 
 		if (this.rules.isCardBeatsCard(gameType, first, second)) {
 
 			if (this.rules.isCardBeatsCard(gameType, second, third)) {
 				// trick winner is hind hand
-				trickWinner = this.trickForeHand.getRightNeighbor();
+				trickWinner = trickForeHand.getRightNeighbor();
 			} else {
 				// trick winner is middle hand
-				trickWinner = this.trickForeHand.getLeftNeighbor();
+				trickWinner = trickForeHand.getLeftNeighbor();
 			}
 		} else {
 
 			if (this.rules.isCardBeatsCard(gameType, first, third)) {
 				// trick winner is hind hand
-				trickWinner = this.trickForeHand.getRightNeighbor();
+				trickWinner = trickForeHand.getRightNeighbor();
 			} else {
 				// trick winner is fore hand
-				trickWinner = this.trickForeHand;
+				trickWinner = trickForeHand;
 			}
 		}
 
@@ -722,7 +734,7 @@ public class SkatGame extends JSkatThread {
 			}
 		}
 
-		log.debug("Trick fore hand: " + this.trickForeHand); //$NON-NLS-1$
+		log.debug("Trick fore hand: " + trickForeHand); //$NON-NLS-1$
 		log.debug("Trick winner: " + trickWinner); //$NON-NLS-1$
 
 		return trickWinner;

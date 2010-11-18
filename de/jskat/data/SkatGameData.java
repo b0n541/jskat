@@ -744,41 +744,50 @@ public class SkatGameData {
 	/**
 	 * Adds a trick
 	 * 
-	 * @param foreHand
-	 *            The player ID of the forehand in the trick
+	 * @param newTrick
+	 *            New trick
 	 */
-	public void addTrick(Player foreHand) {
+	public void addTrick(Trick newTrick) {
 
-		this.tricks.add(new Trick(foreHand));
+		this.tricks.add(newTrick);
 	}
 
 	/**
 	 * Sets a trick card
 	 * 
-	 * @param trickNumber
-	 *            The number of the trick in a game
-	 * @param player
+	 * @param trickPosition
 	 *            The player of the card in the trick
 	 * @param card
 	 *            The ID of the card that was played
 	 */
-	public void setTrickCard(int trickNumber, Player player, Card card) {
+	public void setTrickCard(Player trickPosition, Card card) {
 
-		log.debug(this + ".setTrickCard(" + trickNumber + ", " + player + ", " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		log.debug(this + ".setTrickCard(" + trickPosition + ", " //$NON-NLS-1$ //$NON-NLS-2$
 				+ card + ")"); //$NON-NLS-1$
 
-		switch (player) {
+		Trick currentTrick = getCurrentTrick();
 
+		switch (trickPosition) {
 		case FORE_HAND:
-			this.tricks.get(trickNumber).setFirstCard(card);
+			currentTrick.setFirstCard(card);
 			break;
 		case MIDDLE_HAND:
-			this.tricks.get(trickNumber).setSecondCard(card);
+			currentTrick.setSecondCard(card);
 			break;
 		case HIND_HAND:
-			this.tricks.get(trickNumber).setThirdCard(card);
+			currentTrick.setThirdCard(card);
 			break;
 		}
+	}
+
+	/**
+	 * Gets the current trick
+	 * 
+	 * @return Current trick
+	 */
+	public Trick getCurrentTrick() {
+
+		return tricks.get(tricks.size() - 1);
 	}
 
 	/**
@@ -806,7 +815,6 @@ public class SkatGameData {
 	public Player getTrickWinner(int trickNumber) {
 
 		return this.tricks.get(trickNumber).getTrickWinner();
-
 	}
 
 	/**
@@ -978,6 +986,16 @@ public class SkatGameData {
 	public int getPlayerPoints(Player player) {
 
 		return this.playerPoints.get(player).intValue();
+	}
+
+	/**
+	 * Gets the fore hand player for the current trick
+	 * 
+	 * @return Fore hand player for the current trick
+	 */
+	public Player getTrickForeHand() {
+
+		return getCurrentTrick().getForeHand();
 	}
 
 	/**

@@ -404,7 +404,7 @@ public class ISSController {
 			ISSMoveInformation moveInformation) {
 
 		Player movePlayer = moveInformation.getPlayer();
-		
+
 		switch (moveInformation.getType()) {
 		case DEAL:
 			currGame.setGameState(GameState.DEALING);
@@ -433,6 +433,7 @@ public class ISSController {
 			break;
 		case CARD_PLAY:
 			currGame.setGameState(GameState.TRICK_PLAYING);
+			// currGame.setTrickCard(movePlayer, moveInformation.getCard());
 			break;
 		case TIME_OUT:
 			currGame.setGameState(GameState.PRELIMINARY_GAME_END);
