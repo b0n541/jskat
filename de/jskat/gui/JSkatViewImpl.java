@@ -58,6 +58,7 @@ import de.jskat.gui.action.human.DiscardAction;
 import de.jskat.gui.action.human.GameAnnounceAction;
 import de.jskat.gui.action.human.HoldBidAction;
 import de.jskat.gui.action.human.LookIntoSkatAction;
+import de.jskat.gui.action.human.MakeBidAction;
 import de.jskat.gui.action.human.PassBidAction;
 import de.jskat.gui.action.human.PlayCardAction;
 import de.jskat.gui.action.human.PlayHandGameAction;
@@ -217,6 +218,8 @@ public class JSkatViewImpl implements IJSkatView {
 						new SaveNeuralNetworksAction(jskat, this.bitmaps,
 								this.strings));
 		// Human player actions
+		this.actions.put(JSkatAction.MAKE_BID, new MakeBidAction(jskat,
+				this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.HOLD_BID, new HoldBidAction(jskat,
 				this.bitmaps, this.strings));
 		this.actions.put(JSkatAction.PASS_BID, new PassBidAction(jskat,
@@ -636,12 +639,21 @@ public class JSkatViewImpl implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#setNextBidValue(String, int)
+	 * @see IJSkatView#setBidValueToMake(String, int)
 	 */
 	@Override
-	public void setNextBidValue(String tableName, int nextBidValue) {
+	public void setBidValueToMake(String tableName, int bidValue) {
 
-		tables.get(tableName).setNextBidValue(nextBidValue);
+		tables.get(tableName).setBidValueToMake(bidValue);
+	}
+
+	/**
+	 * @see IJSkatView#setBidValueToHold(String, int)
+	 */
+	@Override
+	public void setBidValueToHold(String tableName, int bidValue) {
+
+		tables.get(tableName).setBidValueToHold(bidValue);
 	}
 
 	/**
@@ -875,19 +887,23 @@ public class JSkatViewImpl implements IJSkatView {
 			this.setGameState(tableName, GameState.BIDDING);
 			this.setBid(tableName, movePlayer, moveInformation.getBidValue(),
 					true);
+			setBidValueToHold(tableName, moveInformation.getBidValue());
 			break;
 		case HOLD_BID:
 			this.setGameState(tableName, GameState.BIDDING);
 			this.setBid(tableName, movePlayer, moveInformation.getBidValue(),
 					false);
-			setNextBidValue(
+			setBidValueToMake(
 					tableName,
 					SkatConstants.getNextBidValue(moveInformation.getBidValue()));
 			break;
 		case PASS:
 			this.setGameState(tableName, GameState.BIDDING);
 			this.setPass(tableName, movePlayer);
-			setNextBidValue(tableName, moveInformation.getBidValue());
+			// FIXME (jan 19.11.2010) current bid value unknown at this point?
+			setBidValueToMake(
+					tableName,
+					SkatConstants.getNextBidValue(moveInformation.getBidValue()));
 			break;
 		case SKAT_REQUEST:
 		case SKAT_LOOKING:

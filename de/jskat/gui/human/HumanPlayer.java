@@ -189,6 +189,9 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 		if (JSkatAction.PASS_BID.toString().equals(command)) {
 			// player passed
 			this.holdBid = false;
+		} else if (JSkatAction.MAKE_BID.toString().equals(command)) {
+			// player hold bid
+			this.holdBid = true;
 		} else if (JSkatAction.HOLD_BID.toString().equals(command)) {
 			// player hold bid
 			this.holdBid = true;
@@ -227,8 +230,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 
 		} else {
 
-			log
-					.error("Unknown action event occured: " + command + " from " + source); //$NON-NLS-1$ //$NON-NLS-2$
+			log.error("Unknown action event occured: " + command + " from " + source); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		if (interrupt) {

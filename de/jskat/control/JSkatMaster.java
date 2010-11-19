@@ -434,24 +434,28 @@ public class JSkatMaster {
 		log.debug(event);
 
 		String tableName = data.getActiveTable();
-		SkatTable table = data.getSkatTable(tableName);
 		String command = event.getActionCommand();
 		Object source = event.getSource();
 
 		if (isIssTable(tableName)) {
+
 			handleHumanInputForISSTable(tableName, command, source);
 
 		} else {
-			this.data.getHumanPlayer(this.data.getActiveTable())
-					.actionPerformed(event);
+
+			this.data.getHumanPlayer(tableName).actionPerformed(event);
 		}
 	}
 
 	private void handleHumanInputForISSTable(String tableName, String command,
 			Object source) {
+
 		if (JSkatAction.PASS_BID.toString().equals(command)) {
 			// player passed
 			this.issControl.sendPassBidMove(tableName);
+		} else if (JSkatAction.MAKE_BID.toString().equals(command)) {
+			// player makes bid
+			this.issControl.sendBidMove(tableName);
 		} else if (JSkatAction.HOLD_BID.toString().equals(command)) {
 			// player hold bid
 			this.issControl.sendHoldBidMove(tableName);

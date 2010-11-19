@@ -249,15 +249,6 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#setNextBidValue(String, int)
-	 */
-	@Override
-	public void setNextBidValue(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") int nextBidValue) {
-		// empty method by indent
-	}
-
-	/**
 	 * @see IJSkatView#showMessage(int, String)
 	 */
 	@Override
@@ -494,6 +485,24 @@ public class NullView implements IJSkatView {
 	@Override
 	public void setSeriesState(@SuppressWarnings("unused") String tableName,
 			@SuppressWarnings("unused") SeriesState state) {
+		// empty method by indent
+	}
+
+	/**
+	 * @see IJSkatView#setBidValueToMake(String, int)
+	 */
+	@Override
+	public void setBidValueToMake(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") int bidValue) {
+		// empty method by indent
+	}
+
+	/**
+	 * @see IJSkatView#setBidValueToHold(String, int)
+	 */
+	@Override
+	public void setBidValueToHold(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") int bidValue) {
 		// empty method by indent
 	}
 }

@@ -18,8 +18,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.ai.IJSkatPlayer;
-import de.jskat.data.SkatTableOptions;
 import de.jskat.data.SkatSeriesData.SeriesState;
+import de.jskat.data.SkatTableOptions;
 import de.jskat.gui.IJSkatView;
 
 /**
@@ -47,8 +47,7 @@ public class SkatTable {
 		this.options = tableOptions;
 		startSkatSeries(this.options.getMaxPlayerCount());
 
-		log
-				.debug("SkatTable created with max. " + this.options.getMaxPlayerCount() + " players."); //$NON-NLS-1$ //$NON-NLS-2$
+		log.debug("SkatTable created with max. " + this.options.getMaxPlayerCount() + " players."); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

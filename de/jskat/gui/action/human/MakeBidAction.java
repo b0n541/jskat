@@ -25,21 +25,21 @@ import de.jskat.gui.img.JSkatGraphicRepository;
 /**
  * Implements the action for handling click on bid button
  */
-public class HoldBidAction extends AbstractJSkatAction {
+public class MakeBidAction extends AbstractJSkatAction {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
-	public HoldBidAction(JSkatMaster controller,
-			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
+	public MakeBidAction(JSkatMaster controller, JSkatGraphicRepository bitmaps,
+			ResourceBundle strings) {
 
 		super(controller, bitmaps);
 
-		putValue(Action.NAME, "hold bid"); //$NON-NLS-1$
-		putValue(Action.SHORT_DESCRIPTION, "Hold this bid");
-		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.HOLD_BID.toString());
+		putValue(Action.NAME, "make bid"); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, "Make bid");
+		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.MAKE_BID.toString());
 	}
 
 	/**

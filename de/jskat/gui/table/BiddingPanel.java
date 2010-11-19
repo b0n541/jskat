@@ -11,6 +11,7 @@ Released: @ReleaseDate@
 
 package de.jskat.gui.table;
 
+import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -36,6 +37,9 @@ class BiddingPanel extends JPanel {
 	private JButton bidButton;
 	private JButton passButton;
 
+	Action makeBidAction;
+	Action holdBidAction;
+
 	/**
 	 * Bidding panel
 	 * 
@@ -58,7 +62,9 @@ class BiddingPanel extends JPanel {
 		biddingPanel.add(this.leftOpponentBid, "left"); //$NON-NLS-1$
 		biddingPanel.add(this.rightOpponentBid, "right, wrap"); //$NON-NLS-1$
 		biddingPanel.add(this.userBid, "span 2, center, wrap"); //$NON-NLS-1$
-		this.bidButton = new JButton(newActions.get(JSkatAction.HOLD_BID));
+		makeBidAction = newActions.get(JSkatAction.MAKE_BID);
+		holdBidAction = newActions.get(JSkatAction.HOLD_BID);
+		this.bidButton = new JButton(makeBidAction);
 		this.passButton = new JButton(newActions.get(JSkatAction.PASS_BID));
 		biddingPanel.add(this.bidButton, "left"); //$NON-NLS-1$
 		biddingPanel.add(this.passButton, "right"); //$NON-NLS-1$
@@ -103,9 +109,16 @@ class BiddingPanel extends JPanel {
 		}
 	}
 
-	void setNextBidValue(int nextBidValue) {
+	void setBidValueToMake(int bidValue) {
 
-		bidButton.setText(String.valueOf(nextBidValue));
+		bidButton.setAction(makeBidAction);
+		bidButton.setText(String.valueOf(bidValue));
+	}
+
+	void setBidValueToHold(int bidValue) {
+
+		bidButton.setAction(holdBidAction);
+		bidButton.setText(String.valueOf(bidValue));
 	}
 
 	void resetPanel() {

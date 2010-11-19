@@ -35,6 +35,7 @@ import de.jskat.gui.IJSkatView;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.util.Card;
 import de.jskat.util.Player;
+import de.jskat.util.SkatConstants;
 import de.jskat.util.rule.SkatRuleFactory;
 
 /**
@@ -403,7 +404,14 @@ public class ISSController {
 		updateGameData(currGame, moveInformation);
 
 		// TODO (jan 19.11.2010) extract this into separate method
-		if (MoveType.CARD_PLAY.equals(moveInformation.getType())) {
+		if (MoveType.PASS.equals(moveInformation.getType())) {
+
+			if (currGame.getNumberOfPasses() == 2) {
+				// check whether one player has to do an initial bid or we have
+				// to move forward to discarding
+			}
+
+		} else if (MoveType.CARD_PLAY.equals(moveInformation.getType())) {
 
 			// handle trick playing
 			Trick trick = currGame.getCurrentTrick();
@@ -454,6 +462,7 @@ public class ISSController {
 			break;
 		case PASS:
 			currGame.setGameState(GameState.BIDDING);
+			currGame.setPlayerPass(movePlayer, true);
 			break;
 		case SKAT_REQUEST:
 			currGame.setGameState(GameState.DISCARDING);
@@ -553,6 +562,20 @@ public class ISSController {
 	 */
 	public void sendHoldBidMove(String tableName) {
 		this.issConnect.sendHoldBidMove(tableName);
+	}
+
+	/**
+	 * Send bid move to ISS
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param bidValue
+	 *            Bid value
+	 */
+	public void sendBidMove(String tableName) {
+
+		this.issConnect.sendBidMove(tableName, SkatConstants
+				.getNextBidValue(gameData.get(tableName).getBidValue()));
 	}
 
 	/**

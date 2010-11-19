@@ -355,14 +355,24 @@ public interface IJSkatView {
 	public void clearTable(String tableName);
 
 	/**
-	 * Sets the next bid value
+	 * Sets the bid value to make
 	 * 
 	 * @param tableName
 	 *            Table name
-	 * @param nextBidValue
-	 *            Next bid value
+	 * @param bidValue
+	 *            Bid value
 	 */
-	public void setNextBidValue(String tableName, int nextBidValue);
+	public void setBidValueToMake(String tableName, int bidValue);
+
+	/**
+	 * Sets the bid value to hold
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param bidValue
+	 *            Bid value
+	 */
+	public void setBidValueToHold(String tableName, int bidValue);
 
 	/**
 	 * Sets the new trick fore hand

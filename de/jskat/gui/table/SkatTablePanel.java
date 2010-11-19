@@ -494,7 +494,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		this.rightOpponentPanel.setSortGameType(GameType.GRAND);
 		this.userPanel.setSortGameType(GameType.GRAND);
 
-		playerPassed.clear();
+		resetGameData();
 	}
 
 	public void setTrickForeHand(Player trickForeHand) {
@@ -692,7 +692,6 @@ public class SkatTablePanel extends AbstractTabPanel {
 			}
 			break;
 		}
-
 	}
 
 	/**
@@ -710,13 +709,24 @@ public class SkatTablePanel extends AbstractTabPanel {
 	}
 
 	/**
-	 * Sets the next bid value
+	 * Sets the bid value to make
 	 * 
-	 * @param nextBidValue
-	 *            Next bid value
+	 * @param bidValue
+	 *            Bid value
 	 */
-	public void setNextBidValue(int nextBidValue) {
+	public void setBidValueToMake(int bidValue) {
 
-		biddingPanel.setNextBidValue(nextBidValue);
+		biddingPanel.setBidValueToMake(bidValue);
+	}
+
+	/**
+	 * Sets the bid value to hold
+	 * 
+	 * @param bidValue
+	 *            Bid value
+	 */
+	public void setBidValueToHold(int bidValue) {
+
+		biddingPanel.setBidValueToHold(bidValue);
 	}
 }

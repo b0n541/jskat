@@ -317,7 +317,7 @@ public class SkatGame extends JSkatThread {
 
 			// get bid value
 			int nextBidValue = SkatConstants.getNextBidValue(currBidValue);
-			this.view.setNextBidValue(this.tableName, nextBidValue);
+			this.view.setBidValueToMake(this.tableName, nextBidValue);
 			// ask player
 			int announcerBidValue = player.get(announcer).bidMore(nextBidValue);
 
@@ -351,6 +351,7 @@ public class SkatGame extends JSkatThread {
 
 					// hearing hand passed
 					hearerPassed = true;
+					data.setPlayerPass(hearer, true);
 					view.setPass(tableName, hearer);
 				}
 			} else {
@@ -359,6 +360,7 @@ public class SkatGame extends JSkatThread {
 
 				// announcing hand passes
 				announcerPassed = true;
+				data.setPlayerPass(announcer, true);
 				view.setPass(tableName, announcer);
 			}
 		}
@@ -370,18 +372,10 @@ public class SkatGame extends JSkatThread {
 
 		Player biddingWinner = null;
 
-		if (this.data.getPlayerBid(announcer) == this.data.getBidValue()) {
-
-			if (this.data.getPlayerBid(hearer) == this.data.getBidValue()) {
-
-				biddingWinner = hearer;
-			} else {
-
-				biddingWinner = announcer;
-			}
-		} else if (this.data.getPlayerBid(hearer) == this.data.getBidValue()) {
-
+		if (data.isPlayerPass(announcer)) {
 			biddingWinner = hearer;
+		} else if (data.isPlayerPass(hearer)) {
+			biddingWinner = announcer;
 		}
 
 		return biddingWinner;
