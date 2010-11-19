@@ -404,11 +404,11 @@ public class ISSController {
 		updateGameData(currGame, moveInformation);
 
 		// TODO (jan 19.11.2010) extract this into separate method
-		if (MoveType.PASS.equals(moveInformation.getType())) {
+		if (MoveType.BID.equals(moveInformation.getType())
+				|| MoveType.PASS.equals(moveInformation.getType())) {
 
-			if (currGame.getNumberOfPasses() == 2) {
-				// check whether one player has to do an initial bid or we have
-				// to move forward to discarding
+			if (isBiddingFinished(currGame)) {
+				view.setGameState(tableName, GameState.LOOK_INTO_SKAT);
 			}
 
 		} else if (MoveType.CARD_PLAY.equals(moveInformation.getType())) {
@@ -440,6 +440,23 @@ public class ISSController {
 						.getLeftNeighbor());
 			}
 		}
+	}
+
+	private boolean isBiddingFinished(SkatGameData currGame) {
+
+		boolean result = false;
+
+		if (currGame.getNumberOfPasses() == 2) {
+			for (Player currPlayer : Player.values()) {
+				if (!currGame.isPlayerPass(currPlayer)) {
+					if (currGame.getPlayerBid(currPlayer) > 0) {
+						result = true;
+					}
+				}
+			}
+		}
+
+		return result;
 	}
 
 	private void updateGameData(SkatGameData currGame,
