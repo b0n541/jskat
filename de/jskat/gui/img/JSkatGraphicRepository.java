@@ -312,11 +312,15 @@ public class JSkatGraphicRepository {
 		/**
 		 * Close icon for windows and tabs
 		 */
-		WINDOW_CLOSE,
+		CLOSE,
 		/**
 		 * JSkat logo
 		 */
-		JSKAT;
+		JSKAT,
+		/**
+		 * Train Neural Networks
+		 */
+		TRAIN_NN;
 	}
 
 	/**

@@ -40,7 +40,7 @@ public class TrainNeuralNetworksAction extends AbstractJSkatAction {
 		putValue(Action.SHORT_DESCRIPTION,
 				strings.getString("train_nn_tooltip"));
 
-		setIcons(JSkatGraphicRepository.Icon.BLANK);
+		setIcons(JSkatGraphicRepository.Icon.TRAIN_NN);
 	}
 
 	/**

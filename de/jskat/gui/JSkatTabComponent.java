@@ -126,7 +126,7 @@ public class JSkatTabComponent extends JPanel {
 			if (getModel().isPressed()) {
 				g2.translate(1, 1);
 			}
-			g2.drawImage(this.bitmaps.getIconImage(Icon.WINDOW_CLOSE,
+			g2.drawImage(this.bitmaps.getIconImage(Icon.CLOSE,
 					IconSize.SMALL), null, null);
 			g2.dispose();
 		}
