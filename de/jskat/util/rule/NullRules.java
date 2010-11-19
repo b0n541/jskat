@@ -22,7 +22,7 @@ import de.jskat.util.Suit;
  * Implementation of skat rules for Null games
  * 
  */
-public class NullRules implements BasicSkatRules {
+public class NullRules extends AbstractSkatRules {
 
 	/**
 	 * @see BasicSkatRules#calcGameResult(SkatGameData)

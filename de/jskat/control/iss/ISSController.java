@@ -35,6 +35,7 @@ import de.jskat.gui.IJSkatView;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.util.Card;
 import de.jskat.util.Player;
+import de.jskat.util.rule.SkatRuleFactory;
 
 /**
  * Controls all ISS related actions
@@ -407,12 +408,19 @@ public class ISSController {
 			Trick trick = currGame.getCurrentTrick();
 
 			if (trick.getThirdCard() != null) {
+
 				// trick completed
+				view.clearTrickCards(tableName);
 				view.setLastTrick(tableName, trick.getForeHand(),
 						trick.getFirstCard(), trick.getSecondCard(),
 						trick.getThirdCard());
-				trick.setTrickWinner(Player.FORE_HAND);
+
+				Player trickWinner = SkatRuleFactory.getSkatRules(
+						currGame.getGameType()).calculateTrickWinner(
+						currGame.getGameType(), trick);
+				trick.setTrickWinner(trickWinner);
 				currGame.addTrick(new Trick(trick.getTrickWinner()));
+
 				view.setActivePlayer(tableName, currGame.getCurrentTrick()
 						.getForeHand());
 			} else if (trick.getSecondCard() != null) {
@@ -455,7 +463,7 @@ public class ISSController {
 		case GAME_ANNOUNCEMENT:
 			currGame.setGameState(GameState.DECLARING);
 			currGame.setAnnouncement(moveInformation.getGameAnnouncement());
-			currGame.addTrick(new Trick(movePlayer));
+			currGame.addTrick(new Trick(Player.FORE_HAND));
 			break;
 		case CARD_PLAY:
 			currGame.setGameState(GameState.TRICK_PLAYING);

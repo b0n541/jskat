@@ -538,7 +538,8 @@ public class SkatGame extends JSkatThread {
 			doSleep(this.maxSleep);
 
 			log.debug("Calculate trick winner"); //$NON-NLS-1$
-			Player trickWinner = calculateTrickWinner(trick);
+			Player trickWinner = rules.calculateTrickWinner(data.getGameType(),
+					trick);
 			trick.setTrickWinner(trickWinner);
 			this.data.getTricks().add(trick);
 			this.data.addPlayerPoints(trickWinner, trick.getCardValueSum());
@@ -552,6 +553,15 @@ public class SkatGame extends JSkatThread {
 				} catch (CloneNotSupportedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				}
+			}
+
+			// Check for preliminary ending of a null game
+			if (GameType.NULL.equals(data.getGameType())) {
+
+				if (trickWinner == this.data.getDeclarer()) {
+					// declarer has won a trick
+					setGameState(GameState.PRELIMINARY_GAME_END);
 				}
 			}
 
@@ -683,59 +693,6 @@ public class SkatGame extends JSkatThread {
 		}
 
 		return result;
-	}
-
-	/**
-	 * Calculates the trick winner
-	 * 
-	 * @param rules
-	 *            Skat rules
-	 * @param trick
-	 *            Trick
-	 * @return ID of the trick winner
-	 */
-	private Player calculateTrickWinner(Trick trick) {
-
-		Player trickWinner = null;
-		GameType gameType = this.data.getGameType();
-		Card first = trick.getFirstCard();
-		Card second = trick.getSecondCard();
-		Card third = trick.getThirdCard();
-		Player trickForeHand = trick.getForeHand();
-
-		if (this.rules.isCardBeatsCard(gameType, first, second)) {
-
-			if (this.rules.isCardBeatsCard(gameType, second, third)) {
-				// trick winner is hind hand
-				trickWinner = trickForeHand.getRightNeighbor();
-			} else {
-				// trick winner is middle hand
-				trickWinner = trickForeHand.getLeftNeighbor();
-			}
-		} else {
-
-			if (this.rules.isCardBeatsCard(gameType, first, third)) {
-				// trick winner is hind hand
-				trickWinner = trickForeHand.getRightNeighbor();
-			} else {
-				// trick winner is fore hand
-				trickWinner = trickForeHand;
-			}
-		}
-
-		// Check for preliminary ending of a null game
-		if (gameType == GameType.NULL) {
-
-			if (trickWinner == this.data.getDeclarer()) {
-				// declarer has won a trick
-				setGameState(GameState.PRELIMINARY_GAME_END);
-			}
-		}
-
-		log.debug("Trick fore hand: " + trickForeHand); //$NON-NLS-1$
-		log.debug("Trick winner: " + trickWinner); //$NON-NLS-1$
-
-		return trickWinner;
 	}
 
 	private boolean isFinished() {

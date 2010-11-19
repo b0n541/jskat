@@ -12,9 +12,11 @@ Released: @ReleaseDate@
 package de.jskat.util.rule;
 
 import de.jskat.data.SkatGameData;
-import de.jskat.util.CardList;
+import de.jskat.data.Trick;
 import de.jskat.util.Card;
+import de.jskat.util.CardList;
 import de.jskat.util.GameType;
+import de.jskat.util.Player;
 import de.jskat.util.Suit;
 
 /**
@@ -27,7 +29,7 @@ public interface BasicSkatRules {
 	 * the rest of the hand
 	 * 
 	 * @param gameType
-	 * 			  Game type
+	 *            Game type
 	 * @param initialCard
 	 *            First card in the trick
 	 * @param hand
@@ -36,13 +38,14 @@ public interface BasicSkatRules {
 	 *            Card to be checked
 	 * @return TRUE if the card is allowed to be played
 	 */
-	public boolean isCardAllowed(GameType gameType, Card initialCard, CardList hand, Card card);
+	public boolean isCardAllowed(GameType gameType, Card initialCard,
+			CardList hand, Card card);
 
 	/**
 	 * Checks whether a card beats another card
 	 * 
 	 * @param gameType
-	 * 			  Game type
+	 *            Game type
 	 * @param cardToBeat
 	 *            Card to be beaten
 	 * @param card
@@ -73,7 +76,7 @@ public interface BasicSkatRules {
 	 * Checks whether one or more cards of a given suit are on the hand
 	 * 
 	 * @param gameType
-	 * 			  Game type
+	 *            Game type
 	 * @param hand
 	 *            Cards on the players hand
 	 * @param suit
@@ -81,4 +84,15 @@ public interface BasicSkatRules {
 	 * @return TRUE if one or more cards are on the hand
 	 */
 	public boolean hasSuit(GameType gameType, CardList hand, Suit suit);
+
+	/**
+	 * Calculates the trick winner
+	 * 
+	 * @param gameType
+	 *            Game type
+	 * @param trick
+	 *            Trick
+	 * @return Trick winner
+	 */
+	public Player calculateTrickWinner(GameType gameType, Trick trick);
 }
