@@ -236,17 +236,17 @@ public class SkatGame extends JSkatThread {
 	 */
 	private void bidding() {
 
-		int bidOrderIndex = 0;
+		int bidValue = 0;
 
 		this.data.setBidValue(0);
 
 		log.debug("ask middle and fore hand..."); //$NON-NLS-1$
 
-		bidOrderIndex = twoPlayerBidding(Player.MIDDLE_HAND, Player.FORE_HAND,
-				bidOrderIndex);
+		bidValue = twoPlayerBidding(Player.MIDDLE_HAND, Player.FORE_HAND,
+				bidValue);
 
 		log.debug("Bid value after first bidding: " //$NON-NLS-1$
-				+ SkatConstants.bidOrder[bidOrderIndex]);
+				+ bidValue);
 
 		Player firstWinner = getBiddingWinner(Player.MIDDLE_HAND,
 				Player.FORE_HAND);
@@ -254,23 +254,15 @@ public class SkatGame extends JSkatThread {
 		log.debug("First bidding winner: " + firstWinner); //$NON-NLS-1$
 		log.debug("ask hind hand and first winner..."); //$NON-NLS-1$
 
-		if (this.data.getBidValue() > 0 && firstWinner == Player.MIDDLE_HAND) {
-			// Increment bid order index for next bidding phase
-			// if at least a bid was announced and middle hand has won the
-			// bidding
-			bidOrderIndex++;
-		}
-
-		bidOrderIndex = twoPlayerBidding(Player.HIND_HAND, firstWinner,
-				bidOrderIndex);
+		bidValue = twoPlayerBidding(Player.HIND_HAND, firstWinner, bidValue);
 
 		log.debug("Bid value after second bidding: " //$NON-NLS-1$
-				+ SkatConstants.bidOrder[bidOrderIndex]);
+				+ bidValue);
 
 		// get second winner
 		Player secondWinner = getBiddingWinner(Player.HIND_HAND, firstWinner);
 
-		if (secondWinner == Player.FORE_HAND && bidOrderIndex == 0) {
+		if (secondWinner == Player.FORE_HAND && bidValue == 0) {
 
 			log.debug("Check whether fore hand holds at least one bid"); //$NON-NLS-1$
 
@@ -289,7 +281,7 @@ public class SkatGame extends JSkatThread {
 			// there is a winner of the bidding
 			setSinglePlayer(getBiddingWinner(Player.HIND_HAND, firstWinner));
 
-			this.data.setBidValue(SkatConstants.bidOrder[bidOrderIndex]);
+			this.data.setBidValue(bidValue);
 
 			log.debug("Player " + this.data.getDeclarer() //$NON-NLS-1$
 					+ " wins the bidding."); //$NON-NLS-1$
@@ -310,46 +302,42 @@ public class SkatGame extends JSkatThread {
 	 *            Announcing player
 	 * @param hearer
 	 *            Hearing player
-	 * @param startBidOrderIndex
-	 *            Index of first bid value from bid order array
+	 * @param startBidValue
+	 *            Bid value to start from
 	 * @return
 	 */
 	private int twoPlayerBidding(Player announcer, Player hearer,
-			int startBidOrderIndex) {
+			int startBidValue) {
 
-		int bidOrderIndex = startBidOrderIndex;
+		int currBidValue = startBidValue;
 		boolean announcerPassed = false;
 		boolean hearerPassed = false;
 
 		while (!announcerPassed && !hearerPassed) {
 
 			// get bid value
-			int nextBidValue = SkatConstants.bidOrder[bidOrderIndex];
+			int nextBidValue = SkatConstants.getNextBidValue(currBidValue);
 			this.view.setNextBidValue(this.tableName, nextBidValue);
 			// ask player
 			int announcerBidValue = player.get(announcer).bidMore(nextBidValue);
 
-			if (announcerBidValue > -1) {
+			if (announcerBidValue > -1
+					&& SkatConstants.bidOrder.contains(Integer
+							.valueOf(announcerBidValue))) {
 
-				log.debug("announcer holds " + announcerBidValue); //$NON-NLS-1$
+				log.debug("announcer bids " + announcerBidValue); //$NON-NLS-1$
 
 				// announcing hand holds bid
+				currBidValue = announcerBidValue;
+
 				this.data.setBidValue(announcerBidValue);
 				this.data.setPlayerBid(announcer, announcerBidValue);
 				this.view.setBid(this.tableName, announcer, announcerBidValue,
 						true);
 
-				if (nextBidValue < announcerBidValue) {
-					// increment bidOrderIndex accordingly
-					while (SkatConstants.bidOrder[bidOrderIndex] < announcerBidValue) {
+				if (player.get(hearer).holdBid(currBidValue)) {
 
-						bidOrderIndex++;
-					}
-				}
-
-				if (player.get(hearer).holdBid(announcerBidValue)) {
-
-					log.debug("hearer holds " + announcerBidValue); //$NON-NLS-1$
+					log.debug("hearer holds " + currBidValue); //$NON-NLS-1$
 
 					// hearing hand holds bid
 					this.data.setBidValue(announcerBidValue);
@@ -357,13 +345,6 @@ public class SkatGame extends JSkatThread {
 					this.view.setBid(this.tableName, hearer, announcerBidValue,
 							false);
 
-					// raise index to next bid in bid order
-					bidOrderIndex++;
-
-					if (bidOrderIndex == SkatConstants.bidOrder.length) {
-
-						// TODO raise appropriate exception here
-					}
 				} else {
 
 					log.debug("hearer passed at " + announcerBidValue); //$NON-NLS-1$
@@ -382,7 +363,7 @@ public class SkatGame extends JSkatThread {
 			}
 		}
 
-		return bidOrderIndex;
+		return currBidValue;
 	}
 
 	private Player getBiddingWinner(Player announcer, Player hearer) {

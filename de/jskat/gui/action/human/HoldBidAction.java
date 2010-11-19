@@ -23,7 +23,7 @@ import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
 
 /**
- * Implements the action for handling card panel clicks
+ * Implements the action for handling click on bid button
  */
 public class HoldBidAction extends AbstractJSkatAction {
 
@@ -37,7 +37,7 @@ public class HoldBidAction extends AbstractJSkatAction {
 
 		super(controller, bitmaps);
 
-		putValue(Action.NAME, "18");
+		putValue(Action.NAME, "bid"); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION, "Hold this bid");
 		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.HOLD_BID.toString());
 	}

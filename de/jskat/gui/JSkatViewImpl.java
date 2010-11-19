@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -101,6 +100,7 @@ import de.jskat.gui.table.SkatTablePanel;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
 import de.jskat.util.Player;
+import de.jskat.util.SkatConstants;
 
 /**
  * Implementation of JSkatView interface
@@ -641,9 +641,7 @@ public class JSkatViewImpl implements IJSkatView {
 	@Override
 	public void setNextBidValue(String tableName, int nextBidValue) {
 
-		// TODO this should be set for every table separately
-		this.actions.get(JSkatAction.HOLD_BID).putValue(Action.NAME,
-				Integer.toString(nextBidValue));
+		tables.get(tableName).setNextBidValue(nextBidValue);
 	}
 
 	/**
@@ -882,10 +880,14 @@ public class JSkatViewImpl implements IJSkatView {
 			this.setGameState(tableName, GameState.BIDDING);
 			this.setBid(tableName, movePlayer, moveInformation.getBidValue(),
 					false);
+			setNextBidValue(
+					tableName,
+					SkatConstants.getNextBidValue(moveInformation.getBidValue()));
 			break;
 		case PASS:
 			this.setGameState(tableName, GameState.BIDDING);
 			this.setPass(tableName, movePlayer);
+			setNextBidValue(tableName, moveInformation.getBidValue());
 			break;
 		case SKAT_REQUEST:
 		case SKAT_LOOKING:

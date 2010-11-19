@@ -493,6 +493,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 		this.leftOpponentPanel.setSortGameType(GameType.GRAND);
 		this.rightOpponentPanel.setSortGameType(GameType.GRAND);
 		this.userPanel.setSortGameType(GameType.GRAND);
+
+		playerPassed.clear();
 	}
 
 	public void setTrickForeHand(Player trickForeHand) {
@@ -690,13 +692,31 @@ public class SkatTablePanel extends AbstractTabPanel {
 			}
 			break;
 		}
+
 	}
 
+	/**
+	 * Sets the series state
+	 * 
+	 * @param state
+	 *            Series state
+	 */
 	public void setSeriesState(SeriesState state) {
 
 		if (SeriesState.SERIES_FINISHED.equals(state)) {
 
 			setContextPanel(ContextPanelTypes.START_SERIES);
 		}
+	}
+
+	/**
+	 * Sets the next bid value
+	 * 
+	 * @param nextBidValue
+	 *            Next bid value
+	 */
+	public void setNextBidValue(int nextBidValue) {
+
+		biddingPanel.setNextBidValue(nextBidValue);
 	}
 }

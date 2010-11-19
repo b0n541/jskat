@@ -23,7 +23,7 @@ import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
 
 /**
- * Implements the action for handling card panel clicks
+ * Implements the action for handling click on look into skat button
  */
 public class LookIntoSkatAction extends AbstractJSkatAction {
 

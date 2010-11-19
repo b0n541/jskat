@@ -23,21 +23,22 @@ import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
 
 /**
- * Implements the action for handling card panel clicks
+ * Implements the action for handling click on pass bid button
  */
 public class PassBidAction extends AbstractJSkatAction {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
+	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster,
+	 *      JSkatGraphicRepository)
 	 */
 	public PassBidAction(JSkatMaster controller,
 			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
 
 		super(controller, bitmaps);
 
-		putValue(Action.NAME, "Pass");
+		putValue(Action.NAME, strings.getString("pass")); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION, "Pass this bid");
 		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.PASS_BID.toString());
 	}

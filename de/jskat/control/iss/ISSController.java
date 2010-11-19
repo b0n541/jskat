@@ -402,6 +402,7 @@ public class ISSController {
 		SkatGameData currGame = this.gameData.get(tableName);
 		updateGameData(currGame, moveInformation);
 
+		// TODO (jan 19.11.2010) extract this into separate method
 		if (MoveType.CARD_PLAY.equals(moveInformation.getType())) {
 
 			// handle trick playing

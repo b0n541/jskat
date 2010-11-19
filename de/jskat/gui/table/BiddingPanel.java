@@ -103,10 +103,16 @@ class BiddingPanel extends JPanel {
 		}
 	}
 
+	void setNextBidValue(int nextBidValue) {
+
+		bidButton.setText(String.valueOf(nextBidValue));
+	}
+
 	void resetPanel() {
 
-		this.foreHandBidLabel.setText("0");
-		this.middleHandBidLabel.setText("0");
-		this.hindHandBidLabel.setText("0");
+		foreHandBidLabel.setText("0"); //$NON-NLS-1$
+		middleHandBidLabel.setText("0"); //$NON-NLS-1$
+		hindHandBidLabel.setText("0"); //$NON-NLS-1$
+		bidButton.setText("18"); //$NON-NLS-1$
 	}
 }
