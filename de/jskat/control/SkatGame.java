@@ -760,7 +760,7 @@ public class SkatGame extends JSkatThread {
 					this.data.isSchwarzAnnounced());
 		}
 
-		this.view.setGameAnnouncement(this.tableName, ann);
+		this.view.setGameAnnouncement(this.tableName, data.getDeclarer(), ann);
 
 		log.debug(this.data.getAnnoucement());
 	}

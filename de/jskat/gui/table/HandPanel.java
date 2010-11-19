@@ -80,6 +80,8 @@ abstract class HandPanel extends JPanel {
 
 	boolean playerPassed = false;
 
+	boolean declarer = false;
+
 	/**
 	 * Constructor
 	 * 
@@ -189,6 +191,10 @@ abstract class HandPanel extends JPanel {
 			if (playerPassed) {
 				headerText.append(" (passed)");
 			}
+
+			if (declarer) {
+				headerText.append(" (Declarer)");
+			}
 		}
 
 		this.headerLabel.setText(headerText.toString());
@@ -243,6 +249,7 @@ abstract class HandPanel extends JPanel {
 		this.cardPanel.clearCards();
 		bidValue = 0;
 		playerPassed = false;
+		declarer = false;
 		refreshHeaderText();
 		setActivePlayer(false);
 	}
@@ -299,6 +306,11 @@ abstract class HandPanel extends JPanel {
 
 	void setPass() {
 		playerPassed = true;
+		refreshHeaderText();
+	}
+
+	void setDeclarer() {
+		declarer = true;
 		refreshHeaderText();
 	}
 }

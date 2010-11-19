@@ -197,11 +197,12 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#setGameAnnouncement(String, GameAnnouncement)
+	 * @see IJSkatView#setGameAnnouncement(String, Player, GameAnnouncement)
 	 */
 	@Override
 	public void setGameAnnouncement(
 			@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player declarer,
 			@SuppressWarnings("unused") GameAnnouncement ann) {
 		// empty method by indent
 	}

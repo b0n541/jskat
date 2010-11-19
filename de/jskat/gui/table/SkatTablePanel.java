@@ -358,13 +358,15 @@ public class SkatTablePanel extends AbstractTabPanel {
 	/**
 	 * Sets the game announcement
 	 */
-	public void setGameAnnouncement(GameAnnouncement ann) {
+	public void setGameAnnouncement(Player player, GameAnnouncement ann) {
 
 		this.gameInfoPanel.setGameAnnouncement(ann);
 
 		this.leftOpponentPanel.setSortGameType(ann.getGameType());
 		this.rightOpponentPanel.setSortGameType(ann.getGameType());
 		this.userPanel.setSortGameType(ann.getGameType());
+
+		getPlayerPanel(player).setDeclarer();
 	}
 
 	/**

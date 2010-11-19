@@ -565,12 +565,13 @@ public class JSkatViewImpl implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#setGameAnnouncement(String, GameAnnouncement)
+	 * @see IJSkatView#setGameAnnouncement(String, Player, GameAnnouncement)
 	 */
 	@Override
-	public void setGameAnnouncement(String tableName, GameAnnouncement ann) {
+	public void setGameAnnouncement(String tableName, Player declarer,
+			GameAnnouncement ann) {
 
-		tables.get(tableName).setGameAnnouncement(ann);
+		tables.get(tableName).setGameAnnouncement(declarer, ann);
 	}
 
 	/**
@@ -911,7 +912,7 @@ public class JSkatViewImpl implements IJSkatView {
 			break;
 		case GAME_ANNOUNCEMENT:
 			this.setGameState(tableName, GameState.DECLARING);
-			this.setGameAnnouncement(tableName,
+			this.setGameAnnouncement(tableName, movePlayer,
 					moveInformation.getGameAnnouncement());
 			this.setGameState(tableName, GameState.TRICK_PLAYING);
 			setTrickForeHand(tableName, Player.FORE_HAND);

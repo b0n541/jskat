@@ -301,10 +301,13 @@ public interface IJSkatView {
 	 * 
 	 * @param tableName
 	 *            Table name
+	 * @param declarer
+	 *            Declarer
 	 * @param ann
 	 *            Game announcement
 	 */
-	public void setGameAnnouncement(String tableName, GameAnnouncement ann);
+	public void setGameAnnouncement(String tableName, Player declarer,
+			GameAnnouncement ann);
 
 	/**
 	 * Set a new game state
