@@ -70,6 +70,8 @@ class BiddingPanel extends JPanel {
 		biddingPanel.add(this.passButton, "right"); //$NON-NLS-1$
 
 		this.add(biddingPanel, "center"); //$NON-NLS-1$
+
+		setOpaque(false);
 	}
 
 	void setUserPosition(Player player) {

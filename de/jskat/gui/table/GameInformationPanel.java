@@ -11,7 +11,6 @@ Released: @ReleaseDate@
 
 package de.jskat.gui.table;
 
-import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.JLabel;
@@ -56,20 +55,19 @@ class GameInformationPanel extends JPanel {
 
 		setLayout(new MigLayout("fill"));
 
-		setBackground(Color.GREEN);
-		setOpaque(false);
+		setOpaque(true);
 
 		label = new JLabel();
 		label.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 
-		gameState = GameState.NEW_GAME;
+		setGameState(GameState.NEW_GAME);
 
 		add(this.label);
 	}
 
 	void clear() {
 
-		this.label.setText(" ");
+		this.label.setText(" "); //$NON-NLS-1$
 	}
 
 	void setGameState(GameState newGameState) {

@@ -22,18 +22,21 @@ class GameStartPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	public GameStartPanel(StartSkatSeriesAction newAction) {
-		
+
 		this.action = newAction;
 		initPanel();
 	}
-	
+
 	public void initPanel() {
-		
+
 		this.setLayout(new MigLayout("fill", "fill", "fill"));
-		
+
 		JPanel panel = new JPanel(new MigLayout("fill"));
 		panel.add(new JButton(this.action), "center");
-		this.add(panel, "center, grow");
+		panel.setOpaque(false);
+		this.add(panel, "center");
+
+		setOpaque(false);
 	}
 
 	private StartSkatSeriesAction action;

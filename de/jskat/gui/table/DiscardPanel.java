@@ -86,6 +86,8 @@ class DiscardPanel extends HandPanel {
 		buttonPanel.add(discardButton, "center"); //$NON-NLS-1$
 		add(buttonPanel);
 
+		setOpaque(false);
+
 		this.showCards();
 	}
 

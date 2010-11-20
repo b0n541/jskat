@@ -102,7 +102,7 @@ abstract class HandPanel extends JPanel {
 
 		this.headerLabel = new JLabel(" "); //$NON-NLS-1$
 
-		format.applyPattern("00");
+		format.applyPattern("00"); //$NON-NLS-1$
 
 		initPanel();
 	}

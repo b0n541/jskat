@@ -258,10 +258,10 @@ class CardPanel extends JPanel {
 					// card panel in discard panel was clicked
 					action = getActionMap()
 							.get(JSkatAction.TAKE_CARD_FROM_SKAT);
-				} else if (this.parent instanceof PlayerPanel) {
+				} else if (this.parent instanceof JSkatUserPanel) {
 					// card panel in player panel was clicked
 
-					GameState state = ((PlayerPanel) this.parent)
+					GameState state = ((JSkatUserPanel) this.parent)
 							.getGameState();
 
 					if (state == GameState.DISCARDING) {

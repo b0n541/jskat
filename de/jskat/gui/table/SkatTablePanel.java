@@ -62,7 +62,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	protected HandPanel hindHand;
 	protected OpponentPanel leftOpponentPanel;
 	protected OpponentPanel rightOpponentPanel;
-	protected PlayerPanel userPanel;
+	protected JSkatUserPanel userPanel;
 	protected GameInformationPanel gameInfoPanel;
 	protected JPanel gameContextPanel;
 	protected Map<ContextPanelTypes, JPanel> contextPanels;
@@ -149,25 +149,14 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	protected JPanel getPlayGroundPanel() {
 
-		JPanel panel = new JPanel(new MigLayout(
-				"fill", "fill", "[shrink][grow][grow][grow][grow]")); //$NON-NLS-1$
-
 		this.gameInfoPanel = getGameInfoPanel();
-		panel.add(this.gameInfoPanel,
-				"span 2, growx, shrinky, align center, wrap"); //$NON-NLS-1$
 		this.leftOpponentPanel = getOpponentPanel();
-		panel.add(this.leftOpponentPanel,
-				"width 50%, growx, growy, hmin 20%, align left"); //$NON-NLS-1$
 		this.rightOpponentPanel = getOpponentPanel();
-		panel.add(this.rightOpponentPanel,
-				"width 50%, growx, growy, hmin 20%, align right, wrap"); //$NON-NLS-1$
-		panel.add(this.getContextPanel(),
-				"span 2, growx, growy, align center, wrap"); //$NON-NLS-1$
+		createGameContextPanel();
 		this.userPanel = getPlayerPanel();
-		panel.add(this.userPanel,
-				"span 2, growx, growy, hmin 20%, align center, wrap"); //$NON-NLS-1$
 
-		return panel;
+		return new PlayGroundPanel(bitmaps, gameInfoPanel, leftOpponentPanel,
+				rightOpponentPanel, gameContextPanel, userPanel);
 	}
 
 	private GameInformationPanel getGameInfoPanel() {
@@ -192,7 +181,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		this.gameContextPanel.add(panel, panelType.toString());
 	}
 
-	private JPanel getContextPanel() {
+	private void createGameContextPanel() {
 
 		this.gameContextPanel = new JPanel();
 		this.gameContextPanel.setOpaque(false);
@@ -221,18 +210,17 @@ public class SkatTablePanel extends AbstractTabPanel {
 		trickHoldingPanel.add(this.lastTrickPanel, "width 25%"); //$NON-NLS-1$
 		this.trickPanel = new TrickPlayPanel(this.bitmaps);
 		trickHoldingPanel.add(this.trickPanel, "grow"); //$NON-NLS-1$
+		trickHoldingPanel.setOpaque(false);
 		addContextPanel(ContextPanelTypes.TRICK_PLAYING, trickHoldingPanel);
 
 		addContextPanel(ContextPanelTypes.GAME_OVER,
 				new GameOverPanel((ContinueSkatSeriesAction) getActionMap()
 						.get(JSkatAction.CONTINUE_LOCAL_SERIES)));
-
-		return this.gameContextPanel;
 	}
 
-	private PlayerPanel getPlayerPanel() {
+	private JSkatUserPanel getPlayerPanel() {
 
-		return new PlayerPanel(this, this.bitmaps, 12);
+		return new JSkatUserPanel(this, this.bitmaps, 12);
 	}
 
 	private HandPanel getPlayerPanel(Player player) {
@@ -499,12 +487,28 @@ public class SkatTablePanel extends AbstractTabPanel {
 		resetGameData();
 	}
 
+	/**
+	 * Sets the fore hand player for the trick
+	 * 
+	 * @param trickForeHand
+	 *            Fore hand player for the trick
+	 */
 	public void setTrickForeHand(Player trickForeHand) {
 
-		this.trickPanel.setTrickForeHand(trickForeHand);
 		setActivePlayer(trickForeHand);
 	}
 
+	/**
+	 * Sets the bid value for a player
+	 * 
+	 * @param player
+	 *            Player
+	 * @param bidValue
+	 *            Bid value
+	 * @param madeBid
+	 *            TRUE, if the player made the bid<br>
+	 *            FALSE, if the player hold the bid
+	 */
 	public void setBid(Player player, int bidValue, boolean madeBid) {
 
 		log.debug(player + " " + (madeBid ? "bids" : "holds") + ": " + bidValue); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
@@ -632,19 +636,12 @@ public class SkatTablePanel extends AbstractTabPanel {
 	public void setLastTrick(Player trickForeHand, Card foreHandCard,
 			Card middleHandCard, Card hindHandCard) {
 
-		this.lastTrickPanel.setTrickForeHand(trickForeHand);
 		this.lastTrickPanel.clearCards();
 		this.lastTrickPanel.setCard(trickForeHand, foreHandCard);
 		this.lastTrickPanel.setCard(trickForeHand.getLeftNeighbor(),
 				middleHandCard);
 		this.lastTrickPanel.setCard(trickForeHand.getRightNeighbor(),
 				hindHandCard);
-	}
-
-	@Override
-	protected void setFocus() {
-		// TODO Auto-generated method stub
-
 	}
 
 	/**
@@ -730,5 +727,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 	public void setBidValueToHold(int bidValue) {
 
 		biddingPanel.setBidValueToHold(bidValue);
+	}
+
+	@Override
+	protected void setFocus() {
+		// FIXME (jan 20.11.2010) set active/inactive actions
+
 	}
 }

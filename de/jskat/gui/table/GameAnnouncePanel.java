@@ -121,6 +121,8 @@ class GameAnnouncePanel extends JPanel {
 		});
 		panel.add(playButton);
 		this.add(panel, "center");
+
+		setOpaque(false);
 	}
 
 	public void resetPanel() {

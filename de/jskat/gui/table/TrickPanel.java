@@ -33,7 +33,6 @@ import de.jskat.util.Player;
 class TrickPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private Player trickForeHand;
 	private JSkatGraphicRepository bitmaps;
 	private List<Player> positions;
 	private CardList trick;
@@ -56,17 +55,6 @@ class TrickPanel extends JPanel {
 		this.positions = new ArrayList<Player>();
 
 		this.setOpaque(false);
-	}
-
-	/**
-	 * Sets the fore hand for the trick
-	 * 
-	 * @param player
-	 *            Trick fore hand
-	 */
-	void setTrickForeHand(Player player) {
-
-		this.trickForeHand = player;
 	}
 
 	/**
@@ -115,8 +103,6 @@ class TrickPanel extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 
-		super.paintComponent(g);
-
 		int panelWidth = this.getWidth();
 		int panelHeight = this.getHeight();
 		double scaleFactor = 1.0d;
@@ -143,15 +129,15 @@ class TrickPanel extends JPanel {
 			double centerTranslate = (panelWidth - xScaleSize) / 2.0d
 					- xScaleSize / 2.0d;
 
-			if (player == this.leftOpponent) {
+			if (player.equals(this.leftOpponent)) {
 
 				xPos = 0.0d + centerTranslate;
 				yPos = yScaleSize / 4.0d;
-			} else if (player == this.rightOpponent) {
+			} else if (player.equals(this.rightOpponent)) {
 
 				xPos = (2 * (xScaleSize / 3.0d)) + centerTranslate;
 				yPos = 0.0d;
-			} else if (player == this.userPosition) {
+			} else if (player.equals(this.userPosition)) {
 				xPos = (xScaleSize / 3.0d) + centerTranslate;
 				yPos = 2 * (yScaleSize / 4.0d);
 			}
