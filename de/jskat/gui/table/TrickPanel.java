@@ -34,6 +34,7 @@ class TrickPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private JSkatGraphicRepository bitmaps;
+	private List<Double> cardRotations;
 	private List<Player> positions;
 	private CardList trick;
 	private Random rand = new Random();
@@ -49,12 +50,13 @@ class TrickPanel extends JPanel {
 	 */
 	TrickPanel(JSkatGraphicRepository jskatBitmaps) {
 
-		this.bitmaps = jskatBitmaps;
+		bitmaps = jskatBitmaps;
 
-		this.trick = new CardList();
-		this.positions = new ArrayList<Player>();
+		trick = new CardList();
+		positions = new ArrayList<Player>();
+		cardRotations = new ArrayList<Double>();
 
-		this.setOpaque(false);
+		setOpaque(false);
 	}
 
 	/**
@@ -67,13 +69,15 @@ class TrickPanel extends JPanel {
 	 */
 	void addCard(Player player, Card card) {
 
-		if (this.trick.size() == 3) {
+		if (trick.size() == 3) {
 			// trick is full -> clear it first
-			this.positions.clear();
-			this.trick.clear();
+			positions.clear();
+			trick.clear();
+			cardRotations.clear();
 		}
-		this.positions.add(player);
-		this.trick.add(card);
+		positions.add(player);
+		trick.add(card);
+		cardRotations.add(Double.valueOf(0.5 * rand.nextDouble() - 0.25));
 		repaint();
 	}
 
@@ -82,8 +86,9 @@ class TrickPanel extends JPanel {
 	 */
 	void removeCard() {
 
-		this.positions.remove(this.positions.size() - 1);
-		this.trick.remove(this.trick.size() - 1);
+		positions.remove(positions.size() - 1);
+		trick.remove(trick.size() - 1);
+		cardRotations.remove(trick.size() - 1);
 		repaint();
 	}
 
@@ -92,8 +97,9 @@ class TrickPanel extends JPanel {
 	 */
 	void clearCards() {
 
-		this.positions.clear();
-		this.trick.clear();
+		positions.clear();
+		trick.clear();
+		cardRotations.clear();
 		repaint();
 	}
 
@@ -103,25 +109,25 @@ class TrickPanel extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 
-		int panelWidth = this.getWidth();
-		int panelHeight = this.getHeight();
+		int panelWidth = getWidth();
+		int panelHeight = getHeight();
 		double scaleFactor = 1.0d;
 		double xPos = 0.0d;
 		double yPos = 0.0d;
 
 		Graphics2D g2D = (Graphics2D) g;
 
-		for (int i = 0; i < this.trick.size(); i++) {
+		for (int i = 0; i < trick.size(); i++) {
 
-			Card card = this.trick.get(i);
-			Player player = this.positions.get(i);
+			Card card = trick.get(i);
+			Player player = positions.get(i);
 
-			Image image = this.bitmaps.getCardImage(card.getSuit(),
-					card.getRank());
+			Image image = bitmaps.getCardImage(card.getSuit(), card.getRank());
 
 			// Calculate scale factor
 			// Image should have 66% of panel height
-			scaleFactor = 1.0d / (image.getHeight(null) / (panelHeight * 2.0d / 3.0d));
+			scaleFactor = 0.5;// 1.0d / (image.getHeight(null) / (panelHeight *
+								// 2.0d / 3.0d));
 
 			// Calculate translation
 			double xScaleSize = image.getWidth(null) * scaleFactor;
@@ -129,15 +135,15 @@ class TrickPanel extends JPanel {
 			double centerTranslate = (panelWidth - xScaleSize) / 2.0d
 					- xScaleSize / 2.0d;
 
-			if (player.equals(this.leftOpponent)) {
+			if (player.equals(leftOpponent)) {
 
 				xPos = 0.0d + centerTranslate;
 				yPos = yScaleSize / 4.0d;
-			} else if (player.equals(this.rightOpponent)) {
+			} else if (player.equals(rightOpponent)) {
 
 				xPos = (2 * (xScaleSize / 3.0d)) + centerTranslate;
 				yPos = 0.0d;
-			} else if (player.equals(this.userPosition)) {
+			} else if (player.equals(userPosition)) {
 				xPos = (xScaleSize / 3.0d) + centerTranslate;
 				yPos = 2 * (yScaleSize / 4.0d);
 			}
@@ -146,7 +152,7 @@ class TrickPanel extends JPanel {
 			transform.setToIdentity();
 			transform.translate(xPos, yPos);
 			transform.scale(scaleFactor, scaleFactor);
-			// transform.rotate(rand.nextDouble());
+			transform.rotate(cardRotations.get(i).doubleValue());
 
 			g2D.setRenderingHint(RenderingHints.KEY_RENDERING,
 					RenderingHints.VALUE_RENDER_QUALITY);
@@ -163,8 +169,8 @@ class TrickPanel extends JPanel {
 
 	void setUserPosition(Player newUserPosition) {
 
-		this.userPosition = newUserPosition;
-		this.leftOpponent = this.userPosition.getLeftNeighbor();
-		this.rightOpponent = this.userPosition.getRightNeighbor();
+		userPosition = newUserPosition;
+		leftOpponent = userPosition.getLeftNeighbor();
+		rightOpponent = userPosition.getRightNeighbor();
 	}
 }

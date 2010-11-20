@@ -49,14 +49,17 @@ public class PlayGroundPanel extends JPanel {
 			OpponentPanel leftOpponentPanel, OpponentPanel rightOpponentPanel,
 			JPanel gameContextPanel, JSkatUserPanel userPanel) {
 
-		super(new MigLayout("fill", "fill", "[shrink][grow][grow][grow][grow]")); //$NON-NLS-1$
+		super(new MigLayout(
+				"fill", "fill", "[shrink][shrink][grow][shrink][shrink]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		add(gameInfoPanel, "span 2, growx, shrinky, align center, wrap"); //$NON-NLS-1$
-		add(leftOpponentPanel, "width 50%, growx, growy, hmin 20%, align left"); //$NON-NLS-1$
+		add(leftOpponentPanel,
+				"width 50%, growx, growy, hmin 20%, hmax 20%, align left"); //$NON-NLS-1$
 		add(rightOpponentPanel,
-				"width 50%, growx, growy, hmin 20%, align right, wrap"); //$NON-NLS-1$
+				"width 50%, growx, growy, hmin 20%, hmax 20%, align right, wrap"); //$NON-NLS-1$
 		add(gameContextPanel, "span 2, growx, growy, align center, wrap"); //$NON-NLS-1$
-		add(userPanel, "span 2, growx, growy, hmin 20%, align center, wrap"); //$NON-NLS-1$
+		add(userPanel,
+				"span 2, growx, growy, hmin 20%, hmax 20%, align center, wrap"); //$NON-NLS-1$
 
 		backGroundImage = jskatBitmaps.getSkatTableImage();
 	}

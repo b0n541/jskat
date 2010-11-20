@@ -33,7 +33,7 @@ class GameOverPanel extends JPanel {
 
 		JPanel panel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
 		panel.add(new JButton(this.action), "center"); //$NON-NLS-1$
-		this.add(panel, "center, grow"); //$NON-NLS-1$
+		this.add(panel, "center"); //$NON-NLS-1$
 
 		setOpaque(false);
 	}
