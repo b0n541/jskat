@@ -23,15 +23,16 @@ class TrickPlayPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private TrickPanel trickPanel;
 
-	TrickPlayPanel(JSkatGraphicRepository jskatBitmaps) {
+	TrickPlayPanel(JSkatGraphicRepository jskatBitmaps, double cardScaleFactor) {
 
-		initPanel(jskatBitmaps);
+		initPanel(jskatBitmaps, cardScaleFactor);
 	}
 
-	private void initPanel(JSkatGraphicRepository jskatBitmaps) {
+	private void initPanel(JSkatGraphicRepository jskatBitmaps,
+			double cardScaleFactor) {
 
 		this.setLayout(new MigLayout("fill, fill, fill")); //$NON-NLS-1$
-		this.trickPanel = new TrickPanel(jskatBitmaps);
+		this.trickPanel = new TrickPanel(jskatBitmaps, cardScaleFactor);
 		trickPanel.setOpaque(false);
 		this.add(this.trickPanel, "growx, growy, center"); //$NON-NLS-1$
 

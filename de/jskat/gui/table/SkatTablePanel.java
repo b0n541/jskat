@@ -204,12 +204,16 @@ public class SkatTablePanel extends AbstractTabPanel {
 		this.gameAnnouncePanel = new GameAnnouncePanel(this, this.strings);
 		addContextPanel(ContextPanelTypes.DECLARING, this.gameAnnouncePanel);
 
-		JPanel trickHoldingPanel = new JPanel(new MigLayout("fill", "fill", //$NON-NLS-1$ //$NON-NLS-2$
+		JPanel trickHoldingPanel = new JPanel(new MigLayout(
+				"fill", "[shrink][grow][shrink]", //$NON-NLS-1$ //$NON-NLS-2$
 				"fill")); //$NON-NLS-1$
-		this.lastTrickPanel = new TrickPlayPanel(this.bitmaps);
+		this.lastTrickPanel = new TrickPlayPanel(this.bitmaps, 0.25);
 		trickHoldingPanel.add(this.lastTrickPanel, "width 25%"); //$NON-NLS-1$
-		this.trickPanel = new TrickPlayPanel(this.bitmaps);
+		this.trickPanel = new TrickPlayPanel(this.bitmaps, 0.5);
 		trickHoldingPanel.add(this.trickPanel, "grow"); //$NON-NLS-1$
+		JPanel blankPanel = new JPanel();
+		blankPanel.setOpaque(false);
+		trickHoldingPanel.add(blankPanel, "width 25%"); //$NON-NLS-1$
 		trickHoldingPanel.setOpaque(false);
 		addContextPanel(ContextPanelTypes.TRICK_PLAYING, trickHoldingPanel);
 

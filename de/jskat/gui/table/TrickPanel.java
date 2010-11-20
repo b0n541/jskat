@@ -42,15 +42,18 @@ class TrickPanel extends JPanel {
 	private Player rightOpponent;
 	private Player leftOpponent;
 
+	private double cardScaleFactor;
+
 	/**
 	 * Constructor
 	 * 
 	 * @param jskatBitmaps
 	 *            JSkat bitmaps
 	 */
-	TrickPanel(JSkatGraphicRepository jskatBitmaps) {
+	TrickPanel(JSkatGraphicRepository jskatBitmaps, double newCardScaleFactor) {
 
 		bitmaps = jskatBitmaps;
+		cardScaleFactor = newCardScaleFactor;
 
 		trick = new CardList();
 		positions = new ArrayList<Player>();
@@ -111,9 +114,9 @@ class TrickPanel extends JPanel {
 
 		int panelWidth = getWidth();
 		int panelHeight = getHeight();
-		double scaleFactor = 1.0d;
-		double xPos = 0.0d;
-		double yPos = 0.0d;
+		double scaleFactor = 1.0;
+		double xPos = 0.0;
+		double yPos = 0.0;
 
 		Graphics2D g2D = (Graphics2D) g;
 
@@ -125,27 +128,30 @@ class TrickPanel extends JPanel {
 			Image image = bitmaps.getCardImage(card.getSuit(), card.getRank());
 
 			// Calculate scale factor
-			// Image should have 66% of panel height
-			scaleFactor = 0.5;// 1.0d / (image.getHeight(null) / (panelHeight *
-								// 2.0d / 3.0d));
+			scaleFactor = 1.0 / (image.getHeight(null) / (panelHeight * cardScaleFactor));
 
 			// Calculate translation
 			double xScaleSize = image.getWidth(null) * scaleFactor;
+			double xAllTrickCardsSize = xScaleSize * (1 + 2.0 / 3.00);
+			double xCenterTranslate = (panelWidth - xAllTrickCardsSize) / 2;
 			double yScaleSize = image.getHeight(null) * scaleFactor;
-			double centerTranslate = (panelWidth - xScaleSize) / 2.0d
-					- xScaleSize / 2.0d;
+			double yAllTrickCardsSize = yScaleSize * 1.5;
+			double yCenterTranslate = (panelHeight - yAllTrickCardsSize) / 2;
 
 			if (player.equals(leftOpponent)) {
 
-				xPos = 0.0d + centerTranslate;
-				yPos = yScaleSize / 4.0d;
+				xPos = xCenterTranslate;
+				yPos = (yScaleSize / 4.0) + yCenterTranslate;
+
 			} else if (player.equals(rightOpponent)) {
 
-				xPos = (2 * (xScaleSize / 3.0d)) + centerTranslate;
-				yPos = 0.0d;
+				xPos = (2.0 * (xScaleSize / 3.0)) + xCenterTranslate;
+				yPos = yCenterTranslate;
+
 			} else if (player.equals(userPosition)) {
-				xPos = (xScaleSize / 3.0d) + centerTranslate;
-				yPos = 2 * (yScaleSize / 4.0d);
+
+				xPos = (xScaleSize / 3.0) + xCenterTranslate;
+				yPos = 2 * (yScaleSize / 4.0d) + yCenterTranslate;
 			}
 
 			AffineTransform transform = new AffineTransform();
