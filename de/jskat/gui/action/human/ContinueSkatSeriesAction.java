@@ -38,7 +38,7 @@ public class ContinueSkatSeriesAction extends AbstractJSkatAction {
 		putValue(NAME, strings.getString("continue_series"));
 		putValue(SHORT_DESCRIPTION,
 				strings.getString("continue_series_tooltip"));
-		setIcons(JSkatGraphicRepository.Icon.BLANK);
+		setIcons(JSkatGraphicRepository.Icon.START_SERIES);
 	}
 
 	/**
