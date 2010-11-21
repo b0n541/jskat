@@ -27,7 +27,7 @@ import de.jskat.util.Player;
 /**
  * Holds all widgets for bidding
  */
-class BiddingPanel extends JPanel {
+class BiddingContextPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -49,7 +49,7 @@ class BiddingPanel extends JPanel {
 	 * @param actions
 	 *            Action map
 	 */
-	BiddingPanel(ActionMap actions, ResourceBundle strings) {
+	BiddingContextPanel(ActionMap actions, ResourceBundle strings) {
 
 		initPanel(actions, strings);
 	}

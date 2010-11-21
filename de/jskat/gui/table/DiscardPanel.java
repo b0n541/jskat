@@ -58,13 +58,13 @@ class DiscardPanel extends HandPanel {
 
 		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		this.headerLabel.setText("Skat");
+		this.headerLabel.setText("Skat"); //$NON-NLS-1$
 		add(this.headerLabel, "wrap"); //$NON-NLS-1$
 
 		this.cardPanel = new CardPanel(this, this.bitmaps, false);
 		add(this.cardPanel, "grow, wrap"); //$NON-NLS-1$
 
-		this.discardAction = getActionMap().get(JSkatAction.DISCARD_CARDS);
+		this.discardAction = getActionMap().get(JSkatAction.LOOK_INTO_SKAT);
 		final JButton discardButton = new JButton(this.discardAction);
 		discardButton.addActionListener(new ActionListener() {
 			@Override
@@ -84,6 +84,7 @@ class DiscardPanel extends HandPanel {
 		});
 		JPanel buttonPanel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
 		buttonPanel.add(discardButton, "center"); //$NON-NLS-1$
+		buttonPanel.setOpaque(false);
 		add(buttonPanel);
 
 		setOpaque(false);

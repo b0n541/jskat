@@ -18,11 +18,11 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 import de.jskat.gui.action.JSkatAction;
 
-class GameStartPanel extends JPanel {
+class StartContextPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	public GameStartPanel(ActionMap actions) {
+	public StartContextPanel(ActionMap actions) {
 
 		initPanel(actions);
 	}

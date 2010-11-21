@@ -19,19 +19,11 @@ public enum ContextPanelTypes {
 	/**
 	 * Start panel
 	 */
-	START_SERIES,
+	START,
 	/**
 	 * Bidding panel
 	 */
 	BIDDING,
-	/**
-	 * Look into skat or play hand panel
-	 */
-	LOOK_INTO_SKAT,
-	/**
-	 * Discarding panel
-	 */
-	DISCARDING,
 	/**
 	 * Declaring panel
 	 */
