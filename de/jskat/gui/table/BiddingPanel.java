@@ -12,6 +12,7 @@ Released: @ReleaseDate@
 package de.jskat.gui.table;
 
 import java.awt.Font;
+import java.util.ResourceBundle;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -45,38 +46,55 @@ class BiddingPanel extends JPanel {
 	/**
 	 * Bidding panel
 	 * 
-	 * @param newActions
+	 * @param actions
+	 *            Action map
 	 */
-	BiddingPanel(ActionMap newActions) {
+	BiddingPanel(ActionMap actions, ResourceBundle strings) {
 
-		initPanel(newActions);
+		initPanel(actions, strings);
 	}
 
-	private void initPanel(ActionMap newActions) {
+	private void initPanel(ActionMap actions, ResourceBundle strings) {
 
-		this.setLayout(new MigLayout("fill")); //$NON-NLS-1$
+		this.setLayout(new MigLayout("fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$
+
+		JPanel blankPanel = new JPanel();
+		blankPanel.setOpaque(false);
+		add(blankPanel, "width 25%"); //$NON-NLS-1$
+
+		JPanel biddingPanel = getBiddingPanel(actions);
+		this.add(biddingPanel, "grow"); //$NON-NLS-1$
+
+		this.add(new GameAnnouncePanel(actions, strings), "width 25%"); //$NON-NLS-1$
+
+		setOpaque(false);
+	}
+
+	private JPanel getBiddingPanel(ActionMap actions) {
 
 		JPanel biddingPanel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
 
 		this.leftOpponentBid = new JLabel("0"); //$NON-NLS-1$
 		leftOpponentBid.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
+
 		this.rightOpponentBid = new JLabel("0"); //$NON-NLS-1$
 		rightOpponentBid.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
+
 		this.userBid = new JLabel("0"); //$NON-NLS-1$
 		userBid.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-		biddingPanel.add(this.leftOpponentBid, "left"); //$NON-NLS-1$
-		biddingPanel.add(this.rightOpponentBid, "right, wrap"); //$NON-NLS-1$
+
+		biddingPanel.add(this.leftOpponentBid, "center"); //$NON-NLS-1$
+		biddingPanel.add(this.rightOpponentBid, "center, wrap"); //$NON-NLS-1$
 		biddingPanel.add(this.userBid, "span 2, center, wrap"); //$NON-NLS-1$
-		makeBidAction = newActions.get(JSkatAction.MAKE_BID);
-		holdBidAction = newActions.get(JSkatAction.HOLD_BID);
+
+		makeBidAction = actions.get(JSkatAction.MAKE_BID);
+		holdBidAction = actions.get(JSkatAction.HOLD_BID);
 		this.bidButton = new JButton(makeBidAction);
-		this.passButton = new JButton(newActions.get(JSkatAction.PASS_BID));
-		biddingPanel.add(this.bidButton, "left"); //$NON-NLS-1$
-		biddingPanel.add(this.passButton, "right"); //$NON-NLS-1$
+		this.passButton = new JButton(actions.get(JSkatAction.PASS_BID));
+		biddingPanel.add(this.bidButton, "center"); //$NON-NLS-1$
+		biddingPanel.add(this.passButton, "center"); //$NON-NLS-1$
 
-		this.add(biddingPanel, "center"); //$NON-NLS-1$
-
-		setOpaque(false);
+		return biddingPanel;
 	}
 
 	void setUserPosition(Player player) {

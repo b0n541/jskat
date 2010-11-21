@@ -16,6 +16,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -38,12 +39,12 @@ class DiscardPanel extends HandPanel {
 	/**
 	 * Constructor
 	 * 
-	 * @see HandPanel#HandPanel(SkatTablePanel, JSkatGraphicRepository, int)
+	 * @see HandPanel#HandPanel(ActionMap, JSkatGraphicRepository, int)
 	 */
-	public DiscardPanel(SkatTablePanel newParent,
-			JSkatGraphicRepository jskatBitmaps, int maxCards) {
+	public DiscardPanel(ActionMap actions, JSkatGraphicRepository jskatBitmaps,
+			int maxCards) {
 
-		super(newParent, jskatBitmaps, maxCards);
+		super(actions, jskatBitmaps, maxCards);
 	}
 
 	/**
@@ -63,8 +64,7 @@ class DiscardPanel extends HandPanel {
 		this.cardPanel = new CardPanel(this, this.bitmaps, false);
 		add(this.cardPanel, "grow, wrap"); //$NON-NLS-1$
 
-		this.discardAction = this.parent.getActionMap().get(
-				JSkatAction.DISCARD_CARDS);
+		this.discardAction = getActionMap().get(JSkatAction.DISCARD_CARDS);
 		final JButton discardButton = new JButton(this.discardAction);
 		discardButton.addActionListener(new ActionListener() {
 			@Override

@@ -15,6 +15,7 @@ import java.awt.Color;
 import java.text.DecimalFormat;
 import java.util.Collection;
 
+import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -36,10 +37,6 @@ abstract class HandPanel extends JPanel {
 	private static final DecimalFormat format = ((DecimalFormat) DecimalFormat
 			.getInstance());
 
-	/**
-	 * Parent panel
-	 */
-	SkatTablePanel parent = null;
 	/**
 	 * Player position
 	 */
@@ -85,16 +82,15 @@ abstract class HandPanel extends JPanel {
 	/**
 	 * Constructor
 	 * 
-	 * @param newParent
-	 *            Skat table panel
+	 * @param actions
+	 *            Action map
 	 * @param jskatBitmaps
 	 *            Card images
 	 */
-	HandPanel(SkatTablePanel newParent, JSkatGraphicRepository jskatBitmaps,
+	HandPanel(ActionMap actions, JSkatGraphicRepository jskatBitmaps,
 			int maxCards) {
 
-		this.parent = newParent;
-		setActionMap(this.parent.getActionMap());
+		setActionMap(actions);
 		this.bitmaps = jskatBitmaps;
 		this.maxCardCount = maxCards;
 

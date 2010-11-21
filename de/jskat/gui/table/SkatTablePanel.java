@@ -166,7 +166,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	private OpponentPanel getOpponentPanel() {
 
-		return new OpponentPanel(this, this.bitmaps, 12);
+		return new OpponentPanel(getActionMap(), this.bitmaps, 12);
 	}
 
 	protected void addContextPanel(ContextPanelTypes panelType, JPanel panel) {
@@ -192,16 +192,17 @@ public class SkatTablePanel extends AbstractTabPanel {
 				new GameStartPanel((StartSkatSeriesAction) getActionMap().get(
 						JSkatAction.START_LOCAL_SERIES)));
 
-		this.biddingPanel = new BiddingPanel(getActionMap());
+		this.biddingPanel = new BiddingPanel(getActionMap(), strings);
 		addContextPanel(ContextPanelTypes.BIDDING, this.biddingPanel);
 
 		this.gameContextPanel.add(new LookIntoSkatPanel(this),
 				ContextPanelTypes.LOOK_INTO_SKAT.toString());
 
-		this.discardPanel = new DiscardPanel(this, this.bitmaps, 4);
+		this.discardPanel = new DiscardPanel(getActionMap(), this.bitmaps, 4);
 		addContextPanel(ContextPanelTypes.DISCARDING, this.discardPanel);
 
-		this.gameAnnouncePanel = new GameAnnouncePanel(this, this.strings);
+		this.gameAnnouncePanel = new GameAnnouncePanel(getActionMap(),
+				this.strings);
 		addContextPanel(ContextPanelTypes.DECLARING, this.gameAnnouncePanel);
 
 		JPanel trickHoldingPanel = new JPanel(new MigLayout(
@@ -224,7 +225,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	private JSkatUserPanel getPlayerPanel() {
 
-		return new JSkatUserPanel(this, this.bitmaps, 12);
+		return new JSkatUserPanel(getActionMap(), this.bitmaps, 12);
 	}
 
 	private HandPanel getPlayerPanel(Player player) {
@@ -383,6 +384,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 			break;
 		case BIDDING:
 			setContextPanel(ContextPanelTypes.BIDDING);
+			getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(false);
 			break;
 		case LOOK_INTO_SKAT:
 			// FIXME show panel only if the human player is looking into the
@@ -395,6 +397,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 			break;
 		case DECLARING:
 			setContextPanel(ContextPanelTypes.DECLARING);
+			getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
 			break;
 		case TRICK_PLAYING:
 			setContextPanel(ContextPanelTypes.TRICK_PLAYING);

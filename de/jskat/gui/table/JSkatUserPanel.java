@@ -11,6 +11,8 @@ Released: @ReleaseDate@
 
 package de.jskat.gui.table;
 
+import javax.swing.ActionMap;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -29,12 +31,12 @@ class JSkatUserPanel extends HandPanel {
 	private GameState gameState;
 
 	/**
-	 * @see HandPanel#HandPanel(SkatTablePanel, JSkatGraphicRepository)
+	 * @see HandPanel#HandPanel(ActionMap, JSkatGraphicRepository)
 	 */
-	JSkatUserPanel(SkatTablePanel newParent, JSkatGraphicRepository jskatBitmaps,
+	JSkatUserPanel(ActionMap actions, JSkatGraphicRepository jskatBitmaps,
 			int maxCards) {
 
-		super(newParent, jskatBitmaps, maxCards);
+		super(actions, jskatBitmaps, maxCards);
 		this.showCards();
 	}
 

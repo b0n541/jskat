@@ -38,10 +38,6 @@ class GameAnnouncePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Parent panel
-	 */
-	protected SkatTablePanel parent = null;
 	JComboBox gameTypeList = null;
 	JCheckBox ouvertBox = null;
 	JCheckBox schneiderBox = null;
@@ -50,20 +46,19 @@ class GameAnnouncePanel extends JPanel {
 	/**
 	 * Constructor
 	 * 
-	 * @param newParent
-	 *            Parent panel
+	 * @param actions
+	 *            Action map
+	 * @param strings
+	 *            i18n strings
 	 */
-	public GameAnnouncePanel(SkatTablePanel newParent, ResourceBundle strings) {
+	GameAnnouncePanel(ActionMap actions, ResourceBundle strings) {
 
-		this.parent = newParent;
-		initPanel(strings);
+		initPanel(actions, strings);
 	}
 
-	private void initPanel(ResourceBundle strings) {
+	private void initPanel(ActionMap actions, ResourceBundle strings) {
 
 		this.setLayout(new MigLayout("fill")); //$NON-NLS-1$
-
-		ActionMap actions = this.parent.getActionMap();
 
 		JPanel panel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
 
@@ -79,13 +74,15 @@ class GameAnnouncePanel extends JPanel {
 		// FIXME (jan 17.11.2010) make card face adjustable
 		gameTypeList.setRenderer(new GameTypeComboBoxRenderer(CardFace.FRENCH,
 				strings));
+		// FIXME (jan 21.11.2010) add a change listener to trigger sorting of
+		// cards
 		this.gameTypeList.setSelectedIndex(-1);
 
 		this.ouvertBox = new JCheckBox(strings.getString("ouvert")); //$NON-NLS-1$
 		this.schneiderBox = new JCheckBox(strings.getString("schneider")); //$NON-NLS-1$
 		this.schwarzBox = new JCheckBox(strings.getString("schwarz")); //$NON-NLS-1$
 
-		panel.add(this.gameTypeList, "wrap"); //$NON-NLS-1$
+		panel.add(this.gameTypeList, "grow, wrap"); //$NON-NLS-1$
 		panel.add(this.ouvertBox, "wrap"); //$NON-NLS-1$
 		panel.add(this.schneiderBox, "wrap"); //$NON-NLS-1$
 		panel.add(this.schwarzBox, "wrap"); //$NON-NLS-1$
@@ -120,7 +117,7 @@ class GameAnnouncePanel extends JPanel {
 			}
 		});
 		panel.add(playButton);
-		this.add(panel, "center");
+		this.add(panel, "center"); //$NON-NLS-1$
 
 		setOpaque(false);
 	}
