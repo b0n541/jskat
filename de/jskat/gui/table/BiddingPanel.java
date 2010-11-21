@@ -11,6 +11,8 @@ Released: @ReleaseDate@
 
 package de.jskat.gui.table;
 
+import java.awt.Font;
+
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.JButton;
@@ -57,8 +59,11 @@ class BiddingPanel extends JPanel {
 		JPanel biddingPanel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
 
 		this.leftOpponentBid = new JLabel("0"); //$NON-NLS-1$
+		leftOpponentBid.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 		this.rightOpponentBid = new JLabel("0"); //$NON-NLS-1$
+		rightOpponentBid.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 		this.userBid = new JLabel("0"); //$NON-NLS-1$
+		userBid.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 		biddingPanel.add(this.leftOpponentBid, "left"); //$NON-NLS-1$
 		biddingPanel.add(this.rightOpponentBid, "right, wrap"); //$NON-NLS-1$
 		biddingPanel.add(this.userBid, "span 2, center, wrap"); //$NON-NLS-1$
