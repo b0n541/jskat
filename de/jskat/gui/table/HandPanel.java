@@ -125,7 +125,7 @@ abstract class HandPanel extends JPanel {
 		Border result = null;
 
 		if (activePlayer) {
-			result = BorderFactory.createLineBorder(Color.red);
+			result = BorderFactory.createLineBorder(Color.yellow);
 		} else {
 			result = BorderFactory.createLineBorder(Color.black);
 		}
