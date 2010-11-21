@@ -43,6 +43,8 @@ class GameAnnouncePanel extends JPanel {
 	JCheckBox schneiderBox = null;
 	JCheckBox schwarzBox = null;
 
+	boolean userLookedIntoSkat;
+
 	/**
 	 * Constructor
 	 * 
@@ -56,7 +58,7 @@ class GameAnnouncePanel extends JPanel {
 		initPanel(actions, strings);
 	}
 
-	private void initPanel(ActionMap actions, ResourceBundle strings) {
+	private void initPanel(final ActionMap actions, ResourceBundle strings) {
 
 		this.setLayout(new MigLayout("fill")); //$NON-NLS-1$
 
@@ -104,6 +106,12 @@ class GameAnnouncePanel extends JPanel {
 					ann.setSchwarz(GameAnnouncePanel.this.schwarzBox
 							.isSelected());
 
+					if (userLookedIntoSkat) {
+						ann.setHand(false);
+					} else {
+						ann.setHand(true);
+					}
+
 					e.setSource(ann);
 					// fire event again
 					playButton.dispatchEvent(e);
@@ -120,6 +128,8 @@ class GameAnnouncePanel extends JPanel {
 		this.add(panel, "center"); //$NON-NLS-1$
 
 		setOpaque(false);
+
+		resetPanel();
 	}
 
 	public void resetPanel() {
@@ -128,6 +138,7 @@ class GameAnnouncePanel extends JPanel {
 		this.ouvertBox.setSelected(false);
 		this.schneiderBox.setSelected(false);
 		this.schwarzBox.setSelected(false);
+		userLookedIntoSkat = false;
 	}
 
 	private class GameTypeComboBoxRenderer extends BasicComboBoxRenderer {
@@ -245,5 +256,9 @@ class GameAnnouncePanel extends JPanel {
 
 			return result;
 		}
+	}
+
+	public void setUserLookedIntoSkat(boolean isUserLookedIntoSkat) {
+		userLookedIntoSkat = isUserLookedIntoSkat;
 	}
 }
