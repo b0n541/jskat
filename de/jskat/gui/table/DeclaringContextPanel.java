@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.util.Card;
+import de.jskat.util.CardList;
 
 /**
  * Context panel for discarding
@@ -32,7 +33,7 @@ class DeclaringContextPanel extends JPanel {
 		discardPanel = new DiscardPanel(actions, jskatBitmaps, maxCards);
 		add(discardPanel, "grow"); //$NON-NLS-1$
 
-		announcePanel = new GameAnnouncePanel(actions, strings);
+		announcePanel = new GameAnnouncePanel(actions, strings, discardPanel);
 		add(announcePanel, "width 25%"); //$NON-NLS-1$
 
 		setOpaque(false);
@@ -56,5 +57,10 @@ class DeclaringContextPanel extends JPanel {
 
 	public void addCard(Card card) {
 		discardPanel.addCard(card);
+	}
+
+	public void setSkat(CardList skat) {
+
+		discardPanel.setSkat(skat);
 	}
 }

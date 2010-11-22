@@ -14,14 +14,13 @@ package de.jskat.gui.human;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.ai.AbstractJSkatPlayer;
 import de.jskat.ai.IJSkatPlayer;
 import de.jskat.data.GameAnnouncement;
+import de.jskat.data.GameAnnouncementWithDiscardedCards;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
@@ -37,10 +36,15 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 
 	private boolean holdBid;
 	private int bidValue;
+	private GameAnnouncementStep gameAnnouncementStep;
 	private boolean lookIntoSkat;
 	private CardList discardSkat;
 	private GameAnnouncement gameAnnouncement;
 	private Card nextCard;
+
+	private enum GameAnnouncementStep {
+		BEFORE_ANNOUNCEMENT, LOOKED_INTO_SKAT, DISCARDED_SKAT, PLAYS_HAND, DONE_GAME_ANNOUNCEMENT
+	}
 
 	/**
 	 * @see IJSkatPlayer#isAIPlayer()
@@ -60,6 +64,8 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 		log.debug("Waiting for human game announcing..."); //$NON-NLS-1$
 
 		waitForUserInput();
+
+		gameAnnouncementStep = GameAnnouncementStep.DONE_GAME_ANNOUNCEMENT;
 
 		return this.gameAnnouncement;
 	}
@@ -95,6 +101,8 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 
 		waitForUserInput();
 
+		gameAnnouncementStep = GameAnnouncementStep.DISCARDED_SKAT;
+
 		return this.discardSkat;
 	}
 
@@ -104,12 +112,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	@Override
 	public void preparateForNewGame() {
 
-		this.holdBid = false;
-		this.bidValue = 0;
-		this.lookIntoSkat = false;
-		this.discardSkat = null;
-		this.gameAnnouncement = null;
-		this.nextCard = null;
+		resetPlayer();
 	}
 
 	/**
@@ -167,13 +170,30 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 		this.idler = new Idler();
 		this.idler.setMonitor(this);
 
-		this.idler.start();
-		try {
-			this.idler.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		if (!isPlayerHasAlreadyPlayed()) {
+
+			this.idler.start();
+			try {
+				this.idler.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+	}
+
+	private boolean isPlayerHasAlreadyPlayed() {
+
+		log.debug("Game announcement step: " + gameAnnouncementStep); //$NON-NLS-1$
+
+		boolean result = false;
+
+		if (GameAnnouncementStep.DISCARDED_SKAT.equals(gameAnnouncementStep)
+				|| GameAnnouncementStep.PLAYS_HAND.equals(gameAnnouncementStep)) {
+			result = true;
+		}
+
+		return result;
 	}
 
 	/**
@@ -196,32 +216,34 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 			// player hold bid
 			this.holdBid = true;
 		} else if (JSkatAction.LOOK_INTO_SKAT.toString().equals(command)) {
+
 			// player wants to look into the skat
 			this.lookIntoSkat = true;
-		} else if (JSkatAction.PLAY_HAND_GAME.toString().equals(command)) {
-			// player wants to play a hand game
-			this.lookIntoSkat = false;
-		} else if (JSkatAction.DISCARD_CARDS.toString().equals(command)) {
+			gameAnnouncementStep = GameAnnouncementStep.LOOKED_INTO_SKAT;
 
-			if (source instanceof CardList) {
-				// player discarded cards
-				this.discardSkat = (CardList) source;
+		} else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
 
-				this.cards.remove(this.discardSkat.get(0));
-				this.cards.remove(this.discardSkat.get(1));
+			if (source instanceof GameAnnouncementWithDiscardedCards) {
+				// player did game announcement
+				gameAnnouncement = (GameAnnouncement) source;
+
+				if (!gameAnnouncement.isHand()) {
+
+					discardSkat = ((GameAnnouncementWithDiscardedCards) source)
+							.getDiscardedCards();
+					cards.remove(this.discardSkat.get(0));
+					cards.remove(this.discardSkat.get(1));
+
+					gameAnnouncementStep = GameAnnouncementStep.DISCARDED_SKAT;
+				} else {
+
+					gameAnnouncementStep = GameAnnouncementStep.PLAYS_HAND;
+				}
+
 			} else {
 
 				log.error("Wrong source for " + command); //$NON-NLS-1$
 				interrupt = false;
-			}
-		} else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
-
-			if (source instanceof JButton) {
-				log.debug("ONLY JBUTTON"); //$NON-NLS-1$
-				interrupt = false;
-			} else {
-				// player did game announcement
-				this.gameAnnouncement = (GameAnnouncement) source;
 			}
 		} else if (JSkatAction.PLAY_CARD.toString().equals(command)
 				&& source instanceof Card) {
@@ -279,7 +301,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 					try {
 						this.monitor.wait();
 					} catch (InterruptedException e) {
-						this.doWait = false;
+						stopWaiting();
 					}
 				}
 			}
@@ -294,6 +316,17 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	 */
 	@Override
 	public void startGame() {
-		// TODO implement it
+		// TODO is there something todo?
+	}
+
+	private void resetPlayer() {
+
+		bidValue = 0;
+		holdBid = false;
+		gameAnnouncementStep = GameAnnouncementStep.BEFORE_ANNOUNCEMENT;
+		lookIntoSkat = false;
+		discardSkat = null;
+		gameAnnouncement = null;
+		nextCard = null;
 	}
 }

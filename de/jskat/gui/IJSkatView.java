@@ -515,4 +515,14 @@ public interface IJSkatView {
 	 *            Active player
 	 */
 	public void setActivePlayer(String tableName, Player player);
+
+	/**
+	 * Sets the skat
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param skat
+	 *            Skat
+	 */
+	public void setSkat(String tableName, CardList skat);
 }

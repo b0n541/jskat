@@ -506,4 +506,13 @@ public class NullView implements IJSkatView {
 			@SuppressWarnings("unused") int bidValue) {
 		// empty method by indent
 	}
+
+	/**
+	 * @see IJSkatView#setSkat(String, CardList)
+	 */
+	@Override
+	public void setSkat(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") CardList skat) {
+		// empty method by indent
+	}
 }

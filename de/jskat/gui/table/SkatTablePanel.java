@@ -542,9 +542,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 		this.clearTable();
 	}
 
-	void setSkat(CardList skat) {
-		// TODO maybe this is not needed anymore
-		// this.discardPanel.setSkat(skat);
+	public void setSkat(CardList skat) {
+
+		declaringPanel.setSkat(skat);
 	}
 
 	public void takeCardFromSkat(Card card) {

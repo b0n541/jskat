@@ -36,6 +36,8 @@ class DiscardPanel extends HandPanel {
 
 	private Action discardAction;
 
+	private boolean userLookedIntoSkat = false;
+
 	/**
 	 * Constructor
 	 * 
@@ -96,6 +98,8 @@ class DiscardPanel extends HandPanel {
 
 		addCard(skat.get(0));
 		addCard(skat.get(1));
+
+		userLookedIntoSkat = true;
 	}
 
 	@Override
@@ -118,6 +122,7 @@ class DiscardPanel extends HandPanel {
 
 		this.cardPanel.clearCards();
 		setDiscardButton();
+		userLookedIntoSkat = false;
 	}
 
 	private void setDiscardButton() {
@@ -130,5 +135,25 @@ class DiscardPanel extends HandPanel {
 			this.getActionMap().get(JSkatAction.DISCARD_CARDS)
 					.setEnabled(false);
 		}
+	}
+
+	public CardList getDiscardedCards() {
+
+		CardList result;
+
+		if (this.cardPanel.getCardCount() == 2) {
+			result = (CardList) cardPanel.cards.clone();
+		} else {
+			throw new IllegalStateException(
+					"More or less than two cards found in skat."); //$NON-NLS-1$
+
+		}
+
+		return result;
+	}
+
+	public boolean isUserLookedIntoSkat() {
+
+		return userLookedIntoSkat;
 	}
 }

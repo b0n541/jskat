@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 import javax.swing.plaf.basic.BasicComboBoxRenderer;
 
 import net.miginfocom.swing.MigLayout;
-import de.jskat.data.GameAnnouncement;
+import de.jskat.data.GameAnnouncementWithDiscardedCards;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.CardFace;
 import de.jskat.util.GameType;
@@ -43,7 +43,7 @@ class GameAnnouncePanel extends JPanel {
 	JCheckBox schneiderBox = null;
 	JCheckBox schwarzBox = null;
 
-	boolean userLookedIntoSkat;
+	DiscardPanel discardPanel;
 
 	/**
 	 * Constructor
@@ -53,12 +53,14 @@ class GameAnnouncePanel extends JPanel {
 	 * @param strings
 	 *            i18n strings
 	 */
-	GameAnnouncePanel(ActionMap actions, ResourceBundle strings) {
+	GameAnnouncePanel(ActionMap actions, ResourceBundle strings,
+			DiscardPanel newDiscardPanel) {
 
-		initPanel(actions, strings);
+		initPanel(actions, strings, newDiscardPanel);
 	}
 
-	private void initPanel(final ActionMap actions, ResourceBundle strings) {
+	private void initPanel(final ActionMap actions, ResourceBundle strings,
+			DiscardPanel newDiscardPanel) {
 
 		this.setLayout(new MigLayout("fill")); //$NON-NLS-1$
 
@@ -89,42 +91,51 @@ class GameAnnouncePanel extends JPanel {
 		panel.add(this.schneiderBox, "wrap"); //$NON-NLS-1$
 		panel.add(this.schwarzBox, "wrap"); //$NON-NLS-1$
 
-		final JButton playButton = new JButton(
-				actions.get(JSkatAction.ANNOUNCE_GAME));
-		playButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
+		if (newDiscardPanel != null) {
 
-				if (gameTypeList.getSelectedItem() != null) {
+			discardPanel = newDiscardPanel;
 
-					GameAnnouncement ann = new GameAnnouncement();
-					ann.setGameType(getGameTypeFromSelectedItem());
+			final JButton playButton = new JButton(
+					actions.get(JSkatAction.ANNOUNCE_GAME));
+			playButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
 
-					ann.setOuvert(GameAnnouncePanel.this.ouvertBox.isSelected());
-					ann.setSchneider(GameAnnouncePanel.this.schneiderBox
-							.isSelected());
-					ann.setSchwarz(GameAnnouncePanel.this.schwarzBox
-							.isSelected());
+					if (gameTypeList.getSelectedItem() != null) {
 
-					if (userLookedIntoSkat) {
-						ann.setHand(false);
-					} else {
-						ann.setHand(true);
+						GameAnnouncementWithDiscardedCards ann = new GameAnnouncementWithDiscardedCards();
+						ann.setGameType(getGameTypeFromSelectedItem());
+
+						ann.setOuvert(GameAnnouncePanel.this.ouvertBox
+								.isSelected());
+						ann.setSchneider(GameAnnouncePanel.this.schneiderBox
+								.isSelected());
+						ann.setSchwarz(GameAnnouncePanel.this.schwarzBox
+								.isSelected());
+
+						if (discardPanel.isUserLookedIntoSkat()) {
+							ann.setHand(false);
+							ann.setDiscardedCards(discardPanel
+									.getDiscardedCards());
+						} else {
+							ann.setHand(true);
+						}
+
+						e.setSource(ann);
+						// fire event again
+						playButton.dispatchEvent(e);
 					}
-
-					e.setSource(ann);
-					// fire event again
-					playButton.dispatchEvent(e);
 				}
-			}
 
-			private GameType getGameTypeFromSelectedItem() {
-				Object selectedItem = gameTypeList.getSelectedItem();
+				private GameType getGameTypeFromSelectedItem() {
+					Object selectedItem = gameTypeList.getSelectedItem();
 
-				return (GameType) selectedItem;
-			}
-		});
-		panel.add(playButton);
+					return (GameType) selectedItem;
+				}
+			});
+			panel.add(playButton);
+		}
+
 		this.add(panel, "center"); //$NON-NLS-1$
 
 		setOpaque(false);
@@ -138,7 +149,6 @@ class GameAnnouncePanel extends JPanel {
 		this.ouvertBox.setSelected(false);
 		this.schneiderBox.setSelected(false);
 		this.schwarzBox.setSelected(false);
-		userLookedIntoSkat = false;
 	}
 
 	private class GameTypeComboBoxRenderer extends BasicComboBoxRenderer {
@@ -256,9 +266,5 @@ class GameAnnouncePanel extends JPanel {
 
 			return result;
 		}
-	}
-
-	public void setUserLookedIntoSkat(boolean isUserLookedIntoSkat) {
-		userLookedIntoSkat = isUserLookedIntoSkat;
 	}
 }

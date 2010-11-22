@@ -65,7 +65,7 @@ class BiddingContextPanel extends JPanel {
 		JPanel biddingPanel = getBiddingPanel(actions);
 		this.add(biddingPanel, "grow"); //$NON-NLS-1$
 
-		this.add(new GameAnnouncePanel(actions, strings), "width 25%"); //$NON-NLS-1$
+		this.add(new GameAnnouncePanel(actions, strings, null), "width 25%"); //$NON-NLS-1$
 
 		setOpaque(false);
 	}

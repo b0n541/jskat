@@ -1045,9 +1045,21 @@ public class JSkatViewImpl implements IJSkatView {
 		tables.get(tableName).setActivePlayer(player);
 	}
 
+	/**
+	 * @see IJSkatView#setSeriesState(String, SeriesState)
+	 */
 	@Override
 	public void setSeriesState(String tableName, SeriesState state) {
 
 		tables.get(tableName).setSeriesState(state);
+	}
+
+	/**
+	 * @see IJSkatView#setSkat(String, CardList)
+	 */
+	@Override
+	public void setSkat(String tableName, CardList skat) {
+
+		tables.get(tableName).setSkat(skat);
 	}
 }
