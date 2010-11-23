@@ -11,6 +11,7 @@ Released: @ReleaseDate@
 
 package de.jskat.gui.iss;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
@@ -74,14 +75,16 @@ public class LoginPanel extends AbstractTabPanel {
 
 		JPanel login = new JPanel(new MigLayout());
 
-		login.add(
-				new JLabel("Connect to International Skat Server"), "span 2, align center, wrap"); //$NON-NLS-2$
+		JLabel headerLabel = new JLabel("Connect to International Skat Server");
+		headerLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
+		login.add(headerLabel, "span 2, align center, wrap"); //$NON-NLS-2$
 		login.add(new JLabel("Login"));
 		this.loginField = new JTextField(10);
 		login.add(this.loginField, "growx, wrap"); //$NON-NLS-1$
 		login.add(new JLabel("Password"));
 		this.passwordField = new JPasswordField(10);
 		login.add(this.passwordField, "growx, wrap"); //$NON-NLS-1$
+
 		final JButton loginButton = new JButton(this.getActionMap().get(
 				JSkatAction.CONNECT_TO_ISS));
 		loginButton.addActionListener(new ActionListener() {
@@ -101,15 +104,18 @@ public class LoginPanel extends AbstractTabPanel {
 				loginButton.dispatchEvent(e);
 			}
 		});
-		login.add(loginButton, "span 2, align center, wrap"); //$NON-NLS-1$
-
 		final JButton issHomepageButton = new JButton(getActionMap().get(
 				JSkatAction.OPEN_ISS_HOMEPAGE));
-		login.add(issHomepageButton, "span 2, align center, wrap"); //$NON-NLS-1$
-
 		final JButton issRegisterButton = new JButton(getActionMap().get(
 				JSkatAction.REGISTER_ON_ISS));
-		login.add(issRegisterButton, "span 2, align center"); //$NON-NLS-1$
+
+		JPanel buttonPanel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
+
+		buttonPanel.add(loginButton);
+		buttonPanel.add(issHomepageButton);
+		buttonPanel.add(issRegisterButton);
+
+		login.add(buttonPanel, "span 2, align center"); //$NON-NLS-1$
 
 		return login;
 	}

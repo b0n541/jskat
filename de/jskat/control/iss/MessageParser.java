@@ -290,21 +290,30 @@ public class MessageParser {
 		info.setGameAnnouncement(ann);
 
 		if (annToken.hasMoreTokens()) {
-			Card skatCard0 = Card.getCardFromString(annToken.nextToken());
-			Card skatCard1 = Card.getCardFromString(annToken.nextToken());
 
-			CardList skat = new CardList();
-			skat.add(skatCard0);
-			skat.add(skatCard1);
+			if (!info.getGameAnnouncement().isHand()) {
+				Card skatCard0 = Card.getCardFromString(annToken.nextToken());
+				Card skatCard1 = Card.getCardFromString(annToken.nextToken());
 
-			info.setSkat(skat);
+				CardList skat = new CardList();
+				skat.add(skatCard0);
+				skat.add(skatCard1);
 
-			while (annToken.hasMoreTokens()
-					&& info.getGameAnnouncement().isOuvert()) {
-				// player has shown the cards
-				// ouvert game
+				info.setSkat(skat);
+			} else {
 
-				// FIXME show cards
+				CardList ouvertCards = new CardList();
+
+				while (annToken.hasMoreTokens()
+						&& info.getGameAnnouncement().isOuvert()) {
+					// player has shown the cards
+					// ouvert game
+
+					ouvertCards
+							.add(Card.getCardFromString(annToken.nextToken()));
+				}
+
+				info.setOuvertCards(ouvertCards);
 			}
 		}
 

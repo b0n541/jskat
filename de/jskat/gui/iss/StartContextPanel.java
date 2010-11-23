@@ -41,7 +41,7 @@ class StartContextPanel extends JPanel {
 				"center"); //$NON-NLS-1$
 		panel.add(new JButton(actions.get(JSkatAction.LEAVE_ISS_TABLE)),
 				"center"); //$NON-NLS-1$
-		setOpaque(false);
+		panel.setOpaque(false);
 		this.add(panel, "center"); //$NON-NLS-1$
 
 		setOpaque(false);

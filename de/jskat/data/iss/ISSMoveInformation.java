@@ -26,15 +26,16 @@ import de.jskat.util.Player;
 public class ISSMoveInformation {
 
 	private MovePlayer movePlayer;
-	// private Player playerPosition;
 	private Map<Player, Double> playerTimes = new HashMap<Player, Double>();
 	private MoveType type;
 	private int bidValue;
 	private GameAnnouncement announcement;
+	// FIXME (jan 23.11.2010) this doesn't work until card lists are static
 	private CardList skat = new CardList();
 	private CardList foreHandCards = new CardList();
 	private CardList middleHandCards = new CardList();
 	private CardList hindHandCards = new CardList();
+	private CardList ouvertCards = new CardList();
 	private Card card;
 	private Player timeOutPlayer;
 
@@ -331,5 +332,24 @@ public class ISSMoveInformation {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Sets the ouvert cards
+	 * 
+	 * @param newOuvertCards
+	 *            Ouvert cards
+	 */
+	public void setOuvertCards(CardList newOuvertCards) {
+		ouvertCards = newOuvertCards;
+	}
+
+	/**
+	 * Gets the ouvert cards
+	 * 
+	 * @return Ouvert cards
+	 */
+	public CardList getOuvertCards() {
+		return ouvertCards;
 	}
 }
