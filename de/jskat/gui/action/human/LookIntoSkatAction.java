@@ -21,6 +21,7 @@ import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
+import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
  * Implements the action for handling click on look into skat button
@@ -41,6 +42,7 @@ public class LookIntoSkatAction extends AbstractJSkatAction {
 		putValue(Action.SHORT_DESCRIPTION, "Look into skat");
 
 		setActionCommand(JSkatAction.LOOK_INTO_SKAT);
+		setIcon(Icon.PLAY);
 	}
 
 	/**

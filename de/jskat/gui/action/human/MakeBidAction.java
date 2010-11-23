@@ -21,6 +21,7 @@ import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
+import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
  * Implements the action for handling click on bid button
@@ -41,6 +42,7 @@ public class MakeBidAction extends AbstractJSkatAction {
 		putValue(Action.SHORT_DESCRIPTION, "Make bid");
 
 		setActionCommand(JSkatAction.MAKE_BID);
+		setIcon(Icon.OK);
 	}
 
 	/**
