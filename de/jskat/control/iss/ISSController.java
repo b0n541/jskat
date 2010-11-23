@@ -20,7 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.control.JSkatMaster;
-import de.jskat.data.GameAnnouncement;
+import de.jskat.data.GameAnnouncementWithDiscardedCards;
 import de.jskat.data.JSkatApplicationData;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameState;
@@ -612,15 +612,11 @@ public class ISSController {
 	 *            Table name
 	 * @param gameAnnouncement
 	 *            Game announcement
-	 * @param discardedCards
-	 *            Discarded cards
 	 */
 	public void sendGameAnnouncementMove(String tableName,
-			GameAnnouncement gameAnnouncement, Card... discardedCards) {
+			GameAnnouncementWithDiscardedCards gameAnnouncement) {
 
-		this.issConnect.sendGameAnnouncementMove(tableName,
-				gameAnnouncement.getGameType(), gameAnnouncement.isHand(),
-				gameAnnouncement.isOuvert(), discardedCards);
+		this.issConnect.sendGameAnnouncementMove(tableName, gameAnnouncement);
 
 	}
 

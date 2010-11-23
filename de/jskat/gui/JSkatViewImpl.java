@@ -907,8 +907,13 @@ public class JSkatViewImpl implements IJSkatView {
 					SkatConstants.getNextBidValue(moveInformation.getBidValue()));
 			break;
 		case SKAT_REQUEST:
-		case SKAT_LOOKING:
 			this.setGameState(tableName, GameState.LOOK_INTO_SKAT);
+			break;
+		case SKAT_LOOKING:
+			this.setGameState(tableName, GameState.DISCARDING);
+			if (moveInformation.getSkat() != null) {
+				setSkat(tableName, moveInformation.getSkat());
+			}
 			break;
 		case GAME_ANNOUNCEMENT:
 			this.setGameState(tableName, GameState.DECLARING);

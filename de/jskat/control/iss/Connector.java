@@ -20,8 +20,10 @@ import javax.swing.JOptionPane;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.jskat.data.GameAnnouncementWithDiscardedCards;
 import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.util.Card;
+import de.jskat.util.CardList;
 import de.jskat.util.GameType;
 
 /**
@@ -211,22 +213,27 @@ class Connector {
 		this.issOut.send("table " + tableName + ' ' + loginName + " play s"); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
-	public void sendGameAnnouncementMove(String tableName, GameType gameType,
-			boolean hand, boolean ouvert, Card... discardedCards) {
+	public void sendGameAnnouncementMove(String tableName,
+			GameAnnouncementWithDiscardedCards gameAnnouncement) {
 
-		String gameAnnouncement = getGameTypeString(gameType, hand, ouvert);
+		String gameAnnouncementString = getGameTypeString(
+				gameAnnouncement.getGameType(), gameAnnouncement.isHand(),
+				gameAnnouncement.isOuvert(), gameAnnouncement.isSchneider(),
+				gameAnnouncement.isSchwarz());
 
-		if (!hand) {
-			gameAnnouncement += "." + getIssCardString(discardedCards[0]) + "." //$NON-NLS-1$ //$NON-NLS-2$
-					+ getIssCardString(discardedCards[1]);
+		if (!gameAnnouncement.isHand()) {
+
+			CardList skat = gameAnnouncement.getDiscardedCards();
+			gameAnnouncementString += "." + getIssCardString(skat.get(0)) + "." //$NON-NLS-1$ //$NON-NLS-2$
+					+ getIssCardString(skat.get(1));
 		}
 
 		this.issOut
-				.send("table " + tableName + ' ' + loginName + " play " + gameAnnouncement); //$NON-NLS-1$//$NON-NLS-2$
+				.send("table " + tableName + ' ' + loginName + " play " + gameAnnouncementString); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
 	private String getGameTypeString(GameType gameType, boolean hand,
-			boolean ouvert) {
+			boolean ouvert, boolean schneider, boolean schwarz) {
 
 		String result = getGameTypeString(gameType);
 
@@ -236,6 +243,14 @@ class Connector {
 
 		if (ouvert) {
 			result += "O"; //$NON-NLS-1$
+		}
+
+		if (schneider) {
+			result += "S"; //$NON-NLS-1$
+		}
+
+		if (schwarz) {
+			result += "Z"; //$NON-NLS-1$
 		}
 
 		return result;

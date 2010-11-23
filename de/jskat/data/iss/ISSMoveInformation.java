@@ -31,8 +31,7 @@ public class ISSMoveInformation {
 	private MoveType type;
 	private int bidValue;
 	private GameAnnouncement announcement;
-	private Card skat0;
-	private Card skat1;
+	private CardList skat = new CardList();
 	private CardList foreHandCards = new CardList();
 	private CardList middleHandCards = new CardList();
 	private CardList hindHandCards = new CardList();
@@ -45,7 +44,7 @@ public class ISSMoveInformation {
 	 * @return Game announcement
 	 */
 	public GameAnnouncement getGameAnnouncement() {
-		return this.announcement;
+		return announcement;
 	}
 
 	/**
@@ -55,7 +54,7 @@ public class ISSMoveInformation {
 	 *            Game announcement
 	 */
 	public void setGameAnnouncement(GameAnnouncement ann) {
-		this.announcement = ann;
+		announcement = ann;
 	}
 
 	/**
@@ -65,18 +64,9 @@ public class ISSMoveInformation {
 	 *            Index of card
 	 * @return Card
 	 */
-	public Card getSkat(int index) {
-		// TODO dirty hack
-		Card result = null;
-		if (index == 0) {
+	public CardList getSkat() {
 
-			result = this.skat0;
-		} else if (index == 1) {
-
-			result = this.skat1;
-		}
-
-		return result;
+		return skat;
 	}
 
 	/**
@@ -87,10 +77,9 @@ public class ISSMoveInformation {
 	 * @param newSkat1
 	 *            Second card
 	 */
-	public void setSkatCards(Card newSkat0, Card newSkat1) {
+	public void setSkat(CardList newSkat) {
 
-		this.skat0 = newSkat0;
-		this.skat1 = newSkat1;
+		skat = newSkat;
 	}
 
 	/**
@@ -100,7 +89,7 @@ public class ISSMoveInformation {
 	 */
 	public MovePlayer getMovePlayer() {
 
-		return this.movePlayer;
+		return movePlayer;
 	}
 
 	/**
@@ -120,7 +109,7 @@ public class ISSMoveInformation {
 	 */
 	public void setMovePlayer(MovePlayer newMovePlayer) {
 
-		this.movePlayer = newMovePlayer;
+		movePlayer = newMovePlayer;
 	}
 
 	/**
@@ -128,7 +117,7 @@ public class ISSMoveInformation {
 	 */
 	public void clearPlayerTimes() {
 
-		this.playerTimes.clear();
+		playerTimes.clear();
 	}
 
 	/**
@@ -141,7 +130,7 @@ public class ISSMoveInformation {
 	 */
 	public void putPlayerTime(Player playerPosition, Double time) {
 
-		this.playerTimes.put(playerPosition, time);
+		playerTimes.put(playerPosition, time);
 	}
 
 	/**
@@ -153,7 +142,7 @@ public class ISSMoveInformation {
 	 */
 	public double getPlayerTime(Player playerPosition) {
 
-		return this.playerTimes.get(playerPosition).doubleValue();
+		return playerTimes.get(playerPosition).doubleValue();
 	}
 
 	/**
@@ -163,7 +152,7 @@ public class ISSMoveInformation {
 	 */
 	public MoveType getType() {
 
-		return this.type;
+		return type;
 	}
 
 	/**
@@ -174,7 +163,7 @@ public class ISSMoveInformation {
 	 */
 	public void setType(MoveType newType) {
 
-		this.type = newType;
+		type = newType;
 	}
 
 	/**
@@ -184,7 +173,7 @@ public class ISSMoveInformation {
 	 */
 	public int getBidValue() {
 
-		return this.bidValue;
+		return bidValue;
 	}
 
 	/**
@@ -195,7 +184,7 @@ public class ISSMoveInformation {
 	 */
 	public void setBidValue(int newBidValue) {
 
-		this.bidValue = newBidValue;
+		bidValue = newBidValue;
 	}
 
 	/**
@@ -205,7 +194,7 @@ public class ISSMoveInformation {
 	 */
 	public Card getCard() {
 
-		return this.card;
+		return card;
 	}
 
 	/**
@@ -215,7 +204,7 @@ public class ISSMoveInformation {
 	 */
 	public void setCard(Card newCard) {
 
-		this.card = newCard;
+		card = newCard;
 	}
 
 	/**
@@ -228,13 +217,13 @@ public class ISSMoveInformation {
 
 		switch (player) {
 		case FORE_HAND:
-			this.foreHandCards.clear();
+			foreHandCards.clear();
 			break;
 		case MIDDLE_HAND:
-			this.middleHandCards.clear();
+			middleHandCards.clear();
 			break;
 		case HIND_HAND:
-			this.hindHandCards.clear();
+			hindHandCards.clear();
 			break;
 		}
 	}
@@ -251,13 +240,13 @@ public class ISSMoveInformation {
 
 		switch (player) {
 		case FORE_HAND:
-			this.foreHandCards.add(newCard);
+			foreHandCards.add(newCard);
 			break;
 		case MIDDLE_HAND:
-			this.middleHandCards.add(newCard);
+			middleHandCards.add(newCard);
 			break;
 		case HIND_HAND:
-			this.hindHandCards.add(newCard);
+			hindHandCards.add(newCard);
 			break;
 		}
 	}
@@ -270,11 +259,10 @@ public class ISSMoveInformation {
 	 */
 	public void setDealCards(List<CardList> deal) {
 
-		this.foreHandCards = deal.get(0);
-		this.middleHandCards = deal.get(1);
-		this.hindHandCards = deal.get(2);
-		this.skat0 = deal.get(3).get(0);
-		this.skat1 = deal.get(3).get(1);
+		foreHandCards = deal.get(0);
+		middleHandCards = deal.get(1);
+		hindHandCards = deal.get(2);
+		skat = deal.get(3);
 	}
 
 	/**
@@ -290,13 +278,13 @@ public class ISSMoveInformation {
 
 		switch (player) {
 		case FORE_HAND:
-			result = this.foreHandCards;
+			result = foreHandCards;
 			break;
 		case MIDDLE_HAND:
-			result = this.middleHandCards;
+			result = middleHandCards;
 			break;
 		case HIND_HAND:
-			result = this.hindHandCards;
+			result = hindHandCards;
 			break;
 		}
 
@@ -311,7 +299,7 @@ public class ISSMoveInformation {
 	 */
 	public void setTimeOutPlayer(Player newTimeOutPlayer) {
 
-		this.timeOutPlayer = newTimeOutPlayer;
+		timeOutPlayer = newTimeOutPlayer;
 	}
 
 	/**
@@ -321,7 +309,7 @@ public class ISSMoveInformation {
 	 */
 	public Player getTimeOutPlayer() {
 
-		return this.timeOutPlayer;
+		return timeOutPlayer;
 	}
 
 	private static Player getPlayer(MovePlayer movePlayer) {

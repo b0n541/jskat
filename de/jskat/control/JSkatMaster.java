@@ -27,7 +27,7 @@ import de.jskat.ai.nn.AIPlayerNN;
 import de.jskat.ai.nn.data.SkatNetworks;
 import de.jskat.ai.nn.train.NNTrainer;
 import de.jskat.control.iss.ISSController;
-import de.jskat.data.GameAnnouncement;
+import de.jskat.data.GameAnnouncementWithDiscardedCards;
 import de.jskat.data.JSkatApplicationData;
 import de.jskat.data.JSkatOptions;
 import de.jskat.gui.IJSkatView;
@@ -488,7 +488,7 @@ public class JSkatMaster {
 				// player did game announcement
 				// FIXME (jan 02.11.2010) Discarded cards are sent with the
 				// game announcement to ISS
-				GameAnnouncement gameAnnouncement = (GameAnnouncement) source;
+				GameAnnouncementWithDiscardedCards gameAnnouncement = (GameAnnouncementWithDiscardedCards) source;
 				this.issControl.sendGameAnnouncementMove(tableName,
 						gameAnnouncement);
 			}

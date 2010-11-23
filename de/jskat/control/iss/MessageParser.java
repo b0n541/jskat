@@ -178,7 +178,7 @@ public class MessageParser {
 					} else if (move.length() == 5) {
 						// open skat given to a player
 						info.setType(MoveType.SKAT_LOOKING);
-						// TODO parse cards
+						info.setSkat(parseSkatCards(move));
 					} else {
 						// game announcement
 						info.setType(MoveType.GAME_ANNOUNCEMENT);
@@ -197,6 +197,18 @@ public class MessageParser {
 				new Double(params.get(params.size() - 1)));
 
 		return info;
+	}
+
+	private static CardList parseSkatCards(String move) {
+
+		StringTokenizer token = new StringTokenizer(move, "."); //$NON-NLS-1$
+		CardList result = new CardList();
+
+		while (token.hasMoreTokens()) {
+			result.add(Card.getCardFromString(token.nextToken()));
+		}
+
+		return result;
 	}
 
 	private static void getMovePlayer(String movePlayer, ISSMoveInformation info) {
@@ -281,7 +293,11 @@ public class MessageParser {
 			Card skatCard0 = Card.getCardFromString(annToken.nextToken());
 			Card skatCard1 = Card.getCardFromString(annToken.nextToken());
 
-			info.setSkatCards(skatCard0, skatCard1);
+			CardList skat = new CardList();
+			skat.add(skatCard0);
+			skat.add(skatCard1);
+
+			info.setSkat(skat);
 
 			while (annToken.hasMoreTokens()
 					&& info.getGameAnnouncement().isOuvert()) {
