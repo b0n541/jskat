@@ -911,7 +911,7 @@ public class JSkatViewImpl implements IJSkatView {
 			break;
 		case SKAT_LOOKING:
 			this.setGameState(tableName, GameState.DISCARDING);
-			if (moveInformation.getSkat() != null) {
+			if (moveInformation.getSkat().size() == 2) {
 				setSkat(tableName, moveInformation.getSkat());
 			}
 			break;

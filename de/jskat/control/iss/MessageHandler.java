@@ -44,8 +44,8 @@ public class MessageHandler {
 	 */
 	public MessageHandler(Connector conn, ISSController controller) {
 
-		this.connect = conn;
-		this.issControl = controller;
+		connect = conn;
+		issControl = controller;
 	}
 
 	void handleMessage(String message) {
@@ -68,7 +68,7 @@ public class MessageHandler {
 
 		} catch (Exception except) {
 			log.error("Error in parsing ISS protocoll", except); //$NON-NLS-1$
-			this.issControl.showMessage(JOptionPane.ERROR_MESSAGE,
+			issControl.showMessage(JOptionPane.ERROR_MESSAGE,
 					"Error in parsing ISS protocoll.");
 		}
 
@@ -124,12 +124,12 @@ public class MessageHandler {
 
 	void handleLobbyChatMessage(List<String> params) {
 
-		this.issControl.addChatMessage(ChatMessageType.LOBBY, params);
+		issControl.addChatMessage(ChatMessageType.LOBBY, params);
 	}
 
 	void handlePasswordMessage() {
 
-		this.connect.sendPassword();
+		connect.sendPassword();
 	}
 
 	void handleTextMessage(List<String> params) {
@@ -138,8 +138,27 @@ public class MessageHandler {
 	}
 
 	void handleErrorMessage(List<String> params) {
-		// FIXME show it to the user
+
 		log.error(params.toString());
+		// FIXME (jan 23.11.2010) i18n needed
+		issControl.showMessage(JOptionPane.ERROR_MESSAGE,
+				getErrorString(params));
+	}
+
+	private String getErrorString(List<String> params) {
+
+		String result = new String();
+
+		for (String token : params) {
+
+			if (result.length() > 0) {
+				result += " "; //$NON-NLS-1$
+			}
+
+			result += token;
+		}
+
+		return result;
 	}
 
 	void handleTableCreateMessage(List<String> params) {
@@ -149,7 +168,7 @@ public class MessageHandler {
 		String tableName = params.get(0);
 		String creator = params.get(1);
 		int seats = Integer.parseInt(params.get(2));
-		this.issControl.createTable(tableName, creator, seats);
+		issControl.createTable(tableName, creator, seats);
 	}
 
 	void handleTableDestroyMessage(List<String> params) {
@@ -157,7 +176,7 @@ public class MessageHandler {
 		log.debug("table destroy message"); //$NON-NLS-1$
 
 		String tableName = params.get(0);
-		this.issControl.destroyTable(tableName);
+		issControl.destroyTable(tableName);
 	}
 
 	/**
@@ -175,28 +194,33 @@ public class MessageHandler {
 		String actionCommand = params.get(2);
 		List<String> detailParams = params.subList(3, params.size());
 
-		if (actionCommand.equals("state")) { //$NON-NLS-1$
+		if (actionCommand.equals("error")) { //$NON-NLS-1$
 
-			this.issControl.updateISSTableState(tableName,
+			handleErrorMessage(params.subList(3, params.size()));
+
+		} else if (actionCommand.equals("state")) { //$NON-NLS-1$
+
+			issControl.updateISSTableState(tableName,
 					MessageParser.getTableStatus(creator, detailParams));
 
 		} else if (actionCommand.equals("start")) { //$NON-NLS-1$
 
-			this.issControl.updateISSGame(tableName,
+			issControl.updateISSGame(tableName,
 					MessageParser.getGameStartStatus(creator, detailParams));
 
 		} else if (actionCommand.equals("go")) { //$NON-NLS-1$
 
-			this.issControl.startGame(tableName);
+			issControl.startGame(tableName);
 
 		} else if (actionCommand.equals("play")) { //$NON-NLS-1$
 
-			this.issControl.updateMove(tableName,
+			issControl.updateMove(tableName,
 					MessageParser.getMoveInformation(detailParams));
 
 		} else if (actionCommand.equals("end")) { //$NON-NLS-1$
-			this.issControl
-					.endGame(tableName, getGameInformation(detailParams));
+
+			issControl.endGame(tableName, getGameInformation(detailParams));
+
 		} else {
 
 			log.debug("unhandled action command: " + actionCommand + " for table " + tableName); //$NON-NLS-1$ //$NON-NLS-2$
@@ -241,7 +265,7 @@ public class MessageHandler {
 		long gamesPlayed = Long.parseLong(params.get(3));
 		double strength = Double.parseDouble(params.get(4));
 
-		this.issControl.updateISSPlayerList(playerName, language, gamesPlayed,
+		issControl.updateISSPlayerList(playerName, language, gamesPlayed,
 				strength);
 	}
 
@@ -253,7 +277,7 @@ public class MessageHandler {
 	 */
 	void removeClientFromList(List<String> params) {
 
-		this.issControl.removeISSPlayerFromList(params.get(0));
+		issControl.removeISSPlayerFromList(params.get(0));
 	}
 
 	/**
@@ -311,7 +335,7 @@ public class MessageHandler {
 		String player2 = params.get(4);
 		String player3 = params.get(5);
 
-		this.issControl.updateISSTableList(tableName, maxPlayers, gamesPlayed,
+		issControl.updateISSTableList(tableName, maxPlayers, gamesPlayed,
 				player1, player2, player3);
 	}
 
@@ -323,7 +347,7 @@ public class MessageHandler {
 	 */
 	void removeTableFromList(List<String> params) {
 
-		this.issControl.removeISSTableFromList(params.get(0));
+		issControl.removeISSTableFromList(params.get(0));
 	}
 
 }
