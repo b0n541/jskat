@@ -32,14 +32,15 @@ public class MakeBidAction extends AbstractJSkatAction {
 	/**
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
-	public MakeBidAction(JSkatMaster controller, JSkatGraphicRepository bitmaps,
-			ResourceBundle strings) {
+	public MakeBidAction(JSkatMaster controller,
+			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
 
 		super(controller, bitmaps);
 
 		putValue(Action.NAME, "make bid"); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION, "Make bid");
-		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.MAKE_BID.toString());
+
+		setActionCommand(JSkatAction.MAKE_BID);
 	}
 
 	/**

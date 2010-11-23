@@ -20,6 +20,7 @@ import javax.swing.Action;
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
+import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
  * Implements the action for starting a new skat series
@@ -40,7 +41,7 @@ public class PauseSkatSeriesAction extends AbstractJSkatAction {
 		putValue(Action.SHORT_DESCRIPTION,
 				strings.getString("pause_series_tooltip"));
 
-		setIcons(JSkatGraphicRepository.Icon.PAUSE);
+		setIcon(Icon.PAUSE);
 	}
 
 	/**

@@ -11,13 +11,12 @@ Released: @ReleaseDate@
 
 package de.jskat.gui.action;
 
-import java.awt.event.ActionEvent;
-
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.img.JSkatGraphicRepository;
+import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
  * Defines an abstract action for JSkat
@@ -31,27 +30,18 @@ public abstract class AbstractJSkatAction extends AbstractAction {
 	 * 
 	 * @param controller
 	 *            JSkat master
-	 * @param bitmaps
+	 * @param newBitmaps
 	 *            JSkat graphics
 	 */
 	public AbstractJSkatAction(JSkatMaster controller,
-			JSkatGraphicRepository bitmaps) {
+			JSkatGraphicRepository newBitmaps) {
 
 		this.jskat = controller;
-		this.bitmaps = bitmaps;
-		setIcons(JSkatGraphicRepository.Icon.BLANK);
+		this.bitmaps = newBitmaps;
+		setIcon(Icon.BLANK);
 	}
 
-	/**
-	 * @see AbstractAction#actionPerformed(ActionEvent)
-	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
-		this.jskat.takeCardFromSkat(e);
-	}
-
-	protected void setIcons(JSkatGraphicRepository.Icon icon) {
+	protected void setIcon(JSkatGraphicRepository.Icon icon) {
 		putValue(
 				SMALL_ICON,
 				new ImageIcon(bitmaps.getIconImage(icon,
@@ -60,7 +50,10 @@ public abstract class AbstractJSkatAction extends AbstractAction {
 				LARGE_ICON_KEY,
 				new ImageIcon(bitmaps.getIconImage(icon,
 						JSkatGraphicRepository.IconSize.BIG)));
+	}
 
+	protected void setActionCommand(JSkatAction action) {
+		putValue(ACTION_COMMAND_KEY, action.toString());
 	}
 
 	/**

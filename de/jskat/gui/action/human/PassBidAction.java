@@ -21,6 +21,7 @@ import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
+import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
  * Implements the action for handling click on pass bid button
@@ -40,7 +41,9 @@ public class PassBidAction extends AbstractJSkatAction {
 
 		putValue(Action.NAME, strings.getString("pass")); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION, "Pass this bid");
-		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.PASS_BID.toString());
+
+		setActionCommand(JSkatAction.PASS_BID);
+		setIcon(Icon.STOP);
 	}
 
 	/**

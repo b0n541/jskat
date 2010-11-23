@@ -23,23 +23,23 @@ import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
- * Implements the action for creating a skat table on ISS
+ * Implements the action for registering on ISS
  */
-public class CreateISSTableAction extends AbstractJSkatAction {
+public class RegisterOnISSAction extends AbstractJSkatAction {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
 	 */
-	public CreateISSTableAction(JSkatMaster controller,
+	public RegisterOnISSAction(JSkatMaster controller,
 			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
 
-		// FIXME (jan 23.11.2010) use CreateTableAction
 		super(controller, bitmaps);
 
-		putValue(Action.NAME, strings.getObject("new_table")); //$NON-NLS-1$
-		setIcon(Icon.TABLE);
+		putValue(Action.NAME, strings.getObject("register_on_iss")); //$NON-NLS-1$
+
+		setIcon(Icon.REGISTER);
 	}
 
 	/**
@@ -48,6 +48,6 @@ public class CreateISSTableAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		this.jskat.getISSController().requestTableCreation();
+		this.jskat.openRegisterPage();
 	}
 }

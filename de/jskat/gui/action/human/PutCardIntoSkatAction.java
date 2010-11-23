@@ -15,7 +15,6 @@ import java.awt.event.ActionEvent;
 import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
-import javax.swing.Action;
 
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
@@ -36,8 +35,8 @@ public class PutCardIntoSkatAction extends AbstractJSkatAction {
 			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
 
 		super(controller, bitmaps);
-		putValue(Action.ACTION_COMMAND_KEY,
-				JSkatAction.PUT_CARD_INTO_SKAT.toString());
+
+		setActionCommand(JSkatAction.PUT_CARD_INTO_SKAT);
 	}
 
 	/**

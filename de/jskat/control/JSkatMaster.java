@@ -11,9 +11,14 @@ Released: @ReleaseDate@
 
 package de.jskat.control;
 
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -667,4 +672,56 @@ public class JSkatMaster {
 		this.view.removeFromISSLobbyPlayerList(playerName);
 	}
 
+	/**
+	 * Opens the ISS homepage in the default browser
+	 */
+	public void openISSHomepage() {
+
+		openWebPage(getISSHomepageLink(Locale.getDefault()));
+	}
+
+	private String getISSHomepageLink(Locale locale) {
+
+		String result = "http://www.skatgame.net/iss/"; //$NON-NLS-1$
+
+		if (locale.getLanguage().equals(Locale.GERMAN.toString())) {
+			result += "index-de.html"; //$NON-NLS-1$
+		} else {
+			result += "index.html"; //$NON-NLS-1$
+		}
+
+		return result;
+	}
+
+	private void openWebPage(String link) {
+		try {
+			Desktop desktop = java.awt.Desktop.getDesktop();
+			URI uri = new URI(link);
+			desktop.browse(uri);
+		} catch (URISyntaxException except) {
+			log.error(except);
+		} catch (IOException except) {
+			log.error(except);
+		}
+	}
+
+	/**
+	 * Opens the ISS registration form in the default browser
+	 */
+	public void openRegisterPage() {
+		openWebPage(getISSRegisterLink(Locale.getDefault()));
+	}
+
+	private String getISSRegisterLink(Locale locale) {
+
+		String result = "http://skatgame.net:7000/"; //$NON-NLS-1$
+
+		if (locale.getLanguage().equals(Locale.GERMAN.toString())) {
+			result += "de-register"; //$NON-NLS-1$
+		} else {
+			result += "en-register"; //$NON-NLS-1$
+		}
+
+		return result;
+	}
 }

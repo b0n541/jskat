@@ -21,6 +21,7 @@ import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
+import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
  * Implements the action for handling click on bid button
@@ -39,7 +40,9 @@ public class HoldBidAction extends AbstractJSkatAction {
 
 		putValue(Action.NAME, "hold bid"); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION, "Hold this bid");
-		putValue(Action.ACTION_COMMAND_KEY, JSkatAction.HOLD_BID.toString());
+
+		setActionCommand(JSkatAction.HOLD_BID);
+		setIcon(Icon.OK);
 	}
 
 	/**

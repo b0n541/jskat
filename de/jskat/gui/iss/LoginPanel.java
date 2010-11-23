@@ -101,8 +101,15 @@ public class LoginPanel extends AbstractTabPanel {
 				loginButton.dispatchEvent(e);
 			}
 		});
+		login.add(loginButton, "span 2, align center, wrap"); //$NON-NLS-1$
 
-		login.add(loginButton, "span 2, align center"); //$NON-NLS-1$
+		final JButton issHomepageButton = new JButton(getActionMap().get(
+				JSkatAction.OPEN_ISS_HOMEPAGE));
+		login.add(issHomepageButton, "span 2, align center, wrap"); //$NON-NLS-1$
+
+		final JButton issRegisterButton = new JButton(getActionMap().get(
+				JSkatAction.REGISTER_ON_ISS));
+		login.add(issRegisterButton, "span 2, align center"); //$NON-NLS-1$
 
 		return login;
 	}

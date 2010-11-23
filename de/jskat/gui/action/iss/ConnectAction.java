@@ -21,6 +21,7 @@ import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
+import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
  * Implements the action for showing about dialog
@@ -37,12 +38,10 @@ public class ConnectAction extends AbstractJSkatAction {
 
 		super(controller, bitmaps);
 
-		putValue(Action.NAME, "Connect to ISS");
-		putValue(Action.SHORT_DESCRIPTION, "Opens a connection to ISS");
-		putValue(Action.ACTION_COMMAND_KEY,
-				JSkatAction.CONNECT_TO_ISS.toString());
+		putValue(Action.NAME, strings.getObject("connect_to_iss")); //$NON-NLS-1$
 
-		setIcons(JSkatGraphicRepository.Icon.CONNECT_ISS);
+		setActionCommand(JSkatAction.CONNECT_TO_ISS);
+		setIcon(Icon.CONNECT_ISS);
 	}
 
 	/**

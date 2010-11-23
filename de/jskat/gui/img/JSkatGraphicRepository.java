@@ -294,9 +294,9 @@ public class JSkatGraphicRepository {
 		 */
 		TABLE,
 		/**
-		 * Start series
+		 * Start series / continue series etc.
 		 */
-		START_SERIES,
+		PLAY,
 		/**
 		 * Pause series
 		 */
@@ -305,6 +305,10 @@ public class JSkatGraphicRepository {
 		 * Connect ISS
 		 */
 		CONNECT_ISS,
+		/**
+		 * Leave table / log out from ISS
+		 */
+		LOG_OUT,
 		/**
 		 * License
 		 */
@@ -320,7 +324,43 @@ public class JSkatGraphicRepository {
 		/**
 		 * Train Neural Networks
 		 */
-		TRAIN_NN;
+		TRAIN_NN,
+		/**
+		 * OK / Bid / Hold bid
+		 */
+		OK,
+		/**
+		 * Cancel / Pass
+		 */
+		STOP,
+		/**
+		 * Chat
+		 */
+		CHAT,
+		/**
+		 * Chat disabled
+		 */
+		CHAT_DISABLED,
+		/**
+		 * User info
+		 */
+		USER_INFO,
+		/**
+		 * Web / Home page
+		 */
+		WEB,
+		/**
+		 * Clock
+		 */
+		CLOCK,
+		/**
+		 * Invite
+		 */
+		INVITE,
+		/**
+		 * Register
+		 */
+		REGISTER;
 	}
 
 	/**

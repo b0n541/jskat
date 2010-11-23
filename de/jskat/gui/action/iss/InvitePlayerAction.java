@@ -19,6 +19,7 @@ import javax.swing.AbstractAction;
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
+import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
  * Implements the action for leaving a skat table on ISS
@@ -37,6 +38,8 @@ public class InvitePlayerAction extends AbstractJSkatAction {
 
 		putValue(NAME, "Invite player");
 		putValue(SHORT_DESCRIPTION, "Invite player on ISS");
+
+		setIcon(Icon.INVITE);
 	}
 
 	/**

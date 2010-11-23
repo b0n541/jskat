@@ -39,8 +39,8 @@ public class PlayHandGameAction extends AbstractJSkatAction {
 
 		putValue(Action.NAME, "Play hand game");
 		putValue(Action.SHORT_DESCRIPTION, "Play hand game");
-		putValue(Action.ACTION_COMMAND_KEY,
-				JSkatAction.PLAY_HAND_GAME.toString());
+
+		setActionCommand(JSkatAction.PLAY_HAND_GAME);
 	}
 
 	/**

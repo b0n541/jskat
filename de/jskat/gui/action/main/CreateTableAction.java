@@ -20,6 +20,7 @@ import javax.swing.Action;
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
+import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
  * Implements the action for creating a new table
@@ -40,7 +41,7 @@ public class CreateTableAction extends AbstractJSkatAction {
 		putValue(Action.SHORT_DESCRIPTION,
 				strings.getString("new_table_tooltip"));
 
-		setIcons(JSkatGraphicRepository.Icon.TABLE);
+		setIcon(Icon.TABLE);
 	}
 
 	/**

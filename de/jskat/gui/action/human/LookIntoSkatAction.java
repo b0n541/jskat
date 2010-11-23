@@ -39,8 +39,8 @@ public class LookIntoSkatAction extends AbstractJSkatAction {
 
 		putValue(Action.NAME, "Look into skat");
 		putValue(Action.SHORT_DESCRIPTION, "Look into skat");
-		putValue(Action.ACTION_COMMAND_KEY,
-				JSkatAction.LOOK_INTO_SKAT.toString());
+
+		setActionCommand(JSkatAction.LOOK_INTO_SKAT);
 	}
 
 	/**

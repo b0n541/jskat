@@ -19,7 +19,9 @@ import javax.swing.Action;
 
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
+import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
+import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
  * Implements the action for showing about dialog
@@ -37,9 +39,9 @@ public class ShowLoginPanelAction extends AbstractJSkatAction {
 		super(controller, bitmaps);
 
 		putValue(Action.NAME, "ISS login");
-		putValue(Action.SHORT_DESCRIPTION, "Shows the login panel for ISS");
 
-		setIcons(JSkatGraphicRepository.Icon.CONNECT_ISS);
+		setActionCommand(JSkatAction.SHOW_ISS_LOGIN);
+		setIcon(Icon.CONNECT_ISS);
 	}
 
 	/**

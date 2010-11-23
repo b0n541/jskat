@@ -20,6 +20,7 @@ import javax.swing.Action;
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
+import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
  * Implements the action for showing about dialog
@@ -40,7 +41,7 @@ public class SaveSeriesAsAction extends AbstractJSkatAction {
 		putValue(Action.SHORT_DESCRIPTION,
 				strings.getString("save_series_as_tooltip"));
 
-		setIcons(JSkatGraphicRepository.Icon.SAVE_AS);
+		setIcon(Icon.SAVE_AS);
 	}
 
 	/**

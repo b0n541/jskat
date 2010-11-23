@@ -118,6 +118,14 @@ public enum JSkatAction {
 	// -- ISS related actions
 	// ----------------------------------------------------------------------------//
 	/**
+	 * Opens ISS homepage in default browser
+	 */
+	OPEN_ISS_HOMEPAGE,
+	/**
+	 * Opens ISS registration form in default browser
+	 */
+	REGISTER_ON_ISS,
+	/**
 	 * Shows the login screen
 	 */
 	SHOW_ISS_LOGIN,
@@ -175,5 +183,5 @@ public enum JSkatAction {
 	/**
 	 * Saves neural network information for Neural Network Player
 	 */
-	SAVE_NEURAL_NETWORKS
+	SAVE_NEURAL_NETWORKS;
 }

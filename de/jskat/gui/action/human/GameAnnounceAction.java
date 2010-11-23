@@ -39,8 +39,8 @@ public class GameAnnounceAction extends AbstractJSkatAction {
 
 		putValue(Action.NAME, "Play!");
 		putValue(Action.SHORT_DESCRIPTION, "Play game");
-		putValue(Action.ACTION_COMMAND_KEY,
-				JSkatAction.ANNOUNCE_GAME.toString());
+
+		setActionCommand(JSkatAction.ANNOUNCE_GAME);
 	}
 
 	/**

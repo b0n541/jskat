@@ -39,8 +39,8 @@ public class DiscardAction extends AbstractJSkatAction {
 
 		putValue(Action.NAME, "Discard");
 		putValue(Action.SHORT_DESCRIPTION, "Discard cards");
-		putValue(Action.ACTION_COMMAND_KEY,
-				JSkatAction.DISCARD_CARDS.toString());
+
+		setActionCommand(JSkatAction.DISCARD_CARDS);
 	}
 
 	/**

@@ -35,7 +35,6 @@ public class ChangeTableSeatsAction extends AbstractJSkatAction {
 			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
 
 		super(controller, bitmaps);
-
 		putValue(Action.NAME, "Change table seats (3 <-> 4)");
 	}
 

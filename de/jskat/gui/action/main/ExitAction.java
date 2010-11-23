@@ -20,6 +20,7 @@ import javax.swing.Action;
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
+import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
  * Implements the action for exiting JSkat
@@ -40,7 +41,7 @@ public class ExitAction extends AbstractJSkatAction {
 		putValue(Action.SHORT_DESCRIPTION,
 				strings.getString("exit_jskat_tooltip"));
 
-		setIcons(JSkatGraphicRepository.Icon.EXIT);
+		setIcon(Icon.EXIT);
 	}
 
 	/**

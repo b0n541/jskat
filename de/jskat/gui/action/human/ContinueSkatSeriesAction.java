@@ -19,6 +19,7 @@ import javax.swing.AbstractAction;
 import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
+import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
  * Implements the action for starting a new skat series
@@ -38,7 +39,7 @@ public class ContinueSkatSeriesAction extends AbstractJSkatAction {
 		putValue(NAME, strings.getString("continue_series"));
 		putValue(SHORT_DESCRIPTION,
 				strings.getString("continue_series_tooltip"));
-		setIcons(JSkatGraphicRepository.Icon.START_SERIES);
+		setIcon(Icon.PLAY);
 	}
 
 	/**
