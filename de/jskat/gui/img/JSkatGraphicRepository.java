@@ -16,6 +16,7 @@ import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,35 +40,58 @@ public class JSkatGraphicRepository {
 	 */
 	public JSkatGraphicRepository(JSkatOptions jskatOptions) {
 
-		this.cardFace = jskatOptions.getCardFace();
-		this.tracker = new MediaTracker(new Canvas());
-		this.skatTable = Toolkit
+		cardFace = jskatOptions.getCardFace();
+		tracker = new MediaTracker(new Canvas());
+		skatTable = Toolkit
 				.getDefaultToolkit()
 				.getImage(
 						ClassLoader
 								.getSystemResource("de/jskat/gui/img/gui/skatTable.png")); //$NON-NLS-1$
-		this.tracker.addImage(this.skatTable, 0);
-		this.jskatLogo = Toolkit
+		tracker.addImage(skatTable, 0);
+		jskatLogo = Toolkit
 				.getDefaultToolkit()
 				.getImage(
 						ClassLoader
 								.getSystemResource("de/jskat/gui/img/gui/jskatLogo.png")); //$NON-NLS-1$
-		this.tracker.addImage(this.jskatLogo, 0);
+		tracker.addImage(jskatLogo, 0);
+
+		bidBubbles = new ArrayList<Image>();
+		bidBubbles
+				.add(Toolkit
+						.getDefaultToolkit()
+						.getImage(
+								ClassLoader
+										.getSystemResource("de/jskat/gui/img/gui/bid_left.png"))); //$NON-NLS-1$
+		bidBubbles
+				.add(Toolkit
+						.getDefaultToolkit()
+						.getImage(
+								ClassLoader
+										.getSystemResource("de/jskat/gui/img/gui/bid_right.png"))); //$NON-NLS-1$
+		bidBubbles
+				.add(Toolkit
+						.getDefaultToolkit()
+						.getImage(
+								ClassLoader
+										.getSystemResource("de/jskat/gui/img/gui/bid_user.png"))); //$NON-NLS-1$
+		tracker.addImage(bidBubbles.get(0), 0);
+		tracker.addImage(bidBubbles.get(1), 0);
+		tracker.addImage(bidBubbles.get(2), 0);
 		try {
-			this.tracker.waitForID(0);
+			tracker.waitForID(0);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 
 		log.debug("Bitmaps for JSkat logo and skat table loaded..."); //$NON-NLS-1$
 
-		this.icons = new ArrayList<ArrayList<Image>>();
+		icons = new ArrayList<List<Image>>();
 		loadIcons();
 
 		log.debug("Bitmaps for icons loaded..."); //$NON-NLS-1$
 
-		this.cards = new ArrayList<ArrayList<Image>>();
-		loadCards(this.cardFace);
+		cards = new ArrayList<List<Image>>();
+		loadCards(cardFace);
 
 		log.debug("Bitmaps for cards loaded..."); //$NON-NLS-1$
 	}
@@ -81,14 +105,13 @@ public class JSkatGraphicRepository {
 		for (Icon icon : Icon.values()) {
 
 			// new array list for all sizes
-			this.icons.add(new ArrayList<Image>());
+			icons.add(new ArrayList<Image>());
 
 			// for all sizes
 			for (IconSize size : IconSize.values()) {
 
 				// add icon
-				this.icons
-						.get(icon.ordinal())
+				icons.get(icon.ordinal())
 						.add(Toolkit
 								.getDefaultToolkit()
 								.getImage(
@@ -100,13 +123,13 @@ public class JSkatGraphicRepository {
 														+ size.toString()
 																.toLowerCase()
 														+ ".png"))); //$NON-NLS-1$
-				this.tracker.addImage(
-						this.icons.get(icon.ordinal()).get(size.ordinal()), 1);
+				tracker.addImage(icons.get(icon.ordinal()).get(size.ordinal()),
+						1);
 			}
 		}
 
 		try {
-			this.tracker.waitForID(1);
+			tracker.waitForID(1);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -122,12 +145,11 @@ public class JSkatGraphicRepository {
 
 		for (Suit suit : Suit.values()) {
 
-			this.cards.add(new ArrayList<Image>());
+			cards.add(new ArrayList<Image>());
 
 			for (Rank rank : Rank.values()) {
 
-				this.cards
-						.get(suit.ordinal())
+				cards.get(suit.ordinal())
 						.add(Toolkit
 								.getDefaultToolkit()
 								.getImage(
@@ -137,21 +159,21 @@ public class JSkatGraphicRepository {
 																.toLowerCase()
 														+ "/gnome/" + suit.shortString() + '-' + rank.shortString() + ".gif"))); //$NON-NLS-1$//$NON-NLS-2$
 
-				this.tracker.addImage(
-						this.cards.get(suit.ordinal()).get(rank.ordinal()), 2);
+				tracker.addImage(cards.get(suit.ordinal()).get(rank.ordinal()),
+						2);
 			}
 		}
 
-		this.cardBack = Toolkit
+		cardBack = Toolkit
 				.getDefaultToolkit()
 				.getImage(
 						ClassLoader
 								.getSystemResource("de/jskat/gui/img/cards/" + cardType.toString().toLowerCase() //$NON-NLS-1$
 										+ "/jskat/back.gif")); //$NON-NLS-1$
-		this.tracker.addImage(this.cardBack, 2);
+		tracker.addImage(cardBack, 2);
 
 		try {
-			this.tracker.waitForID(2);
+			tracker.waitForID(2);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -169,7 +191,7 @@ public class JSkatGraphicRepository {
 	public Image getIconImage(Icon icon, IconSize size) {
 
 		try {
-			return this.icons.get(icon.ordinal()).get(size.ordinal());
+			return icons.get(icon.ordinal()).get(size.ordinal());
 		} catch (IndexOutOfBoundsException exc) {
 			return null;
 		}
@@ -190,10 +212,10 @@ public class JSkatGraphicRepository {
 
 		if (suit != null && value != null) {
 
-			result = this.cards.get(suit.ordinal()).get(value.ordinal());
+			result = cards.get(suit.ordinal()).get(value.ordinal());
 		} else {
 
-			result = this.cardBack;
+			result = cardBack;
 		}
 
 		return result;
@@ -206,7 +228,7 @@ public class JSkatGraphicRepository {
 	 */
 	public Image getSkatTableImage() {
 
-		return this.skatTable;
+		return skatTable;
 	}
 
 	/**
@@ -216,7 +238,34 @@ public class JSkatGraphicRepository {
 	 */
 	public Image getJSkatLogoImage() {
 
-		return this.jskatLogo;
+		return jskatLogo;
+	}
+
+	/**
+	 * Gets the image for the left opponent bid bubble
+	 * 
+	 * @return Image for the left opponent bid bubble
+	 */
+	public Image getLeftBidBubbleImage() {
+		return bidBubbles.get(0);
+	}
+
+	/**
+	 * Gets the image for the right opponent bid bubble
+	 * 
+	 * @return Image for the right opponent bid bubble
+	 */
+	public Image getRightBidBubbleImage() {
+		return bidBubbles.get(1);
+	}
+
+	/**
+	 * Gets the image for the user bid bubble
+	 * 
+	 * @return Image for the user bid bubble
+	 */
+	public Image getUserBidBubbleImage() {
+		return bidBubbles.get(2);
 	}
 
 	private CardFace cardFace;
@@ -225,13 +274,15 @@ public class JSkatGraphicRepository {
 
 	private Image skatTable;
 
-	private ArrayList<ArrayList<Image>> cards;
+	private List<List<Image>> cards;
 
 	private Image cardBack;
 
-	private ArrayList<ArrayList<Image>> icons;
+	private List<List<Image>> icons;
 
 	private Image jskatLogo;
+
+	private List<Image> bidBubbles;
 
 	/**
 	 * Holds all icon types

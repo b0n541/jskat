@@ -190,7 +190,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 				new StartContextPanel((StartSkatSeriesAction) getActionMap()
 						.get(JSkatAction.START_LOCAL_SERIES)));
 
-		this.biddingPanel = new BiddingContextPanel(getActionMap(), strings);
+		this.biddingPanel = new BiddingContextPanel(getActionMap(), bitmaps,
+				strings);
 		addContextPanel(ContextPanelTypes.BIDDING, this.biddingPanel);
 
 		this.declaringPanel = new DeclaringContextPanel(getActionMap(),
