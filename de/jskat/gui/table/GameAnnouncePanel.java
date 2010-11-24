@@ -21,9 +21,10 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.plaf.basic.BasicComboBoxRenderer;
+import javax.swing.ListCellRenderer;
 
 import net.miginfocom.swing.MigLayout;
 import de.jskat.data.GameAnnouncementWithDiscardedCards;
@@ -151,24 +152,39 @@ class GameAnnouncePanel extends JPanel {
 		this.schwarzBox.setSelected(false);
 	}
 
-	private class GameTypeComboBoxRenderer extends BasicComboBoxRenderer {
+	private class GameTypeComboBoxRenderer extends JPanel implements
+			ListCellRenderer {
+
+		private static final long serialVersionUID = 1L;
 
 		CardFace cardFace;
 		ResourceBundle strings;
+		JLabel cellItemLabel;
 
 		GameTypeComboBoxRenderer(CardFace newCardFace, ResourceBundle newStrings) {
 
 			super();
 			cardFace = newCardFace;
 			strings = newStrings;
+
+			setLayout(new MigLayout("fill")); //$NON-NLS-1$
+			cellItemLabel = new JLabel(" "); //$NON-NLS-1$
+			add(cellItemLabel);
 		}
 
 		@Override
 		public Component getListCellRendererComponent(JList list, Object value,
 				int index, boolean isSelected, boolean cellHasFocus) {
 
-			super.getListCellRendererComponent(list, value, index, isSelected,
-					cellHasFocus);
+			cellItemLabel.setFont(list.getFont());
+
+			if (isSelected) {
+				setBackground(list.getSelectionBackground());
+				setForeground(list.getSelectionForeground());
+			} else {
+				setBackground(list.getBackground());
+				setForeground(list.getForeground());
+			}
 
 			GameType gameType = (GameType) value;
 
@@ -193,8 +209,9 @@ class GameAnnouncePanel extends JPanel {
 					break;
 				}
 
-				setText(cellText);
-				setFont(list.getFont());
+				cellItemLabel.setText(cellText);
+			} else {
+				cellItemLabel.setText(" "); //$NON-NLS-1$
 			}
 
 			return this;
