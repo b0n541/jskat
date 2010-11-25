@@ -7,17 +7,15 @@ Authors: @JS@
 
 Released: @ReleaseDate@
 
-*/
+ */
 
-package de.jskat.test.util;
+package de.jskat.util;
 
 import static org.junit.Assert.assertTrue;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import de.jskat.util.CardDeck;
 
 /**
  * Test cases for class CardDeck
@@ -29,7 +27,7 @@ public class CardDeckTest {
 	 */
 	@BeforeClass
 	public static void createLogger() {
-		
+
 		PropertyConfigurator.configure(ClassLoader
 				.getSystemResource("de/jskat/config/log4j.properties")); //$NON-NLS-1$
 	}
@@ -39,19 +37,19 @@ public class CardDeckTest {
 	 */
 	@Test
 	public void getAllCards001() {
-	
-		assertTrue(CardDeck.getAllCards().size() == 32);		
+
+		assertTrue(CardDeck.getAllCards().size() == 32);
 	}
-	
+
 	/**
 	 * Checks setting a card position to null
 	 */
-	@Test 
+	@Test
 	public void setNullCard001() {
-		
+
 		CardDeck simCards = new CardDeck();
 		simCards.set(0, null);
-		
+
 		assertTrue(simCards.get(0) == null);
 	}
 }

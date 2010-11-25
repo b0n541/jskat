@@ -9,7 +9,7 @@ Released: @ReleaseDate@
 
  */
 
-package de.jskat.test.util.rule;
+package de.jskat.util.rule;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -21,8 +21,6 @@ import org.junit.Test;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
 import de.jskat.util.GameType;
-import de.jskat.util.rule.BasicSkatRules;
-import de.jskat.util.rule.SkatRuleFactory;
 
 /**
  * Test suite for all skat rule tests
@@ -61,7 +59,8 @@ public class BasicSkatRuleTest {
 	 */
 	@Test
 	public void isCardAllowedNull001() {
-		assertTrue(nullRules.isCardAllowed(GameType.NULL, Card.CA, this.hand, Card.CK));
+		assertTrue(nullRules.isCardAllowed(GameType.NULL, Card.CA, this.hand,
+				Card.CK));
 	}
 
 	/**
@@ -69,7 +68,8 @@ public class BasicSkatRuleTest {
 	 */
 	@Test
 	public void isCardAllowedGrand001() {
-		assertTrue(grandRules.isCardAllowed(GameType.GRAND, Card.CA, this.hand, Card.CK));
+		assertTrue(grandRules.isCardAllowed(GameType.GRAND, Card.CA, this.hand,
+				Card.CK));
 	}
 
 	/**
@@ -77,21 +77,23 @@ public class BasicSkatRuleTest {
 	 */
 	@Test
 	public void isCardAllowedSuit001() {
-		assertTrue(clubRules.isCardAllowed(GameType.CLUBS, Card.CA, this.hand, Card.CK));
+		assertTrue(clubRules.isCardAllowed(GameType.CLUBS, Card.CA, this.hand,
+				Card.CK));
 	}
-	
+
 	/**
 	 * Checks @see SuitRules#isCardAllowed(GameType, Card, CardList, Card)
 	 */
 	@Test
 	public void isCardAllowedSuit002() {
-		
+
 		this.hand.clear();
 		this.hand.add(Card.C7);
 		this.hand.add(Card.HK);
 		this.hand.add(Card.HJ);
-		
-		assertFalse(diamondRules.isCardAllowed(GameType.DIAMONDS, Card.HT, this.hand, Card.HJ));
+
+		assertFalse(diamondRules.isCardAllowed(GameType.DIAMONDS, Card.HT,
+				this.hand, Card.HJ));
 	}
 
 	/**
@@ -99,13 +101,14 @@ public class BasicSkatRuleTest {
 	 */
 	@Test
 	public void isCardAllowedSuit003() {
-		
+
 		this.hand.clear();
 		this.hand.add(Card.C7);
 		this.hand.add(Card.HK);
 		this.hand.add(Card.HJ);
-		
-		assertTrue(diamondRules.isCardAllowed(GameType.DIAMONDS, Card.HT, this.hand, Card.HK));
+
+		assertTrue(diamondRules.isCardAllowed(GameType.DIAMONDS, Card.HT,
+				this.hand, Card.HK));
 	}
 
 	/**
@@ -113,7 +116,8 @@ public class BasicSkatRuleTest {
 	 */
 	@Test
 	public void isCardAllowedRamsch001() {
-		assertTrue(ramschRules.isCardAllowed(GameType.RAMSCH, Card.CA, this.hand, Card.CK));
+		assertTrue(ramschRules.isCardAllowed(GameType.RAMSCH, Card.CA,
+				this.hand, Card.CK));
 	}
 
 	/**
@@ -169,6 +173,7 @@ public class BasicSkatRuleTest {
 	 */
 	@Test
 	public void isCardBeatsCardRamsch001() {
-		assertTrue(ramschRules.isCardBeatsCard(GameType.RAMSCH, Card.C7, Card.C8));
+		assertTrue(ramschRules.isCardBeatsCard(GameType.RAMSCH, Card.C7,
+				Card.C8));
 	}
 }

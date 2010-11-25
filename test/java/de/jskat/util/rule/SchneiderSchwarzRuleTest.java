@@ -9,7 +9,7 @@ Released: @ReleaseDate@
 
  */
 
-package de.jskat.test.util.rule;
+package de.jskat.util.rule;
 
 import static org.junit.Assert.assertTrue;
 
@@ -21,8 +21,6 @@ import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.util.GameType;
 import de.jskat.util.Player;
-import de.jskat.util.rule.SkatRuleFactory;
-import de.jskat.util.rule.SuitGrandRules;
 
 /**
  * Tests schneider and schwarz rules
@@ -66,7 +64,7 @@ public class SchneiderSchwarzRuleTest {
 	/**
 	 * Test for casting null rules into suit/grand rules
 	 */
-	@Test (expected=ClassCastException.class)
+	@Test(expected = ClassCastException.class)
 	public void testCast001() {
 
 		SuitGrandRules nullRules = (SuitGrandRules) SkatRuleFactory
@@ -76,7 +74,7 @@ public class SchneiderSchwarzRuleTest {
 	/**
 	 * Test for casting ramsch rules into suit/grand rules
 	 */
-	@Test (expected=ClassCastException.class)
+	@Test(expected = ClassCastException.class)
 	public void testCast002() {
 
 		SuitGrandRules nullRules = (SuitGrandRules) SkatRuleFactory

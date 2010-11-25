@@ -7,9 +7,9 @@ Authors: @JS@
 
 Released: @ReleaseDate@
 
-*/
+ */
 
-package de.jskat.test.util;
+package de.jskat.util;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -17,9 +17,6 @@ import static org.junit.Assert.assertTrue;
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import de.jskat.util.Card;
-import de.jskat.util.GameType;
 
 /**
  * Test cases for class Card
@@ -31,11 +28,11 @@ public class CardTest {
 	 */
 	@BeforeClass
 	public static void createLogger() {
-		
+
 		PropertyConfigurator.configure(ClassLoader
 				.getSystemResource("de/jskat/config/log4j.properties")); //$NON-NLS-1$
 	}
-	
+
 	/**
 	 * Checks for reflexivity
 	 */
@@ -44,7 +41,7 @@ public class CardTest {
 
 		assertTrue(Card.CJ.equals(Card.CJ));
 	}
-	
+
 	/**
 	 * Checks for symetry
 	 */
@@ -79,7 +76,7 @@ public class CardTest {
 	public void isTrump001() {
 		assertTrue(Card.HJ.isTrump(GameType.HEARTS));
 	}
-	
+
 	/**
 	 * Checks @see Card#isTrump(GameType)
 	 */
@@ -87,7 +84,7 @@ public class CardTest {
 	public void isTrump002() {
 		assertTrue(Card.HJ.isTrump(GameType.DIAMONDS));
 	}
-	
+
 	/**
 	 * Checks @see Card#isTrump(GameType)
 	 */
@@ -95,7 +92,7 @@ public class CardTest {
 	public void isTrump003() {
 		assertTrue(Card.DJ.isTrump(GameType.HEARTS));
 	}
-	
+
 	/**
 	 * Checks @see Card#isTrump(GameType)
 	 */

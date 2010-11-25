@@ -7,17 +7,15 @@ Authors: @JS@
 
 Released: @ReleaseDate@
 
-*/
+ */
 
-package de.jskat.test.util;
+package de.jskat.util;
 
 import static org.junit.Assert.assertTrue;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import de.jskat.util.SkatConstants;
 
 /**
  * Test cases for class Card
@@ -29,17 +27,17 @@ public class SkatConstantsTest {
 	 */
 	@BeforeClass
 	public static void createLogger() {
-		
+
 		PropertyConfigurator.configure(ClassLoader
 				.getSystemResource("de/jskat/config/log4j.properties")); //$NON-NLS-1$
 	}
-	
+
 	/**
 	 * Tests calculation of game values after tournament rules
 	 */
 	@Test
 	public void getTournamentGameValue001() {
-		
+
 		assertTrue(SkatConstants.getTournamentGameValue(true, 18, 3) == 68);
 		assertTrue(SkatConstants.getTournamentGameValue(true, 18, 4) == 68);
 		assertTrue(SkatConstants.getTournamentGameValue(true, -36, 3) == -86);

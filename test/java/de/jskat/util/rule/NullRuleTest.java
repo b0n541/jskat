@@ -9,7 +9,7 @@ Released: @ReleaseDate@
 
  */
 
-package de.jskat.test.util.rule;
+package de.jskat.util.rule;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -22,7 +22,6 @@ import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.util.GameType;
 import de.jskat.util.Player;
-import de.jskat.util.rule.SkatRuleFactory;
 
 /**
  * Tests for NullRules
@@ -37,7 +36,7 @@ public class NullRuleTest {
 	 */
 	@BeforeClass
 	public static void setUpBeforeClass() {
-		
+
 		PropertyConfigurator.configure(ClassLoader
 				.getSystemResource("de/jskat/config/log4j.properties")); //$NON-NLS-1$
 
@@ -47,15 +46,16 @@ public class NullRuleTest {
 		data.setAnnouncement(ann);
 		data.setDeclarer(Player.FORE_HAND);
 	}
-	
+
 	/**
 	 * Checks @see NullRules#calcGameWon()
 	 */
-	@Test 
+	@Test
 	public void calcGameWon() {
-		assertTrue(SkatRuleFactory.getSkatRules(GameType.NULL).calcGameWon(data));
+		assertTrue(SkatRuleFactory.getSkatRules(GameType.NULL)
+				.calcGameWon(data));
 	}
-	
+
 	/**
 	 * Checks @see NullRules#calcGameResult()
 	 */
