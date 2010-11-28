@@ -35,6 +35,8 @@ import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
 import de.jskat.util.GameType;
+import de.jskat.util.Rank;
+import de.jskat.util.Suit;
 
 /**
  * Panel for showing a Card
@@ -49,7 +51,7 @@ class CardPanel extends JPanel {
 	/**
 	 * Holds the game type for the sorting order
 	 */
-	GameType gameType = GameType.GRAND;
+	GameType sortGameType = GameType.GRAND;
 
 	CardList cards;
 
@@ -69,41 +71,36 @@ class CardPanel extends JPanel {
 	CardPanel(JPanel newParent, JSkatGraphicRepository jSkatBitmaps,
 			boolean newShowBackside) {
 
-		this.setLayout(new MigLayout("fill", "fill", "fill"));
+		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		this.parent = newParent;
-		setActionMap(this.parent.getActionMap());
-		this.bitmaps = jSkatBitmaps;
-		this.showBackside = newShowBackside;
+		parent = newParent;
+		setActionMap(parent.getActionMap());
+		bitmaps = jSkatBitmaps;
+		showBackside = newShowBackside;
 
-		this.cards = new CardList();
+		cards = new CardList();
 
-		this.setOpaque(false);
+		setOpaque(false);
 
-		this.addMouseListener(new MouseListener() {
-
+		addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				// TODO Auto-generated method stub
-
+				// not needed
 			}
 
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				// TODO Auto-generated method stub
-
+				// not needed
 			}
 
 			@Override
 			public void mouseExited(MouseEvent e) {
-				// TODO Auto-generated method stub
-
+				// not needed
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
-				// TODO Auto-generated method stub
-
+				// not needed
 			}
 
 			@Override
@@ -116,27 +113,27 @@ class CardPanel extends JPanel {
 
 	protected void addCard(Card newCard) {
 
-		this.cards.add(newCard);
-		this.cards.sort(this.gameType);
+		cards.add(newCard);
+		cards.sort(sortGameType);
 		repaint();
 	}
 
 	protected void addCards(Collection<Card> newCards) {
 
-		this.cards.addAll(newCards);
-		this.cards.sort(this.gameType);
+		cards.addAll(newCards);
+		cards.sort(sortGameType);
 		repaint();
 	}
 
 	protected void removeCard(Card cardToRemove) {
 
-		this.cards.remove(cardToRemove);
+		cards.remove(cardToRemove);
 		repaint();
 	}
 
 	protected Card get(int index) {
 
-		return this.cards.get(index);
+		return cards.get(index);
 	}
 
 	/**
@@ -153,25 +150,32 @@ class CardPanel extends JPanel {
 		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 
-		int imgWidth = this.getWidth() / (this.cards.size() + 1);
-
 		int cardNo = 0;
-		for (Card card : this.cards) {
+		for (Card card : cards) {
 
 			Image image = null;
-			if (this.showBackside) {
 
-				image = this.bitmaps.getCardImage(null, null);
+			if (showBackside) {
+
+				image = bitmaps.getCardImage(null, null);
 			} else {
 
-				image = this.bitmaps.getCardImage(card.getSuit(),
-						card.getRank());
+				image = bitmaps.getCardImage(card.getSuit(), card.getRank());
 			}
-			double scaleFactor = 1.0d;
+
+			double cardWidth = image.getWidth(this);
+			double partialHiddenCardWidth = 0.0;
+			if (cards.size() > 1) {
+
+				partialHiddenCardWidth = (getWidth() - cardWidth)
+						/ (cards.size() - 1.0);
+			}
+
+			double scaleFactor = 1.0;
 
 			AffineTransform transform = new AffineTransform();
 			transform.scale(scaleFactor, scaleFactor);
-			transform.translate(cardNo * imgWidth, 0);
+			transform.translate(cardNo * partialHiddenCardWidth, 0);
 			g2D.drawImage(image, transform, this);
 
 			cardNo++;
@@ -183,7 +187,7 @@ class CardPanel extends JPanel {
 	 */
 	void clearCards() {
 
-		this.cards.clear();
+		cards.clear();
 		repaint();
 	}
 
@@ -192,7 +196,7 @@ class CardPanel extends JPanel {
 	 */
 	void flipCard() {
 
-		if (this.showBackside) {
+		if (showBackside) {
 
 			showCards();
 		} else {
@@ -206,7 +210,7 @@ class CardPanel extends JPanel {
 	 */
 	void showCards() {
 
-		this.showBackside = false;
+		showBackside = false;
 		repaint();
 	}
 
@@ -215,13 +219,13 @@ class CardPanel extends JPanel {
 	 */
 	void hideCards() {
 
-		this.showBackside = true;
+		showBackside = true;
 		repaint();
 	}
 
 	int getCardCount() {
 
-		return this.cards.size();
+		return cards.size();
 	}
 
 	/**
@@ -229,40 +233,71 @@ class CardPanel extends JPanel {
 	 */
 	void cardClicked(MouseEvent e) {
 
-		int xVal = e.getX();
-		int yVal = e.getY();
+		int xPosition = e.getX();
+		int yPosition = e.getY();
 
-		log.debug("Card panel clicked at: " + xVal + " x " + yVal); //$NON-NLS-1$ //$NON-NLS-2$
+		log.debug("Card panel clicked at: " + xPosition + " x " + yPosition); //$NON-NLS-1$ //$NON-NLS-2$
 
-		if (xVal > -1 && xVal < this.getWidth() && yVal > -1
-				&& yVal < this.getHeight()) {
+		if (xPosition > -1 && xPosition < getWidth() && yPosition > -1
+				&& yPosition < getHeight()) {
 
 			log.debug("Mouse button release inside panel"); //$NON-NLS-1$
 
 			// get card
-			int imgWidth = this.getWidth() / (this.cards.size() + 1);
-			int cardIndex = xVal / imgWidth;
+			double cardWidth = bitmaps.getCardImage(Suit.CLUBS, Rank.JACK)
+					.getWidth(this);
+			double partialHiddenCardWidth = cardWidth;
+			if (cards.size() > 1) {
+
+				partialHiddenCardWidth = (getWidth() - cardWidth)
+						/ (cards.size() - 1.0);
+			}
+
+			int cardIndex = -1;
+			if (cards.size() > 0) {
+				if (cards.size() == 1) {
+					if (xPosition < cardWidth) {
+						cardIndex = 0;
+					}
+				} else {
+					if (!isCardImagesWithGaps(getWidth(), cards.size(),
+							cardWidth, partialHiddenCardWidth)) {
+						cardIndex = 0;
+						while (!((cardIndex * partialHiddenCardWidth) < xPosition && ((cardIndex + 1)
+								* partialHiddenCardWidth > xPosition))
+								&& cardIndex < (cards.size() - 1)) {
+							cardIndex++;
+						}
+					} else {
+						double cardGap = (getWidth() - (cardWidth * cards
+								.size())) / (cards.size() - 1.0);
+
+						if ((int) (xPosition / (cardWidth + cardGap)) == (int) ((xPosition + cardGap) / (cardWidth + cardGap))) {
+							cardIndex = (int) (xPosition / (cardWidth + cardGap));
+						}
+					}
+				}
+			}
 
 			Card card = null;
-			if (cardIndex < this.cards.size()) {
+			if (cardIndex > -1 && cardIndex < cards.size()) {
 
-				card = this.cards.get(cardIndex);
-				log.debug("card index: " + cardIndex + " card: " + this.cards.get(cardIndex)); //$NON-NLS-1$ //$NON-NLS-2$
+				card = cards.get(cardIndex);
+				log.debug("card index: " + cardIndex + " card: " + cards.get(cardIndex)); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			if (card != null) {
 				// send event only, if the card panel shows a card
 				Action action = null;
 
-				if (this.parent instanceof DiscardPanel) {
+				if (parent instanceof DiscardPanel) {
 					// card panel in discard panel was clicked
 					action = getActionMap()
 							.get(JSkatAction.TAKE_CARD_FROM_SKAT);
-				} else if (this.parent instanceof JSkatUserPanel) {
+				} else if (parent instanceof JSkatUserPanel) {
 					// card panel in player panel was clicked
 
-					GameState state = ((JSkatUserPanel) this.parent)
-							.getGameState();
+					GameState state = ((JSkatUserPanel) parent).getGameState();
 
 					if (state == GameState.DISCARDING) {
 						// discarding phase
@@ -274,7 +309,7 @@ class CardPanel extends JPanel {
 					}
 				} else {
 
-					log.debug("Other parent " + this.parent); //$NON-NLS-1$
+					log.debug("Other parent " + parent); //$NON-NLS-1$
 				}
 
 				if (action != null) {
@@ -292,10 +327,22 @@ class CardPanel extends JPanel {
 		}
 	}
 
+	private boolean isCardImagesWithGaps(int panelWidth, int cardCount,
+			double cardWidth, double partialHiddenCardWidth) {
+
+		boolean result = false;
+
+		if (panelWidth > (partialHiddenCardWidth * cardCount - 1) + cardWidth) {
+			result = true;
+		}
+
+		return result;
+	}
+
 	void setSortType(GameType newGameType) {
 
-		this.gameType = newGameType;
-		this.cards.sort(this.gameType);
+		sortGameType = newGameType;
+		cards.sort(sortGameType);
 		repaint();
 	}
 }
