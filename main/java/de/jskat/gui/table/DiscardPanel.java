@@ -11,9 +11,11 @@ Released: @ReleaseDate@
 
 package de.jskat.gui.table;
 
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ResourceBundle;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -30,68 +32,78 @@ import de.jskat.util.CardList;
 /**
  * Holds widgets for deciding of looking into skat or playing hand game
  */
-class DiscardPanel extends HandPanel {
+class DiscardPanel extends JPanel {
+
+	private static final String LOOK_INTO_SKAT_BUTTON = "LOOK_INTO_SKAT_BUTTON";
+
+	private static final String CARD_PANEL = "CARD_PANEL";
 
 	private static final long serialVersionUID = 1L;
 
-	private Action discardAction;
+	JSkatGraphicRepository bitmaps;
+	ResourceBundle strings;
 
-	private boolean userLookedIntoSkat = false;
+	private Action lookIntoSkatAction;
+	JButton lookIntoSkatButton;
+	boolean userLookedIntoSkat = false;
+
+	int maxCardCount = 0;
+
+	CardPanel cardPanel;
 
 	/**
 	 * Constructor
 	 * 
-	 * @see HandPanel#HandPanel(ActionMap, JSkatGraphicRepository, int)
+	 * @param actions
+	 *            Actions for discarding panel
+	 * @param jskatBitmaps
+	 *            Bitmaps
+	 * @param newStrings
+	 *            i18n strings
+	 * @param newMaxCardCount
+	 *            Maximum number of cards
 	 */
 	public DiscardPanel(ActionMap actions, JSkatGraphicRepository jskatBitmaps,
-			int maxCards) {
+			ResourceBundle newStrings, int newMaxCardCount) {
 
-		super(actions, jskatBitmaps, maxCards);
+		setActionMap(actions);
+		bitmaps = jskatBitmaps;
+		strings = newStrings;
+		maxCardCount = newMaxCardCount;
+
+		initPanel();
 	}
 
-	/**
-	 * @see HandPanel#initPanel()
-	 */
-	@Override
 	void initPanel() {
 
 		setBackground(Color.WHITE);
 		setBorder(BorderFactory.createLineBorder(Color.black));
 
-		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		setLayout(new CardLayout());
 
-		this.headerLabel.setText("Skat"); //$NON-NLS-1$
-		add(this.headerLabel, "wrap"); //$NON-NLS-1$
+		cardPanel = new CardPanel(this, bitmaps, false);
+		add(cardPanel, CARD_PANEL);
 
-		this.cardPanel = new CardPanel(this, this.bitmaps, false);
-		add(this.cardPanel, "grow, wrap"); //$NON-NLS-1$
-
-		this.discardAction = getActionMap().get(JSkatAction.LOOK_INTO_SKAT);
-		final JButton discardButton = new JButton(this.discardAction);
-		discardButton.addActionListener(new ActionListener() {
+		lookIntoSkatAction = getActionMap().get(JSkatAction.LOOK_INTO_SKAT);
+		lookIntoSkatButton = new JButton(lookIntoSkatAction);
+		lookIntoSkatButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				if (DiscardPanel.this.cardPanel.getCardCount() == 2) {
+				userLookedIntoSkat = true;
+				DiscardPanel.this.showPanel(CARD_PANEL);
 
-					CardList newSkat = new CardList();
-					newSkat.add(DiscardPanel.this.cardPanel.get(0));
-					newSkat.add(DiscardPanel.this.cardPanel.get(1));
-
-					e.setSource(newSkat);
-					// fire event again
-					discardButton.dispatchEvent(e);
-				}
+				// fire event again
+				lookIntoSkatButton.dispatchEvent(e);
 			}
 		});
-		JPanel buttonPanel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
-		buttonPanel.add(discardButton, "center"); //$NON-NLS-1$
-		buttonPanel.setOpaque(false);
-		add(buttonPanel);
+		JPanel lookIntoSkatPanel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
+		lookIntoSkatPanel.add(lookIntoSkatButton, "center, shrink"); //$NON-NLS-1$
+		lookIntoSkatPanel.setOpaque(false);
+		add(lookIntoSkatPanel, LOOK_INTO_SKAT_BUTTON);
 
 		setOpaque(false);
-
-		this.showCards();
+		cardPanel.showCards();
 	}
 
 	protected void setSkat(CardList skat) {
@@ -102,46 +114,33 @@ class DiscardPanel extends HandPanel {
 		userLookedIntoSkat = true;
 	}
 
-	@Override
 	void addCard(Card card) {
 
-		super.addCard(card);
-
-		setDiscardButton();
+		cardPanel.addCard(card);
 	}
 
-	@Override
 	void removeCard(Card card) {
 
-		super.removeCard(card);
-
-		setDiscardButton();
+		cardPanel.removeCard(card);
 	}
 
 	public void resetPanel() {
 
-		this.cardPanel.clearCards();
-		setDiscardButton();
+		cardPanel.clearCards();
 		userLookedIntoSkat = false;
+		showPanel(LOOK_INTO_SKAT_BUTTON);
 	}
 
-	private void setDiscardButton() {
+	protected void showPanel(String panelType) {
 
-		if (this.cardPanel.getCardCount() == 2) {
-
-			this.getActionMap().get(JSkatAction.DISCARD_CARDS).setEnabled(true);
-		} else {
-
-			this.getActionMap().get(JSkatAction.DISCARD_CARDS)
-					.setEnabled(false);
-		}
+		((CardLayout) getLayout()).show(DiscardPanel.this, panelType);
 	}
 
 	public CardList getDiscardedCards() {
 
 		CardList result;
 
-		if (this.cardPanel.getCardCount() == 2) {
+		if (cardPanel.getCardCount() == 2) {
 			result = (CardList) cardPanel.cards.clone();
 		} else {
 			throw new IllegalStateException(
@@ -155,5 +154,10 @@ class DiscardPanel extends HandPanel {
 	public boolean isUserLookedIntoSkat() {
 
 		return userLookedIntoSkat;
+	}
+
+	public boolean isHandFull() {
+
+		return cardPanel.getCardCount() == maxCardCount;
 	}
 }

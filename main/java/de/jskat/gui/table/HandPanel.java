@@ -13,6 +13,7 @@ package de.jskat.gui.table;
 
 import java.awt.Color;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Collection;
 
 import javax.swing.ActionMap;
@@ -34,7 +35,7 @@ abstract class HandPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final DecimalFormat format = ((DecimalFormat) DecimalFormat
+	private static final DecimalFormat format = ((DecimalFormat) NumberFormat
 			.getInstance());
 
 	/**
@@ -91,12 +92,12 @@ abstract class HandPanel extends JPanel {
 			int maxCards) {
 
 		setActionMap(actions);
-		this.bitmaps = jskatBitmaps;
-		this.maxCardCount = maxCards;
+		bitmaps = jskatBitmaps;
+		maxCardCount = maxCards;
 
-		this.setOpaque(false);
+		setOpaque(false);
 
-		this.headerLabel = new JLabel(" "); //$NON-NLS-1$
+		headerLabel = new JLabel(" "); //$NON-NLS-1$
 
 		format.applyPattern("00"); //$NON-NLS-1$
 
@@ -116,8 +117,8 @@ abstract class HandPanel extends JPanel {
 		header.add(headerLabel);
 		add(header, "shrinky, wrap"); //$NON-NLS-1$
 
-		this.cardPanel = new CardPanel(this, this.bitmaps, true);
-		add(this.cardPanel, "growy"); //$NON-NLS-1$
+		cardPanel = new CardPanel(this, bitmaps, true);
+		add(cardPanel, "growy"); //$NON-NLS-1$
 	}
 
 	private Border getPanelBorder() {
@@ -141,7 +142,7 @@ abstract class HandPanel extends JPanel {
 	 */
 	void setPosition(Player newPosition) {
 
-		this.position = newPosition;
+		position = newPosition;
 		refreshHeaderText();
 	}
 
@@ -158,17 +159,17 @@ abstract class HandPanel extends JPanel {
 	 */
 	Player getPosition() {
 
-		return this.position;
+		return position;
 	}
 
 	private void refreshHeaderText() {
 
 		StringBuffer headerText = new StringBuffer();
 
-		headerText.append(this.playerName).append(": ");
+		headerText.append(playerName).append(": ");
 
 		if (position != null) {
-			switch (this.position) {
+			switch (position) {
 			case FORE_HAND:
 				headerText.append("Fore hand");
 				break;
@@ -180,7 +181,7 @@ abstract class HandPanel extends JPanel {
 				break;
 			}
 			headerText.append(" Time: ");
-			headerText.append(getPlayerTimeString(this.playerTime));
+			headerText.append(getPlayerTimeString(playerTime));
 			headerText.append(" Bid: ");
 			headerText.append(bidValue);
 
@@ -193,7 +194,7 @@ abstract class HandPanel extends JPanel {
 			}
 		}
 
-		this.headerLabel.setText(headerText.toString());
+		headerLabel.setText(headerText.toString());
 	}
 
 	private String getPlayerTimeString(double playerTimeInSeconds) {
@@ -212,7 +213,7 @@ abstract class HandPanel extends JPanel {
 	 */
 	void addCard(Card newCard) {
 
-		this.cardPanel.addCard(newCard);
+		cardPanel.addCard(newCard);
 	}
 
 	/**
@@ -223,7 +224,7 @@ abstract class HandPanel extends JPanel {
 	 */
 	void addCards(Collection<Card> newCards) {
 
-		this.cardPanel.addCards(newCards);
+		cardPanel.addCards(newCards);
 	}
 
 	/**
@@ -234,7 +235,7 @@ abstract class HandPanel extends JPanel {
 	 */
 	void removeCard(Card cardToRemove) {
 
-		this.cardPanel.removeCard(cardToRemove);
+		cardPanel.removeCard(cardToRemove);
 	}
 
 	/**
@@ -242,7 +243,7 @@ abstract class HandPanel extends JPanel {
 	 */
 	void clearHandPanel() {
 
-		this.cardPanel.clearCards();
+		cardPanel.clearCards();
 		bidValue = 0;
 		playerPassed = false;
 		declarer = false;
@@ -255,7 +256,7 @@ abstract class HandPanel extends JPanel {
 	 */
 	void hideCards() {
 
-		this.cardPanel.hideCards();
+		cardPanel.hideCards();
 	}
 
 	/**
@@ -263,31 +264,31 @@ abstract class HandPanel extends JPanel {
 	 */
 	void showCards() {
 
-		this.cardPanel.showCards();
+		cardPanel.showCards();
 	}
 
 	void setSortGameType(GameType newGameType) {
 
-		this.cardPanel.setSortType(newGameType);
+		cardPanel.setSortType(newGameType);
 	}
 
 	boolean isHandFull() {
 
-		return this.cardPanel.getCardCount() == this.maxCardCount;
+		return cardPanel.getCardCount() == maxCardCount;
 	}
 
 	void setPlayerName(String newName) {
 
-		this.playerName = newName;
+		playerName = newName;
 
-		this.refreshHeaderText();
+		refreshHeaderText();
 	}
 
 	void setPlayerTime(double newTime) {
 
-		this.playerTime = newTime;
+		playerTime = newTime;
 
-		this.refreshHeaderText();
+		refreshHeaderText();
 	}
 
 	boolean isActivePlayer() {

@@ -419,11 +419,6 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	void setContextPanel(ContextPanelTypes panelType) {
 
-		if (ContextPanelTypes.DECLARING.equals(panelType)) {
-
-			this.declaringPanel.resetPanel();
-		}
-
 		((CardLayout) this.gameContextPanel.getLayout()).show(
 				this.gameContextPanel, panelType.toString());
 	}

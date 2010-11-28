@@ -54,7 +54,7 @@ class CardPanel extends JPanel {
 	CardList cards;
 
 	private boolean showBackside = true;
-	private HandPanel parent = null;
+	private JPanel parent = null;
 
 	/**
 	 * Creates a new instance of CardPanel
@@ -66,7 +66,7 @@ class CardPanel extends JPanel {
 	 * @param newShowBackside
 	 *            TRUE if the Card should hide its face
 	 */
-	CardPanel(HandPanel newParent, JSkatGraphicRepository jSkatBitmaps,
+	CardPanel(JPanel newParent, JSkatGraphicRepository jSkatBitmaps,
 			boolean newShowBackside) {
 
 		this.setLayout(new MigLayout("fill", "fill", "fill"));
