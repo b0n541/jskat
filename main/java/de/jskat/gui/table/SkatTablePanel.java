@@ -151,8 +151,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 		this.gameInfoPanel = getGameInfoPanel();
 		this.leftOpponentPanel = getOpponentPanel();
 		this.rightOpponentPanel = getOpponentPanel();
-		createGameContextPanel();
 		this.userPanel = getPlayerPanel();
+		createGameContextPanel();
 
 		return new PlayGroundPanel(bitmaps, gameInfoPanel, leftOpponentPanel,
 				rightOpponentPanel, gameContextPanel, userPanel);
@@ -191,11 +191,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 						.get(JSkatAction.START_LOCAL_SERIES)));
 
 		this.biddingPanel = new BiddingContextPanel(getActionMap(), bitmaps,
-				strings);
+				strings, userPanel);
 		addContextPanel(ContextPanelTypes.BIDDING, this.biddingPanel);
 
 		this.declaringPanel = new DeclaringContextPanel(getActionMap(),
-				this.bitmaps, strings, 4);
+				this.bitmaps, strings, userPanel, 4);
 		addContextPanel(ContextPanelTypes.DECLARING, this.declaringPanel);
 
 		JPanel trickHoldingPanel = new JPanel(new MigLayout(

@@ -49,15 +49,15 @@ class BiddingContextPanel extends JPanel {
 	 *            Action map
 	 */
 	BiddingContextPanel(ActionMap actions, JSkatGraphicRepository bitmaps,
-			ResourceBundle strings) {
+			ResourceBundle strings, JSkatUserPanel userPanel) {
 
-		initPanel(actions, bitmaps, strings);
+		initPanel(actions, bitmaps, strings, userPanel);
 	}
 
 	private void initPanel(ActionMap actions, JSkatGraphicRepository bitmaps,
-			ResourceBundle strings) {
+			ResourceBundle strings, JSkatUserPanel userPanel) {
 
-		setLayout(new MigLayout("fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$
+		setLayout(new MigLayout("fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		JPanel blankPanel = new JPanel();
 		blankPanel.setOpaque(false);
@@ -67,7 +67,7 @@ class BiddingContextPanel extends JPanel {
 		biddingPanel.setOpaque(false);
 		add(biddingPanel, "grow"); //$NON-NLS-1$
 
-		add(new GameAnnouncePanel(actions, strings, null), "width 25%"); //$NON-NLS-1$
+		add(new GameAnnouncePanel(actions, strings, userPanel), "width 25%"); //$NON-NLS-1$
 
 		setOpaque(false);
 	}

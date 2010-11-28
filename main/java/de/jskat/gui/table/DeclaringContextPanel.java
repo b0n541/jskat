@@ -22,7 +22,7 @@ class DeclaringContextPanel extends JPanel {
 
 	DeclaringContextPanel(ActionMap actions,
 			JSkatGraphicRepository jskatBitmaps, ResourceBundle strings,
-			int maxCards) {
+			JSkatUserPanel newUserPanel, int maxCards) {
 
 		setLayout(new MigLayout("fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 
@@ -33,7 +33,8 @@ class DeclaringContextPanel extends JPanel {
 		discardPanel = new DiscardPanel(actions, jskatBitmaps, strings, 4);
 		add(discardPanel, "grow"); //$NON-NLS-1$
 
-		announcePanel = new GameAnnouncePanel(actions, strings, discardPanel);
+		announcePanel = new GameAnnouncePanel(actions, strings, discardPanel,
+				newUserPanel);
 		add(announcePanel, "width 25%"); //$NON-NLS-1$
 
 		setOpaque(false);

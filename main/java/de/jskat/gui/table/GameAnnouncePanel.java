@@ -45,6 +45,7 @@ class GameAnnouncePanel extends JPanel {
 	JCheckBox schwarzBox = null;
 
 	DiscardPanel discardPanel;
+	JSkatUserPanel userPanel;
 
 	/**
 	 * Constructor
@@ -55,13 +56,31 @@ class GameAnnouncePanel extends JPanel {
 	 *            i18n strings
 	 */
 	GameAnnouncePanel(ActionMap actions, ResourceBundle strings,
-			DiscardPanel newDiscardPanel) {
+			JSkatUserPanel newUserPanel) {
 
-		initPanel(actions, strings, newDiscardPanel);
+		userPanel = newUserPanel;
+
+		initPanel(actions, strings);
 	}
 
-	private void initPanel(final ActionMap actions, ResourceBundle strings,
-			DiscardPanel newDiscardPanel) {
+	/**
+	 * Constructor
+	 * 
+	 * @param actions
+	 *            Action map
+	 * @param strings
+	 *            i18n strings
+	 */
+	GameAnnouncePanel(ActionMap actions, ResourceBundle strings,
+			DiscardPanel newDiscardPanel, JSkatUserPanel newUserPanel) {
+
+		discardPanel = newDiscardPanel;
+		userPanel = newUserPanel;
+
+		initPanel(actions, strings);
+	}
+
+	private void initPanel(final ActionMap actions, ResourceBundle strings) {
 
 		this.setLayout(new MigLayout("fill")); //$NON-NLS-1$
 
@@ -79,8 +98,18 @@ class GameAnnouncePanel extends JPanel {
 		// FIXME (jan 17.11.2010) make card face adjustable
 		gameTypeList.setRenderer(new GameTypeComboBoxRenderer(CardFace.FRENCH,
 				strings));
-		// FIXME (jan 21.11.2010) add a change listener to trigger sorting of
-		// cards
+		gameTypeList.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// FIXME (jan 28.11.2010) send sorting game type to JSkatMaster
+				// --> more view components can benefit from this
+				GameType gameType = (GameType) gameTypeList.getSelectedItem();
+
+				if (gameType != null) {
+					userPanel.setSortGameType(gameType);
+				}
+			}
+		});
 		this.gameTypeList.setSelectedIndex(-1);
 
 		this.ouvertBox = new JCheckBox(strings.getString("ouvert")); //$NON-NLS-1$
@@ -92,9 +121,7 @@ class GameAnnouncePanel extends JPanel {
 		panel.add(this.schneiderBox, "wrap"); //$NON-NLS-1$
 		panel.add(this.schwarzBox, "wrap"); //$NON-NLS-1$
 
-		if (newDiscardPanel != null) {
-
-			discardPanel = newDiscardPanel;
+		if (discardPanel != null) {
 
 			final JButton playButton = new JButton(
 					actions.get(JSkatAction.ANNOUNCE_GAME));
