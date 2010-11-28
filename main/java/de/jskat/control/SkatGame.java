@@ -76,7 +76,7 @@ public class SkatGame extends JSkatThread {
 		}
 
 		data = new SkatGameData();
-		setGameState(GameState.NEW_GAME);
+		setGameState(GameState.GAME_START);
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class SkatGame extends JSkatThread {
 			log.debug("Game state " + data.getGameState()); //$NON-NLS-1$
 
 			switch (data.getGameState()) {
-			case NEW_GAME:
+			case GAME_START:
 				setGameState(GameState.DEALING);
 				break;
 			case DEALING:
@@ -765,7 +765,7 @@ public class SkatGame extends JSkatThread {
 
 			view.setGameState(tableName, newState);
 
-			if (newState == GameState.NEW_GAME) {
+			if (newState == GameState.GAME_START) {
 
 				view.clearTable(tableName);
 

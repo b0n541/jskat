@@ -368,7 +368,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		this.gameInfoPanel.setGameState(state);
 
 		switch (state) {
-		case NEW_GAME:
+		case GAME_START:
 			setContextPanel(ContextPanelTypes.START);
 			resetGameData();
 			break;

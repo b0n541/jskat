@@ -580,7 +580,7 @@ public class JSkatViewImpl implements IJSkatView {
 	void setActions(GameState state) {
 
 		switch (state) {
-		case NEW_GAME:
+		case GAME_START:
 			actions.get(JSkatAction.CONTINUE_LOCAL_SERIES).setEnabled(false);
 			break;
 		case GAME_OVER:

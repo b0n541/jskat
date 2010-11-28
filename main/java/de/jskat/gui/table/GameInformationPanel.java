@@ -60,7 +60,7 @@ class GameInformationPanel extends JPanel {
 		label = new JLabel();
 		label.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 
-		setGameState(GameState.NEW_GAME);
+		setGameState(GameState.GAME_START);
 
 		add(this.label);
 	}
@@ -74,7 +74,7 @@ class GameInformationPanel extends JPanel {
 
 		gameState = newGameState;
 
-		if (gameState.equals(GameState.NEW_GAME)) {
+		if (gameState.equals(GameState.GAME_START)) {
 
 			resetGameData();
 		}

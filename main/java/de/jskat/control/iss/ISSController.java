@@ -369,7 +369,7 @@ public class ISSController {
 
 		SkatGameData result = new SkatGameData();
 
-		result.setGameState(GameState.NEW_GAME);
+		result.setGameState(GameState.GAME_START);
 		for (Player player : Player.values()) {
 			result.setPlayerName(player, status.getPlayerName(player));
 		}

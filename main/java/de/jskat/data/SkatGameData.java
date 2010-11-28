@@ -42,7 +42,7 @@ public class SkatGameData {
 		/**
 		 * New game started
 		 */
-		NEW_GAME,
+		GAME_START,
 		/**
 		 * Dealing phase
 		 */
