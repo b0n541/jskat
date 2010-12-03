@@ -11,8 +11,6 @@ Released: @ReleaseDate@
 
 package de.jskat.gui;
 
-import java.awt.Dimension;
-
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
@@ -34,8 +32,8 @@ public class ToolbarButton extends JButton {
 	public ToolbarButton(Action a) {
 		
 		super(a);
-		setTextPosition();
-		setPreferredSize(new Dimension(120, 100));
+		// setTextPosition();
+		// setPreferredSize(new Dimension(120, 100));
 	}
 
     private void setTextPosition() {
