@@ -232,7 +232,7 @@ class CardPanel extends JPanel {
 	 * Tells the JSkatMaster when the panel was clicked by the user
 	 */
 	void cardClicked(MouseEvent e) {
-
+		// FIXME (jan 04.12.2010) refactor this method, nobody understands it
 		int xPosition = e.getX();
 		int yPosition = e.getY();
 
@@ -246,33 +246,37 @@ class CardPanel extends JPanel {
 			// get card
 			double cardWidth = bitmaps.getCardImage(Suit.CLUBS, Rank.JACK)
 					.getWidth(this);
-			double partialHiddenCardWidth = cardWidth;
-			if (cards.size() > 1) {
-
-				partialHiddenCardWidth = (getWidth() - cardWidth)
-						/ (cards.size() - 1.0);
-			}
 
 			int cardIndex = -1;
 			if (cards.size() > 0) {
 				if (cards.size() == 1) {
+					log.debug("only on card on hand"); //$NON-NLS-1$
 					if (xPosition < cardWidth) {
 						cardIndex = 0;
 					}
 				} else {
-					if (!isCardImagesWithGaps(getWidth(), cards.size(),
-							cardWidth, partialHiddenCardWidth)) {
+					double distanceBetweenCards = cardWidth;
+					if (cards.size() > 1) {
+						distanceBetweenCards = (getWidth() - cardWidth)
+								/ (cards.size() - 1.0);
+					}
+
+					if (cardWidth > distanceBetweenCards) {
+						// cards without gaps
+						log.debug("cards without gaps"); //$NON-NLS-1$
 						cardIndex = 0;
-						while (!((cardIndex * partialHiddenCardWidth) < xPosition && ((cardIndex + 1)
-								* partialHiddenCardWidth > xPosition))
+						while (!((cardIndex * distanceBetweenCards) < xPosition && ((cardIndex + 1)
+								* distanceBetweenCards > xPosition))
 								&& cardIndex < (cards.size() - 1)) {
 							cardIndex++;
 						}
 					} else {
+						// cards with gaps
+						log.debug("cards with gaps"); //$NON-NLS-1$
 						double cardGap = (getWidth() - (cardWidth * cards
 								.size())) / (cards.size() - 1.0);
 
-						if ((int) (xPosition / (cardWidth + cardGap)) == (int) ((xPosition + cardGap) / (cardWidth + cardGap))) {
+						if ((int) ((xPosition / (cardWidth + cardGap))) == (int) ((xPosition + cardGap) / (cardWidth + cardGap))) {
 							cardIndex = (int) (xPosition / (cardWidth + cardGap));
 						}
 					}
@@ -325,18 +329,6 @@ class CardPanel extends JPanel {
 				}
 			}
 		}
-	}
-
-	private boolean isCardImagesWithGaps(int panelWidth, int cardCount,
-			double cardWidth, double partialHiddenCardWidth) {
-
-		boolean result = false;
-
-		if (panelWidth > (partialHiddenCardWidth * cardCount - 1) + cardWidth) {
-			result = true;
-		}
-
-		return result;
 	}
 
 	void setSortType(GameType newGameType) {
