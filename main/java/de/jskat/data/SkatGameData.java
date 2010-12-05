@@ -795,6 +795,23 @@ public class SkatGameData {
 	}
 
 	/**
+	 * Gets the last trick
+	 * 
+	 * @return Last trick, if at least two tricks are available<br>
+	 *         NULL otherwise
+	 */
+	public Trick getLastTrick() {
+
+		Trick result = null;
+
+		if (tricks.size() > 1) {
+			result = tricks.get(tricks.size() - 2);
+		}
+
+		return result;
+	}
+
+	/**
 	 * Sets the trick winner
 	 * 
 	 * @param trickNumber

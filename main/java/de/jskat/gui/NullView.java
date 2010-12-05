@@ -396,10 +396,11 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#updateISSMove(String, ISSMoveInformation)
+	 * @see IJSkatView#updateISSMove(String, SkatGameData, ISSMoveInformation)
 	 */
 	@Override
 	public void updateISSMove(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") SkatGameData gameData,
 			@SuppressWarnings("unused") ISSMoveInformation moveInformation) {
 		// empty method by indent
 	}

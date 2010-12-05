@@ -398,10 +398,10 @@ public class ISSController {
 	 */
 	public void updateMove(String tableName, ISSMoveInformation moveInformation) {
 
-		this.view.updateISSMove(tableName, moveInformation);
-
 		SkatGameData currGame = this.gameData.get(tableName);
 		updateGameData(currGame, moveInformation);
+
+		this.view.updateISSMove(tableName, currGame, moveInformation);
 
 		// TODO (jan 19.11.2010) extract this into separate method
 		if (MoveType.BID.equals(moveInformation.getType())
@@ -418,12 +418,6 @@ public class ISSController {
 
 			if (trick.getThirdCard() != null) {
 
-				// trick completed
-				view.clearTrickCards(tableName);
-				view.setLastTrick(tableName, trick.getForeHand(),
-						trick.getFirstCard(), trick.getSecondCard(),
-						trick.getThirdCard());
-
 				Player trickWinner = SkatRuleFactory.getSkatRules(
 						currGame.getGameType()).calculateTrickWinner(
 						currGame.getGameType(), trick);
@@ -433,10 +427,14 @@ public class ISSController {
 
 				view.setActivePlayer(tableName, currGame.getCurrentTrick()
 						.getForeHand());
+
 			} else if (trick.getSecondCard() != null) {
+
 				view.setActivePlayer(tableName, trick.getForeHand()
 						.getRightNeighbor());
+
 			} else if (trick.getFirstCard() != null) {
+
 				view.setActivePlayer(tableName, trick.getForeHand()
 						.getLeftNeighbor());
 			}

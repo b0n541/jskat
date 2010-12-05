@@ -47,6 +47,7 @@ import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameState;
 import de.jskat.data.SkatSeriesData.SeriesState;
+import de.jskat.data.Trick;
 import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.data.iss.ISSGameStartInformation;
 import de.jskat.data.iss.ISSMoveInformation;
@@ -851,10 +852,10 @@ public class JSkatViewImpl implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#updateISSMove(String, ISSMoveInformation)
+	 * @see IJSkatView#updateISSMove(String, SkatGameData, ISSMoveInformation)
 	 */
 	@Override
-	public void updateISSMove(String tableName,
+	public void updateISSMove(String tableName, SkatGameData gameData,
 			ISSMoveInformation moveInformation) {
 
 		Player movePlayer = moveInformation.getPlayer();
@@ -910,6 +911,23 @@ public class JSkatViewImpl implements IJSkatView {
 			break;
 		case CARD_PLAY:
 			setGameState(tableName, GameState.TRICK_PLAYING);
+
+			if (gameData.getTricks().size() > 1) {
+
+				Trick currentTrick = gameData.getCurrentTrick();
+				Trick lastTrick = gameData.getLastTrick();
+
+				if (currentTrick.getFirstCard() != null
+						&& currentTrick.getSecondCard() == null
+						&& currentTrick.getThirdCard() == null) {
+					// first card in new trick
+					clearTrickCards(tableName);
+					setLastTrick(tableName, lastTrick.getForeHand(),
+							lastTrick.getFirstCard(),
+							lastTrick.getSecondCard(), lastTrick.getThirdCard());
+				}
+			}
+
 			playTrickCard(tableName, movePlayer, moveInformation.getCard());
 			break;
 		case TIME_OUT:

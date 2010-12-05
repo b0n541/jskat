@@ -500,10 +500,12 @@ public interface IJSkatView {
 	 * 
 	 * @param tableName
 	 *            Table name
+	 * @param gameData
+	 *            Game data
 	 * @param moveInformation
 	 *            Move information
 	 */
-	public void updateISSMove(String tableName,
+	public void updateISSMove(String tableName, SkatGameData gameData,
 			ISSMoveInformation moveInformation);
 
 	/**
