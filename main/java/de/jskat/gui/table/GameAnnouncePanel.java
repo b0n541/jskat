@@ -88,12 +88,12 @@ class GameAnnouncePanel extends JPanel {
 
 		this.gameTypeList = new JComboBox();
 		DefaultComboBoxModel model = new DefaultComboBoxModel();
+		model.addElement(GameType.GRAND);
 		model.addElement(GameType.CLUBS);
 		model.addElement(GameType.SPADES);
 		model.addElement(GameType.HEARTS);
 		model.addElement(GameType.DIAMONDS);
 		model.addElement(GameType.NULL);
-		model.addElement(GameType.GRAND);
 		this.gameTypeList.setModel(model);
 		// FIXME (jan 17.11.2010) make card face adjustable
 		gameTypeList.setRenderer(new GameTypeComboBoxRenderer(CardFace.FRENCH,
