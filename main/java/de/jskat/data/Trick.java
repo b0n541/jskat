@@ -7,222 +7,252 @@ Authors: @JS@
 
 Released: @ReleaseDate@
 
-*/
+ */
 
 package de.jskat.data;
 
-import de.jskat.util.CardList;
 import de.jskat.util.Card;
+import de.jskat.util.CardList;
 import de.jskat.util.Player;
 
 /**
  * Holds data for a single trick
  */
 public class Trick {
-    
-    private Player foreHand;
-    private Player trickWinner;
-    
-    private Card firstCard;
-    private Card secondCard;
-    private Card thirdCard;
 
-    /** 
-     * Creates a new instance of Trick 
-     *
-     * @param newForeHand Player ID of the fore hand player
-     */
-    public Trick(Player newForeHand) {
-        
-        this.foreHand = newForeHand;
-    }
-    
-    /**
-     * Gets the fore hand player
-     * 
-     * @return Fore hand player
-     */
-    public Player getForeHand() {
-        
-        return this.foreHand;
-    }
-    
-    /**
-     * Gets the first card
-     * 
-     * @return First card
-     */
-    public Card getFirstCard() {
-    	
-        return this.firstCard;
-    }
-    
-    /**
-     * Sets the first card
-     * 
-     * @param newFirstCard First card
-     */
-    public void setFirstCard(Card newFirstCard) {
-    	
-        this.firstCard = newFirstCard;
-    }
-    
-    /**
-     * Gets the second card
-     * 
-     * @return Second card
-     */
-    public Card getSecondCard() {
-    	
-        return this.secondCard;
-    }
-    
-    /**
-     * Sets the second card
-     * 
-     * @param newSecondCard Second card
-     */
-    public void setSecondCard(Card newSecondCard) {
-    	
-        this.secondCard = newSecondCard;
-    }
-    
-    /**
-     * Gets the third card
-     * 
-     * @return Third card
-     */
-    public Card getThirdCard() {
-    	
-        return this.thirdCard;
-    }
-    
-    /**
-     * Sets the third card
-     * 
-     * @param newThirdCard Third card
-     */
-    public void setThirdCard(Card newThirdCard) {
-    	
-        this.thirdCard = newThirdCard;
-    }
-    
-    /**
-     * Gets a card from the trick
-     * 
-     * @param player Player
-     * @return Card played by the player
-     */
-    public Card getCard(Player player) {
-    	
-    	Card returnCard = null;
-    	
-    	switch(player) {
-    	
-    	case FORE_HAND:
-    			returnCard = getFirstCard();
-    		break;
-    	case MIDDLE_HAND:
-    			returnCard = getSecondCard();
-    		break;
-    	case HIND_HAND:
-    			returnCard = getThirdCard();
-    		break;
-    	}
-    	
-    	return returnCard;
-    }
-    
-    /**
-     * Gets the trick winner
-     * 
-     * @return Trick winner
-     */
-    public Player getTrickWinner() {
-    	
-        return this.trickWinner;
-    }
-    
-    /**
-     * Sets the trick winner
-     * 
-     * @param newTrickWinner Trick winner
-     */
-    public void setTrickWinner(Player newTrickWinner) {
-    	
-        this.trickWinner = newTrickWinner;
-    }
-    
-    /**
-     * Adds a card to the trick
-     * 
-     * @param newCard Card to be added
-     */
+	private int trickNumberInGame;
+
+	private Player foreHand;
+	private Player trickWinner;
+
+	private Card firstCard;
+	private Card secondCard;
+	private Card thirdCard;
+
+	/**
+	 * Creates a new instance of Trick
+	 * 
+	 * @param newTrickNumber
+	 *            Trick number in game
+	 * 
+	 * @param newForeHand
+	 *            Player ID of the fore hand player
+	 */
+	public Trick(int newTrickNumber, Player newForeHand) {
+
+		trickNumberInGame = newTrickNumber;
+		foreHand = newForeHand;
+	}
+
+	/**
+	 * Gets the fore hand player
+	 * 
+	 * @return Fore hand player
+	 */
+	public Player getForeHand() {
+
+		return foreHand;
+	}
+
+	/**
+	 * Gets the first card
+	 * 
+	 * @return First card
+	 */
+	public Card getFirstCard() {
+
+		return firstCard;
+	}
+
+	/**
+	 * Sets the first card
+	 * 
+	 * @param newFirstCard
+	 *            First card
+	 */
+	public void setFirstCard(Card newFirstCard) {
+
+		firstCard = newFirstCard;
+	}
+
+	/**
+	 * Gets the second card
+	 * 
+	 * @return Second card
+	 */
+	public Card getSecondCard() {
+
+		return secondCard;
+	}
+
+	/**
+	 * Sets the second card
+	 * 
+	 * @param newSecondCard
+	 *            Second card
+	 */
+	public void setSecondCard(Card newSecondCard) {
+
+		secondCard = newSecondCard;
+	}
+
+	/**
+	 * Gets the third card
+	 * 
+	 * @return Third card
+	 */
+	public Card getThirdCard() {
+
+		return thirdCard;
+	}
+
+	/**
+	 * Sets the third card
+	 * 
+	 * @param newThirdCard
+	 *            Third card
+	 */
+	public void setThirdCard(Card newThirdCard) {
+
+		thirdCard = newThirdCard;
+	}
+
+	/**
+	 * Gets a card from the trick
+	 * 
+	 * @param player
+	 *            Player
+	 * @return Card played by the player
+	 */
+	public Card getCard(Player player) {
+
+		Card returnCard = null;
+
+		switch (player) {
+
+		case FORE_HAND:
+			returnCard = getFirstCard();
+			break;
+		case MIDDLE_HAND:
+			returnCard = getSecondCard();
+			break;
+		case HIND_HAND:
+			returnCard = getThirdCard();
+			break;
+		}
+
+		return returnCard;
+	}
+
+	/**
+	 * Gets the trick winner
+	 * 
+	 * @return Trick winner
+	 */
+	public Player getTrickWinner() {
+
+		return trickWinner;
+	}
+
+	/**
+	 * Sets the trick winner
+	 * 
+	 * @param newTrickWinner
+	 *            Trick winner
+	 */
+	public void setTrickWinner(Player newTrickWinner) {
+
+		trickWinner = newTrickWinner;
+	}
+
+	/**
+	 * Adds a card to the trick
+	 * 
+	 * @param newCard
+	 *            Card to be added
+	 */
 	public void addCard(Card newCard) {
 
-		if (this.firstCard == null) {
-			
-			this.firstCard = newCard;
-		}
-		else if (this.secondCard == null) {
-			
-			this.secondCard = newCard;
-		}
-		else if (this.thirdCard == null) {
-			
-			this.thirdCard = newCard;
+		if (firstCard == null) {
+
+			firstCard = newCard;
+		} else if (secondCard == null) {
+
+			secondCard = newCard;
+		} else if (thirdCard == null) {
+
+			thirdCard = newCard;
 		}
 	}
 
 	/**
-     * Returns the cards of the trick as CardList 
-     * 
-     * @return The cards of the trick
-     */
-    public CardList getCardList() {
-    	
-    	CardList returnList = new CardList();
-    	
-    	if (this.firstCard != null) {
-    		
-    		returnList.add(this.firstCard);
-    	}
-    	if (this.secondCard != null) {
-    		
-    		returnList.add(this.secondCard);
-    	}
-    	if (this.thirdCard != null) {
-    		
-    		returnList.add(this.thirdCard);
-    	}
-    	
-    	return returnList;
-    }
-    
-    /**
+	 * Returns the cards of the trick as CardList
+	 * 
+	 * @return The cards of the trick
+	 */
+	public CardList getCardList() {
+
+		CardList returnList = new CardList();
+
+		if (firstCard != null) {
+
+			returnList.add(firstCard);
+		}
+		if (secondCard != null) {
+
+			returnList.add(secondCard);
+		}
+		if (thirdCard != null) {
+
+			returnList.add(thirdCard);
+		}
+
+		return returnList;
+	}
+
+	/**
 	 * Gets the sum of all card points in the CardList
 	 * 
 	 * @return Sum of all card points
-     */
-    public int getCardValueSum() {
-    	
-    	return this.getCardList().getCardValueSum();
-    }
-    
+	 */
+	public int getCardValueSum() {
+
+		return getCardList().getCardValueSum();
+	}
+
+	/**
+	 * Gets the trick number in the game
+	 * 
+	 * @return Trick number in the game
+	 */
+	public int getTrickNumberInGame() {
+		return trickNumberInGame;
+	}
+
+	/**
+	 * Sets the trick number in the game
+	 * 
+	 * @param newTrickNumber
+	 *            Trick number in the game
+	 */
+	public void setTrickNumberInGame(int newTrickNumber) {
+		trickNumberInGame = newTrickNumber;
+	}
+
 	/**
 	 * @see Object#clone()
 	 */
 	@Override
 	public Object clone() throws CloneNotSupportedException {
-		
-		Trick clone = new Trick(this.foreHand);
-		
-		clone.addCard(this.firstCard);
-		clone.addCard(this.secondCard);
-		clone.addCard(this.thirdCard);
-		
-		clone.setTrickWinner(this.trickWinner);
-		
+
+		Trick clone = new Trick(trickNumberInGame, foreHand);
+
+		clone.addCard(firstCard);
+		clone.addCard(secondCard);
+		clone.addCard(thirdCard);
+
+		clone.setTrickWinner(trickWinner);
+
 		return clone;
 	}
 }

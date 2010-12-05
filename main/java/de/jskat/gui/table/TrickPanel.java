@@ -72,12 +72,6 @@ class TrickPanel extends JPanel {
 	 */
 	void addCard(Player player, Card card) {
 
-		if (trick.size() == 3) {
-			// trick is full -> clear it first
-			positions.clear();
-			trick.clear();
-			cardRotations.clear();
-		}
 		positions.add(player);
 		trick.add(card);
 		cardRotations.add(Double.valueOf(0.5 * rand.nextDouble() - 0.25));

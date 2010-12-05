@@ -132,7 +132,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		this.skatListTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
 		this.skatListScrollPane = new JScrollPane(this.skatListTable);
-		this.skatListScrollPane.setPreferredSize(new Dimension(250, 100));
+		this.skatListScrollPane.setPreferredSize(new Dimension(200, 100));
 		this.skatListScrollPane
 				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -451,11 +451,6 @@ public class SkatTablePanel extends AbstractTabPanel {
 	Player getHumanPosition() {
 
 		return this.userPanel.getPosition();
-	}
-
-	CardPanel getLastClickedCardPanel() {
-
-		return this.userPanel.getLastClickedCardPanel();
 	}
 
 	/**
