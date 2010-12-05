@@ -416,6 +416,8 @@ public class ISSController {
 			// handle trick playing
 			Trick trick = currGame.getCurrentTrick();
 
+			view.setTrickNumber(tableName, trick.getTrickNumberInGame() + 1);
+
 			if (trick.getThirdCard() != null) {
 
 				Player trickWinner = SkatRuleFactory.getSkatRules(
