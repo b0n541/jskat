@@ -458,6 +458,8 @@ public class SkatGame extends JSkatThread {
 			log.debug("Play trick " + (trickNo + 1)); //$NON-NLS-1$
 			doSleep(maxSleep);
 
+			view.setTrickNumber(tableName, trickNo + 1);
+
 			Player newTrickForeHand = null;
 			if (trickNo == 0) {
 				// first trick

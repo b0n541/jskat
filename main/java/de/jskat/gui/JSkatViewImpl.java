@@ -1071,4 +1071,13 @@ public class JSkatViewImpl implements IJSkatView {
 
 		tables.get(tableName).setSkat(skat);
 	}
+
+	/**
+	 * @see IJSkatView#setTrickNumber(String, int)
+	 */
+	@Override
+	public void setTrickNumber(String tableName, int trickNumber) {
+
+		tables.get(tableName).setTrickNumber(trickNumber);
+	}
 }

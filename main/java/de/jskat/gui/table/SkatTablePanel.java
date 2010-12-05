@@ -721,4 +721,14 @@ public class SkatTablePanel extends AbstractTabPanel {
 		// FIXME (jan 20.11.2010) set active/inactive actions
 
 	}
+
+	/**
+	 * Sets the trick number
+	 * 
+	 * @param trickNumber
+	 *            Trick number
+	 */
+	public void setTrickNumber(int trickNumber) {
+		gameInfoPanel.setTrickNumber(trickNumber);
+	}
 }

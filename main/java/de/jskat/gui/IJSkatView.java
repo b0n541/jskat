@@ -527,4 +527,14 @@ public interface IJSkatView {
 	 *            Skat
 	 */
 	public void setSkat(String tableName, CardList skat);
+
+	/**
+	 * Sets the trick number
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param trickNumber
+	 *            Trick number
+	 */
+	public void setTrickNumber(String tableName, int trickNumber);
 }

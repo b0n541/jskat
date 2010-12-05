@@ -137,7 +137,7 @@ class GameInformationPanel extends JPanel {
 		}
 
 		if (gameState.equals(GameState.TRICK_PLAYING)) {
-			text += " Trick " + (trick + 1);
+			text += " " + strings.getString("trick") + " " + trick; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 		}
 
 		if (gameState.equals(GameState.GAME_OVER)) {
@@ -201,5 +201,17 @@ class GameInformationPanel extends JPanel {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Sets the trick number
+	 * 
+	 * @param trickNumber
+	 *            Trick number
+	 */
+	public void setTrickNumber(int trickNumber) {
+
+		trick = trickNumber;
+		refreshText();
 	}
 }
