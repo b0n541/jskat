@@ -54,7 +54,7 @@ public class JSkat {
 
 		JSkatMaster jskat = new JSkatMaster(jskatOptions);
 
-		jskat.setView(new JSkatViewImpl(jskat, jskatBitmaps));
+		jskat.setView(new JSkatViewImpl(jskat, jskatBitmaps, jskatOptions));
 	}
 
 	private static void trySettingNimbusLookAndFeel() {

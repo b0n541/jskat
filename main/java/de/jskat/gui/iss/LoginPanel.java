@@ -28,6 +28,7 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.jskat.data.JSkatOptions;
 import de.jskat.data.iss.ISSLoginCredentials;
 import de.jskat.gui.AbstractTabPanel;
 import de.jskat.gui.action.JSkatAction;
@@ -52,9 +53,9 @@ public class LoginPanel extends AbstractTabPanel {
 	 *            i18n strings
 	 */
 	public LoginPanel(String newTableName, JSkatGraphicRepository jskatBitmaps,
-			ActionMap actions, ResourceBundle strings) {
+			ActionMap actions, ResourceBundle strings, JSkatOptions options) {
 
-		super(newTableName, jskatBitmaps, actions, strings);
+		super(newTableName, jskatBitmaps, actions, strings, options);
 		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
 	}
 

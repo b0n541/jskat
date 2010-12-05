@@ -33,6 +33,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.GameAnnouncement;
+import de.jskat.data.JSkatOptions;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameState;
 import de.jskat.data.SkatSeriesData.SeriesState;
@@ -83,9 +84,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public SkatTablePanel(String newTableName,
 			JSkatGraphicRepository jskatBitmaps, ActionMap actions,
-			ResourceBundle jskatStrings) {
+			ResourceBundle jskatStrings, JSkatOptions options) {
 
-		super(newTableName, jskatBitmaps, actions, jskatStrings);
+		super(newTableName, jskatBitmaps, actions, jskatStrings, options);
 
 		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
 	}
@@ -160,7 +161,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	private GameInformationPanel getGameInfoPanel() {
 
-		return new GameInformationPanel(bitmaps, strings);
+		return new GameInformationPanel(bitmaps, strings, options.getCardFace());
 	}
 
 	private OpponentPanel getOpponentPanel() {

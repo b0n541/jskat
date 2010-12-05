@@ -31,6 +31,7 @@ import de.jskat.data.GameAnnouncementWithDiscardedCards;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.CardFace;
 import de.jskat.util.GameType;
+import de.jskat.util.SkatResourceBundle;
 
 /**
  * Holds widgets for announcing a game
@@ -216,99 +217,13 @@ class GameAnnouncePanel extends JPanel {
 			GameType gameType = (GameType) value;
 
 			if (gameType != null) {
-				String cellText = null;
-
-				switch (gameType) {
-				case CLUBS:
-				case SPADES:
-				case HEARTS:
-				case DIAMONDS:
-					cellText = getGameTypeStringForCardFace(gameType);
-					break;
-				case NULL:
-					cellText = strings.getString("null"); //$NON-NLS-1$
-					break;
-				case GRAND:
-					cellText = strings.getString("grand"); //$NON-NLS-1$
-					break;
-				default:
-					// PASSED_IN and RAMSCH not needed here
-					break;
-				}
-
-				cellItemLabel.setText(cellText);
+				cellItemLabel.setText(SkatResourceBundle.getGameType(gameType,
+						strings, cardFace));
 			} else {
 				cellItemLabel.setText(" "); //$NON-NLS-1$
 			}
 
 			return this;
-		}
-
-		private String getGameTypeStringForCardFace(GameType gameType) {
-
-			String result = null;
-
-			switch (cardFace) {
-			case FRENCH:
-			case TOURNAMENT:
-				result = getFrenchGameTypeString(gameType);
-				break;
-			case GERMAN:
-				result = getGermanGameTypeString(gameType);
-				break;
-			}
-
-			return result;
-		}
-
-		private String getGermanGameTypeString(GameType gameType) {
-
-			String result = null;
-
-			switch (gameType) {
-			case CLUBS:
-				result = strings.getString("clubs_german"); //$NON-NLS-1$
-				break;
-			case SPADES:
-				result = strings.getString("spades_german"); //$NON-NLS-1$
-				break;
-			case HEARTS:
-				result = strings.getString("hearts_german"); //$NON-NLS-1$
-				break;
-			case DIAMONDS:
-				result = strings.getString("diamonds_german"); //$NON-NLS-1$
-				break;
-			default:
-				// other game types not needed here
-				break;
-			}
-
-			return result;
-		}
-
-		private String getFrenchGameTypeString(GameType gameType) {
-
-			String result = null;
-
-			switch (gameType) {
-			case CLUBS:
-				result = strings.getString("clubs"); //$NON-NLS-1$
-				break;
-			case SPADES:
-				result = strings.getString("spades"); //$NON-NLS-1$
-				break;
-			case HEARTS:
-				result = strings.getString("hearts"); //$NON-NLS-1$
-				break;
-			case DIAMONDS:
-				result = strings.getString("diamonds"); //$NON-NLS-1$
-				break;
-			default:
-				// other game types not needed here
-				break;
-			}
-
-			return result;
 		}
 	}
 }

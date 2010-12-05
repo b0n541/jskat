@@ -21,8 +21,10 @@ import net.miginfocom.swing.MigLayout;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameState;
+import de.jskat.gui.img.CardFace;
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.util.GameType;
+import de.jskat.util.SkatResourceBundle;
 
 /**
  * Panel for showing game informations
@@ -33,6 +35,7 @@ class GameInformationPanel extends JPanel {
 
 	private JSkatGraphicRepository bitmaps;
 	private ResourceBundle strings;
+	private CardFace cardFace;
 
 	private JLabel label;
 
@@ -51,12 +54,13 @@ class GameInformationPanel extends JPanel {
 	 * Constructor
 	 */
 	GameInformationPanel(JSkatGraphicRepository jskatBitmaps,
-			ResourceBundle jskatStrings) {
+			ResourceBundle jskatStrings, CardFace newCardFace) {
 
 		super();
 
 		bitmaps = jskatBitmaps;
 		strings = jskatStrings;
+		cardFace = newCardFace;
 
 		initPanel();
 	}
@@ -117,7 +121,7 @@ class GameInformationPanel extends JPanel {
 		String text = getGameStateString(gameState);
 
 		if (gameType != null) {
-			text += " " + gameType.toString(); //$NON-NLS-1$
+			text += " " + SkatResourceBundle.getGameType(gameType, strings, cardFace); //$NON-NLS-1$
 		}
 
 		if (handGame) {
@@ -213,6 +217,17 @@ class GameInformationPanel extends JPanel {
 	public void setTrickNumber(int trickNumber) {
 
 		trick = trickNumber;
+		refreshText();
+	}
+
+	/**
+	 * Sets the card face
+	 * 
+	 * @param newCardFace
+	 */
+	public void setCardFace(CardFace newCardFace) {
+
+		cardFace = newCardFace;
 		refreshText();
 	}
 }

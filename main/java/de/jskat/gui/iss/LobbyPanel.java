@@ -30,6 +30,7 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.jskat.data.JSkatOptions;
 import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.gui.AbstractTabPanel;
 import de.jskat.gui.action.JSkatAction;
@@ -63,9 +64,9 @@ public class LobbyPanel extends AbstractTabPanel {
 	 * @param actions
 	 */
 	public LobbyPanel(String tableName, JSkatGraphicRepository jskatBitmaps,
-			ActionMap actions, ResourceBundle strings) {
+			ActionMap actions, ResourceBundle strings, JSkatOptions options) {
 
-		super(tableName, jskatBitmaps, actions, strings);
+		super(tableName, jskatBitmaps, actions, strings, options);
 
 		log.debug("SkatTablePanel: name: " + tableName); //$NON-NLS-1$
 	}

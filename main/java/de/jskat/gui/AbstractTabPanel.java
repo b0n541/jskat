@@ -16,6 +16,7 @@ import java.util.ResourceBundle;
 import javax.swing.ActionMap;
 import javax.swing.JPanel;
 
+import de.jskat.data.JSkatOptions;
 import de.jskat.gui.img.JSkatGraphicRepository;
 
 /**
@@ -34,6 +35,10 @@ public abstract class AbstractTabPanel extends JPanel {
 	 * JSkat strings
 	 */
 	protected ResourceBundle strings;
+	/**
+	 * JSkat options
+	 */
+	protected JSkatOptions options;
 
 	/**
 	 * Constructor
@@ -45,14 +50,16 @@ public abstract class AbstractTabPanel extends JPanel {
 	 * @param actions
 	 *            JSkat actions
 	 */
-	public AbstractTabPanel(String tabName, JSkatGraphicRepository jskatBitmaps,
-			ActionMap actions, ResourceBundle jskatStrings) {
+	public AbstractTabPanel(String tabName,
+			JSkatGraphicRepository jskatBitmaps, ActionMap actions,
+			ResourceBundle jskatStrings, JSkatOptions jskatOptions) {
 
 		super();
-		this.setName(tabName);
-		this.setActionMap(actions);
-		this.bitmaps = jskatBitmaps;
-		this.strings = jskatStrings;
+		setName(tabName);
+		setActionMap(actions);
+		bitmaps = jskatBitmaps;
+		strings = jskatStrings;
+		options = jskatOptions;
 		initPanel();
 	}
 

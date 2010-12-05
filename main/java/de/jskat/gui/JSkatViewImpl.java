@@ -44,6 +44,7 @@ import de.jskat.control.JSkatMaster;
 import de.jskat.control.SkatTable;
 import de.jskat.control.iss.ChatMessageType;
 import de.jskat.data.GameAnnouncement;
+import de.jskat.data.JSkatOptions;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameState;
 import de.jskat.data.SkatSeriesData.SeriesState;
@@ -122,6 +123,8 @@ public class JSkatViewImpl implements IJSkatView {
 	private ResourceBundle strings;
 	static ActionMap actions;
 
+	private JSkatOptions options;
+
 	private LobbyPanel issLobby;
 
 	/**
@@ -132,10 +135,12 @@ public class JSkatViewImpl implements IJSkatView {
 	 * @param jskatBitmaps
 	 *            Bitmaps for JSkat
 	 */
-	public JSkatViewImpl(JSkatMaster jskat, JSkatGraphicRepository jskatBitmaps) {
+	public JSkatViewImpl(JSkatMaster jskat,
+			JSkatGraphicRepository jskatBitmaps, JSkatOptions jskatOptions) {
 
 		bitmaps = jskatBitmaps;
-		// TODO make this setable
+		options = jskatOptions;
+		// FIXME (jan 05.12.2010) make this adjustable
 		strings = ResourceBundle.getBundle("de/jskat/i18n/i18n", //$NON-NLS-1$
 				new Locale("de", "DE")); //$NON-NLS-1$//$NON-NLS-2$
 		tables = new HashMap<String, SkatTablePanel>();
@@ -435,13 +440,13 @@ public class JSkatViewImpl implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#createISSTable(String)
+	 * @see IJSkatView#createISSTable(String, String)
 	 */
 	@Override
 	public void createISSTable(String tableName, String loginName) {
 
 		ISSTablePanel newTable = new ISSTablePanel(tableName, bitmaps, actions,
-				strings, loginName);
+				strings, options, loginName);
 		addTabPanel(newTable, "ISS table: " + tableName);
 		tables.put(tableName, newTable);
 	}
@@ -453,7 +458,7 @@ public class JSkatViewImpl implements IJSkatView {
 	public void createSkatTablePanel(String name) {
 
 		SkatTablePanel newPanel = new SkatTablePanel(name, bitmaps, actions,
-				strings);
+				strings, options);
 		addTabPanel(newPanel, name);
 		tables.put(name, newPanel);
 
@@ -711,7 +716,7 @@ public class JSkatViewImpl implements IJSkatView {
 	public void showISSLogin() {
 
 		LoginPanel loginPanel = new LoginPanel("ISS login", bitmaps, //$NON-NLS-1$ //$NON-NLS-2$
-				actions, strings);
+				actions, strings, null);
 		addTabPanel(loginPanel, "ISS login");
 	}
 
@@ -740,7 +745,7 @@ public class JSkatViewImpl implements IJSkatView {
 	@Override
 	public void showISSLobby() {
 
-		issLobby = new LobbyPanel("ISS lobby", bitmaps, actions, strings);
+		issLobby = new LobbyPanel("ISS lobby", bitmaps, actions, strings, null);
 		addTabPanel(issLobby, "ISS lobby");
 	}
 
