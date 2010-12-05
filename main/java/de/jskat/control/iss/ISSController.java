@@ -63,9 +63,9 @@ public class ISSController {
 	 */
 	public ISSController(JSkatMaster controller, JSkatApplicationData newData) {
 
-		this.jskat = controller;
-		this.data = newData;
-		this.gameData = new HashMap<String, SkatGameData>();
+		jskat = controller;
+		data = newData;
+		gameData = new HashMap<String, SkatGameData>();
 	}
 
 	/**
@@ -76,7 +76,7 @@ public class ISSController {
 	 */
 	public void setView(IJSkatView newView) {
 
-		this.view = newView;
+		view = newView;
 	}
 
 	/**
@@ -84,11 +84,11 @@ public class ISSController {
 	 */
 	public void disconnect() {
 
-		if (this.issConnect != null && this.issConnect.isConnected()) {
+		if (issConnect != null && issConnect.isConnected()) {
 
 			log.debug("connection to ISS still open"); //$NON-NLS-1$
 
-			this.issConnect.closeConnection();
+			issConnect.closeConnection();
 		}
 	}
 
@@ -97,7 +97,7 @@ public class ISSController {
 	 */
 	public void showISSLoginPanel() {
 
-		this.view.showISSLogin();
+		view.showISSLogin();
 	}
 
 	/**
@@ -111,9 +111,9 @@ public class ISSController {
 
 		log.debug("connectToISS"); //$NON-NLS-1$
 
-		if (this.issConnect == null) {
+		if (issConnect == null) {
 
-			this.issConnect = new Connector(this);
+			issConnect = new Connector(this);
 		}
 
 		log.debug("connector created"); //$NON-NLS-1$
@@ -130,11 +130,11 @@ public class ISSController {
 				login = loginCredentials.getLoginName();
 				password = loginCredentials.getPassword();
 
-				if (!this.issConnect.isConnected()) {
+				if (!issConnect.isConnected()) {
 
-					this.issConnect.setConnectionData(login, password,
+					issConnect.setConnectionData(login, password,
 							loginCredentials.getPort());
-					this.issConnect.establishConnection();
+					issConnect.establishConnection();
 				}
 			} else {
 
@@ -142,15 +142,15 @@ public class ISSController {
 			}
 		}
 
-		if (this.issConnect.isConnected()) {
+		if (issConnect.isConnected()) {
 
 			// show ISS lobby if connection was successfull
-			this.view.closeTabPanel("ISS login"); //$NON-NLS-1$
-			this.view.showISSLobby();
-			this.jskat.setIssLogin(login);
+			view.closeTabPanel("ISS login"); //$NON-NLS-1$
+			view.showISSLobby();
+			jskat.setIssLogin(login);
 		}
 
-		return this.issConnect.isConnected();
+		return issConnect.isConnected();
 	}
 
 	/**
@@ -168,7 +168,7 @@ public class ISSController {
 	public void updateISSPlayerList(String playerName, String language,
 			long gamesPlayed, double strength) {
 
-		this.jskat.updateISSPlayer(playerName, language, gamesPlayed, strength);
+		jskat.updateISSPlayer(playerName, language, gamesPlayed, strength);
 	}
 
 	/**
@@ -179,7 +179,7 @@ public class ISSController {
 	 */
 	public void removeISSPlayerFromList(String playerName) {
 
-		this.jskat.removeISSPlayer(playerName);
+		jskat.removeISSPlayer(playerName);
 	}
 
 	/**
@@ -201,7 +201,7 @@ public class ISSController {
 	public void updateISSTableList(String tableName, int maxPlayers,
 			long gamesPlayed, String player1, String player2, String player3) {
 
-		this.view.updateISSLobbyTableList(tableName, maxPlayers, gamesPlayed,
+		view.updateISSLobbyTableList(tableName, maxPlayers, gamesPlayed,
 				player1, player2, player3);
 	}
 
@@ -213,7 +213,7 @@ public class ISSController {
 	 */
 	public void removeISSTableFromList(String tableName) {
 
-		this.view.removeFromISSLobbyTableList(tableName);
+		view.removeFromISSLobbyTableList(tableName);
 	}
 
 	/**
@@ -224,7 +224,7 @@ public class ISSController {
 	 */
 	public void sendChatMessage(ISSChatMessage message) {
 
-		this.issConnect.send(message);
+		issConnect.send(message);
 	}
 
 	/**
@@ -264,7 +264,7 @@ public class ISSController {
 		ISSChatMessage chatMessage = new ISSChatMessage("Lobby", //$NON-NLS-1$
 				message.toString());
 
-		this.view.appendISSChatMessage(ChatMessageType.LOBBY, chatMessage);
+		view.appendISSChatMessage(ChatMessageType.LOBBY, chatMessage);
 	}
 
 	/**
@@ -272,7 +272,7 @@ public class ISSController {
 	 */
 	public void requestTableCreation() {
 
-		this.issConnect.requestTableCreation();
+		issConnect.requestTableCreation();
 	}
 
 	/**
@@ -287,8 +287,8 @@ public class ISSController {
 	 */
 	public void createTable(String tableName, String creator, int maxPlayers) {
 
-		this.view.createISSTable(tableName, creator);
-		this.jskat.setActiveTable(tableName);
+		view.createISSTable(tableName, creator);
+		jskat.setActiveTable(tableName);
 	}
 
 	/**
@@ -299,9 +299,9 @@ public class ISSController {
 	 */
 	public void destroyTable(String tableName) {
 
-		this.view.closeTabPanel(tableName);
+		view.closeTabPanel(tableName);
 		// TODO set to next table
-		this.jskat.setActiveTable(null);
+		jskat.setActiveTable(null);
 	}
 
 	/**
@@ -312,7 +312,7 @@ public class ISSController {
 	 */
 	public void joinTable(String tableName) {
 
-		this.issConnect.joinTable(tableName);
+		issConnect.joinTable(tableName);
 	}
 
 	/**
@@ -323,7 +323,7 @@ public class ISSController {
 	 */
 	public void observeTable(String tableName) {
 
-		this.issConnect.observeTable(tableName);
+		issConnect.observeTable(tableName);
 	}
 
 	/**
@@ -333,7 +333,7 @@ public class ISSController {
 	 *            Table name
 	 */
 	public void leaveTable(String tableName) {
-		this.issConnect.leaveTable(tableName);
+		issConnect.leaveTable(tableName);
 	}
 
 	/**
@@ -346,7 +346,7 @@ public class ISSController {
 	 */
 	public void updateISSTableState(String tableName, ISSTablePanelStatus status) {
 
-		this.view.updateISSTable(tableName, status);
+		view.updateISSTable(tableName, status);
 	}
 
 	/**
@@ -359,10 +359,9 @@ public class ISSController {
 	 */
 	public void updateISSGame(String tableName, ISSGameStartInformation status) {
 
-		this.view
-				.updateISSTable(tableName, this.data.getIssLoginName(), status);
+		view.updateISSTable(tableName, data.getIssLoginName(), status);
 
-		this.gameData.put(tableName, createSkatGameData(status));
+		gameData.put(tableName, createSkatGameData(status));
 	}
 
 	private SkatGameData createSkatGameData(ISSGameStartInformation status) {
@@ -385,7 +384,7 @@ public class ISSController {
 	 */
 	public void startGame(String tableName) {
 
-		this.view.startGame(tableName);
+		view.startGame(tableName);
 	}
 
 	/**
@@ -398,10 +397,10 @@ public class ISSController {
 	 */
 	public void updateMove(String tableName, ISSMoveInformation moveInformation) {
 
-		SkatGameData currGame = this.gameData.get(tableName);
+		SkatGameData currGame = gameData.get(tableName);
 		updateGameData(currGame, moveInformation);
 
-		this.view.updateISSMove(tableName, currGame, moveInformation);
+		view.updateISSMove(tableName, currGame, moveInformation);
 
 		// TODO (jan 19.11.2010) extract this into separate method
 		if (MoveType.BID.equals(moveInformation.getType())
@@ -517,7 +516,7 @@ public class ISSController {
 	 */
 	public void showMessage(int messageType, String message) {
 
-		this.view.showMessage(messageType, message);
+		view.showMessage(messageType, message);
 	}
 
 	/**
@@ -529,7 +528,7 @@ public class ISSController {
 	 *            Invited player
 	 */
 	public void invitePlayer(String tableName, String invitee) {
-		this.issConnect.invitePlayer(tableName, invitee);
+		issConnect.invitePlayer(tableName, invitee);
 	}
 
 	/**
@@ -539,7 +538,7 @@ public class ISSController {
 	 *            Table name
 	 */
 	public void sendReadySignal(String tableName) {
-		this.issConnect.sendReadySignal(tableName);
+		issConnect.sendReadySignal(tableName);
 	}
 
 	/**
@@ -549,7 +548,7 @@ public class ISSController {
 	 *            Table name
 	 */
 	public void sendTalkEnabledSignal(String tableName) {
-		this.issConnect.sendTalkEnabledSignal(tableName);
+		issConnect.sendTalkEnabledSignal(tableName);
 	}
 
 	/**
@@ -559,7 +558,7 @@ public class ISSController {
 	 *            Table name
 	 */
 	public void sendTableSeatChangeSignal(String tableName) {
-		this.issConnect.sendTableSeatChangeSignal(tableName);
+		issConnect.sendTableSeatChangeSignal(tableName);
 	}
 
 	/**
@@ -569,7 +568,7 @@ public class ISSController {
 	 *            Table name
 	 */
 	public void sendPassBidMove(String tableName) {
-		this.issConnect.sendPassMove(tableName);
+		issConnect.sendPassMove(tableName);
 	}
 
 	/**
@@ -579,7 +578,7 @@ public class ISSController {
 	 *            Table name
 	 */
 	public void sendHoldBidMove(String tableName) {
-		this.issConnect.sendHoldBidMove(tableName);
+		issConnect.sendHoldBidMove(tableName);
 	}
 
 	/**
@@ -592,7 +591,7 @@ public class ISSController {
 	 */
 	public void sendBidMove(String tableName) {
 
-		this.issConnect.sendBidMove(tableName, SkatConstants
+		issConnect.sendBidMove(tableName, SkatConstants
 				.getNextBidValue(gameData.get(tableName).getBidValue()));
 	}
 
@@ -603,7 +602,7 @@ public class ISSController {
 	 *            Table name
 	 */
 	public void sendLookIntoSkatMove(String tableName) {
-		this.issConnect.sendLookIntoSkatMove(tableName);
+		issConnect.sendLookIntoSkatMove(tableName);
 	}
 
 	/**
@@ -617,7 +616,7 @@ public class ISSController {
 	public void sendGameAnnouncementMove(String tableName,
 			GameAnnouncementWithDiscardedCards gameAnnouncement) {
 
-		this.issConnect.sendGameAnnouncementMove(tableName, gameAnnouncement);
+		issConnect.sendGameAnnouncementMove(tableName, gameAnnouncement);
 
 	}
 
@@ -630,6 +629,25 @@ public class ISSController {
 	 *            Card
 	 */
 	public void sendCardMove(String tableName, Card nextCard) {
-		this.issConnect.sendCardMove(tableName, nextCard);
+		issConnect.sendCardMove(tableName, nextCard);
+	}
+
+	/**
+	 * Handle an invitation from another player
+	 * 
+	 * @param invitor
+	 *            Invitor
+	 * @param tableName
+	 *            Table name
+	 * @param invitationTicket
+	 *            Invitation ticket
+	 */
+	public void handleInvitation(String invitor, String tableName,
+			String invitationTicket) {
+
+		if (view.showISSTableInvitation(invitor, tableName)) {
+
+			issConnect.sendInvitationAccepted(tableName, invitationTicket);
+		}
 	}
 }

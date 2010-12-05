@@ -15,6 +15,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -1084,5 +1085,26 @@ public class JSkatViewImpl implements IJSkatView {
 	public void setTrickNumber(String tableName, int trickNumber) {
 
 		tables.get(tableName).setTrickNumber(trickNumber);
+	}
+
+	@Override
+	public boolean showISSTableInvitation(String invitor, String tableName) {
+
+		boolean result = false;
+
+		String question = MessageFormat.format(
+				strings.getString("iss_table_invitation"), //$NON-NLS-1$
+				invitor, tableName);
+
+		int answer = JOptionPane.showConfirmDialog(null, question,
+				strings.getString("iss_table_invitation_title"), //$NON-NLS-1$
+				JOptionPane.YES_NO_OPTION);
+
+		if (answer == JOptionPane.YES_OPTION) {
+
+			result = true;
+		}
+
+		return result;
 	}
 }

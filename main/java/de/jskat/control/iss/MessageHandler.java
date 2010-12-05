@@ -116,6 +116,10 @@ public class MessageHandler {
 
 			handleTableDestroyMessage(params);
 
+		} else if (first.equals("invite")) { //$NON-NLS-1$
+
+			handleTableInvitationMessage(params);
+
 		} else {
 
 			log.error("UNHANDLED MESSAGE: " + first + params.toString()); //$NON-NLS-1$ }
@@ -177,6 +181,16 @@ public class MessageHandler {
 
 		String tableName = params.get(0);
 		issControl.destroyTable(tableName);
+	}
+
+	void handleTableInvitationMessage(List<String> params) {
+		log.debug("table destroy message"); //$NON-NLS-1$
+
+		String invitor = params.get(0);
+		String tableName = params.get(1);
+		String invitationTicket = params.get(2);
+
+		issControl.handleInvitation(invitor, tableName, invitationTicket);
 	}
 
 	/**

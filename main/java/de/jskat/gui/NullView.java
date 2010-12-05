@@ -525,4 +525,10 @@ public class NullView implements IJSkatView {
 			@SuppressWarnings("unused") int trickNumber) {
 		// empty method by indent
 	}
+
+	@Override
+	public boolean showISSTableInvitation(String invitor, String tableName) {
+		// empty method by indent
+		return false;
+	}
 }

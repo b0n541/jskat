@@ -52,7 +52,7 @@ class Connector {
 	 */
 	Connector(ISSController controller) {
 
-		this.issControl = controller;
+		issControl = controller;
 	}
 
 	/**
@@ -67,12 +67,12 @@ class Connector {
 	 */
 	void setConnectionData(String newLoginName, String newPassword, int newPort) {
 
-		this.loginName = newLoginName;
-		this.password = newPassword;
+		loginName = newLoginName;
+		password = newPassword;
 
 		if (newPort == 80 || newPort == 7000 || newPort == 8000) {
 
-			this.port = newPort;
+			port = newPort;
 		} else {
 
 			throw new IllegalArgumentException(
@@ -91,18 +91,17 @@ class Connector {
 
 		try {
 			// TODO make this configurable
-			this.socket = new Socket("skatgame.net", this.port); //$NON-NLS-1$
-			this.output = new PrintWriter(this.socket.getOutputStream(), true);
-			this.issOut = new OutputChannel(this.output);
-			this.issIn = new InputChannel(this.issControl, this,
-					this.socket.getInputStream());
-			this.issIn.start();
+			socket = new Socket("skatgame.net", port); //$NON-NLS-1$
+			output = new PrintWriter(socket.getOutputStream(), true);
+			issOut = new OutputChannel(output);
+			issIn = new InputChannel(issControl, this, socket.getInputStream());
+			issIn.start();
 			log.debug("Connection established..."); //$NON-NLS-1$
-			this.issOut.send(this.loginName);
+			issOut.send(loginName);
 
 		} catch (java.net.UnknownHostException e) {
 			log.error("Cannot open connection to ISS"); //$NON-NLS-1$
-			this.issControl.showMessage(JOptionPane.ERROR_MESSAGE,
+			issControl.showMessage(JOptionPane.ERROR_MESSAGE,
 					"Can't establish connection to ISS");
 		} catch (java.io.IOException e) {
 			log.error("IOException: " + e.toString()); //$NON-NLS-1$
@@ -113,7 +112,7 @@ class Connector {
 
 	void sendPassword() {
 
-		this.issOut.send(this.password);
+		issOut.send(password);
 	}
 
 	/**
@@ -123,11 +122,11 @@ class Connector {
 
 		try {
 			log.debug("closing connection"); //$NON-NLS-1$
-			this.issIn.interrupt();
+			issIn.interrupt();
 			log.debug("input channel closed"); //$NON-NLS-1$
-			this.output.close();
+			output.close();
 			log.debug("output channel closed"); //$NON-NLS-1$
-			this.socket.close();
+			socket.close();
 			log.debug("socket closed"); //$NON-NLS-1$
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -143,74 +142,73 @@ class Connector {
 	 */
 	boolean isConnected() {
 
-		return this.socket != null && this.socket.isBound();
+		return socket != null && socket.isBound();
 	}
 
 	void send(ISSChatMessage message) {
 
-		this.issOut.send("yell " + message.getMessage()); //$NON-NLS-1$
+		issOut.send("yell " + message.getMessage()); //$NON-NLS-1$
 	}
 
 	void requestTableCreation() {
 
 		// TODO table creation for four player
-		this.issOut.send("create / 3"); //$NON-NLS-1$
+		issOut.send("create / 3"); //$NON-NLS-1$
 	}
 
 	void joinTable(String tableName) {
 
-		this.issOut.send("join " + tableName); //$NON-NLS-1$
+		issOut.send("join " + tableName); //$NON-NLS-1$
 	}
 
 	void observeTable(String tableName) {
 
-		this.issOut.send("observe " + tableName); //$NON-NLS-1$
+		issOut.send("observe " + tableName); //$NON-NLS-1$
 	}
 
 	void leaveTable(String tableName) {
 
-		this.issOut.send("table " + tableName + ' ' + loginName + " leave"); //$NON-NLS-1$ //$NON-NLS-2$
+		issOut.send("table " + tableName + ' ' + loginName + " leave"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	void sendReadySignal(String tableName) {
 
-		this.issOut.send("table " + tableName + ' ' + loginName + " ready"); //$NON-NLS-1$ //$NON-NLS-2$
+		issOut.send("table " + tableName + ' ' + loginName + " ready"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	void sendTalkEnabledSignal(String tableName) {
 
-		this.issOut.send("table " + tableName + ' ' + loginName + " gametalk"); //$NON-NLS-1$ //$NON-NLS-2$
+		issOut.send("table " + tableName + ' ' + loginName + " gametalk"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	void sendTableSeatChangeSignal(String tableName) {
 
-		this.issOut.send("table " + tableName + ' ' + loginName + " 34"); //$NON-NLS-1$ //$NON-NLS-2$
+		issOut.send("table " + tableName + ' ' + loginName + " 34"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	void invitePlayer(String tableName, String invitee) {
 
-		this.issOut
-				.send("table " + tableName + ' ' + loginName + " invite " + invitee); //$NON-NLS-1$//$NON-NLS-2$
+		issOut.send("table " + tableName + ' ' + loginName + " invite " + invitee); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
 	void sendPassMove(String tableName) {
 
-		this.issOut.send("table " + tableName + ' ' + loginName + " play p"); //$NON-NLS-1$//$NON-NLS-2$
+		issOut.send("table " + tableName + ' ' + loginName + " play p"); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
 	void sendHoldBidMove(String tableName) {
 
-		this.issOut.send("table " + tableName + ' ' + loginName + " play y"); //$NON-NLS-1$//$NON-NLS-2$
+		issOut.send("table " + tableName + ' ' + loginName + " play y"); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
 	public void sendBidMove(String tableName, int bidValue) {
 
-		this.issOut.send("table " + tableName + ' ' + loginName + " play " //$NON-NLS-1$//$NON-NLS-2$
+		issOut.send("table " + tableName + ' ' + loginName + " play " //$NON-NLS-1$//$NON-NLS-2$
 				+ bidValue);
 	}
 
 	public void sendLookIntoSkatMove(String tableName) {
-		this.issOut.send("table " + tableName + ' ' + loginName + " play s"); //$NON-NLS-1$//$NON-NLS-2$
+		issOut.send("table " + tableName + ' ' + loginName + " play s"); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
 	public void sendGameAnnouncementMove(String tableName,
@@ -228,8 +226,7 @@ class Connector {
 					+ getIssCardString(skat.get(1));
 		}
 
-		this.issOut
-				.send("table " + tableName + ' ' + loginName + " play " + gameAnnouncementString); //$NON-NLS-1$//$NON-NLS-2$
+		issOut.send("table " + tableName + ' ' + loginName + " play " + gameAnnouncementString); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
 	private String getGameTypeString(GameType gameType, boolean hand,
@@ -277,11 +274,15 @@ class Connector {
 	}
 
 	public void sendCardMove(String tableName, Card card) {
-		this.issOut
-				.send("table " + tableName + ' ' + loginName + " play " + getIssCardString(card)); //$NON-NLS-1$//$NON-NLS-2$
+		issOut.send("table " + tableName + ' ' + loginName + " play " + getIssCardString(card)); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
 	private String getIssCardString(Card card) {
 		return card.getSuit().shortString() + card.getRank().shortString();
+	}
+
+	public void sendInvitationAccepted(String tableName, String invitationTicket) {
+
+		issOut.send("join " + tableName + " " + invitationTicket); //$NON-NLS-1$//$NON-NLS-2$
 	}
 }

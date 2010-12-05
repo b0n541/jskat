@@ -537,4 +537,15 @@ public interface IJSkatView {
 	 *            Trick number
 	 */
 	public void setTrickNumber(String tableName, int trickNumber);
+
+	/**
+	 * Shows an invitation message for ISS
+	 * 
+	 * @param invitor
+	 *            Invitor
+	 * @param tableName
+	 *            Table name
+	 * @return TRUE, if the user accepted the invitation
+	 */
+	public boolean showISSTableInvitation(String invitor, String tableName);
 }

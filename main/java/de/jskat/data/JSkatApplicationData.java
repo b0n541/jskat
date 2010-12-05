@@ -14,7 +14,6 @@ package de.jskat.data;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.ResourceBundle;
 import java.util.Set;
 
 import de.jskat.control.SkatTable;
@@ -41,11 +40,11 @@ public class JSkatApplicationData {
 	 */
 	public JSkatApplicationData(JSkatOptions jskatOptions) {
 
-		this.options = jskatOptions;
-		this.skatTables = new HashMap<String, SkatTable>();
-		this.humanPlayers = new HashMap<String, HumanPlayer>();
-		this.availableIssPlayer = new HashSet<String>();
-		this.joinedIssTables = new HashSet<String>();
+		options = jskatOptions;
+		skatTables = new HashMap<String, SkatTable>();
+		humanPlayers = new HashMap<String, HumanPlayer>();
+		availableIssPlayer = new HashSet<String>();
+		joinedIssTables = new HashSet<String>();
 	}
 
 	/**
@@ -56,8 +55,8 @@ public class JSkatApplicationData {
 	 */
 	synchronized public void addSkatTable(SkatTable newSkatTable) {
 
-		this.skatTables.put(newSkatTable.getName(), newSkatTable);
-		this.humanPlayers.put(newSkatTable.getName(), new HumanPlayer());
+		skatTables.put(newSkatTable.getName(), newSkatTable);
+		humanPlayers.put(newSkatTable.getName(), new HumanPlayer());
 	}
 
 	/**
@@ -69,7 +68,7 @@ public class JSkatApplicationData {
 	 */
 	public SkatTable getSkatTable(String tableName) {
 
-		return this.skatTables.get(tableName);
+		return skatTables.get(tableName);
 	}
 
 	/**
@@ -79,7 +78,7 @@ public class JSkatApplicationData {
 	 */
 	public JSkatOptions getOptions() {
 
-		return this.options;
+		return options;
 	}
 
 	/**
@@ -89,7 +88,7 @@ public class JSkatApplicationData {
 	 */
 	public SkatTableOptions getTableOptions() {
 
-		return this.options.getSkatTableOptions();
+		return options.getSkatTableOptions();
 	}
 
 	/**
@@ -100,12 +99,12 @@ public class JSkatApplicationData {
 	 */
 	public void setActiveTable(String newActiveTable) {
 
-		if (!this.skatTables.containsKey(newActiveTable)) {
+		if (!skatTables.containsKey(newActiveTable)) {
 			// table is not known yet --> comes from ISS
-			this.joinedIssTables.add(newActiveTable);
+			joinedIssTables.add(newActiveTable);
 		}
 
-		this.activeTable = newActiveTable;
+		activeTable = newActiveTable;
 	}
 
 	/**
@@ -115,17 +114,7 @@ public class JSkatApplicationData {
 	 */
 	public String getActiveTable() {
 
-		return this.activeTable;
-	}
-
-	/**
-	 * Gets the resource bundle
-	 * 
-	 * @return Resource bundle
-	 */
-	public ResourceBundle getResourceBundle() {
-		// TODO Auto-generated method stub
-		return null;
+		return activeTable;
 	}
 
 	/**
@@ -135,7 +124,7 @@ public class JSkatApplicationData {
 	 *            Login name
 	 */
 	public void setIssLoginName(String newISSLoginName) {
-		this.issLoginName = newISSLoginName;
+		issLoginName = newISSLoginName;
 	}
 
 	/**
@@ -144,7 +133,7 @@ public class JSkatApplicationData {
 	 * @return Login name
 	 */
 	public String getIssLoginName() {
-		return this.issLoginName;
+		return issLoginName;
 	}
 
 	/**
@@ -153,7 +142,7 @@ public class JSkatApplicationData {
 	 * @return Available player
 	 */
 	public Set<String> getAvailableISSPlayer() {
-		return this.availableIssPlayer;
+		return availableIssPlayer;
 	}
 
 	/**
@@ -163,7 +152,7 @@ public class JSkatApplicationData {
 	 *            New player
 	 */
 	public void addAvailableISSPlayer(String newPlayer) {
-		this.availableIssPlayer.add(newPlayer);
+		availableIssPlayer.add(newPlayer);
 	}
 
 	/**
@@ -173,7 +162,7 @@ public class JSkatApplicationData {
 	 *            Skat table
 	 */
 	public void addJoinedIssSkatTable(String newSkatTable) {
-		this.joinedIssTables.add(newSkatTable);
+		joinedIssTables.add(newSkatTable);
 	}
 
 	/**
@@ -183,7 +172,7 @@ public class JSkatApplicationData {
 	 *            Player to be removed
 	 */
 	public void removeAvailableISSPlayer(String player) {
-		this.availableIssPlayer.remove(player);
+		availableIssPlayer.remove(player);
 	}
 
 	/**
@@ -193,7 +182,7 @@ public class JSkatApplicationData {
 	 *            Skat table
 	 */
 	public void removeJoinedIssSkatTable(String skatTable) {
-		this.joinedIssTables.remove(skatTable);
+		joinedIssTables.remove(skatTable);
 	}
 
 	/**
@@ -215,6 +204,6 @@ public class JSkatApplicationData {
 	 * @return Human player
 	 */
 	public HumanPlayer getHumanPlayer(String tableName) {
-		return this.humanPlayers.get(tableName);
+		return humanPlayers.get(tableName);
 	}
 }
