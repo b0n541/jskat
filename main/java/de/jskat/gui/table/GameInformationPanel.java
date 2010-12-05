@@ -117,7 +117,7 @@ class GameInformationPanel extends JPanel {
 		String text = getGameStateString(gameState);
 
 		if (gameType != null) {
-			text += " " + gameType.toString();
+			text += " " + gameType.toString(); //$NON-NLS-1$
 		}
 
 		if (handGame) {
@@ -143,13 +143,14 @@ class GameInformationPanel extends JPanel {
 		if (gameState.equals(GameState.GAME_OVER)) {
 
 			if (gameWon) {
-				text += " WON!!!";
+				text += " " + strings.getString("won"); //$NON-NLS-1$//$NON-NLS-2$
 			} else {
-				text += " LOST!!!";
+				text += " " + strings.getString("lost"); //$NON-NLS-1$//$NON-NLS-2$
 			}
 
-			text += " Declarer " + declarerPoints;
-			text += " Opponents " + opponentPoints;
+			text += " " + strings.getString("declarer") + " " + declarerPoints + " " + strings.getString("points"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+			text += " " + strings.getString("opponents") + " " //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+					+ opponentPoints + " " + strings.getString("points"); //$NON-NLS-1$//$NON-NLS-2$
 		}
 
 		label.setText(text);

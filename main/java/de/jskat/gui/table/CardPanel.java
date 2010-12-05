@@ -19,7 +19,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import javax.swing.Action;
 import javax.swing.JPanel;
@@ -140,9 +142,12 @@ class CardPanel extends JPanel {
 	 * @see JPanel#paintComponent(Graphics)
 	 */
 	@Override
-	protected void paintComponent(Graphics g) {
+	protected synchronized void paintComponent(Graphics g) {
 
 		super.paintComponent(g);
+
+		// copying cards prevents ConcurrentModificationException
+		List<Card> cardsToPaint = new ArrayList<Card>(cards);
 
 		Graphics2D g2D = (Graphics2D) g;
 		g2D.setRenderingHint(RenderingHints.KEY_RENDERING,
@@ -151,7 +156,7 @@ class CardPanel extends JPanel {
 				RenderingHints.VALUE_ANTIALIAS_ON);
 
 		int cardNo = 0;
-		for (Card card : cards) {
+		for (Card card : cardsToPaint) {
 
 			Image image = null;
 
