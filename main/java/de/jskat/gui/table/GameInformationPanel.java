@@ -12,6 +12,7 @@ Released: @ReleaseDate@
 package de.jskat.gui.table;
 
 import java.awt.Font;
+import java.util.ResourceBundle;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,6 +21,7 @@ import net.miginfocom.swing.MigLayout;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameState;
+import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.util.GameType;
 
 /**
@@ -28,6 +30,9 @@ import de.jskat.util.GameType;
 class GameInformationPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+
+	private JSkatGraphicRepository bitmaps;
+	private ResourceBundle strings;
 
 	private JLabel label;
 
@@ -45,9 +50,14 @@ class GameInformationPanel extends JPanel {
 	/**
 	 * Constructor
 	 */
-	GameInformationPanel() {
+	GameInformationPanel(JSkatGraphicRepository jskatBitmaps,
+			ResourceBundle jskatStrings) {
 
 		super();
+
+		bitmaps = jskatBitmaps;
+		strings = jskatStrings;
+
 		initPanel();
 	}
 
@@ -104,7 +114,7 @@ class GameInformationPanel extends JPanel {
 
 	private void refreshText() {
 
-		String text = gameState.toString();
+		String text = getGameStateString(gameState);
 
 		if (gameType != null) {
 			text += " " + gameType.toString();
@@ -151,5 +161,45 @@ class GameInformationPanel extends JPanel {
 		opponentPoints = data.getOpponentScore();
 
 		refreshText();
+	}
+
+	String getGameStateString(GameState state) {
+
+		String result = null;
+
+		switch (state) {
+		case BIDDING:
+			result = strings.getString("bidding_phase"); //$NON-NLS-1$
+			break;
+		case CALC_GAME_VALUE:
+			result = strings.getString("calc_game_value_phase"); //$NON-NLS-1$
+			break;
+		case DEALING:
+			result = strings.getString("dealing_phase"); //$NON-NLS-1$
+			break;
+		case DECLARING:
+			result = strings.getString("declaring_phase"); //$NON-NLS-1$
+			break;
+		case DISCARDING:
+			result = strings.getString("discarding_phase"); //$NON-NLS-1$
+			break;
+		case GAME_OVER:
+			result = strings.getString("game_over_phase"); //$NON-NLS-1$
+			break;
+		case GAME_START:
+			result = strings.getString("game_start_phase"); //$NON-NLS-1$
+			break;
+		case LOOK_INTO_SKAT:
+			result = strings.getString("look_into_skat_phase"); //$NON-NLS-1$
+			break;
+		case PRELIMINARY_GAME_END:
+			result = strings.getString("preliminary_game_end_phase"); //$NON-NLS-1$
+			break;
+		case TRICK_PLAYING:
+			result = strings.getString("trick_playing_phase"); //$NON-NLS-1$
+			break;
+		}
+
+		return result;
 	}
 }

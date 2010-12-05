@@ -160,7 +160,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	private GameInformationPanel getGameInfoPanel() {
 
-		return new GameInformationPanel();
+		return new GameInformationPanel(bitmaps, strings);
 	}
 
 	private OpponentPanel getOpponentPanel() {
