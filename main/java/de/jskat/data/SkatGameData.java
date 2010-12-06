@@ -340,7 +340,7 @@ public class SkatGameData {
 
 		won = gameWon;
 
-		log.debug("setGameLost(): Game lost = " + won); //$NON-NLS-1$
+		log.debug("setGameWon(): Game won = " + won); //$NON-NLS-1$
 	}
 
 	/**
@@ -651,6 +651,20 @@ public class SkatGameData {
 	}
 
 	/**
+	 * Sets the score of the player
+	 * 
+	 * @param score
+	 *            Score of the declarer
+	 */
+	public void setDeclarerScore(int score) {
+
+		if (declarer != null) {
+
+			playerPoints.put(declarer, Integer.valueOf(score));
+		}
+	}
+
+	/**
 	 * Gets the score of the single player
 	 * 
 	 * @return The score of the single player
@@ -746,6 +760,17 @@ public class SkatGameData {
 	public int getResult() {
 
 		return result;
+	}
+
+	/**
+	 * Sets the game result
+	 * 
+	 * @param newResult
+	 *            Game result
+	 */
+	public void setResult(int newResult) {
+
+		result = newResult;
 	}
 
 	/**

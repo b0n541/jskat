@@ -14,11 +14,14 @@ package de.jskat.control.iss;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.GameAnnouncement;
+import de.jskat.data.SkatGameData;
 import de.jskat.data.iss.ISSGameStartInformation;
 import de.jskat.data.iss.ISSMoveInformation;
 import de.jskat.data.iss.ISSPlayerStatus;
@@ -370,5 +373,110 @@ public class MessageParser {
 		}
 
 		return result;
+	}
+
+	static SkatGameData parseGameSummary(String gameSummary) {
+
+		SkatGameData result = new SkatGameData();
+
+		Pattern summaryPartPattern = Pattern.compile("(\\w+)\\[(.*?)\\]"); //$NON-NLS-1$
+		Matcher summaryPartMatcher = summaryPartPattern.matcher(gameSummary);
+
+		while (summaryPartMatcher.find()) {
+
+			System.out.println(summaryPartMatcher.group());
+
+			String summaryPartMarker = summaryPartMatcher.group(1);
+			String summeryPart = summaryPartMatcher.group(2);
+
+			parseSummaryPart(result, summaryPartMarker, summeryPart);
+		}
+
+		return result;
+	}
+
+	private static void parseSummaryPart(SkatGameData result,
+			String summaryPartMarker, String summaryPart) {
+
+		if ("P0".equals(summaryPartMarker)) { //$NON-NLS-1$
+
+			result.setPlayerName(Player.FORE_HAND, summaryPart);
+
+		} else if ("P1".equals(summaryPartMarker)) { //$NON-NLS-1$
+
+			result.setPlayerName(Player.MIDDLE_HAND, summaryPart);
+
+		} else if ("P2".equals(summaryPartMarker)) { //$NON-NLS-1$
+
+			result.setPlayerName(Player.HIND_HAND, summaryPart);
+
+		} else if ("MV".equals(summaryPartMarker)) { //$NON-NLS-1$
+
+			parseMoves(result, summaryPart);
+
+		} else if ("R".equals(summaryPartMarker)) { //$NON-NLS-1$
+
+			parseGameResult(result, summaryPart);
+		}
+	}
+
+	private static void parseMoves(SkatGameData result, String summaryPart) {
+
+		StringTokenizer token = new StringTokenizer(summaryPart);
+
+		while (token.hasMoreTokens()) {
+
+			List<String> moveToken = new ArrayList<String>();
+			moveToken.add(token.nextToken());
+			moveToken.add(token.nextToken());
+
+			// FIXME (jan 06.12.2010) doesn't work this way a.t.m.
+			// ISSMoveInformation moveInfo = getMoveInformation(moveToken);
+		}
+	}
+
+	private static void parseGameResult(SkatGameData result, String summaryPart) {
+
+		StringTokenizer token = new StringTokenizer(summaryPart);
+
+		while (token.hasMoreTokens()) {
+
+			parseResultToken(result, token.nextToken());
+		}
+	}
+
+	private static void parseResultToken(SkatGameData result, String token) {
+
+		if (token.startsWith("d:")) { //$NON-NLS-1$
+
+			parseDeclarerToken(result, token);
+
+		} else if ("loss".equals(token)) { //$NON-NLS-1$
+
+			result.setGameWon(false);
+
+		} else if ("win".equals(token)) { //$NON-NLS-1$
+
+			result.setGameWon(true);
+
+		} else if (token.startsWith("v:")) { //$NON-NLS-1$
+
+			result.setResult(Integer.parseInt(token.substring(2)));
+
+		} else if (token.startsWith("p:")) { //$NON-NLS-1$
+
+			result.setDeclarerScore(Integer.parseInt(token.substring(2)));
+		}
+	}
+
+	private static void parseDeclarerToken(SkatGameData result, String token) {
+
+		if ("d:0".equals(token)) { //$NON-NLS-1$
+			result.setDeclarer(Player.FORE_HAND);
+		} else if ("d:1".equals(token)) { //$NON-NLS-1$
+			result.setDeclarer(Player.MIDDLE_HAND);
+		} else if ("d:2".equals(token)) { //$NON-NLS-1$
+			result.setDeclarer(Player.HIND_HAND);
+		}
 	}
 }
