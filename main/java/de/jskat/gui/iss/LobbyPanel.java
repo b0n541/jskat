@@ -12,6 +12,7 @@ Released: @ReleaseDate@
 package de.jskat.gui.iss;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -88,8 +89,10 @@ public class LobbyPanel extends AbstractTabPanel {
 
 		JPanel lobby = new JPanel(new MigLayout());
 
-		lobby.add(
-				new JLabel("Welcome to the International Skat Server"), "span 2, align center, wrap"); //$NON-NLS-1$ //$NON-NLS-2$
+		JLabel headerLabel = new JLabel(
+				"Welcome to the International Skat Server");
+		headerLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
+		lobby.add(headerLabel, "span 2, align center, wrap"); //$NON-NLS-1$ 
 		lobby.add(new JLabel("Players")); //$NON-NLS-1$
 		lobby.add(new JLabel("Tables"), "wrap"); //$NON-NLS-1$ //$NON-NLS-2$
 
