@@ -886,18 +886,15 @@ public class JSkatViewImpl implements IJSkatView {
 			break;
 		case HOLD_BID:
 			setGameState(tableName, GameState.BIDDING);
-			setBid(tableName, movePlayer, moveInformation.getBidValue(), false);
-			setBidValueToMake(
-					tableName,
-					SkatConstants.getNextBidValue(moveInformation.getBidValue()));
+			setBid(tableName, movePlayer, gameData.getBidValue(), false);
+			setBidValueToMake(tableName,
+					SkatConstants.getNextBidValue(gameData.getBidValue()));
 			break;
 		case PASS:
 			setGameState(tableName, GameState.BIDDING);
 			setPass(tableName, movePlayer);
-			// FIXME (jan 19.11.2010) current bid value unknown at this point?
-			setBidValueToMake(
-					tableName,
-					SkatConstants.getNextBidValue(moveInformation.getBidValue()));
+			setBidValueToMake(tableName,
+					SkatConstants.getNextBidValue(gameData.getBidValue()));
 			break;
 		case SKAT_REQUEST:
 			setGameState(tableName, GameState.LOOK_INTO_SKAT);
