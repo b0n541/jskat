@@ -39,7 +39,6 @@ import de.jskat.data.SkatGameData.GameState;
 import de.jskat.data.SkatSeriesData.SeriesState;
 import de.jskat.gui.AbstractTabPanel;
 import de.jskat.gui.action.JSkatAction;
-import de.jskat.gui.action.human.ContinueSkatSeriesAction;
 import de.jskat.gui.action.main.StartSkatSeriesAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.util.Card;
@@ -69,6 +68,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	protected Map<ContextPanelTypes, JPanel> contextPanels;
 	protected TrickPlayPanel trickPanel;
 	protected TrickPlayPanel lastTrickPanel;
+	protected GameOverPanel gameOverPanel;
 	/**
 	 * Table model for skat list
 	 */
@@ -202,9 +202,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 		JPanel trickHoldingPanel = new JPanel(new MigLayout(
 				"fill", "[shrink][grow][shrink]", //$NON-NLS-1$ //$NON-NLS-2$
 				"fill")); //$NON-NLS-1$
-		lastTrickPanel = new TrickPlayPanel(bitmaps, 0.25);
+		lastTrickPanel = new TrickPlayPanel(bitmaps, 0.5, false);
 		trickHoldingPanel.add(lastTrickPanel, "width 25%"); //$NON-NLS-1$
-		trickPanel = new TrickPlayPanel(bitmaps, 0.5);
+		trickPanel = new TrickPlayPanel(bitmaps, 0.6, true);
 		trickHoldingPanel.add(trickPanel, "grow"); //$NON-NLS-1$
 		JPanel blankPanel = new JPanel();
 		blankPanel.setOpaque(false);
@@ -212,9 +212,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 		trickHoldingPanel.setOpaque(false);
 		addContextPanel(ContextPanelTypes.TRICK_PLAYING, trickHoldingPanel);
 
-		addContextPanel(ContextPanelTypes.GAME_OVER,
-				new GameOverPanel((ContinueSkatSeriesAction) getActionMap()
-						.get(JSkatAction.CONTINUE_LOCAL_SERIES)));
+		gameOverPanel = new GameOverPanel(getActionMap(), bitmaps, strings);
+		addContextPanel(ContextPanelTypes.GAME_OVER, gameOverPanel);
 	}
 
 	private JSkatUserPanel getPlayerPanel() {
@@ -261,6 +260,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		biddingPanel.setUserPosition(playerPosition);
 		trickPanel.setUserPosition(playerPosition);
 		lastTrickPanel.setUserPosition(playerPosition);
+		gameOverPanel.setUserPosition(playerPosition);
 
 		// FIXME (jansch 09.11.2010) code duplication with
 		// BiddingPanel.setPlayerPositions()
@@ -463,14 +463,16 @@ public class SkatTablePanel extends AbstractTabPanel {
 	/**
 	 * Adds a new game result
 	 * 
-	 * @param data
+	 * @param gameData
 	 *            Game data
 	 */
-	public void addGameResult(SkatGameData data) {
+	public void addGameResult(SkatGameData gameData) {
+
+		gameOverPanel.setGameResult(gameData);
 
 		skatListTableModel.addResult(leftOpponentPanel.getPosition(),
 				rightOpponentPanel.getPosition(), userPanel.getPosition(),
-				data.getDeclarer(), data.getGameResult());
+				gameData.getDeclarer(), gameData.getGameResult());
 
 		// scroll skat list if the new result is out of scope
 		Rectangle bounds = skatListTable.getCellRect(
@@ -479,8 +481,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 		loc.move(loc.x, loc.y + bounds.height);
 		skatListScrollPane.getViewport().setViewPosition(loc);
 
-		if (data.getGameType() != GameType.PASSED_IN) {
-			gameInfoPanel.setGameResult(data);
+		if (gameData.getGameType() != GameType.PASSED_IN) {
+			gameInfoPanel.setGameResult(gameData);
 		}
 	}
 

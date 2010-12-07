@@ -501,7 +501,6 @@ public class SkatGame extends JSkatThread {
 			Player trickWinner = rules.calculateTrickWinner(data.getGameType(),
 					trick);
 			trick.setTrickWinner(trickWinner);
-			data.getTricks().add(trick);
 			data.addPlayerPoints(trickWinner, trick.getCardValueSum());
 
 			for (Player currPosition : Player.values()) {
@@ -679,6 +678,7 @@ public class SkatGame extends JSkatThread {
 
 		log.debug("Calculate game value"); //$NON-NLS-1$
 
+		// FIXME (jan 07.12.2010) don't let a data class calculate it's values
 		data.calcResult();
 
 		log.debug("game value=" + data.getResult() + ", bid value=" //$NON-NLS-1$ //$NON-NLS-2$

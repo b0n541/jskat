@@ -172,7 +172,7 @@ class GameAnnouncePanel extends JPanel {
 		resetPanel();
 	}
 
-	public void resetPanel() {
+	void resetPanel() {
 
 		this.gameTypeList.setSelectedIndex(-1);
 		this.ouvertBox.setSelected(false);

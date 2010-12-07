@@ -34,9 +34,9 @@ import de.jskat.util.CardList;
  */
 class DiscardPanel extends JPanel {
 
-	private static final String LOOK_INTO_SKAT_BUTTON = "LOOK_INTO_SKAT_BUTTON";
+	private static final String LOOK_INTO_SKAT_BUTTON = "LOOK_INTO_SKAT_BUTTON"; //$NON-NLS-1$
 
-	private static final String CARD_PANEL = "CARD_PANEL";
+	private static final String CARD_PANEL = "CARD_PANEL"; //$NON-NLS-1$
 
 	private static final long serialVersionUID = 1L;
 

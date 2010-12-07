@@ -43,6 +43,7 @@ class TrickPanel extends JPanel {
 	private Player leftOpponent;
 
 	private double cardScaleFactor;
+	private boolean randomPlacement;
 
 	/**
 	 * Constructor
@@ -50,10 +51,12 @@ class TrickPanel extends JPanel {
 	 * @param jskatBitmaps
 	 *            JSkat bitmaps
 	 */
-	TrickPanel(JSkatGraphicRepository jskatBitmaps, double newCardScaleFactor) {
+	TrickPanel(JSkatGraphicRepository jskatBitmaps, double newCardScaleFactor,
+			boolean newRandomPlacement) {
 
 		bitmaps = jskatBitmaps;
 		cardScaleFactor = newCardScaleFactor;
+		randomPlacement = newRandomPlacement;
 
 		trick = new CardList();
 		positions = new ArrayList<Player>();
@@ -74,7 +77,13 @@ class TrickPanel extends JPanel {
 
 		positions.add(player);
 		trick.add(card);
-		cardRotations.add(Double.valueOf(0.5 * rand.nextDouble() - 0.25));
+
+		if (randomPlacement) {
+			cardRotations.add(Double.valueOf(0.5 * rand.nextDouble() - 0.25));
+		} else {
+			cardRotations.add(Double.valueOf(0.0));
+		}
+
 		repaint();
 	}
 

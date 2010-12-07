@@ -65,6 +65,7 @@ public class ISSTablePanel extends SkatTablePanel {
 		// replace game start context panel
 		addContextPanel(ContextPanelTypes.START,
 				new StartContextPanel(this.getActionMap()));
+		// FIXME (jan 07.12.2010) add game over panel
 		addContextPanel(ContextPanelTypes.GAME_OVER,
 				new StartContextPanel(this.getActionMap()));
 		setGameState(GameState.GAME_START);
