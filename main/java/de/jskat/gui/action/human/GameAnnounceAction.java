@@ -21,6 +21,7 @@ import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
+import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
  * Implements the action for handling card panel clicks
@@ -30,17 +31,18 @@ public class GameAnnounceAction extends AbstractJSkatAction {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
+	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster,
+	 *      JSkatGraphicRepository)
 	 */
 	public GameAnnounceAction(JSkatMaster controller,
 			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
 
 		super(controller, bitmaps);
 
-		putValue(Action.NAME, "Play!");
-		putValue(Action.SHORT_DESCRIPTION, "Play game");
+		putValue(Action.NAME, strings.getObject("announce")); //$NON-NLS-1$
 
 		setActionCommand(JSkatAction.ANNOUNCE_GAME);
+		setIcon(Icon.PLAY);
 	}
 
 	/**

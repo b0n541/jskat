@@ -38,8 +38,7 @@ public class LookIntoSkatAction extends AbstractJSkatAction {
 
 		super(controller, bitmaps);
 
-		putValue(Action.NAME, "Look into skat");
-		putValue(Action.SHORT_DESCRIPTION, "Look into skat");
+		putValue(Action.NAME, strings.getObject("look_into_skat")); //$NON-NLS-1$
 
 		setActionCommand(JSkatAction.LOOK_INTO_SKAT);
 		setIcon(Icon.PLAY);

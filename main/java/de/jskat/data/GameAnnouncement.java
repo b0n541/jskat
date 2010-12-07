@@ -71,13 +71,13 @@ public class GameAnnouncement {
 	 */
 	public void initializeVariables() {
 
-		this.gameType = null;
-		this.ouvert = false;
-		this.schneider = false;
-		this.schwarz = false;
-		this.contra = false;
-		this.re = false;
-		this.bock = false;
+		gameType = null;
+		ouvert = false;
+		schneider = false;
+		schwarz = false;
+		contra = false;
+		re = false;
+		bock = false;
 	}
 
 	/**
@@ -87,7 +87,7 @@ public class GameAnnouncement {
 	 */
 	public GameType getGameType() {
 
-		return this.gameType;
+		return gameType;
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class GameAnnouncement {
 	 */
 	public void setGameType(GameType newGameType) {
 
-		this.gameType = newGameType;
+		gameType = newGameType;
 	}
 
 	/**
@@ -107,7 +107,7 @@ public class GameAnnouncement {
 	 */
 	public boolean isSchneider() {
 
-		return this.schneider;
+		return schneider;
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class GameAnnouncement {
 	 */
 	public void setSchneider(boolean isSchneider) {
 
-		this.schneider = isSchneider;
+		schneider = isSchneider;
 	}
 
 	/**
@@ -128,7 +128,7 @@ public class GameAnnouncement {
 	 */
 	public boolean isSchwarz() {
 
-		return this.schwarz;
+		return schwarz;
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class GameAnnouncement {
 	 */
 	public void setSchwarz(boolean isSchwarz) {
 
-		this.schwarz = isSchwarz;
+		schwarz = isSchwarz;
 	}
 
 	/**
@@ -149,7 +149,7 @@ public class GameAnnouncement {
 	 */
 	public boolean isOuvert() {
 
-		return this.ouvert;
+		return ouvert;
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class GameAnnouncement {
 	 */
 	public void setOuvert(boolean isOuvert) {
 
-		this.ouvert = isOuvert;
+		ouvert = isOuvert;
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class GameAnnouncement {
 	 */
 	public boolean isHand() {
 
-		return this.hand;
+		return hand;
 	}
 
 	/**
@@ -181,7 +181,7 @@ public class GameAnnouncement {
 	 */
 	public void setHand(boolean isHand) {
 
-		this.hand = isHand;
+		hand = isHand;
 	}
 
 	/**
@@ -191,7 +191,7 @@ public class GameAnnouncement {
 	 */
 	public boolean isContra() {
 
-		return this.contra;
+		return contra;
 	}
 
 	/**
@@ -202,7 +202,7 @@ public class GameAnnouncement {
 	 */
 	public void setContra(boolean isContra) {
 
-		this.contra = isContra;
+		contra = isContra;
 	}
 
 	/**
@@ -212,7 +212,7 @@ public class GameAnnouncement {
 	 */
 	public boolean isRe() {
 
-		return this.re;
+		return re;
 	}
 
 	/**
@@ -223,7 +223,7 @@ public class GameAnnouncement {
 	 */
 	public void setRe(boolean isRe) {
 
-		this.re = isRe;
+		re = isRe;
 	}
 
 	/**
@@ -233,7 +233,7 @@ public class GameAnnouncement {
 	 */
 	public boolean isBock() {
 
-		return this.bock;
+		return bock;
 	}
 
 	/**
@@ -244,7 +244,7 @@ public class GameAnnouncement {
 	 */
 	public void setBock(boolean isBock) {
 
-		this.contra = isBock;
+		contra = isBock;
 	}
 
 	/**
@@ -255,22 +255,22 @@ public class GameAnnouncement {
 
 		StringBuffer result = new StringBuffer();
 
-		result.append("Game announcement: ").append(this.gameType);
+		result.append("Game announcement: ").append(gameType);
 
-		if (this.hand) {
+		if (hand) {
 			result.append(" hand");
 		}
-		if (this.ouvert) {
+		if (ouvert) {
 
 			result.append(" ouvert");
 		}
 
-		if (this.schneider) {
+		if (schneider) {
 
 			result.append(" schneider");
 		}
 
-		if (this.schwarz) {
+		if (schwarz) {
 
 			result.append(" schwarz");
 		}
@@ -284,19 +284,20 @@ public class GameAnnouncement {
 	@Override
 	public Object clone() throws CloneNotSupportedException {
 
-		log.debug("Cloning GameAnnouncement...");
+		log.debug("Cloning GameAnnouncement..."); //$NON-NLS-1$
 
 		GameAnnouncement clone = new GameAnnouncement();
 
-		clone.setGameType(this.gameType);
-		clone.setOuvert(this.ouvert);
-		clone.setSchneider(this.schneider);
-		clone.setSchwarz(this.schwarz);
-		clone.setContra(this.contra);
-		clone.setRe(this.re);
-		clone.setBock(this.bock);
+		clone.setGameType(gameType);
+		clone.setHand(hand);
+		clone.setOuvert(ouvert);
+		clone.setSchneider(schneider);
+		clone.setSchwarz(schwarz);
+		clone.setContra(contra);
+		clone.setRe(re);
+		clone.setBock(bock);
 
-		log.debug(this + " " + clone);
+		log.debug(this + " " + clone); //$NON-NLS-1$
 
 		return clone;
 	}
