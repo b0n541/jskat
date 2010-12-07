@@ -505,6 +505,7 @@ public class ISSController {
 	public void endGame(String tableName, SkatGameData completeGameData) {
 
 		view.setGameState(tableName, GameState.GAME_OVER);
+		view.setGameResult(tableName, completeGameData);
 		gameData.put(tableName, completeGameData);
 	}
 

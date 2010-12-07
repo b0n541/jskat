@@ -1087,6 +1087,9 @@ public class JSkatViewImpl implements IJSkatView {
 		tables.get(tableName).setTrickNumber(trickNumber);
 	}
 
+	/**
+	 * @see IJSkatView#showISSTableInvitation(String, String)
+	 */
 	@Override
 	public boolean showISSTableInvitation(String invitor, String tableName) {
 
@@ -1106,5 +1109,14 @@ public class JSkatViewImpl implements IJSkatView {
 		}
 
 		return result;
+	}
+
+	/**
+	 * @see IJSkatView#setGameResult(String, SkatGameData)
+	 */
+	@Override
+	public void setGameResult(String tableName, SkatGameData gameData) {
+
+		tables.get(tableName).addGameResult(gameData);
 	}
 }

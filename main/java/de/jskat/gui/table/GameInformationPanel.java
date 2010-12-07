@@ -161,6 +161,7 @@ class GameInformationPanel extends JPanel {
 	}
 
 	void setGameResult(SkatGameData data) {
+
 		gameWon = data.isGameWon();
 		declarerPoints = data.getDeclarerScore();
 		opponentPoints = data.getOpponentScore();

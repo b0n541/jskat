@@ -526,9 +526,23 @@ public class NullView implements IJSkatView {
 		// empty method by indent
 	}
 
+	/**
+	 * @see IJSkatView#showISSTableInvitation(String, String)
+	 */
 	@Override
-	public boolean showISSTableInvitation(String invitor, String tableName) {
+	public boolean showISSTableInvitation(
+			@SuppressWarnings("unused") String invitor,
+			@SuppressWarnings("unused") String tableName) {
 		// empty method by indent
 		return false;
+	}
+
+	/**
+	 * @see IJSkatView#setGameResult(String, SkatGameData)
+	 */
+	@Override
+	public void setGameResult(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") SkatGameData gameData) {
+		// empty method by indent
 	}
 }

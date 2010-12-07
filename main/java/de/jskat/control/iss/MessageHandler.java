@@ -12,6 +12,7 @@ Released: @ReleaseDate@
 package de.jskat.control.iss;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -243,7 +244,27 @@ public class MessageHandler {
 
 	private SkatGameData getGameInformation(List<String> params) {
 
-		return new SkatGameData();
+		// first glue alle params back together
+		String gameResult = glueParams(params);
+
+		return MessageParser.parseGameSummary(gameResult);
+	}
+
+	private String glueParams(List<String> params) {
+
+		String result = new String();
+		Iterator<String> paramIterator = params.iterator();
+
+		while (paramIterator.hasNext()) {
+
+			if (result.length() > 0) {
+				result += " "; //$NON-NLS-1$
+			}
+
+			result += paramIterator.next();
+		}
+
+		return result;
 	}
 
 	/**

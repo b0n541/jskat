@@ -548,4 +548,14 @@ public interface IJSkatView {
 	 * @return TRUE, if the user accepted the invitation
 	 */
 	public boolean showISSTableInvitation(String invitor, String tableName);
+
+	/**
+	 * Sets the game result in the view
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param gameData
+	 *            Game data
+	 */
+	public void setGameResult(String tableName, SkatGameData gameData);
 }

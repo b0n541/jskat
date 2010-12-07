@@ -447,9 +447,25 @@ public class MessageParser {
 
 	private static void parseResultToken(SkatGameData result, String token) {
 
+		// from ISS source code
+		// return "d:"+declarer + (penalty ? " penalty" : (declValue > 0 ? "
+		// win" : " loss"))
+		// + " v:" + declValue
+		// + " m:" + matadors + (overbid ? " overbid" : " bidok")
+		// + " p:" + declCardPoints + " t:" + declTricks
+		// + " s:" + (schneider ? '1' : '0') + " z:" + (schwarz ? '1' :
+		// '0')
+		// + " p0:" + penalty0 + " p1:" + penalty1 + " p2:" + penalty2
+		// + " l:" + this.left + " to:" + this.timeout + " r:" + (resigned
+		// ? '1' : '0');
+
 		if (token.startsWith("d:")) { //$NON-NLS-1$
 
 			parseDeclarerToken(result, token);
+
+		} else if ("penalty".equals(token)) { //$NON-NLS-1$
+
+			// FIXME (jan 07.12.2010) handle this token
 
 		} else if ("loss".equals(token)) { //$NON-NLS-1$
 
@@ -466,6 +482,18 @@ public class MessageParser {
 		} else if (token.startsWith("p:")) { //$NON-NLS-1$
 
 			result.setDeclarerScore(Integer.parseInt(token.substring(2)));
+
+		} else if ("overbid".equals(token)) { //$NON-NLS-1$
+
+			result.setOverBidded(true);
+
+		} else if ("s:1".equals(token)) { //$NON-NLS-1$
+
+			result.setSchneider(true);
+
+		} else if ("z:1".equals(token)) { //$NON-NLS-1$
+
+			result.setSchwarz(true);
 		}
 	}
 

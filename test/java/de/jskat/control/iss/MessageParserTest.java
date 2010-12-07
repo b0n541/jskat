@@ -54,5 +54,8 @@ public class MessageParserTest {
 		assertEquals(-54, gameData.getResult());
 		assertEquals(59, gameData.getDeclarerScore());
 		assertEquals(61, gameData.getOpponentScore());
+		assertFalse(gameData.isSchneider());
+		assertFalse(gameData.isSchwarz());
+		assertFalse(gameData.isOverBidded());
 	}
 }

@@ -348,7 +348,7 @@ public class SkatGameData {
 	 * 
 	 * @return TRUE if the single player overbidded
 	 */
-	public boolean getOverBidded() {
+	public boolean isOverBidded() {
 
 		// TODO This should not be possible when a Ramsch game is played
 		// maybe throw an exception instead?
