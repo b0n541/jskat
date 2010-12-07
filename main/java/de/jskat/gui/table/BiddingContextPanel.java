@@ -132,6 +132,21 @@ class BiddingContextPanel extends JPanel {
 		}
 	}
 
+	void setPass(Player player) {
+
+		switch (player) {
+		case FORE_HAND:
+			foreHandBidLabel.setBidValue(-1);
+			break;
+		case MIDDLE_HAND:
+			middleHandBidLabel.setBidValue(-1);
+			break;
+		case HIND_HAND:
+			hindHandBidLabel.setBidValue(-1);
+			break;
+		}
+	}
+
 	void setBidValueToMake(int bidValue) {
 
 		bidButton.setAction(makeBidAction);

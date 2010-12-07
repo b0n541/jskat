@@ -730,6 +730,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		playerPassed.put(player, Boolean.TRUE);
 
 		getPlayerPanel(player).setPass();
+		biddingPanel.setPass(player);
 
 		switch (player) {
 		case FORE_HAND:

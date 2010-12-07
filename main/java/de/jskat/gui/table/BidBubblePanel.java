@@ -47,7 +47,14 @@ class BidBubblePanel extends JPanel {
 
 	void setBidValue(int bidValue) {
 
-		bidLabel.setText(String.valueOf(bidValue));
+		if (bidValue > -1) {
+
+			bidLabel.setText(String.valueOf(bidValue));
+
+		} else {
+
+			bidLabel.setText("X"); //$NON-NLS-1$
+		}
 	}
 
 	@Override
