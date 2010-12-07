@@ -502,6 +502,14 @@ public class ISSController {
 		}
 	}
 
+	/**
+	 * Handles end of a game
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param completeGameData
+	 *            Game data
+	 */
 	public void endGame(String tableName, SkatGameData completeGameData) {
 
 		view.setGameState(tableName, GameState.GAME_OVER);

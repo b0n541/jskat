@@ -129,9 +129,10 @@ public class SkatTablePanel extends AbstractTabPanel {
 			}
 		}
 
-		skatListTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		skatListTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 
 		skatListScrollPane = new JScrollPane(skatListTable);
+		skatListScrollPane.setMinimumSize(new Dimension(150, 100));
 		skatListScrollPane.setPreferredSize(new Dimension(200, 100));
 		skatListScrollPane
 				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -473,9 +474,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		// scroll skat list if the new result is out of scope
 		Rectangle bounds = skatListTable.getCellRect(
-				skatListTableModel.getRowCount(), 0, true);
+				skatListTableModel.getRowCount() - 1, 0, true);
 		Point loc = bounds.getLocation();
-		loc.move(loc.x, loc.y + bounds.height - 1);
+		loc.move(loc.x, loc.y + bounds.height);
 		skatListScrollPane.getViewport().setViewPosition(loc);
 
 		if (data.getGameType() != GameType.PASSED_IN) {
