@@ -90,7 +90,7 @@ public class LobbyPanel extends AbstractTabPanel {
 		JPanel lobby = new JPanel(new MigLayout());
 
 		JLabel headerLabel = new JLabel(
-				"Welcome to the International Skat Server");
+				strings.getString("welcome_to_iss_title")); //$NON-NLS-1$
 		headerLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 		lobby.add(headerLabel, "span 2, align center, wrap"); //$NON-NLS-1$ 
 		lobby.add(new JLabel("Players")); //$NON-NLS-1$

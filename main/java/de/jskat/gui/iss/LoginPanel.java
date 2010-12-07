@@ -46,16 +46,14 @@ public class LoginPanel extends AbstractTabPanel {
 	private JPasswordField passwordField;
 
 	/**
-	 * @param newTableName
-	 * @param jskatBitmaps
-	 * @param actions
-	 * @param strings
-	 *            i18n strings
+	 * @see AbstractTabPanel#AbstractTabPanel(String, JSkatGraphicRepository,
+	 *      ActionMap, ResourceBundle, JSkatOptions)
 	 */
 	public LoginPanel(String newTableName, JSkatGraphicRepository jskatBitmaps,
-			ActionMap actions, ResourceBundle strings, JSkatOptions options) {
+			ActionMap actions, ResourceBundle jskatStrings,
+			JSkatOptions jskatOptions) {
 
-		super(newTableName, jskatBitmaps, actions, strings, options);
+		super(newTableName, jskatBitmaps, actions, jskatStrings, jskatOptions);
 		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
 	}
 
@@ -76,13 +74,13 @@ public class LoginPanel extends AbstractTabPanel {
 
 		JPanel login = new JPanel(new MigLayout());
 
-		JLabel headerLabel = new JLabel("Connect to International Skat Server");
+		JLabel headerLabel = new JLabel(strings.getString("login_to_iss_title")); //$NON-NLS-1$
 		headerLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-		login.add(headerLabel, "span 2, align center, wrap"); //$NON-NLS-2$
-		login.add(new JLabel("Login"));
+		login.add(headerLabel, "span 2, align center, wrap"); //$NON-NLS-1$
+		login.add(new JLabel(strings.getString("login"))); //$NON-NLS-1$
 		this.loginField = new JTextField(10);
 		login.add(this.loginField, "growx, wrap"); //$NON-NLS-1$
-		login.add(new JLabel("Password"));
+		login.add(new JLabel(strings.getString("password"))); //$NON-NLS-1$
 		this.passwordField = new JPasswordField(10);
 		login.add(this.passwordField, "growx, wrap"); //$NON-NLS-1$
 
