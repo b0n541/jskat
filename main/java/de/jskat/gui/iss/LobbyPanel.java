@@ -204,6 +204,8 @@ public class LobbyPanel extends AbstractTabPanel {
 
 		panel.add(new JButton(this.getActionMap().get(
 				JSkatAction.CREATE_ISS_TABLE)));
+		panel.add(new JButton(this.getActionMap().get(
+				JSkatAction.DISCONNECT_FROM_ISS)));
 
 		return panel;
 	}

@@ -134,6 +134,10 @@ public enum JSkatAction {
 	 */
 	CONNECT_TO_ISS,
 	/**
+	 * Disconnects from the International Skat Server
+	 */
+	DISCONNECT_FROM_ISS,
+	/**
 	 * Sends a chat message
 	 */
 	SEND_CHAT_MESSAGE,

@@ -142,7 +142,7 @@ class Connector {
 	 */
 	boolean isConnected() {
 
-		return socket != null && socket.isBound();
+		return socket != null && !socket.isClosed();
 	}
 
 	void send(ISSChatMessage message) {

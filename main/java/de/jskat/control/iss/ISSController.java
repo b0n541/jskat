@@ -89,6 +89,8 @@ public class ISSController {
 			log.debug("connection to ISS still open"); //$NON-NLS-1$
 
 			issConnect.closeConnection();
+			// FIXME (jan 07.12.2010) use constant instead of string
+			view.closeTabPanel("ISS lobby");
 		}
 	}
 
@@ -145,6 +147,7 @@ public class ISSController {
 		if (issConnect.isConnected()) {
 
 			// show ISS lobby if connection was successfull
+			// FIXME (jan 07.12.2010) use constant instead of title
 			view.closeTabPanel("ISS login"); //$NON-NLS-1$
 			view.showISSLobby();
 			jskat.setIssLogin(login);

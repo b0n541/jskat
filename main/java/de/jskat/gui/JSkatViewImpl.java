@@ -70,6 +70,7 @@ import de.jskat.gui.action.human.TakeCardFromSkatAction;
 import de.jskat.gui.action.iss.ChangeTableSeatsAction;
 import de.jskat.gui.action.iss.ConnectAction;
 import de.jskat.gui.action.iss.CreateISSTableAction;
+import de.jskat.gui.action.iss.DisconnectAction;
 import de.jskat.gui.action.iss.InvitePlayerAction;
 import de.jskat.gui.action.iss.JoinISSTableAction;
 import de.jskat.gui.action.iss.LeaveISSTableAction;
@@ -195,6 +196,8 @@ public class JSkatViewImpl implements IJSkatView {
 				bitmaps, strings));
 		actions.put(JSkatAction.CONNECT_TO_ISS, new ConnectAction(jskat,
 				bitmaps, strings));
+		actions.put(JSkatAction.DISCONNECT_FROM_ISS, new DisconnectAction(
+				jskat, bitmaps, strings));
 		actions.put(JSkatAction.SEND_CHAT_MESSAGE, new SendChatMessageAction(
 				jskat, bitmaps, strings));
 		actions.put(JSkatAction.CREATE_ISS_TABLE, new CreateISSTableAction(
