@@ -144,13 +144,14 @@ public class JSkatViewImpl implements IJSkatView {
 		options = jskatOptions;
 		// FIXME (jan 05.12.2010) make this adjustable
 		strings = ResourceBundle.getBundle("de/jskat/i18n/i18n", //$NON-NLS-1$
-				new Locale("de", "DE")); //$NON-NLS-1$//$NON-NLS-2$
+				Locale.getDefault()); //$NON-NLS-1$//$NON-NLS-2$
 		tables = new HashMap<String, SkatTablePanel>();
 		initActionMap(jskat);
 		initGUI(jskat);
 
 		skatSeriesStartDialog = new SkatSeriesStartDialog(jskat, mainFrame,
 				strings);
+		// FIXME (jansch 08.12.2010) make this part of the main frame
 		preferencesDialog = new JSkatPreferencesDialog(jskat, mainFrame);
 
 		mainFrame.setVisible(true);
