@@ -16,8 +16,11 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
+import java.awt.image.ImageObserver;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.swing.JPanel;
@@ -30,10 +33,11 @@ import de.jskat.util.Player;
 /**
  * Renders all cards of a trick
  */
-class TrickPanel extends JPanel {
+class TrickPanel extends JPanel implements ImageObserver {
 
 	private static final long serialVersionUID = 1L;
 	private JSkatGraphicRepository bitmaps;
+	private Map<Card, Image> scaledCardImages;
 	private List<Double> cardRotations;
 	private List<Player> positions;
 	private CardList trick;
@@ -55,6 +59,8 @@ class TrickPanel extends JPanel {
 			boolean newRandomPlacement) {
 
 		bitmaps = jskatBitmaps;
+		scaledCardImages = new HashMap<Card, Image>();
+		scaleImages();
 		cardScaleFactor = newCardScaleFactor;
 		randomPlacement = newRandomPlacement;
 
@@ -136,16 +142,16 @@ class TrickPanel extends JPanel {
 			Card card = trick.get(i);
 			Player player = positions.get(i);
 
-			Image image = bitmaps.getCardImage(card.getSuit(), card.getRank());
+			Image image = scaledCardImages.get(card);
 
 			// Calculate scale factor
-			scaleFactor = 1.0 / (image.getHeight(null) / (panelHeight * cardScaleFactor));
+			scaleFactor = 1.0 / (image.getHeight(this) / (panelHeight * cardScaleFactor));
 
 			// Calculate translation
-			double xScaleSize = image.getWidth(null) * scaleFactor;
+			double xScaleSize = image.getWidth(this) * scaleFactor;
 			double xAllTrickCardsSize = xScaleSize * (1 + 2.0 / 3.00);
 			double xCenterTranslate = (panelWidth - xAllTrickCardsSize) / 2;
-			double yScaleSize = image.getHeight(null) * scaleFactor;
+			double yScaleSize = image.getHeight(this) * scaleFactor;
 			double yAllTrickCardsSize = yScaleSize * 1.5;
 			double yCenterTranslate = (panelHeight - yAllTrickCardsSize) / 2;
 
@@ -180,5 +186,19 @@ class TrickPanel extends JPanel {
 		userPosition = newUserPosition;
 		leftOpponent = userPosition.getLeftNeighbor();
 		rightOpponent = userPosition.getRightNeighbor();
+	}
+
+	private void scaleImages() {
+
+		for (Card card : Card.values()) {
+
+			Image cardImage = bitmaps.getCardImage(card.getSuit(),
+					card.getRank());
+
+			scaledCardImages.put(card, cardImage.getScaledInstance(
+							(int) (cardImage.getWidth(this) * 0.5),
+							(int) (cardImage.getHeight(this) * 0.5),
+					Image.SCALE_SMOOTH));
+		}
 	}
 }
