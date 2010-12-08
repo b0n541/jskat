@@ -67,6 +67,22 @@ public class PlayGroundPanel extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 
-		g.drawImage(backGroundImage, 0, 0, null);
+		int width = getWidth();
+		int height = getHeight();
+
+		int imageWidth = backGroundImage.getWidth(null);
+		int imageHeight = backGroundImage.getHeight(null);
+
+		int currX = 0;
+		int currY = 0;
+
+		while (currX < width) {
+			while (currY < height) {
+				g.drawImage(backGroundImage, currX, currY, null);
+				currY += imageHeight;
+			}
+			currY = 0;
+			currX += imageWidth;
+		}
 	}
 }
