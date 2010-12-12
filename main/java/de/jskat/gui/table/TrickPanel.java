@@ -15,8 +15,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.geom.AffineTransform;
-import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,17 +26,24 @@ import java.util.Random;
 
 import javax.swing.JPanel;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
 import de.jskat.util.Player;
+import de.jskat.util.Rank;
+import de.jskat.util.Suit;
 
 /**
  * Renders all cards of a trick
  */
-class TrickPanel extends JPanel implements ImageObserver {
+class TrickPanel extends JPanel implements ComponentListener {
 
 	private static final long serialVersionUID = 1L;
+	private static Log log = LogFactory.getLog(JSkatUserPanel.class);
+
 	private JSkatGraphicRepository bitmaps;
 	private Map<Card, Image> scaledCardImages;
 	private List<Double> cardRotations;
@@ -60,7 +68,6 @@ class TrickPanel extends JPanel implements ImageObserver {
 
 		bitmaps = jskatBitmaps;
 		scaledCardImages = new HashMap<Card, Image>();
-		scaleImages();
 		cardScaleFactor = newCardScaleFactor;
 		randomPlacement = newRandomPlacement;
 
@@ -69,6 +76,8 @@ class TrickPanel extends JPanel implements ImageObserver {
 		cardRotations = new ArrayList<Double>();
 
 		setOpaque(false);
+
+		addComponentListener(this);
 	}
 
 	/**
@@ -123,7 +132,6 @@ class TrickPanel extends JPanel implements ImageObserver {
 
 		int panelWidth = getWidth();
 		int panelHeight = getHeight();
-		double scaleFactor = 1.0;
 		double xPos = 0.0;
 		double yPos = 0.0;
 
@@ -143,15 +151,13 @@ class TrickPanel extends JPanel implements ImageObserver {
 			Player player = positions.get(i);
 
 			Image image = scaledCardImages.get(card);
-
-			// Calculate scale factor
-			scaleFactor = 1.0 / (image.getHeight(this) / (panelHeight * cardScaleFactor));
+			assert image != null;
 
 			// Calculate translation
-			double xScaleSize = image.getWidth(this) * scaleFactor;
+			double xScaleSize = image.getWidth(this);
 			double xAllTrickCardsSize = xScaleSize * (1 + 2.0 / 3.00);
 			double xCenterTranslate = (panelWidth - xAllTrickCardsSize) / 2;
-			double yScaleSize = image.getHeight(this) * scaleFactor;
+			double yScaleSize = image.getHeight(this);
 			double yAllTrickCardsSize = yScaleSize * 1.5;
 			double yCenterTranslate = (panelHeight - yAllTrickCardsSize) / 2;
 
@@ -174,7 +180,6 @@ class TrickPanel extends JPanel implements ImageObserver {
 			AffineTransform transform = new AffineTransform();
 			transform.setToIdentity();
 			transform.translate(xPos, yPos);
-			transform.scale(scaleFactor, scaleFactor);
 			transform.rotate(cardRotations.get(i).doubleValue());
 
 			g2D.drawImage(image, transform, this);
@@ -190,15 +195,64 @@ class TrickPanel extends JPanel implements ImageObserver {
 
 	private void scaleImages() {
 
+		int panelWidth = getWidth();
+		int panelHeight = getHeight();
+
+		Image sampleCard = bitmaps.getCardImage(Suit.CLUBS, Rank.JACK);
+		int imageWidth = sampleCard.getWidth(this);
+		assert imageWidth != -1;
+		int imageHeight = sampleCard.getHeight(this);
+		assert imageHeight != -1;
+
+		if (imageWidth == -1 || imageHeight == -1) {
+			log.error("Image size for sample card: " + imageWidth + "x"
+					+ imageHeight);
+		}
+
+		double scaleX = ((100.0 * panelWidth) / (imageWidth * 1.6)) / 100.0;
+		double scaleY = ((100.0 * panelHeight) / (imageHeight * 1.6)) / 100.0;
+
+		double scaleFactor = 1.0;
+		if (scaleX < 1.0 || scaleY < 1.0) {
+			if (scaleX < scaleY) {
+				scaleFactor *= scaleX;
+			} else {
+				scaleFactor *= scaleY;
+			}
+		}
+		scaleFactor *= cardScaleFactor;
+
+		log.debug("Scale factor: " + scaleFactor);
+
 		for (Card card : Card.values()) {
 
 			Image cardImage = bitmaps.getCardImage(card.getSuit(),
 					card.getRank());
 
 			scaledCardImages.put(card, cardImage.getScaledInstance(
-							(int) (cardImage.getWidth(this) * 0.5),
-							(int) (cardImage.getHeight(this) * 0.5),
-					Image.SCALE_SMOOTH));
+					(int) (imageWidth * scaleFactor),
+					(int) (imageHeight * scaleFactor), Image.SCALE_SMOOTH));
 		}
+	}
+
+	@Override
+	public void componentResized(ComponentEvent e) {
+		scaleImages();
+		repaint();
+	}
+
+	@Override
+	public void componentMoved(ComponentEvent e) {
+		// not needed
+	}
+
+	@Override
+	public void componentShown(ComponentEvent e) {
+		// not needed
+	}
+
+	@Override
+	public void componentHidden(ComponentEvent e) {
+		// not needed
 	}
 }

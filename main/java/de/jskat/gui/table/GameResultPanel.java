@@ -54,7 +54,7 @@ class GameResultPanel extends JPanel {
 		trickPanelList = new ArrayList<TrickPanel>();
 		for (int i = 0; i < 10; i++) {
 
-			trickPanelList.add(new TrickPanel(bitmaps, 0.5, false));
+			trickPanelList.add(new TrickPanel(bitmaps, 1.0, false));
 		}
 
 		JPanel trickPanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
