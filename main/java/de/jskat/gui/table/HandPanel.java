@@ -12,22 +12,17 @@ Released: @ReleaseDate@
 package de.jskat.gui.table;
 
 import java.awt.Color;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.Collection;
 import java.util.ResourceBundle;
 
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import net.miginfocom.swing.MigLayout;
 import de.jskat.gui.img.JSkatGraphicRepository;
-import de.jskat.gui.img.JSkatGraphicRepository.Icon;
-import de.jskat.gui.img.JSkatGraphicRepository.IconSize;
 import de.jskat.util.Card;
 import de.jskat.util.GameType;
 import de.jskat.util.Player;
@@ -38,9 +33,6 @@ import de.jskat.util.Player;
 abstract class HandPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-
-	private static final DecimalFormat format = ((DecimalFormat) NumberFormat
-			.getInstance());
 
 	/**
 	 * Player position
@@ -63,13 +55,13 @@ abstract class HandPanel extends JPanel {
 	 */
 	JLabel headerLabel;
 	/**
+	 * Clock panel
+	 */
+	ClockPanel clockPanel;
+	/**
 	 * Player name
 	 */
 	String playerName;
-	/**
-	 * Player time
-	 */
-	double playerTime;
 	/**
 	 * Player bid
 	 */
@@ -107,8 +99,7 @@ abstract class HandPanel extends JPanel {
 		setOpaque(false);
 
 		headerLabel = new JLabel(" "); //$NON-NLS-1$
-
-		format.applyPattern("00"); //$NON-NLS-1$
+		clockPanel = new ClockPanel(jskatBitmaps);
 
 		initPanel();
 	}
@@ -122,12 +113,12 @@ abstract class HandPanel extends JPanel {
 
 		setBorder(getPanelBorder());
 
-		header = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		header = new JPanel(new MigLayout(
+				"fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		header.add(headerLabel);
-		ImageIcon clock = new ImageIcon(bitmaps.getIconImage(Icon.CLOCK,
-				IconSize.SMALL));
-		JLabel clockLabel = new JLabel(clock);
-		header.add(clockLabel);
+		// blank panel
+		header.add(new JPanel());
+		header.add(clockPanel);
 		add(header, "shrinky, wrap"); //$NON-NLS-1$
 
 		cardPanel = new CardPanel(this, bitmaps, true);
@@ -179,7 +170,7 @@ abstract class HandPanel extends JPanel {
 
 		StringBuffer headerText = new StringBuffer();
 
-		headerText.append(playerName).append(": ");
+		headerText.append(playerName).append(": "); //$NON-NLS-1$
 
 		if (position != null) {
 			switch (position) {
@@ -194,7 +185,6 @@ abstract class HandPanel extends JPanel {
 				break;
 			}
 
-			headerText.append(getPlayerTimeString(playerTime));
 			headerText.append(" Bid: ");
 			headerText.append(bidValue);
 
@@ -208,14 +198,6 @@ abstract class HandPanel extends JPanel {
 		}
 
 		headerLabel.setText(headerText.toString());
-	}
-
-	private String getPlayerTimeString(double playerTimeInSeconds) {
-
-		int minutes = (int) Math.floor(playerTimeInSeconds / 60);
-		int seconds = (int) (playerTimeInSeconds - (minutes * 60));
-
-		return format.format(minutes) + ":" + format.format(seconds);
 	}
 
 	/**
@@ -299,9 +281,7 @@ abstract class HandPanel extends JPanel {
 
 	void setPlayerTime(double newTime) {
 
-		playerTime = newTime;
-
-		refreshHeaderText();
+		clockPanel.setPlayerTime(newTime);
 	}
 
 	boolean isActivePlayer() {

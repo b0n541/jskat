@@ -46,7 +46,7 @@ public class JSkatGraphicRepository {
 				.getDefaultToolkit()
 				.getImage(
 						ClassLoader
-								.getSystemResource("de/jskat/gui/img/gui/skatTable.png")); //$NON-NLS-1$
+								.getSystemResource("de/jskat/gui/img/gui/skat_table.png")); //$NON-NLS-1$
 		tracker.addImage(skatTable, 0);
 		jskatLogo = Toolkit
 				.getDefaultToolkit()
