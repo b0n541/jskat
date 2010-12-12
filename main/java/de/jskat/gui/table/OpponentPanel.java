@@ -11,6 +11,8 @@ Released: @ReleaseDate@
 
 package de.jskat.gui.table;
 
+import java.util.ResourceBundle;
+
 import javax.swing.ActionMap;
 
 import de.jskat.gui.img.JSkatGraphicRepository;
@@ -23,11 +25,12 @@ class OpponentPanel extends HandPanel {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see HandPanel#HandPanel(ActionMap, JSkatGraphicRepository, int)
+	 * @see HandPanel#HandPanel(ActionMap, JSkatGraphicRepository,
+	 *      ResourceBundle, int)
 	 */
 	OpponentPanel(ActionMap actions, JSkatGraphicRepository jskatBitmaps,
-			int maxCards) {
+			ResourceBundle jskatStrings, int maxCards) {
 
-		super(actions, jskatBitmaps, maxCards);
+		super(actions, jskatBitmaps, jskatStrings, maxCards);
 	}
 }

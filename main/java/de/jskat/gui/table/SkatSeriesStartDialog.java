@@ -212,7 +212,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 					cellText = strings.getString("algorithmic_player"); //$NON-NLS-1$
 					break;
 				case HUMAN:
-					cellText = strings.getString("human_player"); //$NON-NLS-1$
+					cellText = System.getProperty("user.name"); //$NON-NLS-1$
 					break;
 				}
 

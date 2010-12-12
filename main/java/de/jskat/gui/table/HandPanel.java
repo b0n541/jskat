@@ -15,15 +15,19 @@ import java.awt.Color;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Collection;
+import java.util.ResourceBundle;
 
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import net.miginfocom.swing.MigLayout;
 import de.jskat.gui.img.JSkatGraphicRepository;
+import de.jskat.gui.img.JSkatGraphicRepository.Icon;
+import de.jskat.gui.img.JSkatGraphicRepository.IconSize;
 import de.jskat.util.Card;
 import de.jskat.util.GameType;
 import de.jskat.util.Player;
@@ -46,6 +50,10 @@ abstract class HandPanel extends JPanel {
 	 * Card images
 	 */
 	JSkatGraphicRepository bitmaps;
+	/**
+	 * i18n strings
+	 */
+	ResourceBundle strings;
 	/**
 	 * Header panel
 	 */
@@ -89,10 +97,11 @@ abstract class HandPanel extends JPanel {
 	 *            Card images
 	 */
 	HandPanel(ActionMap actions, JSkatGraphicRepository jskatBitmaps,
-			int maxCards) {
+			ResourceBundle jskatStrings, int maxCards) {
 
 		setActionMap(actions);
 		bitmaps = jskatBitmaps;
+		strings = jskatStrings;
 		maxCardCount = maxCards;
 
 		setOpaque(false);
@@ -115,6 +124,10 @@ abstract class HandPanel extends JPanel {
 
 		header = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		header.add(headerLabel);
+		ImageIcon clock = new ImageIcon(bitmaps.getIconImage(Icon.CLOCK,
+				IconSize.SMALL));
+		JLabel clockLabel = new JLabel(clock);
+		header.add(clockLabel);
 		add(header, "shrinky, wrap"); //$NON-NLS-1$
 
 		cardPanel = new CardPanel(this, bitmaps, true);
@@ -126,9 +139,9 @@ abstract class HandPanel extends JPanel {
 		Border result = null;
 
 		if (activePlayer) {
-			result = BorderFactory.createLineBorder(Color.yellow);
+			result = BorderFactory.createLineBorder(Color.yellow, 2);
 		} else {
-			result = BorderFactory.createLineBorder(Color.black);
+			result = BorderFactory.createLineBorder(Color.black, 2);
 		}
 
 		return result;
@@ -171,16 +184,16 @@ abstract class HandPanel extends JPanel {
 		if (position != null) {
 			switch (position) {
 			case FORE_HAND:
-				headerText.append("Fore hand");
+				headerText.append(strings.getObject("fore_hand")); //$NON-NLS-1$
 				break;
 			case MIDDLE_HAND:
-				headerText.append("Middle hand");
+				headerText.append(strings.getObject("middle_hand")); //$NON-NLS-1$
 				break;
 			case HIND_HAND:
-				headerText.append("Hind hand");
+				headerText.append(strings.getObject("hind_hand")); //$NON-NLS-1$
 				break;
 			}
-			headerText.append(" Time: ");
+
 			headerText.append(getPlayerTimeString(playerTime));
 			headerText.append(" Bid: ");
 			headerText.append(bidValue);
