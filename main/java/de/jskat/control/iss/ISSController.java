@@ -527,8 +527,8 @@ public class ISSController {
 	 * @param message
 	 */
 	public void showMessage(int messageType, String message) {
-
-		view.showMessage(messageType, message);
+		// FIXME (jan 12.12.2010) i18n
+		view.showMessage(messageType, "ISS message", message);
 	}
 
 	/**

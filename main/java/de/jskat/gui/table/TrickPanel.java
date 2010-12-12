@@ -42,7 +42,7 @@ import de.jskat.util.Suit;
 class TrickPanel extends JPanel implements ComponentListener {
 
 	private static final long serialVersionUID = 1L;
-	private static Log log = LogFactory.getLog(JSkatUserPanel.class);
+	private static Log log = LogFactory.getLog(TrickPanel.class);
 
 	private JSkatGraphicRepository bitmaps;
 	private Map<Card, Image> scaledCardImages;

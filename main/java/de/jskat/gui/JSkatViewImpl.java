@@ -108,6 +108,7 @@ import de.jskat.util.Card;
 import de.jskat.util.CardList;
 import de.jskat.util.Player;
 import de.jskat.util.SkatConstants;
+import de.jskat.util.SkatResourceBundle;
 
 /**
  * Implementation of JSkatView interface
@@ -143,8 +144,9 @@ public class JSkatViewImpl implements IJSkatView {
 		bitmaps = jskatBitmaps;
 		options = jskatOptions;
 		// FIXME (jan 05.12.2010) make this adjustable
-		strings = ResourceBundle.getBundle("de/jskat/i18n/i18n", //$NON-NLS-1$
-				Locale.getDefault()); //$NON-NLS-1$//$NON-NLS-2$
+		strings = ResourceBundle.getBundle("de/jskat/i18n/jskat_strings", //$NON-NLS-1$
+				Locale.getDefault());
+		log.debug("I18n strings loaded: " + strings.getLocale()); //$NON-NLS-1$
 		tables = new HashMap<String, SkatTablePanel>();
 		initActionMap(jskat);
 		initGUI(jskat);
@@ -490,12 +492,12 @@ public class JSkatViewImpl implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#showMessage(int, String)
+	 * @see IJSkatView#showMessage(int, String, String)
 	 */
 	@Override
-	public void showMessage(int messageType, String message) {
+	public void showMessage(int messageType, String title, String message) {
 
-		JOptionPane.showMessageDialog(mainFrame, message, null, messageType);
+		JOptionPane.showMessageDialog(mainFrame, message, title, messageType);
 	}
 
 	/**
@@ -1119,5 +1121,20 @@ public class JSkatViewImpl implements IJSkatView {
 	public void setGameResult(String tableName, SkatGameData gameData) {
 
 		tables.get(tableName).addGameResult(gameData);
+	}
+
+	@Override
+	public void showCardNotAllowedMessage(Card card) {
+
+		String title = strings.getString("card_not_allowed_title"); //$NON-NLS-1$
+
+		String message = MessageFormat.format(strings
+				.getString("card_not_allowed"), //$NON-NLS-1$
+				SkatResourceBundle.getSuitStringForCardFace(card.getSuit(),
+						strings, options.getCardFace()), SkatResourceBundle
+						.getRankStringForCardFace(card.getRank(), strings,
+								options.getCardFace()));
+
+		showMessage(JOptionPane.ERROR_MESSAGE, title, message);
 	}
 }

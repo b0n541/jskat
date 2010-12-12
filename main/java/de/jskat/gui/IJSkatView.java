@@ -14,6 +14,8 @@ package de.jskat.gui;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.JOptionPane;
+
 import de.jskat.control.SkatTable;
 import de.jskat.control.iss.ChatMessageType;
 import de.jskat.data.GameAnnouncement;
@@ -130,6 +132,7 @@ public interface IJSkatView {
 	 * 
 	 * @param playerNames
 	 *            Available players
+	 * @return List of player names
 	 */
 	public List<String> getPlayerForInvitation(Set<String> playerNames);
 
@@ -142,11 +145,21 @@ public interface IJSkatView {
 	 * Shows a message dialog
 	 * 
 	 * @param messageType
-	 *            Message type @see {@link JOPtionPane}
+	 *            Message type @see {@link JOptionPane}
+	 * @param title
+	 *            Message title
 	 * @param message
 	 *            Message text
 	 */
-	public void showMessage(int messageType, String message);
+	public void showMessage(int messageType, String title, String message);
+
+	/**
+	 * Shows a message, that a card is not allowed
+	 * 
+	 * @param card
+	 *            Card
+	 */
+	public void showCardNotAllowedMessage(Card card);
 
 	/**
 	 * Shows the exit dialog

@@ -250,10 +250,11 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#showMessage(int, String)
+	 * @see IJSkatView#showMessage(int, String, String)
 	 */
 	@Override
 	public void showMessage(@SuppressWarnings("unused") int messageType,
+			@SuppressWarnings("unused") String title,
 			@SuppressWarnings("unused") String message) {
 		// empty method by indent
 	}
@@ -543,6 +544,14 @@ public class NullView implements IJSkatView {
 	@Override
 	public void setGameResult(@SuppressWarnings("unused") String tableName,
 			@SuppressWarnings("unused") SkatGameData gameData) {
+		// empty method by indent
+	}
+
+	/**
+	 * @see IJSkatView#showCardNotAllowedMessage(Card)
+	 */
+	@Override
+	public void showCardNotAllowedMessage(@SuppressWarnings("unused") Card card) {
 		// empty method by indent
 	}
 }

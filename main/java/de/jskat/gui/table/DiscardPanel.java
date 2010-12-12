@@ -138,17 +138,7 @@ class DiscardPanel extends JPanel {
 
 	public CardList getDiscardedCards() {
 
-		CardList result;
-
-		if (cardPanel.getCardCount() == 2) {
-			result = (CardList) cardPanel.cards.clone();
-		} else {
-			throw new IllegalStateException(
-					"More or less than two cards found in skat."); //$NON-NLS-1$
-
-		}
-
-		return result;
+		return (CardList) cardPanel.cards.clone();
 	}
 
 	public boolean isUserLookedIntoSkat() {

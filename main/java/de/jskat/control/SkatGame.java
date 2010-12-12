@@ -14,8 +14,6 @@ package de.jskat.control;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.swing.JOptionPane;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -596,8 +594,7 @@ public class SkatGame extends JSkatThread {
 						+ trick.getFirstCard() + " player cards: " //$NON-NLS-1$
 						+ data.getPlayerCards(currPlayer));
 
-				view.showMessage(JOptionPane.INFORMATION_MESSAGE,
-						"Card " + card + " is not allowed!"); //$NON-NLS-1$ //$NON-NLS-2$
+				view.showCardNotAllowedMessage(card);
 
 				if (!(skatPlayer instanceof HumanPlayer)) {
 					// TODO create option for switching playing schwarz on/off

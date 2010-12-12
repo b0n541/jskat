@@ -23,13 +23,19 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
 import net.miginfocom.swing.MigLayout;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import de.jskat.data.GameAnnouncementWithDiscardedCards;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.CardFace;
+import de.jskat.util.CardList;
 import de.jskat.util.GameType;
 import de.jskat.util.SkatResourceBundle;
 
@@ -39,6 +45,9 @@ import de.jskat.util.SkatResourceBundle;
 class GameAnnouncePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	private static Log log = LogFactory.getLog(GameAnnouncePanel.class);
+
+	ResourceBundle strings;
 
 	JComboBox gameTypeList = null;
 	JCheckBox ouvertBox = null;
@@ -53,12 +62,13 @@ class GameAnnouncePanel extends JPanel {
 	 * 
 	 * @param actions
 	 *            Action map
-	 * @param strings
+	 * @param jskatStrings
 	 *            i18n strings
 	 */
-	GameAnnouncePanel(ActionMap actions, ResourceBundle strings,
+	GameAnnouncePanel(ActionMap actions, ResourceBundle jskatStrings,
 			JSkatUserPanel newUserPanel) {
 
+		strings = jskatStrings;
 		userPanel = newUserPanel;
 
 		initPanel(actions, strings);
@@ -81,7 +91,7 @@ class GameAnnouncePanel extends JPanel {
 		initPanel(actions, strings);
 	}
 
-	private void initPanel(final ActionMap actions, ResourceBundle strings) {
+	private void initPanel(final ActionMap actions, final ResourceBundle strings) {
 
 		this.setLayout(new MigLayout("fill")); //$NON-NLS-1$
 
@@ -132,28 +142,44 @@ class GameAnnouncePanel extends JPanel {
 
 					if (gameTypeList.getSelectedItem() != null) {
 
-						GameAnnouncementWithDiscardedCards ann = new GameAnnouncementWithDiscardedCards();
-						ann.setGameType(getGameTypeFromSelectedItem());
+						try {
+							GameAnnouncementWithDiscardedCards ann = getGameAnnouncement();
 
-						ann.setOuvert(GameAnnouncePanel.this.ouvertBox
-								.isSelected());
-						ann.setSchneider(GameAnnouncePanel.this.schneiderBox
-								.isSelected());
-						ann.setSchwarz(GameAnnouncePanel.this.schwarzBox
-								.isSelected());
-
-						if (discardPanel.isUserLookedIntoSkat()) {
-							ann.setHand(false);
-							ann.setDiscardedCards(discardPanel
-									.getDiscardedCards());
-						} else {
-							ann.setHand(true);
+							e.setSource(ann);
+							// fire event again
+							playButton.dispatchEvent(e);
+						} catch (IllegalArgumentException except) {
+							log.error(except.getMessage());
 						}
-
-						e.setSource(ann);
-						// fire event again
-						playButton.dispatchEvent(e);
 					}
+				}
+
+				private GameAnnouncementWithDiscardedCards getGameAnnouncement() {
+					GameAnnouncementWithDiscardedCards ann = new GameAnnouncementWithDiscardedCards();
+					ann.setGameType(getGameTypeFromSelectedItem());
+
+					ann.setOuvert(GameAnnouncePanel.this.ouvertBox.isSelected());
+					ann.setSchneider(GameAnnouncePanel.this.schneiderBox
+							.isSelected());
+					ann.setSchwarz(GameAnnouncePanel.this.schwarzBox
+							.isSelected());
+
+					if (discardPanel.isUserLookedIntoSkat()) {
+						ann.setHand(false);
+						CardList discardedCards = discardPanel
+								.getDiscardedCards();
+						if (discardedCards.size() != 2) {
+							JOptionPane.showMessageDialog(
+									GameAnnouncePanel.this,
+									strings.getString("invalid_number_of_cards_in_skat"), //$NON-NLS-1$
+									strings.getString("invalid_number_of_cards_in_skat_title"), //$NON-NLS-1$
+									JOptionPane.ERROR_MESSAGE);
+						}
+						ann.setDiscardedCards(discardedCards);
+					} else {
+						ann.setHand(true);
+					}
+					return ann;
 				}
 
 				private GameType getGameTypeFromSelectedItem() {
