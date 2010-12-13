@@ -12,32 +12,26 @@ Released: @ReleaseDate@
 package de.jskat.gui.action.iss;
 
 import java.awt.event.ActionEvent;
-import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
-import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
  * Implements the action for registering on ISS
  */
-public class RegisterOnISSAction extends AbstractJSkatAction {
+public class RegisterOnIssAction extends AbstractJSkatAction {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
+	 * @see AbstractJSkatAction#AbstractJSkatAction()
 	 */
-	public RegisterOnISSAction(JSkatMaster controller,
-			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
+	public RegisterOnIssAction() {
 
-		super(controller, bitmaps);
-
-		putValue(Action.NAME, strings.getObject("register_on_iss")); //$NON-NLS-1$
+		putValue(Action.NAME, strings.getString("register_on_iss")); //$NON-NLS-1$
 
 		setIcon(Icon.REGISTER);
 	}
@@ -48,6 +42,6 @@ public class RegisterOnISSAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		this.jskat.openRegisterPage();
+		jskat.openIssRegisterPage();
 	}
 }

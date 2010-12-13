@@ -16,7 +16,6 @@ import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.ResourceBundle;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -32,6 +31,7 @@ import javax.swing.ListCellRenderer;
 import net.miginfocom.swing.MigLayout;
 import de.jskat.ai.PlayerType;
 import de.jskat.control.JSkatMaster;
+import de.jskat.util.JSkatResourceBundle;
 
 /**
  * Asks for user defined options on start of a skat series
@@ -43,7 +43,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 	private JSkatMaster jskat;
 	private JFrame parent;
 
-	private ResourceBundle strings;
+	private JSkatResourceBundle strings;
 
 	private JComboBox player1;
 	private JComboBox player2;
@@ -61,12 +61,11 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 	 * @param newStrings
 	 *            i18n strings
 	 */
-	public SkatSeriesStartDialog(JSkatMaster skatMaster, JFrame mainFrame,
-			ResourceBundle newStrings) {
+	public SkatSeriesStartDialog(JSkatMaster skatMaster, JFrame mainFrame) {
 
 		jskat = skatMaster;
 		parent = mainFrame;
-		strings = newStrings;
+		strings = JSkatResourceBundle.instance();
 
 		initGUI();
 	}
@@ -89,18 +88,18 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
 		root.add(new JLabel(strings.getString("player") + " 1")); //$NON-NLS-1$//$NON-NLS-2$
 		player1 = new JComboBox(playerTypes.toArray());
-		player1.setRenderer(new PlayerComboBoxRenderer(strings));
+		player1.setRenderer(new PlayerComboBoxRenderer());
 		root.add(player1, "span2, growx, wrap"); //$NON-NLS-1$
 		root.add(new JLabel(strings.getString("player") + " 2")); //$NON-NLS-1$ //$NON-NLS-2$
 		player2 = new JComboBox(playerTypes.toArray());
-		player2.setRenderer(new PlayerComboBoxRenderer(strings));
+		player2.setRenderer(new PlayerComboBoxRenderer());
 		root.add(player2, "span2, growx, wrap"); //$NON-NLS-1$
 		root.add(new JLabel(strings.getString("player") + " 3")); //$NON-NLS-1$//$NON-NLS-2$
 
 		// Human player can only be player 3
 		playerTypes.add(PlayerType.HUMAN);
 		player3 = new JComboBox(playerTypes.toArray());
-		player3.setRenderer(new PlayerComboBoxRenderer(strings));
+		player3.setRenderer(new PlayerComboBoxRenderer());
 		player3.setSelectedIndex(player3.getItemCount() - 1);
 		root.add(player3, "span2, growx, wrap"); //$NON-NLS-1$
 
@@ -169,13 +168,13 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
 		private static final long serialVersionUID = 1L;
 
-		ResourceBundle strings;
+		JSkatResourceBundle strings;
 		JLabel cellItemLabel;
 
-		PlayerComboBoxRenderer(ResourceBundle newStrings) {
+		PlayerComboBoxRenderer() {
 
 			super();
-			strings = newStrings;
+			strings = JSkatResourceBundle.instance();
 
 			setLayout(new MigLayout("fill")); //$NON-NLS-1$
 			cellItemLabel = new JLabel(" "); //$NON-NLS-1$

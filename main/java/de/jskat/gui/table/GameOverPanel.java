@@ -11,8 +11,6 @@ Released: @ReleaseDate@
 
 package de.jskat.gui.table;
 
-import java.util.ResourceBundle;
-
 import javax.swing.ActionMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -29,20 +27,18 @@ class GameOverPanel extends JPanel {
 
 	private GameResultPanel gameResultPanel;
 
-	public GameOverPanel(ActionMap actions, JSkatGraphicRepository bitmaps,
-			ResourceBundle strings) {
+	public GameOverPanel(ActionMap actions, JSkatGraphicRepository bitmaps) {
 
-		initPanel(actions, bitmaps, strings);
+		initPanel(actions, bitmaps);
 	}
 
-	private void initPanel(ActionMap actions, JSkatGraphicRepository bitmaps,
-			ResourceBundle strings) {
+	private void initPanel(ActionMap actions, JSkatGraphicRepository bitmaps) {
 
 		this.setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		JPanel panel = new JPanel(new MigLayout(
 				"fill", "fill", "[grow][shrink]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		gameResultPanel = new GameResultPanel(bitmaps, strings);
+		gameResultPanel = new GameResultPanel(bitmaps);
 		panel.add(gameResultPanel, "grow, wrap"); //$NON-NLS-1$
 
 		JPanel buttonPanel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$

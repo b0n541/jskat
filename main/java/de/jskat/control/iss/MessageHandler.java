@@ -31,7 +31,7 @@ public class MessageHandler {
 	static Log log = LogFactory.getLog(MessageHandler.class);
 
 	Connector connect;
-	ISSController issControl;
+	IssController issControl;
 
 	private final static int protocolVersion = 14;
 
@@ -43,7 +43,7 @@ public class MessageHandler {
 	 * @param controller
 	 *            ISS controller for JSkat
 	 */
-	public MessageHandler(Connector conn, ISSController controller) {
+	public MessageHandler(Connector conn, IssController controller) {
 
 		connect = conn;
 		issControl = controller;

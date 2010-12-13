@@ -12,33 +12,28 @@ Released: @ReleaseDate@
 package de.jskat.gui.action.iss;
 
 import java.awt.event.ActionEvent;
-import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
-import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
  * Implements the action for creating a skat table on ISS
  */
-public class CreateISSTableAction extends AbstractJSkatAction {
+public class CreateIssTableAction extends AbstractJSkatAction {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
+	 * @see AbstractJSkatAction#AbstractJSkatAction()
 	 */
-	public CreateISSTableAction(JSkatMaster controller,
-			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
+	public CreateIssTableAction() {
 
 		// FIXME (jan 23.11.2010) use CreateTableAction
-		super(controller, bitmaps);
 
-		putValue(Action.NAME, strings.getObject("new_table")); //$NON-NLS-1$
+		putValue(Action.NAME, strings.getString("new_table")); //$NON-NLS-1$
 		setIcon(Icon.TABLE);
 	}
 
@@ -48,6 +43,6 @@ public class CreateISSTableAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		this.jskat.getISSController().requestTableCreation();
+		jskat.getIssController().requestTableCreation();
 	}
 }

@@ -18,7 +18,6 @@ import java.awt.Rectangle;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.ResourceBundle;
 
 import javax.swing.ActionMap;
 import javax.swing.JPanel;
@@ -33,14 +32,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.GameAnnouncement;
-import de.jskat.data.JSkatOptions;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameState;
 import de.jskat.data.SkatSeriesData.SeriesState;
 import de.jskat.gui.AbstractTabPanel;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.action.main.StartSkatSeriesAction;
-import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
 import de.jskat.util.GameType;
@@ -53,6 +50,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	private static final long serialVersionUID = 1L;
 	private static Log log = LogFactory.getLog(SkatTablePanel.class);
+
 	// FIXME (jan 14.11.2010) looks wrong to me, was made static to avoid
 	// NullPointerException during table creation
 	protected static Map<Player, Boolean> playerPassed = new HashMap<Player, Boolean>();
@@ -79,14 +77,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 	protected DeclaringContextPanel declaringPanel;
 
 	/**
-	 * @see AbstractTabPanel#AbstractTabPanel(String, JSkatGraphicRepository,
-	 *      ActionMap, ResourceBundle, JSkatOptions)
+	 * @see AbstractTabPanel#AbstractTabPanel(String, ActionMap)
 	 */
-	public SkatTablePanel(String newTableName,
-			JSkatGraphicRepository jskatBitmaps, ActionMap actions,
-			ResourceBundle jskatStrings, JSkatOptions newOptions) {
+	public SkatTablePanel(String newTableName, ActionMap actions) {
 
-		super(newTableName, jskatBitmaps, actions, jskatStrings, newOptions);
+		super(newTableName, actions);
 
 		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
 	}
@@ -161,12 +156,12 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	private GameInformationPanel getGameInfoPanel() {
 
-		return new GameInformationPanel(bitmaps, strings, options.getCardFace());
+		return new GameInformationPanel(bitmaps);
 	}
 
 	private OpponentPanel getOpponentPanel() {
 
-		return new OpponentPanel(getActionMap(), bitmaps, strings, 12);
+		return new OpponentPanel(getActionMap(), bitmaps, 12);
 	}
 
 	protected void addContextPanel(ContextPanelTypes panelType, JPanel panel) {
@@ -192,11 +187,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 						.get(JSkatAction.START_LOCAL_SERIES)));
 
 		biddingPanel = new BiddingContextPanel(getActionMap(), bitmaps,
-				strings, userPanel);
+				userPanel);
 		addContextPanel(ContextPanelTypes.BIDDING, biddingPanel);
 
 		declaringPanel = new DeclaringContextPanel(getActionMap(), bitmaps,
-				strings, userPanel, 4);
+				userPanel, 4);
 		addContextPanel(ContextPanelTypes.DECLARING, declaringPanel);
 
 		JPanel trickHoldingPanel = new JPanel(new MigLayout(
@@ -212,13 +207,13 @@ public class SkatTablePanel extends AbstractTabPanel {
 		trickHoldingPanel.setOpaque(false);
 		addContextPanel(ContextPanelTypes.TRICK_PLAYING, trickHoldingPanel);
 
-		gameOverPanel = new GameOverPanel(getActionMap(), bitmaps, strings);
+		gameOverPanel = new GameOverPanel(getActionMap(), bitmaps);
 		addContextPanel(ContextPanelTypes.GAME_OVER, gameOverPanel);
 	}
 
 	private JSkatUserPanel getPlayerPanel() {
 
-		return new JSkatUserPanel(getActionMap(), bitmaps, strings, 12);
+		return new JSkatUserPanel(getActionMap(), bitmaps, 12);
 	}
 
 	private HandPanel getPlayerPanel(Player player) {

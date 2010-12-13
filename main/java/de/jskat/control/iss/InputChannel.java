@@ -43,7 +43,7 @@ class InputChannel extends Thread {
 	 * @param is
 	 *            Input stream
 	 */
-	InputChannel(ISSController controller, Connector conn, InputStream is) {
+	InputChannel(IssController controller, Connector conn, InputStream is) {
 
 		this.stream = is;
 		this.reader = new BufferedReader(new InputStreamReader(this.stream));

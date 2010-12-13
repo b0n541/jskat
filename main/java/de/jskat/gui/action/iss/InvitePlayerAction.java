@@ -12,13 +12,10 @@ Released: @ReleaseDate@
 package de.jskat.gui.action.iss;
 
 import java.awt.event.ActionEvent;
-import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 
-import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
-import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
@@ -29,12 +26,9 @@ public class InvitePlayerAction extends AbstractJSkatAction {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
+	 * @see AbstractJSkatAction#AbstractJSkatAction()
 	 */
-	public InvitePlayerAction(JSkatMaster controller,
-			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
-
-		super(controller, bitmaps);
+	public InvitePlayerAction() {
 
 		putValue(NAME, "Invite player");
 		putValue(SHORT_DESCRIPTION, "Invite player on ISS");
@@ -48,6 +42,6 @@ public class InvitePlayerAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		this.jskat.invitePlayer();
+		jskat.invitePlayer();
 	}
 }

@@ -24,6 +24,8 @@ import de.jskat.gui.human.HumanPlayer;
  */
 public class JSkatApplicationData {
 
+	static JSkatApplicationData instance = null;
+
 	private JSkatOptions options;
 	private Map<String, SkatTable> skatTables;
 	private String activeTable;
@@ -33,14 +35,29 @@ public class JSkatApplicationData {
 	private Map<String, HumanPlayer> humanPlayers;
 
 	/**
+	 * Gets the instance of the application data
+	 * 
+	 * @return Application data
+	 */
+	public static JSkatApplicationData instance() {
+
+		if (instance == null) {
+
+			instance = new JSkatApplicationData();
+		}
+
+		return instance;
+	}
+
+	/**
 	 * Contructor
 	 * 
 	 * @param jskatOptions
 	 *            JSkat options
 	 */
-	public JSkatApplicationData(JSkatOptions jskatOptions) {
+	private JSkatApplicationData() {
 
-		options = jskatOptions;
+		options = JSkatOptions.instance();
 		skatTables = new HashMap<String, SkatTable>();
 		humanPlayers = new HashMap<String, HumanPlayer>();
 		availableIssPlayer = new HashSet<String>();
@@ -69,16 +86,6 @@ public class JSkatApplicationData {
 	public SkatTable getSkatTable(String tableName) {
 
 		return skatTables.get(tableName);
-	}
-
-	/**
-	 * Gets all options for JSkat
-	 * 
-	 * @return All options for JSkat
-	 */
-	public JSkatOptions getOptions() {
-
-		return options;
 	}
 
 	/**

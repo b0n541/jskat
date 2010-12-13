@@ -13,7 +13,6 @@ package de.jskat.gui.table;
 
 import java.awt.Color;
 import java.util.Collection;
-import java.util.ResourceBundle;
 
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
@@ -25,6 +24,7 @@ import net.miginfocom.swing.MigLayout;
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.util.Card;
 import de.jskat.util.GameType;
+import de.jskat.util.JSkatResourceBundle;
 import de.jskat.util.Player;
 
 /**
@@ -45,7 +45,7 @@ abstract class HandPanel extends JPanel {
 	/**
 	 * i18n strings
 	 */
-	ResourceBundle strings;
+	JSkatResourceBundle strings;
 	/**
 	 * Header panel
 	 */
@@ -89,11 +89,11 @@ abstract class HandPanel extends JPanel {
 	 *            Card images
 	 */
 	HandPanel(ActionMap actions, JSkatGraphicRepository jskatBitmaps,
-			ResourceBundle jskatStrings, int maxCards) {
+			int maxCards) {
 
 		setActionMap(actions);
 		bitmaps = jskatBitmaps;
-		strings = jskatStrings;
+		strings = JSkatResourceBundle.instance();
 		maxCardCount = maxCards;
 
 		setOpaque(false);
@@ -175,13 +175,13 @@ abstract class HandPanel extends JPanel {
 		if (position != null) {
 			switch (position) {
 			case FORE_HAND:
-				headerText.append(strings.getObject("fore_hand")); //$NON-NLS-1$
+				headerText.append(strings.getString("fore_hand")); //$NON-NLS-1$
 				break;
 			case MIDDLE_HAND:
-				headerText.append(strings.getObject("middle_hand")); //$NON-NLS-1$
+				headerText.append(strings.getString("middle_hand")); //$NON-NLS-1$
 				break;
 			case HIND_HAND:
-				headerText.append(strings.getObject("hind_hand")); //$NON-NLS-1$
+				headerText.append(strings.getString("hind_hand")); //$NON-NLS-1$
 				break;
 			}
 

@@ -12,15 +12,12 @@ Released: @ReleaseDate@
 package de.jskat.gui.action.iss;
 
 import java.awt.event.ActionEvent;
-import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.action.JSkatAction;
-import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
@@ -31,12 +28,9 @@ public class ShowLoginPanelAction extends AbstractJSkatAction {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
+	 * @see AbstractJSkatAction#AbstractJSkatAction()
 	 */
-	public ShowLoginPanelAction(JSkatMaster controller,
-			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
-
-		super(controller, bitmaps);
+	public ShowLoginPanelAction() {
 
 		putValue(Action.NAME, "ISS login");
 
@@ -50,6 +44,6 @@ public class ShowLoginPanelAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		this.jskat.getISSController().showISSLoginPanel();
+		jskat.getIssController().showISSLoginPanel();
 	}
 }

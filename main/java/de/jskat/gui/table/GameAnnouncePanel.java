@@ -14,7 +14,6 @@ package de.jskat.gui.table;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
 
 import javax.swing.ActionMap;
 import javax.swing.DefaultComboBoxModel;
@@ -33,11 +32,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.GameAnnouncementWithDiscardedCards;
+import de.jskat.data.JSkatOptions;
 import de.jskat.gui.action.JSkatAction;
-import de.jskat.gui.img.CardFace;
 import de.jskat.util.CardList;
 import de.jskat.util.GameType;
-import de.jskat.util.SkatResourceBundle;
+import de.jskat.util.JSkatResourceBundle;
 
 /**
  * Holds widgets for announcing a game
@@ -45,9 +44,10 @@ import de.jskat.util.SkatResourceBundle;
 class GameAnnouncePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private static Log log = LogFactory.getLog(GameAnnouncePanel.class);
+	static Log log = LogFactory.getLog(GameAnnouncePanel.class);
 
-	ResourceBundle strings;
+	JSkatResourceBundle strings;
+	JSkatOptions options;
 
 	JComboBox gameTypeList = null;
 	JCheckBox ouvertBox = null;
@@ -62,16 +62,10 @@ class GameAnnouncePanel extends JPanel {
 	 * 
 	 * @param actions
 	 *            Action map
-	 * @param jskatStrings
-	 *            i18n strings
 	 */
-	GameAnnouncePanel(ActionMap actions, ResourceBundle jskatStrings,
-			JSkatUserPanel newUserPanel) {
+	GameAnnouncePanel(ActionMap actions, JSkatUserPanel newUserPanel) {
 
-		strings = jskatStrings;
-		userPanel = newUserPanel;
-
-		initPanel(actions, strings);
+		this(actions, newUserPanel, null);
 	}
 
 	/**
@@ -79,19 +73,21 @@ class GameAnnouncePanel extends JPanel {
 	 * 
 	 * @param actions
 	 *            Action map
-	 * @param strings
-	 *            i18n strings
 	 */
-	GameAnnouncePanel(ActionMap actions, ResourceBundle strings,
-			DiscardPanel newDiscardPanel, JSkatUserPanel newUserPanel) {
+	GameAnnouncePanel(ActionMap actions, JSkatUserPanel newUserPanel,
+			DiscardPanel newDiscardPanel) {
 
-		discardPanel = newDiscardPanel;
+		strings = JSkatResourceBundle.instance();
 		userPanel = newUserPanel;
 
-		initPanel(actions, strings);
+		if (newDiscardPanel != null) {
+			discardPanel = newDiscardPanel;
+		}
+
+		initPanel(actions);
 	}
 
-	private void initPanel(final ActionMap actions, final ResourceBundle strings) {
+	private void initPanel(final ActionMap actions) {
 
 		this.setLayout(new MigLayout("fill")); //$NON-NLS-1$
 
@@ -106,9 +102,7 @@ class GameAnnouncePanel extends JPanel {
 		model.addElement(GameType.DIAMONDS);
 		model.addElement(GameType.NULL);
 		this.gameTypeList.setModel(model);
-		// FIXME (jan 17.11.2010) make card face adjustable
-		gameTypeList.setRenderer(new GameTypeComboBoxRenderer(CardFace.FRENCH,
-				strings));
+		gameTypeList.setRenderer(new GameTypeComboBoxRenderer());
 		gameTypeList.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -211,15 +205,14 @@ class GameAnnouncePanel extends JPanel {
 
 		private static final long serialVersionUID = 1L;
 
-		CardFace cardFace;
-		ResourceBundle strings;
 		JLabel cellItemLabel;
 
-		GameTypeComboBoxRenderer(CardFace newCardFace, ResourceBundle newStrings) {
+		/**
+		 * Constructor
+		 */
+		GameTypeComboBoxRenderer() {
 
 			super();
-			cardFace = newCardFace;
-			strings = newStrings;
 
 			setLayout(new MigLayout("fill")); //$NON-NLS-1$
 			cellItemLabel = new JLabel(" "); //$NON-NLS-1$
@@ -228,7 +221,8 @@ class GameAnnouncePanel extends JPanel {
 
 		@Override
 		public Component getListCellRendererComponent(JList list, Object value,
-				int index, boolean isSelected, boolean cellHasFocus) {
+				@SuppressWarnings("unused") int index, boolean isSelected,
+				@SuppressWarnings("unused") boolean cellHasFocus) {
 
 			cellItemLabel.setFont(list.getFont());
 
@@ -243,8 +237,7 @@ class GameAnnouncePanel extends JPanel {
 			GameType gameType = (GameType) value;
 
 			if (gameType != null) {
-				cellItemLabel.setText(SkatResourceBundle.getGameType(gameType,
-						strings, cardFace));
+				cellItemLabel.setText(strings.getGameType(gameType));
 			} else {
 				cellItemLabel.setText(" "); //$NON-NLS-1$
 			}

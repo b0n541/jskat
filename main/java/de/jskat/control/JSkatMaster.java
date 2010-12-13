@@ -31,7 +31,7 @@ import de.jskat.ai.PlayerType;
 import de.jskat.ai.nn.AIPlayerNN;
 import de.jskat.ai.nn.data.SkatNetworks;
 import de.jskat.ai.nn.train.NNTrainer;
-import de.jskat.control.iss.ISSController;
+import de.jskat.control.iss.IssController;
 import de.jskat.data.GameAnnouncementWithDiscardedCards;
 import de.jskat.data.JSkatApplicationData;
 import de.jskat.data.JSkatOptions;
@@ -48,23 +48,37 @@ public class JSkatMaster {
 
 	private static Log log = LogFactory.getLog(JSkatMaster.class);
 
+	private static JSkatMaster instance = null;
+
 	private JSkatOptions options;
 	private JSkatApplicationData data;
 	private IJSkatView view;
-	private ISSController issControl;
+	private IssController issControl;
+
+	/**
+	 * Gets the instance of the JSkat master controller
+	 * 
+	 * @return JSkat master controller
+	 */
+	public static JSkatMaster instance() {
+
+		if (instance == null) {
+
+			instance = new JSkatMaster();
+		}
+
+		return instance;
+	}
 
 	/**
 	 * Constructor
-	 * 
-	 * @param jskatOptions
-	 *            JSkat options
 	 */
-	public JSkatMaster(JSkatOptions jskatOptions) {
+	private JSkatMaster() {
 
-		data = new JSkatApplicationData(jskatOptions);
-		options = jskatOptions;
+		options = JSkatOptions.instance();
+		data = JSkatApplicationData.instance();
 
-		issControl = new ISSController(this, data);
+		issControl = new IssController(this);
 	}
 
 	/**
@@ -99,7 +113,7 @@ public class JSkatMaster {
 		List<String> player = view.getPlayerForInvitation(data
 				.getAvailableISSPlayer());
 		for (String currPlayer : player) {
-			getISSController().invitePlayer(data.getActiveTable(), currPlayer);
+			getIssController().invitePlayer(data.getActiveTable(), currPlayer);
 		}
 	}
 
@@ -567,7 +581,7 @@ public class JSkatMaster {
 	 * 
 	 * @return ISS controller
 	 */
-	public ISSController getISSController() {
+	public IssController getIssController() {
 
 		return issControl;
 	}
@@ -672,7 +686,7 @@ public class JSkatMaster {
 	/**
 	 * Opens the ISS homepage in the default browser
 	 */
-	public void openISSHomepage() {
+	public void openIssHomepage() {
 
 		openWebPage(getISSHomepageLink(Locale.getDefault()));
 	}
@@ -705,11 +719,12 @@ public class JSkatMaster {
 	/**
 	 * Opens the ISS registration form in the default browser
 	 */
-	public void openRegisterPage() {
-		openWebPage(getISSRegisterLink(Locale.getDefault()));
+	public void openIssRegisterPage() {
+		// FIXME (jan 13.12.2010) get Locale from options
+		openWebPage(getIssRegisterLink(Locale.getDefault()));
 	}
 
-	private String getISSRegisterLink(Locale locale) {
+	private String getIssRegisterLink(Locale locale) {
 
 		String result = "http://skatgame.net:7000/"; //$NON-NLS-1$
 

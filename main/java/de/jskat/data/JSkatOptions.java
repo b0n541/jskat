@@ -7,7 +7,7 @@ Authors: @JS@
 
 Released: @ReleaseDate@
 
-*/
+ */
 
 package de.jskat.data;
 
@@ -34,19 +34,19 @@ public class JSkatOptions {
 	private static Log log = LogFactory.getLog(JSkatOptions.class);
 
 	static private JSkatOptions optionsInstance = null;
-	
+
 	/**
 	 * Languages supported by JSkat
 	 */
 	public enum Languages {
 		/**
-		 * German
-		 */
-		GERMAN,
-		/**
 		 * English
 		 */
-		ENGLISH
+		ENGLISH,
+		/**
+		 * German
+		 */
+		GERMAN;
 	}
 
 	private Properties jskatProperties = new Properties();
@@ -90,185 +90,7 @@ public class JSkatOptions {
 		FileInputStream stream = null;
 
 		try {
-			stream = new FileInputStream(System.getProperty("user.home")
-					+ System.getProperty("file.separator") + ".jskat"
-					+ System.getProperty("file.separator") + "jskat.properties");
-
-			this.jskatProperties.load(stream);
-
-			Enumeration<Object> props = this.jskatProperties.keys();
-			String property;
-			String value;
-
-			while (props.hasMoreElements()) {
-
-				property = (String) props.nextElement();
-
-				value = this.jskatProperties.getProperty(property);
-
-				if (property.equals("language")) {
-					
-					if (value.equals("GERMAN")) {
-						
-						setLanguage(JSkatOptions.Languages.GERMAN);
-					}
-					else {
-						
-						setLanguage(JSkatOptions.Languages.ENGLISH);
-					}
-				} else if (property.equals("cardFace")) {
-					
-					if (value.equals("GERMAN")) {
-						
-						setCardFace(CardFace.GERMAN);
-					}
-					else if (value.equals("FRENCH")) {
-						
-						setCardFace(CardFace.FRENCH);
-					}
-					else {
-						
-						setCardFace(CardFace.TOURNAMENT);
-					}
-				} else if (property.equals("savePath")) {
-					setSavePath(value);
-				} else if (property.equals("trickRemoveDelayTime")) {
-					setTrickRemoveDelayTime(Integer.parseInt(value));
-				} else if (property.equals("trickRemoveAfterClick")) {
-					setTrickRemoveAfterClick(Boolean.valueOf(value)
-							.booleanValue());
-				} else if (property.equals("gameShortCut")) {
-					setGameShortCut(Boolean.valueOf(value).booleanValue());
-				} else if (property.equals("cheatDebugMode")) {
-					setCheatDebugMode(Boolean.valueOf(value).booleanValue());
-				} else if (property.equals("firstPlayerName")) {
-					setFirstPlayerName(value);
-				} else if (property.equals("firstPlayerType")) {
-					setFirstPlayerType(Integer.parseInt(value));
-				} else if (property.equals("secondPlayerName")) {
-					setSecondPlayerName(value);
-				} else if (property.equals("secondPlayerType")) {
-					setSecondPlayerType(Integer.parseInt(value));
-				} else if (property.equals("thirdPlayerName")) {
-					setThirdPlayerName(value);
-				} else if (property.equals("thirdPlayerType")) {
-					setThirdPlayerType(Integer.parseInt(value));
-				} else if (property.equals("rules")) {
-					if (value.equals("PUB")) {
-						setRules(SkatTableOptions.RuleSets.PUB);
-					}
-					else {
-						setRules(SkatTableOptions.RuleSets.ISPA);
-					}
-				} else if (property.equals("playContra")) {
-					setPlayContra(Boolean.valueOf(value).booleanValue());
-				} else if (property.equals("playBock")) {
-					setPlayBock(Boolean.valueOf(value).booleanValue());
-				} else if (property.equals("playRamsch")) {
-					setPlayRamsch(Boolean.valueOf(value).booleanValue());
-				} else if (property.equals("playRevolution")) {
-					setPlayRevolution(Boolean.valueOf(value).booleanValue());
-				} else if (property.equals("bockEventLostGrand")) {
-					setBockEventLostGrand(Boolean.valueOf(value).booleanValue());
-				} else if (property.equals("bockEventLostWith60")) {
-					setBockEventLostWith60(Boolean.valueOf(value)
-							.booleanValue());
-				} else if (property.equals("bockEventLostAfterContra")) {
-					setBockEventLostAfterContra(Boolean.valueOf(value)
-							.booleanValue());
-				} else if (property.equals("bockEventContraReAnnounced")) {
-					setBockEventContraReAnnounced(Boolean.valueOf(value)
-							.booleanValue());
-				} else if (property.equals("bockEventPlayerHasX00Points")) {
-					setBockEventPlayerHasX00Points(Boolean.valueOf(value)
-							.booleanValue());
-				} else if (property.equals("ramschSkat")) {
-					if (value.equals("LAST_TRICK")) {
-						setRamschSkat(SkatTableOptions.RamschSkatOwners.LAST_TRICK);
-					}
-					else {
-						setRamschSkat(SkatTableOptions.RamschSkatOwners.LOSER);
-					}
-				} else if (property.equals("schieberRamsch")) {
-					setSchieberRamsch(Boolean.valueOf(value).booleanValue());
-				} else if (property.equals("schieberRamschJacksInSkat")) {
-					setSchieberRamschJacksInSkat(Boolean.valueOf(value)
-							.booleanValue());
-				} else if (property.equals("ramschEventNoBid")) {
-					setRamschEventNoBid(Boolean.valueOf(value).booleanValue());
-				} else if (property.equals("ramschEventRamschAfterBock")) {
-					setRamschEventRamschAfterBock(Boolean.valueOf(value)
-							.booleanValue());
-				} else if (property.equals("ramschGrandHandPossible")) {
-					setRamschGrandHandPossible(Boolean.valueOf(value)
-							.booleanValue());
-				}
-				// table options
-				else if(property.equals("maxPlayerCount")) {
-					setMaxPlayerCount(Integer.parseInt(value));
-				} else if (property.equals("firstPlayerName")) {
-					setFirstPlayerName(value);
-				} else if (property.equals("firstPlayerType")) {
-					setFirstPlayerType(Integer.parseInt(value));
-				} else if (property.equals("secondPlayerName")) {
-					setSecondPlayerName(value);
-				} else if (property.equals("secondPlayerType")) {
-					setSecondPlayerType(Integer.parseInt(value));
-				} else if (property.equals("thirdPlayerName")) {
-					setThirdPlayerName(value);
-				} else if (property.equals("thirdPlayerType")) {
-					setThirdPlayerType(Integer.parseInt(value));
-				} else if (property.equals("rules")) {
-					if (value.equals("PUB")) {
-						setRules(RuleSets.PUB);
-					}
-					else {
-						setRules(RuleSets.ISPA);
-					}
-				} else if (property.equals("playContra")) {
-					setPlayContra(Boolean.valueOf(value).booleanValue());
-				} else if (property.equals("playBock")) {
-					setPlayBock(Boolean.valueOf(value).booleanValue());
-				} else if (property.equals("playRamsch")) {
-					setPlayRamsch(Boolean.valueOf(value).booleanValue());
-				} else if (property.equals("playRevolution")) {
-					setPlayRevolution(Boolean.valueOf(value).booleanValue());
-				} else if (property.equals("bockEventLostGrand")) {
-					setBockEventLostGrand(Boolean.valueOf(value).booleanValue());
-				} else if (property.equals("bockEventLostWith60")) {
-					setBockEventLostWith60(Boolean.valueOf(value)
-							.booleanValue());
-				} else if (property.equals("bockEventLostAfterContra")) {
-					setBockEventLostAfterContra(Boolean.valueOf(value)
-							.booleanValue());
-				} else if (property.equals("bockEventContraReAnnounced")) {
-					setBockEventContraReAnnounced(Boolean.valueOf(value)
-							.booleanValue());
-				} else if (property.equals("bockEventPlayerHasX00Points")) {
-					setBockEventPlayerHasX00Points(Boolean.valueOf(value)
-							.booleanValue());
-				} else if (property.equals("ramschSkat")) {
-					if (value.equals("LAST_TRICK")) {
-						setRamschSkat(RamschSkatOwners.LAST_TRICK);
-					}
-					else {
-						setRamschSkat(RamschSkatOwners.LOSER);
-					}
-				} else if (property.equals("schieberRamsch")) {
-					setSchieberRamsch(Boolean.valueOf(value).booleanValue());
-				} else if (property.equals("schieberRamschJacksInSkat")) {
-					setSchieberRamschJacksInSkat(Boolean.valueOf(value)
-							.booleanValue());
-				} else if (property.equals("ramschEventNoBid")) {
-					setRamschEventNoBid(Boolean.valueOf(value).booleanValue());
-				} else if (property.equals("ramschEventRamschAfterBock")) {
-					setRamschEventRamschAfterBock(Boolean.valueOf(value)
-							.booleanValue());
-				} else if (property.equals("ramschGrandHandPossible")) {
-					setRamschGrandHandPossible(Boolean.valueOf(value)
-							.booleanValue());
-				}
-			}
+			loadOptions();
 
 		} catch (FileNotFoundException e) {
 
@@ -297,6 +119,186 @@ public class JSkatOptions {
 		}
 	}
 
+	private void loadOptions() throws FileNotFoundException, IOException {
+
+		FileInputStream stream = getFileStream();
+
+		this.jskatProperties.load(stream);
+
+		Enumeration<Object> props = this.jskatProperties.keys();
+		String property;
+		String value;
+
+		while (props.hasMoreElements()) {
+
+			property = (String) props.nextElement();
+
+			value = this.jskatProperties.getProperty(property);
+
+			if (property.equals("language")) {
+
+				if (value.equals("GERMAN")) {
+
+					setLanguage(JSkatOptions.Languages.GERMAN);
+				} else {
+
+					setLanguage(JSkatOptions.Languages.ENGLISH);
+				}
+			} else if (property.equals("cardFace")) {
+
+				if (value.equals("GERMAN")) {
+
+					setCardFace(CardFace.GERMAN);
+				} else if (value.equals("FRENCH")) {
+
+					setCardFace(CardFace.FRENCH);
+				} else {
+
+					setCardFace(CardFace.TOURNAMENT);
+				}
+			} else if (property.equals("savePath")) {
+				setSavePath(value);
+			} else if (property.equals("trickRemoveDelayTime")) {
+				setTrickRemoveDelayTime(Integer.parseInt(value));
+			} else if (property.equals("trickRemoveAfterClick")) {
+				setTrickRemoveAfterClick(Boolean.valueOf(value).booleanValue());
+			} else if (property.equals("gameShortCut")) {
+				setGameShortCut(Boolean.valueOf(value).booleanValue());
+			} else if (property.equals("cheatDebugMode")) {
+				setCheatDebugMode(Boolean.valueOf(value).booleanValue());
+			} else if (property.equals("firstPlayerName")) {
+				setFirstPlayerName(value);
+			} else if (property.equals("firstPlayerType")) {
+				setFirstPlayerType(Integer.parseInt(value));
+			} else if (property.equals("secondPlayerName")) {
+				setSecondPlayerName(value);
+			} else if (property.equals("secondPlayerType")) {
+				setSecondPlayerType(Integer.parseInt(value));
+			} else if (property.equals("thirdPlayerName")) {
+				setThirdPlayerName(value);
+			} else if (property.equals("thirdPlayerType")) {
+				setThirdPlayerType(Integer.parseInt(value));
+			} else if (property.equals("rules")) {
+				if (value.equals("PUB")) {
+					setRules(SkatTableOptions.RuleSets.PUB);
+				} else {
+					setRules(SkatTableOptions.RuleSets.ISPA);
+				}
+			} else if (property.equals("playContra")) {
+				setPlayContra(Boolean.valueOf(value).booleanValue());
+			} else if (property.equals("playBock")) {
+				setPlayBock(Boolean.valueOf(value).booleanValue());
+			} else if (property.equals("playRamsch")) {
+				setPlayRamsch(Boolean.valueOf(value).booleanValue());
+			} else if (property.equals("playRevolution")) {
+				setPlayRevolution(Boolean.valueOf(value).booleanValue());
+			} else if (property.equals("bockEventLostGrand")) {
+				setBockEventLostGrand(Boolean.valueOf(value).booleanValue());
+			} else if (property.equals("bockEventLostWith60")) {
+				setBockEventLostWith60(Boolean.valueOf(value).booleanValue());
+			} else if (property.equals("bockEventLostAfterContra")) {
+				setBockEventLostAfterContra(Boolean.valueOf(value)
+						.booleanValue());
+			} else if (property.equals("bockEventContraReAnnounced")) {
+				setBockEventContraReAnnounced(Boolean.valueOf(value)
+						.booleanValue());
+			} else if (property.equals("bockEventPlayerHasX00Points")) {
+				setBockEventPlayerHasX00Points(Boolean.valueOf(value)
+						.booleanValue());
+			} else if (property.equals("ramschSkat")) {
+				if (value.equals("LAST_TRICK")) {
+					setRamschSkat(SkatTableOptions.RamschSkatOwners.LAST_TRICK);
+				} else {
+					setRamschSkat(SkatTableOptions.RamschSkatOwners.LOSER);
+				}
+			} else if (property.equals("schieberRamsch")) {
+				setSchieberRamsch(Boolean.valueOf(value).booleanValue());
+			} else if (property.equals("schieberRamschJacksInSkat")) {
+				setSchieberRamschJacksInSkat(Boolean.valueOf(value)
+						.booleanValue());
+			} else if (property.equals("ramschEventNoBid")) {
+				setRamschEventNoBid(Boolean.valueOf(value).booleanValue());
+			} else if (property.equals("ramschEventRamschAfterBock")) {
+				setRamschEventRamschAfterBock(Boolean.valueOf(value)
+						.booleanValue());
+			} else if (property.equals("ramschGrandHandPossible")) {
+				setRamschGrandHandPossible(Boolean.valueOf(value)
+						.booleanValue());
+			}
+			// table options
+			else if (property.equals("maxPlayerCount")) {
+				setMaxPlayerCount(Integer.parseInt(value));
+			} else if (property.equals("firstPlayerName")) {
+				setFirstPlayerName(value);
+			} else if (property.equals("firstPlayerType")) {
+				setFirstPlayerType(Integer.parseInt(value));
+			} else if (property.equals("secondPlayerName")) {
+				setSecondPlayerName(value);
+			} else if (property.equals("secondPlayerType")) {
+				setSecondPlayerType(Integer.parseInt(value));
+			} else if (property.equals("thirdPlayerName")) {
+				setThirdPlayerName(value);
+			} else if (property.equals("thirdPlayerType")) {
+				setThirdPlayerType(Integer.parseInt(value));
+			} else if (property.equals("rules")) {
+				if (value.equals("PUB")) {
+					setRules(RuleSets.PUB);
+				} else {
+					setRules(RuleSets.ISPA);
+				}
+			} else if (property.equals("playContra")) {
+				setPlayContra(Boolean.valueOf(value).booleanValue());
+			} else if (property.equals("playBock")) {
+				setPlayBock(Boolean.valueOf(value).booleanValue());
+			} else if (property.equals("playRamsch")) {
+				setPlayRamsch(Boolean.valueOf(value).booleanValue());
+			} else if (property.equals("playRevolution")) {
+				setPlayRevolution(Boolean.valueOf(value).booleanValue());
+			} else if (property.equals("bockEventLostGrand")) {
+				setBockEventLostGrand(Boolean.valueOf(value).booleanValue());
+			} else if (property.equals("bockEventLostWith60")) {
+				setBockEventLostWith60(Boolean.valueOf(value).booleanValue());
+			} else if (property.equals("bockEventLostAfterContra")) {
+				setBockEventLostAfterContra(Boolean.valueOf(value)
+						.booleanValue());
+			} else if (property.equals("bockEventContraReAnnounced")) {
+				setBockEventContraReAnnounced(Boolean.valueOf(value)
+						.booleanValue());
+			} else if (property.equals("bockEventPlayerHasX00Points")) {
+				setBockEventPlayerHasX00Points(Boolean.valueOf(value)
+						.booleanValue());
+			} else if (property.equals("ramschSkat")) {
+				if (value.equals("LAST_TRICK")) {
+					setRamschSkat(RamschSkatOwners.LAST_TRICK);
+				} else {
+					setRamschSkat(RamschSkatOwners.LOSER);
+				}
+			} else if (property.equals("schieberRamsch")) {
+				setSchieberRamsch(Boolean.valueOf(value).booleanValue());
+			} else if (property.equals("schieberRamschJacksInSkat")) {
+				setSchieberRamschJacksInSkat(Boolean.valueOf(value)
+						.booleanValue());
+			} else if (property.equals("ramschEventNoBid")) {
+				setRamschEventNoBid(Boolean.valueOf(value).booleanValue());
+			} else if (property.equals("ramschEventRamschAfterBock")) {
+				setRamschEventRamschAfterBock(Boolean.valueOf(value)
+						.booleanValue());
+			} else if (property.equals("ramschGrandHandPossible")) {
+				setRamschGrandHandPossible(Boolean.valueOf(value)
+						.booleanValue());
+			}
+		}
+	}
+
+	private FileInputStream getFileStream() throws FileNotFoundException {
+		FileInputStream stream = new FileInputStream(
+				System.getProperty("user.home") //$NON-NLS-1$
+						+ System.getProperty("file.separator") + ".jskat" //$NON-NLS-1$ //$NON-NLS-2$
+						+ System.getProperty("file.separator") //$NON-NLS-1$
+						+ "jskat.properties"); //$NON-NLS-1$
+		return stream;
+	}
+
 	/**
 	 * Sets the standard properties
 	 * 
@@ -304,61 +306,65 @@ public class JSkatOptions {
 	private void setStandardProperties() {
 
 		// use standard values for the options
-		this.jskatProperties.setProperty("language", String.valueOf(this.language));
+		this.jskatProperties.setProperty("language",
+				String.valueOf(this.language));
 		this.jskatProperties.setProperty("savePath", this.savePath);
-		this.jskatProperties.setProperty("trickRemoveDelayTime", String
-				.valueOf(this.trickRemoveDelayTime));
-		this.jskatProperties.setProperty("trickRemoveAfterClick", String
-				.valueOf(this.trickRemoveAfterClick));
-		this.jskatProperties.setProperty("gameShortCut", String
-				.valueOf(this.gameShortCut));
-		this.jskatProperties.setProperty("cheatDebugMode", String
-				.valueOf(this.cheatDebugMode));
-		this.jskatProperties.setProperty("firstPlayerName", this.tableOptions
-				.getFirstPlayerName());
-		this.jskatProperties.setProperty("firstPlayerType", String
-				.valueOf(this.tableOptions.getFirstPlayerType()));
-		this.jskatProperties.setProperty("secondPlayerName", this.tableOptions
-				.getSecondPlayerName());
-		this.jskatProperties.setProperty("secondPlayerType", String
-				.valueOf(this.tableOptions.getSecondPlayerType()));
-		this.jskatProperties.setProperty("thirdPlayerName", this.tableOptions
-				.getThirdPlayerName());
-		this.jskatProperties.setProperty("thirdPlayerType", String
-				.valueOf(this.tableOptions.getThirdPlayerType()));
-		this.jskatProperties.setProperty("rules", String.valueOf(this.tableOptions
-				.getRules()));
-		this.jskatProperties.setProperty("playContra", String
-				.valueOf(this.tableOptions.isPlayContra()));
-		this.jskatProperties.setProperty("playBock", String.valueOf(this.tableOptions
-				.isPlayBock()));
-		this.jskatProperties.setProperty("playRamsch", String
-				.valueOf(this.tableOptions.isPlayRamsch()));
-		this.jskatProperties.setProperty("playRevolution", String
-				.valueOf(this.tableOptions.isPlayRevolution()));
-		this.jskatProperties.setProperty("bockEventLostGrand", String
-				.valueOf(this.tableOptions.isBockEventLostGrand()));
-		this.jskatProperties.setProperty("bockEventLostWith60", String
-				.valueOf(this.tableOptions.isBockEventLostWith60()));
-		this.jskatProperties.setProperty("bockEventLostAfterContra", String
-				.valueOf(this.tableOptions.isBockEventLostAfterContra()));
+		this.jskatProperties.setProperty("trickRemoveDelayTime",
+				String.valueOf(this.trickRemoveDelayTime));
+		this.jskatProperties.setProperty("trickRemoveAfterClick",
+				String.valueOf(this.trickRemoveAfterClick));
+		this.jskatProperties.setProperty("gameShortCut",
+				String.valueOf(this.gameShortCut));
+		this.jskatProperties.setProperty("cheatDebugMode",
+				String.valueOf(this.cheatDebugMode));
+		this.jskatProperties.setProperty("firstPlayerName",
+				this.tableOptions.getFirstPlayerName());
+		this.jskatProperties.setProperty("firstPlayerType",
+				String.valueOf(this.tableOptions.getFirstPlayerType()));
+		this.jskatProperties.setProperty("secondPlayerName",
+				this.tableOptions.getSecondPlayerName());
+		this.jskatProperties.setProperty("secondPlayerType",
+				String.valueOf(this.tableOptions.getSecondPlayerType()));
+		this.jskatProperties.setProperty("thirdPlayerName",
+				this.tableOptions.getThirdPlayerName());
+		this.jskatProperties.setProperty("thirdPlayerType",
+				String.valueOf(this.tableOptions.getThirdPlayerType()));
+		this.jskatProperties.setProperty("rules",
+				String.valueOf(this.tableOptions.getRules()));
+		this.jskatProperties.setProperty("playContra",
+				String.valueOf(this.tableOptions.isPlayContra()));
+		this.jskatProperties.setProperty("playBock",
+				String.valueOf(this.tableOptions.isPlayBock()));
+		this.jskatProperties.setProperty("playRamsch",
+				String.valueOf(this.tableOptions.isPlayRamsch()));
+		this.jskatProperties.setProperty("playRevolution",
+				String.valueOf(this.tableOptions.isPlayRevolution()));
+		this.jskatProperties.setProperty("bockEventLostGrand",
+				String.valueOf(this.tableOptions.isBockEventLostGrand()));
+		this.jskatProperties.setProperty("bockEventLostWith60",
+				String.valueOf(this.tableOptions.isBockEventLostWith60()));
+		this.jskatProperties.setProperty("bockEventLostAfterContra",
+				String.valueOf(this.tableOptions.isBockEventLostAfterContra()));
 		this.jskatProperties.setProperty("bockEventContraReAnnounced", String
 				.valueOf(this.tableOptions.isBockEventContraReAnnounced()));
 		this.jskatProperties.setProperty("bockEventPlayerHasX00Points", String
 				.valueOf(this.tableOptions.isBockEventPlayerHasX00Points()));
-		this.jskatProperties.setProperty("ramschSkat", String
-				.valueOf(this.tableOptions.getRamschSkat()));
-		this.jskatProperties.setProperty("schieberRamsch", String
-				.valueOf(this.tableOptions.isSchieberRamsch()));
-		this.jskatProperties.setProperty("schieberRamschJacksInSkat", String
-				.valueOf(this.tableOptions.isSchieberRamschJacksInSkat()));
-		this.jskatProperties.setProperty("ramschEventNoBid", String
-				.valueOf(this.tableOptions.isRamschEventNoBid()));
+		this.jskatProperties.setProperty("ramschSkat",
+				String.valueOf(this.tableOptions.getRamschSkat()));
+		this.jskatProperties.setProperty("schieberRamsch",
+				String.valueOf(this.tableOptions.isSchieberRamsch()));
+		this.jskatProperties
+				.setProperty("schieberRamschJacksInSkat", String
+						.valueOf(this.tableOptions
+								.isSchieberRamschJacksInSkat()));
+		this.jskatProperties.setProperty("ramschEventNoBid",
+				String.valueOf(this.tableOptions.isRamschEventNoBid()));
 		this.jskatProperties.setProperty("ramschEventRamschAfterBock", String
 				.valueOf(this.tableOptions.isRamschEventRamschAfterBock()));
-		this.jskatProperties.setProperty("ramschGrandHandPossible", String
-				.valueOf(this.tableOptions.isRamschGrandHandPossible()));
-		this.jskatProperties.setProperty("cardFace", String.valueOf(this.cardFace));
+		this.jskatProperties.setProperty("ramschGrandHandPossible",
+				String.valueOf(this.tableOptions.isRamschGrandHandPossible()));
+		this.jskatProperties.setProperty("cardFace",
+				String.valueOf(this.cardFace));
 		log.debug(this.jskatProperties.getProperty("cardFace"));
 	}
 
@@ -391,7 +397,7 @@ public class JSkatOptions {
 	 * @return Value of property language.
 	 */
 	public Languages getLanguage() {
-		
+
 		return this.language;
 	}
 
@@ -404,7 +410,8 @@ public class JSkatOptions {
 	public void setLanguage(Languages newLanguage) {
 
 		this.language = newLanguage;
-		this.jskatProperties.setProperty("language", String.valueOf(this.language));
+		this.jskatProperties.setProperty("language",
+				String.valueOf(this.language));
 	}
 
 	/**
@@ -446,8 +453,8 @@ public class JSkatOptions {
 	public void setTrickRemoveDelayTime(int newTrickRemoveDelayTime) {
 
 		this.trickRemoveDelayTime = newTrickRemoveDelayTime;
-		this.jskatProperties.setProperty("trickRemoveDelayTime", String
-				.valueOf(this.trickRemoveDelayTime));
+		this.jskatProperties.setProperty("trickRemoveDelayTime",
+				String.valueOf(this.trickRemoveDelayTime));
 	}
 
 	/**
@@ -468,8 +475,8 @@ public class JSkatOptions {
 	public void setTrickRemoveAfterClick(boolean newTrickRemoveAfterClick) {
 
 		this.trickRemoveAfterClick = newTrickRemoveAfterClick;
-		this.jskatProperties.setProperty("trickRemoveAfterClick", String
-				.valueOf(this.trickRemoveAfterClick));
+		this.jskatProperties.setProperty("trickRemoveAfterClick",
+				String.valueOf(this.trickRemoveAfterClick));
 	}
 
 	/**
@@ -490,8 +497,8 @@ public class JSkatOptions {
 	public void setGameShortCut(boolean isGameShortCut) {
 
 		this.gameShortCut = isGameShortCut;
-		this.jskatProperties.setProperty("gameShortCut", String
-				.valueOf(this.gameShortCut));
+		this.jskatProperties.setProperty("gameShortCut",
+				String.valueOf(this.gameShortCut));
 	}
 
 	/**
@@ -512,8 +519,8 @@ public class JSkatOptions {
 	public void setCheatDebugMode(boolean isCheatDebugMode) {
 
 		this.cheatDebugMode = isCheatDebugMode;
-		this.jskatProperties.setProperty("cheatDebugMode", String
-				.valueOf(this.cheatDebugMode));
+		this.jskatProperties.setProperty("cheatDebugMode",
+				String.valueOf(this.cheatDebugMode));
 	}
 
 	/**
@@ -527,11 +534,11 @@ public class JSkatOptions {
 	}
 
 	private void setMaxPlayerCount(int maxPlayerCount) {
-		
-		this.tableOptions.setMaxPlayerCount(maxPlayerCount);
-		this.jskatProperties.setProperty("maxPlayerCount", String.valueOf(maxPlayerCount));
-	}
 
+		this.tableOptions.setMaxPlayerCount(maxPlayerCount);
+		this.jskatProperties.setProperty("maxPlayerCount",
+				String.valueOf(maxPlayerCount));
+	}
 
 	/**
 	 * Setter for property firstPlayerName.
@@ -564,8 +571,8 @@ public class JSkatOptions {
 	public void setFirstPlayerType(int firstPlayerType) {
 
 		this.tableOptions.setFirstPlayerType(firstPlayerType);
-		this.jskatProperties.setProperty("firstPlayerType", String
-				.valueOf(firstPlayerType));
+		this.jskatProperties.setProperty("firstPlayerType",
+				String.valueOf(firstPlayerType));
 	}
 
 	/**
@@ -609,8 +616,8 @@ public class JSkatOptions {
 	public void setSecondPlayerType(int secondPlayerType) {
 
 		this.tableOptions.setSecondPlayerType(secondPlayerType);
-		this.jskatProperties.setProperty("secondPlayerType", String
-				.valueOf(secondPlayerType));
+		this.jskatProperties.setProperty("secondPlayerType",
+				String.valueOf(secondPlayerType));
 	}
 
 	/**
@@ -654,8 +661,8 @@ public class JSkatOptions {
 	public void setThirdPlayerType(int thirdPlayerType) {
 
 		this.tableOptions.setThirdPlayerType(thirdPlayerType);
-		this.jskatProperties.setProperty("thirdPlayerType", String
-				.valueOf(thirdPlayerType));
+		this.jskatProperties.setProperty("thirdPlayerType",
+				String.valueOf(thirdPlayerType));
 	}
 
 	/**
@@ -721,7 +728,8 @@ public class JSkatOptions {
 	public void setPlayContra(boolean playContra) {
 
 		this.tableOptions.setPlayContra(playContra);
-		this.jskatProperties.setProperty("playContra", String.valueOf(playContra));
+		this.jskatProperties.setProperty("playContra",
+				String.valueOf(playContra));
 	}
 
 	/**
@@ -743,7 +751,8 @@ public class JSkatOptions {
 	public void setPlayRamsch(boolean playRamsch) {
 
 		this.tableOptions.setPlayRamsch(playRamsch);
-		this.jskatProperties.setProperty("playRamsch", String.valueOf(playRamsch));
+		this.jskatProperties.setProperty("playRamsch",
+				String.valueOf(playRamsch));
 	}
 
 	/**
@@ -765,8 +774,8 @@ public class JSkatOptions {
 	public void setPlayRevolution(boolean playRevolution) {
 
 		this.tableOptions.setPlayRevolution(playRevolution);
-		this.jskatProperties.setProperty("playRevolution", String
-				.valueOf(playRevolution));
+		this.jskatProperties.setProperty("playRevolution",
+				String.valueOf(playRevolution));
 	}
 
 	/**
@@ -788,8 +797,8 @@ public class JSkatOptions {
 	public void setBockEventLostGrand(boolean bockEventLostGrand) {
 
 		this.tableOptions.setBockEventLostGrand(bockEventLostGrand);
-		this.jskatProperties.setProperty("bockEventLostGrand", String
-				.valueOf(bockEventLostGrand));
+		this.jskatProperties.setProperty("bockEventLostGrand",
+				String.valueOf(bockEventLostGrand));
 	}
 
 	/**
@@ -811,8 +820,8 @@ public class JSkatOptions {
 	public void setBockEventLostWith60(boolean bockEventLostWith60) {
 
 		this.tableOptions.setBockEventLostWith60(bockEventLostWith60);
-		this.jskatProperties.setProperty("bockEventLostWith60", String
-				.valueOf(bockEventLostWith60));
+		this.jskatProperties.setProperty("bockEventLostWith60",
+				String.valueOf(bockEventLostWith60));
 	}
 
 	/**
@@ -834,8 +843,8 @@ public class JSkatOptions {
 	public void setBockEventLostAfterContra(boolean bockEventLostAfterContra) {
 
 		this.tableOptions.setBockEventLostAfterContra(bockEventLostAfterContra);
-		this.jskatProperties.setProperty("bockEventLostAfterContra", String
-				.valueOf(bockEventLostAfterContra));
+		this.jskatProperties.setProperty("bockEventLostAfterContra",
+				String.valueOf(bockEventLostAfterContra));
 	}
 
 	/**
@@ -858,8 +867,8 @@ public class JSkatOptions {
 
 		this.tableOptions
 				.setBockEventContraReAnnounced(bockEventContraReAnnounced);
-		this.jskatProperties.setProperty("bockEventContraReAnnounced", String
-				.valueOf(bockEventContraReAnnounced));
+		this.jskatProperties.setProperty("bockEventContraReAnnounced",
+				String.valueOf(bockEventContraReAnnounced));
 	}
 
 	/**
@@ -883,8 +892,8 @@ public class JSkatOptions {
 
 		this.tableOptions
 				.setBockEventPlayerHasX00Points(bockEventPlayerHasX00Points);
-		this.jskatProperties.setProperty("bockEventPlayerHasX00Points", String
-				.valueOf(bockEventPlayerHasX00Points));
+		this.jskatProperties.setProperty("bockEventPlayerHasX00Points",
+				String.valueOf(bockEventPlayerHasX00Points));
 	}
 
 	/**
@@ -906,7 +915,8 @@ public class JSkatOptions {
 	public void setRamschSkat(SkatTableOptions.RamschSkatOwners ramschSkat) {
 
 		this.tableOptions.setRamschSkat(ramschSkat);
-		this.jskatProperties.setProperty("ramschSkat", String.valueOf(ramschSkat));
+		this.jskatProperties.setProperty("ramschSkat",
+				String.valueOf(ramschSkat));
 	}
 
 	/**
@@ -928,8 +938,8 @@ public class JSkatOptions {
 	public void setSchieberRamsch(boolean schieberRamsch) {
 
 		this.tableOptions.setSchieberRamsch(schieberRamsch);
-		this.jskatProperties.setProperty("schieberRamsch", String
-				.valueOf(schieberRamsch));
+		this.jskatProperties.setProperty("schieberRamsch",
+				String.valueOf(schieberRamsch));
 	}
 
 	/**
@@ -952,8 +962,8 @@ public class JSkatOptions {
 
 		this.tableOptions
 				.setSchieberRamschJacksInSkat(schieberRamschJacksInSkat);
-		this.jskatProperties.setProperty("schieberRamschJacksInSkat", String
-				.valueOf(schieberRamschJacksInSkat));
+		this.jskatProperties.setProperty("schieberRamschJacksInSkat",
+				String.valueOf(schieberRamschJacksInSkat));
 	}
 
 	/**
@@ -975,8 +985,8 @@ public class JSkatOptions {
 	public void setRamschEventNoBid(boolean ramschEventNoBid) {
 
 		this.tableOptions.setRamschEventNoBid(ramschEventNoBid);
-		this.jskatProperties.setProperty("ramschEventNoBid", String
-				.valueOf(ramschEventNoBid));
+		this.jskatProperties.setProperty("ramschEventNoBid",
+				String.valueOf(ramschEventNoBid));
 	}
 
 	/**
@@ -999,8 +1009,8 @@ public class JSkatOptions {
 
 		this.tableOptions
 				.setRamschEventRamschAfterBock(ramschEventRamschAfterBock);
-		this.jskatProperties.setProperty("ramschEventRamschAfterBock", String
-				.valueOf(ramschEventRamschAfterBock));
+		this.jskatProperties.setProperty("ramschEventRamschAfterBock",
+				String.valueOf(ramschEventRamschAfterBock));
 	}
 
 	/**
@@ -1022,8 +1032,8 @@ public class JSkatOptions {
 	public void setRamschGrandHandPossible(boolean ramschGrandHandPossible) {
 
 		this.tableOptions.setRamschGrandHandPossible(ramschGrandHandPossible);
-		this.jskatProperties.setProperty("ramschGrandHandPossible", String
-				.valueOf(ramschGrandHandPossible));
+		this.jskatProperties.setProperty("ramschGrandHandPossible",
+				String.valueOf(ramschGrandHandPossible));
 	}
 
 	/**
@@ -1048,7 +1058,8 @@ public class JSkatOptions {
 
 			this.cardFace = newCardFace;
 
-			this.jskatProperties.setProperty("cardFace", String.valueOf(this.cardFace));
+			this.jskatProperties.setProperty("cardFace",
+					String.valueOf(this.cardFace));
 		}
 	}
 
@@ -1058,17 +1069,18 @@ public class JSkatOptions {
 	 * @return The current skat table options
 	 */
 	public SkatTableOptions getSkatTableOptions() {
-		
+
 		return this.tableOptions;
 	}
-	
+
 	/**
 	 * Sets the current skat table options
 	 * 
-	 * @param skatTableOptions The current skat table options
+	 * @param skatTableOptions
+	 *            The current skat table options
 	 */
 	public void setSkatTableOptions(SkatTableOptions skatTableOptions) {
-		
+
 		this.tableOptions = skatTableOptions;
 	}
 }

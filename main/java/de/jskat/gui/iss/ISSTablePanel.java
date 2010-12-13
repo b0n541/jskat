@@ -11,15 +11,11 @@ Released: @ReleaseDate@
 
 package de.jskat.gui.iss;
 
-import java.util.ResourceBundle;
-
 import javax.swing.ActionMap;
 import javax.swing.JPanel;
 
-import de.jskat.data.JSkatOptions;
 import de.jskat.data.SkatGameData.GameState;
 import de.jskat.data.iss.ISSTablePanelStatus;
-import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.gui.table.ContextPanelTypes;
 import de.jskat.gui.table.SkatTablePanel;
 
@@ -46,11 +42,10 @@ public class ISSTablePanel extends SkatTablePanel {
 	 * @param newLoginName
 	 *            Login name on ISS
 	 */
-	public ISSTablePanel(String tableName, JSkatGraphicRepository jskatBitmaps,
-			ActionMap actions, ResourceBundle strings, JSkatOptions options,
+	public ISSTablePanel(String tableName, ActionMap actions,
 			String newLoginName) {
 
-		super(tableName, jskatBitmaps, actions, strings, options);
+		super(tableName, actions);
 
 		loginName = newLoginName;
 	}

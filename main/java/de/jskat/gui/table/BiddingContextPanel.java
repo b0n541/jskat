@@ -11,8 +11,6 @@ Released: @ReleaseDate@
 
 package de.jskat.gui.table;
 
-import java.util.ResourceBundle;
-
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.JButton;
@@ -49,13 +47,13 @@ class BiddingContextPanel extends JPanel {
 	 *            Action map
 	 */
 	BiddingContextPanel(ActionMap actions, JSkatGraphicRepository bitmaps,
-			ResourceBundle strings, JSkatUserPanel userPanel) {
+			JSkatUserPanel userPanel) {
 
-		initPanel(actions, bitmaps, strings, userPanel);
+		initPanel(actions, bitmaps, userPanel);
 	}
 
 	private void initPanel(ActionMap actions, JSkatGraphicRepository bitmaps,
-			ResourceBundle strings, JSkatUserPanel userPanel) {
+			JSkatUserPanel userPanel) {
 
 		setLayout(new MigLayout("fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
@@ -67,7 +65,7 @@ class BiddingContextPanel extends JPanel {
 		biddingPanel.setOpaque(false);
 		add(biddingPanel, "grow"); //$NON-NLS-1$
 
-		add(new GameAnnouncePanel(actions, strings, userPanel), "width 25%"); //$NON-NLS-1$
+		add(new GameAnnouncePanel(actions, userPanel), "width 25%"); //$NON-NLS-1$
 
 		setOpaque(false);
 	}

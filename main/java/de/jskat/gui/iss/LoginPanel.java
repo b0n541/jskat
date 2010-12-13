@@ -14,7 +14,6 @@ package de.jskat.gui.iss;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
 
 import javax.swing.ActionMap;
 import javax.swing.JButton;
@@ -28,11 +27,9 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import de.jskat.data.JSkatOptions;
 import de.jskat.data.iss.ISSLoginCredentials;
 import de.jskat.gui.AbstractTabPanel;
 import de.jskat.gui.action.JSkatAction;
-import de.jskat.gui.img.JSkatGraphicRepository;
 
 /**
  * Panel for login into International Skat Server (ISS)
@@ -46,14 +43,11 @@ public class LoginPanel extends AbstractTabPanel {
 	private JPasswordField passwordField;
 
 	/**
-	 * @see AbstractTabPanel#AbstractTabPanel(String, JSkatGraphicRepository,
-	 *      ActionMap, ResourceBundle, JSkatOptions)
+	 * @see AbstractTabPanel#AbstractTabPanel(String, ActionMap)
 	 */
-	public LoginPanel(String newTableName, JSkatGraphicRepository jskatBitmaps,
-			ActionMap actions, ResourceBundle jskatStrings,
-			JSkatOptions jskatOptions) {
+	public LoginPanel(String newTableName, ActionMap actions) {
 
-		super(newTableName, jskatBitmaps, actions, jskatStrings, jskatOptions);
+		super(newTableName, actions);
 		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
 	}
 

@@ -12,14 +12,11 @@ Released: @ReleaseDate@
 package de.jskat.gui.action.main;
 
 import java.awt.event.ActionEvent;
-import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
-import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
@@ -30,16 +27,13 @@ public class CreateTableAction extends AbstractJSkatAction {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
+	 * @see AbstractJSkatAction#AbstractJSkatAction()
 	 */
-	public CreateTableAction(JSkatMaster controller,
-			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
+	public CreateTableAction() {
 
-		super(controller, bitmaps);
-
-		putValue(Action.NAME, strings.getString("new_table"));
+		putValue(Action.NAME, strings.getString("new_table")); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION,
-				strings.getString("new_table_tooltip"));
+				strings.getString("new_table_tooltip")); //$NON-NLS-1$
 
 		setIcon(Icon.TABLE);
 	}
@@ -50,7 +44,7 @@ public class CreateTableAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		this.jskat.createTable();
+		jskat.createTable();
 	}
 
 }

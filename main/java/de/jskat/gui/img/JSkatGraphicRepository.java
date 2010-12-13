@@ -31,6 +31,22 @@ import de.jskat.util.Suit;
 public class JSkatGraphicRepository {
 
 	private static Log log = LogFactory.getLog(JSkatGraphicRepository.class);
+	private static JSkatGraphicRepository instance = null;
+
+	/**
+	 * Gets the instance of the JSkat graphic repository
+	 * 
+	 * @return Graphic repository
+	 */
+	public static JSkatGraphicRepository instance() {
+
+		if (instance == null) {
+
+			instance = new JSkatGraphicRepository();
+		}
+
+		return instance;
+	}
 
 	/**
 	 * Creates a new instance of JSkatGraphicRepository
@@ -38,10 +54,33 @@ public class JSkatGraphicRepository {
 	 * @param jskatOptions
 	 *            Current JSkatOptions
 	 */
-	public JSkatGraphicRepository(JSkatOptions jskatOptions) {
+	private JSkatGraphicRepository() {
 
-		cardFace = jskatOptions.getCardFace();
-		tracker = new MediaTracker(new Canvas());
+		loadAllJSkatImages();
+	}
+
+	public void reloadAllJSkatImages() {
+		loadAllJSkatImages();
+	}
+
+	private void loadAllJSkatImages() {
+		MediaTracker tracker = new MediaTracker(new Canvas());
+		loadImages(tracker);
+
+		log.debug("Bitmaps for JSkat logo and skat table loaded..."); //$NON-NLS-1$
+
+		icons = new ArrayList<List<Image>>();
+		loadIcons(tracker);
+
+		log.debug("Bitmaps for icons loaded..."); //$NON-NLS-1$
+
+		cards = new ArrayList<List<Image>>();
+		loadCards(tracker, JSkatOptions.instance().getCardFace());
+
+		log.debug("Bitmaps for cards loaded..."); //$NON-NLS-1$
+	}
+
+	private void loadImages(MediaTracker tracker) {
 		skatTable = Toolkit
 				.getDefaultToolkit()
 				.getImage(
@@ -82,24 +121,12 @@ public class JSkatGraphicRepository {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-
-		log.debug("Bitmaps for JSkat logo and skat table loaded..."); //$NON-NLS-1$
-
-		icons = new ArrayList<List<Image>>();
-		loadIcons();
-
-		log.debug("Bitmaps for icons loaded..."); //$NON-NLS-1$
-
-		cards = new ArrayList<List<Image>>();
-		loadCards(cardFace);
-
-		log.debug("Bitmaps for cards loaded..."); //$NON-NLS-1$
 	}
 
 	/**
 	 * Loads all icons
 	 */
-	public void loadIcons() {
+	public void loadIcons(MediaTracker tracker) {
 
 		// for all icons
 		for (Icon icon : Icon.values()) {
@@ -141,7 +168,7 @@ public class JSkatGraphicRepository {
 	 * @param cardType
 	 *            The directory name for the card set to be loaded
 	 */
-	public void loadCards(CardFace cardType) {
+	public void loadCards(MediaTracker tracker, CardFace cardType) {
 
 		for (Suit suit : Suit.values()) {
 
@@ -267,10 +294,6 @@ public class JSkatGraphicRepository {
 	public Image getUserBidBubbleImage() {
 		return bidBubbles.get(2);
 	}
-
-	private CardFace cardFace;
-
-	private MediaTracker tracker;
 
 	private Image skatTable;
 

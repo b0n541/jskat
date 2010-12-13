@@ -19,10 +19,8 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.PropertyConfigurator;
 
 import de.jskat.control.JSkatMaster;
-import de.jskat.data.JSkatOptions;
 import de.jskat.gui.JSkatViewImpl;
 import de.jskat.gui.LookAndFeelSetter;
-import de.jskat.gui.img.JSkatGraphicRepository;
 
 /**
  * Main class for JSkat
@@ -46,15 +44,17 @@ public class JSkat {
 
 		trySettingNimbusLookAndFeel();
 
-		JSkatOptions jskatOptions = JSkatOptions.instance();
+		// // get the options
+		// JSkatOptions jskatOptions = JSkatOptions.instance();
+		// // get the i18n strings
+		// JSkatResourceBundle jskatStrings = JSkatResourceBundle.instance();
+		// // get all graphics
+		// JSkatGraphicRepository jskatBitmaps =
+		// JSkatGraphicRepository.instance();
+		// get master controller
+		JSkatMaster jskat = JSkatMaster.instance();
 
-		// Preparing all graphics
-		JSkatGraphicRepository jskatBitmaps = new JSkatGraphicRepository(
-				jskatOptions);
-
-		JSkatMaster jskat = new JSkatMaster(jskatOptions);
-
-		jskat.setView(new JSkatViewImpl(jskat, jskatBitmaps, jskatOptions));
+		jskat.setView(new JSkatViewImpl());
 	}
 
 	private static void trySettingNimbusLookAndFeel() {

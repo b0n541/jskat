@@ -12,15 +12,12 @@ Released: @ReleaseDate@
 package de.jskat.gui.action.human;
 
 import java.awt.event.ActionEvent;
-import java.util.ResourceBundle;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import de.jskat.control.JSkatMaster;
 import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.action.JSkatAction;
-import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
@@ -31,12 +28,9 @@ public class HoldBidAction extends AbstractJSkatAction {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see AbstractJSkatAction#AbstractJSkatAction(JSkatMaster)
+	 * @see AbstractJSkatAction#AbstractJSkatAction()
 	 */
-	public HoldBidAction(JSkatMaster controller,
-			JSkatGraphicRepository bitmaps, ResourceBundle strings) {
-
-		super(controller, bitmaps);
+	public HoldBidAction() {
 
 		putValue(Action.NAME, "hold bid"); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION, "Hold this bid");
@@ -51,6 +45,6 @@ public class HoldBidAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		this.jskat.triggerHuman(e);
+		jskat.triggerHuman(e);
 	}
 }

@@ -41,9 +41,9 @@ import de.jskat.util.rule.SkatRuleFactory;
 /**
  * Controls all ISS related actions
  */
-public class ISSController {
+public class IssController {
 
-	private static Log log = LogFactory.getLog(ISSController.class);
+	private static Log log = LogFactory.getLog(IssController.class);
 
 	private JSkatMaster jskat;
 	private IJSkatView view;
@@ -55,16 +55,11 @@ public class ISSController {
 
 	/**
 	 * Constructor
-	 * 
-	 * @param controller
-	 *            JSkat master controller
-	 * @param newData
-	 *            Application data
 	 */
-	public ISSController(JSkatMaster controller, JSkatApplicationData newData) {
+	public IssController(JSkatMaster newJSkat) {
 
-		jskat = controller;
-		data = newData;
+		jskat = newJSkat;
+		data = JSkatApplicationData.instance();
 		gameData = new HashMap<String, SkatGameData>();
 	}
 

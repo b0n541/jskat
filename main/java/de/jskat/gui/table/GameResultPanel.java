@@ -13,7 +13,6 @@ package de.jskat.gui.table;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 import javax.swing.JPanel;
 
@@ -41,13 +40,12 @@ class GameResultPanel extends JPanel {
 	/**
 	 * Game result panel
 	 */
-	GameResultPanel(JSkatGraphicRepository bitmaps, ResourceBundle strings) {
+	GameResultPanel(JSkatGraphicRepository bitmaps) {
 
-		initPanel(bitmaps, strings);
+		initPanel(bitmaps);
 	}
 
-	private void initPanel(JSkatGraphicRepository bitmaps,
-			ResourceBundle strings) {
+	private void initPanel(JSkatGraphicRepository bitmaps) {
 
 		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 

@@ -16,7 +16,6 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.ResourceBundle;
 
 import javax.swing.ActionMap;
 import javax.swing.JButton;
@@ -31,11 +30,9 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import de.jskat.data.JSkatOptions;
 import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.gui.AbstractTabPanel;
 import de.jskat.gui.action.JSkatAction;
-import de.jskat.gui.img.JSkatGraphicRepository;
 
 /**
  * Represents the lobby of the ISS with an overview about players and tables
@@ -64,10 +61,9 @@ public class LobbyPanel extends AbstractTabPanel {
 	 * @param jskatBitmaps
 	 * @param actions
 	 */
-	public LobbyPanel(String tableName, JSkatGraphicRepository jskatBitmaps,
-			ActionMap actions, ResourceBundle strings, JSkatOptions options) {
+	public LobbyPanel(String tableName, ActionMap actions) {
 
-		super(tableName, jskatBitmaps, actions, strings, options);
+		super(tableName, actions);
 
 		log.debug("SkatTablePanel: name: " + tableName); //$NON-NLS-1$
 	}

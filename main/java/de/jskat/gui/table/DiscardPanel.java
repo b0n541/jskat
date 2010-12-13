@@ -15,7 +15,6 @@ import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ResourceBundle;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
@@ -28,6 +27,7 @@ import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
+import de.jskat.util.JSkatResourceBundle;
 
 /**
  * Holds widgets for deciding of looking into skat or playing hand game
@@ -41,7 +41,7 @@ class DiscardPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	JSkatGraphicRepository bitmaps;
-	ResourceBundle strings;
+	JSkatResourceBundle strings;
 
 	private Action lookIntoSkatAction;
 	JButton lookIntoSkatButton;
@@ -64,11 +64,12 @@ class DiscardPanel extends JPanel {
 	 *            Maximum number of cards
 	 */
 	public DiscardPanel(ActionMap actions, JSkatGraphicRepository jskatBitmaps,
-			ResourceBundle newStrings, int newMaxCardCount) {
+			int newMaxCardCount) {
+
+		strings = JSkatResourceBundle.instance();
 
 		setActionMap(actions);
 		bitmaps = jskatBitmaps;
-		strings = newStrings;
 		maxCardCount = newMaxCardCount;
 
 		initPanel();

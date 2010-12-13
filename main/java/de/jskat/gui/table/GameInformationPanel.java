@@ -12,7 +12,6 @@ Released: @ReleaseDate@
 package de.jskat.gui.table;
 
 import java.awt.Font;
-import java.util.ResourceBundle;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,10 +20,9 @@ import net.miginfocom.swing.MigLayout;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameState;
-import de.jskat.gui.img.CardFace;
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.util.GameType;
-import de.jskat.util.SkatResourceBundle;
+import de.jskat.util.JSkatResourceBundle;
 
 /**
  * Panel for showing game informations
@@ -34,8 +32,7 @@ class GameInformationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JSkatGraphicRepository bitmaps;
-	private ResourceBundle strings;
-	private CardFace cardFace;
+	private JSkatResourceBundle strings;
 
 	private JLabel label;
 
@@ -53,14 +50,12 @@ class GameInformationPanel extends JPanel {
 	/**
 	 * Constructor
 	 */
-	GameInformationPanel(JSkatGraphicRepository jskatBitmaps,
-			ResourceBundle jskatStrings, CardFace newCardFace) {
+	GameInformationPanel(JSkatGraphicRepository jskatBitmaps) {
 
 		super();
 
 		bitmaps = jskatBitmaps;
-		strings = jskatStrings;
-		cardFace = newCardFace;
+		strings = JSkatResourceBundle.instance();
 
 		initPanel();
 	}
@@ -121,7 +116,7 @@ class GameInformationPanel extends JPanel {
 		String text = getGameStateString(gameState);
 
 		if (gameType != null) {
-			text += " " + SkatResourceBundle.getGameType(gameType, strings, cardFace); //$NON-NLS-1$
+			text += " " + strings.getGameType(gameType); //$NON-NLS-1$
 		}
 
 		if (handGame) {
@@ -218,17 +213,6 @@ class GameInformationPanel extends JPanel {
 	public void setTrickNumber(int trickNumber) {
 
 		trick = trickNumber;
-		refreshText();
-	}
-
-	/**
-	 * Sets the card face
-	 * 
-	 * @param newCardFace
-	 */
-	public void setCardFace(CardFace newCardFace) {
-
-		cardFace = newCardFace;
 		refreshText();
 	}
 }

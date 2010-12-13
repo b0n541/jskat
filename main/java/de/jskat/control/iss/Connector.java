@@ -42,7 +42,7 @@ class Connector {
 	private String password;
 	private int port;
 
-	private ISSController issControl;
+	private IssController issControl;
 
 	/**
 	 * Constructor
@@ -50,7 +50,7 @@ class Connector {
 	 * @param controller
 	 *            Controller for ISS connection
 	 */
-	Connector(ISSController controller) {
+	Connector(IssController controller) {
 
 		issControl = controller;
 	}
