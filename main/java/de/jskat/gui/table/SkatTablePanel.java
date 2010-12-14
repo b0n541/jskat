@@ -13,6 +13,7 @@ package de.jskat.gui.table;
 
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.Collection;
@@ -20,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.ActionMap;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -105,7 +107,12 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	private JPanel getSkatListPanel() {
 
-		JPanel panel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		JPanel panel = new JPanel(new MigLayout(
+				"fill", "fill", "[shrink][grow]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+		JLabel skatListLabel = new JLabel(strings.getString("skat_list"));
+		skatListLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
+		panel.add(skatListLabel, "wrap, growx, shrinky"); //$NON-NLS-1$
 
 		skatListTableModel = new SkatListTableModel();
 		skatListTable = new JTable(skatListTableModel);
@@ -132,7 +139,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		skatListScrollPane
 				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		panel.add(skatListScrollPane);
+		panel.add(skatListScrollPane, "growy"); //$NON-NLS-1$
 
 		return panel;
 	}
@@ -494,6 +501,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		gameInfoPanel.clear();
 		biddingPanel.resetPanel();
 		declaringPanel.resetPanel();
+		gameOverPanel.resetPanel();
 		clearHand(Player.FORE_HAND);
 		clearHand(Player.MIDDLE_HAND);
 		clearHand(Player.HIND_HAND);

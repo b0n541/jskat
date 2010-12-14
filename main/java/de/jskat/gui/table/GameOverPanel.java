@@ -63,4 +63,9 @@ class GameOverPanel extends JPanel {
 
 		gameResultPanel.setGameResult(gameData);
 	}
+
+	public void resetPanel() {
+
+		gameResultPanel.resetPanel();
+	}
 }

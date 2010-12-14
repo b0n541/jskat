@@ -12,6 +12,7 @@ Released: @ReleaseDate@
 package de.jskat.gui.iss;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
@@ -44,11 +45,11 @@ class ChatPanel extends JPanel implements ChangeListener {
 	private static final long serialVersionUID = 1L;
 	private static Log log = LogFactory.getLog(ChatPanel.class);
 
-	private JTextField inputLine;
+	JTextField inputLine;
 	private Map<String, JTextArea> chats;
 	private JTabbedPane chatTabs;
 
-	private String activeChatName;
+	String activeChatName;
 
 	/**
 	 * Constructor
@@ -61,21 +62,23 @@ class ChatPanel extends JPanel implements ChangeListener {
 
 	private void initPanel(ActionMap actions) {
 
-		setLayout(new MigLayout("fill")); //$NON-NLS-1$
+		setLayout(new MigLayout("fill", "fill", "[grow][shrink]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		setMinimumSize(new Dimension(100, 100));
+		setPreferredSize(new Dimension(100, 100));
 
-		this.chats = new HashMap<String, JTextArea>();
-		this.chatTabs = new JTabbedPane();
-		this.chatTabs.setTabPlacement(JTabbedPane.BOTTOM);
-		this.chatTabs.setAutoscrolls(true);
-		this.chatTabs.addChangeListener(this);
-		add(this.chatTabs, "growx, wrap"); //$NON-NLS-1$
+		chats = new HashMap<String, JTextArea>();
+		chatTabs = new JTabbedPane();
+		chatTabs.setTabPlacement(JTabbedPane.BOTTOM);
+		chatTabs.setAutoscrolls(true);
+		chatTabs.addChangeListener(this);
+		add(chatTabs, "grow, wrap"); //$NON-NLS-1$
 
-		addNewChat("ISS debug");
+		addNewChat("Table");
 		addNewChat("Lobby");
 
-		this.inputLine = new JTextField(20);
-		this.inputLine.setAction(actions.get(JSkatAction.SEND_CHAT_MESSAGE));
-		this.inputLine.addActionListener(new ActionListener() {
+		inputLine = new JTextField(20);
+		inputLine.setAction(actions.get(JSkatAction.SEND_CHAT_MESSAGE));
+		inputLine.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
@@ -91,20 +94,20 @@ class ChatPanel extends JPanel implements ChangeListener {
 				ChatPanel.this.inputLine.setText(null);
 			}
 		});
-		add(this.inputLine, "growx"); //$NON-NLS-1$
+		add(inputLine, "growx"); //$NON-NLS-1$
 	}
 
 	JTextArea addNewChat(String name) {
 
 		JTextArea chat = getChat();
-		this.chats.put(name, chat);
+		chats.put(name, chat);
 		JScrollPane scrollPane = new JScrollPane(chat);
 		scrollPane
 				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setName(name);
 
-		this.chatTabs.add(name, scrollPane);
-		this.activeChatName = name;
+		chatTabs.add(name, scrollPane);
+		activeChatName = name;
 
 		return chat;
 	}
@@ -122,11 +125,11 @@ class ChatPanel extends JPanel implements ChangeListener {
 
 		log.debug("addMessage");
 
-		JTextArea chat = this.chats.get(message.getChatName());
+		JTextArea chat = chats.get(message.getChatName());
 
 		if (chat == null) {
 			// new chat --> create chat text area first
-			chat = this.addNewChat(message.getChatName());
+			chat = addNewChat(message.getChatName());
 		}
 
 		chat.append(message.getMessage() + '\n');
@@ -140,12 +143,12 @@ class ChatPanel extends JPanel implements ChangeListener {
 			JTabbedPane tabs = (JTabbedPane) e.getSource();
 			Component tab = tabs.getSelectedComponent();
 
-			this.activeChatName = tab.getName();
-			log.debug("Chat " + this.activeChatName + " activated.");
+			activeChatName = tab.getName();
+			log.debug("Chat " + activeChatName + " activated.");
 		}
 	}
 
 	public void setFocus() {
-		this.inputLine.requestFocus();
+		inputLine.requestFocus();
 	}
 }

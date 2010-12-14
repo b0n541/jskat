@@ -14,6 +14,7 @@ package de.jskat.gui.iss;
 import javax.swing.ActionMap;
 import javax.swing.JPanel;
 
+import net.miginfocom.swing.MigLayout;
 import de.jskat.data.SkatGameData.GameState;
 import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.gui.table.ContextPanelTypes;
@@ -56,7 +57,11 @@ public class ISSTablePanel extends SkatTablePanel {
 	@Override
 	protected JPanel getPlayGroundPanel() {
 
-		JPanel panel = super.getPlayGroundPanel();
+		JPanel panel = new JPanel(new MigLayout("fill", "[grow][shrink]", //$NON-NLS-1$ //$NON-NLS-2$
+				"fill")); //$NON-NLS-1$
+		panel.add(super.getPlayGroundPanel(), "grow"); //$NON-NLS-1$
+		panel.add(getChatPanel(), "width 20%, growy"); //$NON-NLS-1$
+
 		// replace game start context panel
 		addContextPanel(ContextPanelTypes.START,
 				new StartContextPanel(this.getActionMap()));
@@ -64,7 +69,6 @@ public class ISSTablePanel extends SkatTablePanel {
 		addContextPanel(ContextPanelTypes.GAME_OVER,
 				new StartContextPanel(this.getActionMap()));
 		setGameState(GameState.GAME_START);
-		panel.add(getChatPanel(), "span 2, growx, align center"); //$NON-NLS-1$
 
 		return panel;
 	}

@@ -16,6 +16,7 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import de.jskat.util.JSkatResourceBundle;
 import de.jskat.util.Player;
 import de.jskat.util.SkatConstants;
 import de.jskat.util.SkatListMode;
@@ -26,6 +27,8 @@ import de.jskat.util.SkatListMode;
 class SkatListTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
+
+	private JSkatResourceBundle strings;
 
 	private SkatListMode mode = SkatListMode.NORMAL;
 
@@ -41,11 +44,13 @@ class SkatListTableModel extends AbstractTableModel {
 	 */
 	public SkatListTableModel() {
 
-		this.declarers = new ArrayList<Player>();
-		this.playerResults = new ArrayList<List<Integer>>();
-		this.gameResults = new ArrayList<Integer>();
-		this.displayValues = new ArrayList<List<Integer>>();
-		this.columns = new ArrayList<String>();
+		strings = JSkatResourceBundle.instance();
+
+		declarers = new ArrayList<Player>();
+		playerResults = new ArrayList<List<Integer>>();
+		gameResults = new ArrayList<Integer>();
+		displayValues = new ArrayList<List<Integer>>();
+		columns = new ArrayList<String>();
 		setColumns();
 	}
 
@@ -55,7 +60,7 @@ class SkatListTableModel extends AbstractTableModel {
 	@Override
 	public int getColumnCount() {
 
-		return this.columns.size();
+		return columns.size();
 	}
 
 	/**
@@ -64,7 +69,7 @@ class SkatListTableModel extends AbstractTableModel {
 	@Override
 	public int getRowCount() {
 
-		return this.declarers.size();
+		return declarers.size();
 	}
 
 	/**
@@ -75,8 +80,8 @@ class SkatListTableModel extends AbstractTableModel {
 
 		Object result = null;
 
-		if (this.displayValues.get(rowIndex).get(columnIndex) != null) {
-			result = this.displayValues.get(rowIndex).get(columnIndex);
+		if (displayValues.get(rowIndex).get(columnIndex) != null) {
+			result = displayValues.get(rowIndex).get(columnIndex);
 		} else {
 			result = "-";
 		}
@@ -97,7 +102,7 @@ class SkatListTableModel extends AbstractTableModel {
 	@Override
 	public String getColumnName(int col) {
 
-		return this.columns.get(col);
+		return columns.get(col);
 	}
 
 	/**
@@ -107,11 +112,11 @@ class SkatListTableModel extends AbstractTableModel {
 	 */
 	void setSkatListMode(SkatListMode newMode) {
 
-		this.mode = newMode;
+		mode = newMode;
 
 		calculateDisplayValues();
 
-		this.fireTableDataChanged();
+		fireTableDataChanged();
 	}
 
 	void calculateDisplayValues() {
@@ -119,19 +124,19 @@ class SkatListTableModel extends AbstractTableModel {
 		int currResult = 0;
 		List<Integer> playerResultsSoFar = new ArrayList<Integer>();
 
-		this.displayValues.clear();
+		displayValues.clear();
 
-		for (int game = 0; game < this.gameResults.size(); game++) {
+		for (int game = 0; game < gameResults.size(); game++) {
 
-			this.displayValues.add(new ArrayList<Integer>());
+			displayValues.add(new ArrayList<Integer>());
 
 			// add player values
-			for (int player = 0; player < this.playerCount; player++) {
+			for (int player = 0; player < playerCount; player++) {
 
 				int previousResult = 0;
 				currResult = 0;
 
-				if (this.declarers.get(game) != null) {
+				if (declarers.get(game) != null) {
 
 					if (game == 0) {
 						// set previous player result to 0
@@ -144,16 +149,15 @@ class SkatListTableModel extends AbstractTableModel {
 					}
 
 					// get player results from current game
-					switch (this.mode) {
+					switch (mode) {
 					case NORMAL:
-						currResult = this.playerResults.get(player).get(game);
+						currResult = playerResults.get(player).get(game);
 						break;
 					case TOURNAMENT:
-						boolean isDeclarer = (this.playerResults.get(player)
-								.get(game) != 0);
+						boolean isDeclarer = (playerResults.get(player).get(
+								game) != 0);
 						currResult = SkatConstants.getTournamentGameValue(
-								isDeclarer, this.gameResults.get(game),
-								this.playerCount);
+								isDeclarer, gameResults.get(game), playerCount);
 						break;
 					case BIERLACHS:
 						// FIXME jan 31.05.2010 add bierlachs value
@@ -164,27 +168,27 @@ class SkatListTableModel extends AbstractTableModel {
 				if (currResult != 0) {
 
 					Integer newResult = new Integer(previousResult + currResult);
-					this.displayValues.get(game).add(newResult);
+					displayValues.get(game).add(newResult);
 					playerResultsSoFar.set(player, newResult);
 
 				} else {
 
-					this.displayValues.get(game).add(null);
+					displayValues.get(game).add(null);
 				}
 			}
 
 			// get game result
-			switch (this.mode) {
+			switch (mode) {
 			case NORMAL:
 			case BIERLACHS:
-				currResult = this.gameResults.get(game);
+				currResult = gameResults.get(game);
 				break;
 			case TOURNAMENT:
 				currResult = SkatConstants.getTournamentGameValue(true,
-						this.gameResults.get(game), this.playerCount);
+						gameResults.get(game), playerCount);
 				break;
 			}
-			this.displayValues.get(game).add(currResult);
+			displayValues.get(game).add(currResult);
 		}
 	}
 
@@ -206,27 +210,25 @@ class SkatListTableModel extends AbstractTableModel {
 			Player declarer, int gameResult) {
 
 		// FIXME works only on 3 player series
-		this.declarers.add(declarer);
-		this.gameResults.add(new Integer(gameResult));
+		declarers.add(declarer);
+		gameResults.add(new Integer(gameResult));
 
 		int declarerColumn = getDeclarerColumn(leftOpponent, rightOpponent,
 				player, declarer);
 
 		if (declarer != null) {
-			this.playerResults.get(declarerColumn).add(new Integer(gameResult));
-			this.playerResults.get((declarerColumn + 1) % 3)
-					.add(new Integer(0));
-			this.playerResults.get((declarerColumn + 2) % 3)
-					.add(new Integer(0));
+			playerResults.get(declarerColumn).add(new Integer(gameResult));
+			playerResults.get((declarerColumn + 1) % 3).add(new Integer(0));
+			playerResults.get((declarerColumn + 2) % 3).add(new Integer(0));
 		} else {
 			// game was passed in
-			for (int i = 0; i < this.playerCount; i++) {
-				this.playerResults.get(i).add(0);
+			for (int i = 0; i < playerCount; i++) {
+				playerResults.get(i).add(0);
 			}
 		}
 		calculateDisplayValues();
 
-		this.fireTableDataChanged();
+		fireTableDataChanged();
 	}
 
 	int getDeclarerColumn(Player leftOpponent, Player rightOpponent,
@@ -250,43 +252,43 @@ class SkatListTableModel extends AbstractTableModel {
 	 */
 	void clearList() {
 
-		this.declarers.clear();
+		declarers.clear();
 		for (List<Integer> currList : playerResults) {
 
 			currList.clear();
 		}
-		this.gameResults.clear();
-		this.displayValues.clear();
+		gameResults.clear();
+		displayValues.clear();
 
-		this.fireTableDataChanged();
+		fireTableDataChanged();
 	}
 
 	public void setPlayerCount(int newPlayerCount) {
 
-		this.declarers.clear();
-		this.gameResults.clear();
+		declarers.clear();
+		gameResults.clear();
 
-		this.playerCount = newPlayerCount;
+		playerCount = newPlayerCount;
 
 		setColumns();
 
-		this.fireTableStructureChanged();
-		this.fireTableDataChanged();
+		fireTableStructureChanged();
+		fireTableDataChanged();
 	}
 
 	void setColumns() {
 
-		this.playerResults.clear();
-		this.displayValues.clear();
-		this.columns.clear();
+		playerResults.clear();
+		displayValues.clear();
+		columns.clear();
 
-		for (int i = 0; i < this.playerCount; i++) {
-
-			this.columns.add("P" + i);
-			this.playerResults.add(new ArrayList<Integer>());
-			this.displayValues.add(new ArrayList<Integer>());
+		for (int i = 0; i < playerCount; i++) {
+			// FIXME (jan 14.12.2010) get player names
+			columns.add("P" + i);
+			playerResults.add(new ArrayList<Integer>());
+			displayValues.add(new ArrayList<Integer>());
 		}
-		this.columns.add("Games");
-		this.displayValues.add(new ArrayList<Integer>());
+		columns.add(strings.getString("games")); //$NON-NLS-1$
+		displayValues.add(new ArrayList<Integer>());
 	}
 }

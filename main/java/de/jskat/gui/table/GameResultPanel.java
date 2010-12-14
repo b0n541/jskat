@@ -96,4 +96,12 @@ class GameResultPanel extends JPanel {
 
 		userPosition = newUserPosition;
 	}
+
+	public void resetPanel() {
+
+		for (TrickPanel panel : trickPanelList) {
+
+			panel.clearCards();
+		}
+	}
 }

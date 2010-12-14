@@ -59,7 +59,7 @@ public class PlayGroundPanel extends JPanel {
 				"width 50%, growx, growy, hmin 20%, hmax 20%, align right, wrap"); //$NON-NLS-1$
 		add(gameContextPanel, "span 2, growx, growy, align center, wrap"); //$NON-NLS-1$
 		add(userPanel,
-				"span 2, growx, growy, hmin 20%, hmax 20%, align center, wrap"); //$NON-NLS-1$
+				"span 2, growx, growy, hmin 33%, hmax 33%, align center, wrap"); //$NON-NLS-1$
 
 		backGroundImage = jskatBitmaps.getSkatTableImage();
 	}
