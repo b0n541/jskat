@@ -184,11 +184,11 @@ abstract class HandPanel extends JPanel {
 				break;
 			}
 
-			headerText.append(" Bid: ");
+			headerText.append(" " + strings.getString("bid") + ": "); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 			headerText.append(bidValue);
 
 			if (playerPassed) {
-				headerText.append(" (passed)");
+				headerText.append(" (" + strings.getString("passed") + ")"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 			}
 
 			if (declarer) {
