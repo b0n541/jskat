@@ -50,11 +50,9 @@ class GameInformationPanel extends JPanel {
 	/**
 	 * Constructor
 	 */
-	GameInformationPanel(JSkatGraphicRepository jskatBitmaps) {
+	GameInformationPanel() {
 
-		super();
-
-		bitmaps = jskatBitmaps;
+		bitmaps = JSkatGraphicRepository.instance();
 		strings = JSkatResourceBundle.instance();
 
 		initPanel();

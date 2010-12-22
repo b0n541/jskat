@@ -88,18 +88,17 @@ abstract class HandPanel extends JPanel {
 	 * @param jskatBitmaps
 	 *            Card images
 	 */
-	HandPanel(ActionMap actions, JSkatGraphicRepository jskatBitmaps,
-			int maxCards) {
+	HandPanel(ActionMap actions, int maxCards) {
 
 		setActionMap(actions);
-		bitmaps = jskatBitmaps;
+		bitmaps = JSkatGraphicRepository.instance();
 		strings = JSkatResourceBundle.instance();
 		maxCardCount = maxCards;
 
 		setOpaque(false);
 
 		headerLabel = new JLabel(" "); //$NON-NLS-1$
-		clockPanel = new ClockPanel(jskatBitmaps);
+		clockPanel = new ClockPanel();
 
 		initPanel();
 	}

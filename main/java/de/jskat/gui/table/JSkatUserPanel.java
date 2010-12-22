@@ -17,7 +17,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.SkatGameData.GameState;
-import de.jskat.gui.img.JSkatGraphicRepository;
 
 /**
  * Panel for showing informations about the user
@@ -31,12 +30,11 @@ class JSkatUserPanel extends HandPanel {
 	private GameState gameState;
 
 	/**
-	 * @see HandPanel#HandPanel(ActionMap, JSkatGraphicRepository, int)
+	 * @see HandPanel#HandPanel(ActionMap, int)
 	 */
-	JSkatUserPanel(ActionMap actions, JSkatGraphicRepository jskatBitmaps,
-			int maxCards) {
+	JSkatUserPanel(ActionMap actions, int maxCards) {
 
-		super(actions, jskatBitmaps, maxCards);
+		super(actions, maxCards);
 		this.showCards();
 	}
 

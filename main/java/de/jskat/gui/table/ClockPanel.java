@@ -29,23 +29,17 @@ import de.jskat.gui.img.JSkatGraphicRepository.IconSize;
 public class ClockPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private JSkatGraphicRepository bitmaps;
 
 	private JLabel timeLabel;
 	private double playerTimeInSeconds;
 
 	/**
 	 * Constructor
-	 * 
-	 * @param jskatBitmaps
-	 *            Bitmaps
 	 */
-	public ClockPanel(JSkatGraphicRepository jskatBitmaps) {
+	public ClockPanel() {
 
-		bitmaps = jskatBitmaps;
-
-		ImageIcon clock = new ImageIcon(bitmaps.getIconImage(Icon.CLOCK,
-				IconSize.SMALL));
+		ImageIcon clock = new ImageIcon(JSkatGraphicRepository.instance()
+				.getIconImage(Icon.CLOCK, IconSize.SMALL));
 		JLabel clockLabel = new JLabel(clock);
 		playerTimeInSeconds = 0.0d;
 		timeLabel = new JLabel(getPlayerTimeString());

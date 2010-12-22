@@ -157,18 +157,18 @@ public class SkatTablePanel extends AbstractTabPanel {
 		userPanel = getPlayerPanel();
 		createGameContextPanel();
 
-		return new PlayGroundPanel(bitmaps, gameInfoPanel, leftOpponentPanel,
+		return new PlayGroundPanel(gameInfoPanel, leftOpponentPanel,
 				rightOpponentPanel, gameContextPanel, userPanel);
 	}
 
 	private GameInformationPanel getGameInfoPanel() {
 
-		return new GameInformationPanel(bitmaps);
+		return new GameInformationPanel();
 	}
 
 	private OpponentPanel getOpponentPanel() {
 
-		return new OpponentPanel(getActionMap(), bitmaps, 12);
+		return new OpponentPanel(getActionMap(), 12);
 	}
 
 	protected void addContextPanel(ContextPanelTypes panelType, JPanel panel) {
@@ -220,7 +220,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	private JSkatUserPanel getPlayerPanel() {
 
-		return new JSkatUserPanel(getActionMap(), bitmaps, 12);
+		return new JSkatUserPanel(getActionMap(), 12);
 	}
 
 	private HandPanel getPlayerPanel(Player player) {

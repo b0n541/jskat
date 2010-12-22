@@ -31,8 +31,6 @@ public class PlayGroundPanel extends JPanel {
 	/**
 	 * Constructor
 	 * 
-	 * @param jskatBitmaps
-	 *            Graphic repository
 	 * @param gameInfoPanel
 	 *            Game info panel
 	 * @param leftOpponentPanel
@@ -44,8 +42,7 @@ public class PlayGroundPanel extends JPanel {
 	 * @param userPanel
 	 *            User panel
 	 */
-	public PlayGroundPanel(JSkatGraphicRepository jskatBitmaps,
-			GameInformationPanel gameInfoPanel,
+	public PlayGroundPanel(GameInformationPanel gameInfoPanel,
 			OpponentPanel leftOpponentPanel, OpponentPanel rightOpponentPanel,
 			JPanel gameContextPanel, JSkatUserPanel userPanel) {
 
@@ -61,7 +58,7 @@ public class PlayGroundPanel extends JPanel {
 		add(userPanel,
 				"span 2, growx, growy, hmin 33%, hmax 33%, align center, wrap"); //$NON-NLS-1$
 
-		backGroundImage = jskatBitmaps.getSkatTableImage();
+		backGroundImage = JSkatGraphicRepository.instance().getSkatTableImage();
 	}
 
 	@Override
