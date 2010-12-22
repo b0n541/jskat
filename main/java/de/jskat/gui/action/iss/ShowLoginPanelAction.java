@@ -45,6 +45,5 @@ public class ShowLoginPanelAction extends AbstractJSkatAction {
 	public void actionPerformed(ActionEvent e) {
 
 		jskat.getIssController().showISSLoginPanel();
-		jskat.getIssController().createTable("Blubb", "Blubb", 0);
 	}
 }
