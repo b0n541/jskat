@@ -196,20 +196,12 @@ class TrickPanel extends JPanel implements ComponentListener {
 
 	private void scaleImages() {
 
-		log.debug("Scaling images");
 		int panelWidth = getWidth();
 		int panelHeight = getHeight();
 
 		Image sampleCard = bitmaps.getCardImage(Suit.CLUBS, Rank.JACK);
 		int imageWidth = sampleCard.getWidth(this);
-		log.debug("Sample card width: " + imageWidth);
 		int imageHeight = sampleCard.getHeight(this);
-		log.debug("Sample card height: " + imageHeight);
-
-		if (imageWidth == -1 || imageHeight == -1) {
-			log.error("Image size for sample card: " + imageWidth + "x"
-					+ imageHeight);
-		}
 
 		double scaleX = ((100.0 * panelWidth) / (imageWidth * 1.6)) / 100.0;
 		double scaleY = ((100.0 * panelHeight) / (imageHeight * 1.6)) / 100.0;
@@ -224,12 +216,10 @@ class TrickPanel extends JPanel implements ComponentListener {
 		}
 		scaleFactor *= cardScaleFactor;
 
-		log.debug("Scale factor: " + scaleFactor);
-
 		for (Card card : Card.values()) {
 
-			Image cardImage = bitmaps.getCardImage(
-					card.getSuit(), card.getRank());
+			Image cardImage = bitmaps.getCardImage(card.getSuit(),
+					card.getRank());
 
 			int scaledWidth = (int) (imageWidth * scaleFactor);
 			int scaledHeight = (int) (imageHeight * scaleFactor);
