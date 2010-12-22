@@ -44,10 +44,9 @@ public class SkatTable {
 	 */
 	public SkatTable(SkatTableOptions tableOptions) {
 
-		this.options = tableOptions;
-		startSkatSeries(this.options.getMaxPlayerCount());
+		options = tableOptions;
 
-		log.debug("SkatTable created with max. " + this.options.getMaxPlayerCount() + " players."); //$NON-NLS-1$ //$NON-NLS-2$
+		log.debug("SkatTable created with max. " + options.getMaxPlayerCount() + " players."); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**
@@ -57,7 +56,7 @@ public class SkatTable {
 	 */
 	public boolean isSeriesRunning() {
 
-		return this.series != null && this.series.isRunning();
+		return series != null && series.isRunning();
 	}
 
 	/**
@@ -66,20 +65,20 @@ public class SkatTable {
 	 * @param rounds
 	 *            Number of rounds to be played
 	 */
-	public void startSkatSeries(int rounds) {
+	public void startSkatSeries(int rounds, boolean unlimitedRounds) {
 
 		if (!isSeriesRunning()) {
 			// TODO save old series data?
-			this.series = new SkatSeries(this.tableName);
-			this.series.setView(this.view);
+			series = new SkatSeries(tableName);
+			series.setView(view);
 		}
 
-		if (this.player.size() >= 3) {
+		if (player.size() >= 3) {
 
-			this.view.startSeries(this.tableName);
-			this.series.setPlayer(this.player);
-			this.series.startSeries(rounds);
-			this.series.start();
+			view.startSeries(tableName);
+			series.setPlayer(player);
+			series.startSeries(rounds, unlimitedRounds);
+			series.start();
 		}
 	}
 
@@ -88,9 +87,9 @@ public class SkatTable {
 	 */
 	public void pauseSkatSeries() {
 
-		synchronized (this.series) {
+		synchronized (series) {
 
-			this.series.startWaiting();
+			series.startWaiting();
 		}
 	}
 
@@ -99,10 +98,10 @@ public class SkatTable {
 	 */
 	public void resumeSkatSeries() {
 
-		synchronized (this.series) {
+		synchronized (series) {
 
-			this.series.stopWaiting();
-			this.series.notify();
+			series.stopWaiting();
+			series.notify();
 		}
 	}
 
@@ -111,7 +110,7 @@ public class SkatTable {
 	 */
 	public void pauseSkatGame() {
 
-		this.series.pauseSkatGame();
+		series.pauseSkatGame();
 	}
 
 	/**
@@ -119,7 +118,7 @@ public class SkatTable {
 	 */
 	public void resumeSkatGame() {
 
-		this.series.resumeSkatGame();
+		series.resumeSkatGame();
 	}
 
 	/**
@@ -129,7 +128,7 @@ public class SkatTable {
 	 */
 	public boolean isSkatGameWaiting() {
 
-		return this.series.isSkatGameWaiting();
+		return series.isSkatGameWaiting();
 	}
 
 	/**
@@ -139,7 +138,7 @@ public class SkatTable {
 	 */
 	public boolean isSkatSeriesWaiting() {
 
-		return this.series.isWaiting();
+		return series.isWaiting();
 	}
 
 	/**
@@ -149,7 +148,7 @@ public class SkatTable {
 	 */
 	public int getMaxPlayerCount() {
 
-		return this.options.getMaxPlayerCount();
+		return options.getMaxPlayerCount();
 	}
 
 	/**
@@ -159,7 +158,7 @@ public class SkatTable {
 	 */
 	public int getPlayerCount() {
 
-		return this.player.size();
+		return player.size();
 	}
 
 	/**
@@ -173,9 +172,9 @@ public class SkatTable {
 
 		boolean result = false;
 
-		if (this.player.size() < this.options.getMaxPlayerCount()) {
+		if (player.size() < options.getMaxPlayerCount()) {
 
-			this.player.add(newPlayer);
+			player.add(newPlayer);
 
 			result = true;
 		}
@@ -188,7 +187,7 @@ public class SkatTable {
 	 */
 	public void removePlayers() {
 
-		this.player.clear();
+		player.clear();
 	}
 
 	/**
@@ -198,7 +197,7 @@ public class SkatTable {
 	 */
 	public SeriesState getSeriesState() {
 
-		return this.series.getSeriesState();
+		return series.getSeriesState();
 	}
 
 	/**
@@ -208,7 +207,7 @@ public class SkatTable {
 	 */
 	public int getCurrentGameID() {
 
-		return this.series.getCurrentGameID();
+		return series.getCurrentGameID();
 	}
 
 	/**
@@ -219,7 +218,7 @@ public class SkatTable {
 	 */
 	public void setView(IJSkatView newView) {
 
-		this.view = newView;
+		view = newView;
 	}
 
 	/**
@@ -229,7 +228,7 @@ public class SkatTable {
 	 */
 	public String getName() {
 
-		return this.tableName;
+		return tableName;
 	}
 
 	/**
@@ -240,6 +239,6 @@ public class SkatTable {
 	 */
 	public void setName(String newTableName) {
 
-		this.tableName = newTableName;
+		tableName = newTableName;
 	}
 }

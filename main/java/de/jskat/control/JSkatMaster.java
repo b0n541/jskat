@@ -151,7 +151,7 @@ public class JSkatMaster {
 			table.placePlayer(getPlayerInstance(table.getName(), player));
 		}
 
-		table.startSkatSeries(numberOfRounds);
+		table.startSkatSeries(numberOfRounds, unlimited);
 	}
 
 	private IJSkatPlayer getPlayerInstance(String tableName,

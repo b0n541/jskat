@@ -36,6 +36,7 @@ public class SkatSeries extends JSkatThread {
 	private int maxSleep = 0;
 	private SkatSeriesData data;
 	private int roundsToGo = 0;
+	private boolean unlimitedRounds = false;
 	private Map<Player, IJSkatPlayer> player;
 	private SkatGame currSkatGame;
 
@@ -49,10 +50,10 @@ public class SkatSeries extends JSkatThread {
 	 */
 	public SkatSeries(String tableName) {
 
-		this.data = new SkatSeriesData();
-		this.data.setState(SeriesState.WAITING);
-		this.data.setTableName(tableName);
-		this.player = new HashMap<Player, IJSkatPlayer>();
+		data = new SkatSeriesData();
+		data.setState(SeriesState.WAITING);
+		data.setTableName(tableName);
+		player = new HashMap<Player, IJSkatPlayer>();
 	}
 
 	/**
@@ -74,7 +75,7 @@ public class SkatSeries extends JSkatThread {
 		player.put(Player.MIDDLE_HAND, newPlayer.get(1));
 		player.put(Player.HIND_HAND, newPlayer.get(2));
 
-		log.debug("Player order: " + this.player); //$NON-NLS-1$
+		log.debug("Player order: " + player); //$NON-NLS-1$
 	}
 
 	/**
@@ -84,7 +85,7 @@ public class SkatSeries extends JSkatThread {
 	 */
 	public boolean isRunning() {
 
-		return this.data.getState() == SeriesState.RUNNING;
+		return data.getState() == SeriesState.RUNNING;
 	}
 
 	/**
@@ -93,10 +94,11 @@ public class SkatSeries extends JSkatThread {
 	 * @param rounds
 	 *            Number of rounds to be played
 	 */
-	public void startSeries(int rounds) {
+	public void startSeries(int rounds, boolean newUnlimitedRound) {
 
-		this.roundsToGo = rounds;
-		this.data.setState(SeriesState.RUNNING);
+		roundsToGo = rounds;
+		unlimitedRounds = newUnlimitedRound;
+		data.setState(SeriesState.RUNNING);
 	}
 
 	/**
@@ -107,7 +109,7 @@ public class SkatSeries extends JSkatThread {
 
 		int roundsPlayed = 0;
 
-		while (this.roundsToGo > 0) {
+		while (roundsToGo > 0 || unlimitedRounds) {
 
 			log.debug("Playing round " + (roundsPlayed + 1)); //$NON-NLS-1$
 
@@ -115,33 +117,31 @@ public class SkatSeries extends JSkatThread {
 
 				if (j > 0 || roundsPlayed > 0) {
 					// change player positions after first game
-					IJSkatPlayer helper = this.player.get(Player.HIND_HAND);
-					this.player.put(Player.HIND_HAND,
-							this.player.get(Player.FORE_HAND));
-					this.player.put(Player.FORE_HAND,
-							this.player.get(Player.MIDDLE_HAND));
-					this.player.put(Player.MIDDLE_HAND, helper);
+					IJSkatPlayer helper = player.get(Player.HIND_HAND);
+					player.put(Player.HIND_HAND, player.get(Player.FORE_HAND));
+					player.put(Player.FORE_HAND, player.get(Player.MIDDLE_HAND));
+					player.put(Player.MIDDLE_HAND, helper);
 				}
 
-				this.currSkatGame = new SkatGame(this.data.getTableName(),
-						this.player.get(Player.FORE_HAND),
-						this.player.get(Player.MIDDLE_HAND),
-						this.player.get(Player.HIND_HAND));
+				currSkatGame = new SkatGame(data.getTableName(),
+						player.get(Player.FORE_HAND),
+						player.get(Player.MIDDLE_HAND),
+						player.get(Player.HIND_HAND));
 
 				setViewPositions();
 
-				this.currSkatGame.setView(this.view);
+				currSkatGame.setView(view);
 
 				log.debug("Playing game " + (j + 1)); //$NON-NLS-1$
 
-				this.data.addGame(this.currSkatGame);
-				this.currSkatGame.start();
+				data.addGame(currSkatGame);
+				currSkatGame.start();
 				try {
-					this.currSkatGame.join();
+					currSkatGame.join();
 
 					log.debug("Game ended: join"); //$NON-NLS-1$
 
-					sleep(this.maxSleep);
+					sleep(maxSleep);
 
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
@@ -156,16 +156,16 @@ public class SkatSeries extends JSkatThread {
 				checkWaitCondition();
 			}
 
-			this.roundsToGo--;
+			roundsToGo--;
 			roundsPlayed++;
 
 			checkWaitCondition();
 		}
 
-		this.data.setState(SeriesState.SERIES_FINISHED);
+		data.setState(SeriesState.SERIES_FINISHED);
 		view.setSeriesState(data.getTableName(), SeriesState.SERIES_FINISHED);
 
-		log.debug(this.data.getState());
+		log.debug(data.getState());
 	}
 
 	private void setViewPositions() {
@@ -204,7 +204,7 @@ public class SkatSeries extends JSkatThread {
 	 */
 	public SeriesState getSeriesState() {
 
-		return this.data.getState();
+		return data.getState();
 	}
 
 	/**
@@ -214,7 +214,7 @@ public class SkatSeries extends JSkatThread {
 	 */
 	public int getCurrentGameID() {
 
-		return this.data.getCurrentGameID();
+		return data.getCurrentGameID();
 	}
 
 	/**
@@ -222,9 +222,9 @@ public class SkatSeries extends JSkatThread {
 	 */
 	public void pauseSkatGame() {
 
-		synchronized (this.currSkatGame) {
+		synchronized (currSkatGame) {
 
-			this.currSkatGame.startWaiting();
+			currSkatGame.startWaiting();
 		}
 	}
 
@@ -233,10 +233,10 @@ public class SkatSeries extends JSkatThread {
 	 */
 	public void resumeSkatGame() {
 
-		synchronized (this.currSkatGame) {
+		synchronized (currSkatGame) {
 
-			this.currSkatGame.stopWaiting();
-			this.currSkatGame.notify();
+			currSkatGame.stopWaiting();
+			currSkatGame.notify();
 		}
 	}
 
@@ -247,7 +247,7 @@ public class SkatSeries extends JSkatThread {
 	 */
 	public boolean isSkatGameWaiting() {
 
-		return this.currSkatGame.isWaiting();
+		return currSkatGame.isWaiting();
 	}
 
 	/**
@@ -258,6 +258,6 @@ public class SkatSeries extends JSkatThread {
 	 */
 	public void setView(IJSkatView newView) {
 
-		this.view = newView;
+		view = newView;
 	}
 }
