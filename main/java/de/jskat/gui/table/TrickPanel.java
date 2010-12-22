@@ -18,6 +18,7 @@ import java.awt.RenderingHints;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -195,14 +196,15 @@ class TrickPanel extends JPanel implements ComponentListener {
 
 	private void scaleImages() {
 
+		log.debug("Scaling images");
 		int panelWidth = getWidth();
 		int panelHeight = getHeight();
 
 		Image sampleCard = bitmaps.getCardImage(Suit.CLUBS, Rank.JACK);
 		int imageWidth = sampleCard.getWidth(this);
-		assert imageWidth != -1;
+		log.debug("Sample card width: " + imageWidth);
 		int imageHeight = sampleCard.getHeight(this);
-		assert imageHeight != -1;
+		log.debug("Sample card height: " + imageHeight);
 
 		if (imageWidth == -1 || imageHeight == -1) {
 			log.error("Image size for sample card: " + imageWidth + "x"
@@ -226,12 +228,21 @@ class TrickPanel extends JPanel implements ComponentListener {
 
 		for (Card card : Card.values()) {
 
-			Image cardImage = bitmaps.getCardImage(card.getSuit(),
-					card.getRank());
+			Image cardImage = bitmaps.getCardImage(
+					card.getSuit(), card.getRank());
 
-			scaledCardImages.put(card, cardImage.getScaledInstance(
-					(int) (imageWidth * scaleFactor),
-					(int) (imageHeight * scaleFactor), Image.SCALE_SMOOTH));
+			int scaledWidth = (int) (imageWidth * scaleFactor);
+			int scaledHeight = (int) (imageHeight * scaleFactor);
+
+			BufferedImage scaledImage = new BufferedImage(scaledWidth,
+					scaledHeight, BufferedImage.TYPE_INT_ARGB);
+			Graphics2D g2 = scaledImage.createGraphics();
+			g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+					RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+			g2.drawImage(cardImage, 0, 0, scaledWidth, scaledHeight, null);
+			g2.dispose();
+
+			scaledCardImages.put(card, scaledImage);
 		}
 	}
 
