@@ -206,7 +206,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 				"fill")); //$NON-NLS-1$
 		lastTrickPanel = new TrickPlayPanel(bitmaps, 0.6, false);
 		trickHoldingPanel.add(lastTrickPanel, "width 25%"); //$NON-NLS-1$
-		trickPanel = new TrickPlayPanel(bitmaps, 0.6, true);
+		trickPanel = new TrickPlayPanel(bitmaps, 0.8, true);
 		trickHoldingPanel.add(trickPanel, "grow"); //$NON-NLS-1$
 		JPanel blankPanel = new JPanel();
 		blankPanel.setOpaque(false);
