@@ -18,6 +18,7 @@ import javax.swing.Action;
 
 import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository.Icon;
+import de.jskat.util.JSkatResourceBundle;
 
 /**
  * Implements the action for leaving a skat table on ISS
@@ -31,7 +32,7 @@ public class ReadyAction extends AbstractJSkatAction {
 	 */
 	public ReadyAction() {
 
-		putValue(Action.NAME, "Ready to play");
+		putValue(Action.NAME, JSkatResourceBundle.instance().getString("ready")); //$NON-NLS-1$
 
 		setIcon(Icon.OK);
 	}

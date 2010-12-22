@@ -18,6 +18,7 @@ import javax.swing.Action;
 
 import de.jskat.gui.action.AbstractJSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository.Icon;
+import de.jskat.util.JSkatResourceBundle;
 
 /**
  * Implements the action for leaving a skat table on ISS
@@ -31,7 +32,8 @@ public class LeaveIssTableAction extends AbstractJSkatAction {
 	 */
 	public LeaveIssTableAction() {
 
-		putValue(Action.NAME, "Leave table");
+		putValue(Action.NAME,
+				JSkatResourceBundle.instance().getString("leave_table")); //$NON-NLS-1$
 
 		setIcon(Icon.LOG_OUT);
 	}
