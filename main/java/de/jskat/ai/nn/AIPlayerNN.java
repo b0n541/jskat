@@ -172,15 +172,14 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		CardList possibleCards = getPlayableCards(this.knowledge
 				.getTrickCards());
 
-		log
-				.debug("found " + possibleCards.size() + " possible cards: " + possibleCards); //$NON-NLS-1$//$NON-NLS-2$
+		log.debug("found " + possibleCards.size() + " possible cards: " + possibleCards); //$NON-NLS-1$//$NON-NLS-2$
 
 		if (possibleCards.size() == 1) {
 
 			bestCardIndex = 0;
 		} else {
-
-			SkatNetworks.getInstance();
+			// FIXME (jan 22.12.2010) looks wrong
+			SkatNetworks.instance();
 			NeuralNetwork net = SkatNetworks.getNetwork(this.gameType,
 					isDeclarer());
 
@@ -219,8 +218,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		}
 
 		log.debug("choosing card " + bestCardIndex); //$NON-NLS-1$
-		log
-				.debug("as player " + this.knowledge.getPlayerPosition() + ": " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$//$NON-NLS-2$
+		log.debug("as player " + this.knowledge.getPlayerPosition() + ": " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$//$NON-NLS-2$
 
 		return possibleCards.get(bestCardIndex);
 	}
@@ -308,8 +306,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		if (this.knowledge.couldHaveCard(this.knowledge.getPlayerPosition(),
 				card)) {
 			inputs[64 + getNetInputIndex(this.gameType, card)] = 1.0d;
-		} else if (this.knowledge.isCardPlayedBy(this.knowledge
-				.getPlayerPosition(), card)) {
+		} else if (this.knowledge.isCardPlayedBy(
+				this.knowledge.getPlayerPosition(), card)) {
 			inputs[64 + getNetInputIndex(this.gameType, card)] = -0.5d;
 		} else {
 			inputs[64 + getNetInputIndex(this.gameType, card)] = 0.0d;
@@ -335,8 +333,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		if (this.knowledge.couldHaveCard(this.knowledge.getPlayerPosition(),
 				card)) {
 			inputs[32 + getNetInputIndex(this.gameType, card)] = 1.0d;
-		} else if (this.knowledge.isCardPlayedBy(this.knowledge
-				.getPlayerPosition(), card)) {
+		} else if (this.knowledge.isCardPlayedBy(
+				this.knowledge.getPlayerPosition(), card)) {
 			inputs[32 + getNetInputIndex(this.gameType, card)] = -0.5d;
 		} else {
 			inputs[32 + getNetInputIndex(this.gameType, card)] = 0.0d;

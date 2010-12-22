@@ -192,7 +192,7 @@ abstract class HandPanel extends JPanel {
 			}
 
 			if (declarer) {
-				headerText.append(" (Declarer)");
+				headerText.append(" (" + strings.getString("declarer") + ")"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 			}
 		}
 
