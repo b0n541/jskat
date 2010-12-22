@@ -83,7 +83,7 @@ class SkatListTableModel extends AbstractTableModel {
 		if (displayValues.get(rowIndex).get(columnIndex) != null) {
 			result = displayValues.get(rowIndex).get(columnIndex);
 		} else {
-			result = "-";
+			result = "-"; //$NON-NLS-1$
 		}
 
 		return result;
@@ -103,6 +103,15 @@ class SkatListTableModel extends AbstractTableModel {
 	public String getColumnName(int col) {
 
 		return columns.get(col);
+	}
+
+	/**
+	 * @see AbstractTableModel#getColumnClass(int)
+	 */
+	@Override
+	public Class<?> getColumnClass(int col) {
+
+		return Integer.class;
 	}
 
 	/**
