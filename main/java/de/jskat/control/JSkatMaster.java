@@ -385,6 +385,8 @@ public class JSkatMaster {
 	 */
 	public void trainNeuralNetworks() {
 
+		view.showTrainingOverview();
+
 		NNTrainer nullTrainer = new NNTrainer();
 		nullTrainer.setGameType(GameType.NULL);
 		nullTrainer.start();
@@ -735,5 +737,29 @@ public class JSkatMaster {
 		}
 
 		return result;
+	}
+
+	/**
+	 * Adds training results
+	 * 
+	 * @param gameType
+	 *            Game type
+	 * @param episodes
+	 *            Number of episodes
+	 * @param totalWonGames
+	 *            Total number of won games
+	 * @param episodeWonGames
+	 *            Number of won games in last episode
+	 * @param avgDeclDiff
+	 *            Average declarer difference
+	 * @param avgOppDiff
+	 *            Average opponent difference
+	 */
+	public void addTrainingResult(GameType gameType, long episodes,
+			long totalWonGames, long episodeWonGames, double avgDeclDiff,
+			double avgOppDiff) {
+
+		view.addTrainingResult(gameType, episodes, totalWonGames,
+				episodeWonGames, avgDeclDiff, avgOppDiff);
 	}
 }

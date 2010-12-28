@@ -26,10 +26,12 @@ import de.jskat.data.iss.ISSMoveInformation;
 import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
+import de.jskat.util.GameType;
 import de.jskat.util.Player;
 
 /**
- * Doesn't do anything
+ * Doesn't do anything<br />
+ * is needed for simulating games without gui
  */
 public class NullView implements IJSkatView {
 
@@ -437,6 +439,14 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
+	 * @see IJSkatView#showTrainingOverview()
+	 */
+	@Override
+	public void showTrainingOverview() {
+		// empty method by indent
+	}
+
+	/**
 	 * @see IJSkatView#closeTabPanel(java.lang.String)
 	 */
 	@Override
@@ -552,6 +562,21 @@ public class NullView implements IJSkatView {
 	 */
 	@Override
 	public void showCardNotAllowedMessage(@SuppressWarnings("unused") Card card) {
+		// empty method by indent
+	}
+
+	/**
+	 * @see IJSkatView#addTrainingResult(GameType, long, long, long, double,
+	 *      double)
+	 */
+	@Override
+	public void addTrainingResult(
+			@SuppressWarnings("unused") GameType gameType,
+			@SuppressWarnings("unused") long episodes,
+			@SuppressWarnings("unused") long totalWonGames,
+			@SuppressWarnings("unused") long episodeWonGames,
+			@SuppressWarnings("unused") double avgDeclDiff,
+			@SuppressWarnings("unused") double avgOppDiff) {
 		// empty method by indent
 	}
 }

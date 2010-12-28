@@ -21,6 +21,7 @@ import de.jskat.ai.IJSkatPlayer;
 import de.jskat.ai.nn.AIPlayerNN;
 import de.jskat.ai.nn.data.SkatNetworks;
 import de.jskat.ai.nn.util.NeuralNetwork;
+import de.jskat.control.JSkatMaster;
 import de.jskat.control.JSkatThread;
 import de.jskat.control.SkatGame;
 import de.jskat.data.GameAnnouncement;
@@ -37,8 +38,9 @@ public class NNTrainer extends JSkatThread {
 
 	private static Log log = LogFactory.getLog(NNTrainer.class);
 
+	private JSkatMaster jskat;
+
 	private Random rand;
-	private List<Boolean> gameWonLost;
 	private List<StringBuffer> nullGames;
 
 	private GameType gameType;
@@ -48,9 +50,10 @@ public class NNTrainer extends JSkatThread {
 	 */
 	public NNTrainer() {
 
-		this.gameWonLost = new ArrayList<Boolean>();
-		this.nullGames = new ArrayList<StringBuffer>();
-		this.rand = new Random();
+		jskat = JSkatMaster.instance();
+
+		rand = new Random();
+		nullGames = new ArrayList<StringBuffer>();
 
 		initLearningPatterns();
 	}
@@ -59,69 +62,69 @@ public class NNTrainer extends JSkatThread {
 
 		// test a perfect null game
 		StringBuffer buffer = new StringBuffer();
-		buffer.append("CA CT CK "); // 3 cards fore hand
-		buffer.append("C9 ST SK "); // 3 cards middle hand
-		buffer.append("H7 DA DT "); // 3 cards hind hand
-		buffer.append("SA HA "); // skat
-		buffer.append("CQ CJ C8 C7 "); // 4 cards fore hand
-		buffer.append("SQ SJ HK HQ "); // 4 cards middle hand
-		buffer.append("DK DQ D9 D8 "); // 4 cards hind hand
-		buffer.append("S9 S8 S7 "); // 3 cards fore hand
-		buffer.append("HJ H9 H8 "); // 3 cards middle hand
-		buffer.append("D7 HT DJ"); // 3 cards hind hand
-		this.nullGames.add(buffer);
+		buffer.append("CA CT CK "); // 3 cards fore hand //$NON-NLS-1$
+		buffer.append("C9 ST SK "); // 3 cards middle hand //$NON-NLS-1$
+		buffer.append("H7 DA DT "); // 3 cards hind hand //$NON-NLS-1$
+		buffer.append("SA HA "); // skat //$NON-NLS-1$
+		buffer.append("CQ CJ C8 C7 "); // 4 cards fore hand //$NON-NLS-1$
+		buffer.append("SQ SJ HK HQ "); // 4 cards middle hand //$NON-NLS-1$
+		buffer.append("DK DQ D9 D8 "); // 4 cards hind hand //$NON-NLS-1$
+		buffer.append("S9 S8 S7 "); // 3 cards fore hand //$NON-NLS-1$
+		buffer.append("HJ H9 H8 "); // 3 cards middle hand //$NON-NLS-1$
+		buffer.append("D7 HT DJ"); // 3 cards hind hand //$NON-NLS-1$
+		nullGames.add(buffer);
 
 		buffer = new StringBuffer();
-		buffer.append("CA CT CK "); // 3 cards fore hand
-		buffer.append("S9 ST SK "); // 3 cards middle hand
-		buffer.append("H7 DA DT "); // 3 cards hind hand
-		buffer.append("SA HA "); // skat
-		buffer.append("CQ CJ C8 C7 "); // 4 cards fore hand
-		buffer.append("SQ SJ HK HQ "); // 4 cards middle hand
-		buffer.append("DK DQ D9 D8 "); // 4 cards hind hand
-		buffer.append("C9 S8 S7 "); // 3 cards fore hand
-		buffer.append("HJ H9 H8 "); // 3 cards middle hand
-		buffer.append("D7 HT DJ"); // 3 cards hind hand
-		this.nullGames.add(buffer);
+		buffer.append("CA CT CK "); // 3 cards fore hand //$NON-NLS-1$
+		buffer.append("S9 ST SK "); // 3 cards middle hand //$NON-NLS-1$
+		buffer.append("H7 DA DT "); // 3 cards hind hand //$NON-NLS-1$
+		buffer.append("SA HA "); // skat //$NON-NLS-1$
+		buffer.append("CQ CJ C8 C7 "); // 4 cards fore hand //$NON-NLS-1$
+		buffer.append("SQ SJ HK HQ "); // 4 cards middle hand //$NON-NLS-1$
+		buffer.append("DK DQ D9 D8 "); // 4 cards hind hand //$NON-NLS-1$
+		buffer.append("C9 S8 S7 "); // 3 cards fore hand //$NON-NLS-1$
+		buffer.append("HJ H9 H8 "); // 3 cards middle hand //$NON-NLS-1$
+		buffer.append("D7 HT DJ"); // 3 cards hind hand //$NON-NLS-1$
+		nullGames.add(buffer);
 
 		buffer = new StringBuffer();
-		buffer.append("C9 C8 C7 "); // 3 cards fore hand
-		buffer.append("CA CT CK "); // 3 cards middle hand
-		buffer.append("CQ CJ SA "); // 3 cards hind hand
-		buffer.append("SJ SK "); // skat
-		buffer.append("ST S9 S8 S7 "); // 4 cards fore hand
-		buffer.append("SQ HA HT HK "); // 4 cards middle hand
-		buffer.append("HQ DA DT DK "); // 4 cards hind hand
-		buffer.append("H9 H8 H7 "); // 3 cards fore hand
-		buffer.append("DQ DJ D9 "); // 3 cards middle hand
-		buffer.append("D8 D7 HJ"); // 3 cards hind hand
-		this.nullGames.add(buffer);
+		buffer.append("C9 C8 C7 "); // 3 cards fore hand //$NON-NLS-1$
+		buffer.append("CA CT CK "); // 3 cards middle hand //$NON-NLS-1$
+		buffer.append("CQ CJ SA "); // 3 cards hind hand //$NON-NLS-1$
+		buffer.append("SJ SK "); // skat //$NON-NLS-1$
+		buffer.append("ST S9 S8 S7 "); // 4 cards fore hand //$NON-NLS-1$
+		buffer.append("SQ HA HT HK "); // 4 cards middle hand //$NON-NLS-1$
+		buffer.append("HQ DA DT DK "); // 4 cards hind hand //$NON-NLS-1$
+		buffer.append("H9 H8 H7 "); // 3 cards fore hand //$NON-NLS-1$
+		buffer.append("DQ DJ D9 "); // 3 cards middle hand //$NON-NLS-1$
+		buffer.append("D8 D7 HJ"); // 3 cards hind hand //$NON-NLS-1$
+		nullGames.add(buffer);
 
 		buffer = new StringBuffer();
-		buffer.append("SA ST SK "); // 3 cards fore hand
-		buffer.append("S9 CT CK "); // 3 cards middle hand
-		buffer.append("H7 DA DT "); // 3 cards hind hand
-		buffer.append("CA HA "); // skat
-		buffer.append("SQ SJ S8 S7 "); // 4 cards fore hand
-		buffer.append("CQ CJ HK HQ "); // 4 cards middle hand
-		buffer.append("DK DQ D9 D8 "); // 4 cards hind hand
-		buffer.append("C9 C8 C7 "); // 3 cards fore hand
-		buffer.append("HJ H9 H8 "); // 3 cards middle hand
-		buffer.append("D7 HT DJ"); // 3 cards hind hand
-		this.nullGames.add(buffer);
+		buffer.append("SA ST SK "); // 3 cards fore hand //$NON-NLS-1$
+		buffer.append("S9 CT CK "); // 3 cards middle hand //$NON-NLS-1$
+		buffer.append("H7 DA DT "); // 3 cards hind hand //$NON-NLS-1$
+		buffer.append("CA HA "); // skat //$NON-NLS-1$
+		buffer.append("SQ SJ S8 S7 "); // 4 cards fore hand //$NON-NLS-1$
+		buffer.append("CQ CJ HK HQ "); // 4 cards middle hand //$NON-NLS-1$
+		buffer.append("DK DQ D9 D8 "); // 4 cards hind hand //$NON-NLS-1$
+		buffer.append("C9 C8 C7 "); // 3 cards fore hand //$NON-NLS-1$
+		buffer.append("HJ H9 H8 "); // 3 cards middle hand //$NON-NLS-1$
+		buffer.append("D7 HT DJ"); // 3 cards hind hand //$NON-NLS-1$
+		nullGames.add(buffer);
 
 		buffer = new StringBuffer();
-		buffer.append("HA HT HK "); // 3 cards fore hand
-		buffer.append("H9 CT CK "); // 3 cards middle hand
-		buffer.append("S7 DA DT "); // 3 cards hind hand
-		buffer.append("CA SA "); // skat
-		buffer.append("HQ HJ H8 H7 "); // 4 cards fore hand
-		buffer.append("CQ CJ SK SQ "); // 4 cards middle hand
-		buffer.append("DK DQ D9 D8 "); // 4 cards hind hand
-		buffer.append("S9 S8 S7 "); // 3 cards fore hand
-		buffer.append("SJ S9 S8 "); // 3 cards middle hand
-		buffer.append("D7 ST DJ"); // 3 cards hind hand
-		this.nullGames.add(buffer);
+		buffer.append("HA HT HK "); // 3 cards fore hand //$NON-NLS-1$
+		buffer.append("H9 CT CK "); // 3 cards middle hand //$NON-NLS-1$
+		buffer.append("S7 DA DT "); // 3 cards hind hand //$NON-NLS-1$
+		buffer.append("CA SA "); // skat //$NON-NLS-1$
+		buffer.append("HQ HJ H8 H7 "); // 4 cards fore hand //$NON-NLS-1$
+		buffer.append("CQ CJ SK SQ "); // 4 cards middle hand //$NON-NLS-1$
+		buffer.append("DK DQ D9 D8 "); // 4 cards hind hand //$NON-NLS-1$
+		buffer.append("S9 S8 S7 "); // 3 cards fore hand //$NON-NLS-1$
+		buffer.append("SJ S9 S8 "); // 3 cards middle hand //$NON-NLS-1$
+		buffer.append("D7 ST DJ"); // 3 cards hind hand //$NON-NLS-1$
+		nullGames.add(buffer);
 	}
 
 	/**
@@ -132,7 +135,7 @@ public class NNTrainer extends JSkatThread {
 	 */
 	public void setGameType(GameType newGameType) {
 
-		this.gameType = newGameType;
+		gameType = newGameType;
 	}
 
 	/**
@@ -155,10 +158,8 @@ public class NNTrainer extends JSkatThread {
 		((AIPlayerNN) nnPlayer2).setIsLearning(true);
 		IJSkatPlayer nnPlayer3 = new AIPlayerNN();
 		((AIPlayerNN) nnPlayer3).setIsLearning(true);
-		NeuralNetwork declarerNet = SkatNetworks
-				.getNetwork(this.gameType, true);
-		NeuralNetwork opponentNet = SkatNetworks.getNetwork(this.gameType,
-				false);
+		NeuralNetwork declarerNet = SkatNetworks.getNetwork(gameType, true);
+		NeuralNetwork opponentNet = SkatNetworks.getNetwork(gameType, false);
 		double avgDeclDiff = 0.0d;
 		double avgOppDiff = 0.0d;
 
@@ -166,25 +167,33 @@ public class NNTrainer extends JSkatThread {
 		long episodesWonGames = 0;
 		long totalWonGames = 0;
 		long totalGames = 0;
-		int episodeSteps = 1000;
+		int episodeSteps = 100;
 
 		while (true) {
 
-			if (episodes % episodeSteps == 1) {
+			if (episodes > 0 && episodes % episodeSteps == 0) {
 
-				log.debug(this.gameType + ": Episode " + episodes
-						+ " won games " + episodesWonGames + " (" + 100
-						* episodesWonGames / (episodeSteps * 3) + " %)"
-						+ " total won games " + totalWonGames + " (" + 100
-						* totalWonGames / totalGames + " %)");
-				log.debug("        Declarer net: "
-						+ declarerNet.getIterations() + " iterations "
-						+ Math.round(avgDeclDiff * 10000.0d) / 10000.d
-						+ " avg diff");
-				log.debug("        Opponent net: "
-						+ opponentNet.getIterations() + " iterations "
-						+ Math.round(avgOppDiff * 10000.0d) / 10000.d
-						+ " avg diff");
+				log.debug(gameType + ": Episode " + episodes + " won games " //$NON-NLS-1$ //$NON-NLS-2$
+						+ episodesWonGames + " (" + 100 * episodesWonGames //$NON-NLS-1$
+						/ (episodeSteps * 3) + " %)" + " total won games " //$NON-NLS-1$ //$NON-NLS-2$
+						+ totalWonGames + " (" + 100 * totalWonGames //$NON-NLS-1$
+						/ totalGames + " %)"); //$NON-NLS-1$
+				log.debug("        Declarer net: " //$NON-NLS-1$
+						+ declarerNet.getIterations()
+						+ " iterations " //$NON-NLS-1$
+						+ Math.round(avgDeclDiff * 10000.0d)
+						/ 10000.d
+						+ " avg diff"); //$NON-NLS-1$
+				log.debug("        Opponent net: " //$NON-NLS-1$
+						+ opponentNet.getIterations()
+						+ " iterations " //$NON-NLS-1$
+						+ Math.round(avgOppDiff * 10000.0d)
+						/ 10000.d
+						+ " avg diff"); //$NON-NLS-1$
+
+				jskat.addTrainingResult(gameType, episodes, totalWonGames,
+						episodesWonGames, avgDeclDiff, avgOppDiff);
+
 				episodesWonGames = 0;
 			}
 
@@ -195,11 +204,11 @@ public class NNTrainer extends JSkatThread {
 				game.setView(new NullView());
 				game.setMaxSleep(0);
 
-				// CardDeck deck = new
-				// CardDeck(this.nullGames.get(rand.nextInt(nullGames.size())).toString());
+				// CardDeck deck = new CardDeck(nullGames.get(
+				// rand.nextInt(nullGames.size())).toString());
 				CardDeck deck = new CardDeck();
 				deck.shuffle();
-				log.debug("Card deck: " + deck);
+				log.debug("Card deck: " + deck); //$NON-NLS-1$
 				game.setCardDeck(deck);
 				game.dealCards();
 
@@ -207,7 +216,7 @@ public class NNTrainer extends JSkatThread {
 
 				GameAnnouncement ann = new GameAnnouncement();
 				// ann.setGameType(GameTypes.NULL);
-				ann.setGameType(this.gameType);
+				ann.setGameType(gameType);
 				game.setGameAnnouncement(ann);
 
 				game.setGameState(GameState.TRICK_PLAYING);
@@ -228,11 +237,9 @@ public class NNTrainer extends JSkatThread {
 
 				totalGames++;
 				avgDeclDiff = (avgDeclDiff * (totalGames - 1) + declarerNet
-						.getAvgDiff())
-						/ totalGames;
+						.getAvgDiff()) / totalGames;
 				avgOppDiff = (avgOppDiff * (totalGames - 1) + opponentNet
-						.getAvgDiff())
-						/ totalGames;
+						.getAvgDiff()) / totalGames;
 			}
 
 			episodes++;

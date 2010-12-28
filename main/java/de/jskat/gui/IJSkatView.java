@@ -28,6 +28,7 @@ import de.jskat.data.iss.ISSMoveInformation;
 import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
+import de.jskat.util.GameType;
 import de.jskat.util.Player;
 
 /**
@@ -172,6 +173,11 @@ public interface IJSkatView {
 	 * Shows preferences dialog
 	 */
 	public void showPreferences();
+
+	/**
+	 * Shows training overview
+	 */
+	public void showTrainingOverview();
 
 	/**
 	 * Adds a card to a players hand
@@ -571,4 +577,24 @@ public interface IJSkatView {
 	 *            Game data
 	 */
 	public void setGameResult(String tableName, SkatGameData gameData);
+
+	/**
+	 * Adds training results
+	 * 
+	 * @param gameType
+	 *            Game type of net
+	 * @param episodes
+	 *            Number of episodes
+	 * @param totalWonGames
+	 *            Total number of won games
+	 * @param episodeWonGames
+	 *            Number of games won in last episode
+	 * @param avgDeclDiff
+	 *            Average declarer difference
+	 * @param avgOppDiff
+	 *            Average opponent difference
+	 */
+	public void addTrainingResult(GameType gameType, long episodes,
+			long totalWonGames, long episodeWonGames, double avgDeclDiff,
+			double avgOppDiff);
 }

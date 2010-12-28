@@ -100,10 +100,12 @@ import de.jskat.gui.iss.ISSTablePanel;
 import de.jskat.gui.iss.LobbyPanel;
 import de.jskat.gui.iss.LoginPanel;
 import de.jskat.gui.iss.PlayerInvitationPanel;
+import de.jskat.gui.nn.NeuralNetworkTrainingOverview;
 import de.jskat.gui.table.SkatSeriesStartDialog;
 import de.jskat.gui.table.SkatTablePanel;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
+import de.jskat.util.GameType;
 import de.jskat.util.JSkatResourceBundle;
 import de.jskat.util.Player;
 import de.jskat.util.SkatConstants;
@@ -118,6 +120,7 @@ public class JSkatViewImpl implements IJSkatView {
 	private JFrame mainFrame;
 	private SkatSeriesStartDialog skatSeriesStartDialog;
 	private JSkatPreferencesDialog preferencesDialog;
+	private NeuralNetworkTrainingOverview trainingOverview;
 	private JTabbedPane tabs;
 	private Map<String, SkatTablePanel> tables;
 	private JSkatGraphicRepository bitmaps;
@@ -145,6 +148,7 @@ public class JSkatViewImpl implements IJSkatView {
 		skatSeriesStartDialog = new SkatSeriesStartDialog(jskat, mainFrame);
 		// FIXME (jansch 08.12.2010) make this part of the main frame
 		preferencesDialog = new JSkatPreferencesDialog(mainFrame);
+		trainingOverview = new NeuralNetworkTrainingOverview();
 
 		mainFrame.setVisible(true);
 	}
@@ -946,6 +950,15 @@ public class JSkatViewImpl implements IJSkatView {
 	}
 
 	/**
+	 * @see IJSkatView#showTrainingOverview()
+	 */
+	@Override
+	public void showTrainingOverview() {
+
+		trainingOverview.setVisible(true);
+	}
+
+	/**
 	 * @see IJSkatView#closeTabPanel(java.lang.String)
 	 */
 	@Override
@@ -1089,5 +1102,14 @@ public class JSkatViewImpl implements IJSkatView {
 				strings.getRankStringForCardFace(card.getRank()));
 
 		showMessage(JOptionPane.ERROR_MESSAGE, title, message);
+	}
+
+	@Override
+	public void addTrainingResult(GameType gameType, long episodes,
+			long totalWonGames, long episodeWonGames, double avgDeclDiff,
+			double avgOppDiff) {
+
+		trainingOverview.addTrainingResult(gameType, episodes, totalWonGames,
+				episodeWonGames, avgDeclDiff, avgOppDiff);
 	}
 }
