@@ -132,6 +132,9 @@ class SkatListTableModel extends AbstractTableModel {
 
 		int currResult = 0;
 		List<Integer> playerResultsSoFar = new ArrayList<Integer>();
+		for (int i = 0; i < playerCount; i++) {
+			playerResultsSoFar.add(new Integer(0));
+		}
 
 		displayValues.clear();
 
@@ -147,15 +150,8 @@ class SkatListTableModel extends AbstractTableModel {
 
 				if (declarers.get(game) != null) {
 
-					if (game == 0) {
-						// set previous player result to 0
-						playerResultsSoFar.add(new Integer(0));
-					} else {
-						// get previous result for player values
-						// from second game on
-						previousResult = playerResultsSoFar.get(player)
-								.intValue();
-					}
+					// get previous result for player values
+					previousResult = playerResultsSoFar.get(player).intValue();
 
 					// get player results from current game
 					switch (mode) {
