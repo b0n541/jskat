@@ -144,7 +144,7 @@ public class JSkatViewImpl implements IJSkatView {
 
 		skatSeriesStartDialog = new SkatSeriesStartDialog(jskat, mainFrame);
 		// FIXME (jansch 08.12.2010) make this part of the main frame
-		preferencesDialog = new JSkatPreferencesDialog(jskat, mainFrame);
+		preferencesDialog = new JSkatPreferencesDialog(mainFrame);
 
 		mainFrame.setVisible(true);
 	}

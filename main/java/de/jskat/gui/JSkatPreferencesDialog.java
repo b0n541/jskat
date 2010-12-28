@@ -63,22 +63,22 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 	 * @param skatMaster
 	 * @param mainFrame
 	 */
-	public JSkatPreferencesDialog(JSkatMaster skatMaster, JFrame mainFrame) {
+	public JSkatPreferencesDialog(JFrame mainFrame) {
 
-		this.jskat = skatMaster;
-		this.parent = mainFrame;
+		jskat = JSkatMaster.instance();
+		parent = mainFrame;
 
 		initGUI(JSkatOptions.instance());
 	}
 
 	private void initGUI(JSkatOptions options) {
 
-		this.setModalityType(ModalityType.APPLICATION_MODAL);
-		this.setResizable(false);
+		setModalityType(ModalityType.APPLICATION_MODAL);
+		setResizable(false);
 
-		this.setTitle("Prefences");
+		setTitle("Prefences");
 
-		Container root = this.getContentPane();
+		Container root = getContentPane();
 		root.setLayout(new MigLayout());
 
 		JTabbedPane prefTabs = new JTabbedPane();
@@ -87,30 +87,30 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 
 		commonTab.add(new JLabel("Language"));
 		String[] data = { "English", "German" };
-		this.language = new JComboBox(data);
+		language = new JComboBox(data);
 		JPanel languagePanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$
-		languagePanel.add(this.language);
+		languagePanel.add(language);
 		commonTab.add(languagePanel, "wrap"); //$NON-NLS-1$
 
 		commonTab.add(new JLabel("Card face"));
-		this.cardFace = new ButtonGroup();
-		this.cardFaceFrench = new JRadioButton("french");
-		this.cardFaceFrench.setSelected(true);
-		this.cardFace.add(this.cardFaceFrench);
-		this.cardFaceGerman = new JRadioButton("german");
-		this.cardFaceGerman.setSelected(true);
-		this.cardFace.add(this.cardFaceGerman);
-		this.cardFaceTournament = new JRadioButton("tournament");
-		this.cardFaceTournament.setSelected(true);
-		this.cardFace.add(this.cardFaceTournament);
+		cardFace = new ButtonGroup();
+		cardFaceFrench = new JRadioButton("french");
+		cardFaceFrench.setSelected(true);
+		cardFace.add(cardFaceFrench);
+		cardFaceGerman = new JRadioButton("german");
+		cardFaceGerman.setSelected(true);
+		cardFace.add(cardFaceGerman);
+		cardFaceTournament = new JRadioButton("tournament");
+		cardFaceTournament.setSelected(true);
+		cardFace.add(cardFaceTournament);
 		JPanel cardFacePanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		cardFacePanel.add(this.cardFaceFrench);
-		cardFacePanel.add(this.cardFaceGerman);
-		cardFacePanel.add(this.cardFaceTournament);
+		cardFacePanel.add(cardFaceFrench);
+		cardFacePanel.add(cardFaceGerman);
+		cardFacePanel.add(cardFaceTournament);
 		commonTab.add(cardFacePanel, "wrap"); //$NON-NLS-1$
 
 		commonTab.add(new JLabel("Save path"));
-		this.savePath = new JTextField(20);
+		savePath = new JTextField(20);
 		JButton savePathButton = new JButton("Search");
 		savePathButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -126,22 +126,22 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 			}
 		});
 		JPanel savePathPanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		savePathPanel.add(this.savePath);
+		savePathPanel.add(savePath);
 		savePathPanel.add(savePathButton);
 		commonTab.add(savePathPanel, "wrap"); //$NON-NLS-1$
 
 		commonTab.add(new JLabel("Wait time after trick"));
-		this.waitTime = new JSlider();
-		this.waitTime.setSnapToTicks(true);
-		this.waitTime.setMinimum(0);
-		this.waitTime.setMaximum(20);
-		this.waitTime.setMajorTickSpacing(5);
-		this.waitTime.setMinorTickSpacing(1);
-		this.waitTime.setPaintTicks(true);
-		this.waitTime.setPaintLabels(true);
-		this.waitTime.setValue(0);
-		this.trickRemoveAfterClick = new JCheckBox("Remove trick after click");
-		this.trickRemoveAfterClick.addChangeListener(new ChangeListener() {
+		waitTime = new JSlider();
+		waitTime.setSnapToTicks(true);
+		waitTime.setMinimum(0);
+		waitTime.setMaximum(20);
+		waitTime.setMajorTickSpacing(5);
+		waitTime.setMinorTickSpacing(1);
+		waitTime.setPaintTicks(true);
+		waitTime.setPaintLabels(true);
+		waitTime.setValue(0);
+		trickRemoveAfterClick = new JCheckBox("Remove trick after click");
+		trickRemoveAfterClick.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent evt) {
 
 				if (JSkatPreferencesDialog.this.trickRemoveAfterClick
@@ -156,21 +156,21 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 			}
 		});
 		JPanel waitTimePanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		waitTimePanel.add(this.waitTime);
-		waitTimePanel.add(this.trickRemoveAfterClick);
+		waitTimePanel.add(waitTime);
+		waitTimePanel.add(trickRemoveAfterClick);
 		commonTab.add(waitTimePanel, "wrap"); //$NON-NLS-1$
 
 		commonTab.add(new JLabel("Game short cut"));
-		this.gameShortCut = new ButtonGroup();
-		this.gameShortCutYes = new JRadioButton("Yes");
-		this.gameShortCut.add(this.gameShortCutYes);
-		this.gameShortCutNo = new JRadioButton("No");
-		this.gameShortCutNo.setSelected(true);
-		this.gameShortCut.add(this.gameShortCutNo);
+		gameShortCut = new ButtonGroup();
+		gameShortCutYes = new JRadioButton("Yes");
+		gameShortCut.add(gameShortCutYes);
+		gameShortCutNo = new JRadioButton("No");
+		gameShortCutNo.setSelected(true);
+		gameShortCut.add(gameShortCutNo);
 		JPanel gameShortCutPanel = new JPanel(new MigLayout(
 				"fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		gameShortCutPanel.add(this.gameShortCutYes);
-		gameShortCutPanel.add(this.gameShortCutNo);
+		gameShortCutPanel.add(gameShortCutYes);
+		gameShortCutPanel.add(gameShortCutNo);
 		commonTab.add(gameShortCutPanel, "wrap"); //$NON-NLS-1$
 
 		prefTabs.add(commonTab, "Common");
@@ -191,7 +191,7 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		buttonPanel.add(cancel);
 		root.add(buttonPanel, "center"); //$NON-NLS-1$
 
-		this.pack();
+		pack();
 	}
 
 	/**
@@ -202,7 +202,7 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 
 		if (isVisible) {
 
-			this.setLocationRelativeTo(this.parent);
+			setLocationRelativeTo(parent);
 		}
 
 		super.setVisible(isVisible);
@@ -216,13 +216,13 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 
 		if ("CANCEL".equals(e.getActionCommand())) { //$NON-NLS-1$
 
-			this.setVisible(false);
+			setVisible(false);
 		} else if ("OK".equals(e.getActionCommand())) { //$NON-NLS-1$
 
 			JSkatOptions options = JSkatOptions.instance();
 			options.saveJSkatProperties();
 
-			this.setVisible(false);
+			setVisible(false);
 		}
 
 	}
