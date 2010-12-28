@@ -4,7 +4,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 import de.jskat.data.JSkatOptions;
-import de.jskat.data.JSkatOptions.Languages;
+import de.jskat.data.JSkatOptions.SupportedLanguage;
 
 /**
  * Helper class for skat related i18n string resolves
@@ -24,11 +24,11 @@ public class JSkatResourceBundle {
 	private void loadStrings() {
 
 		Locale locale = null;
-		if (Languages.ENGLISH.equals(options.getLanguage())) {
+		if (SupportedLanguage.ENGLISH.equals(options.getLanguage())) {
 
 			locale = Locale.ENGLISH;
 
-		} else if (Languages.GERMAN.equals(options.getLanguage())) {
+		} else if (SupportedLanguage.GERMAN.equals(options.getLanguage())) {
 
 			locale = Locale.GERMAN;
 

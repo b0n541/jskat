@@ -32,8 +32,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import net.miginfocom.swing.MigLayout;
-import de.jskat.control.JSkatMaster;
 import de.jskat.data.JSkatOptions;
+import de.jskat.data.JSkatOptions.SupportedLanguage;
+import de.jskat.util.JSkatResourceBundle;
 
 /**
  * Preferences dialog for JSkat
@@ -42,7 +43,6 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
-	private JSkatMaster jskat;
 	private JFrame parent;
 
 	private JComboBox language;
@@ -51,8 +51,8 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 	private JRadioButton cardFaceGerman;
 	private JRadioButton cardFaceTournament;
 	private JTextField savePath;
-	private JSlider waitTime;
-	private JCheckBox trickRemoveAfterClick;
+	JSlider waitTime;
+	JCheckBox trickRemoveAfterClick;
 	private ButtonGroup gameShortCut;
 	private JRadioButton gameShortCutYes;
 	private JRadioButton gameShortCutNo;
@@ -65,18 +65,20 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 	 */
 	public JSkatPreferencesDialog(JFrame mainFrame) {
 
-		jskat = JSkatMaster.instance();
 		parent = mainFrame;
 
-		initGUI(JSkatOptions.instance());
+		initGUI();
 	}
 
-	private void initGUI(JSkatOptions options) {
+	private void initGUI() {
+
+		JSkatResourceBundle strings = JSkatResourceBundle.instance();
+		JSkatOptions options = JSkatOptions.instance();
 
 		setModalityType(ModalityType.APPLICATION_MODAL);
 		setResizable(false);
 
-		setTitle("Prefences");
+		setTitle(strings.getString("preferences")); //$NON-NLS-1$
 
 		Container root = getContentPane();
 		root.setLayout(new MigLayout());
@@ -85,22 +87,21 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 
 		JPanel commonTab = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		commonTab.add(new JLabel("Language"));
-		String[] data = { "English", "German" };
-		language = new JComboBox(data);
-		JPanel languagePanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$
+		commonTab.add(new JLabel(strings.getString("language"))); //$NON-NLS-1$
+		JPanel languagePanel = getLanguagePanel(strings, options);
 		languagePanel.add(language);
 		commonTab.add(languagePanel, "wrap"); //$NON-NLS-1$
 
-		commonTab.add(new JLabel("Card face"));
+		commonTab.add(new JLabel(strings.getString("card_face"))); //$NON-NLS-1$
 		cardFace = new ButtonGroup();
-		cardFaceFrench = new JRadioButton("french");
+		cardFaceFrench = new JRadioButton(strings.getString("card_face_french")); //$NON-NLS-1$
 		cardFaceFrench.setSelected(true);
 		cardFace.add(cardFaceFrench);
-		cardFaceGerman = new JRadioButton("german");
+		cardFaceGerman = new JRadioButton(strings.getString("card_face_german")); //$NON-NLS-1$
 		cardFaceGerman.setSelected(true);
 		cardFace.add(cardFaceGerman);
-		cardFaceTournament = new JRadioButton("tournament");
+		cardFaceTournament = new JRadioButton(
+				strings.getString("card_face_tournament")); //$NON-NLS-1$
 		cardFaceTournament.setSelected(true);
 		cardFace.add(cardFaceTournament);
 		JPanel cardFacePanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -109,9 +110,9 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		cardFacePanel.add(cardFaceTournament);
 		commonTab.add(cardFacePanel, "wrap"); //$NON-NLS-1$
 
-		commonTab.add(new JLabel("Save path"));
+		commonTab.add(new JLabel(strings.getString("save_path"))); //$NON-NLS-1$
 		savePath = new JTextField(20);
-		JButton savePathButton = new JButton("Search");
+		JButton savePathButton = new JButton(strings.getString("search")); //$NON-NLS-1$
 		savePathButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -130,7 +131,38 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		savePathPanel.add(savePathButton);
 		commonTab.add(savePathPanel, "wrap"); //$NON-NLS-1$
 
-		commonTab.add(new JLabel("Wait time after trick"));
+		commonTab.add(new JLabel(strings.getString("wait_time_after_trick"))); //$NON-NLS-1$
+		JPanel waitTimePanel = getWaitingTimePanel(strings, options);
+		commonTab.add(waitTimePanel, "wrap"); //$NON-NLS-1$
+
+		commonTab.add(new JLabel(strings.getString("game_short_cut"))); //$NON-NLS-1$
+		JPanel gameShortCutPanel = getGameShortCutPanel(strings, options);
+		commonTab.add(gameShortCutPanel, "wrap"); //$NON-NLS-1$
+
+		prefTabs.add(commonTab, strings.getString("common_options")); //$NON-NLS-1$
+
+		JPanel skatRulesTab = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		prefTabs.add(skatRulesTab, strings.getString("skat_rules")); //$NON-NLS-1$
+
+		root.add(prefTabs, "wrap"); //$NON-NLS-1$
+
+		JPanel buttonPanel = new JPanel(new MigLayout());
+		JButton start = new JButton("OK"); //$NON-NLS-1$
+		start.setActionCommand("OK"); //$NON-NLS-1$
+		start.addActionListener(this);
+		buttonPanel.add(start);
+		JButton cancel = new JButton(strings.getString("cancel")); //$NON-NLS-1$
+		cancel.setActionCommand("CANCEL"); //$NON-NLS-1$
+		cancel.addActionListener(this);
+		buttonPanel.add(cancel);
+		root.add(buttonPanel, "center"); //$NON-NLS-1$
+
+		pack();
+	}
+
+	private JPanel getWaitingTimePanel(JSkatResourceBundle strings,
+			JSkatOptions options) {
+
 		waitTime = new JSlider();
 		waitTime.setSnapToTicks(true);
 		waitTime.setMinimum(0);
@@ -139,9 +171,13 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		waitTime.setMinorTickSpacing(1);
 		waitTime.setPaintTicks(true);
 		waitTime.setPaintLabels(true);
-		waitTime.setValue(0);
-		trickRemoveAfterClick = new JCheckBox("Remove trick after click");
+
+		waitTime.setValue(options.getTrickRemoveDelayTime());
+
+		trickRemoveAfterClick = new JCheckBox(
+				strings.getString("remove_trick_after_click")); //$NON-NLS-1$
 		trickRemoveAfterClick.addChangeListener(new ChangeListener() {
+			@Override
 			public void stateChanged(ChangeEvent evt) {
 
 				if (JSkatPreferencesDialog.this.trickRemoveAfterClick
@@ -155,43 +191,44 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 				}
 			}
 		});
+		trickRemoveAfterClick.setSelected(options.isTrickRemoveAfterClick());
+
 		JPanel waitTimePanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		waitTimePanel.add(waitTime);
 		waitTimePanel.add(trickRemoveAfterClick);
-		commonTab.add(waitTimePanel, "wrap"); //$NON-NLS-1$
+		return waitTimePanel;
+	}
 
-		commonTab.add(new JLabel("Game short cut"));
+	private JPanel getGameShortCutPanel(JSkatResourceBundle strings,
+			JSkatOptions options) {
+
 		gameShortCut = new ButtonGroup();
-		gameShortCutYes = new JRadioButton("Yes");
+		gameShortCutYes = new JRadioButton(strings.getString("yes")); //$NON-NLS-1$
 		gameShortCut.add(gameShortCutYes);
-		gameShortCutNo = new JRadioButton("No");
-		gameShortCutNo.setSelected(true);
+		gameShortCutNo = new JRadioButton(strings.getString("no")); //$NON-NLS-1$
 		gameShortCut.add(gameShortCutNo);
+
+		if (options.isGameShortCut()) {
+			gameShortCutYes.setSelected(true);
+		} else {
+			gameShortCutNo.setSelected(true);
+		}
+
 		JPanel gameShortCutPanel = new JPanel(new MigLayout(
 				"fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		gameShortCutPanel.add(gameShortCutYes);
 		gameShortCutPanel.add(gameShortCutNo);
-		commonTab.add(gameShortCutPanel, "wrap"); //$NON-NLS-1$
+		return gameShortCutPanel;
+	}
 
-		prefTabs.add(commonTab, "Common");
+	private JPanel getLanguagePanel(JSkatResourceBundle strings,
+			JSkatOptions options) {
 
-		JPanel skatRulesTab = new JPanel(new MigLayout("fill", "fill", "fill"));
-		prefTabs.add(skatRulesTab, "Skat rules");
+		language = new JComboBox(SupportedLanguage.values());
+		language.setSelectedItem(options.getLanguage());
 
-		root.add(prefTabs, "wrap"); //$NON-NLS-1$
-
-		JPanel buttonPanel = new JPanel(new MigLayout());
-		JButton start = new JButton("OK");
-		start.setActionCommand("OK"); //$NON-NLS-1$
-		start.addActionListener(this);
-		buttonPanel.add(start);
-		JButton cancel = new JButton("Cancel");
-		cancel.setActionCommand("CANCEL"); //$NON-NLS-1$
-		cancel.addActionListener(this);
-		buttonPanel.add(cancel);
-		root.add(buttonPanel, "center"); //$NON-NLS-1$
-
-		pack();
+		JPanel languagePanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return languagePanel;
 	}
 
 	/**
@@ -220,6 +257,13 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		} else if ("OK".equals(e.getActionCommand())) { //$NON-NLS-1$
 
 			JSkatOptions options = JSkatOptions.instance();
+
+			options.setLanguage((SupportedLanguage) language.getSelectedItem());
+			options.setSavePath(savePath.getText());
+			options.setTrickRemoveDelayTime(waitTime.getValue());
+			options.setTrickRemoveAfterClick(trickRemoveAfterClick.isSelected());
+			options.setGameShortCut(gameShortCutYes.isSelected());
+
 			options.saveJSkatProperties();
 
 			setVisible(false);

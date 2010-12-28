@@ -38,7 +38,7 @@ public class JSkatOptions {
 	/**
 	 * Languages supported by JSkat
 	 */
-	public enum Languages {
+	public enum SupportedLanguage {
 		/**
 		 * English
 		 */
@@ -51,7 +51,7 @@ public class JSkatOptions {
 
 	private Properties jskatProperties = new Properties();
 
-	private Languages language = Languages.GERMAN;
+	private SupportedLanguage language = SupportedLanguage.GERMAN;
 
 	private String savePath = "";
 
@@ -139,10 +139,10 @@ public class JSkatOptions {
 
 				if (value.equals("GERMAN")) {
 
-					setLanguage(JSkatOptions.Languages.GERMAN);
+					setLanguage(JSkatOptions.SupportedLanguage.GERMAN);
 				} else {
 
-					setLanguage(JSkatOptions.Languages.ENGLISH);
+					setLanguage(JSkatOptions.SupportedLanguage.ENGLISH);
 				}
 			} else if (property.equals("cardFace")) {
 
@@ -396,7 +396,7 @@ public class JSkatOptions {
 	 * 
 	 * @return Value of property language.
 	 */
-	public Languages getLanguage() {
+	public SupportedLanguage getLanguage() {
 
 		return this.language;
 	}
@@ -407,7 +407,7 @@ public class JSkatOptions {
 	 * @param language
 	 *            New value of property language.
 	 */
-	public void setLanguage(Languages newLanguage) {
+	public void setLanguage(SupportedLanguage newLanguage) {
 
 		this.language = newLanguage;
 		this.jskatProperties.setProperty("language",
