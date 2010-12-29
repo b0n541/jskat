@@ -806,4 +806,15 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		gameInfoPanel.setTrickNumber(trickNumber);
 	}
+
+	/**
+	 * Sets the game number
+	 * 
+	 * @param gameNumber
+	 *            Game number
+	 */
+	public void setGameNumber(int gameNumber) {
+
+		gameInfoPanel.setGameNumber(gameNumber);
+	}
 }

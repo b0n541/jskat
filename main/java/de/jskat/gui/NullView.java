@@ -579,4 +579,13 @@ public class NullView implements IJSkatView {
 			@SuppressWarnings("unused") double avgOppDiff) {
 		// empty method by indent
 	}
+
+	/**
+	 * @see IJSkatView#setGameNumber(String, int)
+	 */
+	@Override
+	public void setGameNumber(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") int gameNumber) {
+		// empty method by indent
+	}
 }

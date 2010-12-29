@@ -36,6 +36,7 @@ class GameInformationPanel extends JPanel {
 
 	private JLabel label;
 
+	private int gameNumber;
 	private GameState gameState;
 	private GameType gameType;
 	private boolean handGame;
@@ -111,7 +112,13 @@ class GameInformationPanel extends JPanel {
 
 	private void refreshText() {
 
-		String text = getGameStateString(gameState);
+		String text = ""; //$NON-NLS-1$
+
+		if (gameNumber > 0) {
+			text += strings.getString("game") + " " + gameNumber + ": "; //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+		}
+
+		text += getGameStateString(gameState);
 
 		if (gameType != null) {
 			text += " " + strings.getGameType(gameType); //$NON-NLS-1$
@@ -211,6 +218,18 @@ class GameInformationPanel extends JPanel {
 	public void setTrickNumber(int trickNumber) {
 
 		trick = trickNumber;
+		refreshText();
+	}
+
+	/**
+	 * Sets the game number
+	 * 
+	 * @param newGameNumber
+	 *            Game number
+	 */
+	public void setGameNumber(int newGameNumber) {
+
+		gameNumber = newGameNumber;
 		refreshText();
 	}
 }

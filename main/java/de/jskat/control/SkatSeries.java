@@ -108,6 +108,7 @@ public class SkatSeries extends JSkatThread {
 	public void run() {
 
 		int roundsPlayed = 0;
+		int gameNumber = 0;
 
 		while (roundsToGo > 0 || unlimitedRounds) {
 
@@ -122,6 +123,9 @@ public class SkatSeries extends JSkatThread {
 					player.put(Player.FORE_HAND, player.get(Player.MIDDLE_HAND));
 					player.put(Player.MIDDLE_HAND, helper);
 				}
+
+				gameNumber++;
+				view.setGameNumber(data.getTableName(), gameNumber);
 
 				currSkatGame = new SkatGame(data.getTableName(),
 						player.get(Player.FORE_HAND),

@@ -1112,4 +1112,10 @@ public class JSkatViewImpl implements IJSkatView {
 		trainingOverview.addTrainingResult(gameType, episodes, totalWonGames,
 				episodeWonGames, avgDeclDiff, avgOppDiff);
 	}
+
+	@Override
+	public void setGameNumber(String tableName, int gameNumber) {
+
+		tables.get(tableName).setGameNumber(gameNumber);
+	}
 }

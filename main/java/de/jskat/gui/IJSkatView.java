@@ -597,4 +597,14 @@ public interface IJSkatView {
 	public void addTrainingResult(GameType gameType, long episodes,
 			long totalWonGames, long episodeWonGames, double avgDeclDiff,
 			double avgOppDiff);
+
+	/**
+	 * Sets the game number of the current game
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param gameNumber
+	 *            Game number
+	 */
+	public void setGameNumber(String tableName, int gameNumber);
 }
