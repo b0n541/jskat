@@ -17,7 +17,6 @@ import java.util.Random;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import de.jskat.ai.IJSkatPlayer;
 import de.jskat.ai.nn.AIPlayerNN;
 import de.jskat.ai.nn.data.SkatNetworks;
 import de.jskat.ai.nn.util.NeuralNetwork;
@@ -152,12 +151,12 @@ public class NNTrainer extends JSkatThread {
 	 */
 	private void trainNets() {
 
-		IJSkatPlayer nnPlayer1 = new AIPlayerNN();
-		((AIPlayerNN) nnPlayer1).setIsLearning(true);
-		IJSkatPlayer nnPlayer2 = new AIPlayerNN();
-		((AIPlayerNN) nnPlayer2).setIsLearning(true);
-		IJSkatPlayer nnPlayer3 = new AIPlayerNN();
-		((AIPlayerNN) nnPlayer3).setIsLearning(true);
+		AIPlayerNN nnPlayer1 = new AIPlayerNN();
+		nnPlayer1.setIsLearning(true);
+		AIPlayerNN nnPlayer2 = new AIPlayerNN();
+		nnPlayer2.setIsLearning(true);
+		AIPlayerNN nnPlayer3 = new AIPlayerNN();
+		nnPlayer3.setIsLearning(true);
 		NeuralNetwork declarerNet = SkatNetworks.getNetwork(gameType, true);
 		NeuralNetwork opponentNet = SkatNetworks.getNetwork(gameType, false);
 		double avgDeclDiff = 0.0d;
