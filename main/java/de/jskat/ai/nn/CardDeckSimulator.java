@@ -6,18 +6,18 @@ Authors: @JS@
 
 Released: @ReleaseDate@
 
-*/
+ */
 
 package de.jskat.ai.nn;
 
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 import de.jskat.util.Card;
 import de.jskat.util.CardDeck;
+import de.jskat.util.CardList;
+import de.jskat.util.Player;
 
 /**
  * Simulates possible card decks according to the player knowledge
@@ -26,28 +26,97 @@ public class CardDeckSimulator {
 
 	private static Random rand = new Random();
 
-    /**
-     * Simulates all unknown cards
-     */
-    public static void simulateUnknownCards(CardDeck knownCards) {
-    	
-    	EnumSet<Card> unknownCards = CardDeck.getAllCards();
-    	
-    	for (Card card : knownCards) {
-    		
-    		if (card != null) {
-    			// remove all known cards first
-    			unknownCards.remove(card);
-    		}
-    	}
+	/**
+	 * Simulates a card distribution
+	 * 
+	 * @param playerPosition
+	 *            Player position
+	 * @param playerHand
+	 *            Cards on players hand
+	 * @return Simulated card distribution
+	 */
+	public static CardDeck simulateUnknownCards(Player playerPosition,
+			CardList playerHand) {
 
-    	List<Object> cardList = new LinkedList<Object>(Arrays.asList(unknownCards.toArray()));
-    	for (int i = 0; i < knownCards.size(); i++) {
-    		
-    		if (knownCards.get(i) == null) {
-    			// set a random card
-    			knownCards.set(i, (Card) cardList.remove(rand.nextInt(cardList.size())));
-    		}
-    	}
-    }
+		// prepare result
+		Map<Player, CardList> playerHands = new HashMap<Player, CardList>();
+		CardList skat = new CardList();
+
+		for (Player player : Player.values()) {
+			// set empty card list
+			playerHands.put(player, new CardList());
+		}
+		playerHands.get(playerPosition).addAll(playerHand);
+
+		// get unknown cards
+		CardDeck unknownCards = new CardDeck();
+		for (Card card : playerHand) {
+
+			unknownCards.remove(card);
+		}
+		unknownCards.shuffle();
+
+		// set unknown cards
+		for (Card card : unknownCards) {
+
+			Player player = null;
+			if (playerHands.get(Player.FORE_HAND).size() < 10) {
+				player = Player.FORE_HAND;
+			} else if (playerHands.get(Player.MIDDLE_HAND).size() < 10) {
+				player = Player.MIDDLE_HAND;
+			} else if (playerHands.get(Player.HIND_HAND).size() < 10) {
+				player = Player.HIND_HAND;
+			}
+
+			if (player != null) {
+				playerHands.get(player).add(card);
+			} else {
+				// player hands are filled -> put card into skat
+				skat.add(card);
+			}
+		}
+
+		return createCardDeck(playerHands, skat);
+	}
+
+	private static CardDeck createCardDeck(Map<Player, CardList> playerHands,
+			CardList skat) {
+
+		CardList cards = new CardList();
+
+		// Simulate card dealing
+		for (int i = 0; i < 3; i++) {
+			// FIXME (jan 17.01.2011) code duplication with SkatGame#dealCards()
+			// deal three rounds of cards
+			switch (i) {
+			case 0:
+				// deal three cards
+				dealCards(cards, playerHands, 3);
+				// and put two cards into the skat
+				cards.add(skat.get(0));
+				cards.add(skat.get(1));
+				break;
+			case 1:
+				// deal four cards
+				dealCards(cards, playerHands, 4);
+				break;
+			case 2:
+				// deal three cards
+				dealCards(cards, playerHands, 3);
+				break;
+			}
+		}
+
+		return new CardDeck(cards);
+	}
+
+	private static void dealCards(CardList result,
+			Map<Player, CardList> playerHands, int cardCount) {
+
+		for (Player player : Player.values()) {
+			for (int i = 0; i < cardCount; i++) {
+				result.add(playerHands.get(player).remove(0));
+			}
+		}
+	}
 }

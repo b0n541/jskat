@@ -75,6 +75,16 @@ public class SkatSeries extends JSkatThread {
 		player.put(Player.MIDDLE_HAND, newPlayer.get(1));
 		player.put(Player.HIND_HAND, newPlayer.get(2));
 
+		// set fore hand as bottom player
+		data.setBottomPlayer(Player.FORE_HAND);
+
+		// if an human player is playing, always show him/her at the bottom
+		for (Player hand : Player.values()) {
+			if (player.get(hand) instanceof HumanPlayer) {
+				data.setBottomPlayer(hand);
+			}
+		}
+
 		log.debug("Player order: " + player); //$NON-NLS-1$
 	}
 
@@ -122,6 +132,9 @@ public class SkatSeries extends JSkatThread {
 					player.put(Player.HIND_HAND, player.get(Player.FORE_HAND));
 					player.put(Player.FORE_HAND, player.get(Player.MIDDLE_HAND));
 					player.put(Player.MIDDLE_HAND, helper);
+
+					data.setBottomPlayer(data.getBottomPlayer()
+							.getRightNeighbor());
 				}
 
 				gameNumber++;
@@ -174,15 +187,22 @@ public class SkatSeries extends JSkatThread {
 
 	private void setViewPositions() {
 
-		if (player.get(Player.FORE_HAND) instanceof HumanPlayer) {
-			view.setPositions(data.getTableName(), Player.MIDDLE_HAND,
-					Player.HIND_HAND, Player.FORE_HAND);
-		} else if (player.get(Player.MIDDLE_HAND) instanceof HumanPlayer) {
-			view.setPositions(data.getTableName(), Player.HIND_HAND,
-					Player.FORE_HAND, Player.MIDDLE_HAND);
+		String tableName = data.getTableName();
+
+		if (Player.FORE_HAND.equals(data.getBottomPlayer())) {
+
+			view.setPositions(tableName, Player.MIDDLE_HAND, Player.HIND_HAND,
+					Player.FORE_HAND);
+
+		} else if (Player.MIDDLE_HAND.equals(data.getBottomPlayer())) {
+
+			view.setPositions(tableName, Player.HIND_HAND, Player.FORE_HAND,
+					Player.MIDDLE_HAND);
+
 		} else {
-			view.setPositions(data.getTableName(), Player.FORE_HAND,
-					Player.MIDDLE_HAND, Player.HIND_HAND);
+
+			view.setPositions(tableName, Player.FORE_HAND, Player.MIDDLE_HAND,
+					Player.HIND_HAND);
 		}
 	}
 

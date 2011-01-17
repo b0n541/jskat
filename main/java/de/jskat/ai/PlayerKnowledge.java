@@ -7,20 +7,22 @@ Authors: @JS@
 
 Released: @ReleaseDate@
 
-*/
+ */
 
 package de.jskat.ai;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.Trick;
+import de.jskat.util.Card;
 import de.jskat.util.CardDeck;
 import de.jskat.util.CardList;
-import de.jskat.util.Card;
 import de.jskat.util.Player;
 import de.jskat.util.Rank;
 import de.jskat.util.Suit;
@@ -30,6 +32,11 @@ import de.jskat.util.Suit;
  * information
  */
 public class PlayerKnowledge {
+
+	/**
+	 * Declarer player
+	 */
+	private Player declarer;
 
 	/** the basic game information */
 	private GameAnnouncement game;
@@ -50,21 +57,23 @@ public class PlayerKnowledge {
 	/**
 	 * Holds the highest bid every player has made during bidding
 	 */
-	// TODO use player position for accessing the values
-	private int[] highestBid = new int[3];
-	
+	private Map<Player, Integer> highestBid = new HashMap<Player, Integer>();
+
 	/**
-	 * A complete card deck for doing some boolean operations with a subset of a deck
+	 * A complete card deck for doing some boolean operations with a subset of a
+	 * deck
 	 */
 	private final CardDeck completeDeck = new CardDeck();
-	
+
 	/**
-	 * Card played by the player on the left, represents first card in a trick or is NULL otherwise
+	 * Card played by the player on the left, represents first card in a trick
+	 * or is NULL otherwise
 	 */
 	private Card leftPlayerTrickCard;
-	
+
 	/**
-	 * Card played by the player on the right, represents the first or second card in a trick or is NULL otherwise
+	 * Card played by the player on the right, represents the first or second
+	 * card in a trick or is NULL otherwise
 	 */
 	private Card rightPlayerTrickCard;
 
@@ -72,18 +81,16 @@ public class PlayerKnowledge {
 	 * Counts the trump cards still on players hand
 	 */
 	private int trumpCount;
-	
+
 	/**
 	 * Counts the number of cards on players hand for every card
 	 */
-	// TODO use suit for accessing the values
-	private int[] suitCount = new int[4];
-	
+	private Map<Suit, Integer> suitCount = new HashMap<Suit, Integer>();
+
 	/**
 	 * Counts the points for every suit on players hand
 	 */
-	// TODO use suit for accessing the values
-	private int[] suitPoints = new int[4];
+	private Map<Suit, Integer> suitPoints = new HashMap<Suit, Integer>();
 
 	/**
 	 * Holds trick information
@@ -103,29 +110,34 @@ public class PlayerKnowledge {
 	 */
 	public void initializeVariables() {
 
-		this.playedCards.clear();
-		this.cardPositions.clear();
-		
+		playedCards.clear();
+		cardPositions.clear();
+
 		for (int i = 0; i < 4; i++) {
-			
+
 			if (i < 3) {
 				// only for the players
-				this.playedCards.add(EnumSet.noneOf(Card.class));
+				playedCards.add(EnumSet.noneOf(Card.class));
 			}
 
-			this.cardPositions.add(EnumSet.allOf(Card.class));
+			cardPositions.add(EnumSet.allOf(Card.class));
 		}
 
-		this.highestBid[0] = this.highestBid[1] = this.highestBid[2] = 0;
-		
-		this.leftPlayerTrickCard = null;
-		this.rightPlayerTrickCard = null;
-		
-		this.trumpCount = 0;
-		this.suitCount[0] = this.suitCount[1] = this.suitCount[2] = this.suitCount[3] = 0;
-		this.suitPoints[0] = this.suitPoints[1] = this.suitPoints[2] = this.suitPoints[3] = 0;
-		
-		this.tricks.clear();
+		highestBid.clear();
+
+		leftPlayerTrickCard = null;
+		rightPlayerTrickCard = null;
+
+		setTrumpCount(0);
+		suitCount.clear();
+		suitPoints.clear();
+
+		for (Suit suit : Suit.values()) {
+			suitCount.put(suit, Integer.valueOf(0));
+			suitPoints.put(suit, Integer.valueOf(0));
+		}
+
+		tricks.clear();
 	}
 
 	/**
@@ -137,9 +149,9 @@ public class PlayerKnowledge {
 	 */
 	public boolean isCardPlayed(Card card) {
 
-		return this.playedCards.get(0).contains(card)
-				|| this.playedCards.get(1).contains(card)
-				|| this.playedCards.get(2).contains(card);
+		return playedCards.get(0).contains(card)
+				|| playedCards.get(1).contains(card)
+				|| playedCards.get(2).contains(card);
 	}
 
 	/**
@@ -153,7 +165,7 @@ public class PlayerKnowledge {
 	 */
 	public boolean isCardPlayedBy(Player player, Card card) {
 
-		return this.playedCards.get(player.getOrder()).contains(card);
+		return playedCards.get(player.getOrder()).contains(card);
 	}
 
 	/**
@@ -166,70 +178,73 @@ public class PlayerKnowledge {
 	 */
 	public void setCardPlayed(Player player, Card card) {
 
-		this.playedCards.get(player.getOrder()).add(card);
+		playedCards.get(player.getOrder()).add(card);
 
 		for (int i = 0; i < 2; i++) {
 
-			this.cardPositions.get((player.getOrder() + i) % 3).remove(card);
+			cardPositions.get((player.getOrder() + i) % 3).remove(card);
 		}
-		
+
 		setTrickCard(player, card);
 	}
 
 	/**
 	 * Sets a card played by another player
 	 * 
-	 * @param otherPlayer Player position of other player
-	 * @param card Card played
+	 * @param otherPlayer
+	 *            Player position of other player
+	 * @param card
+	 *            Card played
 	 */
 	private void setTrickCard(Player otherPlayer, Card card) {
-		
-		if (this.getPlayerPosition().getLeftNeighbor() == otherPlayer) {
-			
-			this.leftPlayerTrickCard = card;
-		}
-		else if (this.getPlayerPosition().getRightNeighbor() == otherPlayer) {
-			
-			this.rightPlayerTrickCard = card;
+
+		if (getPlayerPosition().getLeftNeighbor() == otherPlayer) {
+
+			leftPlayerTrickCard = card;
+		} else if (getPlayerPosition().getRightNeighbor() == otherPlayer) {
+
+			rightPlayerTrickCard = card;
 		}
 	}
-	
+
 	/**
 	 * Checks whether a card was played by another player in the current trick
 	 * 
-	 * @param otherPlayer Player position of the other player
-	 * @param card Card played
-	 * @return TRUE if the card was played by the other player in the current trick
+	 * @param otherPlayer
+	 *            Player position of the other player
+	 * @param card
+	 *            Card played
+	 * @return TRUE if the card was played by the other player in the current
+	 *         trick
 	 */
 	public boolean isCardPlayedInTrick(Player otherPlayer, Card card) {
 
 		boolean result = false;
-		
-		if (this.getPlayerPosition().getLeftNeighbor() == otherPlayer) {
-			
-			if (card.equals(this.leftPlayerTrickCard)) {
-				
+
+		if (getPlayerPosition().getLeftNeighbor() == otherPlayer) {
+
+			if (card.equals(leftPlayerTrickCard)) {
+
+				result = true;
+			}
+		} else if (getPlayerPosition().getRightNeighbor() == otherPlayer) {
+
+			if (card.equals(rightPlayerTrickCard)) {
+
 				result = true;
 			}
 		}
-		else if (this.getPlayerPosition().getRightNeighbor() == otherPlayer) {
-			
-			if (card.equals(this.rightPlayerTrickCard)) {
-				
-				result = true;
-			}
-		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Clears the cards played in the trick
 	 */
 	public void clearTrickCards() {
-		
-		this.leftPlayerTrickCard = null;
-		this.rightPlayerTrickCard = null;
+
+		leftPlayerTrickCard = null;
+		rightPlayerTrickCard = null;
 	}
 
 	/**
@@ -261,20 +276,20 @@ public class PlayerKnowledge {
 
 			// check all players and the skat whether the card could be there
 			for (int i = 0; i < 4; i++) {
-	
-				if (this.cardPositions.get(i).contains(card)) {
-	
+
+				if (cardPositions.get(i).contains(card)) {
+
 					possessionCount++;
 				}
 			}
 		}
-		
+
 		return (possessionCount == 1);
 	}
 
 	/**
-	 * Checks whether a player could have a card information,
-	 * this is an uncertain information
+	 * Checks whether a player could have a card information, this is an
+	 * uncertain information
 	 * 
 	 * @param player
 	 *            Player ID
@@ -284,7 +299,7 @@ public class PlayerKnowledge {
 	 */
 	public boolean couldHaveCard(Player player, Card card) {
 
-		return this.cardPositions.get(player.getOrder()).contains(card);
+		return cardPositions.get(player.getOrder()).contains(card);
 	}
 
 	/**
@@ -298,7 +313,8 @@ public class PlayerKnowledge {
 
 		for (Rank rank : Rank.values()) {
 
-			this.cardPositions.get(player.getOrder()).remove(Card.getCard(suit, rank));
+			cardPositions.get(player.getOrder()).remove(
+					Card.getCard(suit, rank));
 		}
 	}
 
@@ -309,9 +325,9 @@ public class PlayerKnowledge {
 	 *            Player ID
 	 * @return Highest bid for the player
 	 */
-	public int getHighestBid(Player player) {
+	public Integer getHighestBid(Player player) {
 
-		return this.highestBid[player.getOrder()];
+		return highestBid.get(player);
 	}
 
 	/**
@@ -322,9 +338,9 @@ public class PlayerKnowledge {
 	 * @param bidValue
 	 *            Highest bid for the player
 	 */
-	public void setHighestBid(Player player, int bidValue) {
+	public void setHighestBid(Player player, Integer bidValue) {
 
-		this.highestBid[player.getOrder()] = bidValue;
+		highestBid.put(player, bidValue);
 	}
 
 	/**
@@ -333,82 +349,116 @@ public class PlayerKnowledge {
 	 * @return Complete deck
 	 */
 	public CardDeck getCompleteDeck() {
-		
-		return this.completeDeck;
+
+		return completeDeck;
 	}
-	
+
 	/**
 	 * Gets the player position
 	 * 
 	 * @return Player position
 	 */
 	public Player getPlayerPosition() {
-		
-		return this.playerPosition;
+
+		return playerPosition;
 	}
 
 	/**
 	 * Sets the player position
 	 * 
-	 * @param newPlayerPosition Player position
+	 * @param newPlayerPosition
+	 *            Player position
 	 */
 	public void setPlayerPosition(Player newPlayerPosition) {
-		
-		this.playerPosition = newPlayerPosition;
+
+		playerPosition = newPlayerPosition;
+	}
+
+	/**
+	 * Set the declarer position
+	 * 
+	 * @param newDeclarer
+	 *            Declarer position
+	 */
+	public void setDeclarer(Player newDeclarer) {
+
+		declarer = newDeclarer;
+	}
+
+	/**
+	 * Gets the declarer position
+	 * 
+	 * @return Declarer position
+	 */
+	public Player getDeclarer() {
+
+		return declarer;
 	}
 
 	/**
 	 * Adds a card to the suit/point counter
 	 * 
-	 * @param card Card
+	 * @param card
+	 *            Card
 	 */
 	public void addCard(Card card) {
-		
-		this.suitCount[card.getSuit().ordinal()]++;
-		this.suitPoints[card.getSuit().ordinal()] += card.getRank().getPoints();
+
+		suitCount.put(card.getSuit(),
+				Integer.valueOf(suitCount.get(card.getSuit()).intValue() + 1));
+		suitPoints.put(
+				card.getSuit(),
+				Integer.valueOf(suitCount.get(card.getSuit()).intValue()
+						+ card.getRank().getPoints()));
 	}
 
 	/**
 	 * Removes a card from the suit/point counter
 	 * 
-	 * @param card Card
+	 * @param card
+	 *            Card
 	 */
 	public void removeCard(Card card) {
-		
-		this.suitCount[card.getSuit().ordinal()]--;
-		this.suitPoints[card.getSuit().ordinal()] -= card.getRank().getPoints();
+
+		suitCount.put(card.getSuit(),
+				Integer.valueOf(suitCount.get(card.getSuit()).intValue() - 1));
+		suitPoints.put(
+				card.getSuit(),
+				Integer.valueOf(suitCount.get(card.getSuit()).intValue()
+						- card.getRank().getPoints()));
 	}
-	
+
 	/**
 	 * @see Object#toString()
 	 */
 	@Override
 	public String toString() {
-		
+
 		StringBuffer result = new StringBuffer();
-		
+
 		result.append("Played cards:\n"); //$NON-NLS-1$
 		for (Suit suit : Suit.values()) {
-			
+
 			result.append(suit.shortString()).append(": "); //$NON-NLS-1$
-			
+
 			for (Rank rank : Rank.values()) {
-				
-				if (this.playedCards.get(0).contains(Card.getCard(suit, rank)) ||
-						this.playedCards.get(1).contains(Card.getCard(suit, rank)) ||
-						this.playedCards.get(2).contains(Card.getCard(suit, rank))) {
-					
-					result.append(suit.shortString()).append(rank.shortString()).append(' ');
-				}
-				else {
-					
+
+				if (playedCards.get(0).contains(Card.getCard(suit, rank))
+						|| playedCards.get(1)
+								.contains(Card.getCard(suit, rank))
+						|| playedCards.get(2)
+								.contains(Card.getCard(suit, rank))) {
+
+					result.append(suit.shortString())
+							.append(rank.shortString()).append(' ');
+				} else {
+
 					result.append("-- "); //$NON-NLS-1$
 				}
 			}
-			
+
 			result.append('\n');
 		}
-		
+
 		return result.toString();
 	}
 
@@ -418,71 +468,91 @@ public class PlayerKnowledge {
 	 * @return List of cards played in the current trick
 	 */
 	public CardList getTrickCards() {
-		
+
 		CardList trick = new CardList();
-		
-		if (this.leftPlayerTrickCard != null) {
-			
-			trick.add(this.leftPlayerTrickCard);
+
+		if (leftPlayerTrickCard != null) {
+
+			trick.add(leftPlayerTrickCard);
 		}
-		
-		if (this.rightPlayerTrickCard != null) {
-			
-			trick.add(this.rightPlayerTrickCard);
+
+		if (rightPlayerTrickCard != null) {
+
+			trick.add(rightPlayerTrickCard);
 		}
-		
+
 		return trick;
 	}
 
 	/**
 	 * Adds a trick to the knowledge
 	 * 
-	 * @param trick Trick to be added
+	 * @param trick
+	 *            Trick to be added
 	 */
 	public void addTrick(Trick trick) {
-		
-		this.tricks.add(trick);
-	}
 
-	/**
-	 * Gets card positions according the player knowledge
-	 * 
-	 * @param position Player position 
-	 * 
-	 * @return String of card symbols
-	 */
-	public String getPossibleCardPositions(Player position) {
-
-		// FIXME returns only null!
-		return new String();
-	}
-
-	/**
-	 * Gets all cards that are already known
-	 * 
-	 * @return String of card symbols
-	 */
-	public CardDeck getKnownCards() {
-		
-		// FIXME returns complete card deck
-		return new CardDeck();
+		tricks.add(trick);
 	}
 
 	/**
 	 * Sets the game announcement
 	 * 
-	 * @param gameAnn Game announcement to set
+	 * @param gameAnn
+	 *            Game announcement to set
 	 */
 	public void setGame(GameAnnouncement gameAnn) {
-		
-		this.game = gameAnn;
+
+		game = gameAnn;
 	}
 
 	/**
 	 * @return the game
 	 */
 	public GameAnnouncement getGame() {
-		
-		return this.game;
+
+		return game;
+	}
+
+	/**
+	 * Sets the trump count
+	 * 
+	 * @param trumpCount
+	 */
+	public void setTrumpCount(int trumpCount) {
+		this.trumpCount = trumpCount;
+	}
+
+	/**
+	 * Gets the trump count
+	 * 
+	 * @return
+	 */
+	public int getTrumpCount() {
+		return trumpCount;
+	}
+
+	/**
+	 * Gets the suit count
+	 * 
+	 * @param suit
+	 *            Suit
+	 * @return Number of cards from this suit
+	 */
+	public int getSuitCount(Suit suit) {
+
+		return suitCount.get(suit).intValue();
+	}
+
+	/**
+	 * Gets the suit points
+	 * 
+	 * @param suit
+	 *            Suit
+	 * @return Points from this suit
+	 */
+	public int getSuitPoints(Suit suit) {
+
+		return suitPoints.get(suit).intValue();
 	}
 }

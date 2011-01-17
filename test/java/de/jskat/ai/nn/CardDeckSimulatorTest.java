@@ -10,12 +10,15 @@ Released: @ReleaseDate@
 
 package de.jskat.ai.nn;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import de.jskat.util.Card;
 import de.jskat.util.CardDeck;
+import de.jskat.util.CardList;
+import de.jskat.util.Player;
 
 /**
  * Tests for CardDeckSimulator
@@ -23,86 +26,107 @@ import de.jskat.util.CardDeck;
 public class CardDeckSimulatorTest {
 
 	/**
-	 * Checks simulation of unknown cards
+	 * Checks simulation of unknown cards<br />
+	 * all cards are unknown
 	 */
 	@Test
-	public void simulateUnknownCards001() {
+	public void simulateUnknownCards_AllCards() {
 
-		CardDeck simCards = new CardDeck();
+		CardList cards = new CardList();
 
-		simCards.set(0, null);
-		simCards.set(8, null);
-		simCards.set(16, null);
-		simCards.set(24, null);
-		CardDeckSimulator.simulateUnknownCards(simCards);
+		CardDeck simCards = CardDeckSimulator.simulateUnknownCards(
+				Player.FORE_HAND, cards);
 
-		assertFalse(simCards.get(0).equals(null)
-				&& simCards.get(8).equals(null)
-				&& simCards.get(16).equals(null)
-				&& simCards.get(24).equals(null));
+		assertEquals(32, simCards.size());
 	}
 
 	/**
-	 * Checks simulation of unknown cards
+	 * Checks simulation of unknown cards<br />
+	 * Fore hand cards are known
 	 */
 	@Test
-	public void simulateUnknownCards002() {
+	public void simulateUnknownCards_ForeHandKnown() {
 
-		CardDeck simCards = new CardDeck();
+		CardList cards = getKnownCards();
 
-		simCards.set(0, null);
-		simCards.set(1, null);
-		simCards.set(2, null);
-		simCards.set(3, null);
-		simCards.set(4, null);
-		simCards.set(5, null);
-		simCards.set(6, null);
-		simCards.set(7, null);
-		CardDeckSimulator.simulateUnknownCards(simCards);
+		CardDeck simCards = CardDeckSimulator.simulateUnknownCards(
+				Player.FORE_HAND, cards);
 
-		assertTrue(simCards.get(0) != null && simCards.get(1) != null
-				&& simCards.get(2) != null && simCards.get(3) != null
-				&& simCards.get(4) != null && simCards.get(5) != null
-				&& simCards.get(6) != null && simCards.get(7) != null);
+		assertEquals(32, simCards.size());
+		assertTrue(cards.contains(simCards.get(0)));
+		assertTrue(cards.contains(simCards.get(1)));
+		assertTrue(cards.contains(simCards.get(2)));
+		assertTrue(cards.contains(simCards.get(11)));
+		assertTrue(cards.contains(simCards.get(12)));
+		assertTrue(cards.contains(simCards.get(13)));
+		assertTrue(cards.contains(simCards.get(14)));
+		assertTrue(cards.contains(simCards.get(23)));
+		assertTrue(cards.contains(simCards.get(24)));
+		assertTrue(cards.contains(simCards.get(25)));
 	}
 
 	/**
-	 * Checks simulation of unknown cards
+	 * Checks simulation of unknown cards<br />
+	 * Middle hand cards are known
 	 */
 	@Test
-	public void simulateUnknownCards003() {
+	public void simulateUnknownCards_MiddleHandKnown() {
 
-		CardDeck simCards = new CardDeck();
+		CardList cards = getKnownCards();
 
-		simCards.set(0, null);
-		simCards.set(1, null);
-		simCards.set(2, null);
-		simCards.set(3, null);
-		simCards.set(4, null);
-		simCards.set(5, null);
-		simCards.set(6, null);
-		simCards.set(7, null);
-		simCards.set(16, null);
-		simCards.set(17, null);
-		simCards.set(18, null);
-		simCards.set(19, null);
-		simCards.set(20, null);
-		simCards.set(21, null);
-		simCards.set(22, null);
-		simCards.set(23, null);
-		simCards.set(24, null);
-		simCards.set(30, null);
-		simCards.set(31, null);
-		CardDeckSimulator.simulateUnknownCards(simCards);
+		CardDeck simCards = CardDeckSimulator.simulateUnknownCards(
+				Player.MIDDLE_HAND, cards);
 
-		assertTrue(simCards.get(0) != null && simCards.get(1) != null
-				&& simCards.get(2) != null && simCards.get(3) != null
-				&& simCards.get(4) != null && simCards.get(5) != null
-				&& simCards.get(6) != null && simCards.get(1) != null
-				&& simCards.get(16) != null && simCards.get(18) != null
-				&& simCards.get(19) != null && simCards.get(20) != null
-				&& simCards.get(21) != null && simCards.get(22) != null
-				&& simCards.get(23) != null && simCards.get(24) != null
-				&& simCards.get(30) != null && simCards.get(31) != null);
+		assertEquals(32, simCards.size());
+		assertTrue(cards.contains(simCards.get(3)));
+		assertTrue(cards.contains(simCards.get(4)));
+		assertTrue(cards.contains(simCards.get(5)));
+		assertTrue(cards.contains(simCards.get(15)));
+		assertTrue(cards.contains(simCards.get(16)));
+		assertTrue(cards.contains(simCards.get(17)));
+		assertTrue(cards.contains(simCards.get(18)));
+		assertTrue(cards.contains(simCards.get(26)));
+		assertTrue(cards.contains(simCards.get(27)));
+		assertTrue(cards.contains(simCards.get(28)));
+	}
+
+	/**
+	 * Checks simulation of unknown cards<br />
+	 * Hind hand cards are known
+	 */
+	@Test
+	public void simulateUnknownCards_HindHandKnown() {
+
+		CardList cards = getKnownCards();
+
+		CardDeck simCards = CardDeckSimulator.simulateUnknownCards(
+				Player.HIND_HAND, cards);
+
+		assertEquals(32, simCards.size());
+		assertTrue(cards.contains(simCards.get(6)));
+		assertTrue(cards.contains(simCards.get(7)));
+		assertTrue(cards.contains(simCards.get(8)));
+		assertTrue(cards.contains(simCards.get(19)));
+		assertTrue(cards.contains(simCards.get(20)));
+		assertTrue(cards.contains(simCards.get(21)));
+		assertTrue(cards.contains(simCards.get(22)));
+		assertTrue(cards.contains(simCards.get(29)));
+		assertTrue(cards.contains(simCards.get(30)));
+		assertTrue(cards.contains(simCards.get(31)));
+	}
+
+	private CardList getKnownCards() {
+		CardList cards = new CardList();
+		cards.add(Card.CJ);
+		cards.add(Card.SJ);
+		cards.add(Card.HJ);
+		cards.add(Card.SJ);
+		cards.add(Card.CA);
+		cards.add(Card.CT);
+		cards.add(Card.CK);
+		cards.add(Card.CQ);
+		cards.add(Card.C9);
+		cards.add(Card.C8);
+		return cards;
 	}
 }

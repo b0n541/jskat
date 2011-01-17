@@ -14,6 +14,7 @@ package de.jskat.ai;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.jskat.data.GameAnnouncement;
 import de.jskat.data.Trick;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
@@ -29,8 +30,6 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 
 	private static Log log = LogFactory.getLog(AbstractJSkatPlayer.class);
 
-	/** ID of the single player (declaring player) */
-	protected Player singlePlayer;
 	/** Player name */
 	protected String playerName;
 	/** Player state */
@@ -43,8 +42,6 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	protected CardList skat = new CardList();
 	/** Cards of the single player */
 	protected CardList singlePlayerCards = new CardList();
-	/** Game type of the current game */
-	protected GameType gameType;
 	/** Flag for hand game */
 	protected boolean handGame;
 	/** Flag for ouvert game */
@@ -65,7 +62,7 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	 */
 	public final void setPlayerName(String newPlayerName) {
 
-		this.playerName = newPlayerName;
+		playerName = newPlayerName;
 	}
 
 	/**
@@ -73,7 +70,7 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	 */
 	public final String getPlayerName() {
 
-		return this.playerName;
+		return playerName;
 	}
 
 	/**
@@ -89,21 +86,18 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	 */
 	public final void newGame(Player newPosition) {
 
-		this.cards.clear();
-		this.skat.clear();
-		this.gameType = null;
-		this.handGame = false;
-		this.ouvertGame = false;
-		this.playerState = null;
-		this.singlePlayer = null;
-		this.rules = null;
-		this.schneiderAnnounced = false;
-		this.schwarzAnnounced = false;
-		this.singlePlayer = null;
-		this.gameWon = false;
-		this.gameValue = 0;
-		this.knowledge.initializeVariables();
-		this.knowledge.setPlayerPosition(newPosition);
+		cards.clear();
+		skat.clear();
+		handGame = false;
+		ouvertGame = false;
+		playerState = null;
+		rules = null;
+		schneiderAnnounced = false;
+		schwarzAnnounced = false;
+		gameWon = false;
+		gameValue = 0;
+		knowledge.initializeVariables();
+		knowledge.setPlayerPosition(newPosition);
 
 		preparateForNewGame();
 	}
@@ -113,8 +107,8 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	 */
 	public final void takeCard(Card newCard) {
 
-		this.cards.add(newCard);
-		this.knowledge.addCard(newCard);
+		cards.add(newCard);
+		knowledge.addCard(newCard);
 	}
 
 	/**
@@ -125,28 +119,34 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	 */
 	protected final void sortCards(GameType sortGameType) {
 
-		this.cards.sort(sortGameType);
+		cards.sort(sortGameType);
 	}
 
 	/**
 	 * @see IJSkatPlayer#startGame(Player, GameType, boolean, boolean, boolean,
 	 *      boolean)
 	 */
-	public final void startGame(Player newSinglePlayer, GameType newGameType,
+	public final void startGame(Player newDeclarer, GameType newGameType,
 			boolean newHandGame, boolean newOuvertGame,
 			boolean newSchneiderAnnounced, boolean newSchwarzAnnounced) {
 
-		this.playerState = PlayerStates.PLAYING;
-		this.singlePlayer = newSinglePlayer;
-		this.gameType = newGameType;
-		this.handGame = newHandGame;
-		this.ouvertGame = newOuvertGame;
-		this.schneiderAnnounced = newSchneiderAnnounced;
-		this.schwarzAnnounced = newSchwarzAnnounced;
-		this.gameWon = false;
-		this.gameValue = 0;
+		playerState = PlayerStates.PLAYING;
+		knowledge.setDeclarer(newDeclarer);
+		GameAnnouncement announcement = new GameAnnouncement();
+		announcement.setGameType(newGameType);
+		announcement.setHand(newHandGame);
+		announcement.setOuvert(newOuvertGame);
+		announcement.setSchneider(newSchneiderAnnounced);
+		announcement.setSchwarz(newSchwarzAnnounced);
+		knowledge.setGame(announcement);
+		handGame = newHandGame;
+		ouvertGame = newOuvertGame;
+		schneiderAnnounced = newSchneiderAnnounced;
+		schwarzAnnounced = newSchwarzAnnounced;
+		gameWon = false;
+		gameValue = 0;
 
-		this.rules = SkatRuleFactory.getSkatRules(this.gameType);
+		rules = SkatRuleFactory.getSkatRules(newGameType);
 
 		startGame();
 	}
@@ -166,8 +166,8 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 
 		log.debug("Skat cards: " + skatCards); //$NON-NLS-1$
 
-		this.skat = skatCards;
-		this.cards.addAll(skatCards);
+		skat = skatCards;
+		cards.addAll(skatCards);
 	}
 
 	/**
@@ -178,7 +178,7 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	 */
 	protected final void setState(IJSkatPlayer.PlayerStates newState) {
 
-		this.playerState = newState;
+		playerState = newState;
 	}
 
 	/**
@@ -186,7 +186,7 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	 */
 	public final void bidByPlayer(Player player, int bidValue) {
 
-		this.knowledge.setHighestBid(player, bidValue);
+		knowledge.setHighestBid(player, bidValue);
 	}
 
 	/**
@@ -200,15 +200,15 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 		boolean isCardAllowed = false;
 		CardList result = new CardList();
 
-		log.debug("game type: " + this.gameType); //$NON-NLS-1$
-		log.debug("player cards (" + this.cards.size() + "): " + this.cards); //$NON-NLS-1$ //$NON-NLS-2$
+		log.debug("game type: " + knowledge.getGame().getGameType()); //$NON-NLS-1$
+		log.debug("player cards (" + cards.size() + "): " + cards); //$NON-NLS-1$ //$NON-NLS-2$
 		log.debug("trick size: " + trick.size()); //$NON-NLS-1$
 
-		for (Card card : this.cards) {
+		for (Card card : cards) {
 
 			if (trick.size() > 0
-					&& this.rules.isCardAllowed(this.gameType, trick.get(0),
-							this.cards, card)) {
+					&& rules.isCardAllowed(knowledge.getGame().getGameType(),
+							trick.get(0), cards, card)) {
 
 				log.debug("initial card: " + trick.get(0)); //$NON-NLS-1$
 				isCardAllowed = true;
@@ -234,12 +234,12 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	 */
 	public final void cardPlayed(Player player, Card card) {
 
-		this.knowledge.setCardPlayed(player, card);
+		knowledge.setCardPlayed(player, card);
 
-		if (player == this.knowledge.getPlayerPosition()) {
+		if (player == knowledge.getPlayerPosition()) {
 			// remove this card from counter
-			this.knowledge.removeCard(card);
-			this.cards.remove(card);
+			knowledge.removeCard(card);
+			cards.remove(card);
 		}
 	}
 
@@ -248,8 +248,8 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	 */
 	public final void showTrick(Trick trick) {
 
-		this.knowledge.addTrick(trick);
-		this.knowledge.clearTrickCards();
+		knowledge.addTrick(trick);
+		knowledge.clearTrickCards();
 	}
 
 	/**
@@ -267,7 +267,7 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 
 		boolean result = false;
 
-		if (this.singlePlayer == this.knowledge.getPlayerPosition()) {
+		if (knowledge.getDeclarer().equals(knowledge.getPlayerPosition())) {
 
 			result = true;
 		}
@@ -280,7 +280,7 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	 */
 	public final void lookAtOuvertCards(CardList ouvertCards) {
 
-		this.singlePlayerCards.addAll(ouvertCards);
+		singlePlayerCards.addAll(ouvertCards);
 	}
 
 	/**
@@ -289,7 +289,7 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	@Override
 	public void setGameResult(boolean pGameWon, int pGameValue) {
 
-		this.gameWon = pGameWon;
-		this.gameValue = pGameValue;
+		gameWon = pGameWon;
+		gameValue = pGameValue;
 	}
 }

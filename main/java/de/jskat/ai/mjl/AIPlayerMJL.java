@@ -120,17 +120,15 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public void startGame() {
-		if (singlePlayer != knowledge.getPlayerPosition()) {
-			log
-					.debug("ok? AIPlayerMJL should be OpponentPlayer - actually is: "
-							+ (aiPlayer == null ? "null" : aiPlayer.getClass()
-									.getName()));
+		if (knowledge.getDeclarer() != knowledge.getPlayerPosition()) {
+			log.debug("ok? AIPlayerMJL should be OpponentPlayer - actually is: "
+					+ (aiPlayer == null ? "null" : aiPlayer.getClass()
+							.getName()));
 		} else {
 			if (aiPlayer == null) {
-				log
-						.warn("todo: AIPlayerMJL should already have been set to SinglePlayer! "
-								+ (aiPlayer == null ? "null" : aiPlayer
-										.getClass().getName()));
+				log.warn("todo: AIPlayerMJL should already have been set to SinglePlayer! "
+						+ (aiPlayer == null ? "null" : aiPlayer.getClass()
+								.getName()));
 				aiPlayer = new SinglePlayer(cards, rules);
 			} else {
 				log.debug("ok! AIPlayerMJL already set to SinglePlayer: "
@@ -148,7 +146,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	@Override
 	public Card playCard() {
 		log.debug(".playCard(): my position: " + knowledge.getPlayerPosition()
-				+ ", single player: " + singlePlayer);
+				+ ", single player: " + knowledge.getDeclarer());
 		Card toPlay = aiPlayer.playNextCard(knowledge);
 		// make sure, that there is a card
 		if (toPlay != null)
