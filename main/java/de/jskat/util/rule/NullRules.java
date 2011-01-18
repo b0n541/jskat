@@ -33,6 +33,7 @@ public class NullRules extends AbstractSkatRules {
 				gameData.isHand(), gameData.isOuvert());
 		int multiplier = 1;
 
+		// FIXME (jan 18.01.2011) better check whether the declarer made a trick
 		if (gameData.isGameLost()) {
 
 			// Lost game is always counted double

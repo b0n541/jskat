@@ -292,6 +292,14 @@ public class SkatGame extends JSkatThread {
 		doSleep(maxSleep);
 	}
 
+	private void informPlayerAboutBid(Player bidPlayer, int bidValue) {
+
+		// inform all players about the last bid
+		for (Player currPlayerPosition : player.keySet()) {
+			player.get(currPlayerPosition).bidByPlayer(bidPlayer, bidValue);
+		}
+	}
+
 	/**
 	 * Controls the bidding between two players
 	 * 
@@ -329,6 +337,7 @@ public class SkatGame extends JSkatThread {
 
 				data.setBidValue(announcerBidValue);
 				data.setPlayerBid(announcer, announcerBidValue);
+				informPlayerAboutBid(announcer, announcerBidValue);
 				view.setBid(tableName, announcer, announcerBidValue, true);
 
 				if (player.get(hearer).holdBid(currBidValue)) {
@@ -338,6 +347,7 @@ public class SkatGame extends JSkatThread {
 					// hearing hand holds bid
 					data.setBidValue(announcerBidValue);
 					data.setPlayerBid(hearer, announcerBidValue);
+					informPlayerAboutBid(hearer, announcerBidValue);
 					view.setBid(tableName, hearer, announcerBidValue, false);
 
 				} else {

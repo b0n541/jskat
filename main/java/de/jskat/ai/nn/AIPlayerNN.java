@@ -11,9 +11,7 @@ Released: @ReleaseDate@
 package de.jskat.ai.nn;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import org.apache.commons.logging.Log;
@@ -25,6 +23,7 @@ import de.jskat.ai.nn.data.SkatNetworks;
 import de.jskat.ai.nn.util.NeuralNetwork;
 import de.jskat.control.SkatGame;
 import de.jskat.data.GameAnnouncement;
+import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameState;
 import de.jskat.gui.NullView;
 import de.jskat.util.Card;
@@ -34,6 +33,8 @@ import de.jskat.util.GameType;
 import de.jskat.util.Player;
 import de.jskat.util.Rank;
 import de.jskat.util.Suit;
+import de.jskat.util.rule.BasicSkatRules;
+import de.jskat.util.rule.SkatRuleFactory;
 
 /**
  * JSkat player using neural network
@@ -46,6 +47,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	private List<double[]> allInputs;
 
 	private boolean isLearning = false;
+
+	private List<GameType> feasibleGameTypes;
 
 	/**
 	 * Constructor
@@ -68,12 +71,20 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		allInputs = new ArrayList<double[]>();
 
+		feasibleGameTypes = new ArrayList<GameType>();
+		for (GameType gameType : GameType.values()) {
+			if (gameType != GameType.RAMSCH && gameType != GameType.PASSED_IN) {
+				feasibleGameTypes.add(gameType);
+			}
+		}
+
 		rand = new Random();
 	}
 
 	/**
 	 * @see IJSkatPlayer#isAIPlayer()
 	 */
+	@Override
 	public boolean isAIPlayer() {
 
 		return true;
@@ -82,12 +93,12 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	/**
 	 * @see IJSkatPlayer#bidMore(int)
 	 */
+	@Override
 	public int bidMore(int nextBidValue) {
-		// TODO replace random bidding
+
 		int result = -1;
 
-		if (rand.nextBoolean()) {
-
+		if (isAnyGamePossible(nextBidValue)) {
 			result = nextBidValue;
 		}
 
@@ -97,80 +108,158 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	/**
 	 * @see IJSkatPlayer#holdBid(int)
 	 */
+	@Override
 	public boolean holdBid(int currBidValue) {
-		// TODO replace random bidding
-		return rand.nextBoolean();
+
+		return isAnyGamePossible(currBidValue);
+	}
+
+	private boolean isAnyGamePossible(int currBidValue) {
+
+		boolean result = false;
+
+		List<GameType> filteredGameTypes = filterFeasibleGameTypes(currBidValue);
+
+		for (GameType gameType : filteredGameTypes) {
+
+			if (simulateGames(cards, gameType, 100) > 50) {
+
+				result = true;
+			}
+		}
+		return result;
+	}
+
+	private List<GameType> filterFeasibleGameTypes(int bidValue) {
+
+		List<GameType> result = new ArrayList<GameType>();
+
+		SkatGameData data = getSimulatedGameOutcome();
+
+		for (GameType gameType : feasibleGameTypes) {
+
+			GameAnnouncement gameAnnouncement = new GameAnnouncement();
+			gameAnnouncement.setGameType(gameType);
+			data.setAnnouncement(gameAnnouncement);
+
+			BasicSkatRules skatRules = SkatRuleFactory.getSkatRules(gameType);
+			int gameResult = skatRules.calcGameResult(data);
+
+			if (gameResult >= bidValue) {
+
+				result.add(gameType);
+			}
+		}
+
+		return result;
+	}
+
+	private SkatGameData getSimulatedGameOutcome() {
+
+		SkatGameData data = new SkatGameData();
+
+		data.setGameWon(true);
+
+		if (cards.contains(Card.CJ)) {
+			data.setClubJack(true);
+		}
+		if (cards.contains(Card.SJ)) {
+			data.setClubJack(true);
+		}
+		if (cards.contains(Card.HJ)) {
+			data.setClubJack(true);
+		}
+		if (cards.contains(Card.DJ)) {
+			data.setClubJack(true);
+		}
+
+		return data;
 	}
 
 	/**
 	 * @see IJSkatPlayer#announceGame()
 	 */
+	@Override
 	public GameAnnouncement announceGame() {
-		// TODO replace random game announcing
+
 		log.debug("position: " + knowledge.getPlayerPosition()); //$NON-NLS-1$
 		log.debug("bids: " + knowledge.getHighestBid(Player.FORE_HAND) + //$NON-NLS-1$
 				" " + knowledge.getHighestBid(Player.MIDDLE_HAND) + //$NON-NLS-1$
 				" " + knowledge.getHighestBid(Player.HIND_HAND)); //$NON-NLS-1$
 
 		GameAnnouncement newGame = new GameAnnouncement();
-
 		newGame.setGameType(getBestGameType());
 
 		// FIXME (jan 17.01.2011) setting ouvert and schneider/schwarz
 		// newGame.setOuvert(rand.nextBoolean());
 
-		log.info("Announcing: " + newGame);
+		log.info("Announcing: " + newGame); //$NON-NLS-1$
 
 		return newGame;
 	}
 
 	private GameType getBestGameType() {
 
-		Map<GameType, Integer> wonGames = new HashMap<GameType, Integer>();
+		// FIXME (jan 18.01.2011) check for overbidding!
+		SimulationResults simulationResults = simulateGames(cards, 100);
 		GameType bestGameType = null;
 		int highestWonGames = -1;
 
-		for (GameType gameType : GameType.values()) {
+		for (GameType gameType : feasibleGameTypes) {
 
-			if (gameType != GameType.RAMSCH && gameType != GameType.PASSED_IN) {
+			int currWonGames = simulationResults.getWonGames(gameType)
+					.intValue();
 
-				log.debug("Getting number of won games for game type: "
-						+ gameType);
+			if (currWonGames > highestWonGames) {
 
-				int currWonGames = simulateGames(gameType, 100);
-				wonGames.put(gameType, currWonGames);
+				log.debug("Found new highest number of won games " //$NON-NLS-1$
+						+ currWonGames + " for game type " + gameType); //$NON-NLS-1$
 
-				log.debug("Number of won games is: " + currWonGames);
-
-				if (currWonGames > highestWonGames) {
-
-					log.debug("Found new highest number of won games "
-							+ currWonGames + " for game type " + gameType);
-
-					highestWonGames = currWonGames;
-					bestGameType = gameType;
-				}
+				highestWonGames = currWonGames;
+				bestGameType = gameType;
 			}
-		}
 
-		if (bestGameType == null) {
+			if (bestGameType == null) {
 
-			log.error("No best game type found. Announcing grand!!!");
-			bestGameType = GameType.GRAND;
-		} else {
-			log.info(wonGames);
+				log.error("No best game type found. Announcing grand!!!"); //$NON-NLS-1$
+				bestGameType = GameType.GRAND;
+
+			}
 		}
 
 		return bestGameType;
 	}
 
-	private int simulateGames(GameType gameType, int episodes) {
+	private SimulationResults simulateGames(CardList playerCards,
+			int numberOfSimulations) {
+
+		// FIXME (jan 18.01.2011) make number of simulated games time dependent
+		SimulationResults result = new SimulationResults();
+
+		// FIXME (jan 18.01.2011) parallelize this process
+		for (GameType gameType : feasibleGameTypes) {
+
+			log.debug("Getting number of won games for game type: " //$NON-NLS-1$
+					+ gameType);
+
+			int currWonGames = simulateGames(playerCards, gameType,
+					numberOfSimulations);
+			result.setWonGames(gameType, Integer.valueOf(currWonGames));
+
+			log.debug("Number of won games is: " + currWonGames); //$NON-NLS-1$
+		}
+
+		return result;
+	}
+
+	private int simulateGames(CardList playerCards, GameType gameType,
+			int episodes) {
 
 		int wonGames = 0;
 
 		for (int i = 0; i < episodes; i++) {
 
-			if (simulateGame(gameType)) {
+			if (simulateGame(playerCards, gameType)) {
 				wonGames++;
 			}
 		}
@@ -178,7 +267,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		return wonGames;
 	}
 
-	private boolean simulateGame(GameType gameType) {
+	private boolean simulateGame(CardList playerCards, GameType gameType) {
 
 		AIPlayerNN nnPlayer1 = new AIPlayerNN();
 		nnPlayer1.setIsLearning(false);
@@ -192,7 +281,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		game.setMaxSleep(0);
 
 		CardDeck deck = CardDeckSimulator.simulateUnknownCards(
-				knowledge.getPlayerPosition(), cards);
+				knowledge.getPlayerPosition(), playerCards);
 		log.debug("Card deck: " + deck); //$NON-NLS-1$
 		game.setCardDeck(deck);
 		game.dealCards();
@@ -219,23 +308,72 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	/**
 	 * @see IJSkatPlayer#lookIntoSkat()
 	 */
+	@Override
 	public boolean lookIntoSkat() {
-		// TODO replace random skat looking
-		return rand.nextBoolean();
+
+		boolean result = true;
+
+		SimulationResults simResult = simulateGames(cards, 100);
+
+		for (GameType gameType : feasibleGameTypes) {
+
+			if (simResult.getWonGames(gameType).intValue() > 75) {
+
+				result = false;
+			}
+		}
+
+		return result;
 	}
 
 	/**
 	 * @see IJSkatPlayer#discardSkat()
 	 */
+	@Override
 	public CardList discardSkat() {
-		// TODO replace random discarding
+
 		CardList result = new CardList();
+		int highestNumberOfWonGames = 0;
 
 		log.debug("Player cards before discarding: " + cards); //$NON-NLS-1$
 
-		// just discard two random cards
-		result.add(cards.remove(rand.nextInt(cards.size())));
-		result.add(cards.remove(rand.nextInt(cards.size())));
+		// check all possible discards
+		for (int i = 0; i < cards.size(); i++) {
+
+			for (int j = 0; j < cards.size() - 1; j++) {
+
+				CardList simCards = new CardList();
+				simCards.addAll(cards);
+
+				CardList currSkat = new CardList();
+				currSkat.add(simCards.remove(i));
+				currSkat.add(simCards.remove(j));
+
+				for (GameType gameType : filterFeasibleGameTypes(knowledge
+						.getHighestBid(knowledge.getPlayerPosition()))) {
+
+					int wonGames = simulateGames(simCards, gameType, 10);
+
+					if (wonGames > highestNumberOfWonGames) {
+
+						highestNumberOfWonGames = wonGames;
+						result.clear();
+						result.addAll(currSkat);
+					}
+				}
+			}
+		}
+
+		if (result.size() != 2) {
+
+			log.error("Did not found cards for discarding!!!"); //$NON-NLS-1$
+			result.clear();
+			result.add(cards.remove(rand.nextInt(cards.size())));
+			result.add(cards.remove(rand.nextInt(cards.size())));
+		} else {
+			cards.remove(result.get(0));
+			cards.remove(result.get(1));
+		}
 
 		log.debug("Player cards after discarding: " + cards); //$NON-NLS-1$
 
@@ -254,6 +392,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	/**
 	 * @see IJSkatPlayer#playCard()
 	 */
+	@Override
 	public Card playCard() {
 
 		int bestCardIndex = -1;

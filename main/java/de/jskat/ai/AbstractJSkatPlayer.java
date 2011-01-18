@@ -184,6 +184,7 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	/**
 	 * @see IJSkatPlayer#bidByPlayer(Player, int)
 	 */
+	@Override
 	public final void bidByPlayer(Player player, int bidValue) {
 
 		knowledge.setHighestBid(player, bidValue);

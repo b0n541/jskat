@@ -48,8 +48,7 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 
 		int multiplier = getBaseMultiplier(gameData);
 
-		log
-				.debug("calcSuitResult: after Jacks and Trump: multiplier " + multiplier); //$NON-NLS-1$
+		log.debug("calcSuitResult: after Jacks and Trump: multiplier " + multiplier); //$NON-NLS-1$
 
 		if (gameData.isHand() && !gameData.isGameLost()) {
 
@@ -113,8 +112,8 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 	 */
 	protected int getJackMultiplier(SkatGameData gameData) {
 
-		// TODO: multiplier should already be calculated at the beginning of the
-		// game - skat & suit cards also need to be considered
+		// FIXME: multiplier should already be calculated at the beginning of
+		// the game - skat & suit cards also need to be considered
 
 		int multiplier = 2; // it's the lowest multiplier,
 		// "with/without one play two"
