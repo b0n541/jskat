@@ -122,7 +122,11 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		for (GameType gameType : filteredGameTypes) {
 
-			if (simulateGames(cards, gameType, 100) > 50) {
+			int gamesToSimulate = 500;
+			int wonGames = simulateGames(cards, gameType, gamesToSimulate);
+			double wonRate = (100.0d * wonGames) / gamesToSimulate;
+
+			if (wonRate > 0.25) {
 
 				result = true;
 			}
@@ -313,11 +317,15 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		boolean result = true;
 
-		SimulationResults simResult = simulateGames(cards, 100);
+		int gamesToSimulate = 100;
+		SimulationResults simResult = simulateGames(cards, gamesToSimulate);
 
 		for (GameType gameType : feasibleGameTypes) {
 
-			if (simResult.getWonGames(gameType).intValue() > 75) {
+			int wonGames = simResult.getWonGames(gameType).intValue();
+			double wonRate = (100.0d * wonGames) / gamesToSimulate;
+
+			if (wonRate > 0.9) {
 
 				result = false;
 			}
