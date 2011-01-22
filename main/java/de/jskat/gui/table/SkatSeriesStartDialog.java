@@ -25,8 +25,12 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.ListCellRenderer;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import net.miginfocom.swing.MigLayout;
 import de.jskat.ai.PlayerType;
@@ -45,10 +49,13 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
 	private JSkatResourceBundle strings;
 
+	private JTextField player1name;
+	private JTextField player2name;
+	private JTextField player3name;
 	private JComboBox player1;
 	private JComboBox player2;
 	private JComboBox player3;
-	private JTextField numberOfRounds;
+	private JSpinner numberOfRounds;
 	private JCheckBox unlimited;
 
 	/**
@@ -87,15 +94,21 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 		playerTypes.add(PlayerType.ALGORITHMIC);
 
 		root.add(new JLabel(strings.getString("player") + " 1")); //$NON-NLS-1$//$NON-NLS-2$
+		player1name = new JTextField("Jan");
+		root.add(player1name, "span2, growx"); //$NON-NLS-1$
 		player1 = new JComboBox(playerTypes.toArray());
 		player1.setRenderer(new PlayerComboBoxRenderer());
 		root.add(player1, "span2, growx, wrap"); //$NON-NLS-1$
 		root.add(new JLabel(strings.getString("player") + " 2")); //$NON-NLS-1$ //$NON-NLS-2$
+		player2name = new JTextField("Markus");
+		root.add(player2name, "span2, growx"); //$NON-NLS-1$
 		player2 = new JComboBox(playerTypes.toArray());
 		player2.setRenderer(new PlayerComboBoxRenderer());
 		root.add(player2, "span2, growx, wrap"); //$NON-NLS-1$
 		root.add(new JLabel(strings.getString("player") + " 3")); //$NON-NLS-1$//$NON-NLS-2$
 
+		player3name = new JTextField(System.getProperty("user.name"));
+		root.add(player3name, "span2, growx"); //$NON-NLS-1$
 		// Human player can only be player 3
 		playerTypes.add(PlayerType.HUMAN);
 		player3 = new JComboBox(playerTypes.toArray());
@@ -104,10 +117,21 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 		root.add(player3, "span2, growx, wrap"); //$NON-NLS-1$
 
 		root.add(new JLabel(strings.getString("number_of_rounds"))); //$NON-NLS-1$
-		numberOfRounds = new JTextField(10);
-		numberOfRounds.setText("1"); //$NON-NLS-1$
+		numberOfRounds = new JSpinner(new SpinnerNumberModel(12, 1, 48, 1));
 		root.add(numberOfRounds);
 		unlimited = new JCheckBox(strings.getString("unlimited")); //$NON-NLS-1$
+		unlimited.addChangeListener(new ChangeListener() {
+			
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				if(unlimited.isSelected()) {
+					numberOfRounds.setEnabled(false);
+				}
+				else {
+					numberOfRounds.setEnabled(true);
+				}
+			}
+		});
 		root.add(unlimited, "wrap"); //$NON-NLS-1$
 
 		JPanel buttonPanel = new JPanel(new MigLayout());
@@ -157,7 +181,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 			setVisible(false);
 
 			jskat.startSeries(playerNames,
-					Integer.parseInt(numberOfRounds.getText()),
+					Integer.parseInt(numberOfRounds.getValue().toString()),
 					unlimited.isSelected());
 		}
 
@@ -211,7 +235,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 					cellText = strings.getString("algorithmic_player"); //$NON-NLS-1$
 					break;
 				case HUMAN:
-					cellText = System.getProperty("user.name"); //$NON-NLS-1$
+					cellText = strings.getString("human_player"); //$NON-NLS-1$
 					break;
 				}
 
