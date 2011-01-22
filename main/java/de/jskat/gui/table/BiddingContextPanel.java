@@ -36,6 +36,7 @@ class BiddingContextPanel extends JPanel {
 	private BidBubblePanel hindHandBidLabel;
 	private JButton bidButton;
 	private JButton passButton;
+	private GameAnnouncePanel announcePanel;
 
 	Action makeBidAction;
 	Action holdBidAction;
@@ -65,7 +66,8 @@ class BiddingContextPanel extends JPanel {
 		biddingPanel.setOpaque(false);
 		add(biddingPanel, "grow"); //$NON-NLS-1$
 
-		add(new GameAnnouncePanel(actions, userPanel), "width 25%"); //$NON-NLS-1$
+		announcePanel = new GameAnnouncePanel(actions, userPanel);
+		add(announcePanel, "width 25%"); //$NON-NLS-1$
 
 		setOpaque(false);
 	}
@@ -163,5 +165,6 @@ class BiddingContextPanel extends JPanel {
 		middleHandBidLabel.setBidValue(0);
 		hindHandBidLabel.setBidValue(0);
 		bidButton.setText("18"); //$NON-NLS-1$
+		announcePanel.resetPanel();
 	}
 }
