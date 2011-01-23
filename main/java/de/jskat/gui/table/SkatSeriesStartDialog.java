@@ -11,7 +11,6 @@ Released: @ReleaseDate@
 
 package de.jskat.gui.table;
 
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,11 +22,9 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.ListCellRenderer;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -35,6 +32,7 @@ import javax.swing.event.ChangeListener;
 import net.miginfocom.swing.MigLayout;
 import de.jskat.ai.PlayerType;
 import de.jskat.control.JSkatMaster;
+import de.jskat.gui.AbstractI18NComboBoxRenderer;
 import de.jskat.util.JSkatResourceBundle;
 
 /**
@@ -50,7 +48,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 	private JSkatMaster jskat;
 	private JFrame parent;
 
-	private JSkatResourceBundle strings;
+	JSkatResourceBundle strings;
 
 	private JTextField player1name;
 	private JTextField player2name;
@@ -190,64 +188,40 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
 	}
 
-	private class PlayerComboBoxRenderer extends JPanel implements
-			ListCellRenderer {
+	private class PlayerComboBoxRenderer extends AbstractI18NComboBoxRenderer {
 
 		private static final long serialVersionUID = 1L;
 
-		JSkatResourceBundle strings;
-		JLabel cellItemLabel;
-
 		PlayerComboBoxRenderer() {
-
 			super();
-			strings = JSkatResourceBundle.instance();
-
-			setLayout(new MigLayout("fill")); //$NON-NLS-1$
-			cellItemLabel = new JLabel(" "); //$NON-NLS-1$
-			add(cellItemLabel);
 		}
 
 		@Override
-		public Component getListCellRendererComponent(JList list, Object value,
-				int index, boolean isSelected, boolean cellHasFocus) {
+		public String getValueText(Object value) {
 
-			cellItemLabel.setFont(list.getFont());
-
-			if (isSelected) {
-				setBackground(list.getSelectionBackground());
-				setForeground(list.getSelectionForeground());
-			} else {
-				setBackground(list.getBackground());
-				setForeground(list.getForeground());
-			}
+			String result = " "; //$NON-NLS-1$
 
 			PlayerType player = (PlayerType) value;
 
 			if (player != null) {
-				String cellText = null;
 
 				switch (player) {
 				case RANDOM:
-					cellText = strings.getString("random_player"); //$NON-NLS-1$
+					result = strings.getString("random_player"); //$NON-NLS-1$
 					break;
 				case NEURAL_NETWORK:
-					cellText = strings.getString("neural_network_player"); //$NON-NLS-1$
+					result = strings.getString("neural_network_player"); //$NON-NLS-1$
 					break;
 				case ALGORITHMIC:
-					cellText = strings.getString("algorithmic_player"); //$NON-NLS-1$
+					result = strings.getString("algorithmic_player"); //$NON-NLS-1$
 					break;
 				case HUMAN:
-					cellText = strings.getString("human_player"); //$NON-NLS-1$
+					result = strings.getString("human_player"); //$NON-NLS-1$
 					break;
 				}
-
-				cellItemLabel.setText(cellText);
-			} else {
-				cellItemLabel.setText(" "); //$NON-NLS-1$
 			}
 
-			return this;
+			return result;
 		}
 	}
 }

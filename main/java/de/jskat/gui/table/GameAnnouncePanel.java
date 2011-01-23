@@ -11,7 +11,6 @@ Released: @ReleaseDate@
 
 package de.jskat.gui.table;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -20,11 +19,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.ListCellRenderer;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -33,6 +29,7 @@ import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.GameAnnouncementWithDiscardedCards;
 import de.jskat.data.JSkatOptions;
+import de.jskat.gui.AbstractI18NComboBoxRenderer;
 import de.jskat.gui.action.JSkatAction;
 import de.jskat.util.CardList;
 import de.jskat.util.GameType;
@@ -200,49 +197,26 @@ class GameAnnouncePanel extends JPanel {
 		this.schwarzBox.setSelected(false);
 	}
 
-	private class GameTypeComboBoxRenderer extends JPanel implements
-			ListCellRenderer {
+	private class GameTypeComboBoxRenderer extends AbstractI18NComboBoxRenderer {
 
 		private static final long serialVersionUID = 1L;
 
-		JLabel cellItemLabel;
-
-		/**
-		 * Constructor
-		 */
 		GameTypeComboBoxRenderer() {
-
 			super();
-
-			setLayout(new MigLayout("fill")); //$NON-NLS-1$
-			cellItemLabel = new JLabel(" "); //$NON-NLS-1$
-			add(cellItemLabel);
 		}
 
 		@Override
-		public Component getListCellRendererComponent(JList list, Object value,
-				@SuppressWarnings("unused") int index, boolean isSelected,
-				@SuppressWarnings("unused") boolean cellHasFocus) {
+		public String getValueText(Object value) {
 
-			cellItemLabel.setFont(list.getFont());
-
-			if (isSelected) {
-				setBackground(list.getSelectionBackground());
-				setForeground(list.getSelectionForeground());
-			} else {
-				setBackground(list.getBackground());
-				setForeground(list.getForeground());
-			}
+			String result = " "; //$NON-NLS-1$
 
 			GameType gameType = (GameType) value;
 
 			if (gameType != null) {
-				cellItemLabel.setText(strings.getGameType(gameType));
-			} else {
-				cellItemLabel.setText(" "); //$NON-NLS-1$
+				result = strings.getGameType(gameType);
 			}
 
-			return this;
+			return result;
 		}
 	}
 }

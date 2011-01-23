@@ -43,6 +43,8 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
+	JSkatResourceBundle strings;
+
 	private JFrame parent;
 
 	private JComboBox language;
@@ -65,6 +67,7 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 	 */
 	public JSkatPreferencesDialog(JFrame mainFrame) {
 
+		strings = JSkatResourceBundle.instance();
 		parent = mainFrame;
 
 		initGUI();
@@ -72,7 +75,6 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 
 	private void initGUI() {
 
-		JSkatResourceBundle strings = JSkatResourceBundle.instance();
 		JSkatOptions options = JSkatOptions.instance();
 
 		setModalityType(ModalityType.APPLICATION_MODAL);
@@ -226,6 +228,7 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 
 		language = new JComboBox(SupportedLanguage.values());
 		language.setSelectedItem(options.getLanguage());
+		language.setRenderer(new LanguageComboBoxRenderer());
 
 		JPanel languagePanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		return languagePanel;
@@ -269,5 +272,35 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 			setVisible(false);
 		}
 
+	}
+
+	private class LanguageComboBoxRenderer extends AbstractI18NComboBoxRenderer {
+
+		private static final long serialVersionUID = 1L;
+
+		LanguageComboBoxRenderer() {
+			super();
+		}
+
+		@Override
+		public String getValueText(Object value) {
+
+			String result = " "; //$NON-NLS-1$
+
+			SupportedLanguage language = (SupportedLanguage) value;
+
+			if (language != null) {
+				switch (language) {
+				case ENGLISH:
+					result = strings.getString("english"); //$NON-NLS-1$
+					break;
+				case GERMAN:
+					result = strings.getString("german"); //$NON-NLS-1$
+					break;
+				}
+			}
+
+			return result;
+		}
 	}
 }
