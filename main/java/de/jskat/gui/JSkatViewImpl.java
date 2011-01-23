@@ -444,8 +444,8 @@ public class JSkatViewImpl implements IJSkatView {
 				.showMessageDialog(
 						mainFrame,
 						"JSkat Version 0.7\n\n"
-								+ "Authors: Jan Schaefer, Markus J. Luzius\n\n"
-								+ "Icons: Gnome Desktop Icons, Tango project, Elementary icons, Silvestre Herrera and Alex Roberts\n\n"
+								+ "Authors: Jan Schäfer, Markus J. Luzius\n\n"
+								+ "Icons: Gnome Desktop Icons, Tango project, Elementary icons,\nSilvestre Herrera and Alex Roberts\n\n"
 								+ "This program comes with ABSOLUTELY NO WARRANTY; for details see licence dialog\n"
 								+ "This is free software, and you are welcome to redistribute it\n"
 								+ "under certain conditions; see licence dialog for details.",
