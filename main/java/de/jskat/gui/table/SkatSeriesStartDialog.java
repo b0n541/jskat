@@ -44,6 +44,9 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final String CANCEL = "CANCEL"; //$NON-NLS-1$
+	private static final String START = "START"; //$NON-NLS-1$
+
 	private JSkatMaster jskat;
 	private JFrame parent;
 
@@ -55,8 +58,8 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 	private JComboBox player1;
 	private JComboBox player2;
 	private JComboBox player3;
-	private JSpinner numberOfRounds;
-	private JCheckBox unlimited;
+	JSpinner numberOfRounds;
+	JCheckBox unlimited;
 
 	/**
 	 * Constructor
@@ -98,13 +101,14 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 		root.add(player1name, "span2, growx"); //$NON-NLS-1$
 		player1 = new JComboBox(playerTypes.toArray());
 		player1.setRenderer(new PlayerComboBoxRenderer());
-		root.add(player1, "span2, growx, wrap"); //$NON-NLS-1$
+		root.add(player1, "growx, wrap"); //$NON-NLS-1$
+
 		root.add(new JLabel(strings.getString("player") + " 2")); //$NON-NLS-1$ //$NON-NLS-2$
 		player2name = new JTextField("Markus");
 		root.add(player2name, "span2, growx"); //$NON-NLS-1$
 		player2 = new JComboBox(playerTypes.toArray());
 		player2.setRenderer(new PlayerComboBoxRenderer());
-		root.add(player2, "span2, growx, wrap"); //$NON-NLS-1$
+		root.add(player2, "growx, wrap"); //$NON-NLS-1$
 		root.add(new JLabel(strings.getString("player") + " 3")); //$NON-NLS-1$//$NON-NLS-2$
 
 		player3name = new JTextField(System.getProperty("user.name"));
@@ -121,13 +125,12 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 		root.add(numberOfRounds);
 		unlimited = new JCheckBox(strings.getString("unlimited")); //$NON-NLS-1$
 		unlimited.addChangeListener(new ChangeListener() {
-			
+
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				if(unlimited.isSelected()) {
+				if (unlimited.isSelected()) {
 					numberOfRounds.setEnabled(false);
-				}
-				else {
+				} else {
 					numberOfRounds.setEnabled(true);
 				}
 			}
@@ -136,14 +139,14 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
 		JPanel buttonPanel = new JPanel(new MigLayout());
 		JButton start = new JButton(strings.getString("start")); //$NON-NLS-1$
-		start.setActionCommand("START"); //$NON-NLS-1$
+		start.setActionCommand(START);
 		start.addActionListener(this);
 		buttonPanel.add(start);
 		JButton cancel = new JButton(strings.getString("cancel")); //$NON-NLS-1$
-		cancel.setActionCommand("CANCEL"); //$NON-NLS-1$
+		cancel.setActionCommand(CANCEL);
 		cancel.addActionListener(this);
 		buttonPanel.add(cancel);
-		root.add(buttonPanel, "span 3, center"); //$NON-NLS-1$
+		root.add(buttonPanel, "span 4, center"); //$NON-NLS-1$
 
 		pack();
 	}
@@ -168,10 +171,10 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		if ("CANCEL".equals(e.getActionCommand())) { //$NON-NLS-1$
+		if (CANCEL.equals(e.getActionCommand())) { //$NON-NLS-1$
 
 			setVisible(false);
-		} else if ("START".equals(e.getActionCommand())) { //$NON-NLS-1$
+		} else if (START.equals(e.getActionCommand())) { //$NON-NLS-1$
 
 			ArrayList<PlayerType> playerNames = new ArrayList<PlayerType>();
 			playerNames.add((PlayerType) player1.getSelectedItem());
