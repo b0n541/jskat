@@ -12,6 +12,7 @@ Released: @ReleaseDate@
 package de.jskat.gui;
 
 import javax.swing.Action;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 
@@ -30,15 +31,17 @@ public class ToolbarButton extends JButton {
 	 * @see JButton#JButton(Action)
 	 */
 	public ToolbarButton(Action a) {
-		
+
 		super(a);
 		// setTextPosition();
 		// setPreferredSize(new Dimension(120, 100));
+		ImageIcon icon = (ImageIcon) getAction().getValue(Action.SMALL_ICON);
+		setIcon(icon);
 	}
 
-    private void setTextPosition() {
-		
-		this.setVerticalTextPosition(SwingConstants.BOTTOM);
-		this.setHorizontalTextPosition(SwingConstants.CENTER);
+	private void setTextPosition() {
+
+		setVerticalTextPosition(SwingConstants.BOTTOM);
+		setHorizontalTextPosition(SwingConstants.CENTER);
 	}
 }
