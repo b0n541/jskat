@@ -25,5 +25,7 @@ interface CardPlayer {
 	 * @return the card to play
 	 */
 	Card playNextCard(PlayerKnowledge knowledge);
+	
+	void startGame(PlayerKnowledge knowledge);
 
 }

@@ -22,20 +22,19 @@ import de.jskat.util.rule.BasicSkatRules;
  * @author Markus J. Luzius <markus@luzius.de>
  *
  */
-public class SinglePlayer implements CardPlayer {
+public class SinglePlayer extends AbstractCardPlayer {
 
 	/** log */
 	private Log log = LogFactory.getLog(SinglePlayer.class);
 	private BasicSkatRules rules;
-	private CardList cards;
 
 	/** Constructor
 	 * @param id playerID
 	 */
 	public SinglePlayer(CardList cards, BasicSkatRules rules) {
+		super(cards);
 		log.debug("Constructing new single player.");
 		this.rules = rules;
-		this.cards = cards;
 	}
 
 	/** Gets the next card, that the player wants to play

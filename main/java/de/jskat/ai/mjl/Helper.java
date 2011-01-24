@@ -13,11 +13,12 @@ package de.jskat.ai.mjl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import de.jskat.ai.PlayerKnowledge;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
 import de.jskat.util.GameType;
+import de.jskat.util.Player;
 import de.jskat.util.Rank;
-import de.jskat.util.SkatConstants;
 import de.jskat.util.Suit;
 
 /**
@@ -32,30 +33,27 @@ public class Helper {
 	 * Checks whether the current trick would be won by the single player, so
 	 * that the AIPlayer can decide which card to play
 	 * 
-	 * @param trick
+	 * @param knowledge
 	 *            All the necessary trick infos
 	 * @return true, if the single player would win the trick
 	 */
-	// public static boolean isSinglePlayerWin(CardList trick, int trump, int
-	// gameType, int singlePlayerPos) {
-	public static boolean isSinglePlayerWin(TrickInfo trick) {
-		if (trick.getTrick().size() < 2)
+	public static boolean isSinglePlayerWin(PlayerKnowledge knowledge) {
+		if (knowledge.getTrickCards().size() < 2)
+			// one card on the table: can't be single player win yet
 			return false;
-		if (trick.getTrick().size() < trick.getSinglePlayerPos() - 1)
-			return false;
-		if (trick.getSinglePlayerPos() == 0) {
-			if (trick.getCard(0).beats(trick.getGameInfo().getGameType(), trick.getCard(1)))
+		if (knowledge.getDeclarer() == Player.FORE_HAND) {
+			if (knowledge.getTrickCards().get(0).beats(knowledge.getGame().getGameType(), knowledge.getTrickCards().get(1)))
 				return true;
 			else
 				return false;
-		} else if (trick.getSinglePlayerPos() == 1) {
-			if (trick.getCard(1).beats(trick.getGameInfo().getGameType(), trick.getCard(0)))
+		} else if (knowledge.getDeclarer() == Player.MIDDLE_HAND) {
+			if (knowledge.getTrickCards().get(1).beats(knowledge.getGame().getGameType(), knowledge.getTrickCards().get(0)))
 				return true;
 			else
 				return false;
 		} else {
 			log.warn("Request for wrong singlePlayerPos ("
-					+ trick.getSinglePlayerPos() + ")!");
+					+ knowledge.getDeclarer() + ")!");
 			return false;
 		}
 	}
@@ -76,62 +74,57 @@ public class Helper {
 	 * @return true, if <b>cards</b> contain a card that can beat the
 	 *         <b>cardToBeat</b>
 	 */
-//	public static int isAbleToBeat(SkatRules rules, CardList cards,
-//			Card cardToBeat, Suit trump, Card initialCard,
-//			GameType gameType) {
-//		int result = -1;
-//		for (int i = 0; i < cards.size(); i++) {
-//			if (rules
-//					.isCardAllowed(cards.get(i), cards, initialCard, trump)) {
-//				if (cards.get(i).beats(cardToBeat, gameType, trump,
-//						initialCard)) {
-//					log.debug(cards.get(i) + " can beat " + cardToBeat
-//							+ ".");
-//					result = i;
-//					break;
-//				}
-//			}
-//		}
-//		return result;
-//	}
+	public static int isAbleToBeat(CardList cards,
+			Card cardToBeat, Card initialCard,
+			GameType gameType) {
+		int result = -1;
+		for (int i = 0; i < cards.size(); i++) {
+			if (cards.get(i).isAllowed(gameType, initialCard, cards)) {
+				if (cards.get(i).beats(gameType, initialCard)) {
+//					log.debug(cards.get(i) + " can beat " + cardToBeat + ".");
+					result = i;
+					break;
+				}
+			}
+		}
+		return result;
+	}
 
 	/**
 	 * Decides whether a player is able to match a certain initial card
 	 * 
 	 * @param cards
-	 * @param trump
 	 * @param initialCard
 	 * @param gameType
 	 * @return true if there is at least one card in the hand that can match
 	 *         <b>initialCard</b>
 	 */
-//	public static boolean isAbleToMatch(SkatRules rules, CardList cards,
-//			Suit trump, Card initialCard,
-//			GameType gameType) {
-//		boolean result = false;
-//		for (int i = 0; i < cards.size(); i++) {
-//			boolean sameSuit = (cards.get(i).getSuit() == initialCard
-//					.getSuit());
-//			if (rules
-//					.isCardAllowed(cards.get(i), cards, initialCard, trump)) {
-//				if (gameType != GameType.NULL) {
-//					if (cards.get(i).isTrump(gameType, trump)
-//							&& initialCard.isTrump(gameType, trump)) {
-//						result = true;
-//					} else if (!cards.get(i).isTrump(gameType, trump)
-//							&& !initialCard.isTrump(gameType, trump) && sameSuit) {
-//						result = true;
-//					}
-//				} else if (sameSuit) {
-//					result = true;
-//				}
-//
-//			}
-//			if (result)
-//				break;
-//		}
-//		return result;
-//	}
+	public static boolean isAbleToMatch(CardList cards,
+			Card initialCard,
+			GameType gameType) {
+		boolean result = false;
+		for (int i = 0; i < cards.size(); i++) {
+			boolean sameSuit = (cards.get(i).getSuit() == initialCard
+					.getSuit());
+			if (cards.get(i).isAllowed(gameType, initialCard, cards)) {
+				if (gameType != GameType.NULL) {
+					if (cards.get(i).isTrump(gameType)
+							&& initialCard.isTrump(gameType)) {
+						result = true;
+					} else if (!cards.get(i).isTrump(gameType)
+							&& !initialCard.isTrump(gameType) && sameSuit) {
+						result = true;
+					}
+				} else if (sameSuit) {
+					result = true;
+				}
+
+			}
+			if (result)
+				break;
+		}
+		return result;
+	}
 
 	/**
 	 * Gets the highest trump card out of a given hand

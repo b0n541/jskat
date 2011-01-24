@@ -22,7 +22,7 @@ import de.jskat.util.rule.BasicSkatRules;
  * @author Markus J. Luzius <markus@luzius.de>
  *
  */
-public class RamschPlayer implements CardPlayer {
+public class RamschPlayer extends AbstractCardPlayer {
 
 	/** log */
 	private Log log = LogFactory.getLog(RamschPlayer.class);
@@ -31,7 +31,8 @@ public class RamschPlayer implements CardPlayer {
 	/** Constructor
 	 * @param id playerID
 	 */
-	public RamschPlayer(int id, BasicSkatRules rules) {
+	public RamschPlayer(CardList cards, int id, BasicSkatRules rules) {
+		super(cards);
 		log.debug("Constructing new single player.");
 		this.playerID = id;
 		this.rules = rules;
