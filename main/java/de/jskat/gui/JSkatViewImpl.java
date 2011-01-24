@@ -1098,8 +1098,8 @@ public class JSkatViewImpl implements IJSkatView {
 
 		String message = MessageFormat.format(
 				strings.getString("card_not_allowed"), //$NON-NLS-1$
-				strings.getSuitStringForCardFace(card.getSuit()),
-				strings.getRankStringForCardFace(card.getRank()));
+				card!=null?strings.getSuitStringForCardFace(card.getSuit()):"--",
+				card!=null?strings.getRankStringForCardFace(card.getRank()):"--");
 
 		showMessage(JOptionPane.ERROR_MESSAGE, title, message);
 	}

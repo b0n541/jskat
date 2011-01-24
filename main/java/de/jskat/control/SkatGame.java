@@ -591,9 +591,13 @@ public class SkatGame extends JSkatThread {
 
 				log.error("Player is fooling!!! Did not play a card!"); //$NON-NLS-1$
 
+				view.showCardNotAllowedMessage(card);
+
 			} else if (!playerHasCard(currPlayer, card)) {
 
 				log.error("Player is fooling!!! Doesn't have card " + card + "!"); //$NON-NLS-1$//$NON-NLS-2$
+
+				view.showCardNotAllowedMessage(card);
 
 			} else if (!rules
 					.isCardAllowed(data.getGameType(), trick.getFirstCard(),

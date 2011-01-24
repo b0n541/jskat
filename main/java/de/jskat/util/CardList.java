@@ -417,6 +417,28 @@ public class CardList extends ArrayList<Card> {
 	}
 
 	/**
+	 * Returns the first index of a card with the given suit. 
+	 * 
+	 * @param suit
+	 *            Suit to search
+	 * @param includeJacks
+	 *            flag whether to include jacks in the result
+	 * @return First index of a card with the given suit, -1 if there is no such
+	 *         card
+	 */
+	public int getFirstIndexOfSuit(Suit suit, boolean includeJacks) {
+		int result = -1;
+		int index = 0;
+		for (Card card : this) {
+			if (result == -1 && card.getSuit() == suit) {
+				if(card.getRank()!=Rank.JACK || (card.getRank()==Rank.JACK && includeJacks)) result = index;
+			}
+			index++;
+		}
+		return result;
+	}
+
+	/**
 	 * Returns the first index of a card with the given suit
 	 * 
 	 * @param suit
@@ -425,20 +447,47 @@ public class CardList extends ArrayList<Card> {
 	 *         card
 	 */
 	public int getFirstIndexOfSuit(Suit suit) {
-
 		int result = -1;
-
 		int index = 0;
 		for (Card card : this) {
-
 			if (result == -1 && card.getSuit() == suit) {
-
 				result = index;
 			}
-
 			index++;
 		}
+		return result;
+	}
 
+	/**
+	 * Returns the last index of a card with the given suit
+	 * 
+	 * @param suit
+	 *            Suit to search
+	 * @return Last index of a card with the given suit, -1 if there is no such
+	 *         card
+	 */
+	public int getLastIndexOfSuit(Suit suit) {
+		int result = -1;
+		int index = 0;
+		for (Card card : this) {
+			if (card.getSuit() == suit) {
+				result = index;
+			}
+			index++;
+		}
+		return result;
+	}
+
+	/**
+	 * Counts the total points of this CardList
+	 * 
+	 * @return the points of the CardList
+	 */
+	public int getTotalValue() {
+		int result = 0;
+		for(Card c: this)
+			result += c.getPoints();
+		
 		return result;
 	}
 }

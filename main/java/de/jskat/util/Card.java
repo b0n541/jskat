@@ -242,6 +242,25 @@ public enum Card {
 	}
 
 	/**
+	 * Checks whether a Card is allowed to be played
+	 * 
+	 * @param gameType
+	 *            The game type within the card is checked
+	 * @return TRUE, when the card is allowed to be played
+	 */
+	public boolean isAllowed(GameType gameType, Card initialCard, CardList hand) {
+
+		boolean result = false;
+		
+		if (gameType != GameType.NULL) {
+			
+			result = ((SuitGrandRamschRules) SkatRuleFactory.getSkatRules(gameType)).isCardAllowed(gameType, initialCard, hand, this); 
+		}
+		
+		return result;
+	}
+	
+	/**
 	 * Checks whether a Card is a trump card or not
 	 * 
 	 * @param gameType
