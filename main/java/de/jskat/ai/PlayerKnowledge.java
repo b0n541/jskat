@@ -14,6 +14,7 @@ package de.jskat.ai;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -47,12 +48,17 @@ public class PlayerKnowledge {
 	/**
 	 * Contains all cards played by the players
 	 */
-	private List<Set<Card>> playedCards = new ArrayList<Set<Card>>();
+	private Map<Player, Set<Card>> playedCards = new HashMap<Player, Set<Card>>();
 
 	/**
 	 * Contains all cards that could be on a certain position
 	 */
-	private List<Set<Card>> cardPositions = new ArrayList<Set<Card>>();
+	private Map<Player, Set<Card>> possiblePlayerCards = new HashMap<Player, Set<Card>>();
+
+	/**
+	 * Contains all cards that could be in the skat
+	 */
+	private Set<Card> possibleSkatCards = new HashSet<Card>();
 
 	/**
 	 * Holds the highest bid every player has made during bidding
@@ -110,27 +116,19 @@ public class PlayerKnowledge {
 	 */
 	public void initializeVariables() {
 
-		playedCards.clear();
-		cardPositions.clear();
+		for (Player player : Player.values()) {
+			highestBid.put(player, Integer.valueOf(0));
 
-		for (int i = 0; i < 4; i++) {
-
-			if (i < 3) {
-				// only for the players
-				playedCards.add(EnumSet.noneOf(Card.class));
-			}
-
-			cardPositions.add(EnumSet.allOf(Card.class));
+			playedCards.put(player, EnumSet.allOf(Card.class));
+			possiblePlayerCards.put(player, EnumSet.allOf(Card.class));
 		}
-
-		highestBid.clear();
+		possibleSkatCards.clear();
+		possibleSkatCards.addAll(EnumSet.allOf(Card.class));
 
 		leftPlayerTrickCard = null;
 		rightPlayerTrickCard = null;
 
 		setTrumpCount(0);
-		suitCount.clear();
-		suitPoints.clear();
 
 		for (Suit suit : Suit.values()) {
 			suitCount.put(suit, Integer.valueOf(0));
@@ -149,9 +147,9 @@ public class PlayerKnowledge {
 	 */
 	public boolean isCardPlayed(Card card) {
 
-		return playedCards.get(0).contains(card)
-				|| playedCards.get(1).contains(card)
-				|| playedCards.get(2).contains(card);
+		return playedCards.get(Player.FORE_HAND).contains(card)
+				|| playedCards.get(Player.MIDDLE_HAND).contains(card)
+				|| playedCards.get(Player.HIND_HAND).contains(card);
 	}
 
 	/**
@@ -165,7 +163,7 @@ public class PlayerKnowledge {
 	 */
 	public boolean isCardPlayedBy(Player player, Card card) {
 
-		return playedCards.get(player.getOrder()).contains(card);
+		return playedCards.get(player).contains(card);
 	}
 
 	/**
@@ -178,12 +176,11 @@ public class PlayerKnowledge {
 	 */
 	public void setCardPlayed(Player player, Card card) {
 
-		playedCards.get(player.getOrder()).add(card);
+		playedCards.get(player).add(card);
 
-		for (int i = 0; i < 2; i++) {
-
-			cardPositions.get((player.getOrder() + i) % 3).remove(card);
-		}
+		possiblePlayerCards.get(player.getLeftNeighbor()).remove(card);
+		possiblePlayerCards.get(player.getRightNeighbor()).remove(card);
+		possibleSkatCards.remove(card);
 
 		setTrickCard(player, card);
 	}
@@ -260,36 +257,8 @@ public class PlayerKnowledge {
 	}
 
 	/**
-	 * Checks whether a player is the only person who has the card
-	 * 
-	 * @param player
-	 *            Player ID
-	 * @param card
-	 *            Card to check
-	 * @return TRUE if and only if the player has the card allone
-	 */
-	public boolean hasCard(Player player, Card card) {
-
-		int possessionCount = 0;
-
-		if (couldHaveCard(player, card)) {
-
-			// check all players and the skat whether the card could be there
-			for (int i = 0; i < 4; i++) {
-
-				if (cardPositions.get(i).contains(card)) {
-
-					possessionCount++;
-				}
-			}
-		}
-
-		return (possessionCount == 1);
-	}
-
-	/**
-	 * Checks whether a player could have a card information, this is an
-	 * uncertain information
+	 * Checks whether a player could have a card, this is an uncertain
+	 * information
 	 * 
 	 * @param player
 	 *            Player ID
@@ -299,7 +268,7 @@ public class PlayerKnowledge {
 	 */
 	public boolean couldHaveCard(Player player, Card card) {
 
-		return cardPositions.get(player.getOrder()).contains(card);
+		return possiblePlayerCards.get(player).contains(card);
 	}
 
 	/**
@@ -313,8 +282,7 @@ public class PlayerKnowledge {
 
 		for (Rank rank : Rank.values()) {
 
-			cardPositions.get(player.getOrder()).remove(
-					Card.getCard(suit, rank));
+			possiblePlayerCards.get(player).remove(Card.getCard(suit, rank));
 		}
 	}
 
@@ -442,11 +410,12 @@ public class PlayerKnowledge {
 
 			for (Rank rank : Rank.values()) {
 
-				if (playedCards.get(0).contains(Card.getCard(suit, rank))
-						|| playedCards.get(1)
-								.contains(Card.getCard(suit, rank))
-						|| playedCards.get(2)
-								.contains(Card.getCard(suit, rank))) {
+				if (playedCards.get(Player.FORE_HAND).contains(
+						Card.getCard(suit, rank))
+						|| playedCards.get(Player.MIDDLE_HAND).contains(
+								Card.getCard(suit, rank))
+						|| playedCards.get(Player.HIND_HAND).contains(
+								Card.getCard(suit, rank))) {
 
 					result.append(suit.shortString())
 							.append(rank.shortString()).append(' ');
@@ -517,10 +486,11 @@ public class PlayerKnowledge {
 	/**
 	 * Sets the trump count
 	 * 
-	 * @param trumpCount
+	 * @param newTrumpCount
+	 *            Trump count
 	 */
-	public void setTrumpCount(int trumpCount) {
-		this.trumpCount = trumpCount;
+	public void setTrumpCount(int newTrumpCount) {
+		trumpCount = newTrumpCount;
 	}
 
 	/**
