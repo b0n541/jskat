@@ -81,38 +81,20 @@ public class JSkatGraphicRepository {
 	}
 
 	private void loadImages(MediaTracker tracker) {
-		skatTable = Toolkit
-				.getDefaultToolkit()
-				.getImage(
-						ClassLoader
-								.getSystemResource("de/jskat/gui/img/gui/skat_table.png")); //$NON-NLS-1$
+		skatTable = Toolkit.getDefaultToolkit().getImage(
+				ClassLoader.getSystemResource("de/jskat/gui/img/gui/skat_table.png")); //$NON-NLS-1$
 		tracker.addImage(skatTable, 0);
-		jskatLogo = Toolkit
-				.getDefaultToolkit()
-				.getImage(
-						ClassLoader
-								.getSystemResource("de/jskat/gui/img/gui/jskatLogo.png")); //$NON-NLS-1$
+		jskatLogo = Toolkit.getDefaultToolkit().getImage(
+				ClassLoader.getSystemResource("de/jskat/gui/img/gui/jskatLogo.png")); //$NON-NLS-1$
 		tracker.addImage(jskatLogo, 0);
 
 		bidBubbles = new ArrayList<Image>();
-		bidBubbles
-				.add(Toolkit
-						.getDefaultToolkit()
-						.getImage(
-								ClassLoader
-										.getSystemResource("de/jskat/gui/img/gui/bid_left.png"))); //$NON-NLS-1$
-		bidBubbles
-				.add(Toolkit
-						.getDefaultToolkit()
-						.getImage(
-								ClassLoader
-										.getSystemResource("de/jskat/gui/img/gui/bid_right.png"))); //$NON-NLS-1$
-		bidBubbles
-				.add(Toolkit
-						.getDefaultToolkit()
-						.getImage(
-								ClassLoader
-										.getSystemResource("de/jskat/gui/img/gui/bid_user.png"))); //$NON-NLS-1$
+		bidBubbles.add(Toolkit.getDefaultToolkit().getImage(
+				ClassLoader.getSystemResource("de/jskat/gui/img/gui/bid_left.png"))); //$NON-NLS-1$
+		bidBubbles.add(Toolkit.getDefaultToolkit().getImage(
+				ClassLoader.getSystemResource("de/jskat/gui/img/gui/bid_right.png"))); //$NON-NLS-1$
+		bidBubbles.add(Toolkit.getDefaultToolkit().getImage(
+				ClassLoader.getSystemResource("de/jskat/gui/img/gui/bid_user.png"))); //$NON-NLS-1$
 		tracker.addImage(bidBubbles.get(0), 0);
 		tracker.addImage(bidBubbles.get(1), 0);
 		tracker.addImage(bidBubbles.get(2), 0);
@@ -138,20 +120,10 @@ public class JSkatGraphicRepository {
 			for (IconSize size : IconSize.values()) {
 
 				// add icon
-				icons.get(icon.ordinal())
-						.add(Toolkit
-								.getDefaultToolkit()
-								.getImage(
-										ClassLoader
-												.getSystemResource("de/jskat/gui/img/gui/" //$NON-NLS-1$
-														+ icon.toString()
-																.toLowerCase()
-														+ '_'
-														+ size.toString()
-																.toLowerCase()
-														+ ".png"))); //$NON-NLS-1$
-				tracker.addImage(icons.get(icon.ordinal()).get(size.ordinal()),
-						1);
+				icons.get(icon.ordinal()).add(
+						Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("de/jskat/gui/img/gui/" //$NON-NLS-1$
+								+ icon.toString().toLowerCase() + '_' + size.toString().toLowerCase() + ".png"))); //$NON-NLS-1$
+				tracker.addImage(icons.get(icon.ordinal()).get(size.ordinal()), 1);
 			}
 		}
 
@@ -165,38 +137,31 @@ public class JSkatGraphicRepository {
 	/**
 	 * Load all card images
 	 * 
-	 * @param cardType
+	 * @param cardFace
 	 *            The directory name for the card set to be loaded
 	 */
-	public void loadCards(MediaTracker tracker, CardFace cardType) {
+	public void loadCards(MediaTracker tracker, CardFace cardFace) {
 
+		cards.clear();
 		for (Suit suit : Suit.values()) {
 
 			cards.add(new ArrayList<Image>());
 
 			for (Rank rank : Rank.values()) {
 
-				cards.get(suit.ordinal())
-						.add(Toolkit
-								.getDefaultToolkit()
-								.getImage(
-										ClassLoader
-												.getSystemResource("de/jskat/gui/img/cards/" //$NON-NLS-1$
-														+ cardType.toString()
-																.toLowerCase()
-														+ "/gnome/" + suit.shortString() + '-' + rank.shortString() + ".gif"))); //$NON-NLS-1$//$NON-NLS-2$
+				cards.get(suit.ordinal()).add(
+						Toolkit.getDefaultToolkit().getImage(
+								ClassLoader.getSystemResource("de/jskat/gui/img/cards/" //$NON-NLS-1$
+										+ cardFace.toString().toLowerCase()
+										+ "/iss/" + suit.shortString() + '-' + rank.shortString() + ".gif"))); //$NON-NLS-1$//$NON-NLS-2$
 
-				tracker.addImage(cards.get(suit.ordinal()).get(rank.ordinal()),
-						2);
+				tracker.addImage(cards.get(suit.ordinal()).get(rank.ordinal()), 2);
 			}
 		}
 
-		cardBack = Toolkit
-				.getDefaultToolkit()
-				.getImage(
-						ClassLoader
-								.getSystemResource("de/jskat/gui/img/cards/" + cardType.toString().toLowerCase() //$NON-NLS-1$
-										+ "/jskat/back.gif")); //$NON-NLS-1$
+		cardBack = Toolkit.getDefaultToolkit().getImage(
+				ClassLoader.getSystemResource("de/jskat/gui/img/cards/" + cardFace.toString().toLowerCase() //$NON-NLS-1$
+						+ "/jskat/back.gif")); //$NON-NLS-1$
 		tracker.addImage(cardBack, 2);
 
 		try {
