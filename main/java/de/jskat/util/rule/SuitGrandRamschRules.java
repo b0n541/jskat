@@ -25,6 +25,7 @@ public abstract class SuitGrandRamschRules extends AbstractSkatRules {
 	/**
 	 * @see BasicSkatRules#isCardAllowed(GameType, Card, CardList, Card)
 	 */
+	@Override
 	public boolean isCardAllowed(GameType gameType, Card initialCard,
 			CardList hand, Card card) {
 
