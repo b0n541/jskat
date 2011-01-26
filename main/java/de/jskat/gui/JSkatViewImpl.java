@@ -1091,6 +1091,9 @@ public class JSkatViewImpl implements IJSkatView {
 		tables.get(tableName).addGameResult(gameData);
 	}
 
+	/**
+	 * @see IJSkatView#showCardNotAllowedMessage(Card)
+	 */
 	@Override
 	public void showCardNotAllowedMessage(Card card) {
 
@@ -1098,12 +1101,18 @@ public class JSkatViewImpl implements IJSkatView {
 
 		String message = MessageFormat.format(
 				strings.getString("card_not_allowed"), //$NON-NLS-1$
-				card!=null?strings.getSuitStringForCardFace(card.getSuit()):"--",
-				card!=null?strings.getRankStringForCardFace(card.getRank()):"--");
+				card != null ? strings.getSuitStringForCardFace(card.getSuit())
+						: "--",
+				card != null ? strings.getRankStringForCardFace(card.getRank())
+						: "--");
 
 		showMessage(JOptionPane.ERROR_MESSAGE, title, message);
 	}
 
+	/**
+	 * @see IJSkatView#addTrainingResult(GameType, long, long, long, double,
+	 *      double)
+	 */
 	@Override
 	public void addTrainingResult(GameType gameType, long episodes,
 			long totalWonGames, long episodeWonGames, double avgDeclDiff,
@@ -1113,9 +1122,23 @@ public class JSkatViewImpl implements IJSkatView {
 				episodeWonGames, avgDeclDiff, avgOppDiff);
 	}
 
+	/**
+	 * @see IJSkatView#setGameNumber(String, int)
+	 */
 	@Override
 	public void setGameNumber(String tableName, int gameNumber) {
 
 		tables.get(tableName).setGameNumber(gameNumber);
+	}
+
+	/**
+	 * @see IJSkatView#setPlayerNames(String, String, String, String)
+	 */
+	@Override
+	public void setPlayerNames(String tableName, String upperLeftPlayerName,
+			String upperRightPlayerName, String lowerPlayerName) {
+
+		tables.get(tableName).setPlayerNames(upperLeftPlayerName,
+				upperRightPlayerName, lowerPlayerName);
 	}
 }

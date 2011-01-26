@@ -69,6 +69,10 @@ public class SkatSeries extends JSkatThread {
 					"Only three players are allowed at the moment."); //$NON-NLS-1$
 		}
 
+		view.setPlayerNames(data.getTableName(), newPlayer.get(0)
+				.getPlayerName(), newPlayer.get(1).getPlayerName(), newPlayer
+				.get(2).getPlayerName());
+
 		// set players in random order
 		Collections.shuffle(newPlayer);
 		player.put(Player.FORE_HAND, newPlayer.get(0));

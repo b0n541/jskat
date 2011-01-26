@@ -588,4 +588,14 @@ public class NullView implements IJSkatView {
 			@SuppressWarnings("unused") int gameNumber) {
 		// empty method by indent
 	}
+
+	/**
+	 * @see IJSkatView#setPlayerNames(String, String, String, String)
+	 */
+	@Override
+	public void setPlayerNames(String tableName, String upperLeftPlayerName,
+			String upperRightPlayerName, String lowerPlayerName) {
+		// TODO Auto-generated method stub
+
+	}
 }

@@ -174,14 +174,19 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 			setVisible(false);
 		} else if (START.equals(e.getActionCommand())) { //$NON-NLS-1$
 
-			ArrayList<PlayerType> playerNames = new ArrayList<PlayerType>();
-			playerNames.add((PlayerType) player1.getSelectedItem());
-			playerNames.add((PlayerType) player2.getSelectedItem());
-			playerNames.add((PlayerType) player3.getSelectedItem());
+			ArrayList<PlayerType> playerTypes = new ArrayList<PlayerType>();
+			playerTypes.add((PlayerType) player1.getSelectedItem());
+			playerTypes.add((PlayerType) player2.getSelectedItem());
+			playerTypes.add((PlayerType) player3.getSelectedItem());
+
+			ArrayList<String> playerNames = new ArrayList<String>();
+			playerNames.add(player1name.getText());
+			playerNames.add(player2name.getText());
+			playerNames.add(player3name.getText());
 
 			setVisible(false);
 
-			jskat.startSeries(playerNames,
+			jskat.startSeries(playerTypes, playerNames,
 					Integer.parseInt(numberOfRounds.getValue().toString()),
 					unlimited.isSelected());
 		}

@@ -607,4 +607,19 @@ public interface IJSkatView {
 	 *            Game number
 	 */
 	public void setGameNumber(String tableName, int gameNumber);
+
+	/**
+	 * Sets the player names of a table
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param playerName
+	 *            Name of left upper player
+	 * @param playerName2
+	 *            Name of right upper player
+	 * @param playerName3
+	 *            Name of lower player
+	 */
+	public void setPlayerNames(String tableName, String upperLeftPlayerName,
+			String upperRightPlayerName, String lowerPlayerName);
 }

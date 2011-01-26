@@ -131,6 +131,8 @@ public class JSkatMaster {
 	 * Starts a new series with given parameters
 	 * 
 	 * @param allPlayer
+	 *            Player types
+	 * @param playerNames
 	 *            Player names
 	 * @param numberOfRounds
 	 *            Number of rounds to be played
@@ -138,7 +140,7 @@ public class JSkatMaster {
 	 *            TRUE, if unlimited rounds should be played
 	 */
 	public void startSeries(ArrayList<PlayerType> allPlayer,
-			int numberOfRounds, boolean unlimited) {
+			ArrayList<String> playerNames, int numberOfRounds, boolean unlimited) {
 
 		log.debug(data.getActiveTable());
 
@@ -146,9 +148,13 @@ public class JSkatMaster {
 
 		table.removePlayers();
 
+		int playerCount = 0;
 		for (PlayerType player : allPlayer) {
 
-			table.placePlayer(getPlayerInstance(table.getName(), player));
+			IJSkatPlayer newPlayer = getPlayerInstance(table.getName(), player);
+			newPlayer.setPlayerName(playerNames.get(playerCount));
+			table.placePlayer(newPlayer);
+			playerCount++;
 		}
 
 		table.startSkatSeries(numberOfRounds, unlimited);

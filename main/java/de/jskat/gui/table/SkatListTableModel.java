@@ -296,4 +296,13 @@ class SkatListTableModel extends AbstractTableModel {
 		columns.add(strings.getString("games")); //$NON-NLS-1$
 		displayValues.add(new ArrayList<Integer>());
 	}
+
+	void setPlayerNames(String upperLeftPlayer, String upperRightPlayer,
+			String lowerPlayer) {
+
+		columns.set(0, upperLeftPlayer);
+		columns.set(1, upperRightPlayer);
+		columns.set(2, lowerPlayer);
+		fireTableStructureChanged();
+	}
 }

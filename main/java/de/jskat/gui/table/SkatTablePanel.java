@@ -817,4 +817,22 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		gameInfoPanel.setGameNumber(gameNumber);
 	}
+
+	/**
+	 * Sets the player names
+	 * 
+	 * @param upperLeftPlayerName
+	 * @param upperRightPlayerName
+	 * @param lowerPlayerName
+	 */
+	public void setPlayerNames(String upperLeftPlayerName,
+			String upperRightPlayerName, String lowerPlayerName) {
+		// FIXME (jan 26.01.2011) possible code duplication with
+		// setPlayerInformation()
+		leftOpponentPanel.setPlayerName(upperLeftPlayerName);
+		rightOpponentPanel.setPlayerName(upperRightPlayerName);
+		userPanel.setPlayerName(lowerPlayerName);
+		skatListTableModel.setPlayerNames(upperLeftPlayerName,
+				upperRightPlayerName, lowerPlayerName);
+	}
 }
