@@ -13,10 +13,10 @@ package de.jskat.util.rule;
 
 import static org.junit.Assert.assertTrue;
 
-import org.apache.log4j.PropertyConfigurator;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.jskat.AbstractJSkatTest;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.util.GameType;
@@ -25,16 +25,18 @@ import de.jskat.util.Player;
 /**
  * Tests schneider and schwarz rules
  */
-public class SchneiderSchwarzRuleTest {
+public class SchneiderSchwarzRuleTest extends AbstractJSkatTest {
+
+	private static SkatGameData data;
+	private static GameAnnouncement ann;
+
+	private static SuitGrandRules clubRules = (SuitGrandRules) SkatRuleFactory.getSkatRules(GameType.CLUBS);
 
 	/**
 	 * @see BeforeClass
 	 */
 	@BeforeClass
 	public static void setUpBeforeClass() {
-
-		PropertyConfigurator.configure(ClassLoader
-				.getSystemResource("de/jskat/config/log4j.properties")); //$NON-NLS-1$
 
 		data = new SkatGameData();
 		ann = new GameAnnouncement();
@@ -67,8 +69,7 @@ public class SchneiderSchwarzRuleTest {
 	@Test(expected = ClassCastException.class)
 	public void testCast001() {
 
-		SuitGrandRules nullRules = (SuitGrandRules) SkatRuleFactory
-				.getSkatRules(GameType.NULL);
+		SuitGrandRules nullRules = (SuitGrandRules) SkatRuleFactory.getSkatRules(GameType.NULL);
 	}
 
 	/**
@@ -77,13 +78,6 @@ public class SchneiderSchwarzRuleTest {
 	@Test(expected = ClassCastException.class)
 	public void testCast002() {
 
-		SuitGrandRules nullRules = (SuitGrandRules) SkatRuleFactory
-				.getSkatRules(GameType.RAMSCH);
+		SuitGrandRules nullRules = (SuitGrandRules) SkatRuleFactory.getSkatRules(GameType.RAMSCH);
 	}
-
-	private static SkatGameData data;
-	private static GameAnnouncement ann;
-
-	private static SuitGrandRules clubRules = (SuitGrandRules) SkatRuleFactory
-			.getSkatRules(GameType.CLUBS);
 }

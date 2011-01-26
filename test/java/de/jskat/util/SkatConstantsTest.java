@@ -13,24 +13,14 @@ package de.jskat.util;
 
 import static org.junit.Assert.assertTrue;
 
-import org.apache.log4j.PropertyConfigurator;
-import org.junit.BeforeClass;
 import org.junit.Test;
+
+import de.jskat.AbstractJSkatTest;
 
 /**
  * Test cases for class Card
  */
-public class SkatConstantsTest {
-
-	/**
-	 * Creates the logger
-	 */
-	@BeforeClass
-	public static void createLogger() {
-
-		PropertyConfigurator.configure(ClassLoader
-				.getSystemResource("de/jskat/config/log4j.properties")); //$NON-NLS-1$
-	}
+public class SkatConstantsTest extends AbstractJSkatTest {
 
 	/**
 	 * Tests calculation of game values after tournament rules

@@ -27,13 +27,12 @@ public class NullRules extends AbstractSkatRules {
 	/**
 	 * @see BasicSkatRules#calcGameResult(SkatGameData)
 	 */
+	@Override
 	public int calcGameResult(SkatGameData gameData) {
 
-		int gameValue = SkatConstants.getGameBaseValue(gameData.getGameType(),
-				gameData.isHand(), gameData.isOuvert());
+		int gameValue = SkatConstants.getGameBaseValue(gameData.getGameType(), gameData.isHand(), gameData.isOuvert());
 		int multiplier = 1;
 
-		// FIXME (jan 18.01.2011) better check whether the declarer made a trick
 		if (gameData.isGameLost()) {
 
 			// Lost game is always counted double
@@ -41,6 +40,19 @@ public class NullRules extends AbstractSkatRules {
 		}
 
 		return gameValue * multiplier;
+	}
+
+	private int getWonTricksByDeclarer(SkatGameData data) {
+
+		int result = 0;
+
+		for (int i = 0; i < data.getTricks().size(); i++) {
+			if (data.getTrickWinner(i).equals(data.getDeclarer())) {
+				result++;
+			}
+		}
+
+		return result;
 	}
 
 	/**
@@ -64,8 +76,7 @@ public class NullRules extends AbstractSkatRules {
 	/**
 	 * @see BasicSkatRules#isCardAllowed(GameType, Card, CardList, Card)
 	 */
-	public boolean isCardAllowed(GameType gameType, Card initialCard,
-			CardList hand, Card card) {
+	public boolean isCardAllowed(GameType gameType, Card initialCard, CardList hand, Card card) {
 
 		boolean result = false;
 
@@ -93,7 +104,7 @@ public class NullRules extends AbstractSkatRules {
 
 		for (int i = 0; i < gameData.getTricks().size(); i++) {
 
-			if (gameData.getTrickWinner(i) == gameData.getDeclarer()) {
+			if (gameData.getTrickWinner(i).equals(gameData.getDeclarer())) {
 				// the single player has won at least one trick
 				result = false;
 			}

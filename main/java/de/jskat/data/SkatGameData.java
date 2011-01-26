@@ -651,17 +651,14 @@ public class SkatGameData {
 	}
 
 	/**
-	 * Sets the score of the player
+	 * Overwrites the declarer score
 	 * 
-	 * @param score
-	 *            Score of the declarer
+	 * @param newScore
+	 *            New score
 	 */
-	public void setDeclarerScore(int score) {
+	public void setDeclarerScore(int newScore) {
 
-		if (declarer != null) {
-
-			playerPoints.put(declarer, Integer.valueOf(score));
-		}
+		playerPoints.put(declarer, Integer.valueOf(newScore));
 	}
 
 	/**
@@ -703,6 +700,8 @@ public class SkatGameData {
 	 */
 	public void calcResult() {
 
+		calcJackInformation();
+
 		if (getGameType() == GameType.PASSED_IN) {
 
 			won = false;
@@ -723,11 +722,9 @@ public class SkatGameData {
 
 		// TODO what happens if two or more players have the same points?
 		// FIXME this is rule logic --> remove it from data object!!!
-		if (playerPoints.get(Player.FORE_HAND).intValue() > playerPoints.get(
-				Player.MIDDLE_HAND).intValue()) {
+		if (playerPoints.get(Player.FORE_HAND).intValue() > playerPoints.get(Player.MIDDLE_HAND).intValue()) {
 
-			if (playerPoints.get(Player.FORE_HAND).intValue() > playerPoints
-					.get(Player.HIND_HAND).intValue()) {
+			if (playerPoints.get(Player.FORE_HAND).intValue() > playerPoints.get(Player.HIND_HAND).intValue()) {
 				ramschLoser = Player.FORE_HAND;
 			} else {
 				ramschLoser = Player.HIND_HAND;
@@ -735,8 +732,7 @@ public class SkatGameData {
 
 		} else {
 
-			if (playerPoints.get(Player.MIDDLE_HAND).intValue() > playerPoints
-					.get(Player.HIND_HAND).intValue()) {
+			if (playerPoints.get(Player.MIDDLE_HAND).intValue() > playerPoints.get(Player.HIND_HAND).intValue()) {
 				ramschLoser = Player.MIDDLE_HAND;
 			} else {
 				ramschLoser = Player.HIND_HAND;
@@ -1016,8 +1012,7 @@ public class SkatGameData {
 	 */
 	public void addPlayerPoints(Player player, int points) {
 
-		playerPoints.put(player,
-				Integer.valueOf(playerPoints.get(player).intValue() + points));
+		playerPoints.put(player, Integer.valueOf(playerPoints.get(player).intValue() + points));
 	}
 
 	/**
@@ -1184,7 +1179,7 @@ public class SkatGameData {
 	public void calcJackInformation() {
 
 		// FIXME (jansch 09.11.2010) this is code for skat rules
-		CardList declarerCards = (CardList) playerHands.get(declarer).clone();
+		CardList declarerCards = (CardList) dealtCards.get(declarer).clone();
 
 		declarerCards.add(skat.get(0));
 		declarerCards.add(skat.get(1));

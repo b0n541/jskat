@@ -50,8 +50,7 @@ public class MessageParser {
 	 * xskat:2 $ 0 0 0 0 0 0 1 1 <br>
 	 * . . 0 0 0 0 0 0 0 0 false <br>
 	 */
-	static ISSTablePanelStatus getTableStatus(String loginName,
-			List<String> params) {
+	static ISSTablePanelStatus getTableStatus(String loginName, List<String> params) {
 
 		ISSTablePanelStatus status = new ISSTablePanelStatus();
 
@@ -64,8 +63,7 @@ public class MessageParser {
 			// parse only non empty seats
 			if (!(".".equals(params.get(i * 10 + 5)))) { //$NON-NLS-1$
 				// there is a player
-				ISSPlayerStatus playerStatus = parsePlayerStatus(params
-						.subList(i * 10 + 5, i * 10 + 16));
+				ISSPlayerStatus playerStatus = parsePlayerStatus(params.subList(i * 10 + 5, i * 10 + 16));
 				status.addPlayer(playerStatus.getName(), playerStatus);
 			}
 		}
@@ -101,8 +99,7 @@ public class MessageParser {
 		return status;
 	}
 
-	static ISSGameStartInformation getGameStartStatus(String loginName,
-			List<String> params) {
+	static ISSGameStartInformation getGameStartStatus(String loginName, List<String> params) {
 
 		log.debug("game start parameter: " + params); //$NON-NLS-1$
 
@@ -192,12 +189,9 @@ public class MessageParser {
 		}
 
 		// parse player times
-		info.putPlayerTime(Player.FORE_HAND,
-				new Double(params.get(params.size() - 3)));
-		info.putPlayerTime(Player.MIDDLE_HAND,
-				new Double(params.get(params.size() - 2)));
-		info.putPlayerTime(Player.HIND_HAND,
-				new Double(params.get(params.size() - 1)));
+		info.putPlayerTime(Player.FORE_HAND, new Double(params.get(params.size() - 3)));
+		info.putPlayerTime(Player.MIDDLE_HAND, new Double(params.get(params.size() - 2)));
+		info.putPlayerTime(Player.HIND_HAND, new Double(params.get(params.size() - 1)));
 
 		return info;
 	}
@@ -237,8 +231,7 @@ public class MessageParser {
 	 * [H] (hand, not given if O + trump game) [S] (schneider announced, only in
 	 * H games, not if O or Z) [Z] (schwarz announced, only in H games)
 	 */
-	private static GameAnnouncement parseGameAnnoucement(
-			ISSMoveInformation info, String move) {
+	private static GameAnnouncement parseGameAnnoucement(ISSMoveInformation info, String move) {
 
 		StringTokenizer annToken = new StringTokenizer(move, "."); //$NON-NLS-1$
 		String gameType = annToken.nextToken();
@@ -307,13 +300,11 @@ public class MessageParser {
 
 				CardList ouvertCards = new CardList();
 
-				while (annToken.hasMoreTokens()
-						&& info.getGameAnnouncement().isOuvert()) {
+				while (annToken.hasMoreTokens() && info.getGameAnnouncement().isOuvert()) {
 					// player has shown the cards
 					// ouvert game
 
-					ouvertCards
-							.add(Card.getCardFromString(annToken.nextToken()));
+					ouvertCards.add(Card.getCardFromString(annToken.nextToken()));
 				}
 
 				info.setOuvertCards(ouvertCards);
@@ -395,8 +386,7 @@ public class MessageParser {
 		return result;
 	}
 
-	private static void parseSummaryPart(SkatGameData result,
-			String summaryPartMarker, String summaryPart) {
+	private static void parseSummaryPart(SkatGameData result, String summaryPartMarker, String summaryPart) {
 
 		if ("P0".equals(summaryPartMarker)) { //$NON-NLS-1$
 

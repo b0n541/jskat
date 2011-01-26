@@ -14,10 +14,9 @@ package de.jskat.util.rule;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.apache.log4j.PropertyConfigurator;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.jskat.AbstractJSkatTest;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
 import de.jskat.util.GameType;
@@ -25,42 +24,24 @@ import de.jskat.util.GameType;
 /**
  * Test suite for all skat rule tests
  */
-public class BasicSkatRuleTest {
+public class BasicSkatRuleTest extends AbstractJSkatTest {
 
 	private CardList hand = new CardList();
 
-	private static BasicSkatRules clubRules = SkatRuleFactory
-			.getSkatRules(GameType.CLUBS);
-	private static BasicSkatRules spadeRules = SkatRuleFactory
-			.getSkatRules(GameType.SPADES);
-	private static BasicSkatRules heartRules = SkatRuleFactory
-			.getSkatRules(GameType.HEARTS);
-	private static BasicSkatRules diamondRules = SkatRuleFactory
-			.getSkatRules(GameType.DIAMONDS);
-	private static BasicSkatRules grandRules = SkatRuleFactory
-			.getSkatRules(GameType.GRAND);
-	private static BasicSkatRules nullRules = SkatRuleFactory
-			.getSkatRules(GameType.NULL);
-	private static BasicSkatRules ramschRules = SkatRuleFactory
-			.getSkatRules(GameType.RAMSCH);
-
-	/**
-	 * Initializes the logger
-	 */
-	@BeforeClass
-	public static void setUpBeforeClass() {
-
-		PropertyConfigurator.configure(ClassLoader
-				.getSystemResource("de/jskat/config/log4j.properties")); //$NON-NLS-1$
-	}
+	private static BasicSkatRules clubRules = SkatRuleFactory.getSkatRules(GameType.CLUBS);
+	private static BasicSkatRules spadeRules = SkatRuleFactory.getSkatRules(GameType.SPADES);
+	private static BasicSkatRules heartRules = SkatRuleFactory.getSkatRules(GameType.HEARTS);
+	private static BasicSkatRules diamondRules = SkatRuleFactory.getSkatRules(GameType.DIAMONDS);
+	private static BasicSkatRules grandRules = SkatRuleFactory.getSkatRules(GameType.GRAND);
+	private static BasicSkatRules nullRules = SkatRuleFactory.getSkatRules(GameType.NULL);
+	private static BasicSkatRules ramschRules = SkatRuleFactory.getSkatRules(GameType.RAMSCH);
 
 	/**
 	 * Checks @see NullRules#isCardAllowed(GameType, Card, CardList, Card)
 	 */
 	@Test
 	public void isCardAllowedNull001() {
-		assertTrue(nullRules.isCardAllowed(GameType.NULL, Card.CA, this.hand,
-				Card.CK));
+		assertTrue(nullRules.isCardAllowed(GameType.NULL, Card.CA, this.hand, Card.CK));
 	}
 
 	/**
@@ -68,8 +49,7 @@ public class BasicSkatRuleTest {
 	 */
 	@Test
 	public void isCardAllowedGrand001() {
-		assertTrue(grandRules.isCardAllowed(GameType.GRAND, Card.CA, this.hand,
-				Card.CK));
+		assertTrue(grandRules.isCardAllowed(GameType.GRAND, Card.CA, this.hand, Card.CK));
 	}
 
 	/**
@@ -77,8 +57,7 @@ public class BasicSkatRuleTest {
 	 */
 	@Test
 	public void isCardAllowedSuit001() {
-		assertTrue(clubRules.isCardAllowed(GameType.CLUBS, Card.CA, this.hand,
-				Card.CK));
+		assertTrue(clubRules.isCardAllowed(GameType.CLUBS, Card.CA, this.hand, Card.CK));
 	}
 
 	/**
@@ -92,8 +71,7 @@ public class BasicSkatRuleTest {
 		this.hand.add(Card.HK);
 		this.hand.add(Card.HJ);
 
-		assertFalse(diamondRules.isCardAllowed(GameType.DIAMONDS, Card.HT,
-				this.hand, Card.HJ));
+		assertFalse(diamondRules.isCardAllowed(GameType.DIAMONDS, Card.HT, this.hand, Card.HJ));
 	}
 
 	/**
@@ -107,8 +85,7 @@ public class BasicSkatRuleTest {
 		this.hand.add(Card.HK);
 		this.hand.add(Card.HJ);
 
-		assertTrue(diamondRules.isCardAllowed(GameType.DIAMONDS, Card.HT,
-				this.hand, Card.HK));
+		assertTrue(diamondRules.isCardAllowed(GameType.DIAMONDS, Card.HT, this.hand, Card.HK));
 	}
 
 	/**
@@ -116,8 +93,7 @@ public class BasicSkatRuleTest {
 	 */
 	@Test
 	public void isCardAllowedRamsch001() {
-		assertTrue(ramschRules.isCardAllowed(GameType.RAMSCH, Card.CA,
-				this.hand, Card.CK));
+		assertTrue(ramschRules.isCardAllowed(GameType.RAMSCH, Card.CA, this.hand, Card.CK));
 	}
 
 	/**
@@ -173,7 +149,6 @@ public class BasicSkatRuleTest {
 	 */
 	@Test
 	public void isCardBeatsCardRamsch001() {
-		assertTrue(ramschRules.isCardBeatsCard(GameType.RAMSCH, Card.C7,
-				Card.C8));
+		assertTrue(ramschRules.isCardBeatsCard(GameType.RAMSCH, Card.C7, Card.C8));
 	}
 }

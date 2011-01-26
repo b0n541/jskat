@@ -13,27 +13,16 @@ package de.jskat.control.iss;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-import org.apache.log4j.PropertyConfigurator;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
+import de.jskat.AbstractJSkatTest;
 import de.jskat.data.SkatGameData;
 import de.jskat.util.Player;
 
 /**
  * Tests the parsing of the ISS messages
  */
-public class MessageParserTest {
-
-	/**
-	 * Creates the logger
-	 */
-	@BeforeClass
-	public static void createLogger() {
-
-		PropertyConfigurator.configure(ClassLoader
-				.getSystemResource("de/jskat/config/log4j.properties")); //$NON-NLS-1$
-	}
+public class MessageParserTest extends AbstractJSkatTest {
 
 	/**
 	 * Test the parsing of the game summary

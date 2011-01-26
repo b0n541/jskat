@@ -29,6 +29,7 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 	/**
 	 * @see BasicSkatRules#calcGameWon(SkatGameData)
 	 */
+	@Override
 	public final boolean calcGameWon(SkatGameData gameData) {
 
 		boolean result = false;
@@ -44,6 +45,7 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 	/**
 	 * @see SuitGrandRamschRules#calcGameResult(SkatGameData)
 	 */
+	@Override
 	public int calcGameResult(SkatGameData gameData) {
 
 		int multiplier = getBaseMultiplier(gameData);
@@ -67,7 +69,7 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 
 			multiplier++;
 
-			if (gameData.isSchneiderAnnounced()) {
+			if (gameData.isHand() && gameData.isSchneiderAnnounced()) {
 
 				multiplier++;
 			}
@@ -79,7 +81,7 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 
 			multiplier++;
 
-			if (gameData.isSchwarzAnnounced()) {
+			if (gameData.isHand() && gameData.isSchwarzAnnounced()) {
 
 				multiplier++;
 			}
@@ -87,8 +89,7 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 			log.debug("calcSuitResult: Schwarz: multiplier " + multiplier); //$NON-NLS-1$
 		}
 
-		int gameValue = SkatConstants.getGameBaseValue(gameData.getGameType(),
-				gameData.isHand(), gameData.isOuvert());
+		int gameValue = SkatConstants.getGameBaseValue(gameData.getGameType(), gameData.isHand(), gameData.isOuvert());
 
 		log.debug("gameMultiplier " + gameValue); //$NON-NLS-1$
 
@@ -111,9 +112,6 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 	 * @return Multiplier for the game only considering jacks
 	 */
 	protected int getJackMultiplier(SkatGameData gameData) {
-
-		// FIXME: multiplier should already be calculated at the beginning of
-		// the game - skat & suit cards also need to be considered
 
 		int multiplier = 2; // it's the lowest multiplier,
 		// "with/without one play two"
