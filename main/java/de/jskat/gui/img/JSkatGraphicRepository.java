@@ -108,7 +108,7 @@ public class JSkatGraphicRepository {
 	/**
 	 * Loads all icons
 	 */
-	public void loadIcons(MediaTracker tracker) {
+	private void loadIcons(MediaTracker tracker) {
 
 		// for all icons
 		for (Icon icon : Icon.values()) {
@@ -140,7 +140,7 @@ public class JSkatGraphicRepository {
 	 * @param cardFace
 	 *            The directory name for the card set to be loaded
 	 */
-	public void loadCards(MediaTracker tracker, CardFace cardFace) {
+	private void loadCards(MediaTracker tracker, CardFace cardFace) {
 
 		cards.clear();
 		for (Suit suit : Suit.values()) {
@@ -169,6 +169,11 @@ public class JSkatGraphicRepository {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void reloadCards(CardFace cardFace) {
+		MediaTracker tracker = new MediaTracker(new Canvas());
+		loadCards(tracker, cardFace);
 	}
 
 	/**

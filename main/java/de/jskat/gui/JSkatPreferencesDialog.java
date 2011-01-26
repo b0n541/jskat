@@ -11,9 +11,7 @@ Released: @ReleaseDate@
 
 package de.jskat.gui;
 
-import java.awt.Canvas;
 import java.awt.Container;
-import java.awt.MediaTracker;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -296,8 +294,8 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 	}
 
 	private void refreshCardFaces() {
-		MediaTracker tracker = new MediaTracker(new Canvas());
-		JSkatGraphicRepository.instance().loadCards(tracker, options.getCardFace());
+
+		JSkatGraphicRepository.instance().reloadCards(options.getCardFace());
 		parent.repaint();
 	}
 
