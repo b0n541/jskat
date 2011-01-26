@@ -147,36 +147,36 @@ public enum Card {
 	 * Seven of diamonds
 	 */
 	D7(Suit.DIAMONDS, Rank.SEVEN);
-	
+
 	private final Suit suit;
 	private final Rank rank;
-	
+
 	private Card(Suit newSuit, Rank newRank) {
-		
+
 		this.suit = newSuit;
 		this.rank = newRank;
 	}
-	
+
 	/**
 	 * Gets the suit of the card
 	 * 
 	 * @return Suit of the card
 	 */
 	public Suit getSuit() {
-		
+
 		return this.suit;
 	}
-	
+
 	/**
 	 * Gets the rank of the card
 	 * 
 	 * @return Rank of the card
 	 */
 	public Rank getRank() {
-		
+
 		return this.rank;
 	}
-	
+
 	/**
 	 * Compares the Cards whether the suit is the same or not
 	 * 
@@ -200,7 +200,7 @@ public enum Card {
 
 		return this.rank == card.getRank();
 	}
-	
+
 	/**
 	 * Get the card value
 	 * 
@@ -246,20 +246,24 @@ public enum Card {
 	 * 
 	 * @param gameType
 	 *            The game type within the card is checked
+	 * @param initialCard
+	 *            First card played in the trick
+	 * @param hand
+	 *            All cards on players hand
 	 * @return TRUE, when the card is allowed to be played
 	 */
 	public boolean isAllowed(GameType gameType, Card initialCard, CardList hand) {
 
 		boolean result = false;
-		
-		if (gameType != GameType.NULL) {
-			
-			result = ((SuitGrandRamschRules) SkatRuleFactory.getSkatRules(gameType)).isCardAllowed(gameType, initialCard, hand, this); 
+
+		if (gameType != GameType.PASSED_IN) {
+			result = SkatRuleFactory.getSkatRules(gameType).isCardAllowed(
+					gameType, initialCard, hand, this);
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Checks whether a Card is a trump card or not
 	 * 
@@ -270,67 +274,71 @@ public enum Card {
 	public boolean isTrump(GameType gameType) {
 
 		boolean result = false;
-		
+
 		if (gameType != GameType.NULL) {
-			
-			result = ((SuitGrandRamschRules) SkatRuleFactory.getSkatRules(gameType)).isTrump(gameType, this); 
+
+			result = ((SuitGrandRamschRules) SkatRuleFactory
+					.getSkatRules(gameType)).isTrump(gameType, this);
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Checks whether the card beats another given card under the current game
 	 * type and trump color with respect to the initial card on the table
 	 * 
 	 * @param gameType
-	 * 			Game type
+	 *            Game type
 	 * @param cardToBeat
-	 * 			Card to beat
+	 *            Card to beat
 	 * @return TRUE if the card beats the other one
 	 */
 	public boolean beats(GameType gameType, Card cardToBeat) {
 
-		return SkatRuleFactory.getSkatRules(gameType)
-					.isCardBeatsCard(gameType, cardToBeat, this);
+		return SkatRuleFactory.getSkatRules(gameType).isCardBeatsCard(gameType,
+				cardToBeat, this);
 	}
 
 	/**
 	 * Gets a card from a string
 	 * 
-	 * @param cardAsString Card as string
+	 * @param cardAsString
+	 *            Card as string
 	 * @return Card
 	 */
 	public static Card getCardFromString(String cardAsString) {
-		
+
 		Suit suit = Suit.getSuitFromString(cardAsString);
 		Rank rank = Rank.getRankFromString(cardAsString);
-		
+
 		return getCard(suit, rank);
 	}
-	
+
 	/**
 	 * Gets a card with suit and rank
 	 * 
-	 * @param suit Suit
-	 * @param rank Rank
+	 * @param suit
+	 *            Suit
+	 * @param rank
+	 *            Rank
 	 * @return Card
 	 */
 	public static Card getCard(Suit suit, Rank rank) {
-		
+
 		Card result = null;
-		
+
 		for (Card card : Card.values()) {
-			
+
 			if (card.getSuit() == suit && card.getRank() == rank) {
-				
+
 				result = card;
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * @see Object#toString()
 	 */
