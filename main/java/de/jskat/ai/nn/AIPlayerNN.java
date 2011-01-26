@@ -138,7 +138,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		List<GameType> result = new ArrayList<GameType>();
 
-		SkatGameData data = getSimulatedGameOutcome();
+		SkatGameData data = getSimulatedGameData();
 
 		for (GameType gameType : feasibleGameTypes) {
 
@@ -158,7 +158,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		return result;
 	}
 
-	private SkatGameData getSimulatedGameOutcome() {
+	private SkatGameData getSimulatedGameData() {
 
 		SkatGameData data = new SkatGameData();
 
