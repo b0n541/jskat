@@ -264,11 +264,57 @@ public class PlayerKnowledge {
 	 *            Player ID
 	 * @param card
 	 *            Card to check
+	 * @return TRUE if and only if the player has the card alone
+	 */
+	public boolean hasCard(Player player, Card card) {
+
+		int possessionCount = 0;
+
+		if (couldHaveCard(player, card)) {
+
+			// check all players and the skat whether the card could be there
+			for (Set<Card> s: possiblePlayerCards.values()) {
+				if (s.contains(card)) {
+					possessionCount++;
+				}
+			}
+			if(possibleSkatCards.contains(card)) possessionCount++;
+		}
+
+		return (possessionCount == 1);
+	}
+
+	/**
+	 * Checks whether a player could have a card information, this is an
+	 * uncertain information
+	 * 
+	 * @param player
+	 *            Player ID
+	 * @param card
+	 *            Card to check
 	 * @return TRUE if the player could have the card
 	 */
 	public boolean couldHaveCard(Player player, Card card) {
 
 		return possiblePlayerCards.get(player).contains(card);
+	}
+
+	/**
+	 * Checks whether a player could have a card of the given suit, 
+	 * this is an uncertain information
+	 * 
+	 * @param player
+	 *            Player ID
+	 * @param suit
+	 *            Suit to check
+	 * @return TRUE if the player could have any card of the suit
+	 */
+	public boolean couldHaveSuit(Player player, Suit suit) {
+		for(Rank r: Rank.values()) {
+			if(r==Rank.JACK) continue;
+			if(couldHaveCard(player, Card.getCard(suit, r))) return true;
+		}
+		return false;
 	}
 
 	/**
@@ -431,6 +477,10 @@ public class PlayerKnowledge {
 		return result.toString();
 	}
 
+	public int getNoOfTricks() {
+		return tricks.size();
+	}
+	
 	/**
 	 * Get cards of the current trick
 	 * 

@@ -57,7 +57,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 			maxBidValue = new Bidding(cards).getMaxBid();
 		}
 		if (maxBidValue < nextBidValue) {
-			aiPlayer = new OpponentPlayer(cards);
+			aiPlayer = new OpponentPlayer(cards, playerName);
 			return -1;
 		}
 		return nextBidValue;
@@ -75,7 +75,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 		}
 		boolean result = !(maxBidValue < 18) && maxBidValue >= currBidValue;
 		if (!result) {
-			aiPlayer = new OpponentPlayer(cards);
+			aiPlayer = new OpponentPlayer(cards, playerName);
 		}
 		return result;
 	}
@@ -153,7 +153,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public Card playCard() {
-		log.debug("--------------------- start ----------------------------------");
+		log.debug("--------------------- start ("+playerName+") ----------------------------------");
 		log.debug(".playCard(): my position: " + knowledge.getPlayerPosition()
 				+ ", single player: " + knowledge.getDeclarer());
 		Card toPlay = aiPlayer.playNextCard(knowledge);
@@ -166,7 +166,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 			log.warn("no playable cards - shouldn't be possible!");
 			log.debug("my cards: " + cards + ", trick: "
 					+ this.knowledge.getTrickCards());
-			log.debug("--------------------- done -----------------------------------");
+			log.debug("--------------------- done ("+playerName+") -----------------------------------");
 			return null;
 		}
 		log.debug("--------------------- done -----------------------------------");

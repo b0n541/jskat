@@ -17,6 +17,7 @@ import de.jskat.ai.PlayerKnowledge;
 import de.jskat.util.Card;
 import de.jskat.util.CardList;
 import de.jskat.util.GameType;
+import de.jskat.util.Player;
 import de.jskat.util.Rank;
 import de.jskat.util.Suit;
 
@@ -26,12 +27,15 @@ import de.jskat.util.Suit;
  */
 public class OpponentPlayer extends AbstractCardPlayer {
 
+	private final String name;
+	
 	/**
 	 * 
 	 */
-	OpponentPlayer(CardList cards) {
+	OpponentPlayer(CardList cards, String name) {
 		super(cards);
-		log.debug("Constructing new opponent player...");
+		this.name = name;
+		log.debug("Constructing a new opponent player called <"+name+">...");
 	}
 	
 	/** Gets the next card that the player wants to play
@@ -46,213 +50,23 @@ public class OpponentPlayer extends AbstractCardPlayer {
 			return playNextCardNullGame(knowledge);
 		}
 
-		GameType gameType = knowledge.getGame().getGameType();
-		Card initialCard = (knowledge.getTrickCards().size()>0?knowledge.getTrickCards().get(0):null);
-		Suit trumpSuit = gameType.getTrumpSuit();
-		// TODO refactor method calls: just include CardMemory instead of all the details
-
 		int bestToBePlayed = -1;
-        log.debug(".playNextCard(): Processing hand ["+cards+"] with trick ["+knowledge.getTrickCards()+"]. Game type is "+gameType+".");
+        log.debug(".playNextCard(): Processing hand ["+cards+"] with trick ["+knowledge.getTrickCards()+"]. Game type is "+knowledge.getGame().getGameType()+".");
         
 		if (knowledge.getTrickCards().size()>1) {
-			// I'm in hindhand
-			// 1: check if player can match initial suit
-			if(Helper.isAbleToMatch(cards, initialCard, gameType)) {
-				// 1.1 if yes (i.e. I can match the initial suit): check if necessary to beat
-				log.debug(".playNextCard(): I can match the demanded color");
-				if(Helper.isSinglePlayerWin(knowledge)) {
-					log.debug(".playNextCard(): Trick is SinglePlayerWin");
-					// 1.1.1: if yes: can beat?
-					Card currentWinner;
-					if (initialCard.beats(gameType, knowledge.getTrickCards().get(1))) {
-						currentWinner = initialCard;
-					}
-					else {
-						currentWinner = knowledge.getTrickCards().get(1);
-					}
-					bestToBePlayed = Helper.isAbleToBeat(cards, currentWinner, initialCard, gameType); 
-					if(bestToBePlayed > -1) {
-						// 1.1.1.1: if I can beat: do it
-						log.debug(".playNextCard(): ...but I can beat it...");
-					} 
-					else {
-						log.debug(".playNextCard(): ...which I can't beat...");
-						// 1.1.1.2: if I can't beat: find lowest matching card
-						if(initialCard.isTrump(gameType)) {
-							bestToBePlayed = cards.getFirstIndexOfSuit(gameType.getTrumpSuit(), false);
-							if(bestToBePlayed < 0) {
-								log.debug(".playNextCard(): Damn! I have to play a Jack...");
-								bestToBePlayed = 0;
-								while(cards.size()>bestToBePlayed+1 && cards.get(bestToBePlayed+1).getRank()==Rank.JACK) bestToBePlayed++;
-							}
-						}
-						else {
-							bestToBePlayed = cards.getFirstIndexOfSuit(initialCard.getSuit(), false);
-						}
-					}
-				}
-				else {
-					log.debug(".playNextCard(): I can match the demanded color, and it's our trick already...");
-					// 1.1.2: if no: find highest matching card
-					if(initialCard.isTrump(gameType)) {
-					    bestToBePlayed = cards.getLastIndexOfSuit(gameType.getTrumpSuit());
-						if(bestToBePlayed < 0) {
-							log.debug(".playNextCard(): Damn! I have to play a Jack...");
-							bestToBePlayed = 0;
-							while(cards.size()>bestToBePlayed+1 && cards.get(bestToBePlayed+1).getRank()==Rank.JACK) bestToBePlayed++;
-						}
-					}
-					else {
-						bestToBePlayed = cards.getLastIndexOfSuit(initialCard.getSuit());
-					}
-				}
+			bestToBePlayed = findHindhandCard(knowledge);
+		}
+		else if (knowledge.getTrickCards().size()>0) {
+			bestToBePlayed = findMiddlehandCard(knowledge);
+		} else {
+			// No card on the table yet
+			if(knowledge.getNoOfTricks()<1) {
+				bestToBePlayed = findFirstInitial(knowledge);
 			}
 			else {
-				// 1.2: if no (i.e. I can't match the initial suit): is ours?
-				if(Helper.isSinglePlayerWin(knowledge)) {
-					// 1.2.1: if no: do I have trump? 
-					log.debug(".playNextCard(): I cannot match and trick is SinglePlayerWin");
-					if(cards.hasTrump(gameType)) {
-						// 1.2.1.1: if yes: do I want to trump
-						if(knowledge.getTrickCards().getTotalValue() > 3) {
-							log.debug(".playNextCard(): But I can and will take it...");
-							// 1.2.1.1.1: if yes: find a good trump
-							bestToBePlayed = findValuableTrump(cards, trumpSuit);
-						}
-						else {
-							log.debug(".playNextCard(): I could trump, but I don't want to...");
-							// 1.2.1.1.2: if no: find a low card
-							bestToBePlayed = findLowCard(cards, trumpSuit);
-						}
-					} 
-					else {
-						log.debug(".playNextCard(): I'd love to have it, but I can't match the initial suit...");
-						// 1.2.1.2: if no: find a low card
-						bestToBePlayed = findLowCard(cards, trumpSuit);
-					}
-				}
-				else {
-					log.debug(".playNextCard(): I cannot match but it's our trick already...");
-					// 1.2.2: if yes: find highest value card (but no ace)
-					bestToBePlayed = findHighCard(cards, trumpSuit);
-					log.debug(".playNextCard(): got back value "+bestToBePlayed );
-					
-				}
+				bestToBePlayed = findInitial(knowledge);
 			}
-		}
-				
-		else if (initialCard!=null) {
-            
-			// Only one card is played in this trick yet
-			// the player is forced to play after the color
-			// of the first card
-            
-			// At first: Is trump played?
-			if (initialCard.getSuit() == trumpSuit ||
-					initialCard.getRank() == Rank.JACK) {
-                
-				// Trump is played
-				log.debug(".playNextCard(): first card is trump...");
-				// Does the player have trump?
-				if (Helper.hasTrump(cards, trumpSuit)) {
-                    
-					// Play the highest trump
-					// Check whether there is a Jack in the cards or not
-					if (cards.contains(Card.CJ)) {
-						bestToBePlayed = cards.getIndexOf(Card.CJ);
-					} else if (cards.contains(Card.SJ)) {
-						bestToBePlayed = cards.getIndexOf(Card.SJ);
-					} else if (cards.contains(Card.HJ)) {
-						bestToBePlayed = cards.getIndexOf(Card.HJ);
-					} else if (cards.contains(Card.DJ)) {
-						bestToBePlayed = cards.getIndexOf(Card.DJ);
-					} else {
-						// No Jack in the cards
-						log.debug(".playNextCard(): ... but i don't have a jack...");
-						bestToBePlayed = cards.getLastIndexOfSuit(trumpSuit);
-					}
-                    
-				} else {
-                    
-					// Player doesn't have trump
-					// it doesn't matter what card is played
-					// just play the first card in the CardList
-					bestToBePlayed = findLowCard(cards, trumpSuit);
-					log.debug(".playNextCard(): ... but i don't have any trumps...");
-				}
-                
-			} else {
-                
-				log.debug(".playNextCard(): first card is a color card...");
-				// If trump is not played the player is forced
-				// to play the color of the first card
-				if (cards.hasSuit(gameType, initialCard.getSuit())) {
-                    
-					// Player has the color
-					// check if it's ours or if I can beat 
-					if(Helper.isSinglePlayerWin(knowledge)) {
-						bestToBePlayed = Helper.isAbleToBeat(cards, initialCard, initialCard, gameType); 
-						if(bestToBePlayed < 0) {
-							log.debug(".playNextCard(): ...which i can't beat...");
-							bestToBePlayed = cards.getFirstIndexOfSuit(initialCard.getSuit());
-						}
-					}
-					else {
-						// Play the card with the highest value
-						log.debug(".playNextCard(): ...to which i try to put some value...");
-						bestToBePlayed = cards.getLastIndexOfSuit(initialCard.getSuit());
-					}
-					
-                    
-				} else {
-                    
-					log.debug(".playNextCard(): ...which i don't have...");
-					// Player doesn't have the color
-					// is there any trump in the cards
-					if (Helper.hasTrump(cards, trumpSuit)) {
-                        
-						// Play the highest trump
-						// Check whether there is a Jack in the cards or not
-						if (cards.contains(Card.CJ)) {
-                            
-							bestToBePlayed = cards.getIndexOf(Card.CJ);
-                            
-						} else if (cards.contains(Card.SJ)) {
-                            
-							bestToBePlayed = cards.getIndexOf(Card.SJ);
-                            
-						} else if (cards.contains(Card.HJ)) {
-                            
-							bestToBePlayed = cards.getIndexOf(Card.HJ);
-                            
-						} else if (cards.contains(Card.DJ)) {
-                            
-							bestToBePlayed = cards.getIndexOf(Card.DJ);
-                            
-						} else {
-                            
-							// No Jack in the cards
-							bestToBePlayed = cards.getLastIndexOfSuit(trumpSuit);
-						}
-                        
-						log.debug(".playNextCard(): ...so i take it...");
-					} else {
-                        
-						// it doesn't matter what card is played
-						// TODO check card value!
-						bestToBePlayed = cards.size() - 1;
-						log.debug(".playNextCard(): ...but i can't take it...");
-					}
-				}
-			}
-            
-			log.debug(".playNextCard(): player " + "@@playerID" + ": " + cards.get(bestToBePlayed));
-		} else {
-            
-			// No card on the table yet
-			
-			bestToBePlayed = findInitial(cards, gameType);
-			log.debug(".playNextCard(): (in forehand) " + "@@playerID" + ": " + cards.get(bestToBePlayed));
+			log.debug(".playNextCard(): (in forehand) " + name + ": " + cards.get(bestToBePlayed));
 		}
         
 		if(bestToBePlayed < 0 || bestToBePlayed > cards.size()-1) {
@@ -267,6 +81,225 @@ public class OpponentPlayer extends AbstractCardPlayer {
 			return null;
 		}
 		return cards.remove(bestToBePlayed);
+	}
+
+	/**
+	 * @param knowledge
+	 * @param gameType
+	 * @param initialCard
+	 * @param trumpSuit
+	 * @return
+	 */
+	private int findMiddlehandCard(PlayerKnowledge knowledge) {
+		GameType gameType = knowledge.getGame().getGameType();
+		Card initialCard = (knowledge.getTrickCards().size()>0?knowledge.getTrickCards().get(0):null);
+		Suit trumpSuit = gameType.getTrumpSuit();
+		
+		int bestToBePlayed;
+		// Only one card is played in this trick yet
+		// the player is forced to play after the color
+		// of the first card
+		
+		// At first: Is trump played?
+		if (initialCard.getSuit() == trumpSuit ||
+				initialCard.getRank() == Rank.JACK) {
+		    
+			// Trump is played
+			log.debug(".playNextCard(): first card is trump...");
+			// Does the player have trump?
+			if (Helper.hasTrump(cards, trumpSuit)) {
+		        
+				// Play the highest trump
+				// Check whether there is a Jack in the cards or not
+				if (cards.contains(Card.CJ)) {
+					bestToBePlayed = cards.getIndexOf(Card.CJ);
+				} else if (cards.contains(Card.SJ)) {
+					bestToBePlayed = cards.getIndexOf(Card.SJ);
+				} else if (cards.contains(Card.HJ)) {
+					bestToBePlayed = cards.getIndexOf(Card.HJ);
+				} else if (cards.contains(Card.DJ)) {
+					bestToBePlayed = cards.getIndexOf(Card.DJ);
+				} else {
+					// No Jack in the cards
+					log.debug(".playNextCard(): ... but i don't have a jack...");
+					bestToBePlayed = cards.getLastIndexOfSuit(trumpSuit);
+				}
+		        
+			} else {
+		        
+				// Player doesn't have trump
+				// it doesn't matter what card is played
+				// just play the first card in the CardList
+				bestToBePlayed = findLowCard(cards, trumpSuit);
+				log.debug(".playNextCard(): ... but i don't have any trumps...");
+			}
+		    
+		} else {
+		    
+			log.debug(".playNextCard(): first card is a color card...");
+			// If trump is not played the player is forced
+			// to play the color of the first card
+			if (cards.hasSuit(gameType, initialCard.getSuit())) {
+		        
+				// Player has the color
+				// check if it's ours or if I can beat 
+				if(Helper.isSinglePlayerWin(knowledge)) {
+					bestToBePlayed = Helper.isAbleToBeat(cards, initialCard, initialCard, gameType); 
+					if(bestToBePlayed < 0) {
+						log.debug(".playNextCard(): ...which i can't beat...");
+						bestToBePlayed = cards.getFirstIndexOfSuit(initialCard.getSuit());
+					}
+				}
+				else {
+					// Play the card with the highest value
+					log.debug(".playNextCard(): ...to which i try to put some value...");
+					bestToBePlayed = cards.getLastIndexOfSuit(initialCard.getSuit());
+				}
+				
+		        
+			} else {
+		        
+				log.debug(".playNextCard(): ...which i don't have...");
+				// Player doesn't have the color
+				// is there any trump in the cards
+				if (Helper.hasTrump(cards, trumpSuit)) {
+		            
+					// Play the highest trump
+					// Check whether there is a Jack in the cards or not
+					if (cards.contains(Card.CJ)) {
+		                
+						bestToBePlayed = cards.getIndexOf(Card.CJ);
+		                
+					} else if (cards.contains(Card.SJ)) {
+		                
+						bestToBePlayed = cards.getIndexOf(Card.SJ);
+		                
+					} else if (cards.contains(Card.HJ)) {
+		                
+						bestToBePlayed = cards.getIndexOf(Card.HJ);
+		                
+					} else if (cards.contains(Card.DJ)) {
+		                
+						bestToBePlayed = cards.getIndexOf(Card.DJ);
+		                
+					} else {
+		                
+						// No Jack in the cards
+						bestToBePlayed = cards.getLastIndexOfSuit(trumpSuit);
+					}
+		            
+					log.debug(".playNextCard(): ...so i take it...");
+				} else {
+		            
+					// it doesn't matter what card is played
+					// TODO check card value!
+					bestToBePlayed = cards.size() - 1;
+					log.debug(".playNextCard(): ...but i can't take it...");
+				}
+			}
+		}
+		
+		log.debug(".playNextCard(): player " + name + ": " + cards.get(bestToBePlayed));
+		return bestToBePlayed;
+	}
+
+	/**
+	 * @param knowledge
+	 * @param gameType
+	 * @param initialCard
+	 * @param trumpSuit
+	 * @return
+	 */
+	private int findHindhandCard(PlayerKnowledge knowledge) {
+		GameType gameType = knowledge.getGame().getGameType();
+		Card initialCard = (knowledge.getTrickCards().size()>0?knowledge.getTrickCards().get(0):null);
+		Suit trumpSuit = gameType.getTrumpSuit();
+		int bestToBePlayed;
+		// I'm in hindhand
+		// 1: check if player can match initial suit
+		if(Helper.isAbleToMatch(cards, initialCard, gameType)) {
+			// 1.1 if yes (i.e. I can match the initial suit): check if necessary to beat
+			log.debug(".playNextCard(): I can match the demanded color");
+			if(Helper.isSinglePlayerWin(knowledge)) {
+				log.debug(".playNextCard(): Trick is SinglePlayerWin");
+				// 1.1.1: if yes: can beat?
+				Card currentWinner;
+				if (initialCard.beats(gameType, knowledge.getTrickCards().get(1))) {
+					currentWinner = initialCard;
+				}
+				else {
+					currentWinner = knowledge.getTrickCards().get(1);
+				}
+				bestToBePlayed = Helper.isAbleToBeat(cards, currentWinner, initialCard, gameType); 
+				if(bestToBePlayed > -1) {
+					// 1.1.1.1: if I can beat: do it
+					log.debug(".playNextCard(): ...but I can beat it...");
+				} 
+				else {
+					log.debug(".playNextCard(): ...which I can't beat...");
+					// 1.1.1.2: if I can't beat: find lowest matching card
+					if(initialCard.isTrump(gameType)) {
+						bestToBePlayed = cards.getFirstIndexOfSuit(gameType.getTrumpSuit(), false);
+						if(bestToBePlayed < 0) {
+							log.debug(".playNextCard(): Damn! I have to play a Jack...");
+							bestToBePlayed = 0;
+							while(cards.size()>bestToBePlayed+1 && cards.get(bestToBePlayed+1).getRank()==Rank.JACK) bestToBePlayed++;
+						}
+					}
+					else {
+						bestToBePlayed = cards.getFirstIndexOfSuit(initialCard.getSuit(), false);
+					}
+				}
+			}
+			else {
+				log.debug(".playNextCard(): I can match the demanded color, and it's our trick already...");
+				// 1.1.2: if no: find highest matching card
+				if(initialCard.isTrump(gameType)) {
+				    bestToBePlayed = cards.getLastIndexOfSuit(gameType.getTrumpSuit());
+					if(bestToBePlayed < 0) {
+						log.debug(".playNextCard(): Damn! I have to play a Jack...");
+						bestToBePlayed = 0;
+						while(cards.size()>bestToBePlayed+1 && cards.get(bestToBePlayed+1).getRank()==Rank.JACK) bestToBePlayed++;
+					}
+				}
+				else {
+					bestToBePlayed = cards.getLastIndexOfSuit(initialCard.getSuit());
+				}
+			}
+		}
+		else {
+			// 1.2: if no (i.e. I can't match the initial suit): is ours?
+			if(Helper.isSinglePlayerWin(knowledge)) {
+				// 1.2.1: if no: do I have trump? 
+				log.debug(".playNextCard(): I cannot match and trick is SinglePlayerWin");
+				if(cards.hasTrump(gameType)) {
+					// 1.2.1.1: if yes: do I want to trump
+					if(knowledge.getTrickCards().getTotalValue() > 3) {
+						log.debug(".playNextCard(): But I can and will take it...");
+						// 1.2.1.1.1: if yes: find a good trump
+						bestToBePlayed = findValuableTrump(cards, trumpSuit);
+					}
+					else {
+						log.debug(".playNextCard(): I could trump, but I don't want to...");
+						// 1.2.1.1.2: if no: find a low card
+						bestToBePlayed = findLowCard(cards, trumpSuit);
+					}
+				} 
+				else {
+					log.debug(".playNextCard(): I'd love to have it, but I can't match the initial suit...");
+					// 1.2.1.2: if no: find a low card
+					bestToBePlayed = findLowCard(cards, trumpSuit);
+				}
+			}
+			else {
+				log.debug(".playNextCard(): I cannot match but it's our trick already...");
+				// 1.2.2: if yes: find highest value card (but no ace)
+				bestToBePlayed = findHighCard(cards, trumpSuit);
+				log.debug(".playNextCard(): got back value "+bestToBePlayed );
+				
+			}
+		}
+		return bestToBePlayed;
 	}
 
 	/**
@@ -428,46 +461,109 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	}
 
 	/**
-	 * Finds an initial card to play
+	 * Finds an initial card to play (from the second trick onward)
 	 * @param cards
 	 * @param game
 	 * @return index of the card
 	 */
-	private int findInitial(CardList cards, GameType game) {
+	private int findInitial(PlayerKnowledge knowledge) {
+		GameType gameType = knowledge.getGame().getGameType();
+		int[] rating = new int[cards.size()];
+		// First, look for any aces that are not trump
+		for(int x=0;x<cards.size();x++)
+		{
+			Card c = cards.get(x);
+			if(knowledge.getDeclarer()==Player.MIDDLE_HAND) {
+				// add to the rating the number of remaining cards
+			}
+			else {
+				// subtract from the rating the number of remaining cards
+			}
+			if (c.getRank() == Rank.ACE && c.getSuit()!=gameType.getTrumpSuit()) { 
+				if(knowledge.couldHaveSuit(knowledge.getDeclarer(), c.getSuit())) {
+					rating[x]+=20;
+					if(knowledge.getDeclarer()==Player.MIDDLE_HAND) {
+						rating[x]+=cards.getSuitCount(c.getSuit(), false);
+					}
+					else {
+						rating[x]-=cards.getSuitCount(c.getSuit(), false);
+					}
+				}
+				else rating[x]-=20; 
+			}
+			if (c.getRank() == Rank.JACK) rating[x]-=20;
+			if (c.getRank() == Rank.TEN && knowledge.isCardOutstanding(Card.getCard(c.getSuit(), Rank.ACE))) rating[x]-=40;
+			if (c.getRank() != Rank.JACK && c.getSuit()==gameType.getTrumpSuit()) rating[x]-=30;
+			if (!knowledge.couldHaveSuit(knowledge.getDeclarer(), c.getSuit())) rating[x]+=(10+c.getRank().ordinal()+cards.getSuitCount(c.getSuit(), false));
+		}
+		StringBuilder sb = new StringBuilder();
+		int result = 0;
+		sb.append("["+rating[0]+"]");
+		for(int i=1;i<rating.length;i++) {
+			sb.append("["+rating[i]+"]");
+			if(rating[i]>rating[result]) result = i;
+		}
+		log.debug("Rating={"+sb+"}");
+		return result;
+	}
+
+	/**
+	 * Finds an initial card to play on the very first trick of the game
+	 * @param cards
+	 * @param game
+	 * @return index of the card
+	 */
+	private int findFirstInitial(PlayerKnowledge knowledge) {
+		GameType gameType = knowledge.getGame().getGameType();
+		log.debug("Opening the game...");
+		// First, look for any aces that are not trump
+		int store = -1;
 		for(int x=0;x<cards.size();x++)
 		{
 			if (cards.get(x).getRank() == Rank.ACE)
-					if(cards.get(x).getSuit() != game.getTrumpSuit()) return x;
+					if(cards.get(x).getSuit() != gameType.getTrumpSuit()) {
+						if(store>=0) {
+							if(knowledge.getDeclarer()==Player.MIDDLE_HAND && cards.getSuitCount(cards.get(x).getSuit(), false)>cards.getSuitCount(cards.get(store).getSuit(), false)) store = x;
+							else if(knowledge.getDeclarer()==Player.HIND_HAND && cards.getSuitCount(cards.get(x).getSuit(), false)<cards.getSuitCount(cards.get(store).getSuit(), false)) store = x;
+						}
+						else store = x;
+					}
 		}
-		// If you don't have any, find a low face card
-		log.debug(".findInitial(): no Ace found");
-		int store = 0;
-		for(int x=0;x<cards.size();x++)
-		{
-			Rank cardRank = cards.get(x).getRank();
-			
-			if (cardRank == Rank.SEVEN || // "7"
-					cardRank == Rank.EIGHT || // "8"
-					cardRank == Rank.NINE) { // "9"
-				// If you find one and it is a trumpf, remember it for later (in case you find nothing else)
-				if(cards.get(x).getSuit() != game.getTrumpSuit()) return x;
-					// else {store = x; break; };
+		if(store>0) return store;
+		if(knowledge.getDeclarer()==Player.MIDDLE_HAND) {
+			// If you don't have any, look for longest color
+			// "kurzer Weg, lange Farbe"
+			Suit maxSuit = null;
+			for(Suit s: Suit.values()) {
+				if(maxSuit==null) {
+					maxSuit = s;
+					continue;
+				}
+				if(s.equals(gameType.getTrumpSuit())) continue;
+				if(cards.getSuitCount(s, false)>cards.getSuitCount(maxSuit, false)) maxSuit = s;
 			}
+			if(cards.get(cards.getFirstIndexOfSuit(maxSuit)).getRank()==Rank.ACE) return cards.getFirstIndexOfSuit(maxSuit);
+			return cards.getLastIndexOfSuit(maxSuit);
 		}
-		// if you have only found a trumpf, then (for heaven's sake) use it
-		if(store > 0) return store;
-		// If you find nothing else, just take the first in the row
-		log.debug(".findInitial(): no low card found");
-		for(int x=0;x<cards.size();x++)
-		{
-			return x;
+		else {
+			// If you don't have any, look for shortest color
+			// "langer Weg, kurze Farbe"
+			Suit minSuit = null;
+			for(Suit s: Suit.values()) {
+				if(minSuit==null) {
+					minSuit = s;
+					continue;
+				}
+				if(s.equals(gameType.getTrumpSuit())) continue;
+				if(cards.getSuitCount(s, false)<cards.getSuitCount(minSuit, false)) minSuit = s;
+			}
+			if(cards.get(cards.getFirstIndexOfSuit(minSuit)).getRank()==Rank.ACE) return cards.getFirstIndexOfSuit(minSuit);
+			return cards.getLastIndexOfSuit(minSuit);
 		}
-		log.debug("WARNING: "+this+".findInitial(): No initial card found - returning 0.");
-		return 0;
-		// TODO: Implement opening strategies:
-		// e.g. "Kurzer Weg, lange Farbe - langer Weg, kurze Farbe"
 	}
 
+	
+	
 	/**
 	 * log
 	 */
