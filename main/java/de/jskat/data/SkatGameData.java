@@ -115,7 +115,7 @@ public class SkatGameData {
 	/**
 	 * Game result
 	 */
-	private int result = 0;
+	private int gameResult = 0;
 
 	/**
 	 * Highest bid value made during bidding
@@ -209,9 +209,14 @@ public class SkatGameData {
 	private CardList skat;
 
 	/**
-	 * Holds all cards dealt to the players and to the skat
+	 * Holds all cards dealt to the players
 	 */
 	private Map<Player, CardList> dealtCards;
+
+	/**
+	 * Holds all cards dealt to skat
+	 */
+	private CardList dealtSkat;
 
 	/**
 	 * Creates a new instance of a Skat game data
@@ -226,7 +231,7 @@ public class SkatGameData {
 	private void intializeVariables() {
 
 		announcement = new GameAnnouncement();
-		result = -1;
+		gameResult = -1;
 
 		playerNames = new HashMap<Player, String>();
 		playerHands = new HashMap<Player, CardList>();
@@ -244,6 +249,7 @@ public class SkatGameData {
 			playerPasses.put(player, Boolean.FALSE);
 		}
 
+		dealtSkat = new CardList();
 		skat = new CardList();
 
 		tricks = new ArrayList<Trick>();
@@ -256,13 +262,13 @@ public class SkatGameData {
 	 */
 	public int getGameResult() {
 
-		if (result == 0 && getGameType() != GameType.PASSED_IN) {
+		if (gameResult == 0 && getGameType() != GameType.PASSED_IN) {
 
 			log.warn("Game result hasn't been calculated yet!"); //$NON-NLS-1$
 			calcResult();
 		}
 
-		return result;
+		return gameResult;
 	}
 
 	/**
@@ -372,7 +378,7 @@ public class SkatGameData {
 		if (overBidded) {
 			// game was overbidded
 			won = false;
-			result = result * -2;
+			gameResult = gameResult * -2;
 		}
 	}
 
@@ -700,16 +706,15 @@ public class SkatGameData {
 	 */
 	public void calcResult() {
 
-		calcJackInformation();
-
 		if (getGameType() == GameType.PASSED_IN) {
 
 			won = false;
-			result = 0;
+			gameResult = 0;
 		} else {
 
+			calcJackInformation();
 			won = rules.calcGameWon(this);
-			result = rules.calcGameResult(this);
+			gameResult = rules.calcGameResult(this);
 		}
 	}
 
@@ -755,7 +760,7 @@ public class SkatGameData {
 	 */
 	public int getResult() {
 
-		return result;
+		return gameResult;
 	}
 
 	/**
@@ -766,7 +771,7 @@ public class SkatGameData {
 	 */
 	public void setResult(int newResult) {
 
-		result = newResult;
+		gameResult = newResult;
 	}
 
 	/**
@@ -823,13 +828,13 @@ public class SkatGameData {
 	 */
 	public Trick getLastTrick() {
 
-		Trick result = null;
+		Trick lastTrick = null;
 
 		if (tricks.size() > 1) {
-			result = tricks.get(tricks.size() - 2);
+			lastTrick = tricks.get(tricks.size() - 2);
 		}
 
-		return result;
+		return lastTrick;
 	}
 
 	/**
@@ -972,6 +977,16 @@ public class SkatGameData {
 	}
 
 	/**
+	 * Gets the dealt skat
+	 * 
+	 * @return Dealt skat
+	 */
+	public CardList getDealtSkat() {
+
+		return dealtSkat;
+	}
+
+	/**
 	 * Sets a dealt card
 	 * 
 	 * @param player
@@ -996,10 +1011,12 @@ public class SkatGameData {
 	 * @param card1
 	 *            Second card
 	 */
-	public void setSkatCards(Card card0, Card card1) {
+	public void setDealtSkatCards(Card card0, Card card1) {
 
-		skat.add(card0);
-		skat.add(card1);
+		dealtSkat.add(card0);
+		dealtSkat.add(card1);
+
+		skat.addAll(dealtSkat);
 	}
 
 	/**
@@ -1181,8 +1198,7 @@ public class SkatGameData {
 		// FIXME (jansch 09.11.2010) this is code for skat rules
 		CardList declarerCards = (CardList) dealtCards.get(declarer).clone();
 
-		declarerCards.add(skat.get(0));
-		declarerCards.add(skat.get(1));
+		declarerCards.addAll(dealtSkat);
 
 		if (declarerCards.hasJack(Suit.CLUBS)) {
 
