@@ -16,10 +16,11 @@ import java.util.Random;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.neuroph.core.NeuralNetwork;
+import org.neuroph.core.learning.SupervisedLearning;
 
 import de.jskat.ai.nn.AIPlayerNN;
 import de.jskat.ai.nn.data.SkatNetworks;
-import de.jskat.ai.nn.util.NeuralNetwork;
 import de.jskat.control.JSkatMaster;
 import de.jskat.control.JSkatThread;
 import de.jskat.control.SkatGame;
@@ -158,9 +159,9 @@ public class NNTrainer extends JSkatThread {
 		AIPlayerNN nnPlayer3 = new AIPlayerNN();
 		nnPlayer3.setIsLearning(true);
 		NeuralNetwork declarerNet = SkatNetworks.getNetwork(gameType, true);
+		SupervisedLearning declarerLearning = (SupervisedLearning) declarerNet.getLearningRule();
 		NeuralNetwork opponentNet = SkatNetworks.getNetwork(gameType, false);
-		double avgDeclDiff = 0.0d;
-		double avgOppDiff = 0.0d;
+		SupervisedLearning opponentLearning = (SupervisedLearning) opponentNet.getLearningRule();
 
 		long episodes = 0;
 		long episodesWonGames = 0;
@@ -178,28 +179,21 @@ public class NNTrainer extends JSkatThread {
 						+ totalWonGames + " (" + 100 * totalWonGames //$NON-NLS-1$
 						/ totalGames + " %)"); //$NON-NLS-1$
 				log.debug("        Declarer net: " //$NON-NLS-1$
-						+ declarerNet.getIterations()
-						+ " iterations " //$NON-NLS-1$
-						+ Math.round(avgDeclDiff * 10000.0d)
-						/ 10000.d
-						+ " avg diff"); //$NON-NLS-1$
+						+ declarerLearning.getCurrentIteration() + " iterations " //$NON-NLS-1$
+						+ declarerLearning.getTotalNetworkError() + " total network error"); //$NON-NLS-1$
 				log.debug("        Opponent net: " //$NON-NLS-1$
-						+ opponentNet.getIterations()
-						+ " iterations " //$NON-NLS-1$
-						+ Math.round(avgOppDiff * 10000.0d)
-						/ 10000.d
-						+ " avg diff"); //$NON-NLS-1$
+						+ opponentLearning.getCurrentIteration() + " iterations " //$NON-NLS-1$
+						+ opponentLearning.getTotalNetworkError() + " total network error"); //$NON-NLS-1$
 
-				jskat.addTrainingResult(gameType, episodes, totalWonGames,
-						episodesWonGames, avgDeclDiff, avgOppDiff);
+				jskat.addTrainingResult(gameType, episodes, totalWonGames, episodesWonGames,
+						declarerLearning.getTotalNetworkError(), opponentLearning.getTotalNetworkError());
 
 				episodesWonGames = 0;
 			}
 
 			for (Player currPlayer : Player.values()) {
 
-				SkatGame game = new SkatGame(null, nnPlayer1, nnPlayer2,
-						nnPlayer3);
+				SkatGame game = new SkatGame(null, nnPlayer1, nnPlayer2, nnPlayer3);
 				game.setView(new NullView());
 				game.setMaxSleep(0);
 
@@ -235,10 +229,6 @@ public class NNTrainer extends JSkatThread {
 				}
 
 				totalGames++;
-				avgDeclDiff = (avgDeclDiff * (totalGames - 1) + declarerNet
-						.getAvgDiff()) / totalGames;
-				avgOppDiff = (avgOppDiff * (totalGames - 1) + opponentNet
-						.getAvgDiff()) / totalGames;
 			}
 
 			episodes++;

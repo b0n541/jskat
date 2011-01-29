@@ -59,18 +59,16 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 	 *            Total Number of won games
 	 * @param episodeWonGames
 	 *            Number of won games in last episode
-	 * @param declarerDiff
-	 *            Average declarer difference
-	 * @param opponentDiff
-	 *            Average opponent difference
+	 * @param totalDeclarerNetError
+	 *            Total error in declarer net
+	 * @param totalOpponentNetError
+	 *            Total error in opponent net
 	 */
-	public void addTrainingResult(GameType gameType, Long episodes,
-			Long totalWonGames, Long episodeWonGames, Double declarerDiff,
-			Double opponentDiff) {
+	public void addTrainingResult(GameType gameType, Long episodes, Long totalWonGames, Long episodeWonGames,
+			Double totalDeclarerNetError, Double totalOpponentNetError) {
 
-		((TrainingOverviewTableModel) overviewTable.getModel())
-				.addTrainingResult(gameType, episodes, totalWonGames,
-						episodeWonGames, declarerDiff, opponentDiff);
+		((TrainingOverviewTableModel) overviewTable.getModel()).addTrainingResult(gameType, episodes, totalWonGames,
+				episodeWonGames, totalDeclarerNetError, totalOpponentNetError);
 	}
 
 	private class TrainingOverviewTableModel extends AbstractTableModel {
@@ -140,14 +138,13 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 		 *            Total number of won games
 		 * @param episodeWonGames
 		 *            Number of won games in last episode
-		 * @param declarerDiff
-		 *            Average declarer difference
-		 * @param opponentDiff
-		 *            Average opponent difference
+		 * @param totalDeclarerNetError
+		 *            Total error in declarer net
+		 * @param totalOpponentNetError
+		 *            Total error in opponent net
 		 */
-		public void addTrainingResult(GameType gameType, Long episodes,
-				Long totalWonGames, Long episodeWonGames, Double declarerDiff,
-				Double opponentDiff) {
+		public void addTrainingResult(GameType gameType, Long episodes, Long totalWonGames, Long episodeWonGames,
+				Double totalDeclarerNetError, Double totalOpponentNetError) {
 
 			TableModel tableModel = overviewTable.getModel();
 
@@ -155,8 +152,8 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 			tableModel.setValueAt(episodes, gameType.ordinal(), 1);
 			tableModel.setValueAt(totalWonGames, gameType.ordinal(), 2);
 			tableModel.setValueAt(episodeWonGames, gameType.ordinal(), 3);
-			tableModel.setValueAt(declarerDiff, gameType.ordinal(), 4);
-			tableModel.setValueAt(opponentDiff, gameType.ordinal(), 5);
+			tableModel.setValueAt(totalDeclarerNetError, gameType.ordinal(), 4);
+			tableModel.setValueAt(totalOpponentNetError, gameType.ordinal(), 5);
 
 			fireTableDataChanged();
 		}

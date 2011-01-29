@@ -110,8 +110,7 @@ public class JSkatMaster {
 	 */
 	public void invitePlayer() {
 
-		List<String> player = view.getPlayerForInvitation(data
-				.getAvailableISSPlayer());
+		List<String> player = view.getPlayerForInvitation(data.getAvailableISSPlayer());
 		for (String currPlayer : player) {
 			getIssController().invitePlayer(data.getActiveTable(), currPlayer);
 		}
@@ -139,8 +138,8 @@ public class JSkatMaster {
 	 * @param unlimited
 	 *            TRUE, if unlimited rounds should be played
 	 */
-	public void startSeries(ArrayList<PlayerType> allPlayer,
-			ArrayList<String> playerNames, int numberOfRounds, boolean unlimited) {
+	public void startSeries(ArrayList<PlayerType> allPlayer, ArrayList<String> playerNames, int numberOfRounds,
+			boolean unlimited) {
 
 		log.debug(data.getActiveTable());
 
@@ -160,8 +159,7 @@ public class JSkatMaster {
 		table.startSkatSeries(numberOfRounds, unlimited);
 	}
 
-	private IJSkatPlayer getPlayerInstance(String tableName,
-			PlayerType playerType) {
+	private IJSkatPlayer getPlayerInstance(String tableName, PlayerType playerType) {
 
 		IJSkatPlayer player = null;
 
@@ -335,8 +333,7 @@ public class JSkatMaster {
 	 *            Skat player
 	 * @return TRUE if the placing was successful
 	 */
-	public synchronized boolean placePlayer(String tableName,
-			IJSkatPlayer player) {
+	public synchronized boolean placePlayer(String tableName, IJSkatPlayer player) {
 
 		boolean result = false;
 
@@ -418,9 +415,8 @@ public class JSkatMaster {
 	 */
 	public void loadNeuralNetworks() {
 
-		SkatNetworks
-				.loadNetworks(System
-						.getProperty("user.home").concat(System.getProperty("file.separator")).concat(".jskat")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+		SkatNetworks.loadNetworks(System
+				.getProperty("user.home").concat(System.getProperty("file.separator")).concat(".jskat")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	/**
@@ -428,9 +424,8 @@ public class JSkatMaster {
 	 */
 	public void saveNeuralNetworks() {
 
-		SkatNetworks
-				.saveNetworks(System
-						.getProperty("user.home").concat(System.getProperty("file.separator")).concat(".jskat")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		SkatNetworks.saveNetworks(System
+				.getProperty("user.home").concat(System.getProperty("file.separator")).concat(".jskat")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	/**
@@ -473,8 +468,7 @@ public class JSkatMaster {
 		}
 	}
 
-	private void handleHumanInputForISSTable(String tableName, String command,
-			Object source) {
+	private void handleHumanInputForISSTable(String tableName, String command, Object source) {
 
 		if (JSkatAction.PASS_BID.toString().equals(command)) {
 			// player passed
@@ -515,11 +509,9 @@ public class JSkatMaster {
 				// FIXME (jan 02.11.2010) Discarded cards are sent with the
 				// game announcement to ISS
 				GameAnnouncementWithDiscardedCards gameAnnouncement = (GameAnnouncementWithDiscardedCards) source;
-				issControl
-						.sendGameAnnouncementMove(tableName, gameAnnouncement);
+				issControl.sendGameAnnouncementMove(tableName, gameAnnouncement);
 			}
-		} else if (JSkatAction.PLAY_CARD.toString().equals(command)
-				&& source instanceof Card) {
+		} else if (JSkatAction.PLAY_CARD.toString().equals(command) && source instanceof Card) {
 
 			Card nextCard = (Card) source;
 			issControl.sendCardMove(tableName, nextCard);
@@ -671,12 +663,10 @@ public class JSkatMaster {
 	 * @param strength
 	 *            Playing strength
 	 */
-	public void updateISSPlayer(String playerName, String language,
-			long gamesPlayed, double strength) {
+	public void updateISSPlayer(String playerName, String language, long gamesPlayed, double strength) {
 
 		data.addAvailableISSPlayer(playerName);
-		view.updateISSLobbyPlayerList(playerName, language, gamesPlayed,
-				strength);
+		view.updateISSLobbyPlayerList(playerName, language, gamesPlayed, strength);
 	}
 
 	/**
@@ -756,16 +746,15 @@ public class JSkatMaster {
 	 *            Total number of won games
 	 * @param episodeWonGames
 	 *            Number of won games in last episode
-	 * @param avgDeclDiff
-	 *            Average declarer difference
-	 * @param avgOppDiff
-	 *            Average opponent difference
+	 * @param totalDeclarerNetError
+	 *            Total error in declarer net
+	 * @param totalOpponentNetError
+	 *            Total error in opponent net
 	 */
-	public void addTrainingResult(GameType gameType, long episodes,
-			long totalWonGames, long episodeWonGames, double avgDeclDiff,
-			double avgOppDiff) {
+	public void addTrainingResult(GameType gameType, long episodes, long totalWonGames, long episodeWonGames,
+			double totalDeclarerNetError, double totalOpponentNetError) {
 
-		view.addTrainingResult(gameType, episodes, totalWonGames,
-				episodeWonGames, avgDeclDiff, avgOppDiff);
+		view.addTrainingResult(gameType, episodes, totalWonGames, episodeWonGames, totalDeclarerNetError,
+				totalOpponentNetError);
 	}
 }

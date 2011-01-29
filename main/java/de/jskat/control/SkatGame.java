@@ -260,6 +260,8 @@ public class SkatGame extends JSkatThread {
 
 			log.debug("Check whether fore hand holds at least one bid"); //$NON-NLS-1$
 
+			view.setActivePlayer(tableName, Player.FORE_HAND);
+
 			// check whether fore hand holds at least one bid
 			if (!(player.get(Player.FORE_HAND).bidMore(18) > -1)) {
 

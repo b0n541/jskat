@@ -16,11 +16,14 @@ import java.util.Random;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.neuroph.core.NeuralNetwork;
+import org.neuroph.core.learning.SupervisedLearning;
+import org.neuroph.core.learning.SupervisedTrainingElement;
+import org.neuroph.core.learning.TrainingSet;
 
 import de.jskat.ai.AbstractJSkatPlayer;
 import de.jskat.ai.IJSkatPlayer;
 import de.jskat.ai.nn.data.SkatNetworks;
-import de.jskat.ai.nn.util.NeuralNetwork;
 import de.jskat.control.SkatGame;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
@@ -122,7 +125,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		for (GameType gameType : filteredGameTypes) {
 
-			int gamesToSimulate = 500;
+			int gamesToSimulate = 100;
 			int wonGames = simulateGames(cards, gameType, gamesToSimulate);
 			double wonRate = (double) wonGames / (double) gamesToSimulate;
 
@@ -197,7 +200,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		// FIXME (jan 17.01.2011) setting ouvert and schneider/schwarz
 		// newGame.setOuvert(rand.nextBoolean());
 
-		log.info("Announcing: " + newGame); //$NON-NLS-1$
+		log.debug("Announcing: " + newGame); //$NON-NLS-1$
 
 		return newGame;
 	}
@@ -427,7 +430,9 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 				// net.setInputParameter(currInputs);
 				// net.propagateForward();
 				//				log.debug("net output: " + net.getOutputParameters()); //$NON-NLS-1$
-				double currOutput = net.getPredictedOutcome(currInputs);
+				net.setInput(currInputs);
+				net.calculate();
+				double currOutput = net.getOutput()[0];
 
 				if (currOutput > highestOutput) {
 
@@ -514,73 +519,74 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	private void setDeclarerNetInputs(double[] inputs, Player leftOpponent, Player rightOpponent, Card card) {
 
 		GameType gameType = knowledge.getGame().getGameType();
+		int netInputIndexForCard = getNetInputIndex(gameType, card);
 
 		// inputs for left opponent
 		if (knowledge.couldHaveCard(leftOpponent, card)) {
-			inputs[getNetInputIndex(gameType, card)] = 1.0d;
+			inputs[netInputIndexForCard] = 1.0d;
 		} else if (knowledge.isCardPlayedInTrick(leftOpponent, card)) {
-			inputs[getNetInputIndex(gameType, card)] = -1.0d;
+			inputs[netInputIndexForCard] = -1.0d;
 		} else if (knowledge.isCardPlayedBy(leftOpponent, card)) {
-			inputs[getNetInputIndex(gameType, card)] = -0.5d;
+			inputs[netInputIndexForCard] = -0.5d;
 		} else {
-			inputs[getNetInputIndex(gameType, card)] = 0.0d;
+			inputs[netInputIndexForCard] = 0.0d;
 		}
 
 		// inputs for right opponent
 		if (knowledge.couldHaveCard(rightOpponent, card)) {
-			inputs[32 + getNetInputIndex(gameType, card)] = 1.0d;
+			inputs[32 + netInputIndexForCard] = 1.0d;
 		} else if (knowledge.isCardPlayedInTrick(rightOpponent, card)) {
-			inputs[32 + getNetInputIndex(gameType, card)] = -1.0d;
+			inputs[32 + netInputIndexForCard] = -1.0d;
 		} else if (knowledge.isCardPlayedBy(rightOpponent, card)) {
-			inputs[32 + getNetInputIndex(gameType, card)] = -0.5d;
+			inputs[32 + netInputIndexForCard] = -0.5d;
 		} else {
-			inputs[32 + getNetInputIndex(gameType, card)] = 0.0d;
+			inputs[32 + netInputIndexForCard] = 0.0d;
 		}
 
 		// inputs for player
 		if (knowledge.couldHaveCard(knowledge.getPlayerPosition(), card)) {
-			inputs[64 + getNetInputIndex(gameType, card)] = 1.0d;
+			inputs[64 + netInputIndexForCard] = 1.0d;
 		} else if (knowledge.isCardPlayedBy(knowledge.getPlayerPosition(), card)) {
-			inputs[64 + getNetInputIndex(gameType, card)] = -0.5d;
+			inputs[64 + netInputIndexForCard] = -0.5d;
 		} else {
-			inputs[64 + getNetInputIndex(gameType, card)] = 0.0d;
+			inputs[64 + netInputIndexForCard] = 0.0d;
 		}
 	}
 
 	private void setOpponentNetInputs(double[] inputs, Player otherOpponent, Player declarer, Card card) {
 
 		GameType gameType = knowledge.getGame().getGameType();
+		int netInputIndexForCard = getNetInputIndex(gameType, card);
 
 		// inputs for other opponent
 		if (knowledge.couldHaveCard(otherOpponent, card)) {
-			// inputs[card.getIndex()] = 0.5d;
-			inputs[getNetInputIndex(gameType, card)] = 1.0d;
+			inputs[netInputIndexForCard] = 1.0d;
 		} else if (knowledge.isCardPlayedInTrick(otherOpponent, card)) {
-			inputs[getNetInputIndex(gameType, card)] = -1.0d;
+			inputs[netInputIndexForCard] = -1.0d;
 		} else if (knowledge.isCardPlayedBy(otherOpponent, card)) {
-			inputs[getNetInputIndex(gameType, card)] = -0.5d;
+			inputs[netInputIndexForCard] = -0.5d;
 		} else {
-			inputs[getNetInputIndex(gameType, card)] = 0.0d;
+			inputs[netInputIndexForCard] = 0.0d;
 		}
 
 		// inputs for player
 		if (knowledge.couldHaveCard(knowledge.getPlayerPosition(), card)) {
-			inputs[32 + getNetInputIndex(gameType, card)] = 1.0d;
+			inputs[32 + netInputIndexForCard] = 1.0d;
 		} else if (knowledge.isCardPlayedBy(knowledge.getPlayerPosition(), card)) {
-			inputs[32 + getNetInputIndex(gameType, card)] = -0.5d;
+			inputs[32 + netInputIndexForCard] = -0.5d;
 		} else {
-			inputs[32 + getNetInputIndex(gameType, card)] = 0.0d;
+			inputs[32 + netInputIndexForCard] = 0.0d;
 		}
 
 		// inputs for single player
 		if (knowledge.couldHaveCard(declarer, card)) {
-			inputs[64 + getNetInputIndex(gameType, card)] = 1.0d;
+			inputs[64 + netInputIndexForCard] = 1.0d;
 		} else if (knowledge.isCardPlayedInTrick(declarer, card)) {
-			inputs[64 + getNetInputIndex(gameType, card)] = -1.0d;
+			inputs[64 + netInputIndexForCard] = -1.0d;
 		} else if (knowledge.isCardPlayedBy(declarer, card)) {
-			inputs[64 + getNetInputIndex(gameType, card)] = -0.5d;
+			inputs[64 + netInputIndexForCard] = -0.5d;
 		} else {
-			inputs[64 + getNetInputIndex(gameType, card)] = 0.0d;
+			inputs[64 + netInputIndexForCard] = 0.0d;
 		}
 	}
 
@@ -708,17 +714,25 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	@Override
 	public void finalizeGame() {
 
-		if (isLearning) {
+		if (isLearning && allInputs.size() > 0) {
 			// adjust neural networks
 			// from last trick to first trick
-			for (int i = allInputs.size() - 1; i > -1; i--) {
-
-				adjustNeuralNetworks(allInputs.get(i));
-			}
+			adjustNeuralNetworks(allInputs);
 		}
 	}
 
-	private void adjustNeuralNetworks(double[] input) {
+	private TrainingSet getTrainingSet(List<double[]> inputList, double[] outputs) {
+
+		TrainingSet trainingSet = new TrainingSet(inputList.get(0).length, 1);
+
+		for (int i = 0; i < inputList.size(); i++) {
+			trainingSet.addElement(new SupervisedTrainingElement(inputList.get(i), outputs));
+		}
+
+		return trainingSet;
+	}
+
+	private void adjustNeuralNetworks(List<double[]> input) {
 
 		double output = 0.0d;
 		if (isDeclarer()) {
@@ -736,10 +750,14 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		}
 		double[] outputParam = { output };
 
-		NeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGame().getGameType(), isDeclarer());
-		net.adjustWeights(input, outputParam);
+		TrainingSet trainingSet = getTrainingSet(input, outputParam);
 
-		log.debug("Neural network: avg diff: " + net.getAvgDiff()); //$NON-NLS-1$
+		NeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGame().getGameType(), isDeclarer());
+		SupervisedLearning learning = (SupervisedLearning) net.getLearningRule();
+		learning.setTrainingSet(trainingSet);
+		learning.doLearningEpoch(trainingSet);
+
+		log.debug("Neural network: total network error: " + learning.getTotalNetworkError()); //$NON-NLS-1$
 	}
 
 	/**
