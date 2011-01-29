@@ -44,11 +44,13 @@ public class SkatNetworks {
 
 	private void initNetworks() {
 
-		NetworkTopology topo = new NetworkTopology(96, // 32 input nodes for
-														// every player
-				1, // 1 output node for win/lost
-				1, // 1 hidden layer
-				new int[] { 15 }); // 10 nodes in hidden layer
+		// 32 input nodes for every player
+		// 1 output node for win/lost
+		// 1 hidden layer
+		// 2*n+1 nodes in hidden layer
+		// n number of nodes in input layer
+		int inputNodeCount = 96;
+		NetworkTopology topo = new NetworkTopology(inputNodeCount, 1, 1, new int[] { 2 * inputNodeCount + 1 });
 		SkatNetworks.suitDeclarer = new NeuralNetwork(topo);
 		SkatNetworks.suitOpponent = new NeuralNetwork(topo);
 		SkatNetworks.nullDeclarer = new NeuralNetwork(topo);
@@ -129,36 +131,24 @@ public class SkatNetworks {
 
 		String pathSep = System.getProperty("file.separator");
 
-		suitDeclarer.loadNetwork(path.concat(pathSep).concat(
-				"jskat.suit.declarer.nnet"));
-		suitOpponent.loadNetwork(path.concat(pathSep).concat(
-				"jskat.suit.opponent.nnet"));
-		nullDeclarer.loadNetwork(path.concat(pathSep).concat(
-				"jskat.null.declarer.nnet"));
-		nullOpponent.loadNetwork(path.concat(pathSep).concat(
-				"jskat.null.opponent.nnet"));
-		grandDeclarer.loadNetwork(path.concat(pathSep).concat(
-				"jskat.grand.declarer.nnet"));
-		grandOpponent.loadNetwork(path.concat(pathSep).concat(
-				"jskat.grand.opponent.nnet"));
+		suitDeclarer.loadNetwork(path.concat(pathSep).concat("jskat.suit.declarer.nnet"));
+		suitOpponent.loadNetwork(path.concat(pathSep).concat("jskat.suit.opponent.nnet"));
+		nullDeclarer.loadNetwork(path.concat(pathSep).concat("jskat.null.declarer.nnet"));
+		nullOpponent.loadNetwork(path.concat(pathSep).concat("jskat.null.opponent.nnet"));
+		grandDeclarer.loadNetwork(path.concat(pathSep).concat("jskat.grand.declarer.nnet"));
+		grandOpponent.loadNetwork(path.concat(pathSep).concat("jskat.grand.opponent.nnet"));
 	}
 
 	public static void saveNetworks(String path) {
 
 		String pathSep = System.getProperty("file.separator");
 
-		suitDeclarer.saveNetwork(path.concat(pathSep).concat(
-				"jskat.suit.declarer.nnet"));
-		suitOpponent.saveNetwork(path.concat(pathSep).concat(
-				"jskat.suit.opponent.nnet"));
-		nullDeclarer.saveNetwork(path.concat(pathSep).concat(
-				"jskat.null.declarer.nnet"));
-		nullOpponent.saveNetwork(path.concat(pathSep).concat(
-				"jskat.null.opponent.nnet"));
-		grandDeclarer.saveNetwork(path.concat(pathSep).concat(
-				"jskat.grand.declarer.nnet"));
-		grandOpponent.saveNetwork(path.concat(pathSep).concat(
-				"jskat.grand.opponent.nnet"));
+		suitDeclarer.saveNetwork(path.concat(pathSep).concat("jskat.suit.declarer.nnet"));
+		suitOpponent.saveNetwork(path.concat(pathSep).concat("jskat.suit.opponent.nnet"));
+		nullDeclarer.saveNetwork(path.concat(pathSep).concat("jskat.null.declarer.nnet"));
+		nullOpponent.saveNetwork(path.concat(pathSep).concat("jskat.null.opponent.nnet"));
+		grandDeclarer.saveNetwork(path.concat(pathSep).concat("jskat.grand.declarer.nnet"));
+		grandOpponent.saveNetwork(path.concat(pathSep).concat("jskat.grand.opponent.nnet"));
 	}
 
 	private final static SkatNetworks instance = new SkatNetworks();
