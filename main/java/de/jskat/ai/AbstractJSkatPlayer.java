@@ -126,8 +126,7 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	 * @see IJSkatPlayer#startGame(Player, GameType, boolean, boolean, boolean,
 	 *      boolean)
 	 */
-	public final void startGame(Player newDeclarer, GameType newGameType,
-			boolean newHandGame, boolean newOuvertGame,
+	public final void startGame(Player newDeclarer, GameType newGameType, boolean newHandGame, boolean newOuvertGame,
 			boolean newSchneiderAnnounced, boolean newSchwarzAnnounced) {
 
 		playerState = PlayerStates.PLAYING;
@@ -207,9 +206,7 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 
 		for (Card card : cards) {
 
-			if (trick.size() > 0
-					&& rules.isCardAllowed(knowledge.getGame().getGameType(),
-							trick.get(0), cards, card)) {
+			if (trick.size() > 0 && rules.isCardAllowed(knowledge.getGame().getGameType(), trick.get(0), cards, card)) {
 
 				log.debug("initial card: " + trick.get(0)); //$NON-NLS-1$
 				isCardAllowed = true;

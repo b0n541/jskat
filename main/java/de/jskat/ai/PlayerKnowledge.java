@@ -177,8 +177,9 @@ public class PlayerKnowledge {
 
 		playedCards.get(player).add(card);
 
-		possiblePlayerCards.get(player.getLeftNeighbor()).remove(card);
-		possiblePlayerCards.get(player.getRightNeighbor()).remove(card);
+		for (Player currPlayer : Player.values()) {
+			possiblePlayerCards.get(currPlayer).remove(card);
+		}
 		possibleSkatCards.remove(card);
 
 		setTrickCard(player, card);
@@ -418,6 +419,9 @@ public class PlayerKnowledge {
 	 *            Card
 	 */
 	public void addCard(Card card) {
+
+		possiblePlayerCards.get(playerPosition.getLeftNeighbor()).remove(card);
+		possiblePlayerCards.get(playerPosition.getRightNeighbor()).remove(card);
 
 		suitCount.put(card.getSuit(), Integer.valueOf(suitCount.get(card.getSuit()).intValue() + 1));
 		suitPoints.put(card.getSuit(),
