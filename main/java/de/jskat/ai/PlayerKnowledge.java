@@ -147,8 +147,7 @@ public class PlayerKnowledge {
 	 */
 	public boolean isCardPlayed(Card card) {
 
-		return playedCards.get(Player.FORE_HAND).contains(card)
-				|| playedCards.get(Player.MIDDLE_HAND).contains(card)
+		return playedCards.get(Player.FORE_HAND).contains(card) || playedCards.get(Player.MIDDLE_HAND).contains(card)
 				|| playedCards.get(Player.HIND_HAND).contains(card);
 	}
 
@@ -273,12 +272,13 @@ public class PlayerKnowledge {
 		if (couldHaveCard(player, card)) {
 
 			// check all players and the skat whether the card could be there
-			for (Set<Card> s: possiblePlayerCards.values()) {
+			for (Set<Card> s : possiblePlayerCards.values()) {
 				if (s.contains(card)) {
 					possessionCount++;
 				}
 			}
-			if(possibleSkatCards.contains(card)) possessionCount++;
+			if (possibleSkatCards.contains(card))
+				possessionCount++;
 		}
 
 		return (possessionCount == 1);
@@ -300,8 +300,8 @@ public class PlayerKnowledge {
 	}
 
 	/**
-	 * Checks whether a player could have a card of the given suit, 
-	 * this is an uncertain information
+	 * Checks whether a player could have a card of the given suit, this is an
+	 * uncertain information
 	 * 
 	 * @param player
 	 *            Player ID
@@ -310,9 +310,11 @@ public class PlayerKnowledge {
 	 * @return TRUE if the player could have any card of the suit
 	 */
 	public boolean couldHaveSuit(Player player, Suit suit) {
-		for(Rank r: Rank.values()) {
-			if(r==Rank.JACK) continue;
-			if(couldHaveCard(player, Card.getCard(suit, r))) return true;
+		for (Rank r : Rank.values()) {
+			if (r == Rank.JACK)
+				continue;
+			if (couldHaveCard(player, Card.getCard(suit, r)))
+				return true;
 		}
 		return false;
 	}
@@ -417,12 +419,9 @@ public class PlayerKnowledge {
 	 */
 	public void addCard(Card card) {
 
-		suitCount.put(card.getSuit(),
-				Integer.valueOf(suitCount.get(card.getSuit()).intValue() + 1));
-		suitPoints.put(
-				card.getSuit(),
-				Integer.valueOf(suitCount.get(card.getSuit()).intValue()
-						+ card.getRank().getPoints()));
+		suitCount.put(card.getSuit(), Integer.valueOf(suitCount.get(card.getSuit()).intValue() + 1));
+		suitPoints.put(card.getSuit(),
+				Integer.valueOf(suitCount.get(card.getSuit()).intValue() + card.getRank().getPoints()));
 	}
 
 	/**
@@ -433,12 +432,9 @@ public class PlayerKnowledge {
 	 */
 	public void removeCard(Card card) {
 
-		suitCount.put(card.getSuit(),
-				Integer.valueOf(suitCount.get(card.getSuit()).intValue() - 1));
-		suitPoints.put(
-				card.getSuit(),
-				Integer.valueOf(suitCount.get(card.getSuit()).intValue()
-						- card.getRank().getPoints()));
+		suitCount.put(card.getSuit(), Integer.valueOf(suitCount.get(card.getSuit()).intValue() - 1));
+		suitPoints.put(card.getSuit(),
+				Integer.valueOf(suitCount.get(card.getSuit()).intValue() - card.getRank().getPoints()));
 	}
 
 	/**
@@ -456,15 +452,11 @@ public class PlayerKnowledge {
 
 			for (Rank rank : Rank.values()) {
 
-				if (playedCards.get(Player.FORE_HAND).contains(
-						Card.getCard(suit, rank))
-						|| playedCards.get(Player.MIDDLE_HAND).contains(
-								Card.getCard(suit, rank))
-						|| playedCards.get(Player.HIND_HAND).contains(
-								Card.getCard(suit, rank))) {
+				if (playedCards.get(Player.FORE_HAND).contains(Card.getCard(suit, rank))
+						|| playedCards.get(Player.MIDDLE_HAND).contains(Card.getCard(suit, rank))
+						|| playedCards.get(Player.HIND_HAND).contains(Card.getCard(suit, rank))) {
 
-					result.append(suit.shortString())
-							.append(rank.shortString()).append(' ');
+					result.append(suit.shortString()).append(rank.shortString()).append(' ');
 				} else {
 
 					result.append("-- "); //$NON-NLS-1$
@@ -477,10 +469,15 @@ public class PlayerKnowledge {
 		return result.toString();
 	}
 
+	/**
+	 * Gets the number of tricks
+	 * 
+	 * @return Number of tricks
+	 */
 	public int getNoOfTricks() {
 		return tricks.size();
 	}
-	
+
 	/**
 	 * Get cards of the current trick
 	 * 
