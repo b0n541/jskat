@@ -74,23 +74,23 @@ public class LobbyPanel extends AbstractTabPanel {
 	@Override
 	protected void initPanel() {
 
-		setLayout(new MigLayout("fill")); //$NON-NLS-1$
+		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$
 
-		add(getLobbyPanel(), "center"); //$NON-NLS-1$
+		add(getLobbyPanel(), "growy, center"); //$NON-NLS-1$
 
 		this.actions = this.getActionMap();
 	}
 
 	private JPanel getLobbyPanel() {
 
-		JPanel lobby = new JPanel(new MigLayout());
+		JPanel lobby = new JPanel(new MigLayout("fill", "fill", "[shrink][shrink][shrink][shrink][grow]"));
 
-		JLabel headerLabel = new JLabel(
-				strings.getString("welcome_to_iss_title")); //$NON-NLS-1$
+		JLabel headerLabel = new JLabel(strings.getString("welcome_to_iss_title")); //$NON-NLS-1$
 		headerLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
+
 		lobby.add(headerLabel, "span 2, align center, wrap"); //$NON-NLS-1$ 
-		lobby.add(new JLabel("Players")); //$NON-NLS-1$
-		lobby.add(new JLabel("Tables"), "wrap"); //$NON-NLS-1$ //$NON-NLS-2$
+		lobby.add(new JLabel(strings.getString("players"))); //$NON-NLS-1$
+		lobby.add(new JLabel(strings.getString("tables")), "wrap"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		lobby.add(getPlayerListPanel());
 		lobby.add(getTableListPanel(), "wrap"); //$NON-NLS-1$
@@ -98,7 +98,7 @@ public class LobbyPanel extends AbstractTabPanel {
 		lobby.add(getActionButtonPanel(), "span 2, wrap");
 
 		this.chatPanel = new ChatPanel(this);
-		lobby.add(this.chatPanel, "span 2, growx, align center"); //$NON-NLS-1$
+		lobby.add(this.chatPanel, "span 2, grow, align center"); //$NON-NLS-1$
 
 		return lobby;
 	}
@@ -114,8 +114,7 @@ public class LobbyPanel extends AbstractTabPanel {
 
 		this.playerListScrollPane = new JScrollPane(this.playerListTable);
 		this.playerListScrollPane.setPreferredSize(new Dimension(300, 200));
-		this.playerListScrollPane
-				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		this.playerListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		panel.add(this.playerListScrollPane);
 
@@ -160,21 +159,17 @@ public class LobbyPanel extends AbstractTabPanel {
 
 				int column = LobbyPanel.this.tableListTable.getSelectedColumn();
 				int row = LobbyPanel.this.tableListTable.getSelectedRow();
-				String tableName = (String) LobbyPanel.this.tableListTable
-						.getValueAt(row, 0);
-				String value = (String) LobbyPanel.this.tableListTable
-						.getValueAt(row, column);
+				String tableName = (String) LobbyPanel.this.tableListTable.getValueAt(row, 0);
+				String value = (String) LobbyPanel.this.tableListTable.getValueAt(row, column);
 
 				if (column == 0) {
 					// observe a table
-					LobbyPanel.actions.get(JSkatAction.OBSERVE_ISS_TABLE)
-							.actionPerformed(
-									new ActionEvent(tableName, 1, null));
+					LobbyPanel.actions.get(JSkatAction.OBSERVE_ISS_TABLE).actionPerformed(
+							new ActionEvent(tableName, 1, null));
 				} else if (value.equals(".")) {
 					// sit down on free seat at table
-					LobbyPanel.actions.get(JSkatAction.JOIN_ISS_TABLE)
-							.actionPerformed(
-									new ActionEvent(tableName, 1, null));
+					LobbyPanel.actions.get(JSkatAction.JOIN_ISS_TABLE).actionPerformed(
+							new ActionEvent(tableName, 1, null));
 				} else {
 
 					log.debug("No free seat!");
@@ -186,8 +181,7 @@ public class LobbyPanel extends AbstractTabPanel {
 
 		this.tableListScrollPane = new JScrollPane(this.tableListTable);
 		this.tableListScrollPane.setPreferredSize(new Dimension(400, 200));
-		this.tableListScrollPane
-				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		this.tableListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		panel.add(this.tableListScrollPane);
 
@@ -198,10 +192,8 @@ public class LobbyPanel extends AbstractTabPanel {
 
 		JPanel panel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		panel.add(new JButton(this.getActionMap().get(
-				JSkatAction.CREATE_ISS_TABLE)));
-		panel.add(new JButton(this.getActionMap().get(
-				JSkatAction.DISCONNECT_FROM_ISS)));
+		panel.add(new JButton(this.getActionMap().get(JSkatAction.CREATE_ISS_TABLE)));
+		panel.add(new JButton(this.getActionMap().get(JSkatAction.DISCONNECT_FROM_ISS)));
 
 		return panel;
 	}
@@ -218,11 +210,9 @@ public class LobbyPanel extends AbstractTabPanel {
 	 * @param strength
 	 *            Play strength
 	 */
-	public void updatePlayer(String playerName, String language,
-			long gamesPlayed, double strength) {
+	public void updatePlayer(String playerName, String language, long gamesPlayed, double strength) {
 
-		this.playerListTableModel.updatePlayer(playerName, language,
-				gamesPlayed, strength);
+		this.playerListTableModel.updatePlayer(playerName, language, gamesPlayed, strength);
 	}
 
 	/**
@@ -252,11 +242,10 @@ public class LobbyPanel extends AbstractTabPanel {
 	 * @param player3
 	 *            Player 3 (? for free seat)
 	 */
-	public void updateTable(String tableName, int maxPlayers, long gamesPlayed,
-			String player1, String player2, String player3) {
+	public void updateTable(String tableName, int maxPlayers, long gamesPlayed, String player1, String player2,
+			String player3) {
 
-		this.tableListTableModel.updateTable(tableName, maxPlayers,
-				gamesPlayed, player1, player2, player3);
+		this.tableListTableModel.updateTable(tableName, maxPlayers, gamesPlayed, player1, player2, player3);
 	}
 
 	/**

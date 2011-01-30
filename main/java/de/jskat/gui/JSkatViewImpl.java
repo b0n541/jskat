@@ -711,6 +711,16 @@ public class JSkatViewImpl implements IJSkatView {
 		log.debug("appendISSChatMessage"); //$NON-NLS-1$
 
 		issLobby.appendChatMessage(message);
+
+		for (SkatTablePanel table : tables.values()) {
+			if (table instanceof ISSTablePanel) {
+				ISSTablePanel issTable = (ISSTablePanel) table;
+				String chatname = message.getChatName();
+				if ("Lobby".equals(chatname) || issTable.getName().equals(chatname)) {
+					issTable.appendChatMessage(message);
+				}
+			}
+		}
 	}
 
 	/**

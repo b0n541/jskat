@@ -36,6 +36,7 @@ import org.apache.commons.logging.LogFactory;
 import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.gui.AbstractTabPanel;
 import de.jskat.gui.action.JSkatAction;
+import de.jskat.util.JSkatResourceBundle;
 
 /**
  * Chat panel for ISS
@@ -56,11 +57,12 @@ class ChatPanel extends JPanel implements ChangeListener {
 	 */
 	ChatPanel(AbstractTabPanel parent) {
 
-		super();
 		initPanel(parent.getActionMap());
 	}
 
 	private void initPanel(ActionMap actions) {
+
+		JSkatResourceBundle strings = JSkatResourceBundle.instance();
 
 		setLayout(new MigLayout("fill", "fill", "[grow][shrink]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		setMinimumSize(new Dimension(100, 100));
@@ -73,8 +75,7 @@ class ChatPanel extends JPanel implements ChangeListener {
 		chatTabs.addChangeListener(this);
 		add(chatTabs, "grow, wrap"); //$NON-NLS-1$
 
-		addNewChat("Table");
-		addNewChat("Lobby");
+		addNewChat(strings.getString("lobby")); //$NON-NLS-1$
 
 		inputLine = new JTextField(20);
 		inputLine.setAction(actions.get(JSkatAction.SEND_CHAT_MESSAGE));
@@ -85,8 +86,7 @@ class ChatPanel extends JPanel implements ChangeListener {
 				String message = ChatPanel.this.inputLine.getText();
 				log.debug("Chat message: " + message); //$NON-NLS-1$
 
-				ISSChatMessage chatMessage = new ISSChatMessage(
-						ChatPanel.this.activeChatName, message);
+				ISSChatMessage chatMessage = new ISSChatMessage(ChatPanel.this.activeChatName, message);
 				e.setSource(chatMessage);
 				// fire event again
 				ChatPanel.this.inputLine.dispatchEvent(e);
@@ -102,11 +102,11 @@ class ChatPanel extends JPanel implements ChangeListener {
 		JTextArea chat = getChat();
 		chats.put(name, chat);
 		JScrollPane scrollPane = new JScrollPane(chat);
-		scrollPane
-				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setName(name);
 
 		chatTabs.add(name, scrollPane);
+		chatTabs.setSelectedIndex(chatTabs.getComponentCount() - 1);
 		activeChatName = name;
 
 		return chat;
