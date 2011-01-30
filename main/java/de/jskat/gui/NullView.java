@@ -555,8 +555,9 @@ public class NullView implements IJSkatView {
 	 * @see IJSkatView#setPlayerNames(String, String, String, String)
 	 */
 	@Override
-	public void setPlayerNames(String tableName, String upperLeftPlayerName, String upperRightPlayerName,
-			String lowerPlayerName) {
+	public void setPlayerNames(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") String upperLeftPlayerName,
+			@SuppressWarnings("unused") String upperRightPlayerName, @SuppressWarnings("unused") String lowerPlayerName) {
 		// empty method by indent
 	}
 
@@ -564,7 +565,15 @@ public class NullView implements IJSkatView {
 	 * @see IJSkatView#setDeclarer(String, Player)
 	 */
 	@Override
-	public void setDeclarer(String tableName, Player declarer) {
+	public void setDeclarer(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player declarer) {
+		// empty method by indent
+	}
+
+	/**
+	 * @see IJSkatView#closeISSPanels()
+	 */
+	@Override
+	public void closeISSPanels() {
 		// empty method by indent
 	}
 }

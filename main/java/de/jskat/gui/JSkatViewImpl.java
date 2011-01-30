@@ -97,7 +97,7 @@ import de.jskat.gui.action.main.TrainNeuralNetworksAction;
 import de.jskat.gui.help.JSkatHelpDialog;
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.gui.iss.ISSTablePanel;
-import de.jskat.gui.iss.LobbyPanel;
+import de.jskat.gui.iss.ISSLobbyPanel;
 import de.jskat.gui.iss.LoginPanel;
 import de.jskat.gui.iss.PlayerInvitationPanel;
 import de.jskat.gui.nn.NeuralNetworkTrainingOverview;
@@ -127,7 +127,7 @@ public class JSkatViewImpl implements IJSkatView {
 	private JSkatResourceBundle strings;
 	private JSkatMaster jskat;
 	static ActionMap actions;
-	private LobbyPanel issLobby;
+	private ISSLobbyPanel issLobby;
 
 	/**
 	 * Constructor
@@ -678,7 +678,7 @@ public class JSkatViewImpl implements IJSkatView {
 	@Override
 	public void showISSLobby() {
 
-		issLobby = new LobbyPanel("ISS lobby", actions);
+		issLobby = new ISSLobbyPanel("ISS lobby", actions);
 		addTabPanel(issLobby, "ISS lobby");
 	}
 
@@ -1092,5 +1092,17 @@ public class JSkatViewImpl implements IJSkatView {
 	public void setDeclarer(String tableName, Player declarer) {
 
 		tables.get(tableName).setDeclarer(declarer);
+	}
+
+	/**
+	 * @see IJSkatView#closeISSPanels()
+	 */
+	@Override
+	public void closeISSPanels() {
+		for (Component currPanel : tabs.getComponents()) {
+			if (currPanel instanceof ISSLobbyPanel || currPanel instanceof ISSTablePanel) {
+				closeTabPanel(currPanel.getName());
+			}
+		}
 	}
 }

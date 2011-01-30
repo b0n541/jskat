@@ -38,10 +38,10 @@ import de.jskat.gui.action.JSkatAction;
  * Represents the lobby of the ISS with an overview about players and tables
  * that are currently online
  */
-public class LobbyPanel extends AbstractTabPanel {
+public class ISSLobbyPanel extends AbstractTabPanel {
 
 	private static final long serialVersionUID = 1L;
-	private static Log log = LogFactory.getLog(LobbyPanel.class);
+	private static Log log = LogFactory.getLog(ISSLobbyPanel.class);
 
 	private PlayerListTableModel playerListTableModel;
 	private JTable playerListTable;
@@ -61,7 +61,7 @@ public class LobbyPanel extends AbstractTabPanel {
 	 * @param jskatBitmaps
 	 * @param actions
 	 */
-	public LobbyPanel(String tableName, ActionMap actions) {
+	public ISSLobbyPanel(String tableName, ActionMap actions) {
 
 		super(tableName, actions);
 
@@ -157,18 +157,18 @@ public class LobbyPanel extends AbstractTabPanel {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 
-				int column = LobbyPanel.this.tableListTable.getSelectedColumn();
-				int row = LobbyPanel.this.tableListTable.getSelectedRow();
-				String tableName = (String) LobbyPanel.this.tableListTable.getValueAt(row, 0);
-				String value = (String) LobbyPanel.this.tableListTable.getValueAt(row, column);
+				int column = ISSLobbyPanel.this.tableListTable.getSelectedColumn();
+				int row = ISSLobbyPanel.this.tableListTable.getSelectedRow();
+				String tableName = (String) ISSLobbyPanel.this.tableListTable.getValueAt(row, 0);
+				String value = (String) ISSLobbyPanel.this.tableListTable.getValueAt(row, column);
 
 				if (column == 0) {
 					// observe a table
-					LobbyPanel.actions.get(JSkatAction.OBSERVE_ISS_TABLE).actionPerformed(
+					ISSLobbyPanel.actions.get(JSkatAction.OBSERVE_ISS_TABLE).actionPerformed(
 							new ActionEvent(tableName, 1, null));
 				} else if (value.equals(".")) {
 					// sit down on free seat at table
-					LobbyPanel.actions.get(JSkatAction.JOIN_ISS_TABLE).actionPerformed(
+					ISSLobbyPanel.actions.get(JSkatAction.JOIN_ISS_TABLE).actionPerformed(
 							new ActionEvent(tableName, 1, null));
 				} else {
 

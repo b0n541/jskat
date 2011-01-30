@@ -85,7 +85,7 @@ public class IssController {
 
 			issConnect.closeConnection();
 			// FIXME (jan 07.12.2010) use constant instead of string
-			view.closeTabPanel("ISS lobby");
+			view.closeISSPanels();
 		}
 	}
 

@@ -624,4 +624,9 @@ public interface IJSkatView {
 	 *            Declarer player
 	 */
 	public void setDeclarer(String tableName, Player declarer);
+
+	/**
+	 * Closes alle ISS related panels
+	 */
+	public void closeISSPanels();
 }

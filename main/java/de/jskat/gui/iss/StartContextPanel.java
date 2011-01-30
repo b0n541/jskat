@@ -32,15 +32,12 @@ class StartContextPanel extends JPanel {
 		this.setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 
 		JPanel panel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
-		panel.add(new JButton(actions.get(JSkatAction.INVITE_ISS_PLAYER)),
-				"center"); //$NON-NLS-1$
+		panel.add(new JButton(actions.get(JSkatAction.INVITE_ISS_PLAYER)), "center"); //$NON-NLS-1$
 		panel.add(new JButton(actions.get(JSkatAction.READY_TO_PLAY)), "center"); //$NON-NLS-1$
-		panel.add(new JButton(actions.get(JSkatAction.TALK_ENABLED)),
-				"center, wrap"); //$NON-NLS-1$
-		panel.add(new JButton(actions.get(JSkatAction.CHANGE_TABLE_SEATS)),
-				"center"); //$NON-NLS-1$
-		panel.add(new JButton(actions.get(JSkatAction.LEAVE_ISS_TABLE)),
-				"center"); //$NON-NLS-1$
+		panel.add(new JButton(actions.get(JSkatAction.TALK_ENABLED)), "center, wrap"); //$NON-NLS-1$
+		// panel.add(new JButton(actions.get(JSkatAction.CHANGE_TABLE_SEATS)),
+		//				"center"); //$NON-NLS-1$
+		panel.add(new JButton(actions.get(JSkatAction.LEAVE_ISS_TABLE)), "center"); //$NON-NLS-1$
 		panel.setOpaque(false);
 		this.add(panel, "center"); //$NON-NLS-1$
 
