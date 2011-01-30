@@ -41,7 +41,7 @@ import de.jskat.util.Rank;
 import de.jskat.util.Suit;
 
 /**
- * Panel for showing a Card
+ * Panel for showing cards on a hand
  */
 class CardPanel extends JPanel {
 
@@ -70,8 +70,7 @@ class CardPanel extends JPanel {
 	 * @param newShowBackside
 	 *            TRUE if the Card should hide its face
 	 */
-	CardPanel(JPanel newParent, JSkatGraphicRepository jSkatBitmaps,
-			boolean newShowBackside) {
+	CardPanel(JPanel newParent, JSkatGraphicRepository jSkatBitmaps, boolean newShowBackside) {
 
 		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
@@ -149,12 +148,21 @@ class CardPanel extends JPanel {
 		// copying cards prevents ConcurrentModificationException
 		List<Card> cardsToPaint = new ArrayList<Card>(cards);
 
+		// rendering hints
 		Graphics2D g2D = (Graphics2D) g;
-		g2D.setRenderingHint(RenderingHints.KEY_RENDERING,
-				RenderingHints.VALUE_RENDER_QUALITY);
-		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
+		g2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
+		// calculate card gap
+		int panelWidth = getWidth();
+		int cardWidth = bitmaps.getCardImage(Suit.CLUBS, Rank.JACK).getWidth(this);
+		int cardGap = cardWidth;
+		if (cards.size() * cardGap > panelWidth) {
+
+			cardGap = (panelWidth - cardWidth) / (cards.size() - 1);
+		}
+
+		// paint all cards
 		int cardNo = 0;
 		for (Card card : cardsToPaint) {
 
@@ -168,19 +176,11 @@ class CardPanel extends JPanel {
 				image = bitmaps.getCardImage(card.getSuit(), card.getRank());
 			}
 
-			double cardWidth = image.getWidth(this);
-			double partialHiddenCardWidth = 0.0;
-			if (cards.size() > 1) {
-
-				partialHiddenCardWidth = (getWidth() - cardWidth)
-						/ (cards.size() - 1.0);
-			}
-
 			double scaleFactor = 1.0;
 
 			AffineTransform transform = new AffineTransform();
 			transform.scale(scaleFactor, scaleFactor);
-			transform.translate(cardNo * partialHiddenCardWidth, 0);
+			transform.translate(cardNo * cardGap, 0);
 			g2D.drawImage(image, transform, this);
 
 			cardNo++;
@@ -243,14 +243,12 @@ class CardPanel extends JPanel {
 
 		log.debug("Card panel clicked at: " + xPosition + " x " + yPosition); //$NON-NLS-1$ //$NON-NLS-2$
 
-		if (xPosition > -1 && xPosition < getWidth() && yPosition > -1
-				&& yPosition < getHeight()) {
+		if (xPosition > -1 && xPosition < getWidth() && yPosition > -1 && yPosition < getHeight()) {
 
 			log.debug("Mouse button release inside panel"); //$NON-NLS-1$
 
 			// get card
-			double cardWidth = bitmaps.getCardImage(Suit.CLUBS, Rank.JACK)
-					.getWidth(this);
+			double cardWidth = bitmaps.getCardImage(Suit.CLUBS, Rank.JACK).getWidth(this);
 
 			int cardIndex = -1;
 			if (cards.size() > 0) {
@@ -262,8 +260,7 @@ class CardPanel extends JPanel {
 				} else {
 					double distanceBetweenCards = cardWidth;
 					if (cards.size() > 1) {
-						distanceBetweenCards = (getWidth() - cardWidth)
-								/ (cards.size() - 1.0);
+						distanceBetweenCards = (getWidth() - cardWidth) / (cards.size() - 1.0);
 					}
 
 					if (cardWidth > distanceBetweenCards) {
@@ -278,8 +275,7 @@ class CardPanel extends JPanel {
 					} else {
 						// cards with gaps
 						log.debug("cards with gaps"); //$NON-NLS-1$
-						double cardGap = (getWidth() - (cardWidth * cards
-								.size())) / (cards.size() - 1.0);
+						double cardGap = 0.0;
 
 						if ((int) ((xPosition / (cardWidth + cardGap))) == (int) ((xPosition + cardGap) / (cardWidth + cardGap))) {
 							cardIndex = (int) (xPosition / (cardWidth + cardGap));
@@ -301,8 +297,7 @@ class CardPanel extends JPanel {
 
 				if (parent instanceof DiscardPanel) {
 					// card panel in discard panel was clicked
-					action = getActionMap()
-							.get(JSkatAction.TAKE_CARD_FROM_SKAT);
+					action = getActionMap().get(JSkatAction.TAKE_CARD_FROM_SKAT);
 				} else if (parent instanceof JSkatUserPanel) {
 					// card panel in player panel was clicked
 
@@ -310,8 +305,7 @@ class CardPanel extends JPanel {
 
 					if (state == GameState.DISCARDING) {
 						// discarding phase
-						action = getActionMap().get(
-								JSkatAction.PUT_CARD_INTO_SKAT);
+						action = getActionMap().get(JSkatAction.PUT_CARD_INTO_SKAT);
 					} else if (state == GameState.TRICK_PLAYING) {
 						// trick playing phase
 						action = getActionMap().get(JSkatAction.PLAY_CARD);
@@ -323,11 +317,9 @@ class CardPanel extends JPanel {
 
 				if (action != null) {
 
-					action.actionPerformed(new ActionEvent(Card
-							.getCardFromString(card.getSuit().shortString()
-									+ card.getRank().shortString()),
-							ActionEvent.ACTION_PERFORMED, (String) action
-									.getValue(Action.ACTION_COMMAND_KEY)));
+					action.actionPerformed(new ActionEvent(Card.getCardFromString(card.getSuit().shortString()
+							+ card.getRank().shortString()), ActionEvent.ACTION_PERFORMED, (String) action
+							.getValue(Action.ACTION_COMMAND_KEY)));
 				} else {
 
 					log.debug("Action is null"); //$NON-NLS-1$
