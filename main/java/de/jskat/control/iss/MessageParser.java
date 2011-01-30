@@ -22,6 +22,7 @@ import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
+import de.jskat.data.iss.ISSChatMessage;
 import de.jskat.data.iss.ISSGameStartInformation;
 import de.jskat.data.iss.ISSMoveInformation;
 import de.jskat.data.iss.ISSPlayerStatus;
@@ -496,5 +497,25 @@ public class MessageParser {
 		} else if ("d:2".equals(token)) { //$NON-NLS-1$
 			result.setDeclarer(Player.HIND_HAND);
 		}
+	}
+
+	/**
+	 * table .5 foo tell foo asdf jklö<br>
+	 * <br>
+	 * table .5 foo tell --> was cut before<br>
+	 * params: foo -> first is talker<br>
+	 * remainings is the chat message<br>
+	 * asdf jklö
+	 */
+	static ISSChatMessage getTableChatMessage(String tableName, List<String> detailParams) {
+
+		StringBuffer text = new StringBuffer();
+
+		text.append(detailParams.get(0)).append(": "); //$NON-NLS-1$
+		for (int i = 1; i < detailParams.size(); i++) {
+			text.append(detailParams.get(i)).append(' ');
+		}
+
+		return new ISSChatMessage(tableName, text.toString());
 	}
 }

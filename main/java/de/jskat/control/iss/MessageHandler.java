@@ -69,8 +69,7 @@ public class MessageHandler {
 
 		} catch (Exception except) {
 			log.error("Error in parsing ISS protocoll", except); //$NON-NLS-1$
-			issControl.showMessage(JOptionPane.ERROR_MESSAGE,
-					"Error in parsing ISS protocoll.");
+			issControl.showMessage(JOptionPane.ERROR_MESSAGE, "Error in parsing ISS protocoll.");
 		}
 
 	}
@@ -146,8 +145,7 @@ public class MessageHandler {
 
 		log.error(params.toString());
 		// FIXME (jan 23.11.2010) i18n needed
-		issControl.showMessage(JOptionPane.ERROR_MESSAGE,
-				getErrorString(params));
+		issControl.showMessage(JOptionPane.ERROR_MESSAGE, getErrorString(params));
 	}
 
 	private String getErrorString(List<String> params) {
@@ -215,13 +213,11 @@ public class MessageHandler {
 
 		} else if (actionCommand.equals("state")) { //$NON-NLS-1$
 
-			issControl.updateISSTableState(tableName,
-					MessageParser.getTableStatus(creator, detailParams));
+			issControl.updateISSTableState(tableName, MessageParser.getTableStatus(creator, detailParams));
 
 		} else if (actionCommand.equals("start")) { //$NON-NLS-1$
 
-			issControl.updateISSGame(tableName,
-					MessageParser.getGameStartStatus(creator, detailParams));
+			issControl.updateISSGame(tableName, MessageParser.getGameStartStatus(creator, detailParams));
 
 		} else if (actionCommand.equals("go")) { //$NON-NLS-1$
 
@@ -229,8 +225,11 @@ public class MessageHandler {
 
 		} else if (actionCommand.equals("play")) { //$NON-NLS-1$
 
-			issControl.updateMove(tableName,
-					MessageParser.getMoveInformation(detailParams));
+			issControl.updateMove(tableName, MessageParser.getMoveInformation(detailParams));
+
+		} else if (actionCommand.equals("tell")) { //$NON-NLS-1$
+
+			issControl.updateISSTableChatMessage(tableName, MessageParser.getTableChatMessage(tableName, detailParams));
 
 		} else if (actionCommand.equals("end")) { //$NON-NLS-1$
 
@@ -300,8 +299,7 @@ public class MessageHandler {
 		long gamesPlayed = Long.parseLong(params.get(3));
 		double strength = Double.parseDouble(params.get(4));
 
-		issControl.updateISSPlayerList(playerName, language, gamesPlayed,
-				strength);
+		issControl.updateISSPlayerList(playerName, language, gamesPlayed, strength);
 	}
 
 	/**
@@ -323,8 +321,7 @@ public class MessageHandler {
 	 */
 	void handleWelcomeMessage(List<String> params) {
 
-		double issProtocolVersion = Double
-				.parseDouble(params.get(params.size() - 1));
+		double issProtocolVersion = Double.parseDouble(params.get(params.size() - 1));
 
 		log.debug("iss version: " + issProtocolVersion); //$NON-NLS-1$
 		log.debug("local version: " + protocolVersion); //$NON-NLS-1$
@@ -370,8 +367,7 @@ public class MessageHandler {
 		String player2 = params.get(4);
 		String player3 = params.get(5);
 
-		issControl.updateISSTableList(tableName, maxPlayers, gamesPlayed,
-				player1, player2, player3);
+		issControl.updateISSTableList(tableName, maxPlayers, gamesPlayed, player1, player2, player3);
 	}
 
 	/**

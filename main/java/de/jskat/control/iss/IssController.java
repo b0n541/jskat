@@ -236,8 +236,10 @@ public class IssController {
 		case LOBBY:
 			addLobbyChatMessage(params);
 			break;
-		case USER:
 		case TABLE:
+			addTableChatMessage(params);
+			break;
+		case USER:
 			// TODO implement it
 			break;
 		}
@@ -260,6 +262,26 @@ public class IssController {
 				message.toString());
 
 		view.appendISSChatMessage(ChatMessageType.LOBBY, chatMessage);
+	}
+
+	void addTableChatMessage(List<String> params) {
+
+		log.debug("addTableChatMessage");
+
+		// first the table for the message
+		String tableName = params.get(0);
+
+		StringBuffer message = new StringBuffer();
+		// second the sender of the message
+		message.append(params.get(1)).append(": "); //$NON-NLS-1$
+		// then the text
+		for (int i = 2; i < params.size(); i++) {
+			message.append(params.get(i)).append(' ');
+		}
+
+		ISSChatMessage chatMessage = new ISSChatMessage(tableName, message.toString());
+
+		view.appendISSChatMessage(ChatMessageType.TABLE, chatMessage);
 	}
 
 	/**
@@ -645,5 +667,18 @@ public class IssController {
 
 			issConnect.sendInvitationAccepted(tableName, invitationTicket);
 		}
+	}
+
+	/**
+	 * Updates a chat message on an ISS table
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param message
+	 *            Chat message
+	 */
+	public void updateISSTableChatMessage(String tableName, ISSChatMessage message) {
+		// FIXME (jan 30.01.2011) tableName not needed here?
+		view.appendISSChatMessage(ChatMessageType.TABLE, message);
 	}
 }

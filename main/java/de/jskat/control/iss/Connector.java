@@ -75,8 +75,7 @@ class Connector {
 			port = newPort;
 		} else {
 
-			throw new IllegalArgumentException(
-					"Unsupported port number: " + newPort); //$NON-NLS-1$
+			throw new IllegalArgumentException("Unsupported port number: " + newPort); //$NON-NLS-1$
 		}
 	}
 
@@ -101,8 +100,7 @@ class Connector {
 
 		} catch (java.net.UnknownHostException e) {
 			log.error("Cannot open connection to ISS"); //$NON-NLS-1$
-			issControl.showMessage(JOptionPane.ERROR_MESSAGE,
-					"Can't establish connection to ISS");
+			issControl.showMessage(JOptionPane.ERROR_MESSAGE, "Can't establish connection to ISS");
 		} catch (java.io.IOException e) {
 			log.error("IOException: " + e.toString()); //$NON-NLS-1$
 		}
@@ -146,8 +144,12 @@ class Connector {
 	}
 
 	void send(ISSChatMessage message) {
-
-		issOut.send("yell " + message.getMessage()); //$NON-NLS-1$
+		// FIXME (jan 30.01.2011) refactor ISSChatMessage with ChatMessageType
+		if ("Lobby".equals(message.getChatName())) {
+			issOut.send("yell " + message.getMessage()); //$NON-NLS-1$
+		} else {
+			issOut.send("table " + message.getChatName() + ' ' + loginName + " tell " + message.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+		}
 	}
 
 	void requestTableCreation() {
@@ -211,13 +213,10 @@ class Connector {
 		issOut.send("table " + tableName + ' ' + loginName + " play s"); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
-	public void sendGameAnnouncementMove(String tableName,
-			GameAnnouncementWithDiscardedCards gameAnnouncement) {
+	public void sendGameAnnouncementMove(String tableName, GameAnnouncementWithDiscardedCards gameAnnouncement) {
 
-		String gameAnnouncementString = getGameTypeString(
-				gameAnnouncement.getGameType(), gameAnnouncement.isHand(),
-				gameAnnouncement.isOuvert(), gameAnnouncement.isSchneider(),
-				gameAnnouncement.isSchwarz());
+		String gameAnnouncementString = getGameTypeString(gameAnnouncement.getGameType(), gameAnnouncement.isHand(),
+				gameAnnouncement.isOuvert(), gameAnnouncement.isSchneider(), gameAnnouncement.isSchwarz());
 
 		if (!gameAnnouncement.isHand()) {
 
@@ -229,8 +228,7 @@ class Connector {
 		issOut.send("table " + tableName + ' ' + loginName + " play " + gameAnnouncementString); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
-	private String getGameTypeString(GameType gameType, boolean hand,
-			boolean ouvert, boolean schneider, boolean schwarz) {
+	private String getGameTypeString(GameType gameType, boolean hand, boolean ouvert, boolean schneider, boolean schwarz) {
 
 		String result = getGameTypeString(gameType);
 
