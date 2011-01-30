@@ -129,8 +129,7 @@ public class IssController {
 
 				if (!issConnect.isConnected()) {
 
-					issConnect.setConnectionData(login, password,
-							loginCredentials.getPort());
+					issConnect.setConnectionData(login, password, loginCredentials.getPort());
 					issConnect.establishConnection();
 				}
 			} else {
@@ -163,8 +162,7 @@ public class IssController {
 	 * @param strength
 	 *            Play strength
 	 */
-	public void updateISSPlayerList(String playerName, String language,
-			long gamesPlayed, double strength) {
+	public void updateISSPlayerList(String playerName, String language, long gamesPlayed, double strength) {
 
 		jskat.updateISSPlayer(playerName, language, gamesPlayed, strength);
 	}
@@ -196,11 +194,10 @@ public class IssController {
 	 * @param player3
 	 *            Player 3 (? for free seat)
 	 */
-	public void updateISSTableList(String tableName, int maxPlayers,
-			long gamesPlayed, String player1, String player2, String player3) {
+	public void updateISSTableList(String tableName, int maxPlayers, long gamesPlayed, String player1, String player2,
+			String player3) {
 
-		view.updateISSLobbyTableList(tableName, maxPlayers, gamesPlayed,
-				player1, player2, player3);
+		view.updateISSLobbyTableList(tableName, maxPlayers, gamesPlayed, player1, player2, player3);
 	}
 
 	/**
@@ -401,10 +398,10 @@ public class IssController {
 		view.updateISSMove(tableName, currGame, moveInformation);
 
 		// TODO (jan 19.11.2010) extract this into separate method
-		if (MoveType.BID.equals(moveInformation.getType())
-				|| MoveType.PASS.equals(moveInformation.getType())) {
+		if (MoveType.BID.equals(moveInformation.getType()) || MoveType.PASS.equals(moveInformation.getType())) {
 
 			if (isBiddingFinished(currGame)) {
+				view.setDeclarer(tableName, currGame.getDeclarer());
 				view.setGameState(tableName, GameState.LOOK_INTO_SKAT);
 			}
 
@@ -417,25 +414,20 @@ public class IssController {
 
 			if (trick.getThirdCard() != null) {
 
-				Player trickWinner = SkatRuleFactory.getSkatRules(
-						currGame.getGameType()).calculateTrickWinner(
+				Player trickWinner = SkatRuleFactory.getSkatRules(currGame.getGameType()).calculateTrickWinner(
 						currGame.getGameType(), trick);
 				trick.setTrickWinner(trickWinner);
-				currGame.addTrick(new Trick(currGame.getTricks().size(), trick
-						.getTrickWinner()));
+				currGame.addTrick(new Trick(currGame.getTricks().size(), trick.getTrickWinner()));
 
-				view.setActivePlayer(tableName, currGame.getCurrentTrick()
-						.getForeHand());
+				view.setActivePlayer(tableName, currGame.getCurrentTrick().getForeHand());
 
 			} else if (trick.getSecondCard() != null) {
 
-				view.setActivePlayer(tableName, trick.getForeHand()
-						.getRightNeighbor());
+				view.setActivePlayer(tableName, trick.getForeHand().getRightNeighbor());
 
 			} else if (trick.getFirstCard() != null) {
 
-				view.setActivePlayer(tableName, trick.getForeHand()
-						.getLeftNeighbor());
+				view.setActivePlayer(tableName, trick.getForeHand().getLeftNeighbor());
 			}
 		}
 	}
@@ -449,6 +441,7 @@ public class IssController {
 				if (!currGame.isPlayerPass(currPlayer)) {
 					if (currGame.getPlayerBid(currPlayer) > 0) {
 						result = true;
+						currGame.setDeclarer(currPlayer);
 					}
 				}
 			}
@@ -457,8 +450,7 @@ public class IssController {
 		return result;
 	}
 
-	private void updateGameData(SkatGameData currGame,
-			ISSMoveInformation moveInformation) {
+	private void updateGameData(SkatGameData currGame, ISSMoveInformation moveInformation) {
 
 		Player movePlayer = moveInformation.getPlayer();
 
@@ -598,8 +590,7 @@ public class IssController {
 	 */
 	public void sendBidMove(String tableName) {
 
-		issConnect.sendBidMove(tableName, SkatConstants
-				.getNextBidValue(gameData.get(tableName).getBidValue()));
+		issConnect.sendBidMove(tableName, SkatConstants.getNextBidValue(gameData.get(tableName).getBidValue()));
 	}
 
 	/**
@@ -620,8 +611,7 @@ public class IssController {
 	 * @param gameAnnouncement
 	 *            Game announcement
 	 */
-	public void sendGameAnnouncementMove(String tableName,
-			GameAnnouncementWithDiscardedCards gameAnnouncement) {
+	public void sendGameAnnouncementMove(String tableName, GameAnnouncementWithDiscardedCards gameAnnouncement) {
 
 		issConnect.sendGameAnnouncementMove(tableName, gameAnnouncement);
 
@@ -649,8 +639,7 @@ public class IssController {
 	 * @param invitationTicket
 	 *            Invitation ticket
 	 */
-	public void handleInvitation(String invitor, String tableName,
-			String invitationTicket) {
+	public void handleInvitation(String invitor, String tableName, String invitationTicket) {
 
 		if (view.showISSTableInvitation(invitor, tableName)) {
 

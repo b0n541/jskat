@@ -557,7 +557,14 @@ public class NullView implements IJSkatView {
 	@Override
 	public void setPlayerNames(String tableName, String upperLeftPlayerName, String upperRightPlayerName,
 			String lowerPlayerName) {
-		// TODO Auto-generated method stub
+		// empty method by indent
+	}
 
+	/**
+	 * @see IJSkatView#setDeclarer(String, Player)
+	 */
+	@Override
+	public void setDeclarer(String tableName, Player declarer) {
+		// empty method by indent
 	}
 }

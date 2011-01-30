@@ -56,6 +56,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	// FIXME (jan 14.11.2010) looks wrong to me, was made static to avoid
 	// NullPointerException during table creation
 	protected static Map<Player, Boolean> playerPassed = new HashMap<Player, Boolean>();
+	// declarer player on the table
+	protected Player declarer;
 
 	protected HandPanel foreHand;
 	protected HandPanel middleHand;
@@ -100,15 +102,13 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		getActionMap().get(JSkatAction.INVITE_ISS_PLAYER).setEnabled(true);
 
-		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				getSkatListPanel(), getPlayGroundPanel());
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, getSkatListPanel(), getPlayGroundPanel());
 		add(splitPane, "grow"); //$NON-NLS-1$
 	}
 
 	private JPanel getSkatListPanel() {
 
-		JPanel panel = new JPanel(new MigLayout(
-				"fill", "fill", "[shrink][grow]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		JPanel panel = new JPanel(new MigLayout("fill", "fill", "[shrink][grow]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		JLabel skatListLabel = new JLabel(strings.getString("skat_list"));
 		skatListLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
@@ -122,12 +122,10 @@ public class SkatTablePanel extends AbstractTabPanel {
 			if (i == 3) {
 
 				// game colum is bigger
-				skatListTable.getColumnModel().getColumn(i)
-						.setPreferredWidth(40);
+				skatListTable.getColumnModel().getColumn(i).setPreferredWidth(40);
 			} else {
 
-				skatListTable.getColumnModel().getColumn(i)
-						.setPreferredWidth(20);
+				skatListTable.getColumnModel().getColumn(i).setPreferredWidth(20);
 			}
 		}
 
@@ -136,8 +134,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		skatListScrollPane = new JScrollPane(skatListTable);
 		skatListScrollPane.setMinimumSize(new Dimension(150, 100));
 		skatListScrollPane.setPreferredSize(new Dimension(200, 100));
-		skatListScrollPane
-				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		skatListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
 		panel.add(skatListScrollPane, "growy"); //$NON-NLS-1$
 
@@ -157,8 +154,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		userPanel = getPlayerPanel();
 		createGameContextPanel();
 
-		return new PlayGroundPanel(gameInfoPanel, leftOpponentPanel,
-				rightOpponentPanel, gameContextPanel, userPanel);
+		return new PlayGroundPanel(gameInfoPanel, leftOpponentPanel, rightOpponentPanel, gameContextPanel, userPanel);
 	}
 
 	private GameInformationPanel getGameInfoPanel() {
@@ -190,19 +186,15 @@ public class SkatTablePanel extends AbstractTabPanel {
 		gameContextPanel.setLayout(new CardLayout());
 
 		addContextPanel(ContextPanelTypes.START,
-				new StartContextPanel((StartSkatSeriesAction) getActionMap()
-						.get(JSkatAction.START_LOCAL_SERIES)));
+				new StartContextPanel((StartSkatSeriesAction) getActionMap().get(JSkatAction.START_LOCAL_SERIES)));
 
-		biddingPanel = new BiddingContextPanel(getActionMap(), bitmaps,
-				userPanel);
+		biddingPanel = new BiddingContextPanel(getActionMap(), bitmaps, userPanel);
 		addContextPanel(ContextPanelTypes.BIDDING, biddingPanel);
 
-		declaringPanel = new DeclaringContextPanel(getActionMap(), bitmaps,
-				userPanel, 4);
+		declaringPanel = new DeclaringContextPanel(getActionMap(), bitmaps, userPanel, 4);
 		addContextPanel(ContextPanelTypes.DECLARING, declaringPanel);
 
-		JPanel trickHoldingPanel = new JPanel(new MigLayout(
-				"fill", "[shrink][grow][shrink]", //$NON-NLS-1$ //$NON-NLS-2$
+		JPanel trickHoldingPanel = new JPanel(new MigLayout("fill", "[shrink][grow][shrink]", //$NON-NLS-1$ //$NON-NLS-2$
 				"fill")); //$NON-NLS-1$
 		lastTrickPanel = new TrickPlayPanel(bitmaps, 0.6, false);
 		trickHoldingPanel.add(lastTrickPanel, "width 25%"); //$NON-NLS-1$
@@ -252,8 +244,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param playerPosition
 	 *            Player position
 	 */
-	public void setPositions(Player leftPosition, Player rightPosition,
-			Player playerPosition) {
+	public void setPositions(Player leftPosition, Player rightPosition, Player playerPosition) {
 
 		leftOpponentPanel.setPosition(leftPosition);
 		rightOpponentPanel.setPosition(rightPosition);
@@ -382,8 +373,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param gameAnnouncement
 	 *            Game announcement
 	 */
-	public void setGameAnnouncement(Player player,
-			GameAnnouncement gameAnnouncement) {
+	public void setGameAnnouncement(Player player, GameAnnouncement gameAnnouncement) {
 
 		gameInfoPanel.setGameAnnouncement(gameAnnouncement);
 
@@ -421,17 +411,21 @@ public class SkatTablePanel extends AbstractTabPanel {
 			getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(false);
 			break;
 		case LOOK_INTO_SKAT:
-			// FIXME show panel only if the human player is looking into the
-			// skat
-			setContextPanel(ContextPanelTypes.DECLARING);
-			getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
+			if (userPanel.getPosition().equals(declarer)) {
+				setContextPanel(ContextPanelTypes.DECLARING);
+				getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
+			}
 			break;
 		case DISCARDING:
-			setContextPanel(ContextPanelTypes.DECLARING);
-			userPanel.setGameState(GameState.DISCARDING);
+			if (userPanel.getPosition().equals(declarer)) {
+				setContextPanel(ContextPanelTypes.DECLARING);
+				userPanel.setGameState(GameState.DISCARDING);
+			}
 			break;
 		case DECLARING:
-			setContextPanel(ContextPanelTypes.DECLARING);
+			if (userPanel.getPosition().equals(declarer)) {
+				setContextPanel(ContextPanelTypes.DECLARING);
+			}
 			break;
 		case TRICK_PLAYING:
 			setContextPanel(ContextPanelTypes.TRICK_PLAYING);
@@ -450,6 +444,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		playerPassed.put(Player.FORE_HAND, Boolean.FALSE);
 		playerPassed.put(Player.MIDDLE_HAND, Boolean.FALSE);
 		playerPassed.put(Player.HIND_HAND, Boolean.FALSE);
+		declarer = null;
 	}
 
 	/**
@@ -460,8 +455,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	void setContextPanel(ContextPanelTypes panelType) {
 
-		((CardLayout) gameContextPanel.getLayout()).show(gameContextPanel,
-				panelType.toString());
+		((CardLayout) gameContextPanel.getLayout()).show(gameContextPanel, panelType.toString());
 	}
 
 	/**
@@ -474,13 +468,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		gameOverPanel.setGameResult(gameData);
 
-		skatListTableModel.addResult(leftOpponentPanel.getPosition(),
-				rightOpponentPanel.getPosition(), userPanel.getPosition(),
-				gameData.getDeclarer(), gameData.getGameResult());
+		skatListTableModel.addResult(leftOpponentPanel.getPosition(), rightOpponentPanel.getPosition(),
+				userPanel.getPosition(), gameData.getDeclarer(), gameData.getGameResult());
 
 		// scroll skat list if the new result is out of scope
-		Rectangle bounds = skatListTable.getCellRect(
-				skatListTableModel.getRowCount() - 1, 0, true);
+		Rectangle bounds = skatListTable.getCellRect(skatListTableModel.getRowCount() - 1, 0, true);
 		Point loc = bounds.getLocation();
 		loc.move(loc.x, loc.y + bounds.height);
 		skatListScrollPane.getViewport().setViewPosition(loc);
@@ -689,8 +681,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param middleHandCard
 	 * @param hindHandCard
 	 */
-	public void setLastTrick(Player trickForeHand, Card foreHandCard,
-			Card middleHandCard, Card hindHandCard) {
+	public void setLastTrick(Player trickForeHand, Card foreHandCard, Card middleHandCard, Card hindHandCard) {
 
 		lastTrickPanel.clearCards();
 		lastTrickPanel.setCard(trickForeHand, foreHandCard);
@@ -825,14 +816,31 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param upperRightPlayerName
 	 * @param lowerPlayerName
 	 */
-	public void setPlayerNames(String upperLeftPlayerName,
-			String upperRightPlayerName, String lowerPlayerName) {
+	public void setPlayerNames(String upperLeftPlayerName, String upperRightPlayerName, String lowerPlayerName) {
 		// FIXME (jan 26.01.2011) possible code duplication with
 		// setPlayerInformation()
 		leftOpponentPanel.setPlayerName(upperLeftPlayerName);
 		rightOpponentPanel.setPlayerName(upperRightPlayerName);
 		userPanel.setPlayerName(lowerPlayerName);
-		skatListTableModel.setPlayerNames(upperLeftPlayerName,
-				upperRightPlayerName, lowerPlayerName);
+		skatListTableModel.setPlayerNames(upperLeftPlayerName, upperRightPlayerName, lowerPlayerName);
+	}
+
+	/**
+	 * Gets the declarer player for the table
+	 * 
+	 * @return Declarer player
+	 */
+	public Player getDeclarer() {
+		return declarer;
+	}
+
+	/**
+	 * Sets the declarer player for the table
+	 * 
+	 * @param declarer
+	 *            Declarer player
+	 */
+	public void setDeclarer(Player declarer) {
+		this.declarer = declarer;
 	}
 }

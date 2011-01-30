@@ -105,6 +105,7 @@ public class SkatGame extends JSkatThread {
 					setGameState(GameState.PRELIMINARY_GAME_END);
 				} else {
 
+					view.setDeclarer(tableName, data.getDeclarer());
 					setGameState(GameState.LOOK_INTO_SKAT);
 				}
 				break;

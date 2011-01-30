@@ -1074,4 +1074,13 @@ public class JSkatViewImpl implements IJSkatView {
 
 		tables.get(tableName).setPlayerNames(upperLeftPlayerName, upperRightPlayerName, lowerPlayerName);
 	}
+
+	/**
+	 * @see IJSkatView#setDeclarer(String, Player)
+	 */
+	@Override
+	public void setDeclarer(String tableName, Player declarer) {
+
+		tables.get(tableName).setDeclarer(declarer);
+	}
 }

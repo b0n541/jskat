@@ -614,4 +614,14 @@ public interface IJSkatView {
 	 */
 	public void setPlayerNames(String tableName, String upperLeftPlayerName, String upperRightPlayerName,
 			String lowerPlayerName);
+
+	/**
+	 * Sets the declarer player of the table
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param declarer
+	 *            Declarer player
+	 */
+	public void setDeclarer(String tableName, Player declarer);
 }
