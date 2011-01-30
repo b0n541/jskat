@@ -11,10 +11,10 @@ Released: @ReleaseDate@
 
 package de.jskat.control;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -65,26 +65,27 @@ public class SkatSeries extends JSkatThread {
 	public void setPlayer(List<IJSkatPlayer> newPlayer) {
 
 		if (newPlayer.size() != 3) {
-			throw new IllegalArgumentException(
-					"Only three players are allowed at the moment."); //$NON-NLS-1$
+			throw new IllegalArgumentException("Only three players are allowed at the moment."); //$NON-NLS-1$
 		}
 
-		view.setPlayerNames(data.getTableName(), newPlayer.get(0)
-				.getPlayerName(), newPlayer.get(1).getPlayerName(), newPlayer
-				.get(2).getPlayerName());
+		view.setPlayerNames(data.getTableName(), newPlayer.get(0).getPlayerName(), newPlayer.get(1).getPlayerName(),
+				newPlayer.get(2).getPlayerName());
+
+		// memorize third player to find it again after shuffling the players
+		IJSkatPlayer thirdPlayer = newPlayer.get(2);
 
 		// set players in random order
-		Collections.shuffle(newPlayer);
-		player.put(Player.FORE_HAND, newPlayer.get(0));
-		player.put(Player.MIDDLE_HAND, newPlayer.get(1));
-		player.put(Player.HIND_HAND, newPlayer.get(2));
-
-		// set fore hand as bottom player
-		data.setBottomPlayer(Player.FORE_HAND);
+		// simple Collection.shuffle doesn't work here, because the order of
+		// players should be the same like in start skat series dialog
+		Random rand = new Random();
+		int startPlayer = rand.nextInt(3);
+		player.put(Player.FORE_HAND, newPlayer.get(startPlayer));
+		player.put(Player.MIDDLE_HAND, newPlayer.get((startPlayer + 1) % 3));
+		player.put(Player.HIND_HAND, newPlayer.get((startPlayer + 2) % 3));
 
 		// if an human player is playing, always show him/her at the bottom
 		for (Player hand : Player.values()) {
-			if (player.get(hand) instanceof HumanPlayer) {
+			if (player.get(hand) instanceof HumanPlayer || player.get(hand) == thirdPlayer) {
 				data.setBottomPlayer(hand);
 			}
 		}
@@ -137,17 +138,14 @@ public class SkatSeries extends JSkatThread {
 					player.put(Player.FORE_HAND, player.get(Player.MIDDLE_HAND));
 					player.put(Player.MIDDLE_HAND, helper);
 
-					data.setBottomPlayer(data.getBottomPlayer()
-							.getRightNeighbor());
+					data.setBottomPlayer(data.getBottomPlayer().getRightNeighbor());
 				}
 
 				gameNumber++;
 				view.setGameNumber(data.getTableName(), gameNumber);
 
-				currSkatGame = new SkatGame(data.getTableName(),
-						player.get(Player.FORE_HAND),
-						player.get(Player.MIDDLE_HAND),
-						player.get(Player.HIND_HAND));
+				currSkatGame = new SkatGame(data.getTableName(), player.get(Player.FORE_HAND),
+						player.get(Player.MIDDLE_HAND), player.get(Player.HIND_HAND));
 
 				setViewPositions();
 
@@ -195,18 +193,15 @@ public class SkatSeries extends JSkatThread {
 
 		if (Player.FORE_HAND.equals(data.getBottomPlayer())) {
 
-			view.setPositions(tableName, Player.MIDDLE_HAND, Player.HIND_HAND,
-					Player.FORE_HAND);
+			view.setPositions(tableName, Player.MIDDLE_HAND, Player.HIND_HAND, Player.FORE_HAND);
 
 		} else if (Player.MIDDLE_HAND.equals(data.getBottomPlayer())) {
 
-			view.setPositions(tableName, Player.HIND_HAND, Player.FORE_HAND,
-					Player.MIDDLE_HAND);
+			view.setPositions(tableName, Player.HIND_HAND, Player.FORE_HAND, Player.MIDDLE_HAND);
 
 		} else {
 
-			view.setPositions(tableName, Player.FORE_HAND, Player.MIDDLE_HAND,
-					Player.HIND_HAND);
+			view.setPositions(tableName, Player.FORE_HAND, Player.MIDDLE_HAND, Player.HIND_HAND);
 		}
 	}
 
