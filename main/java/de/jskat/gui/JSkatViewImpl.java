@@ -96,8 +96,8 @@ import de.jskat.gui.action.main.StartSkatSeriesAction;
 import de.jskat.gui.action.main.TrainNeuralNetworksAction;
 import de.jskat.gui.help.JSkatHelpDialog;
 import de.jskat.gui.img.JSkatGraphicRepository;
-import de.jskat.gui.iss.ISSTablePanel;
 import de.jskat.gui.iss.ISSLobbyPanel;
+import de.jskat.gui.iss.ISSTablePanel;
 import de.jskat.gui.iss.LoginPanel;
 import de.jskat.gui.iss.PlayerInvitationPanel;
 import de.jskat.gui.nn.NeuralNetworkTrainingOverview;
@@ -771,10 +771,12 @@ public class JSkatViewImpl implements IJSkatView {
 
 		// FIXME (jansch 09.11.2010) this is only done for ISS games
 		SkatTablePanel table = tables.get(tableName);
-		table.setPlayerInformation(leftOpponent, status.getPlayerName(leftOpponent), status.getPlayerTime(leftOpponent));
-		table.setPlayerInformation(rightOpponent, status.getPlayerName(rightOpponent),
-				status.getPlayerTime(rightOpponent));
-		table.setPlayerInformation(player, status.getPlayerName(player), status.getPlayerTime(player));
+		table.setPlayerName(leftOpponent, status.getPlayerName(leftOpponent));
+		table.setPlayerTime(leftOpponent, status.getPlayerTime(leftOpponent));
+		table.setPlayerName(rightOpponent, status.getPlayerName(rightOpponent));
+		table.setPlayerTime(rightOpponent, status.getPlayerTime(rightOpponent));
+		table.setPlayerName(player, status.getPlayerName(player));
+		table.setPlayerTime(player, status.getPlayerTime(player));
 	}
 
 	/**
@@ -864,9 +866,9 @@ public class JSkatViewImpl implements IJSkatView {
 			// FIXME dirty hack
 			SkatTablePanel table = tables.get(tableName);
 
-			table.setPlayerInformation(Player.FORE_HAND, null, moveInformation.getPlayerTime(Player.FORE_HAND));
-			table.setPlayerInformation(Player.MIDDLE_HAND, null, moveInformation.getPlayerTime(Player.MIDDLE_HAND));
-			table.setPlayerInformation(Player.HIND_HAND, null, moveInformation.getPlayerTime(Player.HIND_HAND));
+			table.setPlayerTime(Player.FORE_HAND, moveInformation.getPlayerTime(Player.FORE_HAND));
+			table.setPlayerTime(Player.MIDDLE_HAND, moveInformation.getPlayerTime(Player.MIDDLE_HAND));
+			table.setPlayerTime(Player.HIND_HAND, moveInformation.getPlayerTime(Player.HIND_HAND));
 		}
 	}
 

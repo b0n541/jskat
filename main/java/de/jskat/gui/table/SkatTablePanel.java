@@ -53,6 +53,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	private static final long serialVersionUID = 1L;
 	private static Log log = LogFactory.getLog(SkatTablePanel.class);
 
+	protected Map<String, Player> playerNamesAndPositions;
+
 	// FIXME (jan 14.11.2010) looks wrong to me, was made static to avoid
 	// NullPointerException during table creation
 	protected static Map<Player, Boolean> playerPassed = new HashMap<Player, Boolean>();
@@ -97,6 +99,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	protected void initPanel() {
 
 		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+		playerNamesAndPositions = new HashMap<String, Player>();
 
 		contextPanels = new HashMap<ContextPanelTypes, JPanel>();
 
@@ -217,19 +221,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	private HandPanel getPlayerPanel(Player player) {
 
-		HandPanel result = null;
-
-		switch (player) {
-		case FORE_HAND:
-			result = foreHand;
-			break;
-		case MIDDLE_HAND:
-			result = middleHand;
-			break;
-		case HIND_HAND:
-			result = hindHand;
-			break;
-		}
+		HandPanel result = getHandPanel(player);
 
 		return result;
 	}
@@ -640,17 +632,92 @@ public class SkatTablePanel extends AbstractTabPanel {
 	}
 
 	/**
-	 * Sets player information
+	 * Sets player name
 	 * 
 	 * @param player
 	 *            Player position
 	 * @param name
 	 *            Player name
+	 */
+	public void setPlayerName(Player player, String name) {
+
+		playerNamesAndPositions.put(name, player);
+		HandPanel panel = getHandPanel(player);
+
+		if (panel != null) {
+			if (name != null) {
+				panel.setPlayerName(name);
+			}
+		}
+	}
+
+	/**
+	 * Sets player time
+	 * 
+	 * @param player
+	 *            Player position
 	 * @param time
 	 *            Player time
 	 */
-	public void setPlayerInformation(Player player, String name, double time) {
+	public void setPlayerTime(Player player, double time) {
 
+		HandPanel panel = getHandPanel(player);
+
+		if (panel != null) {
+			panel.setPlayerTime(time);
+		}
+	}
+
+	/**
+	 * Sets player flag for chat enabled yes/no
+	 * 
+	 * @param playerName
+	 *            Player name
+	 * @param isChatEnabled
+	 *            Flag for chat enabled yes/no
+	 */
+	public void setPlayerChatEnabled(String playerName, boolean isChatEnabled) {
+
+		HandPanel panel = getHandPanel(playerName);
+
+		if (panel != null) {
+			panel.setChatEnabled(isChatEnabled);
+		}
+	}
+
+	/**
+	 * Sets player flag for ready to play yes/no
+	 * 
+	 * @param playerName
+	 *            Player name
+	 * @param isReadyToPlay
+	 *            Flag for ready to play yes/no
+	 */
+	public void setPlayerReadyToPlay(String playerName, boolean isReadyToPlay) {
+
+		HandPanel panel = getHandPanel(playerName);
+
+		if (panel != null) {
+			panel.setReadyToPlay(isReadyToPlay);
+		}
+	}
+
+	private HandPanel getHandPanel(String playerName) {
+
+		HandPanel panel = null;
+
+		if (playerName.equals(userPanel.getPlayerName())) {
+			panel = userPanel;
+		} else if (playerName.equals(leftOpponentPanel.getPlayerName())) {
+			panel = leftOpponentPanel;
+		} else if (playerName.equals(rightOpponentPanel.getPlayerName())) {
+			panel = rightOpponentPanel;
+		}
+
+		return panel;
+	}
+
+	private HandPanel getHandPanel(Player player) {
 		HandPanel panel = null;
 
 		switch (player) {
@@ -664,13 +731,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 			panel = hindHand;
 			break;
 		}
-
-		if (panel != null) {
-			if (name != null) {
-				panel.setPlayerName(name);
-			}
-			panel.setPlayerTime(time);
-		}
+		return panel;
 	}
 
 	/**

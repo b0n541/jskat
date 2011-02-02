@@ -55,6 +55,10 @@ abstract class HandPanel extends JPanel {
 	 */
 	JLabel headerLabel;
 	/**
+	 * Icon panel
+	 */
+	IconPanel iconPanel;
+	/**
 	 * Clock panel
 	 */
 	ClockPanel clockPanel;
@@ -98,6 +102,7 @@ abstract class HandPanel extends JPanel {
 		setOpaque(false);
 
 		headerLabel = new JLabel(" "); //$NON-NLS-1$
+		iconPanel = new IconPanel();
 		clockPanel = new ClockPanel();
 
 		initPanel();
@@ -112,11 +117,11 @@ abstract class HandPanel extends JPanel {
 
 		setBorder(getPanelBorder());
 
-		header = new JPanel(new MigLayout(
-				"fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		header = new JPanel(new MigLayout("fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		header.add(headerLabel);
 		// blank panel
 		header.add(new JPanel());
+		header.add(iconPanel);
 		header.add(clockPanel);
 		add(header, "shrinky, wrap"); //$NON-NLS-1$
 
@@ -271,7 +276,7 @@ abstract class HandPanel extends JPanel {
 		return cardPanel.getCardCount() == maxCardCount;
 	}
 
-	void setPlayerName(String newName) {
+	public void setPlayerName(String newName) {
 
 		playerName = newName;
 
@@ -281,6 +286,16 @@ abstract class HandPanel extends JPanel {
 	void setPlayerTime(double newTime) {
 
 		clockPanel.setPlayerTime(newTime);
+	}
+
+	void setChatEnabled(boolean isChatEnabled) {
+
+		iconPanel.setChatEnabled(isChatEnabled);
+	}
+
+	void setReadyToPlay(boolean isReadyToPlay) {
+
+		iconPanel.setReadyToPlay(isReadyToPlay);
 	}
 
 	boolean isActivePlayer() {
@@ -301,5 +316,10 @@ abstract class HandPanel extends JPanel {
 	void setDeclarer() {
 		declarer = true;
 		refreshHeaderText();
+	}
+
+	public String getPlayerName() {
+
+		return playerName;
 	}
 }

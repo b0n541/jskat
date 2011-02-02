@@ -16,7 +16,7 @@ import javax.swing.ActionMap;
 /**
  * Panel for showing informations about opponents
  */
-class OpponentPanel extends HandPanel {
+public class OpponentPanel extends HandPanel {
 
 	private static final long serialVersionUID = 1L;
 

@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 import de.jskat.data.SkatGameData.GameState;
 import de.jskat.data.iss.ISSChatMessage;
+import de.jskat.data.iss.ISSPlayerStatus;
 import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.gui.table.ContextPanelTypes;
 import de.jskat.gui.table.SkatTablePanel;
@@ -89,7 +90,35 @@ public class ISSTablePanel extends SkatTablePanel {
 
 		setMaxPlayers(tableStatus.getMaxPlayers());
 
-		// TODO set player informations
+		for (String playerName : tableStatus.getPlayerInformations().keySet()) {
+
+			ISSPlayerStatus status = tableStatus.getPlayerInformation(playerName);
+
+			addPlayerName(playerName);
+			setPlayerReadyToPlay(playerName, status.isReadyToPlay());
+			setPlayerChatEnabled(playerName, status.isTalkEnabled());
+		}
+	}
+
+	private void addPlayerName(String playerName) {
+
+		if (!playerNamesAndPositions.keySet().contains(playerName)) {
+
+			playerNamesAndPositions.put(playerName, null);
+
+			if (userPanel.getPlayerName() == null) {
+
+				userPanel.setPlayerName(playerName);
+
+			} else if (leftOpponentPanel.getPlayerName() == null) {
+
+				leftOpponentPanel.setPlayerName(playerName);
+
+			} else if (rightOpponentPanel.getPlayerName() == null) {
+
+				rightOpponentPanel.setPlayerName(playerName);
+			}
+		}
 	}
 
 	/**

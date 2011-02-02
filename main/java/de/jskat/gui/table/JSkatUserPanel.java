@@ -21,7 +21,7 @@ import de.jskat.data.SkatGameData.GameState;
 /**
  * Panel for showing informations about the user
  */
-class JSkatUserPanel extends HandPanel {
+public class JSkatUserPanel extends HandPanel {
 
 	private static final long serialVersionUID = 1L;
 	private static Log log = LogFactory.getLog(JSkatUserPanel.class);
