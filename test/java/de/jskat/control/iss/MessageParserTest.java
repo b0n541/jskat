@@ -12,11 +12,19 @@ package de.jskat.control.iss;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
 
 import org.junit.Test;
 
 import de.jskat.AbstractJSkatTest;
 import de.jskat.data.SkatGameData;
+import de.jskat.data.iss.ISSPlayerStatus;
+import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.util.Player;
 
 /**
@@ -46,5 +54,35 @@ public class MessageParserTest extends AbstractJSkatTest {
 		assertFalse(gameData.isSchneider());
 		assertFalse(gameData.isSchwarz());
 		assertFalse(gameData.isOverBidded());
+	}
+
+	/**
+	 * Test the leaving of an player
+	 */
+	@Test
+	public void testParseTableUpdatePlayerLeft() {
+
+		String tableUpdate = "table .4 foo state 3 foo . . . foo . 0 0 0 0 0 0 1 0 xskat $ 0 0 0 0 0 0 1 0 xskat:2 $ 0 0 0 0 0 0 1 0 . . 0 0 0 0 0 0 0 0 false 0";
+
+		StringTokenizer token = new StringTokenizer(tableUpdate);
+		token.nextToken(); // table
+		token.nextToken(); // .4
+		String creator = token.nextToken(); // foo
+		token.nextToken(); // state
+		List<String> detailParams = new ArrayList<String>();
+		while (token.hasMoreTokens()) {
+			detailParams.add(token.nextToken());
+		}
+
+		ISSTablePanelStatus status = MessageParser.getTableStatus(creator, detailParams);
+
+		assertEquals(3, status.getMaxPlayers());
+		assertEquals(3, status.getPlayerInformations().size());
+
+		ISSPlayerStatus playerStatus = status.getPlayerInformation("xskat"); //$NON-NLS-1$
+		assertNotNull(playerStatus);
+		assertTrue(playerStatus.isPlayerLeft());
+		assertFalse(playerStatus.isReadyToPlay());
+		assertTrue(playerStatus.isTalkEnabled());
 	}
 }

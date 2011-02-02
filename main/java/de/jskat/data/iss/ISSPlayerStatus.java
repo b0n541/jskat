@@ -1,3 +1,14 @@
+/*
+
+@ShortLicense@
+
+Authors: @JS@
+         @MJL@
+
+Released: @ReleaseDate@
+
+ */
+
 package de.jskat.data.iss;
 
 /**
@@ -14,6 +25,7 @@ public class ISSPlayerStatus {
 	private boolean switch34;
 	private boolean talkEnabled;
 	private boolean readyToPlay;
+	private boolean playerLeft;
 
 	public void setName(String name) {
 		this.name = name;
@@ -85,5 +97,13 @@ public class ISSPlayerStatus {
 
 	public void setReadyToPlay(boolean readyToPlay) {
 		this.readyToPlay = readyToPlay;
+	}
+
+	public void setPlayerLeft(boolean playerLeft) {
+		this.playerLeft = playerLeft;
+	}
+
+	public boolean isPlayerLeft() {
+		return playerLeft;
 	}
 }

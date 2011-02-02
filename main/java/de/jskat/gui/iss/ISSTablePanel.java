@@ -94,9 +94,14 @@ public class ISSTablePanel extends SkatTablePanel {
 
 			ISSPlayerStatus status = tableStatus.getPlayerInformation(playerName);
 
-			addPlayerName(playerName);
+			if (!status.isPlayerLeft()) {
+				addPlayerName(playerName);
+			}
 			setPlayerReadyToPlay(playerName, status.isReadyToPlay());
 			setPlayerChatEnabled(playerName, status.isTalkEnabled());
+			if (status.isPlayerLeft()) {
+				removePlayerName(playerName);
+			}
 		}
 	}
 
@@ -117,6 +122,27 @@ public class ISSTablePanel extends SkatTablePanel {
 			} else if (rightOpponentPanel.getPlayerName() == null) {
 
 				rightOpponentPanel.setPlayerName(playerName);
+			}
+		}
+	}
+
+	private void removePlayerName(String playerName) {
+
+		if (playerNamesAndPositions.keySet().contains(playerName)) {
+
+			playerNamesAndPositions.remove(playerName);
+
+			if (playerName.equals(userPanel.getPlayerName())) {
+
+				userPanel.setPlayerName(""); //$NON-NLS-1$
+
+			} else if (playerName.equals(leftOpponentPanel.getPlayerName())) {
+
+				leftOpponentPanel.setPlayerName(""); //$NON-NLS-1$
+
+			} else if (playerName.equals(rightOpponentPanel.getPlayerName())) {
+
+				rightOpponentPanel.setPlayerName(""); //$NON-NLS-1$
 			}
 		}
 	}
