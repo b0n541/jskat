@@ -150,12 +150,12 @@ public class OpponentPlayer extends AbstractCardPlayer {
 					bestToBePlayed = Helper.isAbleToBeat(cards, initialCard, initialCard, gameType);
 					if (bestToBePlayed < 0) {
 						log.debug(".playNextCard(): ...which i can't beat...");
-						bestToBePlayed = cards.getFirstIndexOfSuit(initialCard.getSuit());
+						bestToBePlayed = cards.getLastIndexOfSuit(initialCard.getSuit());
 					}
 				} else {
 					// Play the card with the highest value
 					log.debug(".playNextCard(): ...to which i try to put some value...");
-					bestToBePlayed = cards.getLastIndexOfSuit(initialCard.getSuit());
+					bestToBePlayed = cards.getFirstIndexOfSuit(initialCard.getSuit());
 				}
 
 			} else {
