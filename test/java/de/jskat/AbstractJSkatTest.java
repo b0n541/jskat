@@ -17,7 +17,7 @@ import org.junit.BeforeClass;
 /**
  * Abstract class for all JSkat unit tests
  */
-public class AbstractJSkatTest {
+public abstract class AbstractJSkatTest {
 
 	/**
 	 * Creates the logger
