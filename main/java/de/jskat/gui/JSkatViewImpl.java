@@ -771,6 +771,7 @@ public class JSkatViewImpl implements IJSkatView {
 
 		// FIXME (jansch 09.11.2010) this is only done for ISS games
 		SkatTablePanel table = tables.get(tableName);
+		table.setGameState(GameState.GAME_START);
 		table.setPlayerName(leftOpponent, status.getPlayerName(leftOpponent));
 		table.setPlayerTime(leftOpponent, status.getPlayerTime(leftOpponent));
 		table.setPlayerName(rightOpponent, status.getPlayerName(rightOpponent));
