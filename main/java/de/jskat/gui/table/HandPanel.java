@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import net.miginfocom.swing.MigLayout;
+import de.jskat.data.JSkatOptions;
 import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.util.Card;
 import de.jskat.util.GameType;
@@ -127,6 +128,10 @@ abstract class HandPanel extends JPanel {
 
 		cardPanel = new CardPanel(this, bitmaps, true);
 		add(cardPanel, "growy"); //$NON-NLS-1$
+
+		if (JSkatOptions.instance().isShowCards()) {
+			showCards();
+		}
 	}
 
 	private Border getPanelBorder() {
