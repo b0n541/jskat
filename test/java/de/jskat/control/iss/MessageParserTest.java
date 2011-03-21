@@ -62,7 +62,7 @@ public class MessageParserTest extends AbstractJSkatTest {
 	@Test
 	public void testParseTableUpdatePlayerLeft() {
 
-		String tableUpdate = "table .4 foo state 3 foo . . . foo . 0 0 0 0 0 0 1 0 xskat $ 0 0 0 0 0 0 1 0 xskat:2 $ 0 0 0 0 0 0 1 0 . . 0 0 0 0 0 0 0 0 false 0";
+		String tableUpdate = "table .4 foo state 3 foo . . . foo . 0 0 0 0 0 0 1 0 xskat $ 2 1 83 157 0 0 1 0 xskat:2 $ 0 0 0 0 0 0 1 0 . . 0 0 0 0 0 0 0 0 false 0";
 
 		StringTokenizer token = new StringTokenizer(tableUpdate);
 		token.nextToken(); // table
@@ -81,6 +81,10 @@ public class MessageParserTest extends AbstractJSkatTest {
 
 		ISSPlayerStatus playerStatus = status.getPlayerInformation("xskat"); //$NON-NLS-1$
 		assertNotNull(playerStatus);
+		assertEquals(2, playerStatus.getGamesPlayed());
+		assertEquals(1, playerStatus.getGamesWon());
+		assertEquals(83, playerStatus.getLastGameResult());
+		assertEquals(157, playerStatus.getTotalPoints());
 		assertTrue(playerStatus.isPlayerLeft());
 		assertFalse(playerStatus.isReadyToPlay());
 		assertTrue(playerStatus.isTalkEnabled());
