@@ -13,8 +13,12 @@ package de.jskat.gui.table;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.table.AbstractTableModel;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import de.jskat.util.JSkatResourceBundle;
 import de.jskat.util.Player;
@@ -27,6 +31,8 @@ import de.jskat.util.SkatListMode;
 class SkatListTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
+
+	private static Log log = LogFactory.getLog(SkatListTableModel.class);
 
 	private JSkatResourceBundle strings;
 
@@ -204,27 +210,28 @@ class SkatListTableModel extends AbstractTableModel {
 	 *            Position of the upper left opponent
 	 * @param rightOpponent
 	 *            Position of the upper right opponent
-	 * @param player
+	 * @param user
 	 *            Position of the player
 	 * @param declarer
 	 *            Position of the game declarer
 	 * @param gameResult
 	 *            Game result
 	 */
-	void addResult(Player leftOpponent, Player rightOpponent, Player player,
+	void addResult(Player leftOpponent, Player rightOpponent, Player user,
 			Player declarer, int gameResult) {
 
 		// FIXME works only on 3 player series
+		// FIXME (jansch 21.03.2011) provide only one method for addResult()
 		declarers.add(declarer);
-		gameResults.add(new Integer(gameResult));
+		gameResults.add(Integer.valueOf(gameResult));
 
 		int declarerColumn = getDeclarerColumn(leftOpponent, rightOpponent,
-				player, declarer);
+				user, declarer);
 
 		if (declarer != null) {
-			playerResults.get(declarerColumn).add(new Integer(gameResult));
-			playerResults.get((declarerColumn + 1) % 3).add(new Integer(0));
-			playerResults.get((declarerColumn + 2) % 3).add(new Integer(0));
+			playerResults.get(declarerColumn).add(Integer.valueOf(gameResult));
+			playerResults.get((declarerColumn + 1) % 3).add(Integer.valueOf(0));
+			playerResults.get((declarerColumn + 2) % 3).add(Integer.valueOf(0));
 		} else {
 			// game was passed in
 			for (int i = 0; i < playerCount; i++) {
@@ -232,6 +239,60 @@ class SkatListTableModel extends AbstractTableModel {
 			}
 		}
 		calculateDisplayValues();
+
+		fireTableDataChanged();
+	}
+
+	/**
+	 * Adds new player points
+	 * 
+	 * @param leftOpponent
+	 *            Position of left opponent
+	 * @param rightOpponent
+	 *            Position of right opponent
+	 * @param user
+	 *            Position of user
+	 * @param declarer
+	 *            Declarer
+	 * @param playerPoints
+	 *            Player points
+	 * @param gameResult
+	 *            Game result
+	 */
+	void addResult(Player leftOpponent, Player rightOpponent,
+			Player user, Player declarer, Map<Player, Integer> playerPoints,
+			int gameResult) {
+
+		log.debug(gameResults.size() + " games so far.");
+		log.debug("Adding game for " + declarer + " with player points "
+				+ playerPoints);
+
+		// FIXME works only on 3 player series
+		// FIXME (jansch 21.03.2011) provide only one method for addResult()
+		declarers.add(declarer);
+		gameResults.add(Integer.valueOf(gameResult));
+
+		int declarerColumn = getDeclarerColumn(leftOpponent, rightOpponent,
+				user, declarer);
+
+		if (declarer != null) {
+			playerResults.get(declarerColumn).add(
+					Integer.valueOf(playerPoints.get(declarer)));
+			playerResults.get((declarerColumn + 1) % 3)
+					.add(Integer.valueOf(playerPoints.get(declarer
+							.getLeftNeighbor())));
+			playerResults.get((declarerColumn + 2) % 3).add(
+					Integer.valueOf(playerPoints.get(declarer
+							.getRightNeighbor())));
+		} else {
+			// game was passed in
+			for (int i = 0; i < playerCount; i++) {
+				playerResults.get(i).add(0);
+			}
+		}
+		calculateDisplayValues();
+
+		log.debug(displayValues.size() + " display values now.");
 
 		fireTableDataChanged();
 	}

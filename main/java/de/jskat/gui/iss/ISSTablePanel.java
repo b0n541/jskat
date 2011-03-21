@@ -11,6 +11,9 @@ Released: @ReleaseDate@
 
 package de.jskat.gui.iss;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.ActionMap;
 import javax.swing.JPanel;
 
@@ -21,6 +24,7 @@ import de.jskat.data.iss.ISSPlayerStatus;
 import de.jskat.data.iss.ISSTablePanelStatus;
 import de.jskat.gui.table.ContextPanelTypes;
 import de.jskat.gui.table.SkatTablePanel;
+import de.jskat.util.Player;
 
 /**
  * Panel for ISS table
@@ -90,6 +94,8 @@ public class ISSTablePanel extends SkatTablePanel {
 
 		setMaxPlayers(tableStatus.getMaxPlayers());
 
+		Map<Player, Integer> playerResults = new HashMap<Player, Integer>();
+		int gameResult = 0;
 		for (String playerName : tableStatus.getPlayerInformations().keySet()) {
 
 			ISSPlayerStatus status = tableStatus.getPlayerInformation(playerName);
@@ -102,7 +108,12 @@ public class ISSTablePanel extends SkatTablePanel {
 			if (status.isPlayerLeft()) {
 				removePlayerName(playerName);
 			}
+			
+			playerResults.put(playerNamesAndPositions.get(playerName),
+					status.getLastGameResult());
 		}
+
+		addGameResult(getDeclarer(), playerResults, gameResult);
 	}
 
 	private void addPlayerName(String playerName) {
