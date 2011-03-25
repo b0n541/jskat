@@ -450,7 +450,7 @@ public class CardList extends ArrayList<Card> {
 		int result = -1;
 		int index = 0;
 		for (Card card : this) {
-			if (result == -1 && card.getSuit() == suit) {
+			if (result == -1 && card.getSuit() == suit && card.getRank()!=Rank.JACK) {
 				result = index;
 			}
 			index++;
@@ -470,7 +470,7 @@ public class CardList extends ArrayList<Card> {
 		int result = -1;
 		int index = 0;
 		for (Card card : this) {
-			if (card.getSuit() == suit) {
+			if (card.getSuit() == suit && card.getRank()!=Rank.JACK) {
 				result = index;
 			}
 			index++;

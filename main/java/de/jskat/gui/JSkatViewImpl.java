@@ -550,7 +550,7 @@ public class JSkatViewImpl implements IJSkatView {
 	@Override
 	public void showHelpDialog() {
 
-		new JSkatHelpDialog(mainFrame, strings.getString("help"), "de/jskat/gui/help/jskat_help.html") //$NON-NLS-1$ 
+		new JSkatHelpDialog(mainFrame, strings.getString("help"), "de/jskat/gui/help/en/contents.html") //$NON-NLS-1$ 
 				.setVisible(true);
 	}
 

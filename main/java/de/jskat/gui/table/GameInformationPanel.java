@@ -20,7 +20,6 @@ import net.miginfocom.swing.MigLayout;
 import de.jskat.data.GameAnnouncement;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameState;
-import de.jskat.gui.img.JSkatGraphicRepository;
 import de.jskat.util.GameType;
 import de.jskat.util.JSkatResourceBundle;
 
@@ -31,7 +30,7 @@ class GameInformationPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private JSkatGraphicRepository bitmaps;
+//	private JSkatGraphicRepository bitmaps;
 	private JSkatResourceBundle strings;
 
 	private JLabel label;
@@ -53,7 +52,7 @@ class GameInformationPanel extends JPanel {
 	 */
 	GameInformationPanel() {
 
-		bitmaps = JSkatGraphicRepository.instance();
+//		bitmaps = JSkatGraphicRepository.instance();
 		strings = JSkatResourceBundle.instance();
 
 		initPanel();
@@ -121,24 +120,25 @@ class GameInformationPanel extends JPanel {
 		text += getGameStateString(gameState);
 
 		if (gameType != null) {
-			text += " " + strings.getGameType(gameType); //$NON-NLS-1$
+			text += " [" + strings.getGameType(gameType); //$NON-NLS-1$
+			if (handGame) {
+				text += " hand";
+			}
+
+			if (ouvertGame) {
+				text += " ouvert";
+			}
+
+			if (schneiderAnnounced) {
+				text += " schneider";
+			}
+
+			if (schwarzAnnounced) {
+				text += " schwarz";
+			}
+			text += "]";
 		}
 
-		if (handGame) {
-			text += " hand";
-		}
-
-		if (ouvertGame) {
-			text += " ouvert";
-		}
-
-		if (schneiderAnnounced) {
-			text += " schneider";
-		}
-
-		if (schwarzAnnounced) {
-			text += " schwarz";
-		}
 
 		if (gameState.equals(GameState.TRICK_PLAYING)) {
 			text += " " + strings.getString("trick") + " " + trick; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
