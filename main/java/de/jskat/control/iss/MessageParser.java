@@ -380,7 +380,7 @@ public class MessageParser {
 
 		while (summaryPartMatcher.find()) {
 
-			System.out.println(summaryPartMatcher.group());
+			log.debug(summaryPartMatcher.group());
 
 			String summaryPartMarker = summaryPartMatcher.group(1);
 			String summeryPart = summaryPartMatcher.group(2);
