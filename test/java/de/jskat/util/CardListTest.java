@@ -11,6 +11,7 @@ Released: @ReleaseDate@
 
 package de.jskat.util;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -55,5 +56,37 @@ public class CardListTest extends AbstractJSkatTest {
 		assertTrue(cards.get(3) == Card.CA);
 		assertTrue(cards.get(4) == Card.HA);
 		assertTrue(cards.get(5) == Card.HT);
+	}
+
+	/**
+	 * Test card finding
+	 */
+	@Test
+	public void testGetFirstIndexOfSuit() {
+
+		CardList cards = new CardList();
+
+		cards.add(Card.CJ);
+		cards.add(Card.CA);
+
+		assertEquals(0, cards.getFirstIndexOfSuit(Suit.CLUBS));
+		assertEquals(0, cards.getFirstIndexOfSuit(Suit.CLUBS, true));
+		assertEquals(1, cards.getFirstIndexOfSuit(Suit.CLUBS, false));
+	}
+
+	/**
+	 * Test card finding
+	 */
+	@Test
+	public void testGetLastIndexOfSuit() {
+
+		CardList cards = new CardList();
+
+		cards.add(Card.CA);
+		cards.add(Card.CJ);
+
+		assertEquals(1, cards.getLastIndexOfSuit(Suit.CLUBS));
+		assertEquals(1, cards.getLastIndexOfSuit(Suit.CLUBS, true));
+		assertEquals(0, cards.getLastIndexOfSuit(Suit.CLUBS, false));
 	}
 }
