@@ -47,8 +47,7 @@ public class CardList extends ArrayList<Card> {
 	 */
 	public boolean hasSuit(GameType gameType, Suit suit) {
 
-		return SkatRuleFactory.getSkatRules(gameType).hasSuit(gameType, this,
-				suit);
+		return SkatRuleFactory.getSkatRules(gameType).hasSuit(gameType, this, suit);
 	}
 
 	/**
@@ -117,8 +116,7 @@ public class CardList extends ArrayList<Card> {
 
 			while (index == -1 && currIndex < this.size()) {
 
-				if (get(currIndex).getSuit() == card.getSuit()
-						&& get(currIndex).getRank() == card.getRank()) {
+				if (get(currIndex).getSuit() == card.getSuit() && get(currIndex).getRank() == card.getRank()) {
 
 					index = currIndex;
 				}
@@ -260,10 +258,8 @@ public class CardList extends ArrayList<Card> {
 		for (int i = 0; i < this.size() - 1; i++) {
 			for (int j = i + 1; j < this.size(); j++) {
 
-				if (get(j).getSuit().getSuitOrder() > get(i).getSuit()
-						.getSuitOrder()
-						|| (get(j).getSuit() == get(i).getSuit() && get(j)
-								.getNullOrder() >= get(i).getNullOrder())) {
+				if (get(j).getSuit().getSuitOrder() > get(i).getSuit().getSuitOrder()
+						|| (get(j).getSuit() == get(i).getSuit() && get(j).getNullOrder() >= get(i).getNullOrder())) {
 
 					log.debug("i=" + i + ", j=" + j + ", " + get(i) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 							+ " vs. " + get(j) + ", cards(1): [" + this //$NON-NLS-1$ //$NON-NLS-2$
@@ -313,10 +309,8 @@ public class CardList extends ArrayList<Card> {
 		for (int i = sortedCards; i < this.size() - 1; i++) {
 			for (int j = i + 1; j < this.size(); j++) {
 
-				if (get(j).getSuit().getSuitOrder() > get(i).getSuit()
-						.getSuitOrder()
-						|| (get(j).getSuit() == get(i).getSuit() && get(j)
-								.getRamschOrder() >= get(i).getRamschOrder())) {
+				if (get(j).getSuit().getSuitOrder() > get(i).getSuit().getSuitOrder()
+						|| (get(j).getSuit() == get(i).getSuit() && get(j).getRamschOrder() >= get(i).getRamschOrder())) {
 
 					log.debug("i=" + i + ", j=" + j + ", " + get(i) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 							+ " vs. " + get(j) + ", cards(1): [" + this //$NON-NLS-1$ //$NON-NLS-2$
@@ -341,20 +335,15 @@ public class CardList extends ArrayList<Card> {
 			for (int j = i + 1; j < this.size(); j++) {
 
 				if (// prefer trump cards
-				(get(j).getSuit() == trumpSuit && get(i).getSuit() != trumpSuit || get(
-						j).getSuit() == trumpSuit
-						&& get(i).getSuit() == trumpSuit
-						&& get(j).getSuitGrandOrder() >= get(i)
-								.getSuitGrandOrder())
+				(get(j).getSuit() == trumpSuit && get(i).getSuit() != trumpSuit || get(j).getSuit() == trumpSuit
+						&& get(i).getSuit() == trumpSuit && get(j).getSuitGrandOrder() >= get(i).getSuitGrandOrder())
 						||
 						// normal sorting, different suits
-						(get(j).getSuit() != trumpSuit
-								&& get(i).getSuit() != trumpSuit && get(j)
-								.getSuit().getSuitOrder() > get(i).getSuit()
-								.getSuitOrder()) ||
+						(get(j).getSuit() != trumpSuit && get(i).getSuit() != trumpSuit && get(j).getSuit()
+								.getSuitOrder() > get(i).getSuit().getSuitOrder())
+						||
 						// normal sorting, same suits
-						(get(j).getSuit() == get(i).getSuit() && get(j)
-								.getSuitGrandOrder() >= get(i)
+						(get(j).getSuit() == get(i).getSuit() && get(j).getSuitGrandOrder() >= get(i)
 								.getSuitGrandOrder())) {
 
 					//					log.debug("i=" + i + ", j=" + j + ", " + get(i) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
@@ -417,7 +406,7 @@ public class CardList extends ArrayList<Card> {
 	}
 
 	/**
-	 * Returns the first index of a card with the given suit. 
+	 * Returns the first index of a card with the given suit.
 	 * 
 	 * @param suit
 	 *            Suit to search
@@ -431,7 +420,9 @@ public class CardList extends ArrayList<Card> {
 		int index = 0;
 		for (Card card : this) {
 			if (result == -1 && card.getSuit() == suit) {
-				if(card.getRank()!=Rank.JACK || (card.getRank()==Rank.JACK && includeJacks)) result = index;
+				if (card.getRank() != Rank.JACK || (card.getRank() == Rank.JACK && includeJacks)) {
+					result = index;
+				}
 			}
 			index++;
 		}
@@ -447,15 +438,8 @@ public class CardList extends ArrayList<Card> {
 	 *         card
 	 */
 	public int getFirstIndexOfSuit(Suit suit) {
-		int result = -1;
-		int index = 0;
-		for (Card card : this) {
-			if (result == -1 && card.getSuit() == suit && card.getRank()!=Rank.JACK) {
-				result = index;
-			}
-			index++;
-		}
-		return result;
+
+		return getFirstIndexOfSuit(suit, true);
 	}
 
 	/**
@@ -467,11 +451,29 @@ public class CardList extends ArrayList<Card> {
 	 *         card
 	 */
 	public int getLastIndexOfSuit(Suit suit) {
+
+		return getLastIndexOfSuit(suit, true);
+	}
+
+	/**
+	 * Returns the last index of a card with the given suit
+	 * 
+	 * @param suit
+	 *            Suit to search
+	 * @param includeJacks
+	 *            flag whether to include jacks in the result
+	 * @return Last index of a card with the given suit, -1 if there is no such
+	 *         card
+	 */
+	public int getLastIndexOfSuit(Suit suit, boolean includeJacks) {
+
 		int result = -1;
 		int index = 0;
 		for (Card card : this) {
-			if (card.getSuit() == suit && card.getRank()!=Rank.JACK) {
-				result = index;
+			if (card.getSuit() == suit) {
+				if (card.getRank() != Rank.JACK || (card.getRank() == Rank.JACK && includeJacks)) {
+					result = index;
+				}
 			}
 			index++;
 		}
@@ -485,9 +487,9 @@ public class CardList extends ArrayList<Card> {
 	 */
 	public int getTotalValue() {
 		int result = 0;
-		for(Card c: this)
+		for (Card c : this)
 			result += c.getPoints();
-		
+
 		return result;
 	}
 }
