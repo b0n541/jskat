@@ -44,6 +44,7 @@ import de.jskat.control.JSkatMaster;
 import de.jskat.control.SkatTable;
 import de.jskat.control.iss.ChatMessageType;
 import de.jskat.data.GameAnnouncement;
+import de.jskat.data.JSkatOptions;
 import de.jskat.data.SkatGameData;
 import de.jskat.data.SkatGameData.GameState;
 import de.jskat.data.SkatSeriesData.SeriesState;
@@ -582,8 +583,19 @@ public class JSkatViewImpl implements IJSkatView {
 	@Override
 	public void showHelpDialog() {
 
-		new JSkatHelpDialog(mainFrame,
-				strings.getString("help"), "de/jskat/gui/help/en/contents.html") //$NON-NLS-1$ 
+		String languageCode = "en";
+		switch (JSkatOptions.instance().getLanguage()) {
+		case GERMAN:
+			languageCode = "de";
+			break;
+		case ENGLISH:
+			languageCode = "en";
+			break;
+		}
+
+		new JSkatHelpDialog(
+				mainFrame,
+				strings.getString("help"), "de/jskat/gui/help/" + languageCode + "/contents.html") //$NON-NLS-1$ 
 				.setVisible(true);
 	}
 
