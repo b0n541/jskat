@@ -54,11 +54,14 @@ public class WelcomePanel extends AbstractTabPanel {
 
 	private JPanel getWelcomePanel() {
 
-		JPanel welcomePanel = new JPanel(new MigLayout("fill"));
+		JPanel welcomePanel = new JPanel(new MigLayout("fill", "fill",
+				"[shrink][grow]"));
 
+		JPanel headerPanel = new JPanel(new MigLayout("fill"));
 		JLabel headerLabel = new JLabel(strings.getString("welcome_to_jskat")); //$NON-NLS-1$
 		headerLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-		welcomePanel.add(headerLabel, "shrink, span 2, align center, wrap"); //$NON-NLS-1$
+		headerPanel.add(headerLabel, "center");
+		welcomePanel.add(headerPanel, "shrink, wrap"); //$NON-NLS-1$
 
 		JPanel localTablePanel = new JPanel(new MigLayout("fill"));
 		final JButton localTableButton = new JButton(this.getActionMap().get(
@@ -83,7 +86,7 @@ public class WelcomePanel extends AbstractTabPanel {
 		buttonPanel.add(localTablePanel, "width 50%");
 		buttonPanel.add(issTablePanel, "width 50%");
 
-		welcomePanel.add(buttonPanel, "grow, span 2, align center"); //$NON-NLS-1$
+		welcomePanel.add(buttonPanel, "align center"); //$NON-NLS-1$
 
 		return welcomePanel;
 	}
