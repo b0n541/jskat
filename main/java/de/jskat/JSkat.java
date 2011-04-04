@@ -44,14 +44,6 @@ public class JSkat {
 
 		trySettingNimbusLookAndFeel();
 
-		// // get the options
-		// JSkatOptions jskatOptions = JSkatOptions.instance();
-		// // get the i18n strings
-		// JSkatResourceBundle jskatStrings = JSkatResourceBundle.instance();
-		// // get all graphics
-		// JSkatGraphicRepository jskatBitmaps =
-		// JSkatGraphicRepository.instance();
-		// get master controller
 		JSkatMaster jskat = JSkatMaster.instance();
 
 		jskat.setView(new JSkatViewImpl());
