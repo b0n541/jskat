@@ -125,7 +125,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		for (GameType gameType : filteredGameTypes) {
 
-			int gamesToSimulate = 100;
+			int gamesToSimulate = 20;
 			int wonGames = simulateGames(cards, gameType, gamesToSimulate);
 			double wonRate = (double) wonGames / (double) gamesToSimulate;
 
@@ -208,7 +208,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	private GameType getBestGameType() {
 
 		// FIXME (jan 18.01.2011) check for overbidding!
-		SimulationResults simulationResults = simulateGames(cards, 100);
+		SimulationResults simulationResults = simulateGames(cards, 20);
 		GameType bestGameType = null;
 		int highestWonGames = -1;
 
@@ -315,7 +315,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		boolean result = true;
 
-		int gamesToSimulate = 100;
+		int gamesToSimulate = 20;
 		SimulationResults simResult = simulateGames(cards, gamesToSimulate);
 
 		for (GameType gameType : feasibleGameTypes) {
@@ -357,7 +357,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 				for (GameType gameType : filterFeasibleGameTypes(knowledge.getHighestBid(knowledge.getPlayerPosition()))) {
 
-					int wonGames = simulateGames(simCards, gameType, 10);
+					int wonGames = simulateGames(simCards, gameType, 3);
 
 					if (wonGames > highestNumberOfWonGames) {
 
