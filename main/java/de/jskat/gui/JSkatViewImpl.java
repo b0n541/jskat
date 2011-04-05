@@ -1188,4 +1188,11 @@ public class JSkatViewImpl implements IJSkatView {
 			}
 		}
 	}
+
+	@Override
+	public void setGameResultWithoutSkatList(String tableName,
+			SkatGameData gameData) {
+
+		tables.get(tableName).setGameResultWithoutSkatList(gameData);
+	}
 }

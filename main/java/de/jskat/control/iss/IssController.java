@@ -525,7 +525,8 @@ public class IssController {
 	public void endGame(String tableName, SkatGameData completeGameData) {
 
 		view.setGameState(tableName, GameState.GAME_OVER);
-		view.setGameResult(tableName, completeGameData);
+		// FIXME (jansch 05.04.2011) remove this dirty hack
+		view.setGameResultWithoutSkatList(tableName, completeGameData);
 		gameData.put(tableName, completeGameData);
 	}
 

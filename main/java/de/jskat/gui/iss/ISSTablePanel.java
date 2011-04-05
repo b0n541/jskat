@@ -36,6 +36,9 @@ public class ISSTablePanel extends SkatTablePanel {
 	String loginName;
 	ChatPanel chatPanel;
 
+	// FIXME (jansch 05.04.2011) Dirty hack
+	ISSTablePanelStatus lastTableStatus;
+
 	/**
 	 * Constructor
 	 * 
@@ -50,7 +53,8 @@ public class ISSTablePanel extends SkatTablePanel {
 	 * @param newLoginName
 	 *            Login name on ISS
 	 */
-	public ISSTablePanel(String tableName, ActionMap actions, String newLoginName) {
+	public ISSTablePanel(String tableName, ActionMap actions,
+			String newLoginName) {
 
 		super(tableName, actions);
 
@@ -71,9 +75,11 @@ public class ISSTablePanel extends SkatTablePanel {
 		panel.add(chatPanel, "width 20%, growy"); //$NON-NLS-1$
 
 		// replace game start context panel
-		addContextPanel(ContextPanelTypes.START, new StartContextPanel(this.getActionMap()));
+		addContextPanel(ContextPanelTypes.START,
+				new StartContextPanel(this.getActionMap()));
 		// FIXME (jan 07.12.2010) add game over panel
-		addContextPanel(ContextPanelTypes.GAME_OVER, new StartContextPanel(this.getActionMap()));
+		addContextPanel(ContextPanelTypes.GAME_OVER,
+				new StartContextPanel(this.getActionMap()));
 		setGameState(GameState.GAME_START);
 
 		return panel;
@@ -92,13 +98,13 @@ public class ISSTablePanel extends SkatTablePanel {
 	 */
 	public void setTableStatus(ISSTablePanelStatus tableStatus) {
 
-		setMaxPlayers(tableStatus.getMaxPlayers());
+		// FIXME (jansch 05.04.2011) make 3<>4 change possible
+		// setMaxPlayers(tableStatus.getMaxPlayers());
 
-		Map<Player, Integer> playerResults = new HashMap<Player, Integer>();
-		int gameResult = 0;
 		for (String playerName : tableStatus.getPlayerInformations().keySet()) {
 
-			ISSPlayerStatus status = tableStatus.getPlayerInformation(playerName);
+			ISSPlayerStatus status = tableStatus
+					.getPlayerInformation(playerName);
 
 			if (!status.isPlayerLeft()) {
 				addPlayerName(playerName);
@@ -108,12 +114,57 @@ public class ISSTablePanel extends SkatTablePanel {
 			if (status.isPlayerLeft()) {
 				removePlayerName(playerName);
 			}
-			
-			playerResults.put(playerNamesAndPositions.get(playerName),
+		}
+
+		if (lastTableStatus == null || isNewGameResultAvailable(tableStatus)) {
+
+			Map<Player, Integer> playerResults = extractPlayerResults(tableStatus);
+			addGameResult(getDeclarer(), playerResults, 0);
+		}
+
+		lastTableStatus = tableStatus;
+	}
+
+	private boolean isNewGameResultAvailable(ISSTablePanelStatus tableStatus) {
+
+		boolean result = false;
+
+		for (String playerName : tableStatus.getPlayerInformations().keySet()) {
+
+			ISSPlayerStatus newStatus = tableStatus
+					.getPlayerInformation(playerName);
+			ISSPlayerStatus oldStatus = lastTableStatus
+					.getPlayerInformation(playerName);
+
+			if (oldStatus != null && newStatus != null) {
+				if (oldStatus.getGamesPlayed() != newStatus.getGamesPlayed()
+						|| oldStatus.getLastGameResult() != newStatus
+								.getLastGameResult()
+						|| oldStatus.getTotalPoints() != newStatus
+								.getTotalPoints()) {
+
+					result = true;
+				}
+			}
+		}
+
+		return result;
+	}
+
+	private Map<Player, Integer> extractPlayerResults(
+			ISSTablePanelStatus tableStatus) {
+
+		Map<Player, Integer> result = new HashMap<Player, Integer>();
+
+		for (String playerName : tableStatus.getPlayerInformations().keySet()) {
+
+			ISSPlayerStatus status = tableStatus
+					.getPlayerInformation(playerName);
+			result.put(playerNamesAndPositions.get(playerName),
 					status.getLastGameResult());
 		}
 
-		addGameResult(getDeclarer(), playerResults, gameResult);
+		return result;
 	}
 
 	private void addPlayerName(String playerName) {

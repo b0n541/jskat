@@ -494,8 +494,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		skatListTableModel.addResult(leftOpponentPanel.getPosition(),
 				rightOpponentPanel.getPosition(), userPanel.getPosition(),
-				declarer, playerResults,
-				gameResult);
+				declarer, playerResults, gameResult);
 
 		// scroll skat list if the new result is out of scope
 		Rectangle bounds = skatListTable.getCellRect(
@@ -503,6 +502,15 @@ public class SkatTablePanel extends AbstractTabPanel {
 		Point loc = bounds.getLocation();
 		loc.move(loc.x, loc.y + bounds.height);
 		skatListScrollPane.getViewport().setViewPosition(loc);
+	}
+
+	// FIXME (jansch 05.04.2011) remove this method, dirty hack
+	public void setGameResultWithoutSkatList(SkatGameData gameData) {
+
+		gameOverPanel.setGameResult(gameData);
+		if (gameData.getGameType() != GameType.PASSED_IN) {
+			gameInfoPanel.setGameResult(gameData);
+		}
 	}
 
 	Player getHumanPosition() {

@@ -576,4 +576,11 @@ public class NullView implements IJSkatView {
 	public void closeISSPanels() {
 		// empty method by indent
 	}
+
+	@Override
+	public void setGameResultWithoutSkatList(String tableName,
+			SkatGameData gameData) {
+		// FIXME (jansch 05.04.2011) remove this dirty hack
+
+	}
 }

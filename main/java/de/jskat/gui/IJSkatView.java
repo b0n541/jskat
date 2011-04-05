@@ -572,6 +572,17 @@ public interface IJSkatView {
 	public void setGameResult(String tableName, SkatGameData gameData);
 
 	/**
+	 * Sets the game result in the view
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param gameData
+	 *            Game data
+	 */
+	public void setGameResultWithoutSkatList(String tableName,
+			SkatGameData gameData);
+
+	/**
 	 * Adds training results
 	 * 
 	 * @param gameType
