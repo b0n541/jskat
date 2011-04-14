@@ -127,7 +127,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		JPanel panel = new JPanel(new MigLayout(
 				"fill", "fill", "[shrink][grow]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		JLabel skatListLabel = new JLabel(strings.getString("skat_list"));
+		JLabel skatListLabel = new JLabel(strings.getString("score_sheet"));
 		skatListLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 		panel.add(skatListLabel, "wrap, growx, shrinky"); //$NON-NLS-1$
 
