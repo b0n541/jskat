@@ -206,8 +206,8 @@ class GameInformationPanel extends JPanel {
 		case GAME_START:
 			result = strings.getString("game_start_phase"); //$NON-NLS-1$
 			break;
-		case LOOK_INTO_SKAT:
-			result = strings.getString("look_into_skat_phase"); //$NON-NLS-1$
+		case PICK_UP_SKAT:
+			result = strings.getString("pick_up_skat_phase"); //$NON-NLS-1$
 			break;
 		case PRELIMINARY_GAME_END:
 			result = strings.getString("preliminary_game_end_phase"); //$NON-NLS-1$

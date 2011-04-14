@@ -70,9 +70,9 @@ import de.jskat.gui.action.human.ContinueSkatSeriesAction;
 import de.jskat.gui.action.human.DiscardAction;
 import de.jskat.gui.action.human.GameAnnounceAction;
 import de.jskat.gui.action.human.HoldBidAction;
-import de.jskat.gui.action.human.LookIntoSkatAction;
 import de.jskat.gui.action.human.MakeBidAction;
 import de.jskat.gui.action.human.PassBidAction;
+import de.jskat.gui.action.human.PickUpSkatAction;
 import de.jskat.gui.action.human.PlayCardAction;
 import de.jskat.gui.action.human.PlayHandGameAction;
 import de.jskat.gui.action.human.PutCardIntoSkatAction;
@@ -216,7 +216,7 @@ public class JSkatViewImpl implements IJSkatView {
 		actions.put(JSkatAction.MAKE_BID, new MakeBidAction());
 		actions.put(JSkatAction.HOLD_BID, new HoldBidAction());
 		actions.put(JSkatAction.PASS_BID, new PassBidAction());
-		actions.put(JSkatAction.LOOK_INTO_SKAT, new LookIntoSkatAction());
+		actions.put(JSkatAction.PICK_UP_SKAT, new PickUpSkatAction());
 		actions.put(JSkatAction.PLAY_HAND_GAME, new PlayHandGameAction());
 		actions.put(JSkatAction.ANNOUNCE_GAME, new GameAnnounceAction());
 		actions.put(JSkatAction.PUT_CARD_INTO_SKAT, new PutCardIntoSkatAction());
@@ -898,7 +898,7 @@ public class JSkatViewImpl implements IJSkatView {
 					SkatConstants.getNextBidValue(gameData.getBidValue()));
 			break;
 		case SKAT_REQUEST:
-			setGameState(tableName, GameState.LOOK_INTO_SKAT);
+			setGameState(tableName, GameState.PICK_UP_SKAT);
 			break;
 		case SKAT_LOOKING:
 			setGameState(tableName, GameState.DISCARDING);

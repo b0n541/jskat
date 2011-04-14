@@ -490,9 +490,9 @@ public class JSkatMaster {
 		} else if (JSkatAction.HOLD_BID.toString().equals(command)) {
 			// player hold bid
 			issControl.sendHoldBidMove(tableName);
-		} else if (JSkatAction.LOOK_INTO_SKAT.toString().equals(command)) {
-			// player wants to look into the skat
-			issControl.sendLookIntoSkatMove(tableName);
+		} else if (JSkatAction.PICK_UP_SKAT.toString().equals(command)) {
+			// player wants to pick up the skat
+			issControl.sendPickUpSkatMove(tableName);
 		} else if (JSkatAction.PLAY_HAND_GAME.toString().equals(command)) {
 			// player wants to play a hand game
 			// FIXME (jan 02.11.2010) decision is not sent to ISS

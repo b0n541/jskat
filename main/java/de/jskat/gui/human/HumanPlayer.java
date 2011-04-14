@@ -48,7 +48,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	private boolean holdBid;
 	private int bidValue;
 	private GameAnnouncementStep gameAnnouncementStep;
-	private boolean lookIntoSkat;
+	private boolean pickUpSkat;
 	private CardList discardSkat;
 	private GameAnnouncement gameAnnouncement;
 	private Card nextCard;
@@ -148,16 +148,16 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	}
 
 	/**
-	 * @see IJSkatPlayer#lookIntoSkat()
+	 * @see IJSkatPlayer#pickUpSkat()
 	 */
 	@Override
-	public boolean lookIntoSkat() {
+	public boolean pickUpSkat() {
 
 		log.debug("Waiting for human looking into skat..."); //$NON-NLS-1$
 
 		waitForUserInput();
 
-		return this.lookIntoSkat;
+		return this.pickUpSkat;
 	}
 
 	/**
@@ -226,10 +226,10 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 		} else if (JSkatAction.HOLD_BID.toString().equals(command)) {
 			// player hold bid
 			this.holdBid = true;
-		} else if (JSkatAction.LOOK_INTO_SKAT.toString().equals(command)) {
+		} else if (JSkatAction.PICK_UP_SKAT.toString().equals(command)) {
 
-			// player wants to look into the skat
-			this.lookIntoSkat = true;
+			// player wants to pick up the skat
+			this.pickUpSkat = true;
 			gameAnnouncementStep = GameAnnouncementStep.LOOKED_INTO_SKAT;
 
 		} else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
@@ -335,7 +335,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 		bidValue = 0;
 		holdBid = false;
 		gameAnnouncementStep = GameAnnouncementStep.BEFORE_ANNOUNCEMENT;
-		lookIntoSkat = false;
+		pickUpSkat = false;
 		discardSkat = null;
 		gameAnnouncement = null;
 		nextCard = null;

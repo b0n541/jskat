@@ -425,7 +425,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 			setContextPanel(ContextPanelTypes.BIDDING);
 			getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(false);
 			break;
-		case LOOK_INTO_SKAT:
+		case PICK_UP_SKAT:
 			if (userPanel.getPosition().equals(declarer)) {
 				setContextPanel(ContextPanelTypes.DECLARING);
 				getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);

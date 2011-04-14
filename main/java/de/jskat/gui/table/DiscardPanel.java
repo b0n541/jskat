@@ -45,7 +45,7 @@ import de.jskat.util.JSkatResourceBundle;
  */
 class DiscardPanel extends JPanel {
 
-	private static final String LOOK_INTO_SKAT_BUTTON = "LOOK_INTO_SKAT_BUTTON"; //$NON-NLS-1$
+	private static final String PICK_UP_SKAT_BUTTON = "PICK_UP_SKAT_BUTTON"; //$NON-NLS-1$
 
 	private static final String CARD_PANEL = "CARD_PANEL"; //$NON-NLS-1$
 
@@ -54,9 +54,9 @@ class DiscardPanel extends JPanel {
 	JSkatGraphicRepository bitmaps;
 	JSkatResourceBundle strings;
 
-	private Action lookIntoSkatAction;
-	JButton lookIntoSkatButton;
-	boolean userLookedIntoSkat = false;
+	private Action pickUpSkatAction;
+	JButton pickUpSkatButton;
+	boolean userPickedUpSkat = false;
 
 	int maxCardCount = 0;
 
@@ -96,23 +96,23 @@ class DiscardPanel extends JPanel {
 		cardPanel = new CardPanel(this, bitmaps, false);
 		add(cardPanel, CARD_PANEL);
 
-		lookIntoSkatAction = getActionMap().get(JSkatAction.LOOK_INTO_SKAT);
-		lookIntoSkatButton = new JButton(lookIntoSkatAction);
-		lookIntoSkatButton.addActionListener(new ActionListener() {
+		pickUpSkatAction = getActionMap().get(JSkatAction.PICK_UP_SKAT);
+		pickUpSkatButton = new JButton(pickUpSkatAction);
+		pickUpSkatButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
-				userLookedIntoSkat = true;
+				userPickedUpSkat = true;
 				DiscardPanel.this.showPanel(CARD_PANEL);
 
 				// fire event again
-				lookIntoSkatButton.dispatchEvent(e);
+				pickUpSkatButton.dispatchEvent(e);
 			}
 		});
 		JPanel lookIntoSkatPanel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
-		lookIntoSkatPanel.add(lookIntoSkatButton, "center, shrink"); //$NON-NLS-1$
+		lookIntoSkatPanel.add(pickUpSkatButton, "center, shrink"); //$NON-NLS-1$
 		lookIntoSkatPanel.setOpaque(false);
-		add(lookIntoSkatPanel, LOOK_INTO_SKAT_BUTTON);
+		add(lookIntoSkatPanel, PICK_UP_SKAT_BUTTON);
 
 		setOpaque(false);
 		cardPanel.showCards();
@@ -123,7 +123,7 @@ class DiscardPanel extends JPanel {
 		addCard(skat.get(0));
 		addCard(skat.get(1));
 
-		userLookedIntoSkat = true;
+		userPickedUpSkat = true;
 	}
 
 	void addCard(Card card) {
@@ -139,8 +139,8 @@ class DiscardPanel extends JPanel {
 	public void resetPanel() {
 
 		cardPanel.clearCards();
-		userLookedIntoSkat = false;
-		showPanel(LOOK_INTO_SKAT_BUTTON);
+		userPickedUpSkat = false;
+		showPanel(PICK_UP_SKAT_BUTTON);
 	}
 
 	protected void showPanel(String panelType) {
@@ -155,7 +155,7 @@ class DiscardPanel extends JPanel {
 
 	public boolean isUserLookedIntoSkat() {
 
-		return userLookedIntoSkat;
+		return userPickedUpSkat;
 	}
 
 	public boolean isHandFull() {

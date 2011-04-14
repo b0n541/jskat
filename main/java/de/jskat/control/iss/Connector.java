@@ -220,7 +220,7 @@ class Connector {
 				+ bidValue);
 	}
 
-	public void sendLookIntoSkatMove(String tableName) {
+	public void sendPickUpSkatMove(String tableName) {
 		issOut.send("table " + tableName + ' ' + loginName + " play s"); //$NON-NLS-1$//$NON-NLS-2$
 	}
 

@@ -107,7 +107,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	 * @see de.jskat.ai.JSkatPlayer#lookIntoSkat()
 	 */
 	@Override
-	public boolean lookIntoSkat() {
+	public boolean pickUpSkat() {
 		// TODO really look into skat?
 		aiPlayer = new SinglePlayer(cards, rules);
 		return true;

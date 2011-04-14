@@ -32,20 +32,20 @@ import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
- * Implements the action for handling click on look into skat button
+ * Implements the action for handling click on pick up skat button
  */
-public class LookIntoSkatAction extends AbstractJSkatAction {
+public class PickUpSkatAction extends AbstractJSkatAction {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see AbstractJSkatAction#AbstractJSkatAction()
 	 */
-	public LookIntoSkatAction() {
+	public PickUpSkatAction() {
 
-		putValue(Action.NAME, strings.getString("look_into_skat")); //$NON-NLS-1$
+		putValue(Action.NAME, strings.getString("pick_up_skat")); //$NON-NLS-1$
 
-		setActionCommand(JSkatAction.LOOK_INTO_SKAT);
+		setActionCommand(JSkatAction.PICK_UP_SKAT);
 		setIcon(Icon.PLAY);
 	}
 

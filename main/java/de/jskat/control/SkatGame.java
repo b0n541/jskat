@@ -117,11 +117,11 @@ public class SkatGame extends JSkatThread {
 				} else {
 
 					view.setDeclarer(tableName, data.getDeclarer());
-					setGameState(GameState.LOOK_INTO_SKAT);
+					setGameState(GameState.PICK_UP_SKAT);
 				}
 				break;
-			case LOOK_INTO_SKAT:
-				if (lookIntoSkat()) {
+			case PICK_UP_SKAT:
+				if (pickUpSkat()) {
 					setGameState(GameState.DISCARDING);
 					view.setSkat(tableName, data.getSkat());
 				} else {
@@ -158,9 +158,9 @@ public class SkatGame extends JSkatThread {
 		log.debug(data.getGameState());
 	}
 
-	private boolean lookIntoSkat() {
+	private boolean pickUpSkat() {
 
-		return player.get(data.getDeclarer()).lookIntoSkat();
+		return player.get(data.getDeclarer()).pickUpSkat();
 	}
 
 	/**

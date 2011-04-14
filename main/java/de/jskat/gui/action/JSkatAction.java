@@ -98,9 +98,9 @@ public enum JSkatAction {
 	 */
 	PASS_BID,
 	/**
-	 * Looks into skat
+	 * Picks up skat
 	 */
-	LOOK_INTO_SKAT,
+	PICK_UP_SKAT,
 	/**
 	 * Plays a hand game
 	 */

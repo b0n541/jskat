@@ -100,7 +100,7 @@ public interface IJSkatPlayer {
 	 * 
 	 * @return TRUE if the player wants to look into the skat
 	 */
-	public boolean lookIntoSkat();
+	public boolean pickUpSkat();
 
 	/**
 	 * Take the skat as a single player.<br>

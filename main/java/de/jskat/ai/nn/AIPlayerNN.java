@@ -329,10 +329,10 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see IJSkatPlayer#lookIntoSkat()
+	 * @see IJSkatPlayer#pickUpSkat()
 	 */
 	@Override
-	public boolean lookIntoSkat() {
+	public boolean pickUpSkat() {
 
 		boolean result = true;
 

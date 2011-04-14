@@ -65,7 +65,7 @@ public class SkatGameData {
 		/**
 		 * Look into skat or play hand game phase
 		 */
-		LOOK_INTO_SKAT,
+		PICK_UP_SKAT,
 		/**
 		 * Discarding phase
 		 */

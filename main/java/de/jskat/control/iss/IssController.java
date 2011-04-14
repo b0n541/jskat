@@ -435,7 +435,7 @@ public class IssController {
 
 			if (isBiddingFinished(currGame)) {
 				view.setDeclarer(tableName, currGame.getDeclarer());
-				view.setGameState(tableName, GameState.LOOK_INTO_SKAT);
+				view.setGameState(tableName, GameState.PICK_UP_SKAT);
 			}
 
 		} else if (MoveType.CARD_PLAY.equals(moveInformation.getType())) {
@@ -628,13 +628,13 @@ public class IssController {
 	}
 
 	/**
-	 * Send look into skat move to ISS
+	 * Send pick up skat move to ISS
 	 * 
 	 * @param tableName
 	 *            Table name
 	 */
-	public void sendLookIntoSkatMove(String tableName) {
-		issConnect.sendLookIntoSkatMove(tableName);
+	public void sendPickUpSkatMove(String tableName) {
+		issConnect.sendPickUpSkatMove(tableName);
 	}
 
 	/**

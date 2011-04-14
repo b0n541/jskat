@@ -72,9 +72,9 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see IJSkatPlayer#lookIntoSkat()
+	 * @see IJSkatPlayer#pickUpSkat()
 	 */
-	public boolean lookIntoSkat() {
+	public boolean pickUpSkat() {
 
 		return this.rand.nextBoolean();
 	}
