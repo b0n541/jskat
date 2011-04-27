@@ -180,8 +180,9 @@ public class ISSLobbyPanel extends AbstractTabPanel {
 
 				if (column == 0) {
 					// observe a table
-					ISSLobbyPanel.actions.get(JSkatAction.OBSERVE_ISS_TABLE).actionPerformed(
-							new ActionEvent(tableName, 1, null));
+					// FIXME (jansch 27.04.2011) doesn't work
+					// ISSLobbyPanel.actions.get(JSkatAction.OBSERVE_ISS_TABLE).actionPerformed(
+					// new ActionEvent(tableName, 1, null));
 				} else if (value.equals(".")) {
 					// sit down on free seat at table
 					ISSLobbyPanel.actions.get(JSkatAction.JOIN_ISS_TABLE).actionPerformed(
