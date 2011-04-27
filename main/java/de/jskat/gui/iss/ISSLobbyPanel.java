@@ -94,12 +94,15 @@ public class ISSLobbyPanel extends AbstractTabPanel {
 
 	private JPanel getLobbyPanel() {
 
-		JPanel lobby = new JPanel(new MigLayout("fill", "fill", "[shrink][shrink][shrink][shrink][grow]"));
+		JPanel lobby = new JPanel(new MigLayout("fill", "fill",
+				"[shrink][shrink][shrink][shrink][grow]"));
 
 		JLabel headerLabel = new JLabel(strings.getString("welcome_to_iss_title")); //$NON-NLS-1$
 		headerLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
+		JPanel headerPanel = new JPanel(new MigLayout("fill"));
+		headerPanel.add(headerLabel, "center");
 
-		lobby.add(headerLabel, "span 2, growx, align center, wrap"); //$NON-NLS-1$ 
+		lobby.add(headerPanel, "span 2, growx, align center, wrap"); //$NON-NLS-1$ 
 		lobby.add(new JLabel(strings.getString("players")), "width 50%"); //$NON-NLS-1$ //$NON-NLS-2$
 		lobby.add(new JLabel(strings.getString("tables")), "wrap"); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -110,6 +113,8 @@ public class ISSLobbyPanel extends AbstractTabPanel {
 
 		this.chatPanel = new ChatPanel(this);
 		lobby.add(this.chatPanel, "span 2, hmin 200px, growy, align center"); //$NON-NLS-1$
+
+		lobby.setPreferredSize(new Dimension(800, 600));
 
 		return lobby;
 	}
