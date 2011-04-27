@@ -27,12 +27,16 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import de.jskat.util.JSkatResourceBundle;
+
 /**
  * Provides a model for the skat list table
  */
 class TableListTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
+
+	private JSkatResourceBundle strings;
 
 	private List<List<String>> data;
 	private List<String> columns;
@@ -42,14 +46,15 @@ class TableListTableModel extends AbstractTableModel {
 	 */
 	public TableListTableModel() {
 
+		strings = JSkatResourceBundle.instance();
 		this.data = new ArrayList<List<String>>();
 		this.columns = new ArrayList<String>();
-		this.columns.add("Name"); //$NON-NLS-1$
-		this.columns.add("Type"); //$NON-NLS-1$
-		this.columns.add("Games"); //$NON-NLS-1$
-		this.columns.add("Player 1"); //$NON-NLS-1$
-		this.columns.add("Player 2"); //$NON-NLS-1$
-		this.columns.add("Player 3"); //$NON-NLS-1$
+		this.columns.add(strings.getString("name")); //$NON-NLS-1$
+		this.columns.add(strings.getString("seats")); //$NON-NLS-1$
+		this.columns.add(strings.getString("games")); //$NON-NLS-1$
+		this.columns.add(strings.getString("player") + " 1"); //$NON-NLS-1$
+		this.columns.add(strings.getString("player") + " 2"); //$NON-NLS-1$
+		this.columns.add(strings.getString("player") + " 3"); //$NON-NLS-1$
 	}
 
 	/**

@@ -27,12 +27,16 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import de.jskat.util.JSkatResourceBundle;
+
 /**
  * Provides a model for the skat list table
  */
 class PlayerListTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
+
+	private JSkatResourceBundle strings;
 
 	private List<List<String>> data;
 	private List<String> columns;
@@ -42,12 +46,13 @@ class PlayerListTableModel extends AbstractTableModel {
 	 */
 	public PlayerListTableModel() {
 
+		strings = JSkatResourceBundle.instance();
 		this.data = new ArrayList<List<String>>();
 		this.columns = new ArrayList<String>();
-		this.columns.add("Name");
-		this.columns.add("Language");
-		this.columns.add("Games");
-		this.columns.add("Strength");
+		this.columns.add(strings.getString("name"));
+		this.columns.add(strings.getString("language"));
+		this.columns.add(strings.getString("games"));
+		this.columns.add(strings.getString("strength"));
 	}
 
 	/**
