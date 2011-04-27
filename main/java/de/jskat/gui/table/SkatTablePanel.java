@@ -88,8 +88,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * Table model for skat list
 	 */
 	protected SkatListTableModel skatListTableModel;
-	protected JTable skatListTable;
-	protected JScrollPane skatListScrollPane;
+	protected JTable scoreListTable;
+	protected JScrollPane scoreListScrollPane;
 	protected BiddingContextPanel biddingPanel;
 	protected DeclaringContextPanel declaringPanel;
 
@@ -118,11 +118,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 		getActionMap().get(JSkatAction.INVITE_ISS_PLAYER).setEnabled(true);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
-				getSkatListPanel(), getPlayGroundPanel());
+				getScoreListPanel(), getPlayGroundPanel());
 		add(splitPane, "grow"); //$NON-NLS-1$
 	}
 
-	private JPanel getSkatListPanel() {
+	private JPanel getScoreListPanel() {
 
 		JPanel panel = new JPanel(new MigLayout(
 				"fill", "fill", "[shrink][grow]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -132,31 +132,31 @@ public class SkatTablePanel extends AbstractTabPanel {
 		panel.add(skatListLabel, "wrap, growx, shrinky"); //$NON-NLS-1$
 
 		skatListTableModel = new SkatListTableModel();
-		skatListTable = new JTable(skatListTableModel);
+		scoreListTable = new JTable(skatListTableModel);
 
-		for (int i = 0; i < skatListTable.getColumnModel().getColumnCount(); i++) {
+		for (int i = 0; i < scoreListTable.getColumnModel().getColumnCount(); i++) {
 
 			if (i == 3) {
 
 				// game colum is bigger
-				skatListTable.getColumnModel().getColumn(i)
+				scoreListTable.getColumnModel().getColumn(i)
 						.setPreferredWidth(40);
 			} else {
 
-				skatListTable.getColumnModel().getColumn(i)
+				scoreListTable.getColumnModel().getColumn(i)
 						.setPreferredWidth(20);
 			}
 		}
 
-		skatListTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+		scoreListTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 
-		skatListScrollPane = new JScrollPane(skatListTable);
-		skatListScrollPane.setMinimumSize(new Dimension(150, 100));
-		skatListScrollPane.setPreferredSize(new Dimension(200, 100));
-		skatListScrollPane
+		scoreListScrollPane = new JScrollPane(scoreListTable);
+		scoreListScrollPane.setMinimumSize(new Dimension(150, 100));
+		scoreListScrollPane.setPreferredSize(new Dimension(300, 100));
+		scoreListScrollPane
 				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		panel.add(skatListScrollPane, "growy"); //$NON-NLS-1$
+		panel.add(scoreListScrollPane, "growy"); //$NON-NLS-1$
 
 		return panel;
 	}
@@ -489,11 +489,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 				gameData.getDeclarer(), gameData.getGameResult());
 
 		// scroll skat list if the new result is out of scope
-		Rectangle bounds = skatListTable.getCellRect(
+		Rectangle bounds = scoreListTable.getCellRect(
 				skatListTableModel.getRowCount() - 1, 0, true);
 		Point loc = bounds.getLocation();
 		loc.move(loc.x, loc.y + bounds.height);
-		skatListScrollPane.getViewport().setViewPosition(loc);
+		scoreListScrollPane.getViewport().setViewPosition(loc);
 
 		if (gameData.getGameType() != GameType.PASSED_IN) {
 			gameInfoPanel.setGameResult(gameData);
@@ -508,11 +508,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 				declarer, playerResults, gameResult);
 
 		// scroll skat list if the new result is out of scope
-		Rectangle bounds = skatListTable.getCellRect(
+		Rectangle bounds = scoreListTable.getCellRect(
 				skatListTableModel.getRowCount() - 1, 0, true);
 		Point loc = bounds.getLocation();
 		loc.move(loc.x, loc.y + bounds.height);
-		skatListScrollPane.getViewport().setViewPosition(loc);
+		scoreListScrollPane.getViewport().setViewPosition(loc);
 	}
 
 	// FIXME (jansch 05.04.2011) remove this method, dirty hack
