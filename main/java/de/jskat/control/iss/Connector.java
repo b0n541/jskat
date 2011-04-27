@@ -112,8 +112,10 @@ class Connector {
 		} catch (java.net.UnknownHostException e) {
 			log.error("Cannot open connection to ISS"); //$NON-NLS-1$
 			issControl.showMessage(JOptionPane.ERROR_MESSAGE, "Can't establish connection to ISS");
+			return false;
 		} catch (java.io.IOException e) {
 			log.error("IOException: " + e.toString()); //$NON-NLS-1$
+			return false;
 		}
 
 		return true;

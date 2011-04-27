@@ -19,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package de.jskat.control.iss;
 
 import java.util.ArrayList;
@@ -33,6 +32,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import de.jskat.data.SkatGameData;
+import de.jskat.util.JSkatResourceBundle;
 
 /**
  * Handles messages from ISS
@@ -43,6 +43,8 @@ public class MessageHandler {
 
 	Connector connect;
 	IssController issControl;
+
+	JSkatResourceBundle strings;
 
 	private final static int protocolVersion = 14;
 
@@ -58,31 +60,40 @@ public class MessageHandler {
 
 		connect = conn;
 		issControl = controller;
+
+		strings = JSkatResourceBundle.instance();
 	}
 
 	void handleMessage(String message) {
 
 		log.debug("ISS    |--> " + message); //$NON-NLS-1$
 
-		// FIXME (jan 14.11.2010) check for NULL
-		StringTokenizer tokenizer = new StringTokenizer(message); // get first
-		// command
-		String first = tokenizer.nextToken();
-		// get all parameters
-		List<String> params = new ArrayList<String>();
-		while (tokenizer.hasMoreTokens()) {
-			params.add(tokenizer.nextToken());
+		if (message == null) {
+
+			connect.closeConnection();
+			issControl.closeIssPanels();
+		} else {
+
+			StringTokenizer tokenizer = new StringTokenizer(message); // get
+																		// first
+			// command
+			String first = tokenizer.nextToken();
+			// get all parameters
+			List<String> params = new ArrayList<String>();
+			while (tokenizer.hasMoreTokens()) {
+				params.add(tokenizer.nextToken());
+			}
+
+			try {
+
+				handleMessage(first, params);
+
+			} catch (Exception except) {
+				log.error("Error in parsing ISS protocoll", except); //$NON-NLS-1$
+				issControl.showMessage(JOptionPane.ERROR_MESSAGE,
+						"Error in parsing ISS protocoll.");
+			}
 		}
-
-		try {
-
-			handleMessage(first, params);
-
-		} catch (Exception except) {
-			log.error("Error in parsing ISS protocoll", except); //$NON-NLS-1$
-			issControl.showMessage(JOptionPane.ERROR_MESSAGE, "Error in parsing ISS protocoll.");
-		}
-
 	}
 
 	void handleMessage(String first, List<String> params) throws Exception {
@@ -156,7 +167,8 @@ public class MessageHandler {
 
 		log.error(params.toString());
 		// FIXME (jan 23.11.2010) i18n needed
-		issControl.showMessage(JOptionPane.ERROR_MESSAGE, getErrorString(params));
+		issControl.showMessage(JOptionPane.ERROR_MESSAGE,
+				getI18ErrorString(getErrorString(params)));
 	}
 
 	private String getErrorString(List<String> params) {
@@ -173,6 +185,15 @@ public class MessageHandler {
 		}
 
 		return result;
+	}
+
+	private String getI18ErrorString(String errorString) {
+
+		if ("_id_pw_mismatch".equals(errorString)) {
+			return strings.getString("login_password_wrong");
+		}
+
+		return errorString;
 	}
 
 	void handleTableCreateMessage(List<String> params) {
@@ -224,11 +245,13 @@ public class MessageHandler {
 
 		} else if (actionCommand.equals("state")) { //$NON-NLS-1$
 
-			issControl.updateISSTableState(tableName, MessageParser.getTableStatus(creator, detailParams));
+			issControl.updateISSTableState(tableName,
+					MessageParser.getTableStatus(creator, detailParams));
 
 		} else if (actionCommand.equals("start")) { //$NON-NLS-1$
 
-			issControl.updateISSGame(tableName, MessageParser.getGameStartStatus(creator, detailParams));
+			issControl.updateISSGame(tableName,
+					MessageParser.getGameStartStatus(creator, detailParams));
 
 		} else if (actionCommand.equals("go")) { //$NON-NLS-1$
 
@@ -236,11 +259,13 @@ public class MessageHandler {
 
 		} else if (actionCommand.equals("play")) { //$NON-NLS-1$
 
-			issControl.updateMove(tableName, MessageParser.getMoveInformation(detailParams));
+			issControl.updateMove(tableName,
+					MessageParser.getMoveInformation(detailParams));
 
 		} else if (actionCommand.equals("tell")) { //$NON-NLS-1$
 
-			issControl.updateISSTableChatMessage(tableName, MessageParser.getTableChatMessage(tableName, detailParams));
+			issControl.updateISSTableChatMessage(tableName,
+					MessageParser.getTableChatMessage(tableName, detailParams));
 
 		} else if (actionCommand.equals("end")) { //$NON-NLS-1$
 
@@ -310,7 +335,8 @@ public class MessageHandler {
 		long gamesPlayed = Long.parseLong(params.get(3));
 		double strength = Double.parseDouble(params.get(4));
 
-		issControl.updateISSPlayerList(playerName, language, gamesPlayed, strength);
+		issControl.updateISSPlayerList(playerName, language, gamesPlayed,
+				strength);
 	}
 
 	/**
@@ -332,7 +358,8 @@ public class MessageHandler {
 	 */
 	void handleWelcomeMessage(List<String> params) {
 
-		double issProtocolVersion = Double.parseDouble(params.get(params.size() - 1));
+		double issProtocolVersion = Double
+				.parseDouble(params.get(params.size() - 1));
 
 		log.debug("iss version: " + issProtocolVersion); //$NON-NLS-1$
 		log.debug("local version: " + protocolVersion); //$NON-NLS-1$
@@ -378,7 +405,8 @@ public class MessageHandler {
 		String player2 = params.get(4);
 		String player3 = params.get(5);
 
-		issControl.updateISSTableList(tableName, maxPlayers, gamesPlayed, player1, player2, player3);
+		issControl.updateISSTableList(tableName, maxPlayers, gamesPlayed,
+				player1, player2, player3);
 	}
 
 	/**

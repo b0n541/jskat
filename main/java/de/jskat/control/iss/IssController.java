@@ -693,4 +693,11 @@ public class IssController {
 		// FIXME (jan 30.01.2011) tableName not needed here?
 		view.appendISSChatMessage(ChatMessageType.TABLE, message);
 	}
+
+	/**
+	 * Closes all ISS related tab panels
+	 */
+	public void closeIssPanels() {
+		view.closeISSPanels();
+	}
 }

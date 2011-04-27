@@ -32,7 +32,7 @@ import de.jskat.gui.action.JSkatAction;
 import de.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
- * Implements the action for showing about dialog
+ * Implements the action for connecting to ISS
  */
 public class ConnectAction extends AbstractJSkatAction {
 
