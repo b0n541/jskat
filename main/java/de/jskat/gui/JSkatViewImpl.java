@@ -25,7 +25,6 @@ package de.jskat.gui;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.text.MessageFormat;
 import java.util.HashMap;
@@ -239,13 +238,6 @@ public class JSkatViewImpl implements IJSkatView {
 	private void initGUI() {
 
 		mainFrame = new JFrame("JSkat"); //$NON-NLS-1$
-		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainFrame.setPreferredSize(new Dimension(1000, 700));
-		mainFrame.setExtendedState(Frame.MAXIMIZED_BOTH);
-
-		mainFrame.setIconImage(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.JSKAT,
-				JSkatGraphicRepository.IconSize.BIG));
 
 		mainFrame.setJMenuBar(getMenuBar());
 
@@ -300,6 +292,14 @@ public class JSkatViewImpl implements IJSkatView {
 
 		mainFrame.setContentPane(mainPanel);
 		mainFrame.pack();
+
+		mainFrame.setIconImage(bitmaps.getIconImage(
+				JSkatGraphicRepository.Icon.JSKAT,
+				JSkatGraphicRepository.IconSize.BIG));
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.setPreferredSize(new Dimension(1000, 700));
+		mainFrame.setExtendedState(mainFrame.getExtendedState()
+				| JFrame.MAXIMIZED_BOTH);
 	}
 
 	private JMenuBar getMenuBar() {
