@@ -328,6 +328,7 @@ public class IssController {
 	public void destroyTable(String tableName) {
 
 		view.closeTabPanel(tableName);
+		data.removeJoinedIssSkatTable(tableName);
 		// TODO set to next table
 		jskat.setActiveTable(null);
 	}
@@ -699,5 +700,17 @@ public class IssController {
 	 */
 	public void closeIssPanels() {
 		view.closeISSPanels();
+	}
+
+	/**
+	 * Checks whether a table is joined or not
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @return TRUE iff the table is joined
+	 */
+	public boolean isTableJoined(String tableName) {
+
+		return data.isTableJoined(tableName);
 	}
 }

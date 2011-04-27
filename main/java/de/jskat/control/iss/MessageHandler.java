@@ -233,47 +233,52 @@ public class MessageHandler {
 		log.debug("table update message"); //$NON-NLS-1$
 
 		String tableName = params.get(0);
-		// FIXME (jan 18.11.2010) is this the name of the creator or the
-		// login name of the current player?
-		String creator = params.get(1);
-		String actionCommand = params.get(2);
-		List<String> detailParams = params.subList(3, params.size());
 
-		if (actionCommand.equals("error")) { //$NON-NLS-1$
+		if (issControl.isTableJoined(tableName)) {
 
-			handleErrorMessage(params.subList(3, params.size()));
+			// FIXME (jan 18.11.2010) is this the name of the creator or the
+			// login name of the current player?
+			String creator = params.get(1);
+			String actionCommand = params.get(2);
+			List<String> detailParams = params.subList(3, params.size());
 
-		} else if (actionCommand.equals("state")) { //$NON-NLS-1$
+			if (actionCommand.equals("error")) { //$NON-NLS-1$
 
-			issControl.updateISSTableState(tableName,
-					MessageParser.getTableStatus(creator, detailParams));
+				handleErrorMessage(params.subList(3, params.size()));
 
-		} else if (actionCommand.equals("start")) { //$NON-NLS-1$
+			} else if (actionCommand.equals("state")) { //$NON-NLS-1$
 
-			issControl.updateISSGame(tableName,
-					MessageParser.getGameStartStatus(creator, detailParams));
+				issControl.updateISSTableState(tableName,
+						MessageParser.getTableStatus(creator, detailParams));
 
-		} else if (actionCommand.equals("go")) { //$NON-NLS-1$
+			} else if (actionCommand.equals("start")) { //$NON-NLS-1$
 
-			issControl.startGame(tableName);
+				issControl
+						.updateISSGame(tableName, MessageParser
+								.getGameStartStatus(creator, detailParams));
 
-		} else if (actionCommand.equals("play")) { //$NON-NLS-1$
+			} else if (actionCommand.equals("go")) { //$NON-NLS-1$
 
-			issControl.updateMove(tableName,
-					MessageParser.getMoveInformation(detailParams));
+				issControl.startGame(tableName);
 
-		} else if (actionCommand.equals("tell")) { //$NON-NLS-1$
+			} else if (actionCommand.equals("play")) { //$NON-NLS-1$
 
-			issControl.updateISSTableChatMessage(tableName,
-					MessageParser.getTableChatMessage(tableName, detailParams));
+				issControl.updateMove(tableName,
+						MessageParser.getMoveInformation(detailParams));
 
-		} else if (actionCommand.equals("end")) { //$NON-NLS-1$
+			} else if (actionCommand.equals("tell")) { //$NON-NLS-1$
 
-			issControl.endGame(tableName, getGameInformation(detailParams));
+				issControl.updateISSTableChatMessage(tableName, MessageParser
+						.getTableChatMessage(tableName, detailParams));
 
-		} else {
+			} else if (actionCommand.equals("end")) { //$NON-NLS-1$
 
-			log.debug("unhandled action command: " + actionCommand + " for table " + tableName); //$NON-NLS-1$ //$NON-NLS-2$
+				issControl.endGame(tableName, getGameInformation(detailParams));
+
+			} else {
+
+				log.debug("unhandled action command: " + actionCommand + " for table " + tableName); //$NON-NLS-1$ //$NON-NLS-2$
+			}
 		}
 	}
 
