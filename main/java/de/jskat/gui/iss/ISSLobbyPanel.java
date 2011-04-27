@@ -187,9 +187,6 @@ public class ISSLobbyPanel extends AbstractTabPanel {
 					// sit down on free seat at table
 					ISSLobbyPanel.actions.get(JSkatAction.JOIN_ISS_TABLE).actionPerformed(
 							new ActionEvent(tableName, 1, null));
-				} else {
-
-					log.debug("No free seat!");
 				}
 			}
 		});
