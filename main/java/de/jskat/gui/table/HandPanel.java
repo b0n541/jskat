@@ -147,7 +147,7 @@ abstract class HandPanel extends JPanel {
 		header.add(clockPanel);
 		add(header, "shrinky, wrap"); //$NON-NLS-1$
 
-		cardPanel = new CardPanel(this, bitmaps, true);
+		cardPanel = new CardPanel(this, 1.0, true);
 		add(cardPanel, "growy"); //$NON-NLS-1$
 
 		if (JSkatOptions.instance().isShowCards()) {

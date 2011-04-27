@@ -93,7 +93,7 @@ class DiscardPanel extends JPanel {
 
 		setLayout(new CardLayout());
 
-		cardPanel = new CardPanel(this, bitmaps, false);
+		cardPanel = new CardPanel(this, 0.75, false);
 		add(cardPanel, CARD_PANEL);
 
 		pickUpSkatAction = getActionMap().get(JSkatAction.PICK_UP_SKAT);

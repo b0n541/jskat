@@ -61,6 +61,8 @@ class CardPanel extends JPanel {
 
 	private JSkatGraphicRepository bitmaps;
 
+	double scaleFactor = 1.0;
+
 	/**
 	 * Holds the game type for the sorting order
 	 */
@@ -74,21 +76,22 @@ class CardPanel extends JPanel {
 	/**
 	 * Creates a new instance of CardPanel
 	 * 
-	 * @param newParent
+	 * @param parent
 	 *            Parent panel
-	 * @param jSkatBitmaps
-	 *            Graphic repository that holds all images used in JSkat
-	 * @param newShowBackside
+	 * @param scaleFactor
+	 *            Scale factor for cards
+	 * @param showBackside
 	 *            TRUE if the Card should hide its face
 	 */
-	CardPanel(JPanel newParent, JSkatGraphicRepository jSkatBitmaps, boolean newShowBackside) {
+	CardPanel(JPanel parent, double scaleFactor, boolean showBackside) {
 
 		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		parent = newParent;
+		this.parent = parent;
 		setActionMap(parent.getActionMap());
-		bitmaps = jSkatBitmaps;
-		showBackside = newShowBackside;
+		bitmaps = JSkatGraphicRepository.instance();
+		this.scaleFactor = scaleFactor;
+		this.showBackside = showBackside;
 
 		cards = new CardList();
 
@@ -186,8 +189,6 @@ class CardPanel extends JPanel {
 
 				image = bitmaps.getCardImage(card.getSuit(), card.getRank());
 			}
-
-			double scaleFactor = 1.0;
 
 			AffineTransform transform = new AffineTransform();
 			transform.scale(scaleFactor, scaleFactor);
