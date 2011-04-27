@@ -297,6 +297,7 @@ public class JSkatViewImpl implements IJSkatView {
 				JSkatGraphicRepository.Icon.JSKAT,
 				JSkatGraphicRepository.IconSize.BIG));
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.setMinimumSize(new Dimension(800, 600));
 		mainFrame.setPreferredSize(new Dimension(1000, 700));
 		mainFrame.setExtendedState(mainFrame.getExtendedState()
 				| JFrame.MAXIMIZED_BOTH);
