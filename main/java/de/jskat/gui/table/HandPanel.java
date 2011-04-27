@@ -204,14 +204,14 @@ abstract class HandPanel extends JPanel {
 
 		if (position != null) {
 			switch (position) {
-			case FORE_HAND:
-				headerText.append(strings.getString("fore_hand")); //$NON-NLS-1$
+			case FOREHAND:
+				headerText.append(strings.getString("forehand")); //$NON-NLS-1$
 				break;
-			case MIDDLE_HAND:
-				headerText.append(strings.getString("middle_hand")); //$NON-NLS-1$
+			case MIDDLEHAND:
+				headerText.append(strings.getString("middlehand")); //$NON-NLS-1$
 				break;
-			case HIND_HAND:
-				headerText.append(strings.getString("hind_hand")); //$NON-NLS-1$
+			case REARHAND:
+				headerText.append(strings.getString("rearhand")); //$NON-NLS-1$
 				break;
 			}
 

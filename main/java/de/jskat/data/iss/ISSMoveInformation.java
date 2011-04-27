@@ -45,7 +45,7 @@ public class ISSMoveInformation {
 	private CardList skat = new CardList();
 	private CardList foreHandCards = new CardList();
 	private CardList middleHandCards = new CardList();
-	private CardList hindHandCards = new CardList();
+	private CardList rearHandCards = new CardList();
 	private CardList ouvertCards = new CardList();
 	private Card card;
 	private Player timeOutPlayer;
@@ -228,14 +228,14 @@ public class ISSMoveInformation {
 	public void clearCards(Player player) {
 
 		switch (player) {
-		case FORE_HAND:
+		case FOREHAND:
 			foreHandCards.clear();
 			break;
-		case MIDDLE_HAND:
+		case MIDDLEHAND:
 			middleHandCards.clear();
 			break;
-		case HIND_HAND:
-			hindHandCards.clear();
+		case REARHAND:
+			rearHandCards.clear();
 			break;
 		}
 	}
@@ -251,14 +251,14 @@ public class ISSMoveInformation {
 	public void addCard(Player player, Card newCard) {
 
 		switch (player) {
-		case FORE_HAND:
+		case FOREHAND:
 			foreHandCards.add(newCard);
 			break;
-		case MIDDLE_HAND:
+		case MIDDLEHAND:
 			middleHandCards.add(newCard);
 			break;
-		case HIND_HAND:
-			hindHandCards.add(newCard);
+		case REARHAND:
+			rearHandCards.add(newCard);
 			break;
 		}
 	}
@@ -273,7 +273,7 @@ public class ISSMoveInformation {
 
 		foreHandCards = deal.get(0);
 		middleHandCards = deal.get(1);
-		hindHandCards = deal.get(2);
+		rearHandCards = deal.get(2);
 		skat = deal.get(3);
 	}
 
@@ -289,14 +289,14 @@ public class ISSMoveInformation {
 		CardList result = null;
 
 		switch (player) {
-		case FORE_HAND:
+		case FOREHAND:
 			result = foreHandCards;
 			break;
-		case MIDDLE_HAND:
+		case MIDDLEHAND:
 			result = middleHandCards;
 			break;
-		case HIND_HAND:
-			result = hindHandCards;
+		case REARHAND:
+			result = rearHandCards;
 			break;
 		}
 
@@ -329,14 +329,14 @@ public class ISSMoveInformation {
 		Player result = null;
 
 		switch (movePlayer) {
-		case FORE_HAND:
-			result = Player.FORE_HAND;
+		case FOREHAND:
+			result = Player.FOREHAND;
 			break;
-		case MIDDLE_HAND:
-			result = Player.MIDDLE_HAND;
+		case MIDDLEHAND:
+			result = Player.MIDDLEHAND;
 			break;
-		case HIND_HAND:
-			result = Player.HIND_HAND;
+		case REARHAND:
+			result = Player.REARHAND;
 			break;
 		case WORLD:
 			break;

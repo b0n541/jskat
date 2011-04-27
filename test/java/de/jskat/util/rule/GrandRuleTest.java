@@ -55,7 +55,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 		ann = new GameAnnouncement();
 		ann.setGameType(GameType.GRAND);
 		data.setAnnouncement(ann);
-		data.setDeclarer(Player.FORE_HAND);
+		data.setDeclarer(Player.FOREHAND);
 		data.setDeclarerScore(61);
 		data.setGameWon(grandRules.calcGameWon(data));
 	}

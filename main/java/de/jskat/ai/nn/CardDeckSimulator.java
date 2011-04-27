@@ -81,12 +81,12 @@ public class CardDeckSimulator {
 		for (Card card : unknownCards) {
 
 			Player player = null;
-			if (playerHands.get(Player.FORE_HAND).size() < 10) {
-				player = Player.FORE_HAND;
-			} else if (playerHands.get(Player.MIDDLE_HAND).size() < 10) {
-				player = Player.MIDDLE_HAND;
-			} else if (playerHands.get(Player.HIND_HAND).size() < 10) {
-				player = Player.HIND_HAND;
+			if (playerHands.get(Player.FOREHAND).size() < 10) {
+				player = Player.FOREHAND;
+			} else if (playerHands.get(Player.MIDDLEHAND).size() < 10) {
+				player = Player.MIDDLEHAND;
+			} else if (playerHands.get(Player.REARHAND).size() < 10) {
+				player = Player.REARHAND;
 			}
 
 			if (player != null) {

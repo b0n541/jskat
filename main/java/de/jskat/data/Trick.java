@@ -141,13 +141,13 @@ public class Trick {
 
 		switch (player) {
 
-		case FORE_HAND:
+		case FOREHAND:
 			returnCard = getFirstCard();
 			break;
-		case MIDDLE_HAND:
+		case MIDDLEHAND:
 			returnCard = getSecondCard();
 			break;
-		case HIND_HAND:
+		case REARHAND:
 			returnCard = getThirdCard();
 			break;
 		}

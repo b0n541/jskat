@@ -738,20 +738,20 @@ public class SkatGameData {
 
 		// TODO what happens if two or more players have the same points?
 		// FIXME this is rule logic --> remove it from data object!!!
-		if (playerPoints.get(Player.FORE_HAND).intValue() > playerPoints.get(Player.MIDDLE_HAND).intValue()) {
+		if (playerPoints.get(Player.FOREHAND).intValue() > playerPoints.get(Player.MIDDLEHAND).intValue()) {
 
-			if (playerPoints.get(Player.FORE_HAND).intValue() > playerPoints.get(Player.HIND_HAND).intValue()) {
-				ramschLoser = Player.FORE_HAND;
+			if (playerPoints.get(Player.FOREHAND).intValue() > playerPoints.get(Player.REARHAND).intValue()) {
+				ramschLoser = Player.FOREHAND;
 			} else {
-				ramschLoser = Player.HIND_HAND;
+				ramschLoser = Player.REARHAND;
 			}
 
 		} else {
 
-			if (playerPoints.get(Player.MIDDLE_HAND).intValue() > playerPoints.get(Player.HIND_HAND).intValue()) {
-				ramschLoser = Player.MIDDLE_HAND;
+			if (playerPoints.get(Player.MIDDLEHAND).intValue() > playerPoints.get(Player.REARHAND).intValue()) {
+				ramschLoser = Player.MIDDLEHAND;
 			} else {
-				ramschLoser = Player.HIND_HAND;
+				ramschLoser = Player.REARHAND;
 			}
 		}
 

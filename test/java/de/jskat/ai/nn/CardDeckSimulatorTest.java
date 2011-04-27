@@ -56,7 +56,7 @@ public class CardDeckSimulatorTest extends AbstractJSkatTest {
 
 		CardList cards = new CardList();
 
-		CardDeck simCards = CardDeckSimulator.simulateUnknownCards(Player.FORE_HAND, cards);
+		CardDeck simCards = CardDeckSimulator.simulateUnknownCards(Player.FOREHAND, cards);
 
 		assertEquals(32, simCards.size());
 	}
@@ -70,7 +70,7 @@ public class CardDeckSimulatorTest extends AbstractJSkatTest {
 
 		CardList cards = getKnownCards();
 
-		CardDeck simCards = CardDeckSimulator.simulateUnknownCards(Player.FORE_HAND, cards);
+		CardDeck simCards = CardDeckSimulator.simulateUnknownCards(Player.FOREHAND, cards);
 
 		assertEquals(32, simCards.size());
 		assertTrue(cards.contains(simCards.get(0)));
@@ -94,7 +94,7 @@ public class CardDeckSimulatorTest extends AbstractJSkatTest {
 
 		CardList cards = getKnownCards();
 
-		CardDeck simCards = CardDeckSimulator.simulateUnknownCards(Player.MIDDLE_HAND, cards);
+		CardDeck simCards = CardDeckSimulator.simulateUnknownCards(Player.MIDDLEHAND, cards);
 
 		assertEquals(32, simCards.size());
 		assertTrue(cards.contains(simCards.get(3)));
@@ -111,14 +111,14 @@ public class CardDeckSimulatorTest extends AbstractJSkatTest {
 
 	/**
 	 * Checks simulation of unknown cards<br />
-	 * Hind hand cards are known
+	 * Rearhand cards are known
 	 */
 	@Test
-	public void simulateUnknownCards_HindHandKnown() {
+	public void simulateUnknownCards_RearHandKnown() {
 
 		CardList cards = getKnownCards();
 
-		CardDeck simCards = CardDeckSimulator.simulateUnknownCards(Player.HIND_HAND, cards);
+		CardDeck simCards = CardDeckSimulator.simulateUnknownCards(Player.REARHAND, cards);
 
 		assertEquals(32, simCards.size());
 		assertTrue(cards.contains(simCards.get(6)));

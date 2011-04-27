@@ -90,9 +90,9 @@ public class SkatSeries extends JSkatThread {
 		// players should be the same like in start skat series dialog
 		Random rand = new Random();
 		int startPlayer = rand.nextInt(3);
-		player.put(Player.FORE_HAND, newPlayer.get(startPlayer));
-		player.put(Player.MIDDLE_HAND, newPlayer.get((startPlayer + 1) % 3));
-		player.put(Player.HIND_HAND, newPlayer.get((startPlayer + 2) % 3));
+		player.put(Player.FOREHAND, newPlayer.get(startPlayer));
+		player.put(Player.MIDDLEHAND, newPlayer.get((startPlayer + 1) % 3));
+		player.put(Player.REARHAND, newPlayer.get((startPlayer + 2) % 3));
 
 		// if an human player is playing, always show him/her at the bottom
 		for (Player hand : Player.values()) {
@@ -144,10 +144,10 @@ public class SkatSeries extends JSkatThread {
 
 				if (j > 0 || roundsPlayed > 0) {
 					// change player positions after first game
-					IJSkatPlayer helper = player.get(Player.HIND_HAND);
-					player.put(Player.HIND_HAND, player.get(Player.FORE_HAND));
-					player.put(Player.FORE_HAND, player.get(Player.MIDDLE_HAND));
-					player.put(Player.MIDDLE_HAND, helper);
+					IJSkatPlayer helper = player.get(Player.REARHAND);
+					player.put(Player.REARHAND, player.get(Player.FOREHAND));
+					player.put(Player.FOREHAND, player.get(Player.MIDDLEHAND));
+					player.put(Player.MIDDLEHAND, helper);
 
 					data.setBottomPlayer(data.getBottomPlayer().getRightNeighbor());
 				}
@@ -155,8 +155,8 @@ public class SkatSeries extends JSkatThread {
 				gameNumber++;
 				view.setGameNumber(data.getTableName(), gameNumber);
 
-				currSkatGame = new SkatGame(data.getTableName(), player.get(Player.FORE_HAND),
-						player.get(Player.MIDDLE_HAND), player.get(Player.HIND_HAND));
+				currSkatGame = new SkatGame(data.getTableName(), player.get(Player.FOREHAND),
+						player.get(Player.MIDDLEHAND), player.get(Player.REARHAND));
 
 				setViewPositions();
 
@@ -202,17 +202,17 @@ public class SkatSeries extends JSkatThread {
 
 		String tableName = data.getTableName();
 
-		if (Player.FORE_HAND.equals(data.getBottomPlayer())) {
+		if (Player.FOREHAND.equals(data.getBottomPlayer())) {
 
-			view.setPositions(tableName, Player.MIDDLE_HAND, Player.HIND_HAND, Player.FORE_HAND);
+			view.setPositions(tableName, Player.MIDDLEHAND, Player.REARHAND, Player.FOREHAND);
 
-		} else if (Player.MIDDLE_HAND.equals(data.getBottomPlayer())) {
+		} else if (Player.MIDDLEHAND.equals(data.getBottomPlayer())) {
 
-			view.setPositions(tableName, Player.HIND_HAND, Player.FORE_HAND, Player.MIDDLE_HAND);
+			view.setPositions(tableName, Player.REARHAND, Player.FOREHAND, Player.MIDDLEHAND);
 
 		} else {
 
-			view.setPositions(tableName, Player.FORE_HAND, Player.MIDDLE_HAND, Player.HIND_HAND);
+			view.setPositions(tableName, Player.FOREHAND, Player.MIDDLEHAND, Player.REARHAND);
 		}
 	}
 

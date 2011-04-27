@@ -813,18 +813,18 @@ public class JSkatViewImpl implements IJSkatView {
 	public void updateISSTable(String tableName, String issLogin,
 			ISSGameStartInformation status) {
 
-		if (issLogin.equals(status.getPlayerName(Player.FORE_HAND))) {
+		if (issLogin.equals(status.getPlayerName(Player.FOREHAND))) {
 
-			updateISSTable(tableName, Player.MIDDLE_HAND, Player.HIND_HAND,
-					Player.FORE_HAND, status);
-		} else if (issLogin.equals(status.getPlayerName(Player.MIDDLE_HAND))) {
+			updateISSTable(tableName, Player.MIDDLEHAND, Player.REARHAND,
+					Player.FOREHAND, status);
+		} else if (issLogin.equals(status.getPlayerName(Player.MIDDLEHAND))) {
 
-			updateISSTable(tableName, Player.HIND_HAND, Player.FORE_HAND,
-					Player.MIDDLE_HAND, status);
-		} else if (issLogin.equals(status.getPlayerName(Player.HIND_HAND))) {
+			updateISSTable(tableName, Player.REARHAND, Player.FOREHAND,
+					Player.MIDDLEHAND, status);
+		} else if (issLogin.equals(status.getPlayerName(Player.REARHAND))) {
 
-			updateISSTable(tableName, Player.FORE_HAND, Player.MIDDLE_HAND,
-					Player.HIND_HAND, status);
+			updateISSTable(tableName, Player.FOREHAND, Player.MIDDLEHAND,
+					Player.REARHAND, status);
 		}
 	}
 
@@ -871,14 +871,14 @@ public class JSkatViewImpl implements IJSkatView {
 		// TODO add other types too
 		case DEAL:
 			setGameState(tableName, GameState.DEALING);
-			addCards(tableName, Player.FORE_HAND,
-					moveInformation.getCards(Player.FORE_HAND));
-			addCards(tableName, Player.MIDDLE_HAND,
-					moveInformation.getCards(Player.MIDDLE_HAND));
-			addCards(tableName, Player.HIND_HAND,
-					moveInformation.getCards(Player.HIND_HAND));
+			addCards(tableName, Player.FOREHAND,
+					moveInformation.getCards(Player.FOREHAND));
+			addCards(tableName, Player.MIDDLEHAND,
+					moveInformation.getCards(Player.MIDDLEHAND));
+			addCards(tableName, Player.REARHAND,
+					moveInformation.getCards(Player.REARHAND));
 			setGameState(tableName, GameState.BIDDING);
-			setActivePlayer(tableName, Player.MIDDLE_HAND);
+			setActivePlayer(tableName, Player.MIDDLEHAND);
 			break;
 		case BID:
 			setGameState(tableName, GameState.BIDDING);
@@ -911,7 +911,7 @@ public class JSkatViewImpl implements IJSkatView {
 			setGameAnnouncement(tableName, movePlayer,
 					moveInformation.getGameAnnouncement());
 			setGameState(tableName, GameState.TRICK_PLAYING);
-			setTrickForeHand(tableName, Player.FORE_HAND);
+			setTrickForeHand(tableName, Player.FOREHAND);
 			break;
 		case CARD_PLAY:
 			setGameState(tableName, GameState.TRICK_PLAYING);
@@ -944,12 +944,12 @@ public class JSkatViewImpl implements IJSkatView {
 			// FIXME dirty hack
 			SkatTablePanel table = tables.get(tableName);
 
-			table.setPlayerTime(Player.FORE_HAND,
-					moveInformation.getPlayerTime(Player.FORE_HAND));
-			table.setPlayerTime(Player.MIDDLE_HAND,
-					moveInformation.getPlayerTime(Player.MIDDLE_HAND));
-			table.setPlayerTime(Player.HIND_HAND,
-					moveInformation.getPlayerTime(Player.HIND_HAND));
+			table.setPlayerTime(Player.FOREHAND,
+					moveInformation.getPlayerTime(Player.FOREHAND));
+			table.setPlayerTime(Player.MIDDLEHAND,
+					moveInformation.getPlayerTime(Player.MIDDLEHAND));
+			table.setPlayerTime(Player.REARHAND,
+					moveInformation.getPlayerTime(Player.REARHAND));
 		}
 	}
 
@@ -968,12 +968,12 @@ public class JSkatViewImpl implements IJSkatView {
 	 */
 	@Override
 	public void setLastTrick(String tableName, Player trickForeHand,
-			Card foreHandCard, Card middleHandCard, Card hindHandCard) {
+			Card foreHandCard, Card middleHandCard, Card rearHandCard) {
 
 		SkatTablePanel table = tables.get(tableName);
 
 		table.setLastTrick(trickForeHand, foreHandCard, middleHandCard,
-				hindHandCard);
+				rearHandCard);
 	}
 
 	/**

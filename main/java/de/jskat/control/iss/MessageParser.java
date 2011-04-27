@@ -124,12 +124,12 @@ public class MessageParser {
 		status.setLoginName(loginName);
 
 		status.setGameNo(Integer.parseInt(params.get(0)));
-		status.putPlayerName(Player.FORE_HAND, params.get(1));
-		status.putPlayerTime(Player.FORE_HAND, Double.valueOf(params.get(2)));
-		status.putPlayerName(Player.MIDDLE_HAND, params.get(3));
-		status.putPlayerTime(Player.MIDDLE_HAND, Double.valueOf(params.get(4)));
-		status.putPlayerName(Player.HIND_HAND, params.get(5));
-		status.putPlayerTime(Player.HIND_HAND, Double.valueOf(params.get(6)));
+		status.putPlayerName(Player.FOREHAND, params.get(1));
+		status.putPlayerTime(Player.FOREHAND, Double.valueOf(params.get(2)));
+		status.putPlayerName(Player.MIDDLEHAND, params.get(3));
+		status.putPlayerTime(Player.MIDDLEHAND, Double.valueOf(params.get(4)));
+		status.putPlayerName(Player.REARHAND, params.get(5));
+		status.putPlayerTime(Player.REARHAND, Double.valueOf(params.get(6)));
 
 		return status;
 	}
@@ -205,9 +205,9 @@ public class MessageParser {
 		}
 
 		// parse player times
-		info.putPlayerTime(Player.FORE_HAND, new Double(params.get(params.size() - 3)));
-		info.putPlayerTime(Player.MIDDLE_HAND, new Double(params.get(params.size() - 2)));
-		info.putPlayerTime(Player.HIND_HAND, new Double(params.get(params.size() - 1)));
+		info.putPlayerTime(Player.FOREHAND, new Double(params.get(params.size() - 3)));
+		info.putPlayerTime(Player.MIDDLEHAND, new Double(params.get(params.size() - 2)));
+		info.putPlayerTime(Player.REARHAND, new Double(params.get(params.size() - 1)));
 
 		return info;
 	}
@@ -232,13 +232,13 @@ public class MessageParser {
 			info.setMovePlayer(MovePlayer.WORLD);
 		} else if ("0".equals(movePlayer)) { //$NON-NLS-1$
 			// fore hand move
-			info.setMovePlayer(MovePlayer.FORE_HAND);
+			info.setMovePlayer(MovePlayer.FOREHAND);
 		} else if ("1".equals(movePlayer)) { //$NON-NLS-1$
 			// middle hand move
-			info.setMovePlayer(MovePlayer.MIDDLE_HAND);
+			info.setMovePlayer(MovePlayer.MIDDLEHAND);
 		} else if ("2".equals(movePlayer)) { //$NON-NLS-1$
 			// hind hand move
-			info.setMovePlayer(MovePlayer.HIND_HAND);
+			info.setMovePlayer(MovePlayer.REARHAND);
 		}
 	}
 
@@ -369,13 +369,13 @@ public class MessageParser {
 
 		switch (timeOut.charAt(3)) {
 		case '0':
-			result = Player.FORE_HAND;
+			result = Player.FOREHAND;
 			break;
 		case '1':
-			result = Player.MIDDLE_HAND;
+			result = Player.MIDDLEHAND;
 			break;
 		case '2':
-			result = Player.HIND_HAND;
+			result = Player.REARHAND;
 			break;
 		}
 
@@ -406,15 +406,15 @@ public class MessageParser {
 
 		if ("P0".equals(summaryPartMarker)) { //$NON-NLS-1$
 
-			result.setPlayerName(Player.FORE_HAND, summaryPart);
+			result.setPlayerName(Player.FOREHAND, summaryPart);
 
 		} else if ("P1".equals(summaryPartMarker)) { //$NON-NLS-1$
 
-			result.setPlayerName(Player.MIDDLE_HAND, summaryPart);
+			result.setPlayerName(Player.MIDDLEHAND, summaryPart);
 
 		} else if ("P2".equals(summaryPartMarker)) { //$NON-NLS-1$
 
-			result.setPlayerName(Player.HIND_HAND, summaryPart);
+			result.setPlayerName(Player.REARHAND, summaryPart);
 
 		} else if ("MV".equals(summaryPartMarker)) { //$NON-NLS-1$
 
@@ -506,11 +506,11 @@ public class MessageParser {
 	private static void parseDeclarerToken(SkatGameData result, String token) {
 
 		if ("d:0".equals(token)) { //$NON-NLS-1$
-			result.setDeclarer(Player.FORE_HAND);
+			result.setDeclarer(Player.FOREHAND);
 		} else if ("d:1".equals(token)) { //$NON-NLS-1$
-			result.setDeclarer(Player.MIDDLE_HAND);
+			result.setDeclarer(Player.MIDDLEHAND);
 		} else if ("d:2".equals(token)) { //$NON-NLS-1$
-			result.setDeclarer(Player.HIND_HAND);
+			result.setDeclarer(Player.REARHAND);
 		}
 	}
 

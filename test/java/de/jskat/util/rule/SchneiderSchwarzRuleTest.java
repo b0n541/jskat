@@ -53,7 +53,7 @@ public class SchneiderSchwarzRuleTest extends AbstractJSkatTest {
 		ann = new GameAnnouncement();
 		ann.setGameType(GameType.CLUBS);
 		data.setAnnouncement(ann);
-		data.setDeclarer(Player.FORE_HAND);
+		data.setDeclarer(Player.FOREHAND);
 	}
 
 	/**

@@ -158,8 +158,8 @@ public class PlayerKnowledge {
 	 */
 	public boolean isCardPlayed(Card card) {
 
-		return playedCards.get(Player.FORE_HAND).contains(card) || playedCards.get(Player.MIDDLE_HAND).contains(card)
-				|| playedCards.get(Player.HIND_HAND).contains(card);
+		return playedCards.get(Player.FOREHAND).contains(card) || playedCards.get(Player.MIDDLEHAND).contains(card)
+				|| playedCards.get(Player.REARHAND).contains(card);
 	}
 
 	/**
@@ -467,9 +467,9 @@ public class PlayerKnowledge {
 
 			for (Rank rank : Rank.values()) {
 
-				if (playedCards.get(Player.FORE_HAND).contains(Card.getCard(suit, rank))
-						|| playedCards.get(Player.MIDDLE_HAND).contains(Card.getCard(suit, rank))
-						|| playedCards.get(Player.HIND_HAND).contains(Card.getCard(suit, rank))) {
+				if (playedCards.get(Player.FOREHAND).contains(Card.getCard(suit, rank))
+						|| playedCards.get(Player.MIDDLEHAND).contains(Card.getCard(suit, rank))
+						|| playedCards.get(Player.REARHAND).contains(Card.getCard(suit, rank))) {
 
 					result.append(suit.shortString()).append(rank.shortString()).append(' ');
 				} else {

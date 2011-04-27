@@ -29,35 +29,35 @@ public enum Player {
 	/**
 	 * First player
 	 */
-	FORE_HAND {
+	FOREHAND {
 		@Override
 		public int getOrder() { return 0; }
 		@Override
-		public Player getRightNeighbor() { return HIND_HAND; }
+		public Player getRightNeighbor() { return REARHAND; }
 		@Override
-		public Player getLeftNeighbor() { return MIDDLE_HAND; }
+		public Player getLeftNeighbor() { return MIDDLEHAND; }
 	},
 	/**
 	 * Second player
 	 */
-	MIDDLE_HAND { 
+	MIDDLEHAND { 
 		@Override
 		public int getOrder() { return 1; } 
 		@Override
-		public Player getRightNeighbor() { return FORE_HAND; }
+		public Player getRightNeighbor() { return FOREHAND; }
 		@Override
-		public Player getLeftNeighbor() { return HIND_HAND; }
+		public Player getLeftNeighbor() { return REARHAND; }
 	},
 	/**
 	 * Third player
 	 */
-	HIND_HAND { 
+	REARHAND { 
 		@Override
 		public int getOrder() { return 2; } 
 		@Override
-		public Player getRightNeighbor() { return MIDDLE_HAND; }
+		public Player getRightNeighbor() { return MIDDLEHAND; }
 		@Override
-		public Player getLeftNeighbor() { return FORE_HAND; }
+		public Player getLeftNeighbor() { return FOREHAND; }
 	};
 	
 	/**

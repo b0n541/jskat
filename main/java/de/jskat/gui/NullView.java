@@ -412,7 +412,7 @@ public class NullView implements IJSkatView {
 	@Override
 	public void setLastTrick(@SuppressWarnings("unused") String tableName,
 			@SuppressWarnings("unused") Player trickForeHand, @SuppressWarnings("unused") Card foreHandCard,
-			@SuppressWarnings("unused") Card middleHandCard, @SuppressWarnings("unused") Card hindHandCard) {
+			@SuppressWarnings("unused") Card middleHandCard, @SuppressWarnings("unused") Card rearHandCard) {
 		// empty method by indent
 	}
 

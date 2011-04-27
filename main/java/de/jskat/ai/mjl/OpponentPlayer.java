@@ -83,7 +83,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 				+ "]. Game type is " + knowledge.getGame().getGameType() + ".");
 
 		if (knowledge.getTrickCards().size() > 1) {
-			bestToBePlayed = findHindhandCard(knowledge);
+			bestToBePlayed = findRearhandCard(knowledge);
 		} else if (knowledge.getTrickCards().size() > 0) {
 			bestToBePlayed = findMiddlehandCard(knowledge);
 		} else {
@@ -243,13 +243,13 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	 * @param trumpSuit
 	 * @return
 	 */
-	private int findHindhandCard(PlayerKnowledge knowledge) {
+	private int findRearhandCard(PlayerKnowledge knowledge) {
 		GameType gameType = knowledge.getGame().getGameType();
 		Card initialCard = (knowledge.getTrickCards().size() > 0 ? knowledge
 				.getTrickCards().get(0) : null);
 		Suit trumpSuit = gameType.getTrumpSuit();
 		int bestToBePlayed;
-		// I'm in hindhand
+		// I'm in rearhand
 		// 1: check if player can match initial suit
 		if (Helper.isAbleToMatch(cards, initialCard, gameType)) {
 			// 1.1 if yes (i.e. I can match the initial suit): check if
@@ -529,7 +529,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 		// First, look for any aces that are not trump
 		for (int x = 0; x < cards.size(); x++) {
 			Card c = cards.get(x);
-			if (knowledge.getDeclarer() == Player.MIDDLE_HAND) {
+			if (knowledge.getDeclarer() == Player.MIDDLEHAND) {
 				// add to the rating the number of remaining cards
 			} else {
 				// subtract from the rating the number of remaining cards
@@ -539,7 +539,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 				if (knowledge.couldHaveSuit(knowledge.getDeclarer(),
 						c.getSuit())) {
 					rating[x] += 20;
-					if (knowledge.getDeclarer() == Player.MIDDLE_HAND) {
+					if (knowledge.getDeclarer() == Player.MIDDLEHAND) {
 						rating[x] += cards.getSuitCount(c.getSuit(), false);
 					} else {
 						rating[x] -= cards.getSuitCount(c.getSuit(), false);
@@ -588,12 +588,12 @@ public class OpponentPlayer extends AbstractCardPlayer {
 			if (cards.get(x).getRank() == Rank.ACE)
 				if (cards.get(x).getSuit() != gameType.getTrumpSuit()) {
 					if (store >= 0) {
-						if (knowledge.getDeclarer() == Player.MIDDLE_HAND
+						if (knowledge.getDeclarer() == Player.MIDDLEHAND
 								&& cards.getSuitCount(cards.get(x).getSuit(),
 										false) > cards.getSuitCount(
 										cards.get(store).getSuit(), false))
 							store = x;
-						else if (knowledge.getDeclarer() == Player.HIND_HAND
+						else if (knowledge.getDeclarer() == Player.REARHAND
 								&& cards.getSuitCount(cards.get(x).getSuit(),
 										false) < cards.getSuitCount(
 										cards.get(store).getSuit(), false))
@@ -604,7 +604,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 		}
 		if (store > 0)
 			return store;
-		if (knowledge.getDeclarer() == Player.MIDDLE_HAND) {
+		if (knowledge.getDeclarer() == Player.MIDDLEHAND) {
 			// If you don't have any, look for longest color
 			// "kurzer Weg, lange Farbe"
 			Suit maxSuit = null;

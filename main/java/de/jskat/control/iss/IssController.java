@@ -513,7 +513,7 @@ public class IssController {
 		case GAME_ANNOUNCEMENT:
 			currGame.setGameState(GameState.DECLARING);
 			currGame.setAnnouncement(moveInformation.getGameAnnouncement());
-			currGame.addTrick(new Trick(0, Player.FORE_HAND));
+			currGame.addTrick(new Trick(0, Player.FOREHAND));
 			break;
 		case CARD_PLAY:
 			currGame.setGameState(GameState.TRICK_PLAYING);

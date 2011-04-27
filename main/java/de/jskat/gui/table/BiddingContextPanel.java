@@ -44,7 +44,7 @@ class BiddingContextPanel extends JPanel {
 	private BidBubblePanel userBid;
 	private BidBubblePanel foreHandBidLabel;
 	private BidBubblePanel middleHandBidLabel;
-	private BidBubblePanel hindHandBidLabel;
+	private BidBubblePanel rearHandBidLabel;
 	private JButton bidButton;
 	private JButton passButton;
 	private GameAnnouncePanel announcePanel;
@@ -110,20 +110,20 @@ class BiddingContextPanel extends JPanel {
 		// FIXME (jansch 09.11.2010) code duplication with
 		// SkatTablePanel.setPositions()
 		switch (player) {
-		case FORE_HAND:
+		case FOREHAND:
 			foreHandBidLabel = userBid;
 			middleHandBidLabel = leftOpponentBid;
-			hindHandBidLabel = rightOpponentBid;
+			rearHandBidLabel = rightOpponentBid;
 			break;
-		case MIDDLE_HAND:
+		case MIDDLEHAND:
 			foreHandBidLabel = rightOpponentBid;
 			middleHandBidLabel = userBid;
-			hindHandBidLabel = leftOpponentBid;
+			rearHandBidLabel = leftOpponentBid;
 			break;
-		case HIND_HAND:
+		case REARHAND:
 			foreHandBidLabel = leftOpponentBid;
 			middleHandBidLabel = rightOpponentBid;
-			hindHandBidLabel = userBid;
+			rearHandBidLabel = userBid;
 			break;
 		}
 	}
@@ -131,14 +131,14 @@ class BiddingContextPanel extends JPanel {
 	void setBid(Player player, int bidValue) {
 
 		switch (player) {
-		case FORE_HAND:
+		case FOREHAND:
 			foreHandBidLabel.setBidValue(bidValue);
 			break;
-		case MIDDLE_HAND:
+		case MIDDLEHAND:
 			middleHandBidLabel.setBidValue(bidValue);
 			break;
-		case HIND_HAND:
-			hindHandBidLabel.setBidValue(bidValue);
+		case REARHAND:
+			rearHandBidLabel.setBidValue(bidValue);
 			break;
 		}
 	}
@@ -146,14 +146,14 @@ class BiddingContextPanel extends JPanel {
 	void setPass(Player player) {
 
 		switch (player) {
-		case FORE_HAND:
+		case FOREHAND:
 			foreHandBidLabel.setBidValue(-1);
 			break;
-		case MIDDLE_HAND:
+		case MIDDLEHAND:
 			middleHandBidLabel.setBidValue(-1);
 			break;
-		case HIND_HAND:
-			hindHandBidLabel.setBidValue(-1);
+		case REARHAND:
+			rearHandBidLabel.setBidValue(-1);
 			break;
 		}
 	}
@@ -174,7 +174,7 @@ class BiddingContextPanel extends JPanel {
 
 		foreHandBidLabel.setBidValue(0);
 		middleHandBidLabel.setBidValue(0);
-		hindHandBidLabel.setBidValue(0);
+		rearHandBidLabel.setBidValue(0);
 		bidButton.setText("18"); //$NON-NLS-1$
 		announcePanel.resetPanel();
 	}

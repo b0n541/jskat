@@ -74,7 +74,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	protected HandPanel foreHand;
 	protected HandPanel middleHand;
-	protected HandPanel hindHand;
+	protected HandPanel rearHand;
 	protected OpponentPanel leftOpponentPanel;
 	protected OpponentPanel rightOpponentPanel;
 	protected JSkatUserPanel userPanel;
@@ -272,20 +272,20 @@ public class SkatTablePanel extends AbstractTabPanel {
 		// FIXME (jansch 09.11.2010) code duplication with
 		// BiddingPanel.setPlayerPositions()
 		switch (playerPosition) {
-		case FORE_HAND:
+		case FOREHAND:
 			foreHand = userPanel;
 			middleHand = leftOpponentPanel;
-			hindHand = rightOpponentPanel;
+			rearHand = rightOpponentPanel;
 			break;
-		case MIDDLE_HAND:
+		case MIDDLEHAND:
 			foreHand = rightOpponentPanel;
 			middleHand = userPanel;
-			hindHand = leftOpponentPanel;
+			rearHand = leftOpponentPanel;
 			break;
-		case HIND_HAND:
+		case REARHAND:
 			foreHand = leftOpponentPanel;
 			middleHand = rightOpponentPanel;
-			hindHand = userPanel;
+			rearHand = userPanel;
 			break;
 		}
 	}
@@ -356,14 +356,14 @@ public class SkatTablePanel extends AbstractTabPanel {
 	public void removeCard(Player player, Card card) {
 
 		switch (player) {
-		case FORE_HAND:
+		case FOREHAND:
 			foreHand.removeCard(card);
 			break;
-		case MIDDLE_HAND:
+		case MIDDLEHAND:
 			middleHand.removeCard(card);
 			break;
-		case HIND_HAND:
-			hindHand.removeCard(card);
+		case REARHAND:
+			rearHand.removeCard(card);
 			break;
 		}
 	}
@@ -456,9 +456,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	private void resetGameData() {
 
-		playerPassed.put(Player.FORE_HAND, Boolean.FALSE);
-		playerPassed.put(Player.MIDDLE_HAND, Boolean.FALSE);
-		playerPassed.put(Player.HIND_HAND, Boolean.FALSE);
+		playerPassed.put(Player.FOREHAND, Boolean.FALSE);
+		playerPassed.put(Player.MIDDLEHAND, Boolean.FALSE);
+		playerPassed.put(Player.REARHAND, Boolean.FALSE);
 		declarer = null;
 	}
 
@@ -538,9 +538,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 		biddingPanel.resetPanel();
 		declaringPanel.resetPanel();
 		gameOverPanel.resetPanel();
-		clearHand(Player.FORE_HAND);
-		clearHand(Player.MIDDLE_HAND);
-		clearHand(Player.HIND_HAND);
+		clearHand(Player.FOREHAND);
+		clearHand(Player.MIDDLEHAND);
+		clearHand(Player.REARHAND);
 		clearTrickCards();
 		clearLastTrickCards();
 		// default sorting is grand sorting
@@ -581,25 +581,25 @@ public class SkatTablePanel extends AbstractTabPanel {
 		getPlayerPanel(player).setBidValue(bidValue);
 
 		switch (player) {
-		case FORE_HAND:
-			if (playerPassed.get(Player.MIDDLE_HAND).booleanValue()) {
-				setActivePlayer(Player.HIND_HAND);
+		case FOREHAND:
+			if (playerPassed.get(Player.MIDDLEHAND).booleanValue()) {
+				setActivePlayer(Player.REARHAND);
 			} else {
-				setActivePlayer(Player.MIDDLE_HAND);
+				setActivePlayer(Player.MIDDLEHAND);
 			}
 			break;
-		case MIDDLE_HAND:
+		case MIDDLEHAND:
 			if (madeBid) {
-				setActivePlayer(Player.FORE_HAND);
+				setActivePlayer(Player.FOREHAND);
 			} else {
-				setActivePlayer(Player.HIND_HAND);
+				setActivePlayer(Player.REARHAND);
 			}
 			break;
-		case HIND_HAND:
-			if (playerPassed.get(Player.FORE_HAND).booleanValue()) {
-				setActivePlayer(Player.MIDDLE_HAND);
+		case REARHAND:
+			if (playerPassed.get(Player.FOREHAND).booleanValue()) {
+				setActivePlayer(Player.MIDDLEHAND);
 			} else {
-				setActivePlayer(Player.FORE_HAND);
+				setActivePlayer(Player.FOREHAND);
 			}
 			break;
 		}
@@ -771,14 +771,14 @@ public class SkatTablePanel extends AbstractTabPanel {
 		HandPanel panel = null;
 
 		switch (player) {
-		case FORE_HAND:
+		case FOREHAND:
 			panel = foreHand;
 			break;
-		case MIDDLE_HAND:
+		case MIDDLEHAND:
 			panel = middleHand;
 			break;
-		case HIND_HAND:
-			panel = hindHand;
+		case REARHAND:
+			panel = rearHand;
 			break;
 		}
 		return panel;
@@ -790,15 +790,15 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param trickForeHand
 	 * @param foreHandCard
 	 * @param middleHandCard
-	 * @param hindHandCard
+	 * @param rearHandCard
 	 */
 	public void setLastTrick(Player trickForeHand, Card foreHandCard,
-			Card middleHandCard, Card hindHandCard) {
+			Card middleHandCard, Card rearHandCard) {
 
 		lastTrickPanel.clearCards();
 		lastTrickPanel.setCard(trickForeHand, foreHandCard);
 		lastTrickPanel.setCard(trickForeHand.getLeftNeighbor(), middleHandCard);
-		lastTrickPanel.setCard(trickForeHand.getRightNeighbor(), hindHandCard);
+		lastTrickPanel.setCard(trickForeHand.getRightNeighbor(), rearHandCard);
 	}
 
 	/**
@@ -809,20 +809,20 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void setActivePlayer(Player player) {
 		switch (player) {
-		case FORE_HAND:
+		case FOREHAND:
 			foreHand.setActivePlayer(true);
 			middleHand.setActivePlayer(false);
-			hindHand.setActivePlayer(false);
+			rearHand.setActivePlayer(false);
 			break;
-		case MIDDLE_HAND:
+		case MIDDLEHAND:
 			foreHand.setActivePlayer(false);
 			middleHand.setActivePlayer(true);
-			hindHand.setActivePlayer(false);
+			rearHand.setActivePlayer(false);
 			break;
-		case HIND_HAND:
+		case REARHAND:
 			foreHand.setActivePlayer(false);
 			middleHand.setActivePlayer(false);
-			hindHand.setActivePlayer(true);
+			rearHand.setActivePlayer(true);
 			break;
 		}
 	}
@@ -843,15 +843,15 @@ public class SkatTablePanel extends AbstractTabPanel {
 		biddingPanel.setPass(player);
 
 		switch (player) {
-		case FORE_HAND:
-		case MIDDLE_HAND:
-			setActivePlayer(Player.HIND_HAND);
+		case FOREHAND:
+		case MIDDLEHAND:
+			setActivePlayer(Player.REARHAND);
 			break;
-		case HIND_HAND:
-			if (playerPassed.get(Player.FORE_HAND).booleanValue()) {
-				setActivePlayer(Player.MIDDLE_HAND);
+		case REARHAND:
+			if (playerPassed.get(Player.FOREHAND).booleanValue()) {
+				setActivePlayer(Player.MIDDLEHAND);
 			} else {
-				setActivePlayer(Player.FORE_HAND);
+				setActivePlayer(Player.FOREHAND);
 			}
 			break;
 		}

@@ -62,12 +62,12 @@ public class Helper {
 		if (knowledge.getTrickCards().size() < 2)
 			// one card on the table: can't be single player win yet
 			return false;
-		if (knowledge.getDeclarer() == Player.FORE_HAND) {
+		if (knowledge.getDeclarer() == Player.FOREHAND) {
 			if (knowledge.getTrickCards().get(0).beats(knowledge.getGame().getGameType(), knowledge.getTrickCards().get(1)))
 				return true;
 			else
 				return false;
-		} else if (knowledge.getDeclarer() == Player.MIDDLE_HAND) {
+		} else if (knowledge.getDeclarer() == Player.MIDDLEHAND) {
 			if (knowledge.getTrickCards().get(1).beats(knowledge.getGame().getGameType(), knowledge.getTrickCards().get(0)))
 				return true;
 			else

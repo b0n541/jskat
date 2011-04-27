@@ -63,11 +63,11 @@ public class MessageParserTest extends AbstractJSkatTest {
 
 		SkatGameData gameData = MessageParser.parseGameSummary(gameSummary);
 
-		assertEquals("zoot", gameData.getPlayerName(Player.FORE_HAND)); //$NON-NLS-1$
-		assertEquals("kermit", gameData.getPlayerName(Player.MIDDLE_HAND)); //$NON-NLS-1$
-		assertEquals("foo", gameData.getPlayerName(Player.HIND_HAND)); //$NON-NLS-1$
+		assertEquals("zoot", gameData.getPlayerName(Player.FOREHAND)); //$NON-NLS-1$
+		assertEquals("kermit", gameData.getPlayerName(Player.MIDDLEHAND)); //$NON-NLS-1$
+		assertEquals("foo", gameData.getPlayerName(Player.REARHAND)); //$NON-NLS-1$
 
-		assertEquals(Player.HIND_HAND, gameData.getDeclarer());
+		assertEquals(Player.REARHAND, gameData.getDeclarer());
 		assertFalse(gameData.isGameWon());
 		assertEquals(-54, gameData.getResult());
 		assertEquals(59, gameData.getDeclarerScore());

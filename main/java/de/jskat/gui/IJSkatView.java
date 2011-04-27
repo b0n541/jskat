@@ -298,11 +298,11 @@ public interface IJSkatView {
 	 *            Card from fore hand
 	 * @param middleHandCard
 	 *            Card from middle hand
-	 * @param hindHandCard
+	 * @param rearHandCard
 	 *            Card from hind hand
 	 */
 	public void setLastTrick(String tableName, Player trickForeHand, Card foreHandCard, Card middleHandCard,
-			Card hindHandCard);
+			Card rearHandCard);
 
 	/**
 	 * Clears the cards of the trick

@@ -211,9 +211,9 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	public GameAnnouncement announceGame() {
 
 		log.debug("position: " + knowledge.getPlayerPosition()); //$NON-NLS-1$
-		log.debug("bids: " + knowledge.getHighestBid(Player.FORE_HAND) + //$NON-NLS-1$
-				" " + knowledge.getHighestBid(Player.MIDDLE_HAND) + //$NON-NLS-1$
-				" " + knowledge.getHighestBid(Player.HIND_HAND)); //$NON-NLS-1$
+		log.debug("bids: " + knowledge.getHighestBid(Player.FOREHAND) + //$NON-NLS-1$
+				" " + knowledge.getHighestBid(Player.MIDDLEHAND) + //$NON-NLS-1$
+				" " + knowledge.getHighestBid(Player.REARHAND)); //$NON-NLS-1$
 
 		GameAnnouncement newGame = new GameAnnouncement();
 		newGame.setGameType(getBestGameType());

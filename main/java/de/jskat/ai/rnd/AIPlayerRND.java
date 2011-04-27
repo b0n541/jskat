@@ -85,9 +85,9 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	public GameAnnouncement announceGame() {
 
 		log.debug("position: " + this.knowledge.getPlayerPosition()); //$NON-NLS-1$
-		log.debug("bids: " + this.knowledge.getHighestBid(Player.FORE_HAND) + //$NON-NLS-1$
-				" " + this.knowledge.getHighestBid(Player.MIDDLE_HAND) + //$NON-NLS-1$
-				" " + this.knowledge.getHighestBid(Player.HIND_HAND)); //$NON-NLS-1$
+		log.debug("bids: " + this.knowledge.getHighestBid(Player.FOREHAND) + //$NON-NLS-1$
+				" " + this.knowledge.getHighestBid(Player.MIDDLEHAND) + //$NON-NLS-1$
+				" " + this.knowledge.getHighestBid(Player.REARHAND)); //$NON-NLS-1$
 
 		GameAnnouncement newGame = new GameAnnouncement();
 
