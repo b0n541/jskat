@@ -28,15 +28,17 @@ import java.util.Map;
 import javax.swing.ActionMap;
 import javax.swing.JPanel;
 
+import net.miginfocom.swing.MigLayout;
+
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.iss.ISSChatMessage;
 import org.jskat.data.iss.ISSPlayerStatus;
 import org.jskat.data.iss.ISSTablePanelStatus;
 import org.jskat.gui.table.ContextPanelTypes;
+import org.jskat.gui.table.JSkatUserPanel;
+import org.jskat.gui.table.OpponentPanel;
 import org.jskat.gui.table.SkatTablePanel;
 import org.jskat.util.Player;
-
-import net.miginfocom.swing.MigLayout;
 
 /**
  * Panel for ISS table
@@ -95,6 +97,16 @@ public class ISSTablePanel extends SkatTablePanel {
 		setGameState(GameState.GAME_START);
 
 		return panel;
+	}
+
+	protected OpponentPanel getOpponentPanel() {
+
+		return new OpponentPanel(getActionMap(), 12, true);
+	}
+
+	protected JSkatUserPanel getPlayerPanel() {
+
+		return new JSkatUserPanel(getActionMap(), 12, true);
 	}
 
 	private ChatPanel getChatPanel() {

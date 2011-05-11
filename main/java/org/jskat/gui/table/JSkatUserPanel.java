@@ -41,11 +41,12 @@ public class JSkatUserPanel extends HandPanel {
 	private GameState gameState;
 
 	/**
-	 * @see HandPanel#HandPanel(ActionMap, int)
+	 * @see HandPanel#HandPanel(ActionMap, int, boolean)
 	 */
-	JSkatUserPanel(ActionMap actions, int maxCards) {
+	public JSkatUserPanel(ActionMap actions, int maxCards,
+			boolean showIssWidgets) {
 
-		super(actions, maxCards);
+		super(actions, maxCards, showIssWidgets);
 		this.showCards();
 	}
 

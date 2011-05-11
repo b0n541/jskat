@@ -21,12 +21,12 @@
 
 /*
 
-@ShortLicense@
+ @ShortLicense@
 
-Authors: @JS@
-         @MJL@
+ Authors: @JS@
+ @MJL@
 
-Released: @ReleaseDate@
+ Released: @ReleaseDate@
 
  */
 
@@ -41,14 +41,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
+import net.miginfocom.swing.MigLayout;
+
 import org.jskat.data.JSkatOptions;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.Card;
 import org.jskat.util.GameType;
 import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.Player;
-
-import net.miginfocom.swing.MigLayout;
 
 /**
  * Abstract class for a panel representing a players hand
@@ -94,6 +94,8 @@ abstract class HandPanel extends JPanel {
 	 */
 	int bidValue;
 
+	boolean showIssWidgets;
+
 	CardPanel cardPanel;
 
 	/**
@@ -114,13 +116,16 @@ abstract class HandPanel extends JPanel {
 	 *            Action map
 	 * @param jskatBitmaps
 	 *            Card images
+	 * @param showIssWidgets
+	 *            TRUE, if ISS widgets should be shown
 	 */
-	HandPanel(ActionMap actions, int maxCards) {
+	HandPanel(ActionMap actions, int maxCards, boolean showIssWidgets) {
 
 		setActionMap(actions);
 		bitmaps = JSkatGraphicRepository.instance();
 		strings = JSkatResourceBundle.instance();
 		maxCardCount = maxCards;
+		this.showIssWidgets = showIssWidgets;
 
 		setOpaque(false);
 
@@ -140,12 +145,15 @@ abstract class HandPanel extends JPanel {
 
 		setBorder(getPanelBorder());
 
-		header = new JPanel(new MigLayout("fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		header = new JPanel(new MigLayout(
+				"fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		header.add(headerLabel);
 		// blank panel
 		header.add(new JPanel());
-		header.add(iconPanel);
-		header.add(clockPanel);
+		if (showIssWidgets) {
+			header.add(iconPanel);
+			header.add(clockPanel);
+		}
 		add(header, "shrinky, wrap"); //$NON-NLS-1$
 
 		cardPanel = new CardPanel(this, 1.0, true);
