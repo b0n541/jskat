@@ -19,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package org.jskat.gui.table;
 
 import java.awt.Font;
@@ -27,13 +26,13 @@ import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import net.miginfocom.swing.MigLayout;
+
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.util.GameType;
 import org.jskat.util.JSkatResourceBundle;
-
-import net.miginfocom.swing.MigLayout;
 
 /**
  * Panel for showing game informations
@@ -42,7 +41,7 @@ class GameInformationPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-//	private JSkatGraphicRepository bitmaps;
+	// private JSkatGraphicRepository bitmaps;
 	private JSkatResourceBundle strings;
 
 	private JLabel label;
@@ -64,7 +63,7 @@ class GameInformationPanel extends JPanel {
 	 */
 	GameInformationPanel() {
 
-//		bitmaps = JSkatGraphicRepository.instance();
+		// bitmaps = JSkatGraphicRepository.instance();
 		strings = JSkatResourceBundle.instance();
 
 		initPanel();
@@ -151,21 +150,22 @@ class GameInformationPanel extends JPanel {
 			text += "]";
 		}
 
-
 		if (gameState.equals(GameState.TRICK_PLAYING)) {
 			text += " " + strings.getString("trick") + " " + trick; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 		}
 
 		if (gameState.equals(GameState.GAME_OVER)) {
 
+			text += " - "; //$NON-NLS-1$
 			if (gameWon) {
-				text += " " + strings.getString("won"); //$NON-NLS-1$//$NON-NLS-2$
+				text += strings.getString("won"); //$NON-NLS-1$
 			} else {
-				text += " " + strings.getString("lost"); //$NON-NLS-1$//$NON-NLS-2$
+				text += strings.getString("lost"); //$NON-NLS-1$
 			}
+			text += " - "; //$NON-NLS-1$
 
-			text += " " + strings.getString("declarer") + " " + declarerPoints + " " + strings.getString("points"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
-			text += " " + strings.getString("opponents") + " " //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+			text += strings.getString("declarer") + ": " + declarerPoints + " " + strings.getString("points"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+			text += ", " + strings.getString("opponents") + ": " //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 					+ opponentPoints + " " + strings.getString("points"); //$NON-NLS-1$//$NON-NLS-2$
 		}
 
