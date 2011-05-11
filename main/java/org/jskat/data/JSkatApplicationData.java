@@ -38,6 +38,7 @@ public class JSkatApplicationData {
 
 	static JSkatApplicationData instance = null;
 
+	private int localTablesCreated = 0;
 	private JSkatOptions options;
 	private Map<String, SkatTable> skatTables;
 	private String activeTable;
@@ -86,6 +87,17 @@ public class JSkatApplicationData {
 
 		skatTables.put(newSkatTable.getName(), newSkatTable);
 		humanPlayers.put(newSkatTable.getName(), new HumanPlayer());
+		localTablesCreated++;
+	}
+
+	/**
+	 * Gets the number of local tables created so far
+	 * 
+	 * @return Number of local tables created so far
+	 */
+	public int getLocalTablesCreated() {
+
+		return localTablesCreated;
 	}
 
 	/**
@@ -224,5 +236,17 @@ public class JSkatApplicationData {
 	 */
 	public HumanPlayer getHumanPlayer(String tableName) {
 		return humanPlayers.get(tableName);
+	}
+
+	/**
+	 * Checks whether a table name is already in use or not
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @return TRUE, if the table name is not used yet
+	 */
+	public boolean isFreeTableName(String tableName) {
+
+		return !skatTables.keySet().contains(tableName);
 	}
 }

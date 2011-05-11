@@ -51,9 +51,12 @@ public interface IJSkatView {
 	/**
 	 * Gets a new table name from the view
 	 * 
+	 * @param localTablesCreated
+	 *            Local tables created so far
+	 * 
 	 * @return New table name
 	 */
-	public String getNewTableName();
+	public String getNewTableName(int localTablesCreated);
 
 	/**
 	 * Shows a table
@@ -652,4 +655,9 @@ public interface IJSkatView {
 	 * Closes alle ISS related panels
 	 */
 	public void closeISSPanels();
+
+	/**
+	 * Shows a message, that a table with a given name already exists
+	 */
+	public void showDuplicateTableNameMessage(String duplicateTableName);
 }

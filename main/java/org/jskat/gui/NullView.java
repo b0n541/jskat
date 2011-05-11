@@ -19,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package org.jskat.gui;
 
 import java.util.List;
@@ -40,7 +39,6 @@ import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
 
-
 /**
  * Doesn't do anything<br />
  * is needed for simulating games without gui
@@ -48,24 +46,26 @@ import org.jskat.util.Player;
 public class NullView implements IJSkatView {
 
 	/**
-	 * @see IJSkatView#addCard(String, Player, Card)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void addCard(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player player,
+	public void addCard(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player player,
 			@SuppressWarnings("unused") Card card) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#clearHand(String, Player)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void clearHand(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player player) {
+	public void clearHand(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player player) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#clearTrickCards(String)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void clearTrickCards(@SuppressWarnings("unused") String tableName) {
@@ -73,7 +73,7 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#createISSTable(String, String)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void createISSTable(@SuppressWarnings("unused") String tableName,
@@ -82,7 +82,7 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#createSkatTablePanel(String)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void createSkatTablePanel(@SuppressWarnings("unused") String name) {
@@ -90,35 +90,38 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#removeCard(String, Player, Card)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void removeCard(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player player,
+	public void removeCard(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player player,
 			@SuppressWarnings("unused") Card card) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#setPositions(String, Player, Player, Player)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void setPositions(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") Player leftPosition, @SuppressWarnings("unused") Player rightPosition,
+			@SuppressWarnings("unused") Player leftPosition,
+			@SuppressWarnings("unused") Player rightPosition,
 			@SuppressWarnings("unused") Player playerPosition) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#setTrickCard(String, Player, Card)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void setTrickCard(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player position,
+	public void setTrickCard(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player position,
 			@SuppressWarnings("unused") Card card) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#showAboutMessage()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void showAboutMessage() {
@@ -126,7 +129,7 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#showExitDialog()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public int showExitDialog() {
@@ -134,7 +137,7 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#showGameResults()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void showGameResults() {
@@ -142,7 +145,7 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#showISSLogin()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void showISSLogin() {
@@ -150,7 +153,7 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#showSeriesResults()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void showSeriesResults() {
@@ -158,7 +161,7 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#showTable(SkatTable)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void showTable(@SuppressWarnings("unused") SkatTable table) {
@@ -166,7 +169,7 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#startBidding()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void startBidding() {
@@ -174,7 +177,7 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#startDiscarding()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void startDiscarding() {
@@ -182,7 +185,7 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#startGame(String)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void startGame(@SuppressWarnings("unused") String tableName) {
@@ -190,7 +193,7 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#startPlaying()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void startPlaying() {
@@ -198,7 +201,7 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#startSeries(String)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void startSeries(@SuppressWarnings("unused") String tableName) {
@@ -206,24 +209,27 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#setGameAnnouncement(String, Player, GameAnnouncement)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void setGameAnnouncement(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") Player declarer, @SuppressWarnings("unused") GameAnnouncement ann) {
+	public void setGameAnnouncement(
+			@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player declarer,
+			@SuppressWarnings("unused") GameAnnouncement ann) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#setGameState(String, GameState)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void setGameState(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") GameState state) {
+	public void setGameState(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") GameState state) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#addGameResult(String, SkatGameData)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void addGameResult(@SuppressWarnings("unused") String tableName,
@@ -232,7 +238,7 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#showHelpDialog()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void showHelpDialog() {
@@ -240,7 +246,7 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#showLicenseDialog()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void showLicenseDialog() {
@@ -248,7 +254,7 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#clearTable(String)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void clearTable(@SuppressWarnings("unused") String tableName) {
@@ -256,25 +262,28 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#showMessage(int, String, String)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void showMessage(@SuppressWarnings("unused") int messageType, @SuppressWarnings("unused") String title,
+	public void showMessage(@SuppressWarnings("unused") int messageType,
+			@SuppressWarnings("unused") String title,
 			@SuppressWarnings("unused") String message) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#setBid(String, Player, int, boolean)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void setBid(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player player,
-			@SuppressWarnings("unused") int bidValue, @SuppressWarnings("unused") boolean madeBid) {
+	public void setBid(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player player,
+			@SuppressWarnings("unused") int bidValue,
+			@SuppressWarnings("unused") boolean madeBid) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#setTrickForeHand(String, Player)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void setTrickForeHand(@SuppressWarnings("unused") String tableName,
@@ -283,23 +292,25 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#putCardIntoSkat(String, Card)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void putCardIntoSkat(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Card card) {
+	public void putCardIntoSkat(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Card card) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#takeCardFromSkat(String, Card)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void takeCardFromSkat(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Card card) {
+	public void takeCardFromSkat(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Card card) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#showStartSkatSeriesDialog()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void showStartSkatSeriesDialog() {
@@ -307,25 +318,28 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#updateISSLobbyPlayerList(String, String, long, double)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void updateISSLobbyPlayerList(@SuppressWarnings("unused") String playerName,
-			@SuppressWarnings("unused") String playerLanguage1, @SuppressWarnings("unused") long gamesPlayed,
+	public void updateISSLobbyPlayerList(
+			@SuppressWarnings("unused") String playerName,
+			@SuppressWarnings("unused") String playerLanguage1,
+			@SuppressWarnings("unused") long gamesPlayed,
 			@SuppressWarnings("unused") double strength) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#removeFromISSLobbyPlayerList(String)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void removeFromISSLobbyPlayerList(@SuppressWarnings("unused") String playerName) {
+	public void removeFromISSLobbyPlayerList(
+			@SuppressWarnings("unused") String playerName) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#showISSLobby()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void showISSLobby() {
@@ -333,36 +347,40 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#removeFromISSLobbyTableList(String)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void removeFromISSLobbyTableList(@SuppressWarnings("unused") String tableName) {
+	public void removeFromISSLobbyTableList(
+			@SuppressWarnings("unused") String tableName) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#updateISSLobbyTableList(String, int, long, String,
-	 *      String, String)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void updateISSLobbyTableList(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") int maxPlayers, @SuppressWarnings("unused") long gamesPlayed,
-			@SuppressWarnings("unused") String player1, @SuppressWarnings("unused") String player2,
+	public void updateISSLobbyTableList(
+			@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") int maxPlayers,
+			@SuppressWarnings("unused") long gamesPlayed,
+			@SuppressWarnings("unused") String player1,
+			@SuppressWarnings("unused") String player2,
 			@SuppressWarnings("unused") String player3) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#appendISSChatMessage(ChatMessageType, ISSChatMessage)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void appendISSChatMessage(@SuppressWarnings("unused") ChatMessageType messageType,
+	public void appendISSChatMessage(
+			@SuppressWarnings("unused") ChatMessageType messageType,
 			@SuppressWarnings("unused") ISSChatMessage message) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#updateISSTable(String, ISSTablePanelStatus)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void updateISSTable(@SuppressWarnings("unused") String tableName,
@@ -371,25 +389,27 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#updateISSTable(String, String, ISSGameStartInformation)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void updateISSTable(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") String playerName, @SuppressWarnings("unused") ISSGameStartInformation status) {
+			@SuppressWarnings("unused") String playerName,
+			@SuppressWarnings("unused") ISSGameStartInformation status) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#getNewTableName()
+	 * {@inheritDoc}
 	 */
 	@Override
-	public String getNewTableName() {
+	public String getNewTableName(
+			@SuppressWarnings("unused") int localTablesCreated) {
 		// empty method by indent
 		return null;
 	}
 
 	/**
-	 * @see IJSkatView#updateISSMove(String, SkatGameData, ISSMoveInformation)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void updateISSMove(@SuppressWarnings("unused") String tableName,
@@ -399,26 +419,29 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#playTrickCard(String, Player, Card)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void playTrickCard(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") Player position, @SuppressWarnings("unused") Card card) {
+			@SuppressWarnings("unused") Player position,
+			@SuppressWarnings("unused") Card card) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#setLastTrick(String, Player, Card, Card, Card)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void setLastTrick(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") Player trickForeHand, @SuppressWarnings("unused") Card foreHandCard,
-			@SuppressWarnings("unused") Card middleHandCard, @SuppressWarnings("unused") Card rearHandCard) {
+			@SuppressWarnings("unused") Player trickForeHand,
+			@SuppressWarnings("unused") Card foreHandCard,
+			@SuppressWarnings("unused") Card middleHandCard,
+			@SuppressWarnings("unused") Card rearHandCard) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#showPreferences()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void showPreferences() {
@@ -426,7 +449,7 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#showTrainingOverview()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void showTrainingOverview() {
@@ -434,7 +457,7 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#closeTabPanel(java.lang.String)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void closeTabPanel(@SuppressWarnings("unused") String name) {
@@ -442,41 +465,45 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#getPlayerForInvitation(Set)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public List<String> getPlayerForInvitation(@SuppressWarnings("unused") Set<String> playerNames) {
+	public List<String> getPlayerForInvitation(
+			@SuppressWarnings("unused") Set<String> playerNames) {
 		// empty method by indent
 		return null;
 	}
 
 	/**
-	 * @see IJSkatView#addCards(String, Player, CardList)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void addCards(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player player,
+	public void addCards(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player player,
 			@SuppressWarnings("unused") CardList cards) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#setActivePlayer(String, Player)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void setActivePlayer(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player player) {
+	public void setActivePlayer(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player player) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#setPass(String, Player)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void setPass(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player player) {
+	public void setPass(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player player) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#setSeriesState(String, SeriesState)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void setSeriesState(@SuppressWarnings("unused") String tableName,
@@ -485,49 +512,54 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#setBidValueToMake(String, int)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void setBidValueToMake(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") int bidValue) {
+	public void setBidValueToMake(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") int bidValue) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#setBidValueToHold(String, int)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void setBidValueToHold(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") int bidValue) {
+	public void setBidValueToHold(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") int bidValue) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#setSkat(String, CardList)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void setSkat(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") CardList skat) {
+	public void setSkat(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") CardList skat) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#setTrickNumber(String, int)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void setTrickNumber(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") int trickNumber) {
+	public void setTrickNumber(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") int trickNumber) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#showISSTableInvitation(String, String)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean showISSTableInvitation(@SuppressWarnings("unused") String invitor,
+	public boolean showISSTableInvitation(
+			@SuppressWarnings("unused") String invitor,
 			@SuppressWarnings("unused") String tableName) {
 		// empty method by indent
 		return false;
 	}
 
 	/**
-	 * @see IJSkatView#setGameResult(String, SkatGameData)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void setGameResult(@SuppressWarnings("unused") String tableName,
@@ -536,7 +568,7 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#showCardNotAllowedMessage(Card)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void showCardNotAllowedMessage(@SuppressWarnings("unused") Card card) {
@@ -544,55 +576,70 @@ public class NullView implements IJSkatView {
 	}
 
 	/**
-	 * @see IJSkatView#addTrainingResult(GameType, long, long, long, double,
-	 *      double)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void addTrainingResult(@SuppressWarnings("unused") GameType gameType,
-			@SuppressWarnings("unused") long episodes, @SuppressWarnings("unused") long totalWonGames,
-			@SuppressWarnings("unused") long episodeWonGames, @SuppressWarnings("unused") double totalDeclarerNetError,
+	public void addTrainingResult(
+			@SuppressWarnings("unused") GameType gameType,
+			@SuppressWarnings("unused") long episodes,
+			@SuppressWarnings("unused") long totalWonGames,
+			@SuppressWarnings("unused") long episodeWonGames,
+			@SuppressWarnings("unused") double totalDeclarerNetError,
 			@SuppressWarnings("unused") double totalOpponentNetError) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#setGameNumber(String, int)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void setGameNumber(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") int gameNumber) {
+	public void setGameNumber(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") int gameNumber) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#setPlayerNames(String, String, String, String)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void setPlayerNames(@SuppressWarnings("unused") String tableName,
 			@SuppressWarnings("unused") String upperLeftPlayerName,
-			@SuppressWarnings("unused") String upperRightPlayerName, @SuppressWarnings("unused") String lowerPlayerName) {
+			@SuppressWarnings("unused") String upperRightPlayerName,
+			@SuppressWarnings("unused") String lowerPlayerName) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#setDeclarer(String, Player)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public void setDeclarer(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player declarer) {
+	public void setDeclarer(@SuppressWarnings("unused") String tableName,
+			@SuppressWarnings("unused") Player declarer) {
 		// empty method by indent
 	}
 
 	/**
-	 * @see IJSkatView#closeISSPanels()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void closeISSPanels() {
 		// empty method by indent
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setGameResultWithoutSkatList(String tableName,
 			SkatGameData gameData) {
 		// FIXME (jansch 05.04.2011) remove this dirty hack
+	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void showDuplicateTableNameMessage(String duplicateTableName) {
+		// empty method by indent
 	}
 }

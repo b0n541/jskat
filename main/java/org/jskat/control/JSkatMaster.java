@@ -19,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package org.jskat.control;
 
 import java.awt.Desktop;
@@ -50,7 +49,6 @@ import org.jskat.gui.action.JSkatAction;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
-
 
 /**
  * Controls everything in JSkat
@@ -100,12 +98,29 @@ public class JSkatMaster {
 		// TODO check whether a connection to ISS is established
 		// TODO ask whether a local or a remote tabel should be created
 
-		String tableName = view.getNewTableName();
+		String tableName = view.getNewTableName(data.getLocalTablesCreated());
+
 		if (tableName == null) {
+
 			log.debug("Create table was cancelled..."); //$NON-NLS-1$
 			return;
-		}
 
+		} else {
+
+			if (data.isFreeTableName(tableName)) {
+
+				createLocalTable(tableName);
+
+			} else {
+
+				view.showDuplicateTableNameMessage(tableName);
+				// try again
+				createTable();
+			}
+		}
+	}
+
+	private void createLocalTable(String tableName) {
 		SkatTable table = new SkatTable(data.getTableOptions());
 		table.setName(tableName);
 		data.addSkatTable(table);
@@ -121,7 +136,8 @@ public class JSkatMaster {
 	 */
 	public void invitePlayer() {
 
-		List<String> player = view.getPlayerForInvitation(data.getAvailableISSPlayer());
+		List<String> player = view.getPlayerForInvitation(data
+				.getAvailableISSPlayer());
 		for (String currPlayer : player) {
 			getIssController().invitePlayer(data.getActiveTable(), currPlayer);
 		}
@@ -149,8 +165,8 @@ public class JSkatMaster {
 	 * @param unlimited
 	 *            TRUE, if unlimited rounds should be played
 	 */
-	public void startSeries(ArrayList<PlayerType> allPlayer, ArrayList<String> playerNames, int numberOfRounds,
-			boolean unlimited) {
+	public void startSeries(ArrayList<PlayerType> allPlayer,
+			ArrayList<String> playerNames, int numberOfRounds, boolean unlimited) {
 
 		log.debug(data.getActiveTable());
 
@@ -170,7 +186,8 @@ public class JSkatMaster {
 		table.startSkatSeries(numberOfRounds, unlimited);
 	}
 
-	private IJSkatPlayer getPlayerInstance(String tableName, PlayerType playerType) {
+	private IJSkatPlayer getPlayerInstance(String tableName,
+			PlayerType playerType) {
 
 		IJSkatPlayer player = null;
 
@@ -344,7 +361,8 @@ public class JSkatMaster {
 	 *            Skat player
 	 * @return TRUE if the placing was successful
 	 */
-	public synchronized boolean placePlayer(String tableName, IJSkatPlayer player) {
+	public synchronized boolean placePlayer(String tableName,
+			IJSkatPlayer player) {
 
 		boolean result = false;
 
@@ -426,8 +444,9 @@ public class JSkatMaster {
 	 */
 	public void loadNeuralNetworks() {
 
-		SkatNetworks.loadNetworks(System
-				.getProperty("user.home").concat(System.getProperty("file.separator")).concat(".jskat")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+		SkatNetworks
+				.loadNetworks(System
+						.getProperty("user.home").concat(System.getProperty("file.separator")).concat(".jskat")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	/**
@@ -435,8 +454,9 @@ public class JSkatMaster {
 	 */
 	public void saveNeuralNetworks() {
 
-		SkatNetworks.saveNetworks(System
-				.getProperty("user.home").concat(System.getProperty("file.separator")).concat(".jskat")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		SkatNetworks
+				.saveNetworks(System
+						.getProperty("user.home").concat(System.getProperty("file.separator")).concat(".jskat")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	/**
@@ -479,7 +499,8 @@ public class JSkatMaster {
 		}
 	}
 
-	private void handleHumanInputForISSTable(String tableName, String command, Object source) {
+	private void handleHumanInputForISSTable(String tableName, String command,
+			Object source) {
 
 		if (JSkatAction.PASS_BID.toString().equals(command)) {
 			// player passed
@@ -520,9 +541,11 @@ public class JSkatMaster {
 				// FIXME (jan 02.11.2010) Discarded cards are sent with the
 				// game announcement to ISS
 				GameAnnouncementWithDiscardedCards gameAnnouncement = (GameAnnouncementWithDiscardedCards) source;
-				issControl.sendGameAnnouncementMove(tableName, gameAnnouncement);
+				issControl
+						.sendGameAnnouncementMove(tableName, gameAnnouncement);
 			}
-		} else if (JSkatAction.PLAY_CARD.toString().equals(command) && source instanceof Card) {
+		} else if (JSkatAction.PLAY_CARD.toString().equals(command)
+				&& source instanceof Card) {
 
 			Card nextCard = (Card) source;
 			issControl.sendCardMove(tableName, nextCard);
@@ -674,10 +697,12 @@ public class JSkatMaster {
 	 * @param strength
 	 *            Playing strength
 	 */
-	public void updateISSPlayer(String playerName, String language, long gamesPlayed, double strength) {
+	public void updateISSPlayer(String playerName, String language,
+			long gamesPlayed, double strength) {
 
 		data.addAvailableISSPlayer(playerName);
-		view.updateISSLobbyPlayerList(playerName, language, gamesPlayed, strength);
+		view.updateISSLobbyPlayerList(playerName, language, gamesPlayed,
+				strength);
 	}
 
 	/**
@@ -762,10 +787,11 @@ public class JSkatMaster {
 	 * @param totalOpponentNetError
 	 *            Total error in opponent net
 	 */
-	public void addTrainingResult(GameType gameType, long episodes, long totalWonGames, long episodeWonGames,
+	public void addTrainingResult(GameType gameType, long episodes,
+			long totalWonGames, long episodeWonGames,
 			double totalDeclarerNetError, double totalOpponentNetError) {
 
-		view.addTrainingResult(gameType, episodes, totalWonGames, episodeWonGames, totalDeclarerNetError,
-				totalOpponentNetError);
+		view.addTrainingResult(gameType, episodes, totalWonGames,
+				episodeWonGames, totalDeclarerNetError, totalOpponentNetError);
 	}
 }
