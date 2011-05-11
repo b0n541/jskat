@@ -28,7 +28,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -44,6 +43,7 @@ import org.jskat.control.iss.IssController;
 import org.jskat.data.GameAnnouncementWithDiscardedCards;
 import org.jskat.data.JSkatApplicationData;
 import org.jskat.data.JSkatOptions;
+import org.jskat.data.JSkatOptions.SupportedLanguage;
 import org.jskat.gui.IJSkatView;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.util.Card;
@@ -722,17 +722,21 @@ public class JSkatMaster {
 	 */
 	public void openIssHomepage() {
 
-		openWebPage(getISSHomepageLink(Locale.getDefault()));
+		openWebPage(getISSHomepageLink());
 	}
 
-	private String getISSHomepageLink(Locale locale) {
+	private String getISSHomepageLink() {
 
 		String result = "http://www.skatgame.net/iss/"; //$NON-NLS-1$
 
-		if (locale.getLanguage().equals(Locale.GERMAN.toString())) {
+		SupportedLanguage lang = JSkatOptions.instance().getLanguage();
+		switch (lang) {
+		case GERMAN:
 			result += "index-de.html"; //$NON-NLS-1$
-		} else {
+			break;
+		case ENGLISH:
 			result += "index.html"; //$NON-NLS-1$
+			break;
 		}
 
 		return result;
@@ -754,18 +758,22 @@ public class JSkatMaster {
 	 * Opens the ISS registration form in the default browser
 	 */
 	public void openIssRegisterPage() {
-		// FIXME (jan 13.12.2010) get Locale from options
-		openWebPage(getIssRegisterLink(Locale.getDefault()));
+
+		openWebPage(getIssRegisterLink());
 	}
 
-	private String getIssRegisterLink(Locale locale) {
+	private String getIssRegisterLink() {
 
 		String result = "http://skatgame.net:7000/"; //$NON-NLS-1$
 
-		if (locale.getLanguage().equals(Locale.GERMAN.toString())) {
+		SupportedLanguage lang = JSkatOptions.instance().getLanguage();
+		switch (lang) {
+		case GERMAN:
 			result += "de-register"; //$NON-NLS-1$
-		} else {
+			break;
+		case ENGLISH:
 			result += "en-register"; //$NON-NLS-1$
+			break;
 		}
 
 		return result;
