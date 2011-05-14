@@ -67,7 +67,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	protected Map<String, Player> playerNamesAndPositions;
 
 	// FIXME (jan 14.11.2010) looks wrong to me, was made static to avoid
-	// NullPointerException during table creation
+	// NullPointerException during ISS table creation
 	protected static Map<Player, Boolean> playerPassed = new HashMap<Player, Boolean>();
 	// declarer player on the table
 	protected Player declarer;
