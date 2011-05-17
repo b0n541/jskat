@@ -900,7 +900,7 @@ public class JSkatViewImpl implements IJSkatView {
 		case SKAT_REQUEST:
 			setGameState(tableName, GameState.PICK_UP_SKAT);
 			break;
-		case SKAT_LOOKING:
+		case PICK_UP_SKAT:
 			setGameState(tableName, GameState.DISCARDING);
 			if (moveInformation.getSkat().size() == 2) {
 				setSkat(tableName, moveInformation.getSkat());
@@ -934,8 +934,9 @@ public class JSkatViewImpl implements IJSkatView {
 
 			playTrickCard(tableName, movePlayer, moveInformation.getCard());
 			break;
+		case RESIGN:
 		case TIME_OUT:
-			// TODO show time out message box
+			// TODO show message box
 			break;
 		}
 

@@ -21,11 +21,11 @@
 
 /*
 
-@ShortLicense@
+ @ShortLicense@
 
-Authors: @JS@
+ Authors: @JS@
 
-Released: @ReleaseDate@
+ Released: @ReleaseDate@
 
  */
 
@@ -41,13 +41,13 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.jskat.AbstractJSkatTest;
-import org.jskat.control.iss.MessageParser;
 import org.jskat.data.SkatGameData;
+import org.jskat.data.iss.ISSMoveInformation;
 import org.jskat.data.iss.ISSPlayerStatus;
 import org.jskat.data.iss.ISSTablePanelStatus;
+import org.jskat.data.iss.MoveType;
 import org.jskat.util.Player;
 import org.junit.Test;
-
 
 /**
  * Tests the parsing of the ISS messages
@@ -111,7 +111,8 @@ public class MessageParserTest extends AbstractJSkatTest {
 			detailParams.add(token.nextToken());
 		}
 
-		ISSTablePanelStatus status = MessageParser.getTableStatus(creator, detailParams);
+		ISSTablePanelStatus status = MessageParser.getTableStatus(creator,
+				detailParams);
 
 		assertEquals(3, status.getMaxPlayers());
 		assertEquals(3, status.getPlayerInformations().size());
@@ -125,5 +126,25 @@ public class MessageParserTest extends AbstractJSkatTest {
 		assertTrue(playerStatus.isPlayerLeft());
 		assertFalse(playerStatus.isReadyToPlay());
 		assertTrue(playerStatus.isTalkEnabled());
+	}
+
+	public void testParseTableUpdatePlayerResign() {
+
+		String playerResign = "table .4 foo play 1 RE 124.1 173.9 177.8"; //$NON-NLS-1$
+
+		StringTokenizer token = new StringTokenizer(playerResign);
+		token.nextToken(); // table
+		token.nextToken(); // .4
+		String creator = token.nextToken(); // foo
+		token.nextToken(); // play
+		List<String> detailParams = new ArrayList<String>();
+		while (token.hasMoreTokens()) {
+			detailParams.add(token.nextToken());
+		}
+
+		ISSMoveInformation moveInfo = MessageParser
+				.getMoveInformation(detailParams);
+
+		assertEquals(MoveType.RESIGN, moveInfo.getType());
 	}
 }

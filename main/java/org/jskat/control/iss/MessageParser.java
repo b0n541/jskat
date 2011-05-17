@@ -154,11 +154,13 @@ public class MessageParser {
 			info.setType(MoveType.SKAT_REQUEST);
 		} else if ("??.??".equals(move)) { //$NON-NLS-1$
 			// hidden skat given to a player
-			info.setType(MoveType.SKAT_LOOKING);
+			info.setType(MoveType.PICK_UP_SKAT);
 		} else if (move.startsWith("TI.")) { //$NON-NLS-1$
 			// time out for player
 			info.setType(MoveType.TIME_OUT);
 			info.setTimeOutPlayer(parseTimeOut(move));
+		} else if (move.equals("RE")) { //$NON-NLS-1$
+			info.setType(MoveType.RESIGN);
 		} else {
 			// extensive parsing needed
 
@@ -193,7 +195,7 @@ public class MessageParser {
 						info.setDealCards(parseCardDeal(move));
 					} else if (move.length() == 5) {
 						// open skat given to a player
-						info.setType(MoveType.SKAT_LOOKING);
+						info.setType(MoveType.PICK_UP_SKAT);
 						info.setSkat(parseSkatCards(move));
 					} else {
 						// game announcement

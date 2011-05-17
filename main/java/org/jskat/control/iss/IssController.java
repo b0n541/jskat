@@ -33,8 +33,8 @@ import org.jskat.control.JSkatMaster;
 import org.jskat.data.GameAnnouncementWithDiscardedCards;
 import org.jskat.data.JSkatApplicationData;
 import org.jskat.data.SkatGameData;
-import org.jskat.data.Trick;
 import org.jskat.data.SkatGameData.GameState;
+import org.jskat.data.Trick;
 import org.jskat.data.iss.ISSChatMessage;
 import org.jskat.data.iss.ISSGameStartInformation;
 import org.jskat.data.iss.ISSLoginCredentials;
@@ -508,7 +508,7 @@ public class IssController {
 		case SKAT_REQUEST:
 			currGame.setGameState(GameState.DISCARDING);
 			break;
-		case SKAT_LOOKING:
+		case PICK_UP_SKAT:
 			currGame.setGameState(GameState.DISCARDING);
 			break;
 		case GAME_ANNOUNCEMENT:
@@ -520,6 +520,7 @@ public class IssController {
 			currGame.setGameState(GameState.TRICK_PLAYING);
 			currGame.setTrickCard(movePlayer, moveInformation.getCard());
 			break;
+		case RESIGN:
 		case TIME_OUT:
 			currGame.setGameState(GameState.PRELIMINARY_GAME_END);
 			break;
