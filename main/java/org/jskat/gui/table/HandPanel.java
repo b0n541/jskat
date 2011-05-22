@@ -351,13 +351,13 @@ abstract class HandPanel extends JPanel {
 		setBorder(getPanelBorder());
 	}
 
-	void setPass() {
-		playerPassed = true;
+	void setPass(boolean isPassed) {
+		playerPassed = isPassed;
 		refreshHeaderText();
 	}
 
-	void setDeclarer() {
-		declarer = true;
+	void setDeclarer(boolean isDeclarer) {
+		declarer = isDeclarer;
 		refreshHeaderText();
 	}
 

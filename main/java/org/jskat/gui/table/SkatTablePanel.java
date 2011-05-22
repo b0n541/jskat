@@ -415,7 +415,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 		userPanel.setSortGameType(gameAnnouncement.getGameType());
 
 		if (gameAnnouncement.getGameType() != GameType.PASSED_IN) {
-			getPlayerPanel(player).setDeclarer();
+			getPlayerPanel(player).setDeclarer(true);
+		}
+
+		if (gameAnnouncement.isOuvert()) {
+			getPlayerPanel(player).showCards();
 		}
 	}
 
@@ -857,7 +861,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		playerPassed.put(player, Boolean.TRUE);
 
-		getPlayerPanel(player).setPass();
+		getPlayerPanel(player).setPass(true);
 		biddingPanel.setPass(player);
 
 		switch (player) {
