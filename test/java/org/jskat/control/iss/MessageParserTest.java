@@ -41,11 +41,15 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 import org.jskat.AbstractJSkatTest;
+import org.jskat.data.GameAnnouncement;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.iss.ISSMoveInformation;
 import org.jskat.data.iss.ISSPlayerStatus;
 import org.jskat.data.iss.ISSTablePanelStatus;
 import org.jskat.data.iss.MoveType;
+import org.jskat.util.Card;
+import org.jskat.util.CardList;
+import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.junit.Test;
 
@@ -94,12 +98,12 @@ public class MessageParserTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Test the leaving of an player
+	 * Test the leaving of a player
 	 */
 	@Test
 	public void testParseTableUpdatePlayerLeft() {
 
-		String tableUpdate = "table .4 foo state 3 foo . . . foo . 0 0 0 0 0 0 1 0 xskat $ 2 1 83 157 0 0 1 0 xskat:2 $ 0 0 0 0 0 0 1 0 . . 0 0 0 0 0 0 0 0 false 0";
+		String tableUpdate = "table .4 foo state 3 foo . . . foo . 0 0 0 0 0 0 1 0 xskat $ 2 1 83 157 0 0 1 0 xskat:2 $ 0 0 0 0 0 0 1 0 . . 0 0 0 0 0 0 0 0 false 0"; //$NON-NLS-1$
 
 		StringTokenizer token = new StringTokenizer(tableUpdate);
 		token.nextToken(); // table
@@ -128,6 +132,9 @@ public class MessageParserTest extends AbstractJSkatTest {
 		assertTrue(playerStatus.isTalkEnabled());
 	}
 
+	/**
+	 * Tests the resigning of a player
+	 */
 	public void testParseTableUpdatePlayerResign() {
 
 		String playerResign = "table .4 foo play 1 RE 124.1 173.9 177.8"; //$NON-NLS-1$
@@ -146,5 +153,45 @@ public class MessageParserTest extends AbstractJSkatTest {
 				.getMoveInformation(detailParams);
 
 		assertEquals(MoveType.RESIGN, moveInfo.getType());
+	}
+
+	/**
+	 * Tests the announcing of an ouvert game
+	 */
+	public void testParseTableUpdateOuvertGame() {
+
+		String ouvertGame = "table .1 foo play 2 SO.D7.DK.HJ.HQ.HK.S7.S9.ST.SK.C7 180.0 174.2 160.9"; //$NON-NLS-1$
+
+		StringTokenizer token = new StringTokenizer(ouvertGame);
+		token.nextToken(); // table
+		token.nextToken(); // .1
+		String creator = token.nextToken(); // foo
+		token.nextToken(); // play
+		List<String> detailParams = new ArrayList<String>();
+		while (token.hasMoreTokens()) {
+			detailParams.add(token.nextToken());
+		}
+
+		ISSMoveInformation moveInfo = MessageParser
+				.getMoveInformation(detailParams);
+
+		assertEquals(MoveType.GAME_ANNOUNCEMENT, moveInfo.getType());
+
+		GameAnnouncement announcement = moveInfo.getGameAnnouncement();
+		assertEquals(GameType.SPADES, announcement.getGameType());
+		assertTrue(announcement.isOuvert());
+
+		CardList ouvertCards = moveInfo.getOuvertCards();
+		assertEquals(10, ouvertCards.size());
+		assertTrue(ouvertCards.contains(Card.D7));
+		assertTrue(ouvertCards.contains(Card.DK));
+		assertTrue(ouvertCards.contains(Card.HJ));
+		assertTrue(ouvertCards.contains(Card.HQ));
+		assertTrue(ouvertCards.contains(Card.HK));
+		assertTrue(ouvertCards.contains(Card.S7));
+		assertTrue(ouvertCards.contains(Card.S9));
+		assertTrue(ouvertCards.contains(Card.ST));
+		assertTrue(ouvertCards.contains(Card.SK));
+		assertTrue(ouvertCards.contains(Card.C7));
 	}
 }
