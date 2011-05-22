@@ -19,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package org.jskat.gui.table;
 
 import java.awt.Container;
@@ -40,12 +39,12 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import net.miginfocom.swing.MigLayout;
+
 import org.jskat.ai.PlayerType;
 import org.jskat.control.JSkatMaster;
 import org.jskat.gui.AbstractI18NComboBoxRenderer;
 import org.jskat.util.JSkatResourceBundle;
-
-import net.miginfocom.swing.MigLayout;
 
 /**
  * Asks for user defined options on start of a skat series
@@ -103,7 +102,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 		ArrayList<PlayerType> playerTypes = new ArrayList<PlayerType>();
 
 		playerTypes.add(PlayerType.RANDOM);
-		playerTypes.add(PlayerType.NEURAL_NETWORK);
+		// playerTypes.add(PlayerType.NEURAL_NETWORK);
 		playerTypes.add(PlayerType.ALGORITHMIC);
 
 		root.add(new JLabel(strings.getString("player") + " 1")); //$NON-NLS-1$//$NON-NLS-2$
