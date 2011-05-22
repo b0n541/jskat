@@ -273,6 +273,14 @@ abstract class HandPanel extends JPanel {
 	}
 
 	/**
+	 * Removes all cards from the panel
+	 */
+	void removeAllCards() {
+
+		cardPanel.clearCards();
+	}
+
+	/**
 	 * Removes all cards from the panel and resets other values
 	 */
 	void clearHandPanel() {

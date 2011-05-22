@@ -871,6 +871,10 @@ public class JSkatViewImpl implements IJSkatView {
 		// TODO add other types too
 		case DEAL:
 			setGameState(tableName, GameState.DEALING);
+			SkatTablePanel table = tables.get(tableName);
+			table.hideCards(Player.FOREHAND);
+			table.hideCards(Player.MIDDLEHAND);
+			table.hideCards(Player.REARHAND);
 			addCards(tableName, Player.FOREHAND,
 					moveInformation.getCards(Player.FOREHAND));
 			addCards(tableName, Player.MIDDLEHAND,
@@ -910,6 +914,10 @@ public class JSkatViewImpl implements IJSkatView {
 			setGameState(tableName, GameState.DECLARING);
 			setGameAnnouncement(tableName, movePlayer,
 					moveInformation.getGameAnnouncement());
+			if (moveInformation.getGameAnnouncement().isOuvert()) {
+				setOuvertCards(tableName, movePlayer,
+						moveInformation.getOuvertCards());
+			}
 			setGameState(tableName, GameState.TRICK_PLAYING);
 			setTrickForeHand(tableName, Player.FOREHAND);
 			break;
@@ -952,6 +960,15 @@ public class JSkatViewImpl implements IJSkatView {
 			table.setPlayerTime(Player.REARHAND,
 					moveInformation.getPlayerTime(Player.REARHAND));
 		}
+	}
+
+	private void setOuvertCards(String tableName, Player player,
+			CardList ouvertCards) {
+
+		SkatTablePanel table = tables.get(tableName);
+		table.removeAllCards(player);
+		table.addCards(player, ouvertCards);
+		table.showCards(player);
 	}
 
 	/**

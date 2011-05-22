@@ -158,6 +158,7 @@ public class MessageParserTest extends AbstractJSkatTest {
 	/**
 	 * Tests the announcing of an ouvert game
 	 */
+	@Test
 	public void testParseTableUpdateOuvertGame() {
 
 		String ouvertGame = "table .1 foo play 2 SO.D7.DK.HJ.HQ.HK.S7.S9.ST.SK.C7 180.0 174.2 160.9"; //$NON-NLS-1$

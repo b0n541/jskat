@@ -19,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package org.jskat.gui.table;
 
 import javax.swing.ActionMap;
@@ -27,7 +26,6 @@ import javax.swing.ActionMap;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.SkatGameData.GameState;
-
 
 /**
  * Panel for showing informations about the user
@@ -61,5 +59,10 @@ public class JSkatUserPanel extends HandPanel {
 
 	GameState getGameState() {
 		return this.gameState;
+	}
+
+	@Override
+	void hideCards() {
+		// ignore hiding of cards for user panel
 	}
 }

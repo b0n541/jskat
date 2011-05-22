@@ -19,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package org.jskat.gui.table;
 
 import java.awt.CardLayout;
@@ -54,7 +53,6 @@ import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
-
 
 /**
  * Panel for a skat table
@@ -364,6 +362,26 @@ public class SkatTablePanel extends AbstractTabPanel {
 			break;
 		case REARHAND:
 			rearHand.removeCard(card);
+			break;
+		}
+	}
+
+	/**
+	 * Removes all cards from a player
+	 * 
+	 * @param player
+	 *            Player
+	 */
+	public void removeAllCards(Player player) {
+		switch (player) {
+		case FOREHAND:
+			foreHand.removeAllCards();
+			break;
+		case MIDDLEHAND:
+			middleHand.removeAllCards();
+			break;
+		case REARHAND:
+			rearHand.removeAllCards();
 			break;
 		}
 	}
@@ -956,5 +974,27 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void setDeclarer(Player declarer) {
 		this.declarer = declarer;
+	}
+
+	/**
+	 * Shows the cards of a player
+	 * 
+	 * @param player
+	 *            Player
+	 */
+	public void showCards(Player player) {
+
+		getPlayerPanel(player).showCards();
+	}
+
+	/**
+	 * Hides the cards of a player
+	 * 
+	 * @param player
+	 *            Player
+	 */
+	public void hideCards(Player player) {
+
+		getPlayerPanel(player).hideCards();
 	}
 }
