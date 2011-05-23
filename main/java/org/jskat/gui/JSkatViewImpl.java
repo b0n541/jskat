@@ -2,8 +2,8 @@
  * JSkat - A skat program written in Java
  * Copyright by Jan Schäfer and Markus J. Luzius
  *
- * Version: 0.7.0
- * Build date: 2011-05-23 18:13:47
+ * Version: 0.8.0-SNAPSHOT
+ * Build date: 2011-05-23 18:57:15
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -458,7 +458,7 @@ public class JSkatViewImpl implements IJSkatView {
 		JOptionPane
 				.showMessageDialog(
 						mainFrame,
-						"JSkat Version 0.7\n\n"
+						"JSkat Version 0.8\n\n"
 								+ "Authors: Jan Schäfer, Markus J. Luzius\n\n"
 								+ "Icons: Gnome Desktop Icons, Tango project, Elementary icons,\nSilvestre Herrera and Alex Roberts\n\n"
 								+ "This program comes with ABSOLUTELY NO WARRANTY; for details see licence dialog\n"
