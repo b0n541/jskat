@@ -19,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package org.jskat.data;
 
 import java.util.ArrayList;
@@ -36,7 +35,6 @@ import org.jskat.util.Player;
 import org.jskat.util.Suit;
 import org.jskat.util.rule.BasicSkatRules;
 import org.jskat.util.rule.SkatRuleFactory;
-
 
 /**
  * Data class for a Skat game
@@ -738,9 +736,11 @@ public class SkatGameData {
 
 		// TODO what happens if two or more players have the same points?
 		// FIXME this is rule logic --> remove it from data object!!!
-		if (playerPoints.get(Player.FOREHAND).intValue() > playerPoints.get(Player.MIDDLEHAND).intValue()) {
+		if (playerPoints.get(Player.FOREHAND).intValue() > playerPoints.get(
+				Player.MIDDLEHAND).intValue()) {
 
-			if (playerPoints.get(Player.FOREHAND).intValue() > playerPoints.get(Player.REARHAND).intValue()) {
+			if (playerPoints.get(Player.FOREHAND).intValue() > playerPoints
+					.get(Player.REARHAND).intValue()) {
 				ramschLoser = Player.FOREHAND;
 			} else {
 				ramschLoser = Player.REARHAND;
@@ -748,7 +748,8 @@ public class SkatGameData {
 
 		} else {
 
-			if (playerPoints.get(Player.MIDDLEHAND).intValue() > playerPoints.get(Player.REARHAND).intValue()) {
+			if (playerPoints.get(Player.MIDDLEHAND).intValue() > playerPoints
+					.get(Player.REARHAND).intValue()) {
 				ramschLoser = Player.MIDDLEHAND;
 			} else {
 				ramschLoser = Player.REARHAND;
@@ -1040,7 +1041,8 @@ public class SkatGameData {
 	 */
 	public void addPlayerPoints(Player player, int points) {
 
-		playerPoints.put(player, Integer.valueOf(playerPoints.get(player).intValue() + points));
+		playerPoints.put(player,
+				Integer.valueOf(playerPoints.get(player).intValue() + points));
 	}
 
 	/**
@@ -1325,5 +1327,16 @@ public class SkatGameData {
 	 */
 	public void setPlayerName(Player player, String playerName) {
 		playerNames.put(player, playerName);
+	}
+
+	/**
+	 * Gets whether the game was passed or nor
+	 * 
+	 * @return TRUE if the game was lost
+	 */
+	public boolean isGamePassed() {
+		return playerPasses.get(Player.FOREHAND).booleanValue()
+				&& playerPasses.get(Player.MIDDLEHAND).booleanValue()
+				&& playerPasses.get(Player.FOREHAND).booleanValue();
 	}
 }

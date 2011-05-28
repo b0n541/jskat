@@ -28,6 +28,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -136,8 +137,10 @@ public class JSkatMaster {
 	 */
 	public void invitePlayer() {
 
-		List<String> player = view.getPlayerForInvitation(data
-				.getAvailableISSPlayer());
+		Set<String> issPlayerNames = data.getAvailableISSPlayer();
+		issPlayerNames.remove(data.getIssLoginName());
+
+		List<String> player = view.getPlayerForInvitation(issPlayerNames);
 		for (String currPlayer : player) {
 			getIssController().invitePlayer(data.getActiveTable(), currPlayer);
 		}

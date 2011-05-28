@@ -19,15 +19,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package org.jskat.control.iss;
 
+/**
+ * Actions on an ISS table
+ */
 public enum TableAction {
 
-	STATE,
-	READY,
-	START,
-	GO,
-	PLAY,
-	END
+	STATE, READY, START, GO, PLAY, END
 }

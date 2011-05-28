@@ -19,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package org.jskat.gui.iss;
 
 import java.util.ArrayList;
@@ -38,15 +37,16 @@ import net.miginfocom.swing.MigLayout;
  */
 public class PlayerInvitationPanel extends JPanel {
 
+	private static final long serialVersionUID = 1L;
+
 	private ButtonGroup firstPlayerGroup;
 	private ButtonGroup secondPlayerGroup;
-	private ButtonGroup thirdPlayerGroup;
+
+	// private ButtonGroup thirdPlayerGroup;
 
 	/**
 	 * Constructor
 	 * 
-	 * @param owner
-	 *            Parent frame
 	 * @param player
 	 *            Available player on ISS
 	 */
@@ -61,7 +61,7 @@ public class PlayerInvitationPanel extends JPanel {
 
 		this.firstPlayerGroup = new ButtonGroup();
 		this.secondPlayerGroup = new ButtonGroup();
-		this.thirdPlayerGroup = new ButtonGroup();
+		// this.thirdPlayerGroup = new ButtonGroup();
 
 		for (String currPlayer : player) {
 
@@ -81,12 +81,12 @@ public class PlayerInvitationPanel extends JPanel {
 		JRadioButton secondButton = new JRadioButton();
 		secondButton.setActionCommand(playerName);
 		this.secondPlayerGroup.add(secondButton);
-		this.add(secondButton);
+		this.add(secondButton, "wrap"); //$NON-NLS-1$
 
-		JRadioButton thirdButton = new JRadioButton();
-		thirdButton.setActionCommand(playerName);
-		this.thirdPlayerGroup.add(thirdButton);
-		this.add(thirdButton, "wrap"); //$NON-NLS-1$
+		// JRadioButton thirdButton = new JRadioButton();
+		// thirdButton.setActionCommand(playerName);
+		// this.thirdPlayerGroup.add(thirdButton);
+		// this.add(thirdButton, "wrap"); //$NON-NLS-1$
 	}
 
 	/**
@@ -102,13 +102,11 @@ public class PlayerInvitationPanel extends JPanel {
 			result.add(this.firstPlayerGroup.getSelection().getActionCommand());
 		}
 		if (this.secondPlayerGroup.getSelection() != null) {
-			result
-					.add(this.secondPlayerGroup.getSelection()
-							.getActionCommand());
+			result.add(this.secondPlayerGroup.getSelection().getActionCommand());
 		}
-		if (this.thirdPlayerGroup.getSelection() != null) {
-			result.add(this.thirdPlayerGroup.getSelection().getActionCommand());
-		}
+		// if (this.thirdPlayerGroup.getSelection() != null) {
+		// result.add(this.thirdPlayerGroup.getSelection().getActionCommand());
+		// }
 
 		return result;
 	}

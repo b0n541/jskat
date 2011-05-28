@@ -27,6 +27,7 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -1041,16 +1042,16 @@ public class JSkatViewImpl implements IJSkatView {
 	@Override
 	public List<String> getPlayerForInvitation(Set<String> playerNames) {
 
-		List<String> result = null;
+		List<String> result = new ArrayList<String>();
 
 		PlayerInvitationPanel invitationPanel = new PlayerInvitationPanel(
 				playerNames);
 		int dialogResult = JOptionPane.showConfirmDialog(mainFrame,
-				invitationPanel, "Player invitation",
+				invitationPanel, strings.getString("invite_players"), //$NON-NLS-1$
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 		if (dialogResult == JOptionPane.OK_OPTION) {
-			result = invitationPanel.getPlayer();
+			result.addAll(invitationPanel.getPlayer());
 		}
 
 		log.debug("Players to invite: " + result);
