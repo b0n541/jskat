@@ -98,6 +98,23 @@ public class MessageParserTest extends AbstractJSkatTest {
 	}
 
 	/**
+	 * Test the parsing of the game summary<br>
+	 * Passed game
+	 */
+	@Test
+	public void testParseGameSummary_PassedGame() {
+
+		String gameSummary = "(;GM[Skat]PC[International Skat Server]CO[]SE[32407]ID[756788]DT[2011-05-28/08:46:19/UTC]P0[xskat]P1[bonsai]P2[bernie]R0[]R1[0.0]R2[]MV[w C8.DQ.DJ.HK.S9.SK.SQ.HQ.CK.D9.S8.DT.SJ.C9.CQ.SA.DK.HT.D7.H7.ST.HJ.C7.H8.S7.DA.CJ.CT.D8.H9.CA.HA 1 p 2 p 0 p ]R[passed] ;)"; //$NON-NLS-1$
+
+		SkatGameData gameData = MessageParser.parseGameSummary(gameSummary);
+
+		// assertTrue(gameData.isGamePassed());
+		assertEquals(-1, gameData.getResult());
+
+		// FIXME (jan 28.05.2011) add further asserts
+	}
+
+	/**
 	 * Test the leaving of a player
 	 */
 	@Test
