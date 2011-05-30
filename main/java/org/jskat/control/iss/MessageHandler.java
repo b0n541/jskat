@@ -33,7 +33,6 @@ import org.apache.commons.logging.LogFactory;
 import org.jskat.data.SkatGameData;
 import org.jskat.util.JSkatResourceBundle;
 
-
 /**
  * Handles messages from ISS
  */
@@ -173,24 +172,21 @@ public class MessageHandler {
 
 	private String getErrorString(List<String> params) {
 
-		String result = new String();
-
-		for (String token : params) {
-
-			if (result.length() > 0) {
-				result += " "; //$NON-NLS-1$
+		for (String param : params) {
+			if (param.startsWith("_")) { //$NON-NLS-1$
+				return param;
 			}
-
-			result += token;
 		}
 
-		return result;
+		return params.toString();
 	}
 
 	private String getI18ErrorString(String errorString) {
 
-		if ("_id_pw_mismatch".equals(errorString)) {
-			return strings.getString("login_password_wrong");
+		if ("_id_pw_mismatch".equals(errorString)) { //$NON-NLS-1$
+			return strings.getString("iss_login_password_wrong"); //$NON-NLS-1$
+		} else if ("_not_your_turn".equals(errorString)) { //$NON-NLS-1$
+			return strings.getString("iss_not_your_turn"); //$NON-NLS-1$
 		}
 
 		return errorString;

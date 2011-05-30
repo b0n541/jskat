@@ -44,6 +44,7 @@ import org.jskat.data.iss.MoveType;
 import org.jskat.gui.IJSkatView;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.util.Card;
+import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.Player;
 import org.jskat.util.SkatConstants;
 import org.jskat.util.rule.SkatRuleFactory;
@@ -59,7 +60,7 @@ public class IssController {
 	private JSkatMaster jskat;
 	private IJSkatView view;
 	private JSkatApplicationData data;
-
+	private JSkatResourceBundle strings;
 	private Connector issConnect;
 
 	private Map<String, SkatGameData> gameData;
@@ -71,6 +72,7 @@ public class IssController {
 
 		jskat = newJSkat;
 		data = JSkatApplicationData.instance();
+		strings = JSkatResourceBundle.instance();
 		gameData = new HashMap<String, SkatGameData>();
 	}
 
@@ -551,7 +553,7 @@ public class IssController {
 	 */
 	public void showMessage(int messageType, String message) {
 		// FIXME (jan 12.12.2010) i18n
-		view.showMessage(messageType, "ISS message", message);
+		view.showMessage(messageType, strings.getString("iss_message"), message); //$NON-NLS-1$
 	}
 
 	/**
