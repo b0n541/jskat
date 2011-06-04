@@ -19,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package org.jskat.gui.img;
 
 import java.awt.Canvas;
@@ -34,7 +33,6 @@ import org.apache.commons.logging.LogFactory;
 import org.jskat.data.JSkatOptions;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
-
 
 /**
  * Repository that holds all images used in JSkat
@@ -92,23 +90,36 @@ public class JSkatGraphicRepository {
 	}
 
 	private void loadImages(MediaTracker tracker) {
-		skatTable = Toolkit.getDefaultToolkit().getImage(
+		skatTable = Toolkit
+				.getDefaultToolkit()
+				.getImage(
 						ClassLoader
 								.getSystemResource("org/jskat/gui/img/gui/skat_table.png")); //$NON-NLS-1$
 		tracker.addImage(skatTable, 0);
-		jskatLogo = Toolkit.getDefaultToolkit().getImage(
+		jskatLogo = Toolkit
+				.getDefaultToolkit()
+				.getImage(
 						ClassLoader
 								.getSystemResource("org/jskat/gui/img/gui/jskatLogo.png")); //$NON-NLS-1$
 		tracker.addImage(jskatLogo, 0);
 
 		bidBubbles = new ArrayList<Image>();
-		bidBubbles.add(Toolkit.getDefaultToolkit().getImage(
+		bidBubbles
+				.add(Toolkit
+						.getDefaultToolkit()
+						.getImage(
 								ClassLoader
 										.getSystemResource("org/jskat/gui/img/gui/bid_left.png"))); //$NON-NLS-1$
-		bidBubbles.add(Toolkit.getDefaultToolkit().getImage(
+		bidBubbles
+				.add(Toolkit
+						.getDefaultToolkit()
+						.getImage(
 								ClassLoader
 										.getSystemResource("org/jskat/gui/img/gui/bid_right.png"))); //$NON-NLS-1$
-		bidBubbles.add(Toolkit.getDefaultToolkit().getImage(
+		bidBubbles
+				.add(Toolkit
+						.getDefaultToolkit()
+						.getImage(
 								ClassLoader
 										.getSystemResource("org/jskat/gui/img/gui/bid_user.png"))); //$NON-NLS-1$
 		tracker.addImage(bidBubbles.get(0), 0);
@@ -136,14 +147,20 @@ public class JSkatGraphicRepository {
 			for (IconSize size : IconSize.values()) {
 
 				// add icon
-				icons.get(icon.ordinal()).add(
-Toolkit
+				icons.get(icon.ordinal())
+						.add(Toolkit
 								.getDefaultToolkit()
 								.getImage(
 										ClassLoader
 												.getSystemResource("org/jskat/gui/img/gui/" //$NON-NLS-1$
-								+ icon.toString().toLowerCase() + '_' + size.toString().toLowerCase() + ".png"))); //$NON-NLS-1$
-				tracker.addImage(icons.get(icon.ordinal()).get(size.ordinal()), 1);
+														+ icon.toString()
+																.toLowerCase()
+														+ '_'
+														+ size.toString()
+																.toLowerCase()
+														+ ".png"))); //$NON-NLS-1$
+				tracker.addImage(icons.get(icon.ordinal()).get(size.ordinal()),
+						1);
 			}
 		}
 
@@ -169,21 +186,27 @@ Toolkit
 
 			for (Rank rank : Rank.values()) {
 
-				cards.get(suit.ordinal()).add(
-						Toolkit.getDefaultToolkit().getImage(
+				cards.get(suit.ordinal())
+						.add(Toolkit
+								.getDefaultToolkit()
+								.getImage(
 										ClassLoader
 												.getSystemResource("org/jskat/gui/img/cards/" //$NON-NLS-1$
-										+ cardFace.toString().toLowerCase()
-										+ "/iss/" + suit.shortString() + '-' + rank.shortString() + ".gif"))); //$NON-NLS-1$//$NON-NLS-2$
+														+ cardFace.toString()
+																.toLowerCase()
+														+ "/iss/" + suit.shortString() + '-' + rank.shortString() + ".gif"))); //$NON-NLS-1$//$NON-NLS-2$
 
-				tracker.addImage(cards.get(suit.ordinal()).get(rank.ordinal()), 2);
+				tracker.addImage(cards.get(suit.ordinal()).get(rank.ordinal()),
+						2);
 			}
 		}
 
-		cardBack = Toolkit.getDefaultToolkit().getImage(
+		cardBack = Toolkit
+				.getDefaultToolkit()
+				.getImage(
 						ClassLoader
 								.getSystemResource("org/jskat/gui/img/cards/" + cardFace.toString().toLowerCase() //$NON-NLS-1$
-						+ "/jskat/back.gif")); //$NON-NLS-1$
+										+ "/iss/back.gif")); //$NON-NLS-1$
 		tracker.addImage(cardBack, 2);
 
 		try {
