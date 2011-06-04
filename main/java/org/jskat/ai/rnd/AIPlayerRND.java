@@ -36,7 +36,6 @@ import java.util.Random;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.AbstractJSkatPlayer;
-import org.jskat.ai.IJSkatPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -50,6 +49,11 @@ import org.jskat.util.Player;
 public class AIPlayerRND extends AbstractJSkatPlayer {
 
 	private static Log log = LogFactory.getLog(AIPlayerRND.class);
+
+	/**
+	 * Random generator
+	 */
+	private Random rand = new Random();
 
 	/**
 	 * Creates a new instance of AIPlayerRND
@@ -72,16 +76,18 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see IJSkatPlayer#pickUpSkat()
+	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean pickUpSkat() {
 
 		return this.rand.nextBoolean();
 	}
 
 	/**
-	 * @see IJSkatPlayer#announceGame()
+	 * {@inheritDoc}
 	 */
+	@Override
 	public GameAnnouncement announceGame() {
 
 		log.debug("position: " + this.knowledge.getPlayerPosition()); //$NON-NLS-1$
@@ -100,8 +106,9 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see IJSkatPlayer#bidMore(int)
+	 * {@inheritDoc}
 	 */
+	@Override
 	public int bidMore(int nextBidValue) {
 
 		int result = -1;
@@ -115,25 +122,26 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see IJSkatPlayer#holdBid(int)
+	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean holdBid(int currBidValue) {
 
 		return this.rand.nextBoolean();
 	}
 
 	/**
-	 * @see org.jskat.ai.AbstractJSkatPlayer#startGame()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void startGame() {
-		// CHECK Auto-generated method stub
-
+		// do nothing
 	}
 
 	/**
-	 * @see IJSkatPlayer#playCard()
+	 * {@inheritDoc}
 	 */
+	@Override
 	public Card playCard() {
 
 		int index = -1;
@@ -158,16 +166,18 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see IJSkatPlayer#isAIPlayer()
+	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean isAIPlayer() {
 
 		return true;
 	}
 
 	/**
-	 * @see org.jskat.ai.IJSkatPlayer#discardSkat()
+	 * {@inheritDoc}
 	 */
+	@Override
 	public CardList discardSkat() {
 
 		CardList result = new CardList();
@@ -184,7 +194,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see org.jskat.ai.IJSkatPlayer#preparateForNewGame()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void preparateForNewGame() {
@@ -192,16 +202,10 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see org.jskat.ai.IJSkatPlayer#finalizeGame()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void finalizeGame() {
 		// nothing to do for AIPlayerRND
 	}
-
-	/**
-	 * Random generator
-	 */
-	private Random rand = new Random();
-
 }
