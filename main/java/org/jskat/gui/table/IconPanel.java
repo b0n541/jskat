@@ -29,6 +29,7 @@ import javax.swing.JPanel;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
+import org.jskat.util.JSkatResourceBundle;
 
 
 /**
@@ -39,11 +40,13 @@ public class IconPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	boolean chatEnabled = false;
-	ImageIcon chatIcon;
+	ImageIcon chatIcon = null;
 	JLabel chatLabel;
 	boolean readyToPlay = false;
-	ImageIcon readyToPlayIcon;
+	ImageIcon readyToPlayIcon = null;
 	JLabel readyToPlayLabel;
+
+	JSkatResourceBundle strings = JSkatResourceBundle.instance();
 
 	/**
 	 * Constructor
@@ -85,18 +88,25 @@ public class IconPanel extends JPanel {
 
 	private void setIcons() {
 
+		String tooltipText = null;
 		if (chatEnabled) {
 			chatIcon = new ImageIcon(JSkatGraphicRepository.instance().getIconImage(Icon.CHAT, IconSize.SMALL));
+			tooltipText = strings.getString("iss_chat_enabled"); //$NON-NLS-1$
 		} else {
 			chatIcon = new ImageIcon(JSkatGraphicRepository.instance().getIconImage(Icon.CHAT_DISABLED, IconSize.SMALL));
+			tooltipText = strings.getString("iss_chat_disabled"); //$NON-NLS-1$
 		}
 		chatLabel.setIcon(chatIcon);
+		chatLabel.setToolTipText(tooltipText);
 
 		if (readyToPlay) {
 			readyToPlayIcon = new ImageIcon(JSkatGraphicRepository.instance().getIconImage(Icon.OK, IconSize.SMALL));
+			tooltipText = strings.getString("iss_ready_to_play"); //$NON-NLS-1$
 		} else {
 			readyToPlayIcon = new ImageIcon(JSkatGraphicRepository.instance().getIconImage(Icon.STOP, IconSize.SMALL));
+			tooltipText = strings.getString("iss_not_ready_to_play"); //$NON-NLS-1$
 		}
 		readyToPlayLabel.setIcon(readyToPlayIcon);
+		readyToPlayLabel.setToolTipText(tooltipText);
 	}
 }
