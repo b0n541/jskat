@@ -45,7 +45,8 @@ public class PassBidAction extends AbstractJSkatAction {
 	public PassBidAction() {
 
 		putValue(Action.NAME, strings.getString("pass")); //$NON-NLS-1$
-		putValue(Action.SHORT_DESCRIPTION, "Pass this bid");
+		putValue(Action.SHORT_DESCRIPTION,
+				strings.getString("pass_short_description")); //$NON-NLS-1$
 
 		setActionCommand(JSkatAction.PASS_BID);
 		setIcon(Icon.STOP);

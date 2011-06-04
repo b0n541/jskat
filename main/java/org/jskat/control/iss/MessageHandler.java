@@ -228,6 +228,8 @@ public class MessageHandler extends Thread {
 			return strings.getString("iss_login_password_wrong"); //$NON-NLS-1$
 		} else if ("_not_your_turn".equals(errorString)) { //$NON-NLS-1$
 			return strings.getString("iss_not_your_turn"); //$NON-NLS-1$
+		} else if ("_invalid_move_colon".equals(errorString)) { //$NON-NLS-1$
+			return strings.getString("iss_invalid_move_colon"); //$NON-NLS-1$
 		}
 
 		return errorString;
