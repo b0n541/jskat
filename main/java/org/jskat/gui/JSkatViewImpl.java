@@ -943,7 +943,14 @@ public class JSkatViewImpl implements IJSkatView {
 
 			playTrickCard(tableName, movePlayer, moveInformation.getCard());
 			break;
+		case SHOW_CARDS:
+			setOuvertCards(tableName, movePlayer,
+					moveInformation.getOuvertCards());
+			break;
 		case RESIGN:
+			// FIXME (jansch 04.06.2011) ask human player if he/she also wants
+			// to resign
+			break;
 		case TIME_OUT:
 			// TODO show message box
 			break;

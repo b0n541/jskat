@@ -58,6 +58,10 @@ public enum MoveType {
 	 */
 	CARD_PLAY,
 	/**
+	 * Showing cards
+	 */
+	SHOW_CARDS,
+	/**
 	 * Resigning game
 	 */
 	RESIGN,

@@ -173,6 +173,37 @@ public class MessageParserTest extends AbstractJSkatTest {
 	}
 
 	/**
+	 * Tests showing cards
+	 */
+	public void testParseTableUpdatePlayerShowCards() {
+
+		String playerResign = "table .3 foo play 2 SC.HT.HA.SJ.SQ.SK.CJ 164.1 177.0 156.4"; //$NON-NLS-1$
+
+		StringTokenizer token = new StringTokenizer(playerResign);
+		token.nextToken(); // table
+		token.nextToken(); // .3
+		String creator = token.nextToken(); // foo
+		token.nextToken(); // play
+		List<String> detailParams = new ArrayList<String>();
+		while (token.hasMoreTokens()) {
+			detailParams.add(token.nextToken());
+		}
+
+		ISSMoveInformation moveInfo = MessageParser
+				.getMoveInformation(detailParams);
+
+		assertEquals(MoveType.SHOW_CARDS, moveInfo.getType());
+		CardList ouvertCards = moveInfo.getOuvertCards();
+		assertEquals(6, ouvertCards.size());
+		assertTrue(ouvertCards.contains(Card.HT));
+		assertTrue(ouvertCards.contains(Card.HA));
+		assertTrue(ouvertCards.contains(Card.SJ));
+		assertTrue(ouvertCards.contains(Card.SQ));
+		assertTrue(ouvertCards.contains(Card.SK));
+		assertTrue(ouvertCards.contains(Card.CJ));
+	}
+	
+	/**
 	 * Tests the announcing of an ouvert game
 	 */
 	@Test

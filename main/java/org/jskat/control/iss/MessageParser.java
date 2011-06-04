@@ -161,7 +161,12 @@ public class MessageParser {
 			info.setType(MoveType.TIME_OUT);
 			info.setTimeOutPlayer(parseTimeOut(move));
 		} else if (move.equals("RE")) { //$NON-NLS-1$
+			// resigning of player
 			info.setType(MoveType.RESIGN);
+		} else if (move.startsWith("SC.")) { //$NON-NLS-1$
+			// declarer shows cards
+			info.setType(MoveType.SHOW_CARDS);
+			info.setOuvertCards(parseSkatCards(move.substring(move.indexOf(".") + 1))); //$NON-NLS-1$
 		} else {
 			// extensive parsing needed
 
