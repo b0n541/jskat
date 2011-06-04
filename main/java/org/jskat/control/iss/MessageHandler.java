@@ -36,7 +36,7 @@ import org.jskat.util.JSkatResourceBundle;
 /**
  * Handles messages from ISS
  */
-public class MessageHandler {
+public class MessageHandler extends Thread {
 
 	static Log log = LogFactory.getLog(MessageHandler.class);
 
@@ -44,6 +44,8 @@ public class MessageHandler {
 	IssController issControl;
 
 	JSkatResourceBundle strings;
+
+	List<String> messageList;
 
 	private final static int protocolVersion = 14;
 
@@ -61,9 +63,42 @@ public class MessageHandler {
 		issControl = controller;
 
 		strings = JSkatResourceBundle.instance();
+
+		messageList = new ArrayList<String>();
 	}
 
-	void handleMessage(String message) {
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void run() {
+		while (true) {
+			if (messageList.size() > 0) {
+
+				String message = getNextMessage();
+				handleMessage(message);
+			} else {
+				try {
+					this.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	synchronized void addMessage(String newMessage) {
+
+		messageList.add(newMessage);
+	}
+
+	private synchronized String getNextMessage() {
+
+		return messageList.remove(0);
+	}
+
+	private void handleMessage(String message) {
 
 		log.debug("ISS    |--> " + message); //$NON-NLS-1$
 
@@ -90,60 +125,66 @@ public class MessageHandler {
 			} catch (Exception except) {
 				log.error("Error in parsing ISS protocoll", except); //$NON-NLS-1$
 				issControl.showMessage(JOptionPane.ERROR_MESSAGE,
-						"Error in parsing ISS protocoll.");
+						strings.getString("iss_error_parsing_iss_protocol")); //$NON-NLS-1$
 			}
 		}
 	}
 
-	void handleMessage(String first, List<String> params) throws Exception {
+	void handleMessage(String first, List<String> params) {
 
-		if (first.equals("password:")) { //$NON-NLS-1$
+		MessageType type = MessageType.getByString(first);
 
-			handlePasswordMessage();
-
-		} else if (first.equals("Welcome")) { //$NON-NLS-1$
-
-			handleWelcomeMessage(params);
-
-		} else if (first.equals("clients")) { //$NON-NLS-1$
-
-			handleClientListMessage(params);
-
-		} else if (first.equals("tables")) { //$NON-NLS-1$
-
-			handleTableListMessage(params);
-
-		} else if (first.equals("create")) { //$NON-NLS-1$
-
-			handleTableCreateMessage(params);
-
-		} else if (first.equals("table")) { //$NON-NLS-1$
-
-			handleTableUpdateMessage(params);
-
-		} else if (first.equals("error")) { //$NON-NLS-1$
-
-			handleErrorMessage(params);
-
-		} else if (first.equals("text")) { //$NON-NLS-1$
-
-			handleTextMessage(params);
-
-		} else if (first.equals("yell")) { //$NON-NLS-1$
-
-			handleLobbyChatMessage(params);
-
-		} else if (first.equals("destroy")) { //$NON-NLS-1$
-
-			handleTableDestroyMessage(params);
-
-		} else if (first.equals("invite")) { //$NON-NLS-1$
-
-			handleTableInvitationMessage(params);
-
-		} else {
+		if (MessageType.UNKNOWN.equals(type)) {
 
 			log.error("UNHANDLED MESSAGE: " + first + params.toString()); //$NON-NLS-1$ }
+		} else {
+			// FIXME (jansch 30.05.2011) put message into a queue
+			try {
+				handleMessageObsolete(type, params);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+
+	void handleMessageObsolete(MessageType type, List<String> params)
+			throws Exception {
+
+		switch (type) {
+		case PASSWORD:
+			handlePasswordMessage();
+			break;
+		case WELCOME:
+			handleWelcomeMessage(params);
+			break;
+		case CLIENTS:
+			handleClientListMessage(params);
+			break;
+		case TABLES:
+			handleTableListMessage(params);
+			break;
+		case CREATE:
+			handleTableCreateMessage(params);
+			break;
+		case INVITE:
+			handleTableInvitationMessage(params);
+			break;
+		case TABLE:
+			handleTableUpdateMessage(params);
+			break;
+		case DESTROY:
+			handleTableDestroyMessage(params);
+			break;
+		case ERROR:
+			handleErrorMessage(params);
+			break;
+		case TEXT:
+			handleTextMessage(params);
+			break;
+		case YELL:
+			handleLobbyChatMessage(params);
+			break;
 		}
 	}
 

@@ -59,6 +59,7 @@ class InputChannel extends Thread {
 		this.stream = is;
 		this.reader = new BufferedReader(new InputStreamReader(this.stream));
 		this.messageHandler = new MessageHandler(conn, controller);
+		messageHandler.start();
 	}
 
 	/**
@@ -74,7 +75,7 @@ class InputChannel extends Thread {
 				try {
 
 					line = InputChannel.this.reader.readLine();
-					InputChannel.this.messageHandler.handleMessage(line);
+					InputChannel.this.messageHandler.addMessage(line);
 
 				} catch (IOException ioe) {
 
