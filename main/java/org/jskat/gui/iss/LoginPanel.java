@@ -19,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package org.jskat.gui.iss;
 
 import java.awt.Font;
@@ -41,7 +40,6 @@ import org.jskat.data.iss.ISSLoginCredentials;
 import org.jskat.gui.AbstractTabPanel;
 import org.jskat.gui.action.JSkatAction;
 
-
 /**
  * Panel for login into International Skat Server (ISS)
  */
@@ -51,7 +49,7 @@ public class LoginPanel extends AbstractTabPanel {
 	private static Log log = LogFactory.getLog(LoginPanel.class);
 
 	JTextField loginField;
-	private JPasswordField passwordField;
+	JPasswordField passwordField;
 
 	/**
 	 * @see AbstractTabPanel#AbstractTabPanel(String, ActionMap)
@@ -98,8 +96,8 @@ public class LoginPanel extends AbstractTabPanel {
 				ISSLoginCredentials loginCredentials = new ISSLoginCredentials();
 				loginCredentials.setLoginName(LoginPanel.this.loginField
 						.getText());
-				loginCredentials.setPassword(new String(
-						LoginPanel.this.passwordField.getPassword()));
+				loginCredentials.setPassword(new String(passwordField
+						.getPassword()));
 				// FIXME must be setable
 				loginCredentials.setPort(7000);
 
