@@ -33,9 +33,8 @@ import org.jskat.util.Player;
 import org.jskat.util.rule.BasicSkatRules;
 import org.jskat.util.rule.SkatRuleFactory;
 
-
 /**
- * The JSkat Player implementation
+ * Abstract JSkat player implementation
  */
 public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 
@@ -69,32 +68,36 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	protected int gameValue;
 
 	/**
-	 * @see IJSkatPlayer#setPlayerName(java.lang.String)
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final void setPlayerName(String newPlayerName) {
 
 		playerName = newPlayerName;
 	}
 
 	/**
-	 * @see IJSkatPlayer#getPlayerName()
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final String getPlayerName() {
 
 		return playerName;
 	}
 
 	/**
-	 * @see IJSkatPlayer#setUpBidding()
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final void setUpBidding() {
 
 		setState(PlayerStates.BIDDING);
 	}
 
 	/**
-	 * @see IJSkatPlayer#newGame(Player)
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final void newGame(Player newPosition) {
 
 		cards.clear();
@@ -114,8 +117,9 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	}
 
 	/**
-	 * @see IJSkatPlayer#takeCard(Card)
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final void takeCard(Card newCard) {
 
 		cards.add(newCard);
@@ -134,9 +138,9 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	}
 
 	/**
-	 * @see IJSkatPlayer#startGame(Player, GameType, boolean, boolean, boolean,
-	 *      boolean)
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final void startGame(Player newDeclarer, GameType newGameType, boolean newHandGame, boolean newOuvertGame,
 			boolean newSchneiderAnnounced, boolean newSchwarzAnnounced) {
 
@@ -170,8 +174,9 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	public abstract void startGame();
 
 	/**
-	 * @see IJSkatPlayer#takeSkat(CardList)
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final void takeSkat(CardList skatCards) {
 
 		log.debug("Skat cards: " + skatCards); //$NON-NLS-1$
@@ -192,7 +197,7 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	}
 
 	/**
-	 * @see IJSkatPlayer#bidByPlayer(Player, int)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public final void bidByPlayer(Player player, int bidValue) {
@@ -239,8 +244,9 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	}
 
 	/**
-	 * @see IJSkatPlayer#cardPlayed(Player, Card)
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final void cardPlayed(Player player, Card card) {
 
 		knowledge.setCardPlayed(player, card);
@@ -253,8 +259,9 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	}
 
 	/**
-	 * @see IJSkatPlayer#showTrick(Trick)
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final void showTrick(Trick trick) {
 
 		knowledge.addTrick(trick);
@@ -262,16 +269,18 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	}
 
 	/**
-	 * @see IJSkatPlayer#isHumanPlayer()
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final boolean isHumanPlayer() {
 
 		return !isAIPlayer();
 	}
 
 	/**
-	 * @see IJSkatPlayer#isDeclarer()
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final boolean isDeclarer() {
 
 		boolean result = false;
@@ -285,15 +294,16 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	}
 
 	/**
-	 * @see IJSkatPlayer#lookAtOuvertCards(CardList)
+	 * {@inheritDoc}
 	 */
+	@Override
 	public final void lookAtOuvertCards(CardList ouvertCards) {
 
 		singlePlayerCards.addAll(ouvertCards);
 	}
 
 	/**
-	 * @see IJSkatPlayer#setGameResult(boolean, int)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void setGameResult(boolean pGameWon, int pGameValue) {

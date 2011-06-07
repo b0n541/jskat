@@ -131,7 +131,7 @@ public class PlayerKnowledge {
 		for (Player player : Player.values()) {
 			highestBid.put(player, Integer.valueOf(0));
 
-			playedCards.put(player, EnumSet.allOf(Card.class));
+			playedCards.put(player, EnumSet.noneOf(Card.class));
 			possiblePlayerCards.put(player, EnumSet.allOf(Card.class));
 		}
 		possibleSkatCards.clear();
@@ -587,5 +587,12 @@ public class PlayerKnowledge {
 	public int getSuitPoints(Suit suit) {
 
 		return suitPoints.get(suit).intValue();
+	}
+
+	/**
+	 * Resets the data of the current game
+	 */
+	public void resetCurrentGameData() {
+		initializeVariables();
 	}
 }

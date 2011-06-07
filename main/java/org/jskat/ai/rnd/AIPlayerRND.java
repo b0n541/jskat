@@ -100,7 +100,8 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 		// select a random game type (without RAMSCH and PASSED_IN)
 		newGame.setGameType(GameType.values()[this.rand.nextInt(GameType
 				.values().length - 2)]);
-		newGame.setOuvert(this.rand.nextBoolean());
+		// newGame.setOuvert(this.rand.nextBoolean());
+		newGame.setOuvert(true);
 
 		return newGame;
 	}
