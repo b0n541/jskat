@@ -470,7 +470,7 @@ public class JSkatViewImpl implements IJSkatView {
 								+ ": International Skat Server\n\n" //$NON-NLS-1$
 								+ strings.getString("icons") //$NON-NLS-1$
 								+ ": Gnome Desktop Icons, Tango project, Elementary icons,\n" //$NON-NLS-1$
-								+ "Silvestre Herrera and Alex Roberts\n\n" //$NON-NLS-1$
+								+ "Silvestre Herrera, Alex Roberts and Icojoy\n\n" //$NON-NLS-1$
 								+ "This program comes with ABSOLUTELY NO WARRANTY;\n" //$NON-NLS-1$
 								+ "for details see licence dialog\n" //$NON-NLS-1$
 								+ "This is free software, and you are welcome to redistribute it\n" //$NON-NLS-1$
