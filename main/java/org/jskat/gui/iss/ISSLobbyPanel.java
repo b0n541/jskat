@@ -94,13 +94,13 @@ public class ISSLobbyPanel extends AbstractTabPanel {
 
 	private JPanel getLobbyPanel() {
 
-		JPanel lobby = new JPanel(new MigLayout("fill", "fill",
-				"[shrink][shrink][shrink][shrink][grow]"));
+		JPanel lobby = new JPanel(new MigLayout("fill", "fill", //$NON-NLS-1$ //$NON-NLS-2$
+				"[shrink][shrink][shrink][shrink][grow]")); //$NON-NLS-1$
 
 		JLabel headerLabel = new JLabel(strings.getString("welcome_to_iss_title")); //$NON-NLS-1$
 		headerLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-		JPanel headerPanel = new JPanel(new MigLayout("fill"));
-		headerPanel.add(headerLabel, "center");
+		JPanel headerPanel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
+		headerPanel.add(headerLabel, "center"); //$NON-NLS-1$
 
 		lobby.add(headerPanel, "span 2, growx, align center, wrap"); //$NON-NLS-1$ 
 		lobby.add(new JLabel(strings.getString("players")), "width 50%"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -109,7 +109,7 @@ public class ISSLobbyPanel extends AbstractTabPanel {
 		lobby.add(getPlayerListPanel());
 		lobby.add(getTableListPanel(), "wrap"); //$NON-NLS-1$
 
-		lobby.add(getActionButtonPanel(), "span 2, wrap");
+		lobby.add(getActionButtonPanel(), "span 2, wrap"); //$NON-NLS-1$
 
 		this.chatPanel = new ChatPanel(this);
 		lobby.add(this.chatPanel, "span 2, hmin 200px, growy, align center"); //$NON-NLS-1$
@@ -183,7 +183,7 @@ public class ISSLobbyPanel extends AbstractTabPanel {
 					// FIXME (jansch 27.04.2011) doesn't work
 					// ISSLobbyPanel.actions.get(JSkatAction.OBSERVE_ISS_TABLE).actionPerformed(
 					// new ActionEvent(tableName, 1, null));
-				} else if (value.equals(".")) {
+				} else if (value.equals(".")) { //$NON-NLS-1$
 					// sit down on free seat at table
 					ISSLobbyPanel.actions.get(JSkatAction.JOIN_ISS_TABLE).actionPerformed(
 							new ActionEvent(tableName, 1, null));
@@ -281,9 +281,9 @@ public class ISSLobbyPanel extends AbstractTabPanel {
 	 */
 	public void appendChatMessage(ISSChatMessage message) {
 
-		log.debug("appendChatMessage");
+		log.debug("Appending chat message: " + message); //$NON-NLS-1$
 
-		this.chatPanel.addMessage(message);
+		this.chatPanel.appendMessage(message);
 	}
 
 	@Override

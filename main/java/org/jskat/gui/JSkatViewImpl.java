@@ -327,16 +327,16 @@ public class JSkatViewImpl implements IJSkatView {
 				.get(JSkatAction.CONTINUE_LOCAL_SERIES)));
 		menu.add(tableMenu);
 
-		// JMenu neuralNetworkMenu = new JMenu(
-		//				strings.getString("neural_networks")); //$NON-NLS-1$
-		// neuralNetworkMenu.add(new JMenuItem(actions
-		// .get(JSkatAction.LOAD_NEURAL_NETWORKS)));
-		// neuralNetworkMenu.add(new JMenuItem(actions
-		// .get(JSkatAction.SAVE_NEURAL_NETWORKS)));
-		// neuralNetworkMenu.add(new JSeparator());
-		// neuralNetworkMenu.add(new JMenuItem(actions
-		// .get(JSkatAction.TRAIN_NEURAL_NETWORKS)));
-		// menu.add(neuralNetworkMenu);
+		JMenu neuralNetworkMenu = new JMenu(
+				strings.getString("neural_networks")); //$NON-NLS-1$
+		neuralNetworkMenu.add(new JMenuItem(actions
+				.get(JSkatAction.LOAD_NEURAL_NETWORKS)));
+		neuralNetworkMenu.add(new JMenuItem(actions
+				.get(JSkatAction.SAVE_NEURAL_NETWORKS)));
+		neuralNetworkMenu.add(new JSeparator());
+		neuralNetworkMenu.add(new JMenuItem(actions
+				.get(JSkatAction.TRAIN_NEURAL_NETWORKS)));
+		menu.add(neuralNetworkMenu);
 
 		JMenu issMenu = new JMenu(strings.getString("iss")); //$NON-NLS-1$
 		issMenu.add(new JMenuItem(actions.get(JSkatAction.SHOW_ISS_LOGIN)));
@@ -459,12 +459,22 @@ public class JSkatViewImpl implements IJSkatView {
 		JOptionPane
 				.showMessageDialog(
 						mainFrame,
-						"JSkat Version 0.8\n\n"
-								+ "Authors: Jan Schäfer, Markus J. Luzius\n\n"
-								+ "Icons: Gnome Desktop Icons, Tango project, Elementary icons,\nSilvestre Herrera and Alex Roberts\n\n"
-								+ "This program comes with ABSOLUTELY NO WARRANTY; for details see licence dialog\n"
-								+ "This is free software, and you are welcome to redistribute it\n"
-								+ "under certain conditions; see licence dialog for details.",
+						"JSkat " //$NON-NLS-1$
+								+ strings.getString("version") //$NON-NLS-1$
+								+ " " //$NON-NLS-1$
+								+ strings.getVersion()
+								+ "\n\n" //$NON-NLS-1$
+								+ strings.getString("authors") //$NON-NLS-1$
+								+ ": Jan Schäfer, Markus J. Luzius\n\n" //$NON-NLS-1$
+								+ strings.getString("cards") //$NON-NLS-1$
+								+ ": International Skat Server\n\n" //$NON-NLS-1$
+								+ strings.getString("icons") //$NON-NLS-1$
+								+ ": Gnome Desktop Icons, Tango project, Elementary icons,\n" //$NON-NLS-1$
+								+ "Silvestre Herrera and Alex Roberts\n\n" //$NON-NLS-1$
+								+ "This program comes with ABSOLUTELY NO WARRANTY;\n" //$NON-NLS-1$
+								+ "for details see licence dialog\n" //$NON-NLS-1$
+								+ "This is free software, and you are welcome to redistribute it\n" //$NON-NLS-1$
+								+ "under certain conditions; see licence dialog for details.", //$NON-NLS-1$
 						strings.getString("about"), JOptionPane.INFORMATION_MESSAGE, //$NON-NLS-1$
 						new ImageIcon(bitmaps.getJSkatLogoImage()));
 	}
@@ -476,20 +486,6 @@ public class JSkatViewImpl implements IJSkatView {
 	public void showMessage(int messageType, String title, String message) {
 
 		JOptionPane.showMessageDialog(mainFrame, message, title, messageType);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int showExitDialog() {
-
-		return JOptionPane
-				.showOptionDialog(
-						mainFrame,
-						strings.getString("exit_dialog_message"), strings //$NON-NLS-1$
-								.getString("exit_dialog_title"), JOptionPane.YES_NO_OPTION, //$NON-NLS-1$
-						JOptionPane.QUESTION_MESSAGE, null, null, null);
 	}
 
 	/**
@@ -577,6 +573,8 @@ public class JSkatViewImpl implements IJSkatView {
 		case GAME_OVER:
 			actions.get(JSkatAction.CONTINUE_LOCAL_SERIES).setEnabled(true);
 			break;
+		default:
+			break;
 		}
 	}
 
@@ -595,13 +593,13 @@ public class JSkatViewImpl implements IJSkatView {
 	@Override
 	public void showHelpDialog() {
 
-		String languageCode = "en";
+		String languageCode = "en"; //$NON-NLS-1$
 		switch (JSkatOptions.instance().getLanguage()) {
 		case GERMAN:
-			languageCode = "de";
+			languageCode = "de"; //$NON-NLS-1$
 			break;
 		case ENGLISH:
-			languageCode = "en";
+			languageCode = "en"; //$NON-NLS-1$
 			break;
 		}
 
@@ -1061,7 +1059,7 @@ public class JSkatViewImpl implements IJSkatView {
 			result.addAll(invitationPanel.getPlayer());
 		}
 
-		log.debug("Players to invite: " + result);
+		log.debug("Players to invite: " + result); //$NON-NLS-1$
 
 		return result;
 	}

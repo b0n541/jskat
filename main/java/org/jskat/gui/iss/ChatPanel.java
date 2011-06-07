@@ -36,6 +36,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -55,7 +56,7 @@ import org.jskat.util.JSkatResourceBundle;
 class ChatPanel extends JPanel implements ChangeListener {
 
 	private static final long serialVersionUID = 1L;
-	private static Log log = LogFactory.getLog(ChatPanel.class);
+	static Log log = LogFactory.getLog(ChatPanel.class);
 
 	JTextField inputLine;
 	private Map<String, JTextArea> chats;
@@ -81,7 +82,7 @@ class ChatPanel extends JPanel implements ChangeListener {
 
 		chats = new HashMap<String, JTextArea>();
 		chatTabs = new JTabbedPane();
-		chatTabs.setTabPlacement(JTabbedPane.BOTTOM);
+		chatTabs.setTabPlacement(SwingConstants.BOTTOM);
 		chatTabs.setAutoscrolls(true);
 		chatTabs.addChangeListener(this);
 		add(chatTabs, "grow, wrap"); //$NON-NLS-1$
@@ -132,9 +133,9 @@ class ChatPanel extends JPanel implements ChangeListener {
 		return chat;
 	}
 
-	void addMessage(ISSChatMessage message) {
+	void appendMessage(ISSChatMessage message) {
 
-		log.debug("addMessage");
+		log.debug("Appending chat message: " + message); //$NON-NLS-1$
 
 		JTextArea chat = chats.get(message.getChatName());
 
@@ -148,14 +149,14 @@ class ChatPanel extends JPanel implements ChangeListener {
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		// TODO Auto-generated method stub
+
 		if (e.getSource() instanceof JTabbedPane) {
 
 			JTabbedPane tabs = (JTabbedPane) e.getSource();
 			Component tab = tabs.getSelectedComponent();
 
 			activeChatName = tab.getName();
-			log.debug("Chat " + activeChatName + " activated.");
+			log.debug("Chat " + activeChatName + " activated."); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 

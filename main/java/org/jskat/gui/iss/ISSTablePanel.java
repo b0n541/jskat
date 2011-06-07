@@ -241,6 +241,6 @@ public class ISSTablePanel extends SkatTablePanel {
 	 */
 	public void appendChatMessage(ISSChatMessage message) {
 
-		chatPanel.addMessage(message);
+		chatPanel.appendMessage(message);
 	}
 }

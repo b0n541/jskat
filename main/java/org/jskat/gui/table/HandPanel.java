@@ -291,6 +291,7 @@ abstract class HandPanel extends JPanel {
 		declarer = false;
 		refreshHeaderText();
 		setActivePlayer(false);
+		hideCards();
 	}
 
 	/**

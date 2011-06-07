@@ -178,13 +178,6 @@ public interface IJSkatView {
 	public void showCardNotAllowedMessage(Card card);
 
 	/**
-	 * Shows the exit dialog
-	 * 
-	 * @return User decision
-	 */
-	public int showExitDialog();
-
-	/**
 	 * Shows preferences dialog
 	 */
 	public void showPreferences();

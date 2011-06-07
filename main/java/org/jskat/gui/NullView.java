@@ -132,14 +132,6 @@ public class NullView implements IJSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int showExitDialog() {
-		return 0;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void showGameResults() {
 		// empty method by indent
 	}

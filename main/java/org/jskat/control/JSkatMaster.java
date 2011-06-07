@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Set;
 
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -399,12 +398,8 @@ public class JSkatMaster {
 	 */
 	public void exitJSkat() {
 
-		if (view.showExitDialog() == JOptionPane.YES_OPTION) {
-
-			options.saveJSkatProperties();
-
-			System.exit(0);
-		}
+		options.saveJSkatProperties();
+		System.exit(0);
 	}
 
 	/**

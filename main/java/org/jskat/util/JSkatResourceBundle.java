@@ -64,6 +64,15 @@ public class JSkatResourceBundle {
 	}
 
 	/**
+	 * Gets the version of JSkat
+	 * 
+	 * @return Version
+	 */
+	public static String getVersion() {
+		return "0.8"; //$NON-NLS-1$
+	}
+
+	/**
 	 * Reloads the strings<br />
 	 * e.g. after changing the language or the card face
 	 */
