@@ -102,7 +102,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 		ArrayList<PlayerType> playerTypes = new ArrayList<PlayerType>();
 
 		playerTypes.add(PlayerType.RANDOM);
-		// playerTypes.add(PlayerType.NEURAL_NETWORK);
+		playerTypes.add(PlayerType.NEURAL_NETWORK);
 		playerTypes.add(PlayerType.ALGORITHMIC);
 
 		root.add(new JLabel(strings.getString("player") + " 1")); //$NON-NLS-1$//$NON-NLS-2$

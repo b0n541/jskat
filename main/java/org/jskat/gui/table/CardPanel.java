@@ -142,12 +142,10 @@ class CardPanel extends JPanel {
 
 		if (cards.contains(cardToRemove)) {
 			cards.remove(cardToRemove);
-		} else {
-			if (showBackside) {
-				// card panels with hidden cards may contain unknown cards
-				// remove the last one
-				cards.remove(cards.size() - 1);
-			}
+		} else if (showBackside) {
+			// card panels with hidden cards may contain unknown cards
+			// remove the last one
+			cards.remove(cards.size() - 1);
 		}
 		repaint();
 	}

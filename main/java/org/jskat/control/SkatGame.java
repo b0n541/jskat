@@ -30,8 +30,8 @@ import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.IJSkatPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.SkatGameData;
-import org.jskat.data.Trick;
 import org.jskat.data.SkatGameData.GameState;
+import org.jskat.data.Trick;
 import org.jskat.gui.IJSkatView;
 import org.jskat.gui.human.HumanPlayer;
 import org.jskat.util.Card;
@@ -421,8 +421,6 @@ public class SkatGame extends JSkatThread {
 		log.debug("Discarded cards: " + discardedSkat); //$NON-NLS-1$
 
 		data.setDiscardedSkat(data.getDeclarer(), discardedSkat);
-		view.removeCard(tableName, data.getDeclarer(), discardedSkat.get(0));
-		view.removeCard(tableName, data.getDeclarer(), discardedSkat.get(1));
 	}
 
 	private boolean checkDiscardedCards(CardList discardedSkat) {
