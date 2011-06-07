@@ -289,7 +289,8 @@ public class SkatGame extends JSkatThread {
 
 		if (secondWinner != null) {
 			// there is a winner of the bidding
-			setSinglePlayer(getBiddingWinner(Player.REARHAND, firstWinner));
+			setSinglePlayer(secondWinner);
+			view.setActivePlayer(tableName, secondWinner);
 
 			data.setBidValue(bidValue);
 
