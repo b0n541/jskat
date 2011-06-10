@@ -103,6 +103,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		}
 
 		rand = new Random();
+		isLearning = true;
 	}
 
 	/**

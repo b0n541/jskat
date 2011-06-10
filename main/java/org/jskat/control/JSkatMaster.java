@@ -36,7 +36,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.IJSkatPlayer;
 import org.jskat.ai.PlayerType;
-import org.jskat.ai.nn.AIPlayerNN;
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.train.NNTrainer;
 import org.jskat.control.iss.IssController;
@@ -178,64 +177,19 @@ public class JSkatMaster {
 
 		int playerCount = 0;
 		for (PlayerType player : allPlayer) {
-
-			IJSkatPlayer newPlayer = getPlayerInstance(table.getName(), player);
+			IJSkatPlayer newPlayer = null;
+			if(player==PlayerType.HUMAN) {
+				newPlayer = data.getHumanPlayer(table.getName());
+			}
+			else {
+				newPlayer = PlayerType.getPlayerInstance(player);
+			}
 			newPlayer.setPlayerName(playerNames.get(playerCount));
 			table.placePlayer(newPlayer);
 			playerCount++;
 		}
 
 		table.startSkatSeries(numberOfRounds, unlimited);
-	}
-
-	private IJSkatPlayer getPlayerInstance(String tableName,
-			PlayerType playerType) {
-
-		IJSkatPlayer player = null;
-
-		switch (playerType) {
-		case RANDOM:
-			player = getPlayerInstanceFromName("org.jskat.ai.rnd.AIPlayerRND"); //$NON-NLS-1$
-			break;
-		case NEURAL_NETWORK:
-			player = getPlayerInstanceFromName("org.jskat.ai.nn.AIPlayerNN"); //$NON-NLS-1$
-			((AIPlayerNN) player).setIsLearning(true);
-			break;
-		case ALGORITHMIC:
-			player = getPlayerInstanceFromName("org.jskat.ai.mjl.AIPlayerMJL"); //$NON-NLS-1$
-			break;
-		case HUMAN:
-			player = data.getHumanPlayer(tableName);
-			break;
-		}
-
-		return player;
-	}
-
-	private IJSkatPlayer getPlayerInstanceFromName(String className) {
-
-		IJSkatPlayer player = null;
-
-		try {
-			player = (IJSkatPlayer) Class.forName(className).newInstance();
-		} catch (ClassNotFoundException ex) {
-			// handle exception case
-			player = getPlayerInstanceFromName("org.jskat.ai.rnd.AIPlayerRND"); //$NON-NLS-1$
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		return player;
 	}
 
 	/**
@@ -520,6 +474,7 @@ public class JSkatMaster {
 			if (source instanceof CardList) {
 				// player discarded cards
 				CardList discardSkat = (CardList) source;
+				log.debug(discardSkat);
 
 				// FIXME (jan 02.11.2010) Discarded cards are sent with the
 				// game announcement to ISS
