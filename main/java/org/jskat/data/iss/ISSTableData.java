@@ -19,17 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
-@ShortLicense@
-
-Authors: @JS@
-         @MJL@
-
-Released: @ReleaseDate@
-
-*/
-
 package org.jskat.data.iss;
 
 /**
@@ -43,41 +32,51 @@ public class ISSTableData {
 	private String firstPlayer;
 	private String secondPlayer;
 	private String thirdPlayer;
-	
-	
+
 	public String getTableName() {
 		return tableName;
 	}
+
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
 	}
+
 	public int getMaxPlayers() {
 		return maxPlayers;
 	}
+
 	public void setMaxPlayers(int maxPlayers) {
 		this.maxPlayers = maxPlayers;
 	}
+
 	public long getGamesPlayed() {
 		return gamesPlayed;
 	}
+
 	public void setGamesPlayed(long gamesPlayed) {
 		this.gamesPlayed = gamesPlayed;
 	}
+
 	public String getFirstPlayer() {
 		return firstPlayer;
 	}
+
 	public void setFirstPlayer(String firstPlayer) {
 		this.firstPlayer = firstPlayer;
 	}
+
 	public String getSecondPlayer() {
 		return secondPlayer;
 	}
+
 	public void setSecondPlayer(String secondPlayer) {
 		this.secondPlayer = secondPlayer;
 	}
+
 	public String getThirdPlayer() {
 		return thirdPlayer;
 	}
+
 	public void setThirdPlayer(String thirdPlayer) {
 		this.thirdPlayer = thirdPlayer;
 	}

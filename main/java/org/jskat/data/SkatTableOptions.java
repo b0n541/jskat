@@ -19,17 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
-@ShortLicense@
-
-Authors: @JS@
-         @MJL@
-
-Released: @ReleaseDate@
-
-*/
-
 package org.jskat.data;
 
 import java.util.Observable;
@@ -38,14 +27,14 @@ import java.util.Observable;
  * Skat table options
  */
 public class SkatTableOptions extends Observable {
-	
+
 	/**
 	 * Getter for property firstPlayerName.
 	 * 
 	 * @return Value of property firstPlayerName.
 	 */
 	public String getFirstPlayerName() {
-		
+
 		return this.firstPlayerName;
 	}
 
@@ -66,7 +55,7 @@ public class SkatTableOptions extends Observable {
 	 * @return Value of property firstPlayerType.
 	 */
 	public int getFirstPlayerType() {
-		
+
 		return this.firstPlayerType;
 	}
 
@@ -87,7 +76,7 @@ public class SkatTableOptions extends Observable {
 	 * @return Value of property secondPlayerName.
 	 */
 	public String getSecondPlayerName() {
-		
+
 		return this.secondPlayerName;
 	}
 
@@ -108,7 +97,7 @@ public class SkatTableOptions extends Observable {
 	 * @return Value of property secondPlayerType.
 	 */
 	public int getSecondPlayerType() {
-		
+
 		return this.secondPlayerType;
 	}
 
@@ -129,7 +118,7 @@ public class SkatTableOptions extends Observable {
 	 * @return Value of property thirdPlayerName.
 	 */
 	public String getThirdPlayerName() {
-		
+
 		return this.thirdPlayerName;
 	}
 
@@ -150,7 +139,7 @@ public class SkatTableOptions extends Observable {
 	 * @return Value of property thirdPlayerType.
 	 */
 	public int getThirdPlayerType() {
-		
+
 		return this.thirdPlayerType;
 	}
 
@@ -318,7 +307,7 @@ public class SkatTableOptions extends Observable {
 	 * @return Value of property bockEventLostAfterContra
 	 */
 	public boolean isBockEventLostAfterContra() {
-		
+
 		return this.bockEventLostAfterContra;
 	}
 
@@ -349,7 +338,8 @@ public class SkatTableOptions extends Observable {
 	 * @param newBockEventContraReAnnounced
 	 *            New value of property bockEventContraReAnnounced
 	 */
-	public void setBockEventContraReAnnounced(boolean newBockEventContraReAnnounced) {
+	public void setBockEventContraReAnnounced(
+			boolean newBockEventContraReAnnounced) {
 
 		this.bockEventContraReAnnounced = newBockEventContraReAnnounced;
 	}
@@ -434,7 +424,8 @@ public class SkatTableOptions extends Observable {
 	 * @param newSchieberRamschJacksInSkat
 	 *            New value of property schieberRamschJacksInSkat
 	 */
-	public void setSchieberRamschJacksInSkat(boolean newSchieberRamschJacksInSkat) {
+	public void setSchieberRamschJacksInSkat(
+			boolean newSchieberRamschJacksInSkat) {
 
 		this.schieberRamschJacksInSkat = newSchieberRamschJacksInSkat;
 	}
@@ -476,7 +467,8 @@ public class SkatTableOptions extends Observable {
 	 * @param newRamschEventRamschAfterBock
 	 *            New value of property ramschEventRamschAfterBock
 	 */
-	public void setRamschEventRamschAfterBock(boolean newRamschEventRamschAfterBock) {
+	public void setRamschEventRamschAfterBock(
+			boolean newRamschEventRamschAfterBock) {
 
 		this.ramschEventRamschAfterBock = newRamschEventRamschAfterBock;
 	}
@@ -515,10 +507,11 @@ public class SkatTableOptions extends Observable {
 	/**
 	 * Sets the maximum count of players
 	 * 
-	 * @param newMaxPlayerCount Maximum player count
+	 * @param newMaxPlayerCount
+	 *            Maximum player count
 	 */
 	public void setMaxPlayerCount(int newMaxPlayerCount) {
-	
+
 		this.maxPlayerCount = newMaxPlayerCount;
 	}
 

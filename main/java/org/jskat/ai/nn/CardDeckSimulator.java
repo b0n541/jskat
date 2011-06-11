@@ -19,16 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
-@ShortLicense@
-
-Authors: @JS@
-
-Released: @ReleaseDate@
-
- */
-
 package org.jskat.ai.nn;
 
 import java.util.HashMap;
@@ -39,7 +29,6 @@ import org.jskat.util.Card;
 import org.jskat.util.CardDeck;
 import org.jskat.util.CardList;
 import org.jskat.util.Player;
-
 
 /**
  * Simulates possible card decks according to the player knowledge

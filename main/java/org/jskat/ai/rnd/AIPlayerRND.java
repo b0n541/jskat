@@ -19,16 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
-@ShortLicense@
-
-Author: @JS@
-
-Released: @ReleaseDate@
-
- */
-
 package org.jskat.ai.rnd;
 
 import java.util.Random;
@@ -41,7 +31,6 @@ import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
-
 
 /**
  * Random player for testing purposes
@@ -152,15 +141,13 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 		CardList possibleCards = getPlayableCards(this.knowledge
 				.getTrickCards());
 
-		log
-				.debug("found " + possibleCards.size() + " possible cards: " + possibleCards); //$NON-NLS-1$//$NON-NLS-2$
+		log.debug("found " + possibleCards.size() + " possible cards: " + possibleCards); //$NON-NLS-1$//$NON-NLS-2$
 
 		// then choose a random one
 		index = this.rand.nextInt(possibleCards.size());
 
 		log.debug("choosing card " + index); //$NON-NLS-1$
-		log
-				.debug("as player " + this.knowledge.getPlayerPosition() + ": " + possibleCards.get(index)); //$NON-NLS-1$//$NON-NLS-2$
+		log.debug("as player " + this.knowledge.getPlayerPosition() + ": " + possibleCards.get(index)); //$NON-NLS-1$//$NON-NLS-2$
 
 		return possibleCards.get(index);
 	}

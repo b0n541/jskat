@@ -19,16 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
-@ShortLicense@
-
-Author: @JS@
-
-Released: @ReleaseDate@
-
-*/
-
 package org.jskat.ai.nn.util;
 
 import java.util.ArrayList;
@@ -49,20 +39,20 @@ public class NetworkTester {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		
+
 		PropertyConfigurator.configure(ClassLoader
 				.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
 
-		//testBooleanFunction();
+		// testBooleanFunction();
 		testSkat();
 	}
-	
+
 	private static void testSkat() {
-		
+
 		List<Double> opponent1 = new ArrayList<Double>();
 		List<Double> opponent2 = new ArrayList<Double>();
 		List<Double> opponent3 = new ArrayList<Double>();
-		
+
 		opponent1.add(0.5); // A --> first opponent
 		opponent1.add(0.5); // K
 		opponent1.add(0.5); // Q
@@ -135,59 +125,60 @@ public class NetworkTester {
 		opponent3.add(0.0); // 9
 		opponent3.add(0.0); // 8
 		opponent3.add(0.5); // 7
-		
+
 		double input[][] = new double[3][opponent1.size()];
-		
+
 		for (int i = 0; i < opponent1.size(); i++) {
-			
+
 			input[0][i] = opponent1.get(i);
 			input[1][i] = opponent2.get(i);
 			input[2][i] = opponent3.get(i);
 		}
-		
-		double output[][] = {{1.0}, {-1.0}, {1.0}};
-		
-		int[] hiddenNeurons = {2};
-		NetworkTopology topo = new NetworkTopology(input[0].length, output[0].length, 1, hiddenNeurons);
-		
+
+		double output[][] = { { 1.0 }, { -1.0 }, { 1.0 } };
+
+		int[] hiddenNeurons = { 2 };
+		NetworkTopology topo = new NetworkTopology(input[0].length,
+				output[0].length, 1, hiddenNeurons);
+
 		NeuralNetwork net = new NeuralNetwork(topo);
-		
+
 		log.debug(net);
-		
+
 		int goodGuess = 0;
 		int i = 0;
-		
+
 		while (goodGuess < input.length) {
-			
+
 			net.adjustWeights(input[i % input.length], output[i % input.length]);
-			
+
 			if (Math.abs(net.getAvgDiff()) < 0.1) {
 				goodGuess++;
-			}
-			else {
+			} else {
 				goodGuess = 0;
 			}
-			
+
 			if (i % 1000 == 0) {
-				
+
 				log.debug(i + " iterations " + goodGuess + " good guesses...");
 			}
 			i++;
 		}
 		log.debug("Learned pattern after " + i + " iterations.");
-//		log.debug(net);
-//		
+		// log.debug(net);
+		//
 		for (i = 0; i < input.length; i++) {
-			
-			double predOutput = net.getPredictedOutcome(input[i % input.length]);
+
+			double predOutput = net
+					.getPredictedOutcome(input[i % input.length]);
 			log.debug(input[i % input.length]);
 			log.debug(predOutput);
 		}
-		
+
 		net.saveNetwork("asdf.net");
-		
+
 		log.debug("Re-loading network");
-		
+
 		NeuralNetwork net2 = new NeuralNetwork();
 		net2.loadNetwork("asdf.net");
 
@@ -195,16 +186,15 @@ public class NetworkTester {
 		i = 0;
 		while (goodGuess < input.length) {
 			net.adjustWeights(input[i % input.length], output[i % input.length]);
-			
+
 			if (Math.abs(net.getAvgDiff()) < 0.1) {
 				goodGuess++;
-			}
-			else {
+			} else {
 				goodGuess = 0;
 			}
-			
+
 			if (i % 1000 == 0) {
-				
+
 				log.debug(i + " iterations " + goodGuess + " good guesses...");
 			}
 			i++;
@@ -212,63 +202,51 @@ public class NetworkTester {
 		log.debug("Learned pattern after " + i + " iterations.");
 
 		for (i = 0; i < input.length; i++) {
-			
+
 			double predOutput = net.getPredictedOutcome(input[i]);
 			log.debug(input[i]);
 			log.debug(predOutput);
 		}
 	}
-	
+
 	private static void testBooleanFunction() {
-		
+
 		NeuralNetwork net = new NeuralNetwork();
 		log.debug(net);
-//		double[][] input = {{1.0, 1.0},
-//				{1.0, 0.0},
-//				{0.0, 1.0},
-//				{0.0, 0.0}};
-//		double[][] output = {{0.0},
-//						 {1.0},
-//						 {1.0},
-//						 {0.0}};
-		double[][] input = {{1.0, 1.0, 1.0},
-				{1.0, 1.0, 0.0},
-				{1.0, 0.0, 1.0},
-				{1.0, 0.0, 0.0},
-				{0.0, 1.0, 1.0},
-				{0.0, 1.0, 0.0},
-				{0.0, 0.0, 1.0},
-				{0.0, 0.0, 0.0}};
-		double[][] output = {{1.0}, // A and B or C
-				 {1.0},
-				 {1.0},
-				 {0.0},
-				 {1.0},
-				 {0.0},
-				 {1.0},
-				 {0.0}};
+		// double[][] input = {{1.0, 1.0},
+		// {1.0, 0.0},
+		// {0.0, 1.0},
+		// {0.0, 0.0}};
+		// double[][] output = {{0.0},
+		// {1.0},
+		// {1.0},
+		// {0.0}};
+		double[][] input = { { 1.0, 1.0, 1.0 }, { 1.0, 1.0, 0.0 },
+				{ 1.0, 0.0, 1.0 }, { 1.0, 0.0, 0.0 }, { 0.0, 1.0, 1.0 },
+				{ 0.0, 1.0, 0.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0 } };
+		double[][] output = { { 1.0 }, // A and B or C
+				{ 1.0 }, { 1.0 }, { 0.0 }, { 1.0 }, { 0.0 }, { 1.0 }, { 0.0 } };
 		int goodGuess = 0;
-		
+
 		for (int i = 0; i < 10000; i++) {
 			net.adjustWeights(input[i % input.length], output[i % input.length]);
-			
+
 			if (net.getAvgDiff() < 0.1) {
 				goodGuess++;
-			}
-			else {
+			} else {
 				goodGuess = 0;
 			}
-			
+
 			if (goodGuess > input.length) {
-				
+
 				log.debug("Learned pattern after " + i + " iterations.");
 				break;
 			}
 		}
-//		log.debug(net);
-//		
+		// log.debug(net);
+		//
 		for (int i = 0; i < input.length; i++) {
-			
+
 			double predOutput = net.getPredictedOutcome(input[i]);
 			log.debug(input[i]);
 			log.debug(predOutput);

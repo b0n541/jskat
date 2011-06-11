@@ -19,16 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
- @ShortLicense@
-
- Authors: @JS@
-
- Released: @ReleaseDate@
-
- */
-
 package org.jskat.control.iss;
 
 import static org.junit.Assert.assertEquals;
@@ -202,7 +192,7 @@ public class MessageParserTest extends AbstractJSkatTest {
 		assertTrue(ouvertCards.contains(Card.SK));
 		assertTrue(ouvertCards.contains(Card.CJ));
 	}
-	
+
 	/**
 	 * Tests the announcing of an ouvert game
 	 */

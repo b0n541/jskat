@@ -19,17 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
-@ShortLicense@
-
-Authors: @JS@
-         @MJL@
-
-Released: @ReleaseDate@
-
-*/
-
 package org.jskat.ai.mjl;
 
 import java.util.HashSet;
@@ -38,7 +27,6 @@ import java.util.Vector;
 
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
-
 
 /**
  * Some tools that are used in the whole application and by the skat players
@@ -91,35 +79,38 @@ public class Tools {
 	 * @return string
 	 */
 	public static String dumpCards(Vector<CardList> values) {
-		
+
 		StringBuffer sb = new StringBuffer("\n{");
-		
+
 		for (int i = 0; i < values.size(); i++) {
-		
+
 			Iterator<Card> iter = values.get(i).iterator();
 			sb.append("\n[");
-			
+
 			while (iter.hasNext()) {
 				sb.append(iter.next().toString()).append(",");
 			}
-			
+
 			sb.deleteCharAt(sb.length() - 1);
 			sb.append("]");
 		}
-		
+
 		return sb.append("\n}").toString();
 	}
 
 	/**
 	 * Checks whether a number is in a given set of numbers
-	 *  
-	 * @param toCheck Number that should be checked
-	 * @param list List of numbers, usually defined by new int[] {a, b, c, ...}
+	 * 
+	 * @param toCheck
+	 *            Number that should be checked
+	 * @param list
+	 *            List of numbers, usually defined by new int[] {a, b, c, ...}
 	 * @return TRUE if the number exists in the list
 	 */
 	public static boolean isIn(int toCheck, int[] list) {
-		for(int i=0;i<list.length;i++) {
-			if(toCheck==list[i]) return true;
+		for (int i = 0; i < list.length; i++) {
+			if (toCheck == list[i])
+				return true;
 		}
 		return false;
 	}

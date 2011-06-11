@@ -19,16 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
-@ShortLicense@
-
-Author: @JS@
-
-Released: @ReleaseDate@
-
-*/
-
 package org.jskat.ai.nn.util;
 
 /**
@@ -42,7 +32,7 @@ class OutputNeuron extends Neuron {
 	 * @see Neuron#Neuron(ActivationFunction)
 	 */
 	OutputNeuron(ActivationFunction activFunction) {
-		
+
 		super(activFunction);
 	}
 
@@ -53,17 +43,18 @@ class OutputNeuron extends Neuron {
 	 * @param learningRate
 	 */
 	protected void calculateError(double targetValue, double learningRate) {
-			
-			// first calculate error for output neuron
-			this.diff = (targetValue - this.activationValue);
-			this.errorSignal = (targetValue - this.activationValue) * dactivFnct(this.inputSum);
-			// adjust all weights leading to this neuron
-			for (Weight weight : this.incomingWeights) {
-				weight.setWeightValue(weight.getWeightValue() +
-										learningRate * this.errorSignal *
-										weight.getInputNeuron().getActivationValue());
-			}
+
+		// first calculate error for output neuron
+		this.diff = (targetValue - this.activationValue);
+		this.errorSignal = (targetValue - this.activationValue)
+				* dactivFnct(this.inputSum);
+		// adjust all weights leading to this neuron
+		for (Weight weight : this.incomingWeights) {
+			weight.setWeightValue(weight.getWeightValue() + learningRate
+					* this.errorSignal
+					* weight.getInputNeuron().getActivationValue());
 		}
+	}
 
 	/**
 	 * Gets the real difference between calculated output and desired value
@@ -71,7 +62,7 @@ class OutputNeuron extends Neuron {
 	 * @return Difference between output and desired value
 	 */
 	protected double getDiff() {
-		
+
 		return this.diff;
 	}
 }

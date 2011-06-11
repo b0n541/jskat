@@ -19,29 +19,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
-@ShortLicense@
-
-Authors: @JS@
-
-Released: @ReleaseDate@
-
- */
-
 package org.jskat.ai.nn;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.jskat.AbstractJSkatTest;
-import org.jskat.ai.nn.CardDeckSimulator;
 import org.jskat.util.Card;
 import org.jskat.util.CardDeck;
 import org.jskat.util.CardList;
 import org.jskat.util.Player;
 import org.junit.Test;
-
 
 /**
  * Tests for CardDeckSimulator
@@ -57,7 +45,8 @@ public class CardDeckSimulatorTest extends AbstractJSkatTest {
 
 		CardList cards = new CardList();
 
-		CardDeck simCards = CardDeckSimulator.simulateUnknownCards(Player.FOREHAND, cards);
+		CardDeck simCards = CardDeckSimulator.simulateUnknownCards(
+				Player.FOREHAND, cards);
 
 		assertEquals(32, simCards.size());
 	}
@@ -71,7 +60,8 @@ public class CardDeckSimulatorTest extends AbstractJSkatTest {
 
 		CardList cards = getKnownCards();
 
-		CardDeck simCards = CardDeckSimulator.simulateUnknownCards(Player.FOREHAND, cards);
+		CardDeck simCards = CardDeckSimulator.simulateUnknownCards(
+				Player.FOREHAND, cards);
 
 		assertEquals(32, simCards.size());
 		assertTrue(cards.contains(simCards.get(0)));
@@ -95,7 +85,8 @@ public class CardDeckSimulatorTest extends AbstractJSkatTest {
 
 		CardList cards = getKnownCards();
 
-		CardDeck simCards = CardDeckSimulator.simulateUnknownCards(Player.MIDDLEHAND, cards);
+		CardDeck simCards = CardDeckSimulator.simulateUnknownCards(
+				Player.MIDDLEHAND, cards);
 
 		assertEquals(32, simCards.size());
 		assertTrue(cards.contains(simCards.get(3)));
@@ -119,7 +110,8 @@ public class CardDeckSimulatorTest extends AbstractJSkatTest {
 
 		CardList cards = getKnownCards();
 
-		CardDeck simCards = CardDeckSimulator.simulateUnknownCards(Player.REARHAND, cards);
+		CardDeck simCards = CardDeckSimulator.simulateUnknownCards(
+				Player.REARHAND, cards);
 
 		assertEquals(32, simCards.size());
 		assertTrue(cards.contains(simCards.get(6)));

@@ -19,25 +19,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
-@ShortLicense@
-
-Author: @MJL@
-
-Released: @ReleaseDate@
-
-*/
-
 package org.jskat.ai.mjl;
 
 import org.jskat.util.GameType;
-import org.jskat.util.SkatConstants;
 import org.jskat.util.Suit;
 
 /**
  * @author Markus J. Luzius <markus@luzius.de>
- *
+ * 
  */
 public class GameInfo {
 
@@ -46,11 +35,16 @@ public class GameInfo {
 	 */
 	public GameInfo() {
 	}
-	
-	/** Constructor for setting up the game info with initial values
-	 * @param type game type
-	 * @param suit trump color
-	 * @param player id of the single player
+
+	/**
+	 * Constructor for setting up the game info with initial values
+	 * 
+	 * @param type
+	 *            game type
+	 * @param suit
+	 *            trump color
+	 * @param player
+	 *            id of the single player
 	 */
 	public GameInfo(GameType type, Suit suit, int player) {
 		gameType = type;
@@ -60,6 +54,7 @@ public class GameInfo {
 
 	/**
 	 * get the current game type
+	 * 
 	 * @return current game type
 	 */
 	public GameType getGameType() {
@@ -68,6 +63,7 @@ public class GameInfo {
 
 	/**
 	 * get the current single player
+	 * 
 	 * @return ID of the current single player
 	 */
 	public int getSinglePlayer() {
@@ -76,6 +72,7 @@ public class GameInfo {
 
 	/**
 	 * get the current trump suit
+	 * 
 	 * @return current trump suit
 	 */
 	public Suit getTrump() {
@@ -84,33 +81,45 @@ public class GameInfo {
 
 	/**
 	 * set the current game type
-	 * @param gameType game type
+	 * 
+	 * @param gameType
+	 *            game type
 	 */
 	public void setGameType(GameType gameType) {
-		this.gameType= gameType;
+		this.gameType = gameType;
 	}
 
 	/**
 	 * set the current single player
-	 * @param id ID of the single player
+	 * 
+	 * @param id
+	 *            ID of the single player
 	 */
 	public void setSinglePlayer(int id) {
-		singlePlayer= id;
+		singlePlayer = id;
 	}
 
 	/**
 	 * set the trump suit
-	 * @param suit trump suit
+	 * 
+	 * @param suit
+	 *            trump suit
 	 */
 	public void setTrump(Suit suit) {
-		trump= suit;
+		trump = suit;
 	}
 
-	/**	 type of the game
-	 * @see jskat.share.SkatConstants */
+	/**
+	 * type of the game
+	 * 
+	 * @see jskat.share.SkatConstants
+	 */
 	private GameType gameType;
-	/**	 trump suit in the current game
-	 * @see jskat.share.SkatConstants */
+	/**
+	 * trump suit in the current game
+	 * 
+	 * @see jskat.share.SkatConstants
+	 */
 	private Suit trump;
 	/** id of the single player */
 	private int singlePlayer;

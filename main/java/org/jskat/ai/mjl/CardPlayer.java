@@ -19,34 +19,26 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
-@ShortLicense@
-
-Author: @MJL@
-
-Released: @ReleaseDate@
-
-*/
-
 package org.jskat.ai.mjl;
 
 import org.jskat.ai.PlayerKnowledge;
 import org.jskat.util.Card;
 
-
 /**
  * @author Markus J. Luzius <markus@luzius.de>
- *
+ * 
  */
 interface CardPlayer {
 
-	/** Gets the next card, that the player wants to play
-	 * @param trickInfo all necessary information about the trick
+	/**
+	 * Gets the next card, that the player wants to play
+	 * 
+	 * @param trickInfo
+	 *            all necessary information about the trick
 	 * @return the card to play
 	 */
 	Card playNextCard(PlayerKnowledge knowledge);
-	
+
 	void startGame(PlayerKnowledge knowledge);
 
 }

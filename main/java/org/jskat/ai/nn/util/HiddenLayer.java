@@ -19,16 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
-@ShortLicense@
-
-Author: @JS@
-
-Released: @ReleaseDate@
-
-*/
-
 package org.jskat.ai.nn.util;
 
 import org.jskat.ai.nn.util.Neuron.ActivationFunction;
@@ -42,7 +32,7 @@ class HiddenLayer extends Layer {
 	 * @see Layer#Layer(int)
 	 */
 	HiddenLayer(int numberOfNeurons) {
-		
+
 		super(numberOfNeurons);
 	}
 
@@ -51,25 +41,26 @@ class HiddenLayer extends Layer {
 	 */
 	@Override
 	Neuron createNeuron(ActivationFunction activFnct) {
-		
+
 		return new Neuron(activFnct);
 	}
 
 	/**
-	 * @see Object#toString() 
+	 * @see Object#toString()
 	 */
 	@Override
 	public String toString() {
-		
+
 		StringBuffer outputWeightStrings = new StringBuffer();
-		
+
 		for (Neuron neuron : this.neurons) {
-			
-			outputWeightStrings.append(neuron.getOutputWeightString()).append(' ');
+
+			outputWeightStrings.append(neuron.getOutputWeightString()).append(
+					' ');
 		}
-		
+
 		return "hidden layer\n" + //$NON-NLS-1$
 				outputWeightStrings.toString() + '\n';
 	}
-	
+
 }

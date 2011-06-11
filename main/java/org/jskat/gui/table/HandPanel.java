@@ -19,17 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
- @ShortLicense@
-
- Authors: @JS@
- @MJL@
-
- Released: @ReleaseDate@
-
- */
-
 package org.jskat.gui.table;
 
 import java.awt.Color;

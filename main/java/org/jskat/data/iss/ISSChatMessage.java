@@ -19,17 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
-@ShortLicense@
-
-Authors: @JS@
-         @MJL@
-
-Released: @ReleaseDate@
-
-*/
-
 package org.jskat.data.iss;
 
 /**
@@ -43,32 +32,34 @@ public class ISSChatMessage {
 	/**
 	 * Constructor
 	 * 
-	 * @param newChatName Chat name
-	 * @param messageText Message text
+	 * @param newChatName
+	 *            Chat name
+	 * @param messageText
+	 *            Message text
 	 */
 	public ISSChatMessage(String newChatName, String messageText) {
-		
+
 		this.chatName = newChatName;
 		this.message = messageText;
 	}
-	
+
 	/**
 	 * Gets the name of the chat
 	 * 
 	 * @return Chat name
 	 */
 	public String getChatName() {
-		
+
 		return this.chatName;
 	}
-	
+
 	/**
 	 * Gets the message text
 	 * 
 	 * @return Message text
 	 */
 	public String getMessage() {
-		
+
 		return this.message;
 	}
 }

@@ -19,16 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
-@ShortLicense@
-
-Author: @JS@
-
-Released: @ReleaseDate@
-
-*/
-
 package org.jskat.ai.nn.util;
 
 /**
@@ -43,63 +33,67 @@ class Weight {
 	/**
 	 * Constructor
 	 * 
-	 * @param newInputNeuron Input neuron
-	 * @param newOutputNeuron Output neuron
-	 * @param weight Weight value
+	 * @param newInputNeuron
+	 *            Input neuron
+	 * @param newOutputNeuron
+	 *            Output neuron
+	 * @param weight
+	 *            Weight value
 	 */
 	Weight(Neuron newInputNeuron, Neuron newOutputNeuron, double weight) {
-		
+
 		this.inputNeuron = newInputNeuron;
 		this.outputNeuron = newOutputNeuron;
 		this.weightValue = weight;
 	}
-	
+
 	/**
 	 * Gets the weight value
 	 * 
 	 * @return The weight value
 	 */
 	double getWeightValue() {
-		
+
 		return this.weightValue;
 	}
 
 	/**
 	 * Sets the weight value
 	 * 
-	 * @param newWeightValue The weight value to set
+	 * @param newWeightValue
+	 *            The weight value to set
 	 */
 	void setWeightValue(double newWeightValue) {
 
 		this.weightValue = newWeightValue;
 	}
-	
+
 	/**
 	 * Gets the input neuron
 	 * 
 	 * @return Input neuron
 	 */
 	Neuron getInputNeuron() {
-		
+
 		return this.inputNeuron;
 	}
-	
+
 	/**
 	 * Gets the output neuron
 	 * 
 	 * @return Output neuron
 	 */
 	Neuron getOutputNeuron() {
-		
+
 		return this.outputNeuron;
 	}
-	
+
 	/**
 	 * @see Object#toString()
 	 */
 	@Override
 	public String toString() {
-		
+
 		return Double.toString(this.weightValue);
 	}
 }

@@ -19,16 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
- @ShortLicense@
-
- Authors: @JS@
-
- Released: @ReleaseDate@
-
- */
-
 package org.jskat.ai.nn.data;
 
 import org.apache.commons.logging.Log;

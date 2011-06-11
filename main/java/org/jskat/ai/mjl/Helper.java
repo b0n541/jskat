@@ -19,16 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
-@ShortLicense@
-
-Author: @MJL@
-
-Released: @ReleaseDate@
-
- */
-
 package org.jskat.ai.mjl;
 
 import org.apache.commons.logging.Log;
@@ -40,7 +30,6 @@ import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
-
 
 /**
  * @author Markus J. Luzius <markus@luzius.de>
@@ -63,12 +52,20 @@ public class Helper {
 			// one card on the table: can't be single player win yet
 			return false;
 		if (knowledge.getDeclarer() == Player.FOREHAND) {
-			if (knowledge.getTrickCards().get(0).beats(knowledge.getGame().getGameType(), knowledge.getTrickCards().get(1)))
+			if (knowledge
+					.getTrickCards()
+					.get(0)
+					.beats(knowledge.getGame().getGameType(),
+							knowledge.getTrickCards().get(1)))
 				return true;
 			else
 				return false;
 		} else if (knowledge.getDeclarer() == Player.MIDDLEHAND) {
-			if (knowledge.getTrickCards().get(1).beats(knowledge.getGame().getGameType(), knowledge.getTrickCards().get(0)))
+			if (knowledge
+					.getTrickCards()
+					.get(1)
+					.beats(knowledge.getGame().getGameType(),
+							knowledge.getTrickCards().get(0)))
 				return true;
 			else
 				return false;
@@ -95,14 +92,14 @@ public class Helper {
 	 * @return true, if <b>cards</b> contain a card that can beat the
 	 *         <b>cardToBeat</b>
 	 */
-	public static int isAbleToBeat(CardList cards,
-			Card cardToBeat, Card initialCard,
-			GameType gameType) {
+	public static int isAbleToBeat(CardList cards, Card cardToBeat,
+			Card initialCard, GameType gameType) {
 		int result = -1;
 		for (int i = 0; i < cards.size(); i++) {
 			if (cards.get(i).isAllowed(gameType, initialCard, cards)) {
 				if (cards.get(i).beats(gameType, initialCard)) {
-//					log.debug(cards.get(i) + " can beat " + cardToBeat + ".");
+					// log.debug(cards.get(i) + " can beat " + cardToBeat +
+					// ".");
 					result = i;
 					break;
 				}
@@ -120,13 +117,11 @@ public class Helper {
 	 * @return true if there is at least one card in the hand that can match
 	 *         <b>initialCard</b>
 	 */
-	public static boolean isAbleToMatch(CardList cards,
-			Card initialCard,
+	public static boolean isAbleToMatch(CardList cards, Card initialCard,
 			GameType gameType) {
 		boolean result = false;
 		for (int i = 0; i < cards.size(); i++) {
-			boolean sameSuit = (cards.get(i).getSuit() == initialCard
-					.getSuit());
+			boolean sameSuit = (cards.get(i).getSuit() == initialCard.getSuit());
 			if (cards.get(i).isAllowed(gameType, initialCard, cards)) {
 				if (gameType != GameType.NULL) {
 					if (cards.get(i).isTrump(gameType)
@@ -156,16 +151,15 @@ public class Helper {
 	 *            the current trump color
 	 * @return index of the highest trump, 0 if there is no trump
 	 */
-	public static int getHighestTrump(CardList cards,
-			Suit currTrump) {
-//		if (cards.size() < 1)
-//			return 0;
+	public static int getHighestTrump(CardList cards, Suit currTrump) {
+		// if (cards.size() < 1)
+		// return 0;
 		int index = 0;
-//		for (int i = 1; i < cards.size(); i++) {
-//			if (cards.get(i).beats(cards.get(index),
-//					GameType.SUIT, currTrump, cards.get(i)))
-//				index = i;
-//		}
+		// for (int i = 1; i < cards.size(); i++) {
+		// if (cards.get(i).beats(cards.get(index),
+		// GameType.SUIT, currTrump, cards.get(i)))
+		// index = i;
+		// }
 		return index;
 	}
 
@@ -178,10 +172,9 @@ public class Helper {
 	 *            trump color
 	 * @return true, if there is at least one trump card in the hand
 	 */
-	public static boolean hasTrump(CardList cards,
-			Suit currTrump) {
+	public static boolean hasTrump(CardList cards, Suit currTrump) {
 		return false;
-//		return (cards.hasTrump(GameType.SUIT, currTrump));
+		// return (cards.hasTrump(GameType.SUIT, currTrump));
 	}
 
 	/**
@@ -234,8 +227,8 @@ public class Helper {
 	 *            only cards of this suit are considered
 	 * @return binary value of the available cards
 	 */
-	public static int suitCardsToBinaryWithSkat(CardList cards,
-			CardList skat, Suit suit) {
+	public static int suitCardsToBinaryWithSkat(CardList cards, CardList skat,
+			Suit suit) {
 		int counter = 0;
 		if (cards.contains(Card.getCard(suit, Rank.SEVEN))
 				|| skat.contains(Card.getCard(suit, Rank.SEVEN)))
@@ -273,8 +266,7 @@ public class Helper {
 	 *            only cards of this suit are considered
 	 * @return binary value of the available cards
 	 */
-	public static int suitCardsToBinary(CardList cards,
-			Suit suit) {
+	public static int suitCardsToBinary(CardList cards, Suit suit) {
 		int counter = 0;
 		if (cards.contains(Card.getCard(suit, Rank.SEVEN)))
 			counter += 1;
@@ -305,8 +297,7 @@ public class Helper {
 	 *            only cards of this suit are considered
 	 * @return binary value of the available cards
 	 */
-	public static int suitCardsToBinaryNullGame(CardList cards,
-			Suit suit) {
+	public static int suitCardsToBinaryNullGame(CardList cards, Suit suit) {
 		int counter = 0;
 		if (cards.contains(Card.getCard(suit, Rank.SEVEN)))
 			counter += 1;
@@ -378,7 +369,7 @@ public class Helper {
 		Suit result = null;
 		if (!(binary == 1 || binary == 2 || binary == 4 || binary == 8)) {
 			log.warn(".binaryToSuit(): warning: more than one suit possible! -->"
-							+ binary);
+					+ binary);
 			return result;
 		}
 		if ((binary & 1) > 0)

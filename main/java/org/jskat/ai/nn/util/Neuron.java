@@ -19,16 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
-@ShortLicense@
-
-Author: @JS@
-
-Released: @ReleaseDate@
-
-*/
-
 package org.jskat.ai.nn.util;
 
 import java.util.ArrayList;
@@ -52,9 +42,9 @@ class Neuron {
 		 */
 		TANH
 	}
-	
+
 	private ActivationFunction activFunction = ActivationFunction.SIGMOID;
-	
+
 	/**
 	 * Activation value
 	 */
@@ -67,7 +57,7 @@ class Neuron {
 	 * Sum of input signals
 	 */
 	protected double inputSum = 0.0;
-	
+
 	/**
 	 * Input weights
 	 */
@@ -77,105 +67,109 @@ class Neuron {
 	/**
 	 * Constructor
 	 * 
-	 * @param activationFunction Activation function 
+	 * @param activationFunction
+	 *            Activation function
 	 */
 	Neuron(ActivationFunction activationFunction) {
-		
+
 		this.activationValue = 0.0;
 		this.errorSignal = 0.0;
 		this.activFunction = activationFunction;
 	}
-	
+
 	/**
 	 * Sets the activation value
 	 * 
-	 * @param input Activation value
+	 * @param input
+	 *            Activation value
 	 */
 	void setActivationValue(double input) {
-		
+
 		this.activationValue = input;
 	}
-	
+
 	/**
 	 * Calculates the activation value
 	 */
 	void calcActivationValue() {
-		
+
 		this.inputSum = 0.0;
 		for (Weight weight : this.incomingWeights) {
-			this.inputSum += weight.getInputNeuron().getActivationValue() * weight.getWeightValue();
+			this.inputSum += weight.getInputNeuron().getActivationValue()
+					* weight.getWeightValue();
 		}
 		this.activationValue = activFnct(this.inputSum);
 	}
-	
+
 	/**
 	 * Gets the activation value
 	 * 
 	 * @return Activation value
 	 */
 	double getActivationValue() {
-		
+
 		return this.activationValue;
 	}
 
 	private double activFnct(double input) {
-		
+
 		double result = 0.0;
-		
+
 		switch (this.activFunction) {
-			case SIGMOID:
-				result = sigmoid(input);
-				break;
-			case TANH:
-				result = tanh(input);
-				break;
+		case SIGMOID:
+			result = sigmoid(input);
+			break;
+		case TANH:
+			result = tanh(input);
+			break;
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Derived activation function
 	 * 
-	 * @param input Input value
+	 * @param input
+	 *            Input value
 	 * @return Activation value
 	 */
 	protected double dactivFnct(double input) {
-		
+
 		double result = 0.0;
-		
+
 		switch (this.activFunction) {
-			case SIGMOID:
-				result = dsigmoid(input);
-				break;
-			case TANH:
-				result = dtanh(input);
-				break;
+		case SIGMOID:
+			result = dsigmoid(input);
+			break;
+		case TANH:
+			result = dtanh(input);
+			break;
 		}
-		
+
 		return result;
 	}
-	
+
 	private static final double sigmoid(double input) {
-		
+
 		return 1.0d / (1.0d + Math.pow(Math.E, -1.0d * input));
 	}
-	
+
 	private static final double dsigmoid(double input) {
-		
+
 		return sigmoid(input) * (1.0d - sigmoid(input));
 	}
-	
+
 	private static final double tanh(double input) {
-		
+
 		return Math.tanh(input);
 	}
-	
+
 	private static final double dtanh(double input) {
-		
+
 		return 1.0d - tanh(input) * tanh(input);
 	}
-	
+
 	/**
 	 * Adjusts all internal weights<br>
 	 * Use only after {@link OutputNeuron#calculateError(double, double)}
@@ -193,12 +187,12 @@ class Neuron {
 		this.errorSignal = dactivFnct(this.inputSum) * errorSum;
 		// adjust all weights leading to this neuron
 		for (Weight weight : this.incomingWeights) {
-			weight.setWeightValue(weight.getWeightValue() +
-									learningRate * this.errorSignal *
-									weight.getInputNeuron().getActivationValue());
+			weight.setWeightValue(weight.getWeightValue() + learningRate
+					* this.errorSignal
+					* weight.getInputNeuron().getActivationValue());
 		}
 	}
-	
+
 	/**
 	 * Gets the current error signal for the Neuron
 	 * 
@@ -212,63 +206,65 @@ class Neuron {
 	/**
 	 * Adds a new incoming weight ot the incoming weights
 	 * 
-	 * @param incomingWeight New incoming weight
+	 * @param incomingWeight
+	 *            New incoming weight
 	 */
 	void addIncomingWeight(Weight incomingWeight) {
-		
+
 		this.incomingWeights.add(incomingWeight);
 	}
-	
+
 	/**
 	 * Adds a new outgoing weight to the outgoing weights
 	 * 
-	 * @param outgoingWeight New outgoing weight
+	 * @param outgoingWeight
+	 *            New outgoing weight
 	 */
 	void addOutgoingWeight(Weight outgoingWeight) {
-		
+
 		this.outgoingWeights.add(outgoingWeight);
 	}
-	
+
 	/**
 	 * @see Object#toString()
 	 */
 	@Override
 	public String toString() {
-		
+
 		return Double.toString(this.activationValue);
 	}
-	
+
 	/**
 	 * Gets a string representation of all incoming weights
 	 * 
 	 * @return All incoming weights as String
 	 */
 	String getInputWeightString() {
-		
+
 		StringBuffer result = new StringBuffer();
-		
+
 		for (Weight weight : this.incomingWeights) {
-			
+
 			result.append(weight).append(' ');
 		}
-		
+
 		return result.toString();
 	}
-	
+
 	/**
 	 * Gets a string representation of all outgoing weights
 	 * 
 	 * @return All outgoing weights as String
 	 */
 	String getOutputWeightString() {
-		
+
 		StringBuffer result = new StringBuffer();
-		
+
 		for (Weight weight : this.outgoingWeights) {
-			
+
 			result.append(weight.toString()).append(' ');
 		}
-		
+
 		return result.toString();
 	}
 }

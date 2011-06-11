@@ -19,23 +19,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
-@ShortLicense@
-
-Authors: @JS@
-
-Released: @ReleaseDate@
-
- */
-
 package org.jskat.ai.nn;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.jskat.util.GameType;
-
 
 /**
  * Holds the results of all game simulations

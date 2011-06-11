@@ -19,16 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
- @ShortLicense@
-
- Author: @JS@
-
- Released: @ReleaseDate@
-
- */
-
 package org.jskat.ai.nn;
 
 import java.util.ArrayList;

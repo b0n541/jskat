@@ -19,16 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
-@ShortLicense@
-
-Author: @JS@
-
-Released: @ReleaseDate@
-
-*/
-
 package org.jskat.ai.nn.util;
 
 import org.jskat.ai.nn.util.Neuron.ActivationFunction;
@@ -41,13 +31,13 @@ class InputLayer extends Layer {
 	/**
 	 * Constructor
 	 * 
-	 * @param numberOfNeurons 
+	 * @param numberOfNeurons
 	 */
 	InputLayer(int numberOfNeurons) {
-		
+
 		super(numberOfNeurons);
 	}
-	
+
 	/**
 	 * @see Layer#createNeuron(ActivationFunction)
 	 */
@@ -63,7 +53,7 @@ class InputLayer extends Layer {
 	 * @param inputs
 	 */
 	void setInputParameter(double[] inputs) {
-		
+
 		if (inputs.length > this.neurons.size()) {
 			throw new IllegalArgumentException("Wrong number of input values."); //$NON-NLS-1$
 		}
@@ -74,18 +64,19 @@ class InputLayer extends Layer {
 	}
 
 	/**
-	 * @see Object#toString() 
+	 * @see Object#toString()
 	 */
 	@Override
 	public String toString() {
-		
+
 		StringBuffer outputWeightStrings = new StringBuffer();
-		
+
 		for (Neuron neuron : this.neurons) {
-			
-			outputWeightStrings.append(neuron.getOutputWeightString()).append(' ');
+
+			outputWeightStrings.append(neuron.getOutputWeightString()).append(
+					' ');
 		}
-		
+
 		return "input layer\n" + //$NON-NLS-1$
 				outputWeightStrings.toString() + '\n';
 	}

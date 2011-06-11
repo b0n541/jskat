@@ -19,16 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
-@ShortLicense@
-
-Author: @MJL@
-
-Released: @ReleaseDate@
-
- */
-
 package org.jskat.ai.mjl;
 
 import org.apache.commons.logging.Log;
@@ -37,7 +27,6 @@ import org.jskat.ai.AbstractJSkatPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
-
 
 /**
  * A JSkat AI Player
@@ -53,7 +42,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	public AIPlayerMJL() {
 		log.debug(".new()");
 	}
-	
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -136,8 +125,8 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 		cards.remove(skat.get(0));
 		cards.remove(skat.get(1));
 		log.debug("no algorithm yet, discarding original skat of [" + skat
-				+ "], cards.size="+cards.size());
-		
+				+ "], cards.size=" + cards.size());
+
 		return skat;
 	}
 
@@ -174,7 +163,8 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public Card playCard() {
-		log.debug("--------------------- start ("+playerName+") ----------------------------------");
+		log.debug("--------------------- start (" + playerName
+				+ ") ----------------------------------");
 		log.debug(".playCard(): my position: " + knowledge.getPlayerPosition()
 				+ ", single player: " + knowledge.getDeclarer());
 		Card toPlay = aiPlayer.playNextCard(knowledge);
@@ -187,7 +177,8 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 			log.warn("no playable cards - shouldn't be possible!");
 			log.debug("my cards: " + cards + ", trick: "
 					+ this.knowledge.getTrickCards());
-			log.debug("--------------------- done ("+playerName+") -----------------------------------");
+			log.debug("--------------------- done (" + playerName
+					+ ") -----------------------------------");
 			return null;
 		}
 		log.debug("--------------------- done -----------------------------------");

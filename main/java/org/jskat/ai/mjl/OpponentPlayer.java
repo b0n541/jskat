@@ -19,16 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*
-
-@ShortLicense@
-
-Author: @MJL@
-
-Released: @ReleaseDate@
-
- */
-
 package org.jskat.ai.mjl;
 
 import org.apache.commons.logging.Log;
@@ -40,7 +30,6 @@ import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
-
 
 /**
  * @author Markus J. Luzius <markus@luzius.de>
