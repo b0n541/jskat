@@ -21,11 +21,11 @@
 
 /*
 
-@ShortLicense@
+ @ShortLicense@
 
-Authors: @JS@
+ Authors: @JS@
 
-Released: @ReleaseDate@
+ Released: @ReleaseDate@
 
  */
 
@@ -38,7 +38,6 @@ import java.util.Random;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.nn.AIPlayerNN;
-import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.JSkatThread;
 import org.jskat.control.SkatGame;
@@ -48,9 +47,6 @@ import org.jskat.gui.NullView;
 import org.jskat.util.CardDeck;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
-import org.neuroph.core.NeuralNetwork;
-import org.neuroph.core.learning.SupervisedLearning;
-
 
 /**
  * Trains the neural networks
@@ -179,10 +175,6 @@ public class NNTrainer extends JSkatThread {
 		nnPlayer2.setIsLearning(true);
 		AIPlayerNN nnPlayer3 = new AIPlayerNN();
 		nnPlayer3.setIsLearning(true);
-		NeuralNetwork declarerNet = SkatNetworks.getNetwork(gameType, true);
-		SupervisedLearning declarerLearning = (SupervisedLearning) declarerNet.getLearningRule();
-		NeuralNetwork opponentNet = SkatNetworks.getNetwork(gameType, false);
-		SupervisedLearning opponentLearning = (SupervisedLearning) opponentNet.getLearningRule();
 
 		long episodes = 0;
 		long episodesWonGames = 0;
@@ -199,15 +191,22 @@ public class NNTrainer extends JSkatThread {
 						/ (episodeSteps * 3) + " %)" + " total won games " //$NON-NLS-1$ //$NON-NLS-2$
 						+ totalWonGames + " (" + 100 * totalWonGames //$NON-NLS-1$
 						/ totalGames + " %)"); //$NON-NLS-1$
-				log.debug("        Declarer net: " //$NON-NLS-1$
-						+ declarerLearning.getCurrentIteration() + " iterations " //$NON-NLS-1$
-						+ declarerLearning.getTotalNetworkError() + " total network error"); //$NON-NLS-1$
-				log.debug("        Opponent net: " //$NON-NLS-1$
-						+ opponentLearning.getCurrentIteration() + " iterations " //$NON-NLS-1$
-						+ opponentLearning.getTotalNetworkError() + " total network error"); //$NON-NLS-1$
+				//				log.debug("        Declarer net: " //$NON-NLS-1$
+				// + declarerLearning.getCurrentIteration()
+				//						+ " iterations " //$NON-NLS-1$
+				// + declarerLearning.getTotalNetworkError()
+				//						+ " total network error"); //$NON-NLS-1$
+				//				log.debug("        Opponent net: " //$NON-NLS-1$
+				// + opponentLearning.getCurrentIteration()
+				//						+ " iterations " //$NON-NLS-1$
+				// + opponentLearning.getTotalNetworkError()
+				//						+ " total network error"); //$NON-NLS-1$
 
-				jskat.addTrainingResult(gameType, episodes, totalWonGames, episodesWonGames,
-						declarerLearning.getTotalNetworkError(), opponentLearning.getTotalNetworkError());
+				jskat.addTrainingResult(gameType, episodes, totalWonGames,
+						episodesWonGames,
+						// declarerLearning.getTotalNetworkError(),
+						// opponentLearning.getTotalNetworkError());
+						0.0, 0.0);
 
 				episodesWonGames = 0;
 			}
@@ -217,12 +216,11 @@ public class NNTrainer extends JSkatThread {
 				nnPlayer1.newGame(Player.FOREHAND);
 				nnPlayer2.newGame(Player.MIDDLEHAND);
 				nnPlayer3.newGame(Player.REARHAND);
-				SkatGame game = new SkatGame(null, nnPlayer1, nnPlayer2, nnPlayer3);
+				SkatGame game = new SkatGame(null, nnPlayer1, nnPlayer2,
+						nnPlayer3);
 				game.setView(new NullView());
 				game.setMaxSleep(0);
 
-				// CardDeck deck = new CardDeck(nullGames.get(
-				// rand.nextInt(nullGames.size())).toString());
 				CardDeck deck = new CardDeck();
 				deck.shuffle();
 				log.debug("Card deck: " + deck); //$NON-NLS-1$
@@ -232,7 +230,6 @@ public class NNTrainer extends JSkatThread {
 				game.setSinglePlayer(currPlayer);
 
 				GameAnnouncement ann = new GameAnnouncement();
-				// ann.setGameType(GameTypes.NULL);
 				ann.setGameType(gameType);
 				game.setGameAnnouncement(ann);
 

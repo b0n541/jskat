@@ -21,11 +21,11 @@
 
 /*
 
-@ShortLicense@
+ @ShortLicense@
 
-Authors: @JS@
+ Authors: @JS@
 
-Released: @ReleaseDate@
+ Released: @ReleaseDate@
 
  */
 
@@ -33,11 +33,9 @@ package org.jskat.ai.nn.data;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jskat.ai.nn.util.NetworkTopology;
+import org.jskat.ai.nn.util.NeuralNetwork;
 import org.jskat.util.GameType;
-import org.neuroph.core.NeuralNetwork;
-import org.neuroph.nnet.MultiLayerPerceptron;
-import org.neuroph.util.TransferFunctionType;
-
 
 /**
  * Holds all neural networks for the NN player
@@ -45,6 +43,15 @@ import org.neuroph.util.TransferFunctionType;
 public class SkatNetworks {
 
 	private static Log log = LogFactory.getLog(SkatNetworks.class);
+
+	private final static SkatNetworks instance = new SkatNetworks();
+
+	private static NeuralNetwork suitDeclarer;
+	private static NeuralNetwork suitOpponent;
+	private static NeuralNetwork nullDeclarer;
+	private static NeuralNetwork nullOpponent;
+	private static NeuralNetwork grandDeclarer;
+	private static NeuralNetwork grandOpponent;
 
 	/**
 	 * Gets an instance of the SkatNetworks
@@ -65,7 +72,6 @@ public class SkatNetworks {
 	}
 
 	private void initNetworks() {
-
 		// 32 input nodes for every player
 		// 1 output node for win/lost
 		// 1 hidden layer
@@ -76,18 +82,44 @@ public class SkatNetworks {
 		int hiddenCount = 50;
 		int outputCount = 1;
 
-		SkatNetworks.suitDeclarer = new MultiLayerPerceptron(TransferFunctionType.TANH, inputCount, hiddenCount,
-				outputCount);
-		SkatNetworks.suitOpponent = new MultiLayerPerceptron(TransferFunctionType.TANH, inputCount, hiddenCount,
-				outputCount);
-		SkatNetworks.nullDeclarer = new MultiLayerPerceptron(TransferFunctionType.TANH, inputCount, hiddenCount,
-				outputCount);
-		SkatNetworks.nullOpponent = new MultiLayerPerceptron(TransferFunctionType.TANH, inputCount, hiddenCount,
-				outputCount);
-		SkatNetworks.grandDeclarer = new MultiLayerPerceptron(TransferFunctionType.TANH, inputCount, hiddenCount,
-				outputCount);
-		SkatNetworks.grandOpponent = new MultiLayerPerceptron(TransferFunctionType.TANH, inputCount, hiddenCount,
-				outputCount);
+		int[] hiddenLayer = { hiddenCount };
+
+		NetworkTopology topol = new NetworkTopology(inputCount, outputCount, 1,
+				hiddenLayer);
+
+		SkatNetworks.suitDeclarer = new NeuralNetwork(topol);
+		SkatNetworks.suitOpponent = new NeuralNetwork(topol);
+		SkatNetworks.nullDeclarer = new NeuralNetwork(topol);
+		SkatNetworks.nullOpponent = new NeuralNetwork(topol);
+		SkatNetworks.grandDeclarer = new NeuralNetwork(topol);
+		SkatNetworks.grandOpponent = new NeuralNetwork(topol);
+
+		// SkatNetworks.suitDeclarer = new
+		// MultiLayerPerceptron(TransferFunctionType.TANH, inputCount,
+		// hiddenCount,
+		// outputCount);
+		// SkatNetworks.suitOpponent = new
+		// MultiLayerPerceptron(TransferFunctionType.TANH, inputCount,
+		// hiddenCount,
+		// outputCount);
+		// SkatNetworks.nullDeclarer = new
+		// MultiLayerPerceptron(TransferFunctionType.TANH, inputCount,
+		// hiddenCount,
+		// outputCount);
+		// SkatNetworks.nullOpponent = new
+		// MultiLayerPerceptron(TransferFunctionType.TANH, inputCount,
+		// hiddenCount,
+		// outputCount);
+		// SkatNetworks.grandDeclarer = new
+		// MultiLayerPerceptron(TransferFunctionType.TANH, inputCount,
+		// hiddenCount,
+		// outputCount);
+		// SkatNetworks.grandOpponent = new
+		// MultiLayerPerceptron(TransferFunctionType.TANH, inputCount,
+		// hiddenCount,
+		// outputCount);
+		// SkatNetworks.loadNetworks(ClassLoader.getSystemResource(
+		//				"org/jskat/ai/nn/data").toString()); //$NON-NLS-1$
 	}
 
 	/**
@@ -207,12 +239,24 @@ public class SkatNetworks {
 
 		String pathSep = System.getProperty("file.separator"); //$NON-NLS-1$
 
-		suitDeclarer = NeuralNetwork.load(path.concat(pathSep).concat("jskat.suit.declarer.nnet")); //$NON-NLS-1$
-		suitOpponent = NeuralNetwork.load(path.concat(pathSep).concat("jskat.suit.opponent.nnet")); //$NON-NLS-1$
-		nullDeclarer = NeuralNetwork.load(path.concat(pathSep).concat("jskat.null.declarer.nnet")); //$NON-NLS-1$
-		nullOpponent = NeuralNetwork.load(path.concat(pathSep).concat("jskat.null.opponent.nnet")); //$NON-NLS-1$
-		grandDeclarer = NeuralNetwork.load(path.concat(pathSep).concat("jskat.grand.declarer.nnet")); //$NON-NLS-1$
-		grandOpponent = NeuralNetwork.load(path.concat(pathSep).concat("jskat.grand.opponent.nnet")); //$NON-NLS-1$
+		suitDeclarer = new NeuralNetwork();
+		suitDeclarer.loadNetwork(path.concat(pathSep).concat(
+				"jskat.suit.declarer.nnet")); //$NON-NLS-1$
+		suitOpponent = new NeuralNetwork();
+		suitOpponent.loadNetwork(path.concat(pathSep).concat(
+				"jskat.suit.opponent.nnet")); //$NON-NLS-1$
+		nullDeclarer = new NeuralNetwork();
+		nullDeclarer.loadNetwork(path.concat(pathSep).concat(
+				"jskat.null.declarer.nnet")); //$NON-NLS-1$
+		nullOpponent = new NeuralNetwork();
+		nullOpponent.loadNetwork(path.concat(pathSep).concat(
+				"jskat.null.opponent.nnet")); //$NON-NLS-1$
+		grandDeclarer = new NeuralNetwork();
+		grandDeclarer.loadNetwork(path.concat(pathSep).concat(
+				"jskat.grand.declarer.nnet")); //$NON-NLS-1$
+		grandOpponent = new NeuralNetwork();
+		grandOpponent.loadNetwork(path.concat(pathSep).concat(
+				"jskat.grand.opponent.nnet")); //$NON-NLS-1$
 	}
 
 	/**
@@ -225,20 +269,17 @@ public class SkatNetworks {
 
 		String pathSep = System.getProperty("file.separator"); //$NON-NLS-1$
 
-		suitDeclarer.save(path.concat(pathSep).concat("jskat.suit.declarer.nnet")); //$NON-NLS-1$
-		suitOpponent.save(path.concat(pathSep).concat("jskat.suit.opponent.nnet")); //$NON-NLS-1$
-		nullDeclarer.save(path.concat(pathSep).concat("jskat.null.declarer.nnet")); //$NON-NLS-1$
-		nullOpponent.save(path.concat(pathSep).concat("jskat.null.opponent.nnet")); //$NON-NLS-1$
-		grandDeclarer.save(path.concat(pathSep).concat("jskat.grand.declarer.nnet")); //$NON-NLS-1$
-		grandOpponent.save(path.concat(pathSep).concat("jskat.grand.opponent.nnet")); //$NON-NLS-1$
+		suitDeclarer.saveNetwork(path.concat(pathSep).concat(
+				"jskat.suit.declarer.nnet")); //$NON-NLS-1$
+		suitOpponent.saveNetwork(path.concat(pathSep).concat(
+				"jskat.suit.opponent.nnet")); //$NON-NLS-1$
+		nullDeclarer.saveNetwork(path.concat(pathSep).concat(
+				"jskat.null.declarer.nnet")); //$NON-NLS-1$
+		nullOpponent.saveNetwork(path.concat(pathSep).concat(
+				"jskat.null.opponent.nnet")); //$NON-NLS-1$
+		grandDeclarer.saveNetwork(path.concat(pathSep).concat(
+				"jskat.grand.declarer.nnet")); //$NON-NLS-1$
+		grandOpponent.saveNetwork(path.concat(pathSep).concat(
+				"jskat.grand.opponent.nnet")); //$NON-NLS-1$
 	}
-
-	private final static SkatNetworks instance = new SkatNetworks();
-
-	private static NeuralNetwork suitDeclarer;
-	private static NeuralNetwork suitOpponent;
-	private static NeuralNetwork nullDeclarer;
-	private static NeuralNetwork nullOpponent;
-	private static NeuralNetwork grandDeclarer;
-	private static NeuralNetwork grandOpponent;
 }
