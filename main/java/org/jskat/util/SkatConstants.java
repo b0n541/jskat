@@ -19,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package org.jskat.util;
 
 import java.util.Arrays;
@@ -34,7 +33,6 @@ public final class SkatConstants {
 	/**
 	 * All possible bid values ordered from the lowest to the highest bid value
 	 */
-	// FIXME (jan 19.11.2010) bid order list is incomplete!!!
 	public final static List<Integer> bidOrder = Arrays.asList(
 			Integer.valueOf(18), Integer.valueOf(20), Integer.valueOf(22),
 			Integer.valueOf(23), Integer.valueOf(24), Integer.valueOf(27),
