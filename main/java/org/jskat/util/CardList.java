@@ -48,6 +48,16 @@ public class CardList extends ArrayList<Card> {
 	}
 
 	/**
+	 * Additional Constructor - only valid for test Classes
+	 */
+	public CardList(Card[] cards) {
+		super();
+		for(Card c: cards) {
+			add(c);
+		}
+	}
+
+	/**
 	 * Tests whether a card with a suit is in the CardList or not
 	 * 
 	 * @param gameType
@@ -141,37 +151,19 @@ public class CardList extends ArrayList<Card> {
 	/**
 	 * Gets the suit with the most Cards in the CardList
 	 * 
-	 * @return Suit with most Cards in the CardList
+	 * @return Suit with most Cards in the CardList,<br>
+	 * the highest ranking suit, if there the highest count gives more than one suit
 	 */
 	public Suit getMostFrequentSuit() {
 
-		// TODO re-implement it
-
-		Suit mostFrequentSuitColor = Suit.CLUBS;
-		int highestCardCount = getSuitCount(Suit.CLUBS, true);
-		int currentCardCount = 0;
-
-		currentCardCount = getSuitCount(Suit.SPADES, true);
-
-		if (currentCardCount > highestCardCount) {
-
-			highestCardCount = currentCardCount;
-			mostFrequentSuitColor = Suit.SPADES;
-		}
-
-		currentCardCount = getSuitCount(Suit.HEARTS, true);
-
-		if (currentCardCount > highestCardCount) {
-
-			highestCardCount = currentCardCount;
-			mostFrequentSuitColor = Suit.HEARTS;
-		}
-		currentCardCount = getSuitCount(Suit.DIAMONDS, true);
-
-		if (currentCardCount > highestCardCount) {
-
-			highestCardCount = currentCardCount;
-			mostFrequentSuitColor = Suit.DIAMONDS;
+		int maxCount = 0;
+		Suit mostFrequentSuitColor = null;
+		for(Suit suit: Suit.values()) {
+			int cardCount = getSuitCount(suit, true);
+			if(cardCount>maxCount) {
+				mostFrequentSuitColor = suit;
+				maxCount = cardCount;
+			}
 		}
 
 		return mostFrequentSuitColor;
@@ -183,7 +175,7 @@ public class CardList extends ArrayList<Card> {
 	 * @param suit
 	 *            The suit to search for
 	 * @param countJacks
-	 *            TRUE if the jacks should count to the number of suit cards
+	 *            TRUE if all of the jacks should count to the number of suit cards (max=11), FALSE otherwise (max=7)
 	 * @return Number of cards with this suit
 	 */
 	public int getSuitCount(Suit suit, boolean countJacks) {
@@ -191,16 +183,8 @@ public class CardList extends ArrayList<Card> {
 		int count = 0;
 
 		for (Card card : this) {
-
-			if (card.getSuit() == suit) {
-
-				if (card.getRank() == Rank.JACK && countJacks) {
-					// count jacks only if needed
-					count++;
-				} else {
-					// count every other card with the same suit
-					count++;
-				}
+			if ((countJacks && card.getRank() == Rank.JACK) || (card.getRank() != Rank.JACK && card.getSuit() == suit)) {
+				count++;
 			}
 		}
 
@@ -227,6 +211,10 @@ public class CardList extends ArrayList<Card> {
 	 */
 	public void sort(GameType gameType) {
 
+		if (gameType==null) {
+			sortGrandGame();
+			return;
+		}
 		if (!containsHiddenCards()) {
 			switch (gameType) {
 			case NULL:
