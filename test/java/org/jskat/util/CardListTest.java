@@ -87,6 +87,7 @@ public class CardListTest extends AbstractJSkatTest {
 		assertEquals(0, cards.getFirstIndexOfSuit(Suit.CLUBS));
 		assertEquals(0, cards.getFirstIndexOfSuit(Suit.CLUBS, true));
 		assertEquals(1, cards.getFirstIndexOfSuit(Suit.CLUBS, false));
+		assertEquals(-1, cards.getFirstIndexOfSuit(Suit.HEARTS));
 	}
 
 	/**
@@ -103,5 +104,6 @@ public class CardListTest extends AbstractJSkatTest {
 		assertEquals(1, cards.getLastIndexOfSuit(Suit.CLUBS));
 		assertEquals(1, cards.getLastIndexOfSuit(Suit.CLUBS, true));
 		assertEquals(0, cards.getLastIndexOfSuit(Suit.CLUBS, false));
+		assertEquals(-1, cards.getLastIndexOfSuit(Suit.HEARTS));
 	}
 }
