@@ -28,68 +28,56 @@ public enum Suit {
 	/**
 	 * Club or Eichel
 	 */
-	CLUBS {
-		@Override
-		public String shortString() { return "C"; } //$NON-NLS-1$
-		@Override
-		public String longString() { return "Clubs"; } //$NON-NLS-1$
-		@Override
-		public int getSuitOrder() { return 3; }
-	},
+	CLUBS("C", "Clubs", 3),
 	/**
 	 * Spades or Grün
 	 */
-	SPADES {
-		@Override
-		public String shortString() { return "S"; } //$NON-NLS-1$
-		@Override
-		public String longString() { return "Spades"; } //$NON-NLS-1$
-		@Override
-		public int getSuitOrder() { return 2; }
-	},
+	SPADES("S", "Spades", 2),
 	/**
 	 * Hearts or Herz
 	 */
-	HEARTS {
-		@Override
-		public String shortString() { return "H"; } //$NON-NLS-1$
-		@Override
-		public String longString() { return "Hearts"; } //$NON-NLS-1$
-		@Override
-		public int getSuitOrder() { return 1; }
-	},
+	HEARTS("H", "Hearts", 1),
 	/**
 	 * Diamonds or Schellen
 	 */
-	DIAMONDS {
-		@Override
-		public String shortString() { return "D"; } //$NON-NLS-1$
-		@Override
-		public String longString() { return "Diamonds"; } //$NON-NLS-1$
-		@Override
-		public int getSuitOrder() { return 0; }
-	};
+	DIAMONDS("D", "Diamonds", 0);
 
+	private final String shortString;
+	private final String longString;
+	private final int sortOrder;
+	
+	private Suit(String s, String l, int order) {
+		shortString = s;
+		longString = l;
+		sortOrder = order;
+	}
+	
 	/**
 	 * Gets a short string representation of the constant
 	 * 
 	 * @return Short string representation of the constant
 	 */
-	public abstract String shortString();
+	public String shortString() {
+		return shortString;
+	}
 
 	/**
 	 * Gets a long string representation of the constant
 	 * 
 	 * @return Long string representation of the constant
 	 */
-	public abstract String longString();
+	public String longString() {
+		return longString;
+	}
 
 	/**
 	 * Gets the order of the constant
 	 * 
 	 * @return Order of the constant
 	 */
-	public abstract int getSuitOrder();
+	public int getSuitOrder() {
+		return sortOrder;
+	}
 	
 	/**
 	 * Gets the suit of a card given as string
