@@ -51,7 +51,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	@Override
 	public void preparateForNewGame() {
 		// reset implementation of aiPlayer
-		aiPlayer = new SinglePlayer(cards, rules);
+		aiPlayer = null;
 		maxBidValue = -1;
 		// nothing else to do right now...
 	}
@@ -98,7 +98,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	@Override
 	public boolean pickUpSkat() {
 		// TODO really look into skat?
-		aiPlayer = new SinglePlayer(cards, rules);
+//		aiPlayer = new SinglePlayer(cards, rules);
 		return true;
 	}
 
@@ -122,12 +122,14 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	@Override
 	public CardList discardSkat() {
 		// TODO check which cards should best be discarded
-		cards.remove(skat.get(0));
-		cards.remove(skat.get(1));
-		log.debug("no algorithm yet, discarding original skat of [" + skat
-				+ "], cards.size=" + cards.size());
-
-		return skat;
+		if(aiPlayer==null || aiPlayer instanceof OpponentPlayer) {
+			cards.remove(skat.get(0));
+			cards.remove(skat.get(1));
+			log.debug("aiplayer ["+aiPlayer.getClass()+"] is not SinglePlayer, discarding original skat of [" + skat
+					+ "], cards.size="+cards.size());
+			return skat;
+		}
+		return ((SinglePlayer)aiPlayer).discardSkat(skat);
 	}
 
 	/*
@@ -137,21 +139,16 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public void startGame() {
+		log.debug("Starting game for player ("+getPlayerName()+")");
 		if (knowledge.getDeclarer() != knowledge.getPlayerPosition()) {
 			log.debug("ok? AIPlayerMJL should be OpponentPlayer - actually is: "
 					+ (aiPlayer == null ? "null" : aiPlayer.getClass()
 							.getName()));
 		} else {
-			if (aiPlayer == null) {
-				log.warn("todo: AIPlayerMJL should already have been set to SinglePlayer! "
-						+ (aiPlayer == null ? "null" : aiPlayer.getClass()
-								.getName()));
-				aiPlayer = new SinglePlayer(cards, rules);
-			} else {
-				log.debug("ok! AIPlayerMJL already set to SinglePlayer: "
-						+ (aiPlayer == null ? "null" : aiPlayer.getClass()
-								.getName()));
-			}
+			log.debug("ok? setting AIPlayerMJL to be SinglePlayer - actually is: "
+					+ (aiPlayer == null ? "null" : aiPlayer.getClass()
+							.getName()));
+			aiPlayer = new SinglePlayer(cards, rules);
 		}
 		aiPlayer.startGame(knowledge);
 	}
@@ -172,6 +169,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 		if (toPlay != null)
 			return toPlay;
 		// if there is none, just play the first valid card
+		log.debug("no card returned from AIPlayer - just taking the first valid card");
 		CardList result = getPlayableCards(this.knowledge.getTrickCards());
 		if (result.size() < 1) {
 			log.warn("no playable cards - shouldn't be possible!");
