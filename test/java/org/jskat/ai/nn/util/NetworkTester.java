@@ -28,6 +28,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.PropertyConfigurator;
 
+// FIXME (jansch 20.06.2011) re-implement it as JUnit-Test
+
 /**
  * Test class for NeuralNetwork
  */
@@ -180,7 +182,7 @@ public class NetworkTester {
 		log.debug("Re-loading network");
 
 		NeuralNetwork net2 = new NeuralNetwork();
-		net2.loadNetwork("asdf.net");
+		// net2.loadNetwork("asdf.net");
 
 		goodGuess = 0;
 		i = 0;
