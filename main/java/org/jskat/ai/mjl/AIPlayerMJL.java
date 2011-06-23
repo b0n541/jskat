@@ -122,13 +122,14 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	@Override
 	public CardList discardSkat() {
 		// TODO check which cards should best be discarded
-		if(aiPlayer==null || aiPlayer instanceof OpponentPlayer) {
+		if (aiPlayer == null || aiPlayer instanceof OpponentPlayer) {
 			cards.remove(skat.get(0));
 			cards.remove(skat.get(1));
-			log.debug("aiplayer ["+aiPlayer.getClass()+"] is not SinglePlayer, discarding original skat of [" + skat
-					+ "], cards.size="+cards.size());
+			log.debug("aiplayer is not SinglePlayer, discarding original skat of ["
+					+ skat + "], cards.size=" + cards.size());
 			return skat;
 		}
+
 		return ((SinglePlayer)aiPlayer).discardSkat(skat);
 	}
 
