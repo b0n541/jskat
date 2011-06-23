@@ -22,9 +22,10 @@
 package org.jskat.ai.nn.util;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -295,23 +296,26 @@ public class NeuralNetwork {
 		String input;
 		ArrayList<String> lines = new ArrayList<String>();
 
+		InputStream is = null;
 		try {
-			reader = new BufferedReader(new FileReader(fileName));
+			is = getClass().getResourceAsStream(fileName);
+			reader = new BufferedReader(new InputStreamReader(is));
 
 			while ((input = reader.readLine()) != null) {
 				log.debug(input);
 				lines.add(input);
 			}
 		} catch (IOException e) {
-			System.err.println("Error reading file!");
-		} finally {
-			if (reader != null) {
-				try {
-					reader.close();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if (is != null) {
+			try {
+				is.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 

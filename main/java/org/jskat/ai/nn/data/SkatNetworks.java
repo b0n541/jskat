@@ -77,12 +77,15 @@ public class SkatNetworks {
 		NetworkTopology topol = new NetworkTopology(inputCount, outputCount, 1,
 				hiddenLayer);
 
-		SkatNetworks.suitDeclarer = new NeuralNetwork(topol);
-		SkatNetworks.suitOpponent = new NeuralNetwork(topol);
-		SkatNetworks.nullDeclarer = new NeuralNetwork(topol);
-		SkatNetworks.nullOpponent = new NeuralNetwork(topol);
-		SkatNetworks.grandDeclarer = new NeuralNetwork(topol);
-		SkatNetworks.grandOpponent = new NeuralNetwork(topol);
+		// SkatNetworks.suitDeclarer = new NeuralNetwork(topol);
+		// SkatNetworks.suitOpponent = new NeuralNetwork(topol);
+		// SkatNetworks.nullDeclarer = new NeuralNetwork(topol);
+		// SkatNetworks.nullOpponent = new NeuralNetwork(topol);
+		// SkatNetworks.grandDeclarer = new NeuralNetwork(topol);
+		// SkatNetworks.grandOpponent = new NeuralNetwork(topol);
+
+		loadNetworks(ClassLoader.getSystemResource("org/jskat/ai/nn/data")
+				.getPath());
 
 		// SkatNetworks.suitDeclarer = new
 		// MultiLayerPerceptron(TransferFunctionType.TANH, inputCount,
@@ -225,28 +228,28 @@ public class SkatNetworks {
 	 * @param path
 	 *            Path to files
 	 */
-	public static void loadNetworks(String path) {
+	public static void loadNetworks(String filePath) {
 
 		String pathSep = System.getProperty("file.separator"); //$NON-NLS-1$
 
 		suitDeclarer = new NeuralNetwork();
-		suitDeclarer.loadNetwork(path.concat(pathSep).concat(
-				"jskat.suit.declarer.nnet")); //$NON-NLS-1$
+		suitDeclarer
+				.loadNetwork("/org/jskat/ai/nn/data/jskat.suit.declarer.nnet"); //$NON-NLS-1$
 		suitOpponent = new NeuralNetwork();
-		suitOpponent.loadNetwork(path.concat(pathSep).concat(
-				"jskat.suit.opponent.nnet")); //$NON-NLS-1$
+		suitOpponent
+				.loadNetwork("/org/jskat/ai/nn/data/jskat.suit.opponent.nnet"); //$NON-NLS-1$
 		nullDeclarer = new NeuralNetwork();
-		nullDeclarer.loadNetwork(path.concat(pathSep).concat(
-				"jskat.null.declarer.nnet")); //$NON-NLS-1$
+		nullDeclarer
+				.loadNetwork("/org/jskat/ai/nn/data/jskat.null.declarer.nnet"); //$NON-NLS-1$
 		nullOpponent = new NeuralNetwork();
-		nullOpponent.loadNetwork(path.concat(pathSep).concat(
-				"jskat.null.opponent.nnet")); //$NON-NLS-1$
+		nullOpponent
+				.loadNetwork("/org/jskat/ai/nn/data/jskat.null.opponent.nnet"); //$NON-NLS-1$
 		grandDeclarer = new NeuralNetwork();
-		grandDeclarer.loadNetwork(path.concat(pathSep).concat(
-				"jskat.grand.declarer.nnet")); //$NON-NLS-1$
+		grandDeclarer
+				.loadNetwork("/org/jskat/ai/nn/data/jskat.grand.declarer.nnet"); //$NON-NLS-1$
 		grandOpponent = new NeuralNetwork();
-		grandOpponent.loadNetwork(path.concat(pathSep).concat(
-				"jskat.grand.opponent.nnet")); //$NON-NLS-1$
+		grandOpponent
+				.loadNetwork("/org/jskat/ai/nn/data/jskat.grand.opponent.nnet"); //$NON-NLS-1$
 	}
 
 	/**
