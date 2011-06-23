@@ -178,10 +178,9 @@ public class JSkatMaster {
 		int playerCount = 0;
 		for (PlayerType player : allPlayer) {
 			IJSkatPlayer newPlayer = null;
-			if(player==PlayerType.HUMAN) {
+			if (player == PlayerType.HUMAN) {
 				newPlayer = data.getHumanPlayer(table.getName());
-			}
-			else {
+			} else {
 				newPlayer = PlayerType.getPlayerInstance(player);
 			}
 			newPlayer.setPlayerName(playerNames.get(playerCount));
@@ -396,9 +395,8 @@ public class JSkatMaster {
 	 */
 	public void loadNeuralNetworks() {
 
-		SkatNetworks
-				.loadNetworks(System
-						.getProperty("user.home").concat(System.getProperty("file.separator")).concat(".jskat")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+		SkatNetworks.loadNetworks(System.getProperty("user.home")
+				.concat(System.getProperty("file.separator")).concat(".jskat"));
 	}
 
 	/**
