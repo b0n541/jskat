@@ -61,7 +61,7 @@ class BidEvaluator {
 	 * @param cards hand of the player
 	 */
 	BidEvaluator(CardList cards) {
-	    log.debug("Checking out what to bid with ["+cards+"]");
+	    log.debug("Checking out what to bid with ["+cards+"]"+cards.dumpFlag());
 	    if(cards.size()<10) {
 	    	log.warn("Not enough cards for bid evaluation!");
 	    	return;
