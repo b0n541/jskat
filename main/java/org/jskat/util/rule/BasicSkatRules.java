@@ -106,4 +106,13 @@ public interface BasicSkatRules {
 	 * @return Trick winner
 	 */
 	public Player calculateTrickWinner(GameType gameType, Trick trick);
+	
+	/**
+	 * calculates the multiplier of a card list with regard to the ruleset
+	 * 
+	 * @param cards a list of cards
+	 * @param gameType the (potential) game type
+	 * @return the multiplier for bidding and game announcement
+	 */
+	public int getMultiplier(CardList cards, GameType gameType);
 }

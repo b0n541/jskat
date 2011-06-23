@@ -59,7 +59,9 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 	@Override
 	public int calcGameResult(SkatGameData gameData) {
 
-		int multiplier = getBaseMultiplier(gameData);
+		int multiplier = getMultiplier(gameData.getPlayerCards(gameData.getDeclarer()), gameData.getGameType());
+		
+		// FIXME (markus) --> winLevels
 
 		log.debug("calcSuitResult: after Jacks and Trump: multiplier " + multiplier); //$NON-NLS-1$
 
@@ -102,7 +104,7 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 
 		int gameValue = SkatConstants.getGameBaseValue(gameData.getGameType(), gameData.isHand(), gameData.isOuvert());
 
-		log.debug("gameMultiplier " + gameValue); //$NON-NLS-1$
+		log.debug("gameValue" + gameValue); //$NON-NLS-1$
 
 		int result = gameValue * multiplier;
 
@@ -114,55 +116,6 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 
 		return result;
 	}
-
-	/**
-	 * Gets the multiplier for the game only considering jacks
-	 * 
-	 * @param gameData
-	 *            Game data
-	 * @return Multiplier for the game only considering jacks
-	 */
-	protected int getJackMultiplier(SkatGameData gameData) {
-
-		int multiplier = 2; // it's the lowest multiplier,
-		// "with/without one play two"
-		if (gameData.getClubJack()) {
-			// game was played with jacks
-			if (gameData.getSpadeJack()) {
-				multiplier++;
-				if (gameData.getHeartJack()) {
-					multiplier++;
-					if (gameData.getDiamondJack()) {
-						multiplier++;
-					}
-				}
-			}
-			log.debug("game played with " + (multiplier - 1) + " jack(s)"); //$NON-NLS-1$ //$NON-NLS-2$
-		} else {
-			// game was played without jacks
-			if (!gameData.getSpadeJack()) {
-				multiplier++;
-				if (!gameData.getHeartJack()) {
-					multiplier++;
-					if (!gameData.getDiamondJack()) {
-						multiplier++;
-					}
-				}
-			}
-			log.debug("game played without " + (multiplier - 1) + " jack(s)"); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-
-		return multiplier;
-	}
-
-	/**
-	 * Gets the base multiplier for the game
-	 * 
-	 * @param gameData
-	 *            Game data
-	 * @return Base multiplier
-	 */
-	protected abstract int getBaseMultiplier(SkatGameData gameData);
 
 	/**
 	 * Checks whether a game was a schneider game<br>

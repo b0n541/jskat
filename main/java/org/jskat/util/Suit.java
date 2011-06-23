@@ -90,7 +90,7 @@ public enum Suit {
 		Suit suit = null;
 		
 		if (cardAsString.length() == 2) {
-			// parse only, iff the string is two characters long
+			// parse only, if the string is two characters long
 			if (cardAsString.startsWith("C")) { //$NON-NLS-1$
 				
 				suit = CLUBS;

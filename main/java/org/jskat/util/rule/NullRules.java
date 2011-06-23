@@ -53,6 +53,7 @@ public class NullRules extends AbstractSkatRules {
 		return gameValue * multiplier;
 	}
 
+	@SuppressWarnings("unused")
 	private int getWonTricksByDeclarer(SkatGameData data) {
 
 		int result = 0;
@@ -143,5 +144,13 @@ public class NullRules extends AbstractSkatRules {
 		}
 
 		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.jskat.util.rule.BasicSkatRules#getMultiplier(org.jskat.util.CardList, org.jskat.util.GameType)
+	 */
+	@Override
+	public int getMultiplier(CardList cards, GameType gameType) {
+		return 0;
 	}
 }

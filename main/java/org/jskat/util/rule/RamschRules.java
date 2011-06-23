@@ -23,6 +23,9 @@
 package org.jskat.util.rule;
 
 import org.jskat.data.SkatGameData;
+import org.jskat.util.Card;
+import org.jskat.util.CardList;
+import org.jskat.util.GameType;
 
 /**
  * Implementation of skat rules for Ramsch games
@@ -89,5 +92,40 @@ public class RamschRules extends SuitGrandRamschRules {
 	public final boolean isJungfrau(int playerID, SkatGameData gameData) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.jskat.util.rule.BasicSkatRules#getMultiplier(org.jskat.util.CardList, org.jskat.util.GameType)
+	 */
+	@Override
+	public int getMultiplier(CardList cards, GameType gameType) {
+		if(gameType==GameType.RAMSCH) return 0;
+		if(gameType!=GameType.GRAND) throw new IllegalArgumentException("Wrong ruleset - "+gameType);
+		int result = 1;
+		if(cards.contains(Card.CJ)) {
+			result++;
+			if(cards.contains(Card.SJ)) {
+				result++;
+				if(cards.contains(Card.HJ)) {
+					result++;
+					if(cards.contains(Card.DJ)) {
+						result++;
+					}
+				}
+			}
+		}
+		else {
+			result++;
+			if(!cards.contains(Card.SJ)) {
+				result++;
+				if(!cards.contains(Card.HJ)) {
+					result++;
+					if(!cards.contains(Card.DJ)) {
+						result++;
+					}
+				}
+			}
+		}
+		return result;
 	}
 }

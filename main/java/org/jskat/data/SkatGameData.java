@@ -32,7 +32,6 @@ import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
-import org.jskat.util.Suit;
 import org.jskat.util.rule.BasicSkatRules;
 import org.jskat.util.rule.SkatRuleFactory;
 
@@ -155,26 +154,6 @@ public class SkatGameData {
 	 * Flag for an over bidded game
 	 */
 	private boolean overBidded = false;
-
-	/**
-	 * Flag for the club jack on declarers hand
-	 */
-	private boolean clubJack = false;
-
-	/**
-	 * Flag for the spade jack on declarers hand
-	 */
-	private boolean spadeJack = false;
-
-	/**
-	 * Flag for the heart jack on declarers hand
-	 */
-	private boolean heartJack = false;
-
-	/**
-	 * Flag for the diamond jack on declarers hand
-	 */
-	private boolean diamondJack = false;
 
 	/**
 	 * Flag for a schneider game
@@ -389,90 +368,6 @@ public class SkatGameData {
 			won = false;
 			gameResult = gameResult * -2;
 		}
-	}
-
-	/**
-	 * Checks whether the single player had the club jack
-	 * 
-	 * @return TRUE if the single player had the club jack
-	 */
-	public boolean getClubJack() {
-
-		return clubJack;
-	}
-
-	/**
-	 * Sets the flag for the club jack
-	 * 
-	 * @param hadClubJack
-	 *            TRUE if the single player had the club jack
-	 */
-	public void setClubJack(boolean hadClubJack) {
-
-		clubJack = hadClubJack;
-	}
-
-	/**
-	 * Checks whether the single player had the spade jack
-	 * 
-	 * @return TRUE if the single player had the spade jack
-	 */
-	public boolean getSpadeJack() {
-
-		return spadeJack;
-	}
-
-	/**
-	 * Sets the flag for the spade jack
-	 * 
-	 * @param hadSpadeJack
-	 *            TRUE if the single player had the spade jack
-	 */
-	public void setSpadeJack(boolean hadSpadeJack) {
-
-		spadeJack = hadSpadeJack;
-	}
-
-	/**
-	 * Checks whether the single player had the heart jack
-	 * 
-	 * @return TRUE if the single player had the heart jack
-	 */
-	public boolean getHeartJack() {
-
-		return heartJack;
-	}
-
-	/**
-	 * Sets the flag for the heart jack
-	 * 
-	 * @param hadHeartJack
-	 *            TRUE if the single player had the heart jack
-	 */
-	public void setHeartJack(boolean hadHeartJack) {
-
-		heartJack = hadHeartJack;
-	}
-
-	/**
-	 * Checks whether the single player had the diamond jack
-	 * 
-	 * @return TRUE if the single player had the diamond jack
-	 */
-	public boolean getDiamondJack() {
-
-		return diamondJack;
-	}
-
-	/**
-	 * Sets the flag for the diamond jack
-	 * 
-	 * @param hadDiamondJack
-	 *            TRUE if the single player had the diamond jack
-	 */
-	public void setDiamondJack(boolean hadDiamondJack) {
-
-		diamondJack = hadDiamondJack;
 	}
 
 	/**
@@ -721,7 +616,6 @@ public class SkatGameData {
 			gameResult = 0;
 		} else {
 
-			calcJackInformation();
 			won = rules.calcGameWon(this);
 			gameResult = rules.calcGameResult(this);
 		}
@@ -1201,34 +1095,6 @@ public class SkatGameData {
 	 */
 	public void setIspaRules(boolean isIspaRules) {
 		ispaRules = isIspaRules;
-	}
-
-	/**
-	 * Calculates the counts of jacks
-	 */
-	public void calcJackInformation() {
-
-		// FIXME (jansch 09.11.2010) this is code for skat rules
-		CardList declarerCards = (CardList) dealtCards.get(declarer).clone();
-
-		declarerCards.addAll(dealtSkat);
-
-		if (declarerCards.hasJack(Suit.CLUBS)) {
-
-			setClubJack(true);
-		}
-		if (declarerCards.hasJack(Suit.SPADES)) {
-
-			setSpadeJack(true);
-		}
-		if (declarerCards.hasJack(Suit.HEARTS)) {
-
-			setHeartJack(true);
-		}
-		if (declarerCards.hasJack(Suit.DIAMONDS)) {
-
-			setDiamondJack(true);
-		}
 	}
 
 	/**

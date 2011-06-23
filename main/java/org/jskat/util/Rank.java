@@ -253,4 +253,13 @@ public enum Rank {
 		
 		return rank;
 	}
+	
+	/**
+	 * Builds an array of the ranks (e.g. to compute the multipliers)
+	 * 
+	 * @return an array containing the ranks without the jack, starting with ace, ending with 7
+	 */
+	public static Rank[] getRankList() {
+		return new Rank[] {Rank.ACE, Rank.TEN, Rank.KING, Rank.QUEEN, Rank.NINE, Rank.EIGHT, Rank.SEVEN };
+	}
 }

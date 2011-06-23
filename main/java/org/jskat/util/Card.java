@@ -350,6 +350,14 @@ public enum Card {
 		return result;
 	}
 
+	/** converts the rank of a card to a specific int value (7=1, 8=2, 9=4, ... A=64, J=128)
+	 * 
+	 * @return an int representation of the card's rank
+	 */
+	int toBinaryFlag() {
+		return (int) Math.pow(2, this.getRank().ordinal());
+	}
+	
 	/**
 	 * @see Object#toString()
 	 */

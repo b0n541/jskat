@@ -174,18 +174,9 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		SkatGameData data = new SkatGameData();
 
 		data.setGameWon(true);
-
-		if (cards.contains(Card.CJ)) {
-			data.setClubJack(true);
-		}
-		if (cards.contains(Card.SJ)) {
-			data.setClubJack(true);
-		}
-		if (cards.contains(Card.HJ)) {
-			data.setClubJack(true);
-		}
-		if (cards.contains(Card.DJ)) {
-			data.setClubJack(true);
+		data.setDeclarer(Player.FOREHAND);
+		for(Card card: cards) {
+			data.setDealtCard(Player.FOREHAND, card);
 		}
 
 		return data;

@@ -22,56 +22,64 @@
 
 package org.jskat.util.rule;
 
-import org.jskat.data.SkatGameData;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Rank;
+import org.jskat.util.Suit;
 
 /**
  * Implementation of skat rules for Suit games
  */
 public class SuitRules extends SuitGrandRules {
 
-	/**
-	 * @see SuitGrandRules#getBaseMultiplier(SkatGameData)
+	/* (non-Javadoc)
+	 * @see org.jskat.util.rule.BasicSkatRules#getMultiplier(org.jskat.util.CardList, org.jskat.util.GameType)
 	 */
 	@Override
-	protected int getBaseMultiplier(SkatGameData gameData) {
-
-		int multiplier = getJackMultiplier(gameData);
-		
-		if (multiplier == 4 && gameData.getClubJack()) {
-			// consider all trump cards too
-			CardList playerCards = gameData.getPlayerCards(gameData.getDeclarer());
-			playerCards.addAll(gameData.getSkat());
-
-			for (Card currTrumpCard : getTrumpCards(gameData.getGameType())) {
-				
-				if (playerCards.contains(currTrumpCard)) {
-					
-					multiplier++;
-				}
-				else {
-					// trump is not continous anymore
-					break;
+	public int getMultiplier(CardList cards, GameType gameType) {
+		if(gameType==GameType.GRAND || gameType==GameType.RAMSCH || gameType==GameType.NULL) throw new IllegalArgumentException("Wrong ruleset - "+gameType);
+		int result = 1;
+		if(cards.contains(Card.CJ)) {
+			result++;
+			if(cards.contains(Card.SJ)) {
+				result++;
+				if(cards.contains(Card.HJ)) {
+					result++;
+					if(cards.contains(Card.DJ)) {
+						result++;
+						for(Rank r: Rank.getRankList()) {
+							if(cards.contains(Card.getCard(Suit.valueOf(gameType.toString()), r))) {
+								result++;
+							}
+							else {
+								break;
+							}
+						}
+					}
 				}
 			}
 		}
-		
-		return multiplier;
-	}
-	
-	private CardList getTrumpCards(GameType gameType) {
-		
-		CardList trumpCards = new CardList();
-		
-		for (Rank currRank : Rank.values()) {
-			
-			trumpCards.add(Card.getCardFromString(gameType.getTrumpSuit().shortString().concat(currRank.shortString())));
+		else {
+			result++;
+			if(!cards.contains(Card.SJ)) {
+				result++;
+				if(!cards.contains(Card.HJ)) {
+					result++;
+					if(!cards.contains(Card.DJ)) {
+						result++;
+						for(Rank r: Rank.getRankList()) {
+							if(!cards.contains(Card.getCard(Suit.valueOf(gameType.toString()), r))) {
+								result++;
+							}
+							else {
+								break;
+							}
+						}
+					}
+				}
+			}
 		}
-		trumpCards.sort(gameType);
-		
-		return trumpCards;
+		return result;
 	}
 }

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.jskat.AbstractJSkatTest;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.SkatGameData;
+import org.jskat.util.Card;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.junit.Before;
@@ -17,11 +18,9 @@ import org.junit.Test;
  */
 public class SuitRuleTest extends AbstractJSkatTest {
 
-	private static SkatGameData data;
 	private static GameAnnouncement ann;
 
-	private static BasicSkatRules clubsRules = SkatRuleFactory
-			.getSkatRules(GameType.CLUBS);
+	private static BasicSkatRules clubsRules = SkatRuleFactory.getSkatRules(GameType.CLUBS);
 
 	/**
 	 * @see BeforeClass
@@ -29,30 +28,35 @@ public class SuitRuleTest extends AbstractJSkatTest {
 	@Before
 	public void initialize() {
 
-		data = new SkatGameData();
 		ann = new GameAnnouncement();
 		ann.setGameType(GameType.CLUBS);
-		data.setAnnouncement(ann);
-		data.setDeclarer(Player.FOREHAND);
-		data.setDeclarerScore(61);
-		data.setGameWon(clubsRules.calcGameWon(data));
 	}
 
 	/**
-	 * Checks @see GrandRules#calcGameWon()
+	 * Checks @see SuitGrandRules#calcGameWon()
 	 */
 	@Test
 	public void calcGameWon() {
+		SkatGameData data = new SkatGameData();
+		data.setAnnouncement(ann);
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerScore(61);
 		assertTrue(clubsRules.calcGameWon(data));
 	}
 
 	/**
-	 * Checks @see GrandRules#calcGameResult()
+	 * Checks @see SuitGrandRules#calcGameResult()
 	 */
 	@Test
 	public void calcGameResultGameWonClubJack() {
-		data.setClubJack(true);
-		data.setGameWon(clubsRules.calcGameWon(data));
+		SkatGameData data = new SkatGameData();
+		data.setAnnouncement(ann);
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerScore(61);
+		data.setDealtCard(Player.FOREHAND, Card.CJ);
+		data.setDealtCard(Player.FOREHAND, Card.HJ);
+		data.setDealtCard(Player.FOREHAND, Card.DJ);
+		data.setDealtCard(Player.FOREHAND, Card.CA);
 		data.calcResult();
 		assertEquals(24, data.getResult());
 		assertEquals(24, clubsRules.calcGameResult(data));
@@ -63,27 +67,57 @@ public class SuitRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void calcGameResultGameWonClubSpadeHeartJack() {
-		data.setClubJack(true);
-		data.setSpadeJack(true);
-		data.setHeartJack(true);
-		data.setGameWon(clubsRules.calcGameWon(data));
+		SkatGameData data = new SkatGameData();
+		data.setAnnouncement(ann);
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerScore(61);
+		data.setDealtCard(Player.FOREHAND, Card.CJ);
+		data.setDealtCard(Player.FOREHAND, Card.SJ);
+		data.setDealtCard(Player.FOREHAND, Card.HJ);
+		data.setDealtCard(Player.FOREHAND, Card.CA);
 		data.calcResult();
 		assertEquals(48, data.getResult());
 		assertEquals(48, clubsRules.calcGameResult(data));
 	}
 
 	/**
-	 * Checks @see GrandRules#calcGameResult()
+	 * Checks @see SuitGrandRules#calcGameResult()
 	 */
 	@Test
 	public void calcGameResultGameWonClubSpadeHeartDiamondJack() {
-		data.setClubJack(true);
-		data.setSpadeJack(true);
-		data.setHeartJack(true);
-		data.setDiamondJack(true);
-		data.setGameWon(clubsRules.calcGameWon(data));
+		SkatGameData data = new SkatGameData();
+		data.setAnnouncement(ann);
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerScore(61);
+		data.setDealtCard(Player.FOREHAND, Card.CJ);
+		data.setDealtCard(Player.FOREHAND, Card.SJ);
+		data.setDealtCard(Player.FOREHAND, Card.HJ);
+		data.setDealtCard(Player.FOREHAND, Card.DJ);
+		data.setDealtCard(Player.FOREHAND, Card.CT);
 		data.calcResult();
 		assertEquals(60, data.getResult());
 		assertEquals(60, clubsRules.calcGameResult(data));
 	}
+	
+	/**
+	 * Checks @see SuitGrandRules#calcGameResult()
+	 */
+	@Test
+	public void calcGameResultGameWonMoreTops() {
+		SkatGameData data = new SkatGameData();
+		data.setAnnouncement(ann);
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerScore(61);
+		data.setDealtCard(Player.FOREHAND, Card.CJ);
+		data.setDealtCard(Player.FOREHAND, Card.SJ);
+		data.setDealtCard(Player.FOREHAND, Card.HJ);
+		data.setDealtCard(Player.FOREHAND, Card.DJ);
+		data.setDealtCard(Player.FOREHAND, Card.CA);
+		data.setDealtCard(Player.FOREHAND, Card.CT);
+		data.setDealtCard(Player.FOREHAND, Card.CQ);
+		data.calcResult();
+		assertEquals(84, data.getResult());
+		assertEquals(84, clubsRules.calcGameResult(data));
+	}
+	
 }

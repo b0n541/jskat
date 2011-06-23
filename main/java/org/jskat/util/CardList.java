@@ -149,7 +149,7 @@ public class CardList extends ArrayList<Card> {
 	}
 
 	/**
-	 * Gets the suit with the most Cards in the CardList
+	 * Gets the suit with the most Cards in the CardList (without considering the jacks!)
 	 * 
 	 * @return Suit with most Cards in the CardList,<br>
 	 * the highest ranking suit, if there the highest count gives more than one suit
@@ -159,7 +159,7 @@ public class CardList extends ArrayList<Card> {
 		int maxCount = 0;
 		Suit mostFrequentSuitColor = null;
 		for(Suit suit: Suit.values()) {
-			int cardCount = getSuitCount(suit, true);
+			int cardCount = getSuitCount(suit, false);
 			if(cardCount>maxCount) {
 				mostFrequentSuitColor = suit;
 				maxCount = cardCount;
@@ -174,16 +174,36 @@ public class CardList extends ArrayList<Card> {
 	 * 
 	 * @param suit
 	 *            The suit to search for
-	 * @param countJacks
-	 *            TRUE if all of the jacks should count to the number of suit cards (max=11), FALSE otherwise (max=7)
+	 * @param countJack
+	 *            TRUE if all of the jack should count to the number of suit cards (max=8), FALSE otherwise (max=7)
 	 * @return Number of cards with this suit
 	 */
-	public int getSuitCount(Suit suit, boolean countJacks) {
+	public int getSuitCount(Suit suit, boolean countJack) {
 
 		int count = 0;
 
 		for (Card card : this) {
-			if ((countJacks && card.getRank() == Rank.JACK) || (card.getRank() != Rank.JACK && card.getSuit() == suit)) {
+			if (card.getSuit() == suit && (card.getRank()!=Rank.JACK || countJack)) {
+				count++;
+			}
+		}
+
+		return count;
+	}
+
+	/**
+	 * Returns the number of potential trump cards for a given suit
+	 * 
+	 * @param trumpSuit
+	 *            The potential trump suit to search for
+	 * @return Number of trump cards for this suit
+	 */
+	public int getTrumpCount(Suit trumpSuit) {
+
+		int count = 0;
+
+		for (Card card : this) {
+			if (card.getRank() == Rank.JACK || card.getSuit() == trumpSuit) {
 				count++;
 			}
 		}
@@ -490,5 +510,37 @@ public class CardList extends ArrayList<Card> {
 			result += c.getPoints();
 
 		return result;
+	}
+	
+	/** 
+	 * converts the CardList to an int[4] array for a bitwise representation of the CardList, 
+	 * with one int value per suit<br>
+	 * using this representation, bitwise operations can be performed on the CardList, e.g. by AI players
+	 * 
+	 * @return an int[4] array 
+	 */
+	public int[] toBinary() {
+		int[] result = new int[4];
+		for(Card c: this) {
+			result[c.getSuit().ordinal()] += c.toBinaryFlag();
+		}
+		return result;
+	}
+	
+	/**
+	 * Provides a String view on the binary representation of the CardList for logging purposes
+	 * 
+	 * @return a loggable String (containing CR/LF chars!)
+	 */
+	public String dumpFlag() {
+		StringBuilder sb = new StringBuilder();
+		sb.append('\n');
+		for(int i: toBinary()) {
+			for(int j=0;j<8;j++) {
+				sb.append((i&(int)Math.pow(2, j))>0?'1':'0');
+			}
+			sb.append('\n');
+		}
+		return sb.toString();
 	}
 }
