@@ -97,7 +97,7 @@ public class CardDeckSimulator {
 
 		// Simulate card dealing
 		for (int i = 0; i < 3; i++) {
-			// FIXME (jan 17.01.2011) code duplication with SkatGame#dealCards()
+			// FIXME (jan 17.01.2011) code duplication with SimpleSkatGame#dealCards()
 			// deal three rounds of cards
 			switch (i) {
 			case 0:
