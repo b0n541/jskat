@@ -605,7 +605,7 @@ public class SkatGame extends JSkatThread {
 			} else if (!rules.isCardAllowed(data.getGameType(), trick.getFirstCard(), data.getPlayerCards(currPlayer),
 					card)) {
 
-				log.debug("card not allowed: " + card + " game type: " //$NON-NLS-1$ //$NON-NLS-2$
+				log.error("Player " + skatPlayer.getClass().toString() + " card not allowed: " + card + " game type: " //$NON-NLS-1$ //$NON-NLS-2$
 						+ data.getGameType() + " first trick card: " //$NON-NLS-1$
 						+ trick.getFirstCard() + " player cards: " //$NON-NLS-1$
 						+ data.getPlayerCards(currPlayer));
