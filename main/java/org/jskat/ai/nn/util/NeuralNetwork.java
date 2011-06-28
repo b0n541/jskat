@@ -320,13 +320,19 @@ public class NeuralNetwork {
 		}
 
 		log.debug(lines.size() + " lines read...");
+		iterations = getIterations(lines);
 		this.topo = getTopology(lines);
 
 		this.layers = getLayers(this.topo, lines);
 		log.debug(this);
 	}
 
-	private NetworkTopology getTopology(ArrayList<String> netData) {
+	private static long getIterations(ArrayList<String> netData) {
+
+		return Long.parseLong(netData.get(1));
+	}
+
+	private static NetworkTopology getTopology(ArrayList<String> netData) {
 
 		int inputs = 0;
 		int outputs = 0;
@@ -339,7 +345,10 @@ public class NeuralNetwork {
 			String currLine = iter.next();
 			log.debug("Current line: " + currLine + " length: "
 					+ currLine.length());
-			if (currLine.equals("input")) {
+			if (currLine.equals("iterations")) {
+				// ignore next line
+				iter.next();
+			} else if (currLine.equals("input")) {
 				log.debug("parsing input node count");
 				inputs = Integer.parseInt(iter.next());
 				log.debug(inputs + " input nodes");
@@ -414,6 +423,10 @@ public class NeuralNetwork {
 	public String toString() {
 
 		StringBuffer result = new StringBuffer();
+
+		result.append("iterations\n");
+		result.append(iterations);
+		result.append('\n');
 
 		result.append("topology\n");
 		result.append(this.topo);

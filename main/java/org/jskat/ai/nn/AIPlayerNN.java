@@ -31,11 +31,9 @@ import org.jskat.ai.AbstractJSkatPlayer;
 import org.jskat.ai.IJSkatPlayer;
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.util.NeuralNetwork;
-import org.jskat.control.SkatGame;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
-import org.jskat.gui.NullView;
 import org.jskat.util.Card;
 import org.jskat.util.CardDeck;
 import org.jskat.util.CardList;
@@ -282,9 +280,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		AIPlayerNN nnPlayer3 = new AIPlayerNN();
 		nnPlayer3.setIsLearning(false);
 
-		SkatGame game = new SkatGame(null, nnPlayer1, nnPlayer2, nnPlayer3);
-		game.setView(new NullView());
-		game.setMaxSleep(0);
+		SimpleSkatGame game = new SimpleSkatGame(nnPlayer1, nnPlayer2,
+				nnPlayer3);
 
 		CardDeck deck = CardDeckSimulator.simulateUnknownCards(
 				knowledge.getPlayerPosition(), playerCards);
@@ -307,6 +304,10 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+		// FIXME (jansch 28.06.2011) have to call getGameResult() for result
+		// calculation
+		game.getGameResult();
 
 		return game.isGameWon();
 	}

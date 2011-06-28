@@ -28,12 +28,11 @@ import java.util.Random;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.nn.AIPlayerNN;
+import org.jskat.ai.nn.SimpleSkatGame;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.JSkatThread;
-import org.jskat.control.SkatGame;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.SkatGameData.GameState;
-import org.jskat.gui.NullView;
 import org.jskat.util.CardDeck;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
@@ -206,10 +205,8 @@ public class NNTrainer extends JSkatThread {
 				nnPlayer1.newGame(Player.FOREHAND);
 				nnPlayer2.newGame(Player.MIDDLEHAND);
 				nnPlayer3.newGame(Player.REARHAND);
-				SkatGame game = new SkatGame(null, nnPlayer1, nnPlayer2,
+				SimpleSkatGame game = new SimpleSkatGame(nnPlayer1, nnPlayer2,
 						nnPlayer3);
-				game.setView(new NullView());
-				game.setMaxSleep(0);
 
 				CardDeck deck = new CardDeck();
 				deck.shuffle();
@@ -232,6 +229,12 @@ public class NNTrainer extends JSkatThread {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+
+				game.calculateGameValue();
+
+				// FIXME (jansch 28.06.2011) have to call getGameResult() to get
+				// the result
+				game.getGameResult();
 
 				if (game.isGameWon()) {
 

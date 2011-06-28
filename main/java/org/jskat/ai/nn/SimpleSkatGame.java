@@ -19,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 package org.jskat.ai.nn;
 
 import java.util.HashMap;
@@ -36,11 +35,11 @@ import org.jskat.data.Trick;
 import org.jskat.gui.human.HumanPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardDeck;
+import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.jskat.util.rule.BasicSkatRules;
 import org.jskat.util.rule.SkatRuleFactory;
-
 
 /**
  * Controls a skat game
@@ -65,8 +64,8 @@ public class SimpleSkatGame extends JSkatThread {
 	 * @param newRearHand
 	 *            Hind hand player
 	 */
-	public SimpleSkatGame(IJSkatPlayer newForeHand,
-			IJSkatPlayer newMiddleHand, IJSkatPlayer newRearHand) {
+	public SimpleSkatGame(IJSkatPlayer newForeHand, IJSkatPlayer newMiddleHand,
+			IJSkatPlayer newRearHand) {
 
 		player = new HashMap<Player, IJSkatPlayer>();
 		player.put(Player.FOREHAND, newForeHand);
@@ -88,7 +87,7 @@ public class SimpleSkatGame extends JSkatThread {
 	@Override
 	public void run() {
 
-				playTricks();
+		playTricks();
 	}
 
 	private void playTricks() {
@@ -101,7 +100,8 @@ public class SimpleSkatGame extends JSkatThread {
 				newTrickForeHand = Player.FOREHAND;
 			} else {
 				// all the other tricks
-				Trick lastTrick = data.getTricks().get(data.getTricks().size() - 1);
+				Trick lastTrick = data.getTricks().get(
+						data.getTricks().size() - 1);
 
 				// set new trick fore hand
 				newTrickForeHand = lastTrick.getTrickWinner();
@@ -112,9 +112,12 @@ public class SimpleSkatGame extends JSkatThread {
 
 			// Ask players for their cards
 			playCard(trick, newTrickForeHand, newTrickForeHand);
-			playCard(trick, newTrickForeHand, newTrickForeHand.getLeftNeighbor());
-			playCard(trick, newTrickForeHand, newTrickForeHand.getRightNeighbor());
-			Player trickWinner = rules.calculateTrickWinner(data.getGameType(), trick);
+			playCard(trick, newTrickForeHand,
+					newTrickForeHand.getLeftNeighbor());
+			playCard(trick, newTrickForeHand,
+					newTrickForeHand.getRightNeighbor());
+			Player trickWinner = rules.calculateTrickWinner(data.getGameType(),
+					trick);
 			trick.setTrickWinner(trickWinner);
 			data.addPlayerPoints(trickWinner, trick.getCardValueSum());
 
@@ -149,7 +152,8 @@ public class SimpleSkatGame extends JSkatThread {
 			// ramsch rules
 		} else {
 			// for all the other games, points to the declarer
-			data.addPlayerPoints(data.getDeclarer(), data.getSkat().getCardValueSum());
+			data.addPlayerPoints(data.getDeclarer(), data.getSkat()
+					.getCardValueSum());
 		}
 
 		// set schneider/schwarz/jungfrau/durchmarsch flags
@@ -189,8 +193,9 @@ public class SimpleSkatGame extends JSkatThread {
 
 				log.error("Player is fooling!!! Doesn't have card " + card + "!"); //$NON-NLS-1$//$NON-NLS-2$
 
-			} else if (!rules.isCardAllowed(data.getGameType(), trick.getFirstCard(), data.getPlayerCards(currPlayer),
-					card)) {
+			} else if (!rules
+					.isCardAllowed(data.getGameType(), trick.getFirstCard(),
+							data.getPlayerCards(currPlayer), card)) {
 
 				log.debug("card not allowed: " + card + " game type: " //$NON-NLS-1$ //$NON-NLS-2$
 						+ data.getGameType() + " first trick card: " //$NON-NLS-1$
@@ -212,7 +217,8 @@ public class SimpleSkatGame extends JSkatThread {
 		data.getPlayerCards(currPlayer).remove(card);
 		data.setTrickCard(currPlayer, card);
 
-		if (trick.getTrickNumberInGame() > 0 && currPlayer.equals(trickForeHand)) {
+		if (trick.getTrickNumberInGame() > 0
+				&& currPlayer.equals(trickForeHand)) {
 			// remove all cards from current trick panel first
 
 			Trick lastTrick = data.getTricks().get(data.getTricks().size() - 2);
@@ -256,7 +262,8 @@ public class SimpleSkatGame extends JSkatThread {
 
 	private boolean isFinished() {
 
-		return data.getGameState() == GameState.PRELIMINARY_GAME_END || data.getGameState() == GameState.GAME_OVER;
+		return data.getGameState() == GameState.PRELIMINARY_GAME_END
+				|| data.getGameState() == GameState.GAME_OVER;
 	}
 
 	/**
@@ -285,7 +292,8 @@ public class SimpleSkatGame extends JSkatThread {
 		for (IJSkatPlayer currPlayer : player.values()) {
 			// no cloning neccessary, because all parameters are primitive data
 			// types
-			currPlayer.startGame(data.getDeclarer(), data.getGameType(), data.isHand(), data.isOuvert(),
+			currPlayer.startGame(data.getDeclarer(), data.getGameType(),
+					data.isHand(), data.isOuvert(),
 					data.isSchneiderAnnounced(), data.isSchwarzAnnounced());
 		}
 	}
@@ -339,5 +347,85 @@ public class SimpleSkatGame extends JSkatThread {
 	public String toString() {
 
 		return data.getGameState().toString();
+	}
+
+	/**
+	 * Deals the cards to the players and the skat
+	 */
+	public void dealCards() {
+
+		for (int i = 0; i < 3; i++) {
+			// deal three rounds of cards
+			switch (i) {
+			case 0:
+				// deal three cards
+				dealCards(3);
+				// and put two cards into the skat
+				data.setDealtSkatCards(deck.remove(0), deck.remove(0));
+				break;
+			case 1:
+				// deal four cards
+				dealCards(4);
+				break;
+			case 2:
+				// deal three cards
+				dealCards(3);
+				break;
+			}
+		}
+
+		// show cards in the view
+		Map<Player, CardList> dealtCards = data.getDealtCards();
+	}
+
+	/**
+	 * Deals the cards to the players
+	 * 
+	 * @param deck
+	 *            Card deck
+	 * @param cardCount
+	 *            Number of cards to be dealt to a player
+	 */
+	private void dealCards(int cardCount) {
+
+		for (Player hand : Player.values()) {
+			// for all players
+			for (int j = 0; j < cardCount; j++) {
+				// deal amount of cards
+				Card card = deck.remove(0);
+				// player can get original card object because Card is immutable
+				player.get(hand).takeCard(card);
+				data.setDealtCard(hand, card);
+			}
+		}
+	}
+
+	public void calculateGameValue() {
+
+		log.debug("Calculate game value"); //$NON-NLS-1$
+
+		// FIXME (jan 07.12.2010) don't let a data class calculate it's values
+		data.calcResult();
+
+		log.debug("game value=" + data.getResult() + ", bid value=" //$NON-NLS-1$ //$NON-NLS-2$
+				+ data.getBidValue());
+
+		if (data.isGameWon() && data.getBidValue() > data.getGameResult()) {
+
+			log.debug("Overbidding: Game is lost"); //$NON-NLS-1$
+			// Game was overbidded
+			// game is lost despite the winning of the single player
+			data.setOverBidded(true);
+		}
+
+		log.debug("Final game result: lost:" + data.isGameLost() + //$NON-NLS-1$
+				" game value: " + data.getResult()); //$NON-NLS-1$
+
+		for (IJSkatPlayer currPlayer : player.values()) {
+			// no cloning neccessary because all parameters are primitive data
+			// types
+			currPlayer.setGameResult(data.isGameWon(), data.getGameResult());
+			currPlayer.finalizeGame();
+		}
 	}
 }
