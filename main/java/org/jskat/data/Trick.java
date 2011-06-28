@@ -266,4 +266,9 @@ public class Trick {
 
 		return clone;
 	}
+
+	public String toString() {
+		return "Trick " + (trickNumberInGame + 1) + ": " + firstCard + " "
+				+ secondCard + " " + thirdCard;
+	}
 }

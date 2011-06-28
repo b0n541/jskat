@@ -250,7 +250,7 @@ public class SkatGameData {
 	 */
 	public int getGameResult() {
 
-		if (gameResult == 0 && getGameType() != GameType.PASSED_IN) {
+		if (gameResult == -1 && getGameType() != GameType.PASSED_IN) {
 
 			log.warn("Game result hasn't been calculated yet!"); //$NON-NLS-1$
 			calcResult();
