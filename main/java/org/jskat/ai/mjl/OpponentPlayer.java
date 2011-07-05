@@ -30,6 +30,7 @@ import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
+import org.jskat.util.rule.NullRules;
 
 /**
  * @author Markus J. Luzius <markus@luzius.de>
@@ -478,17 +479,32 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	 * @param card
 	 * @return index of the card, -1 if none is found
 	 */
-	private int findLowerCard(CardList cards, Card card) {
+	private int findLowerCard(CardList cards, Card initialCard) {
+
 		int index = -1;
-		int possibleCards = Helper.suitCardsToBinaryNullGame(cards,
-				card.getSuit());
-		int counter = 0;
-		while (possibleCards > 0 && card.getNullOrder() > counter
-				&& counter < 8) {
-			if ((possibleCards & (2 ^ counter)) == 1)
-				index = counter;
-			counter++;
+		boolean lowerCardFound = false;
+		Card bestCard = null;
+		NullRules rules = new NullRules();
+
+		for (int i = 0; i < cards.size(); i++) {
+
+			Card currCard = cards.get(i);
+			if (rules
+					.isCardAllowed(GameType.NULL, initialCard, cards, currCard)) {
+				if (bestCard == null) {
+					// no card found yet
+					bestCard = currCard;
+					index = i;
+				} else if (!lowerCardFound
+						&& currCard.getNullOrder() < bestCard.getNullOrder()) {
+					// lower card found
+					bestCard = currCard;
+					index = i;
+					lowerCardFound = true;
+				}
+			}
 		}
+
 		log.debug(".findLowerCard(): " + index);
 		return index;
 	}
