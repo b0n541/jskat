@@ -115,6 +115,21 @@ public class PlayerKnowledge {
 	 */
 	private List<Trick> tricks = new ArrayList<Trick>();
 
+	/** Player cards */
+	private CardList myCards = new CardList();
+	/** Skat cards */
+	private CardList skat = new CardList();
+	/** Cards of the single player */
+	private CardList singlePlayerCards = new CardList();
+	/** Flag for hand game */
+	private boolean handGame;
+	/** Flag for ouvert game */
+	private boolean ouvertGame;
+	/** Flag for schneider announced */
+	private boolean schneiderAnnounced;
+	/** Flag for schwarz announced */
+	private boolean schwarzAnnounced;
+
 	/**
 	 * Constructor
 	 */
@@ -128,6 +143,13 @@ public class PlayerKnowledge {
 	 */
 	public void initializeVariables() {
 
+		myCards.clear();
+		skat.clear();
+		singlePlayerCards.clear();
+		schneiderAnnounced = false;
+		schwarzAnnounced = false;
+		handGame = false;
+		ouvertGame = false;
 		for (Player player : Player.values()) {
 			highestBid.put(player, Integer.valueOf(0));
 
@@ -432,6 +454,8 @@ public class PlayerKnowledge {
 	 */
 	public void addCard(Card card) {
 
+		myCards.add(card);
+		
 		possiblePlayerCards.get(playerPosition.getLeftNeighbor()).remove(card);
 		possiblePlayerCards.get(playerPosition.getRightNeighbor()).remove(card);
 
@@ -594,5 +618,103 @@ public class PlayerKnowledge {
 	 */
 	public void resetCurrentGameData() {
 		initializeVariables();
+	}
+
+	/**
+	 * @return the myCards
+	 */
+	public CardList getMyCards() {
+		return myCards;
+	}
+
+	/**
+	 * @param myCards the myCards to set
+	 */
+	public void setMyCards(CardList myCards) {
+		this.myCards = myCards;
+	}
+
+	/**
+	 * @return the skat
+	 */
+	public CardList getSkat() {
+		return skat;
+	}
+
+	/**
+	 * @param skat the skat to set
+	 */
+	public void setSkat(CardList skat) {
+		this.skat = skat;
+	}
+
+	/**
+	 * @return the singlePlayerCards
+	 */
+	public CardList getSinglePlayerCards() {
+		return singlePlayerCards;
+	}
+
+	/**
+	 * @param singlePlayerCards the singlePlayerCards to set
+	 */
+	public void setSinglePlayerCards(CardList singlePlayerCards) {
+		this.singlePlayerCards = singlePlayerCards;
+	}
+
+	/**
+	 * @return the handGame
+	 */
+	public boolean isHandGame() {
+		return handGame;
+	}
+
+	/**
+	 * @param handGame the handGame to set
+	 */
+	public void setHandGame(boolean handGame) {
+		this.handGame = handGame;
+	}
+
+	/**
+	 * @return the ouvertGame
+	 */
+	public boolean isOuvertGame() {
+		return ouvertGame;
+	}
+
+	/**
+	 * @param ouvertGame the ouvertGame to set
+	 */
+	public void setOuvertGame(boolean ouvertGame) {
+		this.ouvertGame = ouvertGame;
+	}
+
+	/**
+	 * @return the schneiderAnnounced
+	 */
+	public boolean isSchneiderAnnounced() {
+		return schneiderAnnounced;
+	}
+
+	/**
+	 * @param schneiderAnnounced the schneiderAnnounced to set
+	 */
+	public void setSchneiderAnnounced(boolean schneiderAnnounced) {
+		this.schneiderAnnounced = schneiderAnnounced;
+	}
+
+	/**
+	 * @return the schwarzAnnounced
+	 */
+	public boolean isSchwarzAnnounced() {
+		return schwarzAnnounced;
+	}
+
+	/**
+	 * @param schwarzAnnounced the schwarzAnnounced to set
+	 */
+	public void setSchwarzAnnounced(boolean schwarzAnnounced) {
+		this.schwarzAnnounced = schwarzAnnounced;
 	}
 }

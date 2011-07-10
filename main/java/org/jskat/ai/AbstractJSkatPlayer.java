@@ -46,20 +46,6 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	protected IJSkatPlayer.PlayerStates playerState;
 	/** Player knowledge */
 	protected PlayerKnowledge knowledge = new PlayerKnowledge();
-	/** Player cards */
-	protected CardList cards = new CardList();
-	/** Skat cards */
-	protected CardList skat = new CardList();
-	/** Cards of the single player */
-	protected CardList singlePlayerCards = new CardList();
-	/** Flag for hand game */
-	protected boolean handGame;
-	/** Flag for ouvert game */
-	protected boolean ouvertGame;
-	/** Flag for schneider announced */
-	protected boolean schneiderAnnounced;
-	/** Flag for schwarz announced */
-	protected boolean schwarzAnnounced;
 	/** Skat rules for the current skat series */
 	protected BasicSkatRules rules;
 	/** Result of the skat game */
@@ -100,14 +86,8 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	@Override
 	public final void newGame(Player newPosition) {
 
-		cards.clear();
-		skat.clear();
-		handGame = false;
-		ouvertGame = false;
 		playerState = null;
 		rules = null;
-		schneiderAnnounced = false;
-		schwarzAnnounced = false;
 		gameWon = false;
 		gameValue = 0;
 		knowledge.initializeVariables();
@@ -122,7 +102,6 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	@Override
 	public final void takeCard(Card newCard) {
 
-		cards.add(newCard);
 		knowledge.addCard(newCard);
 	}
 
@@ -134,33 +113,22 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	 */
 	protected final void sortCards(GameType sortGameType) {
 
-		cards.sort(sortGameType);
+		knowledge.getMyCards().sort(sortGameType);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void startGame(Player newDeclarer, GameType newGameType, boolean newHandGame, boolean newOuvertGame,
-			boolean newSchneiderAnnounced, boolean newSchwarzAnnounced) {
+	public final void startGame(Player newDeclarer, GameAnnouncement game) {
 
 		playerState = PlayerStates.PLAYING;
 		knowledge.setDeclarer(newDeclarer);
-		GameAnnouncement announcement = new GameAnnouncement();
-		announcement.setGameType(newGameType);
-		announcement.setHand(newHandGame);
-		announcement.setOuvert(newOuvertGame);
-		announcement.setSchneider(newSchneiderAnnounced);
-		announcement.setSchwarz(newSchwarzAnnounced);
-		knowledge.setGame(announcement);
-		handGame = newHandGame;
-		ouvertGame = newOuvertGame;
-		schneiderAnnounced = newSchneiderAnnounced;
-		schwarzAnnounced = newSchwarzAnnounced;
+		knowledge.setGame(game);
 		gameWon = false;
 		gameValue = 0;
 
-		rules = SkatRuleFactory.getSkatRules(newGameType);
+		rules = SkatRuleFactory.getSkatRules(game.getGameType());
 
 		startGame();
 	}
@@ -181,8 +149,8 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 
 		log.debug("Skat cards: " + skatCards); //$NON-NLS-1$
 
-		skat = skatCards;
-		cards.addAll(skatCards);
+		knowledge.setSkat(skatCards);
+		knowledge.getMyCards().addAll(skatCards);
 	}
 
 	/**
@@ -217,12 +185,12 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 		CardList result = new CardList();
 
 		log.debug("game type: " + knowledge.getGame().getGameType()); //$NON-NLS-1$
-		log.debug("player cards (" + cards.size() + "): " + cards); //$NON-NLS-1$ //$NON-NLS-2$
+		log.debug("player cards (" + knowledge.getMyCards().size() + "): " + knowledge.getMyCards()); //$NON-NLS-1$ //$NON-NLS-2$
 		log.debug("trick size: " + trick.size()); //$NON-NLS-1$
 
-		for (Card card : cards) {
+		for (Card card : knowledge.getMyCards()) {
 
-			if (trick.size() > 0 && rules.isCardAllowed(knowledge.getGame().getGameType(), trick.get(0), cards, card)) {
+			if (trick.size() > 0 && rules.isCardAllowed(knowledge.getGame().getGameType(), trick.get(0), knowledge.getMyCards(), card)) {
 
 				log.debug("initial card: " + trick.get(0)); //$NON-NLS-1$
 				isCardAllowed = true;
@@ -254,7 +222,7 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 		if (player == knowledge.getPlayerPosition()) {
 			// remove this card from counter
 			knowledge.removeCard(card);
-			cards.remove(card);
+			knowledge.getMyCards().remove(card);
 		}
 	}
 
@@ -299,7 +267,7 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	@Override
 	public final void lookAtOuvertCards(CardList ouvertCards) {
 
-		singlePlayerCards.addAll(ouvertCards);
+		knowledge.getSinglePlayerCards().addAll(ouvertCards);
 	}
 
 	/**

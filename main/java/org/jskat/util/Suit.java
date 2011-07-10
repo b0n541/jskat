@@ -111,4 +111,8 @@ public enum Suit {
 		
 		return suit;
 	}
+
+	public boolean equals(GameType t) {
+		return this.name().equalsIgnoreCase(t.name());
+	}
 }

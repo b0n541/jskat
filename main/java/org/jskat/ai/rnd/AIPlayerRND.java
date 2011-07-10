@@ -166,16 +166,16 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public CardList discardSkat() {
-
+		CardList cards = knowledge.getMyCards();
 		CardList result = new CardList();
 
-		log.debug("Player cards before discarding: " + this.cards); //$NON-NLS-1$
+		log.debug("Player cards before discarding: " + cards); //$NON-NLS-1$
 
 		// just discard two random cards
-		result.add(this.cards.remove(this.rand.nextInt(this.cards.size())));
-		result.add(this.cards.remove(this.rand.nextInt(this.cards.size())));
+		result.add(cards.remove(this.rand.nextInt(cards.size())));
+		result.add(cards.remove(this.rand.nextInt(cards.size())));
 
-		log.debug("Player cards after discarding: " + this.cards); //$NON-NLS-1$
+		log.debug("Player cards after discarding: " + cards); //$NON-NLS-1$
 
 		return result;
 	}

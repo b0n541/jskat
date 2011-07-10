@@ -242,8 +242,8 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 
 					discardSkat = ((GameAnnouncementWithDiscardedCards) source)
 							.getDiscardedCards();
-					cards.remove(this.discardSkat.get(0));
-					cards.remove(this.discardSkat.get(1));
+					knowledge.getMyCards().remove(this.discardSkat.get(0));
+					knowledge.getMyCards().remove(this.discardSkat.get(1));
 
 					gameAnnouncementStep = GameAnnouncementStep.DISCARDED_SKAT;
 				} else {

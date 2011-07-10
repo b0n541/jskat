@@ -26,7 +26,6 @@ import org.jskat.data.GameAnnouncement;
 import org.jskat.data.Trick;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
-import org.jskat.util.GameType;
 import org.jskat.util.Player;
 
 /**
@@ -124,22 +123,12 @@ public interface IJSkatPlayer {
 	 * 
 	 * @param singlePlayer
 	 *            Single player position
-	 * @param gameType
-	 *            Game type
-	 * @param handGame
-	 *            TRUE if the game is a hand game
-	 * @param ouvertGame
-	 *            TRUE if the game is an ouvert game
-	 * @param schneiderAnnounced
-	 *            TRUE if schneider was announced
-	 * @param schwarzAnnounced
-	 *            TRUE if schwarz was announced
+	 * @param game
+	 *            Game announcement containing all relevant information about the new game
 	 */
 	// FIXME (jan 17.01.2011) change game announcement parameter to immutable
 	// GameAnnouncement
-	public void startGame(Player singlePlayer, GameType gameType,
-			boolean handGame, boolean ouvertGame, boolean schneiderAnnounced,
-			boolean schwarzAnnounced);
+	public void startGame(Player singlePlayer, GameAnnouncement game);
 
 	/**
 	 * Shows the cards of the single player to the opponents in ouvert games

@@ -64,10 +64,10 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	@Override
 	public int bidMore(int nextBidValue) {
 		if (maxBidValue < 0) {
-			maxBidValue = new Bidding(cards).getMaxBid();
+			maxBidValue = new Bidding(knowledge.getMyCards()).getMaxBid();
 		}
 		if (maxBidValue < nextBidValue) {
-			aiPlayer = new OpponentPlayer(cards, playerName);
+			aiPlayer = new OpponentPlayer(knowledge.getMyCards(), playerName);
 			return -1;
 		}
 		return nextBidValue;
@@ -81,11 +81,11 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	@Override
 	public boolean holdBid(int currBidValue) {
 		if (maxBidValue < 0) {
-			maxBidValue = new Bidding(cards).getMaxBid();
+			maxBidValue = new Bidding(knowledge.getMyCards()).getMaxBid();
 		}
 		boolean result = !(maxBidValue < 18) && maxBidValue >= currBidValue;
 		if (!result) {
-			aiPlayer = new OpponentPlayer(cards, playerName);
+			aiPlayer = new OpponentPlayer(knowledge.getMyCards(), playerName);
 		}
 		return result;
 	}
@@ -110,7 +110,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	@Override
 	public GameAnnouncement announceGame() {
 		GameAnnouncement game = new GameAnnouncement();
-		game.setGameType(new Bidding(cards).getSuggestedGameType());
+		game.setGameType(new Bidding(knowledge.getMyCards()).getSuggestedGameType());
 		return game;
 	}
 
@@ -123,14 +123,14 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	public CardList discardSkat() {
 		// TODO check which cards should best be discarded
 		if (aiPlayer == null || aiPlayer instanceof OpponentPlayer) {
-			cards.remove(skat.get(0));
-			cards.remove(skat.get(1));
-			log.debug("aiplayer is not SinglePlayer, discarding original skat of ["
-					+ skat + "], cards.size=" + cards.size());
-			return skat;
+			knowledge.getMyCards().remove(knowledge.getSkat().get(0));
+			knowledge.getMyCards().remove(knowledge.getSkat().get(1));
+			log.debug("aiplayer ["+aiPlayer.getClass()+"] is not SinglePlayer, discarding original skat of [" + knowledge.getSkat()
+					+ "], cards.size="+knowledge.getMyCards().size());
+			return knowledge.getSkat();
 		}
 
-		return ((SinglePlayer)aiPlayer).discardSkat(skat);
+		return ((SinglePlayer)aiPlayer).discardSkat(knowledge.getSkat());
 	}
 
 	/*
@@ -149,7 +149,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 			log.debug("ok? setting AIPlayerMJL to be SinglePlayer - actually is: "
 					+ (aiPlayer == null ? "null" : aiPlayer.getClass()
 							.getName()));
-			aiPlayer = new SinglePlayer(cards, rules);
+			aiPlayer = new SinglePlayer(knowledge.getMyCards(), rules);
 		}
 		aiPlayer.startGame(knowledge);
 	}
@@ -174,7 +174,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 		CardList result = getPlayableCards(this.knowledge.getTrickCards());
 		if (result.size() < 1) {
 			log.warn("no playable cards - shouldn't be possible!");
-			log.debug("my cards: " + cards + ", trick: "
+			log.debug("my cards: " + knowledge.getMyCards() + ", trick: "
 					+ this.knowledge.getTrickCards());
 			log.debug("--------------------- done (" + playerName
 					+ ") -----------------------------------");

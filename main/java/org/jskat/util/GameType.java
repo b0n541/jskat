@@ -89,4 +89,17 @@ public enum GameType {
 	 * @return Trump suit, null if there is no trump suit
 	 */
 	public abstract Suit getTrumpSuit();
+
+	public boolean equals(Suit s) {
+		return s.name().equalsIgnoreCase(this.name());
+	}
+	
+	public Suit asSuit() {
+		try {
+			return Suit.valueOf(this.name());
+		} catch (Exception e) {
+			return null;
+		}
+	}
+	
 }

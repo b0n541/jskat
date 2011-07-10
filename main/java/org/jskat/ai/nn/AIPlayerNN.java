@@ -132,7 +132,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		for (GameType gameType : filteredGameTypes) {
 
 			int gamesToSimulate = 20;
-			int wonGames = simulateGames(cards, gameType, gamesToSimulate);
+			int wonGames = simulateGames(knowledge.getMyCards(), gameType, gamesToSimulate);
 			double wonRate = (double) wonGames / (double) gamesToSimulate;
 
 			if (wonRate > 0.5) {
@@ -173,7 +173,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		data.setGameWon(true);
 		data.setDeclarer(Player.FOREHAND);
-		for(Card card: cards) {
+		for(Card card: knowledge.getMyCards()) {
 			data.setDealtCard(Player.FOREHAND, card);
 		}
 
@@ -205,7 +205,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	private GameType getBestGameType() {
 
 		// FIXME (jan 18.01.2011) check for overbidding!
-		SimulationResults simulationResults = simulateGames(cards, 20);
+		SimulationResults simulationResults = simulateGames(knowledge.getMyCards(), 20);
 		GameType bestGameType = null;
 		int highestWonGames = -1;
 
@@ -321,7 +321,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		boolean result = true;
 
 		int gamesToSimulate = 20;
-		SimulationResults simResult = simulateGames(cards, gamesToSimulate);
+		SimulationResults simResult = simulateGames(knowledge.getMyCards(), gamesToSimulate);
 
 		for (GameType gameType : feasibleGameTypes) {
 
@@ -343,10 +343,11 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	@Override
 	public CardList discardSkat() {
 
+		CardList cards = knowledge.getMyCards();
 		CardList result = new CardList();
 		int highestNumberOfWonGames = 0;
 
-		log.debug("Player cards before discarding: " + cards); //$NON-NLS-1$
+		log.debug("Player cards before discarding: " + knowledge.getMyCards()); //$NON-NLS-1$
 
 		// check all possible discards
 		for (int i = 0; i < cards.size(); i++) {

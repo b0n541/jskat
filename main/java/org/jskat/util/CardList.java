@@ -155,10 +155,23 @@ public class CardList extends ArrayList<Card> {
 	 * the highest ranking suit, if there the highest count gives more than one suit
 	 */
 	public Suit getMostFrequentSuit() {
+		return getMostFrequentSuit(null);
+	}
+
+	/**
+	 * Gets the suit with the most Cards in the CardList (without considering the jacks!), 
+	 * without considering the given suit
+	 * 
+	 * @param exclude suit to exclude from calculating the most frequent suit (normally the trump suit)
+	 * @return Suit with most Cards in the CardList,<br>
+	 * the highest ranking suit, if there the highest count gives more than one suit
+	 */
+	public Suit getMostFrequentSuit(Suit exclude) {
 
 		int maxCount = 0;
 		Suit mostFrequentSuitColor = null;
 		for(Suit suit: Suit.values()) {
+			if(exclude!=null && suit==exclude) continue;
 			int cardCount = getSuitCount(suit, false);
 			if(cardCount>maxCount) {
 				mostFrequentSuitColor = suit;

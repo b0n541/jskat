@@ -30,6 +30,10 @@ import org.apache.commons.logging.LogFactory;
 public enum PlayerType {
 
 	/**
+	 * Algorithmic player
+	 */
+	 NEW_ALGORITHMIC("org.jskat.ai.algorithmic.AlgorithmicAIPlayer"),
+	/**
 	 * Random player
 	 */
 	RANDOM("org.jskat.ai.rnd.AIPlayerRND"),
@@ -37,7 +41,6 @@ public enum PlayerType {
 	 * Algorithmic player
 	 */
 	ALGORITHMIC("org.jskat.ai.mjl.AIPlayerMJL"),
-	// ALGORITHMIC("org.jskat.ai.algorithmic.AlgorithmicAIPlayer"),
 	/**
 	 * Neural network player
 	 */

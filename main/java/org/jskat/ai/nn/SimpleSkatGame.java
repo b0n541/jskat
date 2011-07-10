@@ -290,11 +290,8 @@ public class SimpleSkatGame extends JSkatThread {
 
 		// inform all players
 		for (IJSkatPlayer currPlayer : player.values()) {
-			// no cloning neccessary, because all parameters are primitive data
-			// types
-			currPlayer.startGame(data.getDeclarer(), data.getGameType(),
-					data.isHand(), data.isOuvert(),
-					data.isSchneiderAnnounced(), data.isSchwarzAnnounced());
+			// TODO clone announcement
+			currPlayer.startGame(data.getDeclarer(), ann);
 		}
 	}
 
