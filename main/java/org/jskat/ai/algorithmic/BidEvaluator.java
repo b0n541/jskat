@@ -122,6 +122,13 @@ class BidEvaluator {
 		return maxBid;
 	}
 
+	/** tells the AI player whether to pick up the skat or not
+	 * @return true, if the skat should be picked up;<br>false, for a hand game
+	 */
+	boolean pickUpSkat() {
+		return true;
+	}
+
 	GameType getSuggestedGameType() {
 		return suggestedGameType;
 	}

@@ -6,6 +6,7 @@ package org.jskat.ai.algorithmic;
 import org.apache.log4j.Logger;
 import org.jskat.ai.AbstractJSkatPlayer;
 import org.jskat.ai.IJSkatPlayer;
+import org.jskat.ai.PlayerKnowledge;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -18,7 +19,7 @@ import org.jskat.util.CardList;
 public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	private static final Logger log = Logger.getLogger(AlgorithmicAIPlayer.class);
 
-	private IJSkatPlayer aiPlayer = null;
+	private IAlgorithmicAIPlayer aiPlayer = null;
 	BidEvaluator bidEvaluator = null;
 	
 	/* (non-Javadoc)
@@ -27,8 +28,9 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	@Override
 	public void preparateForNewGame() {
 		log.debug("New game preparation for player <"+playerName+">");
+		aiPlayer = null;
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see org.jskat.ai.IJSkatPlayer#finalizeGame()
 	 */
@@ -36,7 +38,6 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	public void finalizeGame() {
 		// TODO Auto-generated method stub
 		bidEvaluator = null; // not necessry any more
-		aiPlayer = null;
 	}
 
 	/* (non-Javadoc)
@@ -44,7 +45,7 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public int bidMore(int nextBidValue) {
-		if(bidEvaluator==null) bidEvaluator = new BidEvaluator(cards);
+		if(bidEvaluator==null) bidEvaluator = new BidEvaluator(knowledge.getMyCards());
 		if(bidEvaluator.getMaxBid()>=nextBidValue) return nextBidValue;
 		return -1;
 	}
@@ -54,7 +55,7 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public boolean holdBid(int currBidValue) {
-		if(bidEvaluator==null) bidEvaluator = new BidEvaluator(cards);
+		if(bidEvaluator==null) bidEvaluator = new BidEvaluator(knowledge.getMyCards());
 		return (bidEvaluator.getMaxBid()>=currBidValue);
 	}
 
@@ -63,7 +64,7 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public boolean pickUpSkat() {
-		return true;
+		return bidEvaluator.pickUpSkat();
 	}
 
 	/* (non-Javadoc)
@@ -71,7 +72,7 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public GameAnnouncement announceGame() {
-		if(bidEvaluator==null) bidEvaluator = new BidEvaluator(cards);
+		if(bidEvaluator==null) bidEvaluator = new BidEvaluator(knowledge.getMyCards());
 		GameAnnouncement myGame = new GameAnnouncement();
 		myGame.setGameType(bidEvaluator.getSuggestedGameType());
 		aiPlayer = new AlgorithmicSinglePlayer(this);
@@ -83,8 +84,8 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public Card playCard() {
-		// TODO Auto-generated method stub
-		return null;
+		log.debug(playerName+" is playing a card ("+aiPlayer.getClass()+")");
+		return aiPlayer.playCard();
 	}
 
 	/* (non-Javadoc)
@@ -100,8 +101,11 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public CardList discardSkat() {
-		// TODO Auto-generated method stub
-		return null;
+		if(aiPlayer instanceof AlgorithmicSinglePlayer) {
+			log.warn("aiPlayer is not a single player instance: "+aiPlayer);
+			aiPlayer = new AlgorithmicSinglePlayer(this);
+		}
+		return ((AlgorithmicSinglePlayer)aiPlayer).discardSkat(bidEvaluator);
 	}
 
 	/* (non-Javadoc)
@@ -109,8 +113,12 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public void startGame() {
-		// TODO Auto-generated method stub
-		log.debug(aiPlayer);
+		if(aiPlayer==null) aiPlayer = new AlgorithmicOpponentPlayer(this);
+		log.debug("aiPlayer set to "+aiPlayer);
+	}
+
+	protected PlayerKnowledge getKnowledge() {
+		return knowledge;
 	}
 
 }
