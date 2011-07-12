@@ -125,7 +125,8 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 		if (aiPlayer == null || aiPlayer instanceof OpponentPlayer) {
 			knowledge.getMyCards().remove(knowledge.getSkat().get(0));
 			knowledge.getMyCards().remove(knowledge.getSkat().get(1));
-			log.debug("aiplayer ["+aiPlayer.getClass()+"] is not SinglePlayer, discarding original skat of [" + knowledge.getSkat()
+			log.debug("aiplayer is not SinglePlayer, discarding original skat of ["
+					+ knowledge.getSkat()
 					+ "], cards.size="+knowledge.getMyCards().size());
 			return knowledge.getSkat();
 		}
