@@ -59,7 +59,7 @@ public class SinglePlayer extends AbstractCardPlayer {
 	}
 
 	CardList discardSkat(CardList skat) {
-		// TODO check which cards should best be discarded
+		// should be done: check which cards should best be discarded
 		cards.remove(skat.get(0));
 		cards.remove(skat.get(1));
 		log.debug("no algorithm yet, discarding original skat of [" + skat
