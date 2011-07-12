@@ -218,7 +218,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 				} else {
 
 					// it doesn't matter what card is played
-					// TODO check card value!
+					// possible improvement: check card value!
 					bestToBePlayed = cards.size() - 1;
 					log.debug(".playNextCard(): ...but i can't take it...");
 				}
@@ -382,7 +382,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	 * @return index of the card
 	 */
 	private int findValuableTrump(CardList cards, Suit trump) {
-		// TODO consider, which other trumps have already been played
+		// should be improved: consider, which other trumps have already been played
 		if (cards.size() < 1)
 			return 0;
 		int highCard = 0;

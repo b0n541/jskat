@@ -121,7 +121,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public CardList discardSkat() {
-		// TODO check which cards should best be discarded
+		// should be done: check which cards should best be discarded
 		if (aiPlayer == null || aiPlayer instanceof OpponentPlayer) {
 			knowledge.getMyCards().remove(knowledge.getSkat().get(0));
 			knowledge.getMyCards().remove(knowledge.getSkat().get(1));
