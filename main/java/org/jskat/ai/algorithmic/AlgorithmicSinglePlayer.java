@@ -28,7 +28,11 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer  {
 		log.debug("Defining player <"+myPlayer.getPlayerName()+"> as "+this.getClass().getName());
 	}
 	
-	CardList discardSkat(BidEvaluator bid) {
+	/* (non-Javadoc)
+	 * @see org.jskat.ai.algorithmic.IAlgorithmicAIPlayer#discardSkat(org.jskat.ai.algorithmic.BidEvaluator)
+	 */
+	@Override
+	public CardList discardSkat(BidEvaluator bid) {
 		CardList cards = knowledge.getMyCards();
 		cards.sort(bid.getSuggestedGameType());
 		CardList toDiscard = new CardList();

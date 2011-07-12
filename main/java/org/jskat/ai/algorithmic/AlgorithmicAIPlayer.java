@@ -5,7 +5,6 @@ package org.jskat.ai.algorithmic;
 
 import org.apache.log4j.Logger;
 import org.jskat.ai.AbstractJSkatPlayer;
-import org.jskat.ai.IJSkatPlayer;
 import org.jskat.ai.PlayerKnowledge;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.util.Card;
@@ -36,7 +35,6 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public void finalizeGame() {
-		// TODO Auto-generated method stub
 		bidEvaluator = null; // not necessry any more
 	}
 
@@ -64,6 +62,7 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public boolean pickUpSkat() {
+		if(bidEvaluator==null) bidEvaluator = new BidEvaluator(knowledge.getMyCards());
 		return bidEvaluator.pickUpSkat();
 	}
 
@@ -105,7 +104,7 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 			log.warn("aiPlayer is not a single player instance: "+aiPlayer);
 			aiPlayer = new AlgorithmicSinglePlayer(this);
 		}
-		return ((AlgorithmicSinglePlayer)aiPlayer).discardSkat(bidEvaluator);
+		return aiPlayer.discardSkat(bidEvaluator);
 	}
 
 	/* (non-Javadoc)

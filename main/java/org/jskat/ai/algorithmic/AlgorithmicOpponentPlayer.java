@@ -33,13 +33,6 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 	
 	
 	/* (non-Javadoc)
-	 * @see org.jskat.ai.IJSkatPlayer#discardSkat()
-	 */
-	public CardList discardSkat() {
-		throw new IllegalStateException("opponent player cannot discard a skat");
-	}
-	
-	/* (non-Javadoc)
 	 * @see org.jskat.ai.IJSkatPlayer#playCard()
 	 */
 	public Card playCard() {
@@ -97,11 +90,20 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 
 	private Card openTrick() {
 		CardList cards = knowledge.getMyCards();
-		// "kurzer Weg, lange Farbe"
-		Suit longSuit = cards.getMostFrequentSuit(knowledge.getGame().getGameType().asSuit());
-		if(cards.get(cards.getFirstIndexOfSuit(longSuit)).getRank()==Rank.ACE) {
-			return cards.get(cards.getFirstIndexOfSuit(longSuit)); 
+		for(Suit s: Suit.values()) {
+			if(!knowledge.couldHaveSuit(knowledge.getDeclarer(), s) && cards.hasSuit(knowledge.getGame().getGameType(), s)) {
+				return cards.get(cards.getLastIndexOfSuit(s));
+			}
 		}
-		return cards.get(cards.getLastIndexOfSuit(longSuit));
+		return openGame();
+	}
+
+
+	/* (non-Javadoc)
+	 * @see org.jskat.ai.algorithmic.IAlgorithmicAIPlayer#discardSkat(org.jskat.ai.algorithmic.BidEvaluator)
+	 */
+	@Override
+	public CardList discardSkat(BidEvaluator bidEvaluator) {
+		throw new IllegalStateException("opponent player cannot discard a skat");
 	}
 }
