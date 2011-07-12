@@ -546,7 +546,7 @@ public class JSkatMaster {
 	 * Loads a series
 	 */
 	public void loadSeries() {
-		// TODO Auto-generated method stub
+		// TODO saving/loading a skat series (here: load)
 
 	}
 
@@ -557,7 +557,7 @@ public class JSkatMaster {
 	 *            TRUE, if a new name should be given to the save file
 	 */
 	public void saveSeries(boolean newName) {
-		// TODO Auto-generated method stub
+		// TODO saving/loading a skat series (here: save)
 
 	}
 
