@@ -61,44 +61,31 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 
 		int multiplier = getMultiplier(gameData.getPlayerCards(gameData.getDeclarer()), gameData.getGameType());
 		
-		// FIXME (markus) --> winLevels
-
 		log.debug("calcSuitResult: after Jacks and Trump: multiplier " + multiplier); //$NON-NLS-1$
 
-		if (gameData.isHand() && !gameData.isGameLost()) {
-
-			// Hand game is only counted when game was not lost
+		// TODO add option: Hand game is only counted when game was not lost
+//		if (gameData.isHand() && !gameData.isGameLost()) {
+		if (gameData.isHand()) {
 			multiplier++;
-
-			log.debug("calcSuitResult: hand game: multiplier " + multiplier); //$NON-NLS-1$
 		}
 
 		if (gameData.isOuvert()) {
-
 			multiplier++;
 		}
 
 		if (gameData.isSchneider()) {
-
 			multiplier++;
-
 			if (gameData.isHand() && gameData.isSchneiderAnnounced()) {
-
 				multiplier++;
 			}
-
 			log.debug("calcSuitResult: Schneider: multiplier " + multiplier); //$NON-NLS-1$
 		}
 
 		if (gameData.isSchwarz()) {
-
 			multiplier++;
-
 			if (gameData.isHand() && gameData.isSchwarzAnnounced()) {
-
 				multiplier++;
 			}
-
 			log.debug("calcSuitResult: Schwarz: multiplier " + multiplier); //$NON-NLS-1$
 		}
 
