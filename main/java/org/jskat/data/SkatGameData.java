@@ -33,6 +33,7 @@ import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.jskat.util.rule.BasicSkatRules;
+import org.jskat.util.rule.RamschRules;
 import org.jskat.util.rule.SkatRuleFactory;
 
 /**
@@ -1137,19 +1138,10 @@ public class SkatGameData {
 	}
 
 	public void setJungfrauDurchmarsch() {
-		// FIXME this is rule logic --> remove it
+		// FIXME this is rule logic --> move to RamschRules
 		for (Player currPlayer : Player.values()) {
-
-			int playerPoints = getPlayerPoints(currPlayer);
-
-			if (playerPoints == 0) {
-
-				setJungfrau(true);
-			}
-			if (playerPoints == 120) {
-
-				setDurchmarsch(true);
-			}
+			setJungfrau(((RamschRules)rules).isJungfrau(currPlayer, this));
+			setDurchmarsch(((RamschRules)rules).isDurchmarsch(currPlayer, this));
 		}
 	}
 
