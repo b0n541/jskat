@@ -23,9 +23,11 @@
 package org.jskat.util.rule;
 
 import org.jskat.data.SkatGameData;
+import org.jskat.data.Trick;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
+import org.jskat.util.Player;
 
 /**
  * Implementation of skat rules for Ramsch games
@@ -59,23 +61,24 @@ public class RamschRules extends SuitGrandRamschRules {
 	 * @see BasicSkatRules#calcGameWon(SkatGameData)
 	 */
 	public boolean calcGameWon(SkatGameData gameData) {
-		// TODO Auto-generated method stub
-		return false;
+		throw new IllegalStateException("ramsch game cannot be won");
 	}
 	
 	/**
 	 * Checks whether a player did a durchmarsch (walkthrough) in a ramsch game<br>
 	 * durchmarsch means one player made all tricks
 	 * 
-	 * @param playerID
-	 *            Player ID of the player to be checked
+	 * @param player
+	 *            player to be checked
 	 * @param gameData
 	 *            Game data
 	 * @return TRUE if the player played a durchmarsch
 	 */
-	public final boolean isDurchmarsch(int playerID, SkatGameData gameData) {
-		// TODO Auto-generated method stub
-		return false;
+	public final boolean isDurchmarsch(Player player, SkatGameData gameData) {
+		for(Trick t: gameData.getTricks()) {
+			if(t.getTrickWinner()!=player) return false;
+		}
+		return true;
 	}
 
 	/**
@@ -83,15 +86,17 @@ public class RamschRules extends SuitGrandRamschRules {
 	 * jungfrau means one player made no trick<br>
 	 * two players who played jungfrau means a durchmarsch for the third player
 	 * 
-	 * @param playerID
-	 *            Player ID of the player to be checked
+	 * @param player
+	 *            player to be checked
 	 * @param gameData
 	 *            Game data
 	 * @return TRUE if the player was jungfrau
 	 */
-	public final boolean isJungfrau(int playerID, SkatGameData gameData) {
-		// TODO Auto-generated method stub
-		return false;
+	public final boolean isJungfrau(Player player, SkatGameData gameData) {
+		for(Trick t: gameData.getTricks()) {
+			if(t.getTrickWinner()==player) return false;
+		}
+		return true;
 	}
 	
 	/* (non-Javadoc)
