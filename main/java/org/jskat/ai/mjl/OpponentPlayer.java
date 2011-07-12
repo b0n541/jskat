@@ -21,6 +21,8 @@
 
 package org.jskat.ai.mjl;
 
+import java.util.Random;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.PlayerKnowledge;
@@ -39,6 +41,8 @@ import org.jskat.util.rule.NullRules;
 public class OpponentPlayer extends AbstractCardPlayer {
 
 	private final String name;
+
+	private Random rand = new Random();
 
 	/**
 	 * 
@@ -503,6 +507,12 @@ public class OpponentPlayer extends AbstractCardPlayer {
 					lowerCardFound = true;
 				}
 			}
+		}
+
+		if (index == -1) {
+			// still no good card found
+			// --> play a random card
+			index = rand.nextInt(cards.size());
 		}
 
 		log.debug(".findLowerCard(): " + index);
