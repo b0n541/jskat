@@ -187,8 +187,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 			try {
 				this.idler.join();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				log.warn("wait for user input was interrupted");
 			}
 		}
 	}

@@ -100,8 +100,6 @@ public class JSkatOptions {
 
 		setStandardProperties();
 
-		FileInputStream stream = null;
-
 		try {
 			loadOptions();
 
@@ -111,22 +109,20 @@ public class JSkatOptions {
 
 			File dir = new File(System.getProperty("user.home") + System.getProperty("file.separator") + ".jskat");
 			dir.mkdir();
-			File file = new File(System.getProperty("user.home") + System.getProperty("file.separator") + ".jskat"
-					+ System.getProperty("file.separator") + "jskat.properties");
+			String filename = System.getProperty("user.home") + System.getProperty("file.separator") + ".jskat" + System.getProperty("file.separator") + "jskat.properties";
+			File file = new File(filename);
 			try {
 				file.createNewFile();
 
-				log.debug("Property file jskat.properties created at <user_home>/.jskat.");
+				log.debug("Property file jskat.properties created: <"+filename+">");
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				log.warn("Could not create property file <"+filename+"> due to "+e1.getClass()+": "+e1.getMessage());
 			}
 
 			setStandardProperties();
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.warn("Could not load properties: "+e.getClass()+": "+e.getMessage());
 		}
 	}
 

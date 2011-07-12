@@ -128,8 +128,8 @@ public class SimpleSkatGame extends JSkatThread {
 				try {
 					player.get(currPosition).showTrick((Trick) trick.clone());
 				} catch (CloneNotSupportedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.warn("should not happen: "+e.getClass()+" - "+e.getMessage());
+					player.get(currPosition).showTrick(trick);
 				}
 			}
 
@@ -290,8 +290,12 @@ public class SimpleSkatGame extends JSkatThread {
 
 		// inform all players
 		for (IJSkatPlayer currPlayer : player.values()) {
-			// TODO clone announcement
-			currPlayer.startGame(data.getDeclarer(), ann);
+			try {
+				currPlayer.startGame(data.getDeclarer(), (GameAnnouncement) ann.clone());
+			} catch (CloneNotSupportedException e) {
+				log.warn("should not happen: "+e.getClass()+" - "+e.getMessage());
+				currPlayer.startGame(data.getDeclarer(), ann);
+			}
 		}
 	}
 
