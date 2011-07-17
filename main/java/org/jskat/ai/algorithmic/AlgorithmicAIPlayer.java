@@ -83,7 +83,7 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public Card playCard() {
-		log.debug(playerName+" is playing a card ("+aiPlayer.getClass()+")");
+		log.debug("Trick #"+knowledge.getNoOfTricks()+" - "+playerName+" is playing a card ("+aiPlayer.getClass()+")");
 		return aiPlayer.playCard();
 	}
 
@@ -100,7 +100,7 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public CardList discardSkat() {
-		if(aiPlayer instanceof AlgorithmicSinglePlayer) {
+		if(aiPlayer==null || !(aiPlayer instanceof AlgorithmicSinglePlayer)) {
 			log.warn("aiPlayer is not a single player instance: "+aiPlayer);
 			aiPlayer = new AlgorithmicSinglePlayer(this);
 		}
