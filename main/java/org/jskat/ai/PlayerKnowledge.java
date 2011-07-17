@@ -35,6 +35,7 @@ import org.jskat.data.Trick;
 import org.jskat.util.Card;
 import org.jskat.util.CardDeck;
 import org.jskat.util.CardList;
+import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
@@ -355,6 +356,43 @@ public class PlayerKnowledge {
 	}
 
 	/**
+	 * Checks whether a player could have any trump cards left, this is an
+	 * uncertain information
+	 * 
+	 * @param player
+	 *            Player ID
+	 * @return TRUE if the player could have any trump card
+	 */
+	public boolean couldHaveTrump(Player player) {
+		for (Card c: Card.values()) {
+			if(c.isTrump(getGameType()) && couldHaveCard(player, c)) return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Checks whether any player might have any trump cards left
+	 * 
+	 * @param player
+	 *            Player ID
+	 * @return TRUE if the player could still have any trump cards
+	 */
+	public boolean isTrumpOut() {
+		for(Player p: Player.values()) {
+			if(p==declarer) continue;
+			for (Suit s : Suit.values()) {
+				if (couldHaveCard(p, Card.getCard(s, Rank.JACK)))
+					return true;
+			}
+			for (Rank r : Rank.values()) {
+				if (couldHaveCard(p, Card.getCard(getGame().getGameType().asSuit(), r)))
+					return true;
+			}
+		}
+		return false; 
+	}
+
+	/**
 	 * Adjusts the knowledge when a player has not served a suit
 	 * 
 	 * @param player
@@ -568,6 +606,23 @@ public class PlayerKnowledge {
 	public GameAnnouncement getGame() {
 
 		return game;
+	}
+
+	/**
+	 * convenience method for getGame().getGameType()
+	 * @return the gameType
+	 */
+	public GameType getGameType() {
+
+		return game.getGameType();
+	}
+
+	/**
+	 * @return the game
+	 */
+	public Suit getTrumpSuit() {
+
+		return game.getGameType().asSuit();
 	}
 
 	/**

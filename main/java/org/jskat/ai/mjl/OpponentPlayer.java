@@ -67,14 +67,14 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	public Card playNextCard(PlayerKnowledge knowledge) {
 		log.debug("Play next card with trick size "
 				+ knowledge.getTrickCards().size());
-		if (knowledge.getGame().getGameType() == GameType.NULL) {
+		if (knowledge.getGameType() == GameType.NULL) {
 			return playNextCardNullGame(knowledge);
 		}
 
 		int bestToBePlayed = -1;
 		log.debug(".playNextCard(): Processing hand [" + cards
 				+ "] with trick [" + knowledge.getTrickCards()
-				+ "]. Game type is " + knowledge.getGame().getGameType() + ".");
+				+ "]. Game type is " + knowledge.getGameType() + ".");
 
 		if (knowledge.getTrickCards().size() > 1) {
 			bestToBePlayed = findRearhandCard(knowledge);
@@ -114,7 +114,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	 * @return
 	 */
 	private int findMiddlehandCard(PlayerKnowledge knowledge) {
-		GameType gameType = knowledge.getGame().getGameType();
+		GameType gameType = knowledge.getGameType();
 		Card initialCard = (knowledge.getTrickCards().size() > 0 ? knowledge
 				.getTrickCards().get(0) : null);
 		Suit trumpSuit = gameType.getTrumpSuit();
@@ -238,7 +238,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	 * @return
 	 */
 	private int findRearhandCard(PlayerKnowledge knowledge) {
-		GameType gameType = knowledge.getGame().getGameType();
+		GameType gameType = knowledge.getGameType();
 		Card initialCard = (knowledge.getTrickCards().size() > 0 ? knowledge
 				.getTrickCards().get(0) : null);
 		Suit trumpSuit = gameType.getTrumpSuit();
@@ -345,7 +345,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 
 		if (knowledge.getTrickCards().size() > 0) {
 			Card initialCard = knowledge.getTrickCards().get(0);
-			if (!cards.hasSuit(knowledge.getGame().getGameType(),
+			if (!cards.hasSuit(knowledge.getGameType(),
 					initialCard.getSuit())) {
 				// TODO null game: abwerfen
 				log.debug(".playNextCardNullGame(): abwerfen...");
@@ -539,7 +539,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	 * @return index of the card
 	 */
 	private int findInitial(PlayerKnowledge knowledge) {
-		GameType gameType = knowledge.getGame().getGameType();
+		GameType gameType = knowledge.getGameType();
 		int[] rating = new int[cards.size()];
 		// First, look for any aces that are not trump
 		for (int x = 0; x < cards.size(); x++) {
@@ -595,7 +595,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	 * @return index of the card
 	 */
 	private int findFirstInitial(PlayerKnowledge knowledge) {
-		GameType gameType = knowledge.getGame().getGameType();
+		GameType gameType = knowledge.getGameType();
 		log.debug("Opening the game...");
 		// First, look for any aces that are not trump
 		int store = -1;

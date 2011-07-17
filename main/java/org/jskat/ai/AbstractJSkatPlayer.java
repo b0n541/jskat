@@ -184,13 +184,13 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 		boolean isCardAllowed = false;
 		CardList result = new CardList();
 
-		log.debug("game type: " + knowledge.getGame().getGameType()); //$NON-NLS-1$
+		log.debug("game type: " + knowledge.getGameType()); //$NON-NLS-1$
 		log.debug("player cards (" + knowledge.getMyCards().size() + "): " + knowledge.getMyCards()); //$NON-NLS-1$ //$NON-NLS-2$
 		log.debug("trick size: " + trick.size()); //$NON-NLS-1$
 
 		for (Card card : knowledge.getMyCards()) {
 
-			if (trick.size() > 0 && rules.isCardAllowed(knowledge.getGame().getGameType(), trick.get(0), knowledge.getMyCards(), card)) {
+			if (trick.size() > 0 && rules.isCardAllowed(knowledge.getGameType(), trick.get(0), knowledge.getMyCards(), card)) {
 
 				log.debug("initial card: " + trick.get(0)); //$NON-NLS-1$
 				isCardAllowed = true;
