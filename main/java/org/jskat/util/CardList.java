@@ -121,6 +121,23 @@ public class CardList extends ArrayList<Card> {
 	}
 
 	/**
+	 * Overrides the stanjdard get method to handle the "not available" index value of -1, 
+	 * so that in this case the method returns null
+	 */
+	/* (non-Javadoc)
+	 * @see java.util.ArrayList#get(int)
+	 */
+	@Override 
+	public Card get(int index) {
+		try {
+			return super.get(index);
+		} catch (RuntimeException e) {
+			if(index==-1) return null;
+			throw e;
+		}
+	}
+	
+	/**
 	 * Gets the index of a card in the CardList
 	 * 
 	 * @param card
