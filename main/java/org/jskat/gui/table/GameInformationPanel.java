@@ -49,6 +49,8 @@ class GameInformationPanel extends JPanel {
 	private int gameNumber;
 	private GameState gameState;
 	private GameType gameType;
+	private int multiplier;
+	private boolean playWithJacks;
 	private boolean handGame;
 	private boolean ouvertGame;
 	private boolean schneiderAnnounced;
@@ -110,6 +112,8 @@ class GameInformationPanel extends JPanel {
 
 	private void resetGameData() {
 		gameType = null;
+		multiplier = 0;
+		playWithJacks = false;
 		handGame = false;
 		ouvertGame = false;
 		schneiderAnnounced = false;
@@ -132,6 +136,18 @@ class GameInformationPanel extends JPanel {
 
 		if (gameType != null) {
 			text += " [" + strings.getGameType(gameType); //$NON-NLS-1$
+
+			if (gameState.equals(GameState.GAME_OVER) && multiplier > 0) {
+				if (playWithJacks) {
+					text += " " + strings.getString("with"); //$NON-NLS-1$//$NON-NLS-2$
+				} else {
+					text += " " + strings.getString("without"); //$NON-NLS-1$//$NON-NLS-2$
+				}
+				text += " " + multiplier; //$NON-NLS-1$
+				text += " " + strings.getString("play"); //$NON-NLS-1$//$NON-NLS-2$
+				text += " " + (multiplier + 1); //$NON-NLS-1$
+			}
+
 			if (handGame) {
 				text += " hand";
 			}
@@ -174,6 +190,8 @@ class GameInformationPanel extends JPanel {
 
 	void setGameResult(SkatGameData data) {
 
+		multiplier = data.getGameResult().getMultiplier();
+		playWithJacks = data.getGameResult().isPlayWithJacks();
 		gameWon = data.isGameWon();
 		declarerPoints = data.getDeclarerScore();
 		opponentPoints = data.getOpponentScore();

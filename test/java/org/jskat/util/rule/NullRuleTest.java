@@ -33,8 +33,6 @@ import org.jskat.data.Trick;
 import org.jskat.util.Card;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
-import org.jskat.util.rule.BasicSkatRules;
-import org.jskat.util.rule.SkatRuleFactory;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -71,7 +69,7 @@ public class NullRuleTest extends AbstractJSkatTest {
 		data.setTrickCard(Player.FOREHAND, Card.S7);
 		data.setTrickCard(Player.MIDDLEHAND, Card.S9);
 		data.setTrickWinner(1, Player.MIDDLEHAND);
-		data.setGameWon(nullRules.calcGameWon(data));
+		data.getGameResult().setWon(nullRules.calcGameWon(data));
 	}
 
 	/**
@@ -146,7 +144,7 @@ public class NullRuleTest extends AbstractJSkatTest {
 		data.setTrickCard(Player.REARHAND, Card.H8);
 		data.setTrickCard(Player.FOREHAND, Card.H9);
 		data.setTrickWinner(2, Player.FOREHAND);
-		data.setGameWon(nullRules.calcGameWon(data));
+		data.getGameResult().setWon(nullRules.calcGameWon(data));
 	}
 
 	/**

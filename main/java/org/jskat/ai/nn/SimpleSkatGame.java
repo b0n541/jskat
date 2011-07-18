@@ -338,7 +338,7 @@ public class SimpleSkatGame extends JSkatThread {
 	 */
 	public int getGameResult() {
 
-		return data.getGameResult();
+		return data.getGameResult().getGameValue();
 	}
 
 	/**
@@ -408,24 +408,11 @@ public class SimpleSkatGame extends JSkatThread {
 		// FIXME (jan 07.12.2010) don't let a data class calculate it's values
 		data.calcResult();
 
-		log.debug("game value=" + data.getResult() + ", bid value=" //$NON-NLS-1$ //$NON-NLS-2$
-				+ data.getBidValue());
-
-		if (data.isGameWon() && data.getBidValue() > data.getGameResult()) {
-
-			log.debug("Overbidding: Game is lost"); //$NON-NLS-1$
-			// Game was overbidded
-			// game is lost despite the winning of the single player
-			data.setOverBidded(true);
-		}
-
 		log.debug("Final game result: lost:" + data.isGameLost() + //$NON-NLS-1$
 				" game value: " + data.getResult()); //$NON-NLS-1$
 
 		for (IJSkatPlayer currPlayer : player.values()) {
-			// no cloning neccessary because all parameters are primitive data
-			// types
-			currPlayer.setGameResult(data.isGameWon(), data.getGameResult());
+			currPlayer.setGameResult(data.getGameResult().clone());
 			currPlayer.finalizeGame();
 		}
 	}

@@ -58,7 +58,7 @@ public class SuitRuleTest extends AbstractJSkatTest {
 		data.setDealtCard(Player.FOREHAND, Card.DJ);
 		data.setDealtCard(Player.FOREHAND, Card.CA);
 		data.calcResult();
-		assertEquals(24, data.getResult());
+		assertEquals(24, data.getResult().getGameValue());
 		assertEquals(24, clubsRules.calcGameResult(data));
 	}
 
@@ -76,7 +76,7 @@ public class SuitRuleTest extends AbstractJSkatTest {
 		data.setDealtCard(Player.FOREHAND, Card.HJ);
 		data.setDealtCard(Player.FOREHAND, Card.CA);
 		data.calcResult();
-		assertEquals(48, data.getResult());
+		assertEquals(48, data.getResult().getGameValue());
 		assertEquals(48, clubsRules.calcGameResult(data));
 	}
 
@@ -95,7 +95,7 @@ public class SuitRuleTest extends AbstractJSkatTest {
 		data.setDealtCard(Player.FOREHAND, Card.DJ);
 		data.setDealtCard(Player.FOREHAND, Card.CT);
 		data.calcResult();
-		assertEquals(60, data.getResult());
+		assertEquals(60, data.getResult().getGameValue());
 		assertEquals(60, clubsRules.calcGameResult(data));
 	}
 	
@@ -116,7 +116,7 @@ public class SuitRuleTest extends AbstractJSkatTest {
 		data.setDealtCard(Player.FOREHAND, Card.CT);
 		data.setDealtCard(Player.FOREHAND, Card.CQ);
 		data.calcResult();
-		assertEquals(84, data.getResult());
+		assertEquals(84, data.getResult().getGameValue());
 		assertEquals(84, clubsRules.calcGameResult(data));
 	}
 	

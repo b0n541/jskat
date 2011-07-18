@@ -124,7 +124,7 @@ public class SkatGameData {
 	/**
 	 * Game result
 	 */
-	private int gameResult = 0;
+	private SkatGameResult result;
 
 	/**
 	 * Highest bid value made during bidding
@@ -145,36 +145,6 @@ public class SkatGameData {
 	 * Passes the players made during bidding
 	 */
 	private Map<Player, Boolean> playerPasses;
-
-	/**
-	 * Flag for won games
-	 */
-	private boolean won = false;
-
-	/**
-	 * Flag for an over bidded game
-	 */
-	private boolean overBidded = false;
-
-	/**
-	 * Flag for a schneider game
-	 */
-	private boolean schneider = false;
-
-	/**
-	 * Flag for a schwarz game
-	 */
-	private boolean schwarz = false;
-
-	/**
-	 * Flag for a durchmarsch game (one player made all tricks in a ramsch game)
-	 */
-	private boolean durchmarsch = false;
-
-	/**
-	 * Flag for a jungfrau game (one player made no tricks in a ramsch game)
-	 */
-	private boolean jungfrau = false;
 
 	/**
 	 * Flag for a geschoben game (the skat was handed over from player to player
@@ -220,7 +190,7 @@ public class SkatGameData {
 	private void intializeVariables() {
 
 		announcement = new GameAnnouncement();
-		gameResult = -1;
+		result = new SkatGameResult();
 
 		playerNames = new HashMap<Player, String>();
 		playerHands = new HashMap<Player, CardList>();
@@ -249,15 +219,16 @@ public class SkatGameData {
 	 * 
 	 * @return Value of the game
 	 */
-	public int getGameResult() {
+	public SkatGameResult getGameResult() {
 
-		if (gameResult == -1 && getGameType() != GameType.PASSED_IN) {
+		if (result.getGameValue() == -1
+				&& getGameType() != GameType.PASSED_IN) {
 
 			log.warn("Game result hasn't been calculated yet!"); //$NON-NLS-1$
 			calcResult();
 		}
 
-		return gameResult;
+		return result;
 	}
 
 	/**
@@ -312,7 +283,7 @@ public class SkatGameData {
 	 */
 	public boolean isGameLost() {
 
-		return !won;
+		return !result.isWon();
 	}
 
 	/**
@@ -322,20 +293,7 @@ public class SkatGameData {
 	 */
 	public boolean isGameWon() {
 
-		return won;
-	}
-
-	/**
-	 * Sets whether the game was won or not
-	 * 
-	 * @param gameWon
-	 *            TRUE if the game was won
-	 */
-	public void setGameWon(boolean gameWon) {
-
-		won = gameWon;
-
-		log.debug("setGameWon(): Game won = " + won); //$NON-NLS-1$
+		return result.isWon();
 	}
 
 	/**
@@ -351,24 +309,7 @@ public class SkatGameData {
 			log.warn("Overbidding cannot happen in Ramsch games: gameType=" //$NON-NLS-1$
 					+ getGameType());
 		}
-		return overBidded;
-	}
-
-	/**
-	 * Sets the flag for overbidding
-	 * 
-	 * @param newOverBidded
-	 *            TRUE if the single player overbidded
-	 */
-	public void setOverBidded(boolean newOverBidded) {
-
-		overBidded = newOverBidded;
-
-		if (overBidded) {
-			// game was overbidded
-			won = false;
-			gameResult = gameResult * -2;
-		}
+		return result.isOverBidded();
 	}
 
 	/**
@@ -409,18 +350,7 @@ public class SkatGameData {
 	 */
 	public boolean isSchneider() {
 
-		return schneider;
-	}
-
-	/**
-	 * Sets the flag for schneider
-	 * 
-	 * @param isSchneider
-	 *            TRUE if the single player or the opponents played schneider
-	 */
-	public void setSchneider(boolean isSchneider) {
-
-		schneider = isSchneider;
+		return result.isSchneider();
 	}
 
 	/**
@@ -440,18 +370,7 @@ public class SkatGameData {
 	 */
 	public boolean isSchwarz() {
 
-		return schwarz;
-	}
-
-	/**
-	 * Sets the flag for schwarz
-	 * 
-	 * @param isSchwarz
-	 *            TRUE if the player or the opponents played schwarz
-	 */
-	public void setSchwarz(boolean isSchwarz) {
-
-		schwarz = isSchwarz;
+		return result.isSchwarz();
 	}
 
 	/**
@@ -501,18 +420,7 @@ public class SkatGameData {
 	 */
 	public boolean isDurchmarsch() {
 
-		return durchmarsch;
-	}
-
-	/**
-	 * Sets the flag for durchmarsch in a ramsch game
-	 * 
-	 * @param isDurchmarsch
-	 *            TRUE if someone did a durchmarsch in a ramsch game
-	 */
-	public void setDurchmarsch(boolean isDurchmarsch) {
-
-		durchmarsch = isDurchmarsch;
+		return result.isDurchmarsch();
 	}
 
 	/**
@@ -522,31 +430,7 @@ public class SkatGameData {
 	 */
 	public boolean isJungfrau() {
 
-		return jungfrau;
-	}
-
-	/**
-	 * Sets the flag for jungfrau in a ramsch game
-	 * 
-	 * @param isJungfrau
-	 *            TRUE if someone was jungfrau in a ramsch game
-	 */
-	public void setJungfrau(boolean isJungfrau) {
-
-		jungfrau = isJungfrau;
-	}
-
-	/**
-	 * Adds the value of a trick to the points of a player
-	 * 
-	 * @param player
-	 *            The ID of the player
-	 * @param trickValue
-	 *            The value of the trick
-	 */
-	public void addToPlayerPoints(Player player, int trickValue) {
-
-		playerPoints.put(player, new Integer(trickValue));
+		return result.isJungfrau();
 	}
 
 	/**
@@ -613,12 +497,22 @@ public class SkatGameData {
 
 		if (getGameType() == GameType.PASSED_IN) {
 
-			won = false;
-			gameResult = 0;
+			result.setWon(false);
+			result.setGameValue(0);
 		} else {
 
-			won = rules.calcGameWon(this);
-			gameResult = rules.calcGameResult(this);
+			result.setWon(rules.calcGameWon(this));
+			result.setGameValue(rules.calcGameResult(this));
+		}
+
+		if (result.isWon() && getBidValue() > result.getGameValue()) {
+
+			log.debug("Overbidding: Game is lost"); //$NON-NLS-1$
+			// Game was overbidded
+			// game is lost despite the winning of the single player
+			result.setOverBidded(true);
+			result.setWon(false);
+			result.setGameValue(result.getGameValue() * -2);
 		}
 	}
 
@@ -654,9 +548,9 @@ public class SkatGameData {
 		setDeclarer(ramschLoser);
 
 		if (isDurchmarsch()) {
-			setGameWon(true);
+			getGameResult().setWon(true);
 		} else {
-			setGameWon(false);
+			getGameResult().setWon(false);
 		}
 	}
 
@@ -665,9 +559,9 @@ public class SkatGameData {
 	 * 
 	 * @return The result of a game
 	 */
-	public int getResult() {
+	public SkatGameResult getResult() {
 
-		return gameResult;
+		return result;
 	}
 
 	/**
@@ -676,9 +570,9 @@ public class SkatGameData {
 	 * @param newResult
 	 *            Game result
 	 */
-	public void setResult(int newResult) {
+	public void setResult(SkatGameResult newResult) {
 
-		gameResult = newResult;
+		result = newResult;
 	}
 
 	/**
@@ -1123,25 +1017,27 @@ public class SkatGameData {
 	 * Sets the schneider and schwarz flag according the player points
 	 */
 	public void setSchneiderSchwarz() {
-		// FIXME this is rule logic --> remove it
+		// FIXME this is rule logic --> move to SuitGrandRules
 		int declarerPoints = getPlayerPoints(declarer);
 
 		if (declarerPoints >= 89 || declarerPoints <= 30) {
 
-			setSchneider(true);
+			result.setSchneider(true);
 		}
 
 		if (declarerPoints == 120 || declarerPoints == 0) {
 
-			setSchwarz(true);
+			result.setSchwarz(true);
 		}
 	}
 
 	public void setJungfrauDurchmarsch() {
 		// FIXME this is rule logic --> move to RamschRules
 		for (Player currPlayer : Player.values()) {
-			setJungfrau(((RamschRules)rules).isJungfrau(currPlayer, this));
-			setDurchmarsch(((RamschRules)rules).isDurchmarsch(currPlayer, this));
+			result.setJungfrau(((RamschRules) rules).isJungfrau(currPlayer,
+					this));
+			result.setDurchmarsch(((RamschRules) rules).isDurchmarsch(
+					currPlayer, this));
 		}
 	}
 

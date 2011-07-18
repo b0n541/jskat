@@ -23,6 +23,7 @@
 package org.jskat.ai;
 
 import org.jskat.data.GameAnnouncement;
+import org.jskat.data.SkatGameResult;
 import org.jskat.data.Trick;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -209,12 +210,10 @@ public interface IJSkatPlayer {
 	/**
 	 * Informs the player about the game result
 	 * 
-	 * @param gameWon
-	 *            TRUE if the game was won
-	 * @param gameValue
-	 *            Game value
+	 * @param gameResult
+	 *            Game result
 	 */
-	public void setGameResult(boolean gameWon, int gameValue);
+	public void setGameResult(SkatGameResult gameResult);
 
 	/**
 	 * Holds all player states

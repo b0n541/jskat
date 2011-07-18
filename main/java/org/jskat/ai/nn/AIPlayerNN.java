@@ -34,6 +34,7 @@ import org.jskat.ai.nn.util.NeuralNetwork;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
+import org.jskat.data.SkatGameResult;
 import org.jskat.util.Card;
 import org.jskat.util.CardDeck;
 import org.jskat.util.CardList;
@@ -132,7 +133,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		for (GameType gameType : filteredGameTypes) {
 
 			int gamesToSimulate = 20;
-			int wonGames = simulateGames(knowledge.getMyCards(), gameType, gamesToSimulate);
+			int wonGames = simulateGames(knowledge.getMyCards(), gameType,
+					gamesToSimulate);
 			double wonRate = (double) wonGames / (double) gamesToSimulate;
 
 			if (wonRate > 0.5) {
@@ -147,7 +149,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		List<GameType> result = new ArrayList<GameType>();
 
-		SkatGameData data = getSimulatedGameData();
+		SkatGameData data = getGameDataForWonGame();
 
 		for (GameType gameType : feasibleGameTypes) {
 
@@ -167,13 +169,16 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		return result;
 	}
 
-	private SkatGameData getSimulatedGameData() {
+	private SkatGameData getGameDataForWonGame() {
 
 		SkatGameData data = new SkatGameData();
 
-		data.setGameWon(true);
+		SkatGameResult result = new SkatGameResult();
+		result.setWon(true);
+		data.setResult(result);
+
 		data.setDeclarer(Player.FOREHAND);
-		for(Card card: knowledge.getMyCards()) {
+		for (Card card : knowledge.getMyCards()) {
 			data.setDealtCard(Player.FOREHAND, card);
 		}
 
@@ -205,7 +210,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	private GameType getBestGameType() {
 
 		// FIXME (jan 18.01.2011) check for overbidding!
-		SimulationResults simulationResults = simulateGames(knowledge.getMyCards(), 20);
+		SimulationResults simulationResults = simulateGames(
+				knowledge.getMyCards(), 20);
 		GameType bestGameType = null;
 		int highestWonGames = -1;
 
@@ -321,7 +327,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		boolean result = true;
 
 		int gamesToSimulate = 20;
-		SimulationResults simResult = simulateGames(knowledge.getMyCards(), gamesToSimulate);
+		SimulationResults simResult = simulateGames(knowledge.getMyCards(),
+				gamesToSimulate);
 
 		for (GameType gameType : feasibleGameTypes) {
 
@@ -738,13 +745,13 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		double output = 0.0d;
 		if (isDeclarer()) {
-			if (gameWon) {
+			if (gameResult.isWon()) {
 				output = 1.0d;
 			} else {
 				output = -1.0d;
 			}
 		} else {
-			if (gameWon) {
+			if (gameResult.isWon()) {
 				output = -1.0d;
 			} else {
 				output = 1.0d;

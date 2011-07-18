@@ -467,7 +467,7 @@ public class MessageParser {
 		}
 	}
 
-	private static void parseResultToken(SkatGameData result, String token) {
+	private static void parseResultToken(SkatGameData gameData, String token) {
 
 		// from ISS source code
 		// return "d:"+declarer + (penalty ? " penalty" : (declValue > 0 ? "
@@ -483,7 +483,7 @@ public class MessageParser {
 
 		if (token.startsWith("d:")) { //$NON-NLS-1$
 
-			parseDeclarerToken(result, token);
+			parseDeclarerToken(gameData, token);
 
 		} else if ("penalty".equals(token)) { //$NON-NLS-1$
 
@@ -491,31 +491,32 @@ public class MessageParser {
 
 		} else if ("loss".equals(token)) { //$NON-NLS-1$
 
-			result.setGameWon(false);
+			gameData.getResult().setWon(false);
 
 		} else if ("win".equals(token)) { //$NON-NLS-1$
 
-			result.setGameWon(true);
+			gameData.getResult().setWon(true);
 
 		} else if (token.startsWith("v:")) { //$NON-NLS-1$
 
-			result.setResult(Integer.parseInt(token.substring(2)));
+			gameData.getResult().setGameValue(
+					Integer.parseInt(token.substring(2)));
 
 		} else if (token.startsWith("p:")) { //$NON-NLS-1$
 
-			result.setDeclarerScore(Integer.parseInt(token.substring(2)));
+			gameData.setDeclarerScore(Integer.parseInt(token.substring(2)));
 
 		} else if ("overbid".equals(token)) { //$NON-NLS-1$
 
-			result.setOverBidded(true);
+			gameData.getResult().setOverBidded(true);
 
 		} else if ("s:1".equals(token)) { //$NON-NLS-1$
 
-			result.setSchneider(true);
+			gameData.getResult().setSchneider(true);
 
 		} else if ("z:1".equals(token)) { //$NON-NLS-1$
 
-			result.setSchwarz(true);
+			gameData.getResult().setSchwarz(true);
 		}
 	}
 

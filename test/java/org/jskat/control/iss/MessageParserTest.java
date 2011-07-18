@@ -64,7 +64,7 @@ public class MessageParserTest extends AbstractJSkatTest {
 
 		assertEquals(Player.REARHAND, gameData.getDeclarer());
 		assertFalse(gameData.isGameWon());
-		assertEquals(-54, gameData.getResult());
+		assertEquals(-54, gameData.getResult().getGameValue());
 		assertEquals(59, gameData.getDeclarerScore());
 		assertEquals(61, gameData.getOpponentScore());
 		assertFalse(gameData.isSchneider());
@@ -99,7 +99,7 @@ public class MessageParserTest extends AbstractJSkatTest {
 		SkatGameData gameData = MessageParser.parseGameSummary(gameSummary);
 
 		// assertTrue(gameData.isGamePassed());
-		assertEquals(-1, gameData.getResult());
+		assertEquals(-1, gameData.getResult().getGameValue());
 
 		// FIXME (jan 28.05.2011) add further asserts
 	}

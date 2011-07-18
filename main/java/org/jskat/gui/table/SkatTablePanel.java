@@ -506,9 +506,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		gameOverPanel.setGameResult(gameData);
 
-		skatListTableModel.addResult(leftOpponentPanel.getPosition(),
-				rightOpponentPanel.getPosition(), userPanel.getPosition(),
-				gameData.getDeclarer(), gameData.getGameResult());
+		skatListTableModel
+				.addResult(leftOpponentPanel.getPosition(),
+						rightOpponentPanel.getPosition(),
+						userPanel.getPosition(), gameData.getDeclarer(),
+						gameData.getGameResult().getGameValue());
 
 		// scroll skat list if the new result is out of scope
 		Rectangle bounds = scoreListTable.getCellRect(
