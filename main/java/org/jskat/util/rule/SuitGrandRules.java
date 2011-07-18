@@ -25,6 +25,7 @@ package org.jskat.util.rule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.SkatGameData;
+import org.jskat.util.CardList;
 import org.jskat.util.Player;
 import org.jskat.util.SkatConstants;
 
@@ -59,7 +60,10 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 	@Override
 	public int calcGameResult(SkatGameData gameData) {
 
-		int multiplier = getMultiplier(gameData.getPlayerCards(gameData.getDeclarer()), gameData.getGameType());
+		CardList declarerCards = gameData.getDealtCards().get(
+				gameData.getDeclarer());
+		declarerCards.addAll(gameData.getDealtSkat());
+		int multiplier = getMultiplier(declarerCards, gameData.getGameType());
 		
 		log.debug("calcSuitResult: after Jacks and Trump: multiplier " + multiplier); //$NON-NLS-1$
 
