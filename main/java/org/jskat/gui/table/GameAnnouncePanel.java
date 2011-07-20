@@ -160,12 +160,6 @@ class GameAnnouncePanel extends JPanel {
 					GameAnnouncementWithDiscardedCards ann = new GameAnnouncementWithDiscardedCards();
 					ann.setGameType(getGameTypeFromSelectedItem());
 
-					ann.setOuvert(GameAnnouncePanel.this.ouvertBox.isSelected());
-					ann.setSchneider(GameAnnouncePanel.this.schneiderBox
-							.isSelected());
-					ann.setSchwarz(GameAnnouncePanel.this.schwarzBox
-							.isSelected());
-
 					if (discardPanel.isUserLookedIntoSkat()) {
 						ann.setHand(false);
 						CardList discardedCards = discardPanel
@@ -180,6 +174,12 @@ class GameAnnouncePanel extends JPanel {
 						ann.setDiscardedCards(discardedCards);
 					} else {
 						ann.setHand(true);
+						ann.setOuvert(GameAnnouncePanel.this.ouvertBox
+								.isSelected());
+						ann.setSchneider(GameAnnouncePanel.this.schneiderBox
+								.isSelected());
+						ann.setSchwarz(GameAnnouncePanel.this.schwarzBox
+								.isSelected());
 					}
 					return ann;
 				}
