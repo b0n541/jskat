@@ -73,7 +73,7 @@ class GameInformationPanel extends JPanel {
 
 	private void initPanel() {
 
-		setLayout(new MigLayout("fill"));
+		setLayout(new MigLayout("fill")); //$NON-NLS-1$
 
 		setOpaque(true);
 
