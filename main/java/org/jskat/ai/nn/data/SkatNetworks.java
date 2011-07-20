@@ -84,7 +84,7 @@ public class SkatNetworks {
 		// SkatNetworks.grandDeclarer = new NeuralNetwork(topol);
 		// SkatNetworks.grandOpponent = new NeuralNetwork(topol);
 
-		loadNetworks(ClassLoader.getSystemResource("org/jskat/ai/nn/data")
+		loadNetworks(ClassLoader.getSystemResource("org/jskat/ai/nn/data") //$NON-NLS-1$
 				.getPath());
 
 		// SkatNetworks.suitDeclarer = new
