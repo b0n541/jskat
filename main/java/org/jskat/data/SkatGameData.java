@@ -221,8 +221,7 @@ public class SkatGameData {
 	 */
 	public SkatGameResult getGameResult() {
 
-		if (result.getGameValue() == -1
-				&& getGameType() != GameType.PASSED_IN) {
+		if (result.getGameValue() == -1 && getGameType() != GameType.PASSED_IN) {
 
 			log.warn("Game result hasn't been calculated yet!"); //$NON-NLS-1$
 			calcResult();
@@ -501,7 +500,11 @@ public class SkatGameData {
 			result.setGameValue(0);
 		} else {
 
-			result.setWon(rules.calcGameWon(this));
+			if (!result.isWon()) {
+				// game could be won already, because of playing schwarz of an
+				// opponent
+				result.setWon(rules.calcGameWon(this));
+			}
 			result.setGameValue(rules.calcGameResult(this));
 		}
 

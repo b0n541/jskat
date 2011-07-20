@@ -119,11 +119,15 @@ public class SkatGameResult implements Cloneable {
 	/**
 	 * Sets whether the game was a schwarz game
 	 * 
-	 * @param schwarz
+	 * @param isSchwarz
 	 *            TRUE, if the game was a schwarz game
 	 */
-	public void setSchwarz(boolean schwarz) {
-		this.schwarz = schwarz;
+	public void setSchwarz(boolean isSchwarz) {
+		schwarz = isSchwarz;
+		if (schwarz) {
+			// a schwarz game is always schneider
+			schneider = true;
+		}
 	}
 
 	/**

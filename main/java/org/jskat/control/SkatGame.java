@@ -498,16 +498,31 @@ public class SkatGame extends JSkatThread {
 			// Ask players for their cards
 			log.debug("fore hand plays"); //$NON-NLS-1$
 			playCard(trick, newTrickForeHand, newTrickForeHand);
+
+			if (isFinished()) {
+				break;
+			}
+
 			doSleep(maxSleep);
+
 
 			log.debug("middle hand plays"); //$NON-NLS-1$
 			view.setActivePlayer(tableName, newTrickForeHand.getLeftNeighbor());
 			playCard(trick, newTrickForeHand, newTrickForeHand.getLeftNeighbor());
+
+			if (isFinished()) {
+				break;
+			}
+
 			doSleep(maxSleep);
 
 			log.debug("hind hand plays"); //$NON-NLS-1$
 			view.setActivePlayer(tableName, newTrickForeHand.getRightNeighbor());
 			playCard(trick, newTrickForeHand, newTrickForeHand.getRightNeighbor());
+
+			if (isFinished()) {
+				break;
+			}
 
 			doSleep(maxSleep);
 
@@ -584,8 +599,10 @@ public class SkatGame extends JSkatThread {
 		Card card = null;
 		IJSkatPlayer skatPlayer = getPlayerObject(currPlayer);
 
-		boolean isCardAccepted = false;
-		while (!isCardAccepted) {
+		boolean cardAccepted = false;
+		boolean aiPlayerPlayedSchwarz = false;
+
+		while (!cardAccepted && !aiPlayerPlayedSchwarz) {
 			// ask player for the next card
 			card = skatPlayer.playCard();
 
@@ -595,13 +612,23 @@ public class SkatGame extends JSkatThread {
 
 				log.error("Player is fooling!!! Did not play a card!"); //$NON-NLS-1$
 
-				view.showCardNotAllowedMessage(card);
+				if (skatPlayer instanceof HumanPlayer) {
+					view.showCardNotAllowedMessage(card);
+				} else {
+					// TODO create option for switching playing schwarz on/off
+					aiPlayerPlayedSchwarz = true;
+				}
 
 			} else if (!playerHasCard(currPlayer, card)) {
 
 				log.error("Player is fooling!!! Doesn't have card " + card + "!"); //$NON-NLS-1$//$NON-NLS-2$
 
-				view.showCardNotAllowedMessage(card);
+				if (skatPlayer instanceof HumanPlayer) {
+					view.showCardNotAllowedMessage(card);
+				} else {
+					// TODO create option for switching playing schwarz on/off
+					aiPlayerPlayedSchwarz = true;
+				}
 
 			} else if (!rules.isCardAllowed(data.getGameType(), trick.getFirstCard(), data.getPlayerCards(currPlayer),
 					card)) {
@@ -611,16 +638,16 @@ public class SkatGame extends JSkatThread {
 						+ trick.getFirstCard() + " player cards: " //$NON-NLS-1$
 						+ data.getPlayerCards(currPlayer));
 
-				view.showCardNotAllowedMessage(card);
-
-				if (!(skatPlayer instanceof HumanPlayer)) {
+				if (skatPlayer instanceof HumanPlayer) {
+					view.showCardNotAllowedMessage(card);
+				} else {
 					// TODO create option for switching playing schwarz on/off
-					isCardAccepted = true;
+					aiPlayerPlayedSchwarz = true;
 				}
 
 			} else {
 
-				isCardAccepted = true;
+				cardAccepted = true;
 			}
 		}
 
@@ -648,6 +675,20 @@ public class SkatGame extends JSkatThread {
 		}
 
 		log.debug("playing card " + card); //$NON-NLS-1$
+
+		// check schwarz
+		if (aiPlayerPlayedSchwarz && !cardAccepted) {
+			// end game immediately
+			data.getResult().setSchwarz(true);
+			if (data.getDeclarer().equals(currPlayer)) {
+				// declarer played schwarz
+				data.getResult().setWon(false);
+			} else {
+				// opponent played schwarz
+				data.getResult().setWon(true);
+			}
+			data.setGameState(GameState.PRELIMINARY_GAME_END);
+		}
 	}
 
 	private IJSkatPlayer getPlayerObject(Player currPlayer) {
