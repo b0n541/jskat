@@ -3,27 +3,7 @@
  * by Jan Schäfer and Markus J. Luzius
  *
  * Version: 0.9.0-SNAPSHOT
- * Build date: 2011-07-20
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- * JSkat - A skat program written in Java
- * by Jan Schäfer and Markus J. Luzius
- *
- * Version: 0.8.0
- * Build date: 2011-07-20
+ * Build date: 2011-07-26
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,11 +33,11 @@ import org.jskat.data.JSkatApplicationData;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.Trick;
-import org.jskat.data.iss.ISSChatMessage;
-import org.jskat.data.iss.ISSGameStartInformation;
-import org.jskat.data.iss.ISSLoginCredentials;
-import org.jskat.data.iss.ISSMoveInformation;
-import org.jskat.data.iss.ISSTablePanelStatus;
+import org.jskat.data.iss.ChatMessage;
+import org.jskat.data.iss.GameStartInformation;
+import org.jskat.data.iss.LoginCredentials;
+import org.jskat.data.iss.MoveInformation;
+import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.data.iss.MoveType;
 import org.jskat.gui.IJSkatView;
 import org.jskat.gui.action.JSkatAction;
@@ -152,9 +132,9 @@ public class IssController {
 		String password = null;
 
 		if (JSkatAction.CONNECT_TO_ISS.toString().equals(command)) {
-			if (source instanceof ISSLoginCredentials) {
+			if (source instanceof LoginCredentials) {
 
-				ISSLoginCredentials loginCredentials = (ISSLoginCredentials) source;
+				LoginCredentials loginCredentials = (LoginCredentials) source;
 				login = loginCredentials.getLoginName();
 				password = loginCredentials.getPassword();
 
@@ -248,7 +228,7 @@ public class IssController {
 	 * @param message
 	 *            Chat message
 	 */
-	public void sendChatMessage(ISSChatMessage message) {
+	public void sendChatMessage(ChatMessage message) {
 
 		issConnect.send(message);
 	}
@@ -289,7 +269,7 @@ public class IssController {
 			message.append(params.get(i)).append(' ');
 		}
 
-		ISSChatMessage chatMessage = new ISSChatMessage("Lobby", //$NON-NLS-1$
+		ChatMessage chatMessage = new ChatMessage("Lobby", //$NON-NLS-1$
 				message.toString());
 
 		view.appendISSChatMessage(ChatMessageType.LOBBY, chatMessage);
@@ -310,7 +290,7 @@ public class IssController {
 			message.append(params.get(i)).append(' ');
 		}
 
-		ISSChatMessage chatMessage = new ISSChatMessage(tableName, message.toString());
+		ChatMessage chatMessage = new ChatMessage(tableName, message.toString());
 
 		view.appendISSChatMessage(ChatMessageType.TABLE, chatMessage);
 	}
@@ -393,7 +373,7 @@ public class IssController {
 	 * @param status
 	 *            New table status
 	 */
-	public void updateISSTableState(String tableName, ISSTablePanelStatus status) {
+	public void updateISSTableState(String tableName, TablePanelStatus status) {
 
 		view.updateISSTable(tableName, status);
 	}
@@ -406,14 +386,14 @@ public class IssController {
 	 * @param status
 	 *            New game status
 	 */
-	public void updateISSGame(String tableName, ISSGameStartInformation status) {
+	public void updateISSGame(String tableName, GameStartInformation status) {
 
 		view.updateISSTable(tableName, data.getIssLoginName(), status);
 
 		gameData.put(tableName, createSkatGameData(status));
 	}
 
-	private SkatGameData createSkatGameData(ISSGameStartInformation status) {
+	private SkatGameData createSkatGameData(GameStartInformation status) {
 
 		SkatGameData result = new SkatGameData();
 
@@ -444,7 +424,7 @@ public class IssController {
 	 * @param moveInformation
 	 *            Move information
 	 */
-	public void updateMove(String tableName, ISSMoveInformation moveInformation) {
+	public void updateMove(String tableName, MoveInformation moveInformation) {
 
 		SkatGameData currGame = gameData.get(tableName);
 		updateGameData(currGame, moveInformation);
@@ -504,7 +484,7 @@ public class IssController {
 		return result;
 	}
 
-	private void updateGameData(SkatGameData currGame, ISSMoveInformation moveInformation) {
+	private void updateGameData(SkatGameData currGame, MoveInformation moveInformation) {
 
 		Player movePlayer = moveInformation.getPlayer();
 
@@ -711,7 +691,7 @@ public class IssController {
 	 * @param message
 	 *            Chat message
 	 */
-	public void updateISSTableChatMessage(String tableName, ISSChatMessage message) {
+	public void updateISSTableChatMessage(String tableName, ChatMessage message) {
 		// FIXME (jan 30.01.2011) tableName not needed here?
 		view.appendISSChatMessage(ChatMessageType.TABLE, message);
 	}

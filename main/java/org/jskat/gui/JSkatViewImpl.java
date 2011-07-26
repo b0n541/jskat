@@ -3,27 +3,7 @@
  * by Jan Schäfer and Markus J. Luzius
  *
  * Version: 0.9.0-SNAPSHOT
- * Build date: 2011-07-20
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- * JSkat - A skat program written in Java
- * by Jan Schäfer and Markus J. Luzius
- *
- * Version: 0.8.0
- * Build date: 2011-07-20
+ * Build date: 2011-07-26
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -78,11 +58,11 @@ import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.Trick;
-import org.jskat.data.iss.ISSChatMessage;
-import org.jskat.data.iss.ISSGameStartInformation;
-import org.jskat.data.iss.ISSMoveInformation;
-import org.jskat.data.iss.ISSTablePanelStatus;
+import org.jskat.data.iss.ChatMessage;
+import org.jskat.data.iss.GameStartInformation;
+import org.jskat.data.iss.MoveInformation;
 import org.jskat.data.iss.MovePlayer;
+import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.action.human.ContinueSkatSeriesAction;
 import org.jskat.gui.action.human.DiscardAction;
@@ -102,10 +82,10 @@ import org.jskat.gui.action.iss.DisconnectAction;
 import org.jskat.gui.action.iss.InvitePlayerAction;
 import org.jskat.gui.action.iss.JoinIssTableAction;
 import org.jskat.gui.action.iss.LeaveIssTableAction;
-import org.jskat.gui.action.iss.ObserveIssTableAction;
-import org.jskat.gui.action.iss.OpenIssHomepageAction;
+import org.jskat.gui.action.iss.ObserveTableAction;
+import org.jskat.gui.action.iss.OpenHomepageAction;
 import org.jskat.gui.action.iss.ReadyAction;
-import org.jskat.gui.action.iss.RegisterOnIssAction;
+import org.jskat.gui.action.iss.RegisterAction;
 import org.jskat.gui.action.iss.SendChatMessageAction;
 import org.jskat.gui.action.iss.ShowLoginPanelAction;
 import org.jskat.gui.action.iss.TalkEnableAction;
@@ -126,8 +106,8 @@ import org.jskat.gui.action.main.StartSkatSeriesAction;
 import org.jskat.gui.action.main.TrainNeuralNetworksAction;
 import org.jskat.gui.help.JSkatHelpDialog;
 import org.jskat.gui.img.JSkatGraphicRepository;
-import org.jskat.gui.iss.ISSLobbyPanel;
 import org.jskat.gui.iss.ISSTablePanel;
+import org.jskat.gui.iss.LobbyPanel;
 import org.jskat.gui.iss.LoginPanel;
 import org.jskat.gui.iss.PlayerInvitationPanel;
 import org.jskat.gui.nn.NeuralNetworkTrainingOverview;
@@ -157,7 +137,7 @@ public class JSkatViewImpl implements IJSkatView {
 	private JSkatResourceBundle strings;
 	private JSkatMaster jskat;
 	static ActionMap actions;
-	private ISSLobbyPanel issLobby;
+	private LobbyPanel issLobby;
 
 	/**
 	 * Constructor
@@ -208,8 +188,8 @@ public class JSkatViewImpl implements IJSkatView {
 				new ContinueSkatSeriesAction());
 		actions.put(JSkatAction.PAUSE_LOCAL_SERIES, new PauseSkatSeriesAction());
 		// ISS actions
-		actions.put(JSkatAction.REGISTER_ON_ISS, new RegisterOnIssAction());
-		actions.put(JSkatAction.OPEN_ISS_HOMEPAGE, new OpenIssHomepageAction());
+		actions.put(JSkatAction.REGISTER_ON_ISS, new RegisterAction());
+		actions.put(JSkatAction.OPEN_ISS_HOMEPAGE, new OpenHomepageAction());
 		actions.put(JSkatAction.SHOW_ISS_LOGIN, new ShowLoginPanelAction());
 		actions.put(JSkatAction.CONNECT_TO_ISS, new ConnectAction());
 		actions.put(JSkatAction.DISCONNECT_FROM_ISS, new DisconnectAction());
@@ -217,7 +197,7 @@ public class JSkatViewImpl implements IJSkatView {
 		actions.put(JSkatAction.CREATE_ISS_TABLE, new CreateIssTableAction());
 		actions.put(JSkatAction.JOIN_ISS_TABLE, new JoinIssTableAction());
 		actions.put(JSkatAction.LEAVE_ISS_TABLE, new LeaveIssTableAction());
-		actions.put(JSkatAction.OBSERVE_ISS_TABLE, new ObserveIssTableAction());
+		actions.put(JSkatAction.OBSERVE_ISS_TABLE, new ObserveTableAction());
 		actions.put(JSkatAction.READY_TO_PLAY, new ReadyAction());
 		actions.put(JSkatAction.TALK_ENABLED, new TalkEnableAction());
 		actions.put(JSkatAction.CHANGE_TABLE_SEATS,
@@ -755,7 +735,7 @@ public class JSkatViewImpl implements IJSkatView {
 	@Override
 	public void showISSLobby() {
 
-		issLobby = new ISSLobbyPanel("ISS lobby", actions);
+		issLobby = new LobbyPanel("ISS lobby", actions);
 		addTabPanel(issLobby, "ISS lobby");
 	}
 
@@ -784,7 +764,7 @@ public class JSkatViewImpl implements IJSkatView {
 	 */
 	@Override
 	public void appendISSChatMessage(ChatMessageType messageType,
-			ISSChatMessage message) {
+			ChatMessage message) {
 
 		log.debug("appendISSChatMessage"); //$NON-NLS-1$
 
@@ -806,7 +786,7 @@ public class JSkatViewImpl implements IJSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void updateISSTable(String tableName, ISSTablePanelStatus tableStatus) {
+	public void updateISSTable(String tableName, TablePanelStatus tableStatus) {
 
 		// FIXME (jan 08.11.2010) seems very complicated
 		SkatTablePanel panel = tables.get(tableName);
@@ -828,7 +808,7 @@ public class JSkatViewImpl implements IJSkatView {
 	 */
 	@Override
 	public void updateISSTable(String tableName, String issLogin,
-			ISSGameStartInformation status) {
+			GameStartInformation status) {
 
 		if (issLogin.equals(status.getPlayerName(Player.FOREHAND))) {
 
@@ -846,7 +826,7 @@ public class JSkatViewImpl implements IJSkatView {
 	}
 
 	private void updateISSTable(String tableName, Player leftOpponent,
-			Player rightOpponent, Player player, ISSGameStartInformation status) {
+			Player rightOpponent, Player player, GameStartInformation status) {
 
 		log.debug("Updating ISS table: " + tableName + " " + leftOpponent + " " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				+ rightOpponent + " " + player); //$NON-NLS-1$
@@ -881,7 +861,7 @@ public class JSkatViewImpl implements IJSkatView {
 	 */
 	@Override
 	public void updateISSMove(String tableName, SkatGameData gameData,
-			ISSMoveInformation moveInformation) {
+			MoveInformation moveInformation) {
 
 		Player movePlayer = moveInformation.getPlayer();
 
@@ -1235,7 +1215,7 @@ public class JSkatViewImpl implements IJSkatView {
 	@Override
 	public void closeISSPanels() {
 		for (Component currPanel : tabs.getComponents()) {
-			if (currPanel instanceof ISSLobbyPanel
+			if (currPanel instanceof LobbyPanel
 					|| currPanel instanceof ISSTablePanel) {
 				closeTabPanel(currPanel.getName());
 			}

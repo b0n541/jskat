@@ -3,27 +3,7 @@
  * by Jan Schäfer and Markus J. Luzius
  *
  * Version: 0.9.0-SNAPSHOT
- * Build date: 2011-07-20
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- * JSkat - A skat program written in Java
- * by Jan Schäfer and Markus J. Luzius
- *
- * Version: 0.8.0
- * Build date: 2011-07-20
+ * Build date: 2011-07-26
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,19 +38,18 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jskat.data.iss.ISSChatMessage;
+import org.jskat.data.iss.ChatMessage;
 import org.jskat.gui.AbstractTabPanel;
 import org.jskat.gui.action.JSkatAction;
-
 
 /**
  * Represents the lobby of the ISS with an overview about players and tables
  * that are currently online
  */
-public class ISSLobbyPanel extends AbstractTabPanel {
+public class LobbyPanel extends AbstractTabPanel {
 
 	private static final long serialVersionUID = 1L;
-	private static Log log = LogFactory.getLog(ISSLobbyPanel.class);
+	private static Log log = LogFactory.getLog(LobbyPanel.class);
 
 	private PlayerListTableModel playerListTableModel;
 	private JTable playerListTable;
@@ -90,7 +69,7 @@ public class ISSLobbyPanel extends AbstractTabPanel {
 	 * @param jskatBitmaps
 	 * @param actions
 	 */
-	public ISSLobbyPanel(String tableName, ActionMap actions) {
+	public LobbyPanel(String tableName, ActionMap actions) {
 
 		super(tableName, actions);
 
@@ -191,19 +170,19 @@ public class ISSLobbyPanel extends AbstractTabPanel {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 
-				int column = ISSLobbyPanel.this.tableListTable.getSelectedColumn();
-				int row = ISSLobbyPanel.this.tableListTable.getSelectedRow();
-				String tableName = (String) ISSLobbyPanel.this.tableListTable.getValueAt(row, 0);
-				String value = (String) ISSLobbyPanel.this.tableListTable.getValueAt(row, column);
+				int column = LobbyPanel.this.tableListTable.getSelectedColumn();
+				int row = LobbyPanel.this.tableListTable.getSelectedRow();
+				String tableName = (String) LobbyPanel.this.tableListTable.getValueAt(row, 0);
+				String value = (String) LobbyPanel.this.tableListTable.getValueAt(row, column);
 
 				if (column == 0) {
 					// observe a table
 					// FIXME (jansch 27.04.2011) doesn't work
-					// ISSLobbyPanel.actions.get(JSkatAction.OBSERVE_ISS_TABLE).actionPerformed(
+					// LobbyPanel.actions.get(JSkatAction.OBSERVE_ISS_TABLE).actionPerformed(
 					// new ActionEvent(tableName, 1, null));
 				} else if (value.equals(".")) { //$NON-NLS-1$
 					// sit down on free seat at table
-					ISSLobbyPanel.actions.get(JSkatAction.JOIN_ISS_TABLE).actionPerformed(
+					LobbyPanel.actions.get(JSkatAction.JOIN_ISS_TABLE).actionPerformed(
 							new ActionEvent(tableName, 1, null));
 				}
 			}
@@ -297,7 +276,7 @@ public class ISSLobbyPanel extends AbstractTabPanel {
 	 * @param message
 	 *            New message
 	 */
-	public void appendChatMessage(ISSChatMessage message) {
+	public void appendChatMessage(ChatMessage message) {
 
 		log.debug("Appending chat message: " + message); //$NON-NLS-1$
 

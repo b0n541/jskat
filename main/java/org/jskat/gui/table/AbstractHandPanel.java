@@ -3,27 +3,7 @@
  * by Jan Schäfer and Markus J. Luzius
  *
  * Version: 0.9.0-SNAPSHOT
- * Build date: 2011-07-20
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- * JSkat - A skat program written in Java
- * by Jan Schäfer and Markus J. Luzius
- *
- * Version: 0.8.0
- * Build date: 2011-07-20
+ * Build date: 2011-07-26
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -61,7 +41,7 @@ import org.jskat.util.Player;
 /**
  * Abstract class for a panel representing a players hand
  */
-abstract class HandPanel extends JPanel {
+abstract class AbstractHandPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
@@ -127,7 +107,7 @@ abstract class HandPanel extends JPanel {
 	 * @param showIssWidgets
 	 *            TRUE, if ISS widgets should be shown
 	 */
-	HandPanel(ActionMap actions, int maxCards, boolean showIssWidgets) {
+	AbstractHandPanel(ActionMap actions, int maxCards, boolean showIssWidgets) {
 
 		setActionMap(actions);
 		bitmaps = JSkatGraphicRepository.instance();

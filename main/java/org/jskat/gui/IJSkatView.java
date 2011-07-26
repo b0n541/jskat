@@ -3,27 +3,7 @@
  * by Jan Schäfer and Markus J. Luzius
  *
  * Version: 0.9.0-SNAPSHOT
- * Build date: 2011-07-20
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- * JSkat - A skat program written in Java
- * by Jan Schäfer and Markus J. Luzius
- *
- * Version: 0.8.0
- * Build date: 2011-07-20
+ * Build date: 2011-07-26
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -51,15 +31,14 @@ import org.jskat.data.GameAnnouncement;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
-import org.jskat.data.iss.ISSChatMessage;
-import org.jskat.data.iss.ISSGameStartInformation;
-import org.jskat.data.iss.ISSMoveInformation;
-import org.jskat.data.iss.ISSTablePanelStatus;
+import org.jskat.data.iss.ChatMessage;
+import org.jskat.data.iss.GameStartInformation;
+import org.jskat.data.iss.MoveInformation;
+import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
-
 
 /**
  * Interface for JSkat views
@@ -510,7 +489,7 @@ public interface IJSkatView {
 	 * @param message
 	 *            Message
 	 */
-	public void appendISSChatMessage(ChatMessageType messageType, ISSChatMessage message);
+	public void appendISSChatMessage(ChatMessageType messageType, ChatMessage message);
 
 	/**
 	 * Updates an ISS table
@@ -520,7 +499,7 @@ public interface IJSkatView {
 	 * @param status
 	 *            New table state
 	 */
-	public void updateISSTable(String tableName, ISSTablePanelStatus status);
+	public void updateISSTable(String tableName, TablePanelStatus status);
 
 	/**
 	 * Updates an ISS table
@@ -532,7 +511,7 @@ public interface IJSkatView {
 	 * @param status
 	 *            New game state
 	 */
-	public void updateISSTable(String tableName, String loginName, ISSGameStartInformation status);
+	public void updateISSTable(String tableName, String loginName, GameStartInformation status);
 
 	/**
 	 * Updates move information
@@ -544,7 +523,7 @@ public interface IJSkatView {
 	 * @param moveInformation
 	 *            Move information
 	 */
-	public void updateISSMove(String tableName, SkatGameData gameData, ISSMoveInformation moveInformation);
+	public void updateISSMove(String tableName, SkatGameData gameData, MoveInformation moveInformation);
 
 	/**
 	 * Sets the active player

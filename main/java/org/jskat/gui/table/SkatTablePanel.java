@@ -3,27 +3,7 @@
  * by Jan Schäfer and Markus J. Luzius
  *
  * Version: 0.9.0-SNAPSHOT
- * Build date: 2011-07-20
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- * JSkat - A skat program written in Java
- * by Jan Schäfer and Markus J. Luzius
- *
- * Version: 0.8.0
- * Build date: 2011-07-20
+ * Build date: 2011-07-26
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -89,9 +69,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 	// declarer player on the table
 	protected Player declarer;
 
-	protected HandPanel foreHand;
-	protected HandPanel middleHand;
-	protected HandPanel rearHand;
+	protected AbstractHandPanel foreHand;
+	protected AbstractHandPanel middleHand;
+	protected AbstractHandPanel rearHand;
 	protected OpponentPanel leftOpponentPanel;
 	protected OpponentPanel rightOpponentPanel;
 	protected JSkatUserPanel userPanel;
@@ -257,9 +237,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 		addContextPanel(ContextPanelTypes.GAME_OVER, gameOverPanel);
 	}
 
-	private HandPanel getPlayerPanel(Player player) {
+	private AbstractHandPanel getPlayerPanel(Player player) {
 
-		HandPanel result = getHandPanel(player);
+		AbstractHandPanel result = getHandPanel(player);
 
 		return result;
 	}
@@ -735,7 +715,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	public void setPlayerName(Player player, String name) {
 
 		playerNamesAndPositions.put(name, player);
-		HandPanel panel = getHandPanel(player);
+		AbstractHandPanel panel = getHandPanel(player);
 
 		if (panel != null) {
 			if (name != null) {
@@ -754,7 +734,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void setPlayerTime(Player player, double time) {
 
-		HandPanel panel = getHandPanel(player);
+		AbstractHandPanel panel = getHandPanel(player);
 
 		if (panel != null) {
 			panel.setPlayerTime(time);
@@ -771,7 +751,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void setPlayerChatEnabled(String playerName, boolean isChatEnabled) {
 
-		HandPanel panel = getHandPanel(playerName);
+		AbstractHandPanel panel = getHandPanel(playerName);
 
 		if (panel != null) {
 			panel.setChatEnabled(isChatEnabled);
@@ -788,16 +768,16 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void setPlayerReadyToPlay(String playerName, boolean isReadyToPlay) {
 
-		HandPanel panel = getHandPanel(playerName);
+		AbstractHandPanel panel = getHandPanel(playerName);
 
 		if (panel != null) {
 			panel.setReadyToPlay(isReadyToPlay);
 		}
 	}
 
-	private HandPanel getHandPanel(String playerName) {
+	private AbstractHandPanel getHandPanel(String playerName) {
 
-		HandPanel panel = null;
+		AbstractHandPanel panel = null;
 
 		if (playerName.equals(userPanel.getPlayerName())) {
 			panel = userPanel;
@@ -810,8 +790,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 		return panel;
 	}
 
-	private HandPanel getHandPanel(Player player) {
-		HandPanel panel = null;
+	private AbstractHandPanel getHandPanel(Player player) {
+		AbstractHandPanel panel = null;
 
 		switch (player) {
 		case FOREHAND:

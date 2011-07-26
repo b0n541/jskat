@@ -3,27 +3,7 @@
  * by Jan Schäfer and Markus J. Luzius
  *
  * Version: 0.9.0-SNAPSHOT
- * Build date: 2011-07-20
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- * JSkat - A skat program written in Java
- * by Jan Schäfer and Markus J. Luzius
- *
- * Version: 0.8.0
- * Build date: 2011-07-20
+ * Build date: 2011-07-26
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -52,10 +32,10 @@ import java.util.StringTokenizer;
 import org.jskat.AbstractJSkatTest;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.SkatGameData;
-import org.jskat.data.iss.ISSMoveInformation;
-import org.jskat.data.iss.ISSPlayerStatus;
-import org.jskat.data.iss.ISSTablePanelStatus;
+import org.jskat.data.iss.MoveInformation;
 import org.jskat.data.iss.MoveType;
+import org.jskat.data.iss.PlayerStatus;
+import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -141,13 +121,13 @@ public class MessageParserTest extends AbstractJSkatTest {
 			detailParams.add(token.nextToken());
 		}
 
-		ISSTablePanelStatus status = MessageParser.getTableStatus(creator,
+		TablePanelStatus status = MessageParser.getTableStatus(creator,
 				detailParams);
 
 		assertEquals(3, status.getMaxPlayers());
 		assertEquals(3, status.getPlayerInformations().size());
 
-		ISSPlayerStatus playerStatus = status.getPlayerInformation("xskat"); //$NON-NLS-1$
+		PlayerStatus playerStatus = status.getPlayerInformation("xskat"); //$NON-NLS-1$
 		assertNotNull(playerStatus);
 		assertEquals(2, playerStatus.getGamesPlayed());
 		assertEquals(1, playerStatus.getGamesWon());
@@ -175,7 +155,7 @@ public class MessageParserTest extends AbstractJSkatTest {
 			detailParams.add(token.nextToken());
 		}
 
-		ISSMoveInformation moveInfo = MessageParser
+		MoveInformation moveInfo = MessageParser
 				.getMoveInformation(detailParams);
 
 		assertEquals(MoveType.RESIGN, moveInfo.getType());
@@ -198,7 +178,7 @@ public class MessageParserTest extends AbstractJSkatTest {
 			detailParams.add(token.nextToken());
 		}
 
-		ISSMoveInformation moveInfo = MessageParser
+		MoveInformation moveInfo = MessageParser
 				.getMoveInformation(detailParams);
 
 		assertEquals(MoveType.SHOW_CARDS, moveInfo.getType());
@@ -230,7 +210,7 @@ public class MessageParserTest extends AbstractJSkatTest {
 			detailParams.add(token.nextToken());
 		}
 
-		ISSMoveInformation moveInfo = MessageParser
+		MoveInformation moveInfo = MessageParser
 				.getMoveInformation(detailParams);
 
 		assertEquals(MoveType.GAME_ANNOUNCEMENT, moveInfo.getType());

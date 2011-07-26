@@ -3,27 +3,7 @@
  * by Jan Schäfer and Markus J. Luzius
  *
  * Version: 0.9.0-SNAPSHOT
- * Build date: 2011-07-20
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- * JSkat - A skat program written in Java
- * by Jan Schäfer and Markus J. Luzius
- *
- * Version: 0.8.0
- * Build date: 2011-07-20
+ * Build date: 2011-07-26
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -50,11 +30,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.SkatGameData;
-import org.jskat.data.iss.ISSChatMessage;
-import org.jskat.data.iss.ISSGameStartInformation;
-import org.jskat.data.iss.ISSMoveInformation;
-import org.jskat.data.iss.ISSPlayerStatus;
-import org.jskat.data.iss.ISSTablePanelStatus;
+import org.jskat.data.iss.ChatMessage;
+import org.jskat.data.iss.GameStartInformation;
+import org.jskat.data.iss.MoveInformation;
+import org.jskat.data.iss.PlayerStatus;
+import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.data.iss.MovePlayer;
 import org.jskat.data.iss.MoveType;
 import org.jskat.util.Card;
@@ -79,10 +59,10 @@ public class MessageParser {
 	 * xskat:2 $ 0 0 0 0 0 0 1 1 <br>
 	 * . . 0 0 0 0 0 0 0 0 false <br>
 	 */
-	static ISSTablePanelStatus getTableStatus(String loginName,
+	static TablePanelStatus getTableStatus(String loginName,
 			List<String> params) {
 
-		ISSTablePanelStatus status = new ISSTablePanelStatus();
+		TablePanelStatus status = new TablePanelStatus();
 
 		status.setLoginName(loginName);
 
@@ -93,7 +73,7 @@ public class MessageParser {
 			// parse only non empty seats
 			if (!(".".equals(params.get(i * 10 + 5)))) { //$NON-NLS-1$
 				// there is player information
-				ISSPlayerStatus playerStatus = parsePlayerStatus(params
+				PlayerStatus playerStatus = parsePlayerStatus(params
 						.subList(i * 10 + 5, i * 10 + 16));
 				// has player left already
 				if (".".equals(params.get(i + 1))) { //$NON-NLS-1$
@@ -116,9 +96,9 @@ public class MessageParser {
 	 * xskat:2 $ 0 0 0 0 0 0 1 1 <br>
 	 * . . 0 0 0 0 0 0 0 0 false <br>
 	 */
-	private static ISSPlayerStatus parsePlayerStatus(List<String> params) {
+	private static PlayerStatus parsePlayerStatus(List<String> params) {
 
-		ISSPlayerStatus status = new ISSPlayerStatus();
+		PlayerStatus status = new PlayerStatus();
 
 		status.setName(params.get(0));
 		status.setIP(params.get(1));
@@ -134,12 +114,12 @@ public class MessageParser {
 		return status;
 	}
 
-	static ISSGameStartInformation getGameStartStatus(String loginName,
+	static GameStartInformation getGameStartStatus(String loginName,
 			List<String> params) {
 
 		log.debug("game start parameter: " + params); //$NON-NLS-1$
 
-		ISSGameStartInformation status = new ISSGameStartInformation();
+		GameStartInformation status = new GameStartInformation();
 
 		status.setLoginName(loginName);
 
@@ -154,9 +134,9 @@ public class MessageParser {
 		return status;
 	}
 
-	static ISSMoveInformation getMoveInformation(List<String> params) {
+	static MoveInformation getMoveInformation(List<String> params) {
 
-		ISSMoveInformation info = new ISSMoveInformation();
+		MoveInformation info = new MoveInformation();
 
 		getMovePlayer(params.get(0), info);
 
@@ -254,7 +234,7 @@ public class MessageParser {
 		return result;
 	}
 
-	private static void getMovePlayer(String movePlayer, ISSMoveInformation info) {
+	private static void getMovePlayer(String movePlayer, MoveInformation info) {
 
 		log.debug("Move player: " + movePlayer); //$NON-NLS-1$
 		if ("w".equals(movePlayer)) { //$NON-NLS-1$
@@ -278,7 +258,7 @@ public class MessageParser {
 	 * H games, not if O or Z) [Z] (schwarz announced, only in H games)
 	 */
 	private static GameAnnouncement parseGameAnnoucement(
-			ISSMoveInformation info, String move) {
+			MoveInformation info, String move) {
 
 		StringTokenizer annToken = new StringTokenizer(move, "."); //$NON-NLS-1$
 		String gameType = annToken.nextToken();
@@ -472,7 +452,7 @@ public class MessageParser {
 			moveToken.add(token.nextToken());
 
 			// FIXME (jan 06.12.2010) doesn't work this way a.t.m.
-			// ISSMoveInformation moveInfo = getMoveInformation(moveToken);
+			// MoveInformation moveInfo = getMoveInformation(moveToken);
 		}
 	}
 
@@ -558,7 +538,7 @@ public class MessageParser {
 	 * remainings is the chat message<br>
 	 * asdf jklö
 	 */
-	static ISSChatMessage getTableChatMessage(String tableName,
+	static ChatMessage getTableChatMessage(String tableName,
 			List<String> detailParams) {
 
 		StringBuffer text = new StringBuffer();
@@ -568,6 +548,6 @@ public class MessageParser {
 			text.append(detailParams.get(i)).append(' ');
 		}
 
-		return new ISSChatMessage(tableName, text.toString());
+		return new ChatMessage(tableName, text.toString());
 	}
 }

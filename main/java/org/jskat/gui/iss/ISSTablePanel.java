@@ -3,27 +3,7 @@
  * by Jan Schäfer and Markus J. Luzius
  *
  * Version: 0.9.0-SNAPSHOT
- * Build date: 2011-07-20
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- * JSkat - A skat program written in Java
- * by Jan Schäfer and Markus J. Luzius
- *
- * Version: 0.8.0
- * Build date: 2011-07-20
+ * Build date: 2011-07-26
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -49,9 +29,9 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 
 import org.jskat.data.SkatGameData.GameState;
-import org.jskat.data.iss.ISSChatMessage;
-import org.jskat.data.iss.ISSPlayerStatus;
-import org.jskat.data.iss.ISSTablePanelStatus;
+import org.jskat.data.iss.ChatMessage;
+import org.jskat.data.iss.PlayerStatus;
+import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.gui.table.ContextPanelTypes;
 import org.jskat.gui.table.JSkatUserPanel;
 import org.jskat.gui.table.OpponentPanel;
@@ -69,7 +49,7 @@ public class ISSTablePanel extends SkatTablePanel {
 	ChatPanel chatPanel;
 
 	// FIXME (jansch 05.04.2011) Dirty hack
-	ISSTablePanelStatus lastTableStatus;
+	TablePanelStatus lastTableStatus;
 
 	/**
 	 * Constructor
@@ -138,14 +118,14 @@ public class ISSTablePanel extends SkatTablePanel {
 	 * @param tableStatus
 	 *            New table status
 	 */
-	public void setTableStatus(ISSTablePanelStatus tableStatus) {
+	public void setTableStatus(TablePanelStatus tableStatus) {
 
 		// FIXME (jansch 05.04.2011) make 3<>4 change possible
 		// setMaxPlayers(tableStatus.getMaxPlayers());
 
 		for (String playerName : tableStatus.getPlayerInformations().keySet()) {
 
-			ISSPlayerStatus status = tableStatus
+			PlayerStatus status = tableStatus
 					.getPlayerInformation(playerName);
 
 			if (!status.isPlayerLeft()) {
@@ -167,15 +147,15 @@ public class ISSTablePanel extends SkatTablePanel {
 		lastTableStatus = tableStatus;
 	}
 
-	private boolean isNewGameResultAvailable(ISSTablePanelStatus tableStatus) {
+	private boolean isNewGameResultAvailable(TablePanelStatus tableStatus) {
 
 		boolean result = false;
 
 		for (String playerName : tableStatus.getPlayerInformations().keySet()) {
 
-			ISSPlayerStatus newStatus = tableStatus
+			PlayerStatus newStatus = tableStatus
 					.getPlayerInformation(playerName);
-			ISSPlayerStatus oldStatus = lastTableStatus
+			PlayerStatus oldStatus = lastTableStatus
 					.getPlayerInformation(playerName);
 
 			if (oldStatus != null && newStatus != null) {
@@ -194,13 +174,13 @@ public class ISSTablePanel extends SkatTablePanel {
 	}
 
 	private Map<Player, Integer> extractPlayerResults(
-			ISSTablePanelStatus tableStatus) {
+			TablePanelStatus tableStatus) {
 
 		Map<Player, Integer> result = new HashMap<Player, Integer>();
 
 		for (String playerName : tableStatus.getPlayerInformations().keySet()) {
 
-			ISSPlayerStatus status = tableStatus
+			PlayerStatus status = tableStatus
 					.getPlayerInformation(playerName);
 			result.put(playerNamesAndPositions.get(playerName),
 					status.getLastGameResult());
@@ -257,7 +237,7 @@ public class ISSTablePanel extends SkatTablePanel {
 	 * @param message
 	 *            Chat message
 	 */
-	public void appendChatMessage(ISSChatMessage message) {
+	public void appendChatMessage(ChatMessage message) {
 
 		chatPanel.appendMessage(message);
 	}
