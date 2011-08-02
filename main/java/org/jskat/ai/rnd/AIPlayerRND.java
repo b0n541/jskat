@@ -26,6 +26,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.AbstractJSkatPlayer;
 import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -69,7 +70,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	@Override
 	public boolean pickUpSkat() {
 
-		return this.rand.nextBoolean();
+		return rand.nextBoolean();
 	}
 
 	/**
@@ -78,19 +79,19 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	@Override
 	public GameAnnouncement announceGame() {
 
-		log.debug("position: " + this.knowledge.getPlayerPosition()); //$NON-NLS-1$
-		log.debug("bids: " + this.knowledge.getHighestBid(Player.FOREHAND) + //$NON-NLS-1$
-				" " + this.knowledge.getHighestBid(Player.MIDDLEHAND) + //$NON-NLS-1$
-				" " + this.knowledge.getHighestBid(Player.REARHAND)); //$NON-NLS-1$
+		log.debug("position: " + knowledge.getPlayerPosition()); //$NON-NLS-1$
+		log.debug("bids: " + knowledge.getHighestBid(Player.FOREHAND) + //$NON-NLS-1$
+				" " + knowledge.getHighestBid(Player.MIDDLEHAND) + //$NON-NLS-1$
+				" " + knowledge.getHighestBid(Player.REARHAND)); //$NON-NLS-1$
 
-		GameAnnouncement newGame = new GameAnnouncement();
+		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 
 		// select a random game type (without RAMSCH and PASSED_IN)
-		newGame.setGameType(GameType.values()[this.rand.nextInt(GameType
+		factory.setGameType(GameType.values()[rand.nextInt(GameType
 				.values().length - 2)]);
-		newGame.setOuvert(this.rand.nextBoolean());
+		factory.setOuvert(Boolean.valueOf(rand.nextBoolean()));
 
-		return newGame;
+		return factory.getAnnouncement();
 	}
 
 	/**
@@ -101,7 +102,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 
 		int result = -1;
 
-		if (this.rand.nextBoolean()) {
+		if (rand.nextBoolean()) {
 
 			result = nextBidValue;
 		}
@@ -115,7 +116,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	@Override
 	public boolean holdBid(int currBidValue) {
 
-		return this.rand.nextBoolean();
+		return rand.nextBoolean();
 	}
 
 	/**
@@ -134,19 +135,19 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 
 		int index = -1;
 
-		log.debug('\n' + this.knowledge.toString());
+		log.debug('\n' + knowledge.toString());
 
 		// first find all possible cards
-		CardList possibleCards = getPlayableCards(this.knowledge
+		CardList possibleCards = getPlayableCards(knowledge
 				.getTrickCards());
 
 		log.debug("found " + possibleCards.size() + " possible cards: " + possibleCards); //$NON-NLS-1$//$NON-NLS-2$
 
 		// then choose a random one
-		index = this.rand.nextInt(possibleCards.size());
+		index = rand.nextInt(possibleCards.size());
 
 		log.debug("choosing card " + index); //$NON-NLS-1$
-		log.debug("as player " + this.knowledge.getPlayerPosition() + ": " + possibleCards.get(index)); //$NON-NLS-1$//$NON-NLS-2$
+		log.debug("as player " + knowledge.getPlayerPosition() + ": " + possibleCards.get(index)); //$NON-NLS-1$//$NON-NLS-2$
 
 		return possibleCards.get(index);
 	}
@@ -171,8 +172,8 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 		log.debug("Player cards before discarding: " + cards); //$NON-NLS-1$
 
 		// just discard two random cards
-		result.add(cards.remove(this.rand.nextInt(cards.size())));
-		result.add(cards.remove(this.rand.nextInt(cards.size())));
+		result.add(cards.remove(rand.nextInt(cards.size())));
+		result.add(cards.remove(rand.nextInt(cards.size())));
 
 		log.debug("Player cards after discarding: " + cards); //$NON-NLS-1$
 

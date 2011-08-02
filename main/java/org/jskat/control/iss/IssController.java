@@ -28,7 +28,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.control.JSkatMaster;
-import org.jskat.data.GameAnnouncementWithDiscardedCards;
+import org.jskat.data.GameAnnouncement;
 import org.jskat.data.JSkatApplicationData;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
@@ -37,8 +37,8 @@ import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.LoginCredentials;
 import org.jskat.data.iss.MoveInformation;
-import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.data.iss.MoveType;
+import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.gui.IJSkatView;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.util.Card;
@@ -647,7 +647,8 @@ public class IssController {
 	 * @param gameAnnouncement
 	 *            Game announcement
 	 */
-	public void sendGameAnnouncementMove(String tableName, GameAnnouncementWithDiscardedCards gameAnnouncement) {
+	public void sendGameAnnouncementMove(String tableName,
+			GameAnnouncement gameAnnouncement) {
 
 		issConnect.sendGameAnnouncementMove(tableName, gameAnnouncement);
 

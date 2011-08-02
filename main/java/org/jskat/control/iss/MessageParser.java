@@ -29,14 +29,15 @@ import java.util.regex.Pattern;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.MoveInformation;
-import org.jskat.data.iss.PlayerStatus;
-import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.data.iss.MovePlayer;
 import org.jskat.data.iss.MoveType;
+import org.jskat.data.iss.PlayerStatus;
+import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -263,32 +264,32 @@ public class MessageParser {
 		StringTokenizer annToken = new StringTokenizer(move, "."); //$NON-NLS-1$
 		String gameType = annToken.nextToken();
 
-		GameAnnouncement ann = new GameAnnouncement();
+		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 
 		// at first the game type
 		if (gameType.startsWith("G")) { //$NON-NLS-1$
 
-			ann.setGameType(GameType.GRAND);
+			factory.setGameType(GameType.GRAND);
 
 		} else if (gameType.startsWith("C")) { //$NON-NLS-1$
 
-			ann.setGameType(GameType.CLUBS);
+			factory.setGameType(GameType.CLUBS);
 
 		} else if (gameType.startsWith("S")) { //$NON-NLS-1$
 
-			ann.setGameType(GameType.SPADES);
+			factory.setGameType(GameType.SPADES);
 
 		} else if (gameType.startsWith("H")) { //$NON-NLS-1$
 
-			ann.setGameType(GameType.HEARTS);
+			factory.setGameType(GameType.HEARTS);
 
 		} else if (gameType.startsWith("D")) { //$NON-NLS-1$
 
-			ann.setGameType(GameType.DIAMONDS);
+			factory.setGameType(GameType.DIAMONDS);
 
 		} else if (gameType.startsWith("N")) { //$NON-NLS-1$
 
-			ann.setGameType(GameType.NULL);
+			factory.setGameType(GameType.NULL);
 		}
 
 		// parse other game modifiers
@@ -298,18 +299,20 @@ public class MessageParser {
 
 			if (mod == 'O') {
 
-				ann.setOuvert(true);
+				factory.setOuvert(Boolean.TRUE);
 			} else if (mod == 'H') {
 
-				ann.setHand(true);
+				factory.setHand(Boolean.TRUE);
 			} else if (mod == 'S') {
 
-				ann.setSchneider(true);
+				factory.setSchneider(Boolean.TRUE);
 			} else if (mod == 'Z') {
 
-				ann.setSchwarz(true);
+				factory.setSchwarz(Boolean.TRUE);
 			}
 		}
+
+		GameAnnouncement ann = factory.getAnnouncement();
 		info.setGameAnnouncement(ann);
 
 		if (annToken.hasMoreTokens()) {

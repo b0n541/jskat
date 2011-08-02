@@ -27,6 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.IJSkatPlayer;
 import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatGameResult;
@@ -41,7 +42,6 @@ import org.jskat.util.Player;
 import org.jskat.util.SkatConstants;
 import org.jskat.util.rule.BasicSkatRules;
 import org.jskat.util.rule.SkatRuleFactory;
-
 
 /**
  * Controls a skat game
@@ -122,10 +122,10 @@ public class SkatGame extends JSkatThread {
 				break;
 			case PICK_UP_SKAT:
 				if (pickUpSkat()) {
+					data.setDeclarerPickedUpSkat(true);
 					setGameState(GameState.DISCARDING);
 					view.setSkat(tableName, data.getSkat());
 				} else {
-					data.setHand(true);
 					setGameState(GameState.DECLARING);
 				}
 				break;
@@ -250,12 +250,14 @@ public class SkatGame extends JSkatThread {
 
 		log.debug("ask middle and fore hand..."); //$NON-NLS-1$
 
-		bidValue = twoPlayerBidding(Player.MIDDLEHAND, Player.FOREHAND, bidValue);
+		bidValue = twoPlayerBidding(Player.MIDDLEHAND, Player.FOREHAND,
+				bidValue);
 
 		log.debug("Bid value after first bidding: " //$NON-NLS-1$
 				+ bidValue);
 
-		Player firstWinner = getBiddingWinner(Player.MIDDLEHAND, Player.FOREHAND);
+		Player firstWinner = getBiddingWinner(Player.MIDDLEHAND,
+				Player.FOREHAND);
 
 		log.debug("First bidding winner: " + firstWinner); //$NON-NLS-1$
 		log.debug("ask hind hand and first winner..."); //$NON-NLS-1$
@@ -297,9 +299,9 @@ public class SkatGame extends JSkatThread {
 					+ " wins the bidding."); //$NON-NLS-1$
 		} else {
 			// pass in
-			GameAnnouncement ann = new GameAnnouncement();
-			ann.setGameType(GameType.PASSED_IN);
-			setGameAnnouncement(ann);
+			GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+			factory.setGameType(GameType.PASSED_IN);
+			setGameAnnouncement(factory.getAnnouncement());
 		}
 
 		doSleep(maxSleep);
@@ -324,7 +326,8 @@ public class SkatGame extends JSkatThread {
 	 *            Bid value to start from
 	 * @return
 	 */
-	private int twoPlayerBidding(Player announcer, Player hearer, int startBidValue) {
+	private int twoPlayerBidding(Player announcer, Player hearer,
+			int startBidValue) {
 
 		int currBidValue = startBidValue;
 		boolean announcerPassed = false;
@@ -338,7 +341,9 @@ public class SkatGame extends JSkatThread {
 			// ask player
 			int announcerBidValue = player.get(announcer).bidMore(nextBidValue);
 
-			if (announcerBidValue > -1 && SkatConstants.bidOrder.contains(Integer.valueOf(announcerBidValue))) {
+			if (announcerBidValue > -1
+					&& SkatConstants.bidOrder.contains(Integer
+							.valueOf(announcerBidValue))) {
 
 				log.debug("announcer bids " + announcerBidValue); //$NON-NLS-1$
 
@@ -448,15 +453,12 @@ public class SkatGame extends JSkatThread {
 
 		// TODO check for valid game announcements
 		try {
-			GameAnnouncement ann = (GameAnnouncement) player.get(data.getDeclarer()).announceGame().clone();
+			GameAnnouncement ann = player.get(data.getDeclarer())
+					.announceGame();
 
 			setGameAnnouncement(ann);
 		} catch (NullPointerException e) {
 			// player has not returned an object
-			// TODO finish game immediately
-			e.printStackTrace();
-		} catch (CloneNotSupportedException e) {
-			// player has not returned a game announcement
 			// TODO finish game immediately
 			e.printStackTrace();
 		}
@@ -481,7 +483,8 @@ public class SkatGame extends JSkatThread {
 				newTrickForeHand = Player.FOREHAND;
 			} else {
 				// all the other tricks
-				Trick lastTrick = data.getTricks().get(data.getTricks().size() - 1);
+				Trick lastTrick = data.getTricks().get(
+						data.getTricks().size() - 1);
 
 				// set new trick fore hand
 				newTrickForeHand = lastTrick.getTrickWinner();
@@ -503,10 +506,10 @@ public class SkatGame extends JSkatThread {
 
 			doSleep(maxSleep);
 
-
 			log.debug("middle hand plays"); //$NON-NLS-1$
 			view.setActivePlayer(tableName, newTrickForeHand.getLeftNeighbor());
-			playCard(trick, newTrickForeHand, newTrickForeHand.getLeftNeighbor());
+			playCard(trick, newTrickForeHand,
+					newTrickForeHand.getLeftNeighbor());
 
 			if (isFinished()) {
 				break;
@@ -516,7 +519,8 @@ public class SkatGame extends JSkatThread {
 
 			log.debug("hind hand plays"); //$NON-NLS-1$
 			view.setActivePlayer(tableName, newTrickForeHand.getRightNeighbor());
-			playCard(trick, newTrickForeHand, newTrickForeHand.getRightNeighbor());
+			playCard(trick, newTrickForeHand,
+					newTrickForeHand.getRightNeighbor());
 
 			if (isFinished()) {
 				break;
@@ -525,7 +529,8 @@ public class SkatGame extends JSkatThread {
 			doSleep(maxSleep);
 
 			log.debug("Calculate trick winner"); //$NON-NLS-1$
-			Player trickWinner = rules.calculateTrickWinner(data.getGameType(), trick);
+			Player trickWinner = rules.calculateTrickWinner(data.getGameType(),
+					trick);
 			trick.setTrickWinner(trickWinner);
 			data.addPlayerPoints(trickWinner, trick.getCardValueSum());
 
@@ -536,7 +541,8 @@ public class SkatGame extends JSkatThread {
 				try {
 					player.get(currPosition).showTrick((Trick) trick.clone());
 				} catch (CloneNotSupportedException e) {
-					log.warn("should not happen: "+e.getClass()+" - "+e.getMessage());
+					log.warn("should not happen: " + e.getClass() + " - "
+							+ e.getMessage());
 					player.get(currPosition).showTrick(trick);
 				}
 			}
@@ -570,7 +576,8 @@ public class SkatGame extends JSkatThread {
 			// ramsch rules
 		} else {
 			// for all the other games, points to the declarer
-			data.addPlayerPoints(data.getDeclarer(), data.getSkat().getCardValueSum());
+			data.addPlayerPoints(data.getDeclarer(), data.getSkat()
+					.getCardValueSum());
 		}
 
 		// set schneider/schwarz/jungfrau/durchmarsch flags
@@ -628,8 +635,9 @@ public class SkatGame extends JSkatThread {
 					aiPlayerPlayedSchwarz = true;
 				}
 
-			} else if (!rules.isCardAllowed(data.getGameType(), trick.getFirstCard(), data.getPlayerCards(currPlayer),
-					card)) {
+			} else if (!rules
+					.isCardAllowed(data.getGameType(), trick.getFirstCard(),
+							data.getPlayerCards(currPlayer), card)) {
 
 				log.error("Player " + skatPlayer.getClass().toString() + " card not allowed: " + card + " game type: " //$NON-NLS-1$ //$NON-NLS-2$
 						+ data.getGameType() + " first trick card: " //$NON-NLS-1$
@@ -653,15 +661,18 @@ public class SkatGame extends JSkatThread {
 		data.getPlayerCards(currPlayer).remove(card);
 		data.setTrickCard(currPlayer, card);
 
-		if (trick.getTrickNumberInGame() > 0 && currPlayer.equals(trickForeHand)) {
+		if (trick.getTrickNumberInGame() > 0
+				&& currPlayer.equals(trickForeHand)) {
 			// remove all cards from current trick panel first
 			view.clearTrickCards(tableName);
 
 			Trick lastTrick = data.getTricks().get(data.getTricks().size() - 2);
 
 			// set last trick cards
-			view.setLastTrick(tableName, lastTrick.getForeHand(), lastTrick.getCard(Player.FOREHAND),
-					lastTrick.getCard(Player.MIDDLEHAND), lastTrick.getCard(Player.REARHAND));
+			view.setLastTrick(tableName, lastTrick.getForeHand(),
+					lastTrick.getCard(Player.FOREHAND),
+					lastTrick.getCard(Player.MIDDLEHAND),
+					lastTrick.getCard(Player.REARHAND));
 		}
 
 		view.playTrickCard(tableName, currPlayer, card);
@@ -720,7 +731,8 @@ public class SkatGame extends JSkatThread {
 
 	private boolean isFinished() {
 
-		return data.getGameState() == GameState.PRELIMINARY_GAME_END || data.getGameState() == GameState.GAME_OVER;
+		return data.getGameState() == GameState.PRELIMINARY_GAME_END
+				|| data.getGameState() == GameState.GAME_OVER;
 	}
 
 	private void calculateGameValue() {
@@ -787,12 +799,7 @@ public class SkatGame extends JSkatThread {
 
 		// inform all players
 		for (IJSkatPlayer currPlayer : player.values()) {
-			try {
-				currPlayer.startGame(data.getDeclarer(), (GameAnnouncement) ann.clone());
-			} catch (CloneNotSupportedException e) {
-				log.warn("should not happen: "+e.getClass()+" - "+e.getMessage());
-				currPlayer.startGame(data.getDeclarer(), ann);
-			}
+			currPlayer.startGame(data.getDeclarer(), ann);
 		}
 
 		view.setGameAnnouncement(tableName, data.getDeclarer(), ann);

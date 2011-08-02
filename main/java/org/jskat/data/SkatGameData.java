@@ -27,6 +27,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -176,6 +177,8 @@ public class SkatGameData {
 	 */
 	private CardList dealtSkat;
 
+	private boolean declarerPickedUpSkat;
+
 	/**
 	 * Creates a new instance of a Skat game data
 	 */
@@ -321,17 +324,6 @@ public class SkatGameData {
 	}
 
 	/**
-	 * Sets whether the single player has played a hand game
-	 * 
-	 * @param isHand
-	 *            TRUE, if the single player has played a hand game
-	 */
-	public void setHand(boolean isHand) {
-
-		announcement.setHand(isHand);
-	}
-
-	/**
 	 * Checks whether the single player has played an ouvert
 	 * 
 	 * @return TRUE if the single player has played an ouvert game
@@ -379,36 +371,6 @@ public class SkatGameData {
 	public boolean isSchwarzAnnounced() {
 
 		return announcement.isSchwarz();
-	}
-
-	/**
-	 * Checks whether contra was announced
-	 * 
-	 * @return TRUE if contra was announced
-	 */
-	public boolean isContra() {
-
-		return announcement.isContra();
-	}
-
-	/**
-	 * Checks whether re was announced
-	 * 
-	 * @return TRUE if re was announced
-	 */
-	public boolean isRe() {
-
-		return announcement.isRe();
-	}
-
-	/**
-	 * Checks whether bock was announced
-	 * 
-	 * @return TRUE if bock was announced
-	 */
-	public boolean isBock() {
-
-		return announcement.isBock();
 	}
 
 	/**
@@ -929,15 +891,20 @@ public class SkatGameData {
 	/**
 	 * Sets the game announcement
 	 * 
-	 * @param newAnnouncement
+	 * @param announcement
 	 *            The game announcement
 	 */
-	public void setAnnouncement(GameAnnouncement newAnnouncement) {
+	public void setAnnouncement(GameAnnouncement announcement) {
 
-		announcement.setGameType(newAnnouncement.getGameType());
-		announcement.setOuvert(newAnnouncement.isOuvert());
-		announcement.setSchneider(newAnnouncement.isSchneider());
-		announcement.setSchwarz(newAnnouncement.isSchwarz());
+		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+		factory.setGameType(announcement.getGameType());
+		if (!declarerPickedUpSkat) {
+			factory.setHand(Boolean.TRUE);
+		}
+		factory.setOuvert(Boolean.valueOf(announcement.isOuvert()));
+		factory.setSchneider(Boolean.valueOf(announcement.isSchneider()));
+		factory.setSchwarz(Boolean.valueOf(announcement.isSchwarz()));
+		this.announcement = factory.getAnnouncement();
 
 		rules = SkatRuleFactory.getSkatRules(getGameType());
 
@@ -1094,5 +1061,15 @@ public class SkatGameData {
 		return playerPasses.get(Player.FOREHAND).booleanValue()
 				&& playerPasses.get(Player.MIDDLEHAND).booleanValue()
 				&& playerPasses.get(Player.FOREHAND).booleanValue();
+	}
+
+	/**
+	 * Sets whether the declarer picked up the skat
+	 * 
+	 * @param isDeclarerPickedUpSkat
+	 *            TRUE, if the declarer picked up the skat
+	 */
+	public void setDeclarerPickedUpSkat(boolean isDeclarerPickedUpSkat) {
+		this.declarerPickedUpSkat = isDeclarerPickedUpSkat;
 	}
 }

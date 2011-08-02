@@ -20,8 +20,7 @@
  */
 package org.jskat.data;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 
 /**
@@ -31,61 +30,142 @@ import org.jskat.util.GameType;
  */
 public class GameAnnouncement {
 
-	private static Log log = LogFactory.getLog(GameAnnouncement.class);
-
 	/**
 	 * Game type
 	 */
-	private GameType gameType;
+	GameType gameType;
+	/**
+	 * Discarded cards
+	 */
+	CardList discardedCards = new CardList();
 	/**
 	 * Ouvert announcement
 	 */
-	private boolean ouvert;
+	Boolean ouvert = Boolean.FALSE;
 	/**
 	 * Hand announcement
 	 */
-	private boolean hand;
+	Boolean hand = Boolean.FALSE;
 	/**
 	 * Schneider announcement
 	 */
-	private boolean schneider;
+	Boolean schneider = Boolean.FALSE;
 	/**
 	 * Schwarz announcement
 	 */
-	private boolean schwarz;
-	/**
-	 * Contra announcement
-	 */
-	private boolean contra;
-	/**
-	 * Re announcement
-	 */
-	private boolean re;
-	/**
-	 * Bock announcement
-	 */
-	private boolean bock;
+	Boolean schwarz = Boolean.FALSE;
 
 	/**
 	 * Constructor
 	 */
-	public GameAnnouncement() {
-
-		initializeVariables();
+	GameAnnouncement() {
 	}
 
 	/**
-	 * Initializes all variables
+	 * Gets the factory for a {@link GameAnnouncement}
+	 * 
+	 * @return Factory
 	 */
-	public void initializeVariables() {
+	public static GameAnnouncementFactory getFactory() {
+		return new GameAnnouncementFactory();
+	}
 
-		gameType = null;
-		ouvert = false;
-		schneider = false;
-		schwarz = false;
-		contra = false;
-		re = false;
-		bock = false;
+	/**
+	 * Factory for a {@link GameAnnouncement}
+	 */
+	public final static class GameAnnouncementFactory {
+
+		private GameAnnouncement tmpAnnouncement;
+
+		GameAnnouncementFactory() {
+			tmpAnnouncement = new GameAnnouncement();
+		}
+
+		/**
+		 * Gets the {@link GameAnnouncement}
+		 * 
+		 * @return Game announcement
+		 */
+		public final GameAnnouncement getAnnouncement() {
+			GameAnnouncement result = null;
+			if (validate()) {
+				result = tmpAnnouncement;
+				tmpAnnouncement = new GameAnnouncement();
+			} else {
+				throw new RuntimeException("Game announcement not valid."); //$NON-NLS-1$
+			}
+			return result;
+		}
+
+		/**
+		 * Sets the {@link GameType}
+		 * 
+		 * @param gameType
+		 *            Game type
+		 */
+		public final void setGameType(GameType gameType) {
+			tmpAnnouncement.gameType = gameType;
+		}
+
+		/**
+		 * Sets the discarded cards
+		 * 
+		 * @param discardedCards
+		 *            Discarded cards
+		 */
+		public final void setDiscardedCards(CardList discardedCards) {
+			tmpAnnouncement.discardedCards.addAll(discardedCards);
+		}
+
+		/**
+		 * Sets the flag for a hand game
+		 * 
+		 * @param isHand
+		 *            TRUE, if a hand game was announced
+		 */
+		public final void setHand(Boolean isHand) {
+			tmpAnnouncement.hand = isHand;
+		}
+
+		/**
+		 * Sets the flag for an ouvert game
+		 * 
+		 * @param isOuvert
+		 *            TRUE, if an ouvert game was announced
+		 */
+		public final void setOuvert(Boolean isOuvert) {
+			tmpAnnouncement.ouvert = isOuvert;
+		}
+
+		/**
+		 * Sets the flag for a schneider game
+		 * 
+		 * @param schneider
+		 *            TRUE, if schneider was announced
+		 */
+		public final void setSchneider(Boolean isSchneider) {
+			tmpAnnouncement.schneider = isSchneider;
+		}
+
+		/**
+		 * Sets the flag for a schwarz game
+		 * 
+		 * @param schwarz
+		 *            TRUE, if a schwarz was announced
+		 */
+		public final void setSchwarz(Boolean isSchwarz) {
+			tmpAnnouncement.schwarz = isSchwarz;
+		}
+
+		private boolean validate() {
+			if (tmpAnnouncement.gameType == null) {
+				return false;
+			} else if (tmpAnnouncement.isHand()
+					&& tmpAnnouncement.discardedCards.size() > 0) {
+				return false;
+			}
+			return true;
+		}
 	}
 
 	/**
@@ -93,19 +173,20 @@ public class GameAnnouncement {
 	 * 
 	 * @return Game type
 	 */
-	public GameType getGameType() {
+	public final GameType getGameType() {
 
 		return gameType;
 	}
 
 	/**
-	 * Sets the game type
+	 * Gets the discarded cards
 	 * 
-	 * @param newGameType
+	 * @return Discarded cards
 	 */
-	public void setGameType(GameType newGameType) {
-
-		gameType = newGameType;
+	public final CardList getDiscardedCards() {
+		CardList result = new CardList();
+		result.addAll(discardedCards);
+		return result;
 	}
 
 	/**
@@ -113,20 +194,9 @@ public class GameAnnouncement {
 	 * 
 	 * @return TRUE if schneider was announced
 	 */
-	public boolean isSchneider() {
+	public final boolean isSchneider() {
 
-		return schneider;
-	}
-
-	/**
-	 * Sets flag for schneider announcement
-	 * 
-	 * @param isSchneider
-	 *            TRUE if schneider was announced
-	 */
-	public void setSchneider(boolean isSchneider) {
-
-		schneider = isSchneider;
+		return schneider.booleanValue();
 	}
 
 	/**
@@ -134,20 +204,9 @@ public class GameAnnouncement {
 	 * 
 	 * @return TRUE if schwarz was announced
 	 */
-	public boolean isSchwarz() {
+	public final boolean isSchwarz() {
 
-		return schwarz;
-	}
-
-	/**
-	 * Sets flag for schwarz announcement
-	 * 
-	 * @param isSchwarz
-	 *            TRUE if schwarz was announced
-	 */
-	public void setSchwarz(boolean isSchwarz) {
-
-		schwarz = isSchwarz;
+		return schwarz.booleanValue();
 	}
 
 	/**
@@ -155,20 +214,9 @@ public class GameAnnouncement {
 	 * 
 	 * @return TRUE if an ouvert game was announced
 	 */
-	public boolean isOuvert() {
+	public final boolean isOuvert() {
 
-		return ouvert;
-	}
-
-	/**
-	 * Sets flag for an ouvert announcement
-	 * 
-	 * @param isOuvert
-	 *            TRUE if ouvert was announced
-	 */
-	public void setOuvert(boolean isOuvert) {
-
-		ouvert = isOuvert;
+		return ouvert.booleanValue();
 	}
 
 	/**
@@ -176,83 +224,9 @@ public class GameAnnouncement {
 	 * 
 	 * @return TRUE if a hand game was announced
 	 */
-	public boolean isHand() {
+	public final boolean isHand() {
 
-		return hand;
-	}
-
-	/**
-	 * Sets flag for a hand announcement
-	 * 
-	 * @param isHand
-	 *            TRUE, if hand was announced
-	 */
-	public void setHand(boolean isHand) {
-
-		hand = isHand;
-	}
-
-	/**
-	 * Checks whether contra was announced for the game
-	 * 
-	 * @return TRUE if contra was announced
-	 */
-	public boolean isContra() {
-
-		return contra;
-	}
-
-	/**
-	 * Sets the flag for contra announcement
-	 * 
-	 * @param isContra
-	 *            TRUE if contra was announced
-	 */
-	public void setContra(boolean isContra) {
-
-		contra = isContra;
-	}
-
-	/**
-	 * Checks whether re was announced for the game
-	 * 
-	 * @return TRUE if re was announced
-	 */
-	public boolean isRe() {
-
-		return re;
-	}
-
-	/**
-	 * Sets the flag for re announcement
-	 * 
-	 * @param isRe
-	 *            TRUE if re was announced
-	 */
-	public void setRe(boolean isRe) {
-
-		re = isRe;
-	}
-
-	/**
-	 * Checks whether bock was announced for the game
-	 * 
-	 * @return TRUE if bock was announced
-	 */
-	public boolean isBock() {
-
-		return bock;
-	}
-
-	/**
-	 * Sets the flag for bock announcement
-	 * 
-	 * @param isBock
-	 *            TRUE if bock was announced
-	 */
-	public void setBock(boolean isBock) {
-
-		contra = isBock;
+		return hand.booleanValue();
 	}
 
 	/**
@@ -263,50 +237,28 @@ public class GameAnnouncement {
 
 		StringBuffer result = new StringBuffer();
 
-		result.append("Game announcement: ").append(gameType);
+		result.append("Game announcement: ").append(gameType); //$NON-NLS-1$
 
-		if (hand) {
-			result.append(" hand");
-		}
-		if (ouvert) {
+		if (hand.booleanValue()) {
 
-			result.append(" ouvert");
+			result.append(" hand"); //$NON-NLS-1$
 		}
 
-		if (schneider) {
+		if (ouvert.booleanValue()) {
 
-			result.append(" schneider");
+			result.append(" ouvert"); //$NON-NLS-1$
 		}
 
-		if (schwarz) {
+		if (schneider.booleanValue()) {
 
-			result.append(" schwarz");
+			result.append(" schneider"); //$NON-NLS-1$
+		}
+
+		if (schwarz.booleanValue()) {
+
+			result.append(" schwarz"); //$NON-NLS-1$
 		}
 
 		return result.toString();
-	}
-
-	/**
-	 * @see Object#clone()
-	 */
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-
-		log.debug("Cloning GameAnnouncement..."); //$NON-NLS-1$
-
-		GameAnnouncement clone = new GameAnnouncement();
-
-		clone.setGameType(gameType);
-		clone.setHand(hand);
-		clone.setOuvert(ouvert);
-		clone.setSchneider(schneider);
-		clone.setSchwarz(schwarz);
-		clone.setContra(contra);
-		clone.setRe(re);
-		clone.setBock(bock);
-
-		log.debug(this + " " + clone); //$NON-NLS-1$
-
-		return clone;
 	}
 }

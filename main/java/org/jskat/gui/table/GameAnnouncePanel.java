@@ -35,7 +35,8 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jskat.data.GameAnnouncementWithDiscardedCards;
+import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.JSkatOptions;
 import org.jskat.gui.AbstractI18NComboBoxRenderer;
 import org.jskat.gui.action.JSkatAction;
@@ -142,7 +143,7 @@ class GameAnnouncePanel extends JPanel {
 					if (gameTypeList.getSelectedItem() != null) {
 
 						try {
-							GameAnnouncementWithDiscardedCards ann = getGameAnnouncement();
+							GameAnnouncement ann = getGameAnnouncement();
 
 							e.setSource(ann);
 							// fire event again
@@ -153,12 +154,12 @@ class GameAnnouncePanel extends JPanel {
 					}
 				}
 
-				private GameAnnouncementWithDiscardedCards getGameAnnouncement() {
-					GameAnnouncementWithDiscardedCards ann = new GameAnnouncementWithDiscardedCards();
-					ann.setGameType(getGameTypeFromSelectedItem());
+				private GameAnnouncement getGameAnnouncement() {
+					GameAnnouncementFactory factory = GameAnnouncement
+							.getFactory();
+					factory.setGameType(getGameTypeFromSelectedItem());
 
 					if (discardPanel.isUserLookedIntoSkat()) {
-						ann.setHand(false);
 						CardList discardedCards = discardPanel
 								.getDiscardedCards();
 						if (discardedCards.size() != 2) {
@@ -168,17 +169,21 @@ class GameAnnouncePanel extends JPanel {
 									strings.getString("invalid_number_of_cards_in_skat_title"), //$NON-NLS-1$
 									JOptionPane.ERROR_MESSAGE);
 						}
-						ann.setDiscardedCards(discardedCards);
+						factory.setDiscardedCards(discardedCards);
 					} else {
-						ann.setHand(true);
-						ann.setOuvert(GameAnnouncePanel.this.ouvertBox
-								.isSelected());
-						ann.setSchneider(GameAnnouncePanel.this.schneiderBox
-								.isSelected());
-						ann.setSchwarz(GameAnnouncePanel.this.schwarzBox
-								.isSelected());
+						factory.setHand(Boolean.TRUE);
+
+						if (ouvertBox.isSelected()) {
+							factory.setOuvert(Boolean.TRUE);
+						}
+						if (schneiderBox.isSelected()) {
+							factory.setSchneider(Boolean.TRUE);
+						}
+						if (schwarzBox.isSelected()) {
+							factory.setSchwarz(Boolean.TRUE);
+						}
 					}
-					return ann;
+					return factory.getAnnouncement();
 				}
 
 				private GameType getGameTypeFromSelectedItem() {

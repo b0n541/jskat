@@ -31,6 +31,7 @@ import org.jskat.ai.IJSkatPlayer;
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.util.NeuralNetwork;
 import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatGameResult;
@@ -154,9 +155,9 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		for (GameType gameType : feasibleGameTypes) {
 
-			GameAnnouncement gameAnnouncement = new GameAnnouncement();
-			gameAnnouncement.setGameType(gameType);
-			data.setAnnouncement(gameAnnouncement);
+			GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+			factory.setGameType(gameType);
+			data.setAnnouncement(factory.getAnnouncement());
 
 			BasicSkatRules skatRules = SkatRuleFactory.getSkatRules(gameType);
 			int gameResult = skatRules.calcGameResult(data);
@@ -197,11 +198,13 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 				" " + knowledge.getHighestBid(Player.MIDDLEHAND) + //$NON-NLS-1$
 				" " + knowledge.getHighestBid(Player.REARHAND)); //$NON-NLS-1$
 
-		GameAnnouncement newGame = new GameAnnouncement();
-		newGame.setGameType(getBestGameType());
+		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+		factory.setGameType(getBestGameType());
 
 		// FIXME (jan 17.01.2011) setting ouvert and schneider/schwarz
 		// newGame.setOuvert(rand.nextBoolean());
+
+		GameAnnouncement newGame = factory.getAnnouncement();
 
 		log.debug("Announcing: " + newGame); //$NON-NLS-1$
 
@@ -298,9 +301,9 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		game.setSinglePlayer(knowledge.getPlayerPosition());
 
-		GameAnnouncement ann = new GameAnnouncement();
-		ann.setGameType(gameType);
-		game.setGameAnnouncement(ann);
+		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+		factory.setGameType(gameType);
+		game.setGameAnnouncement(factory.getAnnouncement());
 
 		game.setGameState(GameState.TRICK_PLAYING);
 

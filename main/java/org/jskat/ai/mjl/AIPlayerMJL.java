@@ -24,6 +24,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.AbstractJSkatPlayer;
 import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 
@@ -97,7 +98,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	@Override
 	public boolean pickUpSkat() {
 		// TODO really look into skat?
-//		aiPlayer = new SinglePlayer(cards, rules);
+		// aiPlayer = new SinglePlayer(cards, rules);
 		return true;
 	}
 
@@ -108,9 +109,10 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public GameAnnouncement announceGame() {
-		GameAnnouncement game = new GameAnnouncement();
-		game.setGameType(new Bidding(knowledge.getMyCards()).getSuggestedGameType());
-		return game;
+		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+		factory.setGameType(new Bidding(knowledge.getMyCards())
+				.getSuggestedGameType());
+		return factory.getAnnouncement();
 	}
 
 	/*
@@ -126,11 +128,12 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 			knowledge.getMyCards().remove(knowledge.getSkat().get(1));
 			log.debug("aiplayer is not SinglePlayer, discarding original skat of ["
 					+ knowledge.getSkat()
-					+ "], cards.size="+knowledge.getMyCards().size());
+					+ "], cards.size="
+					+ knowledge.getMyCards().size());
 			return knowledge.getSkat();
 		}
 
-		return ((SinglePlayer)aiPlayer).discardSkat(knowledge.getSkat());
+		return ((SinglePlayer) aiPlayer).discardSkat(knowledge.getSkat());
 	}
 
 	/*
@@ -140,7 +143,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public void startGame() {
-		log.debug("Starting game for player ("+getPlayerName()+")");
+		log.debug("Starting game for player (" + getPlayerName() + ")");
 		if (knowledge.getDeclarer() != knowledge.getPlayerPosition()) {
 			log.debug("ok? AIPlayerMJL should be OpponentPlayer - actually is: "
 					+ (aiPlayer == null ? "null" : aiPlayer.getClass()

@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import org.jskat.ai.AbstractJSkatPlayer;
 import org.jskat.ai.PlayerKnowledge;
 import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 
@@ -89,10 +90,10 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	@Override
 	public GameAnnouncement announceGame() {
 		if(bidEvaluator==null) bidEvaluator = new BidEvaluator(knowledge.getMyCards());
-		GameAnnouncement myGame = new GameAnnouncement();
-		myGame.setGameType(bidEvaluator.getSuggestedGameType());
+		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+		factory.setGameType(bidEvaluator.getSuggestedGameType());
 		aiPlayer = new AlgorithmicSinglePlayer(this);
-		return myGame;
+		return factory.getAnnouncement();
 	}
 
 	/* (non-Javadoc)

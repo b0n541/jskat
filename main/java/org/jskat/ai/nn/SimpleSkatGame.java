@@ -43,6 +43,8 @@ import org.jskat.util.rule.SkatRuleFactory;
 /**
  * Controls a skat game
  */
+// FIXME (jansch 02.08.2011) this is nearly the same than SkatGame class
+// try to make them using the same source
 public class SimpleSkatGame extends JSkatThread {
 
 	private static Log log = LogFactory.getLog(SimpleSkatGame.class);
@@ -127,7 +129,8 @@ public class SimpleSkatGame extends JSkatThread {
 				try {
 					player.get(currPosition).showTrick((Trick) trick.clone());
 				} catch (CloneNotSupportedException e) {
-					log.warn("should not happen: "+e.getClass()+" - "+e.getMessage());
+					log.warn("should not happen: " + e.getClass() + " - "
+							+ e.getMessage());
 					player.get(currPosition).showTrick(trick);
 				}
 			}
@@ -289,12 +292,8 @@ public class SimpleSkatGame extends JSkatThread {
 
 		// inform all players
 		for (IJSkatPlayer currPlayer : player.values()) {
-			try {
-				currPlayer.startGame(data.getDeclarer(), (GameAnnouncement) ann.clone());
-			} catch (CloneNotSupportedException e) {
-				log.warn("should not happen: "+e.getClass()+" - "+e.getMessage());
-				currPlayer.startGame(data.getDeclarer(), ann);
-			}
+
+			currPlayer.startGame(data.getDeclarer(), ann);
 		}
 	}
 

@@ -31,6 +31,7 @@ import org.jskat.ai.nn.SimpleSkatGame;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.JSkatThread;
 import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.util.CardDeck;
 import org.jskat.util.GameType;
@@ -215,9 +216,9 @@ public class NNTrainer extends JSkatThread {
 
 				game.setSinglePlayer(currPlayer);
 
-				GameAnnouncement ann = new GameAnnouncement();
-				ann.setGameType(gameType);
-				game.setGameAnnouncement(ann);
+				GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+				factory.setGameType(gameType);
+				game.setGameAnnouncement(factory.getAnnouncement());
 
 				game.setGameState(GameState.TRICK_PLAYING);
 

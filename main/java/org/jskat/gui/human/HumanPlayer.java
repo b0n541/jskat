@@ -28,7 +28,6 @@ import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.AbstractJSkatPlayer;
 import org.jskat.ai.IJSkatPlayer;
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncementWithDiscardedCards;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -230,14 +229,13 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 
 		} else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
 
-			if (source instanceof GameAnnouncementWithDiscardedCards) {
+			if (source instanceof GameAnnouncement) {
 				// player did game announcement
 				gameAnnouncement = (GameAnnouncement) source;
 
 				if (!gameAnnouncement.isHand()) {
 
-					discardSkat = ((GameAnnouncementWithDiscardedCards) source)
-							.getDiscardedCards();
+					discardSkat = gameAnnouncement.getDiscardedCards();
 					knowledge.getMyCards().remove(this.discardSkat.get(0));
 					knowledge.getMyCards().remove(this.discardSkat.get(1));
 

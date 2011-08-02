@@ -28,7 +28,7 @@ import javax.swing.JOptionPane;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jskat.data.GameAnnouncementWithDiscardedCards;
+import org.jskat.data.GameAnnouncement;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -224,7 +224,8 @@ class Connector {
 		issOut.send("table " + tableName + ' ' + loginName + " play s"); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
-	public void sendGameAnnouncementMove(String tableName, GameAnnouncementWithDiscardedCards gameAnnouncement) {
+	public void sendGameAnnouncementMove(String tableName,
+			GameAnnouncement gameAnnouncement) {
 
 		String gameAnnouncementString = getGameTypeString(gameAnnouncement.getGameType(), gameAnnouncement.isHand(),
 				gameAnnouncement.isOuvert(), gameAnnouncement.isSchneider(), gameAnnouncement.isSchwarz());
