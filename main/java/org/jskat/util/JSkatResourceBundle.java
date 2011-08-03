@@ -67,7 +67,7 @@ public class JSkatResourceBundle {
 	 * @return Version
 	 */
 	public static String getVersion() {
-		return "0.8"; //$NON-NLS-1$
+		return "0.9"; //$NON-NLS-1$
 	}
 
 	/**
