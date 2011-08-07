@@ -526,6 +526,16 @@ public interface IJSkatView {
 	public void updateISSMove(String tableName, SkatGameData gameData, MoveInformation moveInformation);
 
 	/**
+	 * Sets the resigning flag of a player
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param player
+	 *            Resigning player
+	 */
+	public void setResign(String tableName, Player player);
+
+	/**
 	 * Sets the active player
 	 * 
 	 * @param tableName

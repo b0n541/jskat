@@ -625,6 +625,14 @@ public class JSkatMaster {
 	}
 
 	/**
+	 * Sends the resign signal to ISS
+	 */
+	public void sendResignSignal() {
+
+		issControl.sendResignSignal(data.getActiveTable());
+	}
+
+	/**
 	 * Leaves a skat table
 	 */
 	public void leaveTable() {

@@ -291,6 +291,11 @@ class Connector {
 		return card.getSuit().shortString() + card.getRank().shortString();
 	}
 
+	void sendResignSignal(String tableName) {
+
+		issOut.send("table " + tableName + ' ' + loginName + " play RE"); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
 	public void sendInvitationAccepted(String tableName, String invitationTicket) {
 
 		issOut.send("join " + tableName + " " + invitationTicket); //$NON-NLS-1$//$NON-NLS-2$

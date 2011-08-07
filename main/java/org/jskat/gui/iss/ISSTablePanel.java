@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.ActionMap;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
@@ -32,6 +33,7 @@ import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.PlayerStatus;
 import org.jskat.data.iss.TablePanelStatus;
+import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.table.ContextPanelTypes;
 import org.jskat.gui.table.JSkatUserPanel;
 import org.jskat.gui.table.OpponentPanel;
@@ -97,11 +99,13 @@ public class ISSTablePanel extends SkatTablePanel {
 		return panel;
 	}
 
+	@Override
 	protected OpponentPanel getOpponentPanel() {
 
 		return new OpponentPanel(getActionMap(), 12, true);
 	}
 
+	@Override
 	protected JSkatUserPanel getPlayerPanel() {
 
 		return new JSkatUserPanel(getActionMap(), 12, true);
@@ -110,6 +114,18 @@ public class ISSTablePanel extends SkatTablePanel {
 	private ChatPanel getChatPanel() {
 
 		return new ChatPanel(this);
+	}
+
+	@Override
+	protected JPanel getRightPanelForTrickPanel() {
+		JPanel additionalActionsPanel = new JPanel();
+		additionalActionsPanel.setOpaque(false);
+
+		JButton giveUpButton = new JButton(getActionMap().get(
+				JSkatAction.RESIGN));
+		additionalActionsPanel.add(giveUpButton);
+
+		return additionalActionsPanel;
 	}
 
 	/**

@@ -633,4 +633,9 @@ public class NullView implements IJSkatView {
 	public void showDuplicateTableNameMessage(String duplicateTableName) {
 		// empty method by indent
 	}
+
+	@Override
+	public void setResign(String tableName, Player player) {
+		// empty method by indent
+	}
 }

@@ -277,6 +277,7 @@ abstract class AbstractHandPanel extends JPanel {
 		bidValue = 0;
 		playerPassed = false;
 		declarer = false;
+		iconPanel.reset();
 		refreshHeaderText();
 		setActivePlayer(false);
 		hideCards();
@@ -328,6 +329,11 @@ abstract class AbstractHandPanel extends JPanel {
 	void setReadyToPlay(boolean isReadyToPlay) {
 
 		iconPanel.setReadyToPlay(isReadyToPlay);
+	}
+
+	void setResign(boolean isResign) {
+
+		iconPanel.setResign(isResign);
 	}
 
 	boolean isActivePlayer() {

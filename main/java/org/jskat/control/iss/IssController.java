@@ -587,6 +587,16 @@ public class IssController {
 	}
 
 	/**
+	 * Sends a resign signal to ISS
+	 * 
+	 * @param tableName
+	 */
+	public void sendResignSignal(String tableName) {
+
+		issConnect.sendResignSignal(tableName);
+	}
+
+	/**
 	 * Send table seat change singal to ISS
 	 * 
 	 * @param tableName

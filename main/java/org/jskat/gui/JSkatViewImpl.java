@@ -86,6 +86,7 @@ import org.jskat.gui.action.iss.ObserveTableAction;
 import org.jskat.gui.action.iss.OpenHomepageAction;
 import org.jskat.gui.action.iss.ReadyAction;
 import org.jskat.gui.action.iss.RegisterAction;
+import org.jskat.gui.action.iss.ResignAction;
 import org.jskat.gui.action.iss.SendChatMessageAction;
 import org.jskat.gui.action.iss.ShowLoginPanelAction;
 import org.jskat.gui.action.iss.TalkEnableAction;
@@ -203,6 +204,7 @@ public class JSkatViewImpl implements IJSkatView {
 		actions.put(JSkatAction.CHANGE_TABLE_SEATS,
 				new ChangeTableSeatsAction());
 		actions.put(JSkatAction.INVITE_ISS_PLAYER, new InvitePlayerAction());
+		actions.put(JSkatAction.RESIGN, new ResignAction());
 		// Neural network actions
 		actions.put(JSkatAction.TRAIN_NEURAL_NETWORKS,
 				new TrainNeuralNetworksAction());
@@ -945,8 +947,7 @@ public class JSkatViewImpl implements IJSkatView {
 					moveInformation.getOuvertCards());
 			break;
 		case RESIGN:
-			// FIXME (jansch 04.06.2011) ask human player if he/she also wants
-			// to resign
+			setResign(tableName, movePlayer);
 			break;
 		case TIME_OUT:
 			// TODO show message box
@@ -1245,5 +1246,11 @@ public class JSkatViewImpl implements IJSkatView {
 		showMessage(JOptionPane.ERROR_MESSAGE,
 				strings.getString("duplicate_table_name_title"), //$NON-NLS-1$
 				message);
+	}
+
+	@Override
+	public void setResign(String tableName, Player player) {
+
+		tables.get(tableName).setPlayerResign(player);
 	}
 }

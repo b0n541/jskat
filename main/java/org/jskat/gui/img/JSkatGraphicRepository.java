@@ -448,7 +448,11 @@ public class JSkatGraphicRepository {
 		/**
 		 * Register
 		 */
-		REGISTER;
+		REGISTER,
+		/**
+		 * White flag
+		 */
+		WHITE_FLAG;
 	}
 
 	/**

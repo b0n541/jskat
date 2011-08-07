@@ -42,6 +42,9 @@ public class IconPanel extends JPanel {
 	boolean readyToPlay = false;
 	ImageIcon readyToPlayIcon = null;
 	JLabel readyToPlayLabel;
+	boolean resigned = false;
+	ImageIcon resignedIcon = null;
+	JLabel resignedLabel;
 
 	JSkatResourceBundle strings = JSkatResourceBundle.instance();
 
@@ -52,11 +55,22 @@ public class IconPanel extends JPanel {
 
 		chatLabel = new JLabel(chatIcon);
 		readyToPlayLabel = new JLabel(readyToPlayIcon);
+		resignedLabel = new JLabel(resignedIcon);
 
 		setIcons();
 
+		add(resignedLabel);
 		add(chatLabel);
 		add(readyToPlayLabel);
+	}
+
+	/**
+	 * Resets the icon panel
+	 */
+	public void reset() {
+
+		resigned = false;
+		setIcons();
 	}
 
 	/**
@@ -83,9 +97,33 @@ public class IconPanel extends JPanel {
 		setIcons();
 	}
 
+	/**
+	 * Sets the flag for "Resign"
+	 * 
+	 * @param isResign
+	 *            TRUE, if the player wants to resign
+	 */
+	public void setResign(boolean isResign) {
+
+		resigned = isResign;
+		setIcons();
+	}
+
 	private void setIcons() {
 
 		String tooltipText = null;
+		if (resigned) {
+			resignedIcon = new ImageIcon(JSkatGraphicRepository.instance()
+					.getIconImage(Icon.WHITE_FLAG, IconSize.SMALL));
+			tooltipText = strings.getString("iss_player_wants_to_resign"); //$NON-NLS-1$
+		} else {
+			resignedIcon = new ImageIcon(JSkatGraphicRepository.instance()
+					.getIconImage(Icon.BLANK, IconSize.SMALL));
+			tooltipText = ""; //$NON-NLS-1$
+		}
+		resignedLabel.setIcon(resignedIcon);
+		resignedLabel.setToolTipText(tooltipText);
+
 		if (chatEnabled) {
 			chatIcon = new ImageIcon(JSkatGraphicRepository.instance().getIconImage(Icon.CHAT, IconSize.SMALL));
 			tooltipText = strings.getString("iss_chat_enabled"); //$NON-NLS-1$

@@ -227,9 +227,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 		trickHoldingPanel.add(lastTrickPanel, "width 25%"); //$NON-NLS-1$
 		trickPanel = new TrickPlayPanel(bitmaps, 0.8, true);
 		trickHoldingPanel.add(trickPanel, "grow"); //$NON-NLS-1$
-		JPanel blankPanel = new JPanel();
-		blankPanel.setOpaque(false);
-		trickHoldingPanel.add(blankPanel, "width 25%"); //$NON-NLS-1$
+
+		trickHoldingPanel.add(getRightPanelForTrickPanel(), "width 25%"); //$NON-NLS-1$
 		trickHoldingPanel.setOpaque(false);
 		addContextPanel(ContextPanelTypes.TRICK_PLAYING, trickHoldingPanel);
 
@@ -242,6 +241,12 @@ public class SkatTablePanel extends AbstractTabPanel {
 		AbstractHandPanel result = getHandPanel(player);
 
 		return result;
+	}
+
+	protected JPanel getRightPanelForTrickPanel() {
+		JPanel blankPanel = new JPanel();
+		blankPanel.setOpaque(false);
+		return blankPanel;
 	}
 
 	/**
@@ -772,6 +777,21 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		if (panel != null) {
 			panel.setReadyToPlay(isReadyToPlay);
+		}
+	}
+
+	/**
+	 * Sets player flag for resign
+	 * 
+	 * @param player
+	 *            Player
+	 */
+	public void setPlayerResign(Player player) {
+
+		AbstractHandPanel panel = getHandPanel(player);
+
+		if (panel != null) {
+			panel.setResign(true);
 		}
 	}
 
