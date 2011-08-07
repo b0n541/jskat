@@ -78,8 +78,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	protected GameInformationPanel gameInfoPanel;
 	protected JPanel gameContextPanel;
 	protected Map<ContextPanelTypes, JPanel> contextPanels;
-	protected TrickPlayPanel trickPanel;
-	protected TrickPlayPanel lastTrickPanel;
+	protected TrickPanel trickPanel;
+	protected TrickPanel lastTrickPanel;
 	protected GameOverPanel gameOverPanel;
 	/**
 	 * Table model for skat list
@@ -223,9 +223,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 		JPanel trickHoldingPanel = new JPanel(new MigLayout(
 				"fill", "[shrink][grow][shrink]", //$NON-NLS-1$ //$NON-NLS-2$
 				"fill")); //$NON-NLS-1$
-		lastTrickPanel = new TrickPlayPanel(0.6, false);
+		lastTrickPanel = new TrickPanel(0.6, false);
 		trickHoldingPanel.add(lastTrickPanel, "width 25%"); //$NON-NLS-1$
-		trickPanel = new TrickPlayPanel(0.8, true);
+		trickPanel = new TrickPanel(0.8, true);
 		trickHoldingPanel.add(trickPanel, "grow"); //$NON-NLS-1$
 
 		trickHoldingPanel.add(getRightPanelForTrickPanel(), "width 25%"); //$NON-NLS-1$
@@ -328,7 +328,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void setTrickCard(Player player, Card card) {
 
-		trickPanel.setCard(player, card);
+		trickPanel.addCard(player, card);
 	}
 
 	/**
@@ -839,9 +839,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 			Card middleHandCard, Card rearHandCard) {
 
 		lastTrickPanel.clearCards();
-		lastTrickPanel.setCard(trickForeHand, foreHandCard);
-		lastTrickPanel.setCard(trickForeHand.getLeftNeighbor(), middleHandCard);
-		lastTrickPanel.setCard(trickForeHand.getRightNeighbor(), rearHandCard);
+		lastTrickPanel.addCard(trickForeHand, foreHandCard);
+		lastTrickPanel.addCard(trickForeHand.getLeftNeighbor(), middleHandCard);
+		lastTrickPanel.addCard(trickForeHand.getRightNeighbor(), rearHandCard);
 	}
 
 	/**
