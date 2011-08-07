@@ -97,8 +97,6 @@ public class LoginPanel extends AbstractTabPanel {
 						.getText());
 				loginCredentials.setPassword(new String(passwordField
 						.getPassword()));
-				// FIXME must be setable
-				loginCredentials.setPort(7000);
 
 				e.setSource(loginCredentials);
 				// fire event again

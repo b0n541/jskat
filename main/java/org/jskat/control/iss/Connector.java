@@ -29,10 +29,12 @@ import javax.swing.JOptionPane;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
+import org.jskat.data.JSkatOptions;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
+import org.jskat.util.JSkatResourceBundle;
 
 
 /**
@@ -42,6 +44,9 @@ class Connector {
 
 	private static Log log = LogFactory.getLog(Connector.class);
 
+	private static JSkatResourceBundle strings = JSkatResourceBundle.instance();
+	private static JSkatOptions options = JSkatOptions.instance();
+
 	private Socket socket;
 	private PrintWriter output;
 	private InputChannel issIn;
@@ -49,7 +54,6 @@ class Connector {
 
 	private String loginName;
 	private String password;
-	private int port;
 
 	private IssController issControl;
 
@@ -71,21 +75,11 @@ class Connector {
 	 *            Login name
 	 * @param newPassword
 	 *            Password
-	 * @param newPort
-	 *            Port number (80, 7000, 8000 are allowed)
 	 */
-	void setConnectionData(String newLoginName, String newPassword, int newPort) {
+	void setConnectionData(String newLoginName, String newPassword) {
 
 		loginName = newLoginName;
 		password = newPassword;
-
-		if (newPort == 80 || newPort == 7000 || newPort == 8000) {
-
-			port = newPort;
-		} else {
-
-			throw new IllegalArgumentException("Unsupported port number: " + newPort); //$NON-NLS-1$
-		}
 	}
 
 	/**
@@ -98,8 +92,8 @@ class Connector {
 		log.debug("ISSConnector.establishConnection()"); //$NON-NLS-1$
 
 		try {
-			// TODO make this configurable
-			socket = new Socket("skatgame.net", port); //$NON-NLS-1$
+			socket = new Socket(options.getIssAddress(), options.getIssPort()
+					.intValue());
 			output = new PrintWriter(socket.getOutputStream(), true);
 			issOut = new OutputChannel(output);
 			issIn = new InputChannel(issControl, this, socket.getInputStream());
@@ -109,7 +103,8 @@ class Connector {
 
 		} catch (java.net.UnknownHostException e) {
 			log.error("Cannot open connection to ISS"); //$NON-NLS-1$
-			issControl.showMessage(JOptionPane.ERROR_MESSAGE, "Can't establish connection to ISS");
+			issControl.showMessage(JOptionPane.ERROR_MESSAGE,
+					strings.getString("cant_connect_to_iss")); //$NON-NLS-1$
 			return false;
 		} catch (java.io.IOException e) {
 			log.error("IOException: " + e.toString()); //$NON-NLS-1$

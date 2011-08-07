@@ -27,7 +27,6 @@ public class LoginCredentials {
 
 	private String loginName;
 	private String password;
-	private int port;
 
 	public String getLoginName() {
 		return loginName;
@@ -43,13 +42,5 @@ public class LoginCredentials {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public int getPort() {
-		return port;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
 	}
 }

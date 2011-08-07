@@ -140,7 +140,7 @@ public class IssController {
 
 				if (!issConnect.isConnected()) {
 
-					issConnect.setConnectionData(login, password, loginCredentials.getPort());
+					issConnect.setConnectionData(login, password);
 					issConnect.establishConnection();
 				}
 			} else {

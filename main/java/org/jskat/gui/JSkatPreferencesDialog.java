@@ -73,6 +73,9 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 	private JRadioButton gameShortCutYes;
 	private JRadioButton gameShortCutNo;
 
+	private JTextField issAddress;
+	private JTextField issPort;
+
 	/**
 	 * Constructor
 	 * 
@@ -100,7 +103,7 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 
 		JTabbedPane prefTabs = new JTabbedPane();
 
-		JPanel commonTab = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		JPanel commonTab = new JPanel(new MigLayout("fill", "fill", "shrink")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		commonTab.add(new JLabel(strings.getString("language"))); //$NON-NLS-1$
 		commonTab.add(getLanguagePanel(), "wrap"); //$NON-NLS-1$
@@ -109,23 +112,7 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		commonTab.add(getCardFacePanel(), "wrap"); //$NON-NLS-1$
 
 		commonTab.add(new JLabel(strings.getString("save_path"))); //$NON-NLS-1$
-		savePath = new JTextField(20);
-		JButton savePathButton = new JButton(strings.getString("search")); //$NON-NLS-1$
-		savePathButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-
-				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				int result = fileChooser.showOpenDialog(JSkatPreferencesDialog.this.parent);
-				if (result == JFileChooser.APPROVE_OPTION) {
-					JSkatPreferencesDialog.this.savePath.setText(fileChooser.getSelectedFile().getAbsolutePath());
-				}
-			}
-		});
-		JPanel savePathPanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		savePathPanel.add(savePath);
-		savePathPanel.add(savePathButton);
-		commonTab.add(savePathPanel, "wrap"); //$NON-NLS-1$
+		commonTab.add(getSavePathPanel(), "wrap"); //$NON-NLS-1$
 
 		commonTab.add(new JLabel(strings.getString("wait_time_after_trick"))); //$NON-NLS-1$
 		JPanel waitTimePanel = getWaitingTimePanel(strings, options);
@@ -137,8 +124,18 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 
 		prefTabs.add(commonTab, strings.getString("common_options")); //$NON-NLS-1$
 
-		JPanel skatRulesTab = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		JPanel skatRulesTab = new JPanel(
+				new MigLayout("fill", "fill", "shrink")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		prefTabs.add(skatRulesTab, strings.getString("skat_rules")); //$NON-NLS-1$
+
+		JPanel issTab = new JPanel(new MigLayout("fill", "fill", "shrink")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+		issTab.add(new JLabel(strings.getString("iss_address"))); //$NON-NLS-1$
+		issTab.add(getIssAddressPanel(), "wrap"); //$NON-NLS-1$
+		issTab.add(new JLabel(strings.getString("iss_port"))); //$NON-NLS-1$
+		issTab.add(getIssPortPanel(), "wrap"); //$NON-NLS-1$
+
+		prefTabs.add(issTab, strings.getString("iss")); //$NON-NLS-1$
 
 		root.add(prefTabs, "wrap"); //$NON-NLS-1$
 
@@ -154,6 +151,48 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		root.add(buttonPanel, "center"); //$NON-NLS-1$
 
 		pack();
+	}
+
+	private JPanel getSavePathPanel() {
+		savePath = new JTextField(20);
+		JButton savePathButton = new JButton(strings.getString("search")); //$NON-NLS-1$
+		savePathButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				int result = fileChooser
+						.showOpenDialog(JSkatPreferencesDialog.this.parent);
+				if (result == JFileChooser.APPROVE_OPTION) {
+					JSkatPreferencesDialog.this.savePath.setText(fileChooser
+							.getSelectedFile().getAbsolutePath());
+				}
+			}
+		});
+		JPanel savePathPanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		savePathPanel.add(savePath);
+		savePathPanel.add(savePathButton);
+		return savePathPanel;
+	}
+
+	private JPanel getIssAddressPanel() {
+
+		issAddress = new JTextField(20);
+		issAddress.setText(options.getIssAddress());
+		JPanel issAddressPanel = new JPanel(new MigLayout(
+				"fill", "fill", "shrink")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		issAddressPanel.add(issAddress);
+		return issAddressPanel;
+	}
+
+	private JPanel getIssPortPanel() {
+
+		issPort = new JTextField(20);
+		issPort.setText(options.getIssPort().toString());
+		JPanel issPortPanel = new JPanel(
+				new MigLayout("fill", "fill", "shrink")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		issPortPanel.add(issPort);
+		return issPortPanel;
 	}
 
 	private JPanel getCardFacePanel() {
@@ -281,14 +320,14 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 			setVisible(false);
 		} else if ("OK".equals(e.getActionCommand())) { //$NON-NLS-1$
 
-			JSkatOptions options = JSkatOptions.instance();
-
 			options.setLanguage((SupportedLanguage) language.getSelectedItem());
 			options.setCardFace(getSelectedCardFace());
 			options.setSavePath(savePath.getText());
 			options.setTrickRemoveDelayTime(waitTime.getValue());
 			options.setTrickRemoveAfterClick(trickRemoveAfterClick.isSelected());
 			options.setGameShortCut(gameShortCutYes.isSelected());
+			options.setIssAddress(issAddress.getText());
+			options.setIssPort(Integer.valueOf(issPort.getText()));
 
 			options.saveJSkatProperties();
 			refreshCardFaces();
