@@ -24,7 +24,8 @@ import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.jskat.gui.img.JSkatGraphicRepository;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jskat.util.Card;
 import org.jskat.util.Player;
 
@@ -35,20 +36,19 @@ import org.jskat.util.Player;
 class TrickPlayPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	private static Log log = LogFactory.getLog(TrickPlayPanel.class);
+
 	private TrickPanel trickPanel;
 
-	TrickPlayPanel(JSkatGraphicRepository jskatBitmaps, double cardScaleFactor,
-			boolean randomPlacement) {
+	TrickPlayPanel(double cardScaleFactor, boolean randomPlacement) {
 
-		initPanel(jskatBitmaps, cardScaleFactor, randomPlacement);
+		initPanel(cardScaleFactor, randomPlacement);
 	}
 
-	private void initPanel(JSkatGraphicRepository jskatBitmaps,
-			double cardScaleFactor, boolean randomPlacement) {
+	private void initPanel(double cardScaleFactor, boolean randomPlacement) {
 
 		this.setLayout(new MigLayout("fill, fill, fill")); //$NON-NLS-1$
-		this.trickPanel = new TrickPanel(jskatBitmaps, cardScaleFactor,
-				randomPlacement);
+		this.trickPanel = new TrickPanel(cardScaleFactor, randomPlacement);
 		trickPanel.setOpaque(false);
 		this.add(this.trickPanel, "growx, growy, center"); //$NON-NLS-1$
 

@@ -38,6 +38,8 @@ import javax.swing.JPanel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jskat.data.JSkatOptions;
+import org.jskat.gui.img.CardFace;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -53,6 +55,7 @@ class TrickPanel extends JPanel implements ComponentListener {
 	private static final long serialVersionUID = 1L;
 	private static Log log = LogFactory.getLog(TrickPanel.class);
 
+	private static JSkatOptions options = JSkatOptions.instance();
 	private JSkatGraphicRepository bitmaps;
 	private Map<Card, Image> scaledCardImages;
 	private List<Double> cardRotations;
@@ -63,6 +66,7 @@ class TrickPanel extends JPanel implements ComponentListener {
 	private Player rightOpponent;
 	private Player leftOpponent;
 
+	private CardFace cardFace;
 	private double cardScaleFactor;
 	private boolean randomPlacement;
 
@@ -72,10 +76,13 @@ class TrickPanel extends JPanel implements ComponentListener {
 	 * @param jskatBitmaps
 	 *            JSkat bitmaps
 	 */
-	TrickPanel(JSkatGraphicRepository jskatBitmaps, double newCardScaleFactor,
+	TrickPanel(double newCardScaleFactor,
 			boolean newRandomPlacement) {
 
-		bitmaps = jskatBitmaps;
+		bitmaps = JSkatGraphicRepository.instance();
+
+		cardFace = options.getCardFace();
+
 		scaledCardImages = new HashMap<Card, Image>();
 		cardScaleFactor = newCardScaleFactor;
 		randomPlacement = newRandomPlacement;
@@ -137,7 +144,14 @@ class TrickPanel extends JPanel implements ComponentListener {
 	 * @see JPanel#paintComponent(Graphics)
 	 */
 	@Override
-	protected void paintComponent(Graphics g) {
+	protected synchronized void paintComponent(Graphics g) {
+
+		super.paintComponent(g);
+
+		if (isNewCardFace()) {
+			cardFace = options.getCardFace();
+			scaleImages();
+		}
 
 		int panelWidth = getWidth();
 		int panelHeight = getHeight();
@@ -193,6 +207,10 @@ class TrickPanel extends JPanel implements ComponentListener {
 
 			g2D.drawImage(image, transform, this);
 		}
+	}
+
+	boolean isNewCardFace() {
+		return !cardFace.equals(options.getCardFace());
 	}
 
 	void setUserPosition(Player newUserPosition) {
