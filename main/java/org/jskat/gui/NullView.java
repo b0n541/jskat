@@ -575,8 +575,7 @@ public class NullView implements IJSkatView {
 			@SuppressWarnings("unused") long episodes,
 			@SuppressWarnings("unused") long totalWonGames,
 			@SuppressWarnings("unused") long episodeWonGames,
-			@SuppressWarnings("unused") double totalDeclarerNetError,
-			@SuppressWarnings("unused") double totalOpponentNetError) {
+			@SuppressWarnings("unused") double avgDifference) {
 		// empty method by indent
 	}
 

@@ -243,7 +243,8 @@ public interface IJSkatView {
 	 *            TRUE, if the player made the bid, FALSE if the player hold the
 	 *            bid
 	 */
-	public void setBid(String tableName, Player player, int bidValue, boolean madeBid);
+	public void setBid(String tableName, Player player, int bidValue,
+			boolean madeBid);
 
 	/**
 	 * Sets the pass bid for a player
@@ -267,7 +268,8 @@ public interface IJSkatView {
 	 * @param playerPosition
 	 *            Player in lower position
 	 */
-	public void setPositions(String tableName, Player leftPosition, Player rightPosition, Player playerPosition);
+	public void setPositions(String tableName, Player leftPosition,
+			Player rightPosition, Player playerPosition);
 
 	/**
 	 * Adds a card to the trick
@@ -295,8 +297,8 @@ public interface IJSkatView {
 	 * @param rearHandCard
 	 *            Card from hind hand
 	 */
-	public void setLastTrick(String tableName, Player trickForeHand, Card foreHandCard, Card middleHandCard,
-			Card rearHandCard);
+	public void setLastTrick(String tableName, Player trickForeHand,
+			Card foreHandCard, Card middleHandCard, Card rearHandCard);
 
 	/**
 	 * Clears the cards of the trick
@@ -328,7 +330,8 @@ public interface IJSkatView {
 	 * @param ann
 	 *            Game announcement
 	 */
-	public void setGameAnnouncement(String tableName, Player declarer, GameAnnouncement ann);
+	public void setGameAnnouncement(String tableName, Player declarer,
+			GameAnnouncement ann);
 
 	/**
 	 * Set a new game state
@@ -445,7 +448,8 @@ public interface IJSkatView {
 	 * @param strength
 	 *            Playing strength after ISS evaluation
 	 */
-	public void updateISSLobbyPlayerList(String playerName, String language, long gamesPlayed, double strength);
+	public void updateISSLobbyPlayerList(String playerName, String language,
+			long gamesPlayed, double strength);
 
 	/**
 	 * Removes a client from the list of the ISS lobby
@@ -471,8 +475,8 @@ public interface IJSkatView {
 	 * @param player3
 	 *            Player 3 (? for free seat)
 	 */
-	public void updateISSLobbyTableList(String tableName, int maxPlayers, long gamesPlayed, String player1,
-			String player2, String player3);
+	public void updateISSLobbyTableList(String tableName, int maxPlayers,
+			long gamesPlayed, String player1, String player2, String player3);
 
 	/**
 	 * Removes a table from the table list of the ISS lobby
@@ -489,7 +493,8 @@ public interface IJSkatView {
 	 * @param message
 	 *            Message
 	 */
-	public void appendISSChatMessage(ChatMessageType messageType, ChatMessage message);
+	public void appendISSChatMessage(ChatMessageType messageType,
+			ChatMessage message);
 
 	/**
 	 * Updates an ISS table
@@ -511,7 +516,8 @@ public interface IJSkatView {
 	 * @param status
 	 *            New game state
 	 */
-	public void updateISSTable(String tableName, String loginName, GameStartInformation status);
+	public void updateISSTable(String tableName, String loginName,
+			GameStartInformation status);
 
 	/**
 	 * Updates move information
@@ -523,7 +529,8 @@ public interface IJSkatView {
 	 * @param moveInformation
 	 *            Move information
 	 */
-	public void updateISSMove(String tableName, SkatGameData gameData, MoveInformation moveInformation);
+	public void updateISSMove(String tableName, SkatGameData gameData,
+			MoveInformation moveInformation);
 
 	/**
 	 * Sets the resigning flag of a player
@@ -608,13 +615,11 @@ public interface IJSkatView {
 	 *            Total number of won games
 	 * @param episodeWonGames
 	 *            Number of games won in last episode
-	 * @param totalDeclarerNetError
-	 *            Total error in declarer net
-	 * @param totalOpponentNetError
-	 *            Total error in opponent net
+	 * @param avgDifference
+	 *            Average difference
 	 */
-	public void addTrainingResult(GameType gameType, long episodes, long totalWonGames, long episodeWonGames,
-			double totalDeclarerNetError, double totalOpponentNetError);
+	public void addTrainingResult(GameType gameType, long episodes,
+			long totalWonGames, long episodeWonGames, double avgDifference);
 
 	/**
 	 * Sets the game number of the current game
@@ -638,8 +643,8 @@ public interface IJSkatView {
 	 * @param playerName3
 	 *            Name of lower player
 	 */
-	public void setPlayerNames(String tableName, String upperLeftPlayerName, String upperRightPlayerName,
-			String lowerPlayerName);
+	public void setPlayerNames(String tableName, String upperLeftPlayerName,
+			String upperRightPlayerName, String lowerPlayerName);
 
 	/**
 	 * Sets the declarer player of the table

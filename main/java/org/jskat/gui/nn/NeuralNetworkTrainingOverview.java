@@ -82,16 +82,15 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 	 *            Total Number of won games
 	 * @param episodeWonGames
 	 *            Number of won games in last episode
-	 * @param totalDeclarerNetError
-	 *            Total error in declarer net
-	 * @param totalOpponentNetError
-	 *            Total error in opponent net
+	 * @param avgDifference
+	 *            Average difference
 	 */
-	public void addTrainingResult(GameType gameType, Long episodes, Long totalWonGames, Long episodeWonGames,
-			Double totalDeclarerNetError, Double totalOpponentNetError) {
+	public void addTrainingResult(GameType gameType, Long episodes,
+			Long totalWonGames, Long episodeWonGames, Double avgDifference) {
 
-		((TrainingOverviewTableModel) overviewTable.getModel()).addTrainingResult(gameType, episodes, totalWonGames,
-				episodeWonGames, totalDeclarerNetError, totalOpponentNetError);
+		((TrainingOverviewTableModel) overviewTable.getModel())
+				.addTrainingResult(gameType, episodes, totalWonGames,
+						episodeWonGames, avgDifference);
 	}
 
 	private class TrainingOverviewTableModel extends AbstractTableModel {
@@ -161,13 +160,11 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 		 *            Total number of won games
 		 * @param episodeWonGames
 		 *            Number of won games in last episode
-		 * @param totalDeclarerNetError
-		 *            Total error in declarer net
-		 * @param totalOpponentNetError
-		 *            Total error in opponent net
+		 * @param avgDifference
+		 *            Average Difference
 		 */
-		public void addTrainingResult(GameType gameType, Long episodes, Long totalWonGames, Long episodeWonGames,
-				Double totalDeclarerNetError, Double totalOpponentNetError) {
+		public void addTrainingResult(GameType gameType, Long episodes,
+				Long totalWonGames, Long episodeWonGames, Double avgDifference) {
 
 			TableModel tableModel = overviewTable.getModel();
 
@@ -175,8 +172,7 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 			tableModel.setValueAt(episodes, gameType.ordinal(), 1);
 			tableModel.setValueAt(totalWonGames, gameType.ordinal(), 2);
 			tableModel.setValueAt(episodeWonGames, gameType.ordinal(), 3);
-			tableModel.setValueAt(totalDeclarerNetError, gameType.ordinal(), 4);
-			tableModel.setValueAt(totalOpponentNetError, gameType.ordinal(), 5);
+			tableModel.setValueAt(avgDifference, gameType.ordinal(), 4);
 
 			fireTableDataChanged();
 		}

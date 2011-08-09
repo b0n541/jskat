@@ -748,16 +748,13 @@ public class JSkatMaster {
 	 *            Total number of won games
 	 * @param episodeWonGames
 	 *            Number of won games in last episode
-	 * @param totalDeclarerNetError
-	 *            Total error in declarer net
-	 * @param totalOpponentNetError
-	 *            Total error in opponent net
+	 * @param avgDifference
+	 *            Average difference
 	 */
 	public void addTrainingResult(GameType gameType, long episodes,
-			long totalWonGames, long episodeWonGames,
-			double totalDeclarerNetError, double totalOpponentNetError) {
+			long totalWonGames, long episodeWonGames, double avgDifference) {
 
 		view.addTrainingResult(gameType, episodes, totalWonGames,
-				episodeWonGames, totalDeclarerNetError, totalOpponentNetError);
+				episodeWonGames, avgDifference);
 	}
 }
