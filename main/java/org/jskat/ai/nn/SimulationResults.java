@@ -20,6 +20,7 @@
  */
 package org.jskat.ai.nn;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,15 +31,19 @@ import org.jskat.util.GameType;
  */
 public class SimulationResults {
 
-	private Map<GameType, Integer> wonGames = new HashMap<GameType, Integer>();
+	private Map<GameType, Double> wonRates = new HashMap<GameType, Double>();
 
-	public Integer getWonGames(GameType gameType) {
+	Double getWonRate(GameType gameType) {
 
-		return wonGames.get(gameType);
+		return wonRates.get(gameType);
 	}
 
-	public void setWonGames(GameType gameType, Integer numberOfWonGames) {
+	void setWonRate(GameType gameType, Double wonRate) {
 
-		wonGames.put(gameType, numberOfWonGames);
+		wonRates.put(gameType, wonRate);
+	}
+
+	Collection<Double> getAllWonRates() {
+		return wonRates.values();
 	}
 }

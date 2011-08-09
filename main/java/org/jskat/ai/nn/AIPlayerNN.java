@@ -33,10 +33,8 @@ import org.jskat.ai.nn.util.NeuralNetwork;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData;
-import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatGameResult;
 import org.jskat.util.Card;
-import org.jskat.util.CardDeck;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
@@ -52,6 +50,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 	private static Log log = LogFactory.getLog(AIPlayerNN.class);
 
+	private GameSimulator gameSimulator;
+
 	private Random rand;
 	private List<double[]> allInputs;
 
@@ -59,7 +59,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 	private List<GameType> feasibleGameTypes;
 
-	private static int MAX_SIMULATIONS = 100;
+	private static long MAX_SIMULATIONS = 100;
 
 	/**
 	 * Constructor
@@ -79,6 +79,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		log.debug("Constructing new AIPlayerNN"); //$NON-NLS-1$
 		setPlayerName(newPlayerName);
+
+		gameSimulator = new GameSimulator();
 
 		allInputs = new ArrayList<double[]>();
 
@@ -128,23 +130,19 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 	private boolean isAnyGamePossible(int bidValue) {
 
-		boolean result = false;
-
 		List<GameType> filteredGameTypes = filterFeasibleGameTypes(bidValue);
 
-		for (GameType gameType : filteredGameTypes) {
+		gameSimulator.resetGameSimulator(filteredGameTypes,
+				knowledge.getPlayerPosition(), knowledge.getMyCards());
+		SimulationResults results = gameSimulator.simulateMaxEpisodes(Long
+				.valueOf(MAX_SIMULATIONS));
 
-			int gamesToSimulate = MAX_SIMULATIONS;
-			int wonGames = simulateGames(knowledge.getMyCards(), gameType,
-					gamesToSimulate);
-			double wonRate = (double) wonGames / (double) gamesToSimulate;
-
-			if (wonRate > 0.5) {
-
-				result = true;
+		for (Double wonRate : results.getAllWonRates()) {
+			if (wonRate.doubleValue() > 0.5) {
+				return true;
 			}
 		}
-		return result;
+		return false;
 	}
 
 	private List<GameType> filterFeasibleGameTypes(int bidValue) {
@@ -160,9 +158,9 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			data.setAnnouncement(factory.getAnnouncement());
 
 			BasicSkatRules skatRules = SkatRuleFactory.getSkatRules(gameType);
-			int gameResult = skatRules.calcGameResult(data);
+			int currGameResult = skatRules.calcGameResult(data);
 
-			if (gameResult >= bidValue) {
+			if (currGameResult >= bidValue) {
 
 				result.add(gameType);
 			}
@@ -214,22 +212,24 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	private GameType getBestGameType() {
 
 		// FIXME (jan 18.01.2011) check for overbidding!
-		SimulationResults simulationResults = simulateGames(
-				knowledge.getMyCards(), MAX_SIMULATIONS);
 		GameType bestGameType = null;
-		int highestWonGames = -1;
+		double highestWonRate = 0.0;
+
+		gameSimulator.resetGameSimulator(feasibleGameTypes,
+				knowledge.getPlayerPosition(), knowledge.getMyCards());
+		SimulationResults results = gameSimulator.simulateMaxEpisodes(Long
+				.valueOf(MAX_SIMULATIONS));
 
 		for (GameType gameType : feasibleGameTypes) {
 
-			int currWonGames = simulationResults.getWonGames(gameType)
-					.intValue();
+			Double wonRate = results.getWonRate(gameType);
 
-			if (currWonGames > highestWonGames) {
+			if (wonRate.doubleValue() > highestWonRate) {
 
 				log.debug("Found new highest number of won games " //$NON-NLS-1$
-						+ currWonGames + " for game type " + gameType); //$NON-NLS-1$
+						+ wonRate + " for game type " + gameType); //$NON-NLS-1$
 
-				highestWonGames = currWonGames;
+				highestWonRate = wonRate;
 				bestGameType = gameType;
 			}
 
@@ -237,89 +237,10 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 				log.error("No best game type found. Announcing grand!!!"); //$NON-NLS-1$
 				bestGameType = GameType.GRAND;
-
 			}
 		}
 
 		return bestGameType;
-	}
-
-	private SimulationResults simulateGames(CardList playerCards,
-			int numberOfSimulations) {
-
-		// FIXME (jan 18.01.2011) make number of simulated games time dependent
-		SimulationResults result = new SimulationResults();
-
-		// FIXME (jan 18.01.2011) parallelize this process
-		for (GameType gameType : feasibleGameTypes) {
-
-			log.debug("Getting number of won games for game type: " //$NON-NLS-1$
-					+ gameType);
-
-			int currWonGames = simulateGames(playerCards, gameType,
-					numberOfSimulations);
-			result.setWonGames(gameType, Integer.valueOf(currWonGames));
-
-			log.debug("Number of won games is: " + currWonGames); //$NON-NLS-1$
-		}
-
-		return result;
-	}
-
-	private int simulateGames(CardList playerCards, GameType gameType,
-			int episodes) {
-
-		int wonGames = 0;
-
-		for (int i = 0; i < episodes; i++) {
-
-			if (simulateGame(playerCards, gameType)) {
-				wonGames++;
-			}
-		}
-
-		return wonGames;
-	}
-
-	private boolean simulateGame(CardList playerCards, GameType gameType) {
-
-		AIPlayerNN nnPlayer1 = new AIPlayerNN();
-		nnPlayer1.setIsLearning(false);
-		AIPlayerNN nnPlayer2 = new AIPlayerNN();
-		nnPlayer2.setIsLearning(false);
-		AIPlayerNN nnPlayer3 = new AIPlayerNN();
-		nnPlayer3.setIsLearning(false);
-
-		SimpleSkatGame game = new SimpleSkatGame(nnPlayer1, nnPlayer2,
-				nnPlayer3);
-
-		CardDeck deck = CardDeckSimulator.simulateUnknownCards(
-				knowledge.getPlayerPosition(), playerCards);
-		log.debug("Card deck: " + deck); //$NON-NLS-1$
-		game.setCardDeck(deck);
-		game.dealCards();
-
-		game.setSinglePlayer(knowledge.getPlayerPosition());
-
-		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-		factory.setGameType(gameType);
-		game.setGameAnnouncement(factory.getAnnouncement());
-
-		game.setGameState(GameState.TRICK_PLAYING);
-
-		game.start();
-		try {
-			game.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		// FIXME (jansch 28.06.2011) have to call getGameResult() for result
-		// calculation
-		game.getGameResult();
-
-		return game.isGameWon();
 	}
 
 	/**
@@ -330,16 +251,14 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		boolean result = true;
 
-		int gamesToSimulate = MAX_SIMULATIONS;
-		SimulationResults simResult = simulateGames(knowledge.getMyCards(),
-				gamesToSimulate);
+		gameSimulator.resetGameSimulator(feasibleGameTypes,
+				knowledge.getPlayerPosition(), knowledge.getMyCards());
+		SimulationResults results = gameSimulator.simulateMaxEpisodes(Long
+				.valueOf(MAX_SIMULATIONS));
 
-		for (GameType gameType : feasibleGameTypes) {
+		for (Double wonRate : results.getAllWonRates()) {
 
-			int wonGames = simResult.getWonGames(gameType).intValue();
-			double wonRate = (double) wonGames / (double) gamesToSimulate;
-
-			if (wonRate > 0.9) {
+			if (wonRate.doubleValue() > 0.9) {
 
 				result = false;
 			}
@@ -356,13 +275,15 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		CardList cards = knowledge.getMyCards();
 		CardList result = new CardList();
-		int highestNumberOfWonGames = 0;
+		double highestWonRate = 0.0;
 
 		log.debug("Player cards before discarding: " + knowledge.getMyCards()); //$NON-NLS-1$
 
+		List<GameType> filteredGameTypes = filterFeasibleGameTypes(knowledge
+				.getHighestBid(knowledge.getPlayerPosition()).intValue());
+
 		// check all possible discards
 		for (int i = 0; i < cards.size(); i++) {
-
 			for (int j = 0; j < cards.size() - 1; j++) {
 
 				CardList simCards = new CardList();
@@ -372,15 +293,16 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 				currSkat.add(simCards.remove(i));
 				currSkat.add(simCards.remove(j));
 
-				for (GameType gameType : filterFeasibleGameTypes(knowledge
-						.getHighestBid(knowledge.getPlayerPosition()))) {
+				gameSimulator.resetGameSimulator(filteredGameTypes,
+						knowledge.getPlayerPosition(), simCards);
+				SimulationResults results = gameSimulator
+						.simulateMaxEpisodes(Long.valueOf(MAX_SIMULATIONS / 10));
 
-					int wonGames = simulateGames(simCards, gameType,
-							MAX_SIMULATIONS / 10);
+				for (Double wonRate : results.getAllWonRates()) {
 
-					if (wonGames > highestNumberOfWonGames) {
+					if (wonRate.doubleValue() > highestWonRate) {
 
-						highestNumberOfWonGames = wonGames;
+						highestWonRate = wonRate.doubleValue();
 						result.clear();
 						result.addAll(currSkat);
 					}

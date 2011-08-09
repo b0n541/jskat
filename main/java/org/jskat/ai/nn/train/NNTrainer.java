@@ -192,10 +192,7 @@ public class NNTrainer extends JSkatThread {
 				//						+ " total network error"); //$NON-NLS-1$
 
 				jskat.addTrainingResult(gameType, episodes, totalWonGames,
-						episodesWonGames,
-						// declarerLearning.getTotalNetworkError(),
-						// opponentLearning.getTotalNetworkError());
-						0.0, 0.0);
+						episodesWonGames, 0.0);
 
 				episodesWonGames = 0;
 			}
