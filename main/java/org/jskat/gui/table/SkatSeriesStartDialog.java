@@ -100,7 +100,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
 		ArrayList<PlayerType> playerTypes = new ArrayList<PlayerType>();
 
-		// playerTypes.add(PlayerType.NEW_ALGORITHMIC);
+		playerTypes.add(PlayerType.NEW_ALGORITHMIC);
 		playerTypes.add(PlayerType.RANDOM);
 		playerTypes.add(PlayerType.NEURAL_NETWORK);
 		playerTypes.add(PlayerType.ALGORITHMIC);
