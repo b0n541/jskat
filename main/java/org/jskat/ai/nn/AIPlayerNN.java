@@ -296,7 +296,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 				gameSimulator.resetGameSimulator(filteredGameTypes,
 						knowledge.getPlayerPosition(), simCards);
 				SimulationResults results = gameSimulator
-						.simulateMaxEpisodes(Long.valueOf(MAX_SIMULATIONS / 10));
+						.simulateMaxEpisodes(Long.valueOf(MAX_SIMULATIONS / 5));
 
 				for (Double wonRate : results.getAllWonRates()) {
 
