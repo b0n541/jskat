@@ -141,6 +141,7 @@ public class MessageParserTest extends AbstractJSkatTest {
 	/**
 	 * Tests the resigning of a player
 	 */
+	@Test
 	public void testParseTableUpdatePlayerResign() {
 
 		String playerResign = "table .4 foo play 1 RE 124.1 173.9 177.8"; //$NON-NLS-1$
@@ -164,6 +165,7 @@ public class MessageParserTest extends AbstractJSkatTest {
 	/**
 	 * Tests showing cards
 	 */
+	@Test
 	public void testParseTableUpdatePlayerShowCards() {
 
 		String playerResign = "table .3 foo play 2 SC.HT.HA.SJ.SQ.SK.CJ 164.1 177.0 156.4"; //$NON-NLS-1$
