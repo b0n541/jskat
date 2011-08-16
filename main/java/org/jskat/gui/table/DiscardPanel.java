@@ -50,36 +50,33 @@ class DiscardPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	JSkatGraphicRepository bitmaps;
-	JSkatResourceBundle strings;
+	private JSkatGraphicRepository bitmaps;
+	private JSkatResourceBundle strings;
 
 	private Action pickUpSkatAction;
-	JButton pickUpSkatButton;
-	boolean userPickedUpSkat = false;
+	private JButton pickUpSkatButton;
+	private boolean userPickedUpSkat = false;
 
-	int maxCardCount = 0;
+	private int maxCardCount = 0;
 
-	CardPanel cardPanel;
+	private CardPanel cardPanel;
+
+	private GameAnnouncePanel announcePanel;
 
 	/**
 	 * Constructor
 	 * 
 	 * @param actions
 	 *            Actions for discarding panel
-	 * @param jskatBitmaps
-	 *            Bitmaps
-	 * @param newStrings
-	 *            i18n strings
 	 * @param newMaxCardCount
 	 *            Maximum number of cards
 	 */
-	public DiscardPanel(ActionMap actions, JSkatGraphicRepository jskatBitmaps,
-			int newMaxCardCount) {
+	public DiscardPanel(ActionMap actions, int newMaxCardCount) {
 
 		strings = JSkatResourceBundle.instance();
+		bitmaps = JSkatGraphicRepository.instance();
 
 		setActionMap(actions);
-		bitmaps = jskatBitmaps;
 		maxCardCount = newMaxCardCount;
 
 		initPanel();
@@ -102,6 +99,7 @@ class DiscardPanel extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 
 				userPickedUpSkat = true;
+				announcePanel.setUserPickedUpSkat(true);
 				DiscardPanel.this.showPanel(CARD_PANEL);
 
 				// fire event again
@@ -160,5 +158,14 @@ class DiscardPanel extends JPanel {
 	public boolean isHandFull() {
 
 		return cardPanel.getCardCount() == maxCardCount;
+	}
+
+	boolean isUserPickedUpSkat() {
+		return userPickedUpSkat;
+	}
+
+	void setAnnouncePanel(GameAnnouncePanel announcePanel) {
+
+		this.announcePanel = announcePanel;
 	}
 }

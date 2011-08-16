@@ -56,6 +56,7 @@ class GameAnnouncePanel extends JPanel {
 	JSkatOptions options;
 
 	JComboBox gameTypeList = null;
+	JCheckBox handBox = null;
 	JCheckBox ouvertBox = null;
 	JCheckBox schneiderBox = null;
 	JCheckBox schwarzBox = null;
@@ -68,10 +69,15 @@ class GameAnnouncePanel extends JPanel {
 	 * 
 	 * @param actions
 	 *            Action map
+	 * @param userPanel
+	 *            User panel
+	 * @param discardPanel
+	 *            Discard panel
 	 */
-	GameAnnouncePanel(ActionMap actions, JSkatUserPanel newUserPanel) {
+	GameAnnouncePanel(ActionMap actions, JSkatUserPanel userPanel,
+			DiscardPanel discardPanel) {
 
-		this(actions, newUserPanel, null);
+		this(actions, userPanel, discardPanel, Boolean.FALSE);
 	}
 
 	/**
@@ -79,21 +85,25 @@ class GameAnnouncePanel extends JPanel {
 	 * 
 	 * @param actions
 	 *            Action map
+	 * @param userPanel
+	 *            User panel
+	 * @param discardPanel
+	 *            Discard panel
+	 * @param showAnnounceButton
+	 *            TRUE, if the announce button should be shown
 	 */
-	GameAnnouncePanel(ActionMap actions, JSkatUserPanel newUserPanel,
-			DiscardPanel newDiscardPanel) {
+	GameAnnouncePanel(ActionMap actions, JSkatUserPanel userPanel,
+			DiscardPanel discardPanel, Boolean showAnnounceButton) {
 
 		strings = JSkatResourceBundle.instance();
-		userPanel = newUserPanel;
+		this.userPanel = userPanel;
+		this.discardPanel = discardPanel;
 
-		if (newDiscardPanel != null) {
-			discardPanel = newDiscardPanel;
-		}
-
-		initPanel(actions);
+		initPanel(actions, showAnnounceButton);
 	}
 
-	private void initPanel(final ActionMap actions) {
+	private void initPanel(final ActionMap actions,
+			final Boolean showAnnounceButton) {
 
 		this.setLayout(new MigLayout("fill")); //$NON-NLS-1$
 
@@ -123,20 +133,23 @@ class GameAnnouncePanel extends JPanel {
 		});
 		this.gameTypeList.setSelectedIndex(-1);
 
+		handBox = new JCheckBox(strings.getString("hand")); //$NON-NLS-1$
+		handBox.setEnabled(false);
 		this.ouvertBox = new JCheckBox(strings.getString("ouvert")); //$NON-NLS-1$
 		this.schneiderBox = new JCheckBox(strings.getString("schneider")); //$NON-NLS-1$
 		this.schwarzBox = new JCheckBox(strings.getString("schwarz")); //$NON-NLS-1$
 
 		panel.add(this.gameTypeList, "grow, wrap"); //$NON-NLS-1$
+		panel.add(handBox, "wrap"); //$NON-NLS-1$
 		panel.add(this.ouvertBox, "wrap"); //$NON-NLS-1$
 		panel.add(this.schneiderBox, "wrap"); //$NON-NLS-1$
 		panel.add(this.schwarzBox, "wrap"); //$NON-NLS-1$
 
-		if (discardPanel != null) {
+		if (showAnnounceButton.booleanValue()) {
 
-			final JButton playButton = new JButton(
+			final JButton announceButton = new JButton(
 					actions.get(JSkatAction.ANNOUNCE_GAME));
-			playButton.addActionListener(new ActionListener() {
+			announceButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 
@@ -147,7 +160,7 @@ class GameAnnouncePanel extends JPanel {
 
 							e.setSource(ann);
 							// fire event again
-							playButton.dispatchEvent(e);
+							announceButton.dispatchEvent(e);
 						} catch (IllegalArgumentException except) {
 							log.error(except.getMessage());
 						}
@@ -157,9 +170,11 @@ class GameAnnouncePanel extends JPanel {
 				private GameAnnouncement getGameAnnouncement() {
 					GameAnnouncementFactory factory = GameAnnouncement
 							.getFactory();
-					factory.setGameType(getGameTypeFromSelectedItem());
+					GameType gameType = getGameTypeFromSelectedItem();
+					factory.setGameType(gameType);
 
 					if (discardPanel.isUserLookedIntoSkat()) {
+
 						CardList discardedCards = discardPanel
 								.getDiscardedCards();
 						if (discardedCards.size() != 2) {
@@ -170,9 +185,16 @@ class GameAnnouncePanel extends JPanel {
 									JOptionPane.ERROR_MESSAGE);
 						}
 						factory.setDiscardedCards(discardedCards);
-					} else {
-						factory.setHand(Boolean.TRUE);
 
+						if (GameType.NULL.equals(gameType)
+								&& ouvertBox.isSelected()) {
+							factory.setOuvert(true);
+						}
+					} else {
+
+						if (handBox.isSelected()) {
+							factory.setHand(Boolean.TRUE);
+						}
 						if (ouvertBox.isSelected()) {
 							factory.setOuvert(Boolean.TRUE);
 						}
@@ -192,7 +214,7 @@ class GameAnnouncePanel extends JPanel {
 					return (GameType) selectedItem;
 				}
 			});
-			panel.add(playButton);
+			panel.add(announceButton);
 		}
 
 		this.add(panel, "center"); //$NON-NLS-1$
@@ -205,6 +227,7 @@ class GameAnnouncePanel extends JPanel {
 	void resetPanel() {
 
 		this.gameTypeList.setSelectedIndex(-1);
+		handBox.setSelected(true);
 		this.ouvertBox.setSelected(false);
 		this.schneiderBox.setSelected(false);
 		this.schwarzBox.setSelected(false);
@@ -230,6 +253,15 @@ class GameAnnouncePanel extends JPanel {
 			}
 
 			return result;
+		}
+	}
+
+	void setUserPickedUpSkat(boolean isUserPickedUpSkat) {
+
+		if (isUserPickedUpSkat) {
+			handBox.setSelected(false);
+		} else {
+			handBox.setSelected(true);
 		}
 	}
 }

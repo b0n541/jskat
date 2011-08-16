@@ -49,12 +49,13 @@ class DeclaringContextPanel extends JPanel {
 		blankPanel.setOpaque(false);
 		add(blankPanel, "width 25%"); //$NON-NLS-1$
 
-		discardPanel = new DiscardPanel(actions, jskatBitmaps, 4);
+		discardPanel = new DiscardPanel(actions, 4);
 		add(discardPanel, "grow"); //$NON-NLS-1$
 
 		announcePanel = new GameAnnouncePanel(actions, newUserPanel,
-				discardPanel);
+				discardPanel, Boolean.TRUE);
 		add(announcePanel, "width 25%"); //$NON-NLS-1$
+		discardPanel.setAnnouncePanel(announcePanel);
 
 		setOpaque(false);
 

@@ -76,7 +76,7 @@ class BiddingContextPanel extends JPanel {
 		biddingPanel.setOpaque(false);
 		add(biddingPanel, "grow"); //$NON-NLS-1$
 
-		announcePanel = new GameAnnouncePanel(actions, userPanel);
+		announcePanel = new GameAnnouncePanel(actions, userPanel, null);
 		add(announcePanel, "width 25%"); //$NON-NLS-1$
 
 		setOpaque(false);
