@@ -83,7 +83,11 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer  {
 		CardList cards = knowledge.getMyCards();
 		if(cards.get(0).getRank()!=Rank.JACK) {
 			Card c = cards.get(cards.getLastIndexOfSuit(knowledge.getGameType().asSuit(), true));
-			if(c==null) c = cards.get(0);
+			if(c==null) {
+				// should not happen - if there is no jack, there should be at least one trump suit card
+				// just to make sure that a card is played
+				c = cards.get(0);
+			}
 			return c;
 		}
 		// from here onwards: first card must be a jack
@@ -146,7 +150,8 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer  {
 
 	private Card playMiddlehandCard() {
 		log.debug("Single player is in middlehand");
-		// fallback: take the first valid card
+		// TODO (mjl 23.08.2011) single player middlehand card
+		// fallback: take the first valid card (which is a trump, if there still is one)
 		CardList cards = knowledge.getMyCards();
 		for(Card c: cards) {
 			if(c.isAllowed(knowledge.getGameType(), knowledge.getTrickCards().isEmpty()?null:knowledge.getTrickCards().get(0), cards)) return c;
@@ -157,7 +162,8 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer  {
 	
 	private Card playRearhandCard() {
 		log.debug("Single player is in rearhand");
-		// fallback: take the first valid card
+		// TODO (mjl 23.08.2011) single player rearhand card
+		// fallback: take the first valid card (which is a trump, if there still is one)
 		CardList cards = knowledge.getMyCards();
 		for(Card c: cards) {
 			if(c.isAllowed(knowledge.getGameType(), knowledge.getTrickCards().isEmpty()?null:knowledge.getTrickCards().get(0), cards)) return c;

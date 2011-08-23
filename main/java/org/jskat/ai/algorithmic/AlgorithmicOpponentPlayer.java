@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import org.jskat.ai.PlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
+import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
@@ -71,8 +72,10 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 			// "kurzer Weg, lange Farbe"
 			Suit longSuit = cards.getMostFrequentSuit(knowledge.getGameType().asSuit());
 			if(cards.get(cards.getFirstIndexOfSuit(longSuit)).getRank()==Rank.ACE) {
+				log.debug("playCard (1)");
 				return cards.get(knowledge.getMyCards().getFirstIndexOfSuit(longSuit)); 
 			}
+			log.debug("playCard (2)");
 			return cards.get(knowledge.getMyCards().getLastIndexOfSuit(cards.getMostFrequentSuit()));
 		}
 		else if(knowledge.getDeclarer()==Player.REARHAND) {
@@ -89,15 +92,19 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 			}
 			if(shortSuit==null) {
 				log.warn("no short suit found: "+cards);
+				log.debug("playCard (3)");
 				return cards.get(cards.size()-1);
 			}
 			if(cards.get(cards.getFirstIndexOfSuit(shortSuit)).getRank()==Rank.ACE) {
+				log.debug("playCard (4)");
 				return cards.get(cards.getFirstIndexOfSuit(shortSuit)); 
 			}
+			log.debug("playCard (5)");
 			return cards.get(cards.getLastIndexOfSuit(shortSuit));
 		}
 		else {
 			log.warn(".openGame(): wrong declarer position: "+knowledge.getDeclarer());
+			log.debug("playCard (6)");
 			return cards.get(cards.size()-1);
 		}
 	}
@@ -106,6 +113,7 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 		CardList cards = knowledge.getMyCards();
 		for(Suit s: Suit.values()) {
 			if(!knowledge.couldHaveSuit(knowledge.getDeclarer(), s) && cards.hasSuit(knowledge.getGameType(), s)) {
+				log.debug("playCard (7)");
 				return cards.get(cards.getLastIndexOfSuit(s));
 			}
 		}
@@ -118,33 +126,110 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 		CardList cards = knowledge.getMyCards();
 		Card initialCard = knowledge.getTrickCards().get(0);
 		Card result = null;
+		GameType gameType = knowledge.getGameType();
 		if(knowledge.getDeclarer()==Player.FOREHAND) {
 			log.debug("Single player has already played a card");
 			for(Card c: cards) {
-				if(c.beats(knowledge.getGameType(), initialCard)) result = c;
+				if(c.beats(gameType, initialCard)) {
+					result = c;
+				}
 			}
-			if(result!=null) return result;
+			if(result!=null) {
+				// I can beat the single player's card - so I take it
+				log.debug("playCard (12)");
+				return result;
+			}
+			// I cannot beat the single player's card
+			if(initialCard.isTrump(gameType)) {
+				if(knowledge.couldHaveTrump(Player.REARHAND)) {
+					int cnt = 0;
+					for(Card c: Card.getBeatingCards(gameType, initialCard)) {
+						if(knowledge.couldHaveCard(Player.REARHAND, c)) {
+							cnt++;
+					}
+					}
+					if(cnt>1) {
+						for(Card c: cards) {
+							if(c.isAllowed(gameType, initialCard, cards)) {
+								if(result==null || c.getPoints()>result.getPoints()) {
+									result = c;
+								}
+							}
+						}
+						log.debug("playCard (14)");
+						return result;
+					}
+				}
+				result = cards.get(cards.getLastIndexOfSuit(knowledge.getTrumpSuit(), true));
+				if(result==null) {
+					for(Card c: cards) {
+						if(c.isAllowed(gameType, initialCard, cards)) {
+							result = c;
+						}
+					}
+				}
+				log.debug("playCard (15)");
+				return result;
+			}
+			else if(knowledge.couldHaveSuit(Player.REARHAND, initialCard.getSuit())) {
+				int cnt = 0;
+				for(Card c: Card.getBeatingCards(gameType, initialCard)) {
+					if(knowledge.couldHaveCard(Player.REARHAND, c)) {
+						cnt++;
+					}
+				}
+				if(cnt>0) {
+					result = cards.get(cards.getFirstIndexOfSuit(initialCard.getSuit(), false));
+				}
+				else {
+					result = cards.get(cards.getLastIndexOfSuit(initialCard.getSuit(), false));
+				}
+				if(result==null) {
+					for(Card c: cards) {
+						if(c.isAllowed(gameType, initialCard, cards)) {
+							result = c;
+						}
+					}
+				}
+				log.debug("playCard (13)");
+				return result;
+			}
+			if(knowledge.couldHaveTrump(Player.REARHAND)) {
+				result = cards.get(cards.getFirstIndexOfSuit(initialCard.getSuit(), false));
+			}
 		}
 		else {
 			log.debug("Single player is in rearhand");
 			if(knowledge.couldHaveSuit(knowledge.getDeclarer(), initialCard.getSuit())) {
-				if(initialCard.getRank()!=Rank.JACK && initialCard.getSuit()!=knowledge.getTrumpSuit() && cards.contains(Card.getCard(initialCard.getSuit(), Rank.ACE))) return Card.getCard(initialCard.getSuit(), Rank.ACE);
+				if(initialCard.getRank()!=Rank.JACK && initialCard.getSuit()!=knowledge.getTrumpSuit() && cards.contains(Card.getCard(initialCard.getSuit(), Rank.ACE))) {
+					log.debug("playCard (11)");
+					return Card.getCard(initialCard.getSuit(), Rank.ACE);
+				}
 			}
 			else {
 				// if the single player doesn't have that suit: take the lowest one
 				result = cards.get(cards.getLastIndexOfSuit(initialCard.getSuit()));
-				if(result!=null) return result;
+				if(result!=null) {
+					log.debug("playCard (10)");
+					return result;
+				}
 				if(knowledge.couldHaveTrump(knowledge.getDeclarer())) {
 				}
 			}
 		}
 		
-		
+		// fallback: get last valid card
 		for(Card c: cards) {
-			if(c.isAllowed(knowledge.getGameType(), knowledge.getTrickCards().isEmpty()?null:knowledge.getTrickCards().get(0), cards)) result = c;
+			if(c.isAllowed(gameType, initialCard, cards)) {
+				result = c;
+			}
 		}
-		if(result!=null) return result;
-		log.warn("no possible card found in card list ["+cards+"] with "+knowledge.getGameType()+" / "+knowledge.getTrickCards().get(0));
+		if(result!=null) {
+			log.debug("playCard (8)");
+			return result;
+		}
+		log.warn("no possible card found in card list ["+cards+"] with "+gameType+" / "+initialCard);
+		log.debug("playCard (9)");
 		return cards.get(0);
 	}
 	
