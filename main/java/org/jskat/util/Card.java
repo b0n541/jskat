@@ -310,6 +310,25 @@ public enum Card {
 	}
 
 	/**
+	 * Creates a list of all cards that would beat the given card under the current game
+	 * type and trump color with respect to the initial card on the table
+	 * 
+	 * @param gameType
+	 *            Game type
+	 * @param cardToBeat
+	 *            Card to beat
+	 * @return a CardList with all the cards that would beat the initial card
+	 */
+	public static CardList getBeatingCards(GameType gameType, Card cardToBeat) {
+		// TODO (mjl 23.08.2011) write unit tests for Card.getBeatingCards()
+		CardList beatingCards = new CardList();
+		for(Card card: Card.values()) {
+			if(card.beats(gameType, cardToBeat)) beatingCards.add(card);
+		}
+		return beatingCards;
+	}
+	
+	/**
 	 * Gets a card from a string
 	 * 
 	 * @param cardAsString
