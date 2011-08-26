@@ -130,7 +130,7 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 		if(knowledge.getDeclarer()==Player.FOREHAND) {
 			log.debug("Single player has already played a card");
 			for(Card c: cards) {
-				if(c.beats(gameType, initialCard)) {
+				if(c.beats(gameType, initialCard) && c.isAllowed(gameType, initialCard, cards)) {
 					result = c;
 				}
 			}
@@ -146,7 +146,7 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 					for(Card c: Card.getBeatingCards(gameType, initialCard)) {
 						if(knowledge.couldHaveCard(Player.REARHAND, c)) {
 							cnt++;
-					}
+						}
 					}
 					if(cnt>1) {
 						for(Card c: cards) {
