@@ -39,6 +39,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jskat.data.JSkatOptions;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
@@ -242,8 +243,10 @@ class CardPanel extends JPanel {
 	 */
 	void hideCards() {
 
-		showBackside = true;
-		repaint();
+		if (!JSkatOptions.instance().isShowCards()) {
+			showBackside = true;
+			repaint();
+		}
 	}
 
 	int getCardCount() {
