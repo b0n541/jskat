@@ -851,11 +851,16 @@ public class JSkatViewImpl implements IJSkatView {
 	 */
 	@Override
 	public String getNewTableName(int localTablesCreated) {
-
-		return JOptionPane.showInputDialog(mainFrame,
+		// get table name
+		String tableName = JOptionPane.showInputDialog(mainFrame,
 				strings.getString("new_table_dialog_message"), //$NON-NLS-1$
 				strings.getString("local_table") + " " //$NON-NLS-1$ //$NON-NLS-2$
 						+ (localTablesCreated + 1));
+		// truncate table name
+		if (tableName.length() > 100) {
+			tableName = tableName.substring(0, 100);
+		}
+		return tableName;
 	}
 
 	/**
