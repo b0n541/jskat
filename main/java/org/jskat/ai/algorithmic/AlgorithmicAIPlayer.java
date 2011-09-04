@@ -101,8 +101,18 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public Card playCard() {
-		log.debug("Trick #"+knowledge.getNoOfTricks()+" - "+playerName+" is playing a card ("+aiPlayer.getClass()+")");
-		return aiPlayer.playCard();
+		log.debug("-+-+-+-+-+-+-+-+-+- Trick #"+knowledge.getNoOfTricks()+" - "+playerName+" is playing a card of "+knowledge.getMyCards()+" ("+aiPlayer.getClass()+") -+-+-+-+-+-+-+-+-+-");
+		Card c = aiPlayer.playCard();
+		if(c!=null) {
+			return c;
+		}
+		log.warn("no card returned from AI player!");
+		if(knowledge.getTrickCards().size()<1) return knowledge.getMyCards().get(0);
+		for(Card c2: knowledge.getMyCards()) {
+			if( c2.isAllowed(knowledge.getGameType(), knowledge.getTrickCards().get(0), knowledge.getMyCards()))  return c2;
+		}
+		log.warn("no valid card found!");
+		return knowledge.getMyCards().get(0);
 	}
 
 	/* (non-Javadoc)

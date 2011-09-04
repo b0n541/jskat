@@ -22,12 +22,14 @@ package org.jskat.ai.algorithmic;
 
 import org.apache.log4j.Logger;
 import org.jskat.ai.PlayerKnowledge;
+import org.jskat.data.Trick;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
+import org.jskat.util.rule.SkatRuleFactory;
 
 /**
  * @author Markus J. Luzius <br>
@@ -54,6 +56,7 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 	 * @see org.jskat.ai.IJSkatPlayer#playCard()
 	 */
 	public Card playCard() {
+		if(knowledge.getMyCards().size()==1) return knowledge.getMyCards().get(0); 
 		if(knowledge.getTrickCards()==null || knowledge.getTrickCards().isEmpty()) {
 			if(knowledge.getNoOfTricks()<1) {
 				return openGame();
@@ -80,27 +83,50 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 		}
 		else if(knowledge.getDeclarer()==Player.REARHAND) {
 			// "langer Weg, kurze Farbe"
-			int minCount = 0;
-			Suit shortSuit = null;
-			for(Suit suit: Suit.values()) {
-				if(suit==knowledge.getGameType().asSuit()) continue;
-				int cardCount = cards.getSuitCount(suit, false);
-				if(cardCount>0 && cardCount<minCount) {
-					shortSuit = suit;
-					minCount = cardCount;
+			int minCount = 9;
+			Card result = null;
+			for(Card c: cards) {
+				if(result==null || result.isTrump(knowledge.getGameType())) {
+					result = c;
+					continue;
+				}
+				if(cards.getSuitCount(c.getSuit(), false)<minCount && !(cards.getSuitCount(c.getSuit(), false)==1 && c.getRank()==Rank.TEN)) {
+					result = c;
+					minCount = cards.getSuitCount(c.getSuit(), false);
+					continue;
+				}
+				if(cards.getSuitCount(c.getSuit(), false)==minCount && c.getRank()==Rank.ACE) {
+					result = c;
+					continue;
+				}
+				if(c.getSuit()==result.getSuit() && cards.getSuitCount(c.getSuit(), false)==minCount) {
+					result = c;
+					continue;
 				}
 			}
-			if(shortSuit==null) {
-				log.warn("no short suit found: "+cards);
-				log.debug("playCard (3)");
-				return cards.get(cards.size()-1);
-			}
-			if(cards.get(cards.getFirstIndexOfSuit(shortSuit)).getRank()==Rank.ACE) {
-				log.debug("playCard (4)");
-				return cards.get(cards.getFirstIndexOfSuit(shortSuit)); 
-			}
-			log.debug("playCard (5)");
-			return cards.get(cards.getLastIndexOfSuit(shortSuit));
+			return result;
+			
+			// xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+//			Suit shortSuit = null;
+//			for(Suit suit: Suit.values()) {
+//				if(suit==knowledge.getGameType().asSuit()) continue;
+//				int cardCount = cards.getSuitCount(suit, false);
+//				if(cardCount>0 && cardCount<minCount) {
+//					shortSuit = suit;
+//					minCount = cardCount;
+//				}
+//			}
+//			if(shortSuit==null) {
+//				log.warn("no short suit found: "+cards);
+//				log.debug("playCard (3)");
+//				return cards.get(cards.size()-1);
+//			}
+//			if(cards.get(cards.getFirstIndexOfSuit(shortSuit)).getRank()==Rank.ACE) {
+//				log.debug("playCard (4)");
+//				return cards.get(cards.getFirstIndexOfSuit(shortSuit)); 
+//			}
+//			log.debug("playCard (5)");
+//			return cards.get(cards.getLastIndexOfSuit(shortSuit));
 		}
 		else {
 			log.warn(".openGame(): wrong declarer position: "+knowledge.getDeclarer());
@@ -234,32 +260,155 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 	}
 	
 	private Card playRearhandCard() {
-		log.debug("Opponent player is in rearhand");
+		log.debug("I ("+myPlayer.getPlayerName()+") am in rearhand (OpponentPlayer)");
 		// fallback: take the first valid card
 		CardList cards = knowledge.getMyCards();
-		if(knowledge.getTrickCards().get(0).beats(knowledge.getGameType(), knowledge.getTrickCards().get(1))) {
+		Card initialCard = knowledge.getTrickCards().get(0);
+		GameType gameType = knowledge.getGameType();
+		Card result = null;
+
+		if(initialCard.beats(gameType, knowledge.getTrickCards().get(1))) {
 			// forehand win
-			if(knowledge.getDeclarer()==Player.FOREHAND) {
+			log.debug("forehand win - declarer="+knowledge.getDeclarer());
+			
+			if(knowledge.getDeclarer()==knowledge.getCurrentTrick().getForeHand()) {
 				// it's a single player win so far
+				log.debug("Single player is in forehand and has the trick so far");
+				boolean myTrick = false;
+				for(Card c: cards) {
+					if(!c.isAllowed(gameType, initialCard, cards)) continue;
+					if(result==null) {
+						result = c;
+						continue;
+					}
+					Trick tmpTrick = null;
+					try {
+						tmpTrick = (Trick) knowledge.getCurrentTrick().clone();
+					} catch (CloneNotSupportedException e) {
+						log.warn("should not happen: " + e.getClass() + " - " + e.getMessage());
+						for(Card c2: cards) {
+							if( c2.isAllowed(gameType, initialCard, cards) ) result = c;
+						}
+						return result;
+					}
+					tmpTrick.addCard(c);
+					if(SkatRuleFactory.getSkatRules(gameType).calculateTrickWinner(gameType, tmpTrick)!=knowledge.getDeclarer()) {
+						if(!myTrick) {
+							log.debug("I can take the trick with "+c);
+							result = c;
+							myTrick = true;
+						}
+						else if(c.getPoints()>=result.getPoints()) result = c;
+						continue;
+					}
+					else if(!myTrick && c.getPoints()<=result.getPoints()) result = c;
+				}
+
+				if(result!=null) return result;
+				for(Card c: cards) {
+					if( c.isAllowed(gameType, initialCard, cards) && (result==null || c.getPoints()<=result.getPoints()) ) result = c;
+				}
+				log.debug("playRearhandCard() (2)");
+				return result;
 			}
 			else {
 				// it's ours already
+				log.debug("it is ours (declarer in forehand)");
+				if(!initialCard.isTrump(gameType)) {
+					result = cards.get(cards.getFirstIndexOfSuit(initialCard.getSuit(), false));
+				}
+				else {
+					for(Card c: cards) {
+						if( c.isAllowed(gameType, initialCard, cards) && (result==null || c.getPoints()>result.getPoints() ) ) result = c;
+					}
+				}
+				if(result!=null) {
+					log.debug("playRearhandCard() (3)");
+					return result;
+				}
+				for(Card c: cards) {
+					if( c.isAllowed(gameType, initialCard, cards) && (result==null || (c.getPoints()>result.getPoints() && c.getRank()!=Rank.ACE)) ) result = c;
+				}
+				log.debug("playRearhandCard() (4)");
+				return result;
 			}
 		}
 		else {
 			// middlehand win
-			if(knowledge.getDeclarer()==Player.MIDDLEHAND) {
+			if(knowledge.getDeclarer()!=knowledge.getCurrentTrick().getForeHand()) {
+				log.debug("Single player is in middlehand and has the trick so far");
 				// it's a single player win so far
+				boolean myTrick = false;
+				for(Card c: cards) {
+					if(!c.isAllowed(gameType, initialCard, cards)) continue;
+					if(result==null) {
+						result = c;
+						continue;
+					}
+					Trick tmpTrick = null;
+					try {
+						tmpTrick = (Trick) knowledge.getCurrentTrick().clone();
+					} catch (CloneNotSupportedException e) {
+						log.warn("should not happen: " + e.getClass() + " - " + e.getMessage());
+						for(Card c2: cards) {
+							if( c2.isAllowed(gameType, initialCard, cards) ) result = c;
+						}
+						return result;
+					}
+					tmpTrick.addCard(c);
+					if(SkatRuleFactory.getSkatRules(gameType).calculateTrickWinner(gameType, tmpTrick)!=knowledge.getDeclarer()) {
+						if(!myTrick) {
+							log.debug("I can take the trick with "+c);
+							result = c;
+							myTrick = true;
+						}
+						else if(c.getPoints()>=result.getPoints()) result = c;
+						continue;
+					}
+					else if(!myTrick && c.getPoints()<=result.getPoints()) result = c;
+				}
+
 			}
 			else {
 				// it's ours already
+				log.debug("it is ours (declarer in middlehand)");
+				if(!initialCard.isTrump(gameType)) {
+					result = cards.get(cards.getFirstIndexOfSuit(initialCard.getSuit(), false));
+					if(result==null) {
+						// "schmieren"
+						for(Card c: cards) {
+							if( result==null ) result = c;
+							else if(result.isTrump(gameType) && (!c.isTrump(gameType) || c.getPoints()>=result.getPoints())) result = c;
+							else if(c.getRank()==Rank.ACE && !knowledge.couldHaveSuit(knowledge.getDeclarer(), c.getSuit())) result = c;
+							else if(c.getPoints()>result.getPoints()) result = c;
+						}
+						if(result!=null) {
+							log.debug("playRearhandCard() (9)");
+							return result;
+						}
+					}
+				}
+				else {
+					for(Card c: cards) {
+						if( c.isAllowed(gameType, initialCard, cards) && (result==null || c.getPoints()>result.getPoints() || result.getRank()==Rank.JACK) ) result = c;
+					}
+				}
+				if(result!=null) {
+					log.debug("playRearhandCard() (7)");
+					return result;
+				}
+				for(Card c: cards) {
+					if( c.isAllowed(gameType, initialCard, cards) && (result==null || (c.getPoints()>result.getPoints() && c.getRank()!=Rank.ACE)) ) result = c;
+				}
+				log.debug("playRearhandCard() (8)");
+				return result;
 			}
 		}
 		
-		
-		Card result = null;
+		log.debug("fallback...");
+		if(result!=null) return result;
 		for(Card c: cards) {
-			if(c.isAllowed(knowledge.getGameType(), knowledge.getTrickCards().isEmpty()?null:knowledge.getTrickCards().get(0), cards)) result = c;
+			if(c.isAllowed(gameType, initialCard, cards)) result = c;
 		}
 		if(result!=null) return result;
 		log.warn("no possible card found in card list ["+cards+"] with "+knowledge.getGameType()+" / "+knowledge.getTrickCards().get(0));
