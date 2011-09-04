@@ -28,6 +28,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.IJSkatPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
+import org.jskat.data.JSkatOptions;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatGameResult;
@@ -472,7 +473,7 @@ public class SkatGame extends JSkatThread {
 
 		for (int trickNo = 0; trickNo < 10; trickNo++) {
 
-			log.debug("Play trick " + (trickNo + 1)); //$NON-NLS-1$
+			log.debug("=============== Play trick " + (trickNo + 1)+" ==============="); //$NON-NLS-1$
 			doSleep(maxSleep);
 
 			view.setTrickNumber(tableName, trickNo + 1);
@@ -495,6 +496,16 @@ public class SkatGame extends JSkatThread {
 
 			Trick trick = new Trick(trickNo, newTrickForeHand);
 			data.addTrick(trick);
+			for (Player currPosition : Player.values()) {
+				// inform all players
+				// cloning of trick information to prevent manipulation by player
+				try {
+					player.get(currPosition).newTrick((Trick) trick.clone());
+				} catch (CloneNotSupportedException e) {
+					log.warn("should not happen: " + e.getClass() + " - " + e.getMessage());
+					player.get(currPosition).newTrick(trick);
+				}
+			}
 
 			// Ask players for their cards
 			log.debug("fore hand plays"); //$NON-NLS-1$
@@ -628,7 +639,7 @@ public class SkatGame extends JSkatThread {
 
 				log.error("Player is fooling!!! Doesn't have card " + card + "!"); //$NON-NLS-1$//$NON-NLS-2$
 
-				if (skatPlayer instanceof HumanPlayer) {
+				if (skatPlayer instanceof HumanPlayer || JSkatOptions.instance().isCheatDebugMode()) {
 					view.showCardNotAllowedMessage(card);
 				} else {
 					// TODO create option for switching playing schwarz on/off
@@ -644,7 +655,7 @@ public class SkatGame extends JSkatThread {
 						+ trick.getFirstCard() + " player cards: " //$NON-NLS-1$
 						+ data.getPlayerCards(currPlayer));
 
-				if (skatPlayer instanceof HumanPlayer) {
+				if (skatPlayer instanceof HumanPlayer || JSkatOptions.instance().isCheatDebugMode()) {
 					view.showCardNotAllowedMessage(card);
 				} else {
 					// TODO create option for switching playing schwarz on/off

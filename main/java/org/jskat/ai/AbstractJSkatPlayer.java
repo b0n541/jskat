@@ -121,6 +121,7 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 		playerState = PlayerStates.PLAYING;
 		knowledge.setDeclarer(newDeclarer);
 		knowledge.setGame(game);
+		knowledge.getMyCards().sort(game.getGameType());
 
 		rules = SkatRuleFactory.getSkatRules(game.getGameType());
 
@@ -224,8 +225,15 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void showTrick(Trick trick) {
+	public final void newTrick(Trick trick) {
+		knowledge.setCurrentTrick(trick);
+	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public final void showTrick(Trick trick) {
 		knowledge.addTrick(trick);
 		knowledge.clearTrickCards();
 	}

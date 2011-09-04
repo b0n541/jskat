@@ -155,6 +155,14 @@ public interface IJSkatPlayer {
 	public void cardPlayed(Player player, Card card);
 
 	/**
+	 * Makes the current trick known to the players when it is initiated
+	 * 
+	 * @param trick
+	 *            Trick information
+	 */
+	public void newTrick(Trick trick);
+
+	/**
 	 * Makes the current trick known to the players when it is complete
 	 * 
 	 * @param trick

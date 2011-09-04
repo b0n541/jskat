@@ -83,6 +83,11 @@ public class PlayerKnowledge {
 	private final CardDeck completeDeck = new CardDeck();
 
 	/**
+	 * The current trick
+	 */
+	private Trick currentTrick;
+	
+	/**
 	 * Card played by the player on the left, represents first card in a trick
 	 * or is NULL otherwise
 	 */
@@ -199,6 +204,24 @@ public class PlayerKnowledge {
 	}
 
 	/**
+	 * Sets the current trick
+	 * 
+	 * @param trick
+	 */
+	public final void setCurrentTrick(Trick trick) {
+		this.currentTrick = trick;
+	}
+	
+	/**
+	 * Provides access to the current trick
+	 * 
+	 * @return the current trick
+	 */
+	public final Trick getCurrentTrick() {
+		return currentTrick;
+	}
+	
+	/**
 	 * Sets a card played
 	 * 
 	 * @param player
@@ -235,6 +258,8 @@ public class PlayerKnowledge {
 
 			rightPlayerTrickCard = card;
 		}
+		
+		currentTrick.addCard(card);
 	}
 
 	/**
