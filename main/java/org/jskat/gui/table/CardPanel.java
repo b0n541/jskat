@@ -193,8 +193,13 @@ class CardPanel extends JPanel {
 
 				image = bitmaps.getCardImage(null, null);
 			} else {
-
-				image = bitmaps.getCardImage(card.getSuit(), card.getRank());
+				if(bitmaps==null || card==null) {
+					// e.g. in debug mode
+					image = bitmaps.getCardImage(null, null);
+				}
+				else {
+					image = bitmaps.getCardImage(card.getSuit(), card.getRank());
+				}
 			}
 
 			AffineTransform transform = new AffineTransform();
@@ -243,6 +248,8 @@ class CardPanel extends JPanel {
 	 */
 	void hideCards() {
 
+		showBackside = true && !JSkatOptions.instance().isCheatDebugMode();
+		repaint();
 		if (!JSkatOptions.instance().isShowCards()) {
 			showBackside = true;
 			repaint();
