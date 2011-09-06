@@ -27,7 +27,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Action;
 import javax.swing.ActionMap;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -85,7 +84,6 @@ class DiscardPanel extends JPanel {
 	void initPanel() {
 
 		setBackground(Color.WHITE);
-		setBorder(BorderFactory.createLineBorder(Color.black));
 
 		setLayout(new CardLayout());
 
