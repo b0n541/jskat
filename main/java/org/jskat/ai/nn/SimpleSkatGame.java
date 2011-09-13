@@ -110,6 +110,18 @@ public class SimpleSkatGame extends JSkatThread {
 
 			Trick trick = new Trick(trickNo, newTrickForeHand);
 			data.addTrick(trick);
+			for (Player currPosition : Player.values()) {
+				// inform all players
+				// cloning of trick information to prevent manipulation by
+				// player
+				try {
+					player.get(currPosition).newTrick((Trick) trick.clone());
+				} catch (CloneNotSupportedException e) {
+					log.warn("should not happen: " + e.getClass() + " - "
+							+ e.getMessage());
+					player.get(currPosition).newTrick(trick);
+				}
+			}
 
 			// Ask players for their cards
 			playCard(trick, newTrickForeHand, newTrickForeHand);
