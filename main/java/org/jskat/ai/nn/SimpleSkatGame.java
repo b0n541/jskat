@@ -23,8 +23,6 @@ package org.jskat.ai.nn;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.IJSkatPlayer;
 import org.jskat.control.JSkatThread;
 import org.jskat.data.GameAnnouncement;
@@ -47,7 +45,6 @@ import org.jskat.util.rule.SkatRuleFactory;
 // try to make them using the same source
 public class SimpleSkatGame extends JSkatThread {
 
-	private static Log log = LogFactory.getLog(SimpleSkatGame.class);
 	private SkatGameData data;
 	private CardDeck deck;
 	private Map<Player, IJSkatPlayer> player;
@@ -80,6 +77,7 @@ public class SimpleSkatGame extends JSkatThread {
 
 		data = new SkatGameData();
 		setGameState(GameState.GAME_START);
+		data.setDeclarerPickedUpSkat(true);
 	}
 
 	/**
@@ -117,8 +115,6 @@ public class SimpleSkatGame extends JSkatThread {
 				try {
 					player.get(currPosition).newTrick((Trick) trick.clone());
 				} catch (CloneNotSupportedException e) {
-					log.warn("should not happen: " + e.getClass() + " - "
-							+ e.getMessage());
 					player.get(currPosition).newTrick(trick);
 				}
 			}
@@ -141,8 +137,6 @@ public class SimpleSkatGame extends JSkatThread {
 				try {
 					player.get(currPosition).showTrick((Trick) trick.clone());
 				} catch (CloneNotSupportedException e) {
-					log.warn("should not happen: " + e.getClass() + " - "
-							+ e.getMessage());
 					player.get(currPosition).showTrick(trick);
 				}
 			}
@@ -201,20 +195,11 @@ public class SimpleSkatGame extends JSkatThread {
 
 			if (card == null) {
 
-				log.error("Player is fooling!!! Did not play a card!"); //$NON-NLS-1$
-
 			} else if (!playerHasCard(currPlayer, card)) {
-
-				log.error("Player is fooling!!! Doesn't have card " + card + "!"); //$NON-NLS-1$//$NON-NLS-2$
 
 			} else if (!rules
 					.isCardAllowed(data.getGameType(), trick.getFirstCard(),
 							data.getPlayerCards(currPlayer), card)) {
-
-				log.debug("card not allowed: " + card + " game type: " //$NON-NLS-1$ //$NON-NLS-2$
-						+ data.getGameType() + " first trick card: " //$NON-NLS-1$
-						+ trick.getFirstCard() + " player cards: " //$NON-NLS-1$
-						+ data.getPlayerCards(currPlayer));
 
 				if (!(skatPlayer instanceof HumanPlayer)) {
 					// TODO create option for switching playing schwarz on/off
@@ -260,8 +245,6 @@ public class SimpleSkatGame extends JSkatThread {
 	private boolean playerHasCard(Player skatPlayer, Card card) {
 
 		boolean result = false;
-
-		log.debug("Player cards: " + data.getPlayerCards(skatPlayer)); //$NON-NLS-1$
 
 		for (Card handCard : data.getPlayerCards(skatPlayer)) {
 
@@ -413,13 +396,8 @@ public class SimpleSkatGame extends JSkatThread {
 
 	public void calculateGameValue() {
 
-		log.debug("Calculate game value"); //$NON-NLS-1$
-
 		// FIXME (jan 07.12.2010) don't let a data class calculate it's values
 		data.calcResult();
-
-		log.debug("Final game result: lost:" + data.isGameLost() + //$NON-NLS-1$
-				" game value: " + data.getResult()); //$NON-NLS-1$
 
 		for (IJSkatPlayer currPlayer : player.values()) {
 			currPlayer.setGameResult(data.getGameResult().clone());
