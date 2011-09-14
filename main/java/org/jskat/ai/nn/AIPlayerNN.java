@@ -146,7 +146,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	}
 
 	private List<GameType> filterFeasibleGameTypes(int bidValue) {
-
+		// FIXME (jansch 14.09.2011) consider hand and ouvert games
+		// return game announcement instead
 		List<GameType> result = new ArrayList<GameType>();
 
 		SkatGameData data = getGameDataForWonGame();
@@ -179,6 +180,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		result.setWon(true);
 		data.setResult(result);
 
+		// it doesn't matter which position is set for declarer
+		// skat game data are only used to calculated the game value
 		data.setDeclarer(Player.FOREHAND);
 		for (Card card : knowledge.getMyCards()) {
 			data.setDealtCard(Player.FOREHAND, card);
