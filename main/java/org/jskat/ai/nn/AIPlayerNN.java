@@ -173,6 +173,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		SkatGameData data = new SkatGameData();
 
+		data.setDeclarerPickedUpSkat(true);
+
 		SkatGameResult result = new SkatGameResult();
 		result.setWon(true);
 		data.setResult(result);
