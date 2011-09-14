@@ -200,5 +200,9 @@ public enum JSkatAction {
 	/**
 	 * Saves neural network information for Neural Network Player
 	 */
-	SAVE_NEURAL_NETWORKS;
+	SAVE_NEURAL_NETWORKS,
+	/**
+	 * Resets neural networks
+	 */
+	RESET_NEURAL_NETWORKS;
 }

@@ -100,6 +100,7 @@ import org.jskat.gui.action.main.LoadNeuralNetworksAction;
 import org.jskat.gui.action.main.LoadSeriesAction;
 import org.jskat.gui.action.main.PauseSkatSeriesAction;
 import org.jskat.gui.action.main.PreferencesAction;
+import org.jskat.gui.action.main.ResetNeuralNetworksAction;
 import org.jskat.gui.action.main.SaveNeuralNetworksAction;
 import org.jskat.gui.action.main.SaveSeriesAction;
 import org.jskat.gui.action.main.SaveSeriesAsAction;
@@ -212,6 +213,8 @@ public class JSkatViewImpl implements IJSkatView {
 				new LoadNeuralNetworksAction());
 		actions.put(JSkatAction.SAVE_NEURAL_NETWORKS,
 				new SaveNeuralNetworksAction());
+		actions.put(JSkatAction.RESET_NEURAL_NETWORKS,
+				new ResetNeuralNetworksAction());
 		// Human player actions
 		actions.put(JSkatAction.MAKE_BID, new MakeBidAction());
 		actions.put(JSkatAction.HOLD_BID, new HoldBidAction());
@@ -334,6 +337,8 @@ public class JSkatViewImpl implements IJSkatView {
 				.get(JSkatAction.LOAD_NEURAL_NETWORKS)));
 		neuralNetworkMenu.add(new JMenuItem(actions
 				.get(JSkatAction.SAVE_NEURAL_NETWORKS)));
+		neuralNetworkMenu.add(new JMenuItem(actions
+				.get(JSkatAction.RESET_NEURAL_NETWORKS)));
 		neuralNetworkMenu.add(new JSeparator());
 		neuralNetworkMenu.add(new JMenuItem(actions
 				.get(JSkatAction.TRAIN_NEURAL_NETWORKS)));

@@ -399,6 +399,13 @@ public class JSkatMaster {
 	}
 
 	/**
+	 * Resets neural networks
+	 */
+	public void resetNeuralNetworks() {
+		SkatNetworks.resetNeuralNetworks();
+	}
+
+	/**
 	 * Saves the weigths for the neural networks
 	 */
 	public void saveNeuralNetworks() {

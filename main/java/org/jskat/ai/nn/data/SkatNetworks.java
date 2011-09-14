@@ -274,4 +274,16 @@ public class SkatNetworks {
 		grandOpponent.saveNetwork(path.concat(pathSep).concat(
 				"jskat.grand.opponent.nnet")); //$NON-NLS-1$
 	}
+
+	/**
+	 * Resets neural networks
+	 */
+	public static void resetNeuralNetworks() {
+		suitDeclarer.resetNetwork();
+		suitOpponent.resetNetwork();
+		nullDeclarer.resetNetwork();
+		nullOpponent.resetNetwork();
+		grandDeclarer.resetNetwork();
+		grandOpponent.resetNetwork();
+	}
 }

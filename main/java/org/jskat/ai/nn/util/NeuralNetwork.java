@@ -41,6 +41,8 @@ public class NeuralNetwork {
 
 	private static Log log = LogFactory.getLog(NeuralNetwork.class);
 
+	Random rand = new Random();
+
 	private long iterations = 0;
 	private double learningRate = 0.3;
 
@@ -100,7 +102,6 @@ public class NeuralNetwork {
 
 	private void connectLayers(Layer inputLayer, Layer outputLayer) {
 
-		Random rand = new Random();
 		ArrayList<Double> weights = new ArrayList<Double>();
 
 		for (int i = 0; i < inputLayer.getNeurons().size()
@@ -207,6 +208,20 @@ public class NeuralNetwork {
 		propagateBackward();
 
 		return getAvgDiff();
+	}
+
+	/**
+	 * Resets the network, sets random values for all weights
+	 */
+	public synchronized void resetNetwork() {
+		for (Layer layer : layers) {
+			for (Neuron neuron : layer.getNeurons()) {
+				for (Weight weight : neuron.incomingWeights) {
+					weight.setWeightValue(new Double(rand.nextGaussian() * 0.2));
+				}
+			}
+		}
+		iterations = 0;
 	}
 
 	/**
