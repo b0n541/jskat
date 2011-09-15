@@ -171,4 +171,5 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer  {
 		log.warn("no possible card found in card list ["+cards+"] with "+knowledge.getGameType()+" / "+knowledge.getTrickCards().get(0));
 		return cards.get(0);
 	}
+	
 }

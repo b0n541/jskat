@@ -166,7 +166,7 @@ public class PlayerKnowledge {
 		leftPlayerTrickCard = null;
 		rightPlayerTrickCard = null;
 
-		setTrumpCount(0);
+		trumpCount = 0;
 
 		for (Suit suit : Suit.values()) {
 			suitCount.put(suit, Integer.valueOf(0));
@@ -237,6 +237,7 @@ public class PlayerKnowledge {
 			possiblePlayerCards.get(currPlayer).remove(card);
 		}
 		possibleSkatCards.remove(card);
+		if(card.isTrump(getGameType()) && player!=playerPosition) trumpCount++;
 
 		setTrickCard(player, card);
 	}
@@ -315,8 +316,8 @@ public class PlayerKnowledge {
 	}
 
 	/**
-	 * Checks whether a player could have a card, this is an uncertain
-	 * information
+	 * Checks whether a player has a card by ruling out all other options, 
+	 * this might be an uncertain information
 	 * 
 	 * @param player
 	 *            Player ID
@@ -379,6 +380,33 @@ public class PlayerKnowledge {
 	}
 
 	/**
+	 * Checks how many cards of the given suit a player could have, this is an
+	 * uncertain information
+	 * 
+	 * @param player
+	 *            Player ID
+	 * @param suit
+	 *            Suit to check
+	 * @return TRUE if the player could have any card of the suit
+	 */
+	public int getPotentialSuitCount(Player player, Suit suit, boolean isTrump, boolean includeJacks) {
+		int result = 0;
+		for (Rank r : Rank.values()) {
+			if (r == Rank.JACK && !includeJacks)
+				continue;
+			else if (couldHaveCard(player, Card.getCard(suit, r)))
+				result++;
+		}
+		if(isTrump) {
+			for(Suit s: Suit.values()) {
+				if (couldHaveCard(player, Card.getCard(s, Rank.JACK)))
+					result++;
+			}
+		}
+		return result;
+	}
+
+	/**
 	 * Checks whether a player could have any trump cards left, this is an
 	 * uncertain information
 	 * 
@@ -396,9 +424,7 @@ public class PlayerKnowledge {
 	/**
 	 * Checks whether any player might have any trump cards left
 	 * 
-	 * @param player
-	 *            Player ID
-	 * @return TRUE if the player could still have any trump cards
+	 * @return TRUE if any player could still have any trump cards
 	 */
 	public boolean isTrumpOut() {
 		for(Player p: Player.values()) {
@@ -426,7 +452,7 @@ public class PlayerKnowledge {
 
 		for (Rank rank : Rank.values()) {
 
-			possiblePlayerCards.get(player).remove(Card.getCard(suit, rank));
+			if(rank!=Rank.JACK || getGameType()==GameType.NULL) possiblePlayerCards.get(player).remove(Card.getCard(suit, rank));
 		}
 	}
 
@@ -511,7 +537,7 @@ public class PlayerKnowledge {
 	 * Adds a card to the suit/point counter
 	 * 
 	 * @param card
-	 *            Card
+	 *            the Card to add
 	 */
 	public void addCard(Card card) {
 
@@ -519,6 +545,7 @@ public class PlayerKnowledge {
 		
 		possiblePlayerCards.get(playerPosition.getLeftNeighbor()).remove(card);
 		possiblePlayerCards.get(playerPosition.getRightNeighbor()).remove(card);
+		possibleSkatCards.remove(card);
 
 		suitCount.put(card.getSuit(), Integer.valueOf(suitCount.get(card.getSuit()).intValue() + 1));
 		suitPoints.put(card.getSuit(),
@@ -621,6 +648,9 @@ public class PlayerKnowledge {
 	public void setGame(GameAnnouncement gameAnn) {
 
 		game = gameAnn;
+		for(Card c: myCards) {
+			if(c.isTrump(getGameType())) trumpCount++;
+		}
 	}
 
 	/**
@@ -649,19 +679,10 @@ public class PlayerKnowledge {
 	}
 
 	/**
-	 * Sets the trump count
+	 * Gets the number of trump cards that is known to the player 
+	 * (either by being on his own hand or by having been played) 
 	 * 
-	 * @param newTrumpCount
-	 *            Trump count
-	 */
-	public void setTrumpCount(int newTrumpCount) {
-		trumpCount = newTrumpCount;
-	}
-
-	/**
-	 * Gets the trump count
-	 * 
-	 * @return
+	 * @return the number of known trump cards
 	 */
 	public int getTrumpCount() {
 		return trumpCount;

@@ -147,68 +147,93 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 	}
 
 	private Card playMiddlehandCard() {
-		log.debug("Opponent player is in middlehand");
+		log.debug("I ("+myPlayer.getPlayerName()+") am in middlehand (OpponentPlayer)");
 		// fallback: take the first valid card
 		CardList cards = knowledge.getMyCards();
 		Card initialCard = knowledge.getTrickCards().get(0);
-		Card result = null;
 		GameType gameType = knowledge.getGameType();
-		if(knowledge.getDeclarer()==Player.FOREHAND) {
+		Card result = null;
+		if(knowledge.getDeclarer()==knowledge.getCurrentTrick().getForeHand()) {
 			log.debug("Single player has already played a card");
 			for(Card c: cards) {
 				if(c.beats(gameType, initialCard) && c.isAllowed(gameType, initialCard, cards)) {
-					result = c;
+					if(result==null) {
+						result = c;
+						continue;
+					}
+					boolean isTrump = initialCard.isTrump(gameType);
+					if(!isTrump && c.getRank()!=Rank.ACE && c.getPoints()>=result.getPoints()) {
+						result = c;
+						continue;
+					}
+					if(c.getRank()==Rank.ACE && knowledge.getPotentialSuitCount(knowledge.getCurrentTrick().getForeHand(), initialCard.getSuit(), isTrump, false)<2) {
+						result = c;
+						continue;
+					}
 				}
 			}
 			if(result!=null) {
 				// I can beat the single player's card - so I take it
-				log.debug("playCard (12)");
+				log.debug("playCard (12) - I try to take it");
 				return result;
 			}
 			// I cannot beat the single player's card
 			if(initialCard.isTrump(gameType)) {
-				if(knowledge.couldHaveTrump(Player.REARHAND)) {
+				if(knowledge.couldHaveTrump(knowledge.getCurrentTrick().getRearHand())) {
 					int cnt = 0;
 					for(Card c: Card.getBeatingCards(gameType, initialCard)) {
-						if(knowledge.couldHaveCard(Player.REARHAND, c)) {
+						if(knowledge.couldHaveCard(knowledge.getCurrentTrick().getRearHand(), c)) {
 							cnt++;
 						}
 					}
-					if(cnt>1) {
+					if(cnt>0) {
+						log.debug("Looking for a high value card - rearhand might have "+cnt+" beating card(s)");
 						for(Card c: cards) {
 							if(c.isAllowed(gameType, initialCard, cards)) {
 								if(result==null || c.getPoints()>result.getPoints()) {
-									result = c;
+									if(c.getRank()==Rank.ACE 
+											&& !c.isTrump(gameType) 
+											&& knowledge.couldHaveSuit(knowledge.getDeclarer(), c.getSuit())  
+											&& !knowledge.getMyCards().contains(Card.getCard(c.getSuit(), Rank.TEN))) {
+										log.debug("Keeping my ace of "+c.getSuit());
+									}
+									else {
+										result = c;
+									}
 								}
 							}
 						}
-						log.debug("playCard (14)");
-						return result;
+						if(result!=null) {
+							log.debug("playCard (14), cnt="+cnt);
+							return result;
+						}
 					}
 				}
 				result = cards.get(cards.getLastIndexOfSuit(knowledge.getTrumpSuit(), true));
 				if(result==null) {
-					for(Card c: cards) {
-						if(c.isAllowed(gameType, initialCard, cards)) {
-							result = c;
-						}
-					}
+					return getDefaultCard(cards, initialCard, gameType);
 				}
 				log.debug("playCard (15)");
 				return result;
 			}
-			else if(knowledge.couldHaveSuit(Player.REARHAND, initialCard.getSuit())) {
-				int cnt = 0;
+			else if(knowledge.couldHaveSuit(knowledge.getCurrentTrick().getRearHand(), initialCard.getSuit())) {
+				// I cannot beat the single player's card, which is not a trump
+				// rear hand could still have the same color
+				int cntSuit = 0;
+				int cntTrump = 0;
 				for(Card c: Card.getBeatingCards(gameType, initialCard)) {
-					if(knowledge.couldHaveCard(Player.REARHAND, c)) {
-						cnt++;
+					if(knowledge.couldHaveCard(knowledge.getCurrentTrick().getRearHand(), c)) {
+						if(c.isTrump(gameType)) cntTrump++;
+						else cntSuit++;
 					}
 				}
-				if(cnt>0) {
+				if(cntSuit>0 || (cntTrump>1 && knowledge.couldHaveSuit(knowledge.getCurrentTrick().getRearHand(), initialCard.getSuit()))) {
 					result = cards.get(cards.getFirstIndexOfSuit(initialCard.getSuit(), false));
+					log.debug("playCard (13pre1), cnt="+cntSuit+" / "+cntTrump);
 				}
 				else {
 					result = cards.get(cards.getLastIndexOfSuit(initialCard.getSuit(), false));
+					log.debug("playCard (13pre2), cnt="+cntSuit+" / "+cntTrump);
 				}
 				if(result==null) {
 					for(Card c: cards) {
@@ -220,7 +245,7 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 				log.debug("playCard (13)");
 				return result;
 			}
-			if(knowledge.couldHaveTrump(Player.REARHAND)) {
+			if(knowledge.couldHaveTrump(knowledge.getCurrentTrick().getRearHand())) {
 				result = cards.get(cards.getFirstIndexOfSuit(initialCard.getSuit(), false));
 			}
 		}
@@ -245,20 +270,10 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 		}
 		
 		// fallback: get last valid card
-		for(Card c: cards) {
-			if(c.isAllowed(gameType, initialCard, cards)) {
-				result = c;
-			}
-		}
-		if(result!=null) {
-			log.debug("playCard (8)");
-			return result;
-		}
-		log.warn("no possible card found in card list ["+cards+"] with "+gameType+" / "+initialCard);
-		log.debug("playCard (9)");
-		return cards.get(0);
+		return getDefaultCard(cards, initialCard, gameType);
 	}
-	
+
+
 	private Card playRearhandCard() {
 		log.debug("I ("+myPlayer.getPlayerName()+") am in rearhand (OpponentPlayer)");
 		// fallback: take the first valid card
@@ -405,16 +420,33 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 			}
 		}
 		
-		log.debug("fallback...");
-		if(result!=null) return result;
-		for(Card c: cards) {
-			if(c.isAllowed(gameType, initialCard, cards)) result = c;
-		}
-		if(result!=null) return result;
-		log.warn("no possible card found in card list ["+cards+"] with "+knowledge.getGameType()+" / "+knowledge.getTrickCards().get(0));
-		return cards.get(0);
+		return getDefaultCard(cards, initialCard, gameType);
 	}
 
+	/**
+	 * Gets a fallback card, if no other algorithm returned a card
+	 * 
+	 * @param cards
+	 * @param initialCard
+	 * @param gameType
+	 * @return a default card
+	 */
+	private Card getDefaultCard(CardList cards, Card initialCard, GameType gameType) {
+		Card result = null;
+		for(Card c: cards) {
+			if(c.isAllowed(gameType, initialCard, cards)) {
+				result = c;
+			}
+		}
+		if(result!=null) {
+			log.debug("playCard (8)");
+			return result;
+		}
+		log.warn("no possible card found in card list ["+cards+"] with "+gameType+" / "+initialCard);
+		log.debug("playCard (9)");
+		return cards.get(0);
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.jskat.ai.algorithmic.IAlgorithmicAIPlayer#discardSkat(org.jskat.ai.algorithmic.BidEvaluator)
 	 */
