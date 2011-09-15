@@ -219,10 +219,8 @@ public class SkatGame extends JSkatThread {
 	}
 
 	/**
-	 * Deals the cards to the players
+	 * Deals a given number of cards to the players
 	 * 
-	 * @param deck
-	 *            Card deck
 	 * @param cardCount
 	 *            Number of cards to be dealt to a player
 	 */
@@ -325,8 +323,8 @@ public class SkatGame extends JSkatThread {
 	 *            Hearing player
 	 * @param startBidValue
 	 *            Bid value to start from
-	 * @return
-	 */
+	 * @return the final bid value	
+	 */	
 	private int twoPlayerBidding(Player announcer, Player hearer,
 			int startBidValue) {
 
