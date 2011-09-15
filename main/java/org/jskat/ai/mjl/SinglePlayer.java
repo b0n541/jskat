@@ -38,8 +38,11 @@ public class SinglePlayer extends AbstractCardPlayer {
 	private Log log = LogFactory.getLog(SinglePlayer.class);
 	private BasicSkatRules rules;
 
-	/** Constructor
-	 * @param id playerID
+	/**
+	 * Constructor
+	 * 
+	 * @param cards
+	 * @param rules
 	 */
 	public SinglePlayer(CardList cards, BasicSkatRules rules) {
 		super(cards);
@@ -58,9 +61,7 @@ public class SinglePlayer extends AbstractCardPlayer {
 	}
 
 	/** Gets the next card, that the player wants to play
-	 * @see org.jskat.ai.mjl.CardPlayer#playNextCard(jskat.share.CardList, org.jskat.ai.mjl.TrickInfo)
-	 * @param cards hand of the player
-	 * @param trick all necessary information about the trick
+	 * @param knowledge all necessary information about the game
 	 * @return index of the card to play
 	 */
 	public Card playNextCard(PlayerKnowledge knowledge) {

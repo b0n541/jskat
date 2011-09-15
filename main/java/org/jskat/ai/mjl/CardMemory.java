@@ -140,13 +140,13 @@ public class CardMemory {
 	/**
 	 * type of the game
 	 * 
-	 * @see jskat.share.SkatConstants
+	 * @see org.jskat.util.GameType
 	 */
 	private GameType gameType;
 	/**
 	 * trump suit in the current game
 	 * 
-	 * @see jskat.share.SkatConstants
+	 * @see org.jskat.util.Suit
 	 */
 	private Suit trump;
 	/** a vector of all the cards that have been played in this game so far */

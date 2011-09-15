@@ -55,13 +55,10 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	/**
 	 * Gets the next card that the player wants to play
 	 * 
-	 * @param cards
-	 *            hand of the player
-	 * @param trickInfo
-	 *            all necessary information about the trick
+	 * @param knowledge
+	 *            all necessary information about the game
 	 * @return index of the card to play
-	 * @see org.jskat.ai.mjl.CardPlayer#playNextCard(jskat.share.CardList,
-	 *      org.jskat.ai.mjl.TrickInfo)
+	 * @see org.jskat.ai.mjl.CardPlayer#playNextCard(PlayerKnowledge)
 	 */
 	public Card playNextCard(PlayerKnowledge knowledge) {
 		log.debug("Play next card with trick size "
@@ -107,10 +104,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 
 	/**
 	 * @param knowledge
-	 * @param gameType
-	 * @param initialCard
-	 * @param trumpSuit
-	 * @return
+	 * @return the index of the card to play by a middlehand opponent player
 	 */
 	private int findMiddlehandCard(PlayerKnowledge knowledge) {
 		GameType gameType = knowledge.getGameType();
@@ -231,10 +225,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 
 	/**
 	 * @param knowledge
-	 * @param gameType
-	 * @param initialCard
-	 * @param trumpSuit
-	 * @return
+	 * @return the card to play by a rearhand opponent player
 	 */
 	private int findRearhandCard(PlayerKnowledge knowledge) {
 		GameType gameType = knowledge.getGameType();
@@ -334,8 +325,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	/**
 	 * Gets the next card that the player wants to play in a null game
 	 * 
-	 * @param cards
-	 * @param trickInfo
+	 * @param knowledge
 	 * @return the index of the card that should be played
 	 */
 	private Card playNextCardNullGame(PlayerKnowledge knowledge) {
@@ -479,7 +469,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	 * null games)
 	 * 
 	 * @param cards
-	 * @param card
+	 * @param initialCard
 	 * @return index of the card, -1 if none is found
 	 */
 	private int findLowerCard(CardList cards, Card initialCard) {
@@ -533,8 +523,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	/**
 	 * Finds an initial card to play (from the second trick onward)
 	 * 
-	 * @param cards
-	 * @param game
+	 * @param knowledge
 	 * @return index of the card
 	 */
 	private int findInitial(PlayerKnowledge knowledge) {
@@ -589,8 +578,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	/**
 	 * Finds an initial card to play on the very first trick of the game
 	 * 
-	 * @param cards
-	 * @param game
+	 * @param knowledge
 	 * @return index of the card
 	 */
 	private int findFirstInitial(PlayerKnowledge knowledge) {

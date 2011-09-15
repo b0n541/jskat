@@ -82,8 +82,6 @@ public class Helper {
 	 *            hand of the player
 	 * @param cardToBeat
 	 *            card that should be beaten
-	 * @param trump
-	 *            current trump color
 	 * @param initialCard
 	 *            initial card of the trick
 	 * @param gameType

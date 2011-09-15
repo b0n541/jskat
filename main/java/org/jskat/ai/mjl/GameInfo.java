@@ -111,13 +111,13 @@ public class GameInfo {
 	/**
 	 * type of the game
 	 * 
-	 * @see jskat.share.SkatConstants
+	 * @see org.jskat.util.GameType
 	 */
 	private GameType gameType;
 	/**
 	 * trump suit in the current game
 	 * 
-	 * @see jskat.share.SkatConstants
+	 * @see org.jskat.util.Suit
 	 */
 	private Suit trump;
 	/** id of the single player */

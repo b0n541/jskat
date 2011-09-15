@@ -32,8 +32,8 @@ interface CardPlayer {
 	/**
 	 * Gets the next card, that the player wants to play
 	 * 
-	 * @param trickInfo
-	 *            all necessary information about the trick
+	 * @param knowledge
+	 *            all necessary information about the game
 	 * @return the card to play
 	 */
 	Card playNextCard(PlayerKnowledge knowledge);
