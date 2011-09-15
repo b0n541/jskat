@@ -39,8 +39,8 @@ public class TablePanelStatus {
 	 * If there is a player with the same name, already in the map it's status
 	 * is updated instead
 	 * 
-	 * @param player
-	 *            Player position
+	 * @param playerName
+	 *            Player name
 	 * @param status
 	 *            Player status
 	 */

@@ -58,9 +58,6 @@ public class JSkatGraphicRepository {
 
 	/**
 	 * Creates a new instance of JSkatGraphicRepository
-	 * 
-	 * @param jskatOptions
-	 *            Current JSkatOptions
 	 */
 	private JSkatGraphicRepository() {
 

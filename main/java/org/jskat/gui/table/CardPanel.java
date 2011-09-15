@@ -248,8 +248,6 @@ class CardPanel extends JPanel {
 	 */
 	void hideCards() {
 
-		showBackside = true && !JSkatOptions.instance().isCheatDebugMode();
-		repaint();
 		if (!JSkatOptions.instance().isShowCards()) {
 			showBackside = true;
 			repaint();

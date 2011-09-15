@@ -60,10 +60,7 @@ public class JSkatApplicationData {
 	}
 
 	/**
-	 * Contructor
-	 * 
-	 * @param jskatOptions
-	 *            JSkat options
+	 * Constructor
 	 */
 	private JSkatApplicationData() {
 

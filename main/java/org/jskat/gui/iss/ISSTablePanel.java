@@ -58,12 +58,8 @@ public class ISSTablePanel extends SkatTablePanel {
 	 * 
 	 * @param tableName
 	 *            Table name
-	 * @param jskatBitmaps
-	 *            Bitmap repository
 	 * @param actions
 	 *            Action map
-	 * @param strings
-	 *            i18n strings
 	 * @param newLoginName
 	 *            Login name on ISS
 	 */

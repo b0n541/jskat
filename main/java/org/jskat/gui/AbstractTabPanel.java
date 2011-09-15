@@ -53,8 +53,6 @@ public abstract class AbstractTabPanel extends JPanel {
 	 * 
 	 * @param tabName
 	 *            Table name
-	 * @param jskatBitmaps
-	 *            JSkat bitmaps
 	 * @param actions
 	 *            JSkat actions
 	 */

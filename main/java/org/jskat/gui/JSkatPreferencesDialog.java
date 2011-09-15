@@ -79,7 +79,6 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 	/**
 	 * Constructor
 	 * 
-	 * @param skatMaster
 	 * @param mainFrame
 	 */
 	public JSkatPreferencesDialog(JFrame mainFrame) {

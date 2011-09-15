@@ -30,7 +30,7 @@ public class OpponentPanel extends AbstractHandPanel {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see AbstractHandPanel#HandPanel(ActionMap, int, boolean)
+	 * @see AbstractHandPanel#AbstractHandPanel(ActionMap, int, boolean)
 	 */
 	public OpponentPanel(ActionMap actions, int maxCards, boolean showIssWidgets) {
 

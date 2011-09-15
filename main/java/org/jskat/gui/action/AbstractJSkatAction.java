@@ -50,9 +50,6 @@ public abstract class AbstractJSkatAction extends AbstractAction {
 
 	/**
 	 * Constructor
-	 * 
-	 * @param newBitmaps
-	 *            JSkat graphics
 	 */
 	public AbstractJSkatAction() {
 

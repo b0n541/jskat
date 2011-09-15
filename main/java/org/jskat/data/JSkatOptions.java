@@ -421,7 +421,7 @@ public class JSkatOptions {
 	/**
 	 * Setter for property language.
 	 * 
-	 * @param language
+	 * @param newLanguage
 	 *            New value of property language.
 	 */
 	public void setLanguage(SupportedLanguage newLanguage) {
@@ -443,7 +443,7 @@ public class JSkatOptions {
 	/**
 	 * Setter for property savePath.
 	 * 
-	 * @param savePath
+	 * @param newSavePath
 	 *            New value of property savePath.
 	 */
 	public void setSavePath(java.lang.String newSavePath) {
@@ -464,7 +464,7 @@ public class JSkatOptions {
 	/**
 	 * Setter for property trickRemoveDelayTime.
 	 * 
-	 * @param trickRemoveDelayTime
+	 * @param newTrickRemoveDelayTime
 	 *            New value of property trickRemoveDelayTime.
 	 */
 	public void setTrickRemoveDelayTime(int newTrickRemoveDelayTime) {
@@ -486,7 +486,7 @@ public class JSkatOptions {
 	/**
 	 * Setter for property trickRemoveAfterClick.
 	 * 
-	 * @param trickRemoveAfterClick
+	 * @param newTrickRemoveAfterClick
 	 *            New value of property trickRemoveAfterClick.
 	 */
 	public void setTrickRemoveAfterClick(boolean newTrickRemoveAfterClick) {
@@ -508,7 +508,7 @@ public class JSkatOptions {
 	/**
 	 * Setter for property gameShortCut.
 	 * 
-	 * @param gameShortCut
+	 * @param isGameShortCut
 	 *            New value of property gameShortCut.
 	 */
 	public void setGameShortCut(boolean isGameShortCut) {
@@ -530,7 +530,7 @@ public class JSkatOptions {
 	/**
 	 * Setter for property cheatDebugMode.
 	 * 
-	 * @param cheatDebugMode
+	 * @param isCheatDebugMode
 	 *            New value of property cheatDebugMode.
 	 */
 	public void setCheatDebugMode(boolean isCheatDebugMode) {
@@ -1066,7 +1066,7 @@ public class JSkatOptions {
 	/**
 	 * Setter for property cardFace
 	 * 
-	 * @param cardFace
+	 * @param newCardFace
 	 *            New value of property cardFace
 	 */
 	public void setCardFace(CardFace newCardFace) {

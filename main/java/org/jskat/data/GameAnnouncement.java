@@ -140,7 +140,7 @@ public class GameAnnouncement {
 		/**
 		 * Sets the flag for a schneider game
 		 * 
-		 * @param schneider
+		 * @param isSchneider
 		 *            TRUE, if schneider was announced
 		 */
 		public final void setSchneider(Boolean isSchneider) {
@@ -150,7 +150,7 @@ public class GameAnnouncement {
 		/**
 		 * Sets the flag for a schwarz game
 		 * 
-		 * @param schwarz
+		 * @param isSchwarz
 		 *            TRUE, if a schwarz was announced
 		 */
 		public final void setSchwarz(Boolean isSchwarz) {

@@ -75,12 +75,10 @@ public class JSkatHelpDialog extends JDialog {
 	 * 
 	 * @param parentFrame
 	 *            The parent JFrame
-	 * @param dialogTitle
+	 * @param title
 	 *            Dialog title
 	 * @param contentPath
 	 *            Path to dialog content
-	 * @param strings
-	 *            i18n strings
 	 */
 	public JSkatHelpDialog(JFrame parentFrame, String title, String contentPath) {
 

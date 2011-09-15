@@ -76,8 +76,6 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 	 *            JSkat master
 	 * @param mainFrame
 	 *            Main frame
-	 * @param newStrings
-	 *            i18n strings
 	 */
 	public SkatSeriesStartDialog(JSkatMaster skatMaster, JFrame mainFrame) {
 

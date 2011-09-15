@@ -158,6 +158,7 @@ public class IssController {
 			jskat.setIssLogin(login);
 		}
 
+		log.debug("iss connected: "+issConnect.isConnected());
 		return issConnect.isConnected();
 	}
 
@@ -631,8 +632,6 @@ public class IssController {
 	 * 
 	 * @param tableName
 	 *            Table name
-	 * @param bidValue
-	 *            Bid value
 	 */
 	public void sendBidMove(String tableName) {
 

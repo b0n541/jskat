@@ -68,11 +68,13 @@ class InputChannel extends Thread {
 		@Override
 		public void run() {
 
+			log.debug("... listening to ISS");
 			String line;
 			while (!InputChannel.this.done) {
 				try {
 
 					line = InputChannel.this.reader.readLine();
+					log.debug("ISS -->| "+line);
 					InputChannel.this.messageHandler.addMessage(line);
 
 				} catch (IOException ioe) {

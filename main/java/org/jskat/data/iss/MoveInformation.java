@@ -68,11 +68,9 @@ public class MoveInformation {
 	}
 
 	/**
-	 * Gets a card from the skat
+	 * Gets  the skat
 	 * 
-	 * @param index
-	 *            Index of card
-	 * @return Card
+	 * @return CardList
 	 */
 	public CardList getSkat() {
 
@@ -82,10 +80,8 @@ public class MoveInformation {
 	/**
 	 * Sets the skat cards
 	 * 
-	 * @param newSkat0
-	 *            First card
-	 * @param newSkat1
-	 *            Second card
+	 * @param newSkat
+	 *            skat cards
 	 */
 	public void setSkat(CardList newSkat) {
 

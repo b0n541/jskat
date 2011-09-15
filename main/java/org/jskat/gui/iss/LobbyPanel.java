@@ -66,7 +66,6 @@ public class LobbyPanel extends AbstractTabPanel {
 	 * Constructor
 	 * 
 	 * @param tableName
-	 * @param jskatBitmaps
 	 * @param actions
 	 */
 	public LobbyPanel(String tableName, ActionMap actions) {

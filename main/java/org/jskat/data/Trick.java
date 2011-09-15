@@ -54,13 +54,31 @@ public class Trick {
 	}
 
 	/**
-	 * Gets the fore hand player
+	 * Gets the fore hand player of this trick
 	 * 
 	 * @return Fore hand player
 	 */
 	public Player getForeHand() {
 
 		return foreHand;
+	}
+
+	/**
+	 * Gets the middle hand player of this trick
+	 * 
+	 * @return Fore hand player
+	 */
+	public Player getMiddleHand() {
+		return foreHand.getLeftNeighbor();
+	}
+
+	/**
+	 * Gets the rear hand player of this trick
+	 * 
+	 * @return Fore hand player
+	 */
+	public Player getRearHand() {
+		return foreHand.getRightNeighbor();
 	}
 
 	/**

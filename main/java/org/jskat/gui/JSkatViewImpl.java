@@ -143,9 +143,6 @@ public class JSkatViewImpl implements IJSkatView {
 
 	/**
 	 * Constructor
-	 * 
-	 * @param jskat
-	 *            JSkatMaster
 	 */
 	public JSkatViewImpl() {
 

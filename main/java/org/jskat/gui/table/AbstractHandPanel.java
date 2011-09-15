@@ -102,8 +102,8 @@ abstract class AbstractHandPanel extends JPanel {
 	 * 
 	 * @param actions
 	 *            Action map
-	 * @param jskatBitmaps
-	 *            Card images
+	 * @param maxCards
+	 *            the maximum number of cards
 	 * @param showIssWidgets
 	 *            TRUE, if ISS widgets should be shown
 	 */
@@ -239,10 +239,10 @@ abstract class AbstractHandPanel extends JPanel {
 	}
 
 	/**
-	 * Adds a card to the panel
+	 * Adds a Collection of cards to the panel
 	 * 
-	 * @param newCard
-	 *            Card
+	 * @param newCards
+	 *            card collection
 	 */
 	void addCards(Collection<Card> newCards) {
 

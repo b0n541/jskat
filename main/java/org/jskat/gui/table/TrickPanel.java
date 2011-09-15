@@ -73,8 +73,8 @@ class TrickPanel extends JPanel implements ComponentListener {
 	/**
 	 * Constructor
 	 * 
-	 * @param jskatBitmaps
-	 *            JSkat bitmaps
+	 * @param newCardScaleFactor
+	 * @param newRandomPlacement
 	 */
 	TrickPanel(double newCardScaleFactor,
 			boolean newRandomPlacement) {

@@ -78,10 +78,9 @@ public class MessageHandler extends Thread {
 				handleMessage(message);
 			} else {
 				try {
-					this.sleep(100);
+					Thread.sleep(100);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.warn("Thread.sleep() was interrupted");
 				}
 			}
 		}
@@ -348,8 +347,8 @@ public class MessageHandler extends Thread {
 	/**
 	 * Handles a client list message
 	 * 
-	 * @param token
-	 *            Client information
+	 * @param params
+	 *            parameters
 	 */
 	void handleClientListMessage(List<String> params) {
 
@@ -368,7 +367,7 @@ public class MessageHandler extends Thread {
 	/**
 	 * Adds or updates a client on the client list
 	 * 
-	 * @param token
+	 * @param params
 	 *            Player information
 	 */
 	void updateClientList(List<String> params) {
@@ -385,7 +384,7 @@ public class MessageHandler extends Thread {
 	/**
 	 * Removes a client from the client list
 	 * 
-	 * @param token
+	 * @param params
 	 *            Player information
 	 */
 	void removeClientFromList(List<String> params) {
@@ -396,7 +395,7 @@ public class MessageHandler extends Thread {
 	/**
 	 * Handles the welcome message and checks the protocol version
 	 * 
-	 * @param token
+	 * @param params
 	 *            Welcome information
 	 */
 	void handleWelcomeMessage(List<String> params) {
@@ -416,8 +415,7 @@ public class MessageHandler extends Thread {
 	/**
 	 * Handles a table list message
 	 * 
-	 * @param Table
-	 *            information
+	 * @param params Table information
 	 */
 	void handleTableListMessage(List<String> params) {
 
@@ -436,7 +434,7 @@ public class MessageHandler extends Thread {
 	/**
 	 * Adds or updates a table on the table list
 	 * 
-	 * @param token
+	 * @param params
 	 *            Table information
 	 */
 	void updateTableList(List<String> params) {
@@ -455,7 +453,7 @@ public class MessageHandler extends Thread {
 	/**
 	 * Removes a table from the table list
 	 * 
-	 * @param token
+	 * @param params
 	 *            Table information
 	 */
 	void removeTableFromList(List<String> params) {

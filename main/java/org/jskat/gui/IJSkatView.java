@@ -636,11 +636,11 @@ public interface IJSkatView {
 	 * 
 	 * @param tableName
 	 *            Table name
-	 * @param playerName
+	 * @param upperLeftPlayerName
 	 *            Name of left upper player
-	 * @param playerName2
+	 * @param upperRightPlayerName
 	 *            Name of right upper player
-	 * @param playerName3
+	 * @param lowerPlayerName
 	 *            Name of lower player
 	 */
 	public void setPlayerNames(String tableName, String upperLeftPlayerName,
