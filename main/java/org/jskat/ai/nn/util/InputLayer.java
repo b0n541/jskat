@@ -38,7 +38,7 @@ class InputLayer extends Layer {
 	}
 
 	/**
-	 * @see Layer#createNeuron(ActivationFunction)
+	 * @see Layer#createNeuron(org.jskat.ai.nn.util.Neuron.ActivationFunction)
 	 */
 	@Override
 	Neuron createNeuron(ActivationFunction activFnct) {

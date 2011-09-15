@@ -53,8 +53,6 @@ public class SimpleSkatGame extends JSkatThread {
 	/**
 	 * Constructor
 	 * 
-	 * @param newTableName
-	 *            Table name
 	 * @param newForeHand
 	 *            Fore hand player
 	 * @param newMiddleHand
@@ -375,8 +373,6 @@ public class SimpleSkatGame extends JSkatThread {
 	/**
 	 * Deals the cards to the players
 	 * 
-	 * @param deck
-	 *            Card deck
 	 * @param cardCount
 	 *            Number of cards to be dealt to a player
 	 */

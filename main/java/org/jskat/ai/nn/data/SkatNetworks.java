@@ -224,7 +224,7 @@ public class SkatNetworks {
 	/**
 	 * Loads all neural networks from files
 	 * 
-	 * @param path
+	 * @param filePath
 	 *            Path to files
 	 */
 	public static void loadNetworks(String filePath) {
