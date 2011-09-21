@@ -59,7 +59,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 	private List<GameType> feasibleGameTypes;
 
-	private static long MAX_SIMULATIONS = 100;
+	private static long MAX_SIMULATIONS = 50;
 
 	/**
 	 * Constructor
@@ -220,12 +220,14 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		GameType bestGameType = null;
 		double highestWonRate = 0.0;
 
-		gameSimulator.resetGameSimulator(feasibleGameTypes,
+		List<GameType> gameTypesToCheck = filterFeasibleGameTypes(knowledge
+				.getHighestBid(knowledge.getPlayerPosition()));
+		gameSimulator.resetGameSimulator(gameTypesToCheck,
 				knowledge.getPlayerPosition(), knowledge.getMyCards());
 		SimulationResults results = gameSimulator.simulateMaxEpisodes(Long
 				.valueOf(MAX_SIMULATIONS));
 
-		for (GameType gameType : feasibleGameTypes) {
+		for (GameType gameType : gameTypesToCheck) {
 
 			Double wonRate = results.getWonRate(gameType);
 
@@ -237,12 +239,12 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 				highestWonRate = wonRate;
 				bestGameType = gameType;
 			}
+		}
 
-			if (bestGameType == null) {
-
-				log.error("No best game type found. Announcing grand!!!"); //$NON-NLS-1$
-				bestGameType = GameType.GRAND;
-			}
+		if (bestGameType == null) {
+			// FIXME (jansch 21.09.2011) find cheapest game
+			log.error("No best game type found. Announcing null!!!"); //$NON-NLS-1$
+			bestGameType = GameType.NULL;
 		}
 
 		return bestGameType;

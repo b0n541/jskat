@@ -3,9 +3,11 @@ package org.jskat.ai.nn;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.control.JSkatThread;
+import org.jskat.control.SkatGame;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData.GameState;
+import org.jskat.gui.NullView;
 import org.jskat.util.CardDeck;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -91,8 +93,10 @@ class GameSimulationThread extends JSkatThread {
 
 	private boolean simulateGame() {
 
-		SimpleSkatGame game = new SimpleSkatGame(nnPlayer1, nnPlayer2,
+		SkatGame game = new SkatGame("table", nnPlayer1, nnPlayer2,
 				nnPlayer3);
+		game.setView(new NullView());
+		game.setMaxSleep(0);
 
 		CardDeck deck = CardDeckSimulator.simulateUnknownCards(position, cards);
 		log.debug("Card deck: " + deck); //$NON-NLS-1$
