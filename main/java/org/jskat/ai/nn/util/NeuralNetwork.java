@@ -107,10 +107,14 @@ public class NeuralNetwork {
 		for (int i = 0; i < inputLayer.getNeurons().size()
 				* outputLayer.getNeurons().size(); i++) {
 
-			weights.add(new Double(rand.nextGaussian() * 0.2));
+			weights.add(new Double(getLittleRandomWeightValue()));
 		}
 
 		connectLayers(inputLayer, outputLayer, weights);
+	}
+
+	private double getLittleRandomWeightValue() {
+		return (rand.nextDouble() - 0.5) * 0.1;
 	}
 
 	private void connectLayers(Layer inputLayer, Layer outputLayer,
@@ -217,7 +221,7 @@ public class NeuralNetwork {
 		for (Layer layer : layers) {
 			for (Neuron neuron : layer.getNeurons()) {
 				for (Weight weight : neuron.incomingWeights) {
-					weight.setWeightValue(new Double(rand.nextGaussian() * 0.2));
+					weight.setWeightValue(getLittleRandomWeightValue());
 				}
 			}
 		}
