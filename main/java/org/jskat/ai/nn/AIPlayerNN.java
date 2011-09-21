@@ -59,7 +59,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 	private List<GameType> feasibleGameTypes;
 
-	private static long MAX_SIMULATIONS = 50;
+	private static long MAX_SIMULATIONS = 100;
 
 	/**
 	 * Constructor
@@ -138,7 +138,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 				.valueOf(MAX_SIMULATIONS));
 
 		for (Double wonRate : results.getAllWonRates()) {
-			if (wonRate.doubleValue() > 0.5) {
+			if (wonRate.doubleValue() > 0.75) {
 				return true;
 			}
 		}
@@ -317,15 +317,16 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			}
 		}
 
-		if (result.size() != 2) {
+		if (result.size() == 2) {
+
+			cards.remove(result.get(0));
+			cards.remove(result.get(1));
+		} else {
 
 			log.error("Did not found cards for discarding!!!"); //$NON-NLS-1$
 			result.clear();
 			result.add(cards.remove(rand.nextInt(cards.size())));
 			result.add(cards.remove(rand.nextInt(cards.size())));
-		} else {
-			cards.remove(result.get(0));
-			cards.remove(result.get(1));
 		}
 
 		log.debug("Player cards after discarding: " + cards); //$NON-NLS-1$
