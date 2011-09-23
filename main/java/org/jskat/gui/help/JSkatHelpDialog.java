@@ -253,7 +253,7 @@ public class JSkatHelpDialog extends JDialog {
 				log.warn("error in writing external html file:", e);
 				return;
 			}
-			pw.print(textPane.getText());
+			pw.print(externalizeLinks(textPane.getText()));
 			pw.flush();
 			pw.close();
 			try {
@@ -267,24 +267,29 @@ public class JSkatHelpDialog extends JDialog {
 		
 	};
 
+	private String externalizeLinks(String html) {
+		return html.replace("a href=\"org/jskat/gui/help/", "a href=\"http://www.jskat.net/help/");
+	}
+	
 	private final HyperlinkListener hll = new HyperlinkListener() {
 		public void hyperlinkUpdate(HyperlinkEvent e) {
 			if(e.getEventType()==HyperlinkEvent.EventType.ACTIVATED) {
-				if(e.getDescription().toLowerCase().startsWith("http:")) {
+				String link = e.getDescription(); 
+				if(link.toLowerCase().startsWith("http:")) {
 					try {
-						Desktop.getDesktop().browse( new URI( e.getDescription() ) );
+						Desktop.getDesktop().browse( new URI( link ) );
 					} catch (IOException ex) {
 						log.warn("IOException", ex);
-						JOptionPane.showMessageDialog(JSkatHelpDialog.this, "Error in loading external link:\n"+e.getDescription()+"\n"+(ex.getMessage()!=null?ex.getMessage():"<???>"), 
+						JOptionPane.showMessageDialog(JSkatHelpDialog.this, "Error in loading external link:\n"+link+"\n"+(ex.getMessage()!=null?ex.getMessage():"<???>"), 
 								"Externer Link", JOptionPane.ERROR_MESSAGE);
 					} catch (URISyntaxException ex) {
 						log.warn("URI exception", ex);
-						JOptionPane.showMessageDialog(JSkatHelpDialog.this, "Error in loading external link:\n"+e.getDescription()+"\n"+(ex.getMessage()!=null?ex.getMessage():"<???>"), 
+						JOptionPane.showMessageDialog(JSkatHelpDialog.this, "Error in loading external link:\n"+link+"\n"+(ex.getMessage()!=null?ex.getMessage():"<???>"), 
 								"Externer Link", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 				else {
-					setFile(e.getDescription());
+					setFile(link);
 				}
 			}
 		}
