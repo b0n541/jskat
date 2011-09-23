@@ -50,7 +50,7 @@ public class AboutAction extends AbstractJSkatAction {
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */
 	@Override
-	public void actionPerformed(@SuppressWarnings("unused") ActionEvent e) {
+	public void actionPerformed(ActionEvent e) {
 
 		jskat.showAboutMessage();
 	}
