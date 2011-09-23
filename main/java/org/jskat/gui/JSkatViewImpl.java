@@ -465,10 +465,13 @@ public class JSkatViewImpl implements IJSkatView {
 						"JSkat " //$NON-NLS-1$
 								+ strings.getString("version") //$NON-NLS-1$
 								+ " " //$NON-NLS-1$
-								+ strings.getVersion()
+								+ JSkatResourceBundle.getVersion()
+								+ "\n\n" //$NON-NLS-1$
+								+ "http://www.jskat.org\n" //$NON-NLS-1$
+								+ "http://sourceforge.net/projects/jskat" //$NON-NLS-1$
 								+ "\n\n" //$NON-NLS-1$
 								+ strings.getString("authors") //$NON-NLS-1$
-								+ ": Jan Schäfer, Markus J. Luzius\n\n" //$NON-NLS-1$
+								+ ":\nJan Schäfer (j@nschaefer.net),\nMarkus J. Luzius (jskat@luzius.de)\n\n" //$NON-NLS-1$
 								+ strings.getString("cards") //$NON-NLS-1$
 								+ ": International Skat Server\n\n" //$NON-NLS-1$
 								+ strings.getString("icons") //$NON-NLS-1$
