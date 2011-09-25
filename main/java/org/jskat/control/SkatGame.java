@@ -323,8 +323,8 @@ public class SkatGame extends JSkatThread {
 	 *            Hearing player
 	 * @param startBidValue
 	 *            Bid value to start from
-	 * @return the final bid value	
-	 */	
+	 * @return the final bid value
+	 */
 	private int twoPlayerBidding(Player announcer, Player hearer,
 			int startBidValue) {
 
@@ -471,7 +471,7 @@ public class SkatGame extends JSkatThread {
 
 		for (int trickNo = 0; trickNo < 10; trickNo++) {
 
-			log.debug("=============== Play trick " + (trickNo + 1)+" ==============="); //$NON-NLS-1$
+			log.debug("=============== Play trick " + (trickNo + 1) + " ==============="); //$NON-NLS-1$
 			doSleep(maxSleep);
 
 			view.setTrickNumber(tableName, trickNo + 1);
@@ -496,11 +496,13 @@ public class SkatGame extends JSkatThread {
 			data.addTrick(trick);
 			for (Player currPosition : Player.values()) {
 				// inform all players
-				// cloning of trick information to prevent manipulation by player
+				// cloning of trick information to prevent manipulation by
+				// player
 				try {
 					player.get(currPosition).newTrick((Trick) trick.clone());
 				} catch (CloneNotSupportedException e) {
-					log.warn("should not happen: " + e.getClass() + " - " + e.getMessage());
+					log.warn("should not happen: " + e.getClass() + " - "
+							+ e.getMessage());
 					player.get(currPosition).newTrick(trick);
 				}
 			}
@@ -637,7 +639,8 @@ public class SkatGame extends JSkatThread {
 
 				log.error("Player is fooling!!! Doesn't have card " + card + "!"); //$NON-NLS-1$//$NON-NLS-2$
 
-				if (skatPlayer instanceof HumanPlayer || JSkatOptions.instance().isCheatDebugMode()) {
+				if (skatPlayer instanceof HumanPlayer
+						|| JSkatOptions.instance().isCheatDebugMode()) {
 					view.showCardNotAllowedMessage(card);
 				} else {
 					// TODO create option for switching playing schwarz on/off
@@ -653,7 +656,8 @@ public class SkatGame extends JSkatThread {
 						+ trick.getFirstCard() + " player cards: " //$NON-NLS-1$
 						+ data.getPlayerCards(currPlayer));
 
-				if (skatPlayer instanceof HumanPlayer || JSkatOptions.instance().isCheatDebugMode()) {
+				if (skatPlayer instanceof HumanPlayer
+						|| JSkatOptions.instance().isCheatDebugMode()) {
 					view.showCardNotAllowedMessage(card);
 				} else {
 					// TODO create option for switching playing schwarz on/off
@@ -782,6 +786,16 @@ public class SkatGame extends JSkatThread {
 	public void setView(IJSkatView newView) {
 
 		view = newView;
+	}
+
+	/**
+	 * Sets a new logger for the skat game
+	 * 
+	 * @param newLogger
+	 *            New logger
+	 */
+	public void setLogger(Log newLogger) {
+		log = newLogger;
 	}
 
 	/**
