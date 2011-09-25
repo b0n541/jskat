@@ -26,6 +26,7 @@ import java.util.Random;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.impl.NoOpLog;
 import org.jskat.ai.nn.AIPlayerNN;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.JSkatThread;
@@ -206,6 +207,7 @@ public class NNTrainer extends JSkatThread {
 				SkatGame game = new SkatGame("table", nnPlayer1, nnPlayer2,
 						nnPlayer3);
 				game.setView(new NullView());
+				game.setLogger(new NoOpLog());
 				game.setMaxSleep(0);
 
 				CardDeck deck = new CardDeck();
