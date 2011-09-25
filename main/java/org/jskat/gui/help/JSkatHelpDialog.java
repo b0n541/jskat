@@ -160,7 +160,7 @@ public class JSkatHelpDialog extends JDialog {
 		}
 		return message.toString();
 	}
-	
+
 	private void setToInitialState() {
 
 		scrollPane.getVerticalScrollBar().setValue(0);
@@ -188,64 +188,81 @@ public class JSkatHelpDialog extends JDialog {
 		setVisible(false);
 		dispose();
 	}
-	
-	/** sets a single file, which will be inserted in the general html frame
-	 * @param filename html snippet file
+
+	/**
+	 * sets a single file, which will be inserted in the general html frame
+	 * 
+	 * @param filename
+	 *            html snippet file
 	 */
 	public void setFile(String filename) {
-		if(filename!=null) {
-			setFile(new String[] {filename});
+		if (filename != null) {
+			setFile(new String[] { filename });
 		}
 	}
-	
-	/** sets a list of files, which will be concatenated and inserted in the general html frame
-	 * @param filenames list of html snippet files
+
+	/**
+	 * sets a list of files, which will be concatenated and inserted in the
+	 * general html frame
+	 * 
+	 * @param filenames
+	 *            list of html snippet files
 	 */
 	public void setFile(String[] filenames) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(getResource("org/jskat/gui/help/frame.html"));
 		int ix = sb.indexOf("@@insert@@");
-		if(ix<0) {
-			throw new IllegalArgumentException("frame.html contains no @@insert@@");
+		if (ix < 0) {
+			throw new IllegalArgumentException(
+					"frame.html contains no @@insert@@");
 		}
-		for(String f: filenames) {
+		for (String f : filenames) {
 			sb.insert(ix, getResource(f));
 			ix = sb.indexOf("@@insert@@");
 		}
-		sb.delete(ix, ix+10);
+		sb.delete(ix, ix + 10);
 		textPane.setText(sb.toString());
 		textPane.setCaretPosition(0);
 	}
-	
-	/** inserts a html snippet in the general frame of the HTMLDialog
-	 * @param htmlSnippet the html snippet to insert
+
+	/**
+	 * inserts a html snippet in the general frame of the HTMLDialog
+	 * 
+	 * @param htmlSnippet
+	 *            the html snippet to insert
 	 */
 	public void insertText(String htmlSnippet) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(getResource("org/jskat/gui/help/frame.html"));
 		int ix = sb.indexOf("@@insert@@");
-		if(ix<0) {
-			throw new IllegalArgumentException("frame.html contains no @@insert@@");
+		if (ix < 0) {
+			throw new IllegalArgumentException(
+					"frame.html contains no @@insert@@");
 		}
-		sb.replace(ix, ix+10, htmlSnippet);
+		sb.replace(ix, ix + 10, htmlSnippet);
 		textPane.setText(sb.toString());
 		textPane.setCaretPosition(0);
 	}
-	
-	/** sets a specific html text to display in the dialog 
-	 * @param html the html to display in the dialog
+
+	/**
+	 * sets a specific html text to display in the dialog
+	 * 
+	 * @param html
+	 *            the html to display in the dialog
 	 */
 	public void setText(String html) {
 		textPane.setText(html);
 		textPane.setCaretPosition(0);
 	}
 
-	private final Action openExternalAction = new AbstractAction(strings.getString("open_external")) {
+	private final Action openExternalAction = new AbstractAction(
+			strings.getString("open_external")) {
 		private static final long serialVersionUID = 4233152199895964006L;
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			File f = new File(System.getProperty("java.io.tmpdir")+File.separator+"JSkat_doc.html");
+			File f = new File(System.getProperty("java.io.tmpdir")
+					+ File.separator + "JSkat_doc.html");
 			PrintWriter pw;
 			try {
 				pw = new PrintWriter(f);
@@ -257,38 +274,52 @@ public class JSkatHelpDialog extends JDialog {
 			pw.flush();
 			pw.close();
 			try {
-				Desktop.getDesktop().browse( new URI( "file:///"+f.getAbsolutePath().replace("\\", "/") ) );
+				Desktop.getDesktop().browse(
+						new URI("file:///"
+								+ f.getAbsolutePath().replace("\\", "/")));
 			} catch (IOException e) {
 				log.error("IOException", e);
 			} catch (URISyntaxException e) {
 				log.error("URI Fehler", e);
 			}
 		}
-		
+
 	};
 
 	private String externalizeLinks(String html) {
-		return html.replace("a href=\"org/jskat/gui/help/", "a href=\"http://www.jskat.net/help/");
+		return html.replace("a href=\"org/jskat/gui/help/",
+				"a href=\"http://www.jskat.org/help/");
 	}
-	
+
 	private final HyperlinkListener hll = new HyperlinkListener() {
 		public void hyperlinkUpdate(HyperlinkEvent e) {
-			if(e.getEventType()==HyperlinkEvent.EventType.ACTIVATED) {
-				String link = e.getDescription(); 
-				if(link.toLowerCase().startsWith("http:")) {
+			if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+				String link = e.getDescription();
+				if (link.toLowerCase().startsWith("http:")) {
 					try {
-						Desktop.getDesktop().browse( new URI( link ) );
+						Desktop.getDesktop().browse(new URI(link));
 					} catch (IOException ex) {
 						log.warn("IOException", ex);
-						JOptionPane.showMessageDialog(JSkatHelpDialog.this, "Error in loading external link:\n"+link+"\n"+(ex.getMessage()!=null?ex.getMessage():"<???>"), 
+						JOptionPane.showMessageDialog(
+								JSkatHelpDialog.this,
+								"Error in loading external link:\n"
+										+ link
+										+ "\n"
+										+ (ex.getMessage() != null ? ex
+												.getMessage() : "<???>"),
 								"Externer Link", JOptionPane.ERROR_MESSAGE);
 					} catch (URISyntaxException ex) {
 						log.warn("URI exception", ex);
-						JOptionPane.showMessageDialog(JSkatHelpDialog.this, "Error in loading external link:\n"+link+"\n"+(ex.getMessage()!=null?ex.getMessage():"<???>"), 
+						JOptionPane.showMessageDialog(
+								JSkatHelpDialog.this,
+								"Error in loading external link:\n"
+										+ link
+										+ "\n"
+										+ (ex.getMessage() != null ? ex
+												.getMessage() : "<???>"),
 								"Externer Link", JOptionPane.ERROR_MESSAGE);
 					}
-				}
-				else {
+				} else {
 					setFile(link);
 				}
 			}
