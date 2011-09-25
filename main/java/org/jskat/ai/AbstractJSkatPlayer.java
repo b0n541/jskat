@@ -185,7 +185,9 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 
 		for (Card card : knowledge.getMyCards()) {
 
-			if (trick.size() > 0 && rules.isCardAllowed(knowledge.getGameType(), trick.get(0), knowledge.getMyCards(), card)) {
+			if (trick.size() > 0
+					&& rules.isCardAllowed(knowledge.getGameType(),
+							trick.get(0), knowledge.getMyCards(), card)) {
 
 				log.debug("initial card: " + trick.get(0)); //$NON-NLS-1$
 				isCardAllowed = true;
@@ -279,5 +281,15 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	public void setGameResult(SkatGameResult gameResult) {
 
 		this.gameResult = gameResult;
+	}
+
+	/**
+	 * Sets a new logger for the abstract skat player
+	 * 
+	 * @param newLogger
+	 *            New logger
+	 */
+	public void setLogger(Log newLogger) {
+		log = newLogger;
 	}
 }
