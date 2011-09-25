@@ -2,6 +2,7 @@ package org.jskat.ai.nn;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.commons.logging.impl.NoOpLog;
 import org.jskat.control.JSkatThread;
 import org.jskat.control.SkatGame;
 import org.jskat.data.GameAnnouncement;
@@ -43,10 +44,13 @@ class GameSimulationThread extends JSkatThread {
 
 		nnPlayer1 = new AIPlayerNN();
 		nnPlayer1.setIsLearning(false);
+		nnPlayer1.setLogger(new NoOpLog());
 		nnPlayer2 = new AIPlayerNN();
 		nnPlayer2.setIsLearning(false);
+		nnPlayer2.setLogger(new NoOpLog());
 		nnPlayer3 = new AIPlayerNN();
 		nnPlayer3.setIsLearning(false);
+		nnPlayer3.setLogger(new NoOpLog());
 	}
 
 	void startSimulationWithMaxEpidodes(Long episodes) {
@@ -93,9 +97,9 @@ class GameSimulationThread extends JSkatThread {
 
 	private boolean simulateGame() {
 
-		SkatGame game = new SkatGame("table", nnPlayer1, nnPlayer2,
-				nnPlayer3);
+		SkatGame game = new SkatGame("table", nnPlayer1, nnPlayer2, nnPlayer3);
 		game.setView(new NullView());
+		game.setLogger(new NoOpLog());
 		game.setMaxSleep(0);
 
 		CardDeck deck = CardDeckSimulator.simulateUnknownCards(position, cards);

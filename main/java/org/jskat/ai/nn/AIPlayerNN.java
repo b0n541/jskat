@@ -713,4 +713,15 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		isLearning = newIsLearning;
 	}
 
+	/**
+	 * Sets a new logger for the nn player
+	 * 
+	 * @param newLogger
+	 *            New logger
+	 */
+	public void setLogger(Log newLogger) {
+		super.setLogger(newLogger);
+		log = newLogger;
+	}
+
 }
