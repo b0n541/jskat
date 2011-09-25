@@ -429,18 +429,20 @@ public class PlayerKnowledge {
 	 * 
 	 * @return TRUE if any player could still have any trump cards
 	 */
-	public boolean isTrumpOut() {
-		for (Player p : Player.values()) {
-			if (p == declarer)
-				continue;
-			for (Suit s : Suit.values()) {
-				if (couldHaveCard(p, Card.getCard(s, Rank.JACK)))
-					return true;
-			}
-			for (Rank r : Rank.values()) {
-				if (couldHaveCard(p,
-						Card.getCard(getGame().getGameType().asSuit(), r)))
-					return true;
+	public boolean couldOpponentsHaveTrump() {
+		if (playerPosition == declarer) {
+			for (Player p : Player.values()) {
+				if (p == declarer)
+					continue;
+				for (Suit s : Suit.values()) {
+					if (couldHaveCard(p, Card.getCard(s, Rank.JACK)))
+						return true;
+				}
+				for (Rank r : Rank.values()) {
+					if (couldHaveCard(p, Card.getCard(getGame().getGameType()
+							.getTrumpSuit(), r)))
+						return true;
+				}
 			}
 		}
 		return false;
@@ -694,11 +696,13 @@ public class PlayerKnowledge {
 	}
 
 	/**
-	 * @return the game
+	 * Gets the current trump suit
+	 * 
+	 * @return Trump suit or null if there is no trump
 	 */
 	public Suit getTrumpSuit() {
 
-		return game.getGameType().asSuit();
+		return game.getGameType().getTrumpSuit();
 	}
 
 	/**
