@@ -79,7 +79,8 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 		if (knowledge.getDeclarer() == Player.MIDDLEHAND) {
 			// "kurzer Weg, lange Farbe"
 			Suit longSuit = cards.getMostFrequentSuit(knowledge.getTrumpSuit());
-			if (cards.get(cards.getFirstIndexOfSuit(longSuit)).getRank() == Rank.ACE) {
+			if (longSuit != null
+					&& cards.get(cards.getFirstIndexOfSuit(longSuit)).getRank() == Rank.ACE) {
 				log.debug("playCard (1)");
 				return cards.get(knowledge.getMyCards().getFirstIndexOfSuit(
 						longSuit));
