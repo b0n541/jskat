@@ -619,8 +619,14 @@ public class SkatGame extends JSkatThread {
 		boolean aiPlayerPlayedSchwarz = false;
 
 		while (!cardAccepted && !aiPlayerPlayedSchwarz) {
-			// ask player for the next card
-			card = skatPlayer.playCard();
+
+			try {
+				// ask player for the next card
+				card = skatPlayer.playCard();
+			} catch (Exception exp) {
+				log.error("Exception thrown by player " + skatPlayer
+						+ " playing " + currPlayer + ": " + exp);
+			}
 
 			log.debug(card + " " + data); //$NON-NLS-1$
 
@@ -670,46 +676,49 @@ public class SkatGame extends JSkatThread {
 			}
 		}
 
-		// card was on players hand and is valid
-		data.getPlayerCards(currPlayer).remove(card);
-		data.setTrickCard(currPlayer, card);
-
-		if (trick.getTrickNumberInGame() > 0
-				&& currPlayer.equals(trickForeHand)) {
-			// remove all cards from current trick panel first
-			view.clearTrickCards(tableName);
-
-			Trick lastTrick = data.getTricks().get(data.getTricks().size() - 2);
-
-			// set last trick cards
-			view.setLastTrick(tableName, lastTrick.getForeHand(),
-					lastTrick.getCard(Player.FOREHAND),
-					lastTrick.getCard(Player.MIDDLEHAND),
-					lastTrick.getCard(Player.REARHAND));
-		}
-
-		view.playTrickCard(tableName, currPlayer, card);
-
-		for (Player currPosition : Player.values()) {
-			// inform all players
-			// cloning of card is not neccessary, because Card is immutable
-			player.get(currPosition).cardPlayed(currPlayer, card);
-		}
-
-		log.debug("playing card " + card); //$NON-NLS-1$
-
-		// check schwarz
-		if (aiPlayerPlayedSchwarz && !cardAccepted) {
-			// end game immediately
-			data.getResult().setSchwarz(true);
-			if (data.getDeclarer().equals(currPlayer)) {
-				// declarer played schwarz
-				data.getResult().setWon(false);
-			} else {
-				// opponent played schwarz
-				data.getResult().setWon(true);
+		if (card == null || aiPlayerPlayedSchwarz) {
+			// check schwarz
+			if (aiPlayerPlayedSchwarz && !cardAccepted) {
+				// end game immediately
+				data.getResult().setSchwarz(true);
+				if (data.getDeclarer().equals(currPlayer)) {
+					// declarer played schwarz
+					data.getResult().setWon(false);
+				} else {
+					// opponent played schwarz
+					data.getResult().setWon(true);
+				}
+				data.setGameState(GameState.PRELIMINARY_GAME_END);
 			}
-			data.setGameState(GameState.PRELIMINARY_GAME_END);
+		} else {
+			// card was on players hand and is valid
+			data.getPlayerCards(currPlayer).remove(card);
+			data.setTrickCard(currPlayer, card);
+
+			if (trick.getTrickNumberInGame() > 0
+					&& currPlayer.equals(trickForeHand)) {
+				// remove all cards from current trick panel first
+				view.clearTrickCards(tableName);
+
+				Trick lastTrick = data.getTricks().get(
+						data.getTricks().size() - 2);
+
+				// set last trick cards
+				view.setLastTrick(tableName, lastTrick.getForeHand(),
+						lastTrick.getCard(Player.FOREHAND),
+						lastTrick.getCard(Player.MIDDLEHAND),
+						lastTrick.getCard(Player.REARHAND));
+			}
+
+			view.playTrickCard(tableName, currPlayer, card);
+
+			for (Player currPosition : Player.values()) {
+				// inform all players
+				// cloning of card is not neccessary, because Card is immutable
+				player.get(currPosition).cardPlayed(currPlayer, card);
+			}
+
+			log.debug("playing card " + card); //$NON-NLS-1$
 		}
 	}
 
