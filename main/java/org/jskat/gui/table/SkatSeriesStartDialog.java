@@ -98,7 +98,6 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
 		ArrayList<PlayerType> playerTypes = new ArrayList<PlayerType>();
 
-		playerTypes.add(PlayerType.NEW_ALGORITHMIC);
 		playerTypes.add(PlayerType.RANDOM);
 		playerTypes.add(PlayerType.NEURAL_NETWORK);
 		playerTypes.add(PlayerType.ALGORITHMIC);
@@ -220,9 +219,6 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 			if (player != null) {
 
 				switch (player) {
-				case NEW_ALGORITHMIC:
-					result = "tmp: new algorithmic"; //$NON-NLS-1$
-					break;
 				case RANDOM:
 					result = strings.getString("random_player"); //$NON-NLS-1$
 					break;
