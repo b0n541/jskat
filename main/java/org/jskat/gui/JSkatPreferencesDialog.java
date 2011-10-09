@@ -100,8 +100,6 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		Container root = getContentPane();
 		root.setLayout(new MigLayout());
 
-		JTabbedPane prefTabs = new JTabbedPane();
-
 		JPanel commonTab = new JPanel(new MigLayout("fill", "fill", "shrink")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		commonTab.add(new JLabel(strings.getString("language"))); //$NON-NLS-1$
@@ -121,11 +119,12 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		JPanel gameShortCutPanel = getGameShortCutPanel();
 		commonTab.add(gameShortCutPanel, "wrap"); //$NON-NLS-1$
 
+		JTabbedPane prefTabs = new JTabbedPane();
 		prefTabs.add(commonTab, strings.getString("common_options")); //$NON-NLS-1$
 
-		JPanel skatRulesTab = new JPanel(
-				new MigLayout("fill", "fill", "shrink")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		prefTabs.add(skatRulesTab, strings.getString("skat_rules")); //$NON-NLS-1$
+		// JPanel skatRulesTab = new JPanel(
+		//				new MigLayout("fill", "fill", "shrink")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		//		prefTabs.add(skatRulesTab, strings.getString("skat_rules")); //$NON-NLS-1$
 
 		JPanel issTab = new JPanel(new MigLayout("fill", "fill", "shrink")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
