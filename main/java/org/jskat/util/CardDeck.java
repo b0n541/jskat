@@ -80,7 +80,7 @@ public class CardDeck extends CardList {
 	}
 
 	/**
-	 * @see CardList#add(org.jskat.util.Card)
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean add(Card card) {
