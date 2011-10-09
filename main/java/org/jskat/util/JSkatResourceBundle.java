@@ -2,7 +2,7 @@
  * JSkat - A skat program written in Java
  * by Jan Schäfer and Markus J. Luzius
  *
- * Version: 0.9.0
+ * Version: 0.10.0-SNAPSHOT
  * Build date: 2011-10-09
  *
  * This program is free software: you can redistribute it and/or modify
@@ -67,7 +67,7 @@ public class JSkatResourceBundle {
 	 * @return Version
 	 */
 	public static String getVersion() {
-		return "0.9"; //$NON-NLS-1$
+		return "0.10"; //$NON-NLS-1$
 	}
 
 	/**
