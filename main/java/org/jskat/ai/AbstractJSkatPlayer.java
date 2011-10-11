@@ -102,6 +102,15 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean playGrandHand() {
+
+		return false;
+	}
+
+	/**
 	 * Sorts the card according a game type
 	 * 
 	 * @param sortGameType
@@ -117,6 +126,7 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	 */
 	@Override
 	public final void startGame(Player newDeclarer, GameAnnouncement game) {
+		log.debug("Starting game for "+getPlayerName()+": "+game.getGameType());
 
 		playerState = PlayerStates.PLAYING;
 		knowledge.setDeclarer(newDeclarer);
@@ -124,6 +134,7 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 		knowledge.getMyCards().sort(game.getGameType());
 
 		rules = SkatRuleFactory.getSkatRules(game.getGameType());
+		log.debug("Starting game for "+getPlayerName()+": "+game.getGameType()+" (rules="+rules.getClass()+")");
 
 		startGame();
 	}

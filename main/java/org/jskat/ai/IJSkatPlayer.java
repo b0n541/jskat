@@ -94,6 +94,11 @@ public interface IJSkatPlayer {
 	public void takeCard(Card newCard);
 
 	/**
+	 * @return true, if the player wants to play a grand hand in a BockRamsch game
+	 */
+	public boolean playGrandHand();
+
+	/**
 	 * Checks whether the player wants to look into the skat
 	 * 
 	 * @return TRUE if the player wants to look into the skat
@@ -250,4 +255,5 @@ public interface IJSkatPlayer {
 		 */
 		PLAYING
 	}
+
 }

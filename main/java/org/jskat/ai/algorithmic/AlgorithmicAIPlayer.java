@@ -27,6 +27,7 @@ import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
+import org.jskat.util.GameType;
 
 /**
  * @author Markus J. Luzius <br>
@@ -140,7 +141,15 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public void startGame() {
-		if(aiPlayer==null) aiPlayer = new AlgorithmicOpponentPlayer(this);
+		if(aiPlayer==null) {
+			if(knowledge.getGameType()==GameType.RAMSCH) {
+				aiPlayer = new AlgorithmicRamschPlayer(this);
+			}
+			else {
+				log.debug("GameType = "+knowledge.getGameType());
+				aiPlayer = new AlgorithmicOpponentPlayer(this);
+			}
+		}
 		log.debug("aiPlayer set to "+aiPlayer);
 	}
 
