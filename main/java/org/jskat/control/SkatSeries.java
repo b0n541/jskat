@@ -32,6 +32,7 @@ import org.jskat.data.SkatSeriesData;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.gui.IJSkatView;
 import org.jskat.gui.human.HumanPlayer;
+import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
 
 
@@ -153,7 +154,7 @@ public class SkatSeries extends JSkatThread {
 				gameNumber++;
 				view.setGameNumber(data.getTableName(), gameNumber);
 
-				currSkatGame = new SkatGame(data.getTableName(), player.get(Player.FOREHAND),
+				currSkatGame = new SkatGame(data.getTableName(), GameVariant.STANDARD, player.get(Player.FOREHAND),
 						player.get(Player.MIDDLEHAND), player.get(Player.REARHAND));
 
 				setViewPositions();

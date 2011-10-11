@@ -25,6 +25,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jskat.ai.AbstractJSkatPlayer;
 import org.jskat.ai.IJSkatPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
@@ -39,6 +40,7 @@ import org.jskat.util.Card;
 import org.jskat.util.CardDeck;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
+import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
 import org.jskat.util.SkatConstants;
 import org.jskat.util.rule.BasicSkatRules;
@@ -52,6 +54,7 @@ public class SkatGame extends JSkatThread {
 	private static Log log = LogFactory.getLog(SkatGame.class);
 	private int maxSleep = 100;
 	private SkatGameData data;
+	private final GameVariant variant;
 	private CardDeck deck;
 	private Map<Player, IJSkatPlayer> player;
 	private String tableName;
@@ -63,6 +66,8 @@ public class SkatGame extends JSkatThread {
 	 * 
 	 * @param newTableName
 	 *            Table name
+	 * @param variant
+	 *            game variant
 	 * @param newForeHand
 	 *            Fore hand player
 	 * @param newMiddleHand
@@ -70,10 +75,11 @@ public class SkatGame extends JSkatThread {
 	 * @param newRearHand
 	 *            Hind hand player
 	 */
-	public SkatGame(String newTableName, IJSkatPlayer newForeHand,
+	public SkatGame(String newTableName, GameVariant variant, IJSkatPlayer newForeHand,
 			IJSkatPlayer newMiddleHand, IJSkatPlayer newRearHand) {
 
 		tableName = newTableName;
+		this.variant = variant;
 		player = new HashMap<Player, IJSkatPlayer>();
 		player.put(Player.FOREHAND, newForeHand);
 		player.put(Player.MIDDLEHAND, newMiddleHand);
@@ -111,12 +117,46 @@ public class SkatGame extends JSkatThread {
 				break;
 			case BIDDING:
 				view.setActivePlayer(tableName, Player.MIDDLEHAND);
+				// ------------------ ramsch ---------------------------
+				if(variant==GameVariant.RAMSCH) {
+					log.debug("ramsch bidding");
+					boolean doBreak = false;
+					for(Player declarer: Player.values()) {
+						if(!doBreak) {
+							data.setDeclarer(declarer);
+							doBreak = playGrandHand();
+						}
+					}
+					if(!doBreak) {
+						log.debug("no grand hand - initiating schieberamsch");
+						setGameState(GameState.PICK_UP_SKAT);
+					}
+					else {
+						log.debug(data.getDeclarer()+" is playing grand hand");
+						GameAnnouncementFactory gaf = GameAnnouncement.getFactory();
+						gaf.setGameType(GameType.GRAND);
+						gaf.setHand(true);
+						data.setAnnouncement(gaf.getAnnouncement());
+						setGameState(GameState.TRICK_PLAYING);
+						log.debug("grand hand game started");
+					}
+					break;
+				}
+				// ------------------ "normal" game (i.e. no ramsch) ---------------------------
 				bidding();
 				if (data.getGameType() == GameType.PASSED_IN) {
-
-					setGameState(GameState.PRELIMINARY_GAME_END);
+					if(JSkatOptions.instance().isRamschEventNoBid()) {
+						log.debug("Playing ramsch due to no bid");
+						GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+						factory.setGameType(GameType.RAMSCH);
+						setGameAnnouncement(factory.getAnnouncement());
+						log.debug("Playing ramsch due to no bid, new game type: "+data.getGameType());
+						setGameState(GameState.TRICK_PLAYING);
+					}
+					else {
+						setGameState(GameState.PRELIMINARY_GAME_END);
+					}
 				} else {
-
 					view.setDeclarer(tableName, data.getDeclarer());
 					setGameState(GameState.PICK_UP_SKAT);
 				}
@@ -157,6 +197,10 @@ public class SkatGame extends JSkatThread {
 		} while (data.getGameState() != GameState.GAME_OVER);
 
 		log.debug(data.getGameState());
+	}
+
+	private boolean playGrandHand() {
+		return player.get(data.getDeclarer()).playGrandHand();
 	}
 
 	private boolean pickUpSkat() {
@@ -300,7 +344,8 @@ public class SkatGame extends JSkatThread {
 			// pass in
 			GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 			factory.setGameType(GameType.PASSED_IN);
-			setGameAnnouncement(factory.getAnnouncement());
+			data.setAnnouncement(factory.getAnnouncement());
+//			setGameAnnouncement(factory.getAnnouncement());
 		}
 
 		doSleep(maxSleep);
@@ -760,7 +805,7 @@ public class SkatGame extends JSkatThread {
 	private void calculateGameValue() {
 
 		log.debug("Calculate game value"); //$NON-NLS-1$
-
+		
 		// FIXME (jan 07.12.2010) don't let a data class calculate it's values
 		data.calcResult();
 

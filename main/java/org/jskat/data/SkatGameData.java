@@ -59,7 +59,7 @@ public class SkatGameData {
 		/**
 		 * Bidding phase
 		 */
-		BIDDING,
+		BIDDING, 
 		/**
 		 * Look into skat or play hand game phase
 		 */
@@ -459,6 +459,49 @@ public class SkatGameData {
 
 			result.setWon(false);
 			result.setGameValue(0);
+		} else if (getGameType() == GameType.RAMSCH) {
+			// get RamschDeclarer
+			if(getGameType()==GameType.RAMSCH) {
+				int[] playerPoints = new int[3];
+				playerPoints[0] = getPlayerPoints(Player.FOREHAND);
+				playerPoints[1] = getPlayerPoints(Player.MIDDLEHAND);
+				playerPoints[2] = getPlayerPoints(Player.REARHAND);
+				if(playerPoints[0]>playerPoints[1] && playerPoints[0]>playerPoints[2]) {
+					setDeclarer(Player.FOREHAND);
+					result.setWon(false);
+					result.setGameValue(playerPoints[0]);
+				}
+				else if(playerPoints[1]>playerPoints[0] && playerPoints[1]>playerPoints[2]) {
+					setDeclarer(Player.MIDDLEHAND);
+					result.setWon(false);
+					result.setGameValue(playerPoints[1]);
+				}
+				else if(playerPoints[2]>playerPoints[0] && playerPoints[2]>playerPoints[1]) {
+					setDeclarer(Player.REARHAND);
+					result.setWon(false);
+					result.setGameValue(playerPoints[2]);
+				}
+				else if(playerPoints[1]>playerPoints[0] && playerPoints[1]==playerPoints[2]) {
+					setDeclarer(Player.FOREHAND);
+					result.setWon(true);
+					result.setGameValue(playerPoints[1]);
+				}
+				else if(playerPoints[0]>playerPoints[1] && playerPoints[0]==playerPoints[2]) {
+					setDeclarer(Player.MIDDLEHAND);
+					result.setWon(true);
+					result.setGameValue(playerPoints[0]);
+				}
+				else if(playerPoints[0]>playerPoints[2] && playerPoints[0]==playerPoints[1]) {
+					setDeclarer(Player.REARHAND);
+					result.setWon(true);
+					result.setGameValue(playerPoints[0]);
+				}
+				else {
+					log.error("Cannot calculate ramsch game result: ["+playerPoints[0]+", "+playerPoints[1]+", "+playerPoints[2]+"]");
+				}
+				log.debug("ramsch game result: ["+playerPoints[0]+", "+playerPoints[1]+", "+playerPoints[2]+"] - "+getDeclarer()+": "+result.getGameValue()+" (win="+result.isWon()+")");
+			}
+			
 		} else {
 
 			if (!result.isWon()) {
