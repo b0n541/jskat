@@ -37,6 +37,7 @@ import org.jskat.data.SkatGameData.GameState;
 import org.jskat.gui.NullView;
 import org.jskat.util.CardDeck;
 import org.jskat.util.GameType;
+import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
 
 /**
@@ -204,7 +205,7 @@ public class NNTrainer extends JSkatThread {
 				nnPlayer1.newGame(Player.FOREHAND);
 				nnPlayer2.newGame(Player.MIDDLEHAND);
 				nnPlayer3.newGame(Player.REARHAND);
-				SkatGame game = new SkatGame("table", nnPlayer1, nnPlayer2,
+				SkatGame game = new SkatGame("table", GameVariant.STANDARD, nnPlayer1, nnPlayer2,
 						nnPlayer3);
 				game.setView(new NullView());
 				game.setLogger(new NoOpLog());

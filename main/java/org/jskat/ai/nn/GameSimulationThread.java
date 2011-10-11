@@ -32,6 +32,7 @@ import org.jskat.gui.NullView;
 import org.jskat.util.CardDeck;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
+import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
 
 /**
@@ -117,7 +118,7 @@ class GameSimulationThread extends JSkatThread {
 
 	private boolean simulateGame() {
 
-		SkatGame game = new SkatGame("table", nnPlayer1, nnPlayer2, nnPlayer3);
+		SkatGame game = new SkatGame("table", GameVariant.STANDARD, nnPlayer1, nnPlayer2, nnPlayer3);
 		game.setView(new NullView());
 		game.setLogger(new NoOpLog());
 		game.setMaxSleep(0);
