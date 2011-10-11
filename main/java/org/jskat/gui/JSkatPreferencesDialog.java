@@ -45,6 +45,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatOptions.SupportedLanguage;
+import org.jskat.data.SkatTableOptions.RamschSkatOwners;
 import org.jskat.gui.img.CardFace;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.JSkatResourceBundle;
@@ -73,6 +74,24 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 	private JRadioButton gameShortCutYes;
 	private JRadioButton gameShortCutNo;
 
+	// rule options
+	private JRadioButton rulesetISPO;
+	private JRadioButton rulesetPub;
+	private JRadioButton rulesetIndividual;
+	private JCheckBox playContra;
+	private JCheckBox playBock;
+	private JCheckBox playRamsch;
+	private JCheckBox playRevolution;
+	private JCheckBox bockEventLostGrand;
+	private JCheckBox bockEventLostWith60;
+	private JCheckBox bockEventLostAfterContra;
+	private JCheckBox bockEventContraReAnnounced;
+	private JCheckBox bockEventPlayerHasX00Points;
+	private RamschSkatOwners ramschSkat = RamschSkatOwners.LAST_TRICK;
+	private JCheckBox schieberRamsch;
+	private JCheckBox schieberRamschJacksInSkat;
+	private JCheckBox ramschEventNoBid;
+
 	private JTextField issAddress;
 	private JTextField issPort;
 
@@ -100,6 +119,8 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		Container root = getContentPane();
 		root.setLayout(new MigLayout());
 
+		JTabbedPane prefTabs = new JTabbedPane();
+
 		JPanel commonTab = new JPanel(new MigLayout("fill", "fill", "shrink")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		commonTab.add(new JLabel(strings.getString("language"))); //$NON-NLS-1$
@@ -119,12 +140,10 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		JPanel gameShortCutPanel = getGameShortCutPanel();
 		commonTab.add(gameShortCutPanel, "wrap"); //$NON-NLS-1$
 
-		JTabbedPane prefTabs = new JTabbedPane();
 		prefTabs.add(commonTab, strings.getString("common_options")); //$NON-NLS-1$
 
-		// JPanel skatRulesTab = new JPanel(
-		//				new MigLayout("fill", "fill", "shrink")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		//		prefTabs.add(skatRulesTab, strings.getString("skat_rules")); //$NON-NLS-1$
+		JPanel skatRulesTab = getRulesPanel(); 
+		prefTabs.add(skatRulesTab, strings.getString("skat_rules")); //$NON-NLS-1$
 
 		JPanel issTab = new JPanel(new MigLayout("fill", "fill", "shrink")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
@@ -293,6 +312,59 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		return languagePanel;
 	}
 
+	private JPanel getRulesPanel() {
+
+		JPanel rulesPanel = new JPanel(new MigLayout("fill", "fill", "shrink")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		ButtonGroup bg = new ButtonGroup();
+		JLabel lbl = new JLabel("Spielregeln");
+		rulesPanel.add(lbl, "wrap");
+		rulesetISPO = new JRadioButton("ISPO rules");
+		rulesPanel.add(rulesetISPO);
+		rulesetISPO.setSelected(true);
+		bg.add(rulesetISPO);
+		rulesetPub = new JRadioButton("pub rules");
+		rulesPanel.add(rulesetPub, "wrap");
+		bg.add(rulesetPub);
+		lbl = new JLabel("");
+		rulesPanel.add(lbl);
+		rulesetIndividual = new JRadioButton("individual rules");
+		rulesPanel.add(rulesetIndividual, "wrap");
+		bg.add(rulesetPub);
+		lbl = new JLabel("");
+		rulesPanel.add(lbl);
+		ramschEventNoBid = new JCheckBox("Play Ramsch when passed in");
+		rulesPanel.add(ramschEventNoBid, "wrap");
+		lbl = new JLabel("");
+		rulesPanel.add(lbl);
+		playBock = new JCheckBox("Play Bock");
+		rulesPanel.add(playBock, "wrap");
+		lbl = new JLabel("");
+		rulesPanel.add(lbl);
+		playRamsch = new JCheckBox("Play BockRamsch");
+		rulesPanel.add(playRamsch, "wrap");
+		lbl = new JLabel("");
+		rulesPanel.add(lbl);
+		lbl = new JLabel("Bock events");
+		rulesPanel.add(lbl, "wrap");
+		lbl = new JLabel("");
+		rulesPanel.add(lbl);
+		bockEventLostAfterContra = new JCheckBox("lost contra game");
+		rulesPanel.add(bockEventLostAfterContra, "wrap");
+		lbl = new JLabel("");
+		rulesPanel.add(lbl);
+		bockEventContraReAnnounced = new JCheckBox("contra & re");
+		rulesPanel.add(bockEventContraReAnnounced, "wrap");
+		lbl = new JLabel("");
+		rulesPanel.add(lbl);
+		bockEventLostGrand = new JCheckBox("lost grand game");
+		rulesPanel.add(bockEventLostGrand, "wrap");
+		lbl = new JLabel("");
+		rulesPanel.add(lbl);
+		bockEventLostWith60 = new JCheckBox("lost with 60 points");
+		rulesPanel.add(bockEventLostWith60, "wrap");
+		return rulesPanel;
+	}
+
 	/**
 	 * @see JDialog#setVisible(boolean)
 	 */
@@ -326,6 +398,35 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 			options.setGameShortCut(gameShortCutYes.isSelected());
 			options.setIssAddress(issAddress.getText());
 			options.setIssPort(Integer.valueOf(issPort.getText()));
+			
+			if(rulesetISPO.isSelected()) {
+				options.setRamschEventNoBid(false);
+				options.setBockEventContraReAnnounced(false);
+				options.setBockEventLostGrand(false);
+				options.setBockEventLostAfterContra(false);
+				options.setBockEventLostWith60(false);
+				options.setPlayContra(false);
+				options.setPlayRamsch(false);
+				options.setPlayBock(false);
+				options.setPlayRevolution(false);
+				options.setSchieberRamsch(false);
+				options.setSchieberRamschJacksInSkat(false);
+				options.setRamschSkat(RamschSkatOwners.LAST_TRICK);
+			}
+			else {
+				options.setRamschEventNoBid(rulesetPub.isSelected() || ramschEventNoBid.isSelected());
+				options.setBockEventContraReAnnounced(rulesetPub.isSelected() || bockEventContraReAnnounced.isSelected());
+				options.setBockEventLostGrand(rulesetPub.isSelected() || bockEventLostGrand.isSelected());
+				options.setBockEventLostAfterContra(rulesetPub.isSelected() || bockEventLostAfterContra.isSelected());
+				options.setBockEventLostWith60(rulesetPub.isSelected() || bockEventLostWith60.isSelected());
+				options.setPlayContra(rulesetPub.isSelected() || playContra.isSelected());
+				options.setPlayRamsch(rulesetPub.isSelected() || playRamsch.isSelected());
+				options.setPlayBock(rulesetPub.isSelected() || playBock.isSelected());
+				options.setPlayRevolution(rulesetPub.isSelected() || playRevolution.isSelected());
+				options.setSchieberRamsch(rulesetPub.isSelected() || schieberRamsch.isSelected());
+				options.setSchieberRamschJacksInSkat(rulesetPub.isSelected() || schieberRamschJacksInSkat.isSelected());
+				options.setRamschSkat(RamschSkatOwners.LAST_TRICK);
+			}
 
 			options.saveJSkatProperties();
 			refreshCardFaces();
