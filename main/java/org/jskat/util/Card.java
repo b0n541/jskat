@@ -321,6 +321,7 @@ public enum Card {
 	 */
 	public static CardList getBeatingCards(GameType gameType, Card cardToBeat) {
 		// TODO (mjl 23.08.2011) write unit tests for Card.getBeatingCards()
+		// FIXME (mjl 05.09.2011) is this supposed to consider trump cards?
 		CardList beatingCards = new CardList();
 		for(Card card: Card.values()) {
 			if(card.beats(gameType, cardToBeat)) beatingCards.add(card);

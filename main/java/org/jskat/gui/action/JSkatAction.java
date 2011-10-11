@@ -98,6 +98,10 @@ public enum JSkatAction {
 	/**
 	 * Picks up skat
 	 */
+	PLAY_GRAND_HAND,
+	/**
+	 * Picks up skat
+	 */
 	PICK_UP_SKAT,
 	/**
 	 * Plays a hand game

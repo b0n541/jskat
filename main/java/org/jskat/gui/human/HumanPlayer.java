@@ -44,6 +44,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	private boolean holdBid;
 	private int bidValue;
 	private GameAnnouncementStep gameAnnouncementStep;
+	private boolean playGrandHand;
 	private boolean pickUpSkat;
 	private CardList discardSkat;
 	private GameAnnouncement gameAnnouncement;
@@ -147,6 +148,19 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	 * @see IJSkatPlayer#pickUpSkat()
 	 */
 	@Override
+	public boolean playGrandHand() {
+
+		log.debug("Waiting for human to decide if playing a grand hand..."); //$NON-NLS-1$
+
+		waitForUserInput();
+
+		return this.playGrandHand;
+	}
+
+	/**
+	 * @see IJSkatPlayer#pickUpSkat()
+	 */
+	@Override
 	public boolean pickUpSkat() {
 
 		log.debug("Waiting for human looking into skat..."); //$NON-NLS-1$
@@ -221,6 +235,9 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 		} else if (JSkatAction.HOLD_BID.toString().equals(command)) {
 			// player hold bid
 			this.holdBid = true;
+		} else if (JSkatAction.PLAY_GRAND_HAND.toString().equals(command)) {
+			// player wants to play a grand hand
+			this.playGrandHand = true;
 		} else if (JSkatAction.PICK_UP_SKAT.toString().equals(command)) {
 
 			// player wants to pick up the skat

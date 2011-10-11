@@ -418,7 +418,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		rightOpponentPanel.setSortGameType(gameAnnouncement.getGameType());
 		userPanel.setSortGameType(gameAnnouncement.getGameType());
 
-		if (gameAnnouncement.getGameType() != GameType.PASSED_IN) {
+		if (gameAnnouncement.getGameType() != GameType.PASSED_IN && gameAnnouncement.getGameType() != GameType.RAMSCH) {
 			getPlayerPanel(player).setDeclarer(true);
 		}
 
