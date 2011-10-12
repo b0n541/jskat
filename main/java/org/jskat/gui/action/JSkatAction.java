@@ -96,7 +96,7 @@ public enum JSkatAction {
 	 */
 	PASS_BID,
 	/**
-	 * Picks up skat
+	 * Play grand hand during ramsch games
 	 */
 	PLAY_GRAND_HAND,
 	/**
