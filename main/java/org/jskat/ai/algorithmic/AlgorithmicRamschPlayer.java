@@ -2,8 +2,8 @@
  * JSkat - A skat program written in Java
  * by Jan Schäfer and Markus J. Luzius
  *
- * Version: 0.9.0-SNAPSHOT
- * Build date: 2011-07-26
+ * Version: 0.10.0-SNAPSHOT
+ * Build date: 2011-10-12
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,14 +22,9 @@ package org.jskat.ai.algorithmic;
 
 import org.apache.log4j.Logger;
 import org.jskat.ai.PlayerKnowledge;
-import org.jskat.data.Trick;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
-import org.jskat.util.Player;
-import org.jskat.util.Rank;
-import org.jskat.util.Suit;
-import org.jskat.util.rule.SkatRuleFactory;
 
 /**
  * @author Markus J. Luzius <br>
