@@ -38,6 +38,10 @@ public enum ContextPanelTypes {
 	 */
 	DECLARING,
 	/**
+	 * Schieberamsch panel
+	 */
+	SCHIEBERAMSCH,
+	/**
 	 * Trick playing panel
 	 */
 	TRICK_PLAYING,

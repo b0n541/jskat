@@ -523,9 +523,13 @@ public class SkatTableOptions extends Observable {
 		 */
 		ISPA,
 		/**
-		 * Extensions to the ISPA rules, played in the pubs
+		 * provides a standard set of pub rules
 		 */
-		PUB
+		PUB,
+		/**
+		 * Various individual extensions to the ISPA rules, allows more finetuning than the standard pub rules
+		 */
+		INDIVIDUAL
 	}
 
 	/**

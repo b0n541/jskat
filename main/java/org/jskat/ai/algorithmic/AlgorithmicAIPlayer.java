@@ -102,6 +102,15 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public Card playCard() {
+		if(aiPlayer==null) {
+			if(knowledge.getGameType()==GameType.RAMSCH) {
+				log.debug("aiPlayer is still null - setting to ramsch player");
+				aiPlayer = new AlgorithmicRamschPlayer(this);
+			}
+			else {
+				throw new IllegalStateException("AIPlayer has not been correctly set");
+			}
+		}
 		log.debug("-+-+-+-+-+-+-+-+-+- Trick #"+knowledge.getNoOfTricks()+" - "+playerName+" is playing a card of "+knowledge.getMyCards()+" ("+aiPlayer.getClass()+") -+-+-+-+-+-+-+-+-+-");
 		Card c = aiPlayer.playCard();
 		if(c!=null) {
@@ -130,7 +139,12 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	@Override
 	public CardList discardSkat() {
 		if(aiPlayer==null || !(aiPlayer instanceof AlgorithmicSinglePlayer)) {
-			log.warn("aiPlayer is not a single player instance: "+aiPlayer);
+			if(knowledge.getGameType()==null || knowledge.getGameType()==GameType.RAMSCH) {
+				log.debug("GameType = "+knowledge.getGameType()+(knowledge.getGameType()==null?" - assuming Ramsch":""));
+				aiPlayer = new AlgorithmicRamschPlayer(this);
+				return aiPlayer.discardSkat(null);
+			}
+			log.warn("aiPlayer for "+knowledge.getGameType()+" game is not a single player instance: "+aiPlayer);
 			aiPlayer = new AlgorithmicSinglePlayer(this);
 		}
 		return aiPlayer.discardSkat(bidEvaluator);
@@ -143,14 +157,18 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	public void startGame() {
 		if(aiPlayer==null) {
 			if(knowledge.getGameType()==GameType.RAMSCH) {
+				log.debug("GameType = "+knowledge.getGameType());
 				aiPlayer = new AlgorithmicRamschPlayer(this);
 			}
 			else {
 				log.debug("GameType = "+knowledge.getGameType());
 				aiPlayer = new AlgorithmicOpponentPlayer(this);
 			}
+			log.debug("aiPlayer set to "+aiPlayer);
 		}
-		log.debug("aiPlayer set to "+aiPlayer);
+		else {
+			log.debug("game started for aiPlayer "+aiPlayer);
+		}
 	}
 
 	protected PlayerKnowledge getKnowledge() {

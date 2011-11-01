@@ -61,6 +61,10 @@ public class SkatGameData {
 		 */
 		BIDDING, 
 		/**
+		 * preparations for a ramsch game
+		 */
+		RAMSCH_PREPARATION,
+		/**
 		 * Look into skat or play hand game phase
 		 */
 		PICK_UP_SKAT,
@@ -529,26 +533,35 @@ public class SkatGameData {
 	public void finishRamschGame() {
 
 		Player ramschLoser;
+		getGameResult().setWon(false);
 
-		// TODO what happens if two or more players have the same points?
 		// FIXME this is rule logic --> remove it from data object!!!
 		if (playerPoints.get(Player.FOREHAND).intValue() > playerPoints.get(
 				Player.MIDDLEHAND).intValue()) {
 
-			if (playerPoints.get(Player.FOREHAND).intValue() > playerPoints
-					.get(Player.REARHAND).intValue()) {
+			if (playerPoints.get(Player.FOREHAND).intValue() > playerPoints.get(Player.REARHAND).intValue()) {
 				ramschLoser = Player.FOREHAND;
 			} else {
-				ramschLoser = Player.REARHAND;
+				if(playerPoints.get(Player.FOREHAND).intValue() == playerPoints.get(Player.REARHAND).intValue()) {
+					ramschLoser = Player.MIDDLEHAND;
+					getGameResult().setWon(true);
+				}
+				else {
+					ramschLoser = Player.REARHAND;
+				}
 			}
 
 		} else {
 
-			if (playerPoints.get(Player.MIDDLEHAND).intValue() > playerPoints
-					.get(Player.REARHAND).intValue()) {
+			if (playerPoints.get(Player.MIDDLEHAND).intValue() > playerPoints.get(Player.REARHAND).intValue()) {
 				ramschLoser = Player.MIDDLEHAND;
 			} else {
-				ramschLoser = Player.REARHAND;
+				if (playerPoints.get(Player.MIDDLEHAND).intValue() == playerPoints.get(Player.REARHAND).intValue()) {
+					ramschLoser = Player.FOREHAND;
+					getGameResult().setWon(true);
+				} else {
+					ramschLoser = Player.REARHAND;
+				}
 			}
 		}
 
@@ -556,9 +569,7 @@ public class SkatGameData {
 
 		if (isDurchmarsch()) {
 			getGameResult().setWon(true);
-		} else {
-			getGameResult().setWon(false);
-		}
+		} 
 	}
 
 	/**
@@ -941,12 +952,14 @@ public class SkatGameData {
 
 		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 		factory.setGameType(announcement.getGameType());
-		if (!declarerPickedUpSkat) {
-			factory.setHand(Boolean.TRUE);
+		if(announcement.getGameType()!=GameType.RAMSCH) {
+			if (!declarerPickedUpSkat) {
+				factory.setHand(Boolean.TRUE);
+			}
+			factory.setOuvert(Boolean.valueOf(announcement.isOuvert()));
+			factory.setSchneider(Boolean.valueOf(announcement.isSchneider()));
+			factory.setSchwarz(Boolean.valueOf(announcement.isSchwarz()));
 		}
-		factory.setOuvert(Boolean.valueOf(announcement.isOuvert()));
-		factory.setSchneider(Boolean.valueOf(announcement.isSchneider()));
-		factory.setSchwarz(Boolean.valueOf(announcement.isSchwarz()));
 		this.announcement = factory.getAnnouncement();
 
 		rules = SkatRuleFactory.getSkatRules(getGameType());

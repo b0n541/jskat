@@ -147,7 +147,7 @@ public enum Rank {
 
 		@Override
 		public int getRamschOrder() {
-			return 4;
+			return 3;
 		}
 
 		@Override
@@ -179,7 +179,7 @@ public enum Rank {
 
 		@Override
 		public int getRamschOrder() {
-			return 5;
+			return 4;
 		}
 
 		@Override
@@ -211,7 +211,7 @@ public enum Rank {
 
 		@Override
 		public int getRamschOrder() {
-			return 3;
+			return 5;
 		}
 
 		@Override

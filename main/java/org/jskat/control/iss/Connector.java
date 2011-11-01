@@ -92,8 +92,8 @@ class Connector {
 		log.debug("ISSConnector.establishConnection()"); //$NON-NLS-1$
 
 		try {
-			socket = new Socket(options.getIssAddress(), options.getIssPort().intValue());
-//			socket = new Socket("localhost", 47333);
+//			socket = new Socket(options.getIssAddress(), options.getIssPort().intValue());
+			socket = new Socket("localhost", 47333);
 			
 			output = new PrintWriter(socket.getOutputStream(), true);
 			issOut = new OutputChannel(output);

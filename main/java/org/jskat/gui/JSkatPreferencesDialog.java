@@ -43,9 +43,12 @@ import javax.swing.event.ChangeListener;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatOptions.SupportedLanguage;
 import org.jskat.data.SkatTableOptions.RamschSkatOwners;
+import org.jskat.data.SkatTableOptions.RuleSets;
 import org.jskat.gui.img.CardFace;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.JSkatResourceBundle;
@@ -56,6 +59,7 @@ import org.jskat.util.JSkatResourceBundle;
 public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
+	private static Log log = LogFactory.getLog(JSkatPreferencesDialog.class);
 
 	JSkatResourceBundle strings;
 	JSkatOptions options;
@@ -75,7 +79,7 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 	private JRadioButton gameShortCutNo;
 
 	// rule options
-	private JRadioButton rulesetISPO;
+	private JRadioButton rulesetISPA;
 	private JRadioButton rulesetPub;
 	private JRadioButton rulesetIndividual;
 	private JCheckBox playContra;
@@ -314,20 +318,24 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 
 	private JPanel getRulesPanel() {
 
+		log.debug("Loaded rules: "+options.getRules());
+		
 		JPanel rulesPanel = new JPanel(new MigLayout("fill", "fill", "shrink")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		ButtonGroup bg = new ButtonGroup();
 		JLabel lbl = new JLabel("Spielregeln");
 		rulesPanel.add(lbl, "wrap");
-		rulesetISPO = new JRadioButton("ISPO rules");
-		rulesPanel.add(rulesetISPO);
-		rulesetISPO.setSelected(true);
-		bg.add(rulesetISPO);
+		rulesetISPA = new JRadioButton("ISPA rules");
+		rulesPanel.add(rulesetISPA);
+		rulesetISPA.setSelected(options.getRules()==RuleSets.ISPA);
+		bg.add(rulesetISPA);
 		rulesetPub = new JRadioButton("pub rules");
+		rulesetPub.setSelected(options.getRules()==RuleSets.PUB);
 		rulesPanel.add(rulesetPub, "wrap");
 		bg.add(rulesetPub);
 		lbl = new JLabel("");
 		rulesPanel.add(lbl);
 		rulesetIndividual = new JRadioButton("individual rules");
+		rulesetIndividual.setSelected(options.getRules()==RuleSets.INDIVIDUAL);
 		rulesPanel.add(rulesetIndividual, "wrap");
 		bg.add(rulesetPub);
 		lbl = new JLabel("");
@@ -399,7 +407,8 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 			options.setIssAddress(issAddress.getText());
 			options.setIssPort(Integer.valueOf(issPort.getText()));
 			
-			if(rulesetISPO.isSelected()) {
+			if(rulesetISPA.isSelected()) {
+				options.setRules(RuleSets.ISPA);
 				options.setRamschEventNoBid(false);
 				options.setBockEventContraReAnnounced(false);
 				options.setBockEventLostGrand(false);
@@ -414,6 +423,7 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 				options.setRamschSkat(RamschSkatOwners.LAST_TRICK);
 			}
 			else {
+				options.setRules(rulesetPub.isSelected()?RuleSets.PUB:RuleSets.INDIVIDUAL);
 				options.setRamschEventNoBid(rulesetPub.isSelected() || ramschEventNoBid.isSelected());
 				options.setBockEventContraReAnnounced(rulesetPub.isSelected() || bockEventContraReAnnounced.isSelected());
 				options.setBockEventLostGrand(rulesetPub.isSelected() || bockEventLostGrand.isSelected());

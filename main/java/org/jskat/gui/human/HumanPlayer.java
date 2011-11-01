@@ -23,6 +23,8 @@ package org.jskat.gui.human;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JPanel;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.AbstractJSkatPlayer;
@@ -73,6 +75,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 
 		waitForUserInput();
 
+		log.debug("Setting step to 'DONE_GAME_ANNOUNCEMENT'");
 		gameAnnouncementStep = GameAnnouncementStep.DONE_GAME_ANNOUNCEMENT;
 
 		return this.gameAnnouncement;
@@ -109,6 +112,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 
 		waitForUserInput();
 
+		log.debug("Setting step to 'DISCARDED_SKAT'");
 		gameAnnouncementStep = GameAnnouncementStep.DISCARDED_SKAT;
 
 		return this.discardSkat;
@@ -244,6 +248,17 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 			this.pickUpSkat = true;
 			gameAnnouncementStep = GameAnnouncementStep.LOOKED_INTO_SKAT;
 
+		} else if (JSkatAction.SCHIEBEN.toString().equals(command)) {
+
+			log.debug("schieben.....");
+			gameAnnouncement = (GameAnnouncement) source;
+			discardSkat = gameAnnouncement.getDiscardedCards();
+			knowledge.getMyCards().remove(this.discardSkat.get(0));
+			knowledge.getMyCards().remove(this.discardSkat.get(1));
+
+			log.debug("Setting step to 'DONE_GAME_ANNOUNCEMENT'");
+			gameAnnouncementStep = GameAnnouncementStep.DONE_GAME_ANNOUNCEMENT;
+
 		} else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
 
 			if (source instanceof GameAnnouncement) {
@@ -256,12 +271,12 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 					knowledge.getMyCards().remove(this.discardSkat.get(0));
 					knowledge.getMyCards().remove(this.discardSkat.get(1));
 
+					log.debug("Setting step to 'DISCARDED_SKAT'");
 					gameAnnouncementStep = GameAnnouncementStep.DISCARDED_SKAT;
 				} else {
 
 					gameAnnouncementStep = GameAnnouncementStep.PLAYS_HAND;
 				}
-
 			} else {
 
 				log.error("Wrong source for " + command); //$NON-NLS-1$

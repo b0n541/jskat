@@ -89,6 +89,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 	protected JScrollPane scoreListScrollPane;
 	protected BiddingContextPanel biddingPanel;
 	protected DeclaringContextPanel declaringPanel;
+	protected SchieberamschContextPanel schieberamschPanel;
+	
+	protected boolean ramsch = false;
 
 	/**
 	 * @see AbstractTabPanel#AbstractTabPanel(String, ActionMap)
@@ -219,6 +222,10 @@ public class SkatTablePanel extends AbstractTabPanel {
 		declaringPanel = new DeclaringContextPanel(getActionMap(), bitmaps,
 				userPanel, 4);
 		addContextPanel(ContextPanelTypes.DECLARING, declaringPanel);
+
+		schieberamschPanel = new SchieberamschContextPanel(getActionMap(), bitmaps,
+				userPanel, 4);
+		addContextPanel(ContextPanelTypes.SCHIEBERAMSCH, schieberamschPanel);
 
 		JPanel trickHoldingPanel = new JPanel(new MigLayout(
 				"fill", "[shrink][grow][shrink]", //$NON-NLS-1$ //$NON-NLS-2$
@@ -412,6 +419,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	public void setGameAnnouncement(Player player,
 			GameAnnouncement gameAnnouncement) {
 
+		if(gameAnnouncement.getGameType()==GameType.RAMSCH) ramsch = true;
+		
 		gameInfoPanel.setGameAnnouncement(gameAnnouncement);
 
 		leftOpponentPanel.setSortGameType(gameAnnouncement.getGameType());
@@ -451,15 +460,29 @@ public class SkatTablePanel extends AbstractTabPanel {
 			setContextPanel(ContextPanelTypes.BIDDING);
 			getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(false);
 			break;
-		case PICK_UP_SKAT:
+		case RAMSCH_PREPARATION:
+			log.debug("ramsch preparation (decl="+declarer+"/myPanel="+userPanel.getPosition()+")");
 			if (userPanel.getPosition().equals(declarer)) {
+				log.debug("activating ramsch discarding panel");
+				setContextPanel(ContextPanelTypes.SCHIEBERAMSCH);
+				userPanel.setGameState(GameState.RAMSCH_PREPARATION);
+				getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
+			}
+			break;
+		case PICK_UP_SKAT:
+			log.debug("picking up skat (decl="+declarer+"/myPanel="+userPanel.getPosition()+")");
+			if (userPanel.getPosition().equals(declarer)) {
+				log.debug("activating pick up skat panel");
 				setContextPanel(ContextPanelTypes.DECLARING);
+				userPanel.setGameState(GameState.PICK_UP_SKAT);
 				getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
 			}
 			break;
 		case DISCARDING:
+			log.debug("discarding skat ("+declarer+"/"+userPanel.getPosition()+")");
 			if (userPanel.getPosition().equals(declarer)) {
-				setContextPanel(ContextPanelTypes.DECLARING);
+				log.debug("activating discarding skat panel");
+				if(!ramsch) setContextPanel(ContextPanelTypes.DECLARING);
 				userPanel.setGameState(GameState.DISCARDING);
 			}
 			break;
@@ -485,6 +508,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		playerPassed.put(Player.FOREHAND, Boolean.FALSE);
 		playerPassed.put(Player.MIDDLEHAND, Boolean.FALSE);
 		playerPassed.put(Player.REARHAND, Boolean.FALSE);
+		ramsch = false;
 		declarer = null;
 	}
 
@@ -496,6 +520,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	void setContextPanel(ContextPanelTypes panelType) {
 
+		log.debug("Showing panel "+panelType.toString());
 		((CardLayout) gameContextPanel.getLayout()).show(gameContextPanel,
 				panelType.toString());
 	}
@@ -649,7 +674,14 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void setSkat(CardList skat) {
 
-		declaringPanel.setSkat(skat);
+		log.debug("Setting skat ("+skat+"): "+ramsch);
+		
+		if(ramsch) {
+			schieberamschPanel.setSkat(skat);
+		}
+		else {
+			declaringPanel.setSkat(skat);
+		}
 	}
 
 	/**
@@ -663,6 +695,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		if (!userPanel.isHandFull()) {
 
 			declaringPanel.removeCard(card);
+			schieberamschPanel.removeCard(card);
 			userPanel.addCard(card);
 
 		} else {
@@ -683,6 +716,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 			userPanel.removeCard(card);
 			declaringPanel.addCard(card);
+			schieberamschPanel.addCard(card);
 
 		} else {
 
@@ -998,6 +1032,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 *            Declarer player
 	 */
 	public void setDeclarer(Player declarer) {
+		log.debug("Setting declarer: "+declarer);
 		this.declarer = declarer;
 	}
 

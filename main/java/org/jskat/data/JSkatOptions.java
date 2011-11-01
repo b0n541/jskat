@@ -187,11 +187,7 @@ public class JSkatOptions {
 			} else if (property.equals("thirdPlayerType")) {
 				setThirdPlayerType(Integer.parseInt(value));
 			} else if (property.equals("rules")) {
-				if (value.equals("PUB")) {
-					setRules(SkatTableOptions.RuleSets.PUB);
-				} else {
-					setRules(SkatTableOptions.RuleSets.ISPA);
-				}
+				setRules(SkatTableOptions.RuleSets.valueOf(value));
 			} else if (property.equals("playContra")) {
 				setPlayContra(Boolean.valueOf(value).booleanValue());
 			} else if (property.equals("playBock")) {
@@ -381,7 +377,6 @@ public class JSkatOptions {
 				String.valueOf(this.isShowCards()));
 		this.jskatProperties.setProperty("cardFace",
 				String.valueOf(this.cardFace));
-		log.debug(this.jskatProperties.getProperty("cardFace"));
 	}
 
 	/**
@@ -398,6 +393,7 @@ public class JSkatOptions {
 
 			this.jskatProperties.store(stream, "JSkat options");
 			stream.close();
+			log.debug("Saved rules: "+getRules());
 
 		} catch (FileNotFoundException e1) {
 

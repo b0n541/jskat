@@ -157,7 +157,7 @@ class GameAnnouncePanel extends JPanel {
 
 						try {
 							GameAnnouncement ann = getGameAnnouncement();
-
+							if(ann==null) return;
 							e.setSource(ann);
 							// fire event again
 							announceButton.dispatchEvent(e);
@@ -183,9 +183,9 @@ class GameAnnouncePanel extends JPanel {
 									strings.getString("invalid_number_of_cards_in_skat"), //$NON-NLS-1$
 									strings.getString("invalid_number_of_cards_in_skat_title"), //$NON-NLS-1$
 									JOptionPane.ERROR_MESSAGE);
+							return null;
 						}
 						factory.setDiscardedCards(discardedCards);
-
 						if (GameType.NULL.equals(gameType)
 								&& ouvertBox.isSelected()) {
 							factory.setOuvert(true);

@@ -101,6 +101,10 @@ class BidEvaluator {
 			}
 		}
 		
+		
+		// FIXME (markus, 01.11.11) remove - only added for ramsch testing
+		maxBid = 0;
+		
 		log.debug("I will bid until " + maxBid +" (m="+multiplier+"x) - I have "+noOfJacks+" Jacks and an additional "+noOfTrumps+" trump cards in suit "+mostFrequentSuitColor);
 	}
 

@@ -75,6 +75,7 @@ import org.jskat.gui.action.human.PlayCardAction;
 import org.jskat.gui.action.human.PlayGrandHandAction;
 import org.jskat.gui.action.human.PlayHandGameAction;
 import org.jskat.gui.action.human.PutCardIntoSkatAction;
+import org.jskat.gui.action.human.SchiebenAction;
 import org.jskat.gui.action.human.TakeCardFromSkatAction;
 import org.jskat.gui.action.iss.ChangeTableSeatsAction;
 import org.jskat.gui.action.iss.ConnectAction;
@@ -219,6 +220,7 @@ public class JSkatViewImpl implements IJSkatView {
 		actions.put(JSkatAction.PASS_BID, new PassBidAction());
 		actions.put(JSkatAction.PICK_UP_SKAT, new PickUpSkatAction());
 		actions.put(JSkatAction.PLAY_GRAND_HAND, new PlayGrandHandAction());
+		actions.put(JSkatAction.SCHIEBEN, new SchiebenAction());
 		actions.put(JSkatAction.PLAY_HAND_GAME, new PlayHandGameAction());
 		actions.put(JSkatAction.ANNOUNCE_GAME, new GameAnnounceAction());
 		actions.put(JSkatAction.PUT_CARD_INTO_SKAT, new PutCardIntoSkatAction());

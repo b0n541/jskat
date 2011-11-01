@@ -22,9 +22,11 @@ package org.jskat.ai.algorithmic;
 
 import org.apache.log4j.Logger;
 import org.jskat.ai.PlayerKnowledge;
+import org.jskat.data.JSkatOptions;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
+import org.jskat.util.Rank;
 
 /**
  * @author Markus J. Luzius <br>
@@ -136,6 +138,48 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
 	 */
 	@Override
 	public CardList discardSkat(BidEvaluator bidEvaluator) {
-		throw new IllegalStateException("ramsch player cannot discard a skat");
+		log.debug(myPlayer.getPlayerName()+" ("+this.getClass()+") is discarding cards - not implemented yet");
+		knowledge.getMyCards().sort(GameType.RAMSCH);
+		if(JSkatOptions.instance().isSchieberRamschJacksInSkat()) {
+			return discardWithJacks();
+		}
+		return discardNoJacks();
 	}
+	
+	private CardList discardWithJacks() {
+		log.debug("cards before discarding(withJacks): "+knowledge.getMyCards());
+		CardList result = new CardList();
+		result.add(knowledge.getMyCards().remove(0));
+		result.add(knowledge.getMyCards().remove(0));
+		log.debug("cards left after discarding(withJacks): "+knowledge.getMyCards().size());
+		return result;
+	}
+	
+	private CardList discardNoJacks() {
+		CardList result = new CardList();
+		for(Card c: knowledge.getMyCards()) {
+			if(result.size()<2 && c.getRank()==Rank.ACE && knowledge.getMyCards().remove(c)) {
+				result.add(c);
+			}
+		}
+		for(Card c: knowledge.getMyCards()) {
+			if(result.size()<2 && c.getRank()==Rank.TEN && knowledge.getMyCards().remove(c)) {
+				result.add(c);
+			}
+		}
+		for(Card c: knowledge.getMyCards()) {
+			if(result.size()<2 && c.getRank()==Rank.KING && knowledge.getMyCards().remove(c)) {
+				result.add(c);
+			}
+		}
+		for(Card c: knowledge.getMyCards()) {
+			if(result.size()<2 && c.getRank()!=Rank.JACK && knowledge.getMyCards().remove(c)) {
+				result.add(c);
+			}
+		}
+		log.debug("cards left after discarding(noJacks): "+knowledge.getMyCards().size()+" - "+knowledge.getMyCards());
+		return result;
+		
+	}
+	
 }

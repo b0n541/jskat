@@ -20,6 +20,8 @@
  */
 package org.jskat.data;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 
@@ -30,6 +32,7 @@ import org.jskat.util.GameType;
  */
 public class GameAnnouncement {
 
+	private static final Log log = LogFactory.getLog(SkatGameData.class);
 	/**
 	 * Game type
 	 */
@@ -159,9 +162,11 @@ public class GameAnnouncement {
 
 		private boolean validate() {
 			if (tmpAnnouncement.gameType == null) {
+				log.debug("gameType is null");
 				return false;
 			} else if (tmpAnnouncement.isHand()
 					&& tmpAnnouncement.discardedCards.size() > 0) {
+				log.debug("hand="+tmpAnnouncement.isHand()+", size="+tmpAnnouncement.discardedCards.size());
 				return false;
 			}
 			return true;

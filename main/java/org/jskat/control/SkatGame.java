@@ -20,12 +20,12 @@
  */
 package org.jskat.control;
 
+import java.io.ObjectInputStream.GetField;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jskat.ai.AbstractJSkatPlayer;
 import org.jskat.ai.IJSkatPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
@@ -105,7 +105,7 @@ public class SkatGame extends JSkatThread {
 
 		do {
 
-			log.debug("Game state " + data.getGameState()); //$NON-NLS-1$
+			log.debug("SkatGame.do --- Game state: " + data.getGameState()); //$NON-NLS-1$
 
 			switch (data.getGameState()) {
 			case GAME_START:
@@ -145,23 +145,45 @@ public class SkatGame extends JSkatThread {
 				// ------------------ "normal" game (i.e. no ramsch) ---------------------------
 				bidding();
 				if (data.getGameType() == GameType.PASSED_IN) {
-					if(JSkatOptions.instance().isRamschEventNoBid()) {
-						log.debug("Playing ramsch due to no bid");
-						GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-						factory.setGameType(GameType.RAMSCH);
-						setGameAnnouncement(factory.getAnnouncement());
-						log.debug("Playing ramsch due to no bid, new game type: "+data.getGameType());
-						setGameState(GameState.TRICK_PLAYING);
-					}
-					else {
-						setGameState(GameState.PRELIMINARY_GAME_END);
-					}
+					setGameState(GameState.PRELIMINARY_GAME_END);
+				} else if (data.getGameType() == GameType.RAMSCH) {
+					data.setDeclarer(Player.FOREHAND);
+					view.setDeclarer(tableName, Player.FOREHAND);
+					view.setSkat(tableName, data.getSkat());
+					setGameState(GameState.RAMSCH_PREPARATION);
+					log.debug("Ramsch game, declarer="+data.getDeclarer());
 				} else {
 					view.setDeclarer(tableName, data.getDeclarer());
 					setGameState(GameState.PICK_UP_SKAT);
 				}
 				break;
+			case RAMSCH_PREPARATION:
+				log.debug("ramsch preparation, declarer: "+data.getDeclarer());
+				// declarer has already been set to forehand in bidding state
+				if(!pickUpSkat()) {
+					data.geschoben();
+					if(data.getDeclarer()==Player.REARHAND) {
+						data.setDeclarer(null);
+						view.setDeclarer(tableName, null);
+						GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+						factory.setGameType(GameType.RAMSCH);
+						setGameAnnouncement(factory.getAnnouncement());
+						setGameState(GameState.TRICK_PLAYING);
+					}
+					else {
+						data.setDeclarer(data.getDeclarer().getLeftNeighbor());
+						view.setDeclarer(tableName, data.getDeclarer());
+						view.setSkat(tableName, data.getSkat());
+						setGameState(GameState.RAMSCH_PREPARATION);
+					}
+				}
+				else {
+					setGameState(GameState.DISCARDING);
+					break;
+				}
+				break;
 			case PICK_UP_SKAT:
+				// only used for normal games (i.e. no ramsch game)
 				if (pickUpSkat()) {
 					data.setDeclarerPickedUpSkat(true);
 					setGameState(GameState.DISCARDING);
@@ -169,10 +191,38 @@ public class SkatGame extends JSkatThread {
 				} else {
 					setGameState(GameState.DECLARING);
 				}
+				
 				break;
 			case DISCARDING:
 				discarding();
-				setGameState(GameState.DECLARING);
+				if(data.getGameType()==GameType.RAMSCH) {
+					// FIXME (markus, 01.11.11) this is only to switch the HumanPlayer into the correct state
+					if(player.get(data.getDeclarer()) instanceof HumanPlayer) {
+						log.debug("letting HumanPlayer announce a game");
+						player.get(data.getDeclarer()).announceGame();
+					}
+					else {
+						log.debug("game announcement skipped for AIPlayer");
+					}
+
+					if(data.getDeclarer()==Player.REARHAND) {
+						data.setDeclarer(null);
+						view.setDeclarer(tableName, null);
+						GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+						factory.setGameType(GameType.RAMSCH);
+						setGameAnnouncement(factory.getAnnouncement());
+						setGameState(GameState.TRICK_PLAYING);
+					}
+					else {
+						data.setDeclarer(data.getDeclarer().getLeftNeighbor());
+						view.setDeclarer(tableName, data.getDeclarer());
+						setGameState(GameState.RAMSCH_PREPARATION);
+					}
+				}
+				else {
+					log.warn("not a ramsch game - now into declaring");
+					setGameState(GameState.DECLARING);
+				}
 				break;
 			case DECLARING:
 				announceGame();
@@ -204,7 +254,6 @@ public class SkatGame extends JSkatThread {
 	}
 
 	private boolean pickUpSkat() {
-
 		return player.get(data.getDeclarer()).pickUpSkat();
 	}
 
@@ -341,11 +390,22 @@ public class SkatGame extends JSkatThread {
 			log.debug("Player " + data.getDeclarer() //$NON-NLS-1$
 					+ " wins the bidding."); //$NON-NLS-1$
 		} else {
-			// pass in
-			GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-			factory.setGameType(GameType.PASSED_IN);
-			data.setAnnouncement(factory.getAnnouncement());
-//			setGameAnnouncement(factory.getAnnouncement());
+
+			if(JSkatOptions.instance().isRamschEventNoBid()) {
+				log.debug("Playing ramsch due to no bid");
+				GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+				factory.setGameType(GameType.RAMSCH);
+				data.setAnnouncement(factory.getAnnouncement());
+				view.setGameAnnouncement(tableName, data.getDeclarer(), data.getAnnoucement());
+				log.debug("Playing ramsch due to no bid, new game type: "+data.getGameType());
+			}
+			else {
+				// pass in
+				GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+				factory.setGameType(GameType.PASSED_IN);
+//				data.setAnnouncement(factory.getAnnouncement());
+				setGameAnnouncement(factory.getAnnouncement());
+			}
 		}
 
 		doSleep(maxSleep);
@@ -447,7 +507,7 @@ public class SkatGame extends JSkatThread {
 
 	private void discarding() {
 
-		log.debug("Player looks into the skat..."); //$NON-NLS-1$
+		log.debug("Player ("+data.getDeclarer()+") looks into the skat..."); //$NON-NLS-1$
 		log.debug("Skat before discarding: " + data.getSkat()); //$NON-NLS-1$
 
 		IJSkatPlayer declarer = player.get(data.getDeclarer());
@@ -513,6 +573,7 @@ public class SkatGame extends JSkatThread {
 	private void playTricks() {
 
 		view.clearTrickCards(tableName);
+		Player trickWinner = null;
 
 		for (int trickNo = 0; trickNo < 10; trickNo++) {
 
@@ -585,8 +646,7 @@ public class SkatGame extends JSkatThread {
 			doSleep(maxSleep);
 
 			log.debug("Calculate trick winner"); //$NON-NLS-1$
-			Player trickWinner = rules.calculateTrickWinner(data.getGameType(),
-					trick);
+			trickWinner = rules.calculateTrickWinner(data.getGameType(), trick);
 			trick.setTrickWinner(trickWinner);
 			data.addPlayerPoints(trickWinner, trick.getCardValueSum());
 
@@ -615,9 +675,9 @@ public class SkatGame extends JSkatThread {
 			doSleep(maxSleep);
 
 			log.debug("Trick cards: " + trick.getCardList()); //$NON-NLS-1$
-			log.debug("Points: fore hand: " + data.getPlayerPoints(Player.FOREHAND) + //$NON-NLS-1$
-					" middle hand: " //$NON-NLS-1$
-					+ data.getPlayerPoints(Player.MIDDLEHAND) + " hind hand: " //$NON-NLS-1$
+			log.debug("Points: forehand: " + data.getPlayerPoints(Player.FOREHAND) + //$NON-NLS-1$
+					" middlehand: " //$NON-NLS-1$
+					+ data.getPlayerPoints(Player.MIDDLEHAND) + " rearhand: " //$NON-NLS-1$
 					+ data.getPlayerPoints(Player.REARHAND));
 
 			if (isFinished()) {
@@ -628,8 +688,14 @@ public class SkatGame extends JSkatThread {
 		}
 
 		if (data.getGameType() == GameType.RAMSCH) {
-			// TODO give the card points of the skat to a player defined in
-			// ramsch rules
+			// TODO give the card points of the skat to a player defined in ramsch rules
+			if(trickWinner!=null) {
+				log.debug("Skat cards are added to player @ " + trickWinner); //$NON-NLS-1$
+				data.addPlayerPoints(trickWinner, data.getSkat().getCardValueSum());
+			}
+			else {
+				log.warn("Skat cards cannot be added to winner of final trick - trick winner is unknown: " + trickWinner); //$NON-NLS-1$
+			}
 		} else {
 			// for all the other games, points to the declarer
 			data.addPlayerPoints(data.getDeclarer(), data.getSkat()
@@ -702,7 +768,7 @@ public class SkatGame extends JSkatThread {
 					.isCardAllowed(data.getGameType(), trick.getFirstCard(),
 							data.getPlayerCards(currPlayer), card)) {
 
-				log.error("Player " + skatPlayer.getClass().toString() + " card not allowed: " + card + " game type: " //$NON-NLS-1$ //$NON-NLS-2$
+				log.error("Player " + skatPlayer.getClass().toString() + " card not allowed: " + card + " game type: " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						+ data.getGameType() + " first trick card: " //$NON-NLS-1$
 						+ trick.getFirstCard() + " player cards: " //$NON-NLS-1$
 						+ data.getPlayerCards(currPlayer));
@@ -878,10 +944,9 @@ public class SkatGame extends JSkatThread {
 		for (IJSkatPlayer currPlayer : player.values()) {
 			currPlayer.startGame(data.getDeclarer(), ann);
 		}
-
 		view.setGameAnnouncement(tableName, data.getDeclarer(), ann);
 
-		log.debug(data.getAnnoucement());
+		log.debug(".setGameAnnouncement(): "+data.getAnnoucement()+" by "+data.getDeclarer()+", rules="+rules);
 	}
 
 	/**

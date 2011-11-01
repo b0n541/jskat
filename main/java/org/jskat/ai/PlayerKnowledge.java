@@ -691,7 +691,7 @@ public class PlayerKnowledge {
 	 * @return the gameType
 	 */
 	public GameType getGameType() {
-
+		if(game==null) return null;
 		return game.getGameType();
 	}
 

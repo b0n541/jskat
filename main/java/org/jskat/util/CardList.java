@@ -358,9 +358,9 @@ public class CardList extends ArrayList<Card> {
 				if (get(j).getSuit().getSuitOrder() > get(i).getSuit().getSuitOrder()
 						|| (get(j).getSuit() == get(i).getSuit() && get(j).getRamschOrder() >= get(i).getRamschOrder())) {
 
-					log.debug("i=" + i + ", j=" + j + ", " + get(i) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-							+ " vs. " + get(j) + ", cards(1): [" + this //$NON-NLS-1$ //$NON-NLS-2$
-							+ "]"); //$NON-NLS-1$
+//					log.debug("i=" + i + ", j=" + j + ", " + get(i) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+//							+ " vs. " + get(j) + ", cards(1): [" + this //$NON-NLS-1$ //$NON-NLS-2$
+//							+ "]"); //$NON-NLS-1$
 
 					changeCards(i, j);
 				}

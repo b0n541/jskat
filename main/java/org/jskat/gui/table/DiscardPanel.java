@@ -32,6 +32,8 @@ import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.Card;
@@ -43,6 +45,7 @@ import org.jskat.util.JSkatResourceBundle;
  */
 class DiscardPanel extends JPanel {
 
+	private static Log log = LogFactory.getLog(DiscardPanel.class);
 	private static final String PICK_UP_SKAT_BUTTON = "PICK_UP_SKAT_BUTTON"; //$NON-NLS-1$
 
 	private static final String CARD_PANEL = "CARD_PANEL"; //$NON-NLS-1$
@@ -61,6 +64,7 @@ class DiscardPanel extends JPanel {
 	private CardPanel cardPanel;
 
 	private GameAnnouncePanel announcePanel;
+	private SchieberamschContextPanel ramschPanel;
 
 	/**
 	 * Constructor
@@ -96,8 +100,15 @@ class DiscardPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 
+				log.debug("user picked up skat");
 				userPickedUpSkat = true;
-				announcePanel.setUserPickedUpSkat(true);
+				if(announcePanel!=null) {
+					log.debug("informing announce panel");
+					announcePanel.setUserPickedUpSkat(true);
+				}
+				else if(ramschPanel!=null) {
+					ramschPanel.refresh();
+				}
 				DiscardPanel.this.showPanel(CARD_PANEL);
 
 				// fire event again
@@ -115,6 +126,8 @@ class DiscardPanel extends JPanel {
 
 	protected void setSkat(CardList skat) {
 
+		log.debug("setting skat: "+skat);
+		
 		addCard(skat.get(0));
 		addCard(skat.get(1));
 
@@ -123,11 +136,13 @@ class DiscardPanel extends JPanel {
 
 	void addCard(Card card) {
 
+		log.debug("adding card");
 		cardPanel.addCard(card);
 	}
 
 	void removeCard(Card card) {
 
+		log.debug("removing card");
 		cardPanel.removeCard(card);
 	}
 
@@ -139,6 +154,7 @@ class DiscardPanel extends JPanel {
 	}
 
 	protected void showPanel(String panelType) {
+		log.debug("Showing panel "+panelType);
 
 		((CardLayout) getLayout()).show(DiscardPanel.this, panelType);
 	}
@@ -166,4 +182,10 @@ class DiscardPanel extends JPanel {
 
 		this.announcePanel = announcePanel;
 	}
+
+	void setRamschPanel(SchieberamschContextPanel ramschPanel) {
+
+		this.ramschPanel = ramschPanel;
+	}
+
 }
