@@ -37,7 +37,7 @@ import org.jskat.util.rule.SkatRuleFactory;
  */
 public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 
-	private static Log log = LogFactory.getLog(AbstractJSkatPlayer.class);
+	private Log log = LogFactory.getLog(AbstractJSkatPlayer.class);
 
 	/** Player name */
 	protected String playerName;
