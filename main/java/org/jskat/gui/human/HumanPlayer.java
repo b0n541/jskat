@@ -298,7 +298,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	/**
 	 * Protected class implementing the waiting thread for user input
 	 */
-	protected class Idler extends Thread {
+	protected static class Idler extends Thread {
 
 		/**
 		 * Sets the monitoring object
