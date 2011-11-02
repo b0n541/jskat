@@ -48,7 +48,7 @@ import org.jskat.util.rule.SkatRuleFactory;
  */
 public class AIPlayerNN extends AbstractJSkatPlayer {
 
-	private static Log log = LogFactory.getLog(AIPlayerNN.class);
+	private Log log = LogFactory.getLog(AIPlayerNN.class);
 
 	private GameSimulator gameSimulator;
 
