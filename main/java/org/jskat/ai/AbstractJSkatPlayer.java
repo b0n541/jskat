@@ -126,7 +126,6 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	 */
 	@Override
 	public final void startGame(Player newDeclarer, GameAnnouncement game) {
-		log.debug("Starting game for "+getPlayerName()+": "+game.getGameType());
 
 		playerState = PlayerStates.PLAYING;
 		knowledge.setDeclarer(newDeclarer);

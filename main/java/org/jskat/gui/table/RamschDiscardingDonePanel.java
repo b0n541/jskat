@@ -110,7 +110,6 @@ class RamschDiscardingDonePanel extends JPanel {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					try {
-						log.debug("Ramsch discarding done");
 						GameAnnouncement ann = getGameAnnouncement();
 						if(ann==null) return; // no valid announcement
 
@@ -140,8 +139,9 @@ class RamschDiscardingDonePanel extends JPanel {
 						if(!JSkatOptions.instance().isSchieberRamschJacksInSkat() && (discardedCards.get(0).getRank()==Rank.JACK || discardedCards.get(1).getRank()==Rank.JACK)) {
 							JOptionPane.showMessageDialog(
 									RamschDiscardingDonePanel.this,
-									strings.getString("invalid_number_of_cards_in_skat"), //$NON-NLS-1$
-									strings.getString("invalid_number_of_cards_in_skat_title"), //$NON-NLS-1$
+									// FIXME (markus, 02.11.11) put message text in resource file
+									"Jacks are not allowed in schieberamsch skat!",
+									"No Jacks allowed",
 									JOptionPane.ERROR_MESSAGE);
 							return null;
 						}

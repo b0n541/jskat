@@ -444,7 +444,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void setGameState(GameState state) {
 
-		log.debug(state);
+		log.debug(".setGameState("+state+")"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		gameInfoPanel.setGameState(state);
 
@@ -461,27 +461,21 @@ public class SkatTablePanel extends AbstractTabPanel {
 			getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(false);
 			break;
 		case RAMSCH_PREPARATION:
-			log.debug("ramsch preparation (decl="+declarer+"/myPanel="+userPanel.getPosition()+")");
 			if (userPanel.getPosition().equals(declarer)) {
-				log.debug("activating ramsch discarding panel");
 				setContextPanel(ContextPanelTypes.SCHIEBERAMSCH);
 				userPanel.setGameState(GameState.RAMSCH_PREPARATION);
 				getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
 			}
 			break;
 		case PICK_UP_SKAT:
-			log.debug("picking up skat (decl="+declarer+"/myPanel="+userPanel.getPosition()+")");
 			if (userPanel.getPosition().equals(declarer)) {
-				log.debug("activating pick up skat panel");
 				setContextPanel(ContextPanelTypes.DECLARING);
 				userPanel.setGameState(GameState.PICK_UP_SKAT);
 				getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
 			}
 			break;
 		case DISCARDING:
-			log.debug("discarding skat ("+declarer+"/"+userPanel.getPosition()+")");
 			if (userPanel.getPosition().equals(declarer)) {
-				log.debug("activating discarding skat panel");
 				if(!ramsch) setContextPanel(ContextPanelTypes.DECLARING);
 				userPanel.setGameState(GameState.DISCARDING);
 			}
@@ -520,9 +514,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	void setContextPanel(ContextPanelTypes panelType) {
 
-		log.debug("Showing panel "+panelType.toString());
-		((CardLayout) gameContextPanel.getLayout()).show(gameContextPanel,
-				panelType.toString());
+		((CardLayout) gameContextPanel.getLayout()).show(gameContextPanel, panelType.toString());
 	}
 
 	/**
@@ -674,8 +666,6 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void setSkat(CardList skat) {
 
-		log.debug("Setting skat ("+skat+"): "+ramsch);
-		
 		if(ramsch) {
 			schieberamschPanel.setSkat(skat);
 		}
@@ -1032,7 +1022,6 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 *            Declarer player
 	 */
 	public void setDeclarer(Player declarer) {
-		log.debug("Setting declarer: "+declarer);
 		this.declarer = declarer;
 	}
 

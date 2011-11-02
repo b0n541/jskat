@@ -37,6 +37,7 @@ import org.jskat.util.CardList;
 class SchieberamschContextPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
+	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(SchieberamschContextPanel.class);
 
 	private DiscardPanel discardPanel;
@@ -53,11 +54,9 @@ class SchieberamschContextPanel extends JPanel {
 		add(blankPanel, "width 25%"); //$NON-NLS-1$
 
 		discardPanel = new DiscardPanel(actions, 4);
-		discardPanel.setRamschPanel(this);
 		add(discardPanel, "grow"); //$NON-NLS-1$
 
-		ramschDiscardingDonePanel = new RamschDiscardingDonePanel(actions, newUserPanel,
-				discardPanel, Boolean.TRUE);
+		ramschDiscardingDonePanel = new RamschDiscardingDonePanel(actions, newUserPanel, discardPanel, Boolean.TRUE);
 		add(ramschDiscardingDonePanel, "width 25%"); //$NON-NLS-1$
 
 		setOpaque(false);
@@ -83,11 +82,7 @@ class SchieberamschContextPanel extends JPanel {
 	}
 
 	public void setSkat(CardList skat) {
-		log.debug("Setting skat cards ("+skat+")...");
 		discardPanel.setSkat(skat);
 	}
 	
-	public void refresh() {
-		log.debug("refresh");
-	}
 }

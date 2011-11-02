@@ -35,10 +35,8 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.gui.action.JSkatAction;
-import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
-import org.jskat.util.JSkatResourceBundle;
 
 /**
  * Holds widgets for deciding of looking into skat or playing hand game
@@ -52,9 +50,6 @@ class DiscardPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private JSkatGraphicRepository bitmaps;
-	private JSkatResourceBundle strings;
-
 	private Action pickUpSkatAction;
 	private JButton pickUpSkatButton;
 	private boolean userPickedUpSkat = false;
@@ -64,7 +59,6 @@ class DiscardPanel extends JPanel {
 	private CardPanel cardPanel;
 
 	private GameAnnouncePanel announcePanel;
-	private SchieberamschContextPanel ramschPanel;
 
 	/**
 	 * Constructor
@@ -75,9 +69,6 @@ class DiscardPanel extends JPanel {
 	 *            Maximum number of cards
 	 */
 	public DiscardPanel(ActionMap actions, int newMaxCardCount) {
-
-		strings = JSkatResourceBundle.instance();
-		bitmaps = JSkatGraphicRepository.instance();
 
 		setActionMap(actions);
 		maxCardCount = newMaxCardCount;
@@ -103,11 +94,7 @@ class DiscardPanel extends JPanel {
 				log.debug("user picked up skat");
 				userPickedUpSkat = true;
 				if(announcePanel!=null) {
-					log.debug("informing announce panel");
 					announcePanel.setUserPickedUpSkat(true);
-				}
-				else if(ramschPanel!=null) {
-					ramschPanel.refresh();
 				}
 				DiscardPanel.this.showPanel(CARD_PANEL);
 
@@ -126,8 +113,6 @@ class DiscardPanel extends JPanel {
 
 	protected void setSkat(CardList skat) {
 
-		log.debug("setting skat: "+skat);
-		
 		addCard(skat.get(0));
 		addCard(skat.get(1));
 
@@ -135,42 +120,32 @@ class DiscardPanel extends JPanel {
 	}
 
 	void addCard(Card card) {
-
-		log.debug("adding card");
 		cardPanel.addCard(card);
 	}
 
 	void removeCard(Card card) {
-
-		log.debug("removing card");
 		cardPanel.removeCard(card);
 	}
 
 	public void resetPanel() {
-
 		cardPanel.clearCards();
 		userPickedUpSkat = false;
 		showPanel(PICK_UP_SKAT_BUTTON);
 	}
 
 	protected void showPanel(String panelType) {
-		log.debug("Showing panel "+panelType);
-
 		((CardLayout) getLayout()).show(DiscardPanel.this, panelType);
 	}
 
 	public CardList getDiscardedCards() {
-
 		return (CardList) cardPanel.cards.clone();
 	}
 
 	public boolean isUserLookedIntoSkat() {
-
 		return userPickedUpSkat;
 	}
 
 	public boolean isHandFull() {
-
 		return cardPanel.getCardCount() == maxCardCount;
 	}
 
@@ -179,13 +154,7 @@ class DiscardPanel extends JPanel {
 	}
 
 	void setAnnouncePanel(GameAnnouncePanel announcePanel) {
-
 		this.announcePanel = announcePanel;
-	}
-
-	void setRamschPanel(SchieberamschContextPanel ramschPanel) {
-
-		this.ramschPanel = ramschPanel;
 	}
 
 }

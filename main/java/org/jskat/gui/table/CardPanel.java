@@ -267,12 +267,12 @@ class CardPanel extends JPanel {
 		int xPosition = e.getX();
 		int yPosition = e.getY();
 
-		log.debug("Card panel clicked at: " + xPosition + " x " + yPosition); //$NON-NLS-1$ //$NON-NLS-2$
+//		log.debug("Card panel clicked at: " + xPosition + " x " + yPosition); //$NON-NLS-1$ //$NON-NLS-2$
 
 		if (xPosition > -1 && xPosition < getWidth() && yPosition > -1
 				&& yPosition < getHeight()) {
 
-			log.debug("Mouse button release inside panel"); //$NON-NLS-1$
+//			log.debug("Mouse button release inside panel"); //$NON-NLS-1$
 
 			// get card
 			double cardWidth = bitmaps.getCardImage(Suit.CLUBS, Rank.JACK)
@@ -317,7 +317,7 @@ class CardPanel extends JPanel {
 			if (cardIndex > -1 && cardIndex < cards.size()) {
 
 				card = cards.get(cardIndex);
-				log.debug("card index: " + cardIndex + " card: " + cards.get(cardIndex)); //$NON-NLS-1$ //$NON-NLS-2$
+//				log.debug("card index: " + cardIndex + " card: " + cards.get(cardIndex)); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			if (card != null) {
