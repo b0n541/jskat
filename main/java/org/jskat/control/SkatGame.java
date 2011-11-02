@@ -50,7 +50,7 @@ import org.jskat.util.rule.SkatRuleFactory;
  */
 public class SkatGame extends JSkatThread {
 
-	private static Log log = LogFactory.getLog(SkatGame.class);
+	private Log log = LogFactory.getLog(SkatGame.class);
 	private int maxSleep = 100;
 	private SkatGameData data;
 	private final GameVariant variant;
