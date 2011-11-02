@@ -55,6 +55,8 @@ public class JSkat {
 
 		JSkatMaster jskat = JSkatMaster.instance();
 
+		jskat.checkJSkatVersion();
+
 		jskat.setView(new JSkatViewImpl());
 	}
 

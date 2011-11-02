@@ -47,6 +47,8 @@ import org.jskat.gui.action.JSkatAction;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
+import org.jskat.util.JSkatResourceBundle;
+import org.jskat.util.version.VersionChecker;
 
 /**
  * Controls everything in JSkat
@@ -86,6 +88,14 @@ public class JSkatMaster {
 		data = JSkatApplicationData.instance();
 
 		issControl = new IssController(this);
+	}
+
+	/**
+	 * Checks the version of JSkat
+	 */
+	public void checkJSkatVersion() {
+		log.debug("Latest version web: " + VersionChecker.getLatestVersion());
+		log.debug("Latest version local: " + JSkatResourceBundle.getVersion());
 	}
 
 	/**
