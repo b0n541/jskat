@@ -22,7 +22,6 @@ package org.jskat.util;
 
 import java.util.Collections;
 import java.util.EnumSet;
-import java.util.Random;
 import java.util.StringTokenizer;
 
 /**
@@ -32,9 +31,7 @@ public class CardDeck extends CardList {
 
 	private static final long serialVersionUID = 1L;
 
-	private Random rand;
-
-	private final int MAX_CARDS = 32;
+	private final static int MAX_CARDS = 32;
 
 	/**
 	 * Creates a new instance of CardDeck
@@ -48,8 +45,6 @@ public class CardDeck extends CardList {
 
 			add(card);
 		}
-
-		this.rand = new Random();
 	}
 
 	/**
