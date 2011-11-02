@@ -85,7 +85,7 @@ public class LobbyPanel extends AbstractTabPanel {
 
 		add(getLobbyPanel(), "center"); //$NON-NLS-1$
 
-		this.actions = this.getActionMap();
+		LobbyPanel.actions = this.getActionMap();
 	}
 
 	private JPanel getLobbyPanel() {
