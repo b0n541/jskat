@@ -44,8 +44,8 @@ public class RamschRules extends SuitGrandRamschRules {
 			multiplier = multiplier * 2;
 		}
 
-		multiplier = multiplier
-				* (new Double(Math.pow(2, gameData.getGeschoben()))).intValue();
+		multiplier = (int) (multiplier
+				* Math.pow(2, gameData.getGeschoben()));
 
 		if (gameData.isGameLost()) {
 			multiplier = multiplier * -1;
