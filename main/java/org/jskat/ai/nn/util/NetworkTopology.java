@@ -54,7 +54,6 @@ public class NetworkTopology {
 		this.inputSignals = inputs;
 		this.outputSignals = outputs;
 		this.hiddenLayers = hiddenLayerCount;
-		this.hiddenNeurons = new int[this.hiddenLayers];
 		this.hiddenNeurons = hiddenNeuronCounts;
 	}
 
