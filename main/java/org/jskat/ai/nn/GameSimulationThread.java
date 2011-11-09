@@ -128,7 +128,7 @@ class GameSimulationThread extends JSkatThread {
 		game.setCardDeck(deck);
 		game.dealCards();
 
-		game.setSinglePlayer(position);
+		game.setDeclarer(position);
 
 		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 		factory.setGameType(gameType);

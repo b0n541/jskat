@@ -397,6 +397,9 @@ public class JSkatMaster {
 		NNTrainer diamondsTrainer = new NNTrainer();
 		diamondsTrainer.setGameType(GameType.DIAMONDS);
 		diamondsTrainer.start();
+		NNTrainer ramschTrainer = new NNTrainer();
+		ramschTrainer.setGameType(GameType.RAMSCH);
+		ramschTrainer.start();
 	}
 
 	/**

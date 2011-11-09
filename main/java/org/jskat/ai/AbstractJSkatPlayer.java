@@ -267,7 +267,8 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 
 		boolean result = false;
 
-		if (knowledge.getDeclarer().equals(knowledge.getPlayerPosition())) {
+		if (GameType.RAMSCH.equals(knowledge.getGameType())
+				|| knowledge.getDeclarer().equals(knowledge.getPlayerPosition())) {
 
 			result = true;
 		}

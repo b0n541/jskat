@@ -41,6 +41,7 @@ public class SkatNetworks {
 	private static NeuralNetwork nullOpponent;
 	private static NeuralNetwork grandDeclarer;
 	private static NeuralNetwork grandOpponent;
+	private static NeuralNetwork ramschDeclarer;
 
 	/**
 	 * Gets an instance of the SkatNetworks
@@ -158,9 +159,11 @@ public class SkatNetworks {
 				net = getGrandOpponent();
 			}
 			break;
-		case PASSED_IN:
 		case RAMSCH:
-			// TODO get ramsch nets too
+			log.debug("Returning ramsch declarer network");
+			net = getRamschDeclarer();
+			break;
+		case PASSED_IN:
 			break;
 		}
 
@@ -222,6 +225,15 @@ public class SkatNetworks {
 	}
 
 	/**
+	 * Gets the neural network for declarer in ramsch games
+	 * 
+	 * @return Neural network
+	 */
+	public static NeuralNetwork getRamschDeclarer() {
+		return ramschDeclarer;
+	}
+
+	/**
 	 * Loads all neural networks from files
 	 * 
 	 * @param filePath
@@ -249,6 +261,8 @@ public class SkatNetworks {
 		grandOpponent = new NeuralNetwork();
 		grandOpponent
 				.loadNetwork("/org/jskat/ai/nn/data/jskat.grand.opponent.nnet"); //$NON-NLS-1$
+		ramschDeclarer = new NeuralNetwork();
+		ramschDeclarer.loadNetwork("/org/jskat/ai/nn/data/jskat.ramsch.declarer.nnet"); //$NON-NLS-1$
 	}
 
 	/**
@@ -273,6 +287,7 @@ public class SkatNetworks {
 				"jskat.grand.declarer.nnet")); //$NON-NLS-1$
 		grandOpponent.saveNetwork(path.concat(pathSep).concat(
 				"jskat.grand.opponent.nnet")); //$NON-NLS-1$
+		ramschDeclarer.saveNetwork(path.concat(pathSep).concat("jskat.ramsch.declarer.nnet")); //$NON-NLS-1$
 	}
 
 	/**
@@ -285,5 +300,6 @@ public class SkatNetworks {
 		nullOpponent.resetNetwork();
 		grandDeclarer.resetNetwork();
 		grandOpponent.resetNetwork();
+		ramschDeclarer.resetNetwork();
 	}
 }

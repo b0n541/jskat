@@ -377,7 +377,7 @@ public class SkatGame extends JSkatThread {
 
 		if (secondWinner != null) {
 			// there is a winner of the bidding
-			setSinglePlayer(secondWinner);
+			setDeclarer(secondWinner);
 			view.setActivePlayer(tableName, secondWinner);
 
 			data.setBidValue(bidValue);
@@ -974,9 +974,18 @@ public class SkatGame extends JSkatThread {
 	 * @param singlePlayer
 	 *            Single player
 	 */
-	public void setSinglePlayer(Player singlePlayer) {
+	public void setDeclarer(Player declarer) {
 
-		data.setDeclarer(singlePlayer);
+		data.setDeclarer(declarer);
+	}
+
+	/**
+	 * Gets the single player
+	 * 
+	 * @return Single player
+	 */
+	public Player getDeclarer() {
+		return data.getDeclarer();
 	}
 
 	/**

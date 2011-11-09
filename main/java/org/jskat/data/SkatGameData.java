@@ -473,32 +473,32 @@ public class SkatGameData {
 				if(playerPoints[0]>playerPoints[1] && playerPoints[0]>playerPoints[2]) {
 					setDeclarer(Player.FOREHAND);
 					result.setWon(false);
-					result.setGameValue(playerPoints[0]);
+					result.setGameValue(-playerPoints[0]);
 				}
 				else if(playerPoints[1]>playerPoints[0] && playerPoints[1]>playerPoints[2]) {
 					setDeclarer(Player.MIDDLEHAND);
 					result.setWon(false);
-					result.setGameValue(playerPoints[1]);
+					result.setGameValue(-playerPoints[1]);
 				}
 				else if(playerPoints[2]>playerPoints[0] && playerPoints[2]>playerPoints[1]) {
 					setDeclarer(Player.REARHAND);
 					result.setWon(false);
-					result.setGameValue(playerPoints[2]);
+					result.setGameValue(-playerPoints[2]);
 				}
 				else if(playerPoints[1]>playerPoints[0] && playerPoints[1]==playerPoints[2]) {
 					setDeclarer(Player.FOREHAND);
 					result.setWon(true);
-					result.setGameValue(playerPoints[1]);
+					result.setGameValue(-playerPoints[1]);
 				}
 				else if(playerPoints[0]>playerPoints[1] && playerPoints[0]==playerPoints[2]) {
 					setDeclarer(Player.MIDDLEHAND);
 					result.setWon(true);
-					result.setGameValue(playerPoints[0]);
+					result.setGameValue(-playerPoints[0]);
 				}
 				else if(playerPoints[0]>playerPoints[2] && playerPoints[0]==playerPoints[1]) {
 					setDeclarer(Player.REARHAND);
 					result.setWon(true);
-					result.setGameValue(playerPoints[0]);
+					result.setGameValue(-playerPoints[0]);
 				}
 				else {
 					log.error("Cannot calculate ramsch game result: ["+playerPoints[0]+", "+playerPoints[1]+", "+playerPoints[2]+"]");

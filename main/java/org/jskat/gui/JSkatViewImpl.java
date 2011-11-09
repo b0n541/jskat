@@ -332,18 +332,13 @@ public class JSkatViewImpl implements IJSkatView {
 				.get(JSkatAction.CONTINUE_LOCAL_SERIES)));
 		menu.add(tableMenu);
 
-		// JMenu neuralNetworkMenu = new JMenu(
-		//				strings.getString("neural_networks")); //$NON-NLS-1$
-		// neuralNetworkMenu.add(new JMenuItem(actions
-		// .get(JSkatAction.LOAD_NEURAL_NETWORKS)));
-		// neuralNetworkMenu.add(new JMenuItem(actions
-		// .get(JSkatAction.SAVE_NEURAL_NETWORKS)));
-		// neuralNetworkMenu.add(new JMenuItem(actions
-		// .get(JSkatAction.RESET_NEURAL_NETWORKS)));
-		// neuralNetworkMenu.add(new JSeparator());
-		// neuralNetworkMenu.add(new JMenuItem(actions
-		// .get(JSkatAction.TRAIN_NEURAL_NETWORKS)));
-		// menu.add(neuralNetworkMenu);
+		JMenu neuralNetworkMenu = new JMenu(strings.getString("neural_networks")); //$NON-NLS-1$
+		neuralNetworkMenu.add(new JMenuItem(actions.get(JSkatAction.LOAD_NEURAL_NETWORKS)));
+		neuralNetworkMenu.add(new JMenuItem(actions.get(JSkatAction.SAVE_NEURAL_NETWORKS)));
+		neuralNetworkMenu.add(new JMenuItem(actions.get(JSkatAction.RESET_NEURAL_NETWORKS)));
+		neuralNetworkMenu.add(new JSeparator());
+		neuralNetworkMenu.add(new JMenuItem(actions.get(JSkatAction.TRAIN_NEURAL_NETWORKS)));
+		menu.add(neuralNetworkMenu);
 
 		JMenu issMenu = new JMenu(strings.getString("iss")); //$NON-NLS-1$
 		issMenu.add(new JMenuItem(actions.get(JSkatAction.SHOW_ISS_LOGIN)));

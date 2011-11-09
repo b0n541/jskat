@@ -163,10 +163,13 @@ public class NNTrainer extends JSkatThread {
 
 		AIPlayerNN nnPlayer1 = new AIPlayerNN();
 		nnPlayer1.setIsLearning(true);
+		nnPlayer1.setLogger(new NoOpLog());
 		AIPlayerNN nnPlayer2 = new AIPlayerNN();
 		nnPlayer2.setIsLearning(true);
+		nnPlayer2.setLogger(new NoOpLog());
 		AIPlayerNN nnPlayer3 = new AIPlayerNN();
 		nnPlayer3.setIsLearning(true);
+		nnPlayer3.setLogger(new NoOpLog());
 
 		long episodes = 0;
 		long episodesWonGames = 0;
@@ -194,8 +197,7 @@ public class NNTrainer extends JSkatThread {
 				// + opponentLearning.getTotalNetworkError()
 				//						+ " total network error"); //$NON-NLS-1$
 
-				jskat.addTrainingResult(gameType, episodes, totalWonGames,
-						episodesWonGames, 0.0);
+				jskat.addTrainingResult(gameType, episodes, totalWonGames, episodesWonGames, 0.0);
 
 				episodesWonGames = 0;
 			}
@@ -205,8 +207,7 @@ public class NNTrainer extends JSkatThread {
 				nnPlayer1.newGame(Player.FOREHAND);
 				nnPlayer2.newGame(Player.MIDDLEHAND);
 				nnPlayer3.newGame(Player.REARHAND);
-				SkatGame game = new SkatGame("table", GameVariant.STANDARD, nnPlayer1, nnPlayer2,
-						nnPlayer3);
+				SkatGame game = new SkatGame("table", GameVariant.STANDARD, nnPlayer1, nnPlayer2, nnPlayer3);
 				game.setView(new NullView());
 				game.setLogger(new NoOpLog());
 				game.setMaxSleep(0);
@@ -217,7 +218,7 @@ public class NNTrainer extends JSkatThread {
 				game.setCardDeck(deck);
 				game.dealCards();
 
-				game.setSinglePlayer(currPlayer);
+				game.setDeclarer(currPlayer);
 
 				GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 				factory.setGameType(gameType);
@@ -237,10 +238,25 @@ public class NNTrainer extends JSkatThread {
 				// the result
 				game.getGameResult();
 
-				if (game.isGameWon()) {
+				if (gameType.equals(GameType.RAMSCH)) {
+					boolean ramschGameWon = false;
+					if (!game.getDeclarer().equals(currPlayer)) {
+						ramschGameWon = true;
+					} else {
+						if (game.getGameResult().getGameValue() >= 0) {
+							ramschGameWon = true;
+						}
+					}
 
-					episodesWonGames++;
-					totalWonGames++;
+					if (ramschGameWon) {
+						episodesWonGames++;
+						totalWonGames++;
+					}
+				} else {
+					if (game.isGameWon()) {
+						episodesWonGames++;
+						totalWonGames++;
+					}
 				}
 
 				totalGames++;

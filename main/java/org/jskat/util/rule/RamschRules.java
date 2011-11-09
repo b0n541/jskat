@@ -35,6 +35,7 @@ public class RamschRules extends SuitGrandRamschRules {
 	/**
 	 * @see BasicSkatRules#calcGameResult(SkatGameData)
 	 */
+	@Override
 	public int calcGameResult(SkatGameData gameData) {
 
 		int multiplier = 1;
@@ -58,6 +59,7 @@ public class RamschRules extends SuitGrandRamschRules {
 	/**
 	 * @see BasicSkatRules#calcGameWon(SkatGameData)
 	 */
+	@Override
 	public boolean calcGameWon(SkatGameData gameData) {
 		throw new IllegalStateException("ramsch game cannot be won");
 	}
@@ -72,7 +74,7 @@ public class RamschRules extends SuitGrandRamschRules {
 	 *            Game data
 	 * @return TRUE if the player played a durchmarsch
 	 */
-	public final boolean isDurchmarsch(Player player, SkatGameData gameData) {
+	public final static boolean isDurchmarsch(Player player, SkatGameData gameData) {
 		for(Trick t: gameData.getTricks()) {
 			if(t.getTrickWinner()!=player) return false;
 		}
@@ -90,7 +92,7 @@ public class RamschRules extends SuitGrandRamschRules {
 	 *            Game data
 	 * @return TRUE if the player was jungfrau
 	 */
-	public final boolean isJungfrau(Player player, SkatGameData gameData) {
+	public final static boolean isJungfrau(Player player, SkatGameData gameData) {
 		for(Trick t: gameData.getTricks()) {
 			if(t.getTrickWinner()==player) return false;
 		}
