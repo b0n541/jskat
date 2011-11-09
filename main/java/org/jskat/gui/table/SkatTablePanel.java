@@ -583,6 +583,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		biddingPanel.resetPanel();
 		declaringPanel.resetPanel();
 		gameOverPanel.resetPanel();
+		schieberamschPanel.resetPanel();
 		clearHand(Player.FOREHAND);
 		clearHand(Player.MIDDLEHAND);
 		clearHand(Player.REARHAND);
