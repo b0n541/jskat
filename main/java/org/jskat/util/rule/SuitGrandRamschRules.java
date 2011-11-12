@@ -35,8 +35,7 @@ public abstract class SuitGrandRamschRules extends AbstractSkatRules {
 	 * @see BasicSkatRules#isCardAllowed(GameType, Card, CardList, Card)
 	 */
 	@Override
-	public boolean isCardAllowed(GameType gameType, Card initialCard,
-			CardList hand, Card card) {
+	public boolean isCardAllowed(GameType gameType, Card initialCard, CardList hand, Card card) {
 
 		boolean result = false;
 
@@ -52,8 +51,7 @@ public abstract class SuitGrandRamschRules extends AbstractSkatRules {
 				// no trump on hand --> every card is allowed
 				result = true;
 			}
-		} else if (initialCard.getSuit() == card.getSuit()
-				&& !card.isTrump(gameType)) {
+		} else if (initialCard.getSuit() == card.getSuit() && !card.isTrump(gameType)) {
 			// card must serve suit
 			result = true;
 		} else if (!hand.hasSuit(gameType, initialCard.getSuit())) {
@@ -67,6 +65,7 @@ public abstract class SuitGrandRamschRules extends AbstractSkatRules {
 	/**
 	 * @see BasicSkatRules#isCardBeatsCard(GameType, Card, Card)
 	 */
+	@Override
 	public boolean isCardBeatsCard(GameType gameType, Card cardToBeat, Card card) {
 
 		boolean result = false;
@@ -78,12 +77,10 @@ public abstract class SuitGrandRamschRules extends AbstractSkatRules {
 				if (cardToBeat.getSuitGrandOrder() < card.getSuitGrandOrder()) {
 					// card is a trump card too and has higher suit order
 					result = true;
-				} else if (cardToBeat.getSuitGrandOrder() == card
-						.getSuitGrandOrder()) {
+				} else if (cardToBeat.getSuitGrandOrder() == card.getSuitGrandOrder()) {
 					// cards have same suit grand order
 					// only possible if two jacks are checked
-					if (cardToBeat.getSuit().getSuitOrder() < card.getSuit()
-							.getSuitOrder()) {
+					if (cardToBeat.getSuit().getSuitOrder() < card.getSuit().getSuitOrder()) {
 
 						result = true;
 					}
@@ -95,8 +92,7 @@ public abstract class SuitGrandRamschRules extends AbstractSkatRules {
 				// card is a trump card
 				result = true;
 			} else if (cardToBeat.getSuit() == card.getSuit()
-					&& cardToBeat.getSuitGrandOrder() < card
-							.getSuitGrandOrder()) {
+					&& cardToBeat.getSuitGrandOrder() < card.getSuitGrandOrder()) {
 				// cards have the same suit and card has higher order in
 				// suit/grand games
 				result = true;
@@ -109,6 +105,7 @@ public abstract class SuitGrandRamschRules extends AbstractSkatRules {
 	/**
 	 * @see BasicSkatRules#hasSuit(GameType, CardList, Suit)
 	 */
+	@Override
 	public boolean hasSuit(GameType gameType, CardList hand, Suit suit) {
 
 		boolean result = false;
@@ -116,8 +113,7 @@ public abstract class SuitGrandRamschRules extends AbstractSkatRules {
 		int index = 0;
 		while (result == false && index < hand.size()) {
 
-			if (hand.get(index).getSuit() == suit
-					&& !hand.get(index).isTrump(gameType)) {
+			if (hand.get(index).getSuit() == suit && !hand.get(index).isTrump(gameType)) {
 
 				result = true;
 			}
@@ -156,11 +152,9 @@ public abstract class SuitGrandRamschRules extends AbstractSkatRules {
 				// then check the suit
 				Suit suit = card.getSuit();
 
-				if (gameType == GameType.CLUBS && suit == Suit.CLUBS
-						|| gameType == GameType.SPADES && suit == Suit.SPADES
-						|| gameType == GameType.HEARTS && suit == Suit.HEARTS
-						|| gameType == GameType.DIAMONDS
-						&& suit == Suit.DIAMONDS) {
+				if (gameType == GameType.CLUBS && suit == Suit.CLUBS || gameType == GameType.SPADES
+						&& suit == Suit.SPADES || gameType == GameType.HEARTS && suit == Suit.HEARTS
+						|| gameType == GameType.DIAMONDS && suit == Suit.DIAMONDS) {
 
 					isSuitTrump = true;
 				}
