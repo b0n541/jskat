@@ -51,7 +51,7 @@ import org.jskat.util.rule.SkatRuleFactory;
 public class SkatGame extends JSkatThread {
 
 	private Log log = LogFactory.getLog(SkatGame.class);
-	private int maxSleep = 100;
+	private int maxSleep;
 	private SkatGameData data;
 	private final GameVariant variant;
 	private CardDeck deck;
@@ -654,13 +654,13 @@ public class SkatGame extends JSkatThread {
 				}
 			}
 
-			doSleep(maxSleep);
-
 			log.debug("Trick cards: " + trick.getCardList()); //$NON-NLS-1$
 			log.debug("Points: forehand: " + data.getPlayerPoints(Player.FOREHAND) + //$NON-NLS-1$
 					" middlehand: " //$NON-NLS-1$
 					+ data.getPlayerPoints(Player.MIDDLEHAND) + " rearhand: " //$NON-NLS-1$
 					+ data.getPlayerPoints(Player.REARHAND));
+
+			doSleep(maxSleep);
 
 			if (isFinished()) {
 				break;

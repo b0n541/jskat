@@ -210,7 +210,6 @@ public class NNTrainer extends JSkatThread {
 				SkatGame game = new SkatGame("table", GameVariant.STANDARD, nnPlayer1, nnPlayer2, nnPlayer3);
 				game.setView(new NullView());
 				game.setLogger(new NoOpLog());
-				game.setMaxSleep(0);
 
 				CardDeck deck = new CardDeck();
 				deck.shuffle();
@@ -262,7 +261,7 @@ public class NNTrainer extends JSkatThread {
 				totalGames++;
 			}
 
-			episodes++;
+			episodes += 3;
 
 			checkWaitCondition();
 		}

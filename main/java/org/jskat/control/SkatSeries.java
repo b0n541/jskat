@@ -119,7 +119,7 @@ public class SkatSeries extends JSkatThread {
 	 * @param rounds
 	 *            Number of rounds to be played
 	 */
-	public void startSeries(int rounds, boolean newUnlimitedRound) {
+	public void setMaxRounds(int rounds, boolean newUnlimitedRound) {
 
 		roundsToGo = rounds;
 		unlimitedRounds = newUnlimitedRound;
@@ -165,6 +165,7 @@ public class SkatSeries extends JSkatThread {
 				setViewPositions();
 
 				currSkatGame.setView(view);
+				currSkatGame.setMaxSleep(maxSleep);
 
 				log.debug("Playing game " + (j + 1)); //$NON-NLS-1$
 
@@ -307,5 +308,18 @@ public class SkatSeries extends JSkatThread {
 	 */
 	public void setOnlyPlayRamsch(boolean isOnlyPlayRamsch) {
 		onlyPlayRamsch = isOnlyPlayRamsch;
+	}
+
+	/**
+	 * Sets max sleep between actions during the skat series, this must only be
+	 * set in skat series that are run with a GUI, otherwise the default value
+	 * of 0 is used
+	 * 
+	 * @param newMaxSleep
+	 *            New value for maximum sleep time in milliseconds
+	 */
+	public void setMaxSleep(int newMaxSleep) {
+
+		maxSleep = newMaxSleep;
 	}
 }

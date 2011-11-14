@@ -29,6 +29,7 @@ import org.jskat.ai.IJSkatPlayer;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.SkatTableOptions;
 import org.jskat.gui.IJSkatView;
+import org.jskat.gui.JSkatViewImpl;
 
 /**
  * Controls a table for playing a series of skat games
@@ -79,6 +80,11 @@ public class SkatTable {
 			// TODO save old series data?
 			series = new SkatSeries(tableName);
 			series.setView(view);
+
+			if (view instanceof JSkatViewImpl) {
+				// set max sleep time only when using GUI
+				series.setMaxSleep(100);
+			}
 		}
 
 		if (player.size() >= 3) {
@@ -86,7 +92,7 @@ public class SkatTable {
 			view.startSeries(tableName);
 			series.setPlayer(player);
 			series.setOnlyPlayRamsch(onlyPlayRamsch);
-			series.startSeries(rounds, unlimitedRounds);
+			series.setMaxRounds(rounds, unlimitedRounds);
 			series.start();
 		}
 	}

@@ -56,8 +56,7 @@ class GameSimulationThread extends JSkatThread {
 	private AIPlayerNN nnPlayer2;
 	private AIPlayerNN nnPlayer3;
 
-	GameSimulationThread(GameType pGameType, Player playerPosition,
-			CardList playerCards) {
+	GameSimulationThread(GameType pGameType, Player playerPosition, CardList playerCards) {
 
 		gameType = pGameType;
 		position = playerPosition;
@@ -121,7 +120,6 @@ class GameSimulationThread extends JSkatThread {
 		SkatGame game = new SkatGame("table", GameVariant.STANDARD, nnPlayer1, nnPlayer2, nnPlayer3);
 		game.setView(new NullView());
 		game.setLogger(new NoOpLog());
-		game.setMaxSleep(0);
 
 		CardDeck deck = CardDeckSimulator.simulateUnknownCards(position, cards);
 		log.debug("Card deck: " + deck); //$NON-NLS-1$
