@@ -112,12 +112,11 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		int result = -1;
 
-		// if (isAnyGamePossible(nextBidValue)) {
-		// result = nextBidValue;
-		// }
-		//
-		// return result;
-		return -1;
+		if (isAnyGamePossible(nextBidValue)) {
+			result = nextBidValue;
+		}
+
+		return result;
 	}
 
 	/**
@@ -126,8 +125,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	@Override
 	public boolean holdBid(int currBidValue) {
 
-		// return isAnyGamePossible(currBidValue);
-		return false;
+		return isAnyGamePossible(currBidValue);
 	}
 
 	private boolean isAnyGamePossible(int bidValue) {

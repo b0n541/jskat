@@ -133,7 +133,10 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 		knowledge.getMyCards().sort(game.getGameType());
 
 		rules = SkatRuleFactory.getSkatRules(game.getGameType());
-		log.debug("Starting game for "+getPlayerName()+": "+game.getGameType()+" (rules="+rules.getClass()+")");
+		if (!GameType.PASSED_IN.equals(game.getGameType())) {
+			log.debug("Starting game for " + getPlayerName() + ": " + game.getGameType() + " (rules=" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					+ rules.getClass() + ")"); //$NON-NLS-1$
+		}
 
 		startGame();
 	}
@@ -196,8 +199,7 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 		for (Card card : knowledge.getMyCards()) {
 
 			if (trick.size() > 0
-					&& rules.isCardAllowed(knowledge.getGameType(),
-							trick.get(0), knowledge.getMyCards(), card)) {
+					&& rules.isCardAllowed(knowledge.getGameType(), trick.get(0), knowledge.getMyCards(), card)) {
 
 				log.debug("initial card: " + trick.get(0)); //$NON-NLS-1$
 				isCardAllowed = true;
