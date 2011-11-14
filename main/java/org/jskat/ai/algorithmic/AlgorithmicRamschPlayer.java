@@ -34,8 +34,7 @@ import org.jskat.util.Rank;
  * 
  */
 public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
-	private static final Logger log = Logger
-			.getLogger(AlgorithmicRamschPlayer.class);
+	private static final Logger log = Logger.getLogger(AlgorithmicRamschPlayer.class);
 
 	private final AlgorithmicAIPlayer myPlayer;
 	private final PlayerKnowledge knowledge;
@@ -46,8 +45,7 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
 	AlgorithmicRamschPlayer(AlgorithmicAIPlayer p) {
 		myPlayer = p;
 		knowledge = p.getKnowledge();
-		log.debug("Defining player <" + myPlayer.getPlayerName() + "> as "
-				+ this.getClass().getName());
+		log.debug("Defining player <" + myPlayer.getPlayerName() + "> as " + this.getClass().getName());
 	}
 
 	/*
@@ -58,8 +56,7 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
 	public Card playCard() {
 		if (knowledge.getMyCards().size() == 1)
 			return knowledge.getMyCards().get(0);
-		if (knowledge.getTrickCards() == null
-				|| knowledge.getTrickCards().isEmpty()) {
+		if (knowledge.getTrickCards() == null || knowledge.getTrickCards().isEmpty()) {
 			if (knowledge.getNoOfTricks() < 1) {
 				return openGame();
 			}
@@ -81,8 +78,7 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
 	}
 
 	private Card playMiddlehandCard() {
-		log.debug("I (" + myPlayer.getPlayerName()
-				+ ") am in middlehand (OpponentPlayer)");
+		log.debug("I (" + myPlayer.getPlayerName() + ") am in middlehand (OpponentPlayer)");
 		CardList cards = knowledge.getMyCards();
 		Card initialCard = knowledge.getTrickCards().get(0);
 		GameType gameType = knowledge.getGameType();
@@ -93,8 +89,7 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
 	}
 
 	private Card playRearhandCard() {
-		log.debug("I (" + myPlayer.getPlayerName()
-				+ ") am in rearhand (OpponentPlayer)");
+		log.debug("I (" + myPlayer.getPlayerName() + ") am in rearhand (OpponentPlayer)");
 		// fallback: take the first valid card
 		CardList cards = knowledge.getMyCards();
 		Card initialCard = knowledge.getTrickCards().get(0);
@@ -111,8 +106,7 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
 	 * @param gameType
 	 * @return a default card
 	 */
-	private Card getDefaultCard(CardList cards, Card initialCard,
-			GameType gameType) {
+	private Card getDefaultCard(CardList cards, Card initialCard, GameType gameType) {
 		Card result = null;
 		for (Card c : cards) {
 			if (c.isAllowed(gameType, initialCard, cards)) {
@@ -123,8 +117,7 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
 			log.debug("playCard (8)");
 			return result;
 		}
-		log.warn("no possible card found in card list [" + cards + "] with "
-				+ gameType + " / " + initialCard);
+		log.warn("no possible card found in card list [" + cards + "] with " + gameType + " / " + initialCard);
 		log.debug("playCard (9)");
 		return cards.get(0);
 	}
@@ -138,48 +131,50 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
 	 */
 	@Override
 	public CardList discardSkat(BidEvaluator bidEvaluator) {
-		log.debug(myPlayer.getPlayerName()+" ("+this.getClass()+") is discarding cards - not implemented yet");
+		log.debug(myPlayer.getPlayerName() + " (" + this.getClass() + ") is discarding cards - not implemented yet");
 		knowledge.getMyCards().sort(GameType.RAMSCH);
-		if(JSkatOptions.instance().isSchieberRamschJacksInSkat()) {
+		if (JSkatOptions.instance().isSchieberRamschJacksInSkat()) {
 			return discardWithJacks();
 		}
 		return discardNoJacks();
 	}
-	
+
 	private CardList discardWithJacks() {
-		log.debug("cards before discarding(withJacks): "+knowledge.getMyCards());
+		log.debug("cards before discarding(withJacks): " + knowledge.getMyCards());
 		CardList result = new CardList();
 		result.add(knowledge.getMyCards().remove(0));
 		result.add(knowledge.getMyCards().remove(0));
-		log.debug("cards left after discarding(withJacks): "+knowledge.getMyCards().size());
+		log.debug("cards left after discarding(withJacks): " + knowledge.getMyCards().size());
 		return result;
 	}
-	
+
 	private CardList discardNoJacks() {
 		CardList result = new CardList();
-		for(Card c: knowledge.getMyCards()) {
-			if(result.size()<2 && c.getRank()==Rank.ACE && knowledge.getMyCards().remove(c)) {
+		for (Card c : knowledge.getMyCards()) {
+			if (result.size() < 2 && c.getRank() == Rank.ACE) {
 				result.add(c);
 			}
 		}
-		for(Card c: knowledge.getMyCards()) {
-			if(result.size()<2 && c.getRank()==Rank.TEN && knowledge.getMyCards().remove(c)) {
+		for (Card c : knowledge.getMyCards()) {
+			if (result.size() < 2 && c.getRank() == Rank.TEN) {
 				result.add(c);
 			}
 		}
-		for(Card c: knowledge.getMyCards()) {
-			if(result.size()<2 && c.getRank()==Rank.KING && knowledge.getMyCards().remove(c)) {
+		for (Card c : knowledge.getMyCards()) {
+			if (result.size() < 2 && c.getRank() == Rank.KING) {
 				result.add(c);
 			}
 		}
-		for(Card c: knowledge.getMyCards()) {
-			if(result.size()<2 && c.getRank()!=Rank.JACK && knowledge.getMyCards().remove(c)) {
+		for (Card c : knowledge.getMyCards()) {
+			if (result.size() < 2 && c.getRank() != Rank.JACK) {
 				result.add(c);
 			}
 		}
-		log.debug("cards left after discarding(noJacks): "+knowledge.getMyCards().size()+" - "+knowledge.getMyCards());
+
+		knowledge.getMyCards().remove(result);
+
+		log.debug("cards left after discarding(noJacks): " + knowledge.getMyCards().size() + " - "
+				+ knowledge.getMyCards());
 		return result;
-		
 	}
-	
 }
