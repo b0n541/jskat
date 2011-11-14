@@ -30,7 +30,6 @@ import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.SkatTableOptions;
 import org.jskat.gui.IJSkatView;
 
-
 /**
  * Controls a table for playing a series of skat games
  */
@@ -74,7 +73,7 @@ public class SkatTable {
 	 * @param rounds
 	 *            Number of rounds to be played
 	 */
-	public void startSkatSeries(int rounds, boolean unlimitedRounds) {
+	public void startSkatSeries(int rounds, boolean unlimitedRounds, boolean onlyPlayRamsch) {
 
 		if (!isSeriesRunning()) {
 			// TODO save old series data?
@@ -86,6 +85,7 @@ public class SkatTable {
 
 			view.startSeries(tableName);
 			series.setPlayer(player);
+			series.setOnlyPlayRamsch(onlyPlayRamsch);
 			series.startSeries(rounds, unlimitedRounds);
 			series.start();
 		}

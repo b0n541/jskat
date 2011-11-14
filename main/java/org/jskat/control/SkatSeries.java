@@ -35,7 +35,6 @@ import org.jskat.gui.human.HumanPlayer;
 import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
 
-
 /**
  * Controls a series of skat games
  */
@@ -47,6 +46,7 @@ public class SkatSeries extends JSkatThread {
 	private SkatSeriesData data;
 	private int roundsToGo = 0;
 	private boolean unlimitedRounds = false;
+	private boolean onlyPlayRamsch = false;
 	private Map<Player, IJSkatPlayer> player;
 	private SkatGame currSkatGame;
 
@@ -154,8 +154,13 @@ public class SkatSeries extends JSkatThread {
 				gameNumber++;
 				view.setGameNumber(data.getTableName(), gameNumber);
 
-				currSkatGame = new SkatGame(data.getTableName(), GameVariant.STANDARD, player.get(Player.FOREHAND),
-						player.get(Player.MIDDLEHAND), player.get(Player.REARHAND));
+				if (onlyPlayRamsch) {
+					currSkatGame = new SkatGame(data.getTableName(), GameVariant.RAMSCH, player.get(Player.FOREHAND),
+							player.get(Player.MIDDLEHAND), player.get(Player.REARHAND));
+				} else {
+					currSkatGame = new SkatGame(data.getTableName(), GameVariant.STANDARD, player.get(Player.FOREHAND),
+							player.get(Player.MIDDLEHAND), player.get(Player.REARHAND));
+				}
 
 				setViewPositions();
 
@@ -292,5 +297,15 @@ public class SkatSeries extends JSkatThread {
 	public void setView(IJSkatView newView) {
 
 		view = newView;
+	}
+
+	/**
+	 * Sets whether only ramsch games are played or not
+	 * 
+	 * @param isOnlyPlayRamsch
+	 *            TRUE, if only ramsch games should be played
+	 */
+	public void setOnlyPlayRamsch(boolean isOnlyPlayRamsch) {
+		onlyPlayRamsch = isOnlyPlayRamsch;
 	}
 }

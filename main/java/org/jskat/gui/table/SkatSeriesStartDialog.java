@@ -68,6 +68,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 	private JComboBox player3;
 	JSpinner numberOfRounds;
 	JCheckBox unlimited;
+	JCheckBox onlyPlayRamsch;
 
 	/**
 	 * Constructor
@@ -142,6 +143,9 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 			}
 		});
 		root.add(unlimited, "wrap"); //$NON-NLS-1$
+		root.add(new JLabel(strings.getString("ramsch"))); //$NON-NLS-1$
+		onlyPlayRamsch = new JCheckBox(strings.getString("only_play_ramsch")); //$NON-NLS-1$
+		root.add(onlyPlayRamsch, "wrap"); //$NON-NLS-1$
 
 		JPanel buttonPanel = new JPanel(new MigLayout());
 		JButton start = new JButton(strings.getString("start")); //$NON-NLS-1$
@@ -194,9 +198,8 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
 			setVisible(false);
 
-			jskat.startSeries(playerTypes, playerNames,
-					Integer.parseInt(numberOfRounds.getValue().toString()),
-					unlimited.isSelected());
+			jskat.startSeries(playerTypes, playerNames, Integer.parseInt(numberOfRounds.getValue().toString()),
+					unlimited.isSelected(), onlyPlayRamsch.isSelected());
 		}
 
 	}

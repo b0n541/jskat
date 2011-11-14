@@ -246,11 +246,6 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 
 		} else if (JSkatAction.SCHIEBEN.toString().equals(command)) {
 
-			gameAnnouncement = (GameAnnouncement) source;
-			discardSkat = gameAnnouncement.getDiscardedCards();
-			knowledge.getMyCards().remove(this.discardSkat.get(0));
-			knowledge.getMyCards().remove(this.discardSkat.get(1));
-
 			gameAnnouncementStep = GameAnnouncementStep.DONE_GAME_ANNOUNCEMENT;
 
 		} else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
@@ -275,8 +270,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 				log.warn("Wrong source for " + command); //$NON-NLS-1$
 				interrupt = false;
 			}
-		} else if (JSkatAction.PLAY_CARD.toString().equals(command)
-				&& source instanceof Card) {
+		} else if (JSkatAction.PLAY_CARD.toString().equals(command) && source instanceof Card) {
 
 			this.nextCard = (Card) source;
 
