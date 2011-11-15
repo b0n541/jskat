@@ -32,7 +32,7 @@ import org.jskat.util.GameType;
  */
 public class GameAnnouncement {
 
-	private static final Log log = LogFactory.getLog(GameAnnouncement.class);
+	static final Log log = LogFactory.getLog(GameAnnouncement.class);
 	/**
 	 * Game type
 	 */
@@ -162,10 +162,10 @@ public class GameAnnouncement {
 
 		private boolean validate() {
 			if (tmpAnnouncement.gameType == null) {
-				log.debug("gameType is null");
+				log.debug("gameType is null"); //$NON-NLS-1$
 				return false;
 			} else if (tmpAnnouncement.isHand() && tmpAnnouncement.discardedCards.size() > 0) {
-				log.debug("hand=" + tmpAnnouncement.isHand() + ", size=" + tmpAnnouncement.discardedCards.size());
+				log.debug("hand=" + tmpAnnouncement.isHand() + ", size=" + tmpAnnouncement.discardedCards.size()); //$NON-NLS-1$ //$NON-NLS-2$
 				return false;
 			}
 			return true;

@@ -28,6 +28,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.IJSkatPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
+import org.jskat.data.GameSummary;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
@@ -941,7 +942,7 @@ public class SkatGame extends JSkatThread {
 
 			} else if (newState == GameState.GAME_OVER) {
 
-				view.addGameResult(tableName, data);
+				view.addGameResult(tableName, getGameSummary());
 			}
 		}
 	}
@@ -1005,6 +1006,15 @@ public class SkatGame extends JSkatThread {
 	public SkatGameResult getGameResult() {
 
 		return data.getGameResult();
+	}
+
+	/**
+	 * Gets a summary of the game
+	 * 
+	 * @return Game summary
+	 */
+	public GameSummary getGameSummary() {
+		return data.getGameSummary();
 	}
 
 	/**

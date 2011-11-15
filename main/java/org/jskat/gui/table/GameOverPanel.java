@@ -26,7 +26,7 @@ import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
 
-import org.jskat.data.SkatGameData;
+import org.jskat.data.GameSummary;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.Player;
@@ -46,15 +46,12 @@ class GameOverPanel extends JPanel {
 
 		this.setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		JPanel panel = new JPanel(new MigLayout(
-				"fill", "fill", "[grow][shrink]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		JPanel panel = new JPanel(new MigLayout("fill", "fill", "[grow][shrink]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		gameResultPanel = new GameResultPanel(bitmaps);
 		panel.add(gameResultPanel, "grow, wrap"); //$NON-NLS-1$
 
 		JPanel buttonPanel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
-		buttonPanel.add(
-				new JButton(actions.get(JSkatAction.CONTINUE_LOCAL_SERIES)),
-				"center, shrink"); //$NON-NLS-1$
+		buttonPanel.add(new JButton(actions.get(JSkatAction.CONTINUE_LOCAL_SERIES)), "center, shrink"); //$NON-NLS-1$
 		buttonPanel.setOpaque(false);
 		panel.add(buttonPanel, "center"); //$NON-NLS-1$
 
@@ -69,9 +66,9 @@ class GameOverPanel extends JPanel {
 		gameResultPanel.setUserPosition(player);
 	}
 
-	void setGameResult(SkatGameData gameData) {
+	void setGameSummary(GameSummary summary) {
 
-		gameResultPanel.setGameResult(gameData);
+		gameResultPanel.setGameSummary(summary);
 	}
 
 	public void resetPanel() {

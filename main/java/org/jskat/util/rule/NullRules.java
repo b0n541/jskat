@@ -144,11 +144,19 @@ public class NullRules extends AbstractSkatRules {
 		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see org.jskat.util.rule.BasicSkatRules#getMultiplier(org.jskat.util.CardList, org.jskat.util.GameType)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
-	public int getMultiplier(CardList cards, GameType gameType) {
+	public int getMultiplier(SkatGameData gameData) {
 		return 0;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isPlayWithJacks(SkatGameData gameData) {
+		return false;
 	}
 }

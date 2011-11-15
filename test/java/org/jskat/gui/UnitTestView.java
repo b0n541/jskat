@@ -7,6 +7,7 @@ import java.util.Set;
 import org.jskat.control.SkatTable;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
@@ -244,7 +245,7 @@ public class UnitTestView implements IJSkatView {
 	}
 
 	@Override
-	public void addGameResult(String tableName, SkatGameData data) {
+	public void addGameResult(String tableName, GameSummary summary) {
 		// TODO Auto-generated method stub
 
 	}
@@ -383,13 +384,13 @@ public class UnitTestView implements IJSkatView {
 	}
 
 	@Override
-	public void setGameResult(String tableName, SkatGameData gameData) {
+	public void setGameResult(String tableName, GameSummary summary) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void setGameResultWithoutSkatList(String tableName, SkatGameData gameData) {
+	public void setGameResultWithoutSkatList(String tableName, GameSummary summary) {
 		// TODO Auto-generated method stub
 
 	}

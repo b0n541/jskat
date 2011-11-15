@@ -47,7 +47,6 @@ import org.jskat.util.Player;
 import org.jskat.util.SkatConstants;
 import org.jskat.util.rule.SkatRuleFactory;
 
-
 /**
  * Controls all ISS related actions
  */
@@ -158,7 +157,7 @@ public class IssController {
 			jskat.setIssLogin(login);
 		}
 
-		log.debug("iss connected: "+issConnect.isConnected());
+		log.debug("iss connected: " + issConnect.isConnected());
 		return issConnect.isConnected();
 	}
 
@@ -533,15 +532,15 @@ public class IssController {
 	 * 
 	 * @param tableName
 	 *            Table name
-	 * @param completeGameData
+	 * @param newGameData
 	 *            Game data
 	 */
-	public void endGame(String tableName, SkatGameData completeGameData) {
+	public void endGame(String tableName, SkatGameData newGameData) {
 
 		view.setGameState(tableName, GameState.GAME_OVER);
 		// FIXME (jansch 05.04.2011) remove this dirty hack
-		view.setGameResultWithoutSkatList(tableName, completeGameData);
-		gameData.put(tableName, completeGameData);
+		view.setGameResultWithoutSkatList(tableName, newGameData.getGameSummary());
+		gameData.put(tableName, newGameData);
 	}
 
 	/**
@@ -656,8 +655,7 @@ public class IssController {
 	 * @param gameAnnouncement
 	 *            Game announcement
 	 */
-	public void sendGameAnnouncementMove(String tableName,
-			GameAnnouncement gameAnnouncement) {
+	public void sendGameAnnouncementMove(String tableName, GameAnnouncement gameAnnouncement) {
 
 		issConnect.sendGameAnnouncementMove(tableName, gameAnnouncement);
 

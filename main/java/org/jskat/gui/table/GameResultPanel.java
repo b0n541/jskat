@@ -29,7 +29,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jskat.data.SkatGameData;
+import org.jskat.data.GameSummary;
 import org.jskat.data.Trick;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.Player;
@@ -74,9 +74,9 @@ class GameResultPanel extends JPanel {
 		setOpaque(false);
 	}
 
-	public void setGameResult(SkatGameData gameData) {
+	public void setGameSummary(GameSummary summary) {
 
-		List<Trick> tricks = gameData.getTricks();
+		List<Trick> tricks = summary.getTricks();
 
 		log.debug("Trick size: " + tricks.size()); //$NON-NLS-1$
 
@@ -89,12 +89,9 @@ class GameResultPanel extends JPanel {
 				Trick trick = tricks.get(i);
 				if (trick != null) {
 					trickPanel.setUserPosition(userPosition);
-					trickPanel.addCard(trick.getForeHand(),
-							trick.getFirstCard());
-					trickPanel.addCard(trick.getForeHand().getLeftNeighbor(),
-							trick.getSecondCard());
-					trickPanel.addCard(trick.getForeHand().getRightNeighbor(),
-							trick.getThirdCard());
+					trickPanel.addCard(trick.getForeHand(), trick.getFirstCard());
+					trickPanel.addCard(trick.getForeHand().getLeftNeighbor(), trick.getSecondCard());
+					trickPanel.addCard(trick.getForeHand().getRightNeighbor(), trick.getThirdCard());
 				}
 			}
 		}

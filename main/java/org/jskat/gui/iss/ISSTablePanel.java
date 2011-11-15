@@ -29,7 +29,10 @@ import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.jskat.data.GameSummary;
+import org.jskat.data.GameSummary.GameSummaryFactory;
 import org.jskat.data.SkatGameData.GameState;
+import org.jskat.data.SkatGameResult;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.PlayerStatus;
 import org.jskat.data.iss.TablePanelStatus;
@@ -38,6 +41,7 @@ import org.jskat.gui.table.ContextPanelTypes;
 import org.jskat.gui.table.JSkatUserPanel;
 import org.jskat.gui.table.OpponentPanel;
 import org.jskat.gui.table.SkatTablePanel;
+import org.jskat.util.GameType;
 import org.jskat.util.Player;
 
 /**
@@ -63,8 +67,7 @@ public class ISSTablePanel extends SkatTablePanel {
 	 * @param newLoginName
 	 *            Login name on ISS
 	 */
-	public ISSTablePanel(String tableName, ActionMap actions,
-			String newLoginName) {
+	public ISSTablePanel(String tableName, ActionMap actions, String newLoginName) {
 
 		super(tableName, actions);
 
@@ -85,11 +88,9 @@ public class ISSTablePanel extends SkatTablePanel {
 		panel.add(chatPanel, "width 20%, growy"); //$NON-NLS-1$
 
 		// replace game start context panel
-		addContextPanel(ContextPanelTypes.START,
-				new StartContextPanel(this.getActionMap()));
+		addContextPanel(ContextPanelTypes.START, new StartContextPanel(this.getActionMap()));
 		// FIXME (jan 07.12.2010) add game over panel
-		addContextPanel(ContextPanelTypes.GAME_OVER,
-				new StartContextPanel(this.getActionMap()));
+		addContextPanel(ContextPanelTypes.GAME_OVER, new StartContextPanel(this.getActionMap()));
 		setGameState(GameState.GAME_START);
 
 		return panel;
@@ -117,8 +118,7 @@ public class ISSTablePanel extends SkatTablePanel {
 		JPanel additionalActionsPanel = new JPanel();
 		additionalActionsPanel.setOpaque(false);
 
-		JButton giveUpButton = new JButton(getActionMap().get(
-				JSkatAction.RESIGN));
+		JButton giveUpButton = new JButton(getActionMap().get(JSkatAction.RESIGN));
 		additionalActionsPanel.add(giveUpButton);
 
 		return additionalActionsPanel;
@@ -137,8 +137,7 @@ public class ISSTablePanel extends SkatTablePanel {
 
 		for (String playerName : tableStatus.getPlayerInformations().keySet()) {
 
-			PlayerStatus status = tableStatus
-					.getPlayerInformation(playerName);
+			PlayerStatus status = tableStatus.getPlayerInformation(playerName);
 
 			if (!status.isPlayerLeft()) {
 				addPlayerName(playerName);
@@ -150,10 +149,23 @@ public class ISSTablePanel extends SkatTablePanel {
 			}
 		}
 
-		if (lastTableStatus == null || isNewGameResultAvailable(tableStatus)) {
+		if (isNewGameResultAvailable(tableStatus)) {
 
 			Map<Player, Integer> playerResults = extractPlayerResults(tableStatus);
-			addGameResult(getDeclarer(), playerResults, 0);
+
+			// FIXME (jan 15.11.2011) try to get more information about the game
+			GameSummaryFactory factory = GameSummary.getFactory();
+			factory.setGameType(GameType.PASSED_IN);
+			factory.setForeHand("not available");
+			factory.setMiddleHand("not available");
+			factory.setRearHand("not available");
+			factory.setDeclarer(Player.FOREHAND);
+			SkatGameResult gameResult = new SkatGameResult();
+			gameResult.setGameValue(0);
+			factory.setGameResult(gameResult);
+			GameSummary summary = factory.getSummary();
+
+			addISSGameResult(getDeclarer(), playerResults, summary);
 		}
 
 		lastTableStatus = tableStatus;
@@ -163,21 +175,19 @@ public class ISSTablePanel extends SkatTablePanel {
 
 		boolean result = false;
 
-		for (String playerName : tableStatus.getPlayerInformations().keySet()) {
+		if (lastTableStatus != null) {
+			for (String playerName : tableStatus.getPlayerInformations().keySet()) {
 
-			PlayerStatus newStatus = tableStatus
-					.getPlayerInformation(playerName);
-			PlayerStatus oldStatus = lastTableStatus
-					.getPlayerInformation(playerName);
+				PlayerStatus newStatus = tableStatus.getPlayerInformation(playerName);
+				PlayerStatus oldStatus = lastTableStatus.getPlayerInformation(playerName);
 
-			if (oldStatus != null && newStatus != null) {
-				if (oldStatus.getGamesPlayed() != newStatus.getGamesPlayed()
-						|| oldStatus.getLastGameResult() != newStatus
-								.getLastGameResult()
-						|| oldStatus.getTotalPoints() != newStatus
-								.getTotalPoints()) {
+				if (oldStatus != null && newStatus != null) {
+					if (oldStatus.getGamesPlayed() != newStatus.getGamesPlayed()
+							|| oldStatus.getLastGameResult() != newStatus.getLastGameResult()
+							|| oldStatus.getTotalPoints() != newStatus.getTotalPoints()) {
 
-					result = true;
+						result = true;
+					}
 				}
 			}
 		}
@@ -185,17 +195,14 @@ public class ISSTablePanel extends SkatTablePanel {
 		return result;
 	}
 
-	private Map<Player, Integer> extractPlayerResults(
-			TablePanelStatus tableStatus) {
+	private Map<Player, Integer> extractPlayerResults(TablePanelStatus tableStatus) {
 
 		Map<Player, Integer> result = new HashMap<Player, Integer>();
 
 		for (String playerName : tableStatus.getPlayerInformations().keySet()) {
 
-			PlayerStatus status = tableStatus
-					.getPlayerInformation(playerName);
-			result.put(playerNamesAndPositions.get(playerName),
-					status.getLastGameResult());
+			PlayerStatus status = tableStatus.getPlayerInformation(playerName);
+			result.put(playerNamesAndPositions.get(playerName), status.getLastGameResult());
 		}
 
 		return result;

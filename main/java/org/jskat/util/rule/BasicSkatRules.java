@@ -47,8 +47,7 @@ public interface BasicSkatRules {
 	 *            Card to be checked
 	 * @return TRUE if the card is allowed to be played
 	 */
-	public boolean isCardAllowed(GameType gameType, Card initialCard,
-			CardList hand, Card card);
+	public boolean isCardAllowed(GameType gameType, Card initialCard, CardList hand, Card card);
 
 	/**
 	 * Checks whether a card beats another card
@@ -104,13 +103,22 @@ public interface BasicSkatRules {
 	 * @return Trick winner
 	 */
 	public Player calculateTrickWinner(GameType gameType, Trick trick);
-	
+
 	/**
 	 * calculates the multiplier of a card list with regard to the ruleset
 	 * 
-	 * @param cards a list of cards
-	 * @param gameType the (potential) game type
+	 * @param gameData
+	 *            Game data
 	 * @return the multiplier for bidding and game announcement
 	 */
-	public int getMultiplier(CardList cards, GameType gameType);
+	public int getMultiplier(SkatGameData gameData);
+
+	/**
+	 * Checks whether the game is played with jacks or without
+	 * 
+	 * @param gameData
+	 *            Game data
+	 * @return TRUE if the game is played with jacks
+	 */
+	public boolean isPlayWithJacks(SkatGameData gameData);
 }

@@ -22,9 +22,6 @@ package org.jskat.util.rule;
 
 import org.jskat.data.SkatGameData;
 import org.jskat.data.Trick;
-import org.jskat.util.Card;
-import org.jskat.util.CardList;
-import org.jskat.util.GameType;
 import org.jskat.util.Player;
 
 /**
@@ -45,8 +42,7 @@ public class RamschRules extends SuitGrandRamschRules {
 			multiplier = multiplier * 2;
 		}
 
-		multiplier = (int) (multiplier
-				* Math.pow(2, gameData.getGeschoben()));
+		multiplier = (int) (multiplier * Math.pow(2, gameData.getGeschoben()));
 
 		if (gameData.isGameLost()) {
 			multiplier = multiplier * -1;
@@ -63,7 +59,7 @@ public class RamschRules extends SuitGrandRamschRules {
 	public boolean calcGameWon(SkatGameData gameData) {
 		throw new IllegalStateException("ramsch game cannot be won");
 	}
-	
+
 	/**
 	 * Checks whether a player did a durchmarsch (walkthrough) in a ramsch game<br>
 	 * durchmarsch means one player made all tricks
@@ -75,8 +71,9 @@ public class RamschRules extends SuitGrandRamschRules {
 	 * @return TRUE if the player played a durchmarsch
 	 */
 	public final static boolean isDurchmarsch(Player player, SkatGameData gameData) {
-		for(Trick t: gameData.getTricks()) {
-			if(t.getTrickWinner()!=player) return false;
+		for (Trick t : gameData.getTricks()) {
+			if (t.getTrickWinner() != player)
+				return false;
 		}
 		return true;
 	}
@@ -93,44 +90,26 @@ public class RamschRules extends SuitGrandRamschRules {
 	 * @return TRUE if the player was jungfrau
 	 */
 	public final static boolean isJungfrau(Player player, SkatGameData gameData) {
-		for(Trick t: gameData.getTricks()) {
-			if(t.getTrickWinner()==player) return false;
+		for (Trick t : gameData.getTricks()) {
+			if (t.getTrickWinner() == player)
+				return false;
 		}
 		return true;
 	}
-	
-	/* (non-Javadoc)
-	 * @see org.jskat.util.rule.BasicSkatRules#getMultiplier(org.jskat.util.CardList, org.jskat.util.GameType)
+
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
-	public int getMultiplier(CardList cards, GameType gameType) {
-		if(gameType==GameType.RAMSCH) return 0;
-		if(gameType!=GameType.GRAND) throw new IllegalArgumentException("Wrong ruleset - "+gameType);
-		int result = 1;
-		if(cards.contains(Card.CJ)) {
-			result++;
-			if(cards.contains(Card.SJ)) {
-				result++;
-				if(cards.contains(Card.HJ)) {
-					result++;
-					if(cards.contains(Card.DJ)) {
-						result++;
-					}
-				}
-			}
-		}
-		else {
-			result++;
-			if(!cards.contains(Card.SJ)) {
-				result++;
-				if(!cards.contains(Card.HJ)) {
-					result++;
-					if(!cards.contains(Card.DJ)) {
-						result++;
-					}
-				}
-			}
-		}
-		return result;
+	public int getMultiplier(@SuppressWarnings("unused") SkatGameData gameData) {
+		return 0;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isPlayWithJacks(SkatGameData gameData) {
+		return false;
 	}
 }

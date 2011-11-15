@@ -28,6 +28,7 @@ import javax.swing.table.AbstractTableModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jskat.data.GameSummary;
 import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.Player;
 import org.jskat.util.SkatConstants;
@@ -49,7 +50,7 @@ class SkatListTableModel extends AbstractTableModel {
 	private int playerCount = 3;
 	private List<Player> declarers;
 	private List<List<Integer>> playerResults;
-	private List<Integer> gameResults;
+	private List<GameSummary> gameResults;
 	private List<String> columns;
 	private List<List<Integer>> displayValues;
 
@@ -62,7 +63,7 @@ class SkatListTableModel extends AbstractTableModel {
 
 		declarers = new ArrayList<Player>();
 		playerResults = new ArrayList<List<Integer>>();
-		gameResults = new ArrayList<Integer>();
+		gameResults = new ArrayList<GameSummary>();
 		displayValues = new ArrayList<List<Integer>>();
 		columns = new ArrayList<String>();
 		setColumns();
@@ -173,10 +174,9 @@ class SkatListTableModel extends AbstractTableModel {
 						currResult = playerResults.get(player).get(game);
 						break;
 					case TOURNAMENT:
-						boolean isDeclarer = (playerResults.get(player).get(
-								game) != 0);
-						currResult = SkatConstants.getTournamentGameValue(
-								isDeclarer, gameResults.get(game), playerCount);
+						boolean isDeclarer = (playerResults.get(player).get(game) != 0);
+						currResult = SkatConstants.getTournamentGameValue(isDeclarer, gameResults.get(game)
+								.getGameValue(), playerCount);
 						break;
 					case BIERLACHS:
 						// FIXME jan 31.05.2010 add bierlachs value
@@ -200,11 +200,11 @@ class SkatListTableModel extends AbstractTableModel {
 			switch (mode) {
 			case NORMAL:
 			case BIERLACHS:
-				currResult = gameResults.get(game);
+				currResult = gameResults.get(game).getGameValue();
 				break;
 			case TOURNAMENT:
-				currResult = SkatConstants.getTournamentGameValue(true,
-						gameResults.get(game), playerCount);
+				currResult = SkatConstants.getTournamentGameValue(true, gameResults.get(game).getGameValue(),
+						playerCount);
 				break;
 			}
 			displayValues.get(game).add(currResult);
@@ -222,22 +222,20 @@ class SkatListTableModel extends AbstractTableModel {
 	 *            Position of the player
 	 * @param declarer
 	 *            Position of the game declarer
-	 * @param gameResult
-	 *            Game result
+	 * @param gameSummary
+	 *            Game summary
 	 */
-	void addResult(Player leftOpponent, Player rightOpponent, Player user,
-			Player declarer, int gameResult) {
+	void addResult(Player leftOpponent, Player rightOpponent, Player user, Player declarer, GameSummary gameSummary) {
 
 		// FIXME works only on 3 player series
 		// FIXME (jansch 21.03.2011) provide only one method for addResult()
 		declarers.add(declarer);
-		gameResults.add(Integer.valueOf(gameResult));
+		gameResults.add(gameSummary);
 
-		int declarerColumn = getDeclarerColumn(leftOpponent, rightOpponent,
-				user, declarer);
+		int declarerColumn = getDeclarerColumn(leftOpponent, rightOpponent, user, declarer);
 
 		if (declarer != null) {
-			playerResults.get(declarerColumn).add(Integer.valueOf(gameResult));
+			playerResults.get(declarerColumn).add(Integer.valueOf(gameSummary.getGameValue()));
 			playerResults.get((declarerColumn + 1) % 3).add(Integer.valueOf(0));
 			playerResults.get((declarerColumn + 2) % 3).add(Integer.valueOf(0));
 		} else {
@@ -264,34 +262,26 @@ class SkatListTableModel extends AbstractTableModel {
 	 *            Declarer
 	 * @param playerPoints
 	 *            Player points
-	 * @param gameResult
-	 *            Game result
+	 * @param gameSummary
+	 *            Game summary
 	 */
-	void addResult(Player leftOpponent, Player rightOpponent,
-			Player user, Player declarer, Map<Player, Integer> playerPoints,
-			int gameResult) {
+	void addResult(Player leftOpponent, Player rightOpponent, Player user, Player declarer,
+			Map<Player, Integer> playerPoints, GameSummary summary) {
 
-		log.debug(gameResults.size() + " games so far.");
-		log.debug("Adding game for " + declarer + " with player points "
-				+ playerPoints);
+		log.debug(gameResults.size() + " games so far."); //$NON-NLS-1$
+		log.debug("Adding game for " + declarer + " with player points " + playerPoints); //$NON-NLS-1$ //$NON-NLS-2$
 
 		// FIXME works only on 3 player series
 		// FIXME (jansch 21.03.2011) provide only one method for addResult()
 		declarers.add(declarer);
-		gameResults.add(Integer.valueOf(gameResult));
+		gameResults.add(summary);
 
-		int declarerColumn = getDeclarerColumn(leftOpponent, rightOpponent,
-				user, declarer);
+		int declarerColumn = getDeclarerColumn(leftOpponent, rightOpponent, user, declarer);
 
 		if (declarer != null) {
-			playerResults.get(declarerColumn).add(
-					Integer.valueOf(playerPoints.get(declarer)));
-			playerResults.get((declarerColumn + 1) % 3)
-					.add(Integer.valueOf(playerPoints.get(declarer
-							.getLeftNeighbor())));
-			playerResults.get((declarerColumn + 2) % 3).add(
-					Integer.valueOf(playerPoints.get(declarer
-							.getRightNeighbor())));
+			playerResults.get(declarerColumn).add(playerPoints.get(declarer));
+			playerResults.get((declarerColumn + 1) % 3).add(playerPoints.get(declarer.getLeftNeighbor()));
+			playerResults.get((declarerColumn + 2) % 3).add(playerPoints.get(declarer.getRightNeighbor()));
 		} else {
 			// game was passed in
 			for (int i = 0; i < playerCount; i++) {
@@ -300,13 +290,12 @@ class SkatListTableModel extends AbstractTableModel {
 		}
 		calculateDisplayValues();
 
-		log.debug(displayValues.size() + " display values now.");
+		log.debug(displayValues.size() + " display values now."); //$NON-NLS-1$
 
 		fireTableDataChanged();
 	}
 
-	int getDeclarerColumn(Player leftOpponent, Player rightOpponent,
-			Player player, Player declarer) {
+	int getDeclarerColumn(Player leftOpponent, Player rightOpponent, Player player, Player declarer) {
 
 		int result = -1;
 
@@ -366,8 +355,7 @@ class SkatListTableModel extends AbstractTableModel {
 		displayValues.add(new ArrayList<Integer>());
 	}
 
-	void setPlayerNames(String upperLeftPlayer, String upperRightPlayer,
-			String lowerPlayer) {
+	void setPlayerNames(String upperLeftPlayer, String upperRightPlayer, String lowerPlayer) {
 
 		columns.set(0, upperLeftPlayer);
 		columns.set(1, upperRightPlayer);

@@ -28,6 +28,7 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
+import org.jskat.data.GameSummary.GameSummaryFactory;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -59,7 +60,7 @@ public class SkatGameData {
 		/**
 		 * Bidding phase
 		 */
-		BIDDING, 
+		BIDDING,
 		/**
 		 * preparations for a ramsch game
 		 */
@@ -465,47 +466,43 @@ public class SkatGameData {
 			result.setGameValue(0);
 		} else if (getGameType() == GameType.RAMSCH) {
 			// get RamschDeclarer
-			if(getGameType()==GameType.RAMSCH) {
+			if (getGameType() == GameType.RAMSCH) {
 				int[] playerPoints = new int[3];
 				playerPoints[0] = getPlayerPoints(Player.FOREHAND);
 				playerPoints[1] = getPlayerPoints(Player.MIDDLEHAND);
 				playerPoints[2] = getPlayerPoints(Player.REARHAND);
-				if(playerPoints[0]>playerPoints[1] && playerPoints[0]>playerPoints[2]) {
+				if (playerPoints[0] > playerPoints[1] && playerPoints[0] > playerPoints[2]) {
 					setDeclarer(Player.FOREHAND);
 					result.setWon(false);
 					result.setGameValue(-playerPoints[0]);
-				}
-				else if(playerPoints[1]>playerPoints[0] && playerPoints[1]>playerPoints[2]) {
+				} else if (playerPoints[1] > playerPoints[0] && playerPoints[1] > playerPoints[2]) {
 					setDeclarer(Player.MIDDLEHAND);
 					result.setWon(false);
 					result.setGameValue(-playerPoints[1]);
-				}
-				else if(playerPoints[2]>playerPoints[0] && playerPoints[2]>playerPoints[1]) {
+				} else if (playerPoints[2] > playerPoints[0] && playerPoints[2] > playerPoints[1]) {
 					setDeclarer(Player.REARHAND);
 					result.setWon(false);
 					result.setGameValue(-playerPoints[2]);
-				}
-				else if(playerPoints[1]>playerPoints[0] && playerPoints[1]==playerPoints[2]) {
+				} else if (playerPoints[1] > playerPoints[0] && playerPoints[1] == playerPoints[2]) {
 					setDeclarer(Player.FOREHAND);
 					result.setWon(true);
 					result.setGameValue(-playerPoints[1]);
-				}
-				else if(playerPoints[0]>playerPoints[1] && playerPoints[0]==playerPoints[2]) {
+				} else if (playerPoints[0] > playerPoints[1] && playerPoints[0] == playerPoints[2]) {
 					setDeclarer(Player.MIDDLEHAND);
 					result.setWon(true);
 					result.setGameValue(-playerPoints[0]);
-				}
-				else if(playerPoints[0]>playerPoints[2] && playerPoints[0]==playerPoints[1]) {
+				} else if (playerPoints[0] > playerPoints[2] && playerPoints[0] == playerPoints[1]) {
 					setDeclarer(Player.REARHAND);
 					result.setWon(true);
 					result.setGameValue(-playerPoints[0]);
+				} else {
+					log.error("Cannot calculate ramsch game result: [" + playerPoints[0] + ", " + playerPoints[1]
+							+ ", " + playerPoints[2] + "]");
 				}
-				else {
-					log.error("Cannot calculate ramsch game result: ["+playerPoints[0]+", "+playerPoints[1]+", "+playerPoints[2]+"]");
-				}
-				log.debug("ramsch game result: ["+playerPoints[0]+", "+playerPoints[1]+", "+playerPoints[2]+"] - "+getDeclarer()+": "+result.getGameValue()+" (win="+result.isWon()+")");
+				log.debug("ramsch game result: [" + playerPoints[0] + ", " + playerPoints[1] + ", " + playerPoints[2]
+						+ "] - " + getDeclarer() + ": " + result.getGameValue() + " (win=" + result.isWon() + ")");
 			}
-			
+
 		} else {
 
 			if (!result.isWon()) {
@@ -514,6 +511,16 @@ public class SkatGameData {
 				result.setWon(rules.calcGameWon(this));
 			}
 			result.setGameValue(rules.calcGameResult(this));
+		}
+
+		if (GameType.CLUBS.equals(announcement.gameType) || GameType.SPADES.equals(announcement.gameType)
+				|| GameType.HEARTS.equals(announcement.gameType) || GameType.DIAMONDS.equals(announcement.gameType)
+				|| GameType.GRAND.equals(announcement.gameType)) {
+
+			result.setFinalDeclarerPoints(getDeclarerScore());
+			result.setFinalOpponentPoints(getOpponentScore());
+			result.setMultiplier(rules.getMultiplier(this));
+			result.setPlayWithJacks(rules.isPlayWithJacks(this));
 		}
 
 		if (result.isWon() && getBidValue() > result.getGameValue()) {
@@ -536,17 +543,15 @@ public class SkatGameData {
 		getGameResult().setWon(false);
 
 		// FIXME this is rule logic --> remove it from data object!!!
-		if (playerPoints.get(Player.FOREHAND).intValue() > playerPoints.get(
-				Player.MIDDLEHAND).intValue()) {
+		if (playerPoints.get(Player.FOREHAND).intValue() > playerPoints.get(Player.MIDDLEHAND).intValue()) {
 
 			if (playerPoints.get(Player.FOREHAND).intValue() > playerPoints.get(Player.REARHAND).intValue()) {
 				ramschLoser = Player.FOREHAND;
 			} else {
-				if(playerPoints.get(Player.FOREHAND).intValue() == playerPoints.get(Player.REARHAND).intValue()) {
+				if (playerPoints.get(Player.FOREHAND).intValue() == playerPoints.get(Player.REARHAND).intValue()) {
 					ramschLoser = Player.MIDDLEHAND;
 					getGameResult().setWon(true);
-				}
-				else {
+				} else {
 					ramschLoser = Player.REARHAND;
 				}
 			}
@@ -569,7 +574,7 @@ public class SkatGameData {
 
 		if (isDurchmarsch()) {
 			getGameResult().setWon(true);
-		} 
+		}
 	}
 
 	/**
@@ -848,8 +853,7 @@ public class SkatGameData {
 	 */
 	public void addPlayerPoints(Player player, int points) {
 
-		playerPoints.put(player,
-				Integer.valueOf(playerPoints.get(player).intValue() + points));
+		playerPoints.put(player, Integer.valueOf(playerPoints.get(player).intValue() + points));
 	}
 
 	/**
@@ -952,7 +956,7 @@ public class SkatGameData {
 
 		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 		factory.setGameType(announcement.getGameType());
-		if(announcement.getGameType()!=GameType.RAMSCH) {
+		if (announcement.getGameType() != GameType.RAMSCH) {
 			if (!declarerPickedUpSkat) {
 				factory.setHand(Boolean.TRUE);
 			}
@@ -1059,10 +1063,8 @@ public class SkatGameData {
 	public void setJungfrauDurchmarsch() {
 		// FIXME this is rule logic --> move to RamschRules
 		for (Player currPlayer : Player.values()) {
-			result.setJungfrau(((RamschRules) rules).isJungfrau(currPlayer,
-					this));
-			result.setDurchmarsch(((RamschRules) rules).isDurchmarsch(
-					currPlayer, this));
+			result.setJungfrau(((RamschRules) rules).isJungfrau(currPlayer, this));
+			result.setDurchmarsch(((RamschRules) rules).isDurchmarsch(currPlayer, this));
 		}
 	}
 
@@ -1114,8 +1116,7 @@ public class SkatGameData {
 	 * @return TRUE if the game was lost
 	 */
 	public boolean isGamePassed() {
-		return playerPasses.get(Player.FOREHAND).booleanValue()
-				&& playerPasses.get(Player.MIDDLEHAND).booleanValue()
+		return playerPasses.get(Player.FOREHAND).booleanValue() && playerPasses.get(Player.MIDDLEHAND).booleanValue()
 				&& playerPasses.get(Player.FOREHAND).booleanValue();
 	}
 
@@ -1127,5 +1128,29 @@ public class SkatGameData {
 	 */
 	public void setDeclarerPickedUpSkat(boolean isDeclarerPickedUpSkat) {
 		this.declarerPickedUpSkat = isDeclarerPickedUpSkat;
+	}
+
+	/**
+	 * Gets a summary of the game
+	 * 
+	 * @return Game summary
+	 */
+	public GameSummary getGameSummary() {
+		GameSummaryFactory factory = GameSummary.getFactory();
+
+		factory.setGameType(getGameType());
+		factory.setHand(Boolean.valueOf(isHand()));
+		factory.setOuvert(Boolean.valueOf(isOuvert()));
+		factory.setSchneider(Boolean.valueOf(isSchneider()));
+		factory.setSchwarz(Boolean.valueOf(isSchwarz()));
+
+		factory.setForeHand(getPlayerName(Player.FOREHAND));
+		factory.setMiddleHand(getPlayerName(Player.MIDDLEHAND));
+		factory.setRearHand(getPlayerName(Player.REARHAND));
+		factory.setDeclarer(getDeclarer());
+
+		factory.setGameResult(getResult());
+
+		return factory.getSummary();
 	}
 }

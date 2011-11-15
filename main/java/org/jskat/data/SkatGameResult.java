@@ -27,6 +27,8 @@ public class SkatGameResult implements Cloneable {
 
 	private int gameValue;
 	private int multiplier;
+	private int finalDeclarerPoints;
+	private int finalOpponentPoints;
 	private boolean playWithJacks;
 	private boolean won;
 	private boolean overBidded;
@@ -245,5 +247,43 @@ public class SkatGameResult implements Cloneable {
 	 */
 	public void setPlayWithJacks(boolean playWithJacks) {
 		this.playWithJacks = playWithJacks;
+	}
+
+	/**
+	 * Sets the final opponent points
+	 * 
+	 * @param points
+	 *            Final opponent points
+	 */
+	public void setFinalOpponentPoints(int points) {
+		finalOpponentPoints = points;
+	}
+
+	/**
+	 * Gets the final opponent points
+	 * 
+	 * @return Final opponent points
+	 */
+	public int getFinalOpponentPoints() {
+		return finalOpponentPoints;
+	}
+
+	/**
+	 * Sets the final declarer points
+	 * 
+	 * @param points
+	 *            Final declarer points
+	 */
+	public void setFinalDeclarerPoints(int points) {
+		finalDeclarerPoints = points;
+	}
+
+	/**
+	 * Gets the final declarer points
+	 * 
+	 * @return Final declarer points
+	 */
+	public int getFinalDeclarerPoints() {
+		return finalDeclarerPoints;
 	}
 }

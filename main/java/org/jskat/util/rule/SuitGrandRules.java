@@ -23,7 +23,9 @@ package org.jskat.util.rule;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.SkatGameData;
+import org.jskat.util.Card;
 import org.jskat.util.CardList;
+import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.jskat.util.SkatConstants;
 
@@ -57,15 +59,12 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 	@Override
 	public int calcGameResult(SkatGameData gameData) {
 
-		CardList declarerCards = gameData.getDealtCards().get(
-				gameData.getDeclarer());
-		declarerCards.addAll(gameData.getDealtSkat());
-		int multiplier = getMultiplier(declarerCards, gameData.getGameType());
-		
+		int multiplier = getMultiplier(gameData);
+
 		log.debug("calcSuitResult: after Jacks and Trump: multiplier " + multiplier); //$NON-NLS-1$
 
 		// TODO add option: Hand game is only counted when game was not lost
-//		if (gameData.isHand() && !gameData.isGameLost()) {
+		// if (gameData.isHand() && !gameData.isGameLost()) {
 		if (gameData.isHand()) {
 			multiplier++;
 		}
@@ -104,6 +103,52 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 
 		return result;
 	}
+
+	/**
+	 * Gets the multiplier for a suit or grand game
+	 * 
+	 * @param gameData
+	 *            Game data
+	 * @return Multiplier
+	 */
+	@Override
+	public int getMultiplier(SkatGameData gameData) {
+
+		int result = 0;
+
+		CardList declarerCards = getDeclarerCards(gameData);
+
+		result = getMultiplier(declarerCards, gameData.getGameType());
+
+		return result;
+	}
+
+	private CardList getDeclarerCards(SkatGameData gameData) {
+		CardList declarerCards = gameData.getDealtCards().get(gameData.getDeclarer());
+		declarerCards.addAll(gameData.getDealtSkat());
+		return declarerCards;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean isPlayWithJacks(SkatGameData gameData) {
+		CardList declarerCards = getDeclarerCards(gameData);
+
+		return declarerCards.contains(Card.CJ);
+	}
+
+	/**
+	 * Gets the multiplier for a {@link CardList} and a {@link GameType}
+	 * 
+	 * @param cards
+	 *            Card list
+	 * @param gameType
+	 *            Game type
+	 * @return Multiplier
+	 */
+	public abstract int getMultiplier(CardList cards, GameType gameType);
 
 	/**
 	 * Checks whether a game was a schneider game<br>

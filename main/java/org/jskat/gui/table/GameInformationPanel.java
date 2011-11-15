@@ -28,7 +28,7 @@ import javax.swing.JPanel;
 import net.miginfocom.swing.MigLayout;
 
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.SkatGameData;
+import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.util.GameType;
 import org.jskat.util.JSkatResourceBundle;
@@ -142,9 +142,9 @@ class GameInformationPanel extends JPanel {
 				} else {
 					text += " " + strings.getString("without"); //$NON-NLS-1$//$NON-NLS-2$
 				}
-				text += " " + multiplier; //$NON-NLS-1$
+				text += " " + (multiplier - 1); //$NON-NLS-1$
 				text += " " + strings.getString("play"); //$NON-NLS-1$//$NON-NLS-2$
-				text += " " + (multiplier + 1); //$NON-NLS-1$
+				text += " " + multiplier; //$NON-NLS-1$
 			}
 
 			if (handGame) {
@@ -162,7 +162,7 @@ class GameInformationPanel extends JPanel {
 			if (schwarzAnnounced) {
 				text += " schwarz";
 			}
-			text += "]";
+			text += "]"; //$NON-NLS-1$
 		}
 
 		if (gameState.equals(GameState.TRICK_PLAYING)) {
@@ -187,13 +187,13 @@ class GameInformationPanel extends JPanel {
 		label.setText(text);
 	}
 
-	void setGameResult(SkatGameData data) {
+	void setGameSummary(GameSummary summary) {
 
-		multiplier = data.getGameResult().getMultiplier();
-		playWithJacks = data.getGameResult().isPlayWithJacks();
-		gameWon = data.isGameWon();
-		declarerPoints = data.getDeclarerScore();
-		opponentPoints = data.getOpponentScore();
+		multiplier = summary.getGameMultiplier();
+		playWithJacks = summary.isGamePlayedWithJacks();
+		gameWon = summary.isGameWon();
+		declarerPoints = summary.getFinalDeclarerPoints();
+		opponentPoints = summary.getFinalOpponentScore();
 
 		refreshText();
 	}

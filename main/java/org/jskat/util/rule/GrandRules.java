@@ -29,32 +29,32 @@ import org.jskat.util.GameType;
  */
 public class GrandRules extends SuitGrandRules {
 
-	/* (non-Javadoc)
-	 * @see org.jskat.util.rule.BasicSkatRules#getMultiplier(org.jskat.util.CardList, org.jskat.util.GameType)
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public int getMultiplier(CardList cards, GameType gameType) {
-		if(gameType!=GameType.GRAND) throw new IllegalArgumentException("Wrong ruleset - "+gameType);
+		if (gameType != GameType.GRAND)
+			throw new IllegalArgumentException("Wrong ruleset - " + gameType);
 		int result = 1;
-		if(cards.contains(Card.CJ)) {
+		if (cards.contains(Card.CJ)) {
 			result++;
-			if(cards.contains(Card.SJ)) {
+			if (cards.contains(Card.SJ)) {
 				result++;
-				if(cards.contains(Card.HJ)) {
+				if (cards.contains(Card.HJ)) {
 					result++;
-					if(cards.contains(Card.DJ)) {
+					if (cards.contains(Card.DJ)) {
 						result++;
 					}
 				}
 			}
-		}
-		else {
+		} else {
 			result++;
-			if(!cards.contains(Card.SJ)) {
+			if (!cards.contains(Card.SJ)) {
 				result++;
-				if(!cards.contains(Card.HJ)) {
+				if (!cards.contains(Card.HJ)) {
 					result++;
-					if(!cards.contains(Card.DJ)) {
+					if (!cards.contains(Card.DJ)) {
 						result++;
 					}
 				}
