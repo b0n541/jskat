@@ -27,7 +27,7 @@ import java.util.Random;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jskat.ai.IJSkatPlayer;
+import org.jskat.ai.JSkatPlayer;
 import org.jskat.data.SkatSeriesData;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.gui.JSkatView;
@@ -47,7 +47,7 @@ public class SkatSeries extends JSkatThread {
 	private int roundsToGo = 0;
 	private boolean unlimitedRounds = false;
 	private boolean onlyPlayRamsch = false;
-	private Map<Player, IJSkatPlayer> player;
+	private Map<Player, JSkatPlayer> player;
 	private SkatGame currSkatGame;
 
 	private JSkatView view;
@@ -63,7 +63,7 @@ public class SkatSeries extends JSkatThread {
 		data = new SkatSeriesData();
 		data.setState(SeriesState.WAITING);
 		data.setTableName(tableName);
-		player = new HashMap<Player, IJSkatPlayer>();
+		player = new HashMap<Player, JSkatPlayer>();
 	}
 
 	/**
@@ -72,7 +72,7 @@ public class SkatSeries extends JSkatThread {
 	 * @param newPlayer
 	 *            New skat series player
 	 */
-	public void setPlayer(List<IJSkatPlayer> newPlayer) {
+	public void setPlayer(List<JSkatPlayer> newPlayer) {
 
 		if (newPlayer.size() != 3) {
 			throw new IllegalArgumentException("Only three players are allowed at the moment."); //$NON-NLS-1$
@@ -82,7 +82,7 @@ public class SkatSeries extends JSkatThread {
 				newPlayer.get(2).getPlayerName());
 
 		// memorize third player to find it again after shuffling the players
-		IJSkatPlayer thirdPlayer = newPlayer.get(2);
+		JSkatPlayer thirdPlayer = newPlayer.get(2);
 
 		// set players in random order
 		// simple Collection.shuffle doesn't work here, because the order of
@@ -143,7 +143,7 @@ public class SkatSeries extends JSkatThread {
 
 				if (j > 0 || roundsPlayed > 0) {
 					// change player positions after first game
-					IJSkatPlayer helper = player.get(Player.REARHAND);
+					JSkatPlayer helper = player.get(Player.REARHAND);
 					player.put(Player.REARHAND, player.get(Player.FOREHAND));
 					player.put(Player.FOREHAND, player.get(Player.MIDDLEHAND));
 					player.put(Player.MIDDLEHAND, helper);
@@ -225,7 +225,7 @@ public class SkatSeries extends JSkatThread {
 
 		boolean result = false;
 
-		for (IJSkatPlayer currPlayer : player.values()) {
+		for (JSkatPlayer currPlayer : player.values()) {
 
 			if (currPlayer instanceof HumanPlayer) {
 

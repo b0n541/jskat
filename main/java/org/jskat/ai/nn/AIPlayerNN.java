@@ -27,7 +27,7 @@ import java.util.Random;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.AbstractJSkatPlayer;
-import org.jskat.ai.IJSkatPlayer;
+import org.jskat.ai.JSkatPlayer;
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.util.NeuralNetwork;
 import org.jskat.data.GameAnnouncement;
@@ -96,7 +96,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see IJSkatPlayer#isAIPlayer()
+	 * @see JSkatPlayer#isAIPlayer()
 	 */
 	@Override
 	public boolean isAIPlayer() {
@@ -105,7 +105,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see IJSkatPlayer#bidMore(int)
+	 * @see JSkatPlayer#bidMore(int)
 	 */
 	@Override
 	public int bidMore(int nextBidValue) {
@@ -120,7 +120,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see IJSkatPlayer#holdBid(int)
+	 * @see JSkatPlayer#holdBid(int)
 	 */
 	@Override
 	public boolean holdBid(int currBidValue) {
@@ -189,7 +189,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see IJSkatPlayer#announceGame()
+	 * @see JSkatPlayer#announceGame()
 	 */
 	@Override
 	public GameAnnouncement announceGame() {
@@ -247,7 +247,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see IJSkatPlayer#pickUpSkat()
+	 * @see JSkatPlayer#pickUpSkat()
 	 */
 	@Override
 	public boolean pickUpSkat() {
@@ -269,7 +269,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see IJSkatPlayer#discardSkat()
+	 * @see JSkatPlayer#discardSkat()
 	 */
 	@Override
 	public CardList discardSkat() {
@@ -336,7 +336,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see IJSkatPlayer#playCard()
+	 * @see JSkatPlayer#playCard()
 	 */
 	@Override
 	public Card playCard() {
@@ -643,7 +643,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see org.jskat.ai.IJSkatPlayer#preparateForNewGame()
+	 * @see org.jskat.ai.JSkatPlayer#preparateForNewGame()
 	 */
 	@Override
 	public void preparateForNewGame() {
@@ -652,7 +652,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see org.jskat.ai.IJSkatPlayer#finalizeGame()
+	 * @see org.jskat.ai.JSkatPlayer#finalizeGame()
 	 */
 	@Override
 	public void finalizeGame() {

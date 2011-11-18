@@ -26,7 +26,7 @@ import java.awt.event.ActionListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.AbstractJSkatPlayer;
-import org.jskat.ai.IJSkatPlayer;
+import org.jskat.ai.JSkatPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.util.Card;
@@ -55,7 +55,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	}
 
 	/**
-	 * @see IJSkatPlayer#isAIPlayer()
+	 * @see JSkatPlayer#isAIPlayer()
 	 */
 	@Override
 	public boolean isAIPlayer() {
@@ -64,7 +64,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	}
 
 	/**
-	 * @see IJSkatPlayer#announceGame()
+	 * @see JSkatPlayer#announceGame()
 	 */
 	@Override
 	public GameAnnouncement announceGame() {
@@ -79,7 +79,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	}
 
 	/**
-	 * @see IJSkatPlayer#bidMore(int)
+	 * @see JSkatPlayer#bidMore(int)
 	 */
 	@Override
 	public int bidMore(int nextBidValue) {
@@ -100,7 +100,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	}
 
 	/**
-	 * @see IJSkatPlayer#discardSkat()
+	 * @see JSkatPlayer#discardSkat()
 	 */
 	@Override
 	public CardList discardSkat() {
@@ -115,7 +115,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	}
 
 	/**
-	 * @see IJSkatPlayer#preparateForNewGame()
+	 * @see JSkatPlayer#preparateForNewGame()
 	 */
 	@Override
 	public void preparateForNewGame() {
@@ -124,7 +124,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	}
 
 	/**
-	 * @see IJSkatPlayer#finalizeGame()
+	 * @see JSkatPlayer#finalizeGame()
 	 */
 	@Override
 	public void finalizeGame() {
@@ -132,7 +132,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	}
 
 	/**
-	 * @see IJSkatPlayer#holdBid(int)
+	 * @see JSkatPlayer#holdBid(int)
 	 */
 	@Override
 	public boolean holdBid(int currBidValue) {
@@ -145,7 +145,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	}
 
 	/**
-	 * @see IJSkatPlayer#pickUpSkat()
+	 * @see JSkatPlayer#pickUpSkat()
 	 */
 	@Override
 	public boolean playGrandHand() {
@@ -158,7 +158,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	}
 
 	/**
-	 * @see IJSkatPlayer#pickUpSkat()
+	 * @see JSkatPlayer#pickUpSkat()
 	 */
 	@Override
 	public boolean pickUpSkat() {
@@ -171,7 +171,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	}
 
 	/**
-	 * @see IJSkatPlayer#playCard()
+	 * @see JSkatPlayer#playCard()
 	 */
 	@Override
 	public Card playCard() {

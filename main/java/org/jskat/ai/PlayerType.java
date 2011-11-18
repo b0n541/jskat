@@ -67,19 +67,19 @@ public enum PlayerType {
 	 * @throws IllegalArgumentException
 	 *             if PlayerType==HUMAN
 	 */
-	public static IJSkatPlayer getPlayerInstance(PlayerType type) {
+	public static JSkatPlayer getPlayerInstance(PlayerType type) {
 		if (type == HUMAN)
 			throw new IllegalArgumentException(
 					".getPlayerInstance(..) cannot be used for human players");
-		IJSkatPlayer player = null;
+		JSkatPlayer player = null;
 
 		try {
-			player = (IJSkatPlayer) Class.forName(type.implementingClass)
+			player = (JSkatPlayer) Class.forName(type.implementingClass)
 					.newInstance();
 		} catch (Exception ex) {
 			// handle exception case
 			try {
-				player = (IJSkatPlayer) Class.forName(RANDOM.implementingClass)
+				player = (JSkatPlayer) Class.forName(RANDOM.implementingClass)
 						.newInstance();
 			} catch (Exception e) {
 				log.warn("Cannot get JSkatPlayer: " + e.getClass() + ": "

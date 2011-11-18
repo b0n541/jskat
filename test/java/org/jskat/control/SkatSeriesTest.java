@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jskat.AbstractJSkatTest;
-import org.jskat.ai.IJSkatPlayer;
+import org.jskat.ai.JSkatPlayer;
 import org.jskat.ai.rnd.AIPlayerRND;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.gui.UnitTestView;
@@ -23,7 +23,7 @@ public class SkatSeriesTest extends AbstractJSkatTest {
 		UnitTestView view = new UnitTestView();
 		series.setView(view);
 
-		List<IJSkatPlayer> player = new ArrayList<IJSkatPlayer>();
+		List<JSkatPlayer> player = new ArrayList<JSkatPlayer>();
 		player.add(new AIPlayerRND());
 		player.add(new AIPlayerRND());
 		player.add(new AIPlayerRND());

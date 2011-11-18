@@ -25,7 +25,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jskat.ai.IJSkatPlayer;
+import org.jskat.ai.JSkatPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary;
@@ -57,7 +57,7 @@ public class SkatGame extends JSkatThread {
 	private SkatGameData data;
 	private final GameVariant variant;
 	private CardDeck deck;
-	private Map<Player, IJSkatPlayer> player;
+	private Map<Player, JSkatPlayer> player;
 	private String tableName;
 	private JSkatView view;
 	private BasicSkatRules rules;
@@ -76,11 +76,11 @@ public class SkatGame extends JSkatThread {
 	 * @param newRearHand
 	 *            Hind hand player
 	 */
-	public SkatGame(String newTableName, GameVariant variant, IJSkatPlayer newForeHand, IJSkatPlayer newMiddleHand,
-			IJSkatPlayer newRearHand) {
+	public SkatGame(String newTableName, GameVariant variant, JSkatPlayer newForeHand, JSkatPlayer newMiddleHand,
+			JSkatPlayer newRearHand) {
 		tableName = newTableName;
 		this.variant = variant;
-		player = new HashMap<Player, IJSkatPlayer>();
+		player = new HashMap<Player, JSkatPlayer>();
 		player.put(Player.FOREHAND, newForeHand);
 		player.put(Player.MIDDLEHAND, newMiddleHand);
 		player.put(Player.REARHAND, newRearHand);
@@ -502,7 +502,7 @@ public class SkatGame extends JSkatThread {
 		log.debug("Player (" + data.getDeclarer() + ") looks into the skat..."); //$NON-NLS-1$
 		log.debug("Skat before discarding: " + data.getSkat()); //$NON-NLS-1$
 
-		IJSkatPlayer declarer = player.get(data.getDeclarer());
+		JSkatPlayer declarer = player.get(data.getDeclarer());
 
 		// create a clone of the skat before sending it to the player
 		// otherwise the player could change the skat after discarding
@@ -709,7 +709,7 @@ public class SkatGame extends JSkatThread {
 	private void playCard(Trick trick, Player trickForeHand, Player currPlayer) {
 
 		Card card = null;
-		IJSkatPlayer skatPlayer = getPlayerObject(currPlayer);
+		JSkatPlayer skatPlayer = getPlayerObject(currPlayer);
 
 		boolean cardAccepted = false;
 		boolean aiPlayerPlayedSchwarz = false;
@@ -810,7 +810,7 @@ public class SkatGame extends JSkatThread {
 		}
 	}
 
-	private IJSkatPlayer getPlayerObject(Player currPlayer) {
+	private JSkatPlayer getPlayerObject(Player currPlayer) {
 
 		return player.get(currPlayer);
 	}
@@ -857,7 +857,7 @@ public class SkatGame extends JSkatThread {
 		log.debug("Final game result: lost:" + data.isGameLost() + //$NON-NLS-1$
 				" game value: " + data.getResult()); //$NON-NLS-1$
 
-		for (IJSkatPlayer currPlayer : player.values()) {
+		for (JSkatPlayer currPlayer : player.values()) {
 			currPlayer.setGameResult(data.getGameResult().clone());
 			currPlayer.finalizeGame();
 		}
@@ -917,7 +917,7 @@ public class SkatGame extends JSkatThread {
 		rules = SkatRuleFactory.getSkatRules(data.getGameType());
 
 		// inform all players
-		for (IJSkatPlayer currPlayer : player.values()) {
+		for (JSkatPlayer currPlayer : player.values()) {
 			currPlayer.startGame(data.getDeclarer(), ann);
 		}
 		view.setGameAnnouncement(tableName, data.getDeclarer(), ann);

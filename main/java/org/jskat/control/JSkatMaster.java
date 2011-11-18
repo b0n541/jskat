@@ -33,7 +33,7 @@ import javax.swing.JButton;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jskat.ai.IJSkatPlayer;
+import org.jskat.ai.JSkatPlayer;
 import org.jskat.ai.PlayerType;
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.train.NNTrainer;
@@ -186,7 +186,7 @@ public class JSkatMaster {
 
 		int playerCount = 0;
 		for (PlayerType player : allPlayer) {
-			IJSkatPlayer newPlayer = null;
+			JSkatPlayer newPlayer = null;
 			if (player == PlayerType.HUMAN) {
 				newPlayer = data.getHumanPlayer(table.getName());
 			} else {
@@ -325,7 +325,7 @@ public class JSkatMaster {
 	 *            Skat player
 	 * @return TRUE if the placing was successful
 	 */
-	public synchronized boolean placePlayer(String tableName, IJSkatPlayer player) {
+	public synchronized boolean placePlayer(String tableName, JSkatPlayer player) {
 
 		boolean result = false;
 

@@ -35,14 +35,14 @@ import org.jskat.util.rule.SkatRuleFactory;
 /**
  * Abstract JSkat player implementation
  */
-public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
+public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
 	private Log log = LogFactory.getLog(AbstractJSkatPlayer.class);
 
 	/** Player name */
 	protected String playerName;
 	/** Player state */
-	protected IJSkatPlayer.PlayerStates playerState;
+	protected JSkatPlayer.PlayerStates playerState;
 	/** Player knowledge */
 	protected PlayerKnowledge knowledge = new PlayerKnowledge();
 	/** Skat rules for the current skat series */
@@ -167,7 +167,7 @@ public abstract class AbstractJSkatPlayer implements IJSkatPlayer {
 	 * @param newState
 	 *            State to be set
 	 */
-	protected final void setState(IJSkatPlayer.PlayerStates newState) {
+	protected final void setState(JSkatPlayer.PlayerStates newState) {
 
 		playerState = newState;
 	}

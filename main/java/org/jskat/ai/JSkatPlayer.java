@@ -30,7 +30,7 @@ import org.jskat.util.Player;
 /**
  * Player interface for AI players
  */
-public interface IJSkatPlayer {
+public interface JSkatPlayer {
 
 	/**
 	 * This function can be used to do some clean up
