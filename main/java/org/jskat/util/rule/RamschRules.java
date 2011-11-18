@@ -35,6 +35,8 @@ public class RamschRules extends SuitGrandRamschRules {
 	@Override
 	public int calcGameResult(SkatGameData gameData) {
 
+		int highestPlayerPoints = getGetHighestPlayerPoints(gameData);
+
 		int multiplier = 1;
 
 		// TODO two player can be jungfrau
@@ -44,12 +46,36 @@ public class RamschRules extends SuitGrandRamschRules {
 
 		multiplier = (int) (multiplier * Math.pow(2, gameData.getGeschoben()));
 
-		if (gameData.isGameLost()) {
-			multiplier = multiplier * -1;
+		return highestPlayerPoints * multiplier;
+	}
+
+	private int getGetHighestPlayerPoints(SkatGameData gameData) {
+
+		int result = 0;
+
+		int foreHandPoints = gameData.getPlayerPoints(Player.FOREHAND);
+		int middleHandPoints = gameData.getPlayerPoints(Player.MIDDLEHAND);
+		int rearHandPoints = gameData.getPlayerPoints(Player.REARHAND);
+
+		// FIXME (jan 18.11.2011) make this simpler
+		if (foreHandPoints > middleHandPoints && foreHandPoints > rearHandPoints) {
+			result = foreHandPoints * -1;
+		} else if (middleHandPoints > foreHandPoints && middleHandPoints > rearHandPoints) {
+			result = middleHandPoints * -1;
+		} else if (rearHandPoints > foreHandPoints && rearHandPoints > middleHandPoints) {
+			result = rearHandPoints * -1;
+		} else if (middleHandPoints > foreHandPoints && middleHandPoints == rearHandPoints) {
+			result = middleHandPoints * -1;
+		} else if (foreHandPoints > middleHandPoints && foreHandPoints == rearHandPoints) {
+			result = foreHandPoints * -1;
+		} else if (foreHandPoints > rearHandPoints && foreHandPoints == middleHandPoints) {
+			result = foreHandPoints * -1;
+		} else {
+			// all player have 40 points
+			result = -40;
 		}
 
-		// FIXME Ramsch games have no single player
-		return gameData.getScore(gameData.getDeclarer()) * multiplier;
+		return result;
 	}
 
 	/**
@@ -57,7 +83,7 @@ public class RamschRules extends SuitGrandRamschRules {
 	 */
 	@Override
 	public boolean calcGameWon(SkatGameData gameData) {
-		throw new IllegalStateException("ramsch game cannot be won");
+		return false;
 	}
 
 	/**
