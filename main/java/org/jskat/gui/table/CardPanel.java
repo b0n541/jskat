@@ -168,15 +168,12 @@ class CardPanel extends JPanel {
 
 		// rendering hints
 		Graphics2D g2D = (Graphics2D) g;
-		g2D.setRenderingHint(RenderingHints.KEY_RENDERING,
-				RenderingHints.VALUE_RENDER_QUALITY);
-		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
+		g2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 		// calculate card gap
 		int panelWidth = getWidth();
-		int cardWidth = bitmaps.getCardImage(Suit.CLUBS, Rank.JACK).getWidth(
-				this);
+		int cardWidth = bitmaps.getCardImage(Suit.CLUBS, Rank.JACK).getWidth(this);
 		int cardGap = cardWidth;
 		if (cards.size() * cardGap > panelWidth) {
 
@@ -193,11 +190,10 @@ class CardPanel extends JPanel {
 
 				image = bitmaps.getCardImage(null, null);
 			} else {
-				if(bitmaps==null || card==null) {
+				if (bitmaps == null || card == null) {
 					// e.g. in debug mode
 					image = bitmaps.getCardImage(null, null);
-				}
-				else {
+				} else {
 					image = bitmaps.getCardImage(card.getSuit(), card.getRank());
 				}
 			}
@@ -267,16 +263,14 @@ class CardPanel extends JPanel {
 		int xPosition = e.getX();
 		int yPosition = e.getY();
 
-//		log.debug("Card panel clicked at: " + xPosition + " x " + yPosition); //$NON-NLS-1$ //$NON-NLS-2$
+		//		log.debug("Card panel clicked at: " + xPosition + " x " + yPosition); //$NON-NLS-1$ //$NON-NLS-2$
 
-		if (xPosition > -1 && xPosition < getWidth() && yPosition > -1
-				&& yPosition < getHeight()) {
+		if (xPosition > -1 && xPosition < getWidth() && yPosition > -1 && yPosition < getHeight()) {
 
-//			log.debug("Mouse button release inside panel"); //$NON-NLS-1$
+			//			log.debug("Mouse button release inside panel"); //$NON-NLS-1$
 
 			// get card
-			double cardWidth = bitmaps.getCardImage(Suit.CLUBS, Rank.JACK)
-					.getWidth(this);
+			double cardWidth = bitmaps.getCardImage(Suit.CLUBS, Rank.JACK).getWidth(this);
 
 			int cardIndex = -1;
 			if (cards.size() > 0) {
@@ -288,8 +282,7 @@ class CardPanel extends JPanel {
 				} else {
 					double distanceBetweenCards = cardWidth;
 					if (cards.size() > 1) {
-						distanceBetweenCards = (getWidth() - cardWidth)
-								/ (cards.size() - 1.0);
+						distanceBetweenCards = (getWidth() - cardWidth) / (cards.size() - 1.0);
 					}
 
 					if (cardWidth > distanceBetweenCards) {
@@ -317,7 +310,7 @@ class CardPanel extends JPanel {
 			if (cardIndex > -1 && cardIndex < cards.size()) {
 
 				card = cards.get(cardIndex);
-//				log.debug("card index: " + cardIndex + " card: " + cards.get(cardIndex)); //$NON-NLS-1$ //$NON-NLS-2$
+				//				log.debug("card index: " + cardIndex + " card: " + cards.get(cardIndex)); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
 			if (card != null) {
@@ -326,17 +319,15 @@ class CardPanel extends JPanel {
 
 				if (parent instanceof DiscardPanel) {
 					// card panel in discard panel was clicked
-					action = getActionMap()
-							.get(JSkatAction.TAKE_CARD_FROM_SKAT);
+					action = getActionMap().get(JSkatAction.TAKE_CARD_FROM_SKAT);
 				} else if (parent instanceof JSkatUserPanel) {
 					// card panel in player panel was clicked
 
 					GameState state = ((JSkatUserPanel) parent).getGameState();
 
-					if (state == GameState.DISCARDING) {
+					if (state == GameState.DISCARDING || state == GameState.RAMSCH_PREPARATION) {
 						// discarding phase
-						action = getActionMap().get(
-								JSkatAction.PUT_CARD_INTO_SKAT);
+						action = getActionMap().get(JSkatAction.PUT_CARD_INTO_SKAT);
 					} else if (state == GameState.TRICK_PLAYING) {
 						// trick playing phase
 						action = getActionMap().get(JSkatAction.PLAY_CARD);
@@ -348,11 +339,9 @@ class CardPanel extends JPanel {
 
 				if (action != null) {
 
-					action.actionPerformed(new ActionEvent(Card
-							.getCardFromString(card.getSuit().shortString()
-									+ card.getRank().shortString()),
-							ActionEvent.ACTION_PERFORMED, (String) action
-									.getValue(Action.ACTION_COMMAND_KEY)));
+					action.actionPerformed(new ActionEvent(Card.getCardFromString(card.getSuit().shortString()
+							+ card.getRank().shortString()), ActionEvent.ACTION_PERFORMED, (String) action
+							.getValue(Action.ACTION_COMMAND_KEY)));
 				} else {
 
 					log.debug("Action is null"); //$NON-NLS-1$

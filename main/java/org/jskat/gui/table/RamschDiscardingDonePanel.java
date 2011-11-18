@@ -33,8 +33,8 @@ import net.miginfocom.swing.MigLayout;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.JSkatOptions;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
+import org.jskat.data.JSkatOptions;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -65,8 +65,7 @@ class RamschDiscardingDonePanel extends JPanel {
 	 * @param discardPanel
 	 *            Discard panel
 	 */
-	RamschDiscardingDonePanel(ActionMap actions, JSkatUserPanel userPanel,
-			DiscardPanel discardPanel) {
+	RamschDiscardingDonePanel(ActionMap actions, JSkatUserPanel userPanel, DiscardPanel discardPanel) {
 
 		this(actions, userPanel, discardPanel, Boolean.FALSE);
 	}
@@ -83,8 +82,8 @@ class RamschDiscardingDonePanel extends JPanel {
 	 * @param showAnnounceButton
 	 *            TRUE, if the announce button should be shown
 	 */
-	RamschDiscardingDonePanel(ActionMap actions, JSkatUserPanel userPanel,
-			DiscardPanel discardPanel, Boolean showAnnounceButton) {
+	RamschDiscardingDonePanel(ActionMap actions, JSkatUserPanel userPanel, DiscardPanel discardPanel,
+			Boolean showAnnounceButton) {
 
 		strings = JSkatResourceBundle.instance();
 		this.userPanel = userPanel;
@@ -93,15 +92,13 @@ class RamschDiscardingDonePanel extends JPanel {
 		initPanel(actions, showAnnounceButton);
 	}
 
-	private void initPanel(final ActionMap actions,
-			final Boolean showAnnounceButton) {
+	private void initPanel(final ActionMap actions, final Boolean showAnnounceButton) {
 
 		this.setLayout(new MigLayout("fill")); //$NON-NLS-1$
 		setOpaque(false);
 
 		JPanel panel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
 		panel.setOpaque(false);
-
 
 		if (showAnnounceButton.booleanValue()) {
 
@@ -111,7 +108,8 @@ class RamschDiscardingDonePanel extends JPanel {
 				public void actionPerformed(ActionEvent e) {
 					try {
 						GameAnnouncement ann = getGameAnnouncement();
-						if(ann==null) return; // no valid announcement
+						if (ann == null)
+							return; // no valid announcement
 
 						e.setSource(ann);
 						// fire event again
@@ -122,26 +120,25 @@ class RamschDiscardingDonePanel extends JPanel {
 				}
 
 				private GameAnnouncement getGameAnnouncement() {
-					GameAnnouncementFactory factory = GameAnnouncement .getFactory();
+					GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 					factory.setGameType(GameType.RAMSCH);
 
 					if (discardPanel.isUserLookedIntoSkat()) {
 
-						CardList discardedCards = discardPanel .getDiscardedCards();
+						CardList discardedCards = discardPanel.getDiscardedCards();
 						if (discardedCards.size() != 2) {
-							JOptionPane.showMessageDialog(
-									RamschDiscardingDonePanel.this,
+							JOptionPane.showMessageDialog(RamschDiscardingDonePanel.this,
 									strings.getString("invalid_number_of_cards_in_skat"), //$NON-NLS-1$
 									strings.getString("invalid_number_of_cards_in_skat_title"), //$NON-NLS-1$
 									JOptionPane.ERROR_MESSAGE);
 							return null;
 						}
-						if(!JSkatOptions.instance().isSchieberRamschJacksInSkat() && (discardedCards.get(0).getRank()==Rank.JACK || discardedCards.get(1).getRank()==Rank.JACK)) {
-							JOptionPane.showMessageDialog(
-									RamschDiscardingDonePanel.this,
-									// FIXME (markus, 02.11.11) put message text in resource file
-									"Jacks are not allowed in schieberamsch skat!",
-									"No Jacks allowed",
+						if (!JSkatOptions.instance().isSchieberRamschJacksInSkat()
+								&& (discardedCards.get(0).getRank() == Rank.JACK || discardedCards.get(1).getRank() == Rank.JACK)) {
+							JOptionPane.showMessageDialog(RamschDiscardingDonePanel.this,
+									// FIXME (markus, 02.11.11) put message text
+									// in resource file
+									"Jacks are not allowed in schieberamsch skat!", "No Jacks allowed",
 									JOptionPane.ERROR_MESSAGE);
 							return null;
 						}
@@ -157,8 +154,5 @@ class RamschDiscardingDonePanel extends JPanel {
 		}
 
 		this.add(panel, "center"); //$NON-NLS-1$
-
-
 	}
-
 }
