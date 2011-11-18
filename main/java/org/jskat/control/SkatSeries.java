@@ -30,7 +30,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.IJSkatPlayer;
 import org.jskat.data.SkatSeriesData;
 import org.jskat.data.SkatSeriesData.SeriesState;
-import org.jskat.gui.IJSkatView;
+import org.jskat.gui.JSkatView;
 import org.jskat.gui.human.HumanPlayer;
 import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
@@ -50,7 +50,7 @@ public class SkatSeries extends JSkatThread {
 	private Map<Player, IJSkatPlayer> player;
 	private SkatGame currSkatGame;
 
-	private IJSkatView view;
+	private JSkatView view;
 
 	/**
 	 * Constructor
@@ -295,7 +295,7 @@ public class SkatSeries extends JSkatThread {
 	 * @param newView
 	 *            View
 	 */
-	public void setView(IJSkatView newView) {
+	public void setView(JSkatView newView) {
 
 		view = newView;
 	}

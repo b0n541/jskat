@@ -42,7 +42,7 @@ import org.jskat.data.GameAnnouncement;
 import org.jskat.data.JSkatApplicationData;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatOptions.SupportedLanguage;
-import org.jskat.gui.IJSkatView;
+import org.jskat.gui.JSkatView;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -61,7 +61,7 @@ public class JSkatMaster {
 
 	private JSkatOptions options;
 	private JSkatApplicationData data;
-	private IJSkatView view;
+	private JSkatView view;
 	private IssController issControl;
 
 	/**
@@ -348,7 +348,7 @@ public class JSkatMaster {
 	 * @param newView
 	 *            View
 	 */
-	public void setView(IJSkatView newView) {
+	public void setView(JSkatView newView) {
 
 		view = newView;
 		issControl.setView(view);

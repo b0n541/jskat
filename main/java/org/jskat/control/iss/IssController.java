@@ -39,7 +39,7 @@ import org.jskat.data.iss.LoginCredentials;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.data.iss.MoveType;
 import org.jskat.data.iss.TablePanelStatus;
-import org.jskat.gui.IJSkatView;
+import org.jskat.gui.JSkatView;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.util.Card;
 import org.jskat.util.JSkatResourceBundle;
@@ -55,7 +55,7 @@ public class IssController {
 	private static Log log = LogFactory.getLog(IssController.class);
 
 	private JSkatMaster jskat;
-	private IJSkatView view;
+	private JSkatView view;
 	private JSkatApplicationData data;
 	private JSkatResourceBundle strings;
 	private Connector issConnect;
@@ -79,7 +79,7 @@ public class IssController {
 	 * @param newView
 	 *            View
 	 */
-	public void setView(IJSkatView newView) {
+	public void setView(JSkatView newView) {
 
 		view = newView;
 	}

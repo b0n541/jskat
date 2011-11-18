@@ -44,7 +44,7 @@ import org.jskat.util.Player;
 /**
  * Interface for JSkat views
  */
-public interface IJSkatView {
+public interface JSkatView {
 
 	/**
 	 * Gets a new table name from the view

@@ -23,7 +23,7 @@ import org.jskat.util.Player;
 /**
  * Helper class that represent a GUI view during unit tests
  */
-public class UnitTestView implements IJSkatView {
+public class UnitTestView implements JSkatView {
 
 	public List<String> tables;
 

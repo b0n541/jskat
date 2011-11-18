@@ -28,7 +28,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.IJSkatPlayer;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.SkatTableOptions;
-import org.jskat.gui.IJSkatView;
+import org.jskat.gui.JSkatView;
 import org.jskat.gui.JSkatViewImpl;
 
 /**
@@ -43,7 +43,7 @@ public class SkatTable {
 	private SkatSeries series;
 	private List<IJSkatPlayer> player = new ArrayList<IJSkatPlayer>();
 
-	private IJSkatView view;
+	private JSkatView view;
 
 	/**
 	 * Constructor
@@ -231,7 +231,7 @@ public class SkatTable {
 	 * @param newView
 	 *            View
 	 */
-	public void setView(IJSkatView newView) {
+	public void setView(JSkatView newView) {
 
 		view = newView;
 	}

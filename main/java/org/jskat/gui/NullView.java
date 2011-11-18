@@ -43,7 +43,7 @@ import org.jskat.util.Player;
  * Doesn't do anything<br />
  * is needed for simulating games without gui
  */
-public class NullView implements IJSkatView {
+public class NullView implements JSkatView {
 
 	/**
 	 * {@inheritDoc}

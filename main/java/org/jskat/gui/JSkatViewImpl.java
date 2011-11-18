@@ -128,7 +128,7 @@ import org.jskat.util.SkatConstants;
 /**
  * Implementation of JSkatView interface
  */
-public class JSkatViewImpl implements IJSkatView {
+public class JSkatViewImpl implements JSkatView {
 
 	static Log log = LogFactory.getLog(JSkatViewImpl.class);
 
