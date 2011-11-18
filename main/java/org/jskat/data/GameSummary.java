@@ -239,6 +239,10 @@ public class GameSummary {
 			if (tmpSummary.gameType == null) {
 				log.error("game type is null"); //$NON-NLS-1$
 				return false;
+			} else if (!GameType.RAMSCH.equals(tmpSummary.gameType) && !GameType.PASSED_IN.equals(tmpSummary.gameType)
+					&& tmpSummary.declarer == null) {
+				log.error("declarer is null"); //$NON-NLS-1$
+				return false;
 			} else if (tmpSummary.foreHand == null) {
 				log.error("fore hand is null"); //$NON-NLS-1$
 				return false;
@@ -247,9 +251,6 @@ public class GameSummary {
 				return false;
 			} else if (tmpSummary.rearHand == null) {
 				log.error("rear hand is null"); //$NON-NLS-1$
-				return false;
-			} else if (tmpSummary.declarer == null) {
-				log.error("declarer is null"); //$NON-NLS-1$
 				return false;
 			} else if (tmpSummary.tricks.size() > 10) {
 				log.error("more than 10 tricks"); //$NON-NLS-1$

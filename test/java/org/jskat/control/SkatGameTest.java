@@ -8,7 +8,9 @@ import org.jskat.AbstractJSkatTest;
 import org.jskat.ai.rnd.AIPlayerRND;
 import org.jskat.ai.test.NoBiddingTestPlayer;
 import org.jskat.data.GameSummary;
+import org.jskat.data.JSkatOptions;
 import org.jskat.data.SkatGameResult;
+import org.jskat.data.SkatTableOptions.RuleSets;
 import org.jskat.gui.UnitTestView;
 import org.jskat.util.GameType;
 import org.jskat.util.GameVariant;
@@ -20,10 +22,73 @@ import org.junit.Test;
 public class SkatGameTest extends AbstractJSkatTest {
 
 	/**
-	 * When no player bids, ramsch is played
+	 * When no player bids, game is passed in
+	 */
+	@Test
+	public void testPassIn_NoBids() {
+		SkatGame game = new SkatGame("Table 1", GameVariant.STANDARD, new NoBiddingTestPlayer(), //$NON-NLS-1$
+				new NoBiddingTestPlayer(), new NoBiddingTestPlayer());
+		game.setView(new UnitTestView());
+
+		game.start();
+		try {
+			game.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		GameSummary summary = game.getGameSummary();
+		assertEquals(GameType.PASSED_IN, summary.getGameType());
+
+		SkatGameResult result = game.getGameResult();
+		assertFalse(result.isWon());
+		assertEquals(0, result.getGameValue());
+	}
+
+	/**
+	 * When no player bids, game is passed in even the options for playing
+	 * ramsch are set but the active ruleset is ISPA rules
+	 */
+	@Test
+	public void testPassIn_NoBids2() {
+
+		JSkatOptions options = JSkatOptions.instance();
+		options.setRules(RuleSets.ISPA);
+		options.setPlayRamsch(true);
+		options.setRamschEventNoBid(true);
+
+		SkatGame game = new SkatGame("Table 1", GameVariant.STANDARD, new NoBiddingTestPlayer(), //$NON-NLS-1$
+				new NoBiddingTestPlayer(), new NoBiddingTestPlayer());
+		game.setView(new UnitTestView());
+
+		game.start();
+		try {
+			game.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		GameSummary summary = game.getGameSummary();
+		assertEquals(GameType.PASSED_IN, summary.getGameType());
+
+		SkatGameResult result = game.getGameResult();
+		assertFalse(result.isWon());
+		assertEquals(0, result.getGameValue());
+	}
+
+	/**
+	 * When no player bids and pub rules are acitvated, ramsch is played
 	 */
 	@Test
 	public void testRamsch_NoBids() {
+
+		JSkatOptions options = JSkatOptions.instance();
+		options.setRules(RuleSets.PUB);
+		options.setPlayRamsch(true);
+		options.setRamschEventNoBid(true);
+
 		SkatGame game = new SkatGame("Table 1", GameVariant.STANDARD, new NoBiddingTestPlayer(), //$NON-NLS-1$
 				new NoBiddingTestPlayer(), new NoBiddingTestPlayer());
 		game.setView(new UnitTestView());
