@@ -62,6 +62,10 @@ public class SkatGameData {
 		 */
 		BIDDING,
 		/**
+		 * Grand hand announcement instead of an ramsch game
+		 */
+		GRAND_HAND_ANNOUNCING,
+		/**
 		 * preparations for a ramsch game
 		 */
 		RAMSCH_PREPARATION,
@@ -698,7 +702,7 @@ public class SkatGameData {
 	 * Raises the value of geschoben by 1
 	 * 
 	 */
-	public void geschoben() {
+	public void addGeschoben() {
 
 		geschoben++;
 	}

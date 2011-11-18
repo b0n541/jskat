@@ -87,8 +87,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 
 		// select a random game type (without RAMSCH and PASSED_IN)
-		factory.setGameType(GameType.values()[rand.nextInt(GameType
-				.values().length - 2)]);
+		factory.setGameType(GameType.values()[rand.nextInt(GameType.values().length - 2)]);
 		factory.setOuvert(Boolean.valueOf(rand.nextBoolean()));
 
 		return factory.getAnnouncement();
@@ -102,10 +101,10 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 
 		int result = -1;
 
-		if (rand.nextBoolean()) {
-
-			result = nextBidValue;
-		}
+		// if (rand.nextBoolean()) {
+		//
+		// result = nextBidValue;
+		// }
 
 		return result;
 	}
@@ -116,7 +115,8 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	@Override
 	public boolean holdBid(int currBidValue) {
 
-		return rand.nextBoolean();
+		// return rand.nextBoolean();
+		return false;
 	}
 
 	/**
@@ -138,8 +138,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 		log.debug('\n' + knowledge.toString());
 
 		// first find all possible cards
-		CardList possibleCards = getPlayableCards(knowledge
-				.getTrickCards());
+		CardList possibleCards = getPlayableCards(knowledge.getTrickCards());
 
 		log.debug("found " + possibleCards.size() + " possible cards: " + possibleCards); //$NON-NLS-1$//$NON-NLS-2$
 
