@@ -11,6 +11,7 @@ import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
+import org.jskat.data.Trick;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.MoveInformation;
@@ -208,8 +209,7 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void setLastTrick(String tableName, Player trickForeHand, Card foreHandCard, Card middleHandCard,
-			Card rearHandCard) {
+	public void setLastTrick(String tableName, Trick trick) {
 		// TODO Auto-generated method stub
 
 	}
@@ -429,6 +429,12 @@ public class UnitTestView implements JSkatView {
 
 	@Override
 	public void showDuplicateTableNameMessage(String duplicateTableName) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setGeschoben(String tableName, Player player) {
 		// TODO Auto-generated method stub
 
 	}

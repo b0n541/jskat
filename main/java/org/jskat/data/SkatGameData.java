@@ -64,15 +64,15 @@ public class SkatGameData {
 		/**
 		 * Grand hand announcement instead of an ramsch game
 		 */
-		GRAND_HAND_ANNOUNCING,
+		RAMSCH_GRAND_HAND_ANNOUNCING,
 		/**
-		 * preparations for a ramsch game
+		 * Schieberamsch
 		 */
-		RAMSCH_PREPARATION,
+		SCHIEBERAMSCH,
 		/**
 		 * Look into skat or play hand game phase
 		 */
-		PICK_UP_SKAT,
+		PICKING_UP_SKAT,
 		/**
 		 * Discarding phase
 		 */
@@ -92,7 +92,7 @@ public class SkatGameData {
 		/**
 		 * Game value calculation phase
 		 */
-		CALC_GAME_VALUE,
+		CALCULATING_GAME_VALUE,
 		/**
 		 * Game over
 		 */
@@ -124,6 +124,11 @@ public class SkatGameData {
 	 * Dealer of the cards
 	 */
 	private Player dealer;
+
+	/**
+	 * Active player to make the next move
+	 */
+	private Player activePlayer;
 
 	/**
 	 * Points the player made during the game
@@ -617,13 +622,11 @@ public class SkatGameData {
 	 */
 	public Trick getLastTrick() {
 
-		Trick lastTrick = null;
-
-		if (tricks.size() > 1) {
-			lastTrick = tricks.get(tricks.size() - 2);
+		if (getTricks().size() == 0) {
+			throw new IllegalStateException("No tricks played in the game so far."); //$NON-NLS-1$
 		}
 
-		return lastTrick;
+		return tricks.get(tricks.size() - 1);
 	}
 
 	/**
@@ -1117,5 +1120,37 @@ public class SkatGameData {
 		factory.setGameResult(getResult());
 
 		return factory.getSummary();
+	}
+
+	/**
+	 * Gets the last trick winner
+	 * 
+	 * @return Last trick winner
+	 */
+	public Player getLastTrickWinner() {
+		// get last trick
+		Trick lastTrick = getLastTrick();
+
+		// get trick winner
+		return lastTrick.getTrickWinner();
+	}
+
+	/**
+	 * Gets the active player
+	 * 
+	 * @return Active player
+	 */
+	public Player getActivePlayer() {
+		return activePlayer;
+	}
+
+	/**
+	 * Sets the active player
+	 * 
+	 * @param activePlayer
+	 *            Active player
+	 */
+	public void setActivePlayer(Player activePlayer) {
+		this.activePlayer = activePlayer;
 	}
 }
