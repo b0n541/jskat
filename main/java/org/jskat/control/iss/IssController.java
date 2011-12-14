@@ -436,7 +436,7 @@ public class IssController {
 
 			if (isBiddingFinished(currGame)) {
 				view.setDeclarer(tableName, currGame.getDeclarer());
-				view.setGameState(tableName, GameState.PICK_UP_SKAT);
+				view.setGameState(tableName, GameState.PICKING_UP_SKAT);
 			}
 
 		} else if (MoveType.CARD_PLAY.equals(moveInformation.getType())) {

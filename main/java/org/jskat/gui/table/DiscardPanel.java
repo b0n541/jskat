@@ -68,15 +68,15 @@ class DiscardPanel extends JPanel {
 	 * @param newMaxCardCount
 	 *            Maximum number of cards
 	 */
-	public DiscardPanel(ActionMap actions, int newMaxCardCount) {
+	public DiscardPanel(ActionMap actions, int newMaxCardCount, boolean showSchiebenButton) {
 
 		setActionMap(actions);
 		maxCardCount = newMaxCardCount;
 
-		initPanel();
+		initPanel(showSchiebenButton);
 	}
 
-	void initPanel() {
+	void initPanel(boolean showSchiebenButton) {
 
 		setBackground(Color.WHITE);
 
@@ -102,8 +102,24 @@ class DiscardPanel extends JPanel {
 				pickUpSkatButton.dispatchEvent(e);
 			}
 		});
+
+		final JButton schiebenButton = new JButton(getActionMap().get(JSkatAction.SCHIEBEN));
+		schiebenButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					e.setSource(JSkatAction.SCHIEBEN);
+					// fire event again
+					schiebenButton.dispatchEvent(e);
+				} catch (IllegalArgumentException except) {
+					log.error(except.getMessage());
+				}
+			}
+		});
+
 		JPanel lookIntoSkatPanel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
-		lookIntoSkatPanel.add(pickUpSkatButton, "center, shrink"); //$NON-NLS-1$
+		lookIntoSkatPanel.add(pickUpSkatButton, "align center, wrap"); //$NON-NLS-1$
+		lookIntoSkatPanel.add(schiebenButton, "align center");
 		lookIntoSkatPanel.setOpaque(false);
 		add(lookIntoSkatPanel, PICK_UP_SKAT_BUTTON);
 
@@ -113,10 +129,15 @@ class DiscardPanel extends JPanel {
 
 	protected void setSkat(CardList skat) {
 
+		clearCards();
 		addCard(skat.get(0));
 		addCard(skat.get(1));
 
 		userPickedUpSkat = true;
+	}
+
+	void clearCards() {
+		cardPanel.clearCards();
 	}
 
 	void addCard(Card card) {

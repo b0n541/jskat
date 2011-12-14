@@ -75,6 +75,7 @@ import org.jskat.gui.action.human.PickUpSkatAction;
 import org.jskat.gui.action.human.PlayCardAction;
 import org.jskat.gui.action.human.PlayGrandHandAction;
 import org.jskat.gui.action.human.PlayHandGameAction;
+import org.jskat.gui.action.human.PlaySchiebeRamschAction;
 import org.jskat.gui.action.human.PutCardIntoSkatAction;
 import org.jskat.gui.action.human.SchiebenAction;
 import org.jskat.gui.action.human.TakeCardFromSkatAction;
@@ -214,6 +215,7 @@ public class JSkatViewImpl implements JSkatView {
 		actions.put(JSkatAction.PASS_BID, new PassBidAction());
 		actions.put(JSkatAction.PICK_UP_SKAT, new PickUpSkatAction());
 		actions.put(JSkatAction.PLAY_GRAND_HAND, new PlayGrandHandAction());
+		actions.put(JSkatAction.PLAY_SCHIEBERAMSCH, new PlaySchiebeRamschAction());
 		actions.put(JSkatAction.SCHIEBEN, new SchiebenAction());
 		actions.put(JSkatAction.PLAY_HAND_GAME, new PlayHandGameAction());
 		actions.put(JSkatAction.ANNOUNCE_GAME, new GameAnnounceAction());
@@ -244,7 +246,8 @@ public class JSkatViewImpl implements JSkatView {
 
 		// symbol button panel
 		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new MigLayout());
+		MigLayout layout = new MigLayout();
+		buttonPanel.setLayout(layout);
 		buttonPanel.add(new ToolbarButton(actions.get(JSkatAction.CREATE_LOCAL_TABLE)));
 		buttonPanel.add(new ToolbarButton(actions.get(JSkatAction.START_LOCAL_SERIES)));
 		buttonPanel.add(new ToolbarButton(actions.get(JSkatAction.SHOW_ISS_LOGIN)));
@@ -866,7 +869,7 @@ public class JSkatViewImpl implements JSkatView {
 			setBidValueToMake(tableName, SkatConstants.getNextBidValue(gameData.getBidValue()));
 			break;
 		case SKAT_REQUEST:
-			setGameState(tableName, GameState.PICK_UP_SKAT);
+			setGameState(tableName, GameState.PICKING_UP_SKAT);
 			break;
 		case PICK_UP_SKAT:
 			setGameState(tableName, GameState.DISCARDING);
@@ -895,8 +898,7 @@ public class JSkatViewImpl implements JSkatView {
 						&& currentTrick.getThirdCard() == null) {
 					// first card in new trick
 					clearTrickCards(tableName);
-					setLastTrick(tableName, lastTrick.getForeHand(), lastTrick.getFirstCard(),
-							lastTrick.getSecondCard(), lastTrick.getThirdCard());
+					setLastTrick(tableName, lastTrick);
 				}
 			}
 
@@ -946,12 +948,11 @@ public class JSkatViewImpl implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setLastTrick(String tableName, Player trickForeHand, Card foreHandCard, Card middleHandCard,
-			Card rearHandCard) {
+	public void setLastTrick(String tableName, Trick trick) {
 
 		SkatTablePanel table = tables.get(tableName);
 
-		table.setLastTrick(trickForeHand, foreHandCard, middleHandCard, rearHandCard);
+		table.setLastTrick(trick);
 	}
 
 	/**
@@ -1188,9 +1189,20 @@ public class JSkatViewImpl implements JSkatView {
 				message);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setResign(String tableName, Player player) {
 
-		tables.get(tableName).setPlayerResign(player);
+		tables.get(tableName).setResign(player);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setGeschoben(String tableName, Player player) {
+		tables.get(tableName).setGeschoben(player);
 	}
 }

@@ -30,21 +30,21 @@ import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
- * Implements the action for playing a grand hand game in a ramsch game
+ * Implements the action for playing a schieberamsch game in a ramsch game
  */
-public class PlayGrandHandAction extends AbstractJSkatAction {
+public class PlaySchiebeRamschAction extends AbstractJSkatAction {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see AbstractJSkatAction#AbstractJSkatAction()
 	 */
-	public PlayGrandHandAction() {
+	public PlaySchiebeRamschAction() {
 
-		putValue(Action.NAME, "Play grand hand game");
-		putValue(Action.SHORT_DESCRIPTION, "Play grand hand game");
+		putValue(Action.NAME, "Play schieberamsch game");
+		putValue(Action.SHORT_DESCRIPTION, "Play schieberamsch game");
 
-		setActionCommand(JSkatAction.PLAY_GRAND_HAND);
+		setActionCommand(JSkatAction.PLAY_SCHIEBERAMSCH);
 		setIcon(Icon.PLAY);
 	}
 

@@ -206,7 +206,7 @@ class GameInformationPanel extends JPanel {
 		case BIDDING:
 			result = strings.getString("bidding_phase"); //$NON-NLS-1$
 			break;
-		case CALC_GAME_VALUE:
+		case CALCULATING_GAME_VALUE:
 			result = strings.getString("calc_game_value_phase"); //$NON-NLS-1$
 			break;
 		case DEALING:
@@ -224,7 +224,7 @@ class GameInformationPanel extends JPanel {
 		case GAME_START:
 			result = strings.getString("game_start_phase"); //$NON-NLS-1$
 			break;
-		case PICK_UP_SKAT:
+		case PICKING_UP_SKAT:
 			result = strings.getString("pick_up_skat_phase"); //$NON-NLS-1$
 			break;
 		case PRELIMINARY_GAME_END:

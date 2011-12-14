@@ -95,6 +95,8 @@ abstract class AbstractHandPanel extends JPanel {
 
 	boolean playerPassed = false;
 
+	boolean playerGeschoben = false;
+
 	boolean declarer = false;
 
 	/**
@@ -215,8 +217,20 @@ abstract class AbstractHandPanel extends JPanel {
 			headerText.append(" " + strings.getString("bid") + ": "); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 			headerText.append(bidValue);
 
-			if (playerPassed) {
-				headerText.append(" (" + strings.getString("passed") + ")"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+			if (playerPassed || playerGeschoben) {
+				
+				headerText.append(" ("); //$NON-NLS-1$
+				
+				String passedOrGeschoben = "";
+				if (playerPassed) {
+					passedOrGeschoben = strings.getString("passed"); //$NON-NLS-1$
+				}
+				if (playerGeschoben) {
+					passedOrGeschoben = strings.getString("geschoben"); //$NON-NLS-1$
+				}
+				headerText.append(passedOrGeschoben);
+				
+				headerText.append(")"); //$NON-NLS-1$
 			}
 
 			if (declarer) {
@@ -276,6 +290,7 @@ abstract class AbstractHandPanel extends JPanel {
 		cardPanel.clearCards();
 		bidValue = 0;
 		playerPassed = false;
+		playerGeschoben = false;
 		declarer = false;
 		iconPanel.reset();
 		refreshHeaderText();
@@ -359,5 +374,10 @@ abstract class AbstractHandPanel extends JPanel {
 	public String getPlayerName() {
 
 		return playerName;
+	}
+
+	public void setGeschoben() {
+		playerGeschoben = true;
+		refreshHeaderText();
 	}
 }

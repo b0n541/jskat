@@ -325,7 +325,7 @@ class CardPanel extends JPanel {
 
 					GameState state = ((JSkatUserPanel) parent).getGameState();
 
-					if (state == GameState.DISCARDING || state == GameState.RAMSCH_PREPARATION) {
+					if (state == GameState.DISCARDING || state == GameState.SCHIEBERAMSCH) {
 						// discarding phase
 						action = getActionMap().get(JSkatAction.PUT_CARD_INTO_SKAT);
 					} else if (state == GameState.TRICK_PLAYING) {

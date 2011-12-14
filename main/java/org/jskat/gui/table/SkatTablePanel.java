@@ -45,6 +45,7 @@ import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
+import org.jskat.data.Trick;
 import org.jskat.gui.AbstractTabPanel;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.action.main.StartSkatSeriesAction;
@@ -448,28 +449,36 @@ public class SkatTablePanel extends AbstractTabPanel {
 			setContextPanel(ContextPanelTypes.BIDDING);
 			getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(false);
 			break;
-		case GRAND_HAND_ANNOUNCING:
+		case RAMSCH_GRAND_HAND_ANNOUNCING:
 			setContextPanel(ContextPanelTypes.SCHIEBERAMSCH);
-			userPanel.setGameState(GameState.GRAND_HAND_ANNOUNCING);
-			getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
+			userPanel.setGameState(state);
+			getActionMap().get(JSkatAction.PLAY_GRAND_HAND).setEnabled(true);
+			getActionMap().get(JSkatAction.PLAY_SCHIEBERAMSCH).setEnabled(true);
+			getActionMap().get(JSkatAction.SCHIEBEN).setEnabled(false);
+			getActionMap().get(JSkatAction.PICK_UP_SKAT).setEnabled(false);
 			break;
-		case RAMSCH_PREPARATION:
+		case SCHIEBERAMSCH:
 			setContextPanel(ContextPanelTypes.SCHIEBERAMSCH);
-			userPanel.setGameState(GameState.RAMSCH_PREPARATION);
-			getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
+			userPanel.setGameState(state);
+			getActionMap().get(JSkatAction.PLAY_GRAND_HAND).setEnabled(false);
+			getActionMap().get(JSkatAction.PLAY_SCHIEBERAMSCH).setEnabled(false);
+			getActionMap().get(JSkatAction.SCHIEBEN).setEnabled(true);
+			getActionMap().get(JSkatAction.PICK_UP_SKAT).setEnabled(true);
 			break;
-		case PICK_UP_SKAT:
+		case PICKING_UP_SKAT:
 			if (userPanel.getPosition().equals(declarer)) {
 				setContextPanel(ContextPanelTypes.DECLARING);
-				userPanel.setGameState(GameState.PICK_UP_SKAT);
+				userPanel.setGameState(state);
+				getActionMap().get(JSkatAction.PICK_UP_SKAT).setEnabled(true);
 				getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
 			}
 			break;
 		case DISCARDING:
 			if (userPanel.getPosition().equals(declarer)) {
+				// FIXME (jansch 14.12.2011) is this if still needed?
 				if (!ramsch)
 					setContextPanel(ContextPanelTypes.DECLARING);
-				userPanel.setGameState(GameState.DISCARDING);
+				userPanel.setGameState(state);
 			}
 			break;
 		case DECLARING:
@@ -479,9 +488,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 			break;
 		case TRICK_PLAYING:
 			setContextPanel(ContextPanelTypes.TRICK_PLAYING);
-			userPanel.setGameState(GameState.TRICK_PLAYING);
+			userPanel.setGameState(state);
 			break;
-		case CALC_GAME_VALUE:
+		case CALCULATING_GAME_VALUE:
 		case PRELIMINARY_GAME_END:
 		case GAME_OVER:
 			setContextPanel(ContextPanelTypes.GAME_OVER);
@@ -798,7 +807,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param player
 	 *            Player
 	 */
-	public void setPlayerResign(Player player) {
+	public void setResign(Player player) {
 
 		AbstractHandPanel panel = getHandPanel(player);
 
@@ -847,12 +856,13 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param middleHandCard
 	 * @param rearHandCard
 	 */
-	public void setLastTrick(Player trickForeHand, Card foreHandCard, Card middleHandCard, Card rearHandCard) {
+	public void setLastTrick(Trick trick) {
 
 		lastTrickPanel.clearCards();
-		lastTrickPanel.addCard(trickForeHand, foreHandCard);
-		lastTrickPanel.addCard(trickForeHand.getLeftNeighbor(), middleHandCard);
-		lastTrickPanel.addCard(trickForeHand.getRightNeighbor(), rearHandCard);
+		Player trickForeHand = trick.getForeHand();
+		lastTrickPanel.addCard(trickForeHand, trick.getFirstCard());
+		lastTrickPanel.addCard(trickForeHand.getLeftNeighbor(), trick.getSecondCard());
+		lastTrickPanel.addCard(trickForeHand.getRightNeighbor(), trick.getThirdCard());
 	}
 
 	/**
@@ -1030,5 +1040,15 @@ public class SkatTablePanel extends AbstractTabPanel {
 	public void hideCards(Player player) {
 
 		getPlayerPanel(player).hideCards();
+	}
+
+	/**
+	 * Sets the schieben of a player
+	 * 
+	 * @param player
+	 *            Player position
+	 */
+	public void setGeschoben(Player player) {
+		getPlayerPanel(player).setGeschoben();
 	}
 }

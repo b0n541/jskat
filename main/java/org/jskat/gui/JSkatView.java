@@ -32,6 +32,7 @@ import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
+import org.jskat.data.Trick;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.MoveInformation;
@@ -286,18 +287,11 @@ public interface JSkatView {
 	 * Sets the cards for the last trick
 	 * 
 	 * @param tableName
-	 *            tableName
-	 * @param trickForeHand
-	 *            Fore hand player in this trick
-	 * @param foreHandCard
-	 *            Card from fore hand
-	 * @param middleHandCard
-	 *            Card from middle hand
-	 * @param rearHandCard
-	 *            Card from hind hand
+	 *            Table name
+	 * @param trick
+	 *            Last trick
 	 */
-	public void setLastTrick(String tableName, Player trickForeHand, Card foreHandCard, Card middleHandCard,
-			Card rearHandCard);
+	public void setLastTrick(String tableName, Trick trick);
 
 	/**
 	 * Clears the cards of the trick
@@ -658,4 +652,14 @@ public interface JSkatView {
 	 * Shows a message, that a table with a given name already exists
 	 */
 	public void showDuplicateTableNameMessage(String duplicateTableName);
+
+	/**
+	 * Sets the schieben of a player
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param player
+	 *            Player position
+	 */
+	public void setGeschoben(String tableName, Player player);
 }

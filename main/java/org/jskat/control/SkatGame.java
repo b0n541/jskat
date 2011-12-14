@@ -115,7 +115,7 @@ public class SkatGame extends JSkatThread {
 				setGameState(GameState.BIDDING);
 				break;
 			case BIDDING:
-				view.setActivePlayer(tableName, Player.MIDDLEHAND);
+				setActivePlayer(Player.MIDDLEHAND);
 
 				if (variant == GameVariant.RAMSCH) {
 					// ramsch games are enforced
@@ -130,26 +130,24 @@ public class SkatGame extends JSkatThread {
 				if (GameType.PASSED_IN.equals(data.getGameType())) {
 					setGameState(GameState.PRELIMINARY_GAME_END);
 				} else if (GameType.RAMSCH.equals(data.getGameType())) {
-					setDeclarer(Player.FOREHAND);
-					view.setSkat(tableName, data.getSkat());
-					setGameState(GameState.GRAND_HAND_ANNOUNCING);
+					setGameState(GameState.RAMSCH_GRAND_HAND_ANNOUNCING);
 				} else {
 					view.setDeclarer(tableName, data.getDeclarer());
-					setGameState(GameState.PICK_UP_SKAT);
+					setGameState(GameState.PICKING_UP_SKAT);
 				}
 				break;
-			case GRAND_HAND_ANNOUNCING:
+			case RAMSCH_GRAND_HAND_ANNOUNCING:
 				boolean grandHandAnnounced = false;
-				for (Player declarer : Player.values()) {
-					if (!grandHandAnnounced) {
-						setDeclarer(declarer);
-						grandHandAnnounced = playGrandHand();
+				for (Player currPlayer : Player.values()) {
+					setActivePlayer(currPlayer);
+					if (!grandHandAnnounced && playGrandHand(currPlayer)) {
+						setDeclarer(currPlayer);
+						grandHandAnnounced = true;
 					}
 				}
 				if (!grandHandAnnounced) {
 					log.debug("no grand hand - initiating schieberamsch"); //$NON-NLS-1$
-					setDeclarer(Player.FOREHAND);
-					setGameState(GameState.RAMSCH_PREPARATION);
+					setGameState(GameState.SCHIEBERAMSCH);
 				} else {
 					log.debug(data.getDeclarer() + " is playing grand hand"); //$NON-NLS-1$
 					GameAnnouncementFactory gaf = GameAnnouncement.getFactory();
@@ -161,62 +159,37 @@ public class SkatGame extends JSkatThread {
 					break;
 				}
 				break;
-			case RAMSCH_PREPARATION:
+			case SCHIEBERAMSCH:
+				for (Player currPlayer : Player.values()) {
+					setActivePlayer(currPlayer);
+					if (!pickUpSkat(data.getActivePlayer())) {
+						log.debug(currPlayer + " schiebt");
+						data.addGeschoben();
+						view.setGeschoben(tableName, currPlayer);
+					}
 
-				// declarer has already been set to forehand in bidding state
-				if (!pickUpSkat()) {
-					data.addGeschoben();
-					if (data.getDeclarer() == Player.REARHAND) {
-						setDeclarer(null);
+					if (Player.REARHAND.equals(data.getActivePlayer())) {
 						GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 						factory.setGameType(GameType.RAMSCH);
 						setGameAnnouncement(factory.getAnnouncement());
 						setGameState(GameState.TRICK_PLAYING);
-					} else {
-						setDeclarer(data.getDeclarer().getLeftNeighbor());
-						view.setSkat(tableName, data.getSkat());
-						setGameState(GameState.RAMSCH_PREPARATION);
 					}
-				} else {
-					setGameState(GameState.DISCARDING);
-					break;
 				}
 				break;
-			case PICK_UP_SKAT:
-				// only used for normal games (i.e. no ramsch game)
-				if (pickUpSkat()) {
+			case PICKING_UP_SKAT:
+				setActivePlayer(data.getDeclarer());
+				if (pickUpSkat(data.getDeclarer())) {
 					data.setDeclarerPickedUpSkat(true);
 					setGameState(GameState.DISCARDING);
 					view.setSkat(tableName, data.getSkat());
 				} else {
 					setGameState(GameState.DECLARING);
 				}
-
 				break;
 			case DISCARDING:
+				setActivePlayer(data.getDeclarer());
 				discarding();
-				if (data.getGameType() == GameType.RAMSCH) {
-					if (player.get(data.getDeclarer()) instanceof HumanPlayer) {
-						// FIXME (markus, 01.11.11) this is only to switch the
-						// HumanPlayer into the correct state
-						player.get(data.getDeclarer()).announceGame();
-					} else {
-						// no action for AIPlayer here
-					}
-
-					if (data.getDeclarer() == Player.REARHAND) {
-						setDeclarer(null);
-						GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-						factory.setGameType(GameType.RAMSCH);
-						setGameAnnouncement(factory.getAnnouncement());
-						setGameState(GameState.TRICK_PLAYING);
-					} else {
-						setDeclarer(data.getDeclarer().getLeftNeighbor());
-						setGameState(GameState.RAMSCH_PREPARATION);
-					}
-				} else {
-					setGameState(GameState.DECLARING);
-				}
+				setGameState(GameState.DECLARING);
 				break;
 			case DECLARING:
 				announceGame();
@@ -224,12 +197,12 @@ public class SkatGame extends JSkatThread {
 				break;
 			case TRICK_PLAYING:
 				playTricks();
-				setGameState(GameState.CALC_GAME_VALUE);
+				setGameState(GameState.CALCULATING_GAME_VALUE);
 				break;
 			case PRELIMINARY_GAME_END:
-				setGameState(GameState.CALC_GAME_VALUE);
+				setGameState(GameState.CALCULATING_GAME_VALUE);
 				break;
-			case CALC_GAME_VALUE:
+			case CALCULATING_GAME_VALUE:
 				calculateGameValue();
 				setGameState(GameState.GAME_OVER);
 				break;
@@ -243,16 +216,17 @@ public class SkatGame extends JSkatThread {
 		log.debug(data.getGameState());
 	}
 
-	private boolean playGrandHand() {
-		return playGrandHand(data.getDeclarer());
+	private void setActivePlayer(Player activePlayer) {
+		data.setActivePlayer(activePlayer);
+		view.setActivePlayer(tableName, activePlayer);
 	}
 
 	private boolean playGrandHand(Player playerPosition) {
 		return player.get(playerPosition).playGrandHand();
 	}
 
-	private boolean pickUpSkat() {
-		return player.get(data.getDeclarer()).pickUpSkat();
+	private boolean pickUpSkat(Player playerPosition) {
+		return player.get(playerPosition).pickUpSkat();
 	}
 
 	/**
@@ -368,6 +342,7 @@ public class SkatGame extends JSkatThread {
 			if (!(player.get(Player.FOREHAND).bidMore(18) > -1)) {
 
 				log.debug("Fore hand passes too"); //$NON-NLS-1$
+				view.setPass(tableName, Player.FOREHAND);
 				secondWinner = null;
 			} else {
 
@@ -500,24 +475,23 @@ public class SkatGame extends JSkatThread {
 
 	private void discarding() {
 
-		log.debug("Player (" + data.getDeclarer() + ") looks into the skat..."); //$NON-NLS-1$ //$NON-NLS-2$
-		log.debug("Skat before discarding: " + data.getSkat()); //$NON-NLS-1$
+		JSkatPlayer activePlayer = player.get(data.getActivePlayer());
 
-		JSkatPlayer declarer = player.get(data.getDeclarer());
+		log.debug("Player (" + activePlayer + ") looks into the skat..."); //$NON-NLS-1$ //$NON-NLS-2$
+		log.debug("Skat before discarding: " + data.getSkat()); //$NON-NLS-1$
 
 		// create a clone of the skat before sending it to the player
 		// otherwise the player could change the skat after discarding
-		declarer.takeSkat((CardList) data.getSkat().clone());
+		activePlayer.takeSkat((CardList) data.getSkat().clone());
 
 		// ask player for the cards to be discarded
 		// cloning is done to prevent the player
 		// from manipulating the skat afterwards
 		CardList discardedSkat = new CardList();
-		discardedSkat.addAll(declarer.discardSkat());
+		discardedSkat.addAll(activePlayer.discardSkat());
 
 		if (!checkDiscardedCards(discardedSkat)) {
 			// TODO throw an appropriate exceptions
-
 		}
 
 		log.debug("Discarded cards: " + discardedSkat); //$NON-NLS-1$
@@ -579,11 +553,8 @@ public class SkatGame extends JSkatThread {
 				// first trick
 				newTrickForeHand = Player.FOREHAND;
 			} else {
-				// all the other tricks
-				Trick lastTrick = data.getTricks().get(data.getTricks().size() - 1);
-
-				// set new trick fore hand
-				newTrickForeHand = lastTrick.getTrickWinner();
+				// set new trick fore hand for other tricks
+				newTrickForeHand = data.getLastTrickWinner();
 			}
 
 			view.setTrickForeHand(tableName, newTrickForeHand);
@@ -795,8 +766,7 @@ public class SkatGame extends JSkatThread {
 				Trick lastTrick = data.getTricks().get(data.getTricks().size() - 2);
 
 				// set last trick cards
-				view.setLastTrick(tableName, lastTrick.getForeHand(), lastTrick.getCard(Player.FOREHAND),
-						lastTrick.getCard(Player.MIDDLEHAND), lastTrick.getCard(Player.REARHAND));
+				view.setLastTrick(tableName, lastTrick);
 			}
 
 			view.playTrickCard(tableName, currPlayer, card);

@@ -100,7 +100,11 @@ public enum JSkatAction {
 	 */
 	PLAY_GRAND_HAND,
 	/**
-	 * skips the skat pickup in a ramsch game (called "Schieben") 
+	 * Play schieberamsch
+	 */
+	PLAY_SCHIEBERAMSCH,
+	/**
+	 * skips the skat pickup in a ramsch game (called "Schieben")
 	 */
 	SCHIEBEN,
 	/**

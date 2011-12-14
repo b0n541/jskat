@@ -30,6 +30,7 @@ import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
+import org.jskat.data.Trick;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.MoveInformation;
@@ -400,9 +401,7 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setLastTrick(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") Player trickForeHand, @SuppressWarnings("unused") Card foreHandCard,
-			@SuppressWarnings("unused") Card middleHandCard, @SuppressWarnings("unused") Card rearHandCard) {
+	public void setLastTrick(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Trick trick) {
 		// empty method by indent
 	}
 
@@ -592,8 +591,19 @@ public class NullView implements JSkatView {
 		// empty method by indent
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void setResign(String tableName, Player player) {
+		// empty method by indent
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setGeschoben(String tableName, Player player) {
 		// empty method by indent
 	}
 }

@@ -46,7 +46,6 @@ public class SchiebenAction extends AbstractJSkatAction {
 
 		setActionCommand(JSkatAction.SCHIEBEN);
 		setIcon(Icon.PLAY);
-		
 	}
 
 	/**

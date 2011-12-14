@@ -20,28 +20,39 @@
  */
 package org.jskat.gui.table;
 
+import java.awt.CardLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.ActionMap;
+import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
+import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
+import org.jskat.util.GameType;
 
 /**
  * Context panel for discarding
  */
 class SchieberamschContextPanel extends JPanel {
 
+	private static final String GRAND_HAND = "GRAND_HAND";
+	private static final String DISCARD = "DISCARD";
 	private static final long serialVersionUID = 1L;
 	@SuppressWarnings("unused")
 	private static Log log = LogFactory.getLog(SchieberamschContextPanel.class);
 
 	private DiscardPanel discardPanel;
-	private RamschDiscardingDonePanel ramschDiscardingDonePanel;
+	JPanel centerPanel;
 
 	SchieberamschContextPanel(ActionMap actions,
 			JSkatGraphicRepository jskatBitmaps, JSkatUserPanel newUserPanel,
@@ -53,20 +64,78 @@ class SchieberamschContextPanel extends JPanel {
 		blankPanel.setOpaque(false);
 		add(blankPanel, "width 25%"); //$NON-NLS-1$
 
-		discardPanel = new DiscardPanel(actions, 4);
-		add(discardPanel, "grow"); //$NON-NLS-1$
+		centerPanel = new JPanel(new CardLayout());
+		JPanel grandHandPanel = getGrandHandSchiebeRamschPanel(actions);
+		grandHandPanel.setOpaque(false);
+		centerPanel.add(grandHandPanel, GRAND_HAND);
 
-		ramschDiscardingDonePanel = new RamschDiscardingDonePanel(actions, newUserPanel, discardPanel, Boolean.TRUE);
-		add(ramschDiscardingDonePanel, "width 25%"); //$NON-NLS-1$
+		discardPanel = new DiscardPanel(actions, 4, true);
+		centerPanel.add(discardPanel, DISCARD);
+
+		centerPanel.setOpaque(false);
+		add(centerPanel, "grow"); //$NON-NLS-1$
+
+		JPanel blankPanel2 = new JPanel();
+		blankPanel2.setOpaque(false);
+		add(blankPanel2, "width 25%"); //$NON-NLS-1$
 
 		setOpaque(false);
 
 		resetPanel();
 	}
 
+	public JPanel getGrandHandSchiebeRamschPanel(ActionMap actions) {
+		JPanel result = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
+
+		final JButton grandHandButton = new JButton(actions.get(JSkatAction.PLAY_GRAND_HAND));
+		grandHandButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					GameAnnouncement ann = getGameAnnouncement();
+
+					e.setSource(ann);
+					// fire event again
+					grandHandButton.dispatchEvent(e);
+				} catch (IllegalArgumentException except) {
+					log.error(except.getMessage());
+				}
+			}
+
+			private GameAnnouncement getGameAnnouncement() {
+				GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+				factory.setGameType(GameType.GRAND);
+				factory.setHand(Boolean.TRUE);
+				return factory.getAnnouncement();
+			}
+		});
+
+		result.add(grandHandButton, "align center, wrap"); //$NON-NLS-1$
+
+		final JButton schiebenButton = new JButton(actions.get(JSkatAction.PLAY_SCHIEBERAMSCH));
+		schiebenButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					showPanel(DISCARD);
+				} catch (IllegalArgumentException except) {
+					log.error(except.getMessage());
+				}
+			}
+		});
+		result.add(schiebenButton, "align center"); //$NON-NLS-1$
+
+		return result;
+	}
+
 	public void resetPanel() {
 
 		discardPanel.resetPanel();
+		showPanel(GRAND_HAND);
+	}
+
+	void showPanel(String panelName) {
+		((CardLayout) centerPanel.getLayout()).show(centerPanel, panelName);
 	}
 
 	public void removeCard(Card card) {
