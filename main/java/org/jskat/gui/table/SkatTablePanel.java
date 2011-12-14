@@ -475,9 +475,6 @@ public class SkatTablePanel extends AbstractTabPanel {
 			break;
 		case DISCARDING:
 			if (userPanel.getPosition().equals(declarer)) {
-				// FIXME (jansch 14.12.2011) is this if still needed?
-				if (!ramsch)
-					setContextPanel(ContextPanelTypes.DECLARING);
 				userPanel.setGameState(state);
 			}
 			break;

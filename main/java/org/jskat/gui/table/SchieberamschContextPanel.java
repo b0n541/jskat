@@ -69,15 +69,13 @@ class SchieberamschContextPanel extends JPanel {
 		grandHandPanel.setOpaque(false);
 		centerPanel.add(grandHandPanel, GRAND_HAND);
 
-		discardPanel = new DiscardPanel(actions, 4, true);
+		discardPanel = new DiscardPanel(actions, 4);
 		centerPanel.add(discardPanel, DISCARD);
 
 		centerPanel.setOpaque(false);
 		add(centerPanel, "grow"); //$NON-NLS-1$
 
-		JPanel blankPanel2 = new JPanel();
-		blankPanel2.setOpaque(false);
-		add(blankPanel2, "width 25%"); //$NON-NLS-1$
+		add(new SkatSchiebenPanel(actions, discardPanel), "width 25%"); //$NON-NLS-1$
 
 		setOpaque(false);
 

@@ -109,8 +109,6 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 
 		waitForUserInput();
 
-		gameAnnouncementStep = GameAnnouncementStep.DISCARDED_SKAT;
-
 		return this.discardSkat;
 	}
 
@@ -246,24 +244,23 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 
 		} else if (JSkatAction.SCHIEBEN.toString().equals(command)) {
 
-			gameAnnouncementStep = GameAnnouncementStep.DONE_GAME_ANNOUNCEMENT;
-
+			if (source instanceof CardList) {
+				CardList cards = (CardList) source;
+				if (cards.size() == 2) {
+					setDiscardedSkatCards((CardList) source);
+				}
+			}
 		} else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
 
 			if (source instanceof GameAnnouncement) {
 				// player did game announcement
 				gameAnnouncement = (GameAnnouncement) source;
 
-				if (!gameAnnouncement.isHand()) {
-
-					discardSkat = gameAnnouncement.getDiscardedCards();
-					knowledge.getMyCards().remove(this.discardSkat.get(0));
-					knowledge.getMyCards().remove(this.discardSkat.get(1));
-
-					gameAnnouncementStep = GameAnnouncementStep.DISCARDED_SKAT;
-				} else {
-
+				if (gameAnnouncement.isHand()) {
 					gameAnnouncementStep = GameAnnouncementStep.PLAYS_HAND;
+				} else {
+					setDiscardedSkatCards(gameAnnouncement.getDiscardedCards());
+					gameAnnouncementStep = GameAnnouncementStep.DISCARDED_SKAT;
 				}
 			} else {
 
@@ -283,6 +280,12 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 
 			this.idler.interrupt();
 		}
+	}
+
+	private void setDiscardedSkatCards(CardList discardedCards) {
+		discardSkat = discardedCards;
+		knowledge.getMyCards().remove(this.discardSkat.get(0));
+		knowledge.getMyCards().remove(this.discardSkat.get(1));
 	}
 
 	/*-------------------------------------------------------------------

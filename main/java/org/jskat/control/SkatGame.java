@@ -163,9 +163,12 @@ public class SkatGame extends JSkatThread {
 				for (Player currPlayer : Player.values()) {
 					setActivePlayer(currPlayer);
 					if (!pickUpSkat(data.getActivePlayer())) {
-						log.debug(currPlayer + " schiebt");
+						log.debug(currPlayer + " schiebt"); //$NON-NLS-1$
 						data.addGeschoben();
 						view.setGeschoben(tableName, currPlayer);
+					} else {
+						view.setSkat(tableName, data.getSkat());
+						discarding();
 					}
 
 					if (Player.REARHAND.equals(data.getActivePlayer())) {
@@ -496,7 +499,7 @@ public class SkatGame extends JSkatThread {
 
 		log.debug("Discarded cards: " + discardedSkat); //$NON-NLS-1$
 
-		data.setDiscardedSkat(data.getDeclarer(), discardedSkat);
+		data.setDiscardedSkat(data.getActivePlayer(), discardedSkat);
 	}
 
 	private boolean checkDiscardedCards(CardList discardedSkat) {

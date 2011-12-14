@@ -74,36 +74,16 @@ class GameAnnouncePanel extends JPanel {
 	 * @param discardPanel
 	 *            Discard panel
 	 */
-	GameAnnouncePanel(ActionMap actions, JSkatUserPanel userPanel,
-			DiscardPanel discardPanel) {
-
-		this(actions, userPanel, discardPanel, Boolean.FALSE);
-	}
-
-	/**
-	 * Constructor
-	 * 
-	 * @param actions
-	 *            Action map
-	 * @param userPanel
-	 *            User panel
-	 * @param discardPanel
-	 *            Discard panel
-	 * @param showAnnounceButton
-	 *            TRUE, if the announce button should be shown
-	 */
-	GameAnnouncePanel(ActionMap actions, JSkatUserPanel userPanel,
-			DiscardPanel discardPanel, Boolean showAnnounceButton) {
+	GameAnnouncePanel(ActionMap actions, JSkatUserPanel userPanel, DiscardPanel discardPanel) {
 
 		strings = JSkatResourceBundle.instance();
 		this.userPanel = userPanel;
 		this.discardPanel = discardPanel;
 
-		initPanel(actions, showAnnounceButton);
+		initPanel(actions);
 	}
 
-	private void initPanel(final ActionMap actions,
-			final Boolean showAnnounceButton) {
+	private void initPanel(final ActionMap actions) {
 
 		this.setLayout(new MigLayout("fill")); //$NON-NLS-1$
 
@@ -145,79 +125,72 @@ class GameAnnouncePanel extends JPanel {
 		panel.add(this.schneiderBox, "wrap"); //$NON-NLS-1$
 		panel.add(this.schwarzBox, "wrap"); //$NON-NLS-1$
 
-		if (showAnnounceButton.booleanValue()) {
+		final JButton announceButton = new JButton(actions.get(JSkatAction.ANNOUNCE_GAME));
+		announceButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
 
-			final JButton announceButton = new JButton(
-					actions.get(JSkatAction.ANNOUNCE_GAME));
-			announceButton.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
+				if (gameTypeList.getSelectedItem() != null) {
 
-					if (gameTypeList.getSelectedItem() != null) {
-
-						try {
-							GameAnnouncement ann = getGameAnnouncement();
-							if(ann==null) return;
-							e.setSource(ann);
-							// fire event again
-							announceButton.dispatchEvent(e);
-						} catch (IllegalArgumentException except) {
-							log.error(except.getMessage());
-						}
+					try {
+						GameAnnouncement ann = getGameAnnouncement();
+						if (ann == null)
+							return;
+						e.setSource(ann);
+						// fire event again
+						announceButton.dispatchEvent(e);
+					} catch (IllegalArgumentException except) {
+						log.error(except.getMessage());
 					}
 				}
+			}
 
-				private GameAnnouncement getGameAnnouncement() {
-					GameAnnouncementFactory factory = GameAnnouncement
-							.getFactory();
-					GameType gameType = getGameTypeFromSelectedItem();
-					factory.setGameType(gameType);
+			private GameAnnouncement getGameAnnouncement() {
+				GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+				GameType gameType = getGameTypeFromSelectedItem();
+				factory.setGameType(gameType);
 
-					if (discardPanel.isUserLookedIntoSkat()) {
+				if (discardPanel.isUserLookedIntoSkat()) {
 
-						CardList discardedCards = discardPanel
-								.getDiscardedCards();
-						if (discardedCards.size() != 2) {
-							JOptionPane.showMessageDialog(
-									GameAnnouncePanel.this,
-									strings.getString("invalid_number_of_cards_in_skat"), //$NON-NLS-1$
-									strings.getString("invalid_number_of_cards_in_skat_title"), //$NON-NLS-1$
-									JOptionPane.ERROR_MESSAGE);
-							return null;
-						}
-						factory.setDiscardedCards(discardedCards);
-						if (GameType.NULL.equals(gameType)
-								&& ouvertBox.isSelected()) {
-							factory.setOuvert(true);
-						}
-					} else {
-
-						if (handBox.isSelected()) {
-							factory.setHand(Boolean.TRUE);
-						}
-						if (ouvertBox.isSelected()) {
-							factory.setOuvert(Boolean.TRUE);
-						}
-						if (schneiderBox.isSelected()) {
-							factory.setSchneider(Boolean.TRUE);
-						}
-						if (schwarzBox.isSelected()) {
-							factory.setSchwarz(Boolean.TRUE);
-						}
+					CardList discardedCards = discardPanel.getDiscardedCards();
+					if (discardedCards.size() != 2) {
+						JOptionPane.showMessageDialog(GameAnnouncePanel.this,
+								strings.getString("invalid_number_of_cards_in_skat"), //$NON-NLS-1$
+								strings.getString("invalid_number_of_cards_in_skat_title"), //$NON-NLS-1$
+								JOptionPane.ERROR_MESSAGE);
+						return null;
 					}
-					return factory.getAnnouncement();
+					factory.setDiscardedCards(discardedCards);
+					if (GameType.NULL.equals(gameType) && ouvertBox.isSelected()) {
+						factory.setOuvert(true);
+					}
+				} else {
+
+					if (handBox.isSelected()) {
+						factory.setHand(Boolean.TRUE);
+					}
+					if (ouvertBox.isSelected()) {
+						factory.setOuvert(Boolean.TRUE);
+					}
+					if (schneiderBox.isSelected()) {
+						factory.setSchneider(Boolean.TRUE);
+					}
+					if (schwarzBox.isSelected()) {
+						factory.setSchwarz(Boolean.TRUE);
+					}
 				}
+				return factory.getAnnouncement();
+			}
 
-				private GameType getGameTypeFromSelectedItem() {
-					Object selectedItem = gameTypeList.getSelectedItem();
+			private GameType getGameTypeFromSelectedItem() {
+				Object selectedItem = gameTypeList.getSelectedItem();
 
-					return (GameType) selectedItem;
-				}
-			});
-			panel.add(announceButton);
-		}
+				return (GameType) selectedItem;
+			}
+		});
+		panel.add(announceButton);
 
-		this.add(panel, "center"); //$NON-NLS-1$
+		add(panel, "center"); //$NON-NLS-1$
 
 		setOpaque(false);
 
