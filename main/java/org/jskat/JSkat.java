@@ -48,15 +48,10 @@ public class JSkat {
 
 		PropertyConfigurator.configure(ClassLoader
 				.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
-
 		log.debug("Welcome to JSkat!"); //$NON-NLS-1$
-
 		trySettingNimbusLookAndFeel();
-
 		JSkatMaster jskat = JSkatMaster.instance();
-
 		jskat.checkJSkatVersion();
-
 		jskat.setView(new JSkatViewImpl());
 	}
 

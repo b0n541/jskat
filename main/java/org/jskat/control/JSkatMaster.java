@@ -47,7 +47,6 @@ import org.jskat.gui.action.JSkatAction;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
-import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.version.VersionChecker;
 
 /**
@@ -93,9 +92,13 @@ public class JSkatMaster {
 	/**
 	 * Checks the version of JSkat
 	 */
-	public void checkJSkatVersion() {
-		log.debug("Latest version web: " + VersionChecker.getLatestVersion());
-		log.debug("Latest version local: " + JSkatResourceBundle.getVersion());
+	public static void checkJSkatVersion() {
+		String latestVersion = VersionChecker.getLatestVersion();
+		log.debug("Latest version web: " + latestVersion); //$NON-NLS-1$
+		log.debug("Latest version local: " + JSkatOptions.getVersion()); //$NON-NLS-1$
+		if (VersionChecker.isHigherVersionAvailable(latestVersion)) {
+			log.debug("Newer version " + latestVersion + " is available on the JSkat website."); //$NON-NLS-1$//$NON-NLS-2$
+		}
 	}
 
 	/**

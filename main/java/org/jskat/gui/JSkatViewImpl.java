@@ -444,7 +444,7 @@ public class JSkatViewImpl implements JSkatView {
 		JOptionPane.showMessageDialog(mainFrame, "JSkat " //$NON-NLS-1$
 				+ strings.getString("version") //$NON-NLS-1$
 				+ " " //$NON-NLS-1$
-				+ JSkatResourceBundle.getVersion() + "\n\n" //$NON-NLS-1$
+				+ JSkatOptions.getVersion() + "\n\n" //$NON-NLS-1$
 				+ "http://www.jskat.org\n" //$NON-NLS-1$
 				+ "http://sourceforge.net/projects/jskat" //$NON-NLS-1$
 				+ "\n\n" //$NON-NLS-1$
