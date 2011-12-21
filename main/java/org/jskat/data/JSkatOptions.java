@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.Locale;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
@@ -327,6 +328,7 @@ public class JSkatOptions {
 
 		// use standard values for the options
 		jskatProperties.setProperty("checkForNewVersionAtStartUp", String.valueOf(checkForNewVersionAtStartUp));
+		language = getDefaultLanguage();
 		jskatProperties.setProperty("language", String.valueOf(language));
 		jskatProperties.setProperty("savePath", savePath);
 		jskatProperties.setProperty("trickRemoveDelayTime", String.valueOf(trickRemoveDelayTime));
@@ -1100,5 +1102,16 @@ public class JSkatOptions {
 	 */
 	public Integer getIssPort() {
 		return issPort;
+	}
+
+	private SupportedLanguage getDefaultLanguage() {
+
+		SupportedLanguage result = SupportedLanguage.ENGLISH;
+
+		if (Locale.getDefault().getLanguage().equals(Locale.GERMAN.getLanguage())) {
+			result = SupportedLanguage.GERMAN;
+		}
+
+		return result;
 	}
 }
