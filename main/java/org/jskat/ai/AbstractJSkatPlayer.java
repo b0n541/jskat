@@ -42,7 +42,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	/** Player name */
 	protected String playerName;
 	/** Player state */
-	protected JSkatPlayer.PlayerStates playerState;
+	protected JSkatPlayer.PlayerState playerState;
 	/** Player knowledge */
 	protected PlayerKnowledge knowledge = new PlayerKnowledge();
 	/** Skat rules for the current skat series */
@@ -74,7 +74,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	@Override
 	public final void setUpBidding() {
 
-		setState(PlayerStates.BIDDING);
+		setState(PlayerState.BIDDING);
 	}
 
 	/**
@@ -127,7 +127,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	@Override
 	public final void startGame(Player newDeclarer, GameAnnouncement game) {
 
-		playerState = PlayerStates.PLAYING;
+		playerState = PlayerState.PLAYING;
 		knowledge.setDeclarer(newDeclarer);
 		knowledge.setGame(game);
 		knowledge.getMyCards().sort(game.getGameType());
@@ -167,7 +167,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * @param newState
 	 *            State to be set
 	 */
-	protected final void setState(JSkatPlayer.PlayerStates newState) {
+	protected final void setState(JSkatPlayer.PlayerState newState) {
 
 		playerState = newState;
 	}

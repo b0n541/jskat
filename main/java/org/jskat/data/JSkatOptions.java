@@ -31,8 +31,8 @@ import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jskat.data.SkatTableOptions.RamschSkatOwners;
-import org.jskat.data.SkatTableOptions.RuleSets;
+import org.jskat.data.SkatTableOptions.RamschSkatOwner;
+import org.jskat.data.SkatTableOptions.RuleSet;
 import org.jskat.gui.img.CardFace;
 
 /**
@@ -194,12 +194,12 @@ public class JSkatOptions {
 			} else if (property.equals("thirdPlayerType")) {
 				setThirdPlayerType(Integer.parseInt(value));
 			} else if (property.equals("rules")) {
-				SkatTableOptions.RuleSets rules = null;
+				SkatTableOptions.RuleSet rules = null;
 				try {
-					rules = SkatTableOptions.RuleSets.valueOf(value);
+					rules = SkatTableOptions.RuleSet.valueOf(value);
 				} catch (IllegalArgumentException e) {
 					// parsing of older options failed
-					rules = SkatTableOptions.RuleSets.ISPA;
+					rules = SkatTableOptions.RuleSet.ISPA;
 				}
 				setRules(rules);
 			} else if (property.equals("playContra")) {
@@ -222,9 +222,9 @@ public class JSkatOptions {
 				setBockEventPlayerHasX00Points(Boolean.valueOf(value).booleanValue());
 			} else if (property.equals("ramschSkat")) {
 				if (value.equals("LAST_TRICK")) {
-					setRamschSkat(SkatTableOptions.RamschSkatOwners.LAST_TRICK);
+					setRamschSkat(SkatTableOptions.RamschSkatOwner.LAST_TRICK);
 				} else {
-					setRamschSkat(SkatTableOptions.RamschSkatOwners.LOSER);
+					setRamschSkat(SkatTableOptions.RamschSkatOwner.LOSER);
 				}
 			} else if (property.equals("schieberRamsch")) {
 				setSchieberRamsch(Boolean.valueOf(value).booleanValue());
@@ -256,9 +256,9 @@ public class JSkatOptions {
 				setThirdPlayerType(Integer.parseInt(value));
 			} else if (property.equals("rules")) {
 				if (value.equals("PUB")) {
-					setRules(RuleSets.PUB);
+					setRules(RuleSet.PUB);
 				} else {
-					setRules(RuleSets.ISPA);
+					setRules(RuleSet.ISPA);
 				}
 			} else if (property.equals("playContra")) {
 				setPlayContra(Boolean.valueOf(value).booleanValue());
@@ -280,9 +280,9 @@ public class JSkatOptions {
 				setBockEventPlayerHasX00Points(Boolean.valueOf(value).booleanValue());
 			} else if (property.equals("ramschSkat")) {
 				if (value.equals("LAST_TRICK")) {
-					setRamschSkat(RamschSkatOwners.LAST_TRICK);
+					setRamschSkat(RamschSkatOwner.LAST_TRICK);
 				} else {
-					setRamschSkat(RamschSkatOwners.LOSER);
+					setRamschSkat(RamschSkatOwner.LOSER);
 				}
 			} else if (property.equals("schieberRamsch")) {
 				setSchieberRamsch(Boolean.valueOf(value).booleanValue());
@@ -673,7 +673,7 @@ public class JSkatOptions {
 	 * 
 	 * @return Value of property rules.
 	 */
-	public SkatTableOptions.RuleSets getRules() {
+	public SkatTableOptions.RuleSet getRules() {
 
 		return this.tableOptions.getRules();
 	}
@@ -684,7 +684,7 @@ public class JSkatOptions {
 	 * @param rules
 	 *            New value of property rules.
 	 */
-	public void setRules(SkatTableOptions.RuleSets rules) {
+	public void setRules(SkatTableOptions.RuleSet rules) {
 
 		this.tableOptions.setRules(rules);
 		this.jskatProperties.setProperty("rules", String.valueOf(rules));
@@ -893,7 +893,7 @@ public class JSkatOptions {
 	 * 
 	 * @return Value of property ramschSkat.
 	 */
-	public SkatTableOptions.RamschSkatOwners getRamschSkat() {
+	public SkatTableOptions.RamschSkatOwner getRamschSkat() {
 
 		return this.tableOptions.getRamschSkat();
 	}
@@ -904,7 +904,7 @@ public class JSkatOptions {
 	 * @param ramschSkat
 	 *            New value of property ramschSkat.
 	 */
-	public void setRamschSkat(SkatTableOptions.RamschSkatOwners ramschSkat) {
+	public void setRamschSkat(SkatTableOptions.RamschSkatOwner ramschSkat) {
 
 		this.tableOptions.setRamschSkat(ramschSkat);
 		this.jskatProperties.setProperty("ramschSkat", String.valueOf(ramschSkat));

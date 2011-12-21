@@ -23,7 +23,7 @@ package org.jskat.gui;
 /**
  * Enumeration for all types of tabs
  */
-enum TabTypes {
+enum TabType {
 
 	/**
 	 * Local JSkat table

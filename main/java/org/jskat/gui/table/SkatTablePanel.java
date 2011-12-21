@@ -78,7 +78,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	protected JSkatUserPanel userPanel;
 	protected GameInformationPanel gameInfoPanel;
 	protected JPanel gameContextPanel;
-	protected Map<ContextPanelTypes, JPanel> contextPanels;
+	protected Map<ContextPanelType, JPanel> contextPanels;
 	protected TrickPanel trickPanel;
 	protected TrickPanel lastTrickPanel;
 	protected GameOverPanel gameOverPanel;
@@ -114,7 +114,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		playerNamesAndPositions = new HashMap<String, Player>();
 
-		contextPanels = new HashMap<ContextPanelTypes, JPanel>();
+		contextPanels = new HashMap<ContextPanelType, JPanel>();
 
 		getActionMap().get(JSkatAction.INVITE_ISS_PLAYER).setEnabled(true);
 
@@ -188,7 +188,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		return new JSkatUserPanel(getActionMap(), 12, false);
 	}
 
-	protected void addContextPanel(ContextPanelTypes panelType, JPanel panel) {
+	protected void addContextPanel(ContextPanelType panelType, JPanel panel) {
 
 		if (contextPanels.containsKey(panelType)) {
 			// remove existing panel first
@@ -206,17 +206,17 @@ public class SkatTablePanel extends AbstractTabPanel {
 		gameContextPanel.setOpaque(false);
 		gameContextPanel.setLayout(new CardLayout());
 
-		addContextPanel(ContextPanelTypes.START,
+		addContextPanel(ContextPanelType.START,
 				new StartContextPanel((StartSkatSeriesAction) getActionMap().get(JSkatAction.START_LOCAL_SERIES)));
 
 		biddingPanel = new BiddingContextPanel(getActionMap(), bitmaps, userPanel);
-		addContextPanel(ContextPanelTypes.BIDDING, biddingPanel);
+		addContextPanel(ContextPanelType.BIDDING, biddingPanel);
 
 		declaringPanel = new DeclaringContextPanel(getActionMap(), bitmaps, userPanel, 4);
-		addContextPanel(ContextPanelTypes.DECLARING, declaringPanel);
+		addContextPanel(ContextPanelType.DECLARING, declaringPanel);
 
 		schieberamschPanel = new SchieberamschContextPanel(getActionMap(), bitmaps, userPanel, 4);
-		addContextPanel(ContextPanelTypes.SCHIEBERAMSCH, schieberamschPanel);
+		addContextPanel(ContextPanelType.SCHIEBERAMSCH, schieberamschPanel);
 
 		JPanel trickHoldingPanel = new JPanel(new MigLayout("fill", "[shrink][grow][shrink]", //$NON-NLS-1$ //$NON-NLS-2$
 				"fill")); //$NON-NLS-1$
@@ -227,10 +227,10 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		trickHoldingPanel.add(getRightPanelForTrickPanel(), "width 25%"); //$NON-NLS-1$
 		trickHoldingPanel.setOpaque(false);
-		addContextPanel(ContextPanelTypes.TRICK_PLAYING, trickHoldingPanel);
+		addContextPanel(ContextPanelType.TRICK_PLAYING, trickHoldingPanel);
 
 		gameOverPanel = new GameOverPanel(getActionMap(), bitmaps);
-		addContextPanel(ContextPanelTypes.GAME_OVER, gameOverPanel);
+		addContextPanel(ContextPanelType.GAME_OVER, gameOverPanel);
 	}
 
 	private AbstractHandPanel getPlayerPanel(Player player) {
@@ -439,18 +439,18 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		switch (state) {
 		case GAME_START:
-			setContextPanel(ContextPanelTypes.START);
+			setContextPanel(ContextPanelType.START);
 			resetGameData();
 			break;
 		case DEALING:
-			setContextPanel(ContextPanelTypes.START);
+			setContextPanel(ContextPanelType.START);
 			break;
 		case BIDDING:
-			setContextPanel(ContextPanelTypes.BIDDING);
+			setContextPanel(ContextPanelType.BIDDING);
 			getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(false);
 			break;
 		case RAMSCH_GRAND_HAND_ANNOUNCING:
-			setContextPanel(ContextPanelTypes.SCHIEBERAMSCH);
+			setContextPanel(ContextPanelType.SCHIEBERAMSCH);
 			userPanel.setGameState(state);
 			getActionMap().get(JSkatAction.PLAY_GRAND_HAND).setEnabled(true);
 			getActionMap().get(JSkatAction.PLAY_SCHIEBERAMSCH).setEnabled(true);
@@ -458,7 +458,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 			getActionMap().get(JSkatAction.PICK_UP_SKAT).setEnabled(false);
 			break;
 		case SCHIEBERAMSCH:
-			setContextPanel(ContextPanelTypes.SCHIEBERAMSCH);
+			setContextPanel(ContextPanelType.SCHIEBERAMSCH);
 			userPanel.setGameState(state);
 			getActionMap().get(JSkatAction.PLAY_GRAND_HAND).setEnabled(false);
 			getActionMap().get(JSkatAction.PLAY_SCHIEBERAMSCH).setEnabled(false);
@@ -467,7 +467,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 			break;
 		case PICKING_UP_SKAT:
 			if (userPanel.getPosition().equals(declarer)) {
-				setContextPanel(ContextPanelTypes.DECLARING);
+				setContextPanel(ContextPanelType.DECLARING);
 				userPanel.setGameState(state);
 				getActionMap().get(JSkatAction.PICK_UP_SKAT).setEnabled(true);
 				getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
@@ -480,17 +480,17 @@ public class SkatTablePanel extends AbstractTabPanel {
 			break;
 		case DECLARING:
 			if (userPanel.getPosition().equals(declarer)) {
-				setContextPanel(ContextPanelTypes.DECLARING);
+				setContextPanel(ContextPanelType.DECLARING);
 			}
 			break;
 		case TRICK_PLAYING:
-			setContextPanel(ContextPanelTypes.TRICK_PLAYING);
+			setContextPanel(ContextPanelType.TRICK_PLAYING);
 			userPanel.setGameState(state);
 			break;
 		case CALCULATING_GAME_VALUE:
 		case PRELIMINARY_GAME_END:
 		case GAME_OVER:
-			setContextPanel(ContextPanelTypes.GAME_OVER);
+			setContextPanel(ContextPanelType.GAME_OVER);
 			break;
 		}
 	}
@@ -510,7 +510,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param panelType
 	 *            Panel type
 	 */
-	void setContextPanel(ContextPanelTypes panelType) {
+	void setContextPanel(ContextPanelType panelType) {
 
 		((CardLayout) gameContextPanel.getLayout()).show(gameContextPanel, panelType.toString());
 	}
@@ -928,7 +928,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		if (SeriesState.SERIES_FINISHED.equals(state)) {
 
-			setContextPanel(ContextPanelTypes.START);
+			setContextPanel(ContextPanelType.START);
 		}
 	}
 

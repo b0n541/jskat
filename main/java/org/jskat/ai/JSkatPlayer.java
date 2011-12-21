@@ -229,7 +229,7 @@ public interface JSkatPlayer {
 	/**
 	 * Holds all player states
 	 */
-	public enum PlayerStates {
+	public enum PlayerState {
 		/**
 		 * Player waits
 		 */

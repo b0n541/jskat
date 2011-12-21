@@ -158,7 +158,7 @@ public class SkatTableOptions extends Observable {
 	 * 
 	 * @return Value of property rules.
 	 */
-	public RuleSets getRules() {
+	public RuleSet getRules() {
 
 		return this.rules;
 	}
@@ -169,7 +169,7 @@ public class SkatTableOptions extends Observable {
 	 * @param newRules
 	 *            New value of property rules.
 	 */
-	public void setRules(RuleSets newRules) {
+	public void setRules(RuleSet newRules) {
 
 		this.rules = newRules;
 	}
@@ -370,7 +370,7 @@ public class SkatTableOptions extends Observable {
 	 * 
 	 * @return Value of property ramschSkat.
 	 */
-	public RamschSkatOwners getRamschSkat() {
+	public RamschSkatOwner getRamschSkat() {
 
 		return this.ramschSkat;
 	}
@@ -381,7 +381,7 @@ public class SkatTableOptions extends Observable {
 	 * @param newRamschSkat
 	 *            New value of property ramschSkat.
 	 */
-	public void setRamschSkat(RamschSkatOwners newRamschSkat) {
+	public void setRamschSkat(RamschSkatOwner newRamschSkat) {
 
 		this.ramschSkat = newRamschSkat;
 	}
@@ -517,7 +517,7 @@ public class SkatTableOptions extends Observable {
 	/**
 	 * Holds the different rule sets
 	 */
-	public enum RuleSets {
+	public enum RuleSet {
 		/**
 		 * Official rules according the ISPA
 		 */
@@ -535,7 +535,7 @@ public class SkatTableOptions extends Observable {
 	/**
 	 * Holds different rules for the owner of the skat after a ramsch game
 	 */
-	public enum RamschSkatOwners {
+	public enum RamschSkatOwner {
 		/**
 		 * Skat goes to winner of last trick
 		 */
@@ -560,7 +560,7 @@ public class SkatTableOptions extends Observable {
 
 	private int thirdPlayerType = 0;
 
-	private RuleSets rules = RuleSets.ISPA;
+	private RuleSet rules = RuleSet.ISPA;
 
 	private boolean playContra = false;
 
@@ -580,7 +580,7 @@ public class SkatTableOptions extends Observable {
 
 	private boolean bockEventPlayerHasX00Points = false;
 
-	private RamschSkatOwners ramschSkat = RamschSkatOwners.LAST_TRICK;
+	private RamschSkatOwner ramschSkat = RamschSkatOwner.LAST_TRICK;
 
 	private boolean schieberRamsch = false;
 

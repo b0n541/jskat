@@ -33,7 +33,7 @@ import org.jskat.data.JSkatOptions;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatGameResult;
-import org.jskat.data.SkatTableOptions.RuleSets;
+import org.jskat.data.SkatTableOptions.RuleSet;
 import org.jskat.data.Trick;
 import org.jskat.gui.JSkatView;
 import org.jskat.gui.human.HumanPlayer;
@@ -367,7 +367,7 @@ public class SkatGame extends JSkatThread {
 
 			JSkatOptions options = JSkatOptions.instance();
 
-			if (!RuleSets.ISPA.equals(options.getRules()) && options.isPlayRamsch() && options.isRamschEventNoBid()) {
+			if (!RuleSet.ISPA.equals(options.getRules()) && options.isPlayRamsch() && options.isRamschEventNoBid()) {
 				log.debug("Playing ramsch due to no bid"); //$NON-NLS-1$
 				GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 				factory.setGameType(GameType.RAMSCH);

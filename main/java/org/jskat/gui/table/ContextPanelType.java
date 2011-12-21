@@ -23,7 +23,7 @@ package org.jskat.gui.table;
 /**
  * Panel types for all game contexts
  */
-public enum ContextPanelTypes {
+public enum ContextPanelType {
 
 	/**
 	 * Start panel

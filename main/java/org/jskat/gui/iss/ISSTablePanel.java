@@ -37,7 +37,7 @@ import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.PlayerStatus;
 import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.gui.action.JSkatAction;
-import org.jskat.gui.table.ContextPanelTypes;
+import org.jskat.gui.table.ContextPanelType;
 import org.jskat.gui.table.JSkatUserPanel;
 import org.jskat.gui.table.OpponentPanel;
 import org.jskat.gui.table.SkatTablePanel;
@@ -88,9 +88,9 @@ public class ISSTablePanel extends SkatTablePanel {
 		panel.add(chatPanel, "width 20%, growy"); //$NON-NLS-1$
 
 		// replace game start context panel
-		addContextPanel(ContextPanelTypes.START, new StartContextPanel(this.getActionMap()));
+		addContextPanel(ContextPanelType.START, new StartContextPanel(this.getActionMap()));
 		// FIXME (jan 07.12.2010) add game over panel
-		addContextPanel(ContextPanelTypes.GAME_OVER, new StartContextPanel(this.getActionMap()));
+		addContextPanel(ContextPanelType.GAME_OVER, new StartContextPanel(this.getActionMap()));
 		setGameState(GameState.GAME_START);
 
 		return panel;

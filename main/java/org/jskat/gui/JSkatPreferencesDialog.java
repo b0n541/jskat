@@ -47,8 +47,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatOptions.SupportedLanguage;
-import org.jskat.data.SkatTableOptions.RamschSkatOwners;
-import org.jskat.data.SkatTableOptions.RuleSets;
+import org.jskat.data.SkatTableOptions.RamschSkatOwner;
+import org.jskat.data.SkatTableOptions.RuleSet;
 import org.jskat.gui.img.CardFace;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.JSkatResourceBundle;
@@ -93,7 +93,7 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 	private JCheckBox bockEventLostAfterContra;
 	private JCheckBox bockEventContraReAnnounced;
 	private JCheckBox bockEventPlayerHasX00Points;
-	private RamschSkatOwners ramschSkat = RamschSkatOwners.LAST_TRICK;
+	private RamschSkatOwner ramschSkat = RamschSkatOwner.LAST_TRICK;
 	private JCheckBox schiebeRamsch;
 	private JCheckBox schieberRamschJacksInSkat;
 	private JCheckBox ramschEventNoBid;
@@ -415,16 +415,16 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		rulesetISPA = new JRadioButton("ISPA rules");
 		rulesetISPA.addActionListener(rbChange);
 		rulesPanel.add(rulesetISPA);
-		rulesetISPA.setSelected(options.getRules()==RuleSets.ISPA);
+		rulesetISPA.setSelected(options.getRules()==RuleSet.ISPA);
 		bg.add(rulesetISPA);
 		rulesetPub = new JRadioButton("pub rules");
 		rulesetPub.addActionListener(rbChange);
-		rulesetPub.setSelected(options.getRules()==RuleSets.PUB);
+		rulesetPub.setSelected(options.getRules()==RuleSet.PUB);
 		rulesPanel.add(rulesetPub, "wrap");
 		bg.add(rulesetPub);
 		rulesPanel.add(new JLabel(""));
 		rulesetIndividual = new JRadioButton("individual rules");
-		rulesetIndividual.setSelected(options.getRules()==RuleSets.INDIVIDUAL);
+		rulesetIndividual.setSelected(options.getRules()==RuleSet.INDIVIDUAL);
 		rulesetIndividual.addActionListener(rbChange);
 		rulesPanel.add(rulesetIndividual, "wrap");
 		bg.add(rulesetIndividual);
@@ -515,7 +515,7 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 			options.setIssPort(Integer.valueOf(issPort.getText()));
 			
 			if(rulesetISPA.isSelected()) {
-				options.setRules(RuleSets.ISPA);
+				options.setRules(RuleSet.ISPA);
 				options.setRamschEventNoBid(false);
 				options.setBockEventContraReAnnounced(false);
 				options.setBockEventLostGrand(false);
@@ -527,10 +527,10 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 				options.setPlayRevolution(false);
 				options.setSchieberRamsch(false);
 				options.setSchieberRamschJacksInSkat(false);
-				options.setRamschSkat(RamschSkatOwners.LAST_TRICK);
+				options.setRamschSkat(RamschSkatOwner.LAST_TRICK);
 			}
 			else {
-				options.setRules(rulesetPub.isSelected()?RuleSets.PUB:RuleSets.INDIVIDUAL);
+				options.setRules(rulesetPub.isSelected()?RuleSet.PUB:RuleSet.INDIVIDUAL);
 				options.setRamschEventNoBid(rulesetPub.isSelected() || ramschEventNoBid.isSelected());
 				options.setBockEventContraReAnnounced(rulesetPub.isSelected() || bockEventContraReAnnounced.isSelected());
 				options.setBockEventLostGrand(rulesetPub.isSelected() || bockEventLostGrand.isSelected());
@@ -542,7 +542,7 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 				options.setPlayRevolution(rulesetPub.isSelected() || playRevolution.isSelected());
 				options.setSchieberRamsch(rulesetPub.isSelected() || schiebeRamsch.isSelected());
 				options.setSchieberRamschJacksInSkat(!rulesetPub.isSelected() && schieberRamschJacksInSkat.isSelected());
-				options.setRamschSkat(RamschSkatOwners.LAST_TRICK);
+				options.setRamschSkat(RamschSkatOwner.LAST_TRICK);
 			}
 
 			options.saveJSkatProperties();

@@ -12,7 +12,7 @@ import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.SkatGameResult;
-import org.jskat.data.SkatTableOptions.RuleSets;
+import org.jskat.data.SkatTableOptions.RuleSet;
 import org.jskat.gui.UnitTestView;
 import org.jskat.util.GameType;
 import org.jskat.util.GameVariant;
@@ -31,7 +31,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 	public void testPassIn_NoBids() {
 
 		JSkatOptions options = JSkatOptions.instance();
-		options.setRules(RuleSets.ISPA);
+		options.setRules(RuleSet.ISPA);
 
 		SkatGame game = new SkatGame("Table 1", GameVariant.STANDARD, new NoBiddingTestPlayer(), //$NON-NLS-1$
 				new NoBiddingTestPlayer(), new NoBiddingTestPlayer());
@@ -61,7 +61,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 	public void testPassIn_NoBids2() {
 
 		JSkatOptions options = JSkatOptions.instance();
-		options.setRules(RuleSets.ISPA);
+		options.setRules(RuleSet.ISPA);
 		options.setPlayRamsch(true);
 		options.setRamschEventNoBid(true);
 
@@ -92,7 +92,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 	public void testRamsch_NoBids() {
 
 		JSkatOptions options = JSkatOptions.instance();
-		options.setRules(RuleSets.PUB);
+		options.setRules(RuleSet.PUB);
 		options.setPlayRamsch(true);
 		options.setRamschEventNoBid(true);
 
