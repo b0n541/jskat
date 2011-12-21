@@ -1122,6 +1122,20 @@ public class JSkatViewImpl implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void showNewVersionAvailableMessage(String newVersion) {
+
+		String title = strings.getString("new_version_title"); //$NON-NLS-1$
+
+		String message = MessageFormat.format(strings.getString("new_version_message"), //$NON-NLS-1$
+				newVersion);
+
+		showMessage(JOptionPane.INFORMATION_MESSAGE, title, message);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void addTrainingResult(GameType gameType, long episodes, long totalWonGames, long episodeWonGames,
 			double avgDifference) {
 

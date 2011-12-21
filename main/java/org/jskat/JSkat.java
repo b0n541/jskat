@@ -27,6 +27,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.PropertyConfigurator;
 import org.jskat.control.JSkatMaster;
+import org.jskat.data.JSkatOptions;
 import org.jskat.gui.JSkatViewImpl;
 import org.jskat.gui.LookAndFeelSetter;
 
@@ -53,8 +54,10 @@ public class JSkat {
 		log.debug("Welcome to JSkat!"); //$NON-NLS-1$
 		trySettingNimbusLookAndFeel();
 		JSkatMaster jskat = JSkatMaster.instance();
-		jskat.checkJSkatVersion();
 		jskat.setView(new JSkatViewImpl());
+		if (JSkatOptions.instance().isCheckForNewVersionAtStartUp()) {
+			jskat.checkJSkatVersion();
+		}
 	}
 
 	/**

@@ -66,6 +66,8 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 
 	private JFrame parent;
 
+	// general options
+	private JCheckBox checkForNewVersion;
 	private JComboBox language;
 	private ButtonGroup cardFace;
 	private JRadioButton cardFaceFrench;
@@ -200,6 +202,9 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		JTabbedPane prefTabs = new JTabbedPane();
 
 		JPanel commonTab = new JPanel(new MigLayout("fill", "fill", "shrink")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+		commonTab.add(new JLabel(strings.getString("check_for_new_version"))); //$NON-NLS-1$
+		commonTab.add(getCheckVersionPanel(), "wrap"); //$NON-NLS-1$
 
 		commonTab.add(new JLabel(strings.getString("language"))); //$NON-NLS-1$
 		commonTab.add(getLanguagePanel(), "wrap"); //$NON-NLS-1$
@@ -379,6 +384,15 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		return gameShortCutPanel;
 	}
 
+	private JPanel getCheckVersionPanel() {
+		checkForNewVersion = new JCheckBox(strings.getString("check_for_new_version_at_start_up")); //$NON-NLS-1$
+		checkForNewVersion.setSelected(options.isCheckForNewVersionAtStartUp());
+
+		JPanel checkVersionPanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+		checkVersionPanel.add(checkForNewVersion);
+		return checkVersionPanel;
+	}
+
 	private JPanel getLanguagePanel() {
 
 		language = new JComboBox(SupportedLanguage.values());
@@ -490,6 +504,7 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 			setVisible(false);
 		} else if ("OK".equals(e.getActionCommand())) { //$NON-NLS-1$
 
+			options.setCheckForNewVersionAtStartUp(checkForNewVersion.isSelected());
 			options.setLanguage((SupportedLanguage) language.getSelectedItem());
 			options.setCardFace(getSelectedCardFace());
 			options.setSavePath(savePath.getText());

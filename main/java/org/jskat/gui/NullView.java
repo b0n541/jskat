@@ -606,4 +606,12 @@ public class NullView implements JSkatView {
 	public void setGeschoben(String tableName, Player player) {
 		// empty method by indent
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void showNewVersionAvailableMessage(String newVersion) {
+		// empty method by indent
+	}
 }

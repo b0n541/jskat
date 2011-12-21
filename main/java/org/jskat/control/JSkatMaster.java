@@ -93,12 +93,13 @@ public class JSkatMaster {
 	/**
 	 * Checks the version of JSkat
 	 */
-	public static void checkJSkatVersion() {
+	public void checkJSkatVersion() {
 		String latestVersion = VersionChecker.getLatestVersion();
 		log.debug("Latest version web: " + latestVersion); //$NON-NLS-1$
 		log.debug("Latest version local: " + JSkat.getVersion()); //$NON-NLS-1$
 		if (VersionChecker.isHigherVersionAvailable(latestVersion)) {
 			log.debug("Newer version " + latestVersion + " is available on the JSkat website."); //$NON-NLS-1$//$NON-NLS-2$
+			view.showNewVersionAvailableMessage(latestVersion);
 		}
 	}
 

@@ -177,6 +177,14 @@ public interface JSkatView {
 	public void showCardNotAllowedMessage(Card card);
 
 	/**
+	 * Shows a message, that a new version is available
+	 * 
+	 * @param newVersion
+	 *            New version
+	 */
+	public void showNewVersionAvailableMessage(String newVersion);
+
+	/**
 	 * Shows preferences dialog
 	 */
 	public void showPreferences();
