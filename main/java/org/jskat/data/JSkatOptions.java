@@ -152,17 +152,21 @@ public class JSkatOptions {
 			if (property.equals("checkForNewVersionAtStartUp")) {
 				setCheckForNewVersionAtStartUp(Boolean.valueOf(value).booleanValue());
 			} else if (property.equals("language")) { //$NON-NLS-1$
-
-				SupportedLanguage newLanguage = SupportedLanguage.valueOf(value);
-				if (newLanguage == null) {
+				SupportedLanguage newLanguage = null;
+				try {
+					newLanguage = SupportedLanguage.valueOf(value);
+				} catch (IllegalArgumentException e) {
+					// parsing of older options failed
 					newLanguage = JSkatOptions.SupportedLanguage.ENGLISH;
 				}
 				setLanguage(newLanguage);
 
 			} else if (property.equals("cardFace")) { //$NON-NLS-1$
-
-				CardFace newCardFace = CardFace.valueOf(value);
-				if (newCardFace == null) {
+				CardFace newCardFace = null;
+				try {
+					newCardFace = CardFace.valueOf(value);
+				} catch (IllegalArgumentException e) {
+					// parsing of older options failed
 					newCardFace = CardFace.TOURNAMENT;
 				}
 				setCardFace(newCardFace);
@@ -190,7 +194,14 @@ public class JSkatOptions {
 			} else if (property.equals("thirdPlayerType")) {
 				setThirdPlayerType(Integer.parseInt(value));
 			} else if (property.equals("rules")) {
-				setRules(SkatTableOptions.RuleSets.valueOf(value));
+				SkatTableOptions.RuleSets rules = null;
+				try {
+					rules = SkatTableOptions.RuleSets.valueOf(value);
+				} catch (IllegalArgumentException e) {
+					// parsing of older options failed
+					rules = SkatTableOptions.RuleSets.ISPA;
+				}
+				setRules(rules);
 			} else if (property.equals("playContra")) {
 				setPlayContra(Boolean.valueOf(value).booleanValue());
 			} else if (property.equals("playBock")) {
