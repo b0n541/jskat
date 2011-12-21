@@ -33,6 +33,7 @@ import javax.swing.JButton;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jskat.JSkat;
 import org.jskat.ai.JSkatPlayer;
 import org.jskat.ai.PlayerType;
 import org.jskat.ai.nn.data.SkatNetworks;
@@ -95,7 +96,7 @@ public class JSkatMaster {
 	public static void checkJSkatVersion() {
 		String latestVersion = VersionChecker.getLatestVersion();
 		log.debug("Latest version web: " + latestVersion); //$NON-NLS-1$
-		log.debug("Latest version local: " + JSkatOptions.getVersion()); //$NON-NLS-1$
+		log.debug("Latest version local: " + JSkat.getVersion()); //$NON-NLS-1$
 		if (VersionChecker.isHigherVersionAvailable(latestVersion)) {
 			log.debug("Newer version " + latestVersion + " is available on the JSkat website."); //$NON-NLS-1$//$NON-NLS-2$
 		}

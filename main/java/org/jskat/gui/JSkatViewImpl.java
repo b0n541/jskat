@@ -49,6 +49,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jskat.JSkat;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.SkatTable;
 import org.jskat.control.iss.ChatMessageType;
@@ -444,7 +445,7 @@ public class JSkatViewImpl implements JSkatView {
 		JOptionPane.showMessageDialog(mainFrame, "JSkat " //$NON-NLS-1$
 				+ strings.getString("version") //$NON-NLS-1$
 				+ " " //$NON-NLS-1$
-				+ JSkatOptions.getVersion() + "\n\n" //$NON-NLS-1$
+				+ JSkat.getVersion() + "\n\n" //$NON-NLS-1$
 				+ "http://www.jskat.org\n" //$NON-NLS-1$
 				+ "http://sourceforge.net/projects/jskat" //$NON-NLS-1$
 				+ "\n\n" //$NON-NLS-1$

@@ -38,6 +38,8 @@ public class JSkat {
 
 	private static Log log = LogFactory.getLog(JSkat.class);
 
+	private static String VERSION = "0.10.0"; //$NON-NLS-1$
+
 	/**
 	 * Main method
 	 * 
@@ -53,6 +55,15 @@ public class JSkat {
 		JSkatMaster jskat = JSkatMaster.instance();
 		jskat.checkJSkatVersion();
 		jskat.setView(new JSkatViewImpl());
+	}
+
+	/**
+	 * Gets the version of JSkat
+	 * 
+	 * @return Version of JSkat
+	 */
+	public static String getVersion() {
+		return VERSION;
 	}
 
 	private static void trySettingNimbusLookAndFeel() {

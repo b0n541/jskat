@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.jskat.data.JSkatOptions;
+import org.jskat.JSkat;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -58,7 +58,7 @@ public class VersionChecker {
 	public static boolean isHigherVersionAvailable(String remoteVersion) {
 		boolean result = false;
 
-		List<Integer> localVersionParts = getVersionParts(JSkatOptions.getVersion());
+		List<Integer> localVersionParts = getVersionParts(JSkat.getVersion());
 		List<Integer> remoteVersionParts = getVersionParts(remoteVersion);
 
 		int index = 0;
