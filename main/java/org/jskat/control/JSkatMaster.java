@@ -774,4 +774,16 @@ public class JSkatMaster {
 
 		view.addTrainingResult(gameType, episodes, totalWonGames, episodeWonGames, avgDifference);
 	}
+
+	/**
+	 * Shows the welcome dialog
+	 */
+	public void showWelcomeDialog() {
+		if(view!=null) {
+			view.showWelcomeDialog();
+		}
+		else {
+			log.warn("no view for welcome message found");
+		}
+	}
 }

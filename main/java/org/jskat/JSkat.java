@@ -55,6 +55,11 @@ public class JSkat {
 		trySettingNimbusLookAndFeel();
 		JSkatMaster jskat = JSkatMaster.instance();
 		jskat.setView(new JSkatViewImpl());
+		
+		if(JSkatOptions.instance().isFirstUse()) {
+			jskat.showWelcomeDialog();
+		}
+
 		if (JSkatOptions.instance().isCheckForNewVersionAtStartUp()) {
 			jskat.checkJSkatVersion();
 		}
