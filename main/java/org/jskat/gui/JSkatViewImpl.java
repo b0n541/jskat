@@ -621,18 +621,8 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showHelpDialog() {
 
-		String languageCode = "en"; //$NON-NLS-1$
-		switch (JSkatOptions.instance().getLanguage()) {
-		case GERMAN:
-			languageCode = "de"; //$NON-NLS-1$
-			break;
-		case ENGLISH:
-			languageCode = "en"; //$NON-NLS-1$
-			break;
-		}
-
 		new JSkatHelpDialog(mainFrame,
-				strings.getString("help"), "org/jskat/gui/help/" + languageCode + "/contents.html") //$NON-NLS-1$ 
+				strings.getString("help"), "org/jskat/gui/help/" + JSkatOptions.instance().getLanguageCode() + "/contents.html") //$NON-NLS-1$ 
 				.setVisible(true);
 	}
 
@@ -643,6 +633,16 @@ public class JSkatViewImpl implements JSkatView {
 	public void showLicenseDialog() {
 
 		new JSkatHelpDialog(mainFrame, strings.getString("license"), "org/jskat/gui/help/gpl3.html").setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void showWelcomeDialog() {
+
+		new JSkatHelpDialog(mainFrame, strings.getString("welcome_to_jskat"), "org/jskat/gui/help/" 
+				+ JSkatOptions.instance().getLanguageCode() + "/welcome.html").setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

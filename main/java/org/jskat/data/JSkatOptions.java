@@ -31,6 +31,7 @@ import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+
 import org.jskat.data.SkatTableOptions.RamschSkatOwner;
 import org.jskat.data.SkatTableOptions.RuleSet;
 import org.jskat.gui.img.CardFace;
@@ -83,6 +84,8 @@ public class JSkatOptions {
 	private String issAddress = "skatgame.net";
 
 	private Integer issPort = Integer.valueOf(7000);
+	
+	private final boolean firstUse;
 
 	/**
 	 * Returns the instance of the Singleton JSkatOptions
@@ -104,13 +107,15 @@ public class JSkatOptions {
 
 		setStandardProperties();
 
+		boolean firstUse = false;
 		try {
 			loadOptions();
 
 		} catch (FileNotFoundException e) {
 
 			log.debug("No properties file found. Using standard values."); //$NON-NLS-1$
-
+			
+			firstUse = true;
 			File dir = new File(System.getProperty("user.home") + System.getProperty("file.separator") + ".jskat"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			dir.mkdir();
 			String filename = System.getProperty("user.home") + System.getProperty("file.separator") + ".jskat" + System.getProperty("file.separator") + "jskat.properties"; //$NON-NLS-1$ //$NON-NLS-2$
@@ -131,6 +136,7 @@ public class JSkatOptions {
 			log.warn("Could not load properties: " + e.getClass() + ": " //$NON-NLS-1$ //$NON-NLS-2$
 					+ e.getMessage());
 		}
+		this.firstUse = firstUse;
 	}
 
 	private void loadOptions() throws FileNotFoundException, IOException {
@@ -338,6 +344,11 @@ public class JSkatOptions {
 	private void setStandardProperties() {
 
 		// use standard values for the options
+		String lang = System.getProperty("user.language", "en");
+		if(lang.equalsIgnoreCase("DE")) {
+			this.language = SupportedLanguage.GERMAN;
+		}
+
 		jskatProperties.setProperty("checkForNewVersionAtStartUp", String.valueOf(checkForNewVersionAtStartUp));
 		language = getDefaultLanguage();
 		jskatProperties.setProperty("language", String.valueOf(language));
@@ -413,6 +424,34 @@ public class JSkatOptions {
 		return this.language;
 	}
 
+	/**
+	 * Modified getter for property language, providing a two-letter code (e.g. "en", "de").
+	 * 
+	 * @return modified value of property language.
+	 */
+	public String getLanguageCode() {
+		String languageCode = "en"; //$NON-NLS-1$
+		switch (this.language) {
+		case GERMAN:
+			languageCode = "de"; //$NON-NLS-1$
+			break;
+		case ENGLISH:
+			languageCode = "en"; //$NON-NLS-1$
+			break;
+		}
+		return languageCode;
+	}
+
+	/**
+	 * Flag that is set if JSkat seems to be used for the first time.
+	 * The flag is set if no option file is found.
+	 *
+	 * @return true, if this is the first use of JSkat
+	 */
+	public boolean isFirstUse() {
+		return firstUse;
+	}
+	
 	/**
 	 * Setter for property language.
 	 * 

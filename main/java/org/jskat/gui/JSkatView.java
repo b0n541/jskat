@@ -374,6 +374,11 @@ public interface JSkatView {
 	public void showLicenseDialog();
 
 	/**
+	 * Shows the welcome dialog
+	 */
+	public void showWelcomeDialog();
+
+	/**
 	 * Clears a complete table
 	 * 
 	 * @param tableName

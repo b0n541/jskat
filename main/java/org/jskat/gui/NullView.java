@@ -242,6 +242,14 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public void showWelcomeDialog() {
+		// empty method by indent
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public void clearTable(@SuppressWarnings("unused") String tableName) {
 		// empty method by indent
 	}

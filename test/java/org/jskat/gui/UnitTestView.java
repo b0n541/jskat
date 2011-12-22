@@ -263,6 +263,12 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
+	public void showWelcomeDialog() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
 	public void clearTable(String tableName) {
 		// TODO Auto-generated method stub
 
