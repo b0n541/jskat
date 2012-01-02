@@ -492,6 +492,9 @@ public class SkatGameData {
 			result.setMultiplier(rules.getMultiplier(this));
 			result.setPlayWithJacks(rules.isPlayWithJacks(this));
 		}
+		else if(GameType.RAMSCH.equals(announcement.gameType)) {
+			finishRamschGame();
+		}
 
 		if (result.isWon() && getBidValue() > result.getGameValue()) {
 
@@ -510,7 +513,7 @@ public class SkatGameData {
 	public void finishRamschGame() {
 
 		Player ramschLoser;
-		getGameResult().setWon(false);
+		result.setWon(false);
 
 		// FIXME this is rule logic --> remove it from data object!!!
 		if (playerPoints.get(Player.FOREHAND).intValue() > playerPoints.get(Player.MIDDLEHAND).intValue()) {
@@ -520,7 +523,7 @@ public class SkatGameData {
 			} else {
 				if (playerPoints.get(Player.FOREHAND).intValue() == playerPoints.get(Player.REARHAND).intValue()) {
 					ramschLoser = Player.MIDDLEHAND;
-					getGameResult().setWon(true);
+					result.setWon(true);
 				} else {
 					ramschLoser = Player.REARHAND;
 				}
@@ -533,7 +536,7 @@ public class SkatGameData {
 			} else {
 				if (playerPoints.get(Player.MIDDLEHAND).intValue() == playerPoints.get(Player.REARHAND).intValue()) {
 					ramschLoser = Player.FOREHAND;
-					getGameResult().setWon(true);
+					result.setWon(true);
 				} else {
 					ramschLoser = Player.REARHAND;
 				}
@@ -543,7 +546,7 @@ public class SkatGameData {
 		setDeclarer(ramschLoser);
 
 		if (isDurchmarsch()) {
-			getGameResult().setWon(true);
+			result.setWon(true);
 		}
 	}
 

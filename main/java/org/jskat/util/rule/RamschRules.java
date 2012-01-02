@@ -37,16 +37,7 @@ public class RamschRules extends SuitGrandRamschRules {
 
 		int highestPlayerPoints = getGetHighestPlayerPoints(gameData);
 
-		int multiplier = 1;
-
-		// TODO two player can be jungfrau
-		if (gameData.isJungfrau()) {
-			multiplier = multiplier * 2;
-		}
-
-		multiplier = (int) (multiplier * Math.pow(2, gameData.getGeschoben()));
-
-		return highestPlayerPoints * multiplier;
+		return highestPlayerPoints * getMultiplier(gameData);
 	}
 
 	private int getGetHighestPlayerPoints(SkatGameData gameData) {
@@ -127,8 +118,15 @@ public class RamschRules extends SuitGrandRamschRules {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int getMultiplier(@SuppressWarnings("unused") SkatGameData gameData) {
-		return 0;
+	public int getMultiplier(SkatGameData gameData) {
+		int multiplier = 1;
+
+		if (gameData.isJungfrau()) {
+			multiplier = 2;
+		}
+
+		multiplier = (int) (multiplier * Math.pow(2, gameData.getGeschoben()));
+		return multiplier;
 	}
 
 	/**

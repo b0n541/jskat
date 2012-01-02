@@ -286,4 +286,19 @@ public class SkatGameResult implements Cloneable {
 	public int getFinalDeclarerPoints() {
 		return finalDeclarerPoints;
 	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(gameValue).append(", mult:").append(multiplier);
+		if(overBidded) sb.append(" (overbidded)");
+		if(durchmarsch) sb.append(" (Durchmarsch)");
+		if(jungfrau) sb.append(" (Jungfrau)");
+		if(schwarz) sb.append(" (Schwarz)");
+		else if (schneider) sb.append(" (Schneider)");
+		return sb.toString();
+	}
 }
