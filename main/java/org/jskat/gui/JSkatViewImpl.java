@@ -162,7 +162,6 @@ public class JSkatViewImpl implements JSkatView {
 		initGUI();
 
 		skatSeriesStartDialog = new SkatSeriesStartDialog(jskat, mainFrame);
-		// FIXME (jansch 08.12.2010) make this part of the main frame
 		preferencesDialog = new JSkatPreferencesDialog(mainFrame);
 		trainingOverview = new NeuralNetworkTrainingOverview();
 
@@ -622,7 +621,7 @@ public class JSkatViewImpl implements JSkatView {
 	public void showHelpDialog() {
 
 		new JSkatHelpDialog(mainFrame,
-				strings.getString("help"), "org/jskat/gui/help/" + JSkatOptions.instance().getLanguageCode() + "/contents.html") //$NON-NLS-1$ 
+				strings.getString("help"), "org/jskat/gui/help/" + JSkatOptions.instance().getI18NCode() + "/contents.html") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
 				.setVisible(true);
 	}
 
@@ -641,8 +640,8 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showWelcomeDialog() {
 
-		new JSkatHelpDialog(mainFrame, strings.getString("welcome_to_jskat"), "org/jskat/gui/help/" 
-				+ JSkatOptions.instance().getLanguageCode() + "/welcome.html").setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
+		new JSkatHelpDialog(mainFrame, strings.getString("welcome_to_jskat"), "org/jskat/gui/help/" //$NON-NLS-1$ //$NON-NLS-2$
+				+ JSkatOptions.instance().getI18NCode() + "/welcome.html").setVisible(true); //$NON-NLS-1$
 	}
 
 	/**
