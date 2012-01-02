@@ -31,15 +31,15 @@ public enum PlayerType {
 	/**
 	 * Algorithmic player
 	 */
-	ALGORITHMIC("org.jskat.ai.algorithmic.AlgorithmicAIPlayer"),
+	ALGORITHMIC("org.jskat.ai.algorithmic.AlgorithmicAIPlayer"), //$NON-NLS-1$
 	/**
 	 * Random player
 	 */
-	RANDOM("org.jskat.ai.rnd.AIPlayerRND"),
+	RANDOM("org.jskat.ai.rnd.AIPlayerRND"), //$NON-NLS-1$
 	/**
 	 * Neural network player
 	 */
-	NEURAL_NETWORK("org.jskat.ai.nn.AIPlayerNN"),
+	NEURAL_NETWORK("org.jskat.ai.nn.AIPlayerNN"), //$NON-NLS-1$
 	/**
 	 * Human player
 	 */

@@ -33,7 +33,6 @@ import org.jskat.data.JSkatOptions;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatGameResult;
-import org.jskat.data.SkatTableOptions.RuleSet;
 import org.jskat.data.Trick;
 import org.jskat.gui.JSkatView;
 import org.jskat.gui.human.HumanPlayer;
@@ -364,10 +363,11 @@ public class SkatGame extends JSkatThread {
 			log.debug("Player " + data.getDeclarer() //$NON-NLS-1$
 					+ " wins the bidding."); //$NON-NLS-1$
 		} else {
-
+			// FIXME (jansch 02.01.2012) use cloned rule options here (see
+			// MantisBT: 0000037)
 			JSkatOptions options = JSkatOptions.instance();
 
-			if (!RuleSet.ISPA.equals(options.getRules()) && options.isPlayRamsch() && options.isRamschEventNoBid()) {
+			if (options.isPlayRamsch() && options.isRamschEventNoBid()) {
 				log.debug("Playing ramsch due to no bid"); //$NON-NLS-1$
 				GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 				factory.setGameType(GameType.RAMSCH);

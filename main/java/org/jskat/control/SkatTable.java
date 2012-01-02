@@ -73,6 +73,8 @@ public class SkatTable {
 	 * 
 	 * @param rounds
 	 *            Number of rounds to be played
+	 * @param unlimitedRounds
+	 * @param onlyPlayRamsch
 	 */
 	public void startSkatSeries(int rounds, boolean unlimitedRounds, boolean onlyPlayRamsch) {
 

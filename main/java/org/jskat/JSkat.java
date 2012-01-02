@@ -56,7 +56,7 @@ public class JSkat {
 		JSkatMaster jskat = JSkatMaster.instance();
 		jskat.setView(new JSkatViewImpl());
 		
-		if(JSkatOptions.instance().isFirstUse()) {
+		if(JSkatOptions.instance().isShowFirstSteps()) {
 			jskat.showWelcomeDialog();
 		}
 

@@ -31,7 +31,7 @@ import java.util.Properties;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
+import org.jskat.ai.PlayerType;
 import org.jskat.data.SkatTableOptions.RamschSkatOwner;
 import org.jskat.data.SkatTableOptions.RuleSet;
 import org.jskat.gui.img.CardFace;
@@ -40,10 +40,6 @@ import org.jskat.gui.img.CardFace;
  * Holds all options of JSkat
  */
 public class JSkatOptions {
-
-	private static Log log = LogFactory.getLog(JSkatOptions.class);
-
-	static private JSkatOptions optionsInstance = null;
 
 	/**
 	 * Languages supported by JSkat
@@ -59,33 +55,13 @@ public class JSkatOptions {
 		GERMAN;
 	}
 
-	private Properties jskatProperties = new Properties();
+	private enum Option {
+		bockEventContraReAnnounced, bockEventLostAfterContra, bockEventLostGrand, bockEventLostWith60, bockEventPlayerHasX00Points, cardFace, cheatDebugMode, checkForNewVersionAtStartUp, firstPlayerName, firstPlayerType, gameShortCut, issAddress, issPort, language, maxPlayerCount, playBock, playContra, playRamsch, playRevolution, ramschEventNoBid, ramschEventRamschAfterBock, ramschGrandHandPossible, ramschSkatOwner, rules, savePath, schieberRamsch, schieberRamschJacksInSkat, secondPlayerName, secondPlayerType, showCards, showFirstSteps, thirdPlayerName, thirdPlayerType, trickRemoveAfterClick, trickRemoveDelayTime, contraAfterBid18;
+	}
 
-	private boolean checkForNewVersionAtStartUp = false;
+	private static Log log = LogFactory.getLog(JSkatOptions.class);
 
-	private SupportedLanguage language = SupportedLanguage.ENGLISH;
-
-	private String savePath = "";
-
-	private int trickRemoveDelayTime = 1000;
-
-	private boolean trickRemoveAfterClick = false;
-
-	private boolean gameShortCut = false;
-
-	private boolean cheatDebugMode = false;
-
-	private CardFace cardFace = CardFace.TOURNAMENT;
-
-	private SkatTableOptions tableOptions = new SkatTableOptions();
-
-	private boolean showCards = false;
-
-	private String issAddress = "skatgame.net";
-
-	private Integer issPort = Integer.valueOf(7000);
-	
-	private final boolean firstUse;
+	static private JSkatOptions optionsInstance = null;
 
 	/**
 	 * Returns the instance of the Singleton JSkatOptions
@@ -102,23 +78,24 @@ public class JSkatOptions {
 		return optionsInstance;
 	}
 
+	private Properties options = new Properties();
+
 	/** Creates a new instance of JSkatOptions */
 	private JSkatOptions() {
 
-		setStandardProperties();
+		setDefaultProperties();
 
-		boolean firstUse = false;
 		try {
 			loadOptions();
 
 		} catch (FileNotFoundException e) {
 
 			log.debug("No properties file found. Using standard values."); //$NON-NLS-1$
-			
-			firstUse = true;
+
+			setOption(Option.showFirstSteps, Boolean.TRUE);
 			File dir = new File(System.getProperty("user.home") + System.getProperty("file.separator") + ".jskat"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			dir.mkdir();
-			String filename = System.getProperty("user.home") + System.getProperty("file.separator") + ".jskat" + System.getProperty("file.separator") + "jskat.properties"; //$NON-NLS-1$ //$NON-NLS-2$
+			String filename = System.getProperty("user.home") + System.getProperty("file.separator") + ".jskat" + System.getProperty("file.separator") + "jskat.properties"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
 			File file = new File(filename);
 			try {
 				file.createNewFile();
@@ -130,182 +107,278 @@ public class JSkatOptions {
 						+ "> due to " + e1.getClass() + ": " + e1.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
-			setStandardProperties();
+			setDefaultProperties();
 
 		} catch (IOException e) {
 			log.warn("Could not load properties: " + e.getClass() + ": " //$NON-NLS-1$ //$NON-NLS-2$
 					+ e.getMessage());
 		}
-		this.firstUse = firstUse;
 	}
 
-	private void loadOptions() throws FileNotFoundException, IOException {
+	/**
+	 * Getter for property cardFace
+	 * 
+	 * @return Value of property cardFace
+	 */
+	public CardFace getCardFace() {
+		return CardFace.valueOf(getOption(Option.cardFace));
+	}
 
-		FileInputStream stream = getFileStream();
+	/**
+	 * Getter for property firstPlayerName.
+	 * 
+	 * @return Value of property firstPlayerName.
+	 */
+	public String getFirstPlayerName() {
+		return getOption(Option.firstPlayerName);
+	}
 
-		this.jskatProperties.load(stream);
+	/**
+	 * Getter for property firstPlayerType.
+	 * 
+	 * @return Value of property firstPlayerType.
+	 */
+	public PlayerType getFirstPlayerType() {
+		return PlayerType.valueOf(getOption(Option.firstPlayerType));
+	}
 
-		Enumeration<Object> props = this.jskatProperties.keys();
-		String property;
-		String value;
+	/**
+	 * Gets the address of the ISS
+	 * 
+	 * @return Address
+	 */
+	public String getIssAddress() {
+		return getOption(Option.issAddress);
+	}
 
-		while (props.hasMoreElements()) {
+	/**
+	 * Gets the port of the ISS
+	 * 
+	 * @return Port
+	 */
+	public Integer getIssPort() {
+		return Integer.valueOf(getOption(Option.issPort));
+	}
 
-			property = (String) props.nextElement();
+	/**
+	 * Getter for property language.
+	 * 
+	 * @return Value of property language.
+	 */
+	public SupportedLanguage getLanguage() {
+		return SupportedLanguage.valueOf(getOption(Option.language));
+	}
 
-			value = this.jskatProperties.getProperty(property);
+	/**
+	 * Gets the maximum number of players allowed in a skat series
+	 * 
+	 * @return Maximum number
+	 */
+	public Integer getMaxPlayerCount() {
+		return getIntegerOption(Option.maxPlayerCount);
+	}
 
-			if (property.equals("checkForNewVersionAtStartUp")) {
-				setCheckForNewVersionAtStartUp(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("language")) { //$NON-NLS-1$
-				SupportedLanguage newLanguage = null;
-				try {
-					newLanguage = SupportedLanguage.valueOf(value);
-				} catch (IllegalArgumentException e) {
-					// parsing of older options failed
-					newLanguage = JSkatOptions.SupportedLanguage.ENGLISH;
-				}
-				setLanguage(newLanguage);
+	/**
+	 * Getter for property ramschSkatOwner.
+	 * 
+	 * @return Value of property ramschSkatOwner.
+	 */
+	public RamschSkatOwner getRamschSkat() {
+		return RamschSkatOwner.valueOf(getOption(Option.ramschSkatOwner));
+	}
 
-			} else if (property.equals("cardFace")) { //$NON-NLS-1$
-				CardFace newCardFace = null;
-				try {
-					newCardFace = CardFace.valueOf(value);
-				} catch (IllegalArgumentException e) {
-					// parsing of older options failed
-					newCardFace = CardFace.TOURNAMENT;
-				}
-				setCardFace(newCardFace);
+	/**
+	 * Getter for property rules.
+	 * 
+	 * @return Value of property rules.
+	 */
+	public RuleSet getRules() {
+		return RuleSet.valueOf(getOption(Option.rules));
+	}
 
-			} else if (property.equals("savePath")) {
-				setSavePath(value);
-			} else if (property.equals("trickRemoveDelayTime")) {
-				setTrickRemoveDelayTime(Integer.parseInt(value));
-			} else if (property.equals("trickRemoveAfterClick")) {
-				setTrickRemoveAfterClick(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("gameShortCut")) {
-				setGameShortCut(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("cheatDebugMode")) {
-				setCheatDebugMode(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("firstPlayerName")) {
-				setFirstPlayerName(value);
-			} else if (property.equals("firstPlayerType")) {
-				setFirstPlayerType(Integer.parseInt(value));
-			} else if (property.equals("secondPlayerName")) {
-				setSecondPlayerName(value);
-			} else if (property.equals("secondPlayerType")) {
-				setSecondPlayerType(Integer.parseInt(value));
-			} else if (property.equals("thirdPlayerName")) {
-				setThirdPlayerName(value);
-			} else if (property.equals("thirdPlayerType")) {
-				setThirdPlayerType(Integer.parseInt(value));
-			} else if (property.equals("rules")) {
-				SkatTableOptions.RuleSet rules = null;
-				try {
-					rules = SkatTableOptions.RuleSet.valueOf(value);
-				} catch (IllegalArgumentException e) {
-					// parsing of older options failed
-					rules = SkatTableOptions.RuleSet.ISPA;
-				}
-				setRules(rules);
-			} else if (property.equals("playContra")) {
-				setPlayContra(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("playBock")) {
-				setPlayBock(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("playRamsch")) {
-				setPlayRamsch(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("playRevolution")) {
-				setPlayRevolution(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("bockEventLostGrand")) {
-				setBockEventLostGrand(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("bockEventLostWith60")) {
-				setBockEventLostWith60(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("bockEventLostAfterContra")) {
-				setBockEventLostAfterContra(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("bockEventContraReAnnounced")) {
-				setBockEventContraReAnnounced(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("bockEventPlayerHasX00Points")) {
-				setBockEventPlayerHasX00Points(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("ramschSkat")) {
-				if (value.equals("LAST_TRICK")) {
-					setRamschSkat(SkatTableOptions.RamschSkatOwner.LAST_TRICK);
-				} else {
-					setRamschSkat(SkatTableOptions.RamschSkatOwner.LOSER);
-				}
-			} else if (property.equals("schieberRamsch")) {
-				setSchieberRamsch(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("schieberRamschJacksInSkat")) {
-				setSchieberRamschJacksInSkat(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("ramschEventNoBid")) {
-				setRamschEventNoBid(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("ramschEventRamschAfterBock")) {
-				setRamschEventRamschAfterBock(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("ramschGrandHandPossible")) {
-				setRamschGrandHandPossible(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("showCards")) {
-				setShowCards(Boolean.valueOf(value).booleanValue());
-			}
-			// table options
-			else if (property.equals("maxPlayerCount")) {
-				setMaxPlayerCount(Integer.parseInt(value));
-			} else if (property.equals("firstPlayerName")) {
-				setFirstPlayerName(value);
-			} else if (property.equals("firstPlayerType")) {
-				setFirstPlayerType(Integer.parseInt(value));
-			} else if (property.equals("secondPlayerName")) {
-				setSecondPlayerName(value);
-			} else if (property.equals("secondPlayerType")) {
-				setSecondPlayerType(Integer.parseInt(value));
-			} else if (property.equals("thirdPlayerName")) {
-				setThirdPlayerName(value);
-			} else if (property.equals("thirdPlayerType")) {
-				setThirdPlayerType(Integer.parseInt(value));
-			} else if (property.equals("rules")) {
-				if (value.equals("PUB")) {
-					setRules(RuleSet.PUB);
-				} else {
-					setRules(RuleSet.ISPA);
-				}
-			} else if (property.equals("playContra")) {
-				setPlayContra(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("playBock")) {
-				setPlayBock(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("playRamsch")) {
-				setPlayRamsch(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("playRevolution")) {
-				setPlayRevolution(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("bockEventLostGrand")) {
-				setBockEventLostGrand(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("bockEventLostWith60")) {
-				setBockEventLostWith60(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("bockEventLostAfterContra")) {
-				setBockEventLostAfterContra(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("bockEventContraReAnnounced")) {
-				setBockEventContraReAnnounced(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("bockEventPlayerHasX00Points")) {
-				setBockEventPlayerHasX00Points(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("ramschSkat")) {
-				if (value.equals("LAST_TRICK")) {
-					setRamschSkat(RamschSkatOwner.LAST_TRICK);
-				} else {
-					setRamschSkat(RamschSkatOwner.LOSER);
-				}
-			} else if (property.equals("schieberRamsch")) {
-				setSchieberRamsch(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("schieberRamschJacksInSkat")) {
-				setSchieberRamschJacksInSkat(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("ramschEventNoBid")) {
-				setRamschEventNoBid(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("ramschEventRamschAfterBock")) {
-				setRamschEventRamschAfterBock(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("ramschGrandHandPossible")) {
-				setRamschGrandHandPossible(Boolean.valueOf(value).booleanValue());
-			} else if (property.equals("issAddress")) {
-				setIssAddress(value);
-			} else if (property.equals("issPort")) {
-				setIssPort(Integer.parseInt(value));
-			}
-		}
+	/**
+	 * Getter for property savePath.
+	 * 
+	 * @return Value of property savePath.
+	 */
+	public String getSavePath() {
+		return getOption(Option.savePath);
+	}
+
+	/**
+	 * Getter for property secondPlayerName.
+	 * 
+	 * @return Value of property secondPlayerName.
+	 */
+	public String getSecondPlayerName() {
+		return getOption(Option.secondPlayerName);
+	}
+
+	/**
+	 * Getter for property secondPlayerType.
+	 * 
+	 * @return Value of property secondPlayerType.
+	 */
+	public PlayerType getSecondPlayerType() {
+		return PlayerType.valueOf(getOption(Option.secondPlayerType));
+	}
+
+	/**
+	 * Gets the current skat table options
+	 * 
+	 * @return The current skat table options
+	 */
+	public SkatTableOptions getSkatTableOptions() {
+
+		SkatTableOptions result = new SkatTableOptions();
+
+		result.setMaxPlayerCount(getMaxPlayerCount());
+
+		result.setFirstPlayerName(getFirstPlayerName());
+		result.setFirstPlayerType(getFirstPlayerType());
+		result.setSecondPlayerName(getSecondPlayerName());
+		result.setSecondPlayerType(getSecondPlayerType());
+		result.setThirdPlayerName(getThirdPlayerName());
+		result.setThirdPlayerType(getThirdPlayerType());
+
+		result.setPlayBock(isPlayBock());
+
+		result.setBockEventContraReAnnounced(isBockEventContraReAnnounced());
+		result.setBockEventLostAfterContra(isBockEventLostAfterContra());
+		result.setBockEventLostGrand(isBockEventLostGrand());
+		result.setBockEventLostWith60(isBockEventLostWith60());
+		result.setBockEventPlayerHasX00Points(isBockEventPlayerHasX00Points());
+
+		result.setPlayContra(isPlayContra());
+		result.setPlayRamsch(isPlayRamsch());
+		result.setPlayRevolution(isPlayRevolution());
+
+		return result;
+	}
+
+	/**
+	 * Getter for property thirdPlayerName.
+	 * 
+	 * @return Value of property thirdPlayerName.
+	 */
+	public String getThirdPlayerName() {
+		return getOption(Option.thirdPlayerName);
+	}
+
+	/**
+	 * Getter for property thirdPlayerType.
+	 * 
+	 * @return Value of property thirdPlayerType.
+	 */
+	public PlayerType getThirdPlayerType() {
+		return PlayerType.valueOf(getOption(Option.thirdPlayerType));
+	}
+
+	/**
+	 * Getter for property trickRemoveDelayTime.
+	 * 
+	 * @return Value of property trickRemoveDelayTime.
+	 */
+	public Integer getTrickRemoveDelayTime() {
+		return getIntegerOption(Option.trickRemoveDelayTime);
+	}
+
+	/**
+	 * Getter for property bockEventContraReAnnounced
+	 * 
+	 * @return Value of property bockEventContraReAnnounced
+	 */
+	public Boolean isBockEventContraReAnnounced() {
+		return isBockEventContraReAnnounced(true);
+	}
+
+	public Boolean isBockEventContraReAnnounced(boolean checkParentOption) {
+		return getBooleanOptionWithParentCheck(Option.bockEventContraReAnnounced, checkParentOption,
+				isPlayBock(checkParentOption));
+	}
+
+	/**
+	 * Getter for property bockEventLostAfterContra
+	 * 
+	 * @return Value of property bockEventLostAfterContra
+	 */
+	public Boolean isBockEventLostAfterContra() {
+		return isBockEventLostAfterContra(true);
+	}
+
+	public Boolean isBockEventLostAfterContra(boolean checkParentOption) {
+		return getBooleanOptionWithParentCheck(Option.bockEventLostAfterContra, checkParentOption,
+				isPlayBock(checkParentOption));
+	}
+
+	/**
+	 * Getter for property bockEventLostGrand
+	 * 
+	 * @return Value of property bockEventLostGrand
+	 */
+	public Boolean isBockEventLostGrand() {
+		return isBockEventLostGrand(true);
+	}
+
+	public Boolean isBockEventLostGrand(boolean checkParentOption) {
+		return getBooleanOptionWithParentCheck(Option.bockEventLostGrand, checkParentOption,
+				isPlayBock(checkParentOption));
+	}
+
+	/**
+	 * Getter for property bockEventLostWith60
+	 * 
+	 * @return Value of property bockEventLostWith60
+	 */
+	public Boolean isBockEventLostWith60() {
+		return isBockEventLostWith60(true);
+	}
+
+	public Boolean isBockEventLostWith60(boolean checkParentOption) {
+		return getBooleanOptionWithParentCheck(Option.bockEventLostWith60, checkParentOption,
+				isPlayBock(checkParentOption));
+	}
+
+	/**
+	 * Getter for property bockEventPlayerHasX00Points
+	 * 
+	 * @return Value of property bockEventPlayerHasX00Points
+	 */
+	public Boolean isBockEventPlayerHasX00Points() {
+		return isBockEventPlayerHasX00Points(true);
+	}
+
+	public Boolean isBockEventPlayerHasX00Points(boolean checkParentOption) {
+		return getBooleanOptionWithParentCheck(Option.bockEventPlayerHasX00Points, checkParentOption,
+				isPlayBock(checkParentOption));
+	}
+
+	/**
+	 * Checks whether at least a bid of 18 has to be done to say contra
+	 * 
+	 * @return TRUE, if the check succeeds
+	 */
+	public Boolean isContraAfterBid18() {
+		return isContraAfterBid18(true);
+	}
+
+	/**
+	 * Checks whether at least a bid of 18 has to be done to say contra
+	 * 
+	 * @return TRUE, if the check succeeds
+	 */
+	public Boolean isContraAfterBid18(boolean checkParentOption) {
+		return getBooleanOptionWithParentCheck(Option.contraAfterBid18, checkParentOption,
+				isPlayContra(checkParentOption));
+	}
+
+	/**
+	 * Getter for property cheatDebugMode.
+	 * 
+	 * @return Value of property cheatDebugMode.
+	 */
+	public Boolean isCheatDebugMode() {
+		return getBooleanOption(Option.cheatDebugMode);
 	}
 
 	/**
@@ -313,84 +386,197 @@ public class JSkatOptions {
 	 * 
 	 * @return TRUE, if the check should be performed at start up
 	 */
-	public boolean isCheckForNewVersionAtStartUp() {
-		return checkForNewVersionAtStartUp;
+	public Boolean isCheckForNewVersionAtStartUp() {
+		return getBooleanOption(Option.checkForNewVersionAtStartUp);
 	}
 
 	/**
-	 * Sets the flag for checking for a new version of JSkat at start up
+	 * Getter for property gameShortCut.
 	 * 
-	 * @param isCheckForNewVersionAtStartUp
-	 *            TRUE, if the check should be performed at start up
+	 * @return Value of property gameShortCut.
 	 */
-	public void setCheckForNewVersionAtStartUp(boolean isCheckForNewVersionAtStartUp) {
-		checkForNewVersionAtStartUp = isCheckForNewVersionAtStartUp;
-		this.jskatProperties.setProperty("checkForNewVersionAtStartUp",
-				String.valueOf(this.checkForNewVersionAtStartUp));
-	}
-
-	private FileInputStream getFileStream() throws FileNotFoundException {
-		FileInputStream stream = new FileInputStream(System.getProperty("user.home") //$NON-NLS-1$
-				+ System.getProperty("file.separator") + ".jskat" //$NON-NLS-1$ //$NON-NLS-2$
-				+ System.getProperty("file.separator") //$NON-NLS-1$
-				+ "jskat.properties"); //$NON-NLS-1$
-		return stream;
+	public Boolean isGameShortCut() {
+		return getBooleanOption(Option.gameShortCut);
 	}
 
 	/**
-	 * Sets the standard properties
+	 * Getter for property playBock.
 	 * 
+	 * @return Value of property playBock.
 	 */
-	private void setStandardProperties() {
+	public Boolean isPlayBock() {
+		return isPlayBock(true);
+	}
 
-		// use standard values for the options
-		String lang = System.getProperty("user.language", "en");
-		if(lang.equalsIgnoreCase("DE")) {
-			this.language = SupportedLanguage.GERMAN;
+	/**
+	 * Getter for property playBock.
+	 * 
+	 * @return Value of property playBock.
+	 */
+	public Boolean isPlayBock(boolean checkParentOption) {
+		return getBooleanOptionWithParentCheck(Option.playBock, checkParentOption, RuleSet.PUB.equals(getRules()));
+	}
+
+	private Boolean getBooleanOptionWithParentCheck(Option option, boolean checkParentOption,
+			boolean parentOptionActivated) {
+
+		Boolean result = getBooleanOption(option);
+
+		if (checkParentOption) {
+			if (!parentOptionActivated) {
+				result = Boolean.FALSE;
+			}
 		}
 
-		jskatProperties.setProperty("checkForNewVersionAtStartUp", String.valueOf(checkForNewVersionAtStartUp));
-		language = getDefaultLanguage();
-		jskatProperties.setProperty("language", String.valueOf(language));
-		jskatProperties.setProperty("savePath", savePath);
-		jskatProperties.setProperty("trickRemoveDelayTime", String.valueOf(trickRemoveDelayTime));
-		jskatProperties.setProperty("trickRemoveAfterClick", String.valueOf(trickRemoveAfterClick));
-		jskatProperties.setProperty("gameShortCut", String.valueOf(gameShortCut));
-		jskatProperties.setProperty("cheatDebugMode", String.valueOf(cheatDebugMode));
-		jskatProperties.setProperty("firstPlayerName", tableOptions.getFirstPlayerName());
-		jskatProperties.setProperty("firstPlayerType", String.valueOf(tableOptions.getFirstPlayerType()));
-		jskatProperties.setProperty("secondPlayerName", tableOptions.getSecondPlayerName());
-		jskatProperties.setProperty("secondPlayerType", String.valueOf(tableOptions.getSecondPlayerType()));
-		jskatProperties.setProperty("thirdPlayerName", tableOptions.getThirdPlayerName());
-		jskatProperties.setProperty("thirdPlayerType", String.valueOf(tableOptions.getThirdPlayerType()));
-		jskatProperties.setProperty("rules", String.valueOf(tableOptions.getRules()));
-		jskatProperties.setProperty("playContra", String.valueOf(tableOptions.isPlayContra()));
-		jskatProperties.setProperty("playBock", String.valueOf(tableOptions.isPlayBock()));
-		jskatProperties.setProperty("playRamsch", String.valueOf(tableOptions.isPlayRamsch()));
-		jskatProperties.setProperty("playRevolution", String.valueOf(tableOptions.isPlayRevolution()));
-		jskatProperties.setProperty("bockEventLostGrand", String.valueOf(tableOptions.isBockEventLostGrand()));
-		jskatProperties.setProperty("bockEventLostWith60", String.valueOf(tableOptions.isBockEventLostWith60()));
-		jskatProperties.setProperty("bockEventLostAfterContra",
-				String.valueOf(tableOptions.isBockEventLostAfterContra()));
-		jskatProperties.setProperty("bockEventContraReAnnounced",
-				String.valueOf(tableOptions.isBockEventContraReAnnounced()));
-		jskatProperties.setProperty("bockEventPlayerHasX00Points",
-				String.valueOf(tableOptions.isBockEventPlayerHasX00Points()));
-		jskatProperties.setProperty("ramschSkat", String.valueOf(tableOptions.getRamschSkat()));
-		jskatProperties.setProperty("schieberRamsch", String.valueOf(tableOptions.isSchieberRamsch()));
-		jskatProperties.setProperty("schieberRamschJacksInSkat",
-				String.valueOf(tableOptions.isSchieberRamschJacksInSkat()));
-		jskatProperties.setProperty("ramschEventNoBid", String.valueOf(tableOptions.isRamschEventNoBid()));
-		jskatProperties.setProperty("ramschEventRamschAfterBock",
-				String.valueOf(tableOptions.isRamschEventRamschAfterBock()));
-		jskatProperties
-				.setProperty("ramschGrandHandPossible", String.valueOf(tableOptions.isRamschGrandHandPossible()));
-		jskatProperties.setProperty("showCards", String.valueOf(isShowCards()));
-		jskatProperties.setProperty("cardFace", String.valueOf(cardFace));
+		return result;
 	}
 
 	/**
-	 * Saves the jskatProperties to a file .jskat in user home
+	 * Getter for property playKontra.
+	 * 
+	 * @return Value of property playKontra.
+	 */
+	public Boolean isPlayContra() {
+		return isPlayContra(true);
+	}
+
+	/**
+	 * Getter for property playKontra.
+	 * 
+	 * @return Value of property playKontra.
+	 */
+	public Boolean isPlayContra(boolean checkParentOption) {
+		return getBooleanOptionWithParentCheck(Option.playContra, checkParentOption, RuleSet.PUB.equals(getRules()));
+	}
+
+	/**
+	 * Getter for property playRamsch.
+	 * 
+	 * @return Value of property playRamsch.
+	 */
+	public Boolean isPlayRamsch() {
+		return isPlayRamsch(true);
+	}
+
+	/**
+	 * Checks whether Ramsch should be played
+	 * 
+	 * @param checkParentOption
+	 *            TRUE, if parent option should be checked too
+	 * @return TRUE, if Ramsch should be played
+	 */
+	public Boolean isPlayRamsch(boolean checkParentOption) {
+		return getBooleanOptionWithParentCheck(Option.playRamsch, checkParentOption, RuleSet.PUB.equals(getRules()));
+	}
+
+	/**
+	 * Getter for property playRevolution.
+	 * 
+	 * @return Value of property playRevolution.
+	 */
+	public Boolean isPlayRevolution() {
+		return getBooleanOption(Option.playRevolution);
+	}
+
+	public Boolean isPlayRevolution(boolean checkParentOption) {
+		return getBooleanOptionWithParentCheck(Option.playRevolution, checkParentOption, RuleSet.PUB.equals(getRules()));
+	}
+
+	/**
+	 * Getter for property ramschEventNoBid
+	 * 
+	 * @return Value of property ramschEventNoBid
+	 */
+	public Boolean isRamschEventNoBid() {
+		return isRamschEventNoBid(true);
+	}
+
+	public Boolean isRamschEventNoBid(boolean checkParentOption) {
+		return getBooleanOptionWithParentCheck(Option.ramschEventNoBid, checkParentOption,
+				isPlayRamsch(checkParentOption));
+	}
+
+	/**
+	 * Getter for property ramschEventRamschAfterBock
+	 * 
+	 * @return Value of property ramschEventRamschAfterBock
+	 */
+	public Boolean isRamschEventRamschAfterBock() {
+		return isRamschEventRamschAfterBock(true);
+	}
+
+	public Boolean isRamschEventRamschAfterBock(boolean checkParentOption) {
+		return getBooleanOptionWithParentCheck(Option.ramschEventRamschAfterBock, checkParentOption,
+				isPlayRamsch(checkParentOption));
+	}
+
+	/**
+	 * Getter for property ramschGrandHandPossible
+	 * 
+	 * @return Value of property ramschGrandHandPossible
+	 */
+	public Boolean isRamschGrandHandPossible() {
+		return getBooleanOption(Option.ramschGrandHandPossible);
+	}
+
+	/**
+	 * Getter for property schieberRamsch
+	 * 
+	 * @return Value of property schieberRamsch
+	 */
+	public Boolean isSchieberRamsch() {
+		return isSchieberRamsch(true);
+	}
+
+	public Boolean isSchieberRamsch(boolean checkParentOption) {
+		return getBooleanOptionWithParentCheck(Option.schieberRamsch, checkParentOption,
+				isPlayRamsch(checkParentOption));
+	}
+
+	/**
+	 * Getter for property schieberRamschJacksInSkat
+	 * 
+	 * @return Value of property schieberRamschJacksInSkat
+	 */
+	public Boolean isSchieberRamschJacksInSkat() {
+		return isSchieberRamschJacksInSkat(true);
+	}
+
+	public Boolean isSchieberRamschJacksInSkat(boolean checkParentOption) {
+		return getBooleanOptionWithParentCheck(Option.schieberRamschJacksInSkat, checkParentOption,
+				isSchieberRamsch(checkParentOption));
+	}
+
+	/**
+	 * Getter for property showCards
+	 * 
+	 * @return TRUE, if cards should be shown
+	 */
+	public Boolean isShowCards() {
+		return getBooleanOption(Option.showCards);
+	}
+
+	/**
+	 * Flag that is set if JSkat seems to be used for the first time. The flag
+	 * is set if no option file is found.
+	 * 
+	 * @return true, if this is the first use of JSkat
+	 */
+	public Boolean isShowFirstSteps() {
+		return getBooleanOption(Option.showFirstSteps);
+	}
+
+	/**
+	 * Getter for property trickRemoveAfterClick.
+	 * 
+	 * @return Value of property trickRemoveAfterClick.
+	 */
+	public Boolean isTrickRemoveAfterClick() {
+		return getBooleanOption(Option.trickRemoveAfterClick);
+	}
+
+	/**
+	 * Saves the options to a file .jskat in user home
 	 * 
 	 */
 	public void saveJSkatProperties() {
@@ -401,9 +587,9 @@ public class JSkatOptions {
 					+ System.getProperty("file.separator") + ".jskat" //$NON-NLS-1$//$NON-NLS-2$
 					+ System.getProperty("file.separator") + "jskat.properties"); //$NON-NLS-1$//$NON-NLS-2$
 
-			this.jskatProperties.store(stream, "JSkat options");
+			options.store(stream, "JSkat options"); //$NON-NLS-1$
 			stream.close();
-			log.debug("Saved rules: " + getRules());
+			log.debug("Saved rules: " + getRules()); //$NON-NLS-1$
 
 		} catch (FileNotFoundException e1) {
 
@@ -415,146 +601,72 @@ public class JSkatOptions {
 	}
 
 	/**
-	 * Getter for property language.
+	 * Setter for property bockEventContraReAnnounced
 	 * 
-	 * @return Value of property language.
+	 * @param bockEventContraReAnnounced
+	 *            New value of property bockEventContraReAnnounced
 	 */
-	public SupportedLanguage getLanguage() {
-
-		return this.language;
+	public void setBockEventContraReAnnounced(Boolean bockEventContraReAnnounced) {
+		setOption(Option.bockEventContraReAnnounced, bockEventContraReAnnounced);
 	}
 
 	/**
-	 * Modified getter for property language, providing a two-letter code (e.g. "en", "de").
+	 * Setter for property bockEventLostAfterContra
 	 * 
-	 * @return modified value of property language.
+	 * @param bockEventLostAfterContra
+	 *            New value of property bockEventLostAfterContra
 	 */
-	public String getLanguageCode() {
-		String languageCode = "en"; //$NON-NLS-1$
-		switch (this.language) {
-		case GERMAN:
-			languageCode = "de"; //$NON-NLS-1$
-			break;
-		case ENGLISH:
-			languageCode = "en"; //$NON-NLS-1$
-			break;
-		}
-		return languageCode;
+	public void setBockEventLostAfterContra(Boolean bockEventLostAfterContra) {
+		setOption(Option.bockEventLostAfterContra, bockEventLostAfterContra);
 	}
 
 	/**
-	 * Flag that is set if JSkat seems to be used for the first time.
-	 * The flag is set if no option file is found.
-	 *
-	 * @return true, if this is the first use of JSkat
-	 */
-	public boolean isFirstUse() {
-		return firstUse;
-	}
-	
-	/**
-	 * Setter for property language.
+	 * Setter for property bockEventLostGrand
 	 * 
-	 * @param newLanguage
-	 *            New value of property language.
+	 * @param bockEventLostGrand
+	 *            New value of property bockEventLostGrand
 	 */
-	public void setLanguage(SupportedLanguage newLanguage) {
-
-		this.language = newLanguage;
-		this.jskatProperties.setProperty("language", String.valueOf(this.language));
+	public void setBockEventLostGrand(Boolean bockEventLostGrand) {
+		setOption(Option.bockEventLostGrand, bockEventLostGrand);
 	}
 
 	/**
-	 * Getter for property savePath.
+	 * Setter for property bockEventLostWith60
 	 * 
-	 * @return Value of property savePath.
+	 * @param bockEventLostWith60
+	 *            New value of property bockEventLostWith60
 	 */
-	public String getSavePath() {
-		return this.savePath;
+	public void setBockEventLostWith60(Boolean bockEventLostWith60) {
+		setOption(Option.bockEventLostWith60, bockEventLostWith60);
 	}
 
 	/**
-	 * Setter for property savePath.
+	 * Setter for property bockEventPlayerHasX00Points
 	 * 
-	 * @param newSavePath
-	 *            New value of property savePath.
+	 * @param bockEventPlayerHasX00Points
+	 *            New value of property bockEventPlayerHasX00Points
 	 */
-	public void setSavePath(java.lang.String newSavePath) {
-
-		this.savePath = newSavePath;
-		this.jskatProperties.setProperty("savePath", this.savePath);
+	public void setBockEventPlayerHasX00Points(Boolean bockEventPlayerHasX00Points) {
+		setOption(Option.bockEventPlayerHasX00Points, bockEventPlayerHasX00Points);
 	}
 
 	/**
-	 * Getter for property trickRemoveDelayTime.
+	 * Sets the flag for bid at least 18 to say contra
 	 * 
-	 * @return Value of property trickRemoveDelayTime.
+	 * @param contraAfterBid18
 	 */
-	public int getTrickRemoveDelayTime() {
-		return this.trickRemoveDelayTime;
+	public void setContraAfterBid18(Boolean contraAfterBid18) {
+		setOption(Option.contraAfterBid18, contraAfterBid18);
 	}
 
 	/**
-	 * Setter for property trickRemoveDelayTime.
+	 * Setter for property cardFace
 	 * 
-	 * @param newTrickRemoveDelayTime
-	 *            New value of property trickRemoveDelayTime.
+	 * @param cardFace
+	 *            New value of property cardFace
 	 */
-	public void setTrickRemoveDelayTime(int newTrickRemoveDelayTime) {
-
-		this.trickRemoveDelayTime = newTrickRemoveDelayTime;
-		this.jskatProperties.setProperty("trickRemoveDelayTime", String.valueOf(this.trickRemoveDelayTime));
-	}
-
-	/**
-	 * Getter for property trickRemoveAfterClick.
-	 * 
-	 * @return Value of property trickRemoveAfterClick.
-	 */
-	public boolean isTrickRemoveAfterClick() {
-		return this.trickRemoveAfterClick;
-	}
-
-	/**
-	 * Setter for property trickRemoveAfterClick.
-	 * 
-	 * @param newTrickRemoveAfterClick
-	 *            New value of property trickRemoveAfterClick.
-	 */
-	public void setTrickRemoveAfterClick(boolean newTrickRemoveAfterClick) {
-
-		this.trickRemoveAfterClick = newTrickRemoveAfterClick;
-		this.jskatProperties.setProperty("trickRemoveAfterClick", String.valueOf(this.trickRemoveAfterClick));
-	}
-
-	/**
-	 * Getter for property gameShortCut.
-	 * 
-	 * @return Value of property gameShortCut.
-	 */
-	public boolean isGameShortCut() {
-		return this.gameShortCut;
-	}
-
-	/**
-	 * Setter for property gameShortCut.
-	 * 
-	 * @param isGameShortCut
-	 *            New value of property gameShortCut.
-	 */
-	public void setGameShortCut(boolean isGameShortCut) {
-
-		this.gameShortCut = isGameShortCut;
-		this.jskatProperties.setProperty("gameShortCut", String.valueOf(this.gameShortCut));
-	}
-
-	/**
-	 * Getter for property cheatDebugMode.
-	 * 
-	 * @return Value of property cheatDebugMode.
-	 */
-	public boolean isCheatDebugMode() {
-		return this.cheatDebugMode;
+	public void setCardFace(CardFace cardFace) {
+		setOption(Option.cardFace, cardFace);
 	}
 
 	/**
@@ -563,26 +675,18 @@ public class JSkatOptions {
 	 * @param isCheatDebugMode
 	 *            New value of property cheatDebugMode.
 	 */
-	public void setCheatDebugMode(boolean isCheatDebugMode) {
-
-		this.cheatDebugMode = isCheatDebugMode;
-		this.jskatProperties.setProperty("cheatDebugMode", String.valueOf(this.cheatDebugMode));
+	public void setCheatDebugMode(Boolean isCheatDebugMode) {
+		setOption(Option.cheatDebugMode, isCheatDebugMode);
 	}
 
 	/**
-	 * Getter for property firstPlayerName.
+	 * Sets the flag for checking for a new version of JSkat at start up
 	 * 
-	 * @return Value of property firstPlayerName.
+	 * @param isCheckForNewVersionAtStartUp
+	 *            TRUE, if the check should be performed at start up
 	 */
-	public String getFirstPlayerName() {
-
-		return this.tableOptions.getFirstPlayerName();
-	}
-
-	private void setMaxPlayerCount(int maxPlayerCount) {
-
-		this.tableOptions.setMaxPlayerCount(maxPlayerCount);
-		this.jskatProperties.setProperty("maxPlayerCount", String.valueOf(maxPlayerCount));
+	public void setCheckForNewVersionAtStartUp(Boolean isCheckForNewVersionAtStartUp) {
+		setOption(Option.checkForNewVersionAtStartUp, isCheckForNewVersionAtStartUp);
 	}
 
 	/**
@@ -592,151 +696,67 @@ public class JSkatOptions {
 	 *            New value of property firstPlayerName.
 	 */
 	public void setFirstPlayerName(java.lang.String firstPlayerName) {
-
-		this.tableOptions.setFirstPlayerName(firstPlayerName);
-		this.jskatProperties.setProperty("firstPlayerName", firstPlayerName);
-	}
-
-	/**
-	 * Getter for property firstPlayerType.
-	 * 
-	 * @return Value of property firstPlayerType.
-	 */
-	public int getFirstPlayerType() {
-
-		return this.tableOptions.getFirstPlayerType();
+		setOption(Option.firstPlayerName, firstPlayerName);
 	}
 
 	/**
 	 * Setter for property firstPlayerType.
 	 * 
-	 * @param firstPlayerType
+	 * @param type
 	 *            New value of property firstPlayerType.
 	 */
-	public void setFirstPlayerType(int firstPlayerType) {
-
-		this.tableOptions.setFirstPlayerType(firstPlayerType);
-		this.jskatProperties.setProperty("firstPlayerType", String.valueOf(firstPlayerType));
+	public void setFirstPlayerType(PlayerType type) {
+		setOption(Option.firstPlayerType, type);
 	}
 
 	/**
-	 * Getter for property secondPlayerName.
+	 * Setter for property gameShortCut.
 	 * 
-	 * @return Value of property secondPlayerName.
+	 * @param isGameShortCut
+	 *            New value of property gameShortCut.
 	 */
-	public String getSecondPlayerName() {
-
-		return this.tableOptions.getSecondPlayerName();
+	public void setGameShortCut(Boolean isGameShortCut) {
+		setOption(Option.gameShortCut, isGameShortCut);
 	}
 
 	/**
-	 * Setter for property secondPlayerName.
+	 * Sets the address of the ISS
 	 * 
-	 * @param secondPlayerName
-	 *            New value of property secondPlayerName.
+	 * @param address
+	 *            Address
 	 */
-	public void setSecondPlayerName(java.lang.String secondPlayerName) {
-
-		this.tableOptions.setSecondPlayerName(secondPlayerName);
-		this.jskatProperties.setProperty("secondPlayerName", secondPlayerName);
+	public void setIssAddress(String address) {
+		setOption(Option.issAddress, address);
 	}
 
 	/**
-	 * Getter for property secondPlayerType.
+	 * Sets the port of the ISS
 	 * 
-	 * @return Value of property secondPlayerType.
+	 * @param port
+	 *            Port
 	 */
-	public int getSecondPlayerType() {
-
-		return this.tableOptions.getSecondPlayerType();
+	public void setIssPort(Integer port) {
+		setOption(Option.issPort, port);
 	}
 
 	/**
-	 * Setter for property secondPlayerType.
+	 * Setter for property language.
 	 * 
-	 * @param secondPlayerType
-	 *            New value of property secondPlayerType.
+	 * @param language
+	 *            New value of property language.
 	 */
-	public void setSecondPlayerType(int secondPlayerType) {
-
-		this.tableOptions.setSecondPlayerType(secondPlayerType);
-		this.jskatProperties.setProperty("secondPlayerType", String.valueOf(secondPlayerType));
+	public void setLanguage(SupportedLanguage language) {
+		setOption(Option.language, language);
 	}
 
 	/**
-	 * Getter for property thirdPlayerName.
+	 * Sets the maximum number of players in a skat series
 	 * 
-	 * @return Value of property thirdPlayerName.
+	 * @param count
+	 *            Maximumn number
 	 */
-	public String getThirdPlayerName() {
-
-		return this.tableOptions.getThirdPlayerName();
-	}
-
-	/**
-	 * Setter for property thirdPlayerName.
-	 * 
-	 * @param thirdPlayerName
-	 *            New value of property thirdPlayerName.
-	 */
-	public void setThirdPlayerName(java.lang.String thirdPlayerName) {
-
-		this.tableOptions.setThirdPlayerName(thirdPlayerName);
-		this.jskatProperties.setProperty("thirdPlayerName", thirdPlayerName);
-	}
-
-	/**
-	 * Getter for property thirdPlayerType.
-	 * 
-	 * @return Value of property thirdPlayerType.
-	 */
-	public int getThirdPlayerType() {
-
-		return this.tableOptions.getThirdPlayerType();
-	}
-
-	/**
-	 * Setter for property thirdPlayerType.
-	 * 
-	 * @param thirdPlayerType
-	 *            New value of property thirdPlayerType.
-	 */
-	public void setThirdPlayerType(int thirdPlayerType) {
-
-		this.tableOptions.setThirdPlayerType(thirdPlayerType);
-		this.jskatProperties.setProperty("thirdPlayerType", String.valueOf(thirdPlayerType));
-	}
-
-	/**
-	 * Getter for property rules.
-	 * 
-	 * @return Value of property rules.
-	 */
-	public SkatTableOptions.RuleSet getRules() {
-
-		return this.tableOptions.getRules();
-	}
-
-	/**
-	 * Setter for property rules.
-	 * 
-	 * @param rules
-	 *            New value of property rules.
-	 */
-	public void setRules(SkatTableOptions.RuleSet rules) {
-
-		this.tableOptions.setRules(rules);
-		this.jskatProperties.setProperty("rules", String.valueOf(rules));
-	}
-
-	/**
-	 * Getter for property playBock.
-	 * 
-	 * @return Value of property playBock.
-	 */
-	public boolean isPlayBock() {
-
-		return this.tableOptions.isPlayBock();
+	public void setMaxPlayerCount(Integer count) {
+		setOption(Option.maxPlayerCount, count);
 	}
 
 	/**
@@ -745,20 +765,8 @@ public class JSkatOptions {
 	 * @param playBock
 	 *            New value of property playBock.
 	 */
-	public void setPlayBock(boolean playBock) {
-
-		this.tableOptions.setPlayBock(playBock);
-		this.jskatProperties.setProperty("playBock", String.valueOf(playBock));
-	}
-
-	/**
-	 * Getter for property playKontra.
-	 * 
-	 * @return Value of property playKontra.
-	 */
-	public boolean isPlayContra() {
-
-		return this.tableOptions.isPlayContra();
+	public void setPlayBock(Boolean playBock) {
+		setOption(Option.playBock, playBock);
 	}
 
 	/**
@@ -767,20 +775,8 @@ public class JSkatOptions {
 	 * @param playContra
 	 *            New value of property playKontra.
 	 */
-	public void setPlayContra(boolean playContra) {
-
-		this.tableOptions.setPlayContra(playContra);
-		this.jskatProperties.setProperty("playContra", String.valueOf(playContra));
-	}
-
-	/**
-	 * Getter for property playRamsch.
-	 * 
-	 * @return Value of property playRamsch.
-	 */
-	public boolean isPlayRamsch() {
-
-		return this.tableOptions.isPlayRamsch();
+	public void setPlayContra(Boolean playContra) {
+		setOption(Option.playContra, playContra);
 	}
 
 	/**
@@ -789,20 +785,8 @@ public class JSkatOptions {
 	 * @param playRamsch
 	 *            New value of property playRamsch.
 	 */
-	public void setPlayRamsch(boolean playRamsch) {
-
-		this.tableOptions.setPlayRamsch(playRamsch);
-		this.jskatProperties.setProperty("playRamsch", String.valueOf(playRamsch));
-	}
-
-	/**
-	 * Getter for property playRevolution.
-	 * 
-	 * @return Value of property playRevolution.
-	 */
-	public boolean isPlayRevolution() {
-
-		return this.tableOptions.isPlayRevolution();
+	public void setPlayRamsch(Boolean playRamsch) {
+		setOption(Option.playRamsch, playRamsch);
 	}
 
 	/**
@@ -811,196 +795,8 @@ public class JSkatOptions {
 	 * @param playRevolution
 	 *            New value of property playRevolution.
 	 */
-	public void setPlayRevolution(boolean playRevolution) {
-
-		this.tableOptions.setPlayRevolution(playRevolution);
-		this.jskatProperties.setProperty("playRevolution", String.valueOf(playRevolution));
-	}
-
-	/**
-	 * Getter for property bockEventLostGrand
-	 * 
-	 * @return Value of property bockEventLostGrand
-	 */
-	public boolean isBockEventLostGrand() {
-
-		return this.tableOptions.isBockEventLostGrand();
-	}
-
-	/**
-	 * Setter for property bockEventLostGrand
-	 * 
-	 * @param bockEventLostGrand
-	 *            New value of property bockEventLostGrand
-	 */
-	public void setBockEventLostGrand(boolean bockEventLostGrand) {
-
-		this.tableOptions.setBockEventLostGrand(bockEventLostGrand);
-		this.jskatProperties.setProperty("bockEventLostGrand", String.valueOf(bockEventLostGrand));
-	}
-
-	/**
-	 * Getter for property bockEventLostWith60
-	 * 
-	 * @return Value of property bockEventLostWith60
-	 */
-	public boolean isBockEventLostWith60() {
-
-		return this.tableOptions.isBockEventLostWith60();
-	}
-
-	/**
-	 * Setter for property bockEventLostWith60
-	 * 
-	 * @param bockEventLostWith60
-	 *            New value of property bockEventLostWith60
-	 */
-	public void setBockEventLostWith60(boolean bockEventLostWith60) {
-
-		this.tableOptions.setBockEventLostWith60(bockEventLostWith60);
-		this.jskatProperties.setProperty("bockEventLostWith60", String.valueOf(bockEventLostWith60));
-	}
-
-	/**
-	 * Getter for property bockEventLostAfterContra
-	 * 
-	 * @return Value of property bockEventLostAfterContra
-	 */
-	public boolean isBockEventLostAfterContra() {
-
-		return this.tableOptions.isBockEventLostAfterContra();
-	}
-
-	/**
-	 * Setter for property bockEventLostAfterContra
-	 * 
-	 * @param bockEventLostAfterContra
-	 *            New value of property bockEventLostAfterContra
-	 */
-	public void setBockEventLostAfterContra(boolean bockEventLostAfterContra) {
-
-		this.tableOptions.setBockEventLostAfterContra(bockEventLostAfterContra);
-		this.jskatProperties.setProperty("bockEventLostAfterContra", String.valueOf(bockEventLostAfterContra));
-	}
-
-	/**
-	 * Getter for property bockEventContraReAnnounced
-	 * 
-	 * @return Value of property bockEventContraReAnnounced
-	 */
-	public boolean isBockEventContraReAnnounced() {
-
-		return this.tableOptions.isBockEventContraReAnnounced();
-	}
-
-	/**
-	 * Setter for property bockEventContraReAnnounced
-	 * 
-	 * @param bockEventContraReAnnounced
-	 *            New value of property bockEventContraReAnnounced
-	 */
-	public void setBockEventContraReAnnounced(boolean bockEventContraReAnnounced) {
-
-		this.tableOptions.setBockEventContraReAnnounced(bockEventContraReAnnounced);
-		this.jskatProperties.setProperty("bockEventContraReAnnounced", String.valueOf(bockEventContraReAnnounced));
-	}
-
-	/**
-	 * Getter for property bockEventPlayerHasX00Points
-	 * 
-	 * @return Value of property bockEventPlayerHasX00Points
-	 */
-	public boolean isBockEventPlayerHasX00Points() {
-
-		return this.tableOptions.isBockEventPlayerHasX00Points();
-	}
-
-	/**
-	 * Setter for property bockEventPlayerHasX00Points
-	 * 
-	 * @param bockEventPlayerHasX00Points
-	 *            New value of property bockEventPlayerHasX00Points
-	 */
-	public void setBockEventPlayerHasX00Points(boolean bockEventPlayerHasX00Points) {
-
-		this.tableOptions.setBockEventPlayerHasX00Points(bockEventPlayerHasX00Points);
-		this.jskatProperties.setProperty("bockEventPlayerHasX00Points", String.valueOf(bockEventPlayerHasX00Points));
-	}
-
-	/**
-	 * Getter for property ramschSkat.
-	 * 
-	 * @return Value of property ramschSkat.
-	 */
-	public SkatTableOptions.RamschSkatOwner getRamschSkat() {
-
-		return this.tableOptions.getRamschSkat();
-	}
-
-	/**
-	 * Setter for property ramschSkat.
-	 * 
-	 * @param ramschSkat
-	 *            New value of property ramschSkat.
-	 */
-	public void setRamschSkat(SkatTableOptions.RamschSkatOwner ramschSkat) {
-
-		this.tableOptions.setRamschSkat(ramschSkat);
-		this.jskatProperties.setProperty("ramschSkat", String.valueOf(ramschSkat));
-	}
-
-	/**
-	 * Getter for property schieberRamsch
-	 * 
-	 * @return Value of property schieberRamsch
-	 */
-	public boolean isSchieberRamsch() {
-
-		return this.tableOptions.isSchieberRamsch();
-	}
-
-	/**
-	 * Setter for property schieberRamsch
-	 * 
-	 * @param schieberRamsch
-	 *            New value of property schieberRamsch
-	 */
-	public void setSchieberRamsch(boolean schieberRamsch) {
-
-		this.tableOptions.setSchieberRamsch(schieberRamsch);
-		this.jskatProperties.setProperty("schieberRamsch", String.valueOf(schieberRamsch));
-	}
-
-	/**
-	 * Getter for property schieberRamschJacksInSkat
-	 * 
-	 * @return Value of property schieberRamschJacksInSkat
-	 */
-	public boolean isSchieberRamschJacksInSkat() {
-
-		return this.tableOptions.isSchieberRamschJacksInSkat();
-	}
-
-	/**
-	 * Setter for property schieberRamschJacksInSkat
-	 * 
-	 * @param schieberRamschJacksInSkat
-	 *            New value of property schieberRamschJacksInSkat
-	 */
-	public void setSchieberRamschJacksInSkat(boolean schieberRamschJacksInSkat) {
-
-		this.tableOptions.setSchieberRamschJacksInSkat(schieberRamschJacksInSkat);
-		this.jskatProperties.setProperty("schieberRamschJacksInSkat", String.valueOf(schieberRamschJacksInSkat));
-	}
-
-	/**
-	 * Getter for property ramschEventNoBid
-	 * 
-	 * @return Value of property ramschEventNoBid
-	 */
-	public boolean isRamschEventNoBid() {
-
-		return this.tableOptions.isRamschEventNoBid();
+	public void setPlayRevolution(Boolean playRevolution) {
+		setOption(Option.playRevolution, playRevolution);
 	}
 
 	/**
@@ -1009,20 +805,8 @@ public class JSkatOptions {
 	 * @param ramschEventNoBid
 	 *            New value of property ramschEventNoBid
 	 */
-	public void setRamschEventNoBid(boolean ramschEventNoBid) {
-
-		this.tableOptions.setRamschEventNoBid(ramschEventNoBid);
-		this.jskatProperties.setProperty("ramschEventNoBid", String.valueOf(ramschEventNoBid));
-	}
-
-	/**
-	 * Getter for property ramschEventRamschAfterBock
-	 * 
-	 * @return Value of property ramschEventRamschAfterBock
-	 */
-	public boolean isRamschEventRamschAfterBock() {
-
-		return this.tableOptions.isRamschEventRamschAfterBock();
+	public void setRamschEventNoBid(Boolean ramschEventNoBid) {
+		setOption(Option.ramschEventNoBid, ramschEventNoBid);
 	}
 
 	/**
@@ -1031,20 +815,8 @@ public class JSkatOptions {
 	 * @param ramschEventRamschAfterBock
 	 *            New value of property ramschEventRamschAfterBock
 	 */
-	public void setRamschEventRamschAfterBock(boolean ramschEventRamschAfterBock) {
-
-		this.tableOptions.setRamschEventRamschAfterBock(ramschEventRamschAfterBock);
-		this.jskatProperties.setProperty("ramschEventRamschAfterBock", String.valueOf(ramschEventRamschAfterBock));
-	}
-
-	/**
-	 * Getter for property ramschGrandHandPossible
-	 * 
-	 * @return Value of property ramschGrandHandPossible
-	 */
-	public boolean isRamschGrandHandPossible() {
-
-		return this.tableOptions.isRamschGrandHandPossible();
+	public void setRamschEventRamschAfterBock(Boolean ramschEventRamschAfterBock) {
+		setOption(Option.ramschEventRamschAfterBock, ramschEventRamschAfterBock);
 	}
 
 	/**
@@ -1053,108 +825,134 @@ public class JSkatOptions {
 	 * @param ramschGrandHandPossible
 	 *            New value of property ramschGrandHandPossible
 	 */
-	public void setRamschGrandHandPossible(boolean ramschGrandHandPossible) {
-
-		this.tableOptions.setRamschGrandHandPossible(ramschGrandHandPossible);
-		this.jskatProperties.setProperty("ramschGrandHandPossible", String.valueOf(ramschGrandHandPossible));
+	public void setRamschGrandHandPossible(Boolean ramschGrandHandPossible) {
+		setOption(Option.ramschGrandHandPossible, ramschGrandHandPossible);
 	}
 
 	/**
-	 * Getter for property cardFace
+	 * Setter for property ramschSkatOwner.
 	 * 
-	 * @return Value of property cardFace
+	 * @param ramschSkatOwner
+	 *            New value of property ramschSkatOwner.
 	 */
-	public CardFace getCardFace() {
-
-		return this.cardFace;
+	public void setRamschSkatOwner(RamschSkatOwner ramschSkat) {
+		setOption(Option.ramschSkatOwner, ramschSkat);
 	}
 
 	/**
-	 * Setter for property cardFace
+	 * Setter for property rules.
 	 * 
-	 * @param newCardFace
-	 *            New value of property cardFace
+	 * @param ruleSet
+	 *            New value of property rules.
 	 */
-	public void setCardFace(CardFace newCardFace) {
-
-		if (this.cardFace != newCardFace) {
-
-			this.cardFace = newCardFace;
-
-			this.jskatProperties.setProperty("cardFace", String.valueOf(this.cardFace));
-		}
+	public void setRules(RuleSet ruleSet) {
+		setOption(Option.rules, ruleSet.name());
 	}
 
 	/**
-	 * Gets the current skat table options
+	 * Setter for property savePath.
 	 * 
-	 * @return The current skat table options
+	 * @param savePath
+	 *            New value of property savePath.
 	 */
-	public SkatTableOptions getSkatTableOptions() {
-
-		return this.tableOptions;
+	public void setSavePath(String savePath) {
+		setOption(Option.savePath, savePath);
 	}
 
 	/**
-	 * Sets the current skat table options
+	 * Setter for property schieberRamsch
 	 * 
-	 * @param skatTableOptions
-	 *            The current skat table options
+	 * @param schieberRamsch
+	 *            New value of property schieberRamsch
 	 */
-	public void setSkatTableOptions(SkatTableOptions skatTableOptions) {
-
-		this.tableOptions = skatTableOptions;
-	}
-
-	public void setShowCards(boolean showCards) {
-		this.showCards = showCards;
-	}
-
-	public boolean isShowCards() {
-		return showCards;
+	public void setSchieberRamsch(Boolean schieberRamsch) {
+		setOption(Option.schieberRamsch, schieberRamsch);
 	}
 
 	/**
-	 * Sets the address of the ISS
+	 * Setter for property schieberRamschJacksInSkat
 	 * 
-	 * @param newAddress
-	 *            Address
+	 * @param schieberRamschJacksInSkat
+	 *            New value of property schieberRamschJacksInSkat
 	 */
-	public void setIssAddress(String newAddress) {
-		issAddress = newAddress;
-		jskatProperties.setProperty("issAddress", newAddress);
+	public void setSchieberRamschJacksInSkat(Boolean schieberRamschJacksInSkat) {
+		setOption(Option.schieberRamschJacksInSkat, schieberRamschJacksInSkat);
 	}
 
 	/**
-	 * Gets the address of the ISS
+	 * Setter for property secondPlayerName.
 	 * 
-	 * @return Address
+	 * @param secondPlayerName
+	 *            New value of property secondPlayerName.
 	 */
-	public String getIssAddress() {
-		return issAddress;
+	public void setSecondPlayerName(String secondPlayerName) {
+		setOption(Option.secondPlayerName, secondPlayerName);
 	}
 
 	/**
-	 * Sets the port of the ISS
+	 * Setter for property secondPlayerType.
 	 * 
-	 * @param newPort
-	 *            Address
+	 * @param secondPlayerType
+	 *            New value of property secondPlayerType.
 	 */
-	public void setIssPort(Integer newPort) {
-		issPort = newPort;
-		jskatProperties.setProperty("issPort", newPort.toString());
+	public void setSecondPlayerType(PlayerType type) {
+		setOption(Option.secondPlayerType, type.name());
 	}
 
 	/**
-	 * Gets the port of the ISS
+	 * Sets the flag for showing all cards
 	 * 
-	 * @return Port
+	 * @param isShowCards
 	 */
-	public Integer getIssPort() {
-		return issPort;
+	public void setShowCards(Boolean isShowCards) {
+		setOption(Option.showCards, isShowCards);
 	}
 
-	private SupportedLanguage getDefaultLanguage() {
+	/**
+	 * Setter for property thirdPlayerName.
+	 * 
+	 * @param thirdPlayerName
+	 *            New value of property thirdPlayerName.
+	 */
+	public void setThirdPlayerName(String thirdPlayerName) {
+		setOption(Option.thirdPlayerName, thirdPlayerName);
+	}
+
+	/**
+	 * Setter for property thirdPlayerType.
+	 * 
+	 * @param thirdPlayerType
+	 *            New value of property thirdPlayerType.
+	 */
+	public void setThirdPlayerType(PlayerType type) {
+		setOption(Option.thirdPlayerType, type.name());
+	}
+
+	/**
+	 * Setter for property trickRemoveAfterClick.
+	 * 
+	 * @param trickRemoveAfterClick
+	 *            New value of property trickRemoveAfterClick.
+	 */
+	public void setTrickRemoveAfterClick(Boolean trickRemoveAfterClick) {
+		setOption(Option.trickRemoveAfterClick, trickRemoveAfterClick);
+	}
+
+	/**
+	 * Setter for property trickRemoveDelayTime.
+	 * 
+	 * @param trickRemoveDelayTime
+	 *            New value of property trickRemoveDelayTime.
+	 */
+	public void setTrickRemoveDelayTime(Integer trickRemoveDelayTime) {
+		setOption(Option.trickRemoveDelayTime, trickRemoveDelayTime);
+	}
+
+	private Boolean getBooleanOption(Option option) {
+		return Boolean.valueOf(options.getProperty(option.name()));
+	}
+
+	private static SupportedLanguage getDefaultLanguage() {
 
 		SupportedLanguage result = SupportedLanguage.ENGLISH;
 
@@ -1163,5 +961,284 @@ public class JSkatOptions {
 		}
 
 		return result;
+	}
+
+	private static FileInputStream getFileStream() throws FileNotFoundException {
+		FileInputStream stream = new FileInputStream(System.getProperty("user.home") //$NON-NLS-1$
+				+ System.getProperty("file.separator") + ".jskat" //$NON-NLS-1$ //$NON-NLS-2$
+				+ System.getProperty("file.separator") //$NON-NLS-1$
+				+ "jskat.properties"); //$NON-NLS-1$
+		return stream;
+	}
+
+	private Integer getIntegerOption(Option option) {
+		return Integer.valueOf(options.getProperty(option.name()));
+	}
+
+	private String getOption(Option option) {
+		return options.getProperty(option.name());
+	}
+
+	private void loadOptions() throws FileNotFoundException, IOException {
+
+		FileInputStream stream = getFileStream();
+
+		Properties loadedOptions = new Properties();
+		loadedOptions.load(stream);
+
+		Enumeration<Object> props = loadedOptions.keys();
+		String property;
+		String value;
+
+		while (props.hasMoreElements()) {
+
+			property = (String) props.nextElement();
+			value = loadedOptions.getProperty(property);
+
+			Option option = null;
+			try {
+				option = Option.valueOf(property);
+			} catch (IllegalArgumentException e) {
+				log.error("Unknown option " + property + " with value " + value); //$NON-NLS-1$ //$NON-NLS-2$
+
+				// handle obsolete or renamed options
+				if ("ramschSkat".equals(property)) { //$NON-NLS-1$
+					option = Option.ramschSkatOwner;
+				}
+			}
+
+			if (option == null) {
+				continue;
+			}
+
+			parseAndSetOptionValue(option, value);
+		}
+	}
+
+	private void parseAndSetOptionValue(Option option, String value) {
+		switch (option) {
+		case bockEventContraReAnnounced:
+			setBockEventContraReAnnounced(Boolean.valueOf(value));
+			break;
+		case bockEventLostAfterContra:
+			setBockEventLostAfterContra(Boolean.valueOf(value));
+			break;
+		case bockEventLostGrand:
+			setBockEventLostGrand(Boolean.valueOf(value));
+			break;
+		case bockEventLostWith60:
+			setBockEventLostWith60(Boolean.valueOf(value));
+			break;
+		case bockEventPlayerHasX00Points:
+			setBockEventPlayerHasX00Points(Boolean.valueOf(value));
+			break;
+		case cardFace:
+			try {
+				setCardFace(CardFace.valueOf(value));
+			} catch (IllegalArgumentException e) {
+				// parsing of older options failed
+				logEnumParseError(option, getCardFace().name());
+			}
+			break;
+		case cheatDebugMode:
+			setCheatDebugMode(Boolean.valueOf(value));
+			break;
+		case checkForNewVersionAtStartUp:
+			setCheckForNewVersionAtStartUp(Boolean.valueOf(value));
+			break;
+		case contraAfterBid18:
+			break;
+		case firstPlayerName:
+			setFirstPlayerName(value);
+			break;
+		case firstPlayerType:
+			try {
+				setFirstPlayerType(PlayerType.valueOf(value));
+			} catch (IllegalArgumentException e) {
+				// parsing of older options failed
+				logEnumParseError(option, getFirstPlayerType().name());
+			}
+			break;
+		case gameShortCut:
+			setGameShortCut(Boolean.valueOf(value));
+			break;
+		case issAddress:
+			setIssAddress(value);
+			break;
+		case issPort:
+			setIssPort(Integer.valueOf(value));
+			break;
+		case language:
+			try {
+				setLanguage(SupportedLanguage.valueOf(value));
+			} catch (IllegalArgumentException e) {
+				// parsing of older options failed
+				logEnumParseError(option, getLanguage().name());
+			}
+			break;
+		case maxPlayerCount:
+			setMaxPlayerCount(Integer.valueOf(value));
+			break;
+		case playBock:
+			setPlayBock(Boolean.valueOf(value));
+			break;
+		case playContra:
+			setPlayContra(Boolean.valueOf(value));
+			break;
+		case playRamsch:
+			setPlayRamsch(Boolean.valueOf(value));
+			break;
+		case playRevolution:
+			setPlayRevolution(Boolean.valueOf(value));
+			break;
+		case ramschEventNoBid:
+			setRamschEventNoBid(Boolean.valueOf(value));
+			break;
+		case ramschEventRamschAfterBock:
+			setRamschEventRamschAfterBock(Boolean.valueOf(value));
+			break;
+		case ramschGrandHandPossible:
+			setRamschGrandHandPossible(Boolean.valueOf(value));
+			break;
+		case ramschSkatOwner:
+			setRamschSkatOwner(RamschSkatOwner.valueOf(value));
+			break;
+		case rules:
+			setRules(RuleSet.valueOf(value));
+			break;
+		case savePath:
+			setSavePath(value);
+			break;
+		case schieberRamsch:
+			setSchieberRamsch(Boolean.valueOf(value));
+			break;
+		case schieberRamschJacksInSkat:
+			setSchieberRamschJacksInSkat(Boolean.valueOf(value));
+			break;
+		case secondPlayerName:
+			setSecondPlayerName(value);
+			break;
+		case secondPlayerType:
+			try {
+				setSecondPlayerType(PlayerType.valueOf(value));
+			} catch (IllegalArgumentException e) {
+				// parsing of older options failed
+				logEnumParseError(option, getSecondPlayerType().name());
+			}
+			break;
+		case showCards:
+			break;
+		case showFirstSteps:
+			break;
+		case thirdPlayerName:
+			setThirdPlayerName(value);
+			break;
+		case thirdPlayerType:
+			try {
+				setThirdPlayerType(PlayerType.valueOf(value));
+			} catch (IllegalArgumentException e) {
+				// parsing of older options failed
+				logEnumParseError(option, getSecondPlayerType().name());
+			}
+			break;
+		case trickRemoveAfterClick:
+			setTrickRemoveAfterClick(Boolean.valueOf(value));
+			break;
+		case trickRemoveDelayTime:
+			setTrickRemoveDelayTime(Integer.valueOf(value));
+			break;
+		}
+	}
+
+	private static void logEnumParseError(Option option, String defaultValue) {
+		log.warn("Parsing of option " + option.name() + " failed. Using default value: " + defaultValue); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
+	/**
+	 * Gets the language code for the language
+	 * 
+	 * @return Language code
+	 */
+	public String getI18NCode() {
+
+		String result = "en"; //$NON-NLS-1$
+
+		if (SupportedLanguage.GERMAN.equals(getLanguage())) {
+			result = "de"; //$NON-NLS-1$
+		}
+
+		return result;
+	}
+
+	private void setOption(Option option, Boolean value) {
+		options.setProperty(option.name(), value.toString());
+	}
+
+	private void setOption(Option option, CardFace value) {
+		options.setProperty(option.name(), value.name());
+	}
+
+	private void setOption(Option option, Integer value) {
+		options.setProperty(option.name(), value.toString());
+	}
+
+	private void setOption(Option option, PlayerType value) {
+		options.setProperty(option.name(), value.name());
+	}
+
+	private void setOption(Option option, RamschSkatOwner value) {
+		options.setProperty(option.name(), value.name());
+	}
+
+	private void setOption(Option option, String value) {
+		options.setProperty(option.name(), value);
+	}
+
+	private void setOption(Option option, SupportedLanguage value) {
+		options.setProperty(option.name(), value.name());
+	}
+
+	/**
+	 * Sets the standard properties
+	 * 
+	 */
+	void setDefaultProperties() {
+
+		setOption(Option.showFirstSteps, Boolean.TRUE);
+		setOption(Option.language, getDefaultLanguage().name());
+		setOption(Option.checkForNewVersionAtStartUp, Boolean.FALSE);
+		setOption(Option.savePath, "");
+		setOption(Option.showCards, Boolean.FALSE);
+		setOption(Option.cardFace, CardFace.TOURNAMENT.name());
+		setOption(Option.trickRemoveDelayTime, 2000);
+		setOption(Option.trickRemoveAfterClick, Boolean.FALSE);
+		setOption(Option.gameShortCut, Boolean.FALSE);
+		setOption(Option.cheatDebugMode, Boolean.FALSE);
+		setOption(Option.maxPlayerCount, Integer.valueOf(3));
+		setOption(Option.firstPlayerName, "Markus");
+		setOption(Option.firstPlayerType, PlayerType.ALGORITHMIC.name());
+		setOption(Option.secondPlayerName, "Jan");
+		setOption(Option.secondPlayerType, PlayerType.NEURAL_NETWORK.name());
+		setOption(Option.thirdPlayerName, System.getProperty("user.name"));
+		setOption(Option.thirdPlayerType, PlayerType.HUMAN.name());
+		setOption(Option.rules, RuleSet.ISPA.name());
+		setOption(Option.playContra, Boolean.TRUE);
+		setOption(Option.contraAfterBid18, Boolean.TRUE);
+		setOption(Option.playBock, Boolean.TRUE);
+		setOption(Option.bockEventLostGrand, Boolean.TRUE);
+		setOption(Option.bockEventLostWith60, Boolean.TRUE);
+		setOption(Option.bockEventLostAfterContra, Boolean.TRUE);
+		setOption(Option.bockEventContraReAnnounced, Boolean.FALSE);
+		setOption(Option.bockEventPlayerHasX00Points, Boolean.FALSE);
+		setOption(Option.playRamsch, Boolean.TRUE);
+		setOption(Option.playRevolution, Boolean.FALSE);
+		setOption(Option.ramschSkatOwner, RamschSkatOwner.LAST_TRICK.name());
+		setOption(Option.schieberRamsch, Boolean.TRUE);
+		setOption(Option.schieberRamschJacksInSkat, Boolean.FALSE);
+		setOption(Option.ramschEventNoBid, Boolean.TRUE);
+		setOption(Option.ramschEventRamschAfterBock, Boolean.FALSE);
+		setOption(Option.ramschGrandHandPossible, Boolean.TRUE);
+		setOption(Option.issAddress, "skatgame.net");
+		setOption(Option.issPort, Integer.valueOf(7000));
 	}
 }
