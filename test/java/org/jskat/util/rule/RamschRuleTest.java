@@ -134,4 +134,23 @@ public class RamschRuleTest extends AbstractJSkatTest {
 		assertFalse(ramschRules.calcGameWon(data));
 		assertEquals(-40, ramschRules.calcGameResult(data));
 	}
+
+	/**
+	 * Test the calculation of the multiplier
+	 */
+	@Test
+	public void testGetMultiplier() {
+
+		data.addGeschoben();
+		assertEquals(2, ramschRules.getMultiplier(data));
+
+		data.addGeschoben();
+		assertEquals(4, ramschRules.getMultiplier(data));
+
+		data.addGeschoben();
+		assertEquals(8, ramschRules.getMultiplier(data));
+
+		data.setJungfrauDurchmarsch();
+		assertEquals(16, ramschRules.getMultiplier(data));
+	}
 }
