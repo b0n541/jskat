@@ -55,10 +55,10 @@ import org.jskat.util.JSkatResourceBundle;
 /**
  * Preferences dialog for JSkat
  */
-public class JSkatPreferencesDialog extends JDialog implements ActionListener {
+public class JSkatOptionsDialog extends JDialog implements ActionListener {
 
 	private static final long serialVersionUID = 1L;
-	private static Log log = LogFactory.getLog(JSkatPreferencesDialog.class);
+	private static Log log = LogFactory.getLog(JSkatOptionsDialog.class);
 
 	JSkatResourceBundle strings;
 	JSkatOptions options;
@@ -66,6 +66,7 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 	private JFrame parent;
 
 	// general options
+	private JCheckBox showTipsAtStartUp;
 	private JCheckBox checkForNewVersion;
 	private JComboBox language;
 	private ButtonGroup cardFace;
@@ -121,7 +122,7 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 	 * 
 	 * @param mainFrame
 	 */
-	public JSkatPreferencesDialog(JFrame mainFrame) {
+	public JSkatOptionsDialog(JFrame mainFrame) {
 
 		strings = JSkatResourceBundle.instance();
 		options = JSkatOptions.instance();
@@ -179,8 +180,6 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		issPanel.add(new JLabel(strings.getString("iss_port")), "shrinky"); //$NON-NLS-1$
 		issPanel.add(getIssPortPanel(), "shrinky, wrap"); //$NON-NLS-1$
 
-		issPanel.validate();
-
 		return issPanel;
 	}
 
@@ -192,9 +191,9 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				int result = fileChooser.showOpenDialog(JSkatPreferencesDialog.this.parent);
+				int result = fileChooser.showOpenDialog(JSkatOptionsDialog.this.parent);
 				if (result == JFileChooser.APPROVE_OPTION) {
-					JSkatPreferencesDialog.this.savePath.setText(fileChooser.getSelectedFile().getAbsolutePath());
+					JSkatOptionsDialog.this.savePath.setText(fileChooser.getSelectedFile().getAbsolutePath());
 				}
 			}
 		});
@@ -207,7 +206,6 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 	private JPanel getIssAddressPanel() {
 
 		issAddress = new JTextField(20);
-		issAddress.setText(options.getIssAddress());
 		JPanel issAddressPanel = new JPanel(new MigLayout("fill", "fill", "shrink")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		issAddressPanel.add(issAddress);
 
@@ -217,7 +215,6 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 	private JPanel getIssPortPanel() {
 
 		issPort = new JTextField(20);
-		issPort.setText(options.getIssPort().toString());
 		JPanel issPortPanel = new JPanel(new MigLayout("fill", "fill", "shrink")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		issPortPanel.add(issPort);
 		return issPortPanel;
@@ -235,18 +232,6 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		cardFaceTournament = new JRadioButton(strings.getString("card_face_tournament")); //$NON-NLS-1$
 		cardFaceTournament.getModel().setActionCommand(CardFace.TOURNAMENT.name());
 		cardFace.add(cardFaceTournament);
-
-		switch (options.getCardFace()) {
-		case FRENCH:
-			cardFaceFrench.setSelected(true);
-			break;
-		case GERMAN:
-			cardFaceGerman.setSelected(true);
-			break;
-		case TOURNAMENT:
-			cardFaceTournament.setSelected(true);
-			break;
-		}
 
 		JPanel cardFacePanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		cardFacePanel.add(cardFaceFrench);
@@ -267,24 +252,21 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		waitTime.setPaintTicks(true);
 		waitTime.setPaintLabels(true);
 
-		waitTime.setValue(options.getTrickRemoveDelayTime() / 1000);
-
 		trickRemoveAfterClick = new JCheckBox(strings.getString("remove_trick_after_click")); //$NON-NLS-1$
 		trickRemoveAfterClick.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent evt) {
 
-				if (JSkatPreferencesDialog.this.trickRemoveAfterClick.isSelected()) {
+				if (JSkatOptionsDialog.this.trickRemoveAfterClick.isSelected()) {
 
-					JSkatPreferencesDialog.this.waitTime.setEnabled(false);
+					JSkatOptionsDialog.this.waitTime.setEnabled(false);
 
 				} else {
 
-					JSkatPreferencesDialog.this.waitTime.setEnabled(true);
+					JSkatOptionsDialog.this.waitTime.setEnabled(true);
 				}
 			}
 		});
-		trickRemoveAfterClick.setSelected(options.isTrickRemoveAfterClick());
 
 		JPanel waitTimePanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		waitTimePanel.add(waitTime);
@@ -300,33 +282,29 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		gameShortCutNo = new JRadioButton(strings.getString("no")); //$NON-NLS-1$
 		gameShortCut.add(gameShortCutNo);
 
-		if (options.isGameShortCut()) {
-			gameShortCutYes.setSelected(true);
-		} else {
-			gameShortCutNo.setSelected(true);
-		}
-
 		JPanel gameShortCutPanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		gameShortCutPanel.add(gameShortCutYes);
 		gameShortCutPanel.add(gameShortCutNo);
 		return gameShortCutPanel;
 	}
 
-	private JPanel getCheckVersionPanel() {
-		checkForNewVersion = new JCheckBox(strings.getString("check_for_new_version_at_start_up")); //$NON-NLS-1$
-		checkForNewVersion.setSelected(options.isCheckForNewVersionAtStartUp());
+	private JPanel getShowTipsPanel() {
+		showTipsAtStartUp = new JCheckBox(strings.getString("show_tips_at_startup")); //$NON-NLS-1$
+		JPanel showTipsPanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+		showTipsPanel.add(showTipsAtStartUp);
+		return showTipsPanel;
+	}
 
+	private JPanel getCheckVersionPanel() {
+		checkForNewVersion = new JCheckBox(strings.getString("check_for_new_version_at_startup")); //$NON-NLS-1$
 		JPanel checkVersionPanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 		checkVersionPanel.add(checkForNewVersion);
 		return checkVersionPanel;
 	}
 
 	private JPanel getLanguagePanel() {
-
 		language = new JComboBox(SupportedLanguage.values());
-		language.setSelectedItem(options.getLanguage());
 		language.setRenderer(new LanguageComboBoxRenderer());
-
 		JPanel languagePanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		languagePanel.add(language);
 		return languagePanel;
@@ -335,6 +313,9 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 	private JPanel getCommonPanel() {
 
 		JPanel commonPanel = new JPanel(new MigLayout()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+
+		commonPanel.add(new JLabel(strings.getString("show_tips"))); //$NON-NLS-1$
+		commonPanel.add(getShowTipsPanel(), "wrap"); //$NON-NLS-1$
 
 		commonPanel.add(new JLabel(strings.getString("check_for_new_version"))); //$NON-NLS-1$
 		commonPanel.add(getCheckVersionPanel(), "wrap"); //$NON-NLS-1$
@@ -352,10 +333,7 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		commonPanel.add(getWaitingTimePanel(strings, options), "wrap"); //$NON-NLS-1$
 
 		commonPanel.add(new JLabel(strings.getString("game_short_cut"))); //$NON-NLS-1$
-		JPanel gameShortCutPanel = getGameShortCutPanel();
-		commonPanel.add(gameShortCutPanel, "wrap"); //$NON-NLS-1$
-
-		commonPanel.validate();
+		commonPanel.add(getGameShortCutPanel(), "wrap"); //$NON-NLS-1$
 
 		return commonPanel;
 	}
@@ -385,11 +363,9 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		JPanel contraPanel = new JPanel(new MigLayout()); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
 		playContra = new JCheckBox(strings.getString("play_contra_re")); //$NON-NLS-1$
-		playContra.setSelected(options.isPlayContra(false).booleanValue());
 		contraPanel.add(playContra, "wrap"); //$NON-NLS-1$
 
 		contraAfterBid18 = new JCheckBox(strings.getString("contra_after_bid_18")); //$NON-NLS-1$
-		contraAfterBid18.setSelected(options.isContraAfterBid18(false).booleanValue());
 		contraPanel.add(contraAfterBid18, "gapleft 20px"); //$NON-NLS-1$
 
 		pubRulesPanel.add(contraPanel, "wrap"); //$NON-NLS-1$
@@ -397,7 +373,6 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		JPanel bockPanel = new JPanel(new MigLayout()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		playBock = new JCheckBox(strings.getString("play_bock")); //$NON-NLS-1$
-		playBock.setSelected(options.isPlayBock(false).booleanValue());
 		bockPanel.add(playBock, "wrap"); //$NON-NLS-1$
 
 		JPanel bockDetailsPanel = new JPanel(new MigLayout()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -405,19 +380,15 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		bockEventLabel = new JLabel(strings.getString("bock_events")); //$NON-NLS-1$
 		bockDetailsPanel.add(bockEventLabel, "span 2, wrap"); //$NON-NLS-1$
 		bockEventLostAfterContra = new JCheckBox(strings.getString("bock_event_lost_contra")); //$NON-NLS-1$
-		bockEventLostAfterContra.setSelected(options.isBockEventLostAfterContra(false).booleanValue());
 		bockDetailsPanel.add(bockEventLostAfterContra);
 		bockEventLostWith60 = new JCheckBox(strings.getString("bock_event_lost_game_with_60")); //$NON-NLS-1$
 		bockEventLostWith60.setSelected(options.isBockEventLostWith60(false).booleanValue());
 		bockDetailsPanel.add(bockEventLostWith60, "wrap"); //$NON-NLS-1$
 		bockEventContraReAnnounced = new JCheckBox(strings.getString("bock_event_contra_re")); //$NON-NLS-1$
-		bockEventContraReAnnounced.setSelected(options.isBockEventContraReAnnounced(false).booleanValue());
 		bockDetailsPanel.add(bockEventContraReAnnounced);
 		bockEventPlayerHasX00Points = new JCheckBox(strings.getString("bock_event_player_x00_points")); //$NON-NLS-1$
-		bockEventPlayerHasX00Points.setSelected(options.isBockEventPlayerHasX00Points(false).booleanValue());
 		bockDetailsPanel.add(bockEventPlayerHasX00Points, "wrap"); //$NON-NLS-1$
 		bockEventLostGrand = new JCheckBox(strings.getString("bock_event_lost_grand")); //$NON-NLS-1$
-		bockEventLostGrand.setSelected(options.isBockEventLostGrand(false).booleanValue());
 		bockDetailsPanel.add(bockEventLostGrand);
 		bockPanel.add(bockDetailsPanel, "gapleft 20px"); //$NON-NLS-1$
 
@@ -426,15 +397,12 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		JPanel ramschPanel = new JPanel(new MigLayout()); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
 		playRamsch = new JCheckBox(strings.getString("play_ramsch")); //$NON-NLS-1$
-		playRamsch.setSelected(options.isPlayRamsch(false).booleanValue());
 		ramschPanel.add(playRamsch, "wrap"); //$NON-NLS-1$
 
 		schiebeRamsch = new JCheckBox(strings.getString("schieberamsch")); //$NON-NLS-1$
-		schiebeRamsch.setSelected(options.isSchieberRamsch(false).booleanValue());
 		ramschPanel.add(schiebeRamsch, "gapleft 20px, wrap"); //$NON-NLS-1$
 
 		schiebeRamschJacksInSkat = new JCheckBox(strings.getString("schieberamsch_jacks_in_skat")); //$NON-NLS-1$
-		schiebeRamschJacksInSkat.setSelected(options.isSchieberRamschJacksInSkat(false).booleanValue());
 		ramschPanel.add(schiebeRamschJacksInSkat, "gapleft 40px, wrap"); //$NON-NLS-1$
 
 		JPanel ramschEventPanel = new JPanel(new MigLayout()); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
@@ -442,10 +410,8 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		ramschEventLabel = new JLabel(strings.getString("ramsch_events")); //$NON-NLS-1$
 		ramschEventPanel.add(ramschEventLabel, "span 2, wrap"); //$NON-NLS-1$
 		ramschEventNoBid = new JCheckBox(strings.getString("ramsch_event_no_bid")); //$NON-NLS-1$
-		ramschEventNoBid.setSelected(options.isRamschEventNoBid(false).booleanValue());
 		ramschEventPanel.add(ramschEventNoBid);
 		ramschEventBockRamsch = new JCheckBox(strings.getString("ramsch_event_bock_ramsch")); //$NON-NLS-1$
-		ramschEventBockRamsch.setSelected(options.isRamschEventRamschAfterBock(false).booleanValue());
 		ramschEventPanel.add(ramschEventBockRamsch);
 
 		ramschPanel.add(ramschEventPanel, "gapleft 20px"); //$NON-NLS-1$
@@ -453,21 +419,9 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 		pubRulesPanel.add(ramschPanel, "wrap"); //$NON-NLS-1$
 
 		playRevolution = new JCheckBox(strings.getString("play_revolution")); //$NON-NLS-1$
-		playRevolution.setSelected(options.isPlayRevolution(false).booleanValue());
 		pubRulesPanel.add(playRevolution);
 
 		rulesPanel.add(pubRulesPanel, "gapleft 20px");
-
-		switch (options.getRules()) {
-		case ISPA:
-			ruleSetISPA.setSelected(true);
-			break;
-		case PUB:
-			ruleSetPub.setSelected(true);
-			break;
-		}
-
-		rulesPanel.validate();
 
 		return rulesPanel;
 	}
@@ -502,11 +456,67 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 	public void setVisible(boolean isVisible) {
 
 		if (isVisible) {
-
 			setLocationRelativeTo(parent);
 		}
 
+		setOptionValues();
+
 		super.setVisible(isVisible);
+	}
+
+	private void setOptionValues() {
+		// common options
+		showTipsAtStartUp.setSelected(options.isShowTipsAtStartUp().booleanValue());
+		checkForNewVersion.setSelected(options.isCheckForNewVersionAtStartUp().booleanValue());
+		language.setSelectedItem(options.getLanguage());
+
+		switch (options.getCardFace()) {
+		case FRENCH:
+			cardFaceFrench.setSelected(true);
+			break;
+		case GERMAN:
+			cardFaceGerman.setSelected(true);
+			break;
+		case TOURNAMENT:
+			cardFaceTournament.setSelected(true);
+			break;
+		}
+
+		waitTime.setValue(options.getTrickRemoveDelayTime().intValue() / 1000);
+		trickRemoveAfterClick.setSelected(options.isTrickRemoveAfterClick().booleanValue());
+
+		if (options.isGameShortCut().booleanValue()) {
+			gameShortCutYes.setSelected(true);
+		} else {
+			gameShortCutNo.setSelected(true);
+		}
+
+		// skat rule options
+		switch (options.getRules()) {
+		case ISPA:
+			ruleSetISPA.setSelected(true);
+			break;
+		case PUB:
+			ruleSetPub.setSelected(true);
+			break;
+		}
+		playContra.setSelected(options.isPlayContra(false).booleanValue());
+		contraAfterBid18.setSelected(options.isContraAfterBid18(false).booleanValue());
+		playBock.setSelected(options.isPlayBock(false).booleanValue());
+		bockEventLostAfterContra.setSelected(options.isBockEventLostAfterContra(false).booleanValue());
+		bockEventContraReAnnounced.setSelected(options.isBockEventContraReAnnounced(false).booleanValue());
+		bockEventPlayerHasX00Points.setSelected(options.isBockEventPlayerHasX00Points(false).booleanValue());
+		bockEventLostGrand.setSelected(options.isBockEventLostGrand(false).booleanValue());
+		playRamsch.setSelected(options.isPlayRamsch(false).booleanValue());
+		schiebeRamsch.setSelected(options.isSchieberRamsch(false).booleanValue());
+		schiebeRamschJacksInSkat.setSelected(options.isSchieberRamschJacksInSkat(false).booleanValue());
+		ramschEventNoBid.setSelected(options.isRamschEventNoBid(false).booleanValue());
+		ramschEventBockRamsch.setSelected(options.isRamschEventRamschAfterBock(false).booleanValue());
+		playRevolution.setSelected(options.isPlayRevolution(false).booleanValue());
+
+		// ISS options
+		issAddress.setText(options.getIssAddress());
+		issPort.setText(options.getIssPort().toString());
 	}
 
 	/**
@@ -520,6 +530,7 @@ public class JSkatPreferencesDialog extends JDialog implements ActionListener {
 			setVisible(false);
 		} else if ("OK".equals(e.getActionCommand())) { //$NON-NLS-1$
 
+			options.setShowTipsAtStartUp(showTipsAtStartUp.isSelected());
 			options.setCheckForNewVersionAtStartUp(checkForNewVersion.isSelected());
 			options.setLanguage((SupportedLanguage) language.getSelectedItem());
 			options.setCardFace(getSelectedCardFace());

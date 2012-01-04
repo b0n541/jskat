@@ -56,7 +56,7 @@ public class JSkatOptions {
 	}
 
 	private enum Option {
-		bockEventContraReAnnounced, bockEventLostAfterContra, bockEventLostGrand, bockEventLostWith60, bockEventPlayerHasX00Points, cardFace, cheatDebugMode, checkForNewVersionAtStartUp, firstPlayerName, firstPlayerType, gameShortCut, issAddress, issPort, language, maxPlayerCount, playBock, playContra, playRamsch, playRevolution, ramschEventNoBid, ramschEventRamschAfterBock, ramschGrandHandPossible, ramschSkatOwner, rules, savePath, schieberRamsch, schieberRamschJacksInSkat, secondPlayerName, secondPlayerType, showCards, showFirstSteps, thirdPlayerName, thirdPlayerType, trickRemoveAfterClick, trickRemoveDelayTime, contraAfterBid18;
+		bockEventContraReAnnounced, bockEventLostAfterContra, bockEventLostGrand, bockEventLostWith60, bockEventPlayerHasX00Points, cardFace, cheatDebugMode, checkForNewVersionAtStartUp, firstPlayerName, firstPlayerType, gameShortCut, issAddress, issPort, language, maxPlayerCount, playBock, playContra, playRamsch, playRevolution, ramschEventNoBid, ramschEventRamschAfterBock, ramschGrandHandPossible, ramschSkatOwner, rules, savePath, schieberRamsch, schieberRamschJacksInSkat, secondPlayerName, secondPlayerType, showCards, showTipsAtStartUp, thirdPlayerName, thirdPlayerType, trickRemoveAfterClick, trickRemoveDelayTime, contraAfterBid18;
 	}
 
 	private static Log log = LogFactory.getLog(JSkatOptions.class);
@@ -92,7 +92,7 @@ public class JSkatOptions {
 
 			log.debug("No properties file found. Using standard values."); //$NON-NLS-1$
 
-			setOption(Option.showFirstSteps, Boolean.TRUE);
+			setOption(Option.showTipsAtStartUp, Boolean.TRUE);
 			File dir = new File(System.getProperty("user.home") + System.getProperty("file.separator") + ".jskat"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			dir.mkdir();
 			String filename = System.getProperty("user.home") + System.getProperty("file.separator") + ".jskat" + System.getProperty("file.separator") + "jskat.properties"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
@@ -562,8 +562,8 @@ public class JSkatOptions {
 	 * 
 	 * @return true, if this is the first use of JSkat
 	 */
-	public Boolean isShowFirstSteps() {
-		return getBooleanOption(Option.showFirstSteps);
+	public Boolean isShowTipsAtStartUp() {
+		return getBooleanOption(Option.showTipsAtStartUp);
 	}
 
 	/**
@@ -1127,8 +1127,10 @@ public class JSkatOptions {
 			}
 			break;
 		case showCards:
+			setShowCards(Boolean.valueOf(value));
 			break;
-		case showFirstSteps:
+		case showTipsAtStartUp:
+			setShowTipsAtStartUp(Boolean.valueOf(value));
 			break;
 		case thirdPlayerName:
 			setThirdPlayerName(value);
@@ -1204,10 +1206,10 @@ public class JSkatOptions {
 	 */
 	void setDefaultProperties() {
 
-		setOption(Option.showFirstSteps, Boolean.TRUE);
+		setOption(Option.showTipsAtStartUp, Boolean.TRUE);
 		setOption(Option.language, getDefaultLanguage().name());
 		setOption(Option.checkForNewVersionAtStartUp, Boolean.FALSE);
-		setOption(Option.savePath, "");
+		setOption(Option.savePath, ""); //$NON-NLS-1$
 		setOption(Option.showCards, Boolean.FALSE);
 		setOption(Option.cardFace, CardFace.TOURNAMENT.name());
 		setOption(Option.trickRemoveDelayTime, 2000);
@@ -1215,11 +1217,11 @@ public class JSkatOptions {
 		setOption(Option.gameShortCut, Boolean.FALSE);
 		setOption(Option.cheatDebugMode, Boolean.FALSE);
 		setOption(Option.maxPlayerCount, Integer.valueOf(3));
-		setOption(Option.firstPlayerName, "Markus");
+		setOption(Option.firstPlayerName, "Markus"); //$NON-NLS-1$
 		setOption(Option.firstPlayerType, PlayerType.ALGORITHMIC.name());
-		setOption(Option.secondPlayerName, "Jan");
+		setOption(Option.secondPlayerName, "Jan"); //$NON-NLS-1$
 		setOption(Option.secondPlayerType, PlayerType.NEURAL_NETWORK.name());
-		setOption(Option.thirdPlayerName, System.getProperty("user.name"));
+		setOption(Option.thirdPlayerName, System.getProperty("user.name")); //$NON-NLS-1$
 		setOption(Option.thirdPlayerType, PlayerType.HUMAN.name());
 		setOption(Option.rules, RuleSet.ISPA.name());
 		setOption(Option.playContra, Boolean.TRUE);
@@ -1238,7 +1240,17 @@ public class JSkatOptions {
 		setOption(Option.ramschEventNoBid, Boolean.TRUE);
 		setOption(Option.ramschEventRamschAfterBock, Boolean.FALSE);
 		setOption(Option.ramschGrandHandPossible, Boolean.TRUE);
-		setOption(Option.issAddress, "skatgame.net");
+		setOption(Option.issAddress, "skatgame.net"); //$NON-NLS-1$
 		setOption(Option.issPort, Integer.valueOf(7000));
+	}
+
+	/**
+	 * Sets the flag for showing the welcome dialog with first steps at startup
+	 * 
+	 * @param isShowTips
+	 *            TRUE, if first steps should be shown
+	 */
+	public void setShowTipsAtStartUp(Boolean isShowTips) {
+		setOption(Option.showTipsAtStartUp, isShowTips);
 	}
 }

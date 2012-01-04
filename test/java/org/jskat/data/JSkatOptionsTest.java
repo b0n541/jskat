@@ -26,7 +26,7 @@ public class JSkatOptionsTest extends AbstractJSkatTest {
 		JSkatOptions options = JSkatOptions.instance();
 		options.setDefaultProperties();
 
-		assertTrue(options.isShowFirstSteps().booleanValue());
+		assertTrue(options.isShowTipsAtStartUp().booleanValue());
 		assertFalse(options.isCheckForNewVersionAtStartUp().booleanValue());
 
 		if (Locale.getDefault().getLanguage().equals(Locale.GERMAN.getLanguage())) {

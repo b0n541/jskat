@@ -63,7 +63,7 @@ public class JSkatHelpDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private static Log log = LogFactory.getLog(JSkatHelpDialog.class);
 
-	private final JSkatResourceBundle strings = JSkatResourceBundle.instance();
+	protected final JSkatResourceBundle strings = JSkatResourceBundle.instance();
 
 	private JFrame parent;
 	private JScrollPane scrollPane;
@@ -96,17 +96,9 @@ public class JSkatHelpDialog extends JDialog {
 	private void initComponents(String title) {
 
 		JPanel northPanel = new JPanel();
-		JPanel southPanel = new JPanel();
-		JButton closeButton = new JButton(strings.getString("close")); //$NON-NLS-1$
-		closeButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
-				closeDialog();
-			}
-		});
-		southPanel.add(closeButton);
-		JButton openExternal = new JButton(openExternalAction);
 
-		southPanel.add(openExternal);
+		JPanel southPanel = getButtonPanel();
+
 		JPanel westPanel = new JPanel();
 		JPanel eastPanel = new JPanel();
 
@@ -142,6 +134,21 @@ public class JSkatHelpDialog extends JDialog {
 		getContentPane().add(westPanel, BorderLayout.WEST);
 
 		pack();
+	}
+
+	protected JPanel getButtonPanel() {
+		JPanel southPanel = new JPanel();
+		JButton closeButton = new JButton(strings.getString("close")); //$NON-NLS-1$
+		closeButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				closeDialog();
+			}
+		});
+		southPanel.add(closeButton);
+		JButton openExternal = new JButton(openExternalAction);
+
+		southPanel.add(openExternal);
+		return southPanel;
 	}
 
 	private String getResource(String url) {
@@ -255,7 +262,7 @@ public class JSkatHelpDialog extends JDialog {
 		textPane.setCaretPosition(0);
 	}
 
-	private final Action openExternalAction = new AbstractAction(
+	protected final Action openExternalAction = new AbstractAction(
 			strings.getString("open_external")) {
 		private static final long serialVersionUID = 4233152199895964006L;
 

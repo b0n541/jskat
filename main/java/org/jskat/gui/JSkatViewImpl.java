@@ -114,6 +114,7 @@ import org.jskat.gui.action.main.SaveSeriesAsAction;
 import org.jskat.gui.action.main.StartSkatSeriesAction;
 import org.jskat.gui.action.main.TrainNeuralNetworksAction;
 import org.jskat.gui.help.JSkatHelpDialog;
+import org.jskat.gui.help.JSkatWelcomeDialog;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.iss.ISSTablePanel;
 import org.jskat.gui.iss.LobbyPanel;
@@ -138,7 +139,7 @@ public class JSkatViewImpl implements JSkatView {
 
 	private JFrame mainFrame;
 	private SkatSeriesStartDialog skatSeriesStartDialog;
-	private JSkatPreferencesDialog preferencesDialog;
+	private JSkatOptionsDialog preferencesDialog;
 	private NeuralNetworkTrainingOverview trainingOverview;
 	private JTabbedPane tabs;
 	private Map<String, SkatTablePanel> tables;
@@ -162,7 +163,7 @@ public class JSkatViewImpl implements JSkatView {
 		initGUI();
 
 		skatSeriesStartDialog = new SkatSeriesStartDialog(jskat, mainFrame);
-		preferencesDialog = new JSkatPreferencesDialog(mainFrame);
+		preferencesDialog = new JSkatOptionsDialog(mainFrame);
 		trainingOverview = new NeuralNetworkTrainingOverview();
 
 		addTabPanel(new WelcomePanel(strings.getString("welcome"), actions), //$NON-NLS-1$
@@ -640,7 +641,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showWelcomeDialog() {
 
-		new JSkatHelpDialog(mainFrame, strings.getString("welcome_to_jskat"), "org/jskat/gui/help/" //$NON-NLS-1$ //$NON-NLS-2$
+		new JSkatWelcomeDialog(mainFrame, strings.getString("welcome_to_jskat"), "org/jskat/gui/help/" //$NON-NLS-1$ //$NON-NLS-2$
 				+ JSkatOptions.instance().getI18NCode() + "/welcome.html").setVisible(true); //$NON-NLS-1$
 	}
 
