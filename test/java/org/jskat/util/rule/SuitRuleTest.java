@@ -69,6 +69,22 @@ public class SuitRuleTest extends AbstractJSkatTest {
 	 * Checks @see SuitGrandRules#calcGameResult()
 	 */
 	@Test
+	public void calcGameResultGameWonWithoutJacks() {
+		SkatGameData data = new SkatGameData();
+		data.setDeclarerPickedUpSkat(true);
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerScore(61);
+		data.setDealtCard(Player.FOREHAND, Card.CA);
+		data.calcResult();
+		assertEquals(60, data.getResult().getGameValue());
+		assertEquals(60, clubsRules.calcGameResult(data));
+	}
+
+	/**
+	 * Checks @see SuitGrandRules#calcGameResult()
+	 */
+	@Test
 	public void calcGameResultGameWonClubJack() {
 		SkatGameData data = new SkatGameData();
 		data.setDeclarerPickedUpSkat(true);
