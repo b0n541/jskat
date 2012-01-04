@@ -176,7 +176,7 @@ public class NetworkTester {
 			log.debug(predOutput);
 		}
 
-		net.saveNetwork("asdf.net");
+		net.saveNetwork(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "asdf.net"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		log.debug("Re-loading network");
 
