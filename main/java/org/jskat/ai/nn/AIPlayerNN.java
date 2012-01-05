@@ -54,6 +54,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 	private Random rand;
 	private List<double[]> allInputs;
+	private GameType bestGameTypeFromDiscarding;
 
 	private boolean isLearning = false;
 
@@ -200,7 +201,15 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 				" " + knowledge.getHighestBid(Player.REARHAND)); //$NON-NLS-1$
 
 		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-		factory.setGameType(getBestGameType());
+
+		if (bestGameTypeFromDiscarding != null) {
+			// use game type from discarding
+			factory.setGameType(bestGameTypeFromDiscarding);
+		} else {
+			// no discarding done
+			factory.setGameType(getBestGameType());
+			factory.setHand(Boolean.TRUE);
+		}
 
 		// FIXME (jan 17.01.2011) setting ouvert and schneider/schwarz
 		// newGame.setOuvert(rand.nextBoolean());
@@ -295,13 +304,16 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 				currSkat.add(simCards.remove(j));
 
 				gameSimulator.resetGameSimulator(filteredGameTypes, knowledge.getPlayerPosition(), simCards);
-				SimulationResults results = gameSimulator.simulateMaxEpisodes(Long.valueOf(MAX_SIMULATIONS / 5));
+				SimulationResults simulationResults = gameSimulator.simulateMaxEpisodes(Long
+						.valueOf(MAX_SIMULATIONS / 5));
 
-				for (Double wonRate : results.getAllWonRates()) {
+				for (GameType currType : filteredGameTypes) {
+
+					Double wonRate = simulationResults.getWonRate(currType);
 
 					if (wonRate.doubleValue() > highestWonRate) {
-
 						highestWonRate = wonRate.doubleValue();
+						bestGameTypeFromDiscarding = currType;
 						result.clear();
 						result.addAll(currSkat);
 					}
@@ -466,7 +478,11 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		// inputs for left opponent
 		if (knowledge.couldHaveCard(leftOpponent, card)) {
-			inputs[netInputIndexForCard] = 1.0d;
+			if (knowledge.couldHaveCard(rightOpponent, card)) {
+				inputs[netInputIndexForCard] = 0.5d;
+			} else {
+				inputs[netInputIndexForCard] = 1.0d;
+			}
 		} else if (knowledge.isCardPlayedInTrick(leftOpponent, card)) {
 			inputs[netInputIndexForCard] = -1.0d;
 		} else if (knowledge.isCardPlayedBy(leftOpponent, card)) {
@@ -477,17 +493,21 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		// inputs for right opponent
 		if (knowledge.couldHaveCard(rightOpponent, card)) {
-			inputs[32 + netInputIndexForCard] = 1.0d;
+			if (knowledge.couldHaveCard(leftOpponent, card)) {
+				inputs[32 + netInputIndexForCard] = 0.5d;
+			} else {
+				inputs[32 + netInputIndexForCard] = 1.0d;
+			}
 		} else if (knowledge.isCardPlayedInTrick(rightOpponent, card)) {
 			inputs[32 + netInputIndexForCard] = -1.0d;
 		} else if (knowledge.isCardPlayedBy(rightOpponent, card)) {
-			inputs[32 + netInputIndexForCard] = -0.5d;
+			inputs[32 + netInputIndexForCard] = -0.5;
 		} else {
 			inputs[32 + netInputIndexForCard] = 0.0d;
 		}
 
 		// inputs for player
-		if (knowledge.couldHaveCard(knowledge.getPlayerPosition(), card)) {
+		if (knowledge.getMyCards().contains(card)) {
 			inputs[64 + netInputIndexForCard] = 1.0d;
 		} else if (knowledge.isCardPlayedBy(knowledge.getPlayerPosition(), card)) {
 			inputs[64 + netInputIndexForCard] = -0.5d;
@@ -503,7 +523,11 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		// inputs for other opponent
 		if (knowledge.couldHaveCard(otherOpponent, card)) {
-			inputs[netInputIndexForCard] = 1.0d;
+			if (knowledge.couldHaveCard(declarer, card)) {
+				inputs[netInputIndexForCard] = 0.5d;
+			} else {
+				inputs[netInputIndexForCard] = 1.0d;
+			}
 		} else if (knowledge.isCardPlayedInTrick(otherOpponent, card)) {
 			inputs[netInputIndexForCard] = -1.0d;
 		} else if (knowledge.isCardPlayedBy(otherOpponent, card)) {
@@ -513,7 +537,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		}
 
 		// inputs for player
-		if (knowledge.couldHaveCard(knowledge.getPlayerPosition(), card)) {
+		if (knowledge.getMyCards().contains(card)) {
 			inputs[32 + netInputIndexForCard] = 1.0d;
 		} else if (knowledge.isCardPlayedBy(knowledge.getPlayerPosition(), card)) {
 			inputs[32 + netInputIndexForCard] = -0.5d;
@@ -523,7 +547,11 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		// inputs for single player
 		if (knowledge.couldHaveCard(declarer, card)) {
-			inputs[64 + netInputIndexForCard] = 1.0d;
+			if (knowledge.couldHaveCard(otherOpponent, card)) {
+				inputs[64 + netInputIndexForCard] = 0.5d;
+			} else {
+				inputs[64 + netInputIndexForCard] = 1.0d;
+			}
 		} else if (knowledge.isCardPlayedInTrick(declarer, card)) {
 			inputs[64 + netInputIndexForCard] = -1.0d;
 		} else if (knowledge.isCardPlayedBy(declarer, card)) {
@@ -649,6 +677,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	public void preparateForNewGame() {
 
 		allInputs.clear();
+		bestGameTypeFromDiscarding = null;
 	}
 
 	/**
