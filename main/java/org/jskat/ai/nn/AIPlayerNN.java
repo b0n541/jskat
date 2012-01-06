@@ -486,7 +486,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		} else if (knowledge.isCardPlayedInTrick(leftOpponent, card)) {
 			inputs[netInputIndexForCard] = -1.0d;
 		} else if (knowledge.isCardPlayedBy(leftOpponent, card)) {
-			inputs[netInputIndexForCard] = -0.5d;
+			inputs[netInputIndexForCard] = -0.75d;
 		} else {
 			inputs[netInputIndexForCard] = 0.0d;
 		}
@@ -501,7 +501,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		} else if (knowledge.isCardPlayedInTrick(rightOpponent, card)) {
 			inputs[32 + netInputIndexForCard] = -1.0d;
 		} else if (knowledge.isCardPlayedBy(rightOpponent, card)) {
-			inputs[32 + netInputIndexForCard] = -0.5;
+			inputs[32 + netInputIndexForCard] = -0.75;
 		} else {
 			inputs[32 + netInputIndexForCard] = 0.0d;
 		}
@@ -510,7 +510,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		if (knowledge.getMyCards().contains(card)) {
 			inputs[64 + netInputIndexForCard] = 1.0d;
 		} else if (knowledge.isCardPlayedBy(knowledge.getPlayerPosition(), card)) {
-			inputs[64 + netInputIndexForCard] = -0.5d;
+			inputs[64 + netInputIndexForCard] = -0.75d;
 		} else {
 			inputs[64 + netInputIndexForCard] = 0.0d;
 		}
@@ -531,7 +531,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		} else if (knowledge.isCardPlayedInTrick(otherOpponent, card)) {
 			inputs[netInputIndexForCard] = -1.0d;
 		} else if (knowledge.isCardPlayedBy(otherOpponent, card)) {
-			inputs[netInputIndexForCard] = -0.5d;
+			inputs[netInputIndexForCard] = -0.75d;
 		} else {
 			inputs[netInputIndexForCard] = 0.0d;
 		}
@@ -540,7 +540,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		if (knowledge.getMyCards().contains(card)) {
 			inputs[32 + netInputIndexForCard] = 1.0d;
 		} else if (knowledge.isCardPlayedBy(knowledge.getPlayerPosition(), card)) {
-			inputs[32 + netInputIndexForCard] = -0.5d;
+			inputs[32 + netInputIndexForCard] = -0.75d;
 		} else {
 			inputs[32 + netInputIndexForCard] = 0.0d;
 		}
@@ -555,7 +555,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		} else if (knowledge.isCardPlayedInTrick(declarer, card)) {
 			inputs[64 + netInputIndexForCard] = -1.0d;
 		} else if (knowledge.isCardPlayedBy(declarer, card)) {
-			inputs[64 + netInputIndexForCard] = -0.5d;
+			inputs[64 + netInputIndexForCard] = -0.75d;
 		} else {
 			inputs[64 + netInputIndexForCard] = 0.0d;
 		}
