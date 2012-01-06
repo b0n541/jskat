@@ -98,13 +98,12 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public int bidMore(int nextBidValue) {
-
 		int result = -1;
 
-		// if (rand.nextBoolean()) {
-		//
-		// result = nextBidValue;
-		// }
+		if (rand.nextBoolean()) {
+
+			result = nextBidValue;
+		}
 
 		return result;
 	}
@@ -114,9 +113,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public boolean holdBid(int currBidValue) {
-
-		// return rand.nextBoolean();
-		return false;
+		return rand.nextBoolean();
 	}
 
 	/**
