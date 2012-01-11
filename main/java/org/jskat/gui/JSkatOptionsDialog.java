@@ -463,6 +463,7 @@ public class JSkatOptionsDialog extends JDialog implements ActionListener {
 		playRamsch.setEnabled(isActivated);
 		schiebeRamsch.setEnabled(isActivated);
 		schiebeRamschJacksInSkat.setEnabled(isActivated);
+		ramschSkatLabel.setEnabled(isActivated);
 		ramschSkatLastTrick.setEnabled(isActivated);
 		ramschSkatLoser.setEnabled(isActivated);
 		ramschEventLabel.setEnabled(isActivated);
@@ -533,8 +534,8 @@ public class JSkatOptionsDialog extends JDialog implements ActionListener {
 		playRamsch.setSelected(options.isPlayRamsch(false).booleanValue());
 		schiebeRamsch.setSelected(options.isSchieberRamsch(false).booleanValue());
 		schiebeRamschJacksInSkat.setSelected(options.isSchieberRamschJacksInSkat(false).booleanValue());
-		ramschSkatLastTrick.setSelected(options.getRamschSkat()==RamschSkatOwner.LAST_TRICK);
-		ramschSkatLoser.setSelected(options.getRamschSkat()!=RamschSkatOwner.LAST_TRICK);
+		ramschSkatLastTrick.setSelected(RamschSkatOwner.LAST_TRICK.equals(options.getRamschSkat()));
+		ramschSkatLoser.setSelected(RamschSkatOwner.LOSER.equals(options.getRamschSkat()));
 		ramschEventNoBid.setSelected(options.isRamschEventNoBid(false).booleanValue());
 		ramschEventBockRamsch.setSelected(options.isRamschEventRamschAfterBock(false).booleanValue());
 		playRevolution.setSelected(options.isPlayRevolution(false).booleanValue());
