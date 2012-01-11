@@ -424,11 +424,11 @@ public class JSkatOptionsDialog extends JDialog implements ActionListener {
 		ramschPanel.add(ramschEventPanel, "gapleft 20px, wrap"); //$NON-NLS-1$
 
 		JPanel ramschSkatPanel = new JPanel(new MigLayout()); 
-		ramschSkatLabel = new JLabel("Ramsch skat goes to");
+		ramschSkatLabel = new JLabel(strings.getString("ramsch_skat_owner")); //$NON-NLS-1$
 		ramschSkatPanel.add(ramschSkatLabel, "wrap"); //$NON-NLS-1$
-		ramschSkatLastTrick = new JRadioButton("Last Trick");
+		ramschSkatLastTrick = new JRadioButton(strings.getString("ramsch_skat_last_trick")); //$NON-NLS-1$
 		ramschSkatPanel.add(ramschSkatLastTrick, "wrap"); //$NON-NLS-1$
-		ramschSkatLoser = new JRadioButton("Loser");
+		ramschSkatLoser = new JRadioButton(strings.getString("ramsch_skat_loser")); //$NON-NLS-1$
 		ramschSkatPanel.add(ramschSkatLoser);
 		ramschPanel.add(ramschSkatPanel, "gapleft 20px"); //$NON-NLS-1$
 		
