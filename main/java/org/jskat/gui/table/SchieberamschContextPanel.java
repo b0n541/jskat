@@ -151,5 +151,4 @@ class SchieberamschContextPanel extends JPanel {
 	public void setSkat(CardList skat) {
 		discardPanel.setSkat(skat);
 	}
-	
 }

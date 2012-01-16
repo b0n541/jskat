@@ -622,4 +622,12 @@ public class NullView implements JSkatView {
 	public void showNewVersionAvailableMessage(String newVersion) {
 		// empty method by indent
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setDiscardedSkat(String tableName, Player activePlayer, CardList skatBefore, CardList discardedSkat) {
+		// empty method by indent
+	}
 }

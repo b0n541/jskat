@@ -675,4 +675,18 @@ public interface JSkatView {
 	 *            Player position
 	 */
 	public void setGeschoben(String tableName, Player player);
+
+	/**
+	 * Sets the discards skat
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param activePlayer
+	 *            Discarding player
+	 * @param skatBefore
+	 *            Skat before discarding
+	 * @param discardedSkat
+	 *            Skat after discarding
+	 */
+	public void setDiscardedSkat(String tableName, Player activePlayer, CardList skatBefore, CardList discardedSkat);
 }

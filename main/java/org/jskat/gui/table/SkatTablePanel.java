@@ -1048,4 +1048,29 @@ public class SkatTablePanel extends AbstractTabPanel {
 	public void setGeschoben(Player player) {
 		getPlayerPanel(player).setGeschoben();
 	}
+
+	/**
+	 * Sets the discarded skat
+	 * 
+	 * @param player
+	 *            Player
+	 * @param skatBefore
+	 *            Skat before discarding
+	 * @param discardedSkat
+	 *            Skat after discarding
+	 */
+	public void setDiscardedSkat(Player player, CardList skatBefore, CardList discardedSkat) {
+		AbstractHandPanel playerPanel = getPlayerPanel(player);
+
+		for (int i = 0; i < 2; i++) {
+			Card skatCard = skatBefore.get(i);
+			playerPanel.addCard(skatCard);
+			takeCardFromSkat(skatCard);
+		}
+		for (int i = 0; i < 2; i++) {
+			Card skatCard = discardedSkat.get(i);
+			playerPanel.removeCard(skatCard);
+			putCardIntoSkat(skatCard);
+		}
+	}
 }

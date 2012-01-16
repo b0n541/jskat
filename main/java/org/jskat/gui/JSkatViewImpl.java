@@ -1266,4 +1266,12 @@ public class JSkatViewImpl implements JSkatView {
 	public void setGeschoben(String tableName, Player player) {
 		tables.get(tableName).setGeschoben(player);
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setDiscardedSkat(String tableName, Player player, CardList skatBefore, CardList discardedSkat) {
+		tables.get(tableName).setDiscardedSkat(player, skatBefore, discardedSkat);
+	}
 }
