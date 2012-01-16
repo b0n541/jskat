@@ -149,7 +149,7 @@ abstract class AbstractHandPanel extends JPanel {
 		cardPanel = new CardPanel(this, 1.0, true);
 		add(cardPanel, "growy"); //$NON-NLS-1$
 
-		if (JSkatOptions.instance().isShowCards()) {
+		if (JSkatOptions.instance().isCheatDebugMode().booleanValue()) {
 			showCards();
 		}
 	}

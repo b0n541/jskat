@@ -56,7 +56,7 @@ public class JSkatOptions {
 	}
 
 	private enum Option {
-		bockEventContraReAnnounced, bockEventLostAfterContra, bockEventLostGrand, bockEventLostWith60, bockEventPlayerHasX00Points, cardFace, cheatDebugMode, checkForNewVersionAtStartUp, firstPlayerName, firstPlayerType, gameShortCut, issAddress, issPort, language, maxPlayerCount, playBock, playContra, playRamsch, playRevolution, ramschEventNoBid, ramschEventRamschAfterBock, ramschGrandHandPossible, ramschSkatOwner, rules, savePath, schieberRamsch, schieberRamschJacksInSkat, secondPlayerName, secondPlayerType, showCards, showTipsAtStartUp, thirdPlayerName, thirdPlayerType, trickRemoveAfterClick, trickRemoveDelayTime, contraAfterBid18;
+		bockEventContraReAnnounced, bockEventLostAfterContra, bockEventLostGrand, bockEventLostWith60, bockEventPlayerHasX00Points, cardFace, cheatDebugMode, checkForNewVersionAtStartUp, firstPlayerName, firstPlayerType, gameShortCut, issAddress, issPort, language, maxPlayerCount, playBock, playContra, playRamsch, playRevolution, ramschEventNoBid, ramschEventRamschAfterBock, ramschGrandHandPossible, ramschSkatOwner, rules, savePath, schieberRamsch, schieberRamschJacksInSkat, secondPlayerName, secondPlayerType, showTipsAtStartUp, thirdPlayerName, thirdPlayerType, trickRemoveAfterClick, trickRemoveDelayTime, contraAfterBid18;
 	}
 
 	private static Log log = LogFactory.getLog(JSkatOptions.class);
@@ -548,15 +548,6 @@ public class JSkatOptions {
 	}
 
 	/**
-	 * Getter for property showCards
-	 * 
-	 * @return TRUE, if cards should be shown
-	 */
-	public Boolean isShowCards() {
-		return getBooleanOption(Option.showCards);
-	}
-
-	/**
 	 * Flag that is set if JSkat seems to be used for the first time. The flag
 	 * is set if no option file is found.
 	 * 
@@ -900,15 +891,6 @@ public class JSkatOptions {
 	}
 
 	/**
-	 * Sets the flag for showing all cards
-	 * 
-	 * @param isShowCards
-	 */
-	public void setShowCards(Boolean isShowCards) {
-		setOption(Option.showCards, isShowCards);
-	}
-
-	/**
 	 * Setter for property thirdPlayerName.
 	 * 
 	 * @param thirdPlayerName
@@ -1126,9 +1108,6 @@ public class JSkatOptions {
 				logEnumParseError(option, getSecondPlayerType().name());
 			}
 			break;
-		case showCards:
-			setShowCards(Boolean.valueOf(value));
-			break;
 		case showTipsAtStartUp:
 			setShowTipsAtStartUp(Boolean.valueOf(value));
 			break;
@@ -1210,7 +1189,6 @@ public class JSkatOptions {
 		setOption(Option.language, getDefaultLanguage().name());
 		setOption(Option.checkForNewVersionAtStartUp, Boolean.FALSE);
 		setOption(Option.savePath, ""); //$NON-NLS-1$
-		setOption(Option.showCards, Boolean.FALSE);
 		setOption(Option.cardFace, CardFace.TOURNAMENT.name());
 		setOption(Option.trickRemoveDelayTime, 2000);
 		setOption(Option.trickRemoveAfterClick, Boolean.FALSE);
