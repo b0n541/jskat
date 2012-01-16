@@ -69,7 +69,7 @@ public class SkatNetworks {
 		// n number of nodes in input layer
 		int inputCount = 96;
 		// int hiddenCount = 2 * inputCount + 1;
-		int hiddenCount = 50;
+		int hiddenCount = 15;
 		int outputCount = 1;
 
 		int[] hiddenLayer = { hiddenCount };
@@ -83,36 +83,10 @@ public class SkatNetworks {
 		// SkatNetworks.nullOpponent = new NeuralNetwork(topol);
 		// SkatNetworks.grandDeclarer = new NeuralNetwork(topol);
 		// SkatNetworks.grandOpponent = new NeuralNetwork(topol);
+		// SkatNetworks.ramschDeclarer = new NeuralNetwork(topol);
 
 		loadNetworks(ClassLoader.getSystemResource("org/jskat/ai/nn/data") //$NON-NLS-1$
 				.getPath());
-
-		// SkatNetworks.suitDeclarer = new
-		// MultiLayerPerceptron(TransferFunctionType.TANH, inputCount,
-		// hiddenCount,
-		// outputCount);
-		// SkatNetworks.suitOpponent = new
-		// MultiLayerPerceptron(TransferFunctionType.TANH, inputCount,
-		// hiddenCount,
-		// outputCount);
-		// SkatNetworks.nullDeclarer = new
-		// MultiLayerPerceptron(TransferFunctionType.TANH, inputCount,
-		// hiddenCount,
-		// outputCount);
-		// SkatNetworks.nullOpponent = new
-		// MultiLayerPerceptron(TransferFunctionType.TANH, inputCount,
-		// hiddenCount,
-		// outputCount);
-		// SkatNetworks.grandDeclarer = new
-		// MultiLayerPerceptron(TransferFunctionType.TANH, inputCount,
-		// hiddenCount,
-		// outputCount);
-		// SkatNetworks.grandOpponent = new
-		// MultiLayerPerceptron(TransferFunctionType.TANH, inputCount,
-		// hiddenCount,
-		// outputCount);
-		// SkatNetworks.loadNetworks(ClassLoader.getSystemResource(
-		//				"org/jskat/ai/nn/data").toString()); //$NON-NLS-1$
 	}
 
 	/**

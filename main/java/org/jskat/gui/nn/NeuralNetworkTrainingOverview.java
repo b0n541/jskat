@@ -107,7 +107,7 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 			header.add("Episodes");
 			header.add("Total won games");
 			header.add("Episode won games");
-			header.add("Average declarer difference");
+			header.add("Percent");
 			header.add("Average opponent difference");
 
 			data = new HashMap<GameType, List<Object>>();
@@ -172,7 +172,7 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 			tableModel.setValueAt(episodes, gameType.ordinal(), 1);
 			tableModel.setValueAt(totalWonGames, gameType.ordinal(), 2);
 			tableModel.setValueAt(episodeWonGames, gameType.ordinal(), 3);
-			tableModel.setValueAt(avgDifference, gameType.ordinal(), 4);
+			tableModel.setValueAt(100d * (double) totalWonGames / (double) episodes, gameType.ordinal(), 4);
 
 			fireTableDataChanged();
 		}
