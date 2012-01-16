@@ -450,4 +450,9 @@ public class UnitTestView implements JSkatView {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public void setDiscardedSkat(String tableName, Player activePlayer, CardList skatBefore, CardList discardedSkat) {
+		// TODO Auto-generated method stub
+	}
 }
