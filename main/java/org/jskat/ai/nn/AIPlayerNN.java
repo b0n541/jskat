@@ -296,15 +296,17 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 				knowledge.getPlayerPosition()).intValue());
 
 		// check all possible discards
-		for (int i = 0; i < cards.size(); i++) {
-			for (int j = 0; j < cards.size() - 1; j++) {
+		for (int i = 0; i < cards.size() - 1; i++) {
+			for (int j = i + 1; j < cards.size(); j++) {
 
 				CardList simCards = new CardList();
 				simCards.addAll(cards);
 
 				CardList currSkat = new CardList();
-				currSkat.add(simCards.remove(i));
-				currSkat.add(simCards.remove(j));
+				currSkat.add(simCards.get(i));
+				currSkat.add(simCards.get(j));
+
+				simCards.removeAll(currSkat);
 
 				gameSimulator.resetGameSimulator(filteredGameTypes, knowledge.getPlayerPosition(), simCards);
 				SimulationResults simulationResults = gameSimulator.simulateMaxEpisodes(Long
@@ -374,7 +376,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			// than than 0.95
 			// better solution: simulate games from this point on
 			SkatNetworks.instance();
-			NeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGame().getGameType(), isDeclarer());
+			List<NeuralNetwork> networks = SkatNetworks.getNetwork(knowledge.getGame().getGameType(), isDeclarer());
+			NeuralNetwork net = networks.get(knowledge.getCurrentTrick().getTrickNumberInGame());
 
 			double highestOutput = -2.0d;
 			double[] bestInputs = new double[96];
@@ -714,10 +717,13 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		}
 		double[] outputParam = { output };
 
-		NeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGame().getGameType(), isDeclarer());
+		List<NeuralNetwork> networks = SkatNetworks.getNetwork(knowledge.getGame().getGameType(), isDeclarer());
 
+		int index = 0;
 		for (double[] inputParam : inputs) {
+			NeuralNetwork net = networks.get(index);
 			net.adjustWeights(inputParam, outputParam);
+			index++;
 		}
 	}
 
