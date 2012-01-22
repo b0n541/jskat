@@ -380,4 +380,13 @@ public enum Rank {
 		return Arrays.asList(Rank.ACE, Rank.TEN, Rank.KING, Rank.QUEEN,
 				Rank.NINE, Rank.EIGHT, Rank.SEVEN);
 	}
+	
+	/** converts the rank of a card to a specific int value (7=1, 8=2, 9=4, ... A=64, J=128)
+	 * 
+	 * @return an int representation of the card's rank
+	 */
+	public int toBinaryFlag() {
+		return (int) Math.pow(2, this.ordinal());
+	}
+	
 }

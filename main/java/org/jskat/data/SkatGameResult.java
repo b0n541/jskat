@@ -162,12 +162,16 @@ public class SkatGameResult implements Cloneable {
 	}
 
 	/**
-	 * Sets whether the game was a durchmarsch game
+	 * Sets whether the game was a durchmarsch game<br>
+	 * If the game is a durchmarsch, then jungfrau is automatically set to false.
 	 * 
 	 * @param durchmarsch
 	 *            TRUE, if the game was a durchmarsch game
 	 */
 	public void setDurchmarsch(boolean durchmarsch) {
+		if(durchmarsch) {
+			this.jungfrau = false;
+		}
 		this.durchmarsch = durchmarsch;
 	}
 
@@ -181,12 +185,14 @@ public class SkatGameResult implements Cloneable {
 	}
 
 	/**
-	 * Sets whether the game was a jungfrau game
+	 * Sets whether the game was a jungfrau game<br>
+	 * Note: The jungfrau flag is overwritten, if durchmarsch is set to true
 	 * 
 	 * @param jungfrau
 	 *            TRUE, if the game was a jungfrau game
 	 */
 	public void setJungfrau(boolean jungfrau) {
+		this.durchmarsch = false;
 		this.jungfrau = jungfrau;
 	}
 

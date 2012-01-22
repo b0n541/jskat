@@ -29,6 +29,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary.GameSummaryFactory;
+import org.jskat.data.SkatTableOptions.RamschSkatOwner;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -542,12 +543,16 @@ public class SkatGameData {
 				}
 			}
 		}
-
+		if(JSkatOptions.instance().getRamschSkat()==RamschSkatOwner.LOSER) {
+			log.debug("adding skat value ("+skat.getTotalValue()+") to player "+ramschLoser);
+			addPlayerPoints(ramschLoser, skat.getTotalValue());
+		}
 		setDeclarer(ramschLoser);
 
 		if (isDurchmarsch()) {
 			result.setWon(true);
 		}
+
 	}
 
 	/**
@@ -1034,8 +1039,8 @@ public class SkatGameData {
 	public void setJungfrauDurchmarsch() {
 		// FIXME this is rule logic --> move to RamschRules
 		for (Player currPlayer : Player.values()) {
-			result.setJungfrau(((RamschRules) rules).isJungfrau(currPlayer, this));
-			result.setDurchmarsch(((RamschRules) rules).isDurchmarsch(currPlayer, this));
+			result.setJungfrau(RamschRules.isJungfrau(currPlayer, this));
+			result.setDurchmarsch(RamschRules.isDurchmarsch(currPlayer, this));
 		}
 	}
 

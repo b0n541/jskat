@@ -373,7 +373,7 @@ public enum Card {
 	 * @return an int representation of the card's rank
 	 */
 	int toBinaryFlag() {
-		return (int) Math.pow(2, this.getRank().ordinal());
+		return this.getRank().toBinaryFlag();
 	}
 	
 	/**

@@ -435,23 +435,6 @@ public class CardList extends ArrayList<Card> {
 	}
 
 	/**
-	 * Gets the sum of all card points in the CardList
-	 * 
-	 * @return Sum of all card points
-	 */
-	public int getCardValueSum() {
-
-		int sum = 0;
-
-		for (Card card : this) {
-
-			sum += card.getRank().getPoints();
-		}
-
-		return sum;
-	}
-
-	/**
 	 * Returns the first index of a card with the given suit.
 	 * 
 	 * @param suit
@@ -476,7 +459,7 @@ public class CardList extends ArrayList<Card> {
 	}
 
 	/**
-	 * Returns the first index of a card with the given suit
+	 * Returns the first index of a card with the given suit (including jacks!)
 	 * 
 	 * @param suit
 	 *            Suit to search
@@ -489,7 +472,7 @@ public class CardList extends ArrayList<Card> {
 	}
 
 	/**
-	 * Returns the last index of a card with the given suit
+	 * Returns the last index of a card with the given suit (including jacks!)
 	 * 
 	 * @param suit
 	 *            Suit to search
@@ -541,8 +524,8 @@ public class CardList extends ArrayList<Card> {
 	
 	/** 
 	 * converts the CardList to an int[4] array for a bitwise representation of the CardList, 
-	 * with one int value per suit<br>
-	 * using this representation, bitwise operations can be performed on the CardList, e.g. by AI players
+	 * with one int value per suit. The index of the array equals the Suit ordinal  (0=Clubs, 3=Diamonds).<br>&nbsp;<br>
+	 * Using this representation, bitwise operations can be performed on the CardList, e.g. by AI players.
 	 * 
 	 * @return an int[4] array 
 	 */

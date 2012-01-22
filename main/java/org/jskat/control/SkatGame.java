@@ -33,6 +33,7 @@ import org.jskat.data.JSkatOptions;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatGameResult;
+import org.jskat.data.SkatTableOptions.RamschSkatOwner;
 import org.jskat.data.Trick;
 import org.jskat.gui.JSkatView;
 import org.jskat.gui.human.HumanPlayer;
@@ -614,7 +615,7 @@ public class SkatGame extends JSkatThread {
 			log.debug("Calculate trick winner"); //$NON-NLS-1$
 			trickWinner = rules.calculateTrickWinner(data.getGameType(), trick);
 			trick.setTrickWinner(trickWinner);
-			data.addPlayerPoints(trickWinner, trick.getCardValueSum());
+			data.addPlayerPoints(trickWinner, trick.getValue());
 
 			for (Player currPosition : Player.values()) {
 				// inform all players
@@ -655,15 +656,17 @@ public class SkatGame extends JSkatThread {
 		if (data.getGameType() == GameType.RAMSCH) {
 			// TODO give the card points of the skat to a player defined in
 			// ramsch rules
-			if (trickWinner != null) {
-				log.debug("Skat cards are added to player @ " + trickWinner); //$NON-NLS-1$
-				data.addPlayerPoints(trickWinner, data.getSkat().getCardValueSum());
-			} else {
-				log.warn("Skat cards cannot be added to winner of final trick - trick winner is unknown"); //$NON-NLS-1$
+			if(JSkatOptions.instance().getRamschSkat()==RamschSkatOwner.LAST_TRICK) {
+				if (trickWinner != null) {
+					log.debug("Skat cards ("+data.getSkat().getTotalValue()+" points) are added to player @ " + trickWinner); //$NON-NLS-1$
+					data.addPlayerPoints(trickWinner, data.getSkat().getTotalValue());
+				} else {
+					log.warn("Skat cards cannot be added to winner of final trick - trick winner is unknown"); //$NON-NLS-1$
+				}
 			}
 		} else {
 			// for all the other games, points to the declarer
-			data.addPlayerPoints(data.getDeclarer(), data.getSkat().getCardValueSum());
+			data.addPlayerPoints(data.getDeclarer(), data.getSkat().getTotalValue());
 		}
 
 		// set schneider/schwarz/jungfrau/durchmarsch flags

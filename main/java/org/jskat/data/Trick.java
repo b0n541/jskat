@@ -242,9 +242,9 @@ public class Trick {
 	 * 
 	 * @return Sum of all card points
 	 */
-	public int getCardValueSum() {
+	public int getValue() {
 
-		return getCardList().getCardValueSum();
+		return getCardList().getTotalValue();
 	}
 
 	/**
