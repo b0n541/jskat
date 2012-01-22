@@ -58,16 +58,19 @@ public class PlayerKnowledge {
 	/**
 	 * Contains all cards played by the players
 	 */
+	// FIXME (markus 07.11.11.) why is this a "Set<Card>" instead of "CardList"?
 	private Map<Player, Set<Card>> playedCards = new HashMap<Player, Set<Card>>();
 
 	/**
 	 * Contains all cards that could be on a certain position
 	 */
+	// FIXME (markus 07.11.11.) why is this a "Set<Card>" instead of "CardList"?
 	private Map<Player, Set<Card>> possiblePlayerCards = new HashMap<Player, Set<Card>>();
 
 	/**
 	 * Contains all cards that could be in the skat
 	 */
+	// FIXME (markus 07.11.11.) why is this a "Set<Card>" instead of "CardList"?
 	private Set<Card> possibleSkatCards = new HashSet<Card>();
 
 	/**
@@ -616,6 +619,21 @@ public class PlayerKnowledge {
 		return result.toString();
 	}
 
+	/**
+	 * Converts all the cards from the tricks to the binary matrix, one int for each suit<br>&nbsp;<br>
+	 * The index of the array equals the Suit ordinal (0=Clubs, 3=Diamonds).
+	 * 
+	 * @return an array int[4]
+	 */
+	public int[] getPlayedCardsBinary() {
+		int[] result = new int[4];
+		for(Trick t: tricks) {
+			int[] tmp = t.getCardList().toBinary();
+			for(int i=0;i<4;i++) result[i]+=tmp[i];
+		}
+		return result;
+	}
+	
 	/**
 	 * Gets the number of tricks
 	 * 
