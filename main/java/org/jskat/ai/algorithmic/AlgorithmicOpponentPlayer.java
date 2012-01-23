@@ -250,7 +250,7 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 			} else if (knowledge.couldHaveSuit(knowledge.getCurrentTrick()
 					.getRearHand(), initialCard.getSuit())) {
 				// I cannot beat the single player's card, which is not a trump
-				// rear hand could still have the same color
+				// rear hand could still have the same suit
 				int cntSuit = 0;
 				int cntTrump = 0;
 				for (Card c : Card.getBeatingCards(gameType, initialCard)) {
@@ -266,8 +266,16 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 						|| (cntTrump > 1 && knowledge.couldHaveSuit(knowledge
 								.getCurrentTrick().getRearHand(), initialCard
 								.getSuit()))) {
-					result = cards.get(cards.getFirstIndexOfSuit(
-							initialCard.getSuit(), false));
+					if(initialCard.getRank()==Rank.ACE || 
+							(initialCard.getRank()==Rank.TEN && !knowledge.couldHaveCard(Player.REARHAND, Card.getCard(initialCard.getSuit(), Rank.ACE)))) {
+						result = cards.get(cards.getLastIndexOfSuit(
+								initialCard.getSuit(), false));
+					}
+					else {
+						result = cards.get(cards.getFirstIndexOfSuit(
+								initialCard.getSuit(), false));
+					}
+					
 					log.debug("playCard (13pre1), cnt=" + cntSuit + " / "
 							+ cntTrump);
 				} else {

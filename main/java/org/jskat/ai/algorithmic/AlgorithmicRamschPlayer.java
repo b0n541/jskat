@@ -20,8 +20,6 @@
  */
 package org.jskat.ai.algorithmic;
 
-import java.util.ArrayList;
-
 import org.apache.log4j.Logger;
 import org.jskat.ai.PlayerKnowledge;
 import org.jskat.data.JSkatOptions;
@@ -141,7 +139,7 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
 		CardList cards = knowledge.getMyCards();
 		Card initialCard = knowledge.getTrickCards().get(0);
 		GameType gameType = knowledge.getGameType();
-		Card result = null;
+//		Card result = null;
 
 		// fallback: get last valid card
 		return getDefaultCard(cards, initialCard, gameType);
@@ -152,7 +150,7 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
 		CardList cards = knowledge.getMyCards();
 		Card initialCard = knowledge.getTrickCards().get(0);
 		GameType gameType = knowledge.getGameType();
-		Card result = null;
+//		Card result = null;
 		// fallback: take the first valid card
 		return getDefaultCard(cards, initialCard, gameType);
 	}
@@ -191,7 +189,7 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
 	 */
 	@Override
 	public CardList discardSkat(BidEvaluator bidEvaluator) {
-		log.debug(myPlayer.getPlayerName()+" ("+this.getClass()+") is discarding cards - not implemented yet");
+		log.debug(myPlayer.getPlayerName()+" ("+this.getClass()+") is discarding cards");
 		knowledge.getMyCards().sort(GameType.RAMSCH);
 		if(JSkatOptions.instance().isSchieberRamschJacksInSkat()) {
 			return discardWithJacks();
@@ -225,10 +223,36 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
 			if(result.size()<2 && c.getRank()==Rank.ACE) {
 				result.add(c);
 			}
+			else if(result.size()==2 && c.getRank()==Rank.ACE) {
+				int len = knowledge.getMyCards().getSuitCount(c.getSuit(), false);
+				int len0 = knowledge.getMyCards().getSuitCount(result.get(0).getSuit(), false);
+				int len1 = knowledge.getMyCards().getSuitCount(result.get(1).getSuit(), false);
+				if(len<len0) {
+					result.remove(0);
+					result.add(c);
+				}
+				else if(len<len1){
+					result.remove(1);
+					result.add(c);
+				}
+			}
 		}
 		for(Card c: knowledge.getMyCards()) {
 			if(result.size()<2 && c.getRank()==Rank.TEN) {
 				result.add(c);
+			}
+			else if(result.size()==2 && c.getRank()==Rank.TEN) {
+				int len = knowledge.getMyCards().getSuitCount(c.getSuit(), false);
+				int len0 = knowledge.getMyCards().getSuitCount(result.get(0).getSuit(), false);
+				int len1 = knowledge.getMyCards().getSuitCount(result.get(1).getSuit(), false);
+				if(len<len0) {
+					result.remove(0);
+					result.add(c);
+				}
+				else if(len<len1){
+					result.remove(1);
+					result.add(c);
+				}
 			}
 		}
 		for(Card c: knowledge.getMyCards()) {

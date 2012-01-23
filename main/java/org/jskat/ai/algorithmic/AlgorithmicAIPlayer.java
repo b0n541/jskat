@@ -167,6 +167,10 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 			log.debug("aiPlayer set to "+aiPlayer);
 		}
 		else {
+			if(aiPlayer instanceof AlgorithmicRamschPlayer && knowledge.getGameType()!=GameType.RAMSCH) {
+				log.debug("Game is grand hand - switching from RamschPlayer to OpponentPlayer");
+				aiPlayer = new AlgorithmicOpponentPlayer(this);
+			}
 			log.debug("game started for aiPlayer "+aiPlayer);
 		}
 	}
