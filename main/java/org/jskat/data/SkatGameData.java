@@ -492,8 +492,7 @@ public class SkatGameData {
 			result.setFinalOpponentPoints(getOpponentScore());
 			result.setMultiplier(rules.getMultiplier(this));
 			result.setPlayWithJacks(rules.isPlayWithJacks(this));
-		}
-		else if(GameType.RAMSCH.equals(announcement.gameType)) {
+		} else if (GameType.RAMSCH.equals(announcement.gameType)) {
 			finishRamschGame();
 		}
 
@@ -543,8 +542,8 @@ public class SkatGameData {
 				}
 			}
 		}
-		if(JSkatOptions.instance().getRamschSkat()==RamschSkatOwner.LOSER) {
-			log.debug("adding skat value ("+skat.getTotalValue()+") to player "+ramschLoser);
+		if (JSkatOptions.instance().getRamschSkat() == RamschSkatOwner.LOSER) {
+			log.debug("adding skat value (" + skat.getTotalValue() + ") to player " + ramschLoser);
 			addPlayerPoints(ramschLoser, skat.getTotalValue());
 		}
 		setDeclarer(ramschLoser);
@@ -1039,8 +1038,13 @@ public class SkatGameData {
 	public void setJungfrauDurchmarsch() {
 		// FIXME this is rule logic --> move to RamschRules
 		for (Player currPlayer : Player.values()) {
-			result.setJungfrau(RamschRules.isJungfrau(currPlayer, this));
-			result.setDurchmarsch(RamschRules.isDurchmarsch(currPlayer, this));
+			if (RamschRules.isDurchmarsch(currPlayer, this)) {
+				result.setDurchmarsch(true);
+			} else {
+				if (RamschRules.isJungfrau(currPlayer, this)) {
+					result.setJungfrau(true);
+				}
+			}
 		}
 	}
 

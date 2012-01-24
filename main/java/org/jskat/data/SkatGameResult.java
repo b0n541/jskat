@@ -163,13 +163,14 @@ public class SkatGameResult implements Cloneable {
 
 	/**
 	 * Sets whether the game was a durchmarsch game<br>
-	 * If the game is a durchmarsch, then jungfrau is automatically set to false.
+	 * If the game is a durchmarsch, then jungfrau is automatically set to
+	 * false.
 	 * 
 	 * @param durchmarsch
 	 *            TRUE, if the game was a durchmarsch game
 	 */
 	public void setDurchmarsch(boolean durchmarsch) {
-		if(durchmarsch) {
+		if (durchmarsch) {
 			this.jungfrau = false;
 		}
 		this.durchmarsch = durchmarsch;
@@ -191,9 +192,11 @@ public class SkatGameResult implements Cloneable {
 	 * @param jungfrau
 	 *            TRUE, if the game was a jungfrau game
 	 */
-	public void setJungfrau(boolean jungfrau) {
-		this.durchmarsch = false;
-		this.jungfrau = jungfrau;
+	public void setJungfrau(boolean isJungfrau) {
+		if (isJungfrau) {
+			this.durchmarsch = false;
+		}
+		this.jungfrau = isJungfrau;
 	}
 
 	/**
@@ -292,19 +295,26 @@ public class SkatGameResult implements Cloneable {
 	public int getFinalDeclarerPoints() {
 		return finalDeclarerPoints;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(gameValue).append(", mult:").append(multiplier);
-		if(overBidded) sb.append(" (overbidded)");
-		if(durchmarsch) sb.append(" (Durchmarsch)");
-		if(jungfrau) sb.append(" (Jungfrau)");
-		if(schwarz) sb.append(" (Schwarz)");
-		else if (schneider) sb.append(" (Schneider)");
+		if (overBidded)
+			sb.append(" (overbidded)");
+		if (durchmarsch)
+			sb.append(" (Durchmarsch)");
+		if (jungfrau)
+			sb.append(" (Jungfrau)");
+		if (schwarz)
+			sb.append(" (Schwarz)");
+		else if (schneider)
+			sb.append(" (Schneider)");
 		return sb.toString();
 	}
 }
