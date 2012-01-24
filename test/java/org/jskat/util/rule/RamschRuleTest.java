@@ -6,6 +6,7 @@ import static org.junit.Assert.assertFalse;
 import org.jskat.AbstractJSkatTest;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData;
+import org.jskat.data.Trick;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.junit.Before;
@@ -139,7 +140,7 @@ public class RamschRuleTest extends AbstractJSkatTest {
 	 * Test the calculation of the multiplier
 	 */
 	@Test
-	public void testGetMultiplier() {
+	public void testGetMultiplierJungfrau() {
 
 		data.addGeschoben();
 		assertEquals(2, ramschRules.getMultiplier(data));
@@ -149,6 +150,42 @@ public class RamschRuleTest extends AbstractJSkatTest {
 
 		data.addGeschoben();
 		assertEquals(8, ramschRules.getMultiplier(data));
+
+		for (int i = 0; i < 10; i++) {
+			Trick trick = new Trick(0, Player.FOREHAND);
+			if (i < 9) {
+				trick.setTrickWinner(Player.FOREHAND);
+			} else {
+				trick.setTrickWinner(Player.MIDDLEHAND);
+			}
+			data.addTrick(trick);
+		}
+
+		data.setJungfrauDurchmarsch();
+		assertEquals(16, ramschRules.getMultiplier(data));
+	}
+
+	/**
+	 * Test the calculation of the multiplier
+	 */
+	@Test
+	public void testGetMultiplierDurchmarsch() {
+
+		data.addGeschoben();
+		assertEquals(2, ramschRules.getMultiplier(data));
+
+		data.addGeschoben();
+		assertEquals(4, ramschRules.getMultiplier(data));
+
+		data.addGeschoben();
+		assertEquals(8, ramschRules.getMultiplier(data));
+
+		// all tricks are made by forehand player
+		for (int i = 0; i < 10; i++) {
+			Trick trick = new Trick(i, Player.FOREHAND);
+			trick.setTrickWinner(Player.FOREHAND);
+			data.addTrick(trick);
+		}
 
 		data.setJungfrauDurchmarsch();
 		assertEquals(16, ramschRules.getMultiplier(data));
