@@ -417,7 +417,7 @@ public interface JSkatView {
 	public void setTrickForeHand(String tableName, Player trickForeHand);
 
 	/**
-	 * Takes a card from the skat
+	 * Takes a card from the skat to the user
 	 * 
 	 * @param tableName
 	 *            Table name
@@ -427,7 +427,19 @@ public interface JSkatView {
 	public void takeCardFromSkat(String tableName, Card card);
 
 	/**
-	 * Puts a card into the skat
+	 * Takes a card from the skat to a player
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param player
+	 *            Player
+	 * @param card
+	 *            Card
+	 */
+	public void takeCardFromSkat(String tableName, Player player, Card card);
+
+	/**
+	 * Puts a card from the user into the skat
 	 * 
 	 * @param tableName
 	 *            Table name
@@ -435,6 +447,18 @@ public interface JSkatView {
 	 *            Card
 	 */
 	public void putCardIntoSkat(String tableName, Card card);
+
+	/**
+	 * Puts a card from a player into the skat
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param player
+	 *            Player
+	 * @param card
+	 *            Card
+	 */
+	public void putCardIntoSkat(String tableName, Player player, Card card);
 
 	/**
 	 * Shows the start dialog for skat series

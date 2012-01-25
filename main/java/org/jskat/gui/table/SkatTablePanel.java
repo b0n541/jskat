@@ -167,7 +167,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		gameInfoPanel = getGameInfoPanel();
 		leftOpponentPanel = getOpponentPanel();
 		rightOpponentPanel = getOpponentPanel();
-		userPanel = getPlayerPanel();
+		userPanel = createPlayerPanel();
 		createGameContextPanel();
 
 		return new PlayGroundPanel(gameInfoPanel, leftOpponentPanel, rightOpponentPanel, gameContextPanel, userPanel);
@@ -183,7 +183,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		return new OpponentPanel(getActionMap(), 12, false);
 	}
 
-	protected JSkatUserPanel getPlayerPanel() {
+	protected JSkatUserPanel createPlayerPanel() {
 
 		return new JSkatUserPanel(getActionMap(), 12, false);
 	}
@@ -669,18 +669,34 @@ public class SkatTablePanel extends AbstractTabPanel {
 	}
 
 	/**
-	 * Takes a card from skat
+	 * Takes a card from skat to user panel
 	 * 
 	 * @param card
 	 *            Card
 	 */
 	public void takeCardFromSkat(Card card) {
+		takeCardFromSkat(userPanel, card);
+	}
 
-		if (!userPanel.isHandFull()) {
+	/**
+	 * Takes a card from skat
+	 * 
+	 * @param player
+	 *            Player
+	 * @param card
+	 *            Card
+	 */
+	public void takeCardFromSkat(Player player, Card card) {
+		takeCardFromSkat(getPlayerPanel(player), card);
+	}
+
+	private void takeCardFromSkat(AbstractHandPanel panel, Card card) {
+
+		if (!panel.isHandFull()) {
 
 			declaringPanel.removeCard(card);
 			schieberamschPanel.removeCard(card);
-			userPanel.addCard(card);
+			panel.addCard(card);
 
 		} else {
 
@@ -689,16 +705,32 @@ public class SkatTablePanel extends AbstractTabPanel {
 	}
 
 	/**
-	 * Puts a card into the skat
+	 * Puts a card from the user panel to the skat
 	 * 
 	 * @param card
 	 *            Card
 	 */
 	public void putCardIntoSkat(Card card) {
+		putCardIntoSkat(userPanel, card);
+	}
+
+	/**
+	 * Puts a card into the skat
+	 * 
+	 * @param player
+	 *            Player
+	 * @param card
+	 *            Card
+	 */
+	public void putCardIntoSkat(Player player, Card card) {
+		putCardIntoSkat(getPlayerPanel(player), card);
+	}
+
+	private void putCardIntoSkat(AbstractHandPanel panel, Card card) {
 
 		if (!declaringPanel.isHandFull()) {
 
-			userPanel.removeCard(card);
+			panel.removeCard(card);
 			declaringPanel.addCard(card);
 			schieberamschPanel.addCard(card);
 
@@ -1064,13 +1096,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		for (int i = 0; i < 2; i++) {
 			Card skatCard = skatBefore.get(i);
-			playerPanel.addCard(skatCard);
-			takeCardFromSkat(skatCard);
+			takeCardFromSkat(player, skatCard);
 		}
 		for (int i = 0; i < 2; i++) {
 			Card skatCard = discardedSkat.get(i);
-			playerPanel.removeCard(skatCard);
-			putCardIntoSkat(skatCard);
+			putCardIntoSkat(player, skatCard);
 		}
 	}
 }

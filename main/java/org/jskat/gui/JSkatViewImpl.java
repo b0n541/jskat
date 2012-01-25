@@ -703,18 +703,18 @@ public class JSkatViewImpl implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void putCardIntoSkat(String tableName, Card card) {
+	public void putCardIntoSkat(String tableName, Player player, Card card) {
 
-		tables.get(tableName).putCardIntoSkat(card);
+		tables.get(tableName).putCardIntoSkat(player, card);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void takeCardFromSkat(String tableName, Card card) {
+	public void takeCardFromSkat(String tableName, Player player, Card card) {
 
-		tables.get(tableName).takeCardFromSkat(card);
+		tables.get(tableName).takeCardFromSkat(player, card);
 	}
 
 	/**
@@ -1273,5 +1273,15 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void setDiscardedSkat(String tableName, Player player, CardList skatBefore, CardList discardedSkat) {
 		tables.get(tableName).setDiscardedSkat(player, skatBefore, discardedSkat);
+	}
+
+	@Override
+	public void takeCardFromSkat(String tableName, Card card) {
+		tables.get(tableName).takeCardFromSkat(card);
+	}
+
+	@Override
+	public void putCardIntoSkat(String tableName, Card card) {
+		tables.get(tableName).putCardIntoSkat(card);
 	}
 }

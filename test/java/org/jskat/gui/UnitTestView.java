@@ -293,13 +293,13 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void takeCardFromSkat(String tableName, Card card) {
+	public void takeCardFromSkat(String tableName, Player player, Card card) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void putCardIntoSkat(String tableName, Card card) {
+	public void putCardIntoSkat(String tableName, Player player, Card card) {
 		// TODO Auto-generated method stub
 
 	}
@@ -454,5 +454,17 @@ public class UnitTestView implements JSkatView {
 	@Override
 	public void setDiscardedSkat(String tableName, Player activePlayer, CardList skatBefore, CardList discardedSkat) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void takeCardFromSkat(String tableName, Card card) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void putCardIntoSkat(String tableName, Card card) {
+		// TODO Auto-generated method stub
+
 	}
 }

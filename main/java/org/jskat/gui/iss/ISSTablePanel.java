@@ -103,7 +103,7 @@ public class ISSTablePanel extends SkatTablePanel {
 	}
 
 	@Override
-	protected JSkatUserPanel getPlayerPanel() {
+	protected JSkatUserPanel createPlayerPanel() {
 
 		return new JSkatUserPanel(getActionMap(), 12, true);
 	}
