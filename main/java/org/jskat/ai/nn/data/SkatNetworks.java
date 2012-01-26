@@ -115,8 +115,8 @@ public class SkatNetworks {
 		ramschDeclarerMiddleGame = new NeuralNetwork(topol);
 		ramschDeclarerEndGame = new NeuralNetwork(topol);
 
-		//		loadNetworks(ClassLoader.getSystemResource("org/jskat/ai/nn/data") //$NON-NLS-1$
-		// .getPath());
+		loadNetworks(ClassLoader.getSystemResource("org/jskat/ai/nn/data") //$NON-NLS-1$
+				.getPath());
 	}
 
 	/**
