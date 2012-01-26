@@ -63,39 +63,70 @@ public abstract class SuitGrandRamschRules extends AbstractSkatRules {
 	}
 
 	/**
-	 * @see BasicSkatRules#isCardBeatsCard(GameType, Card, Card)
+	 * @see BasicSkatRules#isCardBeatsCard(GameType, Card, Card, Card)
 	 */
 	@Override
-	public boolean isCardBeatsCard(GameType gameType, Card cardToBeat, Card card) {
+	public boolean isCardBeatsCard(GameType gameType, Card cardToBeat, Card card, Card initialCard) {
 
 		boolean result = false;
+		if(initialCard.equals(cardToBeat) || cardToBeat.beats(gameType, initialCard, initialCard)) {
 
-		if (cardToBeat.isTrump(gameType)) {
-			// card to beat is a trump card
-			if (card.isTrump(gameType)) {
-
-				if (cardToBeat.getSuitGrandOrder() < card.getSuitGrandOrder()) {
-					// card is a trump card too and has higher suit order
-					result = true;
-				} else if (cardToBeat.getSuitGrandOrder() == card.getSuitGrandOrder()) {
-					// cards have same suit grand order
-					// only possible if two jacks are checked
-					if (cardToBeat.getSuit().getSuitOrder() < card.getSuit().getSuitOrder()) {
-
+			if (cardToBeat.isTrump(gameType)) {
+				// card to beat is a trump card
+				if (card.isTrump(gameType)) {
+	
+					if (cardToBeat.getSuitGrandOrder() < card.getSuitGrandOrder()) {
+						// card is a trump card too and has higher suit order
 						result = true;
+					} else if (cardToBeat.getSuitGrandOrder() == card.getSuitGrandOrder()) {
+						// cards have same suit grand order
+						// only possible if two jacks are checked
+						if (cardToBeat.getSuit().getSuitOrder() < card.getSuit().getSuitOrder()) {
+	
+							result = true;
+						}
 					}
 				}
+			} else {
+				// card to beat is not a trump card
+				if (card.isTrump(gameType)) {
+					// card is a trump card
+					result = true;
+				} else if (cardToBeat.getSuit() == card.getSuit()
+						&& cardToBeat.getSuitGrandOrder() < card.getSuitGrandOrder()) {
+					// cards have the same suit and card has higher order in
+					// suit/grand games
+					result = true;
+				}
 			}
-		} else {
-			// card to beat is not a trump card
-			if (card.isTrump(gameType)) {
-				// card is a trump card
-				result = true;
-			} else if (cardToBeat.getSuit() == card.getSuit()
-					&& cardToBeat.getSuitGrandOrder() < card.getSuitGrandOrder()) {
-				// cards have the same suit and card has higher order in
-				// suit/grand games
-				result = true;
+		}
+		else {
+			if (initialCard.isTrump(gameType)) {
+				// card to beat is a trump card
+				if (card.isTrump(gameType)) {
+					if (initialCard.getSuitGrandOrder() < card.getSuitGrandOrder()) {
+						// card is a trump card too and has higher suit order
+						result = true;
+					} else if (initialCard.getSuitGrandOrder() == card.getSuitGrandOrder()) {
+						// cards have same suit grand order
+						// only possible if two jacks are checked
+						if (initialCard.getSuit().getSuitOrder() < card.getSuit().getSuitOrder()) {
+	
+							result = true;
+						}
+					}
+				}
+			} else {
+				// card to beat is not a trump card
+				if (card.isTrump(gameType)) {
+					// card is a trump card
+					result = true;
+				} else if (initialCard.getSuit() == card.getSuit()
+						&& initialCard.getSuitGrandOrder() < card.getSuitGrandOrder()) {
+					// cards have the same suit and card has higher order in
+					// suit/grand games
+					result = true;
+				}
 			}
 		}
 

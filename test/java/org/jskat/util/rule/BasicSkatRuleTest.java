@@ -109,7 +109,7 @@ public class BasicSkatRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void isCardBeatsCardNull001() {
-		assertTrue(nullRules.isCardBeatsCard(GameType.NULL, Card.C7, Card.C8));
+		assertTrue(nullRules.isCardBeatsCard(GameType.NULL, Card.C7, Card.C8, Card.C7));
 	}
 
 	/**
@@ -117,7 +117,7 @@ public class BasicSkatRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void isCardBeatsCardGrand001() {
-		assertTrue(grandRules.isCardBeatsCard(GameType.GRAND, Card.C7, Card.C8));
+		assertTrue(grandRules.isCardBeatsCard(GameType.GRAND, Card.C7, Card.C8, Card.C7));
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class BasicSkatRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void isCardBeatsCardSuit001() {
-		assertTrue(clubRules.isCardBeatsCard(GameType.CLUBS, Card.C7, Card.C8));
+		assertTrue(clubRules.isCardBeatsCard(GameType.CLUBS, Card.C7, Card.C8, Card.C7));
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class BasicSkatRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void isCardBeatsCardSuit002() {
-		assertTrue(clubRules.isCardBeatsCard(GameType.CLUBS, Card.C7, Card.HJ));
+		assertTrue(clubRules.isCardBeatsCard(GameType.CLUBS, Card.C7, Card.HJ, Card.C7));
 	}
 
 	/**
@@ -141,7 +141,7 @@ public class BasicSkatRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void isCardBeatsCardSuit003() {
-		assertTrue(clubRules.isCardBeatsCard(GameType.CLUBS, Card.CA, Card.CJ));
+		assertTrue(clubRules.isCardBeatsCard(GameType.CLUBS, Card.CA, Card.CJ, Card.CA));
 	}
 
 	/**
@@ -149,7 +149,7 @@ public class BasicSkatRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void isCardBeatsCardSuit004() {
-		assertTrue(clubRules.isCardBeatsCard(GameType.CLUBS, Card.SJ, Card.CJ));
+		assertTrue(clubRules.isCardBeatsCard(GameType.CLUBS, Card.SJ, Card.CJ, Card.SJ));
 	}
 
 	/**
@@ -157,6 +157,6 @@ public class BasicSkatRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void isCardBeatsCardRamsch001() {
-		assertTrue(ramschRules.isCardBeatsCard(GameType.RAMSCH, Card.C7, Card.C8));
+		assertTrue(ramschRules.isCardBeatsCard(GameType.RAMSCH, Card.C7, Card.C8, Card.C7));
 	}
 }

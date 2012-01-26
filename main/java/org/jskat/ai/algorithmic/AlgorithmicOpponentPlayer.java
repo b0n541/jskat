@@ -337,7 +337,7 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 		GameType gameType = knowledge.getGameType();
 		Card result = null;
 
-		if (initialCard.beats(gameType, knowledge.getTrickCards().get(1))) {
+		if (initialCard.beats(gameType, knowledge.getTrickCards().get(1), initialCard)) {
 			// forehand win
 			log.debug("forehand win - declarer=" + knowledge.getDeclarer());
 

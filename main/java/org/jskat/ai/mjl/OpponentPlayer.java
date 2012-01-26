@@ -243,11 +243,10 @@ public class OpponentPlayer extends AbstractCardPlayer {
 				log.debug(".playNextCard(): Trick is SinglePlayerWin");
 				// 1.1.1: if yes: can beat?
 				Card currentWinner;
-				if (initialCard.beats(gameType, knowledge.getTrickCards()
-						.get(1))) {
-					currentWinner = initialCard;
-				} else {
+				if (knowledge.getTrickCards().get(1).beats(gameType, initialCard)) {
 					currentWinner = knowledge.getTrickCards().get(1);
+				} else {
+					currentWinner = initialCard;
 				}
 				bestToBePlayed = Helper.isAbleToBeat(cards, currentWinner,
 						initialCard, gameType);

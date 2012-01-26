@@ -53,12 +53,12 @@ public class Helper {
 		if (knowledge.getDeclarer() == Player.FOREHAND) {
 			if (knowledge
 					.getTrickCards()
-					.get(0)
+					.get(1)
 					.beats(knowledge.getGame().getGameType(),
-							knowledge.getTrickCards().get(1)))
-				return true;
-			else
+							knowledge.getTrickCards().get(0)))
 				return false;
+			else
+				return true;
 		} else if (knowledge.getDeclarer() == Player.MIDDLEHAND) {
 			if (knowledge
 					.getTrickCards()

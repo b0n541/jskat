@@ -140,7 +140,6 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
 		Card initialCard = knowledge.getTrickCards().get(0);
 		GameType gameType = knowledge.getGameType();
 //		Card result = null;
-
 		// fallback: get last valid card
 		return getDefaultCard(cards, initialCard, gameType);
 	}
@@ -149,10 +148,28 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
 		log.debug("I (" + myPlayer.getPlayerName() + ") am in rearhand (OpponentPlayer)");
 		CardList cards = knowledge.getMyCards();
 		Card initialCard = knowledge.getTrickCards().get(0);
+		Card middlehandCard = knowledge.getTrickCards().get(1);
 		GameType gameType = knowledge.getGameType();
-//		Card result = null;
+		Card result = null;
+		CardList allowed = new CardList();
+		for(Card c: cards) {
+			if(c.isAllowed(gameType, initialCard, cards)) allowed.add(c);
+		}
+		if(allowed.size()==1) {
+			return allowed.get(0);
+		}
+		// if possible, take the highest card 
+		result = allowed.get(0);
+		for(Card c: allowed) {
+			boolean beatsCheck = c.beats(gameType, initialCard) && c.beats(gameType, middlehandCard); 
+			boolean beatsResult = result.beats(gameType, initialCard) && result.beats(gameType, middlehandCard); 
+			if(beatsResult && !beatsCheck) {
+				result = c;
+			}
+		}
+		
 		// fallback: take the first valid card
-		return getDefaultCard(cards, initialCard, gameType);
+		return result==null ? getDefaultCard(cards, initialCard, gameType) : result;
 	}
 
 	/**

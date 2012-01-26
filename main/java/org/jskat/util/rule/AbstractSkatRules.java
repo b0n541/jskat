@@ -43,9 +43,9 @@ public abstract class AbstractSkatRules implements BasicSkatRules {
 		Card third = trick.getThirdCard();
 		Player trickForeHand = trick.getForeHand();
 
-		if (isCardBeatsCard(gameType, first, second)) {
+		if (isCardBeatsCard(gameType, first, second, first)) {
 
-			if (isCardBeatsCard(gameType, second, third)) {
+			if (isCardBeatsCard(gameType, second, third, first)) {
 				// trick winner is hind hand
 				trickWinner = trickForeHand.getRightNeighbor();
 			} else {
@@ -54,7 +54,7 @@ public abstract class AbstractSkatRules implements BasicSkatRules {
 			}
 		} else {
 
-			if (isCardBeatsCard(gameType, first, third)) {
+			if (isCardBeatsCard(gameType, first, third, first)) {
 				// trick winner is hind hand
 				trickWinner = trickForeHand.getRightNeighbor();
 			} else {

@@ -301,12 +301,28 @@ public enum Card {
 	 *            Game type
 	 * @param cardToBeat
 	 *            Card to beat
+	 * @param initialCard
+	 *            the initial card of the trick
 	 * @return TRUE if the card beats the other one
 	 */
-	public boolean beats(GameType gameType, Card cardToBeat) {
+	public boolean beats(GameType gameType, Card cardToBeat, Card initialCard) {
 
 		return SkatRuleFactory.getSkatRules(gameType).isCardBeatsCard(gameType,
-				cardToBeat, this);
+				cardToBeat, this, initialCard);
+	}
+
+	/**
+	 * Convenience method if the card should be checked against the initial card
+	 * 
+	 * @param gameType
+	 *            Game type
+	 * @param initialCard
+	 *            Card to beat
+	 * @return TRUE if the card beats the other one
+	 */
+	public boolean beats(GameType gameType, Card initialCard) {
+
+		return beats(gameType, initialCard, initialCard);
 	}
 
 	/**
@@ -317,18 +333,36 @@ public enum Card {
 	 *            Game type
 	 * @param cardToBeat
 	 *            Card to beat
+	 * @param initialCard
+	 *            Card to beat
 	 * @return a CardList with all the cards that would beat the initial card
 	 */
-	public static CardList getBeatingCards(GameType gameType, Card cardToBeat) {
+	public static CardList getBeatingCards(GameType gameType, Card cardToBeat, Card initialCard) {
 		// TODO (mjl 23.08.2011) write unit tests for Card.getBeatingCards()
 		// FIXME (mjl 05.09.2011) is this supposed to consider trump cards?
 		CardList beatingCards = new CardList();
 		for(Card card: Card.values()) {
-			if(card.beats(gameType, cardToBeat)) beatingCards.add(card);
+			if(card.beats(gameType, cardToBeat, initialCard)) beatingCards.add(card);
 		}
 		return beatingCards;
 	}
 	
+	/**
+	 * Creates a list of all cards that would beat the given card under the current game
+	 * type and trump color with respect to the initial card on the table
+	 * 
+	 * @param gameType
+	 *            Game type
+	 * @param initialCard
+	 *            Card to beat
+	 * @return a CardList with all the cards that would beat the initial card
+	 */
+	public static CardList getBeatingCards(GameType gameType, Card initialCard) {
+		// TODO (mjl 23.08.2011) write unit tests for Card.getBeatingCards()
+		// FIXME (mjl 05.09.2011) is this supposed to consider trump cards?
+		return getBeatingCards(gameType, initialCard, initialCard);
+	}
+
 	/**
 	 * Gets a card from a string
 	 * 
