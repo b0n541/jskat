@@ -504,7 +504,10 @@ public class SkatGame extends JSkatThread {
 		log.debug("Discarded cards: " + discardedSkat); //$NON-NLS-1$
 
 		data.setDiscardedSkat(data.getActivePlayer(), discardedSkat);
-		view.setDiscardedSkat(tableName, data.getActivePlayer(), skatBefore, discardedSkat);
+		if (!(activePlayer instanceof HumanPlayer)) {
+			// human player has changed the cards in the GUI already
+			view.setDiscardedSkat(tableName, data.getActivePlayer(), skatBefore, discardedSkat);
+		}
 	}
 
 	private boolean checkDiscardedCards(CardList discardedSkat) {
