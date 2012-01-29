@@ -1129,6 +1129,8 @@ public class SkatGameData {
 		factory.setRearHand(getPlayerName(Player.REARHAND));
 		factory.setDeclarer(getDeclarer());
 
+		factory.setTricks(getTricks());
+
 		factory.setGameResult(getResult());
 
 		return factory.getSummary();
