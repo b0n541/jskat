@@ -215,7 +215,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		declaringPanel = new DeclaringContextPanel(getActionMap(), bitmaps, userPanel, 4);
 		addContextPanel(ContextPanelType.DECLARING, declaringPanel);
 
-		schieberamschPanel = new SchieberamschContextPanel(getActionMap(), bitmaps, userPanel, 4);
+		schieberamschPanel = new SchieberamschContextPanel(getActionMap(), userPanel, 4);
 		addContextPanel(ContextPanelType.SCHIEBERAMSCH, schieberamschPanel);
 
 		JPanel trickHoldingPanel = new JPanel(new MigLayout("fill", "[shrink][grow][shrink]", //$NON-NLS-1$ //$NON-NLS-2$

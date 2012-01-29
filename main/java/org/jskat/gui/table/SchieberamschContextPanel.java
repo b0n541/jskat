@@ -21,11 +21,14 @@
 package org.jskat.gui.table;
 
 import java.awt.CardLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ActionMap;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import net.miginfocom.swing.MigLayout;
@@ -36,14 +39,20 @@ import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
+import org.jskat.gui.img.JSkatGraphicRepository.Icon;
+import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
+import org.jskat.util.JSkatResourceBundle;
 
 /**
  * Context panel for discarding
  */
 class SchieberamschContextPanel extends JPanel {
+
+	JSkatGraphicRepository bitmaps = JSkatGraphicRepository.instance();
+	JSkatResourceBundle strings = JSkatResourceBundle.instance();
 
 	private static final String GRAND_HAND = "GRAND_HAND";
 	private static final String DISCARD = "DISCARD";
@@ -54,8 +63,7 @@ class SchieberamschContextPanel extends JPanel {
 	private DiscardPanel discardPanel;
 	JPanel centerPanel;
 
-	SchieberamschContextPanel(ActionMap actions,
-			JSkatGraphicRepository jskatBitmaps, JSkatUserPanel newUserPanel,
+	SchieberamschContextPanel(ActionMap actions, JSkatUserPanel newUserPanel,
 			int maxCards) {
 
 		setLayout(new MigLayout("fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
@@ -66,7 +74,6 @@ class SchieberamschContextPanel extends JPanel {
 
 		centerPanel = new JPanel(new CardLayout());
 		JPanel grandHandPanel = getGrandHandSchiebeRamschPanel(actions);
-		grandHandPanel.setOpaque(false);
 		centerPanel.add(grandHandPanel, GRAND_HAND);
 
 		discardPanel = new DiscardPanel(actions, 4);
@@ -85,7 +92,15 @@ class SchieberamschContextPanel extends JPanel {
 	public JPanel getGrandHandSchiebeRamschPanel(ActionMap actions) {
 		JPanel result = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
 
+		JPanel question = new JPanel();
+		JLabel questionLabel = new JLabel(strings.getString("want_play_grand_hand")); //$NON-NLS-1$
+		questionLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
+		question.add(questionLabel);
+		result.add(question, "center, growx, span 2, wrap"); //$NON-NLS-1$
+
 		final JButton grandHandButton = new JButton(actions.get(JSkatAction.PLAY_GRAND_HAND));
+		grandHandButton.setIcon(new ImageIcon(bitmaps.getIconImage(Icon.OK, IconSize.BIG)));
+		grandHandButton.setText(strings.getString("yes")); //$NON-NLS-1$
 		grandHandButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -108,9 +123,9 @@ class SchieberamschContextPanel extends JPanel {
 			}
 		});
 
-		result.add(grandHandButton, "align center, wrap"); //$NON-NLS-1$
-
 		final JButton schiebenButton = new JButton(actions.get(JSkatAction.PLAY_SCHIEBERAMSCH));
+		schiebenButton.setIcon(new ImageIcon(bitmaps.getIconImage(Icon.STOP, IconSize.BIG)));
+		schiebenButton.setText(strings.getString("no")); //$NON-NLS-1$
 		schiebenButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -121,7 +136,9 @@ class SchieberamschContextPanel extends JPanel {
 				}
 			}
 		});
-		result.add(schiebenButton, "align center"); //$NON-NLS-1$
+
+		result.add(grandHandButton, "center"); //$NON-NLS-1$
+		result.add(schiebenButton, "center"); //$NON-NLS-1$
 
 		return result;
 	}
