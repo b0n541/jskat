@@ -58,11 +58,9 @@ public interface BasicSkatRules {
 	 *            Card to be beaten
 	 * @param card
 	 *            Card to be checked
-	 * @param initialCard
-	 *            initialCard on the table
 	 * @return TRUE if the card beats the other card
 	 */
-	public boolean isCardBeatsCard(GameType gameType, Card cardToBeat, Card card, Card initialCard);
+	public boolean isCardBeatsCard(GameType gameType, Card cardToBeat, Card card);
 
 	/**
 	 * Checks whether a game is won

@@ -266,8 +266,7 @@ public enum Card {
 		boolean result = false;
 
 		if (gameType != GameType.PASSED_IN) {
-			result = SkatRuleFactory.getSkatRules(gameType).isCardAllowed(
-					gameType, initialCard, hand, this);
+			result = SkatRuleFactory.getSkatRules(gameType).isCardAllowed(gameType, initialCard, hand, this);
 		}
 
 		return result;
@@ -286,8 +285,7 @@ public enum Card {
 
 		if (gameType != GameType.NULL) {
 
-			result = ((SuitGrandRamschRules) SkatRuleFactory
-					.getSkatRules(gameType)).isTrump(gameType, this);
+			result = ((SuitGrandRamschRules) SkatRuleFactory.getSkatRules(gameType)).isTrump(gameType, this);
 		}
 
 		return result;
@@ -301,66 +299,33 @@ public enum Card {
 	 *            Game type
 	 * @param cardToBeat
 	 *            Card to beat
-	 * @param initialCard
-	 *            the initial card of the trick
 	 * @return TRUE if the card beats the other one
 	 */
-	public boolean beats(GameType gameType, Card cardToBeat, Card initialCard) {
+	public boolean beats(GameType gameType, Card cardToBeat) {
 
-		return SkatRuleFactory.getSkatRules(gameType).isCardBeatsCard(gameType,
-				cardToBeat, this, initialCard);
+		return SkatRuleFactory.getSkatRules(gameType).isCardBeatsCard(gameType, cardToBeat, this);
 	}
 
 	/**
-	 * Convenience method if the card should be checked against the initial card
-	 * 
-	 * @param gameType
-	 *            Game type
-	 * @param initialCard
-	 *            Card to beat
-	 * @return TRUE if the card beats the other one
-	 */
-	public boolean beats(GameType gameType, Card initialCard) {
-
-		return beats(gameType, initialCard, initialCard);
-	}
-
-	/**
-	 * Creates a list of all cards that would beat the given card under the current game
-	 * type and trump color with respect to the initial card on the table
+	 * Creates a list of all cards that would beat the given card under the
+	 * current game type and trump color with respect to the initial card on the
+	 * table
 	 * 
 	 * @param gameType
 	 *            Game type
 	 * @param cardToBeat
 	 *            Card to beat
-	 * @param initialCard
-	 *            Card to beat
 	 * @return a CardList with all the cards that would beat the initial card
 	 */
-	public static CardList getBeatingCards(GameType gameType, Card cardToBeat, Card initialCard) {
+	public static CardList getBeatingCards(GameType gameType, Card cardToBeat) {
 		// TODO (mjl 23.08.2011) write unit tests for Card.getBeatingCards()
 		// FIXME (mjl 05.09.2011) is this supposed to consider trump cards?
 		CardList beatingCards = new CardList();
-		for(Card card: Card.values()) {
-			if(card.beats(gameType, cardToBeat, initialCard)) beatingCards.add(card);
+		for (Card card : Card.values()) {
+			if (card.beats(gameType, cardToBeat))
+				beatingCards.add(card);
 		}
 		return beatingCards;
-	}
-	
-	/**
-	 * Creates a list of all cards that would beat the given card under the current game
-	 * type and trump color with respect to the initial card on the table
-	 * 
-	 * @param gameType
-	 *            Game type
-	 * @param initialCard
-	 *            Card to beat
-	 * @return a CardList with all the cards that would beat the initial card
-	 */
-	public static CardList getBeatingCards(GameType gameType, Card initialCard) {
-		// TODO (mjl 23.08.2011) write unit tests for Card.getBeatingCards()
-		// FIXME (mjl 05.09.2011) is this supposed to consider trump cards?
-		return getBeatingCards(gameType, initialCard, initialCard);
 	}
 
 	/**
@@ -402,14 +367,16 @@ public enum Card {
 		return result;
 	}
 
-	/** converts the rank of a card to a specific int value (7=1, 8=2, 9=4, ... A=64, J=128)
+	/**
+	 * converts the rank of a card to a specific int value (7=1, 8=2, 9=4, ...
+	 * A=64, J=128)
 	 * 
 	 * @return an int representation of the card's rank
 	 */
 	int toBinaryFlag() {
 		return this.getRank().toBinaryFlag();
 	}
-	
+
 	/**
 	 * @see Object#toString()
 	 */

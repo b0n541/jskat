@@ -34,6 +34,9 @@ public abstract class AbstractSkatRules implements BasicSkatRules {
 
 	private static Log log = LogFactory.getLog(AbstractSkatRules.class);
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Player calculateTrickWinner(GameType gameType, Trick trick) {
 
@@ -43,9 +46,9 @@ public abstract class AbstractSkatRules implements BasicSkatRules {
 		Card third = trick.getThirdCard();
 		Player trickForeHand = trick.getForeHand();
 
-		if (isCardBeatsCard(gameType, first, second, first)) {
+		if (isCardBeatsCard(gameType, first, second)) {
 
-			if (isCardBeatsCard(gameType, second, third, first)) {
+			if (isCardBeatsCard(gameType, second, third)) {
 				// trick winner is hind hand
 				trickWinner = trickForeHand.getRightNeighbor();
 			} else {
@@ -54,7 +57,7 @@ public abstract class AbstractSkatRules implements BasicSkatRules {
 			}
 		} else {
 
-			if (isCardBeatsCard(gameType, first, third, first)) {
+			if (isCardBeatsCard(gameType, first, third)) {
 				// trick winner is hind hand
 				trickWinner = trickForeHand.getRightNeighbor();
 			} else {

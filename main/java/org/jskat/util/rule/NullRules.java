@@ -69,33 +69,17 @@ public class NullRules extends AbstractSkatRules {
 	 * @see BasicSkatRules#isCardBeatsCard(GameType, Card, Card)
 	 */
 	@Override
-	public boolean isCardBeatsCard(GameType gameType, Card cardToBeat, Card card, Card initialCard) {
+	public boolean isCardBeatsCard(GameType gameType, Card cardToBeat, Card card) {
 
 		boolean result = false;
-		if(cardToBeat.equals(initialCard)) {
-			if (cardToBeat.getSuit() == card.getSuit()) {
-				if (cardToBeat.getNullOrder() < card.getNullOrder()) {
-					result = true;
-				}
-			}
-		}
-		else {
-			if(initialCard.beats(gameType, cardToBeat, initialCard)) {
-				if (initialCard.getSuit() == card.getSuit()) {
-					if (initialCard.getNullOrder() < card.getNullOrder()) {
-						result = true;
-					}
-				}
-			}
-			else {
-				if (cardToBeat.getSuit() == card.getSuit()) {
-					if (cardToBeat.getNullOrder() < card.getNullOrder()) {
-						result = true;
-					}
-				}
-			}
-		}
 
+		if (cardToBeat.getSuit() == card.getSuit()) {
+
+			if (cardToBeat.getNullOrder() < card.getNullOrder()) {
+
+				result = true;
+			}
+		}
 
 		return result;
 	}
@@ -168,7 +152,7 @@ public class NullRules extends AbstractSkatRules {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int getMultiplier(SkatGameData gameData) {
+	public int getMultiplier(@SuppressWarnings("unused") SkatGameData gameData) {
 		return 0;
 	}
 
@@ -176,7 +160,7 @@ public class NullRules extends AbstractSkatRules {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean isPlayWithJacks(SkatGameData gameData) {
+	public boolean isPlayWithJacks(@SuppressWarnings("unused") SkatGameData gameData) {
 		return false;
 	}
 }
