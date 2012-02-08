@@ -21,7 +21,9 @@
 package org.jskat.data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -81,6 +83,10 @@ public class GameSummary {
 	 * Tricks
 	 */
 	List<Trick> tricks = new ArrayList<Trick>();
+	/**
+	 * Player points
+	 */
+	Map<Player, Integer> playerPoints = new HashMap<Player, Integer>();
 
 	/**
 	 * Constructor
@@ -185,6 +191,10 @@ public class GameSummary {
 			tmpSummary.tricks.addAll(tricks);
 		}
 
+		public final void setPlayerPoints(Map<Player, Integer> playerAndPoints) {
+			tmpSummary.playerPoints.putAll(playerAndPoints);
+		}
+
 		/**
 		 * Sets the game result
 		 * 
@@ -257,6 +267,9 @@ public class GameSummary {
 				return false;
 			} else if (tmpSummary.gameResult == null) {
 				log.error("game result is null"); //$NON-NLS-1$
+				return false;
+			} else if (tmpSummary.playerPoints.size() != 3) {
+				log.error("missing player points"); //$NON-NLS-1$
 				return false;
 			}
 			return true;
@@ -451,5 +464,16 @@ public class GameSummary {
 		result.append(" declarer: " + declarer); //$NON-NLS-1$
 
 		return result.toString();
+	}
+
+	/**
+	 * Gets the player points
+	 * 
+	 * @param player
+	 *            Player
+	 * @return Points
+	 */
+	public int getPlayerPoints(Player player) {
+		return playerPoints.get(player).intValue();
 	}
 }

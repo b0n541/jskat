@@ -1131,6 +1131,8 @@ public class SkatGameData {
 
 		factory.setTricks(getTricks());
 
+		factory.setPlayerPoints(playerPoints);
+
 		factory.setGameResult(getResult());
 
 		return factory.getSummary();

@@ -86,7 +86,7 @@ public class SkatNetworks {
 		// n number of nodes in input layer
 		int inputCount = 96;
 		// int hiddenCount = 2 * inputCount + 1;
-		int hiddenCount = 5;
+		int hiddenCount = 10;
 		int outputCount = 1;
 
 		int[] hiddenLayer = { hiddenCount };

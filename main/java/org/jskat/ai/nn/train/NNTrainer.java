@@ -33,6 +33,7 @@ import org.jskat.control.JSkatThread;
 import org.jskat.control.SkatGame;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
+import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.gui.NullView;
 import org.jskat.util.CardDeck;
@@ -237,25 +238,16 @@ public class NNTrainer extends JSkatThread {
 				// the result
 				game.getGameResult();
 
+				boolean gameWon = false;
 				if (gameType.equals(GameType.RAMSCH)) {
-					boolean ramschGameWon = false;
-					if (!game.getDeclarer().equals(currPlayer)) {
-						ramschGameWon = true;
-					} else {
-						if (game.getGameResult().getGameValue() >= 0) {
-							ramschGameWon = true;
-						}
-					}
-
-					if (ramschGameWon) {
-						episodesWonGames++;
-						totalWonGames++;
-					}
+					gameWon = isRamschGameWon(game, currPlayer);
 				} else {
-					if (game.isGameWon()) {
-						episodesWonGames++;
-						totalWonGames++;
-					}
+					gameWon = game.isGameWon();
+				}
+
+				if (gameWon) {
+					episodesWonGames++;
+					totalWonGames++;
 				}
 
 				totalGames++;
@@ -265,5 +257,26 @@ public class NNTrainer extends JSkatThread {
 
 			checkWaitCondition();
 		}
+	}
+
+	private boolean isRamschGameWon(SkatGame game, Player currPlayer) {
+
+		boolean ramschGameWon = false;
+		GameSummary gameSummary = game.getGameSummary();
+		int playerPoints = gameSummary.getPlayerPoints(currPlayer);
+		int highestPlayerPoints = 0;
+		for (Player player : Player.values()) {
+			int currPlayerPoints = gameSummary.getPlayerPoints(player);
+
+			if (currPlayerPoints > highestPlayerPoints) {
+				highestPlayerPoints = currPlayerPoints;
+			}
+		}
+
+		if (highestPlayerPoints > playerPoints) {
+			ramschGameWon = true;
+		}
+
+		return ramschGameWon;
 	}
 }

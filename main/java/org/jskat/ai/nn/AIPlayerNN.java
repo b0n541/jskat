@@ -137,7 +137,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		SimulationResults results = gameSimulator.simulateMaxEpisodes(Long.valueOf(MAX_SIMULATIONS / 2));
 
 		for (Double wonRate : results.getAllWonRates()) {
-			if (wonRate.doubleValue() > 0.75) {
+			if (wonRate.doubleValue() > 0.6) {
 				return true;
 			}
 		}
