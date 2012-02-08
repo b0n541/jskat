@@ -35,7 +35,7 @@ public class JSkatOptionsTest extends AbstractJSkatTest {
 			assertEquals(SupportedLanguage.ENGLISH, options.getLanguage());
 		}
 		assertEquals(CardFace.TOURNAMENT, options.getCardFace());
-		assertEquals("", options.getSavePath()); //$NON-NLS-1$
+		assertEquals(options.getDefaultSaveDir(), options.getSavePath()); //$NON-NLS-1$
 		assertEquals(Integer.valueOf(2000), options.getTrickRemoveDelayTime());
 		assertFalse(options.isTrickRemoveAfterClick().booleanValue());
 		assertFalse(options.isGameShortCut().booleanValue());

@@ -946,11 +946,14 @@ public class JSkatOptions {
 	}
 
 	private static FileInputStream getFileStream() throws FileNotFoundException {
-		FileInputStream stream = new FileInputStream(System.getProperty("user.home") //$NON-NLS-1$
-				+ System.getProperty("file.separator") + ".jskat" //$NON-NLS-1$ //$NON-NLS-2$
-				+ System.getProperty("file.separator") //$NON-NLS-1$
-				+ "jskat.properties"); //$NON-NLS-1$
+		FileInputStream stream = new FileInputStream(getDefaultSaveDir() + "jskat.properties"); //$NON-NLS-1$
 		return stream;
+	}
+
+	static String getDefaultSaveDir() {
+		return System.getProperty("user.home") //$NON-NLS-1$
+				+ System.getProperty("file.separator") + ".jskat" //$NON-NLS-1$ //$NON-NLS-2$
+				+ System.getProperty("file.separator"); //$NON-NLS-1$
 	}
 
 	private Integer getIntegerOption(Option option) {
@@ -1089,7 +1092,11 @@ public class JSkatOptions {
 			setRules(RuleSet.valueOf(value));
 			break;
 		case savePath:
-			setSavePath(value);
+			if ("".equals(value)) { //$NON-NLS-1$
+				setSavePath(getDefaultSaveDir());
+			} else {
+				setSavePath(value);
+			}
 			break;
 		case schieberRamsch:
 			setSchieberRamsch(Boolean.valueOf(value));
@@ -1188,7 +1195,7 @@ public class JSkatOptions {
 		setOption(Option.showTipsAtStartUp, Boolean.TRUE);
 		setOption(Option.language, getDefaultLanguage().name());
 		setOption(Option.checkForNewVersionAtStartUp, Boolean.FALSE);
-		setOption(Option.savePath, ""); //$NON-NLS-1$
+		setOption(Option.savePath, getDefaultSaveDir());
 		setOption(Option.cardFace, CardFace.TOURNAMENT.name());
 		setOption(Option.trickRemoveDelayTime, 2000);
 		setOption(Option.trickRemoveAfterClick, Boolean.FALSE);
