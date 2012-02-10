@@ -621,7 +621,8 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showHelpDialog() {
 
-		new JSkatHelpDialog(mainFrame,
+		new JSkatHelpDialog(
+				mainFrame,
 				strings.getString("help"), "org/jskat/gui/help/" + JSkatOptions.instance().getI18NCode() + "/contents.html") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
 				.setVisible(true);
 	}
@@ -723,6 +724,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showStartSkatSeriesDialog() {
 
+		skatSeriesStartDialog.resetInputs();
 		skatSeriesStartDialog.setVisible(true);
 	}
 

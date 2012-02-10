@@ -42,6 +42,7 @@ import net.miginfocom.swing.MigLayout;
 
 import org.jskat.ai.PlayerType;
 import org.jskat.control.JSkatMaster;
+import org.jskat.data.JSkatOptions;
 import org.jskat.gui.AbstractI18NComboBoxRenderer;
 import org.jskat.util.JSkatResourceBundle;
 
@@ -54,6 +55,10 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
 	private static final String CANCEL = "CANCEL"; //$NON-NLS-1$
 	private static final String START = "START"; //$NON-NLS-1$
+
+	private static final String PLAYER1_DEFAULT_NAME = "Jan"; //$NON-NLS-1$
+	private static final String PLAYER2_DEFAULT_NAME = "Markus"; //$NON-NLS-1$
+	private static final String PLAYER3_DEFAULT_NAME = System.getProperty("user.name"); //$NON-NLS-1$
 
 	private JSkatMaster jskat;
 	private JFrame parent;
@@ -104,21 +109,21 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 		playerTypes.add(PlayerType.NEURAL_NETWORK);
 
 		root.add(new JLabel(strings.getString("player") + " 1")); //$NON-NLS-1$//$NON-NLS-2$
-		player1name = new JTextField("Jan");
+		player1name = new JTextField(PLAYER1_DEFAULT_NAME);
 		root.add(player1name, "span2, growx"); //$NON-NLS-1$
 		player1 = new JComboBox(playerTypes.toArray());
 		player1.setRenderer(new PlayerComboBoxRenderer());
 		root.add(player1, "growx, wrap"); //$NON-NLS-1$
 
 		root.add(new JLabel(strings.getString("player") + " 2")); //$NON-NLS-1$ //$NON-NLS-2$
-		player2name = new JTextField("Markus");
+		player2name = new JTextField(PLAYER2_DEFAULT_NAME);
 		root.add(player2name, "span2, growx"); //$NON-NLS-1$
 		player2 = new JComboBox(playerTypes.toArray());
 		player2.setRenderer(new PlayerComboBoxRenderer());
 		root.add(player2, "growx, wrap"); //$NON-NLS-1$
 		root.add(new JLabel(strings.getString("player") + " 3")); //$NON-NLS-1$//$NON-NLS-2$
 
-		player3name = new JTextField(System.getProperty("user.name"));
+		player3name = new JTextField(PLAYER3_DEFAULT_NAME);
 		root.add(player3name, "span2, growx"); //$NON-NLS-1$
 		// Human player can only be player 3
 		playerTypes.add(PlayerType.HUMAN);
@@ -239,5 +244,21 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
 			return result;
 		}
+	}
+
+	/**
+	 * Resets all input values
+	 */
+	public void resetInputs() {
+
+		player1.setSelectedIndex(0);
+		player1name.setText(PLAYER1_DEFAULT_NAME);
+		player2.setSelectedIndex(0);
+		player2name.setText(PLAYER2_DEFAULT_NAME);
+		player3.setSelectedIndex(player3.getItemCount() - 1);
+		player3name.setText(PLAYER3_DEFAULT_NAME);
+		unlimited.setSelected(false);
+		onlyPlayRamsch.setEnabled(JSkatOptions.instance().isPlayRamsch().booleanValue());
+		onlyPlayRamsch.setSelected(false);
 	}
 }
