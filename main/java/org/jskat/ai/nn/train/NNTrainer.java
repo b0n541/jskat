@@ -240,7 +240,7 @@ public class NNTrainer extends JSkatThread {
 
 				boolean gameWon = false;
 				if (gameType.equals(GameType.RAMSCH)) {
-					gameWon = isRamschGameWon(game, currPlayer);
+					gameWon = isRamschGameWon(game.getGameSummary(), currPlayer);
 				} else {
 					gameWon = game.isGameWon();
 				}
@@ -259,10 +259,9 @@ public class NNTrainer extends JSkatThread {
 		}
 	}
 
-	private boolean isRamschGameWon(SkatGame game, Player currPlayer) {
+	private static boolean isRamschGameWon(GameSummary gameSummary, Player currPlayer) {
 
 		boolean ramschGameWon = false;
-		GameSummary gameSummary = game.getGameSummary();
 		int playerPoints = gameSummary.getPlayerPoints(currPlayer);
 		int highestPlayerPoints = 0;
 		for (Player player : Player.values()) {

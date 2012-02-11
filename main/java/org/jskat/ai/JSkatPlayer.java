@@ -21,7 +21,7 @@
 package org.jskat.ai;
 
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.SkatGameResult;
+import org.jskat.data.GameSummary;
 import org.jskat.data.Trick;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -219,12 +219,12 @@ public interface JSkatPlayer {
 	public CardList discardSkat();
 
 	/**
-	 * Informs the player about the game result
+	 * Informs the player about the game
 	 * 
-	 * @param gameResult
-	 *            Game result
+	 * @param gameSummary
+	 *            Game summary
 	 */
-	public void setGameResult(SkatGameResult gameResult);
+	public void setGameSummary(GameSummary gameSummary);
 
 	/**
 	 * Holds all player states

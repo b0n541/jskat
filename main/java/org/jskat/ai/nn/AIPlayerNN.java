@@ -32,6 +32,7 @@ import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.util.NeuralNetwork;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
+import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameResult;
 import org.jskat.util.Card;
@@ -702,17 +703,26 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	private void adjustNeuralNetworks(List<double[]> inputs) {
 
 		double output = 0.0d;
-		if (isDeclarer()) {
-			if (gameResult.isWon()) {
+
+		if (GameType.RAMSCH.equals(knowledge.getGameType())) {
+			if (isRamschGameWon(gameSummary, knowledge.getPlayerPosition())) {
 				output = 1.0d;
 			} else {
 				output = -1.0d;
 			}
 		} else {
-			if (gameResult.isWon()) {
-				output = -1.0d;
+			if (isDeclarer()) {
+				if (gameSummary.isGameWon()) {
+					output = 1.0d;
+				} else {
+					output = -1.0d;
+				}
 			} else {
-				output = 1.0d;
+				if (gameSummary.isGameWon()) {
+					output = -1.0d;
+				} else {
+					output = 1.0d;
+				}
 			}
 		}
 		double[] outputParam = { output };
@@ -725,6 +735,26 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			net.adjustWeights(inputParam, outputParam);
 			index++;
 		}
+	}
+
+	private static boolean isRamschGameWon(GameSummary gameSummary, Player currPlayer) {
+
+		boolean ramschGameWon = false;
+		int playerPoints = gameSummary.getPlayerPoints(currPlayer);
+		int highestPlayerPoints = 0;
+		for (Player player : Player.values()) {
+			int currPlayerPoints = gameSummary.getPlayerPoints(player);
+
+			if (currPlayerPoints > highestPlayerPoints) {
+				highestPlayerPoints = currPlayerPoints;
+			}
+		}
+
+		if (highestPlayerPoints > playerPoints) {
+			ramschGameWon = true;
+		}
+
+		return ramschGameWon;
 	}
 
 	/**

@@ -23,7 +23,7 @@ package org.jskat.ai;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.SkatGameResult;
+import org.jskat.data.GameSummary;
 import org.jskat.data.Trick;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -47,8 +47,8 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	protected PlayerKnowledge knowledge = new PlayerKnowledge();
 	/** Skat rules for the current skat series */
 	protected BasicSkatRules rules;
-	/** Result of the skat game */
-	protected SkatGameResult gameResult;
+	/** Summary of the skat game */
+	protected GameSummary gameSummary;
 
 	/**
 	 * {@inheritDoc}
@@ -85,7 +85,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
 		playerState = null;
 		rules = null;
-		gameResult = null;
+		gameSummary = null;
 		knowledge.initializeVariables();
 		knowledge.setPlayerPosition(newPosition);
 
@@ -291,9 +291,9 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setGameResult(SkatGameResult gameResult) {
+	public void setGameSummary(GameSummary gameSummary) {
 
-		this.gameResult = gameResult;
+		this.gameSummary = gameSummary;
 	}
 
 	/**
