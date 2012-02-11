@@ -30,10 +30,9 @@ import javax.swing.ActionMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jskat.gui.LayoutFactory;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -103,7 +102,7 @@ class DiscardPanel extends JPanel {
 			}
 		});
 
-		JPanel lookIntoSkatPanel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
+		JPanel lookIntoSkatPanel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 		lookIntoSkatPanel.add(pickUpSkatButton, "center"); //$NON-NLS-1$
 		lookIntoSkatPanel.setOpaque(false);
 		add(lookIntoSkatPanel, PICK_UP_SKAT_BUTTON);

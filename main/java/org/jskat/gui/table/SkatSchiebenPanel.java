@@ -28,11 +28,10 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.JSkatOptions;
+import org.jskat.gui.LayoutFactory;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.util.CardList;
 import org.jskat.util.JSkatResourceBundle;
@@ -71,10 +70,10 @@ class SkatSchiebenPanel extends JPanel {
 
 	private void initPanel(final ActionMap actions) {
 
-		this.setLayout(new MigLayout("fill")); //$NON-NLS-1$
+		this.setLayout(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 		setOpaque(false);
 
-		JPanel panel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
+		JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 		panel.setOpaque(false);
 
 		final JButton schiebenButton = new JButton(actions.get(JSkatAction.SCHIEBEN));

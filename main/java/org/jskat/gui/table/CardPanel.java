@@ -35,12 +35,11 @@ import java.util.List;
 import javax.swing.Action;
 import javax.swing.JPanel;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.SkatGameData.GameState;
+import org.jskat.gui.LayoutFactory;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.Card;
@@ -83,7 +82,7 @@ class CardPanel extends JPanel {
 	 */
 	CardPanel(JPanel parent, double scaleFactor, boolean showBackside) {
 
-		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		this.parent = parent;
 		setActionMap(parent.getActionMap());

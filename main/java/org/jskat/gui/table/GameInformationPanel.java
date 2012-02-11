@@ -25,11 +25,10 @@ import java.awt.Font;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData.GameState;
+import org.jskat.gui.LayoutFactory;
 import org.jskat.util.GameType;
 import org.jskat.util.JSkatResourceBundle;
 
@@ -72,7 +71,7 @@ class GameInformationPanel extends JPanel {
 
 	private void initPanel() {
 
-		setLayout(new MigLayout("fill")); //$NON-NLS-1$
+		setLayout(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
 		setOpaque(true);
 

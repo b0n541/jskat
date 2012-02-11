@@ -33,8 +33,7 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
-import net.miginfocom.swing.MigLayout;
-
+import org.jskat.gui.LayoutFactory;
 import org.jskat.util.GameType;
 
 /**
@@ -46,6 +45,9 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 
 	JTable overviewTable;
 
+	/**
+	 * Constructor
+	 */
 	public NeuralNetworkTrainingOverview() {
 
 		initGUI();
@@ -58,9 +60,9 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 		setTitle("Training of neural networks");
 
 		Container root = getContentPane();
-		root.setLayout(new MigLayout());
+		root.setLayout(LayoutFactory.getMigLayout());
 
-		JPanel rootPanel = new JPanel(new MigLayout("fill", "fill", "fill"));
+		JPanel rootPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill"));
 
 		overviewTable = new JTable(new TrainingOverviewTableModel());
 		overviewTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);

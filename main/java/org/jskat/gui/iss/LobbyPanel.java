@@ -34,12 +34,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.gui.AbstractTabPanel;
+import org.jskat.gui.LayoutFactory;
 import org.jskat.gui.action.JSkatAction;
 
 /**
@@ -81,7 +80,7 @@ public class LobbyPanel extends AbstractTabPanel {
 	@Override
 	protected void initPanel() {
 
-		setLayout(new MigLayout("fill")); //$NON-NLS-1$
+		setLayout(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
 		add(getLobbyPanel(), "center"); //$NON-NLS-1$
 
@@ -90,12 +89,12 @@ public class LobbyPanel extends AbstractTabPanel {
 
 	private JPanel getLobbyPanel() {
 
-		JPanel lobby = new JPanel(new MigLayout("fill", "fill", //$NON-NLS-1$ //$NON-NLS-2$
+		JPanel lobby = new JPanel(LayoutFactory.getMigLayout("fill", "fill", //$NON-NLS-1$ //$NON-NLS-2$
 				"[shrink][shrink][shrink][shrink][grow]")); //$NON-NLS-1$
 
 		JLabel headerLabel = new JLabel(strings.getString("welcome_to_iss_title")); //$NON-NLS-1$
 		headerLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-		JPanel headerPanel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
+		JPanel headerPanel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 		headerPanel.add(headerLabel, "center"); //$NON-NLS-1$
 
 		lobby.add(headerPanel, "span 2, growx, align center, wrap"); //$NON-NLS-1$ 
@@ -117,7 +116,7 @@ public class LobbyPanel extends AbstractTabPanel {
 
 	private JPanel getPlayerListPanel() {
 
-		JPanel panel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		this.playerListTableModel = new PlayerListTableModel();
 		this.playerListTable = new JTable(this.playerListTableModel);
@@ -135,7 +134,7 @@ public class LobbyPanel extends AbstractTabPanel {
 
 	private JPanel getTableListPanel() {
 
-		JPanel panel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		this.tableListTableModel = new TableListTableModel();
 		this.tableListTable = new JTable(this.tableListTableModel);
@@ -200,10 +199,10 @@ public class LobbyPanel extends AbstractTabPanel {
 
 	private JPanel getActionButtonPanel() {
 
-		JPanel panel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		panel.add(new JButton(this.getActionMap().get(JSkatAction.CREATE_ISS_TABLE)));
-		panel.add(new JButton(this.getActionMap().get(JSkatAction.DISCONNECT_FROM_ISS)));
+		panel.add(new JButton(this.getActionMap().get(JSkatAction.CREATE_ISS_TABLE)), "width 50%"); //$NON-NLS-1$
+		panel.add(new JButton(this.getActionMap().get(JSkatAction.DISCONNECT_FROM_ISS)), "width 50%"); //$NON-NLS-1$
 
 		return panel;
 	}

@@ -38,12 +38,11 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.jskat.ai.PlayerType;
 import org.jskat.control.JSkatMaster;
 import org.jskat.data.JSkatOptions;
 import org.jskat.gui.AbstractI18NComboBoxRenderer;
+import org.jskat.gui.LayoutFactory;
 import org.jskat.util.JSkatResourceBundle;
 
 /**
@@ -100,7 +99,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 		setTitle(strings.getString("start_series")); //$NON-NLS-1$
 
 		Container root = getContentPane();
-		root.setLayout(new MigLayout());
+		root.setLayout(LayoutFactory.getMigLayout());
 
 		ArrayList<PlayerType> playerTypes = new ArrayList<PlayerType>();
 
@@ -152,7 +151,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 		onlyPlayRamsch = new JCheckBox(strings.getString("only_play_ramsch")); //$NON-NLS-1$
 		root.add(onlyPlayRamsch, "wrap"); //$NON-NLS-1$
 
-		JPanel buttonPanel = new JPanel(new MigLayout());
+		JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout());
 		JButton start = new JButton(strings.getString("start")); //$NON-NLS-1$
 		start.setActionCommand(START);
 		start.addActionListener(this);

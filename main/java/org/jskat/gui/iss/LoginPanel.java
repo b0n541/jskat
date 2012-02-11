@@ -31,12 +31,11 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.iss.LoginCredentials;
 import org.jskat.gui.AbstractTabPanel;
+import org.jskat.gui.LayoutFactory;
 import org.jskat.gui.action.JSkatAction;
 
 /**
@@ -65,7 +64,7 @@ public class LoginPanel extends AbstractTabPanel {
 	@Override
 	protected void initPanel() {
 
-		setLayout(new MigLayout("fill")); //$NON-NLS-1$
+		setLayout(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
 		getActionMap().get(JSkatAction.CREATE_ISS_TABLE).setEnabled(true);
 
@@ -74,7 +73,7 @@ public class LoginPanel extends AbstractTabPanel {
 
 	private JPanel getLoginPanel() {
 
-		JPanel login = new JPanel(new MigLayout());
+		JPanel login = new JPanel(LayoutFactory.getMigLayout());
 
 		JLabel headerLabel = new JLabel(strings.getString("login_to_iss_title")); //$NON-NLS-1$
 		headerLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
@@ -108,7 +107,7 @@ public class LoginPanel extends AbstractTabPanel {
 		final JButton issRegisterButton = new JButton(getActionMap().get(
 				JSkatAction.REGISTER_ON_ISS));
 
-		JPanel buttonPanel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
+		JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
 		buttonPanel.add(loginButton);
 		buttonPanel.add(issHomepageButton);

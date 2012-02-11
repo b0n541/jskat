@@ -29,7 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import net.miginfocom.swing.MigLayout;
+import org.jskat.gui.LayoutFactory;
 
 /**
  * Dialog panel for player invitation on ISS
@@ -56,7 +56,7 @@ public class PlayerInvitationPanel extends JPanel {
 
 	void initPanel(Set<String> player) {
 
-		this.setLayout(new MigLayout("fill")); //$NON-NLS-1$
+		this.setLayout(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
 		this.firstPlayerGroup = new ButtonGroup();
 		this.secondPlayerGroup = new ButtonGroup();

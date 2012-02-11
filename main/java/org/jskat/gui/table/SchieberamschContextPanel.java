@@ -31,12 +31,11 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
+import org.jskat.gui.LayoutFactory;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
@@ -66,7 +65,7 @@ class SchieberamschContextPanel extends JPanel {
 	SchieberamschContextPanel(ActionMap actions, JSkatUserPanel newUserPanel,
 			int maxCards) {
 
-		setLayout(new MigLayout("fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+		setLayout(LayoutFactory.getMigLayout("fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 
 		JPanel blankPanel = new JPanel();
 		blankPanel.setOpaque(false);
@@ -90,7 +89,7 @@ class SchieberamschContextPanel extends JPanel {
 	}
 
 	public JPanel getGrandHandSchiebeRamschPanel(ActionMap actions) {
-		JPanel result = new JPanel(new MigLayout("fill, debug")); //$NON-NLS-1$
+		JPanel result = new JPanel(LayoutFactory.getMigLayout("fill, debug")); //$NON-NLS-1$
 
 		JPanel question = new JPanel();
 		JLabel questionIconLabel = new JLabel(new ImageIcon(JSkatGraphicRepository.instance().getUserBidBubbleImage()));

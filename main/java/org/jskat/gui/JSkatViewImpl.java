@@ -47,8 +47,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.JSkat;
@@ -292,9 +290,7 @@ public class JSkatViewImpl implements JSkatView {
 		mainPanel.setLayout(new BorderLayout());
 
 		// symbol button panel
-		JPanel buttonPanel = new JPanel();
-		MigLayout layout = new MigLayout();
-		buttonPanel.setLayout(layout);
+		JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout());
 		buttonPanel.add(new ToolbarButton(actions.get(JSkatAction.CREATE_LOCAL_TABLE)));
 		buttonPanel.add(new ToolbarButton(actions.get(JSkatAction.START_LOCAL_SERIES)));
 		buttonPanel.add(new ToolbarButton(actions.get(JSkatAction.SHOW_ISS_LOGIN)));

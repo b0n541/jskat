@@ -29,9 +29,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.jskat.data.JSkatOptions;
+import org.jskat.gui.LayoutFactory;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.Card;
 import org.jskat.util.GameType;
@@ -131,11 +130,11 @@ abstract class AbstractHandPanel extends JPanel {
 	 */
 	void initPanel() {
 
-		setLayout(new MigLayout("fill", "fill", "[shrink][grow]")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+		setLayout(LayoutFactory.getMigLayout("fill", "fill", "[shrink][grow]")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
 		setBorder(getPanelBorder());
 
-		header = new JPanel(new MigLayout(
+		header = new JPanel(LayoutFactory.getMigLayout(
 				"fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		header.add(headerLabel);
 		// blank panel

@@ -23,8 +23,7 @@ package org.jskat.gui.table;
 import javax.swing.ActionMap;
 import javax.swing.JPanel;
 
-import net.miginfocom.swing.MigLayout;
-
+import org.jskat.gui.LayoutFactory;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -42,7 +41,7 @@ class DeclaringContextPanel extends JPanel {
 	DeclaringContextPanel(ActionMap actions, JSkatGraphicRepository jskatBitmaps, JSkatUserPanel newUserPanel,
 			int maxCards) {
 
-		setLayout(new MigLayout("fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+		setLayout(LayoutFactory.getMigLayout("fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 
 		JPanel blankPanel = new JPanel();
 		blankPanel.setOpaque(false);

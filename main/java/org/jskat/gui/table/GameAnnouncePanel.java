@@ -31,14 +31,13 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.JSkatOptions;
 import org.jskat.gui.AbstractI18NComboBoxRenderer;
+import org.jskat.gui.LayoutFactory;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -85,9 +84,9 @@ class GameAnnouncePanel extends JPanel {
 
 	private void initPanel(final ActionMap actions) {
 
-		this.setLayout(new MigLayout("fill")); //$NON-NLS-1$
+		this.setLayout(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
-		JPanel panel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
+		JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
 		this.gameTypeList = new JComboBox();
 		DefaultComboBoxModel model = new DefaultComboBoxModel();

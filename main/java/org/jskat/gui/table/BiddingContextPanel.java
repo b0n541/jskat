@@ -25,8 +25,7 @@ import javax.swing.ActionMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import net.miginfocom.swing.MigLayout;
-
+import org.jskat.gui.LayoutFactory;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.Player;
@@ -66,7 +65,7 @@ class BiddingContextPanel extends JPanel {
 	private void initPanel(ActionMap actions, JSkatGraphicRepository bitmaps,
 			JSkatUserPanel userPanel) {
 
-		setLayout(new MigLayout("fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		setLayout(LayoutFactory.getMigLayout("fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		JPanel blankPanel = new JPanel();
 		blankPanel.setOpaque(false);
@@ -85,7 +84,7 @@ class BiddingContextPanel extends JPanel {
 	private JPanel getBiddingPanel(ActionMap actions,
 			JSkatGraphicRepository bitmaps) {
 
-		JPanel biddingPanel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
+		JPanel biddingPanel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
 		leftOpponentBid = new BidBubblePanel(bitmaps.getLeftBidBubbleImage());
 		rightOpponentBid = new BidBubblePanel(bitmaps.getRightBidBubbleImage());

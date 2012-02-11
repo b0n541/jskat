@@ -25,8 +25,7 @@ import java.awt.Image;
 
 import javax.swing.JPanel;
 
-import net.miginfocom.swing.MigLayout;
-
+import org.jskat.gui.LayoutFactory;
 import org.jskat.gui.img.JSkatGraphicRepository;
 
 /**
@@ -56,7 +55,7 @@ public class PlayGroundPanel extends JPanel {
 			OpponentPanel leftOpponentPanel, OpponentPanel rightOpponentPanel,
 			JPanel gameContextPanel, JSkatUserPanel userPanel) {
 
-		super(new MigLayout(
+		super(LayoutFactory.getMigLayout(
 				"fill", "fill", "[shrink][shrink][grow][shrink][shrink]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		add(gameInfoPanel, "span 2, growx, shrinky, align center, wrap"); //$NON-NLS-1$

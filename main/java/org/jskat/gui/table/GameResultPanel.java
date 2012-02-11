@@ -25,12 +25,11 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameSummary;
 import org.jskat.data.Trick;
+import org.jskat.gui.LayoutFactory;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.Player;
 
@@ -55,7 +54,7 @@ class GameResultPanel extends JPanel {
 
 	private void initPanel(JSkatGraphicRepository bitmaps) {
 
-		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		trickPanelList = new ArrayList<TrickPanel>();
 		for (int i = 0; i < 10; i++) {
@@ -63,7 +62,7 @@ class GameResultPanel extends JPanel {
 			trickPanelList.add(new TrickPanel(1.0, false));
 		}
 
-		JPanel trickPanel = new JPanel(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+		JPanel trickPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 		for (TrickPanel panel : trickPanelList) {
 			trickPanel.add(panel);
 		}

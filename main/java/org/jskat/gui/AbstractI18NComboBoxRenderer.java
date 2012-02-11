@@ -46,7 +46,7 @@ public abstract class AbstractI18NComboBoxRenderer extends JPanel implements
 
 		super();
 
-		setLayout(new MigLayout("fill")); //$NON-NLS-1$
+		setLayout(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 		cellItemLabel = new JLabel(" "); //$NON-NLS-1$
 		add(cellItemLabel);
 	}

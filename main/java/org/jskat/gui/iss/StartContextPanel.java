@@ -24,8 +24,7 @@ import javax.swing.ActionMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import net.miginfocom.swing.MigLayout;
-
+import org.jskat.gui.LayoutFactory;
 import org.jskat.gui.action.JSkatAction;
 
 /**
@@ -42,9 +41,9 @@ class StartContextPanel extends JPanel {
 
 	public void initPanel(ActionMap actions) {
 
-		this.setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+		this.setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 
-		JPanel panel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
+		JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 		panel.add(new JButton(actions.get(JSkatAction.INVITE_ISS_PLAYER)), "center"); //$NON-NLS-1$
 		panel.add(new JButton(actions.get(JSkatAction.READY_TO_PLAY)), "center"); //$NON-NLS-1$
 		panel.add(new JButton(actions.get(JSkatAction.TALK_ENABLED)), "center, wrap"); //$NON-NLS-1$

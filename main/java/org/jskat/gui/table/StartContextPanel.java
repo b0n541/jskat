@@ -23,8 +23,7 @@ package org.jskat.gui.table;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import net.miginfocom.swing.MigLayout;
-
+import org.jskat.gui.LayoutFactory;
 import org.jskat.gui.action.main.StartSkatSeriesAction;
 
 class StartContextPanel extends JPanel {
@@ -41,9 +40,9 @@ class StartContextPanel extends JPanel {
 
 	public void initPanel() {
 
-		this.setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+		this.setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 
-		JPanel panel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
+		JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 		panel.add(new JButton(this.action), "center"); //$NON-NLS-1$
 		panel.setOpaque(false);
 		this.add(panel, "center"); //$NON-NLS-1$

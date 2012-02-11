@@ -28,7 +28,7 @@ import java.awt.Image;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import net.miginfocom.swing.MigLayout;
+import org.jskat.gui.LayoutFactory;
 
 /**
  * Panel for a bid bubble
@@ -44,7 +44,7 @@ class BidBubblePanel extends JPanel {
 
 		bubbleImage = newBubbleImage;
 
-		setLayout(new MigLayout("fill")); //$NON-NLS-1$
+		setLayout(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
 		bidLabel = new JLabel();
 		bidLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));

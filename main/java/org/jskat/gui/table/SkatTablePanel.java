@@ -37,8 +37,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
@@ -47,6 +45,7 @@ import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.Trick;
 import org.jskat.gui.AbstractTabPanel;
+import org.jskat.gui.LayoutFactory;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.action.main.StartSkatSeriesAction;
 import org.jskat.util.Card;
@@ -110,7 +109,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	@Override
 	protected void initPanel() {
 
-		setLayout(new MigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		playerNamesAndPositions = new HashMap<String, Player>();
 
@@ -124,7 +123,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	private JPanel getScoreListPanel() {
 
-		JPanel panel = new JPanel(new MigLayout("fill", "fill", "[shrink][grow]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "[shrink][grow]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		JLabel skatListLabel = new JLabel(strings.getString("score_sheet")); //$NON-NLS-1$
 		skatListLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
@@ -218,7 +217,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		schieberamschPanel = new SchieberamschContextPanel(getActionMap(), userPanel, 4);
 		addContextPanel(ContextPanelType.SCHIEBERAMSCH, schieberamschPanel);
 
-		JPanel trickHoldingPanel = new JPanel(new MigLayout("fill", "[shrink][grow][shrink]", //$NON-NLS-1$ //$NON-NLS-2$
+		JPanel trickHoldingPanel = new JPanel(LayoutFactory.getMigLayout("fill", "[shrink][grow][shrink]", //$NON-NLS-1$ //$NON-NLS-2$
 				"fill")); //$NON-NLS-1$
 		lastTrickPanel = new TrickPanel(0.6, false);
 		trickHoldingPanel.add(lastTrickPanel, "width 25%"); //$NON-NLS-1$

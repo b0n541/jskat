@@ -56,22 +56,22 @@ public class WelcomePanel extends AbstractTabPanel {
 	@Override
 	protected void initPanel() {
 
-		setLayout(new MigLayout("fill")); //$NON-NLS-1$
+		setLayout(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 		add(getWelcomePanel(), "grow, center"); //$NON-NLS-1$
 	}
 
 	private JPanel getWelcomePanel() {
 
-		JPanel welcomePanel = new JPanel(new MigLayout("fill", "fill",
+		JPanel welcomePanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill",
 				"[shrink][grow]"));
 
-		JPanel headerPanel = new JPanel(new MigLayout("fill"));
+		JPanel headerPanel = new JPanel(LayoutFactory.getMigLayout("fill"));
 		JLabel headerLabel = new JLabel(strings.getString("welcome_to_jskat")); //$NON-NLS-1$
 		headerLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 		headerPanel.add(headerLabel, "center");
 		welcomePanel.add(headerPanel, "shrink, wrap"); //$NON-NLS-1$
 
-		JPanel localTablePanel = new JPanel(new MigLayout("fill"));
+		JPanel localTablePanel = new JPanel(LayoutFactory.getMigLayout("fill"));
 		final JButton localTableButton = new JButton(this.getActionMap().get(
 				JSkatAction.CREATE_LOCAL_TABLE));
 		localTablePanel.add(localTableButton, "center, wrap");
@@ -80,7 +80,7 @@ public class WelcomePanel extends AbstractTabPanel {
 						+ strings.getString("explain_local_table_2")
 						+ "</p></html>"), "center");
 
-		JPanel issTablePanel = new JPanel(new MigLayout("fill"));
+		JPanel issTablePanel = new JPanel(LayoutFactory.getMigLayout("fill"));
 		final JButton issTableButton = new JButton(getActionMap().get(
 				JSkatAction.SHOW_ISS_LOGIN));
 		issTablePanel.add(issTableButton, "center, wrap");
@@ -89,7 +89,7 @@ public class WelcomePanel extends AbstractTabPanel {
 						+ strings.getString("explain_iss_table_2")
 						+ "</p></html>"), "center");
 
-		JPanel buttonPanel = new JPanel(new MigLayout("fill")); //$NON-NLS-1$
+		JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
 		buttonPanel.add(localTablePanel, "width 50%");
 		buttonPanel.add(issTablePanel, "width 50%");

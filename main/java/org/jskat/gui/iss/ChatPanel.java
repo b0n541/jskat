@@ -38,12 +38,11 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.gui.AbstractTabPanel;
+import org.jskat.gui.LayoutFactory;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.util.JSkatResourceBundle;
 
@@ -73,7 +72,7 @@ class ChatPanel extends JPanel implements ChangeListener {
 
 		JSkatResourceBundle strings = JSkatResourceBundle.instance();
 
-		setLayout(new MigLayout("fill", "fill", "[grow][shrink]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		setLayout(LayoutFactory.getMigLayout("fill", "fill", "[grow][shrink]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		setMinimumSize(new Dimension(100, 100));
 		setPreferredSize(new Dimension(100, 100));
 
