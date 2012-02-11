@@ -842,7 +842,7 @@ public class SkatGame extends JSkatThread {
 				" game value: " + data.getResult()); //$NON-NLS-1$
 
 		for (JSkatPlayer currPlayer : player.values()) {
-			currPlayer.setGameResult(data.getGameResult().clone());
+			currPlayer.setGameSummary(data.getGameSummary());
 			currPlayer.finalizeGame();
 		}
 
