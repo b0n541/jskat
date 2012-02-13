@@ -1230,15 +1230,6 @@ public class JSkatViewImpl implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setGameResultWithoutSkatList(String tableName, GameSummary summary) {
-
-		tables.get(tableName).setGameResultWithoutSkatList(summary);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void showDuplicateTableNameMessage(String duplicateTableName) {
 
 		String message = MessageFormat.format(strings.getString("duplicate_table_name"), //$NON-NLS-1$

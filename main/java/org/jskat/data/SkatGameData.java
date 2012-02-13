@@ -629,11 +629,11 @@ public class SkatGameData {
 	 */
 	public Trick getLastTrick() {
 
-		if (getTricks().size() == 0) {
-			throw new IllegalStateException("No tricks played in the game so far."); //$NON-NLS-1$
+		if (getTricks().size() < 2) {
+			throw new IllegalStateException("No tricks finished in the game so far."); //$NON-NLS-1$
 		}
 
-		return tricks.get(tricks.size() - 1);
+		return tricks.get(tricks.size() - 2);
 	}
 
 	/**

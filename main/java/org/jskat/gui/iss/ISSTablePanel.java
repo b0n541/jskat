@@ -81,7 +81,7 @@ public class ISSTablePanel extends SkatTablePanel {
 
 		JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "[grow][shrink]", //$NON-NLS-1$ //$NON-NLS-2$
 				"fill")); //$NON-NLS-1$
-		panel.add(super.getPlayGroundPanel(), "grow"); //$NON-NLS-1$
+		panel.add(super.getPlayGroundPanel(), "width 80%, grow"); //$NON-NLS-1$
 		chatPanel = getChatPanel();
 		chatPanel.addNewChat(this.getName());
 		panel.add(chatPanel, "width 20%, growy"); //$NON-NLS-1$
@@ -162,6 +162,8 @@ public class ISSTablePanel extends SkatTablePanel {
 			SkatGameResult gameResult = new SkatGameResult();
 			gameResult.setGameValue(0);
 			factory.setGameResult(gameResult);
+			// looks wrong
+			factory.setPlayerPoints(playerResults);
 			GameSummary summary = factory.getSummary();
 
 			addISSGameResult(getDeclarer(), playerResults, summary);

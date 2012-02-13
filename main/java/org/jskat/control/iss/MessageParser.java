@@ -436,6 +436,11 @@ public class MessageParser {
 
 	private static void parseMoves(SkatGameData result, String summaryPart) {
 
+		// FIXME (jansch 12.02.2012) parse moves correctly
+		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+		factory.setGameType(GameType.PASSED_IN);
+		result.setAnnouncement(factory.getAnnouncement());
+
 		StringTokenizer token = new StringTokenizer(summaryPart);
 
 		while (token.hasMoreTokens()) {

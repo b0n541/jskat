@@ -619,16 +619,6 @@ public interface JSkatView {
 	public void setGameResult(String tableName, GameSummary summary);
 
 	/**
-	 * Sets the game result in the view
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param summary
-	 *            Game summary
-	 */
-	public void setGameResultWithoutSkatList(String tableName, GameSummary summary);
-
-	/**
 	 * Adds training results
 	 * 
 	 * @param gameType

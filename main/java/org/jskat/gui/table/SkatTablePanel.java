@@ -553,15 +553,6 @@ public class SkatTablePanel extends AbstractTabPanel {
 		scoreListScrollPane.getViewport().setViewPosition(loc);
 	}
 
-	// FIXME (jansch 05.04.2011) remove this method, dirty hack
-	public void setGameResultWithoutSkatList(GameSummary summary) {
-
-		gameOverPanel.setGameSummary(summary);
-		if (summary.getGameType() != GameType.PASSED_IN) {
-			gameInfoPanel.setGameSummary(summary);
-		}
-	}
-
 	Player getHumanPosition() {
 
 		return userPanel.getPosition();

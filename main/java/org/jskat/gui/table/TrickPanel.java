@@ -87,6 +87,11 @@ class TrickPanel extends JPanel implements ComponentListener {
 		cardScaleFactor = newCardScaleFactor;
 		randomPlacement = newRandomPlacement;
 
+		// for (Card card : Card.values()) {
+		// scaledCardImages.put(card, bitmaps.getCardImage(card.getSuit(),
+		// card.getRank()));
+		// }
+		//
 		trick = new CardList();
 		positions = new ArrayList<Player>();
 		cardRotations = new ArrayList<Double>();
@@ -275,7 +280,8 @@ class TrickPanel extends JPanel implements ComponentListener {
 
 	@Override
 	public void componentShown(ComponentEvent e) {
-		// not needed
+		scaleImages();
+		repaint();
 	}
 
 	@Override

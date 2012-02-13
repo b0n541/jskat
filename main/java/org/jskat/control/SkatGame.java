@@ -564,8 +564,8 @@ public class SkatGame extends JSkatThread {
 				// first trick
 				newTrickForeHand = Player.FOREHAND;
 			} else {
-				// set new trick fore hand for other tricks
-				newTrickForeHand = data.getLastTrickWinner();
+				// get trick winner as fore hand of next trick
+				newTrickForeHand = data.getTrickWinner(trickNo - 1);
 			}
 
 			view.setTrickForeHand(tableName, newTrickForeHand);

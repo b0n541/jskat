@@ -590,15 +590,6 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setGameResultWithoutSkatList(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") GameSummary summary) {
-		// FIXME (jansch 05.04.2011) remove this dirty hack
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void showDuplicateTableNameMessage(@SuppressWarnings("unused") String duplicateTableName) {
 		// empty method by indent
 	}
