@@ -1142,15 +1142,6 @@ public class JSkatViewImpl implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setGameResult(String tableName, GameSummary summary) {
-
-		tables.get(tableName).addGameResult(summary);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void showCardNotAllowedMessage(Card card) {
 
 		String title = strings.getString("card_not_allowed_title"); //$NON-NLS-1$

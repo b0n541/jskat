@@ -609,16 +609,6 @@ public interface JSkatView {
 	public boolean showISSTableInvitation(String invitor, String tableName);
 
 	/**
-	 * Sets the game result in the view
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param summary
-	 *            Game summary
-	 */
-	public void setGameResult(String tableName, GameSummary summary);
-
-	/**
 	 * Adds training results
 	 * 
 	 * @param gameType

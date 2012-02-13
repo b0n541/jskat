@@ -529,15 +529,6 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setGameResult(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") GameSummary summary) {
-		// empty method by indent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void showCardNotAllowedMessage(@SuppressWarnings("unused") Card card) {
 		// empty method by indent
 	}

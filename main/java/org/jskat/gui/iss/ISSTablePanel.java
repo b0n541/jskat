@@ -166,7 +166,7 @@ public class ISSTablePanel extends SkatTablePanel {
 			factory.setPlayerPoints(playerResults);
 			GameSummary summary = factory.getSummary();
 
-			addISSGameResult(getDeclarer(), playerResults, summary);
+			addGameResult(summary);
 		}
 
 		lastTableStatus = tableStatus;

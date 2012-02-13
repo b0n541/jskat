@@ -98,7 +98,7 @@ public class MessageParserTest extends AbstractJSkatTest {
 		SkatGameData gameData = MessageParser.parseGameSummary(gameSummary);
 
 		// assertTrue(gameData.isGamePassed());
-		assertEquals(-1, gameData.getResult().getGameValue());
+		assertEquals(0, gameData.getResult().getGameValue());
 
 		// FIXME (jan 28.05.2011) add further asserts
 	}

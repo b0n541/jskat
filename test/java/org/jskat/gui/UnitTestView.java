@@ -390,12 +390,6 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void setGameResult(String tableName, GameSummary summary) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void addTrainingResult(GameType gameType, long episodes, long totalWonGames, long episodeWonGames,
 			double avgDifference) {
 		// TODO Auto-generated method stub

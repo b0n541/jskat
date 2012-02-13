@@ -534,17 +534,6 @@ public class SkatTablePanel extends AbstractTabPanel {
 		}
 	}
 
-	/**
-	 * Adds a game result from ISS
-	 */
-	public void addISSGameResult(Player declarer, Map<Player, Integer> playerResults, GameSummary summary) {
-
-		skatListTableModel.addResult(leftOpponentPanel.getPosition(), rightOpponentPanel.getPosition(),
-				userPanel.getPosition(), declarer, playerResults, summary);
-
-		scrollSkatListToTheEnd();
-	}
-
 	private void scrollSkatListToTheEnd() {
 		// scroll skat list if the new result is out of scope
 		Rectangle bounds = scoreListTable.getCellRect(skatListTableModel.getRowCount() - 1, 0, true);
