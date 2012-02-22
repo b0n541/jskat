@@ -22,13 +22,19 @@ package org.jskat.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.File;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
 import javax.swing.ButtonGroup;
 import javax.swing.ButtonModel;
+import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -38,10 +44,9 @@ import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-import net.miginfocom.swing.MigLayout;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -56,7 +61,7 @@ import org.jskat.util.JSkatResourceBundle;
 /**
  * Preferences dialog for JSkat
  */
-public class JSkatOptionsDialog extends JDialog implements ActionListener {
+public class JSkatOptionsDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 	private static Log log = LogFactory.getLog(JSkatOptionsDialog.class);
@@ -104,6 +109,54 @@ public class JSkatOptionsDialog extends JDialog implements ActionListener {
 
 	private JTextField issAddress;
 	private JTextField issPort;
+
+	private final Action okAction = new AbstractAction("OK") {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			options.setShowTipsAtStartUp(showTipsAtStartUp.isSelected());
+			options.setCheckForNewVersionAtStartUp(checkForNewVersion.isSelected());
+			options.setLanguage((SupportedLanguage) language.getSelectedItem());
+			options.setCardFace(getSelectedCardFace());
+			options.setSavePath(savePath.getText());
+			options.setTrickRemoveDelayTime(waitTime.getValue() * 1000);
+			options.setTrickRemoveAfterClick(trickRemoveAfterClick.isSelected());
+			options.setGameShortCut(gameShortCutYes.isSelected());
+			options.setIssAddress(issAddress.getText());
+			options.setIssPort(Integer.valueOf(issPort.getText()));
+
+			if (ruleSetISPA.isSelected()) {
+				options.setRules(RuleSet.ISPA);
+			} else {
+				options.setRules(RuleSet.PUB);
+			}
+
+			options.setRamschEventNoBid(ramschEventNoBid.isSelected());
+			options.setBockEventContraReAnnounced(bockEventContraReAnnounced.isSelected());
+			options.setBockEventLostGrand(bockEventLostGrand.isSelected());
+			options.setBockEventLostAfterContra(bockEventLostAfterContra.isSelected());
+			options.setBockEventLostWith60(bockEventLostWith60.isSelected());
+			options.setPlayContra(playContra.isSelected());
+			options.setPlayRamsch(playRamsch.isSelected());
+			options.setPlayBock(playBock.isSelected());
+			options.setPlayRevolution(playRevolution.isSelected());
+			options.setSchieberRamsch(schiebeRamsch.isSelected());
+			options.setSchieberRamschJacksInSkat(schiebeRamschJacksInSkat.isSelected());
+			options.setRamschSkatOwner(ramschSkatLastTrick.isSelected() ? RamschSkatOwner.LAST_TRICK
+					: RamschSkatOwner.LOSER);
+
+			options.saveJSkatProperties();
+			refreshCardFaces();
+
+			setVisible(false);
+		}
+	};
+	
+	private final Action cancelAction = new AbstractAction("CANCEL") {
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			setVisible(false);
+		}
+	};
 
 	final ChangeListener ruleButtonChangeListener = new ChangeListener() {
 
@@ -161,16 +214,24 @@ public class JSkatOptionsDialog extends JDialog implements ActionListener {
 		root.add(prefTabs, "wrap"); //$NON-NLS-1$
 
 		JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout());
-		JButton start = new JButton("OK"); //$NON-NLS-1$
-		start.setActionCommand("OK"); //$NON-NLS-1$
-		start.addActionListener(this);
+		JButton start = new JButton(); 
+		start.setAction(okAction);
+		start.setText("OK"); //$NON-NLS-1$
 		buttonPanel.add(start);
-		JButton cancel = new JButton(strings.getString("cancel")); //$NON-NLS-1$
-		cancel.setActionCommand("CANCEL"); //$NON-NLS-1$
-		cancel.addActionListener(this);
+		JButton cancel = new JButton(); 
+		cancel.setAction(cancelAction);
+		cancel.setText(strings.getString("cancel")); //$NON-NLS-1$
 		buttonPanel.add(cancel);
 
 		root.add(buttonPanel, "center"); //$NON-NLS-1$
+		
+		InputMap im = root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+		ActionMap am = root.getActionMap();
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "OK");
+		am.put("OK", okAction);
+		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "CANCEL");
+		am.put("CANCEL", cancelAction);
+		
 		setContentPane(root);
 
 		pack();
@@ -547,55 +608,6 @@ public class JSkatOptionsDialog extends JDialog implements ActionListener {
 		// ISS options
 		issAddress.setText(options.getIssAddress());
 		issPort.setText(options.getIssPort().toString());
-	}
-
-	/**
-	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
-	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
-		if ("CANCEL".equals(e.getActionCommand())) { //$NON-NLS-1$
-
-			setVisible(false);
-		} else if ("OK".equals(e.getActionCommand())) { //$NON-NLS-1$
-
-			options.setShowTipsAtStartUp(showTipsAtStartUp.isSelected());
-			options.setCheckForNewVersionAtStartUp(checkForNewVersion.isSelected());
-			options.setLanguage((SupportedLanguage) language.getSelectedItem());
-			options.setCardFace(getSelectedCardFace());
-			options.setSavePath(savePath.getText());
-			options.setTrickRemoveDelayTime(waitTime.getValue() * 1000);
-			options.setTrickRemoveAfterClick(trickRemoveAfterClick.isSelected());
-			options.setGameShortCut(gameShortCutYes.isSelected());
-			options.setIssAddress(issAddress.getText());
-			options.setIssPort(Integer.valueOf(issPort.getText()));
-
-			if (ruleSetISPA.isSelected()) {
-				options.setRules(RuleSet.ISPA);
-			} else {
-				options.setRules(RuleSet.PUB);
-			}
-
-			options.setRamschEventNoBid(ramschEventNoBid.isSelected());
-			options.setBockEventContraReAnnounced(bockEventContraReAnnounced.isSelected());
-			options.setBockEventLostGrand(bockEventLostGrand.isSelected());
-			options.setBockEventLostAfterContra(bockEventLostAfterContra.isSelected());
-			options.setBockEventLostWith60(bockEventLostWith60.isSelected());
-			options.setPlayContra(playContra.isSelected());
-			options.setPlayRamsch(playRamsch.isSelected());
-			options.setPlayBock(playBock.isSelected());
-			options.setPlayRevolution(playRevolution.isSelected());
-			options.setSchieberRamsch(schiebeRamsch.isSelected());
-			options.setSchieberRamschJacksInSkat(schiebeRamschJacksInSkat.isSelected());
-			options.setRamschSkatOwner(ramschSkatLastTrick.isSelected() ? RamschSkatOwner.LAST_TRICK
-					: RamschSkatOwner.LOSER);
-
-			options.saveJSkatProperties();
-			refreshCardFaces();
-
-			setVisible(false);
-		}
 	}
 
 	private CardFace getSelectedCardFace() {
