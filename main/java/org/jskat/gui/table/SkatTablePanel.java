@@ -526,12 +526,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		skatListTableModel.addResult(leftOpponentPanel.getPosition(), rightOpponentPanel.getPosition(),
 				userPanel.getPosition(), summary.getDeclarer(), summary);
-
 		scrollSkatListToTheEnd();
 
-		if (summary.getGameType() != GameType.PASSED_IN) {
-			gameInfoPanel.setGameSummary(summary);
-		}
+		gameInfoPanel.setGameSummary(summary);
 	}
 
 	private void scrollSkatListToTheEnd() {

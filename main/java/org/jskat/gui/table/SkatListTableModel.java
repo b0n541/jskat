@@ -22,7 +22,6 @@ package org.jskat.gui.table;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -249,53 +248,7 @@ class SkatListTableModel extends AbstractTableModel {
 		fireTableDataChanged();
 	}
 
-	/**
-	 * Adds new player points
-	 * 
-	 * @param leftOpponent
-	 *            Position of left opponent
-	 * @param rightOpponent
-	 *            Position of right opponent
-	 * @param user
-	 *            Position of user
-	 * @param declarer
-	 *            Declarer
-	 * @param playerPoints
-	 *            Player points
-	 * @param gameSummary
-	 *            Game summary
-	 */
-	void addResult(Player leftOpponent, Player rightOpponent, Player user, Player declarer,
-			Map<Player, Integer> playerPoints, GameSummary summary) {
-
-		log.debug(gameResults.size() + " games so far."); //$NON-NLS-1$
-		log.debug("Adding game for " + declarer + " with player points " + playerPoints); //$NON-NLS-1$ //$NON-NLS-2$
-
-		// FIXME works only on 3 player series
-		// FIXME (jansch 21.03.2011) provide only one method for addResult()
-		declarers.add(declarer);
-		gameResults.add(summary);
-
-		int declarerColumn = getDeclarerColumn(leftOpponent, rightOpponent, user, declarer);
-
-		if (declarer != null) {
-			playerResults.get(declarerColumn).add(playerPoints.get(declarer));
-			playerResults.get((declarerColumn + 1) % 3).add(playerPoints.get(declarer.getLeftNeighbor()));
-			playerResults.get((declarerColumn + 2) % 3).add(playerPoints.get(declarer.getRightNeighbor()));
-		} else {
-			// game was passed in
-			for (int i = 0; i < playerCount; i++) {
-				playerResults.get(i).add(0);
-			}
-		}
-		calculateDisplayValues();
-
-		log.debug(displayValues.size() + " display values now."); //$NON-NLS-1$
-
-		fireTableDataChanged();
-	}
-
-	int getDeclarerColumn(Player leftOpponent, Player rightOpponent, Player player, Player declarer) {
+	static int getDeclarerColumn(Player leftOpponent, Player rightOpponent, Player player, Player declarer) {
 
 		int result = -1;
 

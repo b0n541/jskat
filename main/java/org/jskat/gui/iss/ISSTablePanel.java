@@ -27,10 +27,7 @@ import javax.swing.ActionMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import org.jskat.data.GameSummary;
-import org.jskat.data.GameSummary.GameSummaryFactory;
 import org.jskat.data.SkatGameData.GameState;
-import org.jskat.data.SkatGameResult;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.PlayerStatus;
 import org.jskat.data.iss.TablePanelStatus;
@@ -40,7 +37,6 @@ import org.jskat.gui.table.ContextPanelType;
 import org.jskat.gui.table.JSkatUserPanel;
 import org.jskat.gui.table.OpponentPanel;
 import org.jskat.gui.table.SkatTablePanel;
-import org.jskat.util.GameType;
 import org.jskat.util.Player;
 
 /**
@@ -146,27 +142,6 @@ public class ISSTablePanel extends SkatTablePanel {
 			if (status.isPlayerLeft()) {
 				removePlayerName(playerName);
 			}
-		}
-
-		if (isNewGameResultAvailable(tableStatus)) {
-
-			Map<Player, Integer> playerResults = extractPlayerResults(tableStatus);
-
-			// FIXME (jan 15.11.2011) try to get more information about the game
-			GameSummaryFactory factory = GameSummary.getFactory();
-			factory.setGameType(GameType.PASSED_IN);
-			factory.setForeHand("not available");
-			factory.setMiddleHand("not available");
-			factory.setRearHand("not available");
-			factory.setDeclarer(Player.FOREHAND);
-			SkatGameResult gameResult = new SkatGameResult();
-			gameResult.setGameValue(0);
-			factory.setGameResult(gameResult);
-			// looks wrong
-			factory.setPlayerPoints(playerResults);
-			GameSummary summary = factory.getSummary();
-
-			addGameResult(summary);
 		}
 
 		lastTableStatus = tableStatus;

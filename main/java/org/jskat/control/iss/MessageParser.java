@@ -500,7 +500,10 @@ public class MessageParser {
 
 		} else if (token.startsWith("p:")) { //$NON-NLS-1$
 
-			gameData.setDeclarerScore(Integer.parseInt(token.substring(2)));
+			int declarerPoints = Integer.parseInt(token.substring(2));
+			gameData.setDeclarerScore(declarerPoints);
+			gameData.getResult().setFinalDeclarerPoints(declarerPoints);
+			gameData.getResult().setFinalOpponentPoints(120 - declarerPoints);
 
 		} else if ("overbid".equals(token)) { //$NON-NLS-1$
 
