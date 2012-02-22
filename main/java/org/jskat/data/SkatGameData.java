@@ -29,7 +29,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary.GameSummaryFactory;
-import org.jskat.data.SkatTableOptions.RamschSkatOwner;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -541,10 +540,6 @@ public class SkatGameData {
 					ramschLoser = Player.REARHAND;
 				}
 			}
-		}
-		if (JSkatOptions.instance().getRamschSkat() == RamschSkatOwner.LOSER) {
-			log.debug("adding skat value (" + skat.getTotalValue() + ") to player " + ramschLoser);
-			addPlayerPoints(ramschLoser, skat.getTotalValue());
 		}
 		setDeclarer(ramschLoser);
 

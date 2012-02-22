@@ -657,11 +657,10 @@ public class SkatGame extends JSkatThread {
 		}
 
 		if (data.getGameType() == GameType.RAMSCH) {
-			// TODO give the card points of the skat to a player defined in
-			// ramsch rules
 			if(JSkatOptions.instance().getRamschSkat()==RamschSkatOwner.LAST_TRICK) {
 				if (trickWinner != null) {
-					log.debug("Skat cards ("+data.getSkat().getTotalValue()+" points) are added to player @ " + trickWinner); //$NON-NLS-1$
+					log.debug("Skat cards ("+data.getSkat().getTotalValue()+" points) are added to player @ "	//$NON-NLS-1$ //$NON-NLS-2$ 
+							+ trickWinner + " (= last trick)"); //$NON-NLS-1$
 					data.addPlayerPoints(trickWinner, data.getSkat().getTotalValue());
 				} else {
 					log.warn("Skat cards cannot be added to winner of final trick - trick winner is unknown"); //$NON-NLS-1$
