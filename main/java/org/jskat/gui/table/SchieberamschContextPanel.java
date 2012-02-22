@@ -89,7 +89,7 @@ class SchieberamschContextPanel extends JPanel {
 	}
 
 	public JPanel getGrandHandSchiebeRamschPanel(ActionMap actions) {
-		JPanel result = new JPanel(LayoutFactory.getMigLayout("fill, debug")); //$NON-NLS-1$
+		JPanel result = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
 		JPanel question = new JPanel();
 		JLabel questionIconLabel = new JLabel(new ImageIcon(JSkatGraphicRepository.instance().getUserBidBubbleImage()));
