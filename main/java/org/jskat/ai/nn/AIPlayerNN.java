@@ -393,14 +393,17 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 				}
 			}
 
-			if (goodCards.size() > 0) {
+			if (goodCards.size() == 1) {
+				bestCardIndex = possibleCards.getIndexOf(goodCards.get(0));
+			} else if (goodCards.size() > 1) {
 				// get random card out of the good cards
 				Card choosenCard = goodCards.get(rand.nextInt(goodCards.size()));
 				bestCardIndex = possibleCards.indexOf(choosenCard);
+				log.warn("More than one good card found: " + goodCards.size()); //$NON-NLS-1$
 			} else {
 				// then choose a random card
 				bestCardIndex = rand.nextInt(possibleCards.size());
-				log.error("RANDOM CARD CHOOSEN"); //$NON-NLS-1$
+				log.warn("No good card found. Choosing random card."); //$NON-NLS-1$
 			}
 
 			// store parameters for the card to play
