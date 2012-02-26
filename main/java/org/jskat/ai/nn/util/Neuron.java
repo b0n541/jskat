@@ -94,8 +94,7 @@ class Neuron {
 
 		this.inputSum = 0.0;
 		for (Weight weight : this.incomingWeights) {
-			this.inputSum += weight.getInputNeuron().getActivationValue()
-					* weight.getWeightValue();
+			this.inputSum += weight.getInputNeuron().getActivationValue() * weight.getWeightValue();
 		}
 		this.activationValue = activFnct(this.inputSum);
 	}
@@ -151,7 +150,7 @@ class Neuron {
 
 	private static final double sigmoid(double input) {
 
-		return 1.0d / (1.0d + Math.pow(Math.E, -1.0d * input));
+		return 1.0d / (1.0d + Math.exp(-1.0 * input));
 	}
 
 	private static final double dsigmoid(double input) {
@@ -186,8 +185,7 @@ class Neuron {
 		this.errorSignal = dactivFnct(this.inputSum) * errorSum;
 		// adjust all weights leading to this neuron
 		for (Weight weight : this.incomingWeights) {
-			weight.setWeightValue(weight.getWeightValue() + learningRate
-					* this.errorSignal
+			weight.setWeightValue(weight.getWeightValue() + learningRate * this.errorSignal
 					* weight.getInputNeuron().getActivationValue());
 		}
 	}

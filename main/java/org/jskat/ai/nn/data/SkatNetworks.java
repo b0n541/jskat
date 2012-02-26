@@ -36,6 +36,15 @@ public class SkatNetworks {
 
 	private static Log log = LogFactory.getLog(SkatNetworks.class);
 
+	// 32 input nodes for every player
+	// 32 input nodes for skat cards
+	// 1 hidden layer
+	// n number of nodes in hidden layer
+	// 1 output node for win/lost
+	private static int inputNeurons = 96;
+	private static int hiddenNeurons = 10;
+	private static int outputNeurons = 1;
+
 	private final static SkatNetworks instance = new SkatNetworks();
 
 	private static NeuralNetwork suitDeclarerOpening;
@@ -79,41 +88,6 @@ public class SkatNetworks {
 	}
 
 	private void initNetworks() {
-		// 32 input nodes for every player
-		// 1 output node for win/lost
-		// 1 hidden layer
-		// 2*n+1 nodes in hidden layer
-		// n number of nodes in input layer
-		int inputCount = 96;
-		// int hiddenCount = 2 * inputCount + 1;
-		int hiddenCount = 10;
-		int outputCount = 1;
-
-		int[] hiddenLayer = { hiddenCount };
-
-		NetworkTopology topol = new NetworkTopology(inputCount, outputCount, 1, hiddenLayer);
-
-		suitDeclarerOpening = new NeuralNetwork(topol);
-		suitDeclarerMiddleGame = new NeuralNetwork(topol);
-		suitDeclarerEndGame = new NeuralNetwork(topol);
-		suitOpponentOpening = new NeuralNetwork(topol);
-		suitOpponentMiddleGame = new NeuralNetwork(topol);
-		suitOpponentEndGame = new NeuralNetwork(topol);
-		nullDeclarerOpening = new NeuralNetwork(topol);
-		nullDeclarerMiddleGame = new NeuralNetwork(topol);
-		nullDeclarerEndGame = new NeuralNetwork(topol);
-		nullOpponentOpening = new NeuralNetwork(topol);
-		nullOpponentMiddleGame = new NeuralNetwork(topol);
-		nullOpponentEndGame = new NeuralNetwork(topol);
-		grandDeclarerOpening = new NeuralNetwork(topol);
-		grandDeclarerMiddleGame = new NeuralNetwork(topol);
-		grandDeclarerEndGame = new NeuralNetwork(topol);
-		grandOpponentOpening = new NeuralNetwork(topol);
-		grandOpponentMiddleGame = new NeuralNetwork(topol);
-		grandOpponentEndGame = new NeuralNetwork(topol);
-		ramschDeclarerOpening = new NeuralNetwork(topol);
-		ramschDeclarerMiddleGame = new NeuralNetwork(topol);
-		ramschDeclarerEndGame = new NeuralNetwork(topol);
 
 		loadNetworks(ClassLoader.getSystemResource("org/jskat/ai/nn/data") //$NON-NLS-1$
 				.getPath());
@@ -276,48 +250,81 @@ public class SkatNetworks {
 
 		String pathSep = System.getProperty("file.separator"); //$NON-NLS-1$
 
-		suitDeclarerOpening = new NeuralNetwork();
-		suitDeclarerOpening.loadNetwork("/org/jskat/ai/nn/data/jskat.suit.declarer.opening.nnet"); //$NON-NLS-1$
-		suitDeclarerMiddleGame = new NeuralNetwork();
-		suitDeclarerMiddleGame.loadNetwork("/org/jskat/ai/nn/data/jskat.suit.declarer.middlegame.nnet"); //$NON-NLS-1$
-		suitDeclarerEndGame = new NeuralNetwork();
-		suitDeclarerEndGame.loadNetwork("/org/jskat/ai/nn/data/jskat.suit.declarer.endgame.nnet"); //$NON-NLS-1$
-		suitOpponentOpening = new NeuralNetwork();
-		suitOpponentOpening.loadNetwork("/org/jskat/ai/nn/data/jskat.suit.opponent.opening.nnet"); //$NON-NLS-1$
-		suitOpponentMiddleGame = new NeuralNetwork();
-		suitOpponentMiddleGame.loadNetwork("/org/jskat/ai/nn/data/jskat.suit.opponent.middlegame.nnet"); //$NON-NLS-1$
-		suitOpponentEndGame = new NeuralNetwork();
-		suitOpponentEndGame.loadNetwork("/org/jskat/ai/nn/data/jskat.suit.opponent.endgame.nnet"); //$NON-NLS-1$
-		nullDeclarerOpening = new NeuralNetwork();
-		nullDeclarerOpening.loadNetwork("/org/jskat/ai/nn/data/jskat.null.declarer.opening.nnet"); //$NON-NLS-1$
-		nullDeclarerMiddleGame = new NeuralNetwork();
-		nullDeclarerMiddleGame.loadNetwork("/org/jskat/ai/nn/data/jskat.null.declarer.middlegame.nnet"); //$NON-NLS-1$
-		nullDeclarerEndGame = new NeuralNetwork();
-		nullDeclarerEndGame.loadNetwork("/org/jskat/ai/nn/data/jskat.null.declarer.endgame.nnet"); //$NON-NLS-1$
-		nullOpponentOpening = new NeuralNetwork();
-		nullOpponentOpening.loadNetwork("/org/jskat/ai/nn/data/jskat.null.opponent.opening.nnet"); //$NON-NLS-1$
-		nullOpponentMiddleGame = new NeuralNetwork();
-		nullOpponentMiddleGame.loadNetwork("/org/jskat/ai/nn/data/jskat.null.opponent.middlegame.nnet"); //$NON-NLS-1$
-		nullOpponentEndGame = new NeuralNetwork();
-		nullOpponentEndGame.loadNetwork("/org/jskat/ai/nn/data/jskat.null.opponent.endgame.nnet"); //$NON-NLS-1$
-		grandDeclarerOpening = new NeuralNetwork();
-		grandDeclarerOpening.loadNetwork("/org/jskat/ai/nn/data/jskat.grand.declarer.opening.nnet"); //$NON-NLS-1$
-		grandDeclarerMiddleGame = new NeuralNetwork();
-		grandDeclarerMiddleGame.loadNetwork("/org/jskat/ai/nn/data/jskat.grand.declarer.middlegame.nnet"); //$NON-NLS-1$
-		grandDeclarerEndGame = new NeuralNetwork();
-		grandDeclarerEndGame.loadNetwork("/org/jskat/ai/nn/data/jskat.grand.declarer.endgame.nnet"); //$NON-NLS-1$
-		grandOpponentOpening = new NeuralNetwork();
-		grandOpponentOpening.loadNetwork("/org/jskat/ai/nn/data/jskat.grand.opponent.opening.nnet"); //$NON-NLS-1$
-		grandOpponentMiddleGame = new NeuralNetwork();
-		grandOpponentMiddleGame.loadNetwork("/org/jskat/ai/nn/data/jskat.grand.opponent.middlegame.nnet"); //$NON-NLS-1$
-		grandOpponentEndGame = new NeuralNetwork();
-		grandOpponentEndGame.loadNetwork("/org/jskat/ai/nn/data/jskat.grand.opponent.endgame.nnet"); //$NON-NLS-1$
-		ramschDeclarerOpening = new NeuralNetwork();
-		ramschDeclarerOpening.loadNetwork("/org/jskat/ai/nn/data/jskat.ramsch.declarer.opening.nnet"); //$NON-NLS-1$
-		ramschDeclarerMiddleGame = new NeuralNetwork();
-		ramschDeclarerMiddleGame.loadNetwork("/org/jskat/ai/nn/data/jskat.ramsch.declarer.middlegame.nnet"); //$NON-NLS-1$
-		ramschDeclarerEndGame = new NeuralNetwork();
-		ramschDeclarerEndGame.loadNetwork("/org/jskat/ai/nn/data/jskat.ramsch.declarer.endgame.nnet"); //$NON-NLS-1$
+		// FIXME (jan 25.02.2012) this is duplicated in
+		// NeuralNetwork.loadNetwork()
+		int[] hiddenLayer = { hiddenNeurons };
+		NetworkTopology topo = new NetworkTopology(inputNeurons, outputNeurons, 1, hiddenLayer);
+
+		suitDeclarerOpening = new NeuralNetwork(topo);
+		suitDeclarerOpening.loadNetwork(
+				"/org/jskat/ai/nn/data/jskat.suit.declarer.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		suitDeclarerMiddleGame = new NeuralNetwork(topo);
+		suitDeclarerMiddleGame
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.suit.declarer.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		suitDeclarerEndGame = new NeuralNetwork(topo);
+		suitDeclarerEndGame.loadNetwork(
+				"/org/jskat/ai/nn/data/jskat.suit.declarer.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		suitOpponentOpening = new NeuralNetwork(topo);
+		suitOpponentOpening.loadNetwork(
+				"/org/jskat/ai/nn/data/jskat.suit.opponent.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		suitOpponentMiddleGame = new NeuralNetwork(topo);
+		suitOpponentMiddleGame
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.suit.opponent.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		suitOpponentEndGame = new NeuralNetwork(topo);
+		suitOpponentEndGame.loadNetwork(
+				"/org/jskat/ai/nn/data/jskat.suit.opponent.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		nullDeclarerOpening = new NeuralNetwork(topo);
+		nullDeclarerOpening.loadNetwork(
+				"/org/jskat/ai/nn/data/jskat.null.declarer.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		nullDeclarerMiddleGame = new NeuralNetwork(topo);
+		nullDeclarerMiddleGame
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.null.declarer.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		nullDeclarerEndGame = new NeuralNetwork(topo);
+		nullDeclarerEndGame.loadNetwork(
+				"/org/jskat/ai/nn/data/jskat.null.declarer.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		nullOpponentOpening = new NeuralNetwork(topo);
+		nullOpponentOpening.loadNetwork(
+				"/org/jskat/ai/nn/data/jskat.null.opponent.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		nullOpponentMiddleGame = new NeuralNetwork(topo);
+		nullOpponentMiddleGame
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.null.opponent.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		nullOpponentEndGame = new NeuralNetwork(topo);
+		nullOpponentEndGame.loadNetwork(
+				"/org/jskat/ai/nn/data/jskat.null.opponent.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		grandDeclarerOpening = new NeuralNetwork(topo);
+		grandDeclarerOpening.loadNetwork(
+				"/org/jskat/ai/nn/data/jskat.grand.declarer.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		grandDeclarerMiddleGame = new NeuralNetwork(topo);
+		grandDeclarerMiddleGame
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.grand.declarer.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		grandDeclarerEndGame = new NeuralNetwork(topo);
+		grandDeclarerEndGame.loadNetwork(
+				"/org/jskat/ai/nn/data/jskat.grand.declarer.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		grandOpponentOpening = new NeuralNetwork(topo);
+		grandOpponentOpening.loadNetwork(
+				"/org/jskat/ai/nn/data/jskat.grand.opponent.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		grandOpponentMiddleGame = new NeuralNetwork(topo);
+		grandOpponentMiddleGame
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.grand.opponent.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		grandOpponentEndGame = new NeuralNetwork(topo);
+		grandOpponentEndGame.loadNetwork(
+				"/org/jskat/ai/nn/data/jskat.grand.opponent.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		ramschDeclarerOpening = new NeuralNetwork(topo);
+		ramschDeclarerOpening.loadNetwork(
+				"/org/jskat/ai/nn/data/jskat.ramsch.declarer.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		ramschDeclarerMiddleGame = new NeuralNetwork(topo);
+		ramschDeclarerMiddleGame
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.ramsch.declarer.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		ramschDeclarerEndGame = new NeuralNetwork(topo);
+		ramschDeclarerEndGame.loadNetwork(
+				"/org/jskat/ai/nn/data/jskat.ramsch.declarer.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 	}
 
 	/**

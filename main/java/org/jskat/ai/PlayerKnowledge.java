@@ -187,8 +187,7 @@ public class PlayerKnowledge {
 	 */
 	public boolean isCardPlayed(Card card) {
 
-		return playedCards.get(Player.FOREHAND).contains(card)
-				|| playedCards.get(Player.MIDDLEHAND).contains(card)
+		return playedCards.get(Player.FOREHAND).contains(card) || playedCards.get(Player.MIDDLEHAND).contains(card)
 				|| playedCards.get(Player.REARHAND).contains(card);
 	}
 
@@ -240,8 +239,9 @@ public class PlayerKnowledge {
 			possiblePlayerCards.get(currPlayer).remove(card);
 		}
 		possibleSkatCards.remove(card);
-		if (card.isTrump(getGameType()) && player != playerPosition)
+		if (card.isTrump(getGameType()) && player != playerPosition) {
 			trumpCount++;
+		}
 
 		setTrickCard(player, card);
 	}
@@ -393,8 +393,7 @@ public class PlayerKnowledge {
 	 *            Suit to check
 	 * @return TRUE if the player could have any card of the suit
 	 */
-	public int getPotentialSuitCount(Player player, Suit suit, boolean isTrump,
-			boolean includeJacks) {
+	public int getPotentialSuitCount(Player player, Suit suit, boolean isTrump, boolean includeJacks) {
 		int result = 0;
 		for (Rank r : Rank.values()) {
 			if (r == Rank.JACK && !includeJacks)
@@ -442,8 +441,7 @@ public class PlayerKnowledge {
 						return true;
 				}
 				for (Rank r : Rank.values()) {
-					if (couldHaveCard(p, Card.getCard(getGame().getGameType()
-							.getTrumpSuit(), r)))
+					if (couldHaveCard(p, Card.getCard(getGame().getGameType().getTrumpSuit(), r)))
 						return true;
 				}
 			}
@@ -452,7 +450,18 @@ public class PlayerKnowledge {
 	}
 
 	/**
-	 * Adjusts the knowledge when a player has not served a suit
+	 * Checks whether a card could lie in the skat
+	 * 
+	 * @param card
+	 *            Card
+	 * @return TRUE if card could lie in the skat
+	 */
+	public boolean couldLieInSkat(Card card) {
+		return possibleSkatCards.contains(card);
+	}
+
+	/**
+	 * Adjusts the knowledge when a player has not followed a suit
 	 * 
 	 * @param player
 	 *            Player ID
@@ -461,10 +470,9 @@ public class PlayerKnowledge {
 	public void setMissingSuit(Player player, Suit suit) {
 
 		for (Rank rank : Rank.values()) {
-
-			if (rank != Rank.JACK || getGameType() == GameType.NULL)
-				possiblePlayerCards.get(player)
-						.remove(Card.getCard(suit, rank));
+			if (rank != Rank.JACK || GameType.NULL.equals(getGameType()) || GameType.RAMSCH.equals(getGameType())) {
+				possiblePlayerCards.get(player).remove(Card.getCard(suit, rank));
+			}
 		}
 	}
 
@@ -559,12 +567,9 @@ public class PlayerKnowledge {
 		possiblePlayerCards.get(playerPosition.getRightNeighbor()).remove(card);
 		possibleSkatCards.remove(card);
 
-		suitCount.put(card.getSuit(),
-				Integer.valueOf(suitCount.get(card.getSuit()).intValue() + 1));
-		suitPoints.put(
-				card.getSuit(),
-				Integer.valueOf(suitCount.get(card.getSuit()).intValue()
-						+ card.getRank().getPoints()));
+		suitCount.put(card.getSuit(), Integer.valueOf(suitCount.get(card.getSuit()).intValue() + 1));
+		suitPoints.put(card.getSuit(),
+				Integer.valueOf(suitCount.get(card.getSuit()).intValue() + card.getRank().getPoints()));
 	}
 
 	/**
@@ -575,12 +580,9 @@ public class PlayerKnowledge {
 	 */
 	public void removeCard(Card card) {
 
-		suitCount.put(card.getSuit(),
-				Integer.valueOf(suitCount.get(card.getSuit()).intValue() - 1));
-		suitPoints.put(
-				card.getSuit(),
-				Integer.valueOf(suitCount.get(card.getSuit()).intValue()
-						- card.getRank().getPoints()));
+		suitCount.put(card.getSuit(), Integer.valueOf(suitCount.get(card.getSuit()).intValue() - 1));
+		suitPoints.put(card.getSuit(),
+				Integer.valueOf(suitCount.get(card.getSuit()).intValue() - card.getRank().getPoints()));
 	}
 
 	/**
@@ -598,15 +600,11 @@ public class PlayerKnowledge {
 
 			for (Rank rank : Rank.values()) {
 
-				if (playedCards.get(Player.FOREHAND).contains(
-						Card.getCard(suit, rank))
-						|| playedCards.get(Player.MIDDLEHAND).contains(
-								Card.getCard(suit, rank))
-						|| playedCards.get(Player.REARHAND).contains(
-								Card.getCard(suit, rank))) {
+				if (playedCards.get(Player.FOREHAND).contains(Card.getCard(suit, rank))
+						|| playedCards.get(Player.MIDDLEHAND).contains(Card.getCard(suit, rank))
+						|| playedCards.get(Player.REARHAND).contains(Card.getCard(suit, rank))) {
 
-					result.append(suit.shortString())
-							.append(rank.shortString()).append(' ');
+					result.append(suit.shortString()).append(rank.shortString()).append(' ');
 				} else {
 
 					result.append("-- "); //$NON-NLS-1$
@@ -620,20 +618,23 @@ public class PlayerKnowledge {
 	}
 
 	/**
-	 * Converts all the cards from the tricks to the binary matrix, one int for each suit<br>&nbsp;<br>
+	 * Converts all the cards from the tricks to the binary matrix, one int for
+	 * each suit<br>
+	 * &nbsp;<br>
 	 * The index of the array equals the Suit ordinal (0=Clubs, 3=Diamonds).
 	 * 
 	 * @return an array int[4]
 	 */
 	public int[] getPlayedCardsBinary() {
 		int[] result = new int[4];
-		for(Trick t: tricks) {
+		for (Trick t : tricks) {
 			int[] tmp = t.getCardList().toBinary();
-			for(int i=0;i<4;i++) result[i]+=tmp[i];
+			for (int i = 0; i < 4; i++)
+				result[i] += tmp[i];
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Gets the number of tricks
 	 * 
@@ -709,7 +710,8 @@ public class PlayerKnowledge {
 	 * @return the gameType
 	 */
 	public GameType getGameType() {
-		if(game==null) return null;
+		if (game == null)
+			return null;
 		return game.getGameType();
 	}
 

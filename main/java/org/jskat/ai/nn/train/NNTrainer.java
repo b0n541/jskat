@@ -178,7 +178,7 @@ public class NNTrainer extends JSkatThread {
 		long totalGames = 0;
 		int episodeSteps = 100;
 
-		while (true) {
+		while (episodes < 300000) {
 
 			if (episodes > 0 && episodes % episodeSteps == 0) {
 

@@ -54,7 +54,8 @@ class InputLayer extends Layer {
 	void setInputParameter(double[] inputs) {
 
 		if (inputs.length > this.neurons.size()) {
-			throw new IllegalArgumentException("Wrong number of input values."); //$NON-NLS-1$
+			throw new IllegalArgumentException(
+					"Wrong number of input values. Expected: " + neurons.size() + " Actual: " + inputs.length); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		for (int i = 0; i < inputs.length; i++) {
@@ -72,8 +73,7 @@ class InputLayer extends Layer {
 
 		for (Neuron neuron : this.neurons) {
 
-			outputWeightStrings.append(neuron.getOutputWeightString()).append(
-					' ');
+			outputWeightStrings.append(neuron.getOutputWeightString()).append(' ');
 		}
 
 		return "input layer\n" + //$NON-NLS-1$

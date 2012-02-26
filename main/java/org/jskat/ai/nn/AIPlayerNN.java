@@ -21,7 +21,9 @@
 package org.jskat.ai.nn;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.apache.commons.logging.Log;
@@ -181,7 +183,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		data.setResult(result);
 
 		// it doesn't matter which position is set for declarer
-		// skat game data are only used to calculated the game value
+		// skat game data are only used to calculate the game value
 		data.setDeclarer(Player.FOREHAND);
 		for (Card card : knowledge.getMyCards()) {
 			data.setDealtCard(Player.FOREHAND, card);
@@ -372,44 +374,38 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 			bestCardIndex = 0;
 		} else {
-			// FIXME (jan 22.12.2010) looks wrong, neural networks only say yes
-			// or no, output parameter value of 0.99 shows not a better card
-			// than than 0.95
-			// better solution: simulate games from this point on
-			SkatNetworks.instance();
 			List<NeuralNetwork> networks = SkatNetworks.getNetwork(knowledge.getGame().getGameType(), isDeclarer());
 			NeuralNetwork net = networks.get(knowledge.getCurrentTrick().getTrickNumberInGame());
 
-			double highestOutput = -2.0d;
-			double[] bestInputs = new double[96];
+			Map<Card, double[]> cardInputs = new HashMap<Card, double[]>();
+			CardList goodCards = new CardList();
 			for (Card card : possibleCards) {
 
 				log.debug("Testing card " + card); //$NON-NLS-1$
 
 				double[] currInputs = getNetInputs(card);
+				cardInputs.put(card, currInputs);
 				double currOutput = net.getPredictedOutcome(currInputs);
 				log.debug("net output: " + currOutput); //$NON-NLS-1$
 
-				if (currOutput > highestOutput) {
-
-					log.debug("Found higher reward: " + currOutput); //$NON-NLS-1$
-					highestOutput = currOutput;
-					bestCardIndex = possibleCards.getIndexOf(card);
-
-					// remember best input parameters
-					bestInputs = currInputs;
+				if (currOutput > 0.9) {
+					goodCards.add(card);
 				}
+			}
+
+			if (goodCards.size() > 0) {
+				// get random card out of the good cards
+				Card choosenCard = goodCards.get(rand.nextInt(goodCards.size()));
+				bestCardIndex = possibleCards.indexOf(choosenCard);
+			} else {
+				// then choose a random card
+				bestCardIndex = rand.nextInt(possibleCards.size());
+				log.error("RANDOM CARD CHOOSEN"); //$NON-NLS-1$
 			}
 
 			// store parameters for the card to play
 			// for adjustment of weights after the game
-			allInputs.add(bestInputs);
-		}
-
-		if (bestCardIndex == -1) {
-			// then choose a random one
-			bestCardIndex = rand.nextInt(possibleCards.size());
-			log.error("RANDOM CARD CHOOSEN"); //$NON-NLS-1$
+			allInputs.add(cardInputs.get(possibleCards.get(bestCardIndex)));
 		}
 
 		log.debug("choosing card " + bestCardIndex); //$NON-NLS-1$
@@ -454,12 +450,9 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		// set information for all cards
 		for (Card card : knowledge.getCompleteDeck()) {
-
 			if (isDeclarer()) {
-
 				setDeclarerNetInputs(inputs, leftOpponent, rightOpponent, card);
 			} else {
-
 				setOpponentNetInputs(inputs, otherOpponent, declarer, card);
 			}
 		}
@@ -467,11 +460,9 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		if (cardToPlay != null) {
 			// set card to play
 			if (isDeclarer()) {
-
-				inputs[64 + getNetInputIndex(knowledge.getGame().getGameType(), cardToPlay)] = -1.0d;
+				inputs[64 + getNetInputIndex(knowledge.getGame().getGameType(), cardToPlay)] = -2.0d;
 			} else {
-
-				inputs[32 + getNetInputIndex(knowledge.getGame().getGameType(), cardToPlay)] = -1.0d;
+				inputs[32 + getNetInputIndex(knowledge.getGame().getGameType(), cardToPlay)] = -2.0d;
 			}
 		}
 
@@ -488,10 +479,10 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			if (knowledge.couldHaveCard(rightOpponent, card)) {
 				inputs[netInputIndexForCard] = 0.5d;
 			} else {
-				inputs[netInputIndexForCard] = 1.0d;
+				inputs[netInputIndexForCard] = 2.0d;
 			}
 		} else if (knowledge.isCardPlayedInTrick(leftOpponent, card)) {
-			inputs[netInputIndexForCard] = -1.0d;
+			inputs[netInputIndexForCard] = -2.0d;
 		} else if (knowledge.isCardPlayedBy(leftOpponent, card)) {
 			inputs[netInputIndexForCard] = -0.5d;
 		} else {
@@ -503,24 +494,31 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			if (knowledge.couldHaveCard(leftOpponent, card)) {
 				inputs[32 + netInputIndexForCard] = 0.5d;
 			} else {
-				inputs[32 + netInputIndexForCard] = 1.0d;
+				inputs[32 + netInputIndexForCard] = 2.0d;
 			}
 		} else if (knowledge.isCardPlayedInTrick(rightOpponent, card)) {
-			inputs[32 + netInputIndexForCard] = -1.0d;
+			inputs[32 + netInputIndexForCard] = -2.0d;
 		} else if (knowledge.isCardPlayedBy(rightOpponent, card)) {
-			inputs[32 + netInputIndexForCard] = -0.5;
+			inputs[32 + netInputIndexForCard] = -0.5d;
 		} else {
 			inputs[32 + netInputIndexForCard] = 0.0d;
 		}
 
 		// inputs for player
 		if (knowledge.getMyCards().contains(card)) {
-			inputs[64 + netInputIndexForCard] = 1.0d;
+			inputs[64 + netInputIndexForCard] = 2.0d;
 		} else if (knowledge.isCardPlayedBy(knowledge.getPlayerPosition(), card)) {
 			inputs[64 + netInputIndexForCard] = -0.5d;
 		} else {
 			inputs[64 + netInputIndexForCard] = 0.0d;
 		}
+
+		// // inputs for skat
+		// if (knowledge.couldLieInSkat(card)) {
+		// inputs[96 + netInputIndexForCard] = 0.5d;
+		// } else {
+		// inputs[96 + netInputIndexForCard] = 0.0d;
+		// }
 	}
 
 	private void setOpponentNetInputs(double[] inputs, Player otherOpponent, Player declarer, Card card) {
@@ -533,10 +531,10 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			if (knowledge.couldHaveCard(declarer, card)) {
 				inputs[netInputIndexForCard] = 0.5d;
 			} else {
-				inputs[netInputIndexForCard] = 1.0d;
+				inputs[netInputIndexForCard] = 2.0d;
 			}
 		} else if (knowledge.isCardPlayedInTrick(otherOpponent, card)) {
-			inputs[netInputIndexForCard] = -1.0d;
+			inputs[netInputIndexForCard] = -2.0d;
 		} else if (knowledge.isCardPlayedBy(otherOpponent, card)) {
 			inputs[netInputIndexForCard] = -0.5d;
 		} else {
@@ -545,7 +543,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		// inputs for player
 		if (knowledge.getMyCards().contains(card)) {
-			inputs[32 + netInputIndexForCard] = 1.0d;
+			inputs[32 + netInputIndexForCard] = 2.0d;
 		} else if (knowledge.isCardPlayedBy(knowledge.getPlayerPosition(), card)) {
 			inputs[32 + netInputIndexForCard] = -0.5d;
 		} else {
@@ -557,15 +555,22 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			if (knowledge.couldHaveCard(otherOpponent, card)) {
 				inputs[64 + netInputIndexForCard] = 0.5d;
 			} else {
-				inputs[64 + netInputIndexForCard] = 1.0d;
+				inputs[64 + netInputIndexForCard] = 2.0d;
 			}
 		} else if (knowledge.isCardPlayedInTrick(declarer, card)) {
-			inputs[64 + netInputIndexForCard] = -1.0d;
+			inputs[64 + netInputIndexForCard] = -2.0d;
 		} else if (knowledge.isCardPlayedBy(declarer, card)) {
 			inputs[64 + netInputIndexForCard] = -0.5d;
 		} else {
 			inputs[64 + netInputIndexForCard] = 0.0d;
 		}
+
+		// // inputs for skat
+		// if (knowledge.couldLieInSkat(card)) {
+		// inputs[96 + netInputIndexForCard] = 0.5d;
+		// } else {
+		// inputs[96 + netInputIndexForCard] = 0.0d;
+		// }
 	}
 
 	/**

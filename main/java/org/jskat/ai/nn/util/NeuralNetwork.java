@@ -66,37 +66,31 @@ public class NeuralNetwork {
 	 */
 	public NeuralNetwork(NetworkTopology newTopology) {
 
-		this.topo = newTopology;
+		topo = newTopology;
 		initializeVariables();
 	}
 
 	private void initializeVariables() {
 
-		this.iterations = 0;
-		this.layers.clear();
+		iterations = 0;
+		layers.clear();
 
-		if (this.topo != null) {
+		if (topo != null) {
 			// Use topology object
-			this.layers.add(new InputLayer(this.topo.getInputNeuronCount()));
-			for (int i = 0; i < this.topo.getHiddenLayerCount(); i++) {
-				this.layers.add(new HiddenLayer(this.topo
-						.getHiddenNeuronCount(i)));
+			layers.add(new InputLayer(topo.getInputNeuronCount()));
+			for (int i = 0; i < topo.getHiddenLayerCount(); i++) {
+				layers.add(new HiddenLayer(topo.getHiddenNeuronCount(i)));
 			}
-			this.layers.add(new OutputLayer(this.topo.getOutputNeuronCount()));
-		} else {
-			// Standard layout
-			this.layers.add(new InputLayer(24));
-			this.layers.add(new HiddenLayer(10));
-			this.layers.add(new OutputLayer(1));
+			layers.add(new OutputLayer(topo.getOutputNeuronCount()));
 		}
 		connectAllLayers();
 	}
 
 	private void connectAllLayers() {
 
-		for (int i = 0; i < this.layers.size() - 1; i++) {
+		for (int i = 0; i < layers.size() - 1; i++) {
 
-			connectLayers(this.layers.get(i), this.layers.get(i + 1));
+			connectLayers(layers.get(i), layers.get(i + 1));
 		}
 	}
 
@@ -104,8 +98,7 @@ public class NeuralNetwork {
 
 		ArrayList<Double> weights = new ArrayList<Double>();
 
-		for (int i = 0; i < inputLayer.getNeurons().size()
-				* outputLayer.getNeurons().size(); i++) {
+		for (int i = 0; i < inputLayer.getNeurons().size() * outputLayer.getNeurons().size(); i++) {
 
 			weights.add(new Double(getLittleRandomWeightValue()));
 		}
@@ -117,15 +110,13 @@ public class NeuralNetwork {
 		return (rand.nextDouble() - 0.5) * 0.1;
 	}
 
-	private void connectLayers(Layer inputLayer, Layer outputLayer,
-			ArrayList<Double> weights) {
+	private void connectLayers(Layer inputLayer, Layer outputLayer, ArrayList<Double> weights) {
 
 		int weightIndex = 0;
 		for (Neuron inputNeuron : inputLayer.getNeurons()) {
 			for (Neuron outputNeuron : outputLayer.getNeurons()) {
 				// create new weight with random weight value
-				Weight newWeight = new Weight(inputNeuron, outputNeuron,
-						weights.get(weightIndex).doubleValue());
+				Weight newWeight = new Weight(inputNeuron, outputNeuron, weights.get(weightIndex).doubleValue());
 				// Weight newWeight = new Weight(inputNeuron, outputNeuron, 0);
 				// connect the weight with the neurons
 				inputNeuron.addOutgoingWeight(newWeight);
@@ -143,7 +134,7 @@ public class NeuralNetwork {
 	 */
 	private void setInputParameter(double[] inputs) {
 
-		((InputLayer) this.layers.get(0)).setInputParameter(inputs);
+		((InputLayer) layers.get(0)).setInputParameter(inputs);
 	}
 
 	/**
@@ -151,8 +142,8 @@ public class NeuralNetwork {
 	 */
 	private void propagateForward() {
 
-		for (int i = 1; i < this.layers.size(); i++) {
-			for (Neuron neuron : this.layers.get(i).getNeurons()) {
+		for (int i = 1; i < layers.size(); i++) {
+			for (Neuron neuron : layers.get(i).getNeurons()) {
 				neuron.calcActivationValue();
 			}
 		}
@@ -166,8 +157,7 @@ public class NeuralNetwork {
 	 */
 	private void setOutputParameter(double[] outputs) {
 
-		((OutputLayer) this.layers.get(this.layers.size() - 1))
-				.setOuputParameter(outputs, this.learningRate);
+		((OutputLayer) layers.get(layers.size() - 1)).setOuputParameter(outputs, learningRate);
 	}
 
 	/**
@@ -177,8 +167,7 @@ public class NeuralNetwork {
 	 */
 	public double getAvgDiff() {
 
-		return ((OutputLayer) this.layers.get(this.layers.size() - 1))
-				.getAvgDiff();
+		return ((OutputLayer) layers.get(layers.size() - 1)).getAvgDiff();
 	}
 
 	/**
@@ -186,13 +175,11 @@ public class NeuralNetwork {
 	 */
 	private void propagateBackward() {
 
-		for (int i = this.layers.size() - 2; i > 0; i--) {
-			for (Neuron neuron : this.layers.get(i).getNeurons()) {
-				neuron.adjustWeights(this.learningRate);
+		for (int i = layers.size() - 2; i > 0; i--) {
+			for (Neuron neuron : layers.get(i).getNeurons()) {
+				neuron.adjustWeights(learningRate);
 			}
 		}
-
-		this.iterations++;
 	}
 
 	/**
@@ -210,6 +197,8 @@ public class NeuralNetwork {
 		propagateForward();
 		setOutputParameter(outputs);
 		propagateBackward();
+
+		iterations++;
 
 		return getAvgDiff();
 	}
@@ -249,7 +238,7 @@ public class NeuralNetwork {
 	 */
 	public long getIterations() {
 
-		return this.iterations;
+		return iterations;
 	}
 
 	/**
@@ -261,8 +250,7 @@ public class NeuralNetwork {
 	 */
 	private double getOutputValue(int outputNodeIndex) {
 
-		return this.layers.get(this.layers.size() - 1).getNeurons()
-				.get(outputNodeIndex).getActivationValue();
+		return layers.get(layers.size() - 1).getNeurons().get(outputNodeIndex).getActivationValue();
 	}
 
 	/**
@@ -281,7 +269,7 @@ public class NeuralNetwork {
 		try {
 
 			writer = new FileWriter(fileName, false);
-			writer.write(this.toString());
+			writer.write(toString());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -307,8 +295,14 @@ public class NeuralNetwork {
 	 * 
 	 * @param fileName
 	 *            File name to load from
+	 * @param inputNeurons
+	 *            Number of input neurons
+	 * @param hiddenNeurons
+	 *            Number of hidden neurons
+	 * @param outputNeurons
+	 *            Number of output neurons
 	 */
-	public void loadNetwork(String fileName) {
+	public void loadNetwork(String fileName, int inputNeurons, int hiddenNeurons, int outputNeurons) {
 
 		BufferedReader reader = null;
 		String input;
@@ -337,12 +331,22 @@ public class NeuralNetwork {
 			}
 		}
 
-		log.debug(lines.size() + " lines read...");
+		log.debug(lines.size() + " lines read..."); //$NON-NLS-1$
 		iterations = getIterations(lines);
-		this.topo = getTopology(lines);
+		topo = getTopology(lines);
 
-		this.layers = getLayers(this.topo, lines);
-		log.debug(this);
+		// FIXME (jan 25.02.2012) this works only for one hidden layer
+		if (topo.getInputNeuronCount() == inputNeurons && topo.getHiddenNeuronCount(0) == hiddenNeurons
+				&& topo.getOutputNeuronCount() == outputNeurons) {
+			layers = getLayers(topo, lines);
+			log.debug(this);
+		} else {
+			log.warn("Loaded network from " + fileName + " has wrong topology. Resetting network to random weights."); //$NON-NLS-1$ //$NON-NLS-2$
+			// FIXME (jan 25.02.2012) this is duplicated in
+			// SkatNetworks.loadNetworks()
+			int[] hiddenLayer = { hiddenNeurons };
+			topo = new NetworkTopology(inputNeurons, outputNeurons, 1, hiddenLayer);
+		}
 	}
 
 	private static long getIterations(ArrayList<String> netData) {
@@ -361,8 +365,7 @@ public class NeuralNetwork {
 		while (iter.hasNext()) {
 
 			String currLine = iter.next();
-			log.debug("Current line: " + currLine + " length: "
-					+ currLine.length());
+			log.debug("Current line: " + currLine + " length: " + currLine.length());
 			if (currLine.equals("iterations")) {
 				// ignore next line
 				iter.next();
@@ -390,12 +393,10 @@ public class NeuralNetwork {
 			}
 		}
 
-		return new NetworkTopology(inputs, outputs, hiddenLayerCount,
-				hiddenNeuronCounts);
+		return new NetworkTopology(inputs, outputs, hiddenLayerCount, hiddenNeuronCounts);
 	}
 
-	private ArrayList<Layer> getLayers(NetworkTopology newTopo,
-			ArrayList<String> netData) {
+	private ArrayList<Layer> getLayers(NetworkTopology newTopo, ArrayList<String> netData) {
 
 		ArrayList<Layer> newLayers = new ArrayList<Layer>();
 
@@ -409,8 +410,7 @@ public class NeuralNetwork {
 		while (iter.hasNext()) {
 
 			String currLine = iter.next();
-			log.debug("Current line: " + currLine + " length: "
-					+ currLine.length());
+			log.debug("Current line: " + currLine + " length: " + currLine.length());
 			if (currLine.equals("input layer")) {
 				log.debug("parsing input layer weights");
 				StringTokenizer tokens = new StringTokenizer(iter.next());
@@ -442,15 +442,15 @@ public class NeuralNetwork {
 
 		StringBuffer result = new StringBuffer();
 
-		result.append("iterations\n");
+		result.append("iterations\n"); //$NON-NLS-1$
 		result.append(iterations);
 		result.append('\n');
 
-		result.append("topology\n");
-		result.append(this.topo);
+		result.append("topology\n"); //$NON-NLS-1$
+		result.append(topo);
 
-		result.append("weights\n");
-		for (Layer layer : this.layers) {
+		result.append("weights\n"); //$NON-NLS-1$
+		for (Layer layer : layers) {
 
 			result.append(layer);
 		}
