@@ -42,7 +42,7 @@ class Neuron {
 		TANH
 	}
 
-	private ActivationFunction activFunction = ActivationFunction.TANH;
+	private ActivationFunction activFunction = ActivationFunction.SIGMOID;
 
 	/**
 	 * Activation value

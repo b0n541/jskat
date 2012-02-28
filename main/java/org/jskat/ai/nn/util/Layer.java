@@ -45,7 +45,7 @@ abstract class Layer {
 
 		// create neurons
 		for (int i = 0; i < numberOfNeurons; i++) {
-			this.neurons.add(createNeuron(ActivationFunction.TANH));
+			this.neurons.add(createNeuron(ActivationFunction.SIGMOID));
 		}
 	}
 
