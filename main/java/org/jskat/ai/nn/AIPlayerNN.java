@@ -65,16 +65,18 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 	private static long MAX_SIMULATIONS = 100;
 
+	// 1.0 and 2.0 for tanh function
 	// 2.0 and 4.0 for sigmoid function
-	private static double HAS_CARD = 4.0d;
-	private static double COULD_HAVE_CARD = 2.0d;
+	private static double HAS_CARD = 1.0d;
+	private static double COULD_HAVE_CARD = 0.5d;
 	private static double DOESNT_HAVE_CARD = 0.0d;
-	private static double PLAYED_CARD = -2.0d;
-	private static double PLAYED_CARD_IN_TRICK = -4.0d;
+	private static double PLAYED_CARD = -0.5d;
+	private static double PLAYED_CARD_IN_TRICK = -1.0d;
 
+	// won game 1.0 and lost game -1.0 for tanh function
 	// won game 1.0 and lost game 0.0 for sigmoid function
 	private static double WON = 1.0d;
-	private static double LOST = 0.0d;
+	private static double LOST = -1.0d;
 
 	/**
 	 * Constructor
@@ -417,11 +419,11 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 				// get random card out of the good cards
 				Card choosenCard = goodCards.get(rand.nextInt(goodCards.size()));
 				bestCardIndex = possibleCards.indexOf(choosenCard);
-				log.warn("Trick " + knowledge.getNoOfTricks() + ": More than one good card found: " + goodCards.size() + ". Choosing random one."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": " + goodCards.size() + " of " + possibleCards.size() + " are good cards. Choosing random."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			} else {
 				// card with highest output
 				bestCardIndex = possibleCards.getIndexOf(cardWithHighestOutput);
-				log.warn("Trick " + knowledge.getNoOfTricks() + ": No good card found. Highest output: " + highestOutput + ". Choosing card with highest output."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": No good card. Choosing highest output: " + highestOutput + "."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			}
 
 			// store parameters for the card to play
