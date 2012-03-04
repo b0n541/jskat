@@ -37,6 +37,8 @@ import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
+import org.jskat.util.rule.BasicSkatRules;
+import org.jskat.util.rule.SkatRuleFactory;
 
 /**
  * Holds the complete knowledge about a game, contains perfect and imperfect
@@ -251,20 +253,80 @@ public class PlayerKnowledge {
 	 * 
 	 * @param otherPlayer
 	 *            Player position of other player
-	 * @param card
+	 * @param playedCard
 	 *            Card played
 	 */
-	private void setTrickCard(Player otherPlayer, Card card) {
+	private void setTrickCard(Player otherPlayer, Card playedCard) {
 
 		if (getPlayerPosition().getLeftNeighbor() == otherPlayer) {
 
-			leftPlayerTrickCard = card;
+			leftPlayerTrickCard = playedCard;
 		} else if (getPlayerPosition().getRightNeighbor() == otherPlayer) {
 
-			rightPlayerTrickCard = card;
+			rightPlayerTrickCard = playedCard;
 		}
 
-		currentTrick.addCard(card);
+		currentTrick.addCard(playedCard);
+
+		// adjust the knowledge about "could have" cards
+		Card firstCard = currentTrick.getFirstCard();
+		Card secondCard = currentTrick.getSecondCard();
+		Card thirdCard = currentTrick.getThirdCard();
+		if (firstCard != null && (secondCard != null || thirdCard != null)) {
+
+			Card cardToCheck = null;
+			if (thirdCard == null) {
+				cardToCheck = secondCard;
+			} else {
+				cardToCheck = thirdCard;
+			}
+
+			if (GameType.NULL.equals(getGameType())) {
+				if (!firstCard.isSameSuit(cardToCheck)) {
+					// player has not followed suit
+					// this means he has no cards with this suit
+					// remove all cards from same suit from "could have" cards
+					for (Card currCard : Card.values()) {
+						if (currCard.isSameSuit(firstCard)) {
+							possiblePlayerCards.get(otherPlayer).remove(currCard);
+						}
+					}
+				}
+			} else {
+				BasicSkatRules skatRules = SkatRuleFactory.getSkatRules(getGameType());
+
+				if (firstCard.isTrump(getGameType()) && !cardToCheck.isTrump(getGameType())) {
+					// first card was a trump card, player card was not
+					// remove jacks from the "could have" cards
+					possiblePlayerCards.get(otherPlayer).remove(Card.CJ);
+					possiblePlayerCards.get(otherPlayer).remove(Card.SJ);
+					possiblePlayerCards.get(otherPlayer).remove(Card.HJ);
+					possiblePlayerCards.get(otherPlayer).remove(Card.DJ);
+					// remove other trump cards for suit games
+					if (GameType.CLUBS.equals(getGameType()) || GameType.SPADES.equals(getGameType())
+							|| GameType.HEARTS.equals(getGameType()) || GameType.DIAMONDS.equals(getGameType())) {
+						for (Card currCard : Card.values()) {
+							if (currCard.isSameSuit(firstCard)) {
+								possiblePlayerCards.get(otherPlayer).remove(currCard);
+							}
+						}
+					}
+				} else {
+					// first card was not a trump card
+					if (!firstCard.isSameSuit(cardToCheck)) {
+						// player has not followed suit
+						// this means he has no cards with this suit
+						// remove all cards for that suit in "could have"
+						// cards, except of the jacks
+						for (Card currCard : Card.values()) {
+							if (currCard.isSameSuit(firstCard) && currCard.getRank() != Rank.JACK) {
+								possiblePlayerCards.get(otherPlayer).remove(currCard);
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 
 	/**
@@ -561,15 +623,17 @@ public class PlayerKnowledge {
 	 */
 	public void addCard(Card card) {
 
-		myCards.add(card);
+		if (!myCards.contains(card)) {
+			myCards.add(card);
 
-		possiblePlayerCards.get(playerPosition.getLeftNeighbor()).remove(card);
-		possiblePlayerCards.get(playerPosition.getRightNeighbor()).remove(card);
-		possibleSkatCards.remove(card);
+			possiblePlayerCards.get(playerPosition.getLeftNeighbor()).remove(card);
+			possiblePlayerCards.get(playerPosition.getRightNeighbor()).remove(card);
+			possibleSkatCards.remove(card);
 
-		suitCount.put(card.getSuit(), Integer.valueOf(suitCount.get(card.getSuit()).intValue() + 1));
-		suitPoints.put(card.getSuit(),
-				Integer.valueOf(suitCount.get(card.getSuit()).intValue() + card.getRank().getPoints()));
+			suitCount.put(card.getSuit(), Integer.valueOf(suitCount.get(card.getSuit()).intValue() + 1));
+			suitPoints.put(card.getSuit(),
+					Integer.valueOf(suitCount.get(card.getSuit()).intValue() + card.getRank().getPoints()));
+		}
 	}
 
 	/**
