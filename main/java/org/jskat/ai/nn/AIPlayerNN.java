@@ -63,15 +63,15 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 	private List<GameType> feasibleGameTypes;
 
-	private static long MAX_SIMULATIONS = 100;
+	private static long MAX_SIMULATIONS = 50;
 
 	// 1.0 and 2.0 for tanh function
 	// 2.0 and 4.0 for sigmoid function
-	private static double HAS_CARD = 1.0d;
-	private static double COULD_HAVE_CARD = 0.5d;
+	private static double HAS_CARD = 2.0d;
+	private static double COULD_HAVE_CARD = 1.0d;
 	private static double DOESNT_HAVE_CARD = 0.0d;
-	private static double PLAYED_CARD = -0.5d;
-	private static double PLAYED_CARD_IN_TRICK = -1.0d;
+	private static double PLAYED_CARD = -1.0d;
+	private static double PLAYED_CARD_IN_TRICK = -2.0d;
 
 	// won game 1.0 and lost game -1.0 for tanh function
 	// won game 1.0 and lost game 0.0 for sigmoid function

@@ -210,47 +210,4 @@ public class NetworkTester {
 		}
 	}
 
-	private static void testBooleanFunction() {
-
-		NeuralNetwork net = new NeuralNetwork();
-		log.debug(net);
-		// double[][] input = {{1.0, 1.0},
-		// {1.0, 0.0},
-		// {0.0, 1.0},
-		// {0.0, 0.0}};
-		// double[][] output = {{0.0},
-		// {1.0},
-		// {1.0},
-		// {0.0}};
-		double[][] input = { { 1.0, 1.0, 1.0 }, { 1.0, 1.0, 0.0 },
-				{ 1.0, 0.0, 1.0 }, { 1.0, 0.0, 0.0 }, { 0.0, 1.0, 1.0 },
-				{ 0.0, 1.0, 0.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0 } };
-		double[][] output = { { 1.0 }, // A and B or C
-				{ 1.0 }, { 1.0 }, { 0.0 }, { 1.0 }, { 0.0 }, { 1.0 }, { 0.0 } };
-		int goodGuess = 0;
-
-		for (int i = 0; i < 10000; i++) {
-			net.adjustWeights(input[i % input.length], output[i % input.length]);
-
-			if (net.getAvgDiff() < 0.1) {
-				goodGuess++;
-			} else {
-				goodGuess = 0;
-			}
-
-			if (goodGuess > input.length) {
-
-				log.debug("Learned pattern after " + i + " iterations.");
-				break;
-			}
-		}
-		// log.debug(net);
-		//
-		for (int i = 0; i < input.length; i++) {
-
-			double predOutput = net.getPredictedOutcome(input[i]);
-			log.debug(input[i]);
-			log.debug(predOutput);
-		}
-	}
 }
