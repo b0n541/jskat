@@ -218,7 +218,9 @@ public class NNTrainer extends JSkatThread {
 				game.setCardDeck(deck);
 				game.dealCards();
 
-				game.setDeclarer(currPlayer);
+				if (!GameType.RAMSCH.equals(gameType)) {
+					game.setDeclarer(currPlayer);
+				}
 
 				GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 				factory.setGameType(gameType);
@@ -259,6 +261,7 @@ public class NNTrainer extends JSkatThread {
 		}
 	}
 
+	// FIXME (jan 10.03.2012) code duplication with AIPlayerNN
 	private static boolean isRamschGameWon(GameSummary gameSummary, Player currPlayer) {
 
 		boolean ramschGameWon = false;

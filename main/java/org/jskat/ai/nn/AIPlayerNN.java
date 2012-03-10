@@ -483,9 +483,9 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		if (cardToPlay != null) {
 			// set card to play
 			if (isDeclarer()) {
-				inputs[64 + getNetInputIndex(knowledge.getGame().getGameType(),cardToPlay)] = PLAYED_CARD_IN_TRICK;
+				inputs[64 + getNetInputIndex(knowledge.getGame().getGameType(), cardToPlay)] = PLAYED_CARD_IN_TRICK;
 			} else {
-				inputs[32 + getNetInputIndex(knowledge.getGame().getGameType(),cardToPlay)] = PLAYED_CARD_IN_TRICK;
+				inputs[32 + getNetInputIndex(knowledge.getGame().getGameType(), cardToPlay)] = PLAYED_CARD_IN_TRICK;
 			}
 		}
 
@@ -765,6 +765,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		}
 	}
 
+	// FIXME (jan 10.03.2012) code duplication with NNTrainer
 	private static boolean isRamschGameWon(GameSummary gameSummary, Player currPlayer) {
 
 		boolean ramschGameWon = false;

@@ -138,6 +138,7 @@ public class SkatGame extends JSkatThread {
 				break;
 			case RAMSCH_GRAND_HAND_ANNOUNCING:
 				boolean grandHandAnnounced = false;
+
 				for (Player currPlayer : Player.values()) {
 					setActivePlayer(currPlayer);
 					if (!grandHandAnnounced && playGrandHand(currPlayer)) {
@@ -145,9 +146,15 @@ public class SkatGame extends JSkatThread {
 						grandHandAnnounced = true;
 					}
 				}
+
 				if (!grandHandAnnounced) {
-					log.debug("no grand hand - initiating schieberamsch"); //$NON-NLS-1$
-					setGameState(GameState.SCHIEBERAMSCH);
+					if (JSkatOptions.instance().isSchieberRamsch(true)) {
+						log.debug("no grand hand - initiating schieberamsch"); //$NON-NLS-1$
+						setGameState(GameState.SCHIEBERAMSCH);
+					} else {
+						log.debug("no grand hand and no schieberamsch - play ramsch"); //$NON-NLS-1$
+						setGameState(GameState.TRICK_PLAYING);
+					}
 				} else {
 					log.debug(data.getDeclarer() + " is playing grand hand"); //$NON-NLS-1$
 					GameAnnouncementFactory gaf = GameAnnouncement.getFactory();
@@ -657,9 +664,9 @@ public class SkatGame extends JSkatThread {
 		}
 
 		if (data.getGameType() == GameType.RAMSCH) {
-			if(JSkatOptions.instance().getRamschSkat()==RamschSkatOwner.LAST_TRICK) {
+			if (JSkatOptions.instance().getRamschSkat() == RamschSkatOwner.LAST_TRICK) {
 				if (trickWinner != null) {
-					log.debug("Skat cards ("+data.getSkat().getTotalValue()+" points) are added to player @ "	//$NON-NLS-1$ //$NON-NLS-2$ 
+					log.debug("Skat cards (" + data.getSkat().getTotalValue() + " points) are added to player @ " //$NON-NLS-1$ //$NON-NLS-2$ 
 							+ trickWinner + " (= last trick)"); //$NON-NLS-1$
 					data.addPlayerPoints(trickWinner, data.getSkat().getTotalValue());
 				} else {
