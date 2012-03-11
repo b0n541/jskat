@@ -79,7 +79,7 @@ public class ISSTablePanel extends SkatTablePanel {
 				"fill")); //$NON-NLS-1$
 		panel.add(super.getPlayGroundPanel(), "width 80%, grow"); //$NON-NLS-1$
 		chatPanel = getChatPanel();
-		chatPanel.addNewChat(this.getName());
+		chatPanel.addNewChat(strings.getString("table")); //$NON-NLS-1$
 		panel.add(chatPanel, "width 20%, growy"); //$NON-NLS-1$
 
 		// replace game start context panel
