@@ -1,8 +1,4 @@
-/**
- * 
- */
 package org.jskat.util;
-
 
 /**
  * @author Markus J. Luzius <br>
