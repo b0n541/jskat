@@ -425,42 +425,43 @@ public class JSkatOptionsDialog extends JDialog {
 
 		JPanel pubRulesPanel = new JPanel(LayoutFactory.getMigLayout());
 
-		JButton resetButton = new JButton("Reset to default");
-		pubRulesPanel.add(resetButton, "wrap"); //$NON-NLS-1$
+		JButton resetButton = new JButton(
+				strings.getString("reset_to_defaults")); //$NON-NLS-1$
+		//		pubRulesPanel.add(resetButton, "wrap"); //$NON-NLS-1$
 
 		JPanel contraPanel = new JPanel(LayoutFactory.getMigLayout());
 
 		playContra = new JCheckBox(strings.getString("play_contra_re")); //$NON-NLS-1$
-		contraPanel.add(playContra, "wrap"); //$NON-NLS-1$
+		//		contraPanel.add(playContra, "wrap"); //$NON-NLS-1$
 
 		contraAfterBid18 = new JCheckBox(strings.getString("contra_after_bid_18")); //$NON-NLS-1$
-		contraPanel.add(contraAfterBid18, "gapleft 20px"); //$NON-NLS-1$
+		//		contraPanel.add(contraAfterBid18, "gapleft 20px"); //$NON-NLS-1$
 
-		pubRulesPanel.add(contraPanel, "wrap"); //$NON-NLS-1$
+		//		pubRulesPanel.add(contraPanel, "wrap"); //$NON-NLS-1$
 
 		JPanel bockPanel = new JPanel(LayoutFactory.getMigLayout()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		playBock = new JCheckBox(strings.getString("play_bock")); //$NON-NLS-1$
-		bockPanel.add(playBock, "wrap"); //$NON-NLS-1$
+		//		bockPanel.add(playBock, "wrap"); //$NON-NLS-1$
 
 		JPanel bockDetailsPanel = new JPanel(LayoutFactory.getMigLayout());
 
 		bockEventLabel = new JLabel(strings.getString("bock_events")); //$NON-NLS-1$
-		bockDetailsPanel.add(bockEventLabel, "span 2, wrap"); //$NON-NLS-1$
+		//		bockDetailsPanel.add(bockEventLabel, "span 2, wrap"); //$NON-NLS-1$
 		bockEventLostAfterContra = new JCheckBox(strings.getString("bock_event_lost_contra")); //$NON-NLS-1$
-		bockDetailsPanel.add(bockEventLostAfterContra);
+		// bockDetailsPanel.add(bockEventLostAfterContra);
 		bockEventLostWith60 = new JCheckBox(strings.getString("bock_event_lost_game_with_60")); //$NON-NLS-1$
 		bockEventLostWith60.setSelected(options.isBockEventLostWith60(false).booleanValue());
-		bockDetailsPanel.add(bockEventLostWith60, "wrap"); //$NON-NLS-1$
+		//		bockDetailsPanel.add(bockEventLostWith60, "wrap"); //$NON-NLS-1$
 		bockEventContraReAnnounced = new JCheckBox(strings.getString("bock_event_contra_re")); //$NON-NLS-1$
-		bockDetailsPanel.add(bockEventContraReAnnounced);
+		// bockDetailsPanel.add(bockEventContraReAnnounced);
 		bockEventPlayerHasX00Points = new JCheckBox(strings.getString("bock_event_player_x00_points")); //$NON-NLS-1$
 		//		bockDetailsPanel.add(bockEventPlayerHasX00Points, "wrap"); //$NON-NLS-1$
 		bockEventLostGrand = new JCheckBox(strings.getString("bock_event_lost_grand")); //$NON-NLS-1$
-		bockDetailsPanel.add(bockEventLostGrand);
-		bockPanel.add(bockDetailsPanel, "gapleft 20px"); //$NON-NLS-1$
+		// bockDetailsPanel.add(bockEventLostGrand);
+		//		bockPanel.add(bockDetailsPanel, "gapleft 20px"); //$NON-NLS-1$
 
-		pubRulesPanel.add(bockPanel, "wrap"); //$NON-NLS-1$
+		//		pubRulesPanel.add(bockPanel, "wrap"); //$NON-NLS-1$
 
 		JPanel ramschPanel = new JPanel(LayoutFactory.getMigLayout());
 
@@ -473,7 +474,7 @@ public class JSkatOptionsDialog extends JDialog {
 		schiebeRamschPanel.add(schiebeRamsch, "gapleft 20px, wrap"); //$NON-NLS-1$
 
 		schiebeRamschJacksInSkat = new JCheckBox(strings.getString("schieberamsch_jacks_in_skat")); //$NON-NLS-1$
-		schiebeRamschPanel.add(schiebeRamschJacksInSkat, "gapleft 40px, wrap"); //$NON-NLS-1$
+		//		schiebeRamschPanel.add(schiebeRamschJacksInSkat, "gapleft 40px, wrap"); //$NON-NLS-1$
 
 		ramschPanel.add(schiebeRamschPanel, "wrap"); //$NON-NLS-1$
 
@@ -484,7 +485,7 @@ public class JSkatOptionsDialog extends JDialog {
 		ramschEventNoBid = new JCheckBox(strings.getString("ramsch_event_no_bid")); //$NON-NLS-1$
 		ramschEventPanel.add(ramschEventNoBid);
 		ramschEventBockRamsch = new JCheckBox(strings.getString("ramsch_event_bock_ramsch")); //$NON-NLS-1$
-		ramschEventPanel.add(ramschEventBockRamsch);
+		// ramschEventPanel.add(ramschEventBockRamsch);
 
 		ramschPanel.add(ramschEventPanel, "gapleft 20px, wrap"); //$NON-NLS-1$
 
