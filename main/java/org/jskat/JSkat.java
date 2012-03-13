@@ -39,7 +39,7 @@ public class JSkat {
 
 	private static Log log = LogFactory.getLog(JSkat.class);
 
-	private static String VERSION = "0.10.0"; //$NON-NLS-1$
+	private static String VERSION = "0.11.0"; //$NON-NLS-1$
 
 	/**
 	 * Main method
