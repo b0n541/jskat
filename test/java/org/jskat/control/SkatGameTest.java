@@ -19,12 +19,15 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.jskat.control;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import org.jskat.AbstractJSkatTest;
+import org.jskat.ai.JSkatPlayer;
 import org.jskat.ai.rnd.AIPlayerRND;
 import org.jskat.ai.test.NoBiddingTestPlayer;
 import org.jskat.ai.test.RamschTestPlayer;
@@ -71,6 +74,42 @@ public class SkatGameTest extends AbstractJSkatTest {
 		SkatGameResult result = game.getGameResult();
 		assertFalse(result.isWon());
 		assertEquals(0, result.getGameValue());
+	}
+	
+	/**
+	 * When no player bids, game is passed in
+	 */
+	@Test
+	public void testPassIn_NoBidsMockito() {
+
+		JSkatOptions options = JSkatOptions.instance();
+		options.setRules(RuleSet.ISPA);
+
+		SkatGame game = new SkatGame("Table 1", GameVariant.STANDARD, getNoBiddingPlayer(), //$NON-NLS-1$
+				getNoBiddingPlayer(), getNoBiddingPlayer());
+		game.setView(new UnitTestView());
+
+		game.start();
+		try {
+			game.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		GameSummary summary = game.getGameSummary();
+		assertEquals(GameType.PASSED_IN, summary.getGameType());
+
+		SkatGameResult result = game.getGameResult();
+		assertFalse(result.isWon());
+		assertEquals(0, result.getGameValue());
+	}
+
+	private JSkatPlayer getNoBiddingPlayer() {
+		JSkatPlayer player = mock(JSkatPlayer.class);
+		when(player.bidMore(anyInt())).thenReturn(-1);
+		when(player.holdBid(anyInt())).thenReturn(false);
+		return player;
 	}
 
 	/**

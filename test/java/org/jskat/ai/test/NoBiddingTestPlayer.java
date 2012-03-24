@@ -19,7 +19,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.jskat.ai.test;
-
 import org.jskat.ai.rnd.AIPlayerRND;
 
 /**
