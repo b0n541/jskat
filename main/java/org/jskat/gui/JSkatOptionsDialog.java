@@ -600,8 +600,8 @@ public class JSkatOptionsDialog extends JDialog {
 		playRamsch.setSelected(options.isPlayRamsch(false).booleanValue());
 		schiebeRamsch.setSelected(options.isSchieberRamsch(false).booleanValue());
 		schiebeRamschJacksInSkat.setSelected(options.isSchieberRamschJacksInSkat(false).booleanValue());
-		ramschSkatLastTrick.setSelected(RamschSkatOwner.LAST_TRICK.equals(options.getRamschSkat()));
-		ramschSkatLoser.setSelected(RamschSkatOwner.LOSER.equals(options.getRamschSkat()));
+		ramschSkatLastTrick.setSelected(RamschSkatOwner.LAST_TRICK.equals(options.getRamschSkatOwner()));
+		ramschSkatLoser.setSelected(RamschSkatOwner.LOSER.equals(options.getRamschSkatOwner()));
 		ramschEventNoBid.setSelected(options.isRamschEventNoBid(false).booleanValue());
 		ramschEventBockRamsch.setSelected(options.isRamschEventRamschAfterBock(false).booleanValue());
 		playRevolution.setSelected(options.isPlayRevolution(false).booleanValue());

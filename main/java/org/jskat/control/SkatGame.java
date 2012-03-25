@@ -664,7 +664,7 @@ public class SkatGame extends JSkatThread {
 		}
 
 		if (data.getGameType() == GameType.RAMSCH) {
-			if (JSkatOptions.instance().getRamschSkat() == RamschSkatOwner.LAST_TRICK) {
+			if (JSkatOptions.instance().getRamschSkatOwner() == RamschSkatOwner.LAST_TRICK) {
 				if (trickWinner != null) {
 					log.debug("Skat cards (" + data.getSkat().getTotalValue() + " points) are added to player @ " //$NON-NLS-1$ //$NON-NLS-2$ 
 							+ trickWinner + " (= last trick)"); //$NON-NLS-1$

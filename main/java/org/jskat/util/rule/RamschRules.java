@@ -49,7 +49,7 @@ public class RamschRules extends SuitGrandRamschRules {
 		int foreHandPoints = gameData.getPlayerPoints(Player.FOREHAND);
 		int middleHandPoints = gameData.getPlayerPoints(Player.MIDDLEHAND);
 		int rearHandPoints = gameData.getPlayerPoints(Player.REARHAND);
-		int skatPoints = JSkatOptions.instance().getRamschSkat()==RamschSkatOwner.LOSER?gameData.getSkat().getTotalValue():0;
+		int skatPoints = JSkatOptions.instance().getRamschSkatOwner()==RamschSkatOwner.LOSER?gameData.getSkat().getTotalValue():0;
 
 		// FIXME (jan 18.11.2011) make this simpler
 		// FIXME (markus 22.02.2012) consider skat points - seems to be missing
