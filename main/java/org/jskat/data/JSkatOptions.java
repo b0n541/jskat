@@ -183,7 +183,7 @@ public class JSkatOptions {
 	 * 
 	 * @return Value of property ramschSkatOwner.
 	 */
-	public RamschSkatOwner getRamschSkat() {
+	public RamschSkatOwner getRamschSkatOwner() {
 		return RamschSkatOwner.valueOf(getOption(Option.ramschSkatOwner));
 	}
 
@@ -1086,10 +1086,20 @@ public class JSkatOptions {
 			setRamschGrandHandPossible(Boolean.valueOf(value));
 			break;
 		case ramschSkatOwner:
-			setRamschSkatOwner(RamschSkatOwner.valueOf(value));
+			try {
+				setRamschSkatOwner(RamschSkatOwner.valueOf(value));
+			} catch (IllegalArgumentException e) {
+				// parsing of older options failed
+				logEnumParseError(option, getRamschSkatOwner().name());
+			}
 			break;
 		case rules:
-			setRules(RuleSet.valueOf(value));
+			try {
+				setRules(RuleSet.valueOf(value));
+			} catch (IllegalArgumentException e) {
+				// parsing of older options failed
+				logEnumParseError(option, getRules().name());
+			}
 			break;
 		case savePath:
 			if ("".equals(value)) { //$NON-NLS-1$
