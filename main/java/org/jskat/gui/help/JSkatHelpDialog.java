@@ -65,10 +65,10 @@ public class JSkatHelpDialog extends JDialog {
 
 	protected final JSkatResourceBundle strings = JSkatResourceBundle.instance();
 
-	private JFrame parent;
+	private final JFrame parent;
 	private JScrollPane scrollPane;
 	private JTextPane textPane;
-	private String contentURL;
+	private final String contentURL;
 
 	/**
 	 * Creates new form JSkatHelpDialog
@@ -80,7 +80,7 @@ public class JSkatHelpDialog extends JDialog {
 	 * @param contentPath
 	 *            Path to dialog content
 	 */
-	public JSkatHelpDialog(JFrame parentFrame, String title, String contentPath) {
+	public JSkatHelpDialog(final JFrame parentFrame, final String title, final String contentPath) {
 
 		super(parentFrame, true);
 
@@ -93,7 +93,7 @@ public class JSkatHelpDialog extends JDialog {
 	/**
 	 * This method is called from within the constructor to initialize the form.
 	 */
-	private void initComponents(String title) {
+	private void initComponents(final String title) {
 
 		JPanel northPanel = new JPanel();
 
@@ -108,7 +108,7 @@ public class JSkatHelpDialog extends JDialog {
 		setTitle(title);
 		addWindowListener(new WindowAdapter() {
 			@Override
-			public void windowClosing(WindowEvent evt) {
+			public void windowClosing(final WindowEvent evt) {
 				closeDialog();
 			}
 		});
@@ -121,10 +121,8 @@ public class JSkatHelpDialog extends JDialog {
 
 		setFile(contentURL);
 
-		scrollPane
-				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane
-				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.setViewportView(textPane);
 		scrollPane.setPreferredSize(new Dimension(600, 300));
 
@@ -140,7 +138,8 @@ public class JSkatHelpDialog extends JDialog {
 		JPanel southPanel = new JPanel();
 		JButton closeButton = new JButton(strings.getString("close")); //$NON-NLS-1$
 		closeButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent evt) {
+			@Override
+			public void actionPerformed(final ActionEvent evt) {
 				closeDialog();
 			}
 		});
@@ -151,7 +150,7 @@ public class JSkatHelpDialog extends JDialog {
 		return southPanel;
 	}
 
-	private String getResource(String url) {
+	private String getResource(final String url) {
 		StringBuilder message = new StringBuilder();
 		try {
 			InputStream is = ClassLoader.getSystemResourceAsStream(url);
@@ -181,7 +180,7 @@ public class JSkatHelpDialog extends JDialog {
 	 *            Shows the dialog if set to TRUE
 	 */
 	@Override
-	public void setVisible(boolean visible) {
+	public void setVisible(final boolean visible) {
 
 		if (visible) {
 			setToInitialState();
@@ -202,7 +201,7 @@ public class JSkatHelpDialog extends JDialog {
 	 * @param filename
 	 *            html snippet file
 	 */
-	public void setFile(String filename) {
+	public void setFile(final String filename) {
 		if (filename != null) {
 			setFile(new String[] { filename });
 		}
@@ -215,13 +214,12 @@ public class JSkatHelpDialog extends JDialog {
 	 * @param filenames
 	 *            list of html snippet files
 	 */
-	public void setFile(String[] filenames) {
+	public void setFile(final String[] filenames) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(getResource("org/jskat/gui/help/frame.html"));
 		int ix = sb.indexOf("@@insert@@");
 		if (ix < 0) {
-			throw new IllegalArgumentException(
-					"frame.html contains no @@insert@@");
+			throw new IllegalArgumentException("frame.html contains no @@insert@@");
 		}
 		for (String f : filenames) {
 			sb.insert(ix, getResource(f));
@@ -238,13 +236,12 @@ public class JSkatHelpDialog extends JDialog {
 	 * @param htmlSnippet
 	 *            the html snippet to insert
 	 */
-	public void insertText(String htmlSnippet) {
+	public void insertText(final String htmlSnippet) {
 		StringBuilder sb = new StringBuilder();
 		sb.append(getResource("org/jskat/gui/help/frame.html"));
 		int ix = sb.indexOf("@@insert@@");
 		if (ix < 0) {
-			throw new IllegalArgumentException(
-					"frame.html contains no @@insert@@");
+			throw new IllegalArgumentException("frame.html contains no @@insert@@");
 		}
 		sb.replace(ix, ix + 10, htmlSnippet);
 		textPane.setText(sb.toString());
@@ -257,19 +254,17 @@ public class JSkatHelpDialog extends JDialog {
 	 * @param html
 	 *            the html to display in the dialog
 	 */
-	public void setText(String html) {
+	public void setText(final String html) {
 		textPane.setText(html);
 		textPane.setCaretPosition(0);
 	}
 
-	protected final Action openExternalAction = new AbstractAction(
-			strings.getString("open_external")) {
+	protected final Action openExternalAction = new AbstractAction(strings.getString("open_external")) {
 		private static final long serialVersionUID = 4233152199895964006L;
 
 		@Override
-		public void actionPerformed(ActionEvent arg0) {
-			File f = new File(System.getProperty("java.io.tmpdir")
-					+ File.separator + "JSkat_doc.html");
+		public void actionPerformed(final ActionEvent arg0) {
+			File f = new File(System.getProperty("java.io.tmpdir") + File.separator + "JSkat_doc.html");
 			PrintWriter pw;
 			try {
 				pw = new PrintWriter(f);
@@ -281,25 +276,22 @@ public class JSkatHelpDialog extends JDialog {
 			pw.flush();
 			pw.close();
 			try {
-				Desktop.getDesktop().browse(
-						new URI("file:///"
-								+ f.getAbsolutePath().replace("\\", "/")));
+				Desktop.getDesktop().browse(new URI("file:///" + f.getAbsolutePath().replace("\\", "/")));
 			} catch (IOException e) {
 				log.error("IOException", e);
 			} catch (URISyntaxException e) {
 				log.error("URI Fehler", e);
 			}
 		}
-
 	};
 
-	private String externalizeLinks(String html) {
-		return html.replace("a href=\"org/jskat/gui/help/",
-				"a href=\"http://www.jskat.org/help/");
+	String externalizeLinks(final String html) {
+		return html.replace("a href=\"org/jskat/gui/help/", "a href=\"http://www.jskat.org/help/");
 	}
 
 	private final HyperlinkListener hll = new HyperlinkListener() {
-		public void hyperlinkUpdate(HyperlinkEvent e) {
+		@Override
+		public void hyperlinkUpdate(final HyperlinkEvent e) {
 			if (e.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 				String link = e.getDescription();
 				if (link.toLowerCase().startsWith("http:")) {
@@ -307,24 +299,14 @@ public class JSkatHelpDialog extends JDialog {
 						Desktop.getDesktop().browse(new URI(link));
 					} catch (IOException ex) {
 						log.warn("IOException", ex);
-						JOptionPane.showMessageDialog(
-								JSkatHelpDialog.this,
-								"Error in loading external link:\n"
-										+ link
-										+ "\n"
-										+ (ex.getMessage() != null ? ex
-												.getMessage() : "<???>"),
-								"Externer Link", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(JSkatHelpDialog.this, "Error in loading external link:\n" + link
+								+ "\n" + (ex.getMessage() != null ? ex.getMessage() : "<???>"), "Externer Link",
+								JOptionPane.ERROR_MESSAGE);
 					} catch (URISyntaxException ex) {
 						log.warn("URI exception", ex);
-						JOptionPane.showMessageDialog(
-								JSkatHelpDialog.this,
-								"Error in loading external link:\n"
-										+ link
-										+ "\n"
-										+ (ex.getMessage() != null ? ex
-												.getMessage() : "<???>"),
-								"Externer Link", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(JSkatHelpDialog.this, "Error in loading external link:\n" + link
+								+ "\n" + (ex.getMessage() != null ? ex.getMessage() : "<???>"), "Externer Link",
+								JOptionPane.ERROR_MESSAGE);
 					}
 				} else {
 					setFile(link);
