@@ -69,7 +69,7 @@ public class JSkatOptionsDialog extends JDialog {
 	JSkatResourceBundle strings;
 	JSkatOptions options;
 
-	private JFrame parent;
+	private final JFrame parent;
 
 	// general options
 	private JCheckBox showTipsAtStartUp;
@@ -112,7 +112,7 @@ public class JSkatOptionsDialog extends JDialog {
 
 	private final Action okAction = new AbstractAction("OK") {
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			options.setShowTipsAtStartUp(showTipsAtStartUp.isSelected());
 			options.setCheckForNewVersionAtStartUp(checkForNewVersion.isSelected());
 			options.setLanguage((SupportedLanguage) language.getSelectedItem());
@@ -150,10 +150,10 @@ public class JSkatOptionsDialog extends JDialog {
 			setVisible(false);
 		}
 	};
-	
+
 	private final Action cancelAction = new AbstractAction("CANCEL") {
 		@Override
-		public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(final ActionEvent e) {
 			setVisible(false);
 		}
 	};
@@ -161,7 +161,7 @@ public class JSkatOptionsDialog extends JDialog {
 	final ChangeListener ruleButtonChangeListener = new ChangeListener() {
 
 		@Override
-		public void stateChanged(ChangeEvent e) {
+		public void stateChanged(final ChangeEvent e) {
 			if (ruleSetISPA.isSelected()) {
 				activatePubRules(false);
 			}
@@ -179,7 +179,7 @@ public class JSkatOptionsDialog extends JDialog {
 	 * 
 	 * @param mainFrame
 	 */
-	public JSkatOptionsDialog(JFrame mainFrame) {
+	public JSkatOptionsDialog(final JFrame mainFrame) {
 
 		strings = JSkatResourceBundle.instance();
 		options = JSkatOptions.instance();
@@ -214,36 +214,38 @@ public class JSkatOptionsDialog extends JDialog {
 		root.add(prefTabs, "wrap"); //$NON-NLS-1$
 
 		JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout());
-		JButton start = new JButton(); 
+		JButton start = new JButton();
 		start.setAction(okAction);
 		start.setText("OK"); //$NON-NLS-1$
 		buttonPanel.add(start);
-		JButton cancel = new JButton(); 
+		JButton cancel = new JButton();
 		cancel.setAction(cancelAction);
 		cancel.setText(strings.getString("cancel")); //$NON-NLS-1$
 		buttonPanel.add(cancel);
 
 		root.add(buttonPanel, "center"); //$NON-NLS-1$
-		
+
 		InputMap im = root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		ActionMap am = root.getActionMap();
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "OK");
 		am.put("OK", okAction);
 		im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "CANCEL");
 		am.put("CANCEL", cancelAction);
-		
+
 		setContentPane(root);
 
 		pack();
 	}
 
 	private JPanel getIssPanel() {
-		JPanel issPanel = new JPanel(LayoutFactory.getMigLayout()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		JPanel issPanel = new JPanel(LayoutFactory.getMigLayout());
 
 		issPanel.add(new JLabel(strings.getString("iss_address")), "shrinky"); //$NON-NLS-1$
 		issPanel.add(getIssAddressPanel(), "shrinky, wrap"); //$NON-NLS-1$
 		issPanel.add(new JLabel(strings.getString("iss_port")), "shrinky"); //$NON-NLS-1$
 		issPanel.add(getIssPortPanel(), "shrinky, wrap"); //$NON-NLS-1$
+
+		issPanel.doLayout();
 
 		return issPanel;
 	}
@@ -253,7 +255,8 @@ public class JSkatOptionsDialog extends JDialog {
 		savePath.setEditable(false);
 		JButton savePathButton = new JButton(strings.getString("search")); //$NON-NLS-1$
 		savePathButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
 
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -309,7 +312,7 @@ public class JSkatOptionsDialog extends JDialog {
 		return cardFacePanel;
 	}
 
-	private JPanel getWaitingTimePanel(JSkatResourceBundle strings, JSkatOptions options) {
+	private JPanel getWaitingTimePanel(final JSkatResourceBundle strings, final JSkatOptions options) {
 
 		waitTime = new JSlider();
 		waitTime.setSnapToTicks(true);
@@ -323,7 +326,7 @@ public class JSkatOptionsDialog extends JDialog {
 		trickRemoveAfterClick = new JCheckBox(strings.getString("remove_trick_after_click")); //$NON-NLS-1$
 		trickRemoveAfterClick.addChangeListener(new ChangeListener() {
 			@Override
-			public void stateChanged(ChangeEvent evt) {
+			public void stateChanged(final ChangeEvent evt) {
 
 				if (JSkatOptionsDialog.this.trickRemoveAfterClick.isSelected()) {
 
@@ -403,6 +406,8 @@ public class JSkatOptionsDialog extends JDialog {
 		commonPanel.add(new JLabel(strings.getString("game_short_cut"))); //$NON-NLS-1$
 		commonPanel.add(getGameShortCutPanel(), "wrap"); //$NON-NLS-1$
 
+		commonPanel.doLayout();
+
 		return commonPanel;
 	}
 
@@ -423,61 +428,112 @@ public class JSkatOptionsDialog extends JDialog {
 		rulesPanel.add(ruleSetISPA, "wrap"); //$NON-NLS-1$
 		rulesPanel.add(ruleSetPub, "wrap"); //$NON-NLS-1$
 
+		JPanel pubRulesPanel = getPubRulesPanel();
+		rulesPanel.add(pubRulesPanel, "gapleft 20px"); //$NON-NLS-1$
+
+		rulesPanel.doLayout();
+
+		return rulesPanel;
+	}
+
+	private JPanel getPubRulesPanel() {
 		JPanel pubRulesPanel = new JPanel(LayoutFactory.getMigLayout());
 
-		JButton resetButton = new JButton(
-				strings.getString("reset_to_defaults")); //$NON-NLS-1$
-		//		pubRulesPanel.add(resetButton, "wrap"); //$NON-NLS-1$
+		JButton resetButton = new JButton(strings.getString("reset_to_defaults")); //$NON-NLS-1$
+		pubRulesPanel.add(resetButton, "wrap"); //$NON-NLS-1$
 
 		JPanel contraPanel = new JPanel(LayoutFactory.getMigLayout());
 
 		playContra = new JCheckBox(strings.getString("play_contra_re")); //$NON-NLS-1$
-		//		contraPanel.add(playContra, "wrap"); //$NON-NLS-1$
+		contraPanel.add(playContra, "wrap"); //$NON-NLS-1$
 
 		contraAfterBid18 = new JCheckBox(strings.getString("contra_after_bid_18")); //$NON-NLS-1$
-		//		contraPanel.add(contraAfterBid18, "gapleft 20px"); //$NON-NLS-1$
+		contraPanel.add(contraAfterBid18, "gapleft 20px"); //$NON-NLS-1$
 
-		//		pubRulesPanel.add(contraPanel, "wrap"); //$NON-NLS-1$
+		pubRulesPanel.add(contraPanel, "wrap"); //$NON-NLS-1$
 
-		JPanel bockPanel = new JPanel(LayoutFactory.getMigLayout()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-		playBock = new JCheckBox(strings.getString("play_bock")); //$NON-NLS-1$
-		//		bockPanel.add(playBock, "wrap"); //$NON-NLS-1$
-
-		JPanel bockDetailsPanel = new JPanel(LayoutFactory.getMigLayout());
-
-		bockEventLabel = new JLabel(strings.getString("bock_events")); //$NON-NLS-1$
-		//		bockDetailsPanel.add(bockEventLabel, "span 2, wrap"); //$NON-NLS-1$
-		bockEventLostAfterContra = new JCheckBox(strings.getString("bock_event_lost_contra")); //$NON-NLS-1$
-		// bockDetailsPanel.add(bockEventLostAfterContra);
-		bockEventLostWith60 = new JCheckBox(strings.getString("bock_event_lost_game_with_60")); //$NON-NLS-1$
-		bockEventLostWith60.setSelected(options.isBockEventLostWith60(false).booleanValue());
-		//		bockDetailsPanel.add(bockEventLostWith60, "wrap"); //$NON-NLS-1$
-		bockEventContraReAnnounced = new JCheckBox(strings.getString("bock_event_contra_re")); //$NON-NLS-1$
-		// bockDetailsPanel.add(bockEventContraReAnnounced);
-		bockEventPlayerHasX00Points = new JCheckBox(strings.getString("bock_event_player_x00_points")); //$NON-NLS-1$
-		//		bockDetailsPanel.add(bockEventPlayerHasX00Points, "wrap"); //$NON-NLS-1$
-		bockEventLostGrand = new JCheckBox(strings.getString("bock_event_lost_grand")); //$NON-NLS-1$
-		// bockDetailsPanel.add(bockEventLostGrand);
-		//		bockPanel.add(bockDetailsPanel, "gapleft 20px"); //$NON-NLS-1$
-
-		//		pubRulesPanel.add(bockPanel, "wrap"); //$NON-NLS-1$
+		JPanel bockPanel = getBockPanel();
+		pubRulesPanel.add(bockPanel, "wrap"); //$NON-NLS-1$
 
 		JPanel ramschPanel = new JPanel(LayoutFactory.getMigLayout());
 
 		playRamsch = new JCheckBox(strings.getString("play_ramsch")); //$NON-NLS-1$
 		ramschPanel.add(playRamsch, "wrap"); //$NON-NLS-1$
 
+		JPanel schiebeRamschPanel = getSchiebeRamschPanel();
+		ramschPanel.add(schiebeRamschPanel, "wrap"); //$NON-NLS-1$
+
+		JPanel ramschEventPanel = getRamschEventPanel();
+		ramschPanel.add(ramschEventPanel, "gapleft 20px, wrap"); //$NON-NLS-1$
+
+		JPanel ramschSkatOwnerPanel = getRamschSkatOwnerPanel();
+		ramschPanel.add(ramschSkatOwnerPanel, "gapleft 20px"); //$NON-NLS-1$
+
+		pubRulesPanel.add(ramschPanel, "wrap"); //$NON-NLS-1$
+
+		playRevolution = new JCheckBox(strings.getString("play_revolution")); //$NON-NLS-1$
+		pubRulesPanel.add(playRevolution);
+		return pubRulesPanel;
+	}
+
+	private JPanel getBockPanel() {
+		JPanel bockPanel = new JPanel(LayoutFactory.getMigLayout());
+
+		playBock = new JCheckBox(strings.getString("play_bock")); //$NON-NLS-1$
+		bockPanel.add(playBock, "wrap"); //$NON-NLS-1$
+
+		JPanel bockDetailsPanel = getBockDetailsPanel();
+		bockPanel.add(bockDetailsPanel, "gapleft 20px"); //$NON-NLS-1$
+		return bockPanel;
+	}
+
+	private JPanel getBockDetailsPanel() {
+		JPanel bockDetailsPanel = new JPanel(LayoutFactory.getMigLayout());
+
+		bockEventLabel = new JLabel(strings.getString("bock_events")); //$NON-NLS-1$
+		bockDetailsPanel.add(bockEventLabel, "span 2, wrap"); //$NON-NLS-1$
+		bockEventLostAfterContra = new JCheckBox(strings.getString("bock_event_lost_contra")); //$NON-NLS-1$
+		bockDetailsPanel.add(bockEventLostAfterContra);
+		bockEventLostWith60 = new JCheckBox(strings.getString("bock_event_lost_game_with_60")); //$NON-NLS-1$
+		bockEventLostWith60.setSelected(options.isBockEventLostWith60(false).booleanValue());
+		bockDetailsPanel.add(bockEventLostWith60, "wrap"); //$NON-NLS-1$
+		bockEventContraReAnnounced = new JCheckBox(strings.getString("bock_event_contra_re")); //$NON-NLS-1$
+		bockDetailsPanel.add(bockEventContraReAnnounced);
+		bockEventPlayerHasX00Points = new JCheckBox(strings.getString("bock_event_player_x00_points")); //$NON-NLS-1$
+		bockDetailsPanel.add(bockEventPlayerHasX00Points, "wrap"); //$NON-NLS-1$
+		bockEventLostGrand = new JCheckBox(strings.getString("bock_event_lost_grand")); //$NON-NLS-1$
+		bockDetailsPanel.add(bockEventLostGrand);
+		return bockDetailsPanel;
+	}
+
+	private JPanel getRamschSkatOwnerPanel() {
+		JPanel ramschSkatOwnerPanel = new JPanel(LayoutFactory.getMigLayout());
+		ramschSkatLabel = new JLabel(strings.getString("ramsch_skat_owner")); //$NON-NLS-1$
+		ramschSkatOwnerPanel.add(ramschSkatLabel, "wrap"); //$NON-NLS-1$
+		ramschSkatLastTrick = new JRadioButton(strings.getString("ramsch_skat_last_trick")); //$NON-NLS-1$
+		ramschSkatOwnerPanel.add(ramschSkatLastTrick, "wrap"); //$NON-NLS-1$
+		ramschSkatLoser = new JRadioButton(strings.getString("ramsch_skat_loser")); //$NON-NLS-1$
+		ramschSkatOwnerPanel.add(ramschSkatLoser);
+
+		ramschSkatOwner = new ButtonGroup();
+		ramschSkatOwner.add(ramschSkatLastTrick);
+		ramschSkatOwner.add(ramschSkatLoser);
+
+		return ramschSkatOwnerPanel;
+	}
+
+	private JPanel getSchiebeRamschPanel() {
 		JPanel schiebeRamschPanel = new JPanel(LayoutFactory.getMigLayout());
 
 		schiebeRamsch = new JCheckBox(strings.getString("schieberamsch")); //$NON-NLS-1$
 		schiebeRamschPanel.add(schiebeRamsch, "gapleft 20px, wrap"); //$NON-NLS-1$
 
 		schiebeRamschJacksInSkat = new JCheckBox(strings.getString("schieberamsch_jacks_in_skat")); //$NON-NLS-1$
-		//		schiebeRamschPanel.add(schiebeRamschJacksInSkat, "gapleft 40px, wrap"); //$NON-NLS-1$
+		schiebeRamschPanel.add(schiebeRamschJacksInSkat, "gapleft 40px, wrap"); //$NON-NLS-1$
+		return schiebeRamschPanel;
+	}
 
-		ramschPanel.add(schiebeRamschPanel, "wrap"); //$NON-NLS-1$
-
+	private JPanel getRamschEventPanel() {
 		JPanel ramschEventPanel = new JPanel(LayoutFactory.getMigLayout());
 
 		ramschEventLabel = new JLabel(strings.getString("ramsch_events")); //$NON-NLS-1$
@@ -485,34 +541,11 @@ public class JSkatOptionsDialog extends JDialog {
 		ramschEventNoBid = new JCheckBox(strings.getString("ramsch_event_no_bid")); //$NON-NLS-1$
 		ramschEventPanel.add(ramschEventNoBid);
 		ramschEventBockRamsch = new JCheckBox(strings.getString("ramsch_event_bock_ramsch")); //$NON-NLS-1$
-		// ramschEventPanel.add(ramschEventBockRamsch);
-
-		ramschPanel.add(ramschEventPanel, "gapleft 20px, wrap"); //$NON-NLS-1$
-
-		JPanel ramschSkatPanel = new JPanel(LayoutFactory.getMigLayout());
-		ramschSkatLabel = new JLabel(strings.getString("ramsch_skat_owner")); //$NON-NLS-1$
-		ramschSkatPanel.add(ramschSkatLabel, "wrap"); //$NON-NLS-1$
-		ramschSkatLastTrick = new JRadioButton(strings.getString("ramsch_skat_last_trick")); //$NON-NLS-1$
-		ramschSkatPanel.add(ramschSkatLastTrick, "wrap"); //$NON-NLS-1$
-		ramschSkatLoser = new JRadioButton(strings.getString("ramsch_skat_loser")); //$NON-NLS-1$
-		ramschSkatPanel.add(ramschSkatLoser);
-		ramschPanel.add(ramschSkatPanel, "gapleft 20px"); //$NON-NLS-1$
-
-		ramschSkatOwner = new ButtonGroup();
-		ramschSkatOwner.add(ramschSkatLastTrick);
-		ramschSkatOwner.add(ramschSkatLoser);
-
-		pubRulesPanel.add(ramschPanel, "wrap"); //$NON-NLS-1$
-
-		playRevolution = new JCheckBox(strings.getString("play_revolution")); //$NON-NLS-1$
-		// pubRulesPanel.add(playRevolution);
-
-		rulesPanel.add(pubRulesPanel, "gapleft 20px"); //$NON-NLS-1$
-
-		return rulesPanel;
+		ramschEventPanel.add(ramschEventBockRamsch);
+		return ramschEventPanel;
 	}
 
-	void activatePubRules(boolean isActivated) {
+	void activatePubRules(final boolean isActivated) {
 
 		playContra.setEnabled(isActivated);
 		contraAfterBid18.setEnabled(isActivated);
@@ -542,7 +575,7 @@ public class JSkatOptionsDialog extends JDialog {
 	 * @see JDialog#setVisible(boolean)
 	 */
 	@Override
-	public void setVisible(boolean isVisible) {
+	public void setVisible(final boolean isVisible) {
 
 		if (isVisible) {
 			setLocationRelativeTo(parent);
@@ -611,12 +644,12 @@ public class JSkatOptionsDialog extends JDialog {
 		issPort.setText(options.getIssPort().toString());
 	}
 
-	private CardFace getSelectedCardFace() {
+	CardFace getSelectedCardFace() {
 		ButtonModel model = cardFace.getSelection();
 		return CardFace.valueOf(model.getActionCommand());
 	}
 
-	private void refreshCardFaces() {
+	void refreshCardFaces() {
 
 		JSkatGraphicRepository.instance().reloadCards(options.getCardFace());
 		parent.repaint();
@@ -631,7 +664,7 @@ public class JSkatOptionsDialog extends JDialog {
 		}
 
 		@Override
-		public String getValueText(Object value) {
+		public String getValueText(final Object value) {
 
 			String result = " "; //$NON-NLS-1$
 
