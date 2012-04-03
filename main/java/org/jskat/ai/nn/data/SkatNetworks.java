@@ -25,8 +25,9 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jskat.ai.nn.util.FastNeuralNetwork;
+import org.jskat.ai.nn.util.INeuralNetwork;
 import org.jskat.ai.nn.util.NetworkTopology;
-import org.jskat.ai.nn.util.NeuralNetwork;
 import org.jskat.util.GameType;
 
 /**
@@ -42,32 +43,32 @@ public class SkatNetworks {
 	// n number of nodes in hidden layer
 	// 1 output node for win/lost
 	private static int inputNeurons = 96;
-	private static int hiddenNeurons = 15;
+	private static int hiddenNeurons = 150;
 	private static int outputNeurons = 1;
 
 	private final static SkatNetworks instance = new SkatNetworks();
 
-	private static NeuralNetwork suitDeclarerOpening;
-	private static NeuralNetwork suitDeclarerMiddleGame;
-	private static NeuralNetwork suitDeclarerEndGame;
-	private static NeuralNetwork suitOpponentOpening;
-	private static NeuralNetwork suitOpponentMiddleGame;
-	private static NeuralNetwork suitOpponentEndGame;
-	private static NeuralNetwork nullDeclarerOpening;
-	private static NeuralNetwork nullDeclarerMiddleGame;
-	private static NeuralNetwork nullDeclarerEndGame;
-	private static NeuralNetwork nullOpponentOpening;
-	private static NeuralNetwork nullOpponentMiddleGame;
-	private static NeuralNetwork nullOpponentEndGame;
-	private static NeuralNetwork grandDeclarerOpening;
-	private static NeuralNetwork grandDeclarerMiddleGame;
-	private static NeuralNetwork grandDeclarerEndGame;
-	private static NeuralNetwork grandOpponentOpening;
-	private static NeuralNetwork grandOpponentMiddleGame;
-	private static NeuralNetwork grandOpponentEndGame;
-	private static NeuralNetwork ramschDeclarerOpening;
-	private static NeuralNetwork ramschDeclarerMiddleGame;
-	private static NeuralNetwork ramschDeclarerEndGame;
+	private static INeuralNetwork suitDeclarerOpening;
+	private static INeuralNetwork suitDeclarerMiddleGame;
+	private static INeuralNetwork suitDeclarerEndGame;
+	private static INeuralNetwork suitOpponentOpening;
+	private static INeuralNetwork suitOpponentMiddleGame;
+	private static INeuralNetwork suitOpponentEndGame;
+	private static INeuralNetwork nullDeclarerOpening;
+	private static INeuralNetwork nullDeclarerMiddleGame;
+	private static INeuralNetwork nullDeclarerEndGame;
+	private static INeuralNetwork nullOpponentOpening;
+	private static INeuralNetwork nullOpponentMiddleGame;
+	private static INeuralNetwork nullOpponentEndGame;
+	private static INeuralNetwork grandDeclarerOpening;
+	private static INeuralNetwork grandDeclarerMiddleGame;
+	private static INeuralNetwork grandDeclarerEndGame;
+	private static INeuralNetwork grandOpponentOpening;
+	private static INeuralNetwork grandOpponentMiddleGame;
+	private static INeuralNetwork grandOpponentEndGame;
+	private static INeuralNetwork ramschDeclarerOpening;
+	private static INeuralNetwork ramschDeclarerMiddleGame;
+	private static INeuralNetwork ramschDeclarerEndGame;
 
 	/**
 	 * Gets an instance of the SkatNetworks
@@ -102,9 +103,9 @@ public class SkatNetworks {
 	 *            TRUE, if declarer network is desired
 	 * @return Neural network
 	 */
-	public static List<NeuralNetwork> getNetwork(GameType gameType, boolean isDeclarer) {
+	public static List<INeuralNetwork> getNetwork(GameType gameType, boolean isDeclarer) {
 
-		List<NeuralNetwork> result = new ArrayList<NeuralNetwork>();
+		List<INeuralNetwork> result = new ArrayList<INeuralNetwork>();
 
 		switch (gameType) {
 		case CLUBS:
@@ -153,7 +154,7 @@ public class SkatNetworks {
 	 * 
 	 * @return Neural network
 	 */
-	private static List<NeuralNetwork> getSuitDeclarer() {
+	private static List<INeuralNetwork> getSuitDeclarer() {
 		return createNetworkList(suitDeclarerOpening, suitDeclarerMiddleGame, suitDeclarerEndGame);
 	}
 
@@ -162,7 +163,7 @@ public class SkatNetworks {
 	 * 
 	 * @return Neural network
 	 */
-	private static List<NeuralNetwork> getSuitOpponent() {
+	private static List<INeuralNetwork> getSuitOpponent() {
 		return createNetworkList(suitOpponentOpening, suitOpponentMiddleGame, suitOpponentEndGame);
 	}
 
@@ -171,7 +172,7 @@ public class SkatNetworks {
 	 * 
 	 * @return Neural network
 	 */
-	private static List<NeuralNetwork> getNullDeclarer() {
+	private static List<INeuralNetwork> getNullDeclarer() {
 		return createNetworkList(nullDeclarerOpening, nullDeclarerMiddleGame, nullDeclarerEndGame);
 	}
 
@@ -180,7 +181,7 @@ public class SkatNetworks {
 	 * 
 	 * @return Neural network
 	 */
-	private static List<NeuralNetwork> getNullOpponent() {
+	private static List<INeuralNetwork> getNullOpponent() {
 		return createNetworkList(nullOpponentOpening, nullOpponentMiddleGame, nullOpponentEndGame);
 	}
 
@@ -189,7 +190,7 @@ public class SkatNetworks {
 	 * 
 	 * @return Neural network
 	 */
-	private static List<NeuralNetwork> getGrandDeclarer() {
+	private static List<INeuralNetwork> getGrandDeclarer() {
 		return createNetworkList(grandDeclarerOpening, grandDeclarerMiddleGame, grandDeclarerEndGame);
 	}
 
@@ -198,7 +199,7 @@ public class SkatNetworks {
 	 * 
 	 * @return Neural network
 	 */
-	private static List<NeuralNetwork> getGrandOpponent() {
+	private static List<INeuralNetwork> getGrandOpponent() {
 		return createNetworkList(grandOpponentOpening, grandOpponentMiddleGame, grandOpponentEndGame);
 	}
 
@@ -207,14 +208,14 @@ public class SkatNetworks {
 	 * 
 	 * @return Neural network
 	 */
-	private static List<NeuralNetwork> getRamschDeclarer() {
+	private static List<INeuralNetwork> getRamschDeclarer() {
 		return createNetworkList(ramschDeclarerOpening, ramschDeclarerMiddleGame, ramschDeclarerEndGame);
 	}
 
-	private static List<NeuralNetwork> createNetworkList(NeuralNetwork openingNet, NeuralNetwork middleGameNet,
-			NeuralNetwork endGameNet) {
+	private static List<INeuralNetwork> createNetworkList(INeuralNetwork openingNet, INeuralNetwork middleGameNet,
+			INeuralNetwork endGameNet) {
 
-		List<NeuralNetwork> result = new ArrayList<NeuralNetwork>();
+		List<INeuralNetwork> result = new ArrayList<INeuralNetwork>();
 
 		for (int i = 0; i < 10; i++) {
 			switch (i) {
@@ -255,74 +256,74 @@ public class SkatNetworks {
 		int[] hiddenLayer = { hiddenNeurons };
 		NetworkTopology topo = new NetworkTopology(inputNeurons, outputNeurons, 1, hiddenLayer);
 
-		suitDeclarerOpening = new NeuralNetwork(topo);
+		suitDeclarerOpening = new FastNeuralNetwork(topo);
 		suitDeclarerOpening.loadNetwork(
 				"/org/jskat/ai/nn/data/jskat.suit.declarer.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
-		suitDeclarerMiddleGame = new NeuralNetwork(topo);
+		suitDeclarerMiddleGame = new FastNeuralNetwork(topo);
 		suitDeclarerMiddleGame
 				.loadNetwork(
 						"/org/jskat/ai/nn/data/jskat.suit.declarer.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
-		suitDeclarerEndGame = new NeuralNetwork(topo);
+		suitDeclarerEndGame = new FastNeuralNetwork(topo);
 		suitDeclarerEndGame.loadNetwork(
 				"/org/jskat/ai/nn/data/jskat.suit.declarer.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
-		suitOpponentOpening = new NeuralNetwork(topo);
+		suitOpponentOpening = new FastNeuralNetwork(topo);
 		suitOpponentOpening.loadNetwork(
 				"/org/jskat/ai/nn/data/jskat.suit.opponent.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
-		suitOpponentMiddleGame = new NeuralNetwork(topo);
+		suitOpponentMiddleGame = new FastNeuralNetwork(topo);
 		suitOpponentMiddleGame
 				.loadNetwork(
 						"/org/jskat/ai/nn/data/jskat.suit.opponent.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
-		suitOpponentEndGame = new NeuralNetwork(topo);
+		suitOpponentEndGame = new FastNeuralNetwork(topo);
 		suitOpponentEndGame.loadNetwork(
 				"/org/jskat/ai/nn/data/jskat.suit.opponent.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
-		nullDeclarerOpening = new NeuralNetwork(topo);
+		nullDeclarerOpening = new FastNeuralNetwork(topo);
 		nullDeclarerOpening.loadNetwork(
 				"/org/jskat/ai/nn/data/jskat.null.declarer.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
-		nullDeclarerMiddleGame = new NeuralNetwork(topo);
+		nullDeclarerMiddleGame = new FastNeuralNetwork(topo);
 		nullDeclarerMiddleGame
 				.loadNetwork(
 						"/org/jskat/ai/nn/data/jskat.null.declarer.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
-		nullDeclarerEndGame = new NeuralNetwork(topo);
+		nullDeclarerEndGame = new FastNeuralNetwork(topo);
 		nullDeclarerEndGame.loadNetwork(
 				"/org/jskat/ai/nn/data/jskat.null.declarer.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
-		nullOpponentOpening = new NeuralNetwork(topo);
+		nullOpponentOpening = new FastNeuralNetwork(topo);
 		nullOpponentOpening.loadNetwork(
 				"/org/jskat/ai/nn/data/jskat.null.opponent.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
-		nullOpponentMiddleGame = new NeuralNetwork(topo);
+		nullOpponentMiddleGame = new FastNeuralNetwork(topo);
 		nullOpponentMiddleGame
 				.loadNetwork(
 						"/org/jskat/ai/nn/data/jskat.null.opponent.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
-		nullOpponentEndGame = new NeuralNetwork(topo);
+		nullOpponentEndGame = new FastNeuralNetwork(topo);
 		nullOpponentEndGame.loadNetwork(
 				"/org/jskat/ai/nn/data/jskat.null.opponent.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
-		grandDeclarerOpening = new NeuralNetwork(topo);
+		grandDeclarerOpening = new FastNeuralNetwork(topo);
 		grandDeclarerOpening.loadNetwork(
 				"/org/jskat/ai/nn/data/jskat.grand.declarer.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
-		grandDeclarerMiddleGame = new NeuralNetwork(topo);
+		grandDeclarerMiddleGame = new FastNeuralNetwork(topo);
 		grandDeclarerMiddleGame
 				.loadNetwork(
 						"/org/jskat/ai/nn/data/jskat.grand.declarer.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
-		grandDeclarerEndGame = new NeuralNetwork(topo);
+		grandDeclarerEndGame = new FastNeuralNetwork(topo);
 		grandDeclarerEndGame.loadNetwork(
 				"/org/jskat/ai/nn/data/jskat.grand.declarer.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
-		grandOpponentOpening = new NeuralNetwork(topo);
+		grandOpponentOpening = new FastNeuralNetwork(topo);
 		grandOpponentOpening.loadNetwork(
 				"/org/jskat/ai/nn/data/jskat.grand.opponent.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
-		grandOpponentMiddleGame = new NeuralNetwork(topo);
+		grandOpponentMiddleGame = new FastNeuralNetwork(topo);
 		grandOpponentMiddleGame
 				.loadNetwork(
 						"/org/jskat/ai/nn/data/jskat.grand.opponent.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
-		grandOpponentEndGame = new NeuralNetwork(topo);
+		grandOpponentEndGame = new FastNeuralNetwork(topo);
 		grandOpponentEndGame.loadNetwork(
 				"/org/jskat/ai/nn/data/jskat.grand.opponent.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
-		ramschDeclarerOpening = new NeuralNetwork(topo);
+		ramschDeclarerOpening = new FastNeuralNetwork(topo);
 		ramschDeclarerOpening.loadNetwork(
 				"/org/jskat/ai/nn/data/jskat.ramsch.declarer.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
-		ramschDeclarerMiddleGame = new NeuralNetwork(topo);
+		ramschDeclarerMiddleGame = new FastNeuralNetwork(topo);
 		ramschDeclarerMiddleGame
 				.loadNetwork(
 						"/org/jskat/ai/nn/data/jskat.ramsch.declarer.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
-		ramschDeclarerEndGame = new NeuralNetwork(topo);
+		ramschDeclarerEndGame = new FastNeuralNetwork(topo);
 		ramschDeclarerEndGame.loadNetwork(
 				"/org/jskat/ai/nn/data/jskat.ramsch.declarer.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 	}
