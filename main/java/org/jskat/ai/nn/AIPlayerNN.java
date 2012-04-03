@@ -31,7 +31,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.AbstractJSkatPlayer;
 import org.jskat.ai.JSkatPlayer;
 import org.jskat.ai.nn.data.SkatNetworks;
-import org.jskat.ai.nn.util.NeuralNetwork;
+import org.jskat.ai.nn.util.INeuralNetwork;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary;
@@ -53,30 +53,30 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 	private Log log = LogFactory.getLog(AIPlayerNN.class);
 
-	private GameSimulator gameSimulator;
+	private final GameSimulator gameSimulator;
 
-	private Random rand;
-	private List<double[]> allInputs;
+	private final Random rand;
+	private final List<double[]> allInputs;
 	private GameType bestGameTypeFromDiscarding;
 
 	private boolean isLearning = false;
 
-	private List<GameType> feasibleGameTypes;
+	private final List<GameType> feasibleGameTypes;
 
-	private static long MAX_SIMULATIONS = 50;
+	private static long MAX_SIMULATIONS = 100;
 
 	// 1.0 and 2.0 for tanh function
 	// 2.0 and 4.0 for sigmoid function
-	private static double HAS_CARD = 2.0d;
-	private static double COULD_HAVE_CARD = 1.0d;
+	private static double HAS_CARD = 1.0d;
+	private static double COULD_HAVE_CARD = 0.5d;
 	private static double DOESNT_HAVE_CARD = 0.0d;
-	private static double PLAYED_CARD = -1.0d;
-	private static double PLAYED_CARD_IN_TRICK = -2.0d;
+	private static double PLAYED_CARD = -0.5d;
+	private static double PLAYED_CARD_IN_TRICK = -1.0d;
 
 	// won game 1.0 and lost game -1.0 for tanh function
 	// won game 1.0 and lost game 0.0 for sigmoid function
 	private static double WON = 1.0d;
-	private static double LOST = -1.0d;
+	private static double LOST = 0.0d;
 
 	/**
 	 * Constructor
@@ -387,8 +387,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 			bestCardIndex = 0;
 		} else {
-			List<NeuralNetwork> networks = SkatNetworks.getNetwork(knowledge.getGame().getGameType(), isDeclarer());
-			NeuralNetwork net = networks.get(knowledge.getCurrentTrick().getTrickNumberInGame());
+			List<INeuralNetwork> networks = SkatNetworks.getNetwork(knowledge.getGame().getGameType(), isDeclarer());
+			INeuralNetwork net = networks.get(knowledge.getCurrentTrick().getTrickNumberInGame());
 
 			Map<Card, double[]> cardInputs = new HashMap<Card, double[]>();
 			CardList goodCards = new CardList();
@@ -755,11 +755,11 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		}
 		double[] outputParam = { output };
 
-		List<NeuralNetwork> networks = SkatNetworks.getNetwork(knowledge.getGame().getGameType(), isDeclarer());
+		List<INeuralNetwork> networks = SkatNetworks.getNetwork(knowledge.getGame().getGameType(), isDeclarer());
 
 		int index = 0;
 		for (double[] inputParam : inputs) {
-			NeuralNetwork net = networks.get(index);
+			INeuralNetwork net = networks.get(index);
 			net.adjustWeights(inputParam, outputParam);
 			index++;
 		}
@@ -803,6 +803,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 * @param newLogger
 	 *            New logger
 	 */
+	@Override
 	public void setLogger(Log newLogger) {
 		super.setLogger(newLogger);
 		log = newLogger;
