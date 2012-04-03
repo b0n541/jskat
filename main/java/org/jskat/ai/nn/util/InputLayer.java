@@ -20,8 +20,6 @@
  */
 package org.jskat.ai.nn.util;
 
-import org.jskat.ai.nn.util.Neuron.ActivationFunction;
-
 /**
  * Input Layer
  */

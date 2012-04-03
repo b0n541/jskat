@@ -20,8 +20,6 @@
  */
 package org.jskat.ai.nn.util;
 
-import org.jskat.ai.nn.util.Neuron.ActivationFunction;
-
 /**
  * Hidden layer for NeuralNetwork
  */
@@ -54,8 +52,7 @@ class HiddenLayer extends Layer {
 
 		for (Neuron neuron : this.neurons) {
 
-			outputWeightStrings.append(neuron.getOutputWeightString()).append(
-					' ');
+			outputWeightStrings.append(neuron.getOutputWeightString()).append(' ');
 		}
 
 		return "hidden layer\n" + //$NON-NLS-1$

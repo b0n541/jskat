@@ -23,14 +23,12 @@ package org.jskat.ai.nn.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jskat.ai.nn.util.Neuron.ActivationFunction;
-
 /**
  * Input Layer
  */
 class OutputLayer extends Layer {
 
-	private List<OutputNeuron> outNeurons;
+	private final List<OutputNeuron> outNeurons;
 
 	/**
 	 * Constructor

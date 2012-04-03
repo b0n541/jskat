@@ -142,7 +142,7 @@ public class NetworkTester {
 		NetworkTopology topo = new NetworkTopology(input[0].length,
 				output[0].length, 1, hiddenNeurons);
 
-		NeuralNetwork net = new NeuralNetwork(topo);
+		INeuralNetwork net = new NeuralNetwork(topo);
 
 		log.debug(net);
 
@@ -180,7 +180,7 @@ public class NetworkTester {
 
 		log.debug("Re-loading network");
 
-		NeuralNetwork net2 = new NeuralNetwork();
+		INeuralNetwork net2 = new NeuralNetwork();
 		// net2.loadNetwork("asdf.net");
 
 		goodGuess = 0;

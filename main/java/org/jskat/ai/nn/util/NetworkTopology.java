@@ -25,10 +25,10 @@ package org.jskat.ai.nn.util;
  */
 public class NetworkTopology {
 
-	private int inputSignals;
-	private int outputSignals;
-	private int hiddenLayers;
-	private int[] hiddenNeurons;
+	private final int inputSignals;
+	private final int outputSignals;
+	private final int hiddenLayers;
+	private final int[] hiddenNeurons;
 
 	/**
 	 * Constructor
@@ -42,13 +42,11 @@ public class NetworkTopology {
 	 * @param hiddenNeuronCounts
 	 *            Number of hidden neurons per hidden layer
 	 */
-	public NetworkTopology(int inputs, int outputs, int hiddenLayerCount,
-			int[] hiddenNeuronCounts) {
+	public NetworkTopology(int inputs, int outputs, int hiddenLayerCount, int[] hiddenNeuronCounts) {
 
 		if (hiddenNeuronCounts.length != hiddenLayerCount) {
 
-			throw new IllegalArgumentException(
-					"Number of hidden layers and number of hidden neurons don't correspond."); //$NON-NLS-1$
+			throw new IllegalArgumentException("Number of hidden layers and number of hidden neurons don't correspond."); //$NON-NLS-1$
 		}
 
 		this.inputSignals = inputs;
@@ -86,6 +84,12 @@ public class NetworkTopology {
 	 */
 	int getHiddenNeuronCount(int layerID) {
 
+		if (layerID < 0) {
+			throw new IllegalArgumentException("Layer must be greater or equals 0."); //$NON-NLS-1$
+		}
+		if (layerID >= hiddenNeurons.length) {
+			throw new IllegalArgumentException("Network has only " + hiddenNeurons.length + " hidden layers."); //$NON-NLS-1$ //$NON-NLS-2$
+		}
 		return this.hiddenNeurons[layerID];
 	}
 
@@ -138,5 +142,45 @@ public class NetworkTopology {
 		result.append(getOutputNeuronCount()).append('\n');
 
 		return result.toString();
+	}
+
+	int getMaxWeightsForLayers() {
+		int result = 0;
+		int previousNodes = getInputNeuronCount();
+		for (int i = 1; i < getLayerCount(); i++) {
+			int currentNodes = getNeuronCount(i);
+			// all previous nodes are connected to all current nodes
+			result = Math.max(result, previousNodes * currentNodes);
+			previousNodes = currentNodes;
+		}
+		return result;
+	}
+
+	int getLayerCount() {
+		return getHiddenLayerCount() + 2;
+	}
+
+	int getLastLayer() {
+		return getLayerCount() - 1;
+	}
+
+	int getNeuronCount(int layer) {
+		int result = 0;
+		if (layer == 0) {
+			result = getInputNeuronCount();
+		} else if (layer == getLastLayer()) {
+			result = getOutputNeuronCount();
+		} else {
+			result = getHiddenNeuronCount(layer - 1);
+		}
+		return result;
+	}
+
+	int getMaxNodesForLayers() {
+		int result = 0;
+		for (int i = 0; i < getLayerCount(); i++) {
+			result = Math.max(result, getNeuronCount(i));
+		}
+		return result;
 	}
 }

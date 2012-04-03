@@ -28,20 +28,6 @@ import java.util.List;
  */
 class Neuron {
 
-	/**
-	 * All activation functions supported by the Neuron
-	 */
-	protected enum ActivationFunction {
-		/**
-		 * Sigmoid function (quasi standard)
-		 */
-		SIGMOID,
-		/**
-		 * Tangens hyperbolicus function
-		 */
-		TANH
-	}
-
 	private ActivationFunction activFunction = ActivationFunction.SIGMOID;
 
 	/**
@@ -61,7 +47,7 @@ class Neuron {
 	 * Input weights
 	 */
 	protected List<Weight> incomingWeights = new ArrayList<Weight>();
-	private List<Weight> outgoingWeights = new ArrayList<Weight>();
+	private final List<Weight> outgoingWeights = new ArrayList<Weight>();
 
 	/**
 	 * Constructor

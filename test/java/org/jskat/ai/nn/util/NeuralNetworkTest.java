@@ -31,7 +31,7 @@ import org.junit.Test;
  */
 public class NeuralNetworkTest extends AbstractJSkatTest {
 
-	private NeuralNetwork network;
+	private INeuralNetwork network;
 
 	@Test
 	public void testAdjustWeights() {

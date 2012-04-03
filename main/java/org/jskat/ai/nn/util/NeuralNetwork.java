@@ -37,18 +37,34 @@ import org.apache.commons.logging.LogFactory;
 /**
  * Neural network
  */
-public class NeuralNetwork {
+public class NeuralNetwork implements Cloneable, INeuralNetwork {
 
 	private static Log log = LogFactory.getLog(NeuralNetwork.class);
 
 	Random rand = new Random();
 
 	private long iterations = 0;
-	private double learningRate = 0.3;
+	private final double learningRate = 0.3;
 
 	private List<Layer> layers = new ArrayList<Layer>();
 
 	private NetworkTopology topo;
+
+	@Override
+	public NeuralNetwork clone() {
+
+		NeuralNetwork network = new NeuralNetwork(topo);
+
+		network.setLayers(layers);
+
+		return network;
+
+	}
+
+	private void setLayers(List<Layer> newLayers) {
+		layers.clear();
+		layers.addAll(newLayers);
+	}
 
 	/**
 	 * Constructor
@@ -160,11 +176,12 @@ public class NeuralNetwork {
 		((OutputLayer) layers.get(layers.size() - 1)).setOuputParameter(outputs, learningRate);
 	}
 
-	/**
-	 * Gets the average difference of all output neurons
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return Average difference
+	 * @see org.jskat.ai.nn.util.INeuralNetwork#getAvgDiff()
 	 */
+	@Override
 	public double getAvgDiff() {
 
 		return ((OutputLayer) layers.get(layers.size() - 1)).getAvgDiff();
@@ -182,15 +199,13 @@ public class NeuralNetwork {
 		}
 	}
 
-	/**
-	 * Adjusts the weights of the net according inputs and desired outputs
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param inputs
-	 *            Input attributes
-	 * @param outputs
-	 *            Output attributes
-	 * @return Average diff
+	 * @see org.jskat.ai.nn.util.INeuralNetwork#adjustWeights(double[],
+	 * double[])
 	 */
+	@Override
 	public synchronized double adjustWeights(double[] inputs, double[] outputs) {
 
 		setInputParameter(inputs);
@@ -203,9 +218,12 @@ public class NeuralNetwork {
 		return getAvgDiff();
 	}
 
-	/**
-	 * Resets the network, sets random values for all weights
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.jskat.ai.nn.util.INeuralNetwork#resetNetwork()
 	 */
+	@Override
 	public synchronized void resetNetwork() {
 		for (Layer layer : layers) {
 			for (Neuron neuron : layer.getNeurons()) {
@@ -217,13 +235,12 @@ public class NeuralNetwork {
 		iterations = 0;
 	}
 
-	/**
-	 * Gets the predicted outcome of a game according inputs
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param inputs
-	 *            Input attributes
-	 * @return Predicted outcome
+	 * @see org.jskat.ai.nn.util.INeuralNetwork#getPredictedOutcome(double[])
 	 */
+	@Override
 	public synchronized double getPredictedOutcome(double[] inputs) {
 
 		setInputParameter(inputs);
@@ -231,11 +248,12 @@ public class NeuralNetwork {
 		return getOutputValue(0);
 	}
 
-	/**
-	 * Gets the number of iterations the NeuralNetwork was trained so far
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @return Number of iterations
+	 * @see org.jskat.ai.nn.util.INeuralNetwork#getIterations()
 	 */
+	@Override
 	public long getIterations() {
 
 		return iterations;
@@ -253,13 +271,12 @@ public class NeuralNetwork {
 		return layers.get(layers.size() - 1).getNeurons().get(outputNodeIndex).getActivationValue();
 	}
 
-	/**
-	 * Save the network parameters to a file
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param fileName
-	 *            File name to save to
-	 * @return TRUE if the saving was successful
+	 * @see org.jskat.ai.nn.util.INeuralNetwork#saveNetwork(java.lang.String)
 	 */
+	@Override
 	public boolean saveNetwork(String fileName) {
 
 		boolean result = false;
@@ -290,18 +307,13 @@ public class NeuralNetwork {
 		return result;
 	}
 
-	/**
-	 * Loads network parameters from a file
+	/*
+	 * (non-Javadoc)
 	 * 
-	 * @param fileName
-	 *            File name to load from
-	 * @param inputNeurons
-	 *            Number of input neurons
-	 * @param hiddenNeurons
-	 *            Number of hidden neurons
-	 * @param outputNeurons
-	 *            Number of output neurons
+	 * @see org.jskat.ai.nn.util.INeuralNetwork#loadNetwork(java.lang.String,
+	 * int, int, int)
 	 */
+	@Override
 	public void loadNetwork(String fileName, int inputNeurons, int hiddenNeurons, int outputNeurons) {
 
 		BufferedReader reader = null;
@@ -434,8 +446,10 @@ public class NeuralNetwork {
 		return newLayers;
 	}
 
-	/**
-	 * @see Object#toString()
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.jskat.ai.nn.util.INeuralNetwork#toString()
 	 */
 	@Override
 	public String toString() {

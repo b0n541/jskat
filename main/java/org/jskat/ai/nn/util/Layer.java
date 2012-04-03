@@ -23,8 +23,6 @@ package org.jskat.ai.nn.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jskat.ai.nn.util.Neuron.ActivationFunction;
-
 /**
  * Layer of Neurons for the NeuralNetwork
  */
