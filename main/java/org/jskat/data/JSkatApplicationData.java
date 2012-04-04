@@ -33,16 +33,16 @@ import org.jskat.gui.human.HumanPlayer;
  */
 public class JSkatApplicationData {
 
-	static JSkatApplicationData instance = null;
+	private volatile static JSkatApplicationData instance = null;
 
 	private int localTablesCreated = 0;
-	private JSkatOptions options;
-	private Map<String, SkatTable> skatTables;
+	private final JSkatOptions options;
+	private final Map<String, SkatTable> skatTables;
 	private String activeTable;
 	private String issLoginName;
-	private Set<String> availableIssPlayer;
-	private Set<String> joinedIssTables;
-	private Map<String, HumanPlayer> humanPlayers;
+	private final Set<String> availableIssPlayer;
+	private final Set<String> joinedIssTables;
+	private final Map<String, HumanPlayer> humanPlayers;
 
 	/**
 	 * Gets the instance of the application data

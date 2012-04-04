@@ -57,12 +57,12 @@ public class JSkatMaster {
 
 	private static Log log = LogFactory.getLog(JSkatMaster.class);
 
-	private static JSkatMaster instance = null;
+	private volatile static JSkatMaster instance = null;
 
-	private JSkatOptions options;
-	private JSkatApplicationData data;
+	private final JSkatOptions options;
+	private final JSkatApplicationData data;
 	private JSkatView view;
-	private IssController issControl;
+	private final IssController issControl;
 
 	/**
 	 * Gets the instance of the JSkat master controller
@@ -779,10 +779,9 @@ public class JSkatMaster {
 	 * Shows the welcome dialog
 	 */
 	public void showWelcomeDialog() {
-		if(view!=null) {
+		if (view != null) {
 			view.showWelcomeDialog();
-		}
-		else {
+		} else {
 			log.warn("no view for welcome message found");
 		}
 	}
