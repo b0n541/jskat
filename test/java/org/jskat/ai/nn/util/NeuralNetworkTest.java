@@ -76,8 +76,8 @@ public class NeuralNetworkTest extends AbstractJSkatTest {
 			}
 
 			if (goodGuess > input.length) {
-				// should learn the function in 2500 steps
-				assertTrue(i < 2500);
+				// should learn the function in less than 3000 steps
+				assertTrue(i < 3000);
 				learnedBooleanFunction = true;
 				break;
 			}
