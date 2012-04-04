@@ -36,7 +36,6 @@ import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.JSkatResourceBundle;
 
-
 /**
  * Connector to International Skat Server ISS
  */
@@ -55,7 +54,7 @@ class Connector {
 	private String loginName;
 	private String password;
 
-	private IssController issControl;
+	private final IssController issControl;
 
 	/**
 	 * Constructor
@@ -103,8 +102,7 @@ class Connector {
 
 		} catch (java.net.UnknownHostException e) {
 			log.error("Cannot open connection to ISS"); //$NON-NLS-1$
-			issControl.showMessage(JOptionPane.ERROR_MESSAGE,
-					strings.getString("cant_connect_to_iss")); //$NON-NLS-1$
+			issControl.showMessage(JOptionPane.ERROR_MESSAGE, strings.getString("cant_connect_to_iss")); //$NON-NLS-1$
 			return false;
 		} catch (java.io.IOException e) {
 			log.error("IOException: " + e.toString()); //$NON-NLS-1$
@@ -219,8 +217,7 @@ class Connector {
 		issOut.send("table " + tableName + ' ' + loginName + " play s"); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
-	public void sendGameAnnouncementMove(String tableName,
-			GameAnnouncement gameAnnouncement) {
+	public void sendGameAnnouncementMove(String tableName, GameAnnouncement gameAnnouncement) {
 
 		String gameAnnouncementString = getGameTypeString(gameAnnouncement.getGameType(), gameAnnouncement.isHand(),
 				gameAnnouncement.isOuvert(), gameAnnouncement.isSchneider(), gameAnnouncement.isSchwarz());

@@ -74,8 +74,12 @@ class InputChannel extends Thread {
 				try {
 
 					line = InputChannel.this.reader.readLine();
-					log.debug("ISS -->| "+line);
+					log.debug("ISS -->| " + line); //$NON-NLS-1$
 					InputChannel.this.messageHandler.addMessage(line);
+
+					if (line == null) {
+						InputChannel.this.done = true;
+					}
 
 				} catch (IOException ioe) {
 

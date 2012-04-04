@@ -122,8 +122,7 @@ public class MessageHandler extends Thread {
 
 			} catch (Exception except) {
 				log.error("Error in parsing ISS protocoll", except); //$NON-NLS-1$
-				issControl.showMessage(JOptionPane.ERROR_MESSAGE,
-						strings.getString("iss_error_parsing_iss_protocol")); //$NON-NLS-1$
+				issControl.showMessage(JOptionPane.ERROR_MESSAGE, strings.getString("iss_error_parsing_iss_protocol")); //$NON-NLS-1$
 			}
 		}
 	}
@@ -146,8 +145,7 @@ public class MessageHandler extends Thread {
 		}
 	}
 
-	void handleMessageObsolete(MessageType type, List<String> params)
-			throws Exception {
+	void handleMessageObsolete(MessageType type, List<String> params) throws Exception {
 
 		switch (type) {
 		case PASSWORD:
@@ -204,9 +202,7 @@ public class MessageHandler extends Thread {
 	void handleErrorMessage(List<String> params) {
 
 		log.error(params.toString());
-		// FIXME (jan 23.11.2010) i18n needed
-		issControl.showMessage(JOptionPane.ERROR_MESSAGE,
-				getI18ErrorString(getErrorString(params)));
+		issControl.showMessage(JOptionPane.ERROR_MESSAGE, getI18ErrorString(getErrorString(params)));
 	}
 
 	private String getErrorString(List<String> params) {
@@ -285,14 +281,11 @@ public class MessageHandler extends Thread {
 
 			} else if (actionCommand.equals("state")) { //$NON-NLS-1$
 
-				issControl.updateISSTableState(tableName,
-						MessageParser.getTableStatus(creator, detailParams));
+				issControl.updateISSTableState(tableName, MessageParser.getTableStatus(creator, detailParams));
 
 			} else if (actionCommand.equals("start")) { //$NON-NLS-1$
 
-				issControl
-						.updateISSGame(tableName, MessageParser
-								.getGameStartStatus(creator, detailParams));
+				issControl.updateISSGame(tableName, MessageParser.getGameStartStatus(creator, detailParams));
 
 			} else if (actionCommand.equals("go")) { //$NON-NLS-1$
 
@@ -300,13 +293,12 @@ public class MessageHandler extends Thread {
 
 			} else if (actionCommand.equals("play")) { //$NON-NLS-1$
 
-				issControl.updateMove(tableName,
-						MessageParser.getMoveInformation(detailParams));
+				issControl.updateMove(tableName, MessageParser.getMoveInformation(detailParams));
 
 			} else if (actionCommand.equals("tell")) { //$NON-NLS-1$
 
-				issControl.updateISSTableChatMessage(tableName, MessageParser
-						.getTableChatMessage(tableName, detailParams));
+				issControl.updateISSTableChatMessage(tableName,
+						MessageParser.getTableChatMessage(tableName, detailParams));
 
 			} else if (actionCommand.equals("end")) { //$NON-NLS-1$
 
@@ -377,8 +369,7 @@ public class MessageHandler extends Thread {
 		long gamesPlayed = Long.parseLong(params.get(3));
 		double strength = Double.parseDouble(params.get(4));
 
-		issControl.updateISSPlayerList(playerName, language, gamesPlayed,
-				strength);
+		issControl.updateISSPlayerList(playerName, language, gamesPlayed, strength);
 	}
 
 	/**
@@ -400,8 +391,8 @@ public class MessageHandler extends Thread {
 	 */
 	void handleWelcomeMessage(List<String> params) {
 
-		double issProtocolVersion = Double
-				.parseDouble(params.get(params.size() - 1));
+		String login = params.get(1);
+		double issProtocolVersion = Double.parseDouble(params.get(params.size() - 1));
 
 		log.debug("iss version: " + issProtocolVersion); //$NON-NLS-1$
 		log.debug("local version: " + protocolVersion); //$NON-NLS-1$
@@ -410,12 +401,15 @@ public class MessageHandler extends Thread {
 			// TODO handle this in JSkatMaster
 			log.error("Wrong protocol version!!!"); //$NON-NLS-1$
 		}
+
+		issControl.showISSLobby(login);
 	}
 
 	/**
 	 * Handles a table list message
 	 * 
-	 * @param params Table information
+	 * @param params
+	 *            Table information
 	 */
 	void handleTableListMessage(List<String> params) {
 
@@ -446,8 +440,7 @@ public class MessageHandler extends Thread {
 		String player2 = params.get(4);
 		String player3 = params.get(5);
 
-		issControl.updateISSTableList(tableName, maxPlayers, gamesPlayed,
-				player1, player2, player3);
+		issControl.updateISSTableList(tableName, maxPlayers, gamesPlayed, player1, player2, player3);
 	}
 
 	/**

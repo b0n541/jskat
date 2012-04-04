@@ -54,13 +54,13 @@ public class IssController {
 
 	private static Log log = LogFactory.getLog(IssController.class);
 
-	private JSkatMaster jskat;
+	private final JSkatMaster jskat;
 	private JSkatView view;
-	private JSkatApplicationData data;
-	private JSkatResourceBundle strings;
+	private final JSkatApplicationData data;
+	private final JSkatResourceBundle strings;
 	private Connector issConnect;
 
-	private Map<String, SkatGameData> gameData;
+	private final Map<String, SkatGameData> gameData;
 
 	/**
 	 * Constructor
@@ -148,17 +148,22 @@ public class IssController {
 			}
 		}
 
-		if (issConnect.isConnected()) {
-
-			// show ISS lobby if connection was successfull
-			// FIXME (jan 07.12.2010) use constant instead of title
-			view.closeTabPanel("ISS login"); //$NON-NLS-1$
-			view.showISSLobby();
-			jskat.setIssLogin(login);
-		}
-
-		log.debug("iss connected: " + issConnect.isConnected());
+		log.debug("Connection to ISS established: " + issConnect.isConnected()); //$NON-NLS-1$
 		return issConnect.isConnected();
+	}
+
+	/**
+	 * Shows ISS lobby when the login was successful
+	 * 
+	 * @param login
+	 *            Login name
+	 */
+	void showISSLobby(String login) {
+		// show ISS lobby if connection was successfull
+		// FIXME (jan 07.12.2010) use constant instead of title
+		view.closeTabPanel("ISS login"); //$NON-NLS-1$
+		view.showISSLobby();
+		jskat.setIssLogin(login);
 	}
 
 	/**
@@ -549,7 +554,6 @@ public class IssController {
 	 * @param message
 	 */
 	public void showMessage(int messageType, String message) {
-		// FIXME (jan 12.12.2010) i18n
 		view.showMessage(messageType, strings.getString("iss_message"), message); //$NON-NLS-1$
 	}
 
