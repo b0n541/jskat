@@ -391,7 +391,7 @@ public class MessageHandler extends Thread {
 	 */
 	void handleWelcomeMessage(List<String> params) {
 
-		String login = params.get(1);
+		String login = params.get(0);
 		double issProtocolVersion = Double.parseDouble(params.get(params.size() - 1));
 
 		log.debug("iss version: " + issProtocolVersion); //$NON-NLS-1$
