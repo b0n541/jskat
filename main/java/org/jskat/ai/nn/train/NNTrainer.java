@@ -29,10 +29,10 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.impl.NoOpLog;
-import org.jskat.ai.JSkatPlayer;
 import org.jskat.ai.PlayerType;
 import org.jskat.ai.nn.AIPlayerNN;
 import org.jskat.control.JSkatMaster;
+import org.jskat.control.JSkatPlayer;
 import org.jskat.control.JSkatThread;
 import org.jskat.control.SkatGame;
 import org.jskat.data.GameAnnouncement;
@@ -147,7 +147,7 @@ public class NNTrainer extends JSkatThread {
 	 * @param newGameType
 	 *            Game type
 	 */
-	public void setGameType(GameType newGameType) {
+	public void setGameType(final GameType newGameType) {
 
 		gameType = newGameType;
 	}
@@ -208,7 +208,7 @@ public class NNTrainer extends JSkatThread {
 		}
 	}
 
-	private JSkatPlayer createPlayer(PlayerType playerType) {
+	private JSkatPlayer createPlayer(final PlayerType playerType) {
 		JSkatPlayer player = PlayerType.getPlayerInstance(playerType);
 
 		if (PlayerType.NEURAL_NETWORK.equals(playerType)) {
@@ -220,7 +220,7 @@ public class NNTrainer extends JSkatThread {
 		return player;
 	}
 
-	private boolean isGameWon(Player currPlayer, SkatGame game) {
+	private boolean isGameWon(final Player currPlayer, final SkatGame game) {
 
 		// FIXME (jansch 28.06.2011) have to call getGameResult() to get
 		// the result
@@ -235,7 +235,7 @@ public class NNTrainer extends JSkatThread {
 		return gameWon;
 	}
 
-	private void runGame(SkatGame game) {
+	private void runGame(final SkatGame game) {
 		game.start();
 		try {
 			game.join();
@@ -245,7 +245,8 @@ public class NNTrainer extends JSkatThread {
 		}
 	}
 
-	private SkatGame prepareGame(JSkatPlayer player1, JSkatPlayer player2, JSkatPlayer player3, Player declarer) {
+	private SkatGame prepareGame(final JSkatPlayer player1, final JSkatPlayer player2, final JSkatPlayer player3,
+			final Player declarer) {
 		player1.newGame(Player.FOREHAND);
 		player2.newGame(Player.MIDDLEHAND);
 		player3.newGame(Player.REARHAND);
@@ -272,7 +273,7 @@ public class NNTrainer extends JSkatThread {
 		return game;
 	}
 
-	static Set<List<PlayerType>> createPlayerPermutations(List<PlayerType> playerTypes) {
+	static Set<List<PlayerType>> createPlayerPermutations(final List<PlayerType> playerTypes) {
 
 		Set<List<PlayerType>> result = new HashSet<List<PlayerType>>();
 
@@ -298,7 +299,7 @@ public class NNTrainer extends JSkatThread {
 	}
 
 	// FIXME (jan 10.03.2012) code duplication with AIPlayerNN
-	private static boolean isRamschGameWon(GameSummary gameSummary, Player currPlayer) {
+	private static boolean isRamschGameWon(final GameSummary gameSummary, final Player currPlayer) {
 
 		boolean ramschGameWon = false;
 		int playerPoints = gameSummary.getPlayerPoints(currPlayer);

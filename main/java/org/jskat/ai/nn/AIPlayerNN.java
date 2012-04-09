@@ -29,9 +29,9 @@ import java.util.Random;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.AbstractJSkatPlayer;
-import org.jskat.ai.JSkatPlayer;
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.util.INeuralNetwork;
+import org.jskat.control.JSkatPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary;
@@ -67,11 +67,11 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 	// 1.0 and 2.0 for tanh function
 	// 2.0 and 4.0 for sigmoid function
-	private static double HAS_CARD = 1.0d;
-	private static double COULD_HAVE_CARD = 0.5d;
+	private static double HAS_CARD = 2.0d;
+	private static double COULD_HAVE_CARD = 1.0d;
 	private static double DOESNT_HAVE_CARD = 0.0d;
-	private static double PLAYED_CARD = -0.5d;
-	private static double PLAYED_CARD_IN_TRICK = -1.0d;
+	private static double PLAYED_CARD = -1.0d;
+	private static double PLAYED_CARD_IN_TRICK = -2.0d;
 
 	// won game 1.0 and lost game -1.0 for tanh function
 	// won game 1.0 and lost game 0.0 for sigmoid function
@@ -92,7 +92,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 * @param newPlayerName
 	 *            Player's name
 	 */
-	public AIPlayerNN(String newPlayerName) {
+	public AIPlayerNN(final String newPlayerName) {
 
 		log.debug("Constructing new AIPlayerNN"); //$NON-NLS-1$
 		setPlayerName(newPlayerName);
@@ -125,7 +125,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 * @see JSkatPlayer#bidMore(int)
 	 */
 	@Override
-	public int bidMore(int nextBidValue) {
+	public int bidMore(final int nextBidValue) {
 
 		int result = -1;
 
@@ -140,12 +140,12 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 * @see JSkatPlayer#holdBid(int)
 	 */
 	@Override
-	public boolean holdBid(int currBidValue) {
+	public boolean holdBid(final int currBidValue) {
 
 		return isAnyGamePossible(currBidValue);
 	}
 
-	private boolean isAnyGamePossible(int bidValue) {
+	private boolean isAnyGamePossible(final int bidValue) {
 
 		List<GameType> filteredGameTypes = filterFeasibleGameTypes(bidValue);
 
@@ -153,14 +153,14 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		SimulationResults results = gameSimulator.simulateMaxEpisodes(Long.valueOf(MAX_SIMULATIONS / 2));
 
 		for (Double wonRate : results.getAllWonRates()) {
-			if (wonRate.doubleValue() > 0.6) {
+			if (wonRate.doubleValue() > 0.75) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private List<GameType> filterFeasibleGameTypes(int bidValue) {
+	private List<GameType> filterFeasibleGameTypes(final int bidValue) {
 		// FIXME (jansch 14.09.2011) consider hand and ouvert games
 		// return game announcement instead
 		List<GameType> result = new ArrayList<GameType>();
@@ -287,7 +287,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		for (Double wonRate : results.getAllWonRates()) {
 
-			if (wonRate.doubleValue() > 0.9) {
+			if (wonRate.doubleValue() > 0.95) {
 
 				result = false;
 			}
@@ -408,7 +408,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 					cardWithHighestOutput = card;
 				}
 
-				if (currOutput > 0.9) {
+				if (currOutput > 0.95) {
 					goodCards.add(card);
 				}
 			}
@@ -444,7 +444,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 *            Card to be played
 	 * @return Net input attributes
 	 */
-	private double[] getNetInputs(Card cardToPlay) {
+	private double[] getNetInputs(final Card cardToPlay) {
 
 		double[] inputs = new double[96];
 
@@ -492,7 +492,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		return inputs;
 	}
 
-	private void setDeclarerNetInputs(double[] inputs, Player leftOpponent, Player rightOpponent, Card card) {
+	private void setDeclarerNetInputs(final double[] inputs, final Player leftOpponent, final Player rightOpponent,
+			final Card card) {
 
 		GameType gameType = knowledge.getGame().getGameType();
 		int netInputIndexForCard = getNetInputIndex(gameType, card);
@@ -544,7 +545,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		// }
 	}
 
-	private void setOpponentNetInputs(double[] inputs, Player otherOpponent, Player declarer, Card card) {
+	private void setOpponentNetInputs(final double[] inputs, final Player otherOpponent, final Player declarer,
+			final Card card) {
 
 		GameType gameType = knowledge.getGame().getGameType();
 		int netInputIndexForCard = getNetInputIndex(gameType, card);
@@ -603,7 +605,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 *            Game type
 	 * @return Index of card for the given game type
 	 */
-	static int getNetInputIndex(GameType gameType, Card card) {
+	static int getNetInputIndex(final GameType gameType, final Card card) {
 
 		int result = 0;
 
@@ -618,7 +620,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		return result;
 	}
 
-	private static int getNetInputIndexSuitGrandRamschGame(GameType gameType, Card card) {
+	private static int getNetInputIndexSuitGrandRamschGame(final GameType gameType, final Card card) {
 
 		int result = -1;
 
@@ -642,7 +644,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		return result;
 	}
 
-	private static int getNetInputIndexJack(Suit jackSuit) {
+	private static int getNetInputIndexJack(final Suit jackSuit) {
 
 		int result = -1;
 
@@ -664,25 +666,25 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		return result;
 	}
 
-	private static int getNetInputIndexNullGame(Card card) {
+	private static int getNetInputIndexNullGame(final Card card) {
 		// TODO better order cards after frequency or points
 		// normal null ordering
 		return card.getSuit().getSuitOrder() * 8 + card.getNullOrder();
 	}
 
-	private static int getNetInputIndexGrandGame(Card card) {
+	private static int getNetInputIndexGrandGame(final Card card) {
 		// TODO better order cards after frequency or points
 		// normal suit ordering after all jacks
 		return 4 + card.getSuit().getSuitOrder() * 7 + card.getSuitGrandOrder();
 	}
 
-	private static int getNetInputIndexRamschGame(Card card) {
+	private static int getNetInputIndexRamschGame(final Card card) {
 		// TODO better order cards after frequency or points
 		// ramsch ordering after all jacks
 		return 4 + card.getSuit().getSuitOrder() * 7 + card.getRamschOrder();
 	}
 
-	private static int getNetInputIndexSuitGame(GameType gameType, Card card) {
+	private static int getNetInputIndexSuitGame(final GameType gameType, final Card card) {
 
 		int result = -1;
 		Suit trump = gameType.getTrumpSuit();
@@ -706,7 +708,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see org.jskat.ai.JSkatPlayer#preparateForNewGame()
+	 * @see org.jskat.control.JSkatPlayer#preparateForNewGame()
 	 */
 	@Override
 	public void preparateForNewGame() {
@@ -716,7 +718,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see org.jskat.ai.JSkatPlayer#finalizeGame()
+	 * @see org.jskat.control.JSkatPlayer#finalizeGame()
 	 */
 	@Override
 	public void finalizeGame() {
@@ -728,7 +730,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		}
 	}
 
-	private void adjustNeuralNetworks(List<double[]> inputs) {
+	private void adjustNeuralNetworks(final List<double[]> inputs) {
 
 		double output = 0.0d;
 
@@ -766,7 +768,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	}
 
 	// FIXME (jan 10.03.2012) code duplication with NNTrainer
-	private static boolean isRamschGameWon(GameSummary gameSummary, Player currPlayer) {
+	private static boolean isRamschGameWon(final GameSummary gameSummary, final Player currPlayer) {
 
 		boolean ramschGameWon = false;
 		int playerPoints = gameSummary.getPlayerPoints(currPlayer);
@@ -792,7 +794,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 * @param newIsLearning
 	 *            TRUE if the player should learn during play
 	 */
-	public void setIsLearning(boolean newIsLearning) {
+	public void setIsLearning(final boolean newIsLearning) {
 
 		isLearning = newIsLearning;
 	}
@@ -804,7 +806,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 *            New logger
 	 */
 	@Override
-	public void setLogger(Log newLogger) {
+	public void setLogger(final Log newLogger) {
 		super.setLogger(newLogger);
 		log = newLogger;
 	}

@@ -43,7 +43,7 @@ public class SkatNetworks {
 	// n number of nodes in hidden layer
 	// 1 output node for win/lost
 	private static int inputNeurons = 96;
-	private static int hiddenNeurons = 300;
+	private static int hiddenNeurons = 500;
 	private static int outputNeurons = 1;
 
 	private final static SkatNetworks instance = new SkatNetworks();
@@ -103,7 +103,7 @@ public class SkatNetworks {
 	 *            TRUE, if declarer network is desired
 	 * @return Neural network
 	 */
-	public static List<INeuralNetwork> getNetwork(GameType gameType, boolean isDeclarer) {
+	public static List<INeuralNetwork> getNetwork(final GameType gameType, final boolean isDeclarer) {
 
 		List<INeuralNetwork> result = new ArrayList<INeuralNetwork>();
 
@@ -212,8 +212,8 @@ public class SkatNetworks {
 		return createNetworkList(ramschDeclarerOpening, ramschDeclarerMiddleGame, ramschDeclarerEndGame);
 	}
 
-	private static List<INeuralNetwork> createNetworkList(INeuralNetwork openingNet, INeuralNetwork middleGameNet,
-			INeuralNetwork endGameNet) {
+	private static List<INeuralNetwork> createNetworkList(final INeuralNetwork openingNet,
+			final INeuralNetwork middleGameNet, final INeuralNetwork endGameNet) {
 
 		List<INeuralNetwork> result = new ArrayList<INeuralNetwork>();
 
@@ -247,7 +247,7 @@ public class SkatNetworks {
 	 * @param filePath
 	 *            Path to files
 	 */
-	public static void loadNetworks(String filePath) {
+	public static void loadNetworks(final String filePath) {
 
 		String pathSep = System.getProperty("file.separator"); //$NON-NLS-1$
 
@@ -334,7 +334,7 @@ public class SkatNetworks {
 	 * @param path
 	 *            Path to files
 	 */
-	public static void saveNetworks(String path) {
+	public static void saveNetworks(final String path) {
 
 		String pathSep = System.getProperty("file.separator"); //$NON-NLS-1$
 
