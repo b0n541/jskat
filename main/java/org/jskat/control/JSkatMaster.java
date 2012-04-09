@@ -34,7 +34,6 @@ import javax.swing.JButton;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.JSkat;
-import org.jskat.ai.JSkatPlayer;
 import org.jskat.ai.PlayerType;
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.train.NNTrainer;

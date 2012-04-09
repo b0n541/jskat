@@ -25,7 +25,6 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jskat.ai.JSkatPlayer;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.SkatTableOptions;
 import org.jskat.gui.JSkatView;

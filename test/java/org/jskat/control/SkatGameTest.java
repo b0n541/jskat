@@ -27,7 +27,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.jskat.AbstractJSkatTest;
-import org.jskat.ai.JSkatPlayer;
 import org.jskat.ai.rnd.AIPlayerRND;
 import org.jskat.ai.test.NoBiddingTestPlayer;
 import org.jskat.ai.test.RamschTestPlayer;

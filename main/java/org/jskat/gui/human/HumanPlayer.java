@@ -26,7 +26,7 @@ import java.awt.event.ActionListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.AbstractJSkatPlayer;
-import org.jskat.ai.JSkatPlayer;
+import org.jskat.control.JSkatPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.util.Card;

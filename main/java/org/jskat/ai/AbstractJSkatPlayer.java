@@ -22,6 +22,7 @@ package org.jskat.ai;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jskat.control.JSkatPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
 import org.jskat.data.Trick;

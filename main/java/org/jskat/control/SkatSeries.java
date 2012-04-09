@@ -27,7 +27,6 @@ import java.util.Random;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jskat.ai.JSkatPlayer;
 import org.jskat.data.SkatSeriesData;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.gui.JSkatView;
