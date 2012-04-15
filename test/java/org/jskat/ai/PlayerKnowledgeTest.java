@@ -256,33 +256,49 @@ public class PlayerKnowledgeTest extends AbstractJSkatTest {
 		}
 	}
 
-	private void assertCouldHaveCard(Player player, Card card) {
+	private void assertCouldHaveCard(final Player player, final Card card) {
 		assertTrue(player + " could have card " + card, //$NON-NLS-1$
 				knowledge.couldHaveCard(player, card));
 	}
 
-	private void assertCouldNotHaveCard(Player player, Card card) {
+	private void assertCouldNotHaveCard(final Player player, final Card card) {
 		assertFalse(player + " could not have card " + card, //$NON-NLS-1$
 				knowledge.couldHaveCard(player, card));
 	}
 
-	private void assertHasCard(Player player, Card card) {
+	private void assertHasCard(final Player player, final Card card) {
 		assertTrue(player + " should have card " + card, //$NON-NLS-1$
 				knowledge.hasCard(player, card));
 	}
 
-	private void assertHasNotCard(Player player, Card card) {
+	private void assertHasNotCard(final Player player, final Card card) {
 		assertFalse(player + " should not have card " + card, //$NON-NLS-1$
 				knowledge.hasCard(player, card));
 	}
 
-	private void assertCouldLieInSkat(Card card) {
+	private void assertCouldLieInSkat(final Card card) {
 		assertTrue(card + " could lie in skat", //$NON-NLS-1$
 				knowledge.couldLieInSkat(card));
 	}
 
-	private void assertCouldNotLieInSkat(Card card) {
+	private void assertCouldNotLieInSkat(final Card card) {
 		assertFalse(card + " could not lie in skat", //$NON-NLS-1$
 				knowledge.couldLieInSkat(card));
+	}
+
+	/**
+	 * Tests setting of tricks
+	 */
+	@Test
+	public void testSetTrick() {
+		Trick trick = new Trick(0, Player.FOREHAND);
+
+		knowledge.setCurrentTrick(trick);
+
+		assertEquals(0, knowledge.getCompletedTricks().size());
+
+		knowledge.addTrick(trick);
+
+		assertEquals(1, knowledge.getCompletedTricks().size());
 	}
 }

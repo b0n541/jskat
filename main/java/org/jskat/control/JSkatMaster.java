@@ -132,7 +132,7 @@ public class JSkatMaster {
 		}
 	}
 
-	private void createLocalTable(String tableName) {
+	private void createLocalTable(final String tableName) {
 		SkatTable table = new SkatTable(data.getTableOptions());
 		table.setName(tableName);
 		data.addSkatTable(table);
@@ -179,8 +179,8 @@ public class JSkatMaster {
 	 * @param unlimited
 	 *            TRUE, if unlimited rounds should be played
 	 */
-	public void startSeries(ArrayList<PlayerType> allPlayer, ArrayList<String> playerNames, int numberOfRounds,
-			boolean unlimited, boolean onlyPlayRamsch) {
+	public void startSeries(final ArrayList<PlayerType> allPlayer, final ArrayList<String> playerNames,
+			final int numberOfRounds, final boolean unlimited, final boolean onlyPlayRamsch) {
 
 		log.debug(data.getActiveTable());
 
@@ -210,7 +210,7 @@ public class JSkatMaster {
 	 * @param tableName
 	 *            Table name
 	 */
-	public void pauseSkatSeries(String tableName) {
+	public void pauseSkatSeries(final String tableName) {
 
 		SkatTable table = data.getSkatTable(tableName);
 
@@ -236,7 +236,7 @@ public class JSkatMaster {
 	 * @param tableName
 	 *            Table name
 	 */
-	public void resumeSkatSeries(String tableName) {
+	public void resumeSkatSeries(final String tableName) {
 
 		SkatTable table = data.getSkatTable(tableName);
 
@@ -252,7 +252,7 @@ public class JSkatMaster {
 	 * @param tableName
 	 *            Table name
 	 */
-	public void pauseSkatGame(String tableName) {
+	public void pauseSkatGame(final String tableName) {
 
 		SkatTable table = data.getSkatTable(tableName);
 
@@ -268,7 +268,7 @@ public class JSkatMaster {
 	 * @param tableName
 	 *            Table name
 	 */
-	public void resumeSkatGame(String tableName) {
+	public void resumeSkatGame(final String tableName) {
 
 		SkatTable table = data.getSkatTable(tableName);
 
@@ -285,7 +285,7 @@ public class JSkatMaster {
 	 *            Table name
 	 * @return TRUE if the game is waiting
 	 */
-	public boolean isSkatGameWaiting(String tableName) {
+	public boolean isSkatGameWaiting(final String tableName) {
 
 		boolean result = false;
 
@@ -306,7 +306,7 @@ public class JSkatMaster {
 	 *            Table name
 	 * @return TRUE if the series is waiting
 	 */
-	public boolean isSkatSeriesWaiting(String tableName) {
+	public boolean isSkatSeriesWaiting(final String tableName) {
 
 		boolean result = false;
 
@@ -329,7 +329,7 @@ public class JSkatMaster {
 	 *            Skat player
 	 * @return TRUE if the placing was successful
 	 */
-	public synchronized boolean placePlayer(String tableName, JSkatPlayer player) {
+	public synchronized boolean placePlayer(final String tableName, final JSkatPlayer player) {
 
 		boolean result = false;
 
@@ -352,7 +352,7 @@ public class JSkatMaster {
 	 * @param newView
 	 *            View
 	 */
-	public void setView(JSkatView newView) {
+	public void setView(final JSkatView newView) {
 
 		view = newView;
 		issControl.setView(view);
@@ -452,7 +452,7 @@ public class JSkatMaster {
 	 * @param event
 	 *            Action event
 	 */
-	public void triggerHuman(ActionEvent event) {
+	public void triggerHuman(final ActionEvent event) {
 
 		log.debug(event);
 
@@ -470,7 +470,7 @@ public class JSkatMaster {
 		}
 	}
 
-	private void handleHumanInputForISSTable(String tableName, String command, Object source) {
+	private void handleHumanInputForISSTable(final String tableName, final String command, final Object source) {
 
 		if (JSkatAction.PASS_BID.toString().equals(command)) {
 			// player passed
@@ -524,7 +524,7 @@ public class JSkatMaster {
 		}
 	}
 
-	private boolean isIssTable(String tableName) {
+	private boolean isIssTable(final String tableName) {
 
 		return data.isTableJoined(tableName);
 	}
@@ -535,7 +535,7 @@ public class JSkatMaster {
 	 * @param e
 	 *            Event
 	 */
-	public void takeCardFromSkat(ActionEvent e) {
+	public void takeCardFromSkat(final ActionEvent e) {
 
 		if (!(e.getSource() instanceof Card)) {
 
@@ -550,7 +550,7 @@ public class JSkatMaster {
 	 * 
 	 * @param e
 	 */
-	public void putCardIntoSkat(ActionEvent e) {
+	public void putCardIntoSkat(final ActionEvent e) {
 
 		if (!(e.getSource() instanceof Card)) {
 
@@ -574,7 +574,7 @@ public class JSkatMaster {
 	 * @param newName
 	 *            TRUE, if a new name should be given to the save file
 	 */
-	public void saveSeries(boolean newName) {
+	public void saveSeries(final boolean newName) {
 		// TODO saving/loading a skat series (here: save)
 
 	}
@@ -603,7 +603,7 @@ public class JSkatMaster {
 	 * @param tableName
 	 *            Table name
 	 */
-	public void setActiveTable(String tableName) {
+	public void setActiveTable(final String tableName) {
 
 		data.setActiveTable(tableName);
 	}
@@ -614,7 +614,7 @@ public class JSkatMaster {
 	 * @param login
 	 *            Login name
 	 */
-	public void setIssLogin(String login) {
+	public void setIssLogin(final String login) {
 
 		data.setIssLoginName(login);
 	}
@@ -674,7 +674,8 @@ public class JSkatMaster {
 	 * @param strength
 	 *            Playing strength
 	 */
-	public void updateISSPlayer(String playerName, String language, long gamesPlayed, double strength) {
+	public void updateISSPlayer(final String playerName, final String language, final long gamesPlayed,
+			final double strength) {
 
 		data.addAvailableISSPlayer(playerName);
 		view.updateISSLobbyPlayerList(playerName, language, gamesPlayed, strength);
@@ -686,7 +687,7 @@ public class JSkatMaster {
 	 * @param playerName
 	 *            Player name
 	 */
-	public void removeISSPlayer(String playerName) {
+	public void removeISSPlayer(final String playerName) {
 
 		data.removeAvailableISSPlayer(playerName);
 		view.removeFromISSLobbyPlayerList(playerName);
@@ -717,7 +718,7 @@ public class JSkatMaster {
 		return result;
 	}
 
-	private void openWebPage(String link) {
+	private void openWebPage(final String link) {
 		try {
 			Desktop desktop = java.awt.Desktop.getDesktop();
 			URI uri = new URI(link);
@@ -768,8 +769,8 @@ public class JSkatMaster {
 	 * @param avgDifference
 	 *            Average difference
 	 */
-	public void addTrainingResult(GameType gameType, long episodes, long totalWonGames, long episodeWonGames,
-			double avgDifference) {
+	public void addTrainingResult(final GameType gameType, final long episodes, final long totalWonGames,
+			final long episodeWonGames, final double avgDifference) {
 
 		view.addTrainingResult(gameType, episodes, totalWonGames, episodeWonGames, avgDifference);
 	}

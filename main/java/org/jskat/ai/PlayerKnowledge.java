@@ -61,24 +61,24 @@ public class PlayerKnowledge {
 	 * Contains all cards played by the players
 	 */
 	// FIXME (markus 07.11.11.) why is this a "Set<Card>" instead of "CardList"?
-	private Map<Player, Set<Card>> playedCards = new HashMap<Player, Set<Card>>();
+	private final Map<Player, Set<Card>> playedCards = new HashMap<Player, Set<Card>>();
 
 	/**
 	 * Contains all cards that could be on a certain position
 	 */
 	// FIXME (markus 07.11.11.) why is this a "Set<Card>" instead of "CardList"?
-	private Map<Player, Set<Card>> possiblePlayerCards = new HashMap<Player, Set<Card>>();
+	private final Map<Player, Set<Card>> possiblePlayerCards = new HashMap<Player, Set<Card>>();
 
 	/**
 	 * Contains all cards that could be in the skat
 	 */
 	// FIXME (markus 07.11.11.) why is this a "Set<Card>" instead of "CardList"?
-	private Set<Card> possibleSkatCards = new HashSet<Card>();
+	private final Set<Card> possibleSkatCards = new HashSet<Card>();
 
 	/**
 	 * Holds the highest bid every player has made during bidding
 	 */
-	private Map<Player, Integer> highestBid = new HashMap<Player, Integer>();
+	private final Map<Player, Integer> highestBid = new HashMap<Player, Integer>();
 
 	/**
 	 * A complete card deck for doing some boolean operations with a subset of a
@@ -111,17 +111,17 @@ public class PlayerKnowledge {
 	/**
 	 * Counts the number of cards on players hand for every card
 	 */
-	private Map<Suit, Integer> suitCount = new HashMap<Suit, Integer>();
+	private final Map<Suit, Integer> suitCount = new HashMap<Suit, Integer>();
 
 	/**
 	 * Counts the points for every suit on players hand
 	 */
-	private Map<Suit, Integer> suitPoints = new HashMap<Suit, Integer>();
+	private final Map<Suit, Integer> suitPoints = new HashMap<Suit, Integer>();
 
 	/**
 	 * Holds trick information
 	 */
-	private List<Trick> tricks = new ArrayList<Trick>();
+	private final List<Trick> tricks = new ArrayList<Trick>();
 
 	/** Player cards */
 	private CardList myCards = new CardList();
@@ -187,7 +187,7 @@ public class PlayerKnowledge {
 	 *            Card to check
 	 * @return TRUE if the card was played
 	 */
-	public boolean isCardPlayed(Card card) {
+	public boolean isCardPlayed(final Card card) {
 
 		return playedCards.get(Player.FOREHAND).contains(card) || playedCards.get(Player.MIDDLEHAND).contains(card)
 				|| playedCards.get(Player.REARHAND).contains(card);
@@ -202,7 +202,7 @@ public class PlayerKnowledge {
 	 *            Card
 	 * @return TRUE if the card was played by the player
 	 */
-	public boolean isCardPlayedBy(Player player, Card card) {
+	public boolean isCardPlayedBy(final Player player, final Card card) {
 
 		return playedCards.get(player).contains(card);
 	}
@@ -212,7 +212,7 @@ public class PlayerKnowledge {
 	 * 
 	 * @param trick
 	 */
-	public final void setCurrentTrick(Trick trick) {
+	public final void setCurrentTrick(final Trick trick) {
 		this.currentTrick = trick;
 	}
 
@@ -233,7 +233,7 @@ public class PlayerKnowledge {
 	 * @param card
 	 *            Card
 	 */
-	public void setCardPlayed(Player player, Card card) {
+	public void setCardPlayed(final Player player, final Card card) {
 
 		playedCards.get(player).add(card);
 
@@ -256,7 +256,7 @@ public class PlayerKnowledge {
 	 * @param playedCard
 	 *            Card played
 	 */
-	private void setTrickCard(Player otherPlayer, Card playedCard) {
+	private void setTrickCard(final Player otherPlayer, final Card playedCard) {
 
 		if (getPlayerPosition().getLeftNeighbor() == otherPlayer) {
 
@@ -339,7 +339,7 @@ public class PlayerKnowledge {
 	 * @return TRUE if the card was played by the other player in the current
 	 *         trick
 	 */
-	public boolean isCardPlayedInTrick(Player otherPlayer, Card card) {
+	public boolean isCardPlayedInTrick(final Player otherPlayer, final Card card) {
 
 		boolean result = false;
 
@@ -376,7 +376,7 @@ public class PlayerKnowledge {
 	 *            Card to check
 	 * @return TRUE if the card is still outstanding
 	 */
-	public boolean isCardOutstanding(Card card) {
+	public boolean isCardOutstanding(final Card card) {
 
 		return !isCardPlayed(card);
 	}
@@ -391,7 +391,7 @@ public class PlayerKnowledge {
 	 *            Card to check
 	 * @return TRUE if and only if the player has the card alone
 	 */
-	public boolean hasCard(Player player, Card card) {
+	public boolean hasCard(final Player player, final Card card) {
 
 		int possessionCount = 0;
 
@@ -403,8 +403,9 @@ public class PlayerKnowledge {
 					possessionCount++;
 				}
 			}
-			if (possibleSkatCards.contains(card))
+			if (possibleSkatCards.contains(card)) {
 				possessionCount++;
+			}
 		}
 
 		return (possessionCount == 1);
@@ -420,7 +421,7 @@ public class PlayerKnowledge {
 	 *            Card to check
 	 * @return TRUE if the player could have the card
 	 */
-	public boolean couldHaveCard(Player player, Card card) {
+	public boolean couldHaveCard(final Player player, final Card card) {
 
 		return possiblePlayerCards.get(player).contains(card);
 	}
@@ -435,12 +436,14 @@ public class PlayerKnowledge {
 	 *            Suit to check
 	 * @return TRUE if the player could have any card of the suit
 	 */
-	public boolean couldHaveSuit(Player player, Suit suit) {
+	public boolean couldHaveSuit(final Player player, final Suit suit) {
 		for (Rank r : Rank.values()) {
-			if (r == Rank.JACK)
+			if (r == Rank.JACK) {
 				continue;
-			if (couldHaveCard(player, Card.getCard(suit, r)))
+			}
+			if (couldHaveCard(player, Card.getCard(suit, r))) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -455,18 +458,21 @@ public class PlayerKnowledge {
 	 *            Suit to check
 	 * @return TRUE if the player could have any card of the suit
 	 */
-	public int getPotentialSuitCount(Player player, Suit suit, boolean isTrump, boolean includeJacks) {
+	public int getPotentialSuitCount(final Player player, final Suit suit, final boolean isTrump,
+			final boolean includeJacks) {
 		int result = 0;
 		for (Rank r : Rank.values()) {
-			if (r == Rank.JACK && !includeJacks)
+			if (r == Rank.JACK && !includeJacks) {
 				continue;
-			else if (couldHaveCard(player, Card.getCard(suit, r)))
+			} else if (couldHaveCard(player, Card.getCard(suit, r))) {
 				result++;
+			}
 		}
 		if (isTrump) {
 			for (Suit s : Suit.values()) {
-				if (couldHaveCard(player, Card.getCard(s, Rank.JACK)))
+				if (couldHaveCard(player, Card.getCard(s, Rank.JACK))) {
 					result++;
+				}
 			}
 		}
 		return result;
@@ -480,10 +486,11 @@ public class PlayerKnowledge {
 	 *            Player ID
 	 * @return TRUE if the player could have any trump card
 	 */
-	public boolean couldHaveTrump(Player player) {
+	public boolean couldHaveTrump(final Player player) {
 		for (Card c : Card.values()) {
-			if (c.isTrump(getGameType()) && couldHaveCard(player, c))
+			if (c.isTrump(getGameType()) && couldHaveCard(player, c)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -496,15 +503,18 @@ public class PlayerKnowledge {
 	public boolean couldOpponentsHaveTrump() {
 		if (playerPosition == declarer) {
 			for (Player p : Player.values()) {
-				if (p == declarer)
+				if (p == declarer) {
 					continue;
+				}
 				for (Suit s : Suit.values()) {
-					if (couldHaveCard(p, Card.getCard(s, Rank.JACK)))
+					if (couldHaveCard(p, Card.getCard(s, Rank.JACK))) {
 						return true;
+					}
 				}
 				for (Rank r : Rank.values()) {
-					if (couldHaveCard(p, Card.getCard(getGame().getGameType().getTrumpSuit(), r)))
+					if (couldHaveCard(p, Card.getCard(getGame().getGameType().getTrumpSuit(), r))) {
 						return true;
+					}
 				}
 			}
 		}
@@ -518,7 +528,7 @@ public class PlayerKnowledge {
 	 *            Card
 	 * @return TRUE if card could lie in the skat
 	 */
-	public boolean couldLieInSkat(Card card) {
+	public boolean couldLieInSkat(final Card card) {
 		return possibleSkatCards.contains(card);
 	}
 
@@ -529,7 +539,7 @@ public class PlayerKnowledge {
 	 *            Player ID
 	 * @param suit
 	 */
-	public void setMissingSuit(Player player, Suit suit) {
+	public void setMissingSuit(final Player player, final Suit suit) {
 
 		for (Rank rank : Rank.values()) {
 			if (rank != Rank.JACK || GameType.NULL.equals(getGameType()) || GameType.RAMSCH.equals(getGameType())) {
@@ -545,7 +555,7 @@ public class PlayerKnowledge {
 	 *            Player ID
 	 * @return Highest bid for the player
 	 */
-	public Integer getHighestBid(Player player) {
+	public Integer getHighestBid(final Player player) {
 
 		return highestBid.get(player);
 	}
@@ -558,7 +568,7 @@ public class PlayerKnowledge {
 	 * @param bidValue
 	 *            Highest bid for the player
 	 */
-	public void setHighestBid(Player player, Integer bidValue) {
+	public void setHighestBid(final Player player, final Integer bidValue) {
 
 		highestBid.put(player, bidValue);
 	}
@@ -589,7 +599,7 @@ public class PlayerKnowledge {
 	 * @param newPlayerPosition
 	 *            Player position
 	 */
-	public void setPlayerPosition(Player newPlayerPosition) {
+	public void setPlayerPosition(final Player newPlayerPosition) {
 
 		playerPosition = newPlayerPosition;
 	}
@@ -600,7 +610,7 @@ public class PlayerKnowledge {
 	 * @param newDeclarer
 	 *            Declarer position
 	 */
-	public void setDeclarer(Player newDeclarer) {
+	public void setDeclarer(final Player newDeclarer) {
 
 		declarer = newDeclarer;
 	}
@@ -621,7 +631,7 @@ public class PlayerKnowledge {
 	 * @param card
 	 *            the Card to add
 	 */
-	public void addCard(Card card) {
+	public void addCard(final Card card) {
 
 		if (!myCards.contains(card)) {
 			myCards.add(card);
@@ -642,7 +652,7 @@ public class PlayerKnowledge {
 	 * @param card
 	 *            Card
 	 */
-	public void removeCard(Card card) {
+	public void removeCard(final Card card) {
 
 		suitCount.put(card.getSuit(), Integer.valueOf(suitCount.get(card.getSuit()).intValue() - 1));
 		suitPoints.put(card.getSuit(),
@@ -693,8 +703,9 @@ public class PlayerKnowledge {
 		int[] result = new int[4];
 		for (Trick t : tricks) {
 			int[] tmp = t.getCardList().toBinary();
-			for (int i = 0; i < 4; i++)
+			for (int i = 0; i < 4; i++) {
 				result[i] += tmp[i];
+			}
 		}
 		return result;
 	}
@@ -736,9 +747,16 @@ public class PlayerKnowledge {
 	 * @param trick
 	 *            Trick to be added
 	 */
-	public void addTrick(Trick trick) {
+	public void addTrick(final Trick trick) {
 
 		tricks.add(trick);
+	}
+
+	/**
+	 * Gets all tricks that are completed
+	 */
+	public List<Trick> getCompletedTricks() {
+		return tricks;
 	}
 
 	/**
@@ -747,15 +765,16 @@ public class PlayerKnowledge {
 	 * @param gameAnn
 	 *            Game announcement to set
 	 */
-	public void setGame(GameAnnouncement gameAnn) {
+	public void setGame(final GameAnnouncement gameAnn) {
 
 		game = gameAnn;
 		if (!GameType.PASSED_IN.equals(getGameType())) {
 			for (Card c : myCards) {
 				// FIXME (jansch 21.09.2011) Cards shouldn't check whether they
 				// are trump or not, let skat rules do the job
-				if (c.isTrump(getGameType()))
+				if (c.isTrump(getGameType())) {
 					trumpCount++;
+				}
 			}
 		}
 	}
@@ -774,8 +793,9 @@ public class PlayerKnowledge {
 	 * @return the gameType
 	 */
 	public GameType getGameType() {
-		if (game == null)
+		if (game == null) {
 			return null;
+		}
 		return game.getGameType();
 	}
 
@@ -806,7 +826,7 @@ public class PlayerKnowledge {
 	 *            Suit
 	 * @return Number of cards from this suit
 	 */
-	public int getSuitCount(Suit suit) {
+	public int getSuitCount(final Suit suit) {
 
 		return suitCount.get(suit).intValue();
 	}
@@ -818,7 +838,7 @@ public class PlayerKnowledge {
 	 *            Suit
 	 * @return Points from this suit
 	 */
-	public int getSuitPoints(Suit suit) {
+	public int getSuitPoints(final Suit suit) {
 
 		return suitPoints.get(suit).intValue();
 	}
@@ -841,7 +861,7 @@ public class PlayerKnowledge {
 	 * @param myCards
 	 *            the myCards to set
 	 */
-	public void setMyCards(CardList myCards) {
+	public void setMyCards(final CardList myCards) {
 		this.myCards = myCards;
 	}
 
@@ -856,7 +876,7 @@ public class PlayerKnowledge {
 	 * @param skat
 	 *            the skat to set
 	 */
-	public void setSkat(CardList skat) {
+	public void setSkat(final CardList skat) {
 		this.skat = skat;
 	}
 
@@ -871,7 +891,7 @@ public class PlayerKnowledge {
 	 * @param singlePlayerCards
 	 *            the singlePlayerCards to set
 	 */
-	public void setSinglePlayerCards(CardList singlePlayerCards) {
+	public void setSinglePlayerCards(final CardList singlePlayerCards) {
 		this.singlePlayerCards = singlePlayerCards;
 	}
 
@@ -886,7 +906,7 @@ public class PlayerKnowledge {
 	 * @param handGame
 	 *            the handGame to set
 	 */
-	public void setHandGame(boolean handGame) {
+	public void setHandGame(final boolean handGame) {
 		this.handGame = handGame;
 	}
 
@@ -901,7 +921,7 @@ public class PlayerKnowledge {
 	 * @param ouvertGame
 	 *            the ouvertGame to set
 	 */
-	public void setOuvertGame(boolean ouvertGame) {
+	public void setOuvertGame(final boolean ouvertGame) {
 		this.ouvertGame = ouvertGame;
 	}
 
@@ -916,7 +936,7 @@ public class PlayerKnowledge {
 	 * @param schneiderAnnounced
 	 *            the schneiderAnnounced to set
 	 */
-	public void setSchneiderAnnounced(boolean schneiderAnnounced) {
+	public void setSchneiderAnnounced(final boolean schneiderAnnounced) {
 		this.schneiderAnnounced = schneiderAnnounced;
 	}
 
@@ -931,7 +951,7 @@ public class PlayerKnowledge {
 	 * @param schwarzAnnounced
 	 *            the schwarzAnnounced to set
 	 */
-	public void setSchwarzAnnounced(boolean schwarzAnnounced) {
+	public void setSchwarzAnnounced(final boolean schwarzAnnounced) {
 		this.schwarzAnnounced = schwarzAnnounced;
 	}
 }

@@ -42,8 +42,8 @@ public class SkatNetworks {
 	// 1 hidden layer
 	// n number of nodes in hidden layer
 	// 1 output node for win/lost
-	private static int inputNeurons = 96;
-	private static int hiddenNeurons = 500;
+	private static int inputNeurons = 1089;
+	private static int hiddenNeurons = 250;
 	private static int outputNeurons = 1;
 
 	private final static SkatNetworks instance = new SkatNetworks();
