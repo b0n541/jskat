@@ -155,222 +155,222 @@ public class AIPlayerNNTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Tests the setting of the input values for a declarer net
-	 */
-	@Test
-	public void testSetDeclarerNetInputs_DeclarerNeurons() {
-
-		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-		factory.setGameType(GameType.GRAND);
-		GameAnnouncement announcement = factory.getAnnouncement();
-
-		AIPlayerNN player = new AIPlayerNN();
-		player.preparateForNewGame();
-		player.newGame(Player.FOREHAND);
-		player.startGame();
-
-		player.startGame(Player.FOREHAND, announcement);
-		player.newTrick(new Trick(0, Player.FOREHAND));
-
-		double[] inputs = player.getNetInputs(Card.CJ);
-		assertEquals(1.0, inputs[363], 0.0);
-
-		player.startGame(Player.MIDDLEHAND, announcement);
-		inputs = player.getNetInputs(Card.CJ);
-		assertEquals(1.0, inputs[0], 0.0);
-
-		player.startGame(Player.REARHAND, announcement);
-		inputs = player.getNetInputs(Card.CJ);
-		assertEquals(1.0, inputs[726], 0.0);
-
-		player.newGame(Player.MIDDLEHAND);
-
-		player.startGame(Player.FOREHAND, announcement);
-		inputs = player.getNetInputs(Card.CJ);
-		assertEquals(1.0, inputs[726], 0.0);
-
-		player.startGame(Player.MIDDLEHAND, announcement);
-		inputs = player.getNetInputs(Card.CJ);
-		assertEquals(1.0, inputs[363], 0.0);
-
-		player.startGame(Player.REARHAND, announcement);
-		inputs = player.getNetInputs(Card.CJ);
-		assertEquals(1.0, inputs[0], 0.0);
-
-		player.newGame(Player.REARHAND);
-
-		player.startGame(Player.FOREHAND, announcement);
-		inputs = player.getNetInputs(Card.CJ);
-		assertEquals(1.0, inputs[0], 0.0);
-
-		player.startGame(Player.MIDDLEHAND, announcement);
-		inputs = player.getNetInputs(Card.CJ);
-		assertEquals(1.0, inputs[726], 0.0);
-
-		player.startGame(Player.REARHAND, announcement);
-		inputs = player.getNetInputs(Card.CJ);
-		assertEquals(1.0, inputs[363], 0.0);
-	}
-
-	/**
-	 * Tests the setting of the input values for a declarer net
-	 */
-	@Test
-	public void testSetDeclarerNetInputs_PlayedCards() {
-
-		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-		factory.setGameType(GameType.GRAND);
-		GameAnnouncement announcement = factory.getAnnouncement();
-
-		AIPlayerNN player = new AIPlayerNN();
-		player.preparateForNewGame();
-		player.newGame(Player.REARHAND);
-		player.startGame();
-
-		player.startGame(Player.FOREHAND, announcement);
-		player.newTrick(new Trick(0, Player.FOREHAND));
-		player.cardPlayed(Player.FOREHAND, Card.SJ);
-		player.cardPlayed(Player.MIDDLEHAND, Card.HJ);
-
-		double[] inputs = player.getNetInputs(Card.CJ);
-
-		// game declarer for player FOREHAND
-		assertEquals(1.0, inputs[0], 0.0);
-		// trick fore hand for player FOREHAND
-		assertEquals(1.0, inputs[1], 0.0);
-		// Club Jack for player FOREHAND
-		assertEquals(0.0, inputs[2], 0.0);
-		// Spade Jack for player FOREHAND
-		assertEquals(1.0, inputs[3], 0.0);
-		// Heart Jack for player FOREHAND
-		assertEquals(0.0, inputs[4], 0.0);
-		// Diamond Jack for player FOREHAND
-		assertEquals(0.0, inputs[5], 0.0);
-
-		// game declarer for player MIDDLEHAND
-		assertEquals(0.0, inputs[726], 0.0);
-		// trick fore hand for player MIDDLEHAND
-		assertEquals(0.0, inputs[1 + 726], 0.0);
-		// Club Jack for player MIDDLEHAND
-		assertEquals(0.0, inputs[2 + 726], 0.0);
-		// Spade Jack for player MIDDLEHAND
-		assertEquals(0.0, inputs[3 + 726], 0.0);
-		// Heart Jack for player MIDDLEHAND
-		assertEquals(1.0, inputs[4 + 726], 0.0);
-		// Diamond Jack for player MIDDLEHAND
-		assertEquals(0.0, inputs[5 + 726], 0.0);
-
-		// game declarer for player REARHAND
-		assertEquals(0.0, inputs[363], 0.0);
-		// trick fore hand for player MIDDLEHAND
-		assertEquals(0.0, inputs[1 + 363], 0.0);
-		// Club Jack for player MIDDLEHAND
-		assertEquals(1.0, inputs[2 + 363], 0.0);
-		// Spade Jack for player MIDDLEHAND
-		assertEquals(0.0, inputs[3 + 363], 0.0);
-		// Heart Jack for player MIDDLEHAND
-		assertEquals(0.0, inputs[4 + 363], 0.0);
-		// Diamond Jack for player MIDDLEHAND
-		assertEquals(0.0, inputs[5 + 363], 0.0);
-	}
+		 * Tests the setting of the input values for a declarer net
+		 */
+		@Test
+		public void testSetDeclarerKnowCards_DeclarerNeurons() {
+	
+			GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+			factory.setGameType(GameType.GRAND);
+			GameAnnouncement announcement = factory.getAnnouncement();
+	
+			AIPlayerNN player = new AIPlayerNN();
+			player.preparateForNewGame();
+			player.newGame(Player.FOREHAND);
+			player.startGame();
+	
+			player.startGame(Player.FOREHAND, announcement);
+			player.newTrick(new Trick(0, Player.FOREHAND));
+	
+			double[] inputs = player.getNetInputs(Card.CJ);
+			assertEquals(1.0, inputs[363], 0.0);
+	
+			player.startGame(Player.MIDDLEHAND, announcement);
+			inputs = player.getNetInputs(Card.CJ);
+			assertEquals(1.0, inputs[0], 0.0);
+	
+			player.startGame(Player.REARHAND, announcement);
+			inputs = player.getNetInputs(Card.CJ);
+			assertEquals(1.0, inputs[726], 0.0);
+	
+			player.newGame(Player.MIDDLEHAND);
+	
+			player.startGame(Player.FOREHAND, announcement);
+			inputs = player.getNetInputs(Card.CJ);
+			assertEquals(1.0, inputs[726], 0.0);
+	
+			player.startGame(Player.MIDDLEHAND, announcement);
+			inputs = player.getNetInputs(Card.CJ);
+			assertEquals(1.0, inputs[363], 0.0);
+	
+			player.startGame(Player.REARHAND, announcement);
+			inputs = player.getNetInputs(Card.CJ);
+			assertEquals(1.0, inputs[0], 0.0);
+	
+			player.newGame(Player.REARHAND);
+	
+			player.startGame(Player.FOREHAND, announcement);
+			inputs = player.getNetInputs(Card.CJ);
+			assertEquals(1.0, inputs[0], 0.0);
+	
+			player.startGame(Player.MIDDLEHAND, announcement);
+			inputs = player.getNetInputs(Card.CJ);
+			assertEquals(1.0, inputs[726], 0.0);
+	
+			player.startGame(Player.REARHAND, announcement);
+			inputs = player.getNetInputs(Card.CJ);
+			assertEquals(1.0, inputs[363], 0.0);
+		}
 
 	/**
-	 * Tests the setting of the input values for a declarer net
-	 */
-	@Test
-	public void testSetDeclarerNetInputs_PlayedCardsTwoTricks() {
+		 * Tests the setting of the input values for a declarer net
+		 */
+		@Test
+		public void testSetDeclarerKnowCards_PlayedCards() {
+	
+			GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+			factory.setGameType(GameType.GRAND);
+			GameAnnouncement announcement = factory.getAnnouncement();
+	
+			AIPlayerNN player = new AIPlayerNN();
+			player.preparateForNewGame();
+			player.newGame(Player.REARHAND);
+			player.startGame();
+	
+			player.startGame(Player.FOREHAND, announcement);
+			player.newTrick(new Trick(0, Player.FOREHAND));
+			player.cardPlayed(Player.FOREHAND, Card.SJ);
+			player.cardPlayed(Player.MIDDLEHAND, Card.HJ);
+	
+			double[] inputs = player.getNetInputs(Card.CJ);
+	
+			// game declarer for player FOREHAND
+			assertEquals(1.0, inputs[0], 0.0);
+			// trick fore hand for player FOREHAND
+			assertEquals(1.0, inputs[1], 0.0);
+			// Club Jack for player FOREHAND
+			assertEquals(0.0, inputs[2], 0.0);
+			// Spade Jack for player FOREHAND
+			assertEquals(1.0, inputs[3], 0.0);
+			// Heart Jack for player FOREHAND
+			assertEquals(0.0, inputs[4], 0.0);
+			// Diamond Jack for player FOREHAND
+			assertEquals(0.0, inputs[5], 0.0);
+	
+			// game declarer for player MIDDLEHAND
+			assertEquals(0.0, inputs[726], 0.0);
+			// trick fore hand for player MIDDLEHAND
+			assertEquals(0.0, inputs[1 + 726], 0.0);
+			// Club Jack for player MIDDLEHAND
+			assertEquals(0.0, inputs[2 + 726], 0.0);
+			// Spade Jack for player MIDDLEHAND
+			assertEquals(0.0, inputs[3 + 726], 0.0);
+			// Heart Jack for player MIDDLEHAND
+			assertEquals(1.0, inputs[4 + 726], 0.0);
+			// Diamond Jack for player MIDDLEHAND
+			assertEquals(0.0, inputs[5 + 726], 0.0);
+	
+			// game declarer for player REARHAND
+			assertEquals(0.0, inputs[363], 0.0);
+			// trick fore hand for player MIDDLEHAND
+			assertEquals(0.0, inputs[1 + 363], 0.0);
+			// Club Jack for player MIDDLEHAND
+			assertEquals(1.0, inputs[2 + 363], 0.0);
+			// Spade Jack for player MIDDLEHAND
+			assertEquals(0.0, inputs[3 + 363], 0.0);
+			// Heart Jack for player MIDDLEHAND
+			assertEquals(0.0, inputs[4 + 363], 0.0);
+			// Diamond Jack for player MIDDLEHAND
+			assertEquals(0.0, inputs[5 + 363], 0.0);
+		}
 
-		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-		factory.setGameType(GameType.GRAND);
-		GameAnnouncement announcement = factory.getAnnouncement();
-
-		AIPlayerNN player = new AIPlayerNN();
-		player.preparateForNewGame();
-		player.newGame(Player.REARHAND);
-		player.startGame();
-
-		player.startGame(Player.FOREHAND, announcement);
-		player.newTrick(new Trick(0, Player.FOREHAND));
-		player.cardPlayed(Player.FOREHAND, Card.SJ);
-		player.cardPlayed(Player.MIDDLEHAND, Card.HJ);
-		player.cardPlayed(Player.REARHAND, Card.CJ);
-		Trick completeTrick = new Trick(0, Player.FOREHAND);
-		completeTrick.addCard(Card.SJ);
-		completeTrick.addCard(Card.HJ);
-		completeTrick.addCard(Card.CJ);
-		completeTrick.setTrickWinner(Player.REARHAND);
-		player.showTrick(completeTrick);
-		player.newTrick(new Trick(1, Player.REARHAND));
-
-		double[] inputs = player.getNetInputs(Card.DJ);
-
-		// game declarer for player FOREHAND
-		assertEquals(1.0, inputs[0], 0.0);
-		// trick fore hand for player FOREHAND trick 1
-		assertEquals(1.0, inputs[1], 0.0);
-		// Club Jack for player FOREHAND trick 1
-		assertEquals(0.0, inputs[2], 0.0);
-		// Spade Jack for player FOREHAND trick 1
-		assertEquals(1.0, inputs[3], 0.0);
-		// Heart Jack for player FOREHAND trick 1
-		assertEquals(0.0, inputs[4], 0.0);
-		// Diamond Jack for player FOREHAND trick 1
-		assertEquals(0.0, inputs[5], 0.0);
-		// trick fore hand for player FOREHAND trick 2
-		assertEquals(0.0, inputs[34], 0.0);
-		// Club Jack for player FOREHAND trick 2
-		assertEquals(0.0, inputs[35], 0.0);
-		// Spade Jack for player FOREHAND trick 2
-		assertEquals(0.0, inputs[36], 0.0);
-		// Heart Jack for player FOREHAND trick 2
-		assertEquals(0.0, inputs[37], 0.0);
-		// Diamond Jack for player FOREHAND trick 2
-		assertEquals(0.0, inputs[38], 0.0);
-
-		// game declarer for player MIDDLEHAND
-		assertEquals(0.0, inputs[726], 0.0);
-		// trick fore hand for player MIDDLEHAND trick 1
-		assertEquals(0.0, inputs[1 + 726], 0.0);
-		// Club Jack for player MIDDLEHAND trick 1
-		assertEquals(0.0, inputs[2 + 726], 0.0);
-		// Spade Jack for player MIDDLEHAND trick 1
-		assertEquals(0.0, inputs[3 + 726], 0.0);
-		// Heart Jack for player MIDDLEHAND trick 1
-		assertEquals(1.0, inputs[4 + 726], 0.0);
-		// Diamond Jack for player MIDDLEHAND trick 1
-		assertEquals(0.0, inputs[5 + 726], 0.0);
-		// trick fore hand for player FOREHAND trick 2
-		assertEquals(0.0, inputs[34 + 726], 0.0);
-		// Club Jack for player FOREHAND trick 2
-		assertEquals(0.0, inputs[35 + 726], 0.0);
-		// Spade Jack for player FOREHAND trick 2
-		assertEquals(0.0, inputs[36 + 726], 0.0);
-		// Heart Jack for player FOREHAND trick 2
-		assertEquals(0.0, inputs[37 + 726], 0.0);
-		// Diamond Jack for player FOREHAND trick 2
-		assertEquals(0.0, inputs[38 + 726], 0.0);
-
-		// game declarer for player REARHAND
-		assertEquals(0.0, inputs[363], 0.0);
-		// trick fore hand for player REARHAND trick 1
-		assertEquals(0.0, inputs[1 + 363], 0.0);
-		// Club Jack for player REARHAND trick 1
-		assertEquals(1.0, inputs[2 + 363], 0.0);
-		// Spade Jack for player REARHAND trick 1
-		assertEquals(0.0, inputs[3 + 363], 0.0);
-		// Heart Jack for player REARHAND trick 1
-		assertEquals(0.0, inputs[4 + 363], 0.0);
-		// Diamond Jack for player REARHAND trick 1
-		assertEquals(0.0, inputs[5 + 363], 0.0);
-		// trick fore hand for player REARHAND trick 2
-		assertEquals(1.0, inputs[34 + 363], 0.0);
-		// Club Jack for player REARHAND trick 2
-		assertEquals(0.0, inputs[35 + 363], 0.0);
-		// Spade Jack for player REARHAND trick 2
-		assertEquals(0.0, inputs[36 + 363], 0.0);
-		// Heart Jack for player REARHAND trick 2
-		assertEquals(0.0, inputs[37 + 363], 0.0);
-		// Diamond Jack for player REARHAND trick 2
-		assertEquals(1.0, inputs[38 + 363], 0.0);
-	}
+	/**
+		 * Tests the setting of the input values for a declarer net
+		 */
+		@Test
+		public void testSetDeclarerKnowCards_PlayedCardsTwoTricks() {
+	
+			GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+			factory.setGameType(GameType.GRAND);
+			GameAnnouncement announcement = factory.getAnnouncement();
+	
+			AIPlayerNN player = new AIPlayerNN();
+			player.preparateForNewGame();
+			player.newGame(Player.REARHAND);
+			player.startGame();
+	
+			player.startGame(Player.FOREHAND, announcement);
+			player.newTrick(new Trick(0, Player.FOREHAND));
+			player.cardPlayed(Player.FOREHAND, Card.SJ);
+			player.cardPlayed(Player.MIDDLEHAND, Card.HJ);
+			player.cardPlayed(Player.REARHAND, Card.CJ);
+			Trick completeTrick = new Trick(0, Player.FOREHAND);
+			completeTrick.addCard(Card.SJ);
+			completeTrick.addCard(Card.HJ);
+			completeTrick.addCard(Card.CJ);
+			completeTrick.setTrickWinner(Player.REARHAND);
+			player.showTrick(completeTrick);
+			player.newTrick(new Trick(1, Player.REARHAND));
+	
+			double[] inputs = player.getNetInputs(Card.DJ);
+	
+			// game declarer for player FOREHAND
+			assertEquals(1.0, inputs[0], 0.0);
+			// trick fore hand for player FOREHAND trick 1
+			assertEquals(1.0, inputs[1], 0.0);
+			// Club Jack for player FOREHAND trick 1
+			assertEquals(0.0, inputs[2], 0.0);
+			// Spade Jack for player FOREHAND trick 1
+			assertEquals(1.0, inputs[3], 0.0);
+			// Heart Jack for player FOREHAND trick 1
+			assertEquals(0.0, inputs[4], 0.0);
+			// Diamond Jack for player FOREHAND trick 1
+			assertEquals(0.0, inputs[5], 0.0);
+			// trick fore hand for player FOREHAND trick 2
+			assertEquals(0.0, inputs[34], 0.0);
+			// Club Jack for player FOREHAND trick 2
+			assertEquals(0.0, inputs[35], 0.0);
+			// Spade Jack for player FOREHAND trick 2
+			assertEquals(0.0, inputs[36], 0.0);
+			// Heart Jack for player FOREHAND trick 2
+			assertEquals(0.0, inputs[37], 0.0);
+			// Diamond Jack for player FOREHAND trick 2
+			assertEquals(0.0, inputs[38], 0.0);
+	
+			// game declarer for player MIDDLEHAND
+			assertEquals(0.0, inputs[726], 0.0);
+			// trick fore hand for player MIDDLEHAND trick 1
+			assertEquals(0.0, inputs[1 + 726], 0.0);
+			// Club Jack for player MIDDLEHAND trick 1
+			assertEquals(0.0, inputs[2 + 726], 0.0);
+			// Spade Jack for player MIDDLEHAND trick 1
+			assertEquals(0.0, inputs[3 + 726], 0.0);
+			// Heart Jack for player MIDDLEHAND trick 1
+			assertEquals(1.0, inputs[4 + 726], 0.0);
+			// Diamond Jack for player MIDDLEHAND trick 1
+			assertEquals(0.0, inputs[5 + 726], 0.0);
+			// trick fore hand for player FOREHAND trick 2
+			assertEquals(0.0, inputs[34 + 726], 0.0);
+			// Club Jack for player FOREHAND trick 2
+			assertEquals(0.0, inputs[35 + 726], 0.0);
+			// Spade Jack for player FOREHAND trick 2
+			assertEquals(0.0, inputs[36 + 726], 0.0);
+			// Heart Jack for player FOREHAND trick 2
+			assertEquals(0.0, inputs[37 + 726], 0.0);
+			// Diamond Jack for player FOREHAND trick 2
+			assertEquals(0.0, inputs[38 + 726], 0.0);
+	
+			// game declarer for player REARHAND
+			assertEquals(0.0, inputs[363], 0.0);
+			// trick fore hand for player REARHAND trick 1
+			assertEquals(0.0, inputs[1 + 363], 0.0);
+			// Club Jack for player REARHAND trick 1
+			assertEquals(1.0, inputs[2 + 363], 0.0);
+			// Spade Jack for player REARHAND trick 1
+			assertEquals(0.0, inputs[3 + 363], 0.0);
+			// Heart Jack for player REARHAND trick 1
+			assertEquals(0.0, inputs[4 + 363], 0.0);
+			// Diamond Jack for player REARHAND trick 1
+			assertEquals(0.0, inputs[5 + 363], 0.0);
+			// trick fore hand for player REARHAND trick 2
+			assertEquals(1.0, inputs[34 + 363], 0.0);
+			// Club Jack for player REARHAND trick 2
+			assertEquals(0.0, inputs[35 + 363], 0.0);
+			// Spade Jack for player REARHAND trick 2
+			assertEquals(0.0, inputs[36 + 363], 0.0);
+			// Heart Jack for player REARHAND trick 2
+			assertEquals(0.0, inputs[37 + 363], 0.0);
+			// Diamond Jack for player REARHAND trick 2
+			assertEquals(1.0, inputs[38 + 363], 0.0);
+		}
 }
