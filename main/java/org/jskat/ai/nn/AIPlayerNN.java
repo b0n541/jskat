@@ -64,7 +64,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 	private final List<GameType> feasibleGameTypes;
 
-	private static long MAX_SIMULATIONS = 25;
+	private static long MAX_SIMULATIONS = 50;
 
 	// 1.0 and 2.0 for tanh function
 	// 2.0 and 4.0 for sigmoid function
@@ -157,7 +157,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		SimulationResults results = gameSimulator.simulateMaxEpisodes(Long.valueOf(MAX_SIMULATIONS / 2));
 
 		for (Double wonRate : results.getAllWonRates()) {
-			if (wonRate.doubleValue() > 0.75) {
+			if (wonRate.doubleValue() > 0.6) {
 				return true;
 			}
 		}
