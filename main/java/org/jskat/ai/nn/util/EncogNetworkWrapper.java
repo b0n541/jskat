@@ -1,5 +1,8 @@
 package org.jskat.ai.nn.util;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
 import org.encog.engine.network.activation.ActivationSigmoid;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataPair;
@@ -7,12 +10,14 @@ import org.encog.ml.data.basic.BasicMLData;
 import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.PersistBasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 
 public class EncogNetworkWrapper implements INeuralNetwork {
 
-	private final BasicNetwork network;
+	private BasicNetwork network;
+	private final PersistBasicNetwork networkPersister;
 
 	public EncogNetworkWrapper(NetworkTopology newTopo) {
 		network = new BasicNetwork();
@@ -23,6 +28,8 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 		network.addLayer(new BasicLayer(new ActivationSigmoid(), false, 1));
 		network.getStructure().finalizeStructure();
 		network.reset();
+
+		networkPersister = new PersistBasicNetwork();
 	}
 
 	@Override
@@ -68,15 +75,25 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 		return 0;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean saveNetwork(String fileName) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			networkPersister.save(new FileOutputStream(fileName), network);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void loadNetwork(String fileName, int inputNeurons, int hiddenNeurons, int outputNeurons) {
-		// TODO Auto-generated method stub
-
+		network = (BasicNetwork) networkPersister.read(getClass().getResourceAsStream(fileName));
 	}
 }
