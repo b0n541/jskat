@@ -409,25 +409,23 @@ public class JSkatMaster {
 	 * Loads the weigths for the neural networks
 	 */
 	public void loadNeuralNetworks() {
-
-		SkatNetworks.loadNetworks(System.getProperty("user.home").concat(System.getProperty("file.separator"))
-				.concat(".jskat"));
+		SkatNetworks.instance().loadNetworks(
+				System.getProperty("user.home").concat(System.getProperty("file.separator")).concat(".jskat"));
 	}
 
 	/**
 	 * Resets neural networks
 	 */
 	public void resetNeuralNetworks() {
-		SkatNetworks.resetNeuralNetworks();
+		SkatNetworks.instance().resetNeuralNetworks();
 	}
 
 	/**
 	 * Saves the weigths for the neural networks
 	 */
 	public void saveNeuralNetworks() {
-
-		SkatNetworks.saveNetworks(System
-				.getProperty("user.home").concat(System.getProperty("file.separator")).concat(".jskat")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		SkatNetworks.instance().saveNetworks(
+				System.getProperty("user.home").concat(System.getProperty("file.separator")).concat(".jskat")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	/**

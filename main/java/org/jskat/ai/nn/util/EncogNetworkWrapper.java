@@ -1,8 +1,5 @@
 package org.jskat.ai.nn.util;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-
 import org.encog.engine.network.activation.ActivationSigmoid;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataPair;
@@ -14,12 +11,15 @@ import org.encog.neural.networks.PersistBasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 
+/**
+ * Wraps the Encog network to fulfill the interface {@link INeuralNetwork}
+ */
 public class EncogNetworkWrapper implements INeuralNetwork {
 
-	private BasicNetwork network;
+	private final BasicNetwork network;
 	private final PersistBasicNetwork networkPersister;
 
-	public EncogNetworkWrapper(NetworkTopology newTopo) {
+	public EncogNetworkWrapper(final NetworkTopology newTopo) {
 		network = new BasicNetwork();
 		network.addLayer(new BasicLayer(null, true, newTopo.getInputNeuronCount()));
 		for (int i = 0; i < newTopo.getHiddenLayerCount(); i++) {
@@ -38,7 +38,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 		return 0;
 	}
 
-	public double train(double[][] inputs, double[][] outputs) {
+	public double train(final double[][] inputs, final double[][] outputs) {
 		BasicMLDataSet trainingSet = new BasicMLDataSet(inputs, outputs);
 		final ResilientPropagation train = new ResilientPropagation(network, trainingSet);
 		train.iteration((int) trainingSet.getRecordCount());
@@ -46,7 +46,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	}
 
 	@Override
-	public double adjustWeights(double[] inputs, double[] outputs) {
+	public double adjustWeights(final double[] inputs, final double[] outputs) {
 		BasicMLData input = new BasicMLData(inputs);
 		BasicMLData output = new BasicMLData(outputs);
 		MLDataPair dataPair = new BasicMLDataPair(input, output);
@@ -63,7 +63,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	}
 
 	@Override
-	public double getPredictedOutcome(double[] inputs) {
+	public double getPredictedOutcome(final double[] inputs) {
 		MLData inputData = new BasicMLData(inputs);
 		MLData output = network.compute(inputData);
 		return output.getData(0);
@@ -79,21 +79,24 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean saveNetwork(String fileName) {
-		try {
-			networkPersister.save(new FileOutputStream(fileName), network);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return true;
+	public boolean saveNetwork(final String fileName) {
+		// try {
+		// networkPersister.save(new FileOutputStream(fileName), network);
+		// } catch (FileNotFoundException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// return true;
+		return false;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void loadNetwork(String fileName, int inputNeurons, int hiddenNeurons, int outputNeurons) {
-		network = (BasicNetwork) networkPersister.read(getClass().getResourceAsStream(fileName));
+	public void loadNetwork(final String fileName, final int inputNeurons, final int hiddenNeurons,
+			final int outputNeurons) {
+		// network = (BasicNetwork)
+		// networkPersister.read(getClass().getResourceAsStream(fileName));
 	}
 }
