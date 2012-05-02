@@ -20,6 +20,9 @@
  */
 package org.jskat.util.rule;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.SkatGameData;
@@ -46,11 +49,18 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 		boolean result = false;
 
 		if (gameData.getScore(gameData.getDeclarer()) > 60) {
-			// the single player has made more than 60 points
+			// declarer has made more than 60 points
+			// if (!isOverbid(gameData)) {
+			// declare should not overbid
 			result = true;
+			// }
 		}
 
 		return result;
+	}
+
+	private boolean isOverbid(SkatGameData gameData) {
+		return gameData.getBidValue() > calcGameResult(gameData);
 	}
 
 	/**
@@ -158,25 +168,14 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 	 *            Game data
 	 * @return TRUE if the game was a schneider game
 	 */
-	public boolean isSchneider(SkatGameData gameData) {
+	public static boolean isSchneider(SkatGameData gameData) {
 
 		boolean result = false;
 
-		Player singlePlayer = gameData.getDeclarer();
-
-		if (gameData.isGameLost()) {
-
-			if (gameData.getScore(singlePlayer) < 31) {
-				// single player lost and has also played schneider
-				result = true;
-			}
-		} else {
-
-			if (gameData.getScore(singlePlayer.getLeftNeighbor()) < 31
-					|| gameData.getScore(singlePlayer.getRightNeighbor()) < 31) {
-				// one of the opponents has played schneider
-				result = true;
-			}
+		if (gameData.getScore(Player.FOREHAND) < 31 || gameData.getScore(Player.MIDDLEHAND) < 31
+				|| gameData.getScore(Player.REARHAND) < 31) {
+			// one player was schneider
+			result = true;
 		}
 
 		return result;
@@ -190,32 +189,19 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 	 *            Game data
 	 * @return TRUE if the game was a schwarz game
 	 */
-	public boolean isSchwarz(SkatGameData gameData) {
+	public static boolean isSchwarz(SkatGameData gameData) {
 
 		boolean result = false;
-
-		int trickWinnerCount[] = { 0, 0, 0 };
+		Set<Player> trickWinners = new HashSet<Player>();
 
 		for (int i = 0; i < gameData.getTricks().size(); i++) {
-			// count all tricks made by the players
-			trickWinnerCount[gameData.getTrickWinner(i).ordinal()]++;
+			trickWinners.add(gameData.getTrickWinner(i));
 		}
 
-		Player singlePlayer = gameData.getDeclarer();
-
-		if (gameData.isGameLost()) {
-
-			if (trickWinnerCount[singlePlayer.ordinal()] == 0) {
-				// single player lost and has also played schwarz
-				result = true;
-			} else {
-
-				if (trickWinnerCount[(singlePlayer.ordinal() + 1) % 3] == 0
-						|| trickWinnerCount[(singlePlayer.ordinal() + 2) % 3] == 0) {
-					// one of the opponents has played schwarz
-					result = true;
-				}
-			}
+		if (!trickWinners.contains(Player.FOREHAND) || !trickWinners.contains(Player.MIDDLEHAND)
+				|| !trickWinners.contains(Player.REARHAND)) {
+			// one player made no trick
+			result = true;
 		}
 
 		return result;
