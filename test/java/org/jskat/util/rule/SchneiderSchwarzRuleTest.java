@@ -40,7 +40,7 @@ public class SchneiderSchwarzRuleTest extends AbstractJSkatTest {
 	private SkatGameData data;
 	private GameAnnouncementFactory factory;
 
-	private static SuitGrandRules clubRules = (SuitGrandRules) SkatRuleFactory.getSkatRules(GameType.CLUBS);
+	private static SuitGrandRule clubRules = (SuitGrandRule) SkatRuleFactory.getSkatRules(GameType.CLUBS);
 
 	/**
 	 * @see BeforeClass
@@ -82,7 +82,7 @@ public class SchneiderSchwarzRuleTest extends AbstractJSkatTest {
 	public void testCast001() {
 
 		data.setAnnouncement(factory.getAnnouncement());
-		SuitGrandRules nullRules = (SuitGrandRules) SkatRuleFactory.getSkatRules(GameType.NULL);
+		SuitGrandRule nullRules = (SuitGrandRule) SkatRuleFactory.getSkatRules(GameType.NULL);
 	}
 
 	/**
@@ -92,6 +92,6 @@ public class SchneiderSchwarzRuleTest extends AbstractJSkatTest {
 	public void testCast002() {
 
 		data.setAnnouncement(factory.getAnnouncement());
-		SuitGrandRules nullRules = (SuitGrandRules) SkatRuleFactory.getSkatRules(GameType.RAMSCH);
+		SuitGrandRule nullRules = (SuitGrandRule) SkatRuleFactory.getSkatRules(GameType.RAMSCH);
 	}
 }

@@ -23,20 +23,18 @@ package org.jskat.util.rule;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
-import org.jskat.util.Rank;
-import org.jskat.util.Suit;
 
 /**
- * Implementation of skat rules for Suit games
+ * Implementation of skat rules for Grand games
  */
-public class SuitRules extends SuitGrandRules {
+public class GrandRule extends SuitGrandRule {
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
 	public int getMultiplier(CardList cards, GameType gameType) {
-		if (gameType == GameType.GRAND || gameType == GameType.RAMSCH || gameType == GameType.NULL)
+		if (gameType != GameType.GRAND)
 			throw new IllegalArgumentException("Wrong ruleset - " + gameType);
 		int result = 1;
 		if (cards.contains(Card.CJ)) {
@@ -47,13 +45,6 @@ public class SuitRules extends SuitGrandRules {
 					result++;
 					if (cards.contains(Card.DJ)) {
 						result++;
-						for (Rank r : Rank.getRankList()) {
-							if (cards.contains(Card.getCard(Suit.valueOf(gameType.toString()), r))) {
-								result++;
-							} else {
-								break;
-							}
-						}
 					}
 				}
 			}
@@ -65,13 +56,6 @@ public class SuitRules extends SuitGrandRules {
 					result++;
 					if (!cards.contains(Card.DJ)) {
 						result++;
-						for (Rank r : Rank.getRankList()) {
-							if (!cards.contains(Card.getCard(Suit.valueOf(gameType.toString()), r))) {
-								result++;
-							} else {
-								break;
-							}
-						}
 					}
 				}
 			}

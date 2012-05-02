@@ -25,7 +25,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.PlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
-import org.jskat.util.rule.BasicSkatRules;
+import org.jskat.util.rule.SkatRule;
 
 
 /**
@@ -36,7 +36,7 @@ public class SinglePlayer extends AbstractCardPlayer {
 
 	/** log */
 	private Log log = LogFactory.getLog(SinglePlayer.class);
-	private BasicSkatRules rules;
+	private SkatRule rules;
 
 	/**
 	 * Constructor
@@ -44,7 +44,7 @@ public class SinglePlayer extends AbstractCardPlayer {
 	 * @param cards
 	 * @param rules
 	 */
-	public SinglePlayer(CardList cards, BasicSkatRules rules) {
+	public SinglePlayer(CardList cards, SkatRule rules) {
 		super(cards);
 		log.debug("Constructing new single player.");
 		this.rules = rules;

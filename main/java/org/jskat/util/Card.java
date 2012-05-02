@@ -21,7 +21,7 @@
 package org.jskat.util;
 
 import org.jskat.util.rule.SkatRuleFactory;
-import org.jskat.util.rule.SuitGrandRamschRules;
+import org.jskat.util.rule.SuitGrandRamschRule;
 
 /**
  * All cards in a skat game
@@ -285,7 +285,7 @@ public enum Card {
 
 		if (gameType != GameType.NULL) {
 
-			result = ((SuitGrandRamschRules) SkatRuleFactory.getSkatRules(gameType)).isTrump(gameType, this);
+			result = ((SuitGrandRamschRule) SkatRuleFactory.getSkatRules(gameType)).isTrump(gameType, this);
 		}
 
 		return result;

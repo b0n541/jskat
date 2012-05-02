@@ -34,9 +34,9 @@ public class SkatRuleFactory {
 	 *            Game type
 	 * @return SkatRules object
 	 */
-	public static BasicSkatRules getSkatRules(GameType gameType) {
+	public static SkatRule getSkatRules(GameType gameType) {
 
-		BasicSkatRules rules = null;
+		SkatRule rules = null;
 
 		switch (gameType) {
 		case CLUBS:
@@ -61,11 +61,11 @@ public class SkatRuleFactory {
 		return rules;
 	}
 
-	private static SuitRules suitRules = new SuitRules();
+	private static SuitRule suitRules = new SuitRule();
 
-	private static GrandRules grandRules = new GrandRules();
+	private static GrandRule grandRules = new GrandRule();
 
-	private static BasicSkatRules nullRules = new NullRules();
+	private static SkatRule nullRules = new NullRule();
 
-	private static BasicSkatRules ramschRules = new RamschRules();
+	private static SkatRule ramschRules = new RamschRule();
 }

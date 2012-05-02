@@ -36,16 +36,16 @@ public class BasicSkatRuleTest extends AbstractJSkatTest {
 
 	private CardList hand = new CardList();
 
-	private static BasicSkatRules clubRules = SkatRuleFactory.getSkatRules(GameType.CLUBS);
-	private static BasicSkatRules spadeRules = SkatRuleFactory.getSkatRules(GameType.SPADES);
-	private static BasicSkatRules heartRules = SkatRuleFactory.getSkatRules(GameType.HEARTS);
-	private static BasicSkatRules diamondRules = SkatRuleFactory.getSkatRules(GameType.DIAMONDS);
-	private static BasicSkatRules grandRules = SkatRuleFactory.getSkatRules(GameType.GRAND);
-	private static BasicSkatRules nullRules = SkatRuleFactory.getSkatRules(GameType.NULL);
-	private static BasicSkatRules ramschRules = SkatRuleFactory.getSkatRules(GameType.RAMSCH);
+	private static SkatRule clubRules = SkatRuleFactory.getSkatRules(GameType.CLUBS);
+	private static SkatRule spadeRules = SkatRuleFactory.getSkatRules(GameType.SPADES);
+	private static SkatRule heartRules = SkatRuleFactory.getSkatRules(GameType.HEARTS);
+	private static SkatRule diamondRules = SkatRuleFactory.getSkatRules(GameType.DIAMONDS);
+	private static SkatRule grandRules = SkatRuleFactory.getSkatRules(GameType.GRAND);
+	private static SkatRule nullRules = SkatRuleFactory.getSkatRules(GameType.NULL);
+	private static SkatRule ramschRules = SkatRuleFactory.getSkatRules(GameType.RAMSCH);
 
 	/**
-	 * Checks @see NullRules#isCardAllowed(GameType, Card, CardList, Card)
+	 * Checks @see NullRule#isCardAllowed(GameType, Card, CardList, Card)
 	 */
 	@Test
 	public void isCardAllowedNull001() {
@@ -53,7 +53,7 @@ public class BasicSkatRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see GrandRules#isCardAllowed(GameType, Card, CardList, Card)
+	 * Checks @see GrandRule#isCardAllowed(GameType, Card, CardList, Card)
 	 */
 	@Test
 	public void isCardAllowedGrand001() {
@@ -61,7 +61,7 @@ public class BasicSkatRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see SuitRules#isCardAllowed(GameType, Card, CardList, Card)
+	 * Checks @see SuitRule#isCardAllowed(GameType, Card, CardList, Card)
 	 */
 	@Test
 	public void isCardAllowedSuit001() {
@@ -69,7 +69,7 @@ public class BasicSkatRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see SuitRules#isCardAllowed(GameType, Card, CardList, Card)
+	 * Checks @see SuitRule#isCardAllowed(GameType, Card, CardList, Card)
 	 */
 	@Test
 	public void isCardAllowedSuit002() {
@@ -83,7 +83,7 @@ public class BasicSkatRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see SuitRules#isCardAllowed(GameType, Card, CardList, Card)
+	 * Checks @see SuitRule#isCardAllowed(GameType, Card, CardList, Card)
 	 */
 	@Test
 	public void isCardAllowedSuit003() {
@@ -97,7 +97,7 @@ public class BasicSkatRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see RamschRules#isCardAllowed(GameType, Card, CardList, Card)
+	 * Checks @see RamschRule#isCardAllowed(GameType, Card, CardList, Card)
 	 */
 	@Test
 	public void isCardAllowedRamsch001() {
@@ -105,7 +105,7 @@ public class BasicSkatRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see NullRules#isCardBeatsCard(GameType, Card, Card)
+	 * Checks @see NullRule#isCardBeatsCard(GameType, Card, Card)
 	 */
 	@Test
 	public void isCardBeatsCardNull001() {
@@ -113,7 +113,7 @@ public class BasicSkatRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see GrandRules#isCardBeatsCard(GameType, Card, Card)
+	 * Checks @see GrandRule#isCardBeatsCard(GameType, Card, Card)
 	 */
 	@Test
 	public void isCardBeatsCardGrand001() {
@@ -121,7 +121,7 @@ public class BasicSkatRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see SuitRules#isCardBeatsCard(GameType, Card, Card)
+	 * Checks @see SuitRule#isCardBeatsCard(GameType, Card, Card)
 	 */
 	@Test
 	public void isCardBeatsCardSuit001() {
@@ -129,7 +129,7 @@ public class BasicSkatRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see SuitRules#isCardBeatsCard(GameType, Card, Card)
+	 * Checks @see SuitRule#isCardBeatsCard(GameType, Card, Card)
 	 */
 	@Test
 	public void isCardBeatsCardSuit002() {
@@ -137,7 +137,7 @@ public class BasicSkatRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see SuitRules#isCardBeatsCard(GameType, Card, Card)
+	 * Checks @see SuitRule#isCardBeatsCard(GameType, Card, Card)
 	 */
 	@Test
 	public void isCardBeatsCardSuit003() {
@@ -145,7 +145,7 @@ public class BasicSkatRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see SuitRules#isCardBeatsCard(GameType, Card, Card)
+	 * Checks @see SuitRule#isCardBeatsCard(GameType, Card, Card)
 	 */
 	@Test
 	public void isCardBeatsCardSuit004() {
@@ -153,7 +153,7 @@ public class BasicSkatRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see RamschRules#isCardBeatsCard(GameType, Card, Card)
+	 * Checks @see RamschRule#isCardBeatsCard(GameType, Card, Card)
 	 */
 	@Test
 	public void isCardBeatsCardRamsch001() {

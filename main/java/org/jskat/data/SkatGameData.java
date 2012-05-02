@@ -22,8 +22,10 @@ package org.jskat.data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -33,8 +35,8 @@ import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
-import org.jskat.util.rule.BasicSkatRules;
-import org.jskat.util.rule.RamschRules;
+import org.jskat.util.rule.RamschRule;
+import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
 
 /**
@@ -108,7 +110,7 @@ public class SkatGameData {
 	/**
 	 * Skat rules according the game type
 	 */
-	private BasicSkatRules rules;
+	private SkatRule rules;
 
 	/**
 	 * The game announcement made by the declarer
@@ -262,7 +264,7 @@ public class SkatGameData {
 	 * @param singlePlayer
 	 *            Player ID of the single player
 	 */
-	public void setDeclarer(Player singlePlayer) {
+	public void setDeclarer(final Player singlePlayer) {
 
 		log.debug("Current single Player " + singlePlayer); //$NON-NLS-1$
 
@@ -285,7 +287,7 @@ public class SkatGameData {
 	 * @param value
 	 *            Highest bid value
 	 */
-	public void setBidValue(int value) {
+	public void setBidValue(final int value) {
 
 		highestBidValue = value;
 		log.debug("setBidValue(" + value + ")"); //$NON-NLS-1$//$NON-NLS-2$
@@ -414,7 +416,7 @@ public class SkatGameData {
 	 *            The ID of a player
 	 * @return The score of a player
 	 */
-	public int getScore(Player player) {
+	public int getScore(final Player player) {
 
 		return playerPoints.get(player).intValue();
 	}
@@ -425,7 +427,7 @@ public class SkatGameData {
 	 * @param newScore
 	 *            New score
 	 */
-	public void setDeclarerScore(int newScore) {
+	public void setDeclarerScore(final int newScore) {
 
 		playerPoints.put(declarer, Integer.valueOf(newScore));
 	}
@@ -478,9 +480,13 @@ public class SkatGameData {
 			if (!result.isWon()) {
 				// game could be won already, because of playing schwarz of an
 				// opponent
-				result.setWon(rules.calcGameWon(this));
+				result.setWon(rules.isGameWon(this));
 			}
 			result.setGameValue(rules.calcGameResult(this));
+
+			if (rules.isOverbid(this)) {
+				result.setOverBidded(true);
+			}
 		}
 
 		if (GameType.CLUBS.equals(announcement.gameType) || GameType.SPADES.equals(announcement.gameType)
@@ -493,16 +499,6 @@ public class SkatGameData {
 			result.setPlayWithJacks(rules.isPlayWithJacks(this));
 		} else if (GameType.RAMSCH.equals(announcement.gameType)) {
 			finishRamschGame();
-		}
-
-		if (result.isWon() && getBidValue() > result.getGameValue()) {
-
-			log.debug("Overbidding: Game is lost"); //$NON-NLS-1$
-			// Game was overbidded
-			// game is lost despite the winning of the single player
-			result.setOverBidded(true);
-			result.setWon(false);
-			result.setGameValue(result.getGameValue() * -2);
 		}
 	}
 
@@ -565,7 +561,7 @@ public class SkatGameData {
 	 * @param newResult
 	 *            Game result
 	 */
-	public void setResult(SkatGameResult newResult) {
+	public void setResult(final SkatGameResult newResult) {
 
 		result = newResult;
 	}
@@ -576,7 +572,7 @@ public class SkatGameData {
 	 * @param newTrick
 	 *            New trick
 	 */
-	public void addTrick(Trick newTrick) {
+	public void addTrick(final Trick newTrick) {
 
 		tricks.add(newTrick);
 	}
@@ -589,7 +585,7 @@ public class SkatGameData {
 	 * @param card
 	 *            The ID of the card that was played
 	 */
-	public void setTrickCard(Player player, Card card) {
+	public void setTrickCard(final Player player, final Card card) {
 
 		log.debug(this + ".setTrickCard(" + player + ", " //$NON-NLS-1$ //$NON-NLS-2$
 				+ card + ")"); //$NON-NLS-1$
@@ -639,7 +635,7 @@ public class SkatGameData {
 	 * @param winner
 	 *            The player ID of the winner of the trick
 	 */
-	public void setTrickWinner(int trickNumber, Player winner) {
+	public void setTrickWinner(final int trickNumber, final Player winner) {
 
 		log.debug("setTrickWinner(" + trickNumber + ", " + winner + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
@@ -653,7 +649,7 @@ public class SkatGameData {
 	 *            The number of the trick in a game
 	 * @return The player ID of the trick winner
 	 */
-	public Player getTrickWinner(int trickNumber) {
+	public Player getTrickWinner(final int trickNumber) {
 
 		return tricks.get(trickNumber).getTrickWinner();
 	}
@@ -719,7 +715,7 @@ public class SkatGameData {
 	 *            Player
 	 * @return CardList of Cards from the player
 	 */
-	public CardList getPlayerCards(Player player) {
+	public CardList getPlayerCards(final Player player) {
 
 		return playerHands.get(player);
 	}
@@ -742,7 +738,7 @@ public class SkatGameData {
 	 * @param newSkat
 	 *            CardList of the new skat
 	 */
-	public void setDiscardedSkat(Player player, CardList newSkat) {
+	public void setDiscardedSkat(final Player player, final CardList newSkat) {
 
 		CardList hand = playerHands.get(player);
 
@@ -788,7 +784,7 @@ public class SkatGameData {
 	 * @param card
 	 *            Card that was dealt
 	 */
-	public void setDealtCard(Player player, Card card) {
+	public void setDealtCard(final Player player, final Card card) {
 
 		// remember the dealt cards
 		dealtCards.get(player).add(card);
@@ -805,7 +801,7 @@ public class SkatGameData {
 	 * @param card1
 	 *            Second card
 	 */
-	public void setDealtSkatCards(Card card0, Card card1) {
+	public void setDealtSkatCards(final Card card0, final Card card1) {
 
 		dealtSkat.add(card0);
 		dealtSkat.add(card1);
@@ -821,7 +817,7 @@ public class SkatGameData {
 	 * @param points
 	 *            Points to be added
 	 */
-	public void addPlayerPoints(Player player, int points) {
+	public void addPlayerPoints(final Player player, final int points) {
 
 		playerPoints.put(player, Integer.valueOf(playerPoints.get(player).intValue() + points));
 	}
@@ -833,7 +829,7 @@ public class SkatGameData {
 	 *            Player
 	 * @return Points of the player
 	 */
-	public int getPlayerPoints(Player player) {
+	public int getPlayerPoints(final Player player) {
 
 		return playerPoints.get(player).intValue();
 	}
@@ -856,7 +852,7 @@ public class SkatGameData {
 	 * @param bidValue
 	 *            Highest bid value so far
 	 */
-	public void setPlayerBid(Player player, int bidValue) {
+	public void setPlayerBid(final Player player, final int bidValue) {
 
 		playerBids.put(player, Integer.valueOf(bidValue));
 	}
@@ -868,7 +864,7 @@ public class SkatGameData {
 	 *            Player
 	 * @return Highest bid value so far
 	 */
-	public int getPlayerBid(Player player) {
+	public int getPlayerBid(final Player player) {
 
 		return playerBids.get(player).intValue();
 	}
@@ -881,7 +877,7 @@ public class SkatGameData {
 	 * @param isPassing
 	 *            TRUE, if the player passes
 	 */
-	public void setPlayerPass(Player player, boolean isPassing) {
+	public void setPlayerPass(final Player player, final boolean isPassing) {
 
 		playerPasses.put(player, Boolean.valueOf(isPassing));
 	}
@@ -893,7 +889,7 @@ public class SkatGameData {
 	 *            Player
 	 * @return TRUE, if the player passes
 	 */
-	public boolean isPlayerPass(Player player) {
+	public boolean isPlayerPass(final Player player) {
 
 		return playerPasses.get(player).booleanValue();
 	}
@@ -922,7 +918,7 @@ public class SkatGameData {
 	 * @param announcement
 	 *            The game announcement
 	 */
-	public void setAnnouncement(GameAnnouncement announcement) {
+	public void setAnnouncement(final GameAnnouncement announcement) {
 
 		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 		factory.setGameType(announcement.getGameType());
@@ -987,7 +983,7 @@ public class SkatGameData {
 	 * @param isIspaRules
 	 *            TRUE when the game was played under ISPA rules
 	 */
-	public void setIspaRules(boolean isIspaRules) {
+	public void setIspaRules(final boolean isIspaRules) {
 		ispaRules = isIspaRules;
 	}
 
@@ -997,7 +993,7 @@ public class SkatGameData {
 	 * @param newState
 	 *            New game state
 	 */
-	public void setGameState(GameState newState) {
+	public void setGameState(final GameState newState) {
 
 		gameState = newState;
 	}
@@ -1016,7 +1012,7 @@ public class SkatGameData {
 	 * Sets the schneider and schwarz flag according the player points
 	 */
 	public void setSchneiderSchwarz() {
-		// FIXME this is rule logic --> move to SuitGrandRules
+		// FIXME this is rule logic --> move to SuitGrandRule
 		int declarerPoints = getPlayerPoints(declarer);
 
 		if (declarerPoints >= 89 || declarerPoints <= 30) {
@@ -1031,12 +1027,12 @@ public class SkatGameData {
 	}
 
 	public void setJungfrauDurchmarsch() {
-		// FIXME this is rule logic --> move to RamschRules
+		// FIXME this is rule logic --> move to RamschRule
 		for (Player currPlayer : Player.values()) {
-			if (RamschRules.isDurchmarsch(currPlayer, this)) {
+			if (RamschRule.isDurchmarsch(currPlayer, this)) {
 				result.setDurchmarsch(true);
 			} else {
-				if (RamschRules.isJungfrau(currPlayer, this)) {
+				if (RamschRule.isJungfrau(currPlayer, this)) {
 					result.setJungfrau(true);
 				}
 			}
@@ -1058,7 +1054,7 @@ public class SkatGameData {
 	 * @param newDealer
 	 *            Dealing player
 	 */
-	public void setDealer(Player newDealer) {
+	public void setDealer(final Player newDealer) {
 		dealer = newDealer;
 	}
 
@@ -1069,7 +1065,7 @@ public class SkatGameData {
 	 *            Player
 	 * @return Player name
 	 */
-	public String getPlayerName(Player player) {
+	public String getPlayerName(final Player player) {
 		return playerNames.get(player);
 	}
 
@@ -1081,7 +1077,7 @@ public class SkatGameData {
 	 * @param playerName
 	 *            Player name
 	 */
-	public void setPlayerName(Player player, String playerName) {
+	public void setPlayerName(final Player player, final String playerName) {
 		playerNames.put(player, playerName);
 	}
 
@@ -1101,7 +1097,7 @@ public class SkatGameData {
 	 * @param isDeclarerPickedUpSkat
 	 *            TRUE, if the declarer picked up the skat
 	 */
-	public void setDeclarerPickedUpSkat(boolean isDeclarerPickedUpSkat) {
+	public void setDeclarerPickedUpSkat(final boolean isDeclarerPickedUpSkat) {
 		this.declarerPickedUpSkat = isDeclarerPickedUpSkat;
 	}
 
@@ -1161,7 +1157,40 @@ public class SkatGameData {
 	 * @param activePlayer
 	 *            Active player
 	 */
-	public void setActivePlayer(Player activePlayer) {
+	public void setActivePlayer(final Player activePlayer) {
 		this.activePlayer = activePlayer;
+	}
+
+	/**
+	 * Checks whether one player made no trick
+	 * 
+	 * @param gameData
+	 *            Game data
+	 * @return TRUE if a player made no trick
+	 */
+	public boolean isPlayerMadeNoTrick() {
+
+		return isPlayerMadeNoTrick(Player.FOREHAND) || isPlayerMadeNoTrick(Player.MIDDLEHAND)
+				|| isPlayerMadeNoTrick(Player.REARHAND);
+	}
+
+	/**
+	 * Checks whether a certain player made no trick
+	 * 
+	 * @param gameData
+	 *            Game data
+	 * @param player
+	 *            Player to check
+	 * @return TRUE if the player made not trick
+	 */
+	public boolean isPlayerMadeNoTrick(final Player player) {
+
+		Set<Player> trickWinners = new HashSet<Player>();
+
+		for (int i = 0; i < getTricks().size(); i++) {
+			trickWinners.add(getTrickWinner(i));
+		}
+
+		return !trickWinners.contains(player);
 	}
 }

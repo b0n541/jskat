@@ -22,6 +22,7 @@ package org.jskat.util.rule;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jskat.data.SkatGameData;
 import org.jskat.data.Trick;
 import org.jskat.util.Card;
 import org.jskat.util.GameType;
@@ -30,15 +31,27 @@ import org.jskat.util.Player;
 /**
  * Abstract implementation of skat rules
  */
-public abstract class AbstractSkatRules implements BasicSkatRules {
+public abstract class AbstractSkatRule implements SkatRule {
 
-	private static Log log = LogFactory.getLog(AbstractSkatRules.class);
+	private static Log log = LogFactory.getLog(AbstractSkatRule.class);
+
+	/**
+	 * Checks whether a game was overbid
+	 * 
+	 * @param gameData
+	 *            Game data
+	 * @return TRUE if the game was overbid
+	 */
+	@Override
+	public boolean isOverbid(final SkatGameData gameData) {
+		return gameData.getBidValue() > getGameValueForWonGame(gameData);
+	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Player calculateTrickWinner(GameType gameType, Trick trick) {
+	public Player calculateTrickWinner(final GameType gameType, final Trick trick) {
 
 		Player trickWinner = null;
 		Card first = trick.getFirstCard();

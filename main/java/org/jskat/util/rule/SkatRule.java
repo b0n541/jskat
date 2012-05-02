@@ -31,7 +31,7 @@ import org.jskat.util.Suit;
 /**
  * Interface for all skat rules objects
  */
-public interface BasicSkatRules {
+public interface SkatRule {
 
 	/**
 	 * Checks, whether the given card is allowed to be played, also considering
@@ -69,7 +69,16 @@ public interface BasicSkatRules {
 	 *            Game data
 	 * @return TRUE if the game was won
 	 */
-	public boolean calcGameWon(SkatGameData gameData);
+	public boolean isGameWon(SkatGameData gameData);
+
+	/**
+	 * Calculates the value for a game if won
+	 * 
+	 * @param gameData
+	 *            Game data
+	 * @return Value of the game if won
+	 */
+	public int getGameValueForWonGame(SkatGameData gameData);
 
 	/**
 	 * Computes the value for a game
@@ -121,4 +130,13 @@ public interface BasicSkatRules {
 	 * @return TRUE if the game is played with jacks
 	 */
 	public boolean isPlayWithJacks(SkatGameData gameData);
+
+	/**
+	 * Checks whether a game was overbid
+	 * 
+	 * @param gameData
+	 *            Game data
+	 * @return TRUE if the game was overbid
+	 */
+	public boolean isOverbid(final SkatGameData gameData);
 }

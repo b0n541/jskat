@@ -29,10 +29,10 @@ import org.jskat.util.Suit;
 /**
  * Rules that are in common for suit, grand and ramsch games
  */
-public abstract class SuitGrandRamschRules extends AbstractSkatRules {
+public abstract class SuitGrandRamschRule extends AbstractSkatRule {
 
 	/**
-	 * @see BasicSkatRules#isCardAllowed(GameType, Card, CardList, Card)
+	 * @see SkatRule#isCardAllowed(GameType, Card, CardList, Card)
 	 */
 	@Override
 	public boolean isCardAllowed(GameType gameType, Card initialCard, CardList hand, Card card) {
@@ -63,7 +63,7 @@ public abstract class SuitGrandRamschRules extends AbstractSkatRules {
 	}
 
 	/**
-	 * @see BasicSkatRules#isCardBeatsCard(GameType, Card, Card)
+	 * @see SkatRule#isCardBeatsCard(GameType, Card, Card)
 	 */
 	@Override
 	public boolean isCardBeatsCard(GameType gameType, Card cardToBeat, Card card) {
@@ -103,7 +103,7 @@ public abstract class SuitGrandRamschRules extends AbstractSkatRules {
 	}
 
 	/**
-	 * @see BasicSkatRules#hasSuit(GameType, CardList, Suit)
+	 * @see SkatRule#hasSuit(GameType, CardList, Suit)
 	 */
 	@Override
 	public boolean hasSuit(GameType gameType, CardList hand, Suit suit) {

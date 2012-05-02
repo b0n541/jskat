@@ -44,7 +44,7 @@ import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
-import org.jskat.util.rule.BasicSkatRules;
+import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
 
 /**
@@ -177,7 +177,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			factory.setGameType(gameType);
 			data.setAnnouncement(factory.getAnnouncement());
 
-			BasicSkatRules skatRules = SkatRuleFactory.getSkatRules(gameType);
+			SkatRule skatRules = SkatRuleFactory.getSkatRules(gameType);
 			int currGameResult = skatRules.calcGameResult(data);
 
 			if (currGameResult >= bidValue) {

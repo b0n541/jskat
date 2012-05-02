@@ -42,7 +42,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 
 	private GameAnnouncementFactory factory;
 
-	private static BasicSkatRules grandRules = SkatRuleFactory
+	private static SkatRule grandRules = SkatRuleFactory
 			.getSkatRules(GameType.GRAND);
 
 	/**
@@ -56,7 +56,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see GrandRules#calcGameWon()
+	 * Checks @see GrandRule#calcGameWon()
 	 */
 	@Test
 	public void calcGameWon() {
@@ -69,7 +69,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see GrandRules#calcGameResult()
+	 * Checks @see GrandRule#calcGameResult()
 	 */
 	@Test
 	public void calcGameLost() {
@@ -82,7 +82,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see GrandRules#calcGameResult()
+	 * Checks @see GrandRule#calcGameResult()
 	 */
 	@Test
 	public void calcGameResultGameWonClubJack() {
@@ -98,7 +98,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see GrandRules#calcGameResult()
+	 * Checks @see GrandRule#calcGameResult()
 	 */
 	@Test
 	public void calcGameResultGameWonClubAndSpadeJack() {
@@ -115,7 +115,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see GrandRules#calcGameResult()
+	 * Checks @see GrandRule#calcGameResult()
 	 */
 	@Test
 	public void calcGameResultGameWonClubAndHeartJack() {
@@ -131,7 +131,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see GrandRules#calcGameResult()
+	 * Checks @see GrandRule#calcGameResult()
 	 */
 	@Test
 	public void calcGameResultGameWonClubJackHand() {
@@ -139,7 +139,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 		data.setAnnouncement(factory.getAnnouncement());
 		data.setDeclarer(Player.FOREHAND);
 		data.setDeclarerScore(61);
-		data.getGameResult().setWon(grandRules.calcGameWon(data));
+		data.getGameResult().setWon(grandRules.isGameWon(data));
 		data.setDealtCard(Player.FOREHAND, Card.CJ);
 		data.setDealtCard(Player.FOREHAND, Card.HJ);
 		data.calcResult();
@@ -147,7 +147,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see GrandRules#calcGameResult()
+	 * Checks @see GrandRule#calcGameResult()
 	 */
 	@Test
 	public void calcGameResultGameWonClubJackSchneider() {
@@ -164,7 +164,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see GrandRules#calcGameResult()
+	 * Checks @see GrandRule#calcGameResult()
 	 */
 	@Test
 	public void calcGameResultGameWonClubJackSchneiderSchwarz() {
@@ -182,7 +182,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see GrandRules#calcGameResult()
+	 * Checks @see GrandRule#calcGameResult()
 	 */
 	@Test
 	public void calcGameResultGameWonClubJackSchneiderAndAnnounced() {
@@ -199,7 +199,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see GrandRules#calcGameResult()
+	 * Checks @see GrandRule#calcGameResult()
 	 */
 	@Test
 	public void calcGameResultGameWonClubJackSchwarzAndAnnounced() {

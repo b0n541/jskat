@@ -37,7 +37,7 @@ import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
-import org.jskat.util.rule.BasicSkatRules;
+import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
 
 /**
@@ -293,7 +293,7 @@ public class PlayerKnowledge {
 					}
 				}
 			} else {
-				BasicSkatRules skatRules = SkatRuleFactory.getSkatRules(getGameType());
+				SkatRule skatRules = SkatRuleFactory.getSkatRules(getGameType());
 
 				if (firstCard.isTrump(getGameType()) && !cardToCheck.isTrump(getGameType())) {
 					// first card was a trump card, player card was not

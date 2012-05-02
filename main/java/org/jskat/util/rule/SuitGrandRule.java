@@ -20,9 +20,6 @@
  */
 package org.jskat.util.rule;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.SkatGameData;
@@ -36,39 +33,34 @@ import org.jskat.util.SkatConstants;
  * Implements some methods of the interface SkatRules that are the same in suit
  * and grand games
  */
-public abstract class SuitGrandRules extends SuitGrandRamschRules {
+public abstract class SuitGrandRule extends SuitGrandRamschRule {
 
-	private static Log log = LogFactory.getLog(SuitGrandRules.class);
+	private static Log log = LogFactory.getLog(SuitGrandRule.class);
 
 	/**
-	 * @see BasicSkatRules#calcGameWon(SkatGameData)
+	 * @see SkatRule#isGameWon(SkatGameData)
 	 */
 	@Override
-	public final boolean calcGameWon(SkatGameData gameData) {
+	public final boolean isGameWon(final SkatGameData gameData) {
 
 		boolean result = false;
 
 		if (gameData.getScore(gameData.getDeclarer()) > 60) {
 			// declarer has made more than 60 points
-			// if (!isOverbid(gameData)) {
-			// declare should not overbid
-			result = true;
-			// }
+			if (!isOverbid(gameData)) {
+				// declare should not overbid
+				result = true;
+			}
 		}
 
 		return result;
 	}
 
-	private boolean isOverbid(SkatGameData gameData) {
-		return gameData.getBidValue() > calcGameResult(gameData);
-	}
-
 	/**
-	 * @see SuitGrandRamschRules#calcGameResult(SkatGameData)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public int calcGameResult(SkatGameData gameData) {
-
+	public int getGameValueForWonGame(final SkatGameData gameData) {
 		int multiplier = getMultiplier(gameData);
 
 		log.debug("calcSuitResult: after Jacks and Trump: multiplier " + multiplier); //$NON-NLS-1$
@@ -103,7 +95,16 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 
 		log.debug("gameValue" + gameValue); //$NON-NLS-1$
 
-		int result = gameValue * multiplier;
+		return gameValue * multiplier;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int calcGameResult(final SkatGameData gameData) {
+
+		int result = getGameValueForWonGame(gameData);
 
 		if (gameData.isGameLost()) {
 
@@ -122,7 +123,7 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 	 * @return Multiplier
 	 */
 	@Override
-	public int getMultiplier(SkatGameData gameData) {
+	public int getMultiplier(final SkatGameData gameData) {
 
 		int result = 0;
 
@@ -133,7 +134,7 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 		return result;
 	}
 
-	private CardList getDeclarerCards(SkatGameData gameData) {
+	private CardList getDeclarerCards(final SkatGameData gameData) {
 		CardList declarerCards = gameData.getDealtCards().get(gameData.getDeclarer());
 		declarerCards.addAll(gameData.getDealtSkat());
 		return declarerCards;
@@ -143,7 +144,7 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean isPlayWithJacks(SkatGameData gameData) {
+	public boolean isPlayWithJacks(final SkatGameData gameData) {
 		CardList declarerCards = getDeclarerCards(gameData);
 
 		return declarerCards.contains(Card.CJ);
@@ -168,7 +169,7 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 	 *            Game data
 	 * @return TRUE if the game was a schneider game
 	 */
-	public static boolean isSchneider(SkatGameData gameData) {
+	public static boolean isSchneider(final SkatGameData gameData) {
 
 		boolean result = false;
 
@@ -182,28 +183,10 @@ public abstract class SuitGrandRules extends SuitGrandRamschRules {
 	}
 
 	/**
-	 * Checks whether a game was a schwarz game<br>
-	 * schwarz means one party made no trick
-	 * 
-	 * @param gameData
-	 *            Game data
-	 * @return TRUE if the game was a schwarz game
+	 * Checks whether a game was a schwarz game<br />
+	 * schwarz means one party made no trick or a wrong card was played
 	 */
-	public static boolean isSchwarz(SkatGameData gameData) {
-
-		boolean result = false;
-		Set<Player> trickWinners = new HashSet<Player>();
-
-		for (int i = 0; i < gameData.getTricks().size(); i++) {
-			trickWinners.add(gameData.getTrickWinner(i));
-		}
-
-		if (!trickWinners.contains(Player.FOREHAND) || !trickWinners.contains(Player.MIDDLEHAND)
-				|| !trickWinners.contains(Player.REARHAND)) {
-			// one player made no trick
-			result = true;
-		}
-
-		return result;
+	public static boolean isSchwarz(final SkatGameData gameData) {
+		return gameData.isPlayerMadeNoTrick() || gameData.getResult().isSchwarz();
 	}
 }

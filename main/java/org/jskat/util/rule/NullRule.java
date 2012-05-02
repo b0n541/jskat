@@ -31,45 +31,39 @@ import org.jskat.util.Suit;
  * Implementation of skat rules for Null games
  * 
  */
-public class NullRules extends AbstractSkatRules {
+public class NullRule extends AbstractSkatRule {
 
 	/**
-	 * @see BasicSkatRules#calcGameResult(SkatGameData)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public int calcGameResult(SkatGameData gameData) {
+	public int getGameValueForWonGame(final SkatGameData gameData) {
+		return SkatConstants.getGameBaseValue(gameData.getGameType(), gameData.isHand(), gameData.isOuvert());
+	}
 
-		int gameValue = SkatConstants.getGameBaseValue(gameData.getGameType(), gameData.isHand(), gameData.isOuvert());
-		int multiplier = 1;
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int calcGameResult(final SkatGameData gameData) {
+
+		int result = getGameValueForWonGame(gameData);
 
 		if (gameData.isGameLost()) {
 
 			// Lost game is always counted double
-			multiplier = multiplier * -2;
-		}
-
-		return gameValue * multiplier;
-	}
-
-	@SuppressWarnings("unused")
-	private int getWonTricksByDeclarer(SkatGameData data) {
-
-		int result = 0;
-
-		for (int i = 0; i < data.getTricks().size(); i++) {
-			if (data.getTrickWinner(i).equals(data.getDeclarer())) {
-				result++;
-			}
+			result = result * -2;
 		}
 
 		return result;
 	}
 
 	/**
-	 * @see BasicSkatRules#isCardBeatsCard(GameType, Card, Card)
+	 * @see SkatRule#isCardBeatsCard(GameType, Card, Card)
 	 */
 	@Override
-	public boolean isCardBeatsCard(GameType gameType, Card cardToBeat, Card card) {
+	public boolean isCardBeatsCard(@SuppressWarnings("unused") final GameType gameType, final Card cardToBeat,
+			final Card card) {
 
 		boolean result = false;
 
@@ -85,10 +79,10 @@ public class NullRules extends AbstractSkatRules {
 	}
 
 	/**
-	 * @see BasicSkatRules#isCardAllowed(GameType, Card, CardList, Card)
+	 * @see SkatRule#isCardAllowed(GameType, Card, CardList, Card)
 	 */
 	@Override
-	public boolean isCardAllowed(GameType gameType, Card initialCard, CardList hand, Card card) {
+	public boolean isCardAllowed(final GameType gameType, final Card initialCard, final CardList hand, final Card card) {
 
 		boolean result = false;
 
@@ -108,29 +102,19 @@ public class NullRules extends AbstractSkatRules {
 	}
 
 	/**
-	 * @see BasicSkatRules#calcGameWon(SkatGameData)
+	 * @see SkatRule#isGameWon(SkatGameData)
 	 */
 	@Override
-	public boolean calcGameWon(SkatGameData gameData) {
+	public boolean isGameWon(final SkatGameData gameData) {
 
-		boolean result = true;
-
-		for (int i = 0; i < gameData.getTricks().size(); i++) {
-
-			if (gameData.getTrickWinner(i).equals(gameData.getDeclarer())) {
-				// the single player has won at least one trick
-				result = false;
-			}
-		}
-
-		return result;
+		return gameData.isPlayerMadeNoTrick(gameData.getDeclarer()) && !isOverbid(gameData);
 	}
 
 	/**
-	 * @see BasicSkatRules#hasSuit(GameType, CardList, Suit)
+	 * @see SkatRule#hasSuit(GameType, CardList, Suit)
 	 */
 	@Override
-	public boolean hasSuit(GameType gameType, CardList hand, Suit suit) {
+	public boolean hasSuit(final GameType gameType, final CardList hand, final Suit suit) {
 
 		boolean result = false;
 
@@ -152,7 +136,7 @@ public class NullRules extends AbstractSkatRules {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int getMultiplier(@SuppressWarnings("unused") SkatGameData gameData) {
+	public int getMultiplier(@SuppressWarnings("unused") final SkatGameData gameData) {
 		return 0;
 	}
 
@@ -160,7 +144,7 @@ public class NullRules extends AbstractSkatRules {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean isPlayWithJacks(@SuppressWarnings("unused") SkatGameData gameData) {
+	public boolean isPlayWithJacks(@SuppressWarnings("unused") final SkatGameData gameData) {
 		return false;
 	}
 }

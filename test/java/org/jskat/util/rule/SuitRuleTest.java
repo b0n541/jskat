@@ -21,6 +21,7 @@
 package org.jskat.util.rule;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.jskat.AbstractJSkatTest;
@@ -41,7 +42,7 @@ public class SuitRuleTest extends AbstractJSkatTest {
 
 	private GameAnnouncementFactory factory;
 
-	private static BasicSkatRules clubsRules = SkatRuleFactory.getSkatRules(GameType.CLUBS);
+	private static SkatRule clubsRules = SkatRuleFactory.getSkatRules(GameType.CLUBS);
 
 	/**
 	 * @see BeforeClass
@@ -54,7 +55,7 @@ public class SuitRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see SuitGrandRules#calcGameWon()
+	 * Checks @see SuitGrandRule#calcGameWon()
 	 */
 	@Test
 	public void calcGameWon() {
@@ -62,11 +63,11 @@ public class SuitRuleTest extends AbstractJSkatTest {
 		data.setAnnouncement(factory.getAnnouncement());
 		data.setDeclarer(Player.FOREHAND);
 		data.setDeclarerScore(61);
-		assertTrue(clubsRules.calcGameWon(data));
+		assertTrue(clubsRules.isGameWon(data));
 	}
 
 	/**
-	 * Checks @see SuitGrandRules#calcGameResult()
+	 * Checks @see SuitGrandRule#calcGameResult()
 	 */
 	@Test
 	public void calcGameResultGameWonWithoutJacks() {
@@ -82,7 +83,7 @@ public class SuitRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see SuitGrandRules#calcGameResult()
+	 * Checks @see SuitGrandRule#calcGameResult()
 	 */
 	@Test
 	public void calcGameResultGameWonClubJack() {
@@ -101,7 +102,7 @@ public class SuitRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see GrandRules#calcGameResult()
+	 * Checks @see GrandRule#calcGameResult()
 	 */
 	@Test
 	public void calcGameResultGameWonClubSpadeHeartJack() {
@@ -120,7 +121,7 @@ public class SuitRuleTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Checks @see SuitGrandRules#calcGameResult()
+	 * Checks @see SuitGrandRule#calcGameResult()
 	 */
 	@Test
 	public void calcGameResultGameWonClubSpadeHeartDiamondJack() {
@@ -138,9 +139,9 @@ public class SuitRuleTest extends AbstractJSkatTest {
 		assertEquals(60, data.getResult().getGameValue());
 		assertEquals(60, clubsRules.calcGameResult(data));
 	}
-	
+
 	/**
-	 * Checks @see SuitGrandRules#calcGameResult()
+	 * Checks @see SuitGrandRule#calcGameResult()
 	 */
 	@Test
 	public void calcGameResultGameWonMoreTops() {
@@ -160,5 +161,59 @@ public class SuitRuleTest extends AbstractJSkatTest {
 		assertEquals(84, data.getResult().getGameValue());
 		assertEquals(84, clubsRules.calcGameResult(data));
 	}
-	
+
+	/**
+	 * Test for overbidding<br />
+	 * Middle hand wins the bidding with 22<br/>
+	 * Picks up skat<br />
+	 * Announces Diamonds without one (has SJ, HJ, DJ)<br />
+	 * Middle hand makes 89 points<br />
+	 * Game is lost because of overbidding
+	 */
+	@Test
+	public void testOverbid() {
+		SkatGameData data = new SkatGameData();
+		data.setDealtCard(Player.MIDDLEHAND, Card.SJ);
+		data.setDealtCard(Player.MIDDLEHAND, Card.HJ);
+		data.setDealtCard(Player.MIDDLEHAND, Card.DJ);
+		data.setBidValue(22);
+		data.setDeclarer(Player.MIDDLEHAND);
+		data.setDeclarerPickedUpSkat(true);
+		factory.setGameType(GameType.DIAMONDS);
+		data.setAnnouncement(factory.getAnnouncement());
+
+		data.setDeclarerScore(89);
+
+		data.calcResult();
+
+		assertFalse(data.getResult().isWon());
+		assertEquals(-36, data.getResult().getGameValue());
+		assertTrue(data.getResult().isOverBidded());
+	}
+
+	/**
+	 * Test for overbidding with schneider<br />
+	 * Same as before but this time the declarer played the other player
+	 * schneider, game is won
+	 */
+	@Test
+	public void testOverbidWithSchneider() {
+		SkatGameData data = new SkatGameData();
+		data.setDealtCard(Player.MIDDLEHAND, Card.SJ);
+		data.setDealtCard(Player.MIDDLEHAND, Card.HJ);
+		data.setDealtCard(Player.MIDDLEHAND, Card.DJ);
+		data.setBidValue(22);
+		data.setDeclarer(Player.MIDDLEHAND);
+		data.setDeclarerPickedUpSkat(true);
+		factory.setGameType(GameType.DIAMONDS);
+		data.setAnnouncement(factory.getAnnouncement());
+
+		data.setDeclarerScore(90);
+		data.getResult().setSchneider(true);
+
+		data.calcResult();
+
+		assertTrue(data.getResult().isWon());
+		assertEquals(27, data.getResult().getGameValue());
+	}
 }

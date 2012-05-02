@@ -25,17 +25,17 @@ package org.jskat.data;
  */
 public class SkatGameResult implements Cloneable {
 
-	private int gameValue;
-	private int multiplier;
-	private int finalDeclarerPoints;
-	private int finalOpponentPoints;
-	private boolean playWithJacks;
-	private boolean won;
-	private boolean overBidded;
-	private boolean schneider;
-	private boolean schwarz;
-	private boolean durchmarsch;
-	private boolean jungfrau;
+	private Integer gameValue;
+	private Integer multiplier;
+	private Integer finalDeclarerPoints;
+	private Integer finalOpponentPoints;
+	private Boolean playWithJacks;
+	private Boolean won;
+	private Boolean overBidded;
+	private Boolean schneider;
+	private Boolean schwarz;
+	private Boolean durchmarsch;
+	private Boolean jungfrau;
 
 	/**
 	 * Constructor
@@ -87,7 +87,7 @@ public class SkatGameResult implements Cloneable {
 	 * @param won
 	 *            TRUE, if the game was won
 	 */
-	public void setWon(boolean won) {
+	public void setWon(final boolean won) {
 		this.won = won;
 	}
 
@@ -106,7 +106,7 @@ public class SkatGameResult implements Cloneable {
 	 * @param overBidded
 	 *            TRUE, if the declarer did overvid
 	 */
-	public void setOverBidded(boolean overBidded) {
+	public void setOverBidded(final boolean overBidded) {
 		this.overBidded = overBidded;
 	}
 
@@ -125,7 +125,7 @@ public class SkatGameResult implements Cloneable {
 	 * @param schneider
 	 *            TRUE, if the game was a schneider game
 	 */
-	public void setSchneider(boolean schneider) {
+	public void setSchneider(final boolean schneider) {
 		this.schneider = schneider;
 	}
 
@@ -144,7 +144,7 @@ public class SkatGameResult implements Cloneable {
 	 * @param isSchwarz
 	 *            TRUE, if the game was a schwarz game
 	 */
-	public void setSchwarz(boolean isSchwarz) {
+	public void setSchwarz(final boolean isSchwarz) {
 		schwarz = isSchwarz;
 		if (schwarz) {
 			// a schwarz game is always schneider
@@ -169,7 +169,7 @@ public class SkatGameResult implements Cloneable {
 	 * @param durchmarsch
 	 *            TRUE, if the game was a durchmarsch game
 	 */
-	public void setDurchmarsch(boolean durchmarsch) {
+	public void setDurchmarsch(final boolean durchmarsch) {
 		if (durchmarsch) {
 			this.jungfrau = false;
 		}
@@ -192,7 +192,7 @@ public class SkatGameResult implements Cloneable {
 	 * @param jungfrau
 	 *            TRUE, if the game was a jungfrau game
 	 */
-	public void setJungfrau(boolean isJungfrau) {
+	public void setJungfrau(final boolean isJungfrau) {
 		if (isJungfrau) {
 			this.durchmarsch = false;
 		}
@@ -214,7 +214,7 @@ public class SkatGameResult implements Cloneable {
 	 * @param gameValue
 	 *            Game result
 	 */
-	public void setGameValue(int gameValue) {
+	public void setGameValue(final int gameValue) {
 		this.gameValue = gameValue;
 	}
 
@@ -235,7 +235,7 @@ public class SkatGameResult implements Cloneable {
 	 * @param multiplier
 	 *            Multiplier
 	 */
-	public void setMultiplier(int multiplier) {
+	public void setMultiplier(final int multiplier) {
 		this.multiplier = multiplier;
 	}
 
@@ -254,7 +254,7 @@ public class SkatGameResult implements Cloneable {
 	 * @param playWithJacks
 	 *            TRUE, if the declarer played with jacks
 	 */
-	public void setPlayWithJacks(boolean playWithJacks) {
+	public void setPlayWithJacks(final boolean playWithJacks) {
 		this.playWithJacks = playWithJacks;
 	}
 
@@ -264,7 +264,7 @@ public class SkatGameResult implements Cloneable {
 	 * @param points
 	 *            Final opponent points
 	 */
-	public void setFinalOpponentPoints(int points) {
+	public void setFinalOpponentPoints(final int points) {
 		finalOpponentPoints = points;
 	}
 
@@ -283,7 +283,7 @@ public class SkatGameResult implements Cloneable {
 	 * @param points
 	 *            Final declarer points
 	 */
-	public void setFinalDeclarerPoints(int points) {
+	public void setFinalDeclarerPoints(final int points) {
 		finalDeclarerPoints = points;
 	}
 
@@ -305,16 +305,20 @@ public class SkatGameResult implements Cloneable {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(gameValue).append(", mult:").append(multiplier);
-		if (overBidded)
+		if (overBidded) {
 			sb.append(" (overbidded)");
-		if (durchmarsch)
+		}
+		if (durchmarsch) {
 			sb.append(" (Durchmarsch)");
-		if (jungfrau)
+		}
+		if (jungfrau) {
 			sb.append(" (Jungfrau)");
-		if (schwarz)
+		}
+		if (schwarz) {
 			sb.append(" (Schwarz)");
-		else if (schneider)
+		} else if (schneider) {
 			sb.append(" (Schneider)");
+		}
 		return sb.toString();
 	}
 }

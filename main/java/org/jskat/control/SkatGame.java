@@ -43,7 +43,7 @@ import org.jskat.util.GameType;
 import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
 import org.jskat.util.SkatConstants;
-import org.jskat.util.rule.BasicSkatRules;
+import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
 
 /**
@@ -59,7 +59,7 @@ public class SkatGame extends JSkatThread {
 	private Map<Player, JSkatPlayer> player;
 	private String tableName;
 	private JSkatView view;
-	private BasicSkatRules rules;
+	private SkatRule rules;
 
 	/**
 	 * Constructor

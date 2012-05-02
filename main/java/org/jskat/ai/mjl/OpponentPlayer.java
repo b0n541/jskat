@@ -31,7 +31,7 @@ import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
-import org.jskat.util.rule.NullRules;
+import org.jskat.util.rule.NullRule;
 
 /**
  * @author Markus J. Luzius <markus@luzius.de>
@@ -476,7 +476,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 		int index = -1;
 		boolean lowerCardFound = false;
 		Card bestCard = null;
-		NullRules rules = new NullRules();
+		NullRule rules = new NullRule();
 
 		for (int i = 0; i < cards.size(); i++) {
 

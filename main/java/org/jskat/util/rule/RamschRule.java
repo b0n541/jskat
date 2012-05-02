@@ -29,27 +29,36 @@ import org.jskat.util.Player;
 /**
  * Implementation of skat rules for Ramsch games
  */
-public class RamschRules extends SuitGrandRamschRules {
+public class RamschRule extends SuitGrandRamschRule {
 
 	/**
-	 * @see BasicSkatRules#calcGameResult(SkatGameData)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public int calcGameResult(SkatGameData gameData) {
-
+	public int getGameValueForWonGame(final SkatGameData gameData) {
 		int highestPlayerPoints = getGetHighestPlayerPoints(gameData);
 
 		return highestPlayerPoints * getMultiplier(gameData);
 	}
 
-	private int getGetHighestPlayerPoints(SkatGameData gameData) {
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public int calcGameResult(final SkatGameData gameData) {
+
+		return getGameValueForWonGame(gameData);
+	}
+
+	private static int getGetHighestPlayerPoints(final SkatGameData gameData) {
 
 		int result = 0;
 
 		int foreHandPoints = gameData.getPlayerPoints(Player.FOREHAND);
 		int middleHandPoints = gameData.getPlayerPoints(Player.MIDDLEHAND);
 		int rearHandPoints = gameData.getPlayerPoints(Player.REARHAND);
-		int skatPoints = JSkatOptions.instance().getRamschSkatOwner()==RamschSkatOwner.LOSER?gameData.getSkat().getTotalValue():0;
+		int skatPoints = JSkatOptions.instance().getRamschSkatOwner() == RamschSkatOwner.LOSER ? gameData.getSkat()
+				.getTotalValue() : 0;
 
 		// FIXME (jan 18.11.2011) make this simpler
 		// FIXME (markus 22.02.2012) consider skat points - seems to be missing
@@ -74,10 +83,10 @@ public class RamschRules extends SuitGrandRamschRules {
 	}
 
 	/**
-	 * @see BasicSkatRules#calcGameWon(SkatGameData)
+	 * @see SkatRule#isGameWon(SkatGameData)
 	 */
 	@Override
-	public boolean calcGameWon(SkatGameData gameData) {
+	public boolean isGameWon(final SkatGameData gameData) {
 		return false;
 	}
 
@@ -91,10 +100,11 @@ public class RamschRules extends SuitGrandRamschRules {
 	 *            Game data
 	 * @return TRUE if the player played a durchmarsch
 	 */
-	public final static boolean isDurchmarsch(Player player, SkatGameData gameData) {
+	public final static boolean isDurchmarsch(final Player player, final SkatGameData gameData) {
 		for (Trick t : gameData.getTricks()) {
-			if (t.getTrickWinner() != player)
+			if (t.getTrickWinner() != player) {
 				return false;
+			}
 		}
 		return true;
 	}
@@ -110,10 +120,11 @@ public class RamschRules extends SuitGrandRamschRules {
 	 *            Game data
 	 * @return TRUE if the player was jungfrau
 	 */
-	public final static boolean isJungfrau(Player player, SkatGameData gameData) {
+	public final static boolean isJungfrau(final Player player, final SkatGameData gameData) {
 		for (Trick t : gameData.getTricks()) {
-			if (t.getTrickWinner() == player)
+			if (t.getTrickWinner() == player) {
 				return false;
+			}
 		}
 		return true;
 	}
@@ -122,7 +133,7 @@ public class RamschRules extends SuitGrandRamschRules {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int getMultiplier(SkatGameData gameData) {
+	public int getMultiplier(final SkatGameData gameData) {
 		int multiplier = 1;
 
 		if (gameData.isJungfrau()) {
@@ -137,7 +148,7 @@ public class RamschRules extends SuitGrandRamschRules {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean isPlayWithJacks(SkatGameData gameData) {
+	public boolean isPlayWithJacks(final SkatGameData gameData) {
 		return false;
 	}
 }

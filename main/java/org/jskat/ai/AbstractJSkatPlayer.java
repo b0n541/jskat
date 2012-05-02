@@ -30,7 +30,7 @@ import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
-import org.jskat.util.rule.BasicSkatRules;
+import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
 
 /**
@@ -47,7 +47,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	/** Player knowledge */
 	protected PlayerKnowledge knowledge = new PlayerKnowledge();
 	/** Skat rules for the current skat series */
-	protected BasicSkatRules rules;
+	protected SkatRule rules;
 	/** Summary of the skat game */
 	protected GameSummary gameSummary;
 

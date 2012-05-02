@@ -25,7 +25,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.PlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
-import org.jskat.util.rule.BasicSkatRules;
+import org.jskat.util.rule.SkatRule;
 
 /**
  * @author Markus J. Luzius <markus@luzius.de>
@@ -43,7 +43,7 @@ public class RamschPlayer extends AbstractCardPlayer {
 	 * @param id
 	 *            playerID
 	 */
-	public RamschPlayer(CardList cards, int id, BasicSkatRules rules) {
+	public RamschPlayer(CardList cards, int id, SkatRule rules) {
 		super(cards);
 		log.debug("Constructing new single player.");
 		this.playerID = id;
@@ -130,6 +130,6 @@ public class RamschPlayer extends AbstractCardPlayer {
 
 	/** player id */
 	private int playerID = -1;
-	private BasicSkatRules rules;
+	private SkatRule rules;
 
 }
