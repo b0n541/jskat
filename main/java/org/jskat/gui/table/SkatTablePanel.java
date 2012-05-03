@@ -25,7 +25,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -96,7 +95,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	/**
 	 * @see AbstractTabPanel#AbstractTabPanel(String, ActionMap)
 	 */
-	public SkatTablePanel(String newTableName, ActionMap actions) {
+	public SkatTablePanel(final String newTableName, final ActionMap actions) {
 
 		super(newTableName, actions);
 
@@ -187,7 +186,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		return new JSkatUserPanel(getActionMap(), 12, false);
 	}
 
-	protected void addContextPanel(ContextPanelType panelType, JPanel panel) {
+	protected void addContextPanel(final ContextPanelType panelType, final JPanel panel) {
 
 		if (contextPanels.containsKey(panelType)) {
 			// remove existing panel first
@@ -232,7 +231,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		addContextPanel(ContextPanelType.GAME_OVER, gameOverPanel);
 	}
 
-	private AbstractHandPanel getPlayerPanel(Player player) {
+	private AbstractHandPanel getPlayerPanel(final Player player) {
 
 		AbstractHandPanel result = getHandPanel(player);
 
@@ -255,7 +254,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param playerPosition
 	 *            Player position
 	 */
-	public void setPositions(Player leftPosition, Player rightPosition, Player playerPosition) {
+	public void setPositions(final Player leftPosition, final Player rightPosition, final Player playerPosition) {
 
 		leftOpponentPanel.setPosition(leftPosition);
 		rightOpponentPanel.setPosition(rightPosition);
@@ -295,7 +294,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param card
 	 *            Card
 	 */
-	public void addCard(Player player, Card card) {
+	public void addCard(final Player player, final Card card) {
 
 		getPlayerPanel(player).addCard(card);
 	}
@@ -308,7 +307,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param cards
 	 *            Cards
 	 */
-	public void addCards(Player player, Collection<Card> cards) {
+	public void addCards(final Player player, final CardList cards) {
 
 		getPlayerPanel(player).addCards(cards);
 	}
@@ -321,7 +320,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param card
 	 *            Card
 	 */
-	public void setTrickCard(Player player, Card card) {
+	public void setTrickCard(final Player player, final Card card) {
 
 		trickPanel.addCard(player, card);
 	}
@@ -350,7 +349,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param card
 	 *            Card
 	 */
-	public void removeCard(Player player, Card card) {
+	public void removeCard(final Player player, final Card card) {
 
 		switch (player) {
 		case FOREHAND:
@@ -371,7 +370,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param player
 	 *            Player
 	 */
-	public void removeAllCards(Player player) {
+	public void removeAllCards(final Player player) {
 		switch (player) {
 		case FOREHAND:
 			foreHand.removeAllCards();
@@ -391,7 +390,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param player
 	 *            Player
 	 */
-	public void clearHand(Player player) {
+	public void clearHand(final Player player) {
 
 		getPlayerPanel(player).clearHandPanel();
 	}
@@ -404,10 +403,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param gameAnnouncement
 	 *            Game announcement
 	 */
-	public void setGameAnnouncement(Player player, GameAnnouncement gameAnnouncement) {
+	public void setGameAnnouncement(final Player player, final GameAnnouncement gameAnnouncement) {
 
-		if (gameAnnouncement.getGameType() == GameType.RAMSCH)
+		if (gameAnnouncement.getGameType() == GameType.RAMSCH) {
 			ramsch = true;
+		}
 
 		gameInfoPanel.setGameAnnouncement(gameAnnouncement);
 
@@ -430,7 +430,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param state
 	 *            Game state
 	 */
-	public void setGameState(GameState state) {
+	public void setGameState(final GameState state) {
 
 		log.debug(".setGameState(" + state + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 
@@ -509,7 +509,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param panelType
 	 *            Panel type
 	 */
-	void setContextPanel(ContextPanelType panelType) {
+	void setContextPanel(final ContextPanelType panelType) {
 
 		((CardLayout) gameContextPanel.getLayout()).show(gameContextPanel, panelType.toString());
 	}
@@ -520,7 +520,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param gameData
 	 *            Game data
 	 */
-	public void addGameResult(GameSummary summary) {
+	public void addGameResult(final GameSummary summary) {
 
 		gameOverPanel.setGameSummary(summary);
 
@@ -573,7 +573,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param trickForeHand
 	 *            Fore hand player for the trick
 	 */
-	public void setTrickForeHand(Player trickForeHand) {
+	public void setTrickForeHand(final Player trickForeHand) {
 
 		setActivePlayer(trickForeHand);
 	}
@@ -589,7 +589,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 *            TRUE, if the player made the bid<br>
 	 *            FALSE, if the player hold the bid
 	 */
-	public void setBid(Player player, int bidValue, boolean madeBid) {
+	public void setBid(final Player player, final int bidValue, final boolean madeBid) {
 
 		log.debug(player + " " + (madeBid ? "bids" : "holds") + ": " + bidValue); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
@@ -635,7 +635,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param skat
 	 *            Skat
 	 */
-	public void setSkat(CardList skat) {
+	public void setSkat(final CardList skat) {
 
 		if (ramsch) {
 			schieberamschPanel.setSkat(skat);
@@ -650,7 +650,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param card
 	 *            Card
 	 */
-	public void takeCardFromSkat(Card card) {
+	public void takeCardFromSkat(final Card card) {
 		takeCardFromSkat(userPanel, card);
 	}
 
@@ -662,11 +662,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param card
 	 *            Card
 	 */
-	public void takeCardFromSkat(Player player, Card card) {
+	public void takeCardFromSkat(final Player player, final Card card) {
 		takeCardFromSkat(getPlayerPanel(player), card);
 	}
 
-	private void takeCardFromSkat(AbstractHandPanel panel, Card card) {
+	private void takeCardFromSkat(final AbstractHandPanel panel, final Card card) {
 
 		if (!panel.isHandFull()) {
 
@@ -686,7 +686,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param card
 	 *            Card
 	 */
-	public void putCardIntoSkat(Card card) {
+	public void putCardIntoSkat(final Card card) {
 		putCardIntoSkat(userPanel, card);
 	}
 
@@ -698,11 +698,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param card
 	 *            Card
 	 */
-	public void putCardIntoSkat(Player player, Card card) {
+	public void putCardIntoSkat(final Player player, final Card card) {
 		putCardIntoSkat(getPlayerPanel(player), card);
 	}
 
-	private void putCardIntoSkat(AbstractHandPanel panel, Card card) {
+	private void putCardIntoSkat(final AbstractHandPanel panel, final Card card) {
 
 		if (!declaringPanel.isHandFull()) {
 
@@ -730,7 +730,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param maxPlayers
 	 *            Maximum number of players
 	 */
-	protected void setMaxPlayers(int maxPlayers) {
+	protected void setMaxPlayers(final int maxPlayers) {
 
 		skatListTableModel.setPlayerCount(maxPlayers);
 	}
@@ -743,7 +743,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param name
 	 *            Player name
 	 */
-	public void setPlayerName(Player player, String name) {
+	public void setPlayerName(final Player player, final String name) {
 
 		playerNamesAndPositions.put(name, player);
 		AbstractHandPanel panel = getHandPanel(player);
@@ -763,7 +763,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param time
 	 *            Player time
 	 */
-	public void setPlayerTime(Player player, double time) {
+	public void setPlayerTime(final Player player, final double time) {
 
 		AbstractHandPanel panel = getHandPanel(player);
 
@@ -780,7 +780,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param isChatEnabled
 	 *            Flag for chat enabled yes/no
 	 */
-	public void setPlayerChatEnabled(String playerName, boolean isChatEnabled) {
+	public void setPlayerChatEnabled(final String playerName, final boolean isChatEnabled) {
 
 		AbstractHandPanel panel = getHandPanel(playerName);
 
@@ -797,7 +797,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param isReadyToPlay
 	 *            Flag for ready to play yes/no
 	 */
-	public void setPlayerReadyToPlay(String playerName, boolean isReadyToPlay) {
+	public void setPlayerReadyToPlay(final String playerName, final boolean isReadyToPlay) {
 
 		AbstractHandPanel panel = getHandPanel(playerName);
 
@@ -812,7 +812,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param player
 	 *            Player
 	 */
-	public void setResign(Player player) {
+	public void setResign(final Player player) {
 
 		AbstractHandPanel panel = getHandPanel(player);
 
@@ -821,7 +821,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		}
 	}
 
-	private AbstractHandPanel getHandPanel(String playerName) {
+	private AbstractHandPanel getHandPanel(final String playerName) {
 
 		AbstractHandPanel panel = null;
 
@@ -836,7 +836,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		return panel;
 	}
 
-	private AbstractHandPanel getHandPanel(Player player) {
+	private AbstractHandPanel getHandPanel(final Player player) {
 		AbstractHandPanel panel = null;
 
 		switch (player) {
@@ -861,7 +861,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param middleHandCard
 	 * @param rearHandCard
 	 */
-	public void setLastTrick(Trick trick) {
+	public void setLastTrick(final Trick trick) {
 
 		lastTrickPanel.clearCards();
 		Player trickForeHand = trick.getForeHand();
@@ -876,7 +876,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param player
 	 *            Active player
 	 */
-	public void setActivePlayer(Player player) {
+	public void setActivePlayer(final Player player) {
 		switch (player) {
 		case FOREHAND:
 			foreHand.setActivePlayer(true);
@@ -902,7 +902,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param player
 	 *            Player
 	 */
-	public void setPass(Player player) {
+	public void setPass(final Player player) {
 
 		log.debug(player + " passes"); //$NON-NLS-1$
 
@@ -932,7 +932,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param state
 	 *            Series state
 	 */
-	public void setSeriesState(SeriesState state) {
+	public void setSeriesState(final SeriesState state) {
 
 		if (SeriesState.SERIES_FINISHED.equals(state)) {
 
@@ -946,7 +946,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param bidValue
 	 *            Bid value
 	 */
-	public void setBidValueToMake(int bidValue) {
+	public void setBidValueToMake(final int bidValue) {
 
 		biddingPanel.setBidValueToMake(bidValue);
 	}
@@ -957,7 +957,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param bidValue
 	 *            Bid value
 	 */
-	public void setBidValueToHold(int bidValue) {
+	public void setBidValueToHold(final int bidValue) {
 
 		biddingPanel.setBidValueToHold(bidValue);
 	}
@@ -974,7 +974,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param trickNumber
 	 *            Trick number
 	 */
-	public void setTrickNumber(int trickNumber) {
+	public void setTrickNumber(final int trickNumber) {
 
 		gameInfoPanel.setTrickNumber(trickNumber);
 	}
@@ -985,7 +985,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param gameNumber
 	 *            Game number
 	 */
-	public void setGameNumber(int gameNumber) {
+	public void setGameNumber(final int gameNumber) {
 
 		gameInfoPanel.setGameNumber(gameNumber);
 	}
@@ -997,7 +997,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param upperRightPlayerName
 	 * @param lowerPlayerName
 	 */
-	public void setPlayerNames(String upperLeftPlayerName, String upperRightPlayerName, String lowerPlayerName) {
+	public void setPlayerNames(final String upperLeftPlayerName, final String upperRightPlayerName,
+			final String lowerPlayerName) {
 		// FIXME (jan 26.01.2011) possible code duplication with
 		// setPlayerInformation()
 		leftOpponentPanel.setPlayerName(upperLeftPlayerName);
@@ -1021,7 +1022,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param declarer
 	 *            Declarer player
 	 */
-	public void setDeclarer(Player declarer) {
+	public void setDeclarer(final Player declarer) {
 		this.declarer = declarer;
 	}
 
@@ -1031,7 +1032,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param player
 	 *            Player
 	 */
-	public void showCards(Player player) {
+	public void showCards(final Player player) {
 
 		getPlayerPanel(player).showCards();
 	}
@@ -1042,7 +1043,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param player
 	 *            Player
 	 */
-	public void hideCards(Player player) {
+	public void hideCards(final Player player) {
 
 		getPlayerPanel(player).hideCards();
 	}
@@ -1053,7 +1054,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param player
 	 *            Player position
 	 */
-	public void setGeschoben(Player player) {
+	public void setGeschoben(final Player player) {
 		getPlayerPanel(player).setGeschoben();
 	}
 
@@ -1067,7 +1068,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param discardedSkat
 	 *            Skat after discarding
 	 */
-	public void setDiscardedSkat(Player player, CardList skatBefore, CardList discardedSkat) {
+	public void setDiscardedSkat(final Player player, final CardList skatBefore, final CardList discardedSkat) {
 		AbstractHandPanel playerPanel = getPlayerPanel(player);
 
 		for (int i = 0; i < 2; i++) {

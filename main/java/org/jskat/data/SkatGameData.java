@@ -539,6 +539,10 @@ public class SkatGameData {
 		}
 		setDeclarer(ramschLoser);
 
+		result.setFinalDeclarerPoints(playerPoints.get(ramschLoser));
+		result.setFinalOpponentPoints(playerPoints.get(ramschLoser.getLeftNeighbor())
+				+ playerPoints.get(ramschLoser.getRightNeighbor()));
+
 		if (isDurchmarsch()) {
 			result.setWon(true);
 		}
@@ -717,7 +721,7 @@ public class SkatGameData {
 	 */
 	public CardList getPlayerCards(final Player player) {
 
-		return playerHands.get(player);
+		return playerHands.get(player).getImmutableCopy();
 	}
 
 	/**
@@ -726,8 +730,7 @@ public class SkatGameData {
 	 * @return skat The cards of the skat
 	 */
 	public CardList getSkat() {
-
-		return skat;
+		return skat.getImmutableCopy();
 	}
 
 	/**
@@ -773,7 +776,7 @@ public class SkatGameData {
 	 */
 	public CardList getDealtSkat() {
 
-		return dealtSkat;
+		return dealtSkat.getImmutableCopy();
 	}
 
 	/**
@@ -1110,10 +1113,10 @@ public class SkatGameData {
 		GameSummaryFactory factory = GameSummary.getFactory();
 
 		factory.setGameType(getGameType());
-		factory.setHand(Boolean.valueOf(isHand()));
-		factory.setOuvert(Boolean.valueOf(isOuvert()));
-		factory.setSchneider(Boolean.valueOf(isSchneider()));
-		factory.setSchwarz(Boolean.valueOf(isSchwarz()));
+		factory.setHand(isHand());
+		factory.setOuvert(isOuvert());
+		factory.setSchneider(isSchneider());
+		factory.setSchwarz(isSchwarz());
 
 		factory.setForeHand(getPlayerName(Player.FOREHAND));
 		factory.setMiddleHand(getPlayerName(Player.MIDDLEHAND));
@@ -1192,5 +1195,17 @@ public class SkatGameData {
 		}
 
 		return !trickWinners.contains(player);
+	}
+
+	/**
+	 * Removes a card from a players hand
+	 * 
+	 * @param player
+	 *            Player
+	 * @param card
+	 *            Card
+	 */
+	public void removePlayerCard(final Player player, final Card card) {
+		playerHands.get(player).remove(card);
 	}
 }

@@ -28,9 +28,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import javax.swing.Action;
 import javax.swing.JPanel;
@@ -56,7 +53,7 @@ class CardPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private static Log log = LogFactory.getLog(CardPanel.class);
 
-	private JSkatGraphicRepository bitmaps;
+	private final JSkatGraphicRepository bitmaps;
 
 	double scaleFactor = 1.0;
 
@@ -80,7 +77,7 @@ class CardPanel extends JPanel {
 	 * @param showBackside
 	 *            TRUE if the Card should hide its face
 	 */
-	CardPanel(JPanel parent, double scaleFactor, boolean showBackside) {
+	CardPanel(final JPanel parent, final double scaleFactor, final boolean showBackside) {
 
 		setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
@@ -96,48 +93,48 @@ class CardPanel extends JPanel {
 
 		addMouseListener(new MouseListener() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void mouseClicked(final MouseEvent e) {
 				// not needed
 			}
 
 			@Override
-			public void mouseEntered(MouseEvent e) {
+			public void mouseEntered(final MouseEvent e) {
 				// not needed
 			}
 
 			@Override
-			public void mouseExited(MouseEvent e) {
+			public void mouseExited(final MouseEvent e) {
 				// not needed
 			}
 
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mousePressed(final MouseEvent e) {
 				// not needed
 			}
 
 			@Override
-			public void mouseReleased(MouseEvent e) {
+			public void mouseReleased(final MouseEvent e) {
 
 				cardClicked(e);
 			}
 		});
 	}
 
-	protected void addCard(Card newCard) {
+	protected void addCard(final Card newCard) {
 
 		cards.add(newCard);
 		cards.sort(sortGameType);
 		repaint();
 	}
 
-	protected void addCards(Collection<Card> newCards) {
+	protected void addCards(final CardList newCards) {
 
 		cards.addAll(newCards);
 		cards.sort(sortGameType);
 		repaint();
 	}
 
-	protected void removeCard(Card cardToRemove) {
+	protected void removeCard(final Card cardToRemove) {
 
 		if (cards.contains(cardToRemove)) {
 			cards.remove(cardToRemove);
@@ -149,7 +146,7 @@ class CardPanel extends JPanel {
 		repaint();
 	}
 
-	protected Card get(int index) {
+	protected Card get(final int index) {
 
 		return cards.get(index);
 	}
@@ -158,12 +155,12 @@ class CardPanel extends JPanel {
 	 * @see JPanel#paintComponent(Graphics)
 	 */
 	@Override
-	protected synchronized void paintComponent(Graphics g) {
+	protected synchronized void paintComponent(final Graphics g) {
 
 		super.paintComponent(g);
 
 		// copying cards prevents ConcurrentModificationException
-		List<Card> cardsToPaint = new ArrayList<Card>(cards);
+		CardList cardsToPaint = new CardList(cards);
 
 		// rendering hints
 		Graphics2D g2D = (Graphics2D) g;
@@ -257,7 +254,7 @@ class CardPanel extends JPanel {
 	/**
 	 * Tells the JSkatMaster when the panel was clicked by the user
 	 */
-	void cardClicked(MouseEvent e) {
+	void cardClicked(final MouseEvent e) {
 		// FIXME (jan 04.12.2010) refactor this method, nobody understands it
 		int xPosition = e.getX();
 		int yPosition = e.getY();
@@ -349,7 +346,7 @@ class CardPanel extends JPanel {
 		}
 	}
 
-	void setSortType(GameType newGameType) {
+	void setSortType(final GameType newGameType) {
 
 		sortGameType = newGameType;
 		cards.sort(sortGameType);

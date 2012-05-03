@@ -42,7 +42,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	/**
 	 * Random generator
 	 */
-	private Random rand = new Random();
+	private final Random rand = new Random();
 
 	/**
 	 * Creates a new instance of AIPlayerRND
@@ -58,7 +58,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	 * @param newPlayerName
 	 *            Player's name
 	 */
-	public AIPlayerRND(String newPlayerName) {
+	public AIPlayerRND(final String newPlayerName) {
 
 		log.debug("Constructing new AIPlayerRND"); //$NON-NLS-1$
 		setPlayerName(newPlayerName);
@@ -97,7 +97,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int bidMore(int nextBidValue) {
+	public int bidMore(final int nextBidValue) {
 		int result = -1;
 
 		if (rand.nextBoolean()) {
@@ -112,7 +112,7 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean holdBid(int currBidValue) {
+	public boolean holdBid(final int currBidValue) {
 		return rand.nextBoolean();
 	}
 
@@ -161,17 +161,12 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public CardList discardSkat() {
-		CardList cards = knowledge.getMyCards();
+	public CardList getCardsToDiscard() {
 		CardList result = new CardList();
 
-		log.debug("Player cards before discarding: " + cards); //$NON-NLS-1$
-
 		// just discard two random cards
-		result.add(cards.remove(rand.nextInt(cards.size())));
-		result.add(cards.remove(rand.nextInt(cards.size())));
-
-		log.debug("Player cards after discarding: " + cards); //$NON-NLS-1$
+		result.add(knowledge.getOwnCards().get(rand.nextInt(knowledge.getOwnCards().size())));
+		result.add(knowledge.getOwnCards().get(rand.nextInt(knowledge.getOwnCards().size())));
 
 		return result;
 	}

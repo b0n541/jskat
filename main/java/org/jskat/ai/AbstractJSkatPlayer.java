@@ -55,7 +55,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void setPlayerName(String newPlayerName) {
+	public final void setPlayerName(final String newPlayerName) {
 
 		playerName = newPlayerName;
 	}
@@ -82,7 +82,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void newGame(Player newPosition) {
+	public final void newGame(final Player newPosition) {
 
 		playerState = null;
 		rules = null;
@@ -97,9 +97,9 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void takeCard(Card newCard) {
+	public final void takeCard(final Card newCard) {
 
-		knowledge.addCard(newCard);
+		knowledge.addOwnCard(newCard);
 	}
 
 	/**
@@ -112,26 +112,14 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	}
 
 	/**
-	 * Sorts the card according a game type
-	 * 
-	 * @param sortGameType
-	 *            Game type
-	 */
-	protected final void sortCards(GameType sortGameType) {
-
-		knowledge.getMyCards().sort(sortGameType);
-	}
-
-	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void startGame(Player newDeclarer, GameAnnouncement game) {
+	public final void startGame(final Player newDeclarer, final GameAnnouncement game) {
 
 		playerState = PlayerState.PLAYING;
 		knowledge.setDeclarer(newDeclarer);
 		knowledge.setGame(game);
-		knowledge.getMyCards().sort(game.getGameType());
 
 		rules = SkatRuleFactory.getSkatRules(game.getGameType());
 		if (!GameType.PASSED_IN.equals(game.getGameType())) {
@@ -154,12 +142,12 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void takeSkat(CardList skatCards) {
+	public final void takeSkat(final CardList skatCards) {
 
 		log.debug("Skat cards: " + skatCards); //$NON-NLS-1$
 
 		knowledge.setSkat(skatCards);
-		knowledge.getMyCards().addAll(skatCards);
+		knowledge.addOwnCards(skatCards);
 	}
 
 	/**
@@ -168,7 +156,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * @param newState
 	 *            State to be set
 	 */
-	protected final void setState(JSkatPlayer.PlayerState newState) {
+	protected final void setState(final JSkatPlayer.PlayerState newState) {
 
 		playerState = newState;
 	}
@@ -177,7 +165,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void bidByPlayer(Player player, int bidValue) {
+	public final void bidByPlayer(final Player player, final int bidValue) {
 
 		knowledge.setHighestBid(player, bidValue);
 	}
@@ -188,19 +176,19 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * @param trick
 	 * @return CardList with all playable cards
 	 */
-	protected final CardList getPlayableCards(CardList trick) {
+	protected final CardList getPlayableCards(final CardList trick) {
 
 		boolean isCardAllowed = false;
 		CardList result = new CardList();
 
 		log.debug("game type: " + knowledge.getGameType()); //$NON-NLS-1$
-		log.debug("player cards (" + knowledge.getMyCards().size() + "): " + knowledge.getMyCards()); //$NON-NLS-1$ //$NON-NLS-2$
+		log.debug("player cards (" + knowledge.getOwnCards().size() + "): " + knowledge.getOwnCards()); //$NON-NLS-1$ //$NON-NLS-2$
 		log.debug("trick size: " + trick.size()); //$NON-NLS-1$
 
-		for (Card card : knowledge.getMyCards()) {
+		for (Card card : knowledge.getOwnCards()) {
 
 			if (trick.size() > 0
-					&& rules.isCardAllowed(knowledge.getGameType(), trick.get(0), knowledge.getMyCards(), card)) {
+					&& rules.isCardAllowed(knowledge.getGameType(), trick.get(0), knowledge.getOwnCards(), card)) {
 
 				log.debug("initial card: " + trick.get(0)); //$NON-NLS-1$
 				isCardAllowed = true;
@@ -225,14 +213,15 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void cardPlayed(Player player, Card card) {
+	public final void cardPlayed(final Player player, final Card card) {
 
 		knowledge.setCardPlayed(player, card);
 
 		if (player == knowledge.getPlayerPosition()) {
 			// remove this card from counter
+			knowledge.removeOwnCard(card);
+		} else {
 			knowledge.removeCard(card);
-			knowledge.getMyCards().remove(card);
 		}
 	}
 
@@ -240,7 +229,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void newTrick(Trick trick) {
+	public final void newTrick(final Trick trick) {
 		knowledge.setCurrentTrick(trick);
 	}
 
@@ -248,7 +237,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void showTrick(Trick trick) {
+	public final void showTrick(final Trick trick) {
 		knowledge.addTrick(trick);
 		knowledge.clearTrickCards();
 	}
@@ -283,7 +272,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void lookAtOuvertCards(CardList ouvertCards) {
+	public final void lookAtOuvertCards(final CardList ouvertCards) {
 
 		knowledge.getSinglePlayerCards().addAll(ouvertCards);
 	}
@@ -292,7 +281,28 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setGameSummary(GameSummary gameSummary) {
+	public final CardList discardSkat() {
+
+		CardList result = new CardList();
+
+		log.debug("Player cards before discarding: " + knowledge.getOwnCards()); //$NON-NLS-1$
+
+		result.addAll(getCardsToDiscard());
+
+		knowledge.removeOwnCards(result.getImmutableCopy());
+
+		log.debug("Player cards after discarding: " + knowledge.getOwnCards()); //$NON-NLS-1$
+
+		return result;
+	}
+
+	protected abstract CardList getCardsToDiscard();
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setGameSummary(final GameSummary gameSummary) {
 
 		this.gameSummary = gameSummary;
 	}
@@ -303,7 +313,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * @param newLogger
 	 *            New logger
 	 */
-	public void setLogger(Log newLogger) {
+	public void setLogger(final Log newLogger) {
 		log = newLogger;
 	}
 }

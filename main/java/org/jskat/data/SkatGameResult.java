@@ -43,6 +43,8 @@ public class SkatGameResult implements Cloneable {
 	public SkatGameResult() {
 		gameValue = -1;
 		multiplier = 0;
+		finalDeclarerPoints = 0;
+		finalOpponentPoints = 0;
 		playWithJacks = false;
 		won = false;
 		overBidded = false;

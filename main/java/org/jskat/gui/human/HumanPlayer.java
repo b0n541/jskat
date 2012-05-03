@@ -82,7 +82,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	 * @see JSkatPlayer#bidMore(int)
 	 */
 	@Override
-	public int bidMore(int nextBidValue) {
+	public int bidMore(final int nextBidValue) {
 
 		log.debug("Waiting for human next bid value..."); //$NON-NLS-1$
 
@@ -103,7 +103,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	 * @see JSkatPlayer#discardSkat()
 	 */
 	@Override
-	public CardList discardSkat() {
+	public CardList getCardsToDiscard() {
 
 		log.debug("Waiting for human discarding..."); //$NON-NLS-1$
 
@@ -133,7 +133,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	 * @see JSkatPlayer#holdBid(int)
 	 */
 	@Override
-	public boolean holdBid(int currBidValue) {
+	public boolean holdBid(final int currBidValue) {
 
 		log.debug("Waiting for human holding bid..."); //$NON-NLS-1$
 
@@ -218,7 +218,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 	 * @see ActionListener#actionPerformed(ActionEvent)
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 
 		Object source = e.getSource();
 		String command = e.getActionCommand();
@@ -282,10 +282,9 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 		}
 	}
 
-	private void setDiscardedSkatCards(CardList discardedCards) {
+	private void setDiscardedSkatCards(final CardList discardedCards) {
 		discardSkat = discardedCards;
-		knowledge.getMyCards().remove(this.discardSkat.get(0));
-		knowledge.getMyCards().remove(this.discardSkat.get(1));
+		knowledge.removeOwnCards(discardSkat.getImmutableCopy());
 	}
 
 	/*-------------------------------------------------------------------
@@ -303,7 +302,7 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 		 * @param newMonitor
 		 *            Monitor
 		 */
-		public void setMonitor(Object newMonitor) {
+		public void setMonitor(final Object newMonitor) {
 
 			this.monitor = newMonitor;
 		}

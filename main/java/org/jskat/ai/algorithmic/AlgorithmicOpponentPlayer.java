@@ -59,8 +59,8 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 	 * @see org.jskat.ai.IJSkatPlayer#playCard()
 	 */
 	public Card playCard() {
-		if (knowledge.getMyCards().size() == 1)
-			return knowledge.getMyCards().get(0);
+		if (knowledge.getOwnCards().size() == 1)
+			return knowledge.getOwnCards().get(0);
 		if (knowledge.getTrickCards() == null
 				|| knowledge.getTrickCards().isEmpty()) {
 			if (knowledge.getNoOfTricks() < 1) {
@@ -75,18 +75,18 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 	}
 
 	private Card openGame() {
-		CardList cards = knowledge.getMyCards();
+		CardList cards = knowledge.getOwnCards();
 		if (knowledge.getDeclarer() == Player.MIDDLEHAND) {
 			// "kurzer Weg, lange Farbe"
 			Suit longSuit = cards.getMostFrequentSuit(knowledge.getTrumpSuit());
 			if (longSuit != null
 					&& cards.get(cards.getFirstIndexOfSuit(longSuit)).getRank() == Rank.ACE) {
 				log.debug("playCard (1)");
-				return cards.get(knowledge.getMyCards().getFirstIndexOfSuit(
+				return cards.get(knowledge.getOwnCards().getFirstIndexOfSuit(
 						longSuit));
 			}
 			log.debug("playCard (2)");
-			return cards.get(knowledge.getMyCards().getLastIndexOfSuit(
+			return cards.get(knowledge.getOwnCards().getLastIndexOfSuit(
 					cards.getMostFrequentSuit()));
 		} else if (knowledge.getDeclarer() == Player.REARHAND) {
 			// "langer Weg, kurze Farbe"
@@ -148,7 +148,7 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 	}
 
 	private Card openTrick() {
-		CardList cards = knowledge.getMyCards();
+		CardList cards = knowledge.getOwnCards();
 		for (Suit s : Suit.values()) {
 			if (!knowledge.couldHaveSuit(knowledge.getDeclarer(), s)
 					&& cards.hasSuit(knowledge.getGameType(), s)) {
@@ -163,7 +163,7 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 		log.debug("I (" + myPlayer.getPlayerName()
 				+ ") am in middlehand (OpponentPlayer)");
 		// fallback: take the first valid card
-		CardList cards = knowledge.getMyCards();
+		CardList cards = knowledge.getOwnCards();
 		Card initialCard = knowledge.getTrickCards().get(0);
 		GameType gameType = knowledge.getGameType();
 		Card result = null;
@@ -221,7 +221,7 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 													knowledge.getDeclarer(),
 													c.getSuit())
 											&& !knowledge
-													.getMyCards()
+													.getOwnCards()
 													.contains(
 															Card.getCard(
 																	c.getSuit(),
@@ -332,7 +332,7 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 		log.debug("I (" + myPlayer.getPlayerName()
 				+ ") am in rearhand (OpponentPlayer)");
 		// fallback: take the first valid card
-		CardList cards = knowledge.getMyCards();
+		CardList cards = knowledge.getOwnCards();
 		Card initialCard = knowledge.getTrickCards().get(0);
 		GameType gameType = knowledge.getGameType();
 		Card result = null;

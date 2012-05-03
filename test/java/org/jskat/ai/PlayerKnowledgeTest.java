@@ -88,7 +88,7 @@ public class PlayerKnowledgeTest extends AbstractJSkatTest {
 	@Test
 	public void testInitialization() {
 
-		assertTrue(knowledge.getMyCards().isEmpty());
+		assertTrue(knowledge.getOwnCards().isEmpty());
 		assertEquals(0, knowledge.getTrumpCount());
 
 		for (Card card : playerCards) {
@@ -131,7 +131,7 @@ public class PlayerKnowledgeTest extends AbstractJSkatTest {
 
 		dealPlayerCards();
 
-		assertEquals(10, knowledge.getMyCards().size());
+		assertEquals(10, knowledge.getOwnCards().size());
 		assertEquals(0, knowledge.getTrumpCount());
 
 		for (Card card : playerCards) {
@@ -252,7 +252,7 @@ public class PlayerKnowledgeTest extends AbstractJSkatTest {
 		// set up player cards
 		knowledge.setPlayerPosition(Player.MIDDLEHAND);
 		for (Card card : playerCards) {
-			knowledge.addCard(card);
+			knowledge.addOwnCard(card);
 		}
 	}
 

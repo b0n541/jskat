@@ -153,7 +153,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		List<GameType> filteredGameTypes = filterFeasibleGameTypes(bidValue);
 
-		gameSimulator.resetGameSimulator(filteredGameTypes, knowledge.getPlayerPosition(), knowledge.getMyCards());
+		gameSimulator.resetGameSimulator(filteredGameTypes, knowledge.getPlayerPosition(), knowledge.getOwnCards());
 		SimulationResults results = gameSimulator.simulateMaxEpisodes(Long.valueOf(MAX_SIMULATIONS / 2));
 
 		for (Double wonRate : results.getAllWonRates()) {
@@ -202,7 +202,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		// it doesn't matter which position is set for declarer
 		// skat game data are only used to calculate the game value
 		data.setDeclarer(Player.FOREHAND);
-		for (Card card : knowledge.getMyCards()) {
+		for (Card card : knowledge.getOwnCards()) {
 			data.setDealtCard(Player.FOREHAND, card);
 		}
 
@@ -249,7 +249,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		List<GameType> gameTypesToCheck = filterFeasibleGameTypes(knowledge
 				.getHighestBid(knowledge.getPlayerPosition()));
-		gameSimulator.resetGameSimulator(gameTypesToCheck, knowledge.getPlayerPosition(), knowledge.getMyCards());
+		gameSimulator.resetGameSimulator(gameTypesToCheck, knowledge.getPlayerPosition(), knowledge.getOwnCards());
 		SimulationResults results = gameSimulator.simulateMaxEpisodes(Long.valueOf(MAX_SIMULATIONS));
 
 		for (GameType gameType : gameTypesToCheck) {
@@ -286,7 +286,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		List<GameType> filteredGameTypes = filterFeasibleGameTypes(knowledge.getHighestBid(
 				knowledge.getPlayerPosition()).intValue());
 
-		gameSimulator.resetGameSimulator(filteredGameTypes, knowledge.getPlayerPosition(), knowledge.getMyCards());
+		gameSimulator.resetGameSimulator(filteredGameTypes, knowledge.getPlayerPosition(), knowledge.getOwnCards());
 		SimulationResults results = gameSimulator.simulateMaxEpisodes(Long.valueOf(MAX_SIMULATIONS));
 
 		for (Double wonRate : results.getAllWonRates()) {
@@ -304,13 +304,13 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 * @see JSkatPlayer#discardSkat()
 	 */
 	@Override
-	public CardList discardSkat() {
+	public CardList getCardsToDiscard() {
 
-		CardList cards = knowledge.getMyCards();
+		CardList cards = knowledge.getOwnCards();
 		CardList result = new CardList();
 		double highestWonRate = 0.0;
 
-		log.debug("Player cards before discarding: " + knowledge.getMyCards()); //$NON-NLS-1$
+		log.debug("Player cards before discarding: " + knowledge.getOwnCards()); //$NON-NLS-1$
 
 		List<GameType> filteredGameTypes = filterFeasibleGameTypes(knowledge.getHighestBid(
 				knowledge.getPlayerPosition()).intValue());
@@ -346,19 +346,14 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			}
 		}
 
-		if (result.size() == 2) {
-
-			cards.remove(result.get(0));
-			cards.remove(result.get(1));
-		} else {
-
+		if (result.size() != 2) {
 			log.error("Did not found cards for discarding!!!"); //$NON-NLS-1$
 			result.clear();
 			result.add(cards.remove(rand.nextInt(cards.size())));
 			result.add(cards.remove(rand.nextInt(cards.size())));
 		}
 
-		log.debug("Player cards after discarding: " + cards); //$NON-NLS-1$
+		log.debug("Player cards after discarding: " + knowledge.getOwnCards()); //$NON-NLS-1$
 
 		return result;
 	}
@@ -431,7 +426,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			} else {
 				// card with highest output
 				bestCardIndex = chooseRandomCard(possibleCards, possibleCards);
-				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": No good card, choosing random from all."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": No good card, choosing random from all."); //$NON-NLS-1$ //$NON-NLS-2$ 
 			}
 			// store parameters for the card to play
 			// for adjustment of weights after the game
@@ -444,7 +439,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		return possibleCards.get(bestCardIndex);
 	}
 
-	private int chooseRandomCard(CardList possibleCards, CardList goodCards) {
+	private int chooseRandomCard(final CardList possibleCards, final CardList goodCards) {
 		int bestCardIndex;
 		Card choosenCard = goodCards.get(rand.nextInt(goodCards.size()));
 		bestCardIndex = possibleCards.indexOf(choosenCard);
@@ -561,7 +556,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		}
 
 		// inputs for player
-		if (knowledge.getMyCards().contains(card)) {
+		if (knowledge.getOwnCards().contains(card)) {
 			inputs[netInputIndexForCard + knownCardsOffset + playerLength] = HAS_CARD;
 		}
 

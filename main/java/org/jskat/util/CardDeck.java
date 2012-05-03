@@ -29,9 +29,7 @@ import java.util.StringTokenizer;
  */
 public class CardDeck extends CardList {
 
-	private static final long serialVersionUID = 1L;
-
-	private final static int MAX_CARDS = 32;
+	private final int MAX_CARDS = 32;
 
 	/**
 	 * Creates a new instance of CardDeck
@@ -40,7 +38,7 @@ public class CardDeck extends CardList {
 
 		super();
 
-		// Creates cards for every suit and value
+		// Adds a card for every suit and value
 		for (Card card : Card.values()) {
 
 			add(card);
@@ -53,7 +51,7 @@ public class CardDeck extends CardList {
 	 * @param cards
 	 *            Card distribution
 	 */
-	public CardDeck(String cards) {
+	public CardDeck(final String cards) {
 
 		StringTokenizer token = new StringTokenizer(cards);
 
@@ -69,20 +67,20 @@ public class CardDeck extends CardList {
 	 * @param cards
 	 *            Card distribution
 	 */
-	public CardDeck(CardList cards) {
+	public CardDeck(final CardList cards) {
 
-		this.addAll(cards);
+		addAll(cards);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean add(Card card) {
+	public boolean add(final Card card) {
 
 		boolean result = false;
 
-		if (size() < this.MAX_CARDS) {
+		if (size() < MAX_CARDS) {
 
 			result = super.add(card);
 		}
@@ -106,8 +104,7 @@ public class CardDeck extends CardList {
 	 * Shuffles the CardDeck
 	 */
 	public void shuffle() {
-
 		// Simple random shuffling
-		Collections.shuffle(this);
+		Collections.shuffle(cards);
 	}
 }

@@ -21,7 +21,6 @@
 package org.jskat.gui.table;
 
 import java.awt.Color;
-import java.util.Collection;
 
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
@@ -33,6 +32,7 @@ import org.jskat.data.JSkatOptions;
 import org.jskat.gui.LayoutFactory;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.Card;
+import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.Player;
@@ -108,7 +108,7 @@ abstract class AbstractHandPanel extends JPanel {
 	 * @param showIssWidgets
 	 *            TRUE, if ISS widgets should be shown
 	 */
-	AbstractHandPanel(ActionMap actions, int maxCards, boolean showIssWidgets) {
+	AbstractHandPanel(final ActionMap actions, final int maxCards, final boolean showIssWidgets) {
 
 		setActionMap(actions);
 		bitmaps = JSkatGraphicRepository.instance();
@@ -134,8 +134,7 @@ abstract class AbstractHandPanel extends JPanel {
 
 		setBorder(getPanelBorder());
 
-		header = new JPanel(LayoutFactory.getMigLayout(
-				"fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		header = new JPanel(LayoutFactory.getMigLayout("fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		header.add(headerLabel);
 		// blank panel
 		header.add(new JPanel());
@@ -172,13 +171,13 @@ abstract class AbstractHandPanel extends JPanel {
 	 * @param newPosition
 	 *            Position
 	 */
-	void setPosition(Player newPosition) {
+	void setPosition(final Player newPosition) {
 
 		position = newPosition;
 		refreshHeaderText();
 	}
 
-	void setBidValue(int newBidValue) {
+	void setBidValue(final int newBidValue) {
 
 		bidValue = newBidValue;
 		refreshHeaderText();
@@ -217,9 +216,9 @@ abstract class AbstractHandPanel extends JPanel {
 			headerText.append(bidValue);
 
 			if (playerPassed || playerGeschoben) {
-				
+
 				headerText.append(" ("); //$NON-NLS-1$
-				
+
 				String passedOrGeschoben = "";
 				if (playerPassed) {
 					passedOrGeschoben = strings.getString("passed"); //$NON-NLS-1$
@@ -228,7 +227,7 @@ abstract class AbstractHandPanel extends JPanel {
 					passedOrGeschoben = strings.getString("geschoben"); //$NON-NLS-1$
 				}
 				headerText.append(passedOrGeschoben);
-				
+
 				headerText.append(")"); //$NON-NLS-1$
 			}
 
@@ -246,7 +245,7 @@ abstract class AbstractHandPanel extends JPanel {
 	 * @param newCard
 	 *            Card
 	 */
-	void addCard(Card newCard) {
+	void addCard(final Card newCard) {
 
 		cardPanel.addCard(newCard);
 	}
@@ -257,7 +256,7 @@ abstract class AbstractHandPanel extends JPanel {
 	 * @param newCards
 	 *            card collection
 	 */
-	void addCards(Collection<Card> newCards) {
+	void addCards(final CardList newCards) {
 
 		cardPanel.addCards(newCards);
 	}
@@ -268,7 +267,7 @@ abstract class AbstractHandPanel extends JPanel {
 	 * @param cardToRemove
 	 *            Card
 	 */
-	void removeCard(Card cardToRemove) {
+	void removeCard(final Card cardToRemove) {
 
 		cardPanel.removeCard(cardToRemove);
 	}
@@ -313,7 +312,7 @@ abstract class AbstractHandPanel extends JPanel {
 		cardPanel.showCards();
 	}
 
-	void setSortGameType(GameType newGameType) {
+	void setSortGameType(final GameType newGameType) {
 
 		cardPanel.setSortType(newGameType);
 	}
@@ -323,29 +322,29 @@ abstract class AbstractHandPanel extends JPanel {
 		return cardPanel.getCardCount() == maxCardCount;
 	}
 
-	public void setPlayerName(String newName) {
+	public void setPlayerName(final String newName) {
 
 		playerName = newName;
 
 		refreshHeaderText();
 	}
 
-	void setPlayerTime(double newTime) {
+	void setPlayerTime(final double newTime) {
 
 		clockPanel.setPlayerTime(newTime);
 	}
 
-	void setChatEnabled(boolean isChatEnabled) {
+	void setChatEnabled(final boolean isChatEnabled) {
 
 		iconPanel.setChatEnabled(isChatEnabled);
 	}
 
-	void setReadyToPlay(boolean isReadyToPlay) {
+	void setReadyToPlay(final boolean isReadyToPlay) {
 
 		iconPanel.setReadyToPlay(isReadyToPlay);
 	}
 
-	void setResign(boolean isResign) {
+	void setResign(final boolean isResign) {
 
 		iconPanel.setResign(isResign);
 	}
@@ -354,18 +353,18 @@ abstract class AbstractHandPanel extends JPanel {
 		return activePlayer;
 	}
 
-	void setActivePlayer(boolean isActivePlayer) {
+	void setActivePlayer(final boolean isActivePlayer) {
 
 		activePlayer = isActivePlayer;
 		setBorder(getPanelBorder());
 	}
 
-	void setPass(boolean isPassed) {
+	void setPass(final boolean isPassed) {
 		playerPassed = isPassed;
 		refreshHeaderText();
 	}
 
-	void setDeclarer(boolean isDeclarer) {
+	void setDeclarer(final boolean isDeclarer) {
 		declarer = isDeclarer;
 		refreshHeaderText();
 	}

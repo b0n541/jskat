@@ -35,7 +35,7 @@ import org.jskat.util.CardList;
  */
 public class AIPlayerMJL extends AbstractJSkatPlayer {
 
-	private Log log = LogFactory.getLog(AIPlayerMJL.class);
+	private final Log log = LogFactory.getLog(AIPlayerMJL.class);
 	private CardPlayer aiPlayer;
 	int maxBidValue = -1;
 
@@ -62,12 +62,12 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	 * @see org.jskat.ai.JSkatPlayer#bidMore(int)
 	 */
 	@Override
-	public int bidMore(int nextBidValue) {
+	public int bidMore(final int nextBidValue) {
 		if (maxBidValue < 0) {
-			maxBidValue = new Bidding(knowledge.getMyCards()).getMaxBid();
+			maxBidValue = new Bidding(knowledge.getOwnCards()).getMaxBid();
 		}
 		if (maxBidValue < nextBidValue) {
-			aiPlayer = new OpponentPlayer(knowledge.getMyCards(), playerName);
+			aiPlayer = new OpponentPlayer(knowledge.getOwnCards(), playerName);
 			return -1;
 		}
 		return nextBidValue;
@@ -79,13 +79,13 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	 * @see org.jskat.ai.JSkatPlayer#holdBid(int)
 	 */
 	@Override
-	public boolean holdBid(int currBidValue) {
+	public boolean holdBid(final int currBidValue) {
 		if (maxBidValue < 0) {
-			maxBidValue = new Bidding(knowledge.getMyCards()).getMaxBid();
+			maxBidValue = new Bidding(knowledge.getOwnCards()).getMaxBid();
 		}
 		boolean result = !(maxBidValue < 18) && maxBidValue >= currBidValue;
 		if (!result) {
-			aiPlayer = new OpponentPlayer(knowledge.getMyCards(), playerName);
+			aiPlayer = new OpponentPlayer(knowledge.getOwnCards(), playerName);
 		}
 		return result;
 	}
@@ -110,8 +110,7 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	@Override
 	public GameAnnouncement announceGame() {
 		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-		factory.setGameType(new Bidding(knowledge.getMyCards())
-				.getSuggestedGameType());
+		factory.setGameType(new Bidding(knowledge.getOwnCards()).getSuggestedGameType());
 		return factory.getAnnouncement();
 	}
 
@@ -121,15 +120,13 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	 * @see org.jskat.ai.JSkatPlayer#discardSkat()
 	 */
 	@Override
-	public CardList discardSkat() {
+	public CardList getCardsToDiscard() {
 		// should be done: check which cards should best be discarded
 		if (aiPlayer == null || aiPlayer instanceof OpponentPlayer) {
-			knowledge.getMyCards().remove(knowledge.getSkat().get(0));
-			knowledge.getMyCards().remove(knowledge.getSkat().get(1));
-			log.debug("aiplayer is not SinglePlayer, discarding original skat of ["
-					+ knowledge.getSkat()
-					+ "], cards.size="
-					+ knowledge.getMyCards().size());
+			knowledge.getOwnCards().remove(knowledge.getSkat().get(0));
+			knowledge.getOwnCards().remove(knowledge.getSkat().get(1));
+			log.debug("aiplayer is not SinglePlayer, discarding original skat of [" + knowledge.getSkat()
+					+ "], cards.size=" + knowledge.getOwnCards().size());
 			return knowledge.getSkat();
 		}
 
@@ -146,13 +143,11 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 		log.debug("Starting game for player (" + getPlayerName() + ")");
 		if (knowledge.getDeclarer() != knowledge.getPlayerPosition()) {
 			log.debug("ok? AIPlayerMJL should be OpponentPlayer - actually is: "
-					+ (aiPlayer == null ? "null" : aiPlayer.getClass()
-							.getName()));
+					+ (aiPlayer == null ? "null" : aiPlayer.getClass().getName()));
 		} else {
 			log.debug("ok? setting AIPlayerMJL to be SinglePlayer - actually is: "
-					+ (aiPlayer == null ? "null" : aiPlayer.getClass()
-							.getName()));
-			aiPlayer = new SinglePlayer(knowledge.getMyCards(), rules);
+					+ (aiPlayer == null ? "null" : aiPlayer.getClass().getName()));
+			aiPlayer = new SinglePlayer(knowledge.getOwnCards(), rules);
 		}
 		aiPlayer.startGame(knowledge);
 	}
@@ -164,23 +159,21 @@ public class AIPlayerMJL extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public Card playCard() {
-		log.debug("--------------------- start (" + playerName
-				+ ") ----------------------------------");
-		log.debug(".playCard(): my position: " + knowledge.getPlayerPosition()
-				+ ", single player: " + knowledge.getDeclarer());
+		log.debug("--------------------- start (" + playerName + ") ----------------------------------");
+		log.debug(".playCard(): my position: " + knowledge.getPlayerPosition() + ", single player: "
+				+ knowledge.getDeclarer());
 		Card toPlay = aiPlayer.playNextCard(knowledge);
 		// make sure, that there is a card
-		if (toPlay != null)
+		if (toPlay != null) {
 			return toPlay;
+		}
 		// if there is none, just play the first valid card
 		log.debug("no card returned from AIPlayer - just taking the first valid card");
 		CardList result = getPlayableCards(this.knowledge.getTrickCards());
 		if (result.size() < 1) {
 			log.warn("no playable cards - shouldn't be possible!");
-			log.debug("my cards: " + knowledge.getMyCards() + ", trick: "
-					+ this.knowledge.getTrickCards());
-			log.debug("--------------------- done (" + playerName
-					+ ") -----------------------------------");
+			log.debug("my cards: " + knowledge.getOwnCards() + ", trick: " + this.knowledge.getTrickCards());
+			log.debug("--------------------- done (" + playerName + ") -----------------------------------");
 			return null;
 		}
 		log.debug("--------------------- done -----------------------------------");

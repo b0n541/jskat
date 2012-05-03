@@ -67,7 +67,7 @@ class DiscardPanel extends JPanel {
 	 * @param newMaxCardCount
 	 *            Maximum number of cards
 	 */
-	public DiscardPanel(ActionMap actions, int newMaxCardCount) {
+	public DiscardPanel(final ActionMap actions, final int newMaxCardCount) {
 
 		setActionMap(actions);
 		maxCardCount = newMaxCardCount;
@@ -88,7 +88,7 @@ class DiscardPanel extends JPanel {
 		pickUpSkatButton = new JButton(pickUpSkatAction);
 		pickUpSkatButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 
 				log.debug("user picked up skat");
 				userPickedUpSkat = true;
@@ -111,7 +111,7 @@ class DiscardPanel extends JPanel {
 		cardPanel.showCards();
 	}
 
-	protected void setSkat(CardList skat) {
+	protected void setSkat(final CardList skat) {
 
 		clearCards();
 		addCard(skat.get(0));
@@ -124,11 +124,11 @@ class DiscardPanel extends JPanel {
 		cardPanel.clearCards();
 	}
 
-	void addCard(Card card) {
+	void addCard(final Card card) {
 		cardPanel.addCard(card);
 	}
 
-	void removeCard(Card card) {
+	void removeCard(final Card card) {
 		cardPanel.removeCard(card);
 	}
 
@@ -138,12 +138,12 @@ class DiscardPanel extends JPanel {
 		showPanel(PICK_UP_SKAT_BUTTON);
 	}
 
-	protected void showPanel(String panelType) {
+	protected void showPanel(final String panelType) {
 		((CardLayout) getLayout()).show(DiscardPanel.this, panelType);
 	}
 
 	public CardList getDiscardedCards() {
-		return (CardList) cardPanel.cards.clone();
+		return cardPanel.cards.getImmutableCopy();
 	}
 
 	public boolean isUserLookedIntoSkat() {
@@ -158,7 +158,7 @@ class DiscardPanel extends JPanel {
 		return userPickedUpSkat;
 	}
 
-	void setAnnouncePanel(GameAnnouncePanel announcePanel) {
+	void setAnnouncePanel(final GameAnnouncePanel announcePanel) {
 		this.announcePanel = announcePanel;
 	}
 

@@ -124,9 +124,9 @@ public class PlayerKnowledge {
 	private final List<Trick> tricks = new ArrayList<Trick>();
 
 	/** Player cards */
-	private CardList myCards = new CardList();
+	private final CardList ownCards = new CardList();
 	/** Skat cards */
-	private CardList skat = new CardList();
+	private final CardList skat = new CardList();
 	/** Cards of the single player */
 	private CardList singlePlayerCards = new CardList();
 	/** Flag for hand game */
@@ -151,7 +151,7 @@ public class PlayerKnowledge {
 	 */
 	public void initializeVariables() {
 
-		myCards.clear();
+		ownCards.clear();
 		skat.clear();
 		singlePlayerCards.clear();
 		schneiderAnnounced = false;
@@ -626,23 +626,34 @@ public class PlayerKnowledge {
 	}
 
 	/**
-	 * Adds a card to the suit/point counter
+	 * Adds a card to the own cards and suit/point counter
 	 * 
 	 * @param card
 	 *            the Card to add
 	 */
-	public void addCard(final Card card) {
+	public void addOwnCard(final Card card) {
 
-		if (!myCards.contains(card)) {
-			myCards.add(card);
+		if (!ownCards.contains(card)) {
+			ownCards.add(card);
 
 			possiblePlayerCards.get(playerPosition.getLeftNeighbor()).remove(card);
 			possiblePlayerCards.get(playerPosition.getRightNeighbor()).remove(card);
 			possibleSkatCards.remove(card);
 
-			suitCount.put(card.getSuit(), Integer.valueOf(suitCount.get(card.getSuit()).intValue() + 1));
-			suitPoints.put(card.getSuit(),
-					Integer.valueOf(suitCount.get(card.getSuit()).intValue() + card.getRank().getPoints()));
+			suitCount.put(card.getSuit(), suitCount.get(card.getSuit()) + 1);
+			suitPoints.put(card.getSuit(), suitCount.get(card.getSuit()) + card.getRank().getPoints());
+		}
+	}
+
+	/**
+	 * Adds cards to the own cards and the suit/point counter
+	 * 
+	 * @param cards
+	 *            Card to be added
+	 */
+	public void addOwnCards(final CardList cards) {
+		for (Card card : cards) {
+			addOwnCard(card);
 		}
 	}
 
@@ -654,9 +665,19 @@ public class PlayerKnowledge {
 	 */
 	public void removeCard(final Card card) {
 
-		suitCount.put(card.getSuit(), Integer.valueOf(suitCount.get(card.getSuit()).intValue() - 1));
-		suitPoints.put(card.getSuit(),
-				Integer.valueOf(suitCount.get(card.getSuit()).intValue() - card.getRank().getPoints()));
+		suitCount.put(card.getSuit(), suitCount.get(card.getSuit()) - 1);
+		suitPoints.put(card.getSuit(), suitCount.get(card.getSuit()) - card.getRank().getPoints());
+	}
+
+	public void removeOwnCard(final Card card) {
+		removeCard(card);
+		ownCards.remove(card);
+	}
+
+	public void removeOwnCards(final CardList cards) {
+		for (Card card : cards) {
+			removeOwnCard(card);
+		}
 	}
 
 	/**
@@ -769,7 +790,7 @@ public class PlayerKnowledge {
 
 		game = gameAnn;
 		if (!GameType.PASSED_IN.equals(getGameType())) {
-			for (Card c : myCards) {
+			for (Card c : ownCards) {
 				// FIXME (jansch 21.09.2011) Cards shouldn't check whether they
 				// are trump or not, let skat rules do the job
 				if (c.isTrump(getGameType())) {
@@ -851,33 +872,35 @@ public class PlayerKnowledge {
 	}
 
 	/**
-	 * @return the myCards
+	 * @return the ownCards
 	 */
-	public CardList getMyCards() {
-		return myCards;
+	public CardList getOwnCards() {
+		return ownCards.getImmutableCopy();
 	}
 
 	/**
-	 * @param myCards
-	 *            the myCards to set
+	 * @param newCards
+	 *            the ownCards to set
 	 */
-	public void setMyCards(final CardList myCards) {
-		this.myCards = myCards;
+	public void setOwnCards(final CardList newCards) {
+		ownCards.clear();
+		ownCards.addAll(newCards);
 	}
 
 	/**
 	 * @return the skat
 	 */
 	public CardList getSkat() {
-		return skat;
+		return skat.getImmutableCopy();
 	}
 
 	/**
-	 * @param skat
+	 * @param newSkat
 	 *            the skat to set
 	 */
-	public void setSkat(final CardList skat) {
-		this.skat = skat;
+	public void setSkat(final CardList newSkat) {
+		skat.clear();
+		skat.addAll(newSkat);
 	}
 
 	/**

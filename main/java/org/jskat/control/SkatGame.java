@@ -53,11 +53,11 @@ public class SkatGame extends JSkatThread {
 
 	private Log log = LogFactory.getLog(SkatGame.class);
 	private int maxSleep;
-	private SkatGameData data;
+	private final SkatGameData data;
 	private final GameVariant variant;
 	private CardDeck deck;
-	private Map<Player, JSkatPlayer> player;
-	private String tableName;
+	private final Map<Player, JSkatPlayer> player;
+	private final String tableName;
 	private JSkatView view;
 	private SkatRule rules;
 
@@ -75,8 +75,8 @@ public class SkatGame extends JSkatThread {
 	 * @param newRearHand
 	 *            Hind hand player
 	 */
-	public SkatGame(String newTableName, GameVariant variant, JSkatPlayer newForeHand, JSkatPlayer newMiddleHand,
-			JSkatPlayer newRearHand) {
+	public SkatGame(final String newTableName, final GameVariant variant, final JSkatPlayer newForeHand,
+			final JSkatPlayer newMiddleHand, final JSkatPlayer newRearHand) {
 		tableName = newTableName;
 		this.variant = variant;
 		player = new HashMap<Player, JSkatPlayer>();
@@ -225,16 +225,16 @@ public class SkatGame extends JSkatThread {
 		log.debug(data.getGameState());
 	}
 
-	private void setActivePlayer(Player activePlayer) {
+	private void setActivePlayer(final Player activePlayer) {
 		data.setActivePlayer(activePlayer);
 		view.setActivePlayer(tableName, activePlayer);
 	}
 
-	private boolean playGrandHand(Player playerPosition) {
+	private boolean playGrandHand(final Player playerPosition) {
 		return player.get(playerPosition).playGrandHand();
 	}
 
-	private boolean pickUpSkat(Player playerPosition) {
+	private boolean pickUpSkat(final Player playerPosition) {
 		return player.get(playerPosition).pickUpSkat();
 	}
 
@@ -298,7 +298,7 @@ public class SkatGame extends JSkatThread {
 	 * @param cardCount
 	 *            Number of cards to be dealt to a player
 	 */
-	private void dealCards(int cardCount) {
+	private void dealCards(final int cardCount) {
 
 		for (Player hand : Player.values()) {
 			// for all players
@@ -392,7 +392,7 @@ public class SkatGame extends JSkatThread {
 		doSleep(maxSleep);
 	}
 
-	private void informPlayerAboutBid(Player bidPlayer, int bidValue) {
+	private void informPlayerAboutBid(final Player bidPlayer, final int bidValue) {
 
 		// inform all players about the last bid
 		for (Player currPlayerPosition : player.keySet()) {
@@ -411,7 +411,7 @@ public class SkatGame extends JSkatThread {
 	 *            Bid value to start from
 	 * @return the final bid value
 	 */
-	private int twoPlayerBidding(Player announcer, Player hearer, int startBidValue) {
+	private int twoPlayerBidding(final Player announcer, final Player hearer, final int startBidValue) {
 
 		int currBidValue = startBidValue;
 		boolean announcerPassed = false;
@@ -470,7 +470,7 @@ public class SkatGame extends JSkatThread {
 		return currBidValue;
 	}
 
-	private Player getBiddingWinner(Player announcer, Player hearer) {
+	private Player getBiddingWinner(final Player announcer, final Player hearer) {
 
 		Player biddingWinner = null;
 
@@ -495,7 +495,7 @@ public class SkatGame extends JSkatThread {
 
 		// create a clone of the skat before sending it to the player
 		// otherwise the player could change the skat after discarding
-		activePlayer.takeSkat((CardList) data.getSkat().clone());
+		activePlayer.takeSkat(data.getSkat());
 
 		// ask player for the cards to be discarded
 		// cloning is done to prevent the player
@@ -516,7 +516,7 @@ public class SkatGame extends JSkatThread {
 		}
 	}
 
-	private boolean checkDiscardedCards(CardList discardedSkat) {
+	private boolean checkDiscardedCards(final CardList discardedSkat) {
 
 		// TODO move this to skat rules?
 		boolean result = true;
@@ -696,7 +696,7 @@ public class SkatGame extends JSkatThread {
 		}
 	}
 
-	private void playCard(Trick trick, Player trickForeHand, Player currPlayer) {
+	private void playCard(final Trick trick, final Player trickForeHand, final Player currPlayer) {
 
 		Card card = null;
 		JSkatPlayer skatPlayer = getPlayerObject(currPlayer);
@@ -774,7 +774,7 @@ public class SkatGame extends JSkatThread {
 			}
 		} else {
 			// card was on players hand and is valid
-			data.getPlayerCards(currPlayer).remove(card);
+			data.removePlayerCard(currPlayer, card);
 			data.setTrickCard(currPlayer, card);
 
 			if (trick.getTrickNumberInGame() > 0 && currPlayer.equals(trickForeHand)) {
@@ -799,7 +799,7 @@ public class SkatGame extends JSkatThread {
 		}
 	}
 
-	private JSkatPlayer getPlayerObject(Player currPlayer) {
+	private JSkatPlayer getPlayerObject(final Player currPlayer) {
 
 		return player.get(currPlayer);
 	}
@@ -811,7 +811,7 @@ public class SkatGame extends JSkatThread {
 	 *            Card to check
 	 * @return TRUE if the card is on player's hand
 	 */
-	private boolean playerHasCard(Player skatPlayer, Card card) {
+	private boolean playerHasCard(final Player skatPlayer, final Card card) {
 
 		boolean result = false;
 
@@ -854,7 +854,7 @@ public class SkatGame extends JSkatThread {
 		doSleep(maxSleep);
 	}
 
-	private void doSleep(int milliseconds) {
+	private void doSleep(final int milliseconds) {
 
 		try {
 			sleep(milliseconds);
@@ -868,7 +868,7 @@ public class SkatGame extends JSkatThread {
 	 * 
 	 * @param newView
 	 */
-	public void setView(JSkatView newView) {
+	public void setView(final JSkatView newView) {
 
 		view = newView;
 	}
@@ -879,7 +879,7 @@ public class SkatGame extends JSkatThread {
 	 * @param newLogger
 	 *            New logger
 	 */
-	public void setLogger(Log newLogger) {
+	public void setLogger(final Log newLogger) {
 		log = newLogger;
 	}
 
@@ -889,7 +889,7 @@ public class SkatGame extends JSkatThread {
 	 * @param newDeck
 	 *            Card deck
 	 */
-	public void setCardDeck(CardDeck newDeck) {
+	public void setCardDeck(final CardDeck newDeck) {
 
 		deck = newDeck;
 	}
@@ -900,7 +900,7 @@ public class SkatGame extends JSkatThread {
 	 * @param ann
 	 *            Game announcement
 	 */
-	public void setGameAnnouncement(GameAnnouncement ann) {
+	public void setGameAnnouncement(final GameAnnouncement ann) {
 
 		data.setAnnouncement(ann);
 		rules = SkatRuleFactory.getSkatRules(data.getGameType());
@@ -920,7 +920,7 @@ public class SkatGame extends JSkatThread {
 	 * @param newState
 	 *            Game state
 	 */
-	public void setGameState(GameState newState) {
+	public void setGameState(final GameState newState) {
 
 		data.setGameState(newState);
 
@@ -945,7 +945,7 @@ public class SkatGame extends JSkatThread {
 	 * @param declarer
 	 *            Declarer
 	 */
-	public void setDeclarer(Player declarer) {
+	public void setDeclarer(final Player declarer) {
 
 		data.setDeclarer(declarer);
 		view.setDeclarer(tableName, declarer);
@@ -986,7 +986,7 @@ public class SkatGame extends JSkatThread {
 	 * @param newMaxSleep
 	 *            Maximum sleep time
 	 */
-	public void setMaxSleep(int newMaxSleep) {
+	public void setMaxSleep(final int newMaxSleep) {
 
 		maxSleep = newMaxSleep;
 	}
