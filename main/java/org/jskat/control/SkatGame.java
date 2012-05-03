@@ -490,8 +490,7 @@ public class SkatGame extends JSkatThread {
 		log.debug("Player (" + activePlayer + ") looks into the skat..."); //$NON-NLS-1$ //$NON-NLS-2$
 		log.debug("Skat before discarding: " + data.getSkat()); //$NON-NLS-1$
 
-		CardList skatBefore = new CardList();
-		skatBefore.addAll(data.getSkat());
+		CardList skatBefore = new CardList(data.getSkat());
 
 		// create a clone of the skat before sending it to the player
 		// otherwise the player could change the skat after discarding
