@@ -56,14 +56,12 @@ class BiddingContextPanel extends JPanel {
 	 * @param actions
 	 *            Action map
 	 */
-	BiddingContextPanel(ActionMap actions, JSkatGraphicRepository bitmaps,
-			JSkatUserPanel userPanel) {
+	BiddingContextPanel(final ActionMap actions, final JSkatGraphicRepository bitmaps, final JSkatUserPanel userPanel) {
 
 		initPanel(actions, bitmaps, userPanel);
 	}
 
-	private void initPanel(ActionMap actions, JSkatGraphicRepository bitmaps,
-			JSkatUserPanel userPanel) {
+	private void initPanel(final ActionMap actions, final JSkatGraphicRepository bitmaps, final JSkatUserPanel userPanel) {
 
 		setLayout(LayoutFactory.getMigLayout("fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
@@ -81,8 +79,7 @@ class BiddingContextPanel extends JPanel {
 		setOpaque(false);
 	}
 
-	private JPanel getBiddingPanel(ActionMap actions,
-			JSkatGraphicRepository bitmaps) {
+	private JPanel getBiddingPanel(final ActionMap actions, final JSkatGraphicRepository bitmaps) {
 
 		JPanel biddingPanel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
@@ -104,7 +101,7 @@ class BiddingContextPanel extends JPanel {
 		return biddingPanel;
 	}
 
-	void setUserPosition(Player player) {
+	void setUserPosition(final Player player) {
 		// FIXME (jansch 09.11.2010) code duplication with
 		// SkatTablePanel.setPositions()
 		switch (player) {
@@ -126,7 +123,7 @@ class BiddingContextPanel extends JPanel {
 		}
 	}
 
-	void setBid(Player player, int bidValue) {
+	void setBid(final Player player, final int bidValue) {
 
 		switch (player) {
 		case FOREHAND:
@@ -141,7 +138,7 @@ class BiddingContextPanel extends JPanel {
 		}
 	}
 
-	void setPass(Player player) {
+	void setPass(final Player player) {
 
 		switch (player) {
 		case FOREHAND:
@@ -156,13 +153,13 @@ class BiddingContextPanel extends JPanel {
 		}
 	}
 
-	void setBidValueToMake(int bidValue) {
+	void setBidValueToMake(final int bidValue) {
 
 		bidButton.setAction(makeBidAction);
 		bidButton.setText(String.valueOf(bidValue));
 	}
 
-	void setBidValueToHold(int bidValue) {
+	void setBidValueToHold(final int bidValue) {
 
 		bidButton.setAction(holdBidAction);
 		bidButton.setText(String.valueOf(bidValue));
@@ -173,7 +170,7 @@ class BiddingContextPanel extends JPanel {
 		foreHandBidLabel.setBidValue(0);
 		middleHandBidLabel.setBidValue(0);
 		rearHandBidLabel.setBidValue(0);
-		bidButton.setText("18"); //$NON-NLS-1$
+		setBidValueToMake(18);
 		announcePanel.resetPanel();
 	}
 }
