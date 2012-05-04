@@ -28,7 +28,7 @@ import org.jskat.util.GameType;
 /**
  * Game announcement
  * 
- * An object of this class is returned by an AI player for game announcement
+ * An object of this class is returned by a player for game announcement
  */
 public class GameAnnouncement {
 
@@ -106,7 +106,7 @@ public class GameAnnouncement {
 		 * @param gameType
 		 *            Game type
 		 */
-		public final void setGameType(GameType gameType) {
+		public final void setGameType(final GameType gameType) {
 			tmpAnnouncement.gameType = gameType;
 		}
 
@@ -116,7 +116,7 @@ public class GameAnnouncement {
 		 * @param discardedCards
 		 *            Discarded cards
 		 */
-		public final void setDiscardedCards(CardList discardedCards) {
+		public final void setDiscardedCards(final CardList discardedCards) {
 			tmpAnnouncement.discardedCards.addAll(discardedCards);
 		}
 
@@ -126,7 +126,7 @@ public class GameAnnouncement {
 		 * @param isHand
 		 *            TRUE, if a hand game was announced
 		 */
-		public final void setHand(Boolean isHand) {
+		public final void setHand(final Boolean isHand) {
 			tmpAnnouncement.hand = isHand;
 		}
 
@@ -136,7 +136,7 @@ public class GameAnnouncement {
 		 * @param isOuvert
 		 *            TRUE, if an ouvert game was announced
 		 */
-		public final void setOuvert(Boolean isOuvert) {
+		public final void setOuvert(final Boolean isOuvert) {
 			tmpAnnouncement.ouvert = isOuvert;
 		}
 
@@ -146,7 +146,7 @@ public class GameAnnouncement {
 		 * @param isSchneider
 		 *            TRUE, if schneider was announced
 		 */
-		public final void setSchneider(Boolean isSchneider) {
+		public final void setSchneider(final Boolean isSchneider) {
 			tmpAnnouncement.schneider = isSchneider;
 		}
 
@@ -156,7 +156,7 @@ public class GameAnnouncement {
 		 * @param isSchwarz
 		 *            TRUE, if a schwarz was announced
 		 */
-		public final void setSchwarz(Boolean isSchwarz) {
+		public final void setSchwarz(final Boolean isSchwarz) {
 			tmpAnnouncement.schwarz = isSchwarz;
 		}
 
@@ -188,9 +188,7 @@ public class GameAnnouncement {
 	 * @return Discarded cards
 	 */
 	public final CardList getDiscardedCards() {
-		CardList result = new CardList();
-		result.addAll(discardedCards);
-		return result;
+		return discardedCards.getImmutableCopy();
 	}
 
 	/**

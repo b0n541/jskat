@@ -114,6 +114,7 @@ public class NullRuleTest extends AbstractJSkatTest {
 	@Test
 	public void calcGameResultGameWonHand() {
 
+		factory.setHand(true);
 		data.setAnnouncement(factory.getAnnouncement());
 		playWinningTricks();
 		data.calcResult();
@@ -139,8 +140,8 @@ public class NullRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void calcGameResultGameWonHandOuvert() {
-
-		factory.setOuvert(Boolean.TRUE);
+		factory.setHand(true);
+		factory.setOuvert(true);
 		data.setAnnouncement(factory.getAnnouncement());
 		playWinningTricks();
 		data.calcResult();
@@ -175,7 +176,7 @@ public class NullRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void calcGameResultGameLostHand() {
-
+		factory.setHand(true);
 		data.setAnnouncement(factory.getAnnouncement());
 		playWinningTricks();
 		playLoosingTrick();
@@ -203,8 +204,8 @@ public class NullRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void calcGameResultGameLostHandOuvert() {
-
-		factory.setOuvert(Boolean.TRUE);
+		factory.setHand(true);
+		factory.setOuvert(true);
 		data.setAnnouncement(factory.getAnnouncement());
 		playWinningTricks();
 		playLoosingTrick();

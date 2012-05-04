@@ -35,7 +35,7 @@ import org.jskat.util.Player;
 public class MoveInformation {
 
 	private MovePlayer movePlayer;
-	private Map<Player, Double> playerTimes = new HashMap<Player, Double>();
+	private final Map<Player, Double> playerTimes = new HashMap<Player, Double>();
 	private MoveType type;
 	private int bidValue;
 	private GameAnnouncement announcement;
@@ -63,27 +63,26 @@ public class MoveInformation {
 	 * @param ann
 	 *            Game announcement
 	 */
-	public void setGameAnnouncement(GameAnnouncement ann) {
+	public void setGameAnnouncement(final GameAnnouncement ann) {
 		announcement = ann;
 	}
 
 	/**
-	 * Gets  the skat
+	 * Gets the skat
 	 * 
 	 * @return CardList
 	 */
 	public CardList getSkat() {
 
-		return skat;
+		return skat.getImmutableCopy();
 	}
 
 	/**
-	 * Sets the skat cards
+	 * Sets the skat
 	 * 
-	 * @param newSkat
-	 *            skat cards
+	 * @return CardList
 	 */
-	public void setSkat(CardList newSkat) {
+	public void setSkat(final CardList newSkat) {
 
 		skat = newSkat;
 	}
@@ -113,7 +112,7 @@ public class MoveInformation {
 	 * @param newMovePlayer
 	 *            Position of the player
 	 */
-	public void setMovePlayer(MovePlayer newMovePlayer) {
+	public void setMovePlayer(final MovePlayer newMovePlayer) {
 
 		movePlayer = newMovePlayer;
 	}
@@ -134,7 +133,7 @@ public class MoveInformation {
 	 * @param time
 	 *            Time
 	 */
-	public void putPlayerTime(Player playerPosition, Double time) {
+	public void putPlayerTime(final Player playerPosition, final Double time) {
 
 		playerTimes.put(playerPosition, time);
 	}
@@ -146,7 +145,7 @@ public class MoveInformation {
 	 *            Player position
 	 * @return Time
 	 */
-	public double getPlayerTime(Player playerPosition) {
+	public double getPlayerTime(final Player playerPosition) {
 
 		return playerTimes.get(playerPosition).doubleValue();
 	}
@@ -167,7 +166,7 @@ public class MoveInformation {
 	 * @param newType
 	 *            Move type
 	 */
-	public void setType(MoveType newType) {
+	public void setType(final MoveType newType) {
 
 		type = newType;
 	}
@@ -188,7 +187,7 @@ public class MoveInformation {
 	 * @param newBidValue
 	 *            Bid value
 	 */
-	public void setBidValue(int newBidValue) {
+	public void setBidValue(final int newBidValue) {
 
 		bidValue = newBidValue;
 	}
@@ -208,7 +207,7 @@ public class MoveInformation {
 	 * 
 	 * @param newCard
 	 */
-	public void setCard(Card newCard) {
+	public void setCard(final Card newCard) {
 
 		card = newCard;
 	}
@@ -219,7 +218,7 @@ public class MoveInformation {
 	 * @param player
 	 *            Player
 	 */
-	public void clearCards(Player player) {
+	public void clearCards(final Player player) {
 
 		switch (player) {
 		case FOREHAND:
@@ -242,7 +241,7 @@ public class MoveInformation {
 	 * @param newCard
 	 *            Card
 	 */
-	public void addCard(Player player, Card newCard) {
+	public void addCard(final Player player, final Card newCard) {
 
 		switch (player) {
 		case FOREHAND:
@@ -263,7 +262,7 @@ public class MoveInformation {
 	 * 
 	 * @param deal
 	 */
-	public void setDealCards(List<CardList> deal) {
+	public void setDealCards(final List<CardList> deal) {
 
 		foreHandCards = deal.get(0);
 		middleHandCards = deal.get(1);
@@ -278,7 +277,7 @@ public class MoveInformation {
 	 *            Player
 	 * @return Cards of a player
 	 */
-	public CardList getCards(Player player) {
+	public CardList getCards(final Player player) {
 
 		CardList result = null;
 
@@ -303,7 +302,7 @@ public class MoveInformation {
 	 * @param newTimeOutPlayer
 	 *            Time out player
 	 */
-	public void setTimeOutPlayer(Player newTimeOutPlayer) {
+	public void setTimeOutPlayer(final Player newTimeOutPlayer) {
 
 		timeOutPlayer = newTimeOutPlayer;
 	}
@@ -318,7 +317,7 @@ public class MoveInformation {
 		return timeOutPlayer;
 	}
 
-	private static Player getPlayer(MovePlayer movePlayer) {
+	private static Player getPlayer(final MovePlayer movePlayer) {
 
 		Player result = null;
 
@@ -345,7 +344,7 @@ public class MoveInformation {
 	 * @param newOuvertCards
 	 *            Ouvert cards
 	 */
-	public void setOuvertCards(CardList newOuvertCards) {
+	public void setOuvertCards(final CardList newOuvertCards) {
 		ouvertCards = newOuvertCards;
 	}
 

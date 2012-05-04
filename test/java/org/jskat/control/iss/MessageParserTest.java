@@ -32,6 +32,7 @@ import java.util.StringTokenizer;
 import org.jskat.AbstractJSkatTest;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.SkatGameData;
+import org.jskat.data.Trick;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.data.iss.MoveType;
 import org.jskat.data.iss.PlayerStatus;
@@ -61,7 +62,38 @@ public class MessageParserTest extends AbstractJSkatTest {
 		assertEquals("kermit", gameData.getPlayerName(Player.MIDDLEHAND)); //$NON-NLS-1$
 		assertEquals("foo", gameData.getPlayerName(Player.REARHAND)); //$NON-NLS-1$
 
+		assertEquals(0, gameData.getPlayerBid(Player.FOREHAND));
+		assertEquals(0, gameData.getPlayerBid(Player.MIDDLEHAND));
+		assertEquals(18, gameData.getPlayerBid(Player.REARHAND));
+		assertEquals(18, gameData.getBidValue());
 		assertEquals(Player.REARHAND, gameData.getDeclarer());
+
+		assertTrue(gameData.getDealtSkat().contains(Card.H8));
+		assertTrue(gameData.getDealtSkat().contains(Card.CK));
+
+		assertEquals(GameType.DIAMONDS, gameData.getGameType());
+		assertFalse(gameData.isHand());
+		assertFalse(gameData.isOuvert());
+		assertFalse(gameData.isSchneider());
+		assertFalse(gameData.isSchneiderAnnounced());
+		assertFalse(gameData.isSchwarz());
+		assertFalse(gameData.isSchwarzAnnounced());
+
+		assertEquals(10, gameData.getTricks().size());
+
+		List<Trick> tricks = gameData.getTricks();
+
+		checkTrick(tricks.get(0), Player.FOREHAND, Card.SA, Card.S7, Card.DA, Player.REARHAND);
+		checkTrick(tricks.get(1), Player.REARHAND, Card.HJ, Card.SJ, Card.D9, Player.FOREHAND);
+		checkTrick(tricks.get(2), Player.FOREHAND, Card.DQ, Card.DJ, Card.D7, Player.MIDDLEHAND);
+		checkTrick(tricks.get(3), Player.MIDDLEHAND, Card.CJ, Card.D8, Card.CQ, Player.MIDDLEHAND);
+		checkTrick(tricks.get(4), Player.MIDDLEHAND, Card.CA, Card.C7, Card.C9, Player.MIDDLEHAND);
+		checkTrick(tricks.get(5), Player.MIDDLEHAND, Card.S9, Card.DT, Card.S8, Player.REARHAND);
+		checkTrick(tricks.get(6), Player.REARHAND, Card.CT, Card.H7, Card.C8, Player.REARHAND);
+		checkTrick(tricks.get(7), Player.REARHAND, Card.CK, Card.H9, Card.HQ, Player.REARHAND);
+		checkTrick(tricks.get(8), Player.REARHAND, Card.HK, Card.HA, Card.SQ, Player.FOREHAND);
+		checkTrick(tricks.get(9), Player.FOREHAND, Card.SK, Card.DK, Card.HT, Player.MIDDLEHAND);
+
 		assertFalse(gameData.isGameWon());
 		assertEquals(-54, gameData.getResult().getGameValue());
 		assertEquals(59, gameData.getDeclarerScore());
@@ -69,6 +101,16 @@ public class MessageParserTest extends AbstractJSkatTest {
 		assertFalse(gameData.isSchneider());
 		assertFalse(gameData.isSchwarz());
 		assertFalse(gameData.isOverBidded());
+	}
+
+	private void checkTrick(final Trick trick, final Player trickForeHand, final Card firstCard, final Card secondCard,
+			final Card thirdCard, final Player trickWinner) {
+		int trickNo = trick.getTrickNumberInGame();
+		assertEquals("Wrong trick fore hand for trick " + trickNo, trickForeHand, trick.getForeHand()); //$NON-NLS-1$
+		assertEquals("Wrong first card for trick " + trickNo, firstCard, trick.getFirstCard()); //$NON-NLS-1$
+		assertEquals("Wrong second card for trick " + trickNo, secondCard, trick.getSecondCard()); //$NON-NLS-1$
+		assertEquals("Wrong third card for trick " + trickNo, thirdCard, trick.getThirdCard()); //$NON-NLS-1$
+		assertEquals("Wrong trick winner for trick " + trickNo, trickWinner, trick.getTrickWinner()); //$NON-NLS-1$
 	}
 
 	/**
@@ -81,9 +123,49 @@ public class MessageParserTest extends AbstractJSkatTest {
 
 		SkatGameData gameData = MessageParser.parseGameSummary(gameSummary);
 
-		assertTrue(gameData.isGameWon());
+		assertEquals("foo", gameData.getPlayerName(Player.FOREHAND)); //$NON-NLS-1$
+		assertEquals("xskat:2", gameData.getPlayerName(Player.MIDDLEHAND)); //$NON-NLS-1$
+		assertEquals("xskat", gameData.getPlayerName(Player.REARHAND)); //$NON-NLS-1$
 
-		// FIXME (jansch 05.04.2011) add further asserts
+		assertEquals(24, gameData.getPlayerBid(Player.FOREHAND));
+		assertEquals(24, gameData.getPlayerBid(Player.MIDDLEHAND));
+		assertEquals(27, gameData.getPlayerBid(Player.REARHAND));
+		assertEquals(27, gameData.getBidValue());
+		assertEquals(Player.REARHAND, gameData.getDeclarer());
+
+		assertTrue(gameData.getDealtSkat().contains(Card.HT));
+		assertTrue(gameData.getDealtSkat().contains(Card.H9));
+
+		assertEquals(GameType.GRAND, gameData.getGameType());
+		assertFalse(gameData.isHand());
+		assertFalse(gameData.isOuvert());
+		assertFalse(gameData.isSchneider());
+		assertFalse(gameData.isSchneiderAnnounced());
+		assertFalse(gameData.isSchwarz());
+		assertFalse(gameData.isSchwarzAnnounced());
+
+		assertEquals(10, gameData.getTricks().size());
+
+		List<Trick> tricks = gameData.getTricks();
+
+		checkTrick(tricks.get(0), Player.FOREHAND, Card.DK, Card.DA, Card.D8, Player.MIDDLEHAND);
+		checkTrick(tricks.get(1), Player.MIDDLEHAND, Card.DT, Card.D9, Card.ST, Player.MIDDLEHAND);
+		checkTrick(tricks.get(2), Player.MIDDLEHAND, Card.SA, Card.CJ, Card.S7, Player.REARHAND);
+		checkTrick(tricks.get(3), Player.REARHAND, Card.HJ, Card.CT, Card.DJ, Player.REARHAND);
+		checkTrick(tricks.get(4), Player.REARHAND, Card.DQ, Card.C7, Card.D7, Player.REARHAND);
+		checkTrick(tricks.get(5), Player.REARHAND, Card.HA, Card.H7, Card.H8, Player.REARHAND);
+		checkTrick(tricks.get(6), Player.REARHAND, Card.HT, Card.HK, Card.C8, Player.REARHAND);
+		checkTrick(tricks.get(7), Player.REARHAND, Card.HQ, Card.S9, Card.CQ, Player.REARHAND);
+		checkTrick(tricks.get(8), Player.REARHAND, Card.H9, Card.SQ, Card.CK, Player.REARHAND);
+		checkTrick(tricks.get(9), Player.REARHAND, Card.SJ, Card.SK, Card.CA, Player.REARHAND);
+
+		assertTrue(gameData.isGameWon());
+		assertEquals(96, gameData.getResult().getGameValue());
+		assertEquals(85, gameData.getDeclarerScore());
+		assertEquals(35, gameData.getOpponentScore());
+		assertFalse(gameData.isSchneider());
+		assertFalse(gameData.isSchwarz());
+		assertFalse(gameData.isOverBidded());
 	}
 
 	/**
@@ -97,10 +179,39 @@ public class MessageParserTest extends AbstractJSkatTest {
 
 		SkatGameData gameData = MessageParser.parseGameSummary(gameSummary);
 
-		// assertTrue(gameData.isGamePassed());
+		assertTrue(gameData.isGamePassed());
 		assertEquals(0, gameData.getResult().getGameValue());
 
-		// FIXME (jan 28.05.2011) add further asserts
+		assertEquals("xskat", gameData.getPlayerName(Player.FOREHAND)); //$NON-NLS-1$
+		assertEquals("bonsai", gameData.getPlayerName(Player.MIDDLEHAND)); //$NON-NLS-1$
+		assertEquals("bernie", gameData.getPlayerName(Player.REARHAND)); //$NON-NLS-1$
+
+		assertEquals(0, gameData.getPlayerBid(Player.FOREHAND));
+		assertEquals(0, gameData.getPlayerBid(Player.MIDDLEHAND));
+		assertEquals(0, gameData.getPlayerBid(Player.REARHAND));
+		assertEquals(-1, gameData.getBidValue());
+		assertEquals(null, gameData.getDeclarer());
+
+		assertTrue(gameData.getDealtSkat().contains(Card.CA));
+		assertTrue(gameData.getDealtSkat().contains(Card.HA));
+
+		assertEquals(GameType.PASSED_IN, gameData.getGameType());
+		assertFalse(gameData.isHand());
+		assertFalse(gameData.isOuvert());
+		assertFalse(gameData.isSchneider());
+		assertFalse(gameData.isSchneiderAnnounced());
+		assertFalse(gameData.isSchwarz());
+		assertFalse(gameData.isSchwarzAnnounced());
+
+		assertEquals(0, gameData.getTricks().size());
+
+		assertFalse(gameData.isGameWon());
+		assertEquals(0, gameData.getResult().getGameValue());
+		assertEquals(0, gameData.getDeclarerScore());
+		assertEquals(0, gameData.getOpponentScore());
+		assertFalse(gameData.isSchneider());
+		assertFalse(gameData.isSchwarz());
+		assertFalse(gameData.isOverBidded());
 	}
 
 	/**
@@ -121,8 +232,7 @@ public class MessageParserTest extends AbstractJSkatTest {
 			detailParams.add(token.nextToken());
 		}
 
-		TablePanelStatus status = MessageParser.getTableStatus(creator,
-				detailParams);
+		TablePanelStatus status = MessageParser.getTableStatus(creator, detailParams);
 
 		assertEquals(3, status.getMaxPlayers());
 		assertEquals(3, status.getPlayerInformations().size());
@@ -156,8 +266,7 @@ public class MessageParserTest extends AbstractJSkatTest {
 			detailParams.add(token.nextToken());
 		}
 
-		MoveInformation moveInfo = MessageParser
-				.getMoveInformation(detailParams);
+		MoveInformation moveInfo = MessageParser.getMoveInformation(detailParams);
 
 		assertEquals(MoveType.RESIGN, moveInfo.getType());
 	}
@@ -180,8 +289,7 @@ public class MessageParserTest extends AbstractJSkatTest {
 			detailParams.add(token.nextToken());
 		}
 
-		MoveInformation moveInfo = MessageParser
-				.getMoveInformation(detailParams);
+		MoveInformation moveInfo = MessageParser.getMoveInformation(detailParams);
 
 		assertEquals(MoveType.SHOW_CARDS, moveInfo.getType());
 		CardList ouvertCards = moveInfo.getOuvertCards();
@@ -212,8 +320,7 @@ public class MessageParserTest extends AbstractJSkatTest {
 			detailParams.add(token.nextToken());
 		}
 
-		MoveInformation moveInfo = MessageParser
-				.getMoveInformation(detailParams);
+		MoveInformation moveInfo = MessageParser.getMoveInformation(detailParams);
 
 		assertEquals(MoveType.GAME_ANNOUNCEMENT, moveInfo.getType());
 

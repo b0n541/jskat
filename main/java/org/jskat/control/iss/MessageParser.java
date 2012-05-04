@@ -31,6 +31,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData;
+import org.jskat.data.Trick;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.MoveInformation;
@@ -42,6 +43,8 @@ import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
+import org.jskat.util.rule.SkatRule;
+import org.jskat.util.rule.SkatRuleFactory;
 
 /**
  * Parses ISS messages
@@ -60,7 +63,7 @@ public class MessageParser {
 	 * xskat:2 $ 0 0 0 0 0 0 1 1 <br>
 	 * . . 0 0 0 0 0 0 0 0 false <br>
 	 */
-	static TablePanelStatus getTableStatus(String loginName, List<String> params) {
+	static TablePanelStatus getTableStatus(final String loginName, final List<String> params) {
 
 		TablePanelStatus status = new TablePanelStatus();
 
@@ -95,7 +98,7 @@ public class MessageParser {
 	 * xskat:2 $ 0 0 0 0 0 0 1 1 <br>
 	 * . . 0 0 0 0 0 0 0 0 false <br>
 	 */
-	private static PlayerStatus parsePlayerStatus(List<String> params) {
+	private static PlayerStatus parsePlayerStatus(final List<String> params) {
 
 		PlayerStatus status = new PlayerStatus();
 
@@ -113,7 +116,7 @@ public class MessageParser {
 		return status;
 	}
 
-	static GameStartInformation getGameStartStatus(String loginName, List<String> params) {
+	static GameStartInformation getGameStartStatus(final String loginName, final List<String> params) {
 
 		log.debug("game start parameter: " + params); //$NON-NLS-1$
 
@@ -132,7 +135,7 @@ public class MessageParser {
 		return status;
 	}
 
-	static MoveInformation getMoveInformation(List<String> params) {
+	static MoveInformation getMoveInformation(final List<String> params) {
 
 		MoveInformation info = new MoveInformation();
 
@@ -209,15 +212,17 @@ public class MessageParser {
 			}
 		}
 
+		return info;
+	}
+
+	static void parsePlayerTimes(final List<String> params, final MoveInformation info) {
 		// parse player times
 		info.putPlayerTime(Player.FOREHAND, new Double(params.get(params.size() - 3)));
 		info.putPlayerTime(Player.MIDDLEHAND, new Double(params.get(params.size() - 2)));
 		info.putPlayerTime(Player.REARHAND, new Double(params.get(params.size() - 1)));
-
-		return info;
 	}
 
-	private static CardList parseSkatCards(String move) {
+	private static CardList parseSkatCards(final String move) {
 
 		StringTokenizer token = new StringTokenizer(move, "."); //$NON-NLS-1$
 		CardList result = new CardList();
@@ -229,7 +234,7 @@ public class MessageParser {
 		return result;
 	}
 
-	private static void getMovePlayer(String movePlayer, MoveInformation info) {
+	private static void getMovePlayer(final String movePlayer, final MoveInformation info) {
 
 		log.debug("Move player: " + movePlayer); //$NON-NLS-1$
 		if ("w".equals(movePlayer)) { //$NON-NLS-1$
@@ -252,7 +257,7 @@ public class MessageParser {
 	 * [H] (hand, not given if O + trump game) [S] (schneider announced, only in
 	 * H games, not if O or Z) [Z] (schwarz announced, only in H games)
 	 */
-	private static GameAnnouncement parseGameAnnoucement(MoveInformation info, String move) {
+	private static GameAnnouncement parseGameAnnoucement(final MoveInformation info, final String move) {
 
 		StringTokenizer annToken = new StringTokenizer(move, "."); //$NON-NLS-1$
 		String gameType = annToken.nextToken();
@@ -285,6 +290,8 @@ public class MessageParser {
 			factory.setGameType(GameType.NULL);
 		}
 
+		boolean handGame = false;
+		boolean ouvertGame = false;
 		// parse other game modifiers
 		for (int i = 1; i < gameType.length(); i++) {
 
@@ -293,9 +300,11 @@ public class MessageParser {
 			if (mod == 'O') {
 
 				factory.setOuvert(Boolean.TRUE);
+				ouvertGame = true;
 			} else if (mod == 'H') {
 
 				factory.setHand(Boolean.TRUE);
+				handGame = true;
 			} else if (mod == 'S') {
 
 				factory.setSchneider(Boolean.TRUE);
@@ -305,16 +314,13 @@ public class MessageParser {
 			}
 		}
 
-		GameAnnouncement ann = factory.getAnnouncement();
-		info.setGameAnnouncement(ann);
-
 		if (annToken.hasMoreTokens()) {
 
-			if (info.getGameAnnouncement().isOuvert()) {
+			if (ouvertGame) {
 
 				CardList ouvertCards = new CardList();
 
-				while (annToken.hasMoreTokens() && info.getGameAnnouncement().isOuvert()) {
+				while (annToken.hasMoreTokens()) {
 					// player has shown the cards
 					// ouvert game
 					ouvertCards.add(Card.getCardFromString(annToken.nextToken()));
@@ -322,29 +328,41 @@ public class MessageParser {
 
 				info.setOuvertCards(ouvertCards);
 
-			} else if (!info.getGameAnnouncement().isHand()) {
+			} else if (!handGame) {
 
-				Card skatCard0 = Card.getCardFromString(annToken.nextToken());
-				Card skatCard1 = Card.getCardFromString(annToken.nextToken());
+				Card discardCard0 = Card.getCardFromString(annToken.nextToken());
+				Card discardCard1 = Card.getCardFromString(annToken.nextToken());
 
-				CardList skat = new CardList();
-				skat.add(skatCard0);
-				skat.add(skatCard1);
+				CardList discardedCards = new CardList();
+				discardedCards.add(discardCard0);
+				discardedCards.add(discardCard1);
 
-				info.setSkat(skat);
+				factory.setDiscardedCards(discardedCards);
 			}
 		}
 
+		GameAnnouncement ann = factory.getAnnouncement();
+		info.setGameAnnouncement(ann);
 		return ann;
 	}
 
+	private static List<CardList> parseCardDeal(final String move) {
+
+		if (move.contains("|") && move.contains("??")) { //$NON-NLS-1$
+			return parseCardDealFromISSMessage(move);
+		}
+
+		return parseCardDealFromSummary(move);
+	}
+
 	/**
+	 * During playing on ISS the deal is send in the following format<br />
 	 * ??.??.??.??.??.??.??.??.??.??|D9.S9.ST.S8.C9.DT.DQ.CJ.SA.HA|??.??.??.??.?
-	 * ?.??.??.??.??.??|??.??
-	 * 
-	 * ?? - hidden card fore hand cards|middle hand cards|hind hand cards|skat
+	 * ?.??.??.??.??.??|??.??<br />
+	 * ?? - hidden card<br />
+	 * fore hand cards|middle hand cards|rear hand cards|skat
 	 */
-	private static List<CardList> parseCardDeal(String move) {
+	private static List<CardList> parseCardDealFromISSMessage(final String move) {
 
 		StringTokenizer handTokens = new StringTokenizer(move, "|"); //$NON-NLS-1$
 		List<CardList> result = new ArrayList<CardList>();
@@ -356,7 +374,34 @@ public class MessageParser {
 		return result;
 	}
 
-	private static CardList parseHand(String hand) {
+	/**
+	 * In game summary the deal is send in a different format<br />
+	 * CQ.H7.C8.C9.CT.SQ.DK.H8.H9.SA.S9.HK.HQ.DJ.CJ.S8.DT.HT.ST.D7.CK.S7.C7.DQ.
+	 * SJ.HA.CA.DA.D8.D9.SK.HJ<br />
+	 * no hidden cards<br />
+	 * first 10 cards fore hand<br />
+	 * next 10 cards middle hand<br />
+	 * next 10 cards rear hand<br />
+	 * last 2 cards skat
+	 * 
+	 * @param move
+	 */
+	private static List<CardList> parseCardDealFromSummary(final String move) {
+		List<CardList> result = new ArrayList<CardList>();
+
+		// fore hand
+		result.add(parseHand(move.substring(0, 29)));
+		// middle hand
+		result.add(parseHand(move.substring(30, 59)));
+		// rear hand
+		result.add(parseHand(move.substring(60, 89)));
+		// skat
+		result.add(parseHand(move.substring(90)));
+
+		return result;
+	}
+
+	private static CardList parseHand(final String hand) {
 
 		StringTokenizer cardTokens = new StringTokenizer(hand, "."); //$NON-NLS-1$
 		CardList result = new CardList();
@@ -371,7 +416,7 @@ public class MessageParser {
 	/**
 	 * TI.0
 	 */
-	private static Player parseTimeOut(String timeOut) {
+	private static Player parseTimeOut(final String timeOut) {
 
 		Player result = null;
 
@@ -390,7 +435,7 @@ public class MessageParser {
 		return result;
 	}
 
-	static SkatGameData parseGameSummary(String gameSummary) {
+	static SkatGameData parseGameSummary(final String gameSummary) {
 
 		SkatGameData result = new SkatGameData();
 
@@ -410,7 +455,8 @@ public class MessageParser {
 		return result;
 	}
 
-	private static void parseSummaryPart(SkatGameData result, String summaryPartMarker, String summaryPart) {
+	private static void parseSummaryPart(final SkatGameData result, final String summaryPartMarker,
+			final String summaryPart) {
 
 		if ("P0".equals(summaryPartMarker)) { //$NON-NLS-1$
 
@@ -434,7 +480,7 @@ public class MessageParser {
 		}
 	}
 
-	private static void parseMoves(SkatGameData result, String summaryPart) {
+	private static void parseMoves(final SkatGameData result, final String summaryPart) {
 
 		// FIXME (jansch 12.02.2012) parse moves correctly
 		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
@@ -449,12 +495,50 @@ public class MessageParser {
 			moveToken.add(token.nextToken());
 			moveToken.add(token.nextToken());
 
-			// FIXME (jan 06.12.2010) doesn't work this way a.t.m.
-			// MoveInformation moveInfo = getMoveInformation(moveToken);
+			MoveInformation moveInfo = getMoveInformation(moveToken);
+
+			switch (moveInfo.getType()) {
+			case DEAL:
+				result.setDealtSkatCards(moveInfo.getSkat().get(0), moveInfo.getSkat().get(1));
+				break;
+			case BID:
+				result.setBidValue(moveInfo.getBidValue());
+				result.setPlayerBid(moveInfo.getPlayer(), moveInfo.getBidValue());
+				break;
+			case HOLD_BID:
+				result.setPlayerBid(moveInfo.getPlayer(), result.getBidValue());
+				break;
+			case PASS:
+				result.setPlayerPass(moveInfo.getPlayer(), true);
+				break;
+			case GAME_ANNOUNCEMENT:
+				result.setAnnouncement(moveInfo.getGameAnnouncement());
+				break;
+			case CARD_PLAY:
+				if (result.getTricks().size() == 0) {
+					// no tricks played so far
+					result.addTrick(new Trick(0, Player.FOREHAND));
+				} else if (result.getCurrentTrick().getThirdCard() != null) {
+					// last card of trick is played
+					// set trick winner
+					result.getCurrentTrick().setTrickWinner(moveInfo.getPlayer());
+					// create next trick
+					result.addTrick(new Trick(result.getTricks().size(), moveInfo.getPlayer()));
+				}
+				result.setTrickCard(moveInfo.getPlayer(), moveInfo.getCard());
+
+				if (result.getTricks().size() == 10 && result.getCurrentTrick().getThirdCard() != null) {
+					// set the trick winner of the last trick
+					SkatRule skatRules = SkatRuleFactory.getSkatRules(result.getGameType());
+					result.setTrickWinner(9,
+							skatRules.calculateTrickWinner(result.getGameType(), result.getCurrentTrick()));
+				}
+				break;
+			}
 		}
 	}
 
-	private static void parseGameResult(SkatGameData result, String summaryPart) {
+	private static void parseGameResult(final SkatGameData result, final String summaryPart) {
 
 		StringTokenizer token = new StringTokenizer(summaryPart);
 
@@ -464,7 +548,7 @@ public class MessageParser {
 		}
 	}
 
-	private static void parseResultToken(SkatGameData gameData, String token) {
+	private static void parseResultToken(final SkatGameData gameData, final String token) {
 
 		// from ISS source code
 		// return "d:"+declarer + (penalty ? " penalty" : (declValue > 0 ? "
@@ -519,7 +603,7 @@ public class MessageParser {
 		}
 	}
 
-	private static void parseDeclarerToken(SkatGameData result, String token) {
+	private static void parseDeclarerToken(final SkatGameData result, final String token) {
 
 		if ("d:0".equals(token)) { //$NON-NLS-1$
 			result.setDeclarer(Player.FOREHAND);
@@ -538,7 +622,7 @@ public class MessageParser {
 	 * remainings is the chat message<br>
 	 * asdf jklö
 	 */
-	static ChatMessage getTableChatMessage(String tableName, List<String> detailParams) {
+	static ChatMessage getTableChatMessage(final String tableName, final List<String> detailParams) {
 
 		StringBuffer text = new StringBuffer();
 

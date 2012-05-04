@@ -929,9 +929,10 @@ public class SkatGameData {
 			if (!declarerPickedUpSkat) {
 				factory.setHand(Boolean.TRUE);
 			}
-			factory.setOuvert(Boolean.valueOf(announcement.isOuvert()));
-			factory.setSchneider(Boolean.valueOf(announcement.isSchneider()));
-			factory.setSchwarz(Boolean.valueOf(announcement.isSchwarz()));
+			factory.setHand(announcement.isHand());
+			factory.setOuvert(announcement.isOuvert());
+			factory.setSchneider(announcement.isSchneider());
+			factory.setSchwarz(announcement.isSchwarz());
 		}
 		this.announcement = factory.getAnnouncement();
 
