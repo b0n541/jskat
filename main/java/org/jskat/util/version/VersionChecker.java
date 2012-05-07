@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.jskat.JSkat;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
@@ -75,10 +74,10 @@ public class VersionChecker {
 	 * 
 	 * @return TRUE, if a new version is available
 	 */
-	public static boolean isHigherVersionAvailable(final String remoteVersion) {
+	public static boolean isHigherVersionAvailable(final String localVersion, final String remoteVersion) {
 		boolean result = false;
 
-		List<Integer> localVersionParts = getVersionParts(JSkat.getVersion());
+		List<Integer> localVersionParts = getVersionParts(localVersion);
 		List<Integer> remoteVersionParts = getVersionParts(remoteVersion);
 
 		Integer previousLocalPart = 0;
