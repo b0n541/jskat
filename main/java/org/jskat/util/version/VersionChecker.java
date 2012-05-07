@@ -75,18 +75,23 @@ public class VersionChecker {
 	 * 
 	 * @return TRUE, if a new version is available
 	 */
-	public static boolean isHigherVersionAvailable(String remoteVersion) {
+	public static boolean isHigherVersionAvailable(final String remoteVersion) {
 		boolean result = false;
 
 		List<Integer> localVersionParts = getVersionParts(JSkat.getVersion());
 		List<Integer> remoteVersionParts = getVersionParts(remoteVersion);
 
+		Integer previousLocalPart = 0;
+		Integer previousRemotePart = 0;
 		int index = 0;
 		for (Integer localVersionPart : localVersionParts) {
 			if (remoteVersionParts.size() > index) {
-				if (localVersionPart.intValue() < remoteVersionParts.get(index).intValue()) {
+				Integer remoteVersionPart = remoteVersionParts.get(index);
+				if (previousLocalPart == previousRemotePart && localVersionPart < remoteVersionPart) {
 					result = true;
 				}
+				previousLocalPart = localVersionPart;
+				previousRemotePart = remoteVersionPart;
 			}
 			index++;
 		}
@@ -94,7 +99,7 @@ public class VersionChecker {
 		return result;
 	}
 
-	private static List<Integer> getVersionParts(String version) {
+	private static List<Integer> getVersionParts(final String version) {
 		List<Integer> result = new ArrayList<Integer>();
 		StringTokenizer token = new StringTokenizer(version, "."); //$NON-NLS-1$
 		while (token.hasMoreTokens()) {
