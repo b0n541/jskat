@@ -67,5 +67,9 @@ public enum MoveType {
 	/**
 	 * Time out
 	 */
-	TIME_OUT
+	TIME_OUT,
+	/**
+	 * Leave table
+	 */
+	LEAVE_TABLE
 }

@@ -163,10 +163,17 @@ public class MessageParser {
 		} else if (move.equals("RE")) { //$NON-NLS-1$
 			// resigning of player
 			info.setType(MoveType.RESIGN);
-		} else if (move.startsWith("SC.")) { //$NON-NLS-1$
+		} else if (move.startsWith("SC")) { //$NON-NLS-1$
 			// declarer shows cards
 			info.setType(MoveType.SHOW_CARDS);
-			info.setOuvertCards(parseSkatCards(move.substring(move.indexOf(".") + 1))); //$NON-NLS-1$
+			if (move.length() > 2) {
+				// declarer cards follow, SC could also stand allone
+				info.setOuvertCards(parseSkatCards(move.substring(move.indexOf(".") + 1))); //$NON-NLS-1$
+			}
+		} else if (move.startsWith("LE.")) { //$NON-NLS-1$
+			// one player left the table during the game
+			info.setType(MoveType.LEAVE_TABLE);
+			info.setLeavingPlayer(parseLeaveTable(move));
 		} else {
 			// extensive parsing needed
 
@@ -418,9 +425,21 @@ public class MessageParser {
 	 */
 	private static Player parseTimeOut(final String timeOut) {
 
+		return extractPlayer(timeOut);
+	}
+
+	/**
+	 * LE.0
+	 */
+	private static Player parseLeaveTable(final String leaveTable) {
+
+		return extractPlayer(leaveTable);
+	}
+
+	private static Player extractPlayer(final String playerAtLastCharacter) {
 		Player result = null;
 
-		switch (timeOut.charAt(3)) {
+		switch (playerAtLastCharacter.charAt(3)) {
 		case '0':
 			result = Player.FOREHAND;
 			break;

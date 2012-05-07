@@ -47,6 +47,7 @@ public class MoveInformation {
 	private CardList ouvertCards = new CardList();
 	private Card card;
 	private Player timeOutPlayer;
+	private Player leavingPlayer;
 
 	/**
 	 * Gets the game announcement
@@ -355,5 +356,23 @@ public class MoveInformation {
 	 */
 	public CardList getOuvertCards() {
 		return ouvertCards;
+	}
+
+	/**
+	 * Sets the player who left the table
+	 * 
+	 * @param parseLeaveTable
+	 */
+	public void setLeavingPlayer(final Player player) {
+		leavingPlayer = player;
+	}
+
+	/**
+	 * Gets the player who left the table
+	 * 
+	 * @return Player who left the table
+	 */
+	public Player getLeavingPlayer() {
+		return leavingPlayer;
 	}
 }

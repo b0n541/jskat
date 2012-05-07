@@ -41,6 +41,7 @@ import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -103,8 +104,8 @@ public class MessageParserTest extends AbstractJSkatTest {
 		assertFalse(gameData.isOverBidded());
 	}
 
-	private void checkTrick(final Trick trick, final Player trickForeHand, final Card firstCard, final Card secondCard,
-			final Card thirdCard, final Player trickWinner) {
+	private static void checkTrick(final Trick trick, final Player trickForeHand, final Card firstCard,
+			final Card secondCard, final Card thirdCard, final Player trickWinner) {
 		int trickNo = trick.getTrickNumberInGame();
 		assertEquals("Wrong trick fore hand for trick " + trickNo, trickForeHand, trick.getForeHand()); //$NON-NLS-1$
 		assertEquals("Wrong first card for trick " + trickNo, firstCard, trick.getFirstCard()); //$NON-NLS-1$
@@ -212,6 +213,42 @@ public class MessageParserTest extends AbstractJSkatTest {
 		assertFalse(gameData.isSchneider());
 		assertFalse(gameData.isSchwarz());
 		assertFalse(gameData.isOverBidded());
+	}
+
+	/**
+	 * Test the parsing of the game summary<br>
+	 * Declarer shows cards and plays last card directly afterwards
+	 */
+	@Test
+	public void testParseGameSummary_ShowingCards() {
+
+		String gameSummary = "(;GM[Skat]PC[International Skat Server]CO[]SE[43795]ID[1039093]DT[2012-01-17/00:07:25/UTC]P0[SkatCLE]P1[SkatKCT]P2[xskat]R0[0.0]R1[0.0]R2[]MV[w DA.S7.DK.CA.D9.CQ.CK.H9.S8.C7.HJ.DT.HA.CT.S9.C9.ST.H8.D7.DJ.HQ.DQ.SK.HK.SQ.H7.C8.D8.SJ.HT.SA.CJ 1 18 0 p 2 p 1 s w SA.CJ 1 G.CT.DT 0 CA 1 C9 2 C8 0 CK 1 D7 2 HT 0 CQ 1 DJ 2 SJ 2 H7 0 H9 1 H8 0 S8 1 S9 2 SK 2 D8 0 DA 1 SC 1 HJ 2 RE 0 RE ]R[d:1 win v:48 m:1 bidok p:84 t:5 s:0 z:0 p0:0 p1:0 p2:0 l:-1 to:-1 r:1] ;)"; //$NON-NLS-1$
+		SkatGameData gameData = MessageParser.parseGameSummary(gameSummary);
+
+		assertEquals(GameType.GRAND, gameData.getGameType());
+	}
+
+	/**
+	 * Test the parsing of the game summary<br>
+	 * 
+	 */
+	@Test
+	public void testParseGameSummary_PlayerLeft() {
+
+		String gameSummary = "(;GM[Skat]PC[Internet Skat Server]SE[146]ID[30]DT[2007-11-04/15:39:49/UTC]P0[bonsai]P1[bar]P2[foo]R0[0.0]R1[0.0]R2[null]MV[w SJ.D9.CA.DJ.SA.CJ.C8.SQ.HT.H8.ST.S8.DA.D7.S9.D8.C7.H7.DT.S7.CT.HJ.C9.SK.H9.HA.HK.DQ.CK.HQ.DK.CQ 1 18 0 p w LE.2 ]R[d:-1 penalty v:0 m:0 bidok p:0 t:0 s:0 z:0 p0:0 p1:0 p2:1 l:2 to:-1] ;)"; //$NON-NLS-1$
+		SkatGameData gameData = MessageParser.parseGameSummary(gameSummary);
+	}
+
+	/**
+	 * Test the parsing of the game summary<br>
+	 * 
+	 */
+	@Test
+	@Ignore
+	public void testParseGameSummary_Fail() {
+
+		String gameSummary = "(;GM[Skat]PC[Internet Skat Server]SE[2171]ID[18358]DT[2008-05-25/17:57:24/UTC]P0[kermit2]P1[kermit1]P2[mic]R0[0.0]R1[null]R2[0.0]MV[w C9.D7.HT.HA.SA.HQ.SJ.S7.C8.HJ.H7.CQ.DQ.D9.H9.S8.H8.CT.HK.SQ.CA.CK.SK.CJ.D8.DT.DK.C7.DJ.S9.ST.DA 1 18 0 p 2 20 1 p 2 s w ST.DA 2 G.DT.ST 0 ?? w LE.1 ]R[d:2 win v:96 m:1 bidok p:120 t:10 s:1 z:1 p0:0 p1:0 p2:0 l:1 to:-1] ;)";
+		SkatGameData gameData = MessageParser.parseGameSummary(gameSummary);
 	}
 
 	/**
