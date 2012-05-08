@@ -80,12 +80,12 @@ public class VersionChecker {
 		List<Integer> localVersionParts = getVersionParts(localVersion);
 		List<Integer> remoteVersionParts = getVersionParts(remoteVersion);
 
-		Integer previousLocalPart = 0;
-		Integer previousRemotePart = 0;
+		int previousLocalPart = 0;
+		int previousRemotePart = 0;
 		int index = 0;
 		for (Integer localVersionPart : localVersionParts) {
 			if (remoteVersionParts.size() > index) {
-				Integer remoteVersionPart = remoteVersionParts.get(index);
+				int remoteVersionPart = remoteVersionParts.get(index);
 				if (previousLocalPart == previousRemotePart && localVersionPart < remoteVersionPart) {
 					result = true;
 				}
