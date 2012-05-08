@@ -1,5 +1,8 @@
 package org.jskat.ai.nn.util;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+
 import org.encog.engine.network.activation.ActivationSigmoid;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataPair;
@@ -16,9 +19,15 @@ import org.encog.neural.networks.training.propagation.resilient.ResilientPropaga
  */
 public class EncogNetworkWrapper implements INeuralNetwork {
 
-	private final BasicNetwork network;
+	private BasicNetwork network;
 	private final PersistBasicNetwork networkPersister;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param newTopo
+	 *            Network topology
+	 */
 	public EncogNetworkWrapper(final NetworkTopology newTopo) {
 		network = new BasicNetwork();
 		network.addLayer(new BasicLayer(null, true, newTopo.getInputNeuronCount()));
@@ -80,14 +89,13 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 */
 	@Override
 	public boolean saveNetwork(final String fileName) {
-		// try {
-		// networkPersister.save(new FileOutputStream(fileName), network);
-		// } catch (FileNotFoundException e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// return true;
-		return false;
+		try {
+			networkPersister.save(new FileOutputStream(fileName), network);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
 	}
 
 	/**
@@ -96,7 +104,6 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	@Override
 	public void loadNetwork(final String fileName, final int inputNeurons, final int hiddenNeurons,
 			final int outputNeurons) {
-		// network = (BasicNetwork)
-		// networkPersister.read(getClass().getResourceAsStream(fileName));
+		network = (BasicNetwork) networkPersister.read(getClass().getResourceAsStream(fileName));
 	}
 }

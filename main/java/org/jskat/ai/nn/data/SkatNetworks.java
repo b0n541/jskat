@@ -43,7 +43,7 @@ public class SkatNetworks {
 	// n number of nodes in hidden layer
 	// 1 output node for win/lost
 	private static int inputNeurons = 1089;
-	private static int hiddenNeurons = 10;
+	private static int hiddenNeurons = 25;
 	private static int outputNeurons = 1;
 
 	private final static SkatNetworks instance = new SkatNetworks();
@@ -249,8 +249,6 @@ public class SkatNetworks {
 	 */
 	public static void loadNetworks(final String filePath) {
 
-		String pathSep = System.getProperty("file.separator"); //$NON-NLS-1$
-
 		// FIXME (jan 25.02.2012) this is duplicated in
 		// NeuralNetwork.loadNetwork()
 		int[] hiddenLayer = { hiddenNeurons };
@@ -336,29 +334,27 @@ public class SkatNetworks {
 	 */
 	public static void saveNetworks(final String path) {
 
-		String pathSep = System.getProperty("file.separator"); //$NON-NLS-1$
-
-		suitDeclarerOpening.saveNetwork(path.concat(pathSep).concat("jskat.suit.declarer.opening.nnet")); //$NON-NLS-1$
-		suitDeclarerMiddleGame.saveNetwork(path.concat(pathSep).concat("jskat.suit.declarer.middlegame.nnet")); //$NON-NLS-1$
-		suitDeclarerEndGame.saveNetwork(path.concat(pathSep).concat("jskat.suit.declarer.endgame.nnet")); //$NON-NLS-1$
-		suitOpponentOpening.saveNetwork(path.concat(pathSep).concat("jskat.suit.opponent.opening.nnet")); //$NON-NLS-1$
-		suitOpponentMiddleGame.saveNetwork(path.concat(pathSep).concat("jskat.suit.opponent.middlegame.nnet")); //$NON-NLS-1$
-		suitOpponentEndGame.saveNetwork(path.concat(pathSep).concat("jskat.suit.opponent.endgame.nnet")); //$NON-NLS-1$
-		nullDeclarerOpening.saveNetwork(path.concat(pathSep).concat("jskat.null.declarer.opening.nnet")); //$NON-NLS-1$
-		nullDeclarerMiddleGame.saveNetwork(path.concat(pathSep).concat("jskat.null.declarer.middlegame.nnet")); //$NON-NLS-1$
-		nullDeclarerEndGame.saveNetwork(path.concat(pathSep).concat("jskat.null.declarer.endgame.nnet")); //$NON-NLS-1$
-		nullOpponentOpening.saveNetwork(path.concat(pathSep).concat("jskat.null.opponent.opening.nnet")); //$NON-NLS-1$
-		nullOpponentMiddleGame.saveNetwork(path.concat(pathSep).concat("jskat.null.opponent.middlegame.nnet")); //$NON-NLS-1$
-		nullOpponentEndGame.saveNetwork(path.concat(pathSep).concat("jskat.null.opponent.endgame.nnet")); //$NON-NLS-1$
-		grandDeclarerOpening.saveNetwork(path.concat(pathSep).concat("jskat.grand.declarer.opening.nnet")); //$NON-NLS-1$
-		grandDeclarerMiddleGame.saveNetwork(path.concat(pathSep).concat("jskat.grand.declarer.middlegame.nnet")); //$NON-NLS-1$
-		grandDeclarerEndGame.saveNetwork(path.concat(pathSep).concat("jskat.grand.declarer.endgame.nnet")); //$NON-NLS-1$
-		grandOpponentOpening.saveNetwork(path.concat(pathSep).concat("jskat.grand.opponent.opening.nnet")); //$NON-NLS-1$
-		grandOpponentMiddleGame.saveNetwork(path.concat(pathSep).concat("jskat.grand.opponent.middlegame.nnet")); //$NON-NLS-1$
-		grandOpponentEndGame.saveNetwork(path.concat(pathSep).concat("jskat.grand.opponent.endgame.nnet")); //$NON-NLS-1$
-		ramschDeclarerOpening.saveNetwork(path.concat(pathSep).concat("jskat.ramsch.declarer.opening.nnet")); //$NON-NLS-1$
-		ramschDeclarerMiddleGame.saveNetwork(path.concat(pathSep).concat("jskat.ramsch.declarer.middlegame.nnet")); //$NON-NLS-1$
-		ramschDeclarerEndGame.saveNetwork(path.concat(pathSep).concat("jskat.ramsch.declarer.endgame.nnet")); //$NON-NLS-1$
+		suitDeclarerOpening.saveNetwork(path.concat("jskat.suit.declarer.opening.nnet")); //$NON-NLS-1$
+		suitDeclarerMiddleGame.saveNetwork(path.concat("jskat.suit.declarer.middlegame.nnet")); //$NON-NLS-1$
+		suitDeclarerEndGame.saveNetwork(path.concat("jskat.suit.declarer.endgame.nnet")); //$NON-NLS-1$
+		suitOpponentOpening.saveNetwork(path.concat("jskat.suit.opponent.opening.nnet")); //$NON-NLS-1$
+		suitOpponentMiddleGame.saveNetwork(path.concat("jskat.suit.opponent.middlegame.nnet")); //$NON-NLS-1$
+		suitOpponentEndGame.saveNetwork(path.concat("jskat.suit.opponent.endgame.nnet")); //$NON-NLS-1$
+		nullDeclarerOpening.saveNetwork(path.concat("jskat.null.declarer.opening.nnet")); //$NON-NLS-1$
+		nullDeclarerMiddleGame.saveNetwork(path.concat("jskat.null.declarer.middlegame.nnet")); //$NON-NLS-1$
+		nullDeclarerEndGame.saveNetwork(path.concat("jskat.null.declarer.endgame.nnet")); //$NON-NLS-1$
+		nullOpponentOpening.saveNetwork(path.concat("jskat.null.opponent.opening.nnet")); //$NON-NLS-1$
+		nullOpponentMiddleGame.saveNetwork(path.concat("jskat.null.opponent.middlegame.nnet")); //$NON-NLS-1$
+		nullOpponentEndGame.saveNetwork(path.concat("jskat.null.opponent.endgame.nnet")); //$NON-NLS-1$
+		grandDeclarerOpening.saveNetwork(path.concat("jskat.grand.declarer.opening.nnet")); //$NON-NLS-1$
+		grandDeclarerMiddleGame.saveNetwork(path.concat("jskat.grand.declarer.middlegame.nnet")); //$NON-NLS-1$
+		grandDeclarerEndGame.saveNetwork(path.concat("jskat.grand.declarer.endgame.nnet")); //$NON-NLS-1$
+		grandOpponentOpening.saveNetwork(path.concat("jskat.grand.opponent.opening.nnet")); //$NON-NLS-1$
+		grandOpponentMiddleGame.saveNetwork(path.concat("jskat.grand.opponent.middlegame.nnet")); //$NON-NLS-1$
+		grandOpponentEndGame.saveNetwork(path.concat("jskat.grand.opponent.endgame.nnet")); //$NON-NLS-1$
+		ramschDeclarerOpening.saveNetwork(path.concat("jskat.ramsch.declarer.opening.nnet")); //$NON-NLS-1$
+		ramschDeclarerMiddleGame.saveNetwork(path.concat("jskat.ramsch.declarer.middlegame.nnet")); //$NON-NLS-1$
+		ramschDeclarerEndGame.saveNetwork(path.concat("jskat.ramsch.declarer.endgame.nnet")); //$NON-NLS-1$
 	}
 
 	/**
