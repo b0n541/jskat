@@ -20,20 +20,13 @@
  */
 package org.jskat.control;
 
-import java.awt.Desktop;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.JButton;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jskat.JSkat;
 import org.jskat.ai.PlayerType;
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.train.NNTrainer;
@@ -91,12 +84,16 @@ public class JSkatMaster {
 
 	/**
 	 * Checks the version of JSkat
+	 * 
+	 * @param latestLocalVersion
+	 *            Local version
+	 * @param latestRemoteVersion
+	 *            Remote version
 	 */
-	public void checkJSkatVersion() {
-		String latestRemoteVersion = VersionChecker.getLatestVersion();
+	public void checkJSkatVersion(final String latestLocalVersion, final String latestRemoteVersion) {
 		log.debug("Latest version web: " + latestRemoteVersion); //$NON-NLS-1$
-		log.debug("Latest version local: " + JSkat.getVersion()); //$NON-NLS-1$
-		if (VersionChecker.isHigherVersionAvailable(JSkat.getVersion(), latestRemoteVersion)) {
+		log.debug("Latest version local: " + latestLocalVersion); //$NON-NLS-1$
+		if (VersionChecker.isHigherVersionAvailable(latestLocalVersion, latestRemoteVersion)) {
 			log.debug("Newer version " + latestRemoteVersion + " is available on the JSkat website."); //$NON-NLS-1$//$NON-NLS-2$
 			view.showNewVersionAvailableMessage(latestRemoteVersion);
 		}
@@ -141,6 +138,23 @@ public class JSkatMaster {
 		data.setActiveTable(table.getName());
 
 		table.setView(view);
+	}
+
+	/**
+	 * Terminates all running threads
+	 */
+	public void terminateAllThreads() {
+		ThreadManager.terminateAllThreads();
+	}
+
+	/**
+	 * Removes a table
+	 * 
+	 * @param tableName
+	 *            Table name
+	 */
+	public void removeTable(final String tableName) {
+		data.removeSkatTable(tableName);
 	}
 
 	/**
@@ -201,7 +215,7 @@ public class JSkatMaster {
 			playerCount++;
 		}
 
-		table.startSkatSeries(numberOfRounds, unlimited, onlyPlayRamsch);
+		table.startSkatSeries(numberOfRounds, unlimited, onlyPlayRamsch, 100);
 	}
 
 	/**
@@ -409,8 +423,7 @@ public class JSkatMaster {
 	 * Loads the weigths for the neural networks
 	 */
 	public void loadNeuralNetworks() {
-		SkatNetworks.instance().loadNetworks(
-				System.getProperty("user.home").concat(System.getProperty("file.separator")).concat(".jskat"));
+		SkatNetworks.instance().loadNetworks(options.getSavePath());
 	}
 
 	/**
@@ -424,8 +437,7 @@ public class JSkatMaster {
 	 * Saves the weigths for the neural networks
 	 */
 	public void saveNeuralNetworks() {
-		SkatNetworks.instance().saveNetworks(
-				System.getProperty("user.home").concat(System.getProperty("file.separator")).concat(".jskat")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		SkatNetworks.instance().saveNetworks(options.getSavePath());
 	}
 
 	/**
@@ -498,19 +510,18 @@ public class JSkatMaster {
 				// issControl.sendDiscardMove(tableName,
 				// discardSkat.get(0), discardSkat.get(1));
 			} else {
-
-				log.error("Wrong source for " + command); //$NON-NLS-1$
+				log.warn("No discarded cards found for " + command); //$NON-NLS-1$
 			}
 		} else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
 
-			if (source instanceof JButton) {
-				log.debug("ONLY JBUTTON"); //$NON-NLS-1$
-			} else {
+			if (source instanceof GameAnnouncement) {
 				// player did game announcement
 				// FIXME (jan 02.11.2010) Discarded cards are sent with the
 				// game announcement to ISS
 				GameAnnouncement gameAnnouncement = (GameAnnouncement) source;
 				issControl.sendGameAnnouncementMove(tableName, gameAnnouncement);
+			} else {
+				log.warn("No game announcement found for " + command); //$NON-NLS-1$
 			}
 		} else if (JSkatAction.PLAY_CARD.toString().equals(command) && source instanceof Card) {
 
@@ -717,15 +728,7 @@ public class JSkatMaster {
 	}
 
 	private void openWebPage(final String link) {
-		try {
-			Desktop desktop = java.awt.Desktop.getDesktop();
-			URI uri = new URI(link);
-			desktop.browse(uri);
-		} catch (URISyntaxException except) {
-			log.error(except);
-		} catch (IOException except) {
-			log.error(except);
-		}
+		view.openWebPage(link);
 	}
 
 	/**

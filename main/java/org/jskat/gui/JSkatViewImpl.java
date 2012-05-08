@@ -22,11 +22,15 @@ package org.jskat.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -510,9 +514,18 @@ public class JSkatViewImpl implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void showMessage(final int messageType, final String title, final String message) {
+	public void showMessage(final String title, final String message) {
 
-		JOptionPane.showMessageDialog(mainFrame, message, title, messageType);
+		JOptionPane.showMessageDialog(mainFrame, message, title, JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void showErrorMessage(final String title, final String message) {
+
+		JOptionPane.showMessageDialog(mainFrame, message, title, JOptionPane.ERROR_MESSAGE);
 	}
 
 	/**
@@ -1152,7 +1165,7 @@ public class JSkatViewImpl implements JSkatView {
 				card != null ? strings.getSuitStringForCardFace(card.getSuit()) : "--", //$NON-NLS-1$
 				card != null ? strings.getRankStringForCardFace(card.getRank()) : "--"); //$NON-NLS-1$
 
-		showMessage(JOptionPane.ERROR_MESSAGE, title, message);
+		showErrorMessage(title, message);
 	}
 
 	/**
@@ -1166,7 +1179,7 @@ public class JSkatViewImpl implements JSkatView {
 		String message = MessageFormat.format(strings.getString("new_version_message"), //$NON-NLS-1$
 				newVersion);
 
-		showMessage(JOptionPane.INFORMATION_MESSAGE, title, message);
+		showMessage(title, message);
 	}
 
 	/**
@@ -1228,7 +1241,7 @@ public class JSkatViewImpl implements JSkatView {
 		String message = MessageFormat.format(strings.getString("duplicate_table_name"), //$NON-NLS-1$
 				duplicateTableName);
 
-		showMessage(JOptionPane.ERROR_MESSAGE, strings.getString("duplicate_table_name_title"), //$NON-NLS-1$
+		showErrorMessage(strings.getString("duplicate_table_name_title"), //$NON-NLS-1$
 				message);
 	}
 
@@ -1258,13 +1271,44 @@ public class JSkatViewImpl implements JSkatView {
 		tables.get(tableName).setDiscardedSkat(player, skatBefore, discardedSkat);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void takeCardFromSkat(final String tableName, final Card card) {
 		tables.get(tableName).takeCardFromSkat(card);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void putCardIntoSkat(final String tableName, final Card card) {
 		tables.get(tableName).putCardIntoSkat(card);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void openWebPage(final String link) {
+		try {
+			Desktop desktop = java.awt.Desktop.getDesktop();
+			URI uri = new URI(link);
+			desktop.browse(uri);
+		} catch (URISyntaxException except) {
+			log.error(except);
+		} catch (IOException except) {
+			log.error(except);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setTrickWinner(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Player trickWinner) {
+		// not needed at the moment
 	}
 }

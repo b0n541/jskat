@@ -134,7 +134,7 @@ public class SkatSeries extends JSkatThread {
 		int roundsPlayed = 0;
 		int gameNumber = 0;
 
-		while (roundsToGo > 0 || unlimitedRounds) {
+		while ((roundsToGo > 0 || unlimitedRounds) && !isTerminated()) {
 
 			log.debug("Playing round " + (roundsPlayed + 1)); //$NON-NLS-1$
 

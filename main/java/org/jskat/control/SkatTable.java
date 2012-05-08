@@ -75,16 +75,16 @@ public class SkatTable {
 	 * @param unlimitedRounds
 	 * @param onlyPlayRamsch
 	 */
-	public void startSkatSeries(int rounds, boolean unlimitedRounds, boolean onlyPlayRamsch) {
+	public void startSkatSeries(int rounds, boolean unlimitedRounds, boolean onlyPlayRamsch, int sleepBetweenMoves) {
 
 		if (!isSeriesRunning()) {
 			// TODO save old series data?
 			series = new SkatSeries(tableName);
 			series.setView(view);
 
-			if (view instanceof JSkatViewImpl) {
+			if (sleepBetweenMoves > 0) {
 				// set max sleep time only when using GUI
-				series.setMaxSleep(100);
+				series.setMaxSleep(sleepBetweenMoves);
 			}
 		}
 

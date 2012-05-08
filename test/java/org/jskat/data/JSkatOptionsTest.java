@@ -44,7 +44,7 @@ public class JSkatOptionsTest extends AbstractJSkatTest {
 	public void testDefaultValues() {
 
 		JSkatOptions options = JSkatOptions.instance();
-		options.setDefaultProperties();
+		options.setDefaultProperties(new DesktopSavePathResolver());
 
 		assertTrue(options.isShowTipsAtStartUp().booleanValue());
 		assertFalse(options.isCheckForNewVersionAtStartUp().booleanValue());
@@ -55,7 +55,7 @@ public class JSkatOptionsTest extends AbstractJSkatTest {
 			assertEquals(SupportedLanguage.ENGLISH, options.getLanguage());
 		}
 		assertEquals(CardFace.TOURNAMENT, options.getCardFace());
-		assertEquals(options.getDefaultSaveDir(), options.getSavePath()); //$NON-NLS-1$
+		assertEquals(options.getDefaultSaveDir(), options.getSavePath());
 		assertEquals(Integer.valueOf(2000), options.getTrickRemoveDelayTime());
 		assertFalse(options.isTrickRemoveAfterClick().booleanValue());
 		assertFalse(options.isGameShortCut().booleanValue());

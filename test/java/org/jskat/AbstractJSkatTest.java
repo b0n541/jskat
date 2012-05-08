@@ -21,6 +21,8 @@
 package org.jskat;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.jskat.data.DesktopSavePathResolver;
+import org.jskat.data.JSkatOptions;
 import org.junit.BeforeClass;
 
 /**
@@ -34,7 +36,8 @@ public abstract class AbstractJSkatTest {
 	@BeforeClass
 	public static void createLogger() {
 
-		PropertyConfigurator.configure(ClassLoader
-				.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
+		PropertyConfigurator.configure(ClassLoader.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
+
+		JSkatOptions.instance(new DesktopSavePathResolver());
 	}
 }

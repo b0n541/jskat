@@ -24,8 +24,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import javax.swing.JOptionPane;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
@@ -62,7 +60,7 @@ class Connector {
 	 * @param controller
 	 *            Controller for ISS connection
 	 */
-	Connector(IssController controller) {
+	Connector(final IssController controller) {
 
 		issControl = controller;
 	}
@@ -75,7 +73,7 @@ class Connector {
 	 * @param newPassword
 	 *            Password
 	 */
-	void setConnectionData(String newLoginName, String newPassword) {
+	void setConnectionData(final String newLoginName, final String newPassword) {
 
 		loginName = newLoginName;
 		password = newPassword;
@@ -102,7 +100,7 @@ class Connector {
 
 		} catch (java.net.UnknownHostException e) {
 			log.error("Cannot open connection to ISS"); //$NON-NLS-1$
-			issControl.showMessage(JOptionPane.ERROR_MESSAGE, strings.getString("cant_connect_to_iss")); //$NON-NLS-1$
+			issControl.showErrorMessage(strings.getString("cant_connect_to_iss")); //$NON-NLS-1$
 			return false;
 		} catch (java.io.IOException e) {
 			log.error("IOException: " + e.toString()); //$NON-NLS-1$
@@ -147,7 +145,7 @@ class Connector {
 		return socket != null && !socket.isClosed();
 	}
 
-	void send(ChatMessage message) {
+	void send(final ChatMessage message) {
 		// FIXME (jan 30.01.2011) refactor ChatMessage with ChatMessageType
 		if ("Lobby".equals(message.getChatName())) {
 			issOut.send("yell " + message.getMessage()); //$NON-NLS-1$
@@ -162,62 +160,62 @@ class Connector {
 		issOut.send("create / 3"); //$NON-NLS-1$
 	}
 
-	void joinTable(String tableName) {
+	void joinTable(final String tableName) {
 
 		issOut.send("join " + tableName); //$NON-NLS-1$
 	}
 
-	void observeTable(String tableName) {
+	void observeTable(final String tableName) {
 
 		issOut.send("observe " + tableName); //$NON-NLS-1$
 	}
 
-	void leaveTable(String tableName) {
+	void leaveTable(final String tableName) {
 
 		issOut.send("table " + tableName + ' ' + loginName + " leave"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	void sendReadySignal(String tableName) {
+	void sendReadySignal(final String tableName) {
 
 		issOut.send("table " + tableName + ' ' + loginName + " ready"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	void sendTalkEnabledSignal(String tableName) {
+	void sendTalkEnabledSignal(final String tableName) {
 
 		issOut.send("table " + tableName + ' ' + loginName + " gametalk"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	void sendTableSeatChangeSignal(String tableName) {
+	void sendTableSeatChangeSignal(final String tableName) {
 
 		issOut.send("table " + tableName + ' ' + loginName + " 34"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	void invitePlayer(String tableName, String invitee) {
+	void invitePlayer(final String tableName, final String invitee) {
 
 		issOut.send("table " + tableName + ' ' + loginName + " invite " + invitee); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
-	void sendPassMove(String tableName) {
+	void sendPassMove(final String tableName) {
 
 		issOut.send("table " + tableName + ' ' + loginName + " play p"); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
-	void sendHoldBidMove(String tableName) {
+	void sendHoldBidMove(final String tableName) {
 
 		issOut.send("table " + tableName + ' ' + loginName + " play y"); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
-	public void sendBidMove(String tableName, int bidValue) {
+	public void sendBidMove(final String tableName, final int bidValue) {
 
 		issOut.send("table " + tableName + ' ' + loginName + " play " //$NON-NLS-1$//$NON-NLS-2$
 				+ bidValue);
 	}
 
-	public void sendPickUpSkatMove(String tableName) {
+	public void sendPickUpSkatMove(final String tableName) {
 		issOut.send("table " + tableName + ' ' + loginName + " play s"); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
-	public void sendGameAnnouncementMove(String tableName, GameAnnouncement gameAnnouncement) {
+	public void sendGameAnnouncementMove(final String tableName, final GameAnnouncement gameAnnouncement) {
 
 		String gameAnnouncementString = getGameTypeString(gameAnnouncement.getGameType(), gameAnnouncement.isHand(),
 				gameAnnouncement.isOuvert(), gameAnnouncement.isSchneider(), gameAnnouncement.isSchwarz());
@@ -232,7 +230,8 @@ class Connector {
 		issOut.send("table " + tableName + ' ' + loginName + " play " + gameAnnouncementString); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
-	private String getGameTypeString(GameType gameType, boolean hand, boolean ouvert, boolean schneider, boolean schwarz) {
+	private String getGameTypeString(final GameType gameType, final boolean hand, final boolean ouvert,
+			final boolean schneider, final boolean schwarz) {
 
 		String result = getGameTypeString(gameType);
 
@@ -255,7 +254,7 @@ class Connector {
 		return result;
 	}
 
-	private String getGameTypeString(GameType gameType) {
+	private String getGameTypeString(final GameType gameType) {
 		switch (gameType) {
 		case CLUBS:
 			return "C"; //$NON-NLS-1$
@@ -275,20 +274,20 @@ class Connector {
 		}
 	}
 
-	public void sendCardMove(String tableName, Card card) {
+	public void sendCardMove(final String tableName, final Card card) {
 		issOut.send("table " + tableName + ' ' + loginName + " play " + getIssCardString(card)); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
-	private String getIssCardString(Card card) {
+	private String getIssCardString(final Card card) {
 		return card.getSuit().shortString() + card.getRank().shortString();
 	}
 
-	void sendResignSignal(String tableName) {
+	void sendResignSignal(final String tableName) {
 
 		issOut.send("table " + tableName + ' ' + loginName + " play RE"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	public void sendInvitationAccepted(String tableName, String invitationTicket) {
+	public void sendInvitationAccepted(final String tableName, final String invitationTicket) {
 
 		issOut.send("join " + tableName + " " + invitationTicket); //$NON-NLS-1$//$NON-NLS-2$
 	}

@@ -30,6 +30,31 @@ public class JSkatThread extends Thread {
 
 	private static Log log = LogFactory.getLog(JSkatThread.class);
 
+	private volatile boolean terminate = false;
+
+	/**
+	 * Constructor
+	 */
+	public JSkatThread() {
+		ThreadManager.registerThread(this);
+	}
+
+	/**
+	 * Terminates the thread
+	 */
+	public void terminate() {
+		terminate = true;
+	}
+
+	/**
+	 * Checks whether the thread is terminated
+	 * 
+	 * @return TRUE, if the thread is terminated
+	 */
+	public boolean isTerminated() {
+		return terminate;
+	}
+
 	/**
 	 * Starts the waiting
 	 */

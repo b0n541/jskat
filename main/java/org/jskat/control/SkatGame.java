@@ -220,7 +220,7 @@ public class SkatGame extends JSkatThread {
 			}
 
 			checkWaitCondition();
-		} while (data.getGameState() != GameState.GAME_OVER);
+		} while (data.getGameState() != GameState.GAME_OVER && !isTerminated());
 
 		log.debug(data.getGameState());
 	}
@@ -624,6 +624,7 @@ public class SkatGame extends JSkatThread {
 			trickWinner = rules.calculateTrickWinner(data.getGameType(), trick);
 			trick.setTrickWinner(trickWinner);
 			data.addPlayerPoints(trickWinner, trick.getValue());
+			view.setTrickWinner(tableName, trickWinner);
 
 			for (Player currPosition : Player.values()) {
 				// inform all players

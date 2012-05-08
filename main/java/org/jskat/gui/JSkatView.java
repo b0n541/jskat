@@ -23,8 +23,6 @@ package org.jskat.gui;
 import java.util.List;
 import java.util.Set;
 
-import javax.swing.JOptionPane;
-
 import org.jskat.control.SkatTable;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.GameAnnouncement;
@@ -159,14 +157,22 @@ public interface JSkatView {
 	/**
 	 * Shows a message dialog
 	 * 
-	 * @param messageType
-	 *            Message type @see {@link JOptionPane}
 	 * @param title
 	 *            Message title
 	 * @param message
 	 *            Message text
 	 */
-	public void showMessage(int messageType, String title, String message);
+	public void showMessage(String title, String message);
+
+	/**
+	 * Shows an error message dialog
+	 * 
+	 * @param title
+	 *            Message title
+	 * @param message
+	 *            Message text
+	 */
+	public void showErrorMessage(String title, String message);
 
 	/**
 	 * Shows a message, that a card is not allowed
@@ -693,4 +699,22 @@ public interface JSkatView {
 	 *            Skat after discarding
 	 */
 	public void setDiscardedSkat(String tableName, Player activePlayer, CardList skatBefore, CardList discardedSkat);
+
+	/**
+	 * Opens a web page in the browser
+	 * 
+	 * @param link
+	 *            URL of the web page
+	 */
+	public void openWebPage(String link);
+
+	/**
+	 * Sets the trick winner
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param trickWinner
+	 *            Trick winner
+	 */
+	public void setTrickWinner(String tableName, Player trickWinner);
 }

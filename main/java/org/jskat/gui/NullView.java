@@ -50,8 +50,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void addCard(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player player,
-			@SuppressWarnings("unused") Card card) {
+	public void addCard(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Player player, @SuppressWarnings("unused") final Card card) {
 		// empty method by indent
 	}
 
@@ -59,7 +59,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void clearHand(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player player) {
+	public void clearHand(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Player player) {
 		// empty method by indent
 	}
 
@@ -67,7 +68,7 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void clearTrickCards(@SuppressWarnings("unused") String tableName) {
+	public void clearTrickCards(@SuppressWarnings("unused") final String tableName) {
 		// empty method by indent
 	}
 
@@ -75,8 +76,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void createISSTable(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") String loginName) {
+	public void createISSTable(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final String loginName) {
 		// empty method by indent
 	}
 
@@ -84,7 +85,7 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void createSkatTablePanel(@SuppressWarnings("unused") String name) {
+	public void createSkatTablePanel(@SuppressWarnings("unused") final String name) {
 		// empty method by indent
 	}
 
@@ -92,8 +93,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void removeCard(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player player,
-			@SuppressWarnings("unused") Card card) {
+	public void removeCard(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Player player, @SuppressWarnings("unused") final Card card) {
 		// empty method by indent
 	}
 
@@ -101,9 +102,10 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setPositions(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") Player leftPosition, @SuppressWarnings("unused") Player rightPosition,
-			@SuppressWarnings("unused") Player playerPosition) {
+	public void setPositions(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Player leftPosition,
+			@SuppressWarnings("unused") final Player rightPosition,
+			@SuppressWarnings("unused") final Player playerPosition) {
 		// empty method by indent
 	}
 
@@ -111,8 +113,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setTrickCard(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player position,
-			@SuppressWarnings("unused") Card card) {
+	public void setTrickCard(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Player position, @SuppressWarnings("unused") final Card card) {
 		// empty method by indent
 	}
 
@@ -152,7 +154,7 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void showTable(@SuppressWarnings("unused") SkatTable table) {
+	public void showTable(@SuppressWarnings("unused") final SkatTable table) {
 		// empty method by indent
 	}
 
@@ -176,7 +178,7 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void startGame(@SuppressWarnings("unused") String tableName) {
+	public void startGame(@SuppressWarnings("unused") final String tableName) {
 		// empty method by indent
 	}
 
@@ -192,7 +194,7 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void startSeries(@SuppressWarnings("unused") String tableName) {
+	public void startSeries(@SuppressWarnings("unused") final String tableName) {
 		// empty method by indent
 	}
 
@@ -200,8 +202,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setGameAnnouncement(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") Player declarer, @SuppressWarnings("unused") GameAnnouncement ann) {
+	public void setGameAnnouncement(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Player declarer, @SuppressWarnings("unused") final GameAnnouncement ann) {
 		// empty method by indent
 	}
 
@@ -209,7 +211,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setGameState(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") GameState state) {
+	public void setGameState(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final GameState state) {
 		// empty method by indent
 	}
 
@@ -217,8 +220,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void addGameResult(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") GameSummary summary) {
+	public void addGameResult(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final GameSummary summary) {
 		// empty method by indent
 	}
 
@@ -250,7 +253,7 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void clearTable(@SuppressWarnings("unused") String tableName) {
+	public void clearTable(@SuppressWarnings("unused") final String tableName) {
 		// empty method by indent
 	}
 
@@ -258,8 +261,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void showMessage(@SuppressWarnings("unused") int messageType, @SuppressWarnings("unused") String title,
-			@SuppressWarnings("unused") String message) {
+	public void showMessage(@SuppressWarnings("unused") final String title,
+			@SuppressWarnings("unused") final String message) {
 		// empty method by indent
 	}
 
@@ -267,8 +270,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setBid(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player player,
-			@SuppressWarnings("unused") int bidValue, @SuppressWarnings("unused") boolean madeBid) {
+	public void showErrorMessage(@SuppressWarnings("unused") final String title,
+			@SuppressWarnings("unused") final String message) {
 		// empty method by indent
 	}
 
@@ -276,8 +279,9 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setTrickForeHand(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") Player trickForeHand) {
+	public void setBid(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Player player, @SuppressWarnings("unused") final int bidValue,
+			@SuppressWarnings("unused") final boolean madeBid) {
 		// empty method by indent
 	}
 
@@ -285,9 +289,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void putCardIntoSkat(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") Player player,
-			@SuppressWarnings("unused") Card card) {
+	public void setTrickForeHand(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Player trickForeHand) {
 		// empty method by indent
 	}
 
@@ -295,8 +298,17 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void takeCardFromSkat(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") Player player, @SuppressWarnings("unused") Card card) {
+	public void putCardIntoSkat(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Player player, @SuppressWarnings("unused") final Card card) {
+		// empty method by indent
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void takeCardFromSkat(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Player player, @SuppressWarnings("unused") final Card card) {
 		// empty method by indent
 	}
 
@@ -312,9 +324,9 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void updateISSLobbyPlayerList(@SuppressWarnings("unused") String playerName,
-			@SuppressWarnings("unused") String playerLanguage1, @SuppressWarnings("unused") long gamesPlayed,
-			@SuppressWarnings("unused") double strength) {
+	public void updateISSLobbyPlayerList(@SuppressWarnings("unused") final String playerName,
+			@SuppressWarnings("unused") final String playerLanguage1,
+			@SuppressWarnings("unused") final long gamesPlayed, @SuppressWarnings("unused") final double strength) {
 		// empty method by indent
 	}
 
@@ -322,7 +334,7 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void removeFromISSLobbyPlayerList(@SuppressWarnings("unused") String playerName) {
+	public void removeFromISSLobbyPlayerList(@SuppressWarnings("unused") final String playerName) {
 		// empty method by indent
 	}
 
@@ -338,7 +350,7 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void removeFromISSLobbyTableList(@SuppressWarnings("unused") String tableName) {
+	public void removeFromISSLobbyTableList(@SuppressWarnings("unused") final String tableName) {
 		// empty method by indent
 	}
 
@@ -346,10 +358,10 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void updateISSLobbyTableList(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") int maxPlayers, @SuppressWarnings("unused") long gamesPlayed,
-			@SuppressWarnings("unused") String player1, @SuppressWarnings("unused") String player2,
-			@SuppressWarnings("unused") String player3) {
+	public void updateISSLobbyTableList(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final int maxPlayers, @SuppressWarnings("unused") final long gamesPlayed,
+			@SuppressWarnings("unused") final String player1, @SuppressWarnings("unused") final String player2,
+			@SuppressWarnings("unused") final String player3) {
 		// empty method by indent
 	}
 
@@ -357,8 +369,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void appendISSChatMessage(@SuppressWarnings("unused") ChatMessageType messageType,
-			@SuppressWarnings("unused") ChatMessage message) {
+	public void appendISSChatMessage(@SuppressWarnings("unused") final ChatMessageType messageType,
+			@SuppressWarnings("unused") final ChatMessage message) {
 		// empty method by indent
 	}
 
@@ -366,8 +378,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void updateISSTable(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") TablePanelStatus status) {
+	public void updateISSTable(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final TablePanelStatus status) {
 		// empty method by indent
 	}
 
@@ -375,8 +387,9 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void updateISSTable(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") String playerName, @SuppressWarnings("unused") GameStartInformation status) {
+	public void updateISSTable(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final String playerName,
+			@SuppressWarnings("unused") final GameStartInformation status) {
 		// empty method by indent
 	}
 
@@ -384,7 +397,7 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public String getNewTableName(@SuppressWarnings("unused") int localTablesCreated) {
+	public String getNewTableName(@SuppressWarnings("unused") final int localTablesCreated) {
 		// empty method by indent
 		return null;
 	}
@@ -393,9 +406,9 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void updateISSMove(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") SkatGameData gameData,
-			@SuppressWarnings("unused") MoveInformation moveInformation) {
+	public void updateISSMove(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final SkatGameData gameData,
+			@SuppressWarnings("unused") final MoveInformation moveInformation) {
 		// empty method by indent
 	}
 
@@ -403,8 +416,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void playTrickCard(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") Player position, @SuppressWarnings("unused") Card card) {
+	public void playTrickCard(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Player position, @SuppressWarnings("unused") final Card card) {
 		// empty method by indent
 	}
 
@@ -412,7 +425,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setLastTrick(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Trick trick) {
+	public void setLastTrick(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Trick trick) {
 		// empty method by indent
 	}
 
@@ -436,7 +450,7 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void closeTabPanel(@SuppressWarnings("unused") String name) {
+	public void closeTabPanel(@SuppressWarnings("unused") final String name) {
 		// empty method by indent
 	}
 
@@ -444,7 +458,7 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<String> getPlayerForInvitation(@SuppressWarnings("unused") Set<String> playerNames) {
+	public List<String> getPlayerForInvitation(@SuppressWarnings("unused") final Set<String> playerNames) {
 		// empty method by indent
 		return null;
 	}
@@ -453,8 +467,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void addCards(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player player,
-			@SuppressWarnings("unused") CardList cards) {
+	public void addCards(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Player player, @SuppressWarnings("unused") final CardList cards) {
 		// empty method by indent
 	}
 
@@ -462,7 +476,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setActivePlayer(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player player) {
+	public void setActivePlayer(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Player player) {
 		// empty method by indent
 	}
 
@@ -470,7 +485,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setPass(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player player) {
+	public void setPass(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Player player) {
 		// empty method by indent
 	}
 
@@ -478,8 +494,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setSeriesState(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") SeriesState state) {
+	public void setSeriesState(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final SeriesState state) {
 		// empty method by indent
 	}
 
@@ -487,7 +503,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setBidValueToMake(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") int bidValue) {
+	public void setBidValueToMake(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final int bidValue) {
 		// empty method by indent
 	}
 
@@ -495,7 +512,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setBidValueToHold(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") int bidValue) {
+	public void setBidValueToHold(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final int bidValue) {
 		// empty method by indent
 	}
 
@@ -503,7 +521,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setSkat(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") CardList skat) {
+	public void setSkat(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final CardList skat) {
 		// empty method by indent
 	}
 
@@ -511,7 +530,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setTrickNumber(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") int trickNumber) {
+	public void setTrickNumber(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final int trickNumber) {
 		// empty method by indent
 	}
 
@@ -519,8 +539,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean showISSTableInvitation(@SuppressWarnings("unused") String invitor,
-			@SuppressWarnings("unused") String tableName) {
+	public boolean showISSTableInvitation(@SuppressWarnings("unused") final String invitor,
+			@SuppressWarnings("unused") final String tableName) {
 		// empty method by indent
 		return false;
 	}
@@ -529,7 +549,7 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void showCardNotAllowedMessage(@SuppressWarnings("unused") Card card) {
+	public void showCardNotAllowedMessage(@SuppressWarnings("unused") final Card card) {
 		// empty method by indent
 	}
 
@@ -537,9 +557,10 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void addTrainingResult(@SuppressWarnings("unused") GameType gameType,
-			@SuppressWarnings("unused") long episodes, @SuppressWarnings("unused") long totalWonGames,
-			@SuppressWarnings("unused") long episodeWonGames, @SuppressWarnings("unused") double avgDifference) {
+	public void addTrainingResult(@SuppressWarnings("unused") final GameType gameType,
+			@SuppressWarnings("unused") final long episodes, @SuppressWarnings("unused") final long totalWonGames,
+			@SuppressWarnings("unused") final long episodeWonGames,
+			@SuppressWarnings("unused") final double avgDifference) {
 		// empty method by indent
 	}
 
@@ -547,7 +568,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setGameNumber(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") int gameNumber) {
+	public void setGameNumber(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final int gameNumber) {
 		// empty method by indent
 	}
 
@@ -555,9 +577,10 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setPlayerNames(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") String upperLeftPlayerName,
-			@SuppressWarnings("unused") String upperRightPlayerName, @SuppressWarnings("unused") String lowerPlayerName) {
+	public void setPlayerNames(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final String upperLeftPlayerName,
+			@SuppressWarnings("unused") final String upperRightPlayerName,
+			@SuppressWarnings("unused") final String lowerPlayerName) {
 		// empty method by indent
 	}
 
@@ -565,7 +588,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setDeclarer(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player declarer) {
+	public void setDeclarer(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Player declarer) {
 		// empty method by indent
 	}
 
@@ -581,7 +605,7 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void showDuplicateTableNameMessage(@SuppressWarnings("unused") String duplicateTableName) {
+	public void showDuplicateTableNameMessage(@SuppressWarnings("unused") final String duplicateTableName) {
 		// empty method by indent
 	}
 
@@ -589,7 +613,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setResign(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player player) {
+	public void setResign(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Player player) {
 		// empty method by indent
 	}
 
@@ -597,7 +622,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setGeschoben(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Player player) {
+	public void setGeschoben(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Player player) {
 		// empty method by indent
 	}
 
@@ -605,7 +631,7 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void showNewVersionAvailableMessage(@SuppressWarnings("unused") String newVersion) {
+	public void showNewVersionAvailableMessage(@SuppressWarnings("unused") final String newVersion) {
 		// empty method by indent
 	}
 
@@ -613,9 +639,10 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setDiscardedSkat(@SuppressWarnings("unused") String tableName,
-			@SuppressWarnings("unused") Player activePlayer, @SuppressWarnings("unused") CardList skatBefore,
-			@SuppressWarnings("unused") CardList discardedSkat) {
+	public void setDiscardedSkat(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Player activePlayer,
+			@SuppressWarnings("unused") final CardList skatBefore,
+			@SuppressWarnings("unused") final CardList discardedSkat) {
 		// empty method by indent
 	}
 
@@ -623,7 +650,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void takeCardFromSkat(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Card card) {
+	public void takeCardFromSkat(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Card card) {
 		// empty method by indent
 	}
 
@@ -631,7 +659,25 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void putCardIntoSkat(@SuppressWarnings("unused") String tableName, @SuppressWarnings("unused") Card card) {
+	public void putCardIntoSkat(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Card card) {
+		// empty method by indent
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void openWebPage(@SuppressWarnings("unused") final String link) {
+		// empty method by indent
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setTrickWinner(@SuppressWarnings("unused") final String tableName,
+			@SuppressWarnings("unused") final Player trickWinner) {
 		// empty method by indent
 	}
 }

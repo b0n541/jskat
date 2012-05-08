@@ -72,12 +72,20 @@ public class JSkatApplicationData {
 	}
 
 	/**
+	 * Removes a local skat table
+	 */
+	synchronized public void removeSkatTable(final String tableName) {
+		skatTables.remove(tableName);
+		humanPlayers.remove(tableName);
+	}
+
+	/**
 	 * Adds a new local skat table
 	 * 
 	 * @param newSkatTable
 	 *            New local table
 	 */
-	synchronized public void addSkatTable(SkatTable newSkatTable) {
+	synchronized public void addSkatTable(final SkatTable newSkatTable) {
 
 		skatTables.put(newSkatTable.getName(), newSkatTable);
 		humanPlayers.put(newSkatTable.getName(), new HumanPlayer());
@@ -101,9 +109,15 @@ public class JSkatApplicationData {
 	 *            Table name
 	 * @return Skat table
 	 */
-	public SkatTable getSkatTable(String tableName) {
+	public SkatTable getSkatTable(final String tableName) {
 
-		return skatTables.get(tableName);
+		SkatTable result = skatTables.get(tableName);
+
+		if (result == null) {
+			throw new IllegalArgumentException("Unknown table name: " + tableName); //$NON-NLS-1$
+		}
+
+		return result;
 	}
 
 	/**
@@ -122,7 +136,7 @@ public class JSkatApplicationData {
 	 * @param newActiveTable
 	 *            New active table
 	 */
-	public void setActiveTable(String newActiveTable) {
+	public void setActiveTable(final String newActiveTable) {
 
 		if (!skatTables.containsKey(newActiveTable)) {
 			// table is not known yet --> comes from ISS
@@ -148,7 +162,7 @@ public class JSkatApplicationData {
 	 * @param newISSLoginName
 	 *            Login name
 	 */
-	public void setIssLoginName(String newISSLoginName) {
+	public void setIssLoginName(final String newISSLoginName) {
 		issLoginName = newISSLoginName;
 	}
 
@@ -176,7 +190,7 @@ public class JSkatApplicationData {
 	 * @param newPlayer
 	 *            New player
 	 */
-	public void addAvailableISSPlayer(String newPlayer) {
+	public void addAvailableISSPlayer(final String newPlayer) {
 		availableIssPlayer.add(newPlayer);
 	}
 
@@ -186,7 +200,7 @@ public class JSkatApplicationData {
 	 * @param newSkatTable
 	 *            Skat table
 	 */
-	public void addJoinedIssSkatTable(String newSkatTable) {
+	public void addJoinedIssSkatTable(final String newSkatTable) {
 		joinedIssTables.add(newSkatTable);
 	}
 
@@ -196,7 +210,7 @@ public class JSkatApplicationData {
 	 * @param player
 	 *            Player to be removed
 	 */
-	public void removeAvailableISSPlayer(String player) {
+	public void removeAvailableISSPlayer(final String player) {
 		availableIssPlayer.remove(player);
 	}
 
@@ -206,7 +220,7 @@ public class JSkatApplicationData {
 	 * @param skatTable
 	 *            Skat table
 	 */
-	public void removeJoinedIssSkatTable(String skatTable) {
+	public void removeJoinedIssSkatTable(final String skatTable) {
 		joinedIssTables.remove(skatTable);
 	}
 
@@ -217,7 +231,7 @@ public class JSkatApplicationData {
 	 *            Table name
 	 * @return TRUE, if the table was joined on ISS
 	 */
-	public boolean isTableJoined(String tableName) {
+	public boolean isTableJoined(final String tableName) {
 		return joinedIssTables.contains(tableName);
 	}
 
@@ -228,7 +242,7 @@ public class JSkatApplicationData {
 	 *            Table name
 	 * @return Human player
 	 */
-	public HumanPlayer getHumanPlayer(String tableName) {
+	public HumanPlayer getHumanPlayer(final String tableName) {
 		return humanPlayers.get(tableName);
 	}
 
@@ -239,7 +253,7 @@ public class JSkatApplicationData {
 	 *            Table name
 	 * @return TRUE, if the table name is not used yet
 	 */
-	public boolean isFreeTableName(String tableName) {
+	public boolean isFreeTableName(final String tableName) {
 
 		return !skatTables.keySet().contains(tableName);
 	}

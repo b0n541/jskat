@@ -41,6 +41,8 @@ import org.jskat.gui.img.CardFace;
  */
 public class JSkatOptions {
 
+	private final static String PROPERTIES_FILENAME = "jskat.properties"; //$NON-NLS-1$
+
 	/**
 	 * Languages supported by JSkat
 	 */
@@ -64,26 +66,43 @@ public class JSkatOptions {
 	static private JSkatOptions optionsInstance = null;
 
 	/**
-	 * Returns the instance of the Singleton JSkatOptions
+	 * Returns the instance of the singleton JSkatOptions<br />
+	 * This method must be called at the very beginning
 	 * 
-	 * @return The unique instance of this class.
+	 * @return Options
 	 */
-	static public JSkatOptions instance() {
+	static public JSkatOptions instance(final SavePathResolver pathResolver) {
 
 		if (null == optionsInstance) {
 
-			optionsInstance = new JSkatOptions();
+			optionsInstance = new JSkatOptions(pathResolver);
 		}
 
 		return optionsInstance;
 	}
 
-	private Properties options = new Properties();
+	/**
+	 * Returns the instance of the singleton {@link JSkatOptions}<br />
+	 * This methods throws a {@link IllegalStateException} if
+	 * {@link #instance(SavePathResolver)} was not called before
+	 * 
+	 * @return Options
+	 */
+	static public JSkatOptions instance() {
+
+		if (optionsInstance == null) {
+			throw new IllegalStateException("Options not intialized, yet."); //$NON-NLS-1$
+		}
+
+		return optionsInstance;
+	}
+
+	private final Properties options = new Properties();
 
 	/** Creates a new instance of JSkatOptions */
-	private JSkatOptions() {
+	private JSkatOptions(final SavePathResolver pathResolver) {
 
-		setDefaultProperties();
+		setDefaultProperties(pathResolver);
 
 		try {
 			loadOptions();
@@ -93,9 +112,9 @@ public class JSkatOptions {
 			log.debug("No properties file found. Using standard values."); //$NON-NLS-1$
 
 			setOption(Option.showTipsAtStartUp, Boolean.TRUE);
-			File dir = new File(System.getProperty("user.home") + System.getProperty("file.separator") + ".jskat"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+			File dir = new File(pathResolver.getDefaultSavePath());
 			dir.mkdir();
-			String filename = System.getProperty("user.home") + System.getProperty("file.separator") + ".jskat" + System.getProperty("file.separator") + "jskat.properties"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+			String filename = pathResolver.getDefaultSavePath() + PROPERTIES_FILENAME;
 			File file = new File(filename);
 			try {
 				file.createNewFile();
@@ -107,7 +126,7 @@ public class JSkatOptions {
 						+ "> due to " + e1.getClass() + ": " + e1.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
-			setDefaultProperties();
+			setDefaultProperties(pathResolver);
 
 		} catch (IOException e) {
 			log.warn("Could not load properties: " + e.getClass() + ": " //$NON-NLS-1$ //$NON-NLS-2$
@@ -292,7 +311,7 @@ public class JSkatOptions {
 		return isBockEventContraReAnnounced(true);
 	}
 
-	public Boolean isBockEventContraReAnnounced(boolean checkParentOption) {
+	public Boolean isBockEventContraReAnnounced(final boolean checkParentOption) {
 		return getBooleanOptionWithParentCheck(Option.bockEventContraReAnnounced, checkParentOption,
 				isPlayBock(checkParentOption));
 	}
@@ -306,7 +325,7 @@ public class JSkatOptions {
 		return isBockEventLostAfterContra(true);
 	}
 
-	public Boolean isBockEventLostAfterContra(boolean checkParentOption) {
+	public Boolean isBockEventLostAfterContra(final boolean checkParentOption) {
 		return getBooleanOptionWithParentCheck(Option.bockEventLostAfterContra, checkParentOption,
 				isPlayBock(checkParentOption));
 	}
@@ -320,7 +339,7 @@ public class JSkatOptions {
 		return isBockEventLostGrand(true);
 	}
 
-	public Boolean isBockEventLostGrand(boolean checkParentOption) {
+	public Boolean isBockEventLostGrand(final boolean checkParentOption) {
 		return getBooleanOptionWithParentCheck(Option.bockEventLostGrand, checkParentOption,
 				isPlayBock(checkParentOption));
 	}
@@ -334,7 +353,7 @@ public class JSkatOptions {
 		return isBockEventLostWith60(true);
 	}
 
-	public Boolean isBockEventLostWith60(boolean checkParentOption) {
+	public Boolean isBockEventLostWith60(final boolean checkParentOption) {
 		return getBooleanOptionWithParentCheck(Option.bockEventLostWith60, checkParentOption,
 				isPlayBock(checkParentOption));
 	}
@@ -348,7 +367,7 @@ public class JSkatOptions {
 		return isBockEventPlayerHasX00Points(true);
 	}
 
-	public Boolean isBockEventPlayerHasX00Points(boolean checkParentOption) {
+	public Boolean isBockEventPlayerHasX00Points(final boolean checkParentOption) {
 		return getBooleanOptionWithParentCheck(Option.bockEventPlayerHasX00Points, checkParentOption,
 				isPlayBock(checkParentOption));
 	}
@@ -367,7 +386,7 @@ public class JSkatOptions {
 	 * 
 	 * @return TRUE, if the check succeeds
 	 */
-	public Boolean isContraAfterBid18(boolean checkParentOption) {
+	public Boolean isContraAfterBid18(final boolean checkParentOption) {
 		return getBooleanOptionWithParentCheck(Option.contraAfterBid18, checkParentOption,
 				isPlayContra(checkParentOption));
 	}
@@ -413,12 +432,12 @@ public class JSkatOptions {
 	 * 
 	 * @return Value of property playBock.
 	 */
-	public Boolean isPlayBock(boolean checkParentOption) {
+	public Boolean isPlayBock(final boolean checkParentOption) {
 		return getBooleanOptionWithParentCheck(Option.playBock, checkParentOption, RuleSet.PUB.equals(getRules()));
 	}
 
-	private Boolean getBooleanOptionWithParentCheck(Option option, boolean checkParentOption,
-			boolean parentOptionActivated) {
+	private Boolean getBooleanOptionWithParentCheck(final Option option, final boolean checkParentOption,
+			final boolean parentOptionActivated) {
 
 		Boolean result = getBooleanOption(option);
 
@@ -445,7 +464,7 @@ public class JSkatOptions {
 	 * 
 	 * @return Value of property playKontra.
 	 */
-	public Boolean isPlayContra(boolean checkParentOption) {
+	public Boolean isPlayContra(final boolean checkParentOption) {
 		return getBooleanOptionWithParentCheck(Option.playContra, checkParentOption, RuleSet.PUB.equals(getRules()));
 	}
 
@@ -465,7 +484,7 @@ public class JSkatOptions {
 	 *            TRUE, if parent option should be checked too
 	 * @return TRUE, if Ramsch should be played
 	 */
-	public Boolean isPlayRamsch(boolean checkParentOption) {
+	public Boolean isPlayRamsch(final boolean checkParentOption) {
 		return getBooleanOptionWithParentCheck(Option.playRamsch, checkParentOption, RuleSet.PUB.equals(getRules()));
 	}
 
@@ -478,7 +497,7 @@ public class JSkatOptions {
 		return getBooleanOption(Option.playRevolution);
 	}
 
-	public Boolean isPlayRevolution(boolean checkParentOption) {
+	public Boolean isPlayRevolution(final boolean checkParentOption) {
 		return getBooleanOptionWithParentCheck(Option.playRevolution, checkParentOption, RuleSet.PUB.equals(getRules()));
 	}
 
@@ -491,7 +510,7 @@ public class JSkatOptions {
 		return isRamschEventNoBid(true);
 	}
 
-	public Boolean isRamschEventNoBid(boolean checkParentOption) {
+	public Boolean isRamschEventNoBid(final boolean checkParentOption) {
 		return getBooleanOptionWithParentCheck(Option.ramschEventNoBid, checkParentOption,
 				isPlayRamsch(checkParentOption));
 	}
@@ -505,7 +524,7 @@ public class JSkatOptions {
 		return isRamschEventRamschAfterBock(true);
 	}
 
-	public Boolean isRamschEventRamschAfterBock(boolean checkParentOption) {
+	public Boolean isRamschEventRamschAfterBock(final boolean checkParentOption) {
 		return getBooleanOptionWithParentCheck(Option.ramschEventRamschAfterBock, checkParentOption,
 				isPlayRamsch(checkParentOption));
 	}
@@ -528,7 +547,7 @@ public class JSkatOptions {
 		return isSchieberRamsch(true);
 	}
 
-	public Boolean isSchieberRamsch(boolean checkParentOption) {
+	public Boolean isSchieberRamsch(final boolean checkParentOption) {
 		return getBooleanOptionWithParentCheck(Option.schieberRamsch, checkParentOption,
 				isPlayRamsch(checkParentOption));
 	}
@@ -542,7 +561,7 @@ public class JSkatOptions {
 		return isSchieberRamschJacksInSkat(true);
 	}
 
-	public Boolean isSchieberRamschJacksInSkat(boolean checkParentOption) {
+	public Boolean isSchieberRamschJacksInSkat(final boolean checkParentOption) {
 		return getBooleanOptionWithParentCheck(Option.schieberRamschJacksInSkat, checkParentOption,
 				isSchieberRamsch(checkParentOption));
 	}
@@ -597,7 +616,7 @@ public class JSkatOptions {
 	 * @param bockEventContraReAnnounced
 	 *            New value of property bockEventContraReAnnounced
 	 */
-	public void setBockEventContraReAnnounced(Boolean bockEventContraReAnnounced) {
+	public void setBockEventContraReAnnounced(final Boolean bockEventContraReAnnounced) {
 		setOption(Option.bockEventContraReAnnounced, bockEventContraReAnnounced);
 	}
 
@@ -607,7 +626,7 @@ public class JSkatOptions {
 	 * @param bockEventLostAfterContra
 	 *            New value of property bockEventLostAfterContra
 	 */
-	public void setBockEventLostAfterContra(Boolean bockEventLostAfterContra) {
+	public void setBockEventLostAfterContra(final Boolean bockEventLostAfterContra) {
 		setOption(Option.bockEventLostAfterContra, bockEventLostAfterContra);
 	}
 
@@ -617,7 +636,7 @@ public class JSkatOptions {
 	 * @param bockEventLostGrand
 	 *            New value of property bockEventLostGrand
 	 */
-	public void setBockEventLostGrand(Boolean bockEventLostGrand) {
+	public void setBockEventLostGrand(final Boolean bockEventLostGrand) {
 		setOption(Option.bockEventLostGrand, bockEventLostGrand);
 	}
 
@@ -627,7 +646,7 @@ public class JSkatOptions {
 	 * @param bockEventLostWith60
 	 *            New value of property bockEventLostWith60
 	 */
-	public void setBockEventLostWith60(Boolean bockEventLostWith60) {
+	public void setBockEventLostWith60(final Boolean bockEventLostWith60) {
 		setOption(Option.bockEventLostWith60, bockEventLostWith60);
 	}
 
@@ -637,7 +656,7 @@ public class JSkatOptions {
 	 * @param bockEventPlayerHasX00Points
 	 *            New value of property bockEventPlayerHasX00Points
 	 */
-	public void setBockEventPlayerHasX00Points(Boolean bockEventPlayerHasX00Points) {
+	public void setBockEventPlayerHasX00Points(final Boolean bockEventPlayerHasX00Points) {
 		setOption(Option.bockEventPlayerHasX00Points, bockEventPlayerHasX00Points);
 	}
 
@@ -646,7 +665,7 @@ public class JSkatOptions {
 	 * 
 	 * @param contraAfterBid18
 	 */
-	public void setContraAfterBid18(Boolean contraAfterBid18) {
+	public void setContraAfterBid18(final Boolean contraAfterBid18) {
 		setOption(Option.contraAfterBid18, contraAfterBid18);
 	}
 
@@ -656,7 +675,7 @@ public class JSkatOptions {
 	 * @param cardFace
 	 *            New value of property cardFace
 	 */
-	public void setCardFace(CardFace cardFace) {
+	public void setCardFace(final CardFace cardFace) {
 		setOption(Option.cardFace, cardFace);
 	}
 
@@ -666,7 +685,7 @@ public class JSkatOptions {
 	 * @param isCheatDebugMode
 	 *            New value of property cheatDebugMode.
 	 */
-	public void setCheatDebugMode(Boolean isCheatDebugMode) {
+	public void setCheatDebugMode(final Boolean isCheatDebugMode) {
 		setOption(Option.cheatDebugMode, isCheatDebugMode);
 	}
 
@@ -676,7 +695,7 @@ public class JSkatOptions {
 	 * @param isCheckForNewVersionAtStartUp
 	 *            TRUE, if the check should be performed at start up
 	 */
-	public void setCheckForNewVersionAtStartUp(Boolean isCheckForNewVersionAtStartUp) {
+	public void setCheckForNewVersionAtStartUp(final Boolean isCheckForNewVersionAtStartUp) {
 		setOption(Option.checkForNewVersionAtStartUp, isCheckForNewVersionAtStartUp);
 	}
 
@@ -686,7 +705,7 @@ public class JSkatOptions {
 	 * @param firstPlayerName
 	 *            New value of property firstPlayerName.
 	 */
-	public void setFirstPlayerName(java.lang.String firstPlayerName) {
+	public void setFirstPlayerName(final java.lang.String firstPlayerName) {
 		setOption(Option.firstPlayerName, firstPlayerName);
 	}
 
@@ -696,7 +715,7 @@ public class JSkatOptions {
 	 * @param type
 	 *            New value of property firstPlayerType.
 	 */
-	public void setFirstPlayerType(PlayerType type) {
+	public void setFirstPlayerType(final PlayerType type) {
 		setOption(Option.firstPlayerType, type);
 	}
 
@@ -706,7 +725,7 @@ public class JSkatOptions {
 	 * @param isGameShortCut
 	 *            New value of property gameShortCut.
 	 */
-	public void setGameShortCut(Boolean isGameShortCut) {
+	public void setGameShortCut(final Boolean isGameShortCut) {
 		setOption(Option.gameShortCut, isGameShortCut);
 	}
 
@@ -716,7 +735,7 @@ public class JSkatOptions {
 	 * @param address
 	 *            Address
 	 */
-	public void setIssAddress(String address) {
+	public void setIssAddress(final String address) {
 		setOption(Option.issAddress, address);
 	}
 
@@ -726,7 +745,7 @@ public class JSkatOptions {
 	 * @param port
 	 *            Port
 	 */
-	public void setIssPort(Integer port) {
+	public void setIssPort(final Integer port) {
 		setOption(Option.issPort, port);
 	}
 
@@ -736,7 +755,7 @@ public class JSkatOptions {
 	 * @param language
 	 *            New value of property language.
 	 */
-	public void setLanguage(SupportedLanguage language) {
+	public void setLanguage(final SupportedLanguage language) {
 		setOption(Option.language, language);
 	}
 
@@ -746,7 +765,7 @@ public class JSkatOptions {
 	 * @param count
 	 *            Maximumn number
 	 */
-	public void setMaxPlayerCount(Integer count) {
+	public void setMaxPlayerCount(final Integer count) {
 		setOption(Option.maxPlayerCount, count);
 	}
 
@@ -756,7 +775,7 @@ public class JSkatOptions {
 	 * @param playBock
 	 *            New value of property playBock.
 	 */
-	public void setPlayBock(Boolean playBock) {
+	public void setPlayBock(final Boolean playBock) {
 		setOption(Option.playBock, playBock);
 	}
 
@@ -766,7 +785,7 @@ public class JSkatOptions {
 	 * @param playContra
 	 *            New value of property playKontra.
 	 */
-	public void setPlayContra(Boolean playContra) {
+	public void setPlayContra(final Boolean playContra) {
 		setOption(Option.playContra, playContra);
 	}
 
@@ -776,7 +795,7 @@ public class JSkatOptions {
 	 * @param playRamsch
 	 *            New value of property playRamsch.
 	 */
-	public void setPlayRamsch(Boolean playRamsch) {
+	public void setPlayRamsch(final Boolean playRamsch) {
 		setOption(Option.playRamsch, playRamsch);
 	}
 
@@ -786,7 +805,7 @@ public class JSkatOptions {
 	 * @param playRevolution
 	 *            New value of property playRevolution.
 	 */
-	public void setPlayRevolution(Boolean playRevolution) {
+	public void setPlayRevolution(final Boolean playRevolution) {
 		setOption(Option.playRevolution, playRevolution);
 	}
 
@@ -796,7 +815,7 @@ public class JSkatOptions {
 	 * @param ramschEventNoBid
 	 *            New value of property ramschEventNoBid
 	 */
-	public void setRamschEventNoBid(Boolean ramschEventNoBid) {
+	public void setRamschEventNoBid(final Boolean ramschEventNoBid) {
 		setOption(Option.ramschEventNoBid, ramschEventNoBid);
 	}
 
@@ -806,7 +825,7 @@ public class JSkatOptions {
 	 * @param ramschEventRamschAfterBock
 	 *            New value of property ramschEventRamschAfterBock
 	 */
-	public void setRamschEventRamschAfterBock(Boolean ramschEventRamschAfterBock) {
+	public void setRamschEventRamschAfterBock(final Boolean ramschEventRamschAfterBock) {
 		setOption(Option.ramschEventRamschAfterBock, ramschEventRamschAfterBock);
 	}
 
@@ -816,7 +835,7 @@ public class JSkatOptions {
 	 * @param ramschGrandHandPossible
 	 *            New value of property ramschGrandHandPossible
 	 */
-	public void setRamschGrandHandPossible(Boolean ramschGrandHandPossible) {
+	public void setRamschGrandHandPossible(final Boolean ramschGrandHandPossible) {
 		setOption(Option.ramschGrandHandPossible, ramschGrandHandPossible);
 	}
 
@@ -826,7 +845,7 @@ public class JSkatOptions {
 	 * @param ramschSkatOwner
 	 *            New value of property ramschSkatOwner.
 	 */
-	public void setRamschSkatOwner(RamschSkatOwner ramschSkat) {
+	public void setRamschSkatOwner(final RamschSkatOwner ramschSkat) {
 		setOption(Option.ramschSkatOwner, ramschSkat);
 	}
 
@@ -836,7 +855,7 @@ public class JSkatOptions {
 	 * @param ruleSet
 	 *            New value of property rules.
 	 */
-	public void setRules(RuleSet ruleSet) {
+	public void setRules(final RuleSet ruleSet) {
 		setOption(Option.rules, ruleSet.name());
 	}
 
@@ -846,7 +865,7 @@ public class JSkatOptions {
 	 * @param savePath
 	 *            New value of property savePath.
 	 */
-	public void setSavePath(String savePath) {
+	public void setSavePath(final String savePath) {
 		setOption(Option.savePath, savePath);
 	}
 
@@ -856,7 +875,7 @@ public class JSkatOptions {
 	 * @param schieberRamsch
 	 *            New value of property schieberRamsch
 	 */
-	public void setSchieberRamsch(Boolean schieberRamsch) {
+	public void setSchieberRamsch(final Boolean schieberRamsch) {
 		setOption(Option.schieberRamsch, schieberRamsch);
 	}
 
@@ -866,7 +885,7 @@ public class JSkatOptions {
 	 * @param schieberRamschJacksInSkat
 	 *            New value of property schieberRamschJacksInSkat
 	 */
-	public void setSchieberRamschJacksInSkat(Boolean schieberRamschJacksInSkat) {
+	public void setSchieberRamschJacksInSkat(final Boolean schieberRamschJacksInSkat) {
 		setOption(Option.schieberRamschJacksInSkat, schieberRamschJacksInSkat);
 	}
 
@@ -876,7 +895,7 @@ public class JSkatOptions {
 	 * @param secondPlayerName
 	 *            New value of property secondPlayerName.
 	 */
-	public void setSecondPlayerName(String secondPlayerName) {
+	public void setSecondPlayerName(final String secondPlayerName) {
 		setOption(Option.secondPlayerName, secondPlayerName);
 	}
 
@@ -886,7 +905,7 @@ public class JSkatOptions {
 	 * @param secondPlayerType
 	 *            New value of property secondPlayerType.
 	 */
-	public void setSecondPlayerType(PlayerType type) {
+	public void setSecondPlayerType(final PlayerType type) {
 		setOption(Option.secondPlayerType, type.name());
 	}
 
@@ -896,7 +915,7 @@ public class JSkatOptions {
 	 * @param thirdPlayerName
 	 *            New value of property thirdPlayerName.
 	 */
-	public void setThirdPlayerName(String thirdPlayerName) {
+	public void setThirdPlayerName(final String thirdPlayerName) {
 		setOption(Option.thirdPlayerName, thirdPlayerName);
 	}
 
@@ -906,7 +925,7 @@ public class JSkatOptions {
 	 * @param thirdPlayerType
 	 *            New value of property thirdPlayerType.
 	 */
-	public void setThirdPlayerType(PlayerType type) {
+	public void setThirdPlayerType(final PlayerType type) {
 		setOption(Option.thirdPlayerType, type.name());
 	}
 
@@ -916,7 +935,7 @@ public class JSkatOptions {
 	 * @param trickRemoveAfterClick
 	 *            New value of property trickRemoveAfterClick.
 	 */
-	public void setTrickRemoveAfterClick(Boolean trickRemoveAfterClick) {
+	public void setTrickRemoveAfterClick(final Boolean trickRemoveAfterClick) {
 		setOption(Option.trickRemoveAfterClick, trickRemoveAfterClick);
 	}
 
@@ -926,11 +945,11 @@ public class JSkatOptions {
 	 * @param trickRemoveDelayTime
 	 *            New value of property trickRemoveDelayTime.
 	 */
-	public void setTrickRemoveDelayTime(Integer trickRemoveDelayTime) {
+	public void setTrickRemoveDelayTime(final Integer trickRemoveDelayTime) {
 		setOption(Option.trickRemoveDelayTime, trickRemoveDelayTime);
 	}
 
-	private Boolean getBooleanOption(Option option) {
+	private Boolean getBooleanOption(final Option option) {
 		return Boolean.valueOf(options.getProperty(option.name()));
 	}
 
@@ -956,11 +975,11 @@ public class JSkatOptions {
 				+ System.getProperty("file.separator"); //$NON-NLS-1$
 	}
 
-	private Integer getIntegerOption(Option option) {
+	private Integer getIntegerOption(final Option option) {
 		return Integer.valueOf(options.getProperty(option.name()));
 	}
 
-	private String getOption(Option option) {
+	private String getOption(final Option option) {
 		return options.getProperty(option.name());
 	}
 
@@ -1000,7 +1019,7 @@ public class JSkatOptions {
 		}
 	}
 
-	private void parseAndSetOptionValue(Option option, String value) {
+	private void parseAndSetOptionValue(final Option option, final String value) {
 		switch (option) {
 		case bockEventContraReAnnounced:
 			setBockEventContraReAnnounced(Boolean.valueOf(value));
@@ -1148,7 +1167,7 @@ public class JSkatOptions {
 		}
 	}
 
-	private static void logEnumParseError(Option option, String defaultValue) {
+	private static void logEnumParseError(final Option option, final String defaultValue) {
 		log.warn("Parsing of option " + option.name() + " failed. Using default value: " + defaultValue); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
@@ -1168,31 +1187,31 @@ public class JSkatOptions {
 		return result;
 	}
 
-	private void setOption(Option option, Boolean value) {
+	private void setOption(final Option option, final Boolean value) {
 		options.setProperty(option.name(), value.toString());
 	}
 
-	private void setOption(Option option, CardFace value) {
+	private void setOption(final Option option, final CardFace value) {
 		options.setProperty(option.name(), value.name());
 	}
 
-	private void setOption(Option option, Integer value) {
+	private void setOption(final Option option, final Integer value) {
 		options.setProperty(option.name(), value.toString());
 	}
 
-	private void setOption(Option option, PlayerType value) {
+	private void setOption(final Option option, final PlayerType value) {
 		options.setProperty(option.name(), value.name());
 	}
 
-	private void setOption(Option option, RamschSkatOwner value) {
+	private void setOption(final Option option, final RamschSkatOwner value) {
 		options.setProperty(option.name(), value.name());
 	}
 
-	private void setOption(Option option, String value) {
+	private void setOption(final Option option, final String value) {
 		options.setProperty(option.name(), value);
 	}
 
-	private void setOption(Option option, SupportedLanguage value) {
+	private void setOption(final Option option, final SupportedLanguage value) {
 		options.setProperty(option.name(), value.name());
 	}
 
@@ -1200,12 +1219,12 @@ public class JSkatOptions {
 	 * Sets the standard properties
 	 * 
 	 */
-	void setDefaultProperties() {
+	void setDefaultProperties(final SavePathResolver pathResolver) {
 
 		setOption(Option.showTipsAtStartUp, Boolean.TRUE);
 		setOption(Option.language, getDefaultLanguage().name());
 		setOption(Option.checkForNewVersionAtStartUp, Boolean.FALSE);
-		setOption(Option.savePath, getDefaultSaveDir());
+		setOption(Option.savePath, pathResolver.getDefaultSavePath());
 		setOption(Option.cardFace, CardFace.TOURNAMENT.name());
 		setOption(Option.trickRemoveDelayTime, 2000);
 		setOption(Option.trickRemoveAfterClick, Boolean.FALSE);
@@ -1245,7 +1264,7 @@ public class JSkatOptions {
 	 * @param isShowTips
 	 *            TRUE, if first steps should be shown
 	 */
-	public void setShowTipsAtStartUp(Boolean isShowTips) {
+	public void setShowTipsAtStartUp(final Boolean isShowTips) {
 		setOption(Option.showTipsAtStartUp, isShowTips);
 	}
 }

@@ -554,8 +554,18 @@ public class IssController {
 	 * @param messageType
 	 * @param message
 	 */
-	public void showMessage(final int messageType, final String message) {
-		view.showMessage(messageType, strings.getString("iss_message"), message); //$NON-NLS-1$
+	public void showMessage(final String message) {
+		view.showMessage(strings.getString("iss_message"), message); //$NON-NLS-1$
+	}
+
+	/**
+	 * Shows an error message from ISS
+	 * 
+	 * @param messageType
+	 * @param message
+	 */
+	public void showErrorMessage(final String message) {
+		view.showErrorMessage(strings.getString("iss_message"), message); //$NON-NLS-1$
 	}
 
 	/**

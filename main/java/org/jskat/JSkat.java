@@ -27,10 +27,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.PropertyConfigurator;
 import org.jskat.control.JSkatMaster;
+import org.jskat.data.DesktopSavePathResolver;
 import org.jskat.data.JSkatOptions;
 import org.jskat.gui.JSkatViewImpl;
 import org.jskat.gui.LookAndFeelSetter;
-
+import org.jskat.util.version.VersionChecker;
 
 /**
  * Main class for JSkat
@@ -47,21 +48,24 @@ public class JSkat {
 	 * @param args
 	 *            Command line arguments
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 
-		PropertyConfigurator.configure(ClassLoader
-				.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
+		PropertyConfigurator.configure(ClassLoader.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
 		log.debug("Welcome to JSkat!"); //$NON-NLS-1$
+
+		initializeOptions();
+
 		trySettingNimbusLookAndFeel();
+
 		JSkatMaster jskat = JSkatMaster.instance();
 		jskat.setView(new JSkatViewImpl());
-		
-		if(JSkatOptions.instance().isShowTipsAtStartUp()) {
+
+		if (JSkatOptions.instance().isShowTipsAtStartUp()) {
 			jskat.showWelcomeDialog();
 		}
 
 		if (JSkatOptions.instance().isCheckForNewVersionAtStartUp()) {
-			jskat.checkJSkatVersion();
+			jskat.checkJSkatVersion(getVersion(), VersionChecker.getLatestVersion());
 		}
 	}
 
@@ -72,6 +76,10 @@ public class JSkat {
 	 */
 	public static String getVersion() {
 		return VERSION;
+	}
+
+	private static void initializeOptions() {
+		JSkatOptions.instance(new DesktopSavePathResolver());
 	}
 
 	private static void trySettingNimbusLookAndFeel() {

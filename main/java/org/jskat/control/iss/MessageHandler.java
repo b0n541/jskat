@@ -25,8 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import javax.swing.JOptionPane;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.SkatGameData;
@@ -123,7 +121,7 @@ public class MessageHandler extends Thread {
 
 			} catch (Exception except) {
 				log.error("Error in parsing ISS protocoll", except); //$NON-NLS-1$
-				issControl.showMessage(JOptionPane.ERROR_MESSAGE, strings.getString("iss_error_parsing_iss_protocol")); //$NON-NLS-1$
+				issControl.showErrorMessage(strings.getString("iss_error_parsing_iss_protocol")); //$NON-NLS-1$
 			}
 		}
 	}
@@ -203,7 +201,7 @@ public class MessageHandler extends Thread {
 	void handleErrorMessage(final List<String> params) {
 
 		log.error(params.toString());
-		issControl.showMessage(JOptionPane.ERROR_MESSAGE, getI18ErrorString(getErrorString(params)));
+		issControl.showErrorMessage(getI18ErrorString(getErrorString(params)));
 	}
 
 	private String getErrorString(final List<String> params) {

@@ -73,7 +73,7 @@ class GameAnnouncePanel extends JPanel {
 	 * @param discardPanel
 	 *            Discard panel
 	 */
-	GameAnnouncePanel(ActionMap actions, JSkatUserPanel userPanel, DiscardPanel discardPanel) {
+	GameAnnouncePanel(final ActionMap actions, final JSkatUserPanel userPanel, final DiscardPanel discardPanel) {
 
 		strings = JSkatResourceBundle.instance();
 		this.userPanel = userPanel;
@@ -100,7 +100,7 @@ class GameAnnouncePanel extends JPanel {
 		gameTypeList.setRenderer(new GameTypeComboBoxRenderer());
 		gameTypeList.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				// FIXME (jan 28.11.2010) send sorting game type to JSkatMaster
 				// --> more view components can benefit from this
 				GameType gameType = (GameType) gameTypeList.getSelectedItem();
@@ -127,21 +127,25 @@ class GameAnnouncePanel extends JPanel {
 		final JButton announceButton = new JButton(actions.get(JSkatAction.ANNOUNCE_GAME));
 		announceButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 
 				if (gameTypeList.getSelectedItem() != null) {
 
 					try {
 						GameAnnouncement ann = getGameAnnouncement();
-						if (ann == null)
+						if (ann == null) {
 							return;
+						}
 						e.setSource(ann);
-						// fire event again
-						announceButton.dispatchEvent(e);
 					} catch (IllegalArgumentException except) {
 						log.error(except.getMessage());
 					}
+				} else {
+					e.setSource(null);
 				}
+
+				// fire event again
+				announceButton.dispatchEvent(e);
 			}
 
 			private GameAnnouncement getGameAnnouncement() {
@@ -214,7 +218,7 @@ class GameAnnouncePanel extends JPanel {
 		}
 
 		@Override
-		public String getValueText(Object value) {
+		public String getValueText(final Object value) {
 
 			String result = " "; //$NON-NLS-1$
 
@@ -228,7 +232,7 @@ class GameAnnouncePanel extends JPanel {
 		}
 	}
 
-	void setUserPickedUpSkat(boolean isUserPickedUpSkat) {
+	void setUserPickedUpSkat(final boolean isUserPickedUpSkat) {
 
 		if (isUserPickedUpSkat) {
 			handBox.setSelected(false);
