@@ -42,11 +42,11 @@ public class SkatSeries extends JSkatThread {
 	private static Log log = LogFactory.getLog(SkatSeries.class);
 
 	private int maxSleep = 0;
-	private SkatSeriesData data;
+	private final SkatSeriesData data;
 	private int roundsToGo = 0;
 	private boolean unlimitedRounds = false;
 	private boolean onlyPlayRamsch = false;
-	private Map<Player, JSkatPlayer> player;
+	private final Map<Player, JSkatPlayer> player;
 	private SkatGame currSkatGame;
 
 	private JSkatView view;
@@ -57,11 +57,12 @@ public class SkatSeries extends JSkatThread {
 	 * @param tableName
 	 *            Table name
 	 */
-	public SkatSeries(String tableName) {
+	public SkatSeries(final String tableName) {
 
 		data = new SkatSeriesData();
 		data.setState(SeriesState.WAITING);
 		data.setTableName(tableName);
+		setName("SkatSeries on table " + tableName); //$NON-NLS-1$
 		player = new HashMap<Player, JSkatPlayer>();
 	}
 
@@ -71,7 +72,7 @@ public class SkatSeries extends JSkatThread {
 	 * @param newPlayer
 	 *            New skat series player
 	 */
-	public void setPlayer(List<JSkatPlayer> newPlayer) {
+	public void setPlayer(final List<JSkatPlayer> newPlayer) {
 
 		if (newPlayer.size() != 3) {
 			throw new IllegalArgumentException("Only three players are allowed at the moment."); //$NON-NLS-1$
@@ -93,6 +94,8 @@ public class SkatSeries extends JSkatThread {
 		player.put(Player.REARHAND, newPlayer.get((startPlayer + 2) % 3));
 
 		// if an human player is playing, always show him/her at the bottom
+		// FIXME (jansch 09.05.2012) this is GUI logic, move it to the GUI
+		// package
 		for (Player hand : Player.values()) {
 			if (player.get(hand) instanceof HumanPlayer || player.get(hand) == thirdPlayer) {
 				data.setBottomPlayer(hand);
@@ -118,7 +121,7 @@ public class SkatSeries extends JSkatThread {
 	 * @param rounds
 	 *            Number of rounds to be played
 	 */
-	public void setMaxRounds(int rounds, boolean newUnlimitedRound) {
+	public void setMaxRounds(final int rounds, final boolean newUnlimitedRound) {
 
 		roundsToGo = rounds;
 		unlimitedRounds = newUnlimitedRound;
@@ -294,7 +297,7 @@ public class SkatSeries extends JSkatThread {
 	 * @param newView
 	 *            View
 	 */
-	public void setView(JSkatView newView) {
+	public void setView(final JSkatView newView) {
 
 		view = newView;
 	}
@@ -305,7 +308,7 @@ public class SkatSeries extends JSkatThread {
 	 * @param isOnlyPlayRamsch
 	 *            TRUE, if only ramsch games should be played
 	 */
-	public void setOnlyPlayRamsch(boolean isOnlyPlayRamsch) {
+	public void setOnlyPlayRamsch(final boolean isOnlyPlayRamsch) {
 		onlyPlayRamsch = isOnlyPlayRamsch;
 	}
 
@@ -317,7 +320,7 @@ public class SkatSeries extends JSkatThread {
 	 * @param newMaxSleep
 	 *            New value for maximum sleep time in milliseconds
 	 */
-	public void setMaxSleep(int newMaxSleep) {
+	public void setMaxSleep(final int newMaxSleep) {
 
 		maxSleep = newMaxSleep;
 	}

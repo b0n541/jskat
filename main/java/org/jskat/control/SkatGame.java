@@ -78,6 +78,7 @@ public class SkatGame extends JSkatThread {
 	public SkatGame(final String newTableName, final GameVariant variant, final JSkatPlayer newForeHand,
 			final JSkatPlayer newMiddleHand, final JSkatPlayer newRearHand) {
 		tableName = newTableName;
+		setName("SkatGame on table " + tableName); //$NON-NLS-1$
 		this.variant = variant;
 		player = new HashMap<Player, JSkatPlayer>();
 		player.put(Player.FOREHAND, newForeHand);
