@@ -195,9 +195,13 @@ public enum JSkatAction {
 	 */
 	CHANGE_TABLE_SEATS,
 	/**
-	 * Resigns a game on ISS
+	 * Resign a game on ISS
 	 */
 	RESIGN,
+	/**
+	 * Shows own cards on ISS
+	 */
+	SHOW_CARDS,
 	// ----------------------------------------------------------------------------//
 	// -- Neural Network Player related actions
 	// ----------------------------------------------------------------------------//

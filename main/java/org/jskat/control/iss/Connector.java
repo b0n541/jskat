@@ -287,6 +287,11 @@ class Connector {
 		issOut.send("table " + tableName + ' ' + loginName + " play RE"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
+	void sendShowCardsSignal(final String tableName) {
+
+		issOut.send("table " + tableName + ' ' + loginName + " play SC"); //$NON-NLS-1$ //$NON-NLS-2$
+	}
+
 	public void sendInvitationAccepted(final String tableName, final String invitationTicket) {
 
 		issOut.send("join " + tableName + " " + invitationTicket); //$NON-NLS-1$//$NON-NLS-2$

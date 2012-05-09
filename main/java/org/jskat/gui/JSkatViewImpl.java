@@ -97,6 +97,7 @@ import org.jskat.gui.action.iss.ReadyAction;
 import org.jskat.gui.action.iss.RegisterAction;
 import org.jskat.gui.action.iss.ResignAction;
 import org.jskat.gui.action.iss.SendChatMessageAction;
+import org.jskat.gui.action.iss.ShowCardsAction;
 import org.jskat.gui.action.iss.ShowLoginPanelAction;
 import org.jskat.gui.action.iss.TalkEnableAction;
 import org.jskat.gui.action.main.AboutAction;
@@ -209,6 +210,7 @@ public class JSkatViewImpl implements JSkatView {
 		actions.put(JSkatAction.CHANGE_TABLE_SEATS, new ChangeTableSeatsAction());
 		actions.put(JSkatAction.INVITE_ISS_PLAYER, new InvitePlayerAction());
 		actions.put(JSkatAction.RESIGN, new ResignAction());
+		actions.put(JSkatAction.SHOW_CARDS, new ShowCardsAction());
 		// Neural network actions
 		actions.put(JSkatAction.TRAIN_NEURAL_NETWORKS, new TrainNeuralNetworksAction());
 		actions.put(JSkatAction.LOAD_NEURAL_NETWORKS, new LoadNeuralNetworksAction());

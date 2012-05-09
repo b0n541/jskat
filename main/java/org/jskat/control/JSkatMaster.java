@@ -661,6 +661,14 @@ public class JSkatMaster {
 	}
 
 	/**
+	 * Sends the show cards signal to ISS
+	 */
+	public void sendShowCardsSignal() {
+
+		issControl.sendShowCardsSignal(data.getActiveTable());
+	}
+
+	/**
 	 * Leaves a skat table
 	 */
 	public void leaveTable() {

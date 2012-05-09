@@ -611,6 +611,16 @@ public class IssController {
 	}
 
 	/**
+	 * Sends a show cards signal to ISS
+	 * 
+	 * @param tableName
+	 */
+	public void sendShowCardsSignal(final String tableName) {
+
+		issConnect.sendShowCardsSignal(tableName);
+	}
+
+	/**
 	 * Send table seat change singal to ISS
 	 * 
 	 * @param tableName

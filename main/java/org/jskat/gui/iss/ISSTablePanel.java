@@ -110,11 +110,13 @@ public class ISSTablePanel extends SkatTablePanel {
 
 	@Override
 	protected JPanel getRightPanelForTrickPanel() {
-		JPanel additionalActionsPanel = new JPanel();
+		JPanel additionalActionsPanel = new JPanel(LayoutFactory.getMigLayout());
 		additionalActionsPanel.setOpaque(false);
 
-		JButton giveUpButton = new JButton(getActionMap().get(JSkatAction.RESIGN));
-		additionalActionsPanel.add(giveUpButton);
+		JButton resignButton = new JButton(getActionMap().get(JSkatAction.RESIGN));
+		additionalActionsPanel.add(resignButton, "growx, wrap"); //$NON-NLS-1$
+		JButton showCardsButton = new JButton(getActionMap().get(JSkatAction.SHOW_CARDS));
+		additionalActionsPanel.add(showCardsButton, "growx"); //$NON-NLS-1$
 
 		return additionalActionsPanel;
 	}
