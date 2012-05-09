@@ -63,12 +63,12 @@ class ChatPanel extends JPanel implements ChangeListener {
 	/**
 	 * Constructor
 	 */
-	ChatPanel(AbstractTabPanel parent) {
+	ChatPanel(final AbstractTabPanel parent) {
 
 		initPanel(parent.getActionMap());
 	}
 
-	private void initPanel(ActionMap actions) {
+	private void initPanel(final ActionMap actions) {
 
 		JSkatResourceBundle strings = JSkatResourceBundle.instance();
 
@@ -83,13 +83,13 @@ class ChatPanel extends JPanel implements ChangeListener {
 		chatTabs.addChangeListener(this);
 		add(chatTabs, "grow, wrap"); //$NON-NLS-1$
 
-		addNewChat(strings.getString("lobby")); //$NON-NLS-1$
+		addNewChat(strings.getString("lobby"), "lobby"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		inputLine = new JTextField(20);
 		inputLine.setAction(actions.get(JSkatAction.SEND_CHAT_MESSAGE));
 		inputLine.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 
 				String message = ChatPanel.this.inputLine.getText();
 				log.debug("Chat message: " + message); //$NON-NLS-1$
@@ -105,7 +105,7 @@ class ChatPanel extends JPanel implements ChangeListener {
 		add(inputLine, "growx"); //$NON-NLS-1$
 	}
 
-	JTextArea addNewChat(String name) {
+	JTextArea addNewChat(final String title, final String name) {
 
 		JTextArea chat = getChat();
 		chats.put(name, chat);
@@ -113,7 +113,7 @@ class ChatPanel extends JPanel implements ChangeListener {
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setName(name);
 
-		chatTabs.add(name, scrollPane);
+		chatTabs.add(title, scrollPane);
 		chatTabs.setSelectedIndex(chatTabs.getComponentCount() - 1);
 		activeChatName = name;
 
@@ -129,7 +129,7 @@ class ChatPanel extends JPanel implements ChangeListener {
 		return chat;
 	}
 
-	void appendMessage(ChatMessage message) {
+	void appendMessage(final ChatMessage message) {
 
 		log.debug("Appending chat message: " + message); //$NON-NLS-1$
 
@@ -137,14 +137,14 @@ class ChatPanel extends JPanel implements ChangeListener {
 
 		if (chat == null) {
 			// new chat --> create chat text area first
-			chat = addNewChat(message.getChatName());
+			chat = addNewChat(message.getChatName(), message.getChatName());
 		}
 
 		chat.append(message.getMessage() + '\n');
 	}
 
 	@Override
-	public void stateChanged(ChangeEvent e) {
+	public void stateChanged(final ChangeEvent e) {
 
 		if (e.getSource() instanceof JTabbedPane) {
 

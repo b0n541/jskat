@@ -62,7 +62,7 @@ public class ISSTablePanel extends SkatTablePanel {
 	 * @param newLoginName
 	 *            Login name on ISS
 	 */
-	public ISSTablePanel(String tableName, ActionMap actions, String newLoginName) {
+	public ISSTablePanel(final String tableName, final ActionMap actions, final String newLoginName) {
 
 		super(tableName, actions);
 
@@ -79,7 +79,7 @@ public class ISSTablePanel extends SkatTablePanel {
 				"fill")); //$NON-NLS-1$
 		panel.add(super.getPlayGroundPanel(), "width 80%, grow"); //$NON-NLS-1$
 		chatPanel = getChatPanel();
-		chatPanel.addNewChat(strings.getString("table")); //$NON-NLS-1$
+		chatPanel.addNewChat(strings.getString("table") + " " + getName(), getName()); //$NON-NLS-1$//$NON-NLS-2$
 		panel.add(chatPanel, "width 20%, growy"); //$NON-NLS-1$
 
 		// replace game start context panel
@@ -125,7 +125,7 @@ public class ISSTablePanel extends SkatTablePanel {
 	 * @param tableStatus
 	 *            New table status
 	 */
-	public void setTableStatus(TablePanelStatus tableStatus) {
+	public void setTableStatus(final TablePanelStatus tableStatus) {
 
 		// FIXME (jansch 05.04.2011) make 3<>4 change possible
 		// setMaxPlayers(tableStatus.getMaxPlayers());
@@ -147,7 +147,7 @@ public class ISSTablePanel extends SkatTablePanel {
 		lastTableStatus = tableStatus;
 	}
 
-	private boolean isNewGameResultAvailable(TablePanelStatus tableStatus) {
+	private boolean isNewGameResultAvailable(final TablePanelStatus tableStatus) {
 
 		boolean result = false;
 
@@ -171,7 +171,7 @@ public class ISSTablePanel extends SkatTablePanel {
 		return result;
 	}
 
-	private Map<Player, Integer> extractPlayerResults(TablePanelStatus tableStatus) {
+	private Map<Player, Integer> extractPlayerResults(final TablePanelStatus tableStatus) {
 
 		Map<Player, Integer> result = new HashMap<Player, Integer>();
 
@@ -184,7 +184,7 @@ public class ISSTablePanel extends SkatTablePanel {
 		return result;
 	}
 
-	private void addPlayerName(String playerName) {
+	private void addPlayerName(final String playerName) {
 
 		if (!playerNamesAndPositions.keySet().contains(playerName)) {
 
@@ -205,7 +205,7 @@ public class ISSTablePanel extends SkatTablePanel {
 		}
 	}
 
-	private void removePlayerName(String playerName) {
+	private void removePlayerName(final String playerName) {
 
 		if (playerNamesAndPositions.keySet().contains(playerName)) {
 
@@ -232,7 +232,7 @@ public class ISSTablePanel extends SkatTablePanel {
 	 * @param message
 	 *            Chat message
 	 */
-	public void appendChatMessage(ChatMessage message) {
+	public void appendChatMessage(final ChatMessage message) {
 
 		chatPanel.appendMessage(message);
 	}
