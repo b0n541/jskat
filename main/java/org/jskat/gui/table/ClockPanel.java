@@ -32,23 +32,23 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
 
 /**
- * Holds the clock icon an the time<br>
+ * Holds the clock icon and the time<br>
  * does clock countdown too
  */
 public class ClockPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private JLabel timeLabel;
-	private double playerTimeInSeconds;
+	private final JLabel timeLabel;
+	double playerTimeInSeconds;
+	CountDownThread countDownThread;
 
 	/**
 	 * Constructor
 	 */
 	public ClockPanel() {
 
-		ImageIcon clock = new ImageIcon(JSkatGraphicRepository.instance()
-				.getIconImage(Icon.CLOCK, IconSize.SMALL));
+		ImageIcon clock = new ImageIcon(JSkatGraphicRepository.instance().getIconImage(Icon.CLOCK, IconSize.SMALL));
 		JLabel clockLabel = new JLabel(clock);
 		playerTimeInSeconds = 0.0d;
 		timeLabel = new JLabel(getPlayerTimeString());
@@ -58,14 +58,40 @@ public class ClockPanel extends JPanel {
 	}
 
 	/**
+	 * Sets the {@link ClockPanel} to active state
+	 */
+	public void setActive() {
+		if (countDownThread != null) {
+			// there is an old count down thread running
+			// stop it at first
+			countDownThread.stopCountDown();
+		}
+		countDownThread = new CountDownThread();
+		countDownThread.start();
+	}
+
+	/**
+	 * Sets the {@link ClockPanel} to inactive state
+	 */
+	public void setInactive() {
+		if (countDownThread != null) {
+			countDownThread.stopCountDown();
+		}
+	}
+
+	/**
 	 * Sets the player time
 	 * 
 	 * @param newPlayerTime
 	 *            Player time
 	 */
-	public void setPlayerTime(double newPlayerTime) {
+	public void setPlayerTime(final double newPlayerTime) {
 
 		playerTimeInSeconds = newPlayerTime;
+		refreshTimeLabel();
+	}
+
+	void refreshTimeLabel() {
 		timeLabel.setText(getPlayerTimeString());
 	}
 
@@ -77,5 +103,36 @@ public class ClockPanel extends JPanel {
 		DecimalFormat format = ((DecimalFormat) NumberFormat.getInstance());
 		format.applyPattern("00"); //$NON-NLS-1$
 		return format.format(minutes) + ":" + format.format(seconds); //$NON-NLS-1$
+	}
+
+	private class CountDownThread extends Thread {
+
+		private volatile boolean isActive = true;
+
+		/**
+		 * Constructor
+		 */
+		CountDownThread() {
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public void run() {
+			while (isActive) {
+				try {
+					sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				setPlayerTime(playerTimeInSeconds - 1.0);
+			}
+		}
+
+		void stopCountDown() {
+			isActive = false;
+		}
 	}
 }

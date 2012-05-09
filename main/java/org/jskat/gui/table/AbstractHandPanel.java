@@ -354,9 +354,20 @@ abstract class AbstractHandPanel extends JPanel {
 	}
 
 	void setActivePlayer(final boolean isActivePlayer) {
-
 		activePlayer = isActivePlayer;
 		setBorder(getPanelBorder());
+
+		updateIssWidgets(isActivePlayer);
+	}
+
+	private void updateIssWidgets(final boolean isActivePlayer) {
+		if (showIssWidgets) {
+			if (isActivePlayer) {
+				clockPanel.setActive();
+			} else {
+				clockPanel.setInactive();
+			}
+		}
 	}
 
 	void setPass(final boolean isPassed) {

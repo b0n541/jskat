@@ -490,6 +490,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 		case PRELIMINARY_GAME_END:
 		case GAME_OVER:
 			setContextPanel(ContextPanelType.GAME_OVER);
+			foreHand.setActivePlayer(false);
+			middleHand.setActivePlayer(false);
+			rearHand.setActivePlayer(false);
 			break;
 		}
 	}
