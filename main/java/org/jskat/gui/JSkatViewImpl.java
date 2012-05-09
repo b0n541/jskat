@@ -873,6 +873,8 @@ public class JSkatViewImpl implements JSkatView {
 		table.setPlayerTime(rightOpponent, status.getPlayerTime(rightOpponent));
 		table.setPlayerName(player, status.getPlayerName(player));
 		table.setPlayerTime(player, status.getPlayerTime(player));
+		table.setPlayerNames(status.getPlayerName(leftOpponent), status.getPlayerName(rightOpponent),
+				status.getPlayerName(player));
 	}
 
 	/**
