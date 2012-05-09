@@ -34,10 +34,10 @@ class PlayerListTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 
-	private JSkatResourceBundle strings;
+	private final JSkatResourceBundle strings;
 
-	private List<List<String>> data;
-	private List<String> columns;
+	private final List<List<Object>> data;
+	private final List<String> columns;
 
 	/**
 	 * Constructor
@@ -45,68 +45,86 @@ class PlayerListTableModel extends AbstractTableModel {
 	public PlayerListTableModel() {
 
 		strings = JSkatResourceBundle.instance();
-		this.data = new ArrayList<List<String>>();
-		this.columns = new ArrayList<String>();
-		this.columns.add(strings.getString("name"));
-		this.columns.add(strings.getString("language"));
-		this.columns.add(strings.getString("games"));
-		this.columns.add(strings.getString("strength"));
+		data = new ArrayList<List<Object>>();
+		columns = new ArrayList<String>();
+		columns.add(strings.getString("name"));
+		columns.add(strings.getString("language"));
+		columns.add(strings.getString("games"));
+		columns.add(strings.getString("strength"));
 	}
 
 	/**
-	 * @see AbstractTableModel#getColumnCount()
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Class<?> getColumnClass(final int columnIndex) {
+
+		if (columnIndex == 2) {
+			return Long.class;
+		} else if (columnIndex == 3) {
+			return Double.class;
+		}
+		return String.class;
+	}
+
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	public int getColumnCount() {
 
-		return this.columns.size();
+		return columns.size();
 	}
 
 	/**
-	 * @see AbstractTableModel#getRowCount()
+	 * {@inheritDoc}
 	 */
 	@Override
 	public int getRowCount() {
 
-		return this.data.size();
+		return data.size();
 	}
 
 	/**
-	 * @see AbstractTableModel#getValueAt(int, int)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
+	public Object getValueAt(final int rowIndex, final int columnIndex) {
 
-		return this.data.get(rowIndex).get(columnIndex);
+		return data.get(rowIndex).get(columnIndex);
 	}
 
 	/**
-	 * @see AbstractTableModel#getColumnName(int)
+	 * {@inheritDoc}
 	 */
 	@Override
-	public String getColumnName(int col) {
-		
-		return this.columns.get(col);
+	public String getColumnName(final int col) {
+
+		return columns.get(col);
 	}
 
 	/**
 	 * Updates the player table model
 	 * 
-	 * @param playerName Player name
-	 * @param language Player language
-	 * @param gamesPlayed Games played
-	 * @param strength Player strength
+	 * @param playerName
+	 *            Player name
+	 * @param language
+	 *            Player language
+	 * @param gamesPlayed
+	 *            Games played
+	 * @param strength
+	 *            Player strength
 	 */
-	public void updatePlayer(String playerName, String language,
-			long gamesPlayed, double strength) {
-		
+	public void updatePlayer(final String playerName, final String language, final long gamesPlayed,
+			final double strength) {
+
 		boolean playerFound = false;
 		int index = 0;
-		
+
 		// first try to find a player already known
-		while (!playerFound && index < this.data.size()) {
-			
-			List<String> currRow = this.data.get(index);
+		while (!playerFound && index < data.size()) {
+
+			List<Object> currRow = data.get(index);
 			// check player name
 			if (currRow.get(0).equals(playerName)) {
 				// player found
@@ -115,53 +133,51 @@ class PlayerListTableModel extends AbstractTableModel {
 			}
 			index++;
 		}
-		
+
 		if (!playerFound) {
 			// player not found --> new player
 			// add this player
 			addRow(playerName, language, gamesPlayed, strength);
 		}
 	}
-	
-	private void updateRow(int index, String language,
-			long gamesPlayed, double strength) {
-		
-		List<String> row = this.data.get(index);
+
+	private void updateRow(final int index, final String language, final long gamesPlayed, final double strength) {
+
+		List<Object> row = data.get(index);
 		// set updated values
 		row.set(1, language);
 		row.set(2, Long.toString(gamesPlayed));
 		row.set(3, Double.toString(strength));
-		
-		this.fireTableDataChanged();
-	}
-	
-	private void addRow(String playerName, String language,
-			long gamesPlayed, double strength) {
 
-		ArrayList<String> newLine = new ArrayList<String>();
+		fireTableDataChanged();
+	}
+
+	private void addRow(final String playerName, final String language, final long gamesPlayed, final double strength) {
+
+		ArrayList<Object> newLine = new ArrayList<Object>();
 		newLine.add(playerName);
 		newLine.add(language);
-		newLine.add(Long.toString(gamesPlayed));
-		newLine.add(Double.toString(strength));
-		this.data.add(newLine);
+		newLine.add(Long.valueOf(gamesPlayed));
+		newLine.add(Double.valueOf(strength));
+		data.add(newLine);
 
-		this.fireTableDataChanged();
+		fireTableDataChanged();
 	}
 
-	public void removePlayer(String playerName) {
+	public void removePlayer(final String playerName) {
 
 		int index = 0;
 		int removeIndex = 0;
-		for (List<String> currRow : this.data) {
-			
+		for (List<Object> currRow : data) {
+
 			if (currRow.get(0).equals(playerName)) {
-				
+
 				removeIndex = index;
 			}
 			index++;
 		}
-		this.data.remove(removeIndex);
-		
-		this.fireTableDataChanged();
+		data.remove(removeIndex);
+
+		fireTableDataChanged();
 	}
 }

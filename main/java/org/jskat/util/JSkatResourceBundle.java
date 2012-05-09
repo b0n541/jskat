@@ -25,6 +25,7 @@ import java.util.ResourceBundle;
 
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatOptions.SupportedLanguage;
+import org.jskat.gui.img.JSkatGraphicRepository.Flag;
 
 /**
  * Helper class for skat related i18n string resolves
@@ -92,7 +93,7 @@ public class JSkatResourceBundle {
 	 *            Key
 	 * @return i18n string
 	 */
-	public String getString(String key) {
+	public String getString(final String key) {
 
 		return strings.getString(key);
 	}
@@ -104,7 +105,7 @@ public class JSkatResourceBundle {
 	 *            Game type
 	 * @return i18n string according the current card face
 	 */
-	public String getGameType(GameType gameType) {
+	public String getGameType(final GameType gameType) {
 
 		String result = null;
 
@@ -139,10 +140,9 @@ public class JSkatResourceBundle {
 	 *            Card
 	 * @return i18n string according the current card face
 	 */
-	public String getCardStringForCardFace(Card card) {
+	public String getCardStringForCardFace(final Card card) {
 
-		return getSuitStringForCardFace(card.getSuit())
-				+ " " + getRankStringForCardFace(card.getRank()); //$NON-NLS-1$
+		return getSuitStringForCardFace(card.getSuit()) + " " + getRankStringForCardFace(card.getRank()); //$NON-NLS-1$
 	}
 
 	/**
@@ -152,7 +152,7 @@ public class JSkatResourceBundle {
 	 *            Rank
 	 * @return i18n string according the current card face
 	 */
-	public String getRankStringForCardFace(Rank rank) {
+	public String getRankStringForCardFace(final Rank rank) {
 
 		String result = null;
 
@@ -168,7 +168,7 @@ public class JSkatResourceBundle {
 		return result;
 	}
 
-	private String getFrenchRankString(Rank rank) {
+	private String getFrenchRankString(final Rank rank) {
 
 		String result = null;
 
@@ -202,7 +202,7 @@ public class JSkatResourceBundle {
 		return result;
 	}
 
-	private String getGermanRankString(Rank rank) {
+	private String getGermanRankString(final Rank rank) {
 
 		String result = null;
 
@@ -244,7 +244,7 @@ public class JSkatResourceBundle {
 	 * @return i18n string according the current card face
 	 */
 
-	public String getSuitStringForCardFace(Suit suit) {
+	public String getSuitStringForCardFace(final Suit suit) {
 
 		String result = null;
 
@@ -260,7 +260,7 @@ public class JSkatResourceBundle {
 		return result;
 	}
 
-	private String getFrenchSuitString(Suit suit) {
+	private String getFrenchSuitString(final Suit suit) {
 
 		String result = null;
 
@@ -281,7 +281,7 @@ public class JSkatResourceBundle {
 		return result;
 	}
 
-	private String getGermanSuitString(Suit suit) {
+	private String getGermanSuitString(final Suit suit) {
 
 		String result = null;
 
@@ -302,7 +302,7 @@ public class JSkatResourceBundle {
 		return result;
 	}
 
-	private String getGameTypeStringForCardFace(GameType gameType) {
+	private String getGameTypeStringForCardFace(final GameType gameType) {
 
 		String result = null;
 
@@ -319,7 +319,7 @@ public class JSkatResourceBundle {
 		return result;
 	}
 
-	private String getGermanGameTypeString(GameType gameType) {
+	private String getGermanGameTypeString(final GameType gameType) {
 
 		String result = null;
 
@@ -344,7 +344,7 @@ public class JSkatResourceBundle {
 		return result;
 	}
 
-	private String getFrenchGameTypeString(GameType gameType) {
+	private String getFrenchGameTypeString(final GameType gameType) {
 
 		String result = null;
 
@@ -363,6 +363,40 @@ public class JSkatResourceBundle {
 			break;
 		default:
 			// other game types not needed here
+			break;
+		}
+
+		return result;
+	}
+
+	/**
+	 * Gets the language for a flag
+	 * 
+	 * @param flag
+	 *            Flag
+	 * @return Language
+	 */
+	public String getLanguageForFlag(final Flag flag) {
+		String result = null;
+
+		switch (flag) {
+		case GERMAN:
+			result = strings.getString("german"); //$NON-NLS-1$
+			break;
+		case ENGLISH:
+			result = strings.getString("english"); //$NON-NLS-1$
+			break;
+		case FRENCH:
+			result = strings.getString("french"); //$NON-NLS-1$
+			break;
+		case SPANISH:
+			result = strings.getString("spanish"); //$NON-NLS-1$
+			break;
+		case POLISH:
+			result = strings.getString("polish"); //$NON-NLS-1$
+			break;
+		case CZECH:
+			result = strings.getString("czech"); //$NON-NLS-1$
 			break;
 		}
 
