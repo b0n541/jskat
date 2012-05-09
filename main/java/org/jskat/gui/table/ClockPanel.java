@@ -127,7 +127,14 @@ public class ClockPanel extends JPanel {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				setPlayerTime(playerTimeInSeconds - 1.0);
+				if (isActive) {
+					// thread could be inactive meanwhile
+					if (playerTimeInSeconds < 1.0) {
+						setPlayerTime(0.0);
+					} else {
+						setPlayerTime(playerTimeInSeconds - 1.0);
+					}
+				}
 			}
 		}
 
