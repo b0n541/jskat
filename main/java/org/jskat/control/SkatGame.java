@@ -224,6 +224,8 @@ public class SkatGame extends JSkatThread {
 		} while (data.getGameState() != GameState.GAME_OVER && !isTerminated());
 
 		log.debug(data.getGameState());
+
+		ThreadManager.unregisterThread(this);
 	}
 
 	private void setActivePlayer(final Player activePlayer) {
