@@ -150,6 +150,7 @@ public class NNTrainer extends JSkatThread {
 	public void setGameType(final GameType newGameType) {
 
 		gameType = newGameType;
+		setName("NNTrainer for " + gameType); //$NON-NLS-1$
 	}
 
 	/**

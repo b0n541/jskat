@@ -21,6 +21,10 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 
 	private BasicNetwork network;
 	private final PersistBasicNetwork networkPersister;
+	private final ResilientPropagation trainer;
+
+	private final MLData inputs;
+	private final MLData outputs;
 
 	/**
 	 * Constructor
@@ -39,48 +43,63 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 		network.reset();
 
 		networkPersister = new PersistBasicNetwork();
-	}
 
-	@Override
-	public double getAvgDiff() {
-
-		return 0;
-	}
-
-	public double train(final double[][] inputs, final double[][] outputs) {
-		BasicMLDataSet trainingSet = new BasicMLDataSet(inputs, outputs);
-		final ResilientPropagation train = new ResilientPropagation(network, trainingSet);
-		train.iteration((int) trainingSet.getRecordCount());
-		return train.getError();
-	}
-
-	@Override
-	public double adjustWeights(final double[] inputs, final double[] outputs) {
-		BasicMLData input = new BasicMLData(inputs);
-		BasicMLData output = new BasicMLData(outputs);
-		MLDataPair dataPair = new BasicMLDataPair(input, output);
+		inputs = new BasicMLData(newTopo.getInputNeuronCount());
+		outputs = new BasicMLData(newTopo.getOutputNeuronCount());
+		MLDataPair dataPair = new BasicMLDataPair(inputs, outputs);
 		BasicMLDataSet trainingSet = new BasicMLDataSet();
 		trainingSet.add(dataPair);
-		final ResilientPropagation train = new ResilientPropagation(network, trainingSet);
-		train.iteration((int) trainingSet.getRecordCount());
-		return train.getError();
+		trainer = new ResilientPropagation(network, trainingSet);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public double getAvgDiff() {
+		return 0.0;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public double adjustWeights(final double[] inputValues, final double[] outputValues) {
+		for (int i = 0; i < inputValues.length; i++) {
+			inputs.setData(i, inputValues[i]);
+		}
+		for (int i = 0; i < outputValues.length; i++) {
+			outputs.setData(i, outputValues[i]);
+		}
+		trainer.iteration(1);
+		return trainer.getError();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void resetNetwork() {
 		network.reset();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public double getPredictedOutcome(final double[] inputs) {
-		MLData inputData = new BasicMLData(inputs);
-		MLData output = network.compute(inputData);
+	public double getPredictedOutcome(final double[] inputValues) {
+		for (int i = 0; i < inputValues.length; i++) {
+			inputs.setData(i, inputValues[i]);
+		}
+		MLData output = network.compute(inputs);
 		return output.getData(0);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public long getIterations() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

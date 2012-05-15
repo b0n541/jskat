@@ -21,6 +21,7 @@
 package org.jskat.ai.nn;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -57,14 +58,17 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	private final GameSimulator gameSimulator;
 
 	private final Random rand;
-	private final List<double[]> allInputs;
+	private final List<double[]> allInputs = new ArrayList<double[]>();
 	private GameType bestGameTypeFromDiscarding;
 
 	private boolean isLearning = false;
 
-	private final List<GameType> feasibleGameTypes;
+	private final List<GameType> feasibleGameTypes = new ArrayList<GameType>();
 
-	private static long MAX_SIMULATIONS = 50;
+	private final double[] netInputs = new double[1089];
+	private final double[] netOutputs = new double[1];
+	private final static int PLAYER_LENGTH = 363;
+	private final static long MAX_SIMULATIONS = 50;
 
 	// 1.0 and 2.0 for tanh function
 	// 2.0 and 4.0 for sigmoid function
@@ -103,9 +107,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		gameSimulator = new GameSimulator();
 
-		allInputs = new ArrayList<double[]>();
+		initInputBuffer();
 
-		feasibleGameTypes = new ArrayList<GameType>();
 		for (GameType gameType : GameType.values()) {
 			if (gameType != GameType.RAMSCH && gameType != GameType.PASSED_IN) {
 				feasibleGameTypes.add(gameType);
@@ -114,6 +117,12 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		rand = new Random();
 		isLearning = true;
+	}
+
+	private void initInputBuffer() {
+		for (int i = 0; i < 10; i++) {
+			allInputs.add(new double[netInputs.length]);
+		}
 	}
 
 	/**
@@ -430,13 +439,23 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			}
 			// store parameters for the card to play
 			// for adjustment of weights after the game
-			allInputs.add(cardInputs.get(possibleCards.get(bestCardIndex)));
+			storeInputParameters(knowledge.getCurrentTrick().getTrickNumberInGame(),
+					cardInputs.get(possibleCards.get(bestCardIndex)));
 		}
 
 		log.debug("choosing card " + bestCardIndex); //$NON-NLS-1$
 		log.debug("as player " + knowledge.getPlayerPosition() + ": " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$//$NON-NLS-2$
 
 		return possibleCards.get(bestCardIndex);
+	}
+
+	private void storeInputParameters(final int trick, final double[] inputParameters) {
+
+		double[] trickInputs = allInputs.get(trick);
+
+		for (int i = 0; i < trickInputs.length; i++) {
+			trickInputs[i] = inputParameters[i];
+		}
 	}
 
 	private int chooseRandomCard(final CardList possibleCards, final CardList goodCards) {
@@ -455,33 +474,30 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 */
 	double[] getNetInputs(final Card cardToPlay) {
 
-		double[] inputs = new double[1089];
-		final int PLAYER_LENGTH = 363;
-
 		// set game declarer
-		setDeclarerInputs(inputs, PLAYER_LENGTH);
+		setDeclarerInputs(netInputs, PLAYER_LENGTH);
 
 		// set information for all played cards
 		final int TRICK_LENGTH = 33;
 		final int CARD_OFFSET = 1;
-		setTrickInputs(inputs, PLAYER_LENGTH, TRICK_LENGTH, CARD_OFFSET);
+		setTrickInputs(netInputs, PLAYER_LENGTH, TRICK_LENGTH, CARD_OFFSET);
 
 		// set information for all unplayed cards
 		Player leftOpponent = knowledge.getPlayerPosition().getLeftNeighbor();
 		Player rightOpponent = knowledge.getPlayerPosition().getRightNeighbor();
 		final int KNOWN_CARDS_OFFSET = 331;
 		for (Card card : knowledge.getCompleteDeck()) {
-			setKnowCards(inputs, leftOpponent, rightOpponent, card, PLAYER_LENGTH, KNOWN_CARDS_OFFSET);
+			setKnowCards(netInputs, leftOpponent, rightOpponent, card, PLAYER_LENGTH, KNOWN_CARDS_OFFSET);
 		}
 
 		// set information of card to be played
 		if (cardToPlay != null) {
 			int trickStartIndex = knowledge.getCurrentTrick().getTrickNumberInGame() * TRICK_LENGTH + 1;
-			setCardInputs(inputs, PLAYER_LENGTH, knowledge.getPlayerPosition(), trickStartIndex, CARD_OFFSET,
+			setCardInputs(netInputs, PLAYER_LENGTH, knowledge.getPlayerPosition(), trickStartIndex, CARD_OFFSET,
 					knowledge.getPlayerPosition(), cardToPlay);
 		}
 
-		return inputs;
+		return netInputs;
 	}
 
 	private void setTrickInputs(final double[] inputs, final int playerLength, final int trickLength,
@@ -685,8 +701,14 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	@Override
 	public void preparateForNewGame() {
 
-		allInputs.clear();
+		resetInputBuffer();
 		bestGameTypeFromDiscarding = null;
+	}
+
+	private void resetInputBuffer() {
+		for (double[] inputs : allInputs) {
+			Arrays.fill(inputs, 0.0);
+		}
 	}
 
 	/**
@@ -705,37 +727,38 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	private void adjustNeuralNetworks(final List<double[]> inputs) {
 
 		double output = 0.0d;
-
-		if (GameType.RAMSCH.equals(knowledge.getGameType())) {
-			if (isRamschGameWon(gameSummary, knowledge.getPlayerPosition())) {
-				output = WON;
-			} else {
-				output = LOST;
-			}
-		} else {
-			if (isDeclarer()) {
-				if (gameSummary.isGameWon()) {
+		if (!GameType.PASSED_IN.equals(knowledge.getGameType())) {
+			if (GameType.RAMSCH.equals(knowledge.getGameType())) {
+				if (isRamschGameWon(gameSummary, knowledge.getPlayerPosition())) {
 					output = WON;
 				} else {
 					output = LOST;
 				}
 			} else {
-				if (gameSummary.isGameWon()) {
-					output = LOST;
+				if (isDeclarer()) {
+					if (gameSummary.isGameWon()) {
+						output = WON;
+					} else {
+						output = LOST;
+					}
 				} else {
-					output = WON;
+					if (gameSummary.isGameWon()) {
+						output = LOST;
+					} else {
+						output = WON;
+					}
 				}
 			}
-		}
-		double[] outputParam = { output };
+			netOutputs[0] = output;
 
-		List<INeuralNetwork> networks = SkatNetworks.getNetwork(knowledge.getGame().getGameType(), isDeclarer());
+			List<INeuralNetwork> networks = SkatNetworks.getNetwork(knowledge.getGame().getGameType(), isDeclarer());
 
-		int index = 0;
-		for (double[] inputParam : inputs) {
-			INeuralNetwork net = networks.get(index);
-			net.adjustWeights(inputParam, outputParam);
-			index++;
+			int index = 0;
+			for (double[] inputParam : inputs) {
+				INeuralNetwork net = networks.get(index);
+				net.adjustWeights(inputParam, netOutputs);
+				index++;
+			}
 		}
 	}
 
