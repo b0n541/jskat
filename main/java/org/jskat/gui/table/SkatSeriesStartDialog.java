@@ -59,8 +59,8 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 	private static final String PLAYER2_DEFAULT_NAME = "Markus"; //$NON-NLS-1$
 	private static final String PLAYER3_DEFAULT_NAME = System.getProperty("user.name"); //$NON-NLS-1$
 
-	private JSkatMaster jskat;
-	private JFrame parent;
+	private final JSkatMaster jskat;
+	private final JFrame parent;
 
 	JSkatResourceBundle strings;
 
@@ -82,7 +82,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 	 * @param mainFrame
 	 *            Main frame
 	 */
-	public SkatSeriesStartDialog(JSkatMaster skatMaster, JFrame mainFrame) {
+	public SkatSeriesStartDialog(final JSkatMaster skatMaster, final JFrame mainFrame) {
 
 		jskat = skatMaster;
 		parent = mainFrame;
@@ -138,7 +138,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 		unlimited.addChangeListener(new ChangeListener() {
 
 			@Override
-			public void stateChanged(ChangeEvent e) {
+			public void stateChanged(final ChangeEvent e) {
 				if (unlimited.isSelected()) {
 					numberOfRounds.setEnabled(false);
 				} else {
@@ -169,7 +169,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 	 * @see JDialog#setVisible(boolean)
 	 */
 	@Override
-	public void setVisible(boolean isVisible) {
+	public void setVisible(final boolean isVisible) {
 
 		if (isVisible) {
 
@@ -183,12 +183,12 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 	 * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 
-		if (CANCEL.equals(e.getActionCommand())) { //$NON-NLS-1$
+		if (CANCEL.equals(e.getActionCommand())) {
 
 			setVisible(false);
-		} else if (START.equals(e.getActionCommand())) { //$NON-NLS-1$
+		} else if (START.equals(e.getActionCommand())) {
 
 			ArrayList<PlayerType> playerTypes = new ArrayList<PlayerType>();
 			playerTypes.add((PlayerType) player1.getSelectedItem());
@@ -203,7 +203,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 			setVisible(false);
 
 			jskat.startSeries(playerTypes, playerNames, Integer.parseInt(numberOfRounds.getValue().toString()),
-					unlimited.isSelected(), onlyPlayRamsch.isSelected());
+					unlimited.isSelected(), onlyPlayRamsch.isSelected(), 100);
 		}
 
 	}
@@ -217,7 +217,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 		}
 
 		@Override
-		public String getValueText(Object value) {
+		public String getValueText(final Object value) {
 
 			String result = " "; //$NON-NLS-1$
 

@@ -23,6 +23,7 @@ package org.jskat.gui;
 import java.util.List;
 import java.util.Set;
 
+import org.jskat.ai.AbstractHumanJSkatPlayer;
 import org.jskat.control.SkatTable;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.GameAnnouncement;
@@ -717,4 +718,11 @@ public interface JSkatView {
 	 *            Trick winner
 	 */
 	public void setTrickWinner(String tableName, Player trickWinner);
+
+	/**
+	 * Creates a human player object for the GUI
+	 * 
+	 * @return Human player object that extends {@link AbstractHumanJSkatPlayer}
+	 */
+	public AbstractHumanJSkatPlayer getHumanPlayerForGUI();
 }

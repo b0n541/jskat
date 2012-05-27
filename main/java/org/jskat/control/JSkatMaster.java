@@ -27,6 +27,7 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jskat.ai.AbstractHumanJSkatPlayer;
 import org.jskat.ai.PlayerType;
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.train.NNTrainer;
@@ -110,29 +111,24 @@ public class JSkatMaster {
 		String tableName = view.getNewTableName(data.getLocalTablesCreated());
 
 		if (tableName == null) {
-
 			log.debug("Create table was cancelled..."); //$NON-NLS-1$
 			return;
+		}
 
+		if (data.isFreeTableName(tableName)) {
+			createLocalTable(tableName, view.getHumanPlayerForGUI());
 		} else {
-
-			if (data.isFreeTableName(tableName)) {
-
-				createLocalTable(tableName);
-
-			} else {
-
-				view.showDuplicateTableNameMessage(tableName);
-				// try again
-				createTable();
-			}
+			view.showDuplicateTableNameMessage(tableName);
+			// try again
+			createTable();
 		}
 	}
 
-	private void createLocalTable(final String tableName) {
+	private void createLocalTable(final String tableName, final AbstractHumanJSkatPlayer humanPlayer) {
 		SkatTable table = new SkatTable(data.getTableOptions());
 		table.setName(tableName);
 		data.addSkatTable(table);
+		data.registerHumanPlayerObject(table, humanPlayer);
 
 		view.createSkatTablePanel(table.getName());
 		data.setActiveTable(table.getName());
@@ -194,7 +190,7 @@ public class JSkatMaster {
 	 *            TRUE, if unlimited rounds should be played
 	 */
 	public void startSeries(final ArrayList<PlayerType> allPlayer, final ArrayList<String> playerNames,
-			final int numberOfRounds, final boolean unlimited, final boolean onlyPlayRamsch) {
+			final int numberOfRounds, final boolean unlimited, final boolean onlyPlayRamsch, final int sleeps) {
 
 		log.debug(data.getActiveTable());
 
@@ -215,7 +211,7 @@ public class JSkatMaster {
 			playerCount++;
 		}
 
-		table.startSkatSeries(numberOfRounds, unlimited, onlyPlayRamsch, 100);
+		table.startSkatSeries(numberOfRounds, unlimited, onlyPlayRamsch, sleeps);
 	}
 
 	/**
@@ -471,11 +467,8 @@ public class JSkatMaster {
 		Object source = event.getSource();
 
 		if (isIssTable(tableName)) {
-
 			handleHumanInputForISSTable(tableName, command, source);
-
 		} else {
-
 			data.getHumanPlayer(tableName).actionPerformed(event);
 		}
 	}

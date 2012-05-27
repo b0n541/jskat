@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.jskat.ai.AbstractHumanJSkatPlayer;
 import org.jskat.control.SkatTable;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.GameAnnouncement;
@@ -491,5 +492,11 @@ public class UnitTestView implements JSkatView {
 	@Override
 	public void setTrickWinner(final String tableName, final Player trickWinner) {
 		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public AbstractHumanJSkatPlayer getHumanPlayerForGUI() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

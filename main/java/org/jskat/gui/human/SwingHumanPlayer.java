@@ -25,7 +25,7 @@ import java.awt.event.ActionListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jskat.ai.AbstractJSkatPlayer;
+import org.jskat.ai.AbstractHumanJSkatPlayer;
 import org.jskat.control.JSkatPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.gui.action.JSkatAction;
@@ -35,9 +35,9 @@ import org.jskat.util.CardList;
 /**
  * Human player
  */
-public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
+public class SwingHumanPlayer extends AbstractHumanJSkatPlayer implements ActionListener {
 
-	private static Log log = LogFactory.getLog(HumanPlayer.class);
+	private static Log log = LogFactory.getLog(SwingHumanPlayer.class);
 
 	private Idler idler = new Idler();
 
@@ -52,15 +52,6 @@ public class HumanPlayer extends AbstractJSkatPlayer implements ActionListener {
 
 	private enum GameAnnouncementStep {
 		BEFORE_ANNOUNCEMENT, LOOKED_INTO_SKAT, DISCARDED_SKAT, PLAYS_HAND, DONE_GAME_ANNOUNCEMENT
-	}
-
-	/**
-	 * @see JSkatPlayer#isAIPlayer()
-	 */
-	@Override
-	public boolean isAIPlayer() {
-
-		return false;
 	}
 
 	/**

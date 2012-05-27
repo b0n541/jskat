@@ -25,8 +25,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.jskat.ai.AbstractHumanJSkatPlayer;
 import org.jskat.control.SkatTable;
-import org.jskat.gui.human.HumanPlayer;
 
 /**
  * Holds all application data
@@ -42,7 +42,7 @@ public class JSkatApplicationData {
 	private String issLoginName;
 	private final Set<String> availableIssPlayer;
 	private final Set<String> joinedIssTables;
-	private final Map<String, HumanPlayer> humanPlayers;
+	private final Map<String, AbstractHumanJSkatPlayer> humanPlayers;
 
 	/**
 	 * Gets the instance of the application data
@@ -66,7 +66,7 @@ public class JSkatApplicationData {
 
 		options = JSkatOptions.instance();
 		skatTables = new HashMap<String, SkatTable>();
-		humanPlayers = new HashMap<String, HumanPlayer>();
+		humanPlayers = new HashMap<String, AbstractHumanJSkatPlayer>();
 		availableIssPlayer = new HashSet<String>();
 		joinedIssTables = new HashSet<String>();
 	}
@@ -86,10 +86,19 @@ public class JSkatApplicationData {
 	 *            New local table
 	 */
 	synchronized public void addSkatTable(final SkatTable newSkatTable) {
-
 		skatTables.put(newSkatTable.getName(), newSkatTable);
-		humanPlayers.put(newSkatTable.getName(), new HumanPlayer());
 		localTablesCreated++;
+	}
+
+	/**
+	 * Registers a human player object with a skat table
+	 * 
+	 * @param skatTable
+	 * @param humanPlayer
+	 */
+	synchronized public void registerHumanPlayerObject(final SkatTable skatTable,
+			final AbstractHumanJSkatPlayer humanPlayer) {
+		humanPlayers.put(skatTable.getName(), humanPlayer);
 	}
 
 	/**
@@ -242,7 +251,7 @@ public class JSkatApplicationData {
 	 *            Table name
 	 * @return Human player
 	 */
-	public HumanPlayer getHumanPlayer(final String tableName) {
+	public AbstractHumanJSkatPlayer getHumanPlayer(final String tableName) {
 		return humanPlayers.get(tableName);
 	}
 

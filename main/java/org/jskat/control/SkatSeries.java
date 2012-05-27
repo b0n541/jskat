@@ -30,7 +30,6 @@ import org.apache.commons.logging.LogFactory;
 import org.jskat.data.SkatSeriesData;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.gui.JSkatView;
-import org.jskat.gui.human.HumanPlayer;
 import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
 
@@ -97,7 +96,7 @@ public class SkatSeries extends JSkatThread {
 		// FIXME (jansch 09.05.2012) this is GUI logic, move it to the GUI
 		// package
 		for (Player hand : Player.values()) {
-			if (player.get(hand) instanceof HumanPlayer || player.get(hand) == thirdPlayer) {
+			if (player.get(hand).isHumanPlayer() || player.get(hand) == thirdPlayer) {
 				data.setBottomPlayer(hand);
 			}
 		}
@@ -228,9 +227,7 @@ public class SkatSeries extends JSkatThread {
 		boolean result = false;
 
 		for (JSkatPlayer currPlayer : player.values()) {
-
-			if (currPlayer instanceof HumanPlayer) {
-
+			if (currPlayer.isHumanPlayer()) {
 				result = true;
 			}
 		}

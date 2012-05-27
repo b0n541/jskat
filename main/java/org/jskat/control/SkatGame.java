@@ -35,7 +35,6 @@ import org.jskat.data.SkatGameResult;
 import org.jskat.data.SkatTableOptions.RamschSkatOwner;
 import org.jskat.data.Trick;
 import org.jskat.gui.JSkatView;
-import org.jskat.gui.human.HumanPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardDeck;
 import org.jskat.util.CardList;
@@ -512,7 +511,7 @@ public class SkatGame extends JSkatThread {
 		log.debug("Discarded cards: " + discardedSkat); //$NON-NLS-1$
 
 		data.setDiscardedSkat(data.getActivePlayer(), discardedSkat);
-		if (!(activePlayer instanceof HumanPlayer)) {
+		if (!(activePlayer.isHumanPlayer())) {
 			// human player has changed the cards in the GUI already
 			view.setDiscardedSkat(tableName, data.getActivePlayer(), skatBefore, discardedSkat);
 		}
@@ -722,7 +721,7 @@ public class SkatGame extends JSkatThread {
 
 				log.error("Player is fooling!!! Did not play a card!"); //$NON-NLS-1$
 
-				if (skatPlayer instanceof HumanPlayer) {
+				if (skatPlayer.isHumanPlayer()) {
 					view.showCardNotAllowedMessage(card);
 				} else {
 					// TODO create option for switching playing schwarz on/off
@@ -733,7 +732,7 @@ public class SkatGame extends JSkatThread {
 
 				log.error("Player (" + player.get(currPlayer) + ") is fooling!!! Doesn't have card " + card + "!"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 
-				if (skatPlayer instanceof HumanPlayer || JSkatOptions.instance().isCheatDebugMode()) {
+				if (skatPlayer.isHumanPlayer() || JSkatOptions.instance().isCheatDebugMode()) {
 					view.showCardNotAllowedMessage(card);
 				} else {
 					// TODO create option for switching playing schwarz on/off
@@ -748,7 +747,7 @@ public class SkatGame extends JSkatThread {
 						+ trick.getFirstCard() + " player cards: " //$NON-NLS-1$
 						+ data.getPlayerCards(currPlayer));
 
-				if (skatPlayer instanceof HumanPlayer || JSkatOptions.instance().isCheatDebugMode()) {
+				if (skatPlayer.isHumanPlayer() || JSkatOptions.instance().isCheatDebugMode()) {
 					view.showCardNotAllowedMessage(card);
 				} else {
 					// TODO create option for switching playing schwarz on/off

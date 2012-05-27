@@ -23,6 +23,7 @@ package org.jskat.gui;
 import java.util.List;
 import java.util.Set;
 
+import org.jskat.ai.AbstractHumanJSkatPlayer;
 import org.jskat.control.SkatTable;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.GameAnnouncement;
@@ -679,5 +680,14 @@ public class NullView implements JSkatView {
 	public void setTrickWinner(@SuppressWarnings("unused") final String tableName,
 			@SuppressWarnings("unused") final Player trickWinner) {
 		// empty method by indent
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public AbstractHumanJSkatPlayer getHumanPlayerForGUI() {
+		// empty method by indent
+		return null;
 	}
 }

@@ -54,6 +54,7 @@ import javax.swing.event.ChangeListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.JSkat;
+import org.jskat.ai.AbstractHumanJSkatPlayer;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.SkatTable;
 import org.jskat.control.iss.ChatMessageType;
@@ -118,6 +119,7 @@ import org.jskat.gui.action.main.StartSkatSeriesAction;
 import org.jskat.gui.action.main.TrainNeuralNetworksAction;
 import org.jskat.gui.help.JSkatHelpDialog;
 import org.jskat.gui.help.JSkatWelcomeDialog;
+import org.jskat.gui.human.SwingHumanPlayer;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.iss.ISSTablePanel;
 import org.jskat.gui.iss.LobbyPanel;
@@ -1314,5 +1316,10 @@ public class JSkatViewImpl implements JSkatView {
 	public void setTrickWinner(@SuppressWarnings("unused") final String tableName,
 			@SuppressWarnings("unused") final Player trickWinner) {
 		// not needed at the moment
+	}
+
+	@Override
+	public AbstractHumanJSkatPlayer getHumanPlayerForGUI() {
+		return new SwingHumanPlayer();
 	}
 }
