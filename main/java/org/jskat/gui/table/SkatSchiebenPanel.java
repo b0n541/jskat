@@ -30,9 +30,9 @@ import javax.swing.JPanel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jskat.control.action.JSkatAction;
 import org.jskat.data.JSkatOptions;
 import org.jskat.gui.LayoutFactory;
-import org.jskat.gui.action.JSkatAction;
 import org.jskat.util.CardList;
 import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.Rank;

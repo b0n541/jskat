@@ -29,7 +29,7 @@ import javax.swing.JPanel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jskat.gui.action.JSkatAction;
+import org.jskat.control.action.JSkatAction;
 
 /**
  * Panel for welcome message and options for playing local or online games

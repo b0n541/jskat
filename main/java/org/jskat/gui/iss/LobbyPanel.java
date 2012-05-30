@@ -37,10 +37,10 @@ import javax.swing.table.TableColumnModel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jskat.control.action.JSkatAction;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.gui.AbstractTabPanel;
 import org.jskat.gui.LayoutFactory;
-import org.jskat.gui.action.JSkatAction;
 
 /**
  * Represents the lobby of the ISS with an overview about players and tables

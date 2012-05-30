@@ -18,35 +18,40 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jskat.gui.table;
+package org.jskat.control.action.main;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
+import java.awt.event.ActionEvent;
 
-import org.jskat.control.action.main.StartSkatSeriesAction;
-import org.jskat.gui.LayoutFactory;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 
-class StartContextPanel extends JPanel {
+import org.jskat.control.action.AbstractJSkatAction;
+import org.jskat.gui.img.JSkatGraphicRepository.Icon;
+
+/**
+ * Implements the action for showing about dialog
+ */
+public class AboutAction extends AbstractJSkatAction {
 
 	private static final long serialVersionUID = 1L;
 
-	private StartSkatSeriesAction action;
+	/**
+	 * @see AbstractJSkatAction#AbstractJSkatAction()
+	 */
+	public AboutAction() {
 
-	public StartContextPanel(StartSkatSeriesAction newAction) {
+		putValue(Action.NAME, strings.getString("about")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, strings.getString("about_tooltip")); //$NON-NLS-1$
 
-		this.action = newAction;
-		initPanel();
+		setIcon(Icon.ABOUT);
 	}
 
-	public void initPanel() {
+	/**
+	 * @see AbstractAction#actionPerformed(ActionEvent)
+	 */
+	@Override
+	public void actionPerformed(ActionEvent e) {
 
-		this.setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
-
-		JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
-		panel.add(new JButton(this.action), "center"); //$NON-NLS-1$
-		panel.setOpaque(false);
-		this.add(panel, "center"); //$NON-NLS-1$
-
-		setOpaque(false);
+		jskat.showAboutMessage();
 	}
 }

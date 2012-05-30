@@ -38,6 +38,8 @@ import javax.swing.ScrollPaneConstants;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jskat.control.action.JSkatAction;
+import org.jskat.control.action.main.StartSkatSeriesAction;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData.GameState;
@@ -45,8 +47,6 @@ import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.Trick;
 import org.jskat.gui.AbstractTabPanel;
 import org.jskat.gui.LayoutFactory;
-import org.jskat.gui.action.JSkatAction;
-import org.jskat.gui.action.main.StartSkatSeriesAction;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;

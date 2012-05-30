@@ -24,8 +24,8 @@ import javax.swing.ActionMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import org.jskat.control.action.JSkatAction;
 import org.jskat.gui.LayoutFactory;
-import org.jskat.gui.action.JSkatAction;
 
 /**
  * Context panel for starting a skat series on ISS

@@ -34,10 +34,10 @@ import javax.swing.JPanel;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jskat.control.action.JSkatAction;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.gui.LayoutFactory;
-import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;

@@ -33,10 +33,10 @@ import javax.swing.JTextField;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jskat.control.action.JSkatAction;
 import org.jskat.data.iss.LoginCredentials;
 import org.jskat.gui.AbstractTabPanel;
 import org.jskat.gui.LayoutFactory;
-import org.jskat.gui.action.JSkatAction;
 
 /**
  * Panel for login into International Skat Server (ISS)

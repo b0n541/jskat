@@ -27,12 +27,12 @@ import javax.swing.ActionMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import org.jskat.control.action.JSkatAction;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.PlayerStatus;
 import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.gui.LayoutFactory;
-import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.table.ContextPanelType;
 import org.jskat.gui.table.JSkatUserPanel;
 import org.jskat.gui.table.OpponentPanel;

@@ -40,10 +40,10 @@ import javax.swing.event.ChangeListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.jskat.control.action.JSkatAction;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.gui.AbstractTabPanel;
 import org.jskat.gui.LayoutFactory;
-import org.jskat.gui.action.JSkatAction;
 import org.jskat.util.JSkatResourceBundle;
 
 /**

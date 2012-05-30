@@ -27,8 +27,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.AbstractHumanJSkatPlayer;
 import org.jskat.control.JSkatPlayer;
+import org.jskat.control.action.JSkatAction;
 import org.jskat.data.GameAnnouncement;
-import org.jskat.gui.action.JSkatAction;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 
