@@ -23,7 +23,6 @@ package org.jskat.gui;
 import java.util.List;
 import java.util.Set;
 
-import org.jskat.ai.AbstractHumanJSkatPlayer;
 import org.jskat.control.SkatTable;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.GameAnnouncement;
@@ -36,6 +35,7 @@ import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.data.iss.TablePanelStatus;
+import org.jskat.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;

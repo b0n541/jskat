@@ -20,7 +20,7 @@
  */
 package org.jskat.ai.mjl;
 
-import org.jskat.ai.PlayerKnowledge;
+import org.jskat.player.PlayerKnowledge;
 import org.jskat.util.Card;
 
 /**

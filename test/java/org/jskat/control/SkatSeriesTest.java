@@ -29,6 +29,7 @@ import org.jskat.AbstractJSkatTest;
 import org.jskat.ai.rnd.AIPlayerRND;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.gui.UnitTestView;
+import org.jskat.player.JSkatPlayer;
 import org.junit.Test;
 
 /**

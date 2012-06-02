@@ -22,7 +22,7 @@ package org.jskat.data;
 
 import java.util.Observable;
 
-import org.jskat.ai.PlayerType;
+import org.jskat.player.PlayerType;
 
 /**
  * Skat table options

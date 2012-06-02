@@ -28,7 +28,8 @@ import org.apache.commons.logging.LogFactory;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.SkatTableOptions;
 import org.jskat.gui.JSkatView;
-import org.jskat.gui.JSkatViewImpl;
+import org.jskat.gui.swing.JSkatViewImpl;
+import org.jskat.player.JSkatPlayer;
 
 /**
  * Controls a table for playing a series of skat games

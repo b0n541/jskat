@@ -25,7 +25,7 @@ import java.util.ResourceBundle;
 
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatOptions.SupportedLanguage;
-import org.jskat.gui.img.JSkatGraphicRepository.Flag;
+import org.jskat.gui.swing.JSkatGraphicRepository.Flag;
 
 /**
  * Helper class for skat related i18n string resolves

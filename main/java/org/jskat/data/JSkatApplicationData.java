@@ -25,8 +25,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.jskat.ai.AbstractHumanJSkatPlayer;
 import org.jskat.control.SkatTable;
+import org.jskat.gui.human.AbstractHumanJSkatPlayer;
 
 /**
  * Holds all application data

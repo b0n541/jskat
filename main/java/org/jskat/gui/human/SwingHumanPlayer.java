@@ -25,10 +25,9 @@ import java.awt.event.ActionListener;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jskat.ai.AbstractHumanJSkatPlayer;
-import org.jskat.control.JSkatPlayer;
-import org.jskat.control.action.JSkatAction;
 import org.jskat.data.GameAnnouncement;
+import org.jskat.gui.action.JSkatAction;
+import org.jskat.player.JSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 
@@ -329,7 +328,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer implements Action
 	}
 
 	/**
-	 * @see org.jskat.ai.AbstractJSkatPlayer#startGame()
+	 * @see org.jskat.player.AbstractJSkatPlayer#startGame()
 	 */
 	@Override
 	public void startGame() {

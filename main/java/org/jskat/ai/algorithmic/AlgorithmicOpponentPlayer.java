@@ -21,8 +21,8 @@
 package org.jskat.ai.algorithmic;
 
 import org.apache.log4j.Logger;
-import org.jskat.ai.PlayerKnowledge;
 import org.jskat.data.Trick;
+import org.jskat.player.PlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;

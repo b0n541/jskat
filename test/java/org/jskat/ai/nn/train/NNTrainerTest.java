@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.jskat.ai.PlayerType;
+import org.jskat.player.PlayerType;
 import org.junit.Test;
 
 public class NNTrainerTest {

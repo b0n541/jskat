@@ -29,8 +29,8 @@ import org.apache.log4j.PropertyConfigurator;
 import org.jskat.control.JSkatMaster;
 import org.jskat.data.DesktopSavePathResolver;
 import org.jskat.data.JSkatOptions;
-import org.jskat.gui.JSkatViewImpl;
-import org.jskat.gui.LookAndFeelSetter;
+import org.jskat.gui.swing.JSkatViewImpl;
+import org.jskat.gui.swing.LookAndFeelSetter;
 import org.jskat.util.version.VersionChecker;
 
 /**

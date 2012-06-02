@@ -22,9 +22,9 @@ package org.jskat.ai.mjl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jskat.ai.AbstractJSkatPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
+import org.jskat.player.AbstractJSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 

@@ -1,0 +1,23 @@
+package org.jskat.gui.human;
+
+import java.awt.event.ActionEvent;
+
+import org.jskat.player.AbstractJSkatPlayer;
+
+/**
+ * Abstract implementation of a human player for JSkat
+ */
+public abstract class AbstractHumanJSkatPlayer extends AbstractJSkatPlayer {
+	@Override
+	public final boolean isAIPlayer() {
+		return false;
+	}
+
+	/**
+	 * Informs the human player about an action that was performed
+	 * 
+	 * @param e
+	 *            Action
+	 */
+	public abstract void actionPerformed(final ActionEvent e);
+}

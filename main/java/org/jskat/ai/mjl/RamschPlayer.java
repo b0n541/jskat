@@ -22,7 +22,7 @@ package org.jskat.ai.mjl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jskat.ai.PlayerKnowledge;
+import org.jskat.player.PlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.rule.SkatRule;

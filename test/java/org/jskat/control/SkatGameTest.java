@@ -36,6 +36,7 @@ import org.jskat.data.JSkatOptions;
 import org.jskat.data.SkatGameResult;
 import org.jskat.data.SkatTableOptions.RuleSet;
 import org.jskat.gui.UnitTestView;
+import org.jskat.player.JSkatPlayer;
 import org.jskat.util.GameType;
 import org.jskat.util.GameVariant;
 import org.jskat.util.Player;

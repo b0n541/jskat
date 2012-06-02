@@ -29,16 +29,16 @@ import java.util.Random;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.jskat.ai.AbstractJSkatPlayer;
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.util.INeuralNetwork;
-import org.jskat.control.JSkatPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameResult;
 import org.jskat.data.Trick;
+import org.jskat.player.AbstractJSkatPlayer;
+import org.jskat.player.JSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -368,7 +368,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see org.jskat.ai.AbstractJSkatPlayer#startGame()
+	 * @see org.jskat.player.AbstractJSkatPlayer#startGame()
 	 */
 	@Override
 	public void startGame() {
@@ -696,7 +696,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see org.jskat.control.JSkatPlayer#preparateForNewGame()
+	 * @see org.jskat.player.JSkatPlayer#preparateForNewGame()
 	 */
 	@Override
 	public void preparateForNewGame() {
@@ -712,7 +712,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see org.jskat.control.JSkatPlayer#finalizeGame()
+	 * @see org.jskat.player.JSkatPlayer#finalizeGame()
 	 */
 	@Override
 	public void finalizeGame() {
