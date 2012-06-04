@@ -72,11 +72,11 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 	// 1.0 and 2.0 for tanh function
 	// 2.0 and 4.0 for sigmoid function
-	private static double HAS_CARD = 1.0d;
-	private static double COULD_HAVE_CARD = 0.5d;
+	private static double HAS_CARD = 4.0d;
+	private static double COULD_HAVE_CARD = 2.0d;
 	private static double DOESNT_HAVE_CARD = 0.0d;
-	private static double PLAYED_CARD = -0.5d;
-	private static double PLAYED_CARD_IN_TRICK = -1.0d;
+	private static double PLAYED_CARD = -2.0d;
+	private static double PLAYED_CARD_IN_TRICK = -4.0d;
 
 	private static double ACTIVE = 1.0d;
 	private static double INACTIVE = 0.0d;
@@ -407,9 +407,9 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 				log.debug("Testing card " + card); //$NON-NLS-1$
 
-				double[] currInputs = getNetInputs(card);
-				cardInputs.put(card, currInputs);
-				double currOutput = net.getPredictedOutcome(currInputs);
+				setNetInputs(card);
+				cardInputs.put(card, netInputs.clone());
+				double currOutput = net.getPredictedOutcome(netInputs);
 				log.debug("net output: " + currOutput); //$NON-NLS-1$
 
 				if (currOutput > highestOutput) {
@@ -472,7 +472,10 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 *            Card to be played
 	 * @return Net input attributes
 	 */
-	double[] getNetInputs(final Card cardToPlay) {
+	double[] setNetInputs(final Card cardToPlay) {
+
+		// clear the inputs
+		Arrays.fill(netInputs, 0.0);
 
 		// set game declarer
 		setDeclarerInputs(netInputs, PLAYER_LENGTH);
@@ -487,7 +490,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		Player rightOpponent = knowledge.getPlayerPosition().getRightNeighbor();
 		final int KNOWN_CARDS_OFFSET = 331;
 		for (Card card : knowledge.getCompleteDeck()) {
-			setKnowCards(netInputs, leftOpponent, rightOpponent, card, PLAYER_LENGTH, KNOWN_CARDS_OFFSET);
+			setKnownCards(netInputs, leftOpponent, rightOpponent, card, PLAYER_LENGTH, KNOWN_CARDS_OFFSET);
 		}
 
 		// set information of card to be played
@@ -532,11 +535,11 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		int cardIndex = getNetInputIndex(knowledge.getGameType(), card);
 
 		if (position.getLeftNeighbor() == trickPlayer) {
-			inputs[cardIndex + trickStartIndex + cardOffset] = 1.0;
+			inputs[cardIndex + trickStartIndex + cardOffset] = PLAYED_CARD_IN_TRICK;
 		} else if (position == trickPlayer) {
-			inputs[cardIndex + trickStartIndex + cardOffset + playerLength] = 1.0;
+			inputs[cardIndex + trickStartIndex + cardOffset + playerLength] = PLAYED_CARD_IN_TRICK;
 		} else if (position.getRightNeighbor() == trickPlayer) {
-			inputs[cardIndex + trickStartIndex + cardOffset + 2 * playerLength] = 1.0;
+			inputs[cardIndex + trickStartIndex + cardOffset + 2 * playerLength] = PLAYED_CARD_IN_TRICK;
 		}
 	}
 
@@ -556,7 +559,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		}
 	}
 
-	private void setKnowCards(final double[] inputs, final Player leftOpponent, final Player rightOpponent,
+	private void setKnownCards(final double[] inputs, final Player leftOpponent, final Player rightOpponent,
 			final Card card, final int playerLength, final int knownCardsOffset) {
 
 		GameType gameType = knowledge.getGame().getGameType();
