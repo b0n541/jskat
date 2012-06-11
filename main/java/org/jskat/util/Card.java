@@ -160,7 +160,7 @@ public enum Card {
 	private final Suit suit;
 	private final Rank rank;
 
-	private Card(Suit newSuit, Rank newRank) {
+	private Card(final Suit newSuit, final Rank newRank) {
 
 		this.suit = newSuit;
 		this.rank = newRank;
@@ -193,7 +193,7 @@ public enum Card {
 	 *            Card to compare to
 	 * @return TRUE if the suits are the same
 	 */
-	public boolean isSameSuit(Card card) {
+	public boolean isSameSuit(final Card card) {
 
 		return this.suit == card.getSuit();
 	}
@@ -205,7 +205,7 @@ public enum Card {
 	 *            Card to compare to
 	 * @return TRUE if the ranks are the same
 	 */
-	public boolean isSameRank(Card card) {
+	public boolean isSameRank(final Card card) {
 
 		return this.rank == card.getRank();
 	}
@@ -261,7 +261,7 @@ public enum Card {
 	 *            All cards on players hand
 	 * @return TRUE, when the card is allowed to be played
 	 */
-	public boolean isAllowed(GameType gameType, Card initialCard, CardList hand) {
+	public boolean isAllowed(final GameType gameType, final Card initialCard, final CardList hand) {
 
 		boolean result = false;
 
@@ -279,7 +279,7 @@ public enum Card {
 	 *            The game type within the card is checked
 	 * @return TRUE, when the card is a trump card
 	 */
-	public boolean isTrump(GameType gameType) {
+	public boolean isTrump(final GameType gameType) {
 
 		boolean result = false;
 
@@ -301,7 +301,7 @@ public enum Card {
 	 *            Card to beat
 	 * @return TRUE if the card beats the other one
 	 */
-	public boolean beats(GameType gameType, Card cardToBeat) {
+	public boolean beats(final GameType gameType, final Card cardToBeat) {
 
 		return SkatRuleFactory.getSkatRules(gameType).isCardBeatsCard(gameType, cardToBeat, this);
 	}
@@ -317,13 +317,14 @@ public enum Card {
 	 *            Card to beat
 	 * @return a CardList with all the cards that would beat the initial card
 	 */
-	public static CardList getBeatingCards(GameType gameType, Card cardToBeat) {
+	public static CardList getBeatingCards(final GameType gameType, final Card cardToBeat) {
 		// TODO (mjl 23.08.2011) write unit tests for Card.getBeatingCards()
 		// FIXME (mjl 05.09.2011) is this supposed to consider trump cards?
 		CardList beatingCards = new CardList();
 		for (Card card : Card.values()) {
-			if (card.beats(gameType, cardToBeat))
+			if (card.beats(gameType, cardToBeat)) {
 				beatingCards.add(card);
+			}
 		}
 		return beatingCards;
 	}
@@ -335,7 +336,7 @@ public enum Card {
 	 *            Card as string
 	 * @return Card
 	 */
-	public static Card getCardFromString(String cardAsString) {
+	public static Card getCardFromString(final String cardAsString) {
 
 		Suit suit = Suit.getSuitFromString(cardAsString);
 		Rank rank = Rank.getRankFromString(cardAsString);
@@ -352,7 +353,7 @@ public enum Card {
 	 *            Rank
 	 * @return Card
 	 */
-	public static Card getCard(Suit suit, Rank rank) {
+	public static Card getCard(final Suit suit, final Rank rank) {
 
 		Card result = null;
 
@@ -385,9 +386,16 @@ public enum Card {
 
 		return this.suit.shortString() + "-" + this.rank.shortString(); //$NON-NLS-1$
 	}
-	
+
+	/**
+	 * Gets the file name for the card image<br />
+	 * Should be located in a class that provides the card images
+	 * 
+	 * @return File name for card image
+	 */
+	@Deprecated
 	public String getPNGString() {
 
-		return (this.suit.shortString()+this.rank.shortString()).toLowerCase(); //$NON-NLS-1$
+		return (this.suit.shortString() + this.rank.shortString()).toLowerCase();
 	}
 }
