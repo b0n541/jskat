@@ -490,13 +490,14 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void setTrickWinner(final String tableName, final Player trickWinner) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public AbstractHumanJSkatPlayer getHumanPlayerForGUI() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void setPlayedTrick(String tableName, Trick playedTrick) {
+		// TODO Auto-generated method stub
+		
 	}
 }

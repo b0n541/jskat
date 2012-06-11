@@ -385,4 +385,9 @@ public enum Card {
 
 		return this.suit.shortString() + "-" + this.rank.shortString(); //$NON-NLS-1$
 	}
+	
+	public String getPNGString() {
+
+		return (this.suit.shortString()+this.rank.shortString()).toLowerCase(); //$NON-NLS-1$
+	}
 }

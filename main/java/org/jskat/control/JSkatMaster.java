@@ -20,7 +20,6 @@
  */
 package org.jskat.control;
 
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -36,6 +35,7 @@ import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatOptions.SupportedLanguage;
 import org.jskat.gui.JSkatView;
 import org.jskat.gui.action.JSkatAction;
+import org.jskat.gui.action.JSkatActionEvent;
 import org.jskat.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.player.JSkatPlayer;
 import org.jskat.player.PlayerType;
@@ -459,7 +459,7 @@ public class JSkatMaster {
 	 * @param event
 	 *            Action event
 	 */
-	public void triggerHuman(final ActionEvent event) {
+	public void triggerHuman(final JSkatActionEvent event) {
 
 		log.debug(event);
 
@@ -538,7 +538,7 @@ public class JSkatMaster {
 	 * @param e
 	 *            Event
 	 */
-	public void takeCardFromSkat(final ActionEvent e) {
+	public void takeCardFromSkat(final JSkatActionEvent e) {
 
 		if (!(e.getSource() instanceof Card)) {
 
@@ -553,7 +553,7 @@ public class JSkatMaster {
 	 * 
 	 * @param e
 	 */
-	public void putCardIntoSkat(final ActionEvent e) {
+	public void putCardIntoSkat(final JSkatActionEvent e) {
 
 		if (!(e.getSource() instanceof Card)) {
 
