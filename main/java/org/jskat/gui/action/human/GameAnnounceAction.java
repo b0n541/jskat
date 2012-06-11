@@ -20,9 +20,6 @@
  */
 package org.jskat.gui.action.human;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.jskat.gui.action.AbstractJSkatAction;
@@ -30,9 +27,9 @@ import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.swing.JSkatGraphicRepository.Icon;
 
 /**
- * Implements the action for handling card panel clicks
+ * Implements the action for announcing a game
  */
-public class GameAnnounceAction extends AbstractJSkatAction {
+public class GameAnnounceAction extends AbstractHumanJSkatAction {
 
 	private static final long serialVersionUID = 1L;
 
@@ -45,14 +42,5 @@ public class GameAnnounceAction extends AbstractJSkatAction {
 
 		setActionCommand(JSkatAction.ANNOUNCE_GAME);
 		setIcon(Icon.PLAY);
-	}
-
-	/**
-	 * @see AbstractAction#actionPerformed(ActionEvent)
-	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
-		jskat.triggerHuman(e);
 	}
 }

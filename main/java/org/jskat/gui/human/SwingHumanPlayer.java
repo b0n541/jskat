@@ -20,13 +20,11 @@
  */
 package org.jskat.gui.human;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.gui.action.JSkatAction;
+import org.jskat.gui.action.JSkatActionEvent;
 import org.jskat.player.JSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -34,7 +32,7 @@ import org.jskat.util.CardList;
 /**
  * Human player
  */
-public class SwingHumanPlayer extends AbstractHumanJSkatPlayer implements ActionListener {
+public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
 	private static Log log = LogFactory.getLog(SwingHumanPlayer.class);
 
@@ -170,46 +168,11 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer implements Action
 
 		return this.nextCard;
 	}
-
-	/**
-	 * Starts waiting for user input
-	 */
-	public void waitForUserInput() {
-
-		this.idler = new Idler();
-		this.idler.setMonitor(this);
-
-		if (!isPlayerHasAlreadyPlayed()) {
-
-			this.idler.start();
-			try {
-				this.idler.join();
-			} catch (InterruptedException e) {
-				log.warn("wait for user input was interrupted");
-			}
-		}
-	}
-
-	private boolean isPlayerHasAlreadyPlayed() {
-
-		log.debug("Game announcement step: " + gameAnnouncementStep); //$NON-NLS-1$
-
-		boolean result = false;
-
-		if (GameAnnouncementStep.DISCARDED_SKAT.equals(gameAnnouncementStep)
-				|| GameAnnouncementStep.PLAYS_HAND.equals(gameAnnouncementStep)) {
-			result = true;
-		}
-
-		return result;
-	}
-
-	/**
-	 * @see ActionListener#actionPerformed(ActionEvent)
-	 */
+	
+	
+	
 	@Override
-	public void actionPerformed(final ActionEvent e) {
-
+	public void actionPerformed(final JSkatActionEvent e) {
 		Object source = e.getSource();
 		String command = e.getActionCommand();
 		boolean interrupt = true;
@@ -270,6 +233,39 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer implements Action
 
 			this.idler.interrupt();
 		}
+	}
+
+	/**
+	 * Starts waiting for user input
+	 */
+	public void waitForUserInput() {
+
+		this.idler = new Idler();
+		this.idler.setMonitor(this);
+
+		if (!isPlayerHasAlreadyPlayed()) {
+
+			this.idler.start();
+			try {
+				this.idler.join();
+			} catch (InterruptedException e) {
+				log.warn("wait for user input was interrupted");
+			}
+		}
+	}
+
+	private boolean isPlayerHasAlreadyPlayed() {
+
+		log.debug("Game announcement step: " + gameAnnouncementStep); //$NON-NLS-1$
+
+		boolean result = false;
+
+		if (GameAnnouncementStep.DISCARDED_SKAT.equals(gameAnnouncementStep)
+				|| GameAnnouncementStep.PLAYS_HAND.equals(gameAnnouncementStep)) {
+			result = true;
+		}
+
+		return result;
 	}
 
 	private void setDiscardedSkatCards(final CardList discardedCards) {

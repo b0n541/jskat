@@ -710,14 +710,14 @@ public interface JSkatView {
 	public void openWebPage(String link);
 
 	/**
-	 * Sets the trick winner
+	 * Sets the played trick
 	 * 
 	 * @param tableName
 	 *            Table name
-	 * @param trickWinner
-	 *            Trick winner
+	 * @param trick
+	 *            Played trick
 	 */
-	public void setTrickWinner(String tableName, Player trickWinner);
+	public void setPlayedTrick(String tableName, Trick playedTrick);
 
 	/**
 	 * Creates a human player object for the GUI

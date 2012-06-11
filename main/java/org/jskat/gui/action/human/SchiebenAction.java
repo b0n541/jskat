@@ -20,9 +20,6 @@
  */
 package org.jskat.gui.action.human;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.jskat.gui.action.AbstractJSkatAction;
@@ -32,7 +29,7 @@ import org.jskat.gui.swing.JSkatGraphicRepository.Icon;
 /**
  * Implements the action for handling the "schieben"-Button in a ramsch game
  */
-public class SchiebenAction extends AbstractJSkatAction {
+public class SchiebenAction extends AbstractHumanJSkatAction {
 
 	private static final long serialVersionUID = 1L;
 
@@ -46,14 +43,5 @@ public class SchiebenAction extends AbstractJSkatAction {
 
 		setActionCommand(JSkatAction.SCHIEBEN);
 		setIcon(Icon.PLAY);
-	}
-
-	/**
-	 * @see AbstractAction#actionPerformed(ActionEvent)
-	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
-		jskat.triggerHuman(e);
 	}
 }

@@ -71,7 +71,6 @@ import org.jskat.data.iss.MovePlayer;
 import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.gui.JSkatView;
 import org.jskat.gui.action.JSkatAction;
-import org.jskat.gui.action.human.ContinueSkatSeriesAction;
 import org.jskat.gui.action.human.DiscardAction;
 import org.jskat.gui.action.human.GameAnnounceAction;
 import org.jskat.gui.action.human.HoldBidAction;
@@ -82,9 +81,7 @@ import org.jskat.gui.action.human.PlayCardAction;
 import org.jskat.gui.action.human.PlayGrandHandAction;
 import org.jskat.gui.action.human.PlayHandGameAction;
 import org.jskat.gui.action.human.PlaySchiebeRamschAction;
-import org.jskat.gui.action.human.PutCardIntoSkatAction;
 import org.jskat.gui.action.human.SchiebenAction;
-import org.jskat.gui.action.human.TakeCardFromSkatAction;
 import org.jskat.gui.action.iss.ChangeTableSeatsAction;
 import org.jskat.gui.action.iss.ConnectAction;
 import org.jskat.gui.action.iss.CreateIssTableAction;
@@ -103,6 +100,7 @@ import org.jskat.gui.action.iss.ShowLoginPanelAction;
 import org.jskat.gui.action.iss.TalkEnableAction;
 import org.jskat.gui.action.main.AboutAction;
 import org.jskat.gui.action.main.ChangeActiveTableAction;
+import org.jskat.gui.action.main.ContinueSkatSeriesAction;
 import org.jskat.gui.action.main.CreateTableAction;
 import org.jskat.gui.action.main.ExitAction;
 import org.jskat.gui.action.main.HelpAction;
@@ -111,11 +109,13 @@ import org.jskat.gui.action.main.LoadNeuralNetworksAction;
 import org.jskat.gui.action.main.LoadSeriesAction;
 import org.jskat.gui.action.main.PauseSkatSeriesAction;
 import org.jskat.gui.action.main.PreferencesAction;
+import org.jskat.gui.action.main.PutCardIntoSkatAction;
 import org.jskat.gui.action.main.ResetNeuralNetworksAction;
 import org.jskat.gui.action.main.SaveNeuralNetworksAction;
 import org.jskat.gui.action.main.SaveSeriesAction;
 import org.jskat.gui.action.main.SaveSeriesAsAction;
 import org.jskat.gui.action.main.StartSkatSeriesAction;
+import org.jskat.gui.action.main.TakeCardFromSkatAction;
 import org.jskat.gui.action.main.TrainNeuralNetworksAction;
 import org.jskat.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.gui.human.SwingHumanPlayer;
@@ -1309,17 +1309,13 @@ public class JSkatViewImpl implements JSkatView {
 		}
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setTrickWinner(@SuppressWarnings("unused") final String tableName,
-			@SuppressWarnings("unused") final Player trickWinner) {
-		// not needed at the moment
-	}
-
 	@Override
 	public AbstractHumanJSkatPlayer getHumanPlayerForGUI() {
 		return new SwingHumanPlayer();
+	}
+
+	@Override
+	public void setPlayedTrick(String tableName, Trick playedTrick) {
+		// not needed at the moment
 	}
 }

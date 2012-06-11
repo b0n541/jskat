@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jskat.gui.action.human;
+package org.jskat.gui.action.main;
 
 import java.awt.event.ActionEvent;
 
@@ -40,8 +40,7 @@ public class ContinueSkatSeriesAction extends AbstractJSkatAction {
 	public ContinueSkatSeriesAction() {
 
 		putValue(NAME, strings.getString("continue_series")); //$NON-NLS-1$
-		putValue(SHORT_DESCRIPTION,
-				strings.getString("continue_series_tooltip")); //$NON-NLS-1$
+		putValue(SHORT_DESCRIPTION, strings.getString("continue_series_tooltip")); //$NON-NLS-1$
 
 		setIcon(Icon.PLAY);
 	}
@@ -50,8 +49,7 @@ public class ContinueSkatSeriesAction extends AbstractJSkatAction {
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e) {
-
+	public void actionPerformed(final ActionEvent e) {
 		jskat.resumeSkatSeries();
 	}
 }

@@ -1,7 +1,6 @@
 package org.jskat.gui.human;
 
-import java.awt.event.ActionEvent;
-
+import org.jskat.gui.action.JSkatActionEvent;
 import org.jskat.player.AbstractJSkatPlayer;
 
 /**
@@ -19,5 +18,5 @@ public abstract class AbstractHumanJSkatPlayer extends AbstractJSkatPlayer {
 	 * @param e
 	 *            Action
 	 */
-	public abstract void actionPerformed(final ActionEvent e);
+	public abstract void actionPerformed(final JSkatActionEvent e);
 }

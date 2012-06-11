@@ -20,9 +20,6 @@
  */
 package org.jskat.gui.action.human;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.jskat.gui.action.AbstractJSkatAction;
@@ -30,9 +27,9 @@ import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.swing.JSkatGraphicRepository.Icon;
 
 /**
- * Implements the action for handling click on bid button
+ * Implements the action for holding a bid
  */
-public class HoldBidAction extends AbstractJSkatAction {
+public class HoldBidAction extends AbstractHumanJSkatAction {
 
 	private static final long serialVersionUID = 1L;
 
@@ -46,14 +43,5 @@ public class HoldBidAction extends AbstractJSkatAction {
 
 		setActionCommand(JSkatAction.HOLD_BID);
 		setIcon(Icon.OK);
-	}
-
-	/**
-	 * @see AbstractAction#actionPerformed(ActionEvent)
-	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
-		jskat.triggerHuman(e);
 	}
 }

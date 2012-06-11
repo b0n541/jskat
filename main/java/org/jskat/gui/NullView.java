@@ -677,17 +677,14 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setTrickWinner(@SuppressWarnings("unused") final String tableName,
-			@SuppressWarnings("unused") final Player trickWinner) {
-		// empty method by indent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public AbstractHumanJSkatPlayer getHumanPlayerForGUI() {
 		// empty method by indent
 		return null;
+	}
+
+	@Override
+	public void setPlayedTrick(String tableName, Trick playedTrick) {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -20,9 +20,6 @@
  */
 package org.jskat.gui.action.human;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.jskat.gui.action.AbstractJSkatAction;
@@ -31,7 +28,7 @@ import org.jskat.gui.action.JSkatAction;
 /**
  * Implements the action for handling card panel clicks
  */
-public class PlayHandGameAction extends AbstractJSkatAction {
+public class PlayHandGameAction extends AbstractHumanJSkatAction {
 
 	private static final long serialVersionUID = 1L;
 
@@ -44,14 +41,5 @@ public class PlayHandGameAction extends AbstractJSkatAction {
 		putValue(Action.SHORT_DESCRIPTION, "Play hand game");
 
 		setActionCommand(JSkatAction.PLAY_HAND_GAME);
-	}
-
-	/**
-	 * @see AbstractAction#actionPerformed(ActionEvent)
-	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
-		jskat.triggerHuman(e);
 	}
 }

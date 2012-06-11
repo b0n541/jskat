@@ -20,9 +20,6 @@
  */
 package org.jskat.gui.action.human;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.jskat.gui.action.AbstractJSkatAction;
@@ -30,9 +27,9 @@ import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.swing.JSkatGraphicRepository.Icon;
 
 /**
- * Implements the action for handling click on pick up skat button
+ * Implements the action for picking up the skat
  */
-public class PickUpSkatAction extends AbstractJSkatAction {
+public class PickUpSkatAction extends AbstractHumanJSkatAction {
 
 	private static final long serialVersionUID = 1L;
 
@@ -45,14 +42,5 @@ public class PickUpSkatAction extends AbstractJSkatAction {
 
 		setActionCommand(JSkatAction.PICK_UP_SKAT);
 		setIcon(Icon.PLAY);
-	}
-
-	/**
-	 * @see AbstractAction#actionPerformed(ActionEvent)
-	 */
-	@Override
-	public void actionPerformed(ActionEvent e) {
-
-		jskat.triggerHuman(e);
 	}
 }

@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jskat.gui.action.human;
+package org.jskat.gui.action.main;
 
 import java.awt.event.ActionEvent;
 
@@ -26,28 +26,28 @@ import javax.swing.AbstractAction;
 
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.action.JSkatAction;
+import org.jskat.gui.action.JSkatActionEvent;
 
 /**
  * Implements the action for handling card panel clicks during discarding
  */
-public class TakeCardFromSkatAction extends AbstractJSkatAction {
+public class PutCardIntoSkatAction extends AbstractJSkatAction {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see AbstractJSkatAction#AbstractJSkatAction()
 	 */
-	public TakeCardFromSkatAction() {
+	public PutCardIntoSkatAction() {
 
-		setActionCommand(JSkatAction.TAKE_CARD_FROM_SKAT);
+		setActionCommand(JSkatAction.PUT_CARD_INTO_SKAT);
 	}
 
 	/**
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e) {
-
-		jskat.takeCardFromSkat(e);
+	public void actionPerformed(final ActionEvent e) {
+		jskat.putCardIntoSkat(new JSkatActionEvent(e.getActionCommand(), e.getSource()));
 	}
 }
