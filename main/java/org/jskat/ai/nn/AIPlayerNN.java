@@ -78,7 +78,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	private static double PLAYED_CARD = -2.0d;
 	private static double PLAYED_CARD_IN_TRICK = -4.0d;
 
-	private static double ACTIVE = 1.0d;
+	private static double ACTIVE = 4.0d;
 	private static double INACTIVE = 0.0d;
 
 	// won game 1.0 and lost game -1.0 for tanh function
@@ -408,9 +408,10 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 				log.debug("Testing card " + card); //$NON-NLS-1$
 
 				setNetInputs(card);
+
 				cardInputs.put(card, netInputs.clone());
 				double currOutput = net.getPredictedOutcome(netInputs);
-				log.debug("net output: " + currOutput); //$NON-NLS-1$
+				log.warn("net output: " + currOutput); //$NON-NLS-1$
 
 				if (currOutput > highestOutput) {
 					highestOutput = currOutput;
@@ -447,6 +448,16 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		log.debug("as player " + knowledge.getPlayerPosition() + ": " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$//$NON-NLS-2$
 
 		return possibleCards.get(bestCardIndex);
+	}
+
+	private void printInputs() {
+		String message = new String();
+
+		for (int i = 0; i < netInputs.length; i++) {
+			message = message + netInputs[i] + " ";
+		}
+
+		log.warn(message);
 	}
 
 	private void storeInputParameters(final int trick, final double[] inputParameters) {
@@ -497,7 +508,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		if (cardToPlay != null) {
 			int trickStartIndex = knowledge.getCurrentTrick().getTrickNumberInGame() * TRICK_LENGTH + 1;
 			setCardInputs(netInputs, PLAYER_LENGTH, knowledge.getPlayerPosition(), trickStartIndex, CARD_OFFSET,
-					knowledge.getPlayerPosition(), cardToPlay);
+					knowledge.getPlayerPosition(), cardToPlay, PLAYED_CARD_IN_TRICK);
 		}
 
 		return netInputs;
@@ -514,33 +525,46 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			Player trickForeHand = trick.getForeHand();
 
 			int trickStartIndex = trick.getTrickNumberInGame() * trickLength + 1;
+			int index = -1;
 			if (position.getLeftNeighbor() == trickForeHand) {
-				inputs[trickStartIndex] = 1.0;
+				index = trickStartIndex;
 			} else if (position == trickForeHand) {
-				inputs[trickStartIndex + playerLength] = 1.0;
+				index = trickStartIndex + playerLength;
 			} else if (position.getRightNeighbor() == trickForeHand) {
-				inputs[trickStartIndex + 2 * playerLength] = 1.0;
+				index = trickStartIndex + 2 * playerLength;
 			}
+			inputs[index] = ACTIVE;
 
+			double activationValue = 0.0;
+			if (trick.getTrickNumberInGame() < trickList.size()) {
+				activationValue = PLAYED_CARD;
+			} else {
+				activationValue = PLAYED_CARD_IN_TRICK;
+			}
 			Player trickPlayer = trick.getForeHand();
 			for (Card card : trick.getCardList()) {
-				setCardInputs(inputs, playerLength, position, trickStartIndex, cardOffset, trickPlayer, card);
+				setCardInputs(inputs, playerLength, position, trickStartIndex, cardOffset, trickPlayer, card,
+						activationValue);
 				trickPlayer = trickPlayer.getLeftNeighbor();
 			}
 		}
 	}
 
 	private void setCardInputs(final double[] inputs, final int playerLength, final Player position,
-			final int trickStartIndex, final int cardOffset, final Player trickPlayer, final Card card) {
+			final int trickStartIndex, final int cardOffset, final Player trickPlayer, final Card card,
+			final double activationValue) {
 		int cardIndex = getNetInputIndex(knowledge.getGameType(), card);
 
+		int index = -1;
 		if (position.getLeftNeighbor() == trickPlayer) {
-			inputs[cardIndex + trickStartIndex + cardOffset] = PLAYED_CARD_IN_TRICK;
+			index = cardIndex + trickStartIndex + cardOffset;
 		} else if (position == trickPlayer) {
-			inputs[cardIndex + trickStartIndex + cardOffset + playerLength] = PLAYED_CARD_IN_TRICK;
+			index = cardIndex + trickStartIndex + cardOffset + playerLength;
 		} else if (position.getRightNeighbor() == trickPlayer) {
-			inputs[cardIndex + trickStartIndex + cardOffset + 2 * playerLength] = PLAYED_CARD_IN_TRICK;
+			index = cardIndex + trickStartIndex + cardOffset + 2 * playerLength;
 		}
+
+		inputs[index] = activationValue;
 	}
 
 	private void setDeclarerInputs(final double[] inputs, final int NEURON_OFFSET) {
@@ -549,13 +573,16 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			Player position = knowledge.getPlayerPosition();
 			Player declarer = knowledge.getDeclarer();
 
+			int index = -1;
 			if (position.getLeftNeighbor() == declarer) {
-				inputs[0] = 1.0;
+				index = 0;
 			} else if (position == declarer) {
-				inputs[NEURON_OFFSET] = 1.0;
+				index = NEURON_OFFSET;
 			} else if (position.getRightNeighbor() == declarer) {
-				inputs[2 * NEURON_OFFSET] = 1.0;
+				index = 2 * NEURON_OFFSET;
 			}
+
+			inputs[index] = ACTIVE;
 		}
 	}
 

@@ -71,7 +71,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 		for (int i = 0; i < outputValues.length; i++) {
 			outputs.setData(i, outputValues[i]);
 		}
-		trainer.iteration(1);
+		trainer.iteration();
 		return trainer.getError();
 	}
 
