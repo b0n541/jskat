@@ -135,7 +135,7 @@ public abstract class SuitGrandRule extends SuitGrandRamschRule {
 	}
 
 	private CardList getDeclarerCards(final SkatGameData gameData) {
-		CardList declarerCards = gameData.getDealtCards().get(gameData.getDeclarer());
+		CardList declarerCards = new CardList(gameData.getDealtCards().get(gameData.getDeclarer()));
 		declarerCards.addAll(gameData.getDealtSkat());
 		return declarerCards;
 	}
