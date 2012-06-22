@@ -259,25 +259,15 @@ public class SkatGame extends JSkatThread {
 
 		log.debug("dealing..."); //$NON-NLS-1$
 
-		for (int i = 0; i < 3; i++) {
-			// deal three rounds of cards
-			switch (i) {
-			case 0:
-				// deal three cards
-				dealCards(3);
-				// and put two cards into the skat
-				data.setDealtSkatCards(deck.remove(0), deck.remove(0));
-				break;
-			case 1:
-				// deal four cards
-				dealCards(4);
-				break;
-			case 2:
-				// deal three cards
-				dealCards(3);
-				break;
-			}
-		}
+		// deal three rounds of cards
+		// deal three cards
+		dealCards(3);
+		// and put two cards into the skat
+		data.setDealtSkatCards(deck.remove(0), deck.remove(0));
+		// deal four cards
+		dealCards(4);
+		// deal three cards
+		dealCards(3);
 
 		// show cards in the view
 		Map<Player, CardList> dealtCards = data.getDealtCards();
