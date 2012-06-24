@@ -44,6 +44,10 @@ public class JSkatThread extends Thread {
 	 */
 	public void terminate() {
 		terminate = true;
+		//A terminated thread must not wait
+		pleaseWait = false;
+		//Interrupts if the thread is waiting
+		interrupt();
 	}
 
 	/**
@@ -59,15 +63,15 @@ public class JSkatThread extends Thread {
 	 * Starts the waiting
 	 */
 	public void startWaiting() {
-
-		this.pleaseWait = true;
+		//A terminated thread must not wait
+		if(!terminate)
+			this.pleaseWait = true;
 	}
 
 	/**
 	 * Stops the waiting
 	 */
 	public void stopWaiting() {
-
 		this.pleaseWait = false;
 		notify();
 	}

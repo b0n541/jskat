@@ -191,6 +191,11 @@ public class SkatSeries extends JSkatThread {
 				}
 
 				checkWaitCondition();
+				
+				//Breaks on termination - 
+				//the thread has to come to the end
+				if(isTerminated())
+					break;
 			}
 
 			roundsToGo--;
