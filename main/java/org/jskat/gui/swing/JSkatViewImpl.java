@@ -1315,7 +1315,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Override
-	public void setPlayedTrick(String tableName, Trick playedTrick) {
+	public void setPlayedTrick(final String tableName, final Trick playedTrick) {
 		// not needed at the moment
 	}
 }

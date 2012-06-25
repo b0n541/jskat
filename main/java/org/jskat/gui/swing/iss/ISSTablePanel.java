@@ -20,7 +20,9 @@
  */
 package org.jskat.gui.swing.iss;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.ActionMap;
@@ -69,6 +71,12 @@ public class ISSTablePanel extends SkatTablePanel {
 		loginName = newLoginName;
 	}
 
+	@Override
+	protected List<JSkatAction> getGameOverActions() {
+		return Arrays.asList(JSkatAction.INVITE_ISS_PLAYER, JSkatAction.READY_TO_PLAY, JSkatAction.TALK_ENABLED,
+				JSkatAction.LEAVE_ISS_TABLE);
+	}
+
 	/**
 	 * @see SkatTablePanel#getPlayGroundPanel()
 	 */
@@ -83,9 +91,7 @@ public class ISSTablePanel extends SkatTablePanel {
 		panel.add(chatPanel, "width 20%, growy"); //$NON-NLS-1$
 
 		// replace game start context panel
-		addContextPanel(ContextPanelType.START, new StartContextPanel(this.getActionMap()));
-		// FIXME (jan 07.12.2010) add game over panel
-		addContextPanel(ContextPanelType.GAME_OVER, new StartContextPanel(this.getActionMap()));
+		addContextPanel(ContextPanelType.START, new StartContextPanel(this.getActionMap(), getGameOverActions()));
 		setGameState(GameState.GAME_START);
 
 		return panel;

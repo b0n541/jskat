@@ -20,6 +20,8 @@
  */
 package org.jskat.gui.swing.iss;
 
+import java.util.List;
+
 import javax.swing.ActionMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -34,22 +36,19 @@ class StartContextPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	public StartContextPanel(ActionMap actions) {
+	public StartContextPanel(final ActionMap actions, final List<JSkatAction> activeActions) {
 
-		initPanel(actions);
+		initPanel(actions, activeActions);
 	}
 
-	public void initPanel(ActionMap actions) {
+	public void initPanel(final ActionMap actions, final List<JSkatAction> activeActions) {
 
 		this.setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 
 		JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
-		panel.add(new JButton(actions.get(JSkatAction.INVITE_ISS_PLAYER)), "center"); //$NON-NLS-1$
-		panel.add(new JButton(actions.get(JSkatAction.READY_TO_PLAY)), "center"); //$NON-NLS-1$
-		panel.add(new JButton(actions.get(JSkatAction.TALK_ENABLED)), "center, wrap"); //$NON-NLS-1$
-		// panel.add(new JButton(actions.get(JSkatAction.CHANGE_TABLE_SEATS)),
-		//				"center"); //$NON-NLS-1$
-		panel.add(new JButton(actions.get(JSkatAction.LEAVE_ISS_TABLE)), "center"); //$NON-NLS-1$
+		for (JSkatAction action : activeActions) {
+			panel.add(new JButton(actions.get(action)), "center"); //$NON-NLS-1$
+		}
 		panel.setOpaque(false);
 		this.add(panel, "center"); //$NON-NLS-1$
 

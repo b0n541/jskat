@@ -25,7 +25,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.ActionMap;
@@ -93,7 +95,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	protected boolean ramsch = false;
 
 	/**
-	 * @see AbstractTabPanel#AbstractTabPanel(String, ActionMap)
+	 * {@inheritDoc}
 	 */
 	public SkatTablePanel(final String newTableName, final ActionMap actions) {
 
@@ -103,7 +105,16 @@ public class SkatTablePanel extends AbstractTabPanel {
 	}
 
 	/**
-	 * @see AbstractTabPanel#initPanel()
+	 * Returns the actions for the game over context
+	 * 
+	 * @return List of actions for the game over context
+	 */
+	protected List<JSkatAction> getGameOverActions() {
+		return Arrays.asList(JSkatAction.CONTINUE_LOCAL_SERIES);
+	}
+
+	/**
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected void initPanel() {
@@ -227,7 +238,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		trickHoldingPanel.setOpaque(false);
 		addContextPanel(ContextPanelType.TRICK_PLAYING, trickHoldingPanel);
 
-		gameOverPanel = new GameOverPanel(getActionMap(), bitmaps);
+		gameOverPanel = new GameOverPanel(getActionMap(), getGameOverActions());
 		addContextPanel(ContextPanelType.GAME_OVER, gameOverPanel);
 	}
 

@@ -20,13 +20,14 @@
  */
 package org.jskat.gui.swing.table;
 
+import java.util.List;
+
 import javax.swing.ActionMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import org.jskat.data.GameSummary;
 import org.jskat.gui.action.JSkatAction;
-import org.jskat.gui.swing.JSkatGraphicRepository;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.Player;
 
@@ -36,21 +37,23 @@ class GameOverPanel extends JPanel {
 
 	private GameResultPanel gameResultPanel;
 
-	public GameOverPanel(ActionMap actions, JSkatGraphicRepository bitmaps) {
+	public GameOverPanel(final ActionMap actions, final List<JSkatAction> activeActions) {
 
-		initPanel(actions, bitmaps);
+		initPanel(actions, activeActions);
 	}
 
-	private void initPanel(ActionMap actions, JSkatGraphicRepository bitmaps) {
+	private void initPanel(final ActionMap actions, final List<JSkatAction> activeActions) {
 
 		this.setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "[grow][shrink]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		gameResultPanel = new GameResultPanel(bitmaps);
+		gameResultPanel = new GameResultPanel();
 		panel.add(gameResultPanel, "grow, wrap"); //$NON-NLS-1$
 
-		JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
-		buttonPanel.add(new JButton(actions.get(JSkatAction.CONTINUE_LOCAL_SERIES)), "center, shrink"); //$NON-NLS-1$
+		JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+		for (JSkatAction action : activeActions) {
+			buttonPanel.add(new JButton(actions.get(action)), "center, shrink"); //$NON-NLS-1$
+		}
 		buttonPanel.setOpaque(false);
 		panel.add(buttonPanel, "center"); //$NON-NLS-1$
 
@@ -60,12 +63,12 @@ class GameOverPanel extends JPanel {
 		setOpaque(false);
 	}
 
-	void setUserPosition(Player player) {
+	void setUserPosition(final Player player) {
 
 		gameResultPanel.setUserPosition(player);
 	}
 
-	void setGameSummary(GameSummary summary) {
+	void setGameSummary(final GameSummary summary) {
 
 		gameResultPanel.setGameSummary(summary);
 	}

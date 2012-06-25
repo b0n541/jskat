@@ -29,14 +29,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameSummary;
 import org.jskat.data.Trick;
-import org.jskat.gui.swing.JSkatGraphicRepository;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.Player;
 
 /**
  * Holds all informations about a game at the end
  */
-class GameResultPanel extends JPanel {
+public class GameResultPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	private static Log log = LogFactory.getLog(GameResultPanel.class);
@@ -47,13 +46,11 @@ class GameResultPanel extends JPanel {
 	/**
 	 * Game result panel
 	 */
-	GameResultPanel(JSkatGraphicRepository bitmaps) {
-
-		initPanel(bitmaps);
+	public GameResultPanel() {
+		initPanel();
 	}
 
-	private void initPanel(JSkatGraphicRepository bitmaps) {
-
+	private void initPanel() {
 		setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		trickPanelList = new ArrayList<TrickPanel>();
@@ -73,7 +70,7 @@ class GameResultPanel extends JPanel {
 		setOpaque(false);
 	}
 
-	public void setGameSummary(GameSummary summary) {
+	public void setGameSummary(final GameSummary summary) {
 
 		List<Trick> tricks = summary.getTricks();
 
@@ -96,7 +93,7 @@ class GameResultPanel extends JPanel {
 		}
 	}
 
-	public void setUserPosition(Player newUserPosition) {
+	public void setUserPosition(final Player newUserPosition) {
 
 		userPosition = newUserPosition;
 	}
