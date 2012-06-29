@@ -2,16 +2,20 @@ package org.jskat.ai.nn.util;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.encog.engine.network.activation.ActivationSigmoid;
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataPair;
+import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.basic.BasicMLData;
 import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.PersistBasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
+import org.encog.neural.networks.training.propagation.Propagation;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 
 /**
@@ -21,10 +25,12 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 
 	private BasicNetwork network;
 	private final PersistBasicNetwork networkPersister;
-	private final ResilientPropagation trainer;
+	private final Propagation trainer;
+	private MLDataSet trainingSet;
 
-	private final MLData inputs;
-	private final MLData outputs;
+	private final List<MLDataPair> dataPairList = new ArrayList<MLDataPair>();
+	private final int MAX_SIZE = 100;
+	private int currentIndex = -1;
 
 	/**
 	 * Constructor
@@ -44,11 +50,12 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 
 		networkPersister = new PersistBasicNetwork();
 
-		inputs = new BasicMLData(newTopo.getInputNeuronCount());
-		outputs = new BasicMLData(newTopo.getOutputNeuronCount());
-		MLDataPair dataPair = new BasicMLDataPair(inputs, outputs);
-		BasicMLDataSet trainingSet = new BasicMLDataSet();
-		trainingSet.add(dataPair);
+		trainingSet = new BasicMLDataSet();
+		MLData inputs = new BasicMLData(newTopo.getInputNeuronCount());
+		MLData outputs = new BasicMLData(1);
+		// trainingSet.add(inputs, outputs);
+		trainingSet = new BasicMLDataSet();
+		trainingSet.add(new BasicMLDataPair(inputs, outputs));
 		trainer = new ResilientPropagation(network, trainingSet);
 	}
 
@@ -65,12 +72,19 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 */
 	@Override
 	public double adjustWeights(final double[] inputValues, final double[] outputValues) {
-		for (int i = 0; i < inputValues.length; i++) {
-			inputs.setData(i, inputValues[i]);
+
+		if (dataPairList.size() < MAX_SIZE) {
+			dataPairList.add(new BasicMLDataPair(new BasicMLData(inputValues), new BasicMLData(outputValues)));
+			currentIndex++;
+		} else {
+			currentIndex = (currentIndex + 1) % MAX_SIZE;
+			dataPairList.set(currentIndex, new BasicMLDataPair(new BasicMLData(inputValues), new BasicMLData(
+					outputValues)));
 		}
-		for (int i = 0; i < outputValues.length; i++) {
-			outputs.setData(i, outputValues[i]);
-		}
+
+		trainingSet.close();
+		trainingSet = new BasicMLDataSet(dataPairList);
+
 		trainer.iteration();
 		return trainer.getError();
 	}
@@ -88,10 +102,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 */
 	@Override
 	public double getPredictedOutcome(final double[] inputValues) {
-		for (int i = 0; i < inputValues.length; i++) {
-			inputs.setData(i, inputValues[i]);
-		}
-		MLData output = network.compute(inputs);
+		MLData output = network.compute(new BasicMLData(inputValues));
 		return output.getData(0);
 	}
 

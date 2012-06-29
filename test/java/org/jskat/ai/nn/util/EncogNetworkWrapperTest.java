@@ -1,10 +1,20 @@
 package org.jskat.ai.nn.util;
 
+import static org.junit.Assert.fail;
+
+import org.encog.engine.network.activation.ActivationSigmoid;
+import org.encog.ml.data.basic.BasicMLData;
+import org.encog.ml.data.basic.BasicMLDataPair;
+import org.encog.ml.data.basic.BasicMLDataSet;
+import org.encog.neural.networks.BasicNetwork;
+import org.encog.neural.networks.layers.BasicLayer;
+import org.encog.neural.networks.training.propagation.Propagation;
+import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.junit.Test;
 
 public class EncogNetworkWrapperTest {
 
-	private static final double MIN_DIFF = 0.0000001;
+	private static final double MIN_DIFF = 0.001;
 
 	@Test
 	public void testBooleanFunction() {
@@ -32,6 +42,56 @@ public class EncogNetworkWrapperTest {
 		double[][] output = { { 0.0 }, // A XOR B
 				{ 1.0 }, { 1.0 }, { 0.0 } };
 
-		// assertTrue(network.train(input, output) < 0.5);
+		double error = 1000.0;
+		double[] inputs = new double[2];
+		double[] outputs = new double[1];
+		int i = 0;
+		int runs = 0;
+
+		while (error > MIN_DIFF && runs < 10000) {
+			error = network.adjustWeights(input[i], output[i]);
+			i = (i + 1) % input.length;
+			runs++;
+		}
+
+		if (runs == 10000) {
+			fail("Needed more than 10000 runs. Error: " + error);
+		} else {
+			System.out.println("Needed " + runs + " runs.");
+		}
+	}
+
+	@Test
+	public void testXORDirect() {
+
+		BasicNetwork network = new BasicNetwork();
+		network.addLayer(new BasicLayer(null, true, 2));
+		network.addLayer(new BasicLayer(new ActivationSigmoid(), true, 3));
+		network.addLayer(new BasicLayer(new ActivationSigmoid(), false, 1));
+		network.getStructure().finalizeStructure();
+		network.reset();
+
+		BasicMLDataSet trainingSet = new BasicMLDataSet();
+		double[][] input = { { 1.0, 1.0 }, { 1.0, 0.0 }, { 0.0, 1.0 }, { 0.0, 0.0 } };
+		double[][] output = { { 0.0 }, // A XOR B
+				{ 1.0 }, { 1.0 }, { 0.0 } };
+
+		for (int i = 0; i < input.length; i++) {
+			trainingSet.add(new BasicMLDataPair(new BasicMLData(input[i]), new BasicMLData(output[i])));
+		}
+
+		Propagation trainer = new ResilientPropagation(network, trainingSet);
+
+		double error = 1000.0;
+		int runs = 0;
+
+		while (error > MIN_DIFF && runs < 10000) {
+			trainer.iteration();
+			error = trainer.getError();
+		}
+
+		if (runs == 10000) {
+			fail("Needed more than 10000 runs. Error: " + error);
+		}
 	}
 }
