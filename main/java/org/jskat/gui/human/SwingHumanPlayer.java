@@ -168,9 +168,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
 		return this.nextCard;
 	}
-	
-	
-	
+
 	@Override
 	public void actionPerformed(final JSkatActionEvent e) {
 		Object source = e.getSource();
@@ -335,6 +333,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
 		bidValue = 0;
 		holdBid = false;
+		playGrandHand = false;
 		gameAnnouncementStep = GameAnnouncementStep.BEFORE_ANNOUNCEMENT;
 		pickUpSkat = false;
 		discardSkat = null;
