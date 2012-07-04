@@ -30,19 +30,19 @@ import javax.swing.ActionMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Holds widgets for deciding of looking into skat or playing hand game
  */
 class DiscardPanel extends JPanel {
 
-	private static Log log = LogFactory.getLog(DiscardPanel.class);
+	private static Logger log = LoggerFactory.getLogger(DiscardPanel.class);
 	private static final String PICK_UP_SKAT_BUTTON = "PICK_UP_SKAT_BUTTON"; //$NON-NLS-1$
 
 	private static final String CARD_PANEL = "CARD_PANEL"; //$NON-NLS-1$

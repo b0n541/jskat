@@ -32,8 +32,6 @@ import java.awt.geom.AffineTransform;
 import javax.swing.Action;
 import javax.swing.JPanel;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.gui.action.JSkatAction;
@@ -44,6 +42,8 @@ import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Panel for showing cards on a hand
@@ -51,7 +51,7 @@ import org.jskat.util.Suit;
 class CardPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private static Log log = LogFactory.getLog(CardPanel.class);
+	private static Logger log = LoggerFactory.getLogger(CardPanel.class);
 
 	private final JSkatGraphicRepository bitmaps;
 

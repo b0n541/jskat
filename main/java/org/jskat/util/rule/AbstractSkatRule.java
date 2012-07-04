@@ -20,20 +20,20 @@
  */
 package org.jskat.util.rule;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.Trick;
 import org.jskat.util.Card;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Abstract implementation of skat rules
  */
 public abstract class AbstractSkatRule implements SkatRule {
 
-	private static Log log = LogFactory.getLog(AbstractSkatRule.class);
+	private static Logger log = LoggerFactory.getLogger(AbstractSkatRule.class);
 
 	/**
 	 * Checks whether a game was overbid

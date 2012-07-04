@@ -23,8 +23,6 @@ package org.jskat;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.PropertyConfigurator;
 import org.jskat.control.JSkatMaster;
 import org.jskat.data.DesktopSavePathResolver;
@@ -32,13 +30,15 @@ import org.jskat.data.JSkatOptions;
 import org.jskat.gui.swing.JSkatViewImpl;
 import org.jskat.gui.swing.LookAndFeelSetter;
 import org.jskat.util.version.VersionChecker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Main class for JSkat
  */
 public class JSkat {
 
-	private static Log log = LogFactory.getLog(JSkat.class);
+	private static Logger log = LoggerFactory.getLogger(JSkat.class);
 
 	private static String VERSION = "0.11.0"; //$NON-NLS-1$
 
@@ -84,9 +84,7 @@ public class JSkat {
 
 	private static void trySettingNimbusLookAndFeel() {
 		for (LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
-
 			if ("Nimbus".equals(laf.getName())) { //$NON-NLS-1$
-
 				LookAndFeelSetter.setLookAndFeel();
 			}
 		}

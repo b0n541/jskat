@@ -35,12 +35,12 @@ import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.table.TableColumnModel;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.swing.AbstractTabPanel;
 import org.jskat.gui.swing.LayoutFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Represents the lobby of the ISS with an overview about players and tables
@@ -49,7 +49,7 @@ import org.jskat.gui.swing.LayoutFactory;
 public class LobbyPanel extends AbstractTabPanel {
 
 	private static final long serialVersionUID = 1L;
-	private static Log log = LogFactory.getLog(LobbyPanel.class);
+	private static Logger log = LoggerFactory.getLogger(LobbyPanel.class);
 
 	private PlayerListTableModel playerListTableModel;
 	private JTable playerListTable;

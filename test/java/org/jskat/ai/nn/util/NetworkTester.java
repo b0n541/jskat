@@ -23,9 +23,9 @@ package org.jskat.ai.nn.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.PropertyConfigurator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 // FIXME (jansch 20.06.2011) re-implement it as JUnit-Test
 
@@ -34,15 +34,14 @@ import org.apache.log4j.PropertyConfigurator;
  */
 public class NetworkTester {
 
-	private static Log log = LogFactory.getLog(NetworkTester.class);
+	private static Logger log = LoggerFactory.getLogger(NetworkTester.class);
 
 	/**
 	 * @param args
 	 */
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 
-		PropertyConfigurator.configure(ClassLoader
-				.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
+		PropertyConfigurator.configure(ClassLoader.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
 
 		// testBooleanFunction();
 		testSkat();
@@ -139,12 +138,11 @@ public class NetworkTester {
 		double output[][] = { { 1.0 }, { -1.0 }, { 1.0 } };
 
 		int[] hiddenNeurons = { 2 };
-		NetworkTopology topo = new NetworkTopology(input[0].length,
-				output[0].length, 1, hiddenNeurons);
+		NetworkTopology topo = new NetworkTopology(input[0].length, output[0].length, 1, hiddenNeurons);
 
 		INeuralNetwork net = new NeuralNetwork(topo);
 
-		log.debug(net);
+		log.debug(net.toString());
 
 		int goodGuess = 0;
 		int i = 0;
@@ -170,10 +168,9 @@ public class NetworkTester {
 		//
 		for (i = 0; i < input.length; i++) {
 
-			double predOutput = net
-					.getPredictedOutcome(input[i % input.length]);
-			log.debug(input[i % input.length]);
-			log.debug(predOutput);
+			double predOutput = net.getPredictedOutcome(input[i % input.length]);
+			log.debug(input[i % input.length].toString());
+			log.debug(Double.toString(predOutput));
 		}
 
 		net.saveNetwork(System.getProperty("java.io.tmpdir") + System.getProperty("file.separator") + "asdf.net"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -205,9 +202,8 @@ public class NetworkTester {
 		for (i = 0; i < input.length; i++) {
 
 			double predOutput = net.getPredictedOutcome(input[i]);
-			log.debug(input[i]);
-			log.debug(predOutput);
+			log.debug(input[i].toString());
+			log.debug(Double.toString(predOutput));
 		}
 	}
-
 }

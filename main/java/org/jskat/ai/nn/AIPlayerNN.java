@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.util.INeuralNetwork;
 import org.jskat.data.GameAnnouncement;
@@ -47,13 +45,15 @@ import org.jskat.util.Rank;
 import org.jskat.util.Suit;
 import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * JSkat player using neural network
  */
 public class AIPlayerNN extends AbstractJSkatPlayer {
 
-	private Log log = LogFactory.getLog(AIPlayerNN.class);
+	private static Logger log = LoggerFactory.getLogger(AIPlayerNN.class);
 
 	private final GameSimulator gameSimulator;
 
@@ -831,9 +831,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 *            New logger
 	 */
 	@Override
-	public void setLogger(final Log newLogger) {
+	public void setLogger(final Logger newLogger) {
 		super.setLogger(newLogger);
 		log = newLogger;
 	}
-
 }

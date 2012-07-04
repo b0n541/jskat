@@ -20,10 +20,10 @@
  */
 package org.jskat.ai.mjl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.util.CardList;
 import org.jskat.util.Suit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Markus J. Luzius <markus@luzius.de>
@@ -31,7 +31,7 @@ import org.jskat.util.Suit;
  */
 public class SkatProcessor {
 
-	private static Log log = LogFactory.getLog(SkatProcessor.class);
+	private static Logger log = LoggerFactory.getLogger(SkatProcessor.class);
 
 	/**
 	 * Processes the skat after the player has won the bidding.
@@ -42,7 +42,7 @@ public class SkatProcessor {
 	 *            the skat
 	 * @return suit to be played (0-3), grand (4), null (-1)
 	 */
-	public static Suit processSkat(CardList cards, CardList skat) {
+	public static Suit processSkat(final CardList cards, final CardList skat) {
 		log.debug("My cards:" + cards + ", Skat=" + skat);
 		// int cDiamonds = cards.getSuitCount(GameType.SUIT, Suit.DIAMONDS);
 		// int cHearts = cards.getSuitCount(GameType.SUIT, Suit.HEARTS);
@@ -123,7 +123,7 @@ public class SkatProcessor {
 	 *            the player's hand
 	 * @return true, if the player should look at the skat
 	 */
-	public static boolean lookAtSkat(CardList cards) {
+	public static boolean lookAtSkat(final CardList cards) {
 		return true;
 	}
 }

@@ -22,9 +22,9 @@ package org.jskat.gui.swing.table;
 
 import javax.swing.ActionMap;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.SkatGameData.GameState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Panel for showing informations about the user
@@ -32,7 +32,7 @@ import org.jskat.data.SkatGameData.GameState;
 public class JSkatUserPanel extends AbstractHandPanel {
 
 	private static final long serialVersionUID = 1L;
-	private static Log log = LogFactory.getLog(JSkatUserPanel.class);
+	private static Logger log = LoggerFactory.getLogger(JSkatUserPanel.class);
 
 	private CardPanel lastClickedCardPanel;
 	private GameState gameState;
@@ -40,8 +40,7 @@ public class JSkatUserPanel extends AbstractHandPanel {
 	/**
 	 * @see AbstractHandPanel#AbstractHandPanel(ActionMap, int, boolean)
 	 */
-	public JSkatUserPanel(ActionMap actions, int maxCards,
-			boolean showIssWidgets) {
+	public JSkatUserPanel(final ActionMap actions, final int maxCards, final boolean showIssWidgets) {
 
 		super(actions, maxCards, showIssWidgets);
 		this.showCards();
@@ -52,7 +51,7 @@ public class JSkatUserPanel extends AbstractHandPanel {
 		return this.lastClickedCardPanel;
 	}
 
-	void setGameState(GameState newGameState) {
+	void setGameState(final GameState newGameState) {
 		this.gameState = newGameState;
 	}
 

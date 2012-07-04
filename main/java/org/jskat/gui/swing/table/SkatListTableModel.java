@@ -25,13 +25,13 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameSummary;
 import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.Player;
 import org.jskat.util.SkatConstants;
 import org.jskat.util.SkatListMode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Provides a model for the skat list table
@@ -40,18 +40,18 @@ class SkatListTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 
-	private static Log log = LogFactory.getLog(SkatListTableModel.class);
+	private static Logger log = LoggerFactory.getLogger(SkatListTableModel.class);
 
-	private JSkatResourceBundle strings;
+	private final JSkatResourceBundle strings;
 
 	private SkatListMode mode = SkatListMode.NORMAL;
 
 	private int playerCount = 3;
-	private List<Player> declarers;
-	private List<List<Integer>> playerResults;
-	private List<GameSummary> gameResults;
-	private List<String> columns;
-	private List<List<Integer>> displayValues;
+	private final List<Player> declarers;
+	private final List<List<Integer>> playerResults;
+	private final List<GameSummary> gameResults;
+	private final List<String> columns;
+	private final List<List<Integer>> displayValues;
 
 	/**
 	 * Constructor
@@ -90,7 +90,7 @@ class SkatListTableModel extends AbstractTableModel {
 	 * @see AbstractTableModel#getValueAt(int, int)
 	 */
 	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
+	public Object getValueAt(final int rowIndex, final int columnIndex) {
 
 		Object result = null;
 
@@ -103,7 +103,7 @@ class SkatListTableModel extends AbstractTableModel {
 		return result;
 	}
 
-	Integer getPlayerValue(int playerColumn, int gameRow) {
+	Integer getPlayerValue(final int playerColumn, final int gameRow) {
 
 		Integer result = null;
 
@@ -114,7 +114,7 @@ class SkatListTableModel extends AbstractTableModel {
 	 * @see AbstractTableModel#getColumnName(int)
 	 */
 	@Override
-	public String getColumnName(int col) {
+	public String getColumnName(final int col) {
 
 		return columns.get(col);
 	}
@@ -123,7 +123,7 @@ class SkatListTableModel extends AbstractTableModel {
 	 * @see AbstractTableModel#getColumnClass(int)
 	 */
 	@Override
-	public Class<?> getColumnClass(int col) {
+	public Class<?> getColumnClass(final int col) {
 
 		return Integer.class;
 	}
@@ -133,7 +133,7 @@ class SkatListTableModel extends AbstractTableModel {
 	 * 
 	 * @param newMode
 	 */
-	void setSkatListMode(SkatListMode newMode) {
+	void setSkatListMode(final SkatListMode newMode) {
 
 		mode = newMode;
 
@@ -224,7 +224,8 @@ class SkatListTableModel extends AbstractTableModel {
 	 * @param gameSummary
 	 *            Game summary
 	 */
-	void addResult(Player leftOpponent, Player rightOpponent, Player user, Player declarer, GameSummary gameSummary) {
+	void addResult(final Player leftOpponent, final Player rightOpponent, final Player user, final Player declarer,
+			final GameSummary gameSummary) {
 
 		// FIXME works only on 3 player series
 		// FIXME (jansch 21.03.2011) provide only one method for addResult()
@@ -248,7 +249,8 @@ class SkatListTableModel extends AbstractTableModel {
 		fireTableDataChanged();
 	}
 
-	static int getDeclarerColumn(Player leftOpponent, Player rightOpponent, Player player, Player declarer) {
+	static int getDeclarerColumn(final Player leftOpponent, final Player rightOpponent, final Player player,
+			final Player declarer) {
 
 		int result = -1;
 
@@ -279,7 +281,7 @@ class SkatListTableModel extends AbstractTableModel {
 		fireTableDataChanged();
 	}
 
-	public void setPlayerCount(int newPlayerCount) {
+	public void setPlayerCount(final int newPlayerCount) {
 
 		declarers.clear();
 		gameResults.clear();
@@ -308,7 +310,7 @@ class SkatListTableModel extends AbstractTableModel {
 		displayValues.add(new ArrayList<Integer>());
 	}
 
-	void setPlayerNames(String upperLeftPlayer, String upperRightPlayer, String lowerPlayer) {
+	void setPlayerNames(final String upperLeftPlayer, final String upperRightPlayer, final String lowerPlayer) {
 
 		columns.set(0, upperLeftPlayer);
 		columns.set(1, upperRightPlayer);

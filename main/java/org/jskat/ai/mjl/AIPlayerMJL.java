@@ -20,13 +20,13 @@
  */
 package org.jskat.ai.mjl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.player.AbstractJSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A JSkat AI Player
@@ -35,7 +35,7 @@ import org.jskat.util.CardList;
  */
 public class AIPlayerMJL extends AbstractJSkatPlayer {
 
-	private final Log log = LogFactory.getLog(AIPlayerMJL.class);
+	private static Logger log = LoggerFactory.getLogger(AIPlayerMJL.class);
 	private CardPlayer aiPlayer;
 	int maxBidValue = -1;
 

@@ -29,12 +29,12 @@ import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.SkatTableOptions.RamschSkatOwner;
 import org.jskat.data.SkatTableOptions.RuleSet;
 import org.jskat.gui.img.CardFace;
 import org.jskat.player.PlayerType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Holds all options of JSkat
@@ -61,7 +61,7 @@ public class JSkatOptions {
 		bockEventContraReAnnounced, bockEventLostAfterContra, bockEventLostGrand, bockEventLostWith60, bockEventPlayerHasX00Points, cardFace, cheatDebugMode, checkForNewVersionAtStartUp, firstPlayerName, firstPlayerType, gameShortCut, issAddress, issPort, language, maxPlayerCount, playBock, playContra, playRamsch, playRevolution, ramschEventNoBid, ramschEventRamschAfterBock, ramschGrandHandPossible, ramschSkatOwner, rules, savePath, schieberRamsch, schieberRamschJacksInSkat, secondPlayerName, secondPlayerType, showTipsAtStartUp, thirdPlayerName, thirdPlayerType, trickRemoveAfterClick, trickRemoveDelayTime, contraAfterBid18;
 	}
 
-	private static Log log = LogFactory.getLog(JSkatOptions.class);
+	private static Logger log = LoggerFactory.getLogger(JSkatOptions.class);
 
 	static private JSkatOptions optionsInstance = null;
 
@@ -73,8 +73,7 @@ public class JSkatOptions {
 	 */
 	static public JSkatOptions instance(final SavePathResolver pathResolver) {
 
-		if (null == optionsInstance) {
-
+		if (optionsInstance == null) {
 			optionsInstance = new JSkatOptions(pathResolver);
 		}
 
@@ -606,7 +605,7 @@ public class JSkatOptions {
 			log.debug("No properties file found. Saving of JSkat options failed."); //$NON-NLS-1$
 		} catch (IOException e) {
 			log.debug("Saving of JSkat options failed."); //$NON-NLS-1$
-			log.debug(e);
+			log.debug(e.toString());
 		}
 	}
 

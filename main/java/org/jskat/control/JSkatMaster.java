@@ -24,8 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.train.NNTrainer;
 import org.jskat.control.iss.IssController;
@@ -43,13 +41,15 @@ import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.version.VersionChecker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Controls everything in JSkat
  */
 public class JSkatMaster {
 
-	private static Log log = LogFactory.getLog(JSkatMaster.class);
+	private static Logger log = LoggerFactory.getLogger(JSkatMaster.class);
 
 	private volatile static JSkatMaster instance = null;
 
@@ -461,7 +461,7 @@ public class JSkatMaster {
 	 */
 	public void triggerHuman(final JSkatActionEvent event) {
 
-		log.debug(event);
+		log.debug(event.toString());
 
 		String tableName = data.getActiveTable();
 		String command = event.getActionCommand();
@@ -496,7 +496,7 @@ public class JSkatMaster {
 			if (source instanceof CardList) {
 				// player discarded cards
 				CardList discardSkat = (CardList) source;
-				log.debug(discardSkat);
+				log.debug(discardSkat.toString());
 
 				// FIXME (jan 02.11.2010) Discarded cards are sent with the
 				// game announcement to ISS

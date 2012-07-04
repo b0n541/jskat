@@ -25,21 +25,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.SkatSeriesData;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.gui.JSkatView;
 import org.jskat.player.JSkatPlayer;
 import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Controls a series of skat games
  */
 public class SkatSeries extends JSkatThread {
 
-	private static Log log = LogFactory.getLog(SkatSeries.class);
+	private static Logger log = LoggerFactory.getLogger(SkatSeries.class);
 
 	private int maxSleep = 0;
 	private final SkatSeriesData data;
@@ -191,11 +191,12 @@ public class SkatSeries extends JSkatThread {
 				}
 
 				checkWaitCondition();
-				
-				//Breaks on termination - 
-				//the thread has to come to the end
-				if(isTerminated())
+
+				// Breaks on termination -
+				// the thread has to come to the end
+				if (isTerminated()) {
 					break;
+				}
 			}
 
 			roundsToGo--;
@@ -207,7 +208,7 @@ public class SkatSeries extends JSkatThread {
 		data.setState(SeriesState.SERIES_FINISHED);
 		view.setSeriesState(data.getTableName(), SeriesState.SERIES_FINISHED);
 
-		log.debug(data.getState());
+		log.debug(data.getState().name());
 	}
 
 	private void setViewPositions() {

@@ -24,19 +24,19 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Arrays;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.AbstractJSkatTest;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Test cases for class Card
  */
 public class BidEvaluatorTest extends AbstractJSkatTest {
 
-	private static Log log = LogFactory.getLog(BidEvaluatorTest.class);
+	private static Logger log = LoggerFactory.getLogger(BidEvaluatorTest.class);
 
 	/**
 	 * Test double sorting

@@ -25,8 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.control.JSkatMaster;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.JSkatApplicationData;
@@ -46,13 +44,15 @@ import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.Player;
 import org.jskat.util.SkatConstants;
 import org.jskat.util.rule.SkatRuleFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Controls all ISS related actions
  */
 public class IssController {
 
-	private static Log log = LogFactory.getLog(IssController.class);
+	private static Logger log = LoggerFactory.getLogger(IssController.class);
 
 	private final JSkatMaster jskat;
 	private JSkatView view;

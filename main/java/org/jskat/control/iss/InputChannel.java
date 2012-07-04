@@ -25,8 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Reads data from ISS until an interrupt signal occures
@@ -35,7 +35,7 @@ import org.apache.commons.logging.LogFactory;
  */
 class InputChannel extends Thread {
 
-	static Log log = LogFactory.getLog(InputChannel.class);
+	private static Logger log = LoggerFactory.getLogger(InputChannel.class);
 
 	MessageHandler messageHandler;
 
@@ -52,7 +52,7 @@ class InputChannel extends Thread {
 	 * @param is
 	 *            Input stream
 	 */
-	InputChannel(IssController controller, Connector conn, InputStream is) {
+	InputChannel(final IssController controller, final Connector conn, final InputStream is) {
 
 		this.stream = is;
 		this.reader = new BufferedReader(new InputStreamReader(this.stream));

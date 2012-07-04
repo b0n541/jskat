@@ -36,8 +36,6 @@ import java.util.Random;
 
 import javax.swing.JPanel;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.JSkatOptions;
 import org.jskat.gui.img.CardFace;
 import org.jskat.gui.swing.JSkatGraphicRepository;
@@ -46,6 +44,8 @@ import org.jskat.util.CardList;
 import org.jskat.util.Player;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Renders all cards of a trick
@@ -53,22 +53,22 @@ import org.jskat.util.Suit;
 class TrickPanel extends JPanel implements ComponentListener {
 
 	private static final long serialVersionUID = 1L;
-	private static Log log = LogFactory.getLog(TrickPanel.class);
+	private static Logger log = LoggerFactory.getLogger(TrickPanel.class);
 
 	private static JSkatOptions options = JSkatOptions.instance();
-	private JSkatGraphicRepository bitmaps;
-	private Map<Card, Image> scaledCardImages;
-	private List<Double> cardRotations;
-	private List<Player> positions;
-	private CardList trick;
-	private Random rand = new Random();
+	private final JSkatGraphicRepository bitmaps;
+	private final Map<Card, Image> scaledCardImages;
+	private final List<Double> cardRotations;
+	private final List<Player> positions;
+	private final CardList trick;
+	private final Random rand = new Random();
 	private Player userPosition;
 	private Player rightOpponent;
 	private Player leftOpponent;
 
 	private CardFace cardFace;
-	private double cardScaleFactor;
-	private boolean randomPlacement;
+	private final double cardScaleFactor;
+	private final boolean randomPlacement;
 
 	/**
 	 * Constructor
@@ -76,8 +76,7 @@ class TrickPanel extends JPanel implements ComponentListener {
 	 * @param newCardScaleFactor
 	 * @param newRandomPlacement
 	 */
-	TrickPanel(double newCardScaleFactor,
-			boolean newRandomPlacement) {
+	TrickPanel(final double newCardScaleFactor, final boolean newRandomPlacement) {
 
 		bitmaps = JSkatGraphicRepository.instance();
 
@@ -109,7 +108,7 @@ class TrickPanel extends JPanel implements ComponentListener {
 	 * @param card
 	 *            Card
 	 */
-	void addCard(Player player, Card card) {
+	void addCard(final Player player, final Card card) {
 
 		positions.add(player);
 		trick.add(card);
@@ -149,7 +148,7 @@ class TrickPanel extends JPanel implements ComponentListener {
 	 * @see JPanel#paintComponent(Graphics)
 	 */
 	@Override
-	protected synchronized void paintComponent(Graphics g) {
+	protected synchronized void paintComponent(final Graphics g) {
 
 		super.paintComponent(g);
 
@@ -164,14 +163,10 @@ class TrickPanel extends JPanel implements ComponentListener {
 		double yPos = 0.0;
 
 		Graphics2D g2D = (Graphics2D) g;
-		g2D.setRenderingHint(RenderingHints.KEY_RENDERING,
-				RenderingHints.VALUE_RENDER_QUALITY);
-		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-				RenderingHints.VALUE_ANTIALIAS_ON);
-		g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-		g2D.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
-				RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+		g2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g2D.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
 
 		for (int i = 0; i < trick.size(); i++) {
 
@@ -218,7 +213,7 @@ class TrickPanel extends JPanel implements ComponentListener {
 		return !cardFace.equals(options.getCardFace());
 	}
 
-	void setUserPosition(Player newUserPosition) {
+	void setUserPosition(final Player newUserPosition) {
 
 		userPosition = newUserPosition;
 		leftOpponent = userPosition.getLeftNeighbor();
@@ -249,17 +244,14 @@ class TrickPanel extends JPanel implements ComponentListener {
 
 		for (Card card : Card.values()) {
 
-			Image cardImage = bitmaps.getCardImage(card.getSuit(),
-					card.getRank());
+			Image cardImage = bitmaps.getCardImage(card.getSuit(), card.getRank());
 
 			int scaledWidth = (int) (imageWidth * scaleFactor);
 			int scaledHeight = (int) (imageHeight * scaleFactor);
 
-			BufferedImage scaledImage = new BufferedImage(scaledWidth,
-					scaledHeight, BufferedImage.TYPE_INT_ARGB);
+			BufferedImage scaledImage = new BufferedImage(scaledWidth, scaledHeight, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g2 = scaledImage.createGraphics();
-			g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-					RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+			g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 			g2.drawImage(cardImage, 0, 0, scaledWidth, scaledHeight, null);
 			g2.dispose();
 
@@ -268,24 +260,24 @@ class TrickPanel extends JPanel implements ComponentListener {
 	}
 
 	@Override
-	public void componentResized(ComponentEvent e) {
+	public void componentResized(final ComponentEvent e) {
 		scaleImages();
 		repaint();
 	}
 
 	@Override
-	public void componentMoved(ComponentEvent e) {
+	public void componentMoved(final ComponentEvent e) {
 		// not needed
 	}
 
 	@Override
-	public void componentShown(ComponentEvent e) {
+	public void componentShown(final ComponentEvent e) {
 		scaleImages();
 		repaint();
 	}
 
 	@Override
-	public void componentHidden(ComponentEvent e) {
+	public void componentHidden(final ComponentEvent e) {
 		// not needed
 	}
 }

@@ -20,14 +20,14 @@
  */
 package org.jskat.util.rule;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.SkatGameData;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.jskat.util.SkatConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implements some methods of the interface SkatRules that are the same in suit
@@ -35,7 +35,7 @@ import org.jskat.util.SkatConstants;
  */
 public abstract class SuitGrandRule extends SuitGrandRamschRule {
 
-	private static Log log = LogFactory.getLog(SuitGrandRule.class);
+	private static Logger log = LoggerFactory.getLogger(SuitGrandRule.class);
 
 	/**
 	 * @see SkatRule#isGameWon(SkatGameData)

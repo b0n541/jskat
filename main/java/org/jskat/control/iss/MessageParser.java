@@ -26,8 +26,6 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData;
@@ -45,13 +43,15 @@ import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Parses ISS messages
  */
 public class MessageParser {
 
-	static Log log = LogFactory.getLog(MessageParser.class);
+	private static Logger log = LoggerFactory.getLogger(MessageParser.class);
 
 	/**
 	 * table .1 bar state --> was cut away before <br>

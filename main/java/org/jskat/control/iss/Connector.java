@@ -24,8 +24,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.iss.ChatMessage;
@@ -33,13 +31,15 @@ import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.JSkatResourceBundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Connector to International Skat Server ISS
  */
 class Connector {
 
-	private static Log log = LogFactory.getLog(Connector.class);
+	private static Logger log = LoggerFactory.getLogger(Connector.class);
 
 	private static JSkatResourceBundle strings = JSkatResourceBundle.instance();
 	private static JSkatOptions options = JSkatOptions.instance();

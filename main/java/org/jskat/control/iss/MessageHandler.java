@@ -25,18 +25,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.util.JSkatResourceBundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Handles messages from ISS
  */
 public class MessageHandler extends Thread {
 
-	static Log log = LogFactory.getLog(MessageHandler.class);
+	private static Logger log = LoggerFactory.getLogger(MessageHandler.class);
 
 	Connector connect;
 	IssController issControl;

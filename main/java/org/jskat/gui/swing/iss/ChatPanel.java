@@ -38,13 +38,13 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.swing.AbstractTabPanel;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.JSkatResourceBundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Chat panel for ISS
@@ -52,7 +52,7 @@ import org.jskat.util.JSkatResourceBundle;
 class ChatPanel extends JPanel implements ChangeListener {
 
 	private static final long serialVersionUID = 1L;
-	static Log log = LogFactory.getLog(ChatPanel.class);
+	private static Logger log = LoggerFactory.getLogger(ChatPanel.class);
 
 	JTextField inputLine;
 	private Map<String, JTextArea> chats;

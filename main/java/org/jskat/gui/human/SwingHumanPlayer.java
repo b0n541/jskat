@@ -20,21 +20,21 @@
  */
 package org.jskat.gui.human;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.action.JSkatActionEvent;
 import org.jskat.player.JSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Human player
  */
 public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
-	private static Log log = LogFactory.getLog(SwingHumanPlayer.class);
+	private static Logger log = LoggerFactory.getLogger(SwingHumanPlayer.class);
 
 	private Idler idler = new Idler();
 

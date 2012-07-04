@@ -22,15 +22,15 @@ package org.jskat.control.iss;
 
 import java.io.PrintWriter;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Handles all outgoing messages to ISS
  */
 class OutputChannel {
 
-	private static Log log = LogFactory.getLog(OutputChannel.class);
+	private static Logger log = LoggerFactory.getLogger(OutputChannel.class);
 
 	/**
 	 * Constructor
@@ -38,7 +38,7 @@ class OutputChannel {
 	 * @param newOutput
 	 *            Input stream from ISS
 	 */
-	OutputChannel(PrintWriter newOutput) {
+	OutputChannel(final PrintWriter newOutput) {
 
 		this.output = newOutput;
 	}
@@ -49,11 +49,11 @@ class OutputChannel {
 	 * @param message
 	 *            Message text
 	 */
-	void send(String message) {
+	void send(final String message) {
 
 		log.debug("ISS <--|    " + message); //$NON-NLS-1$
 		this.output.println(message);
 	}
 
-	private PrintWriter output;
+	private final PrintWriter output;
 }

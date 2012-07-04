@@ -27,19 +27,19 @@ import java.awt.Toolkit;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.JSkatOptions;
 import org.jskat.gui.img.CardFace;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Repository that holds all images used in JSkat
  */
 public class JSkatGraphicRepository {
 
-	private static Log log = LogFactory.getLog(JSkatGraphicRepository.class);
+	private static Logger log = LoggerFactory.getLogger(JSkatGraphicRepository.class);
 	private static JSkatGraphicRepository instance = null;
 
 	/**

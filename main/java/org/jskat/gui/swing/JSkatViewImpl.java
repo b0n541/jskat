@@ -51,8 +51,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.JSkat;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.SkatTable;
@@ -134,13 +132,15 @@ import org.jskat.util.GameType;
 import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.Player;
 import org.jskat.util.SkatConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of JSkatView interface
  */
 public class JSkatViewImpl implements JSkatView {
 
-	static Log log = LogFactory.getLog(JSkatViewImpl.class);
+	private static Logger log = LoggerFactory.getLogger(JSkatViewImpl.class);
 
 	private JFrame mainFrame;
 	private final SkatSeriesStartDialog skatSeriesStartDialog;
@@ -1303,9 +1303,9 @@ public class JSkatViewImpl implements JSkatView {
 			URI uri = new URI(link);
 			desktop.browse(uri);
 		} catch (URISyntaxException except) {
-			log.error(except);
+			log.error(except.toString());
 		} catch (IOException except) {
-			log.error(except);
+			log.error(except.toString());
 		}
 	}
 

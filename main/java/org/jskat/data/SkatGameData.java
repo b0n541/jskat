@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary.GameSummaryFactory;
 import org.jskat.util.Card;
@@ -38,13 +36,15 @@ import org.jskat.util.Player;
 import org.jskat.util.rule.RamschRule;
 import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Data class for a Skat game
  */
 public class SkatGameData {
 
-	private static Log log = LogFactory.getLog(SkatGameData.class);
+	private static Logger log = LoggerFactory.getLogger(SkatGameData.class);
 
 	/**
 	 * All possible game states

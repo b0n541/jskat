@@ -31,12 +31,12 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.iss.LoginCredentials;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.swing.AbstractTabPanel;
 import org.jskat.gui.swing.LayoutFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Panel for login into International Skat Server (ISS)
@@ -44,7 +44,7 @@ import org.jskat.gui.swing.LayoutFactory;
 public class LoginPanel extends AbstractTabPanel {
 
 	private static final long serialVersionUID = 1L;
-	private static Log log = LogFactory.getLog(LoginPanel.class);
+	private static Logger log = LoggerFactory.getLogger(LoginPanel.class);
 
 	JTextField loginField;
 	JPasswordField passwordField;
@@ -52,7 +52,7 @@ public class LoginPanel extends AbstractTabPanel {
 	/**
 	 * @see AbstractTabPanel#AbstractTabPanel(String, ActionMap)
 	 */
-	public LoginPanel(String newTableName, ActionMap actions) {
+	public LoginPanel(final String newTableName, final ActionMap actions) {
 
 		super(newTableName, actions);
 		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
@@ -85,27 +85,22 @@ public class LoginPanel extends AbstractTabPanel {
 		this.passwordField = new JPasswordField(10);
 		login.add(this.passwordField, "growx, wrap"); //$NON-NLS-1$
 
-		final JButton loginButton = new JButton(this.getActionMap().get(
-				JSkatAction.CONNECT_TO_ISS));
+		final JButton loginButton = new JButton(this.getActionMap().get(JSkatAction.CONNECT_TO_ISS));
 		loginButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 
 				LoginCredentials loginCredentials = new LoginCredentials();
-				loginCredentials.setLoginName(LoginPanel.this.loginField
-						.getText());
-				loginCredentials.setPassword(new String(passwordField
-						.getPassword()));
+				loginCredentials.setLoginName(LoginPanel.this.loginField.getText());
+				loginCredentials.setPassword(new String(passwordField.getPassword()));
 
 				e.setSource(loginCredentials);
 				// fire event again
 				loginButton.dispatchEvent(e);
 			}
 		});
-		final JButton issHomepageButton = new JButton(getActionMap().get(
-				JSkatAction.OPEN_ISS_HOMEPAGE));
-		final JButton issRegisterButton = new JButton(getActionMap().get(
-				JSkatAction.REGISTER_ON_ISS));
+		final JButton issHomepageButton = new JButton(getActionMap().get(JSkatAction.OPEN_ISS_HOMEPAGE));
+		final JButton issRegisterButton = new JButton(getActionMap().get(JSkatAction.REGISTER_ON_ISS));
 
 		JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
@@ -118,6 +113,7 @@ public class LoginPanel extends AbstractTabPanel {
 		return login;
 	}
 
+	@Override
 	public void setFocus() {
 		this.loginField.requestFocus();
 	}

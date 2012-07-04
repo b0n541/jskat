@@ -28,14 +28,14 @@ import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.JSkatOptions;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.CardList;
 import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.Rank;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Holds widgets for announcing a game
@@ -43,7 +43,7 @@ import org.jskat.util.Rank;
 class SkatSchiebenPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	static Log log = LogFactory.getLog(SkatSchiebenPanel.class);
+	private static Logger log = LoggerFactory.getLogger(SkatSchiebenPanel.class);
 
 	JSkatResourceBundle strings;
 	JSkatOptions options;
@@ -60,7 +60,7 @@ class SkatSchiebenPanel extends JPanel {
 	 * @param showAnnounceButton
 	 *            TRUE, if the announce button should be shown
 	 */
-	SkatSchiebenPanel(ActionMap actions, DiscardPanel discardPanel) {
+	SkatSchiebenPanel(final ActionMap actions, final DiscardPanel discardPanel) {
 
 		strings = JSkatResourceBundle.instance();
 		this.discardPanel = discardPanel;
@@ -79,11 +79,12 @@ class SkatSchiebenPanel extends JPanel {
 		final JButton schiebenButton = new JButton(actions.get(JSkatAction.SCHIEBEN));
 		schiebenButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				try {
 					CardList discardedCards = getDiscardedCards();
-					if (discardedCards == null)
+					if (discardedCards == null) {
 						return; // no valid announcement
+					}
 
 					e.setSource(discardedCards);
 					// fire event again

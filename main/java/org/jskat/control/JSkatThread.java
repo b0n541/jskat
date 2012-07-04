@@ -20,15 +20,15 @@
  */
 package org.jskat.control;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Extends the normal thread class with an wait option
  */
 public class JSkatThread extends Thread {
 
-	private static Log log = LogFactory.getLog(JSkatThread.class);
+	private static Logger log = LoggerFactory.getLogger(JSkatThread.class);
 
 	private volatile boolean terminate = false;
 
@@ -44,9 +44,9 @@ public class JSkatThread extends Thread {
 	 */
 	public void terminate() {
 		terminate = true;
-		//A terminated thread must not wait
+		// A terminated thread must not wait
 		pleaseWait = false;
-		//Interrupts if the thread is waiting
+		// Interrupts if the thread is waiting
 		interrupt();
 	}
 
@@ -63,9 +63,10 @@ public class JSkatThread extends Thread {
 	 * Starts the waiting
 	 */
 	public void startWaiting() {
-		//A terminated thread must not wait
-		if(!terminate)
+		// A terminated thread must not wait
+		if (!terminate) {
 			this.pleaseWait = true;
+		}
 	}
 
 	/**
@@ -87,7 +88,7 @@ public class JSkatThread extends Thread {
 					wait();
 				} catch (Exception e) {
 					// TODO handle exception accordingly
-					log.error(e);
+					log.error(e.toString());
 				}
 			}
 		}

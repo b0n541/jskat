@@ -25,12 +25,12 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameSummary;
 import org.jskat.data.Trick;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.Player;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Holds all informations about a game at the end
@@ -38,7 +38,7 @@ import org.jskat.util.Player;
 public class GameResultPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private static Log log = LogFactory.getLog(GameResultPanel.class);
+	private static Logger log = LoggerFactory.getLogger(GameResultPanel.class);
 
 	private Player userPosition;
 	private List<TrickPanel> trickPanelList;

@@ -20,8 +20,8 @@
  */
 package org.jskat.player;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * All implemented player types
@@ -45,11 +45,11 @@ public enum PlayerType {
 	 */
 	HUMAN(null);
 
-	private static Log log = LogFactory.getLog(PlayerType.class);
+	private static Logger log = LoggerFactory.getLogger(PlayerType.class);
 
 	private final String implementingClass;
 
-	private PlayerType(String implementingClass) {
+	private PlayerType(final String implementingClass) {
 		// class is not checked here -
 		// otherwise a missing class would already result in an exception here,
 		// even if it is not required
@@ -67,23 +67,20 @@ public enum PlayerType {
 	 * @throws IllegalArgumentException
 	 *             if PlayerType==HUMAN
 	 */
-	public static JSkatPlayer getPlayerInstance(PlayerType type) {
-		if (type == HUMAN)
-			throw new IllegalArgumentException(
-					".getPlayerInstance(..) cannot be used for human players");
+	public static JSkatPlayer getPlayerInstance(final PlayerType type) {
+		if (type == HUMAN) {
+			throw new IllegalArgumentException(".getPlayerInstance(..) cannot be used for human players");
+		}
 		JSkatPlayer player = null;
 
 		try {
-			player = (JSkatPlayer) Class.forName(type.implementingClass)
-					.newInstance();
+			player = (JSkatPlayer) Class.forName(type.implementingClass).newInstance();
 		} catch (Exception ex) {
 			// handle exception case
 			try {
-				player = (JSkatPlayer) Class.forName(RANDOM.implementingClass)
-						.newInstance();
+				player = (JSkatPlayer) Class.forName(RANDOM.implementingClass).newInstance();
 			} catch (Exception e) {
-				log.warn("Cannot get JSkatPlayer: " + e.getClass() + ": "
-						+ e.getMessage());
+				log.warn("Cannot get JSkatPlayer: " + e.getClass() + ": " + e.getMessage());
 			}
 		}
 
@@ -97,7 +94,7 @@ public enum PlayerType {
 	 *            Player type as string
 	 * @return Player type or NULL if the player type does not exists
 	 */
-	public static PlayerType getPlayerTypeFromString(String playerString) {
+	public static PlayerType getPlayerTypeFromString(final String playerString) {
 
 		PlayerType result = null;
 

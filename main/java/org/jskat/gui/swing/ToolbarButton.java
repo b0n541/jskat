@@ -25,9 +25,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.SwingConstants;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.gui.swing.JSkatGraphicRepository.IconSize;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Creates toolbar buttons with text under the icon to save space
@@ -35,12 +35,12 @@ import org.jskat.gui.swing.JSkatGraphicRepository.IconSize;
 public class ToolbarButton extends JButton {
 
 	private static final long serialVersionUID = 1L;
-	static Log log = LogFactory.getLog(ToolbarButton.class);
+	private static Logger log = LoggerFactory.getLogger(ToolbarButton.class);
 
 	/**
 	 * @see JButton#JButton(Action)
 	 */
-	public ToolbarButton(Action a) {
+	public ToolbarButton(final Action a) {
 
 		super(a);
 		// setTextPosition();
@@ -60,7 +60,7 @@ public class ToolbarButton extends JButton {
 	 * @param iconSize
 	 *            IconSize to set
 	 */
-	public void setIconSize(IconSize iconSize) {
+	public void setIconSize(final IconSize iconSize) {
 
 		ImageIcon icon = null;
 		switch (iconSize) {

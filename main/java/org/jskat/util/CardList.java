@@ -26,16 +26,16 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.util.rule.SkatRuleFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Holds Cards on a hand or in the Skat
  */
 public class CardList implements Iterable<Card> {
 
-	private static Log log = LogFactory.getLog(CardList.class);
+	private static Logger log = LoggerFactory.getLogger(CardList.class);
 
 	protected List<Card> cards = new ArrayList<Card>();
 

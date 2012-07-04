@@ -22,12 +22,12 @@ package org.jskat.ai.mjl;
 
 import java.util.Vector;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Markus J. Luzius <markus@luzius.de>
@@ -35,12 +35,11 @@ import org.jskat.util.Suit;
  */
 public class RamschSkatProcessor {
 
-	private Log log = LogFactory.getLog(RamschSkatProcessor.class);
+	private static Logger log = LoggerFactory.getLogger(RamschSkatProcessor.class);
 
-	private void testProcessor(CardList cards, CardList skat) {
+	private void testProcessor(final CardList cards, final CardList skat) {
 		int[] cardBin = new int[4];
-		cardBin[3] = Helper.suitCardsToBinaryWithSkat(cards, skat,
-				Suit.DIAMONDS);
+		cardBin[3] = Helper.suitCardsToBinaryWithSkat(cards, skat, Suit.DIAMONDS);
 		cardBin[2] = Helper.suitCardsToBinaryWithSkat(cards, skat, Suit.HEARTS);
 		cardBin[1] = Helper.suitCardsToBinaryWithSkat(cards, skat, Suit.SPADES);
 		cardBin[0] = Helper.suitCardsToBinaryWithSkat(cards, skat, Suit.CLUBS);
@@ -53,7 +52,7 @@ public class RamschSkatProcessor {
 			// TODO (js) changed due to refactoring,
 			// don't know if it's still work as intended
 			// double rel = 1.0 * (double) c.getRank() / 6.0;
-			double rel = 1.0 * (double) c.getRank().getSuitGrandOrder() / 6.0;
+			double rel = 1.0 * c.getRank().getSuitGrandOrder() / 6.0;
 			if (c.getRank() == Rank.JACK) {
 				rel = 0.0;
 			}
@@ -61,8 +60,7 @@ public class RamschSkatProcessor {
 			// TODO (js) changed due to refactoring,
 			// don't know if it's still work as intended
 			// int tmpBin = cardBin[c.getSuit()];
-			int tmpBin = Helper.suitCardsToBinaryWithSkat(cards, skat,
-					c.getSuit());
+			int tmpBin = Helper.suitCardsToBinaryWithSkat(cards, skat, c.getSuit());
 			log.debug("suit=" + bin(tmpBin, 8) + " & 15 = " + (tmpBin & 15));
 			if (Tools.isIn(tmpBin & 15, new int[] { 7, 11, 13 })) {
 				rel = 0.0;
@@ -98,7 +96,7 @@ public class RamschSkatProcessor {
 	 * @param skat
 	 *            the skat
 	 */
-	public void processSkat(CardList cards, CardList skat) {
+	public void processSkat(final CardList cards, final CardList skat) {
 		log.debug("\n\n================================================================");
 		testProcessor(cards, skat);
 		log.debug("\n================================================================\n\n");
@@ -240,11 +238,11 @@ public class RamschSkatProcessor {
 	 *            the player's hand
 	 * @return true, if the player should look at the skat
 	 */
-	public boolean lookAtSkat(CardList cards) {
+	public boolean lookAtSkat(final CardList cards) {
 		return true;
 	}
 
-	private int pow(int a, int b) {
+	private int pow(final int a, final int b) {
 		int res = 1;
 		for (int i = 0; i < b; i++) {
 			res = res * a;
@@ -252,7 +250,7 @@ public class RamschSkatProcessor {
 		return res;
 	}
 
-	private String bin(int i, int bits) {
+	private String bin(final int i, final int bits) {
 		StringBuffer sb = new StringBuffer();
 		for (int j = bits - 1; j >= 0; j--) {
 			if ((i & pow(2, j)) > 0) {
@@ -264,12 +262,13 @@ public class RamschSkatProcessor {
 		return sb.toString();
 	}
 
-	private int findMax(Vector<Double> list) {
+	private int findMax(final Vector<Double> list) {
 		int res = 0;
 		int pos = 1;
 		while (list.size() > pos) {
-			if (list.get(pos).doubleValue() > list.get(res).doubleValue())
+			if (list.get(pos).doubleValue() > list.get(res).doubleValue()) {
 				res = pos;
+			}
 			pos++;
 		}
 		return res;

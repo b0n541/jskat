@@ -23,8 +23,6 @@ package org.jskat.control;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary;
@@ -45,13 +43,15 @@ import org.jskat.util.Player;
 import org.jskat.util.SkatConstants;
 import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Controls a skat game
  */
 public class SkatGame extends JSkatThread {
 
-	private Log log = LogFactory.getLog(SkatGame.class);
+	private static Logger log = LoggerFactory.getLogger(SkatGame.class);
 	private int maxSleep;
 	private final SkatGameData data;
 	private final GameVariant variant;
@@ -223,7 +223,7 @@ public class SkatGame extends JSkatThread {
 			checkWaitCondition();
 		} while (data.getGameState() != GameState.GAME_OVER && !isTerminated());
 
-		log.debug(data.getGameState());
+		log.debug(data.getGameState().name());
 
 		ThreadManager.unregisterThread(this);
 	}
@@ -252,7 +252,7 @@ public class SkatGame extends JSkatThread {
 			log.debug("shuffling..."); //$NON-NLS-1$
 
 			deck.shuffle();
-			log.debug(deck);
+			log.debug(deck.toString());
 		}
 
 		doSleep(maxSleep);
@@ -872,7 +872,7 @@ public class SkatGame extends JSkatThread {
 	 * @param newLogger
 	 *            New logger
 	 */
-	public void setLogger(final Log newLogger) {
+	public void setLogger(final Logger newLogger) {
 		log = newLogger;
 	}
 

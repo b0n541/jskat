@@ -48,14 +48,14 @@ import javax.swing.KeyStroke;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatOptions.SupportedLanguage;
 import org.jskat.data.SkatTableOptions.RamschSkatOwner;
 import org.jskat.data.SkatTableOptions.RuleSet;
 import org.jskat.gui.img.CardFace;
 import org.jskat.util.JSkatResourceBundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Preferences dialog for JSkat
@@ -63,7 +63,7 @@ import org.jskat.util.JSkatResourceBundle;
 public class JSkatOptionsDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	private static Log log = LogFactory.getLog(JSkatOptionsDialog.class);
+	private static Logger log = LoggerFactory.getLogger(JSkatOptionsDialog.class);
 
 	JSkatResourceBundle strings;
 	JSkatOptions options;
@@ -199,15 +199,15 @@ public class JSkatOptionsDialog extends JDialog {
 		JTabbedPane prefTabs = new JTabbedPane();
 
 		JPanel commonTab = getCommonPanel();
-		log.debug(commonTab.getPreferredSize());
+		log.debug(commonTab.getPreferredSize().toString());
 		prefTabs.addTab(strings.getString("common_options"), commonTab); //$NON-NLS-1$
 
 		JPanel skatRulesTab = getSkatRulesPanel();
-		log.debug(skatRulesTab.getPreferredSize());
+		log.debug(skatRulesTab.getPreferredSize().toString());
 		prefTabs.addTab(strings.getString("skat_rules"), skatRulesTab); //$NON-NLS-1$
 
 		JPanel issTab = getIssPanel();
-		log.debug(issTab.getPreferredSize());
+		log.debug(issTab.getPreferredSize().toString());
 		prefTabs.addTab(strings.getString("iss"), issTab); //$NON-NLS-1$
 
 		root.add(prefTabs, "wrap"); //$NON-NLS-1$

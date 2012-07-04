@@ -20,11 +20,11 @@
  */
 package org.jskat.ai.mjl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Suit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * CardMemory builds the memory of all the cards that have been played during a
@@ -36,7 +36,7 @@ import org.jskat.util.Suit;
  */
 public class CardMemory {
 
-	private Log log = LogFactory.getLog(CardMemory.class);
+	private static Logger log = LoggerFactory.getLogger(CardMemory.class);
 
 	/**
 	 * Default constructor
@@ -57,7 +57,7 @@ public class CardMemory {
 	 * @param gameType
 	 * @param trump
 	 */
-	public CardMemory(GameType gameType, Suit trump) {
+	public CardMemory(final GameType gameType, final Suit trump) {
 		this.gameType = gameType;
 		this.trump = trump;
 		cardsPlayed = new CardList[3];
@@ -77,7 +77,7 @@ public class CardMemory {
 	 * @param forehandPlayer
 	 *            player of the first card in the trick
 	 */
-	public void addTrick(CardList trick, int forehandPlayer) {
+	public void addTrick(final CardList trick, final int forehandPlayer) {
 		tricksPlayed++;
 		initialCardsPlayed.add(trick.get(0));
 		allCardsPlayed.add(trick.get(0));
@@ -104,7 +104,7 @@ public class CardMemory {
 	 *            Suit which is evaluated
 	 * @return Number of times the given player has played a card of that suit
 	 */
-	public int timesPlayedByPlayer(int player, int suit) {
+	public int timesPlayedByPlayer(final int player, final int suit) {
 		int count = 0;
 		return count;
 	}
@@ -116,7 +116,7 @@ public class CardMemory {
 	 *            Suit which is evaluated
 	 * @return Number of times the suit has been demanded
 	 */
-	public int timesDemanded(int suit) {
+	public int timesDemanded(final int suit) {
 		int count = 0;
 		return count;
 	}
@@ -130,7 +130,7 @@ public class CardMemory {
 	 *            Hand of the player
 	 * @return Number of cards still out for that suit
 	 */
-	public int remainingCards(int suit, CardList myCards) {
+	public int remainingCards(final int suit, final CardList myCards) {
 		int count = 0;
 		return count;
 	}
@@ -150,15 +150,15 @@ public class CardMemory {
 	 */
 	private Suit trump;
 	/** a vector of all the cards that have been played in this game so far */
-	private CardList allCardsPlayed;
+	private final CardList allCardsPlayed;
 	/**
 	 * reflects all the cards that have been played by each player in this game
 	 * so far
 	 */
-	private CardList[] cardsPlayed;
+	private final CardList[] cardsPlayed;
 	/**
 	 * reflects all the initial cards that have been played (i.e. what has been
 	 * demanded already?)
 	 */
-	private CardList initialCardsPlayed;
+	private final CardList initialCardsPlayed;
 }

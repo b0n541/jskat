@@ -51,9 +51,9 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.util.JSkatResourceBundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Help dialog for JSkat
@@ -61,7 +61,7 @@ import org.jskat.util.JSkatResourceBundle;
 public class JSkatHelpDialog extends JDialog {
 
 	private static final long serialVersionUID = 1L;
-	private static Log log = LogFactory.getLog(JSkatHelpDialog.class);
+	private static Logger log = LoggerFactory.getLogger(JSkatHelpDialog.class);
 
 	protected final JSkatResourceBundle strings = JSkatResourceBundle.instance();
 

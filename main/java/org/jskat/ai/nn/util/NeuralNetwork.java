@@ -31,15 +31,15 @@ import java.util.List;
 import java.util.Random;
 import java.util.StringTokenizer;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Neural network
  */
 public class NeuralNetwork implements Cloneable, INeuralNetwork {
 
-	private static Log log = LogFactory.getLog(NeuralNetwork.class);
+	private static Logger log = LoggerFactory.getLogger(NeuralNetwork.class);
 
 	Random rand = new Random();
 
@@ -61,7 +61,7 @@ public class NeuralNetwork implements Cloneable, INeuralNetwork {
 
 	}
 
-	private void setLayers(List<Layer> newLayers) {
+	private void setLayers(final List<Layer> newLayers) {
 		layers.clear();
 		layers.addAll(newLayers);
 	}
@@ -80,7 +80,7 @@ public class NeuralNetwork implements Cloneable, INeuralNetwork {
 	 * @param newTopology
 	 *            Topology of the network
 	 */
-	public NeuralNetwork(NetworkTopology newTopology) {
+	public NeuralNetwork(final NetworkTopology newTopology) {
 
 		topo = newTopology;
 		initializeVariables();
@@ -110,7 +110,7 @@ public class NeuralNetwork implements Cloneable, INeuralNetwork {
 		}
 	}
 
-	private void connectLayers(Layer inputLayer, Layer outputLayer) {
+	private void connectLayers(final Layer inputLayer, final Layer outputLayer) {
 
 		ArrayList<Double> weights = new ArrayList<Double>();
 
@@ -126,7 +126,7 @@ public class NeuralNetwork implements Cloneable, INeuralNetwork {
 		return (rand.nextDouble() - 0.5) * 0.1;
 	}
 
-	private void connectLayers(Layer inputLayer, Layer outputLayer, ArrayList<Double> weights) {
+	private void connectLayers(final Layer inputLayer, final Layer outputLayer, final ArrayList<Double> weights) {
 
 		int weightIndex = 0;
 		for (Neuron inputNeuron : inputLayer.getNeurons()) {
@@ -148,7 +148,7 @@ public class NeuralNetwork implements Cloneable, INeuralNetwork {
 	 * @param inputs
 	 *            Input parameters
 	 */
-	private void setInputParameter(double[] inputs) {
+	private void setInputParameter(final double[] inputs) {
 
 		((InputLayer) layers.get(0)).setInputParameter(inputs);
 	}
@@ -171,7 +171,7 @@ public class NeuralNetwork implements Cloneable, INeuralNetwork {
 	 * @param outputs
 	 *            Output parameter
 	 */
-	private void setOutputParameter(double[] outputs) {
+	private void setOutputParameter(final double[] outputs) {
 
 		((OutputLayer) layers.get(layers.size() - 1)).setOuputParameter(outputs, learningRate);
 	}
@@ -206,7 +206,7 @@ public class NeuralNetwork implements Cloneable, INeuralNetwork {
 	 * double[])
 	 */
 	@Override
-	public synchronized double adjustWeights(double[] inputs, double[] outputs) {
+	public synchronized double adjustWeights(final double[] inputs, final double[] outputs) {
 
 		setInputParameter(inputs);
 		propagateForward();
@@ -241,7 +241,7 @@ public class NeuralNetwork implements Cloneable, INeuralNetwork {
 	 * @see org.jskat.ai.nn.util.INeuralNetwork#getPredictedOutcome(double[])
 	 */
 	@Override
-	public synchronized double getPredictedOutcome(double[] inputs) {
+	public synchronized double getPredictedOutcome(final double[] inputs) {
 
 		setInputParameter(inputs);
 		propagateForward();
@@ -266,7 +266,7 @@ public class NeuralNetwork implements Cloneable, INeuralNetwork {
 	 *            Index of the output node
 	 * @return Value of the output node
 	 */
-	private double getOutputValue(int outputNodeIndex) {
+	private double getOutputValue(final int outputNodeIndex) {
 
 		return layers.get(layers.size() - 1).getNeurons().get(outputNodeIndex).getActivationValue();
 	}
@@ -277,7 +277,7 @@ public class NeuralNetwork implements Cloneable, INeuralNetwork {
 	 * @see org.jskat.ai.nn.util.INeuralNetwork#saveNetwork(java.lang.String)
 	 */
 	@Override
-	public boolean saveNetwork(String fileName) {
+	public boolean saveNetwork(final String fileName) {
 
 		boolean result = false;
 
@@ -314,7 +314,8 @@ public class NeuralNetwork implements Cloneable, INeuralNetwork {
 	 * int, int, int)
 	 */
 	@Override
-	public void loadNetwork(String fileName, int inputNeurons, int hiddenNeurons, int outputNeurons) {
+	public void loadNetwork(final String fileName, final int inputNeurons, final int hiddenNeurons,
+			final int outputNeurons) {
 
 		BufferedReader reader = null;
 		String input;
@@ -351,7 +352,7 @@ public class NeuralNetwork implements Cloneable, INeuralNetwork {
 		if (topo.getInputNeuronCount() == inputNeurons && topo.getHiddenNeuronCount(0) == hiddenNeurons
 				&& topo.getOutputNeuronCount() == outputNeurons) {
 			layers = getLayers(topo, lines);
-			log.debug(this);
+			log.debug(this.toString());
 		} else {
 			log.warn("Loaded network from " + fileName + " has wrong topology. Resetting network to random weights."); //$NON-NLS-1$ //$NON-NLS-2$
 			// FIXME (jan 25.02.2012) this is duplicated in
@@ -361,12 +362,12 @@ public class NeuralNetwork implements Cloneable, INeuralNetwork {
 		}
 	}
 
-	private static long getIterations(ArrayList<String> netData) {
+	private static long getIterations(final ArrayList<String> netData) {
 
 		return Long.parseLong(netData.get(1));
 	}
 
-	private static NetworkTopology getTopology(ArrayList<String> netData) {
+	private static NetworkTopology getTopology(final ArrayList<String> netData) {
 
 		int inputs = 0;
 		int outputs = 0;
@@ -408,7 +409,7 @@ public class NeuralNetwork implements Cloneable, INeuralNetwork {
 		return new NetworkTopology(inputs, outputs, hiddenLayerCount, hiddenNeuronCounts);
 	}
 
-	private ArrayList<Layer> getLayers(NetworkTopology newTopo, ArrayList<String> netData) {
+	private ArrayList<Layer> getLayers(final NetworkTopology newTopo, final ArrayList<String> netData) {
 
 		ArrayList<Layer> newLayers = new ArrayList<Layer>();
 

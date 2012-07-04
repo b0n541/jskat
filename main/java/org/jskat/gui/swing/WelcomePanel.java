@@ -27,9 +27,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.gui.action.JSkatAction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Panel for welcome message and options for playing local or online games
@@ -37,12 +37,12 @@ import org.jskat.gui.action.JSkatAction;
 public class WelcomePanel extends AbstractTabPanel {
 
 	private static final long serialVersionUID = 1L;
-	private static Log log = LogFactory.getLog(WelcomePanel.class);
+	private static Logger log = LoggerFactory.getLogger(WelcomePanel.class);
 
 	/**
 	 * @see AbstractTabPanel#AbstractTabPanel(String, ActionMap)
 	 */
-	public WelcomePanel(String newTableName, ActionMap actions) {
+	public WelcomePanel(final String newTableName, final ActionMap actions) {
 
 		super(newTableName, actions);
 		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
@@ -60,8 +60,7 @@ public class WelcomePanel extends AbstractTabPanel {
 
 	private JPanel getWelcomePanel() {
 
-		JPanel welcomePanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill",
-				"[shrink][grow]"));
+		JPanel welcomePanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "[shrink][grow]"));
 
 		JPanel headerPanel = new JPanel(LayoutFactory.getMigLayout("fill"));
 		JLabel headerLabel = new JLabel(strings.getString("welcome_to_jskat")); //$NON-NLS-1$
@@ -70,22 +69,18 @@ public class WelcomePanel extends AbstractTabPanel {
 		welcomePanel.add(headerPanel, "shrink, wrap"); //$NON-NLS-1$
 
 		JPanel localTablePanel = new JPanel(LayoutFactory.getMigLayout("fill"));
-		final JButton localTableButton = new JButton(this.getActionMap().get(
-				JSkatAction.CREATE_LOCAL_TABLE));
+		final JButton localTableButton = new JButton(this.getActionMap().get(JSkatAction.CREATE_LOCAL_TABLE));
 		localTablePanel.add(localTableButton, "center, wrap");
-		localTablePanel.add(new JLabel("<html><p>"
-				+ strings.getString("explain_local_table_1") + "</p><p>"
-						+ strings.getString("explain_local_table_2")
-						+ "</p></html>"), "center");
+		localTablePanel.add(
+				new JLabel("<html><p>" + strings.getString("explain_local_table_1") + "</p><p>"
+						+ strings.getString("explain_local_table_2") + "</p></html>"), "center");
 
 		JPanel issTablePanel = new JPanel(LayoutFactory.getMigLayout("fill"));
-		final JButton issTableButton = new JButton(getActionMap().get(
-				JSkatAction.SHOW_ISS_LOGIN));
+		final JButton issTableButton = new JButton(getActionMap().get(JSkatAction.SHOW_ISS_LOGIN));
 		issTablePanel.add(issTableButton, "center, wrap");
-		issTablePanel.add(new JLabel("<html><p>"
-				+ strings.getString("explain_iss_table_1") + "</p><p>"
-						+ strings.getString("explain_iss_table_2")
-						+ "</p></html>"), "center");
+		issTablePanel.add(
+				new JLabel("<html><p>" + strings.getString("explain_iss_table_1") + "</p><p>"
+						+ strings.getString("explain_iss_table_2") + "</p></html>"), "center");
 
 		JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 

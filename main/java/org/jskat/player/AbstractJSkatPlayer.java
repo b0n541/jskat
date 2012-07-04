@@ -20,8 +20,6 @@
  */
 package org.jskat.player;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
 import org.jskat.data.Trick;
@@ -31,13 +29,15 @@ import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Abstract JSkat player implementation
  */
 public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
-	private Log log = LogFactory.getLog(AbstractJSkatPlayer.class);
+	private static Logger log = LoggerFactory.getLogger(AbstractJSkatPlayer.class);
 
 	/** Player name */
 	protected String playerName;
@@ -312,7 +312,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * @param newLogger
 	 *            New logger
 	 */
-	public void setLogger(final Log newLogger) {
+	public void setLogger(final Logger newLogger) {
 		log = newLogger;
 	}
 }

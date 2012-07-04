@@ -26,9 +26,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.apache.commons.logging.impl.NoOpLog;
 import org.jskat.ai.nn.AIPlayerNN;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.JSkatThread;
@@ -44,13 +41,16 @@ import org.jskat.util.CardDeck;
 import org.jskat.util.GameType;
 import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.helpers.NOPLogger;
 
 /**
  * Trains the neural networks
  */
 public class NNTrainer extends JSkatThread {
 
-	private static Log log = LogFactory.getLog(NNTrainer.class);
+	private static Logger log = LoggerFactory.getLogger(NNTrainer.class);
 
 	private final JSkatMaster jskat;
 
@@ -215,7 +215,7 @@ public class NNTrainer extends JSkatThread {
 		if (PlayerType.NEURAL_NETWORK.equals(playerType)) {
 			AIPlayerNN nnPlayer = (AIPlayerNN) player;
 			nnPlayer.setIsLearning(true);
-			nnPlayer.setLogger(new NoOpLog());
+			nnPlayer.setLogger(NOPLogger.NOP_LOGGER);
 		}
 
 		return player;
@@ -253,7 +253,7 @@ public class NNTrainer extends JSkatThread {
 		player3.newGame(Player.REARHAND);
 		SkatGame game = new SkatGame("table", GameVariant.STANDARD, player1, player2, player3);
 		game.setView(new NullView());
-		game.setLogger(new NoOpLog());
+		game.setLogger(NOPLogger.NOP_LOGGER);
 
 		CardDeck deck = new CardDeck();
 		deck.shuffle();

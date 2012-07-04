@@ -23,19 +23,19 @@ package org.jskat.ai.nn.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.nn.util.EncogNetworkWrapper;
 import org.jskat.ai.nn.util.INeuralNetwork;
 import org.jskat.ai.nn.util.NetworkTopology;
 import org.jskat.util.GameType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Holds all neural networks for the NN player
  */
 public class SkatNetworks {
 
-	private static Log log = LogFactory.getLog(SkatNetworks.class);
+	private static Logger log = LoggerFactory.getLogger(SkatNetworks.class);
 
 	// 32 input nodes for every player
 	// 32 input nodes for skat cards

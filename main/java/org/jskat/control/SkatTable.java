@@ -23,25 +23,24 @@ package org.jskat.control;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.SkatTableOptions;
 import org.jskat.gui.JSkatView;
-import org.jskat.gui.swing.JSkatViewImpl;
 import org.jskat.player.JSkatPlayer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Controls a table for playing a series of skat games
  */
 public class SkatTable {
 
-	private static Log log = LogFactory.getLog(SkatTable.class);
+	private static Logger log = LoggerFactory.getLogger(SkatTable.class);
 
 	private String tableName;
-	private SkatTableOptions options;
+	private final SkatTableOptions options;
 	private SkatSeries series;
-	private List<JSkatPlayer> player = new ArrayList<JSkatPlayer>();
+	private final List<JSkatPlayer> player = new ArrayList<JSkatPlayer>();
 
 	private JSkatView view;
 
@@ -51,7 +50,7 @@ public class SkatTable {
 	 * @param tableOptions
 	 *            Preferences for the table
 	 */
-	public SkatTable(SkatTableOptions tableOptions) {
+	public SkatTable(final SkatTableOptions tableOptions) {
 
 		options = tableOptions;
 
@@ -76,7 +75,8 @@ public class SkatTable {
 	 * @param unlimitedRounds
 	 * @param onlyPlayRamsch
 	 */
-	public void startSkatSeries(int rounds, boolean unlimitedRounds, boolean onlyPlayRamsch, int sleepBetweenMoves) {
+	public void startSkatSeries(final int rounds, final boolean unlimitedRounds, final boolean onlyPlayRamsch,
+			final int sleepBetweenMoves) {
 
 		if (!isSeriesRunning()) {
 			// TODO save old series data?
@@ -185,7 +185,7 @@ public class SkatTable {
 	 *            New Player
 	 * @return TRUE if the player was placed correctly
 	 */
-	public boolean placePlayer(JSkatPlayer newPlayer) {
+	public boolean placePlayer(final JSkatPlayer newPlayer) {
 
 		boolean result = false;
 
@@ -233,7 +233,7 @@ public class SkatTable {
 	 * @param newView
 	 *            View
 	 */
-	public void setView(JSkatView newView) {
+	public void setView(final JSkatView newView) {
 
 		view = newView;
 	}
@@ -254,7 +254,7 @@ public class SkatTable {
 	 * @param newTableName
 	 *            Table name
 	 */
-	public void setName(String newTableName) {
+	public void setName(final String newTableName) {
 
 		tableName = newTableName;
 	}

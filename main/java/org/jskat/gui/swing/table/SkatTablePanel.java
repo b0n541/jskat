@@ -38,8 +38,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData.GameState;
@@ -53,6 +51,8 @@ import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Panel for a skat table
@@ -60,7 +60,7 @@ import org.jskat.util.Player;
 public class SkatTablePanel extends AbstractTabPanel {
 
 	private static final long serialVersionUID = 1L;
-	private static Log log = LogFactory.getLog(SkatTablePanel.class);
+	private static Logger log = LoggerFactory.getLogger(SkatTablePanel.class);
 
 	protected Map<String, Player> playerNamesAndPositions;
 

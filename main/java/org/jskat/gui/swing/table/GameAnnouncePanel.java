@@ -31,8 +31,6 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.JSkatOptions;
@@ -42,6 +40,8 @@ import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.JSkatResourceBundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Holds widgets for announcing a game
@@ -49,7 +49,7 @@ import org.jskat.util.JSkatResourceBundle;
 class GameAnnouncePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	static Log log = LogFactory.getLog(GameAnnouncePanel.class);
+	private static Logger log = LoggerFactory.getLogger(GameAnnouncePanel.class);
 
 	JSkatResourceBundle strings;
 	JSkatOptions options;

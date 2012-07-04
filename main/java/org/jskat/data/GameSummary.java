@@ -25,11 +25,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.control.SkatGame;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Game summary
@@ -38,7 +38,7 @@ import org.jskat.util.Player;
  */
 public class GameSummary {
 
-	static final Log log = LogFactory.getLog(GameSummary.class);
+	private static Logger log = LoggerFactory.getLogger(GameSummary.class);
 	/**
 	 * Fore hand player
 	 */
@@ -136,7 +136,7 @@ public class GameSummary {
 		 * @param gameType
 		 *            Game type
 		 */
-		public final void setGameType(GameType gameType) {
+		public final void setGameType(final GameType gameType) {
 			tmpSummary.gameType = gameType;
 		}
 
@@ -146,7 +146,7 @@ public class GameSummary {
 		 * @param isHand
 		 *            TRUE, if a hand game was announced
 		 */
-		public final void setHand(Boolean isHand) {
+		public final void setHand(final Boolean isHand) {
 			tmpSummary.hand = isHand;
 		}
 
@@ -156,7 +156,7 @@ public class GameSummary {
 		 * @param isOuvert
 		 *            TRUE, if an ouvert game was announced
 		 */
-		public final void setOuvert(Boolean isOuvert) {
+		public final void setOuvert(final Boolean isOuvert) {
 			tmpSummary.ouvert = isOuvert;
 		}
 
@@ -166,7 +166,7 @@ public class GameSummary {
 		 * @param isSchneider
 		 *            TRUE, if schneider was announced
 		 */
-		public final void setSchneider(Boolean isSchneider) {
+		public final void setSchneider(final Boolean isSchneider) {
 			tmpSummary.schneider = isSchneider;
 		}
 
@@ -176,7 +176,7 @@ public class GameSummary {
 		 * @param isSchwarz
 		 *            TRUE, if a schwarz was announced
 		 */
-		public final void setSchwarz(Boolean isSchwarz) {
+		public final void setSchwarz(final Boolean isSchwarz) {
 			tmpSummary.schwarz = isSchwarz;
 		}
 
@@ -186,12 +186,12 @@ public class GameSummary {
 		 * @param tricks
 		 *            Tricks of the game
 		 */
-		public final void setTricks(List<Trick> tricks) {
+		public final void setTricks(final List<Trick> tricks) {
 			tmpSummary.tricks.clear();
 			tmpSummary.tricks.addAll(tricks);
 		}
 
-		public final void setPlayerPoints(Map<Player, Integer> playerAndPoints) {
+		public final void setPlayerPoints(final Map<Player, Integer> playerAndPoints) {
 			tmpSummary.playerPoints.putAll(playerAndPoints);
 		}
 
@@ -201,7 +201,7 @@ public class GameSummary {
 		 * @param gameResult
 		 *            Game result
 		 */
-		public final void setGameResult(SkatGameResult gameResult) {
+		public final void setGameResult(final SkatGameResult gameResult) {
 			tmpSummary.gameResult = gameResult;
 		}
 
@@ -211,7 +211,7 @@ public class GameSummary {
 		 * @param name
 		 *            Name of fore hand player
 		 */
-		public final void setForeHand(String name) {
+		public final void setForeHand(final String name) {
 			tmpSummary.foreHand = name;
 		}
 
@@ -221,7 +221,7 @@ public class GameSummary {
 		 * @param name
 		 *            Name of middle hand player
 		 */
-		public final void setMiddleHand(String name) {
+		public final void setMiddleHand(final String name) {
 			tmpSummary.middleHand = name;
 		}
 
@@ -231,7 +231,7 @@ public class GameSummary {
 		 * @param name
 		 *            Name of rear hand player
 		 */
-		public final void setRearHand(String name) {
+		public final void setRearHand(final String name) {
 			tmpSummary.rearHand = name;
 		}
 
@@ -241,7 +241,7 @@ public class GameSummary {
 		 * @param position
 		 *            Position of declarer
 		 */
-		public final void setDeclarer(Player position) {
+		public final void setDeclarer(final Player position) {
 			tmpSummary.declarer = position;
 		}
 
@@ -473,7 +473,7 @@ public class GameSummary {
 	 *            Player
 	 * @return Points
 	 */
-	public int getPlayerPoints(Player player) {
+	public int getPlayerPoints(final Player player) {
 		return playerPoints.get(player).intValue();
 	}
 }

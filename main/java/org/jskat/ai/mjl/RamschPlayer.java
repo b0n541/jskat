@@ -20,12 +20,12 @@
  */
 package org.jskat.ai.mjl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.player.PlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.rule.SkatRule;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Markus J. Luzius <markus@luzius.de>
@@ -34,7 +34,7 @@ import org.jskat.util.rule.SkatRule;
 public class RamschPlayer extends AbstractCardPlayer {
 
 	/** log */
-	private Log log = LogFactory.getLog(RamschPlayer.class);
+	private static Logger log = LoggerFactory.getLogger(RamschPlayer.class);
 	private CardList cards;
 
 	/**
@@ -43,7 +43,7 @@ public class RamschPlayer extends AbstractCardPlayer {
 	 * @param id
 	 *            playerID
 	 */
-	public RamschPlayer(CardList cards, int id, SkatRule rules) {
+	public RamschPlayer(final CardList cards, final int id, final SkatRule rules) {
 		super(cards);
 		log.debug("Constructing new single player.");
 		this.playerID = id;
@@ -57,7 +57,8 @@ public class RamschPlayer extends AbstractCardPlayer {
 	 *            all necessary information about the game
 	 * @return index of the card to play
 	 */
-	public Card playNextCard(PlayerKnowledge knowledge) {
+	@Override
+	public Card playNextCard(final PlayerKnowledge knowledge) {
 		log.debug(".playNextCard(): Processing hand: " + cards);
 		log.debug(".playNextCard(): Not really implemented yet...");
 		int result = 0;
@@ -102,11 +103,11 @@ public class RamschPlayer extends AbstractCardPlayer {
 		return cards.remove(result);
 	}
 
-	private int playInitialCard(CardList cards) {
+	private int playInitialCard(final CardList cards) {
 		return cards.size() - 1;
 	}
 
-	private int playOtherCard(CardList cards, Card cardToMatch) {
+	private int playOtherCard(final CardList cards, final Card cardToMatch) {
 		return cards.size() - 1;
 	}
 
@@ -124,12 +125,12 @@ public class RamschPlayer extends AbstractCardPlayer {
 	 * 
 	 * @param i
 	 */
-	public void setPlayerID(int i) {
+	public void setPlayerID(final int i) {
 		playerID = i;
 	}
 
 	/** player id */
 	private int playerID = -1;
-	private SkatRule rules;
+	private final SkatRule rules;
 
 }

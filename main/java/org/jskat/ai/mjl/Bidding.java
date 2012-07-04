@@ -20,12 +20,12 @@
  */
 package org.jskat.ai.mjl;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.SkatConstants;
 import org.jskat.util.Suit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Markus J. Luzius <markus@luzius.de>
@@ -33,7 +33,7 @@ import org.jskat.util.Suit;
  */
 class Bidding {
 
-	private Log log = LogFactory.getLog(Bidding.class);
+	private static Logger log = LoggerFactory.getLogger(Bidding.class);
 
 	/**
 	 * Maximum value that the player will bid
@@ -47,7 +47,7 @@ class Bidding {
 	 * @param cards
 	 *            hand of the player
 	 */
-	Bidding(CardList cards) {
+	Bidding(final CardList cards) {
 		log.debug("Checking out what to bid with [" + cards + "]");
 
 		Suit mostFrequentSuitColor;
@@ -59,30 +59,27 @@ class Bidding {
 		int noOfJacks = Helper.countJacks(cards);
 
 		if (mostFrequentSuitColor == Suit.CLUBS) {
-			mostFrequentSuitColorValue = SkatConstants.getGameBaseValue(
-					GameType.CLUBS, false, false);
+			mostFrequentSuitColorValue = SkatConstants.getGameBaseValue(GameType.CLUBS, false, false);
 		} else if (mostFrequentSuitColor == Suit.SPADES) {
-			mostFrequentSuitColorValue = SkatConstants.getGameBaseValue(
-					GameType.SPADES, false, false);
+			mostFrequentSuitColorValue = SkatConstants.getGameBaseValue(GameType.SPADES, false, false);
 		} else if (mostFrequentSuitColor == Suit.HEARTS) {
-			mostFrequentSuitColorValue = SkatConstants.getGameBaseValue(
-					GameType.HEARTS, false, false);
+			mostFrequentSuitColorValue = SkatConstants.getGameBaseValue(GameType.HEARTS, false, false);
 		} else if (mostFrequentSuitColor == Suit.DIAMONDS) {
-			mostFrequentSuitColorValue = SkatConstants.getGameBaseValue(
-					GameType.DIAMONDS, false, false);
+			mostFrequentSuitColorValue = SkatConstants.getGameBaseValue(GameType.DIAMONDS, false, false);
 		}
 		maxBid = mostFrequentSuitColorValue * multiplier;
 
 		// but I will only play, if I have at least 1 jack and 4 color cards or
 		// 2 jacks and 3 color cards
-		if (noOfJacks < 3 && noOfTrumps < 4)
+		if (noOfJacks < 3 && noOfTrumps < 4) {
 			maxBid = 0;
-		else if (noOfJacks < 2 && noOfTrumps < 5)
+		} else if (noOfJacks < 2 && noOfTrumps < 5) {
 			maxBid = 0;
-		else if (noOfJacks < 1 && noOfTrumps < 6)
+		} else if (noOfJacks < 1 && noOfTrumps < 6) {
 			maxBid = 0;
-		else if ((Helper.getJacks(cards) & 12) == 0 && noOfTrumps < 5)
+		} else if ((Helper.getJacks(cards) & 12) == 0 && noOfTrumps < 5) {
 			maxBid = 0;
+		}
 
 		if (maxBid > 0) {
 			switch (mostFrequentSuitColor) {
@@ -101,9 +98,8 @@ class Bidding {
 			}
 		}
 
-		log.debug("I will bid until " + maxBid + " - I have " + noOfJacks
-				+ " Jacks and " + noOfTrumps + " Trumps in suit "
-				+ mostFrequentSuitColor);
+		log.debug("I will bid until " + maxBid + " - I have " + noOfJacks + " Jacks and " + noOfTrumps
+				+ " Trumps in suit " + mostFrequentSuitColor);
 	}
 
 	/**

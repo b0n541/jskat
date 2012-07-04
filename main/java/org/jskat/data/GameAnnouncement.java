@@ -20,10 +20,10 @@
  */
 package org.jskat.data;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Game announcement
@@ -32,7 +32,7 @@ import org.jskat.util.GameType;
  */
 public class GameAnnouncement {
 
-	static final Log log = LogFactory.getLog(GameAnnouncement.class);
+	private static Logger log = LoggerFactory.getLogger(GameAnnouncement.class);
 	/**
 	 * Game type
 	 */

@@ -22,8 +22,6 @@ package org.jskat.ai.rnd;
 
 import java.util.Random;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.player.AbstractJSkatPlayer;
@@ -31,13 +29,15 @@ import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Random player for testing purposes
  */
 public class AIPlayerRND extends AbstractJSkatPlayer {
 
-	private static Log log = LogFactory.getLog(AIPlayerRND.class);
+	private static Logger log = LoggerFactory.getLogger(AIPlayerRND.class);
 
 	/**
 	 * Random generator

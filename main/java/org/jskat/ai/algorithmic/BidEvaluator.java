@@ -20,13 +20,13 @@
  */
 package org.jskat.ai.algorithmic;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.ai.mjl.Helper;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.SkatConstants;
 import org.jskat.util.Suit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The BidEvaluator is the class to generate the acceptable bid value and to
@@ -37,7 +37,7 @@ import org.jskat.util.Suit;
  */
 class BidEvaluator {
 
-	private Log log = LogFactory.getLog(BidEvaluator.class);
+	private static Logger log = LoggerFactory.getLogger(BidEvaluator.class);
 
 	/**
 	 * Maximum value that the player will bid
@@ -51,7 +51,7 @@ class BidEvaluator {
 	 * @param cards
 	 *            hand of the player
 	 */
-	BidEvaluator(CardList cards) {
+	BidEvaluator(final CardList cards) {
 		log.debug("Checking out what to bid with [" + cards + "]" + cards.dumpFlag());
 		if (cards.size() < 10) {
 			log.warn("Not enough cards for bid evaluation!");
@@ -79,14 +79,15 @@ class BidEvaluator {
 
 		// but I will only play, if I have at least 1 jack and 4 color cards or
 		// 2 jacks and 3 color cards
-		if (noOfJacks < 3 && noOfTrumps < 4)
+		if (noOfJacks < 3 && noOfTrumps < 4) {
 			maxBid = 0;
-		else if (noOfJacks < 2 && noOfTrumps < 5)
+		} else if (noOfJacks < 2 && noOfTrumps < 5) {
 			maxBid = 0;
-		else if (noOfJacks < 1 && noOfTrumps < 6)
+		} else if (noOfJacks < 1 && noOfTrumps < 6) {
 			maxBid = 0;
-		else if ((Helper.getJacks(cards) & 3) == 0 && noOfTrumps < 5)
+		} else if ((Helper.getJacks(cards) & 3) == 0 && noOfTrumps < 5) {
 			maxBid = 0;
+		}
 
 		if (maxBid > 0) {
 			switch (mostFrequentSuitColor) {

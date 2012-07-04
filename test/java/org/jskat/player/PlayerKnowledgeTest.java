@@ -27,25 +27,24 @@ import static org.junit.Assert.assertTrue;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.AbstractJSkatTest;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.Trick;
-import org.jskat.player.PlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Test cases for class PlayerKnowledge
  */
 public class PlayerKnowledgeTest extends AbstractJSkatTest {
 
-	private static Log log = LogFactory.getLog(PlayerKnowledgeTest.class);
+	private static Logger log = LoggerFactory.getLogger(PlayerKnowledgeTest.class);
 
 	PlayerKnowledge knowledge;
 	Set<Card> playerCards;

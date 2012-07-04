@@ -31,19 +31,19 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.swing.JSkatGraphicRepository;
-import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.gui.swing.JSkatGraphicRepository.Icon;
 import org.jskat.gui.swing.JSkatGraphicRepository.IconSize;
+import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.JSkatResourceBundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Context panel for discarding
@@ -56,14 +56,12 @@ class SchieberamschContextPanel extends JPanel {
 	private static final String GRAND_HAND = "GRAND_HAND"; //$NON-NLS-1$
 	private static final String DISCARD = "DISCARD"; //$NON-NLS-1$
 	private static final long serialVersionUID = 1L;
-	@SuppressWarnings("unused")
-	private static Log log = LogFactory.getLog(SchieberamschContextPanel.class);
+	private static Logger log = LoggerFactory.getLogger(SchieberamschContextPanel.class);
 
-	private DiscardPanel discardPanel;
+	private final DiscardPanel discardPanel;
 	JPanel centerPanel;
 
-	SchieberamschContextPanel(ActionMap actions, JSkatUserPanel newUserPanel,
-			int maxCards) {
+	SchieberamschContextPanel(final ActionMap actions, final JSkatUserPanel newUserPanel, final int maxCards) {
 
 		setLayout(LayoutFactory.getMigLayout("fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 
@@ -88,7 +86,7 @@ class SchieberamschContextPanel extends JPanel {
 		resetPanel();
 	}
 
-	public JPanel getGrandHandSchiebeRamschPanel(ActionMap actions) {
+	public JPanel getGrandHandSchiebeRamschPanel(final ActionMap actions) {
 		JPanel result = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
 		JPanel question = new JPanel();
@@ -104,7 +102,7 @@ class SchieberamschContextPanel extends JPanel {
 		grandHandButton.setText(strings.getString("yes")); //$NON-NLS-1$
 		grandHandButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				try {
 					GameAnnouncement ann = getGameAnnouncement();
 
@@ -129,7 +127,7 @@ class SchieberamschContextPanel extends JPanel {
 		schieberamschButton.setText(strings.getString("no")); //$NON-NLS-1$
 		schieberamschButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				try {
 					showPanel(DISCARD);
 				} catch (IllegalArgumentException except) {
@@ -159,11 +157,11 @@ class SchieberamschContextPanel extends JPanel {
 		showPanel(GRAND_HAND);
 	}
 
-	void showPanel(String panelName) {
+	void showPanel(final String panelName) {
 		((CardLayout) centerPanel.getLayout()).show(centerPanel, panelName);
 	}
 
-	public void removeCard(Card card) {
+	public void removeCard(final Card card) {
 		discardPanel.removeCard(card);
 	}
 
@@ -171,11 +169,11 @@ class SchieberamschContextPanel extends JPanel {
 		return discardPanel.isHandFull();
 	}
 
-	public void addCard(Card card) {
+	public void addCard(final Card card) {
 		discardPanel.addCard(card);
 	}
 
-	public void setSkat(CardList skat) {
+	public void setSkat(final CardList skat) {
 		discardPanel.setSkat(skat);
 	}
 }
