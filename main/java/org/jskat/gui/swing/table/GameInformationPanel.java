@@ -40,7 +40,7 @@ class GameInformationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	// private JSkatGraphicRepository bitmaps;
-	private JSkatResourceBundle strings;
+	private final JSkatResourceBundle strings;
 
 	private JLabel label;
 
@@ -88,7 +88,7 @@ class GameInformationPanel extends JPanel {
 		this.label.setText(" "); //$NON-NLS-1$
 	}
 
-	void setGameState(GameState newGameState) {
+	void setGameState(final GameState newGameState) {
 
 		gameState = newGameState;
 
@@ -100,7 +100,7 @@ class GameInformationPanel extends JPanel {
 		refreshText();
 	}
 
-	void setGameAnnouncement(GameAnnouncement announcement) {
+	void setGameAnnouncement(final GameAnnouncement announcement) {
 		gameType = announcement.getGameType();
 		handGame = announcement.isHand();
 		ouvertGame = announcement.isOuvert();
@@ -178,7 +178,7 @@ class GameInformationPanel extends JPanel {
 			}
 			text += " - "; //$NON-NLS-1$
 
-			text += strings.getString("declarer") + ": " + declarerPoints + " " + strings.getString("points"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+			text += strings.getString("declarer") + ": " + declarerPoints + " " + strings.getString("points"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ 
 			text += ", " + strings.getString("opponents") + ": " //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 					+ opponentPoints + " " + strings.getString("points"); //$NON-NLS-1$//$NON-NLS-2$
 		}
@@ -186,7 +186,7 @@ class GameInformationPanel extends JPanel {
 		label.setText(text);
 	}
 
-	void setGameSummary(GameSummary summary) {
+	void setGameSummary(final GameSummary summary) {
 
 		multiplier = summary.getGameMultiplier();
 		playWithJacks = summary.isGamePlayedWithJacks();
@@ -197,7 +197,7 @@ class GameInformationPanel extends JPanel {
 		refreshText();
 	}
 
-	String getGameStateString(GameState state) {
+	String getGameStateString(final GameState state) {
 
 		String result = null;
 
@@ -224,6 +224,8 @@ class GameInformationPanel extends JPanel {
 			result = strings.getString("game_start_phase"); //$NON-NLS-1$
 			break;
 		case PICKING_UP_SKAT:
+		case RAMSCH_GRAND_HAND_ANNOUNCING:
+		case SCHIEBERAMSCH:
 			result = strings.getString("pick_up_skat_phase"); //$NON-NLS-1$
 			break;
 		case PRELIMINARY_GAME_END:
@@ -243,7 +245,7 @@ class GameInformationPanel extends JPanel {
 	 * @param trickNumber
 	 *            Trick number
 	 */
-	public void setTrickNumber(int trickNumber) {
+	public void setTrickNumber(final int trickNumber) {
 
 		trick = trickNumber;
 		refreshText();
@@ -255,7 +257,7 @@ class GameInformationPanel extends JPanel {
 	 * @param newGameNumber
 	 *            Game number
 	 */
-	public void setGameNumber(int newGameNumber) {
+	public void setGameNumber(final int newGameNumber) {
 
 		gameNumber = newGameNumber;
 		refreshText();
