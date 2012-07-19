@@ -29,7 +29,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	private MLDataSet trainingSet;
 
 	private final List<MLDataPair> dataPairList = new ArrayList<MLDataPair>();
-	private final int MAX_SIZE = 100;
+	private final int MAX_SIZE = 10;
 	private int currentIndex = -1;
 
 	/**
