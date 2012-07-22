@@ -65,20 +65,19 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 	private final List<GameType> feasibleGameTypes = new ArrayList<GameType>();
 
-	private final double[] netInputs = new double[1089];
-	private final double[] netOutputs = new double[1];
+	private final static int INPUT_LENGTH = 1089;
 	private final static int PLAYER_LENGTH = 363;
 	private final static long MAX_SIMULATIONS = 50;
 
 	// 1.0 and 2.0 for tanh function
 	// 2.0 and 4.0 for sigmoid function
-	private static double HAS_CARD = 4.0d;
-	private static double COULD_HAVE_CARD = 2.0d;
+	private static double HAS_CARD = 1.0d;
+	private static double COULD_HAVE_CARD = 0.5d;
 	private static double DOESNT_HAVE_CARD = 0.0d;
-	private static double PLAYED_CARD = -2.0d;
-	private static double PLAYED_CARD_IN_TRICK = -4.0d;
+	private static double PLAYED_CARD = -0.5d;
+	private static double PLAYED_CARD_IN_TRICK = -1.0d;
 
-	private static double ACTIVE = 4.0d;
+	private static double ACTIVE = 1.0d;
 	private static double INACTIVE = 0.0d;
 
 	// won game 1.0 and lost game -1.0 for tanh function
@@ -120,8 +119,9 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	}
 
 	private void initInputBuffer() {
+		allInputs.clear();
 		for (int i = 0; i < 10; i++) {
-			allInputs.add(new double[netInputs.length]);
+			allInputs.add(new double[INPUT_LENGTH]);
 		}
 	}
 
@@ -407,10 +407,10 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 				log.debug("Testing card " + card); //$NON-NLS-1$
 
-				setNetInputs(card);
+				double[] inputs = setNetInputs(card);
 
-				cardInputs.put(card, netInputs.clone());
-				double currOutput = net.getPredictedOutcome(netInputs);
+				cardInputs.put(card, inputs);
+				double currOutput = net.getPredictedOutcome(inputs);
 				log.warn("net output: " + currOutput); //$NON-NLS-1$
 
 				if (currOutput > highestOutput) {
@@ -450,16 +450,6 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		return possibleCards.get(bestCardIndex);
 	}
 
-	private void printInputs() {
-		String message = new String();
-
-		for (int i = 0; i < netInputs.length; i++) {
-			message = message + netInputs[i] + " ";
-		}
-
-		log.warn(message);
-	}
-
 	private void storeInputParameters(final int trick, final double[] inputParameters) {
 
 		double[] trickInputs = allInputs.get(trick);
@@ -485,8 +475,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 */
 	double[] setNetInputs(final Card cardToPlay) {
 
-		// clear the inputs
-		Arrays.fill(netInputs, 0.0);
+		double[] netInputs = new double[INPUT_LENGTH];
 
 		// set game declarer
 		setDeclarerInputs(netInputs, PLAYER_LENGTH);
@@ -731,14 +720,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	@Override
 	public void preparateForNewGame() {
 
-		resetInputBuffer();
 		bestGameTypeFromDiscarding = null;
-	}
-
-	private void resetInputBuffer() {
-		for (double[] inputs : allInputs) {
-			Arrays.fill(inputs, 0.0);
-		}
 	}
 
 	/**
@@ -752,6 +734,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			// from last trick to first trick
 			adjustNeuralNetworks(allInputs);
 		}
+		initInputBuffer();
 	}
 
 	private void adjustNeuralNetworks(final List<double[]> inputs) {
@@ -779,14 +762,14 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 					}
 				}
 			}
-			netOutputs[0] = output;
+			double[] outputs = new double[]{output};
 
 			List<INeuralNetwork> networks = SkatNetworks.getNetwork(knowledge.getGame().getGameType(), isDeclarer());
 
 			int index = 0;
 			for (double[] inputParam : inputs) {
 				INeuralNetwork net = networks.get(index);
-				net.adjustWeights(inputParam, netOutputs);
+				net.adjustWeights(inputParam, outputs);
 				index++;
 			}
 		}
