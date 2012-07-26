@@ -790,6 +790,7 @@ public class PlayerKnowledge {
 
 		game = gameAnn;
 		if (!GameType.PASSED_IN.equals(getGameType())) {
+			ownCards.sort(getGameType());
 			for (Card c : ownCards) {
 				// FIXME (jansch 21.09.2011) Cards shouldn't check whether they
 				// are trump or not, let skat rules do the job
