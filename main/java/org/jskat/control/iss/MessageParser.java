@@ -63,7 +63,8 @@ public class MessageParser {
 	 * xskat:2 $ 0 0 0 0 0 0 1 1 <br>
 	 * . . 0 0 0 0 0 0 0 0 false <br>
 	 */
-	static TablePanelStatus getTableStatus(final String loginName, final List<String> params) {
+	static TablePanelStatus getTableStatus(final String loginName,
+			final List<String> params) {
 
 		TablePanelStatus status = new TablePanelStatus();
 
@@ -76,7 +77,8 @@ public class MessageParser {
 			// parse only non empty seats
 			if (!(".".equals(params.get(i * 10 + 5)))) { //$NON-NLS-1$
 				// there is player information
-				PlayerStatus playerStatus = parsePlayerStatus(params.subList(i * 10 + 5, i * 10 + 16));
+				PlayerStatus playerStatus = parsePlayerStatus(params.subList(
+						i * 10 + 5, i * 10 + 16));
 				// has player left already
 				if (".".equals(params.get(i + 1))) { //$NON-NLS-1$
 					playerStatus.setPlayerLeft(true);
@@ -116,7 +118,8 @@ public class MessageParser {
 		return status;
 	}
 
-	static GameStartInformation getGameStartStatus(final String loginName, final List<String> params) {
+	static GameStartInformation getGameStartStatus(final String loginName,
+			final List<String> params) {
 
 		log.debug("game start parameter: " + params); //$NON-NLS-1$
 
@@ -168,7 +171,8 @@ public class MessageParser {
 			info.setType(MoveType.SHOW_CARDS);
 			if (move.length() > 2) {
 				// declarer cards follow, SC could also stand allone
-				info.setOuvertCards(parseSkatCards(move.substring(move.indexOf(".") + 1))); //$NON-NLS-1$
+				info.setOuvertCards(parseSkatCards(move.substring(move
+						.indexOf(".") + 1))); //$NON-NLS-1$
 			}
 		} else if (move.startsWith("LE.")) { //$NON-NLS-1$
 			// one player left the table during the game
@@ -222,11 +226,15 @@ public class MessageParser {
 		return info;
 	}
 
-	static void parsePlayerTimes(final List<String> params, final MoveInformation info) {
+	static void parsePlayerTimes(final List<String> params,
+			final MoveInformation info) {
 		// parse player times
-		info.putPlayerTime(Player.FOREHAND, new Double(params.get(params.size() - 3)));
-		info.putPlayerTime(Player.MIDDLEHAND, new Double(params.get(params.size() - 2)));
-		info.putPlayerTime(Player.REARHAND, new Double(params.get(params.size() - 1)));
+		info.putPlayerTime(Player.FOREHAND,
+				new Double(params.get(params.size() - 3)));
+		info.putPlayerTime(Player.MIDDLEHAND,
+				new Double(params.get(params.size() - 2)));
+		info.putPlayerTime(Player.REARHAND,
+				new Double(params.get(params.size() - 1)));
 	}
 
 	private static CardList parseSkatCards(final String move) {
@@ -241,7 +249,8 @@ public class MessageParser {
 		return result;
 	}
 
-	private static void getMovePlayer(final String movePlayer, final MoveInformation info) {
+	private static void getMovePlayer(final String movePlayer,
+			final MoveInformation info) {
 
 		log.debug("Move player: " + movePlayer); //$NON-NLS-1$
 		if ("w".equals(movePlayer)) { //$NON-NLS-1$
@@ -264,45 +273,48 @@ public class MessageParser {
 	 * [H] (hand, not given if O + trump game) [S] (schneider announced, only in
 	 * H games, not if O or Z) [Z] (schwarz announced, only in H games)
 	 */
-	private static GameAnnouncement parseGameAnnoucement(final MoveInformation info, final String move) {
+	private static GameAnnouncement parseGameAnnoucement(
+			final MoveInformation info, final String move) {
 
 		StringTokenizer annToken = new StringTokenizer(move, "."); //$NON-NLS-1$
-		String gameType = annToken.nextToken();
+		String gameTypeString = annToken.nextToken();
 
 		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 
 		// at first the game type
-		if (gameType.startsWith("G")) { //$NON-NLS-1$
+		GameType gameType = null;
+		if (gameTypeString.startsWith("G")) { //$NON-NLS-1$
 
-			factory.setGameType(GameType.GRAND);
+			gameType = GameType.GRAND;
 
-		} else if (gameType.startsWith("C")) { //$NON-NLS-1$
+		} else if (gameTypeString.startsWith("C")) { //$NON-NLS-1$
 
-			factory.setGameType(GameType.CLUBS);
+			gameType = GameType.CLUBS;
 
-		} else if (gameType.startsWith("S")) { //$NON-NLS-1$
+		} else if (gameTypeString.startsWith("S")) { //$NON-NLS-1$
 
-			factory.setGameType(GameType.SPADES);
+			gameType = GameType.SPADES;
 
-		} else if (gameType.startsWith("H")) { //$NON-NLS-1$
+		} else if (gameTypeString.startsWith("H")) { //$NON-NLS-1$
 
-			factory.setGameType(GameType.HEARTS);
+			gameType = GameType.HEARTS;
 
-		} else if (gameType.startsWith("D")) { //$NON-NLS-1$
+		} else if (gameTypeString.startsWith("D")) { //$NON-NLS-1$
 
-			factory.setGameType(GameType.DIAMONDS);
+			gameType = GameType.DIAMONDS;
 
-		} else if (gameType.startsWith("N")) { //$NON-NLS-1$
+		} else if (gameTypeString.startsWith("N")) { //$NON-NLS-1$
 
-			factory.setGameType(GameType.NULL);
+			gameType = GameType.NULL;
 		}
+		factory.setGameType(gameType);
 
 		boolean handGame = false;
 		boolean ouvertGame = false;
 		// parse other game modifiers
-		for (int i = 1; i < gameType.length(); i++) {
+		for (int i = 1; i < gameTypeString.length(); i++) {
 
-			char mod = gameType.charAt(i);
+			char mod = gameTypeString.charAt(i);
 
 			if (mod == 'O') {
 
@@ -327,18 +339,26 @@ public class MessageParser {
 
 				CardList ouvertCards = new CardList();
 
+				int cardNo = 0;
 				while (annToken.hasMoreTokens()) {
-					// player has shown the cards
-					// ouvert game
-					ouvertCards.add(Card.getCardFromString(annToken.nextToken()));
+					// player has shown the cards --> ouvert game
+					String nextCard = annToken.nextToken();
+
+					if (gameType != GameType.NULL
+							|| (gameType == GameType.NULL && cardNo != 0 && cardNo != 1)) {
+						ouvertCards.add(Card.getCardFromString(nextCard));
+					}
+					cardNo++;
 				}
 
 				info.setOuvertCards(ouvertCards);
 
 			} else if (!handGame) {
 
-				Card discardCard0 = Card.getCardFromString(annToken.nextToken());
-				Card discardCard1 = Card.getCardFromString(annToken.nextToken());
+				Card discardCard0 = Card
+						.getCardFromString(annToken.nextToken());
+				Card discardCard1 = Card
+						.getCardFromString(annToken.nextToken());
 
 				CardList discardedCards = new CardList();
 				discardedCards.add(discardCard0);
@@ -474,8 +494,8 @@ public class MessageParser {
 		return result;
 	}
 
-	private static void parseSummaryPart(final SkatGameData result, final String summaryPartMarker,
-			final String summaryPart) {
+	private static void parseSummaryPart(final SkatGameData result,
+			final String summaryPartMarker, final String summaryPart) {
 
 		if ("P0".equals(summaryPartMarker)) { //$NON-NLS-1$
 
@@ -499,7 +519,8 @@ public class MessageParser {
 		}
 	}
 
-	private static void parseMoves(final SkatGameData result, final String summaryPart) {
+	private static void parseMoves(final SkatGameData result,
+			final String summaryPart) {
 
 		// FIXME (jansch 12.02.2012) parse moves correctly
 		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
@@ -518,11 +539,13 @@ public class MessageParser {
 
 			switch (moveInfo.getType()) {
 			case DEAL:
-				result.setDealtSkatCards(moveInfo.getSkat().get(0), moveInfo.getSkat().get(1));
+				result.setDealtSkatCards(moveInfo.getSkat().get(0), moveInfo
+						.getSkat().get(1));
 				break;
 			case BID:
 				result.setBidValue(moveInfo.getBidValue());
-				result.setPlayerBid(moveInfo.getPlayer(), moveInfo.getBidValue());
+				result.setPlayerBid(moveInfo.getPlayer(),
+						moveInfo.getBidValue());
 				break;
 			case HOLD_BID:
 				result.setPlayerBid(moveInfo.getPlayer(), result.getBidValue());
@@ -540,24 +563,29 @@ public class MessageParser {
 				} else if (result.getCurrentTrick().getThirdCard() != null) {
 					// last card of trick is played
 					// set trick winner
-					result.getCurrentTrick().setTrickWinner(moveInfo.getPlayer());
+					result.getCurrentTrick().setTrickWinner(
+							moveInfo.getPlayer());
 					// create next trick
-					result.addTrick(new Trick(result.getTricks().size(), moveInfo.getPlayer()));
+					result.addTrick(new Trick(result.getTricks().size(),
+							moveInfo.getPlayer()));
 				}
 				result.setTrickCard(moveInfo.getPlayer(), moveInfo.getCard());
 
-				if (result.getTricks().size() == 10 && result.getCurrentTrick().getThirdCard() != null) {
+				if (result.getTricks().size() == 10
+						&& result.getCurrentTrick().getThirdCard() != null) {
 					// set the trick winner of the last trick
-					SkatRule skatRules = SkatRuleFactory.getSkatRules(result.getGameType());
-					result.setTrickWinner(9,
-							skatRules.calculateTrickWinner(result.getGameType(), result.getCurrentTrick()));
+					SkatRule skatRules = SkatRuleFactory.getSkatRules(result
+							.getGameType());
+					result.setTrickWinner(9, skatRules.calculateTrickWinner(
+							result.getGameType(), result.getCurrentTrick()));
 				}
 				break;
 			}
 		}
 	}
 
-	private static void parseGameResult(final SkatGameData result, final String summaryPart) {
+	private static void parseGameResult(final SkatGameData result,
+			final String summaryPart) {
 
 		StringTokenizer token = new StringTokenizer(summaryPart);
 
@@ -567,7 +595,8 @@ public class MessageParser {
 		}
 	}
 
-	private static void parseResultToken(final SkatGameData gameData, final String token) {
+	private static void parseResultToken(final SkatGameData gameData,
+			final String token) {
 
 		// from ISS source code
 		// return "d:"+declarer + (penalty ? " penalty" : (declValue > 0 ? "
@@ -599,7 +628,8 @@ public class MessageParser {
 
 		} else if (token.startsWith("v:")) { //$NON-NLS-1$
 
-			gameData.getResult().setGameValue(Integer.parseInt(token.substring(2)));
+			gameData.getResult().setGameValue(
+					Integer.parseInt(token.substring(2)));
 
 		} else if (token.startsWith("p:")) { //$NON-NLS-1$
 
@@ -622,7 +652,8 @@ public class MessageParser {
 		}
 	}
 
-	private static void parseDeclarerToken(final SkatGameData result, final String token) {
+	private static void parseDeclarerToken(final SkatGameData result,
+			final String token) {
 
 		if ("d:0".equals(token)) { //$NON-NLS-1$
 			result.setDeclarer(Player.FOREHAND);
@@ -641,7 +672,8 @@ public class MessageParser {
 	 * remainings is the chat message<br>
 	 * asdf jklö
 	 */
-	static ChatMessage getTableChatMessage(final String tableName, final List<String> detailParams) {
+	static ChatMessage getTableChatMessage(final String tableName,
+			final List<String> detailParams) {
 
 		StringBuffer text = new StringBuffer();
 

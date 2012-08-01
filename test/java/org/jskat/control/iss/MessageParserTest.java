@@ -84,16 +84,26 @@ public class MessageParserTest extends AbstractJSkatTest {
 
 		List<Trick> tricks = gameData.getTricks();
 
-		checkTrick(tricks.get(0), Player.FOREHAND, Card.SA, Card.S7, Card.DA, Player.REARHAND);
-		checkTrick(tricks.get(1), Player.REARHAND, Card.HJ, Card.SJ, Card.D9, Player.FOREHAND);
-		checkTrick(tricks.get(2), Player.FOREHAND, Card.DQ, Card.DJ, Card.D7, Player.MIDDLEHAND);
-		checkTrick(tricks.get(3), Player.MIDDLEHAND, Card.CJ, Card.D8, Card.CQ, Player.MIDDLEHAND);
-		checkTrick(tricks.get(4), Player.MIDDLEHAND, Card.CA, Card.C7, Card.C9, Player.MIDDLEHAND);
-		checkTrick(tricks.get(5), Player.MIDDLEHAND, Card.S9, Card.DT, Card.S8, Player.REARHAND);
-		checkTrick(tricks.get(6), Player.REARHAND, Card.CT, Card.H7, Card.C8, Player.REARHAND);
-		checkTrick(tricks.get(7), Player.REARHAND, Card.CK, Card.H9, Card.HQ, Player.REARHAND);
-		checkTrick(tricks.get(8), Player.REARHAND, Card.HK, Card.HA, Card.SQ, Player.FOREHAND);
-		checkTrick(tricks.get(9), Player.FOREHAND, Card.SK, Card.DK, Card.HT, Player.MIDDLEHAND);
+		checkTrick(tricks.get(0), Player.FOREHAND, Card.SA, Card.S7, Card.DA,
+				Player.REARHAND);
+		checkTrick(tricks.get(1), Player.REARHAND, Card.HJ, Card.SJ, Card.D9,
+				Player.FOREHAND);
+		checkTrick(tricks.get(2), Player.FOREHAND, Card.DQ, Card.DJ, Card.D7,
+				Player.MIDDLEHAND);
+		checkTrick(tricks.get(3), Player.MIDDLEHAND, Card.CJ, Card.D8, Card.CQ,
+				Player.MIDDLEHAND);
+		checkTrick(tricks.get(4), Player.MIDDLEHAND, Card.CA, Card.C7, Card.C9,
+				Player.MIDDLEHAND);
+		checkTrick(tricks.get(5), Player.MIDDLEHAND, Card.S9, Card.DT, Card.S8,
+				Player.REARHAND);
+		checkTrick(tricks.get(6), Player.REARHAND, Card.CT, Card.H7, Card.C8,
+				Player.REARHAND);
+		checkTrick(tricks.get(7), Player.REARHAND, Card.CK, Card.H9, Card.HQ,
+				Player.REARHAND);
+		checkTrick(tricks.get(8), Player.REARHAND, Card.HK, Card.HA, Card.SQ,
+				Player.FOREHAND);
+		checkTrick(tricks.get(9), Player.FOREHAND, Card.SK, Card.DK, Card.HT,
+				Player.MIDDLEHAND);
 
 		assertFalse(gameData.isGameWon());
 		assertEquals(-54, gameData.getResult().getGameValue());
@@ -104,14 +114,21 @@ public class MessageParserTest extends AbstractJSkatTest {
 		assertFalse(gameData.isOverBidded());
 	}
 
-	private static void checkTrick(final Trick trick, final Player trickForeHand, final Card firstCard,
-			final Card secondCard, final Card thirdCard, final Player trickWinner) {
+	private static void checkTrick(final Trick trick,
+			final Player trickForeHand, final Card firstCard,
+			final Card secondCard, final Card thirdCard,
+			final Player trickWinner) {
 		int trickNo = trick.getTrickNumberInGame();
-		assertEquals("Wrong trick fore hand for trick " + trickNo, trickForeHand, trick.getForeHand()); //$NON-NLS-1$
-		assertEquals("Wrong first card for trick " + trickNo, firstCard, trick.getFirstCard()); //$NON-NLS-1$
-		assertEquals("Wrong second card for trick " + trickNo, secondCard, trick.getSecondCard()); //$NON-NLS-1$
-		assertEquals("Wrong third card for trick " + trickNo, thirdCard, trick.getThirdCard()); //$NON-NLS-1$
-		assertEquals("Wrong trick winner for trick " + trickNo, trickWinner, trick.getTrickWinner()); //$NON-NLS-1$
+		assertEquals(
+				"Wrong trick fore hand for trick " + trickNo, trickForeHand, trick.getForeHand()); //$NON-NLS-1$
+		assertEquals(
+				"Wrong first card for trick " + trickNo, firstCard, trick.getFirstCard()); //$NON-NLS-1$
+		assertEquals(
+				"Wrong second card for trick " + trickNo, secondCard, trick.getSecondCard()); //$NON-NLS-1$
+		assertEquals(
+				"Wrong third card for trick " + trickNo, thirdCard, trick.getThirdCard()); //$NON-NLS-1$
+		assertEquals(
+				"Wrong trick winner for trick " + trickNo, trickWinner, trick.getTrickWinner()); //$NON-NLS-1$
 	}
 
 	/**
@@ -149,16 +166,26 @@ public class MessageParserTest extends AbstractJSkatTest {
 
 		List<Trick> tricks = gameData.getTricks();
 
-		checkTrick(tricks.get(0), Player.FOREHAND, Card.DK, Card.DA, Card.D8, Player.MIDDLEHAND);
-		checkTrick(tricks.get(1), Player.MIDDLEHAND, Card.DT, Card.D9, Card.ST, Player.MIDDLEHAND);
-		checkTrick(tricks.get(2), Player.MIDDLEHAND, Card.SA, Card.CJ, Card.S7, Player.REARHAND);
-		checkTrick(tricks.get(3), Player.REARHAND, Card.HJ, Card.CT, Card.DJ, Player.REARHAND);
-		checkTrick(tricks.get(4), Player.REARHAND, Card.DQ, Card.C7, Card.D7, Player.REARHAND);
-		checkTrick(tricks.get(5), Player.REARHAND, Card.HA, Card.H7, Card.H8, Player.REARHAND);
-		checkTrick(tricks.get(6), Player.REARHAND, Card.HT, Card.HK, Card.C8, Player.REARHAND);
-		checkTrick(tricks.get(7), Player.REARHAND, Card.HQ, Card.S9, Card.CQ, Player.REARHAND);
-		checkTrick(tricks.get(8), Player.REARHAND, Card.H9, Card.SQ, Card.CK, Player.REARHAND);
-		checkTrick(tricks.get(9), Player.REARHAND, Card.SJ, Card.SK, Card.CA, Player.REARHAND);
+		checkTrick(tricks.get(0), Player.FOREHAND, Card.DK, Card.DA, Card.D8,
+				Player.MIDDLEHAND);
+		checkTrick(tricks.get(1), Player.MIDDLEHAND, Card.DT, Card.D9, Card.ST,
+				Player.MIDDLEHAND);
+		checkTrick(tricks.get(2), Player.MIDDLEHAND, Card.SA, Card.CJ, Card.S7,
+				Player.REARHAND);
+		checkTrick(tricks.get(3), Player.REARHAND, Card.HJ, Card.CT, Card.DJ,
+				Player.REARHAND);
+		checkTrick(tricks.get(4), Player.REARHAND, Card.DQ, Card.C7, Card.D7,
+				Player.REARHAND);
+		checkTrick(tricks.get(5), Player.REARHAND, Card.HA, Card.H7, Card.H8,
+				Player.REARHAND);
+		checkTrick(tricks.get(6), Player.REARHAND, Card.HT, Card.HK, Card.C8,
+				Player.REARHAND);
+		checkTrick(tricks.get(7), Player.REARHAND, Card.HQ, Card.S9, Card.CQ,
+				Player.REARHAND);
+		checkTrick(tricks.get(8), Player.REARHAND, Card.H9, Card.SQ, Card.CK,
+				Player.REARHAND);
+		checkTrick(tricks.get(9), Player.REARHAND, Card.SJ, Card.SK, Card.CA,
+				Player.REARHAND);
 
 		assertTrue(gameData.isGameWon());
 		assertEquals(96, gameData.getResult().getGameValue());
@@ -269,7 +296,8 @@ public class MessageParserTest extends AbstractJSkatTest {
 			detailParams.add(token.nextToken());
 		}
 
-		TablePanelStatus status = MessageParser.getTableStatus(creator, detailParams);
+		TablePanelStatus status = MessageParser.getTableStatus(creator,
+				detailParams);
 
 		assertEquals(3, status.getMaxPlayers());
 		assertEquals(3, status.getPlayerInformations().size());
@@ -303,7 +331,8 @@ public class MessageParserTest extends AbstractJSkatTest {
 			detailParams.add(token.nextToken());
 		}
 
-		MoveInformation moveInfo = MessageParser.getMoveInformation(detailParams);
+		MoveInformation moveInfo = MessageParser
+				.getMoveInformation(detailParams);
 
 		assertEquals(MoveType.RESIGN, moveInfo.getType());
 	}
@@ -326,7 +355,8 @@ public class MessageParserTest extends AbstractJSkatTest {
 			detailParams.add(token.nextToken());
 		}
 
-		MoveInformation moveInfo = MessageParser.getMoveInformation(detailParams);
+		MoveInformation moveInfo = MessageParser
+				.getMoveInformation(detailParams);
 
 		assertEquals(MoveType.SHOW_CARDS, moveInfo.getType());
 		CardList ouvertCards = moveInfo.getOuvertCards();
@@ -340,13 +370,12 @@ public class MessageParserTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * Tests the announcing of an ouvert game
+	 * Tests the announcing of an null ouvert game
 	 */
 	@Test
-	public void testParseTableUpdateOuvertGame() {
+	public void testParseTableUpdateNullOuvertGame_JSkatUser() {
 
-		String ouvertGame = "table .1 foo play 2 SO.D7.DK.HJ.HQ.HK.S7.S9.ST.SK.C7 180.0 174.2 160.9"; //$NON-NLS-1$
-
+		String ouvertGame = "table .0 foo play 1 NO.DJ.SA.D8.D9.DQ.H8.HT.HQ.C7.C8.CK.CA 237.6 225.8 237.7"; //$NON-NLS-1$
 		StringTokenizer token = new StringTokenizer(ouvertGame);
 		token.nextToken(); // table
 		token.nextToken(); // .1
@@ -357,25 +386,230 @@ public class MessageParserTest extends AbstractJSkatTest {
 			detailParams.add(token.nextToken());
 		}
 
-		MoveInformation moveInfo = MessageParser.getMoveInformation(detailParams);
+		MoveInformation moveInfo = MessageParser
+				.getMoveInformation(detailParams);
+
+		assertEquals(MoveType.GAME_ANNOUNCEMENT, moveInfo.getType());
+
+		GameAnnouncement announcement = moveInfo.getGameAnnouncement();
+		assertEquals(GameType.NULL, announcement.getGameType());
+		assertTrue(announcement.isOuvert());
+
+		CardList ouvertCards = moveInfo.getOuvertCards();
+		assertEquals(10, ouvertCards.size());
+		assertTrue(ouvertCards.contains(Card.D8));
+		assertTrue(ouvertCards.contains(Card.D9));
+		assertTrue(ouvertCards.contains(Card.DQ));
+		assertTrue(ouvertCards.contains(Card.H8));
+		assertTrue(ouvertCards.contains(Card.HT));
+		assertTrue(ouvertCards.contains(Card.HQ));
+		assertTrue(ouvertCards.contains(Card.C7));
+		assertTrue(ouvertCards.contains(Card.C8));
+		assertTrue(ouvertCards.contains(Card.CK));
+		assertTrue(ouvertCards.contains(Card.CA));
+	}
+
+	/**
+	 * Tests the announcing of an null ouvert game
+	 */
+	@Test
+	public void testParseTableUpdateNullOuvertGame_OtherPlayer() {
+
+		String ouvertGame = "table .0 foo play 1 NO.??.??.D8.D9.DQ.H8.HT.HQ.C7.C8.CK.CA 237.6 225.8 237.7"; //$NON-NLS-1$
+		StringTokenizer token = new StringTokenizer(ouvertGame);
+		token.nextToken(); // table
+		token.nextToken(); // .1
+		String creator = token.nextToken(); // foo
+		token.nextToken(); // play
+		List<String> detailParams = new ArrayList<String>();
+		while (token.hasMoreTokens()) {
+			detailParams.add(token.nextToken());
+		}
+
+		MoveInformation moveInfo = MessageParser
+				.getMoveInformation(detailParams);
+
+		assertEquals(MoveType.GAME_ANNOUNCEMENT, moveInfo.getType());
+
+		GameAnnouncement announcement = moveInfo.getGameAnnouncement();
+		assertEquals(GameType.NULL, announcement.getGameType());
+		assertTrue(announcement.isOuvert());
+
+		CardList ouvertCards = moveInfo.getOuvertCards();
+		assertEquals(10, ouvertCards.size());
+		assertTrue(ouvertCards.contains(Card.D8));
+		assertTrue(ouvertCards.contains(Card.D9));
+		assertTrue(ouvertCards.contains(Card.DQ));
+		assertTrue(ouvertCards.contains(Card.H8));
+		assertTrue(ouvertCards.contains(Card.HT));
+		assertTrue(ouvertCards.contains(Card.HQ));
+		assertTrue(ouvertCards.contains(Card.C7));
+		assertTrue(ouvertCards.contains(Card.C8));
+		assertTrue(ouvertCards.contains(Card.CK));
+		assertTrue(ouvertCards.contains(Card.CA));
+	}
+
+	/**
+	 * Tests the announcing of an null ouvert game
+	 */
+	@Test
+	public void testParseTableUpdateSuitHandOuvertGame_JSkatUser() {
+
+		String ouvertGame = "table .0 foo play 1 SHO.D8.D9.DQ.H8.HT.HQ.C7.C8.CK.CA 237.6 225.8 237.7"; //$NON-NLS-1$
+		StringTokenizer token = new StringTokenizer(ouvertGame);
+		token.nextToken(); // table
+		token.nextToken(); // .1
+		String creator = token.nextToken(); // foo
+		token.nextToken(); // play
+		List<String> detailParams = new ArrayList<String>();
+		while (token.hasMoreTokens()) {
+			detailParams.add(token.nextToken());
+		}
+
+		MoveInformation moveInfo = MessageParser
+				.getMoveInformation(detailParams);
 
 		assertEquals(MoveType.GAME_ANNOUNCEMENT, moveInfo.getType());
 
 		GameAnnouncement announcement = moveInfo.getGameAnnouncement();
 		assertEquals(GameType.SPADES, announcement.getGameType());
+		assertTrue(announcement.isHand());
 		assertTrue(announcement.isOuvert());
 
 		CardList ouvertCards = moveInfo.getOuvertCards();
 		assertEquals(10, ouvertCards.size());
-		assertTrue(ouvertCards.contains(Card.D7));
-		assertTrue(ouvertCards.contains(Card.DK));
-		assertTrue(ouvertCards.contains(Card.HJ));
+		assertTrue(ouvertCards.contains(Card.D8));
+		assertTrue(ouvertCards.contains(Card.D9));
+		assertTrue(ouvertCards.contains(Card.DQ));
+		assertTrue(ouvertCards.contains(Card.H8));
+		assertTrue(ouvertCards.contains(Card.HT));
 		assertTrue(ouvertCards.contains(Card.HQ));
-		assertTrue(ouvertCards.contains(Card.HK));
-		assertTrue(ouvertCards.contains(Card.S7));
-		assertTrue(ouvertCards.contains(Card.S9));
-		assertTrue(ouvertCards.contains(Card.ST));
-		assertTrue(ouvertCards.contains(Card.SK));
 		assertTrue(ouvertCards.contains(Card.C7));
+		assertTrue(ouvertCards.contains(Card.C8));
+		assertTrue(ouvertCards.contains(Card.CK));
+		assertTrue(ouvertCards.contains(Card.CA));
+	}
+
+	/**
+	 * Tests the announcing of an null ouvert game
+	 */
+	@Test
+	public void testParseTableUpdateSuitHandOuvertGame_OtherPlayer() {
+
+		String ouvertGame = "table .0 foo play 1 SHO.D8.D9.DQ.H8.HT.HQ.C7.C8.CK.CA 237.6 225.8 237.7"; //$NON-NLS-1$
+		StringTokenizer token = new StringTokenizer(ouvertGame);
+		token.nextToken(); // table
+		token.nextToken(); // .1
+		String creator = token.nextToken(); // foo
+		token.nextToken(); // play
+		List<String> detailParams = new ArrayList<String>();
+		while (token.hasMoreTokens()) {
+			detailParams.add(token.nextToken());
+		}
+
+		MoveInformation moveInfo = MessageParser
+				.getMoveInformation(detailParams);
+
+		assertEquals(MoveType.GAME_ANNOUNCEMENT, moveInfo.getType());
+
+		GameAnnouncement announcement = moveInfo.getGameAnnouncement();
+		assertEquals(GameType.SPADES, announcement.getGameType());
+		assertTrue(announcement.isHand());
+		assertTrue(announcement.isOuvert());
+
+		CardList ouvertCards = moveInfo.getOuvertCards();
+		assertEquals(10, ouvertCards.size());
+		assertTrue(ouvertCards.contains(Card.D8));
+		assertTrue(ouvertCards.contains(Card.D9));
+		assertTrue(ouvertCards.contains(Card.DQ));
+		assertTrue(ouvertCards.contains(Card.H8));
+		assertTrue(ouvertCards.contains(Card.HT));
+		assertTrue(ouvertCards.contains(Card.HQ));
+		assertTrue(ouvertCards.contains(Card.C7));
+		assertTrue(ouvertCards.contains(Card.C8));
+		assertTrue(ouvertCards.contains(Card.CK));
+		assertTrue(ouvertCards.contains(Card.CA));
+	}
+
+	/**
+	 * Tests the announcing of an null ouvert game
+	 */
+	@Test
+	public void testParseTableUpdateGrandHandOuvertGame_JSkatUser() {
+
+		String ouvertGame = "table .0 foo play 1 GHO.D8.D9.DQ.H8.HT.HQ.C7.C8.CK.CA 237.6 225.8 237.7"; //$NON-NLS-1$
+		StringTokenizer token = new StringTokenizer(ouvertGame);
+		token.nextToken(); // table
+		token.nextToken(); // .1
+		String creator = token.nextToken(); // foo
+		token.nextToken(); // play
+		List<String> detailParams = new ArrayList<String>();
+		while (token.hasMoreTokens()) {
+			detailParams.add(token.nextToken());
+		}
+
+		MoveInformation moveInfo = MessageParser
+				.getMoveInformation(detailParams);
+
+		assertEquals(MoveType.GAME_ANNOUNCEMENT, moveInfo.getType());
+
+		GameAnnouncement announcement = moveInfo.getGameAnnouncement();
+		assertEquals(GameType.GRAND, announcement.getGameType());
+		assertTrue(announcement.isHand());
+		assertTrue(announcement.isOuvert());
+
+		CardList ouvertCards = moveInfo.getOuvertCards();
+		assertEquals(10, ouvertCards.size());
+		assertTrue(ouvertCards.contains(Card.D8));
+		assertTrue(ouvertCards.contains(Card.D9));
+		assertTrue(ouvertCards.contains(Card.DQ));
+		assertTrue(ouvertCards.contains(Card.H8));
+		assertTrue(ouvertCards.contains(Card.HT));
+		assertTrue(ouvertCards.contains(Card.HQ));
+		assertTrue(ouvertCards.contains(Card.C7));
+		assertTrue(ouvertCards.contains(Card.C8));
+		assertTrue(ouvertCards.contains(Card.CK));
+		assertTrue(ouvertCards.contains(Card.CA));
+	}
+
+	/**
+	 * Tests the announcing of an null ouvert game
+	 */
+	@Test
+	public void testParseTableUpdateGrandHandOuvertGame_OtherPlayer() {
+
+		String ouvertGame = "table .0 foo play 1 GHO.D8.D9.DQ.H8.HT.HQ.C7.C8.CK.CA 237.6 225.8 237.7"; //$NON-NLS-1$
+		StringTokenizer token = new StringTokenizer(ouvertGame);
+		token.nextToken(); // table
+		token.nextToken(); // .1
+		String creator = token.nextToken(); // foo
+		token.nextToken(); // play
+		List<String> detailParams = new ArrayList<String>();
+		while (token.hasMoreTokens()) {
+			detailParams.add(token.nextToken());
+		}
+
+		MoveInformation moveInfo = MessageParser
+				.getMoveInformation(detailParams);
+
+		assertEquals(MoveType.GAME_ANNOUNCEMENT, moveInfo.getType());
+
+		GameAnnouncement announcement = moveInfo.getGameAnnouncement();
+		assertEquals(GameType.GRAND, announcement.getGameType());
+		assertTrue(announcement.isHand());
+		assertTrue(announcement.isOuvert());
+
+		CardList ouvertCards = moveInfo.getOuvertCards();
+		assertEquals(10, ouvertCards.size());
+		assertTrue(ouvertCards.contains(Card.D8));
+		assertTrue(ouvertCards.contains(Card.D9));
+		assertTrue(ouvertCards.contains(Card.DQ));
+		assertTrue(ouvertCards.contains(Card.H8));
+		assertTrue(ouvertCards.contains(Card.HT));
+		assertTrue(ouvertCards.contains(Card.HQ));
+		assertTrue(ouvertCards.contains(Card.C7));
+		assertTrue(ouvertCards.contains(Card.C8));
+		assertTrue(ouvertCards.contains(Card.CK));
+		assertTrue(ouvertCards.contains(Card.CA));
 	}
 }
