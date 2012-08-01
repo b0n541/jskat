@@ -38,14 +38,14 @@ public class MessageHandler extends Thread {
 
 	private static Logger log = LoggerFactory.getLogger(MessageHandler.class);
 
-	Connector connect;
+	StreamConnector connect;
 	IssController issControl;
 
 	JSkatResourceBundle strings;
 
 	List<String> messageList;
 
-	private final static int protocolVersion = 14;
+	private final static int protocolVersion = 15;
 
 	/**
 	 * Constructor
@@ -55,11 +55,19 @@ public class MessageHandler extends Thread {
 	 * @param controller
 	 *            ISS controller for JSkat
 	 */
-	public MessageHandler(final Connector conn, final IssController controller) {
+	public MessageHandler(final StreamConnector conn,
+			final IssController controller) {
 
 		connect = conn;
 		issControl = controller;
 
+		strings = JSkatResourceBundle.instance();
+
+		messageList = new ArrayList<String>();
+	}
+
+	public MessageHandler(final IssController controller) {
+		issControl = controller;
 		strings = JSkatResourceBundle.instance();
 
 		messageList = new ArrayList<String>();
@@ -95,7 +103,7 @@ public class MessageHandler extends Thread {
 		return messageList.remove(0);
 	}
 
-	private void handleMessage(final String message) {
+	void handleMessage(final String message) {
 
 		log.debug("ISS    |--> " + message); //$NON-NLS-1$
 
@@ -121,7 +129,8 @@ public class MessageHandler extends Thread {
 
 			} catch (Exception except) {
 				log.error("Error in parsing ISS protocoll", except); //$NON-NLS-1$
-				issControl.showErrorMessage(strings.getString("iss_error_parsing_iss_protocol")); //$NON-NLS-1$
+				issControl.showErrorMessage(strings
+						.getString("iss_error_parsing_iss_protocol")); //$NON-NLS-1$
 			}
 		}
 	}
@@ -144,7 +153,8 @@ public class MessageHandler extends Thread {
 		}
 	}
 
-	void handleMessageObsolete(final MessageType type, final List<String> params) throws Exception {
+	void handleMessageObsolete(final MessageType type, final List<String> params)
+			throws Exception {
 
 		switch (type) {
 		case PASSWORD:
@@ -189,8 +199,7 @@ public class MessageHandler extends Thread {
 	}
 
 	void handlePasswordMessage() {
-
-		connect.sendPassword();
+		issControl.sendPassword();
 	}
 
 	void handleTextMessage(final List<String> params) {
@@ -280,11 +289,14 @@ public class MessageHandler extends Thread {
 
 			} else if (actionCommand.equals("state")) { //$NON-NLS-1$
 
-				issControl.updateISSTableState(tableName, MessageParser.getTableStatus(creator, detailParams));
+				issControl.updateISSTableState(tableName,
+						MessageParser.getTableStatus(creator, detailParams));
 
 			} else if (actionCommand.equals("start")) { //$NON-NLS-1$
 
-				issControl.updateISSGame(tableName, MessageParser.getGameStartStatus(creator, detailParams));
+				issControl
+						.updateISSGame(tableName, MessageParser
+								.getGameStartStatus(creator, detailParams));
 
 			} else if (actionCommand.equals("go")) { //$NON-NLS-1$
 
@@ -292,14 +304,15 @@ public class MessageHandler extends Thread {
 
 			} else if (actionCommand.equals("play")) { //$NON-NLS-1$
 
-				MoveInformation moveInfo = MessageParser.getMoveInformation(detailParams);
+				MoveInformation moveInfo = MessageParser
+						.getMoveInformation(detailParams);
 				MessageParser.parsePlayerTimes(detailParams, moveInfo);
 				issControl.updateMove(tableName, moveInfo);
 
 			} else if (actionCommand.equals("tell")) { //$NON-NLS-1$
 
-				issControl.updateISSTableChatMessage(tableName,
-						MessageParser.getTableChatMessage(tableName, detailParams));
+				issControl.updateISSTableChatMessage(tableName, MessageParser
+						.getTableChatMessage(tableName, detailParams));
 
 			} else if (actionCommand.equals("end")) { //$NON-NLS-1$
 
@@ -370,7 +383,8 @@ public class MessageHandler extends Thread {
 		long gamesPlayed = Long.parseLong(params.get(3));
 		double strength = Double.parseDouble(params.get(4));
 
-		issControl.updateISSPlayerList(playerName, language, gamesPlayed, strength);
+		issControl.updateISSPlayerList(playerName, language, gamesPlayed,
+				strength);
 	}
 
 	/**
@@ -393,7 +407,8 @@ public class MessageHandler extends Thread {
 	void handleWelcomeMessage(final List<String> params) {
 
 		String login = params.get(0);
-		double issProtocolVersion = Double.parseDouble(params.get(params.size() - 1));
+		double issProtocolVersion = Double
+				.parseDouble(params.get(params.size() - 1));
 
 		log.debug("iss version: " + issProtocolVersion); //$NON-NLS-1$
 		log.debug("local version: " + protocolVersion); //$NON-NLS-1$
@@ -441,7 +456,8 @@ public class MessageHandler extends Thread {
 		String player2 = params.get(4);
 		String player3 = params.get(5);
 
-		issControl.updateISSTableList(tableName, maxPlayers, gamesPlayed, player1, player2, player3);
+		issControl.updateISSTableList(tableName, maxPlayers, gamesPlayed,
+				player1, player2, player3);
 	}
 
 	/**

@@ -58,7 +58,13 @@ public class IssController {
 	private JSkatView view;
 	private final JSkatApplicationData data;
 	private final JSkatResourceBundle strings;
-	private Connector issConnect;
+	private IssConnector issConnector;
+
+	private String login;
+	private String password;
+
+	private MessageGenerator issMsg;
+	private OutputChannel issOut;
 
 	private final Map<String, SkatGameData> gameData;
 
@@ -89,11 +95,11 @@ public class IssController {
 	 */
 	public void disconnect() {
 
-		if (issConnect != null && issConnect.isConnected()) {
+		if (issConnector != null && issConnector.isConnected()) {
 
 			log.debug("connection to ISS still open"); //$NON-NLS-1$
 
-			issConnect.closeConnection();
+			issConnector.closeConnection();
 			// FIXME (jan 07.12.2010) use constant instead of string
 			view.closeISSPanels();
 		}
@@ -118,17 +124,16 @@ public class IssController {
 
 		log.debug("connectToISS"); //$NON-NLS-1$
 
-		if (issConnect == null) {
+		if (issConnector == null) {
 
-			issConnect = new Connector(this);
+			// issConnector = new StreamConnector();
+			issConnector = new WebSocketConnector();
 		}
 
 		log.debug("connector created"); //$NON-NLS-1$
 
 		Object source = e.getSource();
 		String command = e.getActionCommand();
-		String login = null;
-		String password = null;
 
 		if (JSkatAction.CONNECT_TO_ISS.toString().equals(command)) {
 			if (source instanceof LoginCredentials) {
@@ -137,10 +142,19 @@ public class IssController {
 				login = loginCredentials.getLoginName();
 				password = loginCredentials.getPassword();
 
-				if (!issConnect.isConnected()) {
+				if (issConnector != null && !issConnector.isConnected()) {
 
-					issConnect.setConnectionData(login, password);
-					issConnect.establishConnection();
+					issConnector.setConnectionData(login, password);
+					boolean isConnected = issConnector
+							.establishConnection(this);
+
+					if (isConnected) {
+						log.debug("Connection to ISS established: " + issConnector.isConnected()); //$NON-NLS-1$
+						issMsg = new MessageGenerator(login);
+						issOut = issConnector.getOutputChannel();
+						// sendToIss(login);
+						sendToIss(issMsg.getLoginAndPasswordMessage(password));
+					}
 				}
 			} else {
 
@@ -148,8 +162,11 @@ public class IssController {
 			}
 		}
 
-		log.debug("Connection to ISS established: " + issConnect.isConnected()); //$NON-NLS-1$
-		return issConnect.isConnected();
+		return issConnector != null && issConnector.isConnected();
+	}
+
+	private void sendToIss(final String message) {
+		issOut.sendMessage(message);
 	}
 
 	/**
@@ -178,8 +195,8 @@ public class IssController {
 	 * @param strength
 	 *            Play strength
 	 */
-	public void updateISSPlayerList(final String playerName, final String language, final long gamesPlayed,
-			final double strength) {
+	public void updateISSPlayerList(final String playerName,
+			final String language, final long gamesPlayed, final double strength) {
 
 		jskat.updateISSPlayer(playerName, language, gamesPlayed, strength);
 	}
@@ -211,10 +228,12 @@ public class IssController {
 	 * @param player3
 	 *            Player 3 (? for free seat)
 	 */
-	public void updateISSTableList(final String tableName, final int maxPlayers, final long gamesPlayed,
-			final String player1, final String player2, final String player3) {
+	public void updateISSTableList(final String tableName,
+			final int maxPlayers, final long gamesPlayed, final String player1,
+			final String player2, final String player3) {
 
-		view.updateISSLobbyTableList(tableName, maxPlayers, gamesPlayed, player1, player2, player3);
+		view.updateISSLobbyTableList(tableName, maxPlayers, gamesPlayed,
+				player1, player2, player3);
 	}
 
 	/**
@@ -229,6 +248,15 @@ public class IssController {
 	}
 
 	/**
+	 * Sends the password to the ISS<br />
+	 * only used until protocol version 14
+	 */
+	@Deprecated
+	public void sendPassword() {
+		sendToIss(password);
+	}
+
+	/**
 	 * Sends a chat message to the ISS
 	 * 
 	 * @param message
@@ -236,7 +264,7 @@ public class IssController {
 	 */
 	public void sendChatMessage(final ChatMessage message) {
 
-		issConnect.send(message);
+		sendToIss(issMsg.getChatMessage(message));
 	}
 
 	/**
@@ -247,7 +275,8 @@ public class IssController {
 	 * @param params
 	 *            Chat message
 	 */
-	public void addChatMessage(final ChatMessageType messageType, final List<String> params) {
+	public void addChatMessage(final ChatMessageType messageType,
+			final List<String> params) {
 
 		switch (messageType) {
 		case LOBBY:
@@ -306,7 +335,7 @@ public class IssController {
 	 */
 	public void requestTableCreation() {
 
-		issConnect.requestTableCreation();
+		sendToIss(issMsg.getTableCreationMessage());
 	}
 
 	/**
@@ -319,7 +348,8 @@ public class IssController {
 	 * @param maxPlayers
 	 *            Maximum number of players
 	 */
-	public void createTable(final String tableName, final String creator, final int maxPlayers) {
+	public void createTable(final String tableName, final String creator,
+			final int maxPlayers) {
 
 		view.createISSTable(tableName, creator);
 		jskat.setActiveTable(tableName);
@@ -346,8 +376,7 @@ public class IssController {
 	 *            Table name
 	 */
 	public void joinTable(final String tableName) {
-
-		issConnect.joinTable(tableName);
+		sendToIss(issMsg.getJoinTableMessage(tableName));
 	}
 
 	/**
@@ -357,8 +386,7 @@ public class IssController {
 	 *            Table name
 	 */
 	public void observeTable(final String tableName) {
-
-		issConnect.observeTable(tableName);
+		sendToIss(issMsg.getObserveTableMessage(tableName));
 	}
 
 	/**
@@ -368,7 +396,7 @@ public class IssController {
 	 *            Table name
 	 */
 	public void leaveTable(final String tableName) {
-		issConnect.leaveTable(tableName);
+		sendToIss(issMsg.getLeaveTableMessage(tableName));
 	}
 
 	/**
@@ -379,8 +407,8 @@ public class IssController {
 	 * @param status
 	 *            New table status
 	 */
-	public void updateISSTableState(final String tableName, final TablePanelStatus status) {
-
+	public void updateISSTableState(final String tableName,
+			final TablePanelStatus status) {
 		view.updateISSTable(tableName, status);
 	}
 
@@ -392,7 +420,8 @@ public class IssController {
 	 * @param status
 	 *            New game status
 	 */
-	public void updateISSGame(final String tableName, final GameStartInformation status) {
+	public void updateISSGame(final String tableName,
+			final GameStartInformation status) {
 
 		view.updateISSTable(tableName, data.getIssLoginName(), status);
 
@@ -430,7 +459,8 @@ public class IssController {
 	 * @param moveInformation
 	 *            Move information
 	 */
-	public void updateMove(final String tableName, final MoveInformation moveInformation) {
+	public void updateMove(final String tableName,
+			final MoveInformation moveInformation) {
 
 		SkatGameData currGame = gameData.get(tableName);
 		updateGameData(currGame, moveInformation);
@@ -438,7 +468,8 @@ public class IssController {
 		view.updateISSMove(tableName, currGame, moveInformation);
 
 		// TODO (jan 19.11.2010) extract this into separate method
-		if (MoveType.BID.equals(moveInformation.getType()) || MoveType.PASS.equals(moveInformation.getType())) {
+		if (MoveType.BID.equals(moveInformation.getType())
+				|| MoveType.PASS.equals(moveInformation.getType())) {
 
 			if (isBiddingFinished(currGame)) {
 				view.setDeclarer(tableName, currGame.getDeclarer());
@@ -454,20 +485,25 @@ public class IssController {
 
 			if (trick.getThirdCard() != null) {
 
-				Player trickWinner = SkatRuleFactory.getSkatRules(currGame.getGameType()).calculateTrickWinner(
+				Player trickWinner = SkatRuleFactory.getSkatRules(
+						currGame.getGameType()).calculateTrickWinner(
 						currGame.getGameType(), trick);
 				trick.setTrickWinner(trickWinner);
-				currGame.addTrick(new Trick(currGame.getTricks().size(), trick.getTrickWinner()));
+				currGame.addTrick(new Trick(currGame.getTricks().size(), trick
+						.getTrickWinner()));
 
-				view.setActivePlayer(tableName, currGame.getCurrentTrick().getForeHand());
+				view.setActivePlayer(tableName, currGame.getCurrentTrick()
+						.getForeHand());
 
 			} else if (trick.getSecondCard() != null) {
 
-				view.setActivePlayer(tableName, trick.getForeHand().getRightNeighbor());
+				view.setActivePlayer(tableName, trick.getForeHand()
+						.getRightNeighbor());
 
 			} else if (trick.getFirstCard() != null) {
 
-				view.setActivePlayer(tableName, trick.getForeHand().getLeftNeighbor());
+				view.setActivePlayer(tableName, trick.getForeHand()
+						.getLeftNeighbor());
 			}
 		}
 	}
@@ -490,7 +526,8 @@ public class IssController {
 		return result;
 	}
 
-	private void updateGameData(final SkatGameData currGame, final MoveInformation moveInformation) {
+	private void updateGameData(final SkatGameData currGame,
+			final MoveInformation moveInformation) {
 
 		Player movePlayer = moveInformation.getPlayer();
 
@@ -577,7 +614,7 @@ public class IssController {
 	 *            Invited player
 	 */
 	public void invitePlayer(final String tableName, final String invitee) {
-		issConnect.invitePlayer(tableName, invitee);
+		sendToIss(issMsg.getInvitePlayerMessage(tableName, invitee));
 	}
 
 	/**
@@ -587,7 +624,7 @@ public class IssController {
 	 *            Table name
 	 */
 	public void sendReadySignal(final String tableName) {
-		issConnect.sendReadySignal(tableName);
+		sendToIss(issMsg.getReadyMessage(tableName));
 	}
 
 	/**
@@ -597,7 +634,7 @@ public class IssController {
 	 *            Table name
 	 */
 	public void sendTalkEnabledSignal(final String tableName) {
-		issConnect.sendTalkEnabledSignal(tableName);
+		sendToIss(issMsg.getTalkEnabledMessage(tableName));
 	}
 
 	/**
@@ -606,8 +643,7 @@ public class IssController {
 	 * @param tableName
 	 */
 	public void sendResignSignal(final String tableName) {
-
-		issConnect.sendResignSignal(tableName);
+		sendToIss(issMsg.getResignMessage(tableName));
 	}
 
 	/**
@@ -616,8 +652,7 @@ public class IssController {
 	 * @param tableName
 	 */
 	public void sendShowCardsSignal(final String tableName) {
-
-		issConnect.sendShowCardsSignal(tableName);
+		sendToIss(issMsg.getShowCardsMessage(tableName));
 	}
 
 	/**
@@ -627,7 +662,7 @@ public class IssController {
 	 *            Table name
 	 */
 	public void sendTableSeatChangeSignal(final String tableName) {
-		issConnect.sendTableSeatChangeSignal(tableName);
+		sendToIss(issMsg.getTableSeatChangeMessage(tableName));
 	}
 
 	/**
@@ -637,7 +672,7 @@ public class IssController {
 	 *            Table name
 	 */
 	public void sendPassBidMove(final String tableName) {
-		issConnect.sendPassMove(tableName);
+		sendToIss(issMsg.getPassMoveMessage(tableName));
 	}
 
 	/**
@@ -647,7 +682,7 @@ public class IssController {
 	 *            Table name
 	 */
 	public void sendHoldBidMove(final String tableName) {
-		issConnect.sendHoldBidMove(tableName);
+		sendToIss(issMsg.getHoldBidMoveMessage(tableName));
 	}
 
 	/**
@@ -657,8 +692,8 @@ public class IssController {
 	 *            Table name
 	 */
 	public void sendBidMove(final String tableName) {
-
-		issConnect.sendBidMove(tableName, SkatConstants.getNextBidValue(gameData.get(tableName).getBidValue()));
+		sendToIss(issMsg.getBidMoveMessage(tableName, SkatConstants
+				.getNextBidValue(gameData.get(tableName).getBidValue())));
 	}
 
 	/**
@@ -668,7 +703,7 @@ public class IssController {
 	 *            Table name
 	 */
 	public void sendPickUpSkatMove(final String tableName) {
-		issConnect.sendPickUpSkatMove(tableName);
+		sendToIss(issMsg.getPickUpSkatMoveMessage(tableName));
 	}
 
 	/**
@@ -679,10 +714,10 @@ public class IssController {
 	 * @param gameAnnouncement
 	 *            Game announcement
 	 */
-	public void sendGameAnnouncementMove(final String tableName, final GameAnnouncement gameAnnouncement) {
-
-		issConnect.sendGameAnnouncementMove(tableName, gameAnnouncement);
-
+	public void sendGameAnnouncementMove(final String tableName,
+			final GameAnnouncement gameAnnouncement) {
+		sendToIss(issMsg.getGameAnnouncementMoveMessage(tableName,
+				gameAnnouncement));
 	}
 
 	/**
@@ -694,7 +729,7 @@ public class IssController {
 	 *            Card
 	 */
 	public void sendCardMove(final String tableName, final Card nextCard) {
-		issConnect.sendCardMove(tableName, nextCard);
+		sendToIss(issMsg.getCardMoveMessage(tableName, nextCard));
 	}
 
 	/**
@@ -707,11 +742,11 @@ public class IssController {
 	 * @param invitationTicket
 	 *            Invitation ticket
 	 */
-	public void handleInvitation(final String invitor, final String tableName, final String invitationTicket) {
-
+	public void handleInvitation(final String invitor, final String tableName,
+			final String invitationTicket) {
 		if (view.showISSTableInvitation(invitor, tableName)) {
-
-			issConnect.sendInvitationAccepted(tableName, invitationTicket);
+			sendToIss(issMsg.getInvitationAcceptedMessage(tableName,
+					invitationTicket));
 		}
 	}
 
@@ -723,7 +758,8 @@ public class IssController {
 	 * @param message
 	 *            Chat message
 	 */
-	public void updateISSTableChatMessage(final String tableName, final ChatMessage message) {
+	public void updateISSTableChatMessage(final String tableName,
+			final ChatMessage message) {
 		// FIXME (jan 30.01.2011) tableName not needed here?
 		view.appendISSChatMessage(ChatMessageType.TABLE, message);
 	}
