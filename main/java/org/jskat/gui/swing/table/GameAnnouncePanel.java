@@ -109,7 +109,7 @@ class GameAnnouncePanel extends JPanel {
 			public void actionPerformed(final ActionEvent e) {
 				// FIXME (jan 28.11.2010) send sorting game type to JSkatMaster
 				// --> more view components can benefit from this
-				GameType gameType = (GameType) gameTypeList.getSelectedItem();
+				GameType gameType = getSelectedGameType();
 
 				if (gameType != null) {
 					userPanel.setSortGameType(gameType);
@@ -159,7 +159,7 @@ class GameAnnouncePanel extends JPanel {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 
-				if (gameTypeList.getSelectedItem() != null) {
+				if (getSelectedGameType() != null) {
 
 					try {
 						GameAnnouncement ann = getGameAnnouncement();
@@ -180,7 +180,7 @@ class GameAnnouncePanel extends JPanel {
 
 			private GameAnnouncement getGameAnnouncement() {
 				GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-				GameType gameType = getGameTypeFromSelectedItem();
+				GameType gameType = getSelectedGameType();
 				factory.setGameType(gameType);
 
 				if (discardPanel.isUserLookedIntoSkat()) {
@@ -218,11 +218,6 @@ class GameAnnouncePanel extends JPanel {
 				return factory.getAnnouncement();
 			}
 
-			private GameType getGameTypeFromSelectedItem() {
-				Object selectedItem = gameTypeList.getSelectedItem();
-
-				return (GameType) selectedItem;
-			}
 		});
 		panel.add(announceButton);
 
@@ -233,6 +228,11 @@ class GameAnnouncePanel extends JPanel {
 		resetPanel();
 	}
 
+	GameType getSelectedGameType() {
+		Object selectedItem = gameTypeList.getSelectedItem();
+		return (GameType) selectedItem;
+	}
+
 	private JCheckBox createOuvertBox() {
 		final JCheckBox result = new JCheckBox(strings.getString("ouvert")); //$NON-NLS-1$
 
@@ -240,9 +240,9 @@ class GameAnnouncePanel extends JPanel {
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
 				if (result.isSelected() && handBox.isSelected()
-						&& gameTypeList.getSelectedItem() != null) {
+						&& getSelectedGameType() != null) {
 					// hand ouvert
-					if (GameType.NULL != gameTypeList.getSelectedItem()) {
+					if (GameType.NULL != getSelectedGameType()) {
 						schneiderBox.setSelected(true);
 						schwarzBox.setSelected(true);
 					}
@@ -307,7 +307,7 @@ class GameAnnouncePanel extends JPanel {
 
 		if (isUserPickedUpSkat) {
 			handBox.setSelected(false);
-			if (GameType.NULL.equals(gameTypeList.getSelectedItem())) {
+			if (GameType.NULL.equals(getSelectedGameType())) {
 				ouvertBox.setEnabled(true);
 			} else {
 				ouvertBox.setEnabled(false);

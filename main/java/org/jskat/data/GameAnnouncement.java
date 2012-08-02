@@ -94,8 +94,6 @@ public class GameAnnouncement {
 			if (validate()) {
 				result = tmpAnnouncement;
 				tmpAnnouncement = new GameAnnouncement();
-			} else {
-				throw new RuntimeException("Game announcement not valid."); //$NON-NLS-1$
 			}
 			return result;
 		}
@@ -161,14 +159,56 @@ public class GameAnnouncement {
 		}
 
 		private boolean validate() {
+
+			boolean result = true;
+
 			if (tmpAnnouncement.gameType == null) {
-				log.debug("gameType is null"); //$NON-NLS-1$
-				return false;
-			} else if (tmpAnnouncement.isHand() && tmpAnnouncement.discardedCards.size() > 0) {
-				log.debug("hand=" + tmpAnnouncement.isHand() + ", size=" + tmpAnnouncement.discardedCards.size()); //$NON-NLS-1$ //$NON-NLS-2$
-				return false;
+
+				result = false;
+
+			} else if (tmpAnnouncement.hand
+					&& (tmpAnnouncement.discardedCards.size() > 0)) {
+
+				result = false;
+
+			} else if (!tmpAnnouncement.hand
+					&& (tmpAnnouncement.discardedCards.size() != 2)) {
+
+				result = false;
+
+			} else if (!tmpAnnouncement.hand
+					&& (tmpAnnouncement.schneider || tmpAnnouncement.schwarz)) {
+
+				result = false;
+
+			} else if (tmpAnnouncement.isSchwarz()
+					&& !tmpAnnouncement.isSchneider()) {
+
+				result = false;
+
+			} else if (tmpAnnouncement.gameType == GameType.NULL
+					&& (tmpAnnouncement.schneider || tmpAnnouncement.schwarz)) {
+
+				result = false;
+
+			} else if (tmpAnnouncement.ouvert
+					&& (!tmpAnnouncement.hand || !tmpAnnouncement.schneider || !tmpAnnouncement.schwarz)) {
+
+				result = false;
+
+			} else if ((tmpAnnouncement.gameType == GameType.RAMSCH || tmpAnnouncement.gameType == GameType.PASSED_IN)
+					&& (tmpAnnouncement.hand || tmpAnnouncement.ouvert
+							|| tmpAnnouncement.schneider
+							|| tmpAnnouncement.schwarz || tmpAnnouncement.discardedCards
+							.size() > 0)) {
+
+				result = false;
 			}
-			return true;
+
+			if (!result) {
+				log.error("Invalid " + tmpAnnouncement); //$NON-NLS-1$
+			}
+			return result;
 		}
 	}
 
@@ -261,6 +301,67 @@ public class GameAnnouncement {
 			result.append(" schwarz"); //$NON-NLS-1$
 		}
 
+		if (discardedCards.size() > 0) {
+
+			result.append(" discarded " + discardedCards); //$NON-NLS-1$
+
+		}
+
 		return result.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((discardedCards == null) ? 0 : discardedCards.hashCode());
+		result = prime * result
+				+ ((gameType == null) ? 0 : gameType.hashCode());
+		result = prime * result + ((hand == null) ? 0 : hand.hashCode());
+		result = prime * result + ((ouvert == null) ? 0 : ouvert.hashCode());
+		result = prime * result
+				+ ((schneider == null) ? 0 : schneider.hashCode());
+		result = prime * result + ((schwarz == null) ? 0 : schwarz.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GameAnnouncement other = (GameAnnouncement) obj;
+		if (discardedCards == null) {
+			if (other.discardedCards != null)
+				return false;
+		} else if (!discardedCards.equals(other.discardedCards))
+			return false;
+		if (gameType != other.gameType)
+			return false;
+		if (hand == null) {
+			if (other.hand != null)
+				return false;
+		} else if (!hand.equals(other.hand))
+			return false;
+		if (ouvert == null) {
+			if (other.ouvert != null)
+				return false;
+		} else if (!ouvert.equals(other.ouvert))
+			return false;
+		if (schneider == null) {
+			if (other.schneider != null)
+				return false;
+		} else if (!schneider.equals(other.schneider))
+			return false;
+		if (schwarz == null) {
+			if (other.schwarz != null)
+				return false;
+		} else if (!schwarz.equals(other.schwarz))
+			return false;
+		return true;
 	}
 }

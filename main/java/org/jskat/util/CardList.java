@@ -21,6 +21,7 @@
 package org.jskat.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -64,6 +65,10 @@ public class CardList implements Iterable<Card> {
 	 */
 	public CardList(final CardList newCards) {
 		cards.addAll(newCards.cards);
+	}
+
+	public CardList(Card... cards) {
+		this(Arrays.asList(cards));
 	}
 
 	/**
@@ -184,7 +189,8 @@ public class CardList implements Iterable<Card> {
 	 */
 	public boolean hasSuit(final GameType gameType, final Suit suit) {
 
-		return SkatRuleFactory.getSkatRules(gameType).hasSuit(gameType, this, suit);
+		return SkatRuleFactory.getSkatRules(gameType).hasSuit(gameType, this,
+				suit);
 	}
 
 	/**
@@ -278,7 +284,8 @@ public class CardList implements Iterable<Card> {
 
 			while (index == -1 && currIndex < cards.size()) {
 
-				if (get(currIndex).getSuit() == card.getSuit() && get(currIndex).getRank() == card.getRank()) {
+				if (get(currIndex).getSuit() == card.getSuit()
+						&& get(currIndex).getRank() == card.getRank()) {
 
 					index = currIndex;
 				}
@@ -345,7 +352,8 @@ public class CardList implements Iterable<Card> {
 		int count = 0;
 
 		for (Card card : cards) {
-			if (card.getSuit() == suit && (card.getRank() != Rank.JACK || countJack)) {
+			if (card.getSuit() == suit
+					&& (card.getRank() != Rank.JACK || countJack)) {
 				count++;
 			}
 		}
@@ -434,8 +442,10 @@ public class CardList implements Iterable<Card> {
 		for (int i = 0; i < cards.size() - 1; i++) {
 			for (int j = i + 1; j < cards.size(); j++) {
 
-				if (get(j).getSuit().getSuitOrder() > get(i).getSuit().getSuitOrder()
-						|| (get(j).getSuit() == get(i).getSuit() && get(j).getNullOrder() >= get(i).getNullOrder())) {
+				if (get(j).getSuit().getSuitOrder() > get(i).getSuit()
+						.getSuitOrder()
+						|| (get(j).getSuit() == get(i).getSuit() && get(j)
+								.getNullOrder() >= get(i).getNullOrder())) {
 
 					log.debug("i=" + i + ", j=" + j + ", " + get(i) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 							+ " vs. " + get(j) + ", cards(1): [" + this //$NON-NLS-1$ //$NON-NLS-2$
@@ -485,8 +495,10 @@ public class CardList implements Iterable<Card> {
 		for (int i = sortedCards; i < cards.size() - 1; i++) {
 			for (int j = i + 1; j < cards.size(); j++) {
 
-				if (get(j).getSuit().getSuitOrder() > get(i).getSuit().getSuitOrder()
-						|| (get(j).getSuit() == get(i).getSuit() && get(j).getRamschOrder() >= get(i).getRamschOrder())) {
+				if (get(j).getSuit().getSuitOrder() > get(i).getSuit()
+						.getSuitOrder()
+						|| (get(j).getSuit() == get(i).getSuit() && get(j)
+								.getRamschOrder() >= get(i).getRamschOrder())) {
 
 					//					log.debug("i=" + i + ", j=" + j + ", " + get(i) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 					//							+ " vs. " + get(j) + ", cards(1): [" + this //$NON-NLS-1$ //$NON-NLS-2$
@@ -511,15 +523,20 @@ public class CardList implements Iterable<Card> {
 			for (int j = i + 1; j < cards.size(); j++) {
 
 				if (// prefer trump cards
-				(get(j).getSuit() == trumpSuit && get(i).getSuit() != trumpSuit || get(j).getSuit() == trumpSuit
-						&& get(i).getSuit() == trumpSuit && get(j).getSuitGrandOrder() >= get(i).getSuitGrandOrder())
+				(get(j).getSuit() == trumpSuit && get(i).getSuit() != trumpSuit || get(
+						j).getSuit() == trumpSuit
+						&& get(i).getSuit() == trumpSuit
+						&& get(j).getSuitGrandOrder() >= get(i)
+								.getSuitGrandOrder())
 						||
 						// normal sorting, different suits
-						(get(j).getSuit() != trumpSuit && get(i).getSuit() != trumpSuit && get(j).getSuit()
-								.getSuitOrder() > get(i).getSuit().getSuitOrder())
-						||
+						(get(j).getSuit() != trumpSuit
+								&& get(i).getSuit() != trumpSuit && get(j)
+								.getSuit().getSuitOrder() > get(i).getSuit()
+								.getSuitOrder()) ||
 						// normal sorting, same suits
-						(get(j).getSuit() == get(i).getSuit() && get(j).getSuitGrandOrder() >= get(i)
+						(get(j).getSuit() == get(i).getSuit() && get(j)
+								.getSuitGrandOrder() >= get(i)
 								.getSuitGrandOrder())) {
 
 					//					log.debug("i=" + i + ", j=" + j + ", " + get(i) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
@@ -579,7 +596,8 @@ public class CardList implements Iterable<Card> {
 		int index = 0;
 		for (Card card : cards) {
 			if (result == -1 && card.getSuit() == suit) {
-				if (card.getRank() != Rank.JACK || (card.getRank() == Rank.JACK && includeJacks)) {
+				if (card.getRank() != Rank.JACK
+						|| (card.getRank() == Rank.JACK && includeJacks)) {
 					result = index;
 				}
 			}
@@ -630,7 +648,8 @@ public class CardList implements Iterable<Card> {
 		int index = 0;
 		for (Card card : cards) {
 			if (card.getSuit() == suit) {
-				if (card.getRank() != Rank.JACK || (card.getRank() == Rank.JACK && includeJacks)) {
+				if (card.getRank() != Rank.JACK
+						|| (card.getRank() == Rank.JACK && includeJacks)) {
 					result = index;
 				}
 			}
@@ -687,5 +706,30 @@ public class CardList implements Iterable<Card> {
 			sb.append('\n');
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((cards == null) ? 0 : cards.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CardList other = (CardList) obj;
+		if (cards == null) {
+			if (other.cards != null)
+				return false;
+		} else if (!cards.equals(other.cards))
+			return false;
+		return true;
 	}
 }
