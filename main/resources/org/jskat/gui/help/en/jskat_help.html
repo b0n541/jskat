@@ -1,0 +1,34 @@
+<h3>JSkat Help</h3>
+<h4>JSkat Hierarchy</h4>
+<p>
+In JSkat, a single skat game is embedded in a strict hierarchy, which kind of 
+emulates a real life situation.
+</p>
+<ul>
+    <li>At the top is a Skat table, on which the game takes place. 
+    The table currently holds three (empty) chaírs to be filled with players. 
+    You can also name your table.
+    </li> 
+
+    <li>On the table, a Skat series can be started. Firstly, you have to decide what type of players should be there. A player can either be an AI player, 
+    a human player or a network (i.e. remote human) player. You can also give a name to each player. 
+    Then, a series has a certain duration (i.e. number of rounds to be played). Finally, a series has a certain set of rules (e.g. official tournament rules, 
+    pub rules or an individual ruleset).</li> 
+
+    <li>During the series, several games of skat are played. (Although the games could be grouped into rounds, we deemed such an element in the hierarchy unnecessary.) 
+    Under the rules of the series, a skat game also has a certain set of rules
+	</li> 
+</ul>
+
+<h4>Skat Game</h4>
+<p>
+A Skat game consists of the following steps:
+</p>
+<ol>
+    <li>Dealing cards</li>
+    <li>Bidding</li>
+    <li>Looking into skat (optional)</li>
+    <li>Game announcement</li>
+    <li>Trick playing (up to ten tricks)</li>
+    <li>Finalize the game and result</li>
+</ol>
