@@ -36,8 +36,8 @@ public abstract class AbstractJSkatTest {
 	@BeforeClass
 	public static void createLogger() {
 
-		PropertyConfigurator.configure(ClassLoader.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
-
+		PropertyConfigurator.configure(ClassLoader
+				.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
 		JSkatOptions.instance(new DesktopSavePathResolver());
 	}
 }

@@ -189,7 +189,8 @@ public class PlayerKnowledge {
 	 */
 	public boolean isCardPlayed(final Card card) {
 
-		return playedCards.get(Player.FOREHAND).contains(card) || playedCards.get(Player.MIDDLEHAND).contains(card)
+		return playedCards.get(Player.FOREHAND).contains(card)
+				|| playedCards.get(Player.MIDDLEHAND).contains(card)
 				|| playedCards.get(Player.REARHAND).contains(card);
 	}
 
@@ -288,14 +289,17 @@ public class PlayerKnowledge {
 					// remove all cards from same suit from "could have" cards
 					for (Card currCard : Card.values()) {
 						if (currCard.isSameSuit(firstCard)) {
-							possiblePlayerCards.get(otherPlayer).remove(currCard);
+							possiblePlayerCards.get(otherPlayer).remove(
+									currCard);
 						}
 					}
 				}
 			} else {
-				SkatRule skatRules = SkatRuleFactory.getSkatRules(getGameType());
+				SkatRule skatRules = SkatRuleFactory
+						.getSkatRules(getGameType());
 
-				if (firstCard.isTrump(getGameType()) && !cardToCheck.isTrump(getGameType())) {
+				if (firstCard.isTrump(getGameType())
+						&& !cardToCheck.isTrump(getGameType())) {
 					// first card was a trump card, player card was not
 					// remove jacks from the "could have" cards
 					possiblePlayerCards.get(otherPlayer).remove(Card.CJ);
@@ -303,11 +307,14 @@ public class PlayerKnowledge {
 					possiblePlayerCards.get(otherPlayer).remove(Card.HJ);
 					possiblePlayerCards.get(otherPlayer).remove(Card.DJ);
 					// remove other trump cards for suit games
-					if (GameType.CLUBS.equals(getGameType()) || GameType.SPADES.equals(getGameType())
-							|| GameType.HEARTS.equals(getGameType()) || GameType.DIAMONDS.equals(getGameType())) {
+					if (GameType.CLUBS.equals(getGameType())
+							|| GameType.SPADES.equals(getGameType())
+							|| GameType.HEARTS.equals(getGameType())
+							|| GameType.DIAMONDS.equals(getGameType())) {
 						for (Card currCard : Card.values()) {
 							if (currCard.isSameSuit(firstCard)) {
-								possiblePlayerCards.get(otherPlayer).remove(currCard);
+								possiblePlayerCards.get(otherPlayer).remove(
+										currCard);
 							}
 						}
 					}
@@ -319,8 +326,10 @@ public class PlayerKnowledge {
 						// remove all cards for that suit in "could have"
 						// cards, except of the jacks
 						for (Card currCard : Card.values()) {
-							if (currCard.isSameSuit(firstCard) && currCard.getRank() != Rank.JACK) {
-								possiblePlayerCards.get(otherPlayer).remove(currCard);
+							if (currCard.isSameSuit(firstCard)
+									&& currCard.getRank() != Rank.JACK) {
+								possiblePlayerCards.get(otherPlayer).remove(
+										currCard);
 							}
 						}
 					}
@@ -458,8 +467,8 @@ public class PlayerKnowledge {
 	 *            Suit to check
 	 * @return TRUE if the player could have any card of the suit
 	 */
-	public int getPotentialSuitCount(final Player player, final Suit suit, final boolean isTrump,
-			final boolean includeJacks) {
+	public int getPotentialSuitCount(final Player player, final Suit suit,
+			final boolean isTrump, final boolean includeJacks) {
 		int result = 0;
 		for (Rank r : Rank.values()) {
 			if (r == Rank.JACK && !includeJacks) {
@@ -512,7 +521,8 @@ public class PlayerKnowledge {
 					}
 				}
 				for (Rank r : Rank.values()) {
-					if (couldHaveCard(p, Card.getCard(getGame().getGameType().getTrumpSuit(), r))) {
+					if (couldHaveCard(p, Card.getCard(getGame().getGameType()
+							.getTrumpSuit(), r))) {
 						return true;
 					}
 				}
@@ -542,8 +552,10 @@ public class PlayerKnowledge {
 	public void setMissingSuit(final Player player, final Suit suit) {
 
 		for (Rank rank : Rank.values()) {
-			if (rank != Rank.JACK || GameType.NULL.equals(getGameType()) || GameType.RAMSCH.equals(getGameType())) {
-				possiblePlayerCards.get(player).remove(Card.getCard(suit, rank));
+			if (rank != Rank.JACK || GameType.NULL.equals(getGameType())
+					|| GameType.RAMSCH.equals(getGameType())) {
+				possiblePlayerCards.get(player)
+						.remove(Card.getCard(suit, rank));
 			}
 		}
 	}
@@ -636,12 +648,15 @@ public class PlayerKnowledge {
 		if (!ownCards.contains(card)) {
 			ownCards.add(card);
 
-			possiblePlayerCards.get(playerPosition.getLeftNeighbor()).remove(card);
-			possiblePlayerCards.get(playerPosition.getRightNeighbor()).remove(card);
+			possiblePlayerCards.get(playerPosition.getLeftNeighbor()).remove(
+					card);
+			possiblePlayerCards.get(playerPosition.getRightNeighbor()).remove(
+					card);
 			possibleSkatCards.remove(card);
 
 			suitCount.put(card.getSuit(), suitCount.get(card.getSuit()) + 1);
-			suitPoints.put(card.getSuit(), suitCount.get(card.getSuit()) + card.getRank().getPoints());
+			suitPoints.put(card.getSuit(), suitCount.get(card.getSuit())
+					+ card.getRank().getPoints());
 		}
 	}
 
@@ -666,7 +681,8 @@ public class PlayerKnowledge {
 	public void removeCard(final Card card) {
 
 		suitCount.put(card.getSuit(), suitCount.get(card.getSuit()) - 1);
-		suitPoints.put(card.getSuit(), suitCount.get(card.getSuit()) - card.getRank().getPoints());
+		suitPoints.put(card.getSuit(), suitCount.get(card.getSuit())
+				- card.getRank().getPoints());
 	}
 
 	public void removeOwnCard(final Card card) {
@@ -695,11 +711,15 @@ public class PlayerKnowledge {
 
 			for (Rank rank : Rank.values()) {
 
-				if (playedCards.get(Player.FOREHAND).contains(Card.getCard(suit, rank))
-						|| playedCards.get(Player.MIDDLEHAND).contains(Card.getCard(suit, rank))
-						|| playedCards.get(Player.REARHAND).contains(Card.getCard(suit, rank))) {
+				if (playedCards.get(Player.FOREHAND).contains(
+						Card.getCard(suit, rank))
+						|| playedCards.get(Player.MIDDLEHAND).contains(
+								Card.getCard(suit, rank))
+						|| playedCards.get(Player.REARHAND).contains(
+								Card.getCard(suit, rank))) {
 
-					result.append(suit.shortString()).append(rank.shortString()).append(' ');
+					result.append(suit.shortString())
+							.append(rank.shortString()).append(' ');
 				} else {
 
 					result.append("-- "); //$NON-NLS-1$
@@ -827,7 +847,9 @@ public class PlayerKnowledge {
 	 * @return Trump suit or null if there is no trump
 	 */
 	public Suit getTrumpSuit() {
-
+		if (game == null || game.getGameType() == null) {
+			throw new IllegalStateException("Game type not available."); //$NON-NLS-1$
+		}
 		return game.getGameType().getTrumpSuit();
 	}
 

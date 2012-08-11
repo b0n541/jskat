@@ -66,7 +66,7 @@ public class MessageParser {
 	static TablePanelStatus getTableStatus(final String loginName,
 			final List<String> params) {
 
-		TablePanelStatus status = new TablePanelStatus();
+		final TablePanelStatus status = new TablePanelStatus();
 
 		status.setLoginName(loginName);
 
@@ -75,10 +75,10 @@ public class MessageParser {
 		// get player status
 		for (int i = 0; i < status.getMaxPlayers(); i++) {
 			// parse only non empty seats
-			if (!(".".equals(params.get(i * 10 + 5)))) { //$NON-NLS-1$
+			if (!".".equals(params.get(i * 10 + 5))) { //$NON-NLS-1$
 				// there is player information
-				PlayerStatus playerStatus = parsePlayerStatus(params.subList(
-						i * 10 + 5, i * 10 + 16));
+				final PlayerStatus playerStatus = parsePlayerStatus(params
+						.subList(i * 10 + 5, i * 10 + 16));
 				// has player left already
 				if (".".equals(params.get(i + 1))) { //$NON-NLS-1$
 					playerStatus.setPlayerLeft(true);
@@ -102,7 +102,7 @@ public class MessageParser {
 	 */
 	private static PlayerStatus parsePlayerStatus(final List<String> params) {
 
-		PlayerStatus status = new PlayerStatus();
+		final PlayerStatus status = new PlayerStatus();
 
 		status.setName(params.get(0));
 		status.setIP(params.get(1));
@@ -123,7 +123,7 @@ public class MessageParser {
 
 		log.debug("game start parameter: " + params); //$NON-NLS-1$
 
-		GameStartInformation status = new GameStartInformation();
+		final GameStartInformation status = new GameStartInformation();
 
 		status.setLoginName(loginName);
 
@@ -140,12 +140,12 @@ public class MessageParser {
 
 	static MoveInformation getMoveInformation(final List<String> params) {
 
-		MoveInformation info = new MoveInformation();
+		final MoveInformation info = new MoveInformation();
 
 		getMovePlayer(params.get(0), info);
 
 		// FIXME Unhandled moves
-		String move = params.get(1);
+		final String move = params.get(1);
 		log.debug("Move: " + move); //$NON-NLS-1$
 		if ("y".equals(move)) { //$NON-NLS-1$
 			// holding bid move
@@ -182,7 +182,7 @@ public class MessageParser {
 			// extensive parsing needed
 
 			// test card move
-			Card card = Card.getCardFromString(move);
+			final Card card = Card.getCardFromString(move);
 			if (card != null) {
 				// card play move
 				info.setType(MoveType.CARD_PLAY);
@@ -196,7 +196,7 @@ public class MessageParser {
 
 					bid = Integer.parseInt(move);
 
-				} catch (NumberFormatException e) {
+				} catch (final NumberFormatException e) {
 
 					bid = -1;
 				}
@@ -239,8 +239,8 @@ public class MessageParser {
 
 	private static CardList parseSkatCards(final String move) {
 
-		StringTokenizer token = new StringTokenizer(move, "."); //$NON-NLS-1$
-		CardList result = new CardList();
+		final StringTokenizer token = new StringTokenizer(move, "."); //$NON-NLS-1$
+		final CardList result = new CardList();
 
 		while (token.hasMoreTokens()) {
 			result.add(Card.getCardFromString(token.nextToken()));
@@ -276,10 +276,10 @@ public class MessageParser {
 	private static GameAnnouncement parseGameAnnoucement(
 			final MoveInformation info, final String move) {
 
-		StringTokenizer annToken = new StringTokenizer(move, "."); //$NON-NLS-1$
-		String gameTypeString = annToken.nextToken();
+		final StringTokenizer annToken = new StringTokenizer(move, "."); //$NON-NLS-1$
+		final String gameTypeString = annToken.nextToken();
 
-		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+		final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 
 		// at first the game type
 		GameType gameType = null;
@@ -314,12 +314,13 @@ public class MessageParser {
 		// parse other game modifiers
 		for (int i = 1; i < gameTypeString.length(); i++) {
 
-			char mod = gameTypeString.charAt(i);
+			final char mod = gameTypeString.charAt(i);
 
 			if (mod == 'O') {
 
 				factory.setOuvert(Boolean.TRUE);
 				ouvertGame = true;
+
 			} else if (mod == 'H') {
 
 				factory.setHand(Boolean.TRUE);
@@ -332,20 +333,24 @@ public class MessageParser {
 				factory.setSchwarz(Boolean.TRUE);
 			}
 		}
+		if (gameType != GameType.NULL && ouvertGame && handGame) {
+			factory.setSchneider(true);
+			factory.setSchwarz(true);
+		}
 
 		if (annToken.hasMoreTokens()) {
 
 			if (ouvertGame) {
 
-				CardList ouvertCards = new CardList();
+				final CardList ouvertCards = new CardList();
 
 				int cardNo = 0;
 				while (annToken.hasMoreTokens()) {
 					// player has shown the cards --> ouvert game
-					String nextCard = annToken.nextToken();
+					final String nextCard = annToken.nextToken();
 
-					if (gameType != GameType.NULL
-							|| (gameType == GameType.NULL && cardNo != 0 && cardNo != 1)) {
+					if (gameType != GameType.NULL || gameType == GameType.NULL
+							&& cardNo != 0 && cardNo != 1) {
 						ouvertCards.add(Card.getCardFromString(nextCard));
 					}
 					cardNo++;
@@ -355,12 +360,12 @@ public class MessageParser {
 
 			} else if (!handGame) {
 
-				Card discardCard0 = Card
-						.getCardFromString(annToken.nextToken());
-				Card discardCard1 = Card
-						.getCardFromString(annToken.nextToken());
+				final Card discardCard0 = Card.getCardFromString(annToken
+						.nextToken());
+				final Card discardCard1 = Card.getCardFromString(annToken
+						.nextToken());
 
-				CardList discardedCards = new CardList();
+				final CardList discardedCards = new CardList();
 				discardedCards.add(discardCard0);
 				discardedCards.add(discardCard1);
 
@@ -368,7 +373,7 @@ public class MessageParser {
 			}
 		}
 
-		GameAnnouncement ann = factory.getAnnouncement();
+		final GameAnnouncement ann = factory.getAnnouncement();
 		info.setGameAnnouncement(ann);
 		return ann;
 	}
@@ -391,8 +396,8 @@ public class MessageParser {
 	 */
 	private static List<CardList> parseCardDealFromISSMessage(final String move) {
 
-		StringTokenizer handTokens = new StringTokenizer(move, "|"); //$NON-NLS-1$
-		List<CardList> result = new ArrayList<CardList>();
+		final StringTokenizer handTokens = new StringTokenizer(move, "|"); //$NON-NLS-1$
+		final List<CardList> result = new ArrayList<CardList>();
 
 		while (handTokens.hasMoreTokens()) {
 			result.add(parseHand(handTokens.nextToken()));
@@ -414,7 +419,7 @@ public class MessageParser {
 	 * @param move
 	 */
 	private static List<CardList> parseCardDealFromSummary(final String move) {
-		List<CardList> result = new ArrayList<CardList>();
+		final List<CardList> result = new ArrayList<CardList>();
 
 		// fore hand
 		result.add(parseHand(move.substring(0, 29)));
@@ -430,8 +435,8 @@ public class MessageParser {
 
 	private static CardList parseHand(final String hand) {
 
-		StringTokenizer cardTokens = new StringTokenizer(hand, "."); //$NON-NLS-1$
-		CardList result = new CardList();
+		final StringTokenizer cardTokens = new StringTokenizer(hand, "."); //$NON-NLS-1$
+		final CardList result = new CardList();
 
 		while (cardTokens.hasMoreTokens()) {
 			result.add(Card.getCardFromString(cardTokens.nextToken()));
@@ -476,17 +481,18 @@ public class MessageParser {
 
 	static SkatGameData parseGameSummary(final String gameSummary) {
 
-		SkatGameData result = new SkatGameData();
+		final SkatGameData result = new SkatGameData();
 
-		Pattern summaryPartPattern = Pattern.compile("(\\w+)\\[(.*?)\\]"); //$NON-NLS-1$
-		Matcher summaryPartMatcher = summaryPartPattern.matcher(gameSummary);
+		final Pattern summaryPartPattern = Pattern.compile("(\\w+)\\[(.*?)\\]"); //$NON-NLS-1$
+		final Matcher summaryPartMatcher = summaryPartPattern
+				.matcher(gameSummary);
 
 		while (summaryPartMatcher.find()) {
 
 			log.debug(summaryPartMatcher.group());
 
-			String summaryPartMarker = summaryPartMatcher.group(1);
-			String summeryPart = summaryPartMatcher.group(2);
+			final String summaryPartMarker = summaryPartMatcher.group(1);
+			final String summeryPart = summaryPartMatcher.group(2);
 
 			parseSummaryPart(result, summaryPartMarker, summeryPart);
 		}
@@ -523,19 +529,19 @@ public class MessageParser {
 			final String summaryPart) {
 
 		// FIXME (jansch 12.02.2012) parse moves correctly
-		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+		final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 		factory.setGameType(GameType.PASSED_IN);
 		result.setAnnouncement(factory.getAnnouncement());
 
-		StringTokenizer token = new StringTokenizer(summaryPart);
+		final StringTokenizer token = new StringTokenizer(summaryPart);
 
 		while (token.hasMoreTokens()) {
 
-			List<String> moveToken = new ArrayList<String>();
+			final List<String> moveToken = new ArrayList<String>();
 			moveToken.add(token.nextToken());
 			moveToken.add(token.nextToken());
 
-			MoveInformation moveInfo = getMoveInformation(moveToken);
+			final MoveInformation moveInfo = getMoveInformation(moveToken);
 
 			switch (moveInfo.getType()) {
 			case DEAL:
@@ -574,8 +580,8 @@ public class MessageParser {
 				if (result.getTricks().size() == 10
 						&& result.getCurrentTrick().getThirdCard() != null) {
 					// set the trick winner of the last trick
-					SkatRule skatRules = SkatRuleFactory.getSkatRules(result
-							.getGameType());
+					final SkatRule skatRules = SkatRuleFactory
+							.getSkatRules(result.getGameType());
 					result.setTrickWinner(9, skatRules.calculateTrickWinner(
 							result.getGameType(), result.getCurrentTrick()));
 				}
@@ -587,7 +593,7 @@ public class MessageParser {
 	private static void parseGameResult(final SkatGameData result,
 			final String summaryPart) {
 
-		StringTokenizer token = new StringTokenizer(summaryPart);
+		final StringTokenizer token = new StringTokenizer(summaryPart);
 
 		while (token.hasMoreTokens()) {
 
@@ -633,7 +639,7 @@ public class MessageParser {
 
 		} else if (token.startsWith("p:")) { //$NON-NLS-1$
 
-			int declarerPoints = Integer.parseInt(token.substring(2));
+			final int declarerPoints = Integer.parseInt(token.substring(2));
 			gameData.setDeclarerScore(declarerPoints);
 			gameData.getResult().setFinalDeclarerPoints(declarerPoints);
 			gameData.getResult().setFinalOpponentPoints(120 - declarerPoints);
@@ -675,7 +681,7 @@ public class MessageParser {
 	static ChatMessage getTableChatMessage(final String tableName,
 			final List<String> detailParams) {
 
-		StringBuffer text = new StringBuffer();
+		final StringBuffer text = new StringBuffer();
 
 		text.append(detailParams.get(0)).append(": "); //$NON-NLS-1$
 		for (int i = 1; i < detailParams.size(); i++) {

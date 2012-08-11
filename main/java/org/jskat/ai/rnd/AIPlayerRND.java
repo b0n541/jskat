@@ -84,11 +84,20 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 				" " + knowledge.getHighestBid(Player.MIDDLEHAND) + //$NON-NLS-1$
 				" " + knowledge.getHighestBid(Player.REARHAND)); //$NON-NLS-1$
 
-		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+		final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 
 		// select a random game type (without RAMSCH and PASSED_IN)
-		factory.setGameType(GameType.values()[rand.nextInt(GameType.values().length - 2)]);
-		factory.setOuvert(Boolean.valueOf(rand.nextBoolean()));
+		final GameType gameType = GameType.values()[rand.nextInt(GameType
+				.values().length - 2)];
+		factory.setGameType(gameType);
+		if (Boolean.valueOf(rand.nextBoolean())) {
+			factory.setOuvert(true);
+			if (gameType != GameType.NULL) {
+				factory.setHand(true);
+				factory.setSchneider(true);
+				factory.setSchwarz(true);
+			}
+		}
 
 		return factory.getAnnouncement();
 	}
@@ -135,7 +144,8 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 		log.debug('\n' + knowledge.toString());
 
 		// first find all possible cards
-		CardList possibleCards = getPlayableCards(knowledge.getTrickCards());
+		final CardList possibleCards = getPlayableCards(knowledge
+				.getTrickCards());
 
 		log.debug("found " + possibleCards.size() + " possible cards: " + possibleCards); //$NON-NLS-1$//$NON-NLS-2$
 
@@ -162,11 +172,13 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	 */
 	@Override
 	public CardList getCardsToDiscard() {
-		CardList result = new CardList();
+		final CardList result = new CardList();
 
 		// just discard two random cards
-		result.add(knowledge.getOwnCards().get(rand.nextInt(knowledge.getOwnCards().size())));
-		result.add(knowledge.getOwnCards().get(rand.nextInt(knowledge.getOwnCards().size())));
+		result.add(knowledge.getOwnCards().get(
+				rand.nextInt(knowledge.getOwnCards().size())));
+		result.add(knowledge.getOwnCards().get(
+				rand.nextInt(knowledge.getOwnCards().size())));
 
 		return result;
 	}

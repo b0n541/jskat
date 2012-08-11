@@ -26,7 +26,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.jskat.gui.action.AbstractJSkatAction;
-import org.jskat.gui.swing.JSkatGraphicRepository.Icon;
+import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
  * Implements the action for exiting JSkat

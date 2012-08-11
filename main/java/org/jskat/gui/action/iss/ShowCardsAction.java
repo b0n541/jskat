@@ -26,7 +26,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.jskat.gui.action.AbstractJSkatAction;
-import org.jskat.gui.swing.JSkatGraphicRepository.Icon;
+import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.util.JSkatResourceBundle;
 
 /**
@@ -41,7 +41,8 @@ public class ShowCardsAction extends AbstractJSkatAction {
 	 */
 	public ShowCardsAction() {
 
-		putValue(Action.NAME, JSkatResourceBundle.instance().getString("show_cards")); //$NON-NLS-1$
+		putValue(Action.NAME,
+				JSkatResourceBundle.instance().getString("show_cards")); //$NON-NLS-1$
 
 		setIcon(Icon.PLAY);
 	}

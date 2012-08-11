@@ -489,8 +489,10 @@ public class SkatGameData {
 			}
 		}
 
-		if (GameType.CLUBS.equals(announcement.gameType) || GameType.SPADES.equals(announcement.gameType)
-				|| GameType.HEARTS.equals(announcement.gameType) || GameType.DIAMONDS.equals(announcement.gameType)
+		if (GameType.CLUBS.equals(announcement.gameType)
+				|| GameType.SPADES.equals(announcement.gameType)
+				|| GameType.HEARTS.equals(announcement.gameType)
+				|| GameType.DIAMONDS.equals(announcement.gameType)
 				|| GameType.GRAND.equals(announcement.gameType)) {
 
 			result.setFinalDeclarerPoints(getDeclarerScore());
@@ -511,12 +513,15 @@ public class SkatGameData {
 		result.setWon(false);
 
 		// FIXME this is rule logic --> remove it from data object!!!
-		if (playerPoints.get(Player.FOREHAND).intValue() > playerPoints.get(Player.MIDDLEHAND).intValue()) {
+		if (playerPoints.get(Player.FOREHAND).intValue() > playerPoints.get(
+				Player.MIDDLEHAND).intValue()) {
 
-			if (playerPoints.get(Player.FOREHAND).intValue() > playerPoints.get(Player.REARHAND).intValue()) {
+			if (playerPoints.get(Player.FOREHAND).intValue() > playerPoints
+					.get(Player.REARHAND).intValue()) {
 				ramschLoser = Player.FOREHAND;
 			} else {
-				if (playerPoints.get(Player.FOREHAND).intValue() == playerPoints.get(Player.REARHAND).intValue()) {
+				if (playerPoints.get(Player.FOREHAND).intValue() == playerPoints
+						.get(Player.REARHAND).intValue()) {
 					ramschLoser = Player.MIDDLEHAND;
 					result.setWon(true);
 				} else {
@@ -526,10 +531,12 @@ public class SkatGameData {
 
 		} else {
 
-			if (playerPoints.get(Player.MIDDLEHAND).intValue() > playerPoints.get(Player.REARHAND).intValue()) {
+			if (playerPoints.get(Player.MIDDLEHAND).intValue() > playerPoints
+					.get(Player.REARHAND).intValue()) {
 				ramschLoser = Player.MIDDLEHAND;
 			} else {
-				if (playerPoints.get(Player.MIDDLEHAND).intValue() == playerPoints.get(Player.REARHAND).intValue()) {
+				if (playerPoints.get(Player.MIDDLEHAND).intValue() == playerPoints
+						.get(Player.REARHAND).intValue()) {
 					ramschLoser = Player.FOREHAND;
 					result.setWon(true);
 				} else {
@@ -540,7 +547,8 @@ public class SkatGameData {
 		setDeclarer(ramschLoser);
 
 		result.setFinalDeclarerPoints(playerPoints.get(ramschLoser));
-		result.setFinalOpponentPoints(playerPoints.get(ramschLoser.getLeftNeighbor())
+		result.setFinalOpponentPoints(playerPoints.get(ramschLoser
+				.getLeftNeighbor())
 				+ playerPoints.get(ramschLoser.getRightNeighbor()));
 
 		if (isDurchmarsch()) {
@@ -625,7 +633,8 @@ public class SkatGameData {
 	public Trick getLastTrick() {
 
 		if (getTricks().size() < 2) {
-			throw new IllegalStateException("No tricks finished in the game so far."); //$NON-NLS-1$
+			throw new IllegalStateException(
+					"No tricks finished in the game so far."); //$NON-NLS-1$
 		}
 
 		return tricks.get(tricks.size() - 2);
@@ -822,7 +831,8 @@ public class SkatGameData {
 	 */
 	public void addPlayerPoints(final Player player, final int points) {
 
-		playerPoints.put(player, Integer.valueOf(playerPoints.get(player).intValue() + points));
+		playerPoints.put(player,
+				Integer.valueOf(playerPoints.get(player).intValue() + points));
 	}
 
 	/**
@@ -933,6 +943,7 @@ public class SkatGameData {
 			factory.setOuvert(announcement.isOuvert());
 			factory.setSchneider(announcement.isSchneider());
 			factory.setSchwarz(announcement.isSchwarz());
+			factory.setDiscardedCards(announcement.discardedCards);
 		}
 		this.announcement = factory.getAnnouncement();
 
@@ -1091,7 +1102,8 @@ public class SkatGameData {
 	 * @return TRUE if the game was lost
 	 */
 	public boolean isGamePassed() {
-		return playerPasses.get(Player.FOREHAND).booleanValue() && playerPasses.get(Player.MIDDLEHAND).booleanValue()
+		return playerPasses.get(Player.FOREHAND).booleanValue()
+				&& playerPasses.get(Player.MIDDLEHAND).booleanValue()
 				&& playerPasses.get(Player.FOREHAND).booleanValue();
 	}
 
@@ -1174,7 +1186,8 @@ public class SkatGameData {
 	 */
 	public boolean isPlayerMadeNoTrick() {
 
-		return isPlayerMadeNoTrick(Player.FOREHAND) || isPlayerMadeNoTrick(Player.MIDDLEHAND)
+		return isPlayerMadeNoTrick(Player.FOREHAND)
+				|| isPlayerMadeNoTrick(Player.MIDDLEHAND)
 				|| isPlayerMadeNoTrick(Player.REARHAND);
 	}
 

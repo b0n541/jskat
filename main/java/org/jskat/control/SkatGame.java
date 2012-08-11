@@ -39,6 +39,7 @@ import org.jskat.util.CardDeck;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.GameVariant;
+import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.Player;
 import org.jskat.util.SkatConstants;
 import org.jskat.util.rule.SkatRule;
@@ -61,6 +62,8 @@ public class SkatGame extends JSkatThread {
 	private JSkatView view;
 	private SkatRule rules;
 
+	private final JSkatResourceBundle strings = JSkatResourceBundle.instance();
+
 	/**
 	 * Constructor
 	 * 
@@ -75,8 +78,9 @@ public class SkatGame extends JSkatThread {
 	 * @param newRearHand
 	 *            Hind hand player
 	 */
-	public SkatGame(final String newTableName, final GameVariant variant, final JSkatPlayer newForeHand,
-			final JSkatPlayer newMiddleHand, final JSkatPlayer newRearHand) {
+	public SkatGame(final String newTableName, final GameVariant variant,
+			final JSkatPlayer newForeHand, final JSkatPlayer newMiddleHand,
+			final JSkatPlayer newRearHand) {
 		tableName = newTableName;
 		setName("SkatGame on table " + tableName); //$NON-NLS-1$
 		this.variant = variant;
@@ -179,7 +183,8 @@ public class SkatGame extends JSkatThread {
 					}
 
 					if (Player.REARHAND.equals(data.getActivePlayer())) {
-						GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+						GameAnnouncementFactory factory = GameAnnouncement
+								.getFactory();
 						factory.setGameType(GameType.RAMSCH);
 						setGameAnnouncement(factory.getAnnouncement());
 						setGameState(GameState.TRICK_PLAYING);
@@ -316,12 +321,14 @@ public class SkatGame extends JSkatThread {
 
 		log.debug("ask middle and fore hand..."); //$NON-NLS-1$
 
-		bidValue = twoPlayerBidding(Player.MIDDLEHAND, Player.FOREHAND, bidValue);
+		bidValue = twoPlayerBidding(Player.MIDDLEHAND, Player.FOREHAND,
+				bidValue);
 
 		log.debug("Bid value after first bidding: " //$NON-NLS-1$
 				+ bidValue);
 
-		Player firstWinner = getBiddingWinner(Player.MIDDLEHAND, Player.FOREHAND);
+		Player firstWinner = getBiddingWinner(Player.MIDDLEHAND,
+				Player.FOREHAND);
 
 		log.debug("First bidding winner: " + firstWinner); //$NON-NLS-1$
 		log.debug("ask hind hand and first winner..."); //$NON-NLS-1$
@@ -372,7 +379,8 @@ public class SkatGame extends JSkatThread {
 				GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 				factory.setGameType(GameType.RAMSCH);
 				setGameAnnouncement(factory.getAnnouncement());
-				view.setGameAnnouncement(tableName, data.getDeclarer(), data.getAnnoucement());
+				view.setGameAnnouncement(tableName, data.getDeclarer(),
+						data.getAnnoucement());
 				// do not call "setGameAnnouncement(..)" here!
 			} else {
 				// pass in
@@ -404,7 +412,8 @@ public class SkatGame extends JSkatThread {
 	 *            Bid value to start from
 	 * @return the final bid value
 	 */
-	private int twoPlayerBidding(final Player announcer, final Player hearer, final int startBidValue) {
+	private int twoPlayerBidding(final Player announcer, final Player hearer,
+			final int startBidValue) {
 
 		int currBidValue = startBidValue;
 		boolean announcerPassed = false;
@@ -418,7 +427,9 @@ public class SkatGame extends JSkatThread {
 			// ask player
 			int announcerBidValue = player.get(announcer).bidMore(nextBidValue);
 
-			if (announcerBidValue > -1 && SkatConstants.bidOrder.contains(Integer.valueOf(announcerBidValue))) {
+			if (announcerBidValue > -1
+					&& SkatConstants.bidOrder.contains(Integer
+							.valueOf(announcerBidValue))) {
 
 				log.debug("announcer bids " + announcerBidValue); //$NON-NLS-1$
 
@@ -504,7 +515,8 @@ public class SkatGame extends JSkatThread {
 		data.setDiscardedSkat(data.getActivePlayer(), discardedSkat);
 		if (!(activePlayer.isHumanPlayer())) {
 			// human player has changed the cards in the GUI already
-			view.setDiscardedSkat(tableName, data.getActivePlayer(), skatBefore, discardedSkat);
+			view.setDiscardedSkat(tableName, data.getActivePlayer(),
+					skatBefore, discardedSkat);
 		}
 	}
 
@@ -532,14 +544,13 @@ public class SkatGame extends JSkatThread {
 		log.debug("declaring game..."); //$NON-NLS-1$
 
 		// TODO check for valid game announcements
-		try {
-			GameAnnouncement ann = player.get(data.getDeclarer()).announceGame();
-
+		GameAnnouncement ann = player.get(data.getDeclarer()).announceGame();
+		if (ann != null) {
 			setGameAnnouncement(ann);
-		} catch (NullPointerException e) {
-			// player has not returned an object
-			// TODO finish game immediately
-			e.printStackTrace();
+		} else {
+			view.showErrorMessage(
+					strings.getString("invalid_game_announcement_title"), //$NON-NLS-1$
+					strings.getString("invalid_game_announcement_message", ann)); //$NON-NLS-1$
 		}
 
 		doSleep(maxSleep);
@@ -595,7 +606,8 @@ public class SkatGame extends JSkatThread {
 
 			log.debug("middle hand plays"); //$NON-NLS-1$
 			view.setActivePlayer(tableName, newTrickForeHand.getLeftNeighbor());
-			playCard(trick, newTrickForeHand, newTrickForeHand.getLeftNeighbor());
+			playCard(trick, newTrickForeHand,
+					newTrickForeHand.getLeftNeighbor());
 
 			if (isFinished()) {
 				break;
@@ -605,7 +617,8 @@ public class SkatGame extends JSkatThread {
 
 			log.debug("hind hand plays"); //$NON-NLS-1$
 			view.setActivePlayer(tableName, newTrickForeHand.getRightNeighbor());
-			playCard(trick, newTrickForeHand, newTrickForeHand.getRightNeighbor());
+			playCard(trick, newTrickForeHand,
+					newTrickForeHand.getRightNeighbor());
 
 			if (isFinished()) {
 				break;
@@ -660,14 +673,16 @@ public class SkatGame extends JSkatThread {
 				if (trickWinner != null) {
 					log.debug("Skat cards (" + data.getSkat().getTotalValue() + " points) are added to player @ " //$NON-NLS-1$ //$NON-NLS-2$ 
 							+ trickWinner + " (= last trick)"); //$NON-NLS-1$
-					data.addPlayerPoints(trickWinner, data.getSkat().getTotalValue());
+					data.addPlayerPoints(trickWinner, data.getSkat()
+							.getTotalValue());
 				} else {
 					log.warn("Skat cards cannot be added to winner of final trick - trick winner is unknown"); //$NON-NLS-1$
 				}
 			}
 		} else {
 			// for all the other games, points to the declarer
-			data.addPlayerPoints(data.getDeclarer(), data.getSkat().getTotalValue());
+			data.addPlayerPoints(data.getDeclarer(), data.getSkat()
+					.getTotalValue());
 		}
 
 		// set schneider/schwarz/jungfrau/durchmarsch flags
@@ -689,7 +704,8 @@ public class SkatGame extends JSkatThread {
 		}
 	}
 
-	private void playCard(final Trick trick, final Player trickForeHand, final Player currPlayer) {
+	private void playCard(final Trick trick, final Player trickForeHand,
+			final Player currPlayer) {
 
 		Card card = null;
 		JSkatPlayer skatPlayer = getPlayerObject(currPlayer);
@@ -723,22 +739,25 @@ public class SkatGame extends JSkatThread {
 
 				log.error("Player (" + player.get(currPlayer) + ") is fooling!!! Doesn't have card " + card + "!"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 
-				if (skatPlayer.isHumanPlayer() || JSkatOptions.instance().isCheatDebugMode()) {
+				if (skatPlayer.isHumanPlayer()
+						|| JSkatOptions.instance().isCheatDebugMode()) {
 					view.showCardNotAllowedMessage(card);
 				} else {
 					// TODO create option for switching playing schwarz on/off
 					aiPlayerPlayedSchwarz = true;
 				}
 
-			} else if (!rules.isCardAllowed(data.getGameType(), trick.getFirstCard(), data.getPlayerCards(currPlayer),
-					card)) {
+			} else if (!rules
+					.isCardAllowed(data.getGameType(), trick.getFirstCard(),
+							data.getPlayerCards(currPlayer), card)) {
 
 				log.error("Player " + skatPlayer.getClass().toString() + " card not allowed: " + card + " game type: " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						+ data.getGameType() + " first trick card: " //$NON-NLS-1$
 						+ trick.getFirstCard() + " player cards: " //$NON-NLS-1$
 						+ data.getPlayerCards(currPlayer));
 
-				if (skatPlayer.isHumanPlayer() || JSkatOptions.instance().isCheatDebugMode()) {
+				if (skatPlayer.isHumanPlayer()
+						|| JSkatOptions.instance().isCheatDebugMode()) {
 					view.showCardNotAllowedMessage(card);
 				} else {
 					// TODO create option for switching playing schwarz on/off
@@ -770,11 +789,13 @@ public class SkatGame extends JSkatThread {
 			data.removePlayerCard(currPlayer, card);
 			data.setTrickCard(currPlayer, card);
 
-			if (trick.getTrickNumberInGame() > 0 && currPlayer.equals(trickForeHand)) {
+			if (trick.getTrickNumberInGame() > 0
+					&& currPlayer.equals(trickForeHand)) {
 				// remove all cards from current trick panel first
 				view.clearTrickCards(tableName);
 
-				Trick lastTrick = data.getTricks().get(data.getTricks().size() - 2);
+				Trick lastTrick = data.getTricks().get(
+						data.getTricks().size() - 2);
 
 				// set last trick cards
 				view.setLastTrick(tableName, lastTrick);
@@ -823,7 +844,8 @@ public class SkatGame extends JSkatThread {
 
 	private boolean isFinished() {
 
-		return data.getGameState() == GameState.PRELIMINARY_GAME_END || data.getGameState() == GameState.GAME_OVER;
+		return data.getGameState() == GameState.PRELIMINARY_GAME_END
+				|| data.getGameState() == GameState.GAME_OVER;
 	}
 
 	private void calculateGameValue() {

@@ -201,20 +201,11 @@ public class CardList implements Iterable<Card> {
 	 * @return TRUE, when a trump card was found in the CardList
 	 */
 	public boolean hasTrump(final GameType gameType) {
-
-		boolean result = false;
-
-		int i = 0;
-		while (result == false && i < cards.size()) {
-
-			if (get(i).isTrump(gameType)) {
-
-				result = true;
-			}
-			i++;
+		for (Card card : cards) {
+			if (card.isTrump(gameType))
+				return true;
 		}
-
-		return result;
+		return false;
 	}
 
 	/**

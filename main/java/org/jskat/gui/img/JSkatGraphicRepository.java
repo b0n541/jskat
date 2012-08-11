@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jskat.gui.swing;
+package org.jskat.gui.img;
 
 import java.awt.Canvas;
 import java.awt.Image;
@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jskat.data.JSkatOptions;
-import org.jskat.gui.img.CardFace;
+import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
 import org.slf4j.Logger;
@@ -39,7 +39,8 @@ import org.slf4j.LoggerFactory;
  */
 public class JSkatGraphicRepository {
 
-	private static Logger log = LoggerFactory.getLogger(JSkatGraphicRepository.class);
+	private static Logger log = LoggerFactory
+			.getLogger(JSkatGraphicRepository.class);
 	private static JSkatGraphicRepository instance = null;
 
 	/**
@@ -95,8 +96,12 @@ public class JSkatGraphicRepository {
 		// for all flags
 		for (Flag flag : Flag.values()) {
 			// add flag
-			flags.add(Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/" //$NON-NLS-1$
-					+ "flag_" + flag.toString().toLowerCase() + ".png"))); //$NON-NLS-1$ //$NON-NLS-2$
+			flags.add(Toolkit
+					.getDefaultToolkit()
+					.getImage(
+							ClassLoader
+									.getSystemResource("org/jskat/gui/img/gui/" //$NON-NLS-1$
+											+ "flag_" + flag.toString().toLowerCase() + ".png"))); //$NON-NLS-1$ //$NON-NLS-2$
 			tracker.addImage(flags.get(flag.ordinal()), 3);
 		}
 
@@ -108,20 +113,38 @@ public class JSkatGraphicRepository {
 	}
 
 	private void loadImages(final MediaTracker tracker) {
-		skatTable = Toolkit.getDefaultToolkit().getImage(
-				ClassLoader.getSystemResource("org/jskat/gui/img/gui/skat_table.png")); //$NON-NLS-1$
+		skatTable = Toolkit
+				.getDefaultToolkit()
+				.getImage(
+						ClassLoader
+								.getSystemResource("org/jskat/gui/img/gui/skat_table.png")); //$NON-NLS-1$
 		tracker.addImage(skatTable, 0);
-		jskatLogo = Toolkit.getDefaultToolkit().getImage(
-				ClassLoader.getSystemResource("org/jskat/gui/img/gui/jskatLogo.png")); //$NON-NLS-1$
+		jskatLogo = Toolkit
+				.getDefaultToolkit()
+				.getImage(
+						ClassLoader
+								.getSystemResource("org/jskat/gui/img/gui/jskatLogo.png")); //$NON-NLS-1$
 		tracker.addImage(jskatLogo, 0);
 
 		bidBubbles = new ArrayList<Image>();
-		bidBubbles.add(Toolkit.getDefaultToolkit().getImage(
-				ClassLoader.getSystemResource("org/jskat/gui/img/gui/bid_left.png"))); //$NON-NLS-1$
-		bidBubbles.add(Toolkit.getDefaultToolkit().getImage(
-				ClassLoader.getSystemResource("org/jskat/gui/img/gui/bid_right.png"))); //$NON-NLS-1$
-		bidBubbles.add(Toolkit.getDefaultToolkit().getImage(
-				ClassLoader.getSystemResource("org/jskat/gui/img/gui/bid_user.png"))); //$NON-NLS-1$
+		bidBubbles
+				.add(Toolkit
+						.getDefaultToolkit()
+						.getImage(
+								ClassLoader
+										.getSystemResource("org/jskat/gui/img/gui/bid_left.png"))); //$NON-NLS-1$
+		bidBubbles
+				.add(Toolkit
+						.getDefaultToolkit()
+						.getImage(
+								ClassLoader
+										.getSystemResource("org/jskat/gui/img/gui/bid_right.png"))); //$NON-NLS-1$
+		bidBubbles
+				.add(Toolkit
+						.getDefaultToolkit()
+						.getImage(
+								ClassLoader
+										.getSystemResource("org/jskat/gui/img/gui/bid_user.png"))); //$NON-NLS-1$
 		tracker.addImage(bidBubbles.get(0), 0);
 		tracker.addImage(bidBubbles.get(1), 0);
 		tracker.addImage(bidBubbles.get(2), 0);
@@ -147,10 +170,20 @@ public class JSkatGraphicRepository {
 			for (IconSize size : IconSize.values()) {
 
 				// add icon
-				icons.get(icon.ordinal()).add(
-						Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/" //$NON-NLS-1$
-								+ icon.toString().toLowerCase() + '_' + size.toString().toLowerCase() + ".png"))); //$NON-NLS-1$
-				tracker.addImage(icons.get(icon.ordinal()).get(size.ordinal()), 1);
+				icons.get(icon.ordinal())
+						.add(Toolkit
+								.getDefaultToolkit()
+								.getImage(
+										ClassLoader
+												.getSystemResource("org/jskat/gui/img/gui/" //$NON-NLS-1$
+														+ icon.toString()
+																.toLowerCase()
+														+ '_'
+														+ size.toString()
+																.toLowerCase()
+														+ ".png"))); //$NON-NLS-1$
+				tracker.addImage(icons.get(icon.ordinal()).get(size.ordinal()),
+						1);
 			}
 		}
 
@@ -176,19 +209,27 @@ public class JSkatGraphicRepository {
 
 			for (Rank rank : Rank.values()) {
 
-				cards.get(suit.ordinal()).add(
-						Toolkit.getDefaultToolkit().getImage(
-								ClassLoader.getSystemResource("org/jskat/gui/img/cards/" //$NON-NLS-1$
-										+ cardFace.toString().toLowerCase()
-										+ "/iss/" + suit.shortString() + '-' + rank.shortString() + ".gif"))); //$NON-NLS-1$//$NON-NLS-2$
+				cards.get(suit.ordinal())
+						.add(Toolkit
+								.getDefaultToolkit()
+								.getImage(
+										ClassLoader
+												.getSystemResource("org/jskat/gui/img/cards/" //$NON-NLS-1$
+														+ cardFace.toString()
+																.toLowerCase()
+														+ "/iss/" + suit.shortString() + '-' + rank.shortString() + ".gif"))); //$NON-NLS-1$//$NON-NLS-2$
 
-				tracker.addImage(cards.get(suit.ordinal()).get(rank.ordinal()), 2);
+				tracker.addImage(cards.get(suit.ordinal()).get(rank.ordinal()),
+						2);
 			}
 		}
 
-		cardBack = Toolkit.getDefaultToolkit().getImage(
-				ClassLoader.getSystemResource("org/jskat/gui/img/cards/" + cardFace.toString().toLowerCase() //$NON-NLS-1$
-						+ "/iss/back.gif")); //$NON-NLS-1$
+		cardBack = Toolkit
+				.getDefaultToolkit()
+				.getImage(
+						ClassLoader
+								.getSystemResource("org/jskat/gui/img/cards/" + cardFace.toString().toLowerCase() //$NON-NLS-1$
+										+ "/iss/back.gif")); //$NON-NLS-1$
 		tracker.addImage(cardBack, 2);
 
 		try {
@@ -492,6 +533,9 @@ public class JSkatGraphicRepository {
 	public enum Flag {
 		GERMAN, ENGLISH, FRENCH, SPANISH, POLISH, CZECH;
 
+		private final JSkatResourceBundle strings = JSkatResourceBundle
+				.instance();
+
 		/**
 		 * Gets a flag from a character
 		 * 
@@ -521,6 +565,40 @@ public class JSkatGraphicRepository {
 				break;
 			case 'C':
 				result = CZECH;
+				break;
+			}
+
+			return result;
+		}
+
+		/**
+		 * Gets the language for a flag
+		 * 
+		 * @param flag
+		 *            Flag
+		 * @return Language
+		 */
+		public String getLanguageForFlag() {
+			String result = null;
+
+			switch (this) {
+			case GERMAN:
+				result = strings.getString("german"); //$NON-NLS-1$
+				break;
+			case ENGLISH:
+				result = strings.getString("english"); //$NON-NLS-1$
+				break;
+			case FRENCH:
+				result = strings.getString("french"); //$NON-NLS-1$
+				break;
+			case SPANISH:
+				result = strings.getString("spanish"); //$NON-NLS-1$
+				break;
+			case POLISH:
+				result = strings.getString("polish"); //$NON-NLS-1$
+				break;
+			case CZECH:
+				result = strings.getString("czech"); //$NON-NLS-1$
 				break;
 			}
 

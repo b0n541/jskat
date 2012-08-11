@@ -20,12 +20,12 @@
  */
 package org.jskat.util;
 
+import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatOptions.SupportedLanguage;
-import org.jskat.gui.swing.JSkatGraphicRepository.Flag;
 
 /**
  * Helper class for skat related i18n string resolves
@@ -99,6 +99,17 @@ public class JSkatResourceBundle {
 	}
 
 	/**
+	 * Gets an i18n string
+	 * 
+	 * @param key
+	 *            Key
+	 * @return i18n string
+	 */
+	public String getString(final String key, Object... params) {
+		return MessageFormat.format(strings.getString(key), params);
+	}
+
+	/**
 	 * Gets the i18n string for a game type according the current card face
 	 * 
 	 * @param gameType
@@ -142,7 +153,8 @@ public class JSkatResourceBundle {
 	 */
 	public String getCardStringForCardFace(final Card card) {
 
-		return getSuitStringForCardFace(card.getSuit()) + " " + getRankStringForCardFace(card.getRank()); //$NON-NLS-1$
+		return getSuitStringForCardFace(card.getSuit())
+				+ " " + getRankStringForCardFace(card.getRank()); //$NON-NLS-1$
 	}
 
 	/**
@@ -363,40 +375,6 @@ public class JSkatResourceBundle {
 			break;
 		default:
 			// other game types not needed here
-			break;
-		}
-
-		return result;
-	}
-
-	/**
-	 * Gets the language for a flag
-	 * 
-	 * @param flag
-	 *            Flag
-	 * @return Language
-	 */
-	public String getLanguageForFlag(final Flag flag) {
-		String result = null;
-
-		switch (flag) {
-		case GERMAN:
-			result = strings.getString("german"); //$NON-NLS-1$
-			break;
-		case ENGLISH:
-			result = strings.getString("english"); //$NON-NLS-1$
-			break;
-		case FRENCH:
-			result = strings.getString("french"); //$NON-NLS-1$
-			break;
-		case SPANISH:
-			result = strings.getString("spanish"); //$NON-NLS-1$
-			break;
-		case POLISH:
-			result = strings.getString("polish"); //$NON-NLS-1$
-			break;
-		case CZECH:
-			result = strings.getString("czech"); //$NON-NLS-1$
 			break;
 		}
 

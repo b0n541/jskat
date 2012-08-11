@@ -71,19 +71,19 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 	// 1.0 and 2.0 for tanh function
 	// 2.0 and 4.0 for sigmoid function
-	private static double HAS_CARD = 1.0d;
-	private static double COULD_HAVE_CARD = 0.5d;
-	private static double DOESNT_HAVE_CARD = 0.0d;
-	private static double PLAYED_CARD = -0.5d;
-	private static double PLAYED_CARD_IN_TRICK = -1.0d;
+	public static double HAS_CARD = 1.0d;
+	public static double COULD_HAVE_CARD = 0.5d;
+	public static double DOESNT_HAVE_CARD = 0.0d;
+	public static double PLAYED_CARD = -0.5d;
+	public static double PLAYED_CARD_IN_TRICK = -1.0d;
 
-	private static double ACTIVE = 1.0d;
-	private static double INACTIVE = 0.0d;
+	public static double ACTIVE = 1.0d;
+	public static double INACTIVE = 0.0d;
 
 	// won game 1.0 and lost game -1.0 for tanh function
 	// won game 1.0 and lost game 0.0 for sigmoid function
-	private static double WON = 1.0d;
-	private static double LOST = 0.0d;
+	public static double WON = 1.0d;
+	public static double LOST = 0.0d;
 
 	/**
 	 * Constructor
@@ -120,9 +120,6 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 	private void initInputBuffer() {
 		allInputs.clear();
-		for (int i = 0; i < 10; i++) {
-			allInputs.add(new double[INPUT_LENGTH]);
-		}
 	}
 
 	/**
@@ -452,11 +449,13 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 	private void storeInputParameters(final int trick, final double[] inputParameters) {
 
-		double[] trickInputs = allInputs.get(trick);
+		double[] trickInputs = new double[INPUT_LENGTH];
 
 		for (int i = 0; i < trickInputs.length; i++) {
 			trickInputs[i] = inputParameters[i];
 		}
+		
+		allInputs.add(trickInputs);
 	}
 
 	private int chooseRandomCard(final CardList possibleCards, final CardList goodCards) {
@@ -721,6 +720,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	public void preparateForNewGame() {
 
 		bestGameTypeFromDiscarding = null;
+		initInputBuffer();
 	}
 
 	/**
@@ -734,7 +734,6 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			// from last trick to first trick
 			adjustNeuralNetworks(allInputs);
 		}
-		initInputBuffer();
 	}
 
 	private void adjustNeuralNetworks(final List<double[]> inputs) {

@@ -126,34 +126,34 @@ public class IssController {
 
 		if (issConnector == null) {
 
-			// issConnector = new StreamConnector();
-			issConnector = new WebSocketConnector();
+			issConnector = new StreamConnector();
+			// issConnector = new WebSocketConnector();
 		}
 
 		log.debug("connector created"); //$NON-NLS-1$
 
-		Object source = e.getSource();
-		String command = e.getActionCommand();
+		final Object source = e.getSource();
+		final String command = e.getActionCommand();
 
 		if (JSkatAction.CONNECT_TO_ISS.toString().equals(command)) {
 			if (source instanceof LoginCredentials) {
 
-				LoginCredentials loginCredentials = (LoginCredentials) source;
+				final LoginCredentials loginCredentials = (LoginCredentials) source;
 				login = loginCredentials.getLoginName();
 				password = loginCredentials.getPassword();
 
 				if (issConnector != null && !issConnector.isConnected()) {
 
 					issConnector.setConnectionData(login, password);
-					boolean isConnected = issConnector
+					final boolean isConnected = issConnector
 							.establishConnection(this);
 
 					if (isConnected) {
 						log.debug("Connection to ISS established: " + issConnector.isConnected()); //$NON-NLS-1$
 						issMsg = new MessageGenerator(login);
 						issOut = issConnector.getOutputChannel();
-						// sendToIss(login);
-						sendToIss(issMsg.getLoginAndPasswordMessage(password));
+						sendToIss(login);
+						// sendToIss(issMsg.getLoginAndPasswordMessage(password));
 					}
 				}
 			} else {
@@ -295,7 +295,7 @@ public class IssController {
 
 		log.debug("addLobbyChatMessage"); //$NON-NLS-1$
 
-		StringBuffer message = new StringBuffer();
+		final StringBuffer message = new StringBuffer();
 
 		// first the sender of the message
 		message.append(params.get(0)).append(": "); //$NON-NLS-1$
@@ -304,7 +304,7 @@ public class IssController {
 			message.append(params.get(i)).append(' ');
 		}
 
-		ChatMessage chatMessage = new ChatMessage("Lobby", //$NON-NLS-1$
+		final ChatMessage chatMessage = new ChatMessage("Lobby", //$NON-NLS-1$
 				message.toString());
 
 		view.appendISSChatMessage(ChatMessageType.LOBBY, chatMessage);
@@ -315,9 +315,9 @@ public class IssController {
 		log.debug("addTableChatMessage");
 
 		// first the table for the message
-		String tableName = params.get(0);
+		final String tableName = params.get(0);
 
-		StringBuffer message = new StringBuffer();
+		final StringBuffer message = new StringBuffer();
 		// second the sender of the message
 		message.append(params.get(1)).append(": "); //$NON-NLS-1$
 		// then the text
@@ -325,7 +325,8 @@ public class IssController {
 			message.append(params.get(i)).append(' ');
 		}
 
-		ChatMessage chatMessage = new ChatMessage(tableName, message.toString());
+		final ChatMessage chatMessage = new ChatMessage(tableName,
+				message.toString());
 
 		view.appendISSChatMessage(ChatMessageType.TABLE, chatMessage);
 	}
@@ -430,10 +431,10 @@ public class IssController {
 
 	private SkatGameData createSkatGameData(final GameStartInformation status) {
 
-		SkatGameData result = new SkatGameData();
+		final SkatGameData result = new SkatGameData();
 
 		result.setGameState(GameState.GAME_START);
-		for (Player player : Player.values()) {
+		for (final Player player : Player.values()) {
 			result.setPlayerName(player, status.getPlayerName(player));
 		}
 
@@ -462,7 +463,7 @@ public class IssController {
 	public void updateMove(final String tableName,
 			final MoveInformation moveInformation) {
 
-		SkatGameData currGame = gameData.get(tableName);
+		final SkatGameData currGame = gameData.get(tableName);
 		updateGameData(currGame, moveInformation);
 
 		view.updateISSMove(tableName, currGame, moveInformation);
@@ -479,13 +480,13 @@ public class IssController {
 		} else if (MoveType.CARD_PLAY.equals(moveInformation.getType())) {
 
 			// handle trick playing
-			Trick trick = currGame.getCurrentTrick();
+			final Trick trick = currGame.getCurrentTrick();
 
 			view.setTrickNumber(tableName, trick.getTrickNumberInGame() + 1);
 
 			if (trick.getThirdCard() != null) {
 
-				Player trickWinner = SkatRuleFactory.getSkatRules(
+				final Player trickWinner = SkatRuleFactory.getSkatRules(
 						currGame.getGameType()).calculateTrickWinner(
 						currGame.getGameType(), trick);
 				trick.setTrickWinner(trickWinner);
@@ -513,7 +514,7 @@ public class IssController {
 		boolean result = false;
 
 		if (currGame.getNumberOfPasses() == 2) {
-			for (Player currPlayer : Player.values()) {
+			for (final Player currPlayer : Player.values()) {
 				if (!currGame.isPlayerPass(currPlayer)) {
 					if (currGame.getPlayerBid(currPlayer) > 0) {
 						result = true;
@@ -529,7 +530,7 @@ public class IssController {
 	private void updateGameData(final SkatGameData currGame,
 			final MoveInformation moveInformation) {
 
-		Player movePlayer = moveInformation.getPlayer();
+		final Player movePlayer = moveInformation.getPlayer();
 
 		switch (moveInformation.getType()) {
 		case DEAL:

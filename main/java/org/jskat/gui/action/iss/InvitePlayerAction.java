@@ -25,7 +25,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 
 import org.jskat.gui.action.AbstractJSkatAction;
-import org.jskat.gui.swing.JSkatGraphicRepository.Icon;
+import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.util.JSkatResourceBundle;
 
 /**
