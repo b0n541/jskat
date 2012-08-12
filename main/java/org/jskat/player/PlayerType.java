@@ -41,6 +41,10 @@ public enum PlayerType {
 	 */
 	NEURAL_NETWORK("org.jskat.ai.nn.AIPlayerNN"), //$NON-NLS-1$
 	/**
+	 * Next generation algorithmic player
+	 */
+	NEWALGORITHM("org.jskat.ai.newalgorithm.AlgorithmAI"), //$NON-NLS-1$
+	/**
 	 * Human player
 	 */
 	HUMAN(null);

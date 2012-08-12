@@ -385,8 +385,24 @@ public enum Rank {
 	 * 
 	 * @return an int representation of the card's rank
 	 */
+	@Deprecated
 	public int toBinaryFlag() {
 		return (int) Math.pow(2, this.ordinal());
 	}
-	
+
+	public int toNullBinaryFlag() {
+		return (int) Math.pow(2, this.getNullOrder());
+	}
+
+	public int toSuitBinaryFlag() {
+		return (int) Math.pow(2, this.getSuitGrandOrder());
+	}
+
+	public int toGrandBinaryFlag() {
+		return toSuitBinaryFlag();
+	}
+
+	public int toRamschBinaryFlag() {
+		return (int) Math.pow(2, this.getRamschOrder());
+	}
 }

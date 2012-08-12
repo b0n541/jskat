@@ -450,9 +450,7 @@ public class PlayerKnowledge {
 			if (r == Rank.JACK) {
 				continue;
 			}
-			if (couldHaveCard(player, Card.getCard(suit, r))) {
-				return true;
-			}
+			return couldHaveCard(player, Card.getCard(suit, r));
 		}
 		return false;
 	}
@@ -898,7 +896,7 @@ public class PlayerKnowledge {
 	 * @return the ownCards
 	 */
 	public CardList getOwnCards() {
-		return ownCards.getImmutableCopy();
+		return ownCards;
 	}
 
 	/**
