@@ -23,6 +23,7 @@ package org.jskat.gui.swing;
 import java.awt.Font;
 
 import javax.swing.ActionMap;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -63,48 +64,64 @@ public class WelcomePanel extends AbstractTabPanel {
 	private JPanel getWelcomePanel() {
 
 		final JPanel welcomePanel = new JPanel(LayoutFactory.getMigLayout(
-				"fill", "fill", "[shrink][grow]"));
+				"fill", "[]", "[shrink][grow]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		final JPanel headerPanel = new JPanel(
-				LayoutFactory.getMigLayout("fill"));
-		final JLabel headerLabel = new JLabel(
-				strings.getString("welcome_to_jskat")); //$NON-NLS-1$
-		headerLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-		headerPanel.add(headerLabel, "center");
-		welcomePanel.add(headerPanel, "shrink, wrap"); //$NON-NLS-1$
-
-		final JPanel localTablePanel = new JPanel(
-				LayoutFactory.getMigLayout("fill"));
-		final JButton localTableButton = new JButton(this.getActionMap().get(
-				JSkatAction.CREATE_LOCAL_TABLE));
-		localTablePanel.add(localTableButton, "center, wrap");
-		localTablePanel.add(
-				new JLabel("<html><p>"
-						+ strings.getString("explain_local_table_1")
-						+ "</p><p>"
-						+ strings.getString("explain_local_table_2")
-						+ "</p></html>"), "center");
-
-		final JPanel issTablePanel = new JPanel(
-				LayoutFactory.getMigLayout("fill"));
-		final JButton issTableButton = new JButton(getActionMap().get(
-				JSkatAction.SHOW_ISS_LOGIN));
-		issTablePanel.add(issTableButton, "center, wrap");
-		issTablePanel.add(
-				new JLabel("<html><p>"
-						+ strings.getString("explain_iss_table_1") + "</p><p>"
-						+ strings.getString("explain_iss_table_2")
-						+ "</p></html>"), "center");
-
-		final JPanel buttonPanel = new JPanel(
-				LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
-
-		buttonPanel.add(localTablePanel, "width 50%");
-		buttonPanel.add(issTablePanel, "width 50%");
-
-		welcomePanel.add(buttonPanel, "align center"); //$NON-NLS-1$
+		welcomePanel.add(createHeaderPanel(), "center, wrap"); //$NON-NLS-1$
+		welcomePanel.add(createButtonPanel(), "center"); //$NON-NLS-1$
 
 		return welcomePanel;
+	}
+
+	private JPanel createHeaderPanel() {
+
+		final JPanel headerPanel = new JPanel(
+				LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+		final JLabel logoLabel = new JLabel(new ImageIcon(
+				bitmaps.getJSkatLogoImage()));
+		headerPanel.add(logoLabel);
+		final JLabel headerLabel = new JLabel(
+				strings.getString("welcome_to_jskat")); //$NON-NLS-1$ 
+		headerLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 32));
+		headerPanel.add(headerLabel, "center"); //$NON-NLS-1$
+		return headerPanel;
+	}
+
+	private JPanel createButtonPanel() {
+
+		final JButton localTableButton = new JButton(this.getActionMap().get(
+				JSkatAction.CREATE_LOCAL_TABLE));
+		final JLabel localTableDescription = new JLabel("<html><p>" //$NON-NLS-1$
+				+ strings.getString("explain_local_table_1") + "</p><p>" //$NON-NLS-1$ //$NON-NLS-2$
+				+ strings.getString("explain_local_table_2") + "</p></html>"); //$NON-NLS-1$//$NON-NLS-2$
+
+		final JButton issTableButton = new JButton(getActionMap().get(
+				JSkatAction.SHOW_ISS_LOGIN));
+		final JLabel issTableDescription = new JLabel("<html><p>" //$NON-NLS-1$
+				+ strings.getString("explain_iss_table_1") + "</p><p>" //$NON-NLS-1$ //$NON-NLS-2$
+				+ strings.getString("explain_iss_table_2") + "</p></html>"); //$NON-NLS-1$//$NON-NLS-2$
+
+		final JButton optionsButton = new JButton(getActionMap().get(
+				JSkatAction.PREFERENCES));
+		final JLabel optionsDescription = new JLabel("<html><p>" //$NON-NLS-1$
+				+ strings.getString("explain_options_1") + "</p></html>"); //$NON-NLS-1$//$NON-NLS-2$
+
+		final JButton quitButton = new JButton(getActionMap().get(
+				JSkatAction.EXIT_JSKAT));
+		final JLabel quitDescription = new JLabel("<html><p>" //$NON-NLS-1$
+				+ strings.getString("explain_exit") + "</p></html>"); //$NON-NLS-1$//$NON-NLS-2$
+
+		final JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout(
+				"", "[][]", "[][]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		buttonPanel.add(localTableButton, "grow"); //$NON-NLS-1$
+		buttonPanel.add(localTableDescription, "wrap"); //$NON-NLS-1$
+		buttonPanel.add(issTableButton, "grow"); //$NON-NLS-1$
+		buttonPanel.add(issTableDescription, "wrap"); //$NON-NLS-1$
+		buttonPanel.add(optionsButton, "grow, gapy 1cm"); //$NON-NLS-1$
+		buttonPanel.add(optionsDescription, "gapy 1cm, wrap"); //$NON-NLS-1$
+		buttonPanel.add(quitButton, "grow, gapy 1cm"); //$NON-NLS-1$
+		buttonPanel.add(quitDescription, "gapy 1cm, wrap"); //$NON-NLS-1$
+
+		return buttonPanel;
 	}
 
 	@Override
