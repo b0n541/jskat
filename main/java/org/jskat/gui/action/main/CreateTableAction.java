@@ -40,7 +40,7 @@ public class CreateTableAction extends AbstractJSkatAction {
 	 */
 	public CreateTableAction() {
 
-		putValue(Action.NAME, strings.getString("new_table")); //$NON-NLS-1$
+		putValue(Action.NAME, strings.getString("play_on_local_table")); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION,
 				strings.getString("new_table_tooltip")); //$NON-NLS-1$
 
@@ -51,7 +51,7 @@ public class CreateTableAction extends AbstractJSkatAction {
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void actionPerformed(final ActionEvent e) {
 
 		jskat.createTable();
 	}
