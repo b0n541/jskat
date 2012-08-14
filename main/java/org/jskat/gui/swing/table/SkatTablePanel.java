@@ -526,6 +526,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 			rearHand.setActivePlayer(false);
 			break;
 		}
+
+		validate();
 	}
 
 	private void resetGameData() {
