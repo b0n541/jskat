@@ -229,6 +229,7 @@ public class JSkatOptionsDialog extends JDialog {
 		buttonPanel.add(cancel);
 
 		root.add(buttonPanel, "center"); //$NON-NLS-1$
+		root.validate();
 
 		final InputMap im = root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
 		final ActionMap am = root.getActionMap();
@@ -238,7 +239,6 @@ public class JSkatOptionsDialog extends JDialog {
 		am.put("CANCEL", cancelAction);
 
 		setContentPane(root);
-
 		pack();
 	}
 
