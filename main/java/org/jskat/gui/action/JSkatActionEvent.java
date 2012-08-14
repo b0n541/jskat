@@ -17,7 +17,8 @@ public class JSkatActionEvent {
 	 * @param actionSource
 	 *            Action source
 	 */
-	public JSkatActionEvent(final String actionCommand, final Object actionSource) {
+	public JSkatActionEvent(final String actionCommand,
+			final Object actionSource) {
 		this.actionCommand = actionCommand;
 		this.actionSource = actionSource;
 	}
@@ -30,7 +31,8 @@ public class JSkatActionEvent {
 	 * @param actionSource
 	 *            Action source
 	 */
-	public JSkatActionEvent(final JSkatAction jskatAction, final Object actionSource) {
+	public JSkatActionEvent(final JSkatAction jskatAction,
+			final Object actionSource) {
 		this.actionCommand = jskatAction.toString();
 		this.actionSource = actionSource;
 	}
@@ -61,5 +63,10 @@ public class JSkatActionEvent {
 	 */
 	public Object getSource() {
 		return this.actionSource;
+	}
+
+	@Override
+	public String toString() {
+		return "Action: " + actionCommand + " source: " + actionSource; //$NON-NLS-1$//$NON-NLS-2$
 	}
 }
