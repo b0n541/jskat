@@ -77,7 +77,8 @@ class CardPanel extends JPanel {
 	 * @param showBackside
 	 *            TRUE if the Card should hide its face
 	 */
-	CardPanel(final JPanel parent, final double scaleFactor, final boolean showBackside) {
+	CardPanel(final JPanel parent, final double scaleFactor,
+			final boolean showBackside) {
 
 		setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
@@ -160,16 +161,19 @@ class CardPanel extends JPanel {
 		super.paintComponent(g);
 
 		// copying cards prevents ConcurrentModificationException
-		CardList cardsToPaint = new CardList(cards);
+		final CardList cardsToPaint = new CardList(cards);
 
 		// rendering hints
-		Graphics2D g2D = (Graphics2D) g;
-		g2D.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		final Graphics2D g2D = (Graphics2D) g;
+		g2D.setRenderingHint(RenderingHints.KEY_RENDERING,
+				RenderingHints.VALUE_RENDER_QUALITY);
+		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
 
 		// calculate card gap
-		int panelWidth = getWidth();
-		int cardWidth = bitmaps.getCardImage(Suit.CLUBS, Rank.JACK).getWidth(this);
+		final int panelWidth = getWidth();
+		final int cardWidth = bitmaps.getCardImage(Suit.CLUBS, Rank.JACK)
+				.getWidth(this);
 		int cardGap = cardWidth;
 		if (cards.size() * cardGap > panelWidth) {
 
@@ -178,7 +182,7 @@ class CardPanel extends JPanel {
 
 		// paint all cards
 		int cardNo = 0;
-		for (Card card : cardsToPaint) {
+		for (final Card card : cardsToPaint) {
 
 			Image image = null;
 
@@ -190,11 +194,12 @@ class CardPanel extends JPanel {
 					// e.g. in debug mode
 					image = bitmaps.getCardImage(null, null);
 				} else {
-					image = bitmaps.getCardImage(card.getSuit(), card.getRank());
+					image = bitmaps
+							.getCardImage(card.getSuit(), card.getRank());
 				}
 			}
 
-			AffineTransform transform = new AffineTransform();
+			final AffineTransform transform = new AffineTransform();
 			transform.scale(scaleFactor, scaleFactor);
 			transform.translate(cardNo * cardGap, 0);
 			g2D.drawImage(image, transform, this);
@@ -256,17 +261,19 @@ class CardPanel extends JPanel {
 	 */
 	void cardClicked(final MouseEvent e) {
 		// FIXME (jan 04.12.2010) refactor this method, nobody understands it
-		int xPosition = e.getX();
-		int yPosition = e.getY();
+		final int xPosition = e.getX();
+		final int yPosition = e.getY();
 
 		//		log.debug("Card panel clicked at: " + xPosition + " x " + yPosition); //$NON-NLS-1$ //$NON-NLS-2$
 
-		if (xPosition > -1 && xPosition < getWidth() && yPosition > -1 && yPosition < getHeight()) {
+		if (xPosition > -1 && xPosition < getWidth() && yPosition > -1
+				&& yPosition < getHeight()) {
 
 			//			log.debug("Mouse button release inside panel"); //$NON-NLS-1$
 
 			// get card
-			double cardWidth = bitmaps.getCardImage(Suit.CLUBS, Rank.JACK).getWidth(this);
+			final double cardWidth = bitmaps
+					.getCardImage(Suit.CLUBS, Rank.JACK).getWidth(this);
 
 			int cardIndex = -1;
 			if (cards.size() > 0) {
@@ -278,12 +285,12 @@ class CardPanel extends JPanel {
 				} else {
 					double distanceBetweenCards = cardWidth;
 					if (cards.size() > 1) {
-						distanceBetweenCards = (getWidth() - cardWidth) / (cards.size() - 1.0);
+						distanceBetweenCards = (getWidth() - cardWidth)
+								/ (cards.size() - 1.0);
 					}
 
 					if (cardWidth > distanceBetweenCards) {
-						// cards without gaps
-						log.debug("cards without gaps"); //$NON-NLS-1$
+						log.debug("cards with overlaping"); //$NON-NLS-1$
 						cardIndex = 0;
 						while (!((cardIndex * distanceBetweenCards) < xPosition && ((cardIndex + 1)
 								* distanceBetweenCards > xPosition))
@@ -291,13 +298,9 @@ class CardPanel extends JPanel {
 							cardIndex++;
 						}
 					} else {
-						// cards with gaps
-						log.debug("cards with gaps"); //$NON-NLS-1$
-						double cardGap = 0.0;
+						log.debug("cards without overlaping"); //$NON-NLS-1$
 
-						if ((int) ((xPosition / (cardWidth + cardGap))) == (int) ((xPosition + cardGap) / (cardWidth + cardGap))) {
-							cardIndex = (int) (xPosition / (cardWidth + cardGap));
-						}
+						cardIndex = (int) (xPosition * (1 / scaleFactor) / (cardWidth));
 					}
 				}
 			}
@@ -315,15 +318,19 @@ class CardPanel extends JPanel {
 
 				if (parent instanceof DiscardPanel) {
 					// card panel in discard panel was clicked
-					action = getActionMap().get(JSkatAction.TAKE_CARD_FROM_SKAT);
+					action = getActionMap()
+							.get(JSkatAction.TAKE_CARD_FROM_SKAT);
 				} else if (parent instanceof JSkatUserPanel) {
 					// card panel in player panel was clicked
 
-					GameState state = ((JSkatUserPanel) parent).getGameState();
+					final GameState state = ((JSkatUserPanel) parent)
+							.getGameState();
 
-					if (state == GameState.DISCARDING || state == GameState.SCHIEBERAMSCH) {
+					if (state == GameState.DISCARDING
+							|| state == GameState.SCHIEBERAMSCH) {
 						// discarding phase
-						action = getActionMap().get(JSkatAction.PUT_CARD_INTO_SKAT);
+						action = getActionMap().get(
+								JSkatAction.PUT_CARD_INTO_SKAT);
 					} else if (state == GameState.TRICK_PLAYING) {
 						// trick playing phase
 						action = getActionMap().get(JSkatAction.PLAY_CARD);
@@ -335,9 +342,11 @@ class CardPanel extends JPanel {
 
 				if (action != null) {
 
-					action.actionPerformed(new ActionEvent(Card.getCardFromString(card.getSuit().shortString()
-							+ card.getRank().shortString()), ActionEvent.ACTION_PERFORMED, (String) action
-							.getValue(Action.ACTION_COMMAND_KEY)));
+					action.actionPerformed(new ActionEvent(Card
+							.getCardFromString(card.getSuit().shortString()
+									+ card.getRank().shortString()),
+							ActionEvent.ACTION_PERFORMED, (String) action
+									.getValue(Action.ACTION_COMMAND_KEY)));
 				} else {
 
 					log.debug("Action is null"); //$NON-NLS-1$
