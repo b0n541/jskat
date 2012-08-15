@@ -545,6 +545,9 @@ public class MessageParser {
 
 			switch (moveInfo.getType()) {
 			case DEAL:
+				for (final Player player : Player.values()) {
+					result.setDealtCards(player, moveInfo.getCards(player));
+				}
 				result.setDealtSkatCards(moveInfo.getSkat().get(0), moveInfo
 						.getSkat().get(1));
 				break;
@@ -561,6 +564,8 @@ public class MessageParser {
 				break;
 			case GAME_ANNOUNCEMENT:
 				result.setAnnouncement(moveInfo.getGameAnnouncement());
+				result.setDiscardedSkat(moveInfo.getPlayer(), moveInfo
+						.getGameAnnouncement().getDiscardedCards());
 				break;
 			case CARD_PLAY:
 				if (result.getTricks().size() == 0) {

@@ -81,13 +81,13 @@ public class MessageHandler extends Thread {
 		while (true) {
 			if (messageList.size() > 0) {
 
-				String message = getNextMessage();
+				final String message = getNextMessage();
 				handleMessage(message);
 			} else {
 				try {
 					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					log.warn("Thread.sleep() was interrupted");
+				} catch (final InterruptedException e) {
+					log.warn("Thread.sleep() was interrupted"); //$NON-NLS-1$
 				}
 			}
 		}
@@ -113,12 +113,12 @@ public class MessageHandler extends Thread {
 			issControl.closeIssPanels();
 		} else {
 
-			StringTokenizer tokenizer = new StringTokenizer(message); // get
-																		// first
+			final StringTokenizer tokenizer = new StringTokenizer(message); // get
+			// first
 			// command
-			String first = tokenizer.nextToken();
+			final String first = tokenizer.nextToken();
 			// get all parameters
-			List<String> params = new ArrayList<String>();
+			final List<String> params = new ArrayList<String>();
 			while (tokenizer.hasMoreTokens()) {
 				params.add(tokenizer.nextToken());
 			}
@@ -127,7 +127,7 @@ public class MessageHandler extends Thread {
 
 				handleMessage(first, params);
 
-			} catch (Exception except) {
+			} catch (final Exception except) {
 				log.error("Error in parsing ISS protocoll", except); //$NON-NLS-1$
 				issControl.showErrorMessage(strings
 						.getString("iss_error_parsing_iss_protocol")); //$NON-NLS-1$
@@ -137,7 +137,7 @@ public class MessageHandler extends Thread {
 
 	void handleMessage(final String first, final List<String> params) {
 
-		MessageType type = MessageType.getByString(first);
+		final MessageType type = MessageType.getByString(first);
 
 		if (MessageType.UNKNOWN.equals(type)) {
 
@@ -146,7 +146,7 @@ public class MessageHandler extends Thread {
 			// FIXME (jansch 30.05.2011) put message into a queue
 			try {
 				handleMessageObsolete(type, params);
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -215,7 +215,7 @@ public class MessageHandler extends Thread {
 
 	private String getErrorString(final List<String> params) {
 
-		for (String param : params) {
+		for (final String param : params) {
 			if (param.startsWith("_")) { //$NON-NLS-1$
 				return param;
 			}
@@ -241,9 +241,9 @@ public class MessageHandler extends Thread {
 
 		log.debug("table creation message"); //$NON-NLS-1$
 
-		String tableName = params.get(0);
-		String creator = params.get(1);
-		int seats = Integer.parseInt(params.get(2));
+		final String tableName = params.get(0);
+		final String creator = params.get(1);
+		final int seats = Integer.parseInt(params.get(2));
 		issControl.createTable(tableName, creator, seats);
 	}
 
@@ -251,16 +251,16 @@ public class MessageHandler extends Thread {
 
 		log.debug("table destroy message"); //$NON-NLS-1$
 
-		String tableName = params.get(0);
+		final String tableName = params.get(0);
 		issControl.destroyTable(tableName);
 	}
 
 	void handleTableInvitationMessage(final List<String> params) {
 		log.debug("table destroy message"); //$NON-NLS-1$
 
-		String invitor = params.get(0);
-		String tableName = params.get(1);
-		String invitationTicket = params.get(2);
+		final String invitor = params.get(0);
+		final String tableName = params.get(1);
+		final String invitationTicket = params.get(2);
 
 		issControl.handleInvitation(invitor, tableName, invitationTicket);
 	}
@@ -273,15 +273,15 @@ public class MessageHandler extends Thread {
 
 		log.debug("table update message"); //$NON-NLS-1$
 
-		String tableName = params.get(0);
+		final String tableName = params.get(0);
 
 		if (issControl.isTableJoined(tableName)) {
 
 			// FIXME (jan 18.11.2010) is this the name of the creator or the
 			// login name of the current player?
-			String creator = params.get(1);
-			String actionCommand = params.get(2);
-			List<String> detailParams = params.subList(3, params.size());
+			final String creator = params.get(1);
+			final String actionCommand = params.get(2);
+			final List<String> detailParams = params.subList(3, params.size());
 
 			if (actionCommand.equals("error")) { //$NON-NLS-1$
 
@@ -304,7 +304,7 @@ public class MessageHandler extends Thread {
 
 			} else if (actionCommand.equals("play")) { //$NON-NLS-1$
 
-				MoveInformation moveInfo = MessageParser
+				final MoveInformation moveInfo = MessageParser
 						.getMoveInformation(detailParams);
 				MessageParser.parsePlayerTimes(detailParams, moveInfo);
 				issControl.updateMove(tableName, moveInfo);
@@ -328,7 +328,7 @@ public class MessageHandler extends Thread {
 	private SkatGameData getGameInformation(final List<String> params) {
 
 		// first glue alle params back together
-		String gameResult = glueParams(params);
+		final String gameResult = glueParams(params);
 
 		return MessageParser.parseGameSummary(gameResult);
 	}
@@ -336,7 +336,7 @@ public class MessageHandler extends Thread {
 	private String glueParams(final List<String> params) {
 
 		String result = new String();
-		Iterator<String> paramIterator = params.iterator();
+		final Iterator<String> paramIterator = params.iterator();
 
 		while (paramIterator.hasNext()) {
 
@@ -358,7 +358,7 @@ public class MessageHandler extends Thread {
 	 */
 	void handleClientListMessage(final List<String> params) {
 
-		String plusMinus = params.remove(0);
+		final String plusMinus = params.remove(0);
 
 		if (plusMinus.equals("+")) { //$NON-NLS-1$
 
@@ -378,10 +378,10 @@ public class MessageHandler extends Thread {
 	 */
 	void updateClientList(final List<String> params) {
 
-		String playerName = params.get(0);
-		String language = params.get(2);
-		long gamesPlayed = Long.parseLong(params.get(3));
-		double strength = Double.parseDouble(params.get(4));
+		final String playerName = params.get(0);
+		final String language = params.get(2);
+		final long gamesPlayed = Long.parseLong(params.get(3));
+		final double strength = Double.parseDouble(params.get(4));
 
 		issControl.updateISSPlayerList(playerName, language, gamesPlayed,
 				strength);
@@ -406,9 +406,9 @@ public class MessageHandler extends Thread {
 	 */
 	void handleWelcomeMessage(final List<String> params) {
 
-		String login = params.get(0);
-		double issProtocolVersion = Double
-				.parseDouble(params.get(params.size() - 1));
+		final String login = params.get(0);
+		final double issProtocolVersion = Double.parseDouble(params.get(params
+				.size() - 1));
 
 		log.debug("iss version: " + issProtocolVersion); //$NON-NLS-1$
 		log.debug("local version: " + protocolVersion); //$NON-NLS-1$
@@ -429,7 +429,7 @@ public class MessageHandler extends Thread {
 	 */
 	void handleTableListMessage(final List<String> params) {
 
-		String plusMinus = params.remove(0);
+		final String plusMinus = params.remove(0);
 
 		if (plusMinus.equals("+")) { //$NON-NLS-1$
 
@@ -449,12 +449,12 @@ public class MessageHandler extends Thread {
 	 */
 	void updateTableList(final List<String> params) {
 
-		String tableName = params.get(0);
-		int maxPlayers = Integer.parseInt(params.get(1));
-		long gamesPlayed = Long.parseLong(params.get(2));
-		String player1 = params.get(3);
-		String player2 = params.get(4);
-		String player3 = params.get(5);
+		final String tableName = params.get(0);
+		final int maxPlayers = Integer.parseInt(params.get(1));
+		final long gamesPlayed = Long.parseLong(params.get(2));
+		final String player1 = params.get(3);
+		final String player2 = params.get(4);
+		final String player3 = params.get(5);
 
 		issControl.updateISSTableList(tableName, maxPlayers, gamesPlayed,
 				player1, player2, player3);

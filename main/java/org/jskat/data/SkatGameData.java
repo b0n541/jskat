@@ -217,7 +217,7 @@ public class SkatGameData {
 		playerBids = new HashMap<Player, Integer>();
 		playerPasses = new HashMap<Player, Boolean>();
 
-		for (Player player : Player.values()) {
+		for (final Player player : Player.values()) {
 			playerNames.put(player, ""); //$NON-NLS-1$
 			playerHands.put(player, new CardList());
 			dealtCards.put(player, new CardList());
@@ -602,8 +602,8 @@ public class SkatGameData {
 		log.debug(this + ".setTrickCard(" + player + ", " //$NON-NLS-1$ //$NON-NLS-2$
 				+ card + ")"); //$NON-NLS-1$
 
-		Trick currentTrick = getCurrentTrick();
-		Player trickForeHand = currentTrick.getForeHand();
+		final Trick currentTrick = getCurrentTrick();
+		final Player trickForeHand = currentTrick.getForeHand();
 
 		if (trickForeHand.equals(player)) {
 			currentTrick.setFirstCard(card);
@@ -752,7 +752,7 @@ public class SkatGameData {
 	 */
 	public void setDiscardedSkat(final Player player, final CardList newSkat) {
 
-		CardList hand = playerHands.get(player);
+		final CardList hand = playerHands.get(player);
 
 		// add old skat to player's hand
 		hand.add(skat.get(0));
@@ -797,12 +797,24 @@ public class SkatGameData {
 	 *            Card that was dealt
 	 */
 	public void setDealtCard(final Player player, final Card card) {
-
 		// remember the dealt cards
 		dealtCards.get(player).add(card);
-
 		// current cards are hold in playerHands and skat
 		playerHands.get(player).add(card);
+	}
+
+	/**
+	 * Sets a dealt cards
+	 * 
+	 * @param player
+	 *            Player that got the Card
+	 * @param cards
+	 *            Cards that was dealt
+	 */
+	public void setDealtCards(final Player player, final CardList cards) {
+		for (final Card card : cards) {
+			setDealtCard(player, card);
+		}
 	}
 
 	/**
@@ -916,7 +928,7 @@ public class SkatGameData {
 
 		int numberOfPasses = 0;
 
-		for (Player currPlayer : Player.values()) {
+		for (final Player currPlayer : Player.values()) {
 			if (isPlayerPass(currPlayer)) {
 				numberOfPasses++;
 			}
@@ -933,7 +945,7 @@ public class SkatGameData {
 	 */
 	public void setAnnouncement(final GameAnnouncement announcement) {
 
-		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+		final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 		factory.setGameType(announcement.getGameType());
 		if (announcement.getGameType() != GameType.RAMSCH) {
 			if (!declarerPickedUpSkat) {
@@ -1028,7 +1040,7 @@ public class SkatGameData {
 	 */
 	public void setSchneiderSchwarz() {
 		// FIXME this is rule logic --> move to SuitGrandRule
-		int declarerPoints = getPlayerPoints(declarer);
+		final int declarerPoints = getPlayerPoints(declarer);
 
 		if (declarerPoints >= 89 || declarerPoints <= 30) {
 
@@ -1043,7 +1055,7 @@ public class SkatGameData {
 
 	public void setJungfrauDurchmarsch() {
 		// FIXME this is rule logic --> move to RamschRule
-		for (Player currPlayer : Player.values()) {
+		for (final Player currPlayer : Player.values()) {
 			if (RamschRule.isDurchmarsch(currPlayer, this)) {
 				result.setDurchmarsch(true);
 			} else {
@@ -1123,7 +1135,7 @@ public class SkatGameData {
 	 * @return Game summary
 	 */
 	public GameSummary getGameSummary() {
-		GameSummaryFactory factory = GameSummary.getFactory();
+		final GameSummaryFactory factory = GameSummary.getFactory();
 
 		factory.setGameType(getGameType());
 		factory.setHand(isHand());
@@ -1152,7 +1164,7 @@ public class SkatGameData {
 	 */
 	public Player getLastTrickWinner() {
 		// get last trick
-		Trick lastTrick = getLastTrick();
+		final Trick lastTrick = getLastTrick();
 
 		// get trick winner
 		return lastTrick.getTrickWinner();
@@ -1202,7 +1214,7 @@ public class SkatGameData {
 	 */
 	public boolean isPlayerMadeNoTrick(final Player player) {
 
-		Set<Player> trickWinners = new HashSet<Player>();
+		final Set<Player> trickWinners = new HashSet<Player>();
 
 		for (int i = 0; i < getTricks().size(); i++) {
 			trickWinners.add(getTrickWinner(i));
@@ -1221,5 +1233,32 @@ public class SkatGameData {
 	 */
 	public void removePlayerCard(final Player player, final Card card) {
 		playerHands.get(player).remove(card);
+	}
+
+	/**
+	 * Gets the cards of a player after discarding
+	 * 
+	 * @param player
+	 *            Player
+	 * @return Cards after discarding
+	 */
+	public Map<Player, CardList> getCardsAfterDiscard() {
+
+		final Map<Player, CardList> result = new HashMap<Player, CardList>();
+
+		for (final Player player : Player.values()) {
+			final CardList cards = new CardList();
+
+			if (player.equals(getDeclarer())) {
+				cards.addAll(getDealtCards().get(player));
+				cards.addAll(getDealtSkat());
+				cards.removeAll(getSkat());
+			} else {
+				cards.addAll(getDealtCards().get(player));
+			}
+
+			result.put(player, cards);
+		}
+		return result;
 	}
 }

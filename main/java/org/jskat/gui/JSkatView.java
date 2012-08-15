@@ -21,6 +21,7 @@
 package org.jskat.gui;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.jskat.control.SkatTable;
@@ -352,11 +353,6 @@ public interface JSkatView {
 	 *            New game state
 	 */
 	public void setGameState(String tableName, GameState state);
-
-	/**
-	 * Shows all cards
-	 */
-	public void showAllCards(String tableName);
 
 	/**
 	 * Set a new series state
@@ -738,4 +734,14 @@ public interface JSkatView {
 	 * @return Human player object that extends {@link AbstractHumanJSkatPlayer}
 	 */
 	public AbstractHumanJSkatPlayer getHumanPlayerForGUI();
+
+	/**
+	 * Shows player cards
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @param cards
+	 *            Cards for each player
+	 */
+	public void showCards(String tableName, Map<Player, CardList> cards);
 }

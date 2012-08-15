@@ -22,6 +22,7 @@ package org.jskat.gui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.jskat.control.SkatTable;
@@ -521,7 +522,8 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void showAllCards(final String tableName) {
+	public void showCards(final String tableName,
+			final Map<Player, CardList> cards) {
 		// TODO Auto-generated method stub
 	}
 }

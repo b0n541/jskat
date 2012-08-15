@@ -21,6 +21,7 @@
 package org.jskat.gui;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.jskat.control.SkatTable;
@@ -747,7 +748,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void showAllCards(final String tableName) {
+	public void showCards(final String tableName,
+			final Map<Player, CardList> cards) {
 		// empty method by indent
 	}
 }

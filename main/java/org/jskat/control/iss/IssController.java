@@ -468,7 +468,7 @@ public class IssController {
 
 		view.updateISSMove(tableName, currGame, moveInformation);
 
-		// TODO (jan 19.11.2010) extract this into separate method
+		// TODO (jan 19.11.2010) extract this into separate methods
 		if (MoveType.BID.equals(moveInformation.getType())
 				|| MoveType.PASS.equals(moveInformation.getType())) {
 
@@ -583,6 +583,7 @@ public class IssController {
 
 		view.setGameState(tableName, GameState.GAME_OVER);
 		view.addGameResult(tableName, newGameData.getGameSummary());
+		view.showCards(tableName, newGameData.getCardsAfterDiscard());
 		gameData.put(tableName, newGameData);
 	}
 

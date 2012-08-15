@@ -958,29 +958,9 @@ public class SkatGame extends JSkatThread {
 
 				view.addGameResult(tableName, getGameSummary());
 
-				view.showAllCards(tableName);
-				for (final Player player : Player.values()) {
-
-					view.addCards(tableName, player,
-							getCardsAfterDiscard(player));
-				}
+				view.showCards(tableName, data.getCardsAfterDiscard());
 			}
 		}
-	}
-
-	private CardList getCardsAfterDiscard(final Player player) {
-
-		final CardList result = new CardList();
-
-		if (player.equals(data.getDeclarer())) {
-			result.addAll(data.getDealtCards().get(player));
-			result.addAll(data.getDealtSkat());
-			result.removeAll(data.getSkat());
-		} else {
-			result.addAll(data.getDealtCards().get(player));
-		}
-
-		return result;
 	}
 
 	/**
