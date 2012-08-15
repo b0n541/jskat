@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jskat.data.JSkatOptions;
+import org.jskat.util.Card;
 import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
@@ -71,7 +72,7 @@ public class JSkatGraphicRepository {
 	}
 
 	private void loadAllJSkatImages() {
-		MediaTracker tracker = new MediaTracker(new Canvas());
+		final MediaTracker tracker = new MediaTracker(new Canvas());
 		loadImages(tracker);
 
 		log.debug("Bitmaps for JSkat logo and skat table loaded..."); //$NON-NLS-1$
@@ -94,7 +95,7 @@ public class JSkatGraphicRepository {
 
 	private void loadFlags(final MediaTracker tracker) {
 		// for all flags
-		for (Flag flag : Flag.values()) {
+		for (final Flag flag : Flag.values()) {
 			// add flag
 			flags.add(Toolkit
 					.getDefaultToolkit()
@@ -107,7 +108,7 @@ public class JSkatGraphicRepository {
 
 		try {
 			tracker.waitForID(3);
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
@@ -150,7 +151,7 @@ public class JSkatGraphicRepository {
 		tracker.addImage(bidBubbles.get(2), 0);
 		try {
 			tracker.waitForID(0);
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
@@ -161,13 +162,13 @@ public class JSkatGraphicRepository {
 	private void loadIcons(final MediaTracker tracker) {
 
 		// for all icons
-		for (Icon icon : Icon.values()) {
+		for (final Icon icon : Icon.values()) {
 
 			// new array list for all sizes
 			icons.add(new ArrayList<Image>());
 
 			// for all sizes
-			for (IconSize size : IconSize.values()) {
+			for (final IconSize size : IconSize.values()) {
 
 				// add icon
 				icons.get(icon.ordinal())
@@ -189,7 +190,7 @@ public class JSkatGraphicRepository {
 
 		try {
 			tracker.waitForID(1);
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
@@ -203,11 +204,11 @@ public class JSkatGraphicRepository {
 	private void loadCards(final MediaTracker tracker, final CardFace cardFace) {
 
 		cards.clear();
-		for (Suit suit : Suit.values()) {
+		for (final Suit suit : Suit.values()) {
 
 			cards.add(new ArrayList<Image>());
 
-			for (Rank rank : Rank.values()) {
+			for (final Rank rank : Rank.values()) {
 
 				cards.get(suit.ordinal())
 						.add(Toolkit
@@ -234,7 +235,7 @@ public class JSkatGraphicRepository {
 
 		try {
 			tracker.waitForID(2);
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
@@ -246,7 +247,7 @@ public class JSkatGraphicRepository {
 	 *            Card face
 	 */
 	public void reloadCards(final CardFace cardFace) {
-		MediaTracker tracker = new MediaTracker(new Canvas());
+		final MediaTracker tracker = new MediaTracker(new Canvas());
 		loadCards(tracker, cardFace);
 	}
 
@@ -263,9 +264,20 @@ public class JSkatGraphicRepository {
 
 		try {
 			return icons.get(icon.ordinal()).get(size.ordinal());
-		} catch (IndexOutOfBoundsException exc) {
+		} catch (final IndexOutOfBoundsException exc) {
 			return null;
 		}
+	}
+
+	/**
+	 * Gets the card image
+	 * 
+	 * @param The
+	 *            card
+	 * @return The card image
+	 */
+	public Image getCardImage(final Card card) {
+		return getCardImage(card.getSuit(), card.getRank());
 	}
 
 	/**
