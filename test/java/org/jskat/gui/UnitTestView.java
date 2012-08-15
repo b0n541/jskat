@@ -188,19 +188,22 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void addCard(final String tableName, final Player player, final Card card) {
+	public void addCard(final String tableName, final Player player,
+			final Card card) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void addCards(final String tableName, final Player player, final CardList cards) {
+	public void addCards(final String tableName, final Player player,
+			final CardList cards) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void removeCard(final String tableName, final Player player, final Card card) {
+	public void removeCard(final String tableName, final Player player,
+			final Card card) {
 		// TODO Auto-generated method stub
 
 	}
@@ -212,7 +215,8 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void setBid(final String tableName, final Player player, final int bidValue, final boolean madeBid) {
+	public void setBid(final String tableName, final Player player,
+			final int bidValue, final boolean madeBid) {
 		// TODO Auto-generated method stub
 
 	}
@@ -224,14 +228,15 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void setPositions(final String tableName, final Player leftPosition, final Player rightPosition,
-			final Player playerPosition) {
+	public void setPositions(final String tableName, final Player leftPosition,
+			final Player rightPosition, final Player playerPosition) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void setTrickCard(final String tableName, final Player position, final Card card) {
+	public void setTrickCard(final String tableName, final Player position,
+			final Card card) {
 		// TODO Auto-generated method stub
 
 	}
@@ -249,13 +254,15 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void playTrickCard(final String tableName, final Player position, final Card card) {
+	public void playTrickCard(final String tableName, final Player position,
+			final Card card) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void setGameAnnouncement(final String tableName, final Player declarer, final GameAnnouncement ann) {
+	public void setGameAnnouncement(final String tableName,
+			final Player declarer, final GameAnnouncement ann) {
 		// TODO Auto-generated method stub
 
 	}
@@ -315,19 +322,22 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void setTrickForeHand(final String tableName, final Player trickForeHand) {
+	public void setTrickForeHand(final String tableName,
+			final Player trickForeHand) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void takeCardFromSkat(final String tableName, final Player player, final Card card) {
+	public void takeCardFromSkat(final String tableName, final Player player,
+			final Card card) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void putCardIntoSkat(final String tableName, final Player player, final Card card) {
+	public void putCardIntoSkat(final String tableName, final Player player,
+			final Card card) {
 		// TODO Auto-generated method stub
 
 	}
@@ -339,8 +349,8 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void updateISSLobbyPlayerList(final String playerName, final String language, final long gamesPlayed,
-			final double strength) {
+	public void updateISSLobbyPlayerList(final String playerName,
+			final String language, final long gamesPlayed, final double strength) {
 		// TODO Auto-generated method stub
 
 	}
@@ -352,8 +362,9 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void updateISSLobbyTableList(final String tableName, final int maxPlayers, final long gamesPlayed,
-			final String player1, final String player2, final String player3) {
+	public void updateISSLobbyTableList(final String tableName,
+			final int maxPlayers, final long gamesPlayed, final String player1,
+			final String player2, final String player3) {
 		// TODO Auto-generated method stub
 
 	}
@@ -365,25 +376,29 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void appendISSChatMessage(final ChatMessageType messageType, final ChatMessage message) {
+	public void appendISSChatMessage(final ChatMessageType messageType,
+			final ChatMessage message) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void updateISSTable(final String tableName, final TablePanelStatus status) {
+	public void updateISSTable(final String tableName,
+			final TablePanelStatus status) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void updateISSTable(final String tableName, final String loginName, final GameStartInformation status) {
+	public void updateISSTable(final String tableName, final String loginName,
+			final GameStartInformation status) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void updateISSMove(final String tableName, final SkatGameData gameData, final MoveInformation moveInformation) {
+	public void updateISSMove(final String tableName,
+			final SkatGameData gameData, final MoveInformation moveInformation) {
 		// TODO Auto-generated method stub
 
 	}
@@ -413,14 +428,16 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public boolean showISSTableInvitation(final String invitor, final String tableName) {
+	public boolean showISSTableInvitation(final String invitor,
+			final String tableName) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void addTrainingResult(final GameType gameType, final long episodes, final long totalWonGames,
-			final long episodeWonGames, final double avgDifference) {
+	public void addTrainingResult(final GameType gameType, final long episodes,
+			final long totalWonGames, final long episodeWonGames,
+			final double avgDifference) {
 		// TODO Auto-generated method stub
 
 	}
@@ -432,7 +449,8 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void setPlayerNames(final String tableName, final String upperLeftPlayerName,
+	public void setPlayerNames(final String tableName,
+			final String upperLeftPlayerName,
 			final String upperRightPlayerName, final String lowerPlayerName) {
 		// TODO Auto-generated method stub
 
@@ -469,7 +487,8 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void setDiscardedSkat(final String tableName, final Player activePlayer, final CardList skatBefore,
+	public void setDiscardedSkat(final String tableName,
+			final Player activePlayer, final CardList skatBefore,
 			final CardList discardedSkat) {
 		// TODO Auto-generated method stub
 	}
@@ -496,8 +515,13 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void setPlayedTrick(String tableName, Trick playedTrick) {
+	public void setPlayedTrick(final String tableName, final Trick playedTrick) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public void showAllCards(final String tableName) {
+		// TODO Auto-generated method stub
 	}
 }

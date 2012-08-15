@@ -260,7 +260,8 @@ public interface JSkatView {
 	 *            TRUE, if the player made the bid, FALSE if the player hold the
 	 *            bid
 	 */
-	public void setBid(String tableName, Player player, int bidValue, boolean madeBid);
+	public void setBid(String tableName, Player player, int bidValue,
+			boolean madeBid);
 
 	/**
 	 * Sets the pass bid for a player
@@ -284,7 +285,8 @@ public interface JSkatView {
 	 * @param playerPosition
 	 *            Player in lower position
 	 */
-	public void setPositions(String tableName, Player leftPosition, Player rightPosition, Player playerPosition);
+	public void setPositions(String tableName, Player leftPosition,
+			Player rightPosition, Player playerPosition);
 
 	/**
 	 * Adds a card to the trick
@@ -338,7 +340,8 @@ public interface JSkatView {
 	 * @param ann
 	 *            Game announcement
 	 */
-	public void setGameAnnouncement(String tableName, Player declarer, GameAnnouncement ann);
+	public void setGameAnnouncement(String tableName, Player declarer,
+			GameAnnouncement ann);
 
 	/**
 	 * Set a new game state
@@ -349,6 +352,11 @@ public interface JSkatView {
 	 *            New game state
 	 */
 	public void setGameState(String tableName, GameState state);
+
+	/**
+	 * Shows all cards
+	 */
+	public void showAllCards(String tableName);
 
 	/**
 	 * Set a new series state
@@ -484,7 +492,8 @@ public interface JSkatView {
 	 * @param strength
 	 *            Playing strength after ISS evaluation
 	 */
-	public void updateISSLobbyPlayerList(String playerName, String language, long gamesPlayed, double strength);
+	public void updateISSLobbyPlayerList(String playerName, String language,
+			long gamesPlayed, double strength);
 
 	/**
 	 * Removes a client from the list of the ISS lobby
@@ -510,8 +519,8 @@ public interface JSkatView {
 	 * @param player3
 	 *            Player 3 (? for free seat)
 	 */
-	public void updateISSLobbyTableList(String tableName, int maxPlayers, long gamesPlayed, String player1,
-			String player2, String player3);
+	public void updateISSLobbyTableList(String tableName, int maxPlayers,
+			long gamesPlayed, String player1, String player2, String player3);
 
 	/**
 	 * Removes a table from the table list of the ISS lobby
@@ -528,7 +537,8 @@ public interface JSkatView {
 	 * @param message
 	 *            Message
 	 */
-	public void appendISSChatMessage(ChatMessageType messageType, ChatMessage message);
+	public void appendISSChatMessage(ChatMessageType messageType,
+			ChatMessage message);
 
 	/**
 	 * Updates an ISS table
@@ -550,7 +560,8 @@ public interface JSkatView {
 	 * @param status
 	 *            New game state
 	 */
-	public void updateISSTable(String tableName, String loginName, GameStartInformation status);
+	public void updateISSTable(String tableName, String loginName,
+			GameStartInformation status);
 
 	/**
 	 * Updates move information
@@ -562,7 +573,8 @@ public interface JSkatView {
 	 * @param moveInformation
 	 *            Move information
 	 */
-	public void updateISSMove(String tableName, SkatGameData gameData, MoveInformation moveInformation);
+	public void updateISSMove(String tableName, SkatGameData gameData,
+			MoveInformation moveInformation);
 
 	/**
 	 * Sets the resigning flag of a player
@@ -629,8 +641,8 @@ public interface JSkatView {
 	 * @param avgDifference
 	 *            Average difference
 	 */
-	public void addTrainingResult(GameType gameType, long episodes, long totalWonGames, long episodeWonGames,
-			double avgDifference);
+	public void addTrainingResult(GameType gameType, long episodes,
+			long totalWonGames, long episodeWonGames, double avgDifference);
 
 	/**
 	 * Sets the game number of the current game
@@ -654,8 +666,8 @@ public interface JSkatView {
 	 * @param lowerPlayerName
 	 *            Name of lower player
 	 */
-	public void setPlayerNames(String tableName, String upperLeftPlayerName, String upperRightPlayerName,
-			String lowerPlayerName);
+	public void setPlayerNames(String tableName, String upperLeftPlayerName,
+			String upperRightPlayerName, String lowerPlayerName);
 
 	/**
 	 * Sets the declarer player of the table
@@ -699,7 +711,8 @@ public interface JSkatView {
 	 * @param discardedSkat
 	 *            Skat after discarding
 	 */
-	public void setDiscardedSkat(String tableName, Player activePlayer, CardList skatBefore, CardList discardedSkat);
+	public void setDiscardedSkat(String tableName, Player activePlayer,
+			CardList skatBefore, CardList discardedSkat);
 
 	/**
 	 * Opens a web page in the browser
