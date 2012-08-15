@@ -1407,7 +1407,8 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Override
-	public void showAllCards(final String tableName) {
-		tables.get(tableName).showAllCards();
+	public void showCards(final String tableName,
+			final Map<Player, CardList> cards) {
+		tables.get(tableName).showCards(cards);
 	}
 }

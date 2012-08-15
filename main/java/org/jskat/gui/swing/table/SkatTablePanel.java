@@ -1136,9 +1136,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 	/**
 	 * Shows cards of all players
 	 */
-	public void showAllCards() {
-		for (final Player player : Player.values()) {
+	public void showCards(final Map<Player, CardList> cards) {
+		for (final Player player : cards.keySet()) {
+			removeAllCards(player);
 			showCards(player);
+			addCards(player, cards.get(player));
 		}
 	}
 }
