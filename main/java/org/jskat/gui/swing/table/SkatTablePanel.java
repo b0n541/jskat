@@ -1132,4 +1132,13 @@ public class SkatTablePanel extends AbstractTabPanel {
 			putCardIntoSkat(player, skatCard);
 		}
 	}
+
+	/**
+	 * Shows cards of all players
+	 */
+	public void showAllCards() {
+		for (final Player player : Player.values()) {
+			showCards(player);
+		}
+	}
 }
