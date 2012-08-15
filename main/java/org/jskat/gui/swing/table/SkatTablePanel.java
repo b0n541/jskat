@@ -104,6 +104,12 @@ public class SkatTablePanel extends AbstractTabPanel {
 		super(view, newTableName, actions);
 
 		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
+
+		final TrickPanel trickPanel = new TrickPanel(false);
+		trickPanel.setUserPosition(Player.FOREHAND);
+		trickPanel.addCard(Player.FOREHAND, Card.CJ);
+		trickPanel.addCard(Player.MIDDLEHAND, Card.SJ);
+		trickPanel.addCard(Player.REARHAND, Card.HJ);
 	}
 
 	/**

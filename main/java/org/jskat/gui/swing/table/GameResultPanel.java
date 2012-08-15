@@ -56,11 +56,12 @@ public class GameResultPanel extends JPanel {
 		trickPanelList = new ArrayList<TrickPanel>();
 		for (int i = 0; i < 10; i++) {
 
-			trickPanelList.add(new TrickPanel(1.0, false));
+			trickPanelList.add(new TrickPanel(false));
 		}
 
-		JPanel trickPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-		for (TrickPanel panel : trickPanelList) {
+		final JPanel trickPanel = new JPanel(LayoutFactory.getMigLayout(
+				"fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+		for (final TrickPanel panel : trickPanelList) {
 			trickPanel.add(panel);
 		}
 		trickPanel.setOpaque(false);
@@ -72,22 +73,25 @@ public class GameResultPanel extends JPanel {
 
 	public void setGameSummary(final GameSummary summary) {
 
-		List<Trick> tricks = summary.getTricks();
+		final List<Trick> tricks = summary.getTricks();
 
 		log.debug("Trick size: " + tricks.size()); //$NON-NLS-1$
 
 		for (int i = 0; i < 10; i++) {
 
-			TrickPanel trickPanel = trickPanelList.get(i);
+			final TrickPanel trickPanel = trickPanelList.get(i);
 			trickPanel.clearCards();
 
 			if (i < tricks.size()) {
-				Trick trick = tricks.get(i);
+				final Trick trick = tricks.get(i);
 				if (trick != null) {
 					trickPanel.setUserPosition(userPosition);
-					trickPanel.addCard(trick.getForeHand(), trick.getFirstCard());
-					trickPanel.addCard(trick.getForeHand().getLeftNeighbor(), trick.getSecondCard());
-					trickPanel.addCard(trick.getForeHand().getRightNeighbor(), trick.getThirdCard());
+					trickPanel.addCard(trick.getForeHand(),
+							trick.getFirstCard());
+					trickPanel.addCard(trick.getForeHand().getLeftNeighbor(),
+							trick.getSecondCard());
+					trickPanel.addCard(trick.getForeHand().getRightNeighbor(),
+							trick.getThirdCard());
 				}
 			}
 		}
@@ -100,7 +104,7 @@ public class GameResultPanel extends JPanel {
 
 	public void resetPanel() {
 
-		for (TrickPanel panel : trickPanelList) {
+		for (final TrickPanel panel : trickPanelList) {
 
 			panel.clearCards();
 		}

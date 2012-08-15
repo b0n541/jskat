@@ -27,11 +27,8 @@ import java.awt.RenderingHints;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import javax.swing.JPanel;
@@ -55,9 +52,10 @@ class TrickPanel extends JPanel implements ComponentListener {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(TrickPanel.class);
 
+	private static final double TRICK_SIZE_FACTOR = 1.0d + (2.0d / 3.0d);
+
 	private static JSkatOptions options = JSkatOptions.instance();
 	private final JSkatGraphicRepository bitmaps;
-	private final Map<Card, Image> scaledCardImages;
 	private final List<Double> cardRotations;
 	private final List<Player> positions;
 	private final CardList trick;
@@ -67,29 +65,35 @@ class TrickPanel extends JPanel implements ComponentListener {
 	private Player leftOpponent;
 
 	private CardFace cardFace;
-	private final double cardScaleFactor;
 	private final boolean randomPlacement;
+	private final double globalScale;
 
 	/**
 	 * Constructor
 	 * 
-	 * @param newCardScaleFactor
-	 * @param newRandomPlacement
+	 * @param randomPlacement
+	 *            Random placement of cards
 	 */
-	TrickPanel(final double newCardScaleFactor, final boolean newRandomPlacement) {
+	TrickPanel(final boolean randomPlacement) {
+		this(1.0, randomPlacement);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param globalScale
+	 *            Global scale of cards
+	 * @param randomPlacement
+	 *            Random placement of cards
+	 */
+	TrickPanel(final double globalScale, final boolean randomPlacement) {
 
 		bitmaps = JSkatGraphicRepository.instance();
 
 		cardFace = options.getCardFace();
 
-		scaledCardImages = new HashMap<Card, Image>();
-		cardScaleFactor = newCardScaleFactor;
-		randomPlacement = newRandomPlacement;
-
-		for (final Card card : Card.values()) {
-			scaledCardImages.put(card,
-					bitmaps.getCardImage(card.getSuit(), card.getRank()));
-		}
+		this.randomPlacement = randomPlacement;
+		this.globalScale = globalScale;
 
 		trick = new CardList();
 		positions = new ArrayList<Player>();
@@ -154,13 +158,10 @@ class TrickPanel extends JPanel implements ComponentListener {
 
 		if (isNewCardFace()) {
 			cardFace = options.getCardFace();
-			scaleImages();
 		}
 
 		final int panelWidth = getWidth();
 		final int panelHeight = getHeight();
-		double xPos = 0.0;
-		double yPos = 0.0;
 
 		final Graphics2D g2D = (Graphics2D) g;
 		g2D.setRenderingHint(RenderingHints.KEY_RENDERING,
@@ -168,49 +169,76 @@ class TrickPanel extends JPanel implements ComponentListener {
 		g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);
 		g2D.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+				RenderingHints.VALUE_INTERPOLATION_BICUBIC);
 		g2D.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
 				RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
+
+		final double cardScale = getCardScale() * globalScale;
+		final Image image = bitmaps.getCardImage(Card.CJ);
+
+		final double xScaleSize = image.getWidth(this);
+		final double xAllTrickCardsSize = xScaleSize * TRICK_SIZE_FACTOR;
+		final double xBorder = (panelWidth * (1 / cardScale) - xAllTrickCardsSize) / 2.0d;
+
+		final double yScaleSize = image.getHeight(this);
+		final double yAllTrickCardsSize = yScaleSize * TRICK_SIZE_FACTOR;
+		final double yBorder = (panelHeight * (1 / cardScale) - yAllTrickCardsSize) / 2.0d;
 
 		for (int i = 0; i < trick.size(); i++) {
 
 			final Card card = trick.get(i);
 			final Player player = positions.get(i);
 
-			final Image image = scaledCardImages.get(card);
-			assert image != null;
+			if (card != null && player != null) {
+				// Calculate translation
+				double posX = 0.0d;
+				double posY = 0.0d;
+				if (player.equals(leftOpponent)) {
 
-			// Calculate translation
-			final double xScaleSize = image.getWidth(this);
-			final double xAllTrickCardsSize = xScaleSize * (1 + 2.0 / 3.00);
-			final double xCenterTranslate = (panelWidth - xAllTrickCardsSize) / 2;
-			final double yScaleSize = image.getHeight(this);
-			final double yAllTrickCardsSize = yScaleSize * 1.5;
-			final double yCenterTranslate = (panelHeight - yAllTrickCardsSize) / 2;
+					posX = xBorder;
+					posY = yBorder + (yScaleSize * (1.0d / 3.0d));
 
-			if (player.equals(leftOpponent)) {
+				} else if (player.equals(rightOpponent)) {
 
-				xPos = xCenterTranslate;
-				yPos = (yScaleSize / 4.0) + yCenterTranslate;
+					posX = xBorder + (xScaleSize * (2.0d / 3.0d));
+					posY = yBorder;
 
-			} else if (player.equals(rightOpponent)) {
+				} else if (player.equals(userPosition)) {
 
-				xPos = (2.0 * (xScaleSize / 3.0)) + xCenterTranslate;
-				yPos = yCenterTranslate;
+					posX = xBorder + (xScaleSize * (1.0d / 3.0d));
+					posY = yBorder + (yScaleSize * (2.0d / 3.0d));
+				}
 
-			} else if (player.equals(userPosition)) {
+				final AffineTransform transform = new AffineTransform();
+				transform.translate(posX * cardScale, posY * cardScale);
+				transform.rotate(cardRotations.get(i).doubleValue());
+				transform.scale(cardScale, cardScale);
 
-				xPos = (xScaleSize / 3.0) + xCenterTranslate;
-				yPos = 2 * (yScaleSize / 4.0d) + yCenterTranslate;
+				g2D.drawImage(bitmaps.getCardImage(card), transform, this);
 			}
-
-			final AffineTransform transform = new AffineTransform();
-			transform.setToIdentity();
-			transform.translate(xPos, yPos);
-			transform.rotate(cardRotations.get(i).doubleValue());
-
-			g2D.drawImage(image, transform, this);
 		}
+	}
+
+	private double getCardScale() {
+
+		final Image sampleCard = bitmaps.getCardImage(Suit.CLUBS, Rank.JACK);
+		final double imageWidth = sampleCard.getWidth(this) * TRICK_SIZE_FACTOR;
+		final double imageHeight = sampleCard.getHeight(this)
+				* TRICK_SIZE_FACTOR;
+
+		final double scaleX = getWidth() / imageWidth;
+		final double scaleY = getHeight() / imageHeight;
+
+		double scaleFactor = 1.0;
+		if (scaleX < 1.0 || scaleY < 1.0) {
+			if (scaleX < scaleY) {
+				scaleFactor = scaleX;
+			} else {
+				scaleFactor = scaleY;
+			}
+		}
+
+		return scaleFactor;
 	}
 
 	boolean isNewCardFace() {
@@ -224,51 +252,8 @@ class TrickPanel extends JPanel implements ComponentListener {
 		rightOpponent = userPosition.getRightNeighbor();
 	}
 
-	private void scaleImages() {
-
-		final int panelWidth = getWidth();
-		final int panelHeight = getHeight();
-
-		final Image sampleCard = bitmaps.getCardImage(Suit.CLUBS, Rank.JACK);
-		final int imageWidth = sampleCard.getWidth(this);
-		final int imageHeight = sampleCard.getHeight(this);
-
-		final double scaleX = ((100.0 * panelWidth) / (imageWidth * 1.6)) / 100.0;
-		final double scaleY = ((100.0 * panelHeight) / (imageHeight * 1.6)) / 100.0;
-
-		double scaleFactor = 1.0;
-		if (scaleX < 1.0 || scaleY < 1.0) {
-			if (scaleX < scaleY) {
-				scaleFactor *= scaleX;
-			} else {
-				scaleFactor *= scaleY;
-			}
-		}
-		scaleFactor *= cardScaleFactor;
-
-		for (final Card card : Card.values()) {
-
-			final Image cardImage = bitmaps.getCardImage(card.getSuit(),
-					card.getRank());
-
-			final int scaledWidth = (int) (imageWidth * scaleFactor);
-			final int scaledHeight = (int) (imageHeight * scaleFactor);
-
-			final BufferedImage scaledImage = new BufferedImage(scaledWidth,
-					scaledHeight, BufferedImage.TYPE_INT_ARGB);
-			final Graphics2D g2 = scaledImage.createGraphics();
-			g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-					RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-			g2.drawImage(cardImage, 0, 0, scaledWidth, scaledHeight, null);
-			g2.dispose();
-
-			scaledCardImages.put(card, scaledImage);
-		}
-	}
-
 	@Override
 	public void componentResized(final ComponentEvent e) {
-		scaleImages();
 		repaint();
 	}
 
@@ -279,7 +264,6 @@ class TrickPanel extends JPanel implements ComponentListener {
 
 	@Override
 	public void componentShown(final ComponentEvent e) {
-		scaleImages();
 		repaint();
 	}
 
