@@ -555,6 +555,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		((CardLayout) gameContextPanel.getLayout()).show(gameContextPanel,
 				panelType.toString());
+		gameContextPanel.validate();
 	}
 
 	/**
