@@ -430,6 +430,12 @@ public class SkatGameData {
 	public void setDeclarerScore(final int newScore) {
 
 		playerPoints.put(declarer, Integer.valueOf(newScore));
+		if (newScore > 89) {
+			result.setSchneider(true);
+		}
+		if (newScore == 120) {
+			result.setSchwarz(true);
+		}
 	}
 
 	/**

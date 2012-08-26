@@ -42,7 +42,8 @@ public class GrandRuleTest extends AbstractJSkatTest {
 
 	private GameAnnouncementFactory factory;
 
-	private static SkatRule grandRules = SkatRuleFactory.getSkatRules(GameType.GRAND);
+	private static SkatRule grandRules = SkatRuleFactory
+			.getSkatRules(GameType.GRAND);
 
 	/**
 	 * @see BeforeClass
@@ -59,7 +60,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void calcGameWon() {
-		SkatGameData data = new SkatGameData();
+		final SkatGameData data = new SkatGameData();
 		data.setAnnouncement(factory.getAnnouncement());
 		data.setDeclarer(Player.FOREHAND);
 		data.setDeclarerScore(61);
@@ -72,7 +73,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void calcGameLost() {
-		SkatGameData data = new SkatGameData();
+		final SkatGameData data = new SkatGameData();
 		data.setAnnouncement(factory.getAnnouncement());
 		data.setDeclarer(Player.FOREHAND);
 		data.setDeclarerScore(60);
@@ -85,7 +86,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void calcGameResultGameWonClubJack() {
-		SkatGameData data = new SkatGameData();
+		final SkatGameData data = new SkatGameData();
 		data.setDeclarerPickedUpSkat(true);
 		data.setAnnouncement(factory.getAnnouncement());
 		data.setDeclarer(Player.FOREHAND);
@@ -101,7 +102,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void calcGameResultGameWonClubAndSpadeJack() {
-		SkatGameData data = new SkatGameData();
+		final SkatGameData data = new SkatGameData();
 		data.setDeclarerPickedUpSkat(true);
 		data.setAnnouncement(factory.getAnnouncement());
 		data.setDeclarer(Player.FOREHAND);
@@ -118,7 +119,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void calcGameResultGameWonClubAndHeartJack() {
-		SkatGameData data = new SkatGameData();
+		final SkatGameData data = new SkatGameData();
 		data.setDeclarerPickedUpSkat(true);
 		data.setAnnouncement(factory.getAnnouncement());
 		data.setDeclarer(Player.FOREHAND);
@@ -134,7 +135,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void calcGameResultGameWonClubJackHand() {
-		SkatGameData data = new SkatGameData();
+		final SkatGameData data = new SkatGameData();
 		factory.setHand(true);
 		data.setAnnouncement(factory.getAnnouncement());
 		data.setDeclarer(Player.FOREHAND);
@@ -151,7 +152,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void calcGameResultGameWonClubJackSchneider() {
-		SkatGameData data = new SkatGameData();
+		final SkatGameData data = new SkatGameData();
 		data.setDeclarerPickedUpSkat(true);
 		data.setAnnouncement(factory.getAnnouncement());
 		data.setDeclarer(Player.FOREHAND);
@@ -168,7 +169,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void calcGameResultGameWonClubJackSchneiderSchwarz() {
-		SkatGameData data = new SkatGameData();
+		final SkatGameData data = new SkatGameData();
 		data.setDeclarerPickedUpSkat(true);
 		data.setAnnouncement(factory.getAnnouncement());
 		data.setDeclarer(Player.FOREHAND);
@@ -186,7 +187,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void calcGameResultGameWonClubJackSchneiderAndAnnounced() {
-		SkatGameData data = new SkatGameData();
+		final SkatGameData data = new SkatGameData();
 		data.setDeclarer(Player.FOREHAND);
 		factory.setHand(true);
 		factory.setSchneider(true);
@@ -204,7 +205,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void calcGameResultGameWonClubJackSchwarzAndAnnounced() {
-		SkatGameData data = new SkatGameData();
+		final SkatGameData data = new SkatGameData();
 		data.setDeclarer(Player.FOREHAND);
 		factory.setHand(true);
 		factory.setSchneider(true);
@@ -224,16 +225,70 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void testGrandWithout2And89PointsForDeclarer() {
-		SkatGameData data = new SkatGameData();
+		final SkatGameData data = new SkatGameData();
 		data.setDeclarer(Player.FOREHAND);
 		factory.setSchneider(Boolean.FALSE);
 		factory.setSchwarz(Boolean.FALSE);
 		data.setDeclarerPickedUpSkat(true);
 		data.setAnnouncement(factory.getAnnouncement());
-		data.setDeclarerScore(91);
+		data.setDeclarerScore(89);
 		data.setDealtCard(Player.FOREHAND, Card.HJ);
 		data.setDealtCard(Player.FOREHAND, Card.DJ);
 		data.calcResult();
 		assertEquals(72, data.getResult().getGameValue());
+	}
+
+	/**
+	 * Test grand with four
+	 */
+	@Test
+	public void testGrandWithFour() {
+		final SkatGameData data = new SkatGameData();
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerPickedUpSkat(true);
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setDeclarerScore(61);
+		data.setDealtCard(Player.FOREHAND, Card.CJ);
+		data.setDealtCard(Player.FOREHAND, Card.SJ);
+		data.setDealtCard(Player.FOREHAND, Card.HJ);
+		data.setDealtCard(Player.FOREHAND, Card.DJ);
+		data.calcResult();
+		assertEquals(120, data.getResult().getGameValue());
+	}
+
+	/**
+	 * Test grand with four schneider
+	 */
+	@Test
+	public void testGrandWithFourSchneider() {
+		final SkatGameData data = new SkatGameData();
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerPickedUpSkat(true);
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setDeclarerScore(90);
+		data.setDealtCard(Player.FOREHAND, Card.CJ);
+		data.setDealtCard(Player.FOREHAND, Card.SJ);
+		data.setDealtCard(Player.FOREHAND, Card.HJ);
+		data.setDealtCard(Player.FOREHAND, Card.DJ);
+		data.calcResult();
+		assertEquals(144, data.getResult().getGameValue());
+	}
+
+	/**
+	 * Test grand with four schneider and schwarz
+	 */
+	@Test
+	public void testGrandWithFourSchneiderSchwarz() {
+		final SkatGameData data = new SkatGameData();
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerPickedUpSkat(true);
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setDeclarerScore(120);
+		data.setDealtCard(Player.FOREHAND, Card.CJ);
+		data.setDealtCard(Player.FOREHAND, Card.SJ);
+		data.setDealtCard(Player.FOREHAND, Card.HJ);
+		data.setDealtCard(Player.FOREHAND, Card.DJ);
+		data.calcResult();
+		assertEquals(168, data.getResult().getGameValue());
 	}
 }
