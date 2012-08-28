@@ -445,6 +445,7 @@ public class JSkatOptionsDialog extends JDialog {
 		ruleSetGroup.add(ruleSetISPA);
 		ruleSetPub = new JRadioButton(strings.getString("pub_rules")); //$NON-NLS-1$
 		ruleSetPub.addChangeListener(ruleButtonChangeListener);
+		ruleSetPub.setEnabled(false);
 		ruleSetGroup.add(ruleSetPub);
 
 		rulesPanel.add(ruleSetISPA, "wrap"); //$NON-NLS-1$
@@ -463,6 +464,7 @@ public class JSkatOptionsDialog extends JDialog {
 
 		final JButton resetButton = new JButton(
 				strings.getString("reset_to_defaults")); //$NON-NLS-1$
+		resetButton.setEnabled(false);
 		pubRulesPanel.add(resetButton, "wrap"); //$NON-NLS-1$
 
 		final JPanel contraPanel = new JPanel(LayoutFactory.getMigLayout());
