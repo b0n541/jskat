@@ -400,7 +400,7 @@ public class JSkatViewImpl implements JSkatView {
 				.get(JSkatAction.RESET_NEURAL_NETWORKS)));
 		neuralNetworkMenu.add(new JMenuItem(actions
 				.get(JSkatAction.TRAIN_NEURAL_NETWORKS)));
-		menu.add(neuralNetworkMenu);
+		// menu.add(neuralNetworkMenu);
 
 		final JMenu issMenu = new JMenu(strings.getString("iss")); //$NON-NLS-1$
 		issMenu.add(new JMenuItem(actions.get(JSkatAction.SHOW_ISS_LOGIN)));
