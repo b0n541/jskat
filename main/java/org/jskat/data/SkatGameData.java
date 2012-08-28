@@ -207,7 +207,7 @@ public class SkatGameData {
 
 	private void intializeVariables() {
 
-		announcement = new GameAnnouncement();
+		announcement = GameAnnouncement.getFactory().getEmptyAnnouncement();
 		result = new SkatGameResult();
 
 		playerNames = new HashMap<Player, String>();
@@ -1133,6 +1133,9 @@ public class SkatGameData {
 	 */
 	public void setDeclarerPickedUpSkat(final boolean isDeclarerPickedUpSkat) {
 		this.declarerPickedUpSkat = isDeclarerPickedUpSkat;
+		if (isDeclarerPickedUpSkat) {
+			announcement.hand = false;
+		}
 	}
 
 	/**

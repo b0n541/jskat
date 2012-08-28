@@ -85,6 +85,17 @@ public class GameAnnouncement {
 		}
 
 		/**
+		 * Gets an empty {@link GameAnnouncement}
+		 * 
+		 * @return Empty {@link GameAnnouncement}
+		 */
+		public final static GameAnnouncement getEmptyAnnouncement() {
+			GameAnnouncement result = new GameAnnouncement();
+			result.hand = true;
+			return result;
+		}
+
+		/**
 		 * Gets the {@link GameAnnouncement}
 		 * 
 		 * @return Game announcement
