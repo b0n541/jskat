@@ -90,6 +90,7 @@ public class JSkatOptionsDialog extends JDialog {
 	// rule options
 	JRadioButton ruleSetISPA;
 	JRadioButton ruleSetPub;
+	private JButton resetPubRulesButton;
 	private JCheckBox playContra;
 	private JCheckBox contraAfterBid18;
 	private JCheckBox playBock;
@@ -239,6 +240,7 @@ public class JSkatOptionsDialog extends JDialog {
 		am.put("CANCEL", cancelAction);
 
 		setContentPane(root);
+		validate();
 		pack();
 	}
 
@@ -445,7 +447,6 @@ public class JSkatOptionsDialog extends JDialog {
 		ruleSetGroup.add(ruleSetISPA);
 		ruleSetPub = new JRadioButton(strings.getString("pub_rules")); //$NON-NLS-1$
 		ruleSetPub.addChangeListener(ruleButtonChangeListener);
-		ruleSetPub.setEnabled(false);
 		ruleSetGroup.add(ruleSetPub);
 
 		rulesPanel.add(ruleSetISPA, "wrap"); //$NON-NLS-1$
@@ -462,10 +463,9 @@ public class JSkatOptionsDialog extends JDialog {
 	private JPanel getPubRulesPanel() {
 		final JPanel pubRulesPanel = new JPanel(LayoutFactory.getMigLayout());
 
-		final JButton resetButton = new JButton(
+		resetPubRulesButton = new JButton(
 				strings.getString("reset_to_defaults")); //$NON-NLS-1$
-		resetButton.setEnabled(false);
-		pubRulesPanel.add(resetButton, "wrap"); //$NON-NLS-1$
+		pubRulesPanel.add(resetPubRulesButton, "wrap"); //$NON-NLS-1$
 
 		final JPanel contraPanel = new JPanel(LayoutFactory.getMigLayout());
 
@@ -476,10 +476,10 @@ public class JSkatOptionsDialog extends JDialog {
 				strings.getString("contra_after_bid_18")); //$NON-NLS-1$
 		contraPanel.add(contraAfterBid18, "gapleft 20px"); //$NON-NLS-1$
 
-		pubRulesPanel.add(contraPanel, "wrap"); //$NON-NLS-1$
+		//		pubRulesPanel.add(contraPanel, "wrap"); //$NON-NLS-1$
 
 		final JPanel bockPanel = getBockPanel();
-		pubRulesPanel.add(bockPanel, "wrap"); //$NON-NLS-1$
+		//		pubRulesPanel.add(bockPanel, "wrap"); //$NON-NLS-1$
 
 		final JPanel ramschPanel = new JPanel(LayoutFactory.getMigLayout());
 
@@ -498,7 +498,8 @@ public class JSkatOptionsDialog extends JDialog {
 		pubRulesPanel.add(ramschPanel, "wrap"); //$NON-NLS-1$
 
 		playRevolution = new JCheckBox(strings.getString("play_revolution")); //$NON-NLS-1$
-		pubRulesPanel.add(playRevolution);
+		// pubRulesPanel.add(playRevolution);
+
 		return pubRulesPanel;
 	}
 
@@ -580,11 +581,13 @@ public class JSkatOptionsDialog extends JDialog {
 		ramschEventPanel.add(ramschEventNoBid);
 		ramschEventBockRamsch = new JCheckBox(
 				strings.getString("ramsch_event_bock_ramsch")); //$NON-NLS-1$
-		ramschEventPanel.add(ramschEventBockRamsch);
+		// ramschEventPanel.add(ramschEventBockRamsch);
 		return ramschEventPanel;
 	}
 
 	void activatePubRules(final boolean isActivated) {
+
+		resetPubRulesButton.setEnabled(isActivated);
 
 		playContra.setEnabled(isActivated);
 		contraAfterBid18.setEnabled(isActivated);
