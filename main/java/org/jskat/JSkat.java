@@ -40,7 +40,7 @@ public class JSkat {
 
 	private static Logger log = LoggerFactory.getLogger(JSkat.class);
 
-	private static String VERSION = "0.11.0"; //$NON-NLS-1$
+	private static String VERSION = "0.12.0"; //$NON-NLS-1$
 
 	/**
 	 * Main method
@@ -50,7 +50,8 @@ public class JSkat {
 	 */
 	public static void main(final String[] args) {
 
-		PropertyConfigurator.configure(ClassLoader.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
+		PropertyConfigurator.configure(ClassLoader
+				.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
 		log.debug("Welcome to JSkat!"); //$NON-NLS-1$
 
 		initializeOptions();
@@ -65,7 +66,8 @@ public class JSkat {
 		}
 
 		if (JSkatOptions.instance().isCheckForNewVersionAtStartUp()) {
-			jskat.checkJSkatVersion(getVersion(), VersionChecker.getLatestVersion());
+			jskat.checkJSkatVersion(getVersion(),
+					VersionChecker.getLatestVersion());
 		}
 	}
 
