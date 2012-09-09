@@ -518,7 +518,7 @@ public class SkatGame extends JSkatThread {
 		log.debug("Discarded cards: " + discardedSkat); //$NON-NLS-1$
 
 		data.setDiscardedSkat(data.getActivePlayer(), discardedSkat);
-		if (!(activePlayer.isHumanPlayer())) {
+		if (!activePlayer.isHumanPlayer()) {
 			// human player has changed the cards in the GUI already
 			view.setDiscardedSkat(tableName, data.getActivePlayer(),
 					skatBefore, discardedSkat);
@@ -674,22 +674,7 @@ public class SkatGame extends JSkatThread {
 			checkWaitCondition();
 		}
 
-		if (data.getGameType() == GameType.RAMSCH) {
-			if (JSkatOptions.instance().getRamschSkatOwner() == RamschSkatOwner.LAST_TRICK) {
-				if (trickWinner != null) {
-					log.debug("Skat cards (" + data.getSkat().getTotalValue() + " points) are added to player @ " //$NON-NLS-1$ //$NON-NLS-2$ 
-							+ trickWinner + " (= last trick)"); //$NON-NLS-1$
-					data.addPlayerPoints(trickWinner, data.getSkat()
-							.getTotalValue());
-				} else {
-					log.warn("Skat cards cannot be added to winner of final trick - trick winner is unknown"); //$NON-NLS-1$
-				}
-			}
-		} else {
-			// for all the other games, points to the declarer
-			data.addPlayerPoints(data.getDeclarer(), data.getSkat()
-					.getTotalValue());
-		}
+		addSkatPointsToPlayerPoints(trickWinner);
 
 		// set schneider/schwarz/jungfrau/durchmarsch flags
 		switch (data.getGameType()) {
@@ -707,6 +692,25 @@ public class SkatGame extends JSkatThread {
 		case PASSED_IN:
 			// do nothing
 			break;
+		}
+	}
+
+	private void addSkatPointsToPlayerPoints(Player trickWinner) {
+		if (data.getGameType() == GameType.RAMSCH) {
+			if (JSkatOptions.instance().getRamschSkatOwner() == RamschSkatOwner.LAST_TRICK) {
+				if (trickWinner != null) {
+					log.debug("Skat cards (" + data.getSkat().getTotalValue() + " points) are added to player @ " //$NON-NLS-1$ //$NON-NLS-2$
+							+ trickWinner + " (= last trick)"); //$NON-NLS-1$
+					data.addPlayerPoints(trickWinner, data.getSkat()
+							.getTotalValue());
+				} else {
+					log.warn("Skat cards cannot be added to winner of final trick - trick winner is unknown"); //$NON-NLS-1$
+				}
+			}
+		} else {
+			// for all the other games, points to the declarer
+			data.addPlayerPoints(data.getDeclarer(), data.getSkat()
+					.getTotalValue());
 		}
 	}
 

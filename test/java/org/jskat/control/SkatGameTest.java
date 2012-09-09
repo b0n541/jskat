@@ -18,6 +18,7 @@
  * under the License.
  */
 package org.jskat.control;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -25,20 +26,31 @@ import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jskat.AbstractJSkatTest;
 import org.jskat.ai.rnd.AIPlayerRND;
 import org.jskat.ai.test.NoBiddingTestPlayer;
 import org.jskat.ai.test.RamschTestPlayer;
 import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary;
 import org.jskat.data.JSkatOptions;
+import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatGameResult;
 import org.jskat.data.SkatTableOptions.RuleSet;
+import org.jskat.data.Trick;
 import org.jskat.gui.UnitTestView;
 import org.jskat.player.JSkatPlayer;
+import org.jskat.player.UnitTestPlayer;
+import org.jskat.util.Card;
+import org.jskat.util.CardDeck;
 import org.jskat.util.GameType;
 import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -55,7 +67,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 		JSkatOptions options = JSkatOptions.instance();
 		options.setRules(RuleSet.ISPA);
 
-		SkatGame game = new SkatGame("Table 1", GameVariant.STANDARD, new NoBiddingTestPlayer(), //$NON-NLS-1$
+		SkatGame game = new SkatGame(
+				"Table 1", GameVariant.STANDARD, new NoBiddingTestPlayer(), //$NON-NLS-1$
 				new NoBiddingTestPlayer(), new NoBiddingTestPlayer());
 		game.setView(new UnitTestView());
 
@@ -74,7 +87,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 		assertFalse(result.isWon());
 		assertEquals(0, result.getGameValue());
 	}
-	
+
 	/**
 	 * When no player bids, game is passed in
 	 */
@@ -84,7 +97,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 		JSkatOptions options = JSkatOptions.instance();
 		options.setRules(RuleSet.ISPA);
 
-		SkatGame game = new SkatGame("Table 1", GameVariant.STANDARD, getNoBiddingPlayer(), //$NON-NLS-1$
+		SkatGame game = new SkatGame(
+				"Table 1", GameVariant.STANDARD, getNoBiddingPlayer(), //$NON-NLS-1$
 				getNoBiddingPlayer(), getNoBiddingPlayer());
 		game.setView(new UnitTestView());
 
@@ -123,7 +137,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 		options.setPlayRamsch(true);
 		options.setRamschEventNoBid(true);
 
-		SkatGame game = new SkatGame("Table 1", GameVariant.STANDARD, new NoBiddingTestPlayer(), //$NON-NLS-1$
+		SkatGame game = new SkatGame(
+				"Table 1", GameVariant.STANDARD, new NoBiddingTestPlayer(), //$NON-NLS-1$
 				new NoBiddingTestPlayer(), new NoBiddingTestPlayer());
 		game.setView(new UnitTestView());
 
@@ -154,7 +169,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 		options.setPlayRamsch(true);
 		options.setRamschEventNoBid(true);
 
-		SkatGame game = new SkatGame("Table 1", GameVariant.STANDARD, new NoBiddingTestPlayer(), //$NON-NLS-1$
+		SkatGame game = new SkatGame(
+				"Table 1", GameVariant.STANDARD, new NoBiddingTestPlayer(), //$NON-NLS-1$
 				new NoBiddingTestPlayer(), new NoBiddingTestPlayer());
 		game.setView(new UnitTestView());
 
@@ -180,7 +196,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 	@Test
 	public void testRamsch_Forced() {
 
-		SkatGame game = new SkatGame("Table 1", GameVariant.RAMSCH, new AIPlayerRND(), //$NON-NLS-1$
+		SkatGame game = new SkatGame(
+				"Table 1", GameVariant.RAMSCH, new AIPlayerRND(), //$NON-NLS-1$
 				new AIPlayerRND(), new AIPlayerRND());
 		game.setView(new UnitTestView());
 
@@ -209,7 +226,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 		RamschTestPlayer grandHandPlayer = new RamschTestPlayer();
 		grandHandPlayer.setPlayGrandHand(true);
 
-		SkatGame game = new SkatGame("Table 1", GameVariant.RAMSCH, grandHandPlayer, //$NON-NLS-1$
+		SkatGame game = new SkatGame(
+				"Table 1", GameVariant.RAMSCH, grandHandPlayer, //$NON-NLS-1$
 				new AIPlayerRND(), new AIPlayerRND());
 		game.setView(new UnitTestView());
 
@@ -288,5 +306,89 @@ public class SkatGameTest extends AbstractJSkatTest {
 
 		GameSummary summary = game.getGameSummary();
 		assertEquals(GameType.GRAND, summary.getGameType());
+	}
+
+	@Test
+	public void testCompleteGame() {
+		SkatGame game = new SkatGame("Table 1", GameVariant.STANDARD, //$NON-NLS-1$
+				new AIPlayerRND(), new AIPlayerRND(), new AIPlayerRND());
+		game.setView(new UnitTestView());
+
+		game.start();
+		try {
+			game.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		Player declarer = game.getDeclarer();
+		SkatGameResult result = game.getGameResult();
+		if (declarer != null && result.getGameValue() > 0) {
+			assertEquals(
+					120,
+					result.getFinalDeclarerPoints()
+							+ result.getFinalOpponentPoints());
+			GameSummary summary = game.getGameSummary();
+
+			Map<Player, Integer> playerPointsInTricks = new HashMap<Player, Integer>();
+			for (Trick trick : summary.getTricks()) {
+
+				Integer playerPoints = playerPointsInTricks.get(trick
+						.getTrickWinner());
+				if (playerPoints == null) {
+					playerPoints = 0;
+				}
+				playerPoints = playerPoints + trick.getValue();
+				playerPointsInTricks.put(trick.getTrickWinner(), playerPoints);
+			}
+			assertEquals(
+					result.getFinalOpponentPoints(),
+					playerPointsInTricks.get(declarer.getRightNeighbor())
+							+ playerPointsInTricks.get(declarer
+									.getLeftNeighbor()));
+		}
+	}
+
+	@Ignore
+	@Test
+	public void testPredefinedCardPlaying() {
+		UnitTestPlayer foreHand = new UnitTestPlayer();
+		foreHand.setCardsToPlay(Arrays.asList(Card.C7, Card.SJ, Card.C9,
+				Card.H8, Card.DQ, Card.D7, Card.CT, Card.DK, Card.CA, Card.CK));
+
+		UnitTestPlayer middleHand = new UnitTestPlayer();
+		foreHand.setCardsToPlay(Arrays.asList(Card.CQ, Card.C8, Card.SQ,
+				Card.ST, Card.S9, Card.HT, Card.HA, Card.DA, Card.HK, Card.D9));
+
+		UnitTestPlayer rearHand = new UnitTestPlayer();
+		foreHand.setCardsToPlay(Arrays.asList(Card.DJ, Card.CJ, Card.HJ,
+				Card.SA, Card.S8, Card.H7, Card.H9, Card.D8, Card.HQ, Card.DT));
+
+		SkatGame game = new SkatGame("Table 1", GameVariant.STANDARD, //$NON-NLS-1$
+				foreHand, middleHand, rearHand);
+		game.setView(new UnitTestView());
+
+		CardDeck deck = new CardDeck(
+				"SJ CA CT CQ C8 ST CJ HJ DJ SK S7 CK C9 C7 H8 SQ S9 HA HT SA S8 HQ H9 DK DO D7 HK DA D9 H7 DT D8");
+		game.setCardDeck(deck);
+		game.dealCards();
+		game.setDeclarer(Player.MIDDLEHAND);
+		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+		factory.setGameType(GameType.CLUBS);
+		game.setGameAnnouncement(factory.getAnnouncement());
+		game.setGameState(GameState.TRICK_PLAYING);
+
+		game.start();
+		try {
+			game.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		SkatGameResult result = game.getGameResult();
+		assertEquals(28, result.getFinalDeclarerPoints());
+		assertEquals(28, result.getFinalOpponentPoints());
 	}
 }
