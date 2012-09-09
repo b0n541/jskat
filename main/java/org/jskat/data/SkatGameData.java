@@ -711,7 +711,7 @@ public class SkatGameData {
 		} else {
 
 			// TODO: need to know what this is doing
-			multiplier = (1 << geschoben);
+			multiplier = 1 << geschoben;
 		}
 
 		return multiplier;
@@ -849,7 +849,7 @@ public class SkatGameData {
 	public void addPlayerPoints(final Player player, final int points) {
 
 		playerPoints.put(player,
-				Integer.valueOf(playerPoints.get(player).intValue() + points));
+				playerPoints.get(player) + points);
 	}
 
 	/**
