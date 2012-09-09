@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -43,13 +44,16 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
+	private final JFrame parent;
+	
 	JTable overviewTable;
 
 	/**
 	 * Constructor
 	 */
-	public NeuralNetworkTrainingOverview() {
+	public NeuralNetworkTrainingOverview(final JFrame mainFrame) {
 
+		parent = mainFrame;
 		initGUI();
 	}
 
@@ -184,5 +188,19 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 
 			data.get(GameType.values()[rowIndex]).set(columnIndex, value);
 		}
+	}
+	
+
+	/**
+	 * @see JDialog#setVisible(boolean)
+	 */
+	@Override
+	public void setVisible(final boolean isVisible) {
+
+		if (isVisible) {
+			setLocationRelativeTo(parent);
+		}
+		
+		super.setVisible(isVisible);
 	}
 }
