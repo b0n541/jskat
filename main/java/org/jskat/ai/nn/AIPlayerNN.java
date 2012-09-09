@@ -403,7 +403,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 				log.debug("Testing card " + card); //$NON-NLS-1$
 
-				double[] inputs = setNetInputs(card);
+				double[] inputs = getNetInputs(card);
 
 				cardInputs.put(card, inputs);
 				double currOutput = net.getPredictedOutcome(inputs);
@@ -471,7 +471,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 *            Card to be played
 	 * @return Net input attributes
 	 */
-	double[] setNetInputs(final Card cardToPlay) {
+	double[] getNetInputs(final Card cardToPlay) {
 
 		double[] netInputs = new double[INPUT_LENGTH];
 
@@ -737,6 +737,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 	private void adjustNeuralNetworks(final List<double[]> inputs) {
 
+		assert inputs.size() < 11;
+		
 		double output = 0.0d;
 		if (!GameType.PASSED_IN.equals(knowledge.getGameType())) {
 			if (GameType.RAMSCH.equals(knowledge.getGameType())) {
