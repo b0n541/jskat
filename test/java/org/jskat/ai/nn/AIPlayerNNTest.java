@@ -193,43 +193,43 @@ public class AIPlayerNNTest extends AbstractJSkatTest {
 		player.startGame(Player.FOREHAND, announcement);
 		player.newTrick(new Trick(0, Player.FOREHAND));
 
-		double[] inputs = player.setNetInputs(Card.CJ);
+		double[] inputs = player.getNetInputs(Card.CJ);
 		assertEquals(AIPlayerNN.HAS_CARD, inputs[363], 0.0);
 
 		player.startGame(Player.MIDDLEHAND, announcement);
-		inputs = player.setNetInputs(Card.CJ);
+		inputs = player.getNetInputs(Card.CJ);
 		assertEquals(AIPlayerNN.HAS_CARD, inputs[0], 0.0);
 
 		player.startGame(Player.REARHAND, announcement);
-		inputs = player.setNetInputs(Card.CJ);
+		inputs = player.getNetInputs(Card.CJ);
 		assertEquals(AIPlayerNN.HAS_CARD, inputs[726], 0.0);
 
 		player.newGame(Player.MIDDLEHAND);
 
 		player.startGame(Player.FOREHAND, announcement);
-		inputs = player.setNetInputs(Card.CJ);
+		inputs = player.getNetInputs(Card.CJ);
 		assertEquals(AIPlayerNN.HAS_CARD, inputs[726], 0.0);
 
 		player.startGame(Player.MIDDLEHAND, announcement);
-		inputs = player.setNetInputs(Card.CJ);
+		inputs = player.getNetInputs(Card.CJ);
 		assertEquals(AIPlayerNN.HAS_CARD, inputs[363], 0.0);
 
 		player.startGame(Player.REARHAND, announcement);
-		inputs = player.setNetInputs(Card.CJ);
+		inputs = player.getNetInputs(Card.CJ);
 		assertEquals(AIPlayerNN.HAS_CARD, inputs[0], 0.0);
 
 		player.newGame(Player.REARHAND);
 
 		player.startGame(Player.FOREHAND, announcement);
-		inputs = player.setNetInputs(Card.CJ);
+		inputs = player.getNetInputs(Card.CJ);
 		assertEquals(AIPlayerNN.HAS_CARD, inputs[0], 0.0);
 
 		player.startGame(Player.MIDDLEHAND, announcement);
-		inputs = player.setNetInputs(Card.CJ);
+		inputs = player.getNetInputs(Card.CJ);
 		assertEquals(AIPlayerNN.HAS_CARD, inputs[726], 0.0);
 
 		player.startGame(Player.REARHAND, announcement);
-		inputs = player.setNetInputs(Card.CJ);
+		inputs = player.getNetInputs(Card.CJ);
 		assertEquals(AIPlayerNN.HAS_CARD, inputs[363], 0.0);
 	}
 
@@ -254,7 +254,7 @@ public class AIPlayerNNTest extends AbstractJSkatTest {
 		player.cardPlayed(Player.FOREHAND, Card.SJ);
 		player.cardPlayed(Player.MIDDLEHAND, Card.HJ);
 
-		double[] inputs = player.setNetInputs(Card.CJ);
+		double[] inputs = player.getNetInputs(Card.CJ);
 
 		// game declarer for player FOREHAND
 		assertEquals(AIPlayerNN.ACTIVE, inputs[0], 0.0);
@@ -325,7 +325,7 @@ public class AIPlayerNNTest extends AbstractJSkatTest {
 		player.showTrick(completeTrick);
 		player.newTrick(new Trick(1, Player.REARHAND));
 
-		double[] inputs = player.setNetInputs(Card.DJ);
+		double[] inputs = player.getNetInputs(Card.DJ);
 
 		// game declarer for player FOREHAND
 		assertEquals(AIPlayerNN.ACTIVE, inputs[0], 0.0);
