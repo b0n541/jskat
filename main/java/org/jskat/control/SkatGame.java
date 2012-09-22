@@ -538,6 +538,13 @@ public class SkatGame extends JSkatThread {
 
 			log.error("Player is fooling!!! Skat doesn't have two cards!"); //$NON-NLS-1$
 			result = false;
+		} else if (discardedSkat.get(0) != discardedSkat.get(1)) {
+			log.error("Player is fooling!!! Skat cards are identical!");
+			result = false;
+		} else if (!playerHasCard(data.getDeclarer(), discardedSkat.get(0))
+				|| !playerHasCard(data.getDeclarer(), discardedSkat.get(1))) {
+			log.error("Player is fooling!!! Player doesn't have had discarded card!");
+			result = false;
 		}
 		// TODO check for jacks in the discarded skat in ramsch games
 
@@ -660,10 +667,7 @@ public class SkatGame extends JSkatThread {
 			}
 
 			log.debug("Trick cards: " + trick.getCardList()); //$NON-NLS-1$
-			log.debug("Points: forehand: " + data.getPlayerPoints(Player.FOREHAND) + //$NON-NLS-1$
-					" middlehand: " //$NON-NLS-1$
-					+ data.getPlayerPoints(Player.MIDDLEHAND) + " rearhand: " //$NON-NLS-1$
-					+ data.getPlayerPoints(Player.REARHAND));
+			logPlayerPoints();
 
 			doSleep(maxSleep);
 
@@ -695,13 +699,21 @@ public class SkatGame extends JSkatThread {
 		}
 	}
 
-	private void addSkatPointsToPlayerPoints(Player trickWinner) {
+	private void logPlayerPoints() {
+		log.debug("Points: forehand: " + data.getPlayerPoints(Player.FOREHAND) + //$NON-NLS-1$
+				" middlehand: " //$NON-NLS-1$
+				+ data.getPlayerPoints(Player.MIDDLEHAND) + " rearhand: " //$NON-NLS-1$
+				+ data.getPlayerPoints(Player.REARHAND));
+	}
+
+	private void addSkatPointsToPlayerPoints(Player lastTrickWinner) {
+		log.debug("Skat: " + data.getSkat());
 		if (data.getGameType() == GameType.RAMSCH) {
 			if (JSkatOptions.instance().getRamschSkatOwner() == RamschSkatOwner.LAST_TRICK) {
-				if (trickWinner != null) {
+				if (lastTrickWinner != null) {
 					log.debug("Skat cards (" + data.getSkat().getTotalValue() + " points) are added to player @ " //$NON-NLS-1$ //$NON-NLS-2$
-							+ trickWinner + " (= last trick)"); //$NON-NLS-1$
-					data.addPlayerPoints(trickWinner, data.getSkat()
+							+ lastTrickWinner + " (= last trick)"); //$NON-NLS-1$
+					data.addPlayerPoints(lastTrickWinner, data.getSkat()
 							.getTotalValue());
 				} else {
 					log.warn("Skat cards cannot be added to winner of final trick - trick winner is unknown"); //$NON-NLS-1$
@@ -712,6 +724,7 @@ public class SkatGame extends JSkatThread {
 			data.addPlayerPoints(data.getDeclarer(), data.getSkat()
 					.getTotalValue());
 		}
+		logPlayerPoints();
 	}
 
 	private void playCard(final Trick trick, final Player trickForeHand,

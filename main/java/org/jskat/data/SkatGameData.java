@@ -848,8 +848,7 @@ public class SkatGameData {
 	 */
 	public void addPlayerPoints(final Player player, final int points) {
 
-		playerPoints.put(player,
-				playerPoints.get(player) + points);
+		playerPoints.put(player, playerPoints.get(player) + points);
 	}
 
 	/**
