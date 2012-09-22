@@ -124,69 +124,89 @@ class GameInformationPanel extends JPanel {
 
 	private void refreshText() {
 
-		String text = ""; //$NON-NLS-1$
+		StringBuffer text = new StringBuffer(); //$NON-NLS-1$
 
-		if (gameNumber > 0) {
-			text += strings.getString("game") + " " + gameNumber + ": "; //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+		appendGameNumber(text);
+
+		text.append(getGameStateString(gameState));
+
+		appendGameType(text);
+
+		appendGameStateDetails(text);
+
+		label.setText(text.toString());
+	}
+
+	private void appendGameStateDetails(StringBuffer text) {
+		if (gameState.equals(GameState.TRICK_PLAYING)) {
+			appendTrickPlayingDetails(text);
+		} else if (gameState.equals(GameState.GAME_OVER)) {
+
+			appendGameOverDetails(text);
+		}
+	}
+
+	private void appendGameOverDetails(StringBuffer text) {
+		if (gameType != GameType.PASSED_IN) {
+			text.append(" - "); //$NON-NLS-1$
+			if (gameWon) {
+				text.append(strings.getString("won")); //$NON-NLS-1$
+			} else {
+				text.append(strings.getString("lost")); //$NON-NLS-1$
+			}
 		}
 
-		text += getGameStateString(gameState);
+		if (gameType != GameType.NULL && gameType != GameType.PASSED_IN) {
+			text.append(" - "); //$NON-NLS-1$
 
+			text.append(strings.getString("declarer") + ": " + declarerPoints + " " + strings.getString("points")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ 
+			text.append(", " + strings.getString("opponents") + ": " //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+					+ opponentPoints + " " + strings.getString("points")); //$NON-NLS-1$//$NON-NLS-2$
+		}
+	}
+
+	private void appendTrickPlayingDetails(StringBuffer text) {
+		text.append(" " + strings.getString("trick") + " " + trick); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+	}
+
+	private void appendGameType(StringBuffer text) {
 		if (gameType != null) {
-			text += " [" + strings.getGameType(gameType); //$NON-NLS-1$
+			text.append(" [" + strings.getGameType(gameType)); //$NON-NLS-1$
 
 			if (gameState.equals(GameState.GAME_OVER) && multiplier > 0) {
 				if (playWithJacks) {
-					text += " " + strings.getString("with"); //$NON-NLS-1$//$NON-NLS-2$
+					text.append(" " + strings.getString("with")); //$NON-NLS-1$//$NON-NLS-2$
 				} else {
-					text += " " + strings.getString("without"); //$NON-NLS-1$//$NON-NLS-2$
+					text.append(" " + strings.getString("without")); //$NON-NLS-1$//$NON-NLS-2$
 				}
-				text += " " + (multiplier - 1); //$NON-NLS-1$
-				text += " " + strings.getString("play"); //$NON-NLS-1$//$NON-NLS-2$
-				text += " " + multiplier; //$NON-NLS-1$
+				text.append(" " + (multiplier - 1)); //$NON-NLS-1$
+				text.append(" " + strings.getString("play")); //$NON-NLS-1$//$NON-NLS-2$
+				text.append(" " + multiplier); //$NON-NLS-1$
 			}
 
 			if (handGame) {
-				text += " hand";
+				text.append(" hand");
 			}
 
 			if (ouvertGame) {
-				text += " ouvert";
+				text.append(" ouvert");
 			}
 
 			if (schneiderAnnounced) {
-				text += " schneider";
+				text.append(" schneider");
 			}
 
 			if (schwarzAnnounced) {
-				text += " schwarz";
+				text.append(" schwarz");
 			}
-			text += "]"; //$NON-NLS-1$
+			text.append("]"); //$NON-NLS-1$
 		}
+	}
 
-		if (gameState.equals(GameState.TRICK_PLAYING)) {
-			text += " " + strings.getString("trick") + " " + trick; //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+	private void appendGameNumber(StringBuffer text) {
+		if (gameNumber > 0) {
+			text.append(strings.getString("game") + " " + gameNumber + ": "); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 		}
-
-		if (gameState.equals(GameState.GAME_OVER)) {
-
-			text += " - "; //$NON-NLS-1$
-			if (gameWon) {
-				text += strings.getString("won"); //$NON-NLS-1$
-			} else {
-				text += strings.getString("lost"); //$NON-NLS-1$
-			}
-
-			if (gameType != GameType.NULL && gameType != GameType.PASSED_IN) {
-				text += " - "; //$NON-NLS-1$
-
-				text += strings.getString("declarer") + ": " + declarerPoints + " " + strings.getString("points"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ 
-				text += ", " + strings.getString("opponents") + ": " //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
-						+ opponentPoints + " " + strings.getString("points"); //$NON-NLS-1$//$NON-NLS-2$
-			}
-		}
-
-		label.setText(text);
 	}
 
 	void setGameSummary(final GameSummary summary) {
