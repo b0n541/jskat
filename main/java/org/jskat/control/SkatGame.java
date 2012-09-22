@@ -871,6 +871,24 @@ public class SkatGame extends JSkatThread {
 		log.debug("Final game result: lost:" + data.isGameLost() + //$NON-NLS-1$
 				" game value: " + data.getResult()); //$NON-NLS-1$
 
+		int declarerPoints = 0;
+		int opponentPoints = 0;
+		for (Trick trick : data.getTricks()) {
+			String logString = "Trick: " + (trick.getTrickNumberInGame() + 1);
+			if (trick.getTrickWinner().equals(data.getDeclarer())) {
+				declarerPoints += trick.getValue();
+				logString += " Declarer wins: ";
+			} else {
+				opponentPoints += trick.getValue();
+				logString += " Opponents win: ";
+			}
+			logString += trick.getValue() + " -> " + declarerPoints + "/"
+					+ opponentPoints;
+			log.debug(logString);
+		}
+		log.debug("Final result: " + data.getDeclarerScore() + "/"
+				+ data.getOpponentScore());
+
 		for (final JSkatPlayer currPlayer : player.values()) {
 			currPlayer.setGameSummary(data.getGameSummary());
 			currPlayer.finalizeGame();
