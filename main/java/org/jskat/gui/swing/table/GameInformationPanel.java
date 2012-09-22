@@ -176,11 +176,14 @@ class GameInformationPanel extends JPanel {
 			} else {
 				text += strings.getString("lost"); //$NON-NLS-1$
 			}
-			text += " - "; //$NON-NLS-1$
 
-			text += strings.getString("declarer") + ": " + declarerPoints + " " + strings.getString("points"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ 
-			text += ", " + strings.getString("opponents") + ": " //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
-					+ opponentPoints + " " + strings.getString("points"); //$NON-NLS-1$//$NON-NLS-2$
+			if (gameType != GameType.NULL && gameType != GameType.PASSED_IN) {
+				text += " - "; //$NON-NLS-1$
+
+				text += strings.getString("declarer") + ": " + declarerPoints + " " + strings.getString("points"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ 
+				text += ", " + strings.getString("opponents") + ": " //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+						+ opponentPoints + " " + strings.getString("points"); //$NON-NLS-1$//$NON-NLS-2$
+			}
 		}
 
 		label.setText(text);
