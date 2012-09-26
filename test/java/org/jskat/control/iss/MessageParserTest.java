@@ -286,6 +286,20 @@ public class MessageParserTest extends AbstractJSkatTest {
 
 	/**
 	 * Test the parsing of the game summary<br>
+	 * Declarer plays Null Ouvert and the opponents resign
+	 */
+	@Test
+	public void testParseGameSummary_NullOuvertTwoResigns() {
+		final String gameSummary = "(;GM[Skat]PC[International Skat Server]CO[]SE[60842]ID[1390253]DT[2012-09-26/17:30:29/UTC]P0[kermit]P1[bonsai]P2[zoot]R0[]R1[0.0]R2[]MV[w HK.SK.HJ.CA.SA.C9.S8.H7.ST.HT.C7.HA.CJ.DK.HQ.D7.C8.DA.DT.D9.SQ.DQ.H8.S9.CK.S7.SJ.CT.H9.CQ.DJ.D8 1 18 0 y 1 20 0 y 1 22 0 y 1 23 0 y 1 24 0 y 1 27 0 y 1 30 0 y 1 33 0 y 1 35 0 p 2 p 1 s w DJ.D8 1 NO.HA.HQ 2 RE 0 RE ]R[d:1 win v:46 m:0 bidok p:14 t:0 s:0 z:0 p0:0 p1:0 p2:0 l:-1 to:-1 r:1] ;)";
+		final SkatGameData gameData = MessageParser
+				.parseGameSummary(gameSummary);
+
+		assertEquals(GameType.NULL, gameData.getGameType());
+		assertTrue(gameData.isGameWon());
+	}
+
+	/**
+	 * Test the parsing of the game summary<br>
 	 * 
 	 */
 	@Test

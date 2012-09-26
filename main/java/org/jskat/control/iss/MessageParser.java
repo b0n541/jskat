@@ -339,37 +339,30 @@ public class MessageParser {
 
 		if (annToken.hasMoreTokens()) {
 
-			if (ouvertGame) {
+			CardList showedCards = new CardList();
 
-				final CardList ouvertCards = new CardList();
-
-				int cardNo = 0;
-				while (annToken.hasMoreTokens()) {
-					// player has shown the cards --> ouvert game
-					final String nextCard = annToken.nextToken();
-
-					if (gameType != GameType.NULL || gameType == GameType.NULL
-							&& cardNo != 0 && cardNo != 1) {
-						ouvertCards.add(Card.getCardFromString(nextCard));
-					}
-					cardNo++;
-				}
-
-				info.setOuvertCards(ouvertCards);
-
-			} else if (!handGame) {
-
-				final Card discardCard0 = Card.getCardFromString(annToken
-						.nextToken());
-				final Card discardCard1 = Card.getCardFromString(annToken
-						.nextToken());
-
-				final CardList discardedCards = new CardList();
-				discardedCards.add(discardCard0);
-				discardedCards.add(discardCard1);
-
-				factory.setDiscardedCards(discardedCards);
+			while (annToken.hasMoreTokens()) {
+				showedCards.add(Card.getCardFromString(annToken.nextToken()));
 			}
+
+			CardList discardedCards = new CardList();
+			CardList ouvertCards = new CardList();
+
+			if (handGame) {
+				ouvertCards.addAll(showedCards);
+			} else if (showedCards.size() == 2) {
+				discardedCards.addAll(showedCards);
+			} else {
+				discardedCards.add(showedCards.get(0));
+				discardedCards.add(showedCards.get(1));
+
+				for (int i = 2; i < showedCards.size(); i++) {
+					ouvertCards.add(showedCards.get(i));
+				}
+			}
+
+			info.setOuvertCards(ouvertCards);
+			factory.setDiscardedCards(discardedCards);
 		}
 
 		final GameAnnouncement ann = factory.getAnnouncement();
