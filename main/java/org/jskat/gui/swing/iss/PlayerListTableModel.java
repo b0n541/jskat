@@ -48,9 +48,9 @@ class PlayerListTableModel extends AbstractTableModel {
 		data = new ArrayList<List<Object>>();
 		columns = new ArrayList<String>();
 		columns.add(strings.getString("name"));
-		columns.add(strings.getString("language"));
 		columns.add(strings.getString("games"));
 		columns.add(strings.getString("strength"));
+		columns.add(strings.getString("language"));
 	}
 
 	/**
@@ -59,10 +59,10 @@ class PlayerListTableModel extends AbstractTableModel {
 	@Override
 	public Class<?> getColumnClass(final int columnIndex) {
 
-		if (columnIndex == 2) {
+		if (columnIndex == 1) {
 			return Long.class;
-		} else if (columnIndex == 3) {
-			return Double.class;
+		} else if (columnIndex == 2) {
+			return Long.class;
 		}
 		return String.class;
 	}
@@ -115,8 +115,8 @@ class PlayerListTableModel extends AbstractTableModel {
 	 * @param strength
 	 *            Player strength
 	 */
-	public void updatePlayer(final String playerName, final String language, final long gamesPlayed,
-			final double strength) {
+	public void updatePlayer(final String playerName, final String language,
+			final long gamesPlayed, final double strength) {
 
 		boolean playerFound = false;
 		int index = 0;
@@ -141,24 +141,26 @@ class PlayerListTableModel extends AbstractTableModel {
 		}
 	}
 
-	private void updateRow(final int index, final String language, final long gamesPlayed, final double strength) {
+	private void updateRow(final int index, final String language,
+			final long gamesPlayed, final double strength) {
 
 		List<Object> row = data.get(index);
 		// set updated values
-		row.set(1, language);
-		row.set(2, Long.toString(gamesPlayed));
-		row.set(3, Double.toString(strength));
+		row.set(1, Long.toString(gamesPlayed));
+		row.set(2, Double.toString(strength));
+		row.set(3, language);
 
 		fireTableDataChanged();
 	}
 
-	private void addRow(final String playerName, final String language, final long gamesPlayed, final double strength) {
+	private void addRow(final String playerName, final String language,
+			final long gamesPlayed, final double strength) {
 
 		ArrayList<Object> newLine = new ArrayList<Object>();
 		newLine.add(playerName);
-		newLine.add(language);
 		newLine.add(Long.valueOf(gamesPlayed));
 		newLine.add(Double.valueOf(strength));
+		newLine.add(language);
 		data.add(newLine);
 
 		fireTableDataChanged();

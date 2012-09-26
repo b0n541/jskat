@@ -131,7 +131,9 @@ public class LobbyPanel extends AbstractTabPanel {
 		playerListTable.setAutoCreateRowSorter(true);
 
 		final TableColumnModel columnModel = playerListTable.getColumnModel();
-		columnModel.getColumn(1).setCellRenderer(new FlagTableCellRenderer());
+		columnModel.getColumn(2).setCellRenderer(
+				new PlayerStrengthTableCellRenderer());
+		columnModel.getColumn(3).setCellRenderer(new FlagTableCellRenderer());
 
 		playerListTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
