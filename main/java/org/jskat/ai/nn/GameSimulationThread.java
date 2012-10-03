@@ -21,6 +21,7 @@ package org.jskat.ai.nn;
 
 import org.jskat.control.JSkatThread;
 import org.jskat.control.SkatGame;
+import org.jskat.control.ThreadManager;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData.GameState;
@@ -39,7 +40,8 @@ import org.slf4j.helpers.NOPLogger;
  */
 class GameSimulationThread extends JSkatThread {
 
-	private static Logger log = LoggerFactory.getLogger(GameSimulationThread.class);
+	private static Logger log = LoggerFactory
+			.getLogger(GameSimulationThread.class);
 
 	private final GameType gameType;
 	private final Player position;
@@ -55,7 +57,8 @@ class GameSimulationThread extends JSkatThread {
 	private final AIPlayerNN nnPlayer2;
 	private final AIPlayerNN nnPlayer3;
 
-	GameSimulationThread(final GameType pGameType, final Player playerPosition, final CardList playerCards) {
+	GameSimulationThread(final GameType pGameType, final Player playerPosition,
+			final CardList playerCards) {
 
 		gameType = pGameType;
 		position = playerPosition;
@@ -85,6 +88,7 @@ class GameSimulationThread extends JSkatThread {
 	@Override
 	public void run() {
 		simulateGames();
+		ThreadManager.unregisterThread(this);
 	}
 
 	private void simulateGames() {
@@ -116,7 +120,8 @@ class GameSimulationThread extends JSkatThread {
 
 	private boolean simulateGame() {
 
-		SkatGame game = new SkatGame("table", GameVariant.STANDARD, nnPlayer1, nnPlayer2, nnPlayer3);
+		SkatGame game = new SkatGame("table", GameVariant.STANDARD, nnPlayer1,
+				nnPlayer2, nnPlayer3);
 		game.setView(new NullView());
 		game.setLogger(NOPLogger.NOP_LOGGER);
 

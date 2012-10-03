@@ -74,11 +74,13 @@ public class SkatSeries extends JSkatThread {
 	public void setPlayer(final List<JSkatPlayer> newPlayer) {
 
 		if (newPlayer.size() != 3) {
-			throw new IllegalArgumentException("Only three players are allowed at the moment."); //$NON-NLS-1$
+			throw new IllegalArgumentException(
+					"Only three players are allowed at the moment."); //$NON-NLS-1$
 		}
 
-		view.setPlayerNames(data.getTableName(), newPlayer.get(0).getPlayerName(), newPlayer.get(1).getPlayerName(),
-				newPlayer.get(2).getPlayerName());
+		view.setPlayerNames(data.getTableName(), newPlayer.get(0)
+				.getPlayerName(), newPlayer.get(1).getPlayerName(), newPlayer
+				.get(2).getPlayerName());
 
 		// memorize third player to find it again after shuffling the players
 		JSkatPlayer thirdPlayer = newPlayer.get(2);
@@ -96,7 +98,8 @@ public class SkatSeries extends JSkatThread {
 		// FIXME (jansch 09.05.2012) this is GUI logic, move it to the GUI
 		// package
 		for (Player hand : Player.values()) {
-			if (player.get(hand).isHumanPlayer() || player.get(hand) == thirdPlayer) {
+			if (player.get(hand).isHumanPlayer()
+					|| player.get(hand) == thirdPlayer) {
 				data.setBottomPlayer(hand);
 			}
 		}
@@ -149,18 +152,23 @@ public class SkatSeries extends JSkatThread {
 					player.put(Player.FOREHAND, player.get(Player.MIDDLEHAND));
 					player.put(Player.MIDDLEHAND, helper);
 
-					data.setBottomPlayer(data.getBottomPlayer().getRightNeighbor());
+					data.setBottomPlayer(data.getBottomPlayer()
+							.getRightNeighbor());
 				}
 
 				gameNumber++;
 				view.setGameNumber(data.getTableName(), gameNumber);
 
 				if (onlyPlayRamsch) {
-					currSkatGame = new SkatGame(data.getTableName(), GameVariant.RAMSCH, player.get(Player.FOREHAND),
-							player.get(Player.MIDDLEHAND), player.get(Player.REARHAND));
+					currSkatGame = new SkatGame(data.getTableName(),
+							GameVariant.RAMSCH, player.get(Player.FOREHAND),
+							player.get(Player.MIDDLEHAND),
+							player.get(Player.REARHAND));
 				} else {
-					currSkatGame = new SkatGame(data.getTableName(), GameVariant.STANDARD, player.get(Player.FOREHAND),
-							player.get(Player.MIDDLEHAND), player.get(Player.REARHAND));
+					currSkatGame = new SkatGame(data.getTableName(),
+							GameVariant.STANDARD, player.get(Player.FOREHAND),
+							player.get(Player.MIDDLEHAND),
+							player.get(Player.REARHAND));
 				}
 
 				setViewPositions();
@@ -208,6 +216,8 @@ public class SkatSeries extends JSkatThread {
 		view.setSeriesState(data.getTableName(), SeriesState.SERIES_FINISHED);
 
 		log.debug(data.getState().name());
+		ThreadManager.unregisterThread(this);
+
 	}
 
 	private void setViewPositions() {
@@ -216,15 +226,18 @@ public class SkatSeries extends JSkatThread {
 
 		if (Player.FOREHAND.equals(data.getBottomPlayer())) {
 
-			view.setPositions(tableName, Player.MIDDLEHAND, Player.REARHAND, Player.FOREHAND);
+			view.setPositions(tableName, Player.MIDDLEHAND, Player.REARHAND,
+					Player.FOREHAND);
 
 		} else if (Player.MIDDLEHAND.equals(data.getBottomPlayer())) {
 
-			view.setPositions(tableName, Player.REARHAND, Player.FOREHAND, Player.MIDDLEHAND);
+			view.setPositions(tableName, Player.REARHAND, Player.FOREHAND,
+					Player.MIDDLEHAND);
 
 		} else {
 
-			view.setPositions(tableName, Player.FOREHAND, Player.MIDDLEHAND, Player.REARHAND);
+			view.setPositions(tableName, Player.FOREHAND, Player.MIDDLEHAND,
+					Player.REARHAND);
 		}
 	}
 
