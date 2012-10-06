@@ -76,6 +76,15 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
+	public boolean playGrandHand() {
+
+		return rand.nextBoolean();
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
 	public GameAnnouncement announceGame() {
 
 		log.debug("position: " + knowledge.getPlayerPosition()); //$NON-NLS-1$
