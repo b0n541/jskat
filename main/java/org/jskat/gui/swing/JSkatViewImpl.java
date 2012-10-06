@@ -112,6 +112,7 @@ import org.jskat.gui.action.main.SaveNeuralNetworksAction;
 import org.jskat.gui.action.main.SaveSeriesAction;
 import org.jskat.gui.action.main.SaveSeriesAsAction;
 import org.jskat.gui.action.main.StartSkatSeriesAction;
+import org.jskat.gui.action.main.StopTrainNeuralNetworksAction;
 import org.jskat.gui.action.main.TakeCardFromSkatAction;
 import org.jskat.gui.action.main.TrainNeuralNetworksAction;
 import org.jskat.gui.human.AbstractHumanJSkatPlayer;
@@ -220,6 +221,8 @@ public class JSkatViewImpl implements JSkatView {
 		// Neural network actions
 		actions.put(JSkatAction.TRAIN_NEURAL_NETWORKS,
 				new TrainNeuralNetworksAction());
+		actions.put(JSkatAction.STOP_TRAIN_NEURAL_NETWORKS,
+				new StopTrainNeuralNetworksAction());
 		actions.put(JSkatAction.LOAD_NEURAL_NETWORKS,
 				new LoadNeuralNetworksAction());
 		actions.put(JSkatAction.SAVE_NEURAL_NETWORKS,
@@ -400,6 +403,8 @@ public class JSkatViewImpl implements JSkatView {
 				.get(JSkatAction.RESET_NEURAL_NETWORKS)));
 		neuralNetworkMenu.add(new JMenuItem(actions
 				.get(JSkatAction.TRAIN_NEURAL_NETWORKS)));
+		neuralNetworkMenu.add(new JMenuItem(actions
+				.get(JSkatAction.STOP_TRAIN_NEURAL_NETWORKS)));
 		menu.add(neuralNetworkMenu);
 
 		final JMenu issMenu = new JMenu(strings.getString("iss")); //$NON-NLS-1$
