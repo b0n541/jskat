@@ -27,6 +27,8 @@ import java.io.InputStreamReader;
 
 import org.jskat.data.SkatGameData;
 import org.jskat.util.GameType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class helps in finding interesting games from the game library provided
@@ -36,6 +38,8 @@ public class IssGameExtractor {
 
 	private static String filePath;
 
+	private static Logger log = LoggerFactory.getLogger(IssGameExtractor.class);
+
 	public IssGameExtractor() {
 
 	}
@@ -43,7 +47,8 @@ public class IssGameExtractor {
 	public static void main(final String args[]) throws Exception {
 
 		IssGameExtractor gameExtractor = new IssGameExtractor();
-		gameExtractor.setFilePath("/home/jan/Projekte/JSkat/iss/issgames-1-2012.sgf"); //$NON-NLS-1$
+		gameExtractor
+				.setFilePath("/home/jan/Projekte/JSkat/iss/issgames-1-2012.sgf"); //$NON-NLS-1$
 
 		filterGameDatabase();
 	}
@@ -62,17 +67,16 @@ public class IssGameExtractor {
 				SkatGameData gameData = MessageParser.parseGameSummary(strLine);
 
 				if (GameType.GRAND.equals(gameData.getGameType())) {
-					// Print the content on the console
-					//					System.out.println("Game no. " + gameNo + ": " + strLine); //$NON-NLS-1$//$NON-NLS-2$
-					// System.out.println(gameData.getGameType());
+					// log.debug("Game no. " + gameNo + ": " + strLine); //$NON-NLS-1$//$NON-NLS-2$
+					// log.debug("Game type: " + gameData.getGameType());
 				}
 			} catch (Exception except) {
-				System.out.println("Failed reading game no. " + gameNo + ": " + strLine);
+				log.debug("Failed reading game no. " + gameNo + ": " + strLine); //$NON-NLS-1$ //$NON-NLS-2$
 				// throw except;
 			}
 
 			if (gameNo % 10000 == 0) {
-				System.out.println("Read " + gameNo + " games.");
+				log.debug("Read " + gameNo + " games."); //$NON-NLS-1$//$NON-NLS-2$
 			}
 
 			gameNo++;
@@ -86,7 +90,7 @@ public class IssGameExtractor {
 	 * 
 	 * @param newFilePath
 	 */
-	public void setFilePath(final String newFilePath) {
+	public static void setFilePath(final String newFilePath) {
 		filePath = newFilePath;
 	}
 }
