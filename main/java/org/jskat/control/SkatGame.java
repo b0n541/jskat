@@ -511,7 +511,7 @@ public class SkatGame extends JSkatThread {
 		final CardList discardedSkat = new CardList();
 		discardedSkat.addAll(activePlayer.discardSkat());
 
-		if (!checkDiscardedCards(discardedSkat)) {
+		if (!checkDiscardedCards(data.getActivePlayer(), discardedSkat)) {
 			// TODO throw an appropriate exceptions
 		}
 
@@ -525,7 +525,7 @@ public class SkatGame extends JSkatThread {
 		}
 	}
 
-	private boolean checkDiscardedCards(final CardList discardedSkat) {
+	private boolean checkDiscardedCards(Player player, CardList discardedSkat) {
 
 		// TODO move this to skat rules?
 		boolean result = true;
@@ -538,12 +538,12 @@ public class SkatGame extends JSkatThread {
 
 			log.error("Player is fooling!!! Skat doesn't have two cards!"); //$NON-NLS-1$
 			result = false;
-		} else if (discardedSkat.get(0) != discardedSkat.get(1)) {
-			log.error("Player is fooling!!! Skat cards are identical!");
+		} else if (discardedSkat.get(0) == discardedSkat.get(1)) {
+			log.error("Player is fooling!!! Skat cards are identical!"); //$NON-NLS-1$
 			result = false;
-		} else if (!playerHasCard(data.getDeclarer(), discardedSkat.get(0))
-				|| !playerHasCard(data.getDeclarer(), discardedSkat.get(1))) {
-			log.error("Player is fooling!!! Player doesn't have had discarded card!");
+		} else if (!playerHasCard(player, discardedSkat.get(0))
+				|| !playerHasCard(player, discardedSkat.get(1))) {
+			log.error("Player is fooling!!! Player doesn't have had discarded card!"); //$NON-NLS-1$
 			result = false;
 		}
 		// TODO check for jacks in the discarded skat in ramsch games
