@@ -43,7 +43,7 @@ public class ResetNeuralNetworksAction extends AbstractJSkatAction {
 		putValue(Action.SHORT_DESCRIPTION,
 				strings.getString("reset_nn_tooltip")); //$NON-NLS-1$
 
-		setIcon(Icon.BLANK);
+		setIcon(Icon.UNDO);
 	}
 
 	/**

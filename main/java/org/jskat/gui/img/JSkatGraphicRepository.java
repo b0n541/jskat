@@ -504,7 +504,15 @@ public class JSkatGraphicRepository {
 		/**
 		 * White flag
 		 */
-		WHITE_FLAG;
+		WHITE_FLAG,
+		/**
+		 * Undo
+		 */
+		UNDO,
+		/**
+		 * REDO
+		 */
+		REDO;
 	}
 
 	/**
