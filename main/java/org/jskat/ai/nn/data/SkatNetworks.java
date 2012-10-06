@@ -102,7 +102,8 @@ public class SkatNetworks {
 	 *            TRUE, if declarer network is desired
 	 * @return Neural network
 	 */
-	public static List<INeuralNetwork> getNetwork(final GameType gameType, final boolean isDeclarer) {
+	public static List<INeuralNetwork> getNetwork(final GameType gameType,
+			final boolean isDeclarer) {
 
 		List<INeuralNetwork> result = new ArrayList<INeuralNetwork>();
 
@@ -154,7 +155,8 @@ public class SkatNetworks {
 	 * @return Neural network
 	 */
 	private static List<INeuralNetwork> getSuitDeclarer() {
-		return createNetworkList(suitDeclarerOpening, suitDeclarerMiddleGame, suitDeclarerEndGame);
+		return createNetworkList(suitDeclarerOpening, suitDeclarerMiddleGame,
+				suitDeclarerEndGame);
 	}
 
 	/**
@@ -163,7 +165,8 @@ public class SkatNetworks {
 	 * @return Neural network
 	 */
 	private static List<INeuralNetwork> getSuitOpponent() {
-		return createNetworkList(suitOpponentOpening, suitOpponentMiddleGame, suitOpponentEndGame);
+		return createNetworkList(suitOpponentOpening, suitOpponentMiddleGame,
+				suitOpponentEndGame);
 	}
 
 	/**
@@ -172,7 +175,8 @@ public class SkatNetworks {
 	 * @return Neural network
 	 */
 	private static List<INeuralNetwork> getNullDeclarer() {
-		return createNetworkList(nullDeclarerOpening, nullDeclarerMiddleGame, nullDeclarerEndGame);
+		return createNetworkList(nullDeclarerOpening, nullDeclarerMiddleGame,
+				nullDeclarerEndGame);
 	}
 
 	/**
@@ -181,7 +185,8 @@ public class SkatNetworks {
 	 * @return Neural network
 	 */
 	private static List<INeuralNetwork> getNullOpponent() {
-		return createNetworkList(nullOpponentOpening, nullOpponentMiddleGame, nullOpponentEndGame);
+		return createNetworkList(nullOpponentOpening, nullOpponentMiddleGame,
+				nullOpponentEndGame);
 	}
 
 	/**
@@ -190,7 +195,8 @@ public class SkatNetworks {
 	 * @return Neural network
 	 */
 	private static List<INeuralNetwork> getGrandDeclarer() {
-		return createNetworkList(grandDeclarerOpening, grandDeclarerMiddleGame, grandDeclarerEndGame);
+		return createNetworkList(grandDeclarerOpening, grandDeclarerMiddleGame,
+				grandDeclarerEndGame);
 	}
 
 	/**
@@ -199,7 +205,8 @@ public class SkatNetworks {
 	 * @return Neural network
 	 */
 	private static List<INeuralNetwork> getGrandOpponent() {
-		return createNetworkList(grandOpponentOpening, grandOpponentMiddleGame, grandOpponentEndGame);
+		return createNetworkList(grandOpponentOpening, grandOpponentMiddleGame,
+				grandOpponentEndGame);
 	}
 
 	/**
@@ -208,10 +215,12 @@ public class SkatNetworks {
 	 * @return Neural network
 	 */
 	private static List<INeuralNetwork> getRamschDeclarer() {
-		return createNetworkList(ramschDeclarerOpening, ramschDeclarerMiddleGame, ramschDeclarerEndGame);
+		return createNetworkList(ramschDeclarerOpening,
+				ramschDeclarerMiddleGame, ramschDeclarerEndGame);
 	}
 
-	private static List<INeuralNetwork> createNetworkList(final INeuralNetwork openingNet,
+	private static List<INeuralNetwork> createNetworkList(
+			final INeuralNetwork openingNet,
 			final INeuralNetwork middleGameNet, final INeuralNetwork endGameNet) {
 
 		List<INeuralNetwork> result = new ArrayList<INeuralNetwork>();
@@ -248,81 +257,94 @@ public class SkatNetworks {
 	 */
 	public static void loadNetworks(final String filePath) {
 
-		// FIXME (jan 25.02.2012) this is duplicated in
-		// NeuralNetwork.loadNetwork()
 		int[] hiddenLayer = { hiddenNeurons };
-		NetworkTopology topo = new NetworkTopology(inputNeurons, outputNeurons, 1, hiddenLayer);
+		NetworkTopology topo = new NetworkTopology(inputNeurons, outputNeurons,
+				1, hiddenLayer);
 
 		suitDeclarerOpening = new EncogNetworkWrapper(topo);
-		suitDeclarerOpening.loadNetwork(
-				"/org/jskat/ai/nn/data/jskat.suit.declarer.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		suitDeclarerOpening
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.suit.declarer.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 		suitDeclarerMiddleGame = new EncogNetworkWrapper(topo);
 		suitDeclarerMiddleGame
 				.loadNetwork(
 						"/org/jskat/ai/nn/data/jskat.suit.declarer.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 		suitDeclarerEndGame = new EncogNetworkWrapper(topo);
-		suitDeclarerEndGame.loadNetwork(
-				"/org/jskat/ai/nn/data/jskat.suit.declarer.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		suitDeclarerEndGame
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.suit.declarer.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 		suitOpponentOpening = new EncogNetworkWrapper(topo);
-		suitOpponentOpening.loadNetwork(
-				"/org/jskat/ai/nn/data/jskat.suit.opponent.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		suitOpponentOpening
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.suit.opponent.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 		suitOpponentMiddleGame = new EncogNetworkWrapper(topo);
 		suitOpponentMiddleGame
 				.loadNetwork(
 						"/org/jskat/ai/nn/data/jskat.suit.opponent.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 		suitOpponentEndGame = new EncogNetworkWrapper(topo);
-		suitOpponentEndGame.loadNetwork(
-				"/org/jskat/ai/nn/data/jskat.suit.opponent.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		suitOpponentEndGame
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.suit.opponent.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 		nullDeclarerOpening = new EncogNetworkWrapper(topo);
-		nullDeclarerOpening.loadNetwork(
-				"/org/jskat/ai/nn/data/jskat.null.declarer.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		nullDeclarerOpening
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.null.declarer.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 		nullDeclarerMiddleGame = new EncogNetworkWrapper(topo);
 		nullDeclarerMiddleGame
 				.loadNetwork(
 						"/org/jskat/ai/nn/data/jskat.null.declarer.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 		nullDeclarerEndGame = new EncogNetworkWrapper(topo);
-		nullDeclarerEndGame.loadNetwork(
-				"/org/jskat/ai/nn/data/jskat.null.declarer.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		nullDeclarerEndGame
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.null.declarer.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 		nullOpponentOpening = new EncogNetworkWrapper(topo);
-		nullOpponentOpening.loadNetwork(
-				"/org/jskat/ai/nn/data/jskat.null.opponent.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		nullOpponentOpening
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.null.opponent.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 		nullOpponentMiddleGame = new EncogNetworkWrapper(topo);
 		nullOpponentMiddleGame
 				.loadNetwork(
 						"/org/jskat/ai/nn/data/jskat.null.opponent.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 		nullOpponentEndGame = new EncogNetworkWrapper(topo);
-		nullOpponentEndGame.loadNetwork(
-				"/org/jskat/ai/nn/data/jskat.null.opponent.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		nullOpponentEndGame
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.null.opponent.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 		grandDeclarerOpening = new EncogNetworkWrapper(topo);
-		grandDeclarerOpening.loadNetwork(
-				"/org/jskat/ai/nn/data/jskat.grand.declarer.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		grandDeclarerOpening
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.grand.declarer.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 		grandDeclarerMiddleGame = new EncogNetworkWrapper(topo);
 		grandDeclarerMiddleGame
 				.loadNetwork(
 						"/org/jskat/ai/nn/data/jskat.grand.declarer.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 		grandDeclarerEndGame = new EncogNetworkWrapper(topo);
-		grandDeclarerEndGame.loadNetwork(
-				"/org/jskat/ai/nn/data/jskat.grand.declarer.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		grandDeclarerEndGame
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.grand.declarer.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 		grandOpponentOpening = new EncogNetworkWrapper(topo);
-		grandOpponentOpening.loadNetwork(
-				"/org/jskat/ai/nn/data/jskat.grand.opponent.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		grandOpponentOpening
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.grand.opponent.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 		grandOpponentMiddleGame = new EncogNetworkWrapper(topo);
 		grandOpponentMiddleGame
 				.loadNetwork(
 						"/org/jskat/ai/nn/data/jskat.grand.opponent.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 		grandOpponentEndGame = new EncogNetworkWrapper(topo);
-		grandOpponentEndGame.loadNetwork(
-				"/org/jskat/ai/nn/data/jskat.grand.opponent.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		grandOpponentEndGame
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.grand.opponent.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 		ramschDeclarerOpening = new EncogNetworkWrapper(topo);
-		ramschDeclarerOpening.loadNetwork(
-				"/org/jskat/ai/nn/data/jskat.ramsch.declarer.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		ramschDeclarerOpening
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.ramsch.declarer.opening.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 		ramschDeclarerMiddleGame = new EncogNetworkWrapper(topo);
 		ramschDeclarerMiddleGame
 				.loadNetwork(
 						"/org/jskat/ai/nn/data/jskat.ramsch.declarer.middlegame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 		ramschDeclarerEndGame = new EncogNetworkWrapper(topo);
-		ramschDeclarerEndGame.loadNetwork(
-				"/org/jskat/ai/nn/data/jskat.ramsch.declarer.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
+		ramschDeclarerEndGame
+				.loadNetwork(
+						"/org/jskat/ai/nn/data/jskat.ramsch.declarer.endgame.nnet", inputNeurons, hiddenNeurons, outputNeurons); //$NON-NLS-1$
 	}
 
 	/**
@@ -333,27 +355,48 @@ public class SkatNetworks {
 	 */
 	public static void saveNetworks(final String path) {
 
-		suitDeclarerOpening.saveNetwork(path.concat("jskat.suit.declarer.opening.nnet")); //$NON-NLS-1$
-		suitDeclarerMiddleGame.saveNetwork(path.concat("jskat.suit.declarer.middlegame.nnet")); //$NON-NLS-1$
-		suitDeclarerEndGame.saveNetwork(path.concat("jskat.suit.declarer.endgame.nnet")); //$NON-NLS-1$
-		suitOpponentOpening.saveNetwork(path.concat("jskat.suit.opponent.opening.nnet")); //$NON-NLS-1$
-		suitOpponentMiddleGame.saveNetwork(path.concat("jskat.suit.opponent.middlegame.nnet")); //$NON-NLS-1$
-		suitOpponentEndGame.saveNetwork(path.concat("jskat.suit.opponent.endgame.nnet")); //$NON-NLS-1$
-		nullDeclarerOpening.saveNetwork(path.concat("jskat.null.declarer.opening.nnet")); //$NON-NLS-1$
-		nullDeclarerMiddleGame.saveNetwork(path.concat("jskat.null.declarer.middlegame.nnet")); //$NON-NLS-1$
-		nullDeclarerEndGame.saveNetwork(path.concat("jskat.null.declarer.endgame.nnet")); //$NON-NLS-1$
-		nullOpponentOpening.saveNetwork(path.concat("jskat.null.opponent.opening.nnet")); //$NON-NLS-1$
-		nullOpponentMiddleGame.saveNetwork(path.concat("jskat.null.opponent.middlegame.nnet")); //$NON-NLS-1$
-		nullOpponentEndGame.saveNetwork(path.concat("jskat.null.opponent.endgame.nnet")); //$NON-NLS-1$
-		grandDeclarerOpening.saveNetwork(path.concat("jskat.grand.declarer.opening.nnet")); //$NON-NLS-1$
-		grandDeclarerMiddleGame.saveNetwork(path.concat("jskat.grand.declarer.middlegame.nnet")); //$NON-NLS-1$
-		grandDeclarerEndGame.saveNetwork(path.concat("jskat.grand.declarer.endgame.nnet")); //$NON-NLS-1$
-		grandOpponentOpening.saveNetwork(path.concat("jskat.grand.opponent.opening.nnet")); //$NON-NLS-1$
-		grandOpponentMiddleGame.saveNetwork(path.concat("jskat.grand.opponent.middlegame.nnet")); //$NON-NLS-1$
-		grandOpponentEndGame.saveNetwork(path.concat("jskat.grand.opponent.endgame.nnet")); //$NON-NLS-1$
-		ramschDeclarerOpening.saveNetwork(path.concat("jskat.ramsch.declarer.opening.nnet")); //$NON-NLS-1$
-		ramschDeclarerMiddleGame.saveNetwork(path.concat("jskat.ramsch.declarer.middlegame.nnet")); //$NON-NLS-1$
-		ramschDeclarerEndGame.saveNetwork(path.concat("jskat.ramsch.declarer.endgame.nnet")); //$NON-NLS-1$
+		suitDeclarerOpening.saveNetwork(path
+				.concat("jskat.suit.declarer.opening.nnet")); //$NON-NLS-1$
+		suitDeclarerMiddleGame.saveNetwork(path
+				.concat("jskat.suit.declarer.middlegame.nnet")); //$NON-NLS-1$
+		suitDeclarerEndGame.saveNetwork(path
+				.concat("jskat.suit.declarer.endgame.nnet")); //$NON-NLS-1$
+		suitOpponentOpening.saveNetwork(path
+				.concat("jskat.suit.opponent.opening.nnet")); //$NON-NLS-1$
+		suitOpponentMiddleGame.saveNetwork(path
+				.concat("jskat.suit.opponent.middlegame.nnet")); //$NON-NLS-1$
+		suitOpponentEndGame.saveNetwork(path
+				.concat("jskat.suit.opponent.endgame.nnet")); //$NON-NLS-1$
+		nullDeclarerOpening.saveNetwork(path
+				.concat("jskat.null.declarer.opening.nnet")); //$NON-NLS-1$
+		nullDeclarerMiddleGame.saveNetwork(path
+				.concat("jskat.null.declarer.middlegame.nnet")); //$NON-NLS-1$
+		nullDeclarerEndGame.saveNetwork(path
+				.concat("jskat.null.declarer.endgame.nnet")); //$NON-NLS-1$
+		nullOpponentOpening.saveNetwork(path
+				.concat("jskat.null.opponent.opening.nnet")); //$NON-NLS-1$
+		nullOpponentMiddleGame.saveNetwork(path
+				.concat("jskat.null.opponent.middlegame.nnet")); //$NON-NLS-1$
+		nullOpponentEndGame.saveNetwork(path
+				.concat("jskat.null.opponent.endgame.nnet")); //$NON-NLS-1$
+		grandDeclarerOpening.saveNetwork(path
+				.concat("jskat.grand.declarer.opening.nnet")); //$NON-NLS-1$
+		grandDeclarerMiddleGame.saveNetwork(path
+				.concat("jskat.grand.declarer.middlegame.nnet")); //$NON-NLS-1$
+		grandDeclarerEndGame.saveNetwork(path
+				.concat("jskat.grand.declarer.endgame.nnet")); //$NON-NLS-1$
+		grandOpponentOpening.saveNetwork(path
+				.concat("jskat.grand.opponent.opening.nnet")); //$NON-NLS-1$
+		grandOpponentMiddleGame.saveNetwork(path
+				.concat("jskat.grand.opponent.middlegame.nnet")); //$NON-NLS-1$
+		grandOpponentEndGame.saveNetwork(path
+				.concat("jskat.grand.opponent.endgame.nnet")); //$NON-NLS-1$
+		ramschDeclarerOpening.saveNetwork(path
+				.concat("jskat.ramsch.declarer.opening.nnet")); //$NON-NLS-1$
+		ramschDeclarerMiddleGame.saveNetwork(path
+				.concat("jskat.ramsch.declarer.middlegame.nnet")); //$NON-NLS-1$
+		ramschDeclarerEndGame.saveNetwork(path
+				.concat("jskat.ramsch.declarer.endgame.nnet")); //$NON-NLS-1$
 	}
 
 	/**

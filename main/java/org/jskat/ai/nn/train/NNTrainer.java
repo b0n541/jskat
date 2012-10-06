@@ -59,6 +59,8 @@ public class NNTrainer extends JSkatThread {
 
 	private GameType gameType;
 
+	private boolean stopTraining = false;
+
 	/**
 	 * Constructor
 	 */
@@ -68,77 +70,6 @@ public class NNTrainer extends JSkatThread {
 
 		rand = new Random();
 		nullGames = new ArrayList<StringBuffer>();
-
-		initLearningPatterns();
-	}
-
-	private void initLearningPatterns() {
-
-		// test a perfect null game
-		StringBuffer buffer = new StringBuffer();
-		buffer.append("CA CT CK "); // 3 cards fore hand //$NON-NLS-1$
-		buffer.append("C9 ST SK "); // 3 cards middle hand //$NON-NLS-1$
-		buffer.append("H7 DA DT "); // 3 cards hind hand //$NON-NLS-1$
-		buffer.append("SA HA "); // skat //$NON-NLS-1$
-		buffer.append("CQ CJ C8 C7 "); // 4 cards fore hand //$NON-NLS-1$
-		buffer.append("SQ SJ HK HQ "); // 4 cards middle hand //$NON-NLS-1$
-		buffer.append("DK DQ D9 D8 "); // 4 cards hind hand //$NON-NLS-1$
-		buffer.append("S9 S8 S7 "); // 3 cards fore hand //$NON-NLS-1$
-		buffer.append("HJ H9 H8 "); // 3 cards middle hand //$NON-NLS-1$
-		buffer.append("D7 HT DJ"); // 3 cards hind hand //$NON-NLS-1$
-		nullGames.add(buffer);
-
-		buffer = new StringBuffer();
-		buffer.append("CA CT CK "); // 3 cards fore hand //$NON-NLS-1$
-		buffer.append("S9 ST SK "); // 3 cards middle hand //$NON-NLS-1$
-		buffer.append("H7 DA DT "); // 3 cards hind hand //$NON-NLS-1$
-		buffer.append("SA HA "); // skat //$NON-NLS-1$
-		buffer.append("CQ CJ C8 C7 "); // 4 cards fore hand //$NON-NLS-1$
-		buffer.append("SQ SJ HK HQ "); // 4 cards middle hand //$NON-NLS-1$
-		buffer.append("DK DQ D9 D8 "); // 4 cards hind hand //$NON-NLS-1$
-		buffer.append("C9 S8 S7 "); // 3 cards fore hand //$NON-NLS-1$
-		buffer.append("HJ H9 H8 "); // 3 cards middle hand //$NON-NLS-1$
-		buffer.append("D7 HT DJ"); // 3 cards hind hand //$NON-NLS-1$
-		nullGames.add(buffer);
-
-		buffer = new StringBuffer();
-		buffer.append("C9 C8 C7 "); // 3 cards fore hand //$NON-NLS-1$
-		buffer.append("CA CT CK "); // 3 cards middle hand //$NON-NLS-1$
-		buffer.append("CQ CJ SA "); // 3 cards hind hand //$NON-NLS-1$
-		buffer.append("SJ SK "); // skat //$NON-NLS-1$
-		buffer.append("ST S9 S8 S7 "); // 4 cards fore hand //$NON-NLS-1$
-		buffer.append("SQ HA HT HK "); // 4 cards middle hand //$NON-NLS-1$
-		buffer.append("HQ DA DT DK "); // 4 cards hind hand //$NON-NLS-1$
-		buffer.append("H9 H8 H7 "); // 3 cards fore hand //$NON-NLS-1$
-		buffer.append("DQ DJ D9 "); // 3 cards middle hand //$NON-NLS-1$
-		buffer.append("D8 D7 HJ"); // 3 cards hind hand //$NON-NLS-1$
-		nullGames.add(buffer);
-
-		buffer = new StringBuffer();
-		buffer.append("SA ST SK "); // 3 cards fore hand //$NON-NLS-1$
-		buffer.append("S9 CT CK "); // 3 cards middle hand //$NON-NLS-1$
-		buffer.append("H7 DA DT "); // 3 cards hind hand //$NON-NLS-1$
-		buffer.append("CA HA "); // skat //$NON-NLS-1$
-		buffer.append("SQ SJ S8 S7 "); // 4 cards fore hand //$NON-NLS-1$
-		buffer.append("CQ CJ HK HQ "); // 4 cards middle hand //$NON-NLS-1$
-		buffer.append("DK DQ D9 D8 "); // 4 cards hind hand //$NON-NLS-1$
-		buffer.append("C9 C8 C7 "); // 3 cards fore hand //$NON-NLS-1$
-		buffer.append("HJ H9 H8 "); // 3 cards middle hand //$NON-NLS-1$
-		buffer.append("D7 HT DJ"); // 3 cards hind hand //$NON-NLS-1$
-		nullGames.add(buffer);
-
-		buffer = new StringBuffer();
-		buffer.append("HA HT HK "); // 3 cards fore hand //$NON-NLS-1$
-		buffer.append("H9 CT CK "); // 3 cards middle hand //$NON-NLS-1$
-		buffer.append("S7 DA DT "); // 3 cards hind hand //$NON-NLS-1$
-		buffer.append("CA SA "); // skat //$NON-NLS-1$
-		buffer.append("HQ HJ H8 H7 "); // 4 cards fore hand //$NON-NLS-1$
-		buffer.append("CQ CJ SK SQ "); // 4 cards middle hand //$NON-NLS-1$
-		buffer.append("DK DQ D9 D8 "); // 4 cards hind hand //$NON-NLS-1$
-		buffer.append("S9 S8 S7 "); // 3 cards fore hand //$NON-NLS-1$
-		buffer.append("SJ S9 S8 "); // 3 cards middle hand //$NON-NLS-1$
-		buffer.append("D7 ST DJ"); // 3 cards hind hand //$NON-NLS-1$
-		nullGames.add(buffer);
 	}
 
 	/**
@@ -164,6 +95,16 @@ public class NNTrainer extends JSkatThread {
 	}
 
 	/**
+	 * Stops the training
+	 * 
+	 * @param isStopTraining
+	 *            TRUE, if the training should be stopped
+	 */
+	public void stopTraining(boolean isStopTraining) {
+		stopTraining = isStopTraining;
+	}
+
+	/**
 	 * Trains the neural networks
 	 */
 	private void trainNets() {
@@ -174,7 +115,7 @@ public class NNTrainer extends JSkatThread {
 		long totalGames = 0;
 		int episodeSteps = 100;
 
-		while (true) {
+		while (!stopTraining) {
 
 			if (totalGames > 0) {
 				jskat.addTrainingResult(gameType, totalGames, totalWonGames,

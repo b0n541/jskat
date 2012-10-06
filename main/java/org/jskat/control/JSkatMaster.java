@@ -57,6 +57,8 @@ public class JSkatMaster {
 	private JSkatView view;
 	private final IssController issControl;
 
+	private final List<NNTrainer> runningNNTrainers;
+
 	/**
 	 * Gets the instance of the JSkat master controller
 	 * 
@@ -81,6 +83,8 @@ public class JSkatMaster {
 		data = JSkatApplicationData.instance();
 
 		issControl = new IssController(this);
+
+		runningNNTrainers = new ArrayList<NNTrainer>();
 	}
 
 	/**
@@ -91,10 +95,12 @@ public class JSkatMaster {
 	 * @param latestRemoteVersion
 	 *            Remote version
 	 */
-	public void checkJSkatVersion(final String latestLocalVersion, final String latestRemoteVersion) {
+	public void checkJSkatVersion(final String latestLocalVersion,
+			final String latestRemoteVersion) {
 		log.debug("Latest version web: " + latestRemoteVersion); //$NON-NLS-1$
 		log.debug("Latest version local: " + latestLocalVersion); //$NON-NLS-1$
-		if (VersionChecker.isHigherVersionAvailable(latestLocalVersion, latestRemoteVersion)) {
+		if (VersionChecker.isHigherVersionAvailable(latestLocalVersion,
+				latestRemoteVersion)) {
 			log.debug("Newer version " + latestRemoteVersion + " is available on the JSkat website."); //$NON-NLS-1$//$NON-NLS-2$
 			view.showNewVersionAvailableMessage(latestRemoteVersion);
 		}
@@ -124,7 +130,8 @@ public class JSkatMaster {
 		}
 	}
 
-	private void createLocalTable(final String tableName, final AbstractHumanJSkatPlayer humanPlayer) {
+	private void createLocalTable(final String tableName,
+			final AbstractHumanJSkatPlayer humanPlayer) {
 		SkatTable table = new SkatTable(data.getTableOptions());
 		table.setName(tableName);
 		data.addSkatTable(table);
@@ -189,8 +196,10 @@ public class JSkatMaster {
 	 * @param unlimited
 	 *            TRUE, if unlimited rounds should be played
 	 */
-	public void startSeries(final ArrayList<PlayerType> allPlayer, final ArrayList<String> playerNames,
-			final int numberOfRounds, final boolean unlimited, final boolean onlyPlayRamsch, final int sleeps) {
+	public void startSeries(final ArrayList<PlayerType> allPlayer,
+			final ArrayList<String> playerNames, final int numberOfRounds,
+			final boolean unlimited, final boolean onlyPlayRamsch,
+			final int sleeps) {
 
 		log.debug(data.getActiveTable());
 
@@ -339,7 +348,8 @@ public class JSkatMaster {
 	 *            Skat player
 	 * @return TRUE if the placing was successful
 	 */
-	public synchronized boolean placePlayer(final String tableName, final JSkatPlayer player) {
+	public synchronized boolean placePlayer(final String tableName,
+			final JSkatPlayer player) {
 
 		boolean result = false;
 
@@ -395,24 +405,38 @@ public class JSkatMaster {
 		NNTrainer nullTrainer = new NNTrainer();
 		nullTrainer.setGameType(GameType.NULL);
 		nullTrainer.start();
+		runningNNTrainers.add(nullTrainer);
 		NNTrainer grandTrainer = new NNTrainer();
 		grandTrainer.setGameType(GameType.GRAND);
 		grandTrainer.start();
+		runningNNTrainers.add(grandTrainer);
 		NNTrainer clubsTrainer = new NNTrainer();
 		clubsTrainer.setGameType(GameType.CLUBS);
 		clubsTrainer.start();
+		runningNNTrainers.add(clubsTrainer);
 		NNTrainer spadesTrainer = new NNTrainer();
 		spadesTrainer.setGameType(GameType.SPADES);
 		spadesTrainer.start();
+		runningNNTrainers.add(spadesTrainer);
 		NNTrainer heartsTrainer = new NNTrainer();
 		heartsTrainer.setGameType(GameType.HEARTS);
 		heartsTrainer.start();
+		runningNNTrainers.add(heartsTrainer);
 		NNTrainer diamondsTrainer = new NNTrainer();
 		diamondsTrainer.setGameType(GameType.DIAMONDS);
 		diamondsTrainer.start();
+		runningNNTrainers.add(diamondsTrainer);
 		NNTrainer ramschTrainer = new NNTrainer();
 		ramschTrainer.setGameType(GameType.RAMSCH);
 		ramschTrainer.start();
+		runningNNTrainers.add(ramschTrainer);
+	}
+
+	public void stopTrainNeuralNetworks() {
+		for (NNTrainer trainer : runningNNTrainers) {
+			trainer.stopTraining(true);
+		}
+		runningNNTrainers.clear();
 	}
 
 	/**
@@ -473,7 +497,8 @@ public class JSkatMaster {
 		}
 	}
 
-	private void handleHumanInputForISSTable(final String tableName, final String command, final Object source) {
+	private void handleHumanInputForISSTable(final String tableName,
+			final String command, final Object source) {
 
 		if (JSkatAction.PASS_BID.toString().equals(command)) {
 			// player passed
@@ -512,11 +537,13 @@ public class JSkatMaster {
 				// FIXME (jan 02.11.2010) Discarded cards are sent with the
 				// game announcement to ISS
 				GameAnnouncement gameAnnouncement = (GameAnnouncement) source;
-				issControl.sendGameAnnouncementMove(tableName, gameAnnouncement);
+				issControl
+						.sendGameAnnouncementMove(tableName, gameAnnouncement);
 			} else {
 				log.warn("No game announcement found for " + command); //$NON-NLS-1$
 			}
-		} else if (JSkatAction.PLAY_CARD.toString().equals(command) && source instanceof Card) {
+		} else if (JSkatAction.PLAY_CARD.toString().equals(command)
+				&& source instanceof Card) {
 
 			Card nextCard = (Card) source;
 			issControl.sendCardMove(tableName, nextCard);
@@ -684,11 +711,12 @@ public class JSkatMaster {
 	 * @param strength
 	 *            Playing strength
 	 */
-	public void updateISSPlayer(final String playerName, final String language, final long gamesPlayed,
-			final double strength) {
+	public void updateISSPlayer(final String playerName, final String language,
+			final long gamesPlayed, final double strength) {
 
 		data.addAvailableISSPlayer(playerName);
-		view.updateISSLobbyPlayerList(playerName, language, gamesPlayed, strength);
+		view.updateISSLobbyPlayerList(playerName, language, gamesPlayed,
+				strength);
 	}
 
 	/**
@@ -771,10 +799,12 @@ public class JSkatMaster {
 	 * @param avgDifference
 	 *            Average difference
 	 */
-	public void addTrainingResult(final GameType gameType, final long episodes, final long totalWonGames,
-			final long episodeWonGames, final double avgDifference) {
+	public void addTrainingResult(final GameType gameType, final long episodes,
+			final long totalWonGames, final long episodeWonGames,
+			final double avgDifference) {
 
-		view.addTrainingResult(gameType, episodes, totalWonGames, episodeWonGames, avgDifference);
+		view.addTrainingResult(gameType, episodes, totalWonGames,
+				episodeWonGames, avgDifference);
 	}
 
 	/**

@@ -209,6 +209,10 @@ public enum JSkatAction {
 	 */
 	TRAIN_NEURAL_NETWORKS,
 	/**
+	 * Stops training of neural networks for Neural Network Player
+	 */
+	STOP_TRAIN_NEURAL_NETWORKS,
+	/**
 	 * Loads neural network information for Neural Network Player
 	 */
 	LOAD_NEURAL_NETWORKS,
