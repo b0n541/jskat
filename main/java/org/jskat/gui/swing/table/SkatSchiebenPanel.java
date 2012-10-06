@@ -116,8 +116,8 @@ class SkatSchiebenPanel extends JPanel {
 										SkatSchiebenPanel.this,
 										// FIXME: should not be checked in GUI
 										// code
-										strings.getString("no_jacks_in_schieberamsch_skat"),
-										strings.getString("no_jacks_in_schieberamsch_skat_title"),
+										strings.getString("no_jacks_allowed_in_schieberamsch_skat"),
+										strings.getString("no_jacks_allowed_in_schieberamsch_skat_title"),
 										JOptionPane.ERROR_MESSAGE);
 						return null;
 					}
