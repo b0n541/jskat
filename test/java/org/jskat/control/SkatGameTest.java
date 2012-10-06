@@ -170,8 +170,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 		options.setRamschEventNoBid(true);
 
 		SkatGame game = new SkatGame(
-				"Table 1", GameVariant.STANDARD, new NoBiddingTestPlayer(), //$NON-NLS-1$
-				new NoBiddingTestPlayer(), new NoBiddingTestPlayer());
+				"Table 1", GameVariant.STANDARD, new RamschTestPlayer(), //$NON-NLS-1$
+				new RamschTestPlayer(), new RamschTestPlayer());
 		game.setView(new UnitTestView());
 
 		game.start();
@@ -197,8 +197,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 	public void testRamsch_Forced() {
 
 		SkatGame game = new SkatGame(
-				"Table 1", GameVariant.RAMSCH, new AIPlayerRND(), //$NON-NLS-1$
-				new AIPlayerRND(), new AIPlayerRND());
+				"Table 1", GameVariant.RAMSCH, new RamschTestPlayer(), //$NON-NLS-1$
+				new RamschTestPlayer(), new RamschTestPlayer());
 		game.setView(new UnitTestView());
 
 		game.start();
@@ -258,7 +258,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 		grandHandPlayer.setPlayGrandHand(true);
 
 		SkatGame game = new SkatGame("Table 1", GameVariant.RAMSCH, //$NON-NLS-1$
-				new AIPlayerRND(), grandHandPlayer, new AIPlayerRND());
+				new RamschTestPlayer(), grandHandPlayer, new RamschTestPlayer());
 		game.setView(new UnitTestView());
 
 		game.start();
@@ -288,7 +288,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 		grandHandPlayer.setPlayGrandHand(true);
 
 		SkatGame game = new SkatGame("Table 1", GameVariant.RAMSCH, //$NON-NLS-1$
-				new AIPlayerRND(), new AIPlayerRND(), grandHandPlayer);
+				new RamschTestPlayer(), new RamschTestPlayer(), grandHandPlayer);
 		game.setView(new UnitTestView());
 
 		game.start();
