@@ -24,11 +24,15 @@ import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatTableOptions.RamschSkatOwner;
 import org.jskat.data.Trick;
 import org.jskat.util.Player;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of skat rules for Ramsch games
  */
 public class RamschRule extends SuitGrandRamschRule {
+
+	private final static Logger log = LoggerFactory.getLogger(RamschRule.class);
 
 	/**
 	 * {@inheritDoc}
@@ -56,22 +60,28 @@ public class RamschRule extends SuitGrandRamschRule {
 		int foreHandPoints = gameData.getPlayerPoints(Player.FOREHAND);
 		int middleHandPoints = gameData.getPlayerPoints(Player.MIDDLEHAND);
 		int rearHandPoints = gameData.getPlayerPoints(Player.REARHAND);
-		int skatPoints = JSkatOptions.instance().getRamschSkatOwner() == RamschSkatOwner.LOSER ? gameData.getSkat()
-				.getTotalValue() : 0;
+		int skatPoints = JSkatOptions.instance().getRamschSkatOwner() == RamschSkatOwner.LOSER ? gameData
+				.getSkat().getTotalValue() : 0;
 
 		// FIXME (jan 18.11.2011) make this simpler
 		// FIXME (markus 22.02.2012) consider skat points - seems to be missing
-		if (foreHandPoints > middleHandPoints && foreHandPoints > rearHandPoints) {
+		if (foreHandPoints > middleHandPoints
+				&& foreHandPoints > rearHandPoints) {
 			result = (foreHandPoints + skatPoints) * -1;
-		} else if (middleHandPoints > foreHandPoints && middleHandPoints > rearHandPoints) {
+		} else if (middleHandPoints > foreHandPoints
+				&& middleHandPoints > rearHandPoints) {
 			result = (middleHandPoints + skatPoints) * -1;
-		} else if (rearHandPoints > foreHandPoints && rearHandPoints > middleHandPoints) {
+		} else if (rearHandPoints > foreHandPoints
+				&& rearHandPoints > middleHandPoints) {
 			result = (rearHandPoints + skatPoints) * -1;
-		} else if (middleHandPoints > foreHandPoints && middleHandPoints == rearHandPoints) {
+		} else if (middleHandPoints > foreHandPoints
+				&& middleHandPoints == rearHandPoints) {
 			result = middleHandPoints * -1;
-		} else if (foreHandPoints > middleHandPoints && foreHandPoints == rearHandPoints) {
+		} else if (foreHandPoints > middleHandPoints
+				&& foreHandPoints == rearHandPoints) {
 			result = foreHandPoints * -1;
-		} else if (foreHandPoints > rearHandPoints && foreHandPoints == middleHandPoints) {
+		} else if (foreHandPoints > rearHandPoints
+				&& foreHandPoints == middleHandPoints) {
 			result = foreHandPoints * -1;
 		} else {
 			// all player have 40 points
@@ -99,7 +109,8 @@ public class RamschRule extends SuitGrandRamschRule {
 	 *            Game data
 	 * @return TRUE if the player played a durchmarsch
 	 */
-	public final static boolean isDurchmarsch(final Player player, final SkatGameData gameData) {
+	public final static boolean isDurchmarsch(final Player player,
+			final SkatGameData gameData) {
 		for (Trick t : gameData.getTricks()) {
 			if (t.getTrickWinner() != player) {
 				return false;
@@ -119,7 +130,8 @@ public class RamschRule extends SuitGrandRamschRule {
 	 *            Game data
 	 * @return TRUE if the player was jungfrau
 	 */
-	public final static boolean isJungfrau(final Player player, final SkatGameData gameData) {
+	public final static boolean isJungfrau(final Player player,
+			final SkatGameData gameData) {
 		for (Trick t : gameData.getTricks()) {
 			if (t.getTrickWinner() == player) {
 				return false;
@@ -136,9 +148,11 @@ public class RamschRule extends SuitGrandRamschRule {
 		int multiplier = 1;
 
 		if (gameData.isJungfrau()) {
+			log.debug("One player is jungfrau"); //$NON-NLS-1$
 			multiplier = 2;
 		}
 
+		log.debug(gameData.getGeschoben() + " player did schieben"); //$NON-NLS-1$
 		multiplier = (int) (multiplier * Math.pow(2, gameData.getGeschoben()));
 		return multiplier;
 	}
