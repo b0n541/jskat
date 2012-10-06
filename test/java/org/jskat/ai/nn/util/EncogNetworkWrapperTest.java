@@ -30,10 +30,14 @@ import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.training.propagation.Propagation;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class EncogNetworkWrapperTest {
 
 	private static final double MIN_DIFF = 0.001;
+	private static Logger log = LoggerFactory
+			.getLogger(EncogNetworkWrapperTest.class);
 
 	@Test
 	public void testBooleanFunction() {
@@ -42,8 +46,9 @@ public class EncogNetworkWrapperTest {
 		NetworkTopology topo = new NetworkTopology(3, 1, 1, hiddenNeurons);
 		INeuralNetwork network = new EncogNetworkWrapper(topo);
 
-		double[][] input = { { 1.0, 1.0, 1.0 }, { 1.0, 1.0, 0.0 }, { 1.0, 0.0, 1.0 }, { 1.0, 0.0, 0.0 },
-				{ 0.0, 1.0, 1.0 }, { 0.0, 1.0, 0.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0 } };
+		double[][] input = { { 1.0, 1.0, 1.0 }, { 1.0, 1.0, 0.0 },
+				{ 1.0, 0.0, 1.0 }, { 1.0, 0.0, 0.0 }, { 0.0, 1.0, 1.0 },
+				{ 0.0, 1.0, 0.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0 } };
 		double[][] output = { { 1.0 }, // A and B or C
 				{ 1.0 }, { 1.0 }, { 0.0 }, { 1.0 }, { 0.0 }, { 1.0 }, { 0.0 } };
 
@@ -57,7 +62,8 @@ public class EncogNetworkWrapperTest {
 		NetworkTopology topo = new NetworkTopology(2, 1, 1, hiddenNeurons);
 		INeuralNetwork network = new EncogNetworkWrapper(topo);
 
-		double[][] input = { { 1.0, 1.0 }, { 1.0, 0.0 }, { 0.0, 1.0 }, { 0.0, 0.0 } };
+		double[][] input = { { 1.0, 1.0 }, { 1.0, 0.0 }, { 0.0, 1.0 },
+				{ 0.0, 0.0 } };
 		double[][] output = { { 0.0 }, // A XOR B
 				{ 1.0 }, { 1.0 }, { 0.0 } };
 
@@ -76,7 +82,7 @@ public class EncogNetworkWrapperTest {
 		if (runs == 10000) {
 			fail("Needed more than 10000 runs. Error: " + error);
 		} else {
-			System.out.println("Needed " + runs + " runs.");
+			log.debug("Needed " + runs + " runs.");
 		}
 	}
 
@@ -91,12 +97,14 @@ public class EncogNetworkWrapperTest {
 		network.reset();
 
 		BasicMLDataSet trainingSet = new BasicMLDataSet();
-		double[][] input = { { 1.0, 1.0 }, { 1.0, 0.0 }, { 0.0, 1.0 }, { 0.0, 0.0 } };
+		double[][] input = { { 1.0, 1.0 }, { 1.0, 0.0 }, { 0.0, 1.0 },
+				{ 0.0, 0.0 } };
 		double[][] output = { { 0.0 }, // A XOR B
 				{ 1.0 }, { 1.0 }, { 0.0 } };
 
 		for (int i = 0; i < input.length; i++) {
-			trainingSet.add(new BasicMLDataPair(new BasicMLData(input[i]), new BasicMLData(output[i])));
+			trainingSet.add(new BasicMLDataPair(new BasicMLData(input[i]),
+					new BasicMLData(output[i])));
 		}
 
 		Propagation trainer = new ResilientPropagation(network, trainingSet);
