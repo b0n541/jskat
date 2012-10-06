@@ -43,7 +43,8 @@ import org.slf4j.LoggerFactory;
 class SkatSchiebenPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	private static Logger log = LoggerFactory.getLogger(SkatSchiebenPanel.class);
+	private static Logger log = LoggerFactory
+			.getLogger(SkatSchiebenPanel.class);
 
 	JSkatResourceBundle strings;
 	JSkatOptions options;
@@ -76,7 +77,8 @@ class SkatSchiebenPanel extends JPanel {
 		JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 		panel.setOpaque(false);
 
-		final JButton schiebenButton = new JButton(actions.get(JSkatAction.SCHIEBEN));
+		final JButton schiebenButton = new JButton(
+				actions.get(JSkatAction.SCHIEBEN));
 		schiebenButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -98,20 +100,25 @@ class SkatSchiebenPanel extends JPanel {
 				if (discardPanel.isUserLookedIntoSkat()) {
 					CardList discardedCards = discardPanel.getDiscardedCards();
 					if (discardedCards.size() != 2) {
-						JOptionPane.showMessageDialog(SkatSchiebenPanel.this,
-								strings.getString("invalid_number_of_cards_in_skat"), //$NON-NLS-1$
-								strings.getString("invalid_number_of_cards_in_skat_title"), //$NON-NLS-1$
-								JOptionPane.ERROR_MESSAGE);
+						JOptionPane
+								.showMessageDialog(
+										SkatSchiebenPanel.this,
+										strings.getString("invalid_number_of_cards_in_skat"), //$NON-NLS-1$
+										strings.getString("invalid_number_of_cards_in_skat_title"), //$NON-NLS-1$
+										JOptionPane.ERROR_MESSAGE);
 						return null;
 					}
 					if (!JSkatOptions.instance().isSchieberRamschJacksInSkat()
-							&& (discardedCards.get(0).getRank() == Rank.JACK || discardedCards.get(1).getRank() == Rank.JACK)) {
-						JOptionPane.showMessageDialog(
-								SkatSchiebenPanel.this,
-								// FIXME (markus, 02.11.11) put message text
-								// in resource file
-								"Jacks are not allowed in schieberamsch skat!", "No Jacks allowed",
-								JOptionPane.ERROR_MESSAGE);
+							&& (discardedCards.get(0).getRank() == Rank.JACK || discardedCards
+									.get(1).getRank() == Rank.JACK)) {
+						JOptionPane
+								.showMessageDialog(
+										SkatSchiebenPanel.this,
+										// FIXME: should not be checked in GUI
+										// code
+										strings.getString("no_jacks_in_schieberamsch_skat"),
+										strings.getString("no_jacks_in_schieberamsch_skat_title"),
+										JOptionPane.ERROR_MESSAGE);
 						return null;
 					}
 
