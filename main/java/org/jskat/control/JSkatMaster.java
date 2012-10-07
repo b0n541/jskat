@@ -144,13 +144,6 @@ public class JSkatMaster {
 	}
 
 	/**
-	 * Terminates all running threads
-	 */
-	public void terminateAllThreads() {
-		ThreadManager.terminateAllThreads();
-	}
-
-	/**
 	 * Removes a table
 	 * 
 	 * @param tableName

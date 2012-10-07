@@ -32,13 +32,6 @@ public class JSkatThread extends Thread {
 	private volatile boolean terminate = false;
 
 	/**
-	 * Constructor
-	 */
-	public JSkatThread() {
-		ThreadManager.registerThread(this);
-	}
-
-	/**
 	 * Terminates the thread
 	 */
 	public void terminate() {

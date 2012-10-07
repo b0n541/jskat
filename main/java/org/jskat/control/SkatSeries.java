@@ -216,8 +216,6 @@ public class SkatSeries extends JSkatThread {
 		view.setSeriesState(data.getTableName(), SeriesState.SERIES_FINISHED);
 
 		log.debug(data.getState().name());
-		ThreadManager.unregisterThread(this);
-
 	}
 
 	private void setViewPositions() {

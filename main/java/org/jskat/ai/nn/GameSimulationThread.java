@@ -21,7 +21,6 @@ package org.jskat.ai.nn;
 
 import org.jskat.control.JSkatThread;
 import org.jskat.control.SkatGame;
-import org.jskat.control.ThreadManager;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData.GameState;
@@ -88,7 +87,6 @@ class GameSimulationThread extends JSkatThread {
 	@Override
 	public void run() {
 		simulateGames();
-		ThreadManager.unregisterThread(this);
 	}
 
 	private void simulateGames() {

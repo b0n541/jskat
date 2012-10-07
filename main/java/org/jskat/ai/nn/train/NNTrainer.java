@@ -29,7 +29,6 @@ import org.jskat.ai.nn.AIPlayerNN;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.JSkatThread;
 import org.jskat.control.SkatGame;
-import org.jskat.control.ThreadManager;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary;
@@ -91,7 +90,6 @@ public class NNTrainer extends JSkatThread {
 	public void run() {
 
 		trainNets();
-		ThreadManager.unregisterThread(this);
 	}
 
 	/**
