@@ -104,8 +104,6 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		gameSimulator = new GameSimulator();
 
-		initInputBuffer();
-
 		for (GameType gameType : GameType.values()) {
 			if (gameType != GameType.RAMSCH && gameType != GameType.PASSED_IN) {
 				feasibleGameTypes.add(gameType);
@@ -114,12 +112,6 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		rand = new Random();
 		isLearning = true;
-	}
-
-	private void initInputBuffer() {
-		for (int i = 0; i < 10; i++) {
-			allInputs.add(new double[INPUT_LENGTH]);
-		}
 	}
 
 	/**
@@ -413,8 +405,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 				log.debug("Testing card " + card); //$NON-NLS-1$
 
-				double[] inputs = new double[INPUT_LENGTH];
-				setNetInputs(inputs, card);
+				double[] inputs = getNetInputs(card);
 
 				cardInputs.put(card, inputs);
 				double currOutput = net.getPredictedOutcome(inputs);
@@ -447,8 +438,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			}
 			// store parameters for the card to play
 			// for adjustment of weights after the game
-			storeInputParameters(knowledge.getCurrentTrick()
-					.getTrickNumberInGame(), cardInputs.get(possibleCards
+			storeInputParameters(cardInputs.get(possibleCards
 					.get(bestCardIndex)));
 		}
 
@@ -458,13 +448,9 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		return possibleCards.get(bestCardIndex);
 	}
 
-	private void storeInputParameters(final int trick,
-			final double[] inputParameters) {
+	private void storeInputParameters(final double[] inputParameters) {
 
-		double[] trickInputs = allInputs.get(trick);
-		for (int i = 0; i < trickInputs.length; i++) {
-			trickInputs[i] = inputParameters[i];
-		}
+		allInputs.add(inputParameters);
 	}
 
 	private int chooseRandomCard(final CardList possibleCards,
@@ -482,7 +468,9 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 *            Card to be played
 	 * @return Net input attributes
 	 */
-	void setNetInputs(double[] netInputs, final Card cardToPlay) {
+	double[] getNetInputs(final Card cardToPlay) {
+
+		double[] netInputs = new double[INPUT_LENGTH];
 
 		// set game declarer
 		setDeclarerInputs(netInputs, PLAYER_LENGTH);
@@ -510,6 +498,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 					CARD_OFFSET, knowledge.getPlayerPosition(), cardToPlay,
 					PLAYED_CARD_IN_TRICK);
 		}
+
+		return netInputs;
 	}
 
 	private void setTrickInputs(final double[] inputs, final int playerLength,
@@ -740,6 +730,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	public void preparateForNewGame() {
 
 		bestGameTypeFromDiscarding = null;
+		allInputs.clear();
 	}
 
 	/**
@@ -748,7 +739,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	@Override
 	public void finalizeGame() {
 
-		assert (allInputs.size() < 11);
+		assert allInputs.size() < 11;
 
 		if (isLearning && allInputs.size() > 0) {
 			// adjust neural networks
