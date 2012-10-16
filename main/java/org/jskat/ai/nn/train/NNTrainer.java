@@ -47,226 +47,248 @@ import org.slf4j.helpers.NOPLogger;
 /**
  * Trains the neural networks
  */
-public class NNTrainer extends JSkatThread {
+public class NNTrainer extends JSkatThread
+{
 
-	private static Logger log = LoggerFactory.getLogger(NNTrainer.class);
+    private static Logger            log          = LoggerFactory.getLogger(NNTrainer.class);
 
-	private final JSkatMaster jskat;
+    private final JSkatMaster        jskat;
 
-	private final Random rand;
-	private final List<StringBuffer> nullGames;
+    private final Random             rand;
+    private final List<StringBuffer> nullGames;
 
-	private GameType gameType;
+    private GameType                 gameType;
 
-	private boolean stopTraining = false;
+    private boolean                  stopTraining = false;
 
-	/**
-	 * Constructor
-	 */
-	public NNTrainer() {
+    /**
+     * Constructor
+     */
+    public NNTrainer()
+    {
 
-		jskat = JSkatMaster.instance();
+        jskat = JSkatMaster.instance();
 
-		rand = new Random();
-		nullGames = new ArrayList<StringBuffer>();
-	}
+        rand = new Random();
+        nullGames = new ArrayList<StringBuffer>();
+    }
 
-	/**
-	 * Sets the game type to learn
-	 * 
-	 * @param newGameType
-	 *            Game type
-	 */
-	public void setGameType(final GameType newGameType) {
+    /**
+     * Sets the game type to learn
+     * 
+     * @param newGameType
+     *            Game type
+     */
+    public void setGameType(final GameType newGameType)
+    {
 
-		gameType = newGameType;
-		setName("NNTrainer for " + gameType); //$NON-NLS-1$
-	}
+        gameType = newGameType;
+        setName("NNTrainer for " + gameType); //$NON-NLS-1$
+    }
 
-	/**
-	 * @see java.lang.Thread#run()
-	 */
-	@Override
-	public void run() {
+    /**
+     * @see java.lang.Thread#run()
+     */
+    @Override
+    public void run()
+    {
 
-		trainNets();
-	}
+        trainNets();
+    }
 
-	/**
-	 * Stops the training
-	 * 
-	 * @param isStopTraining
-	 *            TRUE, if the training should be stopped
-	 */
-	public void stopTraining(boolean isStopTraining) {
-		stopTraining = isStopTraining;
-	}
+    /**
+     * Stops the training
+     * 
+     * @param isStopTraining
+     *            TRUE, if the training should be stopped
+     */
+    public void stopTraining(boolean isStopTraining)
+    {
+        stopTraining = isStopTraining;
+    }
 
-	/**
-	 * Trains the neural networks
-	 */
-	private void trainNets() {
+    /**
+     * Trains the neural networks
+     */
+    private void trainNets()
+    {
 
-		long episodes = 0;
-		long episodesWonGames = 0;
-		long totalWonGames = 0;
-		long totalGames = 0;
-		int episodeSteps = 100;
+        long episodes = 0;
+        long episodesWonGames = 0;
+        long totalWonGames = 0;
+        long totalGames = 0;
+        int episodeSteps = 100;
 
-		while (!stopTraining) {
+        while (!stopTraining)
+        {
 
-			if (totalGames > 0) {
-				jskat.addTrainingResult(gameType, totalGames, totalWonGames,
-						episodesWonGames, 0.0);
-			}
+            if (totalGames > 0)
+            {
+                jskat.addTrainingResult(gameType, totalGames, totalWonGames, episodesWonGames, 0.0);
+            }
 
-			List<PlayerType> playerTypes = new ArrayList<PlayerType>();
-			// playerTypes.add(PlayerType.ALGORITHMIC);
-			playerTypes.add(PlayerType.RANDOM);
-			playerTypes.add(PlayerType.NEURAL_NETWORK);
+            List<PlayerType> playerTypes = new ArrayList<PlayerType>();
+            // playerTypes.add(PlayerType.ALGORITHMIC);
+            // playerTypes.add(PlayerType.RANDOM);
+            playerTypes.add(PlayerType.NEURAL_NETWORK);
 
-			for (List<PlayerType> playerConstellation : createPlayerPermutations(playerTypes)) {
+            for (List<PlayerType> playerConstellation : createPlayerPermutations(playerTypes))
+            {
 
-				for (Player currPlayer : Player.values()) {
+                for (Player currPlayer : Player.values())
+                {
 
-					JSkatPlayer player1 = createPlayer(playerConstellation
-							.get(0));
-					JSkatPlayer player2 = createPlayer(playerConstellation
-							.get(1));
-					JSkatPlayer player3 = createPlayer(playerConstellation
-							.get(2));
+                    JSkatPlayer player1 = createPlayer(playerConstellation.get(0));
+                    JSkatPlayer player2 = createPlayer(playerConstellation.get(1));
+                    JSkatPlayer player3 = createPlayer(playerConstellation.get(2));
 
-					SkatGame game = prepareGame(player1, player2, player3,
-							currPlayer);
+                    SkatGame game = prepareGame(player1, player2, player3, currPlayer);
 
-					runGame(game);
+                    runGame(game);
 
-					if (isGameWon(currPlayer, game)) {
-						episodesWonGames++;
-						totalWonGames++;
-					}
+                    if (isGameWon(currPlayer, game))
+                    {
+                        episodesWonGames++;
+                        totalWonGames++;
+                    }
 
-					totalGames++;
-				}
-			}
+                    totalGames++;
+                }
+            }
 
-			checkWaitCondition();
-		}
-	}
+            checkWaitCondition();
+        }
+    }
 
-	private JSkatPlayer createPlayer(final PlayerType playerType) {
-		JSkatPlayer player = PlayerType.getPlayerInstance(playerType);
+    private JSkatPlayer createPlayer(final PlayerType playerType)
+    {
+        JSkatPlayer player = PlayerType.getPlayerInstance(playerType);
 
-		if (PlayerType.NEURAL_NETWORK.equals(playerType)) {
-			AIPlayerNN nnPlayer = (AIPlayerNN) player;
-			nnPlayer.setIsLearning(true);
-			nnPlayer.setLogger(NOPLogger.NOP_LOGGER);
-		}
+        if (PlayerType.NEURAL_NETWORK.equals(playerType))
+        {
+            AIPlayerNN nnPlayer = (AIPlayerNN) player;
+            nnPlayer.setIsLearning(true);
+            nnPlayer.setLogger(NOPLogger.NOP_LOGGER);
+        }
 
-		return player;
-	}
+        return player;
+    }
 
-	private boolean isGameWon(final Player currPlayer, final SkatGame game) {
+    private boolean isGameWon(final Player currPlayer, final SkatGame game)
+    {
 
-		// FIXME (jansch 28.06.2011) have to call getGameResult() to get
-		// the result
-		game.getGameResult();
+        // FIXME (jansch 28.06.2011) have to call getGameResult() to get
+        // the result
+        game.getGameResult();
 
-		boolean gameWon = false;
-		if (gameType.equals(GameType.RAMSCH)) {
-			gameWon = isRamschGameWon(game.getGameSummary(), currPlayer);
-		} else {
-			gameWon = game.isGameWon();
-		}
-		return gameWon;
-	}
+        boolean gameWon = false;
+        if (gameType.equals(GameType.RAMSCH))
+        {
+            gameWon = isRamschGameWon(game.getGameSummary(), currPlayer);
+        }
+        else
+        {
+            gameWon = game.isGameWon();
+        }
+        return gameWon;
+    }
 
-	private void runGame(final SkatGame game) {
-		game.start();
-		try {
-			game.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+    private void runGame(final SkatGame game)
+    {
+        game.start();
+        try
+        {
+            game.join();
+        }
+        catch (InterruptedException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 
-	private SkatGame prepareGame(final JSkatPlayer player1,
-			final JSkatPlayer player2, final JSkatPlayer player3,
-			final Player declarer) {
-		player1.newGame(Player.FOREHAND);
-		player2.newGame(Player.MIDDLEHAND);
-		player3.newGame(Player.REARHAND);
-		SkatGame game = new SkatGame("table", GameVariant.STANDARD, player1,
-				player2, player3);
-		game.setView(new NullView());
-		game.setLogger(NOPLogger.NOP_LOGGER);
+    private SkatGame prepareGame(final JSkatPlayer player1, final JSkatPlayer player2,
+            final JSkatPlayer player3, final Player declarer)
+    {
+        player1.newGame(Player.FOREHAND);
+        player2.newGame(Player.MIDDLEHAND);
+        player3.newGame(Player.REARHAND);
+        SkatGame game = new SkatGame("table", GameVariant.STANDARD, player1, player2, player3);
+        game.setView(new NullView());
+        game.setLogger(NOPLogger.NOP_LOGGER);
 
-		CardDeck deck = new CardDeck();
-		deck.shuffle();
-		log.debug("Card deck: " + deck); //$NON-NLS-1$
-		game.setCardDeck(deck);
-		game.dealCards();
+        CardDeck deck = new CardDeck();
+        deck.shuffle();
+        log.debug("Card deck: " + deck); //$NON-NLS-1$
+        game.setCardDeck(deck);
+        game.dealCards();
 
-		if (!GameType.RAMSCH.equals(gameType)) {
-			game.setDeclarer(declarer);
-		}
+        if (!GameType.RAMSCH.equals(gameType))
+        {
+            game.setDeclarer(declarer);
+        }
 
-		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-		factory.setGameType(gameType);
-		GameAnnouncement announcement = factory.getAnnouncement();
-		game.setGameAnnouncement(announcement);
+        GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+        factory.setGameType(gameType);
+        GameAnnouncement announcement = factory.getAnnouncement();
+        game.setGameAnnouncement(announcement);
 
-		game.setGameState(GameState.TRICK_PLAYING);
-		return game;
-	}
+        game.setGameState(GameState.TRICK_PLAYING);
+        return game;
+    }
 
-	static Set<List<PlayerType>> createPlayerPermutations(
-			final List<PlayerType> playerTypes) {
+    static Set<List<PlayerType>> createPlayerPermutations(final List<PlayerType> playerTypes)
+    {
 
-		Set<List<PlayerType>> result = new HashSet<List<PlayerType>>();
+        Set<List<PlayerType>> result = new HashSet<List<PlayerType>>();
 
-		for (PlayerType player1 : playerTypes) {
-			for (PlayerType player2 : playerTypes) {
-				for (PlayerType player3 : playerTypes) {
+        for (PlayerType player1 : playerTypes)
+        {
+            for (PlayerType player2 : playerTypes)
+            {
+                for (PlayerType player3 : playerTypes)
+                {
 
-					if (player1 == PlayerType.NEURAL_NETWORK
-							|| player2 == PlayerType.NEURAL_NETWORK
-							|| player3 == PlayerType.NEURAL_NETWORK) {
+                    if (player1 == PlayerType.NEURAL_NETWORK || player2 == PlayerType.NEURAL_NETWORK
+                            || player3 == PlayerType.NEURAL_NETWORK)
+                    {
 
-						List<PlayerType> playerPermutation = new ArrayList<PlayerType>();
-						playerPermutation.add(player1);
-						playerPermutation.add(player2);
-						playerPermutation.add(player3);
+                        List<PlayerType> playerPermutation = new ArrayList<PlayerType>();
+                        playerPermutation.add(player1);
+                        playerPermutation.add(player2);
+                        playerPermutation.add(player3);
 
-						result.add(playerPermutation);
-					}
-				}
-			}
-		}
+                        result.add(playerPermutation);
+                    }
+                }
+            }
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	// FIXME (jan 10.03.2012) code duplication with AIPlayerNN
-	private static boolean isRamschGameWon(final GameSummary gameSummary,
-			final Player currPlayer) {
+    // FIXME (jan 10.03.2012) code duplication with AIPlayerNN
+    private static boolean isRamschGameWon(final GameSummary gameSummary, final Player currPlayer)
+    {
 
-		boolean ramschGameWon = false;
-		int playerPoints = gameSummary.getPlayerPoints(currPlayer);
-		int highestPlayerPoints = 0;
-		for (Player player : Player.values()) {
-			int currPlayerPoints = gameSummary.getPlayerPoints(player);
+        boolean ramschGameWon = false;
+        int playerPoints = gameSummary.getPlayerPoints(currPlayer);
+        int highestPlayerPoints = 0;
+        for (Player player : Player.values())
+        {
+            int currPlayerPoints = gameSummary.getPlayerPoints(player);
 
-			if (currPlayerPoints > highestPlayerPoints) {
-				highestPlayerPoints = currPlayerPoints;
-			}
-		}
+            if (currPlayerPoints > highestPlayerPoints)
+            {
+                highestPlayerPoints = currPlayerPoints;
+            }
+        }
 
-		if (highestPlayerPoints > playerPoints) {
-			ramschGameWon = true;
-		}
+        if (highestPlayerPoints > playerPoints)
+        {
+            ramschGameWon = true;
+        }
 
-		return ramschGameWon;
-	}
+        return ramschGameWon;
+    }
 }
