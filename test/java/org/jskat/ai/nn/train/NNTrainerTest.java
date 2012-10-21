@@ -36,7 +36,8 @@ public class NNTrainerTest {
 		List<PlayerType> playerTypes = new ArrayList<PlayerType>();
 		playerTypes.add(PlayerType.RANDOM);
 
-		Set<List<PlayerType>> permutations = NNTrainer.createPlayerPermutations(playerTypes);
+		Set<List<PlayerType>> permutations = NNTrainer
+				.createPlayerPermutations(playerTypes);
 
 		assertEquals(0, permutations.size());
 	}
@@ -46,7 +47,8 @@ public class NNTrainerTest {
 		List<PlayerType> playerTypes = new ArrayList<PlayerType>();
 		playerTypes.add(PlayerType.NEURAL_NETWORK);
 
-		Set<List<PlayerType>> permutations = NNTrainer.createPlayerPermutations(playerTypes);
+		Set<List<PlayerType>> permutations = NNTrainer
+				.createPlayerPermutations(playerTypes);
 
 		assertEquals(1, permutations.size());
 		List<PlayerType> permutation = permutations.iterator().next();
@@ -62,7 +64,8 @@ public class NNTrainerTest {
 		playerTypes.add(PlayerType.RANDOM);
 		playerTypes.add(PlayerType.NEURAL_NETWORK);
 
-		Set<List<PlayerType>> permutations = NNTrainer.createPlayerPermutations(playerTypes);
+		Set<List<PlayerType>> permutations = NNTrainer
+				.createPlayerPermutations(playerTypes);
 
 		assertEquals(19, permutations.size());
 

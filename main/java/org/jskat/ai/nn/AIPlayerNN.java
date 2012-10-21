@@ -67,8 +67,6 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	private final static int PLAYER_LENGTH = 363;
 	private final static long MAX_SIMULATIONS = 50;
 
-	// 1.0 and 2.0 for tanh function
-	// 2.0 and 4.0 for sigmoid function
 	public static double HAS_CARD = 1.0d;
 	public static double COULD_HAVE_CARD = 0.5d;
 	public static double DOESNT_HAVE_CARD = 0.0d;

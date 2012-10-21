@@ -31,10 +31,10 @@ import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.basic.BasicMLData;
 import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.basic.BasicMLDataSet;
+import org.encog.ml.train.BasicTraining;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.PersistBasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
-import org.encog.neural.networks.training.propagation.Propagation;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 
 /**
@@ -44,8 +44,6 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 
 	private BasicNetwork network;
 	private final PersistBasicNetwork networkPersister;
-	private final Propagation trainer;
-	private MLDataSet trainingSet;
 
 	private final List<MLDataPair> dataPairList = new ArrayList<MLDataPair>();
 	private final int MAX_SIZE = 10;
@@ -59,23 +57,17 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 */
 	public EncogNetworkWrapper(final NetworkTopology newTopo) {
 		network = new BasicNetwork();
-		network.addLayer(new BasicLayer(null, true, newTopo.getInputNeuronCount()));
+		network.addLayer(new BasicLayer(null, true, newTopo
+				.getInputNeuronCount()));
 		for (int i = 0; i < newTopo.getHiddenLayerCount(); i++) {
-			network.addLayer(new BasicLayer(new ActivationSigmoid(), true, newTopo.getHiddenNeuronCount(i)));
+			network.addLayer(new BasicLayer(new ActivationSigmoid(), true,
+					newTopo.getHiddenNeuronCount(i)));
 		}
 		network.addLayer(new BasicLayer(new ActivationSigmoid(), false, 1));
 		network.getStructure().finalizeStructure();
 		network.reset();
 
 		networkPersister = new PersistBasicNetwork();
-
-		trainingSet = new BasicMLDataSet();
-		MLData inputs = new BasicMLData(newTopo.getInputNeuronCount());
-		MLData outputs = new BasicMLData(1);
-		// trainingSet.add(inputs, outputs);
-		trainingSet = new BasicMLDataSet();
-		trainingSet.add(new BasicMLDataPair(inputs, outputs));
-		trainer = new ResilientPropagation(network, trainingSet);
 	}
 
 	/**
@@ -90,20 +82,22 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public double adjustWeights(final double[] inputValues, final double[] outputValues) {
+	public double adjustWeights(final double[] inputValues,
+			final double[] outputValues) {
 
 		if (dataPairList.size() < MAX_SIZE) {
-			dataPairList.add(new BasicMLDataPair(new BasicMLData(inputValues), new BasicMLData(outputValues)));
+			dataPairList.add(new BasicMLDataPair(new BasicMLData(inputValues),
+					new BasicMLData(outputValues)));
 			currentIndex++;
 		} else {
 			currentIndex = (currentIndex + 1) % MAX_SIZE;
-			dataPairList.set(currentIndex, new BasicMLDataPair(new BasicMLData(inputValues), new BasicMLData(
-					outputValues)));
+			dataPairList.set(currentIndex, new BasicMLDataPair(new BasicMLData(
+					inputValues), new BasicMLData(outputValues)));
 		}
 
-		trainingSet.close();
-		trainingSet = new BasicMLDataSet(dataPairList);
+		MLDataSet trainingSet = new BasicMLDataSet(dataPairList);
 
+		BasicTraining trainer = new ResilientPropagation(network, trainingSet);
 		trainer.iteration();
 		return trainer.getError();
 	}
@@ -151,8 +145,9 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void loadNetwork(final String fileName, final int inputNeurons, final int hiddenNeurons,
-			final int outputNeurons) {
-		network = (BasicNetwork) networkPersister.read(getClass().getResourceAsStream(fileName));
+	public void loadNetwork(final String fileName, final int inputNeurons,
+			final int hiddenNeurons, final int outputNeurons) {
+		network = (BasicNetwork) networkPersister.read(getClass()
+				.getResourceAsStream(fileName));
 	}
 }
