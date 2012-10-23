@@ -51,7 +51,7 @@ import org.slf4j.LoggerFactory;
  */
 public class AIPlayerNN extends AbstractJSkatPlayer {
 
-	private static Logger log = LoggerFactory.getLogger(AIPlayerNN.class);
+	private Logger log = LoggerFactory.getLogger(AIPlayerNN.class);
 
 	private final GameSimulator gameSimulator;
 
@@ -76,8 +76,6 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	public static double ACTIVE = 1.0d;
 	public static double INACTIVE = 0.0d;
 
-	// won game 1.0 and lost game -1.0 for tanh function
-	// won game 1.0 and lost game 0.0 for sigmoid function
 	public static double WON = 1.0d;
 	public static double LOST = 0.0d;
 
@@ -404,6 +402,9 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 				log.debug("Testing card " + card); //$NON-NLS-1$
 
 				double[] inputs = getNetInputs(card);
+				// if (log.isWarnEnabled()) {
+				// log.warn("net input: " + getInputString(inputs));
+				// }
 
 				cardInputs.put(card, inputs);
 				double currOutput = net.getPredictedOutcome(inputs);
@@ -414,9 +415,9 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 					cardWithHighestOutput = card;
 				}
 
-				if (currOutput > 0.95) {
+				if (currOutput > WON - 0.05) {
 					goodCards.add(card);
-				} else if (currOutput > 0.05) {
+				} else if (currOutput > LOST + 0.05) {
 					undecidedCards.add(card);
 				}
 			}
@@ -444,6 +445,14 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		log.debug("as player " + knowledge.getPlayerPosition() + ": " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$//$NON-NLS-2$
 
 		return possibleCards.get(bestCardIndex);
+	}
+
+	private String getInputString(final double[] inputs) {
+		String result = "";
+		for (double input : inputs) {
+			result += input + " ";
+		}
+		return result;
 	}
 
 	private void storeInputParameters(final double[] inputParameters) {
@@ -781,7 +790,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			int index = 0;
 			for (double[] inputParam : inputs) {
 				INeuralNetwork net = networks.get(index);
-				net.adjustWeights(inputParam, outputs);
+				log.debug("learning error: "
+						+ net.adjustWeights(inputParam, outputs));
 				index++;
 			}
 		}

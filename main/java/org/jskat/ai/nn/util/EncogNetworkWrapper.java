@@ -82,7 +82,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public double adjustWeights(final double[] inputValues,
+	public synchronized double adjustWeights(final double[] inputValues,
 			final double[] outputValues) {
 
 		if (dataPairList.size() < MAX_SIZE) {
@@ -114,8 +114,9 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public double getPredictedOutcome(final double[] inputValues) {
+	public synchronized double getPredictedOutcome(final double[] inputValues) {
 		MLData output = network.compute(new BasicMLData(inputValues));
+		network.clearContext();
 		return output.getData(0);
 	}
 
