@@ -402,9 +402,6 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 				log.debug("Testing card " + card); //$NON-NLS-1$
 
 				double[] inputs = getNetInputs(card);
-				// if (log.isWarnEnabled()) {
-				// log.warn("net input: " + getInputString(inputs));
-				// }
 
 				cardInputs.put(card, inputs);
 				double currOutput = net.getPredictedOutcome(inputs);

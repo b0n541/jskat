@@ -74,7 +74,8 @@ public class EncogNetworkWrapperTest {
 		int runs = 0;
 
 		while (error > MIN_DIFF && runs < 10000) {
-			error = network.adjustWeights(input[i], output[i]);
+			network.adjustWeights(input[i], output[i]);
+			error = network.getAvgDiff();
 			i = (i + 1) % input.length;
 			runs++;
 		}

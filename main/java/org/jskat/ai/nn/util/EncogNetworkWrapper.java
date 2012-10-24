@@ -47,7 +47,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 
 	private final List<MLDataPair> dataPairList = new ArrayList<MLDataPair>();
 	private final int MAX_SIZE = 10;
-	private int currentIndex = -1;
+	private final int currentIndex = -1;
 
 	/**
 	 * Constructor
@@ -57,7 +57,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 */
 	public EncogNetworkWrapper(final NetworkTopology newTopo) {
 		network = new BasicNetwork();
-		network.addLayer(new BasicLayer(null, true, newTopo
+		network.addLayer(new BasicLayer(new ActivationSigmoid(), true, newTopo
 				.getInputNeuronCount()));
 		for (int i = 0; i < newTopo.getHiddenLayerCount(); i++) {
 			network.addLayer(new BasicLayer(new ActivationSigmoid(), true,
@@ -85,17 +85,19 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	public synchronized double adjustWeights(final double[] inputValues,
 			final double[] outputValues) {
 
-		if (dataPairList.size() < MAX_SIZE) {
-			dataPairList.add(new BasicMLDataPair(new BasicMLData(inputValues),
-					new BasicMLData(outputValues)));
-			currentIndex++;
-		} else {
-			currentIndex = (currentIndex + 1) % MAX_SIZE;
-			dataPairList.set(currentIndex, new BasicMLDataPair(new BasicMLData(
-					inputValues), new BasicMLData(outputValues)));
-		}
-
-		MLDataSet trainingSet = new BasicMLDataSet(dataPairList);
+		// if (dataPairList.size() < MAX_SIZE) {
+		// dataPairList.add(new BasicMLDataPair(new BasicMLData(inputValues),
+		// new BasicMLData(outputValues)));
+		// currentIndex++;
+		// } else {
+		// currentIndex = (currentIndex + 1) % MAX_SIZE;
+		// dataPairList.set(currentIndex, new BasicMLDataPair(new BasicMLData(
+		// inputValues), new BasicMLData(outputValues)));
+		// }
+		List<MLDataPair> data = new ArrayList<MLDataPair>();
+		data.add(new BasicMLDataPair(new BasicMLData(inputValues),
+				new BasicMLData(outputValues)));
+		MLDataSet trainingSet = new BasicMLDataSet(data);
 
 		BasicTraining trainer = new ResilientPropagation(network, trainingSet);
 		trainer.iteration();
@@ -106,7 +108,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void resetNetwork() {
+	public synchronized void resetNetwork() {
 		network.reset();
 	}
 
@@ -116,7 +118,6 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	@Override
 	public synchronized double getPredictedOutcome(final double[] inputValues) {
 		MLData output = network.compute(new BasicMLData(inputValues));
-		network.clearContext();
 		return output.getData(0);
 	}
 
@@ -132,7 +133,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean saveNetwork(final String fileName) {
+	public synchronized boolean saveNetwork(final String fileName) {
 		try {
 			networkPersister.save(new FileOutputStream(fileName), network);
 		} catch (FileNotFoundException e) {
@@ -146,8 +147,9 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void loadNetwork(final String fileName, final int inputNeurons,
-			final int hiddenNeurons, final int outputNeurons) {
+	public synchronized void loadNetwork(final String fileName,
+			final int inputNeurons, final int hiddenNeurons,
+			final int outputNeurons) {
 		network = (BasicNetwork) networkPersister.read(getClass()
 				.getResourceAsStream(fileName));
 	}
