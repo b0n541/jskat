@@ -89,8 +89,8 @@ public class SkatNetworks {
 
 	private void initNetworks() {
 		createNetworks();
-		//		loadNetworks(ClassLoader.getSystemResource("org/jskat/ai/nn/data") //$NON-NLS-1$
-		// .getPath());
+		loadNetworks(ClassLoader.getSystemResource("org/jskat/ai/nn/data") //$NON-NLS-1$
+				.getPath());
 	}
 
 	/**
