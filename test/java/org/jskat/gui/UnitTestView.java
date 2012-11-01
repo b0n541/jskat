@@ -436,8 +436,8 @@ public class UnitTestView implements JSkatView {
 
 	@Override
 	public void addTrainingResult(final GameType gameType, final long episodes,
-			final long totalWonGames, final long episodeWonGames,
-			final double avgDifference) {
+			final long totalWonGames, final double avgNetworkErrorDeclarer,
+			final double avgNetworkErrorOpponents) {
 		// TODO Auto-generated method stub
 
 	}

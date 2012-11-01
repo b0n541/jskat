@@ -631,13 +631,14 @@ public interface JSkatView {
 	 *            Number of episodes
 	 * @param totalWonGames
 	 *            Total number of won games
-	 * @param episodeWonGames
-	 *            Number of games won in last episode
-	 * @param avgDifference
-	 *            Average difference
+	 * @param avgNetworkErrorDeclarer
+	 *            Average error of declarer network
+	 * @param avgNetworkErrorOpponents
+	 *            Average error of opponents networks
 	 */
 	public void addTrainingResult(GameType gameType, long episodes,
-			long totalWonGames, long episodeWonGames, double avgDifference);
+			long totalWonGames, double avgNetworkErrorDeclarer,
+			double avgNetworkErrorOpponents);
 
 	/**
 	 * Sets the game number of the current game
