@@ -22,6 +22,8 @@ package org.jskat.gui.swing.nn;
 
 import java.awt.Container;
 import java.awt.Dimension;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,7 +33,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableModel;
 
 import org.jskat.gui.swing.LayoutFactory;
@@ -45,7 +49,7 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 	private static final long serialVersionUID = 1L;
 
 	private final JFrame parent;
-	
+
 	JTable overviewTable;
 
 	/**
@@ -59,22 +63,54 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 
 	private void initGUI() {
 
-		setMinimumSize(new Dimension(400, 300));
+		setMinimumSize(new Dimension(600, 480));
 
 		setTitle("Training of neural networks");
 
 		Container root = getContentPane();
-		root.setLayout(LayoutFactory.getMigLayout());
+		root.setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill"));
 
-		JPanel rootPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill"));
+		JPanel rootPanel = new JPanel(LayoutFactory.getMigLayout("fill",
+				"fill", "fill"));
 
 		overviewTable = new JTable(new TrainingOverviewTableModel());
+		overviewTable.getColumnModel().getColumn(3)
+				.setCellRenderer(new DoubleRenderer(5));
+		overviewTable.getColumnModel().getColumn(4)
+				.setCellRenderer(new DoubleRenderer(10));
+		overviewTable.getColumnModel().getColumn(5)
+				.setCellRenderer(new DoubleRenderer(10));
 		overviewTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 
 		JScrollPane scrollPane = new JScrollPane(overviewTable);
 		rootPanel.add(scrollPane, "grow, center");
 
 		root.add(rootPanel, "center, grow");
+	}
+
+	private class DoubleRenderer extends DefaultTableCellRenderer {
+		private DecimalFormat formatter;
+		private int fractionDigits;
+
+		public DoubleRenderer(int fractionDigits) {
+			super();
+			setHorizontalAlignment(SwingConstants.RIGHT);
+			this.fractionDigits = fractionDigits;
+		}
+
+		@Override
+		public void setValue(Object value) {
+			if (formatter == null) {
+				formatter = new DecimalFormat("###,###,###.##");
+				formatter.setMinimumFractionDigits(fractionDigits);
+				formatter.setMaximumFractionDigits(fractionDigits);
+				DecimalFormatSymbols dfs = formatter.getDecimalFormatSymbols();
+				dfs.setGroupingSeparator(' ');
+				dfs.setDecimalSeparator(',');
+				formatter.setDecimalFormatSymbols(dfs);
+			}
+			setText((value == null) ? "" : formatter.format(value));
+		}
 	}
 
 	/**
@@ -86,17 +122,18 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 	 *            Number of episodes
 	 * @param totalWonGames
 	 *            Total Number of won games
-	 * @param episodeWonGames
-	 *            Number of won games in last episode
-	 * @param avgDifference
-	 *            Average difference
+	 * @param avgNetworkErrorDeclarer
+	 *            Average difference of declarer network
+	 * @param avgNetworkErrorOpponents
+	 *            Average difference of opponents networks
 	 */
 	public void addTrainingResult(GameType gameType, Long episodes,
-			Long totalWonGames, Long episodeWonGames, Double avgDifference) {
+			Long totalWonGames, Double avgNetworkErrorDeclarer,
+			Double avgNetworkErrorOpponents) {
 
 		((TrainingOverviewTableModel) overviewTable.getModel())
 				.addTrainingResult(gameType, episodes, totalWonGames,
-						episodeWonGames, avgDifference);
+						avgNetworkErrorDeclarer, avgNetworkErrorOpponents);
 	}
 
 	private class TrainingOverviewTableModel extends AbstractTableModel {
@@ -112,9 +149,9 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 			header.add("Game type");
 			header.add("Episodes");
 			header.add("Total won games");
-			header.add("Episode won games");
 			header.add("Percent");
-			header.add("Average opponent difference");
+			header.add("Network error declarer");
+			header.add("Network error opponents");
 
 			data = new HashMap<GameType, List<Object>>();
 
@@ -164,21 +201,26 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 		 *            Number of episodes
 		 * @param totalWonGames
 		 *            Total number of won games
-		 * @param episodeWonGames
-		 *            Number of won games in last episode
-		 * @param avgDifference
-		 *            Average Difference
+		 * @param avgNetworkErrorDeclarer
+		 *            Average error of declarer network
+		 * @param avgNetworkErrorOpponents
+		 *            Average error of opponents networks
 		 */
 		public void addTrainingResult(GameType gameType, Long episodes,
-				Long totalWonGames, Long episodeWonGames, Double avgDifference) {
+				Long totalWonGames, Double avgNetworkErrorDeclarer,
+				Double avgNetworkErrorOpponents) {
 
 			TableModel tableModel = overviewTable.getModel();
 
 			tableModel.setValueAt(gameType, gameType.ordinal(), 0);
 			tableModel.setValueAt(episodes, gameType.ordinal(), 1);
 			tableModel.setValueAt(totalWonGames, gameType.ordinal(), 2);
-			tableModel.setValueAt(episodeWonGames, gameType.ordinal(), 3);
-			tableModel.setValueAt(100d * (double) totalWonGames / (double) episodes, gameType.ordinal(), 4);
+			tableModel.setValueAt(totalWonGames * 100.0d / episodes,
+					gameType.ordinal(), 3);
+			tableModel.setValueAt(avgNetworkErrorDeclarer, gameType.ordinal(),
+					4);
+			tableModel.setValueAt(avgNetworkErrorOpponents, gameType.ordinal(),
+					5);
 
 			fireTableDataChanged();
 		}
@@ -189,7 +231,6 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 			data.get(GameType.values()[rowIndex]).set(columnIndex, value);
 		}
 	}
-	
 
 	/**
 	 * @see JDialog#setVisible(boolean)
@@ -200,7 +241,7 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 		if (isVisible) {
 			setLocationRelativeTo(parent);
 		}
-		
+
 		super.setVisible(isVisible);
 	}
 }

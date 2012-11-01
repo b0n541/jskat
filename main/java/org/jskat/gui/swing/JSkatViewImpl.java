@@ -1278,11 +1278,11 @@ public class JSkatViewImpl implements JSkatView {
 	 */
 	@Override
 	public void addTrainingResult(final GameType gameType, final long episodes,
-			final long totalWonGames, final long episodeWonGames,
-			final double avgDifference) {
+			final long totalWonGames, final double avgNetworkErrorDeclarer,
+			final double avgNetworkErrorOpponents) {
 
 		trainingOverview.addTrainingResult(gameType, episodes, totalWonGames,
-				episodeWonGames, avgDifference);
+				avgNetworkErrorDeclarer, avgNetworkErrorOpponents);
 	}
 
 	/**
