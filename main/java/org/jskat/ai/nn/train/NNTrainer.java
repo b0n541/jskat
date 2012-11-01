@@ -105,27 +105,38 @@ public class NNTrainer extends JSkatThread {
 	 */
 	private void trainNets() {
 
-		long episodes = 0;
-		long episodesWonGames = 0;
-		long totalWonGames = 0;
 		long totalGames = 0;
-		int episodeSteps = 100;
+		long totalWonGames = 0;
+		double declarerAvgNetworkErrorSum = 0.0;
+		long declarerParticipations = 0;
+		double opponentAvgNetworkErrorSum = 0.0;
+		long opponentParticipations = 0;
+
+		List<PlayerType> playerTypes = new ArrayList<PlayerType>();
+		// playerTypes.add(PlayerType.ALGORITHMIC);
+		// playerTypes.add(PlayerType.RANDOM);
+		playerTypes.add(PlayerType.NEURAL_NETWORK);
+		Set<List<PlayerType>> playerPermutations = createPlayerPermutations(playerTypes);
 
 		while (!stopTraining) {
 
 			if (totalGames > 0) {
-				jskat.addTrainingResult(gameType, totalGames, totalWonGames,
-						episodesWonGames, 0.0);
+				if (opponentParticipations == 0) {
+					// for ramsch games
+					jskat.addTrainingResult(gameType, totalGames,
+							totalWonGames, declarerAvgNetworkErrorSum
+									/ declarerParticipations, 0.0);
+				} else {
+					jskat.addTrainingResult(gameType, totalGames,
+							totalWonGames, declarerAvgNetworkErrorSum
+									/ declarerParticipations,
+							opponentAvgNetworkErrorSum / opponentParticipations);
+				}
 			}
 
-			List<PlayerType> playerTypes = new ArrayList<PlayerType>();
-			// playerTypes.add(PlayerType.ALGORITHMIC);
-			// playerTypes.add(PlayerType.RANDOM);
-			playerTypes.add(PlayerType.NEURAL_NETWORK);
+			for (List<PlayerType> playerConstellation : playerPermutations) {
 
-			for (List<PlayerType> playerConstellation : createPlayerPermutations(playerTypes)) {
-
-				for (Player currPlayer : Player.values()) {
+				for (Player declarer : Player.values()) {
 					JSkatPlayer player1 = createPlayer(playerConstellation
 							.get(0));
 					JSkatPlayer player2 = createPlayer(playerConstellation
@@ -134,17 +145,48 @@ public class NNTrainer extends JSkatThread {
 							.get(2));
 
 					SkatGame game = prepareGame(player1, player2, player3,
-					// Player.FOREHAND, getPerfectDistribution());
-							currPlayer, null);
+							declarer, null);
 
 					runGame(game);
 
-					if (isGameWon(currPlayer, game)) {
+					if (isGameWon(declarer, game)) {
 						log.debug("Game won.");
-						episodesWonGames++;
 						totalWonGames++;
 					} else {
 						log.debug("Game lost.");
+					}
+					if (player1 instanceof AIPlayerNN) {
+						if (player1.isDeclarer()) {
+							declarerAvgNetworkErrorSum += ((AIPlayerNN) player1)
+									.getLastAvgNetworkError();
+							declarerParticipations++;
+						} else {
+							opponentAvgNetworkErrorSum += ((AIPlayerNN) player1)
+									.getLastAvgNetworkError();
+							opponentParticipations++;
+						}
+					}
+					if (player2 instanceof AIPlayerNN) {
+						if (player2.isDeclarer()) {
+							declarerAvgNetworkErrorSum += ((AIPlayerNN) player2)
+									.getLastAvgNetworkError();
+							declarerParticipations++;
+						} else {
+							opponentAvgNetworkErrorSum += ((AIPlayerNN) player2)
+									.getLastAvgNetworkError();
+							opponentParticipations++;
+						}
+					}
+					if (player3 instanceof AIPlayerNN) {
+						if (player3.isDeclarer()) {
+							declarerAvgNetworkErrorSum += ((AIPlayerNN) player3)
+									.getLastAvgNetworkError();
+							declarerParticipations++;
+						} else {
+							opponentAvgNetworkErrorSum += ((AIPlayerNN) player3)
+									.getLastAvgNetworkError();
+							opponentParticipations++;
+						}
 					}
 
 					totalGames++;
@@ -227,6 +269,10 @@ public class NNTrainer extends JSkatThread {
 		factory.setGameType(gameType);
 		GameAnnouncement announcement = factory.getAnnouncement();
 		game.setGameAnnouncement(announcement);
+
+		player1.startGame(declarer, announcement);
+		player2.startGame(declarer, announcement);
+		player3.startGame(declarer, announcement);
 
 		game.setGameState(GameState.TRICK_PLAYING);
 		return game;

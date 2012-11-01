@@ -60,6 +60,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	private GameType bestGameTypeFromDiscarding;
 
 	private boolean isLearning = false;
+	private double lastAvgNetworkError = 0.0;
 
 	private final List<GameType> feasibleGameTypes = new ArrayList<GameType>();
 
@@ -107,7 +108,6 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		}
 
 		rand = new Random();
-		isLearning = true;
 	}
 
 	/**
@@ -383,20 +383,23 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		log.debug("found " + possibleCards.size() + " possible cards: " + possibleCards); //$NON-NLS-1$//$NON-NLS-2$
 
+		Map<Card, double[]> cardInputs = new HashMap<Card, double[]>();
 		if (possibleCards.size() == 1) {
-
+			// only one card is playable
 			bestCardIndex = 0;
+			cardInputs.put(possibleCards.get(0),
+					getNetInputs(possibleCards.get(0)));
 		} else {
+			// find the best card by asking the network
 			List<INeuralNetwork> networks = SkatNetworks.getNetwork(knowledge
 					.getGame().getGameType(), isDeclarer());
 			INeuralNetwork net = networks.get(knowledge.getCurrentTrick()
 					.getTrickNumberInGame());
 
-			Map<Card, double[]> cardInputs = new HashMap<Card, double[]>();
+			CardList bestCards = new CardList();
 			CardList goodCards = new CardList();
 			CardList undecidedCards = new CardList();
-			double highestOutput = -1000.0;
-			Card cardWithHighestOutput = null;
+			double highestOutput = Double.NEGATIVE_INFINITY;
 			for (Card card : possibleCards) {
 
 				log.debug("Testing card " + card); //$NON-NLS-1$
@@ -405,38 +408,46 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 				cardInputs.put(card, inputs);
 				double currOutput = net.getPredictedOutcome(inputs);
-				log.warn("net output: " + currOutput); //$NON-NLS-1$
+				log.warn("net output for card " + card + ": " + currOutput); //$NON-NLS-1$
 
 				if (currOutput > highestOutput) {
 					highestOutput = currOutput;
-					cardWithHighestOutput = card;
+					bestCards.clear();
+				}
+				if (currOutput == highestOutput) {
+					bestCards.add(card);
 				}
 
-				if (currOutput > WON - 0.05) {
-					goodCards.add(card);
-				} else if (currOutput > LOST + 0.05) {
-					undecidedCards.add(card);
-				}
+				// if (currOutput > WON - 0.05) {
+				// goodCards.add(card);
+				// } else if (currOutput > LOST + 0.05) {
+				// undecidedCards.add(card);
+				// }
 			}
 
-			if (goodCards.size() > 0) {
-				// get random card out of the good cards
-				bestCardIndex = chooseRandomCard(possibleCards, goodCards);
-				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": " + goodCards.size() + " of " + possibleCards.size() + " are good cards. Choosing random from these."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			} else if (undecidedCards.size() > 0) {
-				// get random card out of the undecided cards
-				bestCardIndex = chooseRandomCard(possibleCards, undecidedCards);
-				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": " + undecidedCards.size() + " of " + possibleCards.size() + " are undecided cards. Choosing random from these."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			} else {
-				// card with highest output
-				bestCardIndex = chooseRandomCard(possibleCards, possibleCards);
-				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": No good card, choosing random from all."); //$NON-NLS-1$ //$NON-NLS-2$ 
-			}
-			// store parameters for the card to play
-			// for adjustment of weights after the game
-			storeInputParameters(cardInputs.get(possibleCards
-					.get(bestCardIndex)));
+			// if (isLearning) {
+			// // play randomly during training
+			// bestCardIndex = chooseRandomCard(possibleCards, possibleCards);
+			// } else
+			// if (goodCards.size() > 0) {
+			// // get random card out of the good cards
+			// bestCardIndex = chooseRandomCard(possibleCards, goodCards);
+			//				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": " + goodCards.size() + " of " + possibleCards.size() + " are good cards. Choosing random from these."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			// } else if (undecidedCards.size() > 0) {
+			// // get random card out of the undecided cards
+			// bestCardIndex = chooseRandomCard(possibleCards, undecidedCards);
+			//				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": " + undecidedCards.size() + " of " + possibleCards.size() + " are undecided cards. Choosing random from these."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			// } else {
+			// // get random card
+			// bestCardIndex = chooseRandomCard(possibleCards, possibleCards);
+			//				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": No good card, choosing random from all."); //$NON-NLS-1$ //$NON-NLS-2$ 
+			// }
+			bestCardIndex = chooseRandomCard(possibleCards, bestCards);
 		}
+
+		// store parameters for the card to play
+		// for adjustment of weights after the game
+		storeInputParameters(cardInputs.get(possibleCards.get(bestCardIndex)));
 
 		log.debug("choosing card " + bestCardIndex); //$NON-NLS-1$
 		log.debug("as player " + knowledge.getPlayerPosition() + ": " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$//$NON-NLS-2$
@@ -756,6 +767,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		assert inputs.size() < 11;
 
+		double networkErrorSum = 0.0;
 		double output = 0.0d;
 		if (!GameType.PASSED_IN.equals(knowledge.getGameType())) {
 			if (GameType.RAMSCH.equals(knowledge.getGameType())) {
@@ -787,11 +799,23 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			int index = 0;
 			for (double[] inputParam : inputs) {
 				INeuralNetwork net = networks.get(index);
-				log.debug("learning error: "
-						+ net.adjustWeights(inputParam, outputs));
+				double networkError = net.adjustWeights(inputParam, outputs);
+				log.warn("learning error: " + networkError);
+				networkErrorSum += networkError;
 				index++;
 			}
+
+			lastAvgNetworkError = networkErrorSum / inputs.size();
 		}
+	}
+
+	/**
+	 * Gets the last average network error
+	 * 
+	 * @return Last average network error
+	 */
+	public double getLastAvgNetworkError() {
+		return lastAvgNetworkError;
 	}
 
 	// FIXME (jan 10.03.2012) code duplication with NNTrainer
