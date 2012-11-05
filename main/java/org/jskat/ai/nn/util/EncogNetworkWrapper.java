@@ -52,19 +52,20 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	/**
 	 * Constructor
 	 * 
-	 * @param newTopo
+	 * @param topo
 	 *            Network topology
 	 */
-	public EncogNetworkWrapper(final NetworkTopology newTopo) {
+	public EncogNetworkWrapper(final NetworkTopology topo) {
 		network = new BasicNetwork();
-		network.addLayer(new BasicLayer(new ActivationSigmoid(), true, newTopo
+		network.addLayer(new BasicLayer(new ActivationSigmoid(), false, topo
 				.getInputNeuronCount()));
-		for (int i = 0; i < newTopo.getHiddenLayerCount(); i++) {
-			network.addLayer(new BasicLayer(new ActivationSigmoid(), true,
-					newTopo.getHiddenNeuronCount(i)));
+		for (int i = 0; i < topo.getHiddenLayerCount(); i++) {
+			network.addLayer(new BasicLayer(new ActivationSigmoid(), false,
+					topo.getHiddenNeuronCount(i)));
 		}
 		network.addLayer(new BasicLayer(new ActivationSigmoid(), false, 1));
 		network.getStructure().finalizeStructure();
+		network.setBiasActivation(0.1);
 		network.reset();
 
 		networkPersister = new PersistBasicNetwork();

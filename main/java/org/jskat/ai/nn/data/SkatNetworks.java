@@ -89,8 +89,8 @@ public class SkatNetworks {
 
 	private void initNetworks() {
 		createNetworks();
-		loadNetworks(ClassLoader.getSystemResource("org/jskat/ai/nn/data") //$NON-NLS-1$
-				.getPath());
+		//		loadNetworks(ClassLoader.getSystemResource("org/jskat/ai/nn/data") //$NON-NLS-1$
+		// .getPath());
 	}
 
 	/**
@@ -155,8 +155,10 @@ public class SkatNetworks {
 	 * @return Neural network
 	 */
 	private static List<INeuralNetwork> getSuitDeclarer() {
-		return createNetworkList(suitDeclarerOpening, suitDeclarerMiddleGame,
-				suitDeclarerEndGame);
+		// return createNetworkList(suitDeclarerOpening, suitDeclarerMiddleGame,
+		// suitDeclarerEndGame);
+		return createNetworkList(suitDeclarerOpening, suitDeclarerOpening,
+				suitDeclarerOpening);
 	}
 
 	/**
@@ -165,8 +167,10 @@ public class SkatNetworks {
 	 * @return Neural network
 	 */
 	private static List<INeuralNetwork> getSuitOpponent() {
-		return createNetworkList(suitOpponentOpening, suitOpponentMiddleGame,
-				suitOpponentEndGame);
+		// return createNetworkList(suitOpponentOpening, suitOpponentMiddleGame,
+		// suitOpponentEndGame);
+		return createNetworkList(suitOpponentOpening, suitOpponentOpening,
+				suitOpponentOpening);
 	}
 
 	/**
@@ -175,8 +179,10 @@ public class SkatNetworks {
 	 * @return Neural network
 	 */
 	private static List<INeuralNetwork> getNullDeclarer() {
-		return createNetworkList(nullDeclarerOpening, nullDeclarerMiddleGame,
-				nullDeclarerEndGame);
+		// return createNetworkList(nullDeclarerOpening, nullDeclarerMiddleGame,
+		// nullDeclarerEndGame);
+		return createNetworkList(nullDeclarerOpening, nullDeclarerOpening,
+				nullDeclarerOpening);
 	}
 
 	/**
@@ -185,8 +191,10 @@ public class SkatNetworks {
 	 * @return Neural network
 	 */
 	private static List<INeuralNetwork> getNullOpponent() {
-		return createNetworkList(nullOpponentOpening, nullOpponentMiddleGame,
-				nullOpponentEndGame);
+		// return createNetworkList(nullOpponentOpening, nullOpponentMiddleGame,
+		// nullOpponentEndGame);
+		return createNetworkList(nullOpponentOpening, nullOpponentOpening,
+				nullOpponentOpening);
 	}
 
 	/**
@@ -195,8 +203,11 @@ public class SkatNetworks {
 	 * @return Neural network
 	 */
 	private static List<INeuralNetwork> getGrandDeclarer() {
-		return createNetworkList(grandDeclarerOpening, grandDeclarerMiddleGame,
-				grandDeclarerEndGame);
+		// return createNetworkList(grandDeclarerOpening,
+		// grandDeclarerMiddleGame,
+		// grandDeclarerEndGame);
+		return createNetworkList(grandDeclarerOpening, grandDeclarerOpening,
+				grandDeclarerOpening);
 	}
 
 	/**
@@ -205,8 +216,11 @@ public class SkatNetworks {
 	 * @return Neural network
 	 */
 	private static List<INeuralNetwork> getGrandOpponent() {
-		return createNetworkList(grandOpponentOpening, grandOpponentMiddleGame,
-				grandOpponentEndGame);
+		// return createNetworkList(grandOpponentOpening,
+		// grandOpponentMiddleGame,
+		// grandOpponentEndGame);
+		return createNetworkList(grandOpponentOpening, grandOpponentOpening,
+				grandOpponentOpening);
 	}
 
 	/**
@@ -215,8 +229,10 @@ public class SkatNetworks {
 	 * @return Neural network
 	 */
 	private static List<INeuralNetwork> getRamschDeclarer() {
-		return createNetworkList(ramschDeclarerOpening,
-				ramschDeclarerMiddleGame, ramschDeclarerEndGame);
+		// return createNetworkList(ramschDeclarerOpening,
+		// ramschDeclarerMiddleGame, ramschDeclarerEndGame);
+		return createNetworkList(ramschDeclarerOpening, ramschDeclarerOpening,
+				ramschDeclarerOpening);
 	}
 
 	private static List<INeuralNetwork> createNetworkList(
