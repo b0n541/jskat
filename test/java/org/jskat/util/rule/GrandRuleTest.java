@@ -67,6 +67,31 @@ public class GrandRuleTest extends AbstractJSkatTest {
 		assertTrue(data.getResult().isWon());
 	}
 
+	@Test
+	public void calcGameWonSchneiderAnnounced() {
+		factory.setHand(Boolean.TRUE);
+		factory.setSchneider(Boolean.TRUE);
+		SkatGameData data = new SkatGameData();
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerScore(90);
+		data.calcResult();
+		assertTrue(data.getResult().isWon());
+	}
+
+	@Test
+	public void calcGameWonSchwarzAnnounced() {
+		factory.setHand(Boolean.TRUE);
+		factory.setSchneider(Boolean.TRUE);
+		factory.setSchwarz(Boolean.TRUE);
+		SkatGameData data = new SkatGameData();
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerScore(120);
+		data.calcResult();
+		assertTrue(data.getResult().isWon());
+	}
+
 	/**
 	 * Checks @see GrandRule#calcGameResult()
 	 */

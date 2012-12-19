@@ -41,7 +41,8 @@ public class SuitRuleTest extends AbstractJSkatTest {
 
 	private GameAnnouncementFactory factory;
 
-	private static SkatRule clubsRules = SkatRuleFactory.getSkatRules(GameType.CLUBS);
+	private static SkatRule clubsRules = SkatRuleFactory
+			.getSkatRules(GameType.CLUBS);
 
 	/**
 	 * @see BeforeClass
@@ -62,6 +63,29 @@ public class SuitRuleTest extends AbstractJSkatTest {
 		data.setAnnouncement(factory.getAnnouncement());
 		data.setDeclarer(Player.FOREHAND);
 		data.setDeclarerScore(61);
+		assertTrue(clubsRules.isGameWon(data));
+	}
+
+	@Test
+	public void calcGameWonSchneiderAnnounced() {
+		factory.setHand(Boolean.TRUE);
+		factory.setSchneider(Boolean.TRUE);
+		SkatGameData data = new SkatGameData();
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerScore(90);
+		assertTrue(clubsRules.isGameWon(data));
+	}
+
+	@Test
+	public void calcGameWonSchwarzAnnounced() {
+		factory.setHand(Boolean.TRUE);
+		factory.setSchneider(Boolean.TRUE);
+		factory.setSchwarz(Boolean.TRUE);
+		SkatGameData data = new SkatGameData();
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerScore(120);
 		assertTrue(clubsRules.isGameWon(data));
 	}
 

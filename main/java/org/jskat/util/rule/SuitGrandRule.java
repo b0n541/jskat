@@ -44,12 +44,26 @@ public abstract class SuitGrandRule extends SuitGrandRamschRule {
 
 		boolean result = false;
 
-		if (gameData.getScore(gameData.getDeclarer()) > 60) {
-			// declarer has made more than 60 points
+		if (gameData.getScore(gameData.getDeclarer()) >= getMinimumWinningScore(gameData)) {
+
 			if (!isOverbid(gameData)) {
 				// declare should not overbid
 				result = true;
 			}
+		}
+
+		return result;
+	}
+
+	private static int getMinimumWinningScore(SkatGameData gameData) {
+		int result = 61;
+
+		if (gameData.getAnnoucement().isSchneider()) {
+			result = 90;
+		}
+
+		if (gameData.getAnnoucement().isSchwarz()) {
+			result = 120;
 		}
 
 		return result;
@@ -90,7 +104,8 @@ public abstract class SuitGrandRule extends SuitGrandRamschRule {
 			log.debug("calcSuitResult: Schwarz: multiplier " + multiplier); //$NON-NLS-1$
 		}
 
-		int gameValue = SkatConstants.getGameBaseValue(gameData.getGameType(), gameData.isHand(), gameData.isOuvert());
+		int gameValue = SkatConstants.getGameBaseValue(gameData.getGameType(),
+				gameData.isHand(), gameData.isOuvert());
 
 		log.debug("gameValue" + gameValue); //$NON-NLS-1$
 
@@ -134,7 +149,8 @@ public abstract class SuitGrandRule extends SuitGrandRamschRule {
 	}
 
 	private CardList getDeclarerCards(final SkatGameData gameData) {
-		CardList declarerCards = new CardList(gameData.getDealtCards().get(gameData.getDeclarer()));
+		CardList declarerCards = new CardList(gameData.getDealtCards().get(
+				gameData.getDeclarer()));
 		declarerCards.addAll(gameData.getDealtSkat());
 		return declarerCards;
 	}
@@ -172,7 +188,8 @@ public abstract class SuitGrandRule extends SuitGrandRamschRule {
 
 		boolean result = false;
 
-		if (gameData.getScore(Player.FOREHAND) < 31 || gameData.getScore(Player.MIDDLEHAND) < 31
+		if (gameData.getScore(Player.FOREHAND) < 31
+				|| gameData.getScore(Player.MIDDLEHAND) < 31
 				|| gameData.getScore(Player.REARHAND) < 31) {
 			// one player was schneider
 			result = true;
@@ -186,6 +203,7 @@ public abstract class SuitGrandRule extends SuitGrandRamschRule {
 	 * schwarz means one party made no trick or a wrong card was played
 	 */
 	public static boolean isSchwarz(final SkatGameData gameData) {
-		return gameData.isPlayerMadeNoTrick() || gameData.getResult().isSchwarz();
+		return gameData.isPlayerMadeNoTrick()
+				|| gameData.getResult().isSchwarz();
 	}
 }
