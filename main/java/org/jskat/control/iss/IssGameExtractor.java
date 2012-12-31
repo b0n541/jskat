@@ -25,8 +25,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
+import org.apache.log4j.PropertyConfigurator;
 import org.jskat.data.SkatGameData;
-import org.jskat.util.GameType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,9 +46,11 @@ public class IssGameExtractor {
 
 	public static void main(final String args[]) throws Exception {
 
+		PropertyConfigurator.configure(ClassLoader
+				.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
 		IssGameExtractor gameExtractor = new IssGameExtractor();
 		gameExtractor
-				.setFilePath("/home/jan/Projekte/JSkat/iss/issgames-1-2012.sgf"); //$NON-NLS-1$
+				.setFilePath("/home/jan/Projekte/jskat/iss/issgames-1-2012.sgf"); //$NON-NLS-1$
 
 		filterGameDatabase();
 	}
@@ -65,18 +67,19 @@ public class IssGameExtractor {
 		while ((strLine = br.readLine()) != null) {
 			try {
 				SkatGameData gameData = MessageParser.parseGameSummary(strLine);
-
-				if (GameType.GRAND.equals(gameData.getGameType())) {
-					// log.debug("Game no. " + gameNo + ": " + strLine); //$NON-NLS-1$//$NON-NLS-2$
+				int declarerPoints = gameData.getGameResult()
+						.getFinalDeclarerPoints();
+				if (declarerPoints > 60 && declarerPoints < 65) {
+					log.warn("Game no. " + gameNo + ": " + strLine); //$NON-NLS-1$//$NON-NLS-2$
 					// log.debug("Game type: " + gameData.getGameType());
 				}
 			} catch (Exception except) {
-				log.debug("Failed reading game no. " + gameNo + ": " + strLine); //$NON-NLS-1$ //$NON-NLS-2$
-				// throw except;
+				log.error("Failed reading game no. " + gameNo + ": " + strLine); //$NON-NLS-1$ //$NON-NLS-2$
+				log.error(except.toString());
 			}
 
 			if (gameNo % 10000 == 0) {
-				log.debug("Read " + gameNo + " games."); //$NON-NLS-1$//$NON-NLS-2$
+				log.error("Read " + gameNo + " games."); //$NON-NLS-1$//$NON-NLS-2$
 			}
 
 			gameNo++;

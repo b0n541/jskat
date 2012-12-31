@@ -350,8 +350,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 		}
 	}
 
-	@Ignore
 	@Test
+	@Ignore
 	public void testPredefinedCardPlaying() {
 		UnitTestPlayer foreHand = new UnitTestPlayer();
 		foreHand.setCardsToPlay(Arrays.asList(Card.C7, Card.SJ, Card.C9,

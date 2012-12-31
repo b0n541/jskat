@@ -310,6 +310,7 @@ public class MessageParser {
 
 		boolean handGame = false;
 		boolean ouvertGame = false;
+		boolean schwarzGame = false;
 		// parse other game modifiers
 		for (int i = 1; i < gameTypeString.length(); i++) {
 
@@ -330,7 +331,16 @@ public class MessageParser {
 			} else if (mod == 'Z') {
 
 				factory.setSchwarz(Boolean.TRUE);
+				schwarzGame = true;
 			}
+		}
+
+		if (gameType != GameType.NULL && handGame && schwarzGame) {
+			factory.setSchneider(true);
+		}
+		if (gameType != GameType.NULL && ouvertGame) {
+			factory.setHand(true);
+			handGame = true;
 		}
 		if (gameType != GameType.NULL && ouvertGame && handGame) {
 			factory.setSchneider(true);

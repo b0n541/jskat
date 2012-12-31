@@ -223,6 +223,34 @@ public class MessageParserTest extends AbstractJSkatTest {
 		assertFalse(gameData.isOverBidded());
 	}
 
+	@Test
+	public void testParseGameSummary_IncompleteGrandOuvertAnnouncement() {
+
+		final String gameSummary = "(;GM[Skat]PC[Internet Skat Server]SE[1265]ID[727]DT[2007-11-19/23:42:26/UTC]P0[bonsai]P1[mic]P2[Legolaus]R0[0.0]R1[0.0]R2[0.0]MV[w HJ.HA.DJ.HQ.SA.H7.CA.CJ.HT.H8.H9.D7.DT.C7.ST.CK.C9.SK.S9.CT.C8.SQ.HK.S8.D9.DK.SJ.D8.CQ.DA.DQ.S7 1 p 2 p 0 18 0 GO 0 CJ 0 SC 1 RE 1 H9 2 RE ]R[d:0 win v:192 m:1 bidok p:120 t:10 s:1 z:1 p0:0 p1:0 p2:0 l:-1 to:-1] ;)"; //$NON-NLS-1$
+
+		final SkatGameData gameData = MessageParser
+				.parseGameSummary(gameSummary);
+	}
+
+	@Test
+	public void testParseGameSummary_IncompleteHandSchneiderSchwarzAnnouncement() {
+
+		final String gameSummary = "(;GM[Skat]PC[Internet Skat Server]CO[]SE[2511]ID[26496]DT[2008-06-22/11:14:12/UTC]P0[Madmax]P1[kermit1]P2[kermit2]R0[0.0]R1[0.0]R2[0.0]MV[w C7.SA.SJ.CJ.CK.HJ.S7.SK.C9.ST.DQ.C8.DA.SQ.D7.S8.DT.H7.DK.DJ.S9.HA.HT.D9.HK.CT.CA.H8.HQ.H9.CQ.D8 1 18 0 y 1 20 0 y 1 22 0 y 1 23 0 y 1 p 2 24 0 y 2 27 0 y 2 30 0 y 2 33 0 y 2 35 0 y 2 36 0 y 2 40 0 y 2 p 0 CHZ 0 CJ 1 C8 2 CT 0 SJ 1 DJ 2 CA 0 HJ 1 H7 2 H8 0 CK 1 S8 2 D9 0 C9 1 DQ 2 H9 0 C7 1 SQ 2 S9 0 SA 1 D7 2 HQ 0 ST 1 DK 2 HA 0 SK 1 DA 2 HT 0 S7 1 DT 2 HK ]R[d:0 win v:108 m:3 bidok p:120 t:10 s:1 z:1 p0:0 p1:0 p2:0 l:-1 to:-1] ;)"; //$NON-NLS-1$
+
+		final SkatGameData gameData = MessageParser
+				.parseGameSummary(gameSummary);
+	}
+
+	@Test
+	@Ignore
+	public void testParseGameSummary_IndexOutOfBoundsException() {
+
+		final String gameSummary = "(;GM[Skat]PC[International Skat Server]CO[]SE[26702]ID[596891]DT[2011-02-02/18:10:12/UTC]P0[xskat]P1[Knesebec]P2[bernie]R0[]R1[0.0]R2[]MV[w SJ.D8.D7.DA.HT.CT.DT.CK.DJ.S8.H9.HA.HQ.SK.C8.C7.H8.S7.S9.C9.D9.DQ.CQ.HJ.SQ.SA.CJ.H7.CA.ST.DK.HK 1 18 0 y 1 20 0 p 2 22 1 y 2 23 1 y 2 24 1 y 2 27 1 y 2 30 1 y 2 33 1 y 2 35 1 y 2 36 1 p 2 s w DK.HK 2 D 2 D9.DQ 0 S8 1 S9 2 SA 2 ST 0 DA 1 SK 0 CK 1 C7 2 CQ 0 D7 1 S7 2 DK 2 CA 0 CT 1 C8 2 CJ 0 D8 1 C9 2 SQ 0 DT 1 HA 0 SJ 1 HQ 2 HJ 0 DJ 1 H9 2 HK 0 HT 1 H8 2 H7 ]R[d:2 loss v:-72 m:1 overbid p:41 t:4 s:0 z:0 p0:0 p1:0 p2:0 l:-1 to:-1 r:0] ;)"; //$NON-NLS-1$
+
+		final SkatGameData gameData = MessageParser
+				.parseGameSummary(gameSummary);
+	}
+
 	/**
 	 * Test the parsing of the game summary<br>
 	 * Passed game
@@ -316,7 +344,7 @@ public class MessageParserTest extends AbstractJSkatTest {
 	 */
 	@Test
 	@Ignore
-	public void testParseGameSummary_Fail() {
+	public void testParseGameSummary_CorruptData() {
 
 		final String gameSummary = "(;GM[Skat]PC[Internet Skat Server]SE[2171]ID[18358]DT[2008-05-25/17:57:24/UTC]P0[kermit2]P1[kermit1]P2[mic]R0[0.0]R1[null]R2[0.0]MV[w C9.D7.HT.HA.SA.HQ.SJ.S7.C8.HJ.H7.CQ.DQ.D9.H9.S8.H8.CT.HK.SQ.CA.CK.SK.CJ.D8.DT.DK.C7.DJ.S9.ST.DA 1 18 0 p 2 20 1 p 2 s w ST.DA 2 G.DT.ST 0 ?? w LE.1 ]R[d:2 win v:96 m:1 bidok p:120 t:10 s:1 z:1 p0:0 p1:0 p2:0 l:1 to:-1] ;)";
 		final SkatGameData gameData = MessageParser
