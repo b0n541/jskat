@@ -49,4 +49,18 @@ public class CardDeckTest extends AbstractJSkatTest {
 
 		assertTrue(simCards.get(0) == null);
 	}
+
+	@Test(expected = IllegalArgumentException.class)
+	public void addDoubleCard() {
+		CardDeck cards = new CardDeck();
+		cards.remove(Card.CA);
+		cards.add(Card.CJ);
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void addTooMuchCards() {
+		CardDeck cards = new CardDeck(
+				"CJ SJ HJ CK CQ SK C7 C8 S7 H7 D7 DJ CA CT C9 SQ HA HK HQ S8 H8 H9 HT SA ST S9 D8 D9 DT DA DK DQ");
+		cards.add(Card.CJ);
+	}
 }

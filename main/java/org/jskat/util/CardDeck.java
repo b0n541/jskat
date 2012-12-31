@@ -77,14 +77,16 @@ public class CardDeck extends CardList {
 	@Override
 	public boolean add(final Card card) {
 
-		boolean result = false;
-
-		if (size() < MAX_CARDS) {
-
-			result = super.add(card);
+		if (size() == MAX_CARDS) {
+			throw new IllegalStateException("Card deck is already filled with "
+					+ MAX_CARDS + " cards.");
+		}
+		if (contains(card)) {
+			throw new IllegalArgumentException("Card " + card
+					+ " is already contained in card deck.");
 		}
 
-		return result;
+		return super.add(card);
 	}
 
 	/**
