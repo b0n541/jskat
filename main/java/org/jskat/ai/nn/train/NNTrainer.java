@@ -146,6 +146,8 @@ public class NNTrainer extends JSkatThread {
 
 					SkatGame game = prepareGame(player1, player2, player3,
 							declarer, null);
+					// SkatGame game = prepareGame(player1, player2, player3,
+					// Player.FOREHAND, getPerfectDistribution());
 
 					runGame(game);
 
@@ -199,7 +201,7 @@ public class NNTrainer extends JSkatThread {
 
 	private CardDeck getPerfectDistribution() {
 		return new CardDeck(
-				"CJ SJ HJ CK CQ SK C7 C8 S7 H7 D7 DJ CA CT S9 SQ HA HK HQ S8 H8 H9 HT SA ST S9 D8 D9 DT DA DK DQ");
+				"CJ SJ HJ CK CQ SK C7 C8 S7 H7 D7 DJ CA CT C9 SQ HA HK HQ S8 H8 H9 HT SA ST S9 D8 D9 DT DA DK DQ");
 	}
 
 	private JSkatPlayer createPlayer(final PlayerType playerType) {

@@ -19,6 +19,7 @@
  */
 package org.jskat.ai.nn;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +53,8 @@ import org.slf4j.LoggerFactory;
 public class AIPlayerNN extends AbstractJSkatPlayer {
 
 	private Logger log = LoggerFactory.getLogger(AIPlayerNN.class);
+
+	private DecimalFormat formatter = new DecimalFormat("0.00000000000000000");
 
 	private final GameSimulator gameSimulator;
 
@@ -391,12 +394,11 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 					getNetInputs(possibleCards.get(0)));
 		} else {
 			// find the best card by asking the network
-			List<INeuralNetwork> networks = SkatNetworks.getNetwork(knowledge
-					.getGame().getGameType(), isDeclarer());
-			INeuralNetwork net = networks.get(knowledge.getCurrentTrick()
+			INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGame()
+					.getGameType(), isDeclarer(), knowledge.getCurrentTrick()
 					.getTrickNumberInGame());
 
-			CardList bestCards = new CardList();
+			// CardList bestCards = new CardList();
 			CardList goodCards = new CardList();
 			CardList undecidedCards = new CardList();
 			double highestOutput = Double.NEGATIVE_INFINITY;
@@ -408,41 +410,41 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 				cardInputs.put(card, inputs);
 				double currOutput = net.getPredictedOutcome(inputs);
-				log.warn("net output for card " + card + ": " + currOutput); //$NON-NLS-1$
+				log.warn("net output for card " + card + ": " + formatter.format(currOutput)); //$NON-NLS-1$
 
-				if (currOutput > highestOutput) {
-					highestOutput = currOutput;
-					bestCards.clear();
-				}
-				if (currOutput == highestOutput) {
-					bestCards.add(card);
-				}
-
-				// if (currOutput > WON - 0.05) {
-				// goodCards.add(card);
-				// } else if (currOutput > LOST + 0.05) {
-				// undecidedCards.add(card);
+				// if (currOutput > highestOutput) {
+				// highestOutput = currOutput;
+				// bestCards.clear();
+				// bestCards.add(card);
+				// } else if (currOutput == highestOutput) {
+				// bestCards.add(card);
 				// }
+
+				if (currOutput > WON - 0.05) {
+					goodCards.add(card);
+				} else if (currOutput > LOST + 0.05) {
+					undecidedCards.add(card);
+				}
 			}
 
-			// if (isLearning) {
-			// // play randomly during training
-			// bestCardIndex = chooseRandomCard(possibleCards, possibleCards);
+			// if (bestCards.size() > 0) {
+			// // get random card out of the best cards
+			// bestCardIndex = chooseRandomCard(possibleCards, bestCards);
+			//				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": " + bestCards.size() + " of " + possibleCards.size() + " are best cards. Choosing random from these."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			// } else
-			// if (goodCards.size() > 0) {
-			// // get random card out of the good cards
-			// bestCardIndex = chooseRandomCard(possibleCards, goodCards);
-			//				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": " + goodCards.size() + " of " + possibleCards.size() + " are good cards. Choosing random from these."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			// } else if (undecidedCards.size() > 0) {
-			// // get random card out of the undecided cards
-			// bestCardIndex = chooseRandomCard(possibleCards, undecidedCards);
-			//				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": " + undecidedCards.size() + " of " + possibleCards.size() + " are undecided cards. Choosing random from these."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			// } else {
-			// // get random card
-			// bestCardIndex = chooseRandomCard(possibleCards, possibleCards);
-			//				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": No good card, choosing random from all."); //$NON-NLS-1$ //$NON-NLS-2$ 
-			// }
-			bestCardIndex = chooseRandomCard(possibleCards, bestCards);
+			if (goodCards.size() > 0) {
+				// get random card out of the good cards
+				bestCardIndex = chooseRandomCard(possibleCards, goodCards);
+				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": " + goodCards.size() + " of " + possibleCards.size() + " are good cards. Choosing random from these."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			} else if (undecidedCards.size() > 0) {
+				// get random card out of the undecided cards
+				bestCardIndex = chooseRandomCard(possibleCards, undecidedCards);
+				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": " + undecidedCards.size() + " of " + possibleCards.size() + " are undecided cards. Choosing random from these."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			} else {
+				// get random card
+				bestCardIndex = chooseRandomCard(possibleCards, possibleCards);
+				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": No good card, choosing random from all."); //$NON-NLS-1$ //$NON-NLS-2$ 
+			}
 		}
 
 		// store parameters for the card to play
@@ -636,13 +638,14 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		int result = 0;
 
-		if (gameType == GameType.NULL) {
-
-			result = getNetInputIndexNullGame(card);
-		} else {
-
-			result = getNetInputIndexSuitGrandRamschGame(gameType, card);
-		}
+		// if (gameType == GameType.NULL) {
+		//
+		// result = getNetInputIndexNullGame(card);
+		// } else {
+		//
+		// result = getNetInputIndexSuitGrandRamschGame(gameType, card);
+		// }
+		result = getNetInputIndexNullGame(card);
 
 		return result;
 	}
@@ -665,7 +668,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 				result = getNetInputIndexRamschGame(card);
 			} else {
 
-				result = getNetInputIndexSuitGame(gameType, card);
+				// result = getNetInputIndexSuitGame(gameType, card);
+				result = getNetInputIndexGrandGame(card);
 			}
 		}
 
@@ -793,12 +797,11 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			}
 			double[] outputs = new double[] { output };
 
-			List<INeuralNetwork> networks = SkatNetworks.getNetwork(knowledge
-					.getGame().getGameType(), isDeclarer());
-
 			int index = 0;
 			for (double[] inputParam : inputs) {
-				INeuralNetwork net = networks.get(index);
+				INeuralNetwork net = SkatNetworks.getNetwork(knowledge
+						.getGame().getGameType(), isDeclarer(), index);
+
 				double networkError = net.adjustWeights(inputParam, outputs);
 				log.warn("learning error: " + networkError);
 				networkErrorSum += networkError;
