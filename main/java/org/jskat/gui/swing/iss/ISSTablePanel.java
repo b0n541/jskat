@@ -84,7 +84,7 @@ public class ISSTablePanel extends SkatTablePanel {
 	protected JPanel getPlayGroundPanel() {
 
 		final JPanel panel = new JPanel(LayoutFactory.getMigLayout(
-				"fill", "[grow][shrink]", //$NON-NLS-1$ //$NON-NLS-2$
+				"fill,insets 0", "[grow][shrink]", //$NON-NLS-1$ //$NON-NLS-2$
 				"fill")); //$NON-NLS-1$
 		panel.add(super.getPlayGroundPanel(), "width 80%, grow"); //$NON-NLS-1$
 		chatPanel = getChatPanel();

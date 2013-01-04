@@ -127,7 +127,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	@Override
 	protected void initPanel() {
 
-		setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		setLayout(LayoutFactory.getMigLayout("fill,insets 0", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		playerNamesAndPositions = new HashMap<String, Player>();
 
