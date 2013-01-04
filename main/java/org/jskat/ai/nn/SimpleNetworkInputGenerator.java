@@ -1,7 +1,13 @@
 package org.jskat.ai.nn;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.jskat.data.Trick;
 import org.jskat.player.PlayerKnowledge;
 import org.jskat.util.Card;
+import org.jskat.util.GameType;
+import org.jskat.util.Player;
 
 /**
  * Creates input signals for neural networks<br />
@@ -10,26 +16,144 @@ import org.jskat.util.Card;
  */
 public class SimpleNetworkInputGenerator implements NetworkInputGenerator {
 
-	final static int INPUT_LENGTH = 291;
-	final static int PLAYER_LENGTH = 97;
+	final static int INPUT_LENGTH = 195;
+	final static int PLAYER_INPUT_LENGTH = 65;
+	final static int CARD_DECK_INPUT_LENGTH = 32;
 
-	final static double ACTIVE = 1.0;
+	final static double ACTIVE = 1.0d;
 	final static double INACTIVE = 0.0d;
+
+	final static double HAS_CARD = 1.0d;
+	final static double COULD_HAVE_CARD = 0.5d;
 
 	@Override
 	public double[] getNetInputs(PlayerKnowledge knowledge, Card cardToPlay) {
 		double[] netInputs = new double[INPUT_LENGTH];
 
+		for (int i = 0; i < INPUT_LENGTH; i++) {
+			netInputs[i] = INACTIVE;
+		}
+
 		// set game declarer (1 neuron per player)
+		setDeclarerInput(netInputs, knowledge);
 
 		// set played cards (32 neurons per player)
+		setPlayedCardsInput(netInputs, knowledge);
 
-		// set known cards (32 neurons per player)
-
-		// set uncertain cards (32 neuron per player)
+		// set unplayed cards (32 neurons per player)
+		setUnplayedCardsInput(netInputs, knowledge);
 
 		// set card to be played (see played cards)
+		setCardToBePlayedInput(netInputs, cardToPlay);
 
 		return netInputs;
+	}
+
+	private void setUnplayedCardsInput(double[] netInputs,
+			PlayerKnowledge knowledge) {
+		for (Card card : knowledge.getCompleteDeck()) {
+			setUnplayedCardsInput(netInputs, knowledge, card);
+		}
+	}
+
+	private void setUnplayedCardsInput(double[] netInputs,
+			PlayerKnowledge knowledge, Card card) {
+
+		Player leftOpponent = knowledge.getPlayerPosition().getLeftNeighbor();
+		Player rightOpponent = knowledge.getPlayerPosition().getRightNeighbor();
+		int index = getNetInputIndex(card);
+
+		// inputs for left opponent
+		if (knowledge.couldHaveCard(leftOpponent, card)) {
+			if (knowledge.couldHaveCard(rightOpponent, card)) {
+				netInputs[index + CARD_DECK_INPUT_LENGTH + 1] = COULD_HAVE_CARD;
+			} else {
+				netInputs[index + CARD_DECK_INPUT_LENGTH + 1] = HAS_CARD;
+			}
+		}
+
+		// inputs for player
+		if (knowledge.getOwnCards().contains(card)) {
+			netInputs[index + PLAYER_INPUT_LENGTH + CARD_DECK_INPUT_LENGTH + 1] = HAS_CARD;
+		}
+
+		// inputs for right opponent
+		if (knowledge.couldHaveCard(rightOpponent, card)) {
+			if (knowledge.couldHaveCard(leftOpponent, card)) {
+				netInputs[index + 2 * PLAYER_INPUT_LENGTH
+						+ CARD_DECK_INPUT_LENGTH + 1] = COULD_HAVE_CARD;
+			} else {
+				netInputs[index + 2 * PLAYER_INPUT_LENGTH
+						+ CARD_DECK_INPUT_LENGTH + 1] = HAS_CARD;
+			}
+		}
+	}
+
+	private void setDeclarerInput(double[] netInputs, PlayerKnowledge knowledge) {
+		if (!GameType.RAMSCH.equals(knowledge.getGameType())) {
+			// in Ramsch games there is no declarer
+			Player position = knowledge.getPlayerPosition();
+			Player declarer = knowledge.getDeclarer();
+
+			int index = -1;
+			if (position.getLeftNeighbor() == declarer) {
+				index = 0;
+			} else if (position == declarer) {
+				index = PLAYER_INPUT_LENGTH;
+			} else if (position.getRightNeighbor() == declarer) {
+				index = 2 * PLAYER_INPUT_LENGTH;
+			}
+
+			netInputs[index] = ACTIVE;
+		}
+	}
+
+	private static void setPlayedCardsInput(double[] netInputs,
+			PlayerKnowledge knowledge) {
+
+		List<Trick> trickList = new ArrayList<Trick>();
+		trickList.addAll(knowledge.getCompletedTricks());
+		trickList.add(knowledge.getCurrentTrick());
+		for (Trick trick : trickList) {
+			Player position = knowledge.getPlayerPosition();
+
+			Player trickPlayer = trick.getForeHand();
+			for (Card card : trick.getCardList()) {
+				setPlayedCardsInput(netInputs, knowledge.getGameType(),
+						position, trickPlayer, card, ACTIVE);
+				trickPlayer = trickPlayer.getLeftNeighbor();
+			}
+		}
+	}
+
+	private static void setPlayedCardsInput(double[] netInputs,
+			GameType gameType, Player position, Player trickPlayer, Card card,
+			double activationValue) {
+
+		int cardIndex = getNetInputIndex(card);
+
+		// using offset of 1 because of declarer flag
+		int index = -1;
+		if (position.getLeftNeighbor() == trickPlayer) {
+			index = cardIndex + 1;
+		} else if (position == trickPlayer) {
+			index = PLAYER_INPUT_LENGTH + cardIndex + 1;
+		} else if (position.getRightNeighbor() == trickPlayer) {
+			index = 2 * PLAYER_INPUT_LENGTH + cardIndex + 1;
+		}
+
+		netInputs[index] = activationValue;
+	}
+
+	private void setCardToBePlayedInput(double[] netInputs, Card cardToPlay) {
+
+		// Card to be played is set into played cards inputs
+		int index = PLAYER_INPUT_LENGTH + getNetInputIndex(cardToPlay);
+		netInputs[index] = ACTIVE;
+	}
+
+	private static int getNetInputIndex(final Card card) {
+
+		return card.getSuit().getSuitOrder() * 8 + card.getNullOrder();
 	}
 }

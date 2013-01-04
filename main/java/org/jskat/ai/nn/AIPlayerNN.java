@@ -59,7 +59,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	private DecimalFormat formatter = new DecimalFormat("0.00000000000000000");
 
 	private final GameSimulator gameSimulator;
-	private DetailedNetworkInputGenerator inputGenerator;
+	private NetworkInputGenerator inputGenerator;
 
 	private final Random rand;
 	private final List<double[]> allInputs = new ArrayList<double[]>();
@@ -90,7 +90,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		setPlayerName(newPlayerName);
 
 		gameSimulator = new GameSimulator();
-		inputGenerator = new DetailedNetworkInputGenerator();
+		inputGenerator = new SimpleNetworkInputGenerator();
 
 		for (GameType gameType : GameType.values()) {
 			if (gameType != GameType.RAMSCH && gameType != GameType.PASSED_IN) {
