@@ -29,11 +29,12 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.training.propagation.Propagation;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
+import org.jskat.AbstractJSkatTest;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class EncogNetworkWrapperTest {
+public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 
 	private static final double MIN_DIFF = 0.001;
 	private static Logger log = LoggerFactory
@@ -44,7 +45,7 @@ public class EncogNetworkWrapperTest {
 
 		int[] hiddenNeurons = { 3 };
 		NetworkTopology topo = new NetworkTopology(3, 1, 1, hiddenNeurons);
-		INeuralNetwork network = new EncogNetworkWrapper(topo);
+		INeuralNetwork network = new EncogNetworkWrapper(topo, true);
 
 		double[][] input = { { 1.0, 1.0, 1.0 }, { 1.0, 1.0, 0.0 },
 				{ 1.0, 0.0, 1.0 }, { 1.0, 0.0, 0.0 }, { 0.0, 1.0, 1.0 },
@@ -60,7 +61,8 @@ public class EncogNetworkWrapperTest {
 
 		int[] hiddenNeurons = { 3 };
 		NetworkTopology topo = new NetworkTopology(2, 1, 1, hiddenNeurons);
-		INeuralNetwork network = new EncogNetworkWrapper(topo);
+		INeuralNetwork network = new EncogNetworkWrapper(topo, false);
+		network.resetNetwork();
 
 		double[][] input = { { 1.0, 1.0 }, { 1.0, 0.0 }, { 0.0, 1.0 },
 				{ 0.0, 0.0 } };
@@ -83,7 +85,7 @@ public class EncogNetworkWrapperTest {
 		if (runs == 10000) {
 			fail("Needed more than 10000 runs. Error: " + error);
 		} else {
-			log.debug("Needed " + runs + " runs.");
+			log.debug("Needed " + runs + " to learn.");
 		}
 	}
 
@@ -91,9 +93,9 @@ public class EncogNetworkWrapperTest {
 	public void testXORDirect() {
 
 		BasicNetwork network = new BasicNetwork();
-		network.addLayer(new BasicLayer(null, true, 2));
+		network.addLayer(new BasicLayer(new ActivationSigmoid(), true, 2));
 		network.addLayer(new BasicLayer(new ActivationSigmoid(), true, 3));
-		network.addLayer(new BasicLayer(new ActivationSigmoid(), false, 1));
+		network.addLayer(new BasicLayer(new ActivationSigmoid(), true, 1));
 		network.getStructure().finalizeStructure();
 		network.reset();
 
@@ -113,13 +115,16 @@ public class EncogNetworkWrapperTest {
 		double error = 1000.0;
 		int runs = 0;
 
-		while (error > MIN_DIFF && runs < 10000) {
+		while (error > MIN_DIFF && runs < 200) {
 			trainer.iteration();
 			error = trainer.getError();
+			runs++;
 		}
 
-		if (runs == 10000) {
-			fail("Needed more than 10000 runs. Error: " + error);
+		if (runs == 200) {
+			fail("Needed more than 200 runs. Error: " + error);
+		} else {
+			log.debug("Needed " + runs + " to learn.");
 		}
 	}
 }
