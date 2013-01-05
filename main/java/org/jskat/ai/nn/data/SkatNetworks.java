@@ -42,11 +42,13 @@ public class SkatNetworks {
 	// 1 hidden layer
 	// n number of nodes in hidden layer
 	// 1 output node for win/lost
-	private static int inputNeurons = 195;
-	private static int hiddenNeurons = 25;
-	private static int outputNeurons = 1;
+	private static int INPUT_NEURONS = 195;
+	private static int HIDDEN_NEURONS = 10;
+	private static int OUTPUT_NEURONS = 1;
 
-	private final static SkatNetworks instance = new SkatNetworks();
+	private static final boolean USE_BIAS = true;
+
+	private final static SkatNetworks INTSTANCE = new SkatNetworks();
 
 	// private static Map<GameType, Map<PlayerParty, Map<GamePhase,
 	// INeuralNetwork>>> networks;
@@ -59,7 +61,7 @@ public class SkatNetworks {
 	 */
 	public static SkatNetworks instance() {
 
-		return instance;
+		return INTSTANCE;
 	}
 
 	/**
@@ -96,16 +98,16 @@ public class SkatNetworks {
 	}
 
 	private static void createNetworks() {
-		int[] hiddenLayer = { hiddenNeurons };
-		NetworkTopology topo = new NetworkTopology(inputNeurons, outputNeurons,
-				1, hiddenLayer);
+		int[] hiddenLayer = { HIDDEN_NEURONS };
+		NetworkTopology topo = new NetworkTopology(INPUT_NEURONS,
+				OUTPUT_NEURONS, 1, hiddenLayer);
 
 		networks = new HashMap<GameType, Map<PlayerParty, INeuralNetwork>>();
 		for (GameType gameType : GameType.values()) {
 			networks.put(gameType, new HashMap<PlayerParty, INeuralNetwork>());
 			for (PlayerParty playerParty : PlayerParty.values()) {
 				networks.get(gameType).put(playerParty,
-						new EncogNetworkWrapper(topo));
+						new EncogNetworkWrapper(topo, USE_BIAS));
 			}
 		}
 	}
@@ -126,8 +128,8 @@ public class SkatNetworks {
 						"/org/jskat/ai/nn/data/jskat"
 								.concat("." + gameTypeNets.getKey())
 								.concat("." + playerPartyNets.getKey())
-								.concat(".nnet"), inputNeurons, hiddenNeurons,
-						outputNeurons);
+								.concat(".nnet"), INPUT_NEURONS,
+						HIDDEN_NEURONS, OUTPUT_NEURONS);
 			}
 		}
 	}

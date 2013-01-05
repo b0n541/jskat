@@ -12,7 +12,9 @@ import org.jskat.util.Player;
 /**
  * Creates input signals for neural networks<br />
  * The signals are divided into three parts<br />
- * Opponent 1|Neural network player|Opponent 2
+ * Opponent 1|Neural network player|Opponent 2<br />
+ * Every player part ist divided into another parts<br />
+ * Played cards|Unplayed cards|Other information flags
  */
 public class SimpleNetworkInputGenerator implements NetworkInputGenerator {
 
@@ -24,7 +26,7 @@ public class SimpleNetworkInputGenerator implements NetworkInputGenerator {
 	final static double INACTIVE = 0.0d;
 
 	final static double HAS_CARD = 1.0d;
-	final static double COULD_HAVE_CARD = 0.5d;
+	final static double COULD_HAVE_CARD = 1.0d;
 
 	@Override
 	public double[] getNetInputs(PlayerKnowledge knowledge, Card cardToPlay) {
@@ -33,9 +35,6 @@ public class SimpleNetworkInputGenerator implements NetworkInputGenerator {
 		for (int i = 0; i < INPUT_LENGTH; i++) {
 			netInputs[i] = INACTIVE;
 		}
-
-		// set game declarer (1 neuron per player)
-		setDeclarerInput(netInputs, knowledge);
 
 		// set played cards (32 neurons per player)
 		setPlayedCardsInput(netInputs, knowledge);
@@ -46,47 +45,10 @@ public class SimpleNetworkInputGenerator implements NetworkInputGenerator {
 		// set card to be played (see played cards)
 		setCardToBePlayedInput(netInputs, cardToPlay);
 
+		// set game declarer (1 neuron per player)
+		setDeclarerInput(netInputs, knowledge);
+
 		return netInputs;
-	}
-
-	private void setUnplayedCardsInput(double[] netInputs,
-			PlayerKnowledge knowledge) {
-		for (Card card : knowledge.getCompleteDeck()) {
-			setUnplayedCardsInput(netInputs, knowledge, card);
-		}
-	}
-
-	private void setUnplayedCardsInput(double[] netInputs,
-			PlayerKnowledge knowledge, Card card) {
-
-		Player leftOpponent = knowledge.getPlayerPosition().getLeftNeighbor();
-		Player rightOpponent = knowledge.getPlayerPosition().getRightNeighbor();
-		int index = getNetInputIndex(card);
-
-		// inputs for left opponent
-		if (knowledge.couldHaveCard(leftOpponent, card)) {
-			if (knowledge.couldHaveCard(rightOpponent, card)) {
-				netInputs[index + CARD_DECK_INPUT_LENGTH + 1] = COULD_HAVE_CARD;
-			} else {
-				netInputs[index + CARD_DECK_INPUT_LENGTH + 1] = HAS_CARD;
-			}
-		}
-
-		// inputs for player
-		if (knowledge.getOwnCards().contains(card)) {
-			netInputs[index + PLAYER_INPUT_LENGTH + CARD_DECK_INPUT_LENGTH + 1] = HAS_CARD;
-		}
-
-		// inputs for right opponent
-		if (knowledge.couldHaveCard(rightOpponent, card)) {
-			if (knowledge.couldHaveCard(leftOpponent, card)) {
-				netInputs[index + 2 * PLAYER_INPUT_LENGTH
-						+ CARD_DECK_INPUT_LENGTH + 1] = COULD_HAVE_CARD;
-			} else {
-				netInputs[index + 2 * PLAYER_INPUT_LENGTH
-						+ CARD_DECK_INPUT_LENGTH + 1] = HAS_CARD;
-			}
-		}
 	}
 
 	private void setDeclarerInput(double[] netInputs, PlayerKnowledge knowledge) {
@@ -97,11 +59,11 @@ public class SimpleNetworkInputGenerator implements NetworkInputGenerator {
 
 			int index = -1;
 			if (position.getLeftNeighbor() == declarer) {
-				index = 0;
+				index = 2 * CARD_DECK_INPUT_LENGTH;
 			} else if (position == declarer) {
-				index = PLAYER_INPUT_LENGTH;
+				index = PLAYER_INPUT_LENGTH + 2 * CARD_DECK_INPUT_LENGTH;
 			} else if (position.getRightNeighbor() == declarer) {
-				index = 2 * PLAYER_INPUT_LENGTH;
+				index = 2 * PLAYER_INPUT_LENGTH + 2 * CARD_DECK_INPUT_LENGTH;
 			}
 
 			netInputs[index] = ACTIVE;
@@ -135,14 +97,48 @@ public class SimpleNetworkInputGenerator implements NetworkInputGenerator {
 		// using offset of 1 because of declarer flag
 		int index = -1;
 		if (position.getLeftNeighbor() == trickPlayer) {
-			index = cardIndex + 1;
+			index = cardIndex;
 		} else if (position == trickPlayer) {
-			index = PLAYER_INPUT_LENGTH + cardIndex + 1;
+			index = PLAYER_INPUT_LENGTH + cardIndex;
 		} else if (position.getRightNeighbor() == trickPlayer) {
-			index = 2 * PLAYER_INPUT_LENGTH + cardIndex + 1;
+			index = 2 * PLAYER_INPUT_LENGTH + cardIndex;
 		}
 
 		netInputs[index] = activationValue;
+	}
+
+	private void setUnplayedCardsInput(double[] netInputs,
+			PlayerKnowledge knowledge) {
+		for (Card card : knowledge.getCompleteDeck()) {
+			setUnplayedCardsInput(netInputs, knowledge, card);
+		}
+	}
+
+	private void setUnplayedCardsInput(double[] netInputs,
+			PlayerKnowledge knowledge, Card card) {
+
+		Player leftOpponent = knowledge.getPlayerPosition().getLeftNeighbor();
+		Player rightOpponent = knowledge.getPlayerPosition().getRightNeighbor();
+		int index = getNetInputIndex(card);
+
+		// inputs for left opponent
+		if (knowledge.couldHaveCard(leftOpponent, card)) {
+			netInputs[CARD_DECK_INPUT_LENGTH + index] = COULD_HAVE_CARD;
+		} else if (knowledge.hasCard(leftOpponent, card)) {
+			netInputs[CARD_DECK_INPUT_LENGTH + index] = HAS_CARD;
+		}
+
+		// inputs for player
+		if (knowledge.hasCard(knowledge.getPlayerPosition(), card)) {
+			netInputs[PLAYER_INPUT_LENGTH + CARD_DECK_INPUT_LENGTH + index] = HAS_CARD;
+		}
+
+		// inputs for right opponent
+		if (knowledge.couldHaveCard(rightOpponent, card)) {
+			netInputs[2 * PLAYER_INPUT_LENGTH + CARD_DECK_INPUT_LENGTH + index] = COULD_HAVE_CARD;
+		} else if (knowledge.hasCard(rightOpponent, card)) {
+			netInputs[2 * PLAYER_INPUT_LENGTH + CARD_DECK_INPUT_LENGTH + index] = HAS_CARD;
+		}
 	}
 
 	private void setCardToBePlayedInput(double[] netInputs, Card cardToPlay) {
