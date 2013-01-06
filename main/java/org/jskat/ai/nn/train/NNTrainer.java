@@ -35,7 +35,6 @@ import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.gui.NullView;
 import org.jskat.player.JSkatPlayer;
-import org.jskat.player.PlayerType;
 import org.jskat.util.CardDeck;
 import org.jskat.util.GameType;
 import org.jskat.util.GameVariant;
@@ -50,6 +49,8 @@ import org.slf4j.helpers.NOPLogger;
 public class NNTrainer extends JSkatThread {
 
 	private static Logger log = LoggerFactory.getLogger(NNTrainer.class);
+
+	final static String NEURAL_NETWORK_PLAYER_CLASS = "org.jskat.ai.nn.AIPlayerNN";
 
 	private final JSkatMaster jskat;
 
@@ -112,11 +113,9 @@ public class NNTrainer extends JSkatThread {
 		double opponentAvgNetworkErrorSum = 0.0;
 		long opponentParticipations = 0;
 
-		List<PlayerType> playerTypes = new ArrayList<PlayerType>();
-		// playerTypes.add(PlayerType.ALGORITHMIC);
-		// playerTypes.add(PlayerType.RANDOM);
-		playerTypes.add(PlayerType.NEURAL_NETWORK);
-		Set<List<PlayerType>> playerPermutations = createPlayerPermutations(playerTypes);
+		List<String> playerTypes = new ArrayList<String>();
+		playerTypes.add(NEURAL_NETWORK_PLAYER_CLASS);
+		Set<List<String>> playerPermutations = createPlayerPermutations(playerTypes);
 
 		while (!stopTraining) {
 
@@ -134,7 +133,7 @@ public class NNTrainer extends JSkatThread {
 				}
 			}
 
-			for (List<PlayerType> playerConstellation : playerPermutations) {
+			for (List<String> playerConstellation : playerPermutations) {
 
 				for (Player declarer : Player.values()) {
 					JSkatPlayer player1 = createPlayer(playerConstellation
@@ -204,10 +203,11 @@ public class NNTrainer extends JSkatThread {
 				"CJ SJ HJ CK CQ SK C7 C8 S7 H7 D7 DJ CA CT C9 SQ HA HK HQ S8 H8 H9 HT SA ST S9 D8 D9 DT DA DK DQ");
 	}
 
-	private JSkatPlayer createPlayer(final PlayerType playerType) {
-		JSkatPlayer player = PlayerType.getPlayerInstance(playerType);
+	private JSkatPlayer createPlayer(String playerType) {
 
-		if (PlayerType.NEURAL_NETWORK.equals(playerType)) {
+		JSkatPlayer player = JSkatMaster.instance().createPlayer(playerType);
+
+		if (NEURAL_NETWORK_PLAYER_CLASS.equals(playerType)) {
 			AIPlayerNN nnPlayer = (AIPlayerNN) player;
 			nnPlayer.setIsLearning(true);
 			nnPlayer.setLogger(NOPLogger.NOP_LOGGER);
@@ -280,20 +280,19 @@ public class NNTrainer extends JSkatThread {
 		return game;
 	}
 
-	static Set<List<PlayerType>> createPlayerPermutations(
-			final List<PlayerType> playerTypes) {
+	static Set<List<String>> createPlayerPermutations(List<String> playerTypes) {
 
-		Set<List<PlayerType>> result = new HashSet<List<PlayerType>>();
+		Set<List<String>> result = new HashSet<List<String>>();
 
-		for (PlayerType player1 : playerTypes) {
-			for (PlayerType player2 : playerTypes) {
-				for (PlayerType player3 : playerTypes) {
+		for (String player1 : playerTypes) {
+			for (String player2 : playerTypes) {
+				for (String player3 : playerTypes) {
 
-					if (player1 == PlayerType.NEURAL_NETWORK
-							|| player2 == PlayerType.NEURAL_NETWORK
-							|| player3 == PlayerType.NEURAL_NETWORK) {
+					if (NEURAL_NETWORK_PLAYER_CLASS.equals(player1)
+							|| NEURAL_NETWORK_PLAYER_CLASS.equals(player2)
+							|| NEURAL_NETWORK_PLAYER_CLASS.equals(player3)) {
 
-						List<PlayerType> playerPermutation = new ArrayList<PlayerType>();
+						List<String> playerPermutation = new ArrayList<String>();
 						playerPermutation.add(player1);
 						playerPermutation.add(player2);
 						playerPermutation.add(player3);

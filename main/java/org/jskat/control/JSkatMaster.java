@@ -35,7 +35,7 @@ import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.action.JSkatActionEvent;
 import org.jskat.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.player.JSkatPlayer;
-import org.jskat.player.PlayerType;
+import org.jskat.player.JSkatPlayerResolver;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -189,10 +189,9 @@ public class JSkatMaster {
 	 * @param unlimited
 	 *            TRUE, if unlimited rounds should be played
 	 */
-	public void startSeries(final ArrayList<PlayerType> allPlayer,
-			final ArrayList<String> playerNames, final int numberOfRounds,
-			final boolean unlimited, final boolean onlyPlayRamsch,
-			final int sleeps) {
+	public void startSeries(List<String> allPlayer, List<String> playerNames,
+			int numberOfRounds, boolean unlimited, boolean onlyPlayRamsch,
+			int sleeps) {
 
 		log.debug(data.getActiveTable());
 
@@ -201,12 +200,12 @@ public class JSkatMaster {
 		table.removePlayers();
 
 		int playerCount = 0;
-		for (PlayerType player : allPlayer) {
+		for (String player : allPlayer) {
 			JSkatPlayer newPlayer = null;
-			if (player == PlayerType.HUMAN) {
+			if (JSkatPlayerResolver.HUMAN_PLAYER_CLASS.equals(player)) {
 				newPlayer = data.getHumanPlayer(table.getName());
 			} else {
-				newPlayer = PlayerType.getPlayerInstance(player);
+				newPlayer = createPlayer(player);
 			}
 			newPlayer.setPlayerName(playerNames.get(playerCount));
 			table.placePlayer(newPlayer);
@@ -214,6 +213,23 @@ public class JSkatMaster {
 		}
 
 		table.startSkatSeries(numberOfRounds, unlimited, onlyPlayRamsch, sleeps);
+	}
+
+	public JSkatPlayer createPlayer(String player) {
+		JSkatPlayer newPlayer = null;
+		try {
+			newPlayer = (JSkatPlayer) Class.forName(player).newInstance();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return newPlayer;
 	}
 
 	/**

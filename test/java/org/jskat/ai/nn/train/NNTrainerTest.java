@@ -26,17 +26,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.jskat.player.PlayerType;
+import org.jskat.player.JSkatPlayerResolver;
 import org.junit.Test;
 
 public class NNTrainerTest {
 
 	@Test
 	public void testCreatePlayerPermutations_NoNNPlayer() {
-		List<PlayerType> playerTypes = new ArrayList<PlayerType>();
-		playerTypes.add(PlayerType.RANDOM);
+		List<String> playerTypes = new ArrayList<String>();
+		playerTypes.add(JSkatPlayerResolver.HUMAN_PLAYER_CLASS);
 
-		Set<List<PlayerType>> permutations = NNTrainer
+		Set<List<String>> permutations = NNTrainer
 				.createPlayerPermutations(playerTypes);
 
 		assertEquals(0, permutations.size());
@@ -44,33 +44,35 @@ public class NNTrainerTest {
 
 	@Test
 	public void testCreatePlayerPermutations_OnlyNNPlayer() {
-		List<PlayerType> playerTypes = new ArrayList<PlayerType>();
-		playerTypes.add(PlayerType.NEURAL_NETWORK);
+		List<String> playerTypes = new ArrayList<String>();
+		playerTypes.add(NNTrainer.NEURAL_NETWORK_PLAYER_CLASS);
 
-		Set<List<PlayerType>> permutations = NNTrainer
+		Set<List<String>> permutations = NNTrainer
 				.createPlayerPermutations(playerTypes);
 
 		assertEquals(1, permutations.size());
-		List<PlayerType> permutation = permutations.iterator().next();
-		assertEquals(PlayerType.NEURAL_NETWORK, permutation.get(0));
-		assertEquals(PlayerType.NEURAL_NETWORK, permutation.get(1));
-		assertEquals(PlayerType.NEURAL_NETWORK, permutation.get(2));
+		List<String> permutation = permutations.iterator().next();
+		assertEquals(NNTrainer.NEURAL_NETWORK_PLAYER_CLASS, permutation.get(0));
+		assertEquals(NNTrainer.NEURAL_NETWORK_PLAYER_CLASS, permutation.get(1));
+		assertEquals(NNTrainer.NEURAL_NETWORK_PLAYER_CLASS, permutation.get(2));
 	}
 
 	@Test
 	public void testCreatePlayerPermutations_ThreePlayerTypes() {
-		List<PlayerType> playerTypes = new ArrayList<PlayerType>();
-		playerTypes.add(PlayerType.ALGORITHMIC);
-		playerTypes.add(PlayerType.RANDOM);
-		playerTypes.add(PlayerType.NEURAL_NETWORK);
+		List<String> playerTypes = new ArrayList<String>();
+		for (String aiPlayer : JSkatPlayerResolver
+				.getAllAIPlayerImplementations()) {
+			playerTypes.add(aiPlayer);
+		}
 
-		Set<List<PlayerType>> permutations = NNTrainer
+		Set<List<String>> permutations = NNTrainer
 				.createPlayerPermutations(playerTypes);
 
-		assertEquals(19, permutations.size());
+		assertEquals(127, permutations.size());
 
-		for (List<PlayerType> permutation : permutations) {
-			assertTrue(permutation.contains(PlayerType.NEURAL_NETWORK));
+		for (List<String> permutation : permutations) {
+			assertTrue(permutation
+					.contains(NNTrainer.NEURAL_NETWORK_PLAYER_CLASS));
 		}
 	}
 }

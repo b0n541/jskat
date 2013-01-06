@@ -21,8 +21,6 @@ package org.jskat.data;
 
 import java.util.Observable;
 
-import org.jskat.player.PlayerType;
-
 /**
  * Skat table options
  */
@@ -58,11 +56,11 @@ public class SkatTableOptions extends Observable {
 
 	private Integer maxPlayerCount;
 	private String firstPlayerName;
-	private PlayerType firstPlayerType;
+	private String firstPlayerType;
 	private String secondPlayerName;
-	private PlayerType secondPlayerType;
+	private String secondPlayerType;
 	private String thirdPlayerName;
-	private PlayerType thirdPlayerType;
+	private String thirdPlayerType;
 	private RuleSet rules = RuleSet.ISPA;
 	private Boolean playContra;
 	private Boolean playBock;
@@ -106,7 +104,7 @@ public class SkatTableOptions extends Observable {
 	 * 
 	 * @return Value of property firstPlayerType.
 	 */
-	public PlayerType getFirstPlayerType() {
+	public String getFirstPlayerType() {
 
 		return firstPlayerType;
 	}
@@ -117,7 +115,7 @@ public class SkatTableOptions extends Observable {
 	 * @param type
 	 *            New value of property firstPlayerType.
 	 */
-	public void setFirstPlayerType(PlayerType type) {
+	public void setFirstPlayerType(String type) {
 		firstPlayerType = type;
 	}
 
@@ -147,7 +145,7 @@ public class SkatTableOptions extends Observable {
 	 * 
 	 * @return Value of property secondPlayerType.
 	 */
-	public PlayerType getSecondPlayerType() {
+	public String getSecondPlayerType() {
 
 		return secondPlayerType;
 	}
@@ -158,7 +156,7 @@ public class SkatTableOptions extends Observable {
 	 * @param type
 	 *            Player type
 	 */
-	public void setSecondPlayerType(PlayerType type) {
+	public void setSecondPlayerType(String type) {
 		secondPlayerType = type;
 	}
 
@@ -188,7 +186,7 @@ public class SkatTableOptions extends Observable {
 	 * 
 	 * @return Value of property thirdPlayerType.
 	 */
-	public PlayerType getThirdPlayerType() {
+	public String getThirdPlayerType() {
 
 		return thirdPlayerType;
 	}
@@ -199,7 +197,7 @@ public class SkatTableOptions extends Observable {
 	 * @param type
 	 *            New value of property thirdPlayerType.
 	 */
-	public void setThirdPlayerType(PlayerType type) {
+	public void setThirdPlayerType(String type) {
 
 		thirdPlayerType = type;
 	}
@@ -389,7 +387,7 @@ public class SkatTableOptions extends Observable {
 	 *            New value of property bockEventContraReAnnounced
 	 */
 	public void setBockEventContraReAnnounced(
-Boolean newBockEventContraReAnnounced) {
+			Boolean newBockEventContraReAnnounced) {
 
 		bockEventContraReAnnounced = newBockEventContraReAnnounced;
 	}
@@ -411,7 +409,7 @@ Boolean newBockEventContraReAnnounced) {
 	 *            New value of property bockEventPlayerHasX00Points
 	 */
 	public void setBockEventPlayerHasX00Points(
-Boolean newBockEventPlayerHasX00Points) {
+			Boolean newBockEventPlayerHasX00Points) {
 
 		bockEventPlayerHasX00Points = newBockEventPlayerHasX00Points;
 	}
@@ -475,7 +473,7 @@ Boolean newBockEventPlayerHasX00Points) {
 	 *            New value of property schieberRamschJacksInSkat
 	 */
 	public void setSchieberRamschJacksInSkat(
-Boolean newSchieberRamschJacksInSkat) {
+			Boolean newSchieberRamschJacksInSkat) {
 
 		schieberRamschJacksInSkat = newSchieberRamschJacksInSkat;
 	}
@@ -518,7 +516,7 @@ Boolean newSchieberRamschJacksInSkat) {
 	 *            New value of property ramschEventRamschAfterBock
 	 */
 	public void setRamschEventRamschAfterBock(
-Boolean newRamschEventRamschAfterBock) {
+			Boolean newRamschEventRamschAfterBock) {
 
 		ramschEventRamschAfterBock = newRamschEventRamschAfterBock;
 	}
