@@ -1,22 +1,3 @@
-/**
- * JSkat - A skat program written in Java
- * by Jan Schäfer, Markus J. Luzius and Daniel Loreck
- *
- * Version 0.11.0
- * Copyright (C) 2012-08-28
- *
- * Licensed under the Apache License, Version 2.0. You may
- * obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
 package org.jskat.ai.newalgorithm;
 
 import java.util.ArrayList;
@@ -314,7 +295,7 @@ public class AlgorithmOpponentSuit extends AbstractAlgorithmAI {
 				Card possibleLowCard	= pCards.get(pCards.getLastIndexOfSuit(tSuit, false));	// lowest Card
 				// Wenn der Solo-Spieler schlagbar ist -> schlagen
 				if(possibleHighCard.beats(pSituation.getGameType(), tForehandCard)) {
-					// Wenn die zweithÃ¶chste Karte anschliessend unschlagbar ist
+					// Wenn die zweithÃƒÂ¶chste Karte anschliessend unschlagbar ist
 					if(Helper.isHighestSuitCard(pCards.get(pCards.getFirstIndexOfSuit(tSuit, false)+1), pSituation.getGameType(), pNotOpponentCards, pTrickCards))
 						return possibleHighCard;
 					for(int i=pCards.getLastIndexOfSuit(tSuit, false); i>=pCards.getFirstIndexOfSuit(tSuit, false); i--)
@@ -528,7 +509,7 @@ public class AlgorithmOpponentSuit extends AbstractAlgorithmAI {
 						return playRandomCard(possibleCards);
 				}
 			}
-			// Solo-Spieler ist in Mittelhand und bislang gehÃ¶rt ihm der Stich
+			// Solo-Spieler ist in Mittelhand und bislang gehÃƒÂ¶rt ihm der Stich
 			// Wenn Vorhand schon eine Trumpfkarte ist
 			if(tForehandCard.isTrump(pSituation.getGameType())) {
 				// Wenn der Spieler noch einen Trumpf auf der Hand hat

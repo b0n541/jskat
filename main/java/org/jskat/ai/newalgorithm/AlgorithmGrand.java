@@ -1,22 +1,3 @@
-/**
- * JSkat - A skat program written in Java
- * by Jan Schäfer, Markus J. Luzius and Daniel Loreck
- *
- * Version 0.11.0
- * Copyright (C) 2012-08-28
- *
- * Licensed under the Apache License, Version 2.0. You may
- * obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing,
- * software distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied.  See the License for the
- * specific language governing permissions and limitations
- * under the License.
- */
 package org.jskat.ai.newalgorithm;
 
 import java.util.ArrayList;
@@ -155,7 +136,7 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 						return pCards.get(pCards.getFirstIndexOfSuit(pSituation.getLongestSuit(), false));
 					return pCards.get(pCards.getLastIndexOfSuit(pSituation.getLongestSuit(), false));
 				}
-				// erst alle Karten spielen, wo die zweite Karte anschlieÃŸend die beste ist
+				// erst alle Karten spielen, wo die zweite Karte anschlieÃƒÅ¸end die beste ist
 				for(Suit lSuit : Suit.values()) {
 					if(pCards.getSuitCount(lSuit, false) > 1) {
 						Card possibleHighCard	= pCards.get(pCards.getFirstIndexOfSuit(lSuit, false));
@@ -252,9 +233,18 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 		
 		// Wenn Vorhand-Karte bedient werden kann/muss
 		if(pCards.getSuitCount(tSuit, false) > 0) {
+			Card possibleHighCard			= pCards.get(pCards.getFirstIndexOfSuit(tSuit, false));	// highest Card
+			int possibleBeatingCardIndex	= pCards.getLastIndexOfSuit(tSuit, false);	// lowest Card
+			
+			if(pCards.getSuitCount(tSuit, false) == 1)
+				return possibleHighCard;
+
 			// Wenn schlagbar
-			if(pCards.get(pCards.getFirstIndexOfSuit(tSuit, false)).beats(pSituation.getGameType(), tCardToBeat)) {
-				return getLowestBeatingCard(pCards, pSituation.getGameType(), tCardToBeat);
+			if(possibleHighCard.beats(pSituation.getGameType(), tCardToBeat)) {
+				while(!pCards.get(possibleBeatingCardIndex).beats(pSituation.getGameType(), tCardToBeat)) {
+					possibleBeatingCardIndex --;
+				}
+				return pCards.get(possibleBeatingCardIndex);
 			}
 			// Wenn nicht schlagbar
 			return pCards.get(pCards.getLastIndexOfSuit(tSuit, false));
@@ -402,27 +392,5 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 		}
 		
 		return tDiscardCards;
-	}
-	
-	protected static CardList getPossibleMaxValueCards(CardList pCards, int pMaxCardValue) {
-		CardList possibleCards				= new CardList();
-		
-		for(Suit lSuit : Suit.values()) {
-			int  suitCount			= pCards.getSuitCount(lSuit, false);
-			Card possibleHighCard	= pCards.get(pCards.getFirstIndexOfSuit(lSuit, false));
-			Card possibleLowCard	= pCards.get(pCards.getLastIndexOfSuit(lSuit, false));
-			
-			if(suitCount > 0
-					&& possibleHighCard == possibleLowCard
-					&& possibleLowCard.getPoints() <= pMaxCardValue) {
-				possibleCards.add(possibleLowCard);
-			}
-			else if(suitCount > 2
-					&& possibleLowCard.getPoints() <= pMaxCardValue) {
-				possibleCards.add(possibleLowCard);
-			}
-		}
-		
-		return possibleCards;
 	}
 }
