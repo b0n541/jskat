@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,7 +35,6 @@ import org.slf4j.LoggerFactory;
  * Holds Cards on a hand or in the Skat
  */
 public class CardList implements Iterable<Card> {
-
 	private static Logger log = LoggerFactory.getLogger(CardList.class);
 
 	protected List<Card> cards = new ArrayList<Card>();
@@ -76,13 +76,7 @@ public class CardList implements Iterable<Card> {
 	 * @return Immutable copy of a card list
 	 */
 	public CardList getImmutableCopy() {
-		CardList cardList = new CardList();
-		cardList.setCards(Collections.unmodifiableList(cards));
-		return cardList;
-	}
-
-	private void setCards(final List<Card> newCards) {
-		cards = newCards;
+		return new CardList(Collections.unmodifiableList(cards));
 	}
 
 	/**
@@ -215,21 +209,7 @@ public class CardList implements Iterable<Card> {
 	 * @return TRUE if the jack of the tested suit is in the CardList
 	 */
 	public boolean hasJack(final Suit suit) {
-
-		boolean result = false;
-
-		for (Card card : cards) {
-
-			if (card.getRank() == Rank.JACK) {
-
-				if (card.getSuit() == suit) {
-
-					result = true;
-				}
-			}
-		}
-
-		return result;
+		return cards.contains(Card.getCard(suit, Rank.JACK));
 	}
 
 	/**
@@ -359,7 +339,6 @@ public class CardList implements Iterable<Card> {
 	 * @return Number of trump cards for this suit
 	 */
 	public int getTrumpCount(final Suit trumpSuit) {
-
 		int count = 0;
 
 		for (Card card : cards) {
@@ -372,13 +351,6 @@ public class CardList implements Iterable<Card> {
 	}
 
 	/**
-	 * Changes two cards in the CardList Helper function for sorting
-	 */
-	private void changeCards(final int cardOne, final int cardTwo) {
-		Collections.swap(cards, cardOne, cardTwo);
-	}
-
-	/**
 	 * Sorts the Cards in the CardList according the sort type SkatConstants
 	 * 
 	 * @param gameType
@@ -387,28 +359,28 @@ public class CardList implements Iterable<Card> {
 	public void sort(final GameType gameType) {
 
 		if (gameType == null) {
-			sortGrandGame();
+			Collections.sort(cards, new SuitComparator(GameType.CLUBS));
 			return;
 		}
 		if (!containsHiddenCards()) {
 			switch (gameType) {
 			case NULL:
-				sortNullGame();
-				break;
-			case GRAND:
-				sortGrandGame();
+				Collections.sort(cards, new NullComparator());
 				break;
 			case RAMSCH:
-				sortRamschGame();
+				Collections.sort(cards, new RamschComparator());
 				break;
 			case CLUBS:
 			case SPADES:
 			case HEARTS:
 			case DIAMONDS:
-				sortSuitGame(gameType);
+				Collections.sort(cards, new SuitComparator(gameType));
+//				sortSuitGame(gameType);
 				break;
+			case GRAND:
 			default:
-				sortGrandGame();
+				Collections.sort(cards, new SuitComparator(GameType.CLUBS));
+//				sortGrandGame();
 				break;
 			}
 		}
@@ -425,126 +397,6 @@ public class CardList implements Iterable<Card> {
 		}
 
 		return result;
-	}
-
-	private void sortNullGame() {
-
-		for (int i = 0; i < cards.size() - 1; i++) {
-			for (int j = i + 1; j < cards.size(); j++) {
-
-				if (get(j).getSuit().getSuitOrder() > get(i).getSuit()
-						.getSuitOrder()
-						|| (get(j).getSuit() == get(i).getSuit() && get(j)
-								.getNullOrder() >= get(i).getNullOrder())) {
-
-					log.debug("i=" + i + ", j=" + j + ", " + get(i) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-							+ " vs. " + get(j) + ", cards(1): [" + this //$NON-NLS-1$ //$NON-NLS-2$
-							+ "]"); //$NON-NLS-1$
-
-					changeCards(i, j);
-				}
-			}
-		}
-	}
-
-	private int sortJacks() {
-
-		int sortedCards = 0;
-
-		// First find the Jacks
-		if (cards.contains(Card.CJ)) {
-
-			changeCards(sortedCards, getIndexOf(Card.CJ));
-			sortedCards++;
-		}
-		if (cards.contains(Card.SJ)) {
-
-			changeCards(sortedCards, getIndexOf(Card.SJ));
-			sortedCards++;
-		}
-		if (cards.contains(Card.HJ)) {
-
-			changeCards(sortedCards, getIndexOf(Card.HJ));
-			sortedCards++;
-		}
-		if (cards.contains(Card.DJ)) {
-
-			changeCards(sortedCards, getIndexOf(Card.DJ));
-			sortedCards++;
-		}
-
-		return sortedCards;
-	}
-
-	private void sortRamschGame() {
-
-		// first sort jacks
-		int sortedCards = sortJacks();
-
-		// then cycle through the colors for the remaining colors
-		for (int i = sortedCards; i < cards.size() - 1; i++) {
-			for (int j = i + 1; j < cards.size(); j++) {
-
-				if (get(j).getSuit().getSuitOrder() > get(i).getSuit()
-						.getSuitOrder()
-						|| (get(j).getSuit() == get(i).getSuit() && get(j)
-								.getRamschOrder() >= get(i).getRamschOrder())) {
-
-					//					log.debug("i=" + i + ", j=" + j + ", " + get(i) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-					//							+ " vs. " + get(j) + ", cards(1): [" + this //$NON-NLS-1$ //$NON-NLS-2$
-					//							+ "]"); //$NON-NLS-1$
-
-					changeCards(i, j);
-				}
-			}
-		}
-	}
-
-	private void sortSuitGame(final GameType gameType) {
-
-		log.debug("sort " + this + " according " + gameType); //$NON-NLS-1$ //$NON-NLS-2$
-		// first sort jacks
-		int sortedCards = sortJacks();
-
-		Suit trumpSuit = gameType.getTrumpSuit();
-
-		// then cycle through the colors for the remaining colors
-		for (int i = sortedCards; i < cards.size() - 1; i++) {
-			for (int j = i + 1; j < cards.size(); j++) {
-
-				if (// prefer trump cards
-				(get(j).getSuit() == trumpSuit && get(i).getSuit() != trumpSuit || get(
-						j).getSuit() == trumpSuit
-						&& get(i).getSuit() == trumpSuit
-						&& get(j).getSuitGrandOrder() >= get(i)
-								.getSuitGrandOrder())
-						||
-						// normal sorting, different suits
-						(get(j).getSuit() != trumpSuit
-								&& get(i).getSuit() != trumpSuit && get(j)
-								.getSuit().getSuitOrder() > get(i).getSuit()
-								.getSuitOrder()) ||
-						// normal sorting, same suits
-						(get(j).getSuit() == get(i).getSuit() && get(j)
-								.getSuitGrandOrder() >= get(i)
-								.getSuitGrandOrder())) {
-
-					//					log.debug("i=" + i + ", j=" + j + ", " + get(i) //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-					//							+ " vs. " + get(j) + ", cards(1): [" + this //$NON-NLS-1$ //$NON-NLS-2$
-					//							+ "]"); //$NON-NLS-1$
-
-					changeCards(i, j);
-				}
-			}
-		}
-
-		log.debug("result: " + this); //$NON-NLS-1$
-	}
-
-	private void sortGrandGame() {
-
-		// same order as club order
-		this.sortSuitGame(GameType.CLUBS);
 	}
 
 	/**
@@ -721,5 +573,95 @@ public class CardList implements Iterable<Card> {
 		} else if (!cards.equals(other.cards))
 			return false;
 		return true;
+	}
+	
+	private class NullComparator implements Comparator<Card> {
+		@Override
+		public int compare(Card first, Card second) {
+			if(first.getSuit().getSuitOrder() < second.getSuit().getSuitOrder())
+				return -1;
+			else if(first.getSuit().getSuitOrder() > second.getSuit().getSuitOrder())
+				return 1;
+			
+			if(first.getNullOrder() < second.getNullOrder())
+				return 1;
+			else
+				return -1;
+		}
+	}
+	
+	private class RamschComparator implements Comparator<Card> {
+		@Override
+		public int compare(Card first, Card second) {
+			// Buben VORNE
+			if(first.getRank() == Rank.JACK && second.getRank() == Rank.JACK) {
+				if(first.getSuit().getSuitOrder() < second.getSuit().getSuitOrder())
+					return -1;
+				else if(first.getSuit().getSuitOrder() > second.getSuit().getSuitOrder())
+					return 1;
+			}
+			else if(first.getRank() == Rank.JACK)
+				return -1;
+			else if(second.getRank() == Rank.JACK)
+				return 1;
+						
+			if(first.getSuit().getSuitOrder() < second.getSuit().getSuitOrder())
+				return -1;
+			else if(first.getSuit().getSuitOrder() > second.getSuit().getSuitOrder())
+				return 1;
+			
+			if(first.getRamschOrder() < second.getRamschOrder())
+				return 1;
+			else
+				return -1;
+		}
+	}
+	
+	private class SuitComparator implements Comparator<Card> {
+		private GameType gt;
+		
+		public SuitComparator(GameType pGameType) {
+			gt = pGameType;
+		}
+
+		@Override
+		public int compare(Card first, Card second) {
+			// Buben VORNE
+			if(first.getRank() == Rank.JACK && second.getRank() == Rank.JACK) {
+				if(first.getSuit().getSuitOrder() < second.getSuit().getSuitOrder())
+					return 1;
+				else if(first.getSuit().getSuitOrder() > second.getSuit().getSuitOrder())
+					return -1;
+			}
+			else if(first.getRank() == Rank.JACK)
+				return -1;
+			else if(second.getRank() == Rank.JACK)
+				return 1;
+			
+			// Trumpfkarten danach
+			if(first.getSuit() == gt.getTrumpSuit() && second.getSuit() != gt.getTrumpSuit()) {
+				return -1;
+			}
+			else if(first.getSuit() != gt.getTrumpSuit() && second.getSuit() == gt.getTrumpSuit()) {
+				return 1;
+			}
+			else if(first.getSuit() == gt.getTrumpSuit() && second.getSuit() == gt.getTrumpSuit()) {
+				if(first.getSuitGrandOrder() < second.getSuitGrandOrder())
+					return 1;
+				else
+					return -1;
+			}
+			
+			// Rest nach ordinal
+			if(first.getSuit().getSuitOrder() < second.getSuit().getSuitOrder())
+				return 1;
+			else if(first.getSuit().getSuitOrder() > second.getSuit().getSuitOrder())
+				return -1;
+			
+			if(first.getSuitGrandOrder() < second.getSuitGrandOrder())
+				return 1;
+			else
+				return -1;
+		}
 	}
 }
