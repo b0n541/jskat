@@ -106,21 +106,12 @@ public abstract class SuitGrandRamschRule extends AbstractSkatRule {
 	 */
 	@Override
 	public boolean hasSuit(GameType gameType, CardList hand, Suit suit) {
-
-		boolean result = false;
-
-		int index = 0;
-		while (result == false && index < hand.size()) {
-
-			if (hand.get(index).getSuit() == suit && !hand.get(index).isTrump(gameType)) {
-
-				result = true;
-			}
-
-			index++;
+		for(Card card : hand) {
+			if(card.getSuit() == suit
+					&& !card.isTrump(gameType))
+				return true;
 		}
-
-		return result;
+		return false;
 	}
 
 	/**
