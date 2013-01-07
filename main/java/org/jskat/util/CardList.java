@@ -375,12 +375,10 @@ public class CardList implements Iterable<Card> {
 			case HEARTS:
 			case DIAMONDS:
 				Collections.sort(cards, new SuitComparator(gameType));
-//				sortSuitGame(gameType);
 				break;
 			case GRAND:
 			default:
 				Collections.sort(cards, new SuitComparator(GameType.CLUBS));
-//				sortGrandGame();
 				break;
 			}
 		}
@@ -574,91 +572,100 @@ public class CardList implements Iterable<Card> {
 			return false;
 		return true;
 	}
-	
+
 	private class NullComparator implements Comparator<Card> {
 		@Override
 		public int compare(Card first, Card second) {
-			if(first.getSuit().getSuitOrder() < second.getSuit().getSuitOrder())
+			if (first.getSuit().getSuitOrder() < second.getSuit()
+					.getSuitOrder())
 				return -1;
-			else if(first.getSuit().getSuitOrder() > second.getSuit().getSuitOrder())
+			else if (first.getSuit().getSuitOrder() > second.getSuit()
+					.getSuitOrder())
 				return 1;
-			
-			if(first.getNullOrder() < second.getNullOrder())
+
+			if (first.getNullOrder() < second.getNullOrder())
 				return 1;
 			else
 				return -1;
 		}
 	}
-	
+
 	private class RamschComparator implements Comparator<Card> {
 		@Override
 		public int compare(Card first, Card second) {
-			// Buben VORNE
-			if(first.getRank() == Rank.JACK && second.getRank() == Rank.JACK) {
-				if(first.getSuit().getSuitOrder() < second.getSuit().getSuitOrder())
+			// first the jacks
+			if (first.getRank() == Rank.JACK && second.getRank() == Rank.JACK) {
+				if (first.getSuit().getSuitOrder() < second.getSuit()
+						.getSuitOrder())
 					return -1;
-				else if(first.getSuit().getSuitOrder() > second.getSuit().getSuitOrder())
+				else if (first.getSuit().getSuitOrder() > second.getSuit()
+						.getSuitOrder())
 					return 1;
-			}
-			else if(first.getRank() == Rank.JACK)
+			} else if (first.getRank() == Rank.JACK)
 				return -1;
-			else if(second.getRank() == Rank.JACK)
+			else if (second.getRank() == Rank.JACK)
 				return 1;
-						
-			if(first.getSuit().getSuitOrder() < second.getSuit().getSuitOrder())
+
+			if (first.getSuit().getSuitOrder() < second.getSuit()
+					.getSuitOrder())
 				return -1;
-			else if(first.getSuit().getSuitOrder() > second.getSuit().getSuitOrder())
+			else if (first.getSuit().getSuitOrder() > second.getSuit()
+					.getSuitOrder())
 				return 1;
-			
-			if(first.getRamschOrder() < second.getRamschOrder())
+
+			if (first.getRamschOrder() < second.getRamschOrder())
 				return 1;
 			else
 				return -1;
 		}
 	}
-	
+
 	private class SuitComparator implements Comparator<Card> {
-		private GameType gt;
-		
+		private GameType gameType;
+
 		public SuitComparator(GameType pGameType) {
-			gt = pGameType;
+			gameType = pGameType;
 		}
 
 		@Override
 		public int compare(Card first, Card second) {
-			// Buben VORNE
-			if(first.getRank() == Rank.JACK && second.getRank() == Rank.JACK) {
-				if(first.getSuit().getSuitOrder() < second.getSuit().getSuitOrder())
+			// first the jacks
+			if (first.getRank() == Rank.JACK && second.getRank() == Rank.JACK) {
+				if (first.getSuit().getSuitOrder() < second.getSuit()
+						.getSuitOrder())
 					return 1;
-				else if(first.getSuit().getSuitOrder() > second.getSuit().getSuitOrder())
+				else if (first.getSuit().getSuitOrder() > second.getSuit()
+						.getSuitOrder())
 					return -1;
-			}
-			else if(first.getRank() == Rank.JACK)
+			} else if (first.getRank() == Rank.JACK)
 				return -1;
-			else if(second.getRank() == Rank.JACK)
+			else if (second.getRank() == Rank.JACK)
 				return 1;
-			
-			// Trumpfkarten danach
-			if(first.getSuit() == gt.getTrumpSuit() && second.getSuit() != gt.getTrumpSuit()) {
+
+			// trump cards follow
+			if (first.getSuit() == gameType.getTrumpSuit()
+					&& second.getSuit() != gameType.getTrumpSuit()) {
 				return -1;
-			}
-			else if(first.getSuit() != gt.getTrumpSuit() && second.getSuit() == gt.getTrumpSuit()) {
+			} else if (first.getSuit() != gameType.getTrumpSuit()
+					&& second.getSuit() == gameType.getTrumpSuit()) {
 				return 1;
-			}
-			else if(first.getSuit() == gt.getTrumpSuit() && second.getSuit() == gt.getTrumpSuit()) {
-				if(first.getSuitGrandOrder() < second.getSuitGrandOrder())
+			} else if (first.getSuit() == gameType.getTrumpSuit()
+					&& second.getSuit() == gameType.getTrumpSuit()) {
+				if (first.getSuitGrandOrder() < second.getSuitGrandOrder())
 					return 1;
 				else
 					return -1;
 			}
-			
-			// Rest nach ordinal
-			if(first.getSuit().getSuitOrder() < second.getSuit().getSuitOrder())
+
+			// all the other cards
+			if (first.getSuit().getSuitOrder() < second.getSuit()
+					.getSuitOrder())
 				return 1;
-			else if(first.getSuit().getSuitOrder() > second.getSuit().getSuitOrder())
+			else if (first.getSuit().getSuitOrder() > second.getSuit()
+					.getSuitOrder())
 				return -1;
-			
-			if(first.getSuitGrandOrder() < second.getSuitGrandOrder())
+
+			if (first.getSuitGrandOrder() < second.getSuitGrandOrder())
 				return 1;
 			else
 				return -1;
