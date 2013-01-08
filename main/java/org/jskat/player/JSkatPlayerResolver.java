@@ -35,7 +35,8 @@ public class JSkatPlayerResolver {
 
 	private static Set<String> getAllImplementations() {
 		Set<String> result = new HashSet<String>();
-		Reflections reflections = new Reflections("");
+		Reflections reflections = new Reflections("org.jskat");
+
 		Set<Class<? extends AbstractJSkatPlayer>> subTypes = reflections
 				.getSubTypesOf(AbstractJSkatPlayer.class);
 		for (Class<? extends AbstractJSkatPlayer> jskatPlayer : subTypes) {
