@@ -44,7 +44,7 @@ public class MessageHandler extends Thread {
 
 	List<String> messageList;
 
-	private final static int protocolVersion = 15;
+	private final static int protocolVersion = 14;
 
 	/**
 	 * Constructor
@@ -415,6 +415,8 @@ public class MessageHandler extends Thread {
 		if ((int) issProtocolVersion != protocolVersion) {
 			// TODO handle this in JSkatMaster
 			log.error("Wrong protocol version!!!"); //$NON-NLS-1$
+			log.error("iss version: " + issProtocolVersion); //$NON-NLS-1$
+			log.error("local version: " + protocolVersion); //$NON-NLS-1$
 		}
 
 		issControl.showISSLobby(login);
