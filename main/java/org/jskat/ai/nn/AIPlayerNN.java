@@ -90,7 +90,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		setPlayerName(newPlayerName);
 
 		gameSimulator = new GameSimulator();
-		inputGenerator = new SimpleNetworkInputGenerator();
+		inputGenerator = new DetailedNetworkInputGenerator();
 
 		for (GameType gameType : GameType.values()) {
 			if (gameType != GameType.RAMSCH && gameType != GameType.PASSED_IN) {
