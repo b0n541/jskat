@@ -356,7 +356,6 @@ public class JSkatViewImpl implements JSkatView {
 		mainPanel.add(tabs, BorderLayout.CENTER);
 
 		mainFrame.setContentPane(mainPanel);
-		mainFrame.pack();
 
 		mainFrame.setIconImage(bitmaps.getIconImage(
 				JSkatGraphicRepository.Icon.JSKAT,
@@ -366,6 +365,8 @@ public class JSkatViewImpl implements JSkatView {
 		mainFrame.setPreferredSize(new Dimension(1000, 700));
 		mainFrame.setExtendedState(mainFrame.getExtendedState()
 				| Frame.MAXIMIZED_BOTH);
+
+		mainFrame.pack();
 	}
 
 	private JMenuBar getMenuBar() {
