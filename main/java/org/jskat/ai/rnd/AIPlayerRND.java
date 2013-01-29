@@ -182,11 +182,11 @@ public class AIPlayerRND extends AbstractJSkatPlayer {
 	public CardList getCardsToDiscard() {
 		final CardList result = new CardList();
 
+		CardList discardableCards = new CardList(knowledge.getOwnCards());
+
 		// just discard two random cards
-		result.add(knowledge.getOwnCards().get(
-				rand.nextInt(knowledge.getOwnCards().size())));
-		result.add(knowledge.getOwnCards().get(
-				rand.nextInt(knowledge.getOwnCards().size())));
+		result.add(discardableCards.remove(rand.nextInt(discardableCards.size())));
+		result.add(discardableCards.remove(rand.nextInt(discardableCards.size())));
 
 		return result;
 	}
