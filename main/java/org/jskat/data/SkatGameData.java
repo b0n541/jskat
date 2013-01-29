@@ -748,6 +748,13 @@ public class SkatGameData {
 	}
 
 	/**
+	 * Sets the skat cards to the declarer player
+	 */
+	public void addSkatCardsToDeclarer() {
+		playerHands.get(declarer).addAll(skat);
+	}
+
+	/**
 	 * Sets a new skat after discarding
 	 * 
 	 * @param player
@@ -758,10 +765,6 @@ public class SkatGameData {
 	public void setDiscardedSkat(final Player player, final CardList newSkat) {
 
 		final CardList hand = playerHands.get(player);
-
-		// add old skat to player's hand
-		hand.add(skat.get(0));
-		hand.add(skat.get(1));
 
 		// clear skat
 		skat.clear();

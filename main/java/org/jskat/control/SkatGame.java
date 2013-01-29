@@ -502,6 +502,7 @@ public class SkatGame extends JSkatThread {
 		// create a clone of the skat before sending it to the player
 		// otherwise the player could change the skat after discarding
 		activePlayer.takeSkat(data.getSkat());
+		data.addSkatCardsToDeclarer();
 
 		// ask player for the cards to be discarded
 		// cloning is done to prevent the player
@@ -541,7 +542,7 @@ public class SkatGame extends JSkatThread {
 			result = false;
 		} else if (!playerHasCard(player, discardedSkat.get(0))
 				|| !playerHasCard(player, discardedSkat.get(1))) {
-			log.error("Player is fooling!!! Player doesn't have had discarded card!"); //$NON-NLS-1$
+			log.error("Player is fooling!!! Player doesn't have had discarded card! Dis"); //$NON-NLS-1$
 			result = false;
 		}
 		// TODO check for jacks in the discarded skat in ramsch games
@@ -850,7 +851,7 @@ public class SkatGame extends JSkatThread {
 
 		boolean result = false;
 
-		log.debug("Player cards: " + data.getPlayerCards(skatPlayer)); //$NON-NLS-1$
+		log.debug("Player has card: player cards: " + data.getPlayerCards(skatPlayer) + " card to check: " + card); //$NON-NLS-1$
 
 		for (final Card handCard : data.getPlayerCards(skatPlayer)) {
 
