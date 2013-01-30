@@ -89,8 +89,8 @@ public class SkatGame extends JSkatThread {
 		player.put(Player.REARHAND, newRearHand);
 
 		// inform all players about the starting of the new game
-		for (final Player currPlayerPosition : player.keySet()) {
-			player.get(currPlayerPosition).newGame(currPlayerPosition);
+		for (final Player pos : player.keySet()) {
+			getPlayerInstance(pos).newGame(pos);
 		}
 
 		data = new SkatGameData();
@@ -143,7 +143,7 @@ public class SkatGame extends JSkatThread {
 			case RAMSCH_GRAND_HAND_ANNOUNCING:
 				boolean grandHandAnnounced = false;
 
-				for (final Player currPlayer : Player.values()) {
+				for (final Player currPlayer : Player.getOrderedList()) {
 					setActivePlayer(currPlayer);
 					if (!grandHandAnnounced && playGrandHand(currPlayer)) {
 						setDeclarer(currPlayer);
@@ -172,7 +172,7 @@ public class SkatGame extends JSkatThread {
 				}
 				break;
 			case SCHIEBERAMSCH:
-				for (final Player currPlayer : Player.values()) {
+				for (final Player currPlayer : Player.getOrderedList()) {
 					setActivePlayer(currPlayer);
 					if (!pickUpSkat(data.getActivePlayer())) {
 						log.debug(currPlayer + " schiebt"); //$NON-NLS-1$
@@ -238,11 +238,11 @@ public class SkatGame extends JSkatThread {
 	}
 
 	private boolean playGrandHand(final Player playerPosition) {
-		return player.get(playerPosition).playGrandHand();
+		return getPlayerInstance(playerPosition).playGrandHand();
 	}
 
 	private boolean pickUpSkat(final Player playerPosition) {
-		return player.get(playerPosition).pickUpSkat();
+		return getPlayerInstance(playerPosition).pickUpSkat();
 	}
 
 	/**
@@ -275,7 +275,7 @@ public class SkatGame extends JSkatThread {
 
 		// show cards in the view
 		final Map<Player, CardList> dealtCards = data.getDealtCards();
-		for (final Player currPlayer : Player.values()) {
+		for (final Player currPlayer : Player.getOrderedList()) {
 
 			view.addCards(tableName, currPlayer, dealtCards.get(currPlayer));
 		}
@@ -297,13 +297,13 @@ public class SkatGame extends JSkatThread {
 	 */
 	private void dealCards(final int cardCount) {
 
-		for (final Player hand : Player.values()) {
+		for (final Player hand : Player.getOrderedList()) {
 			// for all players
 			for (int j = 0; j < cardCount; j++) {
 				// deal amount of cards
 				final Card card = deck.remove(0);
 				// player can get original card object because Card is immutable
-				player.get(hand).takeCard(card);
+				getPlayerInstance(hand).takeCard(card);
 				data.setDealtCard(hand, card);
 			}
 		}
@@ -347,7 +347,7 @@ public class SkatGame extends JSkatThread {
 			view.setActivePlayer(tableName, Player.FOREHAND);
 
 			// check whether fore hand holds at least one bid
-			if (!(player.get(Player.FOREHAND).bidMore(18) > -1)) {
+			if (!(getPlayerInstance(Player.FOREHAND).bidMore(18) > -1)) {
 
 				log.debug("Fore hand passes too"); //$NON-NLS-1$
 				view.setPass(tableName, Player.FOREHAND);
@@ -394,11 +394,11 @@ public class SkatGame extends JSkatThread {
 		doSleep(maxSleep);
 	}
 
-	private void informPlayerAboutBid(final Player bidPlayer, final int bidValue) {
-
+	private void informPlayersAboutBid(final Player bidPlayer,
+			final int bidValue) {
 		// inform all players about the last bid
-		for (final Player currPlayerPosition : player.keySet()) {
-			player.get(currPlayerPosition).bidByPlayer(bidPlayer, bidValue);
+		for (final JSkatPlayer playerInstance : player.values()) {
+			playerInstance.bidByPlayer(bidPlayer, bidValue);
 		}
 	}
 
@@ -427,7 +427,7 @@ public class SkatGame extends JSkatThread {
 					.getNextBidValue(currBidValue);
 			view.setBidValueToMake(tableName, nextBidValue);
 			// ask player
-			final int announcerBidValue = player.get(announcer).bidMore(
+			final int announcerBidValue = getPlayerInstance(announcer).bidMore(
 					nextBidValue);
 
 			if (announcerBidValue > -1
@@ -441,17 +441,17 @@ public class SkatGame extends JSkatThread {
 
 				data.setBidValue(announcerBidValue);
 				data.setPlayerBid(announcer, announcerBidValue);
-				informPlayerAboutBid(announcer, announcerBidValue);
+				informPlayersAboutBid(announcer, announcerBidValue);
 				view.setBid(tableName, announcer, announcerBidValue, true);
 
-				if (player.get(hearer).holdBid(currBidValue)) {
+				if (getPlayerInstance(hearer).holdBid(currBidValue)) {
 
 					log.debug("hearer holds " + currBidValue); //$NON-NLS-1$
 
 					// hearing hand holds bid
 					data.setBidValue(announcerBidValue);
 					data.setPlayerBid(hearer, announcerBidValue);
-					informPlayerAboutBid(hearer, announcerBidValue);
+					informPlayersAboutBid(hearer, announcerBidValue);
 					view.setBid(tableName, hearer, announcerBidValue, false);
 
 				} else {
@@ -492,7 +492,8 @@ public class SkatGame extends JSkatThread {
 
 	private void discarding() {
 
-		final JSkatPlayer activePlayer = player.get(data.getActivePlayer());
+		final JSkatPlayer activePlayer = getPlayerInstance(data
+				.getActivePlayer());
 
 		log.debug("Player (" + activePlayer + ") looks into the skat..."); //$NON-NLS-1$ //$NON-NLS-2$
 		log.debug("Skat before discarding: " + data.getSkat()); //$NON-NLS-1$
@@ -555,7 +556,7 @@ public class SkatGame extends JSkatThread {
 		log.debug("declaring game..."); //$NON-NLS-1$
 
 		// TODO check for valid game announcements
-		final GameAnnouncement ann = player.get(data.getDeclarer())
+		final GameAnnouncement ann = getPlayerInstance(data.getDeclarer())
 				.announceGame();
 		if (ann != null) {
 			setGameAnnouncement(ann);
@@ -581,30 +582,14 @@ public class SkatGame extends JSkatThread {
 			view.setTrickNumber(tableName, trickNo + 1);
 
 			Player newTrickForeHand = null;
-			if (trickNo == 0) {
-				// first trick
-				newTrickForeHand = Player.FOREHAND;
-			} else {
-				// get trick winner as fore hand of next trick
-				newTrickForeHand = data.getTrickWinner(trickNo - 1);
-			}
+			newTrickForeHand = getTrickForeHand(trickNo);
 
 			view.setTrickForeHand(tableName, newTrickForeHand);
 			view.setActivePlayer(tableName, newTrickForeHand);
 
 			final Trick trick = new Trick(trickNo, newTrickForeHand);
 			data.addTrick(trick);
-			for (final Player currPosition : Player.values()) {
-				// inform all players
-				// cloning of trick information to prevent manipulation by
-				// player
-				try {
-					player.get(currPosition).newTrick((Trick) trick.clone());
-				} catch (final CloneNotSupportedException e) {
-					log.warn("should not happen: " + e.getClass() + " - " + e.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
-					player.get(currPosition).newTrick(trick);
-				}
-			}
+			informPlayersAboutNewTrick(trick);
 
 			// Ask players for their cards
 			log.debug("fore hand plays"); //$NON-NLS-1$
@@ -644,17 +629,7 @@ public class SkatGame extends JSkatThread {
 			data.addPlayerPoints(trickWinner, trick.getValue());
 			view.setPlayedTrick(tableName, trick);
 
-			for (final Player currPosition : Player.values()) {
-				// inform all players
-				// cloning of trick information to prevent manipulation by
-				// player
-				try {
-					player.get(currPosition).showTrick((Trick) trick.clone());
-				} catch (final CloneNotSupportedException e) {
-					log.warn("should not happen: " + e.getClass() + " - " + e.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
-					player.get(currPosition).showTrick(trick);
-				}
-			}
+			informPlayersAboutCompletedTrick(trick);
 
 			// Check for preliminary ending of a null game
 			if (GameType.NULL.equals(data.getGameType())) {
@@ -698,6 +673,47 @@ public class SkatGame extends JSkatThread {
 		}
 	}
 
+	private void informPlayersAboutCompletedTrick(final Trick trick) {
+		for (final Player currPosition : Player.getOrderedList()) {
+			// inform all players
+			// cloning of trick information to prevent manipulation by
+			// player
+			try {
+				getPlayerInstance(currPosition)
+						.showTrick((Trick) trick.clone());
+			} catch (final CloneNotSupportedException e) {
+				log.warn("should not happen: " + e.getClass() + " - " + e.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+				getPlayerInstance(currPosition).showTrick(trick);
+			}
+		}
+	}
+
+	private void informPlayersAboutNewTrick(final Trick trick) {
+		for (final Player currPosition : Player.getOrderedList()) {
+			// inform all players
+			// cloning of trick information to prevent manipulation by
+			// player
+			try {
+				getPlayerInstance(currPosition).newTrick((Trick) trick.clone());
+			} catch (final CloneNotSupportedException e) {
+				log.warn("should not happen: " + e.getClass() + " - " + e.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
+				getPlayerInstance(currPosition).newTrick(trick);
+			}
+		}
+	}
+
+	private Player getTrickForeHand(int trickNo) {
+		Player trickForeHand = null;
+		if (trickNo == 0) {
+			// first trick
+			trickForeHand = Player.FOREHAND;
+		} else {
+			// get trick winner as fore hand of next trick
+			trickForeHand = data.getTrickWinner(trickNo - 1);
+		}
+		return trickForeHand;
+	}
+
 	private void logPlayerPoints() {
 		log.debug("Points: forehand: " + data.getPlayerPoints(Player.FOREHAND) + //$NON-NLS-1$
 				" middlehand: " //$NON-NLS-1$
@@ -730,7 +746,7 @@ public class SkatGame extends JSkatThread {
 			final Player currPlayer) {
 
 		Card card = null;
-		final JSkatPlayer skatPlayer = getPlayerObject(currPlayer);
+		final JSkatPlayer skatPlayer = getPlayerInstance(currPlayer);
 
 		boolean cardAccepted = false;
 		boolean aiPlayerPlayedSchwarz = false;
@@ -759,7 +775,7 @@ public class SkatGame extends JSkatThread {
 
 			} else if (!playerHasCard(currPlayer, card)) {
 
-				log.error("Player (" + player.get(currPlayer) + ") is fooling!!! Doesn't have card " + card + "!"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+				log.error("Player (" + getPlayerInstance(currPlayer) + ") is fooling!!! Doesn't have card " + card + "!"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 
 				if (skatPlayer.isHumanPlayer()
 						|| JSkatOptions.instance().isCheatDebugMode()) {
@@ -825,19 +841,19 @@ public class SkatGame extends JSkatThread {
 
 			view.playTrickCard(tableName, currPlayer, card);
 
-			for (final Player currPosition : Player.values()) {
+			for (final JSkatPlayer playerInstance : player.values()) {
 				// inform all players
 				// cloning of card is not neccessary, because Card is immutable
-				player.get(currPosition).cardPlayed(currPlayer, card);
+				playerInstance.cardPlayed(currPlayer, card);
 			}
 
 			log.debug("playing card " + card); //$NON-NLS-1$
 		}
 	}
 
-	private JSkatPlayer getPlayerObject(final Player currPlayer) {
+	private JSkatPlayer getPlayerInstance(final Player position) {
 
-		return player.get(currPlayer);
+		return player.get(position);
 	}
 
 	/**
@@ -901,9 +917,9 @@ public class SkatGame extends JSkatThread {
 		log.debug("Final result: " + data.getDeclarerScore() + "/"
 				+ data.getOpponentScore());
 
-		for (final JSkatPlayer currPlayer : player.values()) {
-			currPlayer.setGameSummary(data.getGameSummary());
-			currPlayer.finalizeGame();
+		for (final JSkatPlayer playerInstance : player.values()) {
+			playerInstance.setGameSummary(data.getGameSummary());
+			playerInstance.finalizeGame();
 		}
 
 		doSleep(maxSleep);
@@ -962,8 +978,8 @@ public class SkatGame extends JSkatThread {
 		view.setGameAnnouncement(tableName, data.getDeclarer(), ann);
 
 		// inform all players
-		for (final JSkatPlayer currPlayer : player.values()) {
-			currPlayer.startGame(data.getDeclarer(), ann);
+		for (final JSkatPlayer playerInstance : player.values()) {
+			playerInstance.startGame(data.getDeclarer(), ann);
 		}
 
 		log.debug(".setGameAnnouncement(): " + data.getAnnoucement() + " by " + data.getDeclarer() + ", rules=" + rules); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
