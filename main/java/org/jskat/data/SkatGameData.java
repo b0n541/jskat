@@ -750,8 +750,8 @@ public class SkatGameData {
 	/**
 	 * Sets the skat cards to the declarer player
 	 */
-	public void addSkatCardsToDeclarer() {
-		playerHands.get(declarer).addAll(skat);
+	public void addSkatCardsToDiscardingPlayer(Player discardingPlayer) {
+		playerHands.get(discardingPlayer).addAll(skat);
 	}
 
 	/**

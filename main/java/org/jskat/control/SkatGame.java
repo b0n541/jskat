@@ -492,8 +492,8 @@ public class SkatGame extends JSkatThread {
 
 	private void discarding() {
 
-		final JSkatPlayer activePlayer = getPlayerInstance(data
-				.getActivePlayer());
+		final Player activePlayerPosition = data.getActivePlayer();
+		final JSkatPlayer activePlayer = getPlayerInstance(activePlayerPosition);
 
 		log.debug("Player (" + activePlayer + ") looks into the skat..."); //$NON-NLS-1$ //$NON-NLS-2$
 		log.debug("Skat before discarding: " + data.getSkat()); //$NON-NLS-1$
@@ -503,7 +503,7 @@ public class SkatGame extends JSkatThread {
 		// create a clone of the skat before sending it to the player
 		// otherwise the player could change the skat after discarding
 		activePlayer.takeSkat(data.getSkat());
-		data.addSkatCardsToDeclarer();
+		data.addSkatCardsToDiscardingPlayer(activePlayerPosition);
 
 		// ask player for the cards to be discarded
 		// cloning is done to prevent the player
