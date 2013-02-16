@@ -262,7 +262,7 @@ public class MessageParser {
 			// middle hand move
 			info.setMovePlayer(MovePlayer.MIDDLEHAND);
 		} else if ("2".equals(movePlayer)) { //$NON-NLS-1$
-			// hind hand move
+			// rear hand move
 			info.setMovePlayer(MovePlayer.REARHAND);
 		}
 	}
