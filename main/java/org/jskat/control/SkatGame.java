@@ -75,7 +75,7 @@ public class SkatGame extends JSkatThread {
 	 * @param newMiddleHand
 	 *            Middle hand player
 	 * @param newRearHand
-	 *            Hind hand player
+	 *            Rear hand player
 	 */
 	public SkatGame(final String newTableName, final GameVariant variant,
 			final JSkatPlayer newForeHand, final JSkatPlayer newMiddleHand,
@@ -285,7 +285,7 @@ public class SkatGame extends JSkatThread {
 		log.debug("Fore hand: " + data.getPlayerCards(Player.FOREHAND)); //$NON-NLS-1$
 		log.debug("Middle hand: " //$NON-NLS-1$
 				+ data.getPlayerCards(Player.MIDDLEHAND));
-		log.debug("Hind hand: " + data.getPlayerCards(Player.REARHAND)); //$NON-NLS-1$
+		log.debug("Rear hand: " + data.getPlayerCards(Player.REARHAND)); //$NON-NLS-1$
 		log.debug("Skat: " + data.getSkat()); //$NON-NLS-1$
 	}
 
@@ -330,7 +330,7 @@ public class SkatGame extends JSkatThread {
 				Player.FOREHAND);
 
 		log.debug("First bidding winner: " + firstWinner); //$NON-NLS-1$
-		log.debug("ask hind hand and first winner..."); //$NON-NLS-1$
+		log.debug("ask rear hand and first winner..."); //$NON-NLS-1$
 
 		bidValue = twoPlayerBidding(Player.REARHAND, firstWinner, bidValue);
 
@@ -612,7 +612,7 @@ public class SkatGame extends JSkatThread {
 
 			doSleep(maxSleep);
 
-			log.debug("hind hand plays"); //$NON-NLS-1$
+			log.debug("rear hand plays"); //$NON-NLS-1$
 			view.setActivePlayer(tableName, newTrickForeHand.getRightNeighbor());
 			playCard(trick, newTrickForeHand,
 					newTrickForeHand.getRightNeighbor());
