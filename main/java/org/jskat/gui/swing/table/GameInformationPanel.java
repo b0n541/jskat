@@ -124,7 +124,7 @@ class GameInformationPanel extends JPanel {
 
 	private void refreshText() {
 
-		StringBuffer text = new StringBuffer(); //$NON-NLS-1$
+		StringBuffer text = new StringBuffer();
 
 		appendGameNumber(text);
 
@@ -159,9 +159,9 @@ class GameInformationPanel extends JPanel {
 		if (gameType != GameType.NULL && gameType != GameType.PASSED_IN) {
 			text.append(" - "); //$NON-NLS-1$
 
-			text.append(strings.getString("declarer") + ": " + declarerPoints + " " + strings.getString("points")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ 
-			text.append(", " + strings.getString("opponents") + ": " //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
-					+ opponentPoints + " " + strings.getString("points")); //$NON-NLS-1$//$NON-NLS-2$
+			text.append(declarerPoints + " " + strings.getString("versus")
+					+ " ");
+			text.append(opponentPoints + " " + strings.getString("points")); //$NON-NLS-1$//$NON-NLS-2$
 		}
 	}
 
