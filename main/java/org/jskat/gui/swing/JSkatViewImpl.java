@@ -657,6 +657,14 @@ public class JSkatViewImpl implements JSkatView {
 		case GAME_START:
 			actions.get(JSkatAction.CONTINUE_LOCAL_SERIES).setEnabled(false);
 			break;
+		case BIDDING:
+			actions.get(JSkatAction.MAKE_BID).setEnabled(true);
+			actions.get(JSkatAction.HOLD_BID).setEnabled(true);
+			break;
+		case DISCARDING:
+			actions.get(JSkatAction.MAKE_BID).setEnabled(false);
+			actions.get(JSkatAction.HOLD_BID).setEnabled(false);
+			break;
 		case GAME_OVER:
 			actions.get(JSkatAction.CONTINUE_LOCAL_SERIES).setEnabled(true);
 			break;
