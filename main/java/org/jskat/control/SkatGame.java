@@ -194,9 +194,9 @@ public class SkatGame extends JSkatThread {
 				break;
 			case PICKING_UP_SKAT:
 				setActivePlayer(data.getDeclarer());
+				setGameState(GameState.DISCARDING);
 				if (pickUpSkat(data.getDeclarer())) {
 					data.setDeclarerPickedUpSkat(true);
-					setGameState(GameState.DISCARDING);
 					view.setSkat(tableName, data.getSkat());
 				} else {
 					setGameState(GameState.DECLARING);
