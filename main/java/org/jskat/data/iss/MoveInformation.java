@@ -258,10 +258,11 @@ public class MoveInformation {
 
 	/**
 	 * Sets all cards after dealing, list contains cards from fore hand, middle
-	 * hand, hind hand and skat
+	 * hand, rear hand and skat
 	 * 
 	 * @param deal
 	 */
+	// FIXME: parameter deal should be a Map
 	public void setDealCards(final List<CardList> deal) {
 
 		foreHandCards = deal.get(0);
