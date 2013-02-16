@@ -50,7 +50,8 @@ public abstract class AbstractSkatRule implements SkatRule {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public Player calculateTrickWinner(final GameType gameType, final Trick trick) {
+	public Player calculateTrickWinner(final GameType gameType,
+			final Trick trick) {
 
 		Player trickWinner = null;
 		Card first = trick.getFirstCard();
@@ -61,7 +62,7 @@ public abstract class AbstractSkatRule implements SkatRule {
 		if (isCardBeatsCard(gameType, first, second)) {
 
 			if (isCardBeatsCard(gameType, second, third)) {
-				// trick winner is hind hand
+				// trick winner is rear hand
 				trickWinner = trickForeHand.getRightNeighbor();
 			} else {
 				// trick winner is middle hand
@@ -70,7 +71,7 @@ public abstract class AbstractSkatRule implements SkatRule {
 		} else {
 
 			if (isCardBeatsCard(gameType, first, third)) {
-				// trick winner is hind hand
+				// trick winner is rear hand
 				trickWinner = trickForeHand.getRightNeighbor();
 			} else {
 				// trick winner is fore hand
