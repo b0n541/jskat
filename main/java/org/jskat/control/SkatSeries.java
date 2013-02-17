@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.gui.JSkatView;
@@ -260,6 +261,15 @@ public class SkatSeries extends JSkatThread {
 	public SeriesState getSeriesState() {
 
 		return data.getState();
+	}
+
+	/**
+	 * Gets the game state of the current game
+	 * 
+	 * @return Game state
+	 */
+	public GameState getGameState() {
+		return data.getGameState();
 	}
 
 	/**

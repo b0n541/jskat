@@ -132,15 +132,16 @@ public class JSkatMaster {
 
 	private void createLocalTable(final String tableName,
 			final AbstractHumanJSkatPlayer humanPlayer) {
+
 		SkatTable table = new SkatTable(data.getTableOptions());
 		table.setName(tableName);
+		table.setView(view);
 		data.addSkatTable(table);
 		data.registerHumanPlayerObject(table, humanPlayer);
 
 		view.createSkatTablePanel(table.getName());
-		data.setActiveTable(table.getName());
 
-		table.setView(view);
+		data.setActiveTable(table.getName());
 	}
 
 	/**
@@ -172,7 +173,7 @@ public class JSkatMaster {
 	 */
 	public void startSeries() {
 
-		log.debug(data.getActiveTable());
+		log.debug("starting new skat series on table: " + data.getActiveTable());
 
 		view.showStartSkatSeriesDialog();
 	}
@@ -644,6 +645,12 @@ public class JSkatMaster {
 	public void setActiveTable(final String tableName) {
 
 		data.setActiveTable(tableName);
+
+		if (data.isExistingSkatTable(tableName)
+				|| data.isTableJoined(tableName)) {
+			view.setGameState(tableName, data.getSkatTable(tableName)
+					.getGameState());
+		}
 	}
 
 	/**

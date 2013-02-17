@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jskat.control.SkatGame;
+import org.jskat.data.SkatGameData.GameState;
 import org.jskat.util.Player;
 
 /**
@@ -82,6 +83,15 @@ public class SkatSeriesData {
 	public void setState(SeriesState newState) {
 
 		this.state = newState;
+	}
+
+	/**
+	 * Gets the game state of the current game
+	 * 
+	 * @return Game state
+	 */
+	public GameState getGameState() {
+		return games.get(games.size() - 1).getGameState();
 	}
 
 	/**

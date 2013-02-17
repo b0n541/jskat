@@ -64,7 +64,7 @@ public enum JSkatAction {
 	 */
 	CREATE_LOCAL_TABLE,
 	/**
-	 * Recognizes a change of the acitve skat table
+	 * Recognizes a change of the active skat table
 	 */
 	CHANGE_ACTIVE_TABLE,
 	/**

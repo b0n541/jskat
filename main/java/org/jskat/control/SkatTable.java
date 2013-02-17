@@ -22,6 +22,7 @@ package org.jskat.control;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.SkatTableOptions;
 import org.jskat.gui.JSkatView;
@@ -74,7 +75,8 @@ public class SkatTable {
 	 * @param unlimitedRounds
 	 * @param onlyPlayRamsch
 	 */
-	public void startSkatSeries(final int rounds, final boolean unlimitedRounds, final boolean onlyPlayRamsch,
+	public void startSkatSeries(final int rounds,
+			final boolean unlimitedRounds, final boolean onlyPlayRamsch,
 			final int sleepBetweenMoves) {
 
 		if (!isSeriesRunning()) {
@@ -214,6 +216,18 @@ public class SkatTable {
 	public SeriesState getSeriesState() {
 
 		return series.getSeriesState();
+	}
+
+	/**
+	 * Gets the game state of the current game
+	 * 
+	 * @return Game state
+	 */
+	public GameState getGameState() {
+		if (series != null) {
+			return series.getGameState();
+		}
+		return GameState.GAME_START;
 	}
 
 	/**

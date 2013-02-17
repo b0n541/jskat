@@ -1100,4 +1100,13 @@ public class SkatGame extends JSkatThread {
 	public GameAnnouncement getGameAnnouncement() {
 		return data.getAnnoucement();
 	}
+
+	/**
+	 * Gets the game state
+	 * 
+	 * @return Game state
+	 */
+	public GameState getGameState() {
+		return data.getGameState();
+	}
 }

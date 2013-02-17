@@ -95,7 +95,8 @@ public class JSkatApplicationData {
 	 * @param skatTable
 	 * @param humanPlayer
 	 */
-	synchronized public void registerHumanPlayerObject(final SkatTable skatTable,
+	synchronized public void registerHumanPlayerObject(
+			final SkatTable skatTable,
 			final AbstractHumanJSkatPlayer humanPlayer) {
 		humanPlayers.put(skatTable.getName(), humanPlayer);
 	}
@@ -122,7 +123,8 @@ public class JSkatApplicationData {
 		SkatTable result = skatTables.get(tableName);
 
 		if (result == null) {
-			throw new IllegalArgumentException("Unknown table name: " + tableName); //$NON-NLS-1$
+			throw new IllegalArgumentException(
+					"Unknown table name: " + tableName); //$NON-NLS-1$
 		}
 
 		return result;
@@ -263,6 +265,17 @@ public class JSkatApplicationData {
 	 */
 	public boolean isFreeTableName(final String tableName) {
 
-		return !skatTables.keySet().contains(tableName);
+		return !isExistingSkatTable(tableName);
+	}
+
+	/**
+	 * Checks whether the table is a local table or not
+	 * 
+	 * @param tableName
+	 *            Table name
+	 * @return TRUE, if the table is a local table
+	 */
+	public boolean isExistingSkatTable(String tableName) {
+		return skatTables.keySet().contains(tableName);
 	}
 }
