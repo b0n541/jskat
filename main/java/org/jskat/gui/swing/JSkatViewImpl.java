@@ -514,8 +514,8 @@ public class JSkatViewImpl implements JSkatView {
 	public void createSkatTablePanel(final String name) {
 
 		final SkatTablePanel newPanel = new SkatTablePanel(this, name, actions);
-		addTabPanel(newPanel, name);
 		tables.put(name, newPanel);
+		addTabPanel(newPanel, name);
 
 		actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(true);
 	}
@@ -660,10 +660,12 @@ public class JSkatViewImpl implements JSkatView {
 		case BIDDING:
 			actions.get(JSkatAction.MAKE_BID).setEnabled(true);
 			actions.get(JSkatAction.HOLD_BID).setEnabled(true);
+			actions.get(JSkatAction.PASS_BID).setEnabled(true);
 			break;
 		case DISCARDING:
 			actions.get(JSkatAction.MAKE_BID).setEnabled(false);
 			actions.get(JSkatAction.HOLD_BID).setEnabled(false);
+			actions.get(JSkatAction.PASS_BID).setEnabled(false);
 			break;
 		case GAME_OVER:
 			actions.get(JSkatAction.CONTINUE_LOCAL_SERIES).setEnabled(true);
