@@ -647,7 +647,7 @@ public class JSkatMaster {
 		data.setActiveTable(tableName);
 
 		if (data.isExistingSkatTable(tableName)
-				|| data.isTableJoined(tableName)) {
+		/* || data.isTableJoined(tableName) */) {
 			view.setGameState(tableName, data.getSkatTable(tableName)
 					.getGameState());
 		}
