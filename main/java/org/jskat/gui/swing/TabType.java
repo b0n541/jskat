@@ -24,7 +24,10 @@ package org.jskat.gui.swing;
  * Enumeration for all types of tabs
  */
 enum TabType {
-
+	/**
+	 * Welcome screen
+	 */
+	WELCOME_SCREEN,
 	/**
 	 * Local JSkat table
 	 */
