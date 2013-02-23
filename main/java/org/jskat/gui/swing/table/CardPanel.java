@@ -190,7 +190,7 @@ class CardPanel extends JPanel {
 
 				image = bitmaps.getCardImage(null, null);
 			} else {
-				if (bitmaps == null || card == null) {
+				if (card == null) {
 					// e.g. in debug mode
 					image = bitmaps.getCardImage(null, null);
 				} else {
