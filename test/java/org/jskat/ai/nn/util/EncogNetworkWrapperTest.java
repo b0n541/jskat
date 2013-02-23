@@ -36,12 +36,17 @@ import org.slf4j.LoggerFactory;
 
 public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 
+	private static final int MAX_RUNS = 10000;
 	private static final double MIN_DIFF = 0.001;
 	private static Logger log = LoggerFactory
 			.getLogger(EncogNetworkWrapperTest.class);
 
+	/**
+	 * Tests the {@link EncogNetworkWrapper} with a boolean statement (A AND B
+	 * OR C).
+	 */
 	@Test
-	public void testBooleanFunction() {
+	public final void testBooleanFunction() {
 
 		int[] hiddenNeurons = { 3 };
 		NetworkTopology topo = new NetworkTopology(3, 1, 1, hiddenNeurons);
@@ -56,8 +61,11 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 		// assertTrue(network.adjustWeights(input, output) < 0.5);
 	}
 
+	/**
+	 * Tests the NetworkWrapper with an XOR example.
+	 */
 	@Test
-	public void testXOR() {
+	public final void testXOR() {
 
 		int[] hiddenNeurons = { 3 };
 		NetworkTopology topo = new NetworkTopology(2, 1, 1, hiddenNeurons);
@@ -75,23 +83,25 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 		int i = 0;
 		int runs = 0;
 
-		while (error > MIN_DIFF && runs < 10000) {
+		while (error > MIN_DIFF && runs < MAX_RUNS) {
 			network.adjustWeights(input[i], output[i]);
 			error = network.getAvgDiff();
 			i = (i + 1) % input.length;
 			runs++;
 		}
 
-		if (runs == 10000) {
-			fail("Needed more than 10000 runs. Error: " + error);
+		if (runs == MAX_RUNS) {
+			fail("Needed more than " + MAX_RUNS + " runs. Error: " + error);
 		} else {
 			log.debug("Needed " + runs + " to learn.");
 		}
 	}
 
+	/**
+	 * Tests the Encog-Network directly with an XOR example.
+	 */
 	@Test
-	public void testXORDirect() {
-
+	public final void testXORDirect() {
 		BasicNetwork network = new BasicNetwork();
 		network.addLayer(new BasicLayer(new ActivationSigmoid(), true, 2));
 		network.addLayer(new BasicLayer(new ActivationSigmoid(), true, 3));
