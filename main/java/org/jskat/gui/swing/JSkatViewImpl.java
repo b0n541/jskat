@@ -26,8 +26,6 @@ import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -262,49 +260,7 @@ public class JSkatViewImpl implements JSkatView {
 
 		mainFrame = new JFrame("JSkat"); //$NON-NLS-1$
 
-		mainFrame.addWindowListener(new WindowListener() {
-
-			@Override
-			public void windowClosing(final WindowEvent e) {
-				jskat.exitJSkat();
-			}
-
-			@Override
-			public void windowOpened(final WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowClosed(final WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowIconified(final WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowDeiconified(final WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowActivated(final WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowDeactivated(final WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+		mainFrame.addWindowListener(new JSkatWindowAdapter(jskat));
 
 		mainFrame.setJMenuBar(getMenuBar());
 
