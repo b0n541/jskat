@@ -51,7 +51,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SkatGame extends JSkatThread {
 
-	private static Logger log = LoggerFactory.getLogger(SkatGame.class);
+	private Logger log = LoggerFactory.getLogger(SkatGame.class);
 	private int maxSleep;
 	private final SkatGameData data;
 	private final GameVariant variant;

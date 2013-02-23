@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
-	private static Logger log = LoggerFactory.getLogger(AbstractJSkatPlayer.class);
+	private Logger log = LoggerFactory.getLogger(AbstractJSkatPlayer.class);
 
 	/** Player name */
 	protected String playerName;
@@ -113,7 +113,8 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void startGame(final Player newDeclarer, final GameAnnouncement game) {
+	public final void startGame(final Player newDeclarer,
+			final GameAnnouncement game) {
 
 		playerState = PlayerState.PLAYING;
 		knowledge.setDeclarer(newDeclarer);
@@ -186,7 +187,8 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 		for (Card card : knowledge.getOwnCards()) {
 
 			if (trick.size() > 0
-					&& rules.isCardAllowed(knowledge.getGameType(), trick.get(0), knowledge.getOwnCards(), card)) {
+					&& rules.isCardAllowed(knowledge.getGameType(),
+							trick.get(0), knowledge.getOwnCards(), card)) {
 
 				log.debug("initial card: " + trick.get(0)); //$NON-NLS-1$
 				isCardAllowed = true;
@@ -258,7 +260,8 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 		boolean result = false;
 
 		if (GameType.RAMSCH.equals(knowledge.getGameType())
-				|| knowledge.getDeclarer().equals(knowledge.getPlayerPosition())) {
+				|| knowledge.getDeclarer()
+						.equals(knowledge.getPlayerPosition())) {
 
 			result = true;
 		}
