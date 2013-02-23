@@ -32,17 +32,17 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This class helps in finding interesting games from the game library provided
- * by the ISS team
+ * by the ISS team.
  */
 public class IssGameExtractor {
-
-	private static String filePath;
-
+	/**
+	 * Logger.
+	 */
 	private static Logger log = LoggerFactory.getLogger(IssGameExtractor.class);
-
-	public IssGameExtractor() {
-
-	}
+	/**
+	 * Path to the file with the game informations.
+	 */
+	private static String filePath;
 
 	public static void main(final String args[]) throws Exception {
 
@@ -89,9 +89,10 @@ public class IssGameExtractor {
 	}
 
 	/**
-	 * Sets the path to the game database
+	 * Sets the path to the game database.
 	 * 
 	 * @param newFilePath
+	 *            File path
 	 */
 	public static void setFilePath(final String newFilePath) {
 		filePath = newFilePath;
