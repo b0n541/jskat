@@ -34,10 +34,9 @@ public class JSkatApplicationData {
 
 	private volatile static JSkatApplicationData instance = null;
 
-	private int localTablesCreated = 0;
 	private final JSkatOptions options;
 	private final Map<String, SkatTable> skatTables;
-	private String activeTable;
+	private String activeView;
 	private String issLoginName;
 	private final Set<String> availableIssPlayer;
 	private final Set<String> joinedIssTables;
@@ -73,7 +72,7 @@ public class JSkatApplicationData {
 	/**
 	 * Removes a local skat table
 	 */
-	synchronized public void removeSkatTable(final String tableName) {
+	synchronized public void removeLocalSkatTable(final String tableName) {
 		skatTables.remove(tableName);
 		humanPlayers.remove(tableName);
 	}
@@ -84,9 +83,8 @@ public class JSkatApplicationData {
 	 * @param newSkatTable
 	 *            New local table
 	 */
-	synchronized public void addSkatTable(final SkatTable newSkatTable) {
+	synchronized public void addLocalSkatTable(final SkatTable newSkatTable) {
 		skatTables.put(newSkatTable.getName(), newSkatTable);
-		localTablesCreated++;
 	}
 
 	/**
@@ -108,7 +106,7 @@ public class JSkatApplicationData {
 	 */
 	public int getLocalTablesCreated() {
 
-		return localTablesCreated;
+		return skatTables.size();
 	}
 
 	/**
@@ -141,29 +139,34 @@ public class JSkatApplicationData {
 	}
 
 	/**
-	 * Sets the active table
+	 * Sets the active view
 	 * 
-	 * @param newActiveTable
-	 *            New active table
+	 * @param newActiveView
+	 *            New active view
 	 */
-	public void setActiveTable(final String newActiveTable) {
+	public void setActiveView(JSkatViewType type, String newActiveView) {
 
-		if (!skatTables.containsKey(newActiveTable)) {
-			// table is not known yet --> comes from ISS
-			joinedIssTables.add(newActiveTable);
+		if (type == JSkatViewType.ISS_TABLE) {
+			joinedIssTables.add(newActiveView);
 		}
 
-		activeTable = newActiveTable;
+		if (!skatTables.containsKey(newActiveView)
+				&& type == JSkatViewType.ISS_TABLE) {
+			// table is not known yet --> comes from ISS
+			joinedIssTables.add(newActiveView);
+		}
+
+		activeView = newActiveView;
 	}
 
 	/**
-	 * Gets the active table
+	 * Gets the active view
 	 * 
-	 * @return Active table
+	 * @return Active view
 	 */
-	public String getActiveTable() {
+	public String getActiveView() {
 
-		return activeTable;
+		return activeView;
 	}
 
 	/**
