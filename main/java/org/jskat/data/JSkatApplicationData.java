@@ -35,11 +35,11 @@ public class JSkatApplicationData {
 	private volatile static JSkatApplicationData instance = null;
 
 	private final JSkatOptions options;
-	private final Map<String, SkatTable> skatTables;
+	private final Map<String, SkatTable> localSkatTables;
+	private final Set<String> joinedIssTables;
 	private String activeView;
 	private String issLoginName;
 	private final Set<String> availableIssPlayer;
-	private final Set<String> joinedIssTables;
 	private final Map<String, AbstractHumanJSkatPlayer> humanPlayers;
 
 	/**
@@ -63,7 +63,7 @@ public class JSkatApplicationData {
 	private JSkatApplicationData() {
 
 		options = JSkatOptions.instance();
-		skatTables = new HashMap<String, SkatTable>();
+		localSkatTables = new HashMap<String, SkatTable>();
 		humanPlayers = new HashMap<String, AbstractHumanJSkatPlayer>();
 		availableIssPlayer = new HashSet<String>();
 		joinedIssTables = new HashSet<String>();
@@ -73,7 +73,7 @@ public class JSkatApplicationData {
 	 * Removes a local skat table
 	 */
 	synchronized public void removeLocalSkatTable(final String tableName) {
-		skatTables.remove(tableName);
+		localSkatTables.remove(tableName);
 		humanPlayers.remove(tableName);
 	}
 
@@ -84,7 +84,7 @@ public class JSkatApplicationData {
 	 *            New local table
 	 */
 	synchronized public void addLocalSkatTable(final SkatTable newSkatTable) {
-		skatTables.put(newSkatTable.getName(), newSkatTable);
+		localSkatTables.put(newSkatTable.getName(), newSkatTable);
 	}
 
 	/**
@@ -106,7 +106,7 @@ public class JSkatApplicationData {
 	 */
 	public int getLocalTablesCreated() {
 
-		return skatTables.size();
+		return localSkatTables.size();
 	}
 
 	/**
@@ -116,9 +116,9 @@ public class JSkatApplicationData {
 	 *            Table name
 	 * @return Skat table
 	 */
-	public SkatTable getSkatTable(final String tableName) {
+	public SkatTable getLocalSkatTable(final String tableName) {
 
-		SkatTable result = skatTables.get(tableName);
+		SkatTable result = localSkatTables.get(tableName);
 
 		if (result == null) {
 			throw new IllegalArgumentException(
@@ -147,12 +147,6 @@ public class JSkatApplicationData {
 	public void setActiveView(JSkatViewType type, String newActiveView) {
 
 		if (type == JSkatViewType.ISS_TABLE) {
-			joinedIssTables.add(newActiveView);
-		}
-
-		if (!skatTables.containsKey(newActiveView)
-				&& type == JSkatViewType.ISS_TABLE) {
-			// table is not known yet --> comes from ISS
 			joinedIssTables.add(newActiveView);
 		}
 
@@ -268,7 +262,7 @@ public class JSkatApplicationData {
 	 */
 	public boolean isFreeTableName(final String tableName) {
 
-		return !isExistingSkatTable(tableName);
+		return !isExistingLocalSkatTable(tableName);
 	}
 
 	/**
@@ -278,7 +272,7 @@ public class JSkatApplicationData {
 	 *            Table name
 	 * @return TRUE, if the table is a local table
 	 */
-	public boolean isExistingSkatTable(String tableName) {
-		return skatTables.keySet().contains(tableName);
+	public boolean isExistingLocalSkatTable(String tableName) {
+		return localSkatTables.keySet().contains(tableName);
 	}
 }

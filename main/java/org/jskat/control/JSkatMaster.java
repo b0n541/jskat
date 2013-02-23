@@ -201,7 +201,7 @@ public class JSkatMaster {
 
 		log.debug(data.getActiveView());
 
-		SkatTable table = data.getSkatTable(data.getActiveView());
+		SkatTable table = data.getLocalSkatTable(data.getActiveView());
 
 		table.removePlayers();
 
@@ -246,7 +246,7 @@ public class JSkatMaster {
 	 */
 	public void pauseSkatSeries(final String tableName) {
 
-		SkatTable table = data.getSkatTable(tableName);
+		SkatTable table = data.getLocalSkatTable(tableName);
 
 		if (table.isSeriesRunning()) {
 
@@ -272,7 +272,7 @@ public class JSkatMaster {
 	 */
 	public void resumeSkatSeries(final String tableName) {
 
-		SkatTable table = data.getSkatTable(tableName);
+		SkatTable table = data.getLocalSkatTable(tableName);
 
 		if (table.isSeriesRunning()) {
 
@@ -288,7 +288,7 @@ public class JSkatMaster {
 	 */
 	public void pauseSkatGame(final String tableName) {
 
-		SkatTable table = data.getSkatTable(tableName);
+		SkatTable table = data.getLocalSkatTable(tableName);
 
 		if (table.isSeriesRunning()) {
 
@@ -304,7 +304,7 @@ public class JSkatMaster {
 	 */
 	public void resumeSkatGame(final String tableName) {
 
-		SkatTable table = data.getSkatTable(tableName);
+		SkatTable table = data.getLocalSkatTable(tableName);
 
 		if (table.isSeriesRunning()) {
 
@@ -323,7 +323,7 @@ public class JSkatMaster {
 
 		boolean result = false;
 
-		SkatTable table = data.getSkatTable(tableName);
+		SkatTable table = data.getLocalSkatTable(tableName);
 
 		if (table.isSeriesRunning()) {
 
@@ -344,7 +344,7 @@ public class JSkatMaster {
 
 		boolean result = false;
 
-		SkatTable table = data.getSkatTable(tableName);
+		SkatTable table = data.getLocalSkatTable(tableName);
 
 		if (table.isSeriesRunning()) {
 
@@ -368,7 +368,7 @@ public class JSkatMaster {
 
 		boolean result = false;
 
-		SkatTable table = data.getSkatTable(tableName);
+		SkatTable table = data.getLocalSkatTable(tableName);
 
 		if (!table.isSeriesRunning()) {
 
@@ -642,7 +642,7 @@ public class JSkatMaster {
 	}
 
 	public void setActiveTable(String tableName) {
-		if (data.isExistingSkatTable(tableName)) {
+		if (data.isExistingLocalSkatTable(tableName)) {
 			setActiveTable(JSkatViewType.LOCAL_TABLE, tableName);
 		} else if (data.isTableJoined(tableName)) {
 			setActiveTable(JSkatViewType.ISS_TABLE, tableName);
@@ -666,7 +666,7 @@ public class JSkatMaster {
 		}
 
 		if (type == JSkatViewType.LOCAL_TABLE) {
-			view.setGameState(tableName, data.getSkatTable(tableName)
+			view.setGameState(tableName, data.getLocalSkatTable(tableName)
 					.getGameState());
 		}
 	}
