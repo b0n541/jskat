@@ -68,6 +68,7 @@ public class SkatNetworks {
 	private SkatNetworks() {
 
 		createNetworks();
+		loadNetworks();
 	}
 
 	/**
