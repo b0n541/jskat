@@ -453,7 +453,7 @@ public class JSkatMaster {
 	 * Loads the weigths for the neural networks
 	 */
 	public void loadNeuralNetworks() {
-		SkatNetworks.instance().loadNetworks(options.getSavePath());
+		SkatNetworks.instance().loadNetworks();
 	}
 
 	/**

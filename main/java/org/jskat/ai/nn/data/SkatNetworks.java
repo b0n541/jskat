@@ -123,7 +123,7 @@ public class SkatNetworks {
 	 * @param filePath
 	 *            Path to files
 	 */
-	public static void loadNetworks(final String filePath) {
+	public static void loadNetworks() {
 
 		for (Entry<GameType, Map<PlayerParty, Map<GamePhase, INeuralNetwork>>> gameTypeNets : networks
 				.entrySet()) {
