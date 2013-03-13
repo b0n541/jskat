@@ -482,31 +482,19 @@ public class SkatTablePanel extends AbstractTabPanel {
 			break;
 		case BIDDING:
 			setContextPanel(ContextPanelType.BIDDING);
-			getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(false);
 			break;
 		case RAMSCH_GRAND_HAND_ANNOUNCING:
 			setContextPanel(ContextPanelType.SCHIEBERAMSCH);
 			userPanel.setGameState(state);
-			getActionMap().get(JSkatAction.PLAY_GRAND_HAND).setEnabled(true);
-			getActionMap().get(JSkatAction.PLAY_SCHIEBERAMSCH).setEnabled(true);
-			getActionMap().get(JSkatAction.SCHIEBEN).setEnabled(false);
-			getActionMap().get(JSkatAction.PICK_UP_SKAT).setEnabled(false);
 			break;
 		case SCHIEBERAMSCH:
 			setContextPanel(ContextPanelType.SCHIEBERAMSCH);
 			userPanel.setGameState(state);
-			getActionMap().get(JSkatAction.PLAY_GRAND_HAND).setEnabled(false);
-			getActionMap().get(JSkatAction.PLAY_SCHIEBERAMSCH)
-					.setEnabled(false);
-			getActionMap().get(JSkatAction.SCHIEBEN).setEnabled(true);
-			getActionMap().get(JSkatAction.PICK_UP_SKAT).setEnabled(true);
 			break;
 		case PICKING_UP_SKAT:
 			if (userPanel.getPosition().equals(declarer)) {
 				setContextPanel(ContextPanelType.DECLARING);
 				userPanel.setGameState(state);
-				getActionMap().get(JSkatAction.PICK_UP_SKAT).setEnabled(true);
-				getActionMap().get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
 			}
 			break;
 		case DISCARDING:

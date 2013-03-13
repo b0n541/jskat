@@ -26,8 +26,6 @@ import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -148,6 +146,7 @@ public class JSkatViewImpl implements JSkatView {
 	private final JSkatOptionsDialog preferencesDialog;
 	private final NeuralNetworkTrainingOverview trainingOverview;
 	private JTabbedPane tabs;
+	private String activeView;
 	private final Map<String, SkatTablePanel> tables;
 	private final JSkatGraphicRepository bitmaps;
 	private final JSkatResourceBundle strings;
@@ -261,49 +260,7 @@ public class JSkatViewImpl implements JSkatView {
 
 		mainFrame = new JFrame("JSkat"); //$NON-NLS-1$
 
-		mainFrame.addWindowListener(new WindowListener() {
-
-			@Override
-			public void windowClosing(final WindowEvent e) {
-				jskat.exitJSkat();
-			}
-
-			@Override
-			public void windowOpened(final WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowClosed(final WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowIconified(final WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowDeiconified(final WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowActivated(final WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void windowDeactivated(final WindowEvent e) {
-				// TODO Auto-generated method stub
-
-			}
-		});
+		mainFrame.addWindowListener(new JSkatWindowAdapter(jskat));
 
 		mainFrame.setJMenuBar(getMenuBar());
 
@@ -647,25 +604,49 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void setGameState(final String tableName, final GameState state) {
 
-		setActions(state);
 		tables.get(tableName).setGameState(state);
+		if (activeView.equals(tableName)) {
+			setActions(state);
+		}
 	}
 
-	void setActions(final GameState state) {
-
+	private void setActions(final GameState state) {
 		switch (state) {
 		case GAME_START:
 			actions.get(JSkatAction.CONTINUE_LOCAL_SERIES).setEnabled(false);
 			break;
 		case BIDDING:
+			actions.get(JSkatAction.ANNOUNCE_GAME).setEnabled(false);
 			actions.get(JSkatAction.MAKE_BID).setEnabled(true);
 			actions.get(JSkatAction.HOLD_BID).setEnabled(true);
 			actions.get(JSkatAction.PASS_BID).setEnabled(true);
 			break;
 		case DISCARDING:
+			actions.get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
 			actions.get(JSkatAction.MAKE_BID).setEnabled(false);
 			actions.get(JSkatAction.HOLD_BID).setEnabled(false);
 			actions.get(JSkatAction.PASS_BID).setEnabled(false);
+			break;
+		case RAMSCH_GRAND_HAND_ANNOUNCING:
+			actions.get(JSkatAction.PLAY_GRAND_HAND).setEnabled(true);
+			actions.get(JSkatAction.PLAY_SCHIEBERAMSCH).setEnabled(true);
+			actions.get(JSkatAction.SCHIEBEN).setEnabled(false);
+			actions.get(JSkatAction.PICK_UP_SKAT).setEnabled(false);
+			break;
+		case SCHIEBERAMSCH:
+			actions.get(JSkatAction.PLAY_GRAND_HAND).setEnabled(false);
+			actions.get(JSkatAction.PLAY_SCHIEBERAMSCH).setEnabled(false);
+			actions.get(JSkatAction.SCHIEBEN).setEnabled(true);
+			actions.get(JSkatAction.PICK_UP_SKAT).setEnabled(true);
+			break;
+		case PICKING_UP_SKAT:
+			// FIXME jan 23.02.2013: use a different context panel when an
+			// opponent discards
+
+			// if (userPanel.getPosition().equals(declarer)) {
+			// actions.get(JSkatAction.PICK_UP_SKAT).setEnabled(true);
+			// actions.get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
+			// }
 			break;
 		case GAME_OVER:
 			actions.get(JSkatAction.CONTINUE_LOCAL_SERIES).setEnabled(true);
@@ -1426,5 +1407,10 @@ public class JSkatViewImpl implements JSkatView {
 	public void showCards(final String tableName,
 			final Map<Player, CardList> cards) {
 		tables.get(tableName).showCards(cards);
+	}
+
+	@Override
+	public void setActiveView(String viewName) {
+		activeView = viewName;
 	}
 }
