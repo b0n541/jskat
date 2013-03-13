@@ -460,7 +460,7 @@ public class JSkatViewImpl implements JSkatView {
 
 		final ISSTablePanel newTable = new ISSTablePanel(this, tableName,
 				actions, loginName);
-		addTabPanel(newTable, "ISS table: " + tableName);
+		addTabPanel(newTable, strings.getString("iss_table") + ": " + tableName);
 		tables.put(tableName, newTable);
 	}
 
@@ -821,7 +821,7 @@ public class JSkatViewImpl implements JSkatView {
 	public void showISSLobby() {
 
 		issLobby = new LobbyPanel(this, "ISS lobby", actions);
-		addTabPanel(issLobby, "ISS lobby");
+		addTabPanel(issLobby, strings.getString("iss_lobby"));
 	}
 
 	/**
