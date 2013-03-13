@@ -88,17 +88,17 @@ public class WelcomePanel extends AbstractTabPanel {
 
 	private JPanel createButtonPanel() {
 
-		final JButton localTableButton = new JButton(this.getActionMap().get(
-				JSkatAction.CREATE_LOCAL_TABLE));
-		final JLabel localTableDescription = new JLabel("<html><p>" //$NON-NLS-1$
-				+ strings.getString("explain_local_table_1") + "</p><p>" //$NON-NLS-1$ //$NON-NLS-2$
-				+ strings.getString("explain_local_table_2") + "</p></html>"); //$NON-NLS-1$//$NON-NLS-2$
-
 		final JButton issTableButton = new JButton(getActionMap().get(
 				JSkatAction.SHOW_ISS_LOGIN));
 		final JLabel issTableDescription = new JLabel("<html><p>" //$NON-NLS-1$
 				+ strings.getString("explain_iss_table_1") + "</p><p>" //$NON-NLS-1$ //$NON-NLS-2$
 				+ strings.getString("explain_iss_table_2") + "</p></html>"); //$NON-NLS-1$//$NON-NLS-2$
+
+		final JButton localTableButton = new JButton(this.getActionMap().get(
+				JSkatAction.CREATE_LOCAL_TABLE));
+		final JLabel localTableDescription = new JLabel("<html><p>" //$NON-NLS-1$
+				+ strings.getString("explain_local_table_1") + "</p><p>" //$NON-NLS-1$ //$NON-NLS-2$
+				+ strings.getString("explain_local_table_2") + "</p></html>"); //$NON-NLS-1$//$NON-NLS-2$
 
 		final JButton optionsButton = new JButton(getActionMap().get(
 				JSkatAction.PREFERENCES));
@@ -112,10 +112,10 @@ public class WelcomePanel extends AbstractTabPanel {
 
 		final JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout(
 				"", "[][]", "[][]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		buttonPanel.add(localTableButton, "grow"); //$NON-NLS-1$
-		buttonPanel.add(localTableDescription, "wrap"); //$NON-NLS-1$
 		buttonPanel.add(issTableButton, "grow"); //$NON-NLS-1$
 		buttonPanel.add(issTableDescription, "wrap"); //$NON-NLS-1$
+		buttonPanel.add(localTableButton, "grow"); //$NON-NLS-1$
+		buttonPanel.add(localTableDescription, "wrap"); //$NON-NLS-1$
 		buttonPanel.add(optionsButton, "grow, gapy 1cm"); //$NON-NLS-1$
 		buttonPanel.add(optionsDescription, "gapy 1cm, wrap"); //$NON-NLS-1$
 		buttonPanel.add(quitButton, "grow, gapy 1cm"); //$NON-NLS-1$
