@@ -54,7 +54,7 @@ class ChatPanel extends JPanel implements ChangeListener {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(ChatPanel.class);
 
-	JTextField inputLine;
+	private JTextField inputLine;
 	private Map<String, JTextArea> chats;
 	private JTabbedPane chatTabs;
 
@@ -94,7 +94,8 @@ class ChatPanel extends JPanel implements ChangeListener {
 				String message = ChatPanel.this.inputLine.getText();
 				log.debug("Chat message: " + message); //$NON-NLS-1$
 
-				ChatMessage chatMessage = new ChatMessage(ChatPanel.this.activeChatName, message);
+				ChatMessage chatMessage = new ChatMessage(
+						ChatPanel.this.activeChatName, message);
 				e.setSource(chatMessage);
 				// fire event again
 				ChatPanel.this.inputLine.dispatchEvent(e);
@@ -110,7 +111,8 @@ class ChatPanel extends JPanel implements ChangeListener {
 		JTextArea chat = getChat();
 		chats.put(name, chat);
 		JScrollPane scrollPane = new JScrollPane(chat);
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane
+				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setName(name);
 
 		chatTabs.add(title, scrollPane);
@@ -141,6 +143,13 @@ class ChatPanel extends JPanel implements ChangeListener {
 		}
 
 		chat.append(message.getMessage() + '\n');
+		moveScrollBarToBottom(chat);
+	}
+
+	private void moveScrollBarToBottom(JTextArea chat) {
+		chat.selectAll();
+		int x = chat.getSelectionEnd();
+		chat.select(x, x);
 	}
 
 	@Override
