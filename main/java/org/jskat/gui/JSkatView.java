@@ -744,4 +744,12 @@ public interface JSkatView {
 	 *            Cards for each player
 	 */
 	public void showCards(String tableName, Map<Player, CardList> cards);
+
+	/**
+	 * Sets the active view part for JSkat
+	 * 
+	 * @param name
+	 *            Name of the view
+	 */
+	public void setActiveView(String name);
 }

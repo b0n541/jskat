@@ -525,4 +525,9 @@ public class UnitTestView implements JSkatView {
 			final Map<Player, CardList> cards) {
 		// TODO Auto-generated method stub
 	}
+
+	@Override
+	public void setActiveView(String name) {
+		// TODO Auto-generated method stub
+	}
 }

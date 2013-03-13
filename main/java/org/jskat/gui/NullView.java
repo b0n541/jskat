@@ -751,4 +751,12 @@ public class NullView implements JSkatView {
 			final Map<Player, CardList> cards) {
 		// empty method by intent
 	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setActiveView(String name) {
+		// empty method by intent
+	}
 }

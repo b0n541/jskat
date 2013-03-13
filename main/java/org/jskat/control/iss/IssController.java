@@ -27,6 +27,7 @@ import java.util.Map;
 import org.jskat.control.JSkatMaster;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.JSkatApplicationData;
+import org.jskat.data.JSkatViewType;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.Trick;
@@ -352,7 +353,7 @@ public class IssController {
 			final int maxPlayers) {
 
 		view.createISSTable(tableName, creator);
-		jskat.setActiveTable(tableName);
+		jskat.setActiveTable(JSkatViewType.ISS_TABLE, tableName);
 	}
 
 	/**
@@ -365,8 +366,7 @@ public class IssController {
 
 		view.closeTabPanel(tableName);
 		data.removeJoinedIssSkatTable(tableName);
-		// TODO set to next table
-		jskat.setActiveTable(null);
+		jskat.removeTable(JSkatViewType.ISS_TABLE, tableName);
 	}
 
 	/**
