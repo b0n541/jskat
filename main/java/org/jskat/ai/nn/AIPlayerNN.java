@@ -387,8 +387,6 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 					.getTrickNumberInGame());
 
 			CardList bestCards = new CardList();
-			// CardList goodCards = new CardList();
-			// CardList undecidedCards = new CardList();
 			double highestOutput = Double.NEGATIVE_INFINITY;
 			for (Card card : possibleCards) {
 
@@ -407,12 +405,6 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 				} else if (currOutput == highestOutput) {
 					bestCards.add(card);
 				}
-
-				// if (currOutput > WON - 0.05) {
-				// goodCards.add(card);
-				// } else if (currOutput > LOST + 0.05) {
-				// undecidedCards.add(card);
-				// }
 			}
 
 			if (bestCards.size() > 0) {
@@ -420,20 +412,6 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 				bestCardIndex = chooseRandomCard(possibleCards, bestCards);
 				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": " + bestCards.size() + " of " + possibleCards.size() + " are best cards. Choosing random from these."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			}
-			// else
-			// if (goodCards.size() > 0) {
-			// // get random card out of the good cards
-			// bestCardIndex = chooseRandomCard(possibleCards, goodCards);
-			//				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": " + goodCards.size() + " of " + possibleCards.size() + " are good cards. Choosing random from these."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			// } else if (undecidedCards.size() > 0) {
-			// // get random card out of the undecided cards
-			// bestCardIndex = chooseRandomCard(possibleCards, undecidedCards);
-			//				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": " + undecidedCards.size() + " of " + possibleCards.size() + " are undecided cards. Choosing random from these."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			// } else {
-			// // get random card
-			// bestCardIndex = chooseRandomCard(possibleCards, possibleCards);
-			//				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": No good card, choosing random from all."); //$NON-NLS-1$ //$NON-NLS-2$ 
-			// }
 		}
 
 		// store parameters for the card to play
