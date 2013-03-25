@@ -1,8 +1,8 @@
-package org.jskat.ai.nn;
+package org.jskat.ai.nn.input;
 
 import org.jskat.player.PlayerKnowledge;
 import org.jskat.util.Card;
 
-interface NetworkInputGenerator {
+public interface NetworkInputGenerator {
 	double[] getNetInputs(PlayerKnowledge knowledge, Card cardToPlay);
 }

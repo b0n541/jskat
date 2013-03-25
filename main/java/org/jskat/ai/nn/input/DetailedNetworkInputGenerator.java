@@ -1,4 +1,4 @@
-package org.jskat.ai.nn;
+package org.jskat.ai.nn.input;
 
 import java.util.ArrayList;
 import java.util.List;

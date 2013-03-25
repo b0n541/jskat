@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.Random;
 
 import org.jskat.ai.nn.data.SkatNetworks;
+import org.jskat.ai.nn.input.GenericNetworkInputGenerator;
+import org.jskat.ai.nn.input.NetworkInputGenerator;
 import org.jskat.ai.nn.util.INeuralNetwork;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
@@ -90,7 +92,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		setPlayerName(newPlayerName);
 
 		gameSimulator = new GameSimulator();
-		inputGenerator = new SimpleNetworkInputGenerator();
+		inputGenerator = new GenericNetworkInputGenerator();
 
 		for (GameType gameType : GameType.values()) {
 			if (gameType != GameType.RAMSCH && gameType != GameType.PASSED_IN) {
