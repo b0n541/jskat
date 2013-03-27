@@ -13,13 +13,12 @@ public class GenericNetworkInputGenerator implements NetworkInputGenerator {
 	public GenericNetworkInputGenerator() {
 		strategies.add(new PlayedCardsInputStrategy());
 		strategies.add(new UnplayedCardsInputStrategy());
-		strategies.add(new CardToPlayInputStrategy());
 	}
 
 	@Override
 	public double[] getNetInputs(PlayerKnowledge knowledge, Card cardToPlay) {
 
-		double[] result = new double[96];
+		double[] result = new double[64];
 		int index = 0;
 		for (int strategyCount = 0; strategyCount < strategies.size(); strategyCount++) {
 			InputStrategy strategy = strategies.get(strategyCount);

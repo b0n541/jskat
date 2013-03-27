@@ -39,7 +39,7 @@ public class SkatNetworks {
 
 	private static Logger log = LoggerFactory.getLogger(SkatNetworks.class);
 
-	private static int INPUT_NEURONS = 96;
+	private static int INPUT_NEURONS = 64;
 	private static int HIDDEN_NEURONS = 10;
 	private static int OUTPUT_NEURONS = 1;
 
