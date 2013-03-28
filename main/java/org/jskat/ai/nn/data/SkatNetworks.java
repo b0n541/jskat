@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.jskat.ai.nn.input.GenericNetworkInputGenerator;
 import org.jskat.ai.nn.util.EncogNetworkWrapper;
 import org.jskat.ai.nn.util.INeuralNetwork;
 import org.jskat.ai.nn.util.NetworkTopology;
@@ -39,7 +40,8 @@ public class SkatNetworks {
 
 	private static Logger log = LoggerFactory.getLogger(SkatNetworks.class);
 
-	private static int INPUT_NEURONS = 64;
+	private static int INPUT_NEURONS = GenericNetworkInputGenerator
+			.getNeuronCountForAllStrategies();
 	private static int HIDDEN_NEURONS = 10;
 	private static int OUTPUT_NEURONS = 1;
 

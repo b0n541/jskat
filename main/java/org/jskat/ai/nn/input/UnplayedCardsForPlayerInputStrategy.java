@@ -4,15 +4,16 @@ import org.jskat.player.PlayerKnowledge;
 import org.jskat.util.Card;
 
 /**
- * Gets the network inputs for unplayed cards in the game
+ * Gets network inputs for unplayed cards by the player
  */
-public class UnplayedCardsInputStrategy extends AbstractCardInputStrategy {
+public class UnplayedCardsForPlayerInputStrategy extends
+		AbstractCardInputStrategy {
 
 	@Override
 	public double[] getNetworkInput(PlayerKnowledge knowledge, Card cardToPlay) {
 
 		for (Card card : Card.values()) {
-			if (!knowledge.isCardPlayed(card)) {
+			if (knowledge.isOwnCard(card)) {
 				result[getNetworkInputIndex(card)] = 1.0;
 			}
 		}

@@ -12,16 +12,16 @@ import org.jskat.util.Player;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class PlayedCardsInputStrategyTest {
+public class PlayedCardsForPlayerAndNextCardInputStrategyTest {
 
 	static PlayerKnowledge knowledge;
-	static PlayedCardsInputStrategy strategy;
+	static InputStrategy strategy;
 
 	@BeforeClass
 	public static void setUp() {
 		knowledge = new PlayerKnowledge();
 		knowledge.resetCurrentGameData();
-		strategy = new PlayedCardsInputStrategy();
+		strategy = new PlayedCardsForPlayerAndNextCardInputStrategy();
 	}
 
 	@Test
@@ -32,19 +32,22 @@ public class PlayedCardsInputStrategyTest {
 		knowledge.setPlayerPosition(Player.FOREHAND);
 		knowledge.setCurrentTrick(new Trick(0, Player.FOREHAND));
 		knowledge.setCardPlayed(Player.FOREHAND, Card.CJ);
-		double[] inputs = strategy.getNetworkInput(knowledge, null);
+		double[] inputs = strategy.getNetworkInput(knowledge, Card.DJ);
 		assertEquals(32, inputs.length);
 		assertEquals(1.0, inputs[3 * 8 + 4], 0.0);
+		assertEquals(1.0, inputs[4], 0.0);
 		knowledge.setCardPlayed(Player.MIDDLEHAND, Card.SJ);
-		inputs = strategy.getNetworkInput(knowledge, null);
+		inputs = strategy.getNetworkInput(knowledge, Card.DJ);
 		assertEquals(32, inputs.length);
 		assertEquals(1.0, inputs[3 * 8 + 4], 0.0);
-		assertEquals(1.0, inputs[2 * 8 + 4], 0.0);
+		assertEquals(0.0, inputs[2 * 8 + 4], 0.0);
+		assertEquals(1.0, inputs[4], 0.0);
 		knowledge.setCardPlayed(Player.REARHAND, Card.HJ);
-		inputs = strategy.getNetworkInput(knowledge, null);
+		inputs = strategy.getNetworkInput(knowledge, Card.DJ);
 		assertEquals(32, inputs.length);
 		assertEquals(1.0, inputs[3 * 8 + 4], 0.0);
-		assertEquals(1.0, inputs[2 * 8 + 4], 0.0);
-		assertEquals(1.0, inputs[1 * 8 + 4], 0.0);
+		assertEquals(0.0, inputs[2 * 8 + 4], 0.0);
+		assertEquals(0.0, inputs[1 * 8 + 4], 0.0);
+		assertEquals(1.0, inputs[4], 0.0);
 	}
 }
