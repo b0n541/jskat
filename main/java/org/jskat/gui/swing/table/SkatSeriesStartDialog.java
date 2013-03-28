@@ -41,7 +41,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jskat.control.JSkatMaster;
-import org.jskat.data.JSkatOptions;
 import org.jskat.gui.swing.AbstractI18NComboBoxRenderer;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.player.JSkatPlayerResolver;
@@ -248,22 +247,5 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 			}
 			return result;
 		}
-	}
-
-	/**
-	 * Resets all input values
-	 */
-	public void resetInputs() {
-
-		player1.setSelectedIndex(0);
-		player1name.setText(PLAYER1_DEFAULT_NAME);
-		player2.setSelectedIndex(0);
-		player2name.setText(PLAYER2_DEFAULT_NAME);
-		player3.setSelectedIndex(player3.getItemCount() - 1);
-		player3name.setText(PLAYER3_DEFAULT_NAME);
-		unlimited.setSelected(false);
-		onlyPlayRamsch.setEnabled(JSkatOptions.instance().isPlayRamsch()
-				.booleanValue());
-		onlyPlayRamsch.setSelected(false);
 	}
 }

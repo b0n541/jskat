@@ -781,7 +781,6 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showStartSkatSeriesDialog() {
 
-		skatSeriesStartDialog.resetInputs();
 		skatSeriesStartDialog.setVisible(true);
 	}
 
