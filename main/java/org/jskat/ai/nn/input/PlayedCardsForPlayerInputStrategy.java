@@ -6,10 +6,13 @@ import org.jskat.util.Card;
 /**
  * Gets network inputs for all cards played by the player
  */
-public class PlayedCardsForPlayerInputStrategy extends AbstractCardInputStrategy {
+public class PlayedCardsForPlayerInputStrategy extends
+		AbstractCardInputStrategy {
 
 	@Override
 	public double[] getNetworkInput(PlayerKnowledge knowledge, Card cardToPlay) {
+
+		double[] result = getEmptyInputs();
 
 		for (Card card : Card.values()) {
 			if (knowledge.isCardPlayedBy(knowledge.getPlayerPosition(), card)) {

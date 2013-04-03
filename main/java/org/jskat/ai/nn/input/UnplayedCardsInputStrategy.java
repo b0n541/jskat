@@ -11,6 +11,8 @@ public class UnplayedCardsInputStrategy extends AbstractCardInputStrategy {
 	@Override
 	public double[] getNetworkInput(PlayerKnowledge knowledge, Card cardToPlay) {
 
+		double[] result = getEmptyInputs();
+
 		for (Card card : Card.values()) {
 			if (!knowledge.isCardPlayed(card)) {
 				result[getNetworkInputIndex(card)] = 1.0;

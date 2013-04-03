@@ -13,7 +13,7 @@ public class UnplayedCardsForPlayerAndNextCardInputStrategy extends
 	@Override
 	public double[] getNetworkInput(PlayerKnowledge knowledge, Card cardToPlay) {
 
-		super.getNetworkInput(knowledge, cardToPlay);
+		double[] result = super.getNetworkInput(knowledge, cardToPlay);
 
 		result[getNetworkInputIndex(cardToPlay)] = 0.0;
 

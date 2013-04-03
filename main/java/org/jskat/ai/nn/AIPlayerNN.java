@@ -377,44 +377,44 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		log.debug("found " + possibleCards.size() + " possible cards: " + possibleCards); //$NON-NLS-1$//$NON-NLS-2$
 
 		Map<Card, double[]> cardInputs = new HashMap<Card, double[]>();
-		if (possibleCards.size() == 1) {
-			// only one card is playable
-			bestCardIndex = 0;
-			cardInputs.put(possibleCards.get(0), inputGenerator.getNetInputs(
-					knowledge, possibleCards.get(0)));
-		} else {
-			// find the best card by asking the network
-			INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGame()
-					.getGameType(), isDeclarer(), knowledge.getCurrentTrick()
-					.getTrickNumberInGame());
+		// if (possibleCards.size() == 1) {
+		// // only one card is playable
+		// bestCardIndex = 0;
+		// cardInputs.put(possibleCards.get(0), inputGenerator.getNetInputs(
+		// knowledge, possibleCards.get(0)));
+		// } else {
+		// find the best card by asking the network
+		INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGame()
+				.getGameType(), isDeclarer(), knowledge.getCurrentTrick()
+				.getTrickNumberInGame());
 
-			CardList bestCards = new CardList();
-			double highestOutput = Double.NEGATIVE_INFINITY;
-			for (Card card : possibleCards) {
+		CardList bestCards = new CardList();
+		double highestOutput = Double.NEGATIVE_INFINITY;
+		for (Card card : possibleCards) {
 
-				log.debug("Testing card " + card); //$NON-NLS-1$
+			log.debug("Testing card " + card); //$NON-NLS-1$
 
-				double[] inputs = inputGenerator.getNetInputs(knowledge, card);
+			double[] inputs = inputGenerator.getNetInputs(knowledge, card);
 
-				cardInputs.put(card, inputs);
-				double currOutput = net.getPredictedOutcome(inputs);
-				log.warn("net output for card " + card + ": " + formatter.format(currOutput)); //$NON-NLS-1$
+			cardInputs.put(card, inputs);
+			double currOutput = net.getPredictedOutcome(inputs);
+			log.warn("net output for card " + card + ": " + formatter.format(currOutput)); //$NON-NLS-1$
 
-				if (currOutput > highestOutput) {
-					highestOutput = currOutput;
-					bestCards.clear();
-					bestCards.add(card);
-				} else if (currOutput == highestOutput) {
-					bestCards.add(card);
-				}
-			}
-
-			if (bestCards.size() > 0) {
-				// get random card out of the best cards
-				bestCardIndex = chooseRandomCard(possibleCards, bestCards);
-				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": " + bestCards.size() + " of " + possibleCards.size() + " are best cards. Choosing random from these."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			if (currOutput > highestOutput) {
+				highestOutput = currOutput;
+				bestCards.clear();
+				bestCards.add(card);
+			} else if (currOutput == highestOutput) {
+				bestCards.add(card);
 			}
 		}
+
+		if (bestCards.size() > 0) {
+			// get random card out of the best cards
+			bestCardIndex = chooseRandomCard(possibleCards, bestCards);
+			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": " + bestCards.size() + " of " + possibleCards.size() + " are best cards. Choosing random from these: " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		}
+		// }
 
 		// store parameters for the card to play
 		// for adjustment of weights after the game
