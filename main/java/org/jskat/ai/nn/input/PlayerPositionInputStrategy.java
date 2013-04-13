@@ -4,7 +4,7 @@ import org.jskat.player.PlayerKnowledge;
 import org.jskat.util.Card;
 
 /**
- * Gets the network inputs for unplayed cards in the game
+ * Gets the network inputs for the player position
  */
 public class PlayerPositionInputStrategy extends AbstractInputStrategy {
 
