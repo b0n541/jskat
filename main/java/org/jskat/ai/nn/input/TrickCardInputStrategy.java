@@ -41,11 +41,11 @@ public class TrickCardInputStrategy extends AbstractInputStrategy {
 					+ getNetworkInputIndex(trick.getFirstCard())] = 1.0;
 		}
 		if (trick.getSecondCard() != null) {
-			result[getTrickOffset(trick) + 3
+			result[getTrickOffset(trick) + 3 + 32
 					+ getNetworkInputIndex(trick.getSecondCard())] = 1.0;
 		}
 		if (trick.getThirdCard() != null) {
-			result[getTrickOffset(trick) + 3
+			result[getTrickOffset(trick) + 3 + 64
 					+ getNetworkInputIndex(trick.getThirdCard())] = 1.0;
 		}
 	}

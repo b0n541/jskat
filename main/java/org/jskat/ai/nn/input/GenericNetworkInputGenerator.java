@@ -15,7 +15,6 @@ public class GenericNetworkInputGenerator implements NetworkInputGenerator {
 		strategies.add(new PlayerPositionInputStrategy());
 		strategies.add(new TrickCardAndNextCardInputStrategy());
 		strategies.add(new UnplayedCardsForPlayerAndNextCardInputStrategy());
-		strategies.add(new UnplayedCardsAndNextCardInputStrategy());
 	}
 
 	@Override

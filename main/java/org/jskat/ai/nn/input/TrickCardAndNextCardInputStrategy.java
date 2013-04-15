@@ -20,9 +20,11 @@ public class TrickCardAndNextCardInputStrategy extends TrickCardInputStrategy {
 		if (trick.getFirstCard() == null) {
 			result[getTrickOffset(trick) + 3 + getNetworkInputIndex(cardToPlay)] = 1.0;
 		} else if (trick.getSecondCard() == null) {
-			result[getTrickOffset(trick) + 3 + getNetworkInputIndex(cardToPlay)] = 1.0;
+			result[getTrickOffset(trick) + 3 + 32
+					+ getNetworkInputIndex(cardToPlay)] = 1.0;
 		} else if (trick.getThirdCard() == null) {
-			result[getTrickOffset(trick) + 3 + getNetworkInputIndex(cardToPlay)] = 1.0;
+			result[getTrickOffset(trick) + 3 + 64
+					+ getNetworkInputIndex(cardToPlay)] = 1.0;
 		}
 
 		return result;
