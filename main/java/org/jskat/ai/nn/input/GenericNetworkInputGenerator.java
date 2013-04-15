@@ -11,9 +11,9 @@ public class GenericNetworkInputGenerator implements NetworkInputGenerator {
 	private static final List<InputStrategy> strategies = new ArrayList<InputStrategy>();
 
 	static {
-		strategies.add(new DeclarerPlayerInputStrategy());
+		strategies.add(new DeclarerPositionInputStrategy());
 		strategies.add(new PlayerPositionInputStrategy());
-		strategies.add(new TrickCardAndNextCardInputStrategy());
+		strategies.add(new PlayedCardsForPlayerAndNextCardInputStrategy());
 		strategies.add(new UnplayedCardsForPlayerAndNextCardInputStrategy());
 	}
 

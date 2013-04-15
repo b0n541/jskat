@@ -6,7 +6,7 @@ import org.jskat.util.Card;
 /**
  * Gets the network inputs for the declarer position
  */
-public class DeclarerPlayerInputStrategy extends AbstractInputStrategy {
+public class DeclarerPositionInputStrategy extends AbstractInputStrategy {
 
 	@Override
 	public double[] getNetworkInput(PlayerKnowledge knowledge, Card cardToPlay) {
