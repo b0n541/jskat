@@ -35,7 +35,7 @@ import org.encog.ml.train.BasicTraining;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.PersistBasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
-import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
+import org.encog.neural.networks.training.propagation.back.Backpropagation;
 
 /**
  * Wraps the Encog network to fulfill the interface {@link INeuralNetwork}
@@ -99,7 +99,9 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 				new BasicMLData(outputValues)));
 		MLDataSet trainingSet = new BasicMLDataSet(data);
 
-		BasicTraining trainer = new ResilientPropagation(network, trainingSet);
+		// BasicTraining trainer = new ResilientPropagation(network,
+		// trainingSet);
+		BasicTraining trainer = new Backpropagation(network, trainingSet);
 		trainer.iteration();
 		return trainer.getError();
 	}

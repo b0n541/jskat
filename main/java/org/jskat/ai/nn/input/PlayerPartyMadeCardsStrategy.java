@@ -36,7 +36,7 @@ public class PlayerPartyMadeCardsStrategy extends AbstractInputStrategy
 		return result;
 	}
 
-	private Set<Player> getPartyMembers(PlayerKnowledge knowledge) {
+	protected Set<Player> getPartyMembers(PlayerKnowledge knowledge) {
 
 		Set<Player> result = new HashSet<Player>();
 		if (knowledge.getDeclarer().equals(knowledge.getPlayerPosition())) {
@@ -50,7 +50,7 @@ public class PlayerPartyMadeCardsStrategy extends AbstractInputStrategy
 		return result;
 	}
 
-	private static int getNetworkInputIndex(final Card card) {
+	protected static int getNetworkInputIndex(final Card card) {
 
 		return card.getSuit().getSuitOrder() * 8 + card.getNullOrder();
 	}

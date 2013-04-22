@@ -59,7 +59,7 @@ public class CurrentTrickStrategy extends AbstractInputStrategy implements
 		return result;
 	}
 
-	private static int getNetworkInputIndex(final Card card) {
+	protected static int getNetworkInputIndex(final Card card) {
 
 		return card.getSuit().getSuitOrder() * 8 + card.getNullOrder();
 	}
