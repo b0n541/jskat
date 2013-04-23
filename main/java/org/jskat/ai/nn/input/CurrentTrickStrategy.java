@@ -37,7 +37,7 @@ public class CurrentTrickStrategy extends AbstractInputStrategy implements
 		return result;
 	}
 
-	private static int getTrickForehand(Player player) {
+	protected static int getTrickForehand(Player player) {
 
 		int result = -1;
 
