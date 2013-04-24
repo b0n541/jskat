@@ -43,7 +43,7 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	/**
 	 * Minimum difference between calculated output and desired result.
 	 */
-	private static final double MIN_DIFF = 0.001;
+	private static final double MIN_DIFF = 0.05;
 	/**
 	 * Logger.
 	 */
