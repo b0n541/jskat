@@ -377,19 +377,14 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		log.debug("found " + possibleCards.size() + " possible cards: " + possibleCards); //$NON-NLS-1$//$NON-NLS-2$
 
 		Map<Card, double[]> cardInputs = new HashMap<Card, double[]>();
-		// if (possibleCards.size() == 1) {
-		// // only one card is playable
-		// bestCardIndex = 0;
-		// cardInputs.put(possibleCards.get(0), inputGenerator.getNetInputs(
-		// knowledge, possibleCards.get(0)));
-		// } else {
-		// find the best card by asking the network
+
 		INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGame()
 				.getGameType(), isDeclarer(), knowledge.getCurrentTrick()
 				.getTrickNumberInGame());
 
 		CardList bestCards = new CardList();
 		double highestOutput = Double.NEGATIVE_INFINITY;
+		Card bestCard = null;
 		for (Card card : possibleCards) {
 
 			log.debug("Testing card " + card); //$NON-NLS-1$
@@ -400,21 +395,29 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			double currOutput = net.getPredictedOutcome(inputs);
 			log.warn("net output for card " + card + ": " + formatter.format(currOutput)); //$NON-NLS-1$
 
+			if (currOutput > 0.9) {
+				bestCards.add(card);
+			}
 			if (currOutput > highestOutput) {
 				highestOutput = currOutput;
-				bestCards.clear();
-				bestCards.add(card);
-			} else if (currOutput == highestOutput) {
-				bestCards.add(card);
+				bestCard = card;
 			}
 		}
 
 		if (bestCards.size() > 0) {
 			// get random card out of the best cards
 			bestCardIndex = chooseRandomCard(possibleCards, bestCards);
-			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": " + bestCards.size() + " of " + possibleCards.size() + " are best cards. Choosing random from these: " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": Found best cards. Choosing random from " + bestCards.size() + " out of " + possibleCards.size() + ": " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+			// } else {
+			// // no best card, get card with best output
+			// bestCardIndex = possibleCards.indexOf(bestCard);
+			//			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": No best cards. Choosing card with highest output: " + bestCard); //$NON-NLS-1$ //$NON-NLS-2$ 
+			// }
+		} else {
+			// no best card, get random card out of all cards
+			bestCardIndex = chooseRandomCard(possibleCards, possibleCards);
+			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": No best cards. Choosing card from all: " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$ //$NON-NLS-2$ 
 		}
-		// }
 
 		// store parameters for the card to play
 		// for adjustment of weights after the game
