@@ -408,16 +408,16 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			// get random card out of the best cards
 			bestCardIndex = chooseRandomCard(possibleCards, bestCards);
 			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": Found best cards. Choosing random from " + bestCards.size() + " out of " + possibleCards.size() + ": " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			// } else {
-			// // no best card, get card with best output
-			// bestCardIndex = possibleCards.indexOf(bestCard);
-			//			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": No best cards. Choosing card with highest output: " + bestCard); //$NON-NLS-1$ //$NON-NLS-2$ 
-			// }
 		} else {
-			// no best card, get random card out of all cards
-			bestCardIndex = chooseRandomCard(possibleCards, possibleCards);
-			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": No best cards. Choosing card from all: " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$ //$NON-NLS-2$ 
+			// no best card, get card with best output
+			bestCardIndex = possibleCards.indexOf(bestCard);
+			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": No best cards. Choosing card with highest output: " + bestCard); //$NON-NLS-1$ //$NON-NLS-2$ 
 		}
+		// } else {
+		// // no best card, get random card out of all cards
+		// bestCardIndex = chooseRandomCard(possibleCards, possibleCards);
+		//			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": No best cards. Choosing card from all: " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$ //$NON-NLS-2$ 
+		// }
 
 		// store parameters for the card to play
 		// for adjustment of weights after the game
