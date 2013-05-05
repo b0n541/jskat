@@ -42,7 +42,7 @@ public class SkatNetworks {
 
 	private static int INPUT_NEURONS = GenericNetworkInputGenerator
 			.getNeuronCountForAllStrategies();
-	private static int HIDDEN_NEURONS = 25;
+	private static int HIDDEN_NEURONS = 10;
 	private static int OUTPUT_NEURONS = 1;
 
 	private static final boolean USE_BIAS = true;

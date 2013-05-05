@@ -383,8 +383,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 				.getTrickNumberInGame());
 
 		CardList bestCards = new CardList();
+		CardList highestOutputCards = new CardList();
 		double highestOutput = Double.NEGATIVE_INFINITY;
-		Card bestCard = null;
 		for (Card card : possibleCards) {
 
 			log.debug("Testing card " + card); //$NON-NLS-1$
@@ -400,7 +400,10 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			}
 			if (currOutput > highestOutput) {
 				highestOutput = currOutput;
-				bestCard = card;
+				highestOutputCards.clear();
+				highestOutputCards.add(card);
+			} else if (currOutput == highestOutput) {
+				highestOutputCards.add(card);
 			}
 		}
 
@@ -410,8 +413,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": Found best cards. Choosing random from " + bestCards.size() + " out of " + possibleCards.size() + ": " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		} else {
 			// no best card, get card with best output
-			bestCardIndex = possibleCards.indexOf(bestCard);
-			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": No best cards. Choosing card with highest output: " + bestCard); //$NON-NLS-1$ //$NON-NLS-2$ 
+			bestCardIndex = chooseRandomCard(possibleCards, highestOutputCards);
+			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": No best cards. Choosing card with highest output: " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$ //$NON-NLS-2$ 
 		}
 		// } else {
 		// // no best card, get random card out of all cards
