@@ -19,6 +19,8 @@ public class JSkatPlayerResolver {
 	static {
 		EXCLUDED_PLAYER_CLASSES = new HashSet<String>();
 		EXCLUDED_PLAYER_CLASSES.add("org.jskat.ai.mjl.AIPlayerMJL");
+		EXCLUDED_PLAYER_CLASSES
+				.add("org.jskat.ai.algorithmic.AlgorithmicAIPlayer");
 	}
 
 	/**

@@ -28,6 +28,6 @@ public class JSkatPlayerResolverTest extends AbstractJSkatTest {
 				.getAllAIPlayerImplementations();
 		implementations.removeAll(testImplementations);
 
-		assertEquals(4, implementations.size());
+		assertEquals(3, implementations.size());
 	}
 }

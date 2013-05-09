@@ -68,7 +68,7 @@ public class NNTrainerTest {
 		Set<List<String>> permutations = NNTrainer
 				.createPlayerPermutations(playerTypes);
 
-		assertEquals(127, permutations.size());
+		assertEquals(91, permutations.size());
 
 		for (List<String> permutation : permutations) {
 			assertTrue(permutation
