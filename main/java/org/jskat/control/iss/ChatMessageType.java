@@ -2,7 +2,7 @@
  * JSkat - A skat program written in Java
  * by Jan Schäfer, Markus J. Luzius and Daniel Loreck
  *
- * Version 0.12.0
+ * Version 0.13.0-SNAPSHOT
  * Copyright (C) 2013-05-09
  *
  * Licensed under the Apache License, Version 2.0. You may
