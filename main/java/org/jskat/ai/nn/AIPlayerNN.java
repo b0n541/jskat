@@ -27,6 +27,8 @@ import java.util.Map;
 import java.util.Random;
 
 import org.jskat.ai.nn.data.SkatNetworks;
+import org.jskat.ai.nn.input.GenericNetworkInputGenerator;
+import org.jskat.ai.nn.input.NetworkInputGenerator;
 import org.jskat.ai.nn.util.INeuralNetwork;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
@@ -90,7 +92,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		setPlayerName(newPlayerName);
 
 		gameSimulator = new GameSimulator();
-		inputGenerator = new DetailedNetworkInputGenerator();
+		inputGenerator = new GenericNetworkInputGenerator();
 
 		for (GameType gameType : GameType.values()) {
 			if (gameType != GameType.RAMSCH && gameType != GameType.PASSED_IN) {
@@ -375,65 +377,50 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 		log.debug("found " + possibleCards.size() + " possible cards: " + possibleCards); //$NON-NLS-1$//$NON-NLS-2$
 
 		Map<Card, double[]> cardInputs = new HashMap<Card, double[]>();
-		if (possibleCards.size() == 1) {
-			// only one card is playable
-			bestCardIndex = 0;
-			cardInputs.put(possibleCards.get(0), inputGenerator.getNetInputs(
-					knowledge, possibleCards.get(0)));
-		} else {
-			// find the best card by asking the network
-			INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGame()
-					.getGameType(), isDeclarer(), knowledge.getCurrentTrick()
-					.getTrickNumberInGame());
 
-			// CardList bestCards = new CardList();
-			CardList goodCards = new CardList();
-			CardList undecidedCards = new CardList();
-			double highestOutput = Double.NEGATIVE_INFINITY;
-			for (Card card : possibleCards) {
+		INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGame()
+				.getGameType(), isDeclarer(), knowledge.getCurrentTrick()
+				.getTrickNumberInGame());
 
-				log.debug("Testing card " + card); //$NON-NLS-1$
+		CardList bestCards = new CardList();
+		CardList highestOutputCards = new CardList();
+		double highestOutput = Double.NEGATIVE_INFINITY;
+		for (Card card : possibleCards) {
 
-				double[] inputs = inputGenerator.getNetInputs(knowledge, card);
+			log.debug("Testing card " + card); //$NON-NLS-1$
 
-				cardInputs.put(card, inputs);
-				double currOutput = net.getPredictedOutcome(inputs);
-				log.warn("net output for card " + card + ": " + formatter.format(currOutput)); //$NON-NLS-1$
+			double[] inputs = inputGenerator.getNetInputs(knowledge, card);
 
-				// if (currOutput > highestOutput) {
-				// highestOutput = currOutput;
-				// bestCards.clear();
-				// bestCards.add(card);
-				// } else if (currOutput == highestOutput) {
-				// bestCards.add(card);
-				// }
+			cardInputs.put(card, inputs);
+			double currOutput = net.getPredictedOutcome(inputs);
+			log.warn("net output for card " + card + ": " + formatter.format(currOutput)); //$NON-NLS-1$
 
-				if (currOutput > WON - 0.05) {
-					goodCards.add(card);
-				} else if (currOutput > LOST + 0.05) {
-					undecidedCards.add(card);
-				}
+			if (currOutput > 0.9) {
+				bestCards.add(card);
 			}
-
-			// if (bestCards.size() > 0) {
-			// // get random card out of the best cards
-			// bestCardIndex = chooseRandomCard(possibleCards, bestCards);
-			//				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": " + bestCards.size() + " of " + possibleCards.size() + " are best cards. Choosing random from these."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			// } else
-			if (goodCards.size() > 0) {
-				// get random card out of the good cards
-				bestCardIndex = chooseRandomCard(possibleCards, goodCards);
-				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": " + goodCards.size() + " of " + possibleCards.size() + " are good cards. Choosing random from these."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			} else if (undecidedCards.size() > 0) {
-				// get random card out of the undecided cards
-				bestCardIndex = chooseRandomCard(possibleCards, undecidedCards);
-				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": " + undecidedCards.size() + " of " + possibleCards.size() + " are undecided cards. Choosing random from these."); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
-			} else {
-				// get random card
-				bestCardIndex = chooseRandomCard(possibleCards, possibleCards);
-				log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": No good card, choosing random from all."); //$NON-NLS-1$ //$NON-NLS-2$ 
+			if (currOutput > highestOutput) {
+				highestOutput = currOutput;
+				highestOutputCards.clear();
+				highestOutputCards.add(card);
+			} else if (currOutput == highestOutput) {
+				highestOutputCards.add(card);
 			}
 		}
+
+		if (bestCards.size() > 0) {
+			// get random card out of the best cards
+			bestCardIndex = chooseRandomCard(possibleCards, bestCards);
+			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": Found best cards. Choosing random from " + bestCards.size() + " out of " + possibleCards.size() + ": " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		} else {
+			// no best card, get card with best output
+			bestCardIndex = chooseRandomCard(possibleCards, highestOutputCards);
+			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": No best cards. Choosing card with highest output: " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$ //$NON-NLS-2$ 
+		}
+		// } else {
+		// // no best card, get random card out of all cards
+		// bestCardIndex = chooseRandomCard(possibleCards, possibleCards);
+		//			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": No best cards. Choosing card from all: " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$ //$NON-NLS-2$ 
+		// }
 
 		// store parameters for the card to play
 		// for adjustment of weights after the game

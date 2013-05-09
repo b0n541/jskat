@@ -420,6 +420,17 @@ public class PlayerKnowledge {
 	}
 
 	/**
+	 * Checks whether a card is on the players hand
+	 * 
+	 * @param card
+	 *            Card
+	 * @return TRUE, if the card is on the players hand
+	 */
+	public boolean isOwnCard(Card card) {
+		return ownCards.contains(card);
+	}
+
+	/**
 	 * Checks whether a player could have a card information, this is an
 	 * uncertain information
 	 * 
