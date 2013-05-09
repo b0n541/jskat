@@ -229,8 +229,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 			String player = (String) value;
 
 			if (player != null) {
-				if ("org.jskat.ai.algorithmic.AlgorithmicAIPlayer"
-						.equals(player)) {
+				if ("org.jskat.ai.newalgorithm.AlgorithmAI".equals(player)) {
 					result = strings.getString("algorithmic_nextgen_player"); //$NON-NLS-1$
 				} else if ("org.jskat.ai.mjl.AIPlayerMJL".equals(player)) {
 					result = strings.getString("algorithmic_player"); //$NON-NLS-1$
