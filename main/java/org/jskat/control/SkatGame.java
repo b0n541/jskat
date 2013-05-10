@@ -2,8 +2,8 @@
  * JSkat - A skat program written in Java
  * by Jan Schäfer, Markus J. Luzius and Daniel Loreck
  *
- * Version 0.13.0-SNAPSHOT
- * Copyright (C) 2013-05-09
+ * Version 0.12.1
+ * Copyright (C) 2013-05-10
  *
  * Licensed under the Apache License, Version 2.0. You may
  * obtain a copy of the License at
@@ -903,7 +903,7 @@ public class SkatGame extends JSkatThread {
 		int opponentPoints = 0;
 		for (Trick trick : data.getTricks()) {
 			String logString = "Trick: " + (trick.getTrickNumberInGame() + 1);
-			if (trick.getTrickWinner().equals(data.getDeclarer())) {
+			if (data.getDeclarer().equals(trick.getTrickWinner())) {
 				declarerPoints += trick.getValue();
 				logString += " Declarer wins: ";
 			} else {
