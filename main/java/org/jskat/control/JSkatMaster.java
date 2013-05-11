@@ -131,6 +131,10 @@ public class JSkatMaster {
 		}
 	}
 
+	public void createLocalTable(String tableName) {
+		createLocalTable(tableName, view.getHumanPlayerForGUI());
+	}
+
 	private void createLocalTable(final String tableName,
 			final AbstractHumanJSkatPlayer humanPlayer) {
 

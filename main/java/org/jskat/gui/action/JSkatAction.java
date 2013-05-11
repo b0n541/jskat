@@ -204,7 +204,7 @@ public enum JSkatAction {
 	/**
 	 * Inspects saved ISS games
 	 */
-	INSPECT_ISS_GAMES,
+	ANALYSE_ISS_GAMES,
 	// ----------------------------------------------------------------------------//
 	// -- Neural Network Player related actions
 	// ----------------------------------------------------------------------------//
