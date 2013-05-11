@@ -30,7 +30,6 @@ import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.training.propagation.Propagation;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.jskat.AbstractJSkatTest;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,27 +48,6 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	 */
 	private static Logger log = LoggerFactory
 			.getLogger(EncogNetworkWrapperTest.class);
-
-	/**
-	 * Tests the {@link EncogNetworkWrapper} with a boolean statement (A AND B
-	 * OR C).
-	 */
-	@Test
-	@Ignore
-	public final void testBooleanFunction() {
-
-		int[] hiddenNeurons = { 3 };
-		NetworkTopology topo = new NetworkTopology(3, hiddenNeurons, 1);
-		INeuralNetwork network = new EncogNetworkWrapper(topo, true);
-
-		double[][] input = { { 1.0, 1.0, 1.0 }, { 1.0, 1.0, 0.0 },
-				{ 1.0, 0.0, 1.0 }, { 1.0, 0.0, 0.0 }, { 0.0, 1.0, 1.0 },
-				{ 0.0, 1.0, 0.0 }, { 0.0, 0.0, 1.0 }, { 0.0, 0.0, 0.0 } };
-		double[][] output = { { 1.0 }, // A and B or C
-				{ 1.0 }, { 1.0 }, { 0.0 }, { 1.0 }, { 0.0 }, { 1.0 }, { 0.0 } };
-
-		// assertTrue(network.adjustWeights(input, output) < 0.5);
-	}
 
 	/**
 	 * Tests the NetworkWrapper with an XOR example.

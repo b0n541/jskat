@@ -20,9 +20,11 @@
 package org.jskat.ai.nn.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import org.apache.log4j.PropertyConfigurator;
+import org.jskat.AbstractJSkatTest;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,22 +33,12 @@ import org.slf4j.LoggerFactory;
 /**
  * Test class for NeuralNetwork
  */
-public class NetworkTester {
+public class NetworkTester extends AbstractJSkatTest {
 
 	private static Logger log = LoggerFactory.getLogger(NetworkTester.class);
 
-	/**
-	 * @param args
-	 */
-	public static void main(final String[] args) {
-
-		PropertyConfigurator.configure(ClassLoader.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
-
-		// testBooleanFunction();
-		testSkat();
-	}
-
-	private static void testSkat() {
+	@Test
+	public void testSkat() {
 
 		List<Double> opponent1 = new ArrayList<Double>();
 		List<Double> opponent2 = new ArrayList<Double>();
@@ -137,7 +129,8 @@ public class NetworkTester {
 		double output[][] = { { 1.0 }, { -1.0 }, { 1.0 } };
 
 		int[] hiddenNeurons = { 2 };
-		NetworkTopology topo = new NetworkTopology(input[0].length, output[0].length, 1, hiddenNeurons);
+		NetworkTopology topo = new NetworkTopology(input[0].length,
+				output[0].length, 1, hiddenNeurons);
 
 		INeuralNetwork net = new NeuralNetwork(topo);
 
@@ -167,8 +160,9 @@ public class NetworkTester {
 		//
 		for (i = 0; i < input.length; i++) {
 
-			double predOutput = net.getPredictedOutcome(input[i % input.length]);
-			log.debug(input[i % input.length].toString());
+			double predOutput = net
+					.getPredictedOutcome(input[i % input.length]);
+			log.debug(Arrays.toString(input[i % input.length]));
 			log.debug(Double.toString(predOutput));
 		}
 
@@ -176,8 +170,12 @@ public class NetworkTester {
 
 		log.debug("Re-loading network");
 
-		INeuralNetwork net2 = new NeuralNetwork();
-		// net2.loadNetwork("asdf.net");
+		// INeuralNetwork net2 = new NeuralNetwork(topo);
+		// net2.loadNetwork(
+		// System.getProperty("java.io.tmpdir")
+		// + System.getProperty("file.separator") + "asdf.net",
+		// topo.getInputNeuronCount(), topo.getHiddenLayerCount(),
+		// topo.getOutputNeuronCount());
 
 		goodGuess = 0;
 		i = 0;
@@ -201,7 +199,7 @@ public class NetworkTester {
 		for (i = 0; i < input.length; i++) {
 
 			double predOutput = net.getPredictedOutcome(input[i]);
-			log.debug(input[i].toString());
+			log.debug(Arrays.toString(input[i]));
 			log.debug(Double.toString(predOutput));
 		}
 	}
