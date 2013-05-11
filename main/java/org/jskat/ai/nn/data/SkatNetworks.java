@@ -97,8 +97,8 @@ public class SkatNetworks {
 
 	private static void createNetworks() {
 		int[] hiddenLayer = { HIDDEN_NEURONS };
-		NetworkTopology topo = new NetworkTopology(INPUT_NEURONS,
-				OUTPUT_NEURONS, 1, hiddenLayer);
+		NetworkTopology topo = new NetworkTopology(INPUT_NEURONS, hiddenLayer,
+				OUTPUT_NEURONS);
 
 		networks = new HashMap<GameType, Map<PlayerParty, List<INeuralNetwork>>>();
 		for (GameType gameType : GameType.values()) {

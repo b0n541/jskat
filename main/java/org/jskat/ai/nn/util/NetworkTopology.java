@@ -28,13 +28,6 @@ public class NetworkTopology {
 	private final int outputSignals;
 	private final int[] hiddenNeurons;
 
-	@Deprecated
-	public NetworkTopology(int inputs, int outputs, int hiddenLayerCount,
-			int[] hiddenNeuronCounts) {
-
-		this(inputs, hiddenNeuronCounts, outputs);
-	}
-
 	/**
 	 * Constructor
 	 * 

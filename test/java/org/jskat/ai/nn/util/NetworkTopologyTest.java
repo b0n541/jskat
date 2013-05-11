@@ -50,11 +50,11 @@ public class NetworkTopologyTest {
 
 	private NetworkTopology createSimpleTopology() {
 		int[] hiddenNeurons = { 3 };
-		return new NetworkTopology(2, 1, 1, hiddenNeurons);
+		return new NetworkTopology(2, hiddenNeurons, 1);
 	}
 
 	private NetworkTopology createComplexTopology() {
 		int[] hiddenNeurons = { 3, 4, 5, 2 };
-		return new NetworkTopology(2, 1, 4, hiddenNeurons);
+		return new NetworkTopology(2, hiddenNeurons, 1);
 	}
 }
