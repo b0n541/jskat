@@ -201,6 +201,10 @@ public enum JSkatAction {
 	 * Shows own cards on ISS
 	 */
 	SHOW_CARDS,
+	/**
+	 * Inspects saved ISS games
+	 */
+	INSPECT_ISS_GAMES,
 	// ----------------------------------------------------------------------------//
 	// -- Neural Network Player related actions
 	// ----------------------------------------------------------------------------//
