@@ -643,10 +643,8 @@ public class JSkatViewImpl implements JSkatView {
 			// FIXME jan 23.02.2013: use a different context panel when an
 			// opponent discards
 
-			// if (userPanel.getPosition().equals(declarer)) {
-			// actions.get(JSkatAction.PICK_UP_SKAT).setEnabled(true);
-			// actions.get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
-			// }
+			actions.get(JSkatAction.PICK_UP_SKAT).setEnabled(true);
+			actions.get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
 			break;
 		case GAME_OVER:
 			actions.get(JSkatAction.CONTINUE_LOCAL_SERIES).setEnabled(true);
