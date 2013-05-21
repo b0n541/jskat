@@ -298,10 +298,10 @@ public class JSkatGraphicRepository {
 
 		if (card != null) {
 
-			result = cards.get(CardSet.DONDORF_TOURNAMENT).get(card);
+			result = cards.get(CardSet.ISS_GERMAN).get(card);
 		} else {
 
-			result = cardBacks.get(CardSet.DONDORF_FRENCH);
+			result = cardBacks.get(CardSet.ISS_GERMAN);
 		}
 
 		return result;
