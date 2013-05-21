@@ -298,7 +298,7 @@ public class JSkatGraphicRepository {
 
 		if (card != null) {
 
-			result = cards.get(CardSet.ISS_GERMAN).get(card);
+			result = cards.get(CardSet.DONDORF_GERMAN).get(card);
 		} else {
 
 			result = cardBacks.get(CardSet.ISS_GERMAN);
@@ -617,9 +617,10 @@ public class JSkatGraphicRepository {
 
 	public enum CardSet {
 
-		ISS_FRENCH("ISS", CardFace.FRENCH, "gif"), ISS_GERMAN("ISS",
-				CardFace.GERMAN, "gif"), ISS_TOURNAMENT("ISS",
-				CardFace.TOURNAMENT, "gif"), DONDORF_FRENCH("Dondorf",
+		ISS_GERMAN("ISS", CardFace.GERMAN, "gif"), ISS_FRENCH("ISS",
+				CardFace.FRENCH, "gif"), ISS_TOURNAMENT("ISS",
+				CardFace.TOURNAMENT, "gif"), DONDORF_GERMAN("Dondorf",
+				CardFace.GERMAN, "png"), DONDORF_FRENCH("Dondorf",
 				CardFace.FRENCH, "png"), DONDORF_TOURNAMENT("Dondorf",
 				CardFace.TOURNAMENT, "png");
 
