@@ -20,6 +20,7 @@
 package org.jskat.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -194,6 +195,8 @@ public class SkatGameData {
 
 	private boolean declarerPickedUpSkat;
 
+	private Set<Player> ramschLoosers;
+
 	/**
 	 * Creates a new instance of a Skat game data
 	 */
@@ -229,6 +232,8 @@ public class SkatGameData {
 		skat = new CardList();
 
 		tricks = new ArrayList<Trick>();
+
+		ramschLoosers = new HashSet<Player>();
 	}
 
 	/**
@@ -514,52 +519,24 @@ public class SkatGameData {
 	 */
 	public void finishRamschGame() {
 
-		Player ramschLoser;
 		result.setWon(false);
 
 		// FIXME this is rule logic --> remove it from data object!!!
-		if (playerPoints.get(Player.FOREHAND).intValue() > playerPoints.get(
-				Player.MIDDLEHAND).intValue()) {
-
-			if (playerPoints.get(Player.FOREHAND).intValue() > playerPoints
-					.get(Player.REARHAND).intValue()) {
-				ramschLoser = Player.FOREHAND;
-			} else {
-				if (playerPoints.get(Player.FOREHAND).intValue() == playerPoints
-						.get(Player.REARHAND).intValue()) {
-					ramschLoser = Player.MIDDLEHAND;
-					result.setWon(true);
-				} else {
-					ramschLoser = Player.REARHAND;
-				}
-			}
-
-		} else {
-
-			if (playerPoints.get(Player.MIDDLEHAND).intValue() > playerPoints
-					.get(Player.REARHAND).intValue()) {
-				ramschLoser = Player.MIDDLEHAND;
-			} else {
-				if (playerPoints.get(Player.MIDDLEHAND).intValue() == playerPoints
-						.get(Player.REARHAND).intValue()) {
-					ramschLoser = Player.FOREHAND;
-					result.setWon(true);
-				} else {
-					ramschLoser = Player.REARHAND;
-				}
+		Integer highestPoints = Integer.MIN_VALUE;
+		for (Player player : Player.values()) {
+			if (highestPoints < playerPoints.get(player)) {
+				highestPoints = playerPoints.get(player);
 			}
 		}
-		setDeclarer(ramschLoser);
-
-		result.setFinalDeclarerPoints(playerPoints.get(ramschLoser));
-		result.setFinalOpponentPoints(playerPoints.get(ramschLoser
-				.getLeftNeighbor())
-				+ playerPoints.get(ramschLoser.getRightNeighbor()));
+		for (Player player : Player.values()) {
+			if (playerPoints.get(player) == highestPoints) {
+				ramschLoosers.add(player);
+			}
+		}
 
 		if (isDurchmarsch()) {
 			result.setWon(true);
 		}
-
 	}
 
 	/**
@@ -1162,6 +1139,12 @@ public class SkatGameData {
 
 		factory.setPlayerPoints(playerPoints);
 
+		if (announcement.gameType == GameType.RAMSCH) {
+			for (Player looser : ramschLoosers) {
+				factory.addRamschLooser(looser);
+			}
+		}
+
 		factory.setGameResult(getResult());
 
 		return factory.getSummary();
@@ -1270,5 +1253,19 @@ public class SkatGameData {
 			result.put(player, cards);
 		}
 		return result;
+	}
+
+	/**
+	 * Gets the looses for a ramsch game
+	 * 
+	 * @return Set of loosing players
+	 */
+	public Set<Player> getRamschLoosers() {
+		if (announcement == null
+				|| !GameType.RAMSCH.equals(announcement.gameType)) {
+			throw new IllegalStateException(
+					"This game data object is not from a ramsch game!");
+		}
+		return Collections.unmodifiableSet(ramschLoosers);
 	}
 }

@@ -389,4 +389,28 @@ public class JSkatResourceBundle {
 
 		return strings.getLocale();
 	}
+
+	/**
+	 * Gets the i18n for a player position
+	 * 
+	 * @param position
+	 *            Player position
+	 * @return i18n for player position
+	 */
+	public Object getPlayerString(Player position) {
+		String result = null;
+
+		switch (position) {
+		case FOREHAND:
+			result = strings.getString("forehand");
+			break;
+		case MIDDLEHAND:
+			result = strings.getString("middlehand");
+			break;
+		case REARHAND:
+			result = strings.getString("rearhand");
+			break;
+		}
+		return result;
+	}
 }

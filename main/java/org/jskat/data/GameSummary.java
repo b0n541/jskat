@@ -20,9 +20,12 @@
 package org.jskat.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jskat.control.SkatGame;
 import org.jskat.util.GameType;
@@ -86,6 +89,8 @@ public class GameSummary {
 	 * Player points
 	 */
 	Map<Player, Integer> playerPoints = new HashMap<Player, Integer>();
+
+	Set<Player> ramschLoosers = new HashSet<Player>();
 
 	/**
 	 * Constructor
@@ -190,7 +195,8 @@ public class GameSummary {
 			tmpSummary.tricks.addAll(tricks);
 		}
 
-		public final void setPlayerPoints(final Map<Player, Integer> playerAndPoints) {
+		public final void setPlayerPoints(
+				final Map<Player, Integer> playerAndPoints) {
 			tmpSummary.playerPoints.putAll(playerAndPoints);
 		}
 
@@ -244,11 +250,16 @@ public class GameSummary {
 			tmpSummary.declarer = position;
 		}
 
+		public final void addRamschLooser(Player looser) {
+			tmpSummary.ramschLoosers.add(looser);
+		}
+
 		private boolean validate() {
 			if (tmpSummary.gameType == null) {
 				log.error("game type is null"); //$NON-NLS-1$
 				return false;
-			} else if (!GameType.RAMSCH.equals(tmpSummary.gameType) && !GameType.PASSED_IN.equals(tmpSummary.gameType)
+			} else if (!GameType.RAMSCH.equals(tmpSummary.gameType)
+					&& !GameType.PASSED_IN.equals(tmpSummary.gameType)
 					&& tmpSummary.declarer == null) {
 				log.error("declarer is null"); //$NON-NLS-1$
 				return false;
@@ -270,6 +281,9 @@ public class GameSummary {
 			} else if (tmpSummary.playerPoints.size() != 3) {
 				log.error("missing player points"); //$NON-NLS-1$
 				return false;
+			} else if (tmpSummary.gameType == GameType.RAMSCH
+					&& tmpSummary.ramschLoosers.size() == 0) {
+				log.error("missing ramsch looser");
 			}
 			return true;
 		}
@@ -474,5 +488,9 @@ public class GameSummary {
 	 */
 	public int getPlayerPoints(final Player player) {
 		return playerPoints.get(player).intValue();
+	}
+
+	public Set<Player> getRamschLoosers() {
+		return Collections.unmodifiableSet(ramschLoosers);
 	}
 }
