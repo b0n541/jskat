@@ -40,8 +40,6 @@ import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
-import org.jskat.util.Rank;
-import org.jskat.util.Suit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -172,8 +170,7 @@ class CardPanel extends JPanel {
 
 		// calculate card gap
 		final int panelWidth = getWidth();
-		final int cardWidth = bitmaps.getCardImage(Suit.CLUBS, Rank.JACK)
-				.getWidth(this);
+		final int cardWidth = bitmaps.getCardImage(Card.CJ).getWidth(this);
 		int cardGap = cardWidth;
 		if (cards.size() * cardGap > panelWidth) {
 
@@ -188,14 +185,13 @@ class CardPanel extends JPanel {
 
 			if (showBackside) {
 
-				image = bitmaps.getCardImage(null, null);
+				image = bitmaps.getCardImage(null);
 			} else {
 				if (card == null) {
 					// e.g. in debug mode
-					image = bitmaps.getCardImage(null, null);
+					image = bitmaps.getCardImage(null);
 				} else {
-					image = bitmaps
-							.getCardImage(card.getSuit(), card.getRank());
+					image = bitmaps.getCardImage(card);
 				}
 			}
 
@@ -272,8 +268,8 @@ class CardPanel extends JPanel {
 			//			log.debug("Mouse button release inside panel"); //$NON-NLS-1$
 
 			// get card
-			final double cardWidth = bitmaps
-					.getCardImage(Suit.CLUBS, Rank.JACK).getWidth(this);
+			final double cardWidth = bitmaps.getCardImage(Card.CJ).getWidth(
+					this);
 
 			int cardIndex = -1;
 			if (cards.size() > 0) {

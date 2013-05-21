@@ -39,8 +39,6 @@ import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.Player;
-import org.jskat.util.Rank;
-import org.jskat.util.Suit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -221,7 +219,7 @@ class TrickPanel extends JPanel implements ComponentListener {
 
 	private double getCardScale() {
 
-		final Image sampleCard = bitmaps.getCardImage(Suit.CLUBS, Rank.JACK);
+		final Image sampleCard = bitmaps.getCardImage(Card.CJ);
 		final double imageWidth = sampleCard.getWidth(this) * TRICK_SIZE_FACTOR;
 		final double imageHeight = sampleCard.getHeight(this)
 				* TRICK_SIZE_FACTOR;

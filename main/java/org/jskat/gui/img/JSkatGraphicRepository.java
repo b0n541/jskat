@@ -25,13 +25,13 @@ import java.awt.Image;
 import java.awt.MediaTracker;
 import java.awt.Toolkit;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.jskat.data.JSkatOptions;
 import org.jskat.util.Card;
 import org.jskat.util.JSkatResourceBundle;
-import org.jskat.util.Rank;
-import org.jskat.util.Suit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +43,20 @@ public class JSkatGraphicRepository {
 	private static Logger log = LoggerFactory
 			.getLogger(JSkatGraphicRepository.class);
 	private static JSkatGraphicRepository instance = null;
+
+	private Image skatTable;
+
+	private Map<CardSet, Map<Card, Image>> cards;
+
+	private Map<CardSet, Image> cardBacks;
+
+	private List<List<Image>> icons;
+
+	private List<Image> flags;
+
+	private Image jskatLogo;
+
+	private List<Image> bidBubbles;
 
 	/**
 	 * Gets the instance of the JSkat graphic repository
@@ -82,7 +96,8 @@ public class JSkatGraphicRepository {
 
 		log.debug("Bitmaps for icons loaded..."); //$NON-NLS-1$
 
-		cards = new ArrayList<List<Image>>();
+		cards = new HashMap<CardSet, Map<Card, Image>>();
+		cardBacks = new HashMap<CardSet, Image>();
 		loadCards(tracker, JSkatOptions.instance().getCardFace());
 
 		log.debug("Bitmaps for cards loaded..."); //$NON-NLS-1$
@@ -204,35 +219,34 @@ public class JSkatGraphicRepository {
 	private void loadCards(final MediaTracker tracker, final CardFace cardFace) {
 
 		cards.clear();
-		for (final Suit suit : Suit.values()) {
+		for (CardSet set : CardSet.values()) {
 
-			cards.add(new ArrayList<Image>());
+			cards.put(set, new HashMap<Card, Image>());
 
-			for (final Rank rank : Rank.values()) {
+			for (Card card : Card.values()) {
 
-				cards.get(suit.ordinal())
-						.add(Toolkit
-								.getDefaultToolkit()
-								.getImage(
-										ClassLoader
-												.getSystemResource("org/jskat/gui/img/cards/" //$NON-NLS-1$
-														+ cardFace.toString()
-																.toLowerCase()
-														+ "/iss/" + suit.shortString() + '-' + rank.shortString() + ".gif"))); //$NON-NLS-1$//$NON-NLS-2$
+				cards.get(set)
+						.put(card,
+								Toolkit.getDefaultToolkit()
+										.getImage(
+												ClassLoader
+														.getSystemResource("org/jskat/gui/img/card/" //$NON-NLS-1$
+																+ set.cardFace
+																		.toString()
+																		.toLowerCase()
+																+ "/" + set.name.toLowerCase() + "/" + card.getSuit().shortString() + '-' + card.getRank().shortString() + "." + set.fileType))); //$NON-NLS-1$//$NON-NLS-2$
 
-				tracker.addImage(cards.get(suit.ordinal()).get(rank.ordinal()),
-						2);
+				tracker.addImage(cards.get(set).get(card), 2);
 			}
+
+			cardBacks
+					.put(set,
+							Toolkit.getDefaultToolkit()
+									.getImage(
+											ClassLoader
+													.getSystemResource("org/jskat/gui/img/card/back/" + set.name.toLowerCase() + "." + set.fileType))); //$NON-NLS-1$
+			tracker.addImage(cardBacks.get(set), 2);
 		}
-
-		cardBack = Toolkit
-				.getDefaultToolkit()
-				.getImage(
-						ClassLoader
-								.getSystemResource("org/jskat/gui/img/cards/" + cardFace.toString().toLowerCase() //$NON-NLS-1$
-										+ "/iss/back.gif")); //$NON-NLS-1$
-		tracker.addImage(cardBack, 2);
-
 		try {
 			tracker.waitForID(2);
 		} catch (final InterruptedException e) {
@@ -272,33 +286,22 @@ public class JSkatGraphicRepository {
 	/**
 	 * Gets the card image
 	 * 
-	 * @param The
-	 *            card
-	 * @return The card image
-	 */
-	public Image getCardImage(final Card card) {
-		return getCardImage(card.getSuit(), card.getRank());
-	}
-
-	/**
-	 * Gets the card image
-	 * 
 	 * @param suit
 	 *            The suit of the card
 	 * @param value
 	 *            The value of the card
 	 * @return The card image
 	 */
-	public Image getCardImage(final Suit suit, final Rank value) {
+	public Image getCardImage(Card card) {
 
 		Image result = null;
 
-		if (suit != null && value != null) {
+		if (card != null) {
 
-			result = cards.get(suit.ordinal()).get(value.ordinal());
+			result = cards.get(CardSet.DONDORF_TOURNAMENT).get(card);
 		} else {
 
-			result = cardBack;
+			result = cardBacks.get(CardSet.DONDORF_FRENCH);
 		}
 
 		return result;
@@ -359,20 +362,6 @@ public class JSkatGraphicRepository {
 	public Image getUserBidBubbleImage() {
 		return bidBubbles.get(2);
 	}
-
-	private Image skatTable;
-
-	private List<List<Image>> cards;
-
-	private Image cardBack;
-
-	private List<List<Image>> icons;
-
-	private List<Image> flags;
-
-	private Image jskatLogo;
-
-	private List<Image> bidBubbles;
 
 	/**
 	 * Holds all icon types
@@ -623,6 +612,25 @@ public class JSkatGraphicRepository {
 			}
 
 			return result;
+		}
+	}
+
+	public enum CardSet {
+
+		ISS_FRENCH("ISS", CardFace.FRENCH, "gif"), ISS_GERMAN("ISS",
+				CardFace.GERMAN, "gif"), ISS_TOURNAMENT("ISS",
+				CardFace.TOURNAMENT, "gif"), DONDORF_FRENCH("Dondorf",
+				CardFace.FRENCH, "png"), DONDORF_TOURNAMENT("Dondorf",
+				CardFace.TOURNAMENT, "png");
+
+		public String name = null;
+		public CardFace cardFace = null;
+		public String fileType = null;
+
+		CardSet(String name, CardFace cardFace, String fileType) {
+			this.name = name;
+			this.cardFace = cardFace;
+			this.fileType = fileType;
 		}
 	}
 }
