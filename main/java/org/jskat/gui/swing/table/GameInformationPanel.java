@@ -21,6 +21,9 @@
 package org.jskat.gui.swing.table;
 
 import java.awt.Font;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -31,6 +34,7 @@ import org.jskat.data.SkatGameData.GameState;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.GameType;
 import org.jskat.util.JSkatResourceBundle;
+import org.jskat.util.Player;
 
 /**
  * Panel for showing game informations
@@ -57,6 +61,7 @@ class GameInformationPanel extends JPanel {
 	private boolean gameWon;
 	private int declarerPoints;
 	private int opponentPoints;
+	private Set<Player> ramschLoosers;
 
 	/**
 	 * Constructor
@@ -120,6 +125,7 @@ class GameInformationPanel extends JPanel {
 		gameWon = false;
 		declarerPoints = 0;
 		opponentPoints = 0;
+		ramschLoosers = new HashSet<Player>();
 	}
 
 	private void refreshText() {
@@ -156,7 +162,19 @@ class GameInformationPanel extends JPanel {
 			}
 		}
 
-		if (gameType != GameType.NULL && gameType != GameType.PASSED_IN) {
+		if (gameType == GameType.RAMSCH) {
+			text.append(" - "); //$NON-NLS-1$
+
+			Iterator<Player> iterator = ramschLoosers.iterator();
+			if (iterator.hasNext()) {
+				text.append(strings.getPlayerString(iterator.next()));
+			}
+			while (iterator.hasNext()) {
+				text.append(", ");
+				text.append(strings.getPlayerString(iterator.next()));
+			}
+
+		} else if (gameType != GameType.NULL && gameType != GameType.PASSED_IN) {
 			text.append(" - "); //$NON-NLS-1$
 
 			text.append(declarerPoints + " " + strings.getString("versus")
@@ -216,7 +234,7 @@ class GameInformationPanel extends JPanel {
 		gameWon = summary.isGameWon();
 		declarerPoints = summary.getFinalDeclarerPoints();
 		opponentPoints = summary.getFinalOpponentScore();
-
+		ramschLoosers = summary.getRamschLoosers();
 		refreshText();
 	}
 
