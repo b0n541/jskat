@@ -31,9 +31,9 @@ import org.reflections.Reflections;
  */
 public class JSkatPlayerResolver {
 
-	public final static String HUMAN_PLAYER_CLASS = "org.jskat.gui.human.SwingHumanPlayer";
+	public static final String HUMAN_PLAYER_CLASS = "org.jskat.gui.human.SwingHumanPlayer";
 
-	public final static Set<String> EXCLUDED_PLAYER_CLASSES;
+	public static final Set<String> EXCLUDED_PLAYER_CLASSES;
 
 	static {
 		EXCLUDED_PLAYER_CLASSES = new HashSet<String>();

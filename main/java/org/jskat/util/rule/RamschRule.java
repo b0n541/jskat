@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
  */
 public class RamschRule extends SuitGrandRamschRule {
 
-	private final static Logger log = LoggerFactory.getLogger(RamschRule.class);
+	private static final Logger log = LoggerFactory.getLogger(RamschRule.class);
 
 	/**
 	 * {@inheritDoc}
@@ -109,7 +109,7 @@ public class RamschRule extends SuitGrandRamschRule {
 	 *            Game data
 	 * @return TRUE if the player played a durchmarsch
 	 */
-	public final static boolean isDurchmarsch(final Player player,
+	public static final boolean isDurchmarsch(final Player player,
 			final SkatGameData gameData) {
 		for (Trick t : gameData.getTricks()) {
 			if (t.getTrickWinner() != player) {
@@ -130,7 +130,7 @@ public class RamschRule extends SuitGrandRamschRule {
 	 *            Game data
 	 * @return TRUE if the player was jungfrau
 	 */
-	public final static boolean isJungfrau(final Player player,
+	public static final boolean isJungfrau(final Player player,
 			final SkatGameData gameData) {
 		for (Trick t : gameData.getTricks()) {
 			if (t.getTrickWinner() == player) {
