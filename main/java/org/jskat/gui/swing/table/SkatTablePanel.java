@@ -96,7 +96,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	protected boolean ramsch = false;
 
 	/**
-	 * {@inheritDoc}
+	 * Panel for a skat table.
 	 */
 	public SkatTablePanel(final JSkatView view, final String newTableName,
 			final ActionMap actions) {
@@ -104,16 +104,10 @@ public class SkatTablePanel extends AbstractTabPanel {
 		super(view, newTableName, actions);
 
 		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
-
-		final TrickPanel trickPanel = new TrickPanel(false);
-		trickPanel.setUserPosition(Player.FOREHAND);
-		trickPanel.addCard(Player.FOREHAND, Card.CJ);
-		trickPanel.addCard(Player.MIDDLEHAND, Card.SJ);
-		trickPanel.addCard(Player.REARHAND, Card.HJ);
 	}
 
 	/**
-	 * Returns the actions for the game over context
+	 * Returns the actions for the game over context.
 	 * 
 	 * @return List of actions for the game over context
 	 */
