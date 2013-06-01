@@ -529,7 +529,7 @@ public class SkatGameData {
 			}
 		}
 		for (Player player : Player.values()) {
-			if (playerPoints.get(player) == highestPoints) {
+			if (playerPoints.get(player).equals(highestPoints)) {
 				ramschLoosers.add(player);
 			}
 		}
