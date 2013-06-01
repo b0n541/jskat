@@ -37,7 +37,8 @@ public class NullRule extends AbstractSkatRule {
 	 */
 	@Override
 	public int getGameValueForWonGame(final SkatGameData gameData) {
-		return SkatConstants.getGameBaseValue(gameData.getGameType(), gameData.isHand(), gameData.isOuvert());
+		return SkatConstants.getGameBaseValue(gameData.getGameType(),
+				gameData.isHand(), gameData.isOuvert());
 	}
 
 	/**
@@ -61,8 +62,9 @@ public class NullRule extends AbstractSkatRule {
 	 * @see SkatRule#isCardBeatsCard(GameType, Card, Card)
 	 */
 	@Override
-	public boolean isCardBeatsCard(@SuppressWarnings("unused") final GameType gameType, final Card cardToBeat,
-			final Card card) {
+	public boolean isCardBeatsCard(
+			@SuppressWarnings("unused") final GameType gameType,
+			final Card cardToBeat, final Card card) {
 
 		boolean result = false;
 
@@ -81,7 +83,8 @@ public class NullRule extends AbstractSkatRule {
 	 * @see SkatRule#isCardAllowed(GameType, Card, CardList, Card)
 	 */
 	@Override
-	public boolean isCardAllowed(final GameType gameType, final Card initialCard, final CardList hand, final Card card) {
+	public boolean isCardAllowed(final GameType gameType,
+			final Card initialCard, final CardList hand, final Card card) {
 
 		boolean result = false;
 
@@ -106,19 +109,21 @@ public class NullRule extends AbstractSkatRule {
 	@Override
 	public boolean isGameWon(final SkatGameData gameData) {
 
-		return gameData.isPlayerMadeNoTrick(gameData.getDeclarer()) && !isOverbid(gameData);
+		return gameData.isPlayerMadeNoTrick(gameData.getDeclarer())
+				&& !isOverbid(gameData);
 	}
 
 	/**
 	 * @see SkatRule#hasSuit(GameType, CardList, Suit)
 	 */
 	@Override
-	public boolean hasSuit(final GameType gameType, final CardList hand, final Suit suit) {
+	public boolean hasSuit(final GameType gameType, final CardList hand,
+			final Suit suit) {
 
 		boolean result = false;
 
 		int index = 0;
-		while (result == false && index < hand.size()) {
+		while (!result && index < hand.size()) {
 
 			if (hand.get(index).getSuit() == suit) {
 
@@ -135,7 +140,8 @@ public class NullRule extends AbstractSkatRule {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public int getMultiplier(@SuppressWarnings("unused") final SkatGameData gameData) {
+	public int getMultiplier(
+			@SuppressWarnings("unused") final SkatGameData gameData) {
 		return 0;
 	}
 
@@ -143,7 +149,8 @@ public class NullRule extends AbstractSkatRule {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean isPlayWithJacks(@SuppressWarnings("unused") final SkatGameData gameData) {
+	public boolean isPlayWithJacks(
+			@SuppressWarnings("unused") final SkatGameData gameData) {
 		return false;
 	}
 }
