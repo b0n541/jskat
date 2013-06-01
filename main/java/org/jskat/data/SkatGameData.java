@@ -959,13 +959,11 @@ public class SkatGameData {
 	 */
 	public GameType getGameType() {
 
-		GameType gameType = null;
-
-		if (announcement != null) {
-			gameType = announcement.getGameType();
+		if (announcement == null) {
+			throw new IllegalStateException("No game announcement available!");
 		}
 
-		return gameType;
+		return announcement.getGameType();
 	}
 
 	/**
