@@ -70,6 +70,9 @@ public class ISSTablePanel extends SkatTablePanel {
 		loginName = newLoginName;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected List<JSkatAction> getGameOverActions() {
 		return Arrays.asList(JSkatAction.INVITE_ISS_PLAYER,
