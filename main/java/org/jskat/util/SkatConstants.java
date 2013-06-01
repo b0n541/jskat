@@ -31,7 +31,7 @@ public final class SkatConstants {
 	/**
 	 * All possible bid values ordered from the lowest to the highest bid value
 	 */
-	public final static List<Integer> bidOrder = Arrays.asList(
+	public static final List<Integer> bidOrder = Arrays.asList(
 			Integer.valueOf(18), Integer.valueOf(20), Integer.valueOf(22),
 			Integer.valueOf(23), Integer.valueOf(24), Integer.valueOf(27),
 			Integer.valueOf(30), Integer.valueOf(33), Integer.valueOf(35),
@@ -61,7 +61,7 @@ public final class SkatConstants {
 	 *            Current bid value
 	 * @return Next valid bid value or the last possible bid value
 	 */
-	public final static int getNextBidValue(int currBidValue) {
+	public static final int getNextBidValue(int currBidValue) {
 
 		int result = -1;
 		boolean nextBidValueFound = false;
@@ -91,7 +91,7 @@ public final class SkatConstants {
 	 *            TRUE if game is an ouvert game
 	 * @return Multiplier
 	 */
-	public final static int getGameBaseValue(GameType gameType, boolean hand,
+	public static final int getGameBaseValue(GameType gameType, boolean hand,
 			boolean ouvert) {
 
 		int multiplier = 0;
@@ -149,7 +149,7 @@ public final class SkatConstants {
 	 * 
 	 * @return Tournament value
 	 */
-	public final static int getTournamentGameValue(boolean declarer,
+	public static final int getTournamentGameValue(boolean declarer,
 			int gameValue, int numberOfPlayers) {
 
 		int result = 0;
