@@ -33,8 +33,9 @@ public class GrandRule extends SuitGrandRule {
 	 */
 	@Override
 	public int getMultiplier(CardList cards, GameType gameType) {
-		if (gameType != GameType.GRAND)
+		if (gameType != GameType.GRAND) {
 			throw new IllegalArgumentException("Wrong ruleset - " + gameType);
+		}
 		int result = 1;
 		if (cards.contains(Card.CJ)) {
 			result++;

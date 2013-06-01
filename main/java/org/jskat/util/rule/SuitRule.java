@@ -35,8 +35,10 @@ public class SuitRule extends SuitGrandRule {
 	 */
 	@Override
 	public int getMultiplier(CardList cards, GameType gameType) {
-		if (gameType == GameType.GRAND || gameType == GameType.RAMSCH || gameType == GameType.NULL)
+		if (gameType == GameType.GRAND || gameType == GameType.RAMSCH
+				|| gameType == GameType.NULL) {
 			throw new IllegalArgumentException("Wrong ruleset - " + gameType);
+		}
 		int result = 1;
 		if (cards.contains(Card.CJ)) {
 			result++;
@@ -47,7 +49,8 @@ public class SuitRule extends SuitGrandRule {
 					if (cards.contains(Card.DJ)) {
 						result++;
 						for (Rank r : Rank.getRankList()) {
-							if (cards.contains(Card.getCard(Suit.valueOf(gameType.toString()), r))) {
+							if (cards.contains(Card.getCard(
+									Suit.valueOf(gameType.toString()), r))) {
 								result++;
 							} else {
 								break;
@@ -65,7 +68,8 @@ public class SuitRule extends SuitGrandRule {
 					if (!cards.contains(Card.DJ)) {
 						result++;
 						for (Rank r : Rank.getRankList()) {
-							if (!cards.contains(Card.getCard(Suit.valueOf(gameType.toString()), r))) {
+							if (!cards.contains(Card.getCard(
+									Suit.valueOf(gameType.toString()), r))) {
 								result++;
 							} else {
 								break;
