@@ -74,12 +74,12 @@ public abstract class AbstractTabPanel extends JPanel {
 	}
 
 	/**
-	 * Initializes the tab panel
+	 * Initializes the tab panel.
 	 */
 	protected abstract void initPanel();
 
 	/**
-	 * Sets the focus
+	 * Sets the focus.
 	 */
 	protected abstract void setFocus();
 }
