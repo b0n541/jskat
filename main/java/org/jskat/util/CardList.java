@@ -195,8 +195,9 @@ public class CardList implements Iterable<Card> {
 	 */
 	public boolean hasTrump(final GameType gameType) {
 		for (Card card : cards) {
-			if (card.isTrump(gameType))
+			if (card.isTrump(gameType)) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -436,8 +437,8 @@ public class CardList implements Iterable<Card> {
 		int index = 0;
 		for (Card card : cards) {
 			if (result == -1 && card.getSuit() == suit) {
-				if (card.getRank() != Rank.JACK
-						|| (card.getRank() == Rank.JACK && includeJacks)) {
+				if (card.getRank() != Rank.JACK || card.getRank() == Rank.JACK
+						&& includeJacks) {
 					result = index;
 				}
 			}
@@ -488,8 +489,8 @@ public class CardList implements Iterable<Card> {
 		int index = 0;
 		for (Card card : cards) {
 			if (card.getSuit() == suit) {
-				if (card.getRank() != Rank.JACK
-						|| (card.getRank() == Rank.JACK && includeJacks)) {
+				if (card.getRank() != Rank.JACK || card.getRank() == Rank.JACK
+						&& includeJacks) {
 					result = index;
 				}
 			}
@@ -552,24 +553,29 @@ public class CardList implements Iterable<Card> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((cards == null) ? 0 : cards.hashCode());
+		result = prime * result + (cards == null ? 0 : cards.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (getClass() != obj.getClass()) {
 			return false;
+		}
 		CardList other = (CardList) obj;
 		if (cards == null) {
-			if (other.cards != null)
+			if (other.cards != null) {
 				return false;
-		} else if (!cards.equals(other.cards))
+			}
+		} else if (!cards.equals(other.cards)) {
 			return false;
+		}
 		return true;
 	}
 
@@ -577,16 +583,18 @@ public class CardList implements Iterable<Card> {
 		@Override
 		public int compare(Card first, Card second) {
 			if (first.getSuit().getSuitOrder() < second.getSuit()
-					.getSuitOrder())
+					.getSuitOrder()) {
 				return -1;
-			else if (first.getSuit().getSuitOrder() > second.getSuit()
-					.getSuitOrder())
+			} else if (first.getSuit().getSuitOrder() > second.getSuit()
+					.getSuitOrder()) {
 				return 1;
+			}
 
-			if (first.getNullOrder() < second.getNullOrder())
+			if (first.getNullOrder() < second.getNullOrder()) {
 				return 1;
-			else
+			} else {
 				return -1;
+			}
 		}
 	}
 
@@ -596,27 +604,31 @@ public class CardList implements Iterable<Card> {
 			// first the jacks
 			if (first.getRank() == Rank.JACK && second.getRank() == Rank.JACK) {
 				if (first.getSuit().getSuitOrder() < second.getSuit()
-						.getSuitOrder())
+						.getSuitOrder()) {
 					return -1;
-				else if (first.getSuit().getSuitOrder() > second.getSuit()
-						.getSuitOrder())
+				} else if (first.getSuit().getSuitOrder() > second.getSuit()
+						.getSuitOrder()) {
 					return 1;
-			} else if (first.getRank() == Rank.JACK)
+				}
+			} else if (first.getRank() == Rank.JACK) {
 				return -1;
-			else if (second.getRank() == Rank.JACK)
+			} else if (second.getRank() == Rank.JACK) {
 				return 1;
+			}
 
 			if (first.getSuit().getSuitOrder() < second.getSuit()
-					.getSuitOrder())
+					.getSuitOrder()) {
 				return -1;
-			else if (first.getSuit().getSuitOrder() > second.getSuit()
-					.getSuitOrder())
+			} else if (first.getSuit().getSuitOrder() > second.getSuit()
+					.getSuitOrder()) {
 				return 1;
+			}
 
-			if (first.getRamschOrder() < second.getRamschOrder())
+			if (first.getRamschOrder() < second.getRamschOrder()) {
 				return 1;
-			else
+			} else {
 				return -1;
+			}
 		}
 	}
 
@@ -632,15 +644,17 @@ public class CardList implements Iterable<Card> {
 			// first the jacks
 			if (first.getRank() == Rank.JACK && second.getRank() == Rank.JACK) {
 				if (first.getSuit().getSuitOrder() < second.getSuit()
-						.getSuitOrder())
+						.getSuitOrder()) {
 					return 1;
-				else if (first.getSuit().getSuitOrder() > second.getSuit()
-						.getSuitOrder())
+				} else if (first.getSuit().getSuitOrder() > second.getSuit()
+						.getSuitOrder()) {
 					return -1;
-			} else if (first.getRank() == Rank.JACK)
+				}
+			} else if (first.getRank() == Rank.JACK) {
 				return -1;
-			else if (second.getRank() == Rank.JACK)
+			} else if (second.getRank() == Rank.JACK) {
 				return 1;
+			}
 
 			// trump cards follow
 			if (first.getSuit() == gameType.getTrumpSuit()
@@ -651,24 +665,27 @@ public class CardList implements Iterable<Card> {
 				return 1;
 			} else if (first.getSuit() == gameType.getTrumpSuit()
 					&& second.getSuit() == gameType.getTrumpSuit()) {
-				if (first.getSuitGrandOrder() < second.getSuitGrandOrder())
+				if (first.getSuitGrandOrder() < second.getSuitGrandOrder()) {
 					return 1;
-				else
+				} else {
 					return -1;
+				}
 			}
 
 			// all the other cards
 			if (first.getSuit().getSuitOrder() < second.getSuit()
-					.getSuitOrder())
+					.getSuitOrder()) {
 				return 1;
-			else if (first.getSuit().getSuitOrder() > second.getSuit()
-					.getSuitOrder())
+			} else if (first.getSuit().getSuitOrder() > second.getSuit()
+					.getSuitOrder()) {
 				return -1;
+			}
 
-			if (first.getSuitGrandOrder() < second.getSuitGrandOrder())
+			if (first.getSuitGrandOrder() < second.getSuitGrandOrder()) {
 				return 1;
-			else
+			} else {
 				return -1;
+			}
 		}
 	}
 }
