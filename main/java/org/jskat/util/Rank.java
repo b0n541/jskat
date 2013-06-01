@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Contains all ranks
+ * Contains all ranks.
  */
 public enum Rank {
 	/**
@@ -32,11 +32,13 @@ public enum Rank {
 	SEVEN {
 		@Override
 		public String shortString() {
-			return "7";} //$NON-NLS-1$
+			return "7";
+		}
 
 		@Override
 		public String longString() {
-			return "Seven";} //$NON-NLS-1$
+			return "Seven";
+		}
 
 		@Override
 		public int getSuitGrandOrder() {
@@ -64,11 +66,13 @@ public enum Rank {
 	EIGHT {
 		@Override
 		public String shortString() {
-			return "8";} //$NON-NLS-1$
+			return "8";
+		}
 
 		@Override
 		public String longString() {
-			return "Eight";} //$NON-NLS-1$
+			return "Eight";
+		}
 
 		@Override
 		public int getSuitGrandOrder() {
@@ -96,11 +100,13 @@ public enum Rank {
 	NINE {
 		@Override
 		public String shortString() {
-			return "9";} //$NON-NLS-1$
+			return "9";
+		}
 
 		@Override
 		public String longString() {
-			return "Nine";} //$NON-NLS-1$
+			return "Nine";
+		}
 
 		@Override
 		public int getSuitGrandOrder() {
@@ -128,11 +134,13 @@ public enum Rank {
 	QUEEN {
 		@Override
 		public String shortString() {
-			return "Q";} //$NON-NLS-1$
+			return "Q";
+		}
 
 		@Override
 		public String longString() {
-			return "Queen";} //$NON-NLS-1$
+			return "Queen";
+		}
 
 		@Override
 		public int getSuitGrandOrder() {
@@ -160,11 +168,13 @@ public enum Rank {
 	KING {
 		@Override
 		public String shortString() {
-			return "K";} //$NON-NLS-1$
+			return "K";
+		}
 
 		@Override
 		public String longString() {
-			return "King";} //$NON-NLS-1$
+			return "King";
+		}
 
 		@Override
 		public int getSuitGrandOrder() {
@@ -192,11 +202,13 @@ public enum Rank {
 	TEN {
 		@Override
 		public String shortString() {
-			return "T";} //$NON-NLS-1$
+			return "T";
+		}
 
 		@Override
 		public String longString() {
-			return "Ten";} //$NON-NLS-1$
+			return "Ten";
+		}
 
 		@Override
 		public int getSuitGrandOrder() {
@@ -224,11 +236,13 @@ public enum Rank {
 	ACE {
 		@Override
 		public String shortString() {
-			return "A";} //$NON-NLS-1$
+			return "A";
+		}
 
 		@Override
 		public String longString() {
-			return "Ace";} //$NON-NLS-1$
+			return "Ace";
+		}
 
 		@Override
 		public int getSuitGrandOrder() {
@@ -256,11 +270,13 @@ public enum Rank {
 	JACK {
 		@Override
 		public String shortString() {
-			return "J";} //$NON-NLS-1$
+			return "J";
+		}
 
 		@Override
 		public String longString() {
-			return "Jack";} //$NON-NLS-1$
+			return "Jack";
+		}
 
 		@Override
 		public int getSuitGrandOrder() {
@@ -284,49 +300,49 @@ public enum Rank {
 	};
 
 	/**
-	 * Gets a short string representation of the constant
+	 * Gets a short string representation of the constant.
 	 * 
 	 * @return Short string representation of the constant
 	 */
 	public abstract String shortString();
 
 	/**
-	 * Gets a long string representation of the constant
+	 * Gets a long string representation of the constant.
 	 * 
 	 * @return Long string representation of the constant
 	 */
 	public abstract String longString();
 
 	/**
-	 * Gets the order of the constant in suit and grand games
+	 * Gets the order of the constant in suit and grand games.
 	 * 
 	 * @return Order in suit and grand games
 	 */
 	public abstract int getSuitGrandOrder();
 
 	/**
-	 * Gets the order of the constant in null games
+	 * Gets the order of the constant in null games.
 	 * 
 	 * @return Order in null games
 	 */
 	public abstract int getNullOrder();
 
 	/**
-	 * Gets the order of the constant in ramsch games
+	 * Gets the order of the constant in ramsch games.
 	 * 
 	 * @return Order in ramsch games
 	 */
 	public abstract int getRamschOrder();
 
 	/**
-	 * Gets the points of the card for game value calculation
+	 * Gets the points of the card for game value calculation.
 	 * 
 	 * @return Points of the card
 	 */
 	public abstract int getPoints();
 
 	/**
-	 * Gets the rank of a card given as string
+	 * Gets the rank of a card given as string.
 	 * 
 	 * @param cardAsString
 	 *            Card as string
@@ -379,8 +395,10 @@ public enum Rank {
 		return Arrays.asList(Rank.ACE, Rank.TEN, Rank.KING, Rank.QUEEN,
 				Rank.NINE, Rank.EIGHT, Rank.SEVEN);
 	}
-	
-	/** converts the rank of a card to a specific int value (7=1, 8=2, 9=4, ... A=64, J=128)
+
+	/**
+	 * converts the rank of a card to a specific int value (7=1, 8=2, 9=4, ...
+	 * A=64, J=128)
 	 * 
 	 * @return an int representation of the card's rank
 	 */
