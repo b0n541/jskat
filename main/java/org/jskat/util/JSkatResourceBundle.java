@@ -167,7 +167,7 @@ public class JSkatResourceBundle {
 
 		String result = null;
 
-		switch (options.getCardFace()) {
+		switch (options.getCardSet().getCardFace()) {
 		case FRENCH:
 		case TOURNAMENT:
 			result = getFrenchRankString(rank);
@@ -259,7 +259,7 @@ public class JSkatResourceBundle {
 
 		String result = null;
 
-		switch (options.getCardFace()) {
+		switch (options.getCardSet().getCardFace()) {
 		case FRENCH:
 		case TOURNAMENT:
 			result = getFrenchSuitString(suit);
@@ -317,7 +317,7 @@ public class JSkatResourceBundle {
 
 		String result = null;
 
-		switch (options.getCardFace()) {
+		switch (options.getCardSet().getCardFace()) {
 		case FRENCH:
 		case TOURNAMENT:
 			result = getFrenchGameTypeString(gameType);

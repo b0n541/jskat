@@ -31,6 +31,7 @@ import java.util.Properties;
 import org.jskat.data.SkatTableOptions.RamschSkatOwner;
 import org.jskat.data.SkatTableOptions.RuleSet;
 import org.jskat.gui.img.CardFace;
+import org.jskat.gui.img.CardSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +57,8 @@ public class JSkatOptions {
 	}
 
 	private enum Option {
-		bockEventContraReAnnounced, bockEventLostAfterContra, bockEventLostGrand, bockEventLostWith60, bockEventPlayerHasX00Points, cardFace, cheatDebugMode, checkForNewVersionAtStartUp, gameShortCut, issAddress, issPort, language, maxPlayerCount, playBock, playContra, playRamsch, playRevolution, ramschEventNoBid, ramschEventRamschAfterBock, ramschGrandHandPossible, ramschSkatOwner, rules, savePath, schieberRamsch, schieberRamschJacksInSkat, showTipsAtStartUp, trickRemoveAfterClick, trickRemoveDelayTime, contraAfterBid18;
+		bockEventContraReAnnounced, bockEventLostAfterContra, bockEventLostGrand, bockEventLostWith60, bockEventPlayerHasX00Points, @Deprecated
+		cardFace, cardSet, cheatDebugMode, checkForNewVersionAtStartUp, gameShortCut, issAddress, issPort, language, maxPlayerCount, playBock, playContra, playRamsch, playRevolution, ramschEventNoBid, ramschEventRamschAfterBock, ramschGrandHandPossible, ramschSkatOwner, rules, savePath, schieberRamsch, schieberRamschJacksInSkat, showTipsAtStartUp, trickRemoveAfterClick, trickRemoveDelayTime, contraAfterBid18;
 	}
 
 	private static Logger log = LoggerFactory.getLogger(JSkatOptions.class);
@@ -137,8 +139,8 @@ public class JSkatOptions {
 	 * 
 	 * @return Value of property cardFace
 	 */
-	public CardFace getCardFace() {
-		return CardFace.valueOf(getOption(Option.cardFace));
+	public CardSet getCardSet() {
+		return CardSet.valueOf(getOption(Option.cardSet));
 	}
 
 	/**
@@ -624,8 +626,8 @@ public class JSkatOptions {
 	 * @param cardFace
 	 *            New value of property cardFace
 	 */
-	public void setCardFace(final CardFace cardFace) {
-		setOption(Option.cardFace, cardFace);
+	public void setCardSet(final CardSet cardSet) {
+		setOption(Option.cardSet, cardSet);
 	}
 
 	/**
@@ -933,10 +935,29 @@ public class JSkatOptions {
 			break;
 		case cardFace:
 			try {
-				setCardFace(CardFace.valueOf(value));
+				CardFace cardFace = CardFace.valueOf(value);
+				switch (cardFace) {
+				case FRENCH:
+					setCardSet(CardSet.ISS_FRENCH);
+					break;
+				case GERMAN:
+					setCardSet(CardSet.ISS_GERMAN);
+					break;
+				case TOURNAMENT:
+					setCardSet(CardSet.ISS_TOURNAMENT);
+					break;
+				}
 			} catch (IllegalArgumentException e) {
 				// parsing of older options failed
-				logEnumParseError(option, getCardFace().name());
+				logEnumParseError(option, getCardSet().name());
+			}
+			break;
+		case cardSet:
+			try {
+				setCardSet(CardSet.valueOf(value));
+			} catch (IllegalArgumentException e) {
+				// parsing of older options failed
+				logEnumParseError(option, getCardSet().name());
 			}
 			break;
 		case cheatDebugMode:
@@ -1054,7 +1075,7 @@ public class JSkatOptions {
 		options.setProperty(option.name(), value.toString());
 	}
 
-	private void setOption(final Option option, final CardFace value) {
+	private void setOption(final Option option, final CardSet value) {
 		options.setProperty(option.name(), value.name());
 	}
 
@@ -1084,7 +1105,7 @@ public class JSkatOptions {
 		setOption(Option.language, getDefaultLanguage().name());
 		setOption(Option.checkForNewVersionAtStartUp, Boolean.FALSE);
 		setOption(Option.savePath, pathResolver.getDefaultSavePath());
-		setOption(Option.cardFace, CardFace.TOURNAMENT.name());
+		setOption(Option.cardSet, CardSet.ISS_TOURNAMENT.name());
 		setOption(Option.trickRemoveDelayTime, 2000);
 		setOption(Option.trickRemoveAfterClick, Boolean.FALSE);
 		setOption(Option.gameShortCut, Boolean.FALSE);

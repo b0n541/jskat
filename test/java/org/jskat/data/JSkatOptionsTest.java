@@ -29,6 +29,7 @@ import org.jskat.AbstractJSkatTest;
 import org.jskat.data.JSkatOptions.SupportedLanguage;
 import org.jskat.data.SkatTableOptions.RuleSet;
 import org.jskat.gui.img.CardFace;
+import org.jskat.gui.img.CardSet;
 import org.junit.Test;
 
 /**
@@ -48,12 +49,14 @@ public class JSkatOptionsTest extends AbstractJSkatTest {
 		assertTrue(options.isShowTipsAtStartUp().booleanValue());
 		assertFalse(options.isCheckForNewVersionAtStartUp().booleanValue());
 
-		if (Locale.getDefault().getLanguage().equals(Locale.GERMAN.getLanguage())) {
+		if (Locale.getDefault().getLanguage()
+				.equals(Locale.GERMAN.getLanguage())) {
 			assertEquals(SupportedLanguage.GERMAN, options.getLanguage());
 		} else {
 			assertEquals(SupportedLanguage.ENGLISH, options.getLanguage());
 		}
-		assertEquals(CardFace.TOURNAMENT, options.getCardFace());
+		assertEquals(CardSet.ISS_TOURNAMENT, options.getCardSet());
+		assertEquals(CardFace.TOURNAMENT, options.getCardSet().getCardFace());
 		assertEquals(options.getDefaultSaveDir(), options.getSavePath());
 		assertEquals(Integer.valueOf(2000), options.getTrickRemoveDelayTime());
 		assertFalse(options.isTrickRemoveAfterClick().booleanValue());
