@@ -44,6 +44,8 @@ public class JSkatGraphicRepository {
 			.getLogger(JSkatGraphicRepository.class);
 	private static JSkatGraphicRepository instance = null;
 
+	private static JSkatOptions options = JSkatOptions.instance();
+
 	private Image skatTable;
 
 	private Map<CardSet, Map<Card, Image>> cards;
@@ -98,7 +100,7 @@ public class JSkatGraphicRepository {
 
 		cards = new HashMap<CardSet, Map<Card, Image>>();
 		cardBacks = new HashMap<CardSet, Image>();
-		loadCards(tracker, JSkatOptions.instance().getCardFace());
+		loadCards(tracker);
 
 		log.debug("Bitmaps for cards loaded..."); //$NON-NLS-1$
 
@@ -216,7 +218,7 @@ public class JSkatGraphicRepository {
 	 * @param cardFace
 	 *            The directory name for the card set to be loaded
 	 */
-	private void loadCards(final MediaTracker tracker, final CardFace cardFace) {
+	private void loadCards(final MediaTracker tracker) {
 
 		cards.clear();
 		for (CardSet set : CardSet.values()) {
@@ -231,10 +233,10 @@ public class JSkatGraphicRepository {
 										.getImage(
 												ClassLoader
 														.getSystemResource("org/jskat/gui/img/card/" //$NON-NLS-1$
-																+ set.cardFace
+																+ set.getCardFace()
 																		.toString()
 																		.toLowerCase()
-																+ "/" + set.name.toLowerCase() + "/" + card.getSuit().shortString() + '-' + card.getRank().shortString() + "." + set.fileType))); //$NON-NLS-1$//$NON-NLS-2$
+																+ "/" + set.getName().toLowerCase() + "/" + card.getSuit().shortString() + '-' + card.getRank().shortString() + "." + set.getFileType()))); //$NON-NLS-1$//$NON-NLS-2$
 
 				tracker.addImage(cards.get(set).get(card), 2);
 			}
@@ -244,7 +246,7 @@ public class JSkatGraphicRepository {
 							Toolkit.getDefaultToolkit()
 									.getImage(
 											ClassLoader
-													.getSystemResource("org/jskat/gui/img/card/back/" + set.name.toLowerCase() + "." + set.fileType))); //$NON-NLS-1$
+													.getSystemResource("org/jskat/gui/img/card/back/" + set.getName().toLowerCase() + "." + set.getFileType()))); //$NON-NLS-1$
 			tracker.addImage(cardBacks.get(set), 2);
 		}
 		try {
@@ -252,17 +254,6 @@ public class JSkatGraphicRepository {
 		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
-	}
-
-	/**
-	 * Reloads card images for another card face
-	 * 
-	 * @param cardFace
-	 *            Card face
-	 */
-	public void reloadCards(final CardFace cardFace) {
-		final MediaTracker tracker = new MediaTracker(new Canvas());
-		loadCards(tracker, cardFace);
 	}
 
 	/**
@@ -298,7 +289,7 @@ public class JSkatGraphicRepository {
 
 		if (card != null) {
 
-			result = cards.get(CardSet.DONDORF_GERMAN).get(card);
+			result = cards.get(options.getCardSet()).get(card);
 		} else {
 
 			result = cardBacks.get(CardSet.ISS_GERMAN);
@@ -612,26 +603,6 @@ public class JSkatGraphicRepository {
 			}
 
 			return result;
-		}
-	}
-
-	public enum CardSet {
-
-		ISS_GERMAN("ISS", CardFace.GERMAN, "gif"), ISS_FRENCH("ISS",
-				CardFace.FRENCH, "gif"), ISS_TOURNAMENT("ISS",
-				CardFace.TOURNAMENT, "gif"), DONDORF_GERMAN("Dondorf",
-				CardFace.GERMAN, "png"), DONDORF_FRENCH("Dondorf",
-				CardFace.FRENCH, "png"), DONDORF_TOURNAMENT("Dondorf",
-				CardFace.TOURNAMENT, "png");
-
-		public String name = null;
-		public CardFace cardFace = null;
-		public String fileType = null;
-
-		CardSet(String name, CardFace cardFace, String fileType) {
-			this.name = name;
-			this.cardFace = cardFace;
-			this.fileType = fileType;
 		}
 	}
 }

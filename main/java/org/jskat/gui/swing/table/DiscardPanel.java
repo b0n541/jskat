@@ -55,7 +55,7 @@ class DiscardPanel extends JPanel {
 
 	private int maxCardCount = 0;
 
-	private CardPanel cardPanel;
+	private ClickableCardPanel cardPanel;
 
 	private GameAnnouncePanel announcePanel;
 
@@ -81,7 +81,7 @@ class DiscardPanel extends JPanel {
 
 		setLayout(new CardLayout());
 
-		cardPanel = new CardPanel(this, 0.75, false);
+		cardPanel = new ClickableCardPanel(this, 0.75, false);
 		add(cardPanel, CARD_PANEL);
 
 		pickUpSkatAction = getActionMap().get(JSkatAction.PICK_UP_SKAT);
@@ -102,7 +102,8 @@ class DiscardPanel extends JPanel {
 			}
 		});
 
-		JPanel lookIntoSkatPanel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+		JPanel lookIntoSkatPanel = new JPanel(
+				LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 		lookIntoSkatPanel.add(pickUpSkatButton, "center"); //$NON-NLS-1$
 		lookIntoSkatPanel.setOpaque(false);
 		add(lookIntoSkatPanel, PICK_UP_SKAT_BUTTON);
@@ -143,7 +144,7 @@ class DiscardPanel extends JPanel {
 	}
 
 	public CardList getDiscardedCards() {
-		return cardPanel.cards.getImmutableCopy();
+		return cardPanel.getCards();
 	}
 
 	public boolean isUserLookedIntoSkat() {

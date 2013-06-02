@@ -29,7 +29,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ActionMap;
 import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
 import javax.swing.InputMap;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -52,9 +51,12 @@ import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatOptions.SupportedLanguage;
 import org.jskat.data.SkatTableOptions.RamschSkatOwner;
 import org.jskat.data.SkatTableOptions.RuleSet;
-import org.jskat.gui.img.CardFace;
-import org.jskat.gui.img.JSkatGraphicRepository;
+import org.jskat.gui.img.CardSet;
+import org.jskat.util.Card;
+import org.jskat.util.GameType;
 import org.jskat.util.JSkatResourceBundle;
+import org.jskat.util.Rank;
+import org.jskat.util.Suit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,8 +69,8 @@ public class JSkatOptionsDialog extends JDialog {
 	private static Logger log = LoggerFactory
 			.getLogger(JSkatOptionsDialog.class);
 
-	JSkatResourceBundle strings;
-	JSkatOptions options;
+	private JSkatResourceBundle strings;
+	private JSkatOptions options;
 
 	private final JFrame parent;
 
@@ -76,20 +78,17 @@ public class JSkatOptionsDialog extends JDialog {
 	private JCheckBox showTipsAtStartUp;
 	private JCheckBox checkForNewVersion;
 	private JComboBox language;
-	private ButtonGroup cardFace;
-	private JRadioButton cardFaceFrench;
-	private JRadioButton cardFaceGerman;
-	private JRadioButton cardFaceTournament;
-	JTextField savePath;
-	JSlider waitTime;
-	JCheckBox trickRemoveAfterClick;
+	private JComboBox cardSet;
+	private JTextField savePath;
+	private JSlider waitTime;
+	private JCheckBox trickRemoveAfterClick;
 	private ButtonGroup gameShortCut;
 	private JRadioButton gameShortCutYes;
 	private JRadioButton gameShortCutNo;
 
 	// rule options
-	JRadioButton ruleSetISPA;
-	JRadioButton ruleSetPub;
+	private JRadioButton ruleSetISPA;
+	private JRadioButton ruleSetPub;
 	private JButton resetPubRulesButton;
 	private JCheckBox playContra;
 	private JCheckBox contraAfterBid18;
@@ -119,7 +118,7 @@ public class JSkatOptionsDialog extends JDialog {
 			options.setCheckForNewVersionAtStartUp(checkForNewVersion
 					.isSelected());
 			options.setLanguage((SupportedLanguage) language.getSelectedItem());
-			options.setCardFace(getSelectedCardFace());
+			options.setCardSet(getSelectedCardSet());
 			options.setSavePath(savePath.getText());
 			options.setTrickRemoveDelayTime(waitTime.getValue() * 1000);
 			options.setTrickRemoveAfterClick(trickRemoveAfterClick.isSelected());
@@ -151,7 +150,7 @@ public class JSkatOptionsDialog extends JDialog {
 					: RamschSkatOwner.LOSER);
 
 			options.saveJSkatProperties();
-			refreshCardFaces();
+			refreshCardSet();
 
 			setVisible(false);
 		}
@@ -197,7 +196,7 @@ public class JSkatOptionsDialog extends JDialog {
 	private void initGUI() {
 
 		setModalityType(ModalityType.APPLICATION_MODAL);
-		setResizable(true);
+		setResizable(false);
 
 		setTitle(strings.getString("preferences")); //$NON-NLS-1$
 
@@ -206,15 +205,20 @@ public class JSkatOptionsDialog extends JDialog {
 		final JTabbedPane prefTabs = new JTabbedPane();
 
 		final JPanel commonTab = getCommonPanel();
-		log.debug(commonTab.getPreferredSize().toString());
+		log.debug("Common tab: " + commonTab.getPreferredSize().toString());
 		prefTabs.addTab(strings.getString("common_options"), commonTab); //$NON-NLS-1$
 
+		final JPanel cardSetTab = getCardSetSelectionPanel();
+		log.debug("Card set tab: " + cardSetTab.getPreferredSize().toString());
+		prefTabs.addTab(strings.getString("cardset_options"), cardSetTab); //$NON-NLS-1$
+
 		final JPanel skatRulesTab = getSkatRulesPanel();
-		log.debug(skatRulesTab.getPreferredSize().toString());
+		log.debug("Skat rules tab: "
+				+ skatRulesTab.getPreferredSize().toString());
 		prefTabs.addTab(strings.getString("skat_rules"), skatRulesTab); //$NON-NLS-1$
 
 		final JPanel issTab = getIssPanel();
-		log.debug(issTab.getPreferredSize().toString());
+		log.debug("ISS tab: " + issTab.getPreferredSize().toString());
 		prefTabs.addTab(strings.getString("iss"), issTab); //$NON-NLS-1$
 
 		root.add(prefTabs, "wrap"); //$NON-NLS-1$
@@ -242,6 +246,33 @@ public class JSkatOptionsDialog extends JDialog {
 		setContentPane(root);
 		validate();
 		pack();
+	}
+
+	private JPanel getCardSetSelectionPanel() {
+		JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "fill",
+				"fill"));
+
+		panel.add(new JLabel(strings.getString("card_face"))); //$NON-NLS-1$
+		panel.add(getCardSetPanel(), "wrap"); //$NON-NLS-1$
+
+		panel.add(getCardPanelForSuit(Suit.CLUBS), "span 2, wrap");
+		panel.add(getCardPanelForSuit(Suit.SPADES), "span 2, wrap");
+		panel.add(getCardPanelForSuit(Suit.HEARTS), "span 2, wrap");
+		panel.add(getCardPanelForSuit(Suit.DIAMONDS), "span 2");
+
+		panel.validate();
+
+		return panel;
+	}
+
+	private CardPanel getCardPanelForSuit(Suit suit) {
+		CardPanel cardPanel = new CardPanel(1.0, false);
+
+		for (Rank rank : Rank.values()) {
+			cardPanel.addCard(Card.getCard(suit, rank));
+		}
+		cardPanel.setSortType(GameType.NULL);
+		return cardPanel;
 	}
 
 	private JPanel getIssPanel() {
@@ -303,28 +334,23 @@ public class JSkatOptionsDialog extends JDialog {
 		return issPortPanel;
 	}
 
-	private JPanel getCardFacePanel() {
+	private JPanel getCardSetPanel() {
 
-		cardFace = new ButtonGroup();
-		cardFaceFrench = new JRadioButton(strings.getString("card_face_french")); //$NON-NLS-1$
-		cardFaceFrench.getModel().setActionCommand(CardFace.FRENCH.name());
-		cardFace.add(cardFaceFrench);
-		cardFaceGerman = new JRadioButton(strings.getString("card_face_german")); //$NON-NLS-1$
-		cardFaceGerman.getModel().setActionCommand(CardFace.GERMAN.name());
-		cardFace.add(cardFaceGerman);
-		cardFaceTournament = new JRadioButton(
-				strings.getString("card_face_tournament")); //$NON-NLS-1$
-		cardFaceTournament.getModel().setActionCommand(
-				CardFace.TOURNAMENT.name());
-		cardFace.add(cardFaceTournament);
+		cardSet = new JComboBox(CardSet.values());
+		cardSet.setRenderer(new CardSetComboBoxRenderer());
 
-		final JPanel cardFacePanel = new JPanel(LayoutFactory.getMigLayout(
+		cardSet.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				options.setCardSet((CardSet) cardSet.getSelectedItem());
+				refreshCardSet();
+			}
+		});
+
+		final JPanel cardSetPanel = new JPanel(LayoutFactory.getMigLayout(
 				"fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		cardFacePanel.add(cardFaceFrench);
-		cardFacePanel.add(cardFaceGerman);
-		cardFacePanel.add(cardFaceTournament);
-
-		return cardFacePanel;
+		cardSetPanel.add(cardSet);
+		return cardSetPanel;
 	}
 
 	private JPanel getWaitingTimePanel(final JSkatResourceBundle strings,
@@ -417,9 +443,6 @@ public class JSkatOptionsDialog extends JDialog {
 
 		commonPanel.add(new JLabel(strings.getString("language"))); //$NON-NLS-1$
 		commonPanel.add(getLanguagePanel(), "wrap"); //$NON-NLS-1$
-
-		commonPanel.add(new JLabel(strings.getString("card_face"))); //$NON-NLS-1$
-		commonPanel.add(getCardFacePanel(), "wrap"); //$NON-NLS-1$
 
 		commonPanel.add(new JLabel(strings.getString("save_path"))); //$NON-NLS-1$
 		commonPanel.add(getSavePathPanel(), "wrap"); //$NON-NLS-1$
@@ -636,17 +659,7 @@ public class JSkatOptionsDialog extends JDialog {
 				.booleanValue());
 		language.setSelectedItem(options.getLanguage());
 
-		switch (options.getCardFace()) {
-		case FRENCH:
-			cardFaceFrench.setSelected(true);
-			break;
-		case GERMAN:
-			cardFaceGerman.setSelected(true);
-			break;
-		case TOURNAMENT:
-			cardFaceTournament.setSelected(true);
-			break;
-		}
+		cardSet.setSelectedItem(options.getCardSet());
 
 		savePath.setText(options.getSavePath());
 		waitTime.setValue(options.getTrickRemoveDelayTime().intValue() / 1000);
@@ -701,14 +714,12 @@ public class JSkatOptionsDialog extends JDialog {
 		issPort.setText(options.getIssPort().toString());
 	}
 
-	CardFace getSelectedCardFace() {
-		final ButtonModel model = cardFace.getSelection();
-		return CardFace.valueOf(model.getActionCommand());
+	CardSet getSelectedCardSet() {
+		return (CardSet) cardSet.getSelectedItem();
 	}
 
-	void refreshCardFaces() {
-
-		JSkatGraphicRepository.instance().reloadCards(options.getCardFace());
+	void refreshCardSet() {
+		this.repaint();
 		parent.repaint();
 	}
 
@@ -734,6 +745,48 @@ public class JSkatOptionsDialog extends JDialog {
 					break;
 				case GERMAN:
 					result = strings.getString("german"); //$NON-NLS-1$
+					break;
+				}
+			}
+
+			return result;
+		}
+	}
+
+	private class CardSetComboBoxRenderer extends AbstractI18NComboBoxRenderer {
+
+		private static final long serialVersionUID = 1L;
+
+		CardSetComboBoxRenderer() {
+			super();
+		}
+
+		@Override
+		public String getValueText(final Object value) {
+
+			String result = " "; //$NON-NLS-1$
+
+			final CardSet cardSet = (CardSet) value;
+
+			if (cardSet != null) {
+				switch (cardSet) {
+				case ISS_FRENCH:
+					result = strings.getString("cardset_iss_french"); //$NON-NLS-1$
+					break;
+				case ISS_GERMAN:
+					result = strings.getString("cardset_iss_german"); //$NON-NLS-1$
+					break;
+				case ISS_TOURNAMENT:
+					result = strings.getString("cardset_iss_tournament"); //$NON-NLS-1$
+					break;
+				case DONDORF_FRENCH:
+					result = strings.getString("cardset_dondorf_french"); //$NON-NLS-1$
+					break;
+				case DONDORF_GERMAN:
+					result = strings.getString("cardset_dondorf_german"); //$NON-NLS-1$
+					break;
+				case DONDORF_TOURNAMENT:
+					result = strings.getString("cardset_dondorf_tournament"); //$NON-NLS-1$
 					break;
 				}
 			}

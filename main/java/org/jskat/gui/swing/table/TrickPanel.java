@@ -50,7 +50,7 @@ class TrickPanel extends JPanel implements ComponentListener {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(TrickPanel.class);
 
-	private static final double TRICK_SIZE_FACTOR = 1.0d + (2.0d / 3.0d);
+	private static final double TRICK_SIZE_FACTOR = 1.0d + 2.0d / 3.0d;
 
 	private static JSkatOptions options = JSkatOptions.instance();
 	private final JSkatGraphicRepository bitmaps;
@@ -88,7 +88,7 @@ class TrickPanel extends JPanel implements ComponentListener {
 
 		bitmaps = JSkatGraphicRepository.instance();
 
-		cardFace = options.getCardFace();
+		cardFace = options.getCardSet().getCardFace();
 
 		this.randomPlacement = randomPlacement;
 		this.globalScale = globalScale;
@@ -155,7 +155,7 @@ class TrickPanel extends JPanel implements ComponentListener {
 		super.paintComponent(g);
 
 		if (isNewCardFace()) {
-			cardFace = options.getCardFace();
+			cardFace = options.getCardSet().getCardFace();
 		}
 
 		final int panelWidth = getWidth();
@@ -194,17 +194,17 @@ class TrickPanel extends JPanel implements ComponentListener {
 				if (player.equals(leftOpponent)) {
 
 					posX = xBorder;
-					posY = yBorder + (yScaleSize * (1.0d / 3.0d));
+					posY = yBorder + yScaleSize * (1.0d / 3.0d);
 
 				} else if (player.equals(rightOpponent)) {
 
-					posX = xBorder + (xScaleSize * (2.0d / 3.0d));
+					posX = xBorder + xScaleSize * (2.0d / 3.0d);
 					posY = yBorder;
 
 				} else if (player.equals(userPosition)) {
 
-					posX = xBorder + (xScaleSize * (1.0d / 3.0d));
-					posY = yBorder + (yScaleSize * (2.0d / 3.0d));
+					posX = xBorder + xScaleSize * (1.0d / 3.0d);
+					posY = yBorder + yScaleSize * (2.0d / 3.0d);
 				}
 
 				final AffineTransform transform = new AffineTransform();
@@ -240,7 +240,7 @@ class TrickPanel extends JPanel implements ComponentListener {
 	}
 
 	boolean isNewCardFace() {
-		return !cardFace.equals(options.getCardFace());
+		return !cardFace.equals(options.getCardSet().getCardFace());
 	}
 
 	void setUserPosition(final Player newUserPosition) {

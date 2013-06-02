@@ -34,7 +34,7 @@ public class JSkatUserPanel extends AbstractHandPanel {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(JSkatUserPanel.class);
 
-	private CardPanel lastClickedCardPanel;
+	private ClickableCardPanel lastClickedCardPanel;
 	private GameState gameState;
 
 	/**
@@ -46,7 +46,7 @@ public class JSkatUserPanel extends AbstractHandPanel {
 		this.showCards();
 	}
 
-	CardPanel getLastClickedCardPanel() {
+	ClickableCardPanel getLastClickedCardPanel() {
 
 		return this.lastClickedCardPanel;
 	}

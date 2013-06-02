@@ -83,7 +83,7 @@ abstract class AbstractHandPanel extends JPanel {
 
 	boolean showIssWidgets;
 
-	CardPanel cardPanel;
+	ClickableCardPanel cardPanel;
 
 	/**
 	 * Maximum card count
@@ -144,7 +144,7 @@ abstract class AbstractHandPanel extends JPanel {
 		}
 		add(header, "shrinky, wrap"); //$NON-NLS-1$
 
-		cardPanel = new CardPanel(this, 1.0, true);
+		cardPanel = new ClickableCardPanel(this, 1.0, true);
 		add(cardPanel, "growy"); //$NON-NLS-1$
 
 		if (JSkatOptions.instance().isCheatDebugMode().booleanValue()) {
