@@ -249,16 +249,15 @@ public class JSkatOptionsDialog extends JDialog {
 	}
 
 	private JPanel getCardSetSelectionPanel() {
-		JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "fill",
-				"fill"));
+		JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "", ""));
 
 		panel.add(new JLabel(strings.getString("card_face"))); //$NON-NLS-1$
-		panel.add(getCardSetPanel(), "wrap"); //$NON-NLS-1$
+		panel.add(getCardSetPanel(), "growx, shrinky, wrap"); //$NON-NLS-1$
 
-		panel.add(getCardPanelForSuit(Suit.CLUBS), "span 2, wrap");
-		panel.add(getCardPanelForSuit(Suit.SPADES), "span 2, wrap");
-		panel.add(getCardPanelForSuit(Suit.HEARTS), "span 2, wrap");
-		panel.add(getCardPanelForSuit(Suit.DIAMONDS), "span 2");
+		panel.add(getCardPanelForSuit(Suit.CLUBS), "span 2, grow, wrap");
+		panel.add(getCardPanelForSuit(Suit.SPADES), "span 2, grow, wrap");
+		panel.add(getCardPanelForSuit(Suit.HEARTS), "span 2, grow, wrap");
+		panel.add(getCardPanelForSuit(Suit.DIAMONDS), "span 2, grow");
 
 		panel.validate();
 
