@@ -1266,4 +1266,16 @@ public class SkatGameData {
 		}
 		return Collections.unmodifiableSet(ramschLoosers);
 	}
+
+	/**
+	 * Removes dealt cards for a player
+	 * 
+	 * @param player
+	 *            Player
+	 * @param cards
+	 *            Cards
+	 */
+	public void removeDealtCards(Player player, CardList cards) {
+		dealtCards.get(player).removeAll(cards);
+	}
 }
