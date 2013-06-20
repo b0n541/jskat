@@ -515,7 +515,7 @@ public class IssController {
 		if (currGame.getNumberOfPasses() == 2) {
 			for (final Player currPlayer : Player.values()) {
 				if (!currGame.isPlayerPass(currPlayer)) {
-					if (currGame.getPlayerBid(currPlayer) > 0) {
+					if (currGame.getMaxPlayerBid(currPlayer) > 0) {
 						result = true;
 						currGame.setDeclarer(currPlayer);
 					}
@@ -537,12 +537,11 @@ public class IssController {
 			break;
 		case BID:
 			currGame.setGameState(GameState.BIDDING);
-			currGame.setBidValue(moveInformation.getBidValue());
-			currGame.setPlayerBid(movePlayer, moveInformation.getBidValue());
+			currGame.setMaxPlayerBid(movePlayer, moveInformation.getBidValue());
 			break;
 		case HOLD_BID:
 			currGame.setGameState(GameState.BIDDING);
-			currGame.setPlayerBid(movePlayer, currGame.getBidValue());
+			currGame.setMaxPlayerBid(movePlayer, currGame.getMaxBidValue());
 			break;
 		case PASS:
 			currGame.setGameState(GameState.BIDDING);
@@ -694,7 +693,7 @@ public class IssController {
 	 */
 	public void sendBidMove(final String tableName) {
 		sendToIss(issMsg.getBidMoveMessage(tableName, SkatConstants
-				.getNextBidValue(gameData.get(tableName).getBidValue())));
+				.getNextBidValue(gameData.get(tableName).getMaxBidValue())));
 	}
 
 	/**

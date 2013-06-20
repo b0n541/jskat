@@ -199,7 +199,7 @@ public class SuitRuleTest extends AbstractJSkatTest {
 		data.setDealtCard(Player.MIDDLEHAND, Card.SJ);
 		data.setDealtCard(Player.MIDDLEHAND, Card.HJ);
 		data.setDealtCard(Player.MIDDLEHAND, Card.DJ);
-		data.setBidValue(22);
+		data.setMaxPlayerBid(Player.MIDDLEHAND, 22);
 		data.setDeclarer(Player.MIDDLEHAND);
 		data.setDeclarerPickedUpSkat(true);
 		factory.setGameType(GameType.DIAMONDS);
@@ -225,7 +225,7 @@ public class SuitRuleTest extends AbstractJSkatTest {
 		data.setDealtCard(Player.MIDDLEHAND, Card.SJ);
 		data.setDealtCard(Player.MIDDLEHAND, Card.HJ);
 		data.setDealtCard(Player.MIDDLEHAND, Card.DJ);
-		data.setBidValue(22);
+		data.setMaxPlayerBid(Player.MIDDLEHAND, 22);
 		data.setDeclarer(Player.MIDDLEHAND);
 		data.setDeclarerPickedUpSkat(true);
 		factory.setGameType(GameType.DIAMONDS);

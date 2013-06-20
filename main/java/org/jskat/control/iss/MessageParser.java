@@ -553,12 +553,12 @@ public class MessageParser {
 				result.setDealtSkatCards(moveInfo.getSkat());
 				break;
 			case BID:
-				result.setBidValue(moveInfo.getBidValue());
-				result.setPlayerBid(moveInfo.getPlayer(),
+				result.setMaxPlayerBid(moveInfo.getPlayer(),
 						moveInfo.getBidValue());
 				break;
 			case HOLD_BID:
-				result.setPlayerBid(moveInfo.getPlayer(), result.getBidValue());
+				result.setMaxPlayerBid(moveInfo.getPlayer(),
+						result.getMaxBidValue());
 				break;
 			case PASS:
 				result.setPlayerPass(moveInfo.getPlayer(), true);

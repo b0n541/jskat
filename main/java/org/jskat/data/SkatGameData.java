@@ -143,11 +143,6 @@ public class SkatGameData {
 	private SkatGameResult result;
 
 	/**
-	 * Highest bid value made during bidding
-	 */
-	private int highestBidValue = -1;
-
-	/**
 	 * Player names
 	 */
 	private Map<Player, String> playerNames;
@@ -223,8 +218,8 @@ public class SkatGameData {
 			playerNames.put(player, ""); //$NON-NLS-1$
 			playerHands.put(player, new CardList());
 			dealtCards.put(player, new CardList());
-			playerPoints.put(player, Integer.valueOf(0));
-			playerBids.put(player, Integer.valueOf(0));
+			playerPoints.put(player, 0);
+			playerBids.put(player, 0);
 			playerPasses.put(player, Boolean.FALSE);
 		}
 
@@ -280,21 +275,17 @@ public class SkatGameData {
 	 * 
 	 * @return Highest bid value
 	 */
-	public int getBidValue() {
+	public Integer getMaxBidValue() {
 
-		return highestBidValue;
-	}
+		Integer result = 0;
 
-	/**
-	 * Sets the highest bid value of the game
-	 * 
-	 * @param value
-	 *            Highest bid value
-	 */
-	public void setBidValue(final int value) {
+		for (Integer maxPlayerBid : playerBids.values()) {
+			if (maxPlayerBid > result) {
+				result = maxPlayerBid;
+			}
+		}
 
-		highestBidValue = value;
-		log.debug("setBidValue(" + value + ")"); //$NON-NLS-1$//$NON-NLS-2$
+		return result;
 	}
 
 	/**
@@ -852,14 +843,14 @@ public class SkatGameData {
 	}
 
 	/**
-	 * Sets the highest bid value for a player
+	 * Sets the max bid value for a player
 	 * 
 	 * @param player
 	 *            Player
 	 * @param bidValue
-	 *            Highest bid value so far
+	 *            Max bid value so far
 	 */
-	public void setPlayerBid(final Player player, final int bidValue) {
+	public void setMaxPlayerBid(final Player player, final int bidValue) {
 
 		playerBids.put(player, Integer.valueOf(bidValue));
 	}
@@ -871,7 +862,7 @@ public class SkatGameData {
 	 *            Player
 	 * @return Highest bid value so far
 	 */
-	public int getPlayerBid(final Player player) {
+	public int getMaxPlayerBid(final Player player) {
 
 		return playerBids.get(player).intValue();
 	}

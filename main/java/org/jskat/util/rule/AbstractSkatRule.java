@@ -43,7 +43,7 @@ public abstract class AbstractSkatRule implements SkatRule {
 	 */
 	@Override
 	public boolean isOverbid(final SkatGameData gameData) {
-		return gameData.getBidValue() > getGameValueForWonGame(gameData);
+		return gameData.getMaxBidValue() > getGameValueForWonGame(gameData);
 	}
 
 	/**

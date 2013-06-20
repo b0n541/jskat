@@ -19,9 +19,12 @@
  */
 package org.jskat.control.iss;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -89,10 +92,10 @@ public class MessageParserTest extends AbstractJSkatTest {
 		assertTrue(gameData.getSkat().contains(Card.ST));
 		assertTrue(gameData.getSkat().contains(Card.H8));
 
-		assertEquals(0, gameData.getPlayerBid(Player.FOREHAND));
-		assertEquals(0, gameData.getPlayerBid(Player.MIDDLEHAND));
-		assertEquals(18, gameData.getPlayerBid(Player.REARHAND));
-		assertEquals(18, gameData.getBidValue());
+		assertEquals(0, gameData.getMaxPlayerBid(Player.FOREHAND));
+		assertEquals(0, gameData.getMaxPlayerBid(Player.MIDDLEHAND));
+		assertEquals(18, gameData.getMaxPlayerBid(Player.REARHAND));
+		assertThat(gameData.getMaxBidValue(), is(equalTo(18)));
 		assertEquals(Player.REARHAND, gameData.getDeclarer());
 
 		assertTrue(gameData.getDealtSkat().contains(Card.H8));
@@ -172,10 +175,10 @@ public class MessageParserTest extends AbstractJSkatTest {
 		assertEquals("xskat:2", gameData.getPlayerName(Player.MIDDLEHAND)); //$NON-NLS-1$
 		assertEquals("xskat", gameData.getPlayerName(Player.REARHAND)); //$NON-NLS-1$
 
-		assertEquals(24, gameData.getPlayerBid(Player.FOREHAND));
-		assertEquals(24, gameData.getPlayerBid(Player.MIDDLEHAND));
-		assertEquals(27, gameData.getPlayerBid(Player.REARHAND));
-		assertEquals(27, gameData.getBidValue());
+		assertEquals(24, gameData.getMaxPlayerBid(Player.FOREHAND));
+		assertEquals(24, gameData.getMaxPlayerBid(Player.MIDDLEHAND));
+		assertEquals(27, gameData.getMaxPlayerBid(Player.REARHAND));
+		assertThat(gameData.getMaxBidValue(), is(equalTo(27)));
 		assertEquals(Player.REARHAND, gameData.getDeclarer());
 
 		assertTrue(gameData.getDealtSkat().contains(Card.HT));
@@ -270,10 +273,10 @@ public class MessageParserTest extends AbstractJSkatTest {
 		assertEquals("bonsai", gameData.getPlayerName(Player.MIDDLEHAND)); //$NON-NLS-1$
 		assertEquals("bernie", gameData.getPlayerName(Player.REARHAND)); //$NON-NLS-1$
 
-		assertEquals(0, gameData.getPlayerBid(Player.FOREHAND));
-		assertEquals(0, gameData.getPlayerBid(Player.MIDDLEHAND));
-		assertEquals(0, gameData.getPlayerBid(Player.REARHAND));
-		assertEquals(-1, gameData.getBidValue());
+		assertEquals(0, gameData.getMaxPlayerBid(Player.FOREHAND));
+		assertEquals(0, gameData.getMaxPlayerBid(Player.MIDDLEHAND));
+		assertEquals(0, gameData.getMaxPlayerBid(Player.REARHAND));
+		assertThat(gameData.getMaxBidValue(), is(equalTo(0)));
 		assertEquals(null, gameData.getDeclarer());
 
 		assertTrue(gameData.getDealtSkat().contains(Card.CA));

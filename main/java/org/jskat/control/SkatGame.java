@@ -317,8 +317,6 @@ public class SkatGame extends JSkatThread {
 
 		int bidValue = 0;
 
-		data.setBidValue(0);
-
 		log.debug("ask middle and fore hand..."); //$NON-NLS-1$
 
 		bidValue = twoPlayerBidding(Player.MIDDLEHAND, Player.FOREHAND,
@@ -364,8 +362,6 @@ public class SkatGame extends JSkatThread {
 			// there is a winner of the bidding
 			setDeclarer(secondWinner);
 			view.setActivePlayer(tableName, secondWinner);
-
-			data.setBidValue(bidValue);
 
 			log.debug("Player " + data.getDeclarer() //$NON-NLS-1$
 					+ " wins the bidding."); //$NON-NLS-1$
@@ -440,8 +436,7 @@ public class SkatGame extends JSkatThread {
 				// announcing hand holds bid
 				currBidValue = announcerBidValue;
 
-				data.setBidValue(announcerBidValue);
-				data.setPlayerBid(announcer, announcerBidValue);
+				data.setMaxPlayerBid(announcer, announcerBidValue);
 				informPlayersAboutBid(announcer, announcerBidValue);
 				view.setBid(tableName, announcer, announcerBidValue, true);
 
@@ -450,8 +445,7 @@ public class SkatGame extends JSkatThread {
 					log.debug("hearer holds " + currBidValue); //$NON-NLS-1$
 
 					// hearing hand holds bid
-					data.setBidValue(announcerBidValue);
-					data.setPlayerBid(hearer, announcerBidValue);
+					data.setMaxPlayerBid(hearer, announcerBidValue);
 					informPlayersAboutBid(hearer, announcerBidValue);
 					view.setBid(tableName, hearer, announcerBidValue, false);
 
@@ -895,7 +889,7 @@ public class SkatGame extends JSkatThread {
 		data.calcResult();
 
 		log.debug("game value=" + data.getResult() + ", bid value=" //$NON-NLS-1$ //$NON-NLS-2$
-				+ data.getBidValue());
+				+ data.getMaxBidValue());
 
 		log.debug("Final game result: lost:" + data.isGameLost() + //$NON-NLS-1$
 				" game value: " + data.getResult()); //$NON-NLS-1$

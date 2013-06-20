@@ -42,7 +42,8 @@ public class NullRuleTest extends AbstractJSkatTest {
 	private SkatGameData data;
 	private GameAnnouncementFactory factory;
 
-	private static SkatRule nullRules = SkatRuleFactory.getSkatRules(GameType.NULL);
+	private static SkatRule nullRules = SkatRuleFactory
+			.getSkatRules(GameType.NULL);
 
 	/**
 	 * @see Before
@@ -218,7 +219,7 @@ public class NullRuleTest extends AbstractJSkatTest {
 	@Test
 	public void testOverbid() {
 
-		data.setBidValue(24);
+		data.setMaxPlayerBid(Player.FOREHAND, 24);
 		data.setDeclarerPickedUpSkat(true);
 		data.setAnnouncement(factory.getAnnouncement());
 		playWinningTricks();
