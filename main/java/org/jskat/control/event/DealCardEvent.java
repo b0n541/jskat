@@ -1,5 +1,8 @@
 package org.jskat.control.event;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jskat.data.SkatGameData;
 import org.jskat.util.CardList;
 import org.jskat.util.Player;
@@ -9,21 +12,27 @@ import org.jskat.util.Player;
  */
 public class DealCardEvent implements Event {
 
-	private Player player;
-	private CardList cards = new CardList();
+	private final Map<Player, CardList> playerCards = new HashMap<Player, CardList>();
+	private final CardList skat = new CardList();
 
-	public DealCardEvent(Player player, CardList cards) {
-		this.player = player;
-		this.cards.addAll(cards);
+	public DealCardEvent(Map<Player, CardList> playerCards, CardList skat) {
+		this.playerCards.putAll(playerCards);
+		this.skat.addAll(skat);
 	}
 
 	@Override
 	public void processForward(SkatGameData data) {
-		data.setDealtCards(player, cards);
+		for (Player player : playerCards.keySet()) {
+			data.setDealtCards(player, playerCards.get(player));
+		}
+		data.setDealtSkatCards(skat);
 	}
 
 	@Override
 	public void processBackward(SkatGameData data) {
-		data.removeDealtCards(player, cards);
+		for (Player player : playerCards.keySet()) {
+			data.removeDealtCards(player, playerCards.get(player));
+		}
+		data.removeDealtSkatCards(skat);
 	}
 }

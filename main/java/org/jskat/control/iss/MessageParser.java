@@ -550,8 +550,7 @@ public class MessageParser {
 				for (final Player player : Player.values()) {
 					result.setDealtCards(player, moveInfo.getCards(player));
 				}
-				result.setDealtSkatCards(moveInfo.getSkat().get(0), moveInfo
-						.getSkat().get(1));
+				result.setDealtSkatCards(moveInfo.getSkat());
 				break;
 			case BID:
 				result.setBidValue(moveInfo.getBidValue());

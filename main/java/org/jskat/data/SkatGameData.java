@@ -810,11 +810,9 @@ public class SkatGameData {
 	 * @param card1
 	 *            Second card
 	 */
-	public void setDealtSkatCards(final Card card0, final Card card1) {
+	public void setDealtSkatCards(CardList cards) {
 
-		dealtSkat.add(card0);
-		dealtSkat.add(card1);
-
+		dealtSkat.addAll(cards);
 		skat.addAll(dealtSkat);
 	}
 
@@ -1277,5 +1275,16 @@ public class SkatGameData {
 	 */
 	public void removeDealtCards(Player player, CardList cards) {
 		dealtCards.get(player).removeAll(cards);
+	}
+
+	/**
+	 * Removes cards from dealt skat
+	 * 
+	 * @param cards
+	 *            Cards
+	 */
+	public void removeDealtSkatCards(CardList cards) {
+		dealtSkat.removeAll(cards);
+		skat.removeAll(cards);
 	}
 }

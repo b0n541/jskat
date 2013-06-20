@@ -267,7 +267,8 @@ public class SkatGame extends JSkatThread {
 		// deal three cards
 		dealCards(3);
 		// and put two cards into the skat
-		data.setDealtSkatCards(deck.remove(0), deck.remove(0));
+		CardList skat = new CardList(deck.remove(0), deck.remove(0));
+		data.setDealtSkatCards(skat);
 		// deal four cards
 		dealCards(4);
 		// deal three cards
