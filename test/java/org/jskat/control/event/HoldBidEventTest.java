@@ -10,19 +10,19 @@ import org.jskat.util.Player;
 import org.junit.Before;
 import org.junit.Test;
 
-public class BidEventTest extends AbstractJSkatTest {
+public class HoldBidEventTest extends AbstractJSkatTest {
 
 	private SkatGameData data;
-	private AbstractBidEvent event;
-	private AbstractBidEvent event2;
-	private AbstractBidEvent event3;
+	private HoldBidEvent event;
+	private HoldBidEvent event2;
+	private HoldBidEvent event3;
 
 	@Before
 	public void setUp() {
 		data = new SkatGameData();
-		event = new BidEvent(Player.FOREHAND, 18);
-		event2 = new BidEvent(Player.MIDDLEHAND, 18);
-		event3 = new BidEvent(Player.FOREHAND, 2);
+		event = new HoldBidEvent(Player.FOREHAND, 18);
+		event2 = new HoldBidEvent(Player.MIDDLEHAND, 18);
+		event3 = new HoldBidEvent(Player.FOREHAND, 2);
 	}
 
 	@Test
