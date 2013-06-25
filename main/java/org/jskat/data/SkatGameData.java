@@ -1100,6 +1100,8 @@ public class SkatGameData {
 		this.declarerPickedUpSkat = isDeclarerPickedUpSkat;
 		if (isDeclarerPickedUpSkat) {
 			announcement.hand = false;
+		} else {
+			announcement.hand = true;
 		}
 	}
 
