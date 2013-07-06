@@ -43,6 +43,11 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	 * Minimum difference between calculated output and desired result.
 	 */
 	private static final double MIN_DIFF = 0.05;
+
+	/**
+	 * Maximum iterations for network learning
+	 */
+	private static final int MAX_ITERATIONS = 500;
 	/**
 	 * Logger.
 	 */
@@ -67,20 +72,20 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 
 		double error = 1000.0;
 		int i = 0;
-		int runs = 0;
+		int iteration = 0;
 
-		final int MAX_RUNS = 10000;
-		while (error > MIN_DIFF && runs < MAX_RUNS) {
+		while (error > MIN_DIFF && iteration < MAX_ITERATIONS) {
 			network.adjustWeights(input[i], output[i]);
 			error = network.getAvgDiff();
 			i = (i + 1) % input.length;
-			runs++;
+			iteration++;
 		}
 
-		if (runs == MAX_RUNS) {
-			fail("Needed more than " + MAX_RUNS + " runs. Error: " + error);
+		if (iteration == MAX_ITERATIONS) {
+			fail("Needed more than " + MAX_ITERATIONS + " iterations. Error: "
+					+ error);
 		} else {
-			log.debug("Needed " + runs + " to learn.");
+			log.debug("Needed " + iteration + " iterations to learn.");
 		}
 	}
 
@@ -110,18 +115,18 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 		Propagation trainer = new ResilientPropagation(network, trainingSet);
 
 		double error = 1000.0;
-		int runs = 0;
-		final int maxRuns = 200;
-		while (error > MIN_DIFF && runs < maxRuns) {
+		int iteration = 0;
+		while (error > MIN_DIFF && iteration < MAX_ITERATIONS) {
 			trainer.iteration();
 			error = trainer.getError();
-			runs++;
+			iteration++;
 		}
 
-		if (runs == maxRuns) {
-			fail("Needed more than " + maxRuns + " runs. Error: " + error);
+		if (iteration == MAX_ITERATIONS) {
+			fail("Needed more than " + MAX_ITERATIONS + " iterations. Error: "
+					+ error);
 		} else {
-			log.debug("Needed " + runs + " to learn.");
+			log.debug("Needed " + iteration + " iterations to learn.");
 		}
 	}
 }
