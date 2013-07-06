@@ -982,15 +982,15 @@ public class JSkatViewImpl implements JSkatView {
 			break;
 		case HOLD_BID:
 			setGameState(tableName, GameState.BIDDING);
-			setBid(tableName, movePlayer, gameData.getBidValue(), false);
+			setBid(tableName, movePlayer, gameData.getMaxBidValue(), false);
 			setBidValueToMake(tableName,
-					SkatConstants.getNextBidValue(gameData.getBidValue()));
+					SkatConstants.getNextBidValue(gameData.getMaxBidValue()));
 			break;
 		case PASS:
 			setGameState(tableName, GameState.BIDDING);
 			setPass(tableName, movePlayer);
 			setBidValueToMake(tableName,
-					SkatConstants.getNextBidValue(gameData.getBidValue()));
+					SkatConstants.getNextBidValue(gameData.getMaxBidValue()));
 			break;
 		case SKAT_REQUEST:
 			setGameState(tableName, GameState.PICKING_UP_SKAT);
