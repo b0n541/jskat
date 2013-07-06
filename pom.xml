@@ -1,0 +1,125 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<description>A skat game written in Java</description>
+	<url>http://www.jskat.org</url>
+
+	<developers>
+		<developer>
+			<name>Jan Schäfer</name>
+			<email>j@nschaefer.net</email>
+			<roles>
+				<role>Project owner</role>
+				<role>Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<name>Markus J. Luzius</name>
+			<email>markus@luzius.de</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<name>Daniel Loreck</name>
+			<email>daniel.loreck@gmail.com</email>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<groupId>org.jskat</groupId>
+	<artifactId>jskat-multimodule</artifactId>
+	<version>0.13.0-SNAPSHOT</version>
+	<name>Multi module for JSkat</name>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>jskat-base</module>
+		<module>jskat-swing-gui</module>
+	</modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
+	</properties>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<configuration>
+						<source>1.6</source>
+						<target>1.6</target>
+					</configuration>
+				</plugin>
+				<!-- Source licensing -->
+				<plugin>
+					<groupId>com.mycila.maven-license-plugin</groupId>
+					<artifactId>maven-license-plugin</artifactId>
+					<version>1.9.0</version>
+					<configuration>
+						<!-- no strick checking because of changing version and date -->
+						<strictCheck>false</strictCheck>
+						<header>${basedir}/license/license_short.txt</header>
+						<includes>
+							<include>src/**/*.java</include>
+						</includes>
+						<excludes>
+							<exclude>target/**</exclude>
+						</excludes>
+						<useDefaultExcludes>true</useDefaultExcludes>
+						<properties>
+							<releasetimestamp>${maven.build.timestamp}</releasetimestamp>
+							<releaseversion>${project.version}</releaseversion>
+						</properties>
+					</configuration>
+				</plugin>
+				<!-- Source packaging -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>2.1.2</version>
+					<configuration>
+						<finalName>${project.name}-${project.version}</finalName>
+						<attach>true</attach>
+					</configuration>
+					<executions>
+						<execution>
+							<phase>install</phase>
+							<goals>
+								<goal>jar</goal>
+								<goal>test-jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<!-- Javadoc -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>2.7</version>
+					<executions>
+						<execution>
+							<phase>install</phase>
+							<id>attach-javadocs</id>
+							<goals>
+								<goal>jar</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+				<!-- Release -->
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.4.1</version>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>
