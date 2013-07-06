@@ -548,16 +548,16 @@ public class MessageParser {
 			switch (moveInfo.getType()) {
 			case DEAL:
 				for (final Player player : Player.values()) {
-					result.setDealtCards(player, moveInfo.getCards(player));
+					result.addDealtCards(player, moveInfo.getCards(player));
 				}
 				result.setDealtSkatCards(moveInfo.getSkat());
 				break;
 			case BID:
-				result.setMaxPlayerBid(moveInfo.getPlayer(),
+				result.addPlayerBid(moveInfo.getPlayer(),
 						moveInfo.getBidValue());
 				break;
 			case HOLD_BID:
-				result.setMaxPlayerBid(moveInfo.getPlayer(),
+				result.addPlayerBid(moveInfo.getPlayer(),
 						result.getMaxBidValue());
 				break;
 			case PASS:

@@ -182,18 +182,15 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		SkatGameData data = new SkatGameData();
 
-		data.setDeclarerPickedUpSkat(true);
+		// it doesn't matter which position is set for declarer
+		// skat game data are only used to calculate the game value
+		data.setDeclarer(Player.FOREHAND);
+		data.addDealtCards(Player.FOREHAND, knowledge.getOwnCards());
+		data.addSkatToPlayer(Player.FOREHAND);
 
 		SkatGameResult result = new SkatGameResult();
 		result.setWon(true);
 		data.setResult(result);
-
-		// it doesn't matter which position is set for declarer
-		// skat game data are only used to calculate the game value
-		data.setDeclarer(Player.FOREHAND);
-		for (Card card : knowledge.getOwnCards()) {
-			data.setDealtCard(Player.FOREHAND, card);
-		}
 
 		return data;
 	}

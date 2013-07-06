@@ -85,15 +85,16 @@ public interface JSkatPlayer {
 	public void bidByPlayer(Player player, int bidValue);
 
 	/**
-	 * Takes a card from the dealer
+	 * Takes cards from the dealer
 	 * 
-	 * @param newCard
-	 *            New Card
+	 * @param cards
+	 *            New cards
 	 */
-	public void takeCard(Card newCard);
+	public void takeCards(CardList cards);
 
 	/**
-	 * @return true, if the player wants to play a grand hand in a BockRamsch game
+	 * @return true, if the player wants to play a grand hand in a BockRamsch
+	 *         game
 	 */
 	public boolean playGrandHand();
 
@@ -127,7 +128,8 @@ public interface JSkatPlayer {
 	 * @param singlePlayer
 	 *            Single player position
 	 * @param game
-	 *            Game announcement containing all relevant information about the new game
+	 *            Game announcement containing all relevant information about
+	 *            the new game
 	 */
 	// FIXME (jan 17.01.2011) change game announcement parameter to immutable
 	// GameAnnouncement

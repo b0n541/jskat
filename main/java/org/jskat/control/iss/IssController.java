@@ -537,11 +537,11 @@ public class IssController {
 			break;
 		case BID:
 			currGame.setGameState(GameState.BIDDING);
-			currGame.setMaxPlayerBid(movePlayer, moveInformation.getBidValue());
+			currGame.addPlayerBid(movePlayer, moveInformation.getBidValue());
 			break;
 		case HOLD_BID:
 			currGame.setGameState(GameState.BIDDING);
-			currGame.setMaxPlayerBid(movePlayer, currGame.getMaxBidValue());
+			currGame.addPlayerBid(movePlayer, currGame.getMaxBidValue());
 			break;
 		case PASS:
 			currGame.setGameState(GameState.BIDDING);

@@ -22,6 +22,7 @@ package org.jskat.data;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import org.jskat.util.Player;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -39,7 +40,7 @@ public class SkatGameDataTest {
 
 		assertTrue(gameData.isHand());
 
-		gameData.setDeclarerPickedUpSkat(true);
+		gameData.addSkatToPlayer(Player.FOREHAND);
 
 		assertFalse(gameData.isHand());
 	}

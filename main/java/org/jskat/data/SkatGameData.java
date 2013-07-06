@@ -105,7 +105,7 @@ public class SkatGameData {
 	/**
 	 * Flag for the Skat rules
 	 */
-	private boolean ispaRules = true;
+	private Boolean ispaRules = true;
 
 	/**
 	 * Skat rules according the game type
@@ -135,7 +135,7 @@ public class SkatGameData {
 	/**
 	 * Points the player made during the game
 	 */
-	private Map<Player, Integer> playerPoints;
+	private final Map<Player, Integer> playerPoints = new HashMap<Player, Integer>();
 
 	/**
 	 * Game result
@@ -145,17 +145,17 @@ public class SkatGameData {
 	/**
 	 * Player names
 	 */
-	private Map<Player, String> playerNames;
+	private final Map<Player, String> playerNames = new HashMap<Player, String>();
 
 	/**
 	 * Bids the players made during bidding
 	 */
-	private Map<Player, Integer> playerBids;
+	private final Map<Player, List<Integer>> playerBids = new HashMap<Player, List<Integer>>();
 
 	/**
 	 * Passes the players made during bidding
 	 */
-	private Map<Player, Boolean> playerPasses;
+	private final Map<Player, Boolean> playerPasses = new HashMap<Player, Boolean>();
 
 	/**
 	 * Flag for a geschoben game (the skat was handed over from player to player
@@ -166,31 +166,29 @@ public class SkatGameData {
 	/**
 	 * Tricks made in the game
 	 */
-	private List<Trick> tricks;
+	private final List<Trick> tricks = new ArrayList<Trick>();
 
 	/**
 	 * Cards on player hands
 	 */
-	private Map<Player, CardList> playerHands;
+	private final Map<Player, CardList> playerHands = new HashMap<Player, CardList>();
 
 	/**
 	 * Cards in the skat
 	 */
-	private CardList skat;
+	private final CardList skat = new CardList();
 
 	/**
 	 * Holds all cards dealt to the players
 	 */
-	private Map<Player, CardList> dealtCards;
+	private final Map<Player, CardList> dealtCards = new HashMap<Player, CardList>();
 
 	/**
 	 * Holds all cards dealt to skat
 	 */
-	private CardList dealtSkat;
+	private final CardList dealtSkat = new CardList();
 
-	private boolean declarerPickedUpSkat;
-
-	private Set<Player> ramschLoosers;
+	private final Set<Player> ramschLoosers = new HashSet<Player>();
 
 	/**
 	 * Creates a new instance of a Skat game data
@@ -207,28 +205,14 @@ public class SkatGameData {
 		announcement = GameAnnouncement.getFactory().getEmptyAnnouncement();
 		result = new SkatGameResult();
 
-		playerNames = new HashMap<Player, String>();
-		playerHands = new HashMap<Player, CardList>();
-		dealtCards = new HashMap<Player, CardList>();
-		playerPoints = new HashMap<Player, Integer>();
-		playerBids = new HashMap<Player, Integer>();
-		playerPasses = new HashMap<Player, Boolean>();
-
 		for (final Player player : Player.values()) {
 			playerNames.put(player, ""); //$NON-NLS-1$
 			playerHands.put(player, new CardList());
 			dealtCards.put(player, new CardList());
 			playerPoints.put(player, 0);
-			playerBids.put(player, 0);
+			playerBids.put(player, new ArrayList<Integer>());
 			playerPasses.put(player, Boolean.FALSE);
 		}
-
-		dealtSkat = new CardList();
-		skat = new CardList();
-
-		tricks = new ArrayList<Trick>();
-
-		ramschLoosers = new HashSet<Player>();
 	}
 
 	/**
@@ -279,9 +263,10 @@ public class SkatGameData {
 
 		Integer result = 0;
 
-		for (Integer maxPlayerBid : playerBids.values()) {
-			if (maxPlayerBid > result) {
-				result = maxPlayerBid;
+		for (List<Integer> bids : playerBids.values()) {
+			int maxBid = bids.size() > 0 ? bids.get(bids.size() - 1) : 0;
+			if (maxBid > result) {
+				result = maxBid;
 			}
 		}
 
@@ -716,13 +701,6 @@ public class SkatGameData {
 	}
 
 	/**
-	 * Sets the skat cards to the declarer player
-	 */
-	public void addSkatCardsToDiscardingPlayer(Player discardingPlayer) {
-		playerHands.get(discardingPlayer).addAll(skat);
-	}
-
-	/**
 	 * Sets a new skat after discarding
 	 * 
 	 * @param player
@@ -765,21 +743,6 @@ public class SkatGameData {
 	}
 
 	/**
-	 * Sets a dealt card
-	 * 
-	 * @param player
-	 *            Player that got the Card
-	 * @param card
-	 *            Card that was dealt
-	 */
-	public void setDealtCard(final Player player, final Card card) {
-		// remember the dealt cards
-		dealtCards.get(player).add(card);
-		// current cards are hold in playerHands and skat
-		playerHands.get(player).add(card);
-	}
-
-	/**
 	 * Sets a dealt cards
 	 * 
 	 * @param player
@@ -787,10 +750,9 @@ public class SkatGameData {
 	 * @param cards
 	 *            Cards that was dealt
 	 */
-	public void setDealtCards(final Player player, final CardList cards) {
-		for (final Card card : cards) {
-			setDealtCard(player, card);
-		}
+	public void addDealtCards(final Player player, final CardList cards) {
+		dealtCards.get(player).addAll(cards);
+		playerHands.get(player).addAll(cards);
 	}
 
 	/**
@@ -803,7 +765,9 @@ public class SkatGameData {
 	 */
 	public void setDealtSkatCards(CardList cards) {
 
+		dealtSkat.clear();
 		dealtSkat.addAll(cards);
+		skat.clear();
 		skat.addAll(dealtSkat);
 	}
 
@@ -850,9 +814,14 @@ public class SkatGameData {
 	 * @param bidValue
 	 *            Max bid value so far
 	 */
-	public void setMaxPlayerBid(final Player player, final int bidValue) {
+	public void addPlayerBid(final Player player, final int bidValue) {
 
-		playerBids.put(player, Integer.valueOf(bidValue));
+		playerBids.get(player).add(bidValue);
+	}
+
+	public void removeLastPlayerBid(Player player) {
+		int lastIndex = playerBids.get(player).size() - 1;
+		playerBids.get(player).remove(lastIndex);
 	}
 
 	/**
@@ -863,8 +832,8 @@ public class SkatGameData {
 	 * @return Highest bid value so far
 	 */
 	public int getMaxPlayerBid(final Player player) {
-
-		return playerBids.get(player).intValue();
+		List<Integer> bids = playerBids.get(player);
+		return bids.size() > 0 ? bids.get(bids.size() - 1) : 0;
 	}
 
 	/**
@@ -921,9 +890,9 @@ public class SkatGameData {
 		final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 		factory.setGameType(announcement.getGameType());
 		if (announcement.getGameType() != GameType.RAMSCH) {
-			if (!declarerPickedUpSkat) {
-				factory.setHand(Boolean.TRUE);
-			}
+			// if (!declarerPickedUpSkat) {
+			// factory.setHand(Boolean.TRUE);
+			// }
 			factory.setHand(announcement.isHand());
 			factory.setOuvert(announcement.isOuvert());
 			factory.setSchneider(announcement.isSchneider());
@@ -1091,21 +1060,6 @@ public class SkatGameData {
 	}
 
 	/**
-	 * Sets whether the declarer picked up the skat
-	 * 
-	 * @param isDeclarerPickedUpSkat
-	 *            TRUE, if the declarer picked up the skat
-	 */
-	public void setDeclarerPickedUpSkat(final boolean isDeclarerPickedUpSkat) {
-		this.declarerPickedUpSkat = isDeclarerPickedUpSkat;
-		if (isDeclarerPickedUpSkat) {
-			announcement.hand = false;
-		} else {
-			announcement.hand = true;
-		}
-	}
-
-	/**
 	 * Gets a summary of the game
 	 * 
 	 * @return Game summary
@@ -1206,7 +1160,7 @@ public class SkatGameData {
 	}
 
 	/**
-	 * Removes a card from a players hand
+	 * Removes a card from a players hand.
 	 * 
 	 * @param player
 	 *            Player
@@ -1279,5 +1233,64 @@ public class SkatGameData {
 	public void removeDealtSkatCards(CardList cards) {
 		dealtSkat.removeAll(cards);
 		skat.removeAll(cards);
+	}
+
+	/**
+	 * Adds all cards from the skat to a players hand
+	 * 
+	 * @param player
+	 *            Player
+	 */
+	public void addSkatToPlayer(Player player) {
+		playerHands.get(player).addAll(skat);
+		skat.clear();
+		announcement.hand = false;
+	}
+
+	/**
+	 * Removes all cards from the former skat from a players hand
+	 * 
+	 * @param player
+	 *            Player
+	 */
+	public void removeSkatFromPlayer(Player player) {
+		playerHands.get(player).removeAll(dealtSkat);
+		skat.addAll(dealtSkat);
+		announcement.hand = true;
+	}
+
+	/**
+	 * Sets the cards in the skat.
+	 * 
+	 * @param cards
+	 *            Cards
+	 */
+	public void setSkatCards(CardList cards) {
+		skat.clear();
+		skat.addAll(cards);
+	}
+
+	/**
+	 * Removes cards from a players hand.
+	 * 
+	 * @param player
+	 *            Player
+	 * @param cards
+	 *            Cards
+	 */
+	public void removePlayerCards(Player player, CardList cards) {
+		playerHands.get(player).removeAll(cards);
+	}
+
+	/**
+	 * Adds cards to a players hand.
+	 * 
+	 * @param player
+	 *            Player
+	 * @param cards
+	 *            Cards
+	 */
+	public void addPlayerCards(Player player, CardList cards) {
+		playerHands.get(player).addAll(cards);
 	}
 }

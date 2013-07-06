@@ -101,7 +101,7 @@ public class NullRuleTest extends AbstractJSkatTest {
 	@Test
 	public void calcGameResultGameWon() {
 
-		data.setDeclarerPickedUpSkat(true);
+		factory.setHand(false);
 		data.setAnnouncement(factory.getAnnouncement());
 		playWinningTricks();
 		data.calcResult();
@@ -127,7 +127,7 @@ public class NullRuleTest extends AbstractJSkatTest {
 	@Test
 	public void calcGameResultGameWonOuvert() {
 
-		data.setDeclarerPickedUpSkat(true);
+		factory.setHand(false);
 		factory.setOuvert(Boolean.TRUE);
 		data.setAnnouncement(factory.getAnnouncement());
 		playWinningTricks();
@@ -154,7 +154,7 @@ public class NullRuleTest extends AbstractJSkatTest {
 	@Test
 	public void calcGameResultGameLost() {
 
-		data.setDeclarerPickedUpSkat(true);
+		factory.setHand(false);
 		data.setAnnouncement(factory.getAnnouncement());
 		playWinningTricks();
 		playLoosingTrick();
@@ -190,7 +190,7 @@ public class NullRuleTest extends AbstractJSkatTest {
 	@Test
 	public void calcGameResultGameLostOuvert() {
 
-		data.setDeclarerPickedUpSkat(true);
+		factory.setHand(false);
 		factory.setOuvert(Boolean.TRUE);
 		data.setAnnouncement(factory.getAnnouncement());
 		playWinningTricks();
@@ -219,8 +219,8 @@ public class NullRuleTest extends AbstractJSkatTest {
 	@Test
 	public void testOverbid() {
 
-		data.setMaxPlayerBid(Player.FOREHAND, 24);
-		data.setDeclarerPickedUpSkat(true);
+		data.addPlayerBid(Player.FOREHAND, 24);
+		factory.setHand(false);
 		data.setAnnouncement(factory.getAnnouncement());
 		playWinningTricks();
 		data.calcResult();

@@ -16,11 +16,11 @@ public class PickUpSkatEvent implements Event {
 
 	@Override
 	public void processForward(SkatGameData data) {
-		data.setDeclarerPickedUpSkat(true);
+		data.addSkatToPlayer(player);
 	}
 
 	@Override
 	public void processBackward(SkatGameData data) {
-		data.setDeclarerPickedUpSkat(false);
+		data.removeSkatFromPlayer(player);
 	}
 }

@@ -22,7 +22,7 @@ public class BidEventTest extends AbstractJSkatTest {
 		data = new SkatGameData();
 		event = new BidEvent(Player.FOREHAND, 18);
 		event2 = new BidEvent(Player.MIDDLEHAND, 18);
-		event3 = new BidEvent(Player.FOREHAND, 2);
+		event3 = new BidEvent(Player.FOREHAND, 20);
 	}
 
 	@Test

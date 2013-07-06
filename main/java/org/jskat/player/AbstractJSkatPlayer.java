@@ -95,9 +95,10 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void takeCard(final Card newCard) {
-
-		knowledge.addOwnCard(newCard);
+	public final void takeCards(final CardList cards) {
+		for (Card card : cards) {
+			knowledge.addOwnCard(card);
+		}
 	}
 
 	/**

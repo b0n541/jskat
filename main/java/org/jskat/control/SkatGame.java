@@ -194,10 +194,8 @@ public class SkatGame extends JSkatThread {
 				break;
 			case PICKING_UP_SKAT:
 				setActivePlayer(data.getDeclarer());
-				setGameState(GameState.DISCARDING);
 				if (pickUpSkat(data.getDeclarer())) {
-					data.setDeclarerPickedUpSkat(true);
-					view.setSkat(tableName, data.getSkat());
+					setGameState(GameState.DISCARDING);
 				} else {
 					setGameState(GameState.DECLARING);
 				}
@@ -299,14 +297,14 @@ public class SkatGame extends JSkatThread {
 	private void dealCards(final int cardCount) {
 
 		for (final Player hand : Player.getOrderedList()) {
-			// for all players
+			CardList cards = new CardList();
 			for (int j = 0; j < cardCount; j++) {
 				// deal amount of cards
-				final Card card = deck.remove(0);
-				// player can get original card object because Card is immutable
-				getPlayerInstance(hand).takeCard(card);
-				data.setDealtCard(hand, card);
+				cards.add(deck.remove(0));
 			}
+			// player can get original card object because Card is immutable
+			getPlayerInstance(hand).takeCards(cards);
+			data.addDealtCards(hand, cards);
 		}
 	}
 
@@ -436,7 +434,7 @@ public class SkatGame extends JSkatThread {
 				// announcing hand holds bid
 				currBidValue = announcerBidValue;
 
-				data.setMaxPlayerBid(announcer, announcerBidValue);
+				data.addPlayerBid(announcer, announcerBidValue);
 				informPlayersAboutBid(announcer, announcerBidValue);
 				view.setBid(tableName, announcer, announcerBidValue, true);
 
@@ -445,7 +443,7 @@ public class SkatGame extends JSkatThread {
 					log.debug("hearer holds " + currBidValue); //$NON-NLS-1$
 
 					// hearing hand holds bid
-					data.setMaxPlayerBid(hearer, announcerBidValue);
+					data.addPlayerBid(hearer, announcerBidValue);
 					informPlayersAboutBid(hearer, announcerBidValue);
 					view.setBid(tableName, hearer, announcerBidValue, false);
 
@@ -490,6 +488,8 @@ public class SkatGame extends JSkatThread {
 		final Player activePlayerPosition = data.getActivePlayer();
 		final JSkatPlayer activePlayer = getPlayerInstance(activePlayerPosition);
 
+		view.setSkat(tableName, data.getSkat());
+
 		log.debug("Player (" + activePlayer + ") looks into the skat..."); //$NON-NLS-1$ //$NON-NLS-2$
 		log.debug("Skat before discarding: " + data.getSkat()); //$NON-NLS-1$
 
@@ -497,8 +497,8 @@ public class SkatGame extends JSkatThread {
 
 		// create a clone of the skat before sending it to the player
 		// otherwise the player could change the skat after discarding
-		activePlayer.takeSkat(data.getSkat());
-		data.addSkatCardsToDiscardingPlayer(activePlayerPosition);
+		activePlayer.takeSkat(skatBefore);
+		data.addSkatToPlayer(activePlayerPosition);
 
 		// ask player for the cards to be discarded
 		// cloning is done to prevent the player

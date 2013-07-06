@@ -22,7 +22,7 @@ public class HoldBidEventTest extends AbstractJSkatTest {
 		data = new SkatGameData();
 		event = new HoldBidEvent(Player.FOREHAND, 18);
 		event2 = new HoldBidEvent(Player.MIDDLEHAND, 18);
-		event3 = new HoldBidEvent(Player.FOREHAND, 2);
+		event3 = new HoldBidEvent(Player.FOREHAND, 20);
 	}
 
 	@Test

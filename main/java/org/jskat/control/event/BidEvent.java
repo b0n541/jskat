@@ -6,7 +6,7 @@ import org.jskat.util.Player;
  * Event for bidding.
  */
 public class BidEvent extends AbstractBidEvent {
-	public BidEvent(Player player, Integer bidRaise) {
-		super(player, bidRaise);
+	public BidEvent(Player player, Integer bid) {
+		super(player, bid);
 	}
 }

@@ -23,7 +23,7 @@ public class DealCardEvent implements Event {
 	@Override
 	public void processForward(SkatGameData data) {
 		for (Player player : playerCards.keySet()) {
-			data.setDealtCards(player, playerCards.get(player));
+			data.addDealtCards(player, playerCards.get(player));
 		}
 		data.setDealtSkatCards(skat);
 	}
