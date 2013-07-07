@@ -47,6 +47,9 @@ import org.slf4j.LoggerFactory;
 /**
  * Controls everything in JSkat
  */
+// FIXME b0n541 2013-07-07: this is a god class, everything is controlled by and
+// over this class. It must be split into smaller pieces with respect to SoC and
+// SRP
 public class JSkatMaster {
 
 	private static Logger log = LoggerFactory.getLogger(JSkatMaster.class);
