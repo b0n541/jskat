@@ -2,6 +2,7 @@ language: java
 script: mvn install
 jdk:
   - oraclejdk7
+  - oraclejdk6
   - openjdk7
   - openjdk6
 branches:
