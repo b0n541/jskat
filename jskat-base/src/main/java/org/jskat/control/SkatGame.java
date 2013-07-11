@@ -100,6 +100,8 @@ public class SkatGame extends JSkatThread {
 	/**
 	 * @see Thread#run()
 	 */
+	// FIXME jan 11.07.2013: this method is too long, break it down to smaller
+	// methods or implement it in another way
 	@Override
 	public void run() {
 
