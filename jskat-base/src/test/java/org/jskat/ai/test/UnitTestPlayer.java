@@ -17,12 +17,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jskat.player;
+package org.jskat.ai.test;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.jskat.data.GameAnnouncement;
+import org.jskat.player.AbstractJSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 

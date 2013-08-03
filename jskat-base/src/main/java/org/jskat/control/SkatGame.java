@@ -755,72 +755,29 @@ public class SkatGame extends JSkatThread {
 				card = skatPlayer.playCard();
 			} catch (final Exception exp) {
 				log.error("Exception thrown by player " + skatPlayer + " playing " + currPlayer + ": " + exp); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				if (!skatPlayer.isHumanPlayer()) {
+					aiPlayerPlayedSchwarz = true;
+				}
 			}
 
 			log.debug(card + " " + data); //$NON-NLS-1$
 
-			if (card == null) {
-
-				log.error("Player is fooling!!! Did not play a card!"); //$NON-NLS-1$
-
+			if (isCardSchwarzPlay(skatPlayer, currPlayer, trick, card)) {
 				if (skatPlayer.isHumanPlayer()) {
 					view.showCardNotAllowedMessage(card);
 				} else {
-					// TODO create option for switching playing schwarz on/off
+					view.showAIPlayedSchwarzMessage(skatPlayer.getPlayerName(),
+							card);
 					aiPlayerPlayedSchwarz = true;
 				}
-
-			} else if (!playerHasCard(currPlayer, card)) {
-
-				log.error("Player (" + getPlayerInstance(currPlayer) + ") is fooling!!! Doesn't have card " + card + "!"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
-
-				if (skatPlayer.isHumanPlayer()
-						|| JSkatOptions.instance().isCheatDebugMode()) {
-					view.showCardNotAllowedMessage(card);
-				} else {
-					// TODO create option for switching playing schwarz on/off
-					aiPlayerPlayedSchwarz = true;
-				}
-
-			} else if (!rules
-					.isCardAllowed(data.getGameType(), trick.getFirstCard(),
-							data.getPlayerCards(currPlayer), card)) {
-
-				log.error("Player " + skatPlayer.getClass().toString() + " card not allowed: " + card + " game type: " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-						+ data.getGameType() + " first trick card: " //$NON-NLS-1$
-						+ trick.getFirstCard() + " player cards: " //$NON-NLS-1$
-						+ data.getPlayerCards(currPlayer));
-
-				if (skatPlayer.isHumanPlayer()
-						|| JSkatOptions.instance().isCheatDebugMode()) {
-					view.showCardNotAllowedMessage(card);
-				} else {
-					// TODO create option for switching playing schwarz on/off
-					aiPlayerPlayedSchwarz = true;
-				}
-
 			} else {
 
 				cardAccepted = true;
 			}
 		}
 
-		if (card == null || aiPlayerPlayedSchwarz) {
-			// check schwarz
-			if (aiPlayerPlayedSchwarz && !cardAccepted) {
-				// end game immediately
-				data.getResult().setSchwarz(true);
-				if (data.getDeclarer().equals(currPlayer)) {
-					// declarer played schwarz
-					data.getResult().setWon(false);
-				} else {
-					// opponent played schwarz
-					data.getResult().setWon(true);
-				}
-				data.setGameState(GameState.PRELIMINARY_GAME_END);
-			}
-		} else {
-			// card was on players hand and is valid
+		if (card != null) {
+			// a card was played
 			data.removePlayerCard(currPlayer, card);
 			data.setTrickCard(currPlayer, card);
 
@@ -846,6 +803,45 @@ public class SkatGame extends JSkatThread {
 
 			log.debug("playing card " + card); //$NON-NLS-1$
 		}
+
+		if (aiPlayerPlayedSchwarz) {
+			// end game immediately
+			data.getResult().setSchwarz(true);
+			if (data.getDeclarer().equals(currPlayer)) {
+				// declarer played schwarz
+				data.getResult().setWon(false);
+			} else {
+				// opponent played schwarz
+				data.getResult().setWon(true);
+			}
+			data.setGameState(GameState.PRELIMINARY_GAME_END);
+		}
+	}
+
+	private boolean isCardSchwarzPlay(JSkatPlayer skatPlayer, Player position,
+			Trick trick, Card card) {
+		boolean isSchwarz = false;
+		if (card == null) {
+
+			log.error("Player is fooling!!! Did not play a card!"); //$NON-NLS-1$
+			isSchwarz = true;
+
+		} else if (!playerHasCard(position, card)) {
+
+			log.error("Player (" + skatPlayer + ") is fooling!!! Doesn't have card " + card + "!"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+			isSchwarz = true;
+
+		} else if (!rules.isCardAllowed(data.getGameType(),
+				trick.getFirstCard(), data.getPlayerCards(position), card)) {
+
+			log.error("Player " + skatPlayer.getClass().toString() + " card not allowed: " + card + " game type: " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					+ data.getGameType() + " first trick card: " //$NON-NLS-1$
+					+ trick.getFirstCard() + " player cards: " //$NON-NLS-1$
+					+ data.getPlayerCards(position));
+			isSchwarz = true;
+		}
+
+		return isSchwarz;
 	}
 
 	private JSkatPlayer getPlayerInstance(final Player position) {

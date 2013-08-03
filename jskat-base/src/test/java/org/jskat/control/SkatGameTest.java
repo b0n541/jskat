@@ -32,8 +32,12 @@ import java.util.Map;
 
 import org.jskat.AbstractJSkatTest;
 import org.jskat.ai.rnd.AIPlayerRND;
+import org.jskat.ai.test.ExceptionTestPlayer;
 import org.jskat.ai.test.NoBiddingTestPlayer;
+import org.jskat.ai.test.PlayNonPossessingCardTestPlayer;
+import org.jskat.ai.test.PlayNotAllowedCardTestPlayer;
 import org.jskat.ai.test.RamschTestPlayer;
+import org.jskat.ai.test.UnitTestPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary;
@@ -44,7 +48,6 @@ import org.jskat.data.SkatTableOptions.RuleSet;
 import org.jskat.data.Trick;
 import org.jskat.gui.UnitTestView;
 import org.jskat.player.JSkatPlayer;
-import org.jskat.player.UnitTestPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardDeck;
 import org.jskat.util.GameType;
@@ -309,8 +312,71 @@ public class SkatGameTest extends AbstractJSkatTest {
 	}
 
 	@Test
-	@Ignore
-	// FIXME (b0n541 2013-07-06): Test is unstable
+	@Ignore("Not stable at the moment")
+	public void exceptionFromPlayerDuringGame() {
+		SkatGame game = new SkatGame("Table 1", GameVariant.STANDARD, //$NON-NLS-1$
+				new ExceptionTestPlayer(), new ExceptionTestPlayer(),
+				new ExceptionTestPlayer());
+		game.setView(new UnitTestView());
+
+		game.start();
+		try {
+			game.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		SkatGameResult gameResult = game.getGameResult();
+		assertTrue(gameResult.isSchwarz());
+	}
+
+	@Test
+	@Ignore("Not stable at the moment.")
+	public void playerPlaysNonPossessingCard() {
+		SkatGame game = new SkatGame(
+				"Table 1", GameVariant.STANDARD, //$NON-NLS-1$
+				new PlayNonPossessingCardTestPlayer(),
+				new PlayNonPossessingCardTestPlayer(),
+				new PlayNonPossessingCardTestPlayer());
+		game.setView(new UnitTestView());
+
+		game.start();
+		try {
+			game.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		SkatGameResult gameResult = game.getGameResult();
+		assertTrue(gameResult.isSchwarz());
+	}
+
+	@Test
+	@Ignore("Not stable at the moment.")
+	public void playerPlaysNotAllowedCard() {
+		SkatGame game = new SkatGame(
+				"Table 1", GameVariant.STANDARD, //$NON-NLS-1$
+				new PlayNotAllowedCardTestPlayer(),
+				new PlayNotAllowedCardTestPlayer(),
+				new PlayNotAllowedCardTestPlayer());
+		game.setView(new UnitTestView());
+
+		game.start();
+		try {
+			game.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		SkatGameResult gameResult = game.getGameResult();
+		assertTrue(gameResult.isSchwarz());
+	}
+
+	@Test
+	@Ignore("Not stable at the moment.")
 	public void testCompleteGame() {
 		SkatGame game = new SkatGame("Table 1", GameVariant.STANDARD, //$NON-NLS-1$
 				new AIPlayerRND(), new AIPlayerRND(), new AIPlayerRND());
@@ -353,26 +419,26 @@ public class SkatGameTest extends AbstractJSkatTest {
 	}
 
 	@Test
-	@Ignore
 	public void testPredefinedCardPlaying() {
 		UnitTestPlayer foreHand = new UnitTestPlayer();
 		foreHand.setCardsToPlay(Arrays.asList(Card.C7, Card.SJ, Card.C9,
 				Card.H8, Card.DQ, Card.D7, Card.CT, Card.DK, Card.CA, Card.CK));
 
 		UnitTestPlayer middleHand = new UnitTestPlayer();
-		foreHand.setCardsToPlay(Arrays.asList(Card.CQ, Card.C8, Card.SQ,
+		middleHand.setCardsToPlay(Arrays.asList(Card.CQ, Card.C8, Card.SQ,
 				Card.ST, Card.S9, Card.HT, Card.HA, Card.DA, Card.HK, Card.D9));
 
 		UnitTestPlayer rearHand = new UnitTestPlayer();
-		foreHand.setCardsToPlay(Arrays.asList(Card.DJ, Card.CJ, Card.HJ,
+		rearHand.setCardsToPlay(Arrays.asList(Card.DJ, Card.CJ, Card.HJ,
 				Card.SA, Card.S8, Card.H7, Card.H9, Card.D8, Card.HQ, Card.DT));
 
 		SkatGame game = new SkatGame("Table 1", GameVariant.STANDARD, //$NON-NLS-1$
 				foreHand, middleHand, rearHand);
 		game.setView(new UnitTestView());
 
-		CardDeck deck = new CardDeck(
-				"SJ CA CT CQ C8 ST CJ HJ DJ SK S7 CK C9 C7 H8 SQ S9 HA HT SA S8 HQ H9 DK DO D7 HK DA D9 H7 DT D8");
+		CardDeck deck = new CardDeck("SJ CA CT CK C9 C7 H8 DK DQ D7",
+				"CQ C8 ST SQ S9 HA HT HK DA D9",
+				"CJ HJ DJ SA S8 HQ H9 H7 DT D8", "SK S7");
 		game.setCardDeck(deck);
 		game.dealCards();
 		game.setDeclarer(Player.MIDDLEHAND);
@@ -390,7 +456,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 		}
 
 		SkatGameResult result = game.getGameResult();
-		assertEquals(28, result.getFinalDeclarerPoints());
-		assertEquals(28, result.getFinalOpponentPoints());
+		assertEquals(32, result.getFinalDeclarerPoints());
+		assertEquals(88, result.getFinalOpponentPoints());
 	}
 }

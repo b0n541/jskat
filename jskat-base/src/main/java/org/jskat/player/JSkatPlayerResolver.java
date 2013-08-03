@@ -35,11 +35,23 @@ public class JSkatPlayerResolver {
 
 	public static final Set<String> EXCLUDED_PLAYER_CLASSES;
 
+	public static final Set<String> UNIT_TEST_PLAYER_CLASSES;
+
 	static {
 		EXCLUDED_PLAYER_CLASSES = new HashSet<String>();
 		EXCLUDED_PLAYER_CLASSES.add("org.jskat.ai.mjl.AIPlayerMJL");
 		EXCLUDED_PLAYER_CLASSES
 				.add("org.jskat.ai.algorithmic.AlgorithmicAIPlayer");
+
+		UNIT_TEST_PLAYER_CLASSES = new HashSet<String>();
+		UNIT_TEST_PLAYER_CLASSES.add("org.jskat.ai.test.UnitTestPlayer");
+		UNIT_TEST_PLAYER_CLASSES.add("org.jskat.ai.test.RamschTestPlayer");
+		UNIT_TEST_PLAYER_CLASSES.add("org.jskat.ai.test.NoBiddingTestPlayer");
+		UNIT_TEST_PLAYER_CLASSES.add("org.jskat.ai.test.ExceptionTestPlayer");
+		UNIT_TEST_PLAYER_CLASSES
+				.add("org.jskat.ai.test.PlayNonPossessingCardTestPlayer");
+		UNIT_TEST_PLAYER_CLASSES
+				.add("org.jskat.ai.test.PlayNotAllowedCardTestPlayer");
 	}
 
 	/**
@@ -50,6 +62,7 @@ public class JSkatPlayerResolver {
 		Set<String> result = getAllImplementations();
 
 		result.removeAll(EXCLUDED_PLAYER_CLASSES);
+		result.removeAll(UNIT_TEST_PLAYER_CLASSES);
 
 		return result;
 	}

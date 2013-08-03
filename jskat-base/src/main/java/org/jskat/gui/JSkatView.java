@@ -752,4 +752,14 @@ public interface JSkatView {
 	 *            Name of the view
 	 */
 	public void setActiveView(String name);
+
+	/**
+	 * Shows a messages if an AI player played schwarz
+	 * 
+	 * @param playerName
+	 *            Player name
+	 * @param card
+	 *            Card
+	 */
+	public void showAIPlayedSchwarzMessage(String playerName, Card card);
 }
