@@ -19,8 +19,10 @@
  */
 package org.jskat.util;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -47,17 +49,71 @@ public class CardDeck extends CardList {
 	/**
 	 * Constructor
 	 * 
+	 * @param foreHandCards
+	 *            Cards of fore hand
+	 * @param middleHandCards
+	 *            Cards of middle hand
+	 * @param rearHandCards
+	 *            Cards of rear hand
+	 * @param skatCards
+	 *            Cards of skat
+	 */
+	public CardDeck(List<Card> foreHandCards, List<Card> middleHandCards,
+			List<Card> rearHandCards, List<Card> skatCards) {
+		addAll(foreHandCards.subList(0, 3));
+		addAll(middleHandCards.subList(0, 3));
+		addAll(rearHandCards.subList(0, 3));
+		addAll(skatCards);
+		addAll(foreHandCards.subList(3, 7));
+		addAll(middleHandCards.subList(3, 7));
+		addAll(rearHandCards.subList(3, 7));
+		addAll(foreHandCards.subList(7, 10));
+		addAll(middleHandCards.subList(7, 10));
+		addAll(rearHandCards.subList(7, 10));
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param foreHandCards
+	 *            Cards of fore hand
+	 * @param middleHandCards
+	 *            Cards of middle hand
+	 * @param rearHandCards
+	 *            Cards of rear hand
+	 * @param skatCards
+	 *            Cards of skat
+	 */
+	public CardDeck(String foreHandCards, String middleHandCards,
+			String rearHandCards, String skatCards) {
+		this(getCardsFromString(foreHandCards),
+				getCardsFromString(middleHandCards),
+				getCardsFromString(rearHandCards),
+				getCardsFromString(skatCards));
+	}
+
+	/**
+	 * Constructor
+	 * 
 	 * @param cards
 	 *            Card distribution
 	 */
 	public CardDeck(final String cards) {
 
+		addAll(getCardsFromString(cards));
+	}
+
+	private static List<Card> getCardsFromString(final String cards) {
+
+		List<Card> result = new ArrayList<Card>();
 		StringTokenizer token = new StringTokenizer(cards);
 
 		while (token.hasMoreTokens()) {
 
-			add(Card.getCardFromString(token.nextToken()));
+			result.add(Card.getCardFromString(token.nextToken()));
 		}
+
+		return result;
 	}
 
 	/**
