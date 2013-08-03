@@ -258,7 +258,7 @@ public class JSkatViewImpl implements JSkatView {
 
 	private void initGUI() {
 
-		mainFrame = new JFrame("JSkat"); //$NON-NLS-1$
+		mainFrame = new JFrame("JSkat "+ JSkat.getVersion()); //$NON-NLS-1$
 
 		mainFrame.addWindowListener(new JSkatWindowAdapter(jskat));
 
