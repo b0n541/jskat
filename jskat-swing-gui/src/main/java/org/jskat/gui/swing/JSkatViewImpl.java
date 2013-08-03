@@ -258,7 +258,7 @@ public class JSkatViewImpl implements JSkatView {
 
 	private void initGUI() {
 
-		mainFrame = new JFrame("JSkat "+ JSkat.getVersion()); //$NON-NLS-1$
+		mainFrame = new JFrame("JSkat " + JSkat.getVersion()); //$NON-NLS-1$
 
 		mainFrame.addWindowListener(new JSkatWindowAdapter(jskat));
 
@@ -517,6 +517,14 @@ public class JSkatViewImpl implements JSkatView {
 
 		JOptionPane.showMessageDialog(mainFrame, message, title,
 				JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	@Override
+	public void showAIPlayedSchwarzMessage(String playerName, Card card) {
+		showMessage(
+				strings.getString("player_played_schwarz_title"),
+				strings.getString("player_played_schwarz", playerName,
+						strings.getCardStringForCardFace(card)));
 	}
 
 	/**
