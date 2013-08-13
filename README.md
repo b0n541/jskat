@@ -5,3 +5,5 @@ License:
 * JSkat Swing GUI: GNU General Public License (GPL), Version 3.0 (http://www.gnu.org/licenses/gpl.html)
 
 Continous integration: https://travis-ci.org/b0n541/jskat-multimodule
+
+[![Build Status](https://travis-ci.org/b0n541/jskat-multimodule.png?branch=master)](https://travis-ci.org/b0n541/jskat-multimodule)
