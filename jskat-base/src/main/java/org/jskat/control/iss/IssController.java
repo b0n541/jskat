@@ -19,7 +19,6 @@
  */
 package org.jskat.control.iss;
 
-import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +37,6 @@ import org.jskat.data.iss.MoveInformation;
 import org.jskat.data.iss.MoveType;
 import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.gui.JSkatView;
-import org.jskat.gui.action.JSkatAction;
 import org.jskat.util.Card;
 import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.Player;
@@ -120,7 +118,7 @@ public class IssController {
 	 *            Login credentials
 	 * @return TRUE if the connection was established successfully
 	 */
-	public boolean connectToISS(final ActionEvent e) {
+	public boolean connectToISS(LoginCredentials credentials) {
 
 		log.debug("connectToISS"); //$NON-NLS-1$
 
@@ -132,33 +130,20 @@ public class IssController {
 
 		log.debug("connector created"); //$NON-NLS-1$
 
-		final Object source = e.getSource();
-		final String command = e.getActionCommand();
+		login = credentials.getLoginName();
+		password = credentials.getPassword();
 
-		if (JSkatAction.CONNECT_TO_ISS.toString().equals(command)) {
-			if (source instanceof LoginCredentials) {
+		if (issConnector != null && !issConnector.isConnected()) {
 
-				final LoginCredentials loginCredentials = (LoginCredentials) source;
-				login = loginCredentials.getLoginName();
-				password = loginCredentials.getPassword();
+			issConnector.setConnectionData(login, password);
+			final boolean isConnected = issConnector.establishConnection(this);
 
-				if (issConnector != null && !issConnector.isConnected()) {
-
-					issConnector.setConnectionData(login, password);
-					final boolean isConnected = issConnector
-							.establishConnection(this);
-
-					if (isConnected) {
-						log.debug("Connection to ISS established: " + issConnector.isConnected()); //$NON-NLS-1$
-						issMsg = new MessageGenerator(login);
-						issOut = issConnector.getOutputChannel();
-						sendToIss(login);
-						// sendToIss(issMsg.getLoginAndPasswordMessage(password));
-					}
-				}
-			} else {
-
-				log.error("Wrong source for " + command); //$NON-NLS-1$
+			if (isConnected) {
+				log.debug("Connection to ISS established: " + issConnector.isConnected()); //$NON-NLS-1$
+				issMsg = new MessageGenerator(login);
+				issOut = issConnector.getOutputChannel();
+				sendToIss(login);
+				// sendToIss(issMsg.getLoginAndPasswordMessage(password));
 			}
 		}
 

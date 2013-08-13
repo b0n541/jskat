@@ -25,6 +25,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
+import org.jskat.data.iss.LoginCredentials;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
@@ -52,7 +53,9 @@ public class ConnectAction extends AbstractJSkatAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
-		jskat.getIssController().connectToISS(e);
+		if (e.getSource() instanceof LoginCredentials) {
+			jskat.getIssController().connectToISS(
+					(LoginCredentials) e.getSource());
+		}
 	}
 }
