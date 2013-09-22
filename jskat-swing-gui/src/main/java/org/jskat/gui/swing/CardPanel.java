@@ -20,10 +20,14 @@
  */
 package org.jskat.gui.swing;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 
 import javax.swing.JPanel;
@@ -49,6 +53,10 @@ public class CardPanel extends JPanel {
 	protected Double scaleFactor = 1.0;
 	private Boolean showBackside = true;
 
+	private Integer mouseXPosition = Integer.MAX_VALUE;
+	private Integer activeCardMinXPosition = Integer.MAX_VALUE;
+	private Integer activeCardMaxXPosition = Integer.MAX_VALUE;
+
 	/**
 	 * Holds the game type for the sorting order.
 	 */
@@ -68,6 +76,8 @@ public class CardPanel extends JPanel {
 
 		setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
+		createMouseMotionListener();
+
 		bitmaps = JSkatGraphicRepository.instance();
 		this.scaleFactor = scaleFactor;
 		this.showBackside = showBackside;
@@ -75,6 +85,30 @@ public class CardPanel extends JPanel {
 		cards = new CardList();
 
 		setOpaque(false);
+	}
+
+	private void createMouseMotionListener() {
+		addMouseMotionListener(new MouseMotionListener() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				log.debug("X: " + e.getX() + " Y: " + e.getY());
+				mouseXPosition = e.getX();
+				repaintIfNecessary();
+			}
+
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				// TODO Auto-generated method stub
+			}
+		});
+	}
+
+	protected void repaintIfNecessary() {
+		if (mouseXPosition < activeCardMinXPosition
+				|| mouseXPosition > activeCardMaxXPosition) {
+			log.debug("Repaint");
+			repaint();
+		}
 	}
 
 	/**
@@ -143,7 +177,7 @@ public class CardPanel extends JPanel {
 		final int cardWidth = bitmaps.getCardImage(Card.CJ).getWidth(this);
 		int cardGap = cardWidth;
 		if (cards.size() * cardGap > panelWidth) {
-
+			// cards overlap
 			cardGap = (panelWidth - cardWidth) / (cards.size() - 1);
 		}
 
@@ -151,27 +185,51 @@ public class CardPanel extends JPanel {
 		int cardNo = 0;
 		for (final Card card : cardsToPaint) {
 
-			Image image = null;
-
-			if (showBackside) {
-
-				image = bitmaps.getCardImage(null);
-			} else {
-				if (card == null) {
-					// e.g. in debug mode
-					image = bitmaps.getCardImage(null);
-				} else {
-					image = bitmaps.getCardImage(card);
-				}
-			}
-
 			final AffineTransform transform = new AffineTransform();
 			transform.scale(scaleFactor, scaleFactor);
-			transform.translate(cardNo * cardGap, 0);
-			g2D.drawImage(image, transform, this);
+
+			if (cardNo * cardGap <= mouseXPosition) {
+				transform.translate(cardNo * cardGap, 0);
+			} else if (mouseXPosition < cardNo * cardGap + cardWidth) {
+				transform.translate((cardNo - 1) * cardGap + cardWidth, 0);
+			}
+			g2D.drawImage(getCardImage(card), transform, this);
 
 			cardNo++;
 		}
+
+		if (mouseXPosition == Integer.MAX_VALUE) {
+			activeCardMinXPosition = cardNo * cardGap;
+		} else if (mouseXPosition < activeCardMinXPosition) {
+			activeCardMinXPosition = mouseXPosition - mouseXPosition % cardGap;
+		} else if (activeCardMaxXPosition < mouseXPosition) {
+			activeCardMinXPosition = (mouseXPosition - cardWidth)
+					- mouseXPosition / cardGap;
+		}
+		activeCardMaxXPosition = activeCardMinXPosition + cardWidth;
+
+		g2D.setColor(Color.RED);
+		g2D.setStroke(new BasicStroke(10.0f));
+		g2D.drawLine(activeCardMinXPosition, 0, activeCardMinXPosition, 10);
+		g2D.drawLine(activeCardMaxXPosition, 0, activeCardMaxXPosition, 10);
+		g2D.drawOval(mouseXPosition, 10, 5, 5);
+	}
+
+	private Image getCardImage(final Card card) {
+		Image image = null;
+
+		if (showBackside) {
+
+			image = bitmaps.getCardImage(null);
+		} else {
+			if (card == null) {
+				// e.g. in debug mode
+				image = bitmaps.getCardImage(null);
+			} else {
+				image = bitmaps.getCardImage(card);
+			}
+		}
+		return image;
 	}
 
 	/**
