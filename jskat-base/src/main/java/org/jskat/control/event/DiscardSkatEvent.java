@@ -7,7 +7,7 @@ import org.jskat.util.Player;
 /**
  * Event for discard skat.
  */
-public class DiscardSkatEvent implements Event {
+public final class DiscardSkatEvent implements Event {
 
 	private final Player player;
 	private final CardList discardedSkat = new CardList();
@@ -18,13 +18,13 @@ public class DiscardSkatEvent implements Event {
 	}
 
 	@Override
-	public void processForward(SkatGameData data) {
+	public final void processForward(SkatGameData data) {
 		data.removePlayerCards(player, discardedSkat);
 		data.setSkatCards(discardedSkat);
 	}
 
 	@Override
-	public void processBackward(SkatGameData data) {
+	public final void processBackward(SkatGameData data) {
 		data.setSkatCards(new CardList());
 		data.addPlayerCards(player, discardedSkat);
 	}

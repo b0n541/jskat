@@ -14,12 +14,12 @@ public class AbstractBidEvent implements Event {
 	}
 
 	@Override
-	public void processForward(SkatGameData data) {
+	public final void processForward(SkatGameData data) {
 		data.addPlayerBid(player, bid);
 	}
 
 	@Override
-	public void processBackward(SkatGameData data) {
+	public final void processBackward(SkatGameData data) {
 		data.removeLastPlayerBid(player);
 	}
 

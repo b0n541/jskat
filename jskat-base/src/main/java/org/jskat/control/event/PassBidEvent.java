@@ -6,7 +6,7 @@ import org.jskat.util.Player;
 /**
  * Event for passing a bid.
  */
-public class PassBidEvent implements Event {
+public final class PassBidEvent implements Event {
 
 	private final Player player;
 
@@ -15,12 +15,12 @@ public class PassBidEvent implements Event {
 	}
 
 	@Override
-	public void processForward(SkatGameData data) {
+	public final void processForward(SkatGameData data) {
 		data.setPlayerPass(player, true);
 	}
 
 	@Override
-	public void processBackward(SkatGameData data) {
+	public final void processBackward(SkatGameData data) {
 		data.setPlayerPass(player, false);
 	}
 }

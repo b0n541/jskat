@@ -10,7 +10,7 @@ import org.jskat.util.Player;
 /**
  * Event for card dealing.
  */
-public class DealCardEvent implements Event {
+public final class DealCardEvent implements Event {
 
 	private final Map<Player, CardList> playerCards = new HashMap<Player, CardList>();
 	private final CardList skat = new CardList();
@@ -21,7 +21,7 @@ public class DealCardEvent implements Event {
 	}
 
 	@Override
-	public void processForward(SkatGameData data) {
+	public final void processForward(SkatGameData data) {
 		for (Player player : playerCards.keySet()) {
 			data.addDealtCards(player, playerCards.get(player));
 		}
@@ -29,7 +29,7 @@ public class DealCardEvent implements Event {
 	}
 
 	@Override
-	public void processBackward(SkatGameData data) {
+	public final void processBackward(SkatGameData data) {
 		for (Player player : playerCards.keySet()) {
 			data.removeDealtCards(player, playerCards.get(player));
 		}

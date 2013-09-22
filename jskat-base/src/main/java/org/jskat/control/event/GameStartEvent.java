@@ -6,7 +6,7 @@ import org.jskat.util.Player;
 /**
  * Event for game start.
  */
-public class GameStartEvent implements Event {
+public final class GameStartEvent implements Event {
 
 	private final Player dealer;
 
@@ -15,12 +15,12 @@ public class GameStartEvent implements Event {
 	}
 
 	@Override
-	public void processForward(SkatGameData data) {
+	public final void processForward(SkatGameData data) {
 		data.setDealer(dealer);
 	}
 
 	@Override
-	public void processBackward(SkatGameData data) {
+	public final void processBackward(SkatGameData data) {
 		data.setDealer(null);
 	}
 }
