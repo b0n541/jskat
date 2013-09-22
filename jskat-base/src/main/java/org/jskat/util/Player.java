@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Contains all player positions in a trick
+ * Contains all player positions in a game
  */
 public enum Player {
 	/**
