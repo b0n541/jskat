@@ -26,8 +26,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
 import java.awt.geom.AffineTransform;
 
 import javax.swing.JPanel;
@@ -54,8 +54,8 @@ public class CardPanel extends JPanel {
 	private Boolean showBackside = true;
 
 	private Integer mouseXPosition = Integer.MAX_VALUE;
-	private Integer activeCardMinXPosition = Integer.MAX_VALUE;
-	private Integer activeCardMaxXPosition = Integer.MAX_VALUE;
+	protected Integer activeCardMinXPosition = Integer.MAX_VALUE;
+	protected Integer activeCardMaxXPosition = Integer.MAX_VALUE;
 
 	/**
 	 * Holds the game type for the sorting order.
@@ -76,7 +76,7 @@ public class CardPanel extends JPanel {
 
 		setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		createMouseMotionListener();
+		createMouseAdapter();
 
 		bitmaps = JSkatGraphicRepository.instance();
 		this.scaleFactor = scaleFactor;
@@ -87,26 +87,39 @@ public class CardPanel extends JPanel {
 		setOpaque(false);
 	}
 
-	private void createMouseMotionListener() {
-		addMouseMotionListener(new MouseMotionListener() {
+	private void createMouseAdapter() {
+		MouseAdapter adapter = new MouseAdapter() {
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				log.debug("X: " + e.getX() + " Y: " + e.getY());
 				mouseXPosition = e.getX();
 				repaintIfNecessary();
 			}
 
 			@Override
-			public void mouseDragged(MouseEvent e) {
-				// TODO Auto-generated method stub
+			public void mouseExited(MouseEvent e) {
+				resetMousePositions();
+				repaint();
 			}
-		});
+		};
+
+		addMouseMotionListener(adapter);
+		addMouseListener(adapter);
+	}
+
+	private void resetMousePositions() {
+		mouseXPosition = Integer.MAX_VALUE;
+		resetActiveCardPosition();
+	}
+
+	private void resetActiveCardPosition() {
+		activeCardMinXPosition = Integer.MAX_VALUE;
+		activeCardMaxXPosition = Integer.MAX_VALUE;
 	}
 
 	protected void repaintIfNecessary() {
-		if (mouseXPosition < activeCardMinXPosition
-				|| mouseXPosition > activeCardMaxXPosition) {
-			log.debug("Repaint");
+
+		if (!showBackside
+				&& (mouseXPosition < activeCardMinXPosition || mouseXPosition > activeCardMaxXPosition)) {
 			repaint();
 		}
 	}
@@ -146,6 +159,7 @@ public class CardPanel extends JPanel {
 			// remove the last one
 			cards.remove(cards.size() - 1);
 		}
+		resetActiveCardPosition();
 		repaint();
 	}
 
@@ -173,41 +187,54 @@ public class CardPanel extends JPanel {
 				RenderingHints.VALUE_ANTIALIAS_ON);
 
 		// calculate card gap
-		final int panelWidth = getWidth();
-		final int cardWidth = bitmaps.getCardImage(Card.CJ).getWidth(this);
+		int panelWidth = getWidth();
+		int cardWidth = bitmaps.getCardImage(Card.CJ).getWidth(this);
+		int cardGap = calculateCardGap(panelWidth, cardWidth);
+
+		adjustActiveCardPositions(cardWidth, cardGap);
+		paintAllCards(cardsToPaint, g2D, cardWidth, cardGap);
+		// drawMouseMarkers(g2D);
+	}
+
+	private int calculateCardGap(final int panelWidth, final int cardWidth) {
 		int cardGap = cardWidth;
 		if (cards.size() * cardGap > panelWidth) {
 			// cards overlap
 			cardGap = (panelWidth - cardWidth) / (cards.size() - 1);
 		}
+		return cardGap;
+	}
 
-		// paint all cards
+	private void paintAllCards(final CardList cardsToPaint,
+			final Graphics2D g2D, final int cardWidth, int cardGap) {
 		int cardNo = 0;
 		for (final Card card : cardsToPaint) {
 
 			final AffineTransform transform = new AffineTransform();
 			transform.scale(scaleFactor, scaleFactor);
 
-			if (cardNo * cardGap <= mouseXPosition) {
+			if (cardNo * cardGap <= activeCardMinXPosition) {
 				transform.translate(cardNo * cardGap, 0);
-			} else if (mouseXPosition < cardNo * cardGap + cardWidth) {
+			} else if (activeCardMaxXPosition < cardNo * cardGap + cardWidth) {
 				transform.translate((cardNo - 1) * cardGap + cardWidth, 0);
 			}
 			g2D.drawImage(getCardImage(card), transform, this);
 
 			cardNo++;
 		}
+	}
 
-		if (mouseXPosition == Integer.MAX_VALUE) {
-			activeCardMinXPosition = cardNo * cardGap;
-		} else if (mouseXPosition < activeCardMinXPosition) {
-			activeCardMinXPosition = mouseXPosition - mouseXPosition % cardGap;
-		} else if (activeCardMaxXPosition < mouseXPosition) {
-			activeCardMinXPosition = (mouseXPosition - cardWidth)
-					- mouseXPosition / cardGap;
+	private void adjustActiveCardPositions(int cardWidth, int cardGap) {
+		if (mouseXPosition < activeCardMinXPosition) {
+			activeCardMinXPosition = (mouseXPosition / cardGap) * cardGap;
+		} else if (mouseXPosition > activeCardMaxXPosition) {
+			activeCardMinXPosition = ((mouseXPosition - cardWidth + cardGap) / (cardGap))
+					* cardGap;
 		}
 		activeCardMaxXPosition = activeCardMinXPosition + cardWidth;
+	}
 
+	private void drawMouseMarkers(final Graphics2D g2D) {
 		g2D.setColor(Color.RED);
 		g2D.setStroke(new BasicStroke(10.0f));
 		g2D.drawLine(activeCardMinXPosition, 0, activeCardMinXPosition, 10);

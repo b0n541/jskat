@@ -111,72 +111,14 @@ class ClickableCardPanel extends CardPanel {
 				&& yPosition < getHeight()) {
 
 			// get card
-			final double cardWidth = bitmaps.getCardImage(Card.CJ).getWidth(
-					this);
+			final int cardWidth = bitmaps.getCardImage(Card.CJ).getWidth(this);
 
-			int cardIndex = -1;
-			if (cards.size() > 0) {
-				if (cards.size() == 1) {
-					log.debug("only on card on hand"); //$NON-NLS-1$
-					if (xPosition < cardWidth) {
-						cardIndex = 0;
-					}
-				} else {
-					double distanceBetweenCards = cardWidth;
-					if (cards.size() > 1) {
-						distanceBetweenCards = (getWidth() - cardWidth)
-								/ (cards.size() - 1.0);
-					}
+			int cardIndex = getCardIndex(xPosition, cardWidth);
 
-					if (cardWidth > distanceBetweenCards) {
-						log.debug("cards with overlaping"); //$NON-NLS-1$
-						cardIndex = 0;
-						while (!(cardIndex * distanceBetweenCards < xPosition && (cardIndex + 1)
-								* distanceBetweenCards > xPosition)
-								&& cardIndex < cards.size() - 1) {
-							cardIndex++;
-						}
-					} else {
-						log.debug("cards without overlaping"); //$NON-NLS-1$
-
-						cardIndex = (int) (xPosition * (1 / scaleFactor) / cardWidth);
-					}
-				}
-			}
-
-			Card card = null;
-			if (cardIndex > -1 && cardIndex < cards.size()) {
-
-				card = cards.get(cardIndex);
-			}
+			Card card = getCard(cardIndex);
 
 			if (card != null) {
-				// send event only, if the card panel shows a card
-				Action action = null;
-
-				if (parent instanceof DiscardPanel) {
-					// card panel in discard panel was clicked
-					action = getActionMap()
-							.get(JSkatAction.TAKE_CARD_FROM_SKAT);
-				} else if (parent instanceof JSkatUserPanel) {
-					// card panel in player panel was clicked
-
-					final GameState state = ((JSkatUserPanel) parent)
-							.getGameState();
-
-					if (state == GameState.DISCARDING
-							|| state == GameState.SCHIEBERAMSCH) {
-						// discarding phase
-						action = getActionMap().get(
-								JSkatAction.PUT_CARD_INTO_SKAT);
-					} else if (state == GameState.TRICK_PLAYING) {
-						// trick playing phase
-						action = getActionMap().get(JSkatAction.PLAY_CARD);
-					}
-				} else {
-
-					log.debug("Other parent " + parent); //$NON-NLS-1$
-				}
+				Action action = getAction();
 
 				if (action != null) {
 
@@ -191,5 +133,66 @@ class ClickableCardPanel extends CardPanel {
 				}
 			}
 		}
+	}
+
+	private Action getAction() {
+		// send event only, if the card panel shows a card
+		Action action = null;
+
+		if (parent instanceof DiscardPanel) {
+			// card panel in discard panel was clicked
+			action = getActionMap().get(JSkatAction.TAKE_CARD_FROM_SKAT);
+		} else if (parent instanceof JSkatUserPanel) {
+			// card panel in player panel was clicked
+
+			final GameState state = ((JSkatUserPanel) parent).getGameState();
+
+			if (state == GameState.DISCARDING
+					|| state == GameState.SCHIEBERAMSCH) {
+				// discarding phase
+				action = getActionMap().get(JSkatAction.PUT_CARD_INTO_SKAT);
+			} else if (state == GameState.TRICK_PLAYING) {
+				// trick playing phase
+				action = getActionMap().get(JSkatAction.PLAY_CARD);
+			}
+		} else {
+
+			log.debug("Other parent " + parent); //$NON-NLS-1$
+		}
+		return action;
+	}
+
+	private Card getCard(int cardIndex) {
+		Card card = null;
+		if (cardIndex > -1 && cardIndex < cards.size()) {
+			card = cards.get(cardIndex);
+		}
+		return card;
+	}
+
+	private int getCardIndex(int clickPositionX, int cardWidth) {
+		int cardIndex = -1;
+		if (cards.size() == 1) {
+			log.debug("only one card on hand"); //$NON-NLS-1$
+			if (clickPositionX < cardWidth) {
+				cardIndex = 0;
+			}
+		} else if (cards.size() > 1) {
+
+			int distanceBetweenCards = (getWidth() - cardWidth)
+					/ (cards.size() - 1);
+
+			if (cardWidth > distanceBetweenCards) {
+				log.debug("cards with overlaping"); //$NON-NLS-1$
+				cardIndex = 0;
+				while (cardIndex * distanceBetweenCards < activeCardMinXPosition) {
+					cardIndex++;
+				}
+			} else {
+				log.debug("cards without overlaping"); //$NON-NLS-1$
+				cardIndex = (int) (clickPositionX * (1 / scaleFactor) / cardWidth);
+			}
+		}
+		return cardIndex;
 	}
 }
