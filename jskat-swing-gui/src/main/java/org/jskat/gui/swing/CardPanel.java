@@ -96,10 +96,17 @@ public class CardPanel extends JPanel {
 			}
 
 			@Override
-			public void mouseExited(MouseEvent e) {
-				resetMousePositions();
-				repaint();
+			public void mouseEntered(MouseEvent e) {
+				mouseXPosition = e.getX();
+				resetActiveCardPosition();
+				repaintIfNecessary();
 			}
+			//
+			// @Override
+			// public void mouseExited(MouseEvent e) {
+			// resetMousePositions();
+			// repaint();
+			// }
 		};
 
 		addMouseMotionListener(adapter);
