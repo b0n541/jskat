@@ -53,10 +53,9 @@ import org.jskat.data.SkatTableOptions.RamschSkatOwner;
 import org.jskat.data.SkatTableOptions.RuleSet;
 import org.jskat.gui.img.CardSet;
 import org.jskat.util.Card;
+import org.jskat.util.CardDeck;
 import org.jskat.util.GameType;
 import org.jskat.util.JSkatResourceBundle;
-import org.jskat.util.Rank;
-import org.jskat.util.Suit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -249,28 +248,26 @@ public class JSkatOptionsDialog extends JDialog {
 	}
 
 	private JPanel getCardSetSelectionPanel() {
-		JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "", ""));
+		JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "",
+				"[shrink][grow]"));
 
 		panel.add(new JLabel(strings.getString("card_face"))); //$NON-NLS-1$
-		panel.add(getCardSetPanel(), "growx, shrinky, wrap"); //$NON-NLS-1$
+		panel.add(getCardSetPanel(), "growx, wrap"); //$NON-NLS-1$
 
-		panel.add(getCardPanelForSuit(Suit.CLUBS), "span 2, grow, wrap");
-		panel.add(getCardPanelForSuit(Suit.SPADES), "span 2, grow, wrap");
-		panel.add(getCardPanelForSuit(Suit.HEARTS), "span 2, grow, wrap");
-		panel.add(getCardPanelForSuit(Suit.DIAMONDS), "span 2, grow");
+		panel.add(getCardPanel(), "span 2, grow");
 
 		panel.validate();
 
 		return panel;
 	}
 
-	private CardPanel getCardPanelForSuit(Suit suit) {
+	private CardPanel getCardPanel() {
 		CardPanel cardPanel = new CardPanel(1.0, false);
 
-		for (Rank rank : Rank.values()) {
-			cardPanel.addCard(Card.getCard(suit, rank));
+		for (Card card : CardDeck.getAllCards()) {
+			cardPanel.addCard(card);
 		}
-		cardPanel.setSortType(GameType.NULL);
+		cardPanel.setSortType(GameType.GRAND);
 		return cardPanel;
 	}
 

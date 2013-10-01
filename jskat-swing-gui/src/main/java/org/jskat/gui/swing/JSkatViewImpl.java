@@ -1102,6 +1102,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showPreferences() {
 
+		preferencesDialog.validate();
 		preferencesDialog.setVisible(true);
 	}
 
