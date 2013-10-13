@@ -521,10 +521,18 @@ public class JSkatViewImpl implements JSkatView {
 
 	@Override
 	public void showAIPlayedSchwarzMessage(String playerName, Card card) {
-		showMessage(
-				strings.getString("player_played_schwarz_title"),
+
+		String cardString = null;
+
+		if (card != null) {
+			cardString = strings.getCardStringForCardFace(card);
+		} else {
+			cardString = strings.getString("unknown_card");
+		}
+
+		showMessage(strings.getString("player_played_schwarz_title"),
 				strings.getString("player_played_schwarz", playerName,
-						strings.getCardStringForCardFace(card)));
+						cardString));
 	}
 
 	/**
