@@ -332,7 +332,8 @@ public class JSkatOptionsDialog extends JDialog {
 
 	private JPanel getCardSetPanel() {
 
-		cardSet = new JComboBox(CardSet.values());
+		cardSet = new JComboBox<CardSet>(CardSet.values());
+		cardSet.setSelectedIndex(0);
 		cardSet.setRenderer(new CardSetComboBoxRenderer());
 
 		cardSet.addActionListener(new ActionListener() {
@@ -765,29 +766,19 @@ public class JSkatOptionsDialog extends JDialog {
 			final CardSet cardSet = (CardSet) value;
 
 			if (cardSet != null) {
-				switch (cardSet) {
-				case ISS_FRENCH:
-					result = strings.getString("cardset_iss_french"); //$NON-NLS-1$
-					break;
-				case ISS_GERMAN:
-					result = strings.getString("cardset_iss_german"); //$NON-NLS-1$
-					break;
-				case ISS_TOURNAMENT:
-					result = strings.getString("cardset_iss_tournament"); //$NON-NLS-1$
-					break;
-				case DONDORF_FRENCH:
-					result = strings.getString("cardset_dondorf_french"); //$NON-NLS-1$
-					break;
-				case DONDORF_GERMAN:
-					result = strings.getString("cardset_dondorf_german"); //$NON-NLS-1$
-					break;
-				case DONDORF_TOURNAMENT:
-					result = strings.getString("cardset_dondorf_tournament"); //$NON-NLS-1$
-					break;
-				}
+				result = strings
+						.getString("cardset_" + getCardSetNameInLowerCase(cardSet) + "_" + getCardFaceInLowerCase(cardSet)); //$NON-NLS-1$
 			}
 
 			return result;
+		}
+
+		private String getCardFaceInLowerCase(final CardSet cardSet) {
+			return cardSet.getCardFace().toString().toLowerCase();
+		}
+
+		private String getCardSetNameInLowerCase(final CardSet cardSet) {
+			return cardSet.getName().toLowerCase().replace(" ", "");
 		}
 	}
 }

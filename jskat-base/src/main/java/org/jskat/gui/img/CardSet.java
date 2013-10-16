@@ -25,7 +25,23 @@ public enum CardSet {
 	/**
 	 * Tournament Dondorf card set
 	 */
-	DONDORF_TOURNAMENT("Dondorf", CardFace.TOURNAMENT, "png");
+	DONDORF_TOURNAMENT("Dondorf", CardFace.TOURNAMENT, "png"),
+	/**
+	 * French Ornamental card set
+	 */
+	ORNAMENTAL_FRENCH("Ornamental", CardFace.FRENCH, "png"),
+	/**
+	 * French Tango card set
+	 */
+	TANGO_FRENCH("Tango", CardFace.FRENCH, "png"),
+	/**
+	 * German William Tell card set
+	 */
+	WILLIAMTELL_GERMAN("William Tell", CardFace.GERMAN, "png"),
+	/**
+	 * German XSkat card set
+	 */
+	XSKAT_GERMAN("XSkat", CardFace.GERMAN, "png");
 
 	private String name = null;
 	private CardFace cardFace = null;

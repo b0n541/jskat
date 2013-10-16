@@ -236,7 +236,7 @@ public class JSkatGraphicRepository {
 																+ set.getCardFace()
 																		.toString()
 																		.toLowerCase()
-																+ "/" + set.getName().toLowerCase() + "/" + card.getSuit().shortString() + '-' + card.getRank().shortString() + "." + set.getFileType()))); //$NON-NLS-1$//$NON-NLS-2$
+																+ "/" + getCardSetNameInLowerCase(set) + "/" + card.getSuit().shortString() + '-' + card.getRank().shortString() + "." + set.getFileType()))); //$NON-NLS-1$//$NON-NLS-2$
 
 				tracker.addImage(cards.get(set).get(card), 2);
 			}
@@ -246,7 +246,7 @@ public class JSkatGraphicRepository {
 							Toolkit.getDefaultToolkit()
 									.getImage(
 											ClassLoader
-													.getSystemResource("org/jskat/gui/img/card/back/" + set.getName().toLowerCase() + "." + set.getFileType()))); //$NON-NLS-1$
+													.getSystemResource("org/jskat/gui/img/card/back/" + getCardSetNameInLowerCase(set) + "." + set.getFileType()))); //$NON-NLS-1$
 			tracker.addImage(cardBacks.get(set), 2);
 		}
 		try {
@@ -254,6 +254,10 @@ public class JSkatGraphicRepository {
 		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private String getCardSetNameInLowerCase(CardSet set) {
+		return set.getName().toLowerCase().replace(" ", "");
 	}
 
 	/**
