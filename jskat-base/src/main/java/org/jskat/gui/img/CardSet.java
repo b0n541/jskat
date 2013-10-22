@@ -41,7 +41,11 @@ public enum CardSet {
 	/**
 	 * German XSkat card set
 	 */
-	XSKAT_GERMAN("XSkat", CardFace.GERMAN, "png");
+	XSKAT_GERMAN("XSkat", CardFace.GERMAN, "png"),
+	/**
+	 * Tigullio Bridge card set
+	 */
+	TIGULLIOBRIDGE_FRENCH("Tigullio Bridge", CardFace.FRENCH, "png");
 
 	private String name = null;
 	private CardFace cardFace = null;
