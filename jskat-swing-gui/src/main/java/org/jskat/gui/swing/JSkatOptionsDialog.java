@@ -332,7 +332,7 @@ public class JSkatOptionsDialog extends JDialog {
 
 	private JPanel getCardSetPanel() {
 
-		cardSet = new JComboBox<CardSet>(CardSet.values());
+		cardSet = new JComboBox(CardSet.values());
 		cardSet.setSelectedIndex(0);
 		cardSet.setRenderer(new CardSetComboBoxRenderer());
 
