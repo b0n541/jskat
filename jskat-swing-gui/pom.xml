@@ -8,7 +8,6 @@
 		<version>0.13.0-SNAPSHOT</version>
 	</parent>
 
-	<groupId>org.jskat</groupId>
 	<artifactId>JSkat</artifactId>
 	<packaging>jar</packaging>
 
