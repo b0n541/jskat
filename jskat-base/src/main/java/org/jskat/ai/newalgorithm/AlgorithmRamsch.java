@@ -28,8 +28,7 @@ import org.jskat.util.Rank;
 import org.jskat.util.Suit;
 
 /**
- * @author Markus J. Luzius <br>
- *         created: 15.06.2011 19:13:50
+ * @author Daniel Loreck
  * 
  */
 public class AlgorithmRamsch extends AbstractAlgorithmAI {
@@ -40,13 +39,16 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 	 */
 	AlgorithmRamsch(final AlgorithmAI p, GameType pGameType) {
 		super(p, pGameType);
-		
-		log.debug(String.format("/s is %s", myPlayer.getPlayerName(), this.getClass().getName()));
+
+		log.debug(String.format("/s is %s", myPlayer.getPlayerName(), this
+				.getClass().getName()));
 	}
 
+	@Override
 	public Card startGame() {
 		CardList cards = knowledge.getOwnCards();
-		if (cards.get(0).getRank() == Rank.JACK && cards.get(0).getSuit().ordinal() > 2
+		if (cards.get(0).getRank() == Rank.JACK
+				&& cards.get(0).getSuit().ordinal() > 2
 				&& cards.get(1).getRank() != Rank.JACK) {
 			return cards.get(0);
 		}
@@ -54,8 +56,8 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 		for (Suit s : Suit.values()) {
 			if (cards.getSuitCount(s, false) == 1) {
 				if (resultIndex < 0
-						|| cards.get(resultIndex).getRamschOrder() > cards.get(cards.getFirstIndexOfSuit(s))
-								.getRamschOrder()) {
+						|| cards.get(resultIndex).getRamschOrder() > cards.get(
+								cards.getFirstIndexOfSuit(s)).getRamschOrder()) {
 					resultIndex = cards.getFirstIndexOfSuit(s);
 				}
 			} else if (cards.getSuitCount(s, false) == 2
@@ -69,6 +71,7 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 		return cards.get(cards.size() - 1);
 	}
 
+	@Override
 	public Card playForehandCard() {
 		CardList cards = knowledge.getOwnCards();
 		int[] playedCards = knowledge.getPlayedCardsBinary();
@@ -79,32 +82,38 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 				continue;
 			}
 			Card c = cards.get(cards.getFirstIndexOfSuit(s, false));
-			if (cards.getSuitCount(s, false) == 1 && c.getRank().getRamschOrder() < 6
+			if (cards.getSuitCount(s, false) == 1
+					&& c.getRank().getRamschOrder() < 6
 					&& c.getRank().getRamschOrder() > 2) {
 				if (resultIndex < 0) {
 					resultIndex = cards.getIndexOf(c);
 				} else {
-					if (c.getRamschOrder() > cards.get(resultIndex).getRamschOrder()) {
+					if (c.getRamschOrder() > cards.get(resultIndex)
+							.getRamschOrder()) {
 						resultIndex = cards.getIndexOf(c);
 					}
 				}
 			}
 			Card lowCard = cards.get(cards.getLastIndexOfSuit(s, false));
-			if (cards.getSuitCount(s, false) == 2 && c.getRank().getRamschOrder() < 6
+			if (cards.getSuitCount(s, false) == 2
+					&& c.getRank().getRamschOrder() < 6
 					&& lowCard.getRank().getRamschOrder() < 2) {
 				resultIndex = cards.getIndexOf(c);
 			}
 		}
 		if (resultIndex >= 0) {
 			Card result = cards.get(resultIndex);
-			log.debug("Playing single (or high double) suit card: " + result + " of " + cards);
+			log.debug("Playing single (or high double) suit card: " + result
+					+ " of " + cards);
 			return result;
 		}
 
 		int jack = Rank.JACK.toBinaryFlag();
-		if ((playedCards[0] & jack) + (playedCards[1] & jack) + (playedCards[2] & jack) + (playedCards[3] & jack) == 0) {
+		if ((playedCards[0] & jack) + (playedCards[1] & jack)
+				+ (playedCards[2] & jack) + (playedCards[3] & jack) == 0) {
 			log.debug("no jack played yet - trying it myself");
-			if (cards.get(0).getRank() == Rank.JACK && cards.get(0).getSuit().ordinal() > 1
+			if (cards.get(0).getRank() == Rank.JACK
+					&& cards.get(0).getSuit().ordinal() > 1
 					&& cards.get(1).getRank() != Rank.JACK) {
 				return cards.get(0);
 			}
@@ -124,8 +133,10 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 		return cards.get(cards.size() - 1);
 	}
 
+	@Override
 	public Card playMiddlehandCard() {
-		log.debug("I (" + myPlayer.getPlayerName() + ") am in middlehand (OpponentPlayer)");
+		log.debug("I (" + myPlayer.getPlayerName()
+				+ ") am in middlehand (OpponentPlayer)");
 		CardList cards = knowledge.getOwnCards();
 		Card initialCard = knowledge.getTrickCards().get(0);
 		GameType gameType = knowledge.getGameType();
@@ -134,8 +145,10 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 		return getDefaultCard(cards, initialCard, gameType);
 	}
 
+	@Override
 	public Card playRearhandCard() {
-		log.debug("I (" + myPlayer.getPlayerName() + ") am in rearhand (OpponentPlayer)");
+		log.debug("I (" + myPlayer.getPlayerName()
+				+ ") am in rearhand (OpponentPlayer)");
 		CardList cards = knowledge.getOwnCards();
 		Card initialCard = knowledge.getTrickCards().get(0);
 		Card middlehandCard = knowledge.getTrickCards().get(1);
@@ -153,15 +166,18 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 		// if possible, take the highest card
 		result = allowed.get(0);
 		for (Card c : allowed) {
-			boolean beatsCheck = c.beats(gameType, initialCard) && c.beats(gameType, middlehandCard);
-			boolean beatsResult = result.beats(gameType, initialCard) && result.beats(gameType, middlehandCard);
+			boolean beatsCheck = c.beats(gameType, initialCard)
+					&& c.beats(gameType, middlehandCard);
+			boolean beatsResult = result.beats(gameType, initialCard)
+					&& result.beats(gameType, middlehandCard);
 			if (beatsResult && !beatsCheck) {
 				result = c;
 			}
 		}
 
 		// fallback: take the first valid card
-		return result == null ? getDefaultCard(cards, initialCard, gameType) : result;
+		return result == null ? getDefaultCard(cards, initialCard, gameType)
+				: result;
 	}
 
 	/**
@@ -172,7 +188,8 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 	 * @param gameType
 	 * @return a default card
 	 */
-	private Card getDefaultCard(final CardList cards, final Card initialCard, final GameType gameType) {
+	private Card getDefaultCard(final CardList cards, final Card initialCard,
+			final GameType gameType) {
 		Card result = null;
 		for (Card c : cards) {
 			if (c.isAllowed(gameType, initialCard, cards)) {
@@ -183,7 +200,8 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 			log.debug("playCard (8)");
 			return result;
 		}
-		log.warn("no possible card found in card list [" + cards + "] with " + gameType + " / " + initialCard);
+		log.warn("no possible card found in card list [" + cards + "] with "
+				+ gameType + " / " + initialCard);
 		log.debug("playCard (9)");
 		return cards.get(0);
 	}
@@ -197,7 +215,8 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 	 */
 	@Override
 	public CardList discardSkat(final BidEvaluator bidEvaluator) {
-		log.debug(myPlayer.getPlayerName() + " (" + this.getClass() + ") is discarding cards");
+		log.debug(myPlayer.getPlayerName() + " (" + this.getClass()
+				+ ") is discarding cards");
 		if (JSkatOptions.instance().isSchieberRamschJacksInSkat()) {
 			return discardWithJacks();
 		}
@@ -207,13 +226,16 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 	private CardList discardWithJacks() {
 		CardList result = new CardList();
 		CardList cards = new CardList(knowledge.getOwnCards());
-		log.debug("cards left before discarding(withJacks): " + cards.size() + " - " + cards);
+		log.debug("cards left before discarding(withJacks): " + cards.size()
+				+ " - " + cards);
 		cards.sort(GameType.RAMSCH);
-		if (cards.get(0).getRank() == Rank.JACK && cards.get(0).getSuit() == Suit.CLUBS
+		if (cards.get(0).getRank() == Rank.JACK
+				&& cards.get(0).getSuit() == Suit.CLUBS
 				|| cards.get(0).getSuit() == Suit.SPADES) {
 			result.add(cards.remove(0));
 		}
-		if (cards.get(0).getRank() == Rank.JACK && cards.get(0).getSuit() == Suit.SPADES) {
+		if (cards.get(0).getRank() == Rank.JACK
+				&& cards.get(0).getSuit() == Suit.SPADES) {
 			result.add(cards.remove(0));
 		}
 		if (result.size() == 2) {
@@ -223,7 +245,8 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 		while (result.size() > 2) {
 			cards.add(result.remove(result.size() - 1));
 		}
-		log.debug("cards left after discarding(withJacks): " + cards.size() + " - " + cards);
+		log.debug("cards left after discarding(withJacks): " + cards.size()
+				+ " - " + cards);
 		return result;
 	}
 
@@ -231,14 +254,18 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 		CardList result = new CardList();
 		CardList cards = new CardList(knowledge.getOwnCards());
 		cards.sort(GameType.RAMSCH);
-		log.debug("cards left before discarding(noJacks): " + cards.size() + " - " + cards);
+		log.debug("cards left before discarding(noJacks): " + cards.size()
+				+ " - " + cards);
 		for (Card c : cards) {
 			if (result.size() < 2 && c.getRank() == Rank.ACE) {
 				result.add(c);
 			} else if (result.size() == 2 && c.getRank() == Rank.ACE) {
-				int len = knowledge.getOwnCards().getSuitCount(c.getSuit(), false);
-				int len0 = knowledge.getOwnCards().getSuitCount(result.get(0).getSuit(), false);
-				int len1 = knowledge.getOwnCards().getSuitCount(result.get(1).getSuit(), false);
+				int len = knowledge.getOwnCards().getSuitCount(c.getSuit(),
+						false);
+				int len0 = knowledge.getOwnCards().getSuitCount(
+						result.get(0).getSuit(), false);
+				int len1 = knowledge.getOwnCards().getSuitCount(
+						result.get(1).getSuit(), false);
 				if (len < len0) {
 					result.remove(0);
 					result.add(c);
@@ -252,9 +279,12 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 			if (result.size() < 2 && c.getRank() == Rank.TEN) {
 				result.add(c);
 			} else if (result.size() == 2 && c.getRank() == Rank.TEN) {
-				int len = knowledge.getOwnCards().getSuitCount(c.getSuit(), false);
-				int len0 = knowledge.getOwnCards().getSuitCount(result.get(0).getSuit(), false);
-				int len1 = knowledge.getOwnCards().getSuitCount(result.get(1).getSuit(), false);
+				int len = knowledge.getOwnCards().getSuitCount(c.getSuit(),
+						false);
+				int len0 = knowledge.getOwnCards().getSuitCount(
+						result.get(0).getSuit(), false);
+				int len1 = knowledge.getOwnCards().getSuitCount(
+						result.get(1).getSuit(), false);
 				if (len < len0) {
 					result.remove(0);
 					result.add(c);
@@ -274,7 +304,8 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 				result.add(c);
 			}
 		}
-		log.debug("cards left after discarding(noJacks): " + cards.size() + " - " + cards);
+		log.debug("cards left after discarding(noJacks): " + cards.size()
+				+ " - " + cards);
 		return result;
 
 	}

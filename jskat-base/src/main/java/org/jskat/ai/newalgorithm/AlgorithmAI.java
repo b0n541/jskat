@@ -29,8 +29,7 @@ import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 
 /**
- * @author Markus J. Luzius <br>
- *         created: 13.05.2011 17:33:05
+ * @author Daniel Loreck
  * 
  */
 public class AlgorithmAI extends AbstractJSkatPlayer {
