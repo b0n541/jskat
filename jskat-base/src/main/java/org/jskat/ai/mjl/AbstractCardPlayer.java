@@ -20,7 +20,7 @@
 package org.jskat.ai.mjl;
 
 import org.apache.log4j.Logger;
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.CardList;
 
 /**
@@ -37,9 +37,9 @@ public abstract class AbstractCardPlayer implements CardPlayer {
 		this.cards = cards;
 	}
 	
-	public void startGame(PlayerKnowledge knowledge) {
+	public void startGame(ImmutablePlayerKnowledge knowledge) {
 		log.debug("Starting game...");
-		cards.sort(knowledge.getGame().getGameType());
+		cards.sort(knowledge.getGameAnnouncement().getGameType());
 	}
 
 

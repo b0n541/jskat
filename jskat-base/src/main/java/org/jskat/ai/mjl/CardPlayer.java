@@ -19,7 +19,7 @@
  */
 package org.jskat.ai.mjl;
 
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 
 /**
@@ -35,8 +35,8 @@ interface CardPlayer {
 	 *            all necessary information about the game
 	 * @return the card to play
 	 */
-	Card playNextCard(PlayerKnowledge knowledge);
+	Card playNextCard(ImmutablePlayerKnowledge knowledge);
 
-	void startGame(PlayerKnowledge knowledge);
+	void startGame(ImmutablePlayerKnowledge knowledge);
 
 }

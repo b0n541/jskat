@@ -19,7 +19,7 @@
  */
 package org.jskat.ai.mjl;
 
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.rule.SkatRule;
@@ -57,7 +57,7 @@ public class RamschPlayer extends AbstractCardPlayer {
 	 * @return index of the card to play
 	 */
 	@Override
-	public Card playNextCard(final PlayerKnowledge knowledge) {
+	public Card playNextCard(final ImmutablePlayerKnowledge knowledge) {
 		log.debug(".playNextCard(): Processing hand: " + cards);
 		log.debug(".playNextCard(): Not really implemented yet...");
 		int result = 0;

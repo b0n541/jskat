@@ -42,8 +42,10 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	protected String playerName;
 	/** Player state */
 	protected JSkatPlayer.PlayerState playerState;
-	/** Player knowledge */
-	protected PlayerKnowledge knowledge = new PlayerKnowledge();
+	/** Internal player knowledge */
+	private PlayerKnowledge internalKnowledge = new PlayerKnowledge();
+	/** Immutable Player knowledge */
+	protected ImmutablePlayerKnowledge knowledge = internalKnowledge;
 	/** Skat rules for the current skat series */
 	protected SkatRule rules;
 	/** Summary of the skat game */
@@ -85,8 +87,8 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 		playerState = null;
 		rules = null;
 		gameSummary = null;
-		knowledge.initializeVariables();
-		knowledge.setPlayerPosition(newPosition);
+		internalKnowledge.initializeVariables();
+		internalKnowledge.setPlayerPosition(newPosition);
 
 		preparateForNewGame();
 	}
@@ -97,7 +99,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	@Override
 	public final void takeCards(final CardList cards) {
 		for (Card card : cards) {
-			knowledge.addOwnCard(card);
+			internalKnowledge.addOwnCard(card);
 		}
 	}
 
@@ -118,8 +120,8 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 			final GameAnnouncement game) {
 
 		playerState = PlayerState.PLAYING;
-		knowledge.setDeclarer(newDeclarer);
-		knowledge.setGame(game);
+		internalKnowledge.setDeclarer(newDeclarer);
+		internalKnowledge.setGame(game);
 
 		rules = SkatRuleFactory.getSkatRules(game.getGameType());
 		if (!GameType.PASSED_IN.equals(game.getGameType())) {
@@ -146,8 +148,8 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
 		log.debug("Skat cards: " + skatCards); //$NON-NLS-1$
 
-		knowledge.setSkat(skatCards);
-		knowledge.addOwnCards(skatCards);
+		internalKnowledge.setSkat(skatCards);
+		internalKnowledge.addOwnCards(skatCards);
 	}
 
 	/**
@@ -167,7 +169,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	@Override
 	public final void bidByPlayer(final Player player, final int bidValue) {
 
-		knowledge.setHighestBid(player, bidValue);
+		internalKnowledge.setHighestBid(player, bidValue);
 	}
 
 	/**
@@ -181,15 +183,15 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 		boolean isCardAllowed = false;
 		CardList result = new CardList();
 
-		log.debug("game type: " + knowledge.getGameType()); //$NON-NLS-1$
-		log.debug("player cards (" + knowledge.getOwnCards().size() + "): " + knowledge.getOwnCards()); //$NON-NLS-1$ //$NON-NLS-2$
+		log.debug("game type: " + internalKnowledge.getGameType()); //$NON-NLS-1$
+		log.debug("player cards (" + internalKnowledge.getOwnCards().size() + "): " + internalKnowledge.getOwnCards()); //$NON-NLS-1$ //$NON-NLS-2$
 		log.debug("trick size: " + trick.size()); //$NON-NLS-1$
 
-		for (Card card : knowledge.getOwnCards()) {
+		for (Card card : internalKnowledge.getOwnCards()) {
 
 			if (trick.size() > 0
-					&& rules.isCardAllowed(knowledge.getGameType(),
-							trick.get(0), knowledge.getOwnCards(), card)) {
+					&& rules.isCardAllowed(internalKnowledge.getGameType(),
+							trick.get(0), internalKnowledge.getOwnCards(), card)) {
 
 				log.debug("initial card: " + trick.get(0)); //$NON-NLS-1$
 				isCardAllowed = true;
@@ -216,13 +218,13 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	@Override
 	public final void cardPlayed(final Player player, final Card card) {
 
-		knowledge.setCardPlayed(player, card);
+		internalKnowledge.setCardPlayed(player, card);
 
-		if (player == knowledge.getPlayerPosition()) {
+		if (player == internalKnowledge.getPlayerPosition()) {
 			// remove this card from counter
-			knowledge.removeOwnCard(card);
+			internalKnowledge.removeOwnCard(card);
 		} else {
-			knowledge.removeCard(card);
+			internalKnowledge.removeCard(card);
 		}
 	}
 
@@ -231,7 +233,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 */
 	@Override
 	public final void newTrick(final Trick trick) {
-		knowledge.setCurrentTrick(trick);
+		internalKnowledge.setCurrentTrick(trick);
 	}
 
 	/**
@@ -239,8 +241,8 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 */
 	@Override
 	public final void showTrick(final Trick trick) {
-		knowledge.addTrick(trick);
-		knowledge.clearTrickCards();
+		internalKnowledge.addTrick(trick);
+		internalKnowledge.clearTrickCards();
 	}
 
 	/**
@@ -260,9 +262,9 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
 		boolean result = false;
 
-		if (GameType.RAMSCH.equals(knowledge.getGameType())
-				|| knowledge.getDeclarer()
-						.equals(knowledge.getPlayerPosition())) {
+		if (GameType.RAMSCH.equals(internalKnowledge.getGameType())
+				|| internalKnowledge.getDeclarer().equals(
+						internalKnowledge.getPlayerPosition())) {
 
 			result = true;
 		}
@@ -276,7 +278,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	@Override
 	public final void lookAtOuvertCards(final CardList ouvertCards) {
 
-		knowledge.getSinglePlayerCards().addAll(ouvertCards);
+		internalKnowledge.getSinglePlayerCards().addAll(ouvertCards);
 	}
 
 	/**
@@ -287,13 +289,13 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
 		CardList result = new CardList();
 
-		log.debug("Player cards before discarding: " + knowledge.getOwnCards()); //$NON-NLS-1$
+		log.debug("Player cards before discarding: " + internalKnowledge.getOwnCards()); //$NON-NLS-1$
 
 		result.addAll(getCardsToDiscard());
 
-		knowledge.removeOwnCards(result.getImmutableCopy());
+		internalKnowledge.removeOwnCards(result.getImmutableCopy());
 
-		log.debug("Player cards after discarding: " + knowledge.getOwnCards()); //$NON-NLS-1$
+		log.debug("Player cards after discarding: " + internalKnowledge.getOwnCards()); //$NON-NLS-1$
 
 		return result;
 	}

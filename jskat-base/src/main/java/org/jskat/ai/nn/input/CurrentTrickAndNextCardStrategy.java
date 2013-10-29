@@ -20,7 +20,7 @@
 package org.jskat.ai.nn.input;
 
 import org.jskat.data.Trick;
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
@@ -28,17 +28,11 @@ import org.jskat.util.rule.SkatRuleFactory;
 public class CurrentTrickAndNextCardStrategy extends CurrentTrickStrategy {
 
 	@Override
-	public double[] getNetworkInput(PlayerKnowledge knowledge, Card cardToPlay) {
+	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
 
 		double[] result = getEmptyInputs();
 
-		Trick trick = null;
-		try {
-			trick = (Trick) knowledge.getCurrentTrick().clone();
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Trick trick = (Trick) knowledge.getCurrentTrick().clone();
 
 		if (trick.getFirstCard() != null && trick.getSecondCard() != null
 				&& trick.getThirdCard() == null) {

@@ -23,8 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jskat.data.Trick;
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
+import org.jskat.util.CardDeck;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
 
@@ -48,7 +49,7 @@ public class SimpleNetworkInputGenerator implements NetworkInputGenerator {
 	final static double COULD_HAVE_CARD = 1.0d;
 
 	@Override
-	public double[] getNetInputs(PlayerKnowledge knowledge, Card cardToPlay) {
+	public double[] getNetInputs(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
 		double[] netInputs = new double[INPUT_LENGTH];
 
 		for (int i = 0; i < INPUT_LENGTH; i++) {
@@ -70,7 +71,7 @@ public class SimpleNetworkInputGenerator implements NetworkInputGenerator {
 		return netInputs;
 	}
 
-	private void setDeclarerInput(double[] netInputs, PlayerKnowledge knowledge) {
+	private void setDeclarerInput(double[] netInputs, ImmutablePlayerKnowledge knowledge) {
 		if (!GameType.RAMSCH.equals(knowledge.getGameType())) {
 			// in Ramsch games there is no declarer
 			Player position = knowledge.getPlayerPosition();
@@ -90,7 +91,7 @@ public class SimpleNetworkInputGenerator implements NetworkInputGenerator {
 	}
 
 	private static void setPlayedCardsInput(double[] netInputs,
-			PlayerKnowledge knowledge) {
+			ImmutablePlayerKnowledge knowledge) {
 
 		List<Trick> trickList = new ArrayList<Trick>();
 		trickList.addAll(knowledge.getCompletedTricks());
@@ -127,14 +128,14 @@ public class SimpleNetworkInputGenerator implements NetworkInputGenerator {
 	}
 
 	private void setUnplayedCardsInput(double[] netInputs,
-			PlayerKnowledge knowledge) {
-		for (Card card : knowledge.getCompleteDeck()) {
+			ImmutablePlayerKnowledge knowledge) {
+		for (Card card : new CardDeck()) {
 			setUnplayedCardsInput(netInputs, knowledge, card);
 		}
 	}
 
 	private void setUnplayedCardsInput(double[] netInputs,
-			PlayerKnowledge knowledge, Card card) {
+			ImmutablePlayerKnowledge knowledge, Card card) {
 
 		Player leftOpponent = knowledge.getPlayerPosition().getLeftNeighbor();
 		Player rightOpponent = knowledge.getPlayerPosition().getRightNeighbor();

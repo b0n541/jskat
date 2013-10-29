@@ -19,7 +19,7 @@
  */
 package org.jskat.ai.mjl;
 
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -45,21 +45,21 @@ public class Helper {
 	 *            All the necessary trick infos
 	 * @return true, if the single player would win the trick
 	 */
-	public static boolean isSinglePlayerWin(final PlayerKnowledge knowledge) {
+	public static boolean isSinglePlayerWin(final ImmutablePlayerKnowledge knowledge) {
 		if (knowledge.getTrickCards().size() < 2) {
 			// one card on the table: can't be single player win yet
 			return false;
 		}
 		if (knowledge.getDeclarer() == Player.FOREHAND) {
 			if (knowledge.getTrickCards().get(1)
-					.beats(knowledge.getGame().getGameType(), knowledge.getTrickCards().get(0))) {
+					.beats(knowledge.getGameAnnouncement().getGameType(), knowledge.getTrickCards().get(0))) {
 				return false;
 			} else {
 				return true;
 			}
 		} else if (knowledge.getDeclarer() == Player.MIDDLEHAND) {
 			if (knowledge.getTrickCards().get(1)
-					.beats(knowledge.getGame().getGameType(), knowledge.getTrickCards().get(0))) {
+					.beats(knowledge.getGameAnnouncement().getGameType(), knowledge.getTrickCards().get(0))) {
 				return true;
 			} else {
 				return false;

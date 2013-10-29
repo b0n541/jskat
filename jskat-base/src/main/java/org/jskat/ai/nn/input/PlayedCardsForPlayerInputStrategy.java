@@ -19,7 +19,7 @@
  */
 package org.jskat.ai.nn.input;
 
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 
 /**
@@ -29,7 +29,7 @@ public class PlayedCardsForPlayerInputStrategy extends
 		AbstractCardInputStrategy {
 
 	@Override
-	public double[] getNetworkInput(PlayerKnowledge knowledge, Card cardToPlay) {
+	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
 
 		double[] result = getEmptyInputs();
 

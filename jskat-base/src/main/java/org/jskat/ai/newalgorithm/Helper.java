@@ -19,7 +19,7 @@
  */
 package org.jskat.ai.newalgorithm;
 
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;

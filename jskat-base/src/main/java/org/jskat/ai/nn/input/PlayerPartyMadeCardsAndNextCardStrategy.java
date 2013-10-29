@@ -22,7 +22,7 @@ package org.jskat.ai.nn.input;
 import java.util.Set;
 
 import org.jskat.data.Trick;
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.Player;
 import org.jskat.util.rule.SkatRule;
@@ -32,17 +32,11 @@ public class PlayerPartyMadeCardsAndNextCardStrategy extends
 		PlayerPartyMadeCardsStrategy {
 
 	@Override
-	public double[] getNetworkInput(PlayerKnowledge knowledge, Card cardToPlay) {
+	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
 
 		double[] result = super.getNetworkInput(knowledge, cardToPlay);
 
-		Trick trick = null;
-		try {
-			trick = (Trick) knowledge.getCurrentTrick().clone();
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		Trick trick = (Trick) knowledge.getCurrentTrick().clone();
 
 		if (trick.getFirstCard() != null && trick.getSecondCard() != null
 				&& trick.getThirdCard() == null) {

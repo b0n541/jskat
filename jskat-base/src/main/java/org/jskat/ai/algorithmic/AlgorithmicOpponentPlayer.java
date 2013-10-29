@@ -21,7 +21,7 @@ package org.jskat.ai.algorithmic;
 
 import org.apache.log4j.Logger;
 import org.jskat.data.Trick;
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -40,7 +40,7 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 			.getLogger(AlgorithmicOpponentPlayer.class);
 
 	private final AlgorithmicAIPlayer myPlayer;
-	private final PlayerKnowledge knowledge;
+	private final ImmutablePlayerKnowledge knowledge;
 
 	/**
 	 * 
@@ -57,6 +57,7 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 	 * 
 	 * @see org.jskat.ai.IJSkatPlayer#playCard()
 	 */
+	@Override
 	public Card playCard() {
 		if (knowledge.getOwnCards().size() == 1)
 			return knowledge.getOwnCards().get(0);
@@ -265,16 +266,18 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 						|| (cntTrump > 1 && knowledge.couldHaveSuit(knowledge
 								.getCurrentTrick().getRearHand(), initialCard
 								.getSuit()))) {
-					if(initialCard.getRank()==Rank.ACE || 
-							(initialCard.getRank()==Rank.TEN && !knowledge.couldHaveCard(Player.REARHAND, Card.getCard(initialCard.getSuit(), Rank.ACE)))) {
+					if (initialCard.getRank() == Rank.ACE
+							|| (initialCard.getRank() == Rank.TEN && !knowledge
+									.couldHaveCard(Player.REARHAND, Card
+											.getCard(initialCard.getSuit(),
+													Rank.ACE)))) {
 						result = cards.get(cards.getLastIndexOfSuit(
 								initialCard.getSuit(), false));
-					}
-					else {
+					} else {
 						result = cards.get(cards.getFirstIndexOfSuit(
 								initialCard.getSuit(), false));
 					}
-					
+
 					log.debug("playCard (13pre1), cnt=" + cntSuit + " / "
 							+ cntTrump);
 				} else {
@@ -352,18 +355,8 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 						result = c;
 						continue;
 					}
-					Trick tmpTrick = null;
-					try {
-						tmpTrick = (Trick) knowledge.getCurrentTrick().clone();
-					} catch (CloneNotSupportedException e) {
-						log.warn("should not happen: " + e.getClass() + " - "
-								+ e.getMessage());
-						for (Card c2 : cards) {
-							if (c2.isAllowed(gameType, initialCard, cards))
-								result = c;
-						}
-						return result;
-					}
+					Trick tmpTrick = (Trick) knowledge.getCurrentTrick()
+							.clone();
 					tmpTrick.addCard(c);
 					if (SkatRuleFactory.getSkatRules(gameType)
 							.calculateTrickWinner(gameType, tmpTrick) != knowledge
@@ -430,18 +423,8 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 						result = c;
 						continue;
 					}
-					Trick tmpTrick = null;
-					try {
-						tmpTrick = (Trick) knowledge.getCurrentTrick().clone();
-					} catch (CloneNotSupportedException e) {
-						log.warn("should not happen: " + e.getClass() + " - "
-								+ e.getMessage());
-						for (Card c2 : cards) {
-							if (c2.isAllowed(gameType, initialCard, cards))
-								result = c;
-						}
-						return result;
-					}
+					Trick tmpTrick = (Trick) knowledge.getCurrentTrick()
+							.clone();
 					tmpTrick.addCard(c);
 					if (SkatRuleFactory.getSkatRules(gameType)
 							.calculateTrickWinner(gameType, tmpTrick) != knowledge

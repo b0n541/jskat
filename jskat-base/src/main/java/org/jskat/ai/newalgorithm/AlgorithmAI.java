@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.player.AbstractJSkatPlayer;
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -283,7 +283,7 @@ public class AlgorithmAI extends AbstractJSkatPlayer {
 		}
 	}
 
-	protected PlayerKnowledge getKnowledge() {
+	protected ImmutablePlayerKnowledge getKnowledge() {
 		return knowledge;
 	}
 

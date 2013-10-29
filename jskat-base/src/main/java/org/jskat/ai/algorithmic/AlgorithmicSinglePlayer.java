@@ -20,7 +20,7 @@
 package org.jskat.ai.algorithmic;
 
 import org.apache.log4j.Logger;
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.Player;
@@ -33,10 +33,11 @@ import org.jskat.util.Suit;
  * 
  */
 public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
-	private static final Logger log = Logger.getLogger(AlgorithmicSinglePlayer.class);
+	private static final Logger log = Logger
+			.getLogger(AlgorithmicSinglePlayer.class);
 
 	private final AlgorithmicAIPlayer myPlayer;
-	private final PlayerKnowledge knowledge;
+	private final ImmutablePlayerKnowledge knowledge;
 
 	/**
 	 * 
@@ -44,7 +45,8 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
 	AlgorithmicSinglePlayer(final AlgorithmicAIPlayer p) {
 		myPlayer = p;
 		knowledge = p.getKnowledge();
-		log.debug("Defining player <" + myPlayer.getPlayerName() + "> as " + this.getClass().getName());
+		log.debug("Defining player <" + myPlayer.getPlayerName() + "> as "
+				+ this.getClass().getName());
 	}
 
 	/*
@@ -61,7 +63,6 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
 		CardList toDiscard = new CardList();
 		toDiscard.add(cards.remove(10));
 		toDiscard.add(cards.remove(10));
-		knowledge.removeOwnCards(toDiscard.getImmutableCopy());
 		return toDiscard;
 	}
 
@@ -72,7 +73,8 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
 	 */
 	@Override
 	public Card playCard() {
-		if (knowledge.getTrickCards() == null || knowledge.getTrickCards().isEmpty()) {
+		if (knowledge.getTrickCards() == null
+				|| knowledge.getTrickCards().isEmpty()) {
 			if (knowledge.getNoOfTricks() < 1) {
 				return openGame();
 			}
@@ -90,7 +92,8 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
 		// TODO (markus 15.07.11) open single player game with none-trump
 		CardList cards = knowledge.getOwnCards();
 		if (cards.get(0).getRank() != Rank.JACK) {
-			Card c = cards.get(cards.getLastIndexOfSuit(knowledge.getTrumpSuit(), true));
+			Card c = cards.get(cards.getLastIndexOfSuit(
+					knowledge.getTrumpSuit(), true));
 			if (c == null) {
 				// should not happen - if there is no jack, there should be at
 				// least one trump suit card
@@ -101,22 +104,27 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
 		}
 		// from here onwards: first card must be a jack
 		if (cards.get(0).getSuit() == Suit.CLUBS) {
-			if (cards.get(1).getSuit() != Suit.SPADES || cards.get(1).getRank() != Rank.JACK) {
+			if (cards.get(1).getSuit() != Suit.SPADES
+					|| cards.get(1).getRank() != Rank.JACK) {
 				return cards.get(0);
 			}
-			if (cards.get(2).getSuit() != Suit.HEARTS || cards.get(2).getRank() != Rank.JACK) {
+			if (cards.get(2).getSuit() != Suit.HEARTS
+					|| cards.get(2).getRank() != Rank.JACK) {
 				return cards.get(1);
 			}
-			if (cards.get(3).getSuit() != Suit.DIAMONDS || cards.get(3).getRank() != Rank.JACK) {
+			if (cards.get(3).getSuit() != Suit.DIAMONDS
+					|| cards.get(3).getRank() != Rank.JACK) {
 				return cards.get(2);
 			}
 			return cards.get(3);
 		}
 		if (cards.get(0).getSuit() == Suit.SPADES) {
-			if (cards.get(1).getSuit() != Suit.HEARTS || cards.get(1).getRank() != Rank.JACK) {
+			if (cards.get(1).getSuit() != Suit.HEARTS
+					|| cards.get(1).getRank() != Rank.JACK) {
 				return cards.get(0);
 			}
-			if (cards.get(2).getSuit() != Suit.HEARTS || cards.get(2).getRank() != Rank.JACK) {
+			if (cards.get(2).getSuit() != Suit.HEARTS
+					|| cards.get(2).getRank() != Rank.JACK) {
 				return cards.get(0);
 			}
 		}
@@ -130,7 +138,8 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
 			if (openGame().getRank() == Rank.JACK) {
 				return openGame();
 			}
-			Card c = cards.get(cards.getLastIndexOfSuit(knowledge.getTrumpSuit(), true));
+			Card c = cards.get(cards.getLastIndexOfSuit(
+					knowledge.getTrumpSuit(), true));
 			if (c != null) {
 				return c;
 			}
@@ -153,14 +162,20 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
 		}
 		// do i have any aces?
 		for (Card c : cards) {
-			if (c.getRank() == Rank.ACE && c.getSuit() != knowledge.getTrumpSuit()) {
+			if (c.getRank() == Rank.ACE
+					&& c.getSuit() != knowledge.getTrumpSuit()) {
 				return c;
 			}
-			if (c.getRank() == Rank.TEN && knowledge.isCardPlayed(Card.getCard(c.getSuit(), Rank.ACE))) {
+			if (c.getRank() == Rank.TEN
+					&& knowledge.isCardPlayed(Card.getCard(c.getSuit(),
+							Rank.ACE))) {
 				return c;
 			}
-			if (c.getRank() == Rank.KING && knowledge.isCardPlayed(Card.getCard(c.getSuit(), Rank.ACE))
-					&& knowledge.isCardPlayed(Card.getCard(c.getSuit(), Rank.TEN))) {
+			if (c.getRank() == Rank.KING
+					&& knowledge.isCardPlayed(Card.getCard(c.getSuit(),
+							Rank.ACE))
+					&& knowledge.isCardPlayed(Card.getCard(c.getSuit(),
+							Rank.TEN))) {
 				return c;
 			}
 		}
@@ -186,12 +201,13 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
 		// is one)
 		CardList cards = knowledge.getOwnCards();
 		for (Card c : cards) {
-			if (c.isAllowed(knowledge.getGameType(), knowledge.getTrickCards().isEmpty() ? null : knowledge
-					.getTrickCards().get(0), cards)) {
+			if (c.isAllowed(knowledge.getGameType(), knowledge.getTrickCards()
+					.isEmpty() ? null : knowledge.getTrickCards().get(0), cards)) {
 				return c;
 			}
 		}
-		log.warn("no possible card found in card list [" + cards + "] with " + knowledge.getGameType() + " / "
+		log.warn("no possible card found in card list [" + cards + "] with "
+				+ knowledge.getGameType() + " / "
 				+ knowledge.getTrickCards().get(0));
 		return cards.get(0);
 	}
@@ -203,12 +219,13 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
 		// is one)
 		CardList cards = knowledge.getOwnCards();
 		for (Card c : cards) {
-			if (c.isAllowed(knowledge.getGameType(), knowledge.getTrickCards().isEmpty() ? null : knowledge
-					.getTrickCards().get(0), cards)) {
+			if (c.isAllowed(knowledge.getGameType(), knowledge.getTrickCards()
+					.isEmpty() ? null : knowledge.getTrickCards().get(0), cards)) {
 				return c;
 			}
 		}
-		log.warn("no possible card found in card list [" + cards + "] with " + knowledge.getGameType() + " / "
+		log.warn("no possible card found in card list [" + cards + "] with "
+				+ knowledge.getGameType() + " / "
 				+ knowledge.getTrickCards().get(0));
 		return cards.get(0);
 	}

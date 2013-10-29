@@ -23,7 +23,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jskat.data.Trick;
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.Player;
 
@@ -37,7 +37,7 @@ public class OpponentPartyMadeCardsStrategy extends AbstractInputStrategy
 	}
 
 	@Override
-	public double[] getNetworkInput(PlayerKnowledge knowledge, Card cardToPlay) {
+	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
 
 		double[] result = getEmptyInputs();
 
@@ -55,7 +55,7 @@ public class OpponentPartyMadeCardsStrategy extends AbstractInputStrategy
 		return result;
 	}
 
-	protected Set<Player> getPartyMembers(PlayerKnowledge knowledge) {
+	protected Set<Player> getPartyMembers(ImmutablePlayerKnowledge knowledge) {
 
 		Set<Player> result = new HashSet<Player>();
 		if (knowledge.getDeclarer().equals(knowledge.getPlayerPosition())) {

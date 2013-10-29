@@ -671,31 +671,14 @@ public class SkatGame extends JSkatThread {
 	}
 
 	private void informPlayersAboutCompletedTrick(final Trick trick) {
-		for (final Player currPosition : Player.getOrderedList()) {
-			// inform all players
-			// cloning of trick information to prevent manipulation by
-			// player
-			try {
-				getPlayerInstance(currPosition)
-						.showTrick((Trick) trick.clone());
-			} catch (final CloneNotSupportedException e) {
-				log.warn("should not happen: " + e.getClass() + " - " + e.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
-				getPlayerInstance(currPosition).showTrick(trick);
-			}
+		for (Player currPosition : Player.getOrderedList()) {
+			getPlayerInstance(currPosition).showTrick((Trick) trick.clone());
 		}
 	}
 
 	private void informPlayersAboutNewTrick(final Trick trick) {
-		for (final Player currPosition : Player.getOrderedList()) {
-			// inform all players
-			// cloning of trick information to prevent manipulation by
-			// player
-			try {
-				getPlayerInstance(currPosition).newTrick((Trick) trick.clone());
-			} catch (final CloneNotSupportedException e) {
-				log.warn("should not happen: " + e.getClass() + " - " + e.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
-				getPlayerInstance(currPosition).newTrick(trick);
-			}
+		for (Player currPosition : Player.getOrderedList()) {
+			getPlayerInstance(currPosition).newTrick((Trick) trick.clone());
 		}
 	}
 

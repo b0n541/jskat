@@ -19,7 +19,7 @@
  */
 package org.jskat.ai.nn.input;
 
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 
 public interface InputStrategy {
@@ -40,5 +40,5 @@ public interface InputStrategy {
 	 *            Next card to play
 	 * @return Network input
 	 */
-	public double[] getNetworkInput(PlayerKnowledge knowledge, Card cardToPlay);
+	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge, Card cardToPlay);
 }

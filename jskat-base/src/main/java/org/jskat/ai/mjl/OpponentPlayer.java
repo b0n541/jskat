@@ -21,7 +21,7 @@ package org.jskat.ai.mjl;
 
 import java.util.Random;
 
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -62,10 +62,10 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	 * @param knowledge
 	 *            all necessary information about the game
 	 * @return index of the card to play
-	 * @see org.jskat.ai.mjl.CardPlayer#playNextCard(PlayerKnowledge)
+	 * @see org.jskat.ai.mjl.CardPlayer#playNextCard(ImmutablePlayerKnowledge)
 	 */
 	@Override
-	public Card playNextCard(final PlayerKnowledge knowledge) {
+	public Card playNextCard(final ImmutablePlayerKnowledge knowledge) {
 		log.debug("Play next card with trick size " + knowledge.getTrickCards().size());
 		if (knowledge.getGameType() == GameType.NULL) {
 			return playNextCardNullGame(knowledge);
@@ -107,7 +107,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	 * @param knowledge
 	 * @return the index of the card to play by a middlehand opponent player
 	 */
-	private int findMiddlehandCard(final PlayerKnowledge knowledge) {
+	private int findMiddlehandCard(final ImmutablePlayerKnowledge knowledge) {
 		GameType gameType = knowledge.getGameType();
 		Card initialCard = (knowledge.getTrickCards().size() > 0 ? knowledge.getTrickCards().get(0) : null);
 		Suit trumpSuit = gameType.getTrumpSuit();
@@ -221,7 +221,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	 * @param knowledge
 	 * @return the card to play by a rearhand opponent player
 	 */
-	private int findRearhandCard(final PlayerKnowledge knowledge) {
+	private int findRearhandCard(final ImmutablePlayerKnowledge knowledge) {
 		GameType gameType = knowledge.getGameType();
 		Card initialCard = (knowledge.getTrickCards().size() > 0 ? knowledge.getTrickCards().get(0) : null);
 		Suit trumpSuit = gameType.getTrumpSuit();
@@ -317,7 +317,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	 * @param knowledge
 	 * @return the index of the card that should be played
 	 */
-	private Card playNextCardNullGame(final PlayerKnowledge knowledge) {
+	private Card playNextCardNullGame(final ImmutablePlayerKnowledge knowledge) {
 		int bestToBePlayed = -1;
 		log.debug(".playNextCardNullGame(): cards: [" + cards + "]");
 
@@ -514,7 +514,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	 * @param knowledge
 	 * @return index of the card
 	 */
-	private int findInitial(final PlayerKnowledge knowledge) {
+	private int findInitial(final ImmutablePlayerKnowledge knowledge) {
 		GameType gameType = knowledge.getGameType();
 		int[] rating = new int[cards.size()];
 		// First, look for any aces that are not trump
@@ -569,7 +569,7 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	 * @param knowledge
 	 * @return index of the card
 	 */
-	private int findFirstInitial(final PlayerKnowledge knowledge) {
+	private int findFirstInitial(final ImmutablePlayerKnowledge knowledge) {
 		GameType gameType = knowledge.getGameType();
 		log.debug("Opening the game...");
 		// First, look for any aces that are not trump

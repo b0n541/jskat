@@ -22,7 +22,7 @@ package org.jskat.ai.nn.input;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 
 public class GenericNetworkInputGenerator implements NetworkInputGenerator {
@@ -39,7 +39,7 @@ public class GenericNetworkInputGenerator implements NetworkInputGenerator {
 	}
 
 	@Override
-	public double[] getNetInputs(PlayerKnowledge knowledge, Card cardToPlay) {
+	public double[] getNetInputs(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
 
 		double[] result = new double[getNeuronCountForAllStrategies()];
 		int index = 0;

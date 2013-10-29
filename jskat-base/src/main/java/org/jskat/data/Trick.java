@@ -269,7 +269,7 @@ public class Trick {
 	 * @see Object#clone()
 	 */
 	@Override
-	public Object clone() throws CloneNotSupportedException {
+	public Object clone() {
 
 		Trick clone = new Trick(trickNumberInGame, foreHand);
 
@@ -282,6 +282,7 @@ public class Trick {
 		return clone;
 	}
 
+	@Override
 	public String toString() {
 		return "Trick " + (trickNumberInGame + 1) + ": " + firstCard + " "
 				+ secondCard + " " + thirdCard;

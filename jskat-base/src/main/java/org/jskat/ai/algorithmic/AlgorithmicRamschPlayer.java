@@ -21,7 +21,7 @@ package org.jskat.ai.algorithmic;
 
 import org.apache.log4j.Logger;
 import org.jskat.data.JSkatOptions;
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -37,7 +37,7 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
 	private static final Logger log = Logger.getLogger(AlgorithmicRamschPlayer.class);
 
 	private final AlgorithmicAIPlayer myPlayer;
-	private final PlayerKnowledge knowledge;
+	private final ImmutablePlayerKnowledge knowledge;
 
 	/**
 	 * 

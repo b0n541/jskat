@@ -218,7 +218,8 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 				log.warn("Wrong source for " + command); //$NON-NLS-1$
 				interrupt = false;
 			}
-		} else if (JSkatAction.PLAY_CARD.toString().equals(command) && source instanceof Card) {
+		} else if (JSkatAction.PLAY_CARD.toString().equals(command)
+				&& source instanceof Card) {
 
 			this.nextCard = (Card) source;
 
@@ -268,7 +269,6 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
 	private void setDiscardedSkatCards(final CardList discardedCards) {
 		discardSkat = discardedCards;
-		knowledge.removeOwnCards(discardSkat.getImmutableCopy());
 	}
 
 	/*-------------------------------------------------------------------

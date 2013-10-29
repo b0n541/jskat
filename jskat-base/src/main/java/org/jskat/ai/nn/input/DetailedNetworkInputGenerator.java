@@ -23,8 +23,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jskat.data.Trick;
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
+import org.jskat.util.CardDeck;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.jskat.util.Rank;
@@ -52,7 +53,7 @@ class DetailedNetworkInputGenerator implements NetworkInputGenerator {
 	 * @return Net input attributes
 	 */
 	@Override
-	public double[] getNetInputs(PlayerKnowledge knowledge, Card cardToPlay) {
+	public double[] getNetInputs(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
 
 		double[] netInputs = new double[INPUT_LENGTH];
 
@@ -69,7 +70,7 @@ class DetailedNetworkInputGenerator implements NetworkInputGenerator {
 		Player leftOpponent = knowledge.getPlayerPosition().getLeftNeighbor();
 		Player rightOpponent = knowledge.getPlayerPosition().getRightNeighbor();
 		final int KNOWN_CARDS_OFFSET = 331;
-		for (Card card : knowledge.getCompleteDeck()) {
+		for (Card card : new CardDeck()) {
 			setKnownCards(knowledge, netInputs, leftOpponent, rightOpponent,
 					card, PLAYER_LENGTH, KNOWN_CARDS_OFFSET);
 		}
@@ -87,7 +88,7 @@ class DetailedNetworkInputGenerator implements NetworkInputGenerator {
 		return netInputs;
 	}
 
-	private static void setTrickInputs(PlayerKnowledge knowledge,
+	private static void setTrickInputs(ImmutablePlayerKnowledge knowledge,
 			double[] inputs, int playerLength, int trickLength, int cardOffset) {
 
 		List<Trick> trickList = new ArrayList<Trick>();
@@ -143,7 +144,7 @@ class DetailedNetworkInputGenerator implements NetworkInputGenerator {
 		inputs[index] = activationValue;
 	}
 
-	private static void setDeclarerInputs(PlayerKnowledge knowledge,
+	private static void setDeclarerInputs(ImmutablePlayerKnowledge knowledge,
 			double[] inputs, int NEURON_OFFSET) {
 		if (!GameType.RAMSCH.equals(knowledge.getGameType())) {
 			// in Ramsch games there is no declarer
@@ -163,11 +164,11 @@ class DetailedNetworkInputGenerator implements NetworkInputGenerator {
 		}
 	}
 
-	private static void setKnownCards(PlayerKnowledge knowledge,
+	private static void setKnownCards(ImmutablePlayerKnowledge knowledge,
 			double[] inputs, Player leftOpponent, Player rightOpponent,
 			Card card, int playerLength, int knownCardsOffset) {
 
-		GameType gameType = knowledge.getGame().getGameType();
+		GameType gameType = knowledge.getGameAnnouncement().getGameType();
 		int netInputIndexForCard = getNetInputIndex(gameType, card);
 
 		// inputs for left opponent

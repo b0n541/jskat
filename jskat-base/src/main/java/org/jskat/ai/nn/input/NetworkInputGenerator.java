@@ -19,9 +19,9 @@
  */
 package org.jskat.ai.nn.input;
 
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 
 public interface NetworkInputGenerator {
-	double[] getNetInputs(PlayerKnowledge knowledge, Card cardToPlay);
+	double[] getNetInputs(ImmutablePlayerKnowledge knowledge, Card cardToPlay);
 }

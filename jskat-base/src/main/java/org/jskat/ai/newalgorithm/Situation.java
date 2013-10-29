@@ -21,7 +21,7 @@ package org.jskat.ai.newalgorithm;
 
 import java.util.ArrayList;
 
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Suit;
@@ -44,7 +44,7 @@ public class Situation {
 	private ArrayList<Suit>	oBlankSuits;
 	private int				oRandomInt;
 	
-	public Situation(PlayerKnowledge pKnowledge, GameType pGameType) {
+	public Situation(ImmutablePlayerKnowledge pKnowledge, GameType pGameType) {
 		oTrumpSuit				= pGameType.getTrumpSuit();
 		oGameType				= pGameType;
 		oFreeSuitsLeftPlayer	= new ArrayList<Suit>();

@@ -375,7 +375,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		Map<Card, double[]> cardInputs = new HashMap<Card, double[]>();
 
-		INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGame()
+		INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGameAnnouncement()
 				.getGameType(), isDeclarer(), knowledge.getCurrentTrick()
 				.getTrickNumberInGame());
 
@@ -508,7 +508,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			int index = 0;
 			for (double[] inputParam : inputs) {
 				INeuralNetwork net = SkatNetworks.getNetwork(knowledge
-						.getGame().getGameType(), isDeclarer(), index);
+						.getGameAnnouncement().getGameType(), isDeclarer(), index);
 
 				double networkError = net.adjustWeights(inputParam, outputs);
 				log.warn("learning error: " + networkError);

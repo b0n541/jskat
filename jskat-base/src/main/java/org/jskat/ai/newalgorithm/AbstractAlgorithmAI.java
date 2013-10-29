@@ -22,7 +22,7 @@ package org.jskat.ai.newalgorithm;
 import java.util.ArrayList;
 
 import org.jskat.data.Trick;
-import org.jskat.player.PlayerKnowledge;
+import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -36,7 +36,7 @@ import org.jskat.util.Suit;
  */
 public abstract class AbstractAlgorithmAI {
 	protected final AlgorithmAI		myPlayer;
-	protected final PlayerKnowledge	knowledge;
+	protected final ImmutablePlayerKnowledge	knowledge;
 
 	protected Situation				oSituation;
 	protected CardList				oPlayedCards;
