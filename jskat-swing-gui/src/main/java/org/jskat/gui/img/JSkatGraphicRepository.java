@@ -336,7 +336,7 @@ public class JSkatGraphicRepository {
 	 * 
 	 * @return Image for the left opponent bid bubble
 	 */
-	public Image getLeftBidBubbleImage() {
+	public Image getLeftBidBubble() {
 		return bidBubbles.get(0);
 	}
 
@@ -345,7 +345,7 @@ public class JSkatGraphicRepository {
 	 * 
 	 * @return Image for the right opponent bid bubble
 	 */
-	public Image getRightBidBubbleImage() {
+	public Image getRightBidBubble() {
 		return bidBubbles.get(1);
 	}
 
@@ -354,7 +354,7 @@ public class JSkatGraphicRepository {
 	 * 
 	 * @return Image for the user bid bubble
 	 */
-	public Image getUserBidBubbleImage() {
+	public Image getUserBidBubble() {
 		return bidBubbles.get(2);
 	}
 
