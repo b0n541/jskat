@@ -252,8 +252,7 @@ public class AlgorithmAI extends AbstractJSkatPlayer {
 		if (aiPlayer == null) {
 			// Wenn RAMSCH-Spiel
 			if (knowledge.getGameType() == GameType.RAMSCH) {
-				// aiPlayer = new AlgorithmRamsch(this,
-				// knowledge.getGameType());
+				aiPlayer = new AlgorithmRamsch(this, knowledge.getGameType());
 				log.debug(this.playerName
 						+ " ist AlgorithmRamsch-Spieler / startGame");
 			}
