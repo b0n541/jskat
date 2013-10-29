@@ -90,7 +90,7 @@ class SchieberamschContextPanel extends JPanel {
 		JPanel result = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
 		JPanel question = new JPanel();
-		JLabel questionIconLabel = new JLabel(new ImageIcon(JSkatGraphicRepository.instance().getUserBidBubbleImage()));
+		JLabel questionIconLabel = new JLabel(new ImageIcon(JSkatGraphicRepository.instance().getUserBidBubble()));
 		question.add(questionIconLabel);
 		JLabel questionLabel = new JLabel(strings.getString("want_play_grand_hand")); //$NON-NLS-1$
 		questionLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));

@@ -41,7 +41,8 @@ public abstract class AbstractHumanJSkatAction extends AbstractJSkatAction {
 	 * @see AbstractAction#actionPerformed(ActionEvent)
 	 */
 	@Override
-	public void actionPerformed(final ActionEvent e) {
-		jskat.triggerHuman(new JSkatActionEvent(e.getActionCommand(), e.getSource()));
+	public void actionPerformed(ActionEvent e) {
+		jskat.triggerHuman(new JSkatActionEvent(e.getActionCommand(), e
+				.getSource()));
 	}
 }

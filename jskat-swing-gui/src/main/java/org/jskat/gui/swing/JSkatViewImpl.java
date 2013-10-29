@@ -639,9 +639,6 @@ public class JSkatViewImpl implements JSkatView {
 			break;
 		case DISCARDING:
 			actions.get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
-			actions.get(JSkatAction.MAKE_BID).setEnabled(false);
-			actions.get(JSkatAction.HOLD_BID).setEnabled(false);
-			actions.get(JSkatAction.PASS_BID).setEnabled(false);
 			break;
 		case RAMSCH_GRAND_HAND_ANNOUNCING:
 			actions.get(JSkatAction.PLAY_GRAND_HAND).setEnabled(true);
@@ -658,7 +655,9 @@ public class JSkatViewImpl implements JSkatView {
 		case PICKING_UP_SKAT:
 			// FIXME jan 23.02.2013: use a different context panel when an
 			// opponent discards
-
+			actions.get(JSkatAction.MAKE_BID).setEnabled(false);
+			actions.get(JSkatAction.HOLD_BID).setEnabled(false);
+			actions.get(JSkatAction.PASS_BID).setEnabled(false);
 			actions.get(JSkatAction.PICK_UP_SKAT).setEnabled(true);
 			actions.get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
 			break;

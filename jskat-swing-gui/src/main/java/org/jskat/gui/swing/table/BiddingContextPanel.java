@@ -57,23 +57,23 @@ class BiddingContextPanel extends JPanel {
 	 * @param actions
 	 *            Action map
 	 */
-	BiddingContextPanel(final JSkatView view, final ActionMap actions,
-			final JSkatGraphicRepository bitmaps, final JSkatUserPanel userPanel) {
+	BiddingContextPanel(JSkatView view, ActionMap actions,
+			JSkatGraphicRepository bitmaps, JSkatUserPanel userPanel) {
 
 		initPanel(view, actions, bitmaps, userPanel);
 	}
 
-	private void initPanel(final JSkatView view, final ActionMap actions,
-			final JSkatGraphicRepository bitmaps, final JSkatUserPanel userPanel) {
+	private void initPanel(JSkatView view, ActionMap actions,
+			JSkatGraphicRepository bitmaps, JSkatUserPanel userPanel) {
 
 		setLayout(LayoutFactory.getMigLayout(
 				"fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		final JPanel blankPanel = new JPanel();
+		JPanel blankPanel = new JPanel();
 		blankPanel.setOpaque(false);
 		add(blankPanel, "width 25%"); //$NON-NLS-1$
 
-		final JPanel biddingPanel = getBiddingPanel(actions, bitmaps);
+		JPanel biddingPanel = getBiddingPanel(actions, bitmaps);
 		biddingPanel.setOpaque(false);
 		add(biddingPanel, "grow"); //$NON-NLS-1$
 
@@ -83,15 +83,14 @@ class BiddingContextPanel extends JPanel {
 		setOpaque(false);
 	}
 
-	private JPanel getBiddingPanel(final ActionMap actions,
-			final JSkatGraphicRepository bitmaps) {
+	private JPanel getBiddingPanel(ActionMap actions,
+			JSkatGraphicRepository bitmaps) {
 
-		final JPanel biddingPanel = new JPanel(
-				LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+		JPanel biddingPanel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
-		leftOpponentBid = new BidBubblePanel(bitmaps.getLeftBidBubbleImage());
-		rightOpponentBid = new BidBubblePanel(bitmaps.getRightBidBubbleImage());
-		userBid = new BidBubblePanel(bitmaps.getUserBidBubbleImage());
+		leftOpponentBid = new BidBubblePanel(bitmaps.getLeftBidBubble());
+		rightOpponentBid = new BidBubblePanel(bitmaps.getRightBidBubble());
+		userBid = new BidBubblePanel(bitmaps.getUserBidBubble());
 
 		biddingPanel.add(leftOpponentBid, "center"); //$NON-NLS-1$
 		biddingPanel.add(rightOpponentBid, "center, wrap"); //$NON-NLS-1$
@@ -172,7 +171,6 @@ class BiddingContextPanel extends JPanel {
 	}
 
 	void resetPanel() {
-
 		foreHandBidLabel.setBidValue(0);
 		middleHandBidLabel.setBidValue(0);
 		rearHandBidLabel.setBidValue(0);
