@@ -89,6 +89,7 @@ public class JSkatOptionsDialog extends JDialog {
 	private JCheckBox playBock;
 	private JCheckBox playRamsch;
 	private JCheckBox playRevolution;
+	private JCheckBox bockEventAllPlayersPassed;
 	private JCheckBox bockEventLostGrand;
 	private JCheckBox bockEventLostWith60;
 	private JCheckBox bockEventLostAfterContra;
@@ -431,7 +432,6 @@ public class JSkatOptionsDialog extends JDialog {
 		contraAfterBid18 = new JCheckBox(
 				strings.getString("contra_after_bid_18")); //$NON-NLS-1$
 		contraPanel.add(contraAfterBid18, "gapleft 20px"); //$NON-NLS-1$
-
 		//		pubRulesPanel.add(contraPanel, "wrap"); //$NON-NLS-1$
 
 		final JPanel bockPanel = getBockPanel();
@@ -475,9 +475,12 @@ public class JSkatOptionsDialog extends JDialog {
 
 		bockEventLabel = new JLabel(strings.getString("bock_events")); //$NON-NLS-1$
 		bockDetailsPanel.add(bockEventLabel, "span 2, wrap"); //$NON-NLS-1$
+		bockEventAllPlayersPassed = new JCheckBox(
+				strings.getString("bock_event_all_players_passed")); //$NON-NLS-1$
+		bockDetailsPanel.add(bockEventAllPlayersPassed, "wrap");
 		bockEventLostAfterContra = new JCheckBox(
 				strings.getString("bock_event_lost_contra")); //$NON-NLS-1$
-		bockDetailsPanel.add(bockEventLostAfterContra);
+		bockDetailsPanel.add(bockEventLostAfterContra, "wrap");
 		bockEventLostWith60 = new JCheckBox(
 				strings.getString("bock_event_lost_game_with_60")); //$NON-NLS-1$
 		bockEventLostWith60.setSelected(options.isBockEventLostWith60(false)

@@ -56,7 +56,7 @@ public class JSkatOptions {
 	}
 
 	private enum Option {
-		bockEventContraReAnnounced, bockEventLostAfterContra, bockEventLostGrand, bockEventLostWith60, bockEventPlayerHasX00Points, cardSet, cheatDebugMode, checkForNewVersionAtStartUp, issAddress, issPort, language, maxPlayerCount, playBock, playContra, playRamsch, playRevolution, ramschEventNoBid, ramschEventRamschAfterBock, ramschGrandHandPossible, ramschSkatOwner, rules, savePath, schieberRamsch, schieberRamschJacksInSkat, showTipsAtStartUp, contraAfterBid18;
+		bockEventAllPlayersPassed, bockEventContraReAnnounced, bockEventLostAfterContra, bockEventLostGrand, bockEventLostWith60, bockEventPlayerHasX00Points, cardSet, cheatDebugMode, checkForNewVersionAtStartUp, issAddress, issPort, language, maxPlayerCount, playBock, playContra, playRamsch, playRevolution, ramschEventNoBid, ramschEventRamschAfterBock, ramschGrandHandPossible, ramschSkatOwner, rules, savePath, schieberRamsch, schieberRamschJacksInSkat, showTipsAtStartUp, contraAfterBid18;
 	}
 
 	private static Logger log = LoggerFactory.getLogger(JSkatOptions.class);
@@ -228,6 +228,16 @@ public class JSkatOptions {
 		result.setPlayRevolution(isPlayRevolution());
 
 		return result;
+	}
+
+	public Boolean isBockEventAllPlayersPassed() {
+		return isBockEventAllPlayersPassed(true);
+	}
+
+	public Boolean isBockEventAllPlayersPassed(boolean checkParentOption) {
+		return getBooleanOptionWithParentCheck(
+				Option.bockEventAllPlayersPassed, checkParentOption,
+				isPlayBock(checkParentOption));
 	}
 
 	/**
@@ -525,6 +535,10 @@ public class JSkatOptions {
 			log.debug("Saving of JSkat options failed."); //$NON-NLS-1$
 			log.debug(e.toString());
 		}
+	}
+
+	public void setBockEventAllPlayersPassed(Boolean bockEventAllPlayersPassed) {
+		setOption(Option.bockEventAllPlayersPassed, bockEventAllPlayersPassed);
 	}
 
 	/**

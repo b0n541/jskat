@@ -74,6 +74,19 @@ public class JSkatOptionsTest extends AbstractJSkatTest {
 		assertFalse(options.isPlayBock(true));
 		assertTrue(options.isPlayBock(false));
 
+		assertFalse(options.isBockEventAllPlayersPassed());
+		assertFalse(options.isBockEventAllPlayersPassed(true));
+		assertFalse(options.isBockEventContraReAnnounced());
+		assertFalse(options.isBockEventContraReAnnounced(true));
+		assertFalse(options.isBockEventLostAfterContra());
+		assertFalse(options.isBockEventLostAfterContra(true));
+		assertFalse(options.isBockEventLostGrand());
+		assertFalse(options.isBockEventLostGrand(true));
+		assertFalse(options.isBockEventLostWith60());
+		assertFalse(options.isBockEventLostWith60(true));
+		assertFalse(options.isBockEventPlayerHasX00Points());
+		assertFalse(options.isBockEventPlayerHasX00Points(true));
+
 		assertFalse(options.isPlayRamsch());
 		assertFalse(options.isPlayRamsch(true));
 		assertTrue(options.isPlayRamsch(false));
