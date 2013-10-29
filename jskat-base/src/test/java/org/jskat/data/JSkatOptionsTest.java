@@ -58,9 +58,6 @@ public class JSkatOptionsTest extends AbstractJSkatTest {
 		assertEquals(CardSet.ISS_TOURNAMENT, options.getCardSet());
 		assertEquals(CardFace.TOURNAMENT, options.getCardSet().getCardFace());
 		assertEquals(options.getDefaultSaveDir(), options.getSavePath());
-		assertEquals(Integer.valueOf(2000), options.getTrickRemoveDelayTime());
-		assertFalse(options.isTrickRemoveAfterClick().booleanValue());
-		assertFalse(options.isGameShortCut().booleanValue());
 
 		// rule defaults
 		assertEquals(RuleSet.ISPA, options.getRules());

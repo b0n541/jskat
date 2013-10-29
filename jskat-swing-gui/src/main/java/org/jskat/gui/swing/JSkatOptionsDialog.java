@@ -20,6 +20,7 @@
  */
 package org.jskat.gui.swing;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -40,7 +41,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
@@ -79,11 +79,6 @@ public class JSkatOptionsDialog extends JDialog {
 	private JComboBox language;
 	private JComboBox cardSet;
 	private JTextField savePath;
-	private JSlider waitTime;
-	private JCheckBox trickRemoveAfterClick;
-	private ButtonGroup gameShortCut;
-	private JRadioButton gameShortCutYes;
-	private JRadioButton gameShortCutNo;
 
 	// rule options
 	private JRadioButton ruleSetISPA;
@@ -119,9 +114,6 @@ public class JSkatOptionsDialog extends JDialog {
 			options.setLanguage((SupportedLanguage) language.getSelectedItem());
 			options.setCardSet(getSelectedCardSet());
 			options.setSavePath(savePath.getText());
-			options.setTrickRemoveDelayTime(waitTime.getValue() * 1000);
-			options.setTrickRemoveAfterClick(trickRemoveAfterClick.isSelected());
-			options.setGameShortCut(gameShortCutYes.isSelected());
 			options.setIssAddress(issAddress.getText());
 			options.setIssPort(Integer.valueOf(issPort.getText()));
 
@@ -268,6 +260,7 @@ public class JSkatOptionsDialog extends JDialog {
 			cardPanel.addCard(card);
 		}
 		cardPanel.setSortType(GameType.GRAND);
+		cardPanel.setPreferredSize(new Dimension(600, 100));
 		return cardPanel;
 	}
 
@@ -350,57 +343,6 @@ public class JSkatOptionsDialog extends JDialog {
 		return cardSetPanel;
 	}
 
-	private JPanel getWaitingTimePanel(final JSkatResourceBundle strings,
-			final JSkatOptions options) {
-
-		waitTime = new JSlider();
-		waitTime.setSnapToTicks(true);
-		waitTime.setMinimum(0);
-		waitTime.setMaximum(20);
-		waitTime.setMajorTickSpacing(5);
-		waitTime.setMinorTickSpacing(1);
-		waitTime.setPaintTicks(true);
-		waitTime.setPaintLabels(true);
-
-		trickRemoveAfterClick = new JCheckBox(
-				strings.getString("remove_trick_after_click")); //$NON-NLS-1$
-		trickRemoveAfterClick.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(final ChangeEvent evt) {
-
-				if (JSkatOptionsDialog.this.trickRemoveAfterClick.isSelected()) {
-
-					JSkatOptionsDialog.this.waitTime.setEnabled(false);
-
-				} else {
-
-					JSkatOptionsDialog.this.waitTime.setEnabled(true);
-				}
-			}
-		});
-
-		final JPanel waitTimePanel = new JPanel(LayoutFactory.getMigLayout(
-				"fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		waitTimePanel.add(waitTime);
-		waitTimePanel.add(trickRemoveAfterClick);
-		return waitTimePanel;
-	}
-
-	private JPanel getGameShortCutPanel() {
-
-		gameShortCut = new ButtonGroup();
-		gameShortCutYes = new JRadioButton(strings.getString("yes")); //$NON-NLS-1$
-		gameShortCut.add(gameShortCutYes);
-		gameShortCutNo = new JRadioButton(strings.getString("no")); //$NON-NLS-1$
-		gameShortCut.add(gameShortCutNo);
-
-		final JPanel gameShortCutPanel = new JPanel(LayoutFactory.getMigLayout(
-				"fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		gameShortCutPanel.add(gameShortCutYes);
-		gameShortCutPanel.add(gameShortCutNo);
-		return gameShortCutPanel;
-	}
-
 	private JPanel getShowTipsPanel() {
 		showTipsAtStartUp = new JCheckBox(
 				strings.getString("show_tips_at_startup")); //$NON-NLS-1$
@@ -443,12 +385,6 @@ public class JSkatOptionsDialog extends JDialog {
 
 		commonPanel.add(new JLabel(strings.getString("save_path"))); //$NON-NLS-1$
 		commonPanel.add(getSavePathPanel(), "wrap"); //$NON-NLS-1$
-
-		commonPanel.add(new JLabel(strings.getString("wait_time_after_trick"))); //$NON-NLS-1$
-		commonPanel.add(getWaitingTimePanel(strings, options), "wrap"); //$NON-NLS-1$
-
-		commonPanel.add(new JLabel(strings.getString("game_short_cut"))); //$NON-NLS-1$
-		commonPanel.add(getGameShortCutPanel(), "wrap"); //$NON-NLS-1$
 
 		commonPanel.validate();
 
@@ -659,15 +595,6 @@ public class JSkatOptionsDialog extends JDialog {
 		cardSet.setSelectedItem(options.getCardSet());
 
 		savePath.setText(options.getSavePath());
-		waitTime.setValue(options.getTrickRemoveDelayTime().intValue() / 1000);
-		trickRemoveAfterClick.setSelected(options.isTrickRemoveAfterClick()
-				.booleanValue());
-
-		if (options.isGameShortCut().booleanValue()) {
-			gameShortCutYes.setSelected(true);
-		} else {
-			gameShortCutNo.setSelected(true);
-		}
 
 		// skat rule options
 		switch (options.getRules()) {
