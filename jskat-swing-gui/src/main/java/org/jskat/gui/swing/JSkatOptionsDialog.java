@@ -432,7 +432,7 @@ public class JSkatOptionsDialog extends JDialog {
 		contraAfterBid18 = new JCheckBox(
 				strings.getString("contra_after_bid_18")); //$NON-NLS-1$
 		contraPanel.add(contraAfterBid18, "gapleft 20px"); //$NON-NLS-1$
-		//		pubRulesPanel.add(contraPanel, "wrap"); //$NON-NLS-1$
+		pubRulesPanel.add(contraPanel, "wrap"); //$NON-NLS-1$
 
 		final JPanel bockPanel = getBockPanel();
 		//		pubRulesPanel.add(bockPanel, "wrap"); //$NON-NLS-1$
