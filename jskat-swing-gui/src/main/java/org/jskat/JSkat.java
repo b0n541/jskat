@@ -23,6 +23,7 @@ package org.jskat;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.SplashScreen;
 
 import javax.swing.UIManager;
@@ -125,6 +126,8 @@ public class JSkat {
 				strings.getString("splash_load_card_sets"),
 				strings.getString("splash_look_for_ai_players") };
 		g.setComposite(AlphaComposite.Clear);
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
 		g.fillRect(10, 180, 200, 40);
 		g.setPaintMode();
 		g.setColor(Color.BLACK);
