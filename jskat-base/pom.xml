@@ -5,12 +5,12 @@
 	<parent>
 		<groupId>org.jskat</groupId>
 		<artifactId>jskat-multimodule</artifactId>
-		<version>0.13.0-SNAPSHOT</version>
+		<version>0.13.0</version>
 	</parent>
 
 	<artifactId>jskat-base</artifactId>
 	<name>Base module for JSkat</name>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -55,50 +55,37 @@
 
 	<build>
 		<plugins>
-			<!-- Compiling -->
+			<!-- Source packaging -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.3.2</version>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.1.2</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-					<debug>true</debug>
+					<finalName>${project.artifactId}-${project.version}</finalName>
+					<attach>true</attach>
 				</configuration>
-			</plugin>
-			<!-- Assemble base JAR file for Android version -->
-			<plugin>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>2.3.1</version>
 				<executions>
 					<execution>
-						<id>base</id>
+						<phase>install</phase>
+						<goals>
+							<goal>jar</goal>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Javadoc -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.7</version>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<id>attach-javadocs</id>
 						<goals>
 							<goal>jar</goal>
 						</goals>
-						<phase>package</phase>
-						<configuration>
-							<classifier>base</classifier>
-							<includes>
-								<include>**/jskat/ai/**</include>
-								<include>**/jskat/control/**</include>
-								<include>**/jskat/data/**</include>
-								<include>**/jskat/i18n/**</include>
-								<include>**/jskat/gui/action/**</include>
-								<include>**/jskat/gui/human/**</include>
-								<include>**/jskat/gui/img/**</include>
-								<include>**/jskat/gui/*</include>
-								<include>**/jskat/player/**</include>
-								<include>**/jskat/util/**</include>
-							</includes>
-							<excludes>
-								<include>**/jskat/gui/human/SwingHumanPlayer*</include>
-								<include>**/jskat/gui/swing/**</include>
-								<include>**/jskat/gui/img/cards/**</include>
-								<include>**/jskat/gui/img/gui/**</include>
-								<exclude>**/jskat/JSkat*</exclude>
-							</excludes>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>

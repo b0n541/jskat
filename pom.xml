@@ -28,11 +28,17 @@
 				<role>Developer</role>
 			</roles>
 		</developer>
+		<developer>
+			<name>Sascha Laurien</name>
+			<roles>
+				<role>Developer</role>
+			</roles>
+		</developer>
 	</developers>
 
 	<groupId>org.jskat</groupId>
 	<artifactId>jskat-multimodule</artifactId>
-	<version>0.13.0-SNAPSHOT</version>
+	<version>0.13.0</version>
 	<name>Multi module for JSkat</name>
 	<packaging>pom</packaging>
 
