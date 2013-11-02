@@ -21,9 +21,9 @@
 package org.jskat.ai.newalgorithm;
 
 import org.apache.log4j.Logger;
+import org.jskat.ai.AbstractAIPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
-import org.jskat.player.AbstractJSkatPlayer;
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -33,7 +33,7 @@ import org.jskat.util.GameType;
  * @author Daniel Loreck
  * 
  */
-public class AlgorithmAI extends AbstractJSkatPlayer {
+public class AlgorithmAI extends AbstractAIPlayer {
 	private static final Logger log = Logger.getLogger(AlgorithmAI.class);
 
 	private AbstractAlgorithmAI aiPlayer = null;
@@ -233,21 +233,6 @@ public class AlgorithmAI extends AbstractJSkatPlayer {
 		return knowledge.getOwnCards().get(0);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.jskat.ai.IJSkatPlayer#isAIPlayer()
-	 */
-	@Override
-	public final boolean isAIPlayer() {
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.jskat.ai.AbstractJSkatPlayer#startGame()
-	 */
 	@Override
 	public void startGame() {
 		if (aiPlayer == null) {
@@ -286,6 +271,18 @@ public class AlgorithmAI extends AbstractJSkatPlayer {
 
 	protected ImmutablePlayerKnowledge getKnowledge() {
 		return knowledge;
+	}
+
+	@Override
+	public boolean callContra() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean callRe() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

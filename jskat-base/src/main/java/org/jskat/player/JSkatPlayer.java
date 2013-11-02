@@ -94,10 +94,25 @@ public interface JSkatPlayer {
 	public void takeCards(CardList cards);
 
 	/**
-	 * @return true, if the player wants to play a grand hand in a BockRamsch
-	 *         game
+	 * @return <code>true</code>, if the player wants to play a grand hand in a
+	 *         BockRamsch game
 	 */
 	public boolean playGrandHand();
+
+	/**
+	 * Asks the player to call Contra as opponent player
+	 * 
+	 * @return <code>true</code>, if the player wants to call Contra
+	 */
+	public boolean callContra();
+
+	/**
+	 * Asks the player to call Re a declarer player, after an opponent did call
+	 * Contra
+	 * 
+	 * @return <code>true</code>, if the player wants to call Re
+	 */
+	public boolean callRe();
 
 	/**
 	 * Checks whether the player wants to look into the skat

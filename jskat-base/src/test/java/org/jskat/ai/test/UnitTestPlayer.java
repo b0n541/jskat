@@ -74,7 +74,8 @@ public class UnitTestPlayer extends AbstractJSkatPlayer {
 
 	@Override
 	public Card playCard() {
-		return cardsToPlay.get(knowledge.getCurrentTrick().getTrickNumberInGame());
+		return cardsToPlay.get(knowledge.getCurrentTrick()
+				.getTrickNumberInGame());
 	}
 
 	@Override
@@ -93,6 +94,18 @@ public class UnitTestPlayer extends AbstractJSkatPlayer {
 	protected CardList getCardsToDiscard() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public boolean callContra() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean callRe() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

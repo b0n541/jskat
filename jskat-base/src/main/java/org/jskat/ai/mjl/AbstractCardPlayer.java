@@ -26,22 +26,22 @@ import org.jskat.util.CardList;
 
 /**
  * @author Markus J. Luzius <br>
- * created: 24.01.2011 18:20:09
- *
+ *         created: 24.01.2011 18:20:09
+ * 
  */
 public abstract class AbstractCardPlayer implements CardPlayer {
-	private static final Logger log = Logger.getLogger(AbstractCardPlayer.class);
-	
+	private static final Logger log = Logger
+			.getLogger(AbstractCardPlayer.class);
+
 	protected CardList cards = null;
 
 	protected AbstractCardPlayer(CardList cards) {
 		this.cards = cards;
 	}
-	
+
+	@Override
 	public void startGame(ImmutablePlayerKnowledge knowledge) {
 		log.debug("Starting game...");
 		cards.sort(knowledge.getGameAnnouncement().getGameType());
 	}
-
-
 }

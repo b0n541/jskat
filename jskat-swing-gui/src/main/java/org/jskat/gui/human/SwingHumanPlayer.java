@@ -340,4 +340,16 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 		gameAnnouncement = null;
 		nextCard = null;
 	}
+
+	@Override
+	public boolean callContra() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean callRe() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }
