@@ -33,6 +33,7 @@ import org.apache.log4j.PropertyConfigurator;
 import org.jskat.control.JSkatMaster;
 import org.jskat.data.DesktopSavePathResolver;
 import org.jskat.data.JSkatOptions;
+import org.jskat.data.JSkatOptions.Option;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.swing.JSkatViewImpl;
 import org.jskat.gui.swing.LookAndFeelSetter;
@@ -100,11 +101,12 @@ public class JSkat {
 		splash.close();
 		jskatView.setVisible();
 
-		if (JSkatOptions.instance().isShowTipsAtStartUp()) {
+		if (JSkatOptions.instance().getBoolean(Option.SHOW_TIPS_AT_START_UP)) {
 			jskat.showWelcomeDialog();
 		}
 
-		if (JSkatOptions.instance().isCheckForNewVersionAtStartUp()) {
+		if (JSkatOptions.instance().getBoolean(
+				Option.CHECK_FOR_NEW_VERSION_AT_START_UP)) {
 			jskat.checkJSkatVersion(getVersion(),
 					VersionChecker.getLatestVersion());
 		}

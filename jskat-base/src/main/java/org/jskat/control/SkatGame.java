@@ -155,7 +155,7 @@ public class SkatGame extends JSkatThread {
 				}
 
 				if (!grandHandAnnounced) {
-					if (JSkatOptions.instance().isSchieberRamsch(true)) {
+					if (JSkatOptions.instance().isSchieberamsch(true)) {
 						log.debug("no grand hand - initiating schieberamsch"); //$NON-NLS-1$
 						setGameState(GameState.SCHIEBERAMSCH);
 					} else {

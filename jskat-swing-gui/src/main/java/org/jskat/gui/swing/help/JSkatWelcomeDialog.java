@@ -31,6 +31,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jskat.data.JSkatOptions;
+import org.jskat.data.JSkatOptions.Option;
 
 /**
  * Welcome dialog for helping new player to get started
@@ -49,7 +50,8 @@ public class JSkatWelcomeDialog extends JSkatHelpDialog {
 	 * @param contentPath
 	 *            Path to the content to be shown
 	 */
-	public JSkatWelcomeDialog(JFrame parentFrame, String title, String contentPath) {
+	public JSkatWelcomeDialog(JFrame parentFrame, String title,
+			String contentPath) {
 		super(parentFrame, title, contentPath);
 	}
 
@@ -57,23 +59,25 @@ public class JSkatWelcomeDialog extends JSkatHelpDialog {
 	protected JPanel getButtonPanel() {
 		JPanel buttonPanel = new JPanel();
 
-		final JCheckBox showTips = new JCheckBox(strings.getString("show_tips_at_startup")); //$NON-NLS-1$
+		final JCheckBox showTips = new JCheckBox(
+				strings.getString("show_tips_at_startup")); //$NON-NLS-1$
 		buttonPanel.add(showTips);
-		
+
 		final JSkatOptions options = JSkatOptions.instance();
-		if (options.isShowTipsAtStartUp().booleanValue()) {
+		if (options.getBoolean(Option.SHOW_TIPS_AT_START_UP)) {
 			showTips.setSelected(true);
 		}
-		
+
 		showTips.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				options.setShowTipsAtStartUp(Boolean.valueOf(showTips.isSelected()));
+				options.setShowTipsAtStartUp(showTips.isSelected());
 			}
 		});
 
 		JButton closeButton = new JButton(strings.getString("close")); //$NON-NLS-1$
 		closeButton.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent evt) {
 				closeDialog();
 			}

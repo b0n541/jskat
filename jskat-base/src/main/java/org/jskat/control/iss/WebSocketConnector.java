@@ -26,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 import org.eclipse.jetty.websocket.WebSocket.Connection;
 import org.eclipse.jetty.websocket.WebSocketClient;
 import org.eclipse.jetty.websocket.WebSocketClientFactory;
+import org.jskat.data.JSkatOptions.Option;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,10 +62,11 @@ class WebSocketConnector extends AbstractIssConnector {
 
 			webSocket = new WebSocketConnection(issControl);
 
-			Connection connection = client.open(
-					new URI("ws://" + options.getIssAddress() + ":" //$NON-NLS-1$ //$NON-NLS-2$
-							+ options.getIssPort()), webSocket, 10,
-					TimeUnit.SECONDS);
+			Connection connection = client
+					.open(new URI(
+							"ws://"	+ options.getString(Option.ISS_ADDRESS) + ":" //$NON-NLS-1$ //$NON-NLS-2$
+									+ options.getInteger(Option.ISS_PORT)),
+							webSocket, 10, TimeUnit.SECONDS);
 
 			if (connection.isOpen()) {
 				return true;

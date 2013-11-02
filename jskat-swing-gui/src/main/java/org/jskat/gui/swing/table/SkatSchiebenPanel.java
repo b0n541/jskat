@@ -108,7 +108,7 @@ class SkatSchiebenPanel extends JPanel {
 										JOptionPane.ERROR_MESSAGE);
 						return null;
 					}
-					if (!JSkatOptions.instance().isSchieberRamschJacksInSkat()
+					if (!JSkatOptions.instance().isSchieberamschJacksInSkat()
 							&& (discardedCards.get(0).getRank() == Rank.JACK || discardedCards
 									.get(1).getRank() == Rank.JACK)) {
 						JOptionPane

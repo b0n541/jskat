@@ -48,6 +48,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jskat.data.JSkatOptions;
+import org.jskat.data.JSkatOptions.Option;
 import org.jskat.data.JSkatOptions.SupportedLanguage;
 import org.jskat.data.SkatTableOptions.RamschSkatOwner;
 import org.jskat.data.SkatTableOptions.RuleSet;
@@ -125,7 +126,7 @@ public class JSkatOptionsDialog extends JDialog {
 			}
 
 			options.setRamschEventNoBid(ramschEventNoBid.isSelected());
-			options.setBockEventContraReAnnounced(bockEventContraReAnnounced
+			options.setBockEventContraReCalled(bockEventContraReAnnounced
 					.isSelected());
 			options.setBockEventLostGrand(bockEventLostGrand.isSelected());
 			options.setBockEventLostAfterContra(bockEventLostAfterContra
@@ -589,10 +590,10 @@ public class JSkatOptionsDialog extends JDialog {
 
 	private void setOptionValues() {
 		// common options
-		showTipsAtStartUp.setSelected(options.isShowTipsAtStartUp()
-				.booleanValue());
-		checkForNewVersion.setSelected(options.isCheckForNewVersionAtStartUp()
-				.booleanValue());
+		showTipsAtStartUp.setSelected(options
+				.getBoolean(Option.SHOW_TIPS_AT_START_UP));
+		checkForNewVersion.setSelected(options
+				.getBoolean(Option.CHECK_FOR_NEW_VERSION_AT_START_UP));
 		language.setSelectedItem(options.getLanguage());
 
 		cardSet.setSelectedItem(options.getCardSet());
@@ -615,16 +616,16 @@ public class JSkatOptionsDialog extends JDialog {
 		bockEventLostAfterContra.setSelected(options
 				.isBockEventLostAfterContra(false).booleanValue());
 		bockEventContraReAnnounced.setSelected(options
-				.isBockEventContraReAnnounced(false).booleanValue());
+				.isBockEventContraReCalled(false).booleanValue());
 		bockEventPlayerHasX00Points.setSelected(options
-				.isBockEventPlayerHasX00Points(false).booleanValue());
+				.isBockEventMultipleOfHundredScore(false).booleanValue());
 		bockEventLostGrand.setSelected(options.isBockEventLostGrand(false)
 				.booleanValue());
 		playRamsch.setSelected(options.isPlayRamsch(false).booleanValue());
-		schiebeRamsch.setSelected(options.isSchieberRamsch(false)
-				.booleanValue());
+		schiebeRamsch
+				.setSelected(options.isSchieberamsch(false).booleanValue());
 		schiebeRamschJacksInSkat.setSelected(options
-				.isSchieberRamschJacksInSkat(false).booleanValue());
+				.isSchieberamschJacksInSkat(false).booleanValue());
 		ramschSkatLastTrick.setSelected(RamschSkatOwner.LAST_TRICK
 				.equals(options.getRamschSkatOwner()));
 		ramschSkatLoser.setSelected(RamschSkatOwner.LOSER.equals(options
@@ -637,8 +638,8 @@ public class JSkatOptionsDialog extends JDialog {
 				.booleanValue());
 
 		// ISS options
-		issAddress.setText(options.getIssAddress());
-		issPort.setText(options.getIssPort().toString());
+		issAddress.setText(options.getString(Option.ISS_ADDRESS));
+		issPort.setText(options.getInteger(Option.ISS_PORT).toString());
 	}
 
 	CardSet getSelectedCardSet() {
