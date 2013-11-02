@@ -89,6 +89,7 @@ public class JSkatGraphicRepository {
 
 	private void loadAllJSkatImages() {
 		final MediaTracker tracker = new MediaTracker(new Canvas());
+
 		loadImages(tracker);
 
 		log.debug("Bitmaps for JSkat logo and skat table loaded..."); //$NON-NLS-1$

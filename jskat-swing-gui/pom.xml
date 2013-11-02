@@ -50,6 +50,9 @@
 						<manifest>
 							<mainClass>org.jskat.JSkat</mainClass>
 						</manifest>
+						<manifestEntries>
+							<SplashScreen-Image>org/jskat/gui/img/gui/splash.png</SplashScreen-Image>
+						</manifestEntries>
 					</archive>
 				</configuration>
 				<executions>

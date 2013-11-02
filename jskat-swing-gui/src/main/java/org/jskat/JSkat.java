@@ -20,6 +20,11 @@
  */
 package org.jskat;
 
+import java.awt.AlphaComposite;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.SplashScreen;
+
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
@@ -27,8 +32,10 @@ import org.apache.log4j.PropertyConfigurator;
 import org.jskat.control.JSkatMaster;
 import org.jskat.data.DesktopSavePathResolver;
 import org.jskat.data.JSkatOptions;
+import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.swing.JSkatViewImpl;
 import org.jskat.gui.swing.LookAndFeelSetter;
+import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.version.VersionChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,10 +63,41 @@ public class JSkat {
 
 		initializeOptions();
 
+		JSkatResourceBundle.instance();
+
 		trySettingNimbusLookAndFeel();
 
-		JSkatMaster jskat = JSkatMaster.instance();
-		jskat.setView(new JSkatViewImpl());
+		final SplashScreen splash = SplashScreen.getSplashScreen();
+		if (splash == null) {
+			System.out.println("SplashScreen.getSplashScreen() returned null");
+			return;
+		}
+		Graphics2D g = splash.createGraphics();
+		if (g == null) {
+			System.out.println("g is null");
+			return;
+		}
+		JSkatMaster jskat = null;
+		JSkatViewImpl jskatView = null;
+		for (int i = 0; i < 3; i++) {
+			renderSplashFrame(g, i);
+			splash.update();
+			switch (i) {
+			case 0:
+				jskat = JSkatMaster.instance();
+				break;
+			case 1:
+				JSkatGraphicRepository.instance();
+				break;
+			case 2:
+				jskatView = new JSkatViewImpl();
+				jskat.setView(jskatView);
+				break;
+			}
+		}
+
+		splash.close();
+		jskatView.setVisible();
 
 		if (JSkatOptions.instance().isShowTipsAtStartUp()) {
 			jskat.showWelcomeDialog();
@@ -78,6 +116,19 @@ public class JSkat {
 	 */
 	public static String getVersion() {
 		return VERSION;
+	}
+
+	private static void renderSplashFrame(Graphics2D g, int frame) {
+		final JSkatResourceBundle strings = JSkatResourceBundle.instance();
+		final String[] frameStrings = {
+				strings.getString("splash_init_application"),
+				strings.getString("splash_load_card_sets"),
+				strings.getString("splash_look_for_ai_players") };
+		g.setComposite(AlphaComposite.Clear);
+		g.fillRect(10, 180, 200, 40);
+		g.setPaintMode();
+		g.setColor(Color.BLACK);
+		g.drawString(frameStrings[frame] + "...", 10, 190);
 	}
 
 	private static void initializeOptions() {

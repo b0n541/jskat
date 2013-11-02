@@ -161,7 +161,6 @@ public class JSkatViewImpl implements JSkatView {
 
 		bitmaps = JSkatGraphicRepository.instance();
 		strings = JSkatResourceBundle.instance();
-		log.debug("I18n strings loaded: " + strings.getLocale()); //$NON-NLS-1$
 		tables = new HashMap<String, SkatTablePanel>();
 		jskat = JSkatMaster.instance();
 		initActionMap();
@@ -174,7 +173,12 @@ public class JSkatViewImpl implements JSkatView {
 		addTabPanel(new WelcomePanel(this,
 				strings.getString("welcome"), actions), //$NON-NLS-1$
 				strings.getString("welcome")); //$NON-NLS-1$
+	}
 
+	/**
+	 * Shows the GUI
+	 */
+	public final void setVisible() {
 		mainFrame.setVisible(true);
 	}
 
