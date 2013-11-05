@@ -85,6 +85,10 @@ public class SkatGameData {
 		 */
 		DECLARING,
 		/**
+		 * Contra/Re calling
+		 */
+		CONTRA_RE,
+		/**
 		 * Trick playing phase
 		 */
 		TRICK_PLAYING,
@@ -1293,5 +1297,43 @@ public class SkatGameData {
 	 */
 	public void addPlayerCards(Player player, CardList cards) {
 		playerHands.get(player).addAll(cards);
+	}
+
+	/**
+	 * Sets Contra information.
+	 * 
+	 * @param isContra
+	 *            <code>true</code>, if Contra was called.
+	 */
+	public void setContra(boolean isContra) {
+		announcement.setContra(isContra);
+	}
+
+	/**
+	 * Checks, whether Contra was called.
+	 * 
+	 * @return <code>true</code>, if Contra was called.
+	 */
+	public Boolean isContra() {
+		return announcement.contra;
+	}
+
+	/**
+	 * Sets Re information.
+	 * 
+	 * @param isRe
+	 *            <code>true</code>, if Re was called.
+	 */
+	public void setRe(boolean isRe) {
+		announcement.setRe(isRe);
+	}
+
+	/**
+	 * Checks, whether Re was called.
+	 * 
+	 * @return <code>true</code>, if Re was called.
+	 */
+	public Boolean isRe() {
+		return announcement.re;
 	}
 }

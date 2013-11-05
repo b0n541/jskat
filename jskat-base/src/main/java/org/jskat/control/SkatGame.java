@@ -144,25 +144,9 @@ public class SkatGame extends JSkatThread {
 				}
 				break;
 			case RAMSCH_GRAND_HAND_ANNOUNCING:
-				boolean grandHandAnnounced = false;
+				boolean grandHandAnnounced = grandHand();
 
-				for (final Player currPlayer : Player.getOrderedList()) {
-					setActivePlayer(currPlayer);
-					if (!grandHandAnnounced && playGrandHand(currPlayer)) {
-						setDeclarer(currPlayer);
-						grandHandAnnounced = true;
-					}
-				}
-
-				if (!grandHandAnnounced) {
-					if (JSkatOptions.instance().isSchieberamsch(true)) {
-						log.debug("no grand hand - initiating schieberamsch"); //$NON-NLS-1$
-						setGameState(GameState.SCHIEBERAMSCH);
-					} else {
-						log.debug("no grand hand and no schieberamsch - play ramsch"); //$NON-NLS-1$
-						setGameState(GameState.TRICK_PLAYING);
-					}
-				} else {
+				if (grandHandAnnounced) {
 					log.debug(data.getDeclarer() + " is playing grand hand"); //$NON-NLS-1$
 					final GameAnnouncementFactory gaf = GameAnnouncement
 							.getFactory();
@@ -172,28 +156,22 @@ public class SkatGame extends JSkatThread {
 					setGameState(GameState.TRICK_PLAYING);
 					log.debug("grand hand game started"); //$NON-NLS-1$
 					break;
-				}
-				break;
-			case SCHIEBERAMSCH:
-				for (final Player currPlayer : Player.getOrderedList()) {
-					setActivePlayer(currPlayer);
-					if (!pickUpSkat(data.getActivePlayer())) {
-						log.debug(currPlayer + " schiebt"); //$NON-NLS-1$
-						data.addGeschoben();
-						view.setGeschoben(tableName, currPlayer);
+				} else {
+					if (JSkatOptions.instance().isSchieberamsch(true)) {
+						log.debug("no grand hand - initiating schieberamsch"); //$NON-NLS-1$
+						setGameState(GameState.SCHIEBERAMSCH);
 					} else {
-						view.setSkat(tableName, data.getSkat());
-						discarding();
-					}
-
-					if (Player.REARHAND.equals(data.getActivePlayer())) {
-						final GameAnnouncementFactory factory = GameAnnouncement
-								.getFactory();
-						factory.setGameType(GameType.RAMSCH);
-						setGameAnnouncement(factory.getAnnouncement());
+						log.debug("no grand hand and no schieberamsch - play ramsch"); //$NON-NLS-1$
 						setGameState(GameState.TRICK_PLAYING);
 					}
 				}
+				break;
+			case SCHIEBERAMSCH:
+				schieberamsch();
+				GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+				factory.setGameType(GameType.RAMSCH);
+				setGameAnnouncement(factory.getAnnouncement());
+				setGameState(GameState.TRICK_PLAYING);
 				break;
 			case PICKING_UP_SKAT:
 				setActivePlayer(data.getDeclarer());
@@ -210,6 +188,25 @@ public class SkatGame extends JSkatThread {
 				break;
 			case DECLARING:
 				announceGame();
+				if (JSkatOptions.instance().isPlayContra(true)) {
+					setGameState(GameState.CONTRA_RE);
+				} else {
+					setGameState(GameState.TRICK_PLAYING);
+				}
+				break;
+			case CONTRA_RE:
+				for (Player player : Player.getOrderedList()) {
+					if (!player.equals(data.getDeclarer())) {
+						setActivePlayer(player);
+						if (getPlayerInstance(data.getActivePlayer())
+								.callContra()) {
+							data.setContra(true);
+							if (getPlayerInstance(data.getDeclarer()).callRe()) {
+								data.setRe(true);
+							}
+						}
+					}
+				}
 				setGameState(GameState.TRICK_PLAYING);
 				break;
 			case TRICK_PLAYING:
@@ -231,6 +228,33 @@ public class SkatGame extends JSkatThread {
 		} while (data.getGameState() != GameState.GAME_OVER && !isTerminated());
 
 		log.debug(data.getGameState().name());
+	}
+
+	private boolean grandHand() {
+		boolean grandHandAnnounced = false;
+
+		for (final Player currPlayer : Player.getOrderedList()) {
+			setActivePlayer(currPlayer);
+			if (!grandHandAnnounced && playGrandHand(currPlayer)) {
+				setDeclarer(currPlayer);
+				grandHandAnnounced = true;
+			}
+		}
+		return grandHandAnnounced;
+	}
+
+	private void schieberamsch() {
+		for (final Player currPlayer : Player.getOrderedList()) {
+			setActivePlayer(currPlayer);
+			if (!pickUpSkat(data.getActivePlayer())) {
+				log.debug(currPlayer + " schiebt"); //$NON-NLS-1$
+				data.addGeschoben();
+				view.setGeschoben(tableName, currPlayer);
+			} else {
+				view.setSkat(tableName, data.getSkat());
+				discarding();
+			}
+		}
 	}
 
 	private void setActivePlayer(final Player activePlayer) {

@@ -57,6 +57,14 @@ public class GameAnnouncement {
 	 * Schwarz announcement
 	 */
 	Boolean schwarz = Boolean.FALSE;
+	/**
+	 * Contra called
+	 */
+	Boolean contra = Boolean.FALSE;
+	/**
+	 * Re called
+	 */
+	Boolean re = Boolean.FALSE;
 
 	/**
 	 * Constructor
@@ -389,5 +397,25 @@ public class GameAnnouncement {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Sets contra information.
+	 * 
+	 * @param isContra
+	 *            <code>true</code>, if contra was called
+	 */
+	public void setContra(boolean isContra) {
+		contra = isContra;
+	}
+
+	/**
+	 * Sets re information
+	 * 
+	 * @param isRe
+	 *            <code>true</code>, if re was called
+	 */
+	public void setRe(boolean isRe) {
+		re = isRe;
 	}
 }
