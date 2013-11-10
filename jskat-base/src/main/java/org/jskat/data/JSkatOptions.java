@@ -29,6 +29,7 @@ import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Properties;
 
+import org.jskat.data.SkatTableOptions.ContraCallingTime;
 import org.jskat.data.SkatTableOptions.RamschSkatOwner;
 import org.jskat.data.SkatTableOptions.RuleSet;
 import org.jskat.gui.img.CardSet;
@@ -101,6 +102,10 @@ public final class JSkatOptions {
 		 * Allow contra/re calling
 		 */
 		PLAY_CONTRA(Boolean.class, RULES),
+		/**
+		 * Time of Contra/Re calling
+		 */
+		CONTRA_CALLING_TIME(ContraCallingTime.class, PLAY_CONTRA),
 		/**
 		 * Contra/Re calling is only allowed if the player has at least bid 18
 		 */
@@ -1123,6 +1128,10 @@ public final class JSkatOptions {
 		options.setProperty(option.propertyName(), ruleSet.name());
 	}
 
+	private void setOption(Option option, ContraCallingTime value) {
+		options.setProperty(option.propertyName(), value.name());
+	}
+
 	/**
 	 * Sets the standard properties
 	 * 
@@ -1138,6 +1147,8 @@ public final class JSkatOptions {
 		setOption(Option.MAX_PLAYER_COUNT, 3);
 		setOption(Option.RULES, RuleSet.ISPA);
 		setOption(Option.PLAY_CONTRA, Boolean.TRUE);
+		setOption(Option.CONTRA_CALLING_TIME,
+				ContraCallingTime.BEFORE_FIRST_CARD);
 		setOption(Option.CONTRA_AFTER_BID_18, Boolean.TRUE);
 		setOption(Option.PLAY_BOCK, Boolean.TRUE);
 		setOption(Option.BOCK_EVENT_LOST_GRAND, Boolean.TRUE);
@@ -1227,5 +1238,14 @@ public final class JSkatOptions {
 					+ " is not an integer option.");
 		}
 		return Integer.valueOf(getProperty(option));
+	}
+
+	/**
+	 * Gets the time when contra calling is allowed.
+	 * 
+	 * @return Time when contra calling is allowed
+	 */
+	public ContraCallingTime getContraCallingTime() {
+		return ContraCallingTime.valueOf(get(Option.CONTRA_CALLING_TIME));
 	}
 }

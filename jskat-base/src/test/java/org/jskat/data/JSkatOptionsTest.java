@@ -20,6 +20,8 @@
  */
 package org.jskat.data;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -29,6 +31,7 @@ import java.util.Locale;
 import org.jskat.AbstractJSkatTest;
 import org.jskat.data.JSkatOptions.Option;
 import org.jskat.data.JSkatOptions.SupportedLanguage;
+import org.jskat.data.SkatTableOptions.ContraCallingTime;
 import org.jskat.data.SkatTableOptions.RuleSet;
 import org.jskat.gui.img.CardFace;
 import org.jskat.gui.img.CardSet;
@@ -72,6 +75,9 @@ public class JSkatOptionsTest extends AbstractJSkatTest {
 		assertFalse(options.isContraAfterBid18());
 		assertFalse(options.isContraAfterBid18(true));
 		assertTrue(options.isContraAfterBid18(false));
+
+		assertThat(options.getContraCallingTime(),
+				is(ContraCallingTime.BEFORE_FIRST_CARD));
 
 		assertFalse(options.isPlayBock());
 		assertFalse(options.isPlayBock(true));

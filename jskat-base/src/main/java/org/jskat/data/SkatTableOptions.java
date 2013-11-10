@@ -42,6 +42,21 @@ public class SkatTableOptions extends Observable {
 	}
 
 	/**
+	 * Defines the times, when Contra/Re can be called.
+	 */
+	public enum ContraCallingTime {
+		/**
+		 * Calling contra directly after game announcement
+		 */
+		AFTER_GAME_ANNOUNCEMENT,
+		/**
+		 * Calling contra before the player plays out the first card from
+		 * his/her hand
+		 */
+		BEFORE_FIRST_CARD;
+	}
+
+	/**
 	 * Holds different rules for the owner of the skat after a ramsch game
 	 */
 	public enum RamschSkatOwner {
