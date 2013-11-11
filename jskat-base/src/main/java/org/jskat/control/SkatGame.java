@@ -189,10 +189,7 @@ public class SkatGame extends JSkatThread {
 				break;
 			case DECLARING:
 				announceGame();
-				if (JSkatOptions.instance().isPlayContra(true)
-						&& ContraCallingTime.AFTER_GAME_ANNOUNCEMENT
-								.equals(JSkatOptions.instance()
-										.getContraCallingTime())) {
+				if (isContraPlayEnabled(ContraCallingTime.AFTER_GAME_ANNOUNCEMENT)) {
 					setGameState(GameState.CONTRA_RE);
 				} else {
 					setGameState(GameState.TRICK_PLAYING);
@@ -200,7 +197,8 @@ public class SkatGame extends JSkatThread {
 				break;
 			case CONTRA_RE:
 				for (Player player : Player.getOrderedList()) {
-					if (!player.equals(data.getDeclarer())) {
+					if (isContraEnabledForPlayer(player,
+							ContraCallingTime.AFTER_GAME_ANNOUNCEMENT)) {
 						contraRe(player);
 					}
 				}
@@ -228,14 +226,12 @@ public class SkatGame extends JSkatThread {
 	}
 
 	private void contraRe(Player opponent) {
-		if (!data.isContra()) {
-			setActivePlayer(opponent);
-			if (getPlayerInstance(data.getActivePlayer()).callContra()) {
-				data.setContra(true);
-				setActivePlayer(data.getDeclarer());
-				if (getPlayerInstance(data.getDeclarer()).callRe()) {
-					data.setRe(true);
-				}
+		setActivePlayer(opponent);
+		if (getPlayerInstance(data.getActivePlayer()).callContra()) {
+			data.setContra(true);
+			setActivePlayer(data.getDeclarer());
+			if (getPlayerInstance(data.getDeclarer()).callRe()) {
+				data.setRe(true);
 			}
 		}
 	}
@@ -617,7 +613,7 @@ public class SkatGame extends JSkatThread {
 			newTrickForeHand = getTrickForeHand(trickNo);
 
 			view.setTrickForeHand(tableName, newTrickForeHand);
-			view.setActivePlayer(tableName, newTrickForeHand);
+			setActivePlayer(newTrickForeHand);
 
 			final Trick trick = new Trick(trickNo, newTrickForeHand);
 			data.addTrick(trick);
@@ -625,7 +621,10 @@ public class SkatGame extends JSkatThread {
 
 			// Ask players for their cards
 			log.debug("fore hand plays"); //$NON-NLS-1$
-			contraRe(trick, newTrickForeHand);
+			if (isContraEnabledForPlayer(data.getActivePlayer(),
+					ContraCallingTime.BEFORE_FIRST_CARD)) {
+				contraRe(data.getActivePlayer());
+			}
 			playCard(trick, newTrickForeHand, newTrickForeHand);
 
 			if (isFinished()) {
@@ -635,8 +634,11 @@ public class SkatGame extends JSkatThread {
 			doSleep(maxSleep);
 
 			log.debug("middle hand plays"); //$NON-NLS-1$
-			view.setActivePlayer(tableName, newTrickForeHand.getLeftNeighbor());
-			contraRe(trick, newTrickForeHand.getLeftNeighbor());
+			setActivePlayer(newTrickForeHand.getLeftNeighbor());
+			if (isContraEnabledForPlayer(data.getActivePlayer(),
+					ContraCallingTime.BEFORE_FIRST_CARD)) {
+				contraRe(data.getActivePlayer());
+			}
 			playCard(trick, newTrickForeHand,
 					newTrickForeHand.getLeftNeighbor());
 
@@ -647,8 +649,11 @@ public class SkatGame extends JSkatThread {
 			doSleep(maxSleep);
 
 			log.debug("rear hand plays"); //$NON-NLS-1$
-			view.setActivePlayer(tableName, newTrickForeHand.getRightNeighbor());
-			contraRe(trick, newTrickForeHand.getRightNeighbor());
+			setActivePlayer(newTrickForeHand.getRightNeighbor());
+			if (isContraEnabledForPlayer(data.getActivePlayer(),
+					ContraCallingTime.BEFORE_FIRST_CARD)) {
+				contraRe(data.getActivePlayer());
+			}
 			playCard(trick, newTrickForeHand,
 					newTrickForeHand.getRightNeighbor());
 
@@ -708,14 +713,71 @@ public class SkatGame extends JSkatThread {
 		}
 	}
 
-	private void contraRe(Trick trick, Player player) {
-		if (JSkatOptions.instance().isPlayContra(true)
-				&& ContraCallingTime.BEFORE_FIRST_CARD.equals(JSkatOptions
-						.instance().getContraCallingTime())
-				&& trick.getTrickNumberInGame() == 0
-				&& !player.equals(data.getDeclarer())) {
-			contraRe(player);
+	private Boolean isPlayContra(ContraCallingTime contraCallingTime,
+			Player player) {
+		JSkatOptions options = JSkatOptions.instance();
+		if (isContraPlayEnabled(contraCallingTime)) {
+			if (ContraCallingTime.AFTER_GAME_ANNOUNCEMENT == contraCallingTime) {
+				return true;
+			} else if (ContraCallingTime.BEFORE_FIRST_CARD == contraCallingTime
+					&& data.getCurrentTrick().getTrickNumberInGame() == 0) {
+				return true;
+			}
 		}
+
+		return false;
+	}
+
+	private Boolean isContraPlayEnabled(ContraCallingTime gameTime) {
+		JSkatOptions options = JSkatOptions.instance();
+		if (options.isPlayContra(true)
+				&& options.getContraCallingTime() == gameTime
+				&& isGameWithDeclarer()) {
+			if (ContraCallingTime.AFTER_GAME_ANNOUNCEMENT == gameTime) {
+				return true;
+			} else if (ContraCallingTime.BEFORE_FIRST_CARD == gameTime
+					&& data.getCurrentTrick().getTrickNumberInGame() == 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private Boolean isGameWithDeclarer() {
+		GameType gameType = data.getGameType();
+		if (gameType == GameType.CLUBS || gameType == GameType.SPADES
+				|| gameType == GameType.HEARTS || gameType == GameType.DIAMONDS
+				|| gameType == GameType.GRAND || gameType == GameType.NULL) {
+			return true;
+		}
+		return false;
+	}
+
+	private Boolean isContraEnabledForPlayer(Player player,
+			ContraCallingTime gameTime) {
+		if (isContraPlayEnabled(gameTime) && isNoContraCalledYet()
+				&& isPlayerOpponent(player)
+				&& isPlayerBidHighEnoughForContra(player)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean isPlayerBidHighEnoughForContra(Player player) {
+		JSkatOptions options = JSkatOptions.instance();
+		if (options.isContraAfterBid18() && data.getMaxPlayerBid(player) > 0) {
+			return true;
+		}
+		return true;
+	}
+
+	private boolean isPlayerOpponent(Player player) {
+		return player != data.getDeclarer();
+	}
+
+	private boolean isNoContraCalledYet() {
+		return !data.isContra();
 	}
 
 	private void informPlayersAboutCompletedTrick(final Trick trick) {

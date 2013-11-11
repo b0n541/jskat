@@ -1248,4 +1248,13 @@ public final class JSkatOptions {
 	public ContraCallingTime getContraCallingTime() {
 		return ContraCallingTime.valueOf(get(Option.CONTRA_CALLING_TIME));
 	}
+
+	/**
+	 * Resets the options to default
+	 * 
+	 * @param pathResolver
+	 */
+	public void resetToDefault(DesktopSavePathResolver pathResolver) {
+		setDefaultProperties(pathResolver);
+	}
 }
