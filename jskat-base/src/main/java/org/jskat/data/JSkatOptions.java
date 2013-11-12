@@ -37,22 +37,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Holds all options of JSkat
+ * Holds all options of JSkat.
  */
 public final class JSkatOptions {
 
 	private final static String PROPERTIES_FILENAME = "jskat.properties"; //$NON-NLS-1$
 
 	/**
-	 * Languages supported by JSkat
+	 * Languages supported by JSkat.
 	 */
 	public enum SupportedLanguage {
 		/**
-		 * English
+		 * English.
 		 */
 		ENGLISH,
 		/**
-		 * German
+		 * German.
 		 */
 		GERMAN;
 	}
@@ -950,7 +950,7 @@ public final class JSkatOptions {
 				+ System.getProperty("file.separator"); //$NON-NLS-1$
 	}
 
-	private void loadOptions() throws FileNotFoundException, IOException {
+	private void loadOptions() throws IOException {
 
 		FileInputStream stream = getFileStream();
 
