@@ -20,8 +20,10 @@
  */
 package org.jskat.util.rule;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import org.jskat.AbstractJSkatTest;
@@ -120,8 +122,78 @@ public class SuitRuleTest extends AbstractJSkatTest {
 		data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ,
 				Card.DJ, Card.CA));
 		data.calcResult();
-		assertEquals(24, data.getResult().getGameValue());
-		assertEquals(24, clubsRules.calcGameResult(data));
+		assertThat(data.getResult().getGameValue(), is(24));
+	}
+
+	@Test
+	public void calcGameResultGameWonClubJackContra() {
+		SkatGameData data = new SkatGameData();
+		factory.setHand(false);
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setContra(true);
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerScore(61);
+		data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ,
+				Card.DJ, Card.CA));
+		data.calcResult();
+		assertThat(data.getResult().getGameValue(), is(48));
+	}
+
+	@Test
+	public void calcGameResultGameWonClubJackContraRe() {
+		SkatGameData data = new SkatGameData();
+		factory.setHand(false);
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setContra(true);
+		data.setRe(true);
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerScore(61);
+		data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ,
+				Card.DJ, Card.CA));
+		data.calcResult();
+		assertThat(data.getResult().getGameValue(), is(96));
+	}
+
+	@Test
+	public void calcGameResultGameLostClubJack() {
+		SkatGameData data = new SkatGameData();
+		factory.setHand(false);
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerScore(60);
+		data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ,
+				Card.DJ, Card.CA));
+		data.calcResult();
+		assertThat(data.getResult().getGameValue(), is(-48));
+	}
+
+	@Test
+	public void calcGameResultGameLostClubJackContra() {
+		SkatGameData data = new SkatGameData();
+		factory.setHand(false);
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setContra(true);
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerScore(60);
+		data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ,
+				Card.DJ, Card.CA));
+		data.calcResult();
+		assertThat(data.getResult().getGameValue(), is(-96));
+	}
+
+	@Test
+	public void calcGameResultGameLostClubJackContraRe() {
+		SkatGameData data = new SkatGameData();
+		factory.setHand(false);
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setContra(true);
+		data.setRe(true);
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerScore(60);
+		data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ,
+				Card.DJ, Card.CA));
+		data.calcResult();
+		assertThat(data.getResult().getGameValue(), is(-192));
 	}
 
 	/**

@@ -105,6 +105,16 @@ public abstract class SuitGrandRule extends SuitGrandRamschRule {
 			log.debug("calcSuitResult: Schwarz: multiplier " + multiplier); //$NON-NLS-1$
 		}
 
+		if (gameData.isContra()) {
+			multiplier *= 2;
+			log.debug("calcSuitResult: Contra: multiplier " + multiplier);
+
+			if (gameData.isRe()) {
+				multiplier *= 2;
+				log.debug("calcSuitResult: Re: multiplier " + multiplier);
+			}
+		}
+
 		int gameValue = SkatConstants.getGameBaseValue(gameData.getGameType(),
 				gameData.isHand(), gameData.isOuvert());
 

@@ -38,8 +38,18 @@ public class NullRule extends AbstractSkatRule {
 	 */
 	@Override
 	public int getGameValueForWonGame(final SkatGameData gameData) {
-		return SkatConstants.getGameBaseValue(gameData.getGameType(),
-				gameData.isHand(), gameData.isOuvert());
+
+		Integer gameValue = SkatConstants.getGameBaseValue(
+				gameData.getGameType(), gameData.isHand(), gameData.isOuvert());
+
+		if (gameData.isContra()) {
+			gameValue *= 2;
+			if (gameData.isRe()) {
+				gameValue *= 2;
+			}
+		}
+
+		return gameValue;
 	}
 
 	/**
