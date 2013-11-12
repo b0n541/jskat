@@ -1077,6 +1077,8 @@ public class SkatGameData {
 		factory.setOuvert(isOuvert());
 		factory.setSchneider(isSchneider());
 		factory.setSchwarz(isSchwarz());
+		factory.setContra(isContra());
+		factory.setRe(isRe());
 
 		factory.setForeHand(getPlayerName(Player.FOREHAND));
 		factory.setMiddleHand(getPlayerName(Player.MIDDLEHAND));

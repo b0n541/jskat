@@ -234,7 +234,7 @@ class GameInformationPanel extends JPanel {
 		gameWon = summary.isGameWon();
 		declarerPoints = summary.getFinalDeclarerPoints();
 		opponentPoints = summary.getFinalOpponentScore();
-		ramschLoosers = summary.getRamschLoosers();
+		ramschLoosers = summary.getRamschLosers();
 		refreshText();
 	}
 
