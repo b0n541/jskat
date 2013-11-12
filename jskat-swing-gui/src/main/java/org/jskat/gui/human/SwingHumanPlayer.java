@@ -70,7 +70,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 	 * @see JSkatPlayer#bidMore(int)
 	 */
 	@Override
-	public int bidMore(final int nextBidValue) {
+	public Integer bidMore(final int nextBidValue) {
 
 		log.debug("Waiting for human next bid value..."); //$NON-NLS-1$
 
@@ -121,7 +121,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 	 * @see JSkatPlayer#holdBid(int)
 	 */
 	@Override
-	public boolean holdBid(final int currBidValue) {
+	public Boolean holdBid(final int currBidValue) {
 
 		log.debug("Waiting for human holding bid..."); //$NON-NLS-1$
 
@@ -134,7 +134,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 	 * @see JSkatPlayer#pickUpSkat()
 	 */
 	@Override
-	public boolean playGrandHand() {
+	public Boolean playGrandHand() {
 
 		log.debug("Waiting for human to decide if playing a grand hand..."); //$NON-NLS-1$
 
@@ -147,7 +147,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 	 * @see JSkatPlayer#pickUpSkat()
 	 */
 	@Override
-	public boolean pickUpSkat() {
+	public Boolean pickUpSkat() {
 
 		log.debug("Waiting for human looking into skat..."); //$NON-NLS-1$
 
@@ -342,13 +342,13 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 	}
 
 	@Override
-	public boolean callContra() {
+	public Boolean callContra() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean callRe() {
+	public Boolean callRe() {
 		// TODO Auto-generated method stub
 		return false;
 	}

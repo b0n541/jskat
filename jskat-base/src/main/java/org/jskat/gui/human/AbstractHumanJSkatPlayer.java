@@ -27,11 +27,9 @@ import org.jskat.player.AbstractJSkatPlayer;
  * Abstract implementation of a human player for JSkat
  */
 public abstract class AbstractHumanJSkatPlayer extends AbstractJSkatPlayer {
-	/**
-	 * {@inheritDoc}
-	 */
+
 	@Override
-	public final boolean isAIPlayer() {
+	public final Boolean isAIPlayer() {
 		return false;
 	}
 

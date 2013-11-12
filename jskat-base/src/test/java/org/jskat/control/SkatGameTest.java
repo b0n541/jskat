@@ -39,6 +39,7 @@ import org.jskat.ai.test.PlayNonPossessingCardTestPlayer;
 import org.jskat.ai.test.PlayNotAllowedCardTestPlayer;
 import org.jskat.ai.test.RamschTestPlayer;
 import org.jskat.ai.test.UnitTestPlayer;
+import org.jskat.data.DesktopSavePathResolver;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary;
@@ -54,6 +55,7 @@ import org.jskat.util.CardDeck;
 import org.jskat.util.GameType;
 import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -62,14 +64,39 @@ import org.junit.Test;
  */
 public class SkatGameTest extends AbstractJSkatTest {
 
+	@Before
+	public void setUp() {
+		JSkatOptions.instance().resetToDefault(new DesktopSavePathResolver());
+	}
+
+	@Test
+	public void testContra_NotActivatedInOptions() {
+		SkatGame game = new SkatGame(
+				"Table 1", GameVariant.STANDARD, new NoBiddingTestPlayer(), //$NON-NLS-1$
+				new NoBiddingTestPlayer(), new NoBiddingTestPlayer());
+		game.setView(new UnitTestView());
+
+		game.start();
+		try {
+			game.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		GameSummary summary = game.getGameSummary();
+		assertEquals(GameType.PASSED_IN, summary.getGameType());
+
+		SkatGameResult result = game.getGameResult();
+		assertFalse(result.isWon());
+		assertEquals(0, result.getGameValue());
+	}
+
 	/**
 	 * When no player bids, game is passed in
 	 */
 	@Test
 	public void testPassIn_NoBids() {
-
-		JSkatOptions options = JSkatOptions.instance();
-		options.setRules(RuleSet.ISPA);
 
 		SkatGame game = new SkatGame(
 				"Table 1", GameVariant.STANDARD, new NoBiddingTestPlayer(), //$NON-NLS-1$
@@ -97,9 +124,6 @@ public class SkatGameTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void testPassIn_NoBidsMockito() {
-
-		JSkatOptions options = JSkatOptions.instance();
-		options.setRules(RuleSet.ISPA);
 
 		SkatGame game = new SkatGame(
 				"Table 1", GameVariant.STANDARD, getNoBiddingPlayer(), //$NON-NLS-1$
@@ -137,7 +161,6 @@ public class SkatGameTest extends AbstractJSkatTest {
 	public void testPassIn_NoBids2() {
 
 		JSkatOptions options = JSkatOptions.instance();
-		options.setRules(RuleSet.ISPA);
 		options.setPlayRamsch(true);
 		options.setRamschEventNoBid(true);
 

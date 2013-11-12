@@ -41,7 +41,7 @@ public class RamschTestPlayer extends NoBiddingTestPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean playGrandHand() {
+	public Boolean playGrandHand() {
 		return playGrandHand;
 	}
 }
