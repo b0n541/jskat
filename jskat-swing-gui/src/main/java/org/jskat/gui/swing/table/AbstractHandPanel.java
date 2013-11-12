@@ -237,7 +237,7 @@ abstract class AbstractHandPanel extends JPanel {
 							+ strings.getString("contra");
 				}
 				if (playerRe) {
-					passedGeschobenContraRe += " " + strings.getString("re");
+					passedGeschobenContraRe += strings.getString("re");
 				}
 				headerText.append(passedGeschobenContraRe);
 
