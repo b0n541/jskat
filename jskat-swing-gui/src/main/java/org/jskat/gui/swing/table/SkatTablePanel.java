@@ -1019,7 +1019,6 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 *            Game number
 	 */
 	public void setGameNumber(final int gameNumber) {
-
 		gameInfoPanel.setGameNumber(gameNumber);
 	}
 
@@ -1125,5 +1124,15 @@ public class SkatTablePanel extends AbstractTabPanel {
 			showCards(player);
 			addCards(player, cards.get(player));
 		}
+	}
+
+	public void setContra(Player player) {
+		getPlayerPanel(player).setContra();
+		gameInfoPanel.setContra();
+	}
+
+	public void setRe(Player player) {
+		getPlayerPanel(player).setRe();
+		gameInfoPanel.setRe();
 	}
 }

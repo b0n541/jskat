@@ -1430,4 +1430,14 @@ public class JSkatViewImpl implements JSkatView {
 	public void setActiveView(String viewName) {
 		activeView = viewName;
 	}
+
+	@Override
+	public void setContra(String tableName, Player player) {
+		tables.get(tableName).setContra(player);
+	}
+
+	@Override
+	public void setRe(String tableName, Player player) {
+		tables.get(tableName).setRe(player);
+	}
 }

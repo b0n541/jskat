@@ -229,9 +229,11 @@ public class SkatGame extends JSkatThread {
 		setActivePlayer(opponent);
 		if (getPlayerInstance(data.getActivePlayer()).callContra()) {
 			data.setContra(true);
+			view.setContra(tableName, data.getActivePlayer());
 			setActivePlayer(data.getDeclarer());
 			if (getPlayerInstance(data.getDeclarer()).callRe()) {
 				data.setRe(true);
+				view.setRe(tableName, data.getActivePlayer());
 			}
 		}
 	}

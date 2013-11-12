@@ -768,4 +768,16 @@ public class NullView implements JSkatView {
 	public void showAIPlayedSchwarzMessage(String playerName, Card card) {
 		// empty method by intent
 	}
+
+	@Override
+	public void setContra(String tableName, Player player) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setRe(String tableName, Player player) {
+		// TODO Auto-generated method stub
+
+	}
 }
