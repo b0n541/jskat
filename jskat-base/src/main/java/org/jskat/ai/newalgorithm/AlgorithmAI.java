@@ -66,7 +66,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
 	 * @see org.jskat.ai.IJSkatPlayer#bidMore(int)
 	 */
 	@Override
-	public int bidMore(final int nextBidValue) {
+	public Integer bidMore(final int nextBidValue) {
 		if (bidEvaluator == null) {
 			bidEvaluator = new BidEvaluator(knowledge.getOwnCards(),
 					knowledge.getPlayerPosition());
@@ -83,7 +83,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
 	 * @see org.jskat.ai.IJSkatPlayer#holdBid(int)
 	 */
 	@Override
-	public boolean holdBid(final int currBidValue) {
+	public Boolean holdBid(final int currBidValue) {
 		if (bidEvaluator == null) {
 			bidEvaluator = new BidEvaluator(knowledge.getOwnCards(),
 					knowledge.getPlayerPosition());
@@ -97,7 +97,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
 	 * @see org.jskat.ai.IJSkatPlayer#pickUpSkat()
 	 */
 	@Override
-	public boolean pickUpSkat() {
+	public Boolean pickUpSkat() {
 		if (bidEvaluator == null) {
 			bidEvaluator = new BidEvaluator(knowledge.getOwnCards(),
 					knowledge.getPlayerPosition());
@@ -274,15 +274,20 @@ public class AlgorithmAI extends AbstractAIPlayer {
 	}
 
 	@Override
-	public boolean callContra() {
+	public Boolean callContra() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean callRe() {
+	public Boolean callRe() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
+	@Override
+	public Boolean playGrandHand() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -64,30 +64,18 @@ public class AIPlayerRND extends AbstractAIPlayer {
 		setPlayerName(newPlayerName);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public boolean pickUpSkat() {
-
+	public Boolean pickUpSkat() {
 		return random.nextBoolean();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public boolean playGrandHand() {
-
+	public Boolean playGrandHand() {
 		return random.nextBoolean();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public GameAnnouncement announceGame() {
-
 		log.debug("position: " + knowledge.getPlayerPosition()); //$NON-NLS-1$
 		log.debug("bids: " + knowledge.getHighestBid(Player.FOREHAND) + //$NON-NLS-1$
 				" " + knowledge.getHighestBid(Player.MIDDLEHAND) + //$NON-NLS-1$
@@ -111,11 +99,8 @@ public class AIPlayerRND extends AbstractAIPlayer {
 		return factory.getAnnouncement();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public int bidMore(final int nextBidValue) {
+	public Integer bidMore(final int nextBidValue) {
 		int result = -1;
 
 		if (random.nextBoolean()) {
@@ -126,25 +111,16 @@ public class AIPlayerRND extends AbstractAIPlayer {
 		return result;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public boolean holdBid(final int currBidValue) {
+	public Boolean holdBid(final int currBidValue) {
 		return random.nextBoolean();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void startGame() {
 		// do nothing
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public Card playCard() {
 
@@ -167,9 +143,6 @@ public class AIPlayerRND extends AbstractAIPlayer {
 		return possibleCards.get(index);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public CardList getCardsToDiscard() {
 		final CardList result = new CardList();
@@ -185,29 +158,23 @@ public class AIPlayerRND extends AbstractAIPlayer {
 		return result;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void preparateForNewGame() {
 		// nothing to do for AIPlayerRND
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
 	public void finalizeGame() {
 		// nothing to do for AIPlayerRND
 	}
 
 	@Override
-	public boolean callContra() {
+	public Boolean callContra() {
 		return random.nextBoolean();
 	}
 
 	@Override
-	public boolean callRe() {
+	public Boolean callRe() {
 		return random.nextBoolean();
 	}
 }

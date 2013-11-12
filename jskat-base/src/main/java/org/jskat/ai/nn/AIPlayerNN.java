@@ -108,7 +108,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	 * @see JSkatPlayer#bidMore(int)
 	 */
 	@Override
-	public int bidMore(final int nextBidValue) {
+	public Integer bidMore(final int nextBidValue) {
 
 		int result = -1;
 
@@ -123,7 +123,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	 * @see JSkatPlayer#holdBid(int)
 	 */
 	@Override
-	public boolean holdBid(final int currBidValue) {
+	public Boolean holdBid(final int currBidValue) {
 
 		return isAnyGamePossible(currBidValue);
 	}
@@ -259,7 +259,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	 * @see JSkatPlayer#pickUpSkat()
 	 */
 	@Override
-	public boolean pickUpSkat() {
+	public Boolean pickUpSkat() {
 
 		boolean result = true;
 
@@ -568,14 +568,20 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	}
 
 	@Override
-	public boolean callContra() {
+	public Boolean callContra() {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean callRe() {
+	public Boolean callRe() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public Boolean playGrandHand() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
