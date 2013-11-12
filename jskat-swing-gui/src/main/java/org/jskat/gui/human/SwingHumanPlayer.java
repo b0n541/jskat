@@ -330,7 +330,6 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 	}
 
 	private void resetPlayer() {
-
 		bidValue = 0;
 		holdBid = false;
 		playGrandHand = false;
