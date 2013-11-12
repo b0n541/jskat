@@ -100,6 +100,14 @@ public enum JSkatAction {
 	 */
 	PLAY_GRAND_HAND,
 	/**
+	 * Call Contra
+	 */
+	CALL_CONTRA,
+	/**
+	 * Call Re
+	 */
+	CALL_RE,
+	/**
 	 * Play schieberamsch
 	 */
 	PLAY_SCHIEBERAMSCH,

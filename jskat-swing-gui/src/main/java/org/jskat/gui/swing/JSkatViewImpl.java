@@ -66,6 +66,8 @@ import org.jskat.data.iss.MovePlayer;
 import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.gui.JSkatView;
 import org.jskat.gui.action.JSkatAction;
+import org.jskat.gui.action.human.CallContraAction;
+import org.jskat.gui.action.human.CallReAction;
 import org.jskat.gui.action.human.DiscardAction;
 import org.jskat.gui.action.human.GameAnnounceAction;
 import org.jskat.gui.action.human.HoldBidAction;
@@ -238,6 +240,8 @@ public class JSkatViewImpl implements JSkatView {
 		actions.put(JSkatAction.PASS_BID, new PassBidAction());
 		actions.put(JSkatAction.PICK_UP_SKAT, new PickUpSkatAction());
 		actions.put(JSkatAction.PLAY_GRAND_HAND, new PlayGrandHandAction());
+		actions.put(JSkatAction.CALL_CONTRA, new CallContraAction());
+		actions.put(JSkatAction.CALL_RE, new CallReAction());
 		actions.put(JSkatAction.PLAY_SCHIEBERAMSCH,
 				new PlaySchiebeRamschAction());
 		actions.put(JSkatAction.SCHIEBEN, new SchiebenAction());
