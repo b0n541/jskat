@@ -27,14 +27,17 @@ import org.jskat.util.Card;
 import org.jskat.util.CardList;
 
 /**
- * Test player throws an excpetion during card play
+ * Test player throws an excpetion during card play.
  */
 public class PlayNotAllowedCardTestPlayer extends AIPlayerRND {
 
-	private final static Random random = new Random();
+	/**
+	 * Random generator.
+	 */
+	private final Random random = new Random();
 
 	@Override
-	public Card playCard() {
+	public final Card playCard() {
 		CardList notAllowedCards = new CardList(knowledge.getOwnCards());
 		notAllowedCards.removeAll(getPlayableCards(knowledge.getTrickCards()));
 

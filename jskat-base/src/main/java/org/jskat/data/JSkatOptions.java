@@ -211,17 +211,25 @@ public final class JSkatOptions {
 		}
 	}
 
+	/**
+	 * Logger.
+	 */
 	private static Logger log = LoggerFactory.getLogger(JSkatOptions.class);
 
-	static private JSkatOptions optionsInstance = null;
+	/**
+	 * Instance for options.
+	 */
+	private static JSkatOptions optionsInstance = null;
 
 	/**
-	 * Returns the instance of the singleton JSkatOptions<br />
-	 * This method must be called at the very beginning
+	 * Returns the instance of the singleton JSkatOptions.<br />
+	 * This method must be called at the very beginning.
 	 * 
+	 * @param pathResolver
+	 *            Resolver for save path
 	 * @return Options
 	 */
-	static public JSkatOptions instance(final SavePathResolver pathResolver) {
+	public static JSkatOptions instance(final SavePathResolver pathResolver) {
 
 		if (optionsInstance == null) {
 			optionsInstance = new JSkatOptions(pathResolver);
@@ -438,6 +446,14 @@ public final class JSkatOptions {
 		return isBockEventMultipleOfHundredScore(true);
 	}
 
+	/**
+	 * Checks whether a player score of a multiple of hundred is a bock event.
+	 * 
+	 * @param checkParentOption
+	 *            <code>true</code>, if the parent option should be checked
+	 * @return <code>true</code>, if the player score of a multiple of hundred
+	 *         is a bock event
+	 */
 	public Boolean isBockEventMultipleOfHundredScore(
 			final boolean checkParentOption) {
 		return getBooleanWithParentCheck(
