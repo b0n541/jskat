@@ -38,6 +38,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
 	private Idler idler = new Idler();
 
+	private JSkatActionEvent lastEvent;
 	private Boolean holdBid;
 	private Integer bidValue;
 	private GameAnnouncementStep gameAnnouncementStep;
@@ -49,8 +50,37 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 	private GameAnnouncement gameAnnouncement;
 	private Card nextCard;
 
+	/**
+	 * Used for situations where a human player can make more than one move.
+	 */
 	private enum GameAnnouncementStep {
-		BEFORE_ANNOUNCEMENT, LOOKED_INTO_SKAT, DISCARDED_SKAT, PLAYS_HAND, DONE_GAME_ANNOUNCEMENT
+		/**
+		 * Before any anouncement
+		 */
+		BEFORE_ANNOUNCEMENT,
+		/**
+		 * Player looked into skat
+		 */
+		LOOKED_INTO_SKAT,
+		/**
+		 * Player discarded skat
+		 */
+		DISCARDED_SKAT,
+		/**
+		 * Player announced hand game
+		 */
+		PLAYS_HAND,
+		/**
+		 * Game announcement is done
+		 */
+		DONE_GAME_ANNOUNCEMENT;
+	}
+
+	/**
+	 * Constructor
+	 */
+	public SwingHumanPlayer() {
+		resetPlayer();
 	}
 
 	/**
@@ -173,6 +203,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
 	@Override
 	public void actionPerformed(final JSkatActionEvent e) {
+		lastEvent = e;
 		Object source = e.getSource();
 		String command = e.getActionCommand();
 		boolean interrupt = true;
@@ -331,6 +362,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 	}
 
 	private void resetPlayer() {
+		lastEvent = null;
 		bidValue = 0;
 		holdBid = false;
 		playGrandHand = false;
