@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.ActionMap;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -266,9 +267,18 @@ public class SkatTablePanel extends AbstractTabPanel {
 	}
 
 	protected JPanel getRightPanelForTrickPanel() {
-		final JPanel blankPanel = new JPanel();
-		blankPanel.setOpaque(false);
-		return blankPanel;
+		final JPanel additionalActionsPanel = new JPanel(
+				LayoutFactory.getMigLayout());
+		additionalActionsPanel.setOpaque(false);
+
+		final JButton resignButton = new JButton(getActionMap().get(
+				JSkatAction.CALL_CONTRA));
+		additionalActionsPanel.add(resignButton, "growx, wrap"); //$NON-NLS-1$
+		final JButton showCardsButton = new JButton(getActionMap().get(
+				JSkatAction.CALL_RE));
+		additionalActionsPanel.add(showCardsButton, "growx"); //$NON-NLS-1$
+
+		return additionalActionsPanel;
 	}
 
 	/**
