@@ -51,7 +51,6 @@ public class SkatGameData {
 	 * All possible game states
 	 */
 	public enum GameState {
-
 		/**
 		 * New game started
 		 */
@@ -131,11 +130,6 @@ public class SkatGameData {
 	 * Dealer of the cards
 	 */
 	private Player dealer;
-
-	/**
-	 * Active player to make the next move
-	 */
-	private Player activePlayer;
 
 	/**
 	 * Points the player made during the game
@@ -1111,25 +1105,6 @@ public class SkatGameData {
 
 		// get trick winner
 		return lastTrick.getTrickWinner();
-	}
-
-	/**
-	 * Gets the active player
-	 * 
-	 * @return Active player
-	 */
-	public Player getActivePlayer() {
-		return activePlayer;
-	}
-
-	/**
-	 * Sets the active player
-	 * 
-	 * @param activePlayer
-	 *            Active player
-	 */
-	public void setActivePlayer(final Player activePlayer) {
-		this.activePlayer = activePlayer;
 	}
 
 	/**

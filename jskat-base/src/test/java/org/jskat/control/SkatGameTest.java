@@ -251,7 +251,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 	public void testRamsch_Forced() {
 
 		SkatGame game = new SkatGame(
-				"Table 1", GameVariant.RAMSCH, new RamschTestPlayer(), //$NON-NLS-1$
+				"Table 1", GameVariant.FORCED_RAMSCH, new RamschTestPlayer(), //$NON-NLS-1$
 				new RamschTestPlayer(), new RamschTestPlayer());
 		game.setView(new UnitTestView());
 
@@ -281,7 +281,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 		grandHandPlayer.setPlayGrandHand(true);
 
 		SkatGame game = new SkatGame(
-				"Table 1", GameVariant.RAMSCH, grandHandPlayer, //$NON-NLS-1$
+				"Table 1", GameVariant.FORCED_RAMSCH, grandHandPlayer, //$NON-NLS-1$
 				new AIPlayerRND(), new AIPlayerRND());
 		game.setView(new UnitTestView());
 
@@ -311,7 +311,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 		RamschTestPlayer grandHandPlayer = new RamschTestPlayer();
 		grandHandPlayer.setPlayGrandHand(true);
 
-		SkatGame game = new SkatGame("Table 1", GameVariant.RAMSCH, //$NON-NLS-1$
+		SkatGame game = new SkatGame("Table 1", GameVariant.FORCED_RAMSCH, //$NON-NLS-1$
 				new RamschTestPlayer(), grandHandPlayer, new RamschTestPlayer());
 		game.setView(new UnitTestView());
 
@@ -341,7 +341,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 		RamschTestPlayer grandHandPlayer = new RamschTestPlayer();
 		grandHandPlayer.setPlayGrandHand(true);
 
-		SkatGame game = new SkatGame("Table 1", GameVariant.RAMSCH, //$NON-NLS-1$
+		SkatGame game = new SkatGame("Table 1", GameVariant.FORCED_RAMSCH, //$NON-NLS-1$
 				new RamschTestPlayer(), new RamschTestPlayer(), grandHandPlayer);
 		game.setView(new UnitTestView());
 
