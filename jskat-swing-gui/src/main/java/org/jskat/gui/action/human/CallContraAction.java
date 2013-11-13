@@ -38,8 +38,8 @@ public class CallContraAction extends AbstractHumanJSkatAction {
 	 */
 	public CallContraAction() {
 
-		putValue(Action.NAME, "Call Contra");
-		putValue(Action.SHORT_DESCRIPTION, "Call Contra");
+		putValue(Action.NAME, strings.getString("call_contra"));
+		putValue(Action.SHORT_DESCRIPTION, strings.getString("call_contra"));
 
 		setActionCommand(JSkatAction.CALL_CONTRA);
 		setIcon(Icon.PLAY);

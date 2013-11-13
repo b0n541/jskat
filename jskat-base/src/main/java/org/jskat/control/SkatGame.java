@@ -236,6 +236,7 @@ public class SkatGame extends JSkatThread {
 				view.setRe(tableName, data.getActivePlayer());
 			}
 		}
+		setActivePlayer(opponent);
 	}
 
 	private boolean grandHand() {
