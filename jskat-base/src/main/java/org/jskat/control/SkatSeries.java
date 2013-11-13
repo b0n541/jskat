@@ -167,7 +167,8 @@ public class SkatSeries extends JSkatThread {
 
 				if (onlyPlayRamsch) {
 					currSkatGame = new SkatGame(data.getTableName(),
-							GameVariant.RAMSCH, player.get(Player.FOREHAND),
+							GameVariant.FORCED_RAMSCH,
+							player.get(Player.FOREHAND),
 							player.get(Player.MIDDLEHAND),
 							player.get(Player.REARHAND));
 				} else {

@@ -21,12 +21,19 @@
 package org.jskat.util;
 
 /**
- * @author Markus J. Luzius <br>
- * created: 04.10.2011 10:37:41
- *
+ * Different game variants for skat games
  */
 public enum GameVariant {
+	/**
+	 * Standard game with bidding and announcement by the declarer
+	 */
 	STANDARD,
+	/**
+	 * Bock game
+	 */
 	BOCK,
-	RAMSCH;
+	/**
+	 * Forced Ramsch game
+	 */
+	FORCED_RAMSCH;
 }
