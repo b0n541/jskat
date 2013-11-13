@@ -228,6 +228,7 @@ public class SkatGame extends JSkatThread {
 	}
 
 	private void contraRe() {
+		Player opponent = activePlayer;
 		if (getActivePlayerInstance().callContra()) {
 			data.setContra(true);
 			view.setContra(tableName, activePlayer);
@@ -237,6 +238,7 @@ public class SkatGame extends JSkatThread {
 				view.setRe(tableName, activePlayer);
 			}
 		}
+		setActivePlayer(opponent);
 	}
 
 	private boolean grandHand() {
@@ -266,8 +268,8 @@ public class SkatGame extends JSkatThread {
 		}
 	}
 
-	private void setActivePlayer(final Player player) {
-		activePlayer = player;
+	private void setActivePlayer(final Player newPlayer) {
+		activePlayer = newPlayer;
 		view.setActivePlayer(tableName, activePlayer);
 	}
 
@@ -609,15 +611,13 @@ public class SkatGame extends JSkatThread {
 			log.debug("=============== Play trick " + (trickNo + 1) + " ==============="); //$NON-NLS-1$ //$NON-NLS-2$
 			doSleep(maxSleep);
 
+			Player trickForehand = getTrickForeHand(trickNo);
+			setActivePlayer(trickForehand);
+
 			view.setTrickNumber(tableName, trickNo + 1);
+			view.setTrickForeHand(tableName, activePlayer);
 
-			Player newTrickForeHand = null;
-			newTrickForeHand = getTrickForeHand(trickNo);
-
-			view.setTrickForeHand(tableName, newTrickForeHand);
-			setActivePlayer(newTrickForeHand);
-
-			final Trick trick = new Trick(trickNo, newTrickForeHand);
+			final Trick trick = new Trick(trickNo, activePlayer);
 			data.addTrick(trick);
 			informPlayersAboutNewTrick(trick);
 
@@ -627,7 +627,7 @@ public class SkatGame extends JSkatThread {
 					ContraCallingTime.BEFORE_FIRST_CARD)) {
 				contraRe();
 			}
-			playCard(trick, newTrickForeHand, newTrickForeHand);
+			playCard(trick, trickForehand, activePlayer);
 
 			if (isFinished()) {
 				break;
@@ -636,13 +636,12 @@ public class SkatGame extends JSkatThread {
 			doSleep(maxSleep);
 
 			log.debug("middle hand plays"); //$NON-NLS-1$
-			setActivePlayer(newTrickForeHand.getLeftNeighbor());
+			setActivePlayer(activePlayer.getLeftNeighbor());
 			if (isContraEnabledForPlayer(activePlayer,
 					ContraCallingTime.BEFORE_FIRST_CARD)) {
 				contraRe();
 			}
-			playCard(trick, newTrickForeHand,
-					newTrickForeHand.getLeftNeighbor());
+			playCard(trick, trickForehand, activePlayer);
 
 			if (isFinished()) {
 				break;
@@ -651,13 +650,12 @@ public class SkatGame extends JSkatThread {
 			doSleep(maxSleep);
 
 			log.debug("rear hand plays"); //$NON-NLS-1$
-			setActivePlayer(newTrickForeHand.getRightNeighbor());
+			setActivePlayer(activePlayer.getLeftNeighbor());
 			if (isContraEnabledForPlayer(activePlayer,
 					ContraCallingTime.BEFORE_FIRST_CARD)) {
 				contraRe();
 			}
-			playCard(trick, newTrickForeHand,
-					newTrickForeHand.getRightNeighbor());
+			playCard(trick, trickForehand, activePlayer);
 
 			if (isFinished()) {
 				break;
@@ -795,14 +793,14 @@ public class SkatGame extends JSkatThread {
 		}
 	}
 
-	private Player getTrickForeHand(int trickNo) {
+	private Player getTrickForeHand(int currentTrickNo) {
 		Player trickForeHand = null;
-		if (trickNo == 0) {
+		if (currentTrickNo == 0) {
 			// first trick
 			trickForeHand = Player.FOREHAND;
 		} else {
-			// get trick winner as fore hand of next trick
-			trickForeHand = data.getTrickWinner(trickNo - 1);
+			// get last trick winner as fore hand of next trick
+			trickForeHand = data.getTrickWinner(currentTrickNo - 1);
 		}
 		return trickForeHand;
 	}
