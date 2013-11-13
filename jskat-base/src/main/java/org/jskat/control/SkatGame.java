@@ -733,7 +733,7 @@ public class SkatGame extends JSkatThread {
 
 	private Boolean isContraPlayEnabled(ContraCallingTime gameTime) {
 		JSkatOptions options = JSkatOptions.instance();
-		if (options.isPlayContra(true)
+		if (GameVariant.STANDARD.equals(variant) && options.isPlayContra(true)
 				&& options.getContraCallingTime() == gameTime
 				&& isGameWithDeclarer()) {
 			if (ContraCallingTime.AFTER_GAME_ANNOUNCEMENT == gameTime) {
