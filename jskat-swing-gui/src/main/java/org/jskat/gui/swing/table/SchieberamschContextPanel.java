@@ -46,7 +46,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Context panel for discarding
+ * Context panel for Schieberamsch
  */
 class SchieberamschContextPanel extends JPanel {
 
@@ -56,14 +56,17 @@ class SchieberamschContextPanel extends JPanel {
 	private static final String GRAND_HAND = "GRAND_HAND"; //$NON-NLS-1$
 	private static final String DISCARD = "DISCARD"; //$NON-NLS-1$
 	private static final long serialVersionUID = 1L;
-	private static Logger log = LoggerFactory.getLogger(SchieberamschContextPanel.class);
+	private static Logger log = LoggerFactory
+			.getLogger(SchieberamschContextPanel.class);
 
 	private final DiscardPanel discardPanel;
 	JPanel centerPanel;
 
-	SchieberamschContextPanel(final ActionMap actions, final JSkatUserPanel newUserPanel, final int maxCards) {
+	SchieberamschContextPanel(final ActionMap actions,
+			final JSkatUserPanel newUserPanel, final int maxCards) {
 
-		setLayout(LayoutFactory.getMigLayout("fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+		setLayout(LayoutFactory.getMigLayout(
+				"fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 
 		JPanel blankPanel = new JPanel();
 		blankPanel.setOpaque(false);
@@ -90,15 +93,19 @@ class SchieberamschContextPanel extends JPanel {
 		JPanel result = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
 		JPanel question = new JPanel();
-		JLabel questionIconLabel = new JLabel(new ImageIcon(JSkatGraphicRepository.instance().getUserBidBubble()));
+		JLabel questionIconLabel = new JLabel(new ImageIcon(
+				JSkatGraphicRepository.instance().getUserBidBubble()));
 		question.add(questionIconLabel);
-		JLabel questionLabel = new JLabel(strings.getString("want_play_grand_hand")); //$NON-NLS-1$
+		JLabel questionLabel = new JLabel(
+				strings.getString("want_play_grand_hand")); //$NON-NLS-1$
 		questionLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 		question.add(questionLabel);
 		result.add(question, "center, growx, span 2, wrap"); //$NON-NLS-1$
 
-		final JButton grandHandButton = new JButton(actions.get(JSkatAction.PLAY_GRAND_HAND));
-		grandHandButton.setIcon(new ImageIcon(bitmaps.getIconImage(Icon.OK, IconSize.BIG)));
+		final JButton grandHandButton = new JButton(
+				actions.get(JSkatAction.PLAY_GRAND_HAND));
+		grandHandButton.setIcon(new ImageIcon(bitmaps.getIconImage(Icon.OK,
+				IconSize.BIG)));
 		grandHandButton.setText(strings.getString("yes")); //$NON-NLS-1$
 		grandHandButton.addActionListener(new ActionListener() {
 			@Override
@@ -122,8 +129,10 @@ class SchieberamschContextPanel extends JPanel {
 			}
 		});
 
-		final JButton schieberamschButton = new JButton(actions.get(JSkatAction.PLAY_SCHIEBERAMSCH));
-		schieberamschButton.setIcon(new ImageIcon(bitmaps.getIconImage(Icon.STOP, IconSize.BIG)));
+		final JButton schieberamschButton = new JButton(
+				actions.get(JSkatAction.PLAY_SCHIEBERAMSCH));
+		schieberamschButton.setIcon(new ImageIcon(bitmaps.getIconImage(
+				Icon.STOP, IconSize.BIG)));
 		schieberamschButton.setText(strings.getString("no")); //$NON-NLS-1$
 		schieberamschButton.addActionListener(new ActionListener() {
 			@Override
