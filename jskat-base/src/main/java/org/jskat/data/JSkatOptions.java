@@ -1021,6 +1021,7 @@ public final class JSkatOptions {
 			setCheckForNewVersionAtStartUp(Boolean.valueOf(value));
 			break;
 		case CONTRA_AFTER_BID_18:
+			setContraAfterBid18(Boolean.valueOf(value));
 			break;
 		case ISS_ADDRESS:
 			setIssAddress(value);

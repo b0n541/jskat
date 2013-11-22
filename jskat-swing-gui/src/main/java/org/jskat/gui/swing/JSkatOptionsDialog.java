@@ -133,6 +133,7 @@ public class JSkatOptionsDialog extends JDialog {
 					.isSelected());
 			options.setBockEventLostWith60(bockEventLostWith60.isSelected());
 			options.setPlayContra(playContra.isSelected());
+			options.setContraAfterBid18(contraAfterBid18.isSelected());
 			options.setPlayRamsch(playRamsch.isSelected());
 			options.setPlayBock(playBock.isSelected());
 			options.setPlayRevolution(playRevolution.isSelected());
