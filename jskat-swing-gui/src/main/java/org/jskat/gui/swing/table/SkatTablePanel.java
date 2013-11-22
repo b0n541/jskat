@@ -25,12 +25,15 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.ActionMap;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -47,6 +50,9 @@ import org.jskat.data.Trick;
 import org.jskat.gui.JSkatView;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.action.main.StartSkatSeriesAction;
+import org.jskat.gui.img.JSkatGraphicRepository;
+import org.jskat.gui.img.JSkatGraphicRepository.Icon;
+import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
 import org.jskat.gui.swing.AbstractTabPanel;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.Card;
@@ -243,6 +249,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 				userPanel, 4);
 		addContextPanel(ContextPanelType.SCHIEBERAMSCH, schieberamschPanel);
 
+		addContextPanel(ContextPanelType.RE_AFTER_CONTRA,
+				createCallReAfterContraPanel(getActionMap()));
+
 		final JPanel trickHoldingPanel = new JPanel(LayoutFactory.getMigLayout(
 				"fill", "[shrink][grow][shrink]", //$NON-NLS-1$ //$NON-NLS-2$
 				"fill")); //$NON-NLS-1$
@@ -257,6 +266,60 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		gameOverPanel = new GameOverPanel(getActionMap(), getGameOverActions());
 		addContextPanel(ContextPanelType.GAME_OVER, gameOverPanel);
+	}
+
+	// FIXME: same code can be found in class SchieberamschContextPanel
+	private JPanel createCallReAfterContraPanel(final ActionMap actions) {
+		JPanel result = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+
+		JPanel question = new JPanel();
+		JLabel questionIconLabel = new JLabel(new ImageIcon(
+				JSkatGraphicRepository.instance().getUserBidBubble()));
+		question.add(questionIconLabel);
+		JLabel questionLabel = new JLabel(
+				strings.getString("want_call_re_after_contra")); //$NON-NLS-1$
+		questionLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
+		question.add(questionLabel);
+		result.add(question, "center, growx, span 2, wrap"); //$NON-NLS-1$
+
+		final JButton callReButton = new JButton(
+				actions.get(JSkatAction.CALL_RE));
+		callReButton.setIcon(new ImageIcon(bitmaps.getIconImage(Icon.OK,
+				IconSize.BIG)));
+		callReButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				e.setSource(Boolean.TRUE);
+				callReButton.dispatchEvent(e);
+			}
+		});
+
+		final JButton noReAfterContraButton = new JButton(
+				actions.get(JSkatAction.CALL_RE));
+		noReAfterContraButton.setText(strings.getString("no"));
+		noReAfterContraButton.setIcon(new ImageIcon(bitmaps.getIconImage(
+				Icon.STOP, IconSize.BIG)));
+		noReAfterContraButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(final ActionEvent e) {
+				e.setSource(Boolean.FALSE);
+				noReAfterContraButton.dispatchEvent(e);
+			}
+		});
+
+		JPanel grandHandPanel = new JPanel();
+		grandHandPanel.add(callReButton);
+		grandHandPanel.setOpaque(false);
+		result.add(grandHandPanel, "width 50%"); //$NON-NLS-1$
+
+		JPanel schieberamschPanel = new JPanel();
+		schieberamschPanel.add(noReAfterContraButton);
+		schieberamschPanel.setOpaque(false);
+		result.add(schieberamschPanel, "width 50%"); //$NON-NLS-1$
+
+		result.setOpaque(false);
+
+		return result;
 	}
 
 	private AbstractHandPanel getPlayerPanel(final Player player) {
@@ -274,9 +337,6 @@ public class SkatTablePanel extends AbstractTabPanel {
 		final JButton resignButton = new JButton(getActionMap().get(
 				JSkatAction.CALL_CONTRA));
 		additionalActionsPanel.add(resignButton, "growx, wrap"); //$NON-NLS-1$
-		final JButton showCardsButton = new JButton(getActionMap().get(
-				JSkatAction.CALL_RE));
-		additionalActionsPanel.add(showCardsButton, "growx"); //$NON-NLS-1$
 
 		return additionalActionsPanel;
 	}
@@ -510,6 +570,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 			if (userPanel.getPosition().equals(declarer)) {
 				setContextPanel(ContextPanelType.DECLARING);
 			}
+			break;
+		case CONTRA_RE:
+			setContextPanel(ContextPanelType.RE_AFTER_CONTRA);
 			break;
 		case TRICK_PLAYING:
 			setContextPanel(ContextPanelType.TRICK_PLAYING);

@@ -625,8 +625,11 @@ public class SkatGame extends JSkatThread {
 			log.debug("fore hand plays"); //$NON-NLS-1$
 			if (isContraEnabledForPlayer(activePlayer,
 					ContraCallingTime.BEFORE_FIRST_CARD)) {
+				setGameState(GameState.CONTRA_RE);
 				contraRe();
 			}
+			setGameState(GameState.TRICK_PLAYING);
+
 			playCard(trick, trickForehand, activePlayer);
 
 			if (isFinished()) {
@@ -639,8 +642,11 @@ public class SkatGame extends JSkatThread {
 			setActivePlayer(activePlayer.getLeftNeighbor());
 			if (isContraEnabledForPlayer(activePlayer,
 					ContraCallingTime.BEFORE_FIRST_CARD)) {
+				setGameState(GameState.CONTRA_RE);
 				contraRe();
 			}
+			setGameState(GameState.TRICK_PLAYING);
+
 			playCard(trick, trickForehand, activePlayer);
 
 			if (isFinished()) {
@@ -653,8 +659,11 @@ public class SkatGame extends JSkatThread {
 			setActivePlayer(activePlayer.getLeftNeighbor());
 			if (isContraEnabledForPlayer(activePlayer,
 					ContraCallingTime.BEFORE_FIRST_CARD)) {
+				setGameState(GameState.CONTRA_RE);
 				contraRe();
 			}
+			setGameState(GameState.TRICK_PLAYING);
+
 			playCard(trick, trickForehand, activePlayer);
 
 			if (isFinished()) {

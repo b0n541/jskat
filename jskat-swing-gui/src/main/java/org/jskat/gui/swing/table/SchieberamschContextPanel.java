@@ -89,6 +89,8 @@ class SchieberamschContextPanel extends JPanel {
 		resetPanel();
 	}
 
+	// FIXME: same code can be found in class SkatTabelPanel for
+	// Contra-Re-Context-Panel
 	public JPanel getGrandHandSchiebeRamschPanel(final ActionMap actions) {
 		JPanel result = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 

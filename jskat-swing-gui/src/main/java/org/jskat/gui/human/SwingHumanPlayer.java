@@ -38,7 +38,6 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
 	private Idler idler = new Idler();
 
-	private JSkatActionEvent lastEvent;
 	private Boolean holdBid;
 	private Integer bidValue;
 	private GameAnnouncementStep gameAnnouncementStep;
@@ -196,14 +195,21 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
 		log.debug("Waiting for human playing next card..."); //$NON-NLS-1$
 
-		waitForUserInput();
+		Card cardToPlay = null;
 
-		return this.nextCard;
+		if (nextCard == null) {
+			waitForUserInput();
+		}
+
+		cardToPlay = nextCard;
+		nextCard = null;
+
+		return cardToPlay;
 	}
 
 	@Override
 	public void actionPerformed(final JSkatActionEvent e) {
-		lastEvent = e;
+
 		Object source = e.getSource();
 		String command = e.getActionCommand();
 		boolean interrupt = true;
@@ -223,7 +229,9 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 		} else if (JSkatAction.CALL_CONTRA.toString().equals(command)) {
 			callContra = true;
 		} else if (JSkatAction.CALL_RE.toString().equals(command)) {
-			callRe = true;
+			if (source instanceof Boolean) {
+				callRe = (Boolean) source;
+			}
 		} else if (JSkatAction.PICK_UP_SKAT.toString().equals(command)) {
 			// player wants to pick up the skat
 			this.pickUpSkat = true;
@@ -362,14 +370,13 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 	}
 
 	private void resetPlayer() {
-		lastEvent = null;
 		bidValue = 0;
-		holdBid = false;
-		playGrandHand = false;
-		callContra = false;
-		callRe = false;
+		holdBid = null;
+		playGrandHand = null;
+		callContra = null;
+		callRe = null;
 		gameAnnouncementStep = GameAnnouncementStep.BEFORE_ANNOUNCEMENT;
-		pickUpSkat = false;
+		pickUpSkat = null;
 		discardSkat = null;
 		gameAnnouncement = null;
 		nextCard = null;
@@ -380,9 +387,11 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
 		log.debug("Waiting for human calling contra..."); //$NON-NLS-1$
 
-		waitForUserInput();
+		if (callContra == null) {
+			waitForUserInput();
+		}
 
-		return callContra;
+		return callContra == null ? false : callContra;
 	}
 
 	@Override
@@ -390,8 +399,10 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
 		log.debug("Waiting for human calling re..."); //$NON-NLS-1$
 
-		waitForUserInput();
+		if (callRe == null) {
+			waitForUserInput();
+		}
 
-		return callRe;
+		return callRe == null ? false : callRe;
 	}
 }
