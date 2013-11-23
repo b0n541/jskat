@@ -19,6 +19,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.jskat.ai.test;
+
 import org.jskat.ai.rnd.AIPlayerRND;
 
 /**
@@ -26,19 +27,13 @@ import org.jskat.ai.rnd.AIPlayerRND;
  */
 public class NoBiddingTestPlayer extends AIPlayerRND {
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public int bidMore(@SuppressWarnings("unused") int nextBidValue) {
+	public Integer bidMore(int nextBidValue) {
 		return -1;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public boolean holdBid(@SuppressWarnings("unused") int currBidValue) {
+	public Boolean holdBid(int currBidValue) {
 		return false;
 	}
 }

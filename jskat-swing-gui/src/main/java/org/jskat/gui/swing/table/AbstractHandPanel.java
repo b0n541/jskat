@@ -98,6 +98,10 @@ abstract class AbstractHandPanel extends JPanel {
 
 	boolean declarer = false;
 
+	private boolean playerContra;
+
+	private boolean playerRe;
+
 	/**
 	 * Constructor
 	 * 
@@ -108,7 +112,8 @@ abstract class AbstractHandPanel extends JPanel {
 	 * @param showIssWidgets
 	 *            TRUE, if ISS widgets should be shown
 	 */
-	AbstractHandPanel(final ActionMap actions, final int maxCards, final boolean showIssWidgets) {
+	AbstractHandPanel(final ActionMap actions, final int maxCards,
+			final boolean showIssWidgets) {
 
 		setActionMap(actions);
 		bitmaps = JSkatGraphicRepository.instance();
@@ -134,7 +139,8 @@ abstract class AbstractHandPanel extends JPanel {
 
 		setBorder(getPanelBorder());
 
-		header = new JPanel(LayoutFactory.getMigLayout("fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		header = new JPanel(LayoutFactory.getMigLayout(
+				"fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		header.add(headerLabel);
 		// blank panel
 		header.add(new JPanel());
@@ -215,18 +221,25 @@ abstract class AbstractHandPanel extends JPanel {
 			headerText.append(" " + strings.getString("bid") + ": "); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 			headerText.append(bidValue);
 
-			if (playerPassed || playerGeschoben) {
+			if (playerPassed || playerGeschoben || playerContra || playerRe) {
 
 				headerText.append(" ("); //$NON-NLS-1$
 
-				String passedOrGeschoben = "";
+				String passedGeschobenContraRe = "";
 				if (playerPassed) {
-					passedOrGeschoben = strings.getString("passed"); //$NON-NLS-1$
+					passedGeschobenContraRe = strings.getString("passed"); //$NON-NLS-1$
 				}
 				if (playerGeschoben) {
-					passedOrGeschoben = strings.getString("geschoben"); //$NON-NLS-1$
+					passedGeschobenContraRe = strings.getString("geschoben"); //$NON-NLS-1$
 				}
-				headerText.append(passedOrGeschoben);
+				if (playerContra) {
+					passedGeschobenContraRe += " "
+							+ strings.getString("contra");
+				}
+				if (playerRe) {
+					passedGeschobenContraRe += strings.getString("re");
+				}
+				headerText.append(passedGeschobenContraRe);
 
 				headerText.append(")"); //$NON-NLS-1$
 			}
@@ -289,6 +302,8 @@ abstract class AbstractHandPanel extends JPanel {
 		bidValue = 0;
 		playerPassed = false;
 		playerGeschoben = false;
+		playerContra = false;
+		playerRe = false;
 		declarer = false;
 		iconPanel.reset();
 		refreshHeaderText();
@@ -387,6 +402,16 @@ abstract class AbstractHandPanel extends JPanel {
 
 	public void setGeschoben() {
 		playerGeschoben = true;
+		refreshHeaderText();
+	}
+
+	public void setContra() {
+		playerContra = true;
+		refreshHeaderText();
+	}
+
+	public void setRe() {
+		playerRe = true;
 		refreshHeaderText();
 	}
 }

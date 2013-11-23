@@ -51,7 +51,6 @@ public class SkatGameData {
 	 * All possible game states
 	 */
 	public enum GameState {
-
 		/**
 		 * New game started
 		 */
@@ -84,6 +83,14 @@ public class SkatGameData {
 		 * Declaring phase
 		 */
 		DECLARING,
+		/**
+		 * Contra calling
+		 */
+		CONTRA,
+		/**
+		 * Re calling
+		 */
+		RE,
 		/**
 		 * Trick playing phase
 		 */
@@ -127,11 +134,6 @@ public class SkatGameData {
 	 * Dealer of the cards
 	 */
 	private Player dealer;
-
-	/**
-	 * Active player to make the next move
-	 */
-	private Player activePlayer;
 
 	/**
 	 * Points the player made during the game
@@ -1073,6 +1075,8 @@ public class SkatGameData {
 		factory.setOuvert(isOuvert());
 		factory.setSchneider(isSchneider());
 		factory.setSchwarz(isSchwarz());
+		factory.setContra(isContra());
+		factory.setRe(isRe());
 
 		factory.setForeHand(getPlayerName(Player.FOREHAND));
 		factory.setMiddleHand(getPlayerName(Player.MIDDLEHAND));
@@ -1105,25 +1109,6 @@ public class SkatGameData {
 
 		// get trick winner
 		return lastTrick.getTrickWinner();
-	}
-
-	/**
-	 * Gets the active player
-	 * 
-	 * @return Active player
-	 */
-	public Player getActivePlayer() {
-		return activePlayer;
-	}
-
-	/**
-	 * Sets the active player
-	 * 
-	 * @param activePlayer
-	 *            Active player
-	 */
-	public void setActivePlayer(final Player activePlayer) {
-		this.activePlayer = activePlayer;
 	}
 
 	/**
@@ -1293,5 +1278,43 @@ public class SkatGameData {
 	 */
 	public void addPlayerCards(Player player, CardList cards) {
 		playerHands.get(player).addAll(cards);
+	}
+
+	/**
+	 * Sets Contra information.
+	 * 
+	 * @param isContra
+	 *            <code>true</code>, if Contra was called.
+	 */
+	public void setContra(boolean isContra) {
+		announcement.setContra(isContra);
+	}
+
+	/**
+	 * Checks, whether Contra was called.
+	 * 
+	 * @return <code>true</code>, if Contra was called.
+	 */
+	public Boolean isContra() {
+		return announcement.contra;
+	}
+
+	/**
+	 * Sets Re information.
+	 * 
+	 * @param isRe
+	 *            <code>true</code>, if Re was called.
+	 */
+	public void setRe(boolean isRe) {
+		announcement.setRe(isRe);
+	}
+
+	/**
+	 * Checks, whether Re was called.
+	 * 
+	 * @return <code>true</code>, if Re was called.
+	 */
+	public Boolean isRe() {
+		return announcement.re;
 	}
 }

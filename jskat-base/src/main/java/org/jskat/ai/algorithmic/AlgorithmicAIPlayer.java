@@ -21,9 +21,9 @@
 package org.jskat.ai.algorithmic;
 
 import org.apache.log4j.Logger;
+import org.jskat.ai.AbstractAIPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
-import org.jskat.player.AbstractJSkatPlayer;
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -34,8 +34,9 @@ import org.jskat.util.GameType;
  *         created: 13.05.2011 17:33:05
  * 
  */
-public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
-	private static final Logger log = Logger.getLogger(AlgorithmicAIPlayer.class);
+public class AlgorithmicAIPlayer extends AbstractAIPlayer {
+	private static final Logger log = Logger
+			.getLogger(AlgorithmicAIPlayer.class);
 
 	private IAlgorithmicAIPlayer aiPlayer = null;
 	BidEvaluator bidEvaluator = null;
@@ -67,7 +68,7 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	 * @see org.jskat.ai.IJSkatPlayer#bidMore(int)
 	 */
 	@Override
-	public int bidMore(final int nextBidValue) {
+	public Integer bidMore(final int nextBidValue) {
 		if (bidEvaluator == null) {
 			bidEvaluator = new BidEvaluator(knowledge.getOwnCards());
 		}
@@ -83,7 +84,7 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	 * @see org.jskat.ai.IJSkatPlayer#holdBid(int)
 	 */
 	@Override
-	public boolean holdBid(final int currBidValue) {
+	public Boolean holdBid(final int currBidValue) {
 		if (bidEvaluator == null) {
 			bidEvaluator = new BidEvaluator(knowledge.getOwnCards());
 		}
@@ -96,7 +97,7 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 	 * @see org.jskat.ai.IJSkatPlayer#pickUpSkat()
 	 */
 	@Override
-	public boolean pickUpSkat() {
+	public Boolean pickUpSkat() {
 		if (bidEvaluator == null) {
 			bidEvaluator = new BidEvaluator(knowledge.getOwnCards());
 		}
@@ -131,11 +132,13 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 				log.debug("aiPlayer is still null - setting to ramsch player");
 				aiPlayer = new AlgorithmicRamschPlayer(this);
 			} else {
-				throw new IllegalStateException("AIPlayer has not been correctly set");
+				throw new IllegalStateException(
+						"AIPlayer has not been correctly set");
 			}
 		}
-		log.debug("-+-+-+-+-+-+-+-+-+- Trick #" + knowledge.getNoOfTricks() + " - " + playerName
-				+ " is playing a card of " + knowledge.getOwnCards() + " (" + aiPlayer.getClass()
+		log.debug("-+-+-+-+-+-+-+-+-+- Trick #" + knowledge.getNoOfTricks()
+				+ " - " + playerName + " is playing a card of "
+				+ knowledge.getOwnCards() + " (" + aiPlayer.getClass()
 				+ ") -+-+-+-+-+-+-+-+-+-");
 		Card c = aiPlayer.playCard();
 		if (c != null) {
@@ -146,7 +149,8 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 			return knowledge.getOwnCards().get(0);
 		}
 		for (Card c2 : knowledge.getOwnCards()) {
-			if (c2.isAllowed(knowledge.getGameType(), knowledge.getTrickCards().get(0), knowledge.getOwnCards())) {
+			if (c2.isAllowed(knowledge.getGameType(), knowledge.getTrickCards()
+					.get(0), knowledge.getOwnCards())) {
 				return c2;
 			}
 		}
@@ -154,31 +158,20 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 		return knowledge.getOwnCards().get(0);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.jskat.ai.IJSkatPlayer#isAIPlayer()
-	 */
-	@Override
-	public final boolean isAIPlayer() {
-		return true;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.jskat.ai.IJSkatPlayer#discardSkat()
-	 */
 	@Override
 	public CardList getCardsToDiscard() {
 		if (aiPlayer == null || !(aiPlayer instanceof AlgorithmicSinglePlayer)) {
-			if (knowledge.getGameType() == null || knowledge.getGameType() == GameType.RAMSCH) {
-				log.debug("GameType = " + knowledge.getGameType()
-						+ (knowledge.getGameType() == null ? " - assuming Ramsch" : ""));
+			if (knowledge.getGameType() == null
+					|| knowledge.getGameType() == GameType.RAMSCH) {
+				log.debug("GameType = "
+						+ knowledge.getGameType()
+						+ (knowledge.getGameType() == null ? " - assuming Ramsch"
+								: ""));
 				aiPlayer = new AlgorithmicRamschPlayer(this);
 				return aiPlayer.discardSkat(null);
 			}
-			log.warn("aiPlayer for " + knowledge.getGameType() + " game is not a single player instance: " + aiPlayer);
+			log.warn("aiPlayer for " + knowledge.getGameType()
+					+ " game is not a single player instance: " + aiPlayer);
 			aiPlayer = new AlgorithmicSinglePlayer(this);
 		}
 		return aiPlayer.discardSkat(bidEvaluator);
@@ -201,7 +194,8 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 			}
 			log.debug("aiPlayer set to " + aiPlayer);
 		} else {
-			if (aiPlayer instanceof AlgorithmicRamschPlayer && knowledge.getGameType() != GameType.RAMSCH) {
+			if (aiPlayer instanceof AlgorithmicRamschPlayer
+					&& knowledge.getGameType() != GameType.RAMSCH) {
 				log.debug("Game is grand hand - switching from RamschPlayer to OpponentPlayer");
 				aiPlayer = new AlgorithmicOpponentPlayer(this);
 			}
@@ -213,4 +207,21 @@ public class AlgorithmicAIPlayer extends AbstractJSkatPlayer {
 		return knowledge;
 	}
 
+	@Override
+	public Boolean callContra() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Boolean callRe() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Boolean playGrandHand() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

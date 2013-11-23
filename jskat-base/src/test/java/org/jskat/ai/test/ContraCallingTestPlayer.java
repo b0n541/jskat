@@ -20,28 +20,19 @@
  */
 package org.jskat.ai.test;
 
+import org.jskat.ai.rnd.AIPlayerRND;
+
 /**
- * Test player that only plays ramsch games
+ * Test player that calls Contra everytime, but not Re.
  */
-public class RamschTestPlayer extends NoBiddingTestPlayer {
-
-	private boolean playGrandHand = false;
-
-	/**
-	 * Sets whether the player should play grand hand
-	 * 
-	 * @param isPlayGrandHand
-	 *            TRUE if the player should play grand hand
-	 */
-	public void setPlayGrandHand(boolean isPlayGrandHand) {
-		playGrandHand = isPlayGrandHand;
+public class ContraCallingTestPlayer extends AIPlayerRND {
+	@Override
+	public Boolean callContra() {
+		return true;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public Boolean playGrandHand() {
-		return playGrandHand;
+	public Boolean callRe() {
+		return false;
 	}
 }

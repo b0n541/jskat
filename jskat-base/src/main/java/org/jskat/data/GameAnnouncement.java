@@ -57,6 +57,14 @@ public class GameAnnouncement {
 	 * Schwarz announcement
 	 */
 	Boolean schwarz = Boolean.FALSE;
+	/**
+	 * Contra called
+	 */
+	Boolean contra = Boolean.FALSE;
+	/**
+	 * Re called
+	 */
+	Boolean re = Boolean.FALSE;
 
 	/**
 	 * Constructor
@@ -171,28 +179,28 @@ public class GameAnnouncement {
 
 		private boolean validate() {
 
-			boolean result = true;
+			boolean isValid = true;
 
 			if (tmpAnnouncement.gameType == null) {
-				result = false;
+				isValid = false;
 			} else if (tmpAnnouncement.discardedCards.size() != 0
 					&& tmpAnnouncement.discardedCards.size() != 2) {
-				result = false;
+				isValid = false;
 			} else if (tmpAnnouncement.gameType == GameType.RAMSCH
 					|| tmpAnnouncement.gameType == GameType.PASSED_IN) {
 				if (tmpAnnouncement.hand || tmpAnnouncement.ouvert
 						|| tmpAnnouncement.isSchneider()
 						|| tmpAnnouncement.isSchwarz()
 						|| tmpAnnouncement.discardedCards.size() != 0) {
-					result = false;
+					isValid = false;
 				}
 			} else if (tmpAnnouncement.gameType == GameType.NULL) {
 				if (tmpAnnouncement.hand
 						&& tmpAnnouncement.discardedCards.size() != 0) {
-					result = false;
+					isValid = false;
 				} else if (tmpAnnouncement.isSchneider()
 						|| tmpAnnouncement.isSchwarz()) {
-					result = false;
+					isValid = false;
 				}
 			} else if (tmpAnnouncement.gameType == GameType.CLUBS
 					|| tmpAnnouncement.gameType == GameType.SPADES
@@ -202,27 +210,28 @@ public class GameAnnouncement {
 
 				if (tmpAnnouncement.hand
 						&& tmpAnnouncement.discardedCards.size() != 0) {
-					result = false;
+					isValid = false;
 				} else if (!tmpAnnouncement.hand
 						&& tmpAnnouncement.discardedCards.size() != 0
 						&& tmpAnnouncement.discardedCards.size() != 2) {
-					result = false;
+					isValid = false;
 				} else if (tmpAnnouncement.ouvert
 						&& (!tmpAnnouncement.hand || !tmpAnnouncement.schneider || !tmpAnnouncement.schwarz)) {
-					result = false;
+					isValid = false;
 				} else if (tmpAnnouncement.schwarz
 						&& !tmpAnnouncement.schneider) {
-					result = false;
+					isValid = false;
 				} else if ((tmpAnnouncement.schwarz || tmpAnnouncement.schneider)
 						&& !tmpAnnouncement.hand) {
-					result = false;
+					isValid = false;
 				}
 			}
 
-			if (!result) {
-				log.error("Invalid " + tmpAnnouncement); //$NON-NLS-1$
+			if (!isValid) {
+				log.debug("Invalid " + tmpAnnouncement); //$NON-NLS-1$
 			}
-			return result;
+
+			return isValid;
 		}
 	}
 
@@ -389,5 +398,25 @@ public class GameAnnouncement {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Sets contra information.
+	 * 
+	 * @param isContra
+	 *            <code>true</code>, if contra was called
+	 */
+	public void setContra(boolean isContra) {
+		contra = isContra;
+	}
+
+	/**
+	 * Sets re information
+	 * 
+	 * @param isRe
+	 *            <code>true</code>, if re was called
+	 */
+	public void setRe(boolean isRe) {
+		re = isRe;
 	}
 }

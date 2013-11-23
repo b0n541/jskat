@@ -20,8 +20,10 @@
  */
 package org.jskat.control;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
@@ -33,12 +35,14 @@ import java.util.Map;
 
 import org.jskat.AbstractJSkatTest;
 import org.jskat.ai.rnd.AIPlayerRND;
+import org.jskat.ai.test.ContraReCallingTestPlayer;
 import org.jskat.ai.test.ExceptionTestPlayer;
 import org.jskat.ai.test.NoBiddingTestPlayer;
 import org.jskat.ai.test.PlayNonPossessingCardTestPlayer;
 import org.jskat.ai.test.PlayNotAllowedCardTestPlayer;
 import org.jskat.ai.test.RamschTestPlayer;
 import org.jskat.ai.test.UnitTestPlayer;
+import org.jskat.data.DesktopSavePathResolver;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary;
@@ -54,6 +58,7 @@ import org.jskat.util.CardDeck;
 import org.jskat.util.GameType;
 import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -62,14 +67,63 @@ import org.junit.Test;
  */
 public class SkatGameTest extends AbstractJSkatTest {
 
+	@Before
+	public void setUp() {
+		JSkatOptions.instance().resetToDefault(new DesktopSavePathResolver());
+	}
+
+	@Test
+	public void testContra_NoContraActivatedInOptions() {
+		SkatGame game = new SkatGame(
+				"Table 1", GameVariant.STANDARD, new ContraReCallingTestPlayer(), //$NON-NLS-1$
+				new ContraReCallingTestPlayer(),
+				new ContraReCallingTestPlayer());
+		game.setView(new UnitTestView());
+
+		game.start();
+		try {
+			game.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		GameSummary summary = game.getGameSummary();
+		assertThat(summary.isContra(), is(false));
+		assertThat(summary.isRe(), is(false));
+	}
+
+	@Test
+	public void testContra_ContraActivatedInOptions() {
+
+		JSkatOptions options = JSkatOptions.instance();
+		options.setRules(RuleSet.PUB);
+		options.setPlayContra(true);
+
+		SkatGame game = new SkatGame(
+				"Table 1", GameVariant.STANDARD, new ContraReCallingTestPlayer(), //$NON-NLS-1$
+				new ContraReCallingTestPlayer(),
+				new ContraReCallingTestPlayer());
+		game.setView(new UnitTestView());
+
+		game.start();
+		try {
+			game.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		GameSummary summary = game.getGameSummary();
+		assertThat(summary.isContra(), is(true));
+		assertThat(summary.isRe(), is(true));
+	}
+
 	/**
 	 * When no player bids, game is passed in
 	 */
 	@Test
 	public void testPassIn_NoBids() {
-
-		JSkatOptions options = JSkatOptions.instance();
-		options.setRules(RuleSet.ISPA);
 
 		SkatGame game = new SkatGame(
 				"Table 1", GameVariant.STANDARD, new NoBiddingTestPlayer(), //$NON-NLS-1$
@@ -97,9 +151,6 @@ public class SkatGameTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void testPassIn_NoBidsMockito() {
-
-		JSkatOptions options = JSkatOptions.instance();
-		options.setRules(RuleSet.ISPA);
 
 		SkatGame game = new SkatGame(
 				"Table 1", GameVariant.STANDARD, getNoBiddingPlayer(), //$NON-NLS-1$
@@ -137,7 +188,6 @@ public class SkatGameTest extends AbstractJSkatTest {
 	public void testPassIn_NoBids2() {
 
 		JSkatOptions options = JSkatOptions.instance();
-		options.setRules(RuleSet.ISPA);
 		options.setPlayRamsch(true);
 		options.setRamschEventNoBid(true);
 
@@ -201,7 +251,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 	public void testRamsch_Forced() {
 
 		SkatGame game = new SkatGame(
-				"Table 1", GameVariant.RAMSCH, new RamschTestPlayer(), //$NON-NLS-1$
+				"Table 1", GameVariant.FORCED_RAMSCH, new RamschTestPlayer(), //$NON-NLS-1$
 				new RamschTestPlayer(), new RamschTestPlayer());
 		game.setView(new UnitTestView());
 
@@ -231,7 +281,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 		grandHandPlayer.setPlayGrandHand(true);
 
 		SkatGame game = new SkatGame(
-				"Table 1", GameVariant.RAMSCH, grandHandPlayer, //$NON-NLS-1$
+				"Table 1", GameVariant.FORCED_RAMSCH, grandHandPlayer, //$NON-NLS-1$
 				new AIPlayerRND(), new AIPlayerRND());
 		game.setView(new UnitTestView());
 
@@ -261,7 +311,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 		RamschTestPlayer grandHandPlayer = new RamschTestPlayer();
 		grandHandPlayer.setPlayGrandHand(true);
 
-		SkatGame game = new SkatGame("Table 1", GameVariant.RAMSCH, //$NON-NLS-1$
+		SkatGame game = new SkatGame("Table 1", GameVariant.FORCED_RAMSCH, //$NON-NLS-1$
 				new RamschTestPlayer(), grandHandPlayer, new RamschTestPlayer());
 		game.setView(new UnitTestView());
 
@@ -291,7 +341,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 		RamschTestPlayer grandHandPlayer = new RamschTestPlayer();
 		grandHandPlayer.setPlayGrandHand(true);
 
-		SkatGame game = new SkatGame("Table 1", GameVariant.RAMSCH, //$NON-NLS-1$
+		SkatGame game = new SkatGame("Table 1", GameVariant.FORCED_RAMSCH, //$NON-NLS-1$
 				new RamschTestPlayer(), new RamschTestPlayer(), grandHandPlayer);
 		game.setView(new UnitTestView());
 

@@ -108,15 +108,6 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean playGrandHand() {
-
-		return false;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public final void startGame(final Player newDeclarer,
 			final GameAnnouncement game) {
 
@@ -250,8 +241,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final boolean isHumanPlayer() {
-
+	public final Boolean isHumanPlayer() {
 		return !isAIPlayer();
 	}
 
@@ -259,7 +249,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final boolean isDeclarer() {
+	public final Boolean isDeclarer() {
 
 		boolean result = false;
 

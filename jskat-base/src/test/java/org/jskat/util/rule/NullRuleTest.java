@@ -20,8 +20,10 @@
  */
 package org.jskat.util.rule;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import org.jskat.AbstractJSkatTest;
@@ -109,6 +111,29 @@ public class NullRuleTest extends AbstractJSkatTest {
 		assertEquals(23, data.getResult().getGameValue());
 	}
 
+	@Test
+	public void calcGameResultGameWonContra() {
+
+		factory.setHand(false);
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setContra(true);
+		playWinningTricks();
+		data.calcResult();
+		assertThat(data.getResult().getGameValue(), is(46));
+	}
+
+	@Test
+	public void calcGameResultGameWonContraRe() {
+
+		factory.setHand(false);
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setContra(true);
+		data.setRe(true);
+		playWinningTricks();
+		data.calcResult();
+		assertThat(data.getResult().getGameValue(), is(92));
+	}
+
 	/**
 	 * Checks @see NullRule#calcGameResult()
 	 */
@@ -161,6 +186,31 @@ public class NullRuleTest extends AbstractJSkatTest {
 		playLoosingTrick();
 		data.calcResult();
 		assertEquals(-46, data.getResult().getGameValue());
+	}
+
+	@Test
+	public void calcGameResultGameLostContra() {
+
+		factory.setHand(false);
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setContra(true);
+		playWinningTricks();
+		playLoosingTrick();
+		data.calcResult();
+		assertThat(data.getResult().getGameValue(), is(-92));
+	}
+
+	@Test
+	public void calcGameResultGameLostContraRe() {
+
+		factory.setHand(false);
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setContra(true);
+		data.setRe(true);
+		playWinningTricks();
+		playLoosingTrick();
+		data.calcResult();
+		assertThat(data.getResult().getGameValue(), is(-184));
 	}
 
 	private void playLoosingTrick() {

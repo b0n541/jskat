@@ -48,6 +48,10 @@ public class JSkatPlayerResolver {
 		UNIT_TEST_PLAYER_CLASSES.add("org.jskat.ai.test.UnitTestPlayer");
 		UNIT_TEST_PLAYER_CLASSES.add("org.jskat.ai.test.RamschTestPlayer");
 		UNIT_TEST_PLAYER_CLASSES.add("org.jskat.ai.test.NoBiddingTestPlayer");
+		UNIT_TEST_PLAYER_CLASSES
+				.add("org.jskat.ai.test.ContraCallingTestPlayer");
+		UNIT_TEST_PLAYER_CLASSES
+				.add("org.jskat.ai.test.ContraReCallingTestPlayer");
 		UNIT_TEST_PLAYER_CLASSES.add("org.jskat.ai.test.ExceptionTestPlayer");
 		UNIT_TEST_PLAYER_CLASSES
 				.add("org.jskat.ai.test.PlayNonPossessingCardTestPlayer");

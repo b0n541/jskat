@@ -25,6 +25,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 import org.jskat.data.JSkatOptions;
+import org.jskat.data.JSkatOptions.Option;
 import org.jskat.util.JSkatResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,8 +56,8 @@ class StreamConnector extends AbstractIssConnector {
 		log.debug("StreamConnector.establishConnection()"); //$NON-NLS-1$
 
 		try {
-			socket = new Socket(options.getIssAddress(), options.getIssPort()
-					.intValue());
+			socket = new Socket(options.getString(Option.ISS_ADDRESS),
+					options.getInteger(Option.ISS_PORT));
 
 			output = new PrintWriter(socket.getOutputStream(), true);
 			issOut = new StreamOutputChannel(output);

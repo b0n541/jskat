@@ -30,6 +30,7 @@ import org.jskat.data.JSkatOptions;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatGameResult;
+import org.jskat.data.SkatTableOptions.ContraCallingTime;
 import org.jskat.data.SkatTableOptions.RamschSkatOwner;
 import org.jskat.data.Trick;
 import org.jskat.gui.JSkatView;
@@ -48,7 +49,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Controls a skat game
+ * Controls a skat game.
  */
 public class SkatGame extends JSkatThread {
 
@@ -58,6 +59,7 @@ public class SkatGame extends JSkatThread {
 	private final GameVariant variant;
 	private CardDeck deck;
 	private final Map<Player, JSkatPlayer> player;
+	private Player activePlayer;
 	private final String tableName;
 	private JSkatView view;
 	private SkatRule rules;
@@ -123,7 +125,7 @@ public class SkatGame extends JSkatThread {
 			case BIDDING:
 				setActivePlayer(Player.MIDDLEHAND);
 
-				if (variant == GameVariant.RAMSCH) {
+				if (variant == GameVariant.FORCED_RAMSCH) {
 					// ramsch games are enforced
 					final GameAnnouncementFactory gaf = GameAnnouncement
 							.getFactory();
@@ -144,25 +146,9 @@ public class SkatGame extends JSkatThread {
 				}
 				break;
 			case RAMSCH_GRAND_HAND_ANNOUNCING:
-				boolean grandHandAnnounced = false;
+				boolean grandHandAnnounced = grandHand();
 
-				for (final Player currPlayer : Player.getOrderedList()) {
-					setActivePlayer(currPlayer);
-					if (!grandHandAnnounced && playGrandHand(currPlayer)) {
-						setDeclarer(currPlayer);
-						grandHandAnnounced = true;
-					}
-				}
-
-				if (!grandHandAnnounced) {
-					if (JSkatOptions.instance().isSchieberRamsch(true)) {
-						log.debug("no grand hand - initiating schieberamsch"); //$NON-NLS-1$
-						setGameState(GameState.SCHIEBERAMSCH);
-					} else {
-						log.debug("no grand hand and no schieberamsch - play ramsch"); //$NON-NLS-1$
-						setGameState(GameState.TRICK_PLAYING);
-					}
-				} else {
+				if (grandHandAnnounced) {
 					log.debug(data.getDeclarer() + " is playing grand hand"); //$NON-NLS-1$
 					final GameAnnouncementFactory gaf = GameAnnouncement
 							.getFactory();
@@ -172,32 +158,26 @@ public class SkatGame extends JSkatThread {
 					setGameState(GameState.TRICK_PLAYING);
 					log.debug("grand hand game started"); //$NON-NLS-1$
 					break;
-				}
-				break;
-			case SCHIEBERAMSCH:
-				for (final Player currPlayer : Player.getOrderedList()) {
-					setActivePlayer(currPlayer);
-					if (!pickUpSkat(data.getActivePlayer())) {
-						log.debug(currPlayer + " schiebt"); //$NON-NLS-1$
-						data.addGeschoben();
-						view.setGeschoben(tableName, currPlayer);
+				} else {
+					if (JSkatOptions.instance().isSchieberamsch(true)) {
+						log.debug("no grand hand - initiating schieberamsch"); //$NON-NLS-1$
+						setGameState(GameState.SCHIEBERAMSCH);
 					} else {
-						view.setSkat(tableName, data.getSkat());
-						discarding();
-					}
-
-					if (Player.REARHAND.equals(data.getActivePlayer())) {
-						final GameAnnouncementFactory factory = GameAnnouncement
-								.getFactory();
-						factory.setGameType(GameType.RAMSCH);
-						setGameAnnouncement(factory.getAnnouncement());
+						log.debug("no grand hand and no schieberamsch - play ramsch"); //$NON-NLS-1$
 						setGameState(GameState.TRICK_PLAYING);
 					}
 				}
 				break;
+			case SCHIEBERAMSCH:
+				schieberamsch();
+				GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+				factory.setGameType(GameType.RAMSCH);
+				setGameAnnouncement(factory.getAnnouncement());
+				setGameState(GameState.TRICK_PLAYING);
+				break;
 			case PICKING_UP_SKAT:
 				setActivePlayer(data.getDeclarer());
-				if (pickUpSkat(data.getDeclarer())) {
+				if (pickUpSkat()) {
 					setGameState(GameState.DISCARDING);
 				} else {
 					setGameState(GameState.DECLARING);
@@ -210,6 +190,20 @@ public class SkatGame extends JSkatThread {
 				break;
 			case DECLARING:
 				announceGame();
+				if (isContraPlayEnabled(ContraCallingTime.AFTER_GAME_ANNOUNCEMENT)) {
+					setGameState(GameState.CONTRA);
+				} else {
+					setGameState(GameState.TRICK_PLAYING);
+				}
+				break;
+			case CONTRA:
+				for (Player player : Player.getOrderedList()) {
+					if (isContraEnabledForPlayer(player,
+							ContraCallingTime.AFTER_GAME_ANNOUNCEMENT)) {
+						setActivePlayer(player);
+						contraRe();
+					}
+				}
 				setGameState(GameState.TRICK_PLAYING);
 				break;
 			case TRICK_PLAYING:
@@ -233,17 +227,59 @@ public class SkatGame extends JSkatThread {
 		log.debug(data.getGameState().name());
 	}
 
-	private void setActivePlayer(final Player activePlayer) {
-		data.setActivePlayer(activePlayer);
+	private void contraRe() {
+		Player opponent = activePlayer;
+		if (getActivePlayerInstance().callContra()) {
+			data.setContra(true);
+			view.setContra(tableName, activePlayer);
+			setGameState(GameState.RE);
+			setActivePlayer(data.getDeclarer());
+			if (getActivePlayerInstance().callRe()) {
+				data.setRe(true);
+				view.setRe(tableName, activePlayer);
+			}
+		}
+		setActivePlayer(opponent);
+	}
+
+	private boolean grandHand() {
+		boolean grandHandAnnounced = false;
+
+		for (final Player currPlayer : Player.getOrderedList()) {
+			setActivePlayer(currPlayer);
+			if (!grandHandAnnounced && playGrandHand()) {
+				setDeclarer(activePlayer);
+				grandHandAnnounced = true;
+			}
+		}
+		return grandHandAnnounced;
+	}
+
+	private void schieberamsch() {
+		for (final Player currPlayer : Player.getOrderedList()) {
+			setActivePlayer(currPlayer);
+			if (!pickUpSkat()) {
+				log.debug(currPlayer + " schiebt"); //$NON-NLS-1$
+				data.addGeschoben();
+				view.setGeschoben(tableName, activePlayer);
+			} else {
+				view.setSkat(tableName, data.getSkat());
+				discarding();
+			}
+		}
+	}
+
+	private void setActivePlayer(final Player newPlayer) {
+		activePlayer = newPlayer;
 		view.setActivePlayer(tableName, activePlayer);
 	}
 
-	private boolean playGrandHand(final Player playerPosition) {
-		return getPlayerInstance(playerPosition).playGrandHand();
+	private boolean playGrandHand() {
+		return getActivePlayerInstance().playGrandHand();
 	}
 
-	private boolean pickUpSkat(final Player playerPosition) {
-		return getPlayerInstance(playerPosition).pickUpSkat();
+	private boolean pickUpSkat() {
+		return getActivePlayerInstance().pickUpSkat();
 	}
 
 	/**
@@ -488,8 +524,7 @@ public class SkatGame extends JSkatThread {
 
 	private void discarding() {
 
-		final Player activePlayerPosition = data.getActivePlayer();
-		final JSkatPlayer activePlayer = getPlayerInstance(activePlayerPosition);
+		final JSkatPlayer activePlayerInstance = getActivePlayerInstance();
 
 		view.setSkat(tableName, data.getSkat());
 
@@ -500,26 +535,26 @@ public class SkatGame extends JSkatThread {
 
 		// create a clone of the skat before sending it to the player
 		// otherwise the player could change the skat after discarding
-		activePlayer.takeSkat(skatBefore);
-		data.addSkatToPlayer(activePlayerPosition);
+		activePlayerInstance.takeSkat(skatBefore);
+		data.addSkatToPlayer(activePlayer);
 
 		// ask player for the cards to be discarded
 		// cloning is done to prevent the player
 		// from manipulating the skat afterwards
 		final CardList discardedSkat = new CardList();
-		discardedSkat.addAll(activePlayer.discardSkat());
+		discardedSkat.addAll(activePlayerInstance.discardSkat());
 
-		if (!checkDiscardedCards(data.getActivePlayer(), discardedSkat)) {
+		if (!checkDiscardedCards(activePlayer, discardedSkat)) {
 			// TODO throw an appropriate exceptions
 		}
 
 		log.debug("Discarded cards: " + discardedSkat); //$NON-NLS-1$
 
-		data.setDiscardedSkat(data.getActivePlayer(), discardedSkat);
-		if (!activePlayer.isHumanPlayer()) {
+		data.setDiscardedSkat(activePlayer, discardedSkat);
+		if (!activePlayerInstance.isHumanPlayer()) {
 			// human player has changed the cards in the GUI already
-			view.setDiscardedSkat(tableName, data.getActivePlayer(),
-					skatBefore, discardedSkat);
+			view.setDiscardedSkat(tableName, activePlayer, skatBefore,
+					discardedSkat);
 		}
 	}
 
@@ -577,21 +612,26 @@ public class SkatGame extends JSkatThread {
 			log.debug("=============== Play trick " + (trickNo + 1) + " ==============="); //$NON-NLS-1$ //$NON-NLS-2$
 			doSleep(maxSleep);
 
+			Player trickForehand = getTrickForeHand(trickNo);
+			setActivePlayer(trickForehand);
+
 			view.setTrickNumber(tableName, trickNo + 1);
+			view.setTrickForeHand(tableName, activePlayer);
 
-			Player newTrickForeHand = null;
-			newTrickForeHand = getTrickForeHand(trickNo);
-
-			view.setTrickForeHand(tableName, newTrickForeHand);
-			view.setActivePlayer(tableName, newTrickForeHand);
-
-			final Trick trick = new Trick(trickNo, newTrickForeHand);
+			final Trick trick = new Trick(trickNo, activePlayer);
 			data.addTrick(trick);
 			informPlayersAboutNewTrick(trick);
 
 			// Ask players for their cards
 			log.debug("fore hand plays"); //$NON-NLS-1$
-			playCard(trick, newTrickForeHand, newTrickForeHand);
+			if (isContraEnabledForPlayer(activePlayer,
+					ContraCallingTime.BEFORE_FIRST_CARD)) {
+				setGameState(GameState.CONTRA);
+				contraRe();
+			}
+			setGameState(GameState.TRICK_PLAYING);
+
+			playCard(trick, trickForehand, activePlayer);
 
 			if (isFinished()) {
 				break;
@@ -600,9 +640,15 @@ public class SkatGame extends JSkatThread {
 			doSleep(maxSleep);
 
 			log.debug("middle hand plays"); //$NON-NLS-1$
-			view.setActivePlayer(tableName, newTrickForeHand.getLeftNeighbor());
-			playCard(trick, newTrickForeHand,
-					newTrickForeHand.getLeftNeighbor());
+			setActivePlayer(activePlayer.getLeftNeighbor());
+			if (isContraEnabledForPlayer(activePlayer,
+					ContraCallingTime.BEFORE_FIRST_CARD)) {
+				setGameState(GameState.CONTRA);
+				contraRe();
+			}
+			setGameState(GameState.TRICK_PLAYING);
+
+			playCard(trick, trickForehand, activePlayer);
 
 			if (isFinished()) {
 				break;
@@ -611,9 +657,15 @@ public class SkatGame extends JSkatThread {
 			doSleep(maxSleep);
 
 			log.debug("rear hand plays"); //$NON-NLS-1$
-			view.setActivePlayer(tableName, newTrickForeHand.getRightNeighbor());
-			playCard(trick, newTrickForeHand,
-					newTrickForeHand.getRightNeighbor());
+			setActivePlayer(activePlayer.getLeftNeighbor());
+			if (isContraEnabledForPlayer(activePlayer,
+					ContraCallingTime.BEFORE_FIRST_CARD)) {
+				setGameState(GameState.CONTRA);
+				contraRe();
+			}
+			setGameState(GameState.TRICK_PLAYING);
+
+			playCard(trick, trickForehand, activePlayer);
 
 			if (isFinished()) {
 				break;
@@ -671,6 +723,74 @@ public class SkatGame extends JSkatThread {
 		}
 	}
 
+	private Boolean isPlayContra(ContraCallingTime contraCallingTime,
+			Player player) {
+		JSkatOptions options = JSkatOptions.instance();
+		if (isContraPlayEnabled(contraCallingTime)) {
+			if (ContraCallingTime.AFTER_GAME_ANNOUNCEMENT == contraCallingTime) {
+				return true;
+			} else if (ContraCallingTime.BEFORE_FIRST_CARD == contraCallingTime
+					&& data.getCurrentTrick().getTrickNumberInGame() == 0) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	private Boolean isContraPlayEnabled(ContraCallingTime gameTime) {
+		JSkatOptions options = JSkatOptions.instance();
+		if (!GameVariant.FORCED_RAMSCH.equals(variant)
+				&& options.isPlayContra(true)
+				&& options.getContraCallingTime() == gameTime
+				&& isGameWithDeclarer()) {
+			if (ContraCallingTime.AFTER_GAME_ANNOUNCEMENT == gameTime) {
+				return true;
+			} else if (ContraCallingTime.BEFORE_FIRST_CARD == gameTime
+					&& data.getCurrentTrick().getTrickNumberInGame() == 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private Boolean isGameWithDeclarer() {
+		GameType gameType = data.getGameType();
+		if (gameType == GameType.CLUBS || gameType == GameType.SPADES
+				|| gameType == GameType.HEARTS || gameType == GameType.DIAMONDS
+				|| gameType == GameType.GRAND || gameType == GameType.NULL) {
+			return true;
+		}
+		return false;
+	}
+
+	private Boolean isContraEnabledForPlayer(Player player,
+			ContraCallingTime gameTime) {
+		if (isContraPlayEnabled(gameTime) && isNoContraCalledYet()
+				&& isPlayerOpponent(player)
+				&& isPlayerBidHighEnoughForContra(player)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private boolean isPlayerBidHighEnoughForContra(Player player) {
+		JSkatOptions options = JSkatOptions.instance();
+		if (options.isContraAfterBid18() && data.getMaxPlayerBid(player) > 0) {
+			return true;
+		}
+		return true;
+	}
+
+	private boolean isPlayerOpponent(Player player) {
+		return player != data.getDeclarer();
+	}
+
+	private boolean isNoContraCalledYet() {
+		return !data.isContra();
+	}
+
 	private void informPlayersAboutCompletedTrick(final Trick trick) {
 		for (Player currPosition : Player.getOrderedList()) {
 			getPlayerInstance(currPosition).showTrick((Trick) trick.clone());
@@ -683,14 +803,14 @@ public class SkatGame extends JSkatThread {
 		}
 	}
 
-	private Player getTrickForeHand(int trickNo) {
+	private Player getTrickForeHand(int currentTrickNo) {
 		Player trickForeHand = null;
-		if (trickNo == 0) {
+		if (currentTrickNo == 0) {
 			// first trick
 			trickForeHand = Player.FOREHAND;
 		} else {
-			// get trick winner as fore hand of next trick
-			trickForeHand = data.getTrickWinner(trickNo - 1);
+			// get last trick winner as fore hand of next trick
+			trickForeHand = data.getTrickWinner(currentTrickNo - 1);
 		}
 		return trickForeHand;
 	}
@@ -723,11 +843,10 @@ public class SkatGame extends JSkatThread {
 		logPlayerPoints();
 	}
 
-	private void playCard(final Trick trick, final Player trickForeHand,
-			final Player currPlayer) {
+	private void playCard(Trick trick, Player trickForeHand, Player currPlayer) {
 
 		Card card = null;
-		final JSkatPlayer skatPlayer = getPlayerInstance(currPlayer);
+		final JSkatPlayer skatPlayer = getActivePlayerInstance();
 
 		boolean cardAccepted = false;
 		boolean aiPlayerPlayedSchwarz = false;
@@ -828,8 +947,11 @@ public class SkatGame extends JSkatThread {
 		return isSchwarz;
 	}
 
-	private JSkatPlayer getPlayerInstance(final Player position) {
+	private JSkatPlayer getActivePlayerInstance() {
+		return player.get(activePlayer);
+	}
 
+	private JSkatPlayer getPlayerInstance(Player position) {
 		return player.get(position);
 	}
 

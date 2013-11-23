@@ -38,17 +38,48 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
 	private Idler idler = new Idler();
 
-	private boolean holdBid;
-	private int bidValue;
+	private Boolean holdBid;
+	private Integer bidValue;
 	private GameAnnouncementStep gameAnnouncementStep;
-	private boolean playGrandHand;
-	private boolean pickUpSkat;
+	private Boolean playGrandHand;
+	private Boolean callContra;
+	private Boolean callRe;
+	private Boolean pickUpSkat;
 	private CardList discardSkat;
 	private GameAnnouncement gameAnnouncement;
 	private Card nextCard;
 
+	/**
+	 * Used for situations where a human player can make more than one move.
+	 */
 	private enum GameAnnouncementStep {
-		BEFORE_ANNOUNCEMENT, LOOKED_INTO_SKAT, DISCARDED_SKAT, PLAYS_HAND, DONE_GAME_ANNOUNCEMENT
+		/**
+		 * Before any anouncement
+		 */
+		BEFORE_ANNOUNCEMENT,
+		/**
+		 * Player looked into skat
+		 */
+		LOOKED_INTO_SKAT,
+		/**
+		 * Player discarded skat
+		 */
+		DISCARDED_SKAT,
+		/**
+		 * Player announced hand game
+		 */
+		PLAYS_HAND,
+		/**
+		 * Game announcement is done
+		 */
+		DONE_GAME_ANNOUNCEMENT;
+	}
+
+	/**
+	 * Constructor
+	 */
+	public SwingHumanPlayer() {
+		resetPlayer();
 	}
 
 	/**
@@ -70,7 +101,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 	 * @see JSkatPlayer#bidMore(int)
 	 */
 	@Override
-	public int bidMore(final int nextBidValue) {
+	public Integer bidMore(final int nextBidValue) {
 
 		log.debug("Waiting for human next bid value..."); //$NON-NLS-1$
 
@@ -121,7 +152,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 	 * @see JSkatPlayer#holdBid(int)
 	 */
 	@Override
-	public boolean holdBid(final int currBidValue) {
+	public Boolean holdBid(final int currBidValue) {
 
 		log.debug("Waiting for human holding bid..."); //$NON-NLS-1$
 
@@ -134,7 +165,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 	 * @see JSkatPlayer#pickUpSkat()
 	 */
 	@Override
-	public boolean playGrandHand() {
+	public Boolean playGrandHand() {
 
 		log.debug("Waiting for human to decide if playing a grand hand..."); //$NON-NLS-1$
 
@@ -147,7 +178,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 	 * @see JSkatPlayer#pickUpSkat()
 	 */
 	@Override
-	public boolean pickUpSkat() {
+	public Boolean pickUpSkat() {
 
 		log.debug("Waiting for human looking into skat..."); //$NON-NLS-1$
 
@@ -164,13 +195,21 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
 		log.debug("Waiting for human playing next card..."); //$NON-NLS-1$
 
-		waitForUserInput();
+		Card cardToPlay = null;
 
-		return this.nextCard;
+		if (nextCard == null) {
+			waitForUserInput();
+		}
+
+		cardToPlay = nextCard;
+		nextCard = null;
+
+		return cardToPlay;
 	}
 
 	@Override
 	public void actionPerformed(final JSkatActionEvent e) {
+
 		Object source = e.getSource();
 		String command = e.getActionCommand();
 		boolean interrupt = true;
@@ -179,7 +218,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 			// player passed
 			this.holdBid = false;
 		} else if (JSkatAction.MAKE_BID.toString().equals(command)) {
-			// player hold bid
+			// player makes next bid value
 			this.holdBid = true;
 		} else if (JSkatAction.HOLD_BID.toString().equals(command)) {
 			// player hold bid
@@ -187,14 +226,17 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 		} else if (JSkatAction.PLAY_GRAND_HAND.toString().equals(command)) {
 			// player wants to play a grand hand
 			this.playGrandHand = true;
+		} else if (JSkatAction.CALL_CONTRA.toString().equals(command)) {
+			callContra = true;
+		} else if (JSkatAction.CALL_RE.toString().equals(command)) {
+			if (source instanceof Boolean) {
+				callRe = (Boolean) source;
+			}
 		} else if (JSkatAction.PICK_UP_SKAT.toString().equals(command)) {
-
 			// player wants to pick up the skat
 			this.pickUpSkat = true;
 			gameAnnouncementStep = GameAnnouncementStep.LOOKED_INTO_SKAT;
-
 		} else if (JSkatAction.SCHIEBEN.toString().equals(command)) {
-
 			if (source instanceof CardList) {
 				CardList cards = (CardList) source;
 				if (cards.size() == 2) {
@@ -202,7 +244,6 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 				}
 			}
 		} else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
-
 			if (source instanceof GameAnnouncement) {
 				// player did game announcement
 				gameAnnouncement = (GameAnnouncement) source;
@@ -214,7 +255,6 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 					gameAnnouncementStep = GameAnnouncementStep.DISCARDED_SKAT;
 				}
 			} else {
-
 				log.warn("Wrong source for " + command); //$NON-NLS-1$
 				interrupt = false;
 			}
@@ -330,14 +370,39 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 	}
 
 	private void resetPlayer() {
-
 		bidValue = 0;
-		holdBid = false;
-		playGrandHand = false;
+		holdBid = null;
+		playGrandHand = null;
+		callContra = null;
+		callRe = null;
 		gameAnnouncementStep = GameAnnouncementStep.BEFORE_ANNOUNCEMENT;
-		pickUpSkat = false;
+		pickUpSkat = null;
 		discardSkat = null;
 		gameAnnouncement = null;
 		nextCard = null;
+	}
+
+	@Override
+	public Boolean callContra() {
+
+		log.debug("Waiting for human calling contra..."); //$NON-NLS-1$
+
+		if (callContra == null) {
+			waitForUserInput();
+		}
+
+		return callContra == null ? false : callContra;
+	}
+
+	@Override
+	public Boolean callRe() {
+
+		log.debug("Waiting for human calling re..."); //$NON-NLS-1$
+
+		if (callRe == null) {
+			waitForUserInput();
+		}
+
+		return callRe == null ? false : callRe;
 	}
 }

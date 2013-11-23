@@ -18,30 +18,30 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.jskat.ai.test;
+package org.jskat.gui.action.human;
+
+import javax.swing.Action;
+
+import org.jskat.gui.action.AbstractJSkatAction;
+import org.jskat.gui.action.JSkatAction;
+import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
- * Test player that only plays ramsch games
+ * Implements the action for calling Contra.
  */
-public class RamschTestPlayer extends NoBiddingTestPlayer {
+public class CallContraAction extends AbstractHumanJSkatAction {
 
-	private boolean playGrandHand = false;
-
-	/**
-	 * Sets whether the player should play grand hand
-	 * 
-	 * @param isPlayGrandHand
-	 *            TRUE if the player should play grand hand
-	 */
-	public void setPlayGrandHand(boolean isPlayGrandHand) {
-		playGrandHand = isPlayGrandHand;
-	}
+	private static final long serialVersionUID = 1L;
 
 	/**
-	 * {@inheritDoc}
+	 * @see AbstractJSkatAction#AbstractJSkatAction()
 	 */
-	@Override
-	public Boolean playGrandHand() {
-		return playGrandHand;
+	public CallContraAction() {
+
+		putValue(Action.NAME, strings.getString("call_contra"));
+		putValue(Action.SHORT_DESCRIPTION, strings.getString("call_contra"));
+
+		setActionCommand(JSkatAction.CALL_CONTRA);
+		setIcon(Icon.PLAY);
 	}
 }

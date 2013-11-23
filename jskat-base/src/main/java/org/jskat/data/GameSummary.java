@@ -79,6 +79,14 @@ public class GameSummary {
 	 */
 	Boolean schwarz = Boolean.FALSE;
 	/**
+	 * Contra game
+	 */
+	Boolean contra = Boolean.FALSE;
+	/**
+	 * Re game
+	 */
+	Boolean re = Boolean.FALSE;
+	/**
 	 * Game result
 	 */
 	SkatGameResult gameResult;
@@ -91,7 +99,7 @@ public class GameSummary {
 	 */
 	Map<Player, Integer> playerPoints = new HashMap<Player, Integer>();
 
-	Set<Player> ramschLoosers = new HashSet<Player>();
+	Set<Player> ramschLosers = new HashSet<Player>();
 
 	/**
 	 * Constructor
@@ -252,7 +260,7 @@ public class GameSummary {
 		}
 
 		public final void addRamschLooser(Player looser) {
-			tmpSummary.ramschLoosers.add(looser);
+			tmpSummary.ramschLosers.add(looser);
 		}
 
 		private boolean validate() {
@@ -283,10 +291,18 @@ public class GameSummary {
 				log.error("missing player points"); //$NON-NLS-1$
 				return false;
 			} else if (tmpSummary.gameType == GameType.RAMSCH
-					&& tmpSummary.ramschLoosers.size() == 0) {
+					&& tmpSummary.ramschLosers.size() == 0) {
 				log.error("missing ramsch looser");
 			}
 			return true;
+		}
+
+		public void setContra(Boolean contra) {
+			tmpSummary.contra = contra;
+		}
+
+		public void setRe(Boolean re) {
+			tmpSummary.re = re;
 		}
 	}
 
@@ -491,7 +507,20 @@ public class GameSummary {
 		return playerPoints.get(player).intValue();
 	}
 
-	public Set<Player> getRamschLoosers() {
-		return Collections.unmodifiableSet(ramschLoosers);
+	/**
+	 * Get all players that lost in a Ramsch game.
+	 * 
+	 * @return Set of losers
+	 */
+	public Set<Player> getRamschLosers() {
+		return Collections.unmodifiableSet(ramschLosers);
+	}
+
+	public Boolean isContra() {
+		return contra;
+	}
+
+	public Boolean isRe() {
+		return re;
 	}
 }

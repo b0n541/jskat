@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.jskat.ai.AbstractAIPlayer;
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.input.GenericNetworkInputGenerator;
 import org.jskat.ai.nn.input.NetworkInputGenerator;
@@ -36,7 +37,6 @@ import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameResult;
-import org.jskat.player.AbstractJSkatPlayer;
 import org.jskat.player.JSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
 /**
  * JSkat player using neural network
  */
-public class AIPlayerNN extends AbstractJSkatPlayer {
+public class AIPlayerNN extends AbstractAIPlayer {
 
 	private final static long MAX_SIMULATIONS = 50;
 
@@ -105,19 +105,10 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	}
 
 	/**
-	 * @see JSkatPlayer#isAIPlayer()
-	 */
-	@Override
-	public boolean isAIPlayer() {
-
-		return true;
-	}
-
-	/**
 	 * @see JSkatPlayer#bidMore(int)
 	 */
 	@Override
-	public int bidMore(final int nextBidValue) {
+	public Integer bidMore(final int nextBidValue) {
 
 		int result = -1;
 
@@ -132,7 +123,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 * @see JSkatPlayer#holdBid(int)
 	 */
 	@Override
-	public boolean holdBid(final int currBidValue) {
+	public Boolean holdBid(final int currBidValue) {
 
 		return isAnyGamePossible(currBidValue);
 	}
@@ -268,7 +259,7 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	 * @see JSkatPlayer#pickUpSkat()
 	 */
 	@Override
-	public boolean pickUpSkat() {
+	public Boolean pickUpSkat() {
 
 		boolean result = true;
 
@@ -376,9 +367,9 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 
 		Map<Card, double[]> cardInputs = new HashMap<Card, double[]>();
 
-		INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGameAnnouncement()
-				.getGameType(), isDeclarer(), knowledge.getCurrentTrick()
-				.getTrickNumberInGame());
+		INeuralNetwork net = SkatNetworks.getNetwork(knowledge
+				.getGameAnnouncement().getGameType(), isDeclarer(), knowledge
+				.getCurrentTrick().getTrickNumberInGame());
 
 		CardList bestCards = new CardList();
 		CardList highestOutputCards = new CardList();
@@ -509,7 +500,8 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 			int index = 0;
 			for (double[] inputParam : inputs) {
 				INeuralNetwork net = SkatNetworks.getNetwork(knowledge
-						.getGameAnnouncement().getGameType(), isDeclarer(), index);
+						.getGameAnnouncement().getGameType(), isDeclarer(),
+						index);
 
 				double networkError = net.adjustWeights(inputParam, outputs);
 				log.warn("learning error: " + networkError);
@@ -573,5 +565,23 @@ public class AIPlayerNN extends AbstractJSkatPlayer {
 	public void setLogger(final Logger newLogger) {
 		super.setLogger(newLogger);
 		log = newLogger;
+	}
+
+	@Override
+	public Boolean callContra() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Boolean callRe() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Boolean playGrandHand() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

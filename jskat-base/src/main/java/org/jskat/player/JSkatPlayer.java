@@ -64,7 +64,7 @@ public interface JSkatPlayer {
 	 * @return A bid value equal or higher as the next bid value -1 if the
 	 *         player passes
 	 */
-	public int bidMore(int nextBidValue);
+	public Integer bidMore(int nextBidValue);
 
 	/**
 	 * Asks the player whether it wants to hold a bid from the announcer
@@ -73,7 +73,7 @@ public interface JSkatPlayer {
 	 *            Current bid value
 	 * @return TRUE if the player holds the bid
 	 */
-	public boolean holdBid(int currBidValue);
+	public Boolean holdBid(int currBidValue);
 
 	/**
 	 * Informs the player about a bid value that was announced or hold
@@ -94,17 +94,32 @@ public interface JSkatPlayer {
 	public void takeCards(CardList cards);
 
 	/**
-	 * @return true, if the player wants to play a grand hand in a BockRamsch
-	 *         game
+	 * @return <code>true</code>, if the player wants to play a grand hand in a
+	 *         BockRamsch game
 	 */
-	public boolean playGrandHand();
+	public Boolean playGrandHand();
+
+	/**
+	 * Asks the player to call Contra as opponent player
+	 * 
+	 * @return <code>true</code>, if the player wants to call Contra
+	 */
+	public Boolean callContra();
+
+	/**
+	 * Asks the player to call Re a declarer player, after an opponent did call
+	 * Contra
+	 * 
+	 * @return <code>true</code>, if the player wants to call Re
+	 */
+	public Boolean callRe();
 
 	/**
 	 * Checks whether the player wants to look into the skat
 	 * 
 	 * @return TRUE if the player wants to look into the skat
 	 */
-	public boolean pickUpSkat();
+	public Boolean pickUpSkat();
 
 	/**
 	 * Take the skat as a single player.<br>
@@ -197,21 +212,21 @@ public interface JSkatPlayer {
 	 * 
 	 * @return TRUE if the player is a human player
 	 */
-	public boolean isHumanPlayer();
+	public Boolean isHumanPlayer();
 
 	/**
 	 * Checks whether the player is an AI player
 	 * 
 	 * @return TRUE if the player is an AI player
 	 */
-	public boolean isAIPlayer();
+	public Boolean isAIPlayer();
 
 	/**
 	 * Checks whether the player is the declaring player
 	 * 
 	 * @return TRUE if the player is the declaring player
 	 */
-	public boolean isDeclarer();
+	public Boolean isDeclarer();
 
 	/**
 	 * Asks for the new skat cards during discarding
@@ -257,5 +272,4 @@ public interface JSkatPlayer {
 		 */
 		PLAYING
 	}
-
 }

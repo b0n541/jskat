@@ -27,14 +27,17 @@ import org.jskat.util.Card;
 import org.jskat.util.CardDeck;
 
 /**
- * Test player throws an excpetion during card play
+ * Test player throws an excpetion during card play.
  */
 public class PlayNonPossessingCardTestPlayer extends AIPlayerRND {
 
-	private final static Random random = new Random();
+	/**
+	 * Random generator.
+	 */
+	private final Random random = new Random();
 
 	@Override
-	public Card playCard() {
+	public final Card playCard() {
 		CardDeck unpossessedCards = new CardDeck();
 		unpossessedCards.removeAll(knowledge.getOwnCards());
 

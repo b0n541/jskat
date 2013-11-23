@@ -23,41 +23,39 @@ package org.jskat.ai.test;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jskat.ai.AbstractAIPlayer;
 import org.jskat.data.GameAnnouncement;
-import org.jskat.player.AbstractJSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 
-public class UnitTestPlayer extends AbstractJSkatPlayer {
+public class UnitTestPlayer extends AbstractAIPlayer {
 
 	List<Card> cardsToPlay = new ArrayList<Card>();
 
 	@Override
 	public void preparateForNewGame() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void finalizeGame() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
-	public int bidMore(int nextBidValue) {
+	public Integer bidMore(int nextBidValue) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
-	public boolean holdBid(int currBidValue) {
+	public Boolean holdBid(int currBidValue) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public boolean pickUpSkat() {
+	public Boolean pickUpSkat() {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -74,19 +72,13 @@ public class UnitTestPlayer extends AbstractJSkatPlayer {
 
 	@Override
 	public Card playCard() {
-		return cardsToPlay.get(knowledge.getCurrentTrick().getTrickNumberInGame());
-	}
-
-	@Override
-	public boolean isAIPlayer() {
-		// TODO Auto-generated method stub
-		return false;
+		return cardsToPlay.get(knowledge.getCurrentTrick()
+				.getTrickNumberInGame());
 	}
 
 	@Override
 	public void startGame() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -95,4 +87,21 @@ public class UnitTestPlayer extends AbstractJSkatPlayer {
 		return null;
 	}
 
+	@Override
+	public Boolean callContra() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Boolean callRe() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Boolean playGrandHand() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

@@ -225,7 +225,7 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
 	@Override
 	public CardList discardSkat(final BidEvaluator bidEvaluator) {
 		log.debug(myPlayer.getPlayerName() + " (" + this.getClass() + ") is discarding cards");
-		if (JSkatOptions.instance().isSchieberRamschJacksInSkat()) {
+		if (JSkatOptions.instance().isSchieberamschJacksInSkat()) {
 			return discardWithJacks();
 		}
 		return discardNoJacks();

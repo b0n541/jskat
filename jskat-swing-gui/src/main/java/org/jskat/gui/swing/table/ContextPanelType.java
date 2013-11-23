@@ -42,6 +42,10 @@ public enum ContextPanelType {
 	 */
 	SCHIEBERAMSCH,
 	/**
+	 * Calling Re after Contra panel
+	 */
+	RE_AFTER_CONTRA,
+	/**
 	 * Trick playing panel
 	 */
 	TRICK_PLAYING,

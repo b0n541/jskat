@@ -536,4 +536,16 @@ public class UnitTestView implements JSkatView {
 	public void showAIPlayedSchwarzMessage(String playerName, Card card) {
 		// TODO Auto-generated method stub
 	}
+
+	@Override
+	public void setContra(String tableName, Player player) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void setRe(String tableName, Player player) {
+		// TODO Auto-generated method stub
+
+	}
 }

@@ -42,6 +42,21 @@ public class SkatTableOptions extends Observable {
 	}
 
 	/**
+	 * Defines the times, when Contra/Re can be called.
+	 */
+	public enum ContraCallingTime {
+		/**
+		 * Calling contra directly after game announcement
+		 */
+		AFTER_GAME_ANNOUNCEMENT,
+		/**
+		 * Calling contra before the player plays out the first card from
+		 * his/her hand
+		 */
+		BEFORE_FIRST_CARD;
+	}
+
+	/**
 	 * Holds different rules for the owner of the skat after a ramsch game
 	 */
 	public enum RamschSkatOwner {
@@ -71,7 +86,7 @@ public class SkatTableOptions extends Observable {
 	private Boolean bockEventLostWith60;
 	private Boolean bockEventLostAfterContra;
 	private Boolean bockEventContraReAnnounced;
-	private Boolean bockEventPlayerHasX00Points;
+	private Boolean bockEventMultipleOfHundredScore;
 	private RamschSkatOwner ramschSkat;
 	private Boolean schieberRamsch;
 	private Boolean schieberRamschJacksInSkat;
@@ -400,19 +415,7 @@ public class SkatTableOptions extends Observable {
 	 */
 	public Boolean isBockEventPlayerHasX00Points() {
 
-		return bockEventPlayerHasX00Points;
-	}
-
-	/**
-	 * Setter for property bockEventPlayerHasX00Points
-	 * 
-	 * @param newBockEventPlayerHasX00Points
-	 *            New value of property bockEventPlayerHasX00Points
-	 */
-	public void setBockEventPlayerHasX00Points(
-			Boolean newBockEventPlayerHasX00Points) {
-
-		bockEventPlayerHasX00Points = newBockEventPlayerHasX00Points;
+		return bockEventMultipleOfHundredScore;
 	}
 
 	/**
@@ -562,5 +565,10 @@ public class SkatTableOptions extends Observable {
 	public void setMaxPlayerCount(Integer newMaxPlayerCount) {
 
 		maxPlayerCount = newMaxPlayerCount;
+	}
+
+	public void setBockEventMultipleOfHundredScore(
+			Boolean isBockEventMultipleOfHundredScore) {
+		bockEventMultipleOfHundredScore = isBockEventMultipleOfHundredScore;
 	}
 }

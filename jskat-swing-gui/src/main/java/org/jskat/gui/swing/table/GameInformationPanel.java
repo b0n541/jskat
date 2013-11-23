@@ -57,6 +57,8 @@ class GameInformationPanel extends JPanel {
 	private boolean ouvertGame;
 	private boolean schneiderAnnounced;
 	private boolean schwarzAnnounced;
+	private boolean contra;
+	private boolean re;
 	private int trick;
 	private boolean gameWon;
 	private int declarerPoints;
@@ -121,6 +123,8 @@ class GameInformationPanel extends JPanel {
 		ouvertGame = false;
 		schneiderAnnounced = false;
 		schwarzAnnounced = false;
+		contra = false;
+		re = false;
 		trick = 0;
 		gameWon = false;
 		declarerPoints = 0;
@@ -200,6 +204,13 @@ class GameInformationPanel extends JPanel {
 				text.append(" " + (multiplier - 1)); //$NON-NLS-1$
 				text.append(" " + strings.getString("play")); //$NON-NLS-1$//$NON-NLS-2$
 				text.append(" " + multiplier); //$NON-NLS-1$
+
+				if (contra) {
+					text.append(" " + strings.getString("contra"));
+					if (re) {
+						text.append(" " + strings.getString("re"));
+					}
+				}
 			}
 
 			if (handGame) {
@@ -234,7 +245,7 @@ class GameInformationPanel extends JPanel {
 		gameWon = summary.isGameWon();
 		declarerPoints = summary.getFinalDeclarerPoints();
 		opponentPoints = summary.getFinalOpponentScore();
-		ramschLoosers = summary.getRamschLoosers();
+		ramschLoosers = summary.getRamschLosers();
 		refreshText();
 	}
 
@@ -287,7 +298,6 @@ class GameInformationPanel extends JPanel {
 	 *            Trick number
 	 */
 	public void setTrickNumber(final int trickNumber) {
-
 		trick = trickNumber;
 		refreshText();
 	}
@@ -299,8 +309,15 @@ class GameInformationPanel extends JPanel {
 	 *            Game number
 	 */
 	public void setGameNumber(final int newGameNumber) {
-
 		gameNumber = newGameNumber;
 		refreshText();
+	}
+
+	public void setContra() {
+		contra = true;
+	}
+
+	public void setRe() {
+		re = true;
 	}
 }
