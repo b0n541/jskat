@@ -84,9 +84,13 @@ public class SkatGameData {
 		 */
 		DECLARING,
 		/**
-		 * Contra/Re calling
+		 * Contra calling
 		 */
-		CONTRA_RE,
+		CONTRA,
+		/**
+		 * Re calling
+		 */
+		RE,
 		/**
 		 * Trick playing phase
 		 */

@@ -571,7 +571,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 				setContextPanel(ContextPanelType.DECLARING);
 			}
 			break;
-		case CONTRA_RE:
+		case RE:
 			setContextPanel(ContextPanelType.RE_AFTER_CONTRA);
 			break;
 		case TRICK_PLAYING:

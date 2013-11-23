@@ -49,7 +49,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Controls a skat game
+ * Controls a skat game.
  */
 public class SkatGame extends JSkatThread {
 
@@ -191,12 +191,12 @@ public class SkatGame extends JSkatThread {
 			case DECLARING:
 				announceGame();
 				if (isContraPlayEnabled(ContraCallingTime.AFTER_GAME_ANNOUNCEMENT)) {
-					setGameState(GameState.CONTRA_RE);
+					setGameState(GameState.CONTRA);
 				} else {
 					setGameState(GameState.TRICK_PLAYING);
 				}
 				break;
-			case CONTRA_RE:
+			case CONTRA:
 				for (Player player : Player.getOrderedList()) {
 					if (isContraEnabledForPlayer(player,
 							ContraCallingTime.AFTER_GAME_ANNOUNCEMENT)) {
@@ -232,6 +232,7 @@ public class SkatGame extends JSkatThread {
 		if (getActivePlayerInstance().callContra()) {
 			data.setContra(true);
 			view.setContra(tableName, activePlayer);
+			setGameState(GameState.RE);
 			setActivePlayer(data.getDeclarer());
 			if (getActivePlayerInstance().callRe()) {
 				data.setRe(true);
@@ -625,7 +626,7 @@ public class SkatGame extends JSkatThread {
 			log.debug("fore hand plays"); //$NON-NLS-1$
 			if (isContraEnabledForPlayer(activePlayer,
 					ContraCallingTime.BEFORE_FIRST_CARD)) {
-				setGameState(GameState.CONTRA_RE);
+				setGameState(GameState.CONTRA);
 				contraRe();
 			}
 			setGameState(GameState.TRICK_PLAYING);
@@ -642,7 +643,7 @@ public class SkatGame extends JSkatThread {
 			setActivePlayer(activePlayer.getLeftNeighbor());
 			if (isContraEnabledForPlayer(activePlayer,
 					ContraCallingTime.BEFORE_FIRST_CARD)) {
-				setGameState(GameState.CONTRA_RE);
+				setGameState(GameState.CONTRA);
 				contraRe();
 			}
 			setGameState(GameState.TRICK_PLAYING);
@@ -659,7 +660,7 @@ public class SkatGame extends JSkatThread {
 			setActivePlayer(activePlayer.getLeftNeighbor());
 			if (isContraEnabledForPlayer(activePlayer,
 					ContraCallingTime.BEFORE_FIRST_CARD)) {
-				setGameState(GameState.CONTRA_RE);
+				setGameState(GameState.CONTRA);
 				contraRe();
 			}
 			setGameState(GameState.TRICK_PLAYING);
