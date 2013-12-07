@@ -71,7 +71,7 @@
 					<configuration>
 						<!-- no strick checking because of changing version and date -->
 						<strictCheck>false</strictCheck>
-						<header>${basedir}/license/license_short.txt</header>
+						<header>${basedir}/licenses/license_short.txt</header>
 						<includes>
 							<include>src/**/*.java</include>
 						</includes>
