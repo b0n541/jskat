@@ -55,21 +55,40 @@
 
 	<build>
 		<plugins>
+			<!-- Source licensing -->
+			<plugin>
+				<groupId>com.mycila</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>2.5</version>
+				<configuration>
+					<header>com/mycila/maven/plugin/license/templates/APACHE-2.txt</header>
+					<useDefaultExcludes>true</useDefaultExcludes>
+					<includes>
+						<include>**/*.java</include>
+					</includes>
+					<properties>
+						<owner>Jan Schäfer</owner>
+						<email>jansch@users.sourceforge.net</email>
+					</properties>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 			<!-- Source packaging -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.1.2</version>
-				<configuration>
-					<finalName>${project.artifactId}-${project.version}</finalName>
-					<attach>true</attach>
-				</configuration>
 				<executions>
 					<execution>
-						<phase>install</phase>
+						<id>attach-sources</id>
+						<phase>verify</phase>
 						<goals>
-							<goal>jar</goal>
-							<goal>test-jar</goal>
+							<goal>jar-no-fork</goal>
 						</goals>
 					</execution>
 				</executions>
@@ -78,7 +97,6 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.7</version>
 				<executions>
 					<execution>
 						<phase>install</phase>
