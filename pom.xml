@@ -4,6 +4,7 @@
 
 	<description>A skat game written in Java</description>
 	<url>http://www.jskat.org</url>
+	<inceptionYear>2003</inceptionYear>
 
 	<developers>
 		<developer>
@@ -55,69 +56,14 @@
 	<build>
 		<pluginManagement>
 			<plugins>
+				<!-- JDK -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<configuration>
-						<source>1.6</source>
-						<target>1.6</target>
+						<source>1.7</source>
+						<target>1.7</target>
 					</configuration>
-				</plugin>
-				<!-- Source licensing -->
-				<plugin>
-					<groupId>com.mycila.maven-license-plugin</groupId>
-					<artifactId>maven-license-plugin</artifactId>
-					<version>1.9.0</version>
-					<configuration>
-						<!-- no strick checking because of changing version and date -->
-						<strictCheck>false</strictCheck>
-						<header>${basedir}/license/license_short.txt</header>
-						<includes>
-							<include>src/**/*.java</include>
-						</includes>
-						<excludes>
-							<exclude>target/**</exclude>
-						</excludes>
-						<useDefaultExcludes>true</useDefaultExcludes>
-						<properties>
-							<releasetimestamp>${maven.build.timestamp}</releasetimestamp>
-							<releaseversion>${project.version}</releaseversion>
-						</properties>
-					</configuration>
-				</plugin>
-				<!-- Source packaging -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-source-plugin</artifactId>
-					<version>2.1.2</version>
-					<configuration>
-						<finalName>${project.name}-${project.version}</finalName>
-						<attach>true</attach>
-					</configuration>
-					<executions>
-						<execution>
-							<phase>install</phase>
-							<goals>
-								<goal>jar</goal>
-								<goal>test-jar</goal>
-							</goals>
-						</execution>
-					</executions>
-				</plugin>
-				<!-- Javadoc -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-javadoc-plugin</artifactId>
-					<version>2.7</version>
-					<executions>
-						<execution>
-							<phase>install</phase>
-							<id>attach-javadocs</id>
-							<goals>
-								<goal>jar</goal>
-							</goals>
-						</execution>
-					</executions>
 				</plugin>
 				<!-- Release -->
 				<plugin>
