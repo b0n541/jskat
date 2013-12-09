@@ -66,20 +66,20 @@ public class JSkat {
 		trySettingNimbusLookAndFeel();
 
 		final SplashScreen splash = SplashScreen.getSplashScreen();
+		Graphics2D g = null;
 		if (splash == null) {
-			System.out.println("SplashScreen.getSplashScreen() returned null");
-			return;
+			log.error("SplashScreen not found. Please try to set the vm parameter: -splash:src/main/resources/org/jskat/gui/img/gui/splash.png");
+		} else {
+			g = splash.createGraphics();
 		}
-		Graphics2D g = splash.createGraphics();
-		if (g == null) {
-			System.out.println("g is null");
-			return;
-		}
+
 		JSkatMaster jskat = null;
 		JSkatViewImpl jskatView = null;
 		for (int i = 0; i < 3; i++) {
-			renderSplashFrame(g, i);
-			splash.update();
+			if (splash != null && g != null) {
+				renderSplashFrame(g, i);
+				splash.update();
+			}
 			switch (i) {
 			case 0:
 				jskat = JSkatMaster.instance();
@@ -94,7 +94,10 @@ public class JSkat {
 			}
 		}
 
-		splash.close();
+		if (splash != null && g != null) {
+			splash.close();
+		}
+
 		jskatView.setVisible();
 
 		if (JSkatOptions.instance().getBoolean(Option.SHOW_TIPS_AT_START_UP)) {
