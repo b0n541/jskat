@@ -281,6 +281,12 @@ public class JSkatViewImpl implements JSkatView {
 
 		mainFrame.setContentPane(mainPanel);
 
+		setMainFrameParameters();
+
+		mainFrame.pack();
+	}
+
+	private void setMainFrameParameters() {
 		mainFrame.setIconImage(bitmaps.getIconImage(
 				JSkatGraphicRepository.Icon.JSKAT,
 				JSkatGraphicRepository.IconSize.BIG));
@@ -289,8 +295,6 @@ public class JSkatViewImpl implements JSkatView {
 		mainFrame.setPreferredSize(new Dimension(1000, 700));
 		mainFrame.setExtendedState(mainFrame.getExtendedState()
 				| Frame.MAXIMIZED_BOTH);
-
-		mainFrame.pack();
 	}
 
 	private void addTabbedPane(final JPanel mainPanel) {
