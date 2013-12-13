@@ -719,7 +719,7 @@ public interface JSkatView {
 	 * 
 	 * @param tableName
 	 *            Table name
-	 * @param trick
+	 * @param playedTrick
 	 *            Played trick
 	 */
 	public void setPlayedTrick(String tableName, Trick playedTrick);

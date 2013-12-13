@@ -112,9 +112,6 @@ public class SkatNetworks {
 
 	/**
 	 * Loads all neural networks from files
-	 * 
-	 * @param filePath
-	 *            Path to files
 	 */
 	public static void loadNetworks() {
 		for (Entry<GameType, Map<PlayerParty, List<INeuralNetwork>>> gameTypeNets : networks

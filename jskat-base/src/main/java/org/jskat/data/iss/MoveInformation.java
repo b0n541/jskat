@@ -74,9 +74,10 @@ public class MoveInformation {
 	}
 
 	/**
-	 * Sets the skat
+	 * Sets the skat.
 	 * 
-	 * @return CardList
+	 * @param newSkat
+	 *            Skat cards
 	 */
 	public void setSkat(final CardList newSkat) {
 
@@ -357,7 +358,8 @@ public class MoveInformation {
 	/**
 	 * Sets the player who left the table
 	 * 
-	 * @param parseLeaveTable
+	 * @param player
+	 *            Player
 	 */
 	public void setLeavingPlayer(final Player player) {
 		leavingPlayer = player;

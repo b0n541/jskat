@@ -727,10 +727,10 @@ public final class JSkatOptions {
 	}
 
 	/**
-	 * Setter for property cardFace
+	 * Setter for property card set.
 	 * 
-	 * @param cardFace
-	 *            New value of property cardFace
+	 * @param cardSet
+	 *            Card set
 	 */
 	public void setCardSet(final CardSet cardSet) {
 		setOption(Option.CARD_SET, cardSet);
@@ -871,10 +871,10 @@ public final class JSkatOptions {
 	}
 
 	/**
-	 * Setter for property ramschSkatOwner.
+	 * Setter for property ramschSkat.
 	 * 
-	 * @param ramschSkatOwner
-	 *            New value of property ramschSkatOwner.
+	 * @param ramschSkat
+	 *            Owner of the skat after the ramsch game
 	 */
 	public void setRamschSkatOwner(final RamschSkatOwner ramschSkat) {
 		setOption(Option.RAMSCH_SKAT_OWNER, ramschSkat);

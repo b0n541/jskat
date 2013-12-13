@@ -186,7 +186,7 @@ public class SkatGameResult implements Cloneable {
 	 * Sets whether the game was a jungfrau game<br>
 	 * Note: The jungfrau flag is overwritten, if durchmarsch is set to true
 	 * 
-	 * @param jungfrau
+	 * @param isJungfrau
 	 *            TRUE, if the game was a jungfrau game
 	 */
 	public void setJungfrau(final boolean isJungfrau) {

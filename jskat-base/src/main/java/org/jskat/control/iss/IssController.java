@@ -110,7 +110,7 @@ public class IssController {
 	/**
 	 * Connects to the ISS
 	 * 
-	 * @param e
+	 * @param credentials
 	 *            Login credentials
 	 * @return TRUE if the connection was established successfully
 	 */
@@ -567,20 +567,20 @@ public class IssController {
 	}
 
 	/**
-	 * Shows a message from ISS
+	 * Shows a message from ISS.
 	 * 
-	 * @param messageType
 	 * @param message
+	 *            Message
 	 */
 	public void showMessage(final String message) {
 		view.showMessage(strings.getString("iss_message"), message); //$NON-NLS-1$
 	}
 
 	/**
-	 * Shows an error message from ISS
+	 * Shows an error message from ISS.
 	 * 
-	 * @param messageType
 	 * @param message
+	 *            Message
 	 */
 	public void showErrorMessage(final String message) {
 		view.showErrorMessage(strings.getString("iss_message"), message); //$NON-NLS-1$

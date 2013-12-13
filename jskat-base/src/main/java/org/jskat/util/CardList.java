@@ -133,7 +133,10 @@ public class CardList implements Iterable<Card> {
 	}
 
 	/**
-	 * @see Collection#remove(int)
+	 * Removes a card.
+	 * 
+	 * @param index
+	 *            Index of card
 	 */
 	public Card remove(final int index) {
 		return cards.remove(index);
@@ -629,7 +632,7 @@ public class CardList implements Iterable<Card> {
 	}
 
 	private class SuitComparator implements Comparator<Card> {
-		private GameType gameType;
+		private final GameType gameType;
 
 		public SuitComparator(GameType pGameType) {
 			gameType = pGameType;

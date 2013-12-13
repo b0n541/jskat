@@ -756,10 +756,8 @@ public class SkatGameData {
 	/**
 	 * Sets cards for the skat
 	 * 
-	 * @param card0
-	 *            First card
-	 * @param card1
-	 *            Second card
+	 * @param cards
+	 *            Skat cards
 	 */
 	public void setDealtSkatCards(CardList cards) {
 
@@ -1109,8 +1107,6 @@ public class SkatGameData {
 	/**
 	 * Checks whether one player made no trick
 	 * 
-	 * @param gameData
-	 *            Game data
 	 * @return TRUE if a player made no trick
 	 */
 	public boolean isPlayerMadeNoTrick() {
@@ -1123,8 +1119,6 @@ public class SkatGameData {
 	/**
 	 * Checks whether a certain player made no trick
 	 * 
-	 * @param gameData
-	 *            Game data
 	 * @param player
 	 *            Player to check
 	 * @return TRUE if the player made not trick
@@ -1155,8 +1149,6 @@ public class SkatGameData {
 	/**
 	 * Gets the cards of a player after discarding
 	 * 
-	 * @param player
-	 *            Player
 	 * @return Cards after discarding
 	 */
 	public Map<Player, CardList> getCardsAfterDiscard() {
