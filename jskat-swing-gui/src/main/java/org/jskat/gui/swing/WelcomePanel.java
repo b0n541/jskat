@@ -38,7 +38,7 @@ public class WelcomePanel extends AbstractTabPanel {
 	private static Logger log = LoggerFactory.getLogger(WelcomePanel.class);
 
 	/**
-	 * @see AbstractTabPanel#AbstractTabPanel(String, ActionMap)
+	 * @see AbstractTabPanel#AbstractTabPanel(JSkatView, String, ActionMap)
 	 */
 	public WelcomePanel(final JSkatView view, final String newTableName,
 			final ActionMap actions) {
