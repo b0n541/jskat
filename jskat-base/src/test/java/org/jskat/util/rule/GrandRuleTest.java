@@ -79,6 +79,18 @@ public class GrandRuleTest extends AbstractJSkatTest {
 	}
 
 	@Test
+	public void calcGameLostSchneiderAnnounced() {
+		factory.setHand(Boolean.TRUE);
+		factory.setSchneider(Boolean.TRUE);
+		SkatGameData data = new SkatGameData();
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerScore(89);
+		data.calcResult();
+		assertFalse(data.getResult().isWon());
+	}
+
+	@Test
 	public void calcGameWonSchwarzAnnounced() {
 		factory.setHand(Boolean.TRUE);
 		factory.setSchneider(Boolean.TRUE);
@@ -89,6 +101,19 @@ public class GrandRuleTest extends AbstractJSkatTest {
 		data.setDeclarerScore(120);
 		data.calcResult();
 		assertTrue(data.getResult().isWon());
+	}
+
+	@Test
+	public void calcGameLostSchwarzAnnounced() {
+		factory.setHand(Boolean.TRUE);
+		factory.setSchneider(Boolean.TRUE);
+		factory.setSchwarz(Boolean.TRUE);
+		SkatGameData data = new SkatGameData();
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerScore(119);
+		data.calcResult();
+		assertFalse(data.getResult().isWon());
 	}
 
 	/**

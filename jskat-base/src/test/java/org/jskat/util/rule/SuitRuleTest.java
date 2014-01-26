@@ -77,6 +77,17 @@ public class SuitRuleTest extends AbstractJSkatTest {
 	}
 
 	@Test
+	public void calcGameLostSchneiderAnnounced() {
+		factory.setHand(Boolean.TRUE);
+		factory.setSchneider(Boolean.TRUE);
+		SkatGameData data = new SkatGameData();
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerScore(89);
+		assertFalse(clubsRules.isGameWon(data));
+	}
+
+	@Test
 	public void calcGameWonSchwarzAnnounced() {
 		factory.setHand(Boolean.TRUE);
 		factory.setSchneider(Boolean.TRUE);
@@ -86,6 +97,18 @@ public class SuitRuleTest extends AbstractJSkatTest {
 		data.setDeclarer(Player.FOREHAND);
 		data.setDeclarerScore(120);
 		assertTrue(clubsRules.isGameWon(data));
+	}
+
+	@Test
+	public void calcGameLostSchwarzAnnounced() {
+		factory.setHand(Boolean.TRUE);
+		factory.setSchneider(Boolean.TRUE);
+		factory.setSchwarz(Boolean.TRUE);
+		SkatGameData data = new SkatGameData();
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setDeclarer(Player.FOREHAND);
+		data.setDeclarerScore(119);
+		assertFalse(clubsRules.isGameWon(data));
 	}
 
 	/**
