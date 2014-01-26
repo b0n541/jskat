@@ -27,28 +27,12 @@ public final class SkatConstants {
 	/**
 	 * All possible bid values ordered from the lowest to the highest bid value
 	 */
-	public static final List<Integer> bidOrder = Arrays.asList(
-			Integer.valueOf(18), Integer.valueOf(20), Integer.valueOf(22),
-			Integer.valueOf(23), Integer.valueOf(24), Integer.valueOf(27),
-			Integer.valueOf(30), Integer.valueOf(33), Integer.valueOf(35),
-			Integer.valueOf(36), Integer.valueOf(40), Integer.valueOf(44),
-			Integer.valueOf(45), Integer.valueOf(46), Integer.valueOf(48),
-			Integer.valueOf(50), Integer.valueOf(54), Integer.valueOf(55),
-			Integer.valueOf(59), Integer.valueOf(60), Integer.valueOf(63),
-			Integer.valueOf(66), Integer.valueOf(70), Integer.valueOf(72),
-			Integer.valueOf(77), Integer.valueOf(80), Integer.valueOf(81),
-			Integer.valueOf(84), Integer.valueOf(88), Integer.valueOf(90),
-			Integer.valueOf(96), Integer.valueOf(99), Integer.valueOf(100),
-			Integer.valueOf(108), Integer.valueOf(110), Integer.valueOf(117),
-			Integer.valueOf(120), Integer.valueOf(121), Integer.valueOf(126),
-			Integer.valueOf(130), Integer.valueOf(132), Integer.valueOf(135),
-			Integer.valueOf(140), Integer.valueOf(143), Integer.valueOf(144),
-			Integer.valueOf(150), Integer.valueOf(153), Integer.valueOf(154),
-			Integer.valueOf(156), Integer.valueOf(160), Integer.valueOf(162),
-			Integer.valueOf(165), Integer.valueOf(168), Integer.valueOf(170),
-			Integer.valueOf(176), Integer.valueOf(180), Integer.valueOf(187),
-			Integer.valueOf(192), Integer.valueOf(198), Integer.valueOf(204),
-			Integer.valueOf(216), Integer.valueOf(240), Integer.valueOf(264));
+	public static final List<Integer> bidOrder = Arrays.asList(18, 20, 22, 23,
+			24, 27, 30, 33, 35, 36, 40, 44, 45, 46, 48, 50, 54, 55, 59, 60, 63,
+			66, 70, 72, 77, 80, 81, 84, 88, 90, 96, 99, 100, 108, 110, 117,
+			120, 121, 126, 130, 132, 135, 140, 143, 144, 150, 153, 154, 156,
+			160, 162, 165, 168, 170, 176, 180, 187, 192, 198, 204, 216, 240,
+			264);
 
 	/**
 	 * Gets the next valid bid value
