@@ -218,6 +218,70 @@ public class SuitRuleTest extends AbstractJSkatTest {
 	 * Checks @see GrandRule#calcGameResult()
 	 */
 	@Test
+	public void calcGameResultGameWonClubJackSchneider() {
+		final SkatGameData data = new SkatGameData();
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setDeclarer(Player.FOREHAND);
+		data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ));
+		data.setDeclarerScore(90);
+		data.calcResult();
+		assertEquals(36, data.getResult().getGameValue());
+	}
+
+	/**
+	 * Checks @see GrandRule#calcGameResult()
+	 */
+	@Test
+	public void calcGameResultGameWonClubJackSchneiderSchwarz() {
+		final SkatGameData data = new SkatGameData();
+		data.setAnnouncement(factory.getAnnouncement());
+		data.setDeclarer(Player.FOREHAND);
+		data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ));
+		data.setDeclarerScore(120);
+		data.calcResult();
+		assertEquals(48, data.getResult().getGameValue());
+	}
+
+	/**
+	 * Checks @see GrandRule#calcGameResult()
+	 */
+	@Test
+	public void calcGameResultGameWonClubJackSchneiderAndAnnounced() {
+		final SkatGameData data = new SkatGameData();
+		data.setDeclarer(Player.FOREHAND);
+		factory.setHand(true);
+		factory.setSchneider(true);
+		data.setAnnouncement(factory.getAnnouncement());
+		data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ));
+		data.setDeclarerScore(90);
+		data.getGameResult().setSchneider(true);
+		data.calcResult();
+		assertEquals(60, data.getResult().getGameValue());
+	}
+
+	/**
+	 * Checks @see GrandRule#calcGameResult()
+	 */
+	@Test
+	public void calcGameResultGameWonClubJackSchwarzAndAnnounced() {
+		final SkatGameData data = new SkatGameData();
+		data.setDeclarer(Player.FOREHAND);
+		factory.setHand(true);
+		factory.setSchneider(true);
+		factory.setSchwarz(true);
+		data.setAnnouncement(factory.getAnnouncement());
+		data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ));
+		data.setDeclarerScore(120);
+		data.getGameResult().setSchneider(true);
+		data.getGameResult().setSchwarz(true);
+		data.calcResult();
+		assertEquals(84, data.getResult().getGameValue());
+	}
+
+	/**
+	 * Checks @see GrandRule#calcGameResult()
+	 */
+	@Test
 	public void calcGameResultGameWonClubSpadeHeartJack() {
 		SkatGameData data = new SkatGameData();
 		factory.setHand(false);
