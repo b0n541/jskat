@@ -35,6 +35,19 @@ public final class SkatConstants {
 			264);
 
 	/**
+	 * Minimum points to win a game.
+	 */
+	public static final Integer MIN_WINNING_POINTS = 61;
+	/**
+	 * Minimum points to win a game with schneider.
+	 */
+	public static final Integer MIN_SCHNEIDER_WINNING_POINTS = 90;
+	/**
+	 * Minimum points to win a game with schwarz.
+	 */
+	public static final Integer MIN_SCHWARZ_WINNING_POINTS = 120;
+
+	/**
 	 * Gets the next valid bid value
 	 * 
 	 * @param currBidValue

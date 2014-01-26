@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Implements some methods of the interface SkatRules that are the same in suit
- * and grand games
+ * and grand games.
  */
 public abstract class SuitGrandRule extends SuitGrandRamschRule {
 
@@ -43,7 +43,7 @@ public abstract class SuitGrandRule extends SuitGrandRamschRule {
 		if (gameData.getScore(gameData.getDeclarer()) >= getMinimumWinningScore(gameData)) {
 
 			if (!isOverbid(gameData)) {
-				// declare should not overbid
+				// declarer should not overbid
 				result = true;
 			}
 		}
@@ -52,14 +52,14 @@ public abstract class SuitGrandRule extends SuitGrandRamschRule {
 	}
 
 	private static int getMinimumWinningScore(SkatGameData gameData) {
-		int result = 61;
+		int result = SkatConstants.MIN_WINNING_POINTS;
 
 		if (gameData.getAnnoucement().isSchneider()) {
-			result = 90;
+			result = SkatConstants.MIN_SCHNEIDER_WINNING_POINTS;
 		}
 
 		if (gameData.getAnnoucement().isSchwarz()) {
-			result = 120;
+			result = SkatConstants.MIN_SCHWARZ_WINNING_POINTS;
 		}
 
 		return result;
