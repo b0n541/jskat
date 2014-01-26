@@ -139,7 +139,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		add(splitPane, "grow"); //$NON-NLS-1$
 	}
 
-	private JTabbedPane getLeftPanel() {
+	protected JTabbedPane getLeftPanel() {
 
 		JTabbedPane leftPanel = new JTabbedPane();
 
