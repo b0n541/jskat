@@ -41,6 +41,7 @@ class GameSimulationThread extends JSkatThread {
 	private final GameType gameType;
 	private final Player position;
 	private final CardList cards;
+	private final CardList skat;
 
 	private Long maxEpisodes;
 	private Long maxTimestamp;
@@ -53,11 +54,12 @@ class GameSimulationThread extends JSkatThread {
 	private final AIPlayerNN nnPlayer3;
 
 	GameSimulationThread(final GameType pGameType, final Player playerPosition,
-			final CardList playerCards) {
+			final CardList playerHandCards, final CardList skatCards) {
 
 		gameType = pGameType;
 		position = playerPosition;
-		cards = playerCards;
+		cards = new CardList(playerHandCards);
+		skat = new CardList(skatCards);
 
 		nnPlayer1 = new AIPlayerNN();
 		nnPlayer1.setIsLearning(false);
@@ -109,6 +111,8 @@ class GameSimulationThread extends JSkatThread {
 				return false;
 			}
 		}
+		log.warn(simulatedGames + " episodes simulated for game type "
+				+ gameType + ".");
 		return true;
 	}
 
@@ -119,7 +123,8 @@ class GameSimulationThread extends JSkatThread {
 		game.setView(new NullView());
 		game.setLogger(NOPLogger.NOP_LOGGER);
 
-		CardDeck deck = CardDeckSimulator.simulateUnknownCards(position, cards);
+		CardDeck deck = CardDeckSimulator.simulateUnknownCards(position, cards,
+				skat);
 		log.debug("Card deck: " + deck); //$NON-NLS-1$
 		game.setCardDeck(deck);
 		game.dealCards();

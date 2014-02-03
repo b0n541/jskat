@@ -299,6 +299,9 @@ public class AIPlayerNN extends AbstractAIPlayer {
 				CardList simCards = new CardList();
 				simCards.addAll(cards);
 
+				log.warn("Simulate discarding of " + simCards.get(i) + " and "
+						+ simCards.get(j) + ".");
+
 				CardList currSkat = new CardList();
 				currSkat.add(simCards.get(i));
 				currSkat.add(simCards.get(j));
@@ -306,7 +309,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 				simCards.removeAll(currSkat);
 
 				gameSimulator.resetGameSimulator(filteredGameTypes,
-						knowledge.getPlayerPosition(), simCards);
+						knowledge.getPlayerPosition(), simCards, currSkat);
 				SimulationResults simulationResults = gameSimulator
 						.simulateMaxEpisodes(Long.valueOf(MAX_SIMULATIONS / 2));
 
@@ -327,11 +330,9 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		if (result.size() != 2) {
 			log.error("Did not found cards for discarding!!!"); //$NON-NLS-1$
 			result.clear();
-			result.add(cards.remove(rand.nextInt(cards.size())));
-			result.add(cards.remove(rand.nextInt(cards.size())));
+			result.add(cards.get(rand.nextInt(cards.size())));
+			result.add(cards.get(rand.nextInt(cards.size())));
 		}
-
-		log.debug("Player cards after discarding: " + knowledge.getOwnCards()); //$NON-NLS-1$
 
 		return result;
 	}

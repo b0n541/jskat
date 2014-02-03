@@ -36,11 +36,17 @@ class GameSimulator {
 
 	void resetGameSimulator(List<GameType> gameTypes, Player playerPosition,
 			CardList playerCards) {
-		
+		resetGameSimulator(gameTypes, playerPosition, playerCards,
+				new CardList());
+	}
+
+	void resetGameSimulator(List<GameType> gameTypes, Player playerPosition,
+			CardList playerCards, CardList skatCards) {
+
 		simThreads.clear();
 		for (GameType gameType : gameTypes) {
-			simThreads.put(gameType, new GameSimulationThread(gameType, playerPosition,
-				playerCards));
+			simThreads.put(gameType, new GameSimulationThread(gameType,
+					playerPosition, playerCards, skatCards));
 		}
 	}
 
@@ -48,8 +54,10 @@ class GameSimulator {
 
 		SimulationResults results = new SimulationResults();
 
+		Long endOfSimulation = System.currentTimeMillis() + 10 * 1000;
 		for (GameSimulationThread thread : simThreads.values()) {
 			thread.startSimulationWithMaxEpidodes(maxEpisodes);
+			// thread.startSimulationWithTimestamp(endOfSimulation);
 		}
 		for (GameSimulationThread thread : simThreads.values()) {
 			try {
