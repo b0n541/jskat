@@ -21,6 +21,7 @@ import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
@@ -287,9 +288,12 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	private void setMainFrameParameters() {
-		mainFrame.setIconImage(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.JSKAT,
+		List<Image> icons = new ArrayList<>();
+		icons.add(bitmaps.getIconImage(JSkatGraphicRepository.Icon.JSKAT,
+				JSkatGraphicRepository.IconSize.SMALL));
+		icons.add(bitmaps.getIconImage(JSkatGraphicRepository.Icon.JSKAT,
 				JSkatGraphicRepository.IconSize.BIG));
+		mainFrame.setIconImages(icons);
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setMinimumSize(new Dimension(800, 600));
 		mainFrame.setPreferredSize(new Dimension(1000, 700));
