@@ -21,6 +21,8 @@ import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Frame;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URI;
@@ -271,18 +273,35 @@ public class JSkatViewImpl implements JSkatView {
 		final JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
 
-		// symbol button panel
-		final JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout());
-		buttonPanel.add(new ToolbarButton(actions
-				.get(JSkatAction.CREATE_LOCAL_TABLE)));
-		buttonPanel.add(new ToolbarButton(actions
-				.get(JSkatAction.START_LOCAL_SERIES)));
-		buttonPanel.add(new ToolbarButton(actions
-				.get(JSkatAction.SHOW_ISS_LOGIN)));
-		buttonPanel.add(new ToolbarButton(actions.get(JSkatAction.HELP)));
-		mainPanel.add(buttonPanel, BorderLayout.NORTH);
+		if (isBigScreen()) {
+			addSymbolPanel(mainPanel);
+		}
 
 		// main area
+		addTabbedPane(mainPanel);
+
+		mainFrame.setContentPane(mainPanel);
+
+		setMainFrameParameters();
+
+		mainFrame.pack();
+	}
+
+	private void setMainFrameParameters() {
+		List<Image> icons = new ArrayList<>();
+		icons.add(bitmaps.getIconImage(JSkatGraphicRepository.Icon.JSKAT,
+				JSkatGraphicRepository.IconSize.SMALL));
+		icons.add(bitmaps.getIconImage(JSkatGraphicRepository.Icon.JSKAT,
+				JSkatGraphicRepository.IconSize.BIG));
+		mainFrame.setIconImages(icons);
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.setMinimumSize(new Dimension(800, 600));
+		mainFrame.setPreferredSize(new Dimension(1000, 700));
+		mainFrame.setExtendedState(mainFrame.getExtendedState()
+				| Frame.MAXIMIZED_BOTH);
+	}
+
+	private void addTabbedPane(final JPanel mainPanel) {
 		tabs = new JTabbedPane();
 		tabs.setAutoscrolls(true);
 		tabs.addChangeListener(new ChangeListener() {
@@ -313,21 +332,23 @@ public class JSkatViewImpl implements JSkatView {
 				}
 			}
 		});
-
 		mainPanel.add(tabs, BorderLayout.CENTER);
+	}
 
-		mainFrame.setContentPane(mainPanel);
+	private boolean isBigScreen() {
+		return Toolkit.getDefaultToolkit().getScreenSize().height > 700;
+	}
 
-		mainFrame.setIconImage(bitmaps.getIconImage(
-				JSkatGraphicRepository.Icon.JSKAT,
-				JSkatGraphicRepository.IconSize.BIG));
-		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainFrame.setMinimumSize(new Dimension(800, 600));
-		mainFrame.setPreferredSize(new Dimension(1000, 700));
-		mainFrame.setExtendedState(mainFrame.getExtendedState()
-				| Frame.MAXIMIZED_BOTH);
-
-		mainFrame.pack();
+	private void addSymbolPanel(final JPanel mainPanel) {
+		final JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout());
+		buttonPanel.add(new ToolbarButton(actions
+				.get(JSkatAction.CREATE_LOCAL_TABLE)));
+		buttonPanel.add(new ToolbarButton(actions
+				.get(JSkatAction.START_LOCAL_SERIES)));
+		buttonPanel.add(new ToolbarButton(actions
+				.get(JSkatAction.SHOW_ISS_LOGIN)));
+		buttonPanel.add(new ToolbarButton(actions.get(JSkatAction.HELP)));
+		mainPanel.add(buttonPanel, BorderLayout.NORTH);
 	}
 
 	private JMenuBar getMenuBar() {

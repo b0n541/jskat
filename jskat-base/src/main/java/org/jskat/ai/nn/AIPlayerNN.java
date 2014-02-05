@@ -52,18 +52,40 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	public static double WON = 1.0d;
 	public static double LOST = 0.0d;
 
+	// FIXME (jan 10.03.2012) code duplication with NNTrainer
+	private static boolean isRamschGameWon(final GameSummary gameSummary,
+			final Player currPlayer) {
+
+		boolean ramschGameWon = false;
+		int playerPoints = gameSummary.getPlayerPoints(currPlayer);
+		int highestPlayerPoints = 0;
+		for (Player player : Player.values()) {
+			int currPlayerPoints = gameSummary.getPlayerPoints(player);
+
+			if (currPlayerPoints > highestPlayerPoints) {
+				highestPlayerPoints = currPlayerPoints;
+			}
+		}
+
+		if (highestPlayerPoints > playerPoints) {
+			ramschGameWon = true;
+		}
+
+		return ramschGameWon;
+	}
+
 	private Logger log = LoggerFactory.getLogger(AIPlayerNN.class);
 
 	private DecimalFormat formatter = new DecimalFormat("0.00000000000000000");
-
 	private final GameSimulator gameSimulator;
-	private NetworkInputGenerator inputGenerator;
 
+	private NetworkInputGenerator inputGenerator;
 	private final Random rand;
 	private final List<double[]> allInputs = new ArrayList<double[]>();
-	private GameType bestGameTypeFromDiscarding;
 
+	private GameType bestGameTypeFromDiscarding;
 	private boolean isLearning = false;
+
 	private double lastAvgNetworkError = 0.0;
 
 	private final List<GameType> feasibleGameTypes = new ArrayList<GameType>();
@@ -100,89 +122,6 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	}
 
 	/**
-	 * @see JSkatPlayer#bidMore(int)
-	 */
-	@Override
-	public Integer bidMore(final int nextBidValue) {
-
-		int result = -1;
-
-		if (isAnyGamePossible(nextBidValue)) {
-			result = nextBidValue;
-		}
-
-		return result;
-	}
-
-	/**
-	 * @see JSkatPlayer#holdBid(int)
-	 */
-	@Override
-	public Boolean holdBid(final int currBidValue) {
-
-		return isAnyGamePossible(currBidValue);
-	}
-
-	private boolean isAnyGamePossible(final int bidValue) {
-
-		List<GameType> filteredGameTypes = filterFeasibleGameTypes(bidValue);
-
-		gameSimulator.resetGameSimulator(filteredGameTypes,
-				knowledge.getPlayerPosition(), knowledge.getOwnCards());
-		SimulationResults results = gameSimulator.simulateMaxEpisodes(Long
-				.valueOf(MAX_SIMULATIONS / 2));
-
-		for (Double wonRate : results.getAllWonRates()) {
-			if (wonRate.doubleValue() > 0.6) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private List<GameType> filterFeasibleGameTypes(final int bidValue) {
-		// FIXME (jansch 14.09.2011) consider hand and ouvert games
-		// return game announcement instead
-		List<GameType> result = new ArrayList<GameType>();
-
-		SkatGameData data = getGameDataForWonGame();
-
-		for (GameType gameType : feasibleGameTypes) {
-
-			GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-			factory.setGameType(gameType);
-			data.setAnnouncement(factory.getAnnouncement());
-
-			SkatRule skatRules = SkatRuleFactory.getSkatRules(gameType);
-			int currGameResult = skatRules.calcGameResult(data);
-
-			if (currGameResult >= bidValue) {
-
-				result.add(gameType);
-			}
-		}
-
-		return result;
-	}
-
-	private SkatGameData getGameDataForWonGame() {
-
-		SkatGameData data = new SkatGameData();
-
-		// it doesn't matter which position is set for declarer
-		// skat game data are only used to calculate the game value
-		data.setDeclarer(Player.FOREHAND);
-		data.addDealtCards(Player.FOREHAND, knowledge.getOwnCards());
-		data.addSkatToPlayer(Player.FOREHAND);
-
-		SkatGameResult result = new SkatGameResult();
-		result.setWon(true);
-		data.setResult(result);
-
-		return data;
-	}
-
-	/**
 	 * @see JSkatPlayer#announceGame()
 	 */
 	@Override
@@ -214,40 +153,124 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		return newGame;
 	}
 
-	private GameType getBestGameType() {
+	/**
+	 * @see JSkatPlayer#bidMore(int)
+	 */
+	@Override
+	public Integer bidMore(final int nextBidValue) {
 
-		// FIXME (jan 18.01.2011) check for overbidding!
-		GameType bestGameType = null;
+		int result = -1;
+
+		if (isAnyGamePossible(nextBidValue)) {
+			result = nextBidValue;
+		}
+
+		return result;
+	}
+
+	@Override
+	public Boolean callContra() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Boolean callRe() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	/**
+	 * @see org.jskat.player.JSkatPlayer#finalizeGame()
+	 */
+	@Override
+	public void finalizeGame() {
+
+		assert allInputs.size() < 11;
+
+		if (isLearning && allInputs.size() > 0) {
+			// adjust neural networks
+			// from last trick to first trick
+			adjustNeuralNetworks(allInputs);
+		}
+	}
+
+	/**
+	 * @see JSkatPlayer#discardSkat()
+	 */
+	@Override
+	public CardList getCardsToDiscard() {
+
+		CardList cards = knowledge.getOwnCards();
+		CardList result = new CardList();
 		double highestWonRate = 0.0;
 
-		List<GameType> gameTypesToCheck = filterFeasibleGameTypes(knowledge
-				.getHighestBid(knowledge.getPlayerPosition()));
-		gameSimulator.resetGameSimulator(gameTypesToCheck,
-				knowledge.getPlayerPosition(), knowledge.getOwnCards());
-		SimulationResults results = gameSimulator.simulateMaxEpisodes(Long
-				.valueOf(MAX_SIMULATIONS));
+		log.debug("Player cards before discarding: " + knowledge.getOwnCards()); //$NON-NLS-1$
 
-		for (GameType gameType : gameTypesToCheck) {
+		List<GameType> filteredGameTypes = filterFeasibleGameTypes(knowledge
+				.getHighestBid(knowledge.getPlayerPosition()).intValue());
 
-			Double wonRate = results.getWonRate(gameType);
+		// check all possible discards
+		for (int i = 0; i < cards.size() - 1; i++) {
+			for (int j = i + 1; j < cards.size(); j++) {
 
-			if (wonRate.doubleValue() > highestWonRate) {
+				CardList simCards = new CardList();
+				simCards.addAll(cards);
 
-				log.debug("Found new highest number of won games " //$NON-NLS-1$
-						+ wonRate + " for game type " + gameType); //$NON-NLS-1$
+				log.warn("Simulate discarding of " + simCards.get(i) + " and "
+						+ simCards.get(j) + ".");
 
-				highestWonRate = wonRate;
-				bestGameType = gameType;
+				CardList currSkat = new CardList();
+				currSkat.add(simCards.get(i));
+				currSkat.add(simCards.get(j));
+
+				simCards.removeAll(currSkat);
+
+				gameSimulator.resetGameSimulator(filteredGameTypes,
+						knowledge.getPlayerPosition(), simCards, currSkat);
+				SimulationResults simulationResults = gameSimulator
+						.simulateMaxEpisodes(Long.valueOf(MAX_SIMULATIONS / 2));
+
+				for (GameType currType : filteredGameTypes) {
+
+					Double wonRate = simulationResults.getWonRate(currType);
+
+					if (wonRate.doubleValue() > highestWonRate) {
+						highestWonRate = wonRate.doubleValue();
+						bestGameTypeFromDiscarding = currType;
+						result.clear();
+						result.addAll(currSkat);
+					}
+				}
 			}
 		}
 
-		if (bestGameType == null) {
-			// FIXME (jansch 21.09.2011) find cheapest game
-			log.error("No best game type found. Announcing null!!!"); //$NON-NLS-1$
-			bestGameType = GameType.NULL;
+		if (result.size() != 2) {
+			log.error("Did not found cards for discarding!!!"); //$NON-NLS-1$
+			result.clear();
+			result.add(cards.get(rand.nextInt(cards.size())));
+			result.add(cards.get(rand.nextInt(cards.size())));
 		}
 
-		return bestGameType;
+		return result;
+	}
+
+	/**
+	 * Gets the last average network error
+	 * 
+	 * @return Last average network error
+	 */
+	public double getLastAvgNetworkError() {
+		return lastAvgNetworkError;
+	}
+
+	/**
+	 * @see JSkatPlayer#holdBid(int)
+	 */
+	@Override
+	public Boolean holdBid(final int currBidValue) {
+
+		return isAnyGamePossible(currBidValue);
 	}
 
 	/**
@@ -275,74 +298,6 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		}
 
 		return result;
-	}
-
-	/**
-	 * @see JSkatPlayer#discardSkat()
-	 */
-	@Override
-	public CardList getCardsToDiscard() {
-
-		CardList cards = knowledge.getOwnCards();
-		CardList result = new CardList();
-		double highestWonRate = 0.0;
-
-		log.debug("Player cards before discarding: " + knowledge.getOwnCards()); //$NON-NLS-1$
-
-		List<GameType> filteredGameTypes = filterFeasibleGameTypes(knowledge
-				.getHighestBid(knowledge.getPlayerPosition()).intValue());
-
-		// check all possible discards
-		for (int i = 0; i < cards.size() - 1; i++) {
-			for (int j = i + 1; j < cards.size(); j++) {
-
-				CardList simCards = new CardList();
-				simCards.addAll(cards);
-
-				CardList currSkat = new CardList();
-				currSkat.add(simCards.get(i));
-				currSkat.add(simCards.get(j));
-
-				simCards.removeAll(currSkat);
-
-				gameSimulator.resetGameSimulator(filteredGameTypes,
-						knowledge.getPlayerPosition(), simCards);
-				SimulationResults simulationResults = gameSimulator
-						.simulateMaxEpisodes(Long.valueOf(MAX_SIMULATIONS / 2));
-
-				for (GameType currType : filteredGameTypes) {
-
-					Double wonRate = simulationResults.getWonRate(currType);
-
-					if (wonRate.doubleValue() > highestWonRate) {
-						highestWonRate = wonRate.doubleValue();
-						bestGameTypeFromDiscarding = currType;
-						result.clear();
-						result.addAll(currSkat);
-					}
-				}
-			}
-		}
-
-		if (result.size() != 2) {
-			log.error("Did not found cards for discarding!!!"); //$NON-NLS-1$
-			result.clear();
-			result.add(cards.remove(rand.nextInt(cards.size())));
-			result.add(cards.remove(rand.nextInt(cards.size())));
-		}
-
-		log.debug("Player cards after discarding: " + knowledge.getOwnCards()); //$NON-NLS-1$
-
-		return result;
-	}
-
-	/**
-	 * @see org.jskat.player.AbstractJSkatPlayer#startGame()
-	 */
-	@Override
-	public void startGame() {
-		// CHECK Auto-generated method stub
-
 	}
 
 	/**
@@ -416,25 +371,10 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		return possibleCards.get(bestCardIndex);
 	}
 
-	private String getInputString(final double[] inputs) {
-		String result = "";
-		for (double input : inputs) {
-			result += input + " ";
-		}
-		return result;
-	}
-
-	private void storeInputParameters(final double[] inputParameters) {
-
-		allInputs.add(inputParameters);
-	}
-
-	private int chooseRandomCard(final CardList possibleCards,
-			final CardList goodCards) {
-		int bestCardIndex;
-		Card choosenCard = goodCards.get(rand.nextInt(goodCards.size()));
-		bestCardIndex = possibleCards.indexOf(choosenCard);
-		return bestCardIndex;
+	@Override
+	public Boolean playGrandHand() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	/**
@@ -448,18 +388,35 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	}
 
 	/**
-	 * @see org.jskat.player.JSkatPlayer#finalizeGame()
+	 * Sets the player into learning mode
+	 * 
+	 * @param newIsLearning
+	 *            TRUE if the player should learn during play
+	 */
+	public void setIsLearning(final boolean newIsLearning) {
+
+		isLearning = newIsLearning;
+	}
+
+	/**
+	 * Sets a new logger for the nn player
+	 * 
+	 * @param newLogger
+	 *            New logger
 	 */
 	@Override
-	public void finalizeGame() {
+	public void setLogger(final Logger newLogger) {
+		super.setLogger(newLogger);
+		log = newLogger;
+	}
 
-		assert allInputs.size() < 11;
+	/**
+	 * @see org.jskat.player.AbstractJSkatPlayer#startGame()
+	 */
+	@Override
+	public void startGame() {
+		// CHECK Auto-generated method stub
 
-		if (isLearning && allInputs.size() > 0) {
-			// adjust neural networks
-			// from last trick to first trick
-			adjustNeuralNetworks(allInputs);
-		}
 	}
 
 	private void adjustNeuralNetworks(final List<double[]> inputs) {
@@ -508,75 +465,119 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		}
 	}
 
-	/**
-	 * Gets the last average network error
-	 * 
-	 * @return Last average network error
-	 */
-	public double getLastAvgNetworkError() {
-		return lastAvgNetworkError;
+	private int chooseRandomCard(final CardList possibleCards,
+			final CardList goodCards) {
+		int bestCardIndex;
+		Card choosenCard = goodCards.get(rand.nextInt(goodCards.size()));
+		bestCardIndex = possibleCards.indexOf(choosenCard);
+		return bestCardIndex;
 	}
 
-	// FIXME (jan 10.03.2012) code duplication with NNTrainer
-	private static boolean isRamschGameWon(final GameSummary gameSummary,
-			final Player currPlayer) {
+	private List<GameType> filterFeasibleGameTypes(final int bidValue) {
+		// FIXME (jansch 14.09.2011) consider hand and ouvert games
+		// return game announcement instead
+		List<GameType> result = new ArrayList<GameType>();
 
-		boolean ramschGameWon = false;
-		int playerPoints = gameSummary.getPlayerPoints(currPlayer);
-		int highestPlayerPoints = 0;
-		for (Player player : Player.values()) {
-			int currPlayerPoints = gameSummary.getPlayerPoints(player);
+		SkatGameData data = getGameDataForWonGame();
 
-			if (currPlayerPoints > highestPlayerPoints) {
-				highestPlayerPoints = currPlayerPoints;
+		for (GameType gameType : feasibleGameTypes) {
+
+			GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+			factory.setGameType(gameType);
+			data.setAnnouncement(factory.getAnnouncement());
+
+			SkatRule skatRules = SkatRuleFactory.getSkatRules(gameType);
+			int currGameResult = skatRules.calcGameResult(data);
+
+			if (currGameResult >= bidValue) {
+
+				result.add(gameType);
 			}
 		}
 
-		if (highestPlayerPoints > playerPoints) {
-			ramschGameWon = true;
+		return result;
+	}
+
+	private GameType getBestGameType() {
+
+		// FIXME (jan 18.01.2011) check for overbidding!
+		GameType bestGameType = null;
+		double highestWonRate = 0.0;
+
+		List<GameType> gameTypesToCheck = filterFeasibleGameTypes(knowledge
+				.getHighestBid(knowledge.getPlayerPosition()));
+		gameSimulator.resetGameSimulator(gameTypesToCheck,
+				knowledge.getPlayerPosition(), knowledge.getOwnCards());
+		SimulationResults results = gameSimulator.simulateMaxEpisodes(Long
+				.valueOf(MAX_SIMULATIONS));
+
+		for (GameType gameType : gameTypesToCheck) {
+
+			Double wonRate = results.getWonRate(gameType);
+
+			if (wonRate.doubleValue() > highestWonRate) {
+
+				log.debug("Found new highest number of won games " //$NON-NLS-1$
+						+ wonRate + " for game type " + gameType); //$NON-NLS-1$
+
+				highestWonRate = wonRate;
+				bestGameType = gameType;
+			}
 		}
 
-		return ramschGameWon;
+		if (bestGameType == null) {
+			// FIXME (jansch 21.09.2011) find cheapest game
+			log.error("No best game type found. Announcing null!!!"); //$NON-NLS-1$
+			bestGameType = GameType.NULL;
+		}
+
+		return bestGameType;
 	}
 
-	/**
-	 * Sets the player into learning mode
-	 * 
-	 * @param newIsLearning
-	 *            TRUE if the player should learn during play
-	 */
-	public void setIsLearning(final boolean newIsLearning) {
+	private SkatGameData getGameDataForWonGame() {
 
-		isLearning = newIsLearning;
+		SkatGameData data = new SkatGameData();
+
+		// it doesn't matter which position is set for declarer
+		// skat game data are only used to calculate the game value
+		data.setDeclarer(Player.FOREHAND);
+		data.addDealtCards(Player.FOREHAND, knowledge.getOwnCards());
+		data.addSkatToPlayer(Player.FOREHAND);
+
+		SkatGameResult result = new SkatGameResult();
+		result.setWon(true);
+		data.setResult(result);
+
+		return data;
 	}
 
-	/**
-	 * Sets a new logger for the nn player
-	 * 
-	 * @param newLogger
-	 *            New logger
-	 */
-	@Override
-	public void setLogger(final Logger newLogger) {
-		super.setLogger(newLogger);
-		log = newLogger;
+	private String getInputString(final double[] inputs) {
+		String result = "";
+		for (double input : inputs) {
+			result += input + " ";
+		}
+		return result;
 	}
 
-	@Override
-	public Boolean callContra() {
-		// TODO Auto-generated method stub
+	private boolean isAnyGamePossible(final int bidValue) {
+
+		List<GameType> filteredGameTypes = filterFeasibleGameTypes(bidValue);
+
+		gameSimulator.resetGameSimulator(filteredGameTypes,
+				knowledge.getPlayerPosition(), knowledge.getOwnCards());
+		SimulationResults results = gameSimulator.simulateMaxEpisodes(Long
+				.valueOf(MAX_SIMULATIONS / 2));
+
+		for (Double wonRate : results.getAllWonRates()) {
+			if (wonRate.doubleValue() > 0.6) {
+				return true;
+			}
+		}
 		return false;
 	}
 
-	@Override
-	public Boolean callRe() {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	private void storeInputParameters(final double[] inputParameters) {
 
-	@Override
-	public Boolean playGrandHand() {
-		// TODO Auto-generated method stub
-		return null;
+		allInputs.add(inputParameters);
 	}
 }

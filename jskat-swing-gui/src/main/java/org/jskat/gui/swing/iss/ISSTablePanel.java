@@ -22,6 +22,7 @@ import java.util.List;
 import javax.swing.ActionMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.iss.ChatMessage;
@@ -86,10 +87,6 @@ public class ISSTablePanel extends SkatTablePanel {
 				"fill,insets 0", "[grow][shrink]", //$NON-NLS-1$ //$NON-NLS-2$
 				"fill")); //$NON-NLS-1$
 		panel.add(super.getPlayGroundPanel(), "width 80%, grow"); //$NON-NLS-1$
-		chatPanel = getChatPanel();
-		chatPanel.addNewChat(
-				strings.getString("table") + " " + getName(), getName()); //$NON-NLS-1$//$NON-NLS-2$
-		panel.add(chatPanel, "width 20%, growy"); //$NON-NLS-1$
 
 		// replace game start context panel
 		addContextPanel(
@@ -98,6 +95,19 @@ public class ISSTablePanel extends SkatTablePanel {
 		setGameState(GameState.GAME_START);
 
 		return panel;
+	}
+
+	@Override
+	protected JTabbedPane getLeftPanel() {
+
+		JTabbedPane leftPanel = super.getLeftPanel();
+
+		chatPanel = getChatPanel();
+		chatPanel.addNewChat(
+				strings.getString("table") + " " + getName(), getName()); //$NON-NLS-1$//$NON-NLS-2$
+		leftPanel.add(strings.getString("chat"), chatPanel); //$NON-NLS-1$
+
+		return leftPanel;
 	}
 
 	@Override

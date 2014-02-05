@@ -42,10 +42,26 @@ public class CardDeckSimulator {
 	 */
 	public static CardDeck simulateUnknownCards(Player playerPosition,
 			CardList playerHand) {
+		return simulateUnknownCards(playerPosition, playerHand, new CardList());
+	}
+
+	/**
+	 * Simulates a card distribution
+	 * 
+	 * @param playerPosition
+	 *            Player position
+	 * @param playerHand
+	 *            Cards on players hand
+	 * @param knownSkat
+	 *            Cards in the skat
+	 * @return Simulated card distribution
+	 */
+	public static CardDeck simulateUnknownCards(Player playerPosition,
+			CardList playerHand, CardList knownSkat) {
 
 		// prepare result
 		Map<Player, CardList> playerHands = new HashMap<Player, CardList>();
-		CardList skat = new CardList();
+		CardList skat = new CardList(knownSkat);
 
 		for (Player player : Player.values()) {
 			// set empty card list
@@ -55,10 +71,9 @@ public class CardDeckSimulator {
 
 		// get unknown cards
 		CardDeck unknownCards = new CardDeck();
-		for (Card card : playerHand) {
+		unknownCards.removeAll(playerHand);
+		unknownCards.removeAll(knownSkat);
 
-			unknownCards.remove(card);
-		}
 		unknownCards.shuffle();
 
 		// set unknown cards
@@ -91,7 +106,8 @@ public class CardDeckSimulator {
 
 		// Simulate card dealing
 		for (int i = 0; i < 3; i++) {
-			// FIXME (jan 17.01.2011) code duplication with SimpleSkatGame#dealCards()
+			// FIXME (jan 17.01.2011) code duplication with
+			// SimpleSkatGame#dealCards()
 			// deal three rounds of cards
 			switch (i) {
 			case 0:

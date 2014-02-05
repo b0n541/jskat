@@ -35,6 +35,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 
@@ -133,20 +134,24 @@ public class SkatTablePanel extends AbstractTabPanel {
 		getActionMap().get(JSkatAction.INVITE_ISS_PLAYER).setEnabled(true);
 
 		final JSplitPane splitPane = new JSplitPane(
-				JSplitPane.HORIZONTAL_SPLIT, getScoreListPanel(),
+				JSplitPane.HORIZONTAL_SPLIT, getLeftPanel(),
 				getPlayGroundPanel());
 		add(splitPane, "grow"); //$NON-NLS-1$
+	}
+
+	protected JTabbedPane getLeftPanel() {
+
+		JTabbedPane leftPanel = new JTabbedPane();
+
+		leftPanel.addTab(strings.getString("score_sheet"), getScoreListPanel());
+
+		return leftPanel;
 	}
 
 	private JPanel getScoreListPanel() {
 
 		final JPanel panel = new JPanel(LayoutFactory.getMigLayout(
-				"fill", "fill", "[shrink][grow]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-
-		final JLabel skatListLabel = new JLabel(
-				strings.getString("score_sheet")); //$NON-NLS-1$
-		skatListLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
-		panel.add(skatListLabel, "wrap, growx, shrinky"); //$NON-NLS-1$
+				"fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		skatListTableModel = new SkatListTableModel();
 		scoreListTable = new JTable(skatListTableModel);
