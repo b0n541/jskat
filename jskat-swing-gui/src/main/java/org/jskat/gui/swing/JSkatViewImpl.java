@@ -336,7 +336,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	private boolean isBigScreen() {
-		return Toolkit.getDefaultToolkit().getScreenSize().height > 700;
+		return Toolkit.getDefaultToolkit().getScreenSize().height > 800;
 	}
 
 	private void addSymbolPanel(final JPanel mainPanel) {
