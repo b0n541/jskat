@@ -579,7 +579,7 @@ public class MessageParser {
 					result.addTrick(new Trick(result.getTricks().size(),
 							moveInfo.getPlayer()));
 				}
-				result.setTrickCard(moveInfo.getPlayer(), moveInfo.getCard());
+				result.addTrickCard(moveInfo.getCard());
 
 				if (result.getTricks().size() == 10
 						&& result.getCurrentTrick().getThirdCard() != null) {

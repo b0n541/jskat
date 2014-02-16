@@ -87,17 +87,6 @@ public class Trick {
 	}
 
 	/**
-	 * Sets the first card
-	 * 
-	 * @param newFirstCard
-	 *            First card
-	 */
-	public void setFirstCard(Card newFirstCard) {
-
-		firstCard = newFirstCard;
-	}
-
-	/**
 	 * Gets the second card
 	 * 
 	 * @return Second card
@@ -108,17 +97,6 @@ public class Trick {
 	}
 
 	/**
-	 * Sets the second card
-	 * 
-	 * @param newSecondCard
-	 *            Second card
-	 */
-	public void setSecondCard(Card newSecondCard) {
-
-		secondCard = newSecondCard;
-	}
-
-	/**
 	 * Gets the third card
 	 * 
 	 * @return Third card
@@ -126,17 +104,6 @@ public class Trick {
 	public Card getThirdCard() {
 
 		return thirdCard;
-	}
-
-	/**
-	 * Sets the third card
-	 * 
-	 * @param newThirdCard
-	 *            Third card
-	 */
-	public void setThirdCard(Card newThirdCard) {
-
-		thirdCard = newThirdCard;
 	}
 
 	/**
@@ -249,16 +216,6 @@ public class Trick {
 	 */
 	public int getTrickNumberInGame() {
 		return trickNumberInGame;
-	}
-
-	/**
-	 * Sets the trick number in the game
-	 * 
-	 * @param newTrickNumber
-	 *            Trick number in the game
-	 */
-	public void setTrickNumberInGame(int newTrickNumber) {
-		trickNumberInGame = newTrickNumber;
 	}
 
 	/**

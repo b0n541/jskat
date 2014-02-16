@@ -541,7 +541,7 @@ public class IssController {
 			break;
 		case CARD_PLAY:
 			currGame.setGameState(GameState.TRICK_PLAYING);
-			currGame.setTrickCard(movePlayer, moveInformation.getCard());
+			currGame.addTrickCard(moveInformation.getCard());
 			break;
 		case RESIGN:
 		case TIME_OUT:

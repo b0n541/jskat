@@ -28,7 +28,8 @@ public class PlayerPartyMadeCardsAndNextCardStrategy extends
 		PlayerPartyMadeCardsStrategy {
 
 	@Override
-	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
+	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge,
+			Card cardToPlay) {
 
 		double[] result = super.getNetworkInput(knowledge, cardToPlay);
 
@@ -37,7 +38,7 @@ public class PlayerPartyMadeCardsAndNextCardStrategy extends
 		if (trick.getFirstCard() != null && trick.getSecondCard() != null
 				&& trick.getThirdCard() == null) {
 
-			trick.setThirdCard(cardToPlay);
+			trick.addCard(cardToPlay);
 
 			SkatRule rule = SkatRuleFactory.getSkatRules(knowledge
 					.getGameType());

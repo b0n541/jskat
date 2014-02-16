@@ -57,14 +57,14 @@ public class NullRuleTest extends AbstractJSkatTest {
 
 	private void playWinningTricks() {
 		data.addTrick(new Trick(0, Player.FOREHAND));
-		data.setTrickCard(Player.FOREHAND, Card.C7);
-		data.setTrickCard(Player.MIDDLEHAND, Card.C8);
-		data.setTrickCard(Player.REARHAND, Card.C9);
+		data.addTrickCard(Card.C7);
+		data.addTrickCard(Card.C8);
+		data.addTrickCard(Card.C9);
 		data.setTrickWinner(0, Player.REARHAND);
 		data.addTrick(new Trick(1, Player.REARHAND));
-		data.setTrickCard(Player.REARHAND, Card.S8);
-		data.setTrickCard(Player.FOREHAND, Card.S7);
-		data.setTrickCard(Player.MIDDLEHAND, Card.S9);
+		data.addTrickCard(Card.S8);
+		data.addTrickCard(Card.S7);
+		data.addTrickCard(Card.S9);
 		data.setTrickWinner(1, Player.MIDDLEHAND);
 	}
 
@@ -210,9 +210,9 @@ public class NullRuleTest extends AbstractJSkatTest {
 
 	private void playLoosingTrick() {
 		data.addTrick(new Trick(2, Player.MIDDLEHAND));
-		data.setTrickCard(Player.MIDDLEHAND, Card.H7);
-		data.setTrickCard(Player.REARHAND, Card.H8);
-		data.setTrickCard(Player.FOREHAND, Card.H9);
+		data.addTrickCard(Card.H7);
+		data.addTrickCard(Card.H8);
+		data.addTrickCard(Card.H9);
 		data.setTrickWinner(2, Player.FOREHAND);
 		data.getGameResult().setWon(nullRules.isGameWon(data));
 	}

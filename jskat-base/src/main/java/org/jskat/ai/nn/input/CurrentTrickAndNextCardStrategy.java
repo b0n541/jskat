@@ -24,7 +24,8 @@ import org.jskat.util.rule.SkatRuleFactory;
 public class CurrentTrickAndNextCardStrategy extends CurrentTrickStrategy {
 
 	@Override
-	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
+	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge,
+			Card cardToPlay) {
 
 		double[] result = getEmptyInputs();
 
@@ -33,7 +34,7 @@ public class CurrentTrickAndNextCardStrategy extends CurrentTrickStrategy {
 		if (trick.getFirstCard() != null && trick.getSecondCard() != null
 				&& trick.getThirdCard() == null) {
 			// trick will be completed by next card
-			trick.setThirdCard(cardToPlay);
+			trick.addCard(cardToPlay);
 
 			SkatRule rule = SkatRuleFactory.getSkatRules(knowledge
 					.getGameType());

@@ -877,7 +877,7 @@ public class SkatGame extends JSkatThread {
 		if (card != null) {
 			// a card was played
 			data.removePlayerCard(currPlayer, card);
-			data.setTrickCard(currPlayer, card);
+			data.addTrickCard(card);
 
 			if (trick.getTrickNumberInGame() > 0
 					&& currPlayer.equals(trickForeHand)) {
