@@ -1207,7 +1207,7 @@ public class JSkatViewImpl implements JSkatView {
 
 		tabs.addTab(title, newPanel);
 		tabs.setTabComponentAt(tabs.indexOfComponent(newPanel),
-				new JSkatTabComponent(tabs, bitmaps));
+				new JSkatTabComponent(tabs, bitmaps,jskat));
 		tabs.setSelectedComponent(newPanel);
 		newPanel.setFocus();
 	}
@@ -1371,6 +1371,18 @@ public class JSkatViewImpl implements JSkatView {
 		showErrorMessage(strings.getString("duplicate_table_name_title"), //$NON-NLS-1$
 				message);
 	}
+        
+        	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void showNullInputNameMessage() {
+
+		showErrorMessage(strings.getString("invalid_name_input_null_title"), //$NON-NLS-1$
+				strings.getString("invalid_name_input_null_message"));
+	}
+        
+
 
 	/**
 	 * {@inheritDoc}
