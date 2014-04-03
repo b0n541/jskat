@@ -1371,6 +1371,18 @@ public class JSkatViewImpl implements JSkatView {
 		showErrorMessage(strings.getString("duplicate_table_name_title"), //$NON-NLS-1$
 				message);
 	}
+        
+        	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void showNullInputNameMessage() {
+
+		showErrorMessage(strings.getString("invalid_name_input_null_title"), //$NON-NLS-1$
+				strings.getString("invalid_name_input_null_message"));
+	}
+        
+
 
 	/**
 	 * {@inheritDoc}

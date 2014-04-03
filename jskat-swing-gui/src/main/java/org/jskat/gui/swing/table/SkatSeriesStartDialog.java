@@ -189,16 +189,23 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
 			setVisible(false);
 		} else if (START.equals(e.getActionCommand())) {
+                    
+                        if(player1name.getText().isEmpty() || player2name.getText().isEmpty() || player3name.getText().isEmpty()){
+                            
+                            jskat.showEmptyInputNameMessage();
+                            return;
+                        }
 
 			List<String> playerTypes = new ArrayList<String>();
 			playerTypes.add((String) player1.getSelectedItem());
 			playerTypes.add((String) player2.getSelectedItem());
 			playerTypes.add((String) player3.getSelectedItem());
 
-			List<String> playerNames = new ArrayList<String>();
+			List<String> playerNames = new ArrayList<String>();                        
 			playerNames.add(player1name.getText());
 			playerNames.add(player2name.getText());
 			playerNames.add(player3name.getText());
+                        
 
 			setVisible(false);
 
