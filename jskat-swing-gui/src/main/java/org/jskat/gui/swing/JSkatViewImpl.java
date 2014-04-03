@@ -1207,7 +1207,7 @@ public class JSkatViewImpl implements JSkatView {
 
 		tabs.addTab(title, newPanel);
 		tabs.setTabComponentAt(tabs.indexOfComponent(newPanel),
-				new JSkatTabComponent(tabs, bitmaps,jskat));
+				new JSkatTabComponent(tabs, bitmaps));
 		tabs.setSelectedComponent(newPanel);
 		newPanel.setFocus();
 	}

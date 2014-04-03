@@ -45,7 +45,6 @@ public class JSkatTabComponent extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	final JTabbedPane pane;
-        final JSkatMaster jskat;
 
 	/**
 	 * Constructor
@@ -56,7 +55,7 @@ public class JSkatTabComponent extends JPanel {
 	 *            JSkat bitmaps
 	 */
 	public JSkatTabComponent(final JTabbedPane newPane,
-			JSkatGraphicRepository bitmaps, JSkatMaster jskat) {
+			JSkatGraphicRepository bitmaps) {
 
 		// unset default FlowLayout' gaps
 		super(new FlowLayout(FlowLayout.LEFT, 0, 0));
@@ -65,7 +64,6 @@ public class JSkatTabComponent extends JPanel {
 			throw new IllegalArgumentException("TabbedPane is null"); //$NON-NLS-1$
 		}
 		this.pane = newPane;
-                this.jskat = jskat;
 		setOpaque(false);
 
 		// make JLabel read titles from JTabbedPane
@@ -123,7 +121,7 @@ public class JSkatTabComponent extends JPanel {
 					.indexOfTabComponent(JSkatTabComponent.this);
 			if (i != -1) {
 				// FIXME (jan 22.06.2010) use an action here
-                                jskat.removeTable(JSkatViewType.LOCAL_TABLE, pane.getTitleAt(i));
+                                JSkatMaster.instance().removeTable(JSkatViewType.LOCAL_TABLE, pane.getTitleAt(i));
 				JSkatTabComponent.this.pane.remove(i);                   
 			}
 		}

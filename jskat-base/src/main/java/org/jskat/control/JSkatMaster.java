@@ -125,6 +125,7 @@ public class JSkatMaster {
 			showEmptyInputNameMessage();
 			// try again
 			createTable();
+                        return;
 		}
 
 		if (data.isFreeTableName(tableName)) {
