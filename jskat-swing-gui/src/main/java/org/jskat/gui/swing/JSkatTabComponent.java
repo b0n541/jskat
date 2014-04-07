@@ -116,13 +116,14 @@ public class JSkatTabComponent extends JPanel {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-                    
+
 			int i = JSkatTabComponent.this.pane
 					.indexOfTabComponent(JSkatTabComponent.this);
 			if (i != -1) {
 				// FIXME (jan 22.06.2010) use an action here
-                                JSkatMaster.instance().removeTable(JSkatViewType.LOCAL_TABLE, pane.getTitleAt(i));
-				JSkatTabComponent.this.pane.remove(i);                   
+				JSkatMaster.instance().removeTable(JSkatViewType.LOCAL_TABLE,
+						pane.getTitleAt(i));
+				JSkatTabComponent.this.pane.remove(i);
 			}
 		}
 
@@ -135,8 +136,8 @@ public class JSkatTabComponent extends JPanel {
 			if (getModel().isPressed()) {
 				g2.translate(1, 1);
 			}
-			g2.drawImage(this.bitmaps.getIconImage(Icon.CLOSE,
-					IconSize.SMALL), null, null);
+			g2.drawImage(this.bitmaps.getIconImage(Icon.CLOSE, IconSize.SMALL),
+					null, null);
 			g2.dispose();
 		}
 	}

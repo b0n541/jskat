@@ -681,11 +681,11 @@ public interface JSkatView {
 	 */
 	public void showDuplicateTableNameMessage(String duplicateTableName);
 
-        /**
+	/**
 	 * Shows a message, that input name is empty
 	 */
-        public void showNullInputNameMessage();
-        
+	public void showNullInputNameMessage();
+
 	/**
 	 * Sets the schieben of a player
 	 * 

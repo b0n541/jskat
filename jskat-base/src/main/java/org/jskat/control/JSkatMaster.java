@@ -120,12 +120,12 @@ public class JSkatMaster {
 			log.debug("Create table was cancelled..."); //$NON-NLS-1$
 			return;
 		}
-                
-                if (tableName.isEmpty()) {
+
+		if (tableName.isEmpty()) {
 			showEmptyInputNameMessage();
 			// try again
 			createTable();
-                        return;
+			return;
 		}
 
 		if (data.isFreeTableName(tableName)) {
@@ -419,8 +419,8 @@ public class JSkatMaster {
 
 		view.showAboutMessage();
 	}
-        
-        /**
+
+	/**
 	 * Shows the error message of wrong (null) name input
 	 */
 	public void showEmptyInputNameMessage() {

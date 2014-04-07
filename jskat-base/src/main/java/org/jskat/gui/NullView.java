@@ -776,9 +776,9 @@ public class NullView implements JSkatView {
 
 	}
 
-    @Override
-    public void showNullInputNameMessage() {
-        // TODO Auto-generated method stub
-    
-    }
+	@Override
+	public void showNullInputNameMessage() {
+		// TODO Auto-generated method stub
+
+	}
 }
