@@ -222,6 +222,8 @@ public class ImmutablePlayerKnowledge {
 
 	/**
 	 * Gets all tricks that are completed
+	 * 
+	 * @return List of completed tricks
 	 */
 	public final List<Trick> getCompletedTricks() {
 		return Collections.unmodifiableList(tricks);
@@ -230,8 +232,7 @@ public class ImmutablePlayerKnowledge {
 	/**
 	 * Provides access to the current trick
 	 * 
-	 * @return the current trick
-	 * @throws CloneNotSupportedException
+	 * @return The current trick
 	 */
 	public final Trick getCurrentTrick() {
 		return (Trick) currentTrick.clone();
@@ -332,6 +333,10 @@ public class ImmutablePlayerKnowledge {
 	 *            Player ID
 	 * @param suit
 	 *            Suit to check
+	 * @param isTrump
+	 *            TRUE, if the suit is also trump
+	 * @param includeJacks
+	 *            TRUE, if Jacks should be included in the count
 	 * @return TRUE if the player could have any card of the suit
 	 */
 	public final int getPotentialSuitCount(final Player player,

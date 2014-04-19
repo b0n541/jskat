@@ -16,7 +16,7 @@
 package org.jskat.gui.action;
 
 /**
- * Action event for JSkat<br />
+ * Action event for JSkat<br>
  * Swings action event is not used to enable other platforms like Android
  */
 public class JSkatActionEvent {

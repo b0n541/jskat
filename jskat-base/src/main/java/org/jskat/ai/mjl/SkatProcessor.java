@@ -21,7 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author Markus J. Luzius <markus@luzius.de>
+ * @author Markus J. Luzius (markus@luzius.de)
  * 
  */
 public class SkatProcessor {

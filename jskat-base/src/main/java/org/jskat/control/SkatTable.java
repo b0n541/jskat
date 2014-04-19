@@ -69,7 +69,11 @@ public class SkatTable {
 	 * @param rounds
 	 *            Number of rounds to be played
 	 * @param unlimitedRounds
+	 *            TRUE, if the number of rounds is not limited
 	 * @param onlyPlayRamsch
+	 *            TRUE, if only Ramsch games should be played
+	 * @param sleepBetweenMoves
+	 *            Number of miliseconds to sleep between moves
 	 */
 	public void startSkatSeries(final int rounds,
 			final boolean unlimitedRounds, final boolean onlyPlayRamsch,

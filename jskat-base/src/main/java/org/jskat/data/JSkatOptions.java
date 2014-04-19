@@ -175,7 +175,7 @@ public final class JSkatOptions {
 		}
 
 		/**
-		 * Gets the enum name as property key.<br />
+		 * Gets the enum name as property key.<br>
 		 * Calls name(), converts everything to lower case and replaces all
 		 * occurences of "_[a-z]" to "[A-Z]"
 		 * 
@@ -193,7 +193,7 @@ public final class JSkatOptions {
 		}
 
 		/**
-		 * Gets the enum name from a property key.<br />
+		 * Gets the enum name from a property key.<br>
 		 * Inserts a '_' before each capital letter or number.
 		 * 
 		 * @param property
@@ -217,7 +217,7 @@ public final class JSkatOptions {
 	private static JSkatOptions optionsInstance = null;
 
 	/**
-	 * Returns the instance of the singleton JSkatOptions.<br />
+	 * Returns the instance of the singleton JSkatOptions.<br>
 	 * This method must be called at the very beginning.
 	 * 
 	 * @param pathResolver
@@ -234,7 +234,7 @@ public final class JSkatOptions {
 	}
 
 	/**
-	 * Returns the instance of the singleton {@link JSkatOptions}<br />
+	 * Returns the instance of the singleton {@link JSkatOptions}<br>
 	 * This methods throws a {@link IllegalStateException} if
 	 * {@link #instance(SavePathResolver)} was not called before
 	 * 
@@ -468,6 +468,8 @@ public final class JSkatOptions {
 	/**
 	 * Checks whether at least a bid of 18 has to be done to say contra
 	 * 
+	 * @param checkParentOption
+	 *            TRUE, if the parent option must be true too
 	 * @return TRUE, if the check succeeds
 	 */
 	public Boolean isContraAfterBid18(final boolean checkParentOption) {
@@ -496,6 +498,8 @@ public final class JSkatOptions {
 	/**
 	 * Getter for property playBock.
 	 * 
+	 * @param checkParentOption
+	 *            TRUE, if the parent option must be true too
 	 * @return Value of property playBock.
 	 */
 	public Boolean isPlayBock(final boolean checkParentOption) {
@@ -529,6 +533,8 @@ public final class JSkatOptions {
 	/**
 	 * Getter for property playKontra.
 	 * 
+	 * @param checkParentOption
+	 *            TRUE, if the parent option must be true too
 	 * @return Value of property playKontra.
 	 */
 	public Boolean isPlayContra(final boolean checkParentOption) {
@@ -721,6 +727,8 @@ public final class JSkatOptions {
 	 * Sets the flag for bid at least 18 to say contra
 	 * 
 	 * @param contraAfterBid18
+	 *            TRUE, if at least a bid of 18 is needed for the right to say
+	 *            contra
 	 */
 	public void setContraAfterBid18(final Boolean contraAfterBid18) {
 		setOption(Option.CONTRA_AFTER_BID_18, contraAfterBid18);
@@ -1265,6 +1273,7 @@ public final class JSkatOptions {
 	 * Resets the options to default
 	 * 
 	 * @param pathResolver
+	 *            Save path resolver
 	 */
 	public void resetToDefault(DesktopSavePathResolver pathResolver) {
 		setDefaultProperties(pathResolver);

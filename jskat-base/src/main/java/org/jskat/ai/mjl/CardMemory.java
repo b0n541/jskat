@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
  * certain game. It remembers all the initial cards as well as the individual
  * hands of all players.
  * 
- * @author Markus J. Luzius <markus@luzius.de>
+ * @author Markus J. Luzius (markus@luzius.de)
  * 
  */
 public class CardMemory {
@@ -50,7 +50,9 @@ public class CardMemory {
 	 * Extended constructor with the values of the current game
 	 * 
 	 * @param gameType
+	 *            Game type
 	 * @param trump
+	 *            Trump suit
 	 */
 	public CardMemory(final GameType gameType, final Suit trump) {
 		this.gameType = gameType;

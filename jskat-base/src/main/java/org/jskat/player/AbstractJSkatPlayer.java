@@ -163,7 +163,8 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * Gets all playable cards
 	 * 
 	 * @param trick
-	 * @return CardList with all playable cards
+	 *            Current trick
+	 * @return List of all playable cards
 	 */
 	protected final CardList getPlayableCards(final CardList trick) {
 

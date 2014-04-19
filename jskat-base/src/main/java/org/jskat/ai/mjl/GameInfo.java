@@ -19,7 +19,7 @@ import org.jskat.util.GameType;
 import org.jskat.util.Suit;
 
 /**
- * @author Markus J. Luzius <markus@luzius.de>
+ * @author Markus J. Luzius (markus@luzius.de)
  * 
  */
 public class GameInfo {

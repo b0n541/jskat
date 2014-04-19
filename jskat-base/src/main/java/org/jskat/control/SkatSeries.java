@@ -123,6 +123,8 @@ public class SkatSeries extends JSkatThread {
 	 * 
 	 * @param rounds
 	 *            Number of rounds to be played
+	 * @param newUnlimitedRound
+	 *            TRUE, if the number of rounds is not limited
 	 */
 	public void setMaxRounds(final int rounds, final boolean newUnlimitedRound) {
 

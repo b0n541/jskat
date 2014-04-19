@@ -26,7 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author Markus J. Luzius <markus@luzius.de>
+ * @author Markus J. Luzius (markus@luzius.de)
  * 
  */
 public class Helper {
@@ -41,27 +41,35 @@ public class Helper {
 	 *            All the necessary trick infos
 	 * @return true, if the single player would win the trick
 	 */
-	public static boolean isSinglePlayerWin(final ImmutablePlayerKnowledge knowledge) {
+	public static boolean isSinglePlayerWin(
+			final ImmutablePlayerKnowledge knowledge) {
 		if (knowledge.getTrickCards().size() < 2) {
 			// one card on the table: can't be single player win yet
 			return false;
 		}
 		if (knowledge.getDeclarer() == Player.FOREHAND) {
-			if (knowledge.getTrickCards().get(1)
-					.beats(knowledge.getGameAnnouncement().getGameType(), knowledge.getTrickCards().get(0))) {
+			if (knowledge
+					.getTrickCards()
+					.get(1)
+					.beats(knowledge.getGameAnnouncement().getGameType(),
+							knowledge.getTrickCards().get(0))) {
 				return false;
 			} else {
 				return true;
 			}
 		} else if (knowledge.getDeclarer() == Player.MIDDLEHAND) {
-			if (knowledge.getTrickCards().get(1)
-					.beats(knowledge.getGameAnnouncement().getGameType(), knowledge.getTrickCards().get(0))) {
+			if (knowledge
+					.getTrickCards()
+					.get(1)
+					.beats(knowledge.getGameAnnouncement().getGameType(),
+							knowledge.getTrickCards().get(0))) {
 				return true;
 			} else {
 				return false;
 			}
 		} else {
-			log.warn("Request for wrong singlePlayerPos (" + knowledge.getDeclarer() + ")!");
+			log.warn("Request for wrong singlePlayerPos ("
+					+ knowledge.getDeclarer() + ")!");
 			return false;
 		}
 	}
@@ -80,8 +88,8 @@ public class Helper {
 	 * @return true, if <b>cards</b> contain a card that can beat the
 	 *         <b>cardToBeat</b>
 	 */
-	public static int isAbleToBeat(final CardList cards, final Card cardToBeat, final Card initialCard,
-			final GameType gameType) {
+	public static int isAbleToBeat(final CardList cards, final Card cardToBeat,
+			final Card initialCard, final GameType gameType) {
 		int result = -1;
 		for (int i = 0; i < cards.size(); i++) {
 			if (cards.get(i).isAllowed(gameType, initialCard, cards)) {
@@ -100,20 +108,26 @@ public class Helper {
 	 * Decides whether a player is able to match a certain initial card
 	 * 
 	 * @param cards
+	 *            Players cards
 	 * @param initialCard
+	 *            Initial card
 	 * @param gameType
+	 *            Game type
 	 * @return true if there is at least one card in the hand that can match
 	 *         <b>initialCard</b>
 	 */
-	public static boolean isAbleToMatch(final CardList cards, final Card initialCard, final GameType gameType) {
+	public static boolean isAbleToMatch(final CardList cards,
+			final Card initialCard, final GameType gameType) {
 		boolean result = false;
 		for (int i = 0; i < cards.size(); i++) {
 			boolean sameSuit = (cards.get(i).getSuit() == initialCard.getSuit());
 			if (cards.get(i).isAllowed(gameType, initialCard, cards)) {
 				if (gameType != GameType.NULL) {
-					if (cards.get(i).isTrump(gameType) && initialCard.isTrump(gameType)) {
+					if (cards.get(i).isTrump(gameType)
+							&& initialCard.isTrump(gameType)) {
 						result = true;
-					} else if (!cards.get(i).isTrump(gameType) && !initialCard.isTrump(gameType) && sameSuit) {
+					} else if (!cards.get(i).isTrump(gameType)
+							&& !initialCard.isTrump(gameType) && sameSuit) {
 						result = true;
 					}
 				} else if (sameSuit) {
@@ -213,30 +227,39 @@ public class Helper {
 	 *            only cards of this suit are considered
 	 * @return binary value of the available cards
 	 */
-	public static int suitCardsToBinaryWithSkat(final CardList cards, final CardList skat, final Suit suit) {
+	public static int suitCardsToBinaryWithSkat(final CardList cards,
+			final CardList skat, final Suit suit) {
 		int counter = 0;
-		if (cards.contains(Card.getCard(suit, Rank.SEVEN)) || skat.contains(Card.getCard(suit, Rank.SEVEN))) {
+		if (cards.contains(Card.getCard(suit, Rank.SEVEN))
+				|| skat.contains(Card.getCard(suit, Rank.SEVEN))) {
 			counter += 1;
 		}
-		if (cards.contains(Card.getCard(suit, Rank.EIGHT)) || skat.contains(Card.getCard(suit, Rank.EIGHT))) {
+		if (cards.contains(Card.getCard(suit, Rank.EIGHT))
+				|| skat.contains(Card.getCard(suit, Rank.EIGHT))) {
 			counter += 2;
 		}
-		if (cards.contains(Card.getCard(suit, Rank.NINE)) || skat.contains(Card.getCard(suit, Rank.NINE))) {
+		if (cards.contains(Card.getCard(suit, Rank.NINE))
+				|| skat.contains(Card.getCard(suit, Rank.NINE))) {
 			counter += 4;
 		}
-		if (cards.contains(Card.getCard(suit, Rank.QUEEN)) || skat.contains(Card.getCard(suit, Rank.QUEEN))) {
+		if (cards.contains(Card.getCard(suit, Rank.QUEEN))
+				|| skat.contains(Card.getCard(suit, Rank.QUEEN))) {
 			counter += 8;
 		}
-		if (cards.contains(Card.getCard(suit, Rank.KING)) || skat.contains(Card.getCard(suit, Rank.KING))) {
+		if (cards.contains(Card.getCard(suit, Rank.KING))
+				|| skat.contains(Card.getCard(suit, Rank.KING))) {
 			counter += 16;
 		}
-		if (cards.contains(Card.getCard(suit, Rank.TEN)) || skat.contains(Card.getCard(suit, Rank.TEN))) {
+		if (cards.contains(Card.getCard(suit, Rank.TEN))
+				|| skat.contains(Card.getCard(suit, Rank.TEN))) {
 			counter += 32;
 		}
-		if (cards.contains(Card.getCard(suit, Rank.ACE)) || skat.contains(Card.getCard(suit, Rank.ACE))) {
+		if (cards.contains(Card.getCard(suit, Rank.ACE))
+				|| skat.contains(Card.getCard(suit, Rank.ACE))) {
 			counter += 64;
 		}
-		if (cards.contains(Card.getCard(suit, Rank.JACK)) || skat.contains(Card.getCard(suit, Rank.JACK))) {
+		if (cards.contains(Card.getCard(suit, Rank.JACK))
+				|| skat.contains(Card.getCard(suit, Rank.JACK))) {
 			counter += 128;
 		}
 		return counter;
@@ -290,7 +313,8 @@ public class Helper {
 	 *            only cards of this suit are considered
 	 * @return binary value of the available cards
 	 */
-	public static int suitCardsToBinaryNullGame(final CardList cards, final Suit suit) {
+	public static int suitCardsToBinaryNullGame(final CardList cards,
+			final Suit suit) {
 		int counter = 0;
 		if (cards.contains(Card.getCard(suit, Rank.SEVEN))) {
 			counter += 1;
@@ -377,7 +401,8 @@ public class Helper {
 	public static Suit binaryToSuit(final int binary) {
 		Suit result = null;
 		if (!(binary == 1 || binary == 2 || binary == 4 || binary == 8)) {
-			log.warn(".binaryToSuit(): warning: more than one suit possible! -->" + binary);
+			log.warn(".binaryToSuit(): warning: more than one suit possible! -->"
+					+ binary);
 			return result;
 		}
 		if ((binary & 1) > 0) {

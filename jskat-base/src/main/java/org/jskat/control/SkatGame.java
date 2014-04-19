@@ -1017,6 +1017,7 @@ public class SkatGame extends JSkatThread {
 	 * Sets the view for the game
 	 * 
 	 * @param newView
+	 *            View
 	 */
 	public void setView(final JSkatView newView) {
 

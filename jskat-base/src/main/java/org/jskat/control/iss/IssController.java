@@ -64,6 +64,9 @@ public class IssController {
 
 	/**
 	 * Constructor
+	 * 
+	 * @param newJSkat
+	 *            JSkat master
 	 */
 	public IssController(final JSkatMaster newJSkat) {
 
@@ -229,7 +232,7 @@ public class IssController {
 	}
 
 	/**
-	 * Sends the password to the ISS<br />
+	 * Sends the password to the ISS<br>
 	 * only used until protocol version 14
 	 */
 	@Deprecated
@@ -622,6 +625,7 @@ public class IssController {
 	 * Sends a resign signal to ISS
 	 * 
 	 * @param tableName
+	 *            Table name
 	 */
 	public void sendResignSignal(final String tableName) {
 		sendToIss(issMsg.getResignMessage(tableName));
@@ -631,6 +635,7 @@ public class IssController {
 	 * Sends a show cards signal to ISS
 	 * 
 	 * @param tableName
+	 *            Table name
 	 */
 	public void sendShowCardsSignal(final String tableName) {
 		sendToIss(issMsg.getShowCardsMessage(tableName));

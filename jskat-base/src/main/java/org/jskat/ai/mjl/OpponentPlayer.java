@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author Markus J. Luzius <markus@luzius.de>
+ * @author Markus J. Luzius (markus@luzius.de)
  * 
  */
 public class OpponentPlayer extends AbstractCardPlayer {
@@ -62,13 +62,15 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	 */
 	@Override
 	public Card playNextCard(final ImmutablePlayerKnowledge knowledge) {
-		log.debug("Play next card with trick size " + knowledge.getTrickCards().size());
+		log.debug("Play next card with trick size "
+				+ knowledge.getTrickCards().size());
 		if (knowledge.getGameType() == GameType.NULL) {
 			return playNextCardNullGame(knowledge);
 		}
 
 		int bestToBePlayed = -1;
-		log.debug(".playNextCard(): Processing hand [" + cards + "] with trick [" + knowledge.getTrickCards()
+		log.debug(".playNextCard(): Processing hand [" + cards
+				+ "] with trick [" + knowledge.getTrickCards()
 				+ "]. Game type is " + knowledge.getGameType() + ".");
 
 		if (knowledge.getTrickCards().size() > 1) {
@@ -82,11 +84,13 @@ public class OpponentPlayer extends AbstractCardPlayer {
 			} else {
 				bestToBePlayed = findInitial(knowledge);
 			}
-			log.debug(".playNextCard(): (in forehand) " + name + ": " + cards.get(bestToBePlayed));
+			log.debug(".playNextCard(): (in forehand) " + name + ": "
+					+ cards.get(bestToBePlayed));
 		}
 
 		if (bestToBePlayed < 0 || bestToBePlayed > cards.size() - 1) {
-			log.debug("----- Error in finding a good opponent card: " + bestToBePlayed + " -----");
+			log.debug("----- Error in finding a good opponent card: "
+					+ bestToBePlayed + " -----");
 			bestToBePlayed = 0;
 		}
 
@@ -105,7 +109,8 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	 */
 	private int findMiddlehandCard(final ImmutablePlayerKnowledge knowledge) {
 		GameType gameType = knowledge.getGameType();
-		Card initialCard = (knowledge.getTrickCards().size() > 0 ? knowledge.getTrickCards().get(0) : null);
+		Card initialCard = (knowledge.getTrickCards().size() > 0 ? knowledge
+				.getTrickCards().get(0) : null);
 		Suit trumpSuit = gameType.getTrumpSuit();
 
 		int bestToBePlayed;
@@ -114,7 +119,8 @@ public class OpponentPlayer extends AbstractCardPlayer {
 		// of the first card
 
 		// At first: Is trump played?
-		if (initialCard.getSuit() == trumpSuit || initialCard.getRank() == Rank.JACK) {
+		if (initialCard.getSuit() == trumpSuit
+				|| initialCard.getRank() == Rank.JACK) {
 
 			// Trump is played
 			log.debug(".playNextCard(): first card is trump...");
@@ -156,15 +162,18 @@ public class OpponentPlayer extends AbstractCardPlayer {
 				// Player has the color
 				// check if it's ours or if I can beat
 				if (Helper.isSinglePlayerWin(knowledge)) {
-					bestToBePlayed = Helper.isAbleToBeat(cards, initialCard, initialCard, gameType);
+					bestToBePlayed = Helper.isAbleToBeat(cards, initialCard,
+							initialCard, gameType);
 					if (bestToBePlayed < 0) {
 						log.debug(".playNextCard(): ...which i can't beat...");
-						bestToBePlayed = cards.getLastIndexOfSuit(initialCard.getSuit(), false);
+						bestToBePlayed = cards.getLastIndexOfSuit(
+								initialCard.getSuit(), false);
 					}
 				} else {
 					// Play the card with the highest value
 					log.debug(".playNextCard(): ...to which i try to put some value...");
-					bestToBePlayed = cards.getFirstIndexOfSuit(initialCard.getSuit(), false);
+					bestToBePlayed = cards.getFirstIndexOfSuit(
+							initialCard.getSuit(), false);
 				}
 
 			} else {
@@ -195,7 +204,8 @@ public class OpponentPlayer extends AbstractCardPlayer {
 					} else {
 
 						// No Jack in the cards
-						bestToBePlayed = cards.getLastIndexOfSuit(trumpSuit, false);
+						bestToBePlayed = cards.getLastIndexOfSuit(trumpSuit,
+								false);
 					}
 
 					log.debug(".playNextCard(): ...so i take it...");
@@ -209,7 +219,8 @@ public class OpponentPlayer extends AbstractCardPlayer {
 			}
 		}
 
-		log.debug(".playNextCard(): player " + name + ": " + cards.get(bestToBePlayed));
+		log.debug(".playNextCard(): player " + name + ": "
+				+ cards.get(bestToBePlayed));
 		return bestToBePlayed;
 	}
 
@@ -219,7 +230,8 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	 */
 	private int findRearhandCard(final ImmutablePlayerKnowledge knowledge) {
 		GameType gameType = knowledge.getGameType();
-		Card initialCard = (knowledge.getTrickCards().size() > 0 ? knowledge.getTrickCards().get(0) : null);
+		Card initialCard = (knowledge.getTrickCards().size() > 0 ? knowledge
+				.getTrickCards().get(0) : null);
 		Suit trumpSuit = gameType.getTrumpSuit();
 		int bestToBePlayed;
 		// I'm in rearhand
@@ -232,12 +244,14 @@ public class OpponentPlayer extends AbstractCardPlayer {
 				log.debug(".playNextCard(): Trick is SinglePlayerWin");
 				// 1.1.1: if yes: can beat?
 				Card currentWinner;
-				if (knowledge.getTrickCards().get(1).beats(gameType, initialCard)) {
+				if (knowledge.getTrickCards().get(1)
+						.beats(gameType, initialCard)) {
 					currentWinner = knowledge.getTrickCards().get(1);
 				} else {
 					currentWinner = initialCard;
 				}
-				bestToBePlayed = Helper.isAbleToBeat(cards, currentWinner, initialCard, gameType);
+				bestToBePlayed = Helper.isAbleToBeat(cards, currentWinner,
+						initialCard, gameType);
 				if (bestToBePlayed > -1) {
 					// 1.1.1.1: if I can beat: do it
 					log.debug(".playNextCard(): ...but I can beat it...");
@@ -245,7 +259,8 @@ public class OpponentPlayer extends AbstractCardPlayer {
 					log.debug(".playNextCard(): ...which I can't beat...");
 					// 1.1.1.2: if I can't beat: find lowest matching card
 					if (initialCard.isTrump(gameType)) {
-						bestToBePlayed = cards.getFirstIndexOfSuit(gameType.getTrumpSuit(), false);
+						bestToBePlayed = cards.getFirstIndexOfSuit(
+								gameType.getTrumpSuit(), false);
 						if (bestToBePlayed < 0) {
 							log.debug(".playNextCard(): Damn! I have to play a Jack...");
 							bestToBePlayed = 0;
@@ -255,14 +270,16 @@ public class OpponentPlayer extends AbstractCardPlayer {
 							}
 						}
 					} else {
-						bestToBePlayed = cards.getFirstIndexOfSuit(initialCard.getSuit(), false);
+						bestToBePlayed = cards.getFirstIndexOfSuit(
+								initialCard.getSuit(), false);
 					}
 				}
 			} else {
 				log.debug(".playNextCard(): I can match the demanded color, and it's our trick already...");
 				// 1.1.2: if no: find highest matching card
 				if (initialCard.isTrump(gameType)) {
-					bestToBePlayed = cards.getLastIndexOfSuit(gameType.getTrumpSuit(), false);
+					bestToBePlayed = cards.getLastIndexOfSuit(
+							gameType.getTrumpSuit(), false);
 					if (bestToBePlayed < 0) {
 						log.debug(".playNextCard(): Damn! I have to play a Jack...");
 						bestToBePlayed = 0;
@@ -272,7 +289,8 @@ public class OpponentPlayer extends AbstractCardPlayer {
 						}
 					}
 				} else {
-					bestToBePlayed = cards.getLastIndexOfSuit(initialCard.getSuit(), false);
+					bestToBePlayed = cards.getLastIndexOfSuit(
+							initialCard.getSuit(), false);
 				}
 			}
 		} else {
@@ -328,17 +346,20 @@ public class OpponentPlayer extends AbstractCardPlayer {
 				int toBePlayed = findLowerCard(cards, initialCard);
 				if (toBePlayed < 0) {
 					// no: take the highest one of that suit
-					bestToBePlayed = cards.getFirstIndexOfSuit(initialCard.getSuit(), false);
+					bestToBePlayed = cards.getFirstIndexOfSuit(
+							initialCard.getSuit(), false);
 				} else {
 					bestToBePlayed = toBePlayed;
 				}
 			}
 		} else {
 			int toBePlayed = findInitialForNullGame(cards);
-			log.debug(".playNextCardNullGame(): (initial for null): " + toBePlayed);
+			log.debug(".playNextCardNullGame(): (initial for null): "
+					+ toBePlayed);
 			bestToBePlayed = toBePlayed;
 		}
-		log.debug(".playNextCardNullGame(): playing: [" + cards.get(bestToBePlayed) + "]");
+		log.debug(".playNextCardNullGame(): playing: ["
+				+ cards.get(bestToBePlayed) + "]");
 		if (bestToBePlayed < 0) {
 			return null;
 		}
@@ -379,7 +400,8 @@ public class OpponentPlayer extends AbstractCardPlayer {
 	 * @param trump
 	 * @return index of the card
 	 */
-	private int findMostValuableMatchingCard(final CardList cards, final Suit suit, final Suit trump) {
+	private int findMostValuableMatchingCard(final CardList cards,
+			final Suit suit, final Suit trump) {
 		if (cards.size() < 1) {
 			return 0;
 		}
@@ -468,12 +490,14 @@ public class OpponentPlayer extends AbstractCardPlayer {
 		for (int i = 0; i < cards.size(); i++) {
 
 			Card currCard = cards.get(i);
-			if (rules.isCardAllowed(GameType.NULL, initialCard, cards, currCard)) {
+			if (rules
+					.isCardAllowed(GameType.NULL, initialCard, cards, currCard)) {
 				if (bestCard == null) {
 					// no card found yet
 					bestCard = currCard;
 					index = i;
-				} else if (!lowerCardFound && currCard.getNullOrder() < bestCard.getNullOrder()) {
+				} else if (!lowerCardFound
+						&& currCard.getNullOrder() < bestCard.getNullOrder()) {
 					// lower card found
 					bestCard = currCard;
 					index = i;
@@ -521,8 +545,10 @@ public class OpponentPlayer extends AbstractCardPlayer {
 			} else {
 				// subtract from the rating the number of remaining cards
 			}
-			if (c.getRank() == Rank.ACE && c.getSuit() != gameType.getTrumpSuit()) {
-				if (knowledge.couldHaveSuit(knowledge.getDeclarer(), c.getSuit())) {
+			if (c.getRank() == Rank.ACE
+					&& c.getSuit() != gameType.getTrumpSuit()) {
+				if (knowledge.couldHaveSuit(knowledge.getDeclarer(),
+						c.getSuit())) {
 					rating[x] += 20;
 					if (knowledge.getDeclarer() == Player.MIDDLEHAND) {
 						rating[x] += cards.getSuitCount(c.getSuit(), false);
@@ -536,14 +562,18 @@ public class OpponentPlayer extends AbstractCardPlayer {
 			if (c.getRank() == Rank.JACK) {
 				rating[x] -= 20;
 			}
-			if (c.getRank() == Rank.TEN && knowledge.isCardOutstanding(Card.getCard(c.getSuit(), Rank.ACE))) {
+			if (c.getRank() == Rank.TEN
+					&& knowledge.isCardOutstanding(Card.getCard(c.getSuit(),
+							Rank.ACE))) {
 				rating[x] -= 40;
 			}
-			if (c.getRank() != Rank.JACK && c.getSuit() == gameType.getTrumpSuit()) {
+			if (c.getRank() != Rank.JACK
+					&& c.getSuit() == gameType.getTrumpSuit()) {
 				rating[x] -= 30;
 			}
 			if (!knowledge.couldHaveSuit(knowledge.getDeclarer(), c.getSuit())) {
-				rating[x] += (10 + c.getRank().ordinal() + cards.getSuitCount(c.getSuit(), false));
+				rating[x] += (10 + c.getRank().ordinal() + cards.getSuitCount(
+						c.getSuit(), false));
 			}
 		}
 		StringBuilder sb = new StringBuilder();
@@ -575,11 +605,13 @@ public class OpponentPlayer extends AbstractCardPlayer {
 				if (cards.get(x).getSuit() != gameType.getTrumpSuit()) {
 					if (store >= 0) {
 						if (knowledge.getDeclarer() == Player.MIDDLEHAND
-								&& cards.getSuitCount(cards.get(x).getSuit(), false) > cards.getSuitCount(
+								&& cards.getSuitCount(cards.get(x).getSuit(),
+										false) > cards.getSuitCount(
 										cards.get(store).getSuit(), false)) {
 							store = x;
 						} else if (knowledge.getDeclarer() == Player.REARHAND
-								&& cards.getSuitCount(cards.get(x).getSuit(), false) < cards.getSuitCount(
+								&& cards.getSuitCount(cards.get(x).getSuit(),
+										false) < cards.getSuitCount(
 										cards.get(store).getSuit(), false)) {
 							store = x;
 						}
@@ -604,7 +636,8 @@ public class OpponentPlayer extends AbstractCardPlayer {
 				if (s.equals(gameType.getTrumpSuit())) {
 					continue;
 				}
-				if (cards.getSuitCount(s, false) > cards.getSuitCount(maxSuit, false)) {
+				if (cards.getSuitCount(s, false) > cards.getSuitCount(maxSuit,
+						false)) {
 					maxSuit = s;
 				}
 			}
@@ -624,7 +657,8 @@ public class OpponentPlayer extends AbstractCardPlayer {
 				if (s.equals(gameType.getTrumpSuit())) {
 					continue;
 				}
-				if (cards.getSuitCount(s, false) < cards.getSuitCount(minSuit, false)) {
+				if (cards.getSuitCount(s, false) < cards.getSuitCount(minSuit,
+						false)) {
 					minSuit = s;
 				}
 			}

@@ -158,6 +158,8 @@ public class JSkatMaster {
 	/**
 	 * Removes a table
 	 * 
+	 * @param type
+	 *            View type
 	 * @param tableName
 	 *            Table name
 	 */
@@ -204,6 +206,10 @@ public class JSkatMaster {
 	 *            Number of rounds to be played
 	 * @param unlimited
 	 *            TRUE, if unlimited rounds should be played
+	 * @param onlyPlayRamsch
+	 *            TRUE, if only Ramsch games should be played
+	 * @param sleeps
+	 *            Milliseconds to wait after a games ends during a series
 	 */
 	public void startSeries(List<String> allPlayer, List<String> playerNames,
 			int numberOfRounds, boolean unlimited, boolean onlyPlayRamsch,
@@ -610,16 +616,17 @@ public class JSkatMaster {
 	/**
 	 * Put a card into the skat on the active skat table
 	 * 
-	 * @param e
+	 * @param event
+	 *            Event
 	 */
-	public void putCardIntoSkat(final JSkatActionEvent e) {
+	public void putCardIntoSkat(final JSkatActionEvent event) {
 
-		if (!(e.getSource() instanceof Card)) {
+		if (!(event.getSource() instanceof Card)) {
 
 			throw new IllegalArgumentException();
 		}
 
-		view.putCardIntoSkat(data.getActiveView(), (Card) e.getSource());
+		view.putCardIntoSkat(data.getActiveView(), (Card) event.getSource());
 	}
 
 	/**
@@ -672,6 +679,8 @@ public class JSkatMaster {
 	/**
 	 * Sets the name of the active table
 	 * 
+	 * @param type
+	 *            View type
 	 * @param tableName
 	 *            Table name
 	 */
@@ -847,7 +856,9 @@ public class JSkatMaster {
 	 * @param totalWonGames
 	 *            Total number of won games
 	 * @param avgNetworkErrorDeclarer
-	 *            Average difference
+	 *            Average difference of declarer nets
+	 * @param avgNetworkErrorOpponents
+	 *            Average difference of opponents nets
 	 */
 	public void addTrainingResult(final GameType gameType, final long episodes,
 			final long totalWonGames, final double avgNetworkErrorDeclarer,

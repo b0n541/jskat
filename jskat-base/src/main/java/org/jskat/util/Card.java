@@ -256,12 +256,14 @@ public enum Card {
 	 *            All cards on players hand
 	 * @return TRUE, when the card is allowed to be played
 	 */
-	public boolean isAllowed(final GameType gameType, final Card initialCard, final CardList hand) {
+	public boolean isAllowed(final GameType gameType, final Card initialCard,
+			final CardList hand) {
 
 		boolean result = false;
 
 		if (gameType != GameType.PASSED_IN) {
-			result = SkatRuleFactory.getSkatRules(gameType).isCardAllowed(gameType, initialCard, hand, this);
+			result = SkatRuleFactory.getSkatRules(gameType).isCardAllowed(
+					gameType, initialCard, hand, this);
 		}
 
 		return result;
@@ -280,7 +282,8 @@ public enum Card {
 
 		if (gameType != GameType.NULL) {
 
-			result = ((SuitGrandRamschRule) SkatRuleFactory.getSkatRules(gameType)).isTrump(gameType, this);
+			result = ((SuitGrandRamschRule) SkatRuleFactory
+					.getSkatRules(gameType)).isTrump(gameType, this);
 		}
 
 		return result;
@@ -298,7 +301,8 @@ public enum Card {
 	 */
 	public boolean beats(final GameType gameType, final Card cardToBeat) {
 
-		return SkatRuleFactory.getSkatRules(gameType).isCardBeatsCard(gameType, cardToBeat, this);
+		return SkatRuleFactory.getSkatRules(gameType).isCardBeatsCard(gameType,
+				cardToBeat, this);
 	}
 
 	/**
@@ -312,7 +316,8 @@ public enum Card {
 	 *            Card to beat
 	 * @return a CardList with all the cards that would beat the initial card
 	 */
-	public static CardList getBeatingCards(final GameType gameType, final Card cardToBeat) {
+	public static CardList getBeatingCards(final GameType gameType,
+			final Card cardToBeat) {
 		// TODO (mjl 23.08.2011) write unit tests for Card.getBeatingCards()
 		// FIXME (mjl 05.09.2011) is this supposed to consider trump cards?
 		CardList beatingCards = new CardList();
@@ -383,7 +388,7 @@ public enum Card {
 	}
 
 	/**
-	 * Gets the file name for the card image<br />
+	 * Gets the file name for the card image<br>
 	 * Should be located in a class that provides the card images
 	 * 
 	 * @return File name for card image
@@ -391,6 +396,7 @@ public enum Card {
 	@Deprecated
 	public String getPNGString() {
 
-		return (this.suit.shortString() + this.rank.shortString()).toLowerCase();
+		return (this.suit.shortString() + this.rank.shortString())
+				.toLowerCase();
 	}
 }

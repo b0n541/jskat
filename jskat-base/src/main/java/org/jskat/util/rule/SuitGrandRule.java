@@ -205,8 +205,12 @@ public abstract class SuitGrandRule extends SuitGrandRamschRule {
 	}
 
 	/**
-	 * Checks whether a game was a schwarz game<br />
+	 * Checks whether a game was a schwarz game<br>
 	 * schwarz means one party made no trick or a wrong card was played
+	 * 
+	 * @param gameData
+	 *            Game data
+	 * @return TRUE, if the game is a schwarz game
 	 */
 	public static boolean isSchwarz(final SkatGameData gameData) {
 		return gameData.isPlayerMadeNoTrick()

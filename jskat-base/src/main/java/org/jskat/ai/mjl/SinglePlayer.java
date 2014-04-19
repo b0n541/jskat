@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author Markus J. Luzius <markus@luzius.de>
+ * @author Markus J. Luzius (markus@luzius.de)
  * 
  */
 public class SinglePlayer extends AbstractCardPlayer {
@@ -36,7 +36,9 @@ public class SinglePlayer extends AbstractCardPlayer {
 	 * Constructor
 	 * 
 	 * @param cards
+	 *            Player's cards
 	 * @param rules
+	 *            Skat rules
 	 */
 	public SinglePlayer(final CardList cards, final SkatRule rules) {
 		super(cards);
@@ -48,7 +50,8 @@ public class SinglePlayer extends AbstractCardPlayer {
 		// should be done: check which cards should best be discarded
 		cards.remove(skat.get(0));
 		cards.remove(skat.get(1));
-		log.debug("no algorithm yet, discarding original skat of [" + skat + "], cards.size=" + cards.size());
+		log.debug("no algorithm yet, discarding original skat of [" + skat
+				+ "], cards.size=" + cards.size());
 
 		return skat;
 	}

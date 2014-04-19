@@ -23,7 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author Markus J. Luzius <markus@luzius.de>
+ * @author Markus J. Luzius (markus@luzius.de)
  * 
  */
 public class RamschPlayer extends AbstractCardPlayer {
@@ -35,8 +35,12 @@ public class RamschPlayer extends AbstractCardPlayer {
 	/**
 	 * Constructor
 	 * 
+	 * @param cards
+	 *            Player's cards
 	 * @param id
 	 *            playerID
+	 * @param rules
+	 *            Skat rules
 	 */
 	public RamschPlayer(final CardList cards, final int id, final SkatRule rules) {
 		super(cards);
@@ -118,10 +122,11 @@ public class RamschPlayer extends AbstractCardPlayer {
 	/**
 	 * Sets the player ID
 	 * 
-	 * @param i
+	 * @param id
+	 *            Player ID
 	 */
-	public void setPlayerID(final int i) {
-		playerID = i;
+	public void setPlayerID(final int id) {
+		playerID = id;
 	}
 
 	/** player id */

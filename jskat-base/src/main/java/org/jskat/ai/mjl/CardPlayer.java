@@ -19,7 +19,7 @@ import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 
 /**
- * @author Markus J. Luzius <markus@luzius.de>
+ * @author Markus J. Luzius (markus@luzius.de)
  * 
  */
 interface CardPlayer {

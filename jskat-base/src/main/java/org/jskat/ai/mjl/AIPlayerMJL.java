@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 /**
  * A JSkat AI Player
  * 
- * @author Markus J. Luzius <markus@luzius.de>
+ * @author Markus J. Luzius (markus@luzius.de)
  */
 public class AIPlayerMJL extends AbstractAIPlayer {
 

@@ -38,7 +38,7 @@ import org.jskat.util.GameType;
 import org.jskat.util.Player;
 
 /**
- * Doesn't do anything<br />
+ * Doesn't do anything<br>
  * is needed for simulating games without gui
  */
 public class NullView implements JSkatView {

@@ -58,7 +58,7 @@ public class JSkatResourceBundle {
 	}
 
 	/**
-	 * Reloads the strings<br />
+	 * Reloads the strings<br>
 	 * e.g. after changing the language or the card face
 	 */
 	public void reloadStrings() {
@@ -98,6 +98,8 @@ public class JSkatResourceBundle {
 	 * 
 	 * @param key
 	 *            Key
+	 * @param params
+	 *            Parameters
 	 * @return i18n string
 	 */
 	public String getString(final String key, Object... params) {

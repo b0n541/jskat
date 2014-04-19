@@ -45,7 +45,8 @@ public class VersionChecker {
 			VersionHandler handler = new VersionHandler();
 			XMLReader xmlReader = XMLReaderFactory.createXMLReader();
 			xmlReader.setContentHandler(handler);
-			xmlReader.parse(new InputSource(new URL("http://jskat.org/pad/jskat.xml").openStream())); //$NON-NLS-1$
+			xmlReader.parse(new InputSource(new URL(
+					"http://jskat.org/pad/jskat.xml").openStream())); //$NON-NLS-1$
 			result = handler.versionString;
 		} catch (SAXException e) {
 			// TODO Auto-generated catch block
@@ -64,12 +65,15 @@ public class VersionChecker {
 	/**
 	 * Checks whether a new version is available or not
 	 * 
+	 * @param localVersion
+	 *            Local JSkat version
 	 * @param remoteVersion
 	 *            Remote JSkat version from the JSkat website
 	 * 
 	 * @return TRUE, if a new version is available
 	 */
-	public static boolean isHigherVersionAvailable(final String localVersion, final String remoteVersion) {
+	public static boolean isHigherVersionAvailable(final String localVersion,
+			final String remoteVersion) {
 		boolean result = false;
 
 		List<Integer> localVersionParts = getVersionParts(localVersion);
@@ -81,7 +85,8 @@ public class VersionChecker {
 		for (Integer localVersionPart : localVersionParts) {
 			if (remoteVersionParts.size() > index) {
 				int remoteVersionPart = remoteVersionParts.get(index);
-				if (previousLocalPart == previousRemotePart && localVersionPart < remoteVersionPart) {
+				if (previousLocalPart == previousRemotePart
+						&& localVersionPart < remoteVersionPart) {
 					result = true;
 				}
 				previousLocalPart = localVersionPart;

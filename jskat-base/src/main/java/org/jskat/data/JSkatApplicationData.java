@@ -67,6 +67,9 @@ public class JSkatApplicationData {
 
 	/**
 	 * Removes a local skat table
+	 * 
+	 * @param tableName
+	 *            Table name
 	 */
 	synchronized public void removeLocalSkatTable(final String tableName) {
 		localSkatTables.remove(tableName);
@@ -87,7 +90,9 @@ public class JSkatApplicationData {
 	 * Registers a human player object with a skat table
 	 * 
 	 * @param skatTable
+	 *            Skat table
 	 * @param humanPlayer
+	 *            Human player
 	 */
 	synchronized public void registerHumanPlayerObject(
 			final SkatTable skatTable,
@@ -137,6 +142,8 @@ public class JSkatApplicationData {
 	/**
 	 * Sets the active view
 	 * 
+	 * @param type
+	 *            View type
 	 * @param newActiveView
 	 *            New active view
 	 */

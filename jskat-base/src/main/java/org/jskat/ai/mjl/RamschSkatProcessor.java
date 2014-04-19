@@ -25,16 +25,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author Markus J. Luzius <markus@luzius.de>
+ * @author Markus J. Luzius (markus@luzius.de)
  * 
  */
 public class RamschSkatProcessor {
 
-	private static Logger log = LoggerFactory.getLogger(RamschSkatProcessor.class);
+	private static Logger log = LoggerFactory
+			.getLogger(RamschSkatProcessor.class);
 
 	private void testProcessor(final CardList cards, final CardList skat) {
 		int[] cardBin = new int[4];
-		cardBin[3] = Helper.suitCardsToBinaryWithSkat(cards, skat, Suit.DIAMONDS);
+		cardBin[3] = Helper.suitCardsToBinaryWithSkat(cards, skat,
+				Suit.DIAMONDS);
 		cardBin[2] = Helper.suitCardsToBinaryWithSkat(cards, skat, Suit.HEARTS);
 		cardBin[1] = Helper.suitCardsToBinaryWithSkat(cards, skat, Suit.SPADES);
 		cardBin[0] = Helper.suitCardsToBinaryWithSkat(cards, skat, Suit.CLUBS);
@@ -55,7 +57,8 @@ public class RamschSkatProcessor {
 			// TODO (js) changed due to refactoring,
 			// don't know if it's still work as intended
 			// int tmpBin = cardBin[c.getSuit()];
-			int tmpBin = Helper.suitCardsToBinaryWithSkat(cards, skat, c.getSuit());
+			int tmpBin = Helper.suitCardsToBinaryWithSkat(cards, skat,
+					c.getSuit());
 			log.debug("suit=" + bin(tmpBin, 8) + " & 15 = " + (tmpBin & 15));
 			if (Tools.isIn(tmpBin & 15, new int[] { 7, 11, 13 })) {
 				rel = 0.0;

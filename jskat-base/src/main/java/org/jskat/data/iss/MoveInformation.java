@@ -202,11 +202,12 @@ public class MoveInformation {
 	/**
 	 * Sets the played card
 	 * 
-	 * @param newCard
+	 * @param card
+	 *            Card
 	 */
-	public void setCard(final Card newCard) {
+	public void setCard(final Card card) {
 
-		card = newCard;
+		this.card = card;
 	}
 
 	/**
@@ -258,6 +259,7 @@ public class MoveInformation {
 	 * hand, rear hand and skat
 	 * 
 	 * @param deal
+	 *            Dealt cards
 	 */
 	// FIXME: parameter deal should be a Map
 	public void setDealCards(final List<CardList> deal) {

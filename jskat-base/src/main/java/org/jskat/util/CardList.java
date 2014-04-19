@@ -76,49 +76,71 @@ public class CardList implements Iterable<Card> {
 	}
 
 	/**
-	 * @see Collection#remove(Object)
+	 * Removes a card
+	 * 
+	 * @param card
+	 *            Card
+	 * @return TRUE, if card was removed successfully
 	 */
 	public boolean remove(final Card card) {
 		return cards.remove(card);
 	}
 
 	/**
-	 * @see Collection#add(Object)
+	 * Adds a card
+	 * 
+	 * @param card
+	 *            Card
+	 * @return TRUE, if card was added successfully
 	 */
 	public boolean add(final Card card) {
 		return cards.add(card);
 	}
 
 	/**
-	 * @see Collection#addAll(Collection)
+	 * Adds cards
+	 * 
+	 * @param newCards
+	 *            Cards to add
+	 * @return TRUE, if cards were added successfully
 	 */
 	public boolean addAll(final CardList newCards) {
 		return addAll(newCards.cards);
 	}
 
 	/**
-	 * @see Collection#addAll(Collection)
+	 * Adds cards
+	 * 
+	 * @param newCards
+	 *            Cards to add
+	 * @return TRUE, if cards were added successfully
 	 */
 	public boolean addAll(final Collection<Card> newCards) {
 		return cards.addAll(newCards);
 	}
 
 	/**
-	 * @see Collection#size()
+	 * Gets the size of the hand
+	 * 
+	 * @return Size of the hand
 	 */
 	public int size() {
 		return cards.size();
 	}
 
 	/**
-	 * @see Collection#isEmpty()
+	 * Checks, whether the hand is empty
+	 * 
+	 * @return TRUE, if the hand is empty
 	 */
 	public boolean isEmpty() {
 		return cards.isEmpty();
 	}
 
 	/**
-	 * @see Collection#iterator()
+	 * Gets an iterator
+	 * 
+	 * @return Iterator
 	 */
 	@Override
 	public Iterator<Card> iterator() {
@@ -126,7 +148,11 @@ public class CardList implements Iterable<Card> {
 	}
 
 	/**
-	 * @see Collection#contains(Object)
+	 * Checks, whether the hand contains a card
+	 * 
+	 * @param card
+	 *            Card to check
+	 * @return TRUE, if the hand contains the card
 	 */
 	public boolean contains(final Card card) {
 		return cards.contains(card);
@@ -137,34 +163,47 @@ public class CardList implements Iterable<Card> {
 	 * 
 	 * @param index
 	 *            Index of card
+	 * @return Card
 	 */
 	public Card remove(final int index) {
 		return cards.remove(index);
 	}
 
 	/**
-	 * @see Collection#removeAll(Collection)
+	 * Removes all cards
+	 * 
+	 * @param cardsToRemove
+	 *            Cards to remove
+	 * @return TRUE, if at least one card was removed
 	 */
 	public boolean removeAll(final Collection<Card> cardsToRemove) {
 		return cards.removeAll(cardsToRemove);
 	}
 
 	/**
-	 * @see Collection#removeAll(Collection)
+	 * Removes all cards
+	 * 
+	 * @param cardsToRemove
+	 *            Cards to remove
+	 * @return TRUE, if at least one card was removed
 	 */
 	public boolean removeAll(final CardList cardsToRemove) {
 		return removeAll(cardsToRemove.cards);
 	}
 
 	/**
-	 * @see Collection#clear()
+	 * Clears the hand
 	 */
 	public void clear() {
 		cards.clear();
 	}
 
 	/**
-	 * @see List#indexOf(Object)
+	 * Gets the index of a card on the hand
+	 * 
+	 * @param card
+	 *            Card
+	 * @return Index of card on the hand
 	 */
 	public int indexOf(final Card card) {
 		return cards.indexOf(card);
@@ -213,7 +252,12 @@ public class CardList implements Iterable<Card> {
 	}
 
 	/**
-	 * @see List#set(int, Object)
+	 * Sets a card on the hand
+	 * 
+	 * @param index
+	 *            Index on the hand
+	 * @param card
+	 *            Card
 	 */
 	public void set(final int index, final Card card) {
 		cards.set(index, card);
@@ -223,6 +267,10 @@ public class CardList implements Iterable<Card> {
 	 * Overrides the standard get method (@see {@link List#get(int)}) to handle
 	 * the "not available" index value of -1, so that in this case the method
 	 * returns null
+	 * 
+	 * @param index
+	 *            Index on the hand
+	 * @return Card
 	 */
 	// FIXME (jansch 02.05.2012) seems wrong to me
 	// Exceptions are used to control program execution

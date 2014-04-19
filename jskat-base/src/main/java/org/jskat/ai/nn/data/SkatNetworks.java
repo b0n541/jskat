@@ -73,6 +73,8 @@ public class SkatNetworks {
 	 *            Game type
 	 * @param isDeclarer
 	 *            TRUE, if declarer network is desired
+	 * @param trickNoInGame
+	 *            Trick number in the game
 	 * @return Neural network
 	 */
 	public static INeuralNetwork getNetwork(GameType gameType,

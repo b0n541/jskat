@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author Daniel Loreck <daniel.loreck@gmail.com>
+ * @author Daniel Loreck (daniel.loreck@gmail.com)
  * 
  */
 public class Helper {

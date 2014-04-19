@@ -181,6 +181,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 	 * Sets the current trick
 	 * 
 	 * @param trick
+	 *            Current trick
 	 */
 	public void setCurrentTrick(final Trick trick) {
 		this.currentTrick = trick;
@@ -245,6 +246,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 	 * @param player
 	 *            Player ID
 	 * @param suit
+	 *            Suit that the player didn't follow
 	 */
 	public void setMissingSuit(final Player player, final Suit suit) {
 

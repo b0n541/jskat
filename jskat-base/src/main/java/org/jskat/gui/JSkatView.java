@@ -517,6 +517,7 @@ public interface JSkatView {
 	 * Removes a table from the table list of the ISS lobby
 	 * 
 	 * @param tableName
+	 *            Table name
 	 */
 	public void removeFromISSLobbyTableList(String tableName);
 
@@ -678,6 +679,9 @@ public interface JSkatView {
 
 	/**
 	 * Shows a message, that a table with a given name already exists
+	 * 
+	 * @param duplicateTableName
+	 *            Duplicate table name
 	 */
 	public void showDuplicateTableNameMessage(String duplicateTableName);
 

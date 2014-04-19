@@ -23,11 +23,17 @@ import org.jskat.data.SkatGameData;
 public interface Event {
 	/**
 	 * Processes the event forward.
+	 * 
+	 * @param data
+	 *            Game data
 	 */
 	public void processForward(SkatGameData data);
 
 	/**
 	 * Processes the event backward.
+	 * 
+	 * @param data
+	 *            Game data
 	 */
 	public void processBackward(SkatGameData data);
 }

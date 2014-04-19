@@ -56,6 +56,8 @@ public class JSkatPlayerResolver {
 
 	/**
 	 * Gets all class names including package names of AI player implementations
+	 * 
+	 * @return A set of all player implementation classes
 	 */
 	public static Set<String> getAllAIPlayerImplementations() {
 

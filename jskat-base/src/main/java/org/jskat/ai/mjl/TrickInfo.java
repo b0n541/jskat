@@ -21,7 +21,7 @@ import org.jskat.util.GameType;
 import org.jskat.util.Suit;
 
 /**
- * @author Markus J. Luzius <markus@luzius.de>
+ * @author Markus J. Luzius (markus@luzius.de)
  * 
  */
 public class TrickInfo {
@@ -112,6 +112,7 @@ public class TrickInfo {
 	 * Get a certain card of the trick
 	 * 
 	 * @param index
+	 *            Index of card in trick
 	 * @return card, null if index not available
 	 */
 	public Card getCard(int index) {
