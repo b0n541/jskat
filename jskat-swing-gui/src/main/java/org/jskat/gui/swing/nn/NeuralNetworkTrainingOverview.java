@@ -50,6 +50,9 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 
 	/**
 	 * Constructor
+	 * 
+	 * @param mainFrame
+	 *            Main window
 	 */
 	public NeuralNetworkTrainingOverview(final JFrame mainFrame) {
 

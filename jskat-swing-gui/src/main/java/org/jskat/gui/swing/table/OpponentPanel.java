@@ -27,6 +27,12 @@ public class OpponentPanel extends AbstractHandPanel {
 
 	/**
 	 * @see AbstractHandPanel#AbstractHandPanel(ActionMap, int, boolean)
+	 * @param actions
+	 *            Actions
+	 * @param maxCards
+	 *            Maximum number of cards
+	 * @param showIssWidgets
+	 *            TRUE, if ISS widgets should be shown
 	 */
 	public OpponentPanel(ActionMap actions, int maxCards, boolean showIssWidgets) {
 

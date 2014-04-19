@@ -24,7 +24,7 @@ import net.miginfocom.swing.MigLayout;
 public class LayoutFactory {
 
 	/**
-	 * Gets layout manager for {@link MigLayout}<br />
+	 * Gets layout manager for {@link MigLayout}<br>
 	 * Sets smaller insets on Mac OS platform
 	 * 
 	 * @return Layout manager
@@ -35,7 +35,7 @@ public class LayoutFactory {
 	}
 
 	/**
-	 * Gets layout manager for {@link MigLayout}<br />
+	 * Gets layout manager for {@link MigLayout}<br>
 	 * Sets smaller insets on Mac OS platform
 	 * 
 	 * @param layoutConstraints
@@ -48,7 +48,7 @@ public class LayoutFactory {
 	}
 
 	/**
-	 * Gets layout manager for {@link MigLayout}<br />
+	 * Gets layout manager for {@link MigLayout}<br>
 	 * Sets smaller insets on Mac OS platform
 	 * 
 	 * @param layoutConstraints
@@ -57,13 +57,14 @@ public class LayoutFactory {
 	 *            Column constraints for MigLayout
 	 * @return Layout manager
 	 */
-	public static MigLayout getMigLayout(String layoutConstraints, String columnConstraints) {
+	public static MigLayout getMigLayout(String layoutConstraints,
+			String columnConstraints) {
 
 		return getMigLayout(layoutConstraints, columnConstraints, null);
 	}
 
 	/**
-	 * Gets layout manager for {@link MigLayout}<br />
+	 * Gets layout manager for {@link MigLayout}<br>
 	 * Sets smaller insets on Mac OS platform
 	 * 
 	 * @param layoutConstraints
@@ -74,7 +75,8 @@ public class LayoutFactory {
 	 *            Row constraints for MigLayout
 	 * @return Layout manager
 	 */
-	public static MigLayout getMigLayout(String layoutConstraints, String columnConstraints, String rowConstraints) {
+	public static MigLayout getMigLayout(String layoutConstraints,
+			String columnConstraints, String rowConstraints) {
 
 		String finalLayouConstraints = null;
 
@@ -84,7 +86,8 @@ public class LayoutFactory {
 			finalLayouConstraints = layoutConstraints;
 		}
 
-		return new MigLayout(finalLayouConstraints, columnConstraints, rowConstraints);
+		return new MigLayout(finalLayouConstraints, columnConstraints,
+				rowConstraints);
 	}
 
 	private static String injectMacOSLayoutConstraints(String layoutConstraints) {

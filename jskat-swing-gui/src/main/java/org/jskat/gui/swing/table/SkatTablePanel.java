@@ -101,6 +101,13 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	/**
 	 * Panel for a skat table.
+	 * 
+	 * @param view
+	 *            View
+	 * @param newTableName
+	 *            Table name
+	 * @param actions
+	 *            Action
 	 */
 	public SkatTablePanel(final JSkatView view, final String newTableName,
 			final ActionMap actions) {
@@ -617,8 +624,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	/**
 	 * Adds a new game result
 	 * 
-	 * @param gameData
-	 *            Game data
+	 * @param summary
+	 *            Game summary
 	 */
 	public void addGameResult(final GameSummary summary) {
 
@@ -961,10 +968,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	/**
 	 * Sets the last trick
 	 * 
-	 * @param trickForeHand
-	 * @param foreHandCard
-	 * @param middleHandCard
-	 * @param rearHandCard
+	 * @param trick
+	 *            Last trick
 	 */
 	public void setLastTrick(final Trick trick) {
 
@@ -1100,8 +1105,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * Sets the player names
 	 * 
 	 * @param upperLeftPlayerName
+	 *            Upper left player name
 	 * @param upperRightPlayerName
+	 *            Upper right player name
 	 * @param lowerPlayerName
+	 *            Lower player name
 	 */
 	public void setPlayerNames(final String upperLeftPlayerName,
 			final String upperRightPlayerName, final String lowerPlayerName) {
@@ -1191,6 +1199,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	/**
 	 * Shows cards of all players
+	 * 
+	 * @param cards
+	 *            Cards of all players
 	 */
 	public void showCards(final Map<Player, CardList> cards) {
 		for (final Player player : cards.keySet()) {

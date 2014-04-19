@@ -62,8 +62,12 @@ public class LobbyPanel extends AbstractTabPanel {
 	/**
 	 * Constructor
 	 * 
+	 * @param view
+	 *            View
 	 * @param tableName
+	 *            Table name
 	 * @param actions
+	 *            Action
 	 */
 	public LobbyPanel(final JSkatView view, final String tableName,
 			final ActionMap actions) {

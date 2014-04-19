@@ -25,7 +25,7 @@ import org.jskat.gui.action.JSkatActionEvent;
 import org.jskat.player.JSkatPlayer;
 
 /**
- * Abstract implementation of an human player action for JSkat<br />
+ * Abstract implementation of an human player action for JSkat<br>
  * When the action is performed the GUI player implementation of
  * {@link JSkatPlayer} is triggered
  */

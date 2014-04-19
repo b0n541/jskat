@@ -278,10 +278,8 @@ public class JSkatGraphicRepository {
 	/**
 	 * Gets the card image
 	 * 
-	 * @param suit
-	 *            The suit of the card
-	 * @param value
-	 *            The value of the card
+	 * @param card
+	 *            Card
 	 * @return The card image
 	 */
 	public Image getCardImage(Card card) {
@@ -302,6 +300,8 @@ public class JSkatGraphicRepository {
 	/**
 	 * Gets a flag image
 	 * 
+	 * @param flag
+	 *            Flag
 	 * @return Flag image
 	 */
 	public Image getFlagImage(final Flag flag) {
@@ -575,8 +575,6 @@ public class JSkatGraphicRepository {
 		/**
 		 * Gets the language for a flag
 		 * 
-		 * @param flag
-		 *            Flag
 		 * @return Language
 		 */
 		public String getLanguageForFlag() {

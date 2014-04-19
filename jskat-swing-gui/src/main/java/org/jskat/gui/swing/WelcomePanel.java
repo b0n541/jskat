@@ -39,6 +39,12 @@ public class WelcomePanel extends AbstractTabPanel {
 
 	/**
 	 * @see AbstractTabPanel#AbstractTabPanel(JSkatView, String, ActionMap)
+	 * @param view
+	 *            View
+	 * @param newTableName
+	 *            Table name
+	 * @param actions
+	 *            Actions
 	 */
 	public WelcomePanel(final JSkatView view, final String newTableName,
 			final ActionMap actions) {

@@ -35,10 +35,13 @@ public class ToolbarButton extends JButton {
 
 	/**
 	 * @see JButton#JButton(Action)
+	 * 
+	 * @param action
+	 *            Action
 	 */
-	public ToolbarButton(final Action a) {
+	public ToolbarButton(final Action action) {
 
-		super(a);
+		super(action);
 		// setTextPosition();
 		// setPreferredSize(new Dimension(120, 100));
 		setIconSize(IconSize.SMALL);

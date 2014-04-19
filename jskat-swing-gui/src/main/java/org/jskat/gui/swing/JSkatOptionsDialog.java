@@ -173,6 +173,7 @@ public class JSkatOptionsDialog extends JDialog {
 	 * Constructor
 	 * 
 	 * @param mainFrame
+	 *            Main window
 	 */
 	public JSkatOptionsDialog(final JFrame mainFrame) {
 

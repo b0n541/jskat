@@ -47,7 +47,13 @@ public class LoginPanel extends AbstractTabPanel {
 	JPasswordField passwordField;
 
 	/**
-	 * @see AbstractTabPanel#AbstractTabPanel(String, ActionMap)
+	 * @see AbstractTabPanel#AbstractTabPanel(JSkatView, String, ActionMap)
+	 * @param view
+	 *            View
+	 * @param newTableName
+	 *            Table name
+	 * @param actions
+	 *            Actions
 	 */
 	public LoginPanel(final JSkatView view, final String newTableName,
 			final ActionMap actions) {

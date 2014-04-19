@@ -52,6 +52,8 @@ public class ISSTablePanel extends SkatTablePanel {
 	/**
 	 * Constructor
 	 * 
+	 * @param view
+	 *            View
 	 * @param tableName
 	 *            Table name
 	 * @param actions

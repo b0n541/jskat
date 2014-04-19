@@ -52,6 +52,8 @@ public abstract class AbstractTabPanel extends JPanel {
 	/**
 	 * Constructor
 	 * 
+	 * @param view
+	 *            View
 	 * @param tabName
 	 *            Table name
 	 * @param actions
