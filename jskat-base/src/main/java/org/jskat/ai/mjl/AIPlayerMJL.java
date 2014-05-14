@@ -204,6 +204,6 @@ public class AIPlayerMJL extends AbstractAIPlayer {
 	@Override
 	public Boolean playGrandHand() {
 		// TODO Auto-generated method stub
-		return null;
+		return false;
 	}
 }
