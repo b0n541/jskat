@@ -123,20 +123,28 @@ abstract class AbstractHandPanel extends JPanel {
 		iconPanel = new IconPanel();
 		clockPanel = new ClockPanel();
 
-		initPanel();
+		initPanel(showIssWidgets);
 	}
 
 	/**
 	 * Initializes the panel
 	 */
-	void initPanel() {
+	void initPanel(boolean isIss) {
 
-		setLayout(LayoutFactory.getMigLayout("fill", "fill", "[shrink][grow]")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+		setLayout(LayoutFactory.getMigLayout(
+				"fill, insets 0", "fill", "[shrink][grow]")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
 		setBorder(getPanelBorder());
 
+		String headerInsets = "insets ";
+		if (isIss) {
+			headerInsets = headerInsets + "0 5 0 0";
+		} else {
+			headerInsets = headerInsets + "5";
+		}
+
 		header = new JPanel(LayoutFactory.getMigLayout(
-				"fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				"fill, " + headerInsets, "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		header.add(headerLabel);
 		// blank panel
 		header.add(new JPanel());
