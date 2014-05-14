@@ -375,7 +375,7 @@ public class SkatGame extends JSkatThread {
 
 			log.debug("Check whether fore hand holds at least one bid"); //$NON-NLS-1$
 
-			view.setActivePlayer(tableName, Player.FOREHAND);
+			setActivePlayer(Player.FOREHAND);
 
 			// check whether fore hand holds at least one bid
 			if (!(getPlayerInstance(Player.FOREHAND).bidMore(18) > -1)) {
@@ -393,7 +393,7 @@ public class SkatGame extends JSkatThread {
 		if (secondWinner != null) {
 			// there is a winner of the bidding
 			setDeclarer(secondWinner);
-			view.setActivePlayer(tableName, secondWinner);
+			setActivePlayer(secondWinner);
 
 			log.debug("Player " + data.getDeclarer() //$NON-NLS-1$
 					+ " wins the bidding."); //$NON-NLS-1$
@@ -410,6 +410,7 @@ public class SkatGame extends JSkatThread {
 				setGameAnnouncement(factory.getAnnouncement());
 				view.setGameAnnouncement(tableName, data.getDeclarer(),
 						data.getAnnoucement());
+				setActivePlayer(Player.FOREHAND);
 				// do not call "setGameAnnouncement(..)" here!
 			} else {
 				// pass in

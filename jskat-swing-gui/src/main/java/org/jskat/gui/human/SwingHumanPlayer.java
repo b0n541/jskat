@@ -222,6 +222,8 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 		} else if (JSkatAction.PLAY_GRAND_HAND.toString().equals(command)) {
 			// player wants to play a grand hand
 			this.playGrandHand = true;
+		} else if (JSkatAction.PLAY_SCHIEBERAMSCH.toString().equals(command)) {
+			this.playGrandHand = false;
 		} else if (JSkatAction.CALL_CONTRA.toString().equals(command)) {
 			callContra = true;
 		} else if (JSkatAction.CALL_RE.toString().equals(command)) {
@@ -233,12 +235,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 			this.pickUpSkat = true;
 			gameAnnouncementStep = GameAnnouncementStep.LOOKED_INTO_SKAT;
 		} else if (JSkatAction.SCHIEBEN.toString().equals(command)) {
-			if (source instanceof CardList) {
-				CardList cards = (CardList) source;
-				if (cards.size() == 2) {
-					setDiscardedSkatCards((CardList) source);
-				}
-			}
+			this.pickUpSkat = false;
 		} else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
 			if (source instanceof GameAnnouncement) {
 				// player did game announcement
