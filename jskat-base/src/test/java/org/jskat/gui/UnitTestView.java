@@ -470,6 +470,7 @@ public class UnitTestView implements JSkatView {
 
 	}
 
+	@Override
 	public void showNullInputNameMessage() {
 		// TODO Auto-generated method stub
 	}
@@ -532,7 +533,13 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void showAIPlayedSchwarzMessage(String playerName, Card card) {
+	public void showAIPlayedSchwarzMessageDiscarding(String playerName,
+			CardList discardedCard) {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public void showAIPlayedSchwarzMessageCardPlay(String playerName, Card card) {
 		// TODO Auto-generated method stub
 	}
 

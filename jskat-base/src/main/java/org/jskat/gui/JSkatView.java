@@ -779,12 +779,23 @@ public interface JSkatView {
 	public void setActiveView(String name);
 
 	/**
-	 * Shows a messages if an AI player played schwarz
+	 * Shows a messages if an AI player played schwarz during discarding
+	 * 
+	 * @param playerName
+	 *            Player name
+	 * @param discardedCards
+	 *            Discarded cards
+	 */
+	public void showAIPlayedSchwarzMessageDiscarding(String playerName,
+			CardList discardedCards);
+
+	/**
+	 * Shows a messages if an AI player played schwarz during card play
 	 * 
 	 * @param playerName
 	 *            Player name
 	 * @param card
 	 *            Card
 	 */
-	public void showAIPlayedSchwarzMessage(String playerName, Card card);
+	public void showAIPlayedSchwarzMessageCardPlay(String playerName, Card card);
 }

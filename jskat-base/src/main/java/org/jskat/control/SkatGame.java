@@ -541,16 +541,16 @@ public class SkatGame extends JSkatThread {
 		discardedSkat.addAll(activePlayerInstance.discardSkat());
 
 		if (!checkDiscardedCards(activePlayer, discardedSkat)) {
-			// TODO throw an appropriate exceptions
-		}
+			endGameBecauseOfSchwarzPlaying(activePlayer);
+		} else {
+			log.debug("Discarded cards: " + discardedSkat); //$NON-NLS-1$
 
-		log.debug("Discarded cards: " + discardedSkat); //$NON-NLS-1$
-
-		data.setDiscardedSkat(activePlayer, discardedSkat);
-		if (!activePlayerInstance.isHumanPlayer()) {
-			// human player has changed the cards in the GUI already
-			view.setDiscardedSkat(tableName, activePlayer, skatBefore,
-					discardedSkat);
+			data.setDiscardedSkat(activePlayer, discardedSkat);
+			if (!activePlayerInstance.isHumanPlayer()) {
+				// human player has changed the cards in the GUI already
+				view.setDiscardedSkat(tableName, activePlayer, skatBefore,
+						discardedSkat);
+			}
 		}
 	}
 
@@ -865,7 +865,7 @@ public class SkatGame extends JSkatThread {
 				if (skatPlayer.isHumanPlayer()) {
 					view.showCardNotAllowedMessage(card);
 				} else {
-					view.showAIPlayedSchwarzMessage(skatPlayer.getPlayerName(),
+					view.showAIPlayedSchwarzMessageCardPlay(skatPlayer.getPlayerName(),
 							card);
 					aiPlayerPlayedSchwarz = true;
 				}
@@ -905,16 +905,20 @@ public class SkatGame extends JSkatThread {
 
 		if (aiPlayerPlayedSchwarz) {
 			// end game immediately
-			data.getResult().setSchwarz(true);
-			if (data.getDeclarer().equals(currPlayer)) {
-				// declarer played schwarz
-				data.getResult().setWon(false);
-			} else {
-				// opponent played schwarz
-				data.getResult().setWon(true);
-			}
-			data.setGameState(GameState.PRELIMINARY_GAME_END);
+			endGameBecauseOfSchwarzPlaying(currPlayer);
 		}
+	}
+
+	private void endGameBecauseOfSchwarzPlaying(Player currentPlayer) {
+		data.getResult().setSchwarz(true);
+		if (data.getDeclarer().equals(currentPlayer)) {
+			// declarer played schwarz
+			data.getResult().setWon(false);
+		} else {
+			// opponent played schwarz
+			data.getResult().setWon(true);
+		}
+		data.setGameState(GameState.PRELIMINARY_GAME_END);
 	}
 
 	private boolean isCardSchwarzPlay(JSkatPlayer skatPlayer, Player position,
