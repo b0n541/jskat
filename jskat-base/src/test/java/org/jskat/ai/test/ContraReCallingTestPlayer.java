@@ -30,4 +30,20 @@ public class ContraReCallingTestPlayer extends AIPlayerRND {
 	public Boolean callRe() {
 		return true;
 	}
+
+	@Override
+	public Integer bidMore(int currentBid) {
+		if (currentBid == 18) {
+			return 20;
+		}
+		return -1;
+	}
+
+	@Override
+	public Boolean holdBid(int currentBid) {
+		if (currentBid == 18) {
+			return true;
+		}
+		return false;
+	}
 }
