@@ -39,13 +39,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Main class for JSkat
+ * Main class for JSkat.
  */
 public final class JSkat {
 
-    private final static Logger log = LoggerFactory.getLogger(JSkat.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JSkat.class);
 
-    private final static String VERSION = "0.14.0"; //$NON-NLS-1$
+    private static final String VERSION = "0.14.0"; //$NON-NLS-1$
 
     /**
      * Main method
@@ -57,7 +57,7 @@ public final class JSkat {
 
         PropertyConfigurator.configure(ClassLoader
                 .getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
-        log.debug("Welcome to JSkat!"); //$NON-NLS-1$
+        LOG.debug("Welcome to JSkat!"); //$NON-NLS-1$
 
         initializeOptions();
 
@@ -68,7 +68,7 @@ public final class JSkat {
         final SplashScreen splash = SplashScreen.getSplashScreen();
         Graphics2D g = null;
         if (splash == null) {
-            log.error("SplashScreen not found. Please try to set the vm parameter: -splash:src/main/resources/org/jskat/gui/img/gui/splash.png");
+            LOG.error("SplashScreen not found. Please try to set the vm parameter: -splash:src/main/resources/org/jskat/gui/img/gui/splash.png");
         } else {
             g = splash.createGraphics();
         }
@@ -112,7 +112,7 @@ public final class JSkat {
     }
 
     /**
-     * Gets the version of JSkat
+     * Gets the version of JSkat.
      *
      * @return Version of JSkat
      */
@@ -145,5 +145,12 @@ public final class JSkat {
                 LookAndFeelSetter.setLookAndFeel();
             }
         }
+    }
+
+    /**
+     * Private constructor to prevent instatiating this class.
+     */
+    private JSkat() {
+
     }
 }
