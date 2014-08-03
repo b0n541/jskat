@@ -148,7 +148,7 @@ public final class JSkat {
     }
 
     /**
-     * Private constructor to prevent instatiating this class.
+     * Private constructor to prevent instatiations of this class.
      */
     private JSkat() {
 
