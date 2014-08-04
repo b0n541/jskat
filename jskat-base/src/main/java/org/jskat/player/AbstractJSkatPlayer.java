@@ -121,7 +121,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
 	/**
 	 * does certain startGame operations
-	 * 
+	 *
 	 * A method that is called by the abstract player to allow individual
 	 * players to implement certain start-up operations
 	 */
@@ -141,7 +141,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
 	/**
 	 * Sets the state of the player
-	 * 
+	 *
 	 * @param newState
 	 *            State to be set
 	 */
@@ -161,12 +161,12 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
 	/**
 	 * Gets all playable cards
-	 * 
+	 *
 	 * @param trick
 	 *            Current trick
 	 * @return List of all playable cards
 	 */
-	protected final CardList getPlayableCards(final CardList trick) {
+	public final CardList getPlayableCards(final CardList trick) {
 
 		boolean isCardAllowed = false;
 		CardList result = new CardList();
@@ -181,7 +181,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 					&& rules.isCardAllowed(internalKnowledge.getGameType(),
 							trick.get(0), internalKnowledge.getOwnCards(), card)) {
 
-				log.debug("initial card: " + trick.get(0)); //$NON-NLS-1$
+				log.debug("Card: " + card + " is allowed after initial card: " + trick.get(0)); //$NON-NLS-1$
 				isCardAllowed = true;
 			} else if (trick.size() == 0) {
 
@@ -300,7 +300,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
 	/**
 	 * Sets a new logger for the abstract skat player
-	 * 
+	 *
 	 * @param newLogger
 	 *            New logger
 	 */
