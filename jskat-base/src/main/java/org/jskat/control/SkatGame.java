@@ -63,7 +63,7 @@ public class SkatGame extends JSkatThread {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param newTableName
 	 *            Table name
 	 * @param variant
@@ -181,7 +181,9 @@ public class SkatGame extends JSkatThread {
 			case DISCARDING:
 				setActivePlayer(data.getDeclarer());
 				discarding();
-				setGameState(GameState.DECLARING);
+				if (!GameState.PRELIMINARY_GAME_END.equals(data.getGameState())) {
+					setGameState(GameState.DECLARING);
+				}
 				break;
 			case DECLARING:
 				announceGame();
@@ -324,7 +326,7 @@ public class SkatGame extends JSkatThread {
 
 	/**
 	 * Deals a given number of cards to the players
-	 * 
+	 *
 	 * @param cardCount
 	 *            Number of cards to be dealt to a player
 	 */
@@ -434,7 +436,7 @@ public class SkatGame extends JSkatThread {
 
 	/**
 	 * Controls the bidding between two players
-	 * 
+	 *
 	 * @param announcer
 	 *            Announcing player
 	 * @param hearer
@@ -541,6 +543,8 @@ public class SkatGame extends JSkatThread {
 		discardedSkat.addAll(activePlayerInstance.discardSkat());
 
 		if (!checkDiscardedCards(activePlayer, discardedSkat)) {
+			view.showAIPlayedSchwarzMessageDiscarding(
+					activePlayerInstance.getPlayerName(), discardedSkat);
 			endGameBecauseOfSchwarzPlaying(activePlayer);
 		} else {
 			log.debug("Discarded cards: " + discardedSkat); //$NON-NLS-1$
@@ -865,8 +869,8 @@ public class SkatGame extends JSkatThread {
 				if (skatPlayer.isHumanPlayer()) {
 					view.showCardNotAllowedMessage(card);
 				} else {
-					view.showAIPlayedSchwarzMessageCardPlay(skatPlayer.getPlayerName(),
-							card);
+					view.showAIPlayedSchwarzMessageCardPlay(
+							skatPlayer.getPlayerName(), card);
 					aiPlayerPlayedSchwarz = true;
 				}
 			} else {
@@ -957,7 +961,7 @@ public class SkatGame extends JSkatThread {
 
 	/**
 	 * Checks whether a player has the card on it's hand or not
-	 * 
+	 *
 	 * @param card
 	 *            Card to check
 	 * @return TRUE if the card is on player's hand
@@ -1020,7 +1024,7 @@ public class SkatGame extends JSkatThread {
 
 	/**
 	 * Sets the view for the game
-	 * 
+	 *
 	 * @param newView
 	 *            View
 	 */
@@ -1031,7 +1035,7 @@ public class SkatGame extends JSkatThread {
 
 	/**
 	 * Sets a new logger for the skat game
-	 * 
+	 *
 	 * @param newLogger
 	 *            New logger
 	 */
@@ -1041,7 +1045,7 @@ public class SkatGame extends JSkatThread {
 
 	/**
 	 * Sets the cards from outside
-	 * 
+	 *
 	 * @param newDeck
 	 *            Card deck
 	 */
@@ -1052,7 +1056,7 @@ public class SkatGame extends JSkatThread {
 
 	/**
 	 * Sets the game announcement from the outside
-	 * 
+	 *
 	 * @param ann
 	 *            Game announcement
 	 */
@@ -1072,7 +1076,7 @@ public class SkatGame extends JSkatThread {
 
 	/**
 	 * Sets the game state from outside
-	 * 
+	 *
 	 * @param newState
 	 *            Game state
 	 */
@@ -1099,7 +1103,7 @@ public class SkatGame extends JSkatThread {
 
 	/**
 	 * Sets the single player from outside
-	 * 
+	 *
 	 * @param declarer
 	 *            Declarer
 	 */
@@ -1111,7 +1115,7 @@ public class SkatGame extends JSkatThread {
 
 	/**
 	 * Gets the single player
-	 * 
+	 *
 	 * @return Single player
 	 */
 	public Player getDeclarer() {
@@ -1120,7 +1124,7 @@ public class SkatGame extends JSkatThread {
 
 	/**
 	 * Gets whether a game was won or not
-	 * 
+	 *
 	 * @return TRUE if the game was won
 	 */
 	public boolean isGameWon() {
@@ -1130,7 +1134,7 @@ public class SkatGame extends JSkatThread {
 
 	/**
 	 * Gets the maximum sleep time
-	 * 
+	 *
 	 * @return Maximum sleep time
 	 */
 	public int getMaxSleep() {
@@ -1140,7 +1144,7 @@ public class SkatGame extends JSkatThread {
 
 	/**
 	 * Sets the maximum sleep time
-	 * 
+	 *
 	 * @param newMaxSleep
 	 *            Maximum sleep time
 	 */
@@ -1151,7 +1155,7 @@ public class SkatGame extends JSkatThread {
 
 	/**
 	 * Gets the game result
-	 * 
+	 *
 	 * @return Game result
 	 */
 	public SkatGameResult getGameResult() {
@@ -1161,7 +1165,7 @@ public class SkatGame extends JSkatThread {
 
 	/**
 	 * Gets a summary of the game
-	 * 
+	 *
 	 * @return Game summary
 	 */
 	public GameSummary getGameSummary() {
@@ -1179,7 +1183,7 @@ public class SkatGame extends JSkatThread {
 
 	/**
 	 * Gets the game announcement
-	 * 
+	 *
 	 * @return Game announcement
 	 */
 	public GameAnnouncement getGameAnnouncement() {
@@ -1188,7 +1192,7 @@ public class SkatGame extends JSkatThread {
 
 	/**
 	 * Gets the game state
-	 * 
+	 *
 	 * @return Game state
 	 */
 	public GameState getGameState() {
