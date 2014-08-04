@@ -16,6 +16,7 @@
 package org.jskat.ai.newalgorithm;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.jskat.util.Card;
@@ -59,7 +60,8 @@ public class AlgorithmSuit extends AbstractAlgorithmAI {
 		log.debug("Suit-Declarer plays Middlehand-Card: "
 				+ knowledge.getCurrentTrick().getMiddleHand());
 
-		return playMiddlehandCard(knowledge.getOwnCards(),
+		return playMiddlehandCard(
+				myPlayer.getPlayableCards(knowledge.getTrickCards()),
 				knowledge.getTrickCards(), oPlayedCards, oNotOpponentCards,
 				oSituation);
 	}
@@ -69,7 +71,8 @@ public class AlgorithmSuit extends AbstractAlgorithmAI {
 		log.debug("Suit-Declarer plays Rearhand-Card: "
 				+ knowledge.getCurrentTrick().getRearHand());
 
-		return playRearhandCard(knowledge.getOwnCards(),
+		return playRearhandCard(
+				myPlayer.getPlayableCards(knowledge.getTrickCards()),
 				knowledge.getTrickCards(), oPlayedCards, oNotOpponentCards,
 				oSituation);
 	}
@@ -81,7 +84,19 @@ public class AlgorithmSuit extends AbstractAlgorithmAI {
 		CardList tDiscardCards = discardSkatCards(pBid, knowledge.getOwnCards());
 		// knowledge.removeOwnCards(tDiscardCards);
 
-		oSituation.setCardsAfterDiscarding(knowledge.getOwnCards());
+		// handle wrong discarding
+		while (tDiscardCards.get(0).equals(tDiscardCards.get(1))) {
+			tDiscardCards.clear();
+			Random random = new Random();
+			tDiscardCards.add(knowledge.getOwnCards().get(
+					random.nextInt(knowledge.getOwnCards().size())));
+			tDiscardCards.add(knowledge.getOwnCards().get(
+					random.nextInt(knowledge.getOwnCards().size())));
+		}
+
+		CardList cardsAfterDiscarding = new CardList(knowledge.getOwnCards());
+		cardsAfterDiscarding.removeAll(tDiscardCards);
+		oSituation.setCardsAfterDiscarding(cardsAfterDiscarding);
 
 		return tDiscardCards;
 	}

@@ -25,13 +25,13 @@ import org.jskat.util.Suit;
 
 /**
  * @author Daniel Loreck
- * 
+ *
  */
 public class AlgorithmRamsch extends AbstractAlgorithmAI {
 	private static final Logger log = Logger.getLogger(AlgorithmRamsch.class);
 
 	/**
-	 * 
+	 *
 	 */
 	AlgorithmRamsch(final AlgorithmAI p, GameType pGameType) {
 		super(p, pGameType);
@@ -133,7 +133,7 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 	public Card playMiddlehandCard() {
 		log.debug("I (" + myPlayer.getPlayerName()
 				+ ") am in middlehand (OpponentPlayer)");
-		CardList cards = knowledge.getOwnCards();
+		CardList cards = myPlayer.getPlayableCards(knowledge.getTrickCards());
 		Card initialCard = knowledge.getTrickCards().get(0);
 		GameType gameType = knowledge.getGameType();
 		// Card result = null;
@@ -145,7 +145,7 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 	public Card playRearhandCard() {
 		log.debug("I (" + myPlayer.getPlayerName()
 				+ ") am in rearhand (OpponentPlayer)");
-		CardList cards = knowledge.getOwnCards();
+		CardList cards = myPlayer.getPlayableCards(knowledge.getTrickCards());
 		Card initialCard = knowledge.getTrickCards().get(0);
 		Card middlehandCard = knowledge.getTrickCards().get(1);
 		GameType gameType = knowledge.getGameType();
@@ -178,7 +178,7 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 
 	/**
 	 * Gets a fallback card, if no other algorithm returned a card
-	 * 
+	 *
 	 * @param cards
 	 * @param initialCard
 	 * @param gameType

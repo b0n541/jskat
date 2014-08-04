@@ -65,7 +65,8 @@ public class AlgorithmOpponentSuit extends AbstractAlgorithmAI {
 		log.debug("Suit-Opponent plays Middlehand-Card: "
 				+ knowledge.getCurrentTrick().getMiddleHand());
 
-		return playMiddlehandCard(knowledge.getOwnCards(),
+		return playMiddlehandCard(
+				myPlayer.getPlayableCards(knowledge.getTrickCards()),
 				knowledge.getTrickCards(), oPlayedCards, oNotOpponentCards,
 				oSituation, knowledge.getPlayerPosition(),
 				knowledge.getDeclarer());
@@ -76,7 +77,8 @@ public class AlgorithmOpponentSuit extends AbstractAlgorithmAI {
 		log.debug("Suit-Opponent plays Rearhand-Card: "
 				+ knowledge.getCurrentTrick().getRearHand());
 
-		return playRearhandCard(knowledge.getOwnCards(),
+		return playRearhandCard(
+				myPlayer.getPlayableCards(knowledge.getTrickCards()),
 				knowledge.getTrickCards(), oPlayedCards, oNotOpponentCards,
 				oSituation, knowledge.getPlayerPosition(),
 				knowledge.getDeclarer());
@@ -311,18 +313,18 @@ public class AlgorithmOpponentSuit extends AbstractAlgorithmAI {
 									pSituation.getTrumpSuit()) & Helper
 									.getTrumpCardsToBinary(pCards,
 											pSituation.getTrumpSuit())) >= 1920 // CJ,
-																				// SJ,
-																				// HJ,
-																				// DJ
+							// SJ,
+							// HJ,
+							// DJ
 							|| tForehandCard.getRank() == Rank.TEN
 							&& (Helper.getTrumpCardsToBinary(pPlayedCards,
 									pSituation.getTrumpSuit()) & Helper
 									.getTrumpCardsToBinary(pCards,
 											pSituation.getTrumpSuit())) >= 1984) { // CJ,
-																					// SJ,
-																					// HJ,
-																					// DJ,
-																					// ACE
+						// SJ,
+						// HJ,
+						// DJ,
+						// ACE
 						return pCards.get(pCards.getFirstIndexOfSuit(
 								pSituation.getTrumpSuit(), false));
 					}
@@ -591,10 +593,10 @@ public class AlgorithmOpponentSuit extends AbstractAlgorithmAI {
 
 						Card possibleHighCard = pCards.get(pCards
 								.getFirstIndexOfSuit(lSuit, false)); // highest
-																		// Card
+						// Card
 						Card possibleLowCard = pCards.get(pCards
 								.getLastIndexOfSuit(lSuit, false)); // lowest
-																	// Card
+						// Card
 
 						// Wenn eine Karte der Farbe
 						if (lSuitCount == 1) {
@@ -666,10 +668,10 @@ public class AlgorithmOpponentSuit extends AbstractAlgorithmAI {
 
 						Card possibleHighCard = pCards.get(pCards
 								.getFirstIndexOfSuit(lSuit, false)); // highest
-																		// Card
+						// Card
 						Card possibleLowCard = pCards.get(pCards
 								.getLastIndexOfSuit(lSuit, false)); // lowest
-																	// Card
+						// Card
 
 						// Wenn eine Karte der Farbe
 						if (lSuitCount == 1) {

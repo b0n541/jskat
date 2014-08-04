@@ -59,7 +59,8 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 		log.debug("OpponentGrand plays Middlehand-Card: "
 				+ knowledge.getPlayerPosition());
 
-		return playMiddlehandCard(knowledge.getOwnCards(),
+		return playMiddlehandCard(
+				myPlayer.getPlayableCards(knowledge.getTrickCards()),
 				knowledge.getTrickCards(), oPlayedCards, oNotOpponentCards,
 				oSituation, knowledge.getDeclarer());
 	}
@@ -69,7 +70,8 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 		log.debug("OpponentGrand plays Rearhand-Card: "
 				+ knowledge.getPlayerPosition());
 
-		return playRearhandCard(knowledge.getOwnCards(),
+		return playRearhandCard(
+				myPlayer.getPlayableCards(knowledge.getTrickCards()),
 				knowledge.getTrickCards(), oPlayedCards, oNotOpponentCards,
 				oSituation, knowledge.getPlayerPosition(),
 				knowledge.getDeclarer());
