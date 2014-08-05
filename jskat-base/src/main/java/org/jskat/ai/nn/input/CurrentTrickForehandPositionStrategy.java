@@ -19,19 +19,18 @@ import org.jskat.data.Trick;
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 
-public class CurrentTrickAndNextCardStrategy extends CurrentTrickStrategy {
+public class CurrentTrickForehandPositionStrategy extends
+		AbstractPositionInputStrategy {
 
 	@Override
 	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge,
 			Card cardToPlay) {
-
 		double[] result = getEmptyInputs();
 
-		Trick trick = (Trick) knowledge.getCurrentTrick().clone();
+		Trick trick = knowledge.getCurrentTrick();
 
-		trick.addCard(cardToPlay);
-
-		setTrickCardInputs(result, trick);
+		// set trick forehand position
+		setPositionInput(result, trick.getForeHand());
 
 		return result;
 	}

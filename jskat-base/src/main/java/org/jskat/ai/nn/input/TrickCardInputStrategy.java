@@ -33,7 +33,8 @@ public class TrickCardInputStrategy extends AbstractInputStrategy {
 	}
 
 	@Override
-	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
+	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge,
+			Card cardToPlay) {
 
 		double[] result = getEmptyInputs();
 
@@ -48,20 +49,20 @@ public class TrickCardInputStrategy extends AbstractInputStrategy {
 	private void setTrickInputs(double[] result, Trick trick) {
 
 		// set trick forehand position
-		result[getTrickOffset(trick) + getTrickForehand(trick.getForeHand())] = 1.0;
+		result[getTrickOffset(trick) + getTrickForehand(trick.getForeHand())] = ON;
 
 		// set already played cards
 		if (trick.getFirstCard() != null) {
 			result[getTrickOffset(trick) + 3
-					+ getNetworkInputIndex(trick.getFirstCard())] = 1.0;
+					+ getNetworkInputIndex(trick.getFirstCard())] = ON;
 		}
 		if (trick.getSecondCard() != null) {
 			result[getTrickOffset(trick) + 3 + 32
-					+ getNetworkInputIndex(trick.getSecondCard())] = 1.0;
+					+ getNetworkInputIndex(trick.getSecondCard())] = ON;
 		}
 		if (trick.getThirdCard() != null) {
 			result[getTrickOffset(trick) + 3 + 64
-					+ getNetworkInputIndex(trick.getThirdCard())] = 1.0;
+					+ getNetworkInputIndex(trick.getThirdCard())] = ON;
 		}
 	}
 
@@ -89,10 +90,5 @@ public class TrickCardInputStrategy extends AbstractInputStrategy {
 		}
 
 		return result;
-	}
-
-	protected static int getNetworkInputIndex(final Card card) {
-
-		return card.getSuit().getSuitOrder() * 8 + card.getNullOrder();
 	}
 }

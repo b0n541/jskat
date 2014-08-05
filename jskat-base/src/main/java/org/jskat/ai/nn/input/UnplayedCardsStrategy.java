@@ -15,11 +15,13 @@
  */
 package org.jskat.ai.nn.input;
 
-import org.jskat.data.Trick;
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 
-public class CurrentTrickAndNextCardStrategy extends CurrentTrickStrategy {
+/**
+ * Gets the network inputs for unplayed cards in the game
+ */
+public class UnplayedCardsStrategy extends AbstractCardStrategy {
 
 	@Override
 	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge,
@@ -27,11 +29,11 @@ public class CurrentTrickAndNextCardStrategy extends CurrentTrickStrategy {
 
 		double[] result = getEmptyInputs();
 
-		Trick trick = (Trick) knowledge.getCurrentTrick().clone();
-
-		trick.addCard(cardToPlay);
-
-		setTrickCardInputs(result, trick);
+		for (Card card : Card.values()) {
+			if (!knowledge.isCardPlayed(card)) {
+				result[getNetworkInputIndex(card)] = ON;
+			}
+		}
 
 		return result;
 	}

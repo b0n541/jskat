@@ -26,10 +26,11 @@ import org.jskat.util.GameType;
 import org.jskat.util.Player;
 
 /**
- * Creates input signals for neural networks. The signals are divided into three
- * parts. Opponent 1|Neural network player|Opponent 2. Every player part is
- * divided into another parts. Played cards|Unplayed cards|Other information
- * flags
+ * Creates input signals for neural networks<br />
+ * The signals are divided into three parts<br />
+ * Opponent 1|Neural network player|Opponent 2<br />
+ * Every player part ist divided into another parts<br />
+ * Played cards|Unplayed cards|Other information flags
  */
 public class SimpleNetworkInputGenerator implements NetworkInputGenerator {
 
@@ -44,8 +45,7 @@ public class SimpleNetworkInputGenerator implements NetworkInputGenerator {
 	final static double COULD_HAVE_CARD = 1.0d;
 
 	@Override
-	public double[] getNetInputs(ImmutablePlayerKnowledge knowledge,
-			Card cardToPlay) {
+	public double[] getNetInputs(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
 		double[] netInputs = new double[INPUT_LENGTH];
 
 		for (int i = 0; i < INPUT_LENGTH; i++) {
@@ -67,8 +67,7 @@ public class SimpleNetworkInputGenerator implements NetworkInputGenerator {
 		return netInputs;
 	}
 
-	private void setDeclarerInput(double[] netInputs,
-			ImmutablePlayerKnowledge knowledge) {
+	private void setDeclarerInput(double[] netInputs, ImmutablePlayerKnowledge knowledge) {
 		if (!GameType.RAMSCH.equals(knowledge.getGameType())) {
 			// in Ramsch games there is no declarer
 			Player position = knowledge.getPlayerPosition();

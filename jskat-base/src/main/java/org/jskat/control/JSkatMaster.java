@@ -61,7 +61,7 @@ public class JSkatMaster {
 
 	/**
 	 * Gets the instance of the JSkat master controller
-	 * 
+	 *
 	 * @return JSkat master controller
 	 */
 	public static JSkatMaster instance() {
@@ -89,7 +89,7 @@ public class JSkatMaster {
 
 	/**
 	 * Checks the version of JSkat
-	 * 
+	 *
 	 * @param latestLocalVersion
 	 *            Local version
 	 * @param latestRemoteVersion
@@ -157,7 +157,7 @@ public class JSkatMaster {
 
 	/**
 	 * Removes a table
-	 * 
+	 *
 	 * @param type
 	 *            View type
 	 * @param tableName
@@ -197,7 +197,7 @@ public class JSkatMaster {
 
 	/**
 	 * Starts a new series with given parameters
-	 * 
+	 *
 	 * @param allPlayer
 	 *            Player types
 	 * @param playerNames
@@ -256,7 +256,7 @@ public class JSkatMaster {
 
 	/**
 	 * Pauses a skat series at a table
-	 * 
+	 *
 	 * @param tableName
 	 *            Table name
 	 */
@@ -282,7 +282,7 @@ public class JSkatMaster {
 
 	/**
 	 * Resumes a skat series at a table
-	 * 
+	 *
 	 * @param tableName
 	 *            Table name
 	 */
@@ -298,7 +298,7 @@ public class JSkatMaster {
 
 	/**
 	 * Pauses a skat game at a table
-	 * 
+	 *
 	 * @param tableName
 	 *            Table name
 	 */
@@ -314,7 +314,7 @@ public class JSkatMaster {
 
 	/**
 	 * Resumes a skat game at a table
-	 * 
+	 *
 	 * @param tableName
 	 *            Table name
 	 */
@@ -330,7 +330,7 @@ public class JSkatMaster {
 
 	/**
 	 * Checks whether a skat game is waiting
-	 * 
+	 *
 	 * @param tableName
 	 *            Table name
 	 * @return TRUE if the game is waiting
@@ -351,7 +351,7 @@ public class JSkatMaster {
 
 	/**
 	 * Checks whether a skat series is waiting
-	 * 
+	 *
 	 * @param tableName
 	 *            Table name
 	 * @return TRUE if the series is waiting
@@ -372,7 +372,7 @@ public class JSkatMaster {
 
 	/**
 	 * Places a skat player on a table
-	 * 
+	 *
 	 * @param tableName
 	 *            Table ID
 	 * @param player
@@ -399,7 +399,7 @@ public class JSkatMaster {
 
 	/**
 	 * Sets the view (for MVC)
-	 * 
+	 *
 	 * @param newView
 	 *            View
 	 */
@@ -492,6 +492,10 @@ public class JSkatMaster {
 		SkatNetworks.instance().resetNeuralNetworks();
 	}
 
+	public void saveNeuralNetworks(GameType gameType) {
+		SkatNetworks.instance().saveNetworks(options.getSavePath(), gameType);
+	}
+
 	/**
 	 * Saves the weigths for the neural networks
 	 */
@@ -517,7 +521,7 @@ public class JSkatMaster {
 
 	/**
 	 * Triggers the human player interface to stop waiting
-	 * 
+	 *
 	 * @param event
 	 *            Action event
 	 */
@@ -577,7 +581,7 @@ public class JSkatMaster {
 				// game announcement to ISS
 				GameAnnouncement gameAnnouncement = (GameAnnouncement) source;
 				issControl
-						.sendGameAnnouncementMove(tableName, gameAnnouncement);
+				.sendGameAnnouncementMove(tableName, gameAnnouncement);
 			} else {
 				log.warn("No game announcement found for " + command); //$NON-NLS-1$
 			}
@@ -599,7 +603,7 @@ public class JSkatMaster {
 
 	/**
 	 * Takes a card from the skat on the active skat table
-	 * 
+	 *
 	 * @param e
 	 *            Event
 	 */
@@ -615,7 +619,7 @@ public class JSkatMaster {
 
 	/**
 	 * Put a card into the skat on the active skat table
-	 * 
+	 *
 	 * @param event
 	 *            Event
 	 */
@@ -639,7 +643,7 @@ public class JSkatMaster {
 
 	/**
 	 * Saves a series
-	 * 
+	 *
 	 * @param newName
 	 *            TRUE, if a new name should be given to the save file
 	 */
@@ -650,7 +654,7 @@ public class JSkatMaster {
 
 	/**
 	 * Gets the controller for playing on the ISS
-	 * 
+	 *
 	 * @return ISS controller
 	 */
 	public IssController getIssController() {
@@ -678,7 +682,7 @@ public class JSkatMaster {
 
 	/**
 	 * Sets the name of the active table
-	 * 
+	 *
 	 * @param type
 	 *            View type
 	 * @param tableName
@@ -700,7 +704,7 @@ public class JSkatMaster {
 
 	/**
 	 * Sets the login name for ISS
-	 * 
+	 *
 	 * @param login
 	 *            Login name
 	 */
@@ -762,7 +766,7 @@ public class JSkatMaster {
 
 	/**
 	 * Updates ISS player information
-	 * 
+	 *
 	 * @param playerName
 	 *            Player name
 	 * @param language
@@ -782,7 +786,7 @@ public class JSkatMaster {
 
 	/**
 	 * Removes an ISS player
-	 * 
+	 *
 	 * @param playerName
 	 *            Player name
 	 */
@@ -848,7 +852,7 @@ public class JSkatMaster {
 
 	/**
 	 * Adds training results
-	 * 
+	 *
 	 * @param gameType
 	 *            Game type
 	 * @param episodes

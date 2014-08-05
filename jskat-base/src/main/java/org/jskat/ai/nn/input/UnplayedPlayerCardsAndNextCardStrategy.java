@@ -15,23 +15,23 @@
  */
 package org.jskat.ai.nn.input;
 
-import org.jskat.data.Trick;
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 
-public class CurrentTrickAndNextCardStrategy extends CurrentTrickStrategy {
+/**
+ * Gets network inputs for unplayed cards by the player and the next card to be
+ * played
+ */
+public class UnplayedPlayerCardsAndNextCardStrategy extends
+		UnplayedPlayerCardsStrategy {
 
 	@Override
 	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge,
 			Card cardToPlay) {
 
-		double[] result = getEmptyInputs();
+		double[] result = super.getNetworkInput(knowledge, cardToPlay);
 
-		Trick trick = (Trick) knowledge.getCurrentTrick().clone();
-
-		trick.addCard(cardToPlay);
-
-		setTrickCardInputs(result, trick);
+		result[getNetworkInputIndex(cardToPlay)] = OFF;
 
 		return result;
 	}

@@ -36,5 +36,6 @@ public interface InputStrategy {
 	 *            Next card to play
 	 * @return Network input
 	 */
-	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge, Card cardToPlay);
+	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge,
+			Card cardToPlay);
 }

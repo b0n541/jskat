@@ -15,24 +15,27 @@
  */
 package org.jskat.ai.nn.input;
 
-import org.jskat.data.Trick;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.jskat.player.ImmutablePlayerKnowledge;
-import org.jskat.util.Card;
+import org.jskat.util.Player;
 
-public class CurrentTrickAndNextCardStrategy extends CurrentTrickStrategy {
+public abstract class AbstractPlayerPartyCardStrategy extends
+		AbstractCardStrategy {
 
-	@Override
-	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge,
-			Card cardToPlay) {
+	protected static Set<Player> getPlayerPartyMembers(
+			ImmutablePlayerKnowledge knowledge) {
 
-		double[] result = getEmptyInputs();
-
-		Trick trick = (Trick) knowledge.getCurrentTrick().clone();
-
-		trick.addCard(cardToPlay);
-
-		setTrickCardInputs(result, trick);
-
+		Set<Player> result = new HashSet<Player>();
+		if (knowledge.getDeclarer().equals(knowledge.getPlayerPosition())) {
+			// player is declarer
+			result.add(knowledge.getDeclarer());
+		} else {
+			// player is opponent
+			result.add(knowledge.getDeclarer().getLeftNeighbor());
+			result.add(knowledge.getDeclarer().getRightNeighbor());
+		}
 		return result;
 	}
 }

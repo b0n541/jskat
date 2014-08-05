@@ -54,10 +54,8 @@ class GameSimulator {
 
 		SimulationResults results = new SimulationResults();
 
-		Long endOfSimulation = System.currentTimeMillis() + 10 * 1000;
 		for (GameSimulationThread thread : simThreads.values()) {
 			thread.startSimulationWithMaxEpidodes(maxEpisodes);
-			// thread.startSimulationWithTimestamp(endOfSimulation);
 		}
 		for (GameSimulationThread thread : simThreads.values()) {
 			try {

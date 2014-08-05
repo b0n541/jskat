@@ -17,14 +17,13 @@ package org.jskat.ai.nn.util;
 
 import static org.junit.Assert.fail;
 
-import org.encog.engine.network.activation.ActivationSigmoid;
+import org.encog.engine.network.activation.ActivationTANH;
 import org.encog.ml.data.basic.BasicMLData;
 import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
-import org.encog.neural.networks.training.propagation.Propagation;
-import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
+import org.encog.neural.networks.training.propagation.back.Backpropagation;
 import org.jskat.AbstractJSkatTest;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -35,15 +34,17 @@ import org.slf4j.LoggerFactory;
  */
 public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 
+	private static final double EPSILON = 0.1;
+
 	/**
 	 * Minimum difference between calculated output and desired result.
 	 */
-	private static final double MIN_DIFF = 0.05;
+	private static final double MIN_DIFF = 0.01;
 
 	/**
 	 * Maximum iterations for network learning
 	 */
-	private static final int MAX_ITERATIONS = 500;
+	private static final int MAX_ITERATIONS = 50000;
 	/**
 	 * Logger.
 	 */
@@ -71,8 +72,7 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 		int iteration = 0;
 
 		while (error > MIN_DIFF && iteration < MAX_ITERATIONS) {
-			network.adjustWeights(input[i], output[i]);
-			error = network.getAvgDiff();
+			error = network.adjustWeights(input[i], output[i]);
 			i = (i + 1) % input.length;
 			iteration++;
 		}
@@ -82,7 +82,23 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 					+ error);
 		} else {
 			log.debug("Needed " + iteration + " iterations to learn.");
+			log.debug("Testing network:");
+			for (int n = 0; n < input.length; n++) {
+				log.debug("Input: " + input[n][0] + " " + input[n][1]
+						+ " Expected output: " + output[n][0]
+						+ " Predicted output: "
+						+ network.getPredictedOutcome(input[n]));
+			}
 		}
+
+		// assertTrue(network.getPredictedOutcome(input[0]) < output[0][0]
+		// + EPSILON);
+		// assertTrue(network.getPredictedOutcome(input[1]) > output[1][0]
+		// - EPSILON);
+		// assertTrue(network.getPredictedOutcome(input[2]) > output[2][0]
+		// - EPSILON);
+		// assertTrue(network.getPredictedOutcome(input[3]) < output[3][0]
+		// + EPSILON);
 	}
 
 	/**
@@ -91,9 +107,9 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	@Test
 	public final void testXORDirect() {
 		BasicNetwork network = new BasicNetwork();
-		network.addLayer(new BasicLayer(new ActivationSigmoid(), true, 2));
-		network.addLayer(new BasicLayer(new ActivationSigmoid(), true, 3));
-		network.addLayer(new BasicLayer(new ActivationSigmoid(), true, 1));
+		network.addLayer(new BasicLayer(new ActivationTANH(), true, 2));
+		network.addLayer(new BasicLayer(new ActivationTANH(), true, 3));
+		network.addLayer(new BasicLayer(new ActivationTANH(), true, 1));
 		network.getStructure().finalizeStructure();
 		network.reset();
 
@@ -108,7 +124,8 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 					new BasicMLData(output[i])));
 		}
 
-		Propagation trainer = new ResilientPropagation(network, trainingSet);
+		Backpropagation trainer = new Backpropagation(network, trainingSet);
+		trainer.setBatchSize(1);
 
 		double error = 1000.0;
 		int iteration = 0;
@@ -123,6 +140,13 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 					+ error);
 		} else {
 			log.debug("Needed " + iteration + " iterations to learn.");
+			log.debug("Testing network:");
+			for (int n = 0; n < input.length; n++) {
+				log.debug("Input: " + input[n][0] + " " + input[n][1]
+						+ " Expected output: " + output[n][0]
+						+ " Predicted output: "
+						+ network.compute(new BasicMLData(input[n])));
+			}
 		}
 	}
 }

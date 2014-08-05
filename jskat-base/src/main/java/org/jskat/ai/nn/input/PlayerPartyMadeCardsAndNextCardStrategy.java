@@ -38,17 +38,17 @@ public class PlayerPartyMadeCardsAndNextCardStrategy extends
 		if (trick.getFirstCard() != null && trick.getSecondCard() != null
 				&& trick.getThirdCard() == null) {
 
-			trick.addCard(cardToPlay);
+			trick.setThirdCard(cardToPlay);
 
 			SkatRule rule = SkatRuleFactory.getSkatRules(knowledge
 					.getGameType());
-			Set<Player> partyMembers = getPartyMembers(knowledge);
+			Set<Player> partyMembers = getPlayerPartyMembers(knowledge);
 
 			if (partyMembers.contains(rule.calculateTrickWinner(
 					knowledge.getGameType(), trick))) {
 				// trick was won by player's party
 				for (Card card : trick.getCardList()) {
-					result[getNetworkInputIndex(card)] = 1.0;
+					result[getNetworkInputIndex(card)] = ON;
 				}
 			}
 		}

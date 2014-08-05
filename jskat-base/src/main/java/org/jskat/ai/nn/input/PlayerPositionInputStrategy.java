@@ -21,32 +21,16 @@ import org.jskat.util.Card;
 /**
  * Gets the network inputs for the player position
  */
-public class PlayerPositionInputStrategy extends AbstractInputStrategy {
+public class PlayerPositionInputStrategy extends AbstractPositionInputStrategy {
 
 	@Override
-	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
+	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge,
+			Card cardToPlay) {
 
 		double[] result = getEmptyInputs();
 
-		switch (knowledge.getPlayerPosition()) {
-		case FOREHAND:
-			result[0] = 1.0;
-			break;
-		case MIDDLEHAND:
-			result[1] = 1.0;
-			break;
-		case REARHAND:
-			result[2] = 1.0;
-			break;
-		default:
-			throw new IllegalArgumentException("Player position is unknown.");
-		}
+		setPositionInput(result, knowledge.getPlayerPosition());
 
 		return result;
-	}
-
-	@Override
-	public int getNeuronCount() {
-		return 3;
 	}
 }

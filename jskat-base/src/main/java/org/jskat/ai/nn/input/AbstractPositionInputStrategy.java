@@ -15,24 +15,27 @@
  */
 package org.jskat.ai.nn.input;
 
-import org.jskat.data.Trick;
-import org.jskat.player.ImmutablePlayerKnowledge;
-import org.jskat.util.Card;
+import org.jskat.util.Player;
 
-public class CurrentTrickAndNextCardStrategy extends CurrentTrickStrategy {
+public abstract class AbstractPositionInputStrategy extends
+		AbstractInputStrategy {
 
 	@Override
-	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge,
-			Card cardToPlay) {
+	public final int getNeuronCount() {
+		return 3;
+	}
 
-		double[] result = getEmptyInputs();
-
-		Trick trick = (Trick) knowledge.getCurrentTrick().clone();
-
-		trick.addCard(cardToPlay);
-
-		setTrickCardInputs(result, trick);
-
-		return result;
+	protected final void setPositionInput(double[] result, Player position) {
+		switch (position) {
+		case FOREHAND:
+			result[0] = ON;
+			break;
+		case MIDDLEHAND:
+			result[1] = ON;
+			break;
+		case REARHAND:
+			result[2] = ON;
+			break;
+		}
 	}
 }

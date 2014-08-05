@@ -15,25 +15,27 @@
  */
 package org.jskat.ai.nn.input;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.jskat.player.ImmutablePlayerKnowledge;
-import org.jskat.util.Card;
+import org.jskat.util.Player;
 
-/**
- * Gets the network inputs for unplayed cards in the game
- */
-public class UnplayedCardsInputStrategy extends AbstractCardInputStrategy {
+public abstract class AbstractOpponentPartyCardStrategy extends
+		AbstractCardStrategy {
 
-	@Override
-	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
+	protected static Set<Player> getOpponentPartyMembers(
+			ImmutablePlayerKnowledge knowledge) {
 
-		double[] result = getEmptyInputs();
-
-		for (Card card : Card.values()) {
-			if (!knowledge.isCardPlayed(card)) {
-				result[getNetworkInputIndex(card)] = 1.0;
-			}
+		Set<Player> result = new HashSet<Player>();
+		if (knowledge.getDeclarer().equals(knowledge.getPlayerPosition())) {
+			// player is declarer
+			result.add(knowledge.getDeclarer().getLeftNeighbor());
+			result.add(knowledge.getDeclarer().getRightNeighbor());
+		} else {
+			// player is opponent
+			result.add(knowledge.getDeclarer());
 		}
-
 		return result;
 	}
 }

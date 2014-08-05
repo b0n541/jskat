@@ -15,11 +15,14 @@
  */
 package org.jskat.ai.nn.input;
 
-import org.jskat.data.Trick;
+import java.util.Set;
+
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
+import org.jskat.util.Player;
 
-public class CurrentTrickAndNextCardStrategy extends CurrentTrickStrategy {
+public class UnplayedPlayerPartyCardsStrategy extends
+		AbstractPlayerPartyCardStrategy {
 
 	@Override
 	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge,
@@ -27,12 +30,15 @@ public class CurrentTrickAndNextCardStrategy extends CurrentTrickStrategy {
 
 		double[] result = getEmptyInputs();
 
-		Trick trick = (Trick) knowledge.getCurrentTrick().clone();
+		Set<Player> partyMembers = getPlayerPartyMembers(knowledge);
 
-		trick.addCard(cardToPlay);
-
-		setTrickCardInputs(result, trick);
-
+		for (Card card : Card.values()) {
+			for (Player member : partyMembers) {
+				if (knowledge.couldHaveCard(member, card)) {
+					result[getNetworkInputIndex(card)] = ON;
+				}
+			}
+		}
 		return result;
 	}
 }

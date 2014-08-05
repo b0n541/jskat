@@ -27,7 +27,6 @@ import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.basic.BasicMLData;
 import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.basic.BasicMLDataSet;
-import org.encog.ml.train.BasicTraining;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.PersistBasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
@@ -41,17 +40,11 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	private BasicNetwork network;
 	private final PersistBasicNetwork networkPersister;
 
-	private final List<MLDataPair> dataPairList = new ArrayList<MLDataPair>();
-	private final int MAX_SIZE = 10;
-	private final int currentIndex = -1;
-
 	/**
 	 * Constructor
 	 * 
 	 * @param topo
 	 *            Network topology
-	 * @param useBias
-	 *            TRUE, if bias neurons should be created
 	 */
 	public EncogNetworkWrapper(NetworkTopology topo, boolean useBias) {
 		network = new BasicNetwork();
@@ -83,23 +76,13 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	public synchronized double adjustWeights(final double[] inputValues,
 			final double[] outputValues) {
 
-		// if (dataPairList.size() < MAX_SIZE) {
-		// dataPairList.add(new BasicMLDataPair(new BasicMLData(inputValues),
-		// new BasicMLData(outputValues)));
-		// currentIndex++;
-		// } else {
-		// currentIndex = (currentIndex + 1) % MAX_SIZE;
-		// dataPairList.set(currentIndex, new BasicMLDataPair(new BasicMLData(
-		// inputValues), new BasicMLData(outputValues)));
-		// }
 		List<MLDataPair> data = new ArrayList<MLDataPair>();
 		data.add(new BasicMLDataPair(new BasicMLData(inputValues),
 				new BasicMLData(outputValues)));
 		MLDataSet trainingSet = new BasicMLDataSet(data);
 
-		// BasicTraining trainer = new ResilientPropagation(network,
-		// trainingSet);
-		BasicTraining trainer = new Backpropagation(network, trainingSet);
+		Backpropagation trainer = new Backpropagation(network, trainingSet);
+		trainer.setBatchSize(1);
 		trainer.iteration();
 		return trainer.getError();
 	}

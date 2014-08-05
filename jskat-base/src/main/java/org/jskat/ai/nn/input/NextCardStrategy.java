@@ -18,27 +18,16 @@ package org.jskat.ai.nn.input;
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 
-public class NextCardStrategy extends AbstractInputStrategy implements
-		InputStrategy {
+public class NextCardStrategy extends AbstractCardStrategy {
 
 	@Override
-	public int getNeuronCount() {
-		return 32;
-	}
-
-	@Override
-	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
+	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge,
+			Card cardToPlay) {
 
 		double[] result = getEmptyInputs();
 
-		result[getNetworkInputIndex(cardToPlay)] = 1.0;
+		result[getNetworkInputIndex(cardToPlay)] = ON;
 
 		return result;
 	}
-
-	private static int getNetworkInputIndex(final Card card) {
-
-		return card.getSuit().getSuitOrder() * 8 + card.getNullOrder();
-	}
-
 }

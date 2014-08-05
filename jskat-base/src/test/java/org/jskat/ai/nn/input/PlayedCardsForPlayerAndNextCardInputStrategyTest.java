@@ -49,20 +49,20 @@ public class PlayedCardsForPlayerAndNextCardInputStrategyTest {
 		knowledge.setCardPlayed(Player.FOREHAND, Card.CJ);
 		double[] inputs = strategy.getNetworkInput(knowledge, Card.DJ);
 		assertEquals(32, inputs.length);
-		assertEquals(1.0, inputs[3 * 8 + 4], 0.0);
-		assertEquals(1.0, inputs[4], 0.0);
+		assertEquals(AbstractCardStrategy.ON, inputs[3 * 8 + 4], 0.0);
+		assertEquals(AbstractCardStrategy.ON, inputs[4], 0.0);
 		knowledge.setCardPlayed(Player.MIDDLEHAND, Card.SJ);
 		inputs = strategy.getNetworkInput(knowledge, Card.DJ);
 		assertEquals(32, inputs.length);
-		assertEquals(1.0, inputs[3 * 8 + 4], 0.0);
-		assertEquals(0.0, inputs[2 * 8 + 4], 0.0);
-		assertEquals(1.0, inputs[4], 0.0);
+		assertEquals(AbstractCardStrategy.ON, inputs[3 * 8 + 4], 0.0);
+		assertEquals(AbstractCardStrategy.OFF, inputs[2 * 8 + 4], 0.0);
+		assertEquals(AbstractCardStrategy.ON, inputs[4], 0.0);
 		knowledge.setCardPlayed(Player.REARHAND, Card.HJ);
 		inputs = strategy.getNetworkInput(knowledge, Card.DJ);
 		assertEquals(32, inputs.length);
-		assertEquals(1.0, inputs[3 * 8 + 4], 0.0);
-		assertEquals(0.0, inputs[2 * 8 + 4], 0.0);
-		assertEquals(0.0, inputs[1 * 8 + 4], 0.0);
-		assertEquals(1.0, inputs[4], 0.0);
+		assertEquals(AbstractCardStrategy.ON, inputs[3 * 8 + 4], 0.0);
+		assertEquals(AbstractCardStrategy.OFF, inputs[2 * 8 + 4], 0.0);
+		assertEquals(AbstractCardStrategy.OFF, inputs[1 * 8 + 4], 0.0);
+		assertEquals(AbstractCardStrategy.ON, inputs[4], 0.0);
 	}
 }

@@ -112,7 +112,7 @@ class GameSimulationThread extends JSkatThread {
 			}
 		}
 		log.warn(simulatedGames + " episodes simulated for game type "
-				+ gameType + ".");
+				+ gameType + ": won rate " + getWonRate() + ".");
 		return true;
 	}
 
