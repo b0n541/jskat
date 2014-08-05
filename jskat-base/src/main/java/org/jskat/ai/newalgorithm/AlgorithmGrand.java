@@ -16,7 +16,6 @@
 package org.jskat.ai.newalgorithm;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.jskat.util.Card;
@@ -83,10 +82,7 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 
 		// handle wrong discarding
 		while (tDiscardCards.get(0).equals(tDiscardCards.get(1))) {
-			tDiscardCards.clear();
-			Random random = new Random();
-			tDiscardCards.add(knowledge.getOwnCards().get(
-					random.nextInt(knowledge.getOwnCards().size())));
+			tDiscardCards.remove(1);
 			tDiscardCards.add(knowledge.getOwnCards().get(
 					random.nextInt(knowledge.getOwnCards().size())));
 		}
@@ -192,13 +188,13 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 					if (Helper.isHighestSuitCard(
 							pCards.get(pCards.getFirstIndexOfSuit(
 									pSituation.getLongestSuit(), false)),
-									pPlayedCards, pTrickCards)
-									&& 7 - pNotOpponentCards.getSuitCount(
-											pSituation.getLongestSuit(), false) >= 2
-											&& !pSituation.isLeftPlayerBlankOnColor(pSituation
-													.getLongestSuit())
-													&& !pSituation.isRightPlayerBlankOnColor(pSituation
-															.getLongestSuit())) {
+							pPlayedCards, pTrickCards)
+							&& 7 - pNotOpponentCards.getSuitCount(
+									pSituation.getLongestSuit(), false) >= 2
+							&& !pSituation.isLeftPlayerBlankOnColor(pSituation
+									.getLongestSuit())
+							&& !pSituation.isRightPlayerBlankOnColor(pSituation
+									.getLongestSuit())) {
 						return pCards.get(pCards.getFirstIndexOfSuit(
 								pSituation.getLongestSuit(), false));
 					}
@@ -293,9 +289,9 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 		// mindestens ein weiterer Bube)
 		if (tCardToBeat.getPoints() >= 10
 				&& (Helper.countJacks(pNotOpponentCards) == 4 || Helper
-				.countJacks(pNotOpponentCards) >= 2
-				&& pCards.contains(Card.CJ)
-				&& pCards.get(1).getRank() == Rank.JACK)) {
+						.countJacks(pNotOpponentCards) >= 2
+						&& pCards.contains(Card.CJ)
+						&& pCards.get(1).getRank() == Rank.JACK)) {
 			return pCards.get(Helper.countJacks(pCards) - 1);
 		}
 
@@ -357,9 +353,9 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 			// noch mindestens ein weiterer Bube)
 			if (tForehandCard.getPoints() + tMiddlehandCard.getPoints() >= 10
 					&& (Helper.countJacks(pNotOpponentCards) == 4 || Helper
-					.countJacks(pNotOpponentCards) >= 2
-					&& pCards.contains(Card.CJ)
-					&& pCards.get(1).getRank() == Rank.JACK)) {
+							.countJacks(pNotOpponentCards) >= 2
+							&& pCards.contains(Card.CJ)
+							&& pCards.get(1).getRank() == Rank.JACK)) {
 				return pCards.get(Helper.countJacks(pCards) - 1);
 			}
 			// Wenn < 10 -> Farbe abwerfen
@@ -489,13 +485,13 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 		if (tDiscardCards.size() == 1) {
 			if (!t1ToDiscard.isEmpty()) {
 				tDiscardCards
-				.add(t1ToDiscard.get((int) (Math.random() * t1ToDiscard
-						.size())));
+						.add(t1ToDiscard.get((int) (Math.random() * t1ToDiscard
+								.size())));
 			}
 			if (tDiscardCards.size() != 2 && !t1PossibleDiscard.isEmpty()) {
 				tDiscardCards
-				.add(t1PossibleDiscard.get((int) (Math.random() * t1PossibleDiscard
-						.size())));
+						.add(t1PossibleDiscard.get((int) (Math.random() * t1PossibleDiscard
+								.size())));
 			}
 		}
 

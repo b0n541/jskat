@@ -16,7 +16,6 @@
 package org.jskat.ai.newalgorithm;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.jskat.util.Card;
@@ -86,10 +85,7 @@ public class AlgorithmSuit extends AbstractAlgorithmAI {
 
 		// handle wrong discarding
 		while (tDiscardCards.get(0).equals(tDiscardCards.get(1))) {
-			tDiscardCards.clear();
-			Random random = new Random();
-			tDiscardCards.add(knowledge.getOwnCards().get(
-					random.nextInt(knowledge.getOwnCards().size())));
+			tDiscardCards.remove(1);
 			tDiscardCards.add(knowledge.getOwnCards().get(
 					random.nextInt(knowledge.getOwnCards().size())));
 		}
@@ -215,7 +211,7 @@ public class AlgorithmSuit extends AbstractAlgorithmAI {
 					&& pPlayedCards.getSuitCount(s, false) < 3
 					|| Helper.isHighestSuitCard(possibleHighCard, pPlayedCards,
 							pTrickCards)
-					&& Helper.countJacks(pNotOpponentCards)
+							&& Helper.countJacks(pNotOpponentCards)
 							+ pNotOpponentCards.getSuitCount(
 									pSituation.getTrumpSuit(), false) == 11) {
 				return possibleHighCard;
@@ -235,8 +231,8 @@ public class AlgorithmSuit extends AbstractAlgorithmAI {
 		// Wenn der Spieler die restligen Truempfe hat
 		if (pCards.hasTrump(pSituation.getGameType())
 				&& pCards.size()
-						+ pPlayedCards.getSuitCount(pSituation.getTrumpSuit(),
-								false) + Helper.countJacks(pPlayedCards) == 11) {
+				+ pPlayedCards.getSuitCount(pSituation.getTrumpSuit(),
+						false) + Helper.countJacks(pPlayedCards) == 11) {
 			return pCards.get(0);
 		}
 
@@ -280,8 +276,8 @@ public class AlgorithmSuit extends AbstractAlgorithmAI {
 			if (lCard.beats(pSituation.getGameType(), tForehandCard)
 					&& Helper.isHighestSuitCard(lCard, pPlayedCards,
 							pTrickCards)
-					&& !pSituation.isLeftPlayerBlankOnColor(tForehandCard
-							.getSuit())) {
+							&& !pSituation.isLeftPlayerBlankOnColor(tForehandCard
+									.getSuit())) {
 				return lCard;
 			}
 			return pCards.get(pCards.getLastIndexOfSuit(
@@ -348,7 +344,7 @@ public class AlgorithmSuit extends AbstractAlgorithmAI {
 		if (pCards.hasTrump(pSituation.getGameType())) {
 			if (!pSituation.isLeftPlayerBlankOnColor(tForehandCard.getSuit())
 					|| pPlayedCards
-							.getSuitCount(tForehandCard.getSuit(), false) < 4) {
+					.getSuitCount(tForehandCard.getSuit(), false) < 4) {
 				return Helper.getHighestValueCard(pCards,
 						pSituation.getTrumpSuit(), true);
 			}
@@ -469,7 +465,7 @@ public class AlgorithmSuit extends AbstractAlgorithmAI {
 			if (pCards.contains(Card.getCard(pSituation.getTrumpSuit(),
 					Rank.KING))
 					&& Card.getCard(pSituation.getTrumpSuit(), Rank.KING)
-							.beats(pSituation.getGameType(), tCardToBeat)) {
+					.beats(pSituation.getGameType(), tCardToBeat)) {
 				return Card.getCard(pSituation.getTrumpSuit(), Rank.KING);
 			}
 
@@ -641,13 +637,13 @@ public class AlgorithmSuit extends AbstractAlgorithmAI {
 		if (tDiscardCards.size() == 1) {
 			if (!t1ToDiscard.isEmpty()) {
 				tDiscardCards
-						.add(t1ToDiscard.get((int) (Math.random() * t1ToDiscard
-								.size())));
+				.add(t1ToDiscard.get((int) (Math.random() * t1ToDiscard
+						.size())));
 			}
 			if (!t1PossibleDiscard.isEmpty()) {
 				tDiscardCards
-						.add(t1PossibleDiscard.get((int) (Math.random() * t1PossibleDiscard
-								.size())));
+				.add(t1PossibleDiscard.get((int) (Math.random() * t1PossibleDiscard
+						.size())));
 			}
 		}
 
