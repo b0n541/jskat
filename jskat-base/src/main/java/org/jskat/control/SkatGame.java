@@ -245,8 +245,12 @@ public class SkatGame extends JSkatThread {
 		for (final Player currPlayer : Player.getOrderedList()) {
 			setActivePlayer(currPlayer);
 			if (!grandHandAnnounced && playGrandHand()) {
+				log.debug("Player " + activePlayer + " is playing grand hand.");
 				setDeclarer(activePlayer);
 				grandHandAnnounced = true;
+			} else {
+				log.debug("Player " + activePlayer
+						+ " doesn't want to play grand hand.");
 			}
 		}
 		return grandHandAnnounced;
@@ -256,10 +260,11 @@ public class SkatGame extends JSkatThread {
 		for (final Player currPlayer : Player.getOrderedList()) {
 			setActivePlayer(currPlayer);
 			if (!pickUpSkat()) {
-				log.debug(currPlayer + " schiebt"); //$NON-NLS-1$
+				log.debug("Player " + currPlayer + " does schieben."); //$NON-NLS-1$
 				data.addGeschoben();
 				view.setGeschoben(tableName, activePlayer);
 			} else {
+				log.debug("Player " + currPlayer + " wants to look into skat.");
 				view.setSkat(tableName, data.getSkat());
 				discarding();
 			}
@@ -526,7 +531,7 @@ public class SkatGame extends JSkatThread {
 
 		view.setSkat(tableName, data.getSkat());
 
-		log.debug("Player (" + activePlayer + ") looks into the skat..."); //$NON-NLS-1$ //$NON-NLS-2$
+		log.debug("Player " + activePlayer + " looks into the skat..."); //$NON-NLS-1$ //$NON-NLS-2$
 		log.debug("Skat before discarding: " + data.getSkat()); //$NON-NLS-1$
 
 		final CardList skatBefore = new CardList(data.getSkat());
@@ -966,13 +971,13 @@ public class SkatGame extends JSkatThread {
 	 *            Card to check
 	 * @return TRUE if the card is on player's hand
 	 */
-	private boolean playerHasCard(final Player skatPlayer, final Card card) {
+	private boolean playerHasCard(final Player player, final Card card) {
 
 		boolean result = false;
 
-		log.debug("Player has card: player cards: " + data.getPlayerCards(skatPlayer) + " card to check: " + card); //$NON-NLS-1$
+		log.debug("Player " + player + " has card: player cards: " + data.getPlayerCards(player) + " card to check: " + card); //$NON-NLS-1$
 
-		for (final Card handCard : data.getPlayerCards(skatPlayer)) {
+		for (final Card handCard : data.getPlayerCards(player)) {
 
 			if (handCard.equals(card)) {
 
