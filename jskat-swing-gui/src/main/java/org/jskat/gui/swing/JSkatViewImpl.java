@@ -730,7 +730,7 @@ public class JSkatViewImpl implements JSkatView {
 
         new JSkatHelpDialog(
                 mainFrame,
-                strings.getString("help"), "org/jskat/gui/help/" + JSkatOptions.instance().getI18NCode() + "/contents.html") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ 
+                strings.getString("help"), "org/jskat/gui/help/" + JSkatOptions.instance().getI18NCode() + "/contents.html") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                 .setVisible(true);
     }
 

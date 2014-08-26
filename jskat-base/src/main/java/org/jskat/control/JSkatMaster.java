@@ -581,7 +581,7 @@ public class JSkatMaster {
 				// game announcement to ISS
 				GameAnnouncement gameAnnouncement = (GameAnnouncement) source;
 				issControl
-				.sendGameAnnouncementMove(tableName, gameAnnouncement);
+						.sendGameAnnouncementMove(tableName, gameAnnouncement);
 			} else {
 				log.warn("No game announcement found for " + command); //$NON-NLS-1$
 			}
@@ -653,7 +653,7 @@ public class JSkatMaster {
 	}
 
 	/**
-	 * Gets the controller for playing on the ISS
+	 * Gets the controller for playing on the ISS.
 	 *
 	 * @return ISS controller
 	 */
@@ -663,14 +663,20 @@ public class JSkatMaster {
 	}
 
 	/**
-	 * Shows the preference dialog
+	 * Shows the preference dialog.
 	 */
 	public void showPreferences() {
 
 		view.showPreferences();
 	}
 
-	public void setActiveTable(String tableName) {
+	/**
+	 * Sets the active table.
+	 *
+	 * @param tableName
+	 *            Table name
+	 */
+	public void setActiveTable(final String tableName) {
 		if (data.isExistingLocalSkatTable(tableName)) {
 			setActiveTable(JSkatViewType.LOCAL_TABLE, tableName);
 		} else if (data.isTableJoined(tableName)) {
@@ -681,7 +687,7 @@ public class JSkatMaster {
 	}
 
 	/**
-	 * Sets the name of the active table
+	 * Sets the name of the active table.
 	 *
 	 * @param type
 	 *            View type
