@@ -44,7 +44,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Constructor with predefined cards
-	 * 
+	 *
 	 * @param newCards
 	 *            Predefined cards
 	 */
@@ -54,7 +54,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Constructor with predefined cards
-	 * 
+	 *
 	 * @param newCards
 	 *            Predefined cards
 	 */
@@ -68,7 +68,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Gets a copy of a card list that is immutable
-	 * 
+	 *
 	 * @return Immutable copy of a card list
 	 */
 	public CardList getImmutableCopy() {
@@ -77,7 +77,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Removes a card
-	 * 
+	 *
 	 * @param card
 	 *            Card
 	 * @return TRUE, if card was removed successfully
@@ -88,7 +88,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Adds a card
-	 * 
+	 *
 	 * @param card
 	 *            Card
 	 * @return TRUE, if card was added successfully
@@ -99,7 +99,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Adds cards
-	 * 
+	 *
 	 * @param newCards
 	 *            Cards to add
 	 * @return TRUE, if cards were added successfully
@@ -110,7 +110,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Adds cards
-	 * 
+	 *
 	 * @param newCards
 	 *            Cards to add
 	 * @return TRUE, if cards were added successfully
@@ -121,7 +121,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Gets the size of the hand
-	 * 
+	 *
 	 * @return Size of the hand
 	 */
 	public int size() {
@@ -130,7 +130,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Checks, whether the hand is empty
-	 * 
+	 *
 	 * @return TRUE, if the hand is empty
 	 */
 	public boolean isEmpty() {
@@ -139,7 +139,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Gets an iterator
-	 * 
+	 *
 	 * @return Iterator
 	 */
 	@Override
@@ -149,7 +149,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Checks, whether the hand contains a card
-	 * 
+	 *
 	 * @param card
 	 *            Card to check
 	 * @return TRUE, if the hand contains the card
@@ -160,7 +160,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Removes a card.
-	 * 
+	 *
 	 * @param index
 	 *            Index of card
 	 * @return Card
@@ -171,7 +171,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Removes all cards
-	 * 
+	 *
 	 * @param cardsToRemove
 	 *            Cards to remove
 	 * @return TRUE, if at least one card was removed
@@ -182,7 +182,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Removes all cards
-	 * 
+	 *
 	 * @param cardsToRemove
 	 *            Cards to remove
 	 * @return TRUE, if at least one card was removed
@@ -200,7 +200,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Gets the index of a card on the hand
-	 * 
+	 *
 	 * @param card
 	 *            Card
 	 * @return Index of card on the hand
@@ -211,7 +211,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Tests whether a card with a suit is in the CardList or not
-	 * 
+	 *
 	 * @param gameType
 	 *            Game type of the game played
 	 * @param suit
@@ -226,7 +226,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Tests whether a trump card is in the CardList or not
-	 * 
+	 *
 	 * @param gameType
 	 *            Game type of the game played
 	 * @return TRUE, when a trump card was found in the CardList
@@ -242,7 +242,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Checks whether a jack of a given suit is in the CardList
-	 * 
+	 *
 	 * @param suit
 	 *            Suit to check
 	 * @return TRUE if the jack of the tested suit is in the CardList
@@ -253,7 +253,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Sets a card on the hand
-	 * 
+	 *
 	 * @param index
 	 *            Index on the hand
 	 * @param card
@@ -267,7 +267,7 @@ public class CardList implements Iterable<Card> {
 	 * Overrides the standard get method (@see {@link List#get(int)}) to handle
 	 * the "not available" index value of -1, so that in this case the method
 	 * returns null
-	 * 
+	 *
 	 * @param index
 	 *            Index on the hand
 	 * @return Card
@@ -287,7 +287,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Gets the index of a card in the CardList
-	 * 
+	 *
 	 * @param card
 	 *            Card to be searched
 	 * @return Index of the Card in the CardList
@@ -317,7 +317,7 @@ public class CardList implements Iterable<Card> {
 	/**
 	 * Gets the suit with the most Cards in the CardList (without considering
 	 * the jacks!)
-	 * 
+	 *
 	 * @return Suit with most Cards in the CardList,<br>
 	 *         the highest ranking suit, if there the highest count gives more
 	 *         than one suit
@@ -329,7 +329,7 @@ public class CardList implements Iterable<Card> {
 	/**
 	 * Gets the suit with the most Cards in the CardList (without considering
 	 * the jacks!), without considering the given suit
-	 * 
+	 *
 	 * @param exclude
 	 *            suit to exclude from calculating the most frequent suit
 	 *            (normally the trump suit)
@@ -357,7 +357,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Returns the number of cards with a given suit dependent on a game type
-	 * 
+	 *
 	 * @param suit
 	 *            The suit to search for
 	 * @param countJack
@@ -381,7 +381,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Returns the number of potential trump cards for a given suit
-	 * 
+	 *
 	 * @param trumpSuit
 	 *            The potential trump suit to search for
 	 * @return Number of trump cards for this suit
@@ -400,7 +400,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Sorts the Cards in the CardList according the sort type SkatConstants
-	 * 
+	 *
 	 * @param gameType
 	 *            Game type for sorting
 	 */
@@ -471,7 +471,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Returns the first index of a card with the given suit.
-	 * 
+	 *
 	 * @param suit
 	 *            Suit to search
 	 * @param includeJacks
@@ -496,7 +496,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Returns the first index of a card with the given suit (including jacks!)
-	 * 
+	 *
 	 * @param suit
 	 *            Suit to search
 	 * @return First index of a card with the given suit, -1 if there is no such
@@ -509,7 +509,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Returns the last index of a card with the given suit (including jacks!)
-	 * 
+	 *
 	 * @param suit
 	 *            Suit to search
 	 * @return Last index of a card with the given suit, -1 if there is no such
@@ -522,7 +522,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Returns the last index of a card with the given suit
-	 * 
+	 *
 	 * @param suit
 	 *            Suit to search
 	 * @param includeJacks
@@ -548,7 +548,7 @@ public class CardList implements Iterable<Card> {
 
 	/**
 	 * Counts the total points of this CardList
-	 * 
+	 *
 	 * @return the points of the CardList
 	 */
 	public int getTotalValue() {
@@ -567,7 +567,7 @@ public class CardList implements Iterable<Card> {
 	 * &nbsp;<br>
 	 * Using this representation, bitwise operations can be performed on the
 	 * CardList, e.g. by AI players.
-	 * 
+	 *
 	 * @return an int[4] array
 	 */
 	public int[] toBinary() {
@@ -581,7 +581,7 @@ public class CardList implements Iterable<Card> {
 	/**
 	 * Provides a String view on the binary representation of the CardList for
 	 * logging purposes
-	 * 
+	 *
 	 * @return a loggable String (containing CR/LF chars!)
 	 */
 	public String dumpFlag() {
@@ -652,10 +652,10 @@ public class CardList implements Iterable<Card> {
 			if (first.getRank() == Rank.JACK && second.getRank() == Rank.JACK) {
 				if (first.getSuit().getSuitOrder() < second.getSuit()
 						.getSuitOrder()) {
-					return -1;
+					return 1;
 				} else if (first.getSuit().getSuitOrder() > second.getSuit()
 						.getSuitOrder()) {
-					return 1;
+					return -1;
 				}
 			} else if (first.getRank() == Rank.JACK) {
 				return -1;
