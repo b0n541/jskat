@@ -60,17 +60,17 @@ public class AIPlayerRND extends AbstractAIPlayer {
 	}
 
 	@Override
-	public final Boolean pickUpSkat() {
+	public Boolean pickUpSkat() {
 		return random.nextBoolean();
 	}
 
 	@Override
-	public final Boolean playGrandHand() {
+	public Boolean playGrandHand() {
 		return random.nextBoolean();
 	}
 
 	@Override
-	public final GameAnnouncement announceGame() {
+	public GameAnnouncement announceGame() {
 		log.debug("position: " + knowledge.getPlayerPosition()); //$NON-NLS-1$
 		log.debug("bids: " + knowledge.getHighestBid(Player.FOREHAND) + //$NON-NLS-1$
 				" " + knowledge.getHighestBid(Player.MIDDLEHAND) + //$NON-NLS-1$
@@ -95,7 +95,7 @@ public class AIPlayerRND extends AbstractAIPlayer {
 	}
 
 	@Override
-	public final Integer bidMore(final int nextBidValue) {
+	public Integer bidMore(final int nextBidValue) {
 		int result = -1;
 
 		if (random.nextBoolean()) {
@@ -107,7 +107,7 @@ public class AIPlayerRND extends AbstractAIPlayer {
 	}
 
 	@Override
-	public final Boolean holdBid(final int currBidValue) {
+	public Boolean holdBid(final int currBidValue) {
 		return random.nextBoolean();
 	}
 
@@ -117,7 +117,7 @@ public class AIPlayerRND extends AbstractAIPlayer {
 	}
 
 	@Override
-	public final Card playCard() {
+	public Card playCard() {
 
 		int index = -1;
 
@@ -139,7 +139,7 @@ public class AIPlayerRND extends AbstractAIPlayer {
 	}
 
 	@Override
-	public final CardList getCardsToDiscard() {
+	public CardList getCardsToDiscard() {
 		final CardList result = new CardList();
 
 		CardList discardableCards = new CardList(knowledge.getOwnCards());
@@ -164,12 +164,12 @@ public class AIPlayerRND extends AbstractAIPlayer {
 	}
 
 	@Override
-	public final Boolean callContra() {
+	public Boolean callContra() {
 		return random.nextBoolean();
 	}
 
 	@Override
-	public final Boolean callRe() {
+	public Boolean callRe() {
 		return random.nextBoolean();
 	}
 }
