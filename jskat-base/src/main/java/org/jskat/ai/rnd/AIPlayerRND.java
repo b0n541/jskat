@@ -28,19 +28,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Random player for testing purposes
+ * Random player for testing purposes and driving the other players nuts.
  */
 public class AIPlayerRND extends AbstractAIPlayer {
 
 	private static Logger log = LoggerFactory.getLogger(AIPlayerRND.class);
 
 	/**
-	 * Random generator
+	 * Random generator for decision making.
 	 */
 	private final Random random = new Random();
 
 	/**
-	 * Creates a new instance of AIPlayerRND
+	 * Creates a new instance of AIPlayerRND.
 	 */
 	public AIPlayerRND() {
 
@@ -48,8 +48,8 @@ public class AIPlayerRND extends AbstractAIPlayer {
 	}
 
 	/**
-	 * Creates a new instance of AIPlayerRND
-	 * 
+	 * Creates a new instance of AIPlayerRND.
+	 *
 	 * @param newPlayerName
 	 *            Player's name
 	 */
@@ -60,17 +60,17 @@ public class AIPlayerRND extends AbstractAIPlayer {
 	}
 
 	@Override
-	public Boolean pickUpSkat() {
+	public final Boolean pickUpSkat() {
 		return random.nextBoolean();
 	}
 
 	@Override
-	public Boolean playGrandHand() {
+	public final Boolean playGrandHand() {
 		return random.nextBoolean();
 	}
 
 	@Override
-	public GameAnnouncement announceGame() {
+	public final GameAnnouncement announceGame() {
 		log.debug("position: " + knowledge.getPlayerPosition()); //$NON-NLS-1$
 		log.debug("bids: " + knowledge.getHighestBid(Player.FOREHAND) + //$NON-NLS-1$
 				" " + knowledge.getHighestBid(Player.MIDDLEHAND) + //$NON-NLS-1$
@@ -95,7 +95,7 @@ public class AIPlayerRND extends AbstractAIPlayer {
 	}
 
 	@Override
-	public Integer bidMore(final int nextBidValue) {
+	public final Integer bidMore(final int nextBidValue) {
 		int result = -1;
 
 		if (random.nextBoolean()) {
@@ -107,7 +107,7 @@ public class AIPlayerRND extends AbstractAIPlayer {
 	}
 
 	@Override
-	public Boolean holdBid(final int currBidValue) {
+	public final Boolean holdBid(final int currBidValue) {
 		return random.nextBoolean();
 	}
 
@@ -117,7 +117,7 @@ public class AIPlayerRND extends AbstractAIPlayer {
 	}
 
 	@Override
-	public Card playCard() {
+	public final Card playCard() {
 
 		int index = -1;
 
@@ -139,7 +139,7 @@ public class AIPlayerRND extends AbstractAIPlayer {
 	}
 
 	@Override
-	public CardList getCardsToDiscard() {
+	public final CardList getCardsToDiscard() {
 		final CardList result = new CardList();
 
 		CardList discardableCards = new CardList(knowledge.getOwnCards());
@@ -164,12 +164,12 @@ public class AIPlayerRND extends AbstractAIPlayer {
 	}
 
 	@Override
-	public Boolean callContra() {
+	public final Boolean callContra() {
 		return random.nextBoolean();
 	}
 
 	@Override
-	public Boolean callRe() {
+	public final Boolean callRe() {
 		return random.nextBoolean();
 	}
 }
