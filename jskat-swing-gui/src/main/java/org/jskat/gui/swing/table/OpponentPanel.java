@@ -19,23 +19,23 @@ package org.jskat.gui.swing.table;
 import javax.swing.ActionMap;
 
 /**
- * Panel for showing informations about opponents
+ * Panel for showing informations about opponents.
  */
 public class OpponentPanel extends AbstractHandPanel {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see AbstractHandPanel#AbstractHandPanel(ActionMap, int, boolean)
-	 * @param actions
-	 *            Actions
-	 * @param maxCards
-	 *            Maximum number of cards
-	 * @param showIssWidgets
-	 *            TRUE, if ISS widgets should be shown
-	 */
-	public OpponentPanel(ActionMap actions, int maxCards, boolean showIssWidgets) {
+    /**
+     * @see AbstractHandPanel#AbstractHandPanel(ActionMap, int, boolean)
+     * @param actions
+     *            Actions
+     * @param maxCards
+     *            Maximum number of cards
+     * @param showIssWidgets
+     *            TRUE, if ISS widgets should be shown
+     */
+    public OpponentPanel(ActionMap actions, int maxCards, boolean showIssWidgets) {
 
-		super(actions, maxCards, showIssWidgets);
-	}
+        super(actions, maxCards, showIssWidgets);
+    }
 }
