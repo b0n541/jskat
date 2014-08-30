@@ -365,12 +365,12 @@ public class JSkatViewImpl implements JSkatView {
 
         final JMenu tableMenu = new JMenu(strings.getString("skat_table")); //$NON-NLS-1$
         tableMenu
-                .add(new JMenuItem(actions.get(JSkatAction.CREATE_LOCAL_TABLE)));
+        .add(new JMenuItem(actions.get(JSkatAction.CREATE_LOCAL_TABLE)));
         tableMenu.add(new JSeparator());
         tableMenu
-                .add(new JMenuItem(actions.get(JSkatAction.START_LOCAL_SERIES)));
+        .add(new JMenuItem(actions.get(JSkatAction.START_LOCAL_SERIES)));
         tableMenu
-                .add(new JMenuItem(actions.get(JSkatAction.PAUSE_LOCAL_SERIES)));
+        .add(new JMenuItem(actions.get(JSkatAction.PAUSE_LOCAL_SERIES)));
         tableMenu.add(new JMenuItem(actions
                 .get(JSkatAction.CONTINUE_LOCAL_SERIES)));
         menu.add(tableMenu);
@@ -509,29 +509,29 @@ public class JSkatViewImpl implements JSkatView {
     public void showAboutMessage() {
         // TODO save text for message centrally
         JOptionPane
-                .showMessageDialog(
-                        mainFrame,
-                        "JSkat " //$NON-NLS-1$
-                                + strings.getString("version") //$NON-NLS-1$
-                                + " " //$NON-NLS-1$
-                                + JSkat.getVersion()
-                                + "\n\n" //$NON-NLS-1$
-                                + "http://www.jskat.org\n" //$NON-NLS-1$
-                                + "http://sourceforge.net/projects/jskat" //$NON-NLS-1$
-                                + "\n\n" //$NON-NLS-1$
-                                + strings.getString("authors") //$NON-NLS-1$
-                                + ":\nJan Schäfer (jansch@users.sourceforge.net),\nMarkus J. Luzius (jskat@luzius.de),\nDaniel Loreck (daniel.loreck@gmail.com),\nSascha Laurien\n\n" //$NON-NLS-1$
-                                + strings.getString("cards") //$NON-NLS-1$
-                                + ": International Skat Server, KDE project, OpenClipart.org\n\n" //$NON-NLS-1$
-                                + strings.getString("icons") //$NON-NLS-1$
-                                + ": Gnome Desktop Icons, Tango project, Elementary icons,\n" //$NON-NLS-1$
-                                + "Silvestre Herrera, Alex Roberts and Icojoy\n\n" //$NON-NLS-1$
-                                + "This program comes with ABSOLUTELY NO WARRANTY;\n" //$NON-NLS-1$
-                                + "for details see licence dialog\n" //$NON-NLS-1$
-                                + "This is free software, and you are welcome to redistribute it\n" //$NON-NLS-1$
-                                + "under certain conditions; see licence dialog for details.", //$NON-NLS-1$
-                        strings.getString("about"), JOptionPane.INFORMATION_MESSAGE, //$NON-NLS-1$
-                        new ImageIcon(bitmaps.getJSkatLogoImage()));
+        .showMessageDialog(
+                mainFrame,
+                "JSkat " //$NON-NLS-1$
+                + strings.getString("version") //$NON-NLS-1$
+                + " " //$NON-NLS-1$
+                + JSkat.getVersion()
+                + "\n\n" //$NON-NLS-1$
+                + "http://www.jskat.org\n" //$NON-NLS-1$
+                + "http://sourceforge.net/projects/jskat" //$NON-NLS-1$
+                + "\n\n" //$NON-NLS-1$
+                + strings.getString("authors") //$NON-NLS-1$
+                + ":\nJan Schäfer (jansch@users.sourceforge.net),\nMarkus J. Luzius (jskat@luzius.de),\nDaniel Loreck (daniel.loreck@gmail.com),\nSascha Laurien,\nSlovasim\n\n" //$NON-NLS-1$
+                + strings.getString("cards") //$NON-NLS-1$
+                + ": International Skat Server, KDE project, OpenClipart.org\n\n" //$NON-NLS-1$
+                + strings.getString("icons") //$NON-NLS-1$
+                + ": Gnome Desktop Icons, Tango project, Elementary icons,\n" //$NON-NLS-1$
+                + "Silvestre Herrera, Alex Roberts and Icojoy\n\n" //$NON-NLS-1$
+                + "This program comes with ABSOLUTELY NO WARRANTY;\n" //$NON-NLS-1$
+                + "for details see licence dialog\n" //$NON-NLS-1$
+                + "This is free software, and you are welcome to redistribute it\n" //$NON-NLS-1$
+                + "under certain conditions; see licence dialog for details.", //$NON-NLS-1$
+                strings.getString("about"), JOptionPane.INFORMATION_MESSAGE, //$NON-NLS-1$
+                new ImageIcon(bitmaps.getJSkatLogoImage()));
     }
 
     /**
@@ -731,7 +731,7 @@ public class JSkatViewImpl implements JSkatView {
         new JSkatHelpDialog(
                 mainFrame,
                 strings.getString("help"), "org/jskat/gui/help/" + JSkatOptions.instance().getI18NCode() + "/contents.html") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                .setVisible(true);
+        .setVisible(true);
     }
 
     /**
@@ -752,8 +752,8 @@ public class JSkatViewImpl implements JSkatView {
 
         new JSkatWelcomeDialog(mainFrame,
                 strings.getString("welcome_to_jskat"), "org/jskat/gui/help/" //$NON-NLS-1$ //$NON-NLS-2$
-                        + JSkatOptions.instance().getI18NCode()
-                        + "/welcome.html").setVisible(true); //$NON-NLS-1$
+                + JSkatOptions.instance().getI18NCode()
+                + "/welcome.html").setVisible(true); //$NON-NLS-1$
     }
 
     /**
@@ -1000,7 +1000,7 @@ public class JSkatViewImpl implements JSkatView {
         String tableName = JOptionPane.showInputDialog(mainFrame,
                 strings.getString("new_table_dialog_message"), //$NON-NLS-1$
                 strings.getString("local_table") + " " //$NON-NLS-1$ //$NON-NLS-2$
-                        + (localTablesCreated + 1));
+                + (localTablesCreated + 1));
         // truncate table name
         if (tableName.length() > 100) {
             tableName = tableName.substring(0, 100);
@@ -1302,8 +1302,8 @@ public class JSkatViewImpl implements JSkatView {
         final String message = strings.getString("card_not_allowed_message", //$NON-NLS-1$
                 card != null ? strings.getSuitStringForCardFace(card.getSuit())
                         : "--", //$NON-NLS-1$
-                card != null ? strings.getRankStringForCardFace(card.getRank())
-                        : "--"); //$NON-NLS-1$
+                        card != null ? strings.getRankStringForCardFace(card.getRank())
+                                : "--"); //$NON-NLS-1$
 
         showErrorMessage(title, message);
     }
