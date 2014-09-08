@@ -49,6 +49,7 @@ import javax.swing.event.ChangeListener;
 import org.jskat.JSkat;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.SkatTable;
+import org.jskat.control.event.general.DuplicateTableNameInputEvent;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
@@ -133,6 +134,8 @@ import org.jskat.util.Player;
 import org.jskat.util.SkatConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.eventbus.Subscribe;
 
 /**
  * Implementation of JSkatView interface
@@ -1002,7 +1005,7 @@ public class JSkatViewImpl implements JSkatView {
                 strings.getString("local_table") + " " //$NON-NLS-1$ //$NON-NLS-2$
                 + (localTablesCreated + 1));
         // truncate table name
-        if (tableName.length() > 100) {
+		if (tableName != null && tableName.length() > 100) {
             tableName = tableName.substring(0, 100);
         }
         return tableName;
@@ -1377,15 +1380,13 @@ public class JSkatViewImpl implements JSkatView {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void showDuplicateTableNameMessage(final String duplicateTableName) {
-
+	@Subscribe
+	public void showDuplicateTableNameMessage(
+			final DuplicateTableNameInputEvent event)
+    {
         final String message = strings.getString(
                 "duplicate_table_name_message", //$NON-NLS-1$
-                duplicateTableName);
+				event.tableName);
 
         showErrorMessage(strings.getString("duplicate_table_name_title"), //$NON-NLS-1$
                 message);

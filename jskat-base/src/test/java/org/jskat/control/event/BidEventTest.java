@@ -20,6 +20,8 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import org.jskat.AbstractJSkatTest;
+import org.jskat.control.event.game.AbstractBidEvent;
+import org.jskat.control.event.game.BidEvent;
 import org.jskat.data.SkatGameData;
 import org.jskat.util.Player;
 import org.junit.Before;

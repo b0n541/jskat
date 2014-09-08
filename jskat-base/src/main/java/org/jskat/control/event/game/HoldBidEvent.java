@@ -13,27 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control.event;
+package org.jskat.control.event.game;
 
-import org.jskat.data.SkatGameData;
+import org.jskat.util.Player;
 
 /**
- * Interface for events during a Skat game
+ * Event for holding a bid.
  */
-public interface Event {
-	/**
-	 * Processes the event forward.
-	 * 
-	 * @param data
-	 *            Game data
-	 */
-	public void processForward(SkatGameData data);
-
-	/**
-	 * Processes the event backward.
-	 * 
-	 * @param data
-	 *            Game data
-	 */
-	public void processBackward(SkatGameData data);
+public final class HoldBidEvent extends AbstractBidEvent {
+	public HoldBidEvent(Player player, Integer bid) {
+		super(player, bid);
+	}
 }

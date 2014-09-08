@@ -13,29 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control.event;
+package org.jskat.control.event.game;
 
 import org.jskat.data.SkatGameData;
-import org.jskat.util.Player;
 
 /**
- * Event for passing a bid.
+ * Interface for events during a Skat game
  */
-public final class PassBidEvent implements Event {
+public interface SkatGameEvent {
+	/**
+	 * Processes the event forward.
+	 * 
+	 * @param data
+	 *            Game data
+	 */
+	public void processForward(SkatGameData data);
 
-	private final Player player;
-
-	public PassBidEvent(Player player) {
-		this.player = player;
-	}
-
-	@Override
-	public final void processForward(SkatGameData data) {
-		data.setPlayerPass(player, true);
-	}
-
-	@Override
-	public final void processBackward(SkatGameData data) {
-		data.setPlayerPass(player, false);
-	}
+	/**
+	 * Processes the event backward.
+	 * 
+	 * @param data
+	 *            Game data
+	 */
+	public void processBackward(SkatGameData data);
 }

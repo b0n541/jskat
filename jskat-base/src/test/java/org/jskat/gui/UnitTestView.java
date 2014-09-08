@@ -465,12 +465,6 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void showDuplicateTableNameMessage(final String duplicateTableName) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void showNullInputNameMessage() {
 		// TODO Auto-generated method stub
 	}

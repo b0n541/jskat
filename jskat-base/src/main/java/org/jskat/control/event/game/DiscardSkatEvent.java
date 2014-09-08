@@ -13,29 +13,34 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control.event;
+package org.jskat.control.event.game;
 
 import org.jskat.data.SkatGameData;
+import org.jskat.util.CardList;
 import org.jskat.util.Player;
 
 /**
- * Event for passing a bid.
+ * Event for discard skat.
  */
-public final class PickUpSkatEvent implements Event {
+public final class DiscardSkatEvent implements SkatGameEvent {
 
 	private final Player player;
+	private final CardList discardedSkat = new CardList();
 
-	public PickUpSkatEvent(Player player) {
+	public DiscardSkatEvent(Player player, CardList discardedSkat) {
 		this.player = player;
+		this.discardedSkat.addAll(discardedSkat);
 	}
 
 	@Override
 	public final void processForward(SkatGameData data) {
-		data.addSkatToPlayer(player);
+		data.removePlayerCards(player, discardedSkat);
+		data.setSkatCards(discardedSkat);
 	}
 
 	@Override
 	public final void processBackward(SkatGameData data) {
-		data.removeSkatFromPlayer(player);
+		data.setSkatCards(new CardList());
+		data.addPlayerCards(player, discardedSkat);
 	}
 }

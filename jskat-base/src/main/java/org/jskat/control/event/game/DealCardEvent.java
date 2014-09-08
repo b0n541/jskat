@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control.event;
+package org.jskat.control.event.game;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +25,7 @@ import org.jskat.util.Player;
 /**
  * Event for card dealing.
  */
-public final class DealCardEvent implements Event {
+public final class DealCardEvent implements SkatGameEvent {
 
 	private final Map<Player, CardList> playerCards = new HashMap<Player, CardList>();
 	private final CardList skat = new CardList();

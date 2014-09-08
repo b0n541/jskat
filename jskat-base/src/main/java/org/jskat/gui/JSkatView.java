@@ -678,14 +678,6 @@ public interface JSkatView {
 	public void closeISSPanels();
 
 	/**
-	 * Shows a message, that a table with a given name already exists
-	 * 
-	 * @param duplicateTableName
-	 *            Duplicate table name
-	 */
-	public void showDuplicateTableNameMessage(String duplicateTableName);
-
-	/**
 	 * Shows a message, that input name is empty
 	 */
 	public void showNullInputNameMessage();

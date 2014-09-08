@@ -21,6 +21,7 @@ import java.util.Set;
 
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.train.NNTrainer;
+import org.jskat.control.event.general.DuplicateTableNameInputEvent;
 import org.jskat.control.iss.IssController;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.JSkatApplicationData;
@@ -40,6 +41,10 @@ import org.jskat.util.version.VersionChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.eventbus.DeadEvent;
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+
 /**
  * Controls everything in JSkat
  */
@@ -51,6 +56,8 @@ public class JSkatMaster {
 	private static Logger log = LoggerFactory.getLogger(JSkatMaster.class);
 
 	private volatile static JSkatMaster instance = null;
+
+	private final EventBus eventBus;
 
 	private final JSkatOptions options;
 	private final JSkatApplicationData data;
@@ -82,9 +89,17 @@ public class JSkatMaster {
 		options = JSkatOptions.instance();
 		data = JSkatApplicationData.instance();
 
+		eventBus = new EventBus();
+		eventBus.register(this);
+
 		issControl = new IssController(this);
 
 		runningNNTrainers = new ArrayList<NNTrainer>();
+	}
+
+	@Subscribe
+	public void handleDeadEvent(DeadEvent event) {
+		log.error("Recieved dead event: " + event);
 	}
 
 	/**
@@ -131,7 +146,7 @@ public class JSkatMaster {
 		if (data.isFreeTableName(tableName)) {
 			createLocalTable(tableName, view.getHumanPlayerForGUI());
 		} else {
-			view.showDuplicateTableNameMessage(tableName);
+			eventBus.post(new DuplicateTableNameInputEvent(tableName));
 			// try again
 			createTable();
 		}
@@ -407,6 +422,7 @@ public class JSkatMaster {
 
 		view = newView;
 		issControl.setView(view);
+		eventBus.register(newView);
 	}
 
 	/**
