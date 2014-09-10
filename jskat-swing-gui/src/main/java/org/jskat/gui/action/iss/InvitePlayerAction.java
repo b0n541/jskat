@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
+import org.jskat.control.JSkatMaster;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.util.JSkatResourceBundle;
@@ -47,6 +48,6 @@ public class InvitePlayerAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		jskat.invitePlayer();
+        JSkatMaster.INSTANCE.invitePlayer();
 	}
 }

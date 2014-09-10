@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
+import org.jskat.control.JSkatMaster;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
@@ -47,6 +48,6 @@ public class OpenHomepageAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		jskat.openIssHomepage();
+        JSkatMaster.INSTANCE.openIssHomepage();
 	}
 }

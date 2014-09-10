@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
+import org.jskat.control.JSkatMaster;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.action.JSkatActionEvent;
@@ -44,6 +45,8 @@ public class PutCardIntoSkatAction extends AbstractJSkatAction {
 	 */
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-		jskat.putCardIntoSkat(new JSkatActionEvent(e.getActionCommand(), e.getSource()));
+
+        JSkatMaster.INSTANCE.putCardIntoSkat(new JSkatActionEvent(e
+                .getActionCommand(), e.getSource()));
 	}
 }

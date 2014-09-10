@@ -73,7 +73,6 @@ public final class JSkat {
             g = splash.createGraphics();
         }
 
-        JSkatMaster jskat = null;
         JSkatViewImpl jskatView = null;
         for (int i = 0; i < 3; i++) {
             if (splash != null && g != null) {
@@ -82,14 +81,14 @@ public final class JSkat {
             }
             switch (i) {
             case 0:
-                jskat = JSkatMaster.instance();
+                // TODO do something useful...
                 break;
             case 1:
                 JSkatGraphicRepository.instance();
                 break;
             case 2:
                 jskatView = new JSkatViewImpl();
-                jskat.setView(jskatView);
+                JSkatMaster.INSTANCE.setView(jskatView);
                 break;
             }
         }
@@ -101,12 +100,12 @@ public final class JSkat {
         jskatView.setVisible();
 
         if (JSkatOptions.instance().getBoolean(Option.SHOW_TIPS_AT_START_UP)) {
-            jskat.showWelcomeDialog();
+            JSkatMaster.INSTANCE.showWelcomeDialog();
         }
 
         if (JSkatOptions.instance().getBoolean(
                 Option.CHECK_FOR_NEW_VERSION_AT_START_UP)) {
-            jskat.checkJSkatVersion(getVersion(),
+            JSkatMaster.INSTANCE.checkJSkatVersion(getVersion(),
                     VersionChecker.getLatestVersion());
         }
     }

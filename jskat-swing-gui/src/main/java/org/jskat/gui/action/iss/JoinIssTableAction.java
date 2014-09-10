@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
+import org.jskat.control.JSkatMaster;
 import org.jskat.gui.action.AbstractJSkatAction;
 
 /**
@@ -46,7 +47,8 @@ public class JoinIssTableAction extends AbstractJSkatAction {
 
 		if (e.getSource() instanceof String) {
 
-			jskat.getIssController().joinTable((String) e.getSource());
+            JSkatMaster.INSTANCE.getIssController().joinTable(
+                    (String) e.getSource());
 		}
 	}
 }

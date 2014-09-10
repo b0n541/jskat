@@ -21,6 +21,7 @@ import java.util.Set;
 
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.train.NNTrainer;
+import org.jskat.control.event.JSkatEventBus;
 import org.jskat.control.event.general.DuplicateTableNameInputEvent;
 import org.jskat.control.event.general.EmptyTableNameInputEvent;
 import org.jskat.control.iss.IssController;
@@ -43,7 +44,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.eventbus.DeadEvent;
-import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
 /**
@@ -56,9 +56,7 @@ public class JSkatMaster {
 
 	private static Logger log = LoggerFactory.getLogger(JSkatMaster.class);
 
-	private volatile static JSkatMaster instance = null;
-
-	private final EventBus eventBus;
+	public final static JSkatMaster INSTANCE = new JSkatMaster();
 
 	private final JSkatOptions options;
 	private final JSkatApplicationData data;
@@ -68,21 +66,6 @@ public class JSkatMaster {
 	private final List<NNTrainer> runningNNTrainers;
 
 	/**
-	 * Gets the instance of the JSkat master controller
-	 *
-	 * @return JSkat master controller
-	 */
-	public static JSkatMaster instance() {
-
-		if (instance == null) {
-
-			instance = new JSkatMaster();
-		}
-
-		return instance;
-	}
-
-	/**
 	 * Constructor
 	 */
 	private JSkatMaster() {
@@ -90,10 +73,9 @@ public class JSkatMaster {
 		options = JSkatOptions.instance();
 		data = JSkatApplicationData.instance();
 
-		eventBus = new EventBus();
-		eventBus.register(this);
+		JSkatEventBus.INSTANCE.register(this);
 
-		issControl = new IssController(this, eventBus);
+		issControl = new IssController(this);
 
 		runningNNTrainers = new ArrayList<NNTrainer>();
 	}
@@ -147,7 +129,8 @@ public class JSkatMaster {
 		if (data.isFreeTableName(tableName)) {
 			createLocalTable(tableName, view.getHumanPlayerForGUI());
 		} else {
-			eventBus.post(new DuplicateTableNameInputEvent(tableName));
+			JSkatEventBus.INSTANCE.post(new DuplicateTableNameInputEvent(
+					tableName));
 			// try again
 			createTable();
 		}
@@ -423,7 +406,7 @@ public class JSkatMaster {
 
 		view = newView;
 		issControl.setView(view);
-		eventBus.register(newView);
+		JSkatEventBus.INSTANCE.register(newView);
 	}
 
 	/**
@@ -436,19 +419,11 @@ public class JSkatMaster {
 	}
 
 	/**
-	 * Shows the about message box
-	 */
-	public void showAboutMessage() {
-
-		view.showAboutMessage();
-	}
-
-	/**
 	 * Shows the error message of wrong (null) name input
 	 */
 	public void showEmptyInputNameMessage() {
 
-		eventBus.post(new EmptyTableNameInputEvent());
+		JSkatEventBus.INSTANCE.post(new EmptyTableNameInputEvent());
 	}
 
 	/**

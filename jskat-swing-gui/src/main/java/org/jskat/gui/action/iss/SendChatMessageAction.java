@@ -21,8 +21,10 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
+import org.jskat.control.JSkatMaster;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.gui.action.AbstractJSkatAction;
+import org.jskat.util.JSkatResourceBundle;
 
 /**
  * Implements the action for sending a chat message
@@ -36,7 +38,8 @@ public class SendChatMessageAction extends AbstractJSkatAction {
 	 */
 	public SendChatMessageAction() {
 
-		putValue(Action.NAME, "Send chat message");
+        putValue(Action.NAME,
+                JSkatResourceBundle.instance().getString("send_chat_message"));
 	}
 
 	/**
@@ -48,7 +51,7 @@ public class SendChatMessageAction extends AbstractJSkatAction {
 		if (e.getSource() instanceof ChatMessage) {
 
 			ChatMessage message = (ChatMessage) e.getSource();
-			jskat.getIssController().sendChatMessage(message);
+            JSkatMaster.INSTANCE.getIssController().sendChatMessage(message);
 		}
 	}
 }

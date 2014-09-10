@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jskat.control.JSkatMaster;
+import org.jskat.control.event.JSkatEventBus;
 import org.jskat.control.event.iss.LogoutFromIssEvent;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.JSkatApplicationData;
@@ -42,8 +43,6 @@ import org.jskat.util.rule.SkatRuleFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.eventbus.EventBus;
-
 /**
  * Controls all ISS related actions
  */
@@ -52,7 +51,6 @@ public class IssController {
 	private static Logger log = LoggerFactory.getLogger(IssController.class);
 
 	private final JSkatMaster jskat;
-	private final EventBus eventBus;
 	private JSkatView view;
 	private final JSkatApplicationData data;
 	private final JSkatResourceBundle strings;
@@ -72,10 +70,9 @@ public class IssController {
 	 * @param newJSkat
 	 *            JSkat master
 	 */
-	public IssController(final JSkatMaster jskat, final EventBus eventBus) {
+	public IssController(JSkatMaster jskatMaster) {
 
-		this.jskat = jskat;
-		this.eventBus = eventBus;
+		jskat = jskatMaster;
 		data = JSkatApplicationData.instance();
 		strings = JSkatResourceBundle.instance();
 		gameData = new HashMap<String, SkatGameData>();
@@ -104,7 +101,7 @@ public class IssController {
 			issConnector.closeConnection();
 		}
 
-		eventBus.post(new LogoutFromIssEvent());
+		JSkatEventBus.INSTANCE.post(new LogoutFromIssEvent());
 	}
 
 	/**

@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jskat.control.SkatTable;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
@@ -112,11 +111,6 @@ public interface JSkatView {
 	 * @return List of player names
 	 */
 	public List<String> getPlayerForInvitation(Set<String> playerNames);
-
-	/**
-	 * Shows the about dialog
-	 */
-	public void showAboutMessage();
 
 	/**
 	 * Shows a message dialog

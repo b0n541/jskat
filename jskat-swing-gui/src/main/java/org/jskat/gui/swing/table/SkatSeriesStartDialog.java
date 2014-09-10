@@ -57,7 +57,6 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 	private static final String PLAYER3_DEFAULT_NAME = System
 			.getProperty("user.name"); //$NON-NLS-1$
 
-	private final JSkatMaster jskat;
 	private final JFrame parent;
 
 	private JSkatResourceBundle strings;
@@ -80,10 +79,8 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 	 * @param mainFrame
 	 *            Main frame
 	 */
-	public SkatSeriesStartDialog(final JSkatMaster skatMaster,
-			final JFrame mainFrame) {
+    public SkatSeriesStartDialog(final JFrame mainFrame) {
 
-		jskat = skatMaster;
 		parent = mainFrame;
 		strings = JSkatResourceBundle.instance();
 
@@ -191,7 +188,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 			if (player1name.getText().isEmpty()
 					|| player2name.getText().isEmpty()
 					|| player3name.getText().isEmpty()) {
-				jskat.showEmptyInputNameMessage();
+                JSkatMaster.INSTANCE.showEmptyInputNameMessage();
 				return;
 			}
 
@@ -207,7 +204,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
 			setVisible(false);
 
-			jskat.startSeries(playerTypes, playerNames,
+            JSkatMaster.INSTANCE.startSeries(playerTypes, playerNames,
 					Integer.parseInt(numberOfRounds.getValue().toString()),
 					unlimited.isSelected(), onlyPlayRamsch.isSelected(), 100);
 		}

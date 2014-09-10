@@ -19,7 +19,6 @@ package org.jskat.gui.action;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 
-import org.jskat.control.JSkatMaster;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.util.JSkatResourceBundle;
@@ -31,10 +30,6 @@ public abstract class AbstractJSkatAction extends AbstractAction {
 
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * Controller class
-	 */
-	protected JSkatMaster jskat;
 	/**
 	 * JSkat graphics repository
 	 */
@@ -51,7 +46,6 @@ public abstract class AbstractJSkatAction extends AbstractAction {
 
 		strings = JSkatResourceBundle.instance();
 		bitmaps = JSkatGraphicRepository.instance();
-		jskat = JSkatMaster.instance();
 
 		setIcon(Icon.BLANK);
 	}

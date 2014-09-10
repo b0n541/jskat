@@ -20,6 +20,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
+import org.jskat.control.JSkatMaster;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.action.JSkatActionEvent;
 import org.jskat.player.JSkatPlayer;
@@ -38,7 +39,8 @@ public abstract class AbstractHumanJSkatAction extends AbstractJSkatAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		jskat.triggerHuman(new JSkatActionEvent(e.getActionCommand(), e
+        JSkatMaster.INSTANCE.triggerHuman(new JSkatActionEvent(e
+                .getActionCommand(), e
 				.getSource()));
 	}
 }

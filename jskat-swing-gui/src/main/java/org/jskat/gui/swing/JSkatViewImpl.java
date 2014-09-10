@@ -47,9 +47,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jskat.JSkat;
-import org.jskat.control.JSkatMaster;
 import org.jskat.control.event.general.DuplicateTableNameInputEvent;
 import org.jskat.control.event.general.EmptyTableNameInputEvent;
+import org.jskat.control.event.general.ShowAboutDialogEvent;
 import org.jskat.control.event.iss.LogoutFromIssEvent;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.GameAnnouncement;
@@ -154,7 +154,6 @@ public class JSkatViewImpl implements JSkatView {
     private final Map<String, SkatTablePanel> tables;
     private final JSkatGraphicRepository bitmaps;
     private final JSkatResourceBundle strings;
-    private final JSkatMaster jskat;
     static ActionMap actions;
     private LobbyPanel issLobby;
 
@@ -166,11 +165,10 @@ public class JSkatViewImpl implements JSkatView {
         bitmaps = JSkatGraphicRepository.instance();
         strings = JSkatResourceBundle.instance();
         tables = new HashMap<String, SkatTablePanel>();
-        jskat = JSkatMaster.instance();
         initActionMap();
         initGUI();
 
-        skatSeriesStartDialog = new SkatSeriesStartDialog(jskat, mainFrame);
+        skatSeriesStartDialog = new SkatSeriesStartDialog(mainFrame);
         preferencesDialog = new JSkatOptionsDialog(mainFrame);
         trainingOverview = new NeuralNetworkTrainingOverview(mainFrame);
 
@@ -270,7 +268,7 @@ public class JSkatViewImpl implements JSkatView {
 
         mainFrame = new JFrame("JSkat " + JSkat.getVersion()); //$NON-NLS-1$
 
-        mainFrame.addWindowListener(new JSkatWindowAdapter(jskat));
+        mainFrame.addWindowListener(new JSkatWindowAdapter());
 
         mainFrame.setJMenuBar(getMenuBar());
 
@@ -458,12 +456,8 @@ public class JSkatViewImpl implements JSkatView {
         actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(true);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void showAboutMessage() {
-        // TODO save text for message centrally
+    @Subscribe
+    public void showAboutMessage(final ShowAboutDialogEvent event) {
         JOptionPane
         .showMessageDialog(
                 mainFrame,

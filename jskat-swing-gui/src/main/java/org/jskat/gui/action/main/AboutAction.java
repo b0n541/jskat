@@ -21,11 +21,13 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
+import org.jskat.control.event.JSkatEventBus;
+import org.jskat.control.event.general.ShowAboutDialogEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
- * Implements the action for showing about dialog
+ * Implements the action for showing about dialog.
  */
 public class AboutAction extends AbstractJSkatAction {
 
@@ -35,10 +37,8 @@ public class AboutAction extends AbstractJSkatAction {
 	 * @see AbstractJSkatAction#AbstractJSkatAction()
 	 */
 	public AboutAction() {
-
 		putValue(Action.NAME, strings.getString("about")); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION, strings.getString("about_tooltip")); //$NON-NLS-1$
-
 		setIcon(Icon.ABOUT);
 	}
 
@@ -47,7 +47,6 @@ public class AboutAction extends AbstractJSkatAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
-		jskat.showAboutMessage();
+        JSkatEventBus.INSTANCE.post(new ShowAboutDialogEvent());
 	}
 }

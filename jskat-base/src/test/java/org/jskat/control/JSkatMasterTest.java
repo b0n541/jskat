@@ -32,16 +32,15 @@ public class JSkatMasterTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void createTable() {
-		JSkatMaster master = JSkatMaster.instance();
 		UnitTestView view = new UnitTestView();
-		master.setView(view);
+		JSkatMaster.INSTANCE.setView(view);
 
-		master.createTable();
+		JSkatMaster.INSTANCE.createTable();
 
 		assertEquals(1, view.tables.size());
 		assertTrue(view.tables.contains("UnitTestTable 1")); //$NON-NLS-1$
 
-		master.createTable();
+		JSkatMaster.INSTANCE.createTable();
 
 		assertEquals(2, view.tables.size());
 		assertTrue(view.tables.contains("UnitTestTable 1")); //$NON-NLS-1$

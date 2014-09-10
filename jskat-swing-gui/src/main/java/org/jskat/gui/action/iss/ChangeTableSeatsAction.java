@@ -21,6 +21,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
+import org.jskat.control.JSkatMaster;
 import org.jskat.gui.action.AbstractJSkatAction;
 
 /**
@@ -44,6 +45,6 @@ public class ChangeTableSeatsAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		jskat.sendTableSeatChangeSignal();
+        JSkatMaster.INSTANCE.sendTableSeatChangeSignal();
 	}
 }

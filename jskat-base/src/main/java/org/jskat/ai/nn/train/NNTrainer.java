@@ -18,7 +18,6 @@ package org.jskat.ai.nn.train;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 import org.jskat.ai.nn.AIPlayerNN;
@@ -53,28 +52,15 @@ public class NNTrainer extends JSkatThread {
 	static final String RANDOM_PLAYER_CLASS = "org.jskat.ai.rnd.AIPlayerRND";
 
 	private static final List<String> playerTypes = new ArrayList<String>();
+
 	static {
 		playerTypes.add(NEURAL_NETWORK_PLAYER_CLASS);
 		playerTypes.add(RANDOM_PLAYER_CLASS);
 	}
 
-	private final JSkatMaster jskat;
-
-	private final Random rand;
-
 	private GameType gameType;
 
 	private boolean stopTraining = false;
-
-	/**
-	 * Constructor
-	 */
-	public NNTrainer() {
-
-		jskat = JSkatMaster.instance();
-
-		rand = new Random();
-	}
 
 	/**
 	 * @see java.lang.Thread#run()
@@ -109,7 +95,7 @@ public class NNTrainer extends JSkatThread {
 
 	private JSkatPlayer createPlayer(String playerType) {
 
-		JSkatPlayer player = JSkatMaster.instance().createPlayer(playerType);
+		JSkatPlayer player = JSkatMaster.INSTANCE.createPlayer(playerType);
 
 		if (NEURAL_NETWORK_PLAYER_CLASS.equals(playerType)) {
 			AIPlayerNN nnPlayer = (AIPlayerNN) player;
@@ -208,16 +194,18 @@ public class NNTrainer extends JSkatThread {
 			if (totalGames > 0) {
 
 				if (totalGames % MAX_TRAINING_EPISODES_WITHOUT_SAVE == 0) {
-					jskat.saveNeuralNetworks(gameType);
+					JSkatMaster.INSTANCE.saveNeuralNetworks(gameType);
 				}
 
 				if (opponentParticipations == 0) {
 					// for ramsch games
-					jskat.addTrainingResult(gameType, totalGames,
+					JSkatMaster.INSTANCE
+							.addTrainingResult(gameType, totalGames,
 							totalWonGames, declarerAvgNetworkErrorSum
 									/ declarerParticipations, 0.0);
 				} else {
-					jskat.addTrainingResult(gameType, totalGames,
+					JSkatMaster.INSTANCE
+							.addTrainingResult(gameType, totalGames,
 							totalWonGames, declarerAvgNetworkErrorSum
 									/ declarerParticipations,
 							opponentAvgNetworkErrorSum / opponentParticipations);

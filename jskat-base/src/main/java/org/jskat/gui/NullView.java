@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jskat.control.SkatTable;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
@@ -699,11 +698,5 @@ public class NullView implements JSkatView {
 	public void setRe(String tableName, Player player) {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public void showAboutMessage() {
-		// TODO Auto-generated method stub
-		
 	}
 }

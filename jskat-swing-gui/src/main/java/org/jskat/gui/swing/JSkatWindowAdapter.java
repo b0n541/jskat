@@ -23,14 +23,9 @@ import org.jskat.control.JSkatMaster;
 
 public class JSkatWindowAdapter extends WindowAdapter {
 
-	private JSkatMaster jskat;
-
-	public JSkatWindowAdapter(JSkatMaster jskat) {
-		this.jskat = jskat;
-	}
-
 	@Override
 	public void windowClosing(final WindowEvent e) {
-		jskat.exitJSkat();
+
+        JSkatMaster.INSTANCE.exitJSkat();
 	}
 }
