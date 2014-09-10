@@ -49,7 +49,7 @@ class WebSocketConnection implements WebSocket.OnTextMessage, OutputChannel {
 
 	@Override
 	public void onMessage(final String message) {
-		// handle incoming message
+		log.debug("ISS    |---> " + message); //$NON-NLS-1$
 		messageHandler.addMessage(message);
 	}
 

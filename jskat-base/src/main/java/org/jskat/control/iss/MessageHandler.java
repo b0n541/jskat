@@ -20,11 +20,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import org.jskat.control.event.iss.LogoutFromIssEvent;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.util.JSkatResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.eventbus.EventBus;
 
 /**
  * Handles messages from ISS
@@ -33,12 +36,14 @@ public class MessageHandler extends Thread {
 
 	private static Logger log = LoggerFactory.getLogger(MessageHandler.class);
 
-	StreamConnector connect;
-	IssController issControl;
+	private StreamConnector connect;
+	private IssController issControl;
 
-	JSkatResourceBundle strings;
+	private JSkatResourceBundle strings;
 
-	List<String> messageList;
+	private List<String> messageList;
+
+	private EventBus eventBus;
 
 	private final static int protocolVersion = 14;
 
@@ -101,9 +106,8 @@ public class MessageHandler extends Thread {
 	void handleMessage(final String message) {
 
 		if (message == null) {
-
 			connect.closeConnection();
-			issControl.closeIssPanels();
+			eventBus.post(new LogoutFromIssEvent());
 		} else {
 
 			final StringTokenizer tokenizer = new StringTokenizer(message); // get
@@ -155,6 +159,9 @@ public class MessageHandler extends Thread {
 			break;
 		case WELCOME:
 			handleWelcomeMessage(params);
+			break;
+		case VERSION:
+			handleVersionMessage(params);
 			break;
 		case CLIENTS:
 			handleClientListMessage(params);
@@ -403,7 +410,7 @@ public class MessageHandler extends Thread {
 		final double issProtocolVersion = Double.parseDouble(params.get(params
 				.size() - 1));
 
-		log.debug("iss version: " + issProtocolVersion); //$NON-NLS-1$
+		log.debug("ISS version: " + issProtocolVersion); //$NON-NLS-1$
 		log.debug("local version: " + protocolVersion); //$NON-NLS-1$
 
 		if ((int) issProtocolVersion != protocolVersion) {
@@ -414,6 +421,16 @@ public class MessageHandler extends Thread {
 		}
 
 		issControl.showISSLobby(login);
+	}
+
+	/**
+	 * Handles the version message and checks the protocol version
+	 * 
+	 * @param params
+	 *            Welcome information
+	 */
+	void handleVersionMessage(final List<String> params) {
+		log.debug("ISS version: " + params.get(0));
 	}
 
 	/**

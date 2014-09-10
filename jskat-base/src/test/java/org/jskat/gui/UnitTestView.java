@@ -423,12 +423,6 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void closeISSPanels() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void setGeschoben(final String tableName, final Player player) {
 		// TODO Auto-generated method stub
 

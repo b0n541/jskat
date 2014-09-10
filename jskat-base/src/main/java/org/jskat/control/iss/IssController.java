@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.jskat.control.JSkatMaster;
+import org.jskat.control.event.iss.LogoutFromIssEvent;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.JSkatApplicationData;
 import org.jskat.data.JSkatViewType;
@@ -41,6 +42,8 @@ import org.jskat.util.rule.SkatRuleFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.eventbus.EventBus;
+
 /**
  * Controls all ISS related actions
  */
@@ -49,6 +52,7 @@ public class IssController {
 	private static Logger log = LoggerFactory.getLogger(IssController.class);
 
 	private final JSkatMaster jskat;
+	private final EventBus eventBus;
 	private JSkatView view;
 	private final JSkatApplicationData data;
 	private final JSkatResourceBundle strings;
@@ -68,9 +72,10 @@ public class IssController {
 	 * @param newJSkat
 	 *            JSkat master
 	 */
-	public IssController(final JSkatMaster newJSkat) {
+	public IssController(final JSkatMaster jskat, final EventBus eventBus) {
 
-		jskat = newJSkat;
+		this.jskat = jskat;
+		this.eventBus = eventBus;
 		data = JSkatApplicationData.instance();
 		strings = JSkatResourceBundle.instance();
 		gameData = new HashMap<String, SkatGameData>();
@@ -97,9 +102,9 @@ public class IssController {
 			log.debug("connection to ISS still open"); //$NON-NLS-1$
 
 			issConnector.closeConnection();
-			// FIXME (jan 07.12.2010) use constant instead of string
-			view.closeISSPanels();
 		}
+
+		eventBus.post(new LogoutFromIssEvent());
 	}
 
 	/**
@@ -122,7 +127,6 @@ public class IssController {
 		log.debug("connectToISS"); //$NON-NLS-1$
 
 		if (issConnector == null) {
-
 			issConnector = new StreamConnector();
 			// issConnector = new WebSocketConnector();
 		}
@@ -748,13 +752,6 @@ public class IssController {
 			final ChatMessage message) {
 		// FIXME (jan 30.01.2011) tableName not needed here?
 		view.appendISSChatMessage(ChatMessageType.TABLE, message);
-	}
-
-	/**
-	 * Closes all ISS related tab panels
-	 */
-	public void closeIssPanels() {
-		view.closeISSPanels();
 	}
 
 	/**

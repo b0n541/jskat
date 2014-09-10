@@ -48,9 +48,9 @@ import javax.swing.event.ChangeListener;
 
 import org.jskat.JSkat;
 import org.jskat.control.JSkatMaster;
-import org.jskat.control.SkatTable;
 import org.jskat.control.event.general.DuplicateTableNameInputEvent;
 import org.jskat.control.event.general.EmptyTableNameInputEvent;
+import org.jskat.control.event.iss.LogoutFromIssEvent;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
@@ -1320,11 +1320,8 @@ public class JSkatViewImpl implements JSkatView {
         tables.get(tableName).setDeclarer(declarer);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void closeISSPanels() {
+    @Subscribe
+    public void closeISSPanels(final LogoutFromIssEvent event) {
         for (final Component currPanel : tabs.getComponents()) {
             if (currPanel instanceof LobbyPanel
                     || currPanel instanceof ISSTablePanel) {

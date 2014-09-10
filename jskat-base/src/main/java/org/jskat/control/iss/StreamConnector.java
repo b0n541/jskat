@@ -56,7 +56,8 @@ class StreamConnector extends AbstractIssConnector {
 
 			output = new PrintWriter(socket.getOutputStream(), true);
 			issOut = new StreamOutputChannel(output);
-			issIn = new InputChannel(issControl, this, socket.getInputStream());
+			issIn = new InputChannel(issControl, this,
+					socket.getInputStream());
 			issIn.start();
 			log.debug("Connection established..."); //$NON-NLS-1$
 

@@ -640,11 +640,6 @@ public interface JSkatView {
 	public void setDeclarer(String tableName, Player declarer);
 
 	/**
-	 * Closes alle ISS related panels
-	 */
-	public void closeISSPanels();
-
-	/**
 	 * Sets the schieben of a player
 	 * 
 	 * @param tableName

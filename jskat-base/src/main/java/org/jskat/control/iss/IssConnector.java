@@ -15,6 +15,7 @@
  */
 package org.jskat.control.iss;
 
+
 /**
  * Interface for connectors to ISS
  */
@@ -33,9 +34,11 @@ interface IssConnector {
 	/**
 	 * Establishes a connection with ISS
 	 * 
+	 * @param issControl
+	 *            ISS controller
 	 * @return TRUE if the connection was successful
 	 */
-	boolean establishConnection(IssController issControl);
+	boolean establishConnection(final IssController issControl);
 
 	/**
 	 * Gets the output channel

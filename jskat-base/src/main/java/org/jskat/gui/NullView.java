@@ -585,14 +585,6 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void closeISSPanels() {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void setResign(@SuppressWarnings("unused") final String tableName,
 			@SuppressWarnings("unused") final Player player) {
 		// empty method by intent

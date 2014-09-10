@@ -29,6 +29,10 @@ public enum MessageType {
 	 */
 	WELCOME("Welcome"), //$NON-NLS-1$
 	/**
+	 * Version message
+	 */
+	VERSION("Version"), //$NON-NLS-1$
+	/**
 	 * Clients update message
 	 */
 	CLIENTS("clients"), //$NON-NLS-1$

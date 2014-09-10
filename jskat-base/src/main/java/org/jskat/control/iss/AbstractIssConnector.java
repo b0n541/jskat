@@ -44,5 +44,4 @@ abstract class AbstractIssConnector implements IssConnector {
 		loginName = newLoginName;
 		password = newPassword;
 	}
-
 }

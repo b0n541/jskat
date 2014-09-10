@@ -93,7 +93,7 @@ public class JSkatMaster {
 		eventBus = new EventBus();
 		eventBus.register(this);
 
-		issControl = new IssController(this);
+		issControl = new IssController(this, eventBus);
 
 		runningNNTrainers = new ArrayList<NNTrainer>();
 	}
