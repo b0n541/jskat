@@ -39,7 +39,7 @@
 
 	<groupId>org.jskat</groupId>
 	<artifactId>jskat-multimodule</artifactId>
-	<version>0.14.0</version>
+	<version>0.14.1</version>
 	<name>Multi module for JSkat</name>
 	<packaging>pom</packaging>
 
