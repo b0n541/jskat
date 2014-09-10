@@ -69,26 +69,6 @@ public interface JSkatView {
 	public void startGame(String tableName);
 
 	/**
-	 * Starts bidding
-	 */
-	public void startBidding();
-
-	/**
-	 * Starts discarding
-	 */
-	public void startDiscarding();
-
-	/**
-	 * Starts playing
-	 */
-	public void startPlaying();
-
-	/**
-	 * Shows the results of a game
-	 */
-	public void showGameResults();
-
-	/**
 	 * Shows the login for ISS
 	 */
 	public void showISSLogin();

@@ -436,38 +436,6 @@ public class JSkatViewImpl implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public void startBidding() {
-        // TODO implement it
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void startDiscarding() {
-        // TODO implement it
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void startPlaying() {
-        // TODO implement it
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void showGameResults() {
-        // TODO implement it
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void createISSTable(final String tableName, final String loginName) {
 
         final ISSTablePanel newTable = new ISSTablePanel(this, tableName,

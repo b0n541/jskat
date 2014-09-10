@@ -127,22 +127,6 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void showAboutMessage() {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void showGameResults() {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void showISSLogin() {
 		// empty method by intent
 	}
@@ -151,31 +135,7 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void startBidding() {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void startDiscarding() {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void startGame(@SuppressWarnings("unused") final String tableName) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void startPlaying() {
 		// empty method by intent
 	}
 
@@ -761,5 +721,11 @@ public class NullView implements JSkatView {
 	public void showNullInputNameMessage() {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void showAboutMessage() {
+		// TODO Auto-generated method stub
+		
 	}
 }

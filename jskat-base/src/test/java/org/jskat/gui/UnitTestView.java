@@ -78,30 +78,6 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void startBidding() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void startDiscarding() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void startPlaying() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void showGameResults() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void showISSLogin() {
 		// TODO Auto-generated method stub
 
