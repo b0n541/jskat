@@ -429,11 +429,6 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void showNullInputNameMessage() {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public void setGeschoben(final String tableName, final Player player) {
 		// TODO Auto-generated method stub
 

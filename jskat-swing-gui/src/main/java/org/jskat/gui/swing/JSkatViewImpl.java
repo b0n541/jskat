@@ -50,6 +50,7 @@ import org.jskat.JSkat;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.SkatTable;
 import org.jskat.control.event.general.DuplicateTableNameInputEvent;
+import org.jskat.control.event.general.EmptyTableNameInputEvent;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
@@ -1344,11 +1345,8 @@ public class JSkatViewImpl implements JSkatView {
                 message);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void showNullInputNameMessage() {
+    @Subscribe
+    public void showEmptyInputNameMessage(final EmptyTableNameInputEvent event) {
 
         showErrorMessage(strings.getString("invalid_name_input_null_title"), //$NON-NLS-1$
                 strings.getString("invalid_name_input_null_message"));

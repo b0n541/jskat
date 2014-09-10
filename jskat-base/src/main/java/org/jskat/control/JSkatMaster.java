@@ -22,6 +22,7 @@ import java.util.Set;
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.train.NNTrainer;
 import org.jskat.control.event.general.DuplicateTableNameInputEvent;
+import org.jskat.control.event.general.EmptyTableNameInputEvent;
 import org.jskat.control.iss.IssController;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.JSkatApplicationData;
@@ -447,7 +448,7 @@ public class JSkatMaster {
 	 */
 	public void showEmptyInputNameMessage() {
 
-		view.showNullInputNameMessage();
+		eventBus.post(new EmptyTableNameInputEvent());
 	}
 
 	/**

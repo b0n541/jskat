@@ -645,11 +645,6 @@ public interface JSkatView {
 	public void closeISSPanels();
 
 	/**
-	 * Shows a message, that input name is empty
-	 */
-	public void showNullInputNameMessage();
-
-	/**
 	 * Sets the schieben of a player
 	 * 
 	 * @param tableName
