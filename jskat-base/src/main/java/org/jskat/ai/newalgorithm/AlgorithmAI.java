@@ -109,7 +109,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
 	public CardList getCardsToDiscard() {
 		// Wenn Ramschspiel
 		if (knowledge.getGameType() == GameType.RAMSCH) {
-			// aiPlayer = new AlgorithmRamsch(this, GameType.RAMSCH);
+			aiPlayer = new AlgorithmRamsch(this, GameType.RAMSCH);
 		} else {
 			// Ermitteln was gespielt werden soll
 			// normalerweise muss der BidEvaluator gesetzt sein, sonst kann er
@@ -117,9 +117,8 @@ public class AlgorithmAI extends AbstractAIPlayer {
 			if (bidEvaluator == null) {
 				bidEvaluator = new BidEvaluator(knowledge.getOwnCards(),
 						knowledge.getPlayerPosition());
-			} else {
-				bidEvaluator.eval(knowledge.getOwnCards());
 			}
+			bidEvaluator.eval(knowledge.getOwnCards());
 
 			// Wenn Null-Spiel
 			if (bidEvaluator.getSuggestedGameType() == GameType.NULL) {
