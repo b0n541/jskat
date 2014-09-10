@@ -100,8 +100,6 @@ public class MessageHandler extends Thread {
 
 	void handleMessage(final String message) {
 
-		log.debug("ISS    |--> " + message); //$NON-NLS-1$
-
 		if (message == null) {
 
 			connect.closeConnection();
