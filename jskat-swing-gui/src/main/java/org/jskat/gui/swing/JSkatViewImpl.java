@@ -1316,6 +1316,7 @@ public class JSkatViewImpl implements JSkatView {
 
     @Subscribe
     public void handle(final LogoutFromIssEvent event) {
+
         for (final Component currPanel : tabs.getComponents()) {
             if (currPanel instanceof LobbyPanel
                     || currPanel instanceof ISSTablePanel) {
@@ -1325,8 +1326,8 @@ public class JSkatViewImpl implements JSkatView {
     }
 
 	@Subscribe
-    public void handle(final DuplicateTableNameInputEvent event)
-    {
+    public void handle(final DuplicateTableNameInputEvent event) {
+
         final String message = strings.getString(
                 "duplicate_table_name_message", //$NON-NLS-1$
 				event.tableName);
