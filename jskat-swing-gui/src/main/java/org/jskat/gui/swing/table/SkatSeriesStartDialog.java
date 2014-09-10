@@ -60,7 +60,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 	private final JSkatMaster jskat;
 	private final JFrame parent;
 
-	JSkatResourceBundle strings;
+	private JSkatResourceBundle strings;
 
 	private JTextField player1name;
 	private JTextField player2name;
@@ -68,9 +68,9 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 	private JComboBox player1;
 	private JComboBox player2;
 	private JComboBox player3;
-	JSpinner numberOfRounds;
-	JCheckBox unlimited;
-	JCheckBox onlyPlayRamsch;
+	private JSpinner numberOfRounds;
+	private JCheckBox unlimited;
+	private JCheckBox onlyPlayRamsch;
 
 	/**
 	 * Constructor
@@ -186,14 +186,11 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 	public void actionPerformed(final ActionEvent e) {
 
 		if (CANCEL.equals(e.getActionCommand())) {
-
 			setVisible(false);
 		} else if (START.equals(e.getActionCommand())) {
-
 			if (player1name.getText().isEmpty()
 					|| player2name.getText().isEmpty()
 					|| player3name.getText().isEmpty()) {
-
 				jskat.showEmptyInputNameMessage();
 				return;
 			}
@@ -214,7 +211,6 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 					Integer.parseInt(numberOfRounds.getValue().toString()),
 					unlimited.isSelected(), onlyPlayRamsch.isSelected(), 100);
 		}
-
 	}
 
 	private class PlayerComboBoxRenderer extends AbstractI18NComboBoxRenderer {
