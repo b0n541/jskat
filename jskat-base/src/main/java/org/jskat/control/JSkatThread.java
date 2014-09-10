@@ -19,8 +19,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Extends the normal thread class with an wait option
+ * Extends the normal thread class with an wait option.
+ * 
+ * @deprecated should be implemented as {@link Runnable}
  */
+@Deprecated
 public class JSkatThread extends Thread {
 
 	private static Logger log = LoggerFactory.getLogger(JSkatThread.class);
