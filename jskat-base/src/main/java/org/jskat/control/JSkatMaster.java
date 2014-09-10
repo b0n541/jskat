@@ -81,7 +81,7 @@ public class JSkatMaster {
 	}
 
 	@Subscribe
-	public void handleDeadEvent(DeadEvent event) {
+	public void handle(DeadEvent event) {
 		log.error("Recieved dead event: " + event);
 	}
 

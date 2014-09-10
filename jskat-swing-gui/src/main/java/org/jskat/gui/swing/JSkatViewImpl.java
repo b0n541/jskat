@@ -457,7 +457,7 @@ public class JSkatViewImpl implements JSkatView {
     }
 
     @Subscribe
-    public void showAboutMessage(final ShowAboutDialogEvent event) {
+    public void handle(final ShowAboutDialogEvent event) {
         JOptionPane
         .showMessageDialog(
                 mainFrame,
@@ -1315,7 +1315,7 @@ public class JSkatViewImpl implements JSkatView {
     }
 
     @Subscribe
-    public void closeISSPanels(final LogoutFromIssEvent event) {
+    public void handle(final LogoutFromIssEvent event) {
         for (final Component currPanel : tabs.getComponents()) {
             if (currPanel instanceof LobbyPanel
                     || currPanel instanceof ISSTablePanel) {
@@ -1325,8 +1325,7 @@ public class JSkatViewImpl implements JSkatView {
     }
 
 	@Subscribe
-	public void showDuplicateTableNameMessage(
-			final DuplicateTableNameInputEvent event)
+    public void handle(final DuplicateTableNameInputEvent event)
     {
         final String message = strings.getString(
                 "duplicate_table_name_message", //$NON-NLS-1$
@@ -1337,7 +1336,7 @@ public class JSkatViewImpl implements JSkatView {
     }
 
     @Subscribe
-    public void showEmptyInputNameMessage(final EmptyTableNameInputEvent event) {
+    public void handle(final EmptyTableNameInputEvent event) {
 
         showErrorMessage(strings.getString("invalid_name_input_null_title"), //$NON-NLS-1$
                 strings.getString("invalid_name_input_null_message"));
