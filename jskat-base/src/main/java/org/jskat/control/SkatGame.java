@@ -682,7 +682,6 @@ public class SkatGame extends JSkatThread {
 			trickWinner = rules.calculateTrickWinner(data.getGameType(), trick);
 			trick.setTrickWinner(trickWinner);
 			data.addPlayerPoints(trickWinner, trick.getValue());
-			view.setPlayedTrick(tableName, trick);
 
 			informPlayersAboutCompletedTrick(trick);
 
