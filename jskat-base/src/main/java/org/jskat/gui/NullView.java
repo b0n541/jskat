@@ -159,14 +159,6 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void showTable(@SuppressWarnings("unused") final SkatTable table) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void startBidding() {
 		// empty method by intent
 	}

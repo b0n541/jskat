@@ -53,14 +53,6 @@ public interface JSkatView {
 	public String getNewTableName(int localTablesCreated);
 
 	/**
-	 * Shows a table
-	 * 
-	 * @param table
-	 *            Skat table
-	 */
-	public void showTable(SkatTable table);
-
-	/**
 	 * Opens a new series
 	 * 
 	 * @param tableName

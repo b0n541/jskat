@@ -418,14 +418,6 @@ public class JSkatViewImpl implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public void showTable(final SkatTable table) {
-        // TODO implement it
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void startSeries(final String tableName) {
 
         tables.get(tableName).clearSkatList();
