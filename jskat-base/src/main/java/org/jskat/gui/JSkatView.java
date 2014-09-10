@@ -61,11 +61,6 @@ public interface JSkatView {
 	public void startSeries(String tableName);
 
 	/**
-	 * Shows the results of a series
-	 */
-	public void showSeriesResults();
-
-	/**
 	 * Starts a new game
 	 * 
 	 * @param tableName

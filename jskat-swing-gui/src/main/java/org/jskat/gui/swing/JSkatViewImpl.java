@@ -427,14 +427,6 @@ public class JSkatViewImpl implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public void showSeriesResults() {
-        // TODO implement it
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void startGame(final String tableName) {
 
         tables.get(tableName).startGame();
