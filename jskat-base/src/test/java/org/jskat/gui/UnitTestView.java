@@ -474,12 +474,6 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void setPlayedTrick(final String tableName, final Trick playedTrick) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void showCards(final String tableName,
 			final Map<Player, CardList> cards) {
 		// TODO Auto-generated method stub

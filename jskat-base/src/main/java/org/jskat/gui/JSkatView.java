@@ -683,16 +683,6 @@ public interface JSkatView {
 	public void openWebPage(String link);
 
 	/**
-	 * Sets the played trick
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param playedTrick
-	 *            Played trick
-	 */
-	public void setPlayedTrick(String tableName, Trick playedTrick);
-
-	/**
 	 * Sets the Contra calling of a player.
 	 * 
 	 * @param tableName

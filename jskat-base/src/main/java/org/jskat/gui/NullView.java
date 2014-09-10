@@ -670,14 +670,6 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setPlayedTrick(final String tableName, final Trick playedTrick) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void showCards(final String tableName,
 			final Map<Player, CardList> cards) {
 		// empty method by intent
