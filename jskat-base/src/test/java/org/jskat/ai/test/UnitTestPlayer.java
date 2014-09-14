@@ -29,35 +29,29 @@ public class UnitTestPlayer extends AbstractAIPlayer {
 
 	@Override
 	public void preparateForNewGame() {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public void finalizeGame() {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	public Integer bidMore(int nextBidValue) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public Boolean holdBid(int currBidValue) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public Boolean pickUpSkat() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public GameAnnouncement announceGame() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -73,30 +67,25 @@ public class UnitTestPlayer extends AbstractAIPlayer {
 
 	@Override
 	public void startGame() {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
 	protected CardList getCardsToDiscard() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Boolean callContra() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public Boolean callRe() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public Boolean playGrandHand() {
-		// TODO Auto-generated method stub
-		return null;
+		return false;
 	}
 }

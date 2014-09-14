@@ -395,8 +395,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 	@Override
 	public Boolean playGrandHand() {
-		// TODO Auto-generated method stub
-		return null;
+		return Boolean.FALSE;
 	}
 
 	/**
