@@ -325,11 +325,6 @@ public interface JSkatView {
 	public void addGameResult(String tableName, GameSummary summary);
 
 	/**
-	 * Shows the welcome dialog
-	 */
-	public void showWelcomeDialog();
-
-	/**
 	 * Clears a complete table
 	 * 
 	 * @param tableName

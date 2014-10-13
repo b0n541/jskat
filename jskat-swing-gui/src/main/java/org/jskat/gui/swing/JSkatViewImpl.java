@@ -53,6 +53,7 @@ import org.jskat.control.event.general.ShowAboutDialogEvent;
 import org.jskat.control.event.general.ShowHelpDialogEvent;
 import org.jskat.control.event.general.ShowLicenseDialogEvent;
 import org.jskat.control.event.general.ShowTrainingOverviewDialogEvent;
+import org.jskat.control.event.general.ShowWelcomeDialogEvent;
 import org.jskat.control.event.iss.LogoutFromIssEvent;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
 import org.jskat.control.iss.ChatMessageType;
@@ -691,11 +692,8 @@ public class JSkatViewImpl implements JSkatView {
 				strings.getString("license"), "org/jskat/gui/help/gpl3.html").setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void showWelcomeDialog() {
+	@Subscribe
+	public void handle(ShowWelcomeDialogEvent event) {
 
 		new JSkatWelcomeDialog(mainFrame,
 				strings.getString("welcome_to_jskat"), "org/jskat/gui/help/" //$NON-NLS-1$ //$NON-NLS-2$

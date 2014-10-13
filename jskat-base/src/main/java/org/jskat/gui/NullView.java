@@ -180,14 +180,6 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void showWelcomeDialog() {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void clearTable(@SuppressWarnings("unused") final String tableName) {
 		// empty method by intent
 	}

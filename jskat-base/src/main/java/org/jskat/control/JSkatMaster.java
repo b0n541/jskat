@@ -27,6 +27,7 @@ import org.jskat.control.event.general.EmptyTableNameInputEvent;
 import org.jskat.control.event.general.ShowHelpDialogEvent;
 import org.jskat.control.event.general.ShowLicenseDialogEvent;
 import org.jskat.control.event.general.ShowTrainingOverviewDialogEvent;
+import org.jskat.control.event.general.ShowWelcomeDialogEvent;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
 import org.jskat.control.iss.IssController;
 import org.jskat.data.GameAnnouncement;
@@ -879,10 +880,7 @@ public class JSkatMaster {
 	 * Shows the welcome dialog
 	 */
 	public void showWelcomeDialog() {
-		if (view != null) {
-			view.showWelcomeDialog();
-		} else {
-			log.warn("no view for welcome message found");
-		}
+
+		JSkatEventBus.INSTANCE.post(new ShowWelcomeDialogEvent());
 	}
 }
