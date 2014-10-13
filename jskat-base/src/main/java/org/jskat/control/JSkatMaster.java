@@ -24,6 +24,10 @@ import org.jskat.ai.nn.train.NNTrainer;
 import org.jskat.control.event.JSkatEventBus;
 import org.jskat.control.event.general.DuplicateTableNameInputEvent;
 import org.jskat.control.event.general.EmptyTableNameInputEvent;
+import org.jskat.control.event.general.ShowHelpDialogEvent;
+import org.jskat.control.event.general.ShowLicenseDialogEvent;
+import org.jskat.control.event.general.ShowTrainingOverviewDialogEvent;
+import org.jskat.control.event.nntraining.TrainingResultEvent;
 import org.jskat.control.iss.IssController;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.JSkatApplicationData;
@@ -431,7 +435,7 @@ public class JSkatMaster {
 	 */
 	public void trainNeuralNetworks() {
 
-		view.showTrainingOverview();
+		JSkatEventBus.INSTANCE.post(new ShowTrainingOverviewDialogEvent());
 
 		NNTrainer nullTrainer = new NNTrainer();
 		nullTrainer.setGameType(GameType.NULL);
@@ -500,7 +504,7 @@ public class JSkatMaster {
 	 */
 	public void showHelp() {
 
-		view.showHelpDialog();
+		JSkatEventBus.INSTANCE.post(new ShowHelpDialogEvent());
 	}
 
 	/**
@@ -508,7 +512,7 @@ public class JSkatMaster {
 	 */
 	public void showLicense() {
 
-		view.showLicenseDialog();
+		JSkatEventBus.INSTANCE.post(new ShowLicenseDialogEvent());
 	}
 
 	/**
@@ -862,12 +866,13 @@ public class JSkatMaster {
 	 * @param avgNetworkErrorOpponents
 	 *            Average difference of opponents nets
 	 */
-	public void addTrainingResult(final GameType gameType, final long episodes,
-			final long totalWonGames, final double avgNetworkErrorDeclarer,
-			final double avgNetworkErrorOpponents) {
+	public void addTrainingResult(final GameType gameType, final Long episodes,
+			final Long totalGamesWon, final Double avgNetworkErrorDeclarer,
+			final Double avgNetworkErrorOpponents) {
 
-		view.addTrainingResult(gameType, episodes, totalWonGames,
-				avgNetworkErrorDeclarer, avgNetworkErrorOpponents);
+		JSkatEventBus.INSTANCE.post(new TrainingResultEvent(gameType,
+				episodes, totalGamesWon, avgNetworkErrorDeclarer,
+				avgNetworkErrorOpponents));
 	}
 
 	/**

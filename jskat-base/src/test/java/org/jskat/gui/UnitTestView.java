@@ -34,7 +34,6 @@ import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
-import org.jskat.util.GameType;
 import org.jskat.util.Player;
 
 /**
@@ -135,12 +134,6 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void showTrainingOverview() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void addCard(final String tableName, final Player player,
 			final Card card) {
 		// TODO Auto-generated method stub
@@ -234,18 +227,6 @@ public class UnitTestView implements JSkatView {
 
 	@Override
 	public void addGameResult(final String tableName, final GameSummary summary) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void showHelpDialog() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void showLicenseDialog() {
 		// TODO Auto-generated method stub
 
 	}
@@ -385,14 +366,6 @@ public class UnitTestView implements JSkatView {
 			final String tableName) {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	@Override
-	public void addTrainingResult(final GameType gameType, final long episodes,
-			final long totalWonGames, final double avgNetworkErrorDeclarer,
-			final double avgNetworkErrorOpponents) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

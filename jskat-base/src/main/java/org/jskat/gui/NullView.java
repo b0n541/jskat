@@ -33,7 +33,6 @@ import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
-import org.jskat.util.GameType;
 import org.jskat.util.Player;
 
 /**
@@ -174,22 +173,6 @@ public class NullView implements JSkatView {
 	public void addGameResult(
 			@SuppressWarnings("unused") final String tableName,
 			@SuppressWarnings("unused") final GameSummary summary) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void showHelpDialog() {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void showLicenseDialog() {
 		// empty method by intent
 	}
 
@@ -416,14 +399,6 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void showTrainingOverview() {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void closeTabPanel(@SuppressWarnings("unused") final String name) {
 		// empty method by intent
 	}
@@ -533,19 +508,6 @@ public class NullView implements JSkatView {
 	@Override
 	public void showCardNotAllowedMessage(
 			@SuppressWarnings("unused") final Card card) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void addTrainingResult(
-			@SuppressWarnings("unused") final GameType gameType,
-			@SuppressWarnings("unused") final long episodes,
-			@SuppressWarnings("unused") final long totalWonGames,
-			@SuppressWarnings("unused") final double avgNetworkErrorDeclarer,
-			@SuppressWarnings("unused") final double avgNetworkErrorOpponents) {
 		// empty method by intent
 	}
 

@@ -33,7 +33,6 @@ import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
-import org.jskat.util.GameType;
 import org.jskat.util.Player;
 
 /**
@@ -152,11 +151,6 @@ public interface JSkatView {
 	 * Shows preferences dialog
 	 */
 	public void showPreferences();
-
-	/**
-	 * Shows training overview
-	 */
-	public void showTrainingOverview();
 
 	/**
 	 * Adds a card to a players hand
@@ -329,16 +323,6 @@ public interface JSkatView {
 	 *            Game summary
 	 */
 	public void addGameResult(String tableName, GameSummary summary);
-
-	/**
-	 * Shows the help dialog
-	 */
-	public void showHelpDialog();
-
-	/**
-	 * Shows the license dialog
-	 */
-	public void showLicenseDialog();
 
 	/**
 	 * Shows the welcome dialog
@@ -579,24 +563,6 @@ public interface JSkatView {
 	 * @return TRUE, if the user accepted the invitation
 	 */
 	public boolean showISSTableInvitation(String invitor, String tableName);
-
-	/**
-	 * Adds training results
-	 * 
-	 * @param gameType
-	 *            Game type of net
-	 * @param episodes
-	 *            Number of episodes
-	 * @param totalWonGames
-	 *            Total number of won games
-	 * @param avgNetworkErrorDeclarer
-	 *            Average error of declarer network
-	 * @param avgNetworkErrorOpponents
-	 *            Average error of opponents networks
-	 */
-	public void addTrainingResult(GameType gameType, long episodes,
-			long totalWonGames, double avgNetworkErrorDeclarer,
-			double avgNetworkErrorOpponents);
 
 	/**
 	 * Sets the game number of the current game
