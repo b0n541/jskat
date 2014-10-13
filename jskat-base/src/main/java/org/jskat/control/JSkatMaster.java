@@ -26,6 +26,7 @@ import org.jskat.control.event.general.DuplicateTableNameInputEvent;
 import org.jskat.control.event.general.EmptyTableNameInputEvent;
 import org.jskat.control.event.general.ShowHelpDialogEvent;
 import org.jskat.control.event.general.ShowLicenseDialogEvent;
+import org.jskat.control.event.general.ShowPreferencesDialogEvent;
 import org.jskat.control.event.general.ShowTrainingOverviewDialogEvent;
 import org.jskat.control.event.general.ShowWelcomeDialogEvent;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
@@ -664,7 +665,7 @@ public class JSkatMaster {
 	 */
 	public void showPreferences() {
 
-		view.showPreferences();
+		JSkatEventBus.INSTANCE.post(new ShowPreferencesDialogEvent());
 	}
 
 	/**

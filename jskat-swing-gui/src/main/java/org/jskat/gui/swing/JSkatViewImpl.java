@@ -52,6 +52,7 @@ import org.jskat.control.event.general.EmptyTableNameInputEvent;
 import org.jskat.control.event.general.ShowAboutDialogEvent;
 import org.jskat.control.event.general.ShowHelpDialogEvent;
 import org.jskat.control.event.general.ShowLicenseDialogEvent;
+import org.jskat.control.event.general.ShowPreferencesDialogEvent;
 import org.jskat.control.event.general.ShowTrainingOverviewDialogEvent;
 import org.jskat.control.event.general.ShowWelcomeDialogEvent;
 import org.jskat.control.event.iss.LogoutFromIssEvent;
@@ -1092,11 +1093,8 @@ public class JSkatViewImpl implements JSkatView {
 		table.setLastTrick(trick);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void showPreferences() {
+	@Subscribe
+	public void handle(ShowPreferencesDialogEvent event) {
 
 		preferencesDialog.validate();
 		preferencesDialog.setVisible(true);

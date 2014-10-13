@@ -383,14 +383,6 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void showPreferences() {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void closeTabPanel(@SuppressWarnings("unused") final String name) {
 		// empty method by intent
 	}

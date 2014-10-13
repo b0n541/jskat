@@ -148,11 +148,6 @@ public interface JSkatView {
 	public void showNewVersionAvailableMessage(String newVersion);
 
 	/**
-	 * Shows preferences dialog
-	 */
-	public void showPreferences();
-
-	/**
 	 * Adds a card to a players hand
 	 * 
 	 * @param tableName
