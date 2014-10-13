@@ -69,6 +69,7 @@
 					<properties>
 						<owner>Jan Schäfer</owner>
 						<email>jansch@users.sourceforge.net</email>
+						<project.inceptionYear>2003</project.inceptionYear>
 					</properties>
 				</configuration>
 				<executions>
