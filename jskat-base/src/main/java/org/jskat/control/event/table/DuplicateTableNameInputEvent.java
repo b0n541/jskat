@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control.event.general;
+package org.jskat.control.event.table;
 
 /**
  * This event is created when a user puts in a table name that already exists.

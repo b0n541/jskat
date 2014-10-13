@@ -47,8 +47,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jskat.JSkat;
-import org.jskat.control.event.general.DuplicateTableNameInputEvent;
-import org.jskat.control.event.general.EmptyTableNameInputEvent;
 import org.jskat.control.event.general.ShowAboutDialogEvent;
 import org.jskat.control.event.general.ShowHelpDialogEvent;
 import org.jskat.control.event.general.ShowLicenseDialogEvent;
@@ -57,6 +55,8 @@ import org.jskat.control.event.general.ShowTrainingOverviewDialogEvent;
 import org.jskat.control.event.general.ShowWelcomeDialogEvent;
 import org.jskat.control.event.iss.LogoutFromIssEvent;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
+import org.jskat.control.event.table.DuplicateTableNameInputEvent;
+import org.jskat.control.event.table.EmptyTableNameInputEvent;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
