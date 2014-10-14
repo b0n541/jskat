@@ -140,14 +140,6 @@ public interface JSkatView {
 	public void showCardNotAllowedMessage(Card card);
 
 	/**
-	 * Shows a message, that a new version is available
-	 * 
-	 * @param newVersion
-	 *            New version
-	 */
-	public void showNewVersionAvailableMessage(String newVersion);
-
-	/**
 	 * Adds a card to a players hand
 	 * 
 	 * @param tableName

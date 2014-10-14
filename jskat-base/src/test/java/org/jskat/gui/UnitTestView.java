@@ -383,12 +383,6 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void showNewVersionAvailableMessage(final String newVersion) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void setDiscardedSkat(final String tableName,
 			final Player activePlayer, final CardList skatBefore,
 			final CardList discardedSkat) {

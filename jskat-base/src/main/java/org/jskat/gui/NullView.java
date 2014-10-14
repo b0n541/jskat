@@ -549,15 +549,6 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void showNewVersionAvailableMessage(
-			@SuppressWarnings("unused") final String newVersion) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void setDiscardedSkat(
 			@SuppressWarnings("unused") final String tableName,
 			@SuppressWarnings("unused") final Player activePlayer,

@@ -47,6 +47,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jskat.JSkat;
+import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.general.ShowAboutDialogEvent;
 import org.jskat.control.event.general.ShowHelpDialogEvent;
 import org.jskat.control.event.general.ShowLicenseDialogEvent;
@@ -1248,16 +1249,13 @@ public class JSkatViewImpl implements JSkatView {
 		showErrorMessage(title, message);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void showNewVersionAvailableMessage(final String newVersion) {
+	@Subscribe
+	public void handle(NewJSkatVersionAvailableEvent event) {
 
 		final String title = strings.getString("new_version_title"); //$NON-NLS-1$
 
 		final String message = strings.getString("new_version_message", //$NON-NLS-1$
-				newVersion);
+				event.newVersion);
 
 		showMessage(title, message);
 	}

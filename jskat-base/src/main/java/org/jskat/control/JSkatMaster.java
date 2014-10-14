@@ -22,6 +22,7 @@ import java.util.Set;
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.train.NNTrainer;
 import org.jskat.control.event.JSkatEventBus;
+import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.general.ShowHelpDialogEvent;
 import org.jskat.control.event.general.ShowLicenseDialogEvent;
 import org.jskat.control.event.general.ShowPreferencesDialogEvent;
@@ -106,7 +107,9 @@ public class JSkatMaster {
 		if (VersionChecker.isHigherVersionAvailable(latestLocalVersion,
 				latestRemoteVersion)) {
 			log.debug("Newer version " + latestRemoteVersion + " is available on the JSkat website."); //$NON-NLS-1$//$NON-NLS-2$
-			view.showNewVersionAvailableMessage(latestRemoteVersion);
+
+			JSkatEventBus.INSTANCE.post(new NewJSkatVersionAvailableEvent(
+					latestRemoteVersion));
 		}
 	}
 
