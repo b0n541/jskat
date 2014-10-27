@@ -16,8 +16,8 @@
 package org.jskat.control.event.general;
 
 /**
- * This event is created when the training overview dialog should be shown.
+ * This event is created when the preferences dialog should be shown.
  */
-public class ShowTrainingOverviewDialogEvent {
+public class ShowPreferencesEvent {
 
 }

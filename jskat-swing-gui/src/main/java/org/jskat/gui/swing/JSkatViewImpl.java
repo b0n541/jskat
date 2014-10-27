@@ -48,12 +48,12 @@ import javax.swing.event.ChangeListener;
 
 import org.jskat.JSkat;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
-import org.jskat.control.event.general.ShowAboutDialogEvent;
-import org.jskat.control.event.general.ShowHelpDialogEvent;
-import org.jskat.control.event.general.ShowLicenseDialogEvent;
-import org.jskat.control.event.general.ShowPreferencesDialogEvent;
-import org.jskat.control.event.general.ShowTrainingOverviewDialogEvent;
-import org.jskat.control.event.general.ShowWelcomeDialogEvent;
+import org.jskat.control.event.general.ShowAboutInformationEvent;
+import org.jskat.control.event.general.ShowHelpEvent;
+import org.jskat.control.event.general.ShowLicenseEvent;
+import org.jskat.control.event.general.ShowPreferencesEvent;
+import org.jskat.control.event.general.ShowTrainingOverviewEvent;
+import org.jskat.control.event.general.ShowWelcomeInformationEvent;
 import org.jskat.control.event.iss.LogoutFromIssEvent;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
 import org.jskat.control.event.table.DuplicateTableNameInputEvent;
@@ -463,7 +463,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void handle(final ShowAboutDialogEvent event) {
+	public void handle(final ShowAboutInformationEvent event) {
 		JOptionPane
 				.showMessageDialog(
 						mainFrame,
@@ -679,7 +679,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void handle(ShowHelpDialogEvent event) {
+	public void handle(ShowHelpEvent event) {
 
 		new JSkatHelpDialog(
 				mainFrame,
@@ -688,14 +688,14 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void handle(ShowLicenseDialogEvent event) {
+	public void handle(ShowLicenseEvent event) {
 
 		new JSkatHelpDialog(mainFrame,
 				strings.getString("license"), "org/jskat/gui/help/gpl3.html").setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Subscribe
-	public void handle(ShowWelcomeDialogEvent event) {
+	public void handle(ShowWelcomeInformationEvent event) {
 
 		new JSkatWelcomeDialog(mainFrame,
 				strings.getString("welcome_to_jskat"), "org/jskat/gui/help/" //$NON-NLS-1$ //$NON-NLS-2$
@@ -1095,14 +1095,14 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void handle(ShowPreferencesDialogEvent event) {
+	public void handle(ShowPreferencesEvent event) {
 
 		preferencesDialog.validate();
 		preferencesDialog.setVisible(true);
 	}
 
 	@Subscribe
-	public void handle(ShowTrainingOverviewDialogEvent event) {
+	public void handle(ShowTrainingOverviewEvent event) {
 
 		trainingOverview.setVisible(true);
 	}

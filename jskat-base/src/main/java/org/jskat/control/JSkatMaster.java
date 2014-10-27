@@ -23,11 +23,11 @@ import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.train.NNTrainer;
 import org.jskat.control.event.JSkatEventBus;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
-import org.jskat.control.event.general.ShowHelpDialogEvent;
-import org.jskat.control.event.general.ShowLicenseDialogEvent;
-import org.jskat.control.event.general.ShowPreferencesDialogEvent;
-import org.jskat.control.event.general.ShowTrainingOverviewDialogEvent;
-import org.jskat.control.event.general.ShowWelcomeDialogEvent;
+import org.jskat.control.event.general.ShowHelpEvent;
+import org.jskat.control.event.general.ShowLicenseEvent;
+import org.jskat.control.event.general.ShowPreferencesEvent;
+import org.jskat.control.event.general.ShowTrainingOverviewEvent;
+import org.jskat.control.event.general.ShowWelcomeInformationEvent;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
 import org.jskat.control.event.table.DuplicateTableNameInputEvent;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
@@ -440,7 +440,7 @@ public class JSkatMaster {
 	 */
 	public void trainNeuralNetworks() {
 
-		JSkatEventBus.INSTANCE.post(new ShowTrainingOverviewDialogEvent());
+		JSkatEventBus.INSTANCE.post(new ShowTrainingOverviewEvent());
 
 		NNTrainer nullTrainer = new NNTrainer();
 		nullTrainer.setGameType(GameType.NULL);
@@ -509,7 +509,7 @@ public class JSkatMaster {
 	 */
 	public void showHelp() {
 
-		JSkatEventBus.INSTANCE.post(new ShowHelpDialogEvent());
+		JSkatEventBus.INSTANCE.post(new ShowHelpEvent());
 	}
 
 	/**
@@ -517,7 +517,7 @@ public class JSkatMaster {
 	 */
 	public void showLicense() {
 
-		JSkatEventBus.INSTANCE.post(new ShowLicenseDialogEvent());
+		JSkatEventBus.INSTANCE.post(new ShowLicenseEvent());
 	}
 
 	/**
@@ -668,7 +668,7 @@ public class JSkatMaster {
 	 */
 	public void showPreferences() {
 
-		JSkatEventBus.INSTANCE.post(new ShowPreferencesDialogEvent());
+		JSkatEventBus.INSTANCE.post(new ShowPreferencesEvent());
 	}
 
 	/**
@@ -885,6 +885,6 @@ public class JSkatMaster {
 	 */
 	public void showWelcomeDialog() {
 
-		JSkatEventBus.INSTANCE.post(new ShowWelcomeDialogEvent());
+		JSkatEventBus.INSTANCE.post(new ShowWelcomeInformationEvent());
 	}
 }

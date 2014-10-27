@@ -22,7 +22,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.jskat.control.event.JSkatEventBus;
-import org.jskat.control.event.general.ShowAboutDialogEvent;
+import org.jskat.control.event.general.ShowAboutInformationEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
@@ -47,6 +47,6 @@ public class AboutAction extends AbstractJSkatAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-        JSkatEventBus.INSTANCE.post(new ShowAboutDialogEvent());
+        JSkatEventBus.INSTANCE.post(new ShowAboutInformationEvent());
 	}
 }
