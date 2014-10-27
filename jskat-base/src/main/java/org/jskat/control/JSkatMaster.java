@@ -23,9 +23,6 @@ import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.train.NNTrainer;
 import org.jskat.control.event.JSkatEventBus;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
-import org.jskat.control.event.general.ShowHelpEvent;
-import org.jskat.control.event.general.ShowLicenseEvent;
-import org.jskat.control.event.general.ShowPreferencesEvent;
 import org.jskat.control.event.general.ShowTrainingOverviewEvent;
 import org.jskat.control.event.general.ShowWelcomeInformationEvent;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
@@ -295,22 +292,6 @@ public class JSkatMaster {
 	}
 
 	/**
-	 * Pauses a skat game at a table
-	 *
-	 * @param tableName
-	 *            Table name
-	 */
-	public void pauseSkatGame(final String tableName) {
-
-		SkatTable table = this.data.getLocalSkatTable(tableName);
-
-		if (table.isSeriesRunning()) {
-
-			table.pauseSkatGame();
-		}
-	}
-
-	/**
 	 * Resumes a skat game at a table
 	 *
 	 * @param tableName
@@ -499,22 +480,6 @@ public class JSkatMaster {
 	}
 
 	/**
-	 * Shows the help dialog
-	 */
-	public void showHelp() {
-
-		JSkatEventBus.INSTANCE.post(new ShowHelpEvent());
-	}
-
-	/**
-	 * Shows the license dialog
-	 */
-	public void showLicense() {
-
-		JSkatEventBus.INSTANCE.post(new ShowLicenseEvent());
-	}
-
-	/**
 	 * Triggers the human player interface to stop waiting
 	 *
 	 * @param event
@@ -629,25 +594,6 @@ public class JSkatMaster {
 	}
 
 	/**
-	 * Loads a series
-	 */
-	public void loadSeries() {
-		// TODO saving/loading a skat series (here: load)
-
-	}
-
-	/**
-	 * Saves a series
-	 *
-	 * @param newName
-	 *            TRUE, if a new name should be given to the save file
-	 */
-	public void saveSeries(final boolean newName) {
-		// TODO saving/loading a skat series (here: save)
-
-	}
-
-	/**
 	 * Gets the controller for playing on the ISS.
 	 *
 	 * @return ISS controller
@@ -655,14 +601,6 @@ public class JSkatMaster {
 	public IssController getIssController() {
 
 		return this.issControl;
-	}
-
-	/**
-	 * Shows the preference dialog.
-	 */
-	public void showPreferences() {
-
-		JSkatEventBus.INSTANCE.post(new ShowPreferencesEvent());
 	}
 
 	/**

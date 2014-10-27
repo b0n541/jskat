@@ -21,7 +21,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.jskat.control.JSkatMaster;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
@@ -37,9 +36,9 @@ public class SaveSeriesAction extends AbstractJSkatAction {
 	 */
 	public SaveSeriesAction() {
 
-		putValue(Action.NAME, strings.getString("save_series")); //$NON-NLS-1$
+		putValue(Action.NAME, this.strings.getString("save_series")); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION,
-				strings.getString("save_series_tooltip")); //$NON-NLS-1$
+				this.strings.getString("save_series_tooltip")); //$NON-NLS-1$
 
 		setIcon(Icon.SAVE);
 	}
@@ -49,7 +48,6 @@ public class SaveSeriesAction extends AbstractJSkatAction {
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
-        JSkatMaster.INSTANCE.saveSeries(false);
+		// TODO: implement posting an event
 	}
 }

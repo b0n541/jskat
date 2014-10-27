@@ -21,7 +21,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.jskat.control.JSkatMaster;
+import org.jskat.control.event.general.ShowPreferencesEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
@@ -37,9 +37,9 @@ public class PreferencesAction extends AbstractJSkatAction {
 	 */
 	public PreferencesAction() {
 
-		putValue(Action.NAME, strings.getString("preferences")); //$NON-NLS-1$
+		putValue(Action.NAME, this.strings.getString("preferences")); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION,
-				strings.getString("preferences_tooltip")); //$NON-NLS-1$
+				this.strings.getString("preferences_tooltip")); //$NON-NLS-1$
 
 		setIcon(Icon.PREFERENCES);
 	}
@@ -50,6 +50,6 @@ public class PreferencesAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-        JSkatMaster.INSTANCE.showPreferences();
+		this.eventBus.post(new ShowPreferencesEvent());
 	}
 }

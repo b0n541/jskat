@@ -21,7 +21,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.jskat.control.JSkatMaster;
+import org.jskat.control.event.general.ShowLicenseEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
@@ -37,8 +37,8 @@ public class LicenseAction extends AbstractJSkatAction {
 	 */
 	public LicenseAction() {
 
-		putValue(Action.NAME, strings.getString("license")); //$NON-NLS-1$
-		putValue(Action.SHORT_DESCRIPTION, strings.getString("license_tooltip")); //$NON-NLS-1$
+		putValue(Action.NAME, this.strings.getString("license")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, this.strings.getString("license_tooltip")); //$NON-NLS-1$
 
 		setIcon(Icon.LICENSE);
 	}
@@ -49,6 +49,6 @@ public class LicenseAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-        JSkatMaster.INSTANCE.showLicense();
+		this.eventBus.post(new ShowLicenseEvent());
 	}
 }

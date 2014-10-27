@@ -21,7 +21,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.jskat.control.JSkatMaster;
+import org.jskat.control.event.general.ShowHelpEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
@@ -37,8 +37,8 @@ public class HelpAction extends AbstractJSkatAction {
 	 */
 	public HelpAction() {
 
-		putValue(Action.NAME, strings.getString("help")); //$NON-NLS-1$
-		putValue(Action.SHORT_DESCRIPTION, strings.getString("help_tooltip")); //$NON-NLS-1$
+		putValue(Action.NAME, this.strings.getString("help")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, this.strings.getString("help_tooltip")); //$NON-NLS-1$
 
 		setIcon(Icon.HELP);
 	}
@@ -49,6 +49,6 @@ public class HelpAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-        JSkatMaster.INSTANCE.showHelp();
+		this.eventBus.post(new ShowHelpEvent());
 	}
 }
