@@ -30,7 +30,6 @@ import org.jskat.control.JSkatMaster;
 import org.jskat.data.DesktopSavePathResolver;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatOptions.Option;
-import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.swing.JSkatViewImpl;
 import org.jskat.gui.swing.LookAndFeelSetter;
 import org.jskat.util.JSkatResourceBundle;
@@ -82,7 +81,7 @@ public final class JSkat {
                 // TODO do something useful...
                 break;
             case 1:
-                JSkatGraphicRepository.instance();
+				// TODO do something useful...
                 break;
             case 2:
                 jskatView = new JSkatViewImpl();

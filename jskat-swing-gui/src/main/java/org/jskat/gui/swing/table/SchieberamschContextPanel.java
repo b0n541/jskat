@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
  */
 class SchieberamschContextPanel extends JPanel {
 
-	JSkatGraphicRepository bitmaps = JSkatGraphicRepository.instance();
+	JSkatGraphicRepository bitmaps = JSkatGraphicRepository.INSTANCE;
 	JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
 
 	private static final String GRAND_HAND = "GRAND_HAND"; //$NON-NLS-1$
@@ -92,7 +92,7 @@ class SchieberamschContextPanel extends JPanel {
 
 		JPanel question = new JPanel();
 		JLabel questionIconLabel = new JLabel(new ImageIcon(
-				JSkatGraphicRepository.instance().getUserBidBubble()));
+				this.bitmaps.getUserBidBubble()));
 		question.add(questionIconLabel);
 		JLabel questionLabel = new JLabel(
 				this.strings.getString("want_play_grand_hand")); //$NON-NLS-1$

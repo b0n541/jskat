@@ -134,9 +134,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		setLayout(LayoutFactory.getMigLayout("fill,insets 0", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		playerNamesAndPositions = new HashMap<String, Player>();
+		this.playerNamesAndPositions = new HashMap<String, Player>();
 
-		contextPanels = new HashMap<ContextPanelType, JPanel>();
+		this.contextPanels = new HashMap<ContextPanelType, JPanel>();
 
 		getActionMap().get(JSkatAction.INVITE_ISS_PLAYER).setEnabled(true);
 
@@ -150,7 +150,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		JTabbedPane leftPanel = new JTabbedPane();
 
-		leftPanel.addTab(strings.getString("score_sheet"), getScoreListPanel());
+		leftPanel.addTab(this.strings.getString("score_sheet"), getScoreListPanel());
 
 		return leftPanel;
 	}
@@ -160,32 +160,32 @@ public class SkatTablePanel extends AbstractTabPanel {
 		final JPanel panel = new JPanel(LayoutFactory.getMigLayout(
 				"fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		skatListTableModel = new SkatListTableModel();
-		scoreListTable = new JTable(skatListTableModel);
+		this.skatListTableModel = new SkatListTableModel();
+		this.scoreListTable = new JTable(this.skatListTableModel);
 
-		for (int i = 0; i < scoreListTable.getColumnModel().getColumnCount(); i++) {
+		for (int i = 0; i < this.scoreListTable.getColumnModel().getColumnCount(); i++) {
 
 			if (i == 3) {
 
 				// game colum is bigger
-				scoreListTable.getColumnModel().getColumn(i)
+				this.scoreListTable.getColumnModel().getColumn(i)
 						.setPreferredWidth(40);
 			} else {
 
-				scoreListTable.getColumnModel().getColumn(i)
+				this.scoreListTable.getColumnModel().getColumn(i)
 						.setPreferredWidth(20);
 			}
 		}
 
-		scoreListTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+		this.scoreListTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
 
-		scoreListScrollPane = new JScrollPane(scoreListTable);
-		scoreListScrollPane.setMinimumSize(new Dimension(150, 100));
-		scoreListScrollPane.setPreferredSize(new Dimension(300, 100));
-		scoreListScrollPane
+		this.scoreListScrollPane = new JScrollPane(this.scoreListTable);
+		this.scoreListScrollPane.setMinimumSize(new Dimension(150, 100));
+		this.scoreListScrollPane.setPreferredSize(new Dimension(300, 100));
+		this.scoreListScrollPane
 				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		panel.add(scoreListScrollPane, "growy"); //$NON-NLS-1$
+		panel.add(this.scoreListScrollPane, "growy"); //$NON-NLS-1$
 
 		return panel;
 	}
@@ -197,14 +197,14 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	protected JPanel getPlayGroundPanel() {
 
-		gameInfoPanel = getGameInfoPanel();
-		leftOpponentPanel = getOpponentPanel();
-		rightOpponentPanel = getOpponentPanel();
-		userPanel = createPlayerPanel();
+		this.gameInfoPanel = getGameInfoPanel();
+		this.leftOpponentPanel = getOpponentPanel();
+		this.rightOpponentPanel = getOpponentPanel();
+		this.userPanel = createPlayerPanel();
 		createGameContextPanel();
 
-		return new PlayGroundPanel(gameInfoPanel, leftOpponentPanel,
-				rightOpponentPanel, gameContextPanel, userPanel);
+		return new PlayGroundPanel(this.gameInfoPanel, this.leftOpponentPanel,
+				this.rightOpponentPanel, this.gameContextPanel, this.userPanel);
 	}
 
 	private GameInformationPanel getGameInfoPanel() {
@@ -225,37 +225,37 @@ public class SkatTablePanel extends AbstractTabPanel {
 	protected void addContextPanel(final ContextPanelType panelType,
 			final JPanel panel) {
 
-		if (contextPanels.containsKey(panelType)) {
+		if (this.contextPanels.containsKey(panelType)) {
 			// remove existing panel first
-			gameContextPanel.remove(contextPanels.get(panelType));
-			contextPanels.remove(panelType);
+			this.gameContextPanel.remove(this.contextPanels.get(panelType));
+			this.contextPanels.remove(panelType);
 		}
 
-		contextPanels.put(panelType, panel);
-		gameContextPanel.add(panel, panelType.toString());
+		this.contextPanels.put(panelType, panel);
+		this.gameContextPanel.add(panel, panelType.toString());
 	}
 
 	private void createGameContextPanel() {
 
-		gameContextPanel = new JPanel();
-		gameContextPanel.setOpaque(false);
-		gameContextPanel.setLayout(new CardLayout());
+		this.gameContextPanel = new JPanel();
+		this.gameContextPanel.setOpaque(false);
+		this.gameContextPanel.setLayout(new CardLayout());
 
 		addContextPanel(ContextPanelType.START,
 				new StartContextPanel((StartSkatSeriesAction) getActionMap()
 						.get(JSkatAction.START_LOCAL_SERIES)));
 
-		biddingPanel = new BiddingContextPanel(view, getActionMap(), bitmaps,
-				userPanel);
-		addContextPanel(ContextPanelType.BIDDING, biddingPanel);
+		this.biddingPanel = new BiddingContextPanel(this.view, getActionMap(), this.bitmaps,
+				this.userPanel);
+		addContextPanel(ContextPanelType.BIDDING, this.biddingPanel);
 
-		declaringPanel = new DeclaringContextPanel(view, getActionMap(),
-				bitmaps, userPanel, 4);
-		addContextPanel(ContextPanelType.DECLARING, declaringPanel);
+		this.declaringPanel = new DeclaringContextPanel(this.view, getActionMap(),
+				this.bitmaps, this.userPanel, 4);
+		addContextPanel(ContextPanelType.DECLARING, this.declaringPanel);
 
-		schieberamschPanel = new SchieberamschContextPanel(getActionMap(),
-				userPanel, 4);
-		addContextPanel(ContextPanelType.SCHIEBERAMSCH, schieberamschPanel);
+		this.schieberamschPanel = new SchieberamschContextPanel(getActionMap(),
+				this.userPanel, 4);
+		addContextPanel(ContextPanelType.SCHIEBERAMSCH, this.schieberamschPanel);
 
 		addContextPanel(ContextPanelType.RE_AFTER_CONTRA,
 				createCallReAfterContraPanel(getActionMap()));
@@ -263,17 +263,17 @@ public class SkatTablePanel extends AbstractTabPanel {
 		final JPanel trickHoldingPanel = new JPanel(LayoutFactory.getMigLayout(
 				"fill", "[shrink][grow][shrink]", //$NON-NLS-1$ //$NON-NLS-2$
 				"fill")); //$NON-NLS-1$
-		lastTrickPanel = new TrickPanel(0.6, false);
-		trickHoldingPanel.add(lastTrickPanel, "width 25%"); //$NON-NLS-1$
-		trickPanel = new TrickPanel(0.8, true);
-		trickHoldingPanel.add(trickPanel, "grow"); //$NON-NLS-1$
+		this.lastTrickPanel = new TrickPanel(0.6, false);
+		trickHoldingPanel.add(this.lastTrickPanel, "width 25%"); //$NON-NLS-1$
+		this.trickPanel = new TrickPanel(0.8, true);
+		trickHoldingPanel.add(this.trickPanel, "grow"); //$NON-NLS-1$
 
 		trickHoldingPanel.add(getRightPanelForTrickPanel(), "width 25%"); //$NON-NLS-1$
 		trickHoldingPanel.setOpaque(false);
 		addContextPanel(ContextPanelType.TRICK_PLAYING, trickHoldingPanel);
 
-		gameOverPanel = new GameOverPanel(getActionMap(), getGameOverActions());
-		addContextPanel(ContextPanelType.GAME_OVER, gameOverPanel);
+		this.gameOverPanel = new GameOverPanel(getActionMap(), getGameOverActions());
+		addContextPanel(ContextPanelType.GAME_OVER, this.gameOverPanel);
 	}
 
 	// FIXME: same code can be found in class SchieberamschContextPanel
@@ -282,17 +282,17 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		JPanel question = new JPanel();
 		JLabel questionIconLabel = new JLabel(new ImageIcon(
-				JSkatGraphicRepository.instance().getUserBidBubble()));
+				JSkatGraphicRepository.INSTANCE.getUserBidBubble()));
 		question.add(questionIconLabel);
 		JLabel questionLabel = new JLabel(
-				strings.getString("want_call_re_after_contra")); //$NON-NLS-1$
+				this.strings.getString("want_call_re_after_contra")); //$NON-NLS-1$
 		questionLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 		question.add(questionLabel);
 		result.add(question, "center, growx, span 2, wrap"); //$NON-NLS-1$
 
 		final JButton callReButton = new JButton(
 				actions.get(JSkatAction.CALL_RE));
-		callReButton.setIcon(new ImageIcon(bitmaps.getIconImage(Icon.OK,
+		callReButton.setIcon(new ImageIcon(this.bitmaps.getIconImage(Icon.OK,
 				IconSize.BIG)));
 		callReButton.addActionListener(new ActionListener() {
 			@Override
@@ -304,8 +304,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		final JButton noReAfterContraButton = new JButton(
 				actions.get(JSkatAction.CALL_RE));
-		noReAfterContraButton.setText(strings.getString("no"));
-		noReAfterContraButton.setIcon(new ImageIcon(bitmaps.getIconImage(
+		noReAfterContraButton.setText(this.strings.getString("no"));
+		noReAfterContraButton.setIcon(new ImageIcon(this.bitmaps.getIconImage(
 				Icon.STOP, IconSize.BIG)));
 		noReAfterContraButton.addActionListener(new ActionListener() {
 			@Override
@@ -362,32 +362,32 @@ public class SkatTablePanel extends AbstractTabPanel {
 	public void setPositions(final Player leftPosition,
 			final Player rightPosition, final Player playerPosition) {
 
-		leftOpponentPanel.setPosition(leftPosition);
-		rightOpponentPanel.setPosition(rightPosition);
-		userPanel.setPosition(playerPosition);
+		this.leftOpponentPanel.setPosition(leftPosition);
+		this.rightOpponentPanel.setPosition(rightPosition);
+		this.userPanel.setPosition(playerPosition);
 
-		biddingPanel.setUserPosition(playerPosition);
-		trickPanel.setUserPosition(playerPosition);
-		lastTrickPanel.setUserPosition(playerPosition);
-		gameOverPanel.setUserPosition(playerPosition);
+		this.biddingPanel.setUserPosition(playerPosition);
+		this.trickPanel.setUserPosition(playerPosition);
+		this.lastTrickPanel.setUserPosition(playerPosition);
+		this.gameOverPanel.setUserPosition(playerPosition);
 
 		// FIXME (jansch 09.11.2010) code duplication with
 		// BiddingPanel.setPlayerPositions()
 		switch (playerPosition) {
 		case FOREHAND:
-			foreHand = userPanel;
-			middleHand = leftOpponentPanel;
-			rearHand = rightOpponentPanel;
+			this.foreHand = this.userPanel;
+			this.middleHand = this.leftOpponentPanel;
+			this.rearHand = this.rightOpponentPanel;
 			break;
 		case MIDDLEHAND:
-			foreHand = rightOpponentPanel;
-			middleHand = userPanel;
-			rearHand = leftOpponentPanel;
+			this.foreHand = this.rightOpponentPanel;
+			this.middleHand = this.userPanel;
+			this.rearHand = this.leftOpponentPanel;
 			break;
 		case REARHAND:
-			foreHand = leftOpponentPanel;
-			middleHand = rightOpponentPanel;
-			rearHand = userPanel;
+			this.foreHand = this.leftOpponentPanel;
+			this.middleHand = this.rightOpponentPanel;
+			this.rearHand = this.userPanel;
 			break;
 		}
 	}
@@ -428,7 +428,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void setTrickCard(final Player player, final Card card) {
 
-		trickPanel.addCard(player, card);
+		this.trickPanel.addCard(player, card);
 	}
 
 	/**
@@ -436,7 +436,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void clearTrickCards() {
 
-		trickPanel.clearCards();
+		this.trickPanel.clearCards();
 	}
 
 	/**
@@ -444,7 +444,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	void clearLastTrickCards() {
 
-		lastTrickPanel.clearCards();
+		this.lastTrickPanel.clearCards();
 	}
 
 	/**
@@ -459,13 +459,13 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		switch (player) {
 		case FOREHAND:
-			foreHand.removeCard(card);
+			this.foreHand.removeCard(card);
 			break;
 		case MIDDLEHAND:
-			middleHand.removeCard(card);
+			this.middleHand.removeCard(card);
 			break;
 		case REARHAND:
-			rearHand.removeCard(card);
+			this.rearHand.removeCard(card);
 			break;
 		}
 	}
@@ -479,13 +479,13 @@ public class SkatTablePanel extends AbstractTabPanel {
 	public void removeAllCards(final Player player) {
 		switch (player) {
 		case FOREHAND:
-			foreHand.removeAllCards();
+			this.foreHand.removeAllCards();
 			break;
 		case MIDDLEHAND:
-			middleHand.removeAllCards();
+			this.middleHand.removeAllCards();
 			break;
 		case REARHAND:
-			rearHand.removeAllCards();
+			this.rearHand.removeAllCards();
 			break;
 		}
 	}
@@ -513,14 +513,14 @@ public class SkatTablePanel extends AbstractTabPanel {
 			final GameAnnouncement gameAnnouncement) {
 
 		if (gameAnnouncement.getGameType() == GameType.RAMSCH) {
-			ramsch = true;
+			this.ramsch = true;
 		}
 
-		gameInfoPanel.setGameAnnouncement(gameAnnouncement);
+		this.gameInfoPanel.setGameAnnouncement(gameAnnouncement);
 
-		leftOpponentPanel.setSortGameType(gameAnnouncement.getGameType());
-		rightOpponentPanel.setSortGameType(gameAnnouncement.getGameType());
-		userPanel.setSortGameType(gameAnnouncement.getGameType());
+		this.leftOpponentPanel.setSortGameType(gameAnnouncement.getGameType());
+		this.rightOpponentPanel.setSortGameType(gameAnnouncement.getGameType());
+		this.userPanel.setSortGameType(gameAnnouncement.getGameType());
 
 		if (gameAnnouncement.getGameType() != GameType.PASSED_IN
 				&& gameAnnouncement.getGameType() != GameType.RAMSCH) {
@@ -542,7 +542,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		log.debug(".setGameState(" + state + ")"); //$NON-NLS-1$ //$NON-NLS-2$
 
-		gameInfoPanel.setGameState(state);
+		this.gameInfoPanel.setGameState(state);
 
 		switch (state) {
 		case GAME_START:
@@ -557,25 +557,25 @@ public class SkatTablePanel extends AbstractTabPanel {
 			break;
 		case RAMSCH_GRAND_HAND_ANNOUNCING:
 			setContextPanel(ContextPanelType.SCHIEBERAMSCH);
-			userPanel.setGameState(state);
+			this.userPanel.setGameState(state);
 			break;
 		case SCHIEBERAMSCH:
 			setContextPanel(ContextPanelType.SCHIEBERAMSCH);
-			userPanel.setGameState(state);
+			this.userPanel.setGameState(state);
 			break;
 		case PICKING_UP_SKAT:
-			if (userPanel.getPosition().equals(declarer)) {
+			if (this.userPanel.getPosition().equals(this.declarer)) {
 				setContextPanel(ContextPanelType.DECLARING);
-				userPanel.setGameState(state);
+				this.userPanel.setGameState(state);
 			}
 			break;
 		case DISCARDING:
-			if (userPanel.getPosition().equals(declarer)) {
-				userPanel.setGameState(state);
+			if (this.userPanel.getPosition().equals(this.declarer)) {
+				this.userPanel.setGameState(state);
 			}
 			break;
 		case DECLARING:
-			if (userPanel.getPosition().equals(declarer)) {
+			if (this.userPanel.getPosition().equals(this.declarer)) {
 				setContextPanel(ContextPanelType.DECLARING);
 			}
 			break;
@@ -584,15 +584,15 @@ public class SkatTablePanel extends AbstractTabPanel {
 			break;
 		case TRICK_PLAYING:
 			setContextPanel(ContextPanelType.TRICK_PLAYING);
-			userPanel.setGameState(state);
+			this.userPanel.setGameState(state);
 			break;
 		case CALCULATING_GAME_VALUE:
 		case PRELIMINARY_GAME_END:
 		case GAME_OVER:
 			setContextPanel(ContextPanelType.GAME_OVER);
-			foreHand.setActivePlayer(false);
-			middleHand.setActivePlayer(false);
-			rearHand.setActivePlayer(false);
+			this.foreHand.setActivePlayer(false);
+			this.middleHand.setActivePlayer(false);
+			this.rearHand.setActivePlayer(false);
 			break;
 		}
 
@@ -604,8 +604,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 		playerPassed.put(Player.FOREHAND, Boolean.FALSE);
 		playerPassed.put(Player.MIDDLEHAND, Boolean.FALSE);
 		playerPassed.put(Player.REARHAND, Boolean.FALSE);
-		ramsch = false;
-		declarer = null;
+		this.ramsch = false;
+		this.declarer = null;
 	}
 
 	/**
@@ -616,9 +616,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	void setContextPanel(final ContextPanelType panelType) {
 
-		((CardLayout) gameContextPanel.getLayout()).show(gameContextPanel,
+		((CardLayout) this.gameContextPanel.getLayout()).show(this.gameContextPanel,
 				panelType.toString());
-		gameContextPanel.validate();
+		this.gameContextPanel.validate();
 	}
 
 	/**
@@ -629,28 +629,28 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void addGameResult(final GameSummary summary) {
 
-		gameOverPanel.setGameSummary(summary);
+		this.gameOverPanel.setGameSummary(summary);
 
-		skatListTableModel.addResult(leftOpponentPanel.getPosition(),
-				rightOpponentPanel.getPosition(), userPanel.getPosition(),
+		this.skatListTableModel.addResult(this.leftOpponentPanel.getPosition(),
+				this.rightOpponentPanel.getPosition(), this.userPanel.getPosition(),
 				summary.getDeclarer(), summary);
 		scrollSkatListToTheEnd();
 
-		gameInfoPanel.setGameSummary(summary);
+		this.gameInfoPanel.setGameSummary(summary);
 	}
 
 	private void scrollSkatListToTheEnd() {
 		// scroll skat list if the new result is out of scope
-		final Rectangle bounds = scoreListTable.getCellRect(
-				skatListTableModel.getRowCount() - 1, 0, true);
+		final Rectangle bounds = this.scoreListTable.getCellRect(
+				this.skatListTableModel.getRowCount() - 1, 0, true);
 		final Point loc = bounds.getLocation();
 		loc.move(loc.x, loc.y + bounds.height);
-		scoreListScrollPane.getViewport().setViewPosition(loc);
+		this.scoreListScrollPane.getViewport().setViewPosition(loc);
 	}
 
 	Player getHumanPosition() {
 
-		return userPanel.getPosition();
+		return this.userPanel.getPosition();
 	}
 
 	/**
@@ -658,20 +658,20 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void clearTable() {
 
-		gameInfoPanel.clear();
-		biddingPanel.resetPanel();
-		declaringPanel.resetPanel();
-		gameOverPanel.resetPanel();
-		schieberamschPanel.resetPanel();
+		this.gameInfoPanel.clear();
+		this.biddingPanel.resetPanel();
+		this.declaringPanel.resetPanel();
+		this.gameOverPanel.resetPanel();
+		this.schieberamschPanel.resetPanel();
 		clearHand(Player.FOREHAND);
 		clearHand(Player.MIDDLEHAND);
 		clearHand(Player.REARHAND);
 		clearTrickCards();
 		clearLastTrickCards();
 		// default sorting is grand sorting
-		leftOpponentPanel.setSortGameType(GameType.GRAND);
-		rightOpponentPanel.setSortGameType(GameType.GRAND);
-		userPanel.setSortGameType(GameType.GRAND);
+		this.leftOpponentPanel.setSortGameType(GameType.GRAND);
+		this.rightOpponentPanel.setSortGameType(GameType.GRAND);
+		this.userPanel.setSortGameType(GameType.GRAND);
 
 		resetGameData();
 	}
@@ -703,7 +703,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		log.debug(player + " " + (madeBid ? "bids" : "holds") + ": " + bidValue); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 
-		biddingPanel.setBid(player, bidValue);
+		this.biddingPanel.setBid(player, bidValue);
 		getPlayerPanel(player).setBidValue(bidValue);
 
 		switch (player) {
@@ -747,10 +747,10 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void setSkat(final CardList skat) {
 
-		if (ramsch) {
-			schieberamschPanel.setSkat(skat);
+		if (this.ramsch) {
+			this.schieberamschPanel.setSkat(skat);
 		} else {
-			declaringPanel.setSkat(skat);
+			this.declaringPanel.setSkat(skat);
 		}
 	}
 
@@ -761,7 +761,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 *            Card
 	 */
 	public void takeCardFromSkat(final Card card) {
-		takeCardFromSkat(userPanel, card);
+		takeCardFromSkat(this.userPanel, card);
 	}
 
 	/**
@@ -780,8 +780,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		if (!panel.isHandFull()) {
 
-			declaringPanel.removeCard(card);
-			schieberamschPanel.removeCard(card);
+			this.declaringPanel.removeCard(card);
+			this.schieberamschPanel.removeCard(card);
 			panel.addCard(card);
 
 		} else {
@@ -797,7 +797,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 *            Card
 	 */
 	public void putCardIntoSkat(final Card card) {
-		putCardIntoSkat(userPanel, card);
+		putCardIntoSkat(this.userPanel, card);
 	}
 
 	/**
@@ -814,11 +814,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	private void putCardIntoSkat(final AbstractHandPanel panel, final Card card) {
 
-		if (!declaringPanel.isHandFull()) {
+		if (!this.declaringPanel.isHandFull()) {
 
 			panel.removeCard(card);
-			declaringPanel.addCard(card);
-			schieberamschPanel.addCard(card);
+			this.declaringPanel.addCard(card);
+			this.schieberamschPanel.addCard(card);
 
 		} else {
 
@@ -831,7 +831,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void clearSkatList() {
 
-		skatListTableModel.clearList();
+		this.skatListTableModel.clearList();
 	}
 
 	/**
@@ -842,7 +842,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	protected void setMaxPlayers(final int maxPlayers) {
 
-		skatListTableModel.setPlayerCount(maxPlayers);
+		this.skatListTableModel.setPlayerCount(maxPlayers);
 	}
 
 	/**
@@ -855,7 +855,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void setPlayerName(final Player player, final String name) {
 
-		playerNamesAndPositions.put(name, player);
+		this.playerNamesAndPositions.put(name, player);
 		final AbstractHandPanel panel = getHandPanel(player);
 
 		if (panel != null) {
@@ -937,12 +937,12 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		AbstractHandPanel panel = null;
 
-		if (playerName.equals(userPanel.getPlayerName())) {
-			panel = userPanel;
-		} else if (playerName.equals(leftOpponentPanel.getPlayerName())) {
-			panel = leftOpponentPanel;
-		} else if (playerName.equals(rightOpponentPanel.getPlayerName())) {
-			panel = rightOpponentPanel;
+		if (playerName.equals(this.userPanel.getPlayerName())) {
+			panel = this.userPanel;
+		} else if (playerName.equals(this.leftOpponentPanel.getPlayerName())) {
+			panel = this.leftOpponentPanel;
+		} else if (playerName.equals(this.rightOpponentPanel.getPlayerName())) {
+			panel = this.rightOpponentPanel;
 		}
 
 		return panel;
@@ -953,13 +953,13 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		switch (player) {
 		case FOREHAND:
-			panel = foreHand;
+			panel = this.foreHand;
 			break;
 		case MIDDLEHAND:
-			panel = middleHand;
+			panel = this.middleHand;
 			break;
 		case REARHAND:
-			panel = rearHand;
+			panel = this.rearHand;
 			break;
 		}
 		return panel;
@@ -973,12 +973,12 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void setLastTrick(final Trick trick) {
 
-		lastTrickPanel.clearCards();
+		this.lastTrickPanel.clearCards();
 		final Player trickForeHand = trick.getForeHand();
-		lastTrickPanel.addCard(trickForeHand, trick.getFirstCard());
-		lastTrickPanel.addCard(trickForeHand.getLeftNeighbor(),
+		this.lastTrickPanel.addCard(trickForeHand, trick.getFirstCard());
+		this.lastTrickPanel.addCard(trickForeHand.getLeftNeighbor(),
 				trick.getSecondCard());
-		lastTrickPanel.addCard(trickForeHand.getRightNeighbor(),
+		this.lastTrickPanel.addCard(trickForeHand.getRightNeighbor(),
 				trick.getThirdCard());
 	}
 
@@ -991,19 +991,19 @@ public class SkatTablePanel extends AbstractTabPanel {
 	public void setActivePlayer(final Player player) {
 		switch (player) {
 		case FOREHAND:
-			foreHand.setActivePlayer(true);
-			middleHand.setActivePlayer(false);
-			rearHand.setActivePlayer(false);
+			this.foreHand.setActivePlayer(true);
+			this.middleHand.setActivePlayer(false);
+			this.rearHand.setActivePlayer(false);
 			break;
 		case MIDDLEHAND:
-			foreHand.setActivePlayer(false);
-			middleHand.setActivePlayer(true);
-			rearHand.setActivePlayer(false);
+			this.foreHand.setActivePlayer(false);
+			this.middleHand.setActivePlayer(true);
+			this.rearHand.setActivePlayer(false);
 			break;
 		case REARHAND:
-			foreHand.setActivePlayer(false);
-			middleHand.setActivePlayer(false);
-			rearHand.setActivePlayer(true);
+			this.foreHand.setActivePlayer(false);
+			this.middleHand.setActivePlayer(false);
+			this.rearHand.setActivePlayer(true);
 			break;
 		}
 	}
@@ -1021,7 +1021,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 		playerPassed.put(player, Boolean.TRUE);
 
 		getPlayerPanel(player).setPass(true);
-		biddingPanel.setPass(player);
+		this.biddingPanel.setPass(player);
 
 		switch (player) {
 		case FOREHAND:
@@ -1060,7 +1060,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void setBidValueToMake(final int bidValue) {
 
-		biddingPanel.setBidValueToMake(bidValue);
+		this.biddingPanel.setBidValueToMake(bidValue);
 	}
 
 	/**
@@ -1071,7 +1071,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void setBidValueToHold(final int bidValue) {
 
-		biddingPanel.setBidValueToHold(bidValue);
+		this.biddingPanel.setBidValueToHold(bidValue);
 	}
 
 	@Override
@@ -1088,7 +1088,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	public void setTrickNumber(final int trickNumber) {
 
-		gameInfoPanel.setTrickNumber(trickNumber);
+		this.gameInfoPanel.setTrickNumber(trickNumber);
 	}
 
 	/**
@@ -1098,7 +1098,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 *            Game number
 	 */
 	public void setGameNumber(final int gameNumber) {
-		gameInfoPanel.setGameNumber(gameNumber);
+		this.gameInfoPanel.setGameNumber(gameNumber);
 	}
 
 	/**
@@ -1115,10 +1115,10 @@ public class SkatTablePanel extends AbstractTabPanel {
 			final String upperRightPlayerName, final String lowerPlayerName) {
 		// FIXME (jan 26.01.2011) possible code duplication with
 		// setPlayerInformation()
-		leftOpponentPanel.setPlayerName(upperLeftPlayerName);
-		rightOpponentPanel.setPlayerName(upperRightPlayerName);
-		userPanel.setPlayerName(lowerPlayerName);
-		skatListTableModel.setPlayerNames(upperLeftPlayerName,
+		this.leftOpponentPanel.setPlayerName(upperLeftPlayerName);
+		this.rightOpponentPanel.setPlayerName(upperRightPlayerName);
+		this.userPanel.setPlayerName(lowerPlayerName);
+		this.skatListTableModel.setPlayerNames(upperLeftPlayerName,
 				upperRightPlayerName, lowerPlayerName);
 	}
 
@@ -1128,7 +1128,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @return Declarer player
 	 */
 	public Player getDeclarer() {
-		return declarer;
+		return this.declarer;
 	}
 
 	/**
@@ -1213,11 +1213,11 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	public void setContra(Player player) {
 		getPlayerPanel(player).setContra();
-		gameInfoPanel.setContra();
+		this.gameInfoPanel.setContra();
 	}
 
 	public void setRe(Player player) {
 		getPlayerPanel(player).setRe();
-		gameInfoPanel.setRe();
+		this.gameInfoPanel.setRe();
 	}
 }

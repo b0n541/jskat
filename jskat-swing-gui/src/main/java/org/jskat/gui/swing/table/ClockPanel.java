@@ -44,34 +44,36 @@ public class ClockPanel extends JPanel {
 	 */
 	public ClockPanel() {
 
-		ImageIcon clock = new ImageIcon(JSkatGraphicRepository.instance().getIconImage(Icon.CLOCK, IconSize.SMALL));
+		ImageIcon clock = new ImageIcon(
+				JSkatGraphicRepository.INSTANCE.getIconImage(Icon.CLOCK,
+						IconSize.SMALL));
 		JLabel clockLabel = new JLabel(clock);
-		playerTimeInSeconds = 0.0d;
-		timeLabel = new JLabel(getPlayerTimeString());
+		this.playerTimeInSeconds = 0.0d;
+		this.timeLabel = new JLabel(getPlayerTimeString());
 
 		add(clockLabel);
-		add(timeLabel);
+		add(this.timeLabel);
 	}
 
 	/**
 	 * Sets the {@link ClockPanel} to active state
 	 */
 	public void setActive() {
-		if (countDownThread != null) {
+		if (this.countDownThread != null) {
 			// there is an old count down thread running
 			// stop it at first
-			countDownThread.stopCountDown();
+			this.countDownThread.stopCountDown();
 		}
-		countDownThread = new CountDownThread();
-		countDownThread.start();
+		this.countDownThread = new CountDownThread();
+		this.countDownThread.start();
 	}
 
 	/**
 	 * Sets the {@link ClockPanel} to inactive state
 	 */
 	public void setInactive() {
-		if (countDownThread != null) {
-			countDownThread.stopCountDown();
+		if (this.countDownThread != null) {
+			this.countDownThread.stopCountDown();
 		}
 	}
 
@@ -83,18 +85,18 @@ public class ClockPanel extends JPanel {
 	 */
 	public void setPlayerTime(final double newPlayerTime) {
 
-		playerTimeInSeconds = newPlayerTime;
+		this.playerTimeInSeconds = newPlayerTime;
 		refreshTimeLabel();
 	}
 
 	void refreshTimeLabel() {
-		timeLabel.setText(getPlayerTimeString());
+		this.timeLabel.setText(getPlayerTimeString());
 	}
 
 	private String getPlayerTimeString() {
 
-		int minutes = (int) Math.floor(playerTimeInSeconds / 60);
-		int seconds = (int) (playerTimeInSeconds - (minutes * 60));
+		int minutes = (int) Math.floor(this.playerTimeInSeconds / 60);
+		int seconds = (int) (this.playerTimeInSeconds - (minutes * 60));
 
 		DecimalFormat format = ((DecimalFormat) NumberFormat.getInstance());
 		format.applyPattern("00"); //$NON-NLS-1$
@@ -116,26 +118,26 @@ public class ClockPanel extends JPanel {
 		 */
 		@Override
 		public void run() {
-			while (isActive) {
+			while (this.isActive) {
 				try {
 					sleep(1000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				if (isActive) {
+				if (this.isActive) {
 					// thread could be inactive meanwhile
-					if (playerTimeInSeconds < 1.0) {
+					if (ClockPanel.this.playerTimeInSeconds < 1.0) {
 						setPlayerTime(0.0);
 					} else {
-						setPlayerTime(playerTimeInSeconds - 1.0);
+						setPlayerTime(ClockPanel.this.playerTimeInSeconds - 1.0);
 					}
 				}
 			}
 		}
 
 		void stopCountDown() {
-			isActive = false;
+			this.isActive = false;
 		}
 	}
 }

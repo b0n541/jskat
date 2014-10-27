@@ -112,7 +112,7 @@ abstract class AbstractHandPanel extends JPanel {
             final boolean showIssWidgets) {
 
         setActionMap(actions);
-        this.bitmaps = JSkatGraphicRepository.instance();
+		this.bitmaps = JSkatGraphicRepository.INSTANCE;
 		this.strings = JSkatResourceBundle.INSTANCE;
         this.maxCardCount = maxCards;
         this.showIssWidgets = showIssWidgets;

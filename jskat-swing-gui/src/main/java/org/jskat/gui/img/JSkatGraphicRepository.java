@@ -38,7 +38,8 @@ public class JSkatGraphicRepository {
 
 	private static Logger log = LoggerFactory
 			.getLogger(JSkatGraphicRepository.class);
-	private static JSkatGraphicRepository instance = null;
+
+	public final static JSkatGraphicRepository INSTANCE = new JSkatGraphicRepository();
 
 	private static JSkatOptions options = JSkatOptions.instance();
 
@@ -55,21 +56,6 @@ public class JSkatGraphicRepository {
 	private Image jskatLogo;
 
 	private List<Image> bidBubbles;
-
-	/**
-	 * Gets the instance of the JSkat graphic repository
-	 * 
-	 * @return Graphic repository
-	 */
-	public static JSkatGraphicRepository instance() {
-
-		if (instance == null) {
-
-			instance = new JSkatGraphicRepository();
-		}
-
-		return instance;
-	}
 
 	/**
 	 * Creates a new instance of JSkatGraphicRepository

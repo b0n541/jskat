@@ -65,7 +65,7 @@ public abstract class AbstractTabPanel extends JPanel {
 		super();
 		setName(tabName);
 		setActionMap(actions);
-		this.bitmaps = JSkatGraphicRepository.instance();
+		this.bitmaps = JSkatGraphicRepository.INSTANCE;
 		this.strings = JSkatResourceBundle.INSTANCE;
 		this.options = JSkatOptions.instance();
 		initPanel();

@@ -52,7 +52,7 @@ public abstract class AbstractJSkatAction extends AbstractAction {
 	public AbstractJSkatAction() {
 
 		this.strings = JSkatResourceBundle.INSTANCE;
-		this.bitmaps = JSkatGraphicRepository.instance();
+		this.bitmaps = JSkatGraphicRepository.INSTANCE;
 		this.eventBus = JSkatEventBus.INSTANCE;
 
 		setIcon(Icon.BLANK);

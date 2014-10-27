@@ -34,8 +34,7 @@ public class FlagTableCellRenderer extends DefaultTableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
 
-	private final static JSkatGraphicRepository bitmaps = JSkatGraphicRepository
-			.instance();
+	private final static JSkatGraphicRepository bitmaps = JSkatGraphicRepository.INSTANCE;
 
 	/**
 	 * {@inheritDoc}

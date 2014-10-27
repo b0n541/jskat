@@ -109,11 +109,13 @@ public class IconPanel extends JPanel {
 
 		String tooltipText = null;
 		if (this.resigned) {
-			this.resignedIcon = new ImageIcon(JSkatGraphicRepository.instance()
+			this.resignedIcon = new ImageIcon(
+					JSkatGraphicRepository.INSTANCE
 					.getIconImage(Icon.WHITE_FLAG, IconSize.SMALL));
 			tooltipText = this.strings.getString("iss_player_wants_to_resign"); //$NON-NLS-1$
 		} else {
-			this.resignedIcon = new ImageIcon(JSkatGraphicRepository.instance()
+			this.resignedIcon = new ImageIcon(
+					JSkatGraphicRepository.INSTANCE
 					.getIconImage(Icon.BLANK, IconSize.SMALL));
 			tooltipText = ""; //$NON-NLS-1$
 		}
@@ -121,20 +123,28 @@ public class IconPanel extends JPanel {
 		this.resignedLabel.setToolTipText(tooltipText);
 
 		if (this.chatEnabled) {
-			this.chatIcon = new ImageIcon(JSkatGraphicRepository.instance().getIconImage(Icon.CHAT, IconSize.SMALL));
+			this.chatIcon = new ImageIcon(
+					JSkatGraphicRepository.INSTANCE.getIconImage(Icon.CHAT,
+							IconSize.SMALL));
 			tooltipText = this.strings.getString("iss_chat_enabled"); //$NON-NLS-1$
 		} else {
-			this.chatIcon = new ImageIcon(JSkatGraphicRepository.instance().getIconImage(Icon.CHAT_DISABLED, IconSize.SMALL));
+			this.chatIcon = new ImageIcon(
+					JSkatGraphicRepository.INSTANCE.getIconImage(
+							Icon.CHAT_DISABLED, IconSize.SMALL));
 			tooltipText = this.strings.getString("iss_chat_disabled"); //$NON-NLS-1$
 		}
 		this.chatLabel.setIcon(this.chatIcon);
 		this.chatLabel.setToolTipText(tooltipText);
 
 		if (this.readyToPlay) {
-			this.readyToPlayIcon = new ImageIcon(JSkatGraphicRepository.instance().getIconImage(Icon.OK, IconSize.SMALL));
+			this.readyToPlayIcon = new ImageIcon(
+					JSkatGraphicRepository.INSTANCE.getIconImage(Icon.OK,
+							IconSize.SMALL));
 			tooltipText = this.strings.getString("iss_ready_to_play"); //$NON-NLS-1$
 		} else {
-			this.readyToPlayIcon = new ImageIcon(JSkatGraphicRepository.instance().getIconImage(Icon.STOP, IconSize.SMALL));
+			this.readyToPlayIcon = new ImageIcon(
+					JSkatGraphicRepository.INSTANCE.getIconImage(Icon.STOP,
+							IconSize.SMALL));
 			tooltipText = this.strings.getString("iss_not_ready_to_play"); //$NON-NLS-1$
 		}
 		this.readyToPlayLabel.setIcon(this.readyToPlayIcon);

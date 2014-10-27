@@ -49,7 +49,7 @@ class TrickPanel extends JPanel implements ComponentListener {
 	private static final double TRICK_SIZE_FACTOR = 1.0d + 2.0d / 3.0d;
 
 	private static JSkatOptions options = JSkatOptions.instance();
-	private final JSkatGraphicRepository bitmaps;
+	private final JSkatGraphicRepository bitmaps = JSkatGraphicRepository.INSTANCE;
 	private final List<Double> cardRotations;
 	private final List<Player> positions;
 	private final CardList trick;
@@ -82,16 +82,14 @@ class TrickPanel extends JPanel implements ComponentListener {
 	 */
 	TrickPanel(final double globalScale, final boolean randomPlacement) {
 
-		bitmaps = JSkatGraphicRepository.instance();
-
-		cardFace = options.getCardSet().getCardFace();
+		this.cardFace = options.getCardSet().getCardFace();
 
 		this.randomPlacement = randomPlacement;
 		this.globalScale = globalScale;
 
-		trick = new CardList();
-		positions = new ArrayList<Player>();
-		cardRotations = new ArrayList<Double>();
+		this.trick = new CardList();
+		this.positions = new ArrayList<Player>();
+		this.cardRotations = new ArrayList<Double>();
 
 		setOpaque(false);
 
@@ -108,13 +106,13 @@ class TrickPanel extends JPanel implements ComponentListener {
 	 */
 	void addCard(final Player player, final Card card) {
 
-		positions.add(player);
-		trick.add(card);
+		this.positions.add(player);
+		this.trick.add(card);
 
-		if (randomPlacement) {
-			cardRotations.add(Double.valueOf(0.5 * rand.nextDouble() - 0.25));
+		if (this.randomPlacement) {
+			this.cardRotations.add(Double.valueOf(0.5 * this.rand.nextDouble() - 0.25));
 		} else {
-			cardRotations.add(Double.valueOf(0.0));
+			this.cardRotations.add(Double.valueOf(0.0));
 		}
 
 		repaint();
@@ -125,9 +123,9 @@ class TrickPanel extends JPanel implements ComponentListener {
 	 */
 	void removeCard() {
 
-		positions.remove(positions.size() - 1);
-		trick.remove(trick.size() - 1);
-		cardRotations.remove(trick.size() - 1);
+		this.positions.remove(this.positions.size() - 1);
+		this.trick.remove(this.trick.size() - 1);
+		this.cardRotations.remove(this.trick.size() - 1);
 		repaint();
 	}
 
@@ -136,9 +134,9 @@ class TrickPanel extends JPanel implements ComponentListener {
 	 */
 	void clearCards() {
 
-		positions.clear();
-		trick.clear();
-		cardRotations.clear();
+		this.positions.clear();
+		this.trick.clear();
+		this.cardRotations.clear();
 		repaint();
 	}
 
@@ -151,7 +149,7 @@ class TrickPanel extends JPanel implements ComponentListener {
 		super.paintComponent(g);
 
 		if (isNewCardFace()) {
-			cardFace = options.getCardSet().getCardFace();
+			this.cardFace = options.getCardSet().getCardFace();
 		}
 
 		final int panelWidth = getWidth();
@@ -167,8 +165,8 @@ class TrickPanel extends JPanel implements ComponentListener {
 		g2D.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION,
 				RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
 
-		final double cardScale = getCardScale() * globalScale;
-		final Image image = bitmaps.getCardImage(Card.CJ);
+		final double cardScale = getCardScale() * this.globalScale;
+		final Image image = this.bitmaps.getCardImage(Card.CJ);
 
 		final double xScaleSize = image.getWidth(this);
 		final double xAllTrickCardsSize = xScaleSize * TRICK_SIZE_FACTOR;
@@ -178,26 +176,26 @@ class TrickPanel extends JPanel implements ComponentListener {
 		final double yAllTrickCardsSize = yScaleSize * TRICK_SIZE_FACTOR;
 		final double yBorder = (panelHeight * (1 / cardScale) - yAllTrickCardsSize) / 2.0d;
 
-		for (int i = 0; i < trick.size(); i++) {
+		for (int i = 0; i < this.trick.size(); i++) {
 
-			final Card card = trick.get(i);
-			final Player player = positions.get(i);
+			final Card card = this.trick.get(i);
+			final Player player = this.positions.get(i);
 
 			if (card != null && player != null) {
 				// Calculate translation
 				double posX = 0.0d;
 				double posY = 0.0d;
-				if (player.equals(leftOpponent)) {
+				if (player.equals(this.leftOpponent)) {
 
 					posX = xBorder;
 					posY = yBorder + yScaleSize * (1.0d / 3.0d);
 
-				} else if (player.equals(rightOpponent)) {
+				} else if (player.equals(this.rightOpponent)) {
 
 					posX = xBorder + xScaleSize * (2.0d / 3.0d);
 					posY = yBorder;
 
-				} else if (player.equals(userPosition)) {
+				} else if (player.equals(this.userPosition)) {
 
 					posX = xBorder + xScaleSize * (1.0d / 3.0d);
 					posY = yBorder + yScaleSize * (2.0d / 3.0d);
@@ -205,17 +203,17 @@ class TrickPanel extends JPanel implements ComponentListener {
 
 				final AffineTransform transform = new AffineTransform();
 				transform.translate(posX * cardScale, posY * cardScale);
-				transform.rotate(cardRotations.get(i).doubleValue());
+				transform.rotate(this.cardRotations.get(i).doubleValue());
 				transform.scale(cardScale, cardScale);
 
-				g2D.drawImage(bitmaps.getCardImage(card), transform, this);
+				g2D.drawImage(this.bitmaps.getCardImage(card), transform, this);
 			}
 		}
 	}
 
 	private double getCardScale() {
 
-		final Image sampleCard = bitmaps.getCardImage(Card.CJ);
+		final Image sampleCard = this.bitmaps.getCardImage(Card.CJ);
 		final double imageWidth = sampleCard.getWidth(this) * TRICK_SIZE_FACTOR;
 		final double imageHeight = sampleCard.getHeight(this)
 				* TRICK_SIZE_FACTOR;
@@ -236,14 +234,14 @@ class TrickPanel extends JPanel implements ComponentListener {
 	}
 
 	boolean isNewCardFace() {
-		return !cardFace.equals(options.getCardSet().getCardFace());
+		return !this.cardFace.equals(options.getCardSet().getCardFace());
 	}
 
 	void setUserPosition(final Player newUserPosition) {
 
-		userPosition = newUserPosition;
-		leftOpponent = userPosition.getLeftNeighbor();
-		rightOpponent = userPosition.getRightNeighbor();
+		this.userPosition = newUserPosition;
+		this.leftOpponent = this.userPosition.getLeftNeighbor();
+		this.rightOpponent = this.userPosition.getRightNeighbor();
 	}
 
 	@Override

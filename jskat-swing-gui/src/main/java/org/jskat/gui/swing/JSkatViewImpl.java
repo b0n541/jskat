@@ -168,7 +168,7 @@ public class JSkatViewImpl implements JSkatView {
 	 */
 	public JSkatViewImpl() {
 
-		this.bitmaps = JSkatGraphicRepository.instance();
+		this.bitmaps = JSkatGraphicRepository.INSTANCE;
 		this.strings = JSkatResourceBundle.INSTANCE;
 		this.tables = new HashMap<String, SkatTablePanel>();
 		initActionMap();

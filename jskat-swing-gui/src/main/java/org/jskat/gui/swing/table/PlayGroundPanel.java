@@ -63,7 +63,8 @@ public class PlayGroundPanel extends JPanel {
 		add(userPanel,
 				"span 2, growx, growy, hmin 33%, hmax 33%, align center, wrap"); //$NON-NLS-1$
 
-		backGroundImage = JSkatGraphicRepository.instance().getSkatTableImage();
+		this.backGroundImage = JSkatGraphicRepository.INSTANCE
+				.getSkatTableImage();
 	}
 
 	@Override
@@ -72,15 +73,15 @@ public class PlayGroundPanel extends JPanel {
 		int width = getWidth();
 		int height = getHeight();
 
-		int imageWidth = backGroundImage.getWidth(null);
-		int imageHeight = backGroundImage.getHeight(null);
+		int imageWidth = this.backGroundImage.getWidth(null);
+		int imageHeight = this.backGroundImage.getHeight(null);
 
 		int currX = 0;
 		int currY = 0;
 
 		while (currX < width) {
 			while (currY < height) {
-				g.drawImage(backGroundImage, currX, currY, null);
+				g.drawImage(this.backGroundImage, currX, currY, null);
 				currY += imageHeight;
 			}
 			currY = 0;
