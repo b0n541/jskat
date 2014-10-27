@@ -24,8 +24,6 @@ import org.jskat.ai.nn.train.NNTrainer;
 import org.jskat.control.event.JSkatEventBus;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.general.ShowTrainingOverviewEvent;
-import org.jskat.control.event.general.ShowWelcomeInformationEvent;
-import org.jskat.control.event.nntraining.TrainingResultEvent;
 import org.jskat.control.event.table.DuplicateTableNameInputEvent;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
 import org.jskat.control.iss.IssController;
@@ -787,36 +785,5 @@ public class JSkatMaster {
 		}
 
 		return result;
-	}
-
-	/**
-	 * Adds training results
-	 *
-	 * @param gameType
-	 *            Game type
-	 * @param episodes
-	 *            Number of episodes
-	 * @param totalWonGames
-	 *            Total number of won games
-	 * @param avgNetworkErrorDeclarer
-	 *            Average difference of declarer nets
-	 * @param avgNetworkErrorOpponents
-	 *            Average difference of opponents nets
-	 */
-	public void addTrainingResult(final GameType gameType, final Long episodes,
-			final Long totalGamesWon, final Double avgNetworkErrorDeclarer,
-			final Double avgNetworkErrorOpponents) {
-
-		JSkatEventBus.INSTANCE.post(new TrainingResultEvent(gameType,
-				episodes, totalGamesWon, avgNetworkErrorDeclarer,
-				avgNetworkErrorOpponents));
-	}
-
-	/**
-	 * Shows the welcome dialog
-	 */
-	public void showWelcomeDialog() {
-
-		JSkatEventBus.INSTANCE.post(new ShowWelcomeInformationEvent());
 	}
 }

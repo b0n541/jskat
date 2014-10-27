@@ -24,6 +24,8 @@ import org.jskat.ai.nn.AIPlayerNN;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.JSkatThread;
 import org.jskat.control.SkatGame;
+import org.jskat.control.event.JSkatEventBus;
+import org.jskat.control.event.nntraining.TrainingResultEvent;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary;
@@ -79,8 +81,8 @@ public class NNTrainer extends JSkatThread {
 	 */
 	public void setGameType(final GameType newGameType) {
 
-		gameType = newGameType;
-		setName("NNTrainer for " + gameType); //$NON-NLS-1$
+		this.gameType = newGameType;
+		setName("NNTrainer for " + this.gameType); //$NON-NLS-1$
 	}
 
 	/**
@@ -90,7 +92,7 @@ public class NNTrainer extends JSkatThread {
 	 *            TRUE, if the training should be stopped
 	 */
 	public void stopTraining(boolean isStopTraining) {
-		stopTraining = isStopTraining;
+		this.stopTraining = isStopTraining;
 	}
 
 	private JSkatPlayer createPlayer(String playerType) {
@@ -118,7 +120,7 @@ public class NNTrainer extends JSkatThread {
 		game.getGameResult();
 
 		boolean gameWon = false;
-		if (gameType.equals(GameType.RAMSCH)) {
+		if (this.gameType.equals(GameType.RAMSCH)) {
 			gameWon = isRamschGameWon(game.getGameSummary(), currPlayer);
 		} else {
 			gameWon = game.isGameWon();
@@ -148,12 +150,12 @@ public class NNTrainer extends JSkatThread {
 
 		game.dealCards();
 
-		if (!GameType.RAMSCH.equals(gameType)) {
+		if (!GameType.RAMSCH.equals(this.gameType)) {
 			game.setDeclarer(declarer);
 		}
 
 		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-		factory.setGameType(gameType);
+		factory.setGameType(this.gameType);
 		GameAnnouncement announcement = factory.getAnnouncement();
 		game.setGameAnnouncement(announcement);
 
@@ -189,26 +191,29 @@ public class NNTrainer extends JSkatThread {
 
 		Set<List<String>> playerPermutations = createPlayerPermutations(playerTypes);
 
-		while (!stopTraining /* && totalGames < MAX_TRAINING_EPISODES */) {
+		while (!this.stopTraining /* && totalGames < MAX_TRAINING_EPISODES */) {
 
 			if (totalGames > 0) {
 
 				if (totalGames % MAX_TRAINING_EPISODES_WITHOUT_SAVE == 0) {
-					JSkatMaster.INSTANCE.saveNeuralNetworks(gameType);
+					JSkatMaster.INSTANCE.saveNeuralNetworks(this.gameType);
 				}
 
 				if (opponentParticipations == 0) {
 					// for ramsch games
-					JSkatMaster.INSTANCE
-							.addTrainingResult(gameType, totalGames,
-							totalWonGames, declarerAvgNetworkErrorSum
-									/ declarerParticipations, 0.0);
+					JSkatEventBus.INSTANCE
+							.post(new TrainingResultEvent(this.gameType,
+									totalGames, totalWonGames,
+									declarerAvgNetworkErrorSum
+											/ declarerParticipations, 0.0));
 				} else {
-					JSkatMaster.INSTANCE
-							.addTrainingResult(gameType, totalGames,
+					JSkatEventBus.INSTANCE
+							.post(new TrainingResultEvent(this.gameType,
+									totalGames,
 							totalWonGames, declarerAvgNetworkErrorSum
-									/ declarerParticipations,
-							opponentAvgNetworkErrorSum / opponentParticipations);
+											/ declarerParticipations,
+									opponentAvgNetworkErrorSum
+											/ opponentParticipations));
 				}
 			}
 
