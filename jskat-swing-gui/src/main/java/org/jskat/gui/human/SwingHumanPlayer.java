@@ -372,12 +372,12 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
     private void resetPlayer() {
         bidValue = 0;
-        holdBid = null;
-        playGrandHand = null;
-        callContra = null;
-        callRe = null;
+        holdBid = false;
+        playGrandHand = false;
+        callContra = false;
+        callRe = false;
         gameAnnouncementStep = GameAnnouncementStep.BEFORE_ANNOUNCEMENT;
-        pickUpSkat = null;
+        pickUpSkat = false;
         discardSkat = null;
         gameAnnouncement = null;
         nextCard = null;
