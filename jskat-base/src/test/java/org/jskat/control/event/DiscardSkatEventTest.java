@@ -21,8 +21,8 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import org.jskat.AbstractJSkatTest;
-import org.jskat.control.event.game.DiscardSkatEvent;
-import org.jskat.control.event.game.PickUpSkatEvent;
+import org.jskat.control.event.skatgame.DiscardSkatEvent;
+import org.jskat.control.event.skatgame.PickUpSkatEvent;
 import org.jskat.data.SkatGameData;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;

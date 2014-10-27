@@ -67,7 +67,7 @@ class GameInformationPanel extends JPanel {
     GameInformationPanel() {
 
         // bitmaps = JSkatGraphicRepository.instance();
-        strings = JSkatResourceBundle.instance();
+		this.strings = JSkatResourceBundle.INSTANCE;
 
         initPanel();
     }
@@ -78,8 +78,8 @@ class GameInformationPanel extends JPanel {
 
         setOpaque(true);
 
-        label = new JLabel();
-        label.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
+        this.label = new JLabel();
+        this.label.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 
         setGameState(GameState.GAME_START);
 
@@ -93,9 +93,9 @@ class GameInformationPanel extends JPanel {
 
     void setGameState(final GameState newGameState) {
 
-        gameState = newGameState;
+        this.gameState = newGameState;
 
-        if (gameState.equals(GameState.GAME_START)) {
+        if (this.gameState.equals(GameState.GAME_START)) {
 
             resetGameData();
         }
@@ -104,28 +104,28 @@ class GameInformationPanel extends JPanel {
     }
 
     void setGameAnnouncement(final GameAnnouncement announcement) {
-        gameType = announcement.getGameType();
-        handGame = announcement.isHand();
-        ouvertGame = announcement.isOuvert();
-        schneiderAnnounced = announcement.isSchneider();
-        schwarzAnnounced = announcement.isSchwarz();
+        this.gameType = announcement.getGameType();
+        this.handGame = announcement.isHand();
+        this.ouvertGame = announcement.isOuvert();
+        this.schneiderAnnounced = announcement.isSchneider();
+        this.schwarzAnnounced = announcement.isSchwarz();
     }
 
     private void resetGameData() {
-        gameType = null;
-        multiplier = 0;
-        playWithJacks = false;
-        handGame = false;
-        ouvertGame = false;
-        schneiderAnnounced = false;
-        schwarzAnnounced = false;
-        contra = false;
-        re = false;
-        trick = 0;
-        gameWon = false;
-        declarerPoints = 0;
-        opponentPoints = 0;
-        ramschLoosers = new HashSet<Player>();
+        this.gameType = null;
+        this.multiplier = 0;
+        this.playWithJacks = false;
+        this.handGame = false;
+        this.ouvertGame = false;
+        this.schneiderAnnounced = false;
+        this.schwarzAnnounced = false;
+        this.contra = false;
+        this.re = false;
+        this.trick = 0;
+        this.gameWon = false;
+        this.declarerPoints = 0;
+        this.opponentPoints = 0;
+        this.ramschLoosers = new HashSet<Player>();
     }
 
     private void refreshText() {
@@ -134,94 +134,94 @@ class GameInformationPanel extends JPanel {
 
         appendGameNumber(text);
 
-        text.append(getGameStateString(gameState));
+        text.append(getGameStateString(this.gameState));
 
         appendGameType(text);
 
         appendGameStateDetails(text);
 
-        label.setText(text.toString());
+        this.label.setText(text.toString());
     }
 
     private void appendGameStateDetails(StringBuffer text) {
-        if (gameState.equals(GameState.TRICK_PLAYING)) {
+        if (this.gameState.equals(GameState.TRICK_PLAYING)) {
             appendTrickPlayingDetails(text);
-        } else if (gameState.equals(GameState.GAME_OVER)) {
+        } else if (this.gameState.equals(GameState.GAME_OVER)) {
 
             appendGameOverDetails(text);
         }
     }
 
     private void appendGameOverDetails(StringBuffer text) {
-        if (gameType != GameType.PASSED_IN) {
+        if (this.gameType != GameType.PASSED_IN) {
             text.append(" - "); //$NON-NLS-1$
-            if (gameWon) {
-                text.append(strings.getString("won")); //$NON-NLS-1$
+            if (this.gameWon) {
+                text.append(this.strings.getString("won")); //$NON-NLS-1$
             } else {
-                text.append(strings.getString("lost")); //$NON-NLS-1$
+                text.append(this.strings.getString("lost")); //$NON-NLS-1$
             }
         }
 
-        if (gameType == GameType.RAMSCH) {
+        if (this.gameType == GameType.RAMSCH) {
             text.append(" - "); //$NON-NLS-1$
 
-            Iterator<Player> iterator = ramschLoosers.iterator();
+            Iterator<Player> iterator = this.ramschLoosers.iterator();
             if (iterator.hasNext()) {
-                text.append(strings.getPlayerString(iterator.next()));
+                text.append(this.strings.getPlayerString(iterator.next()));
             }
             while (iterator.hasNext()) {
                 text.append(", ");
-                text.append(strings.getPlayerString(iterator.next()));
+                text.append(this.strings.getPlayerString(iterator.next()));
             }
 
-        } else if (gameType != GameType.NULL && gameType != GameType.PASSED_IN) {
+        } else if (this.gameType != GameType.NULL && this.gameType != GameType.PASSED_IN) {
             text.append(" - "); //$NON-NLS-1$
 
-            text.append(declarerPoints + " " + strings.getString("versus")
+            text.append(this.declarerPoints + " " + this.strings.getString("versus")
                     + " ");
-            text.append(opponentPoints + " " + strings.getString("points")); //$NON-NLS-1$//$NON-NLS-2$
+            text.append(this.opponentPoints + " " + this.strings.getString("points")); //$NON-NLS-1$//$NON-NLS-2$
         }
     }
 
     private void appendTrickPlayingDetails(StringBuffer text) {
-        text.append(" " + strings.getString("trick") + " " + trick); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+        text.append(" " + this.strings.getString("trick") + " " + this.trick); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
     }
 
     private void appendGameType(StringBuffer text) {
-        if (gameType != null) {
-            text.append(" [" + strings.getGameType(gameType)); //$NON-NLS-1$
+        if (this.gameType != null) {
+            text.append(" [" + this.strings.getGameType(this.gameType)); //$NON-NLS-1$
 
-            if (gameState.equals(GameState.GAME_OVER) && multiplier > 0) {
-                if (playWithJacks) {
-                    text.append(" " + strings.getString("with")); //$NON-NLS-1$//$NON-NLS-2$
+            if (this.gameState.equals(GameState.GAME_OVER) && this.multiplier > 0) {
+                if (this.playWithJacks) {
+                    text.append(" " + this.strings.getString("with")); //$NON-NLS-1$//$NON-NLS-2$
                 } else {
-                    text.append(" " + strings.getString("without")); //$NON-NLS-1$//$NON-NLS-2$
+                    text.append(" " + this.strings.getString("without")); //$NON-NLS-1$//$NON-NLS-2$
                 }
-                text.append(" " + (multiplier - 1)); //$NON-NLS-1$
-                text.append(" " + strings.getString("play")); //$NON-NLS-1$//$NON-NLS-2$
-                text.append(" " + multiplier); //$NON-NLS-1$
+                text.append(" " + (this.multiplier - 1)); //$NON-NLS-1$
+                text.append(" " + this.strings.getString("play")); //$NON-NLS-1$//$NON-NLS-2$
+                text.append(" " + this.multiplier); //$NON-NLS-1$
 
-                if (contra) {
-                    text.append(" " + strings.getString("contra"));
-                    if (re) {
-                        text.append(" " + strings.getString("re"));
+                if (this.contra) {
+                    text.append(" " + this.strings.getString("contra"));
+                    if (this.re) {
+                        text.append(" " + this.strings.getString("re"));
                     }
                 }
             }
 
-            if (handGame) {
+            if (this.handGame) {
                 text.append(" hand");
             }
 
-            if (ouvertGame) {
+            if (this.ouvertGame) {
                 text.append(" ouvert");
             }
 
-            if (schneiderAnnounced) {
+            if (this.schneiderAnnounced) {
                 text.append(" schneider");
             }
 
-            if (schwarzAnnounced) {
+            if (this.schwarzAnnounced) {
                 text.append(" schwarz");
             }
             text.append("]"); //$NON-NLS-1$
@@ -229,19 +229,19 @@ class GameInformationPanel extends JPanel {
     }
 
     private void appendGameNumber(StringBuffer text) {
-        if (gameNumber > 0) {
-            text.append(strings.getString("game") + " " + gameNumber + ": "); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        if (this.gameNumber > 0) {
+            text.append(this.strings.getString("game") + " " + this.gameNumber + ": "); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
         }
     }
 
     void setGameSummary(final GameSummary summary) {
 
-        multiplier = summary.getGameMultiplier();
-        playWithJacks = summary.isGamePlayedWithJacks();
-        gameWon = summary.isGameWon();
-        declarerPoints = summary.getFinalDeclarerPoints();
-        opponentPoints = summary.getFinalOpponentScore();
-        ramschLoosers = summary.getRamschLosers();
+        this.multiplier = summary.getGameMultiplier();
+        this.playWithJacks = summary.isGamePlayedWithJacks();
+        this.gameWon = summary.isGameWon();
+        this.declarerPoints = summary.getFinalDeclarerPoints();
+        this.opponentPoints = summary.getFinalOpponentScore();
+        this.ramschLoosers = summary.getRamschLosers();
         refreshText();
     }
 
@@ -251,42 +251,42 @@ class GameInformationPanel extends JPanel {
 
         switch (state) {
         case BIDDING:
-            result = strings.getString("bidding_phase"); //$NON-NLS-1$
+            result = this.strings.getString("bidding_phase"); //$NON-NLS-1$
             break;
         case CALCULATING_GAME_VALUE:
-            result = strings.getString("calc_game_value_phase"); //$NON-NLS-1$
+            result = this.strings.getString("calc_game_value_phase"); //$NON-NLS-1$
             break;
         case DEALING:
-            result = strings.getString("dealing_phase"); //$NON-NLS-1$
+            result = this.strings.getString("dealing_phase"); //$NON-NLS-1$
             break;
         case DECLARING:
-            result = strings.getString("declaring_phase"); //$NON-NLS-1$
+            result = this.strings.getString("declaring_phase"); //$NON-NLS-1$
             break;
         case DISCARDING:
-            result = strings.getString("discarding_phase"); //$NON-NLS-1$
+            result = this.strings.getString("discarding_phase"); //$NON-NLS-1$
             break;
         case GAME_OVER:
-            result = strings.getString("game_over_phase"); //$NON-NLS-1$
+            result = this.strings.getString("game_over_phase"); //$NON-NLS-1$
             break;
         case GAME_START:
-            result = strings.getString("game_start_phase"); //$NON-NLS-1$
+            result = this.strings.getString("game_start_phase"); //$NON-NLS-1$
             break;
         case PICKING_UP_SKAT:
         case RAMSCH_GRAND_HAND_ANNOUNCING:
         case SCHIEBERAMSCH:
-            result = strings.getString("pick_up_skat_phase"); //$NON-NLS-1$
+            result = this.strings.getString("pick_up_skat_phase"); //$NON-NLS-1$
             break;
         case PRELIMINARY_GAME_END:
-            result = strings.getString("preliminary_game_end_phase"); //$NON-NLS-1$
+            result = this.strings.getString("preliminary_game_end_phase"); //$NON-NLS-1$
             break;
         case TRICK_PLAYING:
-            result = strings.getString("trick_playing_phase"); //$NON-NLS-1$
+            result = this.strings.getString("trick_playing_phase"); //$NON-NLS-1$
             break;
         case CONTRA:
-            result = strings.getString("contra_or_play_phase");
+            result = this.strings.getString("contra_or_play_phase");
             break;
         case RE:
-            result = strings.getString("re_or_play_phase");
+            result = this.strings.getString("re_or_play_phase");
             break;
         default:
             result = state.name();
@@ -303,7 +303,7 @@ class GameInformationPanel extends JPanel {
      *            Trick number
      */
     public void setTrickNumber(final int trickNumber) {
-        trick = trickNumber;
+        this.trick = trickNumber;
         refreshText();
     }
 
@@ -314,15 +314,15 @@ class GameInformationPanel extends JPanel {
      *            Game number
      */
     public void setGameNumber(final int newGameNumber) {
-        gameNumber = newGameNumber;
+        this.gameNumber = newGameNumber;
         refreshText();
     }
 
     public void setContra() {
-        contra = true;
+        this.contra = true;
     }
 
     public void setRe() {
-        re = true;
+        this.re = true;
     }
 }

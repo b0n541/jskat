@@ -40,13 +40,13 @@ class PlayerListTableModel extends AbstractTableModel {
 	 */
 	public PlayerListTableModel() {
 
-		strings = JSkatResourceBundle.instance();
-		data = new ArrayList<List<Object>>();
-		columns = new ArrayList<String>();
-		columns.add(strings.getString("name"));
-		columns.add(strings.getString("games"));
-		columns.add(strings.getString("strength"));
-		columns.add(strings.getString("language"));
+		this.strings = JSkatResourceBundle.INSTANCE;
+		this.data = new ArrayList<List<Object>>();
+		this.columns = new ArrayList<String>();
+		this.columns.add(this.strings.getString("name"));
+		this.columns.add(this.strings.getString("games"));
+		this.columns.add(this.strings.getString("strength"));
+		this.columns.add(this.strings.getString("language"));
 	}
 
 	/**
@@ -69,7 +69,7 @@ class PlayerListTableModel extends AbstractTableModel {
 	@Override
 	public int getColumnCount() {
 
-		return columns.size();
+		return this.columns.size();
 	}
 
 	/**
@@ -78,7 +78,7 @@ class PlayerListTableModel extends AbstractTableModel {
 	@Override
 	public int getRowCount() {
 
-		return data.size();
+		return this.data.size();
 	}
 
 	/**
@@ -87,7 +87,7 @@ class PlayerListTableModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(final int rowIndex, final int columnIndex) {
 
-		return data.get(rowIndex).get(columnIndex);
+		return this.data.get(rowIndex).get(columnIndex);
 	}
 
 	/**
@@ -96,7 +96,7 @@ class PlayerListTableModel extends AbstractTableModel {
 	@Override
 	public String getColumnName(final int col) {
 
-		return columns.get(col);
+		return this.columns.get(col);
 	}
 
 	/**
@@ -118,9 +118,9 @@ class PlayerListTableModel extends AbstractTableModel {
 		int index = 0;
 
 		// first try to find a player already known
-		while (!playerFound && index < data.size()) {
+		while (!playerFound && index < this.data.size()) {
 
-			List<Object> currRow = data.get(index);
+			List<Object> currRow = this.data.get(index);
 			// check player name
 			if (currRow.get(0).equals(playerName)) {
 				// player found
@@ -140,7 +140,7 @@ class PlayerListTableModel extends AbstractTableModel {
 	private void updateRow(final int index, final String language,
 			final long gamesPlayed, final double strength) {
 
-		List<Object> row = data.get(index);
+		List<Object> row = this.data.get(index);
 		// set updated values
 		row.set(1, Long.toString(gamesPlayed));
 		row.set(2, Double.toString(strength));
@@ -157,7 +157,7 @@ class PlayerListTableModel extends AbstractTableModel {
 		newLine.add(Long.valueOf(gamesPlayed));
 		newLine.add(Double.valueOf(strength));
 		newLine.add(language);
-		data.add(newLine);
+		this.data.add(newLine);
 
 		fireTableDataChanged();
 	}
@@ -166,7 +166,7 @@ class PlayerListTableModel extends AbstractTableModel {
 
 		int index = 0;
 		int removeIndex = 0;
-		for (List<Object> currRow : data) {
+		for (List<Object> currRow : this.data) {
 
 			if (currRow.get(0).equals(playerName)) {
 
@@ -174,7 +174,7 @@ class PlayerListTableModel extends AbstractTableModel {
 			}
 			index++;
 		}
-		data.remove(removeIndex);
+		this.data.remove(removeIndex);
 
 		fireTableDataChanged();
 	}

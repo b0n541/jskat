@@ -30,25 +30,25 @@ class TableListTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 
-	private JSkatResourceBundle strings;
+	private final JSkatResourceBundle strings;
 
-	private List<List<String>> data;
-	private List<String> columns;
+	private final List<List<String>> data;
+	private final List<String> columns;
 
 	/**
 	 * Constructor
 	 */
 	public TableListTableModel() {
 
-		strings = JSkatResourceBundle.instance();
+		this.strings = JSkatResourceBundle.INSTANCE;
 		this.data = new ArrayList<List<String>>();
 		this.columns = new ArrayList<String>();
-		this.columns.add(strings.getString("name")); //$NON-NLS-1$
-		this.columns.add(strings.getString("seats")); //$NON-NLS-1$
-		this.columns.add(strings.getString("games")); //$NON-NLS-1$
-		this.columns.add(strings.getString("player") + " 1"); //$NON-NLS-1$
-		this.columns.add(strings.getString("player") + " 2"); //$NON-NLS-1$
-		this.columns.add(strings.getString("player") + " 3"); //$NON-NLS-1$
+		this.columns.add(this.strings.getString("name")); //$NON-NLS-1$
+		this.columns.add(this.strings.getString("seats")); //$NON-NLS-1$
+		this.columns.add(this.strings.getString("games")); //$NON-NLS-1$
+		this.columns.add(this.strings.getString("player") + " 1"); //$NON-NLS-1$
+		this.columns.add(this.strings.getString("player") + " 2"); //$NON-NLS-1$
+		this.columns.add(this.strings.getString("player") + " 3"); //$NON-NLS-1$
 	}
 
 	/**

@@ -47,14 +47,14 @@ public class UnitTestView implements JSkatView {
 	 * Constructor
 	 */
 	public UnitTestView() {
-		tables = new ArrayList<String>();
+		this.tables = new ArrayList<String>();
 	}
 
 	/**
 	 * Resets the view
 	 */
 	public void reset() {
-		tables.clear();
+		this.tables.clear();
 	}
 
 	@Override
@@ -89,12 +89,12 @@ public class UnitTestView implements JSkatView {
 
 	@Override
 	public void createISSTable(final String tableName, final String loginName) {
-		tables.add(tableName);
+		this.tables.add(tableName);
 	}
 
 	@Override
 	public void createSkatTablePanel(final String name) {
-		tables.add(name);
+		this.tables.add(name);
 	}
 
 	@Override
@@ -260,12 +260,6 @@ public class UnitTestView implements JSkatView {
 	@Override
 	public void putCardIntoSkat(final String tableName, final Player player,
 			final Card card) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void showStartSkatSeriesDialog() {
 		// TODO Auto-generated method stub
 
 	}

@@ -23,7 +23,6 @@ import javax.swing.AbstractAction;
 import org.jskat.control.JSkatMaster;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
-import org.jskat.util.JSkatResourceBundle;
 
 /**
  * Implements the action for leaving a skat table on ISS
@@ -37,7 +36,7 @@ public class InvitePlayerAction extends AbstractJSkatAction {
 	 */
 	public InvitePlayerAction() {
 
-		putValue(NAME, JSkatResourceBundle.instance().getString("invite")); //$NON-NLS-1$
+		putValue(NAME, this.strings.getString("invite")); //$NON-NLS-1$
 
 		setIcon(Icon.INVITE);
 	}

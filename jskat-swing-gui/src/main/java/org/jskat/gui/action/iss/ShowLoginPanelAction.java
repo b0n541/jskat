@@ -25,7 +25,6 @@ import org.jskat.control.JSkatMaster;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
-import org.jskat.util.JSkatResourceBundle;
 
 /**
  * Implements the action for showing about dialog
@@ -39,8 +38,7 @@ public class ShowLoginPanelAction extends AbstractJSkatAction {
 	 */
 	public ShowLoginPanelAction() {
 
-		putValue(Action.NAME,
-				JSkatResourceBundle.instance().getString("play_on_iss")); //$NON-NLS-1$
+		putValue(Action.NAME, this.strings.getString("play_on_iss")); //$NON-NLS-1$
 
 		setActionCommand(JSkatAction.SHOW_ISS_LOGIN);
 		setIcon(Icon.CONNECT_ISS);

@@ -79,7 +79,7 @@ class GameAnnouncePanel extends JPanel {
 	GameAnnouncePanel(JSkatView view, final ActionMap actions,
 			final JSkatUserPanel userPanel, final DiscardPanel discardPanel) {
 
-		strings = JSkatResourceBundle.instance();
+		this.strings = JSkatResourceBundle.INSTANCE;
 		this.view = view;
 		this.userPanel = userPanel;
 		this.discardPanel = discardPanel;
@@ -102,8 +102,8 @@ class GameAnnouncePanel extends JPanel {
 		model.addElement(GameType.DIAMONDS);
 		model.addElement(GameType.NULL);
 		this.gameTypeList.setModel(model);
-		gameTypeList.setRenderer(new GameTypeComboBoxRenderer());
-		gameTypeList.addActionListener(new ActionListener() {
+		this.gameTypeList.setRenderer(new GameTypeComboBoxRenderer());
+		this.gameTypeList.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				// FIXME (jan 28.11.2010) send sorting game type to JSkatMaster
@@ -111,43 +111,43 @@ class GameAnnouncePanel extends JPanel {
 				GameType gameType = getSelectedGameType();
 
 				if (gameType != null) {
-					userPanel.setSortGameType(gameType);
+					GameAnnouncePanel.this.userPanel.setSortGameType(gameType);
 
-					if (userPickedUpSkat) {
+					if (GameAnnouncePanel.this.userPickedUpSkat) {
 						if (gameType == GameType.NULL) {
-							ouvertBox.setEnabled(true);
+							GameAnnouncePanel.this.ouvertBox.setEnabled(true);
 						} else {
-							ouvertBox.setEnabled(false);
+							GameAnnouncePanel.this.ouvertBox.setEnabled(false);
 						}
 					} else {
-						ouvertBox.setEnabled(true);
+						GameAnnouncePanel.this.ouvertBox.setEnabled(true);
 						if (gameType != GameType.NULL) {
-							schneiderBox.setEnabled(true);
-							schwarzBox.setEnabled(true);
-							if (ouvertBox.isSelected()) {
-								schneiderBox.setSelected(true);
-								schwarzBox.setSelected(true);
+							GameAnnouncePanel.this.schneiderBox.setEnabled(true);
+							GameAnnouncePanel.this.schwarzBox.setEnabled(true);
+							if (GameAnnouncePanel.this.ouvertBox.isSelected()) {
+								GameAnnouncePanel.this.schneiderBox.setSelected(true);
+								GameAnnouncePanel.this.schwarzBox.setSelected(true);
 							}
 						} else {
-							schneiderBox.setEnabled(false);
-							schneiderBox.setSelected(false);
-							schwarzBox.setEnabled(false);
-							schwarzBox.setSelected(false);
+							GameAnnouncePanel.this.schneiderBox.setEnabled(false);
+							GameAnnouncePanel.this.schneiderBox.setSelected(false);
+							GameAnnouncePanel.this.schwarzBox.setEnabled(false);
+							GameAnnouncePanel.this.schwarzBox.setSelected(false);
 						}
 					}
 				}
 			}
 		});
-		gameTypeList.setSelectedIndex(-1);
+		this.gameTypeList.setSelectedIndex(-1);
 
-		handBox = new JCheckBox(strings.getString("hand")); //$NON-NLS-1$
-		handBox.setEnabled(false);
-		ouvertBox = createOuvertBox();
-		schneiderBox = new JCheckBox(strings.getString("schneider")); //$NON-NLS-1$
-		schwarzBox = createSchwarzBox();
+		this.handBox = new JCheckBox(this.strings.getString("hand")); //$NON-NLS-1$
+		this.handBox.setEnabled(false);
+		this.ouvertBox = createOuvertBox();
+		this.schneiderBox = new JCheckBox(this.strings.getString("schneider")); //$NON-NLS-1$
+		this.schwarzBox = createSchwarzBox();
 
 		panel.add(this.gameTypeList, "grow, wrap"); //$NON-NLS-1$
-		panel.add(handBox, "wrap"); //$NON-NLS-1$
+		panel.add(this.handBox, "wrap"); //$NON-NLS-1$
 		panel.add(this.ouvertBox, "wrap"); //$NON-NLS-1$
 		panel.add(this.schneiderBox, "wrap"); //$NON-NLS-1$
 		panel.add(this.schwarzBox, "wrap"); //$NON-NLS-1$
@@ -182,33 +182,33 @@ class GameAnnouncePanel extends JPanel {
 				GameType gameType = getSelectedGameType();
 				factory.setGameType(gameType);
 
-				if (discardPanel.isUserLookedIntoSkat()) {
+				if (GameAnnouncePanel.this.discardPanel.isUserLookedIntoSkat()) {
 
-					CardList discardedCards = discardPanel.getDiscardedCards();
+					CardList discardedCards = GameAnnouncePanel.this.discardPanel.getDiscardedCards();
 					if (discardedCards.size() != 2) {
 
-						view.showErrorMessage(
-								strings.getString("invalid_number_of_cards_in_skat_title"), //$NON-NLS-1$
-								strings.getString("invalid_number_of_cards_in_skat_message")); //$NON-NLS-1$
+						GameAnnouncePanel.this.view.showErrorMessage(
+								GameAnnouncePanel.this.strings.getString("invalid_number_of_cards_in_skat_title"), //$NON-NLS-1$
+								GameAnnouncePanel.this.strings.getString("invalid_number_of_cards_in_skat_message")); //$NON-NLS-1$
 						return null;
 					}
 					factory.setDiscardedCards(discardedCards);
 					if (GameType.NULL.equals(gameType)
-							&& ouvertBox.isSelected()) {
+							&& GameAnnouncePanel.this.ouvertBox.isSelected()) {
 						factory.setOuvert(true);
 					}
 				} else {
 
-					if (handBox.isSelected()) {
+					if (GameAnnouncePanel.this.handBox.isSelected()) {
 						factory.setHand(Boolean.TRUE);
 					}
-					if (ouvertBox.isSelected()) {
+					if (GameAnnouncePanel.this.ouvertBox.isSelected()) {
 						factory.setOuvert(Boolean.TRUE);
 					}
-					if (schneiderBox.isSelected()) {
+					if (GameAnnouncePanel.this.schneiderBox.isSelected()) {
 						factory.setSchneider(Boolean.TRUE);
 					}
-					if (schwarzBox.isSelected()) {
+					if (GameAnnouncePanel.this.schwarzBox.isSelected()) {
 						factory.setSchneider(Boolean.TRUE);
 					}
 				}
@@ -226,22 +226,22 @@ class GameAnnouncePanel extends JPanel {
 	}
 
 	GameType getSelectedGameType() {
-		Object selectedItem = gameTypeList.getSelectedItem();
+		Object selectedItem = this.gameTypeList.getSelectedItem();
 		return (GameType) selectedItem;
 	}
 
 	private JCheckBox createOuvertBox() {
-		final JCheckBox result = new JCheckBox(strings.getString("ouvert")); //$NON-NLS-1$
+		final JCheckBox result = new JCheckBox(this.strings.getString("ouvert")); //$NON-NLS-1$
 
 		result.addItemListener(new ItemListener() {
 			@Override
 			public void itemStateChanged(ItemEvent arg0) {
-				if (result.isSelected() && handBox.isSelected()
+				if (result.isSelected() && GameAnnouncePanel.this.handBox.isSelected()
 						&& getSelectedGameType() != null) {
 					// hand ouvert
 					if (GameType.NULL != getSelectedGameType()) {
-						schneiderBox.setSelected(true);
-						schwarzBox.setSelected(true);
+						GameAnnouncePanel.this.schneiderBox.setSelected(true);
+						GameAnnouncePanel.this.schwarzBox.setSelected(true);
 					}
 				}
 			}
@@ -251,14 +251,14 @@ class GameAnnouncePanel extends JPanel {
 	}
 
 	private JCheckBox createSchwarzBox() {
-		final JCheckBox result = new JCheckBox(strings.getString("schwarz")); //$NON-NLS-1$
+		final JCheckBox result = new JCheckBox(this.strings.getString("schwarz")); //$NON-NLS-1$
 
 		result.addItemListener(new ItemListener() {
 
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if (result.isSelected()) {
-					schneiderBox.setSelected(true);
+					GameAnnouncePanel.this.schneiderBox.setSelected(true);
 				}
 			}
 		});
@@ -269,7 +269,7 @@ class GameAnnouncePanel extends JPanel {
 	void resetPanel() {
 
 		this.gameTypeList.setSelectedIndex(-1);
-		handBox.setSelected(true);
+		this.handBox.setSelected(true);
 		this.ouvertBox.setSelected(false);
 		this.schneiderBox.setSelected(false);
 		this.schwarzBox.setSelected(false);
@@ -291,7 +291,7 @@ class GameAnnouncePanel extends JPanel {
 			GameType gameType = (GameType) value;
 
 			if (gameType != null) {
-				result = strings.getGameType(gameType);
+				result = GameAnnouncePanel.this.strings.getGameType(gameType);
 			}
 
 			return result;
@@ -300,22 +300,22 @@ class GameAnnouncePanel extends JPanel {
 
 	void setUserPickedUpSkat(final boolean isUserPickedUpSkat) {
 
-		userPickedUpSkat = isUserPickedUpSkat;
+		this.userPickedUpSkat = isUserPickedUpSkat;
 
 		if (isUserPickedUpSkat) {
-			handBox.setSelected(false);
+			this.handBox.setSelected(false);
 			if (GameType.NULL.equals(getSelectedGameType())) {
-				ouvertBox.setEnabled(true);
+				this.ouvertBox.setEnabled(true);
 			} else {
-				ouvertBox.setEnabled(false);
+				this.ouvertBox.setEnabled(false);
 			}
-			schneiderBox.setEnabled(false);
-			schwarzBox.setEnabled(false);
+			this.schneiderBox.setEnabled(false);
+			this.schwarzBox.setEnabled(false);
 		} else {
-			handBox.setSelected(true);
-			ouvertBox.setEnabled(true);
-			schneiderBox.setEnabled(true);
-			schwarzBox.setEnabled(true);
+			this.handBox.setSelected(true);
+			this.ouvertBox.setEnabled(true);
+			this.schneiderBox.setEnabled(true);
+			this.schwarzBox.setEnabled(true);
 		}
 	}
 }

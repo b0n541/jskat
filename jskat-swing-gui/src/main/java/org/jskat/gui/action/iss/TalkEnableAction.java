@@ -24,7 +24,6 @@ import javax.swing.Action;
 import org.jskat.control.JSkatMaster;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
-import org.jskat.util.JSkatResourceBundle;
 
 /**
  * Implements the action for leaving a skat table on ISS
@@ -38,7 +37,7 @@ public class TalkEnableAction extends AbstractJSkatAction {
 	 */
 	public TalkEnableAction() {
 
-		putValue(Action.NAME, JSkatResourceBundle.instance().getString("talk")); //$NON-NLS-1$
+		putValue(Action.NAME, this.strings.getString("talk")); //$NON-NLS-1$
 
 		setIcon(Icon.CHAT);
 	}

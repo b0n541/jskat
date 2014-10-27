@@ -250,14 +250,6 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void showStartSkatSeriesDialog() {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void updateISSLobbyPlayerList(
 			@SuppressWarnings("unused") final String playerName,
 			@SuppressWarnings("unused") final String playerLanguage1,

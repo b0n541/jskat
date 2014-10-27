@@ -13,15 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control.event.game;
+package org.jskat.control.event.skatgame;
 
-import org.jskat.util.Player;
+import org.jskat.data.SkatGameData;
 
 /**
- * Event for bidding.
+ * Interface for events during a Skat game
  */
-public final class BidEvent extends AbstractBidEvent {
-	public BidEvent(Player player, Integer bid) {
-		super(player, bid);
-	}
+public interface SkatGameEvent {
+	/**
+	 * Processes the event forward.
+	 * 
+	 * @param data
+	 *            Game data
+	 */
+	public void processForward(SkatGameData data);
+
+	/**
+	 * Processes the event backward.
+	 * 
+	 * @param data
+	 *            Game data
+	 */
+	public void processBackward(SkatGameData data);
 }

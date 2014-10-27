@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
 class SchieberamschContextPanel extends JPanel {
 
 	JSkatGraphicRepository bitmaps = JSkatGraphicRepository.instance();
-	JSkatResourceBundle strings = JSkatResourceBundle.instance();
+	JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
 
 	private static final String GRAND_HAND = "GRAND_HAND"; //$NON-NLS-1$
 	private static final String DISCARD = "DISCARD"; //$NON-NLS-1$
@@ -68,17 +68,17 @@ class SchieberamschContextPanel extends JPanel {
 		blankPanel.setOpaque(false);
 		add(blankPanel, "width 25%"); //$NON-NLS-1$
 
-		centerPanel = new JPanel(new CardLayout());
+		this.centerPanel = new JPanel(new CardLayout());
 		JPanel grandHandPanel = getGrandHandSchiebeRamschPanel(actions);
-		centerPanel.add(grandHandPanel, GRAND_HAND);
+		this.centerPanel.add(grandHandPanel, GRAND_HAND);
 
-		discardPanel = new DiscardPanel(actions, 4);
-		centerPanel.add(discardPanel, DISCARD);
+		this.discardPanel = new DiscardPanel(actions, 4);
+		this.centerPanel.add(this.discardPanel, DISCARD);
 
-		centerPanel.setOpaque(false);
-		add(centerPanel, "grow"); //$NON-NLS-1$
+		this.centerPanel.setOpaque(false);
+		add(this.centerPanel, "grow"); //$NON-NLS-1$
 
-		add(new SkatSchiebenPanel(actions, discardPanel), "width 25%"); //$NON-NLS-1$
+		add(new SkatSchiebenPanel(actions, this.discardPanel), "width 25%"); //$NON-NLS-1$
 
 		setOpaque(false);
 
@@ -95,16 +95,16 @@ class SchieberamschContextPanel extends JPanel {
 				JSkatGraphicRepository.instance().getUserBidBubble()));
 		question.add(questionIconLabel);
 		JLabel questionLabel = new JLabel(
-				strings.getString("want_play_grand_hand")); //$NON-NLS-1$
+				this.strings.getString("want_play_grand_hand")); //$NON-NLS-1$
 		questionLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 		question.add(questionLabel);
 		result.add(question, "center, growx, span 2, wrap"); //$NON-NLS-1$
 
 		final JButton grandHandButton = new JButton(
 				actions.get(JSkatAction.PLAY_GRAND_HAND));
-		grandHandButton.setIcon(new ImageIcon(bitmaps.getIconImage(Icon.OK,
+		grandHandButton.setIcon(new ImageIcon(this.bitmaps.getIconImage(Icon.OK,
 				IconSize.BIG)));
-		grandHandButton.setText(strings.getString("yes")); //$NON-NLS-1$
+		grandHandButton.setText(this.strings.getString("yes")); //$NON-NLS-1$
 		grandHandButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -129,9 +129,9 @@ class SchieberamschContextPanel extends JPanel {
 
 		final JButton schieberamschButton = new JButton(
 				actions.get(JSkatAction.PLAY_SCHIEBERAMSCH));
-		schieberamschButton.setIcon(new ImageIcon(bitmaps.getIconImage(
+		schieberamschButton.setIcon(new ImageIcon(this.bitmaps.getIconImage(
 				Icon.STOP, IconSize.BIG)));
-		schieberamschButton.setText(strings.getString("no")); //$NON-NLS-1$
+		schieberamschButton.setText(this.strings.getString("no")); //$NON-NLS-1$
 		schieberamschButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
@@ -160,27 +160,27 @@ class SchieberamschContextPanel extends JPanel {
 
 	public void resetPanel() {
 
-		discardPanel.resetPanel();
+		this.discardPanel.resetPanel();
 		showPanel(GRAND_HAND);
 	}
 
 	void showPanel(final String panelName) {
-		((CardLayout) centerPanel.getLayout()).show(centerPanel, panelName);
+		((CardLayout) this.centerPanel.getLayout()).show(this.centerPanel, panelName);
 	}
 
 	public void removeCard(final Card card) {
-		discardPanel.removeCard(card);
+		this.discardPanel.removeCard(card);
 	}
 
 	public boolean isHandFull() {
-		return discardPanel.isHandFull();
+		return this.discardPanel.isHandFull();
 	}
 
 	public void addCard(final Card card) {
-		discardPanel.addCard(card);
+		this.discardPanel.addCard(card);
 	}
 
 	public void setSkat(final CardList skat) {
-		discardPanel.setSkat(skat);
+		this.discardPanel.setSkat(skat);
 	}
 }

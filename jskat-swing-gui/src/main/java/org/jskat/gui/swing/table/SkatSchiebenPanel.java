@@ -59,7 +59,7 @@ class SkatSchiebenPanel extends JPanel {
 	 */
 	SkatSchiebenPanel(final ActionMap actions, final DiscardPanel discardPanel) {
 
-		strings = JSkatResourceBundle.instance();
+		this.strings = JSkatResourceBundle.INSTANCE;
 		this.discardPanel = discardPanel;
 
 		initPanel(actions);
@@ -93,14 +93,14 @@ class SkatSchiebenPanel extends JPanel {
 			}
 
 			private CardList getDiscardedCards() {
-				if (discardPanel.isUserLookedIntoSkat()) {
-					CardList discardedCards = discardPanel.getDiscardedCards();
+				if (SkatSchiebenPanel.this.discardPanel.isUserLookedIntoSkat()) {
+					CardList discardedCards = SkatSchiebenPanel.this.discardPanel.getDiscardedCards();
 					if (discardedCards.size() != 2) {
 						JOptionPane
 								.showMessageDialog(
 										SkatSchiebenPanel.this,
-										strings.getString("invalid_number_of_cards_in_skat"), //$NON-NLS-1$
-										strings.getString("invalid_number_of_cards_in_skat_title"), //$NON-NLS-1$
+										SkatSchiebenPanel.this.strings.getString("invalid_number_of_cards_in_skat"), //$NON-NLS-1$
+										SkatSchiebenPanel.this.strings.getString("invalid_number_of_cards_in_skat_title"), //$NON-NLS-1$
 										JOptionPane.ERROR_MESSAGE);
 						return null;
 					}
@@ -112,8 +112,8 @@ class SkatSchiebenPanel extends JPanel {
 										SkatSchiebenPanel.this,
 										// FIXME: should not be checked in GUI
 										// code
-										strings.getString("no_jacks_allowed_in_schieberamsch_skat"),
-										strings.getString("no_jacks_allowed_in_schieberamsch_skat_title"),
+										SkatSchiebenPanel.this.strings.getString("no_jacks_allowed_in_schieberamsch_skat"),
+										SkatSchiebenPanel.this.strings.getString("no_jacks_allowed_in_schieberamsch_skat_title"),
 										JOptionPane.ERROR_MESSAGE);
 						return null;
 					}

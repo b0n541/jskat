@@ -90,18 +90,18 @@ public class JSkatGraphicRepository {
 
 		log.debug("Bitmaps for JSkat logo and skat table loaded..."); //$NON-NLS-1$
 
-		icons = new ArrayList<List<Image>>();
+		this.icons = new ArrayList<List<Image>>();
 		loadIcons(tracker);
 
 		log.debug("Bitmaps for icons loaded..."); //$NON-NLS-1$
 
-		cards = new HashMap<CardSet, Map<Card, Image>>();
-		cardBacks = new HashMap<CardSet, Image>();
+		this.cards = new HashMap<CardSet, Map<Card, Image>>();
+		this.cardBacks = new HashMap<CardSet, Image>();
 		loadCards(tracker);
 
 		log.debug("Bitmaps for cards loaded..."); //$NON-NLS-1$
 
-		flags = new ArrayList<Image>();
+		this.flags = new ArrayList<Image>();
 		loadFlags(tracker);
 
 		log.debug("Bitmaps for flags loaded..."); //$NON-NLS-1$
@@ -111,13 +111,13 @@ public class JSkatGraphicRepository {
 		// for all flags
 		for (final Flag flag : Flag.values()) {
 			// add flag
-			flags.add(Toolkit
+			this.flags.add(Toolkit
 					.getDefaultToolkit()
 					.getImage(
 							ClassLoader
 									.getSystemResource("org/jskat/gui/img/gui/" //$NON-NLS-1$
 											+ "flag_" + flag.toString().toLowerCase() + ".png"))); //$NON-NLS-1$ //$NON-NLS-2$
-			tracker.addImage(flags.get(flag.ordinal()), 3);
+			tracker.addImage(this.flags.get(flag.ordinal()), 3);
 		}
 
 		try {
@@ -128,41 +128,41 @@ public class JSkatGraphicRepository {
 	}
 
 	private void loadImages(final MediaTracker tracker) {
-		skatTable = Toolkit
+		this.skatTable = Toolkit
 				.getDefaultToolkit()
 				.getImage(
 						ClassLoader
 								.getSystemResource("org/jskat/gui/img/gui/skat_table.png")); //$NON-NLS-1$
-		tracker.addImage(skatTable, 0);
-		jskatLogo = Toolkit
+		tracker.addImage(this.skatTable, 0);
+		this.jskatLogo = Toolkit
 				.getDefaultToolkit()
 				.getImage(
 						ClassLoader
 								.getSystemResource("org/jskat/gui/img/gui/jskatLogo.png")); //$NON-NLS-1$
-		tracker.addImage(jskatLogo, 0);
+		tracker.addImage(this.jskatLogo, 0);
 
-		bidBubbles = new ArrayList<Image>();
-		bidBubbles
+		this.bidBubbles = new ArrayList<Image>();
+		this.bidBubbles
 				.add(Toolkit
 						.getDefaultToolkit()
 						.getImage(
 								ClassLoader
 										.getSystemResource("org/jskat/gui/img/gui/bid_left.png"))); //$NON-NLS-1$
-		bidBubbles
+		this.bidBubbles
 				.add(Toolkit
 						.getDefaultToolkit()
 						.getImage(
 								ClassLoader
 										.getSystemResource("org/jskat/gui/img/gui/bid_right.png"))); //$NON-NLS-1$
-		bidBubbles
+		this.bidBubbles
 				.add(Toolkit
 						.getDefaultToolkit()
 						.getImage(
 								ClassLoader
 										.getSystemResource("org/jskat/gui/img/gui/bid_user.png"))); //$NON-NLS-1$
-		tracker.addImage(bidBubbles.get(0), 0);
-		tracker.addImage(bidBubbles.get(1), 0);
-		tracker.addImage(bidBubbles.get(2), 0);
+		tracker.addImage(this.bidBubbles.get(0), 0);
+		tracker.addImage(this.bidBubbles.get(1), 0);
+		tracker.addImage(this.bidBubbles.get(2), 0);
 		try {
 			tracker.waitForID(0);
 		} catch (final InterruptedException e) {
@@ -179,13 +179,13 @@ public class JSkatGraphicRepository {
 		for (final Icon icon : Icon.values()) {
 
 			// new array list for all sizes
-			icons.add(new ArrayList<Image>());
+			this.icons.add(new ArrayList<Image>());
 
 			// for all sizes
 			for (final IconSize size : IconSize.values()) {
 
 				// add icon
-				icons.get(icon.ordinal())
+				this.icons.get(icon.ordinal())
 						.add(Toolkit
 								.getDefaultToolkit()
 								.getImage(
@@ -197,7 +197,7 @@ public class JSkatGraphicRepository {
 														+ size.toString()
 																.toLowerCase()
 														+ ".png"))); //$NON-NLS-1$
-				tracker.addImage(icons.get(icon.ordinal()).get(size.ordinal()),
+				tracker.addImage(this.icons.get(icon.ordinal()).get(size.ordinal()),
 						1);
 			}
 		}
@@ -217,14 +217,14 @@ public class JSkatGraphicRepository {
 	 */
 	private void loadCards(final MediaTracker tracker) {
 
-		cards.clear();
+		this.cards.clear();
 		for (CardSet set : CardSet.values()) {
 
-			cards.put(set, new HashMap<Card, Image>());
+			this.cards.put(set, new HashMap<Card, Image>());
 
 			for (Card card : Card.values()) {
 
-				cards.get(set)
+				this.cards.get(set)
 						.put(card,
 								Toolkit.getDefaultToolkit()
 										.getImage(
@@ -235,16 +235,16 @@ public class JSkatGraphicRepository {
 																		.toLowerCase()
 																+ "/" + getCardSetNameInLowerCase(set) + "/" + card.getSuit().shortString() + '-' + card.getRank().shortString() + "." + set.getFileType()))); //$NON-NLS-1$//$NON-NLS-2$
 
-				tracker.addImage(cards.get(set).get(card), 2);
+				tracker.addImage(this.cards.get(set).get(card), 2);
 			}
 
-			cardBacks
+			this.cardBacks
 					.put(set,
 							Toolkit.getDefaultToolkit()
 									.getImage(
 											ClassLoader
 													.getSystemResource("org/jskat/gui/img/card/back/" + getCardSetNameInLowerCase(set) + "." + set.getFileType()))); //$NON-NLS-1$
-			tracker.addImage(cardBacks.get(set), 2);
+			tracker.addImage(this.cardBacks.get(set), 2);
 		}
 		try {
 			tracker.waitForID(2);
@@ -269,7 +269,7 @@ public class JSkatGraphicRepository {
 	public Image getIconImage(final Icon icon, final IconSize size) {
 
 		try {
-			return icons.get(icon.ordinal()).get(size.ordinal());
+			return this.icons.get(icon.ordinal()).get(size.ordinal());
 		} catch (final IndexOutOfBoundsException exc) {
 			return null;
 		}
@@ -288,10 +288,10 @@ public class JSkatGraphicRepository {
 
 		if (card != null) {
 
-			result = cards.get(options.getCardSet()).get(card);
+			result = this.cards.get(options.getCardSet()).get(card);
 		} else {
 
-			result = cardBacks.get(CardSet.ISS_GERMAN);
+			result = this.cardBacks.get(CardSet.ISS_GERMAN);
 		}
 
 		return result;
@@ -305,7 +305,7 @@ public class JSkatGraphicRepository {
 	 * @return Flag image
 	 */
 	public Image getFlagImage(final Flag flag) {
-		return flags.get(flag.ordinal());
+		return this.flags.get(flag.ordinal());
 	}
 
 	/**
@@ -315,7 +315,7 @@ public class JSkatGraphicRepository {
 	 */
 	public Image getSkatTableImage() {
 
-		return skatTable;
+		return this.skatTable;
 	}
 
 	/**
@@ -325,7 +325,7 @@ public class JSkatGraphicRepository {
 	 */
 	public Image getJSkatLogoImage() {
 
-		return jskatLogo;
+		return this.jskatLogo;
 	}
 
 	/**
@@ -334,7 +334,7 @@ public class JSkatGraphicRepository {
 	 * @return Image for the left opponent bid bubble
 	 */
 	public Image getLeftBidBubble() {
-		return bidBubbles.get(0);
+		return this.bidBubbles.get(0);
 	}
 
 	/**
@@ -343,7 +343,7 @@ public class JSkatGraphicRepository {
 	 * @return Image for the right opponent bid bubble
 	 */
 	public Image getRightBidBubble() {
-		return bidBubbles.get(1);
+		return this.bidBubbles.get(1);
 	}
 
 	/**
@@ -352,7 +352,7 @@ public class JSkatGraphicRepository {
 	 * @return Image for the user bid bubble
 	 */
 	public Image getUserBidBubble() {
-		return bidBubbles.get(2);
+		return this.bidBubbles.get(2);
 	}
 
 	/**
@@ -534,8 +534,7 @@ public class JSkatGraphicRepository {
 	public enum Flag {
 		GERMAN, ENGLISH, FRENCH, SPANISH, POLISH, CZECH;
 
-		private final JSkatResourceBundle strings = JSkatResourceBundle
-				.instance();
+		private final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
 
 		/**
 		 * Gets a flag from a character
@@ -582,22 +581,22 @@ public class JSkatGraphicRepository {
 
 			switch (this) {
 			case GERMAN:
-				result = strings.getString("german"); //$NON-NLS-1$
+				result = this.strings.getString("german"); //$NON-NLS-1$
 				break;
 			case ENGLISH:
-				result = strings.getString("english"); //$NON-NLS-1$
+				result = this.strings.getString("english"); //$NON-NLS-1$
 				break;
 			case FRENCH:
-				result = strings.getString("french"); //$NON-NLS-1$
+				result = this.strings.getString("french"); //$NON-NLS-1$
 				break;
 			case SPANISH:
-				result = strings.getString("spanish"); //$NON-NLS-1$
+				result = this.strings.getString("spanish"); //$NON-NLS-1$
 				break;
 			case POLISH:
-				result = strings.getString("polish"); //$NON-NLS-1$
+				result = this.strings.getString("polish"); //$NON-NLS-1$
 				break;
 			case CZECH:
-				result = strings.getString("czech"); //$NON-NLS-1$
+				result = this.strings.getString("czech"); //$NON-NLS-1$
 				break;
 			}
 

@@ -59,7 +59,7 @@ public class JSkatHelpDialog extends JDialog {
 	private static final long serialVersionUID = 1L;
 	private static Logger log = LoggerFactory.getLogger(JSkatHelpDialog.class);
 
-	protected final JSkatResourceBundle strings = JSkatResourceBundle.instance();
+	protected final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
 
 	private final JFrame parent;
 	private JScrollPane scrollPane;
@@ -80,10 +80,10 @@ public class JSkatHelpDialog extends JDialog {
 
 		super(parentFrame, true);
 
-		parent = parentFrame;
-		contentURL = contentPath;
+		this.parent = parentFrame;
+		this.contentURL = contentPath;
 		initComponents(title);
-		setLocationRelativeTo(parent);
+		setLocationRelativeTo(this.parent);
 	}
 
 	/**
@@ -98,8 +98,8 @@ public class JSkatHelpDialog extends JDialog {
 		JPanel westPanel = new JPanel();
 		JPanel eastPanel = new JPanel();
 
-		scrollPane = new JScrollPane();
-		textPane = new JTextPane();
+		this.scrollPane = new JScrollPane();
+		this.textPane = new JTextPane();
 
 		setTitle(title);
 		addWindowListener(new WindowAdapter() {
@@ -111,18 +111,18 @@ public class JSkatHelpDialog extends JDialog {
 
 		getContentPane().add(northPanel, BorderLayout.NORTH);
 
-		textPane.setEditorKit(new HTMLEditorKit());
-		textPane.addHyperlinkListener(hll);
-		textPane.setEditable(false);
+		this.textPane.setEditorKit(new HTMLEditorKit());
+		this.textPane.addHyperlinkListener(this.hll);
+		this.textPane.setEditable(false);
 
-		setFile(contentURL);
+		setFile(this.contentURL);
 
-		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-		scrollPane.setViewportView(textPane);
-		scrollPane.setPreferredSize(new Dimension(600, 300));
+		this.scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		this.scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+		this.scrollPane.setViewportView(this.textPane);
+		this.scrollPane.setPreferredSize(new Dimension(600, 300));
 
-		getContentPane().add(scrollPane, BorderLayout.CENTER);
+		getContentPane().add(this.scrollPane, BorderLayout.CENTER);
 		getContentPane().add(southPanel, BorderLayout.SOUTH);
 		getContentPane().add(eastPanel, BorderLayout.EAST);
 		getContentPane().add(westPanel, BorderLayout.WEST);
@@ -132,7 +132,7 @@ public class JSkatHelpDialog extends JDialog {
 
 	protected JPanel getButtonPanel() {
 		JPanel southPanel = new JPanel();
-		JButton closeButton = new JButton(strings.getString("close")); //$NON-NLS-1$
+		JButton closeButton = new JButton(this.strings.getString("close")); //$NON-NLS-1$
 		closeButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent evt) {
@@ -140,7 +140,7 @@ public class JSkatHelpDialog extends JDialog {
 			}
 		});
 		southPanel.add(closeButton);
-		JButton openExternal = new JButton(openExternalAction);
+		JButton openExternal = new JButton(this.openExternalAction);
 
 		southPanel.add(openExternal);
 		return southPanel;
@@ -165,8 +165,8 @@ public class JSkatHelpDialog extends JDialog {
 
 	private void setToInitialState() {
 
-		scrollPane.getVerticalScrollBar().setValue(0);
-		setLocationRelativeTo(parent);
+		this.scrollPane.getVerticalScrollBar().setValue(0);
+		setLocationRelativeTo(this.parent);
 	}
 
 	/**
@@ -222,8 +222,8 @@ public class JSkatHelpDialog extends JDialog {
 			ix = sb.indexOf("@@insert@@");
 		}
 		sb.delete(ix, ix + 10);
-		textPane.setText(sb.toString());
-		textPane.setCaretPosition(0);
+		this.textPane.setText(sb.toString());
+		this.textPane.setCaretPosition(0);
 	}
 
 	/**
@@ -240,8 +240,8 @@ public class JSkatHelpDialog extends JDialog {
 			throw new IllegalArgumentException("frame.html contains no @@insert@@");
 		}
 		sb.replace(ix, ix + 10, htmlSnippet);
-		textPane.setText(sb.toString());
-		textPane.setCaretPosition(0);
+		this.textPane.setText(sb.toString());
+		this.textPane.setCaretPosition(0);
 	}
 
 	/**
@@ -251,11 +251,11 @@ public class JSkatHelpDialog extends JDialog {
 	 *            the html to display in the dialog
 	 */
 	public void setText(final String html) {
-		textPane.setText(html);
-		textPane.setCaretPosition(0);
+		this.textPane.setText(html);
+		this.textPane.setCaretPosition(0);
 	}
 
-	protected final Action openExternalAction = new AbstractAction(strings.getString("open_external")) {
+	protected final Action openExternalAction = new AbstractAction(this.strings.getString("open_external")) {
 		private static final long serialVersionUID = 4233152199895964006L;
 
 		@Override
@@ -268,7 +268,7 @@ public class JSkatHelpDialog extends JDialog {
 				log.warn("error in writing external html file:", e);
 				return;
 			}
-			pw.print(externalizeLinks(textPane.getText()));
+			pw.print(externalizeLinks(JSkatHelpDialog.this.textPane.getText()));
 			pw.flush();
 			pw.close();
 			try {

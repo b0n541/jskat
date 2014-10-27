@@ -21,7 +21,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 import org.jskat.AbstractJSkatTest;
-import org.jskat.control.event.game.GameStartEvent;
+import org.jskat.control.event.skatgame.GameStartEvent;
 import org.jskat.data.SkatGameData;
 import org.jskat.util.Player;
 import org.junit.Before;

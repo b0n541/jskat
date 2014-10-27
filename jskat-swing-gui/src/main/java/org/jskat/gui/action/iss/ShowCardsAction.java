@@ -24,7 +24,6 @@ import javax.swing.Action;
 import org.jskat.control.JSkatMaster;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
-import org.jskat.util.JSkatResourceBundle;
 
 /**
  * Implements the action for resigning a game on ISS
@@ -38,8 +37,7 @@ public class ShowCardsAction extends AbstractJSkatAction {
 	 */
 	public ShowCardsAction() {
 
-		putValue(Action.NAME,
-				JSkatResourceBundle.instance().getString("show_cards")); //$NON-NLS-1$
+		putValue(Action.NAME, this.strings.getString("show_cards")); //$NON-NLS-1$
 
 		setIcon(Icon.PLAY);
 	}

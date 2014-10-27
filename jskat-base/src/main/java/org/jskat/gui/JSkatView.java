@@ -394,11 +394,6 @@ public interface JSkatView {
 	public void putCardIntoSkat(String tableName, Player player, Card card);
 
 	/**
-	 * Shows the start dialog for skat series
-	 */
-	public void showStartSkatSeriesDialog();
-
-	/**
 	 * Updates the client list of the ISS lobby
 	 * 
 	 * @param playerName

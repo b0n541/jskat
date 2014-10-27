@@ -19,9 +19,12 @@ package org.jskat.gui.action;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 
+import org.jskat.control.event.JSkatEventBus;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.util.JSkatResourceBundle;
+
+import com.google.common.eventbus.EventBus;
 
 /**
  * Defines an abstract action for JSkat
@@ -33,19 +36,24 @@ public abstract class AbstractJSkatAction extends AbstractAction {
 	/**
 	 * JSkat graphics repository
 	 */
-	protected JSkatGraphicRepository bitmaps;
+	protected final JSkatGraphicRepository bitmaps;
 	/**
 	 * JSkat i18n strings
 	 */
-	protected JSkatResourceBundle strings;
+	protected final JSkatResourceBundle strings;
+	/**
+	 * JSkat event bus
+	 */
+	protected final EventBus eventBus;
 
 	/**
 	 * Constructor
 	 */
 	public AbstractJSkatAction() {
 
-		strings = JSkatResourceBundle.instance();
-		bitmaps = JSkatGraphicRepository.instance();
+		this.strings = JSkatResourceBundle.INSTANCE;
+		this.bitmaps = JSkatGraphicRepository.instance();
+		this.eventBus = JSkatEventBus.INSTANCE;
 
 		setIcon(Icon.BLANK);
 	}
@@ -53,11 +61,11 @@ public abstract class AbstractJSkatAction extends AbstractAction {
 	protected void setIcon(JSkatGraphicRepository.Icon icon) {
 		putValue(
 				SMALL_ICON,
-				new ImageIcon(bitmaps.getIconImage(icon,
+				new ImageIcon(this.bitmaps.getIconImage(icon,
 						JSkatGraphicRepository.IconSize.SMALL)));
 		putValue(
 				LARGE_ICON_KEY,
-				new ImageIcon(bitmaps.getIconImage(icon,
+				new ImageIcon(this.bitmaps.getIconImage(icon,
 						JSkatGraphicRepository.IconSize.BIG)));
 	}
 

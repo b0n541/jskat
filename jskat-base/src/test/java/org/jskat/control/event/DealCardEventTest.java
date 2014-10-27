@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jskat.AbstractJSkatTest;
-import org.jskat.control.event.game.DealCardEvent;
+import org.jskat.control.event.skatgame.DealCardEvent;
 import org.jskat.data.SkatGameData;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;

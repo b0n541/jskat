@@ -61,8 +61,6 @@ public final class JSkat {
 
         initializeOptions();
 
-        JSkatResourceBundle.instance();
-
         trySettingNimbusLookAndFeel();
 
         final SplashScreen splash = SplashScreen.getSplashScreen();
@@ -120,7 +118,7 @@ public final class JSkat {
     }
 
     private static void renderSplashFrame(Graphics2D g, int frame) {
-        final JSkatResourceBundle strings = JSkatResourceBundle.instance();
+		final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
         final String[] frameStrings = {
                 strings.getString("splash_init_application"),
                 strings.getString("splash_load_card_sets"),

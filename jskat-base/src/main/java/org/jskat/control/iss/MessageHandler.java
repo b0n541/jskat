@@ -37,11 +37,11 @@ public class MessageHandler extends Thread {
 	private static Logger log = LoggerFactory.getLogger(MessageHandler.class);
 
 	private StreamConnector connect;
-	private IssController issControl;
+	private final IssController issControl;
 
-	private JSkatResourceBundle strings;
+	private final JSkatResourceBundle strings;
 
-	private List<String> messageList;
+	private final List<String> messageList;
 
 	private EventBus eventBus;
 
@@ -58,19 +58,19 @@ public class MessageHandler extends Thread {
 	public MessageHandler(final StreamConnector conn,
 			final IssController controller) {
 
-		connect = conn;
-		issControl = controller;
+		this.connect = conn;
+		this.issControl = controller;
 
-		strings = JSkatResourceBundle.instance();
+		this.strings = JSkatResourceBundle.INSTANCE;
 
-		messageList = new ArrayList<String>();
+		this.messageList = new ArrayList<String>();
 	}
 
 	public MessageHandler(final IssController controller) {
-		issControl = controller;
-		strings = JSkatResourceBundle.instance();
+		this.issControl = controller;
+		this.strings = JSkatResourceBundle.INSTANCE;
 
-		messageList = new ArrayList<String>();
+		this.messageList = new ArrayList<String>();
 	}
 
 	/**
@@ -79,7 +79,7 @@ public class MessageHandler extends Thread {
 	@Override
 	public void run() {
 		while (true) {
-			if (messageList.size() > 0) {
+			if (this.messageList.size() > 0) {
 
 				final String message = getNextMessage();
 				handleMessage(message);
@@ -95,19 +95,19 @@ public class MessageHandler extends Thread {
 
 	synchronized void addMessage(final String newMessage) {
 
-		messageList.add(newMessage);
+		this.messageList.add(newMessage);
 	}
 
 	private synchronized String getNextMessage() {
 
-		return messageList.remove(0);
+		return this.messageList.remove(0);
 	}
 
 	void handleMessage(final String message) {
 
 		if (message == null) {
-			connect.closeConnection();
-			eventBus.post(new LogoutFromIssEvent());
+			this.connect.closeConnection();
+			this.eventBus.post(new LogoutFromIssEvent());
 		} else {
 
 			final StringTokenizer tokenizer = new StringTokenizer(message); // get
@@ -126,7 +126,7 @@ public class MessageHandler extends Thread {
 
 			} catch (final Exception except) {
 				log.error("Error in parsing ISS protocoll", except); //$NON-NLS-1$
-				issControl.showErrorMessage(strings
+				this.issControl.showErrorMessage(this.strings
 						.getString("iss_error_parsing_iss_protocol")); //$NON-NLS-1$
 			}
 		}
@@ -195,11 +195,11 @@ public class MessageHandler extends Thread {
 
 	void handleLobbyChatMessage(final List<String> params) {
 
-		issControl.addChatMessage(ChatMessageType.LOBBY, params);
+		this.issControl.addChatMessage(ChatMessageType.LOBBY, params);
 	}
 
 	void handlePasswordMessage() {
-		issControl.sendPassword();
+		this.issControl.sendPassword();
 	}
 
 	void handleTextMessage(final List<String> params) {
@@ -210,7 +210,7 @@ public class MessageHandler extends Thread {
 	void handleErrorMessage(final List<String> params) {
 
 		log.error(params.toString());
-		issControl.showErrorMessage(getI18ErrorString(getErrorString(params)));
+		this.issControl.showErrorMessage(getI18ErrorString(getErrorString(params)));
 	}
 
 	private String getErrorString(final List<String> params) {
@@ -227,11 +227,11 @@ public class MessageHandler extends Thread {
 	private String getI18ErrorString(final String errorString) {
 
 		if ("_id_pw_mismatch".equals(errorString)) { //$NON-NLS-1$
-			return strings.getString("iss_login_password_wrong"); //$NON-NLS-1$
+			return this.strings.getString("iss_login_password_wrong"); //$NON-NLS-1$
 		} else if ("_not_your_turn".equals(errorString)) { //$NON-NLS-1$
-			return strings.getString("iss_not_your_turn"); //$NON-NLS-1$
+			return this.strings.getString("iss_not_your_turn"); //$NON-NLS-1$
 		} else if ("_invalid_move_colon".equals(errorString)) { //$NON-NLS-1$
-			return strings.getString("iss_invalid_move_colon"); //$NON-NLS-1$
+			return this.strings.getString("iss_invalid_move_colon"); //$NON-NLS-1$
 		}
 
 		return errorString;
@@ -244,7 +244,7 @@ public class MessageHandler extends Thread {
 		final String tableName = params.get(0);
 		final String creator = params.get(1);
 		final int seats = Integer.parseInt(params.get(2));
-		issControl.createTable(tableName, creator, seats);
+		this.issControl.createTable(tableName, creator, seats);
 	}
 
 	void handleTableDestroyMessage(final List<String> params) {
@@ -252,7 +252,7 @@ public class MessageHandler extends Thread {
 		log.debug("table destroy message"); //$NON-NLS-1$
 
 		final String tableName = params.get(0);
-		issControl.destroyTable(tableName);
+		this.issControl.destroyTable(tableName);
 	}
 
 	void handleTableInvitationMessage(final List<String> params) {
@@ -262,7 +262,7 @@ public class MessageHandler extends Thread {
 		final String tableName = params.get(1);
 		final String invitationTicket = params.get(2);
 
-		issControl.handleInvitation(invitor, tableName, invitationTicket);
+		this.issControl.handleInvitation(invitor, tableName, invitationTicket);
 	}
 
 	/**
@@ -275,7 +275,7 @@ public class MessageHandler extends Thread {
 
 		final String tableName = params.get(0);
 
-		if (issControl.isTableJoined(tableName)) {
+		if (this.issControl.isTableJoined(tableName)) {
 
 			// FIXME (jan 18.11.2010) is this the name of the creator or the
 			// login name of the current player?
@@ -289,34 +289,34 @@ public class MessageHandler extends Thread {
 
 			} else if (actionCommand.equals("state")) { //$NON-NLS-1$
 
-				issControl.updateISSTableState(tableName,
+				this.issControl.updateISSTableState(tableName,
 						MessageParser.getTableStatus(creator, detailParams));
 
 			} else if (actionCommand.equals("start")) { //$NON-NLS-1$
 
-				issControl
+				this.issControl
 						.updateISSGame(tableName, MessageParser
 								.getGameStartStatus(creator, detailParams));
 
 			} else if (actionCommand.equals("go")) { //$NON-NLS-1$
 
-				issControl.startGame(tableName);
+				this.issControl.startGame(tableName);
 
 			} else if (actionCommand.equals("play")) { //$NON-NLS-1$
 
 				final MoveInformation moveInfo = MessageParser
 						.getMoveInformation(detailParams);
 				MessageParser.parsePlayerTimes(detailParams, moveInfo);
-				issControl.updateMove(tableName, moveInfo);
+				this.issControl.updateMove(tableName, moveInfo);
 
 			} else if (actionCommand.equals("tell")) { //$NON-NLS-1$
 
-				issControl.updateISSTableChatMessage(tableName, MessageParser
+				this.issControl.updateISSTableChatMessage(tableName, MessageParser
 						.getTableChatMessage(tableName, detailParams));
 
 			} else if (actionCommand.equals("end")) { //$NON-NLS-1$
 
-				issControl.endGame(tableName, getGameInformation(detailParams));
+				this.issControl.endGame(tableName, getGameInformation(detailParams));
 
 			} else {
 
@@ -383,7 +383,7 @@ public class MessageHandler extends Thread {
 		final long gamesPlayed = Long.parseLong(params.get(3));
 		final double strength = Double.parseDouble(params.get(4));
 
-		issControl.updateISSPlayerList(playerName, language, gamesPlayed,
+		this.issControl.updateISSPlayerList(playerName, language, gamesPlayed,
 				strength);
 	}
 
@@ -395,7 +395,7 @@ public class MessageHandler extends Thread {
 	 */
 	void removeClientFromList(final List<String> params) {
 
-		issControl.removeISSPlayerFromList(params.get(0));
+		this.issControl.removeISSPlayerFromList(params.get(0));
 	}
 
 	/**
@@ -420,7 +420,7 @@ public class MessageHandler extends Thread {
 			log.error("local version: " + protocolVersion); //$NON-NLS-1$
 		}
 
-		issControl.showISSLobby(login);
+		this.issControl.showISSLobby(login);
 	}
 
 	/**
@@ -468,7 +468,7 @@ public class MessageHandler extends Thread {
 		final String player2 = params.get(4);
 		final String player3 = params.get(5);
 
-		issControl.updateISSTableList(tableName, maxPlayers, gamesPlayed,
+		this.issControl.updateISSTableList(tableName, maxPlayers, gamesPlayed,
 				player1, player2, player3);
 	}
 
@@ -480,7 +480,7 @@ public class MessageHandler extends Thread {
 	 */
 	void removeTableFromList(final List<String> params) {
 
-		issControl.removeISSTableFromList(params.get(0));
+		this.issControl.removeISSTableFromList(params.get(0));
 	}
 
 }

@@ -112,16 +112,16 @@ abstract class AbstractHandPanel extends JPanel {
             final boolean showIssWidgets) {
 
         setActionMap(actions);
-        bitmaps = JSkatGraphicRepository.instance();
-        strings = JSkatResourceBundle.instance();
-        maxCardCount = maxCards;
+        this.bitmaps = JSkatGraphicRepository.instance();
+		this.strings = JSkatResourceBundle.INSTANCE;
+        this.maxCardCount = maxCards;
         this.showIssWidgets = showIssWidgets;
 
         setOpaque(false);
 
-        headerLabel = new JLabel(" "); //$NON-NLS-1$
-        iconPanel = new IconPanel();
-        clockPanel = new ClockPanel();
+        this.headerLabel = new JLabel(" "); //$NON-NLS-1$
+        this.iconPanel = new IconPanel();
+        this.clockPanel = new ClockPanel();
 
         initPanel(showIssWidgets);
     }
@@ -143,19 +143,19 @@ abstract class AbstractHandPanel extends JPanel {
             headerInsets = headerInsets + "5";
         }
 
-        header = new JPanel(LayoutFactory.getMigLayout(
+        this.header = new JPanel(LayoutFactory.getMigLayout(
                 "fill, " + headerInsets, "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        header.add(headerLabel);
+        this.header.add(this.headerLabel);
         // blank panel
-        header.add(new JPanel());
-        if (showIssWidgets) {
-            header.add(iconPanel);
-            header.add(clockPanel);
+        this.header.add(new JPanel());
+        if (this.showIssWidgets) {
+            this.header.add(this.iconPanel);
+            this.header.add(this.clockPanel);
         }
-        add(header, "shrinky, wrap"); //$NON-NLS-1$
+        add(this.header, "shrinky, wrap"); //$NON-NLS-1$
 
-        cardPanel = new ClickableCardPanel(this, 1.0, true);
-        add(cardPanel, "growy"); //$NON-NLS-1$
+        this.cardPanel = new ClickableCardPanel(this, 1.0, true);
+        add(this.cardPanel, "growy"); //$NON-NLS-1$
 
         if (JSkatOptions.instance().isCheatDebugMode().booleanValue()) {
             showCards();
@@ -166,7 +166,7 @@ abstract class AbstractHandPanel extends JPanel {
 
         Border result = null;
 
-        if (activePlayer) {
+        if (this.activePlayer) {
             result = BorderFactory.createLineBorder(Color.yellow, 3);
         } else {
             result = BorderFactory.createLineBorder(Color.black, 3);
@@ -183,13 +183,13 @@ abstract class AbstractHandPanel extends JPanel {
      */
     void setPosition(final Player newPosition) {
 
-        position = newPosition;
+        this.position = newPosition;
         refreshHeaderText();
     }
 
     void setBidValue(final int newBidValue) {
 
-        bidValue = newBidValue;
+        this.bidValue = newBidValue;
         refreshHeaderText();
     }
 
@@ -200,60 +200,60 @@ abstract class AbstractHandPanel extends JPanel {
      */
     Player getPosition() {
 
-        return position;
+        return this.position;
     }
 
     private void refreshHeaderText() {
 
         StringBuffer headerText = new StringBuffer();
 
-        headerText.append(playerName).append(": "); //$NON-NLS-1$
+        headerText.append(this.playerName).append(": "); //$NON-NLS-1$
 
-        if (position != null) {
-            switch (position) {
+        if (this.position != null) {
+            switch (this.position) {
             case FOREHAND:
-                headerText.append(strings.getString("forehand")); //$NON-NLS-1$
+                headerText.append(this.strings.getString("forehand")); //$NON-NLS-1$
                 break;
             case MIDDLEHAND:
-                headerText.append(strings.getString("middlehand")); //$NON-NLS-1$
+                headerText.append(this.strings.getString("middlehand")); //$NON-NLS-1$
                 break;
             case REARHAND:
-                headerText.append(strings.getString("rearhand")); //$NON-NLS-1$
+                headerText.append(this.strings.getString("rearhand")); //$NON-NLS-1$
                 break;
             }
 
-            headerText.append(" " + strings.getString("bid") + ": "); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
-            headerText.append(bidValue);
+            headerText.append(" " + this.strings.getString("bid") + ": "); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+            headerText.append(this.bidValue);
 
-            if (playerPassed || playerGeschoben || playerContra || playerRe) {
+            if (this.playerPassed || this.playerGeschoben || this.playerContra || this.playerRe) {
 
                 headerText.append(" ("); //$NON-NLS-1$
 
                 String passedGeschobenContraRe = "";
-                if (playerPassed) {
-                    passedGeschobenContraRe = strings.getString("passed"); //$NON-NLS-1$
+                if (this.playerPassed) {
+                    passedGeschobenContraRe = this.strings.getString("passed"); //$NON-NLS-1$
                 }
-                if (playerGeschoben) {
-                    passedGeschobenContraRe = strings.getString("geschoben"); //$NON-NLS-1$
+                if (this.playerGeschoben) {
+                    passedGeschobenContraRe = this.strings.getString("geschoben"); //$NON-NLS-1$
                 }
-                if (playerContra) {
+                if (this.playerContra) {
                     passedGeschobenContraRe += " "
-                            + strings.getString("contra");
+                            + this.strings.getString("contra");
                 }
-                if (playerRe) {
-                    passedGeschobenContraRe += strings.getString("re");
+                if (this.playerRe) {
+                    passedGeschobenContraRe += this.strings.getString("re");
                 }
                 headerText.append(passedGeschobenContraRe);
 
                 headerText.append(")"); //$NON-NLS-1$
             }
 
-            if (declarer) {
-                headerText.append(" (" + strings.getString("declarer") + ")"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+            if (this.declarer) {
+                headerText.append(" (" + this.strings.getString("declarer") + ")"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
             }
         }
 
-        headerLabel.setText(headerText.toString());
+        this.headerLabel.setText(headerText.toString());
     }
 
     /**
@@ -264,7 +264,7 @@ abstract class AbstractHandPanel extends JPanel {
      */
     void addCard(final Card newCard) {
 
-        cardPanel.addCard(newCard);
+        this.cardPanel.addCard(newCard);
     }
 
     /**
@@ -275,7 +275,7 @@ abstract class AbstractHandPanel extends JPanel {
      */
     void addCards(final CardList newCards) {
 
-        cardPanel.addCards(newCards);
+        this.cardPanel.addCards(newCards);
     }
 
     /**
@@ -286,7 +286,7 @@ abstract class AbstractHandPanel extends JPanel {
      */
     void removeCard(final Card cardToRemove) {
 
-        cardPanel.removeCard(cardToRemove);
+        this.cardPanel.removeCard(cardToRemove);
     }
 
     /**
@@ -294,7 +294,7 @@ abstract class AbstractHandPanel extends JPanel {
      */
     void removeAllCards() {
 
-        cardPanel.clearCards();
+        this.cardPanel.clearCards();
     }
 
     /**
@@ -302,14 +302,14 @@ abstract class AbstractHandPanel extends JPanel {
      */
     void clearHandPanel() {
 
-        cardPanel.clearCards();
-        bidValue = 0;
-        playerPassed = false;
-        playerGeschoben = false;
-        playerContra = false;
-        playerRe = false;
-        declarer = false;
-        iconPanel.reset();
+        this.cardPanel.clearCards();
+        this.bidValue = 0;
+        this.playerPassed = false;
+        this.playerGeschoben = false;
+        this.playerContra = false;
+        this.playerRe = false;
+        this.declarer = false;
+        this.iconPanel.reset();
         refreshHeaderText();
         setActivePlayer(false);
         hideCards();
@@ -320,7 +320,7 @@ abstract class AbstractHandPanel extends JPanel {
      */
     void hideCards() {
 
-        cardPanel.hideCards();
+        this.cardPanel.hideCards();
     }
 
     /**
@@ -328,94 +328,94 @@ abstract class AbstractHandPanel extends JPanel {
      */
     void showCards() {
 
-        cardPanel.showCards();
+        this.cardPanel.showCards();
     }
 
     void setSortGameType(final GameType newGameType) {
 
-        cardPanel.setSortType(newGameType);
+        this.cardPanel.setSortType(newGameType);
     }
 
     boolean isHandFull() {
 
-        return cardPanel.getCardCount() == maxCardCount;
+        return this.cardPanel.getCardCount() == this.maxCardCount;
     }
 
     public void setPlayerName(final String newName) {
 
-        playerName = newName;
+        this.playerName = newName;
 
         refreshHeaderText();
     }
 
     void setPlayerTime(final double newTime) {
 
-        clockPanel.setPlayerTime(newTime);
+        this.clockPanel.setPlayerTime(newTime);
     }
 
     void setChatEnabled(final boolean isChatEnabled) {
 
-        iconPanel.setChatEnabled(isChatEnabled);
+        this.iconPanel.setChatEnabled(isChatEnabled);
     }
 
     void setReadyToPlay(final boolean isReadyToPlay) {
 
-        iconPanel.setReadyToPlay(isReadyToPlay);
+        this.iconPanel.setReadyToPlay(isReadyToPlay);
     }
 
     void setResign(final boolean isResign) {
 
-        iconPanel.setResign(isResign);
+        this.iconPanel.setResign(isResign);
     }
 
     boolean isActivePlayer() {
-        return activePlayer;
+        return this.activePlayer;
     }
 
     void setActivePlayer(final boolean isActivePlayer) {
-        activePlayer = isActivePlayer;
+        this.activePlayer = isActivePlayer;
         setBorder(getPanelBorder());
 
         updateIssWidgets(isActivePlayer);
     }
 
     private void updateIssWidgets(final boolean isActivePlayer) {
-        if (showIssWidgets) {
+        if (this.showIssWidgets) {
             if (isActivePlayer) {
-                clockPanel.setActive();
+                this.clockPanel.setActive();
             } else {
-                clockPanel.setInactive();
+                this.clockPanel.setInactive();
             }
         }
     }
 
     void setPass(final boolean isPassed) {
-        playerPassed = isPassed;
+        this.playerPassed = isPassed;
         refreshHeaderText();
     }
 
     void setDeclarer(final boolean isDeclarer) {
-        declarer = isDeclarer;
+        this.declarer = isDeclarer;
         refreshHeaderText();
     }
 
     public String getPlayerName() {
 
-        return playerName;
+        return this.playerName;
     }
 
     public void setGeschoben() {
-        playerGeschoben = true;
+        this.playerGeschoben = true;
         refreshHeaderText();
     }
 
     public void setContra() {
-        playerContra = true;
+        this.playerContra = true;
         refreshHeaderText();
     }
 
     public void setRe() {
-        playerRe = true;
+        this.playerRe = true;
         refreshHeaderText();
     }
 }

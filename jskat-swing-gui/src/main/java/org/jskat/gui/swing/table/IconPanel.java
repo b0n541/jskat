@@ -42,22 +42,22 @@ public class IconPanel extends JPanel {
 	ImageIcon resignedIcon = null;
 	JLabel resignedLabel;
 
-	JSkatResourceBundle strings = JSkatResourceBundle.instance();
+	JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
 
 	/**
 	 * Constructor
 	 */
 	public IconPanel() {
 
-		chatLabel = new JLabel(chatIcon);
-		readyToPlayLabel = new JLabel(readyToPlayIcon);
-		resignedLabel = new JLabel(resignedIcon);
+		this.chatLabel = new JLabel(this.chatIcon);
+		this.readyToPlayLabel = new JLabel(this.readyToPlayIcon);
+		this.resignedLabel = new JLabel(this.resignedIcon);
 
 		setIcons();
 
-		add(resignedLabel);
-		add(chatLabel);
-		add(readyToPlayLabel);
+		add(this.resignedLabel);
+		add(this.chatLabel);
+		add(this.readyToPlayLabel);
 	}
 
 	/**
@@ -65,7 +65,7 @@ public class IconPanel extends JPanel {
 	 */
 	public void reset() {
 
-		resigned = false;
+		this.resigned = false;
 		setIcons();
 	}
 
@@ -77,7 +77,7 @@ public class IconPanel extends JPanel {
 	 */
 	public void setChatEnabled(boolean isChatEnabled) {
 
-		chatEnabled = isChatEnabled;
+		this.chatEnabled = isChatEnabled;
 		setIcons();
 	}
 
@@ -89,7 +89,7 @@ public class IconPanel extends JPanel {
 	 */
 	public void setReadyToPlay(boolean isReadyToPlay) {
 
-		readyToPlay = isReadyToPlay;
+		this.readyToPlay = isReadyToPlay;
 		setIcons();
 	}
 
@@ -101,43 +101,43 @@ public class IconPanel extends JPanel {
 	 */
 	public void setResign(boolean isResign) {
 
-		resigned = isResign;
+		this.resigned = isResign;
 		setIcons();
 	}
 
 	private void setIcons() {
 
 		String tooltipText = null;
-		if (resigned) {
-			resignedIcon = new ImageIcon(JSkatGraphicRepository.instance()
+		if (this.resigned) {
+			this.resignedIcon = new ImageIcon(JSkatGraphicRepository.instance()
 					.getIconImage(Icon.WHITE_FLAG, IconSize.SMALL));
-			tooltipText = strings.getString("iss_player_wants_to_resign"); //$NON-NLS-1$
+			tooltipText = this.strings.getString("iss_player_wants_to_resign"); //$NON-NLS-1$
 		} else {
-			resignedIcon = new ImageIcon(JSkatGraphicRepository.instance()
+			this.resignedIcon = new ImageIcon(JSkatGraphicRepository.instance()
 					.getIconImage(Icon.BLANK, IconSize.SMALL));
 			tooltipText = ""; //$NON-NLS-1$
 		}
-		resignedLabel.setIcon(resignedIcon);
-		resignedLabel.setToolTipText(tooltipText);
+		this.resignedLabel.setIcon(this.resignedIcon);
+		this.resignedLabel.setToolTipText(tooltipText);
 
-		if (chatEnabled) {
-			chatIcon = new ImageIcon(JSkatGraphicRepository.instance().getIconImage(Icon.CHAT, IconSize.SMALL));
-			tooltipText = strings.getString("iss_chat_enabled"); //$NON-NLS-1$
+		if (this.chatEnabled) {
+			this.chatIcon = new ImageIcon(JSkatGraphicRepository.instance().getIconImage(Icon.CHAT, IconSize.SMALL));
+			tooltipText = this.strings.getString("iss_chat_enabled"); //$NON-NLS-1$
 		} else {
-			chatIcon = new ImageIcon(JSkatGraphicRepository.instance().getIconImage(Icon.CHAT_DISABLED, IconSize.SMALL));
-			tooltipText = strings.getString("iss_chat_disabled"); //$NON-NLS-1$
+			this.chatIcon = new ImageIcon(JSkatGraphicRepository.instance().getIconImage(Icon.CHAT_DISABLED, IconSize.SMALL));
+			tooltipText = this.strings.getString("iss_chat_disabled"); //$NON-NLS-1$
 		}
-		chatLabel.setIcon(chatIcon);
-		chatLabel.setToolTipText(tooltipText);
+		this.chatLabel.setIcon(this.chatIcon);
+		this.chatLabel.setToolTipText(tooltipText);
 
-		if (readyToPlay) {
-			readyToPlayIcon = new ImageIcon(JSkatGraphicRepository.instance().getIconImage(Icon.OK, IconSize.SMALL));
-			tooltipText = strings.getString("iss_ready_to_play"); //$NON-NLS-1$
+		if (this.readyToPlay) {
+			this.readyToPlayIcon = new ImageIcon(JSkatGraphicRepository.instance().getIconImage(Icon.OK, IconSize.SMALL));
+			tooltipText = this.strings.getString("iss_ready_to_play"); //$NON-NLS-1$
 		} else {
-			readyToPlayIcon = new ImageIcon(JSkatGraphicRepository.instance().getIconImage(Icon.STOP, IconSize.SMALL));
-			tooltipText = strings.getString("iss_not_ready_to_play"); //$NON-NLS-1$
+			this.readyToPlayIcon = new ImageIcon(JSkatGraphicRepository.instance().getIconImage(Icon.STOP, IconSize.SMALL));
+			tooltipText = this.strings.getString("iss_not_ready_to_play"); //$NON-NLS-1$
 		}
-		readyToPlayLabel.setIcon(readyToPlayIcon);
-		readyToPlayLabel.setToolTipText(tooltipText);
+		this.readyToPlayLabel.setIcon(this.readyToPlayIcon);
+		this.readyToPlayLabel.setToolTipText(tooltipText);
 	}
 }

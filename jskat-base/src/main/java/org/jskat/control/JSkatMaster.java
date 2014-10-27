@@ -29,6 +29,7 @@ import org.jskat.control.event.general.ShowPreferencesEvent;
 import org.jskat.control.event.general.ShowTrainingOverviewEvent;
 import org.jskat.control.event.general.ShowWelcomeInformationEvent;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
+import org.jskat.control.event.skatseries.CreateSkatSeriesEvent;
 import org.jskat.control.event.table.DuplicateTableNameInputEvent;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
 import org.jskat.control.iss.IssController;
@@ -77,14 +78,14 @@ public class JSkatMaster {
 	 */
 	private JSkatMaster() {
 
-		options = JSkatOptions.instance();
-		data = JSkatApplicationData.instance();
+		this.options = JSkatOptions.instance();
+		this.data = JSkatApplicationData.instance();
 
 		JSkatEventBus.INSTANCE.register(this);
 
-		issControl = new IssController(this);
+		this.issControl = new IssController(this);
 
-		runningNNTrainers = new ArrayList<NNTrainer>();
+		this.runningNNTrainers = new ArrayList<NNTrainer>();
 	}
 
 	@Subscribe
@@ -121,7 +122,7 @@ public class JSkatMaster {
 		// TODO check whether a connection to ISS is established
 		// TODO ask whether a local or a remote tabel should be created
 
-		String tableName = view.getNewTableName(data.getLocalTablesCreated());
+		String tableName = this.view.getNewTableName(this.data.getLocalTablesCreated());
 
 		if (tableName == null) {
 			log.debug("Create table was cancelled..."); //$NON-NLS-1$
@@ -135,8 +136,8 @@ public class JSkatMaster {
 			return;
 		}
 
-		if (data.isFreeTableName(tableName)) {
-			createLocalTable(tableName, view.getHumanPlayerForGUI());
+		if (this.data.isFreeTableName(tableName)) {
+			createLocalTable(tableName, this.view.getHumanPlayerForGUI());
 		} else {
 			JSkatEventBus.INSTANCE.post(new DuplicateTableNameInputEvent(
 					tableName));
@@ -146,21 +147,21 @@ public class JSkatMaster {
 	}
 
 	public void createLocalTable(String tableName) {
-		createLocalTable(tableName, view.getHumanPlayerForGUI());
+		createLocalTable(tableName, this.view.getHumanPlayerForGUI());
 	}
 
 	private void createLocalTable(final String tableName,
 			final AbstractHumanJSkatPlayer humanPlayer) {
 
-		SkatTable table = new SkatTable(data.getTableOptions());
+		SkatTable table = new SkatTable(this.data.getTableOptions());
 		table.setName(tableName);
-		table.setView(view);
-		data.addLocalSkatTable(table);
-		data.registerHumanPlayerObject(table, humanPlayer);
+		table.setView(this.view);
+		this.data.addLocalSkatTable(table);
+		this.data.registerHumanPlayerObject(table, humanPlayer);
 
-		view.createSkatTablePanel(table.getName());
+		this.view.createSkatTablePanel(table.getName());
 
-		data.setActiveView(JSkatViewType.LOCAL_TABLE, table.getName());
+		this.data.setActiveView(JSkatViewType.LOCAL_TABLE, table.getName());
 	}
 
 	/**
@@ -173,7 +174,7 @@ public class JSkatMaster {
 	 */
 	public void removeTable(JSkatViewType type, String tableName) {
 		if (type == JSkatViewType.LOCAL_TABLE) {
-			data.removeLocalSkatTable(tableName);
+			this.data.removeLocalSkatTable(tableName);
 		} else if (type == JSkatViewType.ISS_TABLE) {
 			// FIXME jan 23.02.2013: remove ISS table
 		}
@@ -184,12 +185,12 @@ public class JSkatMaster {
 	 */
 	public void invitePlayer() {
 
-		Set<String> issPlayerNames = data.getAvailableISSPlayer();
-		issPlayerNames.remove(data.getIssLoginName());
+		Set<String> issPlayerNames = this.data.getAvailableISSPlayer();
+		issPlayerNames.remove(this.data.getIssLoginName());
 
-		List<String> player = view.getPlayerForInvitation(issPlayerNames);
+		List<String> player = this.view.getPlayerForInvitation(issPlayerNames);
 		for (String currPlayer : player) {
-			getIssController().invitePlayer(data.getActiveView(), currPlayer);
+			getIssController().invitePlayer(this.data.getActiveView(), currPlayer);
 		}
 	}
 
@@ -198,9 +199,10 @@ public class JSkatMaster {
 	 */
 	public void startSeries() {
 
-		log.debug("starting new skat series on table: " + data.getActiveView());
+		log.debug("creating new skat series on table: "
+				+ this.data.getActiveView());
 
-		view.showStartSkatSeriesDialog();
+		JSkatEventBus.INSTANCE.post(new CreateSkatSeriesEvent());
 	}
 
 	/**
@@ -223,9 +225,9 @@ public class JSkatMaster {
 			int numberOfRounds, boolean unlimited, boolean onlyPlayRamsch,
 			int sleeps) {
 
-		log.debug(data.getActiveView());
+		log.debug(this.data.getActiveView());
 
-		SkatTable table = data.getLocalSkatTable(data.getActiveView());
+		SkatTable table = this.data.getLocalSkatTable(this.data.getActiveView());
 
 		table.removePlayers();
 
@@ -233,7 +235,7 @@ public class JSkatMaster {
 		for (String player : allPlayer) {
 			JSkatPlayer newPlayer = null;
 			if (JSkatPlayerResolver.HUMAN_PLAYER_CLASS.equals(player)) {
-				newPlayer = data.getHumanPlayer(table.getName());
+				newPlayer = this.data.getHumanPlayer(table.getName());
 			} else {
 				newPlayer = createPlayer(player);
 			}
@@ -270,7 +272,7 @@ public class JSkatMaster {
 	 */
 	public void pauseSkatSeries(final String tableName) {
 
-		SkatTable table = data.getLocalSkatTable(tableName);
+		SkatTable table = this.data.getLocalSkatTable(tableName);
 
 		if (table.isSeriesRunning()) {
 
@@ -283,9 +285,9 @@ public class JSkatMaster {
 	 */
 	public void resumeSkatSeries() {
 
-		log.debug(data.getActiveView());
+		log.debug(this.data.getActiveView());
 
-		resumeSkatSeries(data.getActiveView());
+		resumeSkatSeries(this.data.getActiveView());
 	}
 
 	/**
@@ -296,7 +298,7 @@ public class JSkatMaster {
 	 */
 	public void resumeSkatSeries(final String tableName) {
 
-		SkatTable table = data.getLocalSkatTable(tableName);
+		SkatTable table = this.data.getLocalSkatTable(tableName);
 
 		if (table.isSeriesRunning()) {
 
@@ -312,7 +314,7 @@ public class JSkatMaster {
 	 */
 	public void pauseSkatGame(final String tableName) {
 
-		SkatTable table = data.getLocalSkatTable(tableName);
+		SkatTable table = this.data.getLocalSkatTable(tableName);
 
 		if (table.isSeriesRunning()) {
 
@@ -328,7 +330,7 @@ public class JSkatMaster {
 	 */
 	public void resumeSkatGame(final String tableName) {
 
-		SkatTable table = data.getLocalSkatTable(tableName);
+		SkatTable table = this.data.getLocalSkatTable(tableName);
 
 		if (table.isSeriesRunning()) {
 
@@ -347,7 +349,7 @@ public class JSkatMaster {
 
 		boolean result = false;
 
-		SkatTable table = data.getLocalSkatTable(tableName);
+		SkatTable table = this.data.getLocalSkatTable(tableName);
 
 		if (table.isSeriesRunning()) {
 
@@ -368,7 +370,7 @@ public class JSkatMaster {
 
 		boolean result = false;
 
-		SkatTable table = data.getLocalSkatTable(tableName);
+		SkatTable table = this.data.getLocalSkatTable(tableName);
 
 		if (table.isSeriesRunning()) {
 
@@ -392,7 +394,7 @@ public class JSkatMaster {
 
 		boolean result = false;
 
-		SkatTable table = data.getLocalSkatTable(tableName);
+		SkatTable table = this.data.getLocalSkatTable(tableName);
 
 		if (!table.isSeriesRunning()) {
 
@@ -413,8 +415,8 @@ public class JSkatMaster {
 	 */
 	public void setView(final JSkatView newView) {
 
-		view = newView;
-		issControl.setView(view);
+		this.view = newView;
+		this.issControl.setView(this.view);
 		JSkatEventBus.INSTANCE.register(newView);
 	}
 
@@ -423,7 +425,7 @@ public class JSkatMaster {
 	 */
 	public void exitJSkat() {
 
-		options.saveJSkatProperties();
+		this.options.saveJSkatProperties();
 		System.exit(0);
 	}
 
@@ -445,63 +447,67 @@ public class JSkatMaster {
 		NNTrainer nullTrainer = new NNTrainer();
 		nullTrainer.setGameType(GameType.NULL);
 		nullTrainer.start();
-		runningNNTrainers.add(nullTrainer);
+		this.runningNNTrainers.add(nullTrainer);
 		NNTrainer grandTrainer = new NNTrainer();
 		grandTrainer.setGameType(GameType.GRAND);
 		grandTrainer.start();
-		runningNNTrainers.add(grandTrainer);
+		this.runningNNTrainers.add(grandTrainer);
 		NNTrainer clubsTrainer = new NNTrainer();
 		clubsTrainer.setGameType(GameType.CLUBS);
 		clubsTrainer.start();
-		runningNNTrainers.add(clubsTrainer);
+		this.runningNNTrainers.add(clubsTrainer);
 		NNTrainer spadesTrainer = new NNTrainer();
 		spadesTrainer.setGameType(GameType.SPADES);
 		spadesTrainer.start();
-		runningNNTrainers.add(spadesTrainer);
+		this.runningNNTrainers.add(spadesTrainer);
 		NNTrainer heartsTrainer = new NNTrainer();
 		heartsTrainer.setGameType(GameType.HEARTS);
 		heartsTrainer.start();
-		runningNNTrainers.add(heartsTrainer);
+		this.runningNNTrainers.add(heartsTrainer);
 		NNTrainer diamondsTrainer = new NNTrainer();
 		diamondsTrainer.setGameType(GameType.DIAMONDS);
 		diamondsTrainer.start();
-		runningNNTrainers.add(diamondsTrainer);
+		this.runningNNTrainers.add(diamondsTrainer);
 		NNTrainer ramschTrainer = new NNTrainer();
 		ramschTrainer.setGameType(GameType.RAMSCH);
 		ramschTrainer.start();
-		runningNNTrainers.add(ramschTrainer);
+		this.runningNNTrainers.add(ramschTrainer);
 	}
 
 	public void stopTrainNeuralNetworks() {
-		for (NNTrainer trainer : runningNNTrainers) {
+		for (NNTrainer trainer : this.runningNNTrainers) {
 			trainer.stopTraining(true);
 		}
-		runningNNTrainers.clear();
+		this.runningNNTrainers.clear();
 	}
 
 	/**
 	 * Loads the weigths for the neural networks
 	 */
 	public void loadNeuralNetworks() {
-		SkatNetworks.instance().loadNetworks();
+		SkatNetworks.instance();
+		SkatNetworks.loadNetworks();
 	}
 
 	/**
 	 * Resets neural networks
 	 */
 	public void resetNeuralNetworks() {
-		SkatNetworks.instance().resetNeuralNetworks();
+		SkatNetworks.instance();
+		SkatNetworks.resetNeuralNetworks();
 	}
 
 	public void saveNeuralNetworks(GameType gameType) {
-		SkatNetworks.instance().saveNetworks(options.getSavePath(), gameType);
+		SkatNetworks.instance();
+		SkatNetworks.saveNetworks(this.options.getSavePath(), gameType);
 	}
 
 	/**
 	 * Saves the weigths for the neural networks
 	 */
 	public void saveNeuralNetworks() {
-		SkatNetworks.instance().saveNetworks(options.getSavePath());
+		SkatNetworks.instance();
+		SkatNetworks.saveNetworks(this.options.getSavePath());
 	}
 
 	/**
@@ -530,14 +536,14 @@ public class JSkatMaster {
 
 		log.debug(event.toString());
 
-		String tableName = data.getActiveView();
+		String tableName = this.data.getActiveView();
 		String command = event.getActionCommand();
 		Object source = event.getSource();
 
 		if (isIssTable(tableName)) {
 			handleHumanInputForISSTable(tableName, command, source);
 		} else {
-			data.getHumanPlayer(tableName).actionPerformed(event);
+			this.data.getHumanPlayer(tableName).actionPerformed(event);
 		}
 	}
 
@@ -546,16 +552,16 @@ public class JSkatMaster {
 
 		if (JSkatAction.PASS_BID.toString().equals(command)) {
 			// player passed
-			issControl.sendPassBidMove(tableName);
+			this.issControl.sendPassBidMove(tableName);
 		} else if (JSkatAction.MAKE_BID.toString().equals(command)) {
 			// player makes bid
-			issControl.sendBidMove(tableName);
+			this.issControl.sendBidMove(tableName);
 		} else if (JSkatAction.HOLD_BID.toString().equals(command)) {
 			// player hold bid
-			issControl.sendHoldBidMove(tableName);
+			this.issControl.sendHoldBidMove(tableName);
 		} else if (JSkatAction.PICK_UP_SKAT.toString().equals(command)) {
 			// player wants to pick up the skat
-			issControl.sendPickUpSkatMove(tableName);
+			this.issControl.sendPickUpSkatMove(tableName);
 		} else if (JSkatAction.PLAY_HAND_GAME.toString().equals(command)) {
 			// player wants to play a hand game
 			// FIXME (jan 02.11.2010) decision is not sent to ISS
@@ -581,7 +587,7 @@ public class JSkatMaster {
 				// FIXME (jan 02.11.2010) Discarded cards are sent with the
 				// game announcement to ISS
 				GameAnnouncement gameAnnouncement = (GameAnnouncement) source;
-				issControl
+				this.issControl
 						.sendGameAnnouncementMove(tableName, gameAnnouncement);
 			} else {
 				log.warn("No game announcement found for " + command); //$NON-NLS-1$
@@ -590,7 +596,7 @@ public class JSkatMaster {
 				&& source instanceof Card) {
 
 			Card nextCard = (Card) source;
-			issControl.sendCardMove(tableName, nextCard);
+			this.issControl.sendCardMove(tableName, nextCard);
 		} else {
 
 			log.error("Unknown action event occured: " + command + " from " + source); //$NON-NLS-1$ //$NON-NLS-2$
@@ -599,7 +605,7 @@ public class JSkatMaster {
 
 	private boolean isIssTable(final String tableName) {
 
-		return data.isTableJoined(tableName);
+		return this.data.isTableJoined(tableName);
 	}
 
 	/**
@@ -615,7 +621,7 @@ public class JSkatMaster {
 			throw new IllegalArgumentException();
 		}
 
-		view.takeCardFromSkat(data.getActiveView(), (Card) e.getSource());
+		this.view.takeCardFromSkat(this.data.getActiveView(), (Card) e.getSource());
 	}
 
 	/**
@@ -631,7 +637,7 @@ public class JSkatMaster {
 			throw new IllegalArgumentException();
 		}
 
-		view.putCardIntoSkat(data.getActiveView(), (Card) event.getSource());
+		this.view.putCardIntoSkat(this.data.getActiveView(), (Card) event.getSource());
 	}
 
 	/**
@@ -660,7 +666,7 @@ public class JSkatMaster {
 	 */
 	public IssController getIssController() {
 
-		return issControl;
+		return this.issControl;
 	}
 
 	/**
@@ -678,9 +684,9 @@ public class JSkatMaster {
 	 *            Table name
 	 */
 	public void setActiveTable(final String tableName) {
-		if (data.isExistingLocalSkatTable(tableName)) {
+		if (this.data.isExistingLocalSkatTable(tableName)) {
 			setActiveTable(JSkatViewType.LOCAL_TABLE, tableName);
-		} else if (data.isTableJoined(tableName)) {
+		} else if (this.data.isTableJoined(tableName)) {
 			setActiveTable(JSkatViewType.ISS_TABLE, tableName);
 		} else {
 			setActiveTable(JSkatViewType.OTHER, tableName);
@@ -697,14 +703,14 @@ public class JSkatMaster {
 	 */
 	public void setActiveTable(JSkatViewType type, String tableName) {
 
-		data.setActiveView(type, tableName);
-		if (view != null) {
+		this.data.setActiveView(type, tableName);
+		if (this.view != null) {
 			// might not be instantiated yet
-			view.setActiveView(tableName);
+			this.view.setActiveView(tableName);
 		}
 
 		if (type == JSkatViewType.LOCAL_TABLE) {
-			view.setGameState(tableName, data.getLocalSkatTable(tableName)
+			this.view.setGameState(tableName, this.data.getLocalSkatTable(tableName)
 					.getGameState());
 		}
 	}
@@ -717,7 +723,7 @@ public class JSkatMaster {
 	 */
 	public void setIssLogin(final String login) {
 
-		data.setIssLoginName(login);
+		this.data.setIssLoginName(login);
 	}
 
 	/**
@@ -725,7 +731,7 @@ public class JSkatMaster {
 	 */
 	public void sendTableSeatChangeSignal() {
 
-		issControl.sendTableSeatChangeSignal(data.getActiveView());
+		this.issControl.sendTableSeatChangeSignal(this.data.getActiveView());
 	}
 
 	/**
@@ -733,7 +739,7 @@ public class JSkatMaster {
 	 */
 	public void sendReadySignal() {
 
-		issControl.sendReadySignal(data.getActiveView());
+		this.issControl.sendReadySignal(this.data.getActiveView());
 	}
 
 	/**
@@ -741,7 +747,7 @@ public class JSkatMaster {
 	 */
 	public void sendTalkEnabledSignal() {
 
-		issControl.sendTalkEnabledSignal(data.getActiveView());
+		this.issControl.sendTalkEnabledSignal(this.data.getActiveView());
 	}
 
 	/**
@@ -749,7 +755,7 @@ public class JSkatMaster {
 	 */
 	public void sendResignSignal() {
 
-		issControl.sendResignSignal(data.getActiveView());
+		this.issControl.sendResignSignal(this.data.getActiveView());
 	}
 
 	/**
@@ -757,7 +763,7 @@ public class JSkatMaster {
 	 */
 	public void sendShowCardsSignal() {
 
-		issControl.sendShowCardsSignal(data.getActiveView());
+		this.issControl.sendShowCardsSignal(this.data.getActiveView());
 	}
 
 	/**
@@ -765,10 +771,10 @@ public class JSkatMaster {
 	 */
 	public void leaveTable() {
 
-		String tableName = data.getActiveView();
+		String tableName = this.data.getActiveView();
 
 		// FIXME distinguish between ISS and local skat table
-		issControl.leaveTable(tableName);
+		this.issControl.leaveTable(tableName);
 	}
 
 	/**
@@ -786,8 +792,8 @@ public class JSkatMaster {
 	public void updateISSPlayer(final String playerName, final String language,
 			final long gamesPlayed, final double strength) {
 
-		data.addAvailableISSPlayer(playerName);
-		view.updateISSLobbyPlayerList(playerName, language, gamesPlayed,
+		this.data.addAvailableISSPlayer(playerName);
+		this.view.updateISSLobbyPlayerList(playerName, language, gamesPlayed,
 				strength);
 	}
 
@@ -799,12 +805,12 @@ public class JSkatMaster {
 	 */
 	public void removeISSPlayer(final String playerName) {
 
-		data.removeAvailableISSPlayer(playerName);
-		view.removeFromISSLobbyPlayerList(playerName);
+		this.data.removeAvailableISSPlayer(playerName);
+		this.view.removeFromISSLobbyPlayerList(playerName);
 	}
 
 	/**
-	 * Opens the ISS homepage in the default browser
+	 * Opens the ISS homepage viewin the default browser
 	 */
 	public void openIssHomepage() {
 
@@ -829,7 +835,7 @@ public class JSkatMaster {
 	}
 
 	private void openWebPage(final String link) {
-		view.openWebPage(link);
+		this.view.openWebPage(link);
 	}
 
 	/**

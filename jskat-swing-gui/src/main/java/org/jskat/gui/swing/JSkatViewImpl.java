@@ -56,6 +56,7 @@ import org.jskat.control.event.general.ShowTrainingOverviewEvent;
 import org.jskat.control.event.general.ShowWelcomeInformationEvent;
 import org.jskat.control.event.iss.LogoutFromIssEvent;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
+import org.jskat.control.event.skatseries.CreateSkatSeriesEvent;
 import org.jskat.control.event.table.DuplicateTableNameInputEvent;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
 import org.jskat.control.iss.ChatMessageType;
@@ -168,26 +169,26 @@ public class JSkatViewImpl implements JSkatView {
 	 */
 	public JSkatViewImpl() {
 
-		bitmaps = JSkatGraphicRepository.instance();
-		strings = JSkatResourceBundle.instance();
-		tables = new HashMap<String, SkatTablePanel>();
+		this.bitmaps = JSkatGraphicRepository.instance();
+		this.strings = JSkatResourceBundle.INSTANCE;
+		this.tables = new HashMap<String, SkatTablePanel>();
 		initActionMap();
 		initGUI();
 
-		skatSeriesStartDialog = new SkatSeriesStartDialog(mainFrame);
-		preferencesDialog = new JSkatOptionsDialog(mainFrame);
-		trainingOverview = new NeuralNetworkTrainingOverview(mainFrame);
+		this.skatSeriesStartDialog = new SkatSeriesStartDialog(this.mainFrame);
+		this.preferencesDialog = new JSkatOptionsDialog(this.mainFrame);
+		this.trainingOverview = new NeuralNetworkTrainingOverview(this.mainFrame);
 
 		addTabPanel(new WelcomePanel(this,
-				strings.getString("welcome"), actions), //$NON-NLS-1$
-				strings.getString("welcome")); //$NON-NLS-1$
+				this.strings.getString("welcome"), actions), //$NON-NLS-1$
+				this.strings.getString("welcome")); //$NON-NLS-1$
 	}
 
 	/**
 	 * Shows the GUI
 	 */
 	public final void setVisible() {
-		mainFrame.setVisible(true);
+		this.mainFrame.setVisible(true);
 	}
 
 	private void initActionMap() {
@@ -272,11 +273,11 @@ public class JSkatViewImpl implements JSkatView {
 
 	private void initGUI() {
 
-		mainFrame = new JFrame("JSkat " + JSkat.getVersion()); //$NON-NLS-1$
+		this.mainFrame = new JFrame("JSkat " + JSkat.getVersion()); //$NON-NLS-1$
 
-		mainFrame.addWindowListener(new JSkatWindowAdapter());
+		this.mainFrame.addWindowListener(new JSkatWindowAdapter());
 
-		mainFrame.setJMenuBar(getMenuBar());
+		this.mainFrame.setJMenuBar(getMenuBar());
 
 		final JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
@@ -288,31 +289,31 @@ public class JSkatViewImpl implements JSkatView {
 		// main area
 		addTabbedPane(mainPanel);
 
-		mainFrame.setContentPane(mainPanel);
+		this.mainFrame.setContentPane(mainPanel);
 
 		setMainFrameParameters();
 
-		mainFrame.pack();
+		this.mainFrame.pack();
 	}
 
 	private void setMainFrameParameters() {
 		List<Image> icons = new ArrayList<>();
-		icons.add(bitmaps.getIconImage(JSkatGraphicRepository.Icon.JSKAT,
+		icons.add(this.bitmaps.getIconImage(JSkatGraphicRepository.Icon.JSKAT,
 				JSkatGraphicRepository.IconSize.SMALL));
-		icons.add(bitmaps.getIconImage(JSkatGraphicRepository.Icon.JSKAT,
+		icons.add(this.bitmaps.getIconImage(JSkatGraphicRepository.Icon.JSKAT,
 				JSkatGraphicRepository.IconSize.BIG));
-		mainFrame.setIconImages(icons);
-		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		mainFrame.setMinimumSize(new Dimension(800, 600));
-		mainFrame.setPreferredSize(new Dimension(1000, 700));
-		mainFrame.setExtendedState(mainFrame.getExtendedState()
+		this.mainFrame.setIconImages(icons);
+		this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.mainFrame.setMinimumSize(new Dimension(800, 600));
+		this.mainFrame.setPreferredSize(new Dimension(1000, 700));
+		this.mainFrame.setExtendedState(this.mainFrame.getExtendedState()
 				| Frame.MAXIMIZED_BOTH);
 	}
 
 	private void addTabbedPane(final JPanel mainPanel) {
-		tabs = new JTabbedPane();
-		tabs.setAutoscrolls(true);
-		tabs.addChangeListener(new ChangeListener() {
+		this.tabs = new JTabbedPane();
+		this.tabs.setAutoscrolls(true);
+		this.tabs.addChangeListener(new ChangeListener() {
 			/**
 			 * @see ChangeListener#stateChanged(ChangeEvent)
 			 */
@@ -340,7 +341,7 @@ public class JSkatViewImpl implements JSkatView {
 				}
 			}
 		});
-		mainPanel.add(tabs, BorderLayout.CENTER);
+		mainPanel.add(this.tabs, BorderLayout.CENTER);
 	}
 
 	private boolean isBigScreen() {
@@ -363,7 +364,7 @@ public class JSkatViewImpl implements JSkatView {
 
 		final JMenuBar menu = new JMenuBar();
 
-		final JMenu fileMenu = new JMenu(strings.getString("file")); //$NON-NLS-1$
+		final JMenu fileMenu = new JMenu(this.strings.getString("file")); //$NON-NLS-1$
 		fileMenu.add(new JMenuItem(actions.get(JSkatAction.LOAD_SERIES)));
 		fileMenu.add(new JMenuItem(actions.get(JSkatAction.SAVE_SERIES)));
 		fileMenu.add(new JMenuItem(actions.get(JSkatAction.SAVE_SERIES_AS)));
@@ -371,7 +372,7 @@ public class JSkatViewImpl implements JSkatView {
 		fileMenu.add(new JMenuItem(actions.get(JSkatAction.EXIT_JSKAT)));
 		menu.add(fileMenu);
 
-		final JMenu tableMenu = new JMenu(strings.getString("skat_table")); //$NON-NLS-1$
+		final JMenu tableMenu = new JMenu(this.strings.getString("skat_table")); //$NON-NLS-1$
 		tableMenu
 				.add(new JMenuItem(actions.get(JSkatAction.CREATE_LOCAL_TABLE)));
 		tableMenu.add(new JSeparator());
@@ -384,7 +385,7 @@ public class JSkatViewImpl implements JSkatView {
 		menu.add(tableMenu);
 
 		final JMenu neuralNetworkMenu = new JMenu(
-				strings.getString("neural_networks")); //$NON-NLS-1$
+				this.strings.getString("neural_networks")); //$NON-NLS-1$
 		neuralNetworkMenu.add(new JMenuItem(actions
 				.get(JSkatAction.LOAD_NEURAL_NETWORKS)));
 		neuralNetworkMenu.add(new JMenuItem(actions
@@ -398,18 +399,18 @@ public class JSkatViewImpl implements JSkatView {
 				.get(JSkatAction.STOP_TRAIN_NEURAL_NETWORKS)));
 		menu.add(neuralNetworkMenu);
 
-		final JMenu issMenu = new JMenu(strings.getString("iss")); //$NON-NLS-1$
+		final JMenu issMenu = new JMenu(this.strings.getString("iss")); //$NON-NLS-1$
 		issMenu.add(new JMenuItem(actions.get(JSkatAction.SHOW_ISS_LOGIN)));
 		issMenu.add(new JSeparator());
 		issMenu.add(new JMenuItem(actions.get(JSkatAction.CREATE_ISS_TABLE)));
 		issMenu.add(new JMenuItem(actions.get(JSkatAction.INVITE_ISS_PLAYER)));
 		menu.add(issMenu);
 
-		final JMenu extraMenu = new JMenu(strings.getString("extras")); //$NON-NLS-1$
+		final JMenu extraMenu = new JMenu(this.strings.getString("extras")); //$NON-NLS-1$
 		extraMenu.add(new JMenuItem(actions.get(JSkatAction.PREFERENCES)));
 		menu.add(extraMenu);
 
-		final JMenu helpMenu = new JMenu(strings.getString("help")); //$NON-NLS-1$
+		final JMenu helpMenu = new JMenu(this.strings.getString("help")); //$NON-NLS-1$
 		helpMenu.add(new JMenuItem(actions.get(JSkatAction.HELP)));
 		helpMenu.add(new JSeparator());
 		helpMenu.add(new JMenuItem(actions.get(JSkatAction.LICENSE)));
@@ -425,7 +426,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void startSeries(final String tableName) {
 
-		tables.get(tableName).clearSkatList();
+		this.tables.get(tableName).clearSkatList();
 	}
 
 	/**
@@ -434,7 +435,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void startGame(final String tableName) {
 
-		tables.get(tableName).startGame();
+		this.tables.get(tableName).startGame();
 	}
 
 	/**
@@ -445,8 +446,8 @@ public class JSkatViewImpl implements JSkatView {
 
 		final ISSTablePanel newTable = new ISSTablePanel(this, tableName,
 				actions, loginName);
-		addTabPanel(newTable, strings.getString("iss_table") + ": " + tableName);
-		tables.put(tableName, newTable);
+		addTabPanel(newTable, this.strings.getString("iss_table") + ": " + tableName);
+		this.tables.put(tableName, newTable);
 	}
 
 	/**
@@ -456,7 +457,7 @@ public class JSkatViewImpl implements JSkatView {
 	public void createSkatTablePanel(final String name) {
 
 		final SkatTablePanel newPanel = new SkatTablePanel(this, name, actions);
-		tables.put(name, newPanel);
+		this.tables.put(name, newPanel);
 		addTabPanel(newPanel, name);
 
 		actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(true);
@@ -466,28 +467,28 @@ public class JSkatViewImpl implements JSkatView {
 	public void handle(final ShowAboutInformationEvent event) {
 		JOptionPane
 				.showMessageDialog(
-						mainFrame,
+						this.mainFrame,
 						"JSkat " //$NON-NLS-1$
-								+ strings.getString("version") //$NON-NLS-1$
+								+ this.strings.getString("version") //$NON-NLS-1$
 								+ " " //$NON-NLS-1$
 								+ JSkat.getVersion()
 								+ "\n\n" //$NON-NLS-1$
 								+ "http://www.jskat.org\n" //$NON-NLS-1$
 								+ "http://sourceforge.net/projects/jskat" //$NON-NLS-1$
 								+ "\n\n" //$NON-NLS-1$
-								+ strings.getString("authors") //$NON-NLS-1$
+								+ this.strings.getString("authors") //$NON-NLS-1$
 								+ ":\nJan Schäfer (jansch@users.sourceforge.net),\nMarkus J. Luzius (jskat@luzius.de),\nDaniel Loreck (daniel.loreck@gmail.com),\nSascha Laurien,\nSlovasim\n\n" //$NON-NLS-1$
-								+ strings.getString("cards") //$NON-NLS-1$
+								+ this.strings.getString("cards") //$NON-NLS-1$
 								+ ": International Skat Server, KDE project, OpenClipart.org\n\n" //$NON-NLS-1$
-								+ strings.getString("icons") //$NON-NLS-1$
+								+ this.strings.getString("icons") //$NON-NLS-1$
 								+ ": Gnome Desktop Icons, Tango project, Elementary icons,\n" //$NON-NLS-1$
 								+ "Silvestre Herrera, Alex Roberts and Icojoy\n\n" //$NON-NLS-1$
 								+ "This program comes with ABSOLUTELY NO WARRANTY;\n" //$NON-NLS-1$
 								+ "for details see licence dialog\n" //$NON-NLS-1$
 								+ "This is free software, and you are welcome to redistribute it\n" //$NON-NLS-1$
 								+ "under certain conditions; see licence dialog for details.", //$NON-NLS-1$
-						strings.getString("about"), JOptionPane.INFORMATION_MESSAGE, //$NON-NLS-1$
-						new ImageIcon(bitmaps.getJSkatLogoImage()));
+						this.strings.getString("about"), JOptionPane.INFORMATION_MESSAGE, //$NON-NLS-1$
+						new ImageIcon(this.bitmaps.getJSkatLogoImage()));
 	}
 
 	/**
@@ -496,7 +497,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showMessage(final String title, final String message) {
 
-		JOptionPane.showMessageDialog(mainFrame, message, title,
+		JOptionPane.showMessageDialog(this.mainFrame, message, title,
 				JOptionPane.INFORMATION_MESSAGE);
 	}
 
@@ -508,14 +509,14 @@ public class JSkatViewImpl implements JSkatView {
 
 		if (discardedCards != null) {
 			for (Card card : discardedCards) {
-				cardString += " " + strings.getCardStringForCardFace(card);
+				cardString += " " + this.strings.getCardStringForCardFace(card);
 			}
 		} else {
-			cardString = strings.getString("unknown_cards");
+			cardString = this.strings.getString("unknown_cards");
 		}
 
-		showMessage(strings.getString("player_played_schwarz_title"),
-				strings.getString("player_played_schwarz_discarding",
+		showMessage(this.strings.getString("player_played_schwarz_title"),
+				this.strings.getString("player_played_schwarz_discarding",
 						playerName, cardString));
 	}
 
@@ -525,13 +526,13 @@ public class JSkatViewImpl implements JSkatView {
 		String cardString = null;
 
 		if (card != null) {
-			cardString = strings.getCardStringForCardFace(card);
+			cardString = this.strings.getCardStringForCardFace(card);
 		} else {
-			cardString = strings.getString("unknown_card");
+			cardString = this.strings.getString("unknown_card");
 		}
 
-		showMessage(strings.getString("player_played_schwarz_title"),
-				strings.getString("player_played_schwarz_card_play",
+		showMessage(this.strings.getString("player_played_schwarz_title"),
+				this.strings.getString("player_played_schwarz_card_play",
 						playerName, cardString));
 	}
 
@@ -541,7 +542,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showErrorMessage(final String title, final String message) {
 
-		JOptionPane.showMessageDialog(mainFrame, message, title,
+		JOptionPane.showMessageDialog(this.mainFrame, message, title,
 				JOptionPane.ERROR_MESSAGE);
 	}
 
@@ -552,7 +553,7 @@ public class JSkatViewImpl implements JSkatView {
 	public void addCard(final String tableName, final Player player,
 			final Card card) {
 
-		tables.get(tableName).addCard(player, card);
+		this.tables.get(tableName).addCard(player, card);
 	}
 
 	/**
@@ -561,7 +562,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void clearHand(final String tableName, final Player player) {
 
-		tables.get(tableName).clearHand(player);
+		this.tables.get(tableName).clearHand(player);
 	}
 
 	/**
@@ -571,7 +572,7 @@ public class JSkatViewImpl implements JSkatView {
 	public void removeCard(final String tableName, final Player player,
 			final Card card) {
 
-		tables.get(tableName).removeCard(player, card);
+		this.tables.get(tableName).removeCard(player, card);
 	}
 
 	/**
@@ -581,7 +582,7 @@ public class JSkatViewImpl implements JSkatView {
 	public void setPositions(final String tableName, final Player leftPosition,
 			final Player rightPosition, final Player playerPosition) {
 
-		tables.get(tableName).setPositions(leftPosition, rightPosition,
+		this.tables.get(tableName).setPositions(leftPosition, rightPosition,
 				playerPosition);
 	}
 
@@ -592,7 +593,7 @@ public class JSkatViewImpl implements JSkatView {
 	public void setTrickCard(final String tableName, final Player position,
 			final Card card) {
 
-		tables.get(tableName).setTrickCard(position, card);
+		this.tables.get(tableName).setTrickCard(position, card);
 	}
 
 	/**
@@ -601,7 +602,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void clearTrickCards(final String tableName) {
 
-		tables.get(tableName).clearTrickCards();
+		this.tables.get(tableName).clearTrickCards();
 	}
 
 	/**
@@ -611,7 +612,7 @@ public class JSkatViewImpl implements JSkatView {
 	public void setGameAnnouncement(final String tableName,
 			final Player declarer, final GameAnnouncement ann) {
 
-		tables.get(tableName).setGameAnnouncement(declarer, ann);
+		this.tables.get(tableName).setGameAnnouncement(declarer, ann);
 	}
 
 	/**
@@ -620,8 +621,8 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void setGameState(final String tableName, final GameState state) {
 
-		tables.get(tableName).setGameState(state);
-		if (activeView.equals(tableName)) {
+		this.tables.get(tableName).setGameState(state);
+		if (this.activeView.equals(tableName)) {
 			setActions(state);
 		}
 	}
@@ -675,30 +676,30 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void addGameResult(final String tableName, final GameSummary summary) {
 
-		tables.get(tableName).addGameResult(summary);
+		this.tables.get(tableName).addGameResult(summary);
 	}
 
 	@Subscribe
 	public void handle(ShowHelpEvent event) {
 
 		new JSkatHelpDialog(
-				mainFrame,
-				strings.getString("help"), "org/jskat/gui/help/" + JSkatOptions.instance().getI18NCode() + "/contents.html") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				this.mainFrame,
+				this.strings.getString("help"), "org/jskat/gui/help/" + JSkatOptions.instance().getI18NCode() + "/contents.html") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				.setVisible(true);
 	}
 
 	@Subscribe
 	public void handle(ShowLicenseEvent event) {
 
-		new JSkatHelpDialog(mainFrame,
-				strings.getString("license"), "org/jskat/gui/help/gpl3.html").setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
+		new JSkatHelpDialog(this.mainFrame,
+				this.strings.getString("license"), "org/jskat/gui/help/gpl3.html").setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Subscribe
 	public void handle(ShowWelcomeInformationEvent event) {
 
-		new JSkatWelcomeDialog(mainFrame,
-				strings.getString("welcome_to_jskat"), "org/jskat/gui/help/" //$NON-NLS-1$ //$NON-NLS-2$
+		new JSkatWelcomeDialog(this.mainFrame,
+				this.strings.getString("welcome_to_jskat"), "org/jskat/gui/help/" //$NON-NLS-1$ //$NON-NLS-2$
 						+ JSkatOptions.instance().getI18NCode()
 						+ "/welcome.html").setVisible(true); //$NON-NLS-1$
 	}
@@ -709,7 +710,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void clearTable(final String tableName) {
 
-		tables.get(tableName).clearTable();
+		this.tables.get(tableName).clearTable();
 	}
 
 	/**
@@ -718,7 +719,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void setBidValueToMake(final String tableName, final int bidValue) {
 
-		tables.get(tableName).setBidValueToMake(bidValue);
+		this.tables.get(tableName).setBidValueToMake(bidValue);
 	}
 
 	/**
@@ -727,7 +728,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void setBidValueToHold(final String tableName, final int bidValue) {
 
-		tables.get(tableName).setBidValueToHold(bidValue);
+		this.tables.get(tableName).setBidValueToHold(bidValue);
 	}
 
 	/**
@@ -737,7 +738,7 @@ public class JSkatViewImpl implements JSkatView {
 	public void setBid(final String tableName, final Player player,
 			final int bidValue, final boolean madeBid) {
 
-		tables.get(tableName).setBid(player, bidValue, madeBid);
+		this.tables.get(tableName).setBid(player, bidValue, madeBid);
 	}
 
 	/**
@@ -746,7 +747,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void setPass(final String tableName, final Player player) {
 
-		tables.get(tableName).setPass(player);
+		this.tables.get(tableName).setPass(player);
 	}
 
 	/**
@@ -756,7 +757,7 @@ public class JSkatViewImpl implements JSkatView {
 	public void setTrickForeHand(final String tableName,
 			final Player trickForeHand) {
 
-		tables.get(tableName).setTrickForeHand(trickForeHand);
+		this.tables.get(tableName).setTrickForeHand(trickForeHand);
 	}
 
 	/**
@@ -766,7 +767,7 @@ public class JSkatViewImpl implements JSkatView {
 	public void putCardIntoSkat(final String tableName, final Player player,
 			final Card card) {
 
-		tables.get(tableName).putCardIntoSkat(player, card);
+		this.tables.get(tableName).putCardIntoSkat(player, card);
 	}
 
 	/**
@@ -776,16 +777,13 @@ public class JSkatViewImpl implements JSkatView {
 	public void takeCardFromSkat(final String tableName, final Player player,
 			final Card card) {
 
-		tables.get(tableName).takeCardFromSkat(player, card);
+		this.tables.get(tableName).takeCardFromSkat(player, card);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void showStartSkatSeriesDialog() {
+	@Subscribe
+	public void handle(CreateSkatSeriesEvent event) {
 
-		skatSeriesStartDialog.setVisible(true);
+		this.skatSeriesStartDialog.setVisible(true);
 	}
 
 	/**
@@ -805,7 +803,7 @@ public class JSkatViewImpl implements JSkatView {
 	public void updateISSLobbyPlayerList(final String playerName,
 			final String language, final long gamesPlayed, final double strength) {
 
-		issLobby.updatePlayer(playerName, language, gamesPlayed, strength);
+		this.issLobby.updatePlayer(playerName, language, gamesPlayed, strength);
 	}
 
 	/**
@@ -814,7 +812,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void removeFromISSLobbyPlayerList(final String playerName) {
 
-		issLobby.removePlayer(playerName);
+		this.issLobby.removePlayer(playerName);
 	}
 
 	/**
@@ -823,8 +821,8 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showISSLobby() {
 
-		issLobby = new LobbyPanel(this, "ISS lobby", actions);
-		addTabPanel(issLobby, strings.getString("iss_lobby"));
+		this.issLobby = new LobbyPanel(this, "ISS lobby", actions);
+		addTabPanel(this.issLobby, this.strings.getString("iss_lobby"));
 	}
 
 	/**
@@ -835,7 +833,7 @@ public class JSkatViewImpl implements JSkatView {
 			final int maxPlayers, final long gamesPlayed, final String player1,
 			final String player2, final String player3) {
 
-		issLobby.updateTable(tableName, maxPlayers, gamesPlayed, player1,
+		this.issLobby.updateTable(tableName, maxPlayers, gamesPlayed, player1,
 				player2, player3);
 	}
 
@@ -845,7 +843,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void removeFromISSLobbyTableList(final String tableName) {
 
-		issLobby.removeTable(tableName);
+		this.issLobby.removeTable(tableName);
 	}
 
 	/**
@@ -857,9 +855,9 @@ public class JSkatViewImpl implements JSkatView {
 
 		log.debug("appendISSChatMessage"); //$NON-NLS-1$
 
-		issLobby.appendChatMessage(message);
+		this.issLobby.appendChatMessage(message);
 
-		for (final SkatTablePanel table : tables.values()) {
+		for (final SkatTablePanel table : this.tables.values()) {
 			if (table instanceof ISSTablePanel) {
 				final ISSTablePanel issTable = (ISSTablePanel) table;
 				final String chatname = message.getChatName();
@@ -879,12 +877,12 @@ public class JSkatViewImpl implements JSkatView {
 			final TablePanelStatus tableStatus) {
 
 		// FIXME (jan 08.11.2010) seems very complicated
-		SkatTablePanel panel = tables.get(tableName);
+		SkatTablePanel panel = this.tables.get(tableName);
 
 		if (panel == null) {
 
 			createISSTable(tableName, tableStatus.getLoginName());
-			panel = tables.get(tableName);
+			panel = this.tables.get(tableName);
 		}
 
 		if (panel instanceof ISSTablePanel) {
@@ -925,7 +923,7 @@ public class JSkatViewImpl implements JSkatView {
 		setPositions(tableName, leftOpponent, rightOpponent, player);
 
 		// FIXME (jansch 09.11.2010) this is only done for ISS games
-		final SkatTablePanel table = tables.get(tableName);
+		final SkatTablePanel table = this.tables.get(tableName);
 		table.setGameState(GameState.GAME_START);
 		table.setPlayerName(leftOpponent, status.getPlayerName(leftOpponent));
 		table.setPlayerTime(leftOpponent, status.getPlayerTime(leftOpponent));
@@ -944,9 +942,9 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public String getNewTableName(final int localTablesCreated) {
 		// get table name
-		String tableName = JOptionPane.showInputDialog(mainFrame,
-				strings.getString("new_table_dialog_message"), //$NON-NLS-1$
-				strings.getString("local_table") + " " //$NON-NLS-1$ //$NON-NLS-2$
+		String tableName = JOptionPane.showInputDialog(this.mainFrame,
+				this.strings.getString("new_table_dialog_message"), //$NON-NLS-1$
+				this.strings.getString("local_table") + " " //$NON-NLS-1$ //$NON-NLS-2$
 						+ (localTablesCreated + 1));
 		// truncate table name
 		if (tableName != null && tableName.length() > 100) {
@@ -968,7 +966,7 @@ public class JSkatViewImpl implements JSkatView {
 		// TODO add other types too
 		case DEAL:
 			setGameState(tableName, GameState.DEALING);
-			final SkatTablePanel table = tables.get(tableName);
+			final SkatTablePanel table = this.tables.get(tableName);
 			table.hideCards(Player.FOREHAND);
 			table.hideCards(Player.MIDDLEHAND);
 			table.hideCards(Player.REARHAND);
@@ -1052,7 +1050,7 @@ public class JSkatViewImpl implements JSkatView {
 		// adjust player times
 		if (moveInformation.getMovePlayer() != MovePlayer.WORLD) {
 			// FIXME dirty hack
-			final SkatTablePanel table = tables.get(tableName);
+			final SkatTablePanel table = this.tables.get(tableName);
 
 			table.setPlayerTime(Player.FOREHAND,
 					moveInformation.getPlayerTime(Player.FOREHAND));
@@ -1066,7 +1064,7 @@ public class JSkatViewImpl implements JSkatView {
 	private void setOuvertCards(final String tableName, final Player player,
 			final CardList ouvertCards) {
 
-		final SkatTablePanel table = tables.get(tableName);
+		final SkatTablePanel table = this.tables.get(tableName);
 		table.removeAllCards(player);
 		table.addCards(player, ouvertCards);
 		table.showCards(player);
@@ -1089,7 +1087,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void setLastTrick(final String tableName, final Trick trick) {
 
-		final SkatTablePanel table = tables.get(tableName);
+		final SkatTablePanel table = this.tables.get(tableName);
 
 		table.setLastTrick(trick);
 	}
@@ -1097,14 +1095,14 @@ public class JSkatViewImpl implements JSkatView {
 	@Subscribe
 	public void handle(ShowPreferencesEvent event) {
 
-		preferencesDialog.validate();
-		preferencesDialog.setVisible(true);
+		this.preferencesDialog.validate();
+		this.preferencesDialog.setVisible(true);
 	}
 
 	@Subscribe
 	public void handle(ShowTrainingOverviewEvent event) {
 
-		trainingOverview.setVisible(true);
+		this.trainingOverview.setVisible(true);
 	}
 
 	/**
@@ -1113,9 +1111,9 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void closeTabPanel(final String tabName) {
 
-		AbstractTabPanel panel = (AbstractTabPanel) tabs.getSelectedComponent();
+		AbstractTabPanel panel = (AbstractTabPanel) this.tabs.getSelectedComponent();
 		if (!tabName.equals(panel.getName())) {
-			for (final Component currPanel : tabs.getComponents()) {
+			for (final Component currPanel : this.tabs.getComponents()) {
 				if (tabName.equals(currPanel.getName())) {
 					panel = (AbstractTabPanel) currPanel;
 				}
@@ -1124,10 +1122,10 @@ public class JSkatViewImpl implements JSkatView {
 
 		if (panel instanceof SkatTablePanel || panel instanceof ISSTablePanel) {
 			// remove from table list
-			tables.remove(panel.getName());
+			this.tables.remove(panel.getName());
 		}
 
-		tabs.remove(panel);
+		this.tabs.remove(panel);
 	}
 
 	/**
@@ -1140,8 +1138,8 @@ public class JSkatViewImpl implements JSkatView {
 
 		final PlayerInvitationPanel invitationPanel = new PlayerInvitationPanel(
 				playerNames);
-		final int dialogResult = JOptionPane.showConfirmDialog(mainFrame,
-				invitationPanel, strings.getString("invite_players"), //$NON-NLS-1$
+		final int dialogResult = JOptionPane.showConfirmDialog(this.mainFrame,
+				invitationPanel, this.strings.getString("invite_players"), //$NON-NLS-1$
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 		if (dialogResult == JOptionPane.OK_OPTION) {
@@ -1160,15 +1158,15 @@ public class JSkatViewImpl implements JSkatView {
 	public void addCards(final String tableName, final Player player,
 			final CardList cards) {
 
-		tables.get(tableName).addCards(player, cards);
+		this.tables.get(tableName).addCards(player, cards);
 	}
 
 	private void addTabPanel(final AbstractTabPanel newPanel, final String title) {
 
-		tabs.addTab(title, newPanel);
-		tabs.setTabComponentAt(tabs.indexOfComponent(newPanel),
-				new JSkatTabComponent(tabs, bitmaps));
-		tabs.setSelectedComponent(newPanel);
+		this.tabs.addTab(title, newPanel);
+		this.tabs.setTabComponentAt(this.tabs.indexOfComponent(newPanel),
+				new JSkatTabComponent(this.tabs, this.bitmaps));
+		this.tabs.setSelectedComponent(newPanel);
 		newPanel.setFocus();
 	}
 
@@ -1178,7 +1176,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void setActivePlayer(final String tableName, final Player player) {
 
-		tables.get(tableName).setActivePlayer(player);
+		this.tables.get(tableName).setActivePlayer(player);
 	}
 
 	/**
@@ -1187,7 +1185,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void setSeriesState(final String tableName, final SeriesState state) {
 
-		tables.get(tableName).setSeriesState(state);
+		this.tables.get(tableName).setSeriesState(state);
 	}
 
 	/**
@@ -1196,7 +1194,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void setSkat(final String tableName, final CardList skat) {
 
-		tables.get(tableName).setSkat(skat);
+		this.tables.get(tableName).setSkat(skat);
 	}
 
 	/**
@@ -1205,7 +1203,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void setTrickNumber(final String tableName, final int trickNumber) {
 
-		tables.get(tableName).setTrickNumber(trickNumber);
+		this.tables.get(tableName).setTrickNumber(trickNumber);
 	}
 
 	/**
@@ -1217,11 +1215,11 @@ public class JSkatViewImpl implements JSkatView {
 
 		boolean result = false;
 
-		final String question = strings.getString("iss_table_invitation", //$NON-NLS-1$
+		final String question = this.strings.getString("iss_table_invitation", //$NON-NLS-1$
 				invitor, tableName);
 
 		final int answer = JOptionPane.showConfirmDialog(null, question,
-				strings.getString("iss_table_invitation_title"), //$NON-NLS-1$
+				this.strings.getString("iss_table_invitation_title"), //$NON-NLS-1$
 				JOptionPane.YES_NO_OPTION);
 
 		if (answer == JOptionPane.YES_OPTION) {
@@ -1238,12 +1236,12 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showCardNotAllowedMessage(final Card card) {
 
-		final String title = strings.getString("card_not_allowed_title"); //$NON-NLS-1$
+		final String title = this.strings.getString("card_not_allowed_title"); //$NON-NLS-1$
 
-		final String message = strings.getString("card_not_allowed_message", //$NON-NLS-1$
-				card != null ? strings.getSuitStringForCardFace(card.getSuit())
+		final String message = this.strings.getString("card_not_allowed_message", //$NON-NLS-1$
+				card != null ? this.strings.getSuitStringForCardFace(card.getSuit())
 						: "--", //$NON-NLS-1$
-				card != null ? strings.getRankStringForCardFace(card.getRank())
+				card != null ? this.strings.getRankStringForCardFace(card.getRank())
 						: "--"); //$NON-NLS-1$
 
 		showErrorMessage(title, message);
@@ -1252,9 +1250,9 @@ public class JSkatViewImpl implements JSkatView {
 	@Subscribe
 	public void handle(NewJSkatVersionAvailableEvent event) {
 
-		final String title = strings.getString("new_version_title"); //$NON-NLS-1$
+		final String title = this.strings.getString("new_version_title"); //$NON-NLS-1$
 
-		final String message = strings.getString("new_version_message", //$NON-NLS-1$
+		final String message = this.strings.getString("new_version_message", //$NON-NLS-1$
 				event.newVersion);
 
 		showMessage(title, message);
@@ -1263,7 +1261,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Subscribe
 	public void handle(TrainingResultEvent event) {
 
-		trainingOverview.addTrainingResult(event.gameType, event.episodes,
+		this.trainingOverview.addTrainingResult(event.gameType, event.episodes,
 				event.totalGamesWon, event.avgNetworkErrorDeclarer,
 				event.avgNetworkErrorOpponents);
 	}
@@ -1274,7 +1272,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void setGameNumber(final String tableName, final int gameNumber) {
 
-		tables.get(tableName).setGameNumber(gameNumber);
+		this.tables.get(tableName).setGameNumber(gameNumber);
 	}
 
 	/**
@@ -1285,7 +1283,7 @@ public class JSkatViewImpl implements JSkatView {
 			final String upperLeftPlayerName,
 			final String upperRightPlayerName, final String lowerPlayerName) {
 
-		tables.get(tableName).setPlayerNames(upperLeftPlayerName,
+		this.tables.get(tableName).setPlayerNames(upperLeftPlayerName,
 				upperRightPlayerName, lowerPlayerName);
 	}
 
@@ -1295,13 +1293,13 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void setDeclarer(final String tableName, final Player declarer) {
 
-		tables.get(tableName).setDeclarer(declarer);
+		this.tables.get(tableName).setDeclarer(declarer);
 	}
 
 	@Subscribe
 	public void handle(final LogoutFromIssEvent event) {
 
-		for (final Component currPanel : tabs.getComponents()) {
+		for (final Component currPanel : this.tabs.getComponents()) {
 			if (currPanel instanceof LobbyPanel
 					|| currPanel instanceof ISSTablePanel) {
 				closeTabPanel(currPanel.getName());
@@ -1312,19 +1310,19 @@ public class JSkatViewImpl implements JSkatView {
 	@Subscribe
 	public void handle(final DuplicateTableNameInputEvent event) {
 
-		final String message = strings.getString(
+		final String message = this.strings.getString(
 				"duplicate_table_name_message", //$NON-NLS-1$
 				event.tableName);
 
-		showErrorMessage(strings.getString("duplicate_table_name_title"), //$NON-NLS-1$
+		showErrorMessage(this.strings.getString("duplicate_table_name_title"), //$NON-NLS-1$
 				message);
 	}
 
 	@Subscribe
 	public void handle(final EmptyTableNameInputEvent event) {
 
-		showErrorMessage(strings.getString("invalid_name_input_null_title"), //$NON-NLS-1$
-				strings.getString("invalid_name_input_null_message"));
+		showErrorMessage(this.strings.getString("invalid_name_input_null_title"), //$NON-NLS-1$
+				this.strings.getString("invalid_name_input_null_message"));
 	}
 
 	/**
@@ -1333,7 +1331,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void setResign(final String tableName, final Player player) {
 
-		tables.get(tableName).setResign(player);
+		this.tables.get(tableName).setResign(player);
 	}
 
 	/**
@@ -1341,7 +1339,7 @@ public class JSkatViewImpl implements JSkatView {
 	 */
 	@Override
 	public void setGeschoben(final String tableName, final Player player) {
-		tables.get(tableName).setGeschoben(player);
+		this.tables.get(tableName).setGeschoben(player);
 	}
 
 	/**
@@ -1350,7 +1348,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void setDiscardedSkat(final String tableName, final Player player,
 			final CardList skatBefore, final CardList discardedSkat) {
-		tables.get(tableName).setDiscardedSkat(player, skatBefore,
+		this.tables.get(tableName).setDiscardedSkat(player, skatBefore,
 				discardedSkat);
 	}
 
@@ -1359,7 +1357,7 @@ public class JSkatViewImpl implements JSkatView {
 	 */
 	@Override
 	public void takeCardFromSkat(final String tableName, final Card card) {
-		tables.get(tableName).takeCardFromSkat(card);
+		this.tables.get(tableName).takeCardFromSkat(card);
 	}
 
 	/**
@@ -1367,7 +1365,7 @@ public class JSkatViewImpl implements JSkatView {
 	 */
 	@Override
 	public void putCardIntoSkat(final String tableName, final Card card) {
-		tables.get(tableName).putCardIntoSkat(card);
+		this.tables.get(tableName).putCardIntoSkat(card);
 	}
 
 	/**
@@ -1394,21 +1392,21 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showCards(final String tableName,
 			final Map<Player, CardList> cards) {
-		tables.get(tableName).showCards(cards);
+		this.tables.get(tableName).showCards(cards);
 	}
 
 	@Override
 	public void setActiveView(String viewName) {
-		activeView = viewName;
+		this.activeView = viewName;
 	}
 
 	@Override
 	public void setContra(String tableName, Player player) {
-		tables.get(tableName).setContra(player);
+		this.tables.get(tableName).setContra(player);
 	}
 
 	@Override
 	public void setRe(String tableName, Player player) {
-		tables.get(tableName).setRe(player);
+		this.tables.get(tableName).setRe(player);
 	}
 }
