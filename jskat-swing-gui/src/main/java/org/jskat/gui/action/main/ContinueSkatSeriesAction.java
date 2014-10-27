@@ -36,9 +36,9 @@ public class ContinueSkatSeriesAction extends AbstractJSkatAction {
 	 */
 	public ContinueSkatSeriesAction() {
 
-		putValue(NAME, strings.getString("continue_series")); //$NON-NLS-1$
+		putValue(NAME, this.strings.getString("continue_series")); //$NON-NLS-1$
 		putValue(SHORT_DESCRIPTION,
-				strings.getString("continue_series_tooltip")); //$NON-NLS-1$
+				this.strings.getString("continue_series_tooltip")); //$NON-NLS-1$
 
 		setIcon(Icon.PLAY);
 	}
@@ -49,6 +49,6 @@ public class ContinueSkatSeriesAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(final ActionEvent e) {
 
-        JSkatMaster.INSTANCE.resumeSkatSeries();
+		JSkatMaster.INSTANCE.resumeSkatSeries();
 	}
 }

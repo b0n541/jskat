@@ -68,10 +68,6 @@ public enum JSkatAction {
 	 */
 	START_LOCAL_SERIES,
 	/**
-	 * Pauses a local skat series
-	 */
-	PAUSE_LOCAL_SERIES,
-	/**
 	 * Continues a local skat series
 	 */
 	CONTINUE_LOCAL_SERIES,

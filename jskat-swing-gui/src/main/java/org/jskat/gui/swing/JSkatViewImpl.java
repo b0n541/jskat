@@ -112,7 +112,6 @@ import org.jskat.gui.action.main.HelpAction;
 import org.jskat.gui.action.main.LicenseAction;
 import org.jskat.gui.action.main.LoadNeuralNetworksAction;
 import org.jskat.gui.action.main.LoadSeriesAction;
-import org.jskat.gui.action.main.PauseSkatSeriesAction;
 import org.jskat.gui.action.main.PreferencesAction;
 import org.jskat.gui.action.main.PutCardIntoSkatAction;
 import org.jskat.gui.action.main.ResetNeuralNetworksAction;
@@ -211,7 +210,6 @@ public class JSkatViewImpl implements JSkatView {
 		actions.put(JSkatAction.START_LOCAL_SERIES, new StartSkatSeriesAction());
 		actions.put(JSkatAction.CONTINUE_LOCAL_SERIES,
 				new ContinueSkatSeriesAction());
-		actions.put(JSkatAction.PAUSE_LOCAL_SERIES, new PauseSkatSeriesAction());
 		// ISS actions
 		actions.put(JSkatAction.REGISTER_ON_ISS, new RegisterAction());
 		actions.put(JSkatAction.OPEN_ISS_HOMEPAGE, new OpenHomepageAction());
@@ -265,8 +263,6 @@ public class JSkatViewImpl implements JSkatView {
 		actions.get(JSkatAction.SAVE_SERIES).setEnabled(false);
 		actions.get(JSkatAction.SAVE_SERIES_AS).setEnabled(false);
 		actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(false);
-		actions.get(JSkatAction.PAUSE_LOCAL_SERIES).setEnabled(false);
-		actions.get(JSkatAction.CONTINUE_LOCAL_SERIES).setEnabled(false);
 		actions.get(JSkatAction.CREATE_ISS_TABLE).setEnabled(false);
 		actions.get(JSkatAction.INVITE_ISS_PLAYER).setEnabled(false);
 	}
@@ -378,10 +374,6 @@ public class JSkatViewImpl implements JSkatView {
 		tableMenu.add(new JSeparator());
 		tableMenu
 				.add(new JMenuItem(actions.get(JSkatAction.START_LOCAL_SERIES)));
-		tableMenu
-				.add(new JMenuItem(actions.get(JSkatAction.PAUSE_LOCAL_SERIES)));
-		tableMenu.add(new JMenuItem(actions
-				.get(JSkatAction.CONTINUE_LOCAL_SERIES)));
 		menu.add(tableMenu);
 
 		final JMenu neuralNetworkMenu = new JMenu(
@@ -629,9 +621,6 @@ public class JSkatViewImpl implements JSkatView {
 
 	private void setActions(final GameState state) {
 		switch (state) {
-		case GAME_START:
-			actions.get(JSkatAction.CONTINUE_LOCAL_SERIES).setEnabled(false);
-			break;
 		case BIDDING:
 			actions.get(JSkatAction.ANNOUNCE_GAME).setEnabled(false);
 			actions.get(JSkatAction.MAKE_BID).setEnabled(true);

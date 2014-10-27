@@ -29,7 +29,6 @@ import org.jskat.control.event.general.ShowPreferencesEvent;
 import org.jskat.control.event.general.ShowTrainingOverviewEvent;
 import org.jskat.control.event.general.ShowWelcomeInformationEvent;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
-import org.jskat.control.event.skatseries.CreateSkatSeriesEvent;
 import org.jskat.control.event.table.DuplicateTableNameInputEvent;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
 import org.jskat.control.iss.IssController;
@@ -192,17 +191,6 @@ public class JSkatMaster {
 		for (String currPlayer : player) {
 			getIssController().invitePlayer(this.data.getActiveView(), currPlayer);
 		}
-	}
-
-	/**
-	 * Starts a new skat series
-	 */
-	public void startSeries() {
-
-		log.debug("creating new skat series on table: "
-				+ this.data.getActiveView());
-
-		JSkatEventBus.INSTANCE.post(new CreateSkatSeriesEvent());
 	}
 
 	/**
