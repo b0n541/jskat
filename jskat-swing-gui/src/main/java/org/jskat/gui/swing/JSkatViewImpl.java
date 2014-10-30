@@ -47,6 +47,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jskat.JSkat;
+import org.jskat.control.event.JSkatEventBus;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.general.ShowAboutInformationEvent;
 import org.jskat.control.event.general.ShowHelpEvent;
@@ -54,11 +55,13 @@ import org.jskat.control.event.general.ShowLicenseEvent;
 import org.jskat.control.event.general.ShowPreferencesEvent;
 import org.jskat.control.event.general.ShowTrainingOverviewEvent;
 import org.jskat.control.event.general.ShowWelcomeInformationEvent;
-import org.jskat.control.event.iss.LogoutFromIssEvent;
+import org.jskat.control.event.iss.IssConnectSuccessEvent;
+import org.jskat.control.event.iss.IssLogoutEvent;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
 import org.jskat.control.event.skatseries.CreateSkatSeriesEvent;
 import org.jskat.control.event.table.DuplicateTableNameInputEvent;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
+import org.jskat.control.event.table.RemoveTableEvent;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
@@ -181,6 +184,8 @@ public class JSkatViewImpl implements JSkatView {
 		addTabPanel(new WelcomePanel(this,
 				this.strings.getString("welcome"), actions), //$NON-NLS-1$
 				this.strings.getString("welcome")); //$NON-NLS-1$
+		
+		JSkatEventBus.INSTANCE.register(this);
 	}
 
 	/**
@@ -804,16 +809,15 @@ public class JSkatViewImpl implements JSkatView {
 		this.issLobby.removePlayer(playerName);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void showISSLobby() {
-
+	@Subscribe
+	public void handle(final IssConnectSuccessEvent event) {
+		// show ISS lobby if connection was successfull
+		// FIXME (jan 07.12.2010) use constant instead of title
+		closeTabPanel("ISS login"); //$NON-NLS-1$
 		this.issLobby = new LobbyPanel(this, "ISS lobby", actions);
 		addTabPanel(this.issLobby, this.strings.getString("iss_lobby"));
 	}
-
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -1089,16 +1093,20 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void handle(ShowTrainingOverviewEvent event) {
+	public void handle(final ShowTrainingOverviewEvent event) {
 
 		this.trainingOverview.setVisible(true);
 	}
 
+	@Subscribe
+	public void handle(RemoveTableEvent event) {
+		closeTabPanel(event.tableName);
+	}
+	
 	/**
 	 * {@inheritDoc}
 	 */
-	@Override
-	public void closeTabPanel(final String tabName) {
+	private void closeTabPanel(final String tabName) {
 
 		AbstractTabPanel panel = (AbstractTabPanel) this.tabs.getSelectedComponent();
 		if (!tabName.equals(panel.getName())) {
@@ -1286,7 +1294,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void handle(final LogoutFromIssEvent event) {
+	public void handle(final IssLogoutEvent event) {
 
 		for (final Component currPanel : this.tabs.getComponents()) {
 			if (currPanel instanceof LobbyPanel

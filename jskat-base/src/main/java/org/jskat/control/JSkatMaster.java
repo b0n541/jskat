@@ -24,8 +24,10 @@ import org.jskat.ai.nn.train.NNTrainer;
 import org.jskat.control.event.JSkatEventBus;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.general.ShowTrainingOverviewEvent;
+import org.jskat.control.event.iss.IssConnectSuccessEvent;
 import org.jskat.control.event.table.DuplicateTableNameInputEvent;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
+import org.jskat.control.event.table.RemoveTableEvent;
 import org.jskat.control.iss.IssController;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.JSkatApplicationData;
@@ -73,18 +75,18 @@ public class JSkatMaster {
 	private JSkatMaster() {
 
 		this.options = JSkatOptions.instance();
-		this.data = JSkatApplicationData.instance();
-
-		JSkatEventBus.INSTANCE.register(this);
+		this.data = JSkatApplicationData.INSTANCE;
 
 		this.issControl = new IssController(this);
 
 		this.runningNNTrainers = new ArrayList<NNTrainer>();
+		
+		JSkatEventBus.INSTANCE.register(this);
 	}
 
 	@Subscribe
 	public void handle(DeadEvent event) {
-		log.error("Recieved dead event: " + event);
+		log.error("Recieved dead event: " + event.getEvent());
 	}
 
 	/**
@@ -166,11 +168,12 @@ public class JSkatMaster {
 	 * @param tableName
 	 *            Table name
 	 */
-	public void removeTable(JSkatViewType type, String tableName) {
-		if (type == JSkatViewType.LOCAL_TABLE) {
-			this.data.removeLocalSkatTable(tableName);
-		} else if (type == JSkatViewType.ISS_TABLE) {
-			// FIXME jan 23.02.2013: remove ISS table
+	@Subscribe
+	public void handle(final RemoveTableEvent event) {
+		if (JSkatViewType.LOCAL_TABLE.equals(event.tableType)) {
+			this.data.removeLocalSkatTable(event.tableName);
+		} else if (JSkatViewType.ISS_TABLE.equals(event.tableType)) {
+			this.data.removeJoinedIssSkatTable(event.tableName);
 		}
 	}
 
@@ -384,7 +387,6 @@ public class JSkatMaster {
 
 		this.view = newView;
 		this.issControl.setView(this.view);
-		JSkatEventBus.INSTANCE.register(newView);
 	}
 
 	/**
@@ -645,49 +647,10 @@ public class JSkatMaster {
 	 * @param login
 	 *            Login name
 	 */
-	public void setIssLogin(final String login) {
+	@Subscribe
+	public void handle(final IssConnectSuccessEvent event) {
 
-		this.data.setIssLoginName(login);
-	}
-
-	/**
-	 * Sends the table seat change signal to ISS
-	 */
-	public void sendTableSeatChangeSignal() {
-
-		this.issControl.sendTableSeatChangeSignal(this.data.getActiveView());
-	}
-
-	/**
-	 * Sends the ready to play signal to ISS
-	 */
-	public void sendReadySignal() {
-
-		this.issControl.sendReadySignal(this.data.getActiveView());
-	}
-
-	/**
-	 * Sends the talk enabled signal to ISS
-	 */
-	public void sendTalkEnabledSignal() {
-
-		this.issControl.sendTalkEnabledSignal(this.data.getActiveView());
-	}
-
-	/**
-	 * Sends the resign signal to ISS
-	 */
-	public void sendResignSignal() {
-
-		this.issControl.sendResignSignal(this.data.getActiveView());
-	}
-
-	/**
-	 * Sends the show cards signal to ISS
-	 */
-	public void sendShowCardsSignal() {
-
-		this.issControl.sendShowCardsSignal(this.data.getActiveView());
+		this.data.setIssLoginName(event.login);
 	}
 
 	/**

@@ -32,6 +32,7 @@ import org.jskat.control.event.general.ShowWelcomeInformationEvent;
 import org.jskat.data.DesktopSavePathResolver;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatOptions.Option;
+import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.swing.JSkatViewImpl;
 import org.jskat.gui.swing.LookAndFeelSetter;
 import org.jskat.util.JSkatResourceBundle;
@@ -62,8 +63,6 @@ public final class JSkat {
 
         initializeOptions();
 
-        trySettingNimbusLookAndFeel();
-
         final SplashScreen splash = SplashScreen.getSplashScreen();
         Graphics2D g = null;
         if (splash == null) {
@@ -80,10 +79,10 @@ public final class JSkat {
             }
             switch (i) {
             case 0:
-                // TODO do something useful...
+            	trySettingNimbusLookAndFeel();
                 break;
             case 1:
-				// TODO do something useful...
+				JSkatGraphicRepository.INSTANCE.toString();
                 break;
             case 2:
                 jskatView = new JSkatViewImpl();

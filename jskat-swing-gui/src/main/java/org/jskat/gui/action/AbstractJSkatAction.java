@@ -20,6 +20,7 @@ import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 
 import org.jskat.control.event.JSkatEventBus;
+import org.jskat.data.JSkatApplicationData;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.util.JSkatResourceBundle;
@@ -36,24 +37,20 @@ public abstract class AbstractJSkatAction extends AbstractAction {
 	/**
 	 * JSkat graphics repository
 	 */
-	protected final JSkatGraphicRepository bitmaps;
+	protected final static JSkatGraphicRepository bitmaps = JSkatGraphicRepository.INSTANCE;
 	/**
 	 * JSkat i18n strings
 	 */
-	protected final JSkatResourceBundle strings;
+	protected final static JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
 	/**
 	 * JSkat event bus
 	 */
-	protected final EventBus eventBus;
-
+	protected final static EventBus eventBus = JSkatEventBus.INSTANCE;
+	
 	/**
 	 * Constructor
 	 */
 	public AbstractJSkatAction() {
-
-		this.strings = JSkatResourceBundle.INSTANCE;
-		this.bitmaps = JSkatGraphicRepository.INSTANCE;
-		this.eventBus = JSkatEventBus.INSTANCE;
 
 		setIcon(Icon.BLANK);
 	}

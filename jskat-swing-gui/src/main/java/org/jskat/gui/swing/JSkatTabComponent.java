@@ -31,6 +31,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 import org.jskat.control.JSkatMaster;
+import org.jskat.control.event.JSkatEventBus;
+import org.jskat.control.event.table.RemoveTableEvent;
 import org.jskat.data.JSkatViewType;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
@@ -116,15 +118,13 @@ public class JSkatTabComponent extends JPanel {
 		}
 
 		@Override
-        public void actionPerformed(ActionEvent e) {
+		public void actionPerformed(ActionEvent e) {
 
 			int i = JSkatTabComponent.this.pane
 					.indexOfTabComponent(JSkatTabComponent.this);
 			if (i != -1) {
-				// FIXME (jan 22.06.2010) use an action here
-                JSkatMaster.INSTANCE.removeTable(JSkatViewType.LOCAL_TABLE,
-						pane.getTitleAt(i));
-				JSkatTabComponent.this.pane.remove(i);
+				JSkatEventBus.INSTANCE.post(new RemoveTableEvent(
+						JSkatViewType.LOCAL_TABLE, pane.getTitleAt(i)));
 			}
 		}
 

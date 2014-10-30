@@ -28,7 +28,7 @@ import org.jskat.gui.human.AbstractHumanJSkatPlayer;
  */
 public class JSkatApplicationData {
 
-	private volatile static JSkatApplicationData instance = null;
+	public final static JSkatApplicationData INSTANCE = new JSkatApplicationData();
 
 	private final JSkatOptions options;
 	private final Map<String, SkatTable> localSkatTables;
@@ -37,21 +37,6 @@ public class JSkatApplicationData {
 	private String issLoginName;
 	private final Set<String> availableIssPlayer;
 	private final Map<String, AbstractHumanJSkatPlayer> humanPlayers;
-
-	/**
-	 * Gets the instance of the application data
-	 * 
-	 * @return Application data
-	 */
-	public static JSkatApplicationData instance() {
-
-		if (instance == null) {
-
-			instance = new JSkatApplicationData();
-		}
-
-		return instance;
-	}
 
 	/**
 	 * Constructor

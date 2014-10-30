@@ -82,12 +82,6 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void showISSLobby() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void createISSTable(final String tableName, final String loginName) {
 		this.tables.add(tableName);
 	}
@@ -95,12 +89,6 @@ public class UnitTestView implements JSkatView {
 	@Override
 	public void createSkatTablePanel(final String name) {
 		this.tables.add(name);
-	}
-
-	@Override
-	public void closeTabPanel(final String name) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

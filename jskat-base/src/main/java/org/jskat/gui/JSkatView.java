@@ -72,11 +72,6 @@ public interface JSkatView {
 	public void showISSLogin();
 
 	/**
-	 * Shows the lobby for ISS
-	 */
-	public void showISSLobby();
-
-	/**
 	 * Creates ISS table
 	 * 
 	 * @param tableName
@@ -93,14 +88,6 @@ public interface JSkatView {
 	 *            Name of the table
 	 */
 	public void createSkatTablePanel(String name);
-
-	/**
-	 * Closes a tab panel
-	 * 
-	 * @param name
-	 *            Name of the tab panel
-	 */
-	public void closeTabPanel(String name);
 
 	/**
 	 * Gets the players to invite

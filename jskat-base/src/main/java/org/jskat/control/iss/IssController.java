@@ -21,7 +21,14 @@ import java.util.Map;
 
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.event.JSkatEventBus;
-import org.jskat.control.event.iss.LogoutFromIssEvent;
+import org.jskat.control.event.iss.IssConnectEvent;
+import org.jskat.control.event.iss.IssDisconnectEvent;
+import org.jskat.control.event.iss.IssLogoutEvent;
+import org.jskat.control.event.iss.IssReadyToPlayEvent;
+import org.jskat.control.event.iss.IssResignEvent;
+import org.jskat.control.event.iss.IssShowCardsEvent;
+import org.jskat.control.event.iss.IssTableSeatChangeEvent;
+import org.jskat.control.event.iss.IssTalkEnabledToggleEvent;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.JSkatApplicationData;
 import org.jskat.data.JSkatViewType;
@@ -43,6 +50,9 @@ import org.jskat.util.rule.SkatRuleFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
+
 /**
  * Controls all ISS related actions
  */
@@ -50,10 +60,11 @@ public class IssController {
 
 	private static Logger log = LoggerFactory.getLogger(IssController.class);
 
+	private final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
+	private final EventBus eventBus = JSkatEventBus.INSTANCE;
+	private final JSkatApplicationData appData = JSkatApplicationData.INSTANCE;
 	private final JSkatMaster jskat;
 	private JSkatView view;
-	private final JSkatApplicationData data;
-	private final JSkatResourceBundle strings;
 	private IssConnector issConnector;
 
 	private String login;
@@ -73,9 +84,9 @@ public class IssController {
 	public IssController(JSkatMaster jskatMaster) {
 
 		this.jskat = jskatMaster;
-		this.data = JSkatApplicationData.instance();
-		this.strings = JSkatResourceBundle.INSTANCE;
 		this.gameData = new HashMap<String, SkatGameData>();
+		
+		eventBus.register(this);
 	}
 
 	/**
@@ -92,7 +103,8 @@ public class IssController {
 	/**
 	 * Disconnects from ISS
 	 */
-	public void disconnect() {
+	@Subscribe
+	public void handle(final IssDisconnectEvent event) {
 
 		if (this.issConnector != null && this.issConnector.isConnected()) {
 
@@ -101,7 +113,7 @@ public class IssController {
 			this.issConnector.closeConnection();
 		}
 
-		JSkatEventBus.INSTANCE.post(new LogoutFromIssEvent());
+		eventBus.post(new IssLogoutEvent());
 	}
 
 	/**
@@ -112,14 +124,8 @@ public class IssController {
 		this.view.showISSLogin();
 	}
 
-	/**
-	 * Connects to the ISS
-	 * 
-	 * @param credentials
-	 *            Login credentials
-	 * @return TRUE if the connection was established successfully
-	 */
-	public boolean connectToISS(LoginCredentials credentials) {
+	@Subscribe
+	public void establishConnection(final IssConnectEvent event) {
 
 		log.debug("connectToISS"); //$NON-NLS-1$
 
@@ -130,8 +136,8 @@ public class IssController {
 
 		log.debug("connector created"); //$NON-NLS-1$
 
-		this.login = credentials.getLoginName();
-		this.password = credentials.getPassword();
+		this.login = event.loginCredentials.getLoginName();
+		this.password = event.loginCredentials.getPassword();
 
 		if (this.issConnector != null && !this.issConnector.isConnected()) {
 
@@ -146,26 +152,10 @@ public class IssController {
 				// sendToIss(issMsg.getLoginAndPasswordMessage(password));
 			}
 		}
-
-		return this.issConnector != null && this.issConnector.isConnected();
 	}
 
 	private void sendToIss(final String message) {
 		this.issOut.sendMessage(message);
-	}
-
-	/**
-	 * Shows ISS lobby when the login was successful
-	 * 
-	 * @param login
-	 *            Login name
-	 */
-	void showISSLobby(final String login) {
-		// show ISS lobby if connection was successfull
-		// FIXME (jan 07.12.2010) use constant instead of title
-		this.view.closeTabPanel("ISS login"); //$NON-NLS-1$
-		this.view.showISSLobby();
-		this.jskat.setIssLogin(login);
 	}
 
 	/**
@@ -342,19 +332,6 @@ public class IssController {
 	}
 
 	/**
-	 * Destroys a local representation of an ISS table
-	 * 
-	 * @param tableName
-	 *            Table name
-	 */
-	public void destroyTable(final String tableName) {
-
-		this.view.closeTabPanel(tableName);
-		this.data.removeJoinedIssSkatTable(tableName);
-		this.jskat.removeTable(JSkatViewType.ISS_TABLE, tableName);
-	}
-
-	/**
 	 * Joins a table on ISS
 	 * 
 	 * @param tableName
@@ -408,7 +385,7 @@ public class IssController {
 	public void updateISSGame(final String tableName,
 			final GameStartInformation status) {
 
-		this.view.updateISSTable(tableName, this.data.getIssLoginName(), status);
+		this.view.updateISSTable(tableName, this.appData.getIssLoginName(), status);
 
 		this.gameData.put(tableName, createSkatGameData(status));
 	}
@@ -608,8 +585,10 @@ public class IssController {
 	 * @param tableName
 	 *            Table name
 	 */
-	public void sendReadySignal(final String tableName) {
-		sendToIss(this.issMsg.getReadyMessage(tableName));
+	@Subscribe
+	public void handle(final IssReadyToPlayEvent event) {
+		
+		sendToIss(this.issMsg.getReadyMessage(appData.getActiveView()));
 	}
 
 	/**
@@ -618,8 +597,10 @@ public class IssController {
 	 * @param tableName
 	 *            Table name
 	 */
-	public void sendTalkEnabledSignal(final String tableName) {
-		sendToIss(this.issMsg.getTalkEnabledMessage(tableName));
+	@Subscribe
+	public void handle(final IssTalkEnabledToggleEvent event) {
+		
+		sendToIss(this.issMsg.getTalkEnabledMessage(appData.getActiveView()));
 	}
 
 	/**
@@ -628,8 +609,10 @@ public class IssController {
 	 * @param tableName
 	 *            Table name
 	 */
-	public void sendResignSignal(final String tableName) {
-		sendToIss(this.issMsg.getResignMessage(tableName));
+	@Subscribe
+	public void handle(final IssResignEvent event) {
+		
+		sendToIss(this.issMsg.getResignMessage(appData.getActiveView()));
 	}
 
 	/**
@@ -638,8 +621,10 @@ public class IssController {
 	 * @param tableName
 	 *            Table name
 	 */
-	public void sendShowCardsSignal(final String tableName) {
-		sendToIss(this.issMsg.getShowCardsMessage(tableName));
+	@Subscribe
+	public void handle(final IssShowCardsEvent event) {
+		
+		sendToIss(this.issMsg.getShowCardsMessage(appData.getActiveView()));
 	}
 
 	/**
@@ -648,8 +633,9 @@ public class IssController {
 	 * @param tableName
 	 *            Table name
 	 */
-	public void sendTableSeatChangeSignal(final String tableName) {
-		sendToIss(this.issMsg.getTableSeatChangeMessage(tableName));
+	@Subscribe
+	public void handle(final IssTableSeatChangeEvent event) {
+		sendToIss(this.issMsg.getTableSeatChangeMessage(appData.getActiveView()));
 	}
 
 	/**
@@ -760,6 +746,6 @@ public class IssController {
 	 */
 	public boolean isTableJoined(final String tableName) {
 
-		return this.data.isTableJoined(tableName);
+		return this.appData.isTableJoined(tableName);
 	}
 }

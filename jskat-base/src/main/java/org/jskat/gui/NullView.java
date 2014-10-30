@@ -271,14 +271,6 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void showISSLobby() {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void removeFromISSLobbyTableList(
 			@SuppressWarnings("unused") final String tableName) {
 		// empty method by intent
@@ -368,14 +360,6 @@ public class NullView implements JSkatView {
 	public void setLastTrick(
 			@SuppressWarnings("unused") final String tableName,
 			@SuppressWarnings("unused") final Trick trick) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void closeTabPanel(@SuppressWarnings("unused") final String name) {
 		// empty method by intent
 	}
 

@@ -22,6 +22,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.jskat.control.JSkatMaster;
+import org.jskat.control.event.iss.IssDisconnectEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
@@ -47,6 +48,6 @@ public class DisconnectAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-        JSkatMaster.INSTANCE.getIssController().disconnect();
+        eventBus.post(new IssDisconnectEvent());
 	}
 }

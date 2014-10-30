@@ -20,7 +20,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.jskat.control.event.iss.LogoutFromIssEvent;
+import org.jskat.control.event.JSkatEventBus;
+import org.jskat.control.event.iss.IssConnectSuccessEvent;
+import org.jskat.control.event.iss.IssLogoutEvent;
+import org.jskat.control.event.table.RemoveTableEvent;
+import org.jskat.data.JSkatViewType;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.util.JSkatResourceBundle;
@@ -43,7 +47,7 @@ public class MessageHandler extends Thread {
 
 	private final List<String> messageList;
 
-	private EventBus eventBus;
+	private EventBus eventBus = JSkatEventBus.INSTANCE;
 
 	private final static int protocolVersion = 14;
 
@@ -107,7 +111,7 @@ public class MessageHandler extends Thread {
 
 		if (message == null) {
 			this.connect.closeConnection();
-			this.eventBus.post(new LogoutFromIssEvent());
+			this.eventBus.post(new IssLogoutEvent());
 		} else {
 
 			final StringTokenizer tokenizer = new StringTokenizer(message); // get
@@ -252,7 +256,8 @@ public class MessageHandler extends Thread {
 		log.debug("table destroy message"); //$NON-NLS-1$
 
 		final String tableName = params.get(0);
-		this.issControl.destroyTable(tableName);
+		
+		eventBus.post(new RemoveTableEvent(JSkatViewType.ISS_TABLE, tableName));
 	}
 
 	void handleTableInvitationMessage(final List<String> params) {
@@ -420,7 +425,7 @@ public class MessageHandler extends Thread {
 			log.error("local version: " + protocolVersion); //$NON-NLS-1$
 		}
 
-		this.issControl.showISSLobby(login);
+		eventBus.post(new IssConnectSuccessEvent(login));
 	}
 
 	/**
