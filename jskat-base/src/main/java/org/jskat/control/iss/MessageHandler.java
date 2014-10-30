@@ -22,7 +22,7 @@ import java.util.StringTokenizer;
 
 import org.jskat.control.event.JSkatEventBus;
 import org.jskat.control.event.iss.IssConnectSuccessEvent;
-import org.jskat.control.event.iss.IssLogoutEvent;
+import org.jskat.control.event.iss.IssDisconnectEvent;
 import org.jskat.control.event.table.RemoveTableEvent;
 import org.jskat.data.JSkatViewType;
 import org.jskat.data.SkatGameData;
@@ -110,8 +110,7 @@ public class MessageHandler extends Thread {
 	void handleMessage(final String message) {
 
 		if (message == null) {
-			this.connect.closeConnection();
-			this.eventBus.post(new IssLogoutEvent());
+			this.eventBus.post(new IssDisconnectEvent());
 		} else {
 
 			final StringTokenizer tokenizer = new StringTokenizer(message); // get

@@ -56,7 +56,7 @@ import org.jskat.control.event.general.ShowPreferencesEvent;
 import org.jskat.control.event.general.ShowTrainingOverviewEvent;
 import org.jskat.control.event.general.ShowWelcomeInformationEvent;
 import org.jskat.control.event.iss.IssConnectSuccessEvent;
-import org.jskat.control.event.iss.IssLogoutEvent;
+import org.jskat.control.event.iss.IssDisconnectEvent;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
 import org.jskat.control.event.skatseries.CreateSkatSeriesEvent;
 import org.jskat.control.event.table.DuplicateTableNameInputEvent;
@@ -93,7 +93,7 @@ import org.jskat.gui.action.human.SchiebenAction;
 import org.jskat.gui.action.iss.ChangeTableSeatsAction;
 import org.jskat.gui.action.iss.ConnectAction;
 import org.jskat.gui.action.iss.CreateIssTableAction;
-import org.jskat.gui.action.iss.DisconnectAction;
+import org.jskat.gui.action.iss.LogoutAction;
 import org.jskat.gui.action.iss.InvitePlayerAction;
 import org.jskat.gui.action.iss.JoinIssTableAction;
 import org.jskat.gui.action.iss.LeaveIssTableAction;
@@ -220,7 +220,7 @@ public class JSkatViewImpl implements JSkatView {
 		actions.put(JSkatAction.OPEN_ISS_HOMEPAGE, new OpenHomepageAction());
 		actions.put(JSkatAction.SHOW_ISS_LOGIN, new ShowLoginPanelAction());
 		actions.put(JSkatAction.CONNECT_TO_ISS, new ConnectAction());
-		actions.put(JSkatAction.DISCONNECT_FROM_ISS, new DisconnectAction());
+		actions.put(JSkatAction.DISCONNECT_FROM_ISS, new LogoutAction());
 		actions.put(JSkatAction.SEND_CHAT_MESSAGE, new SendChatMessageAction());
 		actions.put(JSkatAction.CREATE_ISS_TABLE, new CreateIssTableAction());
 		actions.put(JSkatAction.JOIN_ISS_TABLE, new JoinIssTableAction());
@@ -1294,7 +1294,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void handle(final IssLogoutEvent event) {
+	public void handle(final IssDisconnectEvent event) {
 
 		for (final Component currPanel : this.tabs.getComponents()) {
 			if (currPanel instanceof LobbyPanel

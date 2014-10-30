@@ -23,7 +23,6 @@ import org.jskat.control.JSkatMaster;
 import org.jskat.control.event.JSkatEventBus;
 import org.jskat.control.event.iss.IssConnectEvent;
 import org.jskat.control.event.iss.IssDisconnectEvent;
-import org.jskat.control.event.iss.IssLogoutEvent;
 import org.jskat.control.event.iss.IssReadyToPlayEvent;
 import org.jskat.control.event.iss.IssResignEvent;
 import org.jskat.control.event.iss.IssShowCardsEvent;
@@ -37,7 +36,6 @@ import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.Trick;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.GameStartInformation;
-import org.jskat.data.iss.LoginCredentials;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.data.iss.MoveType;
 import org.jskat.data.iss.TablePanelStatus;
@@ -112,8 +110,6 @@ public class IssController {
 
 			this.issConnector.closeConnection();
 		}
-
-		eventBus.post(new IssLogoutEvent());
 	}
 
 	/**

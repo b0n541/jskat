@@ -21,7 +21,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.jskat.control.JSkatMaster;
 import org.jskat.control.event.iss.IssDisconnectEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
@@ -29,14 +28,14 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 /**
  * Implements the action for leaving the ISS
  */
-public class DisconnectAction extends AbstractJSkatAction {
+public class LogoutAction extends AbstractJSkatAction {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see AbstractJSkatAction#AbstractJSkatAction()
 	 */
-	public DisconnectAction() {
+	public LogoutAction() {
 
 		putValue(Action.NAME, strings.getString("disconnect_from_iss")); //$NON-NLS-1$
 		setIcon(Icon.LOG_OUT);
@@ -48,6 +47,6 @@ public class DisconnectAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-        eventBus.post(new IssDisconnectEvent());
+		eventBus.post(new IssDisconnectEvent());
 	}
 }
