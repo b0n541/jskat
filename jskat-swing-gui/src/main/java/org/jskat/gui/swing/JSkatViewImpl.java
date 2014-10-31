@@ -1294,7 +1294,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void handle(final IssDisconnectEvent event) {
+	public void closeAllIssTabsOn(final IssDisconnectEvent event) {
 
 		for (final Component currPanel : this.tabs.getComponents()) {
 			if (currPanel instanceof LobbyPanel
