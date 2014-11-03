@@ -461,7 +461,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void handle(final ShowAboutInformationEvent event) {
+	public void showAboutInformationDialogOn(final ShowAboutInformationEvent event) {
 		JOptionPane
 				.showMessageDialog(
 						this.mainFrame,
@@ -674,7 +674,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void handle(ShowHelpEvent event) {
+	public void showHelpDialogOn(ShowHelpEvent event) {
 
 		new JSkatHelpDialog(
 				this.mainFrame,
@@ -683,14 +683,14 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void handle(ShowLicenseEvent event) {
+	public void showLicenceDialogOn(ShowLicenseEvent event) {
 
 		new JSkatHelpDialog(this.mainFrame,
 				this.strings.getString("license"), "org/jskat/gui/help/gpl3.html").setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Subscribe
-	public void handle(ShowWelcomeInformationEvent event) {
+	public void showWelcomeDialogOn(ShowWelcomeInformationEvent event) {
 
 		new JSkatWelcomeDialog(this.mainFrame,
 				this.strings.getString("welcome_to_jskat"), "org/jskat/gui/help/" //$NON-NLS-1$ //$NON-NLS-2$
@@ -775,7 +775,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void handle(CreateSkatSeriesEvent event) {
+	public void showSkatSeriesStartDialogOn(CreateSkatSeriesEvent event) {
 
 		this.skatSeriesStartDialog.setVisible(true);
 	}
@@ -810,7 +810,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void handle(final IssConnectSuccessEvent event) {
+	public void showIssLobbyOn(final IssConnectSuccessEvent event) {
 		// show ISS lobby if connection was successfull
 		// FIXME (jan 07.12.2010) use constant instead of title
 		closeTabPanel("ISS login"); //$NON-NLS-1$
@@ -1086,20 +1086,20 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void handle(ShowPreferencesEvent event) {
+	public void showPreferencesDialogOn(ShowPreferencesEvent event) {
 
 		this.preferencesDialog.validate();
 		this.preferencesDialog.setVisible(true);
 	}
 
 	@Subscribe
-	public void handle(final ShowTrainingOverviewEvent event) {
+	public void showTrainingOverviewDialogOn(final ShowTrainingOverviewEvent event) {
 
 		this.trainingOverview.setVisible(true);
 	}
 
 	@Subscribe
-	public void handle(RemoveTableEvent event) {
+	public void closeTableOn(RemoveTableEvent event) {
 		closeTabPanel(event.tableName);
 	}
 	
@@ -1245,7 +1245,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void handle(NewJSkatVersionAvailableEvent event) {
+	public void showInfoMessageOn(NewJSkatVersionAvailableEvent event) {
 
 		final String title = this.strings.getString("new_version_title"); //$NON-NLS-1$
 
@@ -1256,7 +1256,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void handle(TrainingResultEvent event) {
+	public void addTrainingResultOn(TrainingResultEvent event) {
 
 		this.trainingOverview.addTrainingResult(event.gameType, event.episodes,
 				event.totalGamesWon, event.avgNetworkErrorDeclarer,
@@ -1305,7 +1305,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void handle(final DuplicateTableNameInputEvent event) {
+	public void showErrorMessageOn(final DuplicateTableNameInputEvent event) {
 
 		final String message = this.strings.getString(
 				"duplicate_table_name_message", //$NON-NLS-1$
@@ -1316,7 +1316,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void handle(final EmptyTableNameInputEvent event) {
+	public void showErrorMessageOn(final EmptyTableNameInputEvent event) {
 
 		showErrorMessage(this.strings.getString("invalid_name_input_null_title"), //$NON-NLS-1$
 				this.strings.getString("invalid_name_input_null_message"));
