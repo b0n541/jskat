@@ -84,7 +84,7 @@ public class JSkatMaster {
 	}
 
 	@Subscribe
-	public void handle(DeadEvent event) {
+	public void on(DeadEvent event) {
 		log.error("Recieved dead event: " + event.getEvent());
 	}
 
@@ -168,7 +168,7 @@ public class JSkatMaster {
 	 *            Table name
 	 */
 	@Subscribe
-	public void handle(final TableRemovedEvent event) {
+	public void removeTableDataOn(final TableRemovedEvent event) {
 		if (JSkatViewType.LOCAL_TABLE.equals(event.tableType)) {
 			this.data.removeLocalSkatTable(event.tableName);
 		} else if (JSkatViewType.ISS_TABLE.equals(event.tableType)) {
@@ -647,7 +647,7 @@ public class JSkatMaster {
 	 *            Login name
 	 */
 	@Subscribe
-	public void handle(final IssConnectedEvent event) {
+	public void setLoginNameOn(final IssConnectedEvent event) {
 
 		this.data.setIssLoginName(event.login);
 	}
