@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control.event.general;
+package org.jskat.control.command.iss;
 
 /**
- * This event is created when the help dialog should be shown.
+ * This command is created when the user wants to disconnect from ISS.
  */
-public class ShowHelpEvent {
+public class IssDisconnectCommand {
 
 }

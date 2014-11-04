@@ -21,13 +21,12 @@ import java.util.Set;
 
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.train.NNTrainer;
-import org.jskat.control.event.JSkatEventBus;
+import org.jskat.control.command.general.ShowTrainingOverviewCommand;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
-import org.jskat.control.event.general.ShowTrainingOverviewEvent;
-import org.jskat.control.event.iss.IssConnectSuccessEvent;
+import org.jskat.control.event.iss.IssConnectedEvent;
 import org.jskat.control.event.table.DuplicateTableNameInputEvent;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
-import org.jskat.control.event.table.RemoveTableEvent;
+import org.jskat.control.event.table.TableRemovedEvent;
 import org.jskat.control.iss.IssController;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.JSkatApplicationData;
@@ -169,7 +168,7 @@ public class JSkatMaster {
 	 *            Table name
 	 */
 	@Subscribe
-	public void handle(final RemoveTableEvent event) {
+	public void handle(final TableRemovedEvent event) {
 		if (JSkatViewType.LOCAL_TABLE.equals(event.tableType)) {
 			this.data.removeLocalSkatTable(event.tableName);
 		} else if (JSkatViewType.ISS_TABLE.equals(event.tableType)) {
@@ -411,7 +410,7 @@ public class JSkatMaster {
 	 */
 	public void trainNeuralNetworks() {
 
-		JSkatEventBus.INSTANCE.post(new ShowTrainingOverviewEvent());
+		JSkatEventBus.INSTANCE.post(new ShowTrainingOverviewCommand());
 
 		NNTrainer nullTrainer = new NNTrainer();
 		nullTrainer.setGameType(GameType.NULL);
@@ -648,7 +647,7 @@ public class JSkatMaster {
 	 *            Login name
 	 */
 	@Subscribe
-	public void handle(final IssConnectSuccessEvent event) {
+	public void handle(final IssConnectedEvent event) {
 
 		this.data.setIssLoginName(event.login);
 	}

@@ -21,10 +21,10 @@ import java.util.List;
 import java.util.Set;
 
 import org.jskat.ai.nn.AIPlayerNN;
+import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.JSkatThread;
 import org.jskat.control.SkatGame;
-import org.jskat.control.event.JSkatEventBus;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;

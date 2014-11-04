@@ -22,7 +22,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.jskat.control.JSkatMaster;
-import org.jskat.control.event.iss.IssConnectEvent;
+import org.jskat.control.command.iss.IssConnectCommand;
 import org.jskat.data.iss.LoginCredentials;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.action.JSkatAction;
@@ -52,7 +52,7 @@ public class ConnectAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof LoginCredentials) {
-            eventBus.post(new IssConnectEvent((LoginCredentials) e.getSource()));
+            eventBus.post(new IssConnectCommand((LoginCredentials) e.getSource()));
 		}
 	}
 }

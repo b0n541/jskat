@@ -13,10 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control.event.iss;
+package org.jskat.control;
+
+import com.google.common.eventbus.EventBus;
+
 
 /**
- * This event is created if the user is ready to play on ISS.
+ * Central event bus for JSkat.
  */
-public class IssReadyToPlayEvent {
+public class JSkatEventBus {
+
+	public final static EventBus INSTANCE = new EventBus();
+
+	private JSkatEventBus() {
+		
+	}
 }

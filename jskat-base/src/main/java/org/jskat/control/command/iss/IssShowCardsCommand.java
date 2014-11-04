@@ -13,18 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control.event.iss;
-
-import org.jskat.data.iss.LoginCredentials;
+package org.jskat.control.command.iss;
 
 /**
- * This event is created when the user wants to connect to the ISS.
+ * This command is created when the user wants to show the cards on ISS.
  */
-public class IssConnectEvent {
+public class IssShowCardsCommand {
 
-	public final LoginCredentials loginCredentials;
-
-	public IssConnectEvent(final LoginCredentials loginCredentials) {
-		this.loginCredentials = loginCredentials;
-	}
 }

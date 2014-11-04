@@ -22,7 +22,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.jskat.control.JSkatMaster;
-import org.jskat.control.event.iss.IssShowCardsEvent;
+import org.jskat.control.command.iss.IssShowCardsCommand;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
@@ -49,6 +49,6 @@ public class ShowCardsAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(final ActionEvent e) {
 
-       eventBus.post(new IssShowCardsEvent());
+       eventBus.post(new IssShowCardsCommand());
 	}
 }

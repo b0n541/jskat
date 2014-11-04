@@ -47,21 +47,21 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jskat.JSkat;
-import org.jskat.control.event.JSkatEventBus;
+import org.jskat.control.JSkatEventBus;
+import org.jskat.control.command.general.ShowAboutInformationCommand;
+import org.jskat.control.command.general.ShowHelpCommand;
+import org.jskat.control.command.general.ShowLicenseCommand;
+import org.jskat.control.command.general.ShowPreferencesCommand;
+import org.jskat.control.command.general.ShowTrainingOverviewCommand;
+import org.jskat.control.command.general.ShowWelcomeInformationCommand;
+import org.jskat.control.command.iss.IssDisconnectCommand;
+import org.jskat.control.command.skatseries.CreateSkatSeriesCommand;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
-import org.jskat.control.event.general.ShowAboutInformationEvent;
-import org.jskat.control.event.general.ShowHelpEvent;
-import org.jskat.control.event.general.ShowLicenseEvent;
-import org.jskat.control.event.general.ShowPreferencesEvent;
-import org.jskat.control.event.general.ShowTrainingOverviewEvent;
-import org.jskat.control.event.general.ShowWelcomeInformationEvent;
-import org.jskat.control.event.iss.IssConnectSuccessEvent;
-import org.jskat.control.event.iss.IssDisconnectEvent;
+import org.jskat.control.event.iss.IssConnectedEvent;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
-import org.jskat.control.event.skatseries.CreateSkatSeriesEvent;
 import org.jskat.control.event.table.DuplicateTableNameInputEvent;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
-import org.jskat.control.event.table.RemoveTableEvent;
+import org.jskat.control.event.table.TableRemovedEvent;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
@@ -93,10 +93,10 @@ import org.jskat.gui.action.human.SchiebenAction;
 import org.jskat.gui.action.iss.ChangeTableSeatsAction;
 import org.jskat.gui.action.iss.ConnectAction;
 import org.jskat.gui.action.iss.CreateIssTableAction;
-import org.jskat.gui.action.iss.LogoutAction;
 import org.jskat.gui.action.iss.InvitePlayerAction;
 import org.jskat.gui.action.iss.JoinIssTableAction;
 import org.jskat.gui.action.iss.LeaveIssTableAction;
+import org.jskat.gui.action.iss.LogoutAction;
 import org.jskat.gui.action.iss.ObserveTableAction;
 import org.jskat.gui.action.iss.OpenHomepageAction;
 import org.jskat.gui.action.iss.ReadyAction;
@@ -461,7 +461,8 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void showAboutInformationDialogOn(final ShowAboutInformationEvent event) {
+	public void showAboutInformationDialogOn(
+			final ShowAboutInformationCommand command) {
 		JOptionPane
 				.showMessageDialog(
 						this.mainFrame,
@@ -674,7 +675,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void showHelpDialogOn(ShowHelpEvent event) {
+	public void showHelpDialogOn(ShowHelpCommand command) {
 
 		new JSkatHelpDialog(
 				this.mainFrame,
@@ -683,14 +684,14 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void showLicenceDialogOn(ShowLicenseEvent event) {
+	public void showLicenceDialogOn(ShowLicenseCommand command) {
 
 		new JSkatHelpDialog(this.mainFrame,
 				this.strings.getString("license"), "org/jskat/gui/help/gpl3.html").setVisible(true); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	@Subscribe
-	public void showWelcomeDialogOn(ShowWelcomeInformationEvent event) {
+	public void showWelcomeDialogOn(ShowWelcomeInformationCommand command) {
 
 		new JSkatWelcomeDialog(this.mainFrame,
 				this.strings.getString("welcome_to_jskat"), "org/jskat/gui/help/" //$NON-NLS-1$ //$NON-NLS-2$
@@ -775,7 +776,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void showSkatSeriesStartDialogOn(CreateSkatSeriesEvent event) {
+	public void showSkatSeriesStartDialogOn(CreateSkatSeriesCommand command) {
 
 		this.skatSeriesStartDialog.setVisible(true);
 	}
@@ -810,7 +811,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void showIssLobbyOn(final IssConnectSuccessEvent event) {
+	public void showIssLobbyOn(final IssConnectedEvent event) {
 		// show ISS lobby if connection was successfull
 		// FIXME (jan 07.12.2010) use constant instead of title
 		closeTabPanel("ISS login"); //$NON-NLS-1$
@@ -1086,20 +1087,21 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void showPreferencesDialogOn(ShowPreferencesEvent event) {
+	public void showPreferencesDialogOn(ShowPreferencesCommand command) {
 
 		this.preferencesDialog.validate();
 		this.preferencesDialog.setVisible(true);
 	}
 
 	@Subscribe
-	public void showTrainingOverviewDialogOn(final ShowTrainingOverviewEvent event) {
+	public void showTrainingOverviewDialogOn(
+			final ShowTrainingOverviewCommand command) {
 
 		this.trainingOverview.setVisible(true);
 	}
 
 	@Subscribe
-	public void closeTableOn(RemoveTableEvent event) {
+	public void closeTableOn(TableRemovedEvent event) {
 		closeTabPanel(event.tableName);
 	}
 	
@@ -1294,7 +1296,7 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Subscribe
-	public void closeAllIssTabsOn(final IssDisconnectEvent event) {
+	public void closeAllIssTabsOn(final IssDisconnectCommand event) {
 
 		for (final Component currPanel : this.tabs.getComponents()) {
 			if (currPanel instanceof LobbyPanel

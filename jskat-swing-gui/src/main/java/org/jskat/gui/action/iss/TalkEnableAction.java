@@ -22,7 +22,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 
 import org.jskat.control.JSkatMaster;
-import org.jskat.control.event.iss.IssTalkEnabledToggleEvent;
+import org.jskat.control.command.iss.IssToggleTalkEnabledCommand;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
@@ -49,6 +49,6 @@ public class TalkEnableAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-       eventBus.post(new IssTalkEnabledToggleEvent());
+       eventBus.post(new IssToggleTalkEnabledCommand());
 	}
 }

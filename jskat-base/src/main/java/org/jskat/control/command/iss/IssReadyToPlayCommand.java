@@ -13,27 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control.event.table;
-
-import org.jskat.data.JSkatViewType;
+package org.jskat.control.command.iss;
 
 /**
- * This event is created when a skat table is removed.
+ * This command is created if the user is ready to play on ISS.
  */
-public class RemoveTableEvent {
-	
-	public final String tableName;
-	public final JSkatViewType tableType;
-
-	/**
-	 * Constructor.
-	 * 
-	 * @param tableType Type to distinguish between local and ISS tables
-	 * @param tableName Table name
-	 */
-	public RemoveTableEvent(JSkatViewType tableType, String tableName) {
-	
-		this.tableType = tableType;
-		this.tableName = tableName;
-	}
+public class IssReadyToPlayCommand {
 }

@@ -13,19 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control.event;
+package org.jskat.control.event.table;
 
-import com.google.common.eventbus.EventBus;
-
+import org.jskat.data.JSkatViewType;
 
 /**
- * Central event bus for JSkat.
+ * This event is created when a skat table is removed.
  */
-public class JSkatEventBus {
+public class TableRemovedEvent {
+	
+	public final String tableName;
+	public final JSkatViewType tableType;
 
-	public final static EventBus INSTANCE = new EventBus();
-
-	private JSkatEventBus() {
-		
+	/**
+	 * Constructor.
+	 * 
+	 * @param tableType Type to distinguish between local and ISS tables
+	 * @param tableName Table name
+	 */
+	public TableRemovedEvent(JSkatViewType tableType, String tableName) {
+	
+		this.tableType = tableType;
+		this.tableName = tableName;
 	}
 }

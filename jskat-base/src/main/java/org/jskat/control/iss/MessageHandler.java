@@ -20,10 +20,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.jskat.control.event.JSkatEventBus;
-import org.jskat.control.event.iss.IssConnectSuccessEvent;
-import org.jskat.control.event.iss.IssDisconnectEvent;
-import org.jskat.control.event.table.RemoveTableEvent;
+import org.jskat.control.JSkatEventBus;
+import org.jskat.control.event.iss.IssConnectedEvent;
+import org.jskat.control.event.iss.IssDisconnectedEvent;
+import org.jskat.control.event.table.TableRemovedEvent;
 import org.jskat.data.JSkatViewType;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.iss.MoveInformation;
@@ -110,7 +110,7 @@ public class MessageHandler extends Thread {
 	void handleMessage(final String message) {
 
 		if (message == null) {
-			this.eventBus.post(new IssDisconnectEvent());
+			this.eventBus.post(new IssDisconnectedEvent());
 		} else {
 
 			final StringTokenizer tokenizer = new StringTokenizer(message); // get
@@ -256,7 +256,7 @@ public class MessageHandler extends Thread {
 
 		final String tableName = params.get(0);
 		
-		eventBus.post(new RemoveTableEvent(JSkatViewType.ISS_TABLE, tableName));
+		eventBus.post(new TableRemovedEvent(JSkatViewType.ISS_TABLE, tableName));
 	}
 
 	void handleTableInvitationMessage(final List<String> params) {
@@ -424,7 +424,7 @@ public class MessageHandler extends Thread {
 			log.error("local version: " + protocolVersion); //$NON-NLS-1$
 		}
 
-		eventBus.post(new IssConnectSuccessEvent(login));
+		eventBus.post(new IssConnectedEvent(login));
 	}
 
 	/**

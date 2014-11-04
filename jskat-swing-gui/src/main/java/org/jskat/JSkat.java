@@ -26,9 +26,9 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
-import org.jskat.control.event.JSkatEventBus;
-import org.jskat.control.event.general.ShowWelcomeInformationEvent;
+import org.jskat.control.command.general.ShowWelcomeInformationCommand;
 import org.jskat.data.DesktopSavePathResolver;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatOptions.Option;
@@ -98,7 +98,7 @@ public final class JSkat {
         jskatView.setVisible();
 
         if (JSkatOptions.instance().getBoolean(Option.SHOW_TIPS_AT_START_UP)) {
-			JSkatEventBus.INSTANCE.post(new ShowWelcomeInformationEvent());
+			JSkatEventBus.INSTANCE.post(new ShowWelcomeInformationCommand());
         }
 
         if (JSkatOptions.instance().getBoolean(

@@ -21,7 +21,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.jskat.control.event.general.ShowPreferencesEvent;
+import org.jskat.control.command.general.ShowPreferencesCommand;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
@@ -50,6 +50,6 @@ public class PreferencesAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		this.eventBus.post(new ShowPreferencesEvent());
+		this.eventBus.post(new ShowPreferencesCommand());
 	}
 }

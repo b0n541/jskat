@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control.event.iss;
+package org.jskat.control.command.general;
 
 /**
- * This event is created when the user wants to show the cards on ISS.
+ * This command is created when the help dialog should be shown.
  */
-public class IssShowCardsEvent {
+public class ShowHelpCommand {
 
 }

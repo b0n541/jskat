@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control.event.general;
+package org.jskat.control.command.general;
 
 /**
- * This event is created when the welcome dialog should be shown.
+ * This command is created when the welcome dialog should be shown.
  */
-public class ShowWelcomeInformationEvent {
+public class ShowWelcomeInformationCommand {
 
 }

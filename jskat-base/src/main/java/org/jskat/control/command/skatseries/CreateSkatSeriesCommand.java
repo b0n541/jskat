@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control.event.general;
+package org.jskat.control.command.skatseries;
 
 /**
- * This event is created when the license dialog should be shown.
+ * This command is created when a new skat series should be created.
  */
-public class ShowLicenseEvent {
+public class CreateSkatSeriesCommand {
 
 }

@@ -19,7 +19,7 @@ package org.jskat.gui.action;
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 
-import org.jskat.control.event.JSkatEventBus;
+import org.jskat.control.JSkatEventBus;
 import org.jskat.data.JSkatApplicationData;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;

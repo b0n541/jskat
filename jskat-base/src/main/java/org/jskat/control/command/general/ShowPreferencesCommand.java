@@ -13,16 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control.event.iss;
+package org.jskat.control.command.general;
 
 /**
- * This event is created when the connection to ISS was successful.
+ * This command is created when the preferences dialog should be shown.
  */
-public class IssConnectSuccessEvent {
+public class ShowPreferencesCommand {
 
-	public final String login;
-	
-	public IssConnectSuccessEvent(String login) {
-		this.login = login;
-	}
 }

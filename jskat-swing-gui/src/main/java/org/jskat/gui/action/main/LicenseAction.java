@@ -21,7 +21,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.jskat.control.event.general.ShowLicenseEvent;
+import org.jskat.control.command.general.ShowLicenseCommand;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
@@ -49,6 +49,6 @@ public class LicenseAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		this.eventBus.post(new ShowLicenseEvent());
+		this.eventBus.post(new ShowLicenseCommand());
 	}
 }

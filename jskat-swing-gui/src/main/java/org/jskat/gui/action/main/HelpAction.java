@@ -21,7 +21,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.jskat.control.event.general.ShowHelpEvent;
+import org.jskat.control.command.general.ShowHelpCommand;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
@@ -49,6 +49,6 @@ public class HelpAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		this.eventBus.post(new ShowHelpEvent());
+		this.eventBus.post(new ShowHelpCommand());
 	}
 }

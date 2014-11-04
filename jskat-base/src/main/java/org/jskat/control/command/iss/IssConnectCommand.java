@@ -13,11 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control.event.iss;
+package org.jskat.control.command.iss;
+
+import org.jskat.data.iss.LoginCredentials;
 
 /**
- * This event is created when the user wants to change the number of seats on a table on ISS.
+ * This command is created when the user wants to connect to the ISS.
  */
-public class IssTableSeatChangeEvent {
+public class IssConnectCommand {
 
+	public final LoginCredentials loginCredentials;
+
+	public IssConnectCommand(final LoginCredentials loginCredentials) {
+		this.loginCredentials = loginCredentials;
+	}
 }

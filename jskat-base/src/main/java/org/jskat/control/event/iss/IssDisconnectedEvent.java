@@ -16,8 +16,7 @@
 package org.jskat.control.event.iss;
 
 /**
- * This event is created when the user wants to toggle the talk enabled setting on ISS.
+ * This event is created when the connection to ISS was lost.
  */
-public class IssTalkEnabledToggleEvent {
-
+public class IssDisconnectedEvent {
 }

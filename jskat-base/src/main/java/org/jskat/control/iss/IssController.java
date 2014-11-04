@@ -19,15 +19,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
-import org.jskat.control.event.JSkatEventBus;
-import org.jskat.control.event.iss.IssConnectEvent;
-import org.jskat.control.event.iss.IssDisconnectEvent;
-import org.jskat.control.event.iss.IssReadyToPlayEvent;
-import org.jskat.control.event.iss.IssResignEvent;
-import org.jskat.control.event.iss.IssShowCardsEvent;
-import org.jskat.control.event.iss.IssTableSeatChangeEvent;
-import org.jskat.control.event.iss.IssTalkEnabledToggleEvent;
+import org.jskat.control.command.iss.IssConnectCommand;
+import org.jskat.control.command.iss.IssDisconnectCommand;
+import org.jskat.control.command.iss.IssReadyToPlayCommand;
+import org.jskat.control.command.iss.IssResignCommand;
+import org.jskat.control.command.iss.IssShowCardsCommand;
+import org.jskat.control.command.iss.IssTableSeatChangeCommand;
+import org.jskat.control.command.iss.IssToggleTalkEnabledCommand;
+import org.jskat.control.event.iss.IssDisconnectedEvent;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.JSkatApplicationData;
 import org.jskat.data.JSkatViewType;
@@ -102,8 +103,21 @@ public class IssController {
 	 * Disconnects from ISS
 	 */
 	@Subscribe
-	public void handle(final IssDisconnectEvent event) {
+	public void disconnectFromIssOn(final IssDisconnectCommand commant) {
 
+		closeConnectionIfOpen();
+	}
+
+	/**
+	 * Connection to ISS was lost
+	 */
+	@Subscribe
+	public void closeConnectionOn(final IssDisconnectedEvent event) {
+
+		closeConnectionIfOpen();
+	}
+
+	private void closeConnectionIfOpen() {
 		if (this.issConnector != null && this.issConnector.isConnected()) {
 
 			log.debug("connection to ISS still open"); //$NON-NLS-1$
@@ -121,7 +135,7 @@ public class IssController {
 	}
 
 	@Subscribe
-	public void establishConnection(final IssConnectEvent event) {
+	public void establishConnectionOn(final IssConnectCommand command) {
 
 		log.debug("connectToISS"); //$NON-NLS-1$
 
@@ -132,8 +146,8 @@ public class IssController {
 
 		log.debug("connector created"); //$NON-NLS-1$
 
-		this.login = event.loginCredentials.getLoginName();
-		this.password = event.loginCredentials.getPassword();
+		this.login = command.loginCredentials.getLoginName();
+		this.password = command.loginCredentials.getPassword();
 
 		if (this.issConnector != null && !this.issConnector.isConnected()) {
 
@@ -582,7 +596,7 @@ public class IssController {
 	 *            Table name
 	 */
 	@Subscribe
-	public void handle(final IssReadyToPlayEvent event) {
+	public void sendReadyToPlayOn(final IssReadyToPlayCommand event) {
 		
 		sendToIss(this.issMsg.getReadyMessage(appData.getActiveView()));
 	}
@@ -594,7 +608,7 @@ public class IssController {
 	 *            Table name
 	 */
 	@Subscribe
-	public void handle(final IssTalkEnabledToggleEvent event) {
+	public void sendToggleTalkEnabledOn(final IssToggleTalkEnabledCommand event) {
 		
 		sendToIss(this.issMsg.getTalkEnabledMessage(appData.getActiveView()));
 	}
@@ -606,7 +620,7 @@ public class IssController {
 	 *            Table name
 	 */
 	@Subscribe
-	public void handle(final IssResignEvent event) {
+	public void sendResignOn(final IssResignCommand event) {
 		
 		sendToIss(this.issMsg.getResignMessage(appData.getActiveView()));
 	}
@@ -618,7 +632,7 @@ public class IssController {
 	 *            Table name
 	 */
 	@Subscribe
-	public void handle(final IssShowCardsEvent event) {
+	public void sendShowCardsOn(final IssShowCardsCommand event) {
 		
 		sendToIss(this.issMsg.getShowCardsMessage(appData.getActiveView()));
 	}
@@ -630,7 +644,7 @@ public class IssController {
 	 *            Table name
 	 */
 	@Subscribe
-	public void handle(final IssTableSeatChangeEvent event) {
+	public void sendTableSeatChangeOn(final IssTableSeatChangeCommand command) {
 		sendToIss(this.issMsg.getTableSeatChangeMessage(appData.getActiveView()));
 	}
 

@@ -30,9 +30,9 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.plaf.basic.BasicButtonUI;
 
+import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
-import org.jskat.control.event.JSkatEventBus;
-import org.jskat.control.event.table.RemoveTableEvent;
+import org.jskat.control.event.table.TableRemovedEvent;
 import org.jskat.data.JSkatViewType;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
@@ -123,7 +123,7 @@ public class JSkatTabComponent extends JPanel {
 			int i = JSkatTabComponent.this.pane
 					.indexOfTabComponent(JSkatTabComponent.this);
 			if (i != -1) {
-				JSkatEventBus.INSTANCE.post(new RemoveTableEvent(
+				JSkatEventBus.INSTANCE.post(new TableRemovedEvent(
 						JSkatViewType.LOCAL_TABLE, pane.getTitleAt(i)));
 			}
 		}
