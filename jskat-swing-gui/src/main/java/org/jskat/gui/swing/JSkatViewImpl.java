@@ -160,9 +160,10 @@ public class JSkatViewImpl implements JSkatView {
 	private final NeuralNetworkTrainingOverview trainingOverview;
 	private JTabbedPane tabs;
 	private String activeView;
-	private final Map<String, SkatTablePanel> tables;
-	private final JSkatGraphicRepository bitmaps;
-	private final JSkatResourceBundle strings;
+	private final Map<String, SkatTablePanel> tables = new HashMap<String, SkatTablePanel>();
+	private final JSkatGraphicRepository bitmaps = JSkatGraphicRepository.INSTANCE;
+	private final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
+	private final JSkatOptions options = JSkatOptions.instance();
 	static ActionMap actions;
 	private LobbyPanel issLobby;
 
@@ -171,9 +172,6 @@ public class JSkatViewImpl implements JSkatView {
 	 */
 	public JSkatViewImpl() {
 
-		this.bitmaps = JSkatGraphicRepository.INSTANCE;
-		this.strings = JSkatResourceBundle.INSTANCE;
-		this.tables = new HashMap<String, SkatTablePanel>();
 		initActionMap();
 		initGUI();
 
@@ -657,6 +655,12 @@ public class JSkatViewImpl implements JSkatView {
 			actions.get(JSkatAction.PICK_UP_SKAT).setEnabled(true);
 			actions.get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
 			break;
+		case TRICK_PLAYING:
+			if (options.isPlayContra()) {
+				actions.get(JSkatAction.CALL_CONTRA).setEnabled(true);
+			} else {
+				actions.get(JSkatAction.CALL_CONTRA).setEnabled(false);
+			}
 		case GAME_OVER:
 			actions.get(JSkatAction.CONTINUE_LOCAL_SERIES).setEnabled(true);
 			break;
