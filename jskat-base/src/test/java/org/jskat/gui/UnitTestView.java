@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jskat.control.JSkatEventBus;
+import org.jskat.control.event.table.TableCreatedEvent;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
@@ -36,6 +38,8 @@ import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.Player;
 
+import com.google.common.eventbus.Subscribe;
+
 /**
  * Helper class that represent a GUI view during unit tests
  */
@@ -48,6 +52,12 @@ public class UnitTestView implements JSkatView {
 	 */
 	public UnitTestView() {
 		this.tables = new ArrayList<String>();
+		JSkatEventBus.INSTANCE.register(this);
+	}
+
+	@Subscribe
+	public void handle(final TableCreatedEvent event) {
+		tables.add(event.tableName);
 	}
 
 	/**
