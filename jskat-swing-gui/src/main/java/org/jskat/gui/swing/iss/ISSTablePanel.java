@@ -43,7 +43,6 @@ public class ISSTablePanel extends SkatTablePanel {
 
 	private static final long serialVersionUID = 1L;
 
-	String loginName;
 	ChatPanel chatPanel;
 
 	// FIXME (jansch 05.04.2011) Dirty hack
@@ -62,11 +61,9 @@ public class ISSTablePanel extends SkatTablePanel {
 	 *            Login name on ISS
 	 */
 	public ISSTablePanel(final JSkatView view, final String tableName,
-			final ActionMap actions, final String newLoginName) {
+			final ActionMap actions) {
 
 		super(view, tableName, actions);
-
-		loginName = newLoginName;
 	}
 
 	/**

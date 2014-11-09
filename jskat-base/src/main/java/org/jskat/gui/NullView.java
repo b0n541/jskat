@@ -45,46 +45,8 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void addCard(@SuppressWarnings("unused") final String tableName,
-			@SuppressWarnings("unused") final Player player,
-			@SuppressWarnings("unused") final Card card) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void clearHand(@SuppressWarnings("unused") final String tableName,
-			@SuppressWarnings("unused") final Player player) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void clearTrickCards(
 			@SuppressWarnings("unused") final String tableName) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void createISSTable(
-			@SuppressWarnings("unused") final String tableName,
-			@SuppressWarnings("unused") final String loginName) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void createSkatTablePanel(
-			@SuppressWarnings("unused") final String name) {
 		// empty method by intent
 	}
 

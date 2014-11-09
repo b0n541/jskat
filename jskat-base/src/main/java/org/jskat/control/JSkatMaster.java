@@ -26,6 +26,7 @@ import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.iss.IssConnectedEvent;
 import org.jskat.control.event.table.DuplicateTableNameInputEvent;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
+import org.jskat.control.event.table.TableCreatedEvent;
 import org.jskat.control.event.table.TableRemovedEvent;
 import org.jskat.control.iss.IssController;
 import org.jskat.data.GameAnnouncement;
@@ -141,10 +142,6 @@ public class JSkatMaster {
 		}
 	}
 
-	public void createLocalTable(String tableName) {
-		createLocalTable(tableName, this.view.getHumanPlayerForGUI());
-	}
-
 	private void createLocalTable(final String tableName,
 			final AbstractHumanJSkatPlayer humanPlayer) {
 
@@ -154,7 +151,8 @@ public class JSkatMaster {
 		this.data.addLocalSkatTable(table);
 		this.data.registerHumanPlayerObject(table, humanPlayer);
 
-		this.view.createSkatTablePanel(table.getName());
+		JSkatEventBus.INSTANCE.post(new TableCreatedEvent(
+				JSkatViewType.LOCAL_TABLE, tableName));
 
 		this.data.setActiveView(JSkatViewType.LOCAL_TABLE, table.getName());
 	}

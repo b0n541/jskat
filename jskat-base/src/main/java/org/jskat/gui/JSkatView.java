@@ -72,24 +72,6 @@ public interface JSkatView {
 	public void showISSLogin();
 
 	/**
-	 * Creates ISS table
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param loginName
-	 *            Login name on ISS
-	 */
-	public void createISSTable(String tableName, String loginName);
-
-	/**
-	 * Creates a local table panel
-	 * 
-	 * @param name
-	 *            Name of the table
-	 */
-	public void createSkatTablePanel(String name);
-
-	/**
 	 * Gets the players to invite
 	 * 
 	 * @param playerNames
@@ -127,18 +109,6 @@ public interface JSkatView {
 	public void showCardNotAllowedMessage(Card card);
 
 	/**
-	 * Adds a card to a players hand
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param player
-	 *            Player
-	 * @param card
-	 *            Card
-	 */
-	public void addCard(String tableName, Player player, Card card);
-
-	/**
 	 * Adds a list of cards to a players hand
 	 * 
 	 * @param tableName
@@ -161,16 +131,6 @@ public interface JSkatView {
 	 *            Card
 	 */
 	public void removeCard(String tableName, Player player, Card card);
-
-	/**
-	 * Removes all cards from a players hand
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param player
-	 *            Player
-	 */
-	public void clearHand(String tableName, Player player);
 
 	/**
 	 * Sets the bid value for a player

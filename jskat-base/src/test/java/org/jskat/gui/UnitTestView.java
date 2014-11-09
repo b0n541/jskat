@@ -82,16 +82,6 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void createISSTable(final String tableName, final String loginName) {
-		this.tables.add(tableName);
-	}
-
-	@Override
-	public void createSkatTablePanel(final String name) {
-		this.tables.add(name);
-	}
-
-	@Override
 	public List<String> getPlayerForInvitation(final Set<String> playerNames) {
 		// TODO Auto-generated method stub
 		return null;
@@ -116,13 +106,6 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void addCard(final String tableName, final Player player,
-			final Card card) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void addCards(final String tableName, final Player player,
 			final CardList cards) {
 		// TODO Auto-generated method stub
@@ -132,12 +115,6 @@ public class UnitTestView implements JSkatView {
 	@Override
 	public void removeCard(final String tableName, final Player player,
 			final Card card) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void clearHand(final String tableName, final Player player) {
 		// TODO Auto-generated method stub
 
 	}

@@ -292,9 +292,10 @@ public class SkatGame extends JSkatThread {
 		if (this.deck == null) {
 			// Skat game has no cards, yet
 			this.deck = new CardDeck();
-			this.log.debug("shuffling..."); //$NON-NLS-1$
 
+			this.log.debug("shuffling..."); //$NON-NLS-1$
 			this.deck.shuffle();
+
 			this.log.debug(this.deck.toString());
 		}
 

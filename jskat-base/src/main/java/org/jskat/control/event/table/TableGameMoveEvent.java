@@ -13,19 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control;
+package org.jskat.control.event.table;
 
-import com.google.common.eventbus.EventBus;
-
+import org.jskat.control.event.skatgame.SkatGameEvent;
 
 /**
- * Central event bus for JSkat.
+ * This event is created when a move in a skat game was done on a table.
  */
-public class JSkatEventBus {
+public class TableGameMoveEvent {
 
-	public final static EventBus INSTANCE = new EventBus("JSkat");
+	public final String tableName;
+	public final SkatGameEvent gameEvent;
 
-	private JSkatEventBus() {
-		
+	public TableGameMoveEvent(String tableName, SkatGameEvent gameEvent) {
+		this.tableName = tableName;
+		this.gameEvent = gameEvent;
 	}
 }
