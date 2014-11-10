@@ -57,7 +57,7 @@ public class UnitTestView implements JSkatView {
 
 	@Subscribe
 	public void handle(final TableCreatedEvent event) {
-		tables.add(event.tableName);
+		this.tables.add(event.tableName);
 	}
 
 	/**
@@ -125,19 +125,6 @@ public class UnitTestView implements JSkatView {
 	@Override
 	public void removeCard(final String tableName, final Player player,
 			final Card card) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setBid(final String tableName, final Player player,
-			final int bidValue, final boolean madeBid) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setPass(final String tableName, final Player player) {
 		// TODO Auto-generated method stub
 
 	}
@@ -219,13 +206,6 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void setTrickForeHand(final String tableName,
-			final Player trickForeHand) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void takeCardFromSkat(final String tableName, final Player player,
 			final Card card) {
 		// TODO Auto-generated method stub
@@ -296,12 +276,6 @@ public class UnitTestView implements JSkatView {
 
 	@Override
 	public void setResign(final String tableName, final Player player) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setActivePlayer(final String tableName, final Player player) {
 		// TODO Auto-generated method stub
 
 	}

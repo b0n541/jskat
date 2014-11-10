@@ -20,8 +20,8 @@ import org.jskat.util.Player;
 
 public class AbstractBidEvent implements SkatGameEvent {
 
-	protected final Player player;
-	protected final Integer bid;
+	public final Player player;
+	public final Integer bid;
 
 	public AbstractBidEvent(Player player, Integer bid) {
 		this.player = player;
@@ -30,11 +30,11 @@ public class AbstractBidEvent implements SkatGameEvent {
 
 	@Override
 	public final void processForward(SkatGameData data) {
-		data.addPlayerBid(player, bid);
+		data.addPlayerBid(this.player, this.bid);
 	}
 
 	@Override
 	public final void processBackward(SkatGameData data) {
-		data.removeLastPlayerBid(player);
+		data.removeLastPlayerBid(this.player);
 	}
 }

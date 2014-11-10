@@ -169,27 +169,6 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setBid(@SuppressWarnings("unused") final String tableName,
-			@SuppressWarnings("unused") final Player player,
-			@SuppressWarnings("unused") final int bidValue,
-			@SuppressWarnings("unused") final boolean madeBid) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setTrickForeHand(
-			@SuppressWarnings("unused") final String tableName,
-			@SuppressWarnings("unused") final Player trickForeHand) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void putCardIntoSkat(
 			@SuppressWarnings("unused") final String tableName,
 			@SuppressWarnings("unused") final Player player,
@@ -342,25 +321,6 @@ public class NullView implements JSkatView {
 	public void addCards(@SuppressWarnings("unused") final String tableName,
 			@SuppressWarnings("unused") final Player player,
 			@SuppressWarnings("unused") final CardList cards) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setActivePlayer(
-			@SuppressWarnings("unused") final String tableName,
-			@SuppressWarnings("unused") final Player player) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setPass(@SuppressWarnings("unused") final String tableName,
-			@SuppressWarnings("unused") final Player player) {
 		// empty method by intent
 	}
 

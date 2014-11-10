@@ -15,17 +15,14 @@
  */
 package org.jskat.control.event.table;
 
-import org.jskat.control.event.skatgame.SkatGameEvent;
+import org.jskat.util.Player;
 
-/**
- * This event is created when a move in a skat game was done on a table.
- */
-public class TableGameMoveEvent extends AbstractTableEvent {
+public class ActivePlayerChangedEvent extends AbstractTableEvent {
 
-	public final SkatGameEvent gameEvent;
+	public final Player player;
 
-	public TableGameMoveEvent(String tableName, SkatGameEvent gameEvent) {
+	public ActivePlayerChangedEvent(String tableName, Player player) {
 		super(tableName);
-		this.gameEvent = gameEvent;
+		this.player = player;
 	}
 }

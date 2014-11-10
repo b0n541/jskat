@@ -39,6 +39,10 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 
+import org.jskat.control.event.skatgame.AbstractBidEvent;
+import org.jskat.control.event.skatgame.BidEvent;
+import org.jskat.control.event.skatgame.HoldBidEvent;
+import org.jskat.control.event.table.ActivePlayerChangedEvent;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData.GameState;
@@ -57,6 +61,8 @@ import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.eventbus.Subscribe;
 
 /**
  * Panel for a skat table
@@ -675,58 +681,30 @@ public class SkatTablePanel extends AbstractTabPanel {
 	}
 
 	/**
-	 * Sets the fore hand player for the trick
-	 * 
-	 * @param trickForeHand
-	 *            Fore hand player for the trick
+	 * Sets the bid value for a player.
 	 */
-	public void setTrickForeHand(final Player trickForeHand) {
+	@Subscribe
+	public void setBidValueOn(final BidEvent event) {
 
-		setActivePlayer(trickForeHand);
+		log.debug(event.player + " bids: " + event.bid);
+
+		setBidValue(event);
+	}
+
+	private void setBidValue(final AbstractBidEvent event) {
+		this.biddingPanel.setBid(event.player, event.bid);
+		getPlayerPanel(event.player).setBidValue(event.bid);
 	}
 
 	/**
-	 * Sets the bid value for a player
-	 * 
-	 * @param player
-	 *            Player
-	 * @param bidValue
-	 *            Bid value
-	 * @param madeBid
-	 *            TRUE, if the player made the bid<br>
-	 *            FALSE, if the player hold the bid
+	 * Sets the bid value for a player.
 	 */
-	public void setBid(final Player player, final int bidValue,
-			final boolean madeBid) {
+	@Subscribe
+	public void setBidValueOn(final HoldBidEvent event) {
 
-		log.debug(player + " " + (madeBid ? "bids" : "holds") + ": " + bidValue); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
+		log.debug(event.player + " holds: " + event.bid);
 
-		this.biddingPanel.setBid(player, bidValue);
-		getPlayerPanel(player).setBidValue(bidValue);
-
-		switch (player) {
-		case FOREHAND:
-			if (playerPassed.get(Player.MIDDLEHAND).booleanValue()) {
-				setActivePlayer(Player.REARHAND);
-			} else {
-				setActivePlayer(Player.MIDDLEHAND);
-			}
-			break;
-		case MIDDLEHAND:
-			if (madeBid) {
-				setActivePlayer(Player.FOREHAND);
-			} else {
-				setActivePlayer(Player.REARHAND);
-			}
-			break;
-		case REARHAND:
-			if (playerPassed.get(Player.FOREHAND).booleanValue()) {
-				setActivePlayer(Player.MIDDLEHAND);
-			} else {
-				setActivePlayer(Player.FOREHAND);
-			}
-			break;
-		}
+		setBidValue(event);
 	}
 
 	/**
@@ -986,8 +964,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param player
 	 *            Active player
 	 */
-	public void setActivePlayer(final Player player) {
-		switch (player) {
+	@Subscribe
+	public void setActivePlayerOn(final ActivePlayerChangedEvent event) {
+		switch (event.player) {
 		case FOREHAND:
 			this.foreHand.setActivePlayer(true);
 			this.middleHand.setActivePlayer(false);
@@ -1020,20 +999,6 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		getPlayerPanel(player).setPass(true);
 		this.biddingPanel.setPass(player);
-
-		switch (player) {
-		case FOREHAND:
-		case MIDDLEHAND:
-			setActivePlayer(Player.REARHAND);
-			break;
-		case REARHAND:
-			if (playerPassed.get(Player.FOREHAND).booleanValue()) {
-				setActivePlayer(Player.MIDDLEHAND);
-			} else {
-				setActivePlayer(Player.FOREHAND);
-			}
-			break;
-		}
 	}
 
 	/**

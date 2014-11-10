@@ -20,9 +20,8 @@ import org.jskat.data.JSkatViewType;
 /**
  * This event is created when a skat table is removed.
  */
-public class TableRemovedEvent {
+public class TableRemovedEvent extends AbstractTableEvent {
 	
-	public final String tableName;
 	public final JSkatViewType tableType;
 
 	/**
@@ -33,7 +32,7 @@ public class TableRemovedEvent {
 	 */
 	public TableRemovedEvent(JSkatViewType tableType, String tableName) {
 	
+		super(tableName);
 		this.tableType = tableType;
-		this.tableName = tableName;
 	}
 }

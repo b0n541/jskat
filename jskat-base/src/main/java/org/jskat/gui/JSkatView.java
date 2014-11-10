@@ -133,32 +133,6 @@ public interface JSkatView {
 	public void removeCard(String tableName, Player player, Card card);
 
 	/**
-	 * Sets the bid value for a player
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param player
-	 *            Player
-	 * @param bidValue
-	 *            Bid value
-	 * @param madeBid
-	 *            TRUE, if the player made the bid, FALSE if the player hold the
-	 *            bid
-	 */
-	public void setBid(String tableName, Player player, int bidValue,
-			boolean madeBid);
-
-	/**
-	 * Sets the pass bid for a player
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param player
-	 *            Player
-	 */
-	public void setPass(String tableName, Player player);
-
-	/**
 	 * Sets the player positions for a table
 	 * 
 	 * @param tableName
@@ -285,16 +259,6 @@ public interface JSkatView {
 	 *            Bid value
 	 */
 	public void setBidValueToHold(String tableName, int bidValue);
-
-	/**
-	 * Sets the new trick fore hand
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param trickForeHand
-	 *            Trick fore hand
-	 */
-	public void setTrickForeHand(String tableName, Player trickForeHand);
 
 	/**
 	 * Takes a card from the skat to the user
@@ -446,16 +410,6 @@ public interface JSkatView {
 	 *            Resigning player
 	 */
 	public void setResign(String tableName, Player player);
-
-	/**
-	 * Sets the active player
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param player
-	 *            Active player
-	 */
-	public void setActivePlayer(String tableName, Player player);
 
 	/**
 	 * Sets the skat

@@ -18,6 +18,11 @@ package org.jskat.control;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jskat.control.event.skatgame.BidEvent;
+import org.jskat.control.event.skatgame.HoldBidEvent;
+import org.jskat.control.event.skatgame.PassBidEvent;
+import org.jskat.control.event.table.ActivePlayerChangedEvent;
+import org.jskat.control.event.table.TableGameMoveEvent;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary;
@@ -273,7 +278,8 @@ public class SkatGame extends JSkatThread {
 
 	private void setActivePlayer(final Player newPlayer) {
 		this.activePlayer = newPlayer;
-		this.view.setActivePlayer(this.tableName, this.activePlayer);
+		JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(
+				this.tableName, this.activePlayer));
 	}
 
 	private boolean playGrandHand() {
@@ -386,15 +392,17 @@ public class SkatGame extends JSkatThread {
 			setActivePlayer(Player.FOREHAND);
 
 			// check whether fore hand holds at least one bid
-			if (!(getPlayerInstance(Player.FOREHAND).bidMore(18) > -1)) {
+			if (getPlayerInstance(Player.FOREHAND).bidMore(18) > -1) {
 
-				this.log.debug("Fore hand passes too"); //$NON-NLS-1$
-				this.view.setPass(this.tableName, Player.FOREHAND);
-				secondWinner = null;
+				this.log.debug("Fore hand holds 18"); //$NON-NLS-1$
+				JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(
+						this.tableName, new BidEvent(secondWinner, 18)));
 			} else {
 
-				this.view.setBid(this.tableName, secondWinner, 18, true);
-				this.log.debug("Fore hand holds 18"); //$NON-NLS-1$
+				this.log.debug("Fore hand passes too"); //$NON-NLS-1$
+				JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(
+						this.tableName, new PassBidEvent(Player.FOREHAND)));
+				secondWinner = null;
 			}
 		}
 
@@ -465,6 +473,7 @@ public class SkatGame extends JSkatThread {
 					.getNextBidValue(currBidValue);
 			this.view.setBidValueToMake(this.tableName, nextBidValue);
 			// ask player
+			setActivePlayer(announcer);
 			final int announcerBidValue = getPlayerInstance(announcer).bidMore(
 					nextBidValue);
 
@@ -479,8 +488,11 @@ public class SkatGame extends JSkatThread {
 
 				this.data.addPlayerBid(announcer, announcerBidValue);
 				informPlayersAboutBid(announcer, announcerBidValue);
-				this.view.setBid(this.tableName, announcer, announcerBidValue, true);
+				JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(
+						this.tableName, new BidEvent(announcer,
+								announcerBidValue)));
 
+				setActivePlayer(hearer);
 				if (getPlayerInstance(hearer).holdBid(currBidValue)) {
 
 					this.log.debug("hearer holds " + currBidValue); //$NON-NLS-1$
@@ -488,7 +500,9 @@ public class SkatGame extends JSkatThread {
 					// hearing hand holds bid
 					this.data.addPlayerBid(hearer, announcerBidValue);
 					informPlayersAboutBid(hearer, announcerBidValue);
-					this.view.setBid(this.tableName, hearer, announcerBidValue, false);
+					JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(
+							this.tableName, new HoldBidEvent(hearer,
+									announcerBidValue)));
 
 				} else {
 
@@ -497,7 +511,8 @@ public class SkatGame extends JSkatThread {
 					// hearing hand passed
 					hearerPassed = true;
 					this.data.setPlayerPass(hearer, true);
-					this.view.setPass(this.tableName, hearer);
+					JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(
+							this.tableName, new PassBidEvent(hearer)));
 				}
 			} else {
 
@@ -506,7 +521,8 @@ public class SkatGame extends JSkatThread {
 				// announcing hand passes
 				announcerPassed = true;
 				this.data.setPlayerPass(announcer, true);
-				this.view.setPass(this.tableName, announcer);
+				JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(
+						this.tableName, new PassBidEvent(announcer)));
 			}
 		}
 
@@ -622,7 +638,6 @@ public class SkatGame extends JSkatThread {
 			setActivePlayer(trickForehand);
 
 			this.view.setTrickNumber(this.tableName, trickNo + 1);
-			this.view.setTrickForeHand(this.tableName, this.activePlayer);
 
 			final Trick trick = new Trick(trickNo, this.activePlayer);
 			this.data.addTrick(trick);

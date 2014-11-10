@@ -20,9 +20,8 @@ import org.jskat.data.JSkatViewType;
 /**
  * This event is created when a skat table is created.
  */
-public class TableCreatedEvent {
+public class TableCreatedEvent extends AbstractTableEvent {
 	
-	public final String tableName;
 	public final JSkatViewType tableType;
 
 	/**
@@ -32,8 +31,8 @@ public class TableCreatedEvent {
 	 * @param tableName Table name
 	 */
 	public TableCreatedEvent(JSkatViewType tableType, String tableName) {
-	
+
+		super(tableName);
 		this.tableType = tableType;
-		this.tableName = tableName;
 	}
 }

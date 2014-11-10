@@ -59,7 +59,11 @@ import org.jskat.control.command.skatseries.CreateSkatSeriesCommand;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.iss.IssConnectedEvent;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
+import org.jskat.control.event.skatgame.BidEvent;
+import org.jskat.control.event.skatgame.HoldBidEvent;
 import org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent;
+import org.jskat.control.event.skatgame.PassBidEvent;
+import org.jskat.control.event.table.ActivePlayerChangedEvent;
 import org.jskat.control.event.table.DuplicateTableNameInputEvent;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
 import org.jskat.control.event.table.TableCreatedEvent;
@@ -153,9 +157,6 @@ import com.google.common.eventbus.DeadEvent;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
-/**
- * Implementation of JSkatView interface
- */
 public class JSkatViewImpl implements JSkatView {
 
 	private static Logger log = LoggerFactory.getLogger(JSkatViewImpl.class);
@@ -174,8 +175,6 @@ public class JSkatViewImpl implements JSkatView {
 	private final JSkatOptions options = JSkatOptions.instance();
 	static ActionMap actions;
 	private LobbyPanel issLobby;
-
-	private EventBus eventBus;
 
 	/**
 	 * Constructor
@@ -460,21 +459,26 @@ public class JSkatViewImpl implements JSkatView {
 		}
 
 		this.tables.put(tableName, panel);
-		EventBus tableEventBus = new EventBus(tableName);
-		tableEventBus.register(this);
-		tableEventBus.register(panel);
-		this.tableEventBuses.put(tableName, tableEventBus);
+		EventBus eventBus = new EventBus(tableName);
+		eventBus.register(panel);
+		this.tableEventBuses.put(tableName, eventBus);
+		JSkatEventBus.INSTANCE.register(panel);
 		addTabPanel(panel, tabTitle);
 	}
 
 	@Subscribe
-	public void on(DeadEvent event) {
-		log.error("Recieved dead event: " + event.getEvent());
+	public void dispatchTableEventOn(ActivePlayerChangedEvent event) {
+		this.tableEventBuses.get(event.tableName).post(event);
 	}
 
 	@Subscribe
-	public void dispatchTableEventOn(final TableGameMoveEvent event) {
+	public void dispatchTableEventOn(TableGameMoveEvent event) {
 		this.tableEventBuses.get(event.tableName).post(event.gameEvent);
+	}
+
+	@Subscribe
+	public void logErrorOn(DeadEvent event) {
+		log.error("Recieved dead event: " + event.getEvent());
 	}
 
 	@Subscribe
@@ -739,35 +743,6 @@ public class JSkatViewImpl implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setBid(final String tableName, final Player player,
-			final int bidValue, final boolean madeBid) {
-
-		this.tables.get(tableName).setBid(player, bidValue, madeBid);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setPass(final String tableName, final Player player) {
-
-		this.tables.get(tableName).setPass(player);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setTrickForeHand(final String tableName,
-			final Player trickForeHand) {
-
-		this.tables.get(tableName).setTrickForeHand(trickForeHand);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void putCardIntoSkat(final String tableName, final Player player,
 			final Card card) {
 
@@ -974,22 +949,24 @@ public class JSkatViewImpl implements JSkatView {
 			addCards(tableName, Player.REARHAND,
 					moveInformation.getCards(Player.REARHAND));
 			setGameState(tableName, GameState.BIDDING);
-			setActivePlayer(tableName, Player.MIDDLEHAND);
 			break;
 		case BID:
 			setGameState(tableName, GameState.BIDDING);
-			setBid(tableName, movePlayer, moveInformation.getBidValue(), true);
+			this.tableEventBuses.get(tableName).post(
+					new BidEvent(movePlayer, moveInformation.getBidValue()));
 			setBidValueToHold(tableName, moveInformation.getBidValue());
 			break;
 		case HOLD_BID:
 			setGameState(tableName, GameState.BIDDING);
-			setBid(tableName, movePlayer, gameData.getMaxBidValue(), false);
+			this.tableEventBuses.get(tableName).post(
+					new HoldBidEvent(movePlayer, gameData.getMaxBidValue()));
 			setBidValueToMake(tableName,
 					SkatConstants.getNextBidValue(gameData.getMaxBidValue()));
 			break;
 		case PASS:
 			setGameState(tableName, GameState.BIDDING);
-			setPass(tableName, movePlayer);
+			this.tableEventBuses.get(tableName).post(
+					new PassBidEvent(movePlayer));
 			setBidValueToMake(tableName,
 					SkatConstants.getNextBidValue(gameData.getMaxBidValue()));
 			break;
@@ -1011,7 +988,6 @@ public class JSkatViewImpl implements JSkatView {
 						moveInformation.getOuvertCards());
 			}
 			setGameState(tableName, GameState.TRICK_PLAYING);
-			setTrickForeHand(tableName, Player.FOREHAND);
 			break;
 		case CARD_PLAY:
 			setGameState(tableName, GameState.TRICK_PLAYING);
@@ -1171,15 +1147,6 @@ public class JSkatViewImpl implements JSkatView {
 				new JSkatTabComponent(this.tabs, this.bitmaps));
 		this.tabs.setSelectedComponent(newPanel);
 		newPanel.setFocus();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setActivePlayer(final String tableName, final Player player) {
-
-		this.tables.get(tableName).setActivePlayer(player);
 	}
 
 	/**

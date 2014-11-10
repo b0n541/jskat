@@ -29,6 +29,7 @@ import org.jskat.control.command.iss.IssShowCardsCommand;
 import org.jskat.control.command.iss.IssTableSeatChangeCommand;
 import org.jskat.control.command.iss.IssToggleTalkEnabledCommand;
 import org.jskat.control.event.iss.IssDisconnectedEvent;
+import org.jskat.control.event.table.ActivePlayerChangedEvent;
 import org.jskat.control.event.table.TableCreatedEvent;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.JSkatApplicationData;
@@ -86,7 +87,7 @@ public class IssController {
 		this.jskat = jskatMaster;
 		this.gameData = new HashMap<String, SkatGameData>();
 		
-		eventBus.register(this);
+		this.eventBus.register(this);
 	}
 
 	/**
@@ -338,7 +339,7 @@ public class IssController {
 	public void createTable(final String tableName, final String creator,
 			final int maxPlayers) {
 
-		eventBus.post(new TableCreatedEvent(JSkatViewType.ISS_TABLE, tableName));
+		this.eventBus.post(new TableCreatedEvent(JSkatViewType.ISS_TABLE, tableName));
 		this.jskat.setActiveTable(JSkatViewType.ISS_TABLE, tableName);
 	}
 
@@ -465,18 +466,18 @@ public class IssController {
 				currGame.addTrick(new Trick(currGame.getTricks().size(), trick
 						.getTrickWinner()));
 
-				this.view.setActivePlayer(tableName, currGame.getCurrentTrick()
-						.getForeHand());
+				JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(
+						tableName, currGame.getCurrentTrick().getForeHand()));
 
 			} else if (trick.getSecondCard() != null) {
 
-				this.view.setActivePlayer(tableName, trick.getForeHand()
-						.getRightNeighbor());
+				JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(
+						tableName, trick.getForeHand().getRightNeighbor()));
 
 			} else if (trick.getFirstCard() != null) {
 
-				this.view.setActivePlayer(tableName, trick.getForeHand()
-						.getLeftNeighbor());
+				JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(
+						tableName, trick.getForeHand().getLeftNeighbor()));
 			}
 		}
 	}
@@ -599,7 +600,7 @@ public class IssController {
 	@Subscribe
 	public void sendReadyToPlayOn(final IssReadyToPlayCommand event) {
 		
-		sendToIss(this.issMsg.getReadyMessage(appData.getActiveView()));
+		sendToIss(this.issMsg.getReadyMessage(this.appData.getActiveView()));
 	}
 
 	/**
@@ -611,7 +612,7 @@ public class IssController {
 	@Subscribe
 	public void sendToggleTalkEnabledOn(final IssToggleTalkEnabledCommand event) {
 		
-		sendToIss(this.issMsg.getTalkEnabledMessage(appData.getActiveView()));
+		sendToIss(this.issMsg.getTalkEnabledMessage(this.appData.getActiveView()));
 	}
 
 	/**
@@ -623,7 +624,7 @@ public class IssController {
 	@Subscribe
 	public void sendResignOn(final IssResignCommand event) {
 		
-		sendToIss(this.issMsg.getResignMessage(appData.getActiveView()));
+		sendToIss(this.issMsg.getResignMessage(this.appData.getActiveView()));
 	}
 
 	/**
@@ -635,7 +636,7 @@ public class IssController {
 	@Subscribe
 	public void sendShowCardsOn(final IssShowCardsCommand event) {
 		
-		sendToIss(this.issMsg.getShowCardsMessage(appData.getActiveView()));
+		sendToIss(this.issMsg.getShowCardsMessage(this.appData.getActiveView()));
 	}
 
 	/**
@@ -646,7 +647,7 @@ public class IssController {
 	 */
 	@Subscribe
 	public void sendTableSeatChangeOn(final IssTableSeatChangeCommand command) {
-		sendToIss(this.issMsg.getTableSeatChangeMessage(appData.getActiveView()));
+		sendToIss(this.issMsg.getTableSeatChangeMessage(this.appData.getActiveView()));
 	}
 
 	/**
