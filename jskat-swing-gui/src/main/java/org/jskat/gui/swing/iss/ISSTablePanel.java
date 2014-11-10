@@ -28,7 +28,6 @@ import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.PlayerStatus;
 import org.jskat.data.iss.TablePanelStatus;
-import org.jskat.gui.JSkatView;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.gui.swing.table.ContextPanelType;
@@ -51,8 +50,6 @@ public class ISSTablePanel extends SkatTablePanel {
 	/**
 	 * Constructor
 	 * 
-	 * @param view
-	 *            View
 	 * @param tableName
 	 *            Table name
 	 * @param actions
@@ -60,10 +57,9 @@ public class ISSTablePanel extends SkatTablePanel {
 	 * @param newLoginName
 	 *            Login name on ISS
 	 */
-	public ISSTablePanel(final JSkatView view, final String tableName,
-			final ActionMap actions) {
+	public ISSTablePanel(final String tableName, final ActionMap actions) {
 
-		super(view, tableName, actions);
+		super(tableName, actions);
 	}
 
 	/**
@@ -101,10 +97,10 @@ public class ISSTablePanel extends SkatTablePanel {
 
 		JTabbedPane leftPanel = super.getLeftPanel();
 
-		chatPanel = getChatPanel();
-		chatPanel.addNewChat(
-				strings.getString("table") + " " + getName(), getName()); //$NON-NLS-1$//$NON-NLS-2$
-		leftPanel.add(strings.getString("chat"), chatPanel); //$NON-NLS-1$
+		this.chatPanel = getChatPanel();
+		this.chatPanel.addNewChat(
+				this.strings.getString("table") + " " + getName(), getName()); //$NON-NLS-1$//$NON-NLS-2$
+		leftPanel.add(this.strings.getString("chat"), this.chatPanel); //$NON-NLS-1$
 
 		return leftPanel;
 	}
@@ -169,47 +165,47 @@ public class ISSTablePanel extends SkatTablePanel {
 			}
 		}
 
-		lastTableStatus = tableStatus;
+		this.lastTableStatus = tableStatus;
 	}
 
 	private void addPlayerName(final String playerName) {
 
-		if (!playerNamesAndPositions.keySet().contains(playerName)) {
+		if (!this.playerNamesAndPositions.keySet().contains(playerName)) {
 
-			playerNamesAndPositions.put(playerName, null);
+			this.playerNamesAndPositions.put(playerName, null);
 
-			if (userPanel.getPlayerName() == null) {
+			if (this.userPanel.getPlayerName() == null) {
 
-				userPanel.setPlayerName(playerName);
+				this.userPanel.setPlayerName(playerName);
 
-			} else if (leftOpponentPanel.getPlayerName() == null) {
+			} else if (this.leftOpponentPanel.getPlayerName() == null) {
 
-				leftOpponentPanel.setPlayerName(playerName);
+				this.leftOpponentPanel.setPlayerName(playerName);
 
-			} else if (rightOpponentPanel.getPlayerName() == null) {
+			} else if (this.rightOpponentPanel.getPlayerName() == null) {
 
-				rightOpponentPanel.setPlayerName(playerName);
+				this.rightOpponentPanel.setPlayerName(playerName);
 			}
 		}
 	}
 
 	private void removePlayerName(final String playerName) {
 
-		if (playerNamesAndPositions.keySet().contains(playerName)) {
+		if (this.playerNamesAndPositions.keySet().contains(playerName)) {
 
-			playerNamesAndPositions.remove(playerName);
+			this.playerNamesAndPositions.remove(playerName);
 
-			if (playerName.equals(userPanel.getPlayerName())) {
+			if (playerName.equals(this.userPanel.getPlayerName())) {
 
-				userPanel.setPlayerName(""); //$NON-NLS-1$
+				this.userPanel.setPlayerName(""); //$NON-NLS-1$
 
-			} else if (playerName.equals(leftOpponentPanel.getPlayerName())) {
+			} else if (playerName.equals(this.leftOpponentPanel.getPlayerName())) {
 
-				leftOpponentPanel.setPlayerName(""); //$NON-NLS-1$
+				this.leftOpponentPanel.setPlayerName(""); //$NON-NLS-1$
 
-			} else if (playerName.equals(rightOpponentPanel.getPlayerName())) {
+			} else if (playerName.equals(this.rightOpponentPanel.getPlayerName())) {
 
-				rightOpponentPanel.setPlayerName(""); //$NON-NLS-1$
+				this.rightOpponentPanel.setPlayerName(""); //$NON-NLS-1$
 			}
 		}
 	}
@@ -222,6 +218,6 @@ public class ISSTablePanel extends SkatTablePanel {
 	 */
 	public void appendChatMessage(final ChatMessage message) {
 
-		chatPanel.appendMessage(message);
+		this.chatPanel.appendMessage(message);
 	}
 }

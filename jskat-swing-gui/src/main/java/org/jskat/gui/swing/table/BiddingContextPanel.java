@@ -21,7 +21,6 @@ import javax.swing.ActionMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import org.jskat.gui.JSkatView;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.swing.LayoutFactory;
@@ -53,14 +52,14 @@ class BiddingContextPanel extends JPanel {
 	 * @param actions
 	 *            Action map
 	 */
-	BiddingContextPanel(JSkatView view, ActionMap actions,
-			JSkatGraphicRepository bitmaps, JSkatUserPanel userPanel) {
+	BiddingContextPanel(ActionMap actions, JSkatGraphicRepository bitmaps,
+			JSkatUserPanel userPanel) {
 
-		initPanel(view, actions, bitmaps, userPanel);
+		initPanel(actions, bitmaps, userPanel);
 	}
 
-	private void initPanel(JSkatView view, ActionMap actions,
-			JSkatGraphicRepository bitmaps, JSkatUserPanel userPanel) {
+	private void initPanel(ActionMap actions, JSkatGraphicRepository bitmaps,
+			JSkatUserPanel userPanel) {
 
 		setLayout(LayoutFactory.getMigLayout(
 				"fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -73,8 +72,8 @@ class BiddingContextPanel extends JPanel {
 		biddingPanel.setOpaque(false);
 		add(biddingPanel, "grow"); //$NON-NLS-1$
 
-		announcePanel = new GameAnnouncePanel(view, actions, userPanel, null);
-		add(announcePanel, "width 25%"); //$NON-NLS-1$
+		this.announcePanel = new GameAnnouncePanel(actions, userPanel, null);
+		add(this.announcePanel, "width 25%"); //$NON-NLS-1$
 
 		setOpaque(false);
 	}
@@ -84,20 +83,20 @@ class BiddingContextPanel extends JPanel {
 
 		JPanel biddingPanel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
-		leftOpponentBid = new BidBubblePanel(bitmaps.getLeftBidBubble());
-		rightOpponentBid = new BidBubblePanel(bitmaps.getRightBidBubble());
-		userBid = new BidBubblePanel(bitmaps.getUserBidBubble());
+		this.leftOpponentBid = new BidBubblePanel(bitmaps.getLeftBidBubble());
+		this.rightOpponentBid = new BidBubblePanel(bitmaps.getRightBidBubble());
+		this.userBid = new BidBubblePanel(bitmaps.getUserBidBubble());
 
-		biddingPanel.add(leftOpponentBid, "center"); //$NON-NLS-1$
-		biddingPanel.add(rightOpponentBid, "center, wrap"); //$NON-NLS-1$
-		biddingPanel.add(userBid, "span 2, center, wrap"); //$NON-NLS-1$
+		biddingPanel.add(this.leftOpponentBid, "center"); //$NON-NLS-1$
+		biddingPanel.add(this.rightOpponentBid, "center, wrap"); //$NON-NLS-1$
+		biddingPanel.add(this.userBid, "span 2, center, wrap"); //$NON-NLS-1$
 
-		makeBidAction = actions.get(JSkatAction.MAKE_BID);
-		holdBidAction = actions.get(JSkatAction.HOLD_BID);
-		bidButton = new JButton(makeBidAction);
-		passButton = new JButton(actions.get(JSkatAction.PASS_BID));
-		biddingPanel.add(bidButton, "center"); //$NON-NLS-1$
-		biddingPanel.add(passButton, "center"); //$NON-NLS-1$
+		this.makeBidAction = actions.get(JSkatAction.MAKE_BID);
+		this.holdBidAction = actions.get(JSkatAction.HOLD_BID);
+		this.bidButton = new JButton(this.makeBidAction);
+		this.passButton = new JButton(actions.get(JSkatAction.PASS_BID));
+		biddingPanel.add(this.bidButton, "center"); //$NON-NLS-1$
+		biddingPanel.add(this.passButton, "center"); //$NON-NLS-1$
 
 		return biddingPanel;
 	}
@@ -107,19 +106,19 @@ class BiddingContextPanel extends JPanel {
 		// SkatTablePanel.setPositions()
 		switch (player) {
 		case FOREHAND:
-			foreHandBidLabel = userBid;
-			middleHandBidLabel = leftOpponentBid;
-			rearHandBidLabel = rightOpponentBid;
+			this.foreHandBidLabel = this.userBid;
+			this.middleHandBidLabel = this.leftOpponentBid;
+			this.rearHandBidLabel = this.rightOpponentBid;
 			break;
 		case MIDDLEHAND:
-			foreHandBidLabel = rightOpponentBid;
-			middleHandBidLabel = userBid;
-			rearHandBidLabel = leftOpponentBid;
+			this.foreHandBidLabel = this.rightOpponentBid;
+			this.middleHandBidLabel = this.userBid;
+			this.rearHandBidLabel = this.leftOpponentBid;
 			break;
 		case REARHAND:
-			foreHandBidLabel = leftOpponentBid;
-			middleHandBidLabel = rightOpponentBid;
-			rearHandBidLabel = userBid;
+			this.foreHandBidLabel = this.leftOpponentBid;
+			this.middleHandBidLabel = this.rightOpponentBid;
+			this.rearHandBidLabel = this.userBid;
 			break;
 		}
 	}
@@ -128,13 +127,13 @@ class BiddingContextPanel extends JPanel {
 
 		switch (player) {
 		case FOREHAND:
-			foreHandBidLabel.setBidValue(bidValue);
+			this.foreHandBidLabel.setBidValue(bidValue);
 			break;
 		case MIDDLEHAND:
-			middleHandBidLabel.setBidValue(bidValue);
+			this.middleHandBidLabel.setBidValue(bidValue);
 			break;
 		case REARHAND:
-			rearHandBidLabel.setBidValue(bidValue);
+			this.rearHandBidLabel.setBidValue(bidValue);
 			break;
 		}
 	}
@@ -143,34 +142,34 @@ class BiddingContextPanel extends JPanel {
 
 		switch (player) {
 		case FOREHAND:
-			foreHandBidLabel.setBidValue(-1);
+			this.foreHandBidLabel.setBidValue(-1);
 			break;
 		case MIDDLEHAND:
-			middleHandBidLabel.setBidValue(-1);
+			this.middleHandBidLabel.setBidValue(-1);
 			break;
 		case REARHAND:
-			rearHandBidLabel.setBidValue(-1);
+			this.rearHandBidLabel.setBidValue(-1);
 			break;
 		}
 	}
 
 	void setBidValueToMake(final int bidValue) {
 
-		bidButton.setAction(makeBidAction);
-		bidButton.setText(String.valueOf(bidValue));
+		this.bidButton.setAction(this.makeBidAction);
+		this.bidButton.setText(String.valueOf(bidValue));
 	}
 
 	void setBidValueToHold(final int bidValue) {
 
-		bidButton.setAction(holdBidAction);
-		bidButton.setText(String.valueOf(bidValue));
+		this.bidButton.setAction(this.holdBidAction);
+		this.bidButton.setText(String.valueOf(bidValue));
 	}
 
 	void resetPanel() {
-		foreHandBidLabel.setBidValue(0);
-		middleHandBidLabel.setBidValue(0);
-		rearHandBidLabel.setBidValue(0);
+		this.foreHandBidLabel.setBidValue(0);
+		this.middleHandBidLabel.setBidValue(0);
+		this.rearHandBidLabel.setBidValue(0);
 		setBidValueToMake(18);
-		announcePanel.resetPanel();
+		this.announcePanel.resetPanel();
 	}
 }

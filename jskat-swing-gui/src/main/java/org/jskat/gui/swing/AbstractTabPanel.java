@@ -20,7 +20,6 @@ import javax.swing.ActionMap;
 import javax.swing.JPanel;
 
 import org.jskat.data.JSkatOptions;
-import org.jskat.gui.JSkatView;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.JSkatResourceBundle;
 
@@ -32,10 +31,6 @@ public abstract class AbstractTabPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * JSkat view
-	 */
-	protected JSkatView view;
 	/**
 	 * JSkat bitmaps
 	 */
@@ -52,15 +47,12 @@ public abstract class AbstractTabPanel extends JPanel {
 	/**
 	 * Constructor
 	 * 
-	 * @param view
-	 *            View
 	 * @param tabName
 	 *            Table name
 	 * @param actions
 	 *            JSkat actions
 	 */
-	public AbstractTabPanel(final JSkatView view, final String tabName,
-			final ActionMap actions) {
+	public AbstractTabPanel(final String tabName, final ActionMap actions) {
 
 		super();
 		setName(tabName);

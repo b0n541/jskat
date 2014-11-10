@@ -28,10 +28,11 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 
+import org.jskat.control.JSkatEventBus;
+import org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.JSkatOptions;
-import org.jskat.gui.JSkatView;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.swing.AbstractI18NComboBoxRenderer;
 import org.jskat.gui.swing.LayoutFactory;
@@ -62,8 +63,6 @@ class GameAnnouncePanel extends JPanel {
 	DiscardPanel discardPanel;
 	JSkatUserPanel userPanel;
 
-	JSkatView view;
-
 	boolean userPickedUpSkat = false;
 
 	/**
@@ -76,11 +75,10 @@ class GameAnnouncePanel extends JPanel {
 	 * @param discardPanel
 	 *            Discard panel
 	 */
-	GameAnnouncePanel(JSkatView view, final ActionMap actions,
-			final JSkatUserPanel userPanel, final DiscardPanel discardPanel) {
+	GameAnnouncePanel(final ActionMap actions, final JSkatUserPanel userPanel,
+			final DiscardPanel discardPanel) {
 
 		this.strings = JSkatResourceBundle.INSTANCE;
-		this.view = view;
 		this.userPanel = userPanel;
 		this.discardPanel = discardPanel;
 
@@ -187,9 +185,8 @@ class GameAnnouncePanel extends JPanel {
 					CardList discardedCards = GameAnnouncePanel.this.discardPanel.getDiscardedCards();
 					if (discardedCards.size() != 2) {
 
-						GameAnnouncePanel.this.view.showErrorMessage(
-								GameAnnouncePanel.this.strings.getString("invalid_number_of_cards_in_skat_title"), //$NON-NLS-1$
-								GameAnnouncePanel.this.strings.getString("invalid_number_of_cards_in_skat_message")); //$NON-NLS-1$
+						JSkatEventBus.INSTANCE
+								.post(new InvalidNumberOfCardsInDiscardedSkatEvent());
 						return null;
 					}
 					factory.setDiscardedCards(discardedCards);

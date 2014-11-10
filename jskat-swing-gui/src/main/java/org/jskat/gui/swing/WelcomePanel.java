@@ -39,17 +39,14 @@ public class WelcomePanel extends AbstractTabPanel {
 
 	/**
 	 * @see AbstractTabPanel#AbstractTabPanel(JSkatView, String, ActionMap)
-	 * @param view
-	 *            View
 	 * @param newTableName
 	 *            Table name
 	 * @param actions
 	 *            Actions
 	 */
-	public WelcomePanel(final JSkatView view, final String newTableName,
-			final ActionMap actions) {
+	public WelcomePanel(final String newTableName, final ActionMap actions) {
 
-		super(view, newTableName, actions);
+		super(newTableName, actions);
 		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
 	}
 
@@ -79,10 +76,10 @@ public class WelcomePanel extends AbstractTabPanel {
 		final JPanel headerPanel = new JPanel(
 				LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 		final JLabel logoLabel = new JLabel(new ImageIcon(
-				bitmaps.getJSkatLogoImage()));
+				this.bitmaps.getJSkatLogoImage()));
 		headerPanel.add(logoLabel);
 		final JLabel headerLabel = new JLabel(
-				strings.getString("welcome_to_jskat")); //$NON-NLS-1$ 
+				this.strings.getString("welcome_to_jskat")); //$NON-NLS-1$ 
 		headerLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 32));
 		headerPanel.add(headerLabel, "center"); //$NON-NLS-1$
 		return headerPanel;
@@ -93,24 +90,24 @@ public class WelcomePanel extends AbstractTabPanel {
 		final JButton issTableButton = new JButton(getActionMap().get(
 				JSkatAction.SHOW_ISS_LOGIN));
 		final JLabel issTableDescription = new JLabel("<html><p>" //$NON-NLS-1$
-				+ strings.getString("explain_iss_table_1") + "</p><p>" //$NON-NLS-1$ //$NON-NLS-2$
-				+ strings.getString("explain_iss_table_2") + "</p></html>"); //$NON-NLS-1$//$NON-NLS-2$
+				+ this.strings.getString("explain_iss_table_1") + "</p><p>" //$NON-NLS-1$ //$NON-NLS-2$
+				+ this.strings.getString("explain_iss_table_2") + "</p></html>"); //$NON-NLS-1$//$NON-NLS-2$
 
 		final JButton localTableButton = new JButton(this.getActionMap().get(
 				JSkatAction.CREATE_LOCAL_TABLE));
 		final JLabel localTableDescription = new JLabel("<html><p>" //$NON-NLS-1$
-				+ strings.getString("explain_local_table_1") + "</p><p>" //$NON-NLS-1$ //$NON-NLS-2$
-				+ strings.getString("explain_local_table_2") + "</p></html>"); //$NON-NLS-1$//$NON-NLS-2$
+				+ this.strings.getString("explain_local_table_1") + "</p><p>" //$NON-NLS-1$ //$NON-NLS-2$
+				+ this.strings.getString("explain_local_table_2") + "</p></html>"); //$NON-NLS-1$//$NON-NLS-2$
 
 		final JButton optionsButton = new JButton(getActionMap().get(
 				JSkatAction.PREFERENCES));
 		final JLabel optionsDescription = new JLabel("<html><p>" //$NON-NLS-1$
-				+ strings.getString("explain_options_1") + "</p></html>"); //$NON-NLS-1$//$NON-NLS-2$
+				+ this.strings.getString("explain_options_1") + "</p></html>"); //$NON-NLS-1$//$NON-NLS-2$
 
 		final JButton quitButton = new JButton(getActionMap().get(
 				JSkatAction.EXIT_JSKAT));
 		final JLabel quitDescription = new JLabel("<html><p>" //$NON-NLS-1$
-				+ strings.getString("explain_exit") + "</p></html>"); //$NON-NLS-1$//$NON-NLS-2$
+				+ this.strings.getString("explain_exit") + "</p></html>"); //$NON-NLS-1$//$NON-NLS-2$
 
 		final JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout(
 				"", "[][]", "[][]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$

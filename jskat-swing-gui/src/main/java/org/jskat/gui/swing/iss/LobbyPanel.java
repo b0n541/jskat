@@ -32,7 +32,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.table.TableColumnModel;
 
 import org.jskat.data.iss.ChatMessage;
-import org.jskat.gui.JSkatView;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.swing.AbstractTabPanel;
 import org.jskat.gui.swing.LayoutFactory;
@@ -62,17 +61,14 @@ public class LobbyPanel extends AbstractTabPanel {
 	/**
 	 * Constructor
 	 * 
-	 * @param view
-	 *            View
 	 * @param tableName
 	 *            Table name
 	 * @param actions
 	 *            Action
 	 */
-	public LobbyPanel(final JSkatView view, final String tableName,
-			final ActionMap actions) {
+	public LobbyPanel(final String tableName, final ActionMap actions) {
 
-		super(view, tableName, actions);
+		super(tableName, actions);
 
 		log.debug("SkatTablePanel: name: " + tableName); //$NON-NLS-1$
 	}
@@ -97,23 +93,23 @@ public class LobbyPanel extends AbstractTabPanel {
 				"[shrink][shrink][shrink][shrink][grow]")); //$NON-NLS-1$
 
 		final JLabel headerLabel = new JLabel(
-				strings.getString("welcome_to_iss_title")); //$NON-NLS-1$
+				this.strings.getString("welcome_to_iss_title")); //$NON-NLS-1$
 		headerLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 		final JPanel headerPanel = new JPanel(
 				LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 		headerPanel.add(headerLabel, "center"); //$NON-NLS-1$
 
 		lobby.add(headerPanel, "span 2, growx, align center, wrap"); //$NON-NLS-1$ 
-		lobby.add(new JLabel(strings.getString("players")), "width 50%"); //$NON-NLS-1$ //$NON-NLS-2$
-		lobby.add(new JLabel(strings.getString("tables")), "wrap"); //$NON-NLS-1$ //$NON-NLS-2$
+		lobby.add(new JLabel(this.strings.getString("players")), "width 50%"); //$NON-NLS-1$ //$NON-NLS-2$
+		lobby.add(new JLabel(this.strings.getString("tables")), "wrap"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		lobby.add(getPlayerListPanel());
 		lobby.add(getTableListPanel(), "wrap"); //$NON-NLS-1$
 
 		lobby.add(getActionButtonPanel(), "span 2, wrap"); //$NON-NLS-1$
 
-		chatPanel = new ChatPanel(this);
-		lobby.add(chatPanel, "span 2, hmin 200px, growy, align center"); //$NON-NLS-1$
+		this.chatPanel = new ChatPanel(this);
+		lobby.add(this.chatPanel, "span 2, hmin 200px, growy, align center"); //$NON-NLS-1$
 
 		lobby.setPreferredSize(new Dimension(800, 600));
 
@@ -125,24 +121,24 @@ public class LobbyPanel extends AbstractTabPanel {
 		final JPanel panel = new JPanel(LayoutFactory.getMigLayout(
 				"fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		playerListTableModel = new PlayerListTableModel();
-		playerListTable = new JTable(playerListTableModel);
+		this.playerListTableModel = new PlayerListTableModel();
+		this.playerListTable = new JTable(this.playerListTableModel);
 
-		playerListTable.setAutoCreateRowSorter(true);
+		this.playerListTable.setAutoCreateRowSorter(true);
 
-		final TableColumnModel columnModel = playerListTable.getColumnModel();
+		final TableColumnModel columnModel = this.playerListTable.getColumnModel();
 		columnModel.getColumn(2).setCellRenderer(
 				new PlayerStrengthTableCellRenderer());
 		columnModel.getColumn(3).setCellRenderer(new FlagTableCellRenderer());
 
-		playerListTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		this.playerListTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
-		playerListScrollPane = new JScrollPane(playerListTable);
-		playerListScrollPane.setPreferredSize(new Dimension(300, 200));
-		playerListScrollPane
+		this.playerListScrollPane = new JScrollPane(this.playerListTable);
+		this.playerListScrollPane.setPreferredSize(new Dimension(300, 200));
+		this.playerListScrollPane
 				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		panel.add(playerListScrollPane);
+		panel.add(this.playerListScrollPane);
 
 		return panel;
 	}
@@ -152,10 +148,10 @@ public class LobbyPanel extends AbstractTabPanel {
 		final JPanel panel = new JPanel(LayoutFactory.getMigLayout(
 				"fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		tableListTableModel = new TableListTableModel();
-		tableListTable = new JTable(tableListTableModel);
+		this.tableListTableModel = new TableListTableModel();
+		this.tableListTable = new JTable(this.tableListTableModel);
 
-		tableListTable.addMouseListener(new MouseListener() {
+		this.tableListTable.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseClicked(final MouseEvent e) {
@@ -206,14 +202,14 @@ public class LobbyPanel extends AbstractTabPanel {
 			}
 		});
 
-		tableListTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+		this.tableListTable.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
 
-		tableListScrollPane = new JScrollPane(tableListTable);
-		tableListScrollPane.setPreferredSize(new Dimension(400, 200));
-		tableListScrollPane
+		this.tableListScrollPane = new JScrollPane(this.tableListTable);
+		this.tableListScrollPane.setPreferredSize(new Dimension(400, 200));
+		this.tableListScrollPane
 				.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-		panel.add(tableListScrollPane);
+		panel.add(this.tableListScrollPane);
 
 		return panel;
 	}
@@ -248,7 +244,7 @@ public class LobbyPanel extends AbstractTabPanel {
 	public void updatePlayer(final String playerName, final String language,
 			final long gamesPlayed, final double strength) {
 
-		playerListTableModel.updatePlayer(playerName, language, gamesPlayed,
+		this.playerListTableModel.updatePlayer(playerName, language, gamesPlayed,
 				strength);
 	}
 
@@ -260,7 +256,7 @@ public class LobbyPanel extends AbstractTabPanel {
 	 */
 	public void removePlayer(final String playerName) {
 
-		playerListTableModel.removePlayer(playerName);
+		this.playerListTableModel.removePlayer(playerName);
 	}
 
 	/**
@@ -283,7 +279,7 @@ public class LobbyPanel extends AbstractTabPanel {
 			final long gamesPlayed, final String player1, final String player2,
 			final String player3) {
 
-		tableListTableModel.updateTable(tableName, maxPlayers, gamesPlayed,
+		this.tableListTableModel.updateTable(tableName, maxPlayers, gamesPlayed,
 				player1, player2, player3);
 	}
 
@@ -295,7 +291,7 @@ public class LobbyPanel extends AbstractTabPanel {
 	 */
 	public void removeTable(final String tableName) {
 
-		tableListTableModel.removeTable(tableName);
+		this.tableListTableModel.removeTable(tableName);
 	}
 
 	/**
@@ -308,11 +304,11 @@ public class LobbyPanel extends AbstractTabPanel {
 
 		log.debug("Appending chat message: " + message); //$NON-NLS-1$
 
-		chatPanel.appendMessage(message);
+		this.chatPanel.appendMessage(message);
 	}
 
 	@Override
 	protected void setFocus() {
-		chatPanel.setFocus();
+		this.chatPanel.setFocus();
 	}
 }

@@ -44,7 +44,6 @@ import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.Trick;
-import org.jskat.gui.JSkatView;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.action.main.StartSkatSeriesAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
@@ -109,10 +108,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param actions
 	 *            Action
 	 */
-	public SkatTablePanel(final JSkatView view, final String newTableName,
-			final ActionMap actions) {
+	public SkatTablePanel(final String newTableName, final ActionMap actions) {
 
-		super(view, newTableName, actions);
+		super(newTableName, actions);
 
 		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
 	}
@@ -245,12 +243,12 @@ public class SkatTablePanel extends AbstractTabPanel {
 				new StartContextPanel((StartSkatSeriesAction) getActionMap()
 						.get(JSkatAction.START_LOCAL_SERIES)));
 
-		this.biddingPanel = new BiddingContextPanel(this.view, getActionMap(), this.bitmaps,
-				this.userPanel);
+		this.biddingPanel = new BiddingContextPanel(getActionMap(),
+				this.bitmaps, this.userPanel);
 		addContextPanel(ContextPanelType.BIDDING, this.biddingPanel);
 
-		this.declaringPanel = new DeclaringContextPanel(this.view, getActionMap(),
-				this.bitmaps, this.userPanel, 4);
+		this.declaringPanel = new DeclaringContextPanel(getActionMap(),
+				this.userPanel);
 		addContextPanel(ContextPanelType.DECLARING, this.declaringPanel);
 
 		this.schieberamschPanel = new SchieberamschContextPanel(getActionMap(),

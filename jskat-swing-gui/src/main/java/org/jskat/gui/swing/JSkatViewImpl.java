@@ -59,6 +59,7 @@ import org.jskat.control.command.skatseries.CreateSkatSeriesCommand;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.iss.IssConnectedEvent;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
+import org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent;
 import org.jskat.control.event.table.DuplicateTableNameInputEvent;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
 import org.jskat.control.event.table.TableCreatedEvent;
@@ -189,7 +190,8 @@ public class JSkatViewImpl implements JSkatView {
 		this.trainingOverview = new NeuralNetworkTrainingOverview(
 				this.mainFrame);
 
-		addTabPanel(new WelcomePanel(this,
+		addTabPanel(
+				new WelcomePanel(
 				this.strings.getString("welcome"), actions), //$NON-NLS-1$
 				this.strings.getString("welcome")); //$NON-NLS-1$
 
@@ -450,10 +452,10 @@ public class JSkatViewImpl implements JSkatView {
 
 		SkatTablePanel panel = null;
 		if (JSkatViewType.LOCAL_TABLE.equals(event.tableType)) {
-			panel = new SkatTablePanel(this, tableName, actions);
+			panel = new SkatTablePanel(tableName, actions);
 			tabTitle = tableName;
 		} else if (JSkatViewType.ISS_TABLE.equals(event.tableType)) {
-			panel = new ISSTablePanel(this, tableName, actions);
+			panel = new ISSTablePanel(tableName, actions);
 			tabTitle = this.strings.getString("iss_table") + ": " + tableName;
 		}
 
@@ -472,7 +474,7 @@ public class JSkatViewImpl implements JSkatView {
 
 	@Subscribe
 	public void dispatchTableEventOn(final TableGameMoveEvent event) {
-		tableEventBuses.get(event.tableName).post(event.gameEvent);
+		this.tableEventBuses.get(event.tableName).post(event.gameEvent);
 	}
 
 	@Subscribe
@@ -623,6 +625,9 @@ public class JSkatViewImpl implements JSkatView {
 
 	private void setActions(final GameState state) {
 		switch (state) {
+		case GAME_START:
+			actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(true);
+			break;
 		case BIDDING:
 			actions.get(JSkatAction.ANNOUNCE_GAME).setEnabled(false);
 			actions.get(JSkatAction.MAKE_BID).setEnabled(true);
@@ -654,7 +659,7 @@ public class JSkatViewImpl implements JSkatView {
 			actions.get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
 			break;
 		case TRICK_PLAYING:
-			if (options.isPlayContra()) {
+			if (this.options.isPlayContra()) {
 				actions.get(JSkatAction.CALL_CONTRA).setEnabled(true);
 			} else {
 				actions.get(JSkatAction.CALL_CONTRA).setEnabled(false);
@@ -791,7 +796,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showISSLogin() {
 
-		final LoginPanel loginPanel = new LoginPanel(this, "ISS login", actions);
+		final LoginPanel loginPanel = new LoginPanel("ISS login", actions);
 		addTabPanel(loginPanel, "ISS login");
 	}
 
@@ -819,7 +824,7 @@ public class JSkatViewImpl implements JSkatView {
 		// show ISS lobby if connection was successfull
 		// FIXME (jan 07.12.2010) use constant instead of title
 		closeTabPanel("ISS login"); //$NON-NLS-1$
-		this.issLobby = new LobbyPanel(this, "ISS lobby", actions);
+		this.issLobby = new LobbyPanel("ISS lobby", actions);
 		addTabPanel(this.issLobby, this.strings.getString("iss_lobby"));
 	}
 
@@ -1304,6 +1309,15 @@ public class JSkatViewImpl implements JSkatView {
 				closeTabPanel(currPanel.getName());
 			}
 		}
+	}
+
+	@Subscribe
+	public void showErrorMessageOn(
+			final InvalidNumberOfCardsInDiscardedSkatEvent event) {
+		showErrorMessage(this.strings
+				.getString("invalid_number_of_cards_in_skat_title"), //$NON-NLS-1$
+				this.strings
+						.getString("invalid_number_of_cards_in_skat_message"));
 	}
 
 	@Subscribe

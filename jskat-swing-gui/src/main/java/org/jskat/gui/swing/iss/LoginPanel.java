@@ -48,17 +48,15 @@ public class LoginPanel extends AbstractTabPanel {
 
 	/**
 	 * @see AbstractTabPanel#AbstractTabPanel(JSkatView, String, ActionMap)
-	 * @param view
-	 *            View
 	 * @param newTableName
 	 *            Table name
 	 * @param actions
 	 *            Actions
 	 */
-	public LoginPanel(final JSkatView view, final String newTableName,
+	public LoginPanel(final String newTableName,
 			final ActionMap actions) {
 
-		super(view, newTableName, actions);
+		super(newTableName, actions);
 		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
 	}
 
@@ -80,13 +78,13 @@ public class LoginPanel extends AbstractTabPanel {
 		final JPanel login = new JPanel(LayoutFactory.getMigLayout());
 
 		final JLabel headerLabel = new JLabel(
-				strings.getString("login_to_iss_title")); //$NON-NLS-1$
+				this.strings.getString("login_to_iss_title")); //$NON-NLS-1$
 		headerLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 		login.add(headerLabel, "span 2, align center, wrap"); //$NON-NLS-1$
-		login.add(new JLabel(strings.getString("login"))); //$NON-NLS-1$
+		login.add(new JLabel(this.strings.getString("login"))); //$NON-NLS-1$
 		this.loginField = new JTextField(10);
 		login.add(this.loginField, "growx, wrap"); //$NON-NLS-1$
-		login.add(new JLabel(strings.getString("password"))); //$NON-NLS-1$
+		login.add(new JLabel(this.strings.getString("password"))); //$NON-NLS-1$
 		this.passwordField = new JPasswordField(10);
 		login.add(this.passwordField, "growx, wrap"); //$NON-NLS-1$
 
@@ -99,7 +97,7 @@ public class LoginPanel extends AbstractTabPanel {
 				final LoginCredentials loginCredentials = new LoginCredentials();
 				loginCredentials.setLoginName(LoginPanel.this.loginField
 						.getText());
-				loginCredentials.setPassword(new String(passwordField
+				loginCredentials.setPassword(new String(LoginPanel.this.passwordField
 						.getPassword()));
 
 				e.setSource(loginCredentials);
