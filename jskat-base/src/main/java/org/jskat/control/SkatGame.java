@@ -99,7 +99,7 @@ public class SkatGame extends JSkatThread {
 		}
 
 		this.data = new SkatGameData();
-		JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(data);
+
 		setGameState(GameState.GAME_START);
 	}
 
@@ -110,6 +110,8 @@ public class SkatGame extends JSkatThread {
 	// methods or implement it in another way
 	@Override
 	public void run() {
+
+		JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(data);
 
 		this.view.clearTable(this.tableName);
 		this.view.setGameState(this.tableName, this.data.getGameState());
@@ -228,6 +230,8 @@ public class SkatGame extends JSkatThread {
 
 			checkWaitCondition();
 		} while (this.data.getGameState() != GameState.GAME_OVER && !isTerminated());
+
+		JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).unregister(data);
 
 		this.log.debug(this.data.getGameState().name());
 	}

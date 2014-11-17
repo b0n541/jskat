@@ -31,8 +31,6 @@ import org.jskat.util.JSkatResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.eventbus.EventBus;
-
 /**
  * Handles messages from ISS
  */
@@ -47,7 +45,7 @@ public class MessageHandler extends Thread {
 
 	private final List<String> messageList;
 
-	private EventBus eventBus = JSkatEventBus.INSTANCE;
+	private JSkatEventBus eventBus = JSkatEventBus.INSTANCE;
 
 	private final static int protocolVersion = 14;
 

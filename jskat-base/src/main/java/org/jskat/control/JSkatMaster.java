@@ -24,11 +24,9 @@ import org.jskat.ai.nn.train.NNTrainer;
 import org.jskat.control.command.general.ShowTrainingOverviewCommand;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.iss.IssConnectedEvent;
-import org.jskat.control.event.table.ActivePlayerChangedEvent;
 import org.jskat.control.event.table.DuplicateTableNameInputEvent;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
 import org.jskat.control.event.table.TableCreatedEvent;
-import org.jskat.control.event.table.TableGameMoveEvent;
 import org.jskat.control.event.table.TableRemovedEvent;
 import org.jskat.control.iss.IssController;
 import org.jskat.data.GameAnnouncement;
@@ -49,7 +47,6 @@ import org.jskat.util.version.VersionChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.eventbus.DeadEvent;
 import com.google.common.eventbus.Subscribe;
 
 /**
@@ -84,22 +81,6 @@ public class JSkatMaster {
 		this.runningNNTrainers = new ArrayList<NNTrainer>();
 		
 		JSkatEventBus.INSTANCE.register(this);
-	}
-
-	@Subscribe
-	public void on(DeadEvent event) {
-		log.error("Recieved dead event: " + event.getEvent());
-	}
-
-	@Subscribe
-	public void dispatchTableEventOn(ActivePlayerChangedEvent event) {
-		JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(event);
-	}
-
-	@Subscribe
-	public void dispatchTableEventOn(TableGameMoveEvent event) {
-		JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(
-				event.gameEvent);
 	}
 
 	/**

@@ -51,7 +51,6 @@ import org.jskat.util.rule.SkatRuleFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
 /**
@@ -62,7 +61,7 @@ public class IssController {
 	private static Logger log = LoggerFactory.getLogger(IssController.class);
 
 	private final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
-	private final EventBus eventBus = JSkatEventBus.INSTANCE;
+	private final JSkatEventBus eventBus = JSkatEventBus.INSTANCE;
 	private final JSkatApplicationData appData = JSkatApplicationData.INSTANCE;
 	private final JSkatMaster jskat;
 	private JSkatView view;

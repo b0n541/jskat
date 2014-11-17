@@ -18,7 +18,14 @@ package org.jskat.control;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jskat.control.event.table.ActivePlayerChangedEvent;
+import org.jskat.control.event.table.TableGameMoveEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.eventbus.DeadEvent;
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 
 
 /**
@@ -26,11 +33,40 @@ import com.google.common.eventbus.EventBus;
  */
 public class JSkatEventBus {
 
-	public final static EventBus INSTANCE = new EventBus("JSkat");
+	private final static Logger log = LoggerFactory
+			.getLogger(JSkatEventBus.class);
 
+	private final EventBus mainEventBus;
+
+	public final static JSkatEventBus INSTANCE = new JSkatEventBus();
 	public final static Map<String, EventBus> TABLE_EVENT_BUSSES = new HashMap<>();
 
 	private JSkatEventBus() {
-		
+		mainEventBus = new EventBus("JSkat");
+		mainEventBus.register(this);
+	}
+
+	public void register(Object listener) {
+		mainEventBus.register(listener);
+	}
+
+	public void post(Object event) {
+		mainEventBus.post(event);
+	}
+
+	@Subscribe
+	public void on(DeadEvent event) {
+		log.error("Recieved dead event: " + event.getEvent());
+	}
+
+	@Subscribe
+	public void dispatchTableEventOn(ActivePlayerChangedEvent event) {
+		JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(event);
+	}
+
+	@Subscribe
+	public void dispatchTableEventOn(TableGameMoveEvent event) {
+		JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(
+				event.gameEvent);
 	}
 }
