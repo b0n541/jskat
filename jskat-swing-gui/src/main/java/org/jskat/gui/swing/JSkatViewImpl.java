@@ -64,7 +64,6 @@ import org.jskat.control.event.skatgame.HoldBidEvent;
 import org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent;
 import org.jskat.control.event.skatgame.PassBidEvent;
 import org.jskat.control.event.skatgame.TrickCardPlayedEvent;
-import org.jskat.control.event.table.ActivePlayerChangedEvent;
 import org.jskat.control.event.table.DuplicateTableNameInputEvent;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
 import org.jskat.control.event.table.TableCreatedEvent;
@@ -155,8 +154,6 @@ import org.jskat.util.SkatConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.eventbus.DeadEvent;
-import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
 
 public class JSkatViewImpl implements JSkatView {
@@ -460,27 +457,7 @@ public class JSkatViewImpl implements JSkatView {
 		}
 
 		this.tables.put(tableName, panel);
-		EventBus eventBus = new EventBus(tableName);
-		eventBus.register(panel);
-		JSkatEventBus.INSTANCE.register(panel);
-		JSkatEventBus.TABLE_EVENT_BUSSES.put(tableName, eventBus);
 		addTabPanel(panel, tabTitle);
-	}
-
-	@Subscribe
-	public void dispatchTableEventOn(ActivePlayerChangedEvent event) {
-		JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(event);
-	}
-
-	@Subscribe
-	public void dispatchTableEventOn(TableGameMoveEvent event) {
-		JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(
-				event.gameEvent);
-	}
-
-	@Subscribe
-	public void logErrorOn(DeadEvent event) {
-		log.error("Recieved dead event: " + event.getEvent());
 	}
 
 	@Subscribe

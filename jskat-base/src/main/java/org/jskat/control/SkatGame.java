@@ -21,7 +21,6 @@ import java.util.Map;
 import org.jskat.control.event.skatgame.BidEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
 import org.jskat.control.event.skatgame.PassBidEvent;
-import org.jskat.control.event.skatgame.SkatGameEvent;
 import org.jskat.control.event.skatgame.TrickCardPlayedEvent;
 import org.jskat.control.event.table.ActivePlayerChangedEvent;
 import org.jskat.control.event.table.TableGameMoveEvent;
@@ -50,8 +49,6 @@ import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.eventbus.Subscribe;
 
 /**
  * Controls a skat game.
@@ -89,7 +86,6 @@ public class SkatGame extends JSkatThread {
 			final JSkatPlayer newForeHand, final JSkatPlayer newMiddleHand,
 			final JSkatPlayer newRearHand) {
 		this.tableName = newTableName;
-		JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(this);
 		setName("SkatGame on table " + this.tableName); //$NON-NLS-1$
 		this.variant = variant;
 		this.player = new HashMap<Player, JSkatPlayer>();
@@ -103,12 +99,8 @@ public class SkatGame extends JSkatThread {
 		}
 
 		this.data = new SkatGameData();
+		JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(data);
 		setGameState(GameState.GAME_START);
-	}
-
-	@Subscribe
-	public void adjustDataOn(SkatGameEvent event) {
-		event.processForward(data);
 	}
 
 	/**

@@ -32,7 +32,6 @@ import org.jskat.AbstractJSkatTest;
 import org.jskat.ai.rnd.AIPlayerRND;
 import org.jskat.ai.test.ContraReCallingTestPlayer;
 import org.jskat.ai.test.ExceptionTestPlayer;
-import org.jskat.ai.test.NoBiddingTestPlayer;
 import org.jskat.ai.test.PlayNonPossessingCardTestPlayer;
 import org.jskat.ai.test.PlayNotAllowedCardTestPlayer;
 import org.jskat.ai.test.RamschTestPlayer;
@@ -57,20 +56,26 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import com.google.common.eventbus.EventBus;
+
 /**
  * Test class for {@link SkatGame}
  */
 public class SkatGameTest extends AbstractJSkatTest {
 
+	private static final String TABLE_NAME = "Table 1";
+
 	@Before
 	public void setUp() {
 		JSkatOptions.instance().resetToDefault(new DesktopSavePathResolver());
+		JSkatEventBus.TABLE_EVENT_BUSSES.put(TABLE_NAME, new EventBus());
 	}
 
 	@Test
 	public void testContra_NoContraActivatedInOptions() {
-		SkatGame game = new SkatGame(
-				"Table 1", GameVariant.STANDARD, new ContraReCallingTestPlayer(), //$NON-NLS-1$
+		SkatGame game = new SkatGame(TABLE_NAME,
+				GameVariant.STANDARD,
+				new ContraReCallingTestPlayer(), //$NON-NLS-1$
 				new ContraReCallingTestPlayer(),
 				new ContraReCallingTestPlayer());
 		game.setView(new UnitTestView());
@@ -95,8 +100,9 @@ public class SkatGameTest extends AbstractJSkatTest {
 		options.setRules(RuleSet.PUB);
 		options.setPlayContra(true);
 
-		SkatGame game = new SkatGame(
-				"Table 1", GameVariant.STANDARD, new ContraReCallingTestPlayer(), //$NON-NLS-1$
+		SkatGame game = new SkatGame(TABLE_NAME,
+				GameVariant.STANDARD,
+				new ContraReCallingTestPlayer(), //$NON-NLS-1$
 				new ContraReCallingTestPlayer(),
 				new ContraReCallingTestPlayer());
 		game.setView(new UnitTestView());
@@ -120,9 +126,9 @@ public class SkatGameTest extends AbstractJSkatTest {
 	@Test
 	public void testPassIn_NoBids() {
 
-		SkatGame game = new SkatGame(
-				"Table 1", GameVariant.STANDARD, new NoBiddingTestPlayer(), //$NON-NLS-1$
-				new NoBiddingTestPlayer(), new NoBiddingTestPlayer());
+		SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
+				getNoBiddingPlayer(), getNoBiddingPlayer(),
+				getNoBiddingPlayer());
 		game.setView(new UnitTestView());
 
 		game.start();
@@ -147,8 +153,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 	@Test
 	public void testPassIn_NoBidsMockito() {
 
-		SkatGame game = new SkatGame(
-				"Table 1", GameVariant.STANDARD, getNoBiddingPlayer(), //$NON-NLS-1$
+		SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
+				getNoBiddingPlayer(), //$NON-NLS-1$
 				getNoBiddingPlayer(), getNoBiddingPlayer());
 		game.setView(new UnitTestView());
 
@@ -186,9 +192,9 @@ public class SkatGameTest extends AbstractJSkatTest {
 		options.setPlayRamsch(true);
 		options.setRamschEventNoBid(true);
 
-		SkatGame game = new SkatGame(
-				"Table 1", GameVariant.STANDARD, new NoBiddingTestPlayer(), //$NON-NLS-1$
-				new NoBiddingTestPlayer(), new NoBiddingTestPlayer());
+		SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
+				getNoBiddingPlayer(), getNoBiddingPlayer(),
+				getNoBiddingPlayer());
 		game.setView(new UnitTestView());
 
 		game.start();
@@ -218,8 +224,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 		options.setPlayRamsch(true);
 		options.setRamschEventNoBid(true);
 
-		SkatGame game = new SkatGame(
-				"Table 1", GameVariant.STANDARD, new RamschTestPlayer(), //$NON-NLS-1$
+		SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
+				new RamschTestPlayer(), //$NON-NLS-1$
 				new RamschTestPlayer(), new RamschTestPlayer());
 		game.setView(new UnitTestView());
 
@@ -245,8 +251,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 	@Test
 	public void testRamsch_Forced() {
 
-		SkatGame game = new SkatGame(
-				"Table 1", GameVariant.FORCED_RAMSCH, new RamschTestPlayer(), //$NON-NLS-1$
+		SkatGame game = new SkatGame(TABLE_NAME, GameVariant.FORCED_RAMSCH,
+				new RamschTestPlayer(), //$NON-NLS-1$
 				new RamschTestPlayer(), new RamschTestPlayer());
 		game.setView(new UnitTestView());
 
@@ -275,8 +281,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 		RamschTestPlayer grandHandPlayer = new RamschTestPlayer();
 		grandHandPlayer.setPlayGrandHand(true);
 
-		SkatGame game = new SkatGame(
-				"Table 1", GameVariant.FORCED_RAMSCH, grandHandPlayer, //$NON-NLS-1$
+		SkatGame game = new SkatGame(TABLE_NAME, GameVariant.FORCED_RAMSCH,
+				grandHandPlayer, //$NON-NLS-1$
 				new AIPlayerRND(), new AIPlayerRND());
 		game.setView(new UnitTestView());
 
@@ -306,7 +312,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 		RamschTestPlayer grandHandPlayer = new RamschTestPlayer();
 		grandHandPlayer.setPlayGrandHand(true);
 
-		SkatGame game = new SkatGame("Table 1", GameVariant.FORCED_RAMSCH, //$NON-NLS-1$
+		SkatGame game = new SkatGame(TABLE_NAME, GameVariant.FORCED_RAMSCH, //$NON-NLS-1$
 				new RamschTestPlayer(), grandHandPlayer, new RamschTestPlayer());
 		game.setView(new UnitTestView());
 
@@ -336,7 +342,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 		RamschTestPlayer grandHandPlayer = new RamschTestPlayer();
 		grandHandPlayer.setPlayGrandHand(true);
 
-		SkatGame game = new SkatGame("Table 1", GameVariant.FORCED_RAMSCH, //$NON-NLS-1$
+		SkatGame game = new SkatGame(TABLE_NAME, GameVariant.FORCED_RAMSCH, //$NON-NLS-1$
 				new RamschTestPlayer(), new RamschTestPlayer(), grandHandPlayer);
 		game.setView(new UnitTestView());
 
@@ -360,7 +366,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 	@Test
 	@Ignore("Not stable at the moment")
 	public void exceptionFromPlayerDuringGame() {
-		SkatGame game = new SkatGame("Table 1", GameVariant.STANDARD, //$NON-NLS-1$
+		SkatGame game = new SkatGame(TABLE_NAME,
+				GameVariant.STANDARD, //$NON-NLS-1$
 				new ExceptionTestPlayer(), new ExceptionTestPlayer(),
 				new ExceptionTestPlayer());
 		game.setView(new UnitTestView());
@@ -381,7 +388,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 	@Ignore("Not stable at the moment.")
 	public void playerPlaysNonPossessingCard() {
 		SkatGame game = new SkatGame(
-				"Table 1", GameVariant.STANDARD, //$NON-NLS-1$
+				TABLE_NAME,
+				GameVariant.STANDARD, //$NON-NLS-1$
 				new PlayNonPossessingCardTestPlayer(),
 				new PlayNonPossessingCardTestPlayer(),
 				new PlayNonPossessingCardTestPlayer());
@@ -403,7 +411,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 	@Ignore("Not stable at the moment.")
 	public void playerPlaysNotAllowedCard() {
 		SkatGame game = new SkatGame(
-				"Table 1", GameVariant.STANDARD, //$NON-NLS-1$
+				TABLE_NAME,
+				GameVariant.STANDARD, //$NON-NLS-1$
 				new PlayNotAllowedCardTestPlayer(),
 				new PlayNotAllowedCardTestPlayer(),
 				new PlayNotAllowedCardTestPlayer());
@@ -424,7 +433,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 	@Test
 	@Ignore("Not stable at the moment.")
 	public void testCompleteGame() {
-		SkatGame game = new SkatGame("Table 1", GameVariant.STANDARD, //$NON-NLS-1$
+		SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD, //$NON-NLS-1$
 				new AIPlayerRND(), new AIPlayerRND(), new AIPlayerRND());
 		game.setView(new UnitTestView());
 
@@ -478,7 +487,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 		rearHand.setCardsToPlay(Arrays.asList(Card.DJ, Card.CJ, Card.HJ,
 				Card.SA, Card.S8, Card.H7, Card.H9, Card.D8, Card.HQ, Card.DT));
 
-		SkatGame game = new SkatGame("Table 1", GameVariant.STANDARD, //$NON-NLS-1$
+		SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD, //$NON-NLS-1$
 				foreHand, middleHand, rearHand);
 		game.setView(new UnitTestView());
 

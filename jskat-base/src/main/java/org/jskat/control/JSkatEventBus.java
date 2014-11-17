@@ -27,6 +27,7 @@ import com.google.common.eventbus.EventBus;
 public class JSkatEventBus {
 
 	public final static EventBus INSTANCE = new EventBus("JSkat");
+
 	public final static Map<String, EventBus> TABLE_EVENT_BUSSES = new HashMap<>();
 
 	private JSkatEventBus() {

@@ -27,14 +27,19 @@ import org.jskat.gui.UnitTestView;
 import org.jskat.player.JSkatPlayer;
 import org.junit.Test;
 
+import com.google.common.eventbus.EventBus;
+
 /**
  * Test class for {@link SkatSeries}
  */
 public class SkatSeriesTest extends AbstractJSkatTest {
 
+	private final static String TABLE_NAME = "Table 1";
+
 	@Test
 	public void testSkatSeriesRun() {
-		SkatSeries series = new SkatSeries("ASDF"); //$NON-NLS-1$
+		JSkatEventBus.TABLE_EVENT_BUSSES.put(TABLE_NAME, new EventBus());
+		SkatSeries series = new SkatSeries(TABLE_NAME);
 		UnitTestView view = new UnitTestView();
 		series.setView(view);
 

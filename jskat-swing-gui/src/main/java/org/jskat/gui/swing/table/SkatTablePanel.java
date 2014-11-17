@@ -39,6 +39,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 
+import org.jskat.control.JSkatEventBus;
 import org.jskat.control.event.skatgame.AbstractBidEvent;
 import org.jskat.control.event.skatgame.BidEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
@@ -110,16 +111,18 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * 
 	 * @param view
 	 *            View
-	 * @param newTableName
+	 * @param tableName
 	 *            Table name
 	 * @param actions
 	 *            Action
 	 */
-	public SkatTablePanel(final String newTableName, final ActionMap actions) {
+	public SkatTablePanel(final String tableName, final ActionMap actions) {
 
-		super(newTableName, actions);
+		super(tableName, actions);
 
-		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
+		JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(this);
+
+		log.debug("SkatTablePanel: name: " + tableName); //$NON-NLS-1$
 	}
 
 	/**

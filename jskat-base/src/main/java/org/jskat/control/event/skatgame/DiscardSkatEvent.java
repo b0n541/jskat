@@ -34,8 +34,7 @@ public final class DiscardSkatEvent implements SkatGameEvent {
 
 	@Override
 	public final void processForward(SkatGameData data) {
-		data.removePlayerCards(player, discardedSkat);
-		data.setSkatCards(discardedSkat);
+		data.setDiscardedSkat(player, discardedSkat);
 	}
 
 	@Override

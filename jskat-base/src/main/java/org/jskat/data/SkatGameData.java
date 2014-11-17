@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jskat.control.event.skatgame.SkatGameEvent;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary.GameSummaryFactory;
 import org.jskat.util.Card;
@@ -34,6 +35,8 @@ import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.eventbus.Subscribe;
 
 /**
  * Data class for a Skat game
@@ -196,6 +199,11 @@ public class SkatGameData {
 		intializeVariables();
 
 		log.debug("Game data created"); //$NON-NLS-1$
+	}
+
+	@Subscribe
+	public void adjustDataOn(SkatGameEvent event) {
+		event.processForward(this);
 	}
 
 	private void intializeVariables() {
@@ -704,16 +712,10 @@ public class SkatGameData {
 	 */
 	public void setDiscardedSkat(final Player player, final CardList newSkat) {
 
-		final CardList hand = playerHands.get(player);
+		playerHands.get(player).removeAll(newSkat);
 
-		// clear skat
 		skat.clear();
-
-		// add new cards to skat
-		hand.remove(newSkat.get(0));
-		skat.add(newSkat.get(0));
-		hand.remove(newSkat.get(1));
-		skat.add(newSkat.get(1));
+		skat.addAll(newSkat);
 	}
 
 	/**
@@ -1237,18 +1239,6 @@ public class SkatGameData {
 	public void setSkatCards(CardList cards) {
 		skat.clear();
 		skat.addAll(cards);
-	}
-
-	/**
-	 * Removes cards from a players hand.
-	 * 
-	 * @param player
-	 *            Player
-	 * @param cards
-	 *            Cards
-	 */
-	public void removePlayerCards(Player player, CardList cards) {
-		playerHands.get(player).removeAll(cards);
 	}
 
 	/**

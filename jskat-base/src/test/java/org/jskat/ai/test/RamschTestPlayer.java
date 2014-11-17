@@ -15,12 +15,24 @@
  */
 package org.jskat.ai.test;
 
+import org.jskat.ai.rnd.AIPlayerRND;
+
 /**
  * Test player that only plays ramsch games
  */
-public class RamschTestPlayer extends NoBiddingTestPlayer {
+public class RamschTestPlayer extends AIPlayerRND {
 
 	private boolean playGrandHand = false;
+
+	@Override
+	public Integer bidMore(final int nextBidValue) {
+		return -1;
+	}
+
+	@Override
+	public Boolean holdBid(final int currBidValue) {
+		return false;
+	}
 
 	/**
 	 * Sets whether the player should play grand hand

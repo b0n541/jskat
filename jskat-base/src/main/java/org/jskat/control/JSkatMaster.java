@@ -24,9 +24,11 @@ import org.jskat.ai.nn.train.NNTrainer;
 import org.jskat.control.command.general.ShowTrainingOverviewCommand;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.iss.IssConnectedEvent;
+import org.jskat.control.event.table.ActivePlayerChangedEvent;
 import org.jskat.control.event.table.DuplicateTableNameInputEvent;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
 import org.jskat.control.event.table.TableCreatedEvent;
+import org.jskat.control.event.table.TableGameMoveEvent;
 import org.jskat.control.event.table.TableRemovedEvent;
 import org.jskat.control.iss.IssController;
 import org.jskat.data.GameAnnouncement;
@@ -89,6 +91,17 @@ public class JSkatMaster {
 		log.error("Recieved dead event: " + event.getEvent());
 	}
 
+	@Subscribe
+	public void dispatchTableEventOn(ActivePlayerChangedEvent event) {
+		JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(event);
+	}
+
+	@Subscribe
+	public void dispatchTableEventOn(TableGameMoveEvent event) {
+		JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(
+				event.gameEvent);
+	}
+
 	/**
 	 * Checks the version of JSkat
 	 *
@@ -145,8 +158,7 @@ public class JSkatMaster {
 	private void createLocalTable(final String tableName,
 			final AbstractHumanJSkatPlayer humanPlayer) {
 
-		SkatTable table = new SkatTable(this.data.getTableOptions());
-		table.setName(tableName);
+		SkatTable table = new SkatTable(tableName, this.data.getTableOptions());
 		table.setView(this.view);
 		this.data.addLocalSkatTable(table);
 		this.data.registerHumanPlayerObject(table, humanPlayer);

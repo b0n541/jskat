@@ -62,6 +62,7 @@ public class SkatSeries extends JSkatThread {
 		data = new SkatSeriesData();
 		data.setState(SeriesState.WAITING);
 		data.setTableName(tableName);
+
 		setName("SkatSeries on table " + tableName); //$NON-NLS-1$
 		player = new HashMap<Player, JSkatPlayer>();
 	}
