@@ -63,7 +63,7 @@ public class DiscardSkatEventTest extends AbstractJSkatTest {
 	}
 
 	@Test
-	public void SkatGameDataAfterEvent() {
+	public void skatGameDataAfterEvent() {
 
 		assertThat(data.getPlayerCards(Player.FOREHAND).size(), is(12));
 		assertThat(data.getSkat().size(), is(0));
@@ -79,7 +79,7 @@ public class DiscardSkatEventTest extends AbstractJSkatTest {
 	}
 
 	@Test
-	public void SkatGameDataBeforeEvent() {
+	public void skatGameDataBeforeEvent() {
 
 		event.processForward(data);
 		event.processBackward(data);

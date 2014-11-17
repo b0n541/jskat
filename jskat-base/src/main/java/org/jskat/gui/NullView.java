@@ -25,7 +25,6 @@ import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
-import org.jskat.data.Trick;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.MoveInformation;
@@ -45,41 +44,11 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void clearTrickCards(
-			@SuppressWarnings("unused") final String tableName) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void removeCard(@SuppressWarnings("unused") final String tableName,
-			@SuppressWarnings("unused") final Player player,
-			@SuppressWarnings("unused") final Card card) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void setPositions(
 			@SuppressWarnings("unused") final String tableName,
 			@SuppressWarnings("unused") final Player leftPosition,
 			@SuppressWarnings("unused") final Player rightPosition,
 			@SuppressWarnings("unused") final Player playerPosition) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setTrickCard(
-			@SuppressWarnings("unused") final String tableName,
-			@SuppressWarnings("unused") final Player position,
-			@SuppressWarnings("unused") final Card card) {
 		// empty method by intent
 	}
 
@@ -280,27 +249,6 @@ public class NullView implements JSkatView {
 			@SuppressWarnings("unused") final String tableName,
 			@SuppressWarnings("unused") final SkatGameData gameData,
 			@SuppressWarnings("unused") final MoveInformation moveInformation) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void playTrickCard(
-			@SuppressWarnings("unused") final String tableName,
-			@SuppressWarnings("unused") final Player position,
-			@SuppressWarnings("unused") final Card card) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setLastTrick(
-			@SuppressWarnings("unused") final String tableName,
-			@SuppressWarnings("unused") final Trick trick) {
 		// empty method by intent
 	}
 

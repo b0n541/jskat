@@ -42,12 +42,13 @@ import javax.swing.ScrollPaneConstants;
 import org.jskat.control.event.skatgame.AbstractBidEvent;
 import org.jskat.control.event.skatgame.BidEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
+import org.jskat.control.event.skatgame.TrickCardPlayedEvent;
 import org.jskat.control.event.table.ActivePlayerChangedEvent;
+import org.jskat.control.event.table.TrickCompletedEvent;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
-import org.jskat.data.Trick;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.action.main.StartSkatSeriesAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
@@ -438,7 +439,23 @@ public class SkatTablePanel extends AbstractTabPanel {
 	/**
 	 * Clears trick cards
 	 */
-	public void clearTrickCards() {
+	@Subscribe
+	public void clearTrickCardsAndSetLastTrickOn(final TrickCompletedEvent event) {
+
+		clearTrickCards();
+		clearLastTrickCards();
+		final Player trickForeHand = event.trick.getForeHand();
+		this.lastTrickPanel.addCard(trickForeHand, event.trick.getFirstCard());
+		this.lastTrickPanel.addCard(trickForeHand.getLeftNeighbor(),
+				event.trick.getSecondCard());
+		this.lastTrickPanel.addCard(trickForeHand.getRightNeighbor(),
+				event.trick.getThirdCard());
+	}
+
+	/**
+	 * Clears trick cards
+	 */
+	private void clearTrickCards() {
 
 		this.trickPanel.clearCards();
 	}
@@ -446,20 +463,18 @@ public class SkatTablePanel extends AbstractTabPanel {
 	/**
 	 * Clears last trick cards
 	 */
-	void clearLastTrickCards() {
+	private void clearLastTrickCards() {
 
 		this.lastTrickPanel.clearCards();
 	}
 
-	/**
-	 * Removes a card from a player
-	 * 
-	 * @param player
-	 *            Player
-	 * @param card
-	 *            Card
-	 */
-	public void removeCard(final Player player, final Card card) {
+	@Subscribe
+	public void setTrickCardOn(TrickCardPlayedEvent event) {
+		removeCard(event.player, event.card);
+		setTrickCard(event.player, event.card);
+	}
+
+	private void removeCard(final Player player, final Card card) {
 
 		switch (player) {
 		case FOREHAND:
@@ -939,23 +954,6 @@ public class SkatTablePanel extends AbstractTabPanel {
 			break;
 		}
 		return panel;
-	}
-
-	/**
-	 * Sets the last trick
-	 * 
-	 * @param trick
-	 *            Last trick
-	 */
-	public void setLastTrick(final Trick trick) {
-
-		this.lastTrickPanel.clearCards();
-		final Player trickForeHand = trick.getForeHand();
-		this.lastTrickPanel.addCard(trickForeHand, trick.getFirstCard());
-		this.lastTrickPanel.addCard(trickForeHand.getLeftNeighbor(),
-				trick.getSecondCard());
-		this.lastTrickPanel.addCard(trickForeHand.getRightNeighbor(),
-				trick.getThirdCard());
 	}
 
 	/**

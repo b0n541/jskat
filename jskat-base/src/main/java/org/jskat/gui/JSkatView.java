@@ -25,7 +25,6 @@ import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
-import org.jskat.data.Trick;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.MoveInformation;
@@ -121,18 +120,6 @@ public interface JSkatView {
 	public void addCards(String tableName, Player player, CardList cards);
 
 	/**
-	 * Removes a card from a players hand
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param player
-	 *            Player
-	 * @param card
-	 *            Card
-	 */
-	public void removeCard(String tableName, Player player, Card card);
-
-	/**
 	 * Sets the player positions for a table
 	 * 
 	 * @param tableName
@@ -146,48 +133,6 @@ public interface JSkatView {
 	 */
 	public void setPositions(String tableName, Player leftPosition,
 			Player rightPosition, Player playerPosition);
-
-	/**
-	 * Adds a card to the trick
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param position
-	 *            Player position
-	 * @param card
-	 *            Card
-	 */
-	public void setTrickCard(String tableName, Player position, Card card);
-
-	/**
-	 * Sets the cards for the last trick
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param trick
-	 *            Last trick
-	 */
-	public void setLastTrick(String tableName, Trick trick);
-
-	/**
-	 * Clears the cards of the trick
-	 * 
-	 * @param tableName
-	 *            Table name
-	 */
-	public void clearTrickCards(String tableName);
-
-	/**
-	 * Plays a card during card play
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param position
-	 *            Player position
-	 * @param card
-	 *            Card
-	 */
-	public void playTrickCard(String tableName, Player position, Card card);
 
 	/**
 	 * Sets the game announcement

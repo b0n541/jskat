@@ -21,8 +21,11 @@ import java.util.Map;
 import org.jskat.control.event.skatgame.BidEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
 import org.jskat.control.event.skatgame.PassBidEvent;
+import org.jskat.control.event.skatgame.SkatGameEvent;
+import org.jskat.control.event.skatgame.TrickCardPlayedEvent;
 import org.jskat.control.event.table.ActivePlayerChangedEvent;
 import org.jskat.control.event.table.TableGameMoveEvent;
+import org.jskat.control.event.table.TrickCompletedEvent;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary;
@@ -47,6 +50,8 @@ import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.eventbus.Subscribe;
 
 /**
  * Controls a skat game.
@@ -84,6 +89,7 @@ public class SkatGame extends JSkatThread {
 			final JSkatPlayer newForeHand, final JSkatPlayer newMiddleHand,
 			final JSkatPlayer newRearHand) {
 		this.tableName = newTableName;
+		JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(this);
 		setName("SkatGame on table " + this.tableName); //$NON-NLS-1$
 		this.variant = variant;
 		this.player = new HashMap<Player, JSkatPlayer>();
@@ -98,6 +104,11 @@ public class SkatGame extends JSkatThread {
 
 		this.data = new SkatGameData();
 		setGameState(GameState.GAME_START);
+	}
+
+	@Subscribe
+	public void adjustDataOn(SkatGameEvent event) {
+		event.processForward(data);
 	}
 
 	/**
@@ -626,7 +637,6 @@ public class SkatGame extends JSkatThread {
 
 	private void playTricks() {
 
-		this.view.clearTrickCards(this.tableName);
 		Player trickWinner = null;
 
 		for (int trickNo = 0; trickNo < 10; trickNo++) {
@@ -900,23 +910,15 @@ public class SkatGame extends JSkatThread {
 		}
 
 		if (card != null) {
-			// a card was played
-			this.data.removePlayerCard(currPlayer, card);
-			this.data.addTrickCard(card);
-
 			if (trick.getTrickNumberInGame() > 0
-					&& currPlayer.equals(trickForeHand)) {
-				// remove all cards from current trick panel first
-				this.view.clearTrickCards(this.tableName);
+					&& trick.getFirstCard() == null) {
 
-				final Trick lastTrick = this.data.getTricks().get(
-						this.data.getTricks().size() - 2);
-
-				// set last trick cards
-				this.view.setLastTrick(this.tableName, lastTrick);
+				JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(
+						new TrickCompletedEvent(data.getLastTrick()));
 			}
 
-			this.view.playTrickCard(this.tableName, currPlayer, card);
+			JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(this.tableName,
+					new TrickCardPlayedEvent(currPlayer, card)));
 
 			for (final JSkatPlayer playerInstance : this.player.values()) {
 				// inform all players

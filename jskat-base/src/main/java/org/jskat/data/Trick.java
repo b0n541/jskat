@@ -190,20 +190,33 @@ public class Trick {
 	/**
 	 * Adds a card to the trick
 	 * 
-	 * @param newCard
+	 * @param card
 	 *            Card to be added
 	 */
-	public void addCard(Card newCard) {
+	public void addCard(Card card) {
 
 		if (firstCard == null) {
-
-			firstCard = newCard;
+			firstCard = card;
 		} else if (secondCard == null) {
-
-			secondCard = newCard;
+			secondCard = card;
 		} else if (thirdCard == null) {
+			thirdCard = card;
+		}
+	}
 
-			thirdCard = newCard;
+	/**
+	 * Removes a card from the trick.
+	 * 
+	 * @param card
+	 *            Card to be removed
+	 */
+	public void removeCard(Card card) {
+		if (card.equals(thirdCard)) {
+			thirdCard = null;
+		} else if (card.equals(secondCard)) {
+			secondCard = null;
+		} else if (card.equals(firstCard)) {
+			firstCard = null;
 		}
 	}
 

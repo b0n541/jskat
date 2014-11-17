@@ -13,23 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control;
+package org.jskat.control.event.table;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import com.google.common.eventbus.EventBus;
-
+import org.jskat.data.Trick;
 
 /**
- * Central event bus for JSkat.
+ * This event is created when a trick is completed.
  */
-public class JSkatEventBus {
+public class TrickCompletedEvent {
 
-	public final static EventBus INSTANCE = new EventBus("JSkat");
-	public final static Map<String, EventBus> TABLE_EVENT_BUSSES = new HashMap<>();
+	public final Trick trick;
 
-	private JSkatEventBus() {
-		
+	public TrickCompletedEvent(Trick trick) {
+		this.trick = trick;
 	}
 }

@@ -42,7 +42,7 @@ public class HoldBidEventTest extends AbstractJSkatTest {
 	}
 
 	@Test
-	public void SkatGameDataAfterEvent() {
+	public void skatGameDataAfterEvent() {
 
 		event.processForward(data);
 
@@ -75,7 +75,7 @@ public class HoldBidEventTest extends AbstractJSkatTest {
 	}
 
 	@Test
-	public void SkatGameDataBeforeEvent() {
+	public void skatGameDataBeforeEvent() {
 
 		event.processForward(data);
 		event2.processForward(data);

@@ -195,7 +195,7 @@ public class SkatGameData {
 
 		intializeVariables();
 
-		log.debug("Game created"); //$NON-NLS-1$
+		log.debug("Game data created"); //$NON-NLS-1$
 	}
 
 	private void intializeVariables() {
@@ -546,14 +546,24 @@ public class SkatGameData {
 	}
 
 	/**
-	 * Adds a trick card
+	 * Adds a trick card.
 	 * 
 	 * @param card
-	 *            The ID of the card that was played
+	 *            Card to be added
 	 */
 	public void addTrickCard(final Card card) {
 
 		getCurrentTrick().addCard(card);
+	}
+
+	/**
+	 * Removes a trick card.
+	 * 
+	 * @param card
+	 *            Card to be removed
+	 */
+	public void removeTrickCard(final Card card) {
+		getCurrentTrick().removeCard(card);
 	}
 
 	/**
@@ -1251,6 +1261,18 @@ public class SkatGameData {
 	 */
 	public void addPlayerCards(Player player, CardList cards) {
 		playerHands.get(player).addAll(cards);
+	}
+
+	/**
+	 * Adds a card to a players hand.
+	 * 
+	 * @param player
+	 *            Player
+	 * @param card
+	 *            Card
+	 */
+	public void addPlayerCard(Player player, Card card) {
+		playerHands.get(player).add(card);
 	}
 
 	/**

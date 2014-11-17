@@ -28,7 +28,6 @@ import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
-import org.jskat.data.Trick;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.MoveInformation;
@@ -123,41 +122,8 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void removeCard(final String tableName, final Player player,
-			final Card card) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void setPositions(final String tableName, final Player leftPosition,
 			final Player rightPosition, final Player playerPosition) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setTrickCard(final String tableName, final Player position,
-			final Card card) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setLastTrick(final String tableName, final Trick trick) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void clearTrickCards(final String tableName) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void playTrickCard(final String tableName, final Player position,
-			final Card card) {
 		// TODO Auto-generated method stub
 
 	}
