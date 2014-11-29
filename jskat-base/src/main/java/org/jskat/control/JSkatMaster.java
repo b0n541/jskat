@@ -139,15 +139,18 @@ public class JSkatMaster {
 	private void createLocalTable(final String tableName,
 			final AbstractHumanJSkatPlayer humanPlayer) {
 
-		SkatTable table = new SkatTable(tableName, this.data.getTableOptions());
-		table.setView(this.view);
-		this.data.addLocalSkatTable(table);
-		this.data.registerHumanPlayerObject(table, humanPlayer);
-
 		JSkatEventBus.INSTANCE.post(new TableCreatedEvent(
 				JSkatViewType.LOCAL_TABLE, tableName));
+	}
 
-		this.data.setActiveView(JSkatViewType.LOCAL_TABLE, table.getName());
+	/**
+	 * Gets the view implementation.
+	 * 
+	 * @deprecated Use only until event processing is completely implemented.
+	 */
+	@Deprecated
+	public JSkatView getView() {
+		return view;
 	}
 
 	/**
@@ -177,7 +180,7 @@ public class JSkatMaster {
 
 		List<String> player = this.view.getPlayerForInvitation(issPlayerNames);
 		for (String currPlayer : player) {
-			getIssController().invitePlayer(this.data.getActiveView(), currPlayer);
+			getIssController().invitePlayer(this.data.getActiveTable(), currPlayer);
 		}
 	}
 
@@ -201,9 +204,9 @@ public class JSkatMaster {
 			int numberOfRounds, boolean unlimited, boolean onlyPlayRamsch,
 			int sleeps) {
 
-		log.debug(this.data.getActiveView());
+		log.debug(this.data.getActiveTable());
 
-		SkatTable table = this.data.getLocalSkatTable(this.data.getActiveView());
+		SkatTable table = this.data.getLocalSkatTable(this.data.getActiveTable());
 
 		table.removePlayers();
 
@@ -261,9 +264,9 @@ public class JSkatMaster {
 	 */
 	public void resumeSkatSeries() {
 
-		log.debug(this.data.getActiveView());
+		log.debug(this.data.getActiveTable());
 
-		resumeSkatSeries(this.data.getActiveView());
+		resumeSkatSeries(this.data.getActiveTable());
 	}
 
 	/**
@@ -479,7 +482,7 @@ public class JSkatMaster {
 
 		log.debug(event.toString());
 
-		String tableName = this.data.getActiveView();
+		String tableName = this.data.getActiveTable();
 		String command = event.getActionCommand();
 		Object source = event.getSource();
 
@@ -564,7 +567,7 @@ public class JSkatMaster {
 			throw new IllegalArgumentException();
 		}
 
-		this.view.takeCardFromSkat(this.data.getActiveView(), (Card) e.getSource());
+		this.view.takeCardFromSkat(this.data.getActiveTable(), (Card) e.getSource());
 	}
 
 	/**
@@ -580,7 +583,7 @@ public class JSkatMaster {
 			throw new IllegalArgumentException();
 		}
 
-		this.view.putCardIntoSkat(this.data.getActiveView(), (Card) event.getSource());
+		this.view.putCardIntoSkat(this.data.getActiveTable(), (Card) event.getSource());
 	}
 
 	/**
@@ -619,7 +622,7 @@ public class JSkatMaster {
 	 */
 	public void setActiveTable(JSkatViewType type, String tableName) {
 
-		this.data.setActiveView(type, tableName);
+		this.data.setActiveTable(type, tableName);
 		if (this.view != null) {
 			// might not be instantiated yet
 			this.view.setActiveView(tableName);
@@ -648,7 +651,7 @@ public class JSkatMaster {
 	 */
 	public void leaveTable() {
 
-		String tableName = this.data.getActiveView();
+		String tableName = this.data.getActiveTable();
 
 		// FIXME distinguish between ISS and local skat table
 		this.issControl.leaveTable(tableName);

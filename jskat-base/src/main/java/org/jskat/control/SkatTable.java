@@ -21,7 +21,6 @@ import java.util.List;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.SkatTableOptions;
-import org.jskat.gui.JSkatView;
 import org.jskat.player.JSkatPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +38,6 @@ public class SkatTable {
 	private final SkatTableOptions options;
 	private SkatSeries series;
 	private final List<JSkatPlayer> player = new ArrayList<JSkatPlayer>();
-
-	private JSkatView view;
 
 	/**
 	 * Constructor
@@ -87,9 +84,8 @@ public class SkatTable {
 			final int sleepBetweenMoves) {
 
 		if (!isSeriesRunning()) {
-			// TODO save old series data?
+
 			series = new SkatSeries(tableName);
-			series.setView(view);
 
 			if (sleepBetweenMoves > 0) {
 				// set max sleep time only when using GUI
@@ -99,7 +95,6 @@ public class SkatTable {
 
 		if (player.size() >= 3) {
 
-			view.startSeries(tableName);
 			series.setPlayer(player);
 			series.setOnlyPlayRamsch(onlyPlayRamsch);
 			series.setMaxRounds(rounds, unlimitedRounds);
@@ -245,17 +240,6 @@ public class SkatTable {
 	public int getCurrentGameID() {
 
 		return series.getCurrentGameID();
-	}
-
-	/**
-	 * Sets the view for the skat table
-	 * 
-	 * @param newView
-	 *            View
-	 */
-	public void setView(final JSkatView newView) {
-
-		view = newView;
 	}
 
 	/**

@@ -50,14 +50,6 @@ public interface JSkatView {
 	public String getNewTableName(int localTablesCreated);
 
 	/**
-	 * Opens a new series
-	 * 
-	 * @param tableName
-	 *            Table name
-	 */
-	public void startSeries(String tableName);
-
-	/**
 	 * Starts a new game
 	 * 
 	 * @param tableName

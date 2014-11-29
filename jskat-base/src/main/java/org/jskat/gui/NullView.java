@@ -72,14 +72,6 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void startSeries(@SuppressWarnings("unused") final String tableName) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void setGameAnnouncement(
 			@SuppressWarnings("unused") final String tableName,
 			@SuppressWarnings("unused") final Player declarer,

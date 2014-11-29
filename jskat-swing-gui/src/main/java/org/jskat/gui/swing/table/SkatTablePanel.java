@@ -45,6 +45,7 @@ import org.jskat.control.event.skatgame.BidEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
 import org.jskat.control.event.skatgame.TrickCardPlayedEvent;
 import org.jskat.control.event.table.ActivePlayerChangedEvent;
+import org.jskat.control.event.table.SkatSeriesStartedEvent;
 import org.jskat.control.event.table.TrickCompletedEvent;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
@@ -823,7 +824,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	/**
 	 * Clears the skat list
 	 */
-	public void clearSkatList() {
+	@Subscribe
+	public void clearSkatListOn(final SkatSeriesStartedEvent event) {
 
 		this.skatListTableModel.clearList();
 	}

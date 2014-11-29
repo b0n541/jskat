@@ -15,7 +15,6 @@
  */
 package org.jskat.control;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,9 +25,6 @@ import org.jskat.data.SkatSeriesData;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.gui.JSkatView;
 import org.jskat.player.JSkatPlayer;
-import org.jskat.util.Card;
-import org.jskat.util.CardDeck;
-import org.jskat.util.CardList;
 import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
 import org.slf4j.Logger;
@@ -62,6 +58,8 @@ public class SkatSeries extends JSkatThread {
 		data = new SkatSeriesData();
 		data.setState(SeriesState.WAITING);
 		data.setTableName(tableName);
+
+		view = JSkatMaster.INSTANCE.getView();
 
 		setName("SkatSeries on table " + tableName); //$NON-NLS-1$
 		player = new HashMap<Player, JSkatPlayer>();
@@ -221,23 +219,6 @@ public class SkatSeries extends JSkatThread {
 		view.setSeriesState(data.getTableName(), SeriesState.SERIES_FINISHED);
 
 		log.debug(data.getState().name());
-	}
-
-	private CardDeck getGrandGame() {
-		CardList cards = new CardList();
-
-		cards.addAll(Arrays.asList(Card.CT, Card.CQ, Card.C9)); // forehand
-		cards.addAll(Arrays.asList(Card.CJ, Card.SJ, Card.CA)); // middlehand
-		cards.addAll(Arrays.asList(Card.HJ, Card.DJ, Card.C7)); // rearhand
-		cards.addAll(Arrays.asList(Card.H7, Card.D9)); // skat
-		cards.addAll(Arrays.asList(Card.C8, Card.S7, Card.HT, Card.HQ)); // forehand
-		cards.addAll(Arrays.asList(Card.CK, Card.ST, Card.SQ, Card.S9)); // middlehand
-		cards.addAll(Arrays.asList(Card.SA, Card.SK, Card.S8, Card.HK)); // rearhand
-		cards.addAll(Arrays.asList(Card.H8, Card.DT, Card.DK)); // forehand
-		cards.addAll(Arrays.asList(Card.HA, Card.DA, Card.DQ)); // middlehand
-		cards.addAll(Arrays.asList(Card.H9, Card.D8, Card.D7)); // rearhand
-
-		return new CardDeck(cards);
 	}
 
 	private void setViewPositions() {

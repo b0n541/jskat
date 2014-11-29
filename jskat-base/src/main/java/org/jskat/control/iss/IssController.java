@@ -599,7 +599,7 @@ public class IssController {
 	@Subscribe
 	public void sendReadyToPlayOn(final IssReadyToPlayCommand event) {
 		
-		sendToIss(this.issMsg.getReadyMessage(this.appData.getActiveView()));
+		sendToIss(this.issMsg.getReadyMessage(this.appData.getActiveTable()));
 	}
 
 	/**
@@ -611,7 +611,7 @@ public class IssController {
 	@Subscribe
 	public void sendToggleTalkEnabledOn(final IssToggleTalkEnabledCommand event) {
 		
-		sendToIss(this.issMsg.getTalkEnabledMessage(this.appData.getActiveView()));
+		sendToIss(this.issMsg.getTalkEnabledMessage(this.appData.getActiveTable()));
 	}
 
 	/**
@@ -623,7 +623,7 @@ public class IssController {
 	@Subscribe
 	public void sendResignOn(final IssResignCommand event) {
 		
-		sendToIss(this.issMsg.getResignMessage(this.appData.getActiveView()));
+		sendToIss(this.issMsg.getResignMessage(this.appData.getActiveTable()));
 	}
 
 	/**
@@ -635,7 +635,7 @@ public class IssController {
 	@Subscribe
 	public void sendShowCardsOn(final IssShowCardsCommand event) {
 		
-		sendToIss(this.issMsg.getShowCardsMessage(this.appData.getActiveView()));
+		sendToIss(this.issMsg.getShowCardsMessage(this.appData.getActiveTable()));
 	}
 
 	/**
@@ -646,7 +646,7 @@ public class IssController {
 	 */
 	@Subscribe
 	public void sendTableSeatChangeOn(final IssTableSeatChangeCommand command) {
-		sendToIss(this.issMsg.getTableSeatChangeMessage(this.appData.getActiveView()));
+		sendToIss(this.issMsg.getTableSeatChangeMessage(this.appData.getActiveTable()));
 	}
 
 	/**

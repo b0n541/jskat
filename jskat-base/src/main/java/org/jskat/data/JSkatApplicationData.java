@@ -20,8 +20,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.jskat.control.JSkatEventBus;
+import org.jskat.control.JSkatMaster;
 import org.jskat.control.SkatTable;
+import org.jskat.control.event.table.TableCreatedEvent;
 import org.jskat.gui.human.AbstractHumanJSkatPlayer;
+
+import com.google.common.eventbus.Subscribe;
 
 /**
  * Holds all application data
@@ -32,8 +37,8 @@ public class JSkatApplicationData {
 
 	private final JSkatOptions options;
 	private final Map<String, SkatTable> localSkatTables;
-	private final Set<String> joinedIssTables;
-	private String activeView;
+	private final Map<String, SkatTable> joinedIssTables;
+	private String tableName;
 	private String issLoginName;
 	private final Set<String> availableIssPlayer;
 	private final Map<String, AbstractHumanJSkatPlayer> humanPlayers;
@@ -44,10 +49,27 @@ public class JSkatApplicationData {
 	private JSkatApplicationData() {
 
 		options = JSkatOptions.instance();
-		localSkatTables = new HashMap<String, SkatTable>();
-		humanPlayers = new HashMap<String, AbstractHumanJSkatPlayer>();
-		availableIssPlayer = new HashSet<String>();
-		joinedIssTables = new HashSet<String>();
+		localSkatTables = new HashMap<>();
+		humanPlayers = new HashMap<>();
+		availableIssPlayer = new HashSet<>();
+		joinedIssTables = new HashMap<>();
+
+		JSkatEventBus.INSTANCE.register(this);
+	}
+
+	@Subscribe
+	synchronized public void adjustTableDataOn(final TableCreatedEvent event) {
+
+		SkatTable table = new SkatTable(event.tableName, JSkatOptions
+				.instance().getSkatTableOptions());
+		if (JSkatViewType.LOCAL_TABLE.equals(event.tableType)) {
+			addLocalSkatTable(table);
+			registerHumanPlayerObject(table, JSkatMaster.INSTANCE.getView()
+					.getHumanPlayerForGUI());
+		} else if (JSkatViewType.ISS_TABLE.equals(event.tableType)) {
+			addJoinedIssSkatTable(table);
+		}
+		setActiveTable(event.tableType, event.tableName);
 	}
 
 	/**
@@ -125,30 +147,26 @@ public class JSkatApplicationData {
 	}
 
 	/**
-	 * Sets the active view
+	 * Sets the active table
 	 * 
 	 * @param type
 	 *            View type
-	 * @param newActiveView
-	 *            New active view
+	 * @param tableName
+	 *            Table name
 	 */
-	public void setActiveView(JSkatViewType type, String newActiveView) {
+	public void setActiveTable(JSkatViewType type, String tableName) {
 
-		if (type == JSkatViewType.ISS_TABLE) {
-			joinedIssTables.add(newActiveView);
-		}
-
-		activeView = newActiveView;
+		this.tableName = tableName;
 	}
 
 	/**
-	 * Gets the active view
+	 * Gets the active table
 	 * 
-	 * @return Active view
+	 * @return Active table name
 	 */
-	public String getActiveView() {
+	public String getActiveTable() {
 
-		return activeView;
+		return tableName;
 	}
 
 	/**
@@ -195,8 +213,8 @@ public class JSkatApplicationData {
 	 * @param newSkatTable
 	 *            Skat table
 	 */
-	public void addJoinedIssSkatTable(final String newSkatTable) {
-		joinedIssTables.add(newSkatTable);
+	public void addJoinedIssSkatTable(final SkatTable newSkatTable) {
+		joinedIssTables.put(newSkatTable.getName(), newSkatTable);
 	}
 
 	/**
@@ -212,11 +230,11 @@ public class JSkatApplicationData {
 	/**
 	 * Removes a joined skat table on ISS
 	 * 
-	 * @param skatTable
+	 * @param tableName
 	 *            Skat table
 	 */
-	public void removeJoinedIssSkatTable(final String skatTable) {
-		joinedIssTables.remove(skatTable);
+	public void removeJoinedIssSkatTable(final String tableName) {
+		joinedIssTables.remove(tableName);
 	}
 
 	/**
@@ -227,7 +245,7 @@ public class JSkatApplicationData {
 	 * @return TRUE, if the table was joined on ISS
 	 */
 	public boolean isTableJoined(final String tableName) {
-		return joinedIssTables.contains(tableName);
+		return joinedIssTables.containsKey(tableName);
 	}
 
 	/**
