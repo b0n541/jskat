@@ -435,6 +435,7 @@ public class JSkatViewImpl implements JSkatView {
 
 	@Subscribe
 	public void createSkatTablePanelOn(final TableCreatedEvent event) {
+
 		String tableName = event.tableName;
 		String tabTitle = null;
 

@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jskat.control.event.table.ActivePlayerChangedEvent;
+import org.jskat.control.event.table.TableCreatedEvent;
 import org.jskat.control.event.table.TableGameMoveEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,6 +58,12 @@ public class JSkatEventBus {
 	@Subscribe
 	public void on(DeadEvent event) {
 		log.error("Recieved dead event: " + event.getEvent());
+	}
+
+	@Subscribe
+	public void createdTableEventBusOn(final TableCreatedEvent event) {
+		EventBus eventBus = new EventBus();
+		JSkatEventBus.TABLE_EVENT_BUSSES.put(event.tableName, eventBus);
 	}
 
 	@Subscribe

@@ -25,8 +25,6 @@ import org.jskat.player.JSkatPlayer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.eventbus.EventBus;
-
 /**
  * Controls a table for playing a series of skat games
  */
@@ -49,10 +47,6 @@ public class SkatTable {
 
 		this.tableName = tableName;
 		this.options = options;
-
-		EventBus eventBus = new EventBus();
-		eventBus.register(this);
-		JSkatEventBus.TABLE_EVENT_BUSSES.put(tableName, eventBus);
 
 		log.debug("SkatTable created with max. " + options.getMaxPlayerCount() + " players."); //$NON-NLS-1$ //$NON-NLS-2$
 	}

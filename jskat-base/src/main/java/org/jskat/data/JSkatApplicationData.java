@@ -70,6 +70,8 @@ public class JSkatApplicationData {
 			addJoinedIssSkatTable(table);
 		}
 		setActiveTable(event.tableType, event.tableName);
+
+		JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(this);
 	}
 
 	/**
