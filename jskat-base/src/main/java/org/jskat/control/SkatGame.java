@@ -18,6 +18,7 @@ package org.jskat.control;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.skatgame.BidEvent;
 import org.jskat.control.event.skatgame.ContraEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
@@ -1114,7 +1115,8 @@ public class SkatGame extends JSkatThread {
 
 				this.view.addGameResult(this.tableName, getGameSummary());
 
-				this.view.showCards(this.tableName, this.data.getCardsAfterDiscard());
+				JSkatEventBus.INSTANCE.post(new ShowCardsCommand(tableName,
+						data.getCardsAfterDiscard()));
 			}
 		}
 	}

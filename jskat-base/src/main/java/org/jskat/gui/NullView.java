@@ -16,7 +16,6 @@
 package org.jskat.gui;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.jskat.control.iss.ChatMessageType;
@@ -430,15 +429,6 @@ public class NullView implements JSkatView {
 	public AbstractHumanJSkatPlayer getHumanPlayerForGUI() {
 		// empty method by intent
 		return null;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void showCards(final String tableName,
-			final Map<Player, CardList> cards) {
-		// empty method by intent
 	}
 
 	/**

@@ -17,7 +17,6 @@ package org.jskat.gui;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.jskat.control.JSkatEventBus;
@@ -311,12 +310,6 @@ public class UnitTestView implements JSkatView {
 	public AbstractHumanJSkatPlayer getHumanPlayerForGUI() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public void showCards(final String tableName,
-			final Map<Player, CardList> cards) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override

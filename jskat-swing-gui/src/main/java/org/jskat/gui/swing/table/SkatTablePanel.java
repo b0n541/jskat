@@ -40,6 +40,7 @@ import javax.swing.JTable;
 import javax.swing.ScrollPaneConstants;
 
 import org.jskat.control.JSkatEventBus;
+import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.skatgame.AbstractBidEvent;
 import org.jskat.control.event.skatgame.BidEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
@@ -1169,11 +1170,12 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param cards
 	 *            Cards of all players
 	 */
-	public void showCards(final Map<Player, CardList> cards) {
-		for (final Player player : cards.keySet()) {
-			removeAllCards(player);
-			showCards(player);
-			addCards(player, cards.get(player));
+	@Subscribe
+	public void showCardsOn(final ShowCardsCommand command) {
+		for (Map.Entry<Player, CardList> playerCards : command.cards.entrySet()) {
+			removeAllCards(playerCards.getKey());
+			showCards(playerCards.getKey());
+			addCards(playerCards.getKey(), playerCards.getValue());
 		}
 	}
 

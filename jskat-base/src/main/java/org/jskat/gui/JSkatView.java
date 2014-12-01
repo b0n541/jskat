@@ -16,7 +16,6 @@
 package org.jskat.gui;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.jskat.control.iss.ChatMessageType;
@@ -453,16 +452,6 @@ public interface JSkatView {
 	 * @return Human player object that extends {@link AbstractHumanJSkatPlayer}
 	 */
 	public AbstractHumanJSkatPlayer getHumanPlayerForGUI();
-
-	/**
-	 * Shows player cards
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param cards
-	 *            Cards for each player
-	 */
-	public void showCards(String tableName, Map<Player, CardList> cards);
 
 	/**
 	 * Sets the active view part for JSkat

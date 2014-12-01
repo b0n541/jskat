@@ -1293,12 +1293,6 @@ public class JSkatViewImpl implements JSkatView {
 	}
 
 	@Override
-	public void showCards(final String tableName,
-			final Map<Player, CardList> cards) {
-		this.tables.get(tableName).showCards(cards);
-	}
-
-	@Override
 	public void setActiveView(String viewName) {
 		this.activeView = viewName;
 	}

@@ -29,6 +29,7 @@ import org.jskat.control.command.iss.IssShowCardsCommand;
 import org.jskat.control.command.iss.IssTableSeatChangeCommand;
 import org.jskat.control.command.iss.IssToggleTalkEnabledCommand;
 import org.jskat.control.command.table.CreateTableCommand;
+import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.iss.IssDisconnectedEvent;
 import org.jskat.control.event.table.ActivePlayerChangedEvent;
 import org.jskat.data.GameAnnouncement;
@@ -553,10 +554,11 @@ public class IssController {
 	 */
 	public void endGame(final String tableName, final SkatGameData newGameData) {
 
-		this.view.setGameState(tableName, GameState.GAME_OVER);
-		this.view.addGameResult(tableName, newGameData.getGameSummary());
-		this.view.showCards(tableName, newGameData.getCardsAfterDiscard());
-		this.gameData.put(tableName, newGameData);
+		view.setGameState(tableName, GameState.GAME_OVER);
+		view.addGameResult(tableName, newGameData.getGameSummary());
+		eventBus.post(new ShowCardsCommand(tableName, newGameData
+				.getCardsAfterDiscard()));
+		gameData.put(tableName, newGameData);
 	}
 
 	/**
