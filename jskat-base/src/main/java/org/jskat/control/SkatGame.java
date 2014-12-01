@@ -19,8 +19,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jskat.control.event.skatgame.BidEvent;
+import org.jskat.control.event.skatgame.ContraEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
 import org.jskat.control.event.skatgame.PassBidEvent;
+import org.jskat.control.event.skatgame.ReEvent;
 import org.jskat.control.event.skatgame.TrickCardPlayedEvent;
 import org.jskat.control.event.table.ActivePlayerChangedEvent;
 import org.jskat.control.event.table.TableGameMoveEvent;
@@ -237,18 +239,16 @@ public class SkatGame extends JSkatThread {
 	}
 
 	private void contraRe() {
-		Player opponent = this.activePlayer;
 		if (getActivePlayerInstance().callContra()) {
-			this.data.setContra(true);
-			this.view.setContra(this.tableName, this.activePlayer);
+			JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName,
+					new ContraEvent(activePlayer)));
 			setGameState(GameState.RE);
 			setActivePlayer(this.data.getDeclarer());
 			if (getActivePlayerInstance().callRe()) {
-				this.data.setRe(true);
-				this.view.setRe(this.tableName, this.activePlayer);
+				JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName,
+						new ReEvent(activePlayer)));
 			}
 		}
-		setActivePlayer(opponent);
 	}
 
 	private boolean grandHand() {

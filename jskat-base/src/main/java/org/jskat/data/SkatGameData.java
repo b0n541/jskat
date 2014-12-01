@@ -189,6 +189,8 @@ public class SkatGameData {
 	 */
 	private final CardList dealtSkat = new CardList();
 
+	private Boolean skatPickedUp = false;
+
 	private final Set<Player> ramschLoosers = new HashSet<Player>();
 
 	/**
@@ -1301,5 +1303,24 @@ public class SkatGameData {
 	 */
 	public Boolean isRe() {
 		return announcement.re;
+	}
+
+	/**
+	 * Sets the information that the winner of the bidding picked up the skat.
+	 * 
+	 * @param skatPickedUp
+	 *            TRUE if the winner of the bidding picked up the skat
+	 */
+	public void setSkatPickUp(boolean skatPickedUp) {
+		this.skatPickedUp = skatPickedUp;
+	}
+
+	/**
+	 * Checks whether the skat was picked up.
+	 * 
+	 * @return TRUE if the skat was picked up
+	 */
+	public Boolean isSkatPickedUp() {
+		return skatPickedUp;
 	}
 }

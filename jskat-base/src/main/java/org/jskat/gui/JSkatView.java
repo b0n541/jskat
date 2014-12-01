@@ -448,26 +448,6 @@ public interface JSkatView {
 	public void openWebPage(String link);
 
 	/**
-	 * Sets the Contra calling of a player.
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param player
-	 *            Player
-	 */
-	public void setContra(String tableName, Player player);
-
-	/**
-	 * Sets the Re calling of a player.
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param player
-	 *            Player
-	 */
-	public void setRe(String tableName, Player player);
-
-	/**
 	 * Creates a human player object for the GUI
 	 * 
 	 * @return Human player object that extends {@link AbstractHumanJSkatPlayer}

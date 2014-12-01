@@ -13,31 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control.event.skatgame;
+package org.jskat.control.command.table;
 
-import org.jskat.data.SkatGameData;
-import org.jskat.util.Player;
+import org.jskat.data.JSkatViewType;
 
-/**
- * Event for picking up the skat.
- */
-public final class PickUpSkatEvent implements SkatGameEvent {
+public class CreateTableCommand {
 
-	private final Player player;
+	public final JSkatViewType tableType;
+	public final String tableName;
 
-	public PickUpSkatEvent(Player player) {
-		this.player = player;
-	}
-
-	@Override
-	public final void processForward(SkatGameData data) {
-		data.setSkatPickUp(true);
-		data.addSkatToPlayer(player);
-	}
-
-	@Override
-	public final void processBackward(SkatGameData data) {
-		data.setSkatPickUp(false);
-		data.removeSkatFromPlayer(player);
+	public CreateTableCommand(JSkatViewType tableType, String tableName) {
+		this.tableType = tableType;
+		this.tableName = tableName;
 	}
 }

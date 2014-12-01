@@ -28,9 +28,9 @@ import org.jskat.control.command.iss.IssResignCommand;
 import org.jskat.control.command.iss.IssShowCardsCommand;
 import org.jskat.control.command.iss.IssTableSeatChangeCommand;
 import org.jskat.control.command.iss.IssToggleTalkEnabledCommand;
+import org.jskat.control.command.table.CreateTableCommand;
 import org.jskat.control.event.iss.IssDisconnectedEvent;
 import org.jskat.control.event.table.ActivePlayerChangedEvent;
-import org.jskat.control.event.table.TableCreatedEvent;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.JSkatApplicationData;
 import org.jskat.data.JSkatViewType;
@@ -338,7 +338,8 @@ public class IssController {
 	public void createTable(final String tableName, final String creator,
 			final int maxPlayers) {
 
-		this.eventBus.post(new TableCreatedEvent(JSkatViewType.ISS_TABLE, tableName));
+		this.eventBus.post(new CreateTableCommand(JSkatViewType.ISS_TABLE,
+				tableName));
 		this.jskat.setActiveTable(JSkatViewType.ISS_TABLE, tableName);
 	}
 

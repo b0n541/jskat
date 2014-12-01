@@ -22,11 +22,11 @@ import java.util.Set;
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.train.NNTrainer;
 import org.jskat.control.command.general.ShowTrainingOverviewCommand;
+import org.jskat.control.command.table.CreateTableCommand;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.iss.IssConnectedEvent;
 import org.jskat.control.event.table.DuplicateTableNameInputEvent;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
-import org.jskat.control.event.table.TableCreatedEvent;
 import org.jskat.control.event.table.TableRemovedEvent;
 import org.jskat.control.iss.IssController;
 import org.jskat.data.GameAnnouncement;
@@ -139,7 +139,7 @@ public class JSkatMaster {
 	private void createLocalTable(final String tableName,
 			final AbstractHumanJSkatPlayer humanPlayer) {
 
-		JSkatEventBus.INSTANCE.post(new TableCreatedEvent(
+		JSkatEventBus.INSTANCE.post(new CreateTableCommand(
 				JSkatViewType.LOCAL_TABLE, tableName));
 	}
 

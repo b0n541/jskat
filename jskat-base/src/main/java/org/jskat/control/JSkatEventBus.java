@@ -18,6 +18,7 @@ package org.jskat.control;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.jskat.control.command.table.CreateTableCommand;
 import org.jskat.control.event.table.ActivePlayerChangedEvent;
 import org.jskat.control.event.table.TableCreatedEvent;
 import org.jskat.control.event.table.TableGameMoveEvent;
@@ -61,9 +62,10 @@ public class JSkatEventBus {
 	}
 
 	@Subscribe
-	public void createdTableEventBusOn(final TableCreatedEvent event) {
-		EventBus eventBus = new EventBus();
-		JSkatEventBus.TABLE_EVENT_BUSSES.put(event.tableName, eventBus);
+	public void createdTableEventBusOn(final CreateTableCommand command) {
+		EventBus eventBus = new EventBus("Table " + command.tableName);
+		JSkatEventBus.TABLE_EVENT_BUSSES.put(command.tableName, eventBus);
+		post(new TableCreatedEvent(command.tableType, command.tableName));
 	}
 
 	@Subscribe

@@ -19,25 +19,23 @@ import org.jskat.data.SkatGameData;
 import org.jskat.util.Player;
 
 /**
- * Event for picking up the skat.
+ * Event for calling contra.
  */
-public final class PickUpSkatEvent implements SkatGameEvent {
+public final class ContraEvent implements SkatGameEvent {
 
 	private final Player player;
 
-	public PickUpSkatEvent(Player player) {
+	public ContraEvent(Player player) {
 		this.player = player;
 	}
 
 	@Override
 	public final void processForward(SkatGameData data) {
-		data.setSkatPickUp(true);
-		data.addSkatToPlayer(player);
+		data.setContra(true);
 	}
 
 	@Override
 	public final void processBackward(SkatGameData data) {
-		data.setSkatPickUp(false);
-		data.removeSkatFromPlayer(player);
+		data.setContra(false);
 	}
 }
