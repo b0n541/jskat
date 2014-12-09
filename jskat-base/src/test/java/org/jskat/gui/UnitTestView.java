@@ -22,7 +22,6 @@ import java.util.Set;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.event.table.TableCreatedEvent;
 import org.jskat.control.iss.ChatMessageType;
-import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
@@ -117,13 +116,6 @@ public class UnitTestView implements JSkatView {
 	@Override
 	public void setPositions(final String tableName, final Player leftPosition,
 			final Player rightPosition, final Player playerPosition) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void setGameAnnouncement(final String tableName,
-			final Player declarer, final GameAnnouncement ann) {
 		// TODO Auto-generated method stub
 
 	}

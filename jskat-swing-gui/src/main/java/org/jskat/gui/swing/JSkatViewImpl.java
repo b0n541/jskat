@@ -60,6 +60,7 @@ import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.iss.IssConnectedEvent;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
 import org.jskat.control.event.skatgame.BidEvent;
+import org.jskat.control.event.skatgame.GameAnnouncementEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
 import org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent;
 import org.jskat.control.event.skatgame.PassBidEvent;
@@ -71,7 +72,6 @@ import org.jskat.control.event.table.TableGameMoveEvent;
 import org.jskat.control.event.table.TableRemovedEvent;
 import org.jskat.control.event.table.TrickCompletedEvent;
 import org.jskat.control.iss.ChatMessageType;
-import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatViewType;
@@ -551,16 +551,6 @@ public class JSkatViewImpl implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setGameAnnouncement(final String tableName,
-			final Player declarer, final GameAnnouncement ann) {
-
-		this.tables.get(tableName).setGameAnnouncement(declarer, ann);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void setGameState(final String tableName, final GameState state) {
 
 		this.tables.get(tableName).setGameState(state);
@@ -923,10 +913,11 @@ public class JSkatViewImpl implements JSkatView {
 			break;
 		case GAME_ANNOUNCEMENT:
 			setGameState(tableName, GameState.DECLARING);
-			setGameAnnouncement(tableName, movePlayer,
-					moveInformation.getGameAnnouncement());
+			JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName,
+					new GameAnnouncementEvent(movePlayer, moveInformation
+							.getGameAnnouncement())));
 			if (moveInformation.getGameAnnouncement().isOuvert()) {
-				setOuvertCards(tableName, movePlayer,
+				setIssOuvertCards(tableName, movePlayer,
 						moveInformation.getOuvertCards());
 			}
 			setGameState(tableName, GameState.TRICK_PLAYING);
@@ -953,7 +944,7 @@ public class JSkatViewImpl implements JSkatView {
 							.getCard())));
 			break;
 		case SHOW_CARDS:
-			setOuvertCards(tableName, movePlayer,
+			setIssOuvertCards(tableName, movePlayer,
 					moveInformation.getOuvertCards());
 			break;
 		case RESIGN:
@@ -978,7 +969,7 @@ public class JSkatViewImpl implements JSkatView {
 		}
 	}
 
-	private void setOuvertCards(final String tableName, final Player player,
+	private void setIssOuvertCards(final String tableName, final Player player,
 			final CardList ouvertCards) {
 
 		final SkatTablePanel table = this.tables.get(tableName);

@@ -21,6 +21,7 @@ import java.util.Map;
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.skatgame.BidEvent;
 import org.jskat.control.event.skatgame.ContraEvent;
+import org.jskat.control.event.skatgame.GameAnnouncementEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
 import org.jskat.control.event.skatgame.PassBidEvent;
 import org.jskat.control.event.skatgame.ReEvent;
@@ -244,11 +245,13 @@ public class SkatGame extends JSkatThread {
 			JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName,
 					new ContraEvent(activePlayer)));
 			setGameState(GameState.RE);
+			Player activePlayerBeforeContraRe = activePlayer;
 			setActivePlayer(this.data.getDeclarer());
 			if (getActivePlayerInstance().callRe()) {
 				JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName,
 						new ReEvent(activePlayer)));
 			}
+			setActivePlayer(activePlayerBeforeContraRe);
 		}
 	}
 
@@ -432,8 +435,9 @@ public class SkatGame extends JSkatThread {
 						.getFactory();
 				factory.setGameType(GameType.RAMSCH);
 				setGameAnnouncement(factory.getAnnouncement());
-				this.view.setGameAnnouncement(this.tableName, this.data.getDeclarer(),
-						this.data.getAnnoucement());
+				JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName,
+						new GameAnnouncementEvent(data.getDeclarer(), data
+								.getAnnoucement())));
 				setActivePlayer(Player.FOREHAND);
 				// do not call "setGameAnnouncement(..)" here!
 			} else {
@@ -1083,7 +1087,8 @@ public class SkatGame extends JSkatThread {
 
 		this.data.setAnnouncement(ann);
 		this.rules = SkatRuleFactory.getSkatRules(this.data.getGameType());
-		this.view.setGameAnnouncement(this.tableName, this.data.getDeclarer(), ann);
+		JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName,
+				new GameAnnouncementEvent(data.getDeclarer(), ann)));
 
 		// inform all players
 		for (final JSkatPlayer playerInstance : this.player.values()) {

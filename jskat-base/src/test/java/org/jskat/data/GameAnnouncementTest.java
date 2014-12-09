@@ -125,6 +125,7 @@ public class GameAnnouncementTest extends AbstractJSkatTest {
 
 	private static GameAnnouncement createSuitGrandOuvert(
 			final GameType gameType) {
+		GameAnnouncement.getFactory();
 		final GameAnnouncement result = new GameAnnouncement();
 		result.gameType = gameType;
 		result.hand = Boolean.TRUE;
@@ -241,6 +242,7 @@ public class GameAnnouncementTest extends AbstractJSkatTest {
 			final Boolean isHand, final Boolean isOuvert,
 			final Boolean isSchneider, final Boolean isSchwarz,
 			final CardList discardedCards) {
+
 		final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 		factory.setGameType(gameType);
 		factory.setHand(isHand);

@@ -897,10 +897,14 @@ public class SkatGameData {
 		}
 		this.announcement = factory.getAnnouncement();
 
-		rules = SkatRuleFactory.getSkatRules(getGameType());
+		if (this.announcement == null) {
+			this.announcement = GameAnnouncementFactory.getEmptyAnnouncement();
+			rules = null;
+		} else {
+			rules = SkatRuleFactory.getSkatRules(getGameType());
+		}
 
-		if (getGameType() == GameType.PASSED_IN) {
-
+		if (GameType.PASSED_IN.equals(getGameType())) {
 			gameState = GameState.GAME_OVER;
 			calcResult();
 		}
@@ -1274,7 +1278,7 @@ public class SkatGameData {
 	 *            <code>true</code>, if Contra was called.
 	 */
 	public void setContra(boolean isContra) {
-		announcement.setContra(isContra);
+		announcement.contra = isContra;
 	}
 
 	/**
@@ -1293,7 +1297,7 @@ public class SkatGameData {
 	 *            <code>true</code>, if Re was called.
 	 */
 	public void setRe(boolean isRe) {
-		announcement.setRe(isRe);
+		announcement.re = isRe;
 	}
 
 	/**

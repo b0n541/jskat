@@ -23,7 +23,7 @@ import org.jskat.util.Player;
  */
 public final class ReEvent implements SkatGameEvent {
 
-	private final Player player;
+	public final Player player;
 
 	public ReEvent(Player player) {
 		this.player = player;

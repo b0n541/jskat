@@ -43,12 +43,14 @@ import org.jskat.control.JSkatEventBus;
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.skatgame.AbstractBidEvent;
 import org.jskat.control.event.skatgame.BidEvent;
+import org.jskat.control.event.skatgame.ContraEvent;
+import org.jskat.control.event.skatgame.GameAnnouncementEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
+import org.jskat.control.event.skatgame.ReEvent;
 import org.jskat.control.event.skatgame.TrickCardPlayedEvent;
 import org.jskat.control.event.table.ActivePlayerChangedEvent;
 import org.jskat.control.event.table.SkatSeriesStartedEvent;
 import org.jskat.control.event.table.TrickCompletedEvent;
-import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
@@ -533,26 +535,28 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param gameAnnouncement
 	 *            Game announcement
 	 */
-	public void setGameAnnouncement(final Player player,
-			final GameAnnouncement gameAnnouncement) {
+	@Subscribe
+	public void setGameAnnouncementOn(final GameAnnouncementEvent event) {
 
-		if (gameAnnouncement.getGameType() == GameType.RAMSCH) {
+		if (event.announcement.getGameType() == GameType.RAMSCH) {
 			this.ramsch = true;
 		}
 
-		this.gameInfoPanel.setGameAnnouncement(gameAnnouncement);
+		this.gameInfoPanel.setGameAnnouncement(event.announcement);
 
-		this.leftOpponentPanel.setSortGameType(gameAnnouncement.getGameType());
-		this.rightOpponentPanel.setSortGameType(gameAnnouncement.getGameType());
-		this.userPanel.setSortGameType(gameAnnouncement.getGameType());
+		this.leftOpponentPanel
+				.setSortGameType(event.announcement.getGameType());
+		this.rightOpponentPanel.setSortGameType(event.announcement
+				.getGameType());
+		this.userPanel.setSortGameType(event.announcement.getGameType());
 
-		if (gameAnnouncement.getGameType() != GameType.PASSED_IN
-				&& gameAnnouncement.getGameType() != GameType.RAMSCH) {
-			getPlayerPanel(player).setDeclarer(true);
+		if (event.announcement.getGameType() != GameType.PASSED_IN
+				&& event.announcement.getGameType() != GameType.RAMSCH) {
+			getPlayerPanel(event.player).setDeclarer(true);
 		}
 
-		if (gameAnnouncement.isOuvert()) {
-			getPlayerPanel(player).showCards();
+		if (event.announcement.isOuvert()) {
+			getPlayerPanel(event.player).showCards();
 		}
 	}
 
@@ -1179,13 +1183,15 @@ public class SkatTablePanel extends AbstractTabPanel {
 		}
 	}
 
-	public void setContra(Player player) {
-		getPlayerPanel(player).setContra();
+	@Subscribe
+	public void setContraOn(final ContraEvent event) {
+		getPlayerPanel(event.player).setContra();
 		this.gameInfoPanel.setContra();
 	}
 
-	public void setRe(Player player) {
-		getPlayerPanel(player).setRe();
+	@Subscribe
+	public void setReOn(final ReEvent event) {
+		getPlayerPanel(event.player).setRe();
 		this.gameInfoPanel.setRe();
 	}
 }

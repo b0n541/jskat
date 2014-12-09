@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
  * 
  * An object of this class is returned by a player for game announcement
  */
+// FIXME: make member variables private, implement fluent interface for factory
 public class GameAnnouncement {
 
 	private static Logger log = LoggerFactory.getLogger(GameAnnouncement.class);
@@ -130,6 +131,10 @@ public class GameAnnouncement {
 		 */
 		public final void setDiscardedCards(final CardList discardedCards) {
 			tmpAnnouncement.discardedCards.addAll(discardedCards);
+			// FIXME: re-activate when factory is fixed
+			// if (discardedCards != null && discardedCards.size() == 2) {
+			// tmpAnnouncement.hand = false;
+			// }
 		}
 
 		/**
@@ -393,25 +398,5 @@ public class GameAnnouncement {
 			return false;
 		}
 		return true;
-	}
-
-	/**
-	 * Sets contra information.
-	 * 
-	 * @param isContra
-	 *            <code>true</code>, if contra was called
-	 */
-	public void setContra(boolean isContra) {
-		contra = isContra;
-	}
-
-	/**
-	 * Sets re information
-	 * 
-	 * @param isRe
-	 *            <code>true</code>, if re was called
-	 */
-	public void setRe(boolean isRe) {
-		re = isRe;
 	}
 }

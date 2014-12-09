@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.jskat.control.iss.ChatMessageType;
-import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
@@ -124,19 +123,6 @@ public interface JSkatView {
 	 */
 	public void setPositions(String tableName, Player leftPosition,
 			Player rightPosition, Player playerPosition);
-
-	/**
-	 * Sets the game announcement
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param declarer
-	 *            Declarer
-	 * @param ann
-	 *            Game announcement
-	 */
-	public void setGameAnnouncement(String tableName, Player declarer,
-			GameAnnouncement ann);
 
 	/**
 	 * Set a new game state

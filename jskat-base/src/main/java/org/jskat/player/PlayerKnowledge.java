@@ -170,8 +170,8 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 			possiblePlayerCards.get(currPlayer).remove(card);
 		}
 		possibleSkatCards.remove(card);
-		if (card.isTrump(getGameType()) && player != playerPosition) {
-			trumpCount++;
+		if (card.isTrump(getGameType()) && playerPosition.equals(player)) {
+			trumpCount--;
 		}
 
 		setTrickCard(player, card);
@@ -408,5 +408,4 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 			}
 		}
 	}
-
 }

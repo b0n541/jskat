@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.jskat.control.iss.ChatMessageType;
-import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
@@ -64,17 +63,6 @@ public class NullView implements JSkatView {
 	 */
 	@Override
 	public void startGame(@SuppressWarnings("unused") final String tableName) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setGameAnnouncement(
-			@SuppressWarnings("unused") final String tableName,
-			@SuppressWarnings("unused") final Player declarer,
-			@SuppressWarnings("unused") final GameAnnouncement ann) {
 		// empty method by intent
 	}
 

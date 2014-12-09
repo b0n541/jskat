@@ -15,27 +15,31 @@
  */
 package org.jskat.control.event.skatgame;
 
+import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData;
 import org.jskat.util.Player;
 
 /**
- * Event for calling contra.
+ * Event for game announcement.
  */
-public final class ContraEvent implements SkatGameEvent {
+public final class GameAnnouncementEvent implements SkatGameEvent {
 
 	public final Player player;
+	public final GameAnnouncement announcement;
 
-	public ContraEvent(Player player) {
+	public GameAnnouncementEvent(Player player, GameAnnouncement announcement) {
 		this.player = player;
+		this.announcement = announcement;
 	}
 
 	@Override
-	public final void processForward(SkatGameData data) {
-		data.setContra(true);
+	public void processForward(SkatGameData data) {
+		data.setAnnouncement(announcement);
 	}
 
 	@Override
-	public final void processBackward(SkatGameData data) {
-		data.setContra(false);
+	public void processBackward(SkatGameData data) {
+		data.setAnnouncement(GameAnnouncementFactory.getEmptyAnnouncement());
 	}
 }
