@@ -225,24 +225,30 @@ abstract class AbstractHandPanel extends JPanel {
             headerText.append(" " + this.strings.getString("bid") + ": "); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
             headerText.append(this.bidValue);
 
-            if (this.playerPassed || this.playerGeschoben || this.playerContra || this.playerRe) {
+			if (playerPassed || playerGeschoben || playerContra || playerRe) {
 
                 headerText.append(" ("); //$NON-NLS-1$
 
                 String passedGeschobenContraRe = "";
-                if (this.playerPassed) {
-                    passedGeschobenContraRe = this.strings.getString("passed"); //$NON-NLS-1$
+				if (playerPassed) {
+					passedGeschobenContraRe = strings.getString("passed"); //$NON-NLS-1$
                 }
-                if (this.playerGeschoben) {
-                    passedGeschobenContraRe = this.strings.getString("geschoben"); //$NON-NLS-1$
+				if (playerGeschoben) {
+					passedGeschobenContraRe = strings.getString("geschoben"); //$NON-NLS-1$
                 }
-                if (this.playerContra) {
-                    passedGeschobenContraRe += " "
-                            + this.strings.getString("contra");
+				
+				if (passedGeschobenContraRe.length() > 0
+						&& (playerContra || playerRe)) {
+					passedGeschobenContraRe += " ";
+				}
+				
+				if (playerContra) {
+					passedGeschobenContraRe += strings.getString("contra");
                 }
-                if (this.playerRe) {
-                    passedGeschobenContraRe += this.strings.getString("re");
+				if (playerRe) {
+					passedGeschobenContraRe += strings.getString("re");
                 }
+
                 headerText.append(passedGeschobenContraRe);
 
                 headerText.append(")"); //$NON-NLS-1$

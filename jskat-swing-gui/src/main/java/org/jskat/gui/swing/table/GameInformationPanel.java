@@ -188,42 +188,44 @@ class GameInformationPanel extends JPanel {
     }
 
     private void appendGameType(StringBuffer text) {
-        if (this.gameType != null) {
-            text.append(" [" + this.strings.getGameType(this.gameType)); //$NON-NLS-1$
+		if (gameType != null) {
+			text.append(" [" + strings.getGameType(gameType)); //$NON-NLS-1$
 
-            if (this.gameState.equals(GameState.GAME_OVER) && this.multiplier > 0) {
-                if (this.playWithJacks) {
-                    text.append(" " + this.strings.getString("with")); //$NON-NLS-1$//$NON-NLS-2$
+			if (gameState.equals(GameState.GAME_OVER) && multiplier > 0) {
+				if (playWithJacks) {
+					text.append(" " + strings.getString("with")); //$NON-NLS-1$//$NON-NLS-2$
                 } else {
-                    text.append(" " + this.strings.getString("without")); //$NON-NLS-1$//$NON-NLS-2$
+					text.append(" " + strings.getString("without")); //$NON-NLS-1$//$NON-NLS-2$
                 }
-                text.append(" " + (this.multiplier - 1)); //$NON-NLS-1$
-                text.append(" " + this.strings.getString("play")); //$NON-NLS-1$//$NON-NLS-2$
-                text.append(" " + this.multiplier); //$NON-NLS-1$
-
-                if (this.contra) {
-                    text.append(" " + this.strings.getString("contra"));
-                    if (this.re) {
-                        text.append(" " + this.strings.getString("re"));
-                    }
-                }
+				text.append(" " + (multiplier - 1)); //$NON-NLS-1$
+				text.append(" " + strings.getString("play")); //$NON-NLS-1$//$NON-NLS-2$
+				text.append(" " + multiplier); //$NON-NLS-1$
             }
 
-            if (this.handGame) {
-                text.append(" hand");
+			if (handGame) {
+				text.append(" " + strings.getString("hand"));
             }
 
-            if (this.ouvertGame) {
-                text.append(" ouvert");
+			if (ouvertGame) {
+				text.append(" " + strings.getString("ouvert"));
             }
 
-            if (this.schneiderAnnounced) {
-                text.append(" schneider");
+			if (schneiderAnnounced) {
+				text.append(" " + strings.getString("schneider"));
             }
 
-            if (this.schwarzAnnounced) {
-                text.append(" schwarz");
+			if (schwarzAnnounced) {
+				text.append(" " + strings.getString("schwarz"));
             }
+
+			if (contra) {
+				text.append(" " + strings.getString("contra"));
+			}
+
+			if (re) {
+				text.append(" " + strings.getString("re"));
+			}
+
             text.append("]"); //$NON-NLS-1$
         }
     }
@@ -320,9 +322,11 @@ class GameInformationPanel extends JPanel {
 
     public void setContra() {
         this.contra = true;
+		refreshText();
     }
 
     public void setRe() {
         this.re = true;
+		refreshText();
     }
 }
