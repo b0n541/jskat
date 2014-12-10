@@ -150,20 +150,6 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void takeCardFromSkat(final String tableName, final Player player,
-			final Card card) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void putCardIntoSkat(final String tableName, final Player player,
-			final Card card) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void updateISSLobbyPlayerList(final String playerName,
 			final String language, final long gamesPlayed, final double strength) {
 		// TODO Auto-generated method stub

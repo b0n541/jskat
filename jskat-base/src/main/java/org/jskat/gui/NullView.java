@@ -106,28 +106,6 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void putCardIntoSkat(
-			@SuppressWarnings("unused") final String tableName,
-			@SuppressWarnings("unused") final Player player,
-			@SuppressWarnings("unused") final Card card) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void takeCardFromSkat(
-			@SuppressWarnings("unused") final String tableName,
-			@SuppressWarnings("unused") final Player player,
-			@SuppressWarnings("unused") final Card card) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void updateISSLobbyPlayerList(
 			@SuppressWarnings("unused") final String playerName,
 			@SuppressWarnings("unused") final String playerLanguage1,

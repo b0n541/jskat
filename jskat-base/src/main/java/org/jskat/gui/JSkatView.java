@@ -182,18 +182,6 @@ public interface JSkatView {
 	public void takeCardFromSkat(String tableName, Card card);
 
 	/**
-	 * Takes a card from the skat to a player
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param player
-	 *            Player
-	 * @param card
-	 *            Card
-	 */
-	public void takeCardFromSkat(String tableName, Player player, Card card);
-
-	/**
 	 * Puts a card from the user into the skat
 	 * 
 	 * @param tableName
@@ -202,18 +190,6 @@ public interface JSkatView {
 	 *            Card
 	 */
 	public void putCardIntoSkat(String tableName, Card card);
-
-	/**
-	 * Puts a card from a player into the skat
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param player
-	 *            Player
-	 * @param card
-	 *            Card
-	 */
-	public void putCardIntoSkat(String tableName, Player player, Card card);
 
 	/**
 	 * Updates the client list of the ISS lobby

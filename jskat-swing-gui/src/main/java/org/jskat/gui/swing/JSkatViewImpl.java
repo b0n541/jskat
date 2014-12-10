@@ -661,26 +661,6 @@ public class JSkatViewImpl implements JSkatView {
 		this.tables.get(tableName).setBidValueToHold(bidValue);
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void putCardIntoSkat(final String tableName, final Player player,
-			final Card card) {
-
-		this.tables.get(tableName).putCardIntoSkat(player, card);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void takeCardFromSkat(final String tableName, final Player player,
-			final Card card) {
-
-		this.tables.get(tableName).takeCardFromSkat(player, card);
-	}
-
 	@Subscribe
 	public void showSkatSeriesStartDialogOn(CreateSkatSeriesCommand command) {
 
