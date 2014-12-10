@@ -43,6 +43,7 @@ import org.jskat.data.Trick;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.MoveInformation;
+import org.jskat.data.iss.MovePlayer;
 import org.jskat.data.iss.MoveType;
 import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.gui.JSkatView;
@@ -88,7 +89,7 @@ public class IssController {
 
 		this.jskat = jskatMaster;
 		this.gameData = new HashMap<String, SkatGameData>();
-		
+
 		this.eventBus.register(this);
 	}
 
@@ -156,7 +157,8 @@ public class IssController {
 		if (this.issConnector != null && !this.issConnector.isConnected()) {
 
 			this.issConnector.setConnectionData(this.login, this.password);
-			final boolean isConnected = this.issConnector.establishConnection(this);
+			final boolean isConnected = this.issConnector
+					.establishConnection(this);
 
 			if (isConnected) {
 				log.debug("Connection to ISS established: " + this.issConnector.isConnected()); //$NON-NLS-1$
@@ -400,7 +402,8 @@ public class IssController {
 	public void updateISSGame(final String tableName,
 			final GameStartInformation status) {
 
-		this.view.updateISSTable(tableName, this.appData.getIssLoginName(), status);
+		this.view.updateISSTable(tableName, this.appData.getIssLoginName(),
+				status);
 
 		this.gameData.put(tableName, createSkatGameData(status));
 	}
@@ -445,8 +448,65 @@ public class IssController {
 		this.view.updateISSMove(tableName, currGame, moveInformation);
 
 		// TODO (jan 19.11.2010) extract this into separate methods
-		if (MoveType.BID.equals(moveInformation.getType())
+		if (MoveType.DEAL.equals(moveInformation.getType())) {
+			JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName,
+					Player.MIDDLEHAND));
+		} else if (MoveType.BID.equals(moveInformation.getType())
+				|| MoveType.HOLD_BID.equals(moveInformation.getType())
 				|| MoveType.PASS.equals(moveInformation.getType())) {
+
+			if (MoveType.BID.equals(moveInformation.getType())) {
+				if (MovePlayer.MIDDLEHAND.equals(moveInformation
+						.getMovePlayer())) {
+					JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(
+							tableName, Player.FOREHAND));
+				} else if (MovePlayer.REARHAND.equals(moveInformation
+						.getMovePlayer())) {
+					if (!currGame.isPlayerPass(Player.FOREHAND)) {
+						JSkatEventBus.INSTANCE
+								.post(new ActivePlayerChangedEvent(tableName,
+										Player.FOREHAND));
+					} else {
+						JSkatEventBus.INSTANCE
+								.post(new ActivePlayerChangedEvent(tableName,
+										Player.MIDDLEHAND));
+					}
+				}
+			} else if (MoveType.HOLD_BID.equals(moveInformation.getType())) {
+				if (MovePlayer.FOREHAND.equals(moveInformation.getMovePlayer())) {
+					if (!currGame.isPlayerPass(Player.MIDDLEHAND)) {
+						JSkatEventBus.INSTANCE
+								.post(new ActivePlayerChangedEvent(tableName,
+										Player.MIDDLEHAND));
+					} else {
+						JSkatEventBus.INSTANCE
+								.post(new ActivePlayerChangedEvent(tableName,
+										Player.REARHAND));
+					}
+				} else if (MovePlayer.MIDDLEHAND.equals(moveInformation
+						.getMovePlayer())) {
+					JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(
+							tableName, Player.REARHAND));
+				}
+			} else if (MoveType.PASS.equals(moveInformation.getType())) {
+				if (MovePlayer.FOREHAND.equals(moveInformation.getMovePlayer())
+						|| MovePlayer.MIDDLEHAND.equals(moveInformation
+								.getMovePlayer())) {
+					JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(
+							tableName, Player.REARHAND));
+				} else if (MovePlayer.REARHAND.equals(moveInformation
+						.getMovePlayer())) {
+					if (!currGame.isPlayerPass(Player.FOREHAND)) {
+						JSkatEventBus.INSTANCE
+								.post(new ActivePlayerChangedEvent(tableName,
+										Player.FOREHAND));
+					} else {
+						JSkatEventBus.INSTANCE
+								.post(new ActivePlayerChangedEvent(tableName,
+										Player.MIDDLEHAND));
+					}
+				}
+			}
 
 			if (isBiddingFinished(currGame)) {
 				this.view.setDeclarer(tableName, currGame.getDeclarer());
@@ -458,7 +518,8 @@ public class IssController {
 			// handle trick playing
 			final Trick trick = currGame.getCurrentTrick();
 
-			this.view.setTrickNumber(tableName, trick.getTrickNumberInGame() + 1);
+			this.view.setTrickNumber(tableName,
+					trick.getTrickNumberInGame() + 1);
 
 			if (trick.getThirdCard() != null) {
 
@@ -582,7 +643,8 @@ public class IssController {
 	 *            Message
 	 */
 	public void showErrorMessage(final String message) {
-		this.view.showErrorMessage(this.strings.getString("iss_message"), message); //$NON-NLS-1$
+		this.view.showErrorMessage(
+				this.strings.getString("iss_message"), message); //$NON-NLS-1$
 	}
 
 	/**
@@ -605,7 +667,7 @@ public class IssController {
 	 */
 	@Subscribe
 	public void sendReadyToPlayOn(final IssReadyToPlayCommand event) {
-		
+
 		sendToIss(this.issMsg.getReadyMessage(this.appData.getActiveTable()));
 	}
 
@@ -617,8 +679,9 @@ public class IssController {
 	 */
 	@Subscribe
 	public void sendToggleTalkEnabledOn(final IssToggleTalkEnabledCommand event) {
-		
-		sendToIss(this.issMsg.getTalkEnabledMessage(this.appData.getActiveTable()));
+
+		sendToIss(this.issMsg.getTalkEnabledMessage(this.appData
+				.getActiveTable()));
 	}
 
 	/**
@@ -629,7 +692,7 @@ public class IssController {
 	 */
 	@Subscribe
 	public void sendResignOn(final IssResignCommand event) {
-		
+
 		sendToIss(this.issMsg.getResignMessage(this.appData.getActiveTable()));
 	}
 
@@ -641,8 +704,9 @@ public class IssController {
 	 */
 	@Subscribe
 	public void sendShowCardsOn(final IssShowCardsCommand event) {
-		
-		sendToIss(this.issMsg.getShowCardsMessage(this.appData.getActiveTable()));
+
+		sendToIss(this.issMsg
+				.getShowCardsMessage(this.appData.getActiveTable()));
 	}
 
 	/**
@@ -653,7 +717,8 @@ public class IssController {
 	 */
 	@Subscribe
 	public void sendTableSeatChangeOn(final IssTableSeatChangeCommand command) {
-		sendToIss(this.issMsg.getTableSeatChangeMessage(this.appData.getActiveTable()));
+		sendToIss(this.issMsg.getTableSeatChangeMessage(this.appData
+				.getActiveTable()));
 	}
 
 	/**
@@ -683,8 +748,11 @@ public class IssController {
 	 *            Table name
 	 */
 	public void sendBidMove(final String tableName) {
-		sendToIss(this.issMsg.getBidMoveMessage(tableName, SkatConstants
-				.getNextBidValue(this.gameData.get(tableName).getMaxBidValue())));
+		sendToIss(this.issMsg
+				.getBidMoveMessage(
+						tableName,
+						SkatConstants.getNextBidValue(this.gameData.get(
+								tableName).getMaxBidValue())));
 	}
 
 	/**
