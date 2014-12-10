@@ -22,7 +22,6 @@ import java.util.Set;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.event.table.TableCreatedEvent;
 import org.jskat.control.iss.ChatMessageType;
-import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
@@ -128,12 +127,6 @@ public class UnitTestView implements JSkatView {
 
 	@Override
 	public void setSeriesState(final String tableName, final SeriesState state) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void addGameResult(final String tableName, final GameSummary summary) {
 		// TODO Auto-generated method stub
 
 	}

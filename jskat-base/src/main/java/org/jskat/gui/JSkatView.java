@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.jskat.control.iss.ChatMessageType;
-import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
@@ -143,16 +142,6 @@ public interface JSkatView {
 	 *            New series state
 	 */
 	public void setSeriesState(String tableName, SeriesState state);
-
-	/**
-	 * Adds a game result
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param summary
-	 *            Game summary
-	 */
-	public void addGameResult(String tableName, GameSummary summary);
 
 	/**
 	 * Clears a complete table

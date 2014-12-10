@@ -45,13 +45,13 @@ import org.jskat.control.event.skatgame.AbstractBidEvent;
 import org.jskat.control.event.skatgame.BidEvent;
 import org.jskat.control.event.skatgame.ContraEvent;
 import org.jskat.control.event.skatgame.GameAnnouncementEvent;
+import org.jskat.control.event.skatgame.GameFinishEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
 import org.jskat.control.event.skatgame.ReEvent;
 import org.jskat.control.event.skatgame.TrickCardPlayedEvent;
 import org.jskat.control.event.table.ActivePlayerChangedEvent;
 import org.jskat.control.event.table.SkatSeriesStartedEvent;
 import org.jskat.control.event.table.TrickCompletedEvent;
-import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.gui.action.JSkatAction;
@@ -162,7 +162,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		JTabbedPane leftPanel = new JTabbedPane();
 
-		leftPanel.addTab(this.strings.getString("score_sheet"), getScoreListPanel());
+		leftPanel.addTab(this.strings.getString("score_sheet"),
+				getScoreListPanel());
 
 		return leftPanel;
 	}
@@ -175,7 +176,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 		this.skatListTableModel = new SkatListTableModel();
 		this.scoreListTable = new JTable(this.skatListTableModel);
 
-		for (int i = 0; i < this.scoreListTable.getColumnModel().getColumnCount(); i++) {
+		for (int i = 0; i < this.scoreListTable.getColumnModel()
+				.getColumnCount(); i++) {
 
 			if (i == 3) {
 
@@ -284,7 +286,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 		trickHoldingPanel.setOpaque(false);
 		addContextPanel(ContextPanelType.TRICK_PLAYING, trickHoldingPanel);
 
-		this.gameOverPanel = new GameOverPanel(getActionMap(), getGameOverActions());
+		this.gameOverPanel = new GameOverPanel(getActionMap(),
+				getGameOverActions());
 		addContextPanel(ContextPanelType.GAME_OVER, this.gameOverPanel);
 	}
 
@@ -644,8 +647,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	void setContextPanel(final ContextPanelType panelType) {
 
-		((CardLayout) this.gameContextPanel.getLayout()).show(this.gameContextPanel,
-				panelType.toString());
+		((CardLayout) this.gameContextPanel.getLayout()).show(
+				this.gameContextPanel, panelType.toString());
 		this.gameContextPanel.validate();
 	}
 
@@ -655,16 +658,18 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param summary
 	 *            Game summary
 	 */
-	public void addGameResult(final GameSummary summary) {
+	@Subscribe
+	public void addGameResultOn(final GameFinishEvent event) {
 
-		this.gameOverPanel.setGameSummary(summary);
+		this.gameOverPanel.setGameSummary(event.gameSummary);
 
 		this.skatListTableModel.addResult(this.leftOpponentPanel.getPosition(),
-				this.rightOpponentPanel.getPosition(), this.userPanel.getPosition(),
-				summary.getDeclarer(), summary);
+				this.rightOpponentPanel.getPosition(),
+				this.userPanel.getPosition(), event.gameSummary.getDeclarer(),
+				event.gameSummary);
 		scrollSkatListToTheEnd();
 
-		this.gameInfoPanel.setGameSummary(summary);
+		this.gameInfoPanel.setGameSummary(event.gameSummary);
 	}
 
 	private void scrollSkatListToTheEnd() {

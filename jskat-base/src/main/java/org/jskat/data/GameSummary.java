@@ -40,61 +40,61 @@ public class GameSummary {
 	/**
 	 * Fore hand player
 	 */
-	String foreHand;
+	public String foreHand;
 	/**
 	 * Middle hand player
 	 */
-	String middleHand;
+	public String middleHand;
 	/**
 	 * Rear hand player
 	 */
-	String rearHand;
+	public String rearHand;
 	/**
 	 * Declarer
 	 */
-	Player declarer;
+	public Player declarer;
 	/**
 	 * Game type
 	 */
-	GameType gameType;
+	public GameType gameType;
 	/**
 	 * Ouvert game
 	 */
-	Boolean ouvert = Boolean.FALSE;
+	public Boolean ouvert = Boolean.FALSE;
 	/**
 	 * Hand game
 	 */
-	Boolean hand = Boolean.FALSE;
+	public Boolean hand = Boolean.FALSE;
 	/**
 	 * Schneider game
 	 */
-	Boolean schneider = Boolean.FALSE;
+	public Boolean schneider = Boolean.FALSE;
 	/**
 	 * Schwarz game
 	 */
-	Boolean schwarz = Boolean.FALSE;
+	public Boolean schwarz = Boolean.FALSE;
 	/**
 	 * Contra game
 	 */
-	Boolean contra = Boolean.FALSE;
+	public Boolean contra = Boolean.FALSE;
 	/**
 	 * Re game
 	 */
-	Boolean re = Boolean.FALSE;
+	public Boolean re = Boolean.FALSE;
 	/**
 	 * Game result
 	 */
-	SkatGameResult gameResult;
+	public SkatGameResult gameResult;
 	/**
 	 * Tricks
 	 */
-	List<Trick> tricks = new ArrayList<Trick>();
+	public List<Trick> tricks = new ArrayList<Trick>();
 	/**
 	 * Player points
 	 */
-	Map<Player, Integer> playerPoints = new HashMap<Player, Integer>();
+	public Map<Player, Integer> playerPoints = new HashMap<Player, Integer>();
 
-	Set<Player> ramschLosers = new HashSet<Player>();
+	public Set<Player> ramschLosers = new HashSet<Player>();
 
 	/**
 	 * Constructor

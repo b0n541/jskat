@@ -72,7 +72,6 @@ import org.jskat.control.event.table.TableGameMoveEvent;
 import org.jskat.control.event.table.TableRemovedEvent;
 import org.jskat.control.event.table.TrickCompletedEvent;
 import org.jskat.control.iss.ChatMessageType;
-import org.jskat.data.GameSummary;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatViewType;
 import org.jskat.data.SkatGameData;
@@ -606,15 +605,6 @@ public class JSkatViewImpl implements JSkatView {
 		default:
 			break;
 		}
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void addGameResult(final String tableName, final GameSummary summary) {
-
-		this.tables.get(tableName).addGameResult(summary);
 	}
 
 	@Subscribe

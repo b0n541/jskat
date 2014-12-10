@@ -22,6 +22,7 @@ import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.skatgame.BidEvent;
 import org.jskat.control.event.skatgame.ContraEvent;
 import org.jskat.control.event.skatgame.GameAnnouncementEvent;
+import org.jskat.control.event.skatgame.GameFinishEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
 import org.jskat.control.event.skatgame.PassBidEvent;
 import org.jskat.control.event.skatgame.ReEvent;
@@ -1118,7 +1119,9 @@ public class SkatGame extends JSkatThread {
 
 			} else if (newState == GameState.GAME_OVER) {
 
-				this.view.addGameResult(this.tableName, getGameSummary());
+				// FIXME: merge this event with the command
+				JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName,
+						new GameFinishEvent(getGameSummary())));
 
 				JSkatEventBus.INSTANCE.post(new ShowCardsCommand(tableName,
 						data.getCardsAfterDiscard()));

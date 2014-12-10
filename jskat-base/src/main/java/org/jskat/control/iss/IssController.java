@@ -31,7 +31,9 @@ import org.jskat.control.command.iss.IssToggleTalkEnabledCommand;
 import org.jskat.control.command.table.CreateTableCommand;
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.iss.IssDisconnectedEvent;
+import org.jskat.control.event.skatgame.GameFinishEvent;
 import org.jskat.control.event.table.ActivePlayerChangedEvent;
+import org.jskat.control.event.table.TableGameMoveEvent;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.JSkatApplicationData;
 import org.jskat.data.JSkatViewType;
@@ -555,7 +557,9 @@ public class IssController {
 	public void endGame(final String tableName, final SkatGameData newGameData) {
 
 		view.setGameState(tableName, GameState.GAME_OVER);
-		view.addGameResult(tableName, newGameData.getGameSummary());
+		// FIXME: merge event and command
+		eventBus.post(new TableGameMoveEvent(tableName, new GameFinishEvent(
+				newGameData.getGameSummary())));
 		eventBus.post(new ShowCardsCommand(tableName, newGameData
 				.getCardsAfterDiscard()));
 		gameData.put(tableName, newGameData);
