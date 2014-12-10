@@ -47,6 +47,7 @@ import org.jskat.control.event.skatgame.ContraEvent;
 import org.jskat.control.event.skatgame.GameAnnouncementEvent;
 import org.jskat.control.event.skatgame.GameFinishEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
+import org.jskat.control.event.skatgame.PassBidEvent;
 import org.jskat.control.event.skatgame.ReEvent;
 import org.jskat.control.event.skatgame.TrickCardPlayedEvent;
 import org.jskat.control.event.table.ActivePlayerChangedEvent;
@@ -1004,14 +1005,15 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param player
 	 *            Player
 	 */
-	public void setPass(final Player player) {
+	@Subscribe
+	public void setPassOn(final PassBidEvent event) {
 
-		log.debug(player + " passes"); //$NON-NLS-1$
+		log.debug(event.player + " passes"); //$NON-NLS-1$
 
-		playerPassed.put(player, Boolean.TRUE);
+		playerPassed.put(event.player, Boolean.TRUE);
 
-		getPlayerPanel(player).setPass(true);
-		this.biddingPanel.setPass(player);
+		getPlayerPanel(event.player).setPass(true);
+		biddingPanel.setPass(event.player);
 	}
 
 	/**

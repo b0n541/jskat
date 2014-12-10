@@ -23,7 +23,7 @@ import org.jskat.util.Player;
  */
 public final class PassBidEvent implements SkatGameEvent {
 
-	private final Player player;
+	public final Player player;
 
 	public PassBidEvent(Player player) {
 		this.player = player;
