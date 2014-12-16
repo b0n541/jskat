@@ -23,7 +23,7 @@ import org.jskat.util.Player;
  */
 public final class GameStartEvent implements SkatGameEvent {
 
-	private final Player dealer;
+	public final Player dealer;
 
 	public GameStartEvent(Player dealer) {
 		this.dealer = dealer;

@@ -22,13 +22,12 @@ import org.jskat.util.Player;
 /**
  * Event for discard skat.
  */
-public final class DiscardSkatEvent implements SkatGameEvent {
+public final class DiscardSkatEvent extends AbstractPlayerMoveEvent {
 
-	private final Player player;
-	private final CardList discardedSkat = new CardList();
+	public final CardList discardedSkat = new CardList();
 
 	public DiscardSkatEvent(Player player, CardList discardedSkat) {
-		this.player = player;
+		super(player);
 		this.discardedSkat.addAll(discardedSkat);
 	}
 
@@ -41,5 +40,10 @@ public final class DiscardSkatEvent implements SkatGameEvent {
 	public final void processBackward(SkatGameData data) {
 		data.setSkatCards(new CardList());
 		data.addPlayerCards(player, discardedSkat);
+	}
+
+	@Override
+	protected String getMoveDetails() {
+		return discardedSkat.toString();
 	}
 }

@@ -21,12 +21,10 @@ import org.jskat.util.Player;
 /**
  * Event for passing a bid.
  */
-public final class PassBidEvent implements SkatGameEvent {
-
-	public final Player player;
+public final class PassBidEvent extends AbstractPlayerMoveEvent {
 
 	public PassBidEvent(Player player) {
-		this.player = player;
+		super(player);
 	}
 
 	@Override
@@ -37,5 +35,10 @@ public final class PassBidEvent implements SkatGameEvent {
 	@Override
 	public final void processBackward(SkatGameData data) {
 		data.setPlayerPass(player, false);
+	}
+
+	@Override
+	protected String getMoveDetails() {
+		return "pass";
 	}
 }

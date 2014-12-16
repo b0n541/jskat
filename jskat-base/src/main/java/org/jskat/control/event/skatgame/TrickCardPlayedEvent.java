@@ -22,13 +22,12 @@ import org.jskat.util.Player;
 /**
  * Event for a card played in the trick.
  */
-public final class TrickCardPlayedEvent implements SkatGameEvent {
+public final class TrickCardPlayedEvent extends AbstractPlayerMoveEvent {
 
-	public final Player player;
 	public final Card card;
 
 	public TrickCardPlayedEvent(Player player, Card card) {
-		this.player = player;
+		super(player);
 		this.card = card;
 	}
 
@@ -42,5 +41,10 @@ public final class TrickCardPlayedEvent implements SkatGameEvent {
 	public final void processBackward(SkatGameData data) {
 		data.removeTrickCard(card);
 		data.addPlayerCard(player, card);
+	}
+
+	@Override
+	protected String getMoveDetails() {
+		return card.toString();
 	}
 }

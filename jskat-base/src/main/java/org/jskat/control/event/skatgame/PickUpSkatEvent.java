@@ -21,12 +21,10 @@ import org.jskat.util.Player;
 /**
  * Event for picking up the skat.
  */
-public final class PickUpSkatEvent implements SkatGameEvent {
-
-	private final Player player;
+public final class PickUpSkatEvent extends AbstractPlayerMoveEvent {
 
 	public PickUpSkatEvent(Player player) {
-		this.player = player;
+		super(player);
 	}
 
 	@Override
@@ -39,5 +37,10 @@ public final class PickUpSkatEvent implements SkatGameEvent {
 	public final void processBackward(SkatGameData data) {
 		data.setSkatPickUp(false);
 		data.removeSkatFromPlayer(player);
+	}
+
+	@Override
+	protected String getMoveDetails() {
+		return "pick up skat";
 	}
 }

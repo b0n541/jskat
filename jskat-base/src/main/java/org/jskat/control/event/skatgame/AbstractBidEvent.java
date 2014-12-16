@@ -18,23 +18,27 @@ package org.jskat.control.event.skatgame;
 import org.jskat.data.SkatGameData;
 import org.jskat.util.Player;
 
-public class AbstractBidEvent implements SkatGameEvent {
+public abstract class AbstractBidEvent extends AbstractPlayerMoveEvent {
 
-	public final Player player;
 	public final Integer bid;
 
 	public AbstractBidEvent(Player player, Integer bid) {
-		this.player = player;
+		super(player);
 		this.bid = bid;
 	}
 
 	@Override
 	public final void processForward(SkatGameData data) {
-		data.addPlayerBid(this.player, this.bid);
+		data.addPlayerBid(player, bid);
 	}
 
 	@Override
 	public final void processBackward(SkatGameData data) {
-		data.removeLastPlayerBid(this.player);
+		data.removeLastPlayerBid(player);
+	}
+
+	@Override
+	protected final String getMoveDetails() {
+		return bid.toString();
 	}
 }

@@ -21,12 +21,10 @@ import org.jskat.util.Player;
 /**
  * Event for calling contra.
  */
-public final class ContraEvent implements SkatGameEvent {
-
-	public final Player player;
+public final class ContraEvent extends AbstractPlayerMoveEvent {
 
 	public ContraEvent(Player player) {
-		this.player = player;
+		super(player);
 	}
 
 	@Override
@@ -37,5 +35,10 @@ public final class ContraEvent implements SkatGameEvent {
 	@Override
 	public final void processBackward(SkatGameData data) {
 		data.setContra(false);
+	}
+
+	@Override
+	protected String getMoveDetails() {
+		return "contra";
 	}
 }

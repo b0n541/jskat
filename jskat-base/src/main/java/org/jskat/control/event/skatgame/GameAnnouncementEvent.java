@@ -23,13 +23,12 @@ import org.jskat.util.Player;
 /**
  * Event for game announcement.
  */
-public final class GameAnnouncementEvent implements SkatGameEvent {
+public final class GameAnnouncementEvent extends AbstractPlayerMoveEvent {
 
-	public final Player player;
 	public final GameAnnouncement announcement;
 
 	public GameAnnouncementEvent(Player player, GameAnnouncement announcement) {
-		this.player = player;
+		super(player);
 		this.announcement = announcement;
 	}
 
@@ -41,5 +40,10 @@ public final class GameAnnouncementEvent implements SkatGameEvent {
 	@Override
 	public void processBackward(SkatGameData data) {
 		data.setAnnouncement(GameAnnouncementFactory.getEmptyAnnouncement());
+	}
+
+	@Override
+	protected String getMoveDetails() {
+		return announcement.toString();
 	}
 }
