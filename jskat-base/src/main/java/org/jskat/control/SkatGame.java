@@ -26,6 +26,7 @@ import org.jskat.control.event.skatgame.GameFinishEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
 import org.jskat.control.event.skatgame.PassBidEvent;
 import org.jskat.control.event.skatgame.ReEvent;
+import org.jskat.control.event.skatgame.SkatGameEvent;
 import org.jskat.control.event.skatgame.TrickCardPlayedEvent;
 import org.jskat.control.event.table.ActivePlayerChangedEvent;
 import org.jskat.control.event.table.TableGameMoveEvent;
@@ -90,20 +91,23 @@ public class SkatGame extends JSkatThread {
 	public SkatGame(final String newTableName, final GameVariant variant,
 			final JSkatPlayer newForeHand, final JSkatPlayer newMiddleHand,
 			final JSkatPlayer newRearHand) {
+
 		this.tableName = newTableName;
 		setName("SkatGame on table " + this.tableName); //$NON-NLS-1$
+		data = new SkatGameData();
+		JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(data);
+
 		this.variant = variant;
-		this.player = new HashMap<Player, JSkatPlayer>();
-		this.player.put(Player.FOREHAND, newForeHand);
-		this.player.put(Player.MIDDLEHAND, newMiddleHand);
-		this.player.put(Player.REARHAND, newRearHand);
+
+		player = new HashMap<Player, JSkatPlayer>();
+		player.put(Player.FOREHAND, newForeHand);
+		player.put(Player.MIDDLEHAND, newMiddleHand);
+		player.put(Player.REARHAND, newRearHand);
 
 		// inform all players about the starting of the new game
 		for (final Player pos : this.player.keySet()) {
 			getPlayerInstance(pos).newGame(pos);
 		}
-
-		this.data = new SkatGameData();
 
 		setGameState(GameState.GAME_START);
 	}
@@ -115,8 +119,6 @@ public class SkatGame extends JSkatThread {
 	// methods or implement it in another way
 	@Override
 	public void run() {
-
-		JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(data);
 
 		this.view.clearTable(this.tableName);
 		this.view.setGameState(this.tableName, this.data.getGameState());
@@ -151,7 +153,8 @@ public class SkatGame extends JSkatThread {
 				} else if (GameType.RAMSCH.equals(this.data.getGameType())) {
 					setGameState(GameState.RAMSCH_GRAND_HAND_ANNOUNCING);
 				} else {
-					this.view.setDeclarer(this.tableName, this.data.getDeclarer());
+					this.view.setDeclarer(this.tableName,
+							this.data.getDeclarer());
 					setGameState(GameState.PICKING_UP_SKAT);
 				}
 				break;
@@ -159,7 +162,8 @@ public class SkatGame extends JSkatThread {
 				boolean grandHandAnnounced = grandHand();
 
 				if (grandHandAnnounced) {
-					this.log.debug(this.data.getDeclarer() + " is playing grand hand"); //$NON-NLS-1$
+					this.log.debug(this.data.getDeclarer()
+							+ " is playing grand hand"); //$NON-NLS-1$
 					final GameAnnouncementFactory gaf = GameAnnouncement
 							.getFactory();
 					gaf.setGameType(GameType.GRAND);
@@ -196,7 +200,8 @@ public class SkatGame extends JSkatThread {
 			case DISCARDING:
 				setActivePlayer(this.data.getDeclarer());
 				discarding();
-				if (!GameState.PRELIMINARY_GAME_END.equals(this.data.getGameState())) {
+				if (!GameState.PRELIMINARY_GAME_END.equals(this.data
+						.getGameState())) {
 					setGameState(GameState.DECLARING);
 				}
 				break;
@@ -234,11 +239,16 @@ public class SkatGame extends JSkatThread {
 			}
 
 			checkWaitCondition();
-		} while (this.data.getGameState() != GameState.GAME_OVER && !isTerminated());
+		} while (this.data.getGameState() != GameState.GAME_OVER
+				&& !isTerminated());
 
 		JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).unregister(data);
 
-		this.log.debug(this.data.getGameState().name());
+		log.debug(data.getGameState().name());
+		log.debug("Game moves:");
+		for (SkatGameEvent event : data.getGameMoves()) {
+			log.debug(event.toString());
+		}
 	}
 
 	private void contraRe() {
@@ -262,7 +272,8 @@ public class SkatGame extends JSkatThread {
 		for (final Player currPlayer : Player.getOrderedList()) {
 			setActivePlayer(currPlayer);
 			if (!grandHandAnnounced && playGrandHand()) {
-				this.log.debug("Player " + this.activePlayer + " is playing grand hand.");
+				this.log.debug("Player " + this.activePlayer
+						+ " is playing grand hand.");
 				setDeclarer(this.activePlayer);
 				grandHandAnnounced = true;
 			} else {
@@ -281,7 +292,8 @@ public class SkatGame extends JSkatThread {
 				this.data.addGeschoben();
 				this.view.setGeschoben(this.tableName, this.activePlayer);
 			} else {
-				this.log.debug("Player " + currPlayer + " wants to look into skat.");
+				this.log.debug("Player " + currPlayer
+						+ " wants to look into skat.");
 				this.view.setSkat(this.tableName, this.data.getSkat());
 				discarding();
 			}
@@ -336,7 +348,8 @@ public class SkatGame extends JSkatThread {
 		final Map<Player, CardList> dealtCards = this.data.getDealtCards();
 		for (final Player currPlayer : Player.getOrderedList()) {
 
-			this.view.addCards(this.tableName, currPlayer, dealtCards.get(currPlayer));
+			this.view.addCards(this.tableName, currPlayer,
+					dealtCards.get(currPlayer));
 		}
 
 		doSleep(this.maxSleep);
@@ -587,8 +600,8 @@ public class SkatGame extends JSkatThread {
 			this.data.setDiscardedSkat(this.activePlayer, discardedSkat);
 			if (!activePlayerInstance.isHumanPlayer()) {
 				// human player has changed the cards in the GUI already
-				this.view.setDiscardedSkat(this.tableName, this.activePlayer, skatBefore,
-						discardedSkat);
+				this.view.setDiscardedSkat(this.tableName, this.activePlayer,
+						skatBefore, discardedSkat);
 			}
 		}
 	}
@@ -629,9 +642,10 @@ public class SkatGame extends JSkatThread {
 		if (ann != null) {
 			setGameAnnouncement(ann);
 		} else {
-			this.view.showErrorMessage(
-					this.strings.getString("invalid_game_announcement_title"), //$NON-NLS-1$
-					this.strings.getString("invalid_game_announcement_message", ann)); //$NON-NLS-1$
+			this.view.showErrorMessage(this.strings
+					.getString("invalid_game_announcement_title"), //$NON-NLS-1$
+					this.strings.getString(
+							"invalid_game_announcement_message", ann)); //$NON-NLS-1$
 		}
 
 		doSleep(this.maxSleep);
@@ -707,7 +721,8 @@ public class SkatGame extends JSkatThread {
 			doSleep(this.maxSleep);
 
 			this.log.debug("Calculate trick winner"); //$NON-NLS-1$
-			trickWinner = this.rules.calculateTrickWinner(this.data.getGameType(), trick);
+			trickWinner = this.rules.calculateTrickWinner(
+					this.data.getGameType(), trick);
 			trick.setTrickWinner(trickWinner);
 			this.data.addPlayerPoints(trickWinner, trick.getValue());
 
@@ -809,7 +824,8 @@ public class SkatGame extends JSkatThread {
 
 	private boolean isPlayerBidHighEnoughForContra(Player player) {
 		JSkatOptions options = JSkatOptions.instance();
-		if (options.isContraAfterBid18() && this.data.getMaxPlayerBid(player) > 0) {
+		if (options.isContraAfterBid18()
+				&& this.data.getMaxPlayerBid(player) > 0) {
 			return true;
 		}
 		return true;
@@ -861,16 +877,16 @@ public class SkatGame extends JSkatThread {
 				if (lastTrickWinner != null) {
 					this.log.debug("Skat cards (" + this.data.getSkat().getTotalValue() + " points) are added to player @ " //$NON-NLS-1$ //$NON-NLS-2$
 							+ lastTrickWinner + " (= last trick)"); //$NON-NLS-1$
-					this.data.addPlayerPoints(lastTrickWinner, this.data.getSkat()
-							.getTotalValue());
+					this.data.addPlayerPoints(lastTrickWinner, this.data
+							.getSkat().getTotalValue());
 				} else {
 					this.log.warn("Skat cards cannot be added to winner of final trick - trick winner is unknown"); //$NON-NLS-1$
 				}
 			}
 		} else {
 			// for all the other games, points to the declarer
-			this.data.addPlayerPoints(this.data.getDeclarer(), this.data.getSkat()
-					.getTotalValue());
+			this.data.addPlayerPoints(this.data.getDeclarer(), this.data
+					.getSkat().getTotalValue());
 		}
 		logPlayerPoints();
 	}

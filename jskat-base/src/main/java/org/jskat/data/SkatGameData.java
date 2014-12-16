@@ -193,6 +193,8 @@ public class SkatGameData {
 
 	private final Set<Player> ramschLoosers = new HashSet<Player>();
 
+	private final List<SkatGameEvent> gameMoves = new ArrayList<>();
+
 	/**
 	 * Creates a new instance of a Skat game data
 	 */
@@ -206,21 +208,32 @@ public class SkatGameData {
 	@Subscribe
 	public void adjustDataOn(SkatGameEvent event) {
 		event.processForward(this);
+		gameMoves.add(event);
 	}
 
 	private void intializeVariables() {
 
-		announcement = GameAnnouncement.getFactory().getEmptyAnnouncement();
-		result = new SkatGameResult();
+		GameAnnouncement.getFactory();
+		this.announcement = GameAnnouncementFactory.getEmptyAnnouncement();
+		this.result = new SkatGameResult();
 
 		for (final Player player : Player.values()) {
-			playerNames.put(player, ""); //$NON-NLS-1$
-			playerHands.put(player, new CardList());
-			dealtCards.put(player, new CardList());
-			playerPoints.put(player, 0);
-			playerBids.put(player, new ArrayList<Integer>());
-			playerPasses.put(player, Boolean.FALSE);
+			this.playerNames.put(player, ""); //$NON-NLS-1$
+			this.playerHands.put(player, new CardList());
+			this.dealtCards.put(player, new CardList());
+			this.playerPoints.put(player, 0);
+			this.playerBids.put(player, new ArrayList<Integer>());
+			this.playerPasses.put(player, Boolean.FALSE);
 		}
+	}
+
+	/**
+	 * Returns all game moves.
+	 * 
+	 * @return Game moves
+	 */
+	public List<SkatGameEvent> getGameMoves() {
+		return Collections.unmodifiableList(gameMoves);
 	}
 
 	/**
@@ -230,13 +243,13 @@ public class SkatGameData {
 	 */
 	public SkatGameResult getGameResult() {
 
-		if (result.getGameValue() == -1 && getGameType() != GameType.PASSED_IN) {
+		if (this.result.getGameValue() == -1 && getGameType() != GameType.PASSED_IN) {
 
 			log.warn("Game result hasn't been calculated yet!"); //$NON-NLS-1$
 			calcResult();
 		}
 
-		return result;
+		return this.result;
 	}
 
 	/**
@@ -246,7 +259,7 @@ public class SkatGameData {
 	 */
 	public Player getDeclarer() {
 
-		return declarer;
+		return this.declarer;
 	}
 
 	/**
@@ -259,7 +272,7 @@ public class SkatGameData {
 
 		log.debug("Current single Player " + singlePlayer); //$NON-NLS-1$
 
-		declarer = singlePlayer;
+		this.declarer = singlePlayer;
 	}
 
 	/**
@@ -271,7 +284,7 @@ public class SkatGameData {
 
 		Integer result = 0;
 
-		for (List<Integer> bids : playerBids.values()) {
+		for (List<Integer> bids : this.playerBids.values()) {
 			int maxBid = bids.size() > 0 ? bids.get(bids.size() - 1) : 0;
 			if (maxBid > result) {
 				result = maxBid;
@@ -288,7 +301,7 @@ public class SkatGameData {
 	 */
 	public boolean isGameLost() {
 
-		return !result.isWon();
+		return !this.result.isWon();
 	}
 
 	/**
@@ -298,7 +311,7 @@ public class SkatGameData {
 	 */
 	public boolean isGameWon() {
 
-		return result.isWon();
+		return this.result.isWon();
 	}
 
 	/**
@@ -314,7 +327,7 @@ public class SkatGameData {
 			log.warn("Overbidding cannot happen in Ramsch games: gameType=" //$NON-NLS-1$
 					+ getGameType());
 		}
-		return result.isOverBidded();
+		return this.result.isOverBidded();
 	}
 
 	/**
@@ -324,7 +337,7 @@ public class SkatGameData {
 	 */
 	public boolean isHand() {
 
-		return announcement.isHand();
+		return this.announcement.isHand();
 	}
 
 	/**
@@ -334,7 +347,7 @@ public class SkatGameData {
 	 */
 	public boolean isOuvert() {
 
-		return announcement.isOuvert();
+		return this.announcement.isOuvert();
 	}
 
 	/**
@@ -344,7 +357,7 @@ public class SkatGameData {
 	 */
 	public boolean isSchneider() {
 
-		return result.isSchneider();
+		return this.result.isSchneider();
 	}
 
 	/**
@@ -354,7 +367,7 @@ public class SkatGameData {
 	 */
 	public boolean isSchneiderAnnounced() {
 
-		return announcement.isSchneider();
+		return this.announcement.isSchneider();
 	}
 
 	/**
@@ -364,7 +377,7 @@ public class SkatGameData {
 	 */
 	public boolean isSchwarz() {
 
-		return result.isSchwarz();
+		return this.result.isSchwarz();
 	}
 
 	/**
@@ -374,7 +387,7 @@ public class SkatGameData {
 	 */
 	public boolean isSchwarzAnnounced() {
 
-		return announcement.isSchwarz();
+		return this.announcement.isSchwarz();
 	}
 
 	/**
@@ -384,7 +397,7 @@ public class SkatGameData {
 	 */
 	public boolean isDurchmarsch() {
 
-		return result.isDurchmarsch();
+		return this.result.isDurchmarsch();
 	}
 
 	/**
@@ -394,7 +407,7 @@ public class SkatGameData {
 	 */
 	public boolean isJungfrau() {
 
-		return result.isJungfrau();
+		return this.result.isJungfrau();
 	}
 
 	/**
@@ -406,7 +419,7 @@ public class SkatGameData {
 	 */
 	public int getScore(final Player player) {
 
-		return playerPoints.get(player).intValue();
+		return this.playerPoints.get(player).intValue();
 	}
 
 	/**
@@ -417,12 +430,12 @@ public class SkatGameData {
 	 */
 	public void setDeclarerScore(final int newScore) {
 
-		playerPoints.put(declarer, Integer.valueOf(newScore));
+		this.playerPoints.put(this.declarer, Integer.valueOf(newScore));
 		if (newScore > 89) {
-			result.setSchneider(true);
+			this.result.setSchneider(true);
 		}
 		if (newScore == 120) {
-			result.setSchwarz(true);
+			this.result.setSchwarz(true);
 		}
 	}
 
@@ -435,9 +448,9 @@ public class SkatGameData {
 
 		int score = 0;
 
-		if (declarer != null) {
+		if (this.declarer != null) {
 
-			score = getScore(declarer);
+			score = getScore(this.declarer);
 		}
 
 		return score;
@@ -452,9 +465,9 @@ public class SkatGameData {
 
 		int score = 0;
 
-		if (declarer != null) {
+		if (this.declarer != null) {
 
-			score = 120 - getScore(declarer);
+			score = 120 - getScore(this.declarer);
 		}
 
 		return score;
@@ -467,33 +480,33 @@ public class SkatGameData {
 
 		if (getGameType() == GameType.PASSED_IN) {
 
-			result.setWon(false);
-			result.setGameValue(0);
+			this.result.setWon(false);
+			this.result.setGameValue(0);
 		} else {
 
-			if (!result.isWon()) {
+			if (!this.result.isWon()) {
 				// game could be won already, because of playing schwarz of an
 				// opponent
-				result.setWon(rules.isGameWon(this));
+				this.result.setWon(this.rules.isGameWon(this));
 			}
-			result.setGameValue(rules.calcGameResult(this));
+			this.result.setGameValue(this.rules.calcGameResult(this));
 
-			if (rules.isOverbid(this)) {
-				result.setOverBidded(true);
+			if (this.rules.isOverbid(this)) {
+				this.result.setOverBidded(true);
 			}
 		}
 
-		if (GameType.CLUBS.equals(announcement.gameType)
-				|| GameType.SPADES.equals(announcement.gameType)
-				|| GameType.HEARTS.equals(announcement.gameType)
-				|| GameType.DIAMONDS.equals(announcement.gameType)
-				|| GameType.GRAND.equals(announcement.gameType)) {
+		if (GameType.CLUBS.equals(this.announcement.gameType)
+				|| GameType.SPADES.equals(this.announcement.gameType)
+				|| GameType.HEARTS.equals(this.announcement.gameType)
+				|| GameType.DIAMONDS.equals(this.announcement.gameType)
+				|| GameType.GRAND.equals(this.announcement.gameType)) {
 
-			result.setFinalDeclarerPoints(getDeclarerScore());
-			result.setFinalOpponentPoints(getOpponentScore());
-			result.setMultiplier(rules.getMultiplier(this));
-			result.setPlayWithJacks(rules.isPlayWithJacks(this));
-		} else if (GameType.RAMSCH.equals(announcement.gameType)) {
+			this.result.setFinalDeclarerPoints(getDeclarerScore());
+			this.result.setFinalOpponentPoints(getOpponentScore());
+			this.result.setMultiplier(this.rules.getMultiplier(this));
+			this.result.setPlayWithJacks(this.rules.isPlayWithJacks(this));
+		} else if (GameType.RAMSCH.equals(this.announcement.gameType)) {
 			finishRamschGame();
 		}
 	}
@@ -503,23 +516,23 @@ public class SkatGameData {
 	 */
 	public void finishRamschGame() {
 
-		result.setWon(false);
+		this.result.setWon(false);
 
 		// FIXME this is rule logic --> remove it from data object!!!
 		Integer highestPoints = Integer.MIN_VALUE;
 		for (Player player : Player.values()) {
-			if (highestPoints < playerPoints.get(player)) {
-				highestPoints = playerPoints.get(player);
+			if (highestPoints < this.playerPoints.get(player)) {
+				highestPoints = this.playerPoints.get(player);
 			}
 		}
 		for (Player player : Player.values()) {
-			if (playerPoints.get(player).equals(highestPoints)) {
-				ramschLoosers.add(player);
+			if (this.playerPoints.get(player).equals(highestPoints)) {
+				this.ramschLoosers.add(player);
 			}
 		}
 
 		if (isDurchmarsch()) {
-			result.setWon(true);
+			this.result.setWon(true);
 		}
 	}
 
@@ -530,7 +543,7 @@ public class SkatGameData {
 	 */
 	public SkatGameResult getResult() {
 
-		return result;
+		return this.result;
 	}
 
 	/**
@@ -541,7 +554,7 @@ public class SkatGameData {
 	 */
 	public void setResult(final SkatGameResult newResult) {
 
-		result = newResult;
+		this.result = newResult;
 	}
 
 	/**
@@ -552,7 +565,7 @@ public class SkatGameData {
 	 */
 	public void addTrick(final Trick newTrick) {
 
-		tricks.add(newTrick);
+		this.tricks.add(newTrick);
 	}
 
 	/**
@@ -583,7 +596,7 @@ public class SkatGameData {
 	 */
 	public Trick getCurrentTrick() {
 
-		return tricks.get(tricks.size() - 1);
+		return this.tricks.get(this.tricks.size() - 1);
 	}
 
 	/**
@@ -599,7 +612,7 @@ public class SkatGameData {
 					"No tricks finished in the game so far."); //$NON-NLS-1$
 		}
 
-		return tricks.get(tricks.size() - 2);
+		return this.tricks.get(this.tricks.size() - 2);
 	}
 
 	/**
@@ -614,7 +627,7 @@ public class SkatGameData {
 
 		log.debug("setTrickWinner(" + trickNumber + ", " + winner + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		tricks.get(trickNumber).setTrickWinner(winner);
+		this.tricks.get(trickNumber).setTrickWinner(winner);
 	}
 
 	/**
@@ -626,7 +639,7 @@ public class SkatGameData {
 	 */
 	public Player getTrickWinner(final int trickNumber) {
 
-		return tricks.get(trickNumber).getTrickWinner();
+		return this.tricks.get(trickNumber).getTrickWinner();
 	}
 
 	/**
@@ -636,7 +649,7 @@ public class SkatGameData {
 	 */
 	public List<Trick> getTricks() {
 
-		return tricks;
+		return this.tricks;
 	}
 
 	/**
@@ -646,7 +659,7 @@ public class SkatGameData {
 	 */
 	public int getGeschoben() {
 
-		return geschoben;
+		return this.geschoben;
 	}
 
 	/**
@@ -656,19 +669,19 @@ public class SkatGameData {
 	 */
 	public int getGeschobenMultiplier() {
 
-		log.debug("geschoben=" + geschoben + ", 2^" + geschoben + "=" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				+ (1 << geschoben));
+		log.debug("geschoben=" + this.geschoben + ", 2^" + this.geschoben + "=" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				+ (1 << this.geschoben));
 
 		int multiplier = 0;
 
-		if (geschoben < 0) {
+		if (this.geschoben < 0) {
 
-			multiplier = geschoben;
+			multiplier = this.geschoben;
 
 		} else {
 
 			// TODO: need to know what this is doing
-			multiplier = 1 << geschoben;
+			multiplier = 1 << this.geschoben;
 		}
 
 		return multiplier;
@@ -680,7 +693,7 @@ public class SkatGameData {
 	 */
 	public void addGeschoben() {
 
-		geschoben++;
+		this.geschoben++;
 	}
 
 	/**
@@ -692,7 +705,7 @@ public class SkatGameData {
 	 */
 	public CardList getPlayerCards(final Player player) {
 
-		return playerHands.get(player).getImmutableCopy();
+		return this.playerHands.get(player).getImmutableCopy();
 	}
 
 	/**
@@ -701,7 +714,7 @@ public class SkatGameData {
 	 * @return skat The cards of the skat
 	 */
 	public CardList getSkat() {
-		return skat.getImmutableCopy();
+		return this.skat.getImmutableCopy();
 	}
 
 	/**
@@ -714,10 +727,10 @@ public class SkatGameData {
 	 */
 	public void setDiscardedSkat(final Player player, final CardList newSkat) {
 
-		playerHands.get(player).removeAll(newSkat);
+		this.playerHands.get(player).removeAll(newSkat);
 
-		skat.clear();
-		skat.addAll(newSkat);
+		this.skat.clear();
+		this.skat.addAll(newSkat);
 	}
 
 	/**
@@ -727,7 +740,7 @@ public class SkatGameData {
 	 */
 	public Map<Player, CardList> getDealtCards() {
 
-		return dealtCards;
+		return this.dealtCards;
 	}
 
 	/**
@@ -737,7 +750,7 @@ public class SkatGameData {
 	 */
 	public CardList getDealtSkat() {
 
-		return dealtSkat.getImmutableCopy();
+		return this.dealtSkat.getImmutableCopy();
 	}
 
 	/**
@@ -749,8 +762,8 @@ public class SkatGameData {
 	 *            Cards that was dealt
 	 */
 	public void addDealtCards(final Player player, final CardList cards) {
-		dealtCards.get(player).addAll(cards);
-		playerHands.get(player).addAll(cards);
+		this.dealtCards.get(player).addAll(cards);
+		this.playerHands.get(player).addAll(cards);
 	}
 
 	/**
@@ -761,10 +774,10 @@ public class SkatGameData {
 	 */
 	public void setDealtSkatCards(CardList cards) {
 
-		dealtSkat.clear();
-		dealtSkat.addAll(cards);
-		skat.clear();
-		skat.addAll(dealtSkat);
+		this.dealtSkat.clear();
+		this.dealtSkat.addAll(cards);
+		this.skat.clear();
+		this.skat.addAll(this.dealtSkat);
 	}
 
 	/**
@@ -777,7 +790,7 @@ public class SkatGameData {
 	 */
 	public void addPlayerPoints(final Player player, final int points) {
 
-		playerPoints.put(player, playerPoints.get(player) + points);
+		this.playerPoints.put(player, this.playerPoints.get(player) + points);
 	}
 
 	/**
@@ -789,7 +802,7 @@ public class SkatGameData {
 	 */
 	public int getPlayerPoints(final Player player) {
 
-		return playerPoints.get(player).intValue();
+		return this.playerPoints.get(player).intValue();
 	}
 
 	/**
@@ -812,12 +825,12 @@ public class SkatGameData {
 	 */
 	public void addPlayerBid(final Player player, final int bidValue) {
 
-		playerBids.get(player).add(bidValue);
+		this.playerBids.get(player).add(bidValue);
 	}
 
 	public void removeLastPlayerBid(Player player) {
-		int lastIndex = playerBids.get(player).size() - 1;
-		playerBids.get(player).remove(lastIndex);
+		int lastIndex = this.playerBids.get(player).size() - 1;
+		this.playerBids.get(player).remove(lastIndex);
 	}
 
 	/**
@@ -828,7 +841,7 @@ public class SkatGameData {
 	 * @return Highest bid value so far
 	 */
 	public int getMaxPlayerBid(final Player player) {
-		List<Integer> bids = playerBids.get(player);
+		List<Integer> bids = this.playerBids.get(player);
 		return bids.size() > 0 ? bids.get(bids.size() - 1) : 0;
 	}
 
@@ -842,7 +855,7 @@ public class SkatGameData {
 	 */
 	public void setPlayerPass(final Player player, final boolean isPassing) {
 
-		playerPasses.put(player, Boolean.valueOf(isPassing));
+		this.playerPasses.put(player, Boolean.valueOf(isPassing));
 	}
 
 	/**
@@ -854,7 +867,7 @@ public class SkatGameData {
 	 */
 	public boolean isPlayerPass(final Player player) {
 
-		return playerPasses.get(player).booleanValue();
+		return this.playerPasses.get(player).booleanValue();
 	}
 
 	/**
@@ -899,13 +912,13 @@ public class SkatGameData {
 
 		if (this.announcement == null) {
 			this.announcement = GameAnnouncementFactory.getEmptyAnnouncement();
-			rules = null;
+			this.rules = null;
 		} else {
-			rules = SkatRuleFactory.getSkatRules(getGameType());
+			this.rules = SkatRuleFactory.getSkatRules(getGameType());
 		}
 
 		if (GameType.PASSED_IN.equals(getGameType())) {
-			gameState = GameState.GAME_OVER;
+			this.gameState = GameState.GAME_OVER;
 			calcResult();
 		}
 	}
@@ -917,11 +930,11 @@ public class SkatGameData {
 	 */
 	public GameType getGameType() {
 
-		if (announcement == null) {
+		if (this.announcement == null) {
 			throw new IllegalStateException("No game announcement available!");
 		}
 
-		return announcement.getGameType();
+		return this.announcement.getGameType();
 	}
 
 	/**
@@ -931,7 +944,7 @@ public class SkatGameData {
 	 */
 	public GameAnnouncement getAnnoucement() {
 
-		return announcement;
+		return this.announcement;
 	}
 
 	/**
@@ -941,7 +954,7 @@ public class SkatGameData {
 	 */
 	public boolean isIspaRules() {
 
-		return ispaRules;
+		return this.ispaRules;
 	}
 
 	/**
@@ -951,7 +964,7 @@ public class SkatGameData {
 	 *            TRUE when the game was played under ISPA rules
 	 */
 	public void setIspaRules(final boolean isIspaRules) {
-		ispaRules = isIspaRules;
+		this.ispaRules = isIspaRules;
 	}
 
 	/**
@@ -962,7 +975,7 @@ public class SkatGameData {
 	 */
 	public void setGameState(final GameState newState) {
 
-		gameState = newState;
+		this.gameState = newState;
 	}
 
 	/**
@@ -972,7 +985,7 @@ public class SkatGameData {
 	 */
 	public GameState getGameState() {
 
-		return gameState;
+		return this.gameState;
 	}
 
 	/**
@@ -980,16 +993,16 @@ public class SkatGameData {
 	 */
 	public void setSchneiderSchwarz() {
 		// FIXME this is rule logic --> move to SuitGrandRule
-		final int declarerPoints = getPlayerPoints(declarer);
+		final int declarerPoints = getPlayerPoints(this.declarer);
 
 		if (declarerPoints >= 89 || declarerPoints <= 30) {
 
-			result.setSchneider(true);
+			this.result.setSchneider(true);
 		}
 
 		if (declarerPoints == 120 || declarerPoints == 0) {
 
-			result.setSchwarz(true);
+			this.result.setSchwarz(true);
 		}
 	}
 
@@ -997,10 +1010,10 @@ public class SkatGameData {
 		// FIXME this is rule logic --> move to RamschRule
 		for (final Player currPlayer : Player.values()) {
 			if (RamschRule.isDurchmarsch(currPlayer, this)) {
-				result.setDurchmarsch(true);
+				this.result.setDurchmarsch(true);
 			} else {
 				if (RamschRule.isJungfrau(currPlayer, this)) {
-					result.setJungfrau(true);
+					this.result.setJungfrau(true);
 				}
 			}
 		}
@@ -1012,7 +1025,7 @@ public class SkatGameData {
 	 * @return Dealing player
 	 */
 	public Player getDealer() {
-		return dealer;
+		return this.dealer;
 	}
 
 	/**
@@ -1022,7 +1035,7 @@ public class SkatGameData {
 	 *            Dealing player
 	 */
 	public void setDealer(final Player newDealer) {
-		dealer = newDealer;
+		this.dealer = newDealer;
 	}
 
 	/**
@@ -1033,7 +1046,7 @@ public class SkatGameData {
 	 * @return Player name
 	 */
 	public String getPlayerName(final Player player) {
-		return playerNames.get(player);
+		return this.playerNames.get(player);
 	}
 
 	/**
@@ -1045,7 +1058,7 @@ public class SkatGameData {
 	 *            Player name
 	 */
 	public void setPlayerName(final Player player, final String playerName) {
-		playerNames.put(player, playerName);
+		this.playerNames.put(player, playerName);
 	}
 
 	/**
@@ -1054,9 +1067,9 @@ public class SkatGameData {
 	 * @return TRUE if the game was lost
 	 */
 	public boolean isGamePassed() {
-		return playerPasses.get(Player.FOREHAND).booleanValue()
-				&& playerPasses.get(Player.MIDDLEHAND).booleanValue()
-				&& playerPasses.get(Player.FOREHAND).booleanValue();
+		return this.playerPasses.get(Player.FOREHAND).booleanValue()
+				&& this.playerPasses.get(Player.MIDDLEHAND).booleanValue()
+				&& this.playerPasses.get(Player.FOREHAND).booleanValue();
 	}
 
 	/**
@@ -1082,10 +1095,10 @@ public class SkatGameData {
 
 		factory.setTricks(getTricks());
 
-		factory.setPlayerPoints(playerPoints);
+		factory.setPlayerPoints(this.playerPoints);
 
-		if (announcement.gameType == GameType.RAMSCH) {
-			for (Player looser : ramschLoosers) {
+		if (this.announcement.gameType == GameType.RAMSCH) {
+			for (Player looser : this.ramschLoosers) {
 				factory.addRamschLooser(looser);
 			}
 		}
@@ -1147,7 +1160,7 @@ public class SkatGameData {
 	 *            Card
 	 */
 	public void removePlayerCard(final Player player, final Card card) {
-		playerHands.get(player).remove(card);
+		this.playerHands.get(player).remove(card);
 	}
 
 	/**
@@ -1181,12 +1194,12 @@ public class SkatGameData {
 	 * @return Set of loosing players
 	 */
 	public Set<Player> getRamschLoosers() {
-		if (announcement == null
-				|| !GameType.RAMSCH.equals(announcement.gameType)) {
+		if (this.announcement == null
+				|| !GameType.RAMSCH.equals(this.announcement.gameType)) {
 			throw new IllegalStateException(
 					"This game data object is not from a ramsch game!");
 		}
-		return Collections.unmodifiableSet(ramschLoosers);
+		return Collections.unmodifiableSet(this.ramschLoosers);
 	}
 
 	/**
@@ -1198,7 +1211,7 @@ public class SkatGameData {
 	 *            Cards
 	 */
 	public void removeDealtCards(Player player, CardList cards) {
-		dealtCards.get(player).removeAll(cards);
+		this.dealtCards.get(player).removeAll(cards);
 	}
 
 	/**
@@ -1208,8 +1221,8 @@ public class SkatGameData {
 	 *            Cards
 	 */
 	public void removeDealtSkatCards(CardList cards) {
-		dealtSkat.removeAll(cards);
-		skat.removeAll(cards);
+		this.dealtSkat.removeAll(cards);
+		this.skat.removeAll(cards);
 	}
 
 	/**
@@ -1219,9 +1232,9 @@ public class SkatGameData {
 	 *            Player
 	 */
 	public void addSkatToPlayer(Player player) {
-		playerHands.get(player).addAll(skat);
-		skat.clear();
-		announcement.hand = false;
+		this.playerHands.get(player).addAll(this.skat);
+		this.skat.clear();
+		this.announcement.hand = false;
 	}
 
 	/**
@@ -1231,9 +1244,9 @@ public class SkatGameData {
 	 *            Player
 	 */
 	public void removeSkatFromPlayer(Player player) {
-		playerHands.get(player).removeAll(dealtSkat);
-		skat.addAll(dealtSkat);
-		announcement.hand = true;
+		this.playerHands.get(player).removeAll(this.dealtSkat);
+		this.skat.addAll(this.dealtSkat);
+		this.announcement.hand = true;
 	}
 
 	/**
@@ -1243,8 +1256,8 @@ public class SkatGameData {
 	 *            Cards
 	 */
 	public void setSkatCards(CardList cards) {
-		skat.clear();
-		skat.addAll(cards);
+		this.skat.clear();
+		this.skat.addAll(cards);
 	}
 
 	/**
@@ -1256,7 +1269,7 @@ public class SkatGameData {
 	 *            Cards
 	 */
 	public void addPlayerCards(Player player, CardList cards) {
-		playerHands.get(player).addAll(cards);
+		this.playerHands.get(player).addAll(cards);
 	}
 
 	/**
@@ -1268,7 +1281,7 @@ public class SkatGameData {
 	 *            Card
 	 */
 	public void addPlayerCard(Player player, Card card) {
-		playerHands.get(player).add(card);
+		this.playerHands.get(player).add(card);
 	}
 
 	/**
@@ -1278,7 +1291,7 @@ public class SkatGameData {
 	 *            <code>true</code>, if Contra was called.
 	 */
 	public void setContra(boolean isContra) {
-		announcement.contra = isContra;
+		this.announcement.contra = isContra;
 	}
 
 	/**
@@ -1287,7 +1300,7 @@ public class SkatGameData {
 	 * @return <code>true</code>, if Contra was called.
 	 */
 	public Boolean isContra() {
-		return announcement.contra;
+		return this.announcement.contra;
 	}
 
 	/**
@@ -1297,7 +1310,7 @@ public class SkatGameData {
 	 *            <code>true</code>, if Re was called.
 	 */
 	public void setRe(boolean isRe) {
-		announcement.re = isRe;
+		this.announcement.re = isRe;
 	}
 
 	/**
@@ -1306,7 +1319,7 @@ public class SkatGameData {
 	 * @return <code>true</code>, if Re was called.
 	 */
 	public Boolean isRe() {
-		return announcement.re;
+		return this.announcement.re;
 	}
 
 	/**
@@ -1325,6 +1338,6 @@ public class SkatGameData {
 	 * @return TRUE if the skat was picked up
 	 */
 	public Boolean isSkatPickedUp() {
-		return skatPickedUp;
+		return this.skatPickedUp;
 	}
 }
