@@ -513,6 +513,11 @@ public class IssController {
 				this.view.setGameState(tableName, GameState.PICKING_UP_SKAT);
 			}
 
+		} else if (MoveType.GAME_ANNOUNCEMENT.equals(moveInformation.getType())) {
+
+			JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName,
+					Player.FOREHAND));
+
 		} else if (MoveType.CARD_PLAY.equals(moveInformation.getType())) {
 
 			// handle trick playing
