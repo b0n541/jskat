@@ -159,12 +159,12 @@ public class CardPanel extends JPanel {
      */
     public final void removeCard(final Card cardToRemove) {
 
-        if (this.cards.contains(cardToRemove)) {
-            this.cards.remove(cardToRemove);
-        } else if (this.showBackside) {
+		if (cards.contains(cardToRemove)) {
+			cards.remove(cardToRemove);
+		} else if (cards.size() > 0) {
             // card panels with hidden cards may contain unknown cards
             // remove the last one
-            this.cards.remove(this.cards.size() - 1);
+			cards.remove(cards.size() - 1);
         }
         resetActiveCardPosition();
         repaint();
