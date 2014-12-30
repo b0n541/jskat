@@ -27,6 +27,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
@@ -44,6 +45,7 @@ import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.skatgame.AbstractBidEvent;
 import org.jskat.control.event.skatgame.BidEvent;
 import org.jskat.control.event.skatgame.ContraEvent;
+import org.jskat.control.event.skatgame.DealCardEvent;
 import org.jskat.control.event.skatgame.GameAnnouncementEvent;
 import org.jskat.control.event.skatgame.GameFinishEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
@@ -409,19 +411,6 @@ public class SkatTablePanel extends AbstractTabPanel {
 	}
 
 	/**
-	 * Adds a card to a player
-	 * 
-	 * @param player
-	 *            Player
-	 * @param card
-	 *            Card
-	 */
-	public void addCard(final Player player, final Card card) {
-
-		getPlayerPanel(player).addCard(card);
-	}
-
-	/**
 	 * Adds cards to a player
 	 * 
 	 * @param player
@@ -429,9 +418,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param cards
 	 *            Cards
 	 */
-	public void addCards(final Player player, final CardList cards) {
-
-		getPlayerPanel(player).addCards(cards);
+	@Subscribe
+	public void setDealtCardsOn(final DealCardEvent event) {
+		setCardsForPlayers(event.playerCards);
 	}
 
 	/**
@@ -1183,10 +1172,15 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 */
 	@Subscribe
 	public void showCardsOn(final ShowCardsCommand command) {
-		for (Map.Entry<Player, CardList> playerCards : command.cards.entrySet()) {
+		setCardsForPlayers(command.cards);
+	}
+
+	private void setCardsForPlayers(Map<Player, CardList> cards) {
+		for (Entry<Player, CardList> playerCards : cards.entrySet()) {
 			removeAllCards(playerCards.getKey());
+			getPlayerPanel(playerCards.getKey()).addCards(
+					playerCards.getValue());
 			showCards(playerCards.getKey());
-			addCards(playerCards.getKey(), playerCards.getValue());
 		}
 	}
 

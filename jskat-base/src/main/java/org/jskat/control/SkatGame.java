@@ -21,6 +21,7 @@ import java.util.Map;
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.skatgame.BidEvent;
 import org.jskat.control.event.skatgame.ContraEvent;
+import org.jskat.control.event.skatgame.DealCardEvent;
 import org.jskat.control.event.skatgame.GameAnnouncementEvent;
 import org.jskat.control.event.skatgame.GameFinishEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
@@ -319,6 +320,11 @@ public class SkatGame extends JSkatThread {
 	 */
 	public void dealCards() {
 
+		Map<Player, CardList> dealtCards = new HashMap<>();
+		for (Player player : Player.values()) {
+			dealtCards.put(player, new CardList());
+		}
+
 		if (this.deck == null) {
 			// Skat game has no cards, yet
 			this.deck = new CardDeck();
@@ -335,22 +341,16 @@ public class SkatGame extends JSkatThread {
 
 		// deal three rounds of cards
 		// deal three cards
-		dealCards(3);
+		dealCards(3, dealtCards);
 		// and put two cards into the skat
 		CardList skat = new CardList(this.deck.remove(0), this.deck.remove(0));
-		this.data.setDealtSkatCards(skat);
 		// deal four cards
-		dealCards(4);
+		dealCards(4, dealtCards);
 		// deal three cards
-		dealCards(3);
+		dealCards(3, dealtCards);
 
-		// show cards in the view
-		final Map<Player, CardList> dealtCards = this.data.getDealtCards();
-		for (final Player currPlayer : Player.getOrderedList()) {
-
-			this.view.addCards(this.tableName, currPlayer,
-					dealtCards.get(currPlayer));
-		}
+		JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName,
+				new DealCardEvent(dealtCards, skat)));
 
 		doSleep(this.maxSleep);
 
@@ -367,7 +367,7 @@ public class SkatGame extends JSkatThread {
 	 * @param cardCount
 	 *            Number of cards to be dealt to a player
 	 */
-	private void dealCards(final int cardCount) {
+	private void dealCards(final int cardCount, Map<Player, CardList> dealtCards) {
 
 		for (final Player hand : Player.getOrderedList()) {
 			CardList cards = new CardList();
@@ -377,7 +377,7 @@ public class SkatGame extends JSkatThread {
 			}
 			// player can get original card object because Card is immutable
 			getPlayerInstance(hand).takeCards(cards);
-			this.data.addDealtCards(hand, cards);
+			dealtCards.get(hand).addAll(cards);
 		}
 	}
 

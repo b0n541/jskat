@@ -106,13 +106,6 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void addCards(final String tableName, final Player player,
-			final CardList cards) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void setPositions(final String tableName, final Player leftPosition,
 			final Player rightPosition, final Player playerPosition) {
 		// TODO Auto-generated method stub

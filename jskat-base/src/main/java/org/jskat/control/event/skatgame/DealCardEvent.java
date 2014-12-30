@@ -15,8 +15,9 @@
  */
 package org.jskat.control.event.skatgame;
 
-import java.util.HashMap;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.jskat.data.SkatGameData;
 import org.jskat.util.CardList;
@@ -27,12 +28,12 @@ import org.jskat.util.Player;
  */
 public final class DealCardEvent implements SkatGameEvent {
 
-	private final Map<Player, CardList> playerCards = new HashMap<Player, CardList>();
-	private final CardList skat = new CardList();
+	public final Map<Player, CardList> playerCards;
+	public final CardList skat;
 
 	public DealCardEvent(Map<Player, CardList> playerCards, CardList skat) {
-		this.playerCards.putAll(playerCards);
-		this.skat.addAll(skat);
+		this.playerCards = Collections.unmodifiableMap(playerCards);
+		this.skat = skat.getImmutableCopy();
 	}
 
 	@Override
@@ -49,5 +50,15 @@ public final class DealCardEvent implements SkatGameEvent {
 			data.removeDealtCards(player, playerCards.get(player));
 		}
 		data.removeDealtSkatCards(skat);
+	}
+
+	@Override
+	public String toString() {
+		String result = "Dealt cards:\n";
+		for (Entry<Player, CardList> entry : playerCards.entrySet()) {
+			result += entry.getKey() + ": " + entry.getValue() + "\n";
+		}
+		result += "Skat: " + skat;
+		return result;
 	}
 }

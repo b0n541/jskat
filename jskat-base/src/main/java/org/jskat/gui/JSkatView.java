@@ -97,18 +97,6 @@ public interface JSkatView {
 	public void showCardNotAllowedMessage(Card card);
 
 	/**
-	 * Adds a list of cards to a players hand
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param player
-	 *            Player
-	 * @param cards
-	 *            List of cards
-	 */
-	public void addCards(String tableName, Player player, CardList cards);
-
-	/**
 	 * Sets the player positions for a table
 	 * 
 	 * @param tableName

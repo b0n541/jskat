@@ -56,10 +56,12 @@ import org.jskat.control.command.general.ShowTrainingOverviewCommand;
 import org.jskat.control.command.general.ShowWelcomeInformationCommand;
 import org.jskat.control.command.iss.IssDisconnectCommand;
 import org.jskat.control.command.skatseries.CreateSkatSeriesCommand;
+import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.iss.IssConnectedEvent;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
 import org.jskat.control.event.skatgame.BidEvent;
+import org.jskat.control.event.skatgame.DealCardEvent;
 import org.jskat.control.event.skatgame.GameAnnouncementEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
 import org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent;
@@ -187,8 +189,7 @@ public class JSkatViewImpl implements JSkatView {
 				this.mainFrame);
 
 		addTabPanel(
-				new WelcomePanel(
-				this.strings.getString("welcome"), actions), //$NON-NLS-1$
+				new WelcomePanel(this.strings.getString("welcome"), actions), //$NON-NLS-1$
 				this.strings.getString("welcome")); //$NON-NLS-1$
 
 		JSkatEventBus.INSTANCE.register(this);
@@ -844,12 +845,16 @@ public class JSkatViewImpl implements JSkatView {
 			table.hideCards(Player.FOREHAND);
 			table.hideCards(Player.MIDDLEHAND);
 			table.hideCards(Player.REARHAND);
-			addCards(tableName, Player.FOREHAND,
+
+			Map<Player, CardList> dealtCards = new HashMap<>();
+			dealtCards.put(Player.FOREHAND,
 					moveInformation.getCards(Player.FOREHAND));
-			addCards(tableName, Player.MIDDLEHAND,
+			dealtCards.put(Player.MIDDLEHAND,
 					moveInformation.getCards(Player.MIDDLEHAND));
-			addCards(tableName, Player.REARHAND,
+			dealtCards.put(Player.REARHAND,
 					moveInformation.getCards(Player.REARHAND));
+			JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(
+					new DealCardEvent(dealtCards, new CardList()));
 			setGameState(tableName, GameState.BIDDING);
 			break;
 		case BID:
@@ -887,7 +892,7 @@ public class JSkatViewImpl implements JSkatView {
 					new GameAnnouncementEvent(movePlayer, moveInformation
 							.getGameAnnouncement())));
 			if (moveInformation.getGameAnnouncement().isOuvert()) {
-				setIssOuvertCards(tableName, movePlayer,
+				showCardsForPlayer(tableName, movePlayer,
 						moveInformation.getOuvertCards());
 			}
 			setGameState(tableName, GameState.TRICK_PLAYING);
@@ -914,7 +919,7 @@ public class JSkatViewImpl implements JSkatView {
 							.getCard())));
 			break;
 		case SHOW_CARDS:
-			setIssOuvertCards(tableName, movePlayer,
+			showCardsForPlayer(tableName, movePlayer,
 					moveInformation.getOuvertCards());
 			break;
 		case RESIGN:
@@ -939,13 +944,12 @@ public class JSkatViewImpl implements JSkatView {
 		}
 	}
 
-	private void setIssOuvertCards(final String tableName, final Player player,
-			final CardList ouvertCards) {
-
-		final SkatTablePanel table = this.tables.get(tableName);
-		table.removeAllCards(player);
-		table.addCards(player, ouvertCards);
-		table.showCards(player);
+	private void showCardsForPlayer(final String tableName,
+			final Player player, final CardList cards) {
+		Map<Player, CardList> ouvertCards = new HashMap<>();
+		ouvertCards.put(player, cards);
+		JSkatEventBus.INSTANCE
+				.post(new ShowCardsCommand(tableName, ouvertCards));
 	}
 
 	@Subscribe
@@ -1011,16 +1015,6 @@ public class JSkatViewImpl implements JSkatView {
 		log.debug("Players to invite: " + result); //$NON-NLS-1$
 
 		return result;
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void addCards(final String tableName, final Player player,
-			final CardList cards) {
-
-		this.tables.get(tableName).addCards(player, cards);
 	}
 
 	private void addTabPanel(final AbstractTabPanel newPanel, final String title) {
