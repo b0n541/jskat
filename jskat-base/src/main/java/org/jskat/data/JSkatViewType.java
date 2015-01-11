@@ -28,6 +28,10 @@ public enum JSkatViewType {
 	 */
 	ISS_TABLE,
 	/**
+	 * Training table
+	 */
+	TRAINING_TABLE,
+	/**
 	 * Other views like the welcome panel at start up
 	 */
 	OTHER;

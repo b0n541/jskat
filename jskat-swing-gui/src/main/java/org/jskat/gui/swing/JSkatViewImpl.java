@@ -436,6 +436,10 @@ public class JSkatViewImpl implements JSkatView {
 	@Subscribe
 	public void createSkatTablePanelOn(final TableCreatedEvent event) {
 
+		if (JSkatViewType.TRAINING_TABLE.equals(event.tableType)) {
+			return;
+		}
+		
 		String tableName = event.tableName;
 		String tabTitle = null;
 
@@ -445,10 +449,10 @@ public class JSkatViewImpl implements JSkatView {
 			tabTitle = tableName;
 		} else if (JSkatViewType.ISS_TABLE.equals(event.tableType)) {
 			panel = new ISSTablePanel(tableName, actions);
-			tabTitle = this.strings.getString("iss_table") + ": " + tableName;
+			tabTitle = strings.getString("iss_table") + ": " + tableName;
 		}
 
-		this.tables.put(tableName, panel);
+		tables.put(tableName, panel);
 		addTabPanel(panel, tabTitle);
 	}
 

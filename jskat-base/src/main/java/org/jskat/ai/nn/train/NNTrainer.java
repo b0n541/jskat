@@ -25,10 +25,12 @@ import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.JSkatThread;
 import org.jskat.control.SkatGame;
+import org.jskat.control.command.table.CreateTableCommand;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary;
+import org.jskat.data.JSkatViewType;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.gui.NullView;
 import org.jskat.player.JSkatPlayer;
@@ -134,8 +136,10 @@ public class NNTrainer extends JSkatThread {
 		player1.newGame(Player.FOREHAND);
 		player2.newGame(Player.MIDDLEHAND);
 		player3.newGame(Player.REARHAND);
-		SkatGame game = new SkatGame("table", GameVariant.STANDARD, player1,
-				player2, player3);
+		JSkatEventBus.INSTANCE.post(new CreateTableCommand(JSkatViewType.TRAINING_TABLE,
+				gameType.toString()));
+		SkatGame game = new SkatGame(gameType.toString(), GameVariant.STANDARD,
+				player1, player2, player3);
 		game.setView(new NullView());
 		game.setLogger(NOPLogger.NOP_LOGGER);
 

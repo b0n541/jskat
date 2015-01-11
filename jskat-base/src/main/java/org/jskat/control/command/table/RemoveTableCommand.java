@@ -13,26 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control.event.table;
+package org.jskat.control.command.table;
 
 import org.jskat.data.JSkatViewType;
 
-/**
- * This event is created when a skat table is removed.
- */
-public class TableRemovedEvent extends AbstractTableEvent {
-	
+
+public class RemoveTableCommand {
+
+	public final String tableName;
 	public final JSkatViewType tableType;
 
-	/**
-	 * Constructor.
-	 * 
-	 * @param tableType Type to distinguish between different table types
-	 * @param tableName Table name
-	 */
-	public TableRemovedEvent(String tableName, JSkatViewType tableType) {
-	
-		super(tableName);
+	public RemoveTableCommand(String tableName, JSkatViewType tableType) {
+		this.tableName = tableName;
 		this.tableType = tableType;
 	}
 }

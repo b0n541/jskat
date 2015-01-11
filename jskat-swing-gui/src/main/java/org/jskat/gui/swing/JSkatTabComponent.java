@@ -31,7 +31,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.plaf.basic.BasicButtonUI;
 
 import org.jskat.control.JSkatEventBus;
-import org.jskat.control.JSkatMaster;
 import org.jskat.control.event.table.TableRemovedEvent;
 import org.jskat.data.JSkatViewType;
 import org.jskat.gui.img.JSkatGraphicRepository;
@@ -123,8 +122,9 @@ public class JSkatTabComponent extends JPanel {
 			int i = JSkatTabComponent.this.pane
 					.indexOfTabComponent(JSkatTabComponent.this);
 			if (i != -1) {
-				JSkatEventBus.INSTANCE.post(new TableRemovedEvent(
-						JSkatViewType.LOCAL_TABLE, pane.getTitleAt(i)));
+				// FIXME: it could also be an ISS table
+				JSkatEventBus.INSTANCE.post(new TableRemovedEvent(pane
+						.getTitleAt(i), JSkatViewType.LOCAL_TABLE));
 			}
 		}
 

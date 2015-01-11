@@ -254,7 +254,7 @@ public class MessageHandler extends Thread {
 
 		final String tableName = params.get(0);
 		
-		eventBus.post(new TableRemovedEvent(JSkatViewType.ISS_TABLE, tableName));
+		eventBus.post(new TableRemovedEvent(tableName, JSkatViewType.ISS_TABLE));
 	}
 
 	void handleTableInvitationMessage(final List<String> params) {
