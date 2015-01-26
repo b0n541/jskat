@@ -26,12 +26,12 @@ import org.jskat.util.Player;
 /**
  * Event for card dealing.
  */
-public final class DealCardEvent implements SkatGameEvent {
+public final class CardDealEvent implements SkatGameEvent {
 
 	public final Map<Player, CardList> playerCards;
 	public final CardList skat;
 
-	public DealCardEvent(Map<Player, CardList> playerCards, CardList skat) {
+	public CardDealEvent(Map<Player, CardList> playerCards, CardList skat) {
 		this.playerCards = Collections.unmodifiableMap(playerCards);
 		this.skat = skat.getImmutableCopy();
 	}

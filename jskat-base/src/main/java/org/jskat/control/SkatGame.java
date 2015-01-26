@@ -21,7 +21,7 @@ import java.util.Map;
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.skatgame.BidEvent;
 import org.jskat.control.event.skatgame.ContraEvent;
-import org.jskat.control.event.skatgame.DealCardEvent;
+import org.jskat.control.event.skatgame.CardDealEvent;
 import org.jskat.control.event.skatgame.GameAnnouncementEvent;
 import org.jskat.control.event.skatgame.GameFinishEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
@@ -350,7 +350,7 @@ public class SkatGame extends JSkatThread {
 		dealCards(3, dealtCards);
 
 		JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName,
-				new DealCardEvent(dealtCards, skat)));
+				new CardDealEvent(dealtCards, skat)));
 
 		doSleep(this.maxSleep);
 

@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jskat.AbstractJSkatTest;
-import org.jskat.control.event.skatgame.DealCardEvent;
+import org.jskat.control.event.skatgame.CardDealEvent;
 import org.jskat.data.SkatGameData;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -36,7 +36,7 @@ import org.junit.Test;
 public class DealCardEventTest extends AbstractJSkatTest {
 
 	private SkatGameData data;
-	private DealCardEvent event;
+	private CardDealEvent event;
 
 	@Before
 	public void setUp() {
@@ -59,7 +59,7 @@ public class DealCardEventTest extends AbstractJSkatTest {
 
 		CardList skat = new CardList(Card.D7, Card.D8);
 
-		event = new DealCardEvent(playerCards, skat);
+		event = new CardDealEvent(playerCards, skat);
 	}
 
 	@Test

@@ -45,7 +45,7 @@ import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.skatgame.AbstractBidEvent;
 import org.jskat.control.event.skatgame.BidEvent;
 import org.jskat.control.event.skatgame.ContraEvent;
-import org.jskat.control.event.skatgame.DealCardEvent;
+import org.jskat.control.event.skatgame.CardDealEvent;
 import org.jskat.control.event.skatgame.GameAnnouncementEvent;
 import org.jskat.control.event.skatgame.GameFinishEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
@@ -419,7 +419,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 *            Cards
 	 */
 	@Subscribe
-	public void setDealtCardsOn(final DealCardEvent event) {
+	public void setDealtCardsOn(final CardDealEvent event) {
 		setCardsForPlayers(event.playerCards);
 	}
 

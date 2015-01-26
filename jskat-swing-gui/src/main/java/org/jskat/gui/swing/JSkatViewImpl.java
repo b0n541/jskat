@@ -61,7 +61,7 @@ import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.iss.IssConnectedEvent;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
 import org.jskat.control.event.skatgame.BidEvent;
-import org.jskat.control.event.skatgame.DealCardEvent;
+import org.jskat.control.event.skatgame.CardDealEvent;
 import org.jskat.control.event.skatgame.GameAnnouncementEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
 import org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent;
@@ -858,7 +858,7 @@ public class JSkatViewImpl implements JSkatView {
 			dealtCards.put(Player.REARHAND,
 					moveInformation.getCards(Player.REARHAND));
 			JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(
-					new DealCardEvent(dealtCards, new CardList()));
+					new CardDealEvent(dealtCards, new CardList()));
 			setGameState(tableName, GameState.BIDDING);
 			break;
 		case BID:
