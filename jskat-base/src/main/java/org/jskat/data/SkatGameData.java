@@ -129,11 +129,6 @@ public class SkatGameData {
 	private Player declarer;
 
 	/**
-	 * Dealer of the cards
-	 */
-	private Player dealer;
-
-	/**
 	 * Points the player made during the game
 	 */
 	private final Map<Player, Integer> playerPoints = new HashMap<Player, Integer>();
@@ -1017,25 +1012,6 @@ public class SkatGameData {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Gets the dealing player
-	 * 
-	 * @return Dealing player
-	 */
-	public Player getDealer() {
-		return this.dealer;
-	}
-
-	/**
-	 * Sets the dealer player
-	 * 
-	 * @param newDealer
-	 *            Dealing player
-	 */
-	public void setDealer(final Player newDealer) {
-		this.dealer = newDealer;
 	}
 
 	/**

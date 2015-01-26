@@ -41,18 +41,6 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setPositions(
-			@SuppressWarnings("unused") final String tableName,
-			@SuppressWarnings("unused") final Player leftPosition,
-			@SuppressWarnings("unused") final Player rightPosition,
-			@SuppressWarnings("unused") final Player playerPosition) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void showISSLogin() {
 		// empty method by intent
 	}
@@ -274,16 +262,6 @@ public class NullView implements JSkatView {
 	@Override
 	public void showCardNotAllowedMessage(
 			@SuppressWarnings("unused") final Card card) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setGameNumber(
-			@SuppressWarnings("unused") final String tableName,
-			@SuppressWarnings("unused") final int gameNumber) {
 		// empty method by intent
 	}
 

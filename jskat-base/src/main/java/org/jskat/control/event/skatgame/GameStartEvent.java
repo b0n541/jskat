@@ -23,19 +23,25 @@ import org.jskat.util.Player;
  */
 public final class GameStartEvent implements SkatGameEvent {
 
-	public final Player dealer;
+	public final Integer gameNo;
+	public final Player leftPlayerPosition;
+	public final Player rightPlayerPosition;
+	public final Player userPosition;
 
-	public GameStartEvent(Player dealer) {
-		this.dealer = dealer;
+	public GameStartEvent(Integer gameNo,
+			Player leftPlayerPosition, Player rightPlayerPosition,
+			Player userPosition) {
+		this.gameNo = gameNo;
+		this.leftPlayerPosition = leftPlayerPosition;
+		this.rightPlayerPosition = rightPlayerPosition;
+		this.userPosition = userPosition;
 	}
 
 	@Override
-	public final void processForward(SkatGameData data) {
-		data.setDealer(dealer);
+	public void processForward(SkatGameData data) {
 	}
 
 	@Override
-	public final void processBackward(SkatGameData data) {
-		data.setDealer(null);
+	public void processBackward(SkatGameData data) {
 	}
 }

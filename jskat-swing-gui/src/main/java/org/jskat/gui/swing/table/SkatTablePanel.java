@@ -44,10 +44,11 @@ import org.jskat.control.JSkatEventBus;
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.skatgame.AbstractBidEvent;
 import org.jskat.control.event.skatgame.BidEvent;
-import org.jskat.control.event.skatgame.ContraEvent;
 import org.jskat.control.event.skatgame.CardDealEvent;
+import org.jskat.control.event.skatgame.ContraEvent;
 import org.jskat.control.event.skatgame.GameAnnouncementEvent;
 import org.jskat.control.event.skatgame.GameFinishEvent;
+import org.jskat.control.event.skatgame.GameStartEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
 import org.jskat.control.event.skatgame.PassBidEvent;
 import org.jskat.control.event.skatgame.ReEvent;
@@ -377,21 +378,23 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param playerPosition
 	 *            Player position
 	 */
-	public void setPositions(final Player leftPosition,
-			final Player rightPosition, final Player playerPosition) {
+	@Subscribe
+	public void setPlayerPositionsOn(final GameStartEvent event) {
 
-		this.leftOpponentPanel.setPosition(leftPosition);
-		this.rightOpponentPanel.setPosition(rightPosition);
-		this.userPanel.setPosition(playerPosition);
+		this.gameInfoPanel.setGameNumber(event.gameNo);
 
-		this.biddingPanel.setUserPosition(playerPosition);
-		this.trickPanel.setUserPosition(playerPosition);
-		this.lastTrickPanel.setUserPosition(playerPosition);
-		this.gameOverPanel.setUserPosition(playerPosition);
+		this.leftOpponentPanel.setPosition(event.leftPlayerPosition);
+		this.rightOpponentPanel.setPosition(event.rightPlayerPosition);
+		this.userPanel.setPosition(event.userPosition);
+
+		this.biddingPanel.setUserPosition(event.userPosition);
+		this.trickPanel.setUserPosition(event.userPosition);
+		this.lastTrickPanel.setUserPosition(event.userPosition);
+		this.gameOverPanel.setUserPosition(event.userPosition);
 
 		// FIXME (jansch 09.11.2010) code duplication with
 		// BiddingPanel.setPlayerPositions()
-		switch (playerPosition) {
+		switch (event.userPosition) {
 		case FOREHAND:
 			this.foreHand = this.userPanel;
 			this.middleHand = this.leftOpponentPanel;
@@ -1056,16 +1059,6 @@ public class SkatTablePanel extends AbstractTabPanel {
 	public void setTrickNumber(final int trickNumber) {
 
 		this.gameInfoPanel.setTrickNumber(trickNumber);
-	}
-
-	/**
-	 * Sets the game number
-	 * 
-	 * @param gameNumber
-	 *            Game number
-	 */
-	public void setGameNumber(final int gameNumber) {
-		this.gameInfoPanel.setGameNumber(gameNumber);
 	}
 
 	/**

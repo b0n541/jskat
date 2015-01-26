@@ -99,7 +99,7 @@ class SkatSchiebenPanel extends JPanel {
 						JOptionPane
 								.showMessageDialog(
 										SkatSchiebenPanel.this,
-										SkatSchiebenPanel.this.strings.getString("invalid_number_of_cards_in_skat"), //$NON-NLS-1$
+										SkatSchiebenPanel.this.strings.getString("invalid_number_of_cards_in_skat_message"), //$NON-NLS-1$
 										SkatSchiebenPanel.this.strings.getString("invalid_number_of_cards_in_skat_title"), //$NON-NLS-1$
 										JOptionPane.ERROR_MESSAGE);
 						return null;
@@ -112,7 +112,7 @@ class SkatSchiebenPanel extends JPanel {
 										SkatSchiebenPanel.this,
 										// FIXME: should not be checked in GUI
 										// code
-										SkatSchiebenPanel.this.strings.getString("no_jacks_allowed_in_schieberamsch_skat"),
+										SkatSchiebenPanel.this.strings.getString("no_jacks_allowed_in_schieberamsch_skat_message"),
 										SkatSchiebenPanel.this.strings.getString("no_jacks_allowed_in_schieberamsch_skat_title"),
 										JOptionPane.ERROR_MESSAGE);
 						return null;

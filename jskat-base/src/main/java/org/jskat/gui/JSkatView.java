@@ -97,21 +97,6 @@ public interface JSkatView {
 	public void showCardNotAllowedMessage(Card card);
 
 	/**
-	 * Sets the player positions for a table
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param leftPosition
-	 *            Player in upper left position
-	 * @param rightPosition
-	 *            Player in upper right position
-	 * @param playerPosition
-	 *            Player in lower position
-	 */
-	public void setPositions(String tableName, Player leftPosition,
-			Player rightPosition, Player playerPosition);
-
-	/**
 	 * Set a new game state
 	 * 
 	 * @param tableName
@@ -316,16 +301,6 @@ public interface JSkatView {
 	 * @return TRUE, if the user accepted the invitation
 	 */
 	public boolean showISSTableInvitation(String invitor, String tableName);
-
-	/**
-	 * Sets the game number of the current game
-	 * 
-	 * @param tableName
-	 *            Table name
-	 * @param gameNumber
-	 *            Game number
-	 */
-	public void setGameNumber(String tableName, int gameNumber);
 
 	/**
 	 * Sets the player names of a table

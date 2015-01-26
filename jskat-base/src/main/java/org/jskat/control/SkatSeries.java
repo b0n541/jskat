@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.jskat.control.event.skatgame.GameStartEvent;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData;
 import org.jskat.data.SkatSeriesData.SeriesState;
@@ -159,7 +160,6 @@ public class SkatSeries extends JSkatThread {
 				}
 
 				gameNumber++;
-				view.setGameNumber(data.getTableName(), gameNumber);
 
 				if (onlyPlayRamsch) {
 					currSkatGame = new SkatGame(data.getTableName(),
@@ -174,7 +174,10 @@ public class SkatSeries extends JSkatThread {
 							player.get(Player.REARHAND));
 				}
 
-				setViewPositions();
+				JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(
+						new GameStartEvent(gameNumber, data.getBottomPlayer()
+								.getLeftNeighbor(), data.getBottomPlayer()
+								.getRightNeighbor(), data.getBottomPlayer()));
 
 				currSkatGame.setView(view);
 				currSkatGame.setMaxSleep(maxSleep);
@@ -219,27 +222,6 @@ public class SkatSeries extends JSkatThread {
 		view.setSeriesState(data.getTableName(), SeriesState.SERIES_FINISHED);
 
 		log.debug(data.getState().name());
-	}
-
-	private void setViewPositions() {
-
-		String tableName = data.getTableName();
-
-		if (Player.FOREHAND.equals(data.getBottomPlayer())) {
-
-			view.setPositions(tableName, Player.MIDDLEHAND, Player.REARHAND,
-					Player.FOREHAND);
-
-		} else if (Player.MIDDLEHAND.equals(data.getBottomPlayer())) {
-
-			view.setPositions(tableName, Player.REARHAND, Player.FOREHAND,
-					Player.MIDDLEHAND);
-
-		} else {
-
-			view.setPositions(tableName, Player.FOREHAND, Player.MIDDLEHAND,
-					Player.REARHAND);
-		}
 	}
 
 	private boolean isHumanPlayerInvolved() {

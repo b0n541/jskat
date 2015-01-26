@@ -106,13 +106,6 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void setPositions(final String tableName, final Player leftPosition,
-			final Player rightPosition, final Player playerPosition) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void setGameState(final String tableName, final GameState state) {
 		// TODO Auto-generated method stub
 
@@ -220,12 +213,6 @@ public class UnitTestView implements JSkatView {
 			final String tableName) {
 		// TODO Auto-generated method stub
 		return false;
-	}
-
-	@Override
-	public void setGameNumber(final String tableName, final int gameNumber) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

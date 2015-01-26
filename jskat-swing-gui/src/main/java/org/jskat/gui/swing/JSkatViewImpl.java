@@ -63,6 +63,7 @@ import org.jskat.control.event.nntraining.TrainingResultEvent;
 import org.jskat.control.event.skatgame.BidEvent;
 import org.jskat.control.event.skatgame.CardDealEvent;
 import org.jskat.control.event.skatgame.GameAnnouncementEvent;
+import org.jskat.control.event.skatgame.GameStartEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
 import org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent;
 import org.jskat.control.event.skatgame.PassBidEvent;
@@ -439,7 +440,7 @@ public class JSkatViewImpl implements JSkatView {
 		if (JSkatViewType.TRAINING_TABLE.equals(event.tableType)) {
 			return;
 		}
-		
+
 		String tableName = event.tableName;
 		String tabTitle = null;
 
@@ -538,17 +539,6 @@ public class JSkatViewImpl implements JSkatView {
 
 		JOptionPane.showMessageDialog(this.mainFrame, message, title,
 				JOptionPane.ERROR_MESSAGE);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setPositions(final String tableName, final Player leftPosition,
-			final Player rightPosition, final Player playerPosition) {
-
-		this.tables.get(tableName).setPositions(leftPosition, rightPosition,
-				playerPosition);
 	}
 
 	/**
@@ -799,7 +789,9 @@ public class JSkatViewImpl implements JSkatView {
 		log.debug("Updating ISS table: " + tableName + " " + leftOpponent + " " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				+ rightOpponent + " " + player); //$NON-NLS-1$
 
-		setPositions(tableName, leftOpponent, rightOpponent, player);
+		JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(
+				new GameStartEvent(status.getGameNo(), leftOpponent,
+						rightOpponent, player));
 
 		// FIXME (jansch 09.11.2010) this is only done for ISS games
 		final SkatTablePanel table = this.tables.get(tableName);
@@ -1116,15 +1108,6 @@ public class JSkatViewImpl implements JSkatView {
 		this.trainingOverview.addTrainingResult(event.gameType, event.episodes,
 				event.totalGamesWon, event.avgNetworkErrorDeclarer,
 				event.avgNetworkErrorOpponents);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void setGameNumber(final String tableName, final int gameNumber) {
-
-		this.tables.get(tableName).setGameNumber(gameNumber);
 	}
 
 	/**
