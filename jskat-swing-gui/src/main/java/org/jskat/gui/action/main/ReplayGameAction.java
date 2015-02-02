@@ -25,21 +25,22 @@ import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**
- * Implements the action for continuing a local skat series
+ * Implements the action for replaying a game
  */
-public class ContinueSkatSeriesAction extends AbstractJSkatAction {
+public class ReplayGameAction extends AbstractJSkatAction {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see AbstractJSkatAction#AbstractJSkatAction()
 	 */
-	public ContinueSkatSeriesAction() {
+	public ReplayGameAction() {
 
-		putValue(NAME, AbstractJSkatAction.strings.getString("continue_series")); //$NON-NLS-1$
+		putValue(NAME, AbstractJSkatAction.strings.getString("replay_game")); //$NON-NLS-1$
 		putValue(SHORT_DESCRIPTION,
-				AbstractJSkatAction.strings.getString("continue_series_tooltip")); //$NON-NLS-1$
+				AbstractJSkatAction.strings.getString("replay_game_tooltip")); //$NON-NLS-1$
 
+		// TODO: needs a play icon like a music player
 		setIcon(Icon.PLAY);
 	}
 

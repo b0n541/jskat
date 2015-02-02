@@ -128,6 +128,7 @@ import org.jskat.gui.action.main.LoadNeuralNetworksAction;
 import org.jskat.gui.action.main.LoadSeriesAction;
 import org.jskat.gui.action.main.PreferencesAction;
 import org.jskat.gui.action.main.PutCardIntoSkatAction;
+import org.jskat.gui.action.main.ReplayGameAction;
 import org.jskat.gui.action.main.ResetNeuralNetworksAction;
 import org.jskat.gui.action.main.SaveNeuralNetworksAction;
 import org.jskat.gui.action.main.SaveSeriesAction;
@@ -223,6 +224,7 @@ public class JSkatViewImpl implements JSkatView {
 		actions.put(JSkatAction.START_LOCAL_SERIES, new StartSkatSeriesAction());
 		actions.put(JSkatAction.CONTINUE_LOCAL_SERIES,
 				new ContinueSkatSeriesAction());
+		actions.put(JSkatAction.REPLAY_GAME, new ReplayGameAction());
 		// ISS actions
 		actions.put(JSkatAction.REGISTER_ON_ISS, new RegisterAction());
 		actions.put(JSkatAction.OPEN_ISS_HOMEPAGE, new OpenHomepageAction());

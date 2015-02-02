@@ -71,6 +71,10 @@ public enum JSkatAction {
 	 * Continues a local skat series
 	 */
 	CONTINUE_LOCAL_SERIES,
+	/**
+	 * Replays a game
+	 */
+	REPLAY_GAME,
 	// ----------------------------------------------------------------------------//
 	// -- Human player actions
 	// ----------------------------------------------------------------------------//
