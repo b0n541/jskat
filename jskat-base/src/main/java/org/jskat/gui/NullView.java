@@ -67,14 +67,6 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void clearTable(@SuppressWarnings("unused") final String tableName) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void showMessage(@SuppressWarnings("unused") final String title,
 			@SuppressWarnings("unused") final String message) {
 		// empty method by intent

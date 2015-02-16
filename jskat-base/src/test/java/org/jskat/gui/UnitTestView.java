@@ -118,12 +118,6 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void clearTable(final String tableName) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void setBidValueToMake(final String tableName, final int bidValue) {
 		// TODO Auto-generated method stub
 

@@ -380,7 +380,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 *            Player position
 	 */
 	@Subscribe
-	public void setPlayerPositionsOn(final GameStartEvent event) {
+	public void resetTableOn(final GameStartEvent event) {
 
 		this.gameInfoPanel.setGameNumber(event.gameNo);
 
@@ -412,6 +412,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 			this.rearHand = this.userPanel;
 			break;
 		}
+
+		clearTable();
 	}
 
 	/**

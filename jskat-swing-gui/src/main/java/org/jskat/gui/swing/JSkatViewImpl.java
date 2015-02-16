@@ -151,6 +151,7 @@ import org.jskat.gui.swing.table.SkatSeriesStartDialog;
 import org.jskat.gui.swing.table.SkatTablePanel;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
+import org.jskat.util.GameVariant;
 import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.Player;
 import org.jskat.util.SkatConstants;
@@ -635,15 +636,6 @@ public class JSkatViewImpl implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void clearTable(final String tableName) {
-
-		this.tables.get(tableName).clearTable();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public void setBidValueToMake(final String tableName, final int bidValue) {
 
 		this.tables.get(tableName).setBidValueToMake(bidValue);
@@ -792,8 +784,8 @@ public class JSkatViewImpl implements JSkatView {
 				+ rightOpponent + " " + player); //$NON-NLS-1$
 
 		JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(
-				new GameStartEvent(status.getGameNo(), leftOpponent,
-						rightOpponent, player));
+				new GameStartEvent(status.getGameNo(), GameVariant.STANDARD,
+						leftOpponent, rightOpponent, player));
 
 		// FIXME (jansch 09.11.2010) this is only done for ISS games
 		final SkatTablePanel table = this.tables.get(tableName);

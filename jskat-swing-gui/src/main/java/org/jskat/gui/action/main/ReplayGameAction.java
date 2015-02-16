@@ -20,7 +20,9 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.AbstractAction;
 
-import org.jskat.control.JSkatMaster;
+import org.jskat.control.JSkatEventBus;
+import org.jskat.control.command.table.ReplayGameCommand;
+import org.jskat.data.JSkatApplicationData;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
@@ -49,7 +51,8 @@ public class ReplayGameAction extends AbstractJSkatAction {
 	 */
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-
-		JSkatMaster.INSTANCE.resumeSkatSeries();
+		JSkatEventBus.TABLE_EVENT_BUSSES.get(
+				JSkatApplicationData.INSTANCE.getActiveTable()).post(
+				new ReplayGameCommand());
 	}
 }

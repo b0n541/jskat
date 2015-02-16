@@ -117,14 +117,6 @@ public interface JSkatView {
 	public void setSeriesState(String tableName, SeriesState state);
 
 	/**
-	 * Clears a complete table
-	 * 
-	 * @param tableName
-	 *            Table name
-	 */
-	public void clearTable(String tableName);
-
-	/**
 	 * Sets the bid value to make
 	 * 
 	 * @param tableName

@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.jskat.control.command.table.ReplayGameCommand;
 import org.jskat.control.event.skatgame.GameStartEvent;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData;
@@ -30,6 +31,8 @@ import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.eventbus.Subscribe;
 
 /**
  * Controls a series of skat games
@@ -45,6 +48,7 @@ public class SkatSeries extends JSkatThread {
 	private boolean onlyPlayRamsch = false;
 	private final Map<Player, JSkatPlayer> player;
 	private SkatGame currSkatGame;
+	private SkatGameReplayer currReplayGame;
 
 	private JSkatView view;
 
@@ -62,8 +66,17 @@ public class SkatSeries extends JSkatThread {
 
 		view = JSkatMaster.INSTANCE.getView();
 
+		JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(this);
+
 		setName("SkatSeries on table " + tableName); //$NON-NLS-1$
 		player = new HashMap<Player, JSkatPlayer>();
+	}
+
+	@Subscribe
+	public void startReplayGameOn(ReplayGameCommand command) {
+
+		currReplayGame = new SkatGameReplayer(data.getTableName(),
+				currSkatGame.getGameMoves());
 	}
 
 	/**
@@ -115,7 +128,7 @@ public class SkatSeries extends JSkatThread {
 	 */
 	public boolean isRunning() {
 
-		return data.getState() == SeriesState.RUNNING;
+		return SeriesState.RUNNING.equals(data.getState());
 	}
 
 	/**
@@ -161,23 +174,21 @@ public class SkatSeries extends JSkatThread {
 
 				gameNumber++;
 
+				GameVariant gameVariant = GameVariant.STANDARD;
 				if (onlyPlayRamsch) {
-					currSkatGame = new SkatGame(data.getTableName(),
-							GameVariant.FORCED_RAMSCH,
-							player.get(Player.FOREHAND),
-							player.get(Player.MIDDLEHAND),
-							player.get(Player.REARHAND));
-				} else {
-					currSkatGame = new SkatGame(data.getTableName(),
-							GameVariant.STANDARD, player.get(Player.FOREHAND),
-							player.get(Player.MIDDLEHAND),
-							player.get(Player.REARHAND));
+					gameVariant = GameVariant.FORCED_RAMSCH;
 				}
 
+				currSkatGame = new SkatGame(data.getTableName(), gameVariant,
+						player.get(Player.FOREHAND),
+						player.get(Player.MIDDLEHAND),
+						player.get(Player.REARHAND));
+
 				JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(
-						new GameStartEvent(gameNumber, data.getBottomPlayer()
-								.getLeftNeighbor(), data.getBottomPlayer()
-								.getRightNeighbor(), data.getBottomPlayer()));
+						new GameStartEvent(gameNumber, gameVariant, data
+								.getBottomPlayer().getLeftNeighbor(), data
+								.getBottomPlayer().getRightNeighbor(), data
+								.getBottomPlayer()));
 
 				currSkatGame.setView(view);
 				currSkatGame.setMaxSleep(maxSleep);

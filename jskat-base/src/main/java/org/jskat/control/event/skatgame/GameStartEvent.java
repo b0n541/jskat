@@ -16,6 +16,7 @@
 package org.jskat.control.event.skatgame;
 
 import org.jskat.data.SkatGameData;
+import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
 
 /**
@@ -24,14 +25,16 @@ import org.jskat.util.Player;
 public final class GameStartEvent implements SkatGameEvent {
 
 	public final Integer gameNo;
+	public final GameVariant gameVariant;
 	public final Player leftPlayerPosition;
 	public final Player rightPlayerPosition;
 	public final Player userPosition;
 
-	public GameStartEvent(Integer gameNo,
+	public GameStartEvent(Integer gameNo, GameVariant gameVariant,
 			Player leftPlayerPosition, Player rightPlayerPosition,
 			Player userPosition) {
 		this.gameNo = gameNo;
+		this.gameVariant = gameVariant;
 		this.leftPlayerPosition = leftPlayerPosition;
 		this.rightPlayerPosition = rightPlayerPosition;
 		this.userPosition = userPosition;

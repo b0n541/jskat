@@ -38,7 +38,7 @@ import com.google.common.eventbus.Subscribe;
  */
 public class JSkatEventBus {
 
-	private final static Logger log = LoggerFactory
+	private final static Logger LOG = LoggerFactory
 			.getLogger(JSkatEventBus.class);
 
 	private final EventBus mainEventBus;
@@ -61,7 +61,7 @@ public class JSkatEventBus {
 
 	@Subscribe
 	public void on(DeadEvent event) {
-		log.error("Recieved dead event: " + event.getEvent());
+		LOG.error("Recieved dead event: " + event.getEvent());
 	}
 
 	@Subscribe
@@ -87,12 +87,16 @@ public class JSkatEventBus {
 
 	@Subscribe
 	public void dispatchTableEventOn(TableGameMoveEvent event) {
+		LOG.info("Forwarding game event " + event.gameEvent + " to table "
+				+ event.tableName);
 		JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(
 				event.gameEvent);
 	}
 
 	@Subscribe
 	public void dispatchTableCommandOn(ShowCardsCommand command) {
+		LOG.info("Forwarding command " + command + " to table "
+			+ command.tableName);
 		JSkatEventBus.TABLE_EVENT_BUSSES.get(command.tableName).post(command);
 	}
 }

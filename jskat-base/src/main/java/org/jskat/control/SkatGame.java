@@ -16,12 +16,13 @@
 package org.jskat.control;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.skatgame.BidEvent;
-import org.jskat.control.event.skatgame.ContraEvent;
 import org.jskat.control.event.skatgame.CardDealEvent;
+import org.jskat.control.event.skatgame.ContraEvent;
 import org.jskat.control.event.skatgame.GameAnnouncementEvent;
 import org.jskat.control.event.skatgame.GameFinishEvent;
 import org.jskat.control.event.skatgame.HoldBidEvent;
@@ -121,7 +122,6 @@ public class SkatGame extends JSkatThread {
 	@Override
 	public void run() {
 
-		this.view.clearTable(this.tableName);
 		this.view.setGameState(this.tableName, this.data.getGameState());
 
 		do {
@@ -1129,11 +1129,7 @@ public class SkatGame extends JSkatThread {
 
 			this.view.setGameState(this.tableName, newState);
 
-			if (newState == GameState.GAME_START) {
-
-				this.view.clearTable(this.tableName);
-
-			} else if (newState == GameState.GAME_OVER) {
+			if (newState == GameState.GAME_OVER) {
 
 				// FIXME: merge this event with the command
 				JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName,
@@ -1205,6 +1201,15 @@ public class SkatGame extends JSkatThread {
 	public SkatGameResult getGameResult() {
 
 		return this.data.getGameResult();
+	}
+
+	/**
+	 * Gets the game moves.
+	 * 
+	 * @return List of game moves
+	 */
+	public List<SkatGameEvent> getGameMoves() {
+		return this.data.getGameMoves();
 	}
 
 	/**
