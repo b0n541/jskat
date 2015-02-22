@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.jskat</groupId>
 		<artifactId>jskat-multimodule</artifactId>
-		<version>0.14.2</version>
+		<version>0.14.3</version>
 	</parent>
 
 	<artifactId>jskat-base</artifactId>

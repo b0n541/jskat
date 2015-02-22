@@ -43,114 +43,114 @@ import org.slf4j.LoggerFactory;
  */
 public final class JSkat {
 
-    private static final Logger LOG = LoggerFactory.getLogger(JSkat.class);
+	private static final Logger LOG = LoggerFactory.getLogger(JSkat.class);
 
-    private static final String VERSION = "0.14.2"; //$NON-NLS-1$
+	private static final String VERSION = "0.14.3"; //$NON-NLS-1$
 
-    /**
-     * Main method
-     *
-     * @param args
-     *            Command line arguments
-     */
-    public static void main(final String[] args) {
+	/**
+	 * Main method
+	 *
+	 * @param args
+	 *            Command line arguments
+	 */
+	public static void main(final String[] args) {
 
-        PropertyConfigurator.configure(ClassLoader
-                .getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
-        LOG.debug("Welcome to JSkat!"); //$NON-NLS-1$
+		PropertyConfigurator.configure(ClassLoader
+				.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
+		LOG.debug("Welcome to JSkat!"); //$NON-NLS-1$
 
-        initializeOptions();
+		initializeOptions();
 
-        JSkatResourceBundle.instance();
+		JSkatResourceBundle.instance();
 
-        trySettingNimbusLookAndFeel();
+		trySettingNimbusLookAndFeel();
 
-        final SplashScreen splash = SplashScreen.getSplashScreen();
-        Graphics2D g = null;
-        if (splash == null) {
-            LOG.error("SplashScreen not found. Please try to set the vm parameter: -splash:src/main/resources/org/jskat/gui/img/gui/splash.png");
-        } else {
-            g = splash.createGraphics();
-        }
+		final SplashScreen splash = SplashScreen.getSplashScreen();
+		Graphics2D g = null;
+		if (splash == null) {
+			LOG.error("SplashScreen not found. Please try to set the vm parameter: -splash:src/main/resources/org/jskat/gui/img/gui/splash.png");
+		} else {
+			g = splash.createGraphics();
+		}
 
-        JSkatMaster jskat = null;
-        JSkatViewImpl jskatView = null;
-        for (int i = 0; i < 3; i++) {
-            if (splash != null && g != null) {
-                renderSplashFrame(g, i);
-                splash.update();
-            }
-            switch (i) {
-            case 0:
-                jskat = JSkatMaster.instance();
-                break;
-            case 1:
-                JSkatGraphicRepository.instance();
-                break;
-            case 2:
-                jskatView = new JSkatViewImpl();
-                jskat.setView(jskatView);
-                break;
-            }
-        }
+		JSkatMaster jskat = null;
+		JSkatViewImpl jskatView = null;
+		for (int i = 0; i < 3; i++) {
+			if (splash != null && g != null) {
+				renderSplashFrame(g, i);
+				splash.update();
+			}
+			switch (i) {
+			case 0:
+				jskat = JSkatMaster.instance();
+				break;
+			case 1:
+				JSkatGraphicRepository.instance();
+				break;
+			case 2:
+				jskatView = new JSkatViewImpl();
+				jskat.setView(jskatView);
+				break;
+			}
+		}
 
-        if (splash != null && g != null) {
-            splash.close();
-        }
+		if (splash != null && g != null) {
+			splash.close();
+		}
 
-        jskatView.setVisible();
+		jskatView.setVisible();
 
-        if (JSkatOptions.instance().getBoolean(Option.SHOW_TIPS_AT_START_UP)) {
-            jskat.showWelcomeDialog();
-        }
+		if (JSkatOptions.instance().getBoolean(Option.SHOW_TIPS_AT_START_UP)) {
+			jskat.showWelcomeDialog();
+		}
 
-        if (JSkatOptions.instance().getBoolean(
-                Option.CHECK_FOR_NEW_VERSION_AT_START_UP)) {
-            jskat.checkJSkatVersion(getVersion(),
-                    VersionChecker.getLatestVersion());
-        }
-    }
+		if (JSkatOptions.instance().getBoolean(
+				Option.CHECK_FOR_NEW_VERSION_AT_START_UP)) {
+			jskat.checkJSkatVersion(getVersion(),
+					VersionChecker.getLatestVersion());
+		}
+	}
 
-    /**
-     * Gets the version of JSkat.
-     *
-     * @return Version of JSkat
-     */
-    public static String getVersion() {
-        return VERSION;
-    }
+	/**
+	 * Gets the version of JSkat.
+	 *
+	 * @return Version of JSkat
+	 */
+	public static String getVersion() {
+		return VERSION;
+	}
 
-    private static void renderSplashFrame(Graphics2D g, int frame) {
-        final JSkatResourceBundle strings = JSkatResourceBundle.instance();
-        final String[] frameStrings = {
-                strings.getString("splash_init_application"),
-                strings.getString("splash_load_card_sets"),
-                strings.getString("splash_look_for_ai_players") };
-        g.setComposite(AlphaComposite.Clear);
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-        g.fillRect(10, 180, 200, 40);
-        g.setPaintMode();
-        g.setColor(Color.BLACK);
-        g.drawString(frameStrings[frame] + "...", 10, 190);
-    }
+	private static void renderSplashFrame(Graphics2D g, int frame) {
+		final JSkatResourceBundle strings = JSkatResourceBundle.instance();
+		final String[] frameStrings = {
+				strings.getString("splash_init_application"),
+				strings.getString("splash_load_card_sets"),
+				strings.getString("splash_look_for_ai_players") };
+		g.setComposite(AlphaComposite.Clear);
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		g.fillRect(10, 180, 200, 40);
+		g.setPaintMode();
+		g.setColor(Color.BLACK);
+		g.drawString(frameStrings[frame] + "...", 10, 190);
+	}
 
-    private static void initializeOptions() {
-        JSkatOptions.instance(new DesktopSavePathResolver());
-    }
+	private static void initializeOptions() {
+		JSkatOptions.instance(new DesktopSavePathResolver());
+	}
 
-    private static void trySettingNimbusLookAndFeel() {
-        for (LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
-            if ("Nimbus".equals(laf.getName())) { //$NON-NLS-1$
-                LookAndFeelSetter.setLookAndFeel();
-            }
-        }
-    }
+	private static void trySettingNimbusLookAndFeel() {
+		for (LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
+			if ("Nimbus".equals(laf.getName())) { //$NON-NLS-1$
+				LookAndFeelSetter.setLookAndFeel();
+			}
+		}
+	}
 
-    /**
-     * Private constructor to prevent instatiations of this class.
-     */
-    private JSkat() {
+	/**
+	 * Private constructor to prevent instatiations of this class.
+	 */
+	private JSkat() {
 
-    }
+	}
 }
