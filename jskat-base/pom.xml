@@ -15,12 +15,12 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.7.7</version>
+			<version>1.7.10</version>
 		</dependency>
 		<dependency>
 			<groupId>org.encog</groupId>
 			<artifactId>encog-core</artifactId>
-			<version>3.2.0</version>
+			<version>3.3.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
@@ -30,7 +30,7 @@
 		<dependency>
 			<groupId>org.reflections</groupId>
 			<artifactId>reflections</artifactId>
-			<version>0.9.8</version>
+			<version>0.9.9</version>
 		</dependency>
 
 		<!-- Test -->
@@ -43,7 +43,7 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-all</artifactId>
-			<version>1.9.5</version>
+			<version>1.10.19</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
