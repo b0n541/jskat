@@ -117,8 +117,6 @@ public class SkatTablePanel extends AbstractTabPanel {
 	/**
 	 * Panel for a skat table.
 	 * 
-	 * @param view
-	 *            View
 	 * @param tableName
 	 *            Table name
 	 * @param actions
@@ -371,12 +369,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	/**
 	 * Sets player positions
 	 * 
-	 * @param leftPosition
-	 *            Upper left position
-	 * @param rightPosition
-	 *            Upper right position
-	 * @param playerPosition
-	 *            Player position
+	 * @param event
+	 *            Game start event
 	 */
 	@Subscribe
 	public void setPlayerPositionsOn(final GameStartEvent event) {
@@ -416,10 +410,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	/**
 	 * Adds cards to a player
 	 * 
-	 * @param player
-	 *            Player
-	 * @param cards
-	 *            Cards
+	 * @param event
+	 *            Card deal event
 	 */
 	@Subscribe
 	public void setDealtCardsOn(final CardDealEvent event) {
@@ -440,7 +432,10 @@ public class SkatTablePanel extends AbstractTabPanel {
 	}
 
 	/**
-	 * Clears trick cards
+	 * Clears trick cards.
+	 * 
+	 * @param event
+	 *            Trick completed event
 	 */
 	@Subscribe
 	public void clearTrickCardsAndSetLastTrickOn(final TrickCompletedEvent event) {
@@ -526,10 +521,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	/**
 	 * Sets the game announcement
 	 * 
-	 * @param player
-	 *            Player
-	 * @param gameAnnouncement
-	 *            Game announcement
+	 * @param event
+	 *            Game announcement event
 	 */
 	@Subscribe
 	public void setGameAnnouncementOn(final GameAnnouncementEvent event) {
@@ -648,8 +641,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	/**
 	 * Adds a new game result
 	 * 
-	 * @param summary
-	 *            Game summary
+	 * @param event
+	 *            Game finish event
 	 */
 	@Subscribe
 	public void addGameResultOn(final GameFinishEvent event) {
@@ -720,6 +713,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	/**
 	 * Sets the bid value for a player.
+	 * 
+	 * @param event
+	 *            Hold bid event
 	 */
 	@Subscribe
 	public void setBidValueOn(final HoldBidEvent event) {
@@ -825,7 +821,10 @@ public class SkatTablePanel extends AbstractTabPanel {
 	}
 
 	/**
-	 * Clears the skat list
+	 * Clears the skat list.
+	 * 
+	 * @param event
+	 *            Skat series started event
 	 */
 	@Subscribe
 	public void clearSkatListOn(final SkatSeriesStartedEvent event) {
@@ -967,8 +966,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	/**
 	 * Sets the active player
 	 * 
-	 * @param player
-	 *            Active player
+	 * @param event
+	 *            Active player changed event
 	 */
 	@Subscribe
 	public void setActivePlayerOn(final ActivePlayerChangedEvent event) {
@@ -994,8 +993,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	/**
 	 * Sets passing of a player
 	 * 
-	 * @param player
-	 *            Player
+	 * @param event
+	 *            Pass bid event
 	 */
 	@Subscribe
 	public void setPassOn(final PassBidEvent event) {
@@ -1160,8 +1159,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	/**
 	 * Shows cards of all players
 	 * 
-	 * @param cards
-	 *            Cards of all players
+	 * @param command
+	 *            Show cards command
 	 */
 	@Subscribe
 	public void showCardsOn(final ShowCardsCommand command) {

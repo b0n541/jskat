@@ -82,7 +82,7 @@ public class IssController {
 	/**
 	 * Constructor
 	 * 
-	 * @param newJSkat
+	 * @param jskatMaster
 	 *            JSkat master
 	 */
 	public IssController(JSkatMaster jskatMaster) {
@@ -105,16 +105,22 @@ public class IssController {
 	}
 
 	/**
-	 * Disconnects from ISS
+	 * Disconnects from ISS.
+	 * 
+	 * @param command
+	 *            ISS disconnect command
 	 */
 	@Subscribe
-	public void disconnectFromIssOn(final IssDisconnectCommand commant) {
+	public void disconnectFromIssOn(final IssDisconnectCommand command) {
 
 		closeConnectionIfOpen();
 	}
 
 	/**
-	 * Connection to ISS was lost
+	 * Connection to ISS was lost.
+	 * 
+	 * @param event
+	 *            ISS disconnected event
 	 */
 	@Subscribe
 	public void closeConnectionOn(final IssDisconnectedEvent event) {
@@ -653,7 +659,7 @@ public class IssController {
 	}
 
 	/**
-	 * Invites a player on ISS to play at a table on ISS
+	 * Invites a player on ISS to play at a table on ISS.
 	 * 
 	 * @param tableName
 	 *            Table name
@@ -667,11 +673,11 @@ public class IssController {
 	/**
 	 * Sends ready to play signal to ISS
 	 * 
-	 * @param tableName
-	 *            Table name
+	 * @param command
+	 *            ISS ready to play command
 	 */
 	@Subscribe
-	public void sendReadyToPlayOn(final IssReadyToPlayCommand event) {
+	public void sendReadyToPlayOn(final IssReadyToPlayCommand command) {
 
 		sendToIss(this.issMsg.getReadyMessage(this.appData.getActiveTable()));
 	}
@@ -679,11 +685,12 @@ public class IssController {
 	/**
 	 * Send talk enabled signal to ISS
 	 * 
-	 * @param tableName
-	 *            Table name
+	 * @param command
+	 *            ISS toggle talk enabled command
 	 */
 	@Subscribe
-	public void sendToggleTalkEnabledOn(final IssToggleTalkEnabledCommand event) {
+	public void sendToggleTalkEnabledOn(
+			final IssToggleTalkEnabledCommand command) {
 
 		sendToIss(this.issMsg.getTalkEnabledMessage(this.appData
 				.getActiveTable()));
@@ -692,11 +699,11 @@ public class IssController {
 	/**
 	 * Sends a resign signal to ISS
 	 * 
-	 * @param tableName
-	 *            Table name
+	 * @param command
+	 *            ISS resign command
 	 */
 	@Subscribe
-	public void sendResignOn(final IssResignCommand event) {
+	public void sendResignOn(final IssResignCommand command) {
 
 		sendToIss(this.issMsg.getResignMessage(this.appData.getActiveTable()));
 	}
@@ -704,11 +711,11 @@ public class IssController {
 	/**
 	 * Sends a show cards signal to ISS
 	 * 
-	 * @param tableName
-	 *            Table name
+	 * @param command
+	 *            ISS show cards command
 	 */
 	@Subscribe
-	public void sendShowCardsOn(final IssShowCardsCommand event) {
+	public void sendShowCardsOn(final IssShowCardsCommand command) {
 
 		sendToIss(this.issMsg
 				.getShowCardsMessage(this.appData.getActiveTable()));
@@ -717,8 +724,8 @@ public class IssController {
 	/**
 	 * Send table seat change singal to ISS
 	 * 
-	 * @param tableName
-	 *            Table name
+	 * @param command
+	 *            ISS table seat change command
 	 */
 	@Subscribe
 	public void sendTableSeatChangeOn(final IssTableSeatChangeCommand command) {

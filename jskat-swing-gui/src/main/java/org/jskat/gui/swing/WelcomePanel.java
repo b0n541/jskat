@@ -24,7 +24,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.jskat.gui.JSkatView;
 import org.jskat.gui.action.JSkatAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +37,7 @@ public class WelcomePanel extends AbstractTabPanel {
 	private static Logger log = LoggerFactory.getLogger(WelcomePanel.class);
 
 	/**
-	 * @see AbstractTabPanel#AbstractTabPanel(JSkatView, String, ActionMap)
+	 * @see AbstractTabPanel#AbstractTabPanel(String, ActionMap)
 	 * @param newTableName
 	 *            Table name
 	 * @param actions

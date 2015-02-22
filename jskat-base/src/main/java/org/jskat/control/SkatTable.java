@@ -40,7 +40,9 @@ public class SkatTable {
 	/**
 	 * Constructor
 	 * 
-	 * @param tableOptions
+	 * @param tableName
+	 *            Table name
+	 * @param options
 	 *            Preferences for the table
 	 */
 	public SkatTable(final String tableName, final SkatTableOptions options) {
