@@ -75,6 +75,10 @@ public enum JSkatAction {
 	 * Replays a game
 	 */
 	REPLAY_GAME,
+	/**
+	 * Plays the next replay step
+	 */
+	NEXT_REPLAY_STEP,
 	// ----------------------------------------------------------------------------//
 	// -- Human player actions
 	// ----------------------------------------------------------------------------//

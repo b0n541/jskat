@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.jskat.control.command.table.NextReplayMoveCommand;
 import org.jskat.control.command.table.ReplayGameCommand;
 import org.jskat.control.event.skatgame.GameStartEvent;
 import org.jskat.data.SkatGameData.GameState;
@@ -73,10 +74,16 @@ public class SkatSeries extends JSkatThread {
 	}
 
 	@Subscribe
-	public void startReplayGameOn(ReplayGameCommand command) {
+	public void startReplayGameOn(ReplayGameCommand command)
+			throws InterruptedException {
 
-		currReplayGame = new SkatGameReplayer(data.getTableName(),
+		currReplayGame = new SkatGameReplayer(view, data.getTableName(),
 				currSkatGame.getGameMoves());
+	}
+
+	@Subscribe
+	public void replayNextMoveOn(NextReplayMoveCommand comman) {
+		currReplayGame.oneMoveForward();
 	}
 
 	/**

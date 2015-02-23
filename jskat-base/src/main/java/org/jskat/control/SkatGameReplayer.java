@@ -18,9 +18,15 @@ package org.jskat.control;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jskat.control.event.skatgame.BidEvent;
+import org.jskat.control.event.skatgame.GameAnnouncementEvent;
+import org.jskat.control.event.skatgame.GameStartEvent;
 import org.jskat.control.event.skatgame.SkatGameEvent;
+import org.jskat.control.event.skatgame.TrickCardPlayedEvent;
 import org.jskat.control.event.table.TableGameMoveEvent;
 import org.jskat.data.SkatGameData;
+import org.jskat.data.SkatGameData.GameState;
+import org.jskat.gui.JSkatView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,12 +38,15 @@ public class SkatGameReplayer {
 	private final static Logger LOG = LoggerFactory
 			.getLogger(SkatGameReplayer.class);
 
+	private final JSkatView view;
 	private final String tableName;
 	private SkatGameData data;
 	private final List<SkatGameEvent> gameMoves = new ArrayList<>();
 	private int currentMove = 0;
 
-	public SkatGameReplayer(String tableName, List<SkatGameEvent> gameMoves) {
+	public SkatGameReplayer(JSkatView view, String tableName,
+			List<SkatGameEvent> gameMoves) throws InterruptedException {
+		this.view = view;
 		this.tableName = tableName;
 		this.gameMoves.addAll(gameMoves);
 		resetReplay();
@@ -79,9 +88,22 @@ public class SkatGameReplayer {
 		return currentMove < gameMoves.size();
 	}
 
+	private void setGameState(SkatGameEvent event) {
+		if (event instanceof GameStartEvent) {
+			view.setGameState(tableName, GameState.GAME_START);
+		} else if (event instanceof BidEvent) {
+			view.setGameState(tableName, GameState.BIDDING);
+		} else if (event instanceof GameAnnouncementEvent) {
+			view.setGameState(tableName, GameState.DECLARING);
+		} else if (event instanceof TrickCardPlayedEvent) {
+			view.setGameState(tableName, GameState.TRICK_PLAYING);
+		}
+	}
+
 	private void oneStepForward() {
 		SkatGameEvent event = gameMoves.get(currentMove);
 		event.processForward(data);
+		setGameState(event);
 		JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName, event));
 		currentMove++;
 	}
