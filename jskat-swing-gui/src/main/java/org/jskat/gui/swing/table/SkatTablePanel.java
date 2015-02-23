@@ -132,7 +132,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	@Override
 	protected void initPanel() {
 
-		setLayout(LayoutFactory.getMigLayout("fill,insets 0", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		setLayout(LayoutFactory.getMigLayout("insets 0, fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		playerNamesAndPositions = new HashMap<String, Player>();
 
@@ -144,6 +144,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 				JSplitPane.HORIZONTAL_SPLIT, getLeftPanel(),
 				getPlayGroundPanel());
 		add(splitPane, "grow"); //$NON-NLS-1$
+
+		doLayout();
 	}
 
 	protected JTabbedPane getLeftPanel() {

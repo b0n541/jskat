@@ -99,7 +99,7 @@ public class LayoutFactory {
 			result = getMacOSInsets();
 		} else if (!layoutConstraints.contains("ins") && !layoutConstraints.contains("insets")) { //$NON-NLS-1$ //$NON-NLS-2$
 			// set Mac OS specific insets only if insets are not set already
-			result = layoutConstraints + ", " + getMacOSInsets(); //$NON-NLS-1$
+			result = getMacOSInsets() + ", " + layoutConstraints; //$NON-NLS-1$
 		}
 
 		return result;

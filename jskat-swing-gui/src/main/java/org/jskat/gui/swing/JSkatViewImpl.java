@@ -280,9 +280,9 @@ public class JSkatViewImpl implements JSkatView {
 		// main area
 		addTabbedPane(mainPanel);
 
-		mainFrame.setContentPane(mainPanel);
-
 		setMainFrameParameters();
+
+		mainFrame.setContentPane(mainPanel);
 	}
 
 	private void setMainFrameParameters() {
