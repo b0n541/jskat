@@ -564,6 +564,13 @@ public class SkatGameData {
 	}
 
 	/**
+	 * Removes the last trick.
+	 */
+	public void removeLastTrick() {
+		this.tricks.remove(tricks.size() - 1);
+	}
+
+	/**
 	 * Adds a trick card.
 	 * 
 	 * @param card
@@ -590,8 +597,10 @@ public class SkatGameData {
 	 * @return Current trick
 	 */
 	public Trick getCurrentTrick() {
-
+		if (tricks.size() > 0) {
 		return this.tricks.get(this.tricks.size() - 1);
+		}
+		return null;
 	}
 
 	/**

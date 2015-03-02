@@ -16,8 +16,10 @@
 package org.jskat.control.event.skatgame;
 
 import org.jskat.data.SkatGameData;
+import org.jskat.data.Trick;
 import org.jskat.util.Card;
 import org.jskat.util.Player;
+import org.jskat.util.rule.SkatRuleFactory;
 
 /**
  * Event for a card played in the trick.
@@ -33,14 +35,49 @@ public final class TrickCardPlayedEvent extends AbstractPlayerMoveEvent {
 
 	@Override
 	public final void processForward(SkatGameData data) {
+
 		data.removePlayerCard(player, card);
+
+		if (isNoTricksPlayed(data)) {
+			data.addTrick(new Trick(0, Player.FOREHAND));
+		}
+
 		data.addTrickCard(card);
+
+		if (isTrickCompleted(data)) {
+			Trick trick = data.getCurrentTrick();
+			Player trickWinner = SkatRuleFactory.getSkatRules(
+					data.getGameType()).calculateTrickWinner(
+					data.getGameType(), trick);
+			trick.setTrickWinner(trickWinner);
+			data.addTrick(new Trick(data.getTricks().size(), trickWinner));
+		}
+	}
+
+	private boolean isNoTricksPlayed(SkatGameData data) {
+		return data.getTricks().size() == 0;
+	}
+
+	private boolean isTrickCompleted(SkatGameData data) {
+		return data.getCurrentTrick().getThirdCard() != null;
 	}
 
 	@Override
 	public final void processBackward(SkatGameData data) {
+
+		if (isEmptyTrick(data)) {
+			data.removeLastTrick();
+		}
+
 		data.removeTrickCard(card);
+
 		data.addPlayerCard(player, card);
+	}
+
+	private boolean isEmptyTrick(SkatGameData data) {
+		return data.getCurrentTrick().getFirstCard() == null
+				&& data.getCurrentTrick().getSecondCard() == null
+				&& data.getCurrentTrick().getThirdCard() == null;
 	}
 
 	@Override

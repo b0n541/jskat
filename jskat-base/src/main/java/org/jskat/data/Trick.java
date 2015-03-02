@@ -26,7 +26,7 @@ public class Trick {
 
 	private int trickNumberInGame;
 
-	private Player foreHand;
+	private final Player foreHand;
 	private Player trickWinner;
 
 	private Card firstCard;
@@ -213,6 +213,7 @@ public class Trick {
 	public void removeCard(Card card) {
 		if (card.equals(thirdCard)) {
 			thirdCard = null;
+			trickWinner = null;
 		} else if (card.equals(secondCard)) {
 			secondCard = null;
 		} else if (card.equals(firstCard)) {
