@@ -26,10 +26,10 @@ import org.jskat.util.GameType;
 import org.jskat.util.Player;
 
 /**
- * Creates input signals for neural networks<br />
- * The signals are divided into three parts<br />
- * Opponent 1|Neural network player|Opponent 2<br />
- * Every player part ist divided into another parts<br />
+ * Creates input signals for neural networks<br>
+ * The signals are divided into three parts<br>
+ * Opponent 1|Neural network player|Opponent 2<br>
+ * Every player part ist divided into another parts<br>
  * Played cards|Unplayed cards|Other information flags
  */
 public class SimpleNetworkInputGenerator implements NetworkInputGenerator {

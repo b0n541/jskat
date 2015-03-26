@@ -28,7 +28,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import org.jskat.data.iss.LoginCredentials;
-import org.jskat.gui.JSkatView;
 import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.swing.AbstractTabPanel;
 import org.jskat.gui.swing.LayoutFactory;
@@ -47,17 +46,17 @@ public class LoginPanel extends AbstractTabPanel {
 	JPasswordField passwordField;
 
 	/**
-	 * @see AbstractTabPanel#AbstractTabPanel(JSkatView, String, ActionMap)
-	 * @param newTableName
+	 * @see AbstractTabPanel#AbstractTabPanel(String, ActionMap)
+	 * @param tableName
 	 *            Table name
 	 * @param actions
 	 *            Actions
 	 */
-	public LoginPanel(final String newTableName,
+	public LoginPanel(final String tableName,
 			final ActionMap actions) {
 
-		super(newTableName, actions);
-		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
+		super(tableName, actions);
+		log.debug("SkatTablePanel: name: " + tableName); //$NON-NLS-1$
 	}
 
 	/**

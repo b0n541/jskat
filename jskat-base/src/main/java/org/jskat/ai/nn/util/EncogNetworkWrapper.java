@@ -45,6 +45,8 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 * 
 	 * @param topo
 	 *            Network topology
+	 * @param useBias
+	 *            TRUE, if bias nodes should be used
 	 */
 	public EncogNetworkWrapper(NetworkTopology topo, boolean useBias) {
 		network = new BasicNetwork();

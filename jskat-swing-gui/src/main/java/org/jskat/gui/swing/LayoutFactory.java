@@ -18,10 +18,16 @@ package org.jskat.gui.swing;
 
 import net.miginfocom.swing.MigLayout;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Layout factory for creation of layout managers
  */
 public class LayoutFactory {
+
+	private final static Logger LOG = LoggerFactory
+			.getLogger(LayoutFactory.class);
 
 	/**
 	 * Gets layout manager for {@link MigLayout}<br>
@@ -78,12 +84,14 @@ public class LayoutFactory {
 	public static MigLayout getMigLayout(String layoutConstraints,
 			String columnConstraints, String rowConstraints) {
 
-		String finalLayouConstraints = null;
+		String finalLayouConstraints = layoutConstraints;
 
-		if (isMacOS()) {
-			finalLayouConstraints = injectMacOSLayoutConstraints(layoutConstraints);
-		} else {
-			finalLayouConstraints = layoutConstraints;
+		if (layoutConstraints != null) {
+			if (isMacOS()) {
+				finalLayouConstraints = injectMacOSLayoutConstraints(layoutConstraints);
+			} else if (layoutConstraints != null) {
+				finalLayouConstraints = layoutConstraints;
+			}
 		}
 
 		return new MigLayout(finalLayouConstraints, columnConstraints,
@@ -92,21 +100,27 @@ public class LayoutFactory {
 
 	private static String injectMacOSLayoutConstraints(String layoutConstraints) {
 
-		String result = null;
+		String result = layoutConstraints;
 
-		if (layoutConstraints == null) {
+		if (layoutConstraints == null || layoutConstraints.length() == 0) {
 			// no layout constraints set
 			result = getMacOSInsets();
 		} else if (!layoutConstraints.contains("ins") && !layoutConstraints.contains("insets")) { //$NON-NLS-1$ //$NON-NLS-2$
 			// set Mac OS specific insets only if insets are not set already
-			result = layoutConstraints + ", " + getMacOSInsets(); //$NON-NLS-1$
+			result = getMacOSInsets() + ", " + layoutConstraints; //$NON-NLS-1$
 		}
+
+		LOG.debug("Layout constraints: " + result);
 
 		return result;
 	}
 
 	private static boolean isMacOS() {
-		if (System.getProperty("os.name").toUpperCase().contains("MAC")) { //$NON-NLS-1$ //$NON-NLS-2$
+		String osName = System.getProperty("os.name").toUpperCase();
+
+		LOG.debug("OS: " + osName);
+
+		if (osName.contains("MAC")) { //$NON-NLS-1$ //$NON-NLS-2$
 			return true;
 		}
 		return false;

@@ -54,8 +54,6 @@ public class ISSTablePanel extends SkatTablePanel {
 	 *            Table name
 	 * @param actions
 	 *            Action map
-	 * @param newLoginName
-	 *            Login name on ISS
 	 */
 	public ISSTablePanel(final String tableName, final ActionMap actions) {
 

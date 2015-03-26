@@ -24,7 +24,6 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import org.jskat.gui.JSkatView;
 import org.jskat.gui.action.JSkatAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +37,7 @@ public class WelcomePanel extends AbstractTabPanel {
 	private static Logger log = LoggerFactory.getLogger(WelcomePanel.class);
 
 	/**
-	 * @see AbstractTabPanel#AbstractTabPanel(JSkatView, String, ActionMap)
+	 * @see AbstractTabPanel#AbstractTabPanel(String, ActionMap)
 	 * @param newTableName
 	 *            Table name
 	 * @param actions
@@ -89,35 +88,35 @@ public class WelcomePanel extends AbstractTabPanel {
 
 		final JButton issTableButton = new JButton(getActionMap().get(
 				JSkatAction.SHOW_ISS_LOGIN));
-		final JLabel issTableDescription = new JLabel("<html><p>" //$NON-NLS-1$
-				+ this.strings.getString("explain_iss_table_1") + "</p><p>" //$NON-NLS-1$ //$NON-NLS-2$
-				+ this.strings.getString("explain_iss_table_2") + "</p></html>"); //$NON-NLS-1$//$NON-NLS-2$
+		final JLabel issTableDescription = new JLabel("<html>"
+				+ this.strings.getString("explain_iss_table_1") + "<br>" //$NON-NLS-1$ //$NON-NLS-2$
+				+ this.strings.getString("explain_iss_table_2")); //$NON-NLS-1$//$NON-NLS-2$
 
 		final JButton localTableButton = new JButton(this.getActionMap().get(
 				JSkatAction.CREATE_LOCAL_TABLE));
-		final JLabel localTableDescription = new JLabel("<html><p>" //$NON-NLS-1$
-				+ this.strings.getString("explain_local_table_1") + "</p><p>" //$NON-NLS-1$ //$NON-NLS-2$
-				+ this.strings.getString("explain_local_table_2") + "</p></html>"); //$NON-NLS-1$//$NON-NLS-2$
+		final JLabel localTableDescription = new JLabel("<html>" //$NON-NLS-1$
+						+ this.strings.getString("explain_local_table_1") + "<br>" //$NON-NLS-1$ //$NON-NLS-2$
+				+ this.strings.getString("explain_local_table_2")); //$NON-NLS-1$//$NON-NLS-2$
 
 		final JButton optionsButton = new JButton(getActionMap().get(
 				JSkatAction.PREFERENCES));
-		final JLabel optionsDescription = new JLabel("<html><p>" //$NON-NLS-1$
-				+ this.strings.getString("explain_options_1") + "</p></html>"); //$NON-NLS-1$//$NON-NLS-2$
+		final JLabel optionsDescription = new JLabel(
+				this.strings.getString("explain_options_1")); //$NON-NLS-1$//$NON-NLS-2$
 
 		final JButton quitButton = new JButton(getActionMap().get(
 				JSkatAction.EXIT_JSKAT));
-		final JLabel quitDescription = new JLabel("<html><p>" //$NON-NLS-1$
-				+ this.strings.getString("explain_exit") + "</p></html>"); //$NON-NLS-1$//$NON-NLS-2$
+		final JLabel quitDescription = new JLabel(
+				this.strings.getString("explain_exit")); //$NON-NLS-1$//$NON-NLS-2$
 
 		final JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout(
-				"", "[][]", "[][]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		buttonPanel.add(issTableButton, "grow"); //$NON-NLS-1$
+				"", "[][]", "[center][center][center][center]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		buttonPanel.add(issTableButton, "growx, shrinky"); //$NON-NLS-1$
 		buttonPanel.add(issTableDescription, "wrap"); //$NON-NLS-1$
-		buttonPanel.add(localTableButton, "grow"); //$NON-NLS-1$
+		buttonPanel.add(localTableButton, "growx, shrinky"); //$NON-NLS-1$
 		buttonPanel.add(localTableDescription, "wrap"); //$NON-NLS-1$
-		buttonPanel.add(optionsButton, "grow, gapy 1cm"); //$NON-NLS-1$
+		buttonPanel.add(optionsButton, "growx, shrinky, gapy 1cm"); //$NON-NLS-1$
 		buttonPanel.add(optionsDescription, "gapy 1cm, wrap"); //$NON-NLS-1$
-		buttonPanel.add(quitButton, "grow, gapy 1cm"); //$NON-NLS-1$
+		buttonPanel.add(quitButton, "growx, shrinky, gapy 1cm"); //$NON-NLS-1$
 		buttonPanel.add(quitDescription, "gapy 1cm, wrap"); //$NON-NLS-1$
 
 		return buttonPanel;

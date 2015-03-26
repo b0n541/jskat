@@ -146,6 +146,8 @@ public class JSkatMaster {
 	/**
 	 * Gets the view implementation.
 	 * 
+	 * @return The JSkat view implementation
+	 * 
 	 * @deprecated Use only until event processing is completely implemented.
 	 */
 	@Deprecated
@@ -156,10 +158,8 @@ public class JSkatMaster {
 	/**
 	 * Removes a table
 	 *
-	 * @param type
-	 *            View type
-	 * @param tableName
-	 *            Table name
+	 * @param event
+	 *            Table removed event
 	 */
 	@Subscribe
 	public void removeTableDataOn(final TableRemovedEvent event) {
@@ -637,8 +637,8 @@ public class JSkatMaster {
 	/**
 	 * Sets the login name for ISS
 	 *
-	 * @param login
-	 *            Login name
+	 * @param event
+	 *            ISS connected event
 	 */
 	@Subscribe
 	public void setLoginNameOn(final IssConnectedEvent event) {
