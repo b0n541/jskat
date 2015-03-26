@@ -40,7 +40,7 @@ public interface JSkatPlayer {
 
 	/**
 	 * Informs the player about the start of a new game
-	 * 
+	 *
 	 * @param position
 	 *            Initial sitting position of the player
 	 */
@@ -53,7 +53,7 @@ public interface JSkatPlayer {
 
 	/**
 	 * Asks the player whether it wants to bid higher or not
-	 * 
+	 *
 	 * @param nextBidValue
 	 *            Next bid value
 	 * @return A bid value equal or higher as the next bid value -1 if the
@@ -63,7 +63,7 @@ public interface JSkatPlayer {
 
 	/**
 	 * Asks the player whether it wants to hold a bid from the announcer
-	 * 
+	 *
 	 * @param currBidValue
 	 *            Current bid value
 	 * @return TRUE if the player holds the bid
@@ -72,7 +72,7 @@ public interface JSkatPlayer {
 
 	/**
 	 * Informs the player about a bid value that was announced or hold
-	 * 
+	 *
 	 * @param player
 	 *            Player who announced or hold the bid
 	 * @param bidValue
@@ -82,7 +82,7 @@ public interface JSkatPlayer {
 
 	/**
 	 * Takes cards from the dealer
-	 * 
+	 *
 	 * @param cards
 	 *            New cards
 	 */
@@ -96,7 +96,7 @@ public interface JSkatPlayer {
 
 	/**
 	 * Asks the player to call Contra as opponent player
-	 * 
+	 *
 	 * @return <code>true</code>, if the player wants to call Contra
 	 */
 	public Boolean callContra();
@@ -104,14 +104,14 @@ public interface JSkatPlayer {
 	/**
 	 * Asks the player to call Re a declarer player, after an opponent did call
 	 * Contra
-	 * 
+	 *
 	 * @return <code>true</code>, if the player wants to call Re
 	 */
 	public Boolean callRe();
 
 	/**
 	 * Checks whether the player wants to look into the skat
-	 * 
+	 *
 	 * @return TRUE if the player wants to look into the skat
 	 */
 	public Boolean pickUpSkat();
@@ -120,7 +120,7 @@ public interface JSkatPlayer {
 	 * Take the skat as a single player.<br>
 	 * When the method is done, the skat CardList must still contain exactly two
 	 * cards. Otherwise a SkatHandlingException might be thrown.
-	 * 
+	 *
 	 * @param skat
 	 *            The skat Cards
 	 */
@@ -128,14 +128,14 @@ public interface JSkatPlayer {
 
 	/**
 	 * Asks the player for the game he wants to play
-	 * 
+	 *
 	 * @return Game announcement
 	 */
 	public GameAnnouncement announceGame();
 
 	/**
 	 * Start the game: inform player of game type, trumpf and special options
-	 * 
+	 *
 	 * @param singlePlayer
 	 *            Single player position
 	 * @param game
@@ -148,7 +148,7 @@ public interface JSkatPlayer {
 
 	/**
 	 * Shows the cards of the single player to the opponents in ouvert games
-	 * 
+	 *
 	 * @param ouvertCards
 	 *            Cards of the single player in an ouver game
 	 */
@@ -156,14 +156,14 @@ public interface JSkatPlayer {
 
 	/**
 	 * Get next Card to play
-	 * 
+	 *
 	 * @return Card to be played
 	 */
 	public Card playCard();
 
 	/**
 	 * Informs the player about a card that was played
-	 * 
+	 *
 	 * @param player
 	 *            Player who played the card
 	 * @param card
@@ -173,15 +173,17 @@ public interface JSkatPlayer {
 
 	/**
 	 * Makes the current trick known to the players when it is initiated
-	 * 
-	 * @param trick
-	 *            Trick information
+	 *
+	 * @param trickNo
+	 *            Trick no in game
+	 * @param trickForehand
+	 *            Forehand for the trick
 	 */
-	public void newTrick(Trick trick);
+	public void newTrick(int trickNo, Player trickForehand);
 
 	/**
 	 * Makes the current trick known to the players when it is complete
-	 * 
+	 *
 	 * @param trick
 	 *            Trick information
 	 */
@@ -189,14 +191,14 @@ public interface JSkatPlayer {
 
 	/**
 	 * Gets the name of the skat player
-	 * 
+	 *
 	 * @return Player name
 	 */
 	public String getPlayerName();
 
 	/**
 	 * Sets the name of the skat player
-	 * 
+	 *
 	 * @param newPlayerName
 	 *            Player name to be set
 	 */
@@ -204,35 +206,35 @@ public interface JSkatPlayer {
 
 	/**
 	 * Checks whether the player is a human player
-	 * 
+	 *
 	 * @return TRUE if the player is a human player
 	 */
 	public Boolean isHumanPlayer();
 
 	/**
 	 * Checks whether the player is an AI player
-	 * 
+	 *
 	 * @return TRUE if the player is an AI player
 	 */
 	public Boolean isAIPlayer();
 
 	/**
 	 * Checks whether the player is the declaring player
-	 * 
+	 *
 	 * @return TRUE if the player is the declaring player
 	 */
 	public Boolean isDeclarer();
 
 	/**
 	 * Asks for the new skat cards during discarding
-	 * 
+	 *
 	 * @return CardList The new cards for the skat
 	 */
 	public CardList discardSkat();
 
 	/**
 	 * Informs the player about the game
-	 * 
+	 *
 	 * @param gameSummary
 	 *            Game summary
 	 */

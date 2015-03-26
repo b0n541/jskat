@@ -178,7 +178,7 @@ public class PlayerKnowledgeTest extends AbstractJSkatTest {
 		knowledge.setGame(factory.getAnnouncement());
 		knowledge.setDeclarer(Player.FOREHAND);
 
-		knowledge.setCurrentTrick(new Trick(0, Player.FOREHAND));
+		knowledge.setCurrentTrick(0, Player.FOREHAND);
 
 		Card foreHandCard = Card.SA;
 		Card middleHandCard = Card.SQ;
@@ -299,13 +299,12 @@ public class PlayerKnowledgeTest extends AbstractJSkatTest {
 	 */
 	@Test
 	public void testSetTrick() {
-		Trick trick = new Trick(0, Player.FOREHAND);
 
-		knowledge.setCurrentTrick(trick);
+		knowledge.setCurrentTrick(0, Player.FOREHAND);
 
 		assertEquals(0, knowledge.getCompletedTricks().size());
 
-		knowledge.addTrick(trick);
+		knowledge.addTrick(new Trick(0, Player.FOREHAND));
 
 		assertEquals(1, knowledge.getCompletedTricks().size());
 	}

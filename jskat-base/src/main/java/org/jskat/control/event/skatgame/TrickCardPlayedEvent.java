@@ -48,9 +48,11 @@ public final class TrickCardPlayedEvent extends AbstractPlayerMoveEvent {
 			Trick trick = data.getCurrentTrick();
 			Player trickWinner = SkatRuleFactory.getSkatRules(
 					data.getGameType()).calculateTrickWinner(
-					data.getGameType(), trick);
+							data.getGameType(), trick);
 			trick.setTrickWinner(trickWinner);
-			data.addTrick(new Trick(data.getTricks().size(), trickWinner));
+			if (data.getTricks().size() < 10) {
+				data.addTrick(new Trick(data.getTricks().size(), trickWinner));
+			}
 		}
 	}
 

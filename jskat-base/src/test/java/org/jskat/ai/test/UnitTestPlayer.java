@@ -25,7 +25,8 @@ import org.jskat.util.CardList;
 
 public class UnitTestPlayer extends AbstractAIPlayer {
 
-	List<Card> cardsToPlay = new ArrayList<Card>();
+	private int trickNo = 0;
+	private List<Card> cardsToPlay = new ArrayList<Card>();
 
 	@Override
 	public void preparateForNewGame() {
@@ -61,8 +62,7 @@ public class UnitTestPlayer extends AbstractAIPlayer {
 
 	@Override
 	public Card playCard() {
-		return cardsToPlay.get(knowledge.getCurrentTrick()
-				.getTrickNumberInGame());
+		return cardsToPlay.get(trickNo++);
 	}
 
 	@Override

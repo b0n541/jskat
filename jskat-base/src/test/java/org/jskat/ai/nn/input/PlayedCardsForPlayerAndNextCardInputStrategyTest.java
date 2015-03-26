@@ -19,7 +19,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
-import org.jskat.data.Trick;
 import org.jskat.player.PlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.GameType;
@@ -45,7 +44,7 @@ public class PlayedCardsForPlayerAndNextCardInputStrategyTest {
 		factory.setGameType(GameType.CLUBS);
 		knowledge.setGame(factory.getAnnouncement());
 		knowledge.setPlayerPosition(Player.FOREHAND);
-		knowledge.setCurrentTrick(new Trick(0, Player.FOREHAND));
+		knowledge.setCurrentTrick(0, Player.FOREHAND);
 		knowledge.setCardPlayed(Player.FOREHAND, Card.CJ);
 		double[] inputs = strategy.getNetworkInput(knowledge, Card.DJ);
 		assertEquals(32, inputs.length);

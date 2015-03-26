@@ -208,7 +208,8 @@ public class SkatGame extends JSkatThread {
 				break;
 			case DECLARING:
 				announceGame();
-				if (isContraPlayEnabled(ContraCallingTime.AFTER_GAME_ANNOUNCEMENT)) {
+				if (isContraPlayEnabled(
+						ContraCallingTime.AFTER_GAME_ANNOUNCEMENT, 0)) {
 					setGameState(GameState.CONTRA);
 				} else {
 					setGameState(GameState.TRICK_PLAYING);
@@ -217,7 +218,7 @@ public class SkatGame extends JSkatThread {
 			case CONTRA:
 				for (Player player : Player.getOrderedList()) {
 					if (isContraEnabledForPlayer(player,
-							ContraCallingTime.AFTER_GAME_ANNOUNCEMENT)) {
+							ContraCallingTime.AFTER_GAME_ANNOUNCEMENT, 0)) {
 						setActivePlayer(player);
 						contraRe();
 					}
@@ -653,8 +654,6 @@ public class SkatGame extends JSkatThread {
 
 	private void playTricks() {
 
-		Player trickWinner = null;
-
 		for (int trickNo = 0; trickNo < 10; trickNo++) {
 
 			this.log.debug("=============== Play trick " + (trickNo + 1) + " ==============="); //$NON-NLS-1$ //$NON-NLS-2$
@@ -665,20 +664,18 @@ public class SkatGame extends JSkatThread {
 
 			this.view.setTrickNumber(this.tableName, trickNo + 1);
 
-			final Trick trick = new Trick(trickNo, this.activePlayer);
-			this.data.addTrick(trick);
-			informPlayersAboutNewTrick(trick);
+			informPlayersAboutNewTrick(trickNo, trickForehand);
 
 			// Ask players for their cards
 			this.log.debug("fore hand plays"); //$NON-NLS-1$
 			if (isContraEnabledForPlayer(this.activePlayer,
-					ContraCallingTime.BEFORE_FIRST_CARD)) {
+					ContraCallingTime.BEFORE_FIRST_CARD, trickNo)) {
 				setGameState(GameState.CONTRA);
 				contraRe();
 			}
 			setGameState(GameState.TRICK_PLAYING);
 
-			playCard(trick, trickForehand, this.activePlayer);
+			playCard(trickForehand, null, activePlayer);
 
 			if (isFinished()) {
 				break;
@@ -689,13 +686,14 @@ public class SkatGame extends JSkatThread {
 			this.log.debug("middle hand plays"); //$NON-NLS-1$
 			setActivePlayer(this.activePlayer.getLeftNeighbor());
 			if (isContraEnabledForPlayer(this.activePlayer,
-					ContraCallingTime.BEFORE_FIRST_CARD)) {
+					ContraCallingTime.BEFORE_FIRST_CARD, trickNo)) {
 				setGameState(GameState.CONTRA);
 				contraRe();
 			}
 			setGameState(GameState.TRICK_PLAYING);
 
-			playCard(trick, trickForehand, this.activePlayer);
+			playCard(trickForehand, data.getCurrentTrick().getFirstCard(),
+					activePlayer);
 
 			if (isFinished()) {
 				break;
@@ -705,14 +703,15 @@ public class SkatGame extends JSkatThread {
 
 			this.log.debug("rear hand plays"); //$NON-NLS-1$
 			setActivePlayer(this.activePlayer.getLeftNeighbor());
-			if (isContraEnabledForPlayer(this.activePlayer,
-					ContraCallingTime.BEFORE_FIRST_CARD)) {
+			if (isContraEnabledForPlayer(activePlayer,
+					ContraCallingTime.BEFORE_FIRST_CARD, trickNo)) {
 				setGameState(GameState.CONTRA);
 				contraRe();
 			}
 			setGameState(GameState.TRICK_PLAYING);
 
-			playCard(trick, trickForehand, this.activePlayer);
+			playCard(trickForehand, data.getCurrentTrick().getFirstCard(),
+					activePlayer);
 
 			if (isFinished()) {
 				break;
@@ -720,24 +719,22 @@ public class SkatGame extends JSkatThread {
 
 			doSleep(this.maxSleep);
 
-			this.log.debug("Calculate trick winner"); //$NON-NLS-1$
-			trickWinner = this.rules.calculateTrickWinner(
-					this.data.getGameType(), trick);
-			trick.setTrickWinner(trickWinner);
-			this.data.addPlayerPoints(trickWinner, trick.getValue());
+			Trick lastTrick = data.getLastTrick();
+			this.data.addPlayerPoints(lastTrick.getTrickWinner(),
+					lastTrick.getValue());
 
-			informPlayersAboutCompletedTrick(trick);
+			informPlayersAboutCompletedTrick(lastTrick);
 
 			// Check for preliminary ending of a null game
 			if (GameType.NULL.equals(this.data.getGameType())) {
 
-				if (trickWinner == this.data.getDeclarer()) {
+				if (lastTrick.getTrickWinner() == this.data.getDeclarer()) {
 					// declarer has won a trick
 					setGameState(GameState.PRELIMINARY_GAME_END);
 				}
 			}
 
-			this.log.debug("Trick cards: " + trick.getCardList()); //$NON-NLS-1$
+			this.log.debug("Trick cards: " + lastTrick.getCardList()); //$NON-NLS-1$
 			logPlayerPoints();
 
 			doSleep(this.maxSleep);
@@ -749,7 +746,7 @@ public class SkatGame extends JSkatThread {
 			checkWaitCondition();
 		}
 
-		addSkatPointsToPlayerPoints(trickWinner);
+		addSkatPointsToPlayerPoints(data.getLastTrickWinner());
 
 		// set schneider/schwarz/jungfrau/durchmarsch flags
 		switch (this.data.getGameType()) {
@@ -770,22 +767,7 @@ public class SkatGame extends JSkatThread {
 		}
 	}
 
-	private Boolean isPlayContra(ContraCallingTime contraCallingTime,
-			Player player) {
-		JSkatOptions options = JSkatOptions.instance();
-		if (isContraPlayEnabled(contraCallingTime)) {
-			if (ContraCallingTime.AFTER_GAME_ANNOUNCEMENT == contraCallingTime) {
-				return true;
-			} else if (ContraCallingTime.BEFORE_FIRST_CARD == contraCallingTime
-					&& this.data.getCurrentTrick().getTrickNumberInGame() == 0) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	private Boolean isContraPlayEnabled(ContraCallingTime gameTime) {
+	private Boolean isContraPlayEnabled(ContraCallingTime gameTime, int trickNo) {
 		JSkatOptions options = JSkatOptions.instance();
 		if (!GameVariant.FORCED_RAMSCH.equals(this.variant)
 				&& options.isPlayContra(true)
@@ -794,7 +776,7 @@ public class SkatGame extends JSkatThread {
 			if (ContraCallingTime.AFTER_GAME_ANNOUNCEMENT == gameTime) {
 				return true;
 			} else if (ContraCallingTime.BEFORE_FIRST_CARD == gameTime
-					&& this.data.getCurrentTrick().getTrickNumberInGame() == 0) {
+					&& trickNo == 0) {
 				return true;
 			}
 		}
@@ -812,8 +794,8 @@ public class SkatGame extends JSkatThread {
 	}
 
 	private Boolean isContraEnabledForPlayer(Player player,
-			ContraCallingTime gameTime) {
-		if (isContraPlayEnabled(gameTime) && isNoContraCalledYet()
+			ContraCallingTime gameTime, int trickNo) {
+		if (isContraPlayEnabled(gameTime, trickNo) && isNoContraCalledYet()
 				&& isPlayerOpponent(player)
 				&& isPlayerBidHighEnoughForContra(player)) {
 			return true;
@@ -845,9 +827,9 @@ public class SkatGame extends JSkatThread {
 		}
 	}
 
-	private void informPlayersAboutNewTrick(final Trick trick) {
+	private void informPlayersAboutNewTrick(int trickNo, Player trickForehand) {
 		for (Player currPosition : Player.getOrderedList()) {
-			getPlayerInstance(currPosition).newTrick((Trick) trick.clone());
+			getPlayerInstance(currPosition).newTrick(trickNo, trickForehand);
 		}
 	}
 
@@ -891,9 +873,10 @@ public class SkatGame extends JSkatThread {
 		logPlayerPoints();
 	}
 
-	private void playCard(Trick trick, Player trickForeHand, Player currPlayer) {
+	private void playCard(Player trickForeHand, Card firstTrickCard,
+			Player currPlayer) {
 
-		Card card = null;
+		Card playedCard = null;
 		final JSkatPlayer skatPlayer = getActivePlayerInstance();
 
 		boolean cardAccepted = false;
@@ -903,7 +886,7 @@ public class SkatGame extends JSkatThread {
 
 			try {
 				// ask player for the next card
-				card = skatPlayer.playCard();
+				playedCard = skatPlayer.playCard();
 			} catch (final Exception exp) {
 				this.log.error("Exception thrown by player " + skatPlayer + " playing " + currPlayer + ": " + exp); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 				if (!skatPlayer.isHumanPlayer()) {
@@ -911,14 +894,15 @@ public class SkatGame extends JSkatThread {
 				}
 			}
 
-			this.log.debug(card + " " + this.data); //$NON-NLS-1$
+			this.log.debug(playedCard + " " + this.data); //$NON-NLS-1$
 
-			if (isCardSchwarzPlay(skatPlayer, currPlayer, trick, card)) {
+			if (isCardSchwarzPlay(skatPlayer, currPlayer, firstTrickCard,
+					playedCard)) {
 				if (skatPlayer.isHumanPlayer()) {
-					this.view.showCardNotAllowedMessage(card);
+					this.view.showCardNotAllowedMessage(playedCard);
 				} else {
 					this.view.showAIPlayedSchwarzMessageCardPlay(
-							skatPlayer.getPlayerName(), card);
+							skatPlayer.getPlayerName(), playedCard);
 					aiPlayerPlayedSchwarz = true;
 				}
 			} else {
@@ -927,24 +911,23 @@ public class SkatGame extends JSkatThread {
 			}
 		}
 
-		if (card != null) {
-			if (trick.getTrickNumberInGame() > 0
-					&& trick.getFirstCard() == null) {
-
+		if (playedCard != null) {
+			if (data.getCurrentTrick() != null
+					&& data.getCurrentTrick().getFirstCard() == null) {
 				JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(
 						new TrickCompletedEvent(data.getLastTrick()));
 			}
 
 			JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(this.tableName,
-					new TrickCardPlayedEvent(currPlayer, card)));
+					new TrickCardPlayedEvent(currPlayer, playedCard)));
 
 			for (final JSkatPlayer playerInstance : this.player.values()) {
 				// inform all players
 				// cloning of card is not neccessary, because Card is immutable
-				playerInstance.cardPlayed(currPlayer, card);
+				playerInstance.cardPlayed(currPlayer, playedCard);
 			}
 
-			this.log.debug("playing card " + card); //$NON-NLS-1$
+			this.log.debug("playing card " + playedCard); //$NON-NLS-1$
 		}
 
 		if (aiPlayerPlayedSchwarz) {
@@ -966,25 +949,25 @@ public class SkatGame extends JSkatThread {
 	}
 
 	private boolean isCardSchwarzPlay(JSkatPlayer skatPlayer, Player position,
-			Trick trick, Card card) {
+			Card firstTrickCard, Card playedCard) {
 		boolean isSchwarz = false;
-		if (card == null) {
+		if (playedCard == null) {
 
 			this.log.error("Player is fooling!!! Did not play a card!"); //$NON-NLS-1$
 			isSchwarz = true;
 
-		} else if (!playerHasCard(position, card)) {
+		} else if (!playerHasCard(position, playedCard)) {
 
-			this.log.error("Player (" + skatPlayer + ") is fooling!!! Doesn't have card " + card + "!"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+			this.log.error("Player (" + skatPlayer + ") is fooling!!! Doesn't have card " + playedCard + "!"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 			isSchwarz = true;
 
-		} else if (!this.rules.isCardAllowed(this.data.getGameType(),
-				trick.getFirstCard(), this.data.getPlayerCards(position), card)) {
+		} else if (!rules.isCardAllowed(data.getGameType(), firstTrickCard,
+				data.getPlayerCards(position), playedCard)) {
 
-			this.log.error("Player " + skatPlayer.getClass().toString() + " card not allowed: " + card + " game type: " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-					+ this.data.getGameType() + " first trick card: " //$NON-NLS-1$
-					+ trick.getFirstCard() + " player cards: " //$NON-NLS-1$
-					+ this.data.getPlayerCards(position));
+			this.log.error("Player " + skatPlayer.getClass().toString() + " card not allowed: " + playedCard + " game type: " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					+ data.getGameType() + " first trick card: " //$NON-NLS-1$
+					+ firstTrickCard + " player cards: " //$NON-NLS-1$
+					+ data.getPlayerCards(position));
 			isSchwarz = true;
 		}
 
@@ -1205,7 +1188,7 @@ public class SkatGame extends JSkatThread {
 
 	/**
 	 * Gets the game moves.
-	 * 
+	 *
 	 * @return List of game moves
 	 */
 	public List<SkatGameEvent> getGameMoves() {

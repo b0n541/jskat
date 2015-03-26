@@ -220,8 +220,8 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void newTrick(final Trick trick) {
-		internalKnowledge.setCurrentTrick(trick);
+	public final void newTrick(int trickNo, Player trickForehand) {
+		internalKnowledge.setCurrentTrick(trickNo, trickForehand);
 	}
 
 	/**

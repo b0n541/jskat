@@ -36,7 +36,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 
 	/**
 	 * Adds a card to the own cards and suit/point counter
-	 * 
+	 *
 	 * @param card
 	 *            the Card to add
 	 */
@@ -59,7 +59,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 
 	/**
 	 * Adds cards to the own cards and the suit/point counter
-	 * 
+	 *
 	 * @param cards
 	 *            Card to be added
 	 */
@@ -71,7 +71,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 
 	/**
 	 * Adds a trick to the knowledge
-	 * 
+	 *
 	 * @param trick
 	 *            Trick to be added
 	 */
@@ -125,7 +125,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 
 	/**
 	 * Removes a card from the suit/point counter
-	 * 
+	 *
 	 * @param card
 	 *            Card
 	 */
@@ -156,7 +156,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 
 	/**
 	 * Sets a card played
-	 * 
+	 *
 	 * @param player
 	 *            Player ID
 	 * @param card
@@ -179,17 +179,19 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 
 	/**
 	 * Sets the current trick
-	 * 
-	 * @param trick
-	 *            Current trick
+	 *
+	 * @param trickNo
+	 *            Trick no in game
+	 * @param trickForehand
+	 *            Forehand player for the trick
 	 */
-	public void setCurrentTrick(final Trick trick) {
-		this.currentTrick = trick;
+	public void setCurrentTrick(int trickNo, Player trickForehand) {
+		this.currentTrick = new Trick(trickNo, trickForehand);
 	}
 
 	/**
 	 * Set the declarer position
-	 * 
+	 *
 	 * @param newDeclarer
 	 *            Declarer position
 	 */
@@ -200,7 +202,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 
 	/**
 	 * Sets the game announcement
-	 * 
+	 *
 	 * @param gameAnn
 	 *            Game announcement to set
 	 */
@@ -229,7 +231,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 
 	/**
 	 * Sets the highest bid for a player
-	 * 
+	 *
 	 * @param player
 	 *            Player ID
 	 * @param bidValue
@@ -242,7 +244,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 
 	/**
 	 * Adjusts the knowledge when a player has not followed a suit
-	 * 
+	 *
 	 * @param player
 	 *            Player ID
 	 * @param suit
@@ -278,7 +280,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 
 	/**
 	 * Sets the player position
-	 * 
+	 *
 	 * @param newPlayerPosition
 	 *            Player position
 	 */
@@ -322,7 +324,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 
 	/**
 	 * Sets a card played by another player
-	 * 
+	 *
 	 * @param otherPlayer
 	 *            Player position of other player
 	 * @param playedCard
