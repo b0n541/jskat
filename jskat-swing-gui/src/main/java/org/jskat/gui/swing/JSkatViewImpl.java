@@ -22,7 +22,6 @@ import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URI;
@@ -291,7 +290,7 @@ public class JSkatViewImpl implements JSkatView {
 		final JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
 
-		if (isBigScreen()) {
+		if (ScreenResolution.isBigScreen()) {
 			addSymbolPanel(mainPanel);
 		}
 
@@ -351,10 +350,6 @@ public class JSkatViewImpl implements JSkatView {
 			}
 		});
 		mainPanel.add(this.tabs, BorderLayout.CENTER);
-	}
-
-	private boolean isBigScreen() {
-		return Toolkit.getDefaultToolkit().getScreenSize().height > 800;
 	}
 
 	private void addSymbolPanel(final JPanel mainPanel) {
