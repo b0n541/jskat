@@ -18,6 +18,7 @@ package org.jskat.control;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jskat.control.event.table.SkatGameReplayFinishedEvent;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.SkatTableOptions;
@@ -32,7 +33,7 @@ public class SkatTable {
 
 	private static Logger log = LoggerFactory.getLogger(SkatTable.class);
 
-	private String tableName;
+	private final String tableName;
 	private final SkatTableOptions options;
 	private SkatSeries series;
 	private final List<JSkatPlayer> player = new ArrayList<JSkatPlayer>();
@@ -113,6 +114,9 @@ public class SkatTable {
 	 * Resumes a paused skat series
 	 */
 	public void resumeSkatSeries() {
+
+		JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(
+				new SkatGameReplayFinishedEvent());
 
 		synchronized (series) {
 

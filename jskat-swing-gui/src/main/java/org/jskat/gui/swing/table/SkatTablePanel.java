@@ -54,6 +54,8 @@ import org.jskat.control.event.skatgame.PassBidEvent;
 import org.jskat.control.event.skatgame.ReEvent;
 import org.jskat.control.event.skatgame.TrickCardPlayedEvent;
 import org.jskat.control.event.table.ActivePlayerChangedEvent;
+import org.jskat.control.event.table.SkatGameReplayFinishedEvent;
+import org.jskat.control.event.table.SkatGameReplayStartedEvent;
 import org.jskat.control.event.table.SkatSeriesStartedEvent;
 import org.jskat.control.event.table.TrickCompletedEvent;
 import org.jskat.data.SkatGameData.GameState;
@@ -113,6 +115,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 	protected SchieberamschContextPanel schieberamschPanel;
 
 	protected boolean ramsch = false;
+
+	protected boolean replay = false;
 
 	/**
 	 * Panel for a skat table.
@@ -365,6 +369,16 @@ public class SkatTablePanel extends AbstractTabPanel {
 		additionalActionsPanel.add(resignButton, "growx, wrap"); //$NON-NLS-1$
 
 		return additionalActionsPanel;
+	}
+
+	@Subscribe
+	public void setReplayModeOn(final SkatGameReplayStartedEvent event) {
+		replay = true;
+	}
+
+	@Subscribe
+	public void setReplayModeOn(final SkatGameReplayFinishedEvent event) {
+		replay = false;
 	}
 
 	/**
@@ -652,11 +666,14 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 		this.gameOverPanel.setGameSummary(event.gameSummary);
 
-		this.skatListTableModel.addResult(this.leftOpponentPanel.getPosition(),
-				this.rightOpponentPanel.getPosition(),
-				this.userPanel.getPosition(), event.gameSummary.getDeclarer(),
-				event.gameSummary);
-		scrollSkatListToTheEnd();
+		if (!replay) {
+			this.skatListTableModel.addResult(
+					this.leftOpponentPanel.getPosition(),
+					this.rightOpponentPanel.getPosition(),
+					this.userPanel.getPosition(),
+					event.gameSummary.getDeclarer(), event.gameSummary);
+			scrollSkatListToTheEnd();
+		}
 
 		this.gameInfoPanel.setGameSummary(event.gameSummary);
 	}

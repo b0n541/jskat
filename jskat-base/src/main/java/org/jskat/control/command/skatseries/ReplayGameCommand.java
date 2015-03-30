@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control.command.table;
+package org.jskat.control.command.skatseries;
 
 /**
  * This command is created when a skat game should be replayed.

@@ -20,9 +20,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.jskat.control.command.skatseries.ReplayGameCommand;
 import org.jskat.control.command.table.NextReplayMoveCommand;
-import org.jskat.control.command.table.ReplayGameCommand;
 import org.jskat.control.event.skatgame.GameStartEvent;
+import org.jskat.control.event.table.SkatGameReplayStartedEvent;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData;
 import org.jskat.data.SkatSeriesData.SeriesState;
@@ -76,6 +77,9 @@ public class SkatSeries extends JSkatThread {
 	@Subscribe
 	public void startReplayGameOn(ReplayGameCommand command)
 			throws InterruptedException {
+
+		JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(
+				new SkatGameReplayStartedEvent());
 
 		currReplayGame = new SkatGameReplayer(view, data.getTableName(),
 				currSkatGame.getGameMoves());

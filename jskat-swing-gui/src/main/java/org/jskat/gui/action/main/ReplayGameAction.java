@@ -21,7 +21,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 
 import org.jskat.control.JSkatEventBus;
-import org.jskat.control.command.table.ReplayGameCommand;
+import org.jskat.control.command.skatseries.ReplayGameCommand;
 import org.jskat.data.JSkatApplicationData;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
