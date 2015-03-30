@@ -24,6 +24,7 @@ import org.jskat.control.event.skatgame.GameStartEvent;
 import org.jskat.control.event.skatgame.SkatGameEvent;
 import org.jskat.control.event.skatgame.TrickCardPlayedEvent;
 import org.jskat.control.event.table.TableGameMoveEvent;
+import org.jskat.control.event.table.TrickCompletedEvent;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.gui.JSkatView;
@@ -102,9 +103,20 @@ public class SkatGameReplayer {
 
 	private void oneStepForward() {
 		SkatGameEvent event = gameMoves.get(currentMove);
+
+		// TODO: code duplication with SkatGame.playCard()
+		if (event instanceof TrickCardPlayedEvent
+				&& data.getCurrentTrick() != null
+				&& data.getCurrentTrick().getFirstCard() == null) {
+			JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(
+					new TrickCompletedEvent(data.getLastTrick()));
+		}
+
 		event.processForward(data);
 		setGameState(event);
+
 		JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName, event));
+
 		currentMove++;
 	}
 }

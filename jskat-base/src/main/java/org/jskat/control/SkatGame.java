@@ -912,6 +912,7 @@ public class SkatGame extends JSkatThread {
 		}
 
 		if (playedCard != null) {
+			// TODO: code duplication with SkatGameReplayer.oneStepForward()
 			if (data.getCurrentTrick() != null
 					&& data.getCurrentTrick().getFirstCard() == null) {
 				JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(
