@@ -18,6 +18,7 @@ package org.jskat.control;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.skatgame.BidEvent;
 import org.jskat.control.event.skatgame.GameAnnouncementEvent;
 import org.jskat.control.event.skatgame.GameFinishEvent;
@@ -115,6 +116,9 @@ public class SkatGameReplayer {
 				&& data.getCurrentTrick().getFirstCard() == null) {
 			JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(
 					new TrickCompletedEvent(data.getLastTrick()));
+		} else if (event instanceof GameFinishEvent) {
+			JSkatEventBus.INSTANCE.post(new ShowCardsCommand(tableName, data
+					.getCardsAfterDiscard()));
 		}
 
 		event.processForward(data);
