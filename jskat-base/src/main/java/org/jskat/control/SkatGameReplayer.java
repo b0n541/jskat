@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.jskat.control.event.skatgame.BidEvent;
 import org.jskat.control.event.skatgame.GameAnnouncementEvent;
+import org.jskat.control.event.skatgame.GameFinishEvent;
 import org.jskat.control.event.skatgame.GameStartEvent;
 import org.jskat.control.event.skatgame.SkatGameEvent;
 import org.jskat.control.event.skatgame.TrickCardPlayedEvent;
@@ -91,18 +92,22 @@ public class SkatGameReplayer {
 
 	private void setGameState(SkatGameEvent event) {
 		if (event instanceof GameStartEvent) {
-			view.setGameState(tableName, GameState.GAME_START);
+			view.setGameState(tableName, GameState.BIDDING);
 		} else if (event instanceof BidEvent) {
 			view.setGameState(tableName, GameState.BIDDING);
 		} else if (event instanceof GameAnnouncementEvent) {
 			view.setGameState(tableName, GameState.DECLARING);
 		} else if (event instanceof TrickCardPlayedEvent) {
 			view.setGameState(tableName, GameState.TRICK_PLAYING);
+		} else if (event instanceof GameFinishEvent) {
+			view.setGameState(tableName, GameState.GAME_OVER);
 		}
 	}
 
 	private void oneStepForward() {
 		SkatGameEvent event = gameMoves.get(currentMove);
+
+		setGameState(event);
 
 		// TODO: code duplication with SkatGame.playCard()
 		if (event instanceof TrickCardPlayedEvent
@@ -113,7 +118,6 @@ public class SkatGameReplayer {
 		}
 
 		event.processForward(data);
-		setGameState(event);
 
 		JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName, event));
 
