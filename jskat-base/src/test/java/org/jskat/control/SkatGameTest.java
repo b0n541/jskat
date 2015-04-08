@@ -505,4 +505,54 @@ public class SkatGameTest extends AbstractJSkatTest {
 		assertEquals(32, result.getFinalDeclarerPoints());
 		assertEquals(88, result.getFinalOpponentPoints());
 	}
+
+	/**
+	 * Tests the fix for Issue #33:<br>
+	 *
+	 * https://github.com/b0n541/jskat-multimodule/issues/33
+	 */
+	@Test
+	public void testGameResultIssue33() {
+
+		UnitTestPlayer foreHand = new UnitTestPlayer();
+		foreHand.setCardsToPlay(Arrays.asList(Card.SJ, Card.CJ, Card.D8,
+				Card.SA, Card.C7, Card.ST, Card.C9, Card.S7, Card.S9, Card.S8));
+
+		UnitTestPlayer middleHand = new UnitTestPlayer();
+		middleHand.setCardsToPlay(Arrays.asList(Card.SQ, Card.SK, Card.DA,
+				Card.DT, Card.CK, Card.H8, Card.DQ, Card.DK, Card.HQ, Card.HT));
+
+		UnitTestPlayer rearHand = new UnitTestPlayer();
+		rearHand.setCardsToPlay(Arrays.asList(Card.DJ, Card.HJ, Card.D7,
+				Card.H7, Card.CT, Card.HA, Card.CQ, Card.C8, Card.H9, Card.HK));
+
+		SkatGame game = new SkatGame("Table 1", GameVariant.STANDARD, foreHand,
+				middleHand, rearHand);
+		game.setView(new UnitTestView());
+
+		CardDeck deck = new CardDeck("CJ SJ SA ST S9 S8 S7 C9 C7 D8",
+				"SK SQ CK HT HQ H8 DA DT DK DQ",
+				"HJ DJ CT CQ C8 HA HK H9 H7 D7", "D9 CA");
+		game.setCardDeck(deck);
+		game.dealCards();
+		game.setDeclarer(Player.FOREHAND);
+		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+		factory.setGameType(GameType.SPADES);
+		game.setGameAnnouncement(factory.getAnnouncement());
+		game.setGameState(GameState.TRICK_PLAYING);
+
+		game.start();
+		try {
+			game.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		SkatGameResult result = game.getGameResult();
+		assertEquals(89, result.getFinalDeclarerPoints());
+		assertEquals(31, result.getFinalOpponentPoints());
+		assertThat(result.isSchneider(), is(false));
+		assertThat(result.getGameValue(), is(33));
+	}
 }
