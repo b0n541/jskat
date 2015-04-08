@@ -54,11 +54,13 @@ public final class SkatNetworks {
 
 	/**
 	 * Gets a neural network.
-	 * 
+	 *
 	 * @param gameType
 	 *            Game type
 	 * @param isDeclarer
 	 *            TRUE, if declarer network is desired
+	 * @param trickNoInGame
+	 *            Number of trick in game
 	 * @return Neural network
 	 */
 	public static INeuralNetwork getNetwork(GameType gameType,
@@ -79,7 +81,7 @@ public final class SkatNetworks {
 
 	/**
 	 * Gets an instance of the SkatNetworks
-	 * 
+	 *
 	 * @return Instance
 	 */
 	public static SkatNetworks instance() {
@@ -89,9 +91,6 @@ public final class SkatNetworks {
 
 	/**
 	 * Loads all neural networks from files
-	 * 
-	 * @param filePath
-	 *            Path to files
 	 */
 	public static void loadNetworks() {
 		for (Entry<GameType, Map<PlayerParty, List<INeuralNetwork>>> gameTypeNets : networks
@@ -125,7 +124,7 @@ public final class SkatNetworks {
 
 	/**
 	 * Saves all networks to files
-	 * 
+	 *
 	 * @param path
 	 *            Path to files
 	 */
