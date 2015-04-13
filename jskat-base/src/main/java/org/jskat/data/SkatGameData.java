@@ -496,13 +496,24 @@ public class SkatGameData {
 				|| GameType.SPADES.equals(this.announcement.gameType)
 				|| GameType.HEARTS.equals(this.announcement.gameType)
 				|| GameType.DIAMONDS.equals(this.announcement.gameType)
-				|| GameType.GRAND.equals(this.announcement.gameType)) {
+				|| GameType.GRAND.equals(this.announcement.gameType)
+				|| GameType.NULL.equals(this.announcement.gameType)) {
 
 			this.result.setFinalDeclarerPoints(getDeclarerScore());
 			this.result.setFinalOpponentPoints(getOpponentScore());
+		}
+
+		if (GameType.CLUBS.equals(this.announcement.gameType)
+				|| GameType.SPADES.equals(this.announcement.gameType)
+				|| GameType.HEARTS.equals(this.announcement.gameType)
+				|| GameType.DIAMONDS.equals(this.announcement.gameType)
+				|| GameType.GRAND.equals(this.announcement.gameType)) {
+
 			this.result.setMultiplier(this.rules.getMultiplier(this));
 			this.result.setPlayWithJacks(this.rules.isPlayWithJacks(this));
-		} else if (GameType.RAMSCH.equals(this.announcement.gameType)) {
+		}
+
+		if (GameType.RAMSCH.equals(this.announcement.gameType)) {
 			finishRamschGame();
 		}
 	}

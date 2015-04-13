@@ -15,6 +15,8 @@
  */
 package org.jskat.ai.test;
 
+import java.util.Random;
+
 import org.jskat.ai.rnd.AIPlayerRND;
 import org.jskat.util.Card;
 
@@ -23,9 +25,18 @@ import org.jskat.util.Card;
  */
 public class ExceptionTestPlayer extends AIPlayerRND {
 
+	private final Random random = new Random();
+	private final int trickNoWhereExceptionIsThrown;
+
+	public ExceptionTestPlayer() {
+		this.trickNoWhereExceptionIsThrown = random.nextInt(10);
+	}
+
 	@Override
 	public Card playCard() {
-		double exception = 42 / 0;
-		return Card.CJ;
+		if (this.knowledge.getCurrentTrick().getTrickNumberInGame() == trickNoWhereExceptionIsThrown) {
+			double exception = 42 / 0;
+		}
+		return super.playCard();
 	}
 }

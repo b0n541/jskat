@@ -36,10 +36,10 @@ public class PlayNotAllowedCardTestPlayer extends AIPlayerRND {
 		CardList notAllowedCards = new CardList(knowledge.getOwnCards());
 		notAllowedCards.removeAll(getPlayableCards(knowledge.getTrickCards()));
 
-		// sometimes all cards are allowed
 		if (notAllowedCards.size() > 0) {
 			return notAllowedCards.get(random.nextInt(notAllowedCards.size()));
 		} else {
+			// sometimes all cards are allowed
 			return super.playCard();
 		}
 	}

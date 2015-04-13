@@ -20,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -27,6 +28,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import org.jskat.AbstractJSkatTest;
 import org.jskat.ai.rnd.AIPlayerRND;
@@ -53,7 +55,6 @@ import org.jskat.util.GameType;
 import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.google.common.eventbus.EventBus;
@@ -64,6 +65,7 @@ import com.google.common.eventbus.EventBus;
 public class SkatGameTest extends AbstractJSkatTest {
 
 	private static final String TABLE_NAME = "Table 1";
+	private final Random random = new Random();
 
 	@Before
 	public void setUp() {
@@ -79,17 +81,22 @@ public class SkatGameTest extends AbstractJSkatTest {
 				new ContraReCallingTestPlayer());
 		game.setView(new UnitTestView());
 
-		game.start();
-		try {
-			game.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		runGame(game);
 
 		GameSummary summary = game.getGameSummary();
 		assertThat(summary.isContra(), is(false));
 		assertThat(summary.isRe(), is(false));
+	}
+
+	private void runGame(SkatGame game) {
+		game.start();
+		try {
+			game.join();
+		} catch (InterruptedException e) {
+			System.out.println("InterruptedException during game run...");
+			e.printStackTrace();
+			fail();
+		}
 	}
 
 	@Test
@@ -105,13 +112,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 				new ContraReCallingTestPlayer());
 		game.setView(new UnitTestView());
 
-		game.start();
-		try {
-			game.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		runGame(game);
 
 		GameSummary summary = game.getGameSummary();
 		assertThat(summary.isContra(), is(true));
@@ -129,13 +130,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 				getNoBiddingPlayer());
 		game.setView(new UnitTestView());
 
-		game.start();
-		try {
-			game.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		runGame(game);
 
 		GameSummary summary = game.getGameSummary();
 		assertEquals(GameType.PASSED_IN, summary.getGameType());
@@ -156,13 +151,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 				getNoBiddingPlayer());
 		game.setView(new UnitTestView());
 
-		game.start();
-		try {
-			game.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		runGame(game);
 
 		GameSummary summary = game.getGameSummary();
 		assertEquals(GameType.PASSED_IN, summary.getGameType());
@@ -195,13 +184,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 				getNoBiddingPlayer());
 		game.setView(new UnitTestView());
 
-		game.start();
-		try {
-			game.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		runGame(game);
 
 		GameSummary summary = game.getGameSummary();
 		assertEquals(GameType.PASSED_IN, summary.getGameType());
@@ -227,13 +210,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 				new RamschTestPlayer());
 		game.setView(new UnitTestView());
 
-		game.start();
-		try {
-			game.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		runGame(game);
 
 		GameSummary summary = game.getGameSummary();
 		assertEquals(GameType.RAMSCH, summary.getGameType());
@@ -254,13 +231,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 				new RamschTestPlayer());
 		game.setView(new UnitTestView());
 
-		game.start();
-		try {
-			game.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		runGame(game);
 
 		GameSummary summary = game.getGameSummary();
 		assertEquals(GameType.RAMSCH, summary.getGameType());
@@ -283,13 +254,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 				grandHandPlayer, new AIPlayerRND(), new AIPlayerRND());
 		game.setView(new UnitTestView());
 
-		game.start();
-		try {
-			game.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		runGame(game);
 
 		assertEquals(Player.FOREHAND, game.getDeclarer());
 		GameAnnouncement announcement = game.getGameAnnouncement();
@@ -313,13 +278,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 				new RamschTestPlayer(), grandHandPlayer, new RamschTestPlayer());
 		game.setView(new UnitTestView());
 
-		game.start();
-		try {
-			game.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		runGame(game);
 
 		assertEquals(Player.MIDDLEHAND, game.getDeclarer());
 		GameAnnouncement announcement = game.getGameAnnouncement();
@@ -343,13 +302,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 				new RamschTestPlayer(), new RamschTestPlayer(), grandHandPlayer);
 		game.setView(new UnitTestView());
 
-		game.start();
-		try {
-			game.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		runGame(game);
 
 		assertEquals(Player.REARHAND, game.getDeclarer());
 		GameAnnouncement announcement = game.getGameAnnouncement();
@@ -361,27 +314,38 @@ public class SkatGameTest extends AbstractJSkatTest {
 	}
 
 	@Test
-	@Ignore("Not stable at the moment")
 	public void exceptionFromPlayerDuringGame() {
 		SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
 				new ExceptionTestPlayer(), new ExceptionTestPlayer(),
 				new ExceptionTestPlayer());
 		game.setView(new UnitTestView());
 
-		game.start();
-		try {
-			game.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		randomGameAnnouncement(game);
+
+		runGame(game);
 
 		SkatGameResult gameResult = game.getGameResult();
 		assertTrue(gameResult.isSchwarz());
 	}
 
+	private void randomGameAnnouncement(SkatGame game) {
+		CardDeck deck = new CardDeck();
+		game.setCardDeck(deck);
+		game.dealCards();
+		game.setDeclarer(Player.values()[random.nextInt(Player.values().length)]);
+		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+		factory.setGameType(getRandomGameType());
+		game.setGameAnnouncement(factory.getAnnouncement());
+		game.setGameState(GameState.TRICK_PLAYING);
+	}
+
+	private GameType getRandomGameType() {
+		return Arrays.asList(GameType.GRAND, GameType.CLUBS,
+				GameType.SPADES, GameType.HEARTS, GameType.DIAMONDS,
+				GameType.NULL, GameType.RAMSCH).get(random.nextInt(7));
+	}
+
 	@Test
-	@Ignore("Not stable at the moment.")
 	public void playerPlaysNonPossessingCard() {
 		SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
 				new PlayNonPossessingCardTestPlayer(),
@@ -389,20 +353,18 @@ public class SkatGameTest extends AbstractJSkatTest {
 				new PlayNonPossessingCardTestPlayer());
 		game.setView(new UnitTestView());
 
-		game.start();
-		try {
-			game.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		randomGameAnnouncement(game);
+
+		runGame(game);
 
 		SkatGameResult gameResult = game.getGameResult();
 		assertTrue(gameResult.isSchwarz());
+		assertThat(
+				gameResult.getFinalDeclarerPoints()
+						+ gameResult.getFinalOpponentPoints(), is(120));
 	}
 
 	@Test
-	@Ignore("Not stable at the moment.")
 	public void playerPlaysNotAllowedCard() {
 		SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
 				new PlayNotAllowedCardTestPlayer(),
@@ -410,32 +372,26 @@ public class SkatGameTest extends AbstractJSkatTest {
 				new PlayNotAllowedCardTestPlayer());
 		game.setView(new UnitTestView());
 
-		game.start();
-		try {
-			game.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		randomGameAnnouncement(game);
+
+		runGame(game);
 
 		SkatGameResult gameResult = game.getGameResult();
 		assertTrue(gameResult.isSchwarz());
+		assertThat(
+				gameResult.getFinalDeclarerPoints()
+						+ gameResult.getFinalOpponentPoints(), is(120));
 	}
 
 	@Test
-	@Ignore("Not stable at the moment.")
 	public void testCompleteGame() {
 		SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
 				new AIPlayerRND(), new AIPlayerRND(), new AIPlayerRND());
 		game.setView(new UnitTestView());
 
-		game.start();
-		try {
-			game.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		randomGameAnnouncement(game);
+
+		runGame(game);
 
 		Player declarer = game.getDeclarer();
 		SkatGameResult result = game.getGameResult();
@@ -443,7 +399,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 			assertEquals(
 					120,
 					result.getFinalDeclarerPoints()
-					+ result.getFinalOpponentPoints());
+							+ result.getFinalOpponentPoints());
 			GameSummary summary = game.getGameSummary();
 
 			Map<Player, Integer> playerPointsInTricks = new HashMap<Player, Integer>();
@@ -460,8 +416,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 			assertEquals(
 					result.getFinalOpponentPoints(),
 					playerPointsInTricks.get(declarer.getRightNeighbor())
-					+ playerPointsInTricks.get(declarer
-							.getLeftNeighbor()));
+							+ playerPointsInTricks.get(declarer
+									.getLeftNeighbor()));
 		}
 	}
 
@@ -494,13 +450,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 		game.setGameAnnouncement(factory.getAnnouncement());
 		game.setGameState(GameState.TRICK_PLAYING);
 
-		game.start();
-		try {
-			game.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		runGame(game);
 
 		SkatGameResult result = game.getGameResult();
 		assertEquals(32, result.getFinalDeclarerPoints());
@@ -542,13 +492,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 		game.setGameAnnouncement(factory.getAnnouncement());
 		game.setGameState(GameState.TRICK_PLAYING);
 
-		game.start();
-		try {
-			game.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		runGame(game);
 
 		SkatGameResult result = game.getGameResult();
 		assertEquals(89, result.getFinalDeclarerPoints());
