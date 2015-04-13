@@ -224,7 +224,7 @@ public class SkatGameData {
 
 	/**
 	 * Returns all game moves.
-	 * 
+	 *
 	 * @return Game moves
 	 */
 	public List<SkatGameEvent> getGameMoves() {
@@ -233,12 +233,13 @@ public class SkatGameData {
 
 	/**
 	 * Returns the result of the game
-	 * 
+	 *
 	 * @return Value of the game
 	 */
 	public SkatGameResult getGameResult() {
 
-		if (this.result.getGameValue() == -1 && getGameType() != GameType.PASSED_IN) {
+		if (this.result.getGameValue() == -1
+				&& getGameType() != GameType.PASSED_IN) {
 
 			log.warn("Game result hasn't been calculated yet!"); //$NON-NLS-1$
 			calcResult();
@@ -249,7 +250,7 @@ public class SkatGameData {
 
 	/**
 	 * Returns the single player of the game
-	 * 
+	 *
 	 * @return Player ID of the single player
 	 */
 	public Player getDeclarer() {
@@ -259,7 +260,7 @@ public class SkatGameData {
 
 	/**
 	 * Set the single player of the game
-	 * 
+	 *
 	 * @param singlePlayer
 	 *            Player ID of the single player
 	 */
@@ -272,7 +273,7 @@ public class SkatGameData {
 
 	/**
 	 * Returns the highest bid value of the game
-	 * 
+	 *
 	 * @return Highest bid value
 	 */
 	public Integer getMaxBidValue() {
@@ -291,7 +292,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets whether the game was lost or not
-	 * 
+	 *
 	 * @return TRUE if the game was lost
 	 */
 	public boolean isGameLost() {
@@ -301,7 +302,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets whether a game was won or not
-	 * 
+	 *
 	 * @return TRUE if the game was won
 	 */
 	public boolean isGameWon() {
@@ -311,7 +312,7 @@ public class SkatGameData {
 
 	/**
 	 * Checks whether the single player overbidded
-	 * 
+	 *
 	 * @return TRUE if the single player overbidded
 	 */
 	public boolean isOverBidded() {
@@ -327,7 +328,7 @@ public class SkatGameData {
 
 	/**
 	 * Checks whether the single player has played a hand game
-	 * 
+	 *
 	 * @return TRUE, if the single player has played a hand game
 	 */
 	public boolean isHand() {
@@ -337,7 +338,7 @@ public class SkatGameData {
 
 	/**
 	 * Checks whether the single player has played an ouvert
-	 * 
+	 *
 	 * @return TRUE if the single player has played an ouvert game
 	 */
 	public boolean isOuvert() {
@@ -347,7 +348,7 @@ public class SkatGameData {
 
 	/**
 	 * Checks whether one party played schneider
-	 * 
+	 *
 	 * @return TRUE if the single player or the opponents played schneider
 	 */
 	public boolean isSchneider() {
@@ -357,7 +358,7 @@ public class SkatGameData {
 
 	/**
 	 * Checks whether schneider was announced
-	 * 
+	 *
 	 * @return TRUE if Schneider was announced
 	 */
 	public boolean isSchneiderAnnounced() {
@@ -367,7 +368,7 @@ public class SkatGameData {
 
 	/**
 	 * Checks whether schwarz was played
-	 * 
+	 *
 	 * @return TRUE if the player or the opponents played schwarz
 	 */
 	public boolean isSchwarz() {
@@ -377,7 +378,7 @@ public class SkatGameData {
 
 	/**
 	 * Checks whether schwarz was announced
-	 * 
+	 *
 	 * @return TRUE if schwarz was announced
 	 */
 	public boolean isSchwarzAnnounced() {
@@ -387,7 +388,7 @@ public class SkatGameData {
 
 	/**
 	 * Checks whether a durchmarsch was done in a ramsch game or not
-	 * 
+	 *
 	 * @return TRUE if someone did a durchmarsch in a ramsch game
 	 */
 	public boolean isDurchmarsch() {
@@ -397,7 +398,7 @@ public class SkatGameData {
 
 	/**
 	 * Checks whether someone was jungfrau in a ramsch game
-	 * 
+	 *
 	 * @return TRUE if someone was jungfrau in a ramsch game
 	 */
 	public boolean isJungfrau() {
@@ -407,7 +408,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the score of a player
-	 * 
+	 *
 	 * @param player
 	 *            The ID of a player
 	 * @return The score of a player
@@ -419,7 +420,7 @@ public class SkatGameData {
 
 	/**
 	 * Overwrites the declarer score
-	 * 
+	 *
 	 * @param newScore
 	 *            New score
 	 */
@@ -436,7 +437,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the score of the single player
-	 * 
+	 *
 	 * @return The score of the single player
 	 */
 	public int getDeclarerScore() {
@@ -453,7 +454,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the score of the opponent players
-	 * 
+	 *
 	 * @return Score The score of the opponent players
 	 */
 	public int getOpponentScore() {
@@ -533,7 +534,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the result of a game
-	 * 
+	 *
 	 * @return The result of a game
 	 */
 	public SkatGameResult getResult() {
@@ -543,7 +544,7 @@ public class SkatGameData {
 
 	/**
 	 * Sets the game result
-	 * 
+	 *
 	 * @param newResult
 	 *            Game result
 	 */
@@ -554,7 +555,7 @@ public class SkatGameData {
 
 	/**
 	 * Adds a trick
-	 * 
+	 *
 	 * @param newTrick
 	 *            New trick
 	 */
@@ -572,7 +573,7 @@ public class SkatGameData {
 
 	/**
 	 * Adds a trick card.
-	 * 
+	 *
 	 * @param card
 	 *            Card to be added
 	 */
@@ -583,7 +584,7 @@ public class SkatGameData {
 
 	/**
 	 * Removes a trick card.
-	 * 
+	 *
 	 * @param card
 	 *            Card to be removed
 	 */
@@ -593,7 +594,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the current trick
-	 * 
+	 *
 	 * @return Current trick
 	 */
 	public Trick getCurrentTrick() {
@@ -605,7 +606,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the last trick
-	 * 
+	 *
 	 * @return Last trick, if at least two tricks are available<br>
 	 *         NULL otherwise
 	 */
@@ -621,7 +622,7 @@ public class SkatGameData {
 
 	/**
 	 * Sets the trick winner
-	 * 
+	 *
 	 * @param trickNumber
 	 *            The number of the trick in a game
 	 * @param winner
@@ -636,7 +637,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the winner of the trick
-	 * 
+	 *
 	 * @param trickNumber
 	 *            The number of the trick in a game
 	 * @return The player ID of the trick winner
@@ -648,7 +649,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets all tricks
-	 * 
+	 *
 	 * @return ArrayList of tricks
 	 */
 	public List<Trick> getTricks() {
@@ -658,7 +659,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the number of geschoben
-	 * 
+	 *
 	 * @return Returns the number of geschoben
 	 */
 	public int getGeschoben() {
@@ -668,7 +669,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the geschoben multiplier
-	 * 
+	 *
 	 * @return Returns the geschoben multiplier
 	 */
 	public int getGeschobenMultiplier() {
@@ -693,7 +694,7 @@ public class SkatGameData {
 
 	/**
 	 * Raises the value of geschoben by 1
-	 * 
+	 *
 	 */
 	public void addGeschoben() {
 
@@ -702,7 +703,7 @@ public class SkatGameData {
 
 	/**
 	 * Get the player cards
-	 * 
+	 *
 	 * @param player
 	 *            Player
 	 * @return CardList of Cards from the player
@@ -714,7 +715,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets a reference to the skat for the game
-	 * 
+	 *
 	 * @return skat The cards of the skat
 	 */
 	public CardList getSkat() {
@@ -723,7 +724,7 @@ public class SkatGameData {
 
 	/**
 	 * Sets a new skat after discarding
-	 * 
+	 *
 	 * @param player
 	 *            Player ID of the discarding player
 	 * @param newSkat
@@ -739,7 +740,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the dealt cards
-	 * 
+	 *
 	 * @return The dealt cards
 	 */
 	public Map<Player, CardList> getDealtCards() {
@@ -749,7 +750,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the dealt skat
-	 * 
+	 *
 	 * @return Dealt skat
 	 */
 	public CardList getDealtSkat() {
@@ -759,7 +760,7 @@ public class SkatGameData {
 
 	/**
 	 * Sets a dealt cards
-	 * 
+	 *
 	 * @param player
 	 *            Player that got the Card
 	 * @param cards
@@ -772,7 +773,7 @@ public class SkatGameData {
 
 	/**
 	 * Sets cards for the skat
-	 * 
+	 *
 	 * @param cards
 	 *            Skat cards
 	 */
@@ -786,7 +787,7 @@ public class SkatGameData {
 
 	/**
 	 * Adds points to player points
-	 * 
+	 *
 	 * @param player
 	 *            Player to whom the points should be added
 	 * @param points
@@ -799,7 +800,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the points of a player
-	 * 
+	 *
 	 * @param player
 	 *            Player
 	 * @return Points of the player
@@ -811,7 +812,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the fore hand player for the current trick
-	 * 
+	 *
 	 * @return Fore hand player for the current trick
 	 */
 	public Player getTrickForeHand() {
@@ -821,7 +822,7 @@ public class SkatGameData {
 
 	/**
 	 * Sets the max bid value for a player
-	 * 
+	 *
 	 * @param player
 	 *            Player
 	 * @param bidValue
@@ -839,7 +840,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the highest bid value for a player
-	 * 
+	 *
 	 * @param player
 	 *            Player
 	 * @return Highest bid value so far
@@ -851,7 +852,7 @@ public class SkatGameData {
 
 	/**
 	 * Sets the value for a player pass
-	 * 
+	 *
 	 * @param player
 	 *            Player
 	 * @param isPassing
@@ -864,7 +865,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the value for a player pass
-	 * 
+	 *
 	 * @param player
 	 *            Player
 	 * @return TRUE, if the player passes
@@ -876,7 +877,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the number of passes so far
-	 * 
+	 *
 	 * @return Number of passes
 	 */
 	public int getNumberOfPasses() {
@@ -894,7 +895,7 @@ public class SkatGameData {
 
 	/**
 	 * Sets the game announcement
-	 * 
+	 *
 	 * @param announcement
 	 *            The game announcement
 	 */
@@ -929,7 +930,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the game type
-	 * 
+	 *
 	 * @return Game type
 	 */
 	public GameType getGameType() {
@@ -943,7 +944,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the game announcement
-	 * 
+	 *
 	 * @return The game announcement
 	 */
 	public GameAnnouncement getAnnoucement() {
@@ -953,7 +954,7 @@ public class SkatGameData {
 
 	/**
 	 * Checks whether the game was played under ISPA rules or not
-	 * 
+	 *
 	 * @return TRUE when the game was played under ISPA rules
 	 */
 	public boolean isIspaRules() {
@@ -963,7 +964,7 @@ public class SkatGameData {
 
 	/**
 	 * Sets the flag for ISPA rules
-	 * 
+	 *
 	 * @param isIspaRules
 	 *            TRUE when the game was played under ISPA rules
 	 */
@@ -973,7 +974,7 @@ public class SkatGameData {
 
 	/**
 	 * Sets the game state
-	 * 
+	 *
 	 * @param newState
 	 *            New game state
 	 */
@@ -984,7 +985,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the game state
-	 * 
+	 *
 	 * @return The game state
 	 */
 	public GameState getGameState() {
@@ -999,7 +1000,7 @@ public class SkatGameData {
 		// FIXME this is rule logic --> move to SuitGrandRule
 		final int declarerPoints = getPlayerPoints(this.declarer);
 
-		if (declarerPoints >= 89 || declarerPoints <= 30) {
+		if (declarerPoints >= 90 || declarerPoints <= 30) {
 
 			this.result.setSchneider(true);
 		}
@@ -1025,7 +1026,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the player name
-	 * 
+	 *
 	 * @param player
 	 *            Player
 	 * @return Player name
@@ -1036,7 +1037,7 @@ public class SkatGameData {
 
 	/**
 	 * Sets the player name
-	 * 
+	 *
 	 * @param player
 	 *            Player
 	 * @param playerName
@@ -1048,7 +1049,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets whether the game was passed or nor
-	 * 
+	 *
 	 * @return TRUE if the game was lost
 	 */
 	public boolean isGamePassed() {
@@ -1059,7 +1060,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets a summary of the game
-	 * 
+	 *
 	 * @return Game summary
 	 */
 	public GameSummary getGameSummary() {
@@ -1095,7 +1096,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the last trick winner
-	 * 
+	 *
 	 * @return Last trick winner
 	 */
 	public Player getLastTrickWinner() {
@@ -1108,7 +1109,7 @@ public class SkatGameData {
 
 	/**
 	 * Checks whether one player made no trick
-	 * 
+	 *
 	 * @return TRUE if a player made no trick
 	 */
 	public boolean isPlayerMadeNoTrick() {
@@ -1120,7 +1121,7 @@ public class SkatGameData {
 
 	/**
 	 * Checks whether a certain player made no trick
-	 * 
+	 *
 	 * @param player
 	 *            Player to check
 	 * @return TRUE if the player made not trick
@@ -1138,7 +1139,7 @@ public class SkatGameData {
 
 	/**
 	 * Removes a card from a players hand.
-	 * 
+	 *
 	 * @param player
 	 *            Player
 	 * @param card
@@ -1150,7 +1151,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the cards of a player after discarding
-	 * 
+	 *
 	 * @return Cards after discarding
 	 */
 	public Map<Player, CardList> getCardsAfterDiscard() {
@@ -1175,7 +1176,7 @@ public class SkatGameData {
 
 	/**
 	 * Gets the looses for a ramsch game
-	 * 
+	 *
 	 * @return Set of loosing players
 	 */
 	public Set<Player> getRamschLoosers() {
@@ -1189,7 +1190,7 @@ public class SkatGameData {
 
 	/**
 	 * Removes dealt cards for a player
-	 * 
+	 *
 	 * @param player
 	 *            Player
 	 * @param cards
@@ -1201,7 +1202,7 @@ public class SkatGameData {
 
 	/**
 	 * Removes cards from dealt skat
-	 * 
+	 *
 	 * @param cards
 	 *            Cards
 	 */
@@ -1212,7 +1213,7 @@ public class SkatGameData {
 
 	/**
 	 * Adds all cards from the skat to a players hand
-	 * 
+	 *
 	 * @param player
 	 *            Player
 	 */
@@ -1224,7 +1225,7 @@ public class SkatGameData {
 
 	/**
 	 * Removes all cards from the former skat from a players hand
-	 * 
+	 *
 	 * @param player
 	 *            Player
 	 */
@@ -1236,7 +1237,7 @@ public class SkatGameData {
 
 	/**
 	 * Sets the cards in the skat.
-	 * 
+	 *
 	 * @param cards
 	 *            Cards
 	 */
@@ -1247,7 +1248,7 @@ public class SkatGameData {
 
 	/**
 	 * Adds cards to a players hand.
-	 * 
+	 *
 	 * @param player
 	 *            Player
 	 * @param cards
@@ -1259,7 +1260,7 @@ public class SkatGameData {
 
 	/**
 	 * Adds a card to a players hand.
-	 * 
+	 *
 	 * @param player
 	 *            Player
 	 * @param card
@@ -1271,7 +1272,7 @@ public class SkatGameData {
 
 	/**
 	 * Sets Contra information.
-	 * 
+	 *
 	 * @param isContra
 	 *            <code>true</code>, if Contra was called.
 	 */
@@ -1281,7 +1282,7 @@ public class SkatGameData {
 
 	/**
 	 * Checks, whether Contra was called.
-	 * 
+	 *
 	 * @return <code>true</code>, if Contra was called.
 	 */
 	public Boolean isContra() {
@@ -1290,7 +1291,7 @@ public class SkatGameData {
 
 	/**
 	 * Sets Re information.
-	 * 
+	 *
 	 * @param isRe
 	 *            <code>true</code>, if Re was called.
 	 */
@@ -1300,7 +1301,7 @@ public class SkatGameData {
 
 	/**
 	 * Checks, whether Re was called.
-	 * 
+	 *
 	 * @return <code>true</code>, if Re was called.
 	 */
 	public Boolean isRe() {
@@ -1309,7 +1310,7 @@ public class SkatGameData {
 
 	/**
 	 * Sets the information that the winner of the bidding picked up the skat.
-	 * 
+	 *
 	 * @param skatPickedUp
 	 *            TRUE if the winner of the bidding picked up the skat
 	 */
@@ -1319,7 +1320,7 @@ public class SkatGameData {
 
 	/**
 	 * Checks whether the skat was picked up.
-	 * 
+	 *
 	 * @return TRUE if the skat was picked up
 	 */
 	public Boolean isSkatPickedUp() {
