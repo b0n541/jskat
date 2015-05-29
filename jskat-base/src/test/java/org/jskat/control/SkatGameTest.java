@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import org.eclipse.jetty.util.log.Log;
 import org.jskat.AbstractJSkatTest;
 import org.jskat.ai.rnd.AIPlayerRND;
 import org.jskat.ai.test.ContraReCallingTestPlayer;
@@ -336,13 +337,15 @@ public class SkatGameTest extends AbstractJSkatTest {
 		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 		factory.setGameType(getRandomGameType());
 		game.setGameAnnouncement(factory.getAnnouncement());
+		Log.warn(game.getGameAnnouncement().getGameType()
+				+ " game was chosen randomly...");
 		game.setGameState(GameState.TRICK_PLAYING);
 	}
 
 	private GameType getRandomGameType() {
-		return Arrays.asList(GameType.GRAND, GameType.CLUBS,
-				GameType.SPADES, GameType.HEARTS, GameType.DIAMONDS,
-				GameType.NULL, GameType.RAMSCH).get(random.nextInt(7));
+		return Arrays.asList(GameType.GRAND, GameType.CLUBS, GameType.SPADES,
+				GameType.HEARTS, GameType.DIAMONDS, GameType.NULL).get(
+				random.nextInt(6));
 	}
 
 	@Test
@@ -361,7 +364,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 		assertTrue(gameResult.isSchwarz());
 		assertThat(
 				gameResult.getFinalDeclarerPoints()
-						+ gameResult.getFinalOpponentPoints(), is(120));
+				+ gameResult.getFinalOpponentPoints(), is(120));
 	}
 
 	@Test
@@ -380,7 +383,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 		assertTrue(gameResult.isSchwarz());
 		assertThat(
 				gameResult.getFinalDeclarerPoints()
-						+ gameResult.getFinalOpponentPoints(), is(120));
+				+ gameResult.getFinalOpponentPoints(), is(120));
 	}
 
 	@Test
@@ -399,7 +402,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 			assertEquals(
 					120,
 					result.getFinalDeclarerPoints()
-							+ result.getFinalOpponentPoints());
+					+ result.getFinalOpponentPoints());
 			GameSummary summary = game.getGameSummary();
 
 			Map<Player, Integer> playerPointsInTricks = new HashMap<Player, Integer>();
@@ -416,8 +419,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 			assertEquals(
 					result.getFinalOpponentPoints(),
 					playerPointsInTricks.get(declarer.getRightNeighbor())
-							+ playerPointsInTricks.get(declarer
-									.getLeftNeighbor()));
+					+ playerPointsInTricks.get(declarer
+							.getLeftNeighbor()));
 		}
 	}
 

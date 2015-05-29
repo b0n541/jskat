@@ -610,25 +610,30 @@ public class SkatGameData {
 	 */
 	public Trick getCurrentTrick() {
 		if (tricks.size() > 0) {
-		return this.tricks.get(this.tricks.size() - 1);
+			return this.tricks.get(this.tricks.size() - 1);
 		}
 		return null;
 	}
 
 	/**
-	 * Gets the last trick
+	 * Gets the last completed trick.
 	 *
-	 * @return Last trick, if at least two tricks are available<br>
-	 *         NULL otherwise
+	 * @return Last completed trick, NULL otherwise
 	 */
-	public Trick getLastTrick() {
+	public Trick getLastCompletedTrick() {
 
 		if (getTricks().size() < 2) {
 			throw new IllegalStateException(
 					"No tricks finished in the game so far."); //$NON-NLS-1$
 		}
 
-		return this.tricks.get(this.tricks.size() - 2);
+		if (tricks.get(tricks.size() - 1).isTrickFinished()) {
+			// after the game is finished take the last trick
+			return tricks.get(tricks.size() - 1);
+		} else {
+			// during the game the last trick is not finished
+			return tricks.get(tricks.size() - 2);
+		}
 	}
 
 	/**
@@ -665,7 +670,7 @@ public class SkatGameData {
 	 */
 	public List<Trick> getTricks() {
 
-		return this.tricks;
+		return Collections.unmodifiableList(tricks);
 	}
 
 	/**
@@ -1005,6 +1010,17 @@ public class SkatGameData {
 	}
 
 	/**
+	 * Checks whether the game has ended or not.
+	 *
+	 * @return TRUE, if the game has ended
+	 */
+	public boolean isGameFinished() {
+
+		return GameState.PRELIMINARY_GAME_END.equals(gameState)
+				|| GameState.GAME_OVER.equals(gameState);
+	}
+
+	/**
 	 * Sets the schneider and schwarz flag according the player points
 	 */
 	public void setSchneiderSchwarz() {
@@ -1111,11 +1127,7 @@ public class SkatGameData {
 	 * @return Last trick winner
 	 */
 	public Player getLastTrickWinner() {
-		// get last trick
-		final Trick lastTrick = getLastTrick();
-
-		// get trick winner
-		return lastTrick.getTrickWinner();
+		return getLastCompletedTrick().getTrickWinner();
 	}
 
 	/**

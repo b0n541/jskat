@@ -677,7 +677,7 @@ public class SkatGame extends JSkatThread {
 
 			playCard(trickForehand, null, activePlayer);
 
-			if (isFinished()) {
+			if (data.isGameFinished()) {
 				break;
 			}
 
@@ -695,7 +695,7 @@ public class SkatGame extends JSkatThread {
 			playCard(trickForehand, data.getCurrentTrick().getFirstCard(),
 					activePlayer);
 
-			if (isFinished()) {
+			if (data.isGameFinished()) {
 				break;
 			}
 
@@ -713,13 +713,13 @@ public class SkatGame extends JSkatThread {
 			playCard(trickForehand, data.getCurrentTrick().getFirstCard(),
 					activePlayer);
 
-			if (isFinished()) {
+			if (data.isGameFinished()) {
 				break;
 			}
 
 			doSleep(this.maxSleep);
 
-			Trick lastTrick = data.getLastTrick();
+			Trick lastTrick = data.getLastCompletedTrick();
 			this.data.addPlayerPoints(lastTrick.getTrickWinner(),
 					lastTrick.getValue());
 
@@ -739,7 +739,7 @@ public class SkatGame extends JSkatThread {
 
 			doSleep(this.maxSleep);
 
-			if (isFinished()) {
+			if (data.isGameFinished()) {
 				break;
 			}
 
@@ -916,7 +916,7 @@ public class SkatGame extends JSkatThread {
 			if (data.getCurrentTrick() != null
 					&& data.getCurrentTrick().getFirstCard() == null) {
 				JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(
-						new TrickCompletedEvent(data.getLastTrick()));
+						new TrickCompletedEvent(data.getLastCompletedTrick()));
 			}
 
 			JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(this.tableName,
@@ -1005,12 +1005,6 @@ public class SkatGame extends JSkatThread {
 		}
 
 		return result;
-	}
-
-	private boolean isFinished() {
-
-		return this.data.getGameState() == GameState.PRELIMINARY_GAME_END
-				|| this.data.getGameState() == GameState.GAME_OVER;
 	}
 
 	private void calculateGameValue() {

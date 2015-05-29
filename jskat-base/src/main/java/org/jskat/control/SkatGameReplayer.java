@@ -115,7 +115,7 @@ public class SkatGameReplayer {
 				&& data.getCurrentTrick() != null
 				&& data.getCurrentTrick().getFirstCard() == null) {
 			JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(
-					new TrickCompletedEvent(data.getLastTrick()));
+					new TrickCompletedEvent(data.getLastCompletedTrick()));
 		} else if (event instanceof GameFinishEvent) {
 			JSkatEventBus.INSTANCE.post(new ShowCardsCommand(tableName, data
 					.getCardsAfterDiscard()));

@@ -35,10 +35,10 @@ public class Trick {
 
 	/**
 	 * Creates a new instance of Trick
-	 * 
+	 *
 	 * @param newTrickNumber
 	 *            Trick number in game
-	 * 
+	 *
 	 * @param newForeHand
 	 *            Player ID of the fore hand player
 	 */
@@ -49,8 +49,18 @@ public class Trick {
 	}
 
 	/**
+	 * Checks whether the trick is finished or not.
+	 *
+	 * @return TRUE, if the trick is finished
+	 */
+	public boolean isTrickFinished() {
+		return firstCard != null && secondCard != null && thirdCard != null
+				&& trickWinner != null;
+	}
+
+	/**
 	 * Gets the fore hand player of this trick
-	 * 
+	 *
 	 * @return Fore hand player
 	 */
 	public Player getForeHand() {
@@ -60,7 +70,7 @@ public class Trick {
 
 	/**
 	 * Gets the middle hand player of this trick
-	 * 
+	 *
 	 * @return Fore hand player
 	 */
 	public Player getMiddleHand() {
@@ -69,7 +79,7 @@ public class Trick {
 
 	/**
 	 * Gets the rear hand player of this trick
-	 * 
+	 *
 	 * @return Fore hand player
 	 */
 	public Player getRearHand() {
@@ -78,7 +88,7 @@ public class Trick {
 
 	/**
 	 * Gets the first card
-	 * 
+	 *
 	 * @return First card
 	 */
 	public Card getFirstCard() {
@@ -88,7 +98,7 @@ public class Trick {
 
 	/**
 	 * Sets the first card
-	 * 
+	 *
 	 * @param newFirstCard
 	 *            First card
 	 */
@@ -99,7 +109,7 @@ public class Trick {
 
 	/**
 	 * Gets the second card
-	 * 
+	 *
 	 * @return Second card
 	 */
 	public Card getSecondCard() {
@@ -109,7 +119,7 @@ public class Trick {
 
 	/**
 	 * Sets the second card
-	 * 
+	 *
 	 * @param newSecondCard
 	 *            Second card
 	 */
@@ -120,7 +130,7 @@ public class Trick {
 
 	/**
 	 * Gets the third card
-	 * 
+	 *
 	 * @return Third card
 	 */
 	public Card getThirdCard() {
@@ -130,7 +140,7 @@ public class Trick {
 
 	/**
 	 * Sets the third card
-	 * 
+	 *
 	 * @param newThirdCard
 	 *            Third card
 	 */
@@ -141,7 +151,7 @@ public class Trick {
 
 	/**
 	 * Gets a card from the trick
-	 * 
+	 *
 	 * @param player
 	 *            Player
 	 * @return Card played by the player
@@ -168,7 +178,7 @@ public class Trick {
 
 	/**
 	 * Gets the trick winner
-	 * 
+	 *
 	 * @return Trick winner
 	 */
 	public Player getTrickWinner() {
@@ -178,7 +188,7 @@ public class Trick {
 
 	/**
 	 * Sets the trick winner
-	 * 
+	 *
 	 * @param newTrickWinner
 	 *            Trick winner
 	 */
@@ -189,7 +199,7 @@ public class Trick {
 
 	/**
 	 * Adds a card to the trick
-	 * 
+	 *
 	 * @param card
 	 *            Card to be added
 	 */
@@ -206,7 +216,7 @@ public class Trick {
 
 	/**
 	 * Removes a card from the trick.
-	 * 
+	 *
 	 * @param card
 	 *            Card to be removed
 	 */
@@ -223,7 +233,7 @@ public class Trick {
 
 	/**
 	 * Returns the cards of the trick as CardList
-	 * 
+	 *
 	 * @return The cards of the trick
 	 */
 	public CardList getCardList() {
@@ -248,7 +258,7 @@ public class Trick {
 
 	/**
 	 * Gets the sum of all card points in the CardList
-	 * 
+	 *
 	 * @return Sum of all card points
 	 */
 	public int getValue() {
@@ -258,7 +268,7 @@ public class Trick {
 
 	/**
 	 * Gets the trick number in the game
-	 * 
+	 *
 	 * @return Trick number in the game
 	 */
 	public int getTrickNumberInGame() {
@@ -267,7 +277,7 @@ public class Trick {
 
 	/**
 	 * Sets the trick number in the game
-	 * 
+	 *
 	 * @param newTrickNumber
 	 *            Trick number in the game
 	 */

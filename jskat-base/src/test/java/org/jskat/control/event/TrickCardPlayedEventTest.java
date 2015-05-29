@@ -106,7 +106,7 @@ public class TrickCardPlayedEventTest extends AbstractJSkatTest {
 		assertHand(data.getPlayerCards(Player.FOREHAND), Card.CA, Card.C7);
 		assertHand(data.getPlayerCards(Player.MIDDLEHAND), Card.SA, Card.C8);
 		assertHand(data.getPlayerCards(Player.REARHAND), Card.HA, Card.C9);
-		assertTrick(data.getLastTrick(), Card.CJ, Card.SJ, Card.HJ,
+		assertTrick(data.getLastCompletedTrick(), Card.CJ, Card.SJ, Card.HJ,
 				Player.FOREHAND);
 		assertEmptyTrick(data.getCurrentTrick());
 
@@ -129,7 +129,7 @@ public class TrickCardPlayedEventTest extends AbstractJSkatTest {
 		assertHand(data.getPlayerCards(Player.FOREHAND), Card.CA);
 		assertHand(data.getPlayerCards(Player.MIDDLEHAND), Card.SA);
 		assertHand(data.getPlayerCards(Player.REARHAND), Card.HA);
-		assertTrick(data.getLastTrick(), Card.C7, Card.C8, Card.C9,
+		assertTrick(data.getLastCompletedTrick(), Card.C7, Card.C8, Card.C9,
 				Player.REARHAND);
 		assertEmptyTrick(data.getCurrentTrick());
 
@@ -152,7 +152,7 @@ public class TrickCardPlayedEventTest extends AbstractJSkatTest {
 		assertHand(data.getPlayerCards(Player.FOREHAND));
 		assertHand(data.getPlayerCards(Player.MIDDLEHAND));
 		assertHand(data.getPlayerCards(Player.REARHAND));
-		assertTrick(data.getLastTrick(), Card.HA, Card.CA, Card.SA,
+		assertTrick(data.getLastCompletedTrick(), Card.HA, Card.CA, Card.SA,
 				Player.FOREHAND);
 		assertEmptyTrick(data.getCurrentTrick());
 	}
@@ -185,7 +185,7 @@ public class TrickCardPlayedEventTest extends AbstractJSkatTest {
 		assertHand(data.getPlayerCards(Player.MIDDLEHAND));
 		assertHand(data.getPlayerCards(Player.REARHAND));
 		assertEmptyTrick(data.getCurrentTrick());
-		assertTrick(data.getLastTrick(), Card.HA, Card.CA, Card.SA,
+		assertTrick(data.getLastCompletedTrick(), Card.HA, Card.CA, Card.SA,
 				Player.FOREHAND);
 
 		events.next().processBackward(data);
@@ -208,7 +208,7 @@ public class TrickCardPlayedEventTest extends AbstractJSkatTest {
 		assertHand(data.getPlayerCards(Player.MIDDLEHAND), Card.SA);
 		assertHand(data.getPlayerCards(Player.REARHAND), Card.HA);
 		assertEmptyTrick(data.getCurrentTrick());
-		assertTrick(data.getLastTrick(), Card.C7, Card.C8, Card.C9,
+		assertTrick(data.getLastCompletedTrick(), Card.C7, Card.C8, Card.C9,
 				Player.REARHAND);
 	}
 
