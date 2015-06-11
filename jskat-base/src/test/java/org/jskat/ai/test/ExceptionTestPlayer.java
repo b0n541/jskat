@@ -29,12 +29,12 @@ public class ExceptionTestPlayer extends AIPlayerRND {
 	private final int trickNoWhereExceptionIsThrown;
 
 	public ExceptionTestPlayer() {
-		this.trickNoWhereExceptionIsThrown = random.nextInt(10);
+		trickNoWhereExceptionIsThrown = random.nextInt(10);
 	}
 
 	@Override
 	public Card playCard() {
-		if (this.knowledge.getCurrentTrick().getTrickNumberInGame() == trickNoWhereExceptionIsThrown) {
+		if (knowledge.getCurrentTrick().getTrickNumberInGame() == trickNoWhereExceptionIsThrown) {
 			double exception = 42 / 0;
 		}
 		return super.playCard();

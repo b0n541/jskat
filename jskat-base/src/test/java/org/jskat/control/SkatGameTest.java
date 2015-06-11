@@ -326,7 +326,16 @@ public class SkatGameTest extends AbstractJSkatTest {
 		runGame(game);
 
 		SkatGameResult gameResult = game.getGameResult();
-		assertTrue(gameResult.isSchwarz());
+		if (!nullGameEndedPreliminary(game)) {
+			assertTrue(gameResult.isSchwarz());
+		}
+	}
+
+	private boolean nullGameEndedPreliminary(SkatGame game) {
+		// in Null games the game might have ended preliminary before all tricks
+		// have been played
+		return GameType.NULL.equals(game.getGameAnnouncement().getGameType()) && game
+				.getGameSummary().getTricks().size() < 10;
 	}
 
 	private void randomGameAnnouncement(SkatGame game) {
@@ -344,8 +353,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 
 	private GameType getRandomGameType() {
 		return Arrays.asList(GameType.GRAND, GameType.CLUBS, GameType.SPADES,
-				GameType.HEARTS, GameType.DIAMONDS, GameType.NULL).get(
-				random.nextInt(6));
+				GameType.HEARTS, GameType.DIAMONDS, GameType.NULL,
+				GameType.RAMSCH).get(random.nextInt(6));
 	}
 
 	@Test
@@ -364,7 +373,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 		assertTrue(gameResult.isSchwarz());
 		assertThat(
 				gameResult.getFinalDeclarerPoints()
-				+ gameResult.getFinalOpponentPoints(), is(120));
+						+ gameResult.getFinalOpponentPoints(), is(120));
 	}
 
 	@Test
@@ -383,7 +392,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 		assertTrue(gameResult.isSchwarz());
 		assertThat(
 				gameResult.getFinalDeclarerPoints()
-				+ gameResult.getFinalOpponentPoints(), is(120));
+						+ gameResult.getFinalOpponentPoints(), is(120));
 	}
 
 	@Test
@@ -402,7 +411,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 			assertEquals(
 					120,
 					result.getFinalDeclarerPoints()
-					+ result.getFinalOpponentPoints());
+							+ result.getFinalOpponentPoints());
 			GameSummary summary = game.getGameSummary();
 
 			Map<Player, Integer> playerPointsInTricks = new HashMap<Player, Integer>();
@@ -419,8 +428,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 			assertEquals(
 					result.getFinalOpponentPoints(),
 					playerPointsInTricks.get(declarer.getRightNeighbor())
-					+ playerPointsInTricks.get(declarer
-							.getLeftNeighbor()));
+							+ playerPointsInTricks.get(declarer
+									.getLeftNeighbor()));
 		}
 	}
 
