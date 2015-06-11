@@ -22,6 +22,7 @@ import org.jskat.control.command.table.CreateTableCommand;
 import org.jskat.control.command.table.RemoveTableCommand;
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.table.ActivePlayerChangedEvent;
+import org.jskat.control.event.table.SkatSeriesStartedEvent;
 import org.jskat.control.event.table.TableCreatedEvent;
 import org.jskat.control.event.table.TableGameMoveEvent;
 import org.jskat.control.event.table.TableRemovedEvent;
@@ -31,7 +32,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.eventbus.DeadEvent;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
-
 
 /**
  * Central event bus for JSkat.
@@ -72,7 +72,7 @@ public class JSkatEventBus {
 
 		post(new TableCreatedEvent(command.tableType, command.tableName));
 	}
-	
+
 	@Subscribe
 	public void removeTableEventBusOn(final RemoveTableCommand command) {
 		JSkatEventBus.TABLE_EVENT_BUSSES.remove(command.tableName);
@@ -94,9 +94,16 @@ public class JSkatEventBus {
 	}
 
 	@Subscribe
+	public void dispatchTableEventOn(SkatSeriesStartedEvent event) {
+		LOG.info("Forwarding table event " + event + " to table "
+				+ event.tableName);
+		JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(event);
+	}
+
+	@Subscribe
 	public void dispatchTableCommandOn(ShowCardsCommand command) {
 		LOG.info("Forwarding command " + command + " to table "
-			+ command.tableName);
+				+ command.tableName);
 		JSkatEventBus.TABLE_EVENT_BUSSES.get(command.tableName).post(command);
 	}
 }

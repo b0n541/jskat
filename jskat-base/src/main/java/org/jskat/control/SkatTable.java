@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.jskat.control.event.table.SkatGameReplayFinishedEvent;
+import org.jskat.control.event.table.SkatSeriesStartedEvent;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.SkatTableOptions;
@@ -97,6 +98,8 @@ public class SkatTable {
 			series.setMaxRounds(rounds, unlimitedRounds);
 			series.start();
 		}
+
+		JSkatEventBus.INSTANCE.post(new SkatSeriesStartedEvent(tableName));
 	}
 
 	/**
