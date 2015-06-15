@@ -46,6 +46,8 @@ public class JSkatOptionsTest extends AbstractJSkatTest {
 		JSkatOptions options = JSkatOptions.instance();
 		options.setDefaultProperties(new DesktopSavePathResolver());
 
+		assertFalse(options.isCheatDebugMode());
+
 		assertTrue(options.getBoolean(Option.SHOW_TIPS_AT_START_UP));
 		assertFalse(options
 				.getBoolean(Option.CHECK_FOR_NEW_VERSION_AT_START_UP));
@@ -58,7 +60,7 @@ public class JSkatOptionsTest extends AbstractJSkatTest {
 		}
 		assertEquals(CardSet.ISS_TOURNAMENT, options.getCardSet());
 		assertEquals(CardFace.TOURNAMENT, options.getCardSet().getCardFace());
-		assertEquals(options.getDefaultSaveDir(), options.getSavePath());
+		assertEquals(JSkatOptions.getDefaultSaveDir(), options.getSavePath());
 
 		// rule defaults
 		assertEquals(RuleSet.ISPA, options.getRules());

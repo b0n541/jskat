@@ -1185,6 +1185,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 	@Subscribe
 	public void showCardsOn(final ShowCardsCommand command) {
 		setCardsForPlayers(command.cards);
+		for (Player player : Player.values()) {
+			showCards(player);
+		}
 	}
 
 	private void setCardsForPlayers(Map<Player, CardList> cards) {
@@ -1192,7 +1195,6 @@ public class SkatTablePanel extends AbstractTabPanel {
 			removeAllCards(playerCards.getKey());
 			getPlayerPanel(playerCards.getKey()).addCards(
 					playerCards.getValue());
-			showCards(playerCards.getKey());
 		}
 	}
 
