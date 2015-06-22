@@ -231,16 +231,6 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setTrickNumber(
-			@SuppressWarnings("unused") final String tableName,
-			@SuppressWarnings("unused") final int trickNumber) {
-		// empty method by intent
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public boolean showISSTableInvitation(
 			@SuppressWarnings("unused") final String invitor,
 			@SuppressWarnings("unused") final String tableName) {

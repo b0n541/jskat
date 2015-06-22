@@ -1037,15 +1037,6 @@ public class JSkatViewImpl implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setTrickNumber(final String tableName, final int trickNumber) {
-
-		this.tables.get(tableName).setTrickNumber(trickNumber);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	public boolean showISSTableInvitation(final String invitor,
 			final String tableName) {
 

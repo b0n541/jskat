@@ -662,8 +662,6 @@ public class SkatGame extends JSkatThread {
 			Player trickForehand = getTrickForeHand(trickNo);
 			setActivePlayer(trickForehand);
 
-			this.view.setTrickNumber(this.tableName, trickNo + 1);
-
 			informPlayersAboutNewTrick(trickNo, trickForehand);
 
 			// Ask players for their cards

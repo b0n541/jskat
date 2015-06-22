@@ -390,6 +390,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	@Subscribe
 	public void resetTableOn(final GameStartEvent event) {
 
+		this.gameInfoPanel.setGameState(GameState.GAME_START);
 		this.gameInfoPanel.setGameNumber(event.gameNo);
 
 		this.leftOpponentPanel.setPosition(event.leftPlayerPosition);
@@ -465,6 +466,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 				event.trick.getSecondCard());
 		this.lastTrickPanel.addCard(trickForeHand.getRightNeighbor(),
 				event.trick.getThirdCard());
+
+		// set trick number of next trick
+		setTrickNumber(event.trick.getTrickNumberInGame() + 2);
 	}
 
 	/**

@@ -197,12 +197,6 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void setTrickNumber(final String tableName, final int trickNumber) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public boolean showISSTableInvitation(final String invitor,
 			final String tableName) {
 		// TODO Auto-generated method stub
