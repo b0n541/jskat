@@ -15,7 +15,9 @@
  */
 package org.jskat.data;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import org.jskat.util.Player;
@@ -42,23 +44,49 @@ public class SkatGameDataTest {
 	}
 
 	@Test
-	public void schneider() {
+	public void schneiderSchwarz() {
 
-		assertFalse(gameData.isSchneider());
+		assertThat(gameData.isSchneider(), is(false));
+		assertThat(gameData.isSchwarz(), is(false));
 
-		gameData.setDeclarerScore(91);
+		gameData.setDeclarerScore(0);
 
-		assertTrue(gameData.isSchneider());
-	}
+		assertThat(gameData.isSchneider(), is(true));
+		assertThat(gameData.isSchwarz(), is(true));
 
-	@Test
-	public void schwarz() {
+		gameData.setDeclarerScore(15);
 
-		assertFalse(gameData.isSchwarz());
+		assertThat(gameData.isSchneider(), is(true));
+		assertThat(gameData.isSchwarz(), is(false));
+
+		gameData.setDeclarerScore(30);
+
+		assertThat(gameData.isSchneider(), is(true));
+		assertThat(gameData.isSchwarz(), is(false));
+
+		gameData.setDeclarerScore(31);
+
+		assertThat(gameData.isSchneider(), is(false));
+		assertThat(gameData.isSchwarz(), is(false));
+
+		gameData.setDeclarerScore(60);
+
+		assertThat(gameData.isSchneider(), is(false));
+		assertThat(gameData.isSchwarz(), is(false));
+
+		gameData.setDeclarerScore(89);
+
+		assertThat(gameData.isSchneider(), is(false));
+		assertThat(gameData.isSchwarz(), is(false));
+
+		gameData.setDeclarerScore(90);
+
+		assertThat(gameData.isSchneider(), is(true));
+		assertThat(gameData.isSchwarz(), is(false));
 
 		gameData.setDeclarerScore(120);
 
-		assertTrue(gameData.isSchwarz());
+		assertThat(gameData.isSchneider(), is(true));
+		assertThat(gameData.isSchwarz(), is(true));
 	}
-
 }
