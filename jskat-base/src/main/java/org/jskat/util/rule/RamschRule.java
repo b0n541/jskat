@@ -107,12 +107,15 @@ public class RamschRule extends SuitGrandRamschRule {
 	 */
 	public static final boolean isDurchmarsch(final Player player,
 			final SkatGameData gameData) {
-		for (Trick t : gameData.getTricks()) {
-			if (t.getTrickWinner() != player) {
-				return false;
+		if (gameData.getTricks().size() == 10) {
+			for (Trick t : gameData.getTricks()) {
+				if (t.getTrickWinner() != player) {
+					return false;
+				}
 			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	/**
@@ -128,12 +131,15 @@ public class RamschRule extends SuitGrandRamschRule {
 	 */
 	public static final boolean isJungfrau(final Player player,
 			final SkatGameData gameData) {
-		for (Trick t : gameData.getTricks()) {
-			if (t.getTrickWinner() == player) {
-				return false;
+		if (gameData.getTricks().size() == 10) {
+			for (Trick t : gameData.getTricks()) {
+				if (t.getTrickWinner() == player) {
+					return false;
+				}
 			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	/**
@@ -141,6 +147,7 @@ public class RamschRule extends SuitGrandRamschRule {
 	 */
 	@Override
 	public int getMultiplier(final SkatGameData gameData) {
+
 		int multiplier = 1;
 
 		if (gameData.isJungfrau()) {
@@ -150,6 +157,7 @@ public class RamschRule extends SuitGrandRamschRule {
 
 		log.debug(gameData.getGeschoben() + " player did schieben"); //$NON-NLS-1$
 		multiplier = (int) (multiplier * Math.pow(2, gameData.getGeschoben()));
+
 		return multiplier;
 	}
 

@@ -15,10 +15,12 @@
  */
 package org.jskat.util.rule;
 
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertThat;
 
 import java.util.Set;
 
@@ -58,7 +60,6 @@ public class RamschRuleTest extends AbstractJSkatTest {
 	@Test(expected = IllegalStateException.class)
 	public void testWrongGameData_NoAnnouncement() {
 		data = new SkatGameData();
-
 		data.getRamschLoosers();
 	}
 
@@ -83,15 +84,17 @@ public class RamschRuleTest extends AbstractJSkatTest {
 		data.addPlayerPoints(Player.MIDDLEHAND, 15);
 		data.addPlayerPoints(Player.REARHAND, 5);
 
-		assertFalse(ramschRules.isGameWon(data));
-		assertEquals(-100, ramschRules.calcGameResult(data));
+		assertThat(ramschRules.isGameWon(data), is(false));
+		assertThat(ramschRules.calcGameResult(data), is(-100));
 
 		data.finishRamschGame();
 
-		assertNull(data.getDeclarer());
+		assertThat(data.getDeclarer(), is(nullValue()));
+
 		Set<Player> ramschLoosers = data.getRamschLoosers();
-		assertEquals(1, ramschLoosers.size());
-		assertTrue(ramschLoosers.contains(Player.FOREHAND));
+
+		assertThat(ramschLoosers.size(), is(1));
+		assertThat(ramschLoosers, hasItem(Player.FOREHAND));
 	}
 
 	/**
@@ -105,15 +108,17 @@ public class RamschRuleTest extends AbstractJSkatTest {
 		data.addPlayerPoints(Player.MIDDLEHAND, 100);
 		data.addPlayerPoints(Player.REARHAND, 5);
 
-		assertFalse(ramschRules.isGameWon(data));
-		assertEquals(-100, ramschRules.calcGameResult(data));
+		assertThat(ramschRules.isGameWon(data), is(false));
+		assertThat(ramschRules.calcGameResult(data), is(-100));
 
 		data.finishRamschGame();
 
-		assertNull(data.getDeclarer());
+		assertThat(data.getDeclarer(), is(nullValue()));
+
 		Set<Player> ramschLoosers = data.getRamschLoosers();
-		assertEquals(1, ramschLoosers.size());
-		assertTrue(ramschLoosers.contains(Player.MIDDLEHAND));
+
+		assertThat(ramschLoosers.size(), is(1));
+		assertThat(ramschLoosers, hasItem(Player.MIDDLEHAND));
 	}
 
 	/**
@@ -127,15 +132,17 @@ public class RamschRuleTest extends AbstractJSkatTest {
 		data.addPlayerPoints(Player.MIDDLEHAND, 5);
 		data.addPlayerPoints(Player.REARHAND, 100);
 
-		assertFalse(ramschRules.isGameWon(data));
-		assertEquals(-100, ramschRules.calcGameResult(data));
+		assertThat(ramschRules.isGameWon(data), is(false));
+		assertThat(ramschRules.calcGameResult(data), is(-100));
 
 		data.finishRamschGame();
 
-		assertNull(data.getDeclarer());
+		assertThat(data.getDeclarer(), is(nullValue()));
+
 		Set<Player> ramschLoosers = data.getRamschLoosers();
-		assertEquals(1, ramschLoosers.size());
-		assertTrue(ramschLoosers.contains(Player.REARHAND));
+
+		assertThat(ramschLoosers.size(), is(1));
+		assertThat(ramschLoosers, hasItem(Player.REARHAND));
 	}
 
 	/**
@@ -149,16 +156,18 @@ public class RamschRuleTest extends AbstractJSkatTest {
 		data.addPlayerPoints(Player.MIDDLEHAND, 50);
 		data.addPlayerPoints(Player.REARHAND, 20);
 
-		assertFalse(ramschRules.isGameWon(data));
-		assertEquals(-50, ramschRules.calcGameResult(data));
+		assertThat(ramschRules.isGameWon(data), is(false));
+		assertThat(ramschRules.calcGameResult(data), is(-50));
 
 		data.finishRamschGame();
 
-		assertNull(data.getDeclarer());
+		assertThat(data.getDeclarer(), is(nullValue()));
+
 		Set<Player> ramschLoosers = data.getRamschLoosers();
-		assertEquals(2, ramschLoosers.size());
-		assertTrue(ramschLoosers.contains(Player.FOREHAND));
-		assertTrue(ramschLoosers.contains(Player.MIDDLEHAND));
+
+		assertThat(ramschLoosers.size(), is(2));
+		assertThat(ramschLoosers, hasItem(Player.FOREHAND));
+		assertThat(ramschLoosers, hasItem(Player.MIDDLEHAND));
 	}
 
 	/**
@@ -172,16 +181,55 @@ public class RamschRuleTest extends AbstractJSkatTest {
 		data.addPlayerPoints(Player.MIDDLEHAND, 50);
 		data.addPlayerPoints(Player.REARHAND, 50);
 
-		assertFalse(ramschRules.isGameWon(data));
-		assertEquals(-50, ramschRules.calcGameResult(data));
+		assertThat(ramschRules.isGameWon(data), is(false));
+		assertThat(ramschRules.calcGameResult(data), is(-50));
 
 		data.finishRamschGame();
 
-		assertNull(data.getDeclarer());
+		assertThat(data.getDeclarer(), is(nullValue()));
+
 		Set<Player> ramschLoosers = data.getRamschLoosers();
-		assertEquals(2, ramschLoosers.size());
-		assertTrue(ramschLoosers.contains(Player.MIDDLEHAND));
-		assertTrue(ramschLoosers.contains(Player.REARHAND));
+
+		assertThat(ramschLoosers.size(), is(2));
+		assertThat(ramschLoosers, hasItem(Player.MIDDLEHAND));
+		assertThat(ramschLoosers, hasItem(Player.REARHAND));
+	}
+
+	/**
+	 * Tests game value calculation<br>
+	 * Middle hand and rear hand made the most points
+	 */
+	@Test
+	public void testCalcGameValue_MiddleHandRearHandMostPointsForehandJungfrau() {
+
+		data.addPlayerPoints(Player.FOREHAND, 0);
+		data.addPlayerPoints(Player.MIDDLEHAND, 60);
+		data.addPlayerPoints(Player.REARHAND, 60);
+
+		for (int i = 0; i < 10; i++) {
+			Trick trick = new Trick(0, Player.FOREHAND);
+			if (i < 9) {
+				trick.setTrickWinner(Player.MIDDLEHAND);
+			} else {
+				trick.setTrickWinner(Player.REARHAND);
+			}
+			data.addTrick(trick);
+		}
+
+		data.setJungfrauDurchmarsch();
+
+		assertFalse(ramschRules.isGameWon(data));
+		assertEquals(-120, ramschRules.calcGameResult(data));
+
+		data.finishRamschGame();
+
+		assertThat(data.getDeclarer(), is(nullValue()));
+
+		Set<Player> ramschLoosers = data.getRamschLoosers();
+
+		assertThat(ramschLoosers.size(), is(2));
+		assertThat(ramschLoosers, hasItem(Player.MIDDLEHAND));
+		assertThat(ramschLoosers, hasItem(Player.REARHAND));
 	}
 
 	/**
@@ -200,11 +248,13 @@ public class RamschRuleTest extends AbstractJSkatTest {
 
 		data.finishRamschGame();
 
-		assertNull(data.getDeclarer());
+		assertThat(data.getDeclarer(), is(nullValue()));
+
 		Set<Player> ramschLoosers = data.getRamschLoosers();
-		assertEquals(2, ramschLoosers.size());
-		assertTrue(ramschLoosers.contains(Player.FOREHAND));
-		assertTrue(ramschLoosers.contains(Player.REARHAND));
+
+		assertThat(ramschLoosers.size(), is(2));
+		assertThat(ramschLoosers, hasItem(Player.FOREHAND));
+		assertThat(ramschLoosers, hasItem(Player.REARHAND));
 	}
 
 	/**
@@ -223,28 +273,41 @@ public class RamschRuleTest extends AbstractJSkatTest {
 
 		data.finishRamschGame();
 
-		assertNull(data.getDeclarer());
+		assertThat(data.getDeclarer(), is(nullValue()));
+
 		Set<Player> ramschLoosers = data.getRamschLoosers();
-		assertEquals(3, ramschLoosers.size());
-		assertTrue(ramschLoosers.contains(Player.FOREHAND));
-		assertTrue(ramschLoosers.contains(Player.MIDDLEHAND));
-		assertTrue(ramschLoosers.contains(Player.REARHAND));
+
+		assertThat(ramschLoosers.size(), is(3));
+		assertThat(ramschLoosers, hasItem(Player.FOREHAND));
+		assertThat(ramschLoosers, hasItem(Player.MIDDLEHAND));
+		assertThat(ramschLoosers, hasItem(Player.REARHAND));
+	}
+
+	@Test
+	public void testGetMultiplierGeschoben() {
+
+		assertEquals(1, ramschRules.getMultiplier(data));
+
+		data.addGeschoben();
+
+		assertEquals(2, ramschRules.getMultiplier(data));
+
+		data.addGeschoben();
+
+		assertEquals(4, ramschRules.getMultiplier(data));
+
+		data.addGeschoben();
+
+		assertEquals(8, ramschRules.getMultiplier(data));
 	}
 
 	/**
 	 * Test the calculation of the multiplier
 	 */
 	@Test
-	public void testGetMultiplierJungfrau() {
+	public void testMultiplierJungfrau() {
 
-		data.addGeschoben();
-		assertEquals(2, ramschRules.getMultiplier(data));
-
-		data.addGeschoben();
-		assertEquals(4, ramschRules.getMultiplier(data));
-
-		data.addGeschoben();
-		assertEquals(8, ramschRules.getMultiplier(data));
+		assertEquals(1, ramschRules.getMultiplier(data));
 
 		for (int i = 0; i < 10; i++) {
 			Trick trick = new Trick(0, Player.FOREHAND);
@@ -257,23 +320,48 @@ public class RamschRuleTest extends AbstractJSkatTest {
 		}
 
 		data.setJungfrauDurchmarsch();
-		assertEquals(16, ramschRules.getMultiplier(data));
+
+		assertThat(ramschRules.getMultiplier(data), is(2));
+		assertThat(data.isJungfrau(), is(true));
+		assertThat(data.isDurchmarsch(), is(false));
 	}
 
 	/**
 	 * Test the calculation of the multiplier
 	 */
 	@Test
-	public void testGetMultiplierDurchmarsch() {
+	public void testMultiplierGeschobenJungfrau() {
+
+		assertEquals(1, ramschRules.getMultiplier(data));
 
 		data.addGeschoben();
-		assertEquals(2, ramschRules.getMultiplier(data));
-
 		data.addGeschoben();
-		assertEquals(4, ramschRules.getMultiplier(data));
-
 		data.addGeschoben();
-		assertEquals(8, ramschRules.getMultiplier(data));
+
+		for (int i = 0; i < 10; i++) {
+			Trick trick = new Trick(0, Player.FOREHAND);
+			if (i < 9) {
+				trick.setTrickWinner(Player.FOREHAND);
+			} else {
+				trick.setTrickWinner(Player.MIDDLEHAND);
+			}
+			data.addTrick(trick);
+		}
+
+		data.setJungfrauDurchmarsch();
+
+		assertThat(ramschRules.getMultiplier(data), is(16));
+		assertThat(data.isJungfrau(), is(true));
+		assertThat(data.isDurchmarsch(), is(false));
+	}
+
+	/**
+	 * Test the calculation of the multiplier
+	 */
+	@Test
+	public void testMultiplierDurchmarsch() {
+
+		assertEquals(1, ramschRules.getMultiplier(data));
 
 		// all tricks are made by forehand player
 		for (int i = 0; i < 10; i++) {
@@ -283,6 +371,9 @@ public class RamschRuleTest extends AbstractJSkatTest {
 		}
 
 		data.setJungfrauDurchmarsch();
-		assertEquals(16, ramschRules.getMultiplier(data));
+
+		assertThat(ramschRules.getMultiplier(data), is(2));
+		assertThat(data.isJungfrau(), is(true));
+		assertThat(data.isDurchmarsch(), is(true));
 	}
 }

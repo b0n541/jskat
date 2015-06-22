@@ -427,6 +427,7 @@ public class SkatGameData {
 	public void setDeclarerScore(final int newScore) {
 
 		this.playerPoints.put(this.declarer, Integer.valueOf(newScore));
+
 		if (newScore < 31 || newScore > 89) {
 			result.setSchneider(true);
 		} else {
@@ -1012,10 +1013,8 @@ public class SkatGameData {
 		for (final Player currPlayer : Player.values()) {
 			if (RamschRule.isDurchmarsch(currPlayer, this)) {
 				this.result.setDurchmarsch(true);
-			} else {
-				if (RamschRule.isJungfrau(currPlayer, this)) {
-					this.result.setJungfrau(true);
-				}
+			} else if (RamschRule.isJungfrau(currPlayer, this)) {
+				this.result.setJungfrau(true);
 			}
 		}
 	}

@@ -168,7 +168,7 @@ public class SkatGameResult implements Cloneable {
 	 */
 	public void setDurchmarsch(final boolean durchmarsch) {
 		if (durchmarsch) {
-			this.jungfrau = false;
+			setJungfrau(true);
 		}
 		this.durchmarsch = durchmarsch;
 	}
@@ -190,10 +190,7 @@ public class SkatGameResult implements Cloneable {
 	 *            TRUE, if the game was a jungfrau game
 	 */
 	public void setJungfrau(final boolean isJungfrau) {
-		if (isJungfrau) {
-			this.durchmarsch = false;
-		}
-		this.jungfrau = isJungfrau;
+		jungfrau = isJungfrau;
 	}
 
 	/**
