@@ -44,8 +44,7 @@ public class NextReplayMoveAction extends AbstractJSkatAction {
 				AbstractJSkatAction.strings
 						.getString("next_replay_move_tooltip")); //$NON-NLS-1$
 
-		// TODO: needs a play icon like a music player
-		setIcon(Icon.PLAY);
+		setIcon(Icon.NEXT);
 	}
 
 	/**

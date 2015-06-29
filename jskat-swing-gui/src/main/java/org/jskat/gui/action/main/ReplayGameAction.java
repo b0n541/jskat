@@ -42,8 +42,7 @@ public class ReplayGameAction extends AbstractJSkatAction {
 		putValue(SHORT_DESCRIPTION,
 				AbstractJSkatAction.strings.getString("replay_game_tooltip")); //$NON-NLS-1$
 
-		// TODO: needs a play icon like a music player
-		setIcon(Icon.PLAY);
+		setIcon(Icon.FIRST);
 	}
 
 	/**
