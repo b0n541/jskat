@@ -1199,6 +1199,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 			removeAllCards(playerCards.getKey());
 			getPlayerPanel(playerCards.getKey()).addCards(
 					playerCards.getValue());
+			if (replay) {
+				showCards(playerCards.getKey());
+			}
 		}
 	}
 
