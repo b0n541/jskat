@@ -53,6 +53,7 @@ class GameInformationPanel extends JPanel {
     private boolean ouvertGame;
     private boolean schneiderAnnounced;
     private boolean schwarzAnnounced;
+	private boolean overBidded;
     private boolean contra;
     private boolean re;
     private int trick;
@@ -119,6 +120,7 @@ class GameInformationPanel extends JPanel {
 		ouvertGame = false;
 		schneiderAnnounced = false;
 		schwarzAnnounced = false;
+		overBidded = false;
 		contra = false;
 		re = false;
 		trick = 1;
@@ -226,6 +228,10 @@ class GameInformationPanel extends JPanel {
 				text.append(" " + strings.getString("re"));
 			}
 
+			if (overBidded) {
+				text.append(" " + strings.getString("overbidded"));
+			}
+
             text.append("]"); //$NON-NLS-1$
         }
     }
@@ -244,6 +250,7 @@ class GameInformationPanel extends JPanel {
 		declarerPoints = summary.getFinalDeclarerPoints();
 		opponentPoints = summary.getFinalOpponentScore();
 		ramschLoosers = summary.getRamschLosers();
+		overBidded = summary.gameResult.isOverBidded();
         refreshText();
     }
 
