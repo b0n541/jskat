@@ -23,6 +23,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import org.jskat.gui.action.JSkatAction;
 import org.slf4j.Logger;
@@ -59,7 +60,7 @@ public class WelcomePanel extends AbstractTabPanel {
 		add(getWelcomePanel(), "grow, center"); //$NON-NLS-1$
 	}
 
-	private JPanel getWelcomePanel() {
+	private JScrollPane getWelcomePanel() {
 
 		final JPanel welcomePanel = new JPanel(LayoutFactory.getMigLayout(
 				"fill", "[]", "[shrink][grow]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -67,7 +68,8 @@ public class WelcomePanel extends AbstractTabPanel {
 		welcomePanel.add(createHeaderPanel(), "center, wrap"); //$NON-NLS-1$
 		welcomePanel.add(createButtonPanel(), "center"); //$NON-NLS-1$
 
-		return welcomePanel;
+		return new JScrollPane(welcomePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	}
 
 	private JPanel createHeaderPanel() {

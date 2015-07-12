@@ -124,7 +124,7 @@ public class JSkatGraphicRepository {
 				.getDefaultToolkit()
 				.getImage(
 						ClassLoader
-								.getSystemResource("org/jskat/gui/img/gui/jskatLogo.png")); //$NON-NLS-1$
+.getSystemResource("org/jskat/gui/img/gui/jskat_logo.png")); //$NON-NLS-1$
 		tracker.addImage(this.jskatLogo, 0);
 
 		this.bidBubbles = new ArrayList<Image>();
