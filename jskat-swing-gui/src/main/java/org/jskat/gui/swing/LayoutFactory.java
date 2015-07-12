@@ -16,10 +16,10 @@
  */
 package org.jskat.gui.swing;
 
-import net.miginfocom.swing.MigLayout;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import net.miginfocom.swing.MigLayout;
 
 /**
  * Layout factory for creation of layout managers
@@ -117,8 +117,6 @@ public class LayoutFactory {
 
 	private static boolean isMacOS() {
 		String osName = System.getProperty("os.name").toUpperCase();
-
-		LOG.debug("OS: " + osName);
 
 		if (osName.contains("MAC")) { //$NON-NLS-1$ //$NON-NLS-2$
 			return true;
