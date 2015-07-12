@@ -487,6 +487,8 @@ public class JSkatViewImpl implements JSkatView {
 				+ this.strings.getString("icons") //$NON-NLS-1$
 				+ ": Gnome Desktop Icons, Tango project, Elementary icons,\n" //$NON-NLS-1$
 				+ "Silvestre Herrera, Alex Roberts and Icojoy\n\n" //$NON-NLS-1$
+				+ this.strings.getString("background_image")
+				+ ": webtreats\n\n"
 				+ "This program comes with ABSOLUTELY NO WARRANTY;\n" //$NON-NLS-1$
 				+ "for details see licence dialog\n" //$NON-NLS-1$
 				+ "This is free software, and you are welcome to redistribute it\n" //$NON-NLS-1$
