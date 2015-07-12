@@ -465,6 +465,7 @@ public class JSkatViewImpl implements JSkatView {
 
 		tables.put(tableName, panel);
 		addTabPanel(panel, tabTitle);
+		actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(true);
 	}
 
 	@Subscribe
