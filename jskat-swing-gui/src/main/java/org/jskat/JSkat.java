@@ -126,10 +126,10 @@ public final class JSkat {
         g.setComposite(AlphaComposite.Clear);
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-        g.fillRect(10, 180, 200, 40);
+		g.fillRect(10, 280, 200, 40);
         g.setPaintMode();
         g.setColor(Color.BLACK);
-        g.drawString(frameStrings[frame] + "...", 10, 190);
+		g.drawString(frameStrings[frame] + "...", 10, 290);
     }
 
     private static void initializeOptions() {
