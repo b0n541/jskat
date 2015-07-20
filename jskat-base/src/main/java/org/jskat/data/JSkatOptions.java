@@ -160,8 +160,15 @@ public final class JSkatOptions {
 		/**
 		 * It is allowed to play Grand hand instead of a ramsch game
 		 */
-		RAMSCH_GRAND_HAND_POSSIBLE(Boolean.class), PLAY_REVOLUTION(
-				Boolean.class);
+		RAMSCH_GRAND_HAND_POSSIBLE(Boolean.class), 
+		/**
+		 * Allow playing of revolution (not used a.t.m.)
+		 */
+		PLAY_REVOLUTION(Boolean.class),
+		/**
+		 * Waiting time after finishing a trick
+		 */
+		WAIT_TIME_AFTER_TRICK(Integer.class);
 
 		public final Class clazz;
 		public final Option parent = null;
@@ -341,6 +348,14 @@ public final class JSkatOptions {
 		return getString(Option.SAVE_PATH);
 	}
 
+	public Integer getWaitTimeAfterTrick() {
+		return getInteger(Option.WAIT_TIME_AFTER_TRICK);
+	}
+	
+	public void setWaitTimeAfterTrick(Integer waitTime) {
+		setOption(Option.WAIT_TIME_AFTER_TRICK, waitTime);
+	}
+	
 	/**
 	 * Gets the current skat table options
 	 * 
@@ -1096,6 +1111,9 @@ public final class JSkatOptions {
 		case SHOW_TIPS_AT_START_UP:
 			setShowTipsAtStartUp(Boolean.valueOf(value));
 			break;
+		case WAIT_TIME_AFTER_TRICK:
+			setWaitTimeAfterTrick(Integer.valueOf(value));
+			break;
 		}
 	}
 
@@ -1187,6 +1205,7 @@ public final class JSkatOptions {
 		setOption(Option.PLAY_REVOLUTION, Boolean.FALSE);
 		setOption(Option.ISS_ADDRESS, "skatgame.net"); //$NON-NLS-1$
 		setOption(Option.ISS_PORT, Integer.valueOf(7000));
+		setOption(Option.WAIT_TIME_AFTER_TRICK, Integer.valueOf(0));
 	}
 
 	/**
