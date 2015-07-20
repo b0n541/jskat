@@ -52,6 +52,7 @@ import org.jskat.data.JSkatOptions.Option;
 import org.jskat.data.JSkatOptions.SupportedLanguage;
 import org.jskat.data.SkatTableOptions.RamschSkatOwner;
 import org.jskat.data.SkatTableOptions.RuleSet;
+import org.jskat.data.SkatTableOptions.SavePath;
 import org.jskat.gui.img.CardSet;
 import org.jskat.util.Card;
 import org.jskat.util.CardDeck;
@@ -79,7 +80,8 @@ public class JSkatOptionsDialog extends JDialog {
 	private JCheckBox hideToolbar;
 	private JComboBox language;
 	private JComboBox cardSet;
-	private JTextField savePath;
+	private JRadioButton savePathUserHome;
+	private JRadioButton savePathWorkingDirectory;
 	private JSlider waitTimeAfterTrick;
 
 	// rule options
@@ -119,7 +121,13 @@ public class JSkatOptionsDialog extends JDialog {
 			JSkatOptionsDialog.this.options
 					.setLanguage((SupportedLanguage) JSkatOptionsDialog.this.language.getSelectedItem());
 			JSkatOptionsDialog.this.options.setCardSet(getSelectedCardSet());
-			JSkatOptionsDialog.this.options.setSavePath(JSkatOptionsDialog.this.savePath.getText());
+
+			if (JSkatOptionsDialog.this.savePathUserHome.isSelected()) {
+				JSkatOptionsDialog.this.options.setSavePath(SavePath.USER_HOME);
+			} else if (JSkatOptionsDialog.this.savePathWorkingDirectory.isSelected()) {
+				JSkatOptionsDialog.this.options.setSavePath(SavePath.WORKING_DIRECTORY);
+			}
+
 			JSkatOptionsDialog.this.options
 					.setWaitTimeAfterTrick(JSkatOptionsDialog.this.waitTimeAfterTrick.getValue());
 			JSkatOptionsDialog.this.options.setIssAddress(JSkatOptionsDialog.this.issAddress.getText());
@@ -127,7 +135,7 @@ public class JSkatOptionsDialog extends JDialog {
 
 			if (JSkatOptionsDialog.this.ruleSetISPA.isSelected()) {
 				JSkatOptionsDialog.this.options.setRules(RuleSet.ISPA);
-			} else {
+			} else if (JSkatOptionsDialog.this.ruleSetPub.isSelected()) {
 				JSkatOptionsDialog.this.options.setRules(RuleSet.PUB);
 			}
 
@@ -288,26 +296,18 @@ public class JSkatOptionsDialog extends JDialog {
 	}
 
 	private JPanel getSavePathPanel() {
-		this.savePath = new JTextField(20);
-		this.savePath.setEditable(false);
-		final JButton savePathButton = new JButton(strings.getString("search")); //$NON-NLS-1$
-		savePathButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
+		
+		final JPanel savePathPanel = new JPanel(LayoutFactory.getMigLayout());
 
-				final JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				fileChooser.setFileHidingEnabled(false);
-				fileChooser.setCurrentDirectory(new File(JSkatOptionsDialog.this.savePath.getText()));
-				final int result = fileChooser.showOpenDialog(JSkatOptionsDialog.this.parent);
-				if (result == JFileChooser.APPROVE_OPTION) {
-					JSkatOptionsDialog.this.savePath.setText(fileChooser.getSelectedFile().getAbsolutePath());
-				}
-			}
-		});
-		final JPanel savePathPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		savePathPanel.add(this.savePath);
-		savePathPanel.add(savePathButton);
+		final ButtonGroup savePathGroup = new ButtonGroup();
+		this.savePathUserHome = new JRadioButton(strings.getString("user_home")); //$NON-NLS-1$
+		savePathGroup.add(this.savePathUserHome);
+		this.savePathWorkingDirectory = new JRadioButton(strings.getString("working_directory")); //$NON-NLS-1$
+		savePathGroup.add(this.savePathWorkingDirectory);
+
+		savePathPanel.add(this.savePathUserHome); //$NON-NLS-1$
+		savePathPanel.add(this.savePathWorkingDirectory, "wrap"); //$NON-NLS-1$
+
 		return savePathPanel;
 	}
 
@@ -368,13 +368,12 @@ public class JSkatOptionsDialog extends JDialog {
 			public void actionPerformed(ActionEvent e) {
 				if (hideToolbar.isSelected()) {
 					JSkatEventBus.INSTANCE.post(new HideToolbarCommand());
-				}
-				else {
+				} else {
 					JSkatEventBus.INSTANCE.post(new ShowToolbarCommand());
 				}
 			}
 		});
-		
+
 		final JPanel hideToolbarPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 		hideToolbarPanel.add(hideToolbar);
 		return hideToolbarPanel;
@@ -615,8 +614,15 @@ public class JSkatOptionsDialog extends JDialog {
 
 		cardSet.setSelectedItem(options.getCardSet());
 
-		savePath.setText(options.getSavePath());
-		
+		switch (options.getSavePathInternal()) {
+		case USER_HOME:
+			savePathUserHome.setSelected(true);
+			break;
+		case WORKING_DIRECTORY:
+			savePathWorkingDirectory.setSelected(true);
+			break;
+		}
+
 		waitTimeAfterTrick.setValue(options.getWaitTimeAfterTrick());
 
 		// skat rule options

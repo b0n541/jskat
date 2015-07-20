@@ -64,6 +64,20 @@ public class SkatTableOptions extends Observable {
 		 */
 		LOSER
 	}
+	
+	/**
+	 * Supported save paths
+	 */
+	public enum SavePath {
+		/**
+		 * User home
+		 */
+		USER_HOME,
+		/**
+		 * Working directory
+		 */
+		WORKING_DIRECTORY;
+	}
 
 	private Integer maxPlayerCount;
 	private String firstPlayerName;

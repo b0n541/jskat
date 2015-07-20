@@ -44,23 +44,23 @@ public class JSkatOptionsTest extends AbstractJSkatTest {
 	public void testDefaultValues() {
 
 		JSkatOptions options = JSkatOptions.instance();
-		options.setDefaultProperties(new DesktopSavePathResolver());
+		options.setDefaultProperties();
 
 		assertFalse(options.isCheatDebugMode());
 
 		assertTrue(options.getBoolean(Option.SHOW_TIPS_AT_START_UP));
-		assertFalse(options
-				.getBoolean(Option.CHECK_FOR_NEW_VERSION_AT_START_UP));
+		assertFalse(options.getBoolean(Option.CHECK_FOR_NEW_VERSION_AT_START_UP));
+		assertFalse(options.getBoolean(Option.HIDE_TOOLBAR));
 
-		if (Locale.getDefault().getLanguage()
-				.equals(Locale.GERMAN.getLanguage())) {
+		if (Locale.getDefault().getLanguage().equals(Locale.GERMAN.getLanguage())) {
 			assertEquals(SupportedLanguage.GERMAN, options.getLanguage());
 		} else {
 			assertEquals(SupportedLanguage.ENGLISH, options.getLanguage());
 		}
+		assertEquals(Integer.valueOf(0), options.getWaitTimeAfterTrick());
 		assertEquals(CardSet.ISS_TOURNAMENT, options.getCardSet());
 		assertEquals(CardFace.TOURNAMENT, options.getCardSet().getCardFace());
-		assertEquals(JSkatOptions.getDefaultSaveDir(), options.getSavePath());
+		assertEquals(new DesktopSavePathResolver().getCurrentWorkingDirectory(), options.getSavePath());
 
 		// rule defaults
 		assertEquals(RuleSet.ISPA, options.getRules());
@@ -73,8 +73,7 @@ public class JSkatOptionsTest extends AbstractJSkatTest {
 		assertFalse(options.isContraAfterBid18(true));
 		assertTrue(options.isContraAfterBid18(false));
 
-		assertThat(options.getContraCallingTime(),
-				is(ContraCallingTime.BEFORE_FIRST_CARD));
+		assertThat(options.getContraCallingTime(), is(ContraCallingTime.BEFORE_FIRST_CARD));
 
 		assertFalse(options.isPlayBock());
 		assertFalse(options.isPlayBock(true));
@@ -110,21 +109,15 @@ public class JSkatOptionsTest extends AbstractJSkatTest {
 	public void testPropertyName() {
 		assertEquals("rules", JSkatOptions.Option.RULES.propertyName());
 		assertEquals("cardSet", JSkatOptions.Option.CARD_SET.propertyName());
-		assertEquals("bockEventNoBid",
-				JSkatOptions.Option.BOCK_EVENT_NO_BID.propertyName());
-		assertEquals("contraAfterBid18",
-				JSkatOptions.Option.CONTRA_AFTER_BID_18.propertyName());
+		assertEquals("bockEventNoBid", JSkatOptions.Option.BOCK_EVENT_NO_BID.propertyName());
+		assertEquals("contraAfterBid18", JSkatOptions.Option.CONTRA_AFTER_BID_18.propertyName());
 	}
 
 	@Test
 	public void testValueOfProperty() {
-		assertEquals(JSkatOptions.Option.RULES,
-				JSkatOptions.Option.valueOfProperty("rules"));
-		assertEquals(JSkatOptions.Option.CARD_SET,
-				JSkatOptions.Option.valueOfProperty("cardSet"));
-		assertEquals(JSkatOptions.Option.BOCK_EVENT_NO_BID,
-				JSkatOptions.Option.valueOfProperty("bockEventNoBid"));
-		assertEquals(JSkatOptions.Option.CONTRA_AFTER_BID_18,
-				JSkatOptions.Option.valueOfProperty("contraAfterBid18"));
+		assertEquals(JSkatOptions.Option.RULES, JSkatOptions.Option.valueOfProperty("rules"));
+		assertEquals(JSkatOptions.Option.CARD_SET, JSkatOptions.Option.valueOfProperty("cardSet"));
+		assertEquals(JSkatOptions.Option.BOCK_EVENT_NO_BID, JSkatOptions.Option.valueOfProperty("bockEventNoBid"));
+		assertEquals(JSkatOptions.Option.CONTRA_AFTER_BID_18, JSkatOptions.Option.valueOfProperty("contraAfterBid18"));
 	}
 }

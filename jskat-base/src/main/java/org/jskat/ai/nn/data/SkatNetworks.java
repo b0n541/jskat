@@ -25,6 +25,7 @@ import org.jskat.ai.nn.input.GenericNetworkInputGenerator;
 import org.jskat.ai.nn.util.EncogNetworkWrapper;
 import org.jskat.ai.nn.util.INeuralNetwork;
 import org.jskat.ai.nn.util.NetworkTopology;
+import org.jskat.data.SkatTableOptions.SavePath;
 import org.jskat.util.GameType;
 
 /**
@@ -125,16 +126,24 @@ public final class SkatNetworks {
 	/**
 	 * Saves all networks to files
 	 * 
-	 * @param path
+	 * @param savePath
 	 *            Path to files
 	 */
-	public static void saveNetworks(final String path) {
+	public static void saveNetworks(final String savePath) {
 		for (GameType gameType : GameType.values()) {
-			saveNetworks(path, gameType);
+			saveNetworks(savePath, gameType);
 		}
 	}
 
-	public static void saveNetworks(final String path, GameType gameType) {
+	/**
+	 * Saves all networks of the specified game type to files
+	 * 
+	 * @param savePath
+	 *            Path to files
+	 * @param gameType
+	 *            Game type
+	 */
+	public static void saveNetworks(final String savePath, GameType gameType) {
 
 		Map<PlayerParty, List<INeuralNetwork>> gameTypeNetworks = networks
 				.get(gameType);
@@ -146,7 +155,7 @@ public final class SkatNetworks {
 						.getValue()
 						.get(trick)
 						.saveNetwork(
-								path.concat("jskat").concat("." + gameType)
+								savePath.concat("jskat").concat("." + gameType)
 										.concat("." + playerPartyNets.getKey())
 										.concat(".TRICK" + trick)
 										.concat(".nnet"));

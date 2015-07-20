@@ -70,7 +70,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 
 	@Before
 	public void setUp() {
-		JSkatOptions.instance().resetToDefault(new DesktopSavePathResolver());
+		JSkatOptions.instance().resetToDefault();
 		JSkatEventBus.TABLE_EVENT_BUSSES.put(TABLE_NAME, new EventBus());
 	}
 

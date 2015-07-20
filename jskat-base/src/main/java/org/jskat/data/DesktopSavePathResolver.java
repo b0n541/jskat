@@ -15,10 +15,18 @@
  */
 package org.jskat.data;
 
+import java.nio.file.Paths;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Resolves the default save path for desktop applications
  */
 public class DesktopSavePathResolver implements SavePathResolver {
+	
+	private final static Logger log = LoggerFactory.getLogger(DesktopSavePathResolver.class);
+	
 	/**
 	 * {@inheritDoc}
 	 */
@@ -27,5 +35,12 @@ public class DesktopSavePathResolver implements SavePathResolver {
 		return System.getProperty("user.home") //$NON-NLS-1$
 				+ System.getProperty("file.separator") + ".jskat" //$NON-NLS-1$ //$NON-NLS-2$
 				+ System.getProperty("file.separator"); //$NON-NLS-1$
+	}
+
+	@Override
+	public String getCurrentWorkingDirectory() {
+		String result = Paths.get(".").toAbsolutePath().normalize().toString() + System.getProperty("file.separator");
+		log.debug("Current working directory: "+result);
+		return result;
 	}
 }

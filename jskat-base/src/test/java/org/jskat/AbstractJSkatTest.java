@@ -34,6 +34,6 @@ public abstract class AbstractJSkatTest {
 				.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
 		JSkatOptions options = JSkatOptions
 				.instance(new DesktopSavePathResolver());
-		options.resetToDefault(new DesktopSavePathResolver());
+		options.resetToDefault();
 	}
 }

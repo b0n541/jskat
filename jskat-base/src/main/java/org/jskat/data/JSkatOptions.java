@@ -19,6 +19,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.Locale;
@@ -27,6 +29,7 @@ import java.util.Properties;
 import org.jskat.data.SkatTableOptions.ContraCallingTime;
 import org.jskat.data.SkatTableOptions.RamschSkatOwner;
 import org.jskat.data.SkatTableOptions.RuleSet;
+import org.jskat.data.SkatTableOptions.SavePath;
 import org.jskat.gui.img.CardSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,10 +48,9 @@ public final class JSkatOptions {
 		/**
 		 * English.
 		 */
-		ENGLISH,
-		/**
-		 * German.
-		 */
+		ENGLISH, /**
+					 * German.
+					 */
 		GERMAN;
 	}
 
@@ -56,122 +58,122 @@ public final class JSkatOptions {
 		/**
 		 * Language for the GUI
 		 */
-		LANGUAGE(SupportedLanguage.class),
-		/**
-		 * Save path
-		 */
-		SAVE_PATH(String.class),
-		/**
-		 * JSkat checks the website for a new version on start up
-		 */
-		CHECK_FOR_NEW_VERSION_AT_START_UP(Boolean.class),
-		/**
-		 * JSkat shows tips at start up
-		 */
-		SHOW_TIPS_AT_START_UP(Boolean.class),
-		/**
-		 * Cheat/Debug mode, e.g. all cards can be seen
-		 */
-		CHEAT_DEBUG_MODE(Boolean.class),
-		/**
-		 * Card set
-		 */
-		CARD_SET(CardSet.class),
-		/**
-		 * Maximum players on a table
-		 */
-		MAX_PLAYER_COUNT(Integer.class),
-		/**
-		 * Web address of the ISS
-		 */
-		ISS_ADDRESS(String.class),
-		/**
-		 * Network port of the ISS
-		 */
-		ISS_PORT(Integer.class),
-		/**
-		 * Rule set
-		 */
-		RULES(RuleSet.class),
-		/**
-		 * Allow contra/re calling
-		 */
-		PLAY_CONTRA(Boolean.class, RULES),
-		/**
-		 * Time of Contra/Re calling
-		 */
-		CONTRA_CALLING_TIME(ContraCallingTime.class, PLAY_CONTRA),
-		/**
-		 * Contra/Re calling is only allowed if the player has at least bid 18
-		 */
-		CONTRA_AFTER_BID_18(Boolean.class, PLAY_CONTRA),
-		/**
-		 * Play bock games
-		 */
-		PLAY_BOCK(Boolean.class, RULES),
-		/**
-		 * Bock event: all players passed, no bid
-		 */
-		BOCK_EVENT_NO_BID(Boolean.class, PLAY_BOCK),
-		/**
-		 * Bock event: Contra/Re was called
-		 */
-		BOCK_EVENT_CONTRA_RE_CALLED(Boolean.class, PLAY_BOCK),
-		/**
-		 * Bock event: Declarer lost a game after contra was called
-		 */
-		BOCK_EVENT_LOST_AFTER_CONTRA(Boolean.class, PLAY_BOCK),
-		/**
-		 * Bock event: Declarer lost a grand game
-		 */
-		BOCK_EVENT_LOST_GRAND(Boolean.class, PLAY_BOCK),
-		/**
-		 * Bock event: Declarer lost a game with 60 points
-		 */
-		BOCK_EVENT_LOST_WITH_60(Boolean.class, PLAY_BOCK),
-		/**
-		 * Bock event: One player has X00 points, where X is 1..9
-		 */
-		BOCK_EVENT_MULTIPLE_OF_HUNDRED_SCORE(Boolean.class, PLAY_BOCK),
-		/**
-		 * Play ramsch games
-		 */
-		PLAY_RAMSCH(Boolean.class, RULES),
-		/**
-		 * Ramsch event: all players passed, no bid
-		 */
-		RAMSCH_EVENT_NO_BID(Boolean.class, PLAY_RAMSCH),
-		/**
-		 * Ramsch event: play ramsch after a round of bock games
-		 */
-		RAMSCH_EVENT_RAMSCH_AFTER_BOCK(Boolean.class, PLAY_RAMSCH),
-		/**
-		 * Player, who gets the skat in a ramsch game
-		 */
-		RAMSCH_SKAT_OWNER(RamschSkatOwner.class, PLAY_RAMSCH),
-		/**
-		 * Play Schieberamsch
-		 */
-		SCHIEBERAMSCH(Boolean.class, PLAY_RAMSCH),
-		/**
-		 * Allow jacks to discard in Schieberamsch games
-		 */
-		SCHIEBERAMSCH_JACKS_IN_SKAT(Boolean.class, SCHIEBERAMSCH),
-		/**
-		 * It is allowed to play Grand hand instead of a ramsch game
-		 */
-		RAMSCH_GRAND_HAND_POSSIBLE(Boolean.class), 
-		/**
-		 * Allow playing of revolution (not used a.t.m.)
-		 */
-		PLAY_REVOLUTION(Boolean.class),
-		/**
-		 * Waiting time after finishing a trick
-		 */
-		WAIT_TIME_AFTER_TRICK(Integer.class),
-		/**
-		 * Hide toolbar
-		 */
+		LANGUAGE(SupportedLanguage.class), /**
+											 * Save path for properties file and
+											 * log file
+											 */
+		SAVE_PATH(String.class), /**
+									 * Properties file and log file are saved in
+									 * working directory
+									 */
+		SAVE_IN_WORKING_DIRECTORY(
+				Boolean.class), /**
+								 * JSkat checks the website for a new version on
+								 * start up
+								 */
+		CHECK_FOR_NEW_VERSION_AT_START_UP(
+				Boolean.class), /**
+								 * JSkat shows tips at start up
+								 */
+		SHOW_TIPS_AT_START_UP(
+				Boolean.class), /**
+								 * Cheat/Debug mode, e.g. all cards can be seen
+								 */
+		CHEAT_DEBUG_MODE(Boolean.class), /**
+											 * Card set
+											 */
+		CARD_SET(CardSet.class), /**
+									 * Maximum players on a table
+									 */
+		MAX_PLAYER_COUNT(Integer.class), /**
+											 * Web address of the ISS
+											 */
+		ISS_ADDRESS(String.class), /**
+									 * Network port of the ISS
+									 */
+		ISS_PORT(Integer.class), /**
+									 * Rule set
+									 */
+		RULES(RuleSet.class), /**
+								 * Allow contra/re calling
+								 */
+		PLAY_CONTRA(Boolean.class, RULES), /**
+											 * Time of Contra/Re calling
+											 */
+		CONTRA_CALLING_TIME(ContraCallingTime.class,
+				PLAY_CONTRA), /**
+								 * Contra/Re calling is only allowed if the
+								 * player has at least bid 18
+								 */
+		CONTRA_AFTER_BID_18(Boolean.class, PLAY_CONTRA), /**
+															 * Play bock games
+															 */
+		PLAY_BOCK(Boolean.class,
+				RULES), /**
+						 * Bock event: all players passed, no bid
+						 */
+		BOCK_EVENT_NO_BID(Boolean.class,
+				PLAY_BOCK), /**
+							 * Bock event: Contra/Re was called
+							 */
+		BOCK_EVENT_CONTRA_RE_CALLED(Boolean.class,
+				PLAY_BOCK), /**
+							 * Bock event: Declarer lost a game after contra was
+							 * called
+							 */
+		BOCK_EVENT_LOST_AFTER_CONTRA(Boolean.class,
+				PLAY_BOCK), /**
+							 * Bock event: Declarer lost a grand game
+							 */
+		BOCK_EVENT_LOST_GRAND(Boolean.class,
+				PLAY_BOCK), /**
+							 * Bock event: Declarer lost a game with 60 points
+							 */
+		BOCK_EVENT_LOST_WITH_60(Boolean.class,
+				PLAY_BOCK), /**
+							 * Bock event: One player has X00 points, where X is
+							 * 1..9
+							 */
+		BOCK_EVENT_MULTIPLE_OF_HUNDRED_SCORE(Boolean.class,
+				PLAY_BOCK), /**
+							 * Play ramsch games
+							 */
+		PLAY_RAMSCH(Boolean.class,
+				RULES), /**
+						 * Ramsch event: all players passed, no bid
+						 */
+		RAMSCH_EVENT_NO_BID(Boolean.class,
+				PLAY_RAMSCH), /**
+								 * Ramsch event: play ramsch after a round of
+								 * bock games
+								 */
+		RAMSCH_EVENT_RAMSCH_AFTER_BOCK(Boolean.class,
+				PLAY_RAMSCH), /**
+								 * Player, who gets the skat in a ramsch game
+								 */
+		RAMSCH_SKAT_OWNER(RamschSkatOwner.class,
+				PLAY_RAMSCH), /**
+								 * Play Schieberamsch
+								 */
+		SCHIEBERAMSCH(Boolean.class,
+				PLAY_RAMSCH), /**
+								 * Allow jacks to discard in Schieberamsch games
+								 */
+		SCHIEBERAMSCH_JACKS_IN_SKAT(Boolean.class,
+				SCHIEBERAMSCH), /**
+								 * It is allowed to play Grand hand instead of a
+								 * ramsch game
+								 */
+		RAMSCH_GRAND_HAND_POSSIBLE(
+				Boolean.class), /**
+								 * Allow playing of revolution (not used a.t.m.)
+								 */
+		PLAY_REVOLUTION(Boolean.class), /**
+										 * Waiting time after finishing a trick
+										 */
+		WAIT_TIME_AFTER_TRICK(Integer.class), /**
+												 * Hide toolbar
+												 */
 		HIDE_TOOLBAR(Boolean.class);
 
 		public final Class clazz;
@@ -226,19 +228,23 @@ public final class JSkatOptions {
 	 * Instance for options.
 	 */
 	private static JSkatOptions optionsInstance = null;
+	/**
+	 * Save path resolver
+	 */
+	private final SavePathResolver savePathResolver;
 
 	/**
 	 * Returns the instance of the singleton JSkatOptions.<br>
 	 * This method must be called at the very beginning.
 	 * 
-	 * @param pathResolver
+	 * @param savePathResolver
 	 *            Resolver for save path
 	 * @return Options
 	 */
-	public static JSkatOptions instance(final SavePathResolver pathResolver) {
+	public static JSkatOptions instance(final SavePathResolver savePathResolver) {
 
 		if (optionsInstance == null) {
-			optionsInstance = new JSkatOptions(pathResolver);
+			optionsInstance = new JSkatOptions(savePathResolver);
 		}
 
 		return optionsInstance;
@@ -263,9 +269,9 @@ public final class JSkatOptions {
 	private final Properties options = new Properties();
 
 	/** Creates a new instance of JSkatOptions */
-	private JSkatOptions(final SavePathResolver pathResolver) {
-
-		setDefaultProperties(pathResolver);
+	private JSkatOptions(final SavePathResolver savePathResolver) {
+		this.savePathResolver = savePathResolver;
+		setDefaultProperties();
 
 		try {
 			loadOptions();
@@ -274,11 +280,9 @@ public final class JSkatOptions {
 
 			log.debug("No properties file found. Using standard values."); //$NON-NLS-1$
 
-			setOption(Option.SHOW_TIPS_AT_START_UP, Boolean.TRUE);
-			File dir = new File(pathResolver.getDefaultSavePath());
+			File dir = new File(savePathResolver.getDefaultSavePath());
 			dir.mkdir();
-			String filename = pathResolver.getDefaultSavePath()
-					+ PROPERTIES_FILENAME;
+			String filename = savePathResolver.getDefaultSavePath() + PROPERTIES_FILENAME;
 			File file = new File(filename);
 			try {
 				file.createNewFile();
@@ -290,7 +294,7 @@ public final class JSkatOptions {
 						+ "> due to " + e1.getClass() + ": " + e1.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 
-			setDefaultProperties(pathResolver);
+			setDefaultProperties();
 
 		} catch (IOException e) {
 			log.warn("Could not load properties: " + e.getClass() + ": " //$NON-NLS-1$ //$NON-NLS-2$
@@ -349,25 +353,35 @@ public final class JSkatOptions {
 	 * @return Value of property savePath.
 	 */
 	public String getSavePath() {
-		return getString(Option.SAVE_PATH);
+		switch (getSavePathInternal()) {
+		case USER_HOME:
+			return savePathResolver.getDefaultSavePath();
+		case WORKING_DIRECTORY:
+			return savePathResolver.getCurrentWorkingDirectory();
+		}
+		return null;
+	}
+
+	public SavePath getSavePathInternal() {
+		return SavePath.valueOf(get(Option.SAVE_PATH));
 	}
 
 	public Integer getWaitTimeAfterTrick() {
 		return getInteger(Option.WAIT_TIME_AFTER_TRICK);
 	}
-	
+
 	public void setWaitTimeAfterTrick(Integer waitTime) {
 		setOption(Option.WAIT_TIME_AFTER_TRICK, waitTime);
 	}
-	
+
 	public Boolean isHideToolbar() {
 		return getBoolean(Option.HIDE_TOOLBAR);
 	}
-	
+
 	public void setHideToolbar(Boolean isHideToolbar) {
 		setOption(Option.HIDE_TOOLBAR, isHideToolbar);
 	}
-	
+
 	/**
 	 * Gets the current skat table options
 	 * 
@@ -399,8 +413,7 @@ public final class JSkatOptions {
 	}
 
 	public Boolean isBockEventAllPlayersPassed(boolean checkParentOption) {
-		return getBooleanWithParentCheck(Option.BOCK_EVENT_NO_BID,
-				checkParentOption, isPlayBock(checkParentOption));
+		return getBooleanWithParentCheck(Option.BOCK_EVENT_NO_BID, checkParentOption, isPlayBock(checkParentOption));
 	}
 
 	/**
@@ -413,8 +426,8 @@ public final class JSkatOptions {
 	}
 
 	public Boolean isBockEventContraReCalled(final boolean checkParentOption) {
-		return getBooleanWithParentCheck(Option.BOCK_EVENT_CONTRA_RE_CALLED,
-				checkParentOption, isPlayBock(checkParentOption));
+		return getBooleanWithParentCheck(Option.BOCK_EVENT_CONTRA_RE_CALLED, checkParentOption,
+				isPlayBock(checkParentOption));
 	}
 
 	/**
@@ -427,8 +440,8 @@ public final class JSkatOptions {
 	}
 
 	public Boolean isBockEventLostAfterContra(final boolean checkParentOption) {
-		return getBooleanWithParentCheck(Option.BOCK_EVENT_LOST_AFTER_CONTRA,
-				checkParentOption, isPlayBock(checkParentOption));
+		return getBooleanWithParentCheck(Option.BOCK_EVENT_LOST_AFTER_CONTRA, checkParentOption,
+				isPlayBock(checkParentOption));
 	}
 
 	/**
@@ -441,8 +454,8 @@ public final class JSkatOptions {
 	}
 
 	public Boolean isBockEventLostGrand(final boolean checkParentOption) {
-		return getBooleanWithParentCheck(Option.BOCK_EVENT_LOST_GRAND,
-				checkParentOption, isPlayBock(checkParentOption));
+		return getBooleanWithParentCheck(Option.BOCK_EVENT_LOST_GRAND, checkParentOption,
+				isPlayBock(checkParentOption));
 	}
 
 	/**
@@ -455,8 +468,8 @@ public final class JSkatOptions {
 	}
 
 	public Boolean isBockEventLostWith60(final boolean checkParentOption) {
-		return getBooleanWithParentCheck(Option.BOCK_EVENT_LOST_WITH_60,
-				checkParentOption, isPlayBock(checkParentOption));
+		return getBooleanWithParentCheck(Option.BOCK_EVENT_LOST_WITH_60, checkParentOption,
+				isPlayBock(checkParentOption));
 	}
 
 	/**
@@ -476,10 +489,8 @@ public final class JSkatOptions {
 	 * @return <code>true</code>, if the player score of a multiple of hundred
 	 *         is a bock event
 	 */
-	public Boolean isBockEventMultipleOfHundredScore(
-			final boolean checkParentOption) {
-		return getBooleanWithParentCheck(
-				Option.BOCK_EVENT_MULTIPLE_OF_HUNDRED_SCORE, checkParentOption,
+	public Boolean isBockEventMultipleOfHundredScore(final boolean checkParentOption) {
+		return getBooleanWithParentCheck(Option.BOCK_EVENT_MULTIPLE_OF_HUNDRED_SCORE, checkParentOption,
 				isPlayBock(checkParentOption));
 	}
 
@@ -500,8 +511,8 @@ public final class JSkatOptions {
 	 * @return TRUE, if the check succeeds
 	 */
 	public Boolean isContraAfterBid18(final boolean checkParentOption) {
-		return getBooleanWithParentCheck(Option.CONTRA_AFTER_BID_18,
-				checkParentOption, isPlayContra(checkParentOption));
+		return getBooleanWithParentCheck(Option.CONTRA_AFTER_BID_18, checkParentOption,
+				isPlayContra(checkParentOption));
 	}
 
 	/**
@@ -530,12 +541,11 @@ public final class JSkatOptions {
 	 * @return Value of property playBock.
 	 */
 	public Boolean isPlayBock(final boolean checkParentOption) {
-		return getBooleanWithParentCheck(Option.PLAY_BOCK, checkParentOption,
-				RuleSet.PUB.equals(getRules()));
+		return getBooleanWithParentCheck(Option.PLAY_BOCK, checkParentOption, RuleSet.PUB.equals(getRules()));
 	}
 
-	private Boolean getBooleanWithParentCheck(final Option option,
-			final boolean checkParentOption, final boolean parentOptionActivated) {
+	private Boolean getBooleanWithParentCheck(final Option option, final boolean checkParentOption,
+			final boolean parentOptionActivated) {
 
 		Boolean result = getBoolean(option);
 
@@ -565,8 +575,7 @@ public final class JSkatOptions {
 	 * @return Value of property playKontra.
 	 */
 	public Boolean isPlayContra(final boolean checkParentOption) {
-		return getBooleanWithParentCheck(Option.PLAY_CONTRA, checkParentOption,
-				RuleSet.PUB.equals(getRules()));
+		return getBooleanWithParentCheck(Option.PLAY_CONTRA, checkParentOption, RuleSet.PUB.equals(getRules()));
 	}
 
 	/**
@@ -586,8 +595,7 @@ public final class JSkatOptions {
 	 * @return TRUE, if Ramsch should be played
 	 */
 	public Boolean isPlayRamsch(final boolean checkParentOption) {
-		return getBooleanWithParentCheck(Option.PLAY_RAMSCH, checkParentOption,
-				RuleSet.PUB.equals(getRules()));
+		return getBooleanWithParentCheck(Option.PLAY_RAMSCH, checkParentOption, RuleSet.PUB.equals(getRules()));
 	}
 
 	/**
@@ -600,8 +608,7 @@ public final class JSkatOptions {
 	}
 
 	public Boolean isPlayRevolution(final boolean checkParentOption) {
-		return getBooleanWithParentCheck(Option.PLAY_REVOLUTION,
-				checkParentOption, RuleSet.PUB.equals(getRules()));
+		return getBooleanWithParentCheck(Option.PLAY_REVOLUTION, checkParentOption, RuleSet.PUB.equals(getRules()));
 	}
 
 	/**
@@ -614,8 +621,8 @@ public final class JSkatOptions {
 	}
 
 	public Boolean isRamschEventNoBid(final boolean checkParentOption) {
-		return getBooleanWithParentCheck(Option.RAMSCH_EVENT_NO_BID,
-				checkParentOption, isPlayRamsch(checkParentOption));
+		return getBooleanWithParentCheck(Option.RAMSCH_EVENT_NO_BID, checkParentOption,
+				isPlayRamsch(checkParentOption));
 	}
 
 	/**
@@ -628,8 +635,8 @@ public final class JSkatOptions {
 	}
 
 	public Boolean isRamschEventRamschAfterBock(final boolean checkParentOption) {
-		return getBooleanWithParentCheck(Option.RAMSCH_EVENT_RAMSCH_AFTER_BOCK,
-				checkParentOption, isPlayRamsch(checkParentOption));
+		return getBooleanWithParentCheck(Option.RAMSCH_EVENT_RAMSCH_AFTER_BOCK, checkParentOption,
+				isPlayRamsch(checkParentOption));
 	}
 
 	/**
@@ -651,8 +658,7 @@ public final class JSkatOptions {
 	}
 
 	public Boolean isSchieberamsch(final boolean checkParentOption) {
-		return getBooleanWithParentCheck(Option.SCHIEBERAMSCH,
-				checkParentOption, isPlayRamsch(checkParentOption));
+		return getBooleanWithParentCheck(Option.SCHIEBERAMSCH, checkParentOption, isPlayRamsch(checkParentOption));
 	}
 
 	/**
@@ -665,8 +671,8 @@ public final class JSkatOptions {
 	}
 
 	public Boolean isSchieberamschJacksInSkat(final boolean checkParentOption) {
-		return getBooleanWithParentCheck(Option.SCHIEBERAMSCH_JACKS_IN_SKAT,
-				checkParentOption, isSchieberamsch(checkParentOption));
+		return getBooleanWithParentCheck(Option.SCHIEBERAMSCH_JACKS_IN_SKAT, checkParentOption,
+				isSchieberamsch(checkParentOption));
 	}
 
 	/**
@@ -674,22 +680,17 @@ public final class JSkatOptions {
 	 */
 	public void saveJSkatProperties() {
 
-		FileOutputStream stream = null;
+		FileWriter writer = null;
 		try {
-			stream = new FileOutputStream(System.getProperty("user.home") //$NON-NLS-1$
-					+ System.getProperty("file.separator") + ".jskat" //$NON-NLS-1$//$NON-NLS-2$
-					+ System.getProperty("file.separator") + "jskat.properties"); //$NON-NLS-1$//$NON-NLS-2$
-
-			options.store(stream, "JSkat options"); //$NON-NLS-1$
-			stream.close();
-			log.debug("Saved rules: " + getRules()); //$NON-NLS-1$
-
+			writer = new FileWriter(getSavePath() + PROPERTIES_FILENAME);
+			options.store(writer, "JSkat options"); //$NON-NLS-1$
+			writer.close();
+			log.debug("Saved options with rules: " + getRules()); //$NON-NLS-1$
 		} catch (FileNotFoundException e1) {
-
-			log.debug("No properties file found. Saving of JSkat options failed."); //$NON-NLS-1$
+			log.warn("No properties file found. Saving of JSkat options failed."); //$NON-NLS-1$
 		} catch (IOException e) {
-			log.debug("Saving of JSkat options failed."); //$NON-NLS-1$
-			log.debug(e.toString());
+			log.warn("Saving of JSkat options failed."); //$NON-NLS-1$
+			log.warn(e.toString());
 		}
 	}
 
@@ -713,8 +714,7 @@ public final class JSkatOptions {
 	 * @param bockEventLostAfterContra
 	 *            New value of property bockEventLostAfterContra
 	 */
-	public void setBockEventLostAfterContra(
-			final Boolean bockEventLostAfterContra) {
+	public void setBockEventLostAfterContra(final Boolean bockEventLostAfterContra) {
 		setOption(Option.BOCK_EVENT_LOST_AFTER_CONTRA, bockEventLostAfterContra);
 	}
 
@@ -744,10 +744,8 @@ public final class JSkatOptions {
 	 * @param bockEventMultipleOfHundredScore
 	 *            New value of property bockEventPlayerHasX00Points
 	 */
-	public void setBockEventMultipleOfHundredScore(
-			final Boolean bockEventMultipleOfHundredScore) {
-		setOption(Option.BOCK_EVENT_MULTIPLE_OF_HUNDRED_SCORE,
-				bockEventMultipleOfHundredScore);
+	public void setBockEventMultipleOfHundredScore(final Boolean bockEventMultipleOfHundredScore) {
+		setOption(Option.BOCK_EVENT_MULTIPLE_OF_HUNDRED_SCORE, bockEventMultipleOfHundredScore);
 	}
 
 	/**
@@ -787,10 +785,8 @@ public final class JSkatOptions {
 	 * @param isCheckForNewVersionAtStartUp
 	 *            TRUE, if the check should be performed at start up
 	 */
-	public void setCheckForNewVersionAtStartUp(
-			final Boolean isCheckForNewVersionAtStartUp) {
-		setOption(Option.CHECK_FOR_NEW_VERSION_AT_START_UP,
-				isCheckForNewVersionAtStartUp);
+	public void setCheckForNewVersionAtStartUp(final Boolean isCheckForNewVersionAtStartUp) {
+		setOption(Option.CHECK_FOR_NEW_VERSION_AT_START_UP, isCheckForNewVersionAtStartUp);
 	}
 
 	/**
@@ -889,10 +885,8 @@ public final class JSkatOptions {
 	 * @param ramschEventRamschAfterBock
 	 *            New value of property ramschEventRamschAfterBock
 	 */
-	public void setRamschEventRamschAfterBock(
-			final Boolean ramschEventRamschAfterBock) {
-		setOption(Option.RAMSCH_EVENT_RAMSCH_AFTER_BOCK,
-				ramschEventRamschAfterBock);
+	public void setRamschEventRamschAfterBock(final Boolean ramschEventRamschAfterBock) {
+		setOption(Option.RAMSCH_EVENT_RAMSCH_AFTER_BOCK, ramschEventRamschAfterBock);
 	}
 
 	/**
@@ -931,8 +925,8 @@ public final class JSkatOptions {
 	 * @param savePath
 	 *            New value of property savePath.
 	 */
-	public void setSavePath(final String savePath) {
-		setOption(Option.SAVE_PATH, savePath);
+	public void setSavePath(final SavePath savePath) {
+		setOption(Option.SAVE_PATH, savePath.name());
 	}
 
 	/**
@@ -951,8 +945,7 @@ public final class JSkatOptions {
 	 * @param schieberRamschJacksInSkat
 	 *            New value of property schieberRamschJacksInSkat
 	 */
-	public void setSchieberRamschJacksInSkat(
-			final Boolean schieberRamschJacksInSkat) {
+	public void setSchieberRamschJacksInSkat(final Boolean schieberRamschJacksInSkat) {
 		setOption(Option.SCHIEBERAMSCH_JACKS_IN_SKAT, schieberRamschJacksInSkat);
 	}
 
@@ -960,29 +953,24 @@ public final class JSkatOptions {
 
 		SupportedLanguage result = SupportedLanguage.ENGLISH;
 
-		if (Locale.getDefault().getLanguage()
-				.equals(Locale.GERMAN.getLanguage())) {
+		if (Locale.getDefault().getLanguage().equals(Locale.GERMAN.getLanguage())) {
 			result = SupportedLanguage.GERMAN;
 		}
 
 		return result;
 	}
 
-	private static FileInputStream getFileStream() throws FileNotFoundException {
-		FileInputStream stream = new FileInputStream(getDefaultSaveDir()
-				+ "jskat.properties"); //$NON-NLS-1$
-		return stream;
-	}
-
-	static String getDefaultSaveDir() {
-		return System.getProperty("user.home") //$NON-NLS-1$
-				+ System.getProperty("file.separator") + ".jskat" //$NON-NLS-1$ //$NON-NLS-2$
-				+ System.getProperty("file.separator"); //$NON-NLS-1$
-	}
-
 	private void loadOptions() throws IOException {
 
-		FileInputStream stream = getFileStream();
+		FileInputStream stream = null;
+
+		try {
+			stream = new FileInputStream(savePathResolver.getCurrentWorkingDirectory() + PROPERTIES_FILENAME);
+			setSavePath(SavePath.WORKING_DIRECTORY);
+		} catch (FileNotFoundException e) {
+			stream = new FileInputStream(savePathResolver.getDefaultSavePath() + PROPERTIES_FILENAME);
+			setSavePath(SavePath.USER_HOME);
+		}
 
 		Properties loadedOptions = new Properties();
 		loadedOptions.load(stream);
@@ -1107,13 +1095,6 @@ public final class JSkatOptions {
 				logEnumParseError(option, getRules().name());
 			}
 			break;
-		case SAVE_PATH:
-			if ("".equals(value)) { //$NON-NLS-1$
-				setSavePath(getDefaultSaveDir());
-			} else {
-				setSavePath(value);
-			}
-			break;
 		case SCHIEBERAMSCH:
 			setSchieberRamsch(Boolean.valueOf(value));
 			break;
@@ -1132,8 +1113,7 @@ public final class JSkatOptions {
 		}
 	}
 
-	private static void logEnumParseError(final Option option,
-			final String defaultValue) {
+	private static void logEnumParseError(final Option option, final String defaultValue) {
 		log.warn("Parsing of option " + option.name() + " failed. Using default value: " + defaultValue); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
@@ -1169,6 +1149,10 @@ public final class JSkatOptions {
 		options.setProperty(option.propertyName(), value.name());
 	}
 
+	private void setOption(Option option, SavePath value) {
+		options.setProperty(option.propertyName(), value.name());
+	}
+
 	private void setOption(Option option, String value) {
 		options.setProperty(option.propertyName(), value);
 	}
@@ -1189,20 +1173,19 @@ public final class JSkatOptions {
 	 * Sets the standard properties
 	 * 
 	 */
-	void setDefaultProperties(final SavePathResolver pathResolver) {
+	void setDefaultProperties() {
 
 		setOption(Option.HIDE_TOOLBAR, Boolean.FALSE);
 		setOption(Option.SHOW_TIPS_AT_START_UP, Boolean.TRUE);
 		setOption(Option.CHECK_FOR_NEW_VERSION_AT_START_UP, Boolean.FALSE);
 		setOption(Option.LANGUAGE, getDefaultLanguage());
-		setOption(Option.SAVE_PATH, pathResolver.getDefaultSavePath());
+		setOption(Option.SAVE_PATH, SavePath.WORKING_DIRECTORY);
 		setOption(Option.CARD_SET, CardSet.ISS_TOURNAMENT);
 		setOption(Option.CHEAT_DEBUG_MODE, Boolean.FALSE);
 		setOption(Option.MAX_PLAYER_COUNT, 3);
 		setOption(Option.RULES, RuleSet.ISPA);
 		setOption(Option.PLAY_CONTRA, Boolean.TRUE);
-		setOption(Option.CONTRA_CALLING_TIME,
-				ContraCallingTime.BEFORE_FIRST_CARD);
+		setOption(Option.CONTRA_CALLING_TIME, ContraCallingTime.BEFORE_FIRST_CARD);
 		setOption(Option.CONTRA_AFTER_BID_18, Boolean.TRUE);
 		setOption(Option.PLAY_BOCK, Boolean.TRUE);
 		setOption(Option.BOCK_EVENT_LOST_GRAND, Boolean.TRUE);
@@ -1255,8 +1238,7 @@ public final class JSkatOptions {
 	 */
 	public String getString(Option option) {
 		if (option.clazz != String.class) {
-			throw new IllegalArgumentException("Option " + option
-					+ " is not a string option.");
+			throw new IllegalArgumentException("Option " + option + " is not a string option.");
 		}
 		return getProperty(option);
 	}
@@ -1274,8 +1256,7 @@ public final class JSkatOptions {
 	 */
 	public final Boolean getBoolean(final Option option) {
 		if (option.clazz != Boolean.class) {
-			throw new IllegalArgumentException("Option " + option
-					+ " is not a boolean option.");
+			throw new IllegalArgumentException("Option " + option + " is not a boolean option.");
 		}
 		return Boolean.valueOf(getProperty(option));
 	}
@@ -1289,8 +1270,7 @@ public final class JSkatOptions {
 	 */
 	public final Integer getInteger(final Option option) {
 		if (option.clazz != Integer.class) {
-			throw new IllegalArgumentException("Option " + option
-					+ " is not an integer option.");
+			throw new IllegalArgumentException("Option " + option + " is not an integer option.");
 		}
 		return Integer.valueOf(getProperty(option));
 	}
@@ -1306,11 +1286,8 @@ public final class JSkatOptions {
 
 	/**
 	 * Resets the options to default
-	 * 
-	 * @param pathResolver
-	 *            Save path resolver
 	 */
-	public void resetToDefault(DesktopSavePathResolver pathResolver) {
-		setDefaultProperties(pathResolver);
+	public void resetToDefault() {
+		setDefaultProperties();
 	}
 }

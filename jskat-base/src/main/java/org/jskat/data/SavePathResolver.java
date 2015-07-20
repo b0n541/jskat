@@ -25,4 +25,11 @@ public interface SavePathResolver {
 	 * @return Default save path
 	 */
 	public String getDefaultSavePath();
+	
+	/**
+	 * Resolves the current working directory
+	 * 
+	 * @return Current working directory
+	 */
+	public String getCurrentWorkingDirectory();
 }
