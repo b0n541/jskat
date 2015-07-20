@@ -35,6 +35,7 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
@@ -113,6 +114,7 @@ public class JSkatOptionsDialog extends JDialog {
 	private final Action okAction = new AbstractAction("OK") {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
+			JOptionPane.showMessageDialog(parent, options.getSavePath());
 			JSkatOptionsDialog.this.options
 					.setShowTipsAtStartUp(JSkatOptionsDialog.this.showTipsAtStartUp.isSelected());
 			JSkatOptionsDialog.this.options
@@ -296,7 +298,7 @@ public class JSkatOptionsDialog extends JDialog {
 	}
 
 	private JPanel getSavePathPanel() {
-		
+
 		final JPanel savePathPanel = new JPanel(LayoutFactory.getMigLayout());
 
 		final ButtonGroup savePathGroup = new ButtonGroup();
@@ -305,7 +307,7 @@ public class JSkatOptionsDialog extends JDialog {
 		this.savePathWorkingDirectory = new JRadioButton(strings.getString("working_directory")); //$NON-NLS-1$
 		savePathGroup.add(this.savePathWorkingDirectory);
 
-		savePathPanel.add(this.savePathUserHome); //$NON-NLS-1$
+		savePathPanel.add(this.savePathUserHome); // $NON-NLS-1$
 		savePathPanel.add(this.savePathWorkingDirectory, "wrap"); //$NON-NLS-1$
 
 		return savePathPanel;
