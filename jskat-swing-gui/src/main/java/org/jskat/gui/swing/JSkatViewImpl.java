@@ -187,6 +187,8 @@ public class JSkatViewImpl implements JSkatView {
 	 */
 	public JSkatViewImpl() {
 
+		JSkatEventBus.INSTANCE.register(this);
+
 		initActionMap();
 		initGUI();
 
@@ -198,8 +200,6 @@ public class JSkatViewImpl implements JSkatView {
 		addTabPanel(
 				new WelcomePanel(this.strings.getString("welcome"), actions), //$NON-NLS-1$
 				this.strings.getString("welcome")); //$NON-NLS-1$
-
-		JSkatEventBus.INSTANCE.register(this);
 	}
 
 	/**
