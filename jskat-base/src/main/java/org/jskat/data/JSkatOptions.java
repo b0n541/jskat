@@ -168,7 +168,11 @@ public final class JSkatOptions {
 		/**
 		 * Waiting time after finishing a trick
 		 */
-		WAIT_TIME_AFTER_TRICK(Integer.class);
+		WAIT_TIME_AFTER_TRICK(Integer.class),
+		/**
+		 * Hide toolbar
+		 */
+		HIDE_TOOLBAR(Boolean.class);
 
 		public final Class clazz;
 		public final Option parent = null;
@@ -354,6 +358,14 @@ public final class JSkatOptions {
 	
 	public void setWaitTimeAfterTrick(Integer waitTime) {
 		setOption(Option.WAIT_TIME_AFTER_TRICK, waitTime);
+	}
+	
+	public Boolean isHideToolbar() {
+		return getBoolean(Option.HIDE_TOOLBAR);
+	}
+	
+	public void setHideToolbar(Boolean isHideToolbar) {
+		setOption(Option.HIDE_TOOLBAR, isHideToolbar);
 	}
 	
 	/**
@@ -1114,6 +1126,9 @@ public final class JSkatOptions {
 		case WAIT_TIME_AFTER_TRICK:
 			setWaitTimeAfterTrick(Integer.valueOf(value));
 			break;
+		case HIDE_TOOLBAR:
+			setHideToolbar(Boolean.valueOf(value));
+			break;
 		}
 	}
 
@@ -1176,9 +1191,10 @@ public final class JSkatOptions {
 	 */
 	void setDefaultProperties(final SavePathResolver pathResolver) {
 
+		setOption(Option.HIDE_TOOLBAR, Boolean.FALSE);
 		setOption(Option.SHOW_TIPS_AT_START_UP, Boolean.TRUE);
-		setOption(Option.LANGUAGE, getDefaultLanguage());
 		setOption(Option.CHECK_FOR_NEW_VERSION_AT_START_UP, Boolean.FALSE);
+		setOption(Option.LANGUAGE, getDefaultLanguage());
 		setOption(Option.SAVE_PATH, pathResolver.getDefaultSavePath());
 		setOption(Option.CARD_SET, CardSet.ISS_TOURNAMENT);
 		setOption(Option.CHEAT_DEBUG_MODE, Boolean.FALSE);

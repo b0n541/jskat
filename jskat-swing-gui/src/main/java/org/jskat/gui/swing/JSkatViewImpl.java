@@ -47,10 +47,12 @@ import javax.swing.event.ChangeListener;
 
 import org.jskat.JSkat;
 import org.jskat.control.JSkatEventBus;
+import org.jskat.control.command.general.HideToolbarCommand;
 import org.jskat.control.command.general.ShowAboutInformationCommand;
 import org.jskat.control.command.general.ShowHelpCommand;
 import org.jskat.control.command.general.ShowLicenseCommand;
 import org.jskat.control.command.general.ShowPreferencesCommand;
+import org.jskat.control.command.general.ShowToolbarCommand;
 import org.jskat.control.command.general.ShowTrainingOverviewCommand;
 import org.jskat.control.command.general.ShowWelcomeInformationCommand;
 import org.jskat.control.command.iss.IssDisconnectCommand;
@@ -165,6 +167,8 @@ public class JSkatViewImpl implements JSkatView {
 	private static Logger log = LoggerFactory.getLogger(JSkatViewImpl.class);
 
 	private JFrame mainFrame;
+	private final JPanel mainPanel = new JPanel();
+	private JPanel toolbar;
 	private final SkatSeriesStartDialog skatSeriesStartDialog;
 	private final JSkatOptionsDialog preferencesDialog;
 	private final NeuralNetworkTrainingOverview trainingOverview;
@@ -296,11 +300,11 @@ public class JSkatViewImpl implements JSkatView {
 
 		this.mainFrame.setJMenuBar(getMenuBar());
 
-		final JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
 
-		if (ScreenResolution.isBigScreen()) {
-			addSymbolPanel(mainPanel);
+		createToolbar();
+		if (ScreenResolution.isBigScreen() && !options.isHideToolbar()) {
+			JSkatEventBus.INSTANCE.post(new ShowToolbarCommand());
 		}
 
 		// main area
@@ -311,6 +315,18 @@ public class JSkatViewImpl implements JSkatView {
 		setMainFrameParameters();
 
 		this.mainFrame.pack();
+	}
+	
+	@Subscribe
+	public void hideToolbarOn(HideToolbarCommand command) {
+		mainPanel.remove(toolbar);
+		mainPanel.validate();
+	}
+
+	@Subscribe
+	public void addToolbar(ShowToolbarCommand command) {
+		mainPanel.add(toolbar, BorderLayout.NORTH);
+		mainPanel.validate();
 	}
 
 	private void setMainFrameParameters() {
@@ -360,20 +376,19 @@ public class JSkatViewImpl implements JSkatView {
 		mainPanel.add(this.tabs, BorderLayout.CENTER);
 	}
 
-	private void addSymbolPanel(final JPanel mainPanel) {
-		final JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout());
-		buttonPanel.add(
+	private void createToolbar() {
+		toolbar = new JPanel(LayoutFactory.getMigLayout());
+		toolbar.add(
 				new ToolbarButton(actions.get(JSkatAction.CREATE_LOCAL_TABLE)));
-		buttonPanel.add(
+		toolbar.add(
 				new ToolbarButton(actions.get(JSkatAction.START_LOCAL_SERIES)));
-		buttonPanel.add(
+		toolbar.add(
 				new ToolbarButton(actions.get(JSkatAction.SHOW_ISS_LOGIN)));
-		buttonPanel
+		toolbar
 				.add(new ToolbarButton(actions.get(JSkatAction.REPLAY_GAME)));
-		buttonPanel.add(
+		toolbar.add(
 				new ToolbarButton(actions.get(JSkatAction.NEXT_REPLAY_STEP)));
-		buttonPanel.add(new ToolbarButton(actions.get(JSkatAction.HELP)));
-		mainPanel.add(buttonPanel, BorderLayout.NORTH);
+		toolbar.add(new ToolbarButton(actions.get(JSkatAction.HELP)));
 	}
 
 	private JMenuBar getMenuBar() {
