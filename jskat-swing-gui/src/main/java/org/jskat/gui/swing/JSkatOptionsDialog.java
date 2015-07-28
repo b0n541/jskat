@@ -114,7 +114,6 @@ public class JSkatOptionsDialog extends JDialog {
 	private final Action okAction = new AbstractAction("OK") {
 		@Override
 		public void actionPerformed(final ActionEvent e) {
-			JOptionPane.showMessageDialog(parent, options.getSavePath());
 			JSkatOptionsDialog.this.options
 					.setShowTipsAtStartUp(JSkatOptionsDialog.this.showTipsAtStartUp.isSelected());
 			JSkatOptionsDialog.this.options
