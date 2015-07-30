@@ -23,6 +23,9 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -297,6 +300,7 @@ public class JSkatViewImpl implements JSkatView {
 		this.mainFrame = new JFrame("JSkat " + JSkat.getVersion()); //$NON-NLS-1$
 
 		this.mainFrame.addWindowListener(new JSkatWindowAdapter());
+		this.mainFrame.addComponentListener(new JSkatMainFrameComponentAdapter());
 
 		this.mainFrame.setJMenuBar(getMenuBar());
 

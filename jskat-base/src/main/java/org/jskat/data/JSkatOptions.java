@@ -15,6 +15,8 @@
  */
 package org.jskat.data;
 
+import java.awt.Dimension;
+import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -175,7 +177,20 @@ public final class JSkatOptions {
 		WAIT_TIME_AFTER_TRICK(Integer.class), /**
 												 * Hide toolbar
 												 */
-		HIDE_TOOLBAR(Boolean.class);
+		HIDE_TOOLBAR(Boolean.class), /**
+										 * X-Position of main frame on screen
+										 */
+		MAIN_FRAME_X_POSITION(
+				Integer.class), /**
+								 * Y-Position of main frame on screen
+								 */
+		MAIN_FRAME_Y_POSITION(Integer.class), /**
+												 * Width of main frame
+												 */
+		MAIN_FRAME_WIDTH(Integer.class), /**
+											 * Height of main frame
+											 */
+		MAIN_FRAME_HEIGHT(Integer.class);
 
 		public final Class clazz;
 		public final Option parent = null;
@@ -1206,6 +1221,10 @@ public final class JSkatOptions {
 		setOption(Option.ISS_ADDRESS, "skatgame.net"); //$NON-NLS-1$
 		setOption(Option.ISS_PORT, Integer.valueOf(7000));
 		setOption(Option.WAIT_TIME_AFTER_TRICK, Integer.valueOf(0));
+		setOption(Option.MAIN_FRAME_X_POSITION, Integer.MIN_VALUE);
+		setOption(Option.MAIN_FRAME_Y_POSITION, Integer.MIN_VALUE);
+		setOption(Option.MAIN_FRAME_WIDTH, Integer.MIN_VALUE);
+		setOption(Option.MAIN_FRAME_HEIGHT, Integer.MIN_VALUE);
 	}
 
 	/**
@@ -1290,5 +1309,15 @@ public final class JSkatOptions {
 	 */
 	public void resetToDefault() {
 		setDefaultProperties();
+	}
+
+	public void setMainFrameSize(Dimension size) {
+		setOption(Option.MAIN_FRAME_WIDTH, (int) size.getWidth());
+		setOption(Option.MAIN_FRAME_HEIGHT, (int) size.getHeight());
+	}
+
+	public void setMainFramePosition(Point locationOnScreen) {
+		setOption(Option.MAIN_FRAME_X_POSITION, locationOnScreen.x);
+		setOption(Option.MAIN_FRAME_Y_POSITION, locationOnScreen.y);
 	}
 }
