@@ -15,7 +15,12 @@
  */
 package org.jskat.data;
 
+import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URISyntaxException;
+import java.net.URLDecoder;
 import java.nio.file.Paths;
+import java.security.CodeSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +44,17 @@ public class DesktopSavePathResolver implements SavePathResolver {
 
 	@Override
 	public String getCurrentWorkingDirectory() {
-		String result = Paths.get(".").toAbsolutePath().normalize().toString() + System.getProperty("file.separator");
-		log.debug("Current working directory: "+result);
-		return result;
+		
+		CodeSource codeSource = DesktopSavePathResolver.class.getProtectionDomain().getCodeSource();
+		
+		String workingDir;
+		try {
+			File jarFile= new File(codeSource.getLocation().toURI().getPath());
+			workingDir = jarFile.getParentFile().getPath() + File.separator;
+		} catch (URISyntaxException e) {
+			workingDir = getDefaultSavePath();
+		}
+		
+		return workingDir;
 	}
 }

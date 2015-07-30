@@ -15,6 +15,8 @@
  */
 package org.jskat.data;
 
+import java.io.UnsupportedEncodingException;
+
 /**
  * Resolves the default save path for a specific platform
  */
