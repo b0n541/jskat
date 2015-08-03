@@ -20,11 +20,8 @@ import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Properties;
@@ -384,6 +381,32 @@ public final class JSkatOptions {
 
 	public Integer getWaitTimeAfterTrick() {
 		return getInteger(Option.WAIT_TIME_AFTER_TRICK);
+	}
+
+	public Dimension getMainFrameSize() {
+		return new Dimension(getInteger(Option.MAIN_FRAME_WIDTH),
+				getInteger(Option.MAIN_FRAME_HEIGHT));
+	}
+
+	public void setMainFrameWidth(Integer width) {
+		setOption(Option.MAIN_FRAME_WIDTH, width);
+	}
+
+	public void setMainFrameHeight(Integer height) {
+		setOption(Option.MAIN_FRAME_HEIGHT, height);
+	}
+
+	public Point getMainFramePosition() {
+		return new Point(getInteger(Option.MAIN_FRAME_X_POSITION),
+				getInteger(Option.MAIN_FRAME_Y_POSITION));
+	}
+
+	public void setMainFrameXPosition(Integer xPosition) {
+		setOption(Option.MAIN_FRAME_X_POSITION, xPosition);
+	}
+
+	public void setMainFrameYPosition(Integer yPosition) {
+		setOption(Option.MAIN_FRAME_Y_POSITION, yPosition);
 	}
 
 	public void setWaitTimeAfterTrick(Integer waitTime) {
@@ -1125,6 +1148,18 @@ public final class JSkatOptions {
 			break;
 		case HIDE_TOOLBAR:
 			setHideToolbar(Boolean.valueOf(value));
+			break;
+		case MAIN_FRAME_WIDTH:
+			setMainFrameWidth(Integer.valueOf(value));
+			break;
+		case MAIN_FRAME_HEIGHT:
+			setMainFrameHeight(Integer.valueOf(value));
+			break;
+		case MAIN_FRAME_X_POSITION:
+			setMainFrameXPosition(Integer.valueOf(value));
+			break;
+		case MAIN_FRAME_Y_POSITION:
+			setMainFrameYPosition(Integer.valueOf(value));
 			break;
 		}
 	}

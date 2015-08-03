@@ -18,10 +18,7 @@ package org.jskat.gui.swing;
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
-import org.jskat.control.JSkatMaster;
 import org.jskat.data.JSkatOptions;
 
 public class JSkatMainFrameComponentAdapter extends ComponentAdapter {
@@ -33,6 +30,7 @@ public class JSkatMainFrameComponentAdapter extends ComponentAdapter {
 	
 	@Override
 	public void componentMoved(ComponentEvent e) {
-		JSkatOptions.instance().setMainFramePosition(e.getComponent().getLocationOnScreen());
+		JSkatOptions.instance()
+				.setMainFramePosition(e.getComponent().getLocationOnScreen());
 	}
 }

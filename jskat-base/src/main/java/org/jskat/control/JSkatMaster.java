@@ -387,6 +387,10 @@ public class JSkatMaster {
 	 */
 	public void exitJSkat() {
 
+		System.out.println(options.getMainFrameSize().getWidth() + "x"
+				+ options.getMainFrameSize().getHeight());
+		System.out.println(options.getMainFramePosition().getX() + "x"
+				+ options.getMainFramePosition().getY());
 		this.options.saveJSkatProperties();
 		System.exit(0);
 	}

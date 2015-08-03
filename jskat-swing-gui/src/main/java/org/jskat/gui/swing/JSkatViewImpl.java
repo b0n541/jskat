@@ -22,10 +22,8 @@ import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -212,6 +210,20 @@ public class JSkatViewImpl implements JSkatView {
 		this.mainFrame.setVisible(true);
 	}
 
+	/**
+	 * Moves the position to a certian point.
+	 * 
+	 * @param location
+	 *            New location
+	 */
+	public final void setPosition(Point location) {
+		if (mainFrame.isVisible()) {
+			this.mainFrame.setLocation(location);
+		} else {
+			throw new IllegalStateException("GUI is not visible.");
+		}
+	}
+
 	private void initActionMap() {
 
 		actions = new ActionMap();
@@ -300,7 +312,8 @@ public class JSkatViewImpl implements JSkatView {
 		this.mainFrame = new JFrame("JSkat " + JSkat.getVersion()); //$NON-NLS-1$
 
 		this.mainFrame.addWindowListener(new JSkatWindowAdapter());
-		this.mainFrame.addComponentListener(new JSkatMainFrameComponentAdapter());
+		this.mainFrame
+				.addComponentListener(new JSkatMainFrameComponentAdapter());
 
 		this.mainFrame.setJMenuBar(getMenuBar());
 
@@ -320,7 +333,7 @@ public class JSkatViewImpl implements JSkatView {
 
 		this.mainFrame.pack();
 	}
-	
+
 	@Subscribe
 	public void hideToolbarOn(HideToolbarCommand command) {
 		mainPanel.remove(toolbar);
@@ -341,10 +354,17 @@ public class JSkatViewImpl implements JSkatView {
 				JSkatGraphicRepository.IconSize.BIG));
 		this.mainFrame.setIconImages(icons);
 		this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		Dimension mainFrameSize = options.getMainFrameSize();
+		if (mainFrameSize != null && mainFrameSize.getWidth() > 0.0
+				&& mainFrameSize.getHeight() > 0.0) {
+			mainFrame.setPreferredSize(mainFrameSize);
+		} else {
+			this.mainFrame.setPreferredSize(new Dimension(1000, 700));
+			this.mainFrame.setExtendedState(
+					this.mainFrame.getExtendedState() | Frame.MAXIMIZED_BOTH);
+		}
 		this.mainFrame.setMinimumSize(new Dimension(800, 600));
-		this.mainFrame.setPreferredSize(new Dimension(1000, 700));
-		this.mainFrame.setExtendedState(
-				this.mainFrame.getExtendedState() | Frame.MAXIMIZED_BOTH);
 	}
 
 	private void addTabbedPane(final JPanel mainPanel) {
@@ -386,10 +406,8 @@ public class JSkatViewImpl implements JSkatView {
 				new ToolbarButton(actions.get(JSkatAction.CREATE_LOCAL_TABLE)));
 		toolbar.add(
 				new ToolbarButton(actions.get(JSkatAction.START_LOCAL_SERIES)));
-		toolbar.add(
-				new ToolbarButton(actions.get(JSkatAction.SHOW_ISS_LOGIN)));
-		toolbar
-				.add(new ToolbarButton(actions.get(JSkatAction.REPLAY_GAME)));
+		toolbar.add(new ToolbarButton(actions.get(JSkatAction.SHOW_ISS_LOGIN)));
+		toolbar.add(new ToolbarButton(actions.get(JSkatAction.REPLAY_GAME)));
 		toolbar.add(
 				new ToolbarButton(actions.get(JSkatAction.NEXT_REPLAY_STEP)));
 		toolbar.add(new ToolbarButton(actions.get(JSkatAction.HELP)));
@@ -506,8 +524,7 @@ public class JSkatViewImpl implements JSkatView {
 				+ this.strings.getString("icons") //$NON-NLS-1$
 				+ ": Gnome Desktop Icons, Tango project, Elementary icons,\n" //$NON-NLS-1$
 				+ "Silvestre Herrera, Alex Roberts and Icojoy\n\n" //$NON-NLS-1$
-				+ this.strings.getString("background_image")
-				+ ": webtreats\n\n"
+				+ this.strings.getString("background_image") + ": webtreats\n\n"
 				+ "This program comes with ABSOLUTELY NO WARRANTY;\n" //$NON-NLS-1$
 				+ "for details see licence dialog\n" //$NON-NLS-1$
 				+ "This is free software, and you are welcome to redistribute it\n" //$NON-NLS-1$
