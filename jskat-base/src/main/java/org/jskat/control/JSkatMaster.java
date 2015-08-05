@@ -79,7 +79,7 @@ public class JSkatMaster {
 		this.issControl = new IssController(this);
 
 		this.runningNNTrainers = new ArrayList<NNTrainer>();
-		
+
 		JSkatEventBus.INSTANCE.register(this);
 	}
 
@@ -91,16 +91,13 @@ public class JSkatMaster {
 	 * @param latestRemoteVersion
 	 *            Remote version
 	 */
-	public void checkJSkatVersion(final String latestLocalVersion,
-			final String latestRemoteVersion) {
+	public void checkJSkatVersion(final String latestLocalVersion, final String latestRemoteVersion) {
 		log.debug("Latest version web: " + latestRemoteVersion); //$NON-NLS-1$
 		log.debug("Latest version local: " + latestLocalVersion); //$NON-NLS-1$
-		if (VersionChecker.isHigherVersionAvailable(latestLocalVersion,
-				latestRemoteVersion)) {
+		if (VersionChecker.isHigherVersionAvailable(latestLocalVersion, latestRemoteVersion)) {
 			log.debug("Newer version " + latestRemoteVersion + " is available on the JSkat website."); //$NON-NLS-1$//$NON-NLS-2$
 
-			JSkatEventBus.INSTANCE.post(new NewJSkatVersionAvailableEvent(
-					latestRemoteVersion));
+			JSkatEventBus.INSTANCE.post(new NewJSkatVersionAvailableEvent(latestRemoteVersion));
 		}
 	}
 
@@ -129,18 +126,15 @@ public class JSkatMaster {
 		if (this.data.isFreeTableName(tableName)) {
 			createLocalTable(tableName, this.view.getHumanPlayerForGUI());
 		} else {
-			JSkatEventBus.INSTANCE.post(new DuplicateTableNameInputEvent(
-					tableName));
+			JSkatEventBus.INSTANCE.post(new DuplicateTableNameInputEvent(tableName));
 			// try again
 			createTable();
 		}
 	}
 
-	private void createLocalTable(final String tableName,
-			final AbstractHumanJSkatPlayer humanPlayer) {
+	private void createLocalTable(final String tableName, final AbstractHumanJSkatPlayer humanPlayer) {
 
-		JSkatEventBus.INSTANCE.post(new CreateTableCommand(
-				JSkatViewType.LOCAL_TABLE, tableName));
+		JSkatEventBus.INSTANCE.post(new CreateTableCommand(JSkatViewType.LOCAL_TABLE, tableName));
 	}
 
 	/**
@@ -200,9 +194,8 @@ public class JSkatMaster {
 	 * @param sleeps
 	 *            Milliseconds to wait after a games ends during a series
 	 */
-	public void startSeries(List<String> allPlayer, List<String> playerNames,
-			int numberOfRounds, boolean unlimited, boolean onlyPlayRamsch,
-			int sleeps) {
+	public void startSeries(List<String> allPlayer, List<String> playerNames, int numberOfRounds, boolean unlimited,
+			boolean onlyPlayRamsch, int sleeps) {
 
 		log.debug(this.data.getActiveTable());
 
@@ -352,8 +345,7 @@ public class JSkatMaster {
 	 *            Skat player
 	 * @return TRUE if the placing was successful
 	 */
-	public synchronized boolean placePlayer(final String tableName,
-			final JSkatPlayer player) {
+	public synchronized boolean placePlayer(final String tableName, final JSkatPlayer player) {
 
 		boolean result = false;
 
@@ -387,10 +379,6 @@ public class JSkatMaster {
 	 */
 	public void exitJSkat() {
 
-		System.out.println(options.getMainFrameSize().getWidth() + "x"
-				+ options.getMainFrameSize().getHeight());
-		System.out.println(options.getMainFramePosition().getX() + "x"
-				+ options.getMainFramePosition().getY());
 		this.options.saveJSkatProperties();
 		System.exit(0);
 	}
@@ -497,8 +485,7 @@ public class JSkatMaster {
 		}
 	}
 
-	private void handleHumanInputForISSTable(final String tableName,
-			final String command, final Object source) {
+	private void handleHumanInputForISSTable(final String tableName, final String command, final Object source) {
 
 		if (JSkatAction.PASS_BID.toString().equals(command)) {
 			// player passed
@@ -537,13 +524,11 @@ public class JSkatMaster {
 				// FIXME (jan 02.11.2010) Discarded cards are sent with the
 				// game announcement to ISS
 				GameAnnouncement gameAnnouncement = (GameAnnouncement) source;
-				this.issControl
-						.sendGameAnnouncementMove(tableName, gameAnnouncement);
+				this.issControl.sendGameAnnouncementMove(tableName, gameAnnouncement);
 			} else {
 				log.warn("No game announcement found for " + command); //$NON-NLS-1$
 			}
-		} else if (JSkatAction.PLAY_CARD.toString().equals(command)
-				&& source instanceof Card) {
+		} else if (JSkatAction.PLAY_CARD.toString().equals(command) && source instanceof Card) {
 
 			Card nextCard = (Card) source;
 			this.issControl.sendCardMove(tableName, nextCard);
@@ -633,8 +618,7 @@ public class JSkatMaster {
 		}
 
 		if (type == JSkatViewType.LOCAL_TABLE) {
-			this.view.setGameState(tableName, this.data.getLocalSkatTable(tableName)
-					.getGameState());
+			this.view.setGameState(tableName, this.data.getLocalSkatTable(tableName).getGameState());
 		}
 	}
 
@@ -673,12 +657,11 @@ public class JSkatMaster {
 	 * @param strength
 	 *            Playing strength
 	 */
-	public void updateISSPlayer(final String playerName, final String language,
-			final long gamesPlayed, final double strength) {
+	public void updateISSPlayer(final String playerName, final String language, final long gamesPlayed,
+			final double strength) {
 
 		this.data.addAvailableISSPlayer(playerName);
-		this.view.updateISSLobbyPlayerList(playerName, language, gamesPlayed,
-				strength);
+		this.view.updateISSLobbyPlayerList(playerName, language, gamesPlayed, strength);
 	}
 
 	/**

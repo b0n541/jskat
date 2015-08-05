@@ -22,10 +22,8 @@ import java.awt.event.WindowEvent;
 import org.jskat.control.JSkatMaster;
 
 public class JSkatWindowAdapter extends WindowAdapter {
-
 	@Override
 	public void windowClosing(final WindowEvent e) {
-
         JSkatMaster.INSTANCE.exitJSkat();
 	}
 }

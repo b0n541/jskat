@@ -29,6 +29,7 @@ import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.eclipse.jetty.util.log.Log;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.command.general.ShowWelcomeInformationCommand;
@@ -113,13 +114,6 @@ public final class JSkat {
 
 	private static void showView(JSkatViewImpl jskatView) {
 		jskatView.setVisible();
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		Point mainFramePosition = JSkatOptions.instance()
-				.getMainFramePosition();
-		if (screenSize.getWidth() > mainFramePosition.getX()
-				&& screenSize.getHeight() > mainFramePosition.getY()) {
-			jskatView.setPosition(mainFramePosition);
-		}
 	}
 
     /**
