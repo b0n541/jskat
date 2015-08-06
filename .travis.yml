@@ -2,8 +2,6 @@ language: java
 
 script:
   - jdk_switcher use oraclejdk7
-  - cd jskat-base
-  - mvn test 
-  - cd ..
+  - mvn test -pl jskat-base
   - jdk_switcher use oraclejdk8
-  - mvn test
+  - mvn install
