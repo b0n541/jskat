@@ -169,7 +169,7 @@ public class JSkatViewImpl implements JSkatView {
 	private static Logger LOG = LoggerFactory.getLogger(JSkatViewImpl.class);
 
 	private JFrame mainFrame = new JFrame("JSkat " + JSkat.getVersion()); //$NON-NLS-1$ ;
-	private final JPanel mainPanel = new JPanel();
+	public final JPanel mainPanel = new JPanel();
 	private JPanel toolbar;
 	private final SkatSeriesStartDialog skatSeriesStartDialog;
 	private final JSkatOptionsDialog preferencesDialog;
@@ -316,7 +316,7 @@ public class JSkatViewImpl implements JSkatView {
 
 		setMainFrameParameters();
 
-		this.mainFrame.setContentPane(mainPanel);
+//		this.mainFrame.setContentPane(mainPanel);
 		
 		LOG.debug("GUI initialization finished.");
 	}
