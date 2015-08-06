@@ -1,7 +1,5 @@
 sudo: false
 
-language: java
-
 script:
   - jdk_switcher use oraclejdk7
   - mvn test -pl jskat-base
