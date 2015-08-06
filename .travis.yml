@@ -1,6 +1,9 @@
 language: java
 
-jdk:
-  - openjdk7
-  - oraclejdk7
-  - oraclejdk8
+script:
+  - jdk_switcher use oraclejdk7
+  - cd jskat-base
+  - mvn test 
+  - cd ..
+  - jdk_switcher use oraclejdk8
+  - mvn test
