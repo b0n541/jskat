@@ -1,8 +1,6 @@
 package org.jskat;
 
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.apache.log4j.PropertyConfigurator;
 import org.jskat.control.JSkatMaster;
@@ -13,11 +11,9 @@ import org.jskat.gui.swing.JSkatViewImpl;
 import org.jskat.gui.swing.LookAndFeelSetter;
 
 import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
@@ -34,6 +30,7 @@ public class JSkatFX extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+
 		primaryStage.setTitle("Hello World!");
 		
 		SwingUtilities.invokeLater(new Runnable() {
@@ -53,7 +50,39 @@ public class JSkatFX extends Application {
 		StackPane pane = new StackPane();
         pane.getChildren().add(swingNode);
         
-		primaryStage.setScene(new Scene(pane, 1000, 1000));
+		Scene scene = new Scene(pane,
+				JSkatOptions.instance().getMainFrameSize().getWidth(),
+				JSkatOptions.instance().getMainFrameSize().getHeight());
+		scene.widthProperty()
+				.addListener(new javafx.beans.value.ChangeListener<Number>() {
+					@Override
+					public void changed(
+							ObservableValue<? extends Number> observable,
+							Number oldValue, Number newValue) {
+						System.out.println("Width: " + newValue);
+						JSkatOptions.instance()
+								.setMainFrameWidth(newValue.intValue());
+					}
+				});
+		scene.heightProperty()
+				.addListener(new javafx.beans.value.ChangeListener<Number>() {
+					@Override
+					public void changed(
+							ObservableValue<? extends Number> observable,
+							Number oldValue, Number newValue) {
+						System.out.println("Height: " + newValue);
+						JSkatOptions.instance()
+								.setMainFrameHeight(newValue.intValue());
+					}
+				});
+
+		primaryStage.setScene(scene);
+
+		primaryStage
+				.setX(JSkatOptions.instance().getMainFramePosition().getX());
+		primaryStage
+				.setY(JSkatOptions.instance().getMainFramePosition().getY());
+
 		primaryStage.show();
 	}
 }
