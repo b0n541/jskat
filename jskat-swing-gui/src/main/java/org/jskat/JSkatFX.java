@@ -25,80 +25,108 @@ import org.jskat.data.JSkatOptions;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.swing.JSkatViewImpl;
 import org.jskat.gui.swing.LookAndFeelSetter;
+import org.jskat.util.JSkatResourceBundle;
 
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class JSkatFX extends Application {
-	
+
 	public static void main(String[] args) {
-		
-        PropertyConfigurator.configure(ClassLoader
-                .getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
-        JSkatOptions.instance(new DesktopSavePathResolver());
-		
+
+		PropertyConfigurator.configure(ClassLoader.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
+		JSkatOptions.instance(new DesktopSavePathResolver());
+
 		launch(args);
 	}
 
 	@Override
 	public void start(Stage primaryStage) {
 
-		primaryStage.setTitle("Hello World!");
-		
+		primaryStage.setTitle("JSkat " + JSkat.getVersion());
+
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
 				LookAndFeelSetter.setLookAndFeel();
 			}
 		});
-		
+
 		JSkatViewImpl jskatView = new JSkatViewImpl();
 		JSkatGraphicRepository.INSTANCE.toString();
 		JSkatMaster.INSTANCE.setView(jskatView);
-		
+
 		SwingNode swingNode = new SwingNode();
 		swingNode.setContent(jskatView.mainPanel);
-		
-		StackPane pane = new StackPane();
-        pane.getChildren().add(swingNode);
-        
-		Scene scene = new Scene(pane,
-				JSkatOptions.instance().getMainFrameSize().getWidth(),
+
+		VBox pane = new VBox();
+		pane.getChildren().addAll(getMenu(), swingNode);
+		VBox.setVgrow(swingNode, Priority.ALWAYS);
+
+		Scene scene = new Scene(pane, JSkatOptions.instance().getMainFrameSize().getWidth(),
 				JSkatOptions.instance().getMainFrameSize().getHeight());
-		scene.widthProperty()
-				.addListener(new javafx.beans.value.ChangeListener<Number>() {
-					@Override
-					public void changed(
-							ObservableValue<? extends Number> observable,
-							Number oldValue, Number newValue) {
-						System.out.println("Width: " + newValue);
-						JSkatOptions.instance()
-								.setMainFrameWidth(newValue.intValue());
-					}
-				});
-		scene.heightProperty()
-				.addListener(new javafx.beans.value.ChangeListener<Number>() {
-					@Override
-					public void changed(
-							ObservableValue<? extends Number> observable,
-							Number oldValue, Number newValue) {
-						System.out.println("Height: " + newValue);
-						JSkatOptions.instance()
-								.setMainFrameHeight(newValue.intValue());
-					}
-				});
+		scene.setFill(Color.rgb(96, 65, 34));
+		scene.widthProperty().addListener(new javafx.beans.value.ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				System.out.println("Width: " + newValue);
+				JSkatOptions.instance().setMainFrameWidth(newValue.intValue());
+			}
+		});
+		scene.heightProperty().addListener(new javafx.beans.value.ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				System.out.println("Height: " + newValue);
+				JSkatOptions.instance().setMainFrameHeight(newValue.intValue());
+			}
+		});
 
 		primaryStage.setScene(scene);
 
-		primaryStage
-				.setX(JSkatOptions.instance().getMainFramePosition().getX());
-		primaryStage
-				.setY(JSkatOptions.instance().getMainFramePosition().getY());
+		primaryStage.setX(JSkatOptions.instance().getMainFramePosition().getX());
+		primaryStage.setY(JSkatOptions.instance().getMainFramePosition().getY());
 
 		primaryStage.show();
+	}
+
+	private static MenuBar getMenu() {
+
+		JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
+
+		MenuBar menuBar = new MenuBar();
+
+		Menu fileMenu = new Menu(strings.getString("file"));
+
+		MenuItem exitJSkatMenuItem = new MenuItem(strings.getString("exit_jskat"));
+		exitJSkatMenuItem.setGraphic(new ImageView(new Image("org/jskat/gui/img/gui/exit_small.png")));
+		exitJSkatMenuItem.setOnAction(actionEvent -> System.exit(0));
+		fileMenu.getItems().addAll(new MenuItem(strings.getString("load_series")), new SeparatorMenuItem(),
+				exitJSkatMenuItem);
+
+		Menu menuSkatTable = new Menu(strings.getString("skat_table"));
+
+		Menu menuNeuralNetworks = new Menu(strings.getString("neural_networks"));
+
+		Menu menuIss = new Menu(strings.getString("iss"));
+
+		Menu menuExtras = new Menu(strings.getString("extras"));
+
+		Menu menuHelp = new Menu(strings.getString("help"));
+
+		menuBar.getMenus().addAll(fileMenu, menuSkatTable, menuNeuralNetworks, menuIss, menuExtras, menuHelp);
+
+		return menuBar;
 	}
 }
