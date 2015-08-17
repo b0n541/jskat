@@ -74,8 +74,8 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 	/**
 	 * Constructor
 	 * 
-	 * @param mainFrame
-	 *            Main frame
+	 * @param parent
+	 *            Parent component of the skat series start dialog
 	 */
 	public SkatSeriesStartDialog(final Component parent) {
 

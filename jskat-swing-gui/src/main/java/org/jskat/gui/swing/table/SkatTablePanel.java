@@ -721,6 +721,9 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	/**
 	 * Sets the bid value for a player.
+	 * 
+	 * @param event
+	 *            Bid event
 	 */
 	@Subscribe
 	public void setBidValueOn(final BidEvent event) {

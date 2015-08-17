@@ -51,8 +51,8 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 	/**
 	 * Constructor
 	 * 
-	 * @param mainFrame
-	 *            Main window
+	 * @param parent
+	 *            Parent component of the dialog
 	 */
 	public NeuralNetworkTrainingOverview(final Component parent) {
 

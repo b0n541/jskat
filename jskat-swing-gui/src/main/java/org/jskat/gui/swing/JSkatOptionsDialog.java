@@ -190,8 +190,8 @@ public class JSkatOptionsDialog extends JDialog {
 	/**
 	 * Constructor
 	 * 
-	 * @param mainFrame
-	 *            Main window
+	 * @param parent
+	 *            Parent component of the options dialog
 	 */
 	public JSkatOptionsDialog(final Component parent) {
 
