@@ -18,18 +18,14 @@ package org.jskat;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.SplashScreen;
-import java.awt.Toolkit;
 
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
 
 import org.apache.log4j.PropertyConfigurator;
-import org.eclipse.jetty.util.log.Log;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.command.general.ShowWelcomeInformationCommand;
@@ -99,8 +95,6 @@ public final class JSkat {
             splash.close();
         }
 
-        showView(jskatView);
-
         if (JSkatOptions.instance().getBoolean(Option.SHOW_TIPS_AT_START_UP)) {
 			JSkatEventBus.INSTANCE.post(new ShowWelcomeInformationCommand());
         }
@@ -111,10 +105,6 @@ public final class JSkat {
                     VersionChecker.getLatestVersion());
         }
     }
-
-	private static void showView(JSkatViewImpl jskatView) {
-		jskatView.setVisible();
-	}
 
     /**
      * Gets the version of JSkat.

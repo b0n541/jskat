@@ -19,10 +19,6 @@ package org.jskat.gui.swing;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Desktop;
-import java.awt.Dimension;
-import java.awt.Frame;
-import java.awt.Image;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URI;
@@ -35,7 +31,6 @@ import java.util.Set;
 
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -43,7 +38,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -168,7 +162,6 @@ public class JSkatViewImpl implements JSkatView {
 
 	private static Logger LOG = LoggerFactory.getLogger(JSkatViewImpl.class);
 
-	private JFrame mainFrame = new JFrame("JSkat " + JSkat.getVersion()); //$NON-NLS-1$ ;
 	public final JPanel mainPanel = new JPanel();
 	private JPanel toolbar;
 	private final SkatSeriesStartDialog skatSeriesStartDialog;
@@ -191,40 +184,12 @@ public class JSkatViewImpl implements JSkatView {
 
 		JSkatEventBus.INSTANCE.register(this);
 
-		this.skatSeriesStartDialog = new SkatSeriesStartDialog(this.mainFrame);
-		this.preferencesDialog = new JSkatOptionsDialog(this.mainFrame);
-		this.trainingOverview = new NeuralNetworkTrainingOverview(this.mainFrame);
+		this.skatSeriesStartDialog = new SkatSeriesStartDialog(mainPanel);
+		this.preferencesDialog = new JSkatOptionsDialog(mainPanel);
+		this.trainingOverview = new NeuralNetworkTrainingOverview(mainPanel);
 
 		initActionMap();
 		initGUI();
-
-		LOG.debug("Main frame pack()");
-		mainFrame.pack();
-		
-		this.mainFrame.addWindowListener(new JSkatWindowAdapter());
-		this.mainFrame.addComponentListener(new JSkatComponentAdapter());
-	}
-
-	/**
-	 * Shows the GUI
-	 */
-	public final void setVisible() {
-		
-		LOG.debug("Set visible");
-		this.mainFrame.setVisible(true);
-
-		Point position = options.getMainFramePosition();
-		Dimension size = options.getMainFrameSize();
-		LOG.debug("Set main frame position: " + position);
-		LOG.debug("Set main frame size: " + size);
-		if (mainFrame.isVisible()) {
-//			mainFrame.setLocation(position);
-			mainFrame.setLocation(position);
-			mainFrame.setSize(size);
-//			mainFrame.setBounds(position.x, position.y, size.width, size.height);
-		} else {
-			throw new IllegalStateException("GUI is not visible.");
-		}
 	}
 
 	private void initActionMap() {
@@ -300,8 +265,6 @@ public class JSkatViewImpl implements JSkatView {
 
 	private void initGUI() {
 
-		this.mainFrame.setJMenuBar(getMenuBar());
-
 		mainPanel.setLayout(new BorderLayout());
 
 		createToolbar();
@@ -314,10 +277,6 @@ public class JSkatViewImpl implements JSkatView {
 		addTabPanel(new WelcomePanel(this.strings.getString("welcome"), actions), //$NON-NLS-1$
 				this.strings.getString("welcome")); //$NON-NLS-1$
 
-		setMainFrameParameters();
-
-//		this.mainFrame.setContentPane(mainPanel);
-		
 		LOG.debug("GUI initialization finished.");
 	}
 
@@ -335,25 +294,6 @@ public class JSkatViewImpl implements JSkatView {
 	private void addToolbar() {
 		mainPanel.add(toolbar, BorderLayout.NORTH);
 		mainPanel.validate();
-	}
-
-	private void setMainFrameParameters() {
-		List<Image> icons = new ArrayList<>();
-		icons.add(this.bitmaps.getIconImage(JSkatGraphicRepository.Icon.JSKAT, JSkatGraphicRepository.IconSize.SMALL));
-		icons.add(this.bitmaps.getIconImage(JSkatGraphicRepository.Icon.JSKAT, JSkatGraphicRepository.IconSize.BIG));
-		this.mainFrame.setIconImages(icons);
-		this.mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-		Dimension mainFrameSize = options.getMainFrameSize();
-		LOG.debug("Main panel size from options: " + mainFrameSize);
-		if (mainFrameSize != null && mainFrameSize.getWidth() > 0.0 && mainFrameSize.getHeight() > 0.0) {
-			LOG.debug("Set main panel size: " + mainFrameSize);
-//			mainPanel.setPreferredSize(mainFrameSize);
-		} else {
-//			mainPanel.setPreferredSize(new Dimension(1000, 700));
-			this.mainFrame.setExtendedState(this.mainFrame.getExtendedState() | Frame.MAXIMIZED_BOTH);
-		}
-		this.mainPanel.setMinimumSize(new Dimension(800, 600));
 	}
 
 	private void addTabbedPane() {
@@ -483,7 +423,7 @@ public class JSkatViewImpl implements JSkatView {
 
 	@Subscribe
 	public void showAboutInformationDialogOn(final ShowAboutInformationCommand command) {
-		JOptionPane.showMessageDialog(this.mainFrame,
+		JOptionPane.showMessageDialog(null,
 				"JSkat " //$NON-NLS-1$
 						+ this.strings.getString("version") //$NON-NLS-1$
 						+ " " //$NON-NLS-1$
@@ -514,7 +454,8 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showMessage(final String title, final String message) {
 
-		JOptionPane.showMessageDialog(this.mainFrame, message, title, JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, message, title,
+				JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	@Override
@@ -555,7 +496,8 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showErrorMessage(final String title, final String message) {
 
-		JOptionPane.showMessageDialog(this.mainFrame, message, title, JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null, message, title,
+				JOptionPane.ERROR_MESSAGE);
 	}
 
 	/**
@@ -627,7 +569,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Subscribe
 	public void showHelpDialogOn(ShowHelpCommand command) {
 
-		new JSkatHelpDialog(this.mainFrame, this.strings.getString("help"), //$NON-NLS-1$
+		new JSkatHelpDialog(null, this.strings.getString("help"), //$NON-NLS-1$
 				"org/jskat/gui/help/" + JSkatOptions.instance().getI18NCode() //$NON-NLS-1$
 						+ "/contents.html") //$NON-NLS-1$
 								.setVisible(true);
@@ -636,14 +578,14 @@ public class JSkatViewImpl implements JSkatView {
 	@Subscribe
 	public void showLicenceDialogOn(ShowLicenseCommand command) {
 
-		new JSkatHelpDialog(this.mainFrame, this.strings.getString("license"), //$NON-NLS-1$
+		new JSkatHelpDialog(null, this.strings.getString("license"), //$NON-NLS-1$
 				"org/jskat/gui/help/gpl3.html").setVisible(true); //$NON-NLS-1$
 	}
 
 	@Subscribe
 	public void showWelcomeDialogOn(ShowWelcomeInformationCommand command) {
 
-		new JSkatWelcomeDialog(this.mainFrame, this.strings.getString("welcome_to_jskat"), //$NON-NLS-1$
+		new JSkatWelcomeDialog(null, this.strings.getString("welcome_to_jskat"), //$NON-NLS-1$
 				"org/jskat/gui/help/" //$NON-NLS-1$
 						+ JSkatOptions.instance().getI18NCode() + "/welcome.html").setVisible(true); //$NON-NLS-1$
 	}
@@ -811,7 +753,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public String getNewTableName(final int localTablesCreated) {
 		// get table name
-		String tableName = JOptionPane.showInputDialog(this.mainFrame,
+		String tableName = JOptionPane.showInputDialog(null,
 				this.strings.getString("new_table_dialog_message"), //$NON-NLS-1$
 				this.strings.getString("local_table") + " " //$NON-NLS-1$ //$NON-NLS-2$
 						+ (localTablesCreated + 1));
@@ -977,7 +919,8 @@ public class JSkatViewImpl implements JSkatView {
 		final List<String> result = new ArrayList<String>();
 
 		final PlayerInvitationPanel invitationPanel = new PlayerInvitationPanel(playerNames);
-		final int dialogResult = JOptionPane.showConfirmDialog(this.mainFrame, invitationPanel,
+		final int dialogResult = JOptionPane.showConfirmDialog(null,
+				invitationPanel,
 				this.strings.getString("invite_players"), //$NON-NLS-1$
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 

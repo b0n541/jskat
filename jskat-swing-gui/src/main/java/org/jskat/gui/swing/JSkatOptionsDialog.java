@@ -16,11 +16,11 @@
  */
 package org.jskat.gui.swing;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.File;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -32,10 +32,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
@@ -73,7 +70,7 @@ public class JSkatOptionsDialog extends JDialog {
 	private final JSkatResourceBundle strings;
 	private final JSkatOptions options;
 
-	private final JFrame parent;
+	private final Component parent;
 
 	// general options
 	private JCheckBox showTipsAtStartUp;
@@ -196,11 +193,11 @@ public class JSkatOptionsDialog extends JDialog {
 	 * @param mainFrame
 	 *            Main window
 	 */
-	public JSkatOptionsDialog(final JFrame mainFrame) {
+	public JSkatOptionsDialog(final Component parent) {
 
 		strings = JSkatResourceBundle.INSTANCE;
 		this.options = JSkatOptions.instance();
-		this.parent = mainFrame;
+		this.parent = parent;
 
 		initGUI();
 	}

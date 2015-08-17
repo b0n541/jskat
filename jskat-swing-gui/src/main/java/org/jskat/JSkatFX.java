@@ -39,7 +39,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class JSkatFX extends Application {
@@ -71,24 +70,23 @@ public class JSkatFX extends Application {
 		SwingNode swingNode = new SwingNode();
 		swingNode.setContent(jskatView.mainPanel);
 
+		MenuBar menu = getMenu();
+
 		VBox pane = new VBox();
 		pane.getChildren().addAll(getMenu(), swingNode);
 		VBox.setVgrow(swingNode, Priority.ALWAYS);
 
 		Scene scene = new Scene(pane, JSkatOptions.instance().getMainFrameSize().getWidth(),
 				JSkatOptions.instance().getMainFrameSize().getHeight());
-		scene.setFill(Color.rgb(96, 65, 34));
 		scene.widthProperty().addListener(new javafx.beans.value.ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				System.out.println("Width: " + newValue);
 				JSkatOptions.instance().setMainFrameWidth(newValue.intValue());
 			}
 		});
 		scene.heightProperty().addListener(new javafx.beans.value.ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				System.out.println("Height: " + newValue);
 				JSkatOptions.instance().setMainFrameHeight(newValue.intValue());
 			}
 		});
@@ -111,7 +109,8 @@ public class JSkatFX extends Application {
 
 		MenuItem exitJSkatMenuItem = new MenuItem(strings.getString("exit_jskat"));
 		exitJSkatMenuItem.setGraphic(new ImageView(new Image("org/jskat/gui/img/gui/exit_small.png")));
-		exitJSkatMenuItem.setOnAction(actionEvent -> System.exit(0));
+		exitJSkatMenuItem
+				.setOnAction(actionEvent -> JSkatMaster.INSTANCE.exitJSkat());
 		fileMenu.getItems().addAll(new MenuItem(strings.getString("load_series")), new SeparatorMenuItem(),
 				exitJSkatMenuItem);
 

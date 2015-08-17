@@ -16,6 +16,7 @@
  */
 package org.jskat.gui.swing.table;
 
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,7 +28,6 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -57,7 +57,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 	private static final String PLAYER3_DEFAULT_NAME = System
 			.getProperty("user.name"); //$NON-NLS-1$
 
-	private final JFrame parent;
+	private final Component parent;
 
 	private final JSkatResourceBundle strings;
 
@@ -77,9 +77,9 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 	 * @param mainFrame
 	 *            Main frame
 	 */
-    public SkatSeriesStartDialog(final JFrame mainFrame) {
+	public SkatSeriesStartDialog(final Component parent) {
 
-		this.parent = mainFrame;
+		this.parent = parent;
 		this.strings = JSkatResourceBundle.INSTANCE;
 
 		initGUI();

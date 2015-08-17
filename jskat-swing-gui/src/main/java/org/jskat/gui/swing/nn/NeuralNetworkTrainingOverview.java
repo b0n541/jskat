@@ -16,6 +16,7 @@
  */
 package org.jskat.gui.swing.nn;
 
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.text.DecimalFormat;
@@ -25,7 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -44,7 +44,7 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 
 	private static final long serialVersionUID = 1L;
 
-	private final JFrame parent;
+	private final Component parent;
 
 	JTable overviewTable;
 
@@ -54,9 +54,9 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 	 * @param mainFrame
 	 *            Main window
 	 */
-	public NeuralNetworkTrainingOverview(final JFrame mainFrame) {
+	public NeuralNetworkTrainingOverview(final Component parent) {
 
-		parent = mainFrame;
+		this.parent = parent;
 		initGUI();
 	}
 
@@ -89,7 +89,7 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 
 	private class DoubleRenderer extends DefaultTableCellRenderer {
 		private DecimalFormat formatter;
-		private int fractionDigits;
+		private final int fractionDigits;
 
 		public DoubleRenderer(int fractionDigits) {
 			super();
@@ -139,8 +139,8 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 
 		private static final long serialVersionUID = 1L;
 
-		private List<String> header;
-		private HashMap<GameType, List<Object>> data;
+		private final List<String> header;
+		private final HashMap<GameType, List<Object>> data;
 
 		protected TrainingOverviewTableModel() {
 
