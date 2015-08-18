@@ -86,7 +86,7 @@ public final class JSkat {
 				break;
 			case 2:
 				jskatView = new JSkatViewImpl();
-				JSkatMaster.INSTANCE.setView(jskatView, null);
+				JSkatMaster.INSTANCE.setView(jskatView);
 				break;
 			}
 		}

@@ -36,8 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public class JSkatGraphicRepository {
 
-	private static Logger log = LoggerFactory
-			.getLogger(JSkatGraphicRepository.class);
+	private static Logger log = LoggerFactory.getLogger(JSkatGraphicRepository.class);
 
 	public final static JSkatGraphicRepository INSTANCE = new JSkatGraphicRepository();
 
@@ -97,12 +96,8 @@ public class JSkatGraphicRepository {
 		// for all flags
 		for (final Flag flag : Flag.values()) {
 			// add flag
-			this.flags.add(Toolkit
-					.getDefaultToolkit()
-					.getImage(
-							ClassLoader
-									.getSystemResource("org/jskat/gui/img/gui/" //$NON-NLS-1$
-											+ "flag_" + flag.toString().toLowerCase() + ".png"))); //$NON-NLS-1$ //$NON-NLS-2$
+			this.flags.add(Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/" //$NON-NLS-1$
+					+ "flag_" + flag.toString().toLowerCase() + ".png"))); //$NON-NLS-1$ //$NON-NLS-2$
 			tracker.addImage(this.flags.get(flag.ordinal()), 3);
 		}
 
@@ -114,38 +109,20 @@ public class JSkatGraphicRepository {
 	}
 
 	private void loadImages(final MediaTracker tracker) {
-		this.skatTable = Toolkit
-				.getDefaultToolkit()
-				.getImage(
-						ClassLoader
-								.getSystemResource("org/jskat/gui/img/gui/skat_table.png")); //$NON-NLS-1$
+		this.skatTable = Toolkit.getDefaultToolkit()
+				.getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/skat_table.png")); //$NON-NLS-1$
 		tracker.addImage(this.skatTable, 0);
-		this.jskatLogo = Toolkit
-				.getDefaultToolkit()
-				.getImage(
-						ClassLoader
-.getSystemResource("org/jskat/gui/img/gui/jskat_logo.png")); //$NON-NLS-1$
+		this.jskatLogo = Toolkit.getDefaultToolkit()
+				.getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/jskat_logo.png")); //$NON-NLS-1$
 		tracker.addImage(this.jskatLogo, 0);
 
 		this.bidBubbles = new ArrayList<Image>();
-		this.bidBubbles
-				.add(Toolkit
-						.getDefaultToolkit()
-						.getImage(
-								ClassLoader
-										.getSystemResource("org/jskat/gui/img/gui/bid_left.png"))); //$NON-NLS-1$
-		this.bidBubbles
-				.add(Toolkit
-						.getDefaultToolkit()
-						.getImage(
-								ClassLoader
-										.getSystemResource("org/jskat/gui/img/gui/bid_right.png"))); //$NON-NLS-1$
-		this.bidBubbles
-				.add(Toolkit
-						.getDefaultToolkit()
-						.getImage(
-								ClassLoader
-										.getSystemResource("org/jskat/gui/img/gui/bid_user.png"))); //$NON-NLS-1$
+		this.bidBubbles.add(Toolkit.getDefaultToolkit()
+				.getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/bid_left.png"))); //$NON-NLS-1$
+		this.bidBubbles.add(Toolkit.getDefaultToolkit()
+				.getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/bid_right.png"))); //$NON-NLS-1$
+		this.bidBubbles.add(Toolkit.getDefaultToolkit()
+				.getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/bid_user.png"))); //$NON-NLS-1$
 		tracker.addImage(this.bidBubbles.get(0), 0);
 		tracker.addImage(this.bidBubbles.get(1), 0);
 		tracker.addImage(this.bidBubbles.get(2), 0);
@@ -172,19 +149,11 @@ public class JSkatGraphicRepository {
 
 				// add icon
 				this.icons.get(icon.ordinal())
-						.add(Toolkit
-								.getDefaultToolkit()
-								.getImage(
-										ClassLoader
-												.getSystemResource("org/jskat/gui/img/gui/" //$NON-NLS-1$
-														+ icon.toString()
-																.toLowerCase()
-														+ '_'
-														+ size.toString()
-																.toLowerCase()
-														+ ".png"))); //$NON-NLS-1$
-				tracker.addImage(this.icons.get(icon.ordinal()).get(size.ordinal()),
-						1);
+						.add(Toolkit.getDefaultToolkit()
+								.getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/" //$NON-NLS-1$
+										+ icon.toString().toLowerCase() + '_' + size.toString().toLowerCase()
+										+ ".png"))); //$NON-NLS-1$
+				tracker.addImage(this.icons.get(icon.ordinal()).get(size.ordinal()), 1);
 			}
 		}
 
@@ -210,26 +179,18 @@ public class JSkatGraphicRepository {
 
 			for (Card card : Card.values()) {
 
-				this.cards.get(set)
-						.put(card,
-								Toolkit.getDefaultToolkit()
-										.getImage(
-												ClassLoader
-														.getSystemResource("org/jskat/gui/img/card/" //$NON-NLS-1$
-																+ set.getCardFace()
-																		.toString()
-																		.toLowerCase()
-																+ "/" + getCardSetNameInLowerCase(set) + "/" + card.getSuit().shortString() + '-' + card.getRank().shortString() + "." + set.getFileType()))); //$NON-NLS-1$//$NON-NLS-2$
+				this.cards.get(set).put(card,
+						Toolkit.getDefaultToolkit()
+								.getImage(ClassLoader.getSystemResource("org/jskat/gui/img/card/" //$NON-NLS-1$
+										+ set.getCardFace().toString().toLowerCase() + "/" //$NON-NLS-1$
+										+ getCardSetNameInLowerCase(set) + "/" + card.getSuit().shortString() + '-' //$NON-NLS-1$
+										+ card.getRank().shortString() + "." + set.getFileType())));
 
 				tracker.addImage(this.cards.get(set).get(card), 2);
 			}
 
-			this.cardBacks
-					.put(set,
-							Toolkit.getDefaultToolkit()
-									.getImage(
-											ClassLoader
-													.getSystemResource("org/jskat/gui/img/card/back/" + getCardSetNameInLowerCase(set) + "." + set.getFileType()))); //$NON-NLS-1$
+			this.cardBacks.put(set, Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource(
+					"org/jskat/gui/img/card/back/" + getCardSetNameInLowerCase(set) + "." + set.getFileType()))); //$NON-NLS-1$
 			tracker.addImage(this.cardBacks.get(set), 2);
 		}
 		try {
@@ -314,6 +275,10 @@ public class JSkatGraphicRepository {
 		return this.jskatLogo;
 	}
 
+	public javafx.scene.image.Image getJSkatLogoImageFX() {
+		return new javafx.scene.image.Image(getClass().getResourceAsStream("/org/jskat/gui/img/gui/jskat_logo.png"));
+	}
+
 	/**
 	 * Gets the image for the left opponent bid bubble
 	 * 
@@ -348,138 +313,105 @@ public class JSkatGraphicRepository {
 		/**
 		 * About
 		 */
-		ABOUT,
-		/**
-		 * Blank
-		 */
-		BLANK,
-		/**
-		 * Exit
-		 */
-		EXIT,
-		/**
-		 * Help
-		 */
-		HELP,
-		/**
-		 * New skat round
-		 */
-		NEW,
-		/**
-		 * Load skat round
-		 */
-		LOAD,
-		/**
-		 * Save
-		 */
-		SAVE,
-		/**
-		 * Save under new name
-		 */
-		SAVE_AS,
-		/**
-		 * First
-		 */
-		FIRST,
-		/**
-		 * Previous
-		 */
-		PREVIOUS,
-		/**
-		 * Next
-		 */
-		NEXT,
-		/**
-		 * Last
-		 */
-		LAST,
-		/**
-		 * Preferences
-		 */
-		PREFERENCES,
-		/**
-		 * Table
-		 */
-		TABLE,
-		/**
-		 * Start series / continue series etc.
-		 */
-		PLAY,
-		/**
-		 * Pause series
-		 */
-		PAUSE,
-		/**
-		 * Connect ISS
-		 */
-		CONNECT_ISS,
-		/**
-		 * Leave table / log out from ISS
-		 */
-		LOG_OUT,
-		/**
-		 * License
-		 */
-		LICENSE,
-		/**
-		 * Close icon for windows and tabs
-		 */
-		CLOSE,
-		/**
-		 * JSkat logo
-		 */
-		JSKAT,
-		/**
-		 * Train Neural Networks
-		 */
-		TRAIN_NN,
-		/**
-		 * OK / Bid / Hold bid
-		 */
-		OK,
-		/**
-		 * Cancel / Pass
-		 */
-		STOP,
-		/**
-		 * Chat
-		 */
-		CHAT,
-		/**
-		 * Chat disabled
-		 */
-		CHAT_DISABLED,
-		/**
-		 * User info
-		 */
-		USER_INFO,
-		/**
-		 * Web / Home page
-		 */
-		WEB,
-		/**
-		 * Clock
-		 */
-		CLOCK,
-		/**
-		 * Invite
-		 */
-		INVITE,
-		/**
-		 * Register
-		 */
-		REGISTER,
-		/**
-		 * White flag
-		 */
-		WHITE_FLAG,
-		/**
-		 * Undo
-		 */
-		UNDO,
-		/**
-		 * REDO
-		 */
+		ABOUT, /**
+				 * Blank
+				 */
+		BLANK, /**
+				 * Exit
+				 */
+		EXIT, /**
+				 * Help
+				 */
+		HELP, /**
+				 * New skat round
+				 */
+		NEW, /**
+				 * Load skat round
+				 */
+		LOAD, /**
+				 * Save
+				 */
+		SAVE, /**
+				 * Save under new name
+				 */
+		SAVE_AS, /**
+					 * First
+					 */
+		FIRST, /**
+				 * Previous
+				 */
+		PREVIOUS, /**
+					 * Next
+					 */
+		NEXT, /**
+				 * Last
+				 */
+		LAST, /**
+				 * Preferences
+				 */
+		PREFERENCES, /**
+						 * Table
+						 */
+		TABLE, /**
+				 * Start series / continue series etc.
+				 */
+		PLAY, /**
+				 * Pause series
+				 */
+		PAUSE, /**
+				 * Connect ISS
+				 */
+		CONNECT_ISS, /**
+						 * Leave table / log out from ISS
+						 */
+		LOG_OUT, /**
+					 * License
+					 */
+		LICENSE, /**
+					 * Close icon for windows and tabs
+					 */
+		CLOSE, /**
+				 * JSkat logo
+				 */
+		JSKAT, /**
+				 * Train Neural Networks
+				 */
+		TRAIN_NN, /**
+					 * OK / Bid / Hold bid
+					 */
+		OK, /**
+			 * Cancel / Pass
+			 */
+		STOP, /**
+				 * Chat
+				 */
+		CHAT, /**
+				 * Chat disabled
+				 */
+		CHAT_DISABLED, /**
+						 * User info
+						 */
+		USER_INFO, /**
+					 * Web / Home page
+					 */
+		WEB, /**
+				 * Clock
+				 */
+		CLOCK, /**
+				 * Invite
+				 */
+		INVITE, /**
+				 * Register
+				 */
+		REGISTER, /**
+					 * White flag
+					 */
+		WHITE_FLAG, /**
+					 * Undo
+					 */
+		UNDO, /**
+				 * REDO
+				 */
 		REDO;
 	}
 

@@ -33,7 +33,7 @@ public class JSkatMasterTest extends AbstractJSkatTest {
 	@Test
 	public void createTable() {
 		UnitTestView view = new UnitTestView();
-		JSkatMaster.INSTANCE.setView(view, null);
+		JSkatMaster.INSTANCE.setView(view);
 
 		JSkatMaster.INSTANCE.createTable();
 
