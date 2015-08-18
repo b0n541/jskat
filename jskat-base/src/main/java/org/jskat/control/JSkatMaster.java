@@ -15,6 +15,7 @@
  */
 package org.jskat.control;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -49,6 +50,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.eventbus.Subscribe;
 
+import javafx.stage.Stage;
+
 /**
  * Controls everything in JSkat
  */
@@ -67,6 +70,8 @@ public class JSkatMaster {
 	private final IssController issControl;
 
 	private final List<NNTrainer> runningNNTrainers;
+
+	private Stage mainWindow;
 
 	/**
 	 * Constructor
@@ -368,9 +373,10 @@ public class JSkatMaster {
 	 * @param newView
 	 *            View
 	 */
-	public void setView(final JSkatView newView) {
+	public void setView(final JSkatView newView, Stage primaryStage) {
 
 		this.view = newView;
+		this.mainWindow = primaryStage;
 		this.issControl.setView(this.view);
 	}
 
@@ -379,6 +385,7 @@ public class JSkatMaster {
 	 */
 	public void exitJSkat() {
 
+		options.setMainFramePosition(new Point((int) mainWindow.getX(), (int) mainWindow.getY()));
 		this.options.saveJSkatProperties();
 		System.exit(0);
 	}
