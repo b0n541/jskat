@@ -30,6 +30,7 @@ import org.jskat.gui.swing.LookAndFeelSetter;
 import org.jskat.util.JSkatResourceBundle;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Point2D;
@@ -82,13 +83,13 @@ public class JSkatFX extends Application {
 
 		Scene scene = new Scene(pane, JSkatOptions.instance().getMainFrameSize().getWidth(),
 				JSkatOptions.instance().getMainFrameSize().getHeight());
-		scene.widthProperty().addListener(new javafx.beans.value.ChangeListener<Number>() {
+		scene.widthProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 				JSkatOptions.instance().setMainFrameWidth(newValue.intValue());
 			}
 		});
-		scene.heightProperty().addListener(new javafx.beans.value.ChangeListener<Number>() {
+		scene.heightProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
 				JSkatOptions.instance().setMainFrameHeight(newValue.intValue());
@@ -96,6 +97,19 @@ public class JSkatFX extends Application {
 		});
 
 		primaryStage.setScene(scene);
+
+		primaryStage.xProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				JSkatOptions.instance().setMainFrameXPosition(newValue.intValue());
+			}
+		});
+		primaryStage.yProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				JSkatOptions.instance().setMainFrameYPosition(newValue.intValue());
+			}
+		});
 
 		placeMainWindow(primaryStage);
 
