@@ -18,6 +18,17 @@ package org.jskat;
 
 import java.awt.Point;
 
+import javax.swing.SwingUtilities;
+
+import org.apache.log4j.PropertyConfigurator;
+import org.jskat.control.JSkatMaster;
+import org.jskat.data.DesktopSavePathResolver;
+import org.jskat.data.JSkatOptions;
+import org.jskat.gui.img.JSkatGraphicRepository;
+import org.jskat.gui.swing.JSkatViewImpl;
+import org.jskat.gui.swing.LookAndFeelSetter;
+import org.jskat.util.JSkatResourceBundle;
+
 import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Point2D;
@@ -33,23 +44,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
-import javax.swing.SwingUtilities;
-
-import org.apache.log4j.PropertyConfigurator;
-import org.jskat.control.JSkatMaster;
-import org.jskat.data.DesktopSavePathResolver;
-import org.jskat.data.JSkatOptions;
-import org.jskat.gui.img.JSkatGraphicRepository;
-import org.jskat.gui.swing.JSkatViewImpl;
-import org.jskat.gui.swing.LookAndFeelSetter;
-import org.jskat.util.JSkatResourceBundle;
-
 public class JSkatFX extends Application {
 
 	public static void main(String[] args) {
 
-		PropertyConfigurator.configure(ClassLoader
-				.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
+		PropertyConfigurator.configure(ClassLoader.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
 		JSkatOptions.instance(new DesktopSavePathResolver());
 
 		launch(args);
@@ -80,24 +79,19 @@ public class JSkatFX extends Application {
 		pane.getChildren().addAll(menu, swingNode);
 		VBox.setVgrow(swingNode, Priority.ALWAYS);
 
-		Scene scene = new Scene(pane, JSkatOptions.instance()
-				.getMainFrameSize().getWidth(), JSkatOptions.instance()
-				.getMainFrameSize().getHeight());
+		Scene scene = new Scene(pane, JSkatOptions.instance().getMainFrameSize().getWidth(),
+				JSkatOptions.instance().getMainFrameSize().getHeight());
 		scene.widthProperty().addListener(
-				(observable, oldValue, newValue) -> JSkatOptions.instance()
-						.setMainFrameWidth(newValue.intValue()));
+				(observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameWidth(newValue.intValue()));
 		scene.heightProperty().addListener(
-				(observable, oldValue, newValue) -> JSkatOptions.instance()
-						.setMainFrameHeight(newValue.intValue()));
+				(observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameHeight(newValue.intValue()));
 
 		primaryStage.setScene(scene);
 
 		primaryStage.xProperty().addListener(
-				(observable, oldValue, newValue) -> JSkatOptions.instance()
-						.setMainFrameXPosition(newValue.intValue()));
+				(observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameXPosition(newValue.intValue()));
 		primaryStage.yProperty().addListener(
-				(observable, oldValue, newValue) -> JSkatOptions.instance()
-						.setMainFrameYPosition(newValue.intValue()));
+				(observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameYPosition(newValue.intValue()));
 
 		placeMainWindow(primaryStage);
 
@@ -106,10 +100,8 @@ public class JSkatFX extends Application {
 
 	private void placeMainWindow(Stage primaryStage) {
 
-		Point mainFramePosition = JSkatOptions.instance()
-				.getMainFramePosition();
-		Point2D javaFxPosition = new Point2D(mainFramePosition.getX(),
-				mainFramePosition.getY());
+		Point mainFramePosition = JSkatOptions.instance().getMainFramePosition();
+		Point2D javaFxPosition = new Point2D(mainFramePosition.getX(), mainFramePosition.getY());
 
 		boolean screenFound = false;
 
@@ -125,8 +117,7 @@ public class JSkatFX extends Application {
 		}
 	}
 
-	private void placeMainWindow(Screen screen, Stage primaryStage,
-			Point2D position) {
+	private void placeMainWindow(Screen screen, Stage primaryStage, Point2D position) {
 
 		if (screen.getVisualBounds().contains(position)) {
 			primaryStage.setX(position.getX());
@@ -144,55 +135,42 @@ public class JSkatFX extends Application {
 
 		Menu fileMenu = new Menu(strings.getString("file"));
 
-		MenuItem exitJSkatMenuItem = new MenuItem(
-				strings.getString("exit_jskat"));
-		exitJSkatMenuItem.setGraphic(new ImageView(new Image(
-				"org/jskat/gui/img/gui/exit_small.png")));
-		exitJSkatMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE
-				.exitJSkat());
-		fileMenu.getItems().addAll(
-				new MenuItem(strings.getString("load_series")),
-				new MenuItem(strings.getString("save_series")),
-				new MenuItem(strings.getString("save_series_as")),
+		MenuItem exitJSkatMenuItem = new MenuItem(strings.getString("exit_jskat"));
+		exitJSkatMenuItem.setGraphic(new ImageView(new Image("org/jskat/gui/img/gui/exit_small.png")));
+		exitJSkatMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.exitJSkat());
+		fileMenu.getItems().addAll(new MenuItem(strings.getString("load_series")),
+				new MenuItem(strings.getString("save_series")), new MenuItem(strings.getString("save_series_as")),
 				new SeparatorMenuItem(), exitJSkatMenuItem);
 
 		Menu skatTableMenu = new Menu(strings.getString("skat_table"));
-		skatTableMenu.getItems().addAll(
-				new MenuItem(strings.getString("play_on_local_table")),
-				new SeparatorMenuItem(),
-				new MenuItem(strings.getString("start_series")),
-				new SeparatorMenuItem(),
-				new MenuItem(strings.getString("replay_game")),
-				new MenuItem(strings.getString("next_replay_move")));
+		skatTableMenu.getItems().addAll(new MenuItem(strings.getString("play_on_local_table")), new SeparatorMenuItem(),
+				new MenuItem(strings.getString("start_series")), new SeparatorMenuItem(),
+				new MenuItem(strings.getString("replay_game")), new MenuItem(strings.getString("next_replay_move")));
+
+		MenuItem resetNeuralNetworksMenuItem = new MenuItem(strings.getString("reset_nn"));
+		resetNeuralNetworksMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.resetNeuralNetworks());
+		MenuItem trainNeuralNetworksMenuItem = new MenuItem(strings.getString("train_nn"));
+		trainNeuralNetworksMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.trainNeuralNetworks());
+		MenuItem stopTrainNeuralNetworksMenuItem = new MenuItem(strings.getString("stop_train_nn"));
+		stopTrainNeuralNetworksMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.stopTrainNeuralNetworks());
 
 		Menu neuralNetworksMenu = new Menu(strings.getString("neural_networks"));
-		neuralNetworksMenu.getItems().addAll(
-				new MenuItem(strings.getString("load_nn")),
-				new MenuItem(strings.getString("save_nn")),
-				new SeparatorMenuItem(),
-				new MenuItem(strings.getString("reset_nn")),
-				new MenuItem(strings.getString("train_nn")),
-				new MenuItem(strings.getString("stop_train_nn")));
+		neuralNetworksMenu.getItems().addAll(new MenuItem(strings.getString("load_nn")),
+				new MenuItem(strings.getString("save_nn")), new SeparatorMenuItem(), resetNeuralNetworksMenuItem,
+				trainNeuralNetworksMenuItem, stopTrainNeuralNetworksMenuItem);
 
 		Menu issMenu = new Menu(strings.getString("iss"));
-		issMenu.getItems().addAll(
-				new MenuItem(strings.getString("play_on_iss")),
-				new SeparatorMenuItem(),
-				new MenuItem(strings.getString("new_table")),
-				new MenuItem(strings.getString("invite")));
+		issMenu.getItems().addAll(new MenuItem(strings.getString("play_on_iss")), new SeparatorMenuItem(),
+				new MenuItem(strings.getString("new_table")), new MenuItem(strings.getString("invite")));
 
 		Menu extrasMenu = new Menu(strings.getString("extras"));
-		extrasMenu.getItems().addAll(
-				new MenuItem(strings.getString("preferences")));
+		extrasMenu.getItems().addAll(new MenuItem(strings.getString("preferences")));
 
 		Menu helpMenu = new Menu(strings.getString("help"));
-		helpMenu.getItems().addAll(new MenuItem(strings.getString("help")),
-				new SeparatorMenuItem(),
-				new MenuItem(strings.getString("license")),
-				new MenuItem(strings.getString("about")));
+		helpMenu.getItems().addAll(new MenuItem(strings.getString("help")), new SeparatorMenuItem(),
+				new MenuItem(strings.getString("license")), new MenuItem(strings.getString("about")));
 
-		menuBar.getMenus().addAll(fileMenu, skatTableMenu, neuralNetworksMenu,
-				issMenu, extrasMenu, helpMenu);
+		menuBar.getMenus().addAll(fileMenu, skatTableMenu, neuralNetworksMenu, issMenu, extrasMenu, helpMenu);
 
 		return menuBar;
 	}
