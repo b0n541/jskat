@@ -35,8 +35,7 @@ import org.slf4j.helpers.NOPLogger;
  */
 class GameSimulationThread extends JSkatThread {
 
-	private static Logger log = LoggerFactory
-			.getLogger(GameSimulationThread.class);
+	private static Logger log = LoggerFactory.getLogger(GameSimulationThread.class);
 
 	private final GameType gameType;
 	private final Player position;
@@ -53,9 +52,10 @@ class GameSimulationThread extends JSkatThread {
 	private final AIPlayerNN nnPlayer2;
 	private final AIPlayerNN nnPlayer3;
 
-	GameSimulationThread(final GameType pGameType, final Player playerPosition,
-			final CardList playerHandCards, final CardList skatCards) {
+	GameSimulationThread(final GameType pGameType, final Player playerPosition, final CardList playerHandCards,
+			final CardList skatCards) {
 
+		setName(pGameType.name());
 		gameType = pGameType;
 		position = playerPosition;
 		cards = new CardList(playerHandCards);
@@ -111,20 +111,17 @@ class GameSimulationThread extends JSkatThread {
 				return false;
 			}
 		}
-		log.warn(simulatedGames + " episodes simulated for game type "
-				+ gameType + ": won rate " + getWonRate() + ".");
+		log.warn(simulatedGames + " episodes simulated for game type " + gameType + ": won rate " + getWonRate() + ".");
 		return true;
 	}
 
 	private boolean simulateGame() {
 
-		SkatGame game = new SkatGame("table", GameVariant.STANDARD, nnPlayer1,
-				nnPlayer2, nnPlayer3);
+		SkatGame game = new SkatGame("SIM" + gameType.name(), GameVariant.STANDARD, nnPlayer1, nnPlayer2, nnPlayer3);
 		game.setView(new NullView());
 		game.setLogger(NOPLogger.NOP_LOGGER);
 
-		CardDeck deck = CardDeckSimulator.simulateUnknownCards(position, cards,
-				skat);
+		CardDeck deck = CardDeckSimulator.simulateUnknownCards(position, cards, skat);
 		log.debug("Card deck: " + deck); //$NON-NLS-1$
 		game.setCardDeck(deck);
 		game.dealCards();

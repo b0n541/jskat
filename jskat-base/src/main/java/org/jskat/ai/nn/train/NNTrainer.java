@@ -130,16 +130,13 @@ public class NNTrainer extends JSkatThread {
 		return gameWon;
 	}
 
-	private SkatGame prepareGame(final JSkatPlayer player1,
-			final JSkatPlayer player2, final JSkatPlayer player3,
+	private SkatGame prepareGame(final JSkatPlayer player1, final JSkatPlayer player2, final JSkatPlayer player3,
 			final Player declarer, final CardDeck cardDeck) {
 		player1.newGame(Player.FOREHAND);
 		player2.newGame(Player.MIDDLEHAND);
 		player3.newGame(Player.REARHAND);
-		JSkatEventBus.INSTANCE.post(new CreateTableCommand(JSkatViewType.TRAINING_TABLE,
-				gameType.toString()));
-		SkatGame game = new SkatGame(gameType.toString(), GameVariant.STANDARD,
-				player1, player2, player3);
+		JSkatEventBus.INSTANCE.post(new CreateTableCommand(JSkatViewType.TRAINING_TABLE, "TRAIN" + gameType.name()));
+		SkatGame game = new SkatGame("TRAIN" + gameType.name(), GameVariant.STANDARD, player1, player2, player3);
 		game.setView(new NullView());
 		game.setLogger(NOPLogger.NOP_LOGGER);
 
@@ -205,34 +202,23 @@ public class NNTrainer extends JSkatThread {
 
 				if (opponentParticipations == 0) {
 					// for ramsch games
-					JSkatEventBus.INSTANCE
-							.post(new TrainingResultEvent(this.gameType,
-									totalGames, totalWonGames,
-									declarerAvgNetworkErrorSum
-											/ declarerParticipations, 0.0));
+					JSkatEventBus.INSTANCE.post(new TrainingResultEvent(this.gameType, totalGames, totalWonGames,
+							declarerAvgNetworkErrorSum / declarerParticipations, 0.0));
 				} else {
-					JSkatEventBus.INSTANCE
-							.post(new TrainingResultEvent(this.gameType,
-									totalGames,
-							totalWonGames, declarerAvgNetworkErrorSum
-											/ declarerParticipations,
-									opponentAvgNetworkErrorSum
-											/ opponentParticipations));
+					JSkatEventBus.INSTANCE.post(new TrainingResultEvent(this.gameType, totalGames, totalWonGames,
+							declarerAvgNetworkErrorSum / declarerParticipations,
+							opponentAvgNetworkErrorSum / opponentParticipations));
 				}
 			}
 
 			for (List<String> playerConstellation : playerPermutations) {
 
 				for (Player declarer : Player.values()) {
-					JSkatPlayer player1 = createPlayer(playerConstellation
-							.get(0));
-					JSkatPlayer player2 = createPlayer(playerConstellation
-							.get(1));
-					JSkatPlayer player3 = createPlayer(playerConstellation
-							.get(2));
+					JSkatPlayer player1 = createPlayer(playerConstellation.get(0));
+					JSkatPlayer player2 = createPlayer(playerConstellation.get(1));
+					JSkatPlayer player3 = createPlayer(playerConstellation.get(2));
 
-					SkatGame game = prepareGame(player1, player2, player3,
-							declarer, null);
+					SkatGame game = prepareGame(player1, player2, player3, declarer, null);
 					// SkatGame game = prepareGame(player1, player2, player3,
 					// Player.FOREHAND, getPerfectDistribution());
 
@@ -246,34 +232,28 @@ public class NNTrainer extends JSkatThread {
 					}
 					if (player1 instanceof AIPlayerNN) {
 						if (player1.isDeclarer()) {
-							declarerAvgNetworkErrorSum += ((AIPlayerNN) player1)
-									.getLastAvgNetworkError();
+							declarerAvgNetworkErrorSum += ((AIPlayerNN) player1).getLastAvgNetworkError();
 							declarerParticipations++;
 						} else {
-							opponentAvgNetworkErrorSum += ((AIPlayerNN) player1)
-									.getLastAvgNetworkError();
+							opponentAvgNetworkErrorSum += ((AIPlayerNN) player1).getLastAvgNetworkError();
 							opponentParticipations++;
 						}
 					}
 					if (player2 instanceof AIPlayerNN) {
 						if (player2.isDeclarer()) {
-							declarerAvgNetworkErrorSum += ((AIPlayerNN) player2)
-									.getLastAvgNetworkError();
+							declarerAvgNetworkErrorSum += ((AIPlayerNN) player2).getLastAvgNetworkError();
 							declarerParticipations++;
 						} else {
-							opponentAvgNetworkErrorSum += ((AIPlayerNN) player2)
-									.getLastAvgNetworkError();
+							opponentAvgNetworkErrorSum += ((AIPlayerNN) player2).getLastAvgNetworkError();
 							opponentParticipations++;
 						}
 					}
 					if (player3 instanceof AIPlayerNN) {
 						if (player3.isDeclarer()) {
-							declarerAvgNetworkErrorSum += ((AIPlayerNN) player3)
-									.getLastAvgNetworkError();
+							declarerAvgNetworkErrorSum += ((AIPlayerNN) player3).getLastAvgNetworkError();
 							declarerParticipations++;
 						} else {
-							opponentAvgNetworkErrorSum += ((AIPlayerNN) player3)
-									.getLastAvgNetworkError();
+							opponentAvgNetworkErrorSum += ((AIPlayerNN) player3).getLastAvgNetworkError();
 							opponentParticipations++;
 						}
 					}
@@ -294,8 +274,7 @@ public class NNTrainer extends JSkatThread {
 			for (String player2 : playerTypes) {
 				for (String player3 : playerTypes) {
 
-					if (NEURAL_NETWORK_PLAYER_CLASS.equals(player1)
-							|| NEURAL_NETWORK_PLAYER_CLASS.equals(player2)
+					if (NEURAL_NETWORK_PLAYER_CLASS.equals(player1) || NEURAL_NETWORK_PLAYER_CLASS.equals(player2)
 							|| NEURAL_NETWORK_PLAYER_CLASS.equals(player3)) {
 
 						List<String> playerPermutation = new ArrayList<String>();
@@ -313,8 +292,7 @@ public class NNTrainer extends JSkatThread {
 	}
 
 	// FIXME (jan 10.03.2012) code duplication with AIPlayerNN
-	private static boolean isRamschGameWon(final GameSummary gameSummary,
-			final Player currPlayer) {
+	private static boolean isRamschGameWon(final GameSummary gameSummary, final Player currPlayer) {
 
 		boolean ramschGameWon = false;
 		int playerPoints = gameSummary.getPlayerPoints(currPlayer);

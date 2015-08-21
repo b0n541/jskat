@@ -19,6 +19,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jskat.control.JSkatEventBus;
+import org.jskat.control.command.table.CreateTableCommand;
+import org.jskat.data.JSkatViewType;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
@@ -34,19 +37,16 @@ class GameSimulator {
 		simThreads = new HashMap<GameType, GameSimulationThread>();
 	}
 
-	void resetGameSimulator(List<GameType> gameTypes, Player playerPosition,
-			CardList playerCards) {
-		resetGameSimulator(gameTypes, playerPosition, playerCards,
-				new CardList());
+	void resetGameSimulator(List<GameType> gameTypes, Player playerPosition, CardList playerCards) {
+		resetGameSimulator(gameTypes, playerPosition, playerCards, new CardList());
 	}
 
-	void resetGameSimulator(List<GameType> gameTypes, Player playerPosition,
-			CardList playerCards, CardList skatCards) {
+	void resetGameSimulator(List<GameType> gameTypes, Player playerPosition, CardList playerCards, CardList skatCards) {
 
 		simThreads.clear();
 		for (GameType gameType : gameTypes) {
-			simThreads.put(gameType, new GameSimulationThread(gameType,
-					playerPosition, playerCards, skatCards));
+			simThreads.put(gameType, new GameSimulationThread(gameType, playerPosition, playerCards, skatCards));
+			JSkatEventBus.INSTANCE.post(new CreateTableCommand(JSkatViewType.TRAINING_TABLE, "SIM" + gameType.name()));
 		}
 	}
 
