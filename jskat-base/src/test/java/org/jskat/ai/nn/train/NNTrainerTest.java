@@ -15,7 +15,9 @@
  */
 package org.jskat.ai.nn.train;
 
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -32,8 +34,7 @@ public class NNTrainerTest {
 		List<String> playerTypes = new ArrayList<String>();
 		playerTypes.add(JSkatPlayerResolver.HUMAN_PLAYER_CLASS);
 
-		Set<List<String>> permutations = NNTrainer
-				.createPlayerPermutations(playerTypes);
+		Set<List<String>> permutations = NNTrainer.createPlayerPermutations(playerTypes);
 
 		assertEquals(0, permutations.size());
 	}
@@ -43,8 +44,7 @@ public class NNTrainerTest {
 		List<String> playerTypes = new ArrayList<String>();
 		playerTypes.add(NNTrainer.NEURAL_NETWORK_PLAYER_CLASS);
 
-		Set<List<String>> permutations = NNTrainer
-				.createPlayerPermutations(playerTypes);
+		Set<List<String>> permutations = NNTrainer.createPlayerPermutations(playerTypes);
 
 		assertEquals(1, permutations.size());
 		List<String> permutation = permutations.iterator().next();
@@ -56,19 +56,16 @@ public class NNTrainerTest {
 	@Test
 	public void testCreatePlayerPermutations_ThreePlayerTypes() {
 		List<String> playerTypes = new ArrayList<String>();
-		for (String aiPlayer : JSkatPlayerResolver
-				.getAllAIPlayerImplementations()) {
+		for (String aiPlayer : JSkatPlayerResolver.getAllAIPlayerImplementations()) {
 			playerTypes.add(aiPlayer);
 		}
 
-		Set<List<String>> permutations = NNTrainer
-				.createPlayerPermutations(playerTypes);
+		Set<List<String>> permutations = NNTrainer.createPlayerPermutations(playerTypes);
 
-		assertEquals(19, permutations.size());
+		assertThat(permutations.size(), is(37));
 
 		for (List<String> permutation : permutations) {
-			assertTrue(permutation
-					.contains(NNTrainer.NEURAL_NETWORK_PLAYER_CLASS));
+			assertTrue(permutation.contains(NNTrainer.NEURAL_NETWORK_PLAYER_CLASS));
 		}
 	}
 }

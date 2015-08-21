@@ -15,7 +15,8 @@
  */
 package org.jskat.player;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertThat;
 
 import java.util.Set;
 
@@ -27,9 +28,8 @@ public class JSkatPlayerResolverTest extends AbstractJSkatTest {
 	@Test
 	public void testGetAllAIPlayerImplementations() {
 
-		Set<String> implementations = JSkatPlayerResolver
-				.getAllAIPlayerImplementations();
+		Set<String> implementations = JSkatPlayerResolver.getAllAIPlayerImplementations();
 
-		assertEquals(3, implementations.size());
+		assertThat(implementations.size(), is(4));
 	}
 }
