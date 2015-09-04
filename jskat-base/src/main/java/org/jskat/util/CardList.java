@@ -29,6 +29,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Holds Cards on a hand or in the Skat
+ *
+ * FIXME this should be a real {@link Collection}
  */
 public class CardList implements Iterable<Card> {
 	private static Logger log = LoggerFactory.getLogger(CardList.class);
@@ -479,7 +481,8 @@ public class CardList implements Iterable<Card> {
 	 * @return First index of a card with the given suit, -1 if there is no such
 	 *         card
 	 */
-	public int getFirstIndexOfSuit(final Suit suit, final boolean includeJacks) {
+	public int getFirstIndexOfSuit(final Suit suit,
+			final boolean includeJacks) {
 		int result = -1;
 		int index = 0;
 		for (Card card : cards) {

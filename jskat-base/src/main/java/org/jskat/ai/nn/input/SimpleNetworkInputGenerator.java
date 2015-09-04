@@ -41,11 +41,9 @@ public class SimpleNetworkInputGenerator implements NetworkInputGenerator {
 	final static double ACTIVE = 1.0d;
 	final static double INACTIVE = 0.0d;
 
-	final static double HAS_CARD = 1.0d;
-	final static double COULD_HAVE_CARD = 1.0d;
-
 	@Override
-	public double[] getNetInputs(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
+	public double[] getNetInputs(ImmutablePlayerKnowledge knowledge,
+			Card cardToPlay) {
 		double[] netInputs = new double[INPUT_LENGTH];
 
 		for (int i = 0; i < INPUT_LENGTH; i++) {
@@ -67,7 +65,8 @@ public class SimpleNetworkInputGenerator implements NetworkInputGenerator {
 		return netInputs;
 	}
 
-	private void setDeclarerInput(double[] netInputs, ImmutablePlayerKnowledge knowledge) {
+	private void setDeclarerInput(double[] netInputs,
+			ImmutablePlayerKnowledge knowledge) {
 		if (!GameType.RAMSCH.equals(knowledge.getGameType())) {
 			// in Ramsch games there is no declarer
 			Player position = knowledge.getPlayerPosition();
@@ -139,21 +138,19 @@ public class SimpleNetworkInputGenerator implements NetworkInputGenerator {
 
 		// inputs for left opponent
 		if (knowledge.couldHaveCard(leftOpponent, card)) {
-			netInputs[CARD_DECK_INPUT_LENGTH + index] = COULD_HAVE_CARD;
-		} else if (knowledge.hasCard(leftOpponent, card)) {
-			netInputs[CARD_DECK_INPUT_LENGTH + index] = HAS_CARD;
+			netInputs[CARD_DECK_INPUT_LENGTH + index] = ACTIVE;
 		}
 
 		// inputs for player
-		if (knowledge.hasCard(knowledge.getPlayerPosition(), card)) {
-			netInputs[PLAYER_INPUT_LENGTH + CARD_DECK_INPUT_LENGTH + index] = HAS_CARD;
+		if (knowledge.couldHaveCard(knowledge.getPlayerPosition(), card)) {
+			netInputs[PLAYER_INPUT_LENGTH + CARD_DECK_INPUT_LENGTH
+					+ index] = ACTIVE;
 		}
 
 		// inputs for right opponent
 		if (knowledge.couldHaveCard(rightOpponent, card)) {
-			netInputs[2 * PLAYER_INPUT_LENGTH + CARD_DECK_INPUT_LENGTH + index] = COULD_HAVE_CARD;
-		} else if (knowledge.hasCard(rightOpponent, card)) {
-			netInputs[2 * PLAYER_INPUT_LENGTH + CARD_DECK_INPUT_LENGTH + index] = HAS_CARD;
+			netInputs[2 * PLAYER_INPUT_LENGTH + CARD_DECK_INPUT_LENGTH
+					+ index] = ACTIVE;
 		}
 	}
 
