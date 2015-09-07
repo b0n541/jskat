@@ -50,7 +50,7 @@ import com.google.common.collect.Multimap;
  */
 public class AIPlayerNN extends AbstractAIPlayer {
 
-	private final static Long MAX_SIMULATIONS = 23L;
+	private final static Long MAX_SIMULATIONS = 41L;
 	private final static Double MIN_WON_RATE_FOR_BIDDING = 0.6;
 	private final static Double MIN_WON_RATE_FOR_DISCARDING = 0.75;
 	private final static Double MIN_WON_RATE_FOR_HAND_GAME = 0.95;
@@ -81,10 +81,10 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 	private Logger log = LoggerFactory.getLogger(AIPlayerNN.class);
 
-	private DecimalFormat formatter = new DecimalFormat("0.00000000000000000"); //$NON-NLS-1$
+	private final DecimalFormat formatter = new DecimalFormat("0.00000000000000000"); //$NON-NLS-1$
 	private final GameSimulator gameSimulator;
 
-	private NetworkInputGenerator inputGenerator;
+	private final NetworkInputGenerator inputGenerator;
 	private final Random rand;
 	private final List<double[]> allInputs = new ArrayList<double[]>();
 
