@@ -34,23 +34,13 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 		initializeVariables();
 	}
 
-	/**
-	 * Adds a card to the own cards and suit/point counter
-	 *
-	 * @param card
-	 *            the Card to add
-	 */
-	public void addOwnCard(final Card card) {
-
-		if (!ownCards.contains(card)) {
-			ownCards.add(card);
-
-			possiblePlayerCards.get(playerPosition.getLeftNeighbor()).remove(card);
-			possiblePlayerCards.get(playerPosition.getRightNeighbor()).remove(card);
+	private void addOwnCard(final Card card) {
+		if (ownCards.add(card)) {
+			possiblePlayerCards.get(playerPosition.getLeftNeighbor())
+					.remove(card);
+			possiblePlayerCards.get(playerPosition.getRightNeighbor())
+					.remove(card);
 			possibleSkatCards.remove(card);
-
-			suitCount.put(card.getSuit(), suitCount.get(card.getSuit()) + 1);
-			suitPoints.put(card.getSuit(), suitCount.get(card.getSuit()) + card.getRank().getPoints());
 		}
 	}
 
@@ -60,9 +50,14 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 	 * @param cards
 	 *            Card to be added
 	 */
-	public void addOwnCards(final CardList cards) {
+	public void addOwnCards(final Iterable<Card> cards) {
 		for (Card card : cards) {
 			addOwnCard(card);
+		}
+		for (Card card : Card.values()) {
+			if (!ownCards.contains(card)) {
+				possiblePlayerCards.get(playerPosition).remove(card);
+			}
 		}
 	}
 
@@ -72,7 +67,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 	 * @param trick
 	 *            Trick to be added
 	 */
-	public void addTrick(final Trick trick) {
+	public void addCompletedTrick(final Trick trick) {
 
 		tricks.add(trick);
 	}
@@ -80,7 +75,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 	/**
 	 * Clears the cards played in the trick
 	 */
-	public void clearTrickCards() {
+	private void clearTrickCards() {
 
 		leftPlayerTrickCard = null;
 		rightPlayerTrickCard = null;
@@ -89,8 +84,25 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 	/**
 	 * Initializes all parameters
 	 */
-	public void initializeVariables() {
+	private void initializeVariables() {
 
+		resetCurrentGameData();
+	}
+
+	public void removeOwnCard(final Card card) {
+		ownCards.remove(card);
+	}
+
+	public void removeOwnCards(final CardList cards) {
+		for (Card card : cards) {
+			removeOwnCard(card);
+		}
+	}
+
+	/**
+	 * Resets the data of the current game
+	 */
+	public void resetCurrentGameData() {
 		ownCards.clear();
 		skat.clear();
 		singlePlayerCards.clear();
@@ -112,42 +124,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 
 		trumpCount = 0;
 
-		for (Suit suit : Suit.values()) {
-			suitCount.put(suit, Integer.valueOf(0));
-			suitPoints.put(suit, Integer.valueOf(0));
-		}
-
 		tricks.clear();
-	}
-
-	/**
-	 * Removes a card from the suit/point counter
-	 *
-	 * @param card
-	 *            Card
-	 */
-	public void removeCard(final Card card) {
-
-		suitCount.put(card.getSuit(), suitCount.get(card.getSuit()) - 1);
-		suitPoints.put(card.getSuit(), suitCount.get(card.getSuit()) - card.getRank().getPoints());
-	}
-
-	public void removeOwnCard(final Card card) {
-		removeCard(card);
-		ownCards.remove(card);
-	}
-
-	public void removeOwnCards(final CardList cards) {
-		for (Card card : cards) {
-			removeOwnCard(card);
-		}
-	}
-
-	/**
-	 * Resets the data of the current game
-	 */
-	public void resetCurrentGameData() {
-		initializeVariables();
 	}
 
 	/**
@@ -162,12 +139,11 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 
 		playedCards.get(player).add(card);
 
-		for (Player currPlayer : Player.values()) {
-			possiblePlayerCards.get(currPlayer).remove(card);
-		}
-		possibleSkatCards.remove(card);
-		if (card.isTrump(getGameType()) && playerPosition.equals(player)) {
-			trumpCount--;
+		if (playerPosition.equals(player)) {
+			removeOwnCard(card);
+			if (card.isTrump(getGameType())) {
+				trumpCount--;
+			}
 		}
 
 		setTrickCard(player, card);
@@ -181,8 +157,9 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 	 * @param trickForehand
 	 *            Forehand player for the trick
 	 */
-	public void setCurrentTrick(int trickNo, Player trickForehand) {
+	public void setNextTrick(int trickNo, Player trickForehand) {
 		this.currentTrick = new Trick(trickNo, trickForehand);
+		clearTrickCards();
 	}
 
 	/**
@@ -205,8 +182,8 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 	public void setGame(final GameAnnouncement gameAnn) {
 
 		announcement = gameAnn;
+		trumpCount = 0;
 		if (!GameType.PASSED_IN.equals(getGameType())) {
-			ownCards.sort(getGameType());
 			for (Card c : ownCards) {
 				// FIXME (jansch 21.09.2011) Cards shouldn't check whether they
 				// are trump or not, let skat rules do the job
@@ -249,8 +226,10 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 	public void setMissingSuit(final Player player, final Suit suit) {
 
 		for (Rank rank : Rank.values()) {
-			if (rank != Rank.JACK || GameType.NULL.equals(getGameType()) || GameType.RAMSCH.equals(getGameType())) {
-				possiblePlayerCards.get(player).remove(Card.getCard(suit, rank));
+			if (rank != Rank.JACK || GameType.NULL.equals(getGameType())
+					|| GameType.RAMSCH.equals(getGameType())) {
+				possiblePlayerCards.get(player)
+						.remove(Card.getCard(suit, rank));
 			}
 		}
 	}
@@ -261,15 +240,6 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 	 */
 	public void setOuvertGame(final boolean ouvertGame) {
 		this.ouvertGame = ouvertGame;
-	}
-
-	/**
-	 * @param newCards
-	 *            the ownCards to set
-	 */
-	public void setOwnCards(final CardList newCards) {
-		ownCards.clear();
-		ownCards.addAll(newCards);
 	}
 
 	/**
@@ -304,7 +274,10 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 	 *            the singlePlayerCards to set
 	 */
 	public void setSinglePlayerCards(final CardList singlePlayerCards) {
-		this.singlePlayerCards = singlePlayerCards;
+		this.singlePlayerCards.clear();
+		for (Card card : singlePlayerCards) {
+			this.singlePlayerCards.add(card);
+		}
 	}
 
 	/**
@@ -313,7 +286,9 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 	 */
 	public void setSkat(final CardList newSkat) {
 		skat.clear();
-		skat.addAll(newSkat);
+		for (Card card : newSkat) {
+			skat.add(card);
+		}
 	}
 
 	/**
@@ -334,6 +309,11 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 			rightPlayerTrickCard = playedCard;
 		}
 
+		for (Player currPlayer : Player.values()) {
+			possiblePlayerCards.get(currPlayer).remove(playedCard);
+		}
+		possibleSkatCards.remove(playedCard);
+
 		currentTrick.addCard(playedCard);
 
 		// adjust the knowledge about "could have" cards
@@ -349,21 +329,31 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 				cardToCheck = thirdCard;
 			}
 
-			if (GameType.NULL.equals(getGameType())) {
-				if (!firstCard.isSameSuit(cardToCheck)) {
-					// player has not followed suit
-					// this means he has no cards with this suit
-					// remove all cards from same suit from "could have" cards
-					for (Card currCard : Card.values()) {
-						if (currCard.isSameSuit(firstCard)) {
-							possiblePlayerCards.get(otherPlayer).remove(currCard);
-						}
+			adjustPossibleCards(otherPlayer, firstCard, cardToCheck);
+		}
+	}
+
+	private void adjustPossibleCards(final Player otherPlayer,
+			Card firstTrickCard, Card cardPlayed) {
+
+		if (GameType.NULL.equals(getGameType())) {
+			if (!firstTrickCard.isSameSuit(cardPlayed)) {
+				// player has not followed suit
+				// this means he has no cards with this suit
+				// remove all cards from same suit from "could have" cards
+				for (Card currCard : Card.values()) {
+					if (currCard.isSameSuit(firstTrickCard)) {
+						possiblePlayerCards.get(otherPlayer)
+								.remove(currCard);
 					}
 				}
-			} else {
-				SkatRule skatRules = SkatRuleFactory.getSkatRules(getGameType());
+			}
+		} else {
+			SkatRule skatRules = SkatRuleFactory
+					.getSkatRules(getGameType());
 
-				if (firstCard.isTrump(getGameType()) && !cardToCheck.isTrump(getGameType())) {
+			if (firstTrickCard.isTrump(getGameType())) {
+				if (!cardPlayed.isTrump(getGameType())) {
 					// first card was a trump card, player card was not
 					// remove jacks from the "could have" cards
 					possiblePlayerCards.get(otherPlayer).remove(Card.CJ);
@@ -371,25 +361,31 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 					possiblePlayerCards.get(otherPlayer).remove(Card.HJ);
 					possiblePlayerCards.get(otherPlayer).remove(Card.DJ);
 					// remove other trump cards for suit games
-					if (GameType.CLUBS.equals(getGameType()) || GameType.SPADES.equals(getGameType())
-							|| GameType.HEARTS.equals(getGameType()) || GameType.DIAMONDS.equals(getGameType())) {
+					if (GameType.CLUBS.equals(getGameType())
+							|| GameType.SPADES.equals(getGameType())
+							|| GameType.HEARTS.equals(getGameType())
+							|| GameType.DIAMONDS.equals(getGameType())) {
 						for (Card currCard : Card.values()) {
-							if (currCard.getSuit().equals(getGameType().getTrumpSuit())) {
-								possiblePlayerCards.get(otherPlayer).remove(currCard);
+							if (getGameType().getTrumpSuit()
+									.equals(currCard.getSuit())) {
+								possiblePlayerCards.get(otherPlayer)
+										.remove(currCard);
 							}
 						}
 					}
-				} else {
-					// first card was not a trump card
-					if (!firstCard.isSameSuit(cardToCheck)) {
-						// player has not followed suit
-						// this means he has no cards with this suit
-						// remove all cards for that suit in "could have"
-						// cards, except of the jacks
-						for (Card currCard : Card.values()) {
-							if (currCard.isSameSuit(firstCard) && currCard.getRank() != Rank.JACK) {
-								possiblePlayerCards.get(otherPlayer).remove(currCard);
-							}
+				}
+			} else {
+				// first card was not a trump card
+				if (!firstTrickCard.isSameSuit(cardPlayed)) {
+					// player has not followed suit
+					// this means he has no cards with this suit
+					// remove all cards for that suit in "could have"
+					// cards, except of the jacks
+					for (Card currCard : Card.values()) {
+						if (currCard.isSameSuit(firstTrickCard)
+								&& currCard.getRank() != Rank.JACK) {
+							possiblePlayerCards.get(otherPlayer)
+									.remove(currCard);
 						}
 					}
 				}

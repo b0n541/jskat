@@ -44,7 +44,7 @@ public class PlayedCardsForPlayerAndNextCardInputStrategyTest {
 		factory.setGameType(GameType.CLUBS);
 		knowledge.setGame(factory.getAnnouncement());
 		knowledge.setPlayerPosition(Player.FOREHAND);
-		knowledge.setCurrentTrick(0, Player.FOREHAND);
+		knowledge.setNextTrick(0, Player.FOREHAND);
 		knowledge.setCardPlayed(Player.FOREHAND, Card.CJ);
 		double[] inputs = strategy.getNetworkInput(knowledge, Card.DJ);
 		assertEquals(32, inputs.length);

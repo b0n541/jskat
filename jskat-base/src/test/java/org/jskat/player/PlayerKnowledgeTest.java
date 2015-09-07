@@ -57,7 +57,7 @@ public class PlayerKnowledgeTest extends AbstractJSkatTest {
 		knowledge.setPlayerPosition(Player.MIDDLEHAND);
 
 		// Cards for the player
-		playerCards = new HashSet<Card>();
+		playerCards = new HashSet<>();
 		playerCards.add(Card.CA);
 		playerCards.add(Card.CQ);
 		playerCards.add(Card.C8);
@@ -94,17 +94,17 @@ public class PlayerKnowledgeTest extends AbstractJSkatTest {
 					knowledge.couldHaveCard(Player.MIDDLEHAND, card));
 			assertTrue(Player.REARHAND + " could have card " + card, //$NON-NLS-1$
 					knowledge.couldHaveCard(Player.REARHAND, card));
-			assertFalse(
-					"No certain information about Card " + card + " on " + Player.FOREHAND, //$NON-NLS-1$ //$NON-NLS-2$
+			assertFalse("No certain information about Card " + card + " on " //$NON-NLS-1$ //$NON-NLS-2$
+					+ Player.FOREHAND,
 					knowledge.hasCard(Player.FOREHAND, card));
-			assertFalse(
-					"No certain information about Card " + card + " on " + Player.MIDDLEHAND, //$NON-NLS-1$ //$NON-NLS-2$
+			assertFalse("No certain information about Card " + card + " on " //$NON-NLS-1$ //$NON-NLS-2$
+					+ Player.MIDDLEHAND,
 					knowledge.hasCard(Player.MIDDLEHAND, card));
-			assertFalse(
-					"No certain information about Card " + card + " on " + Player.REARHAND, //$NON-NLS-1$ //$NON-NLS-2$
+			assertFalse("No certain information about Card " + card + " on " //$NON-NLS-1$ //$NON-NLS-2$
+					+ Player.REARHAND,
 					knowledge.hasCard(Player.REARHAND, card));
-			assertTrue(
-					"Card " + card + " could lie in skat.", knowledge.couldLieInSkat(card)); //$NON-NLS-1$//$NON-NLS-2$
+			assertTrue("Card " + card + " could lie in skat.", //$NON-NLS-1$//$NON-NLS-2$
+					knowledge.couldLieInSkat(card));
 		}
 		for (Card card : otherCards) {
 			assertTrue("Card " + card + " should be on " + Player.FOREHAND, //$NON-NLS-1$ //$NON-NLS-2$
@@ -113,17 +113,17 @@ public class PlayerKnowledgeTest extends AbstractJSkatTest {
 					knowledge.couldHaveCard(Player.MIDDLEHAND, card));
 			assertTrue("Card " + card + " should be on " + Player.REARHAND, //$NON-NLS-1$ //$NON-NLS-2$
 					knowledge.couldHaveCard(Player.REARHAND, card));
-			assertFalse(
-					"No certain information about Card " + card + " on " + Player.FOREHAND, //$NON-NLS-1$ //$NON-NLS-2$
+			assertFalse("No certain information about Card " + card + " on " //$NON-NLS-1$ //$NON-NLS-2$
+					+ Player.FOREHAND,
 					knowledge.hasCard(Player.FOREHAND, card));
-			assertFalse(
-					"No certain information about Card " + card + " on " + Player.MIDDLEHAND, //$NON-NLS-1$ //$NON-NLS-2$
+			assertFalse("No certain information about Card " + card + " on " //$NON-NLS-1$ //$NON-NLS-2$
+					+ Player.MIDDLEHAND,
 					knowledge.hasCard(Player.MIDDLEHAND, card));
-			assertFalse(
-					"No certain information about Card " + card + " on " + Player.REARHAND, //$NON-NLS-1$ //$NON-NLS-2$
+			assertFalse("No certain information about Card " + card + " on " //$NON-NLS-1$ //$NON-NLS-2$
+					+ Player.REARHAND,
 					knowledge.hasCard(Player.REARHAND, card));
-			assertTrue(
-					"Card " + card + " could lie in skat.", knowledge.couldLieInSkat(card)); //$NON-NLS-1$//$NON-NLS-2$
+			assertTrue("Card " + card + " could lie in skat.", //$NON-NLS-1$//$NON-NLS-2$
+					knowledge.couldLieInSkat(card));
 		}
 	}
 
@@ -145,26 +145,26 @@ public class PlayerKnowledgeTest extends AbstractJSkatTest {
 					knowledge.couldHaveCard(Player.MIDDLEHAND, card));
 			assertFalse(Player.REARHAND + " could not have card " + card, //$NON-NLS-1$
 					knowledge.couldHaveCard(Player.REARHAND, card));
-			assertFalse(
-					"No certain information about Card " + card + " on " + Player.FOREHAND, //$NON-NLS-1$ //$NON-NLS-2$
+			assertFalse("No certain information about Card " + card + " on " //$NON-NLS-1$ //$NON-NLS-2$
+					+ Player.FOREHAND,
 					knowledge.hasCard(Player.FOREHAND, card));
 			assertTrue(Player.MIDDLEHAND + " could have card " + card, //$NON-NLS-1$
 					knowledge.hasCard(Player.MIDDLEHAND, card));
-			assertFalse(
-					"No certain information about Card " + card + " on " + Player.REARHAND, //$NON-NLS-1$ //$NON-NLS-2$
+			assertFalse("No certain information about Card " + card + " on " //$NON-NLS-1$ //$NON-NLS-2$
+					+ Player.REARHAND,
 					knowledge.hasCard(Player.REARHAND, card));
-			assertFalse(
-					"Card " + card + " could not lie in skat.", knowledge.couldLieInSkat(card)); //$NON-NLS-1$//$NON-NLS-2$
+			assertFalse("Card " + card + " could not lie in skat.", //$NON-NLS-1$//$NON-NLS-2$
+					knowledge.couldLieInSkat(card));
 		}
 		for (Card card : otherCards) {
 			assertCouldHaveCard(Player.FOREHAND, card);
-			assertCouldHaveCard(Player.MIDDLEHAND, card);
+			assertCouldNotHaveCard(Player.MIDDLEHAND, card);
 			assertCouldHaveCard(Player.REARHAND, card);
 			assertHasNotCard(Player.FOREHAND, card);
 			assertHasNotCard(Player.MIDDLEHAND, card);
 			assertHasNotCard(Player.REARHAND, card);
-			assertTrue(
-					"Card " + card + " could lie in skat.", knowledge.couldLieInSkat(card)); //$NON-NLS-1$//$NON-NLS-2$
+			assertTrue("Card " + card + " could lie in skat.", //$NON-NLS-1$//$NON-NLS-2$
+					knowledge.couldLieInSkat(card));
 		}
 	}
 
@@ -178,7 +178,7 @@ public class PlayerKnowledgeTest extends AbstractJSkatTest {
 		knowledge.setGame(factory.getAnnouncement());
 		knowledge.setDeclarer(Player.FOREHAND);
 
-		knowledge.setCurrentTrick(0, Player.FOREHAND);
+		knowledge.setNextTrick(0, Player.FOREHAND);
 
 		Card foreHandCard = Card.SA;
 		Card middleHandCard = Card.SQ;
@@ -207,14 +207,13 @@ public class PlayerKnowledgeTest extends AbstractJSkatTest {
 		assertCouldNotHaveCard(Player.REARHAND, foreHandCard);
 
 		// Middle hand plays
-		// FIXME (jan 04.03.2012) some cards can be set to "have not"
 		assertCouldNotHaveCard(Player.MIDDLEHAND, Card.SA);
 		assertCouldHaveCard(Player.MIDDLEHAND, Card.ST);
-		assertCouldHaveCard(Player.MIDDLEHAND, Card.SK);
+		assertCouldNotHaveCard(Player.MIDDLEHAND, Card.SK);
 		assertCouldHaveCard(Player.MIDDLEHAND, Card.SQ);
-		assertCouldHaveCard(Player.MIDDLEHAND, Card.S9);
-		assertCouldHaveCard(Player.MIDDLEHAND, Card.S8);
-		assertCouldHaveCard(Player.MIDDLEHAND, Card.S7);
+		assertCouldNotHaveCard(Player.MIDDLEHAND, Card.S9);
+		assertCouldNotHaveCard(Player.MIDDLEHAND, Card.S8);
+		assertCouldNotHaveCard(Player.MIDDLEHAND, Card.S7);
 
 		knowledge.setCardPlayed(Player.MIDDLEHAND, middleHandCard);
 
@@ -259,9 +258,7 @@ public class PlayerKnowledgeTest extends AbstractJSkatTest {
 
 		// set up player cards
 		knowledge.setPlayerPosition(Player.MIDDLEHAND);
-		for (Card card : playerCards) {
-			knowledge.addOwnCard(card);
-		}
+		knowledge.addOwnCards(playerCards);
 	}
 
 	private void assertCouldHaveCard(final Player player, final Card card) {
@@ -300,11 +297,11 @@ public class PlayerKnowledgeTest extends AbstractJSkatTest {
 	@Test
 	public void testSetTrick() {
 
-		knowledge.setCurrentTrick(0, Player.FOREHAND);
+		knowledge.setNextTrick(0, Player.FOREHAND);
 
 		assertEquals(0, knowledge.getCompletedTricks().size());
 
-		knowledge.addTrick(new Trick(0, Player.FOREHAND));
+		knowledge.addCompletedTrick(new Trick(0, Player.FOREHAND));
 
 		assertEquals(1, knowledge.getCompletedTricks().size());
 	}

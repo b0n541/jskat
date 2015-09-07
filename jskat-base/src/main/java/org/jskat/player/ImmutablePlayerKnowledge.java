@@ -96,13 +96,21 @@ public class ImmutablePlayerKnowledge {
 
 	/**
 	 * Counts the number of cards on players hand for every card
+	 *
+	 * FIXME: do we need this numbers and if do we count the Jacks into this
+	 * number
 	 */
-	protected final Map<Suit, Integer> suitCount = new HashMap<Suit, Integer>();
+	// protected final Map<Suit, Integer> suitCount = new HashMap<Suit,
+	// Integer>();
 
 	/**
 	 * Counts the points for every suit on players hand
+	 *
+	 * FIXME: do we need this numbers and if do we count the Jacks into this
+	 * number
 	 */
-	protected final Map<Suit, Integer> suitPoints = new HashMap<Suit, Integer>();
+	// protected final Map<Suit, Integer> suitPoints = new HashMap<Suit,
+	// Integer>();
 
 	/**
 	 * Holds trick information
@@ -110,11 +118,11 @@ public class ImmutablePlayerKnowledge {
 	protected final List<Trick> tricks = new ArrayList<Trick>();
 
 	/** Player cards */
-	protected final CardList ownCards = new CardList();
+	protected final Set<Card> ownCards = new HashSet<>();
 	/** Skat cards */
-	protected final CardList skat = new CardList();
+	protected final Set<Card> skat = new HashSet<>();
 	/** Cards of the single player */
-	protected CardList singlePlayerCards = new CardList();
+	protected Set<Card> singlePlayerCards = new HashSet<>();
 	/** Flag for hand game */
 	protected boolean handGame;
 	/** Flag for ouvert game */
@@ -133,7 +141,7 @@ public class ImmutablePlayerKnowledge {
 	/**
 	 * Checks whether a player could have a card information, this is an
 	 * uncertain information
-	 * 
+	 *
 	 * @param player
 	 *            Player ID
 	 * @param card
@@ -148,7 +156,7 @@ public class ImmutablePlayerKnowledge {
 	/**
 	 * Checks whether a player could have a card of the given suit, this is an
 	 * uncertain information
-	 * 
+	 *
 	 * @param player
 	 *            Player ID
 	 * @param suit
@@ -156,19 +164,20 @@ public class ImmutablePlayerKnowledge {
 	 * @return TRUE if the player could have any card of the suit
 	 */
 	public final boolean couldHaveSuit(final Player player, final Suit suit) {
-		for (Rank r : Rank.values()) {
-			if (r == Rank.JACK) {
+		boolean result = false;
+		for (Rank rank : Rank.values()) {
+			if (Rank.JACK.equals(rank)) {
 				continue;
 			}
-			return couldHaveCard(player, Card.getCard(suit, r));
+			result |= couldHaveCard(player, Card.getCard(suit, rank));
 		}
-		return false;
+		return result;
 	}
 
 	/**
 	 * Checks whether a player could have any trump cards left, this is an
 	 * uncertain information
-	 * 
+	 *
 	 * @param player
 	 *            Player ID
 	 * @return TRUE if the player could have any trump card
@@ -184,7 +193,7 @@ public class ImmutablePlayerKnowledge {
 
 	/**
 	 * Checks whether a card could lie in the skat
-	 * 
+	 *
 	 * @param card
 	 *            Card
 	 * @return TRUE if card could lie in the skat
@@ -195,7 +204,7 @@ public class ImmutablePlayerKnowledge {
 
 	/**
 	 * Checks whether any player might have any trump cards left
-	 * 
+	 *
 	 * @return TRUE if any player could still have any trump cards
 	 */
 	public final boolean couldOpponentsHaveTrump() {
@@ -222,7 +231,7 @@ public class ImmutablePlayerKnowledge {
 
 	/**
 	 * Gets all tricks that are completed
-	 * 
+	 *
 	 * @return List of completed tricks
 	 */
 	public final List<Trick> getCompletedTricks() {
@@ -231,7 +240,7 @@ public class ImmutablePlayerKnowledge {
 
 	/**
 	 * Provides access to the current trick
-	 * 
+	 *
 	 * @return The current trick
 	 */
 	public final Trick getCurrentTrick() {
@@ -240,7 +249,7 @@ public class ImmutablePlayerKnowledge {
 
 	/**
 	 * Gets the declarer position
-	 * 
+	 *
 	 * @return Declarer position
 	 */
 	public final Player getDeclarer() {
@@ -258,7 +267,7 @@ public class ImmutablePlayerKnowledge {
 
 	/**
 	 * convenience method for getGame().getGameType()
-	 * 
+	 *
 	 * @return the gameType
 	 */
 	public final GameType getGameType() {
@@ -270,7 +279,7 @@ public class ImmutablePlayerKnowledge {
 
 	/**
 	 * Gets the highest bid for a player
-	 * 
+	 *
 	 * @param player
 	 *            Player ID
 	 * @return Highest bid for the player
@@ -282,7 +291,7 @@ public class ImmutablePlayerKnowledge {
 
 	/**
 	 * Gets the number of tricks
-	 * 
+	 *
 	 * @return Number of tricks
 	 */
 	public final int getNoOfTricks() {
@@ -293,7 +302,9 @@ public class ImmutablePlayerKnowledge {
 	 * @return the ownCards
 	 */
 	public final CardList getOwnCards() {
-		return ownCards.getImmutableCopy();
+		CardList result = new CardList();
+		result.addAll(ownCards);
+		return result;
 	}
 
 	/**
@@ -301,7 +312,7 @@ public class ImmutablePlayerKnowledge {
 	 * each suit<br>
 	 * &nbsp;<br>
 	 * The index of the array equals the Suit ordinal (0=Clubs, 3=Diamonds).
-	 * 
+	 *
 	 * @return an array int[4]
 	 */
 	public final int[] getPlayedCardsBinary() {
@@ -317,7 +328,7 @@ public class ImmutablePlayerKnowledge {
 
 	/**
 	 * Gets the player position
-	 * 
+	 *
 	 * @return Player position
 	 */
 	public final Player getPlayerPosition() {
@@ -328,7 +339,7 @@ public class ImmutablePlayerKnowledge {
 	/**
 	 * Checks how many cards of the given suit a player could have, this is an
 	 * uncertain information
-	 * 
+	 *
 	 * @param player
 	 *            Player ID
 	 * @param suit
@@ -340,7 +351,8 @@ public class ImmutablePlayerKnowledge {
 	 * @return TRUE if the player could have any card of the suit
 	 */
 	public final int getPotentialSuitCount(final Player player,
-			final Suit suit, final boolean isTrump, final boolean includeJacks) {
+			final Suit suit, final boolean isTrump,
+			final boolean includeJacks) {
 		int result = 0;
 		for (Rank r : Rank.values()) {
 			if (r == Rank.JACK && !includeJacks) {
@@ -363,43 +375,23 @@ public class ImmutablePlayerKnowledge {
 	 * @return the singlePlayerCards
 	 */
 	public final CardList getSinglePlayerCards() {
-		return singlePlayerCards.getImmutableCopy();
+		CardList result = new CardList();
+		result.addAll(singlePlayerCards);
+		return result;
 	}
 
 	/**
 	 * @return the skat
 	 */
 	public final CardList getSkat() {
-		return skat.getImmutableCopy();
-	}
-
-	/**
-	 * Gets the suit count
-	 * 
-	 * @param suit
-	 *            Suit
-	 * @return Number of cards from this suit
-	 */
-	public final int getSuitCount(final Suit suit) {
-
-		return suitCount.get(suit).intValue();
-	}
-
-	/**
-	 * Gets the suit points
-	 * 
-	 * @param suit
-	 *            Suit
-	 * @return Points from this suit
-	 */
-	public final int getSuitPoints(final Suit suit) {
-
-		return suitPoints.get(suit).intValue();
+		CardList result = new CardList();
+		result.addAll(skat);
+		return result;
 	}
 
 	/**
 	 * Get cards of the current trick
-	 * 
+	 *
 	 * @return List of cards played in the current trick
 	 */
 	public final CardList getTrickCards() {
@@ -422,7 +414,7 @@ public class ImmutablePlayerKnowledge {
 	/**
 	 * Gets the number of trump cards that is known to the player (either by
 	 * being on his own hand or by having been played)
-	 * 
+	 *
 	 * @return the number of known trump cards
 	 */
 	public final int getTrumpCount() {
@@ -431,7 +423,7 @@ public class ImmutablePlayerKnowledge {
 
 	/**
 	 * Gets the current trump suit
-	 * 
+	 *
 	 * @return Trump suit or null if there is no trump
 	 */
 	public final Suit getTrumpSuit() {
@@ -442,9 +434,9 @@ public class ImmutablePlayerKnowledge {
 	}
 
 	/**
-	 * Checks whether a player has a card by ruling out all other options, this
-	 * might be an uncertain information
-	 * 
+	 * Checks whether a player has a card alone by ruling out all other options,
+	 * this might be an uncertain information
+	 *
 	 * @param player
 	 *            Player ID
 	 * @param card
@@ -453,27 +445,33 @@ public class ImmutablePlayerKnowledge {
 	 */
 	public final boolean hasCard(final Player player, final Card card) {
 
+		if (couldHaveCard(player, card)) {
+			return getPossibleCardPositions(card) == 1;
+		}
+
+		return false;
+	}
+
+	private int getPossibleCardPositions(final Card card) {
+
 		int possessionCount = 0;
 
-		if (couldHaveCard(player, card)) {
-
-			// check all players and the skat whether the card could be there
-			for (Set<Card> s : possiblePlayerCards.values()) {
-				if (s.contains(card)) {
-					possessionCount++;
-				}
-			}
-			if (possibleSkatCards.contains(card)) {
+		for (Player playerPosition : Player.values()) {
+			if (couldHaveCard(playerPosition, card)) {
 				possessionCount++;
 			}
 		}
 
-		return (possessionCount == 1);
+		if (couldLieInSkat(card)) {
+			possessionCount++;
+		}
+
+		return possessionCount;
 	}
 
 	/**
 	 * Checks whether a card is still outstanding
-	 * 
+	 *
 	 * @param card
 	 *            Card to check
 	 * @return TRUE if the card is still outstanding
@@ -485,7 +483,7 @@ public class ImmutablePlayerKnowledge {
 
 	/**
 	 * Checks whether a card was played already
-	 * 
+	 *
 	 * @param card
 	 *            Card to check
 	 * @return TRUE if the card was played
@@ -499,7 +497,7 @@ public class ImmutablePlayerKnowledge {
 
 	/**
 	 * Checks whether a card was played by a player
-	 * 
+	 *
 	 * @param player
 	 *            Player ID
 	 * @param card
@@ -513,7 +511,7 @@ public class ImmutablePlayerKnowledge {
 
 	/**
 	 * Checks whether a card was played by another player in the current trick
-	 * 
+	 *
 	 * @param otherPlayer
 	 *            Player position of the other player
 	 * @param card
@@ -558,7 +556,7 @@ public class ImmutablePlayerKnowledge {
 
 	/**
 	 * Checks whether a card is on the players hand
-	 * 
+	 *
 	 * @param card
 	 *            Card
 	 * @return TRUE, if the card is on the players hand

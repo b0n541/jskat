@@ -16,9 +16,12 @@
 package org.jskat.util;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 /**
@@ -27,6 +30,57 @@ import java.util.StringTokenizer;
 public class CardDeck extends CardList {
 
 	private final int MAX_CARDS = 32;
+
+	public final static Map<Suit, List<Card>> SUIT_CARDS;
+	public final static Map<Rank, List<Card>> RANK_CARDS;
+
+	static {
+		Map<Suit, List<Card>> suitCards = new HashMap<>();
+		suitCards.put(Suit.CLUBS,
+				Collections.unmodifiableList(
+						Arrays.asList(Card.CJ, Card.CA, Card.CT, Card.CK,
+								Card.CQ, Card.C9, Card.C8, Card.C7)));
+		suitCards.put(Suit.SPADES,
+				Collections.unmodifiableList(
+						Arrays.asList(Card.SJ, Card.SA, Card.ST, Card.SK,
+								Card.SQ, Card.S9, Card.S8, Card.S7)));
+		suitCards.put(Suit.HEARTS,
+				Collections.unmodifiableList(
+						Arrays.asList(Card.HJ, Card.HA, Card.HT, Card.HK,
+								Card.HQ, Card.H9, Card.H8, Card.H7)));
+		suitCards.put(Suit.DIAMONDS,
+				Collections.unmodifiableList(
+						Arrays.asList(Card.DJ, Card.DA, Card.DT, Card.DK,
+								Card.DQ, Card.D9, Card.D8, Card.D7)));
+		SUIT_CARDS = Collections.unmodifiableMap(suitCards);
+
+		Map<Rank, List<Card>> rankCards = new HashMap<>();
+		rankCards.put(Rank.JACK,
+				Collections.unmodifiableList(
+						Arrays.asList(Card.CJ, Card.SJ, Card.HJ, Card.DJ)));
+		rankCards.put(Rank.ACE,
+				Collections.unmodifiableList(
+						Arrays.asList(Card.CA, Card.SA, Card.HA, Card.DA)));
+		rankCards.put(Rank.TEN,
+				Collections.unmodifiableList(
+						Arrays.asList(Card.CT, Card.ST, Card.HT, Card.DT)));
+		rankCards.put(Rank.KING,
+				Collections.unmodifiableList(
+						Arrays.asList(Card.CK, Card.SK, Card.HK, Card.DK)));
+		rankCards.put(Rank.QUEEN,
+				Collections.unmodifiableList(
+						Arrays.asList(Card.CQ, Card.SQ, Card.HQ, Card.DQ)));
+		rankCards.put(Rank.NINE,
+				Collections.unmodifiableList(
+						Arrays.asList(Card.C9, Card.S9, Card.H9, Card.D9)));
+		rankCards.put(Rank.EIGHT,
+				Collections.unmodifiableList(
+						Arrays.asList(Card.C8, Card.S8, Card.H8, Card.D8)));
+		rankCards.put(Rank.SEVEN,
+				Collections.unmodifiableList(
+						Arrays.asList(Card.C7, Card.S7, Card.H7, Card.D7)));
+		RANK_CARDS = Collections.unmodifiableMap(rankCards);
+	}
 
 	/**
 	 * Creates a new instance of CardDeck
@@ -44,7 +98,7 @@ public class CardDeck extends CardList {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param foreHandCards
 	 *            Cards of fore hand
 	 * @param middleHandCards
@@ -70,7 +124,7 @@ public class CardDeck extends CardList {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param foreHandCards
 	 *            Cards of fore hand
 	 * @param middleHandCards
@@ -90,7 +144,7 @@ public class CardDeck extends CardList {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param cards
 	 *            Card distribution
 	 */
@@ -114,7 +168,7 @@ public class CardDeck extends CardList {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param cards
 	 *            Card distribution
 	 */
@@ -143,7 +197,7 @@ public class CardDeck extends CardList {
 
 	/**
 	 * Gets a complete card deck
-	 * 
+	 *
 	 * @return A complete card deck
 	 */
 	public static EnumSet<Card> getAllCards() {
