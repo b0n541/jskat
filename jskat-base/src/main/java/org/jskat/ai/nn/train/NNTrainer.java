@@ -59,7 +59,6 @@ public class NNTrainer extends JSkatThread {
 
 	static {
 		playerTypes.add(NEURAL_NETWORK_PLAYER_CLASS);
-		playerTypes.add(RANDOM_PLAYER_CLASS);
 	}
 
 	private GameType gameType;
