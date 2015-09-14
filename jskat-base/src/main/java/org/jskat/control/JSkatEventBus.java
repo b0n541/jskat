@@ -67,10 +67,12 @@ public class JSkatEventBus {
 	@Subscribe
 	public void createTableEventBusOn(final CreateTableCommand command) {
 
-		EventBus eventBus = new EventBus("Table " + command.tableName);
-		JSkatEventBus.TABLE_EVENT_BUSSES.put(command.tableName, eventBus);
+		if (!JSkatEventBus.TABLE_EVENT_BUSSES.containsKey(command.tableName)) {
+			EventBus eventBus = new EventBus("Table " + command.tableName);
+			JSkatEventBus.TABLE_EVENT_BUSSES.put(command.tableName, eventBus);
 
-		post(new TableCreatedEvent(command.tableType, command.tableName));
+			post(new TableCreatedEvent(command.tableType, command.tableName));
+		}
 	}
 
 	@Subscribe
@@ -89,8 +91,8 @@ public class JSkatEventBus {
 	public void dispatchTableEventOn(TableGameMoveEvent event) {
 		LOG.info("Forwarding game event " + event.gameEvent + " to table "
 				+ event.tableName);
-		JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(
-				event.gameEvent);
+		JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName)
+				.post(event.gameEvent);
 	}
 
 	@Subscribe
