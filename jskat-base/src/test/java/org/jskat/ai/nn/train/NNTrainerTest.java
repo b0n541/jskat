@@ -34,7 +34,8 @@ public class NNTrainerTest {
 		List<String> playerTypes = new ArrayList<String>();
 		playerTypes.add(JSkatPlayerResolver.HUMAN_PLAYER_CLASS);
 
-		Set<List<String>> permutations = NNTrainer.createPlayerPermutations(playerTypes);
+		Set<List<String>> permutations = NNTrainer
+				.createPlayerPermutations(playerTypes);
 
 		assertEquals(0, permutations.size());
 	}
@@ -44,7 +45,8 @@ public class NNTrainerTest {
 		List<String> playerTypes = new ArrayList<String>();
 		playerTypes.add(NNTrainer.NEURAL_NETWORK_PLAYER_CLASS);
 
-		Set<List<String>> permutations = NNTrainer.createPlayerPermutations(playerTypes);
+		Set<List<String>> permutations = NNTrainer
+				.createPlayerPermutations(playerTypes);
 
 		assertEquals(1, permutations.size());
 		List<String> permutation = permutations.iterator().next();
@@ -55,17 +57,20 @@ public class NNTrainerTest {
 
 	@Test
 	public void testCreatePlayerPermutations_ThreePlayerTypes() {
-		List<String> playerTypes = new ArrayList<String>();
-		for (String aiPlayer : JSkatPlayerResolver.getAllAIPlayerImplementations()) {
+		List<String> playerTypes = new ArrayList<>();
+		for (String aiPlayer : JSkatPlayerResolver
+				.getAllAIPlayerImplementations()) {
 			playerTypes.add(aiPlayer);
 		}
 
-		Set<List<String>> permutations = NNTrainer.createPlayerPermutations(playerTypes);
+		Set<List<String>> permutations = NNTrainer
+				.createPlayerPermutations(playerTypes);
 
-		assertThat(permutations.size(), is(37));
+		assertThat(permutations.size(), is(19));
 
 		for (List<String> permutation : permutations) {
-			assertTrue(permutation.contains(NNTrainer.NEURAL_NETWORK_PLAYER_CLASS));
+			assertTrue(permutation
+					.contains(NNTrainer.NEURAL_NETWORK_PLAYER_CLASS));
 		}
 	}
 }
