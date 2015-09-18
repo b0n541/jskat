@@ -28,8 +28,9 @@ public class JSkatPlayerResolverTest extends AbstractJSkatTest {
 	@Test
 	public void testGetAllAIPlayerImplementations() {
 
-		Set<String> implementations = JSkatPlayerResolver.getAllAIPlayerImplementations();
+		Set<String> implementations = JSkatPlayerResolver
+				.getAllAIPlayerImplementations();
 
-		assertThat(implementations.size(), is(4));
+		assertThat(implementations.size(), is(3));
 	}
 }
