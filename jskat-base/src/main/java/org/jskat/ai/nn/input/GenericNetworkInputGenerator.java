@@ -23,7 +23,7 @@ import org.jskat.util.Card;
 
 public class GenericNetworkInputGenerator implements NetworkInputGenerator {
 
-	private static final List<InputStrategy> strategies = new ArrayList<InputStrategy>();
+	private static final List<InputStrategy> strategies = new ArrayList<>();
 
 	static {
 		strategies.add(new PlayerPartyMadeCardsAndNextCardStrategy());
@@ -33,13 +33,16 @@ public class GenericNetworkInputGenerator implements NetworkInputGenerator {
 	}
 
 	@Override
-	public double[] getNetInputs(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
+	public double[] getNetInputs(ImmutablePlayerKnowledge knowledge,
+			Card cardToPlay) {
 
 		double[] result = new double[getNeuronCountForAllStrategies()];
 		int index = 0;
-		for (int strategyCount = 0; strategyCount < strategies.size(); strategyCount++) {
+		for (int strategyCount = 0; strategyCount < strategies
+				.size(); strategyCount++) {
 			InputStrategy strategy = strategies.get(strategyCount);
-			double[] networkInput = strategy.getNetworkInput(knowledge, cardToPlay);
+			double[] networkInput = strategy.getNetworkInput(knowledge,
+					cardToPlay);
 			for (int i = 0; i < strategy.getNeuronCount(); i++) {
 				result[index] = networkInput[i];
 				index++;
@@ -51,7 +54,7 @@ public class GenericNetworkInputGenerator implements NetworkInputGenerator {
 
 	/**
 	 * Gets the neuron count needed for all strategies
-	 * 
+	 *
 	 * @return Neuron count
 	 */
 	public static int getNeuronCountForAllStrategies() {
