@@ -17,7 +17,6 @@ package org.jskat.ai.nn;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
 import org.jskat.util.Card;
 import org.jskat.util.CardDeck;
@@ -28,8 +27,6 @@ import org.jskat.util.Player;
  * Simulates possible card decks according to the player knowledge
  */
 public class CardDeckSimulator {
-
-	private static Random rand = new Random();
 
 	/**
 	 * Simulates a card distribution
