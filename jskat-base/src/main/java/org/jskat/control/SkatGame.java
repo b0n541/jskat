@@ -988,7 +988,11 @@ public class SkatGame extends JSkatThread {
 	 *
 	 * @param newView
 	 *            View
+	 * 
+	 * @deprecated don't rely on setting a view anymore as we want to use event
+	 *             busses now.
 	 */
+	@Deprecated
 	public void setView(final JSkatView newView) {
 
 		this.view = newView;

@@ -83,9 +83,10 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 	private final DecimalFormat formatter = new DecimalFormat("0.00000000000000000"); //$NON-NLS-1$
 	private final GameSimulator gameSimulator;
+	private final GameSimulator2 gameSimulator2;
 
 	private final NetworkInputGenerator inputGenerator;
-	private final Random rand;
+	private final static Random RANDOM = new Random();
 	private final List<double[]> allInputs = new ArrayList<double[]>();
 
 	private GameType bestGameTypeFromDiscarding;
@@ -99,7 +100,11 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	 * Constructor
 	 */
 	public AIPlayerNN() {
-		this("unknown"); //$NON-NLS-1$
+		this("unknown", null); //$NON-NLS-1$
+	}
+
+	public AIPlayerNN(Logger logger) {
+		this("unknown", logger);
 	}
 
 	/**
@@ -108,11 +113,16 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	 * @param newPlayerName
 	 *            Player's name
 	 */
-	public AIPlayerNN(final String newPlayerName) {
+	public AIPlayerNN(final String newPlayerName, Logger logger) {
 		log.debug("Constructing new AIPlayerNN"); //$NON-NLS-1$
 		setPlayerName(newPlayerName);
 
+		if (logger != null) {
+			log = logger;
+		}
+
 		gameSimulator = new GameSimulator();
+		gameSimulator2 = new GameSimulator2();
 		inputGenerator = new GenericNetworkInputGenerator();
 
 		for (GameType gameType : GameType.values()) {
@@ -120,8 +130,6 @@ public class AIPlayerNN extends AbstractAIPlayer {
 				feasibleGameTypes.add(gameType);
 			}
 		}
-
-		rand = new Random();
 	}
 
 	/**
@@ -211,6 +219,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		List<GameType> filteredGameTypes = filterFeasibleGameTypes(
 				knowledge.getHighestBid(knowledge.getPlayerPosition()).intValue());
 
+		gameSimulator2.reset();
+
 		// check all possible discards
 		int simCount = 0;
 		for (int i = 0; i < cards.size() - 1; i++) {
@@ -225,28 +235,34 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 				simCards.removeAll(currSkat);
 
-				log.warn("Discard simulation no. " + simCount + ": skat " + currSkat);
+				log.warn("Discard simulation no. " + simCount + ": skat "
+						+ currSkat);
 
-				gameSimulator.resetGameSimulator(filteredGameTypes, knowledge.getPlayerPosition(), simCards, currSkat);
-				SimulationResults simulationResults = gameSimulator.simulateMaxEpisodes(MAX_SIMULATIONS);
+				// gameSimulator.resetGameSimulator(filteredGameTypes, knowledge.getPlayerPosition(), simCards, currSkat);
+				// SimulationResults simulationResults =
+				// gameSimulator.simulateMaxEpisodes(MAX_SIMULATIONS);
 
-				for (GameType currType : filteredGameTypes) {
+				for (GameType gameType : filteredGameTypes) {
 
-					Double wonRate = simulationResults.getWonRate(currType);
-
-					if (wonRate >= MIN_WON_RATE_FOR_DISCARDING) {
-						results.put(currType, currSkat);
-					}
-
-					// for fall back
-					if (wonRate > maxWonRate) {
-						maxWonRate = wonRate;
-						fallBackSkat = currSkat;
-						fallBackGameType = currType;
-					}
+					// Double wonRate = simulationResults.getWonRate(currType);
+					gameSimulator2.add(new GameSimulation(gameType,
+							knowledge.getPlayerPosition(), simCards, currSkat));
 				}
+				// if (wonRate >= MIN_WON_RATE_FOR_DISCARDING) {
+				// results.put(currType, currSkat);
+				// }
+				//
+				// // for fall back
+				// if (wonRate > maxWonRate) {
+				// maxWonRate = wonRate;
+				// fallBackSkat = currSkat;
+				// fallBackGameType = currType;
+				// }
+				// }
 			}
 		}
+
+		gameSimulator2.simulate(filteredGameTypes);
 
 		int maxGoodDiscards = 0;
 		for (GameType gameType : results.keySet()) {
@@ -260,7 +276,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		if (maxGoodDiscards > 0) {
 			skat = getRandomEntry(new ArrayList<>(results.get(bestGameTypeFromDiscarding)));
 
-			log.warn("Best game type: " + bestGameTypeFromDiscarding + " choosing skat " + skat + " out of "
+			log.warn("Best game type: " + bestGameTypeFromDiscarding
+					+ " choosing skat " + skat + " out of "
 					+ results.get(bestGameTypeFromDiscarding).size() + " skats.");
 		} else {
 			// fallback
@@ -272,7 +289,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	}
 
 	private CardList getRandomEntry(List<CardList> possibleSkats) {
-		return possibleSkats.get(rand.nextInt(possibleSkats.size()));
+		return possibleSkats.get(RANDOM.nextInt(possibleSkats.size()));
 	}
 
 	/**
@@ -326,7 +343,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		// first find all possible cards
 		CardList possibleCards = getPlayableCards(knowledge.getTrickCards());
 
-		log.debug("found " + possibleCards.size() + " possible cards: " + possibleCards); //$NON-NLS-1$//$NON-NLS-2$
+		log.debug("found " + possibleCards.size() + " possible cards: " //$NON-NLS-1$//$NON-NLS-2$
+				+ possibleCards);
 
 		Map<Card, double[]> cardInputs = new HashMap<Card, double[]>();
 
@@ -343,7 +361,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 			cardInputs.put(card, inputs);
 			Double currOutput = net.getPredictedOutcome(inputs);
-			log.warn("net output for card " + card + ": " + formatter.format(currOutput)); //$NON-NLS-1$
+			log.warn("net output for card " + card + ": " //$NON-NLS-1$
+					+ formatter.format(currOutput));
 
 			if (currOutput > (IDEAL_WON - EPSILON)) {
 				bestCards.add(card);
@@ -361,12 +380,14 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		if (bestCards.size() > 0) {
 			// get random card out of the best cards
 			bestCardIndex = chooseRandomCard(possibleCards, bestCards);
-			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": Found best cards. Choosing random from " //$NON-NLS-1$ //$NON-NLS-2$
+			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) //$NON-NLS-1$
+					+ ": Found best cards. Choosing random from " //$NON-NLS-1$
 					+ bestCards.size() + " out of " + possibleCards.size() + ": " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$ //$NON-NLS-2$
 		} else {
 			// no best card, get card with best output
 			bestCardIndex = chooseRandomCard(possibleCards, highestOutputCards);
-			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) + ": Found no best cards. Choosing card from " //$NON-NLS-1$ //$NON-NLS-2$
+			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) //$NON-NLS-1$
+					+ ": Found no best cards. Choosing card from " //$NON-NLS-1$
 					+ highestOutputCards.size() + " out of " + possibleCards.size() + " with highest output: "
 					+ possibleCards.get(bestCardIndex));
 			// no best card, get random card out of all cards
@@ -378,7 +399,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		storeInputParameters(cardInputs.get(possibleCards.get(bestCardIndex)));
 
 		log.debug("choosing card " + bestCardIndex); //$NON-NLS-1$
-		log.debug("as player " + knowledge.getPlayerPosition() + ": " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$//$NON-NLS-2$
+		log.debug("as player " + knowledge.getPlayerPosition() + ": " //$NON-NLS-1$//$NON-NLS-2$
+				+ possibleCards.get(bestCardIndex));
 
 		return possibleCards.get(bestCardIndex);
 	}
@@ -473,7 +495,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 	private int chooseRandomCard(final CardList possibleCards, final CardList goodCards) {
 		int bestCardIndex;
-		Card choosenCard = goodCards.get(rand.nextInt(goodCards.size()));
+		Card choosenCard = goodCards.get(RANDOM.nextInt(goodCards.size()));
 		bestCardIndex = possibleCards.indexOf(choosenCard);
 		return bestCardIndex;
 	}
