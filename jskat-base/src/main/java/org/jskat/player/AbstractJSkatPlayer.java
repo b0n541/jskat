@@ -179,8 +179,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
 			if (trick.size() > 0
 					&& rules.isCardAllowed(internalKnowledge.getGameType(),
-							trick.get(0), internalKnowledge.getOwnCards(),
-							card)) {
+							trick.get(0), internalKnowledge.getOwnCards(), card)) {
 
 				log.debug("Card: " + card + " is allowed after initial card: " //$NON-NLS-1$
 						+ trick.get(0));
@@ -289,7 +288,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setGameSummary(final GameSummary gameSummary) {
+	public final void setGameSummary(final GameSummary gameSummary) {
 
 		this.gameSummary = gameSummary;
 	}
@@ -300,7 +299,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * @param newLogger
 	 *            New logger
 	 */
-	public void setLogger(final Logger newLogger) {
+	public final void setLogger(final Logger newLogger) {
 		log = newLogger;
 	}
 }
