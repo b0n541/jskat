@@ -16,37 +16,26 @@
 package org.jskat.ai.nn;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.jskat.control.JSkatEventBus;
-import org.jskat.control.event.table.TableCreatedEvent;
+import org.jskat.control.command.table.CreateTableCommand;
 import org.jskat.data.JSkatViewType;
 import org.jskat.util.GameType;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.slf4j.helpers.NOPLogger;
 
 public class GameSimulator2 {
 
-	private final static Logger LOG = LoggerFactory
-			.getLogger(GameSimulator2.class);
-
-	Map<GameType, List<AIPlayerNN>> aiPlayer = new HashMap<>();
-	Map<GameType, List<GameSimulation>> gameSimulations = new HashMap<>();
+	private Map<GameType, List<GameSimulation>> gameSimulations = new HashMap<>();
 
 	GameSimulator2() {
+
 		for (GameType gameType : GameType.values()) {
-			aiPlayer.put(gameType,
-					Arrays.asList(new AIPlayerNN(NOPLogger.NOP_LOGGER),
-							new AIPlayerNN(NOPLogger.NOP_LOGGER),
-							new AIPlayerNN(NOPLogger.NOP_LOGGER)));
 			gameSimulations.put(gameType, new ArrayList<GameSimulation>());
-			JSkatEventBus.INSTANCE
-					.post(new TableCreatedEvent(JSkatViewType.TRAINING_TABLE,
-							getTrainingTableName(gameType)));
+			JSkatEventBus.INSTANCE.post(new CreateTableCommand(
+					JSkatViewType.TRAINING_TABLE,
+					getTrainingTableName(gameType)));
 		}
 	}
 
@@ -61,16 +50,14 @@ public class GameSimulator2 {
 	}
 
 	void add(GameSimulation gameSimulation) {
-		gameSimulations.get(gameSimulation.gameType).add(gameSimulation);
+		gameSimulations.get(gameSimulation.getGameType()).add(gameSimulation);
 	}
 
 	public void simulate(List<GameType> gameTypes) {
 		for (GameType gameType : gameTypes) {
-			GameSimulation gameSimulation = getNextSimulation(
-					gameSimulations.get(gameType));
-			List<AIPlayerNN> player = aiPlayer.get(gameType);
-			gameSimulation.simulateGame(getTrainingTableName(gameType),
-					player.get(0), player.get(1), player.get(2));
+			GameSimulation gameSimulation = getNextSimulation(gameSimulations
+					.get(gameType));
+			gameSimulation.simulateGame(getTrainingTableName(gameType));
 		}
 	}
 
