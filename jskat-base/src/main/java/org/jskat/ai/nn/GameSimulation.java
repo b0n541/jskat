@@ -41,17 +41,11 @@ class GameSimulation {
 	private final CardList playerCards;
 	private final CardList skatCards;
 
+	private final Statistics statistics = new Statistics();
+
 	private final JSkatPlayer player1;
 	private final JSkatPlayer player2;
 	private final JSkatPlayer player3;
-
-	private long simulatedGames;
-	private long wonGames;
-	private double wonRate;
-	private long wonGamesWithSchneider;
-	private double wonRateWithSchneider;
-	private long wonGamesWithSchwarz;
-	private double wonRateWithSchwarz;
 
 	GameSimulation(GameType gameType, Player playerPosition,
 			CardList playerCards) {
@@ -105,56 +99,95 @@ class GameSimulation {
 		// calculation
 		SkatGameResult gameResult = game.getGameResult();
 
-		adjustStatistics(gameResult);
-	}
-
-	private void adjustStatistics(SkatGameResult gameResult) {
-		simulatedGames++;
-		if (gameResult.isWon()) {
-			wonGames++;
-			if (gameResult.isSchneider()) {
-				wonGamesWithSchneider++;
-			}
-			if (gameResult.isSchwarz()) {
-				wonGamesWithSchwarz++;
-			}
-		}
-		wonRate = ((double) wonGames) / ((double) simulatedGames);
-		wonRateWithSchneider = ((double) wonGamesWithSchneider)
-				/ ((double) simulatedGames);
-		wonRateWithSchwarz = ((double) wonGamesWithSchwarz)
-				/ ((double) simulatedGames);
+		statistics.adjust(gameResult);
 	}
 
 	long getSimulatedGames() {
-		return simulatedGames;
+		return statistics.getSimulatedGames();
 	}
 
 	long getWonGames() {
-		return wonGames;
+		return statistics.getWonGames();
 	}
 
 	double getWonRate() {
-		return wonRate;
+		return statistics.getWonRate();
 	}
 
 	long getWonGamesWithSchneider() {
-		return wonGamesWithSchneider;
+		return statistics.getWonGamesWithSchneider();
 	}
 
 	double getWonRateWithSchneider() {
-		return wonRateWithSchneider;
+		return statistics.getWonRateWithSchneider();
 	}
 
 	long getWonGamesWithSchwarz() {
-		return wonGamesWithSchwarz;
+		return statistics.getWonGamesWithSchwarz();
 	}
 
 	double getWonRateWithSchwarz() {
-		return wonRateWithSchwarz;
+		return statistics.getWonRateWithSchwarz();
 	}
 
 	public GameType getGameType() {
 		return gameType;
+	}
+
+	class Statistics {
+
+		private long simulatedGames;
+		private long wonGames;
+		private double wonRate;
+		private long wonGamesWithSchneider;
+		private double wonRateWithSchneider;
+		private long wonGamesWithSchwarz;
+		private double wonRateWithSchwarz;
+
+		void adjust(SkatGameResult gameResult) {
+			simulatedGames++;
+			if (gameResult.isWon()) {
+				wonGames++;
+				if (gameResult.isSchneider()) {
+					wonGamesWithSchneider++;
+				}
+				if (gameResult.isSchwarz()) {
+					wonGamesWithSchwarz++;
+				}
+			}
+			wonRate = ((double) wonGames) / ((double) simulatedGames);
+			wonRateWithSchneider = ((double) wonGamesWithSchneider)
+					/ ((double) simulatedGames);
+			wonRateWithSchwarz = ((double) wonGamesWithSchwarz)
+					/ ((double) simulatedGames);
+		}
+
+		long getSimulatedGames() {
+			return simulatedGames;
+		}
+
+		long getWonGames() {
+			return wonGames;
+		}
+
+		double getWonRate() {
+			return wonRate;
+		}
+
+		long getWonGamesWithSchneider() {
+			return wonGamesWithSchneider;
+		}
+
+		double getWonRateWithSchneider() {
+			return wonRateWithSchneider;
+		}
+
+		long getWonGamesWithSchwarz() {
+			return wonGamesWithSchwarz;
+		}
+
+		double getWonRateWithSchwarz() {
+			return wonRateWithSchwarz;
+		}
 	}
 }

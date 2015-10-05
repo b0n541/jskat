@@ -26,6 +26,7 @@ import org.jskat.AbstractJSkatTest;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.command.table.CreateTableCommand;
 import org.jskat.data.JSkatViewType;
+import org.jskat.data.SkatGameResult;
 import org.jskat.util.Card;
 import org.jskat.util.CardDeck;
 import org.jskat.util.CardList;
@@ -130,6 +131,60 @@ public class GameSimulationTest extends AbstractJSkatTest {
 					is(((double) simulation.getWonGames())
 							/ ((double) simulation.getSimulatedGames())));
 		}
+	}
+
+	@Test
+	public void testSimulationStatistics() {
+		GameSimulation simulation = new GameSimulation(getRandomGameType(),
+				getRandomPlayer(), getRandomCards(10), getRandomCards(2));
+		GameSimulation.Statistics statistics = simulation.new Statistics();
+
+		assertThat(statistics.getSimulatedGames(), is(0L));
+		assertThat(statistics.getWonGames(), is(0L));
+
+		SkatGameResult gameResult = new SkatGameResult();
+		statistics.adjust(gameResult);
+
+		assertThat(statistics.getSimulatedGames(), is(1L));
+		assertThat(statistics.getWonGames(), is(0L));
+		assertThat(statistics.getWonRate(), is(0.0));
+		assertThat(statistics.getWonGamesWithSchneider(), is(0L));
+		assertThat(statistics.getWonRateWithSchneider(), is(0.0));
+		assertThat(statistics.getWonGamesWithSchwarz(), is(0L));
+		assertThat(statistics.getWonRateWithSchwarz(), is(0.0));
+
+		gameResult.setWon(true);
+		statistics.adjust(gameResult);
+
+		assertThat(statistics.getSimulatedGames(), is(2L));
+		assertThat(statistics.getWonGames(), is(1L));
+		assertThat(statistics.getWonRate(), is(0.5));
+		assertThat(statistics.getWonGamesWithSchneider(), is(0L));
+		assertThat(statistics.getWonRateWithSchneider(), is(0.0));
+		assertThat(statistics.getWonGamesWithSchwarz(), is(0L));
+		assertThat(statistics.getWonRateWithSchwarz(), is(0.0));
+
+		gameResult.setSchneider(true);
+		statistics.adjust(gameResult);
+
+		assertThat(statistics.getSimulatedGames(), is(3L));
+		assertThat(statistics.getWonGames(), is(2L));
+		assertThat(statistics.getWonRate(), is(2.0 / 3.0));
+		assertThat(statistics.getWonGamesWithSchneider(), is(1L));
+		assertThat(statistics.getWonRateWithSchneider(), is(1.0 / 3.0));
+		assertThat(statistics.getWonGamesWithSchwarz(), is(0L));
+		assertThat(statistics.getWonRateWithSchwarz(), is(0.0));
+
+		gameResult.setSchwarz(true);
+		statistics.adjust(gameResult);
+
+		assertThat(statistics.getSimulatedGames(), is(4L));
+		assertThat(statistics.getWonGames(), is(3L));
+		assertThat(statistics.getWonRate(), is(0.75));
+		assertThat(statistics.getWonGamesWithSchneider(), is(2L));
+		assertThat(statistics.getWonRateWithSchneider(), is(0.5));
+		assertThat(statistics.getWonGamesWithSchwarz(), is(1L));
+		assertThat(statistics.getWonRateWithSchwarz(), is(0.25));
 	}
 
 	private CardList getRandomCards(int cardCount) {
