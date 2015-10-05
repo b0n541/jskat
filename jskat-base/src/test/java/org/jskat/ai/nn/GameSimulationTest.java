@@ -37,6 +37,7 @@ import org.junit.Test;
 
 public class GameSimulationTest extends AbstractJSkatTest {
 
+	private static final String TABLE_NAME = "ASDF";
 	private final static Random RANDOM = new Random();
 	private final static List<GameType> GAME_TYPES = Arrays.asList(
 			GameType.GRAND, GameType.CLUBS, GameType.SPADES, GameType.HEARTS,
@@ -47,7 +48,7 @@ public class GameSimulationTest extends AbstractJSkatTest {
 	@Before
 	public void setup() {
 		JSkatEventBus.INSTANCE.post(new CreateTableCommand(
-				JSkatViewType.LOCAL_TABLE, "ASDF"));
+				JSkatViewType.LOCAL_TABLE, TABLE_NAME));
 	}
 
 	@Test
@@ -57,7 +58,7 @@ public class GameSimulationTest extends AbstractJSkatTest {
 						Card.DJ, Card.CA, Card.SA, Card.HA, Card.DA, Card.CT,
 						Card.ST), new CardList(Card.D7, Card.D8));
 		for (long i = 0; i < 10; i++) {
-			simulation.simulateGame("ASDF");
+			simulation.simulateGame(TABLE_NAME);
 			assertThat(simulation.getSimulatedGames(), is(i + 1));
 			assertThat(simulation.getWonGames(), is(i + 1));
 			assertThat(simulation.getWonRate(), is(1.0));
@@ -73,7 +74,7 @@ public class GameSimulationTest extends AbstractJSkatTest {
 		GameSimulation simulation = new GameSimulation(getRandomGameType(),
 				getRandomPlayer(), getRandomCards(10), getRandomCards(2));
 		for (long i = 0; i < 10; i++) {
-			simulation.simulateGame("ASDF");
+			simulation.simulateGame(TABLE_NAME);
 			assertThat(simulation.getSimulatedGames(), is(i + 1));
 			assertThat(simulation.getWonRate(),
 					is(((double) simulation.getWonGames())
@@ -86,7 +87,7 @@ public class GameSimulationTest extends AbstractJSkatTest {
 		GameSimulation simulation = new GameSimulation(getRandomGameType(),
 				getRandomPlayer(), getRandomCards(10));
 		for (long i = 0; i < 10; i++) {
-			simulation.simulateGame("ASDF");
+			simulation.simulateGame(TABLE_NAME);
 			assertThat(simulation.getSimulatedGames(), is(i + 1));
 			assertThat(simulation.getWonRate(),
 					is(((double) simulation.getWonGames())
@@ -99,7 +100,7 @@ public class GameSimulationTest extends AbstractJSkatTest {
 		GameSimulation simulation = new GameSimulation(getRandomGameType(),
 				Player.FOREHAND, getRandomCards(10), getRandomCards(2));
 		for (long i = 0; i < 10; i++) {
-			simulation.simulateGame("ASDF");
+			simulation.simulateGame(TABLE_NAME);
 			assertThat(simulation.getSimulatedGames(), is(i + 1));
 			assertThat(simulation.getWonRate(),
 					is(((double) simulation.getWonGames())
@@ -112,7 +113,7 @@ public class GameSimulationTest extends AbstractJSkatTest {
 		GameSimulation simulation = new GameSimulation(getRandomGameType(),
 				Player.MIDDLEHAND, getRandomCards(10), getRandomCards(2));
 		for (long i = 0; i < 10; i++) {
-			simulation.simulateGame("ASDF");
+			simulation.simulateGame(TABLE_NAME);
 			assertThat(simulation.getSimulatedGames(), is(i + 1));
 			assertThat(simulation.getWonRate(),
 					is(((double) simulation.getWonGames())
@@ -125,7 +126,7 @@ public class GameSimulationTest extends AbstractJSkatTest {
 		GameSimulation simulation = new GameSimulation(getRandomGameType(),
 				Player.REARHAND, getRandomCards(10), getRandomCards(2));
 		for (long i = 0; i < 10; i++) {
-			simulation.simulateGame("ASDF");
+			simulation.simulateGame(TABLE_NAME);
 			assertThat(simulation.getSimulatedGames(), is(i + 1));
 			assertThat(simulation.getWonRate(),
 					is(((double) simulation.getWonGames())
