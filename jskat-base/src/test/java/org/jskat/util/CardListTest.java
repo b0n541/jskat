@@ -15,8 +15,12 @@
  */
 package org.jskat.util;
 
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+
+import java.util.Random;
 
 import org.jskat.AbstractJSkatTest;
 import org.junit.Test;
@@ -25,6 +29,8 @@ import org.junit.Test;
  * Test cases for class Card
  */
 public class CardListTest extends AbstractJSkatTest {
+
+	private static final Random RANDOM = new Random();
 
 	/**
 	 * Test double sorting
@@ -93,5 +99,29 @@ public class CardListTest extends AbstractJSkatTest {
 		assertEquals(1, cards.getLastIndexOfSuit(Suit.CLUBS, true));
 		assertEquals(0, cards.getLastIndexOfSuit(Suit.CLUBS, false));
 		assertEquals(-1, cards.getLastIndexOfSuit(Suit.HEARTS));
+	}
+
+	@Test
+	public void testPerfectGrandSuitHand() {
+		CardList cards = CardList.getPerfectGrandSuitHand();
+
+		assertThat(cards.size(), is(10));
+
+		assertTrue(cards.contains(Card.CJ));
+		assertTrue(cards.contains(Card.SJ));
+		assertTrue(cards.contains(Card.HJ));
+		assertTrue(cards.contains(Card.DJ));
+		assertTrue(cards.contains(Card.CA));
+		assertTrue(cards.contains(Card.SA));
+		assertTrue(cards.contains(Card.HA));
+		assertTrue(cards.contains(Card.DA));
+		assertTrue(cards.contains(Card.CT));
+		assertTrue(cards.contains(Card.ST));
+	}
+
+	@Test
+	public void testRandomCards() {
+		CardList cards = CardList.getRandomCards(10);
+		assertThat(cards.size(), is(10));
 	}
 }

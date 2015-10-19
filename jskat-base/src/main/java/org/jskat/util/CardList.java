@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import org.jskat.util.rule.SkatRuleFactory;
 import org.slf4j.Logger;
@@ -33,9 +34,12 @@ import org.slf4j.LoggerFactory;
  * FIXME this should be a real {@link Collection}
  */
 public class CardList implements Iterable<Card> {
-	private static Logger log = LoggerFactory.getLogger(CardList.class);
 
-	protected List<Card> cards = new ArrayList<Card>();
+	private static final Random RANDOM = new Random();
+
+	private static final Logger LOG = LoggerFactory.getLogger(CardList.class);
+
+	protected List<Card> cards = new ArrayList<>();
 
 	/**
 	 * Constructor
@@ -627,6 +631,32 @@ public class CardList implements Iterable<Card> {
 			return false;
 		}
 		return true;
+	}
+
+	/**
+	 * Returns an unbeatable Grand/suit hand of 10 cards.
+	 * 
+	 * @return Unbeatable Grand/suit hand
+	 */
+	public final static CardList getPerfectGrandSuitHand() {
+		return new CardList(Card.CJ, Card.SJ, Card.HJ, Card.DJ, Card.CA,
+				Card.SA, Card.HA, Card.DA, Card.CT, Card.ST);
+	}
+
+	/**
+	 * Returns random hand.
+	 * 
+	 * @param cardCount
+	 *            Number of cards
+	 * @return Random hand
+	 */
+	public final static CardList getRandomCards(int cardCount) {
+		CardDeck cardDeck = new CardDeck();
+		CardList result = new CardList();
+		for (int i = 0; i < cardCount; i++) {
+			result.add(cardDeck.remove(RANDOM.nextInt(cardDeck.size())));
+		}
+		return result;
 	}
 
 	private class NullComparator implements Comparator<Card> {
