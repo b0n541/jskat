@@ -122,7 +122,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 		inputGenerator = new GenericNetworkInputGenerator();
 		gameSimulator = new GameSimulator();
-		gameSimulator2 = new GameSimulator2(10L, null);
+		gameSimulator2 = new GameSimulator2(1000L, null);
 
 		for (GameType gameType : GameType.values()) {
 			if (gameType != GameType.RAMSCH && gameType != GameType.PASSED_IN) {

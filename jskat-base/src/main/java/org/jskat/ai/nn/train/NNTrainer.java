@@ -109,11 +109,6 @@ public class NNTrainer extends JSkatThread {
 		return player;
 	}
 
-	private CardDeck getPerfectDistribution() {
-		return new CardDeck(
-				"CJ SJ HJ CK CQ SK C7 C8 S7 H7 D7 DJ CA CT C9 SQ HA HK HQ S8 H8 H9 HT SA ST S9 D8 D9 DT DA DK DQ");
-	}
-
 	private boolean isGameWon(final Player currPlayer, final SkatGame game) {
 
 		// FIXME (jansch 28.06.2011) have to call getGameResult() to get
