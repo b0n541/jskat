@@ -208,6 +208,16 @@ public class CardDeck extends CardList {
 	}
 
 	/**
+	 * Get the perfect card distribution where forehand wins all types of games.
+	 * 
+	 * @return Perfect card distribution
+	 */
+	public static CardDeck getPerfectDistribution() {
+		return new CardDeck(
+				"CJ SJ HJ CK CQ SK C7 C8 S7 H7 D7 DJ CA CT C9 SQ HA HK HQ S8 H8 H9 HT SA ST S9 D8 D9 DT DA DK DQ");
+	}
+
+	/**
 	 * Shuffles the CardDeck
 	 */
 	public void shuffle() {
