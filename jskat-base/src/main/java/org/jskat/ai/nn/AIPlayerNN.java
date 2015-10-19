@@ -122,7 +122,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 		inputGenerator = new GenericNetworkInputGenerator();
 		gameSimulator = new GameSimulator();
-		gameSimulator2 = new GameSimulator2();
+		gameSimulator2 = new GameSimulator2(10L, null);
 
 		for (GameType gameType : GameType.values()) {
 			if (gameType != GameType.RAMSCH && gameType != GameType.PASSED_IN) {
@@ -207,9 +207,6 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	 */
 	@Override
 	public CardList getCardsToDiscard() {
-		Double maxWonRate = Double.MIN_VALUE;
-		CardList fallBackSkat = null;
-		GameType fallBackGameType = null;
 		CardList cards = knowledge.getOwnCards();
 
 		log.debug("Player cards before discarding: " + knowledge.getOwnCards()); //$NON-NLS-1$
@@ -219,74 +216,33 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 		gameSimulator2.reset();
 
-		// check all possible discards
+		// create all possible discards
 		int simCount = 0;
 		for (int i = 0; i < cards.size() - 1; i++) {
 			for (int j = i + 1; j < cards.size(); j++) {
 				simCount++;
-				CardList simCards = new CardList();
-				simCards.addAll(cards);
+				CardList simCards = new CardList(cards);
 
-				CardList currSkat = new CardList();
-				currSkat.add(simCards.get(i));
-				currSkat.add(simCards.get(j));
+				CardList currSkat = new CardList(simCards.get(i),
+						simCards.get(j));
 
 				simCards.removeAll(currSkat);
 
 				log.warn("Discard simulation no. " + simCount + ": skat "
 						+ currSkat);
 
-				// gameSimulator.resetGameSimulator(filteredGameTypes,
-				// knowledge.getPlayerPosition(), simCards, currSkat);
-				// SimulationResults simulationResults =
-				// gameSimulator.simulateMaxEpisodes(MAX_SIMULATIONS);
-
 				for (GameType gameType : filteredGameTypes) {
 
-					// Double wonRate = simulationResults.getWonRate(currType);
 					gameSimulator2.add(new GameSimulation(gameType, knowledge
 							.getPlayerPosition(), simCards, currSkat));
 				}
-				// if (wonRate >= MIN_WON_RATE_FOR_DISCARDING) {
-				// results.put(currType, currSkat);
-				// }
-				//
-				// // for fall back
-				// if (wonRate > maxWonRate) {
-				// maxWonRate = wonRate;
-				// fallBackSkat = currSkat;
-				// fallBackGameType = currType;
-				// }
-				// }
 			}
 		}
 
-		gameSimulator2.simulate(filteredGameTypes);
+		GameSimulation bestSimulation = gameSimulator2
+				.simulate(filteredGameTypes);
 
-		// int maxGoodDiscards = 0;
-		// for (GameType gameType : results.keySet()) {
-		// if (results.get(gameType).size() > maxGoodDiscards) {
-		// maxGoodDiscards = results.get(gameType).size();
-		// bestGameTypeFromDiscarding = gameType;
-		// }
-		// }
-		//
-		CardList skat = null;
-		// if (maxGoodDiscards > 0) {
-		// skat = getRandomEntry(new ArrayList<>(
-		// results.get(bestGameTypeFromDiscarding)));
-		//
-		// log.warn("Best game type: " + bestGameTypeFromDiscarding
-		// + " choosing skat " + skat + " out of "
-		// + results.get(bestGameTypeFromDiscarding).size()
-		// + " skats.");
-		// } else {
-		// // fallback
-		// skat = fallBackSkat;
-		// bestGameTypeFromDiscarding = fallBackGameType;
-		// }
-
-		return skat;
+		return bestSimulation.getSkatCards();
 	}
 
 	private CardList getRandomEntry(List<CardList> possibleSkats) {

@@ -25,17 +25,24 @@ import org.jskat.control.command.table.CreateTableCommand;
 import org.jskat.data.JSkatViewType;
 import org.jskat.util.GameType;
 
-public class GameSimulator2 {
+class GameSimulator2 {
 
-	private Map<GameType, List<GameSimulation>> gameSimulations = new HashMap<>();
+	private final Map<GameType, List<GameSimulation>> gameSimulations = new HashMap<>();
+	private final Long maxSimulations;
+	private final Long maxTimeInMilliseconds;
 
-	GameSimulator2() {
+	GameSimulator2(Long maxSimulations, Long maxTimeInMilliseconds) {
+
+		this.maxSimulations = maxSimulations != null ? maxSimulations
+				: Long.MAX_VALUE;
+		this.maxTimeInMilliseconds = maxTimeInMilliseconds != null
+				? maxTimeInMilliseconds : Long.MAX_VALUE;
 
 		for (GameType gameType : GameType.values()) {
 			gameSimulations.put(gameType, new ArrayList<GameSimulation>());
-			JSkatEventBus.INSTANCE.post(new CreateTableCommand(
-					JSkatViewType.TRAINING_TABLE,
-					getTrainingTableName(gameType)));
+			JSkatEventBus.INSTANCE
+					.post(new CreateTableCommand(JSkatViewType.TRAINING_TABLE,
+							getTrainingTableName(gameType)));
 		}
 	}
 
@@ -53,31 +60,62 @@ public class GameSimulator2 {
 		gameSimulations.get(gameSimulation.getGameType()).add(gameSimulation);
 	}
 
-	public void simulate(List<GameType> gameTypes) {
-		for (GameType gameType : gameTypes) {
-			GameSimulation gameSimulation = getNextSimulation(gameSimulations
-					.get(gameType));
-			gameSimulation.simulateGame(getTrainingTableName(gameType));
+	GameSimulation simulate(List<GameType> possibleGameTypes) {
+		long simulationCount = 0L;
+		long startTimeInMilliseconds = System.currentTimeMillis();
+		while (simulationCount < maxSimulations && System.currentTimeMillis()
+				- startTimeInMilliseconds < maxTimeInMilliseconds) {
+			GameSimulation simulation = getNextSimulation(possibleGameTypes);
+			simulation.simulateGame(
+					getTrainingTableName(simulation.getGameType()));
+			simulationCount++;
 		}
+
+		return getBestGameSimulation();
 	}
 
-	private GameSimulation getNextSimulation(
-			List<GameSimulation> possibleGameSimulations) {
-		GameSimulation result = null;
-		double maxWonRate = 0.0;
-
-		for (GameSimulation currSim : possibleGameSimulations) {
-			if (currSim.getSimulatedGames() == 0L) {
-				// simulation has never been run
-				return currSim;
+	private GameSimulation getBestGameSimulation() {
+		double maxWonRate = Double.NEGATIVE_INFINITY;
+		GameSimulation bestSimulation = null;
+		for (GameType gameType : GameType.values()) {
+			for (GameSimulation simulation : gameSimulations.get(gameType)) {
+				if (simulation.getWonRate() > maxWonRate) {
+					maxWonRate = simulation.getWonRate();
+					bestSimulation = simulation;
+				}
 			}
-			if (currSim.getWonRate() > maxWonRate) {
-				// prefer higher won rates
-				maxWonRate = currSim.getWonRate();
-				result = currSim;
+		}
+		return bestSimulation;
+	}
+
+	private GameSimulation getNextSimulation(List<GameType> possibleGameTypes) {
+		List<GameSimulation> bestSimulations = new ArrayList<>();
+		double maxWonRate = Double.NEGATIVE_INFINITY;
+		for (GameType gameType : possibleGameTypes) {
+			for (GameSimulation simulation : gameSimulations.get(gameType)) {
+				if (simulation.getSimulatedGames() == 0L) {
+					// simulation has never been run --> return immediately
+					return simulation;
+				}
+				if (simulation.getWonRate() >= maxWonRate) {
+					if (simulation.getWonRate() > maxWonRate) {
+						// prefer higher won rates
+						maxWonRate = simulation.getWonRate();
+						bestSimulations.clear();
+					}
+					bestSimulations.add(simulation);
+				}
 			}
 		}
 
+		Long minSimulationCount = Long.MAX_VALUE;
+		GameSimulation result = null;
+		for (GameSimulation simulation : bestSimulations) {
+			if (simulation.getSimulatedGames() < minSimulationCount) {
+				minSimulationCount = simulation.getSimulatedGames();
+				result = simulation;
+			}
+		}
 		return result;
 	}
 }

@@ -28,7 +28,6 @@ import org.jskat.control.command.table.CreateTableCommand;
 import org.jskat.data.JSkatViewType;
 import org.jskat.data.SkatGameResult;
 import org.jskat.util.Card;
-import org.jskat.util.CardDeck;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
@@ -42,21 +41,20 @@ public class GameSimulationTest extends AbstractJSkatTest {
 	private final static List<GameType> GAME_TYPES = Arrays.asList(
 			GameType.GRAND, GameType.CLUBS, GameType.SPADES, GameType.HEARTS,
 			GameType.DIAMONDS, GameType.NULL, GameType.RAMSCH);
-	private final static List<Player> PLAYER_POSITIONS = Arrays.asList(
-			Player.FOREHAND, Player.MIDDLEHAND, Player.REARHAND);
+	private final static List<Player> PLAYER_POSITIONS = Arrays
+			.asList(Player.FOREHAND, Player.MIDDLEHAND, Player.REARHAND);
 
 	@Before
 	public void setup() {
-		JSkatEventBus.INSTANCE.post(new CreateTableCommand(
-				JSkatViewType.LOCAL_TABLE, TABLE_NAME));
+		JSkatEventBus.INSTANCE.post(
+				new CreateTableCommand(JSkatViewType.LOCAL_TABLE, TABLE_NAME));
 	}
 
 	@Test
 	public void testSimulationAllGamesWonWithSchneiderSchwarz() {
 		GameSimulation simulation = new GameSimulation(GameType.GRAND,
-				getRandomPlayer(), new CardList(Card.CJ, Card.SJ, Card.HJ,
-						Card.DJ, Card.CA, Card.SA, Card.HA, Card.DA, Card.CT,
-						Card.ST), new CardList(Card.D7, Card.D8));
+				getRandomPlayer(), CardList.getPerfectGrandSuitHand(),
+				new CardList(Card.D7, Card.D8));
 		for (long i = 0; i < 10; i++) {
 			simulation.simulateGame(TABLE_NAME);
 			assertThat(simulation.getSimulatedGames(), is(i + 1));
@@ -72,7 +70,8 @@ public class GameSimulationTest extends AbstractJSkatTest {
 	@Test
 	public void testSimulationKnownSkat() {
 		GameSimulation simulation = new GameSimulation(getRandomGameType(),
-				getRandomPlayer(), getRandomCards(10), getRandomCards(2));
+				getRandomPlayer(), CardList.getRandomCards(10),
+				CardList.getRandomCards(2));
 		for (long i = 0; i < 10; i++) {
 			simulation.simulateGame(TABLE_NAME);
 			assertThat(simulation.getSimulatedGames(), is(i + 1));
@@ -85,7 +84,7 @@ public class GameSimulationTest extends AbstractJSkatTest {
 	@Test
 	public void testSimulationUnknownSkat() {
 		GameSimulation simulation = new GameSimulation(getRandomGameType(),
-				getRandomPlayer(), getRandomCards(10));
+				getRandomPlayer(), CardList.getRandomCards(10));
 		for (long i = 0; i < 10; i++) {
 			simulation.simulateGame(TABLE_NAME);
 			assertThat(simulation.getSimulatedGames(), is(i + 1));
@@ -98,7 +97,8 @@ public class GameSimulationTest extends AbstractJSkatTest {
 	@Test
 	public void testSimulationForeHand() {
 		GameSimulation simulation = new GameSimulation(getRandomGameType(),
-				Player.FOREHAND, getRandomCards(10), getRandomCards(2));
+				Player.FOREHAND, CardList.getRandomCards(10),
+				CardList.getRandomCards(2));
 		for (long i = 0; i < 10; i++) {
 			simulation.simulateGame(TABLE_NAME);
 			assertThat(simulation.getSimulatedGames(), is(i + 1));
@@ -111,7 +111,8 @@ public class GameSimulationTest extends AbstractJSkatTest {
 	@Test
 	public void testSimulationMiddleHand() {
 		GameSimulation simulation = new GameSimulation(getRandomGameType(),
-				Player.MIDDLEHAND, getRandomCards(10), getRandomCards(2));
+				Player.MIDDLEHAND, CardList.getRandomCards(10),
+				CardList.getRandomCards(2));
 		for (long i = 0; i < 10; i++) {
 			simulation.simulateGame(TABLE_NAME);
 			assertThat(simulation.getSimulatedGames(), is(i + 1));
@@ -124,7 +125,8 @@ public class GameSimulationTest extends AbstractJSkatTest {
 	@Test
 	public void testSimulationRearHand() {
 		GameSimulation simulation = new GameSimulation(getRandomGameType(),
-				Player.REARHAND, getRandomCards(10), getRandomCards(2));
+				Player.REARHAND, CardList.getRandomCards(10),
+				CardList.getRandomCards(2));
 		for (long i = 0; i < 10; i++) {
 			simulation.simulateGame(TABLE_NAME);
 			assertThat(simulation.getSimulatedGames(), is(i + 1));
@@ -137,7 +139,8 @@ public class GameSimulationTest extends AbstractJSkatTest {
 	@Test
 	public void testSimulationStatistics() {
 		GameSimulation simulation = new GameSimulation(getRandomGameType(),
-				getRandomPlayer(), getRandomCards(10), getRandomCards(2));
+				getRandomPlayer(), CardList.getRandomCards(10),
+				CardList.getRandomCards(2));
 		GameSimulation.Statistics statistics = simulation.new Statistics();
 
 		assertThat(statistics.getSimulatedGames(), is(0L));
@@ -186,15 +189,6 @@ public class GameSimulationTest extends AbstractJSkatTest {
 		assertThat(statistics.getWonRateWithSchneider(), is(0.5));
 		assertThat(statistics.getWonGamesWithSchwarz(), is(1L));
 		assertThat(statistics.getWonRateWithSchwarz(), is(0.25));
-	}
-
-	private CardList getRandomCards(int cardCount) {
-		CardDeck cardDeck = new CardDeck();
-		CardList result = new CardList();
-		for (int i = 0; i < cardCount; i++) {
-			result.add(cardDeck.remove(RANDOM.nextInt(cardDeck.size())));
-		}
-		return result;
 	}
 
 	private GameType getRandomGameType() {

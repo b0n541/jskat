@@ -66,7 +66,7 @@ class GameSimulation {
 		player3 = new AIPlayerNN(NOPLogger.NOP_LOGGER);
 	}
 
-	void simulateGame(String tableName) {
+	SkatGameResult simulateGame(String tableName) {
 
 		SkatGame game = new SkatGame(tableName, GameVariant.STANDARD, player1,
 				player2, player3);
@@ -100,6 +100,8 @@ class GameSimulation {
 		SkatGameResult gameResult = game.getGameResult();
 
 		statistics.adjust(gameResult);
+
+		return gameResult;
 	}
 
 	long getSimulatedGames() {
@@ -132,6 +134,10 @@ class GameSimulation {
 
 	public GameType getGameType() {
 		return gameType;
+	}
+
+	public CardList getSkatCards() {
+		return new CardList(skatCards);
 	}
 
 	class Statistics {
