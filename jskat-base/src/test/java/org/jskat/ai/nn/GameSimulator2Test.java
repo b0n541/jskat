@@ -34,8 +34,7 @@ public class GameSimulator2Test extends AbstractJSkatTest {
 		gameSimulator.add(new GameSimulation(GameType.GRAND, Player.FOREHAND,
 				CardList.getPerfectGrandSuitHand()));
 
-		GameSimulation bestSimulation = gameSimulator
-				.simulateMaxEpisodes(10L);
+		GameSimulation bestSimulation = gameSimulator.simulateMaxEpisodes(10L);
 
 		assertThat(bestSimulation.getEpisodes(), is(10L));
 		assertThat(bestSimulation.getWonGames(), is(10L));
@@ -47,11 +46,10 @@ public class GameSimulator2Test extends AbstractJSkatTest {
 		gameSimulator.add(new GameSimulation(GameType.GRAND, Player.FOREHAND,
 				CardList.getPerfectGrandSuitHand()));
 
-		GameSimulation bestSimulation = gameSimulator
-				.simulateMaxTime(2000L);
+		GameSimulation bestSimulation = gameSimulator.simulateMaxTime(1000L);
 
-		assertThat(bestSimulation.getEpisodes(), is(greaterThan(100L)));
-		assertThat(bestSimulation.getWonGames(), is(greaterThan(100L)));
+		assertThat(bestSimulation.getEpisodes(), is(greaterThan(10L)));
+		assertThat(bestSimulation.getWonGames(), is(greaterThan(10L)));
 	}
 
 	@Test
