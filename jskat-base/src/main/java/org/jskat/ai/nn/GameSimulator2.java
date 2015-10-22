@@ -90,7 +90,7 @@ class GameSimulator2 {
 		return bestSimulation;
 	}
 
-	private GameSimulation getNextSimulation() {
+	GameSimulation getNextSimulation() {
 		List<GameSimulation> bestSimulations = new ArrayList<>();
 		double maxWonRate = Double.NEGATIVE_INFINITY;
 		for (GameType gameType : GameType.values()) {

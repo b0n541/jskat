@@ -86,13 +86,32 @@ public class GameSimulator2Test extends AbstractJSkatTest {
 		Mockito.when(nullSimulation.getEpisodes()).thenReturn(0L);
 		Mockito.when(nullSimulation.getWonRate()).thenReturn(0.0);
 
-		Mockito.when(grandSimulation.getEpisodes()).thenReturn(0L);
-		Mockito.when(grandSimulation.getWonRate()).thenReturn(0.0);
+		Mockito.when(grandSimulation.getEpisodes()).thenReturn(1L);
+		Mockito.when(grandSimulation.getWonRate()).thenReturn(1.0);
+
+		assertThat(gameSimulator.getNextSimulation().getGameType(), is(GameType.NULL));
 
 		GameSimulation bestSimulation = gameSimulator.simulateMaxEpisodes(1L);
 
+		assertThat(bestSimulation.getGameType(), is(GameType.GRAND));
+
+		Mockito.when(nullSimulation.getEpisodes()).thenReturn(1L);
+
+		assertThat(gameSimulator.getNextSimulation().getGameType(), is(GameType.GRAND));
+
+		bestSimulation = gameSimulator.simulateMaxEpisodes(1L);
+
+		assertThat(bestSimulation.getGameType(), is(GameType.GRAND));
+
 		Mockito.when(nullSimulation.getWonRate()).thenReturn(0.9);
-		Mockito.when(grandSimulation.getWonRate()).thenReturn(0.1);
+		Mockito.when(grandSimulation.getEpisodes()).thenReturn(2L);
+		Mockito.when(grandSimulation.getWonRate()).thenReturn(0.9);
+
+		assertThat(gameSimulator.getNextSimulation().getGameType(), is(GameType.NULL));
+
+		gameSimulator.simulateMaxEpisodes(1L);
+
+		Mockito.when(grandSimulation.getWonRate()).thenReturn(0.8);
 
 		bestSimulation = gameSimulator.simulateMaxEpisodes(1L);
 
