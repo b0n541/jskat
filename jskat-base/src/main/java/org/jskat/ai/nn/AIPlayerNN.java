@@ -122,7 +122,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 		inputGenerator = new GenericNetworkInputGenerator();
 		gameSimulator = new GameSimulator();
-		gameSimulator2 = new GameSimulator2(1000L, null);
+		gameSimulator2 = new GameSimulator2();
 
 		for (GameType gameType : GameType.values()) {
 			if (gameType != GameType.RAMSCH && gameType != GameType.PASSED_IN) {
@@ -228,19 +228,16 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 				simCards.removeAll(currSkat);
 
-				log.warn("Discard simulation no. " + simCount + ": skat "
-						+ currSkat);
+				log.warn("Discard simulation no. " + simCount + ": skat " + currSkat);
 
 				for (GameType gameType : filteredGameTypes) {
 
-					gameSimulator2.add(new GameSimulation(gameType, knowledge
-							.getPlayerPosition(), simCards, currSkat));
+					gameSimulator2.add(new GameSimulation(gameType, knowledge.getPlayerPosition(), simCards, currSkat));
 				}
 			}
 		}
 
-		GameSimulation bestSimulation = gameSimulator2
-				.simulate(filteredGameTypes);
+		GameSimulation bestSimulation = gameSimulator2.simulateMaxEpisodes(1000L);
 
 		return bestSimulation.getSkatCards();
 	}
@@ -309,7 +306,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 		INeuralNetwork net = SkatNetworks.getNetwork(knowledge
 				.getGameAnnouncement().getGameType(), isDeclarer(), knowledge
-				.getCurrentTrick().getTrickNumberInGame());
+						.getCurrentTrick().getTrickNumberInGame());
 
 		CardList bestCards = new CardList();
 		CardList highestOutputCards = new CardList();
@@ -346,7 +343,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) //$NON-NLS-1$
 					+ ": Found best cards. Choosing random from " //$NON-NLS-1$
 					+ bestCards.size()
-					+ " out of " + possibleCards.size() + ": " + possibleCards.get(bestCardIndex)); //$NON-NLS-1$ //$NON-NLS-2$
+					+ " out of " + possibleCards.size() + ": " //$NON-NLS-1$ //$NON-NLS-2$
+					+ possibleCards.get(bestCardIndex));
 		} else {
 			// no best card, get card with best output
 			bestCardIndex = chooseRandomCard(possibleCards, highestOutputCards);
@@ -409,7 +407,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		double output = 0.0d;
 		if (!GameType.PASSED_IN.equals(knowledge.getGameType())) {
 			if (GameType.RAMSCH.equals(knowledge.getGameType())) {
-				if (isRamschGameWon(gameSummary, knowledge.getPlayerPosition())) {
+				if (isRamschGameWon(gameSummary,
+						knowledge.getPlayerPosition())) {
 					output = IDEAL_WON;
 				} else {
 					output = IDEAL_LOST;

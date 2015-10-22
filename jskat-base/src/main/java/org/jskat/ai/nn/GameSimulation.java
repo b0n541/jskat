@@ -104,8 +104,8 @@ class GameSimulation {
 		return gameResult;
 	}
 
-	long getSimulatedGames() {
-		return statistics.getSimulatedGames();
+	long getEpisodes() {
+		return statistics.getEpisodes();
 	}
 
 	long getWonGames() {
@@ -140,9 +140,14 @@ class GameSimulation {
 		return new CardList(skatCards);
 	}
 
+	@Override
+	public String toString() {
+		return "Game simulation " + gameType + " " + statistics.getEpisodes() + " episodes";
+	}
+
 	class Statistics {
 
-		private long simulatedGames;
+		private long episodes;
 		private long wonGames;
 		private double wonRate;
 		private long wonGamesWithSchneider;
@@ -151,7 +156,7 @@ class GameSimulation {
 		private double wonRateWithSchwarz;
 
 		void adjust(SkatGameResult gameResult) {
-			simulatedGames++;
+			episodes++;
 			if (gameResult.isWon()) {
 				wonGames++;
 				if (gameResult.isSchneider()) {
@@ -161,15 +166,13 @@ class GameSimulation {
 					wonGamesWithSchwarz++;
 				}
 			}
-			wonRate = ((double) wonGames) / ((double) simulatedGames);
-			wonRateWithSchneider = ((double) wonGamesWithSchneider)
-					/ ((double) simulatedGames);
-			wonRateWithSchwarz = ((double) wonGamesWithSchwarz)
-					/ ((double) simulatedGames);
+			wonRate = ((double) wonGames) / ((double) episodes);
+			wonRateWithSchneider = ((double) wonGamesWithSchneider) / ((double) episodes);
+			wonRateWithSchwarz = ((double) wonGamesWithSchwarz) / ((double) episodes);
 		}
 
-		long getSimulatedGames() {
-			return simulatedGames;
+		long getEpisodes() {
+			return episodes;
 		}
 
 		long getWonGames() {

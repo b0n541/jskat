@@ -15,10 +15,9 @@
  */
 package org.jskat.ai.nn;
 
-import static org.hamcrest.core.Is.is;
+import static org.hamcrest.Matchers.greaterThan;
+import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
-
-import java.util.Arrays;
 
 import org.jskat.AbstractJSkatTest;
 import org.jskat.util.CardList;
@@ -29,37 +28,44 @@ import org.junit.Test;
 public class GameSimulator2Test extends AbstractJSkatTest {
 
 	@Test
-	public void testSimulateGamesOneGameType() {
-		GameSimulator2 gameSimulator = new GameSimulator2(10L, null);
+	public void testSimulateGamesWithEpisodeLimit() {
+		GameSimulator2 gameSimulator = new GameSimulator2();
 		gameSimulator.add(new GameSimulation(GameType.GRAND, Player.FOREHAND,
 				CardList.getPerfectGrandSuitHand()));
 
 		GameSimulation bestSimulation = gameSimulator
-				.simulate(Arrays.asList(GameType.GRAND));
+				.simulateMaxEpisodes(10L);
 
-		assertThat(bestSimulation.getSimulatedGames(), is(10L));
+		assertThat(bestSimulation.getEpisodes(), is(10L));
 		assertThat(bestSimulation.getWonGames(), is(10L));
 	}
 
 	@Test
-	public void testSimulateGamesFiveGameTypes() {
-		GameSimulator2 gameSimulator = new GameSimulator2(10L, null);
+	public void testSimulateGamesWithTimeLimit() {
+		GameSimulator2 gameSimulator = new GameSimulator2();
 		gameSimulator.add(new GameSimulation(GameType.GRAND, Player.FOREHAND,
-				CardList.getPerfectGrandSuitHand()));
-		gameSimulator.add(new GameSimulation(GameType.CLUBS, Player.FOREHAND,
-				CardList.getPerfectGrandSuitHand()));
-		gameSimulator.add(new GameSimulation(GameType.SPADES, Player.FOREHAND,
-				CardList.getPerfectGrandSuitHand()));
-		gameSimulator.add(new GameSimulation(GameType.HEARTS, Player.FOREHAND,
-				CardList.getPerfectGrandSuitHand()));
-		gameSimulator.add(new GameSimulation(GameType.DIAMONDS, Player.FOREHAND,
 				CardList.getPerfectGrandSuitHand()));
 
 		GameSimulation bestSimulation = gameSimulator
-				.simulate(Arrays.asList(GameType.GRAND, GameType.CLUBS,
-						GameType.SPADES, GameType.HEARTS, GameType.DIAMONDS));
+				.simulateMaxTime(2000L);
 
-		assertThat(bestSimulation.getSimulatedGames(), is(2L));
-		assertThat(bestSimulation.getWonGames(), is(2L));
+		assertThat(bestSimulation.getEpisodes(), is(greaterThan(100L)));
+		assertThat(bestSimulation.getWonGames(), is(greaterThan(100L)));
+	}
+
+	@Test
+	public void testSimulateGamesFiveGameTypesEqualDistribution() {
+
+		GameSimulator2 gameSimulator = new GameSimulator2();
+		gameSimulator.add(new GameSimulation(GameType.GRAND, Player.FOREHAND, CardList.getPerfectGrandSuitHand()));
+		gameSimulator.add(new GameSimulation(GameType.CLUBS, Player.FOREHAND, CardList.getPerfectGrandSuitHand()));
+		gameSimulator.add(new GameSimulation(GameType.SPADES, Player.FOREHAND, CardList.getPerfectGrandSuitHand()));
+		gameSimulator.add(new GameSimulation(GameType.HEARTS, Player.FOREHAND, CardList.getPerfectGrandSuitHand()));
+		gameSimulator.add(new GameSimulation(GameType.DIAMONDS, Player.FOREHAND, CardList.getPerfectGrandSuitHand()));
+
+		GameSimulation bestSimulation = gameSimulator.simulateMaxEpisodes(100L);
+
+		assertThat(bestSimulation.getEpisodes(), is(20L));
+		assertThat(bestSimulation.getWonGames(), is(20L));
 	}
 }

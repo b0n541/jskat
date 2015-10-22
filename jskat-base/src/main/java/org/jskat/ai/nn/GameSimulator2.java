@@ -28,15 +28,8 @@ import org.jskat.util.GameType;
 class GameSimulator2 {
 
 	private final Map<GameType, List<GameSimulation>> gameSimulations = new HashMap<>();
-	private final Long maxSimulations;
-	private final Long maxTimeInMilliseconds;
 
-	GameSimulator2(Long maxSimulations, Long maxTimeInMilliseconds) {
-
-		this.maxSimulations = maxSimulations != null ? maxSimulations
-				: Long.MAX_VALUE;
-		this.maxTimeInMilliseconds = maxTimeInMilliseconds != null
-				? maxTimeInMilliseconds : Long.MAX_VALUE;
+	GameSimulator2() {
 
 		for (GameType gameType : GameType.values()) {
 			gameSimulations.put(gameType, new ArrayList<GameSimulation>());
@@ -60,15 +53,24 @@ class GameSimulator2 {
 		gameSimulations.get(gameSimulation.getGameType()).add(gameSimulation);
 	}
 
-	GameSimulation simulate(List<GameType> possibleGameTypes) {
-		long simulationCount = 0L;
-		long startTimeInMilliseconds = System.currentTimeMillis();
-		while (simulationCount < maxSimulations && System.currentTimeMillis()
-				- startTimeInMilliseconds < maxTimeInMilliseconds) {
-			GameSimulation simulation = getNextSimulation(possibleGameTypes);
+	GameSimulation simulateMaxEpisodes(long maxEpisodes) {
+		long episodes = 0L;
+		while (episodes < maxEpisodes) {
+			GameSimulation simulation = getNextSimulation();
 			simulation.simulateGame(
 					getTrainingTableName(simulation.getGameType()));
-			simulationCount++;
+			episodes++;
+		}
+
+		return getBestGameSimulation();
+	}
+
+	GameSimulation simulateMaxTime(long maxTimeInMilliseconds) {
+		long endTime = System.currentTimeMillis() + maxTimeInMilliseconds;
+		while (System.currentTimeMillis() <= endTime) {
+			GameSimulation simulation = getNextSimulation();
+			simulation.simulateGame(
+					getTrainingTableName(simulation.getGameType()));
 		}
 
 		return getBestGameSimulation();
@@ -88,12 +90,12 @@ class GameSimulator2 {
 		return bestSimulation;
 	}
 
-	private GameSimulation getNextSimulation(List<GameType> possibleGameTypes) {
+	private GameSimulation getNextSimulation() {
 		List<GameSimulation> bestSimulations = new ArrayList<>();
 		double maxWonRate = Double.NEGATIVE_INFINITY;
-		for (GameType gameType : possibleGameTypes) {
+		for (GameType gameType : GameType.values()) {
 			for (GameSimulation simulation : gameSimulations.get(gameType)) {
-				if (simulation.getSimulatedGames() == 0L) {
+				if (simulation.getEpisodes() == 0L) {
 					// simulation has never been run --> return immediately
 					return simulation;
 				}
@@ -111,8 +113,8 @@ class GameSimulator2 {
 		Long minSimulationCount = Long.MAX_VALUE;
 		GameSimulation result = null;
 		for (GameSimulation simulation : bestSimulations) {
-			if (simulation.getSimulatedGames() < minSimulationCount) {
-				minSimulationCount = simulation.getSimulatedGames();
+			if (simulation.getEpisodes() < minSimulationCount) {
+				minSimulationCount = simulation.getEpisodes();
 				result = simulation;
 			}
 		}

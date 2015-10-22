@@ -57,7 +57,7 @@ public class GameSimulationTest extends AbstractJSkatTest {
 				new CardList(Card.D7, Card.D8));
 		for (long i = 0; i < 10; i++) {
 			simulation.simulateGame(TABLE_NAME);
-			assertThat(simulation.getSimulatedGames(), is(i + 1));
+			assertThat(simulation.getEpisodes(), is(i + 1));
 			assertThat(simulation.getWonGames(), is(i + 1));
 			assertThat(simulation.getWonRate(), is(1.0));
 			assertThat(simulation.getWonGamesWithSchneider(), is(i + 1));
@@ -74,10 +74,10 @@ public class GameSimulationTest extends AbstractJSkatTest {
 				CardList.getRandomCards(2));
 		for (long i = 0; i < 10; i++) {
 			simulation.simulateGame(TABLE_NAME);
-			assertThat(simulation.getSimulatedGames(), is(i + 1));
+			assertThat(simulation.getEpisodes(), is(i + 1));
 			assertThat(simulation.getWonRate(),
 					is(((double) simulation.getWonGames())
-							/ ((double) simulation.getSimulatedGames())));
+							/ ((double) simulation.getEpisodes())));
 		}
 	}
 
@@ -87,10 +87,10 @@ public class GameSimulationTest extends AbstractJSkatTest {
 				getRandomPlayer(), CardList.getRandomCards(10));
 		for (long i = 0; i < 10; i++) {
 			simulation.simulateGame(TABLE_NAME);
-			assertThat(simulation.getSimulatedGames(), is(i + 1));
+			assertThat(simulation.getEpisodes(), is(i + 1));
 			assertThat(simulation.getWonRate(),
 					is(((double) simulation.getWonGames())
-							/ ((double) simulation.getSimulatedGames())));
+							/ ((double) simulation.getEpisodes())));
 		}
 	}
 
@@ -101,10 +101,10 @@ public class GameSimulationTest extends AbstractJSkatTest {
 				CardList.getRandomCards(2));
 		for (long i = 0; i < 10; i++) {
 			simulation.simulateGame(TABLE_NAME);
-			assertThat(simulation.getSimulatedGames(), is(i + 1));
+			assertThat(simulation.getEpisodes(), is(i + 1));
 			assertThat(simulation.getWonRate(),
 					is(((double) simulation.getWonGames())
-							/ ((double) simulation.getSimulatedGames())));
+							/ ((double) simulation.getEpisodes())));
 		}
 	}
 
@@ -115,10 +115,10 @@ public class GameSimulationTest extends AbstractJSkatTest {
 				CardList.getRandomCards(2));
 		for (long i = 0; i < 10; i++) {
 			simulation.simulateGame(TABLE_NAME);
-			assertThat(simulation.getSimulatedGames(), is(i + 1));
+			assertThat(simulation.getEpisodes(), is(i + 1));
 			assertThat(simulation.getWonRate(),
 					is(((double) simulation.getWonGames())
-							/ ((double) simulation.getSimulatedGames())));
+							/ ((double) simulation.getEpisodes())));
 		}
 	}
 
@@ -129,10 +129,10 @@ public class GameSimulationTest extends AbstractJSkatTest {
 				CardList.getRandomCards(2));
 		for (long i = 0; i < 10; i++) {
 			simulation.simulateGame(TABLE_NAME);
-			assertThat(simulation.getSimulatedGames(), is(i + 1));
+			assertThat(simulation.getEpisodes(), is(i + 1));
 			assertThat(simulation.getWonRate(),
 					is(((double) simulation.getWonGames())
-							/ ((double) simulation.getSimulatedGames())));
+							/ ((double) simulation.getEpisodes())));
 		}
 	}
 
@@ -143,13 +143,13 @@ public class GameSimulationTest extends AbstractJSkatTest {
 				CardList.getRandomCards(2));
 		GameSimulation.Statistics statistics = simulation.new Statistics();
 
-		assertThat(statistics.getSimulatedGames(), is(0L));
+		assertThat(statistics.getEpisodes(), is(0L));
 		assertThat(statistics.getWonGames(), is(0L));
 
 		SkatGameResult gameResult = new SkatGameResult();
 		statistics.adjust(gameResult);
 
-		assertThat(statistics.getSimulatedGames(), is(1L));
+		assertThat(statistics.getEpisodes(), is(1L));
 		assertThat(statistics.getWonGames(), is(0L));
 		assertThat(statistics.getWonRate(), is(0.0));
 		assertThat(statistics.getWonGamesWithSchneider(), is(0L));
@@ -160,7 +160,7 @@ public class GameSimulationTest extends AbstractJSkatTest {
 		gameResult.setWon(true);
 		statistics.adjust(gameResult);
 
-		assertThat(statistics.getSimulatedGames(), is(2L));
+		assertThat(statistics.getEpisodes(), is(2L));
 		assertThat(statistics.getWonGames(), is(1L));
 		assertThat(statistics.getWonRate(), is(0.5));
 		assertThat(statistics.getWonGamesWithSchneider(), is(0L));
@@ -171,7 +171,7 @@ public class GameSimulationTest extends AbstractJSkatTest {
 		gameResult.setSchneider(true);
 		statistics.adjust(gameResult);
 
-		assertThat(statistics.getSimulatedGames(), is(3L));
+		assertThat(statistics.getEpisodes(), is(3L));
 		assertThat(statistics.getWonGames(), is(2L));
 		assertThat(statistics.getWonRate(), is(2.0 / 3.0));
 		assertThat(statistics.getWonGamesWithSchneider(), is(1L));
@@ -182,7 +182,7 @@ public class GameSimulationTest extends AbstractJSkatTest {
 		gameResult.setSchwarz(true);
 		statistics.adjust(gameResult);
 
-		assertThat(statistics.getSimulatedGames(), is(4L));
+		assertThat(statistics.getEpisodes(), is(4L));
 		assertThat(statistics.getWonGames(), is(3L));
 		assertThat(statistics.getWonRate(), is(0.75));
 		assertThat(statistics.getWonGamesWithSchneider(), is(2L));
