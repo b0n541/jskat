@@ -24,6 +24,7 @@ import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class GameSimulator2Test extends AbstractJSkatTest {
 
@@ -67,5 +68,34 @@ public class GameSimulator2Test extends AbstractJSkatTest {
 
 		assertThat(bestSimulation.getEpisodes(), is(20L));
 		assertThat(bestSimulation.getWonGames(), is(20L));
+	}
+
+	@Test
+	public void testSimulationSelection() {
+
+		GameSimulator2 gameSimulator = new GameSimulator2();
+
+		GameSimulation nullSimulation = Mockito.mock(GameSimulation.class);
+		Mockito.when(nullSimulation.getGameType()).thenReturn(GameType.NULL);
+		GameSimulation grandSimulation = Mockito.mock(GameSimulation.class);
+		Mockito.when(grandSimulation.getGameType()).thenReturn(GameType.GRAND);
+
+		gameSimulator.add(nullSimulation);
+		gameSimulator.add(grandSimulation);
+
+		Mockito.when(nullSimulation.getEpisodes()).thenReturn(0L);
+		Mockito.when(nullSimulation.getWonRate()).thenReturn(0.0);
+
+		Mockito.when(grandSimulation.getEpisodes()).thenReturn(0L);
+		Mockito.when(grandSimulation.getWonRate()).thenReturn(0.0);
+
+		GameSimulation bestSimulation = gameSimulator.simulateMaxEpisodes(1L);
+
+		Mockito.when(nullSimulation.getWonRate()).thenReturn(0.9);
+		Mockito.when(grandSimulation.getWonRate()).thenReturn(0.1);
+
+		bestSimulation = gameSimulator.simulateMaxEpisodes(1L);
+
+		assertThat(bestSimulation.getGameType(), is(GameType.NULL));
 	}
 }
