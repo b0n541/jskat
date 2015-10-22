@@ -47,7 +47,10 @@ import org.slf4j.LoggerFactory;
  */
 public class AIPlayerNN extends AbstractAIPlayer {
 
-	private final static Long MAX_SIMULATIONS = 41L;
+	private final static Long MAX_SIMULATIONS_DISCARDING = 1000L;
+	private final static Long MAX_TIME_DISCARDING = 5000L;
+	private final static Long MAX_SIMULATIONS_BIDDING = 500L;
+	private final static Long MAX_SIMULATIONS_HAND_GAME = 500L;
 	private final static Double MIN_WON_RATE_FOR_BIDDING = 0.6;
 	private final static Double MIN_WON_RATE_FOR_DISCARDING = 0.75;
 	private final static Double MIN_WON_RATE_FOR_HAND_GAME = 0.95;
@@ -81,7 +84,6 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 	private final DecimalFormat formatter = new DecimalFormat(
 			"0.00000000000000000"); //$NON-NLS-1$
-	private final GameSimulator gameSimulator;
 	private final GameSimulator2 gameSimulator2;
 
 	private final NetworkInputGenerator inputGenerator;
@@ -121,7 +123,6 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		}
 
 		inputGenerator = new GenericNetworkInputGenerator();
-		gameSimulator = new GameSimulator();
 		gameSimulator2 = new GameSimulator2();
 
 		for (GameType gameType : GameType.values()) {
@@ -146,11 +147,9 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		if (bestGameTypeFromDiscarding != null) {
 			// use game type from discarding
 			factory.setGameType(bestGameTypeFromDiscarding);
-		} else {
-			// no discarding done
-			factory.setGameType(getBestGameType());
-			factory.setHand(Boolean.TRUE);
 		}
+
+		factory.setHand(knowledge.isHandGame());
 
 		// FIXME (jan 17.01.2011) setting ouvert and schneider/schwarz
 		// newGame.setOuvert(rand.nextBoolean());
@@ -238,6 +237,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		}
 
 		GameSimulation bestSimulation = gameSimulator2.simulateMaxEpisodes(1000L);
+		bestGameTypeFromDiscarding = bestSimulation.getGameType();
 
 		return bestSimulation.getSkatCards();
 	}
@@ -268,23 +268,23 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	 */
 	@Override
 	public Boolean pickUpSkat() {
-		boolean result = true;
+
+		gameSimulator2.reset();
 
 		List<GameType> filteredGameTypes = filterFeasibleGameTypes(knowledge
 				.getHighestBid(knowledge.getPlayerPosition()).intValue());
-
-		gameSimulator.resetGameSimulator(filteredGameTypes,
-				knowledge.getPlayerPosition(), knowledge.getOwnCards());
-		SimulationResults results = gameSimulator
-				.simulateMaxEpisodes(MAX_SIMULATIONS);
-
-		for (Double wonRate : results.getAllWonRates()) {
-			if (wonRate.doubleValue() >= MIN_WON_RATE_FOR_HAND_GAME) {
-				result = false;
-			}
+		for (GameType gameType : filteredGameTypes) {
+			gameSimulator2.add(new GameSimulation(gameType, knowledge.getPlayerPosition(), knowledge.getOwnCards()));
 		}
 
-		return result;
+		GameSimulation bestSimulation = gameSimulator2.simulateMaxEpisodes(MAX_SIMULATIONS_HAND_GAME);
+
+		if (bestSimulation.getWonRate() >= MIN_WON_RATE_FOR_HAND_GAME) {
+			bestGameTypeFromDiscarding = bestSimulation.getGameType();
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -479,41 +479,6 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		return result;
 	}
 
-	private GameType getBestGameType() {
-		// FIXME (jan 18.01.2011) check for overbidding!
-		GameType bestGameType = null;
-		double highestWonRate = 0.0;
-
-		List<GameType> gameTypesToCheck = filterFeasibleGameTypes(knowledge
-				.getHighestBid(knowledge.getPlayerPosition()));
-		gameSimulator.resetGameSimulator(gameTypesToCheck,
-				knowledge.getPlayerPosition(), knowledge.getOwnCards());
-		SimulationResults results = gameSimulator
-				.simulateMaxEpisodes(MAX_SIMULATIONS);
-
-		for (GameType gameType : gameTypesToCheck) {
-
-			Double wonRate = results.getWonRate(gameType);
-
-			if (wonRate.doubleValue() > highestWonRate) {
-
-				log.debug("Found new highest number of won games " //$NON-NLS-1$
-						+ wonRate + " for game type " + gameType); //$NON-NLS-1$
-
-				highestWonRate = wonRate;
-				bestGameType = gameType;
-			}
-		}
-
-		if (bestGameType == null) {
-			// FIXME (jansch 21.09.2011) find cheapest game
-			log.error("No best game type found. Announcing null!!!"); //$NON-NLS-1$
-			bestGameType = GameType.NULL;
-		}
-
-		return bestGameType;
-	}
-
 	private SkatGameData getGameDataForWonGame() {
 		SkatGameData data = new SkatGameData();
 
@@ -539,20 +504,23 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	}
 
 	private boolean isAnyGamePossible(final int bidValue) {
+
 		List<GameType> filteredGameTypes = filterFeasibleGameTypes(bidValue);
 
 		log.warn("Game simulation on bidding: bid value " + bidValue);
 
-		gameSimulator.resetGameSimulator(filteredGameTypes,
-				knowledge.getPlayerPosition(), knowledge.getOwnCards());
-		SimulationResults results = gameSimulator
-				.simulateMaxEpisodes(MAX_SIMULATIONS);
+		gameSimulator2.reset();
 
-		for (Double wonRate : results.getAllWonRates()) {
-			if (wonRate.doubleValue() >= MIN_WON_RATE_FOR_BIDDING) {
-				return true;
-			}
+		for (GameType gameType : filteredGameTypes) {
+			gameSimulator2.add(new GameSimulation(gameType, knowledge.getPlayerPosition(), knowledge.getOwnCards()));
 		}
+
+		GameSimulation bestSimulation = gameSimulator2.simulateMaxEpisodes(MAX_SIMULATIONS_BIDDING);
+
+		if (bestSimulation.getWonRate() >= MIN_WON_RATE_FOR_BIDDING) {
+			return true;
+		}
+
 		return false;
 	}
 
