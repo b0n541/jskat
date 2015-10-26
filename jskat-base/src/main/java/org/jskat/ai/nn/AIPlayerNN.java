@@ -236,6 +236,10 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		GameSimulation bestSimulation = gameSimulator2.simulateMaxEpisodes(1000L);
 		bestGameTypeFromDiscarding = bestSimulation.getGameType();
 
+		log.warn("Simulated " + bestSimulation.getEpisodes()
+				+ " episodes with highest won rate of "
+				+ bestSimulation.getWonRate());
+
 		return bestSimulation.getSkatCards();
 	}
 
@@ -266,6 +270,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	@Override
 	public Boolean pickUpSkat() {
 
+		log.warn("Check hand game or pick up skat...");
+
 		gameSimulator2.reset();
 
 		List<GameType> filteredGameTypes = filterFeasibleGameTypes(knowledge
@@ -275,6 +281,10 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		}
 
 		GameSimulation bestSimulation = gameSimulator2.simulateMaxEpisodes(MAX_SIMULATIONS_HAND_GAME);
+
+		log.warn("Simulated " + bestSimulation.getEpisodes()
+				+ " episodes with best won rate of "
+				+ bestSimulation.getWonRate());
 
 		if (bestSimulation.getWonRate() >= MIN_WON_RATE_FOR_HAND_GAME) {
 			bestGameTypeFromDiscarding = bestSimulation.getGameType();
@@ -513,6 +523,10 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		}
 
 		GameSimulation bestSimulation = gameSimulator2.simulateMaxEpisodes(MAX_SIMULATIONS_BIDDING);
+
+		log.warn("Simulated " + bestSimulation.getEpisodes()
+				+ " episodes with highest won rate of "
+				+ bestSimulation.getWonRate());
 
 		if (bestSimulation.getWonRate() >= MIN_WON_RATE_FOR_BIDDING) {
 			return true;
