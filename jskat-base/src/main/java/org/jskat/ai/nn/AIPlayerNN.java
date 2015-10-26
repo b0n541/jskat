@@ -40,7 +40,6 @@ import org.jskat.util.Player;
 import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * JSkat player using neural network
@@ -79,8 +78,6 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 		return ramschGameWon;
 	}
-
-	private Logger log = LoggerFactory.getLogger(AIPlayerNN.class);
 
 	private final DecimalFormat formatter = new DecimalFormat(
 			"0.00000000000000000"); //$NON-NLS-1$

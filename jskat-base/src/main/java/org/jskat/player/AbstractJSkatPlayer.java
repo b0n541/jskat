@@ -32,14 +32,14 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
-	private Logger log = LoggerFactory.getLogger(AbstractJSkatPlayer.class);
+	protected Logger log = LoggerFactory.getLogger(AbstractJSkatPlayer.class);
 
 	/** Player name */
 	protected String playerName;
 	/** Player state */
 	protected JSkatPlayer.PlayerState playerState;
 	/** Internal player knowledge */
-	private PlayerKnowledge internalKnowledge = new PlayerKnowledge();
+	private final PlayerKnowledge internalKnowledge = new PlayerKnowledge();
 	/** Immutable Player knowledge */
 	protected ImmutablePlayerKnowledge knowledge = internalKnowledge;
 	/** Skat rules for the current skat series */
