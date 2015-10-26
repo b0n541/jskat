@@ -238,7 +238,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 		log.warn("Simulated " + bestSimulation.getEpisodes()
 				+ " episodes with highest won rate of "
-				+ bestSimulation.getWonRate());
+				+ bestSimulation.getWonRate() + " discarded cards "
+				+ bestSimulation.getSkatCards());
 
 		return bestSimulation.getSkatCards();
 	}
