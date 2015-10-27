@@ -59,8 +59,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	public final static Double EPSILON = 0.05;
 
 	// FIXME (jan 10.03.2012) code duplication with NNTrainer
-	private static boolean isRamschGameWon(final GameSummary gameSummary,
-			final Player currPlayer) {
+	private static boolean isRamschGameWon(final GameSummary gameSummary, final Player currPlayer) {
 		boolean ramschGameWon = false;
 		int playerPoints = gameSummary.getPlayerPoints(currPlayer);
 		int highestPlayerPoints = 0;
@@ -79,8 +78,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		return ramschGameWon;
 	}
 
-	private final DecimalFormat formatter = new DecimalFormat(
-			"0.00000000000000000"); //$NON-NLS-1$
+	private final DecimalFormat formatter = new DecimalFormat("0.00000000000000000"); //$NON-NLS-1$
 	private final GameSimulator2 gameSimulator2;
 
 	private final NetworkInputGenerator inputGenerator;
@@ -207,8 +205,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 		log.debug("Player cards before discarding: " + knowledge.getOwnCards()); //$NON-NLS-1$
 
-		List<GameType> filteredGameTypes = filterFeasibleGameTypes(knowledge
-				.getHighestBid(knowledge.getPlayerPosition()).intValue());
+		List<GameType> filteredGameTypes = filterFeasibleGameTypes(
+				knowledge.getHighestBid(knowledge.getPlayerPosition()).intValue());
 
 		gameSimulator2.reset();
 
@@ -219,8 +217,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 				simCount++;
 				CardList simCards = new CardList(cards);
 
-				CardList currSkat = new CardList(simCards.get(i),
-						simCards.get(j));
+				CardList currSkat = new CardList(simCards.get(i), simCards.get(j));
 
 				simCards.removeAll(currSkat);
 
@@ -236,10 +233,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		GameSimulation bestSimulation = gameSimulator2.simulateMaxEpisodes(1000L);
 		bestGameTypeFromDiscarding = bestSimulation.getGameType();
 
-		log.warn("Simulated " + bestSimulation.getEpisodes()
-				+ " episodes with highest won rate of "
-				+ bestSimulation.getWonRate() + " discarded cards "
-				+ bestSimulation.getSkatCards());
+		log.warn("Simulated " + bestSimulation.getEpisodes() + " episodes with highest won rate of "
+				+ bestSimulation.getWonRate() + " discarded cards " + bestSimulation.getSkatCards());
 
 		return bestSimulation.getSkatCards();
 	}
@@ -275,23 +270,24 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 		gameSimulator2.reset();
 
-		List<GameType> filteredGameTypes = filterFeasibleGameTypes(knowledge
-				.getHighestBid(knowledge.getPlayerPosition()).intValue());
+		List<GameType> filteredGameTypes = filterFeasibleGameTypes(
+				knowledge.getHighestBid(knowledge.getPlayerPosition()).intValue());
 		for (GameType gameType : filteredGameTypes) {
 			gameSimulator2.add(new GameSimulation(gameType, knowledge.getPlayerPosition(), knowledge.getOwnCards()));
 		}
 
 		GameSimulation bestSimulation = gameSimulator2.simulateMaxEpisodes(MAX_SIMULATIONS_HAND_GAME);
 
-		log.warn("Simulated " + bestSimulation.getEpisodes()
-				+ " episodes with best won rate of "
+		log.warn("Simulated " + bestSimulation.getEpisodes() + " episodes with best won rate of "
 				+ bestSimulation.getWonRate());
 
 		if (bestSimulation.getWonRate() >= MIN_WON_RATE_FOR_HAND_GAME) {
+			log.warn("Min won rate reached. Playing hand...");
 			bestGameTypeFromDiscarding = bestSimulation.getGameType();
 			return false;
 		}
 
+		log.warn("Min won rate not reached. Picking up skat...");
 		return true;
 	}
 
@@ -312,9 +308,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 		Map<Card, double[]> cardInputs = new HashMap<Card, double[]>();
 
-		INeuralNetwork net = SkatNetworks.getNetwork(knowledge
-				.getGameAnnouncement().getGameType(), isDeclarer(), knowledge
-						.getCurrentTrick().getTrickNumberInGame());
+		INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGameAnnouncement().getGameType(), isDeclarer(),
+				knowledge.getCurrentTrick().getTrickNumberInGame());
 
 		CardList bestCards = new CardList();
 		CardList highestOutputCards = new CardList();
@@ -332,15 +327,12 @@ public class AIPlayerNN extends AbstractAIPlayer {
 			if (currOutput > (IDEAL_WON - EPSILON)) {
 				bestCards.add(card);
 			}
-			if (currOutput > highestOutput
-					&& !formatter.format(currOutput).equals(
-							formatter.format(highestOutput))) {
+			if (currOutput > highestOutput && !formatter.format(currOutput).equals(formatter.format(highestOutput))) {
 				highestOutput = currOutput;
 				highestOutputCards.clear();
 				highestOutputCards.add(card);
 			} else if (currOutput == highestOutput
-					|| formatter.format(currOutput).equals(
-							formatter.format(highestOutput))) {
+					|| formatter.format(currOutput).equals(formatter.format(highestOutput))) {
 				highestOutputCards.add(card);
 			}
 		}
@@ -350,16 +342,14 @@ public class AIPlayerNN extends AbstractAIPlayer {
 			bestCardIndex = chooseRandomCard(possibleCards, bestCards);
 			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) //$NON-NLS-1$
 					+ ": Found best cards. Choosing random from " //$NON-NLS-1$
-					+ bestCards.size()
-					+ " out of " + possibleCards.size() + ": " //$NON-NLS-1$ //$NON-NLS-2$
+					+ bestCards.size() + " out of " + possibleCards.size() + ": " //$NON-NLS-1$ //$NON-NLS-2$
 					+ possibleCards.get(bestCardIndex));
 		} else {
 			// no best card, get card with best output
 			bestCardIndex = chooseRandomCard(possibleCards, highestOutputCards);
 			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) //$NON-NLS-1$
 					+ ": Found no best cards. Choosing card from " //$NON-NLS-1$
-					+ highestOutputCards.size() + " out of "
-					+ possibleCards.size() + " with highest output: "
+					+ highestOutputCards.size() + " out of " + possibleCards.size() + " with highest output: "
 					+ possibleCards.get(bestCardIndex));
 			// no best card, get random card out of all cards
 			// bestCardIndex = chooseRandomCard(possibleCards, possibleCards);
@@ -415,8 +405,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		double output = 0.0d;
 		if (!GameType.PASSED_IN.equals(knowledge.getGameType())) {
 			if (GameType.RAMSCH.equals(knowledge.getGameType())) {
-				if (isRamschGameWon(gameSummary,
-						knowledge.getPlayerPosition())) {
+				if (isRamschGameWon(gameSummary, knowledge.getPlayerPosition())) {
 					output = IDEAL_WON;
 				} else {
 					output = IDEAL_LOST;
@@ -440,9 +429,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 			int index = 0;
 			for (double[] inputParam : inputs) {
-				INeuralNetwork net = SkatNetworks.getNetwork(knowledge
-						.getGameAnnouncement().getGameType(), isDeclarer(),
-						index);
+				INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGameAnnouncement().getGameType(),
+						isDeclarer(), index);
 
 				double networkError = net.adjustWeights(inputParam, outputs);
 				log.warn("learning error: " + networkError);
@@ -454,8 +442,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		}
 	}
 
-	private int chooseRandomCard(final CardList possibleCards,
-			final CardList goodCards) {
+	private int chooseRandomCard(final CardList possibleCards, final CardList goodCards) {
 		int bestCardIndex;
 		Card choosenCard = goodCards.get(RANDOM.nextInt(goodCards.size()));
 		bestCardIndex = possibleCards.indexOf(choosenCard);
@@ -525,13 +512,15 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 		GameSimulation bestSimulation = gameSimulator2.simulateMaxEpisodes(MAX_SIMULATIONS_BIDDING);
 
-		log.warn("Simulated " + bestSimulation.getEpisodes()
-				+ " episodes with highest won rate of "
+		log.warn("Simulated " + bestSimulation.getEpisodes() + " episodes with highest won rate of "
 				+ bestSimulation.getWonRate());
 
 		if (bestSimulation.getWonRate() >= MIN_WON_RATE_FOR_BIDDING) {
+			log.warn("Min won rate reached. Bidding...");
 			return true;
 		}
+
+		log.warn("Min won rate not reached. Passing...");
 
 		return false;
 	}
