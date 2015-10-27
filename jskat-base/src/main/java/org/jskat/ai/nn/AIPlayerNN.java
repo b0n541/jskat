@@ -48,7 +48,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 	private final static Long MAX_SIMULATIONS_DISCARDING = 1000L;
 	private final static Long MAX_TIME_DISCARDING = 5000L;
-	private final static Long MAX_SIMULATIONS_BIDDING = 500L;
+	private final static Long MAX_SIMULATIONS_BIDDING = 10L;
 	private final static Long MAX_SIMULATIONS_HAND_GAME = 500L;
 	private final static Double MIN_WON_RATE_FOR_BIDDING = 0.6;
 	private final static Double MIN_WON_RATE_FOR_DISCARDING = 0.75;
@@ -503,6 +503,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		List<GameType> filteredGameTypes = filterFeasibleGameTypes(bidValue);
 
 		log.warn("Game simulation on bidding: bid value " + bidValue);
+		log.warn("Player position: " + knowledge.getPlayerPosition() + " cards: " + knowledge.getOwnCards());
 
 		gameSimulator2.reset();
 

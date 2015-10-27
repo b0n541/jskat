@@ -339,11 +339,11 @@ public class SkatGame extends JSkatThread {
 
 		doSleep(this.maxSleep);
 
-		this.log.debug("Fore hand: " + this.data.getPlayerCards(Player.FOREHAND)); //$NON-NLS-1$
-		this.log.debug("Middle hand: " //$NON-NLS-1$
+		this.log.warn("Fore hand: " + this.data.getPlayerCards(Player.FOREHAND)); //$NON-NLS-1$
+		this.log.warn("Middle hand: " //$NON-NLS-1$
 				+ this.data.getPlayerCards(Player.MIDDLEHAND));
-		this.log.debug("Rear hand: " + this.data.getPlayerCards(Player.REARHAND)); //$NON-NLS-1$
-		this.log.debug("Skat: " + this.data.getSkat()); //$NON-NLS-1$
+		this.log.warn("Rear hand: " + this.data.getPlayerCards(Player.REARHAND)); //$NON-NLS-1$
+		this.log.warn("Skat: " + this.data.getSkat()); //$NON-NLS-1$
 	}
 
 	/**
@@ -904,8 +904,8 @@ public class SkatGame extends JSkatThread {
 			this.log.error("Player (" + skatPlayer + ") is fooling!!! Doesn't have card " + playedCard + "!"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 			isSchwarz = true;
 
-		} else
-			if (!rules.isCardAllowed(data.getGameType(), firstTrickCard, data.getPlayerCards(position), playedCard)) {
+		} else if (!rules.isCardAllowed(data.getGameType(), firstTrickCard, data.getPlayerCards(position),
+				playedCard)) {
 
 			this.log.error(
 					"Player " + skatPlayer.getClass().toString() + " card not allowed: " + playedCard + " game type: " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -988,7 +988,7 @@ public class SkatGame extends JSkatThread {
 	 *
 	 * @param newView
 	 *            View
-	 * 
+	 *
 	 * @deprecated don't rely on setting a view anymore as we want to use event
 	 *             busses now.
 	 */

@@ -33,8 +33,7 @@ import org.slf4j.helpers.NOPLogger;
 
 class GameSimulation {
 
-	private final static Logger LOG = LoggerFactory
-			.getLogger(GameSimulation.class);
+	private final static Logger LOG = LoggerFactory.getLogger(GameSimulation.class);
 
 	private final GameType gameType;
 	private final Player playerPosition;
@@ -47,14 +46,12 @@ class GameSimulation {
 	private final JSkatPlayer player2;
 	private final JSkatPlayer player3;
 
-	GameSimulation(GameType gameType, Player playerPosition,
-			CardList playerCards) {
+	GameSimulation(GameType gameType, Player playerPosition, CardList playerCards) {
 
 		this(gameType, playerPosition, playerCards, new CardList());
 	}
 
-	GameSimulation(GameType gameType, Player playerPosition,
-			CardList playerCards, CardList skatCards) {
+	GameSimulation(GameType gameType, Player playerPosition, CardList playerCards, CardList skatCards) {
 
 		this.gameType = gameType;
 		this.playerPosition = playerPosition;
@@ -68,14 +65,12 @@ class GameSimulation {
 
 	SkatGameResult simulateGame(String tableName) {
 
-		SkatGame game = new SkatGame(tableName, GameVariant.STANDARD, player1,
-				player2, player3);
+		SkatGame game = new SkatGame(tableName, GameVariant.STANDARD, player1, player2, player3);
 		game.setView(new NullView());
 		game.setLogger(NOPLogger.NOP_LOGGER);
 
-		CardDeck deck = CardDeckSimulator.simulateUnknownCards(playerPosition,
-				playerCards, skatCards);
-		LOG.debug("Card deck: " + deck); //$NON-NLS-1$
+		CardDeck deck = CardDeckSimulator.simulateUnknownCards(playerPosition, playerCards, skatCards);
+		LOG.warn("Simulated card deck: " + deck); //$NON-NLS-1$
 		game.setCardDeck(deck);
 		game.dealCards();
 

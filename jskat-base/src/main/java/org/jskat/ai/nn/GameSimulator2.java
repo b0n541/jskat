@@ -24,8 +24,12 @@ import org.jskat.control.JSkatEventBus;
 import org.jskat.control.command.table.CreateTableCommand;
 import org.jskat.data.JSkatViewType;
 import org.jskat.util.GameType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class GameSimulator2 {
+
+	private final static Logger LOG = LoggerFactory.getLogger(GameSimulator2.class);
 
 	private final Map<GameType, List<GameSimulation>> gameSimulations = new HashMap<>();
 
@@ -34,8 +38,7 @@ class GameSimulator2 {
 		for (GameType gameType : GameType.values()) {
 			gameSimulations.put(gameType, new ArrayList<GameSimulation>());
 			JSkatEventBus.INSTANCE
-					.post(new CreateTableCommand(JSkatViewType.TRAINING_TABLE,
-							getTrainingTableName(gameType)));
+					.post(new CreateTableCommand(JSkatViewType.TRAINING_TABLE, getTrainingTableName(gameType)));
 		}
 	}
 
@@ -57,8 +60,8 @@ class GameSimulator2 {
 		long episodes = 0L;
 		while (episodes < maxEpisodes) {
 			GameSimulation simulation = getNextSimulation();
-			simulation.simulateGame(
-					getTrainingTableName(simulation.getGameType()));
+			LOG.warn("Simulating " + simulation.getGameType() + " game. Current won rate: " + simulation.getWonRate());
+			simulation.simulateGame(getTrainingTableName(simulation.getGameType()));
 			episodes++;
 		}
 
@@ -69,8 +72,7 @@ class GameSimulator2 {
 		long endTime = System.currentTimeMillis() + maxTimeInMilliseconds;
 		while (System.currentTimeMillis() <= endTime) {
 			GameSimulation simulation = getNextSimulation();
-			simulation.simulateGame(
-					getTrainingTableName(simulation.getGameType()));
+			simulation.simulateGame(getTrainingTableName(simulation.getGameType()));
 		}
 
 		return getBestGameSimulation();
