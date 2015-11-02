@@ -70,7 +70,7 @@ class GameSimulation {
 		game.setLogger(NOPLogger.NOP_LOGGER);
 
 		CardDeck deck = CardDeckSimulator.simulateUnknownCards(playerPosition, playerCards, skatCards);
-		LOG.warn("Simulated card deck: " + deck); //$NON-NLS-1$
+		LOG.debug("Simulated card deck: " + deck); //$NON-NLS-1$
 		game.setCardDeck(deck);
 		game.dealCards();
 

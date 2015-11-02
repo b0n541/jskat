@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.command.table.CreateTableCommand;
@@ -30,7 +31,11 @@ import org.slf4j.LoggerFactory;
 class GameSimulator2 {
 
 	private final static Logger LOG = LoggerFactory.getLogger(GameSimulator2.class);
-
+	
+	private final static Random RANDOM = new Random();
+	
+	private final static Double EXPLORATION_RATE = 0.2;
+	
 	private final Map<GameType, List<GameSimulation>> gameSimulations = new HashMap<>();
 
 	GameSimulator2() {
@@ -60,7 +65,9 @@ class GameSimulator2 {
 		long episodes = 0L;
 		while (episodes < maxEpisodes) {
 			GameSimulation simulation = getNextSimulation();
-			LOG.warn("Simulating " + simulation.getGameType() + " game. Current won rate: " + simulation.getWonRate());
+			LOG.debug("Simulating " + simulation.getGameType()
+					+ " game. Current won rate: " + simulation.getWonRate()
+					+ " in " + simulation.getEpisodes() + " episodes.");
 			simulation.simulateGame(getTrainingTableName(simulation.getGameType()));
 			episodes++;
 		}
@@ -68,10 +75,20 @@ class GameSimulator2 {
 		return getBestGameSimulation();
 	}
 
+	GameSimulation getNextSimulation() {
+		if (RANDOM.nextDouble() > EXPLORATION_RATE) {
+			return getNextSimulationByWonRate();
+		}
+		return getNextSimulationByExploring();
+	}
+
 	GameSimulation simulateMaxTime(long maxTimeInMilliseconds) {
 		long endTime = System.currentTimeMillis() + maxTimeInMilliseconds;
 		while (System.currentTimeMillis() <= endTime) {
 			GameSimulation simulation = getNextSimulation();
+			LOG.warn("Simulating " + simulation.getGameType()
+					+ " game. Current won rate: " + simulation.getWonRate()
+					+ " in " + simulation.getEpisodes() + " episodes.");
 			simulation.simulateGame(getTrainingTableName(simulation.getGameType()));
 		}
 
@@ -89,11 +106,17 @@ class GameSimulator2 {
 				}
 			}
 		}
+
+		LOG.warn("Best game simulation " + bestSimulation.getGameType()
+				+ " after " + bestSimulation.getEpisodes()
+				+ " episodes with won rate " + bestSimulation.getWonRate());
+
 		return bestSimulation;
 	}
 
-	GameSimulation getNextSimulation() {
+	GameSimulation getNextSimulationByWonRate() {
 		List<GameSimulation> bestSimulations = new ArrayList<>();
+
 		double maxWonRate = Double.NEGATIVE_INFINITY;
 		for (GameType gameType : GameType.values()) {
 			for (GameSimulation simulation : gameSimulations.get(gameType)) {
@@ -121,5 +144,29 @@ class GameSimulator2 {
 			}
 		}
 		return result;
+	}
+
+	GameSimulation getNextSimulationByExploring() {
+		List<GameSimulation> bestSimulations = new ArrayList<>();
+
+		long minEpisodes = Long.MAX_VALUE;
+		for (GameType gameType : GameType.values()) {
+			for (GameSimulation simulation : gameSimulations.get(gameType)) {
+				if (simulation.getEpisodes() == 0L) {
+					// simulation has never been run --> return immediately
+					return simulation;
+				}
+				if (simulation.getEpisodes() <= minEpisodes) {
+					if (simulation.getEpisodes() < minEpisodes) {
+						// prefer fewer episodes
+						minEpisodes = simulation.getEpisodes();
+						bestSimulations.clear();
+					}
+					bestSimulations.add(simulation);
+				}
+			}
+		}
+
+		return bestSimulations.get(RANDOM.nextInt(bestSimulations.size()));
 	}
 }

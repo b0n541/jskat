@@ -46,16 +46,16 @@ import org.slf4j.Logger;
  */
 public class AIPlayerNN extends AbstractAIPlayer {
 
-	private final static Long MAX_SIMULATIONS_DISCARDING = 1000L;
+	private final static Long MAX_SIMULATIONS_DISCARDING = 2000L;
 	private final static Long MAX_TIME_DISCARDING = 5000L;
-	private final static Long MAX_SIMULATIONS_BIDDING = 10L;
+	private final static Long MAX_SIMULATIONS_BIDDING = 100L;
 	private final static Long MAX_SIMULATIONS_HAND_GAME = 500L;
 	private final static Double MIN_WON_RATE_FOR_BIDDING = 0.6;
 	private final static Double MIN_WON_RATE_FOR_DISCARDING = 0.75;
 	private final static Double MIN_WON_RATE_FOR_HAND_GAME = 0.95;
 
-	public final static Double IDEAL_WON = 1.0d;
-	public final static Double IDEAL_LOST = 0.0d;
+	public final static Double IDEAL_WON = 1.0;
+	public final static Double IDEAL_LOST = 0.0;
 	public final static Double EPSILON = 0.05;
 
 	// FIXME (jan 10.03.2012) code duplication with NNTrainer
@@ -221,7 +221,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 				simCards.removeAll(currSkat);
 
-				log.warn("Discard simulation no. " + simCount + ": skat " + currSkat);
+				log.debug("Discard simulation no. " + simCount + ": skat "
+						+ currSkat);
 
 				for (GameType gameType : filteredGameTypes) {
 
