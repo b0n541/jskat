@@ -31,6 +31,8 @@ import org.jskat.util.JSkatResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javafx.scene.image.ImageView;
+
 /**
  * Repository that holds all images used in JSkat
  */
@@ -48,7 +50,8 @@ public class JSkatGraphicRepository {
 
 	private Map<CardSet, Image> cardBacks;
 
-	private List<List<Image>> icons;
+	private List<List<Image>> awtIcons;
+	private Map<Icon, Map<IconSize, javafx.scene.image.Image>> icons;
 
 	private List<Image> flags;
 
@@ -75,7 +78,8 @@ public class JSkatGraphicRepository {
 
 		log.debug("Bitmaps for JSkat logo and skat table loaded..."); //$NON-NLS-1$
 
-		this.icons = new ArrayList<List<Image>>();
+		this.awtIcons = new ArrayList<List<Image>>();
+		this.icons = new HashMap<>();
 		loadIcons(tracker);
 
 		log.debug("Bitmaps for icons loaded..."); //$NON-NLS-1$
@@ -142,18 +146,25 @@ public class JSkatGraphicRepository {
 		for (final Icon icon : Icon.values()) {
 
 			// new array list for all sizes
-			this.icons.add(new ArrayList<Image>());
+			this.awtIcons.add(new ArrayList<Image>());
+			icons.put(icon, new HashMap<>());
 
 			// for all sizes
 			for (final IconSize size : IconSize.values()) {
 
-				// add icon
-				this.icons.get(icon.ordinal())
-						.add(Toolkit.getDefaultToolkit()
-								.getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/" //$NON-NLS-1$
-										+ icon.toString().toLowerCase() + '_' + size.toString().toLowerCase()
-										+ ".png"))); //$NON-NLS-1$
-				tracker.addImage(this.icons.get(icon.ordinal()).get(size.ordinal()), 1);
+				// // add icon
+				// this.awtIcons.get(icon.ordinal())
+				// .add(Toolkit.getDefaultToolkit()
+				// .getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/"
+				// //$NON-NLS-1$
+				// + icon.toString().toLowerCase() + '_' +
+				// size.toString().toLowerCase()
+				// + ".png"))); //$NON-NLS-1$
+				// tracker.addImage(this.awtIcons.get(icon.ordinal()).get(size.ordinal()),
+				// 1);
+
+				icons.get(icon).put(size, new javafx.scene.image.Image("org/jskat/gui/img/gui/" //$NON-NLS-1$
+						+ icon.toString().toLowerCase() + '_' + size.toString().toLowerCase() + ".png")); //$NON-NLS-1$
 			}
 		}
 
@@ -166,7 +177,7 @@ public class JSkatGraphicRepository {
 
 	/**
 	 * Load all card images
-	 * 
+	 *
 	 * @param cardFace
 	 *            The directory name for the card set to be loaded
 	 */
@@ -206,7 +217,7 @@ public class JSkatGraphicRepository {
 
 	/**
 	 * Gets an icon image
-	 * 
+	 *
 	 * @param icon
 	 *            Icon name
 	 * @param size
@@ -215,16 +226,25 @@ public class JSkatGraphicRepository {
 	 */
 	public Image getIconImage(final Icon icon, final IconSize size) {
 
-		try {
-			return this.icons.get(icon.ordinal()).get(size.ordinal());
-		} catch (final IndexOutOfBoundsException exc) {
-			return null;
-		}
+		return null;
+	}
+
+	/**
+	 * Gets an icon image
+	 *
+	 * @param icon
+	 *            Icon
+	 * @param size
+	 *            Size
+	 * @return Icon image
+	 */
+	public ImageView getImageView(final Icon icon, final IconSize size) {
+		return new ImageView(icons.get(icon).get(size));
 	}
 
 	/**
 	 * Gets the card image
-	 * 
+	 *
 	 * @param card
 	 *            Card
 	 * @return The card image
@@ -246,7 +266,7 @@ public class JSkatGraphicRepository {
 
 	/**
 	 * Gets a flag image
-	 * 
+	 *
 	 * @param flag
 	 *            Flag
 	 * @return Flag image
@@ -257,7 +277,7 @@ public class JSkatGraphicRepository {
 
 	/**
 	 * Gets the image for the skat table
-	 * 
+	 *
 	 * @return The image for the skat table
 	 */
 	public Image getSkatTableImage() {
@@ -267,7 +287,7 @@ public class JSkatGraphicRepository {
 
 	/**
 	 * Gets the image for the JSkat logo
-	 * 
+	 *
 	 * @return The image for the JSkat logo
 	 */
 	public Image getJSkatLogoImage() {
@@ -281,7 +301,7 @@ public class JSkatGraphicRepository {
 
 	/**
 	 * Gets the image for the left opponent bid bubble
-	 * 
+	 *
 	 * @return Image for the left opponent bid bubble
 	 */
 	public Image getLeftBidBubble() {
@@ -290,7 +310,7 @@ public class JSkatGraphicRepository {
 
 	/**
 	 * Gets the image for the right opponent bid bubble
-	 * 
+	 *
 	 * @return Image for the right opponent bid bubble
 	 */
 	public Image getRightBidBubble() {
@@ -299,7 +319,7 @@ public class JSkatGraphicRepository {
 
 	/**
 	 * Gets the image for the user bid bubble
-	 * 
+	 *
 	 * @return Image for the user bid bubble
 	 */
 	public Image getUserBidBubble() {
@@ -313,105 +333,138 @@ public class JSkatGraphicRepository {
 		/**
 		 * About
 		 */
-		ABOUT, /**
-				 * Blank
-				 */
-		BLANK, /**
-				 * Exit
-				 */
-		EXIT, /**
-				 * Help
-				 */
-		HELP, /**
-				 * New skat round
-				 */
-		NEW, /**
-				 * Load skat round
-				 */
-		LOAD, /**
-				 * Save
-				 */
-		SAVE, /**
-				 * Save under new name
-				 */
-		SAVE_AS, /**
-					 * First
-					 */
-		FIRST, /**
-				 * Previous
-				 */
-		PREVIOUS, /**
-					 * Next
-					 */
-		NEXT, /**
-				 * Last
-				 */
-		LAST, /**
-				 * Preferences
-				 */
-		PREFERENCES, /**
-						 * Table
-						 */
-		TABLE, /**
-				 * Start series / continue series etc.
-				 */
-		PLAY, /**
-				 * Pause series
-				 */
-		PAUSE, /**
-				 * Connect ISS
-				 */
-		CONNECT_ISS, /**
-						 * Leave table / log out from ISS
-						 */
-		LOG_OUT, /**
-					 * License
-					 */
-		LICENSE, /**
-					 * Close icon for windows and tabs
-					 */
-		CLOSE, /**
-				 * JSkat logo
-				 */
-		JSKAT, /**
-				 * Train Neural Networks
-				 */
-		TRAIN_NN, /**
-					 * OK / Bid / Hold bid
-					 */
-		OK, /**
-			 * Cancel / Pass
-			 */
-		STOP, /**
-				 * Chat
-				 */
-		CHAT, /**
-				 * Chat disabled
-				 */
-		CHAT_DISABLED, /**
-						 * User info
-						 */
-		USER_INFO, /**
-					 * Web / Home page
-					 */
-		WEB, /**
-				 * Clock
-				 */
-		CLOCK, /**
-				 * Invite
-				 */
-		INVITE, /**
-				 * Register
-				 */
-		REGISTER, /**
-					 * White flag
-					 */
-		WHITE_FLAG, /**
-					 * Undo
-					 */
-		UNDO, /**
-				 * REDO
-				 */
+		ABOUT,
+		/**
+		 * Blank
+		 */
+		BLANK,
+		/**
+		 * Exit
+		 */
+		EXIT,
+		/**
+		 * Help
+		 */
+		HELP,
+		/**
+		 * New skat round
+		 */
+		NEW,
+		/**
+		 * Load skat round
+		 */
+		LOAD,
+		/**
+		 * Save
+		 */
+		SAVE,
+		/**
+		 * Save under new name
+		 */
+		SAVE_AS,
+		/**
+		 * First
+		 */
+		FIRST,
+		/**
+		 * Previous
+		 */
+		PREVIOUS,
+		/**
+		 * Next
+		 */
+		NEXT,
+		/**
+		 * Last
+		 */
+		LAST,
+		/**
+		 * Preferences
+		 */
+		PREFERENCES,
+		/**
+		 * Table
+		 */
+		TABLE,
+		/**
+		 * Start series / continue series etc.
+		 */
+		PLAY,
+		/**
+		 * Pause series
+		 */
+		PAUSE,
+		/**
+		 * Connect ISS
+		 */
+		CONNECT_ISS,
+		/**
+		 * Leave table / log out from ISS
+		 */
+		LOG_OUT,
+		/**
+		 * License
+		 */
+		LICENSE,
+		/**
+		 * Close icon for windows and tabs
+		 */
+		CLOSE,
+		/**
+		 * JSkat logo
+		 */
+		JSKAT,
+		/**
+		 * Train Neural Networks
+		 */
+		TRAIN_NN,
+		/**
+		 * OK / Bid / Hold bid
+		 */
+		OK,
+		/**
+		 * Cancel / Pass
+		 */
+		STOP,
+		/**
+		 * Chat
+		 */
+		CHAT,
+		/**
+		 * Chat disabled
+		 */
+		CHAT_DISABLED,
+		/**
+		 * User info
+		 */
+		USER_INFO,
+		/**
+		 * Web / Home page
+		 */
+		WEB,
+		/**
+		 * Clock
+		 */
+		CLOCK,
+		/**
+		 * Invite
+		 */
+		INVITE,
+		/**
+		 * Register
+		 */
+		REGISTER,
+		/**
+		 * White flag
+		 */
+		WHITE_FLAG,
+		/**
+		 * Undo
+		 */
+		UNDO,
+		/**
+		 * REDO
+		 */
 		REDO;
 	}
 
@@ -440,7 +493,7 @@ public class JSkatGraphicRepository {
 
 		/**
 		 * Gets a string representing the size of the icon
-		 * 
+		 *
 		 * @return Size string
 		 */
 		public abstract String getSize();
@@ -456,7 +509,7 @@ public class JSkatGraphicRepository {
 
 		/**
 		 * Gets a flag from a character
-		 * 
+		 *
 		 * @param languageChar
 		 *            Character
 		 * @return Flag
@@ -491,7 +544,7 @@ public class JSkatGraphicRepository {
 
 		/**
 		 * Gets the language for a flag
-		 * 
+		 *
 		 * @return Language
 		 */
 		public String getLanguageForFlag() {

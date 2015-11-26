@@ -21,10 +21,14 @@ import java.awt.Point;
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
+import org.jskat.control.command.skatseries.CreateSkatSeriesCommand;
 import org.jskat.data.DesktopSavePathResolver;
 import org.jskat.data.JSkatOptions;
 import org.jskat.gui.img.JSkatGraphicRepository;
+import org.jskat.gui.img.JSkatGraphicRepository.Icon;
+import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
 import org.jskat.gui.swing.JSkatViewImpl;
 import org.jskat.gui.swing.LookAndFeelSetter;
 import org.jskat.util.JSkatResourceBundle;
@@ -37,8 +41,6 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
@@ -117,7 +119,7 @@ public class JSkatFX extends Application {
 		}
 	}
 
-	private void placeMainWindow(Screen screen, Stage primaryStage, Point2D position) {
+	private static void placeMainWindow(Screen screen, Stage primaryStage, Point2D position) {
 
 		if (screen.getVisualBounds().contains(position)) {
 			primaryStage.setX(position.getX());
@@ -135,17 +137,29 @@ public class JSkatFX extends Application {
 
 		Menu fileMenu = new Menu(strings.getString("file"));
 
+		MenuItem loadSeriesMenuItem = new MenuItem(strings.getString("load_series"));
+		loadSeriesMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.LOAD, IconSize.SMALL));
+		MenuItem saveSeriesMenuItem = new MenuItem(strings.getString("save_series"));
+		saveSeriesMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.SAVE, IconSize.SMALL));
+		MenuItem saveSeriesAsMenuItem = new MenuItem(strings.getString("save_series_as"));
+		saveSeriesAsMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.SAVE_AS, IconSize.SMALL));
 		MenuItem exitJSkatMenuItem = new MenuItem(strings.getString("exit_jskat"));
-		exitJSkatMenuItem.setGraphic(new ImageView(new Image("org/jskat/gui/img/gui/exit_small.png")));
+		exitJSkatMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.EXIT, IconSize.SMALL));
 		exitJSkatMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.exitJSkat());
-		fileMenu.getItems().addAll(new MenuItem(strings.getString("load_series")),
-				new MenuItem(strings.getString("save_series")), new MenuItem(strings.getString("save_series_as")),
+
+		fileMenu.getItems().addAll(loadSeriesMenuItem, saveSeriesMenuItem, saveSeriesAsMenuItem,
 				new SeparatorMenuItem(), exitJSkatMenuItem);
 
 		Menu skatTableMenu = new Menu(strings.getString("skat_table"));
-		skatTableMenu.getItems().addAll(new MenuItem(strings.getString("play_on_local_table")), new SeparatorMenuItem(),
-				new MenuItem(strings.getString("start_series")), new SeparatorMenuItem(),
-				new MenuItem(strings.getString("replay_game")), new MenuItem(strings.getString("next_replay_move")));
+
+		MenuItem playOnLocalTable = new MenuItem(strings.getString("play_on_local_table")); //$NON-NLS-1$
+		playOnLocalTable.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.TABLE, IconSize.SMALL));
+		playOnLocalTable.setOnAction(actionEvent -> JSkatMaster.INSTANCE.createTable());
+		MenuItem startSkatSeriesMenuItem = new MenuItem(strings.getString("start_series")); //$NON-NLS-1$
+		startSkatSeriesMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE.post(new CreateSkatSeriesCommand()));
+		skatTableMenu.getItems().addAll(playOnLocalTable, new SeparatorMenuItem(), startSkatSeriesMenuItem,
+				new SeparatorMenuItem(), new MenuItem(strings.getString("replay_game")),
+				new MenuItem(strings.getString("next_replay_move")));
 
 		MenuItem resetNeuralNetworksMenuItem = new MenuItem(strings.getString("reset_nn"));
 		resetNeuralNetworksMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.resetNeuralNetworks());

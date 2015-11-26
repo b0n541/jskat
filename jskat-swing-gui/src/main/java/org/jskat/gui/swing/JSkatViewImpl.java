@@ -19,7 +19,6 @@ package org.jskat.gui.swing;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Desktop;
-import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -43,6 +42,7 @@ import javax.swing.event.ChangeListener;
 
 import org.jskat.JSkat;
 import org.jskat.control.JSkatEventBus;
+import org.jskat.control.JSkatMaster;
 import org.jskat.control.command.general.HideToolbarCommand;
 import org.jskat.control.command.general.ShowAboutInformationCommand;
 import org.jskat.control.command.general.ShowHelpCommand;
@@ -85,56 +85,6 @@ import org.jskat.data.iss.MovePlayer;
 import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.gui.JSkatView;
 import org.jskat.gui.action.JSkatAction;
-import org.jskat.gui.action.human.CallContraAction;
-import org.jskat.gui.action.human.CallReAction;
-import org.jskat.gui.action.human.DiscardAction;
-import org.jskat.gui.action.human.GameAnnounceAction;
-import org.jskat.gui.action.human.HoldBidAction;
-import org.jskat.gui.action.human.MakeBidAction;
-import org.jskat.gui.action.human.PassBidAction;
-import org.jskat.gui.action.human.PickUpSkatAction;
-import org.jskat.gui.action.human.PlayCardAction;
-import org.jskat.gui.action.human.PlayGrandHandAction;
-import org.jskat.gui.action.human.PlayHandGameAction;
-import org.jskat.gui.action.human.PlaySchiebeRamschAction;
-import org.jskat.gui.action.human.SchiebenAction;
-import org.jskat.gui.action.iss.ChangeTableSeatsAction;
-import org.jskat.gui.action.iss.ConnectAction;
-import org.jskat.gui.action.iss.CreateIssTableAction;
-import org.jskat.gui.action.iss.InvitePlayerAction;
-import org.jskat.gui.action.iss.JoinIssTableAction;
-import org.jskat.gui.action.iss.LeaveIssTableAction;
-import org.jskat.gui.action.iss.LogoutAction;
-import org.jskat.gui.action.iss.ObserveTableAction;
-import org.jskat.gui.action.iss.OpenHomepageAction;
-import org.jskat.gui.action.iss.ReadyAction;
-import org.jskat.gui.action.iss.RegisterAction;
-import org.jskat.gui.action.iss.ResignAction;
-import org.jskat.gui.action.iss.SendChatMessageAction;
-import org.jskat.gui.action.iss.ShowCardsAction;
-import org.jskat.gui.action.iss.ShowLoginPanelAction;
-import org.jskat.gui.action.iss.TalkEnableAction;
-import org.jskat.gui.action.main.AboutAction;
-import org.jskat.gui.action.main.ChangeActiveTableAction;
-import org.jskat.gui.action.main.ContinueSkatSeriesAction;
-import org.jskat.gui.action.main.CreateTableAction;
-import org.jskat.gui.action.main.ExitAction;
-import org.jskat.gui.action.main.HelpAction;
-import org.jskat.gui.action.main.LicenseAction;
-import org.jskat.gui.action.main.LoadNeuralNetworksAction;
-import org.jskat.gui.action.main.LoadSeriesAction;
-import org.jskat.gui.action.main.NextReplayMoveAction;
-import org.jskat.gui.action.main.PreferencesAction;
-import org.jskat.gui.action.main.PutCardIntoSkatAction;
-import org.jskat.gui.action.main.ReplayGameAction;
-import org.jskat.gui.action.main.ResetNeuralNetworksAction;
-import org.jskat.gui.action.main.SaveNeuralNetworksAction;
-import org.jskat.gui.action.main.SaveSeriesAction;
-import org.jskat.gui.action.main.SaveSeriesAsAction;
-import org.jskat.gui.action.main.StartSkatSeriesAction;
-import org.jskat.gui.action.main.StopTrainNeuralNetworksAction;
-import org.jskat.gui.action.main.TakeCardFromSkatAction;
-import org.jskat.gui.action.main.TrainNeuralNetworksAction;
 import org.jskat.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.gui.human.SwingHumanPlayer;
 import org.jskat.gui.img.JSkatGraphicRepository;
@@ -196,71 +146,86 @@ public class JSkatViewImpl implements JSkatView {
 
 		actions = new ActionMap();
 
-		// common actions
-		actions.put(JSkatAction.LOAD_SERIES, new LoadSeriesAction());
-		actions.put(JSkatAction.SAVE_SERIES, new SaveSeriesAction());
-		actions.put(JSkatAction.SAVE_SERIES_AS, new SaveSeriesAsAction());
-		actions.put(JSkatAction.HELP, new HelpAction());
-		actions.put(JSkatAction.LICENSE, new LicenseAction());
-		actions.put(JSkatAction.EXIT_JSKAT, new ExitAction());
-		actions.put(JSkatAction.PREFERENCES, new PreferencesAction());
-		actions.put(JSkatAction.ABOUT_JSKAT, new AboutAction());
-		actions.put(JSkatAction.CHANGE_ACTIVE_TABLE, new ChangeActiveTableAction());
-		// skat table actions
-		actions.put(JSkatAction.CREATE_LOCAL_TABLE, new CreateTableAction());
-		actions.put(JSkatAction.START_LOCAL_SERIES, new StartSkatSeriesAction());
-		actions.put(JSkatAction.CONTINUE_LOCAL_SERIES, new ContinueSkatSeriesAction());
-		actions.put(JSkatAction.REPLAY_GAME, new ReplayGameAction());
-		actions.put(JSkatAction.NEXT_REPLAY_STEP, new NextReplayMoveAction());
-		// ISS actions
-		actions.put(JSkatAction.REGISTER_ON_ISS, new RegisterAction());
-		actions.put(JSkatAction.OPEN_ISS_HOMEPAGE, new OpenHomepageAction());
-		actions.put(JSkatAction.SHOW_ISS_LOGIN, new ShowLoginPanelAction());
-		actions.put(JSkatAction.CONNECT_TO_ISS, new ConnectAction());
-		actions.put(JSkatAction.DISCONNECT_FROM_ISS, new LogoutAction());
-		actions.put(JSkatAction.SEND_CHAT_MESSAGE, new SendChatMessageAction());
-		actions.put(JSkatAction.CREATE_ISS_TABLE, new CreateIssTableAction());
-		actions.put(JSkatAction.JOIN_ISS_TABLE, new JoinIssTableAction());
-		actions.put(JSkatAction.LEAVE_ISS_TABLE, new LeaveIssTableAction());
-		actions.put(JSkatAction.OBSERVE_ISS_TABLE, new ObserveTableAction());
-		actions.put(JSkatAction.READY_TO_PLAY, new ReadyAction());
-		actions.put(JSkatAction.TALK_ENABLED, new TalkEnableAction());
-		actions.put(JSkatAction.CHANGE_TABLE_SEATS, new ChangeTableSeatsAction());
-		actions.put(JSkatAction.INVITE_ISS_PLAYER, new InvitePlayerAction());
-		actions.put(JSkatAction.RESIGN, new ResignAction());
-		actions.put(JSkatAction.SHOW_CARDS, new ShowCardsAction());
-		// Neural network actions
-		actions.put(JSkatAction.TRAIN_NEURAL_NETWORKS, new TrainNeuralNetworksAction());
-		actions.put(JSkatAction.STOP_TRAIN_NEURAL_NETWORKS, new StopTrainNeuralNetworksAction());
-		actions.put(JSkatAction.LOAD_NEURAL_NETWORKS, new LoadNeuralNetworksAction());
-		actions.put(JSkatAction.SAVE_NEURAL_NETWORKS, new SaveNeuralNetworksAction());
-		actions.put(JSkatAction.RESET_NEURAL_NETWORKS, new ResetNeuralNetworksAction());
-		// Human player actions
-		actions.put(JSkatAction.MAKE_BID, new MakeBidAction());
-		actions.put(JSkatAction.HOLD_BID, new HoldBidAction());
-		actions.put(JSkatAction.PASS_BID, new PassBidAction());
-		actions.put(JSkatAction.PICK_UP_SKAT, new PickUpSkatAction());
-		actions.put(JSkatAction.PLAY_GRAND_HAND, new PlayGrandHandAction());
-		actions.put(JSkatAction.CALL_CONTRA, new CallContraAction());
-		actions.put(JSkatAction.CALL_RE, new CallReAction());
-		actions.put(JSkatAction.PLAY_SCHIEBERAMSCH, new PlaySchiebeRamschAction());
-		actions.put(JSkatAction.SCHIEBEN, new SchiebenAction());
-		actions.put(JSkatAction.PLAY_HAND_GAME, new PlayHandGameAction());
-		actions.put(JSkatAction.ANNOUNCE_GAME, new GameAnnounceAction());
-		actions.put(JSkatAction.PUT_CARD_INTO_SKAT, new PutCardIntoSkatAction());
-		actions.put(JSkatAction.TAKE_CARD_FROM_SKAT, new TakeCardFromSkatAction());
-		actions.put(JSkatAction.DISCARD_CARDS, new DiscardAction());
-		actions.put(JSkatAction.PLAY_CARD, new PlayCardAction());
-
-		// disable some actions
-		actions.get(JSkatAction.LOAD_SERIES).setEnabled(false);
-		actions.get(JSkatAction.SAVE_SERIES).setEnabled(false);
-		actions.get(JSkatAction.SAVE_SERIES_AS).setEnabled(false);
-		actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(false);
-		actions.get(JSkatAction.CREATE_ISS_TABLE).setEnabled(false);
-		actions.get(JSkatAction.INVITE_ISS_PLAYER).setEnabled(false);
-		actions.get(JSkatAction.REPLAY_GAME).setEnabled(false);
-		actions.get(JSkatAction.NEXT_REPLAY_STEP).setEnabled(false);
+		// // common actions
+		// actions.put(JSkatAction.LOAD_SERIES, new LoadSeriesAction());
+		// actions.put(JSkatAction.SAVE_SERIES, new SaveSeriesAction());
+		// actions.put(JSkatAction.SAVE_SERIES_AS, new SaveSeriesAsAction());
+		// actions.put(JSkatAction.HELP, new HelpAction());
+		// actions.put(JSkatAction.LICENSE, new LicenseAction());
+		// actions.put(JSkatAction.EXIT_JSKAT, new ExitAction());
+		// actions.put(JSkatAction.PREFERENCES, new PreferencesAction());
+		// actions.put(JSkatAction.ABOUT_JSKAT, new AboutAction());
+		// actions.put(JSkatAction.CHANGE_ACTIVE_TABLE, new
+		// ChangeActiveTableAction());
+		// // skat table actions
+		// actions.put(JSkatAction.CREATE_LOCAL_TABLE, new CreateTableAction());
+		// actions.put(JSkatAction.START_LOCAL_SERIES, new
+		// StartSkatSeriesAction());
+		// actions.put(JSkatAction.CONTINUE_LOCAL_SERIES, new
+		// ContinueSkatSeriesAction());
+		// actions.put(JSkatAction.REPLAY_GAME, new ReplayGameAction());
+		// actions.put(JSkatAction.NEXT_REPLAY_STEP, new
+		// NextReplayMoveAction());
+		// // ISS actions
+		// actions.put(JSkatAction.REGISTER_ON_ISS, new RegisterAction());
+		// actions.put(JSkatAction.OPEN_ISS_HOMEPAGE, new OpenHomepageAction());
+		// actions.put(JSkatAction.SHOW_ISS_LOGIN, new ShowLoginPanelAction());
+		// actions.put(JSkatAction.CONNECT_TO_ISS, new ConnectAction());
+		// actions.put(JSkatAction.DISCONNECT_FROM_ISS, new LogoutAction());
+		// actions.put(JSkatAction.SEND_CHAT_MESSAGE, new
+		// SendChatMessageAction());
+		// actions.put(JSkatAction.CREATE_ISS_TABLE, new
+		// CreateIssTableAction());
+		// actions.put(JSkatAction.JOIN_ISS_TABLE, new JoinIssTableAction());
+		// actions.put(JSkatAction.LEAVE_ISS_TABLE, new LeaveIssTableAction());
+		// actions.put(JSkatAction.OBSERVE_ISS_TABLE, new ObserveTableAction());
+		// actions.put(JSkatAction.READY_TO_PLAY, new ReadyAction());
+		// actions.put(JSkatAction.TALK_ENABLED, new TalkEnableAction());
+		// actions.put(JSkatAction.CHANGE_TABLE_SEATS, new
+		// ChangeTableSeatsAction());
+		// actions.put(JSkatAction.INVITE_ISS_PLAYER, new InvitePlayerAction());
+		// actions.put(JSkatAction.RESIGN, new ResignAction());
+		// actions.put(JSkatAction.SHOW_CARDS, new ShowCardsAction());
+		// // Neural network actions
+		// actions.put(JSkatAction.TRAIN_NEURAL_NETWORKS, new
+		// TrainNeuralNetworksAction());
+		// actions.put(JSkatAction.STOP_TRAIN_NEURAL_NETWORKS, new
+		// StopTrainNeuralNetworksAction());
+		// actions.put(JSkatAction.LOAD_NEURAL_NETWORKS, new
+		// LoadNeuralNetworksAction());
+		// actions.put(JSkatAction.SAVE_NEURAL_NETWORKS, new
+		// SaveNeuralNetworksAction());
+		// actions.put(JSkatAction.RESET_NEURAL_NETWORKS, new
+		// ResetNeuralNetworksAction());
+		// // Human player actions
+		// actions.put(JSkatAction.MAKE_BID, new MakeBidAction());
+		// actions.put(JSkatAction.HOLD_BID, new HoldBidAction());
+		// actions.put(JSkatAction.PASS_BID, new PassBidAction());
+		// actions.put(JSkatAction.PICK_UP_SKAT, new PickUpSkatAction());
+		// actions.put(JSkatAction.PLAY_GRAND_HAND, new PlayGrandHandAction());
+		// actions.put(JSkatAction.CALL_CONTRA, new CallContraAction());
+		// actions.put(JSkatAction.CALL_RE, new CallReAction());
+		// actions.put(JSkatAction.PLAY_SCHIEBERAMSCH, new
+		// PlaySchiebeRamschAction());
+		// actions.put(JSkatAction.SCHIEBEN, new SchiebenAction());
+		// actions.put(JSkatAction.PLAY_HAND_GAME, new PlayHandGameAction());
+		// actions.put(JSkatAction.ANNOUNCE_GAME, new GameAnnounceAction());
+		// actions.put(JSkatAction.PUT_CARD_INTO_SKAT, new
+		// PutCardIntoSkatAction());
+		// actions.put(JSkatAction.TAKE_CARD_FROM_SKAT, new
+		// TakeCardFromSkatAction());
+		// actions.put(JSkatAction.DISCARD_CARDS, new DiscardAction());
+		// actions.put(JSkatAction.PLAY_CARD, new PlayCardAction());
+		//
+		// // disable some actions
+		// actions.get(JSkatAction.LOAD_SERIES).setEnabled(false);
+		// actions.get(JSkatAction.SAVE_SERIES).setEnabled(false);
+		// actions.get(JSkatAction.SAVE_SERIES_AS).setEnabled(false);
+		// actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(false);
+		// actions.get(JSkatAction.CREATE_ISS_TABLE).setEnabled(false);
+		// actions.get(JSkatAction.INVITE_ISS_PLAYER).setEnabled(false);
+		// actions.get(JSkatAction.REPLAY_GAME).setEnabled(false);
+		// actions.get(JSkatAction.NEXT_REPLAY_STEP).setEnabled(false);
 	}
 
 	private void initGUI() {
@@ -290,7 +255,7 @@ public class JSkatViewImpl implements JSkatView {
 	public void addToolbar(ShowToolbarCommand command) {
 		addToolbar();
 	}
-	
+
 	private void addToolbar() {
 		mainPanel.add(toolbar, BorderLayout.NORTH);
 		mainPanel.validate();
@@ -318,8 +283,7 @@ public class JSkatViewImpl implements JSkatView {
 						LOG.debug("showing table panel of table " + tableName); //$NON-NLS-1$
 						panel.setFocus();
 
-						JSkatViewImpl.actions.get(JSkatAction.CHANGE_ACTIVE_TABLE)
-								.actionPerformed(new ActionEvent(e.getSource(), 1, tableName));
+						JSkatMaster.INSTANCE.setActiveTable(tableName);
 					}
 				}
 			}
@@ -454,8 +418,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showMessage(final String title, final String message) {
 
-		JOptionPane.showMessageDialog(null, message, title,
-				JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	@Override
@@ -496,8 +459,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showErrorMessage(final String title, final String message) {
 
-		JOptionPane.showMessageDialog(null, message, title,
-				JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
 	}
 
 	/**
@@ -753,8 +715,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public String getNewTableName(final int localTablesCreated) {
 		// get table name
-		String tableName = JOptionPane.showInputDialog(null,
-				this.strings.getString("new_table_dialog_message"), //$NON-NLS-1$
+		String tableName = JOptionPane.showInputDialog(null, this.strings.getString("new_table_dialog_message"), //$NON-NLS-1$
 				this.strings.getString("local_table") + " " //$NON-NLS-1$ //$NON-NLS-2$
 						+ (localTablesCreated + 1));
 		// truncate table name
@@ -919,8 +880,7 @@ public class JSkatViewImpl implements JSkatView {
 		final List<String> result = new ArrayList<String>();
 
 		final PlayerInvitationPanel invitationPanel = new PlayerInvitationPanel(playerNames);
-		final int dialogResult = JOptionPane.showConfirmDialog(null,
-				invitationPanel,
+		final int dialogResult = JOptionPane.showConfirmDialog(null, invitationPanel,
 				this.strings.getString("invite_players"), //$NON-NLS-1$
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 

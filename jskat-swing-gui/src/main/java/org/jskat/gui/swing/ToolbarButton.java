@@ -35,7 +35,7 @@ public class ToolbarButton extends JButton {
 
 	/**
 	 * @see JButton#JButton(Action)
-	 * 
+	 *
 	 * @param action
 	 *            Action
 	 */
@@ -55,24 +55,26 @@ public class ToolbarButton extends JButton {
 
 	/**
 	 * Sets the icon size of a toolbar button
-	 * 
+	 *
 	 * @param iconSize
 	 *            IconSize to set
 	 */
 	public void setIconSize(final IconSize iconSize) {
 
-		ImageIcon icon = null;
-		switch (iconSize) {
-		case SMALL:
-			icon = (ImageIcon) getAction().getValue(Action.SMALL_ICON);
-			break;
-		case BIG:
-			icon = (ImageIcon) getAction().getValue(Action.LARGE_ICON_KEY);
-			break;
-		}
+		if (getAction() != null) {
+			ImageIcon icon = null;
+			switch (iconSize) {
+			case SMALL:
+				icon = (ImageIcon) getAction().getValue(Action.SMALL_ICON);
+				break;
+			case BIG:
+				icon = (ImageIcon) getAction().getValue(Action.LARGE_ICON_KEY);
+				break;
+			}
 
-		if (icon != null) {
-			setIcon(icon);
+			if (icon != null) {
+				setIcon(icon);
+			}
 		}
 	}
 }
