@@ -24,6 +24,8 @@ import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.util.JSkatResourceBundle;
 
+import javafx.scene.control.MenuItem;
+
 /**
  * Defines an abstract action for JSkat
  */
@@ -44,6 +46,8 @@ public abstract class AbstractJSkatAction extends AbstractAction {
 	 */
 	protected final static JSkatEventBus eventBus = JSkatEventBus.INSTANCE;
 	
+	protected MenuItem menuItem;
+
 	/**
 	 * Constructor
 	 */
@@ -55,15 +59,28 @@ public abstract class AbstractJSkatAction extends AbstractAction {
 	protected void setIcon(JSkatGraphicRepository.Icon icon) {
 		putValue(
 				SMALL_ICON,
-				new ImageIcon(this.bitmaps.getIconImage(icon,
+				new ImageIcon(AbstractJSkatAction.bitmaps.getIconImage(icon,
 						JSkatGraphicRepository.IconSize.SMALL)));
 		putValue(
 				LARGE_ICON_KEY,
-				new ImageIcon(this.bitmaps.getIconImage(icon,
+				new ImageIcon(AbstractJSkatAction.bitmaps.getIconImage(icon,
 						JSkatGraphicRepository.IconSize.BIG)));
 	}
 
 	protected void setActionCommand(JSkatAction action) {
 		putValue(ACTION_COMMAND_KEY, action.toString());
+	}
+
+	public void setMenuItem(MenuItem menuItem) {
+		this.menuItem = menuItem;
+	}
+
+	@Override
+	public void setEnabled(boolean isEnabled) {
+		super.setEnabled(isEnabled);
+
+		if (menuItem != null) {
+			menuItem.setDisable(!isEnabled);
+		}
 	}
 }

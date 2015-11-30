@@ -77,13 +77,14 @@ public class JSkatFX extends Application {
 
 		JSkatGraphicRepository.INSTANCE.toString();
 
-		JSkatViewImpl jskatView = new JSkatViewImpl();
+		MenuBar menu = getMenu();
+
+		JSkatViewImpl jskatView = new JSkatViewImpl(menu);
 		JSkatMaster.INSTANCE.setView(jskatView);
 
 		SwingNode swingNode = new SwingNode();
 		swingNode.setContent(jskatView.mainPanel);
 
-		MenuBar menu = getMenu();
 
 		VBox pane = new VBox();
 		pane.getChildren().addAll(menu, swingNode);

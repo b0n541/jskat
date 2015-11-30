@@ -30,7 +30,6 @@ import java.util.Set;
 
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -50,8 +49,6 @@ import org.jskat.control.command.general.ShowTrainingOverviewCommand;
 import org.jskat.control.command.general.ShowWelcomeInformationCommand;
 import org.jskat.control.command.iss.IssDisconnectCommand;
 import org.jskat.control.command.skatseries.CreateSkatSeriesCommand;
-import org.jskat.control.command.skatseries.ReplayGameCommand;
-import org.jskat.control.command.table.NextReplayMoveCommand;
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.iss.IssConnectedEvent;
@@ -71,7 +68,6 @@ import org.jskat.control.event.table.TableGameMoveEvent;
 import org.jskat.control.event.table.TableRemovedEvent;
 import org.jskat.control.event.table.TrickCompletedEvent;
 import org.jskat.control.iss.ChatMessageType;
-import org.jskat.data.JSkatApplicationData;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatViewType;
 import org.jskat.data.SkatGameData;
@@ -138,8 +134,6 @@ import org.jskat.gui.action.main.TrainNeuralNetworksAction;
 import org.jskat.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.gui.human.SwingHumanPlayer;
 import org.jskat.gui.img.JSkatGraphicRepository;
-import org.jskat.gui.img.JSkatGraphicRepository.Icon;
-import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
 import org.jskat.gui.swing.help.JSkatHelpDialog;
 import org.jskat.gui.swing.help.JSkatWelcomeDialog;
 import org.jskat.gui.swing.iss.ISSTablePanel;
@@ -159,6 +153,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.eventbus.Subscribe;
+
+import javafx.collections.ObservableList;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 
 public class JSkatViewImpl implements JSkatView {
 
@@ -182,7 +180,7 @@ public class JSkatViewImpl implements JSkatView {
 	/**
 	 * Constructor
 	 */
-	public JSkatViewImpl() {
+	public JSkatViewImpl(MenuBar menu) {
 
 		JSkatEventBus.INSTANCE.register(this);
 
@@ -190,16 +188,19 @@ public class JSkatViewImpl implements JSkatView {
 		this.preferencesDialog = new JSkatOptionsDialog(mainPanel);
 		this.trainingOverview = new NeuralNetworkTrainingOverview(mainPanel);
 
-		initActionMap();
+		initActionMap(menu);
 		initGUI();
 	}
 
-	private void initActionMap() {
+	private void initActionMap(MenuBar menu) {
 
 		actions = new ActionMap();
 
 		// common actions
-		actions.put(JSkatAction.LOAD_SERIES, new LoadSeriesAction());
+		ObservableList<Menu> menus = menu.getMenus();
+		LoadSeriesAction loadSeriesAction = new LoadSeriesAction();
+		loadSeriesAction.setMenuItem(menus.get(0).getItems().get(0));
+		actions.put(JSkatAction.LOAD_SERIES, loadSeriesAction);
 		actions.put(JSkatAction.SAVE_SERIES, new SaveSeriesAction());
 		actions.put(JSkatAction.SAVE_SERIES_AS, new SaveSeriesAsAction());
 		actions.put(JSkatAction.HELP, new HelpAction());
