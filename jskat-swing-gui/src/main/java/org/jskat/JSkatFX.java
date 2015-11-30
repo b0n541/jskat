@@ -75,8 +75,9 @@ public class JSkatFX extends Application {
 			}
 		});
 
-		JSkatViewImpl jskatView = new JSkatViewImpl();
 		JSkatGraphicRepository.INSTANCE.toString();
+
+		JSkatViewImpl jskatView = new JSkatViewImpl();
 		JSkatMaster.INSTANCE.setView(jskatView);
 
 		SwingNode swingNode = new SwingNode();

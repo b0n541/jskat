@@ -152,16 +152,17 @@ public class JSkatGraphicRepository {
 			// for all sizes
 			for (final IconSize size : IconSize.values()) {
 
-				// // add icon
-				// this.awtIcons.get(icon.ordinal())
-				// .add(Toolkit.getDefaultToolkit()
-				// .getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/"
-				// //$NON-NLS-1$
-				// + icon.toString().toLowerCase() + '_' +
-				// size.toString().toLowerCase()
-				// + ".png"))); //$NON-NLS-1$
-				// tracker.addImage(this.awtIcons.get(icon.ordinal()).get(size.ordinal()),
-				// 1);
+				// add icon
+				this.awtIcons.get(icon.ordinal())
+						.add(Toolkit.getDefaultToolkit().getImage(ClassLoader
+								.getSystemResource("org/jskat/gui/img/gui/"
+										// $NON-NLS-1$
+										+ icon.toString().toLowerCase() + '_'
+										+ size.toString().toLowerCase()
+										+ ".png"))); //$NON-NLS-1$
+				tracker.addImage(
+						this.awtIcons.get(icon.ordinal()).get(size.ordinal()),
+						1);
 
 				icons.get(icon).put(size, new javafx.scene.image.Image("org/jskat/gui/img/gui/" //$NON-NLS-1$
 						+ icon.toString().toLowerCase() + '_' + size.toString().toLowerCase() + ".png")); //$NON-NLS-1$
@@ -226,7 +227,7 @@ public class JSkatGraphicRepository {
 	 */
 	public Image getIconImage(final Icon icon, final IconSize size) {
 
-		return null;
+		return awtIcons.get(icon.ordinal()).get(size.ordinal());
 	}
 
 	/**
