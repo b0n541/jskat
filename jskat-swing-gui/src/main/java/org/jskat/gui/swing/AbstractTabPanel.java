@@ -49,6 +49,16 @@ public abstract class AbstractTabPanel extends JPanel {
 	 * 
 	 * @param tabName
 	 *            Table name
+	 */
+	public AbstractTabPanel(final String tabName) {
+		this(tabName, null);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param tabName
+	 *            Table name
 	 * @param actions
 	 *            JSkat actions
 	 */

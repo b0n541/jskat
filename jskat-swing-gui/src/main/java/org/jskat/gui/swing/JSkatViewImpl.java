@@ -31,12 +31,8 @@ import java.util.Set;
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -89,6 +85,56 @@ import org.jskat.data.iss.MovePlayer;
 import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.gui.JSkatView;
 import org.jskat.gui.action.JSkatAction;
+import org.jskat.gui.action.human.CallContraAction;
+import org.jskat.gui.action.human.CallReAction;
+import org.jskat.gui.action.human.DiscardAction;
+import org.jskat.gui.action.human.GameAnnounceAction;
+import org.jskat.gui.action.human.HoldBidAction;
+import org.jskat.gui.action.human.MakeBidAction;
+import org.jskat.gui.action.human.PassBidAction;
+import org.jskat.gui.action.human.PickUpSkatAction;
+import org.jskat.gui.action.human.PlayCardAction;
+import org.jskat.gui.action.human.PlayGrandHandAction;
+import org.jskat.gui.action.human.PlayHandGameAction;
+import org.jskat.gui.action.human.PlaySchiebeRamschAction;
+import org.jskat.gui.action.human.SchiebenAction;
+import org.jskat.gui.action.iss.ChangeTableSeatsAction;
+import org.jskat.gui.action.iss.ConnectAction;
+import org.jskat.gui.action.iss.CreateIssTableAction;
+import org.jskat.gui.action.iss.InvitePlayerAction;
+import org.jskat.gui.action.iss.JoinIssTableAction;
+import org.jskat.gui.action.iss.LeaveIssTableAction;
+import org.jskat.gui.action.iss.LogoutAction;
+import org.jskat.gui.action.iss.ObserveTableAction;
+import org.jskat.gui.action.iss.OpenHomepageAction;
+import org.jskat.gui.action.iss.ReadyAction;
+import org.jskat.gui.action.iss.RegisterAction;
+import org.jskat.gui.action.iss.ResignAction;
+import org.jskat.gui.action.iss.SendChatMessageAction;
+import org.jskat.gui.action.iss.ShowCardsAction;
+import org.jskat.gui.action.iss.ShowLoginPanelAction;
+import org.jskat.gui.action.iss.TalkEnableAction;
+import org.jskat.gui.action.main.AboutAction;
+import org.jskat.gui.action.main.ChangeActiveTableAction;
+import org.jskat.gui.action.main.ContinueSkatSeriesAction;
+import org.jskat.gui.action.main.CreateTableAction;
+import org.jskat.gui.action.main.ExitAction;
+import org.jskat.gui.action.main.HelpAction;
+import org.jskat.gui.action.main.LicenseAction;
+import org.jskat.gui.action.main.LoadNeuralNetworksAction;
+import org.jskat.gui.action.main.LoadSeriesAction;
+import org.jskat.gui.action.main.NextReplayMoveAction;
+import org.jskat.gui.action.main.PreferencesAction;
+import org.jskat.gui.action.main.PutCardIntoSkatAction;
+import org.jskat.gui.action.main.ReplayGameAction;
+import org.jskat.gui.action.main.ResetNeuralNetworksAction;
+import org.jskat.gui.action.main.SaveNeuralNetworksAction;
+import org.jskat.gui.action.main.SaveSeriesAction;
+import org.jskat.gui.action.main.SaveSeriesAsAction;
+import org.jskat.gui.action.main.StartSkatSeriesAction;
+import org.jskat.gui.action.main.StopTrainNeuralNetworksAction;
+import org.jskat.gui.action.main.TakeCardFromSkatAction;
+import org.jskat.gui.action.main.TrainNeuralNetworksAction;
 import org.jskat.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.gui.human.SwingHumanPlayer;
 import org.jskat.gui.img.JSkatGraphicRepository;
@@ -152,86 +198,83 @@ public class JSkatViewImpl implements JSkatView {
 
 		actions = new ActionMap();
 
-		// // common actions
-		// actions.put(JSkatAction.LOAD_SERIES, new LoadSeriesAction());
-		// actions.put(JSkatAction.SAVE_SERIES, new SaveSeriesAction());
-		// actions.put(JSkatAction.SAVE_SERIES_AS, new SaveSeriesAsAction());
-		// actions.put(JSkatAction.HELP, new HelpAction());
-		// actions.put(JSkatAction.LICENSE, new LicenseAction());
-		// actions.put(JSkatAction.EXIT_JSKAT, new ExitAction());
-		// actions.put(JSkatAction.PREFERENCES, new PreferencesAction());
-		// actions.put(JSkatAction.ABOUT_JSKAT, new AboutAction());
-		// actions.put(JSkatAction.CHANGE_ACTIVE_TABLE, new
-		// ChangeActiveTableAction());
-		// // skat table actions
-		// actions.put(JSkatAction.CREATE_LOCAL_TABLE, new CreateTableAction());
-		// actions.put(JSkatAction.START_LOCAL_SERIES, new
-		// StartSkatSeriesAction());
-		// actions.put(JSkatAction.CONTINUE_LOCAL_SERIES, new
-		// ContinueSkatSeriesAction());
-		// actions.put(JSkatAction.REPLAY_GAME, new ReplayGameAction());
-		// actions.put(JSkatAction.NEXT_REPLAY_STEP, new
-		// NextReplayMoveAction());
-		// // ISS actions
-		// actions.put(JSkatAction.REGISTER_ON_ISS, new RegisterAction());
-		// actions.put(JSkatAction.OPEN_ISS_HOMEPAGE, new OpenHomepageAction());
-		// actions.put(JSkatAction.SHOW_ISS_LOGIN, new ShowLoginPanelAction());
-		// actions.put(JSkatAction.CONNECT_TO_ISS, new ConnectAction());
-		// actions.put(JSkatAction.DISCONNECT_FROM_ISS, new LogoutAction());
-		// actions.put(JSkatAction.SEND_CHAT_MESSAGE, new
-		// SendChatMessageAction());
-		// actions.put(JSkatAction.CREATE_ISS_TABLE, new
-		// CreateIssTableAction());
-		// actions.put(JSkatAction.JOIN_ISS_TABLE, new JoinIssTableAction());
-		// actions.put(JSkatAction.LEAVE_ISS_TABLE, new LeaveIssTableAction());
-		// actions.put(JSkatAction.OBSERVE_ISS_TABLE, new ObserveTableAction());
-		// actions.put(JSkatAction.READY_TO_PLAY, new ReadyAction());
-		// actions.put(JSkatAction.TALK_ENABLED, new TalkEnableAction());
-		// actions.put(JSkatAction.CHANGE_TABLE_SEATS, new
-		// ChangeTableSeatsAction());
-		// actions.put(JSkatAction.INVITE_ISS_PLAYER, new InvitePlayerAction());
-		// actions.put(JSkatAction.RESIGN, new ResignAction());
-		// actions.put(JSkatAction.SHOW_CARDS, new ShowCardsAction());
-		// // Neural network actions
-		// actions.put(JSkatAction.TRAIN_NEURAL_NETWORKS, new
-		// TrainNeuralNetworksAction());
-		// actions.put(JSkatAction.STOP_TRAIN_NEURAL_NETWORKS, new
-		// StopTrainNeuralNetworksAction());
-		// actions.put(JSkatAction.LOAD_NEURAL_NETWORKS, new
-		// LoadNeuralNetworksAction());
-		// actions.put(JSkatAction.SAVE_NEURAL_NETWORKS, new
-		// SaveNeuralNetworksAction());
-		// actions.put(JSkatAction.RESET_NEURAL_NETWORKS, new
-		// ResetNeuralNetworksAction());
-		// // Human player actions
-		// actions.put(JSkatAction.MAKE_BID, new MakeBidAction());
-		// actions.put(JSkatAction.HOLD_BID, new HoldBidAction());
-		// actions.put(JSkatAction.PASS_BID, new PassBidAction());
-		// actions.put(JSkatAction.PICK_UP_SKAT, new PickUpSkatAction());
-		// actions.put(JSkatAction.PLAY_GRAND_HAND, new PlayGrandHandAction());
-		// actions.put(JSkatAction.CALL_CONTRA, new CallContraAction());
-		// actions.put(JSkatAction.CALL_RE, new CallReAction());
-		// actions.put(JSkatAction.PLAY_SCHIEBERAMSCH, new
-		// PlaySchiebeRamschAction());
-		// actions.put(JSkatAction.SCHIEBEN, new SchiebenAction());
-		// actions.put(JSkatAction.PLAY_HAND_GAME, new PlayHandGameAction());
-		// actions.put(JSkatAction.ANNOUNCE_GAME, new GameAnnounceAction());
-		// actions.put(JSkatAction.PUT_CARD_INTO_SKAT, new
-		// PutCardIntoSkatAction());
-		// actions.put(JSkatAction.TAKE_CARD_FROM_SKAT, new
-		// TakeCardFromSkatAction());
-		// actions.put(JSkatAction.DISCARD_CARDS, new DiscardAction());
-		// actions.put(JSkatAction.PLAY_CARD, new PlayCardAction());
-		//
-		// // disable some actions
-		// actions.get(JSkatAction.LOAD_SERIES).setEnabled(false);
-		// actions.get(JSkatAction.SAVE_SERIES).setEnabled(false);
-		// actions.get(JSkatAction.SAVE_SERIES_AS).setEnabled(false);
-		// actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(false);
-		// actions.get(JSkatAction.CREATE_ISS_TABLE).setEnabled(false);
-		// actions.get(JSkatAction.INVITE_ISS_PLAYER).setEnabled(false);
-		// actions.get(JSkatAction.REPLAY_GAME).setEnabled(false);
-		// actions.get(JSkatAction.NEXT_REPLAY_STEP).setEnabled(false);
+		// common actions
+		actions.put(JSkatAction.LOAD_SERIES, new LoadSeriesAction());
+		actions.put(JSkatAction.SAVE_SERIES, new SaveSeriesAction());
+		actions.put(JSkatAction.SAVE_SERIES_AS, new SaveSeriesAsAction());
+		actions.put(JSkatAction.HELP, new HelpAction());
+		actions.put(JSkatAction.LICENSE, new LicenseAction());
+		actions.put(JSkatAction.EXIT_JSKAT, new ExitAction());
+		actions.put(JSkatAction.PREFERENCES, new PreferencesAction());
+		actions.put(JSkatAction.ABOUT_JSKAT, new AboutAction());
+		actions.put(JSkatAction.CHANGE_ACTIVE_TABLE,
+				new ChangeActiveTableAction());
+		// skat table actions
+		actions.put(JSkatAction.CREATE_LOCAL_TABLE, new CreateTableAction());
+		actions.put(JSkatAction.START_LOCAL_SERIES,
+				new StartSkatSeriesAction());
+		actions.put(JSkatAction.CONTINUE_LOCAL_SERIES,
+				new ContinueSkatSeriesAction());
+		actions.put(JSkatAction.REPLAY_GAME, new ReplayGameAction());
+		actions.put(JSkatAction.NEXT_REPLAY_STEP, new NextReplayMoveAction());
+		// ISS actions
+		actions.put(JSkatAction.REGISTER_ON_ISS, new RegisterAction());
+		actions.put(JSkatAction.OPEN_ISS_HOMEPAGE, new OpenHomepageAction());
+		actions.put(JSkatAction.SHOW_ISS_LOGIN, new ShowLoginPanelAction());
+		actions.put(JSkatAction.CONNECT_TO_ISS, new ConnectAction());
+		actions.put(JSkatAction.DISCONNECT_FROM_ISS, new LogoutAction());
+		actions.put(JSkatAction.SEND_CHAT_MESSAGE, new SendChatMessageAction());
+		actions.put(JSkatAction.CREATE_ISS_TABLE, new CreateIssTableAction());
+		actions.put(JSkatAction.JOIN_ISS_TABLE, new JoinIssTableAction());
+		actions.put(JSkatAction.LEAVE_ISS_TABLE, new LeaveIssTableAction());
+		actions.put(JSkatAction.OBSERVE_ISS_TABLE, new ObserveTableAction());
+		actions.put(JSkatAction.READY_TO_PLAY, new ReadyAction());
+		actions.put(JSkatAction.TALK_ENABLED, new TalkEnableAction());
+		actions.put(JSkatAction.CHANGE_TABLE_SEATS,
+				new ChangeTableSeatsAction());
+		actions.put(JSkatAction.INVITE_ISS_PLAYER, new InvitePlayerAction());
+		actions.put(JSkatAction.RESIGN, new ResignAction());
+		actions.put(JSkatAction.SHOW_CARDS, new ShowCardsAction());
+		// Neural network actions
+		actions.put(JSkatAction.TRAIN_NEURAL_NETWORKS,
+				new TrainNeuralNetworksAction());
+		actions.put(JSkatAction.STOP_TRAIN_NEURAL_NETWORKS,
+				new StopTrainNeuralNetworksAction());
+		actions.put(JSkatAction.LOAD_NEURAL_NETWORKS,
+				new LoadNeuralNetworksAction());
+		actions.put(JSkatAction.SAVE_NEURAL_NETWORKS,
+				new SaveNeuralNetworksAction());
+		actions.put(JSkatAction.RESET_NEURAL_NETWORKS,
+				new ResetNeuralNetworksAction());
+		// Human player actions
+		actions.put(JSkatAction.MAKE_BID, new MakeBidAction());
+		actions.put(JSkatAction.HOLD_BID, new HoldBidAction());
+		actions.put(JSkatAction.PASS_BID, new PassBidAction());
+		actions.put(JSkatAction.PICK_UP_SKAT, new PickUpSkatAction());
+		actions.put(JSkatAction.PLAY_GRAND_HAND, new PlayGrandHandAction());
+		actions.put(JSkatAction.CALL_CONTRA, new CallContraAction());
+		actions.put(JSkatAction.CALL_RE, new CallReAction());
+		actions.put(JSkatAction.PLAY_SCHIEBERAMSCH,
+				new PlaySchiebeRamschAction());
+		actions.put(JSkatAction.SCHIEBEN, new SchiebenAction());
+		actions.put(JSkatAction.PLAY_HAND_GAME, new PlayHandGameAction());
+		actions.put(JSkatAction.ANNOUNCE_GAME, new GameAnnounceAction());
+		actions.put(JSkatAction.PUT_CARD_INTO_SKAT,
+				new PutCardIntoSkatAction());
+		actions.put(JSkatAction.TAKE_CARD_FROM_SKAT,
+				new TakeCardFromSkatAction());
+		actions.put(JSkatAction.DISCARD_CARDS, new DiscardAction());
+		actions.put(JSkatAction.PLAY_CARD, new PlayCardAction());
+
+		// disable some actions
+		actions.get(JSkatAction.LOAD_SERIES).setEnabled(false);
+		actions.get(JSkatAction.SAVE_SERIES).setEnabled(false);
+		actions.get(JSkatAction.SAVE_SERIES_AS).setEnabled(false);
+		actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(false);
+		actions.get(JSkatAction.CREATE_ISS_TABLE).setEnabled(false);
+		actions.get(JSkatAction.INVITE_ISS_PLAYER).setEnabled(false);
+		actions.get(JSkatAction.REPLAY_GAME).setEnabled(false);
+		actions.get(JSkatAction.NEXT_REPLAY_STEP).setEnabled(false);
 	}
 
 	private void initGUI() {
@@ -245,7 +288,7 @@ public class JSkatViewImpl implements JSkatView {
 
 		// main area
 		addTabbedPane();
-		addTabPanel(new WelcomePanel(this.strings.getString("welcome"), actions), //$NON-NLS-1$
+		addTabPanel(new WelcomePanel(this.strings.getString("welcome")), //$NON-NLS-1$
 				this.strings.getString("welcome")); //$NON-NLS-1$
 
 		LOG.debug("GUI initialization finished.");
@@ -299,122 +342,12 @@ public class JSkatViewImpl implements JSkatView {
 
 	private void createToolbar() {
 		toolbar = new JPanel(LayoutFactory.getMigLayout());
-
-		JButton createLocalTableToolbarButton = new JButton(
-				strings.getString("play_on_local_table"),
-				new ImageIcon(JSkatGraphicRepository.INSTANCE
-						.getIconImage(Icon.TABLE, IconSize.SMALL)));
-		createLocalTableToolbarButton
-				.setToolTipText(strings.getString("new_table_tooltip"));
-		createLocalTableToolbarButton.addActionListener(
-				actionEvent -> JSkatMaster.INSTANCE.createTable());
-
-		toolbar.add(createLocalTableToolbarButton);
-
-		JButton startLocalSkatSeriesToolbarButton = new JButton(
-				strings.getString("start_series"),
-				new ImageIcon(JSkatGraphicRepository.INSTANCE
-						.getIconImage(Icon.PLAY, IconSize.SMALL)));
-		startLocalSkatSeriesToolbarButton
-				.setToolTipText(strings.getString("start_series_tooltip"));
-		startLocalSkatSeriesToolbarButton
-				.addActionListener(actionEvent -> JSkatEventBus.INSTANCE
-						.post(new CreateSkatSeriesCommand()));
-
-		toolbar.add(startLocalSkatSeriesToolbarButton);
-
-		JButton showIssLoginToolbarButton = new JButton(
-				strings.getString("play_on_iss"),
-				new ImageIcon(JSkatGraphicRepository.INSTANCE
-						.getIconImage(Icon.CONNECT_ISS, IconSize.SMALL)));
-		showIssLoginToolbarButton
-				.setToolTipText(strings.getString("play_on_iss_tooltip"));
-		showIssLoginToolbarButton
-				.addActionListener(actionEvent -> JSkatMaster.INSTANCE
-						.getIssController().showISSLoginPanel());
-
-		toolbar.add(showIssLoginToolbarButton);
-
-		JButton replayGameToolbarButton = new JButton(
-				strings.getString("replay_game"),
-				new ImageIcon(JSkatGraphicRepository.INSTANCE
-						.getIconImage(Icon.FIRST, IconSize.SMALL)));
-		replayGameToolbarButton
-				.setToolTipText(strings.getString("replay_game_tooltip"));
-		replayGameToolbarButton
-				.addActionListener(
-						actionEvent -> JSkatEventBus.TABLE_EVENT_BUSSES
-								.get(JSkatApplicationData.INSTANCE
-										.getActiveTable())
-								.post(new ReplayGameCommand()));
-
-		toolbar.add(replayGameToolbarButton);
-
-		JButton nextReplayStepToolbarButton = new JButton(
-				strings.getString("next_replay_move"),
-				new ImageIcon(JSkatGraphicRepository.INSTANCE
-						.getIconImage(Icon.NEXT, IconSize.SMALL)));
-		nextReplayStepToolbarButton
-				.setToolTipText(strings.getString("next_replay_move_tooltip"));
-		nextReplayStepToolbarButton
-				.addActionListener(
-						actionEvent -> JSkatEventBus.TABLE_EVENT_BUSSES
-								.get(JSkatApplicationData.INSTANCE
-										.getActiveTable())
-								.post(new NextReplayMoveCommand()));
-
-		toolbar.add(nextReplayStepToolbarButton);
-	}
-
-	private JMenuBar getMenuBar() {
-
-		final JMenuBar menu = new JMenuBar();
-
-		final JMenu fileMenu = new JMenu(this.strings.getString("file")); //$NON-NLS-1$
-		fileMenu.add(new JMenuItem(actions.get(JSkatAction.LOAD_SERIES)));
-		fileMenu.add(new JMenuItem(actions.get(JSkatAction.SAVE_SERIES)));
-		fileMenu.add(new JMenuItem(actions.get(JSkatAction.SAVE_SERIES_AS)));
-		fileMenu.add(new JSeparator());
-		fileMenu.add(new JMenuItem(actions.get(JSkatAction.EXIT_JSKAT)));
-		menu.add(fileMenu);
-
-		final JMenu tableMenu = new JMenu(this.strings.getString("skat_table")); //$NON-NLS-1$
-		tableMenu.add(new JMenuItem(actions.get(JSkatAction.CREATE_LOCAL_TABLE)));
-		tableMenu.add(new JSeparator());
-		tableMenu.add(new JMenuItem(actions.get(JSkatAction.START_LOCAL_SERIES)));
-		tableMenu.add(new JSeparator());
-		tableMenu.add(new JMenuItem(actions.get(JSkatAction.REPLAY_GAME)));
-		tableMenu.add(new JMenuItem(actions.get(JSkatAction.NEXT_REPLAY_STEP)));
-		menu.add(tableMenu);
-
-		final JMenu neuralNetworkMenu = new JMenu(this.strings.getString("neural_networks")); //$NON-NLS-1$
-		neuralNetworkMenu.add(new JMenuItem(actions.get(JSkatAction.LOAD_NEURAL_NETWORKS)));
-		neuralNetworkMenu.add(new JMenuItem(actions.get(JSkatAction.SAVE_NEURAL_NETWORKS)));
-		neuralNetworkMenu.add(new JSeparator());
-		neuralNetworkMenu.add(new JMenuItem(actions.get(JSkatAction.RESET_NEURAL_NETWORKS)));
-		neuralNetworkMenu.add(new JMenuItem(actions.get(JSkatAction.TRAIN_NEURAL_NETWORKS)));
-		neuralNetworkMenu.add(new JMenuItem(actions.get(JSkatAction.STOP_TRAIN_NEURAL_NETWORKS)));
-		menu.add(neuralNetworkMenu);
-
-		final JMenu issMenu = new JMenu(this.strings.getString("iss")); //$NON-NLS-1$
-		issMenu.add(new JMenuItem(actions.get(JSkatAction.SHOW_ISS_LOGIN)));
-		issMenu.add(new JSeparator());
-		issMenu.add(new JMenuItem(actions.get(JSkatAction.CREATE_ISS_TABLE)));
-		issMenu.add(new JMenuItem(actions.get(JSkatAction.INVITE_ISS_PLAYER)));
-		menu.add(issMenu);
-
-		final JMenu extraMenu = new JMenu(this.strings.getString("extras")); //$NON-NLS-1$
-		extraMenu.add(new JMenuItem(actions.get(JSkatAction.PREFERENCES)));
-		menu.add(extraMenu);
-
-		final JMenu helpMenu = new JMenu(this.strings.getString("help")); //$NON-NLS-1$
-		helpMenu.add(new JMenuItem(actions.get(JSkatAction.HELP)));
-		helpMenu.add(new JSeparator());
-		helpMenu.add(new JMenuItem(actions.get(JSkatAction.LICENSE)));
-		helpMenu.add(new JMenuItem(actions.get(JSkatAction.ABOUT_JSKAT)));
-		menu.add(helpMenu);
-
-		return menu;
+		toolbar.add(new ToolbarButton(actions.get(JSkatAction.CREATE_LOCAL_TABLE)));
+		toolbar.add(new ToolbarButton(actions.get(JSkatAction.START_LOCAL_SERIES)));
+		toolbar.add(new ToolbarButton(actions.get(JSkatAction.SHOW_ISS_LOGIN)));
+		toolbar.add(new ToolbarButton(actions.get(JSkatAction.REPLAY_GAME)));
+		toolbar.add(new ToolbarButton(actions.get(JSkatAction.NEXT_REPLAY_STEP)));
+		toolbar.add(new ToolbarButton(actions.get(JSkatAction.HELP)));
 	}
 
 	/**

@@ -50,9 +50,9 @@ public class WelcomePanel extends AbstractTabPanel {
 	 * @param actions
 	 *            Actions
 	 */
-	public WelcomePanel(final String newTableName, final ActionMap actions) {
+	public WelcomePanel(final String newTableName) {
 
-		super(newTableName, actions);
+		super(newTableName);
 		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
 	}
 
