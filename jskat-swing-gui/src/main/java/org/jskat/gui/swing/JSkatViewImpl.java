@@ -30,6 +30,7 @@ import java.util.Set;
 
 import javax.swing.ActionMap;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -53,6 +54,8 @@ import org.jskat.control.command.general.ShowTrainingOverviewCommand;
 import org.jskat.control.command.general.ShowWelcomeInformationCommand;
 import org.jskat.control.command.iss.IssDisconnectCommand;
 import org.jskat.control.command.skatseries.CreateSkatSeriesCommand;
+import org.jskat.control.command.skatseries.ReplayGameCommand;
+import org.jskat.control.command.table.NextReplayMoveCommand;
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.iss.IssConnectedEvent;
@@ -72,6 +75,7 @@ import org.jskat.control.event.table.TableGameMoveEvent;
 import org.jskat.control.event.table.TableRemovedEvent;
 import org.jskat.control.event.table.TrickCompletedEvent;
 import org.jskat.control.iss.ChatMessageType;
+import org.jskat.data.JSkatApplicationData;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatViewType;
 import org.jskat.data.SkatGameData;
@@ -88,6 +92,8 @@ import org.jskat.gui.action.JSkatAction;
 import org.jskat.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.gui.human.SwingHumanPlayer;
 import org.jskat.gui.img.JSkatGraphicRepository;
+import org.jskat.gui.img.JSkatGraphicRepository.Icon;
+import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
 import org.jskat.gui.swing.help.JSkatHelpDialog;
 import org.jskat.gui.swing.help.JSkatWelcomeDialog;
 import org.jskat.gui.swing.iss.ISSTablePanel;
@@ -293,12 +299,71 @@ public class JSkatViewImpl implements JSkatView {
 
 	private void createToolbar() {
 		toolbar = new JPanel(LayoutFactory.getMigLayout());
-		toolbar.add(new ToolbarButton(actions.get(JSkatAction.CREATE_LOCAL_TABLE)));
-		toolbar.add(new ToolbarButton(actions.get(JSkatAction.START_LOCAL_SERIES)));
-		toolbar.add(new ToolbarButton(actions.get(JSkatAction.SHOW_ISS_LOGIN)));
-		toolbar.add(new ToolbarButton(actions.get(JSkatAction.REPLAY_GAME)));
-		toolbar.add(new ToolbarButton(actions.get(JSkatAction.NEXT_REPLAY_STEP)));
-		toolbar.add(new ToolbarButton(actions.get(JSkatAction.HELP)));
+
+		JButton createLocalTableToolbarButton = new JButton(
+				strings.getString("play_on_local_table"),
+				new ImageIcon(JSkatGraphicRepository.INSTANCE
+						.getIconImage(Icon.TABLE, IconSize.SMALL)));
+		createLocalTableToolbarButton
+				.setToolTipText(strings.getString("new_table_tooltip"));
+		createLocalTableToolbarButton.addActionListener(
+				actionEvent -> JSkatMaster.INSTANCE.createTable());
+
+		toolbar.add(createLocalTableToolbarButton);
+
+		JButton startLocalSkatSeriesToolbarButton = new JButton(
+				strings.getString("start_series"),
+				new ImageIcon(JSkatGraphicRepository.INSTANCE
+						.getIconImage(Icon.PLAY, IconSize.SMALL)));
+		startLocalSkatSeriesToolbarButton
+				.setToolTipText(strings.getString("start_series_tooltip"));
+		startLocalSkatSeriesToolbarButton
+				.addActionListener(actionEvent -> JSkatEventBus.INSTANCE
+						.post(new CreateSkatSeriesCommand()));
+
+		toolbar.add(startLocalSkatSeriesToolbarButton);
+
+		JButton showIssLoginToolbarButton = new JButton(
+				strings.getString("play_on_iss"),
+				new ImageIcon(JSkatGraphicRepository.INSTANCE
+						.getIconImage(Icon.CONNECT_ISS, IconSize.SMALL)));
+		showIssLoginToolbarButton
+				.setToolTipText(strings.getString("play_on_iss_tooltip"));
+		showIssLoginToolbarButton
+				.addActionListener(actionEvent -> JSkatMaster.INSTANCE
+						.getIssController().showISSLoginPanel());
+
+		toolbar.add(showIssLoginToolbarButton);
+
+		JButton replayGameToolbarButton = new JButton(
+				strings.getString("replay_game"),
+				new ImageIcon(JSkatGraphicRepository.INSTANCE
+						.getIconImage(Icon.FIRST, IconSize.SMALL)));
+		replayGameToolbarButton
+				.setToolTipText(strings.getString("replay_game_tooltip"));
+		replayGameToolbarButton
+				.addActionListener(
+						actionEvent -> JSkatEventBus.TABLE_EVENT_BUSSES
+								.get(JSkatApplicationData.INSTANCE
+										.getActiveTable())
+								.post(new ReplayGameCommand()));
+
+		toolbar.add(replayGameToolbarButton);
+
+		JButton nextReplayStepToolbarButton = new JButton(
+				strings.getString("next_replay_move"),
+				new ImageIcon(JSkatGraphicRepository.INSTANCE
+						.getIconImage(Icon.NEXT, IconSize.SMALL)));
+		nextReplayStepToolbarButton
+				.setToolTipText(strings.getString("next_replay_move_tooltip"));
+		nextReplayStepToolbarButton
+				.addActionListener(
+						actionEvent -> JSkatEventBus.TABLE_EVENT_BUSSES
+								.get(JSkatApplicationData.INSTANCE
+										.getActiveTable())
+								.post(new NextReplayMoveCommand()));
+
+		toolbar.add(nextReplayStepToolbarButton);
 	}
 
 	private JMenuBar getMenuBar() {
