@@ -47,8 +47,6 @@ public class WelcomePanel extends AbstractTabPanel {
 	 * @see AbstractTabPanel#AbstractTabPanel(String, ActionMap)
 	 * @param newTableName
 	 *            Table name
-	 * @param actions
-	 *            Actions
 	 */
 	public WelcomePanel(final String newTableName) {
 
