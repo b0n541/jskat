@@ -24,14 +24,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 
-import org.jskat.control.JSkatEventBus;
-import org.jskat.control.JSkatMaster;
-import org.jskat.control.command.general.ShowPreferencesCommand;
-import org.jskat.gui.img.JSkatGraphicRepository;
-import org.jskat.gui.img.JSkatGraphicRepository.Icon;
-import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
+import org.jskat.gui.action.JSkatAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,10 +41,12 @@ public class WelcomePanel extends AbstractTabPanel {
 	 * @see AbstractTabPanel#AbstractTabPanel(String, ActionMap)
 	 * @param newTableName
 	 *            Table name
+	 * @param actions
+	 *            Actions
 	 */
-	public WelcomePanel(final String newTableName) {
+	public WelcomePanel(final String newTableName, final ActionMap actions) {
 
-		super(newTableName);
+		super(newTableName, actions);
 		log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
 	}
 
@@ -72,8 +68,8 @@ public class WelcomePanel extends AbstractTabPanel {
 		welcomePanel.add(createHeaderPanel(), "center, wrap"); //$NON-NLS-1$
 		welcomePanel.add(createButtonPanel(), "center"); //$NON-NLS-1$
 
-		return new JScrollPane(welcomePanel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
-				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		return new JScrollPane(welcomePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 	}
 
 	private JPanel createHeaderPanel() {
@@ -92,50 +88,25 @@ public class WelcomePanel extends AbstractTabPanel {
 
 	private JPanel createButtonPanel() {
 
-		final JButton issTableButton = new JButton(
-				strings.getString("play_on_iss"),
-				new ImageIcon(JSkatGraphicRepository.INSTANCE
-						.getIconImage(Icon.CONNECT_ISS, IconSize.BIG)));
-		issTableButton.setToolTipText(strings.getString("play_on_iss_tooltip"));
-		issTableButton.addActionListener(actionEvent -> JSkatMaster.INSTANCE
-				.getIssController().showISSLoginPanel());
-		
+		final JButton issTableButton = new JButton(getActionMap().get(
+				JSkatAction.SHOW_ISS_LOGIN));
 		final JLabel issTableDescription = new JLabel("<html>"
 				+ this.strings.getString("explain_iss_table_1") + "<br>" //$NON-NLS-1$ //$NON-NLS-2$
 				+ this.strings.getString("explain_iss_table_2")); //$NON-NLS-1$//$NON-NLS-2$
 
-		final JButton localTableButton = new JButton(
-				strings.getString("play_on_local_table"),
-				new ImageIcon(JSkatGraphicRepository.INSTANCE
-						.getIconImage(Icon.TABLE, IconSize.BIG)));
-		localTableButton.setToolTipText(strings.getString("new_table_tooltip"));
-		localTableButton.addActionListener(
-				actionEvent -> JSkatMaster.INSTANCE.createTable());
-
+		final JButton localTableButton = new JButton(this.getActionMap().get(
+				JSkatAction.CREATE_LOCAL_TABLE));
 		final JLabel localTableDescription = new JLabel("<html>" //$NON-NLS-1$
 						+ this.strings.getString("explain_local_table_1") + "<br>" //$NON-NLS-1$ //$NON-NLS-2$
 				+ this.strings.getString("explain_local_table_2")); //$NON-NLS-1$//$NON-NLS-2$
 
-		final JButton preferencesButton = new JButton(
-				strings.getString("preferences"),
-				new ImageIcon(JSkatGraphicRepository.INSTANCE
-						.getIconImage(Icon.PREFERENCES, IconSize.BIG)));
-		preferencesButton
-				.setToolTipText(strings.getString("preferences_tooltip"));
-		preferencesButton
-				.addActionListener(actionEvent -> JSkatEventBus.INSTANCE
-						.post(new ShowPreferencesCommand()));
-		
-		final JLabel preferencesDescription = new JLabel(
+		final JButton optionsButton = new JButton(getActionMap().get(
+				JSkatAction.PREFERENCES));
+		final JLabel optionsDescription = new JLabel(
 				this.strings.getString("explain_options_1")); //$NON-NLS-1$//$NON-NLS-2$
 
-		final JButton quitButton = new JButton(strings.getString("exit_jskat"),
-				new ImageIcon(JSkatGraphicRepository.INSTANCE
-						.getIconImage(Icon.EXIT, IconSize.BIG)));
-		quitButton.setToolTipText(strings.getString("exit_jskat_tooltip"));
-		quitButton.addActionListener(
-				actionEvent -> JSkatMaster.INSTANCE.exitJSkat());
-		
+		final JButton quitButton = new JButton(getActionMap().get(
+				JSkatAction.EXIT_JSKAT));
 		final JLabel quitDescription = new JLabel(
 				this.strings.getString("explain_exit")); //$NON-NLS-1$//$NON-NLS-2$
 
@@ -145,8 +116,8 @@ public class WelcomePanel extends AbstractTabPanel {
 		buttonPanel.add(issTableDescription, "wrap"); //$NON-NLS-1$
 		buttonPanel.add(localTableButton, "growx, shrinky"); //$NON-NLS-1$
 		buttonPanel.add(localTableDescription, "wrap"); //$NON-NLS-1$
-		buttonPanel.add(preferencesButton, "growx, shrinky, gapy 1cm"); //$NON-NLS-1$
-		buttonPanel.add(preferencesDescription, "gapy 1cm, wrap"); //$NON-NLS-1$
+		buttonPanel.add(optionsButton, "growx, shrinky, gapy 1cm"); //$NON-NLS-1$
+		buttonPanel.add(optionsDescription, "gapy 1cm, wrap"); //$NON-NLS-1$
 		buttonPanel.add(quitButton, "growx, shrinky, gapy 1cm"); //$NON-NLS-1$
 		buttonPanel.add(quitDescription, "gapy 1cm, wrap"); //$NON-NLS-1$
 

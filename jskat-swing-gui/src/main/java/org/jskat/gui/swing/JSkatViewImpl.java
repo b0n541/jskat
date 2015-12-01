@@ -208,14 +208,11 @@ public class JSkatViewImpl implements JSkatView {
 		actions.put(JSkatAction.EXIT_JSKAT, new ExitAction());
 		actions.put(JSkatAction.PREFERENCES, new PreferencesAction());
 		actions.put(JSkatAction.ABOUT_JSKAT, new AboutAction());
-		actions.put(JSkatAction.CHANGE_ACTIVE_TABLE,
-				new ChangeActiveTableAction());
+		actions.put(JSkatAction.CHANGE_ACTIVE_TABLE, new ChangeActiveTableAction());
 		// skat table actions
 		actions.put(JSkatAction.CREATE_LOCAL_TABLE, new CreateTableAction());
-		actions.put(JSkatAction.START_LOCAL_SERIES,
-				new StartSkatSeriesAction());
-		actions.put(JSkatAction.CONTINUE_LOCAL_SERIES,
-				new ContinueSkatSeriesAction());
+		actions.put(JSkatAction.START_LOCAL_SERIES, new StartSkatSeriesAction());
+		actions.put(JSkatAction.CONTINUE_LOCAL_SERIES, new ContinueSkatSeriesAction());
 		actions.put(JSkatAction.REPLAY_GAME, new ReplayGameAction());
 		actions.put(JSkatAction.NEXT_REPLAY_STEP, new NextReplayMoveAction());
 		// ISS actions
@@ -231,22 +228,16 @@ public class JSkatViewImpl implements JSkatView {
 		actions.put(JSkatAction.OBSERVE_ISS_TABLE, new ObserveTableAction());
 		actions.put(JSkatAction.READY_TO_PLAY, new ReadyAction());
 		actions.put(JSkatAction.TALK_ENABLED, new TalkEnableAction());
-		actions.put(JSkatAction.CHANGE_TABLE_SEATS,
-				new ChangeTableSeatsAction());
+		actions.put(JSkatAction.CHANGE_TABLE_SEATS, new ChangeTableSeatsAction());
 		actions.put(JSkatAction.INVITE_ISS_PLAYER, new InvitePlayerAction());
 		actions.put(JSkatAction.RESIGN, new ResignAction());
 		actions.put(JSkatAction.SHOW_CARDS, new ShowCardsAction());
 		// Neural network actions
-		actions.put(JSkatAction.TRAIN_NEURAL_NETWORKS,
-				new TrainNeuralNetworksAction());
-		actions.put(JSkatAction.STOP_TRAIN_NEURAL_NETWORKS,
-				new StopTrainNeuralNetworksAction());
-		actions.put(JSkatAction.LOAD_NEURAL_NETWORKS,
-				new LoadNeuralNetworksAction());
-		actions.put(JSkatAction.SAVE_NEURAL_NETWORKS,
-				new SaveNeuralNetworksAction());
-		actions.put(JSkatAction.RESET_NEURAL_NETWORKS,
-				new ResetNeuralNetworksAction());
+		actions.put(JSkatAction.TRAIN_NEURAL_NETWORKS, new TrainNeuralNetworksAction());
+		actions.put(JSkatAction.STOP_TRAIN_NEURAL_NETWORKS, new StopTrainNeuralNetworksAction());
+		actions.put(JSkatAction.LOAD_NEURAL_NETWORKS, new LoadNeuralNetworksAction());
+		actions.put(JSkatAction.SAVE_NEURAL_NETWORKS, new SaveNeuralNetworksAction());
+		actions.put(JSkatAction.RESET_NEURAL_NETWORKS, new ResetNeuralNetworksAction());
 		// Human player actions
 		actions.put(JSkatAction.MAKE_BID, new MakeBidAction());
 		actions.put(JSkatAction.HOLD_BID, new HoldBidAction());
@@ -255,15 +246,12 @@ public class JSkatViewImpl implements JSkatView {
 		actions.put(JSkatAction.PLAY_GRAND_HAND, new PlayGrandHandAction());
 		actions.put(JSkatAction.CALL_CONTRA, new CallContraAction());
 		actions.put(JSkatAction.CALL_RE, new CallReAction());
-		actions.put(JSkatAction.PLAY_SCHIEBERAMSCH,
-				new PlaySchiebeRamschAction());
+		actions.put(JSkatAction.PLAY_SCHIEBERAMSCH, new PlaySchiebeRamschAction());
 		actions.put(JSkatAction.SCHIEBEN, new SchiebenAction());
 		actions.put(JSkatAction.PLAY_HAND_GAME, new PlayHandGameAction());
 		actions.put(JSkatAction.ANNOUNCE_GAME, new GameAnnounceAction());
-		actions.put(JSkatAction.PUT_CARD_INTO_SKAT,
-				new PutCardIntoSkatAction());
-		actions.put(JSkatAction.TAKE_CARD_FROM_SKAT,
-				new TakeCardFromSkatAction());
+		actions.put(JSkatAction.PUT_CARD_INTO_SKAT, new PutCardIntoSkatAction());
+		actions.put(JSkatAction.TAKE_CARD_FROM_SKAT, new TakeCardFromSkatAction());
 		actions.put(JSkatAction.DISCARD_CARDS, new DiscardAction());
 		actions.put(JSkatAction.PLAY_CARD, new PlayCardAction());
 
@@ -289,7 +277,7 @@ public class JSkatViewImpl implements JSkatView {
 
 		// main area
 		addTabbedPane();
-		addTabPanel(new WelcomePanel(this.strings.getString("welcome")), //$NON-NLS-1$
+		addTabPanel(new WelcomePanel(this.strings.getString("welcome"), actions), //$NON-NLS-1$
 				this.strings.getString("welcome")); //$NON-NLS-1$
 
 		LOG.debug("GUI initialization finished.");
