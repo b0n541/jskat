@@ -37,9 +37,9 @@ public class StartSkatSeriesAction extends AbstractJSkatAction {
 	 */
 	public StartSkatSeriesAction() {
 
-		putValue(Action.NAME, this.strings.getString("start_series")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("start_series")); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION,
-				this.strings.getString("start_series_tooltip")); //$NON-NLS-1$
+				STRINGS.getString("start_series_tooltip")); //$NON-NLS-1$
 
 		setIcon(Icon.PLAY);
 	}
@@ -50,6 +50,6 @@ public class StartSkatSeriesAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		this.eventBus.post(new CreateSkatSeriesCommand());
+		this.EVENTBUS.post(new CreateSkatSeriesCommand());
 	}
 }

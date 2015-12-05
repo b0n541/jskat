@@ -37,9 +37,9 @@ public class ResetNeuralNetworksAction extends AbstractJSkatAction {
 	 */
 	public ResetNeuralNetworksAction() {
 
-		putValue(Action.NAME, strings.getString("reset_nn")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("reset_nn")); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION,
-				strings.getString("reset_nn_tooltip")); //$NON-NLS-1$
+				STRINGS.getString("reset_nn_tooltip")); //$NON-NLS-1$
 
 		setIcon(Icon.UNDO);
 	}

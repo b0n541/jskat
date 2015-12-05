@@ -34,9 +34,9 @@ public class MakeBidAction extends AbstractHumanJSkatAction {
 	 */
 	public MakeBidAction() {
 
-		putValue(Action.NAME, strings.getString("make_bid")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("make_bid")); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION,
-				strings.getString("make_bid_short_description")); //$NON-NLS-1$
+				STRINGS.getString("make_bid_short_description")); //$NON-NLS-1$
 
 		setActionCommand(JSkatAction.MAKE_BID);
 		setIcon(Icon.OK);

@@ -37,9 +37,9 @@ public class TrainNeuralNetworksAction extends AbstractJSkatAction {
 	 */
 	public TrainNeuralNetworksAction() {
 
-		putValue(Action.NAME, strings.getString("train_nn")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("train_nn")); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION,
-				strings.getString("train_nn_tooltip")); //$NON-NLS-1$
+				STRINGS.getString("train_nn_tooltip")); //$NON-NLS-1$
 
 		setIcon(Icon.TRAIN_NN);
 	}

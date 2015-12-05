@@ -37,7 +37,7 @@ public class OpenHomepageAction extends AbstractJSkatAction {
 	 */
 	public OpenHomepageAction() {
 
-		putValue(Action.NAME, strings.getString("open_iss_homepage")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("open_iss_homepage")); //$NON-NLS-1$
 
 		setIcon(Icon.WEB);
 	}

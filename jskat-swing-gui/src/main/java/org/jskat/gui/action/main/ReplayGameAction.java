@@ -38,9 +38,9 @@ public class ReplayGameAction extends AbstractJSkatAction {
 	 */
 	public ReplayGameAction() {
 
-		putValue(NAME, AbstractJSkatAction.strings.getString("replay_game")); //$NON-NLS-1$
+		putValue(NAME, STRINGS.getString("replay_game")); //$NON-NLS-1$
 		putValue(SHORT_DESCRIPTION,
-				AbstractJSkatAction.strings.getString("replay_game_tooltip")); //$NON-NLS-1$
+				STRINGS.getString("replay_game_tooltip")); //$NON-NLS-1$
 
 		setIcon(Icon.FIRST);
 	}

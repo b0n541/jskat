@@ -21,7 +21,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.jskat.control.JSkatMaster;
 import org.jskat.control.command.iss.IssConnectCommand;
 import org.jskat.data.iss.LoginCredentials;
 import org.jskat.gui.action.AbstractJSkatAction;
@@ -40,7 +39,7 @@ public class ConnectAction extends AbstractJSkatAction {
 	 */
 	public ConnectAction() {
 
-		putValue(Action.NAME, strings.getString("connect_to_iss")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("connect_to_iss")); //$NON-NLS-1$
 
 		setActionCommand(JSkatAction.CONNECT_TO_ISS);
 		setIcon(Icon.CONNECT_ISS);
@@ -52,7 +51,7 @@ public class ConnectAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource() instanceof LoginCredentials) {
-            eventBus.post(new IssConnectCommand((LoginCredentials) e.getSource()));
+            EVENTBUS.post(new IssConnectCommand((LoginCredentials) e.getSource()));
 		}
 	}
 }

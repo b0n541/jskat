@@ -37,9 +37,9 @@ public class StopTrainNeuralNetworksAction extends AbstractJSkatAction {
 	 */
 	public StopTrainNeuralNetworksAction() {
 
-		putValue(Action.NAME, strings.getString("stop_train_nn")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("stop_train_nn")); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION,
-				strings.getString("stop_train_nn_tooltip")); //$NON-NLS-1$
+				STRINGS.getString("stop_train_nn_tooltip")); //$NON-NLS-1$
 
 		setIcon(Icon.STOP);
 	}

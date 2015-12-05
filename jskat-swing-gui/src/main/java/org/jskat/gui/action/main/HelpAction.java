@@ -37,8 +37,8 @@ public class HelpAction extends AbstractJSkatAction {
 	 */
 	public HelpAction() {
 
-		putValue(Action.NAME, this.strings.getString("help")); //$NON-NLS-1$
-		putValue(Action.SHORT_DESCRIPTION, this.strings.getString("help_tooltip")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("help")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, STRINGS.getString("help_tooltip")); //$NON-NLS-1$
 
 		setIcon(Icon.HELP);
 	}
@@ -49,6 +49,6 @@ public class HelpAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		this.eventBus.post(new ShowHelpCommand());
+		this.EVENTBUS.post(new ShowHelpCommand());
 	}
 }

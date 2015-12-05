@@ -37,9 +37,9 @@ public class ExitAction extends AbstractJSkatAction {
 	 */
 	public ExitAction() {
 
-		putValue(Action.NAME, strings.getString("exit_jskat")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("exit_jskat")); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION,
-				strings.getString("exit_jskat_tooltip")); //$NON-NLS-1$
+				STRINGS.getString("exit_jskat_tooltip")); //$NON-NLS-1$
 
 		setIcon(Icon.EXIT);
 	}

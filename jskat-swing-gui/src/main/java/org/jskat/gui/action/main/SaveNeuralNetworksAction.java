@@ -37,8 +37,8 @@ public class SaveNeuralNetworksAction extends AbstractJSkatAction {
 	 */
 	public SaveNeuralNetworksAction() {
 
-		putValue(Action.NAME, strings.getString("save_nn")); //$NON-NLS-1$
-		putValue(Action.SHORT_DESCRIPTION, strings.getString("save_nn_tooltip")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("save_nn")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, STRINGS.getString("save_nn_tooltip")); //$NON-NLS-1$
 
 		setIcon(Icon.SAVE);
 	}
