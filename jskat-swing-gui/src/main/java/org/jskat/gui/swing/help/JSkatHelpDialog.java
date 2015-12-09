@@ -68,7 +68,7 @@ public class JSkatHelpDialog extends JDialog {
 
 	/**
 	 * Creates new form JSkatHelpDialog
-	 * 
+	 *
 	 * @param parentFrame
 	 *            The parent JFrame
 	 * @param title
@@ -140,9 +140,6 @@ public class JSkatHelpDialog extends JDialog {
 			}
 		});
 		southPanel.add(closeButton);
-		JButton openExternal = new JButton(this.openExternalAction);
-
-		southPanel.add(openExternal);
 		return southPanel;
 	}
 
@@ -171,7 +168,7 @@ public class JSkatHelpDialog extends JDialog {
 
 	/**
 	 * Shows the Help dialog
-	 * 
+	 *
 	 * @param visible
 	 *            Shows the dialog if set to TRUE
 	 */
@@ -193,7 +190,7 @@ public class JSkatHelpDialog extends JDialog {
 
 	/**
 	 * sets a single file, which will be inserted in the general html frame
-	 * 
+	 *
 	 * @param filename
 	 *            html snippet file
 	 */
@@ -206,7 +203,7 @@ public class JSkatHelpDialog extends JDialog {
 	/**
 	 * sets a list of files, which will be concatenated and inserted in the
 	 * general html frame
-	 * 
+	 *
 	 * @param filenames
 	 *            list of html snippet files
 	 */
@@ -228,7 +225,7 @@ public class JSkatHelpDialog extends JDialog {
 
 	/**
 	 * inserts a html snippet in the general frame of the HTMLDialog
-	 * 
+	 *
 	 * @param htmlSnippet
 	 *            the html snippet to insert
 	 */
@@ -246,7 +243,7 @@ public class JSkatHelpDialog extends JDialog {
 
 	/**
 	 * sets a specific html text to display in the dialog
-	 * 
+	 *
 	 * @param html
 	 *            the html to display in the dialog
 	 */
@@ -295,14 +292,16 @@ public class JSkatHelpDialog extends JDialog {
 						Desktop.getDesktop().browse(new URI(link));
 					} catch (IOException ex) {
 						log.warn("IOException", ex);
-						JOptionPane.showMessageDialog(JSkatHelpDialog.this, "Error in loading external link:\n" + link
-								+ "\n" + (ex.getMessage() != null ? ex.getMessage() : "<???>"), "Externer Link",
-								JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(JSkatHelpDialog.this,
+								"Error in loading external link:\n" + link + "\n"
+										+ (ex.getMessage() != null ? ex.getMessage() : "<???>"),
+								"Externer Link", JOptionPane.ERROR_MESSAGE);
 					} catch (URISyntaxException ex) {
 						log.warn("URI exception", ex);
-						JOptionPane.showMessageDialog(JSkatHelpDialog.this, "Error in loading external link:\n" + link
-								+ "\n" + (ex.getMessage() != null ? ex.getMessage() : "<???>"), "Externer Link",
-								JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(JSkatHelpDialog.this,
+								"Error in loading external link:\n" + link + "\n"
+										+ (ex.getMessage() != null ? ex.getMessage() : "<???>"),
+								"Externer Link", JOptionPane.ERROR_MESSAGE);
 					}
 				} else {
 					setFile(link);
