@@ -18,15 +18,27 @@ package org.jskat.gui.swing;
 
 import java.awt.Toolkit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Determines the screen resolution
  */
 public class ScreenResolution {
-	public final static boolean isBigScreen() {
-		return Toolkit.getDefaultToolkit().getScreenSize().height > 800;
+
+	private static final Logger LOG = LoggerFactory.getLogger(ScreenResolution.class);
+
+	public static final boolean isBigScreen() {
+		return getScreenHeight() > 800;
 	}
 
-	public final static boolean isVeryBigScreen() {
-		return Toolkit.getDefaultToolkit().getScreenSize().height > 1300;
+	private static int getScreenHeight() {
+		int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+		LOG.debug("Screen height: " + screenHeight);
+		return screenHeight;
+	}
+
+	public static final boolean isVeryBigScreen() {
+		return getScreenHeight() > 1300;
 	}
 }
