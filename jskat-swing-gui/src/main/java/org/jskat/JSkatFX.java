@@ -44,11 +44,18 @@ import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
@@ -57,12 +64,28 @@ import javafx.stage.WindowEvent;
 
 public class JSkatFX extends Application {
 
+	private Pane splashScreenLayout;
+	private ProgressBar splashScreenProgressBar;
+	private Label splashScreenProgressText;
+
 	public static void main(String[] args) {
 
 		PropertyConfigurator.configure(ClassLoader.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
 		JSkatOptions.instance(new DesktopSavePathResolver());
 
 		launch(args);
+	}
+
+	@Override
+	public void init() {
+		ImageView splashScreenImage = new ImageView(
+				new Image(JSkatFX.class.getResource("/org/jskat/gui/img/gui/splash.png").toExternalForm()));
+		splashScreenProgressBar = new ProgressBar();
+		splashScreenProgressText = new Label("Loading JSkat...");
+		splashScreenProgressText.setAlignment(Pos.CENTER);
+		splashScreenLayout = new VBox();
+		splashScreenLayout.getChildren().addAll(splashScreenImage, splashScreenProgressBar, splashScreenProgressText);
+		splashScreenLayout.setEffect(new DropShadow());
 	}
 
 	@Override
