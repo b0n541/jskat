@@ -85,7 +85,7 @@ public final class JSkat {
 				JSkatGraphicRepository.INSTANCE.toString();
 				break;
 			case 2:
-				jskatView = new JSkatViewImpl(null);
+				jskatView = new JSkatViewImpl(null, null);
 				JSkatMaster.INSTANCE.setView(jskatView);
 				break;
 			}
@@ -132,7 +132,7 @@ public final class JSkat {
 	private static void trySettingNimbusLookAndFeel() {
 		for (LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels()) {
 			if ("Nimbus".equals(laf.getName())) { //$NON-NLS-1$
-				LookAndFeelSetter.setLookAndFeel();
+				LookAndFeelSetter.setLookAndFeel(null);
 			}
 		}
 	}

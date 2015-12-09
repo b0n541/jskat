@@ -157,6 +157,7 @@ import com.google.common.eventbus.Subscribe;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.stage.Screen;
 
 public class JSkatViewImpl implements JSkatView {
 
@@ -180,7 +181,7 @@ public class JSkatViewImpl implements JSkatView {
 	/**
 	 * Constructor
 	 */
-	public JSkatViewImpl(MenuBar menu) {
+	public JSkatViewImpl(Screen targetScreen, MenuBar menu) {
 
 		JSkatEventBus.INSTANCE.register(this);
 
@@ -189,7 +190,7 @@ public class JSkatViewImpl implements JSkatView {
 		this.trainingOverview = new NeuralNetworkTrainingOverview(mainPanel);
 
 		initActionMap(menu);
-		initGUI();
+		initGUI(targetScreen);
 	}
 
 	private void initActionMap(MenuBar menu) {
@@ -201,8 +202,12 @@ public class JSkatViewImpl implements JSkatView {
 		LoadSeriesAction loadSeriesAction = new LoadSeriesAction();
 		loadSeriesAction.setMenuItem(menus.get(0).getItems().get(0));
 		actions.put(JSkatAction.LOAD_SERIES, loadSeriesAction);
-		actions.put(JSkatAction.SAVE_SERIES, new SaveSeriesAction());
-		actions.put(JSkatAction.SAVE_SERIES_AS, new SaveSeriesAsAction());
+		SaveSeriesAction saveSeriesAction = new SaveSeriesAction();
+		saveSeriesAction.setMenuItem(menus.get(0).getItems().get(1));
+		actions.put(JSkatAction.SAVE_SERIES, saveSeriesAction);
+		SaveSeriesAsAction saveSeriesAsAction = new SaveSeriesAsAction();
+		saveSeriesAsAction.setMenuItem(menus.get(0).getItems().get(2));
+		actions.put(JSkatAction.SAVE_SERIES_AS, saveSeriesAsAction);
 		actions.put(JSkatAction.HELP, new HelpAction());
 		actions.put(JSkatAction.LICENSE, new LicenseAction());
 		actions.put(JSkatAction.EXIT_JSKAT, new ExitAction());
@@ -266,12 +271,12 @@ public class JSkatViewImpl implements JSkatView {
 		actions.get(JSkatAction.NEXT_REPLAY_STEP).setEnabled(false);
 	}
 
-	private void initGUI() {
+	private void initGUI(Screen targetScreen) {
 
 		mainPanel.setLayout(new BorderLayout());
 
 		createToolbar();
-		if (ScreenResolution.isBigScreen() && !options.isHideToolbar()) {
+		if (ScreenResolution.isBigScreen(targetScreen) && !options.isHideToolbar()) {
 			addToolbar();
 		}
 

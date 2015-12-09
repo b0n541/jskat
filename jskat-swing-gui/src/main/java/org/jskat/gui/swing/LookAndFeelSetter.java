@@ -26,33 +26,32 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javafx.stage.Screen;
+
 /**
  * Sets the look and feel
  */
 public class LookAndFeelSetter {
 
-	private static Logger log = LoggerFactory
-			.getLogger(LookAndFeelSetter.class);
+	private static Logger log = LoggerFactory.getLogger(LookAndFeelSetter.class);
 
 	/**
 	 * Sets the look and feel
 	 */
-	public static void setLookAndFeel() {
+	public static void setLookAndFeel(Screen targetScreen) {
 
 		try {
-			LookAndFeel laf = (LookAndFeel) Class
-					.forName("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel").newInstance(); //$NON-NLS-1$
+			LookAndFeel laf = (LookAndFeel) Class.forName("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel") //$NON-NLS-1$
+					.newInstance();
 
 			laf.getDefaults().put("control", new Color(226, 217, 202)); //$NON-NLS-1$
 			laf.getDefaults().put("text", new Color(0, 0, 0)); //$NON-NLS-1$
 			laf.getDefaults().put("nimbusFocus", new Color(255, 245, 193)); //$NON-NLS-1$
-			laf.getDefaults().put(
-					"nimbusLightBackground", new Color(241, 238, 229)); //$NON-NLS-1$
+			laf.getDefaults().put("nimbusLightBackground", new Color(241, 238, 229)); //$NON-NLS-1$
 			laf.getDefaults().put("nimbusBase", new Color(96, 65, 34)); //$NON-NLS-1$
 
-			if (ScreenResolution.isVeryBigScreen()) {
-				laf.getDefaults().put("defaultFont",
-						new Font(Font.SANS_SERIF, 0, 18));
+			if (ScreenResolution.isVeryBigScreen(targetScreen)) {
+				laf.getDefaults().put("defaultFont", new Font(Font.SANS_SERIF, 0, 18));
 			}
 
 			UIManager.setLookAndFeel(laf);

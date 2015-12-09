@@ -68,10 +68,13 @@ public class JSkatFX extends Application {
 
 		primaryStage.setTitle("JSkat " + JSkat.getVersion());
 
+		Point2D savedScreenPosition = getSavedScreenPosition();
+		Screen targetScreen = getTargetScreen(savedScreenPosition);
+
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				LookAndFeelSetter.setLookAndFeel();
+				LookAndFeelSetter.setLookAndFeel(targetScreen);
 			}
 		});
 
@@ -79,12 +82,11 @@ public class JSkatFX extends Application {
 
 		MenuBar menu = getMenu();
 
-		JSkatViewImpl jskatView = new JSkatViewImpl(menu);
+		JSkatViewImpl jskatView = new JSkatViewImpl(targetScreen, menu);
 		JSkatMaster.INSTANCE.setView(jskatView);
 
 		SwingNode swingNode = new SwingNode();
 		swingNode.setContent(jskatView.mainPanel);
-
 
 		VBox pane = new VBox();
 		pane.getChildren().addAll(menu, swingNode);
@@ -104,28 +106,48 @@ public class JSkatFX extends Application {
 		primaryStage.yProperty().addListener(
 				(observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameYPosition(newValue.intValue()));
 
-		placeMainWindow(primaryStage);
+		placeMainWindow(targetScreen, savedScreenPosition, primaryStage);
 
 		primaryStage.show();
 	}
 
-	private void placeMainWindow(Stage primaryStage) {
+	private static void placeMainWindow(Screen targetScreen, Point2D savedScreenPosition, Stage primaryStage) {
 
-		Point mainFramePosition = JSkatOptions.instance().getMainFramePosition();
-		Point2D javaFxPosition = new Point2D(mainFramePosition.getX(), mainFramePosition.getY());
+		double targetXPosition = savedScreenPosition.getX();
+		double targetYPosition = savedScreenPosition.getY();
 
-		boolean screenFound = false;
+		if (targetXPosition < targetScreen.getBounds().getMinX()) {
+			targetXPosition = targetScreen.getBounds().getMinX() + 400;
+		}
+		if (targetXPosition > targetScreen.getBounds().getMaxX()) {
+			targetXPosition = targetScreen.getBounds().getMaxX() - 400;
+		}
+
+		if (targetYPosition < targetScreen.getBounds().getMinY()) {
+			targetYPosition = targetScreen.getBounds().getMinY() + 400;
+		}
+		if (targetYPosition > targetScreen.getBounds().getMaxY()) {
+			targetYPosition = targetScreen.getBounds().getMaxY() - 400;
+		}
+
+		placeMainWindow(targetScreen, primaryStage, new Point2D(targetXPosition, targetYPosition));
+	}
+
+	private static Screen getTargetScreen(Point2D savedScreenPosition) {
 
 		for (Screen screen : Screen.getScreens()) {
-			if (screen.getVisualBounds().contains(javaFxPosition)) {
-				placeMainWindow(screen, primaryStage, javaFxPosition);
-				screenFound = true;
+			if (screen.getVisualBounds().contains(savedScreenPosition)) {
+				return screen;
 			}
 		}
 
-		if (!screenFound) {
-			placeMainWindow(Screen.getPrimary(), primaryStage, javaFxPosition);
-		}
+		return Screen.getPrimary();
+	}
+
+	private static Point2D getSavedScreenPosition() {
+
+		Point mainFramePosition = JSkatOptions.instance().getMainFramePosition();
+		return new Point2D(mainFramePosition.getX(), mainFramePosition.getY());
 	}
 
 	private static void placeMainWindow(Screen screen, Stage primaryStage, Point2D position) {
@@ -166,120 +188,79 @@ public class JSkatFX extends Application {
 		playOnLocalTable.setOnAction(actionEvent -> JSkatMaster.INSTANCE.createTable());
 		MenuItem startSkatSeriesMenuItem = new MenuItem(strings.getString("start_series")); //$NON-NLS-1$
 		startSkatSeriesMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE.post(new CreateSkatSeriesCommand()));
-		startSkatSeriesMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE
-				.getImageView(Icon.PLAY, IconSize.SMALL));
-		MenuItem replayGameMenuItem = new MenuItem(
-				strings.getString("replay_game"));
-		replayGameMenuItem
-				.setOnAction(
-						actionEvent -> JSkatEventBus.TABLE_EVENT_BUSSES
-								.get(JSkatApplicationData.INSTANCE
-										.getActiveTable())
-								.post(new ReplayGameCommand()));
-		replayGameMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE
-				.getImageView(Icon.FIRST, IconSize.SMALL));
-		MenuItem nextReplayMoveMenuItem = new MenuItem(
-				strings.getString("next_replay_move"));
-		nextReplayMoveMenuItem
-				.setOnAction(
-						actionEvent -> JSkatEventBus.TABLE_EVENT_BUSSES
-								.get(JSkatApplicationData.INSTANCE
-										.getActiveTable())
-								.post(new NextReplayMoveCommand()));
-		nextReplayMoveMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE
-				.getImageView(Icon.NEXT, IconSize.SMALL));
+		startSkatSeriesMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.PLAY, IconSize.SMALL));
+		MenuItem replayGameMenuItem = new MenuItem(strings.getString("replay_game"));
+		replayGameMenuItem.setOnAction(actionEvent -> JSkatEventBus.TABLE_EVENT_BUSSES
+				.get(JSkatApplicationData.INSTANCE.getActiveTable()).post(new ReplayGameCommand()));
+		replayGameMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.FIRST, IconSize.SMALL));
+		MenuItem nextReplayMoveMenuItem = new MenuItem(strings.getString("next_replay_move"));
+		nextReplayMoveMenuItem.setOnAction(actionEvent -> JSkatEventBus.TABLE_EVENT_BUSSES
+				.get(JSkatApplicationData.INSTANCE.getActiveTable()).post(new NextReplayMoveCommand()));
+		nextReplayMoveMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.NEXT, IconSize.SMALL));
 
-		skatTableMenu.getItems().addAll(playOnLocalTable,
-				new SeparatorMenuItem(), startSkatSeriesMenuItem,
-				new SeparatorMenuItem(), replayGameMenuItem,
-				nextReplayMoveMenuItem);
+		skatTableMenu.getItems().addAll(playOnLocalTable, new SeparatorMenuItem(), startSkatSeriesMenuItem,
+				new SeparatorMenuItem(), replayGameMenuItem, nextReplayMoveMenuItem);
 
-		Menu neuralNetworksMenu = new Menu(
-				strings.getString("neural_networks"));
+		Menu neuralNetworksMenu = new Menu(strings.getString("neural_networks"));
 
-		MenuItem loadNeuralNetworksMenuItem = new MenuItem(
-				strings.getString("load_nn"));
-		loadNeuralNetworksMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE
-				.getImageView(Icon.LOAD, IconSize.SMALL));
-		MenuItem saveNeuralNetworksMenuItem = new MenuItem(
-				strings.getString("save_nn"));
-		saveNeuralNetworksMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE
-				.getImageView(Icon.SAVE, IconSize.SMALL));
+		MenuItem loadNeuralNetworksMenuItem = new MenuItem(strings.getString("load_nn"));
+		loadNeuralNetworksMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.LOAD, IconSize.SMALL));
+		MenuItem saveNeuralNetworksMenuItem = new MenuItem(strings.getString("save_nn"));
+		saveNeuralNetworksMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.SAVE, IconSize.SMALL));
 		MenuItem resetNeuralNetworksMenuItem = new MenuItem(strings.getString("reset_nn"));
 		resetNeuralNetworksMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.resetNeuralNetworks());
-		resetNeuralNetworksMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE
-				.getImageView(Icon.UNDO, IconSize.SMALL));
+		resetNeuralNetworksMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.UNDO, IconSize.SMALL));
 		MenuItem trainNeuralNetworksMenuItem = new MenuItem(strings.getString("train_nn"));
 		trainNeuralNetworksMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.trainNeuralNetworks());
-		trainNeuralNetworksMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE
-				.getImageView(Icon.TRAIN_NN, IconSize.SMALL));
+		trainNeuralNetworksMenuItem
+				.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.TRAIN_NN, IconSize.SMALL));
 		MenuItem stopTrainNeuralNetworksMenuItem = new MenuItem(strings.getString("stop_train_nn"));
 		stopTrainNeuralNetworksMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.stopTrainNeuralNetworks());
 		stopTrainNeuralNetworksMenuItem
-				.setGraphic(JSkatGraphicRepository.INSTANCE
-						.getImageView(Icon.PAUSE, IconSize.SMALL));
+				.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.PAUSE, IconSize.SMALL));
 
-		neuralNetworksMenu.getItems().addAll(loadNeuralNetworksMenuItem,
-				saveNeuralNetworksMenuItem, new SeparatorMenuItem(),
-				resetNeuralNetworksMenuItem, trainNeuralNetworksMenuItem,
+		neuralNetworksMenu.getItems().addAll(loadNeuralNetworksMenuItem, saveNeuralNetworksMenuItem,
+				new SeparatorMenuItem(), resetNeuralNetworksMenuItem, trainNeuralNetworksMenuItem,
 				stopTrainNeuralNetworksMenuItem);
 
 		Menu issMenu = new Menu(strings.getString("iss"));
 
-		MenuItem playOnIssMenuItem = new MenuItem(
-				strings.getString("play_on_iss"));
-		playOnIssMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE
-				.getIssController().showISSLoginPanel());
-		playOnIssMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE
-				.getImageView(Icon.CONNECT_ISS, IconSize.SMALL));
-		MenuItem createNewTableOnIssMenuItem = new MenuItem(
-				strings.getString("new_table"));
+		MenuItem playOnIssMenuItem = new MenuItem(strings.getString("play_on_iss"));
+		playOnIssMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.getIssController().showISSLoginPanel());
+		playOnIssMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.CONNECT_ISS, IconSize.SMALL));
+		MenuItem createNewTableOnIssMenuItem = new MenuItem(strings.getString("new_table"));
 		createNewTableOnIssMenuItem
-				.setOnAction(actionEvent -> JSkatMaster.INSTANCE
-						.getIssController().requestTableCreation());
-		createNewTableOnIssMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE
-				.getImageView(Icon.TABLE, IconSize.SMALL));
-		MenuItem invitePlayerMenuItem = new MenuItem(
-				strings.getString("invite"));
-		invitePlayerMenuItem.setOnAction(
-				actionEvent -> JSkatMaster.INSTANCE.invitePlayer());
-		invitePlayerMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE
-				.getImageView(Icon.INVITE, IconSize.SMALL));
+				.setOnAction(actionEvent -> JSkatMaster.INSTANCE.getIssController().requestTableCreation());
+		createNewTableOnIssMenuItem
+				.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.TABLE, IconSize.SMALL));
+		MenuItem invitePlayerMenuItem = new MenuItem(strings.getString("invite"));
+		invitePlayerMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.invitePlayer());
+		invitePlayerMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.INVITE, IconSize.SMALL));
 
-		issMenu.getItems().addAll(playOnIssMenuItem, new SeparatorMenuItem(),
-				createNewTableOnIssMenuItem, invitePlayerMenuItem);
+		issMenu.getItems().addAll(playOnIssMenuItem, new SeparatorMenuItem(), createNewTableOnIssMenuItem,
+				invitePlayerMenuItem);
 
 		Menu extrasMenu = new Menu(strings.getString("extras"));
 
-		MenuItem preferencesMenuItem = new MenuItem(
-				strings.getString("preferences"));
-		preferencesMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE
-				.post(new ShowPreferencesCommand()));
-		preferencesMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE
-				.getImageView(Icon.PREFERENCES, IconSize.SMALL));
+		MenuItem preferencesMenuItem = new MenuItem(strings.getString("preferences"));
+		preferencesMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE.post(new ShowPreferencesCommand()));
+		preferencesMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.PREFERENCES, IconSize.SMALL));
 
 		extrasMenu.getItems().addAll(preferencesMenuItem);
 
 		Menu helpMenu = new Menu(strings.getString("help"));
 
 		MenuItem helpMenuItem = new MenuItem(strings.getString("help"));
-		helpMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE
-				.post(new ShowHelpCommand()));
-		helpMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE
-				.getImageView(Icon.HELP, IconSize.SMALL));
+		helpMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE.post(new ShowHelpCommand()));
+		helpMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.HELP, IconSize.SMALL));
 		MenuItem licenseMenuItem = new MenuItem(strings.getString("license"));
-		licenseMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE
-				.post(new ShowLicenseCommand()));
-		licenseMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE
-				.getImageView(Icon.LICENSE, IconSize.SMALL));
+		licenseMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE.post(new ShowLicenseCommand()));
+		licenseMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.LICENSE, IconSize.SMALL));
 		MenuItem aboutMenuItem = new MenuItem(strings.getString("about"));
-		aboutMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE
-				.post(new ShowAboutInformationCommand()));
-		aboutMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE
-				.getImageView(Icon.ABOUT, IconSize.SMALL));
+		aboutMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE.post(new ShowAboutInformationCommand()));
+		aboutMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.ABOUT, IconSize.SMALL));
 
-		helpMenu.getItems().addAll(helpMenuItem, new SeparatorMenuItem(),
-				licenseMenuItem, aboutMenuItem);
+		helpMenu.getItems().addAll(helpMenuItem, new SeparatorMenuItem(), licenseMenuItem, aboutMenuItem);
 
 		menuBar.getMenus().addAll(fileMenu, skatTableMenu, neuralNetworksMenu, issMenu, extrasMenu, helpMenu);
 

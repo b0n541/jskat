@@ -16,10 +16,10 @@
  */
 package org.jskat.gui.swing;
 
-import java.awt.Toolkit;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javafx.stage.Screen;
 
 /**
  * Determines the screen resolution
@@ -28,17 +28,17 @@ public class ScreenResolution {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ScreenResolution.class);
 
-	public static final boolean isBigScreen() {
-		return getScreenHeight() > 800;
+	public static final boolean isBigScreen(Screen targetScreen) {
+		return getScreenHeight(targetScreen) > 800;
 	}
 
-	private static int getScreenHeight() {
-		int screenHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
-		LOG.debug("Screen height: " + screenHeight);
-		return screenHeight;
+	private static int getScreenHeight(Screen targetScreen) {
+		double height = targetScreen.getBounds().getHeight();
+		LOG.debug("Screen height JavaFX: " + height);
+		return (int) height;
 	}
 
-	public static final boolean isVeryBigScreen() {
-		return getScreenHeight() > 1300;
+	public static final boolean isVeryBigScreen(Screen targetScreen) {
+		return getScreenHeight(targetScreen) > 1300;
 	}
 }
