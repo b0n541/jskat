@@ -52,8 +52,7 @@ public class LoginPanel extends AbstractTabPanel {
 	 * @param actions
 	 *            Actions
 	 */
-	public LoginPanel(final String tableName,
-			final ActionMap actions) {
+	public LoginPanel(final String tableName, final ActionMap actions) {
 
 		super(tableName, actions);
 		log.debug("SkatTablePanel: name: " + tableName); //$NON-NLS-1$
@@ -76,9 +75,8 @@ public class LoginPanel extends AbstractTabPanel {
 
 		final JPanel login = new JPanel(LayoutFactory.getMigLayout());
 
-		final JLabel headerLabel = new JLabel(
-				this.strings.getString("login_to_iss_title")); //$NON-NLS-1$
-		headerLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
+		final JLabel headerLabel = new JLabel(this.strings.getString("login_to_iss_title")); //$NON-NLS-1$
+		headerLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 32));
 		login.add(headerLabel, "span 2, align center, wrap"); //$NON-NLS-1$
 		login.add(new JLabel(this.strings.getString("login"))); //$NON-NLS-1$
 		this.loginField = new JTextField(10);
@@ -87,30 +85,24 @@ public class LoginPanel extends AbstractTabPanel {
 		this.passwordField = new JPasswordField(10);
 		login.add(this.passwordField, "growx, wrap"); //$NON-NLS-1$
 
-		final JButton loginButton = new JButton(this.getActionMap().get(
-				JSkatAction.CONNECT_TO_ISS));
+		final JButton loginButton = new JButton(this.getActionMap().get(JSkatAction.CONNECT_TO_ISS));
 		loginButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 
 				final LoginCredentials loginCredentials = new LoginCredentials();
-				loginCredentials.setLoginName(LoginPanel.this.loginField
-						.getText());
-				loginCredentials.setPassword(new String(LoginPanel.this.passwordField
-						.getPassword()));
+				loginCredentials.setLoginName(LoginPanel.this.loginField.getText());
+				loginCredentials.setPassword(new String(LoginPanel.this.passwordField.getPassword()));
 
 				e.setSource(loginCredentials);
 				// fire event again
 				loginButton.dispatchEvent(e);
 			}
 		});
-		final JButton issHomepageButton = new JButton(getActionMap().get(
-				JSkatAction.OPEN_ISS_HOMEPAGE));
-		final JButton issRegisterButton = new JButton(getActionMap().get(
-				JSkatAction.REGISTER_ON_ISS));
+		final JButton issHomepageButton = new JButton(getActionMap().get(JSkatAction.OPEN_ISS_HOMEPAGE));
+		final JButton issRegisterButton = new JButton(getActionMap().get(JSkatAction.REGISTER_ON_ISS));
 
-		final JPanel buttonPanel = new JPanel(
-				LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+		final JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
 		buttonPanel.add(loginButton);
 		buttonPanel.add(issHomepageButton);
