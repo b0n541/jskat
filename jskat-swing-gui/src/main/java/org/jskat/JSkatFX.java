@@ -42,6 +42,7 @@ import org.jskat.util.JSkatResourceBundle;
 
 import javafx.application.Application;
 import javafx.embed.swing.SwingNode;
+import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Menu;
@@ -52,6 +53,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class JSkatFX extends Application {
 
@@ -105,6 +107,13 @@ public class JSkatFX extends Application {
 				(observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameXPosition(newValue.intValue()));
 		primaryStage.yProperty().addListener(
 				(observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameYPosition(newValue.intValue()));
+
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent we) {
+				JSkatMaster.INSTANCE.exitJSkat();
+			}
+		});
 
 		placeMainWindow(targetScreen, savedScreenPosition, primaryStage);
 
