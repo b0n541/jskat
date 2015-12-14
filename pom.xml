@@ -2,6 +2,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<name>JSkat</name>
 	<description>A skat game written in Java</description>
 	<url>http://www.jskat.org</url>
 	<inceptionYear>2003</inceptionYear>
@@ -40,12 +41,12 @@
 	<groupId>org.jskat</groupId>
 	<artifactId>jskat-multimodule</artifactId>
 	<version>0.16.0-SNAPSHOT</version>
-	<name>Multi module for JSkat</name>
 	<packaging>pom</packaging>
 
 	<modules>
 		<module>jskat-base</module>
 		<module>jskat-swing-gui</module>
+		<module>jskat-javafx-gui</module>
 	</modules>
 
 	<properties>
