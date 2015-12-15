@@ -84,17 +84,13 @@ public class LayoutFactory {
 	public static MigLayout getMigLayout(String layoutConstraints,
 			String columnConstraints, String rowConstraints) {
 
-		String finalLayouConstraints = layoutConstraints;
+		String finalLayoutConstraints = layoutConstraints;
 
-		if (layoutConstraints != null) {
-			if (isMacOS()) {
-				finalLayouConstraints = injectMacOSLayoutConstraints(layoutConstraints);
-			} else if (layoutConstraints != null) {
-				finalLayouConstraints = layoutConstraints;
-			}
+		if (layoutConstraints != null && isMacOS()) {
+			finalLayoutConstraints = injectMacOSLayoutConstraints(layoutConstraints);
 		}
 
-		return new MigLayout(finalLayouConstraints, columnConstraints,
+		return new MigLayout(finalLayoutConstraints, columnConstraints,
 				rowConstraints);
 	}
 
