@@ -34,7 +34,7 @@ public class GameAnnounceAction extends AbstractHumanJSkatAction {
 	 */
 	public GameAnnounceAction() {
 
-		putValue(Action.NAME, strings.getString("announce")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("announce")); //$NON-NLS-1$
 
 		setActionCommand(JSkatAction.ANNOUNCE_GAME);
 		setIcon(Icon.PLAY);

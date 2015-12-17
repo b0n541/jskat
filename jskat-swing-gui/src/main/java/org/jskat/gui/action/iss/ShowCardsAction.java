@@ -21,7 +21,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.jskat.control.JSkatMaster;
 import org.jskat.control.command.iss.IssShowCardsCommand;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
@@ -38,7 +37,7 @@ public class ShowCardsAction extends AbstractJSkatAction {
 	 */
 	public ShowCardsAction() {
 
-		putValue(Action.NAME, this.strings.getString("show_cards")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("show_cards")); //$NON-NLS-1$
 
 		setIcon(Icon.PLAY);
 	}
@@ -49,6 +48,6 @@ public class ShowCardsAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(final ActionEvent e) {
 
-       eventBus.post(new IssShowCardsCommand());
+       EVENTBUS.post(new IssShowCardsCommand());
 	}
 }

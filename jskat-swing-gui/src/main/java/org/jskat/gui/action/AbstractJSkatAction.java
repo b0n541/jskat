@@ -36,15 +36,15 @@ public abstract class AbstractJSkatAction extends AbstractAction {
 	/**
 	 * JSkat graphics repository
 	 */
-	protected final static JSkatGraphicRepository bitmaps = JSkatGraphicRepository.INSTANCE;
+	protected final static JSkatGraphicRepository BITMAPS = JSkatGraphicRepository.INSTANCE;
 	/**
 	 * JSkat i18n strings
 	 */
-	protected final static JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
+	protected final static JSkatResourceBundle STRINGS = JSkatResourceBundle.INSTANCE;
 	/**
 	 * JSkat event bus
 	 */
-	protected final static JSkatEventBus eventBus = JSkatEventBus.INSTANCE;
+	protected final static JSkatEventBus EVENTBUS = JSkatEventBus.INSTANCE;
 	
 	protected MenuItem menuItem;
 
@@ -59,11 +59,11 @@ public abstract class AbstractJSkatAction extends AbstractAction {
 	protected void setIcon(JSkatGraphicRepository.Icon icon) {
 		putValue(
 				SMALL_ICON,
-				new ImageIcon(AbstractJSkatAction.bitmaps.getIconImage(icon,
+				new ImageIcon(BITMAPS.getIconImage(icon,
 						JSkatGraphicRepository.IconSize.SMALL)));
 		putValue(
 				LARGE_ICON_KEY,
-				new ImageIcon(AbstractJSkatAction.bitmaps.getIconImage(icon,
+				new ImageIcon(BITMAPS.getIconImage(icon,
 						JSkatGraphicRepository.IconSize.BIG)));
 	}
 

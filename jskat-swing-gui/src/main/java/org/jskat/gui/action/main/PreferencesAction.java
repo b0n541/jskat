@@ -37,9 +37,9 @@ public class PreferencesAction extends AbstractJSkatAction {
 	 */
 	public PreferencesAction() {
 
-		putValue(Action.NAME, strings.getString("preferences")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("preferences")); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION,
-				strings.getString("preferences_tooltip")); //$NON-NLS-1$
+				STRINGS.getString("preferences_tooltip")); //$NON-NLS-1$
 
 		setIcon(Icon.PREFERENCES);
 	}
@@ -50,6 +50,6 @@ public class PreferencesAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		eventBus.post(new ShowPreferencesCommand());
+		EVENTBUS.post(new ShowPreferencesCommand());
 	}
 }

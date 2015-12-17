@@ -15,8 +15,7 @@
  */
 package org.jskat.data;
 
-import java.awt.Dimension;
-import java.awt.Point;
+import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -306,9 +305,6 @@ public final class JSkatOptions {
 				log.warn("Could not create property file <" + filename //$NON-NLS-1$
 						+ "> due to " + e1.getClass() + ": " + e1.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
-
-			setDefaultProperties();
-
 		} catch (IOException e) {
 			log.warn("Could not load properties: " + e.getClass() + ": " //$NON-NLS-1$ //$NON-NLS-2$
 					+ e.getMessage());
@@ -1258,8 +1254,11 @@ public final class JSkatOptions {
 		setOption(Option.WAIT_TIME_AFTER_TRICK, Integer.valueOf(0));
 		setOption(Option.MAIN_FRAME_X_POSITION, Integer.MIN_VALUE);
 		setOption(Option.MAIN_FRAME_Y_POSITION, Integer.MIN_VALUE);
-		setOption(Option.MAIN_FRAME_WIDTH, Integer.MIN_VALUE);
-		setOption(Option.MAIN_FRAME_HEIGHT, Integer.MIN_VALUE);
+
+        // fix odd looking minimized windows on the very first startup
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		setOption(Option.MAIN_FRAME_WIDTH, (int)screenSize.getWidth() / 2);
+		setOption(Option.MAIN_FRAME_HEIGHT, (int)screenSize.getHeight() / 2);
 	}
 
 	/**

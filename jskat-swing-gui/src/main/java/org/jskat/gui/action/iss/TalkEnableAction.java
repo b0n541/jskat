@@ -21,7 +21,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.jskat.control.JSkatMaster;
 import org.jskat.control.command.iss.IssToggleTalkEnabledCommand;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
@@ -38,7 +37,7 @@ public class TalkEnableAction extends AbstractJSkatAction {
 	 */
 	public TalkEnableAction() {
 
-		putValue(Action.NAME, this.strings.getString("talk")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("talk")); //$NON-NLS-1$
 
 		setIcon(Icon.CHAT);
 	}
@@ -49,6 +48,6 @@ public class TalkEnableAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-       eventBus.post(new IssToggleTalkEnabledCommand());
+       EVENTBUS.post(new IssToggleTalkEnabledCommand());
 	}
 }

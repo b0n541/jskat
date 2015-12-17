@@ -37,7 +37,7 @@ public class LogoutAction extends AbstractJSkatAction {
 	 */
 	public LogoutAction() {
 
-		putValue(Action.NAME, strings.getString("disconnect_from_iss")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("disconnect_from_iss")); //$NON-NLS-1$
 		setIcon(Icon.LOG_OUT);
 	}
 
@@ -47,6 +47,6 @@ public class LogoutAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		eventBus.post(new IssDisconnectCommand());
+		EVENTBUS.post(new IssDisconnectCommand());
 	}
 }
