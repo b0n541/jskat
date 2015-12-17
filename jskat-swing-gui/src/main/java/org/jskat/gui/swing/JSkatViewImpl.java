@@ -36,7 +36,6 @@ import javax.swing.JTabbedPane;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.jskat.JSkat;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.command.general.HideToolbarCommand;
@@ -178,10 +177,14 @@ public class JSkatViewImpl implements JSkatView {
 	static ActionMap actions;
 	private LobbyPanel issLobby;
 
+	private static String VERSION;
+
 	/**
 	 * Constructor
 	 */
-	public JSkatViewImpl(Screen targetScreen, MenuBar menu) {
+	public JSkatViewImpl(Screen targetScreen, MenuBar menu, String version) {
+
+		this.VERSION = version;
 
 		JSkatEventBus.INSTANCE.register(this);
 
@@ -383,7 +386,7 @@ public class JSkatViewImpl implements JSkatView {
 				"JSkat " //$NON-NLS-1$
 						+ this.strings.getString("version") //$NON-NLS-1$
 						+ " " //$NON-NLS-1$
-						+ JSkat.getVersion() + "\n\n" //$NON-NLS-1$
+						+ VERSION + "\n\n" //$NON-NLS-1$
 						+ "http://www.jskat.org\n" //$NON-NLS-1$
 						+ "http://sourceforge.net/projects/jskat" //$NON-NLS-1$
 						+ "\n\n" //$NON-NLS-1$

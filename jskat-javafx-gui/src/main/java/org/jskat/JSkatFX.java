@@ -21,14 +21,18 @@ import java.awt.Point;
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
+import org.jskat.control.command.general.ShowWelcomeInformationCommand;
 import org.jskat.data.DesktopSavePathResolver;
 import org.jskat.data.JSkatOptions;
+import org.jskat.data.JSkatOptions.Option;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.javafx.JSkatMenuFactory;
 import org.jskat.gui.swing.JSkatViewImpl;
 import org.jskat.gui.swing.LookAndFeelSetter;
 import org.jskat.util.JSkatResourceBundle;
+import org.jskat.util.version.VersionChecker;
 
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
@@ -57,6 +61,8 @@ import javafx.util.Duration;
 
 public class JSkatFX extends Application {
 
+	private static final String VERSION = "0.10.0";
+
 	private static final int SPLASH_WIDTH = 500;
 	private static final int SPLASH_HEIGHT = 300;
 
@@ -79,7 +85,7 @@ public class JSkatFX extends Application {
 		ImageView splashScreenImage = new ImageView(
 				new Image(JSkatFX.class.getResource("/org/jskat/gui/img/gui/splash.png").toExternalForm()));
 		splashScreenProgressBar = new ProgressBar();
-		splashScreenProgressBar.setPrefWidth(SPLASH_WIDTH - 20);
+		splashScreenProgressBar.setPrefWidth(SPLASH_WIDTH);
 		splashScreenProgressText = new Label("Loading JSkat...");
 		splashScreenProgressText.setAlignment(Pos.CENTER);
 		splashScreenLayout = new VBox();
@@ -118,7 +124,7 @@ public class JSkatFX extends Application {
 				updateMessage(JSkatResourceBundle.INSTANCE.getString("splash_look_for_ai_players"));
 
 				MenuBar menu = JSkatMenuFactory.build();
-				JSkatViewImpl jskatView = new JSkatViewImpl(targetScreen, menu);
+				JSkatViewImpl jskatView = new JSkatViewImpl(targetScreen, menu, VERSION);
 				JSkatMaster.INSTANCE.setView(jskatView);
 
 				return new InitializedGuiElements(menu, jskatView);
@@ -135,7 +141,7 @@ public class JSkatFX extends Application {
 			JSkatViewImpl jskatView) {
 
 		jskatMainStage = new Stage(StageStyle.DECORATED);
-		jskatMainStage.setTitle("JSkat " + JSkat.getVersion());
+		jskatMainStage.setTitle("JSkat " + VERSION);
 		jskatMainStage.getIcons().add(JSkatGraphicRepository.INSTANCE.getJSkatLogoImageFX());
 
 		SwingNode swingNode = new SwingNode();
@@ -169,6 +175,14 @@ public class JSkatFX extends Application {
 		placeMainWindow(targetScreen, savedScreenPosition, jskatMainStage);
 
 		jskatMainStage.show();
+
+		if (JSkatOptions.instance().getBoolean(Option.SHOW_TIPS_AT_START_UP)) {
+			JSkatEventBus.INSTANCE.post(new ShowWelcomeInformationCommand());
+		}
+
+		if (JSkatOptions.instance().getBoolean(Option.CHECK_FOR_NEW_VERSION_AT_START_UP)) {
+			JSkatMaster.INSTANCE.checkJSkatVersion(VERSION, VersionChecker.getLatestVersion());
+		}
 	}
 
 	private void showSplashScreen(Screen targetScreen, final Stage splashStage, Task<?> startupTask,
