@@ -37,8 +37,8 @@ public class AboutAction extends AbstractJSkatAction {
 	 * @see AbstractJSkatAction#AbstractJSkatAction()
 	 */
 	public AboutAction() {
-		putValue(Action.NAME, strings.getString("about")); //$NON-NLS-1$
-		putValue(Action.SHORT_DESCRIPTION, strings.getString("about_tooltip")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("about")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, STRINGS.getString("about_tooltip")); //$NON-NLS-1$
 		setIcon(Icon.ABOUT);
 	}
 

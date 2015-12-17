@@ -36,9 +36,9 @@ public class LoadSeriesAction extends AbstractJSkatAction {
 	 */
 	public LoadSeriesAction() {
 
-		putValue(Action.NAME, this.strings.getString("load_series")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("load_series")); //$NON-NLS-1$
 		putValue(Action.SHORT_DESCRIPTION,
-				this.strings.getString("load_series_tooltip")); //$NON-NLS-1$
+				STRINGS.getString("load_series_tooltip")); //$NON-NLS-1$
 
 		setIcon(Icon.LOAD);
 	}

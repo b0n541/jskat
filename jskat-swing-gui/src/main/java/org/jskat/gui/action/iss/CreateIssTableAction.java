@@ -39,7 +39,7 @@ public class CreateIssTableAction extends AbstractJSkatAction {
 
 		// FIXME (jan 23.11.2010) use CreateTableAction
 
-		putValue(Action.NAME, strings.getString("new_table")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("new_table")); //$NON-NLS-1$
 		setIcon(Icon.TABLE);
 	}
 

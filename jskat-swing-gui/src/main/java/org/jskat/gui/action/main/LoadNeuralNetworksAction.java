@@ -37,8 +37,8 @@ public class LoadNeuralNetworksAction extends AbstractJSkatAction {
 	 */
 	public LoadNeuralNetworksAction() {
 
-		putValue(Action.NAME, strings.getString("load_nn")); //$NON-NLS-1$
-		putValue(Action.SHORT_DESCRIPTION, strings.getString("load_nn_tooltip")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("load_nn")); //$NON-NLS-1$
+		putValue(Action.SHORT_DESCRIPTION, STRINGS.getString("load_nn_tooltip")); //$NON-NLS-1$
 
 		setIcon(Icon.LOAD);
 	}

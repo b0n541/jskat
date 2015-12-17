@@ -59,6 +59,8 @@ public class JSkatFX extends Application {
 
 		primaryStage.setTitle("JSkat " + JSkat.getVersion());
 
+		primaryStage.setOnCloseRequest(windowEvent -> JSkatMaster.INSTANCE.exitJSkat());
+
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {

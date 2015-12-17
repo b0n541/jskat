@@ -21,7 +21,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.jskat.control.JSkatMaster;
 import org.jskat.control.command.iss.IssReadyToPlayCommand;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
@@ -38,7 +37,7 @@ public class ReadyAction extends AbstractJSkatAction {
 	 */
 	public ReadyAction() {
 
-		putValue(Action.NAME, this.strings.getString("ready")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("ready")); //$NON-NLS-1$
 
 		setIcon(Icon.OK);
 	}
@@ -49,6 +48,6 @@ public class ReadyAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-        eventBus.post(new IssReadyToPlayCommand());
+        EVENTBUS.post(new IssReadyToPlayCommand());
 	}
 }

@@ -21,7 +21,6 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
-import org.jskat.control.JSkatMaster;
 import org.jskat.control.command.iss.IssResignCommand;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
@@ -38,7 +37,7 @@ public class ResignAction extends AbstractJSkatAction {
 	 */
 	public ResignAction() {
 
-		putValue(Action.NAME, this.strings.getString("resign")); //$NON-NLS-1$
+		putValue(Action.NAME, STRINGS.getString("resign")); //$NON-NLS-1$
 
 		setIcon(Icon.WHITE_FLAG);
 	}
@@ -49,6 +48,6 @@ public class ResignAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-        eventBus.post(new IssResignCommand());
+        EVENTBUS.post(new IssResignCommand());
 	}
 }

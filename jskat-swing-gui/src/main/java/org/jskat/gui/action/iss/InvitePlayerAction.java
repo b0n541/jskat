@@ -36,7 +36,7 @@ public class InvitePlayerAction extends AbstractJSkatAction {
 	 */
 	public InvitePlayerAction() {
 
-		putValue(NAME, this.strings.getString("invite")); //$NON-NLS-1$
+		putValue(NAME, STRINGS.getString("invite")); //$NON-NLS-1$
 
 		setIcon(Icon.INVITE);
 	}

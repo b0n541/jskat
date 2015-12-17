@@ -45,6 +45,6 @@ public class ChangeTableSeatsAction extends AbstractJSkatAction {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		eventBus.post(new IssTableSeatChangeCommand());
+		EVENTBUS.post(new IssTableSeatChangeCommand());
 	}
 }
