@@ -8,9 +8,9 @@
 		<version>0.16.0-SNAPSHOT</version>
 	</parent>
 
-	<name>JSkat</name>
-	<description>JavaFX module for JSkat</description>
-	<artifactId>JSkatFX</artifactId>
+	<name>JSkat-JavaFx</name>
+	<description>JavaFX module and main application class for JSkat</description>
+	<artifactId>JSkat</artifactId>
 	<packaging>jar</packaging>
 
 	<dependencies>
@@ -29,20 +29,18 @@
 	<build>
 		<plugins>
 			<!-- JDK -->
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.1</version>
-					<configuration>
-						<source>1.8</source>
-						<target>1.8</target>
-					</configuration>
-				</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
 			<!-- Source licensing -->
 			<plugin>
 				<groupId>com.mycila</groupId>
 				<artifactId>license-maven-plugin</artifactId>
-				<version>2.6</version>
 				<configuration>
 					<header>com/mycila/maven/plugin/license/templates/GPL-3.txt</header>
 					<useDefaultExcludes>true</useDefaultExcludes>
@@ -50,47 +48,21 @@
 						<include>**/*.java</include>
 					</includes>
 					<properties>
+						<project.name>JSkat</project.name>
 						<releasetimestamp>${maven.build.timestamp}</releasetimestamp>
 						<releaseversion>${project.version}</releaseversion>
 					</properties>
 				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<!-- Source packaging -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.3</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<!-- Javadoc -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
-				<executions>
-					<execution>
-						<phase>install</phase>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<!-- JAR file with all dependencies -->
 			<plugin>
