@@ -15,7 +15,9 @@
  */
 package org.jskat.data;
 
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -47,9 +49,10 @@ public final class JSkatOptions {
 		/**
 		 * English.
 		 */
-		ENGLISH, /**
-					 * German.
-					 */
+		ENGLISH,
+		/**
+		 * German.
+		 */
 		GERMAN;
 	}
 
@@ -57,135 +60,142 @@ public final class JSkatOptions {
 		/**
 		 * Language for the GUI
 		 */
-		LANGUAGE(SupportedLanguage.class), /**
-											 * Save path for properties file and
-											 * log file
-											 */
-		SAVE_PATH(String.class), /**
-									 * Properties file and log file are saved in
-									 * working directory
-									 */
-		SAVE_IN_WORKING_DIRECTORY(
-				Boolean.class), /**
-								 * JSkat checks the website for a new version on
-								 * start up
-								 */
-		CHECK_FOR_NEW_VERSION_AT_START_UP(
-				Boolean.class), /**
-								 * JSkat shows tips at start up
-								 */
-		SHOW_TIPS_AT_START_UP(
-				Boolean.class), /**
-								 * Cheat/Debug mode, e.g. all cards can be seen
-								 */
-		CHEAT_DEBUG_MODE(Boolean.class), /**
-											 * Card set
-											 */
-		CARD_SET(CardSet.class), /**
-									 * Maximum players on a table
-									 */
-		MAX_PLAYER_COUNT(Integer.class), /**
-											 * Web address of the ISS
-											 */
-		ISS_ADDRESS(String.class), /**
-									 * Network port of the ISS
-									 */
-		ISS_PORT(Integer.class), /**
-									 * Rule set
-									 */
-		RULES(RuleSet.class), /**
-								 * Allow contra/re calling
-								 */
-		PLAY_CONTRA(Boolean.class, RULES), /**
-											 * Time of Contra/Re calling
-											 */
-		CONTRA_CALLING_TIME(ContraCallingTime.class,
-				PLAY_CONTRA), /**
-								 * Contra/Re calling is only allowed if the
-								 * player has at least bid 18
-								 */
-		CONTRA_AFTER_BID_18(Boolean.class, PLAY_CONTRA), /**
-															 * Play bock games
-															 */
-		PLAY_BOCK(Boolean.class,
-				RULES), /**
-						 * Bock event: all players passed, no bid
-						 */
-		BOCK_EVENT_NO_BID(Boolean.class,
-				PLAY_BOCK), /**
-							 * Bock event: Contra/Re was called
-							 */
-		BOCK_EVENT_CONTRA_RE_CALLED(Boolean.class,
-				PLAY_BOCK), /**
-							 * Bock event: Declarer lost a game after contra was
-							 * called
-							 */
-		BOCK_EVENT_LOST_AFTER_CONTRA(Boolean.class,
-				PLAY_BOCK), /**
-							 * Bock event: Declarer lost a grand game
-							 */
-		BOCK_EVENT_LOST_GRAND(Boolean.class,
-				PLAY_BOCK), /**
-							 * Bock event: Declarer lost a game with 60 points
-							 */
-		BOCK_EVENT_LOST_WITH_60(Boolean.class,
-				PLAY_BOCK), /**
-							 * Bock event: One player has X00 points, where X is
-							 * 1..9
-							 */
-		BOCK_EVENT_MULTIPLE_OF_HUNDRED_SCORE(Boolean.class,
-				PLAY_BOCK), /**
-							 * Play ramsch games
-							 */
-		PLAY_RAMSCH(Boolean.class,
-				RULES), /**
-						 * Ramsch event: all players passed, no bid
-						 */
-		RAMSCH_EVENT_NO_BID(Boolean.class,
-				PLAY_RAMSCH), /**
-								 * Ramsch event: play ramsch after a round of
-								 * bock games
-								 */
-		RAMSCH_EVENT_RAMSCH_AFTER_BOCK(Boolean.class,
-				PLAY_RAMSCH), /**
-								 * Player, who gets the skat in a ramsch game
-								 */
-		RAMSCH_SKAT_OWNER(RamschSkatOwner.class,
-				PLAY_RAMSCH), /**
-								 * Play Schieberamsch
-								 */
-		SCHIEBERAMSCH(Boolean.class,
-				PLAY_RAMSCH), /**
-								 * Allow jacks to discard in Schieberamsch games
-								 */
-		SCHIEBERAMSCH_JACKS_IN_SKAT(Boolean.class,
-				SCHIEBERAMSCH), /**
-								 * It is allowed to play Grand hand instead of a
-								 * ramsch game
-								 */
-		RAMSCH_GRAND_HAND_POSSIBLE(
-				Boolean.class), /**
-								 * Allow playing of revolution (not used a.t.m.)
-								 */
-		PLAY_REVOLUTION(Boolean.class), /**
-										 * Waiting time after finishing a trick
-										 */
-		WAIT_TIME_AFTER_TRICK(Integer.class), /**
-												 * Hide toolbar
-												 */
-		HIDE_TOOLBAR(Boolean.class), /**
-										 * X-Position of main frame on screen
-										 */
-		MAIN_FRAME_X_POSITION(
-				Integer.class), /**
-								 * Y-Position of main frame on screen
-								 */
-		MAIN_FRAME_Y_POSITION(Integer.class), /**
-												 * Width of main frame
-												 */
-		MAIN_FRAME_WIDTH(Integer.class), /**
-											 * Height of main frame
-											 */
+		LANGUAGE(SupportedLanguage.class),
+		/**
+		 * Save path for properties file and log file
+		 */
+		SAVE_PATH(String.class),
+		/**
+		 * Properties file and log file are saved in working directory
+		 */
+		SAVE_IN_WORKING_DIRECTORY(Boolean.class),
+		/**
+		 * JSkat checks the website for a new version on start up
+		 */
+		CHECK_FOR_NEW_VERSION_AT_START_UP(Boolean.class),
+		/**
+		 * JSkat shows tips at start up
+		 */
+		SHOW_TIPS_AT_START_UP(Boolean.class),
+		/**
+		 * Cheat/Debug mode, e.g. all cards can be seen
+		 */
+		CHEAT_DEBUG_MODE(Boolean.class),
+		/**
+		 * Card set
+		 */
+		CARD_SET(CardSet.class),
+		/**
+		 * Maximum players on a table
+		 */
+		MAX_PLAYER_COUNT(Integer.class),
+		/**
+		 * Web address of the ISS
+		 */
+		ISS_ADDRESS(String.class),
+		/**
+		 * Network port of the ISS
+		 */
+		ISS_PORT(Integer.class),
+		/**
+		 * Rule set
+		 */
+		RULES(RuleSet.class),
+		/**
+		 * Allow contra/re calling
+		 */
+		PLAY_CONTRA(Boolean.class, RULES),
+		/**
+		 * Time of Contra/Re calling
+		 */
+		CONTRA_CALLING_TIME(ContraCallingTime.class, PLAY_CONTRA),
+		/**
+		 * Contra/Re calling is only allowed if the player has at least bid 18
+		 */
+		CONTRA_AFTER_BID_18(Boolean.class, PLAY_CONTRA),
+		/**
+		 * Play bock games
+		 */
+		PLAY_BOCK(Boolean.class, RULES),
+		/**
+		 * Bock event: all players passed, no bid
+		 */
+		BOCK_EVENT_NO_BID(Boolean.class, PLAY_BOCK),
+		/**
+		 * Bock event: Contra/Re was called
+		 */
+		BOCK_EVENT_CONTRA_RE_CALLED(Boolean.class, PLAY_BOCK),
+		/**
+		 * Bock event: Declarer lost a game after contra was called
+		 */
+		BOCK_EVENT_LOST_AFTER_CONTRA(Boolean.class, PLAY_BOCK),
+		/**
+		 * Bock event: Declarer lost a grand game
+		 */
+		BOCK_EVENT_LOST_GRAND(Boolean.class, PLAY_BOCK),
+		/**
+		 * Bock event: Declarer lost a game with 60 points
+		 */
+		BOCK_EVENT_LOST_WITH_60(Boolean.class, PLAY_BOCK),
+		/**
+		 * Bock event: One player has X00 points, where X is 1..9
+		 */
+		BOCK_EVENT_MULTIPLE_OF_HUNDRED_SCORE(Boolean.class, PLAY_BOCK),
+		/**
+		 * Play ramsch games
+		 */
+		PLAY_RAMSCH(Boolean.class, RULES),
+		/**
+		 * Ramsch event: all players passed, no bid
+		 */
+		RAMSCH_EVENT_NO_BID(Boolean.class, PLAY_RAMSCH),
+		/**
+		 * Ramsch event: play ramsch after a round of bock games
+		 */
+		RAMSCH_EVENT_RAMSCH_AFTER_BOCK(Boolean.class, PLAY_RAMSCH),
+		/**
+		 * Player, who gets the skat in a ramsch game
+		 */
+		RAMSCH_SKAT_OWNER(RamschSkatOwner.class, PLAY_RAMSCH),
+		/**
+		 * Play Schieberamsch
+		 */
+		SCHIEBERAMSCH(Boolean.class, PLAY_RAMSCH),
+		/**
+		 * Allow jacks to discard in Schieberamsch games
+		 */
+		SCHIEBERAMSCH_JACKS_IN_SKAT(Boolean.class, SCHIEBERAMSCH),
+		/**
+		 * It is allowed to play Grand hand instead of a ramsch game
+		 */
+		RAMSCH_GRAND_HAND_POSSIBLE(Boolean.class),
+		/**
+		 * Allow playing of revolution (not used a.t.m.)
+		 */
+		PLAY_REVOLUTION(Boolean.class),
+		/**
+		 * Waiting time after finishing a trick
+		 */
+		WAIT_TIME_AFTER_TRICK(Integer.class),
+		/**
+		 * Hide toolbar
+		 */
+		HIDE_TOOLBAR(Boolean.class),
+		/**
+		 * X-Position of main frame on screen
+		 */
+		MAIN_FRAME_X_POSITION(Integer.class),
+		/**
+		 * Y-Position of main frame on screen
+		 */
+		MAIN_FRAME_Y_POSITION(Integer.class),
+		/**
+		 * Width of main frame
+		 */
+		MAIN_FRAME_WIDTH(Integer.class),
+		/**
+		 * Height of main frame
+		 */
 		MAIN_FRAME_HEIGHT(Integer.class);
 
 		public final Class clazz;
@@ -203,7 +213,7 @@ public final class JSkatOptions {
 		 * Gets the enum name as property key.<br>
 		 * Calls name(), converts everything to lower case and replaces all
 		 * occurences of "_[a-z]" to "[A-Z]"
-		 * 
+		 *
 		 * @return Property name of the enum
 		 */
 		public String propertyName() {
@@ -220,7 +230,7 @@ public final class JSkatOptions {
 		/**
 		 * Gets the enum name from a property key.<br>
 		 * Inserts a '_' before each capital letter or number.
-		 * 
+		 *
 		 * @param property
 		 *            Property
 		 * @return Enum
@@ -248,7 +258,7 @@ public final class JSkatOptions {
 	/**
 	 * Returns the instance of the singleton JSkatOptions.<br>
 	 * This method must be called at the very beginning.
-	 * 
+	 *
 	 * @param savePathResolver
 	 *            Resolver for save path
 	 * @return Options
@@ -266,7 +276,7 @@ public final class JSkatOptions {
 	 * Returns the instance of the singleton {@link JSkatOptions}<br>
 	 * This methods throws a {@link IllegalStateException} if
 	 * {@link #instance(SavePathResolver)} was not called before
-	 * 
+	 *
 	 * @return Options
 	 */
 	static public JSkatOptions instance() {
@@ -313,7 +323,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property cardFace
-	 * 
+	 *
 	 * @return Value of property cardFace
 	 */
 	public CardSet getCardSet() {
@@ -322,7 +332,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property language.
-	 * 
+	 *
 	 * @return Value of property language.
 	 */
 	public SupportedLanguage getLanguage() {
@@ -331,7 +341,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Gets the maximum number of players allowed in a skat series
-	 * 
+	 *
 	 * @return Maximum number
 	 */
 	public Integer getMaxPlayerCount() {
@@ -340,7 +350,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property ramschSkatOwner.
-	 * 
+	 *
 	 * @return Value of property ramschSkatOwner.
 	 */
 	public RamschSkatOwner getRamschSkatOwner() {
@@ -349,7 +359,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property rules.
-	 * 
+	 *
 	 * @return Value of property rules.
 	 */
 	public RuleSet getRules() {
@@ -358,7 +368,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property savePath.
-	 * 
+	 *
 	 * @return Value of property savePath.
 	 */
 	public String getSavePath() {
@@ -380,8 +390,7 @@ public final class JSkatOptions {
 	}
 
 	public Dimension getMainFrameSize() {
-		return new Dimension(getInteger(Option.MAIN_FRAME_WIDTH),
-				getInteger(Option.MAIN_FRAME_HEIGHT));
+		return new Dimension(getInteger(Option.MAIN_FRAME_WIDTH), getInteger(Option.MAIN_FRAME_HEIGHT));
 	}
 
 	public void setMainFrameWidth(Integer width) {
@@ -393,8 +402,7 @@ public final class JSkatOptions {
 	}
 
 	public Point getMainFramePosition() {
-		return new Point(getInteger(Option.MAIN_FRAME_X_POSITION),
-				getInteger(Option.MAIN_FRAME_Y_POSITION));
+		return new Point(getInteger(Option.MAIN_FRAME_X_POSITION), getInteger(Option.MAIN_FRAME_Y_POSITION));
 	}
 
 	public void setMainFrameXPosition(Integer xPosition) {
@@ -419,7 +427,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Gets the current skat table options
-	 * 
+	 *
 	 * @return The current skat table options
 	 */
 	public SkatTableOptions getSkatTableOptions() {
@@ -453,7 +461,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property bockEventContraReAnnounced
-	 * 
+	 *
 	 * @return Value of property bockEventConOptiontraReAnnounced
 	 */
 	public Boolean isBockEventContraReCalled() {
@@ -467,7 +475,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property bockEventLostAfterContra
-	 * 
+	 *
 	 * @return Value of property bockEventLostAfterContra
 	 */
 	public Boolean isBockEventLostAfterContra() {
@@ -481,7 +489,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property bockEventLostGrand
-	 * 
+	 *
 	 * @return Value of property bockEventLostGrand
 	 */
 	public Boolean isBockEventLostGrand() {
@@ -495,7 +503,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property bockEventLostWith60
-	 * 
+	 *
 	 * @return Value of property bockEventLostWith60
 	 */
 	public Boolean isBockEventLostWith60() {
@@ -509,7 +517,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property bockEventPlayerHasX00Points
-	 * 
+	 *
 	 * @return Value of property bockEventPlayerHasX00Points
 	 */
 	public Boolean isBockEventMultipleOfHundredScore() {
@@ -518,7 +526,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Checks whether a player score of a multiple of hundred is a bock event.
-	 * 
+	 *
 	 * @param checkParentOption
 	 *            <code>true</code>, if the parent option should be checked
 	 * @return <code>true</code>, if the player score of a multiple of hundred
@@ -531,7 +539,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Checks whether at least a bid of 18 has to be done to say contra
-	 * 
+	 *
 	 * @return TRUE, if the check succeeds
 	 */
 	public Boolean isContraAfterBid18() {
@@ -540,7 +548,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Checks whether at least a bid of 18 has to be done to say contra
-	 * 
+	 *
 	 * @param checkParentOption
 	 *            TRUE, if the parent option must be true too
 	 * @return TRUE, if the check succeeds
@@ -552,7 +560,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property cheatDebugMode.
-	 * 
+	 *
 	 * @return Value of property cheatDebugMode.
 	 */
 	public Boolean isCheatDebugMode() {
@@ -561,7 +569,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property playBock.
-	 * 
+	 *
 	 * @return Value of property playBock.
 	 */
 	public Boolean isPlayBock() {
@@ -570,7 +578,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property playBock.
-	 * 
+	 *
 	 * @param checkParentOption
 	 *            TRUE, if the parent option must be true too
 	 * @return Value of property playBock.
@@ -595,7 +603,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property playKontra.
-	 * 
+	 *
 	 * @return Value of property playKontra.
 	 */
 	public Boolean isPlayContra() {
@@ -604,7 +612,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property playKontra.
-	 * 
+	 *
 	 * @param checkParentOption
 	 *            TRUE, if the parent option must be true too
 	 * @return Value of property playKontra.
@@ -615,7 +623,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property playRamsch.
-	 * 
+	 *
 	 * @return Value of property playRamsch.
 	 */
 	public Boolean isPlayRamsch() {
@@ -624,7 +632,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Checks whether Ramsch should be played
-	 * 
+	 *
 	 * @param checkParentOption
 	 *            TRUE, if parent option should be checked too
 	 * @return TRUE, if Ramsch should be played
@@ -635,7 +643,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property playRevolution.
-	 * 
+	 *
 	 * @return Value of property playRevolution.
 	 */
 	public Boolean isPlayRevolution() {
@@ -648,7 +656,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property ramschEventNoBid
-	 * 
+	 *
 	 * @return Value of property ramschEventNoBid
 	 */
 	public Boolean isRamschEventNoBid() {
@@ -662,7 +670,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property ramschEventRamschAfterBock
-	 * 
+	 *
 	 * @return Value of property ramschEventRamschAfterBock
 	 */
 	public Boolean isRamschEventRamschAfterBock() {
@@ -676,7 +684,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property ramschGrandHandPossible
-	 * 
+	 *
 	 * @return Value of property ramschGrandHandPossible
 	 */
 	public Boolean isRamschGrandHandPossible() {
@@ -685,7 +693,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property schieberRamsch
-	 * 
+	 *
 	 * @return Value of property schieberRamsch
 	 */
 	public Boolean isSchieberamsch() {
@@ -698,7 +706,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Getter for property schieberRamschJacksInSkat
-	 * 
+	 *
 	 * @return Value of property schieberRamschJacksInSkat
 	 */
 	public Boolean isSchieberamschJacksInSkat() {
@@ -735,7 +743,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Setter for property bockEventContraReAnnounced
-	 * 
+	 *
 	 * @param bockEventContraReCalled
 	 *            New value of property bockEventContraReAnnounced
 	 */
@@ -745,7 +753,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Setter for property bockEventLostAfterContra
-	 * 
+	 *
 	 * @param bockEventLostAfterContra
 	 *            New value of property bockEventLostAfterContra
 	 */
@@ -755,7 +763,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Setter for property bockEventLostGrand
-	 * 
+	 *
 	 * @param bockEventLostGrand
 	 *            New value of property bockEventLostGrand
 	 */
@@ -765,7 +773,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Setter for property bockEventLostWith60
-	 * 
+	 *
 	 * @param bockEventLostWith60
 	 *            New value of property bockEventLostWith60
 	 */
@@ -775,7 +783,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Setter for property bockEventPlayerHasX00Points
-	 * 
+	 *
 	 * @param bockEventMultipleOfHundredScore
 	 *            New value of property bockEventPlayerHasX00Points
 	 */
@@ -785,7 +793,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Sets the flag for bid at least 18 to say contra
-	 * 
+	 *
 	 * @param contraAfterBid18
 	 *            TRUE, if at least a bid of 18 is needed for the right to say
 	 *            contra
@@ -796,7 +804,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Setter for property card set.
-	 * 
+	 *
 	 * @param cardSet
 	 *            Card set
 	 */
@@ -806,7 +814,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Setter for property cheatDebugMode.
-	 * 
+	 *
 	 * @param isCheatDebugMode
 	 *            New value of property cheatDebugMode.
 	 */
@@ -816,7 +824,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Sets the flag for checking for a new version of JSkat at start up
-	 * 
+	 *
 	 * @param isCheckForNewVersionAtStartUp
 	 *            TRUE, if the check should be performed at start up
 	 */
@@ -826,7 +834,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Sets the address of the ISS
-	 * 
+	 *
 	 * @param address
 	 *            Address
 	 */
@@ -836,7 +844,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Sets the port of the ISS
-	 * 
+	 *
 	 * @param port
 	 *            Port
 	 */
@@ -846,7 +854,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Setter for property language.
-	 * 
+	 *
 	 * @param language
 	 *            New value of property language.
 	 */
@@ -856,7 +864,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Sets the maximum number of players in a skat series
-	 * 
+	 *
 	 * @param count
 	 *            Maximumn number
 	 */
@@ -866,7 +874,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Setter for property playBock.
-	 * 
+	 *
 	 * @param playBock
 	 *            New value of property playBock.
 	 */
@@ -876,7 +884,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Setter for property playKontra.
-	 * 
+	 *
 	 * @param playContra
 	 *            New value of property playKontra.
 	 */
@@ -886,7 +894,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Setter for property playRamsch.
-	 * 
+	 *
 	 * @param playRamsch
 	 *            New value of property playRamsch.
 	 */
@@ -896,7 +904,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Setter for property playRevolution.
-	 * 
+	 *
 	 * @param playRevolution
 	 *            New value of property playRevolution.
 	 */
@@ -906,7 +914,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Setter for property ramschEventNoBid
-	 * 
+	 *
 	 * @param ramschEventNoBid
 	 *            New value of property ramschEventNoBid
 	 */
@@ -916,7 +924,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Setter for property ramschEventRamschAfterBock
-	 * 
+	 *
 	 * @param ramschEventRamschAfterBock
 	 *            New value of property ramschEventRamschAfterBock
 	 */
@@ -926,7 +934,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Setter for property ramschGrandHandPossible
-	 * 
+	 *
 	 * @param ramschGrandHandPossible
 	 *            New value of property ramschGrandHandPossible
 	 */
@@ -936,7 +944,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Setter for property ramschSkat.
-	 * 
+	 *
 	 * @param ramschSkat
 	 *            Owner of the skat after the ramsch game
 	 */
@@ -946,7 +954,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Setter for property rules.
-	 * 
+	 *
 	 * @param ruleSet
 	 *            New value of property rules.
 	 */
@@ -956,7 +964,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Setter for property savePath.
-	 * 
+	 *
 	 * @param savePath
 	 *            New value of property savePath.
 	 */
@@ -966,7 +974,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Setter for property schieberRamsch
-	 * 
+	 *
 	 * @param schieberRamsch
 	 *            New value of property schieberRamsch
 	 */
@@ -976,7 +984,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Setter for property schieberRamschJacksInSkat
-	 * 
+	 *
 	 * @param schieberRamschJacksInSkat
 	 *            New value of property schieberRamschJacksInSkat
 	 */
@@ -1166,7 +1174,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Gets the language code for the language
-	 * 
+	 *
 	 * @return Language code
 	 */
 	public String getI18NCode() {
@@ -1218,7 +1226,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Sets the standard properties
-	 * 
+	 *
 	 */
 	void setDefaultProperties() {
 
@@ -1255,15 +1263,15 @@ public final class JSkatOptions {
 		setOption(Option.MAIN_FRAME_X_POSITION, Integer.MIN_VALUE);
 		setOption(Option.MAIN_FRAME_Y_POSITION, Integer.MIN_VALUE);
 
-        // fix odd looking minimized windows on the very first startup
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		setOption(Option.MAIN_FRAME_WIDTH, (int)screenSize.getWidth() / 2);
-		setOption(Option.MAIN_FRAME_HEIGHT, (int)screenSize.getHeight() / 2);
+		// fix odd looking minimized windows on the very first startup
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		setOption(Option.MAIN_FRAME_WIDTH, (int) screenSize.getWidth() / 2);
+		setOption(Option.MAIN_FRAME_HEIGHT, (int) screenSize.getHeight() / 2);
 	}
 
 	/**
 	 * Sets the flag for showing the welcome dialog with first steps at startup
-	 * 
+	 *
 	 * @param isShowTips
 	 *            TRUE, if first steps should be shown
 	 */
@@ -1273,7 +1281,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Gets any option as {@link String}
-	 * 
+	 *
 	 * @param option
 	 *            Option
 	 * @return Value
@@ -1285,7 +1293,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Gets an option of type {@link String}
-	 * 
+	 *
 	 * @param option
 	 *            Option
 	 * @return Value
@@ -1303,7 +1311,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Gets an option of type {@link Boolean}
-	 * 
+	 *
 	 * @param option
 	 *            Option
 	 * @return Value
@@ -1317,7 +1325,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Gets an option of type {@link Integer}
-	 * 
+	 *
 	 * @param option
 	 *            Option
 	 * @return Value
@@ -1331,7 +1339,7 @@ public final class JSkatOptions {
 
 	/**
 	 * Gets the time when contra calling is allowed.
-	 * 
+	 *
 	 * @return Time when contra calling is allowed
 	 */
 	public ContraCallingTime getContraCallingTime() {
