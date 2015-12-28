@@ -21,13 +21,12 @@ import java.awt.Point;
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.PropertyConfigurator;
-import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
-import org.jskat.control.command.general.ShowWelcomeInformationCommand;
 import org.jskat.data.DesktopSavePathResolver;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatOptions.Option;
 import org.jskat.gui.img.JSkatGraphicRepository;
+import org.jskat.gui.javafx.JSkatMainWindow;
 import org.jskat.gui.javafx.JSkatMenuFactory;
 import org.jskat.gui.swing.JSkatViewImpl;
 import org.jskat.gui.swing.LookAndFeelSetter;
@@ -38,9 +37,6 @@ import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
-import javafx.embed.swing.SwingNode;
-import javafx.event.EventHandler;
-import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -52,17 +48,15 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
 public class JSkatFX extends Application {
 
-	private static final String VERSION = "0.10.0";
+	private static final String VERSION = "0.16.0";
 
 	private static final int SPLASH_WIDTH = 500;
 	private static final int SPLASH_HEIGHT = 300;
@@ -70,8 +64,6 @@ public class JSkatFX extends Application {
 	private Pane splashScreenLayout;
 	private ProgressBar splashScreenProgressBar;
 	private Label splashScreenProgressText;
-
-	private Stage jskatMainStage;
 
 	public static void main(String[] args) {
 
@@ -135,65 +127,25 @@ public class JSkatFX extends Application {
 		showSplashScreen(targetScreen, primaryStage, startupTasks,
 				() -> showJSkatMainWindow(targetScreen, savedScreenPosition, startupTasks.valueProperty().get().menu,
 						startupTasks.valueProperty().get().jskatView));
+
 		new Thread(startupTasks).start();
 	}
 
-	private void showJSkatMainWindow(Screen targetScreen, Point2D savedScreenPosition, MenuBar menu,
+	private static void showJSkatMainWindow(Screen targetScreen, Point2D screenPosition, MenuBar menu,
 			JSkatViewImpl jskatView) {
 
-		jskatMainStage = new Stage(StageStyle.DECORATED);
-		jskatMainStage.setTitle("JSkat " + VERSION);
-		jskatMainStage.getIcons().add(JSkatGraphicRepository.INSTANCE.getJSkatLogoImageFX());
+		JSkatMainWindow jskatMainWindow = new JSkatMainWindow(VERSION, menu, jskatView, targetScreen, screenPosition);
 
-		SwingNode swingNode = new SwingNode();
-		swingNode.setContent(jskatView.mainPanel);
+		jskatMainWindow.show();
 
-		VBox pane = new VBox();
-		pane.getChildren().addAll(menu, swingNode);
-		VBox.setVgrow(swingNode, Priority.ALWAYS);
-
-		Dimension2D dimension = getMainWindowDimension(targetScreen);
-		Scene scene = new Scene(pane, dimension.getWidth(), dimension.getHeight());
-		scene.widthProperty().addListener(
-				(observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameWidth(newValue.intValue()));
-		scene.heightProperty().addListener(
-				(observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameHeight(newValue.intValue()));
-
-		jskatMainStage.setScene(scene);
-
-		jskatMainStage.xProperty().addListener(
-				(observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameXPosition(newValue.intValue()));
-		jskatMainStage.yProperty().addListener(
-				(observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameYPosition(newValue.intValue()));
-
-		jskatMainStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-			@Override
-			public void handle(WindowEvent we) {
-				JSkatMaster.INSTANCE.exitJSkat();
-			}
-		});
-
-		placeMainWindow(targetScreen, savedScreenPosition, jskatMainStage);
-
-		jskatMainStage.show();
-
-		if (JSkatOptions.instance().getBoolean(Option.SHOW_TIPS_AT_START_UP)) {
-			JSkatEventBus.INSTANCE.post(new ShowWelcomeInformationCommand());
-		}
+		// if (JSkatOptions.instance().getBoolean(Option.SHOW_TIPS_AT_START_UP))
+		// {
+		// JSkatEventBus.INSTANCE.post(new ShowWelcomeInformationCommand());
+		// }
 
 		if (JSkatOptions.instance().getBoolean(Option.CHECK_FOR_NEW_VERSION_AT_START_UP)) {
 			JSkatMaster.INSTANCE.checkJSkatVersion(VERSION, VersionChecker.getLatestVersion());
 		}
-	}
-
-	private static Dimension2D getMainWindowDimension(Screen targetScreen) {
-		double width = JSkatOptions.instance().getMainFrameSize().getWidth();
-		double height = JSkatOptions.instance().getMainFrameSize().getHeight();
-
-		// on first startup the default values for width and height are
-		// Integer.MIN_VALUE
-		return new Dimension2D(width > 0 ? width : targetScreen.getBounds().getWidth() / 2,
-				height > 0 ? height : targetScreen.getBounds().getHeight() / 2);
 	}
 
 	private void showSplashScreen(Screen targetScreen, final Stage splashStage, Task<?> startupTask,
@@ -226,28 +178,6 @@ public class JSkatFX extends Application {
 		splashStage.show();
 	}
 
-	private static void placeMainWindow(Screen targetScreen, Point2D savedScreenPosition, Stage primaryStage) {
-
-		double targetXPosition = savedScreenPosition.getX();
-		double targetYPosition = savedScreenPosition.getY();
-
-		if (targetXPosition < targetScreen.getBounds().getMinX()) {
-			targetXPosition = targetScreen.getBounds().getMinX() + 400;
-		}
-		if (targetXPosition > targetScreen.getBounds().getMaxX()) {
-			targetXPosition = targetScreen.getBounds().getMaxX() - 400;
-		}
-
-		if (targetYPosition < targetScreen.getBounds().getMinY()) {
-			targetYPosition = targetScreen.getBounds().getMinY() + 400;
-		}
-		if (targetYPosition > targetScreen.getBounds().getMaxY()) {
-			targetYPosition = targetScreen.getBounds().getMaxY() - 400;
-		}
-
-		placeMainWindow(targetScreen, primaryStage, new Point2D(targetXPosition, targetYPosition));
-	}
-
 	private static Screen getTargetScreen(Point2D savedScreenPosition) {
 
 		for (Screen screen : Screen.getScreens()) {
@@ -263,16 +193,6 @@ public class JSkatFX extends Application {
 
 		Point mainFramePosition = JSkatOptions.instance().getMainFramePosition();
 		return new Point2D(mainFramePosition.getX(), mainFramePosition.getY());
-	}
-
-	private static void placeMainWindow(Screen screen, Stage primaryStage, Point2D position) {
-
-		if (screen.getVisualBounds().contains(position)) {
-			primaryStage.setX(position.getX());
-			primaryStage.setY(position.getY());
-		} else {
-			primaryStage.centerOnScreen();
-		}
 	}
 
 	private interface InitializationCompleteHandler {

@@ -49,7 +49,6 @@ import org.jskat.control.command.general.ShowWelcomeInformationCommand;
 import org.jskat.control.command.iss.IssDisconnectCommand;
 import org.jskat.control.command.skatseries.CreateSkatSeriesCommand;
 import org.jskat.control.command.table.ShowCardsCommand;
-import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.iss.IssConnectedEvent;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
 import org.jskat.control.event.skatgame.BidEvent;
@@ -951,17 +950,6 @@ public class JSkatViewImpl implements JSkatView {
 				card != null ? this.strings.getRankStringForCardFace(card.getRank()) : "--"); //$NON-NLS-1$
 
 		showErrorMessage(title, message);
-	}
-
-	@Subscribe
-	public void showInfoMessageOn(NewJSkatVersionAvailableEvent event) {
-
-		final String title = this.strings.getString("new_version_title"); //$NON-NLS-1$
-
-		final String message = this.strings.getString("new_version_message", //$NON-NLS-1$
-				event.newVersion);
-
-		showMessage(title, message);
 	}
 
 	@Subscribe
