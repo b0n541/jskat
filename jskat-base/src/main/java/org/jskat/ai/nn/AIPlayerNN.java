@@ -99,6 +99,12 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		this("unknown", null); //$NON-NLS-1$
 	}
 
+	/**
+	 * Constructor
+	 *
+	 * @param logger
+	 *            Logger to be used, allows to set NOPLogger from outside
+	 */
 	public AIPlayerNN(Logger logger) {
 		this("unknown", logger);
 	}
@@ -108,6 +114,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	 *
 	 * @param newPlayerName
 	 *            Player's name
+	 * @param logger
+	 *            Logger to be used, allows to set NOPLogger from outside
 	 */
 	public AIPlayerNN(final String newPlayerName, Logger logger) {
 		log.debug("Constructing new AIPlayerNN"); //$NON-NLS-1$
@@ -221,8 +229,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 				simCards.removeAll(currSkat);
 
-				log.debug("Discard simulation no. " + simCount + ": skat "
-						+ currSkat);
+				log.debug("Discard simulation no. " + simCount + ": skat " + currSkat);
 
 				for (GameType gameType : filteredGameTypes) {
 
