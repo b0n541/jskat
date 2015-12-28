@@ -40,6 +40,7 @@ import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.embed.swing.SwingNode;
 import javafx.event.EventHandler;
+import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -151,8 +152,8 @@ public class JSkatFX extends Application {
 		pane.getChildren().addAll(menu, swingNode);
 		VBox.setVgrow(swingNode, Priority.ALWAYS);
 
-		Scene scene = new Scene(pane, JSkatOptions.instance().getMainFrameSize().getWidth(),
-				JSkatOptions.instance().getMainFrameSize().getHeight());
+		Dimension2D dimension = getMainWindowDimension(targetScreen);
+		Scene scene = new Scene(pane, dimension.getWidth(), dimension.getHeight());
 		scene.widthProperty().addListener(
 				(observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameWidth(newValue.intValue()));
 		scene.heightProperty().addListener(
@@ -183,6 +184,16 @@ public class JSkatFX extends Application {
 		if (JSkatOptions.instance().getBoolean(Option.CHECK_FOR_NEW_VERSION_AT_START_UP)) {
 			JSkatMaster.INSTANCE.checkJSkatVersion(VERSION, VersionChecker.getLatestVersion());
 		}
+	}
+
+	private static Dimension2D getMainWindowDimension(Screen targetScreen) {
+		double width = JSkatOptions.instance().getMainFrameSize().getWidth();
+		double height = JSkatOptions.instance().getMainFrameSize().getHeight();
+
+		// on first startup the default values for width and height are
+		// Integer.MIN_VALUE
+		return new Dimension2D(width > 0 ? width : targetScreen.getBounds().getWidth() / 2,
+				height > 0 ? height : targetScreen.getBounds().getHeight() / 2);
 	}
 
 	private void showSplashScreen(Screen targetScreen, final Stage splashStage, Task<?> startupTask,
