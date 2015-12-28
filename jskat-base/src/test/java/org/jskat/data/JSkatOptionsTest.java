@@ -60,7 +60,7 @@ public class JSkatOptionsTest extends AbstractJSkatTest {
 		assertEquals(Integer.valueOf(0), options.getWaitTimeAfterTrick());
 		assertEquals(CardSet.ISS_TOURNAMENT, options.getCardSet());
 		assertEquals(CardFace.TOURNAMENT, options.getCardSet().getCardFace());
-		assertEquals(new DesktopSavePathResolver().getCurrentWorkingDirectory(), options.getSavePath());
+		assertEquals(new DesktopSavePathResolver().getDefaultSavePath(), options.getSavePath());
 
 		// rule defaults
 		assertEquals(RuleSet.ISPA, options.getRules());

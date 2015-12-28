@@ -17,7 +17,6 @@ package org.jskat.data;
 
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -1234,7 +1233,7 @@ public final class JSkatOptions {
 		setOption(Option.SHOW_TIPS_AT_START_UP, Boolean.TRUE);
 		setOption(Option.CHECK_FOR_NEW_VERSION_AT_START_UP, Boolean.FALSE);
 		setOption(Option.LANGUAGE, getDefaultLanguage());
-		setOption(Option.SAVE_PATH, SavePath.WORKING_DIRECTORY);
+		setOption(Option.SAVE_PATH, SavePath.USER_HOME);
 		setOption(Option.CARD_SET, CardSet.ISS_TOURNAMENT);
 		setOption(Option.CHEAT_DEBUG_MODE, Boolean.FALSE);
 		setOption(Option.MAX_PLAYER_COUNT, 3);
@@ -1262,11 +1261,8 @@ public final class JSkatOptions {
 		setOption(Option.WAIT_TIME_AFTER_TRICK, Integer.valueOf(0));
 		setOption(Option.MAIN_FRAME_X_POSITION, Integer.MIN_VALUE);
 		setOption(Option.MAIN_FRAME_Y_POSITION, Integer.MIN_VALUE);
-
-		// fix odd looking minimized windows on the very first startup
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		setOption(Option.MAIN_FRAME_WIDTH, (int) screenSize.getWidth() / 2);
-		setOption(Option.MAIN_FRAME_HEIGHT, (int) screenSize.getHeight() / 2);
+		setOption(Option.MAIN_FRAME_WIDTH, Integer.MIN_VALUE);
+		setOption(Option.MAIN_FRAME_HEIGHT, Integer.MIN_VALUE);
 	}
 
 	/**
