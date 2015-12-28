@@ -39,7 +39,7 @@ import javafx.scene.control.SeparatorMenuItem;
 /**
  * Factory for building the menu for JSkat.
  */
-public class JSkatMenuFactory {
+public final class JSkatMenuFactory {
 
 	/**
 	 * Builds the menu.
