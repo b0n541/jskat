@@ -31,12 +31,12 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Game summary
- * 
+ *
  * An object of this class is returned by {@link SkatGame}
  */
 public class GameSummary {
 
-	private static Logger log = LoggerFactory.getLogger(GameSummary.class);
+	private static Logger LOG = LoggerFactory.getLogger(GameSummary.class);
 	/**
 	 * Fore hand player
 	 */
@@ -88,13 +88,13 @@ public class GameSummary {
 	/**
 	 * Tricks
 	 */
-	public List<Trick> tricks = new ArrayList<Trick>();
+	public List<Trick> tricks = new ArrayList<>();
 	/**
 	 * Player points
 	 */
-	public Map<Player, Integer> playerPoints = new HashMap<Player, Integer>();
+	public Map<Player, Integer> playerPoints = new HashMap<>();
 
-	public Set<Player> ramschLosers = new HashSet<Player>();
+	public Set<Player> ramschLosers = new HashSet<>();
 
 	/**
 	 * Constructor
@@ -104,7 +104,7 @@ public class GameSummary {
 
 	/**
 	 * Gets the factory for a {@link GameSummary}
-	 * 
+	 *
 	 * @return Factory
 	 */
 	public static GameSummaryFactory getFactory() {
@@ -124,7 +124,7 @@ public class GameSummary {
 
 		/**
 		 * Gets the {@link GameSummary}
-		 * 
+		 *
 		 * @return Game announcement
 		 */
 		public final GameSummary getSummary() {
@@ -140,7 +140,7 @@ public class GameSummary {
 
 		/**
 		 * Sets the {@link GameType}
-		 * 
+		 *
 		 * @param gameType
 		 *            Game type
 		 */
@@ -150,7 +150,7 @@ public class GameSummary {
 
 		/**
 		 * Sets the flag for a hand game
-		 * 
+		 *
 		 * @param isHand
 		 *            TRUE, if a hand game was announced
 		 */
@@ -160,7 +160,7 @@ public class GameSummary {
 
 		/**
 		 * Sets the flag for an ouvert game
-		 * 
+		 *
 		 * @param isOuvert
 		 *            TRUE, if an ouvert game was announced
 		 */
@@ -170,7 +170,7 @@ public class GameSummary {
 
 		/**
 		 * Sets the flag for a schneider game
-		 * 
+		 *
 		 * @param isSchneider
 		 *            TRUE, if schneider was announced
 		 */
@@ -180,7 +180,7 @@ public class GameSummary {
 
 		/**
 		 * Sets the flag for a schwarz game
-		 * 
+		 *
 		 * @param isSchwarz
 		 *            TRUE, if a schwarz was announced
 		 */
@@ -190,7 +190,7 @@ public class GameSummary {
 
 		/**
 		 * Sets the tricks
-		 * 
+		 *
 		 * @param tricks
 		 *            Tricks of the game
 		 */
@@ -199,14 +199,13 @@ public class GameSummary {
 			tmpSummary.tricks.addAll(tricks);
 		}
 
-		public final void setPlayerPoints(
-				final Map<Player, Integer> playerAndPoints) {
+		public final void setPlayerPoints(final Map<Player, Integer> playerAndPoints) {
 			tmpSummary.playerPoints.putAll(playerAndPoints);
 		}
 
 		/**
 		 * Sets the game result
-		 * 
+		 *
 		 * @param gameResult
 		 *            Game result
 		 */
@@ -216,7 +215,7 @@ public class GameSummary {
 
 		/**
 		 * Sets the fore hand player
-		 * 
+		 *
 		 * @param name
 		 *            Name of fore hand player
 		 */
@@ -226,7 +225,7 @@ public class GameSummary {
 
 		/**
 		 * Sets the middle hand player
-		 * 
+		 *
 		 * @param name
 		 *            Name of middle hand player
 		 */
@@ -236,7 +235,7 @@ public class GameSummary {
 
 		/**
 		 * Sets the rear hand player
-		 * 
+		 *
 		 * @param name
 		 *            Name of rear hand player
 		 */
@@ -246,7 +245,7 @@ public class GameSummary {
 
 		/**
 		 * Sets the declarer
-		 * 
+		 *
 		 * @param position
 		 *            Position of declarer
 		 */
@@ -260,34 +259,32 @@ public class GameSummary {
 
 		private boolean validate() {
 			if (tmpSummary.gameType == null) {
-				log.error("game type is null"); //$NON-NLS-1$
+				LOG.error("game type is null"); //$NON-NLS-1$
 				return false;
-			} else if (!GameType.RAMSCH.equals(tmpSummary.gameType)
-					&& !GameType.PASSED_IN.equals(tmpSummary.gameType)
+			} else if (!GameType.RAMSCH.equals(tmpSummary.gameType) && !GameType.PASSED_IN.equals(tmpSummary.gameType)
 					&& tmpSummary.declarer == null) {
-				log.error("declarer is null"); //$NON-NLS-1$
+				LOG.error("declarer is null"); //$NON-NLS-1$
 				return false;
 			} else if (tmpSummary.foreHand == null) {
-				log.error("fore hand is null"); //$NON-NLS-1$
+				LOG.error("fore hand is null"); //$NON-NLS-1$
 				return false;
 			} else if (tmpSummary.middleHand == null) {
-				log.error("middle hand is null"); //$NON-NLS-1$
+				LOG.error("middle hand is null"); //$NON-NLS-1$
 				return false;
 			} else if (tmpSummary.rearHand == null) {
-				log.error("rear hand is null"); //$NON-NLS-1$
+				LOG.error("rear hand is null"); //$NON-NLS-1$
 				return false;
 			} else if (tmpSummary.tricks.size() > 10) {
-				log.error("more than 10 tricks"); //$NON-NLS-1$
+				LOG.error("more than 10 tricks"); //$NON-NLS-1$
 				return false;
 			} else if (tmpSummary.gameResult == null) {
-				log.error("game result is null"); //$NON-NLS-1$
+				LOG.error("game result is null"); //$NON-NLS-1$
 				return false;
 			} else if (tmpSummary.playerPoints.size() != 3) {
-				log.error("missing player points"); //$NON-NLS-1$
+				LOG.error("missing player points"); //$NON-NLS-1$
 				return false;
-			} else if (tmpSummary.gameType == GameType.RAMSCH
-					&& tmpSummary.ramschLosers.size() == 0) {
-				log.error("missing ramsch looser");
+			} else if (tmpSummary.gameType == GameType.RAMSCH && tmpSummary.ramschLosers.size() == 0) {
+				LOG.error("missing ramsch looser");
 			}
 			return true;
 		}
@@ -303,7 +300,7 @@ public class GameSummary {
 
 	/**
 	 * Gets the game type
-	 * 
+	 *
 	 * @return Game type
 	 */
 	public final GameType getGameType() {
@@ -313,7 +310,7 @@ public class GameSummary {
 
 	/**
 	 * Checks whether schneider was announced or not
-	 * 
+	 *
 	 * @return TRUE if schneider was announced
 	 */
 	public final boolean isSchneider() {
@@ -323,7 +320,7 @@ public class GameSummary {
 
 	/**
 	 * Checks whether schwarz was announced or not
-	 * 
+	 *
 	 * @return TRUE if schwarz was announced
 	 */
 	public final boolean isSchwarz() {
@@ -333,7 +330,7 @@ public class GameSummary {
 
 	/**
 	 * Checks whether an ouvert game was announced or not
-	 * 
+	 *
 	 * @return TRUE if an ouvert game was announced
 	 */
 	public final boolean isOuvert() {
@@ -343,7 +340,7 @@ public class GameSummary {
 
 	/**
 	 * Checks whether a hand game was announced or not
-	 * 
+	 *
 	 * @return TRUE if a hand game was announced
 	 */
 	public final boolean isHand() {
@@ -353,7 +350,7 @@ public class GameSummary {
 
 	/**
 	 * Checks whether the game was won or not
-	 * 
+	 *
 	 * @return TRUE if the game was won
 	 */
 	public final boolean isGameWon() {
@@ -363,7 +360,7 @@ public class GameSummary {
 
 	/**
 	 * Gets the game value
-	 * 
+	 *
 	 * @return Game value
 	 */
 	public final int getGameValue() {
@@ -372,7 +369,7 @@ public class GameSummary {
 
 	/**
 	 * Gets the final declarer points
-	 * 
+	 *
 	 * @return Final declarer points
 	 */
 	public int getFinalDeclarerPoints() {
@@ -381,7 +378,7 @@ public class GameSummary {
 
 	/**
 	 * Gets the final opponent points
-	 * 
+	 *
 	 * @return Final opponent points
 	 */
 	public int getFinalOpponentScore() {
@@ -390,7 +387,7 @@ public class GameSummary {
 
 	/**
 	 * Gets the multiplier for the game
-	 * 
+	 *
 	 * @return Multiplier for the game
 	 */
 	public int getGameMultiplier() {
@@ -399,7 +396,7 @@ public class GameSummary {
 
 	/**
 	 * Checks whether the game was played with or without jacks
-	 * 
+	 *
 	 * @return TRUE, if the game was played with jacks
 	 */
 	public boolean isGamePlayedWithJacks() {
@@ -408,7 +405,7 @@ public class GameSummary {
 
 	/**
 	 * Gets the fore hand player
-	 * 
+	 *
 	 * @return Fore hand player
 	 */
 	public final String getForeHand() {
@@ -417,7 +414,7 @@ public class GameSummary {
 
 	/**
 	 * Gets the middle hand player
-	 * 
+	 *
 	 * @return Middle hand player
 	 */
 	public final String getMiddleHand() {
@@ -426,7 +423,7 @@ public class GameSummary {
 
 	/**
 	 * Gets the rear hand player
-	 * 
+	 *
 	 * @return Rear hand player
 	 */
 	public final String getRearHand() {
@@ -435,7 +432,7 @@ public class GameSummary {
 
 	/**
 	 * Gets the position of declarer
-	 * 
+	 *
 	 * @return Declarer position
 	 */
 	public final Player getDeclarer() {
@@ -444,7 +441,7 @@ public class GameSummary {
 
 	/**
 	 * Gets the tricks of the skat game
-	 * 
+	 *
 	 * @return Tricks
 	 */
 	public final List<Trick> getTricks() {
@@ -493,7 +490,7 @@ public class GameSummary {
 
 	/**
 	 * Gets the player points
-	 * 
+	 *
 	 * @param player
 	 *            Player
 	 * @return Points
@@ -504,7 +501,7 @@ public class GameSummary {
 
 	/**
 	 * Get all players that lost in a Ramsch game.
-	 * 
+	 *
 	 * @return Set of losers
 	 */
 	public Set<Player> getRamschLosers() {
