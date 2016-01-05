@@ -89,7 +89,7 @@ public class JSkatMainWindow extends Stage {
 			}
 		});
 
-		placeMainWindow(targetScreen, screenPosition);
+		placeMainWindow(targetScreen, this, screenPosition);
 	}
 
 	private static Dimension2D getMainWindowDimension(Screen targetScreen) {
@@ -98,30 +98,8 @@ public class JSkatMainWindow extends Stage {
 
 		// on first startup the default values for width and height are
 		// Integer.MIN_VALUE
-		return new Dimension2D(width > 0 ? width : targetScreen.getBounds().getWidth() / 2,
-				height > 0 ? height : targetScreen.getBounds().getHeight() / 2);
-	}
-
-	private void placeMainWindow(Screen targetScreen, Point2D screenPosition) {
-
-		double targetXPosition = screenPosition.getX();
-		double targetYPosition = screenPosition.getY();
-
-		if (targetXPosition < targetScreen.getBounds().getMinX()) {
-			targetXPosition = targetScreen.getBounds().getMinX() + 400;
-		}
-		if (targetXPosition > targetScreen.getBounds().getMaxX()) {
-			targetXPosition = targetScreen.getBounds().getMaxX() - 400;
-		}
-
-		if (targetYPosition < targetScreen.getBounds().getMinY()) {
-			targetYPosition = targetScreen.getBounds().getMinY() + 400;
-		}
-		if (targetYPosition > targetScreen.getBounds().getMaxY()) {
-			targetYPosition = targetScreen.getBounds().getMaxY() - 400;
-		}
-
-		placeMainWindow(targetScreen, this, new Point2D(targetXPosition, targetYPosition));
+		return new Dimension2D(width > 0 ? width : targetScreen.getBounds().getWidth() * 2 / 3,
+				height > 0 ? height : targetScreen.getBounds().getHeight() * 2 / 3);
 	}
 
 	private static void placeMainWindow(Screen screen, Stage mainWindow, Point2D position) {

@@ -17,7 +17,6 @@ package org.jskat.data;
 
 import java.awt.Dimension;
 import java.awt.Point;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -301,19 +300,6 @@ public final class JSkatOptions {
 
 			log.debug("No properties file found. Using standard values."); //$NON-NLS-1$
 
-			File dir = new File(savePathResolver.getDefaultSavePath());
-			dir.mkdir();
-			String filename = savePathResolver.getDefaultSavePath() + PROPERTIES_FILENAME;
-			File file = new File(filename);
-			try {
-				file.createNewFile();
-
-				log.debug("Property file jskat.properties created: <" //$NON-NLS-1$
-						+ filename + ">"); //$NON-NLS-1$
-			} catch (IOException e1) {
-				log.warn("Could not create property file <" + filename //$NON-NLS-1$
-						+ "> due to " + e1.getClass() + ": " + e1.getMessage()); //$NON-NLS-1$ //$NON-NLS-2$
-			}
 		} catch (IOException e) {
 			log.warn("Could not load properties: " + e.getClass() + ": " //$NON-NLS-1$ //$NON-NLS-2$
 					+ e.getMessage());
