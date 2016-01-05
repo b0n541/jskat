@@ -138,6 +138,7 @@ public class JSkatFX extends Application {
 
 		jskatMainWindow.show();
 
+		// TODO: re-implement the welcome dialog in JavaFx first
 		// if (JSkatOptions.instance().getBoolean(Option.SHOW_TIPS_AT_START_UP))
 		// {
 		// JSkatEventBus.INSTANCE.post(new ShowWelcomeInformationCommand());
