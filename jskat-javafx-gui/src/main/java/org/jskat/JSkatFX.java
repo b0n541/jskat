@@ -84,7 +84,7 @@ public class JSkatFX extends Application {
 		splashScreenLayout = new VBox();
 		splashScreenLayout.getChildren().addAll(splashScreenImage, splashScreenProgressBar, splashScreenProgressText);
 		splashScreenLayout.setStyle(
-				"-fx-padding: 5; " + "-fx-background-color: cornsilk; " + "-fx-border-width:5; " + "-fx-border-color: "
+				"-fx-padding: 5; " + "-fx-background-color: cornsilk; " + "-fx-border-width:2; " + "-fx-border-color: "
 						+ "linear-gradient(" + "to bottom, " + "chocolate, " + "derive(chocolate, 50%)" + ");");
 		splashScreenLayout.setEffect(new DropShadow());
 	}

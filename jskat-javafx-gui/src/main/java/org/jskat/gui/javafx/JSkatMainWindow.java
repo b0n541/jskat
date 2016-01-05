@@ -139,7 +139,7 @@ public class JSkatMainWindow extends Stage {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.initOwner(this);
 		alert.setTitle(STRINGS.getString("new_version_title"));
-		alert.setHeaderText(STRINGS.getString("new_version_title"));
+		alert.setHeaderText(STRINGS.getString("new_version_header", event.newVersion));
 		alert.setContentText(STRINGS.getString("new_version_message", event.newVersion));
 
 		// this is a workaround for a bug under Linux that cuts long texts
