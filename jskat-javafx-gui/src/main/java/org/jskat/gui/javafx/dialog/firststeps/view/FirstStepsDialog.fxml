@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<VBox prefHeight="300.0" prefWidth="400.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.66" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jskat.gui.javafx.dialog.firststeps.FirstStepsDialogController">
+	<children>
+		<ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
+			<content>
+				<WebView fx:id="firstStepsContent" prefHeight="-1.0" prefWidth="-1.0" />
+			</content>
+		</ScrollPane>
+		<HBox alignment="BASELINE_CENTER">
+			<children>
+				<CheckBox mnemonicParsing="false" text="CheckBox" />
+				<Pane HBox.hgrow="ALWAYS" />
+				<Button mnemonicParsing="false" text="Button" />
+			</children>
+		</HBox>
+	</children>
+	<padding>
+		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+	</padding>
+</VBox>

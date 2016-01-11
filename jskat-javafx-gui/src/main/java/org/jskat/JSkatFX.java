@@ -17,6 +17,7 @@
 package org.jskat;
 
 import java.awt.Point;
+import java.io.IOException;
 
 import javax.swing.SwingUtilities;
 
@@ -37,6 +38,7 @@ import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -143,6 +145,20 @@ public class JSkatFX extends Application {
 		// {
 		// JSkatEventBus.INSTANCE.post(new ShowWelcomeInformationCommand());
 		// }
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(JSkatFX.class.getResource("gui/javafx/dialog/firststeps/view/FirstStepsDialog.fxml"));
+			VBox rootLayout;
+			rootLayout = (VBox) loader.load();
+			Stage stage = new Stage();
+			stage.setTitle("ASDF");
+			Scene scene = new Scene(rootLayout);
+			stage.setScene(scene);
+			stage.show();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		if (JSkatOptions.instance().getBoolean(Option.CHECK_FOR_NEW_VERSION_AT_START_UP)) {
 			JSkatMaster.INSTANCE.checkJSkatVersion(VERSION, VersionChecker.getLatestVersion());
