@@ -9,11 +9,7 @@
 
 <VBox prefHeight="300.0" prefWidth="400.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.66" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jskat.gui.javafx.dialog.firststeps.FirstStepsDialogController">
 	<children>
-		<ScrollPane fitToHeight="true" fitToWidth="true" VBox.vgrow="ALWAYS">
-			<content>
-				<WebView fx:id="firstStepsContent" prefHeight="-1.0" prefWidth="-1.0" />
-			</content>
-		</ScrollPane>
+		<WebView fx:id="firstStepsContent" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS" />
 		<HBox alignment="BASELINE_CENTER">
 			<children>
 				<CheckBox mnemonicParsing="false" text="CheckBox" />

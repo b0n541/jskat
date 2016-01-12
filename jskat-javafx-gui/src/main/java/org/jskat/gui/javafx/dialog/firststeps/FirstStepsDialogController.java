@@ -16,9 +16,7 @@
  */
 package org.jskat.gui.javafx.dialog.firststeps;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import org.jskat.JSkatFX;
 
 import javafx.fxml.FXML;
 import javafx.scene.web.WebEngine;
@@ -31,13 +29,8 @@ public class FirstStepsDialogController {
 	@FXML
 	public void initialize() {
 		WebEngine engine = firstStepsContent.getEngine();
-		try {
-			String contentUrl = Paths.get("org/jskat/gui/help/de/gettingStarted.html").toUri().toURL().toExternalForm();
-			System.out.println(contentUrl);
-			engine.loadContent(new String(Files.readAllBytes(Paths.get("org/jskat/gui/help/de/gettingStarted.html"))));
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		String contentUrl = JSkatFX.class.getResource("/org/jskat/gui/help/de/gettingStarted.html").toExternalForm();
+		System.out.println(contentUrl);
+		engine.load(contentUrl);
 	}
 }
