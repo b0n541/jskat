@@ -29,8 +29,8 @@ public class JSkatResourceBundle {
 
 	public final static JSkatResourceBundle INSTANCE = new JSkatResourceBundle();
 
-	JSkatOptions options = null;
-	ResourceBundle strings = null;
+	private JSkatOptions options = null;
+	private ResourceBundle strings = null;
 
 	private JSkatResourceBundle() {
 
@@ -59,6 +59,15 @@ public class JSkatResourceBundle {
 	}
 
 	/**
+	 * Gets the string resource bundle.
+	 *
+	 * @return String resource bundle
+	 */
+	public ResourceBundle getStringResources() {
+		return strings;
+	}
+
+	/**
 	 * Reloads the strings<br>
 	 * e.g. after changing the language or the card face
 	 */
@@ -69,7 +78,7 @@ public class JSkatResourceBundle {
 
 	/**
 	 * Gets an i18n string
-	 * 
+	 *
 	 * @param key
 	 *            Key
 	 * @return i18n string
@@ -81,7 +90,7 @@ public class JSkatResourceBundle {
 
 	/**
 	 * Gets an i18n string
-	 * 
+	 *
 	 * @param key
 	 *            Key
 	 * @param params
@@ -94,7 +103,7 @@ public class JSkatResourceBundle {
 
 	/**
 	 * Gets the i18n string for a game type according the current card face
-	 * 
+	 *
 	 * @param gameType
 	 *            Game type
 	 * @return i18n string according the current card face
@@ -129,20 +138,19 @@ public class JSkatResourceBundle {
 
 	/**
 	 * Gets the i18n string for a card according the current card face
-	 * 
+	 *
 	 * @param card
 	 *            Card
 	 * @return i18n string according the current card face
 	 */
 	public String getCardStringForCardFace(final Card card) {
 
-		return getSuitStringForCardFace(card.getSuit())
-				+ " " + getRankStringForCardFace(card.getRank()); //$NON-NLS-1$
+		return getSuitStringForCardFace(card.getSuit()) + " " + getRankStringForCardFace(card.getRank()); //$NON-NLS-1$
 	}
 
 	/**
 	 * Gets the i18n string for a rank according the current card face
-	 * 
+	 *
 	 * @param rank
 	 *            Rank
 	 * @return i18n string according the current card face
@@ -233,7 +241,7 @@ public class JSkatResourceBundle {
 
 	/**
 	 * Gets the i18n string for a suit according the current card face
-	 * 
+	 *
 	 * @param suit
 	 *            Suit
 	 * @return i18n string according the current card face
@@ -366,7 +374,7 @@ public class JSkatResourceBundle {
 
 	/**
 	 * Gets the {@link Locale} of the i18n strings
-	 * 
+	 *
 	 * @return Locale
 	 */
 	public Locale getLocale() {
@@ -376,7 +384,7 @@ public class JSkatResourceBundle {
 
 	/**
 	 * Gets the i18n for a player position
-	 * 
+	 *
 	 * @param position
 	 *            Player position
 	 * @return i18n for player position

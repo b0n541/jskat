@@ -17,20 +17,43 @@
 package org.jskat.gui.javafx.dialog.firststeps;
 
 import org.jskat.JSkatFX;
+import org.jskat.gui.javafx.dialog.firststeps.model.FirstStepsDialogModel;
 
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.control.CheckBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 
 public class FirstStepsDialogController {
+
+	@FXML
+	private Parent root;
+
 	@FXML
 	private WebView firstStepsContent;
 
 	@FXML
+	private CheckBox showTipsOnStartUp;
+
+	private FirstStepsDialogModel model = new FirstStepsDialogModel();
+
+	@FXML
 	public void initialize() {
+		loadFirstStepsText();
+		showTipsOnStartUp.selectedProperty().bindBidirectional(model.isShowTipsOnStartUp);
+	}
+
+	@FXML
+	public void closeFirstStepsDialog() {
+		Stage stage = (Stage) root.getScene().getWindow();
+		stage.close();
+	}
+
+	private void loadFirstStepsText() {
 		WebEngine engine = firstStepsContent.getEngine();
 		String contentUrl = JSkatFX.class.getResource("/org/jskat/gui/help/de/gettingStarted.html").toExternalForm();
-		System.out.println(contentUrl);
 		engine.load(contentUrl);
 	}
 }

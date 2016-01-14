@@ -7,14 +7,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<VBox prefHeight="300.0" prefWidth="400.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.66" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jskat.gui.javafx.dialog.firststeps.FirstStepsDialogController">
+<VBox fx:id="root" prefHeight="400.0" prefWidth="600.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.66" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jskat.gui.javafx.dialog.firststeps.FirstStepsDialogController">
 	<children>
 		<WebView fx:id="firstStepsContent" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS" />
 		<HBox alignment="BASELINE_CENTER">
 			<children>
-				<CheckBox mnemonicParsing="false" text="CheckBox" />
+				<CheckBox fx:id="showTipsOnStartUp" mnemonicParsing="false" text="%show_tips_at_startup" />
 				<Pane HBox.hgrow="ALWAYS" />
-				<Button mnemonicParsing="false" text="Button" />
+				<Button mnemonicParsing="false" onAction="#closeFirstStepsDialog" text="%close" />
 			</children>
 		</HBox>
 	</children>

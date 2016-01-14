@@ -148,10 +148,11 @@ public class JSkatFX extends Application {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(JSkatFX.class.getResource("gui/javafx/dialog/firststeps/view/FirstStepsDialog.fxml"));
+			loader.setResources(JSkatResourceBundle.INSTANCE.getStringResources());
 			VBox rootLayout;
 			rootLayout = (VBox) loader.load();
 			Stage stage = new Stage();
-			stage.setTitle("ASDF");
+			stage.setTitle(JSkatResourceBundle.INSTANCE.getString("show_tips"));
 			Scene scene = new Scene(rootLayout);
 			stage.setScene(scene);
 			stage.show();
