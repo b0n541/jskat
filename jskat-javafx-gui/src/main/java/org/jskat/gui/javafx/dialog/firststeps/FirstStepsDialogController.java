@@ -20,6 +20,8 @@ import org.jskat.JSkatFX;
 import org.jskat.data.JSkatOptions;
 import org.jskat.gui.javafx.dialog.firststeps.model.FirstStepsDialogModel;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
@@ -44,6 +46,12 @@ public class FirstStepsDialogController {
 	public void initialize() {
 		loadFirstStepsText();
 		showTipsOnStartUp.selectedProperty().bindBidirectional(model.isShowTipsOnStartUp);
+		showTipsOnStartUp.selectedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				JSkatOptions.instance().setShowTipsAtStartUp(newValue);
+			}
+		});
 	}
 
 	@FXML
