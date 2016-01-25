@@ -17,6 +17,7 @@
 package org.jskat.gui.javafx.dialog.firststeps;
 
 import org.jskat.JSkatFX;
+import org.jskat.data.JSkatOptions;
 import org.jskat.gui.javafx.dialog.firststeps.model.FirstStepsDialogModel;
 
 import javafx.fxml.FXML;
@@ -53,7 +54,9 @@ public class FirstStepsDialogController {
 
 	private void loadFirstStepsText() {
 		WebEngine engine = firstStepsContent.getEngine();
-		String contentUrl = JSkatFX.class.getResource("/org/jskat/gui/help/de/gettingStarted.html").toExternalForm();
+		String contentUrl = JSkatFX.class
+				.getResource("/org/jskat/gui/help/" + JSkatOptions.instance().getI18NCode() + "/gettingStarted.html")
+				.toExternalForm();
 		engine.load(contentUrl);
 	}
 }
