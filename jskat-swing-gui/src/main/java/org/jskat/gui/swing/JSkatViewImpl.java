@@ -45,7 +45,6 @@ import org.jskat.control.command.general.ShowLicenseCommand;
 import org.jskat.control.command.general.ShowPreferencesCommand;
 import org.jskat.control.command.general.ShowToolbarCommand;
 import org.jskat.control.command.general.ShowTrainingOverviewCommand;
-import org.jskat.control.command.general.ShowWelcomeInformationCommand;
 import org.jskat.control.command.iss.IssDisconnectCommand;
 import org.jskat.control.command.skatseries.CreateSkatSeriesCommand;
 import org.jskat.control.command.table.ShowCardsCommand;
@@ -133,7 +132,6 @@ import org.jskat.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.gui.human.SwingHumanPlayer;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.swing.help.JSkatHelpDialog;
-import org.jskat.gui.swing.help.JSkatWelcomeDialog;
 import org.jskat.gui.swing.iss.ISSTablePanel;
 import org.jskat.gui.swing.iss.LobbyPanel;
 import org.jskat.gui.swing.iss.LoginPanel;
@@ -183,7 +181,7 @@ public class JSkatViewImpl implements JSkatView {
 	 */
 	public JSkatViewImpl(Screen targetScreen, MenuBar menu, String version) {
 
-		this.VERSION = version;
+		JSkatViewImpl.VERSION = version;
 
 		JSkatEventBus.INSTANCE.register(this);
 
@@ -536,14 +534,6 @@ public class JSkatViewImpl implements JSkatView {
 
 		new JSkatHelpDialog(null, this.strings.getString("license"), //$NON-NLS-1$
 				"org/jskat/gui/help/gpl3.html").setVisible(true); //$NON-NLS-1$
-	}
-
-	@Subscribe
-	public void showWelcomeDialogOn(ShowWelcomeInformationCommand command) {
-
-		new JSkatWelcomeDialog(null, this.strings.getString("welcome_to_jskat"), //$NON-NLS-1$
-				"org/jskat/gui/help/" //$NON-NLS-1$
-						+ JSkatOptions.instance().getI18NCode() + "/welcome.html").setVisible(true); //$NON-NLS-1$
 	}
 
 	/**

@@ -17,12 +17,13 @@
 package org.jskat;
 
 import java.awt.Point;
-import java.io.IOException;
 
 import javax.swing.SwingUtilities;
 
 import org.apache.log4j.PropertyConfigurator;
+import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
+import org.jskat.control.command.general.ShowWelcomeInformationCommand;
 import org.jskat.data.DesktopSavePathResolver;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatOptions.Option;
@@ -38,7 +39,6 @@ import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -51,7 +51,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -142,25 +141,7 @@ public class JSkatFX extends Application {
 		jskatMainWindow.show();
 
 		if (JSkatOptions.instance().getBoolean(Option.SHOW_TIPS_AT_START_UP)) {
-			// JSkatEventBus.INSTANCE.post(new ShowWelcomeInformationCommand());
-			try {
-				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(
-						JSkatFX.class.getResource("gui/javafx/dialog/firststeps/view/FirstStepsDialog.fxml"));
-				loader.setResources(JSkatResourceBundle.INSTANCE.getStringResources());
-				VBox rootLayout;
-				rootLayout = (VBox) loader.load();
-				Stage stage = new Stage();
-				stage.setTitle(JSkatResourceBundle.INSTANCE.getString("show_tips"));
-				Scene scene = new Scene(rootLayout);
-				stage.setScene(scene);
-				stage.initModality(Modality.APPLICATION_MODAL);
-				stage.initOwner(jskatMainWindow);
-				stage.show();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			JSkatEventBus.INSTANCE.post(new ShowWelcomeInformationCommand());
 		}
 
 		if (JSkatOptions.instance().getBoolean(Option.CHECK_FOR_NEW_VERSION_AT_START_UP)) {

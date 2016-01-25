@@ -16,8 +16,12 @@
  */
 package org.jskat.gui.javafx;
 
+import java.io.IOException;
+
+import org.jskat.JSkatFX;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
+import org.jskat.control.command.general.ShowWelcomeInformationCommand;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.data.JSkatOptions;
 import org.jskat.gui.img.JSkatGraphicRepository;
@@ -28,6 +32,7 @@ import com.google.common.eventbus.Subscribe;
 
 import javafx.embed.swing.SwingNode;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
@@ -38,6 +43,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -125,5 +131,22 @@ public class JSkatMainWindow extends Stage {
 				.forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
 
 		alert.showAndWait();
+	}
+
+	@Subscribe
+	public void showWelcomeDialogOn(ShowWelcomeInformationCommand command) throws IOException {
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(
+				JSkatFX.class.getResource("/org/jskat/gui/javafx/dialog/firststeps/view/FirstStepsDialog.fxml"));
+		loader.setResources(JSkatResourceBundle.INSTANCE.getStringResources());
+		VBox rootLayout;
+		rootLayout = (VBox) loader.load();
+		Stage stage = new Stage();
+		stage.setTitle(JSkatResourceBundle.INSTANCE.getString("show_tips"));
+		Scene scene = new Scene(rootLayout);
+		stage.setScene(scene);
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.initOwner(this);
+		stage.show();
 	}
 }
