@@ -703,6 +703,10 @@ public final class JSkatOptions {
 				isSchieberamsch(checkParentOption));
 	}
 
+	public Boolean isShowTipsOnStartUp() {
+		return getBoolean(Option.SHOW_TIPS_AT_START_UP);
+	}
+
 	/**
 	 * Saves the options to a file .jskat in user home
 	 */
