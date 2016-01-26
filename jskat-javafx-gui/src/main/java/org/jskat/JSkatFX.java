@@ -58,7 +58,7 @@ import javafx.util.Duration;
 
 public class JSkatFX extends Application {
 
-	private static final String VERSION = "0.10.0";
+	private static final String VERSION = "0.16.0";
 
 	private static final int SPLASH_WIDTH = 500;
 	private static final int SPLASH_HEIGHT = 300;
@@ -176,6 +176,7 @@ public class JSkatFX extends Application {
 		final Rectangle2D bounds = targetScreen.getBounds();
 		splashStage.setX(bounds.getMinX() + bounds.getWidth() / 2 - SPLASH_WIDTH / 2);
 		splashStage.setY(bounds.getMinY() + bounds.getHeight() / 2 - SPLASH_HEIGHT / 2);
+
 		splashStage.show();
 	}
 
