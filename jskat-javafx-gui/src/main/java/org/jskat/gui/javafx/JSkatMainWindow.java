@@ -129,6 +129,7 @@ public class JSkatMainWindow extends Stage {
 		// this is a workaround for a bug under Linux that cuts long texts
 		alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label)
 				.forEach(node -> ((Label) node).setMinHeight(Region.USE_PREF_SIZE));
+
 		alert.getDialogPane().setStyle("-fx-background-color: #e2d9ca;");
 
 		alert.showAndWait();
