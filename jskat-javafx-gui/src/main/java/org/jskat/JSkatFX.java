@@ -58,7 +58,7 @@ import javafx.util.Duration;
 
 public class JSkatFX extends Application {
 
-	private static final String VERSION = "0.16.0";
+	private static final String VERSION = "0.10.0";
 
 	private static final int SPLASH_WIDTH = 500;
 	private static final int SPLASH_HEIGHT = 300;
@@ -86,7 +86,7 @@ public class JSkatFX extends Application {
 		splashScreenLayout = new VBox();
 		splashScreenLayout.getChildren().addAll(splashScreenImage, splashScreenProgressBar, splashScreenProgressText);
 		splashScreenLayout.setStyle(
-				"-fx-padding: 5; " + "-fx-background-color: cornsilk; " + "-fx-border-width:2; " + "-fx-border-color: "
+				"-fx-padding: 5; " + "-fx-background-color: #e2d9ca; " + "-fx-border-width:2; " + "-fx-border-color: "
 						+ "linear-gradient(" + "to bottom, " + "chocolate, " + "derive(chocolate, 50%)" + ");");
 		splashScreenLayout.setEffect(new DropShadow());
 	}

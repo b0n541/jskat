@@ -44,6 +44,7 @@ public class FirstStepsDialogController {
 
 	@FXML
 	public void initialize() {
+		root.setStyle("-fx-background-color: #e2d9ca;");
 		loadFirstStepsText();
 		showTipsOnStartUp.selectedProperty().bindBidirectional(model.isShowTipsOnStartUp);
 		showTipsOnStartUp.selectedProperty().addListener(new ChangeListener<Boolean>() {
