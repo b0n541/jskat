@@ -1,0 +1,15 @@
+apply plugin: 'java'
+
+dependencies {
+	compile project(':jskat-base')
+	compile project(':jskat-swing-gui')
+}
+
+version = '0.16.0'
+
+jar {
+    manifest {
+        attributes 'Implementation-Title': 'JSkat',
+                   'Implementation-Version': version
+    }
+}
