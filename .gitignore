@@ -4,3 +4,6 @@
 /build/
 /.gradle/
 /.classpath
+/gradle/
+/gradlew
+/gradlew.bat
