@@ -1,8 +1,27 @@
-apply plugin: 'java'
+plugins {
+	id "com.github.johnrengelman.shadow" version "1.2.3"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.10'
+}
+
+allprojects {
+	repositories {
+	    mavenCentral()
+	}
+}
+
+allprojects {
+	apply plugin: 'java'
+	apply plugin: 'eclipse'
+	apply plugin: 'idea'
+}
 
 dependencies {
 	compile project(':jskat-base')
 	compile project(':jskat-swing-gui')
+	compile project(':jskat-javafx-gui')
 }
 
 version = '0.16.0'
@@ -10,6 +29,12 @@ version = '0.16.0'
 jar {
     manifest {
         attributes 'Implementation-Title': 'JSkat',
-                   'Implementation-Version': version
+                   'Implementation-Version': version,
+                   'Main-Class': 'org.jskat.JSkatFX'
     }
+}
+
+shadowJar {
+	baseName = 'JSkat'
+	classifier = ''
 }

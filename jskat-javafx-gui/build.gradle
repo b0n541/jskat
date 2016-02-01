@@ -1,11 +1,3 @@
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
 	compile project(':jskat-base')
 	compile project(':jskat-swing-gui')
