@@ -77,7 +77,8 @@ class GameSimulator2 {
 
 	GameSimulation getNextSimulation() {
 		if (RANDOM.nextDouble() > EXPLORATION_RATE) {
-			return getNextSimulationByWonRate();
+			// return getNextSimulationByWonRate();
+			return getNextSimulationByWonRateAndMedian();
 		}
 		return getNextSimulationByExploring();
 	}
@@ -140,6 +141,33 @@ class GameSimulator2 {
 		for (GameSimulation simulation : bestSimulations) {
 			if (simulation.getEpisodes() < minSimulationCount) {
 				minSimulationCount = simulation.getEpisodes();
+				result = simulation;
+			}
+		}
+		return result;
+	}
+
+	GameSimulation getNextSimulationByWonRateAndMedian() {
+		List<GameSimulation> bestSimulations = new ArrayList<>();
+
+		double minWonRate = 0.75;
+		for (GameType gameType : GameType.values()) {
+			for (GameSimulation simulation : gameSimulations.get(gameType)) {
+				if (simulation.getEpisodes() == 0L) {
+					// simulation has never been run --> return immediately
+					return simulation;
+				}
+				if (simulation.getWonRate() >= minWonRate) {
+					bestSimulations.add(simulation);
+				}
+			}
+		}
+
+		double maxMedian = Double.NEGATIVE_INFINITY;
+		GameSimulation result = null;
+		for (GameSimulation simulation : bestSimulations) {
+			if (simulation.getDeclarerPointsMedian() > maxMedian) {
+				maxMedian = simulation.getDeclarerPointsMedian();
 				result = simulation;
 			}
 		}

@@ -15,6 +15,7 @@
  */
 package org.jskat.ai.nn;
 
+import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatistics;
 import org.jskat.control.SkatGame;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
@@ -127,6 +128,10 @@ class GameSimulation {
 		return statistics.getWonRateWithSchwarz();
 	}
 
+	double getDeclarerPointsMedian() {
+		return statistics.getDeclarerPointsMedian();
+	}
+
 	public GameType getGameType() {
 		return gameType;
 	}
@@ -149,6 +154,7 @@ class GameSimulation {
 		private double wonRateWithSchneider;
 		private long wonGamesWithSchwarz;
 		private double wonRateWithSchwarz;
+		private final SynchronizedDescriptiveStatistics declarerPointsStats = new SynchronizedDescriptiveStatistics();
 
 		void adjust(SkatGameResult gameResult) {
 			episodes++;
@@ -164,6 +170,7 @@ class GameSimulation {
 			wonRate = ((double) wonGames) / ((double) episodes);
 			wonRateWithSchneider = ((double) wonGamesWithSchneider) / ((double) episodes);
 			wonRateWithSchwarz = ((double) wonGamesWithSchwarz) / ((double) episodes);
+			declarerPointsStats.addValue(gameResult.getFinalDeclarerPoints());
 		}
 
 		long getEpisodes() {
@@ -192,6 +199,10 @@ class GameSimulation {
 
 		double getWonRateWithSchwarz() {
 			return wonRateWithSchwarz;
+		}
+
+		double getDeclarerPointsMedian() {
+			return declarerPointsStats.getPercentile(50);
 		}
 	}
 }
