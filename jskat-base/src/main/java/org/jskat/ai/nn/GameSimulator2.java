@@ -31,11 +31,11 @@ import org.slf4j.LoggerFactory;
 class GameSimulator2 {
 
 	private final static Logger LOG = LoggerFactory.getLogger(GameSimulator2.class);
-	
+
 	private final static Random RANDOM = new Random();
-	
+
 	private final static Double EXPLORATION_RATE = 0.2;
-	
+
 	private final Map<GameType, List<GameSimulation>> gameSimulations = new HashMap<>();
 
 	GameSimulator2() {
@@ -65,8 +65,7 @@ class GameSimulator2 {
 		long episodes = 0L;
 		while (episodes < maxEpisodes) {
 			GameSimulation simulation = getNextSimulation();
-			LOG.debug("Simulating " + simulation.getGameType()
-					+ " game. Current won rate: " + simulation.getWonRate()
+			LOG.debug("Simulating " + simulation.getGameType() + " game. Current won rate: " + simulation.getWonRate()
 					+ " in " + simulation.getEpisodes() + " episodes.");
 			simulation.simulateGame(getTrainingTableName(simulation.getGameType()));
 			episodes++;
@@ -87,8 +86,7 @@ class GameSimulator2 {
 		long endTime = System.currentTimeMillis() + maxTimeInMilliseconds;
 		while (System.currentTimeMillis() <= endTime) {
 			GameSimulation simulation = getNextSimulation();
-			LOG.warn("Simulating " + simulation.getGameType()
-					+ " game. Current won rate: " + simulation.getWonRate()
+			LOG.warn("Simulating " + simulation.getGameType() + " game. Current won rate: " + simulation.getWonRate()
 					+ " in " + simulation.getEpisodes() + " episodes.");
 			simulation.simulateGame(getTrainingTableName(simulation.getGameType()));
 		}
@@ -108,9 +106,9 @@ class GameSimulator2 {
 			}
 		}
 
-		LOG.warn("Best game simulation " + bestSimulation.getGameType()
-				+ " after " + bestSimulation.getEpisodes()
-				+ " episodes with won rate " + bestSimulation.getWonRate());
+		LOG.warn("Best game simulation " + bestSimulation.getGameType() + " after " + bestSimulation.getEpisodes()
+				+ " episodes with won rate " + bestSimulation.getWonRate() + " and median of "
+				+ bestSimulation.getDeclarerPointsMedian() + " of declarer points");
 
 		return bestSimulation;
 	}
@@ -148,29 +146,28 @@ class GameSimulator2 {
 	}
 
 	GameSimulation getNextSimulationByWonRateAndMedian() {
-		List<GameSimulation> bestSimulations = new ArrayList<>();
 
-		double minWonRate = 0.75;
+		List<GameSimulation> allSimulations = new ArrayList<>();
+
 		for (GameType gameType : GameType.values()) {
 			for (GameSimulation simulation : gameSimulations.get(gameType)) {
 				if (simulation.getEpisodes() == 0L) {
 					// simulation has never been run --> return immediately
 					return simulation;
 				}
-				if (simulation.getWonRate() >= minWonRate) {
-					bestSimulations.add(simulation);
-				}
+				allSimulations.add(simulation);
 			}
 		}
 
 		double maxMedian = Double.NEGATIVE_INFINITY;
 		GameSimulation result = null;
-		for (GameSimulation simulation : bestSimulations) {
+		for (GameSimulation simulation : allSimulations) {
 			if (simulation.getDeclarerPointsMedian() > maxMedian) {
 				maxMedian = simulation.getDeclarerPointsMedian();
 				result = simulation;
 			}
 		}
+
 		return result;
 	}
 
