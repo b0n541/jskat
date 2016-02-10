@@ -17,14 +17,15 @@ package org.jskat.ai.nn.util;
 
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
+
 import org.encog.engine.network.activation.ActivationSigmoid;
 import org.encog.ml.data.basic.BasicMLData;
 import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
-import org.encog.neural.networks.training.propagation.resilient.RPROPType;
-import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
+import org.encog.neural.networks.training.propagation.back.Backpropagation;
 import org.jskat.AbstractJSkatTest;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -119,13 +120,14 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 			trainingSet.add(new BasicMLDataPair(new BasicMLData(input[i]), new BasicMLData(output[i])));
 		}
 
-		ResilientPropagation trainer = new ResilientPropagation(network, trainingSet);
-		trainer.setRPROPType(RPROPType.iRPROPp);
-		trainer.setBatchSize(0);
-
 		double error = 1000.0;
+		int i = 0;
 		int iteration = 0;
 		while (error > MIN_DIFF && iteration < MAX_ITERATIONS) {
+			i = (i + 1) % trainingSet.size();
+			Backpropagation trainer = new Backpropagation(network,
+					new BasicMLDataSet(Arrays.asList(trainingSet.get(i))));
+			trainer.setBatchSize(1);
 			trainer.iteration();
 			error = trainer.getError();
 			iteration++;
