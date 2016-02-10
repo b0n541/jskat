@@ -76,7 +76,7 @@ public class NNTrainer extends JSkatThread {
 
 	/**
 	 * Sets the game type to learn
-	 * 
+	 *
 	 * @param newGameType
 	 *            Game type
 	 */
@@ -88,7 +88,7 @@ public class NNTrainer extends JSkatThread {
 
 	/**
 	 * Stops the training
-	 * 
+	 *
 	 * @param isStopTraining
 	 *            TRUE, if the training should be stopped
 	 */

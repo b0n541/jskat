@@ -33,10 +33,8 @@ import org.jskat.util.GameType;
 public final class SkatNetworks {
 
 	private static int INPUT_NEURONS = GenericNetworkInputGenerator.getNeuronCountForAllStrategies();
-	private static int HIDDEN_NEURONS = 317;
-	// private static int HIDDEN_NEURONS2 = 234;
-	// private static int HIDDEN_NEURONS3 = 23;
 	private static int OUTPUT_NEURONS = 1;
+	private static int HIDDEN_NEURONS = (INPUT_NEURONS + OUTPUT_NEURONS) * 2;
 
 	private static final boolean USE_BIAS = true;
 
@@ -154,9 +152,8 @@ public final class SkatNetworks {
 			for (PlayerParty playerParty : PlayerParty.values()) {
 				List<INeuralNetwork> networkList = new ArrayList<>();
 				networks.get(gameType).put(playerParty, networkList);
-				INeuralNetwork net = new EncogNetworkWrapper(topo, USE_BIAS);
 				for (int trick = 0; trick < 10; trick++) {
-					networkList.add(net);
+					networkList.add(new EncogNetworkWrapper(topo, USE_BIAS));
 				}
 			}
 		}

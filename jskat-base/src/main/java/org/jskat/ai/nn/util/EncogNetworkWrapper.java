@@ -42,7 +42,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param topo
 	 *            Network topology
 	 * @param useBias
@@ -50,11 +50,9 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 */
 	public EncogNetworkWrapper(NetworkTopology topo, boolean useBias) {
 		network = new BasicNetwork();
-		network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias, topo
-				.getInputNeuronCount()));
+		network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias, topo.getInputNeuronCount()));
 		for (int i = 0; i < topo.getHiddenLayerCount(); i++) {
-			network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias,
-					topo.getHiddenNeuronCount(i)));
+			network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias, topo.getHiddenNeuronCount(i)));
 		}
 		network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias, 1));
 		network.getStructure().finalizeStructure();
@@ -75,12 +73,10 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public synchronized double adjustWeights(final double[] inputValues,
-			final double[] outputValues) {
+	public synchronized double adjustWeights(final double[] inputValues, final double[] outputValues) {
 
 		List<MLDataPair> data = new ArrayList<MLDataPair>();
-		data.add(new BasicMLDataPair(new BasicMLData(inputValues),
-				new BasicMLData(outputValues)));
+		data.add(new BasicMLDataPair(new BasicMLData(inputValues), new BasicMLData(outputValues)));
 		MLDataSet trainingSet = new BasicMLDataSet(data);
 
 		Backpropagation trainer = new Backpropagation(network, trainingSet);
@@ -132,10 +128,8 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public synchronized void loadNetwork(final String fileName,
-			final int inputNeurons, final int hiddenNeurons,
+	public synchronized void loadNetwork(final String fileName, final int inputNeurons, final int hiddenNeurons,
 			final int outputNeurons) {
-		network = (BasicNetwork) networkPersister.read(getClass()
-				.getResourceAsStream(fileName));
+		network = (BasicNetwork) networkPersister.read(getClass().getResourceAsStream(fileName));
 	}
 }

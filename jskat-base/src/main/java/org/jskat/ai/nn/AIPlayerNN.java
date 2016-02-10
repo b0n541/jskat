@@ -56,7 +56,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 	public final static Double IDEAL_WON = 1.0;
 	public final static Double IDEAL_LOST = 0.0;
-	public final static Double EPSILON = 0.05;
+	public final static Double EPSILON = 0.2;
 
 	// FIXME (jan 10.03.2012) code duplication with NNTrainer
 	private static boolean isRamschGameWon(final GameSummary gameSummary, final Player currPlayer) {
@@ -434,6 +434,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 				}
 			}
 			double[] outputs = new double[] { output };
+
+			log.warn("Learning output: " + output);
 
 			int index = 0;
 			for (double[] inputParam : inputs) {
