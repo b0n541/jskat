@@ -17,13 +17,14 @@ package org.jskat.ai.nn.util;
 
 import static org.junit.Assert.fail;
 
-import org.encog.engine.network.activation.ActivationTANH;
+import org.encog.engine.network.activation.ActivationSigmoid;
 import org.encog.ml.data.basic.BasicMLData;
 import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
-import org.encog.neural.networks.training.propagation.back.Backpropagation;
+import org.encog.neural.networks.training.propagation.resilient.RPROPType;
+import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.jskat.AbstractJSkatTest;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -44,12 +45,12 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	/**
 	 * Maximum iterations for network learning
 	 */
-	private static final int MAX_ITERATIONS = 50000;
+	private static final int MAX_ITERATIONS = 200;
+
 	/**
 	 * Logger.
 	 */
-	private static Logger log = LoggerFactory
-			.getLogger(EncogNetworkWrapperTest.class);
+	private static Logger log = LoggerFactory.getLogger(EncogNetworkWrapperTest.class);
 
 	/**
 	 * Tests the NetworkWrapper with an XOR example.
@@ -62,8 +63,7 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 		INeuralNetwork network = new EncogNetworkWrapper(topo, false);
 		network.resetNetwork();
 
-		double[][] input = { { 1.0, 1.0 }, { 1.0, 0.0 }, { 0.0, 1.0 },
-				{ 0.0, 0.0 } };
+		double[][] input = { { 1.0, 1.0 }, { 1.0, 0.0 }, { 0.0, 1.0 }, { 0.0, 0.0 } };
 		double[][] output = { { 0.0 }, // A XOR B
 				{ 1.0 }, { 1.0 }, { 0.0 } };
 
@@ -78,16 +78,13 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 		}
 
 		if (iteration == MAX_ITERATIONS) {
-			fail("Needed more than " + MAX_ITERATIONS + " iterations. Error: "
-					+ error);
+			fail("Needed more than " + MAX_ITERATIONS + " iterations. Error: " + error);
 		} else {
-			log.debug("Needed " + iteration + " iterations to learn.");
-			log.debug("Testing network:");
+			log.info("Needed " + iteration + " iterations to learn.");
+			log.info("Testing network:");
 			for (int n = 0; n < input.length; n++) {
-				log.debug("Input: " + input[n][0] + " " + input[n][1]
-						+ " Expected output: " + output[n][0]
-						+ " Predicted output: "
-						+ network.getPredictedOutcome(input[n]));
+				log.info("Input: " + input[n][0] + " " + input[n][1] + " Expected output: " + output[n][0]
+						+ " Predicted output: " + network.getPredictedOutcome(input[n]));
 			}
 		}
 
@@ -107,25 +104,24 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	@Test
 	public final void testXORDirect() {
 		BasicNetwork network = new BasicNetwork();
-		network.addLayer(new BasicLayer(new ActivationTANH(), true, 2));
-		network.addLayer(new BasicLayer(new ActivationTANH(), true, 3));
-		network.addLayer(new BasicLayer(new ActivationTANH(), true, 1));
+		network.addLayer(new BasicLayer(new ActivationSigmoid(), true, 2));
+		network.addLayer(new BasicLayer(new ActivationSigmoid(), true, 3));
+		network.addLayer(new BasicLayer(new ActivationSigmoid(), true, 1));
 		network.getStructure().finalizeStructure();
 		network.reset();
 
 		BasicMLDataSet trainingSet = new BasicMLDataSet();
-		double[][] input = { { 1.0, 1.0 }, { 1.0, 0.0 }, { 0.0, 1.0 },
-				{ 0.0, 0.0 } };
+		double[][] input = { { 1.0, 1.0 }, { 1.0, 0.0 }, { 0.0, 1.0 }, { 0.0, 0.0 } };
 		double[][] output = { { 0.0 }, // A XOR B
 				{ 1.0 }, { 1.0 }, { 0.0 } };
 
 		for (int i = 0; i < input.length; i++) {
-			trainingSet.add(new BasicMLDataPair(new BasicMLData(input[i]),
-					new BasicMLData(output[i])));
+			trainingSet.add(new BasicMLDataPair(new BasicMLData(input[i]), new BasicMLData(output[i])));
 		}
 
-		Backpropagation trainer = new Backpropagation(network, trainingSet);
-		trainer.setBatchSize(1);
+		ResilientPropagation trainer = new ResilientPropagation(network, trainingSet);
+		trainer.setRPROPType(RPROPType.iRPROPp);
+		trainer.setBatchSize(0);
 
 		double error = 1000.0;
 		int iteration = 0;
@@ -136,16 +132,13 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 		}
 
 		if (iteration == MAX_ITERATIONS) {
-			fail("Needed more than " + MAX_ITERATIONS + " iterations. Error: "
-					+ error);
+			fail("Needed more than " + MAX_ITERATIONS + " iterations. Error: " + error);
 		} else {
 			log.debug("Needed " + iteration + " iterations to learn.");
 			log.debug("Testing network:");
 			for (int n = 0; n < input.length; n++) {
-				log.debug("Input: " + input[n][0] + " " + input[n][1]
-						+ " Expected output: " + output[n][0]
-						+ " Predicted output: "
-						+ network.compute(new BasicMLData(input[n])));
+				log.debug("Input: " + input[n][0] + " " + input[n][1] + " Expected output: " + output[n][0]
+						+ " Predicted output: " + network.compute(new BasicMLData(input[n])));
 			}
 		}
 	}

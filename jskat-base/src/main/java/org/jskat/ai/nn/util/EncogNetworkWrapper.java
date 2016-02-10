@@ -81,7 +81,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 
 		Backpropagation trainer = new Backpropagation(network, trainingSet);
 		trainer.setBatchSize(1);
-		trainer.iteration();
+		trainer.iteration(10);
 		return trainer.getError();
 	}
 
