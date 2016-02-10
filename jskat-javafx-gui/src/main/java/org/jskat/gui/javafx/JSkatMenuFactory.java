@@ -91,8 +91,10 @@ public final class JSkatMenuFactory {
 
 		MenuItem loadNeuralNetworksMenuItem = new MenuItem(strings.getString("load_nn"));
 		loadNeuralNetworksMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.LOAD, IconSize.SMALL));
+		loadNeuralNetworksMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.loadNeuralNetworks());
 		MenuItem saveNeuralNetworksMenuItem = new MenuItem(strings.getString("save_nn"));
 		saveNeuralNetworksMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.SAVE, IconSize.SMALL));
+		saveNeuralNetworksMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.saveNeuralNetworks());
 		MenuItem resetNeuralNetworksMenuItem = new MenuItem(strings.getString("reset_nn"));
 		resetNeuralNetworksMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.resetNeuralNetworks());
 		resetNeuralNetworksMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.UNDO, IconSize.SMALL));
