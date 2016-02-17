@@ -32,6 +32,7 @@ import org.encog.neural.networks.training.propagation.resilient.RPROPType;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.util.simple.EncogUtility;
 import org.jskat.AbstractJSkatTest;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -151,6 +152,7 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	}
 
 	@Test
+	@Ignore
 	public void testXOROnlineTraining() {
 
 		double XOR_INPUT[][] = { { 0.0, 0.0 }, { 1.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 1.0 } };
