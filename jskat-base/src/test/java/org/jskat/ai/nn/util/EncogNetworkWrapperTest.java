@@ -19,13 +19,18 @@ import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 
+import org.encog.Encog;
 import org.encog.engine.network.activation.ActivationSigmoid;
+import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.basic.BasicMLData;
 import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.training.propagation.back.Backpropagation;
+import org.encog.neural.networks.training.propagation.resilient.RPROPType;
+import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
+import org.encog.util.simple.EncogUtility;
 import org.jskat.AbstractJSkatTest;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -143,5 +148,55 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 						+ " Predicted output: " + network.compute(new BasicMLData(input[n])));
 			}
 		}
+	}
+
+	@Test
+	public void testXOROnlineTraining() {
+
+		double XOR_INPUT[][] = { { 0.0, 0.0 }, { 1.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 1.0 } };
+		double XOR_IDEAL[][] = { { 0.0 }, { 1.0 }, { 1.0 }, { 0.0 } };
+
+		// Create a neural network, using the utility.
+		BasicNetwork network = EncogUtility.simpleFeedForward(2, 3, 2, 1, false);
+		network.reset();
+
+		// Create training data.
+		MLDataSet trainingSet = new BasicMLDataSet(XOR_INPUT, XOR_IDEAL);
+
+		// Train the neural network.
+		final Backpropagation train = new Backpropagation(network, trainingSet, 0.07, 0.02);
+		train.setBatchSize(1);
+
+		// Evaluate the neural network.
+		EncogUtility.trainToError(train, 0.01);
+		EncogUtility.evaluate(network, trainingSet);
+
+		// Shut down Encog.
+		Encog.getInstance().shutdown();
+	}
+
+	@Test
+	public void testXORResilientTraining() {
+
+		double XOR_INPUT[][] = { { 0.0, 0.0 }, { 1.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 1.0 } };
+		double XOR_IDEAL[][] = { { 0.0 }, { 1.0 }, { 1.0 }, { 0.0 } };
+
+		// Create a neural network, using the utility.
+		BasicNetwork network = EncogUtility.simpleFeedForward(2, 3, 0, 1, false);
+		network.reset();
+
+		// Create training data.
+		MLDataSet trainingSet = new BasicMLDataSet(XOR_INPUT, XOR_IDEAL);
+
+		// Train the neural network.
+		final ResilientPropagation train = new ResilientPropagation(network, trainingSet);
+		train.setRPROPType(RPROPType.iRPROPp);
+
+		// Evaluate the neural network.
+		EncogUtility.trainToError(train, 0.01);
+		EncogUtility.evaluate(network, trainingSet);
+
+		// Shut down Encog.
+		Encog.getInstance().shutdown();
 	}
 }
