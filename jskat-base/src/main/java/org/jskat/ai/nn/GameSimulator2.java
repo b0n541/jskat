@@ -76,8 +76,8 @@ class GameSimulator2 {
 
 	GameSimulation getNextSimulation() {
 		if (RANDOM.nextDouble() > EXPLORATION_RATE) {
-			// return getNextSimulationByWonRate();
-			return getNextSimulationByWonRateAndMedian();
+			return getNextSimulationByWonRate();
+			// return getNextSimulationByWonRateAndMedian();
 		}
 		return getNextSimulationByExploring();
 	}
