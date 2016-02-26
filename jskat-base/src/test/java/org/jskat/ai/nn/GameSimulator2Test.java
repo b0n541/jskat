@@ -81,9 +81,11 @@ public class GameSimulator2Test extends AbstractJSkatTest {
 
 		Mockito.when(nullSimulation.getEpisodes()).thenReturn(0L);
 		Mockito.when(nullSimulation.getWonRate()).thenReturn(0.0);
+		Mockito.when(nullSimulation.getDeclarerPointsMedian()).thenReturn(10.0);
 
 		Mockito.when(grandSimulation.getEpisodes()).thenReturn(1L);
 		Mockito.when(grandSimulation.getWonRate()).thenReturn(1.0);
+		Mockito.when(grandSimulation.getDeclarerPointsMedian()).thenReturn(80.0);
 
 		assertThat(gameSimulator.getNextSimulation().getGameType(), is(GameType.NULL));
 

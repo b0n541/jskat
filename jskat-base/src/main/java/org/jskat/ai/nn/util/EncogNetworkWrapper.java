@@ -31,6 +31,8 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.PersistBasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.training.propagation.back.Backpropagation;
+import org.encog.neural.networks.training.propagation.resilient.RPROPType;
+import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 
 /**
  * Wraps the Encog network to fulfill the interface {@link INeuralNetwork}
@@ -42,7 +44,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param topo
 	 *            Network topology
 	 * @param useBias
@@ -50,11 +52,9 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 */
 	public EncogNetworkWrapper(NetworkTopology topo, boolean useBias) {
 		network = new BasicNetwork();
-		network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias, topo
-				.getInputNeuronCount()));
+		network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias, topo.getInputNeuronCount()));
 		for (int i = 0; i < topo.getHiddenLayerCount(); i++) {
-			network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias,
-					topo.getHiddenNeuronCount(i)));
+			network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias, topo.getHiddenNeuronCount(i)));
 		}
 		network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias, 1));
 		network.getStructure().finalizeStructure();
@@ -71,22 +71,30 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 		return 0.0;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	public synchronized double adjustWeights(final double[] inputValues,
-			final double[] outputValues) {
+	public synchronized double adjustWeights(final double[] inputValues, final double[] outputValues) {
 
 		List<MLDataPair> data = new ArrayList<MLDataPair>();
-		data.add(new BasicMLDataPair(new BasicMLData(inputValues),
-				new BasicMLData(outputValues)));
+		data.add(new BasicMLDataPair(new BasicMLData(inputValues), new BasicMLData(outputValues)));
 		MLDataSet trainingSet = new BasicMLDataSet(data);
 
-		Backpropagation trainer = new Backpropagation(network, trainingSet);
+		final Backpropagation trainer = new Backpropagation(network, trainingSet, 0.07, 0.02);
 		trainer.setBatchSize(1);
 		trainer.iteration();
 		return trainer.getError();
+	}
+
+	@Override
+	public synchronized double adjustWeightsBatch(final double[][] inputValues, final double[][] outputValues) {
+
+		MLDataSet trainingSet = new BasicMLDataSet(inputValues, outputValues);
+		final ResilientPropagation train = new ResilientPropagation(network, trainingSet);
+		train.setRPROPType(RPROPType.iRPROPp);
+		train.setBatchSize(0);
+
+		train.iteration();
+
+		return train.getError();
 	}
 
 	/**
@@ -132,10 +140,8 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public synchronized void loadNetwork(final String fileName,
-			final int inputNeurons, final int hiddenNeurons,
+	public synchronized void loadNetwork(final String fileName, final int inputNeurons, final int hiddenNeurons,
 			final int outputNeurons) {
-		network = (BasicNetwork) networkPersister.read(getClass()
-				.getResourceAsStream(fileName));
+		network = (BasicNetwork) networkPersister.read(getClass().getResourceAsStream(fileName));
 	}
 }
