@@ -34,7 +34,7 @@ public final class SkatNetworks {
 
 	private static int INPUT_NEURONS = GenericNetworkInputGenerator.getNeuronCountForAllStrategies();
 	private static int OUTPUT_NEURONS = 1;
-	private static int HIDDEN_NEURONS = (INPUT_NEURONS + OUTPUT_NEURONS) * 2;
+	private static int HIDDEN_NEURONS = INPUT_NEURONS * 2;
 
 	private static final boolean USE_BIAS = true;
 
@@ -46,7 +46,6 @@ public final class SkatNetworks {
 	 * Private constructor for singleton class.
 	 */
 	private SkatNetworks() {
-
 		createNetworks();
 		// loadNetworks();
 	}
@@ -96,7 +95,7 @@ public final class SkatNetworks {
 					playerPartyNet.getValue().get(trick)
 							.loadNetwork("/org/jskat/ai/nn/data/jskat".concat("." + gameTypeNets.getKey())
 									.concat("." + playerPartyNet.getKey()).concat(".TRICK" + trick).concat(".nnet"),
-							INPUT_NEURONS, HIDDEN_NEURONS, OUTPUT_NEURONS);
+									INPUT_NEURONS, HIDDEN_NEURONS, OUTPUT_NEURONS);
 				}
 			}
 		}
