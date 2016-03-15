@@ -976,10 +976,12 @@ public class SkatGame extends JSkatThread {
 
 	private void doSleep(final int milliseconds) {
 
-		try {
-			sleep(milliseconds);
-		} catch (final InterruptedException e) {
-			this.log.warn("sleep was interrupted..."); //$NON-NLS-1$
+		if (milliseconds > 0) {
+			try {
+				sleep(milliseconds);
+			} catch (final InterruptedException e) {
+				this.log.warn("sleep was interrupted..."); //$NON-NLS-1$
+			}
 		}
 	}
 
