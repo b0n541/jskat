@@ -32,7 +32,6 @@ import org.encog.neural.networks.training.propagation.resilient.RPROPType;
 import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.util.simple.EncogUtility;
 import org.jskat.AbstractJSkatTest;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +62,6 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	 * Tests the NetworkWrapper with an XOR example.
 	 */
 	@Test
-	@Ignore
 	public final void testXOR() {
 
 		int[] hiddenNeurons = { 3 };
@@ -110,7 +108,6 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	 * Tests the {@link BasicNetwork} directly with an XOR example.
 	 */
 	@Test
-	@Ignore
 	public final void testXORDirect() {
 		BasicNetwork network = new BasicNetwork();
 		network.addLayer(new BasicLayer(new ActivationSigmoid(), true, 2));
@@ -154,7 +151,6 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	}
 
 	@Test
-	@Ignore
 	public void testXOROnlineTraining() {
 
 		double XOR_INPUT[][] = { { 0.0, 0.0 }, { 1.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 1.0 } };
@@ -168,7 +164,7 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 		MLDataSet trainingSet = new BasicMLDataSet(XOR_INPUT, XOR_IDEAL);
 
 		// Train the neural network.
-		final Backpropagation train = new Backpropagation(network, trainingSet, 0.07, 0.02);
+		final Backpropagation train = new Backpropagation(network, trainingSet, 0.7, 0.02);
 		train.setBatchSize(1);
 
 		// Evaluate the neural network.

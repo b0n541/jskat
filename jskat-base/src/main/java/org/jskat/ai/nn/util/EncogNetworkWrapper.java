@@ -31,8 +31,6 @@ import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.PersistBasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.training.propagation.back.Backpropagation;
-import org.encog.neural.networks.training.propagation.resilient.RPROPType;
-import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 
 /**
  * Wraps the Encog network to fulfill the interface {@link INeuralNetwork}
@@ -74,13 +72,14 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	@Override
 	public synchronized double adjustWeights(final double[] inputValues, final double[] outputValues) {
 
-		List<MLDataPair> data = new ArrayList<MLDataPair>();
+		List<MLDataPair> data = new ArrayList<>();
 		data.add(new BasicMLDataPair(new BasicMLData(inputValues), new BasicMLData(outputValues)));
 		MLDataSet trainingSet = new BasicMLDataSet(data);
 
-		final Backpropagation trainer = new Backpropagation(network, trainingSet, 0.07, 0.02);
+		final Backpropagation trainer = new Backpropagation(network, trainingSet, 0.7, 0.02);
 		trainer.setBatchSize(1);
 		trainer.iteration();
+
 		return trainer.getError();
 	}
 
@@ -88,9 +87,12 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	public synchronized double adjustWeightsBatch(final double[][] inputValues, final double[][] outputValues) {
 
 		MLDataSet trainingSet = new BasicMLDataSet(inputValues, outputValues);
-		final ResilientPropagation train = new ResilientPropagation(network, trainingSet);
-		train.setRPROPType(RPROPType.iRPROPp);
+		Backpropagation train = new Backpropagation(network, trainingSet, 0.7, 0.02);
 		train.setBatchSize(0);
+		// final ResilientPropagation train = new ResilientPropagation(network,
+		// trainingSet);
+		// train.setRPROPType(RPROPType.iRPROPp);
+		// train.setBatchSize(0);
 
 		train.iteration();
 
