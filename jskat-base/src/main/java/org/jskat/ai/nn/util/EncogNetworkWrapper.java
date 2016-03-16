@@ -76,7 +76,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 		data.add(new BasicMLDataPair(new BasicMLData(inputValues), new BasicMLData(outputValues)));
 		MLDataSet trainingSet = new BasicMLDataSet(data);
 
-		final Backpropagation trainer = new Backpropagation(network, trainingSet, 0.7, 0.02);
+		final Backpropagation trainer = new Backpropagation(network, trainingSet, 0.3, 0.9);
 		trainer.setBatchSize(1);
 		trainer.iteration();
 
