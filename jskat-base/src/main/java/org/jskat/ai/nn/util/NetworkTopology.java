@@ -22,7 +22,7 @@ public class NetworkTopology {
 
 	private final int inputSignals;
 	private final int outputSignals;
-	private final int[] hiddenNeurons;
+	private final int[] hiddenLayerNeurons;
 
 	/**
 	 * Constructor
@@ -31,12 +31,12 @@ public class NetworkTopology {
 	 *            Number of input neurons
 	 * @param outputs
 	 *            Number of output neurons
-	 * @param hiddenLayers
+	 * @param hiddenLayerNeurons
 	 *            Number of neurons in every hidden layer
 	 */
-	public NetworkTopology(int inputs, int[] hiddenLayers, int outputs) {
+	public NetworkTopology(int inputs, int[] hiddenLayerNeurons, int outputs) {
 		this.inputSignals = inputs;
-		this.hiddenNeurons = hiddenLayers;
+		this.hiddenLayerNeurons = hiddenLayerNeurons;
 		this.outputSignals = outputs;
 	}
 
@@ -57,7 +57,7 @@ public class NetworkTopology {
 	 */
 	int getHiddenLayerCount() {
 
-		return hiddenNeurons.length;
+		return hiddenLayerNeurons.length;
 	}
 
 	/**
@@ -73,11 +73,11 @@ public class NetworkTopology {
 			throw new IllegalArgumentException(
 					"Layer must be greater or equals 0."); //$NON-NLS-1$
 		}
-		if (layerID >= hiddenNeurons.length) {
+		if (layerID >= hiddenLayerNeurons.length) {
 			throw new IllegalArgumentException(
-					"Network has only " + hiddenNeurons.length + " hidden layers."); //$NON-NLS-1$ //$NON-NLS-2$
+					"Network has only " + hiddenLayerNeurons.length + " hidden layers."); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		return this.hiddenNeurons[layerID];
+		return this.hiddenLayerNeurons[layerID];
 	}
 
 	/**
@@ -119,8 +119,8 @@ public class NetworkTopology {
 		result.append("input\n"); //$NON-NLS-1$
 		result.append(getInputNeuronCount()).append('\n');
 
-		result.append("hidden ").append(this.hiddenNeurons.length).append('\n'); //$NON-NLS-1$
-		for (int i = 0; i < this.hiddenNeurons.length; i++) {
+		result.append("hidden ").append(this.hiddenLayerNeurons.length).append('\n'); //$NON-NLS-1$
+		for (int i = 0; i < this.hiddenLayerNeurons.length; i++) {
 
 			result.append(getHiddenNeuronCount(i)).append('\n');
 		}

@@ -19,21 +19,32 @@ public interface INeuralNetwork {
 
 	/**
 	 * Gets the average difference of all output neurons
-	 * 
+	 *
 	 * @return Average difference
 	 */
-	public abstract double getAvgDiff();
+	double getAvgDiff();
 
 	/**
 	 * Adjusts the weights of the net according inputs and desired outputs
-	 * 
+	 *
 	 * @param inputs
 	 *            Input attributes
 	 * @param outputs
 	 *            Output attributes
-	 * @return Average diff
+	 * @return Average error
 	 */
-	public abstract double adjustWeights(double[] inputs, double[] outputs);
+	double adjustWeights(double[] inputs, double[] outputs);
+
+	/**
+	 * Adjusts the weights of the net with a batch training set.
+	 *
+	 * @param inputs
+	 *            Input attributes
+	 * @param outputs
+	 *            Output attributes
+	 * @return Average error
+	 */
+	double adjustWeightsBatch(double[][] inputs, double[][] outputs);
 
 	/**
 	 * Resets the network, sets random values for all weights
@@ -42,7 +53,7 @@ public interface INeuralNetwork {
 
 	/**
 	 * Gets the predicted outcome of a game according inputs
-	 * 
+	 *
 	 * @param inputs
 	 *            Input attributes
 	 * @return Predicted outcome
@@ -51,14 +62,14 @@ public interface INeuralNetwork {
 
 	/**
 	 * Gets the number of iterations the NeuralNetwork was trained so far
-	 * 
+	 *
 	 * @return Number of iterations
 	 */
 	public abstract long getIterations();
 
 	/**
 	 * Save the network parameters to a file
-	 * 
+	 *
 	 * @param fileName
 	 *            File name to save to
 	 * @return TRUE if the saving was successful
@@ -67,7 +78,7 @@ public interface INeuralNetwork {
 
 	/**
 	 * Loads network parameters from a file
-	 * 
+	 *
 	 * @param fileName
 	 *            File name to load from
 	 * @param inputNeurons

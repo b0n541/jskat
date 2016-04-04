@@ -389,7 +389,7 @@ public class JSkatViewImpl implements JSkatView {
 						+ "\n\n" //$NON-NLS-1$
 						+ this.strings.getString(
 								"authors") //$NON-NLS-1$
-				+ ":\nJan Schäfer (jansch@users.sourceforge.net),\nMarkus J. Luzius (jskat@luzius.de),\nDaniel Loreck (daniel.loreck@gmail.com),\nSascha Laurien,\nSlovasim\n\n" //$NON-NLS-1$
+				+ ":\nJan Schäfer (jansch@users.sourceforge.net)\nMarkus J. Luzius (jskat@luzius.de)\nDaniel Loreck (daniel.loreck@gmail.com)\nSascha Laurien\nSlovasim\nMartin Rothe\n\n" //$NON-NLS-1$
 				+ this.strings.getString("cards") //$NON-NLS-1$
 				+ ": International Skat Server, KDE project, OpenClipart.org\n\n" //$NON-NLS-1$
 				+ this.strings.getString("icons") //$NON-NLS-1$
