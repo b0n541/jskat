@@ -15,6 +15,7 @@
  */
 package org.jskat.ai.nn;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
@@ -35,8 +36,8 @@ public class GameSimulator2Test extends AbstractJSkatTest {
 
 		GameSimulation bestSimulation = gameSimulator.simulateMaxEpisodes(10L);
 
-		assertThat(bestSimulation.getEpisodes(), is(10L));
-		assertThat(bestSimulation.getWonGames(), is(10L));
+		assertThat(bestSimulation.getEpisodes(), is(equalTo(10L)));
+		assertThat(bestSimulation.getWonGames(), is(equalTo(10L)));
 	}
 
 	@Test
