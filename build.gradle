@@ -16,6 +16,8 @@ allprojects {
 	apply plugin: 'java'
 	apply plugin: 'eclipse'
 	apply plugin: 'idea'
+	apply plugin: 'jacoco'
+	
 	
 	task sourcesJar(type: Jar, dependsOn: classes) {
 	    classifier = 'sources'
@@ -31,6 +33,15 @@ allprojects {
 	    archives sourcesJar
 	    archives javadocJar
 	}
+	
+	jacocoTestReport {
+	    reports {
+    	    xml.enabled = true
+        	html.enabled = true
+    	}
+    }
+
+	check.dependsOn jacocoTestReport
 }
 
 dependencies {
