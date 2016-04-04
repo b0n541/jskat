@@ -178,6 +178,13 @@ public class JSkatViewImpl implements JSkatView {
 
 	/**
 	 * Constructor
+	 * 
+	 * @param targetScreen
+	 *            Target screen for main window
+	 * @param menu
+	 *            Menu bar
+	 * @param version
+	 *            JSkat version
 	 */
 	public JSkatViewImpl(Screen targetScreen, MenuBar menu, String version) {
 

@@ -36,7 +36,10 @@ public class LookAndFeelSetter {
 	private static Logger log = LoggerFactory.getLogger(LookAndFeelSetter.class);
 
 	/**
-	 * Sets the look and feel
+	 * Sets the look and feel.
+	 * 
+	 * @param targetScreen
+	 *            Target screen for main window
 	 */
 	public static void setLookAndFeel(Screen targetScreen) {
 
