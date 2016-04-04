@@ -1,5 +1,6 @@
 plugins {
 	id "com.github.johnrengelman.shadow" version "1.2.3"
+	id "com.github.hierynomus.license" version "0.12.1"
 }
 
 task wrapper(type: Wrapper) {
@@ -17,8 +18,8 @@ allprojects {
 	apply plugin: 'eclipse'
 	apply plugin: 'idea'
 	apply plugin: 'jacoco'
-	
-	
+	apply plugin: 'license'
+
 	task sourcesJar(type: Jar, dependsOn: classes) {
 	    classifier = 'sources'
 	    from sourceSets.main.allSource
@@ -42,6 +43,12 @@ allprojects {
     }
 
 	check.dependsOn jacocoTestReport
+	
+	license {
+    	include "**/*.java"
+    	header project.file('LICENSE.header')
+    	ext.year = Calendar.getInstance().get(Calendar.YEAR)
+    }
 }
 
 dependencies {
