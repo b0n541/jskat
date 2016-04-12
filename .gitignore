@@ -1,5 +1,5 @@
-/.settings
-/.project
-/.checkstyle
 /build/
-/bin/
+/.gradle/
+/.settings/
+/.project
+/.classpath
