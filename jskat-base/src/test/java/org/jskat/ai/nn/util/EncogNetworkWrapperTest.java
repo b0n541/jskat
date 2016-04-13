@@ -46,12 +46,12 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	/**
 	 * Minimum difference between calculated output and desired result.
 	 */
-	private static final double MIN_DIFF = 0.01;
+	private static final double MIN_DIFF = 0.1;
 
 	/**
 	 * Maximum iterations for network learning
 	 */
-	private static final int MAX_ITERATIONS = 500;
+	private static final int MAX_ITERATIONS = 1000;
 
 	/**
 	 * Logger.
@@ -66,20 +66,17 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 
 		int[] hiddenNeurons = { 3 };
 		NetworkTopology topo = new NetworkTopology(2, hiddenNeurons, 1);
-		INeuralNetwork network = new EncogNetworkWrapper(topo, false);
+		INeuralNetwork network = new EncogNetworkWrapper(topo, true);
 		network.resetNetwork();
 
 		double[][] input = { { 1.0, 1.0 }, { 1.0, 0.0 }, { 0.0, 1.0 }, { 0.0, 0.0 } };
-		double[][] output = { { 0.0 }, // A XOR B
-				{ 1.0 }, { 1.0 }, { 0.0 } };
+		double[][] output = { { 0.0 }, { 1.0 }, { 1.0 }, { 0.0 } };
 
 		double error = 1000.0;
-		int i = 0;
 		int iteration = 0;
 
 		while (error > MIN_DIFF && iteration < MAX_ITERATIONS) {
-			error = network.adjustWeights(input[i], output[i]);
-			i = (i + 1) % input.length;
+			error = network.adjustWeightsBatch(input, output);
 			iteration++;
 		}
 
