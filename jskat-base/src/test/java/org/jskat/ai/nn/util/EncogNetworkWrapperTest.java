@@ -51,7 +51,7 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	/**
 	 * Maximum iterations for network learning
 	 */
-	private static final int MAX_ITERATIONS = 1000;
+	private static final int MAX_ITERATIONS = 200;
 
 	/**
 	 * Logger.
@@ -90,15 +90,6 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 						+ " Predicted output: " + network.getPredictedOutcome(input[n]));
 			}
 		}
-
-		// assertTrue(network.getPredictedOutcome(input[0]) < output[0][0]
-		// + EPSILON);
-		// assertTrue(network.getPredictedOutcome(input[1]) > output[1][0]
-		// - EPSILON);
-		// assertTrue(network.getPredictedOutcome(input[2]) > output[2][0]
-		// - EPSILON);
-		// assertTrue(network.getPredictedOutcome(input[3]) < output[3][0]
-		// + EPSILON);
 	}
 
 	/**
@@ -154,20 +145,23 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 		double XOR_IDEAL[][] = { { 0.0 }, { 1.0 }, { 1.0 }, { 0.0 } };
 
 		// Create a neural network, using the utility.
-		BasicNetwork network = EncogUtility.simpleFeedForward(2, 3, 2, 1, false);
-		network.reset();
+		BasicNetwork network = EncogUtility.simpleFeedForward(2, 3, 0, 1, false);
 
 		// Create training data.
 		MLDataSet trainingSet = new BasicMLDataSet(XOR_INPUT, XOR_IDEAL);
 
 		// Train the neural network.
-		final Backpropagation train = new Backpropagation(network, trainingSet, 0.7, 0.02);
+		final Backpropagation train = new Backpropagation(network, trainingSet, 0.3, 0.9);
 		train.setBatchSize(1);
 
 		// Evaluate the neural network.
 		EncogUtility.trainToError(train, 0.01);
 		EncogUtility.evaluate(network, trainingSet);
 
+		if (train.getIteration() > MAX_ITERATIONS) {
+			fail("Needed more than " + MAX_ITERATIONS + " iterations " + train.getIteration() + ". Error: "
+					+ train.getError());
+		}
 		// Shut down Encog.
 		Encog.getInstance().shutdown();
 	}
