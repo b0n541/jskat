@@ -442,7 +442,12 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 			INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGameAnnouncement().getGameType(), isDeclarer(),
 					0);
-			double networkError = net.adjustWeightsBatch(inputsArray, outputsArray);
+			double networkError = 0.0;
+
+			for (int i = 0; i < inputs.size(); i++) {
+				// net.adjustWeightsBatch(inputsArray, outputsArray);
+				networkError = net.adjustWeights(inputsArray[i], outputsArray[i]);
+			}
 
 			log.warn("learning error: " + networkError);
 			lastAvgNetworkError = networkError;

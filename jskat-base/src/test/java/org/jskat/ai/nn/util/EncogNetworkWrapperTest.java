@@ -73,10 +73,13 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 		double[][] output = { { 0.0 }, { 1.0 }, { 1.0 }, { 0.0 } };
 
 		double error = 1000.0;
+		int i = 0;
 		int iteration = 0;
 
 		while (error > MIN_DIFF && iteration < MAX_ITERATIONS) {
-			error = network.adjustWeightsBatch(input, output);
+			// error = network.adjustWeightsBatch(input, output);
+			error = network.adjustWeights(input[i], output[i]);
+			i = (i + 1) % output.length;
 			iteration++;
 		}
 
