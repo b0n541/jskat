@@ -42,6 +42,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	private static final double MOMENTUM = 0.9;
 
 	private BasicNetwork network;
+	private ResilientPropagation trainer;
 	private final PersistBasicNetwork networkPersister;
 
 	/**
@@ -80,12 +81,14 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 		data.add(new BasicMLDataPair(new BasicMLData(inputValues), new BasicMLData(outputValues)));
 		MLDataSet trainingSet = new BasicMLDataSet(data);
 
-		// Backpropagation trainer = new Backpropagation(network, trainingSet,
-		// LEARNING_RATE, MOMENTUM);
-		ResilientPropagation trainer = new ResilientPropagation(network, trainingSet);
-		trainer.setRPROPType(RPROPType.iRPROPp);
+		if (trainer == null) {
+			trainer = new ResilientPropagation(network, trainingSet);
+			trainer.setRPROPType(RPROPType.iRPROPp);
+			trainer.setBatchSize(1);
+		} else {
+			trainer.setTraining(trainingSet);
+		}
 
-		trainer.setBatchSize(1);
 		trainer.iteration();
 
 		return trainer.getError();
@@ -96,12 +99,14 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 
 		MLDataSet trainingSet = new BasicMLDataSet(inputValues, outputValues);
 
-		// Backpropagation trainer = new Backpropagation(network, trainingSet,
-		// LEARNING_RATE, MOMENTUM);
-		ResilientPropagation trainer = new ResilientPropagation(network, trainingSet);
-		trainer.setRPROPType(RPROPType.iRPROPp);
+		if (trainer == null) {
+			trainer = new ResilientPropagation(network, trainingSet);
+			trainer.setRPROPType(RPROPType.iRPROPp);
+			trainer.setBatchSize(0);
+		} else {
+			trainer.setTraining(trainingSet);
+		}
 
-		trainer.setBatchSize(0);
 		trainer.iteration();
 
 		return trainer.getError();
