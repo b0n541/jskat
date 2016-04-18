@@ -37,6 +37,9 @@ import org.encog.neural.networks.training.propagation.back.Backpropagation;
  */
 public class EncogNetworkWrapper implements INeuralNetwork {
 
+	private static final double LEARNING_RATE = 0.3;
+	private static final double MOMENTUM = 0.9;
+
 	private BasicNetwork network;
 	private final PersistBasicNetwork networkPersister;
 
@@ -76,7 +79,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 		data.add(new BasicMLDataPair(new BasicMLData(inputValues), new BasicMLData(outputValues)));
 		MLDataSet trainingSet = new BasicMLDataSet(data);
 
-		Backpropagation trainer = new Backpropagation(network, trainingSet, 0.3, 0.9);
+		Backpropagation trainer = new Backpropagation(network, trainingSet, LEARNING_RATE, MOMENTUM);
 
 		trainer.setBatchSize(1);
 		trainer.iteration();
@@ -89,7 +92,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 
 		MLDataSet trainingSet = new BasicMLDataSet(inputValues, outputValues);
 
-		Backpropagation trainer = new Backpropagation(network, trainingSet, 0.3, 0.9);
+		Backpropagation trainer = new Backpropagation(network, trainingSet, LEARNING_RATE, MOMENTUM);
 
 		trainer.setBatchSize(0);
 		trainer.iteration();
