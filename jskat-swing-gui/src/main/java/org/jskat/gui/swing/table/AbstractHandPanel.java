@@ -86,7 +86,10 @@ abstract class AbstractHandPanel extends JPanel {
      */
     int maxCardCount = 0;
 
-    boolean activePlayer = false;
+    /**
+     * Indicates whether this player is currently the active player
+     */
+    boolean isActivePlayer = false;
 
     boolean playerPassed = false;
 
@@ -108,12 +111,11 @@ abstract class AbstractHandPanel extends JPanel {
      * @param showIssWidgets
      *            TRUE, if ISS widgets should be shown
      */
-    AbstractHandPanel(final ActionMap actions, final int maxCards,
-            final boolean showIssWidgets) {
+    AbstractHandPanel(final ActionMap actions, final int maxCards, final boolean showIssWidgets) {
 
         setActionMap(actions);
-		this.bitmaps = JSkatGraphicRepository.INSTANCE;
-		this.strings = JSkatResourceBundle.INSTANCE;
+        this.bitmaps = JSkatGraphicRepository.INSTANCE;
+        this.strings = JSkatResourceBundle.INSTANCE;
         this.maxCardCount = maxCards;
         this.showIssWidgets = showIssWidgets;
 
@@ -129,12 +131,11 @@ abstract class AbstractHandPanel extends JPanel {
     /**
      * Initializes the panel
      */
-    void initPanel(boolean isIss) {
+    void initPanel(final boolean isIss) {
 
-        setLayout(LayoutFactory.getMigLayout(
-                "fill, insets 0", "fill", "[shrink][grow]")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        setLayout(LayoutFactory.getMigLayout("fill, insets 0", "fill", "[shrink][grow]")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
 
-        setBorder(getPanelBorder());
+        setBorder(getPanelBorder(this.isActivePlayer));
 
         String headerInsets = "insets ";
         if (isIss) {
@@ -143,8 +144,7 @@ abstract class AbstractHandPanel extends JPanel {
             headerInsets = headerInsets + "5";
         }
 
-        this.header = new JPanel(LayoutFactory.getMigLayout(
-                "fill, " + headerInsets, "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.header = new JPanel(LayoutFactory.getMigLayout("fill, " + headerInsets, "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.header.add(this.headerLabel);
         // blank panel
         this.header.add(new JPanel());
@@ -162,17 +162,23 @@ abstract class AbstractHandPanel extends JPanel {
         }
     }
 
-    private Border getPanelBorder() {
+    /**
+     * Retrieves the Border for the hand panel for that player. It visually
+     * distinguishes between active and non-active players.
+     * 
+     * @return
+     */
+    private Border getPanelBorder(final boolean isActivePlayer) {
 
-        Border result = null;
+        Border resultingBorder = null;
 
-        if (this.activePlayer) {
-            result = BorderFactory.createLineBorder(Color.yellow, 3);
+        if (isActivePlayer) {
+            resultingBorder = BorderFactory.createLineBorder(Color.yellow, 3);
         } else {
-            result = BorderFactory.createLineBorder(Color.black, 3);
+            resultingBorder = BorderFactory.createLineBorder(Color.black, 3);
         }
 
-        return result;
+        return resultingBorder;
     }
 
     /**
@@ -203,9 +209,9 @@ abstract class AbstractHandPanel extends JPanel {
         return this.position;
     }
 
-    private void refreshHeaderText() {
+    private void refreshHeaderText(final String... isThinking) {
 
-        StringBuffer headerText = new StringBuffer();
+        final StringBuffer headerText = new StringBuffer();
 
         headerText.append(this.playerName).append(": "); //$NON-NLS-1$
 
@@ -225,28 +231,27 @@ abstract class AbstractHandPanel extends JPanel {
             headerText.append(" " + this.strings.getString("bid") + ": "); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
             headerText.append(this.bidValue);
 
-			if (playerPassed || playerGeschoben || playerContra || playerRe) {
+            if (playerPassed || playerGeschoben || playerContra || playerRe) {
 
                 headerText.append(" ("); //$NON-NLS-1$
 
                 String passedGeschobenContraRe = "";
-				if (playerPassed) {
-					passedGeschobenContraRe = strings.getString("passed"); //$NON-NLS-1$
+                if (playerPassed) {
+                    passedGeschobenContraRe = strings.getString("passed"); //$NON-NLS-1$
                 }
-				if (playerGeschoben) {
-					passedGeschobenContraRe = strings.getString("geschoben"); //$NON-NLS-1$
+                if (playerGeschoben) {
+                    passedGeschobenContraRe = strings.getString("geschoben"); //$NON-NLS-1$
                 }
-				
-				if (passedGeschobenContraRe.length() > 0
-						&& (playerContra || playerRe)) {
-					passedGeschobenContraRe += " ";
-				}
-				
-				if (playerContra) {
-					passedGeschobenContraRe += strings.getString("contra");
+
+                if (passedGeschobenContraRe.length() > 0 && (playerContra || playerRe)) {
+                    passedGeschobenContraRe += " ";
                 }
-				if (playerRe) {
-					passedGeschobenContraRe += strings.getString("re");
+
+                if (playerContra) {
+                    passedGeschobenContraRe += strings.getString("contra");
+                }
+                if (playerRe) {
+                    passedGeschobenContraRe += strings.getString("re");
                 }
 
                 headerText.append(passedGeschobenContraRe);
@@ -257,6 +262,18 @@ abstract class AbstractHandPanel extends JPanel {
             if (this.declarer) {
                 headerText.append(" (" + this.strings.getString("declarer") + ")"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
             }
+        }
+
+        // Append a visual indication that this player is thinking only if this
+        // player is an opponent
+        if (this instanceof OpponentPanel && this.isActivePlayer) {
+
+            // TODO: Distinguish between opponent player types. Only if this is
+            // a NN
+            // player that thinks longer, than indicate this with a text:
+            // "thinking" or with an icon within the border
+
+            headerText.append(" " + this.strings.getString("thinking")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
         this.headerLabel.setText(headerText.toString());
@@ -375,13 +392,22 @@ abstract class AbstractHandPanel extends JPanel {
     }
 
     boolean isActivePlayer() {
-        return this.activePlayer;
+        return this.isActivePlayer;
     }
 
+    /**
+     * Sets the flag that indicates whether this player is active (it is the
+     * turn of this player). It also may change the visual indication whether
+     * this player is thinking or not.
+     * 
+     * @param isActivePlayer
+     *            whether this player is the active player
+     */
     void setActivePlayer(final boolean isActivePlayer) {
-        this.activePlayer = isActivePlayer;
-        setBorder(getPanelBorder());
-
+        this.isActivePlayer = isActivePlayer;
+        // a refresh is needed to toggle the "is thinking" visual within the UI
+        this.refreshHeaderText();
+        setBorder(getPanelBorder(this.isActivePlayer));
         updateIssWidgets(isActivePlayer);
     }
 
