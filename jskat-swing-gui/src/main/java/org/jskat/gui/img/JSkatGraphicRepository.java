@@ -78,7 +78,7 @@ public class JSkatGraphicRepository {
 
 		log.debug("Bitmaps for JSkat logo and skat table loaded..."); //$NON-NLS-1$
 
-		this.awtIcons = new ArrayList<List<Image>>();
+	this.awtIcons = new ArrayList<List<Image>>();
 		this.icons = new HashMap<>();
 		loadIcons(tracker);
 
@@ -90,7 +90,7 @@ public class JSkatGraphicRepository {
 
 		log.debug("Bitmaps for cards loaded..."); //$NON-NLS-1$
 
-		this.flags = new ArrayList<Image>();
+		this.flags = new ArrayList<>();
 		loadFlags(tracker);
 
 		log.debug("Bitmaps for flags loaded..."); //$NON-NLS-1$
@@ -120,7 +120,7 @@ public class JSkatGraphicRepository {
 				.getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/jskat_logo.png")); //$NON-NLS-1$
 		tracker.addImage(this.jskatLogo, 0);
 
-		this.bidBubbles = new ArrayList<Image>();
+		this.bidBubbles = new ArrayList<>();
 		this.bidBubbles.add(Toolkit.getDefaultToolkit()
 				.getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/bid_left.png"))); //$NON-NLS-1$
 		this.bidBubbles.add(Toolkit.getDefaultToolkit()
@@ -146,7 +146,7 @@ public class JSkatGraphicRepository {
 		for (final Icon icon : Icon.values()) {
 
 			// new array list for all sizes
-			this.awtIcons.add(new ArrayList<Image>());
+			this.awtIcons.add(new ArrayList<>());
 			icons.put(icon, new HashMap<>());
 
 			// for all sizes
@@ -185,11 +185,11 @@ public class JSkatGraphicRepository {
 	private void loadCards(final MediaTracker tracker) {
 
 		this.cards.clear();
-		for (CardSet set : CardSet.values()) {
+		for (final CardSet set : CardSet.values()) {
 
 			this.cards.put(set, new HashMap<Card, Image>());
 
-			for (Card card : Card.values()) {
+			for (final Card card : Card.values()) {
 
 				this.cards.get(set).put(card,
 						Toolkit.getDefaultToolkit()
@@ -212,7 +212,7 @@ public class JSkatGraphicRepository {
 		}
 	}
 
-	private String getCardSetNameInLowerCase(CardSet set) {
+	private String getCardSetNameInLowerCase(final CardSet set) {
 		return set.getName().toLowerCase().replace(" ", "");
 	}
 
@@ -250,7 +250,7 @@ public class JSkatGraphicRepository {
 	 *            Card
 	 * @return The card image
 	 */
-	public Image getCardImage(Card card) {
+	public Image getCardImage(final Card card) {
 
 		Image result = null;
 

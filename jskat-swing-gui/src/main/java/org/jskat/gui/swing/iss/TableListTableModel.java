@@ -41,8 +41,8 @@ class TableListTableModel extends AbstractTableModel {
 	public TableListTableModel() {
 
 		this.strings = JSkatResourceBundle.INSTANCE;
-		this.data = new ArrayList<List<String>>();
-		this.columns = new ArrayList<String>();
+		this.data = new ArrayList<>();
+		this.columns = new ArrayList<>();
 		this.columns.add(this.strings.getString("name")); //$NON-NLS-1$
 		this.columns.add(this.strings.getString("seats")); //$NON-NLS-1$
 		this.columns.add(this.strings.getString("games")); //$NON-NLS-1$
@@ -148,7 +148,7 @@ class TableListTableModel extends AbstractTableModel {
 	private void addRow(String tableName, int maxPlayers, long gamesPlayed,
 			String player1, String player2, String player3) {
 
-		ArrayList<String> newLine = new ArrayList<String>();
+		ArrayList<String> newLine = new ArrayList<>();
 		newLine.add(tableName);
 		newLine.add(Integer.toString(maxPlayers));
 		newLine.add(Long.toString(gamesPlayed));

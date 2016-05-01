@@ -167,7 +167,7 @@ public class JSkatViewImpl implements JSkatView {
 	private JTabbedPane tabs;
 	private String activeView;
 	@Deprecated
-	private final Map<String, SkatTablePanel> tables = new HashMap<String, SkatTablePanel>();
+	private final Map<String, SkatTablePanel> tables = new HashMap<>();
 	private final JSkatGraphicRepository bitmaps = JSkatGraphicRepository.INSTANCE;
 	private final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
 	private final JSkatOptions options = JSkatOptions.instance();
@@ -868,7 +868,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public List<String> getPlayerForInvitation(final Set<String> playerNames) {
 
-		final List<String> result = new ArrayList<String>();
+		final List<String> result = new ArrayList<>();
 
 		final PlayerInvitationPanel invitationPanel = new PlayerInvitationPanel(playerNames);
 		final int dialogResult = JOptionPane.showConfirmDialog(null, invitationPanel,
