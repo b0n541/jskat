@@ -209,7 +209,7 @@ abstract class AbstractHandPanel extends JPanel {
         return this.position;
     }
 
-    private void refreshHeaderText(final String... isThinking) {
+    private void refreshHeaderText() {
 
         final StringBuffer headerText = new StringBuffer();
 
@@ -267,12 +267,9 @@ abstract class AbstractHandPanel extends JPanel {
         // Append a visual indication that this player is thinking only if this
         // player is an opponent
         if (this instanceof OpponentPanel && this.isActivePlayer) {
-
-            // TODO: Distinguish between opponent player types. Only if this is
-            // a NN
-            // player that thinks longer, than indicate this with a text:
-            // "thinking" or with an icon within the border
-
+            // TODO: Distinguish between opponent players (Neural Network and
+            // non-NN) types. Only if this is a NN player, than indicate the
+            // "thinking".
             headerText.append(" " + this.strings.getString("thinking")); //$NON-NLS-1$ //$NON-NLS-2$
         }
 
