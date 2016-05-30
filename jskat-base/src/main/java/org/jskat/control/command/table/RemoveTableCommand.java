@@ -23,8 +23,8 @@ public class RemoveTableCommand {
 	public final String tableName;
 	public final JSkatViewType tableType;
 
-	public RemoveTableCommand(String tableName, JSkatViewType tableType) {
-		this.tableName = tableName;
+	public RemoveTableCommand(JSkatViewType tableType, String tableName) {
 		this.tableType = tableType;
+		this.tableName = tableName;
 	}
 }

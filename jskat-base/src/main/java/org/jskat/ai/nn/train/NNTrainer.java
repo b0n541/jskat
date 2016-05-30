@@ -26,6 +26,7 @@ import org.jskat.control.JSkatMaster;
 import org.jskat.control.JSkatThread;
 import org.jskat.control.SkatGame;
 import org.jskat.control.command.table.CreateTableCommand;
+import org.jskat.control.command.table.RemoveTableCommand;
 import org.jskat.control.event.nntraining.TrainingResultEvent;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
@@ -84,6 +85,7 @@ public class NNTrainer extends JSkatThread {
 
 		this.gameType = newGameType;
 		setName("NNTrainer for " + this.gameType); //$NON-NLS-1$
+		JSkatEventBus.INSTANCE.post(new CreateTableCommand(JSkatViewType.TRAINING_TABLE, "TRAIN" + gameType.name()));
 	}
 
 	/**
@@ -94,6 +96,7 @@ public class NNTrainer extends JSkatThread {
 	 */
 	public void stopTraining(boolean isStopTraining) {
 		this.stopTraining = isStopTraining;
+		JSkatEventBus.INSTANCE.post(new RemoveTableCommand(JSkatViewType.TRAINING_TABLE, "TRAIN" + gameType.name()));
 	}
 
 	private JSkatPlayer createPlayer(String playerType) {
@@ -129,7 +132,6 @@ public class NNTrainer extends JSkatThread {
 		player1.newGame(Player.FOREHAND);
 		player2.newGame(Player.MIDDLEHAND);
 		player3.newGame(Player.REARHAND);
-		JSkatEventBus.INSTANCE.post(new CreateTableCommand(JSkatViewType.TRAINING_TABLE, "TRAIN" + gameType.name()));
 		SkatGame game = new SkatGame("TRAIN" + gameType.name(), GameVariant.STANDARD, player1, player2, player3);
 		game.setView(new NullView());
 		game.setLogger(NOPLogger.NOP_LOGGER);
