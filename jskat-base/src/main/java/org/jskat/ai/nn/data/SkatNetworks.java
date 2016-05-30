@@ -149,11 +149,10 @@ public final class SkatNetworks {
 		for (GameType gameType : GameType.values()) {
 			networks.put(gameType, new HashMap<PlayerParty, List<INeuralNetwork>>());
 			for (PlayerParty playerParty : PlayerParty.values()) {
-				List<INeuralNetwork> networkList = new ArrayList<>();
-				networks.get(gameType).put(playerParty, networkList);
-				EncogNetworkWrapper network = new EncogNetworkWrapper(topo, USE_BIAS);
+				networks.get(gameType).put(playerParty, new ArrayList<INeuralNetwork>());
 				for (int trick = 0; trick < 10; trick++) {
-					networkList.add(network);
+					INeuralNetwork network = new EncogNetworkWrapper(topo, USE_BIAS);
+					networks.get(gameType).get(playerParty).add(network);
 				}
 			}
 		}

@@ -22,7 +22,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.jskat.player.JSkatPlayerResolver;
 import org.junit.Test;
@@ -34,8 +33,7 @@ public class NNTrainerTest {
 		List<String> playerTypes = new ArrayList<String>();
 		playerTypes.add(JSkatPlayerResolver.HUMAN_PLAYER_CLASS);
 
-		Set<List<String>> permutations = NNTrainer
-				.createPlayerPermutations(playerTypes);
+		List<List<String>> permutations = NNTrainer.createPlayerPermutations(playerTypes);
 
 		assertEquals(0, permutations.size());
 	}
@@ -45,8 +43,7 @@ public class NNTrainerTest {
 		List<String> playerTypes = new ArrayList<String>();
 		playerTypes.add(NNTrainer.NEURAL_NETWORK_PLAYER_CLASS);
 
-		Set<List<String>> permutations = NNTrainer
-				.createPlayerPermutations(playerTypes);
+		List<List<String>> permutations = NNTrainer.createPlayerPermutations(playerTypes);
 
 		assertEquals(1, permutations.size());
 		List<String> permutation = permutations.iterator().next();
@@ -63,8 +60,7 @@ public class NNTrainerTest {
 			playerTypes.add(aiPlayer);
 		}
 
-		Set<List<String>> permutations = NNTrainer
-				.createPlayerPermutations(playerTypes);
+		List<List<String>> permutations = NNTrainer.createPlayerPermutations(playerTypes);
 
 		assertThat(permutations.size(), is(19));
 

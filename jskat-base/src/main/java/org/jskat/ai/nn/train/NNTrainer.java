@@ -16,9 +16,7 @@
 package org.jskat.ai.nn.train;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.jskat.ai.nn.AIPlayerNN;
 import org.jskat.control.JSkatEventBus;
@@ -60,6 +58,7 @@ public class NNTrainer extends JSkatThread {
 
 	static {
 		playerTypes.add(NEURAL_NETWORK_PLAYER_CLASS);
+		playerTypes.add(RANDOM_PLAYER_CLASS);
 	}
 
 	private GameType gameType;
@@ -186,7 +185,7 @@ public class NNTrainer extends JSkatThread {
 		double opponentAvgNetworkErrorSum = 0.0;
 		long opponentParticipations = 0;
 
-		Set<List<String>> playerPermutations = createPlayerPermutations(playerTypes);
+		List<List<String>> playerPermutations = createPlayerPermutations(playerTypes);
 
 		while (!this.stopTraining /* && totalGames < MAX_TRAINING_EPISODES */) {
 
@@ -196,8 +195,7 @@ public class NNTrainer extends JSkatThread {
 					JSkatMaster.INSTANCE.saveNeuralNetworks(this.gameType);
 				}
 
-				if (opponentParticipations == 0) {
-					// for ramsch games
+				if (GameType.RAMSCH.equals(gameType)) {
 					JSkatEventBus.INSTANCE.post(new TrainingResultEvent(this.gameType, totalGames, totalWonGames,
 							declarerAvgNetworkErrorSum / declarerParticipations, 0.0));
 				} else {
@@ -216,7 +214,8 @@ public class NNTrainer extends JSkatThread {
 
 					SkatGame game = prepareGame(player1, player2, player3, declarer, null);
 					// SkatGame game = prepareGame(player1, player2, player3,
-					// Player.FOREHAND, getPerfectDistribution());
+					// Player.FOREHAND,
+					// CardDeck.getPerfectDistribution());
 
 					runGame(game);
 
@@ -226,6 +225,7 @@ public class NNTrainer extends JSkatThread {
 					} else {
 						log.debug("Game lost.");
 					}
+
 					if (player1 instanceof AIPlayerNN) {
 						if (player1.isDeclarer()) {
 							declarerAvgNetworkErrorSum += ((AIPlayerNN) player1).getLastAvgNetworkError();
@@ -262,9 +262,9 @@ public class NNTrainer extends JSkatThread {
 		}
 	}
 
-	static Set<List<String>> createPlayerPermutations(List<String> playerTypes) {
+	static List<List<String>> createPlayerPermutations(List<String> playerTypes) {
 
-		Set<List<String>> result = new HashSet<List<String>>();
+		List<List<String>> result = new ArrayList<List<String>>();
 
 		for (String player1 : playerTypes) {
 			for (String player2 : playerTypes) {

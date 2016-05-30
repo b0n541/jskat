@@ -444,13 +444,14 @@ public class AIPlayerNN extends AbstractAIPlayer {
 					0);
 			double networkError = 0.0;
 
-			for (int i = 0; i < inputs.size(); i++) {
-				// net.adjustWeightsBatch(inputsArray, outputsArray);
-				networkError = net.adjustWeights(inputsArray[i], outputsArray[i]);
-			}
+			networkError = net.adjustWeightsBatch(inputsArray, outputsArray);
+			// for (int i = 0; i < inputs.size(); i++) {
+			// networkError += net.adjustWeights(inputsArray[i],
+			// outputsArray[i]);
+			// }
 
 			log.warn("learning error: " + networkError);
-			lastAvgNetworkError = networkError;
+			lastAvgNetworkError = networkError;// / inputs.size();
 		}
 	}
 
