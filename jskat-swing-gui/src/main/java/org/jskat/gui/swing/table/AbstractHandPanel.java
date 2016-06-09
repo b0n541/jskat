@@ -20,12 +20,15 @@ import java.awt.Color;
 
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import org.jskat.data.JSkatOptions;
 import org.jskat.gui.img.JSkatGraphicRepository;
+import org.jskat.gui.img.JSkatGraphicRepository.Icon;
+import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -60,6 +63,10 @@ abstract class AbstractHandPanel extends JPanel {
      * Header label
      */
     JLabel headerLabel;
+    /**
+     * The label that holds the icon for thinking opponents
+     */
+    JLabel headerThinkingIconLabel;
     /**
      * Icon panel
      */
@@ -146,12 +153,17 @@ abstract class AbstractHandPanel extends JPanel {
 
         this.header = new JPanel(LayoutFactory.getMigLayout("fill, " + headerInsets, "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.header.add(this.headerLabel);
+        this.headerThinkingIconLabel = new JLabel(
+                new ImageIcon(this.bitmaps.getIconImage(Icon.THINKING, IconSize.SMALL)));
+        this.headerThinkingIconLabel.setVisible(false);
+        this.header.add(this.headerThinkingIconLabel);
         // blank panel
         this.header.add(new JPanel());
         if (this.showIssWidgets) {
             this.header.add(this.iconPanel);
             this.header.add(this.clockPanel);
         }
+        this.header.add(this.headerThinkingIconLabel);
         add(this.header, "shrinky, wrap"); //$NON-NLS-1$
 
         this.cardPanel = new ClickableCardPanel(this, 1.0, true);
@@ -190,13 +202,13 @@ abstract class AbstractHandPanel extends JPanel {
     void setPosition(final Player newPosition) {
 
         this.position = newPosition;
-        refreshHeaderText();
+        refreshHeader();
     }
 
     void setBidValue(final int newBidValue) {
 
         this.bidValue = newBidValue;
-        refreshHeaderText();
+        refreshHeader();
     }
 
     /**
@@ -209,7 +221,11 @@ abstract class AbstractHandPanel extends JPanel {
         return this.position;
     }
 
-    private void refreshHeaderText() {
+    /**
+     * Refreshes the header of this hand panel, i.e. the text and the thinking
+     * icon.
+     */
+    private void refreshHeader() {
 
         final StringBuffer headerText = new StringBuffer();
 
@@ -270,7 +286,9 @@ abstract class AbstractHandPanel extends JPanel {
             // TODO: Distinguish between opponent players (Neural Network and
             // non-NN) types. Only if this is a NN player, than indicate the
             // "thinking".
-            headerText.append(" " + this.strings.getString("thinking")); //$NON-NLS-1$ //$NON-NLS-2$
+            this.headerThinkingIconLabel.setVisible(true);
+        } else {
+            this.headerThinkingIconLabel.setVisible(false);
         }
 
         this.headerLabel.setText(headerText.toString());
@@ -330,7 +348,7 @@ abstract class AbstractHandPanel extends JPanel {
         this.playerRe = false;
         this.declarer = false;
         this.iconPanel.reset();
-        refreshHeaderText();
+        refreshHeader();
         setActivePlayer(false);
         hideCards();
     }
@@ -365,7 +383,7 @@ abstract class AbstractHandPanel extends JPanel {
 
         this.playerName = newName;
 
-        refreshHeaderText();
+        refreshHeader();
     }
 
     void setPlayerTime(final double newTime) {
@@ -403,7 +421,7 @@ abstract class AbstractHandPanel extends JPanel {
     void setActivePlayer(final boolean isActivePlayer) {
         this.isActivePlayer = isActivePlayer;
         // a refresh is needed to toggle the "is thinking" visual within the UI
-        this.refreshHeaderText();
+        this.refreshHeader();
         setBorder(getPanelBorder(this.isActivePlayer));
         updateIssWidgets(isActivePlayer);
     }
@@ -420,12 +438,12 @@ abstract class AbstractHandPanel extends JPanel {
 
     void setPass(final boolean isPassed) {
         this.playerPassed = isPassed;
-        refreshHeaderText();
+        refreshHeader();
     }
 
     void setDeclarer(final boolean isDeclarer) {
         this.declarer = isDeclarer;
-        refreshHeaderText();
+        refreshHeader();
     }
 
     public String getPlayerName() {
@@ -435,16 +453,16 @@ abstract class AbstractHandPanel extends JPanel {
 
     public void setGeschoben() {
         this.playerGeschoben = true;
-        refreshHeaderText();
+        refreshHeader();
     }
 
     public void setContra() {
         this.playerContra = true;
-        refreshHeaderText();
+        refreshHeader();
     }
 
     public void setRe() {
         this.playerRe = true;
-        refreshHeaderText();
+        refreshHeader();
     }
 }

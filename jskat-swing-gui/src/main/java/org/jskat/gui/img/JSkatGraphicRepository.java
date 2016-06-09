@@ -96,7 +96,7 @@ public class JSkatGraphicRepository {
 		log.debug("Bitmaps for flags loaded..."); //$NON-NLS-1$
 	}
 
-	private void loadFlags(final MediaTracker tracker) {
+    private void loadFlags(final MediaTracker tracker) {
 		// for all flags
 		for (final Flag flag : Flag.values()) {
 			// add flag
@@ -327,9 +327,9 @@ public class JSkatGraphicRepository {
 		return this.bidBubbles.get(2);
 	}
 
-	/**
-	 * Holds all icon types
-	 */
+    /**
+     * Holds all icon types
+     */
 	public enum Icon {
 		/**
 		 * About
@@ -466,7 +466,11 @@ public class JSkatGraphicRepository {
 		/**
 		 * REDO
 		 */
-		REDO;
+        REDO,
+        /**
+         * Thinking icon
+         */
+        THINKING;
 	}
 
 	/**
@@ -573,6 +577,6 @@ public class JSkatGraphicRepository {
 			}
 
 			return result;
-		}
-	}
+        }
+    }
 }
