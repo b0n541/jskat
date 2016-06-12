@@ -168,14 +168,14 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	public final CardList getPlayableCards(final CardList trick) {
 
 		boolean isCardAllowed = false;
-		CardList result = new CardList();
+		final CardList result = new CardList();
 
 		log.debug("game type: " + internalKnowledge.getGameType()); //$NON-NLS-1$
 		log.debug("player cards (" + internalKnowledge.getOwnCards().size() //$NON-NLS-1$
 				+ "): " + internalKnowledge.getOwnCards()); //$NON-NLS-1$
 		log.debug("trick size: " + trick.size()); //$NON-NLS-1$
 
-		for (Card card : internalKnowledge.getOwnCards()) {
+		for (final Card card : internalKnowledge.getOwnCards()) {
 
 			if (trick.size() > 0
 					&& rules.isCardAllowed(internalKnowledge.getGameType(),
@@ -214,7 +214,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void newTrick(int trickNo, Player trickForehand) {
+	public final void newTrick(final int trickNo, final Player trickForehand) {
 		internalKnowledge.setNextTrick(trickNo, trickForehand);
 	}
 
@@ -267,7 +267,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	@Override
 	public final CardList discardSkat() {
 
-		CardList result = new CardList();
+		final CardList result = new CardList();
 
 		log.debug("Player cards before discarding: " //$NON-NLS-1$
 				+ internalKnowledge.getOwnCards());
@@ -302,4 +302,9 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	public final void setLogger(final Logger newLogger) {
 		log = newLogger;
 	}
+
+    @Override
+    public Boolean isAIPlayerNN() {
+        return false;
+    }
 }

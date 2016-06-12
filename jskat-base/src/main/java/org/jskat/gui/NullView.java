@@ -27,6 +27,7 @@ import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.gui.human.AbstractHumanJSkatPlayer;
+import org.jskat.player.JSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.Player;
@@ -340,7 +341,7 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setActiveView(String name) {
+	public void setActiveView(final String name) {
 		// empty method by intent
 	}
 
@@ -348,13 +349,18 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void showAIPlayedSchwarzMessageDiscarding(String playerName,
-			CardList discardedCards) {
+	public void showAIPlayedSchwarzMessageDiscarding(final String playerName,
+			final CardList discardedCards) {
 		// empty method by intent
 	}
 
 	@Override
-	public void showAIPlayedSchwarzMessageCardPlay(String playerName, Card card) {
+	public void showAIPlayedSchwarzMessageCardPlay(final String playerName, final Card card) {
 		// empty method by intent
 	}
+
+    @Override
+    public void setNewPlayers(final String tableName, final List<JSkatPlayer> newPlayers) {
+        // TODO Auto-generated method stub
+    }
 }

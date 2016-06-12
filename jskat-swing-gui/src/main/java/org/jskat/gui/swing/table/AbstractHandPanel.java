@@ -109,6 +109,11 @@ abstract class AbstractHandPanel extends JPanel {
     private boolean playerRe;
 
     /**
+     * Indicates whether this panel is of an neural opponent
+     */
+    private boolean isNeuralNetworkPlayer;
+
+    /**
      * Constructor
      *
      * @param actions
@@ -117,6 +122,8 @@ abstract class AbstractHandPanel extends JPanel {
      *            the maximum number of cards
      * @param showIssWidgets
      *            TRUE, if ISS widgets should be shown
+     * @param isNeuralNetworkPlayer
+     *            TRUE, if this panel is for a neural network opponent
      */
     AbstractHandPanel(final ActionMap actions, final int maxCards, final boolean showIssWidgets) {
 
@@ -281,11 +288,8 @@ abstract class AbstractHandPanel extends JPanel {
         }
 
         // Append a visual indication that this player is thinking only if this
-        // player is an opponent
-        if (this instanceof OpponentPanel && this.isActivePlayer) {
-            // TODO: Distinguish between opponent players (Neural Network and
-            // non-NN) types. Only if this is a NN player, than indicate the
-            // "thinking".
+        // player is a neural network opponent.
+        if (this.isNeuralNetworkPlayer && this.isActivePlayer) {
             this.headerThinkingIconLabel.setVisible(true);
         } else {
             this.headerThinkingIconLabel.setVisible(false);
@@ -384,6 +388,15 @@ abstract class AbstractHandPanel extends JPanel {
         this.playerName = newName;
 
         refreshHeader();
+    }
+
+    /**
+     * Sets whether this player is a neural network player/opponent or not.
+     * 
+     * @param isNNPlayer
+     */
+    public void isNeuralNetworkPlayer(final boolean isNNPlayer) {
+        this.isNeuralNetworkPlayer = isNNPlayer;
     }
 
     void setPlayerTime(final double newTime) {

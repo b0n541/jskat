@@ -30,6 +30,7 @@ import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.gui.human.AbstractHumanJSkatPlayer;
+import org.jskat.player.JSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.Player;
@@ -252,18 +253,24 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void setActiveView(String name) {
+	public void setActiveView(final String name) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void showAIPlayedSchwarzMessageDiscarding(String playerName,
-			CardList discardedCard) {
+	public void showAIPlayedSchwarzMessageDiscarding(final String playerName,
+			final CardList discardedCard) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void showAIPlayedSchwarzMessageCardPlay(String playerName, Card card) {
+	public void showAIPlayedSchwarzMessageCardPlay(final String playerName, final Card card) {
 		// TODO Auto-generated method stub
 	}
+
+    @Override
+    public void setNewPlayers(final String tableName, final List<JSkatPlayer> newPlayers) {
+        // TODO Auto-generated method stub
+
+    }
 }

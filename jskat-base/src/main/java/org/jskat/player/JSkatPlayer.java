@@ -23,7 +23,7 @@ import org.jskat.util.CardList;
 import org.jskat.util.Player;
 
 /**
- * Player interface for AI players
+ * Player interface for JSkat players
  */
 public interface JSkatPlayer {
 
@@ -210,6 +210,13 @@ public interface JSkatPlayer {
 	 * @return TRUE if the player is a human player
 	 */
 	public Boolean isHumanPlayer();
+
+    /**
+     * Checks whether the player is a neural network player.
+     *
+     * @return TRUE if the player is a neural network player
+     */
+    public Boolean isAIPlayerNN();
 
 	/**
 	 * Checks whether the player is an AI player

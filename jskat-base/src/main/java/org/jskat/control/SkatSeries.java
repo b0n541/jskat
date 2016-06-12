@@ -48,7 +48,7 @@ public class SkatSeries extends JSkatThread {
 	private int roundsToGo = 0;
 	private boolean unlimitedRounds = false;
 	private boolean onlyPlayRamsch = false;
-	private final Map<Player, JSkatPlayer> player;
+	private final Map<Player, JSkatPlayer> players;
 	private SkatGame currSkatGame;
 	private SkatGameReplayer currReplayGame;
 
@@ -71,11 +71,11 @@ public class SkatSeries extends JSkatThread {
 		JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(this);
 
 		setName("SkatSeries on table " + tableName); //$NON-NLS-1$
-		player = new HashMap<Player, JSkatPlayer>();
+		players = new HashMap<Player, JSkatPlayer>();
 	}
 
 	@Subscribe
-	public void startReplayGameOn(ReplayGameCommand command)
+	public void startReplayGameOn(final ReplayGameCommand command)
 			throws InterruptedException {
 
 		JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(
@@ -86,50 +86,48 @@ public class SkatSeries extends JSkatThread {
 	}
 
 	@Subscribe
-	public void replayNextMoveOn(NextReplayMoveCommand comman) {
+	public void replayNextMoveOn(final NextReplayMoveCommand comman) {
 		currReplayGame.oneMoveForward();
 	}
 
 	/**
-	 * Sets the skat players
-	 * 
-	 * @param newPlayer
-	 *            New skat series player
-	 */
-	public void setPlayer(final List<JSkatPlayer> newPlayer) {
+     * Sets the skat players
+     * 
+     * @param newPlayers
+     *            New skat series player
+     */
+    public void setPlayers(final List<JSkatPlayer> newPlayers) {
 
-		if (newPlayer.size() != 3) {
+        if (newPlayers.size() != 3) {
 			throw new IllegalArgumentException(
 					"Only three players are allowed at the moment."); //$NON-NLS-1$
 		}
 
-		view.setPlayerNames(data.getTableName(), newPlayer.get(0)
-				.getPlayerName(), newPlayer.get(1).getPlayerName(), newPlayer
-				.get(2).getPlayerName());
+        view.setNewPlayers(data.getTableName(), newPlayers);
 
 		// memorize third player to find it again after shuffling the players
-		JSkatPlayer thirdPlayer = newPlayer.get(2);
+        final JSkatPlayer thirdPlayer = newPlayers.get(2);
 
 		// set players in random order
 		// simple Collection.shuffle doesn't work here, because the order of
 		// players should be the same like in start skat series dialog
-		Random rand = new Random();
-		int startPlayer = rand.nextInt(3);
-		player.put(Player.FOREHAND, newPlayer.get(startPlayer));
-		player.put(Player.MIDDLEHAND, newPlayer.get((startPlayer + 1) % 3));
-		player.put(Player.REARHAND, newPlayer.get((startPlayer + 2) % 3));
+		final Random rand = new Random();
+		final int startPlayer = rand.nextInt(3);
+        players.put(Player.FOREHAND, newPlayers.get(startPlayer));
+        players.put(Player.MIDDLEHAND, newPlayers.get((startPlayer + 1) % 3));
+        players.put(Player.REARHAND, newPlayers.get((startPlayer + 2) % 3));
 
 		// if an human player is playing, always show him/her at the bottom
 		// FIXME (jansch 09.05.2012) this is GUI logic, move it to the GUI
 		// package
-		for (Player hand : Player.values()) {
-			if (player.get(hand).isHumanPlayer()
-					|| player.get(hand) == thirdPlayer) {
+		for (final Player hand : Player.values()) {
+			if (players.get(hand).isHumanPlayer()
+					|| players.get(hand) == thirdPlayer) {
 				data.setBottomPlayer(hand);
 			}
 		}
 
-		log.debug("Player order: " + player); //$NON-NLS-1$
+		log.debug("Player order: " + players); //$NON-NLS-1$
 	}
 
 	/**
@@ -174,10 +172,10 @@ public class SkatSeries extends JSkatThread {
 
 				if (j > 0 || roundsPlayed > 0) {
 					// change player positions after first game
-					JSkatPlayer helper = player.get(Player.REARHAND);
-					player.put(Player.REARHAND, player.get(Player.FOREHAND));
-					player.put(Player.FOREHAND, player.get(Player.MIDDLEHAND));
-					player.put(Player.MIDDLEHAND, helper);
+					final JSkatPlayer helper = players.get(Player.REARHAND);
+					players.put(Player.REARHAND, players.get(Player.FOREHAND));
+					players.put(Player.FOREHAND, players.get(Player.MIDDLEHAND));
+					players.put(Player.MIDDLEHAND, helper);
 
 					data.setBottomPlayer(data.getBottomPlayer()
 							.getRightNeighbor());
@@ -191,9 +189,9 @@ public class SkatSeries extends JSkatThread {
 				}
 
 				currSkatGame = new SkatGame(data.getTableName(), gameVariant,
-						player.get(Player.FOREHAND),
-						player.get(Player.MIDDLEHAND),
-						player.get(Player.REARHAND));
+						players.get(Player.FOREHAND),
+						players.get(Player.MIDDLEHAND),
+						players.get(Player.REARHAND));
 
 				JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(
 						new GameStartEvent(gameNumber, gameVariant, data
@@ -215,7 +213,7 @@ public class SkatSeries extends JSkatThread {
 
 					sleep(maxSleep);
 
-				} catch (InterruptedException e) {
+				} catch (final InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
@@ -250,7 +248,7 @@ public class SkatSeries extends JSkatThread {
 
 		boolean result = false;
 
-		for (JSkatPlayer currPlayer : player.values()) {
+		for (final JSkatPlayer currPlayer : players.values()) {
 			if (currPlayer.isHumanPlayer()) {
 				result = true;
 			}

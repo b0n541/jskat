@@ -27,6 +27,7 @@ import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.gui.human.AbstractHumanJSkatPlayer;
+import org.jskat.player.JSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.Player;
@@ -377,4 +378,14 @@ public interface JSkatView {
 	 *            Card
 	 */
 	public void showAIPlayedSchwarzMessageCardPlay(String playerName, Card card);
+
+    /**
+     * Sets the new players within the view.
+     * 
+     * @param tableName
+     *            Table name
+     * @param newPlayers
+     *            The players on that table
+     */
+    public void setNewPlayers(String tableName, List<JSkatPlayer> newPlayers);
 }
