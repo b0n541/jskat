@@ -20,15 +20,12 @@ import java.awt.Color;
 
 import javax.swing.ActionMap;
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 
 import org.jskat.data.JSkatOptions;
 import org.jskat.gui.img.JSkatGraphicRepository;
-import org.jskat.gui.img.JSkatGraphicRepository.Icon;
-import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -64,10 +61,6 @@ abstract class AbstractHandPanel extends JPanel {
      */
     JLabel headerLabel;
     /**
-     * The label that holds the icon for thinking opponents
-     */
-    JLabel headerThinkingIconLabel;
-    /**
      * Icon panel
      */
     IconPanel iconPanel;
@@ -98,6 +91,11 @@ abstract class AbstractHandPanel extends JPanel {
      */
     boolean isActivePlayer = false;
 
+	/**
+	 * Indicates whether this player is an AI player
+	 */
+	boolean isAIPlayer = false;
+
     boolean playerPassed = false;
 
     boolean playerGeschoben = false;
@@ -107,11 +105,6 @@ abstract class AbstractHandPanel extends JPanel {
     private boolean playerContra;
 
     private boolean playerRe;
-
-    /**
-     * Indicates whether this panel is of an neural opponent
-     */
-    private boolean isNeuralNetworkPlayer;
 
     /**
      * Constructor
@@ -160,17 +153,12 @@ abstract class AbstractHandPanel extends JPanel {
 
         this.header = new JPanel(LayoutFactory.getMigLayout("fill, " + headerInsets, "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         this.header.add(this.headerLabel);
-        this.headerThinkingIconLabel = new JLabel(
-                new ImageIcon(this.bitmaps.getIconImage(Icon.THINKING, IconSize.SMALL)));
-        this.headerThinkingIconLabel.setVisible(false);
-        this.header.add(this.headerThinkingIconLabel);
         // blank panel
         this.header.add(new JPanel());
+		this.header.add(this.iconPanel);
         if (this.showIssWidgets) {
-            this.header.add(this.iconPanel);
             this.header.add(this.clockPanel);
         }
-        this.header.add(this.headerThinkingIconLabel);
         add(this.header, "shrinky, wrap"); //$NON-NLS-1$
 
         this.cardPanel = new ClickableCardPanel(this, 1.0, true);
@@ -288,11 +276,11 @@ abstract class AbstractHandPanel extends JPanel {
         }
 
         // Append a visual indication that this player is thinking only if this
-        // player is a neural network opponent.
-        if (this.isNeuralNetworkPlayer && this.isActivePlayer) {
-            this.headerThinkingIconLabel.setVisible(true);
+		// player is a AI player or sitting on an opponent player seat
+		if (isActivePlayer && isAIPlayer) {
+			iconPanel.setThinking(true);
         } else {
-            this.headerThinkingIconLabel.setVisible(false);
+			iconPanel.setThinking(false);
         }
 
         this.headerLabel.setText(headerText.toString());
@@ -390,15 +378,6 @@ abstract class AbstractHandPanel extends JPanel {
         refreshHeader();
     }
 
-    /**
-     * Sets whether this player is a neural network player/opponent or not.
-     * 
-     * @param isNNPlayer
-     */
-    public void isNeuralNetworkPlayer(final boolean isNNPlayer) {
-        this.isNeuralNetworkPlayer = isNNPlayer;
-    }
-
     void setPlayerTime(final double newTime) {
 
         this.clockPanel.setPlayerTime(newTime);
@@ -438,6 +417,17 @@ abstract class AbstractHandPanel extends JPanel {
         setBorder(getPanelBorder(this.isActivePlayer));
         updateIssWidgets(isActivePlayer);
     }
+
+	/**
+	 * Sets the flag that indicates whether this player is an AI player or not.
+	 * 
+	 * @param isAIPlayer
+	 *            TRUE, if the player is an AI player
+	 */
+	void setAIPlayer(final boolean isAIPlayer) {
+
+		this.isAIPlayer = isAIPlayer;
+	}
 
     private void updateIssWidgets(final boolean isActivePlayer) {
         if (this.showIssWidgets) {

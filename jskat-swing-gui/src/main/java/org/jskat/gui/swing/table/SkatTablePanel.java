@@ -1121,6 +1121,7 @@ public class SkatTablePanel extends AbstractTabPanel {
      */
     public void setPlayers(final JSkatPlayer upperLeftPlayer, final JSkatPlayer upperRightPlayer,
             final JSkatPlayer lowerPlayer) {
+		// FIXME: this view class should not get an instance of a JSkatPlayer!
         final String upperLeftPlayerName = upperLeftPlayer.getPlayerName();
         final String upperRightPlayerName = upperRightPlayer.getPlayerName();
         final String lowerPlayerName = lowerPlayer.getPlayerName();
@@ -1130,9 +1131,9 @@ public class SkatTablePanel extends AbstractTabPanel {
         this.userPanel.setPlayerName(lowerPlayerName);
         this.skatListTableModel.setPlayerNames(upperLeftPlayerName, upperRightPlayerName, lowerPlayerName);
 
-        this.leftOpponentPanel.isNeuralNetworkPlayer(upperLeftPlayer.isAIPlayerNN());
-        this.rightOpponentPanel.isNeuralNetworkPlayer(upperRightPlayer.isAIPlayerNN());
-        this.userPanel.isNeuralNetworkPlayer(lowerPlayer.isAIPlayerNN());
+		this.leftOpponentPanel.setAIPlayer(upperLeftPlayer.isAIPlayer());
+		this.rightOpponentPanel.setAIPlayer(upperRightPlayer.isAIPlayer());
+		this.userPanel.setAIPlayer(lowerPlayer.isAIPlayer());
     }
 
 	/**

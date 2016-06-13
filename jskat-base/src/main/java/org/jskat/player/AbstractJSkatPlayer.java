@@ -302,9 +302,4 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	public final void setLogger(final Logger newLogger) {
 		log = newLogger;
 	}
-
-    @Override
-    public Boolean isAIPlayerNN() {
-        return false;
-    }
 }

@@ -211,13 +211,6 @@ public interface JSkatPlayer {
 	 */
 	public Boolean isHumanPlayer();
 
-    /**
-     * Checks whether the player is a neural network player.
-     *
-     * @return TRUE if the player is a neural network player
-     */
-    public Boolean isAIPlayerNN();
-
 	/**
 	 * Checks whether the player is an AI player
 	 *

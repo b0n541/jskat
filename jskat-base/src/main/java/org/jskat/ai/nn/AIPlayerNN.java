@@ -528,9 +528,4 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	private void storeInputParameters(final double[] inputParameters) {
 		allInputs.add(inputParameters);
 	}
-
-    @Override
-    public final Boolean isAIPlayerNN() {
-        return true;
-    }
 }
