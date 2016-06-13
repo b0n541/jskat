@@ -30,7 +30,6 @@ import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.gui.human.AbstractHumanJSkatPlayer;
-import org.jskat.player.JSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.Player;
@@ -205,9 +204,9 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void setPlayerNames(final String tableName,
-			final String upperLeftPlayerName,
-			final String upperRightPlayerName, final String lowerPlayerName) {
+	public void setPlayerNames(String tableName, String upperLeftPlayerName, boolean isUpperLeftPlayerAIPlayer,
+			String upperRightPlayerName, boolean isUpperRightPlayerAIPlayer, String lowerPlayerName,
+			boolean isLowerPlayerAIPlayer) {
 		// TODO Auto-generated method stub
 
 	}
@@ -267,10 +266,4 @@ public class UnitTestView implements JSkatView {
 	public void showAIPlayedSchwarzMessageCardPlay(final String playerName, final Card card) {
 		// TODO Auto-generated method stub
 	}
-
-    @Override
-    public void setNewPlayers(final String tableName, final List<JSkatPlayer> newPlayers) {
-        // TODO Auto-generated method stub
-
-    }
 }

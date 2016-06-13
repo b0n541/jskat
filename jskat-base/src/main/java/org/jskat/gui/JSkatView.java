@@ -27,7 +27,6 @@ import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.gui.human.AbstractHumanJSkatPlayer;
-import org.jskat.player.JSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.Player;
@@ -292,13 +291,20 @@ public interface JSkatView {
 	 *            Table name
 	 * @param upperLeftPlayerName
 	 *            Name of left upper player
+	 * @param isUpperLeftPlayerAIPlayer
+	 *            TRUE, if the upper left player is an AI player
 	 * @param upperRightPlayerName
 	 *            Name of right upper player
+	 * @param isUpperRightPlayerAIPlayer
+	 *            TRUE, if the upper right player is an AI player
 	 * @param lowerPlayerName
 	 *            Name of lower player
+	 * @param isLowerPlayerAIPlayer
+	 *            TRUE, if the lower player is an AI player
 	 */
-	public void setPlayerNames(String tableName, String upperLeftPlayerName,
-			String upperRightPlayerName, String lowerPlayerName);
+	public void setPlayerNames(String tableName, String upperLeftPlayerName, boolean isUpperLeftPlayerAIPlayer,
+			String upperRightPlayerName, boolean isUpperRightPlayerAIPlayer, String lowerPlayerName,
+			boolean isLowerPlayerAIPlayer);
 
 	/**
 	 * Sets the declarer player of the table
@@ -378,14 +384,4 @@ public interface JSkatView {
 	 *            Card
 	 */
 	public void showAIPlayedSchwarzMessageCardPlay(String playerName, Card card);
-
-    /**
-     * Sets the new players within the view.
-     * 
-     * @param tableName
-     *            Table name
-     * @param newPlayers
-     *            The players on that table
-     */
-    public void setNewPlayers(String tableName, List<JSkatPlayer> newPlayers);
 }

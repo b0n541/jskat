@@ -41,7 +41,9 @@ import com.google.common.eventbus.Subscribe;
  */
 public class SkatSeries extends JSkatThread {
 
-	private static Logger log = LoggerFactory.getLogger(SkatSeries.class);
+	private static final Logger LOG = LoggerFactory.getLogger(SkatSeries.class);
+
+	private static final Random RANDOM = new Random();
 
 	private int maxSleep = 0;
 	private final SkatSeriesData data;
@@ -103,7 +105,9 @@ public class SkatSeries extends JSkatThread {
 					"Only three players are allowed at the moment."); //$NON-NLS-1$
 		}
 
-        view.setNewPlayers(data.getTableName(), newPlayers);
+		view.setPlayerNames(data.getTableName(), newPlayers.get(0).getPlayerName(), newPlayers.get(0).isAIPlayer(),
+				newPlayers.get(1).getPlayerName(), newPlayers.get(1).isAIPlayer(), newPlayers.get(2).getPlayerName(),
+				newPlayers.get(2).isAIPlayer());
 
 		// memorize third player to find it again after shuffling the players
         final JSkatPlayer thirdPlayer = newPlayers.get(2);
@@ -111,8 +115,7 @@ public class SkatSeries extends JSkatThread {
 		// set players in random order
 		// simple Collection.shuffle doesn't work here, because the order of
 		// players should be the same like in start skat series dialog
-		final Random rand = new Random();
-		final int startPlayer = rand.nextInt(3);
+		final int startPlayer = RANDOM.nextInt(3);
         players.put(Player.FOREHAND, newPlayers.get(startPlayer));
         players.put(Player.MIDDLEHAND, newPlayers.get((startPlayer + 1) % 3));
         players.put(Player.REARHAND, newPlayers.get((startPlayer + 2) % 3));
@@ -127,7 +130,7 @@ public class SkatSeries extends JSkatThread {
 			}
 		}
 
-		log.debug("Player order: " + players); //$NON-NLS-1$
+		LOG.debug("Player order: " + players); //$NON-NLS-1$
 	}
 
 	/**
@@ -166,7 +169,7 @@ public class SkatSeries extends JSkatThread {
 
 		while ((roundsToGo > 0 || unlimitedRounds) && !isTerminated()) {
 
-			log.debug("Playing round " + (roundsPlayed + 1)); //$NON-NLS-1$
+			LOG.debug("Playing round " + (roundsPlayed + 1)); //$NON-NLS-1$
 
 			for (int j = 0; j < 3; j++) {
 
@@ -202,14 +205,14 @@ public class SkatSeries extends JSkatThread {
 				currSkatGame.setView(view);
 				currSkatGame.setMaxSleep(maxSleep);
 
-				log.debug("Playing game " + (j + 1)); //$NON-NLS-1$
+				LOG.debug("Playing game " + (j + 1)); //$NON-NLS-1$
 
 				data.addGame(currSkatGame);
 				currSkatGame.start();
 				try {
 					currSkatGame.join();
 
-					log.debug("Game ended: join"); //$NON-NLS-1$
+					LOG.debug("Game ended: join"); //$NON-NLS-1$
 
 					sleep(maxSleep);
 
@@ -241,7 +244,7 @@ public class SkatSeries extends JSkatThread {
 		data.setState(SeriesState.SERIES_FINISHED);
 		view.setSeriesState(data.getTableName(), SeriesState.SERIES_FINISHED);
 
-		log.debug(data.getState().name());
+		LOG.debug(data.getState().name());
 	}
 
 	private boolean isHumanPlayerInvolved() {

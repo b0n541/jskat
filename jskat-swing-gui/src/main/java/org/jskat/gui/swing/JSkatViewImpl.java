@@ -139,7 +139,6 @@ import org.jskat.gui.swing.iss.PlayerInvitationPanel;
 import org.jskat.gui.swing.nn.NeuralNetworkTrainingOverview;
 import org.jskat.gui.swing.table.SkatSeriesStartDialog;
 import org.jskat.gui.swing.table.SkatTablePanel;
-import org.jskat.player.JSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameVariant;
@@ -698,10 +697,8 @@ public class JSkatViewImpl implements JSkatView {
 		table.setPlayerName(player, status.getPlayerName(player));
 		table.setPlayerTime(player, status.getPlayerTime(player));
 
-        table.setPlayerNames(
-                             status.getPlayerName(leftOpponent),
-                             status.getPlayerName(rightOpponent),
-                             status.getPlayerName(player));
+		table.setPlayerNames(status.getPlayerName(leftOpponent), false, status.getPlayerName(rightOpponent), false,
+				status.getPlayerName(player), false);
 	}
 
 	/**
@@ -964,10 +961,12 @@ public class JSkatViewImpl implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setPlayerNames(final String tableName, final String upperLeftPlayerName,
-			final String upperRightPlayerName, final String lowerPlayerName) {
+	public void setPlayerNames(String tableName, String upperLeftPlayerName, boolean isUpperLeftPlayerAIPlayer,
+			String upperRightPlayerName, boolean isUpperRightPlayerAIPlayer, String lowerPlayerName,
+			boolean isLowerPlayerAIPlayer) {
 
-		this.tables.get(tableName).setPlayerNames(upperLeftPlayerName, upperRightPlayerName, lowerPlayerName);
+		this.tables.get(tableName).setPlayerNames(upperLeftPlayerName, isUpperLeftPlayerAIPlayer, upperRightPlayerName,
+				isUpperRightPlayerAIPlayer, lowerPlayerName, isLowerPlayerAIPlayer);
 	}
 
 	/**
@@ -1079,13 +1078,4 @@ public class JSkatViewImpl implements JSkatView {
 	public void setActiveView(final String viewName) {
 		this.activeView = viewName;
 	}
-
-    @Override
-    public void setNewPlayers(final String tableName, final List<JSkatPlayer> newPlayers) {
-        final JSkatPlayer upperLeftPlayer = newPlayers.get(0);
-        final JSkatPlayer upperRightPlayer = newPlayers.get(1);
-        final JSkatPlayer lowerPlayer = newPlayers.get(2);
-
-        this.tables.get(tableName).setPlayers(upperLeftPlayer, upperRightPlayer, lowerPlayer);
-    }
 }

@@ -67,7 +67,6 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
 import org.jskat.gui.swing.AbstractTabPanel;
 import org.jskat.gui.swing.LayoutFactory;
-import org.jskat.player.JSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -1098,43 +1097,20 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param lowerPlayerName
 	 *            Lower player name
 	 */
-	public void setPlayerNames(final String upperLeftPlayerName,
-			final String upperRightPlayerName, final String lowerPlayerName) {
+	public void setPlayerNames(String upperLeftPlayerName, boolean isUpperLeftPlayerAIPlayer,
+			String upperRightPlayerName, boolean isUpperRightPlayerAIPlayer, String lowerPlayerName,
+			boolean isLowerPlayerAIPlayer) {
 		// FIXME (jan 26.01.2011) possible code duplication with
 		// setPlayerInformation()
-		this.leftOpponentPanel.setPlayerName(upperLeftPlayerName);
-		this.rightOpponentPanel.setPlayerName(upperRightPlayerName);
-		this.userPanel.setPlayerName(lowerPlayerName);
+		leftOpponentPanel.setPlayerName(upperLeftPlayerName);
+		leftOpponentPanel.setAIPlayer(isUpperLeftPlayerAIPlayer);
+		rightOpponentPanel.setPlayerName(upperRightPlayerName);
+		rightOpponentPanel.setAIPlayer(isUpperRightPlayerAIPlayer);
+		userPanel.setPlayerName(lowerPlayerName);
+		userPanel.setAIPlayer(isLowerPlayerAIPlayer);
 		this.skatListTableModel.setPlayerNames(upperLeftPlayerName,
 				upperRightPlayerName, lowerPlayerName);
 	}
-
-    /**
-     * Sets the players (used for non-ISS games)
-     * 
-     * @param upperLeftPlayer
-     *            Upper left player
-     * @param upperRightPlayer
-     *            Upper right player
-     * @param lowerPlayer
-     *            Lower player
-     */
-    public void setPlayers(final JSkatPlayer upperLeftPlayer, final JSkatPlayer upperRightPlayer,
-            final JSkatPlayer lowerPlayer) {
-		// FIXME: this view class should not get an instance of a JSkatPlayer!
-        final String upperLeftPlayerName = upperLeftPlayer.getPlayerName();
-        final String upperRightPlayerName = upperRightPlayer.getPlayerName();
-        final String lowerPlayerName = lowerPlayer.getPlayerName();
-
-        this.leftOpponentPanel.setPlayerName(upperLeftPlayerName);
-        this.rightOpponentPanel.setPlayerName(upperRightPlayerName);
-        this.userPanel.setPlayerName(lowerPlayerName);
-        this.skatListTableModel.setPlayerNames(upperLeftPlayerName, upperRightPlayerName, lowerPlayerName);
-
-		this.leftOpponentPanel.setAIPlayer(upperLeftPlayer.isAIPlayer());
-		this.rightOpponentPanel.setAIPlayer(upperRightPlayer.isAIPlayer());
-		this.userPanel.setAIPlayer(lowerPlayer.isAIPlayer());
-    }
 
 	/**
 	 * Gets the declarer player for the table
