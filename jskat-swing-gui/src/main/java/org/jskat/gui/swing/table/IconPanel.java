@@ -70,17 +70,17 @@ public class IconPanel extends JPanel {
 	 */
 	public IconPanel() {
 
-		thinkingLabel = new JLabel(BLANK_ICON);
 		chatLabel = new JLabel(BLANK_ICON);
 		readyToPlayLabel = new JLabel(BLANK_ICON);
 		resignedLabel = new JLabel(BLANK_ICON);
+		thinkingLabel = new JLabel(BLANK_ICON);
 
 		refreshIcons();
 
-		add(thinkingLabel);
 		add(resignedLabel);
 		add(chatLabel);
 		add(readyToPlayLabel);
+		add(thinkingLabel);
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class IconPanel extends JPanel {
 
 	/**
 	 * Sets the flag for enabling chat
-	 * 
+	 *
 	 * @param isChatEnabled
 	 *            TRUE, if chatting is enabled
 	 */
@@ -110,7 +110,7 @@ public class IconPanel extends JPanel {
 
 	/**
 	 * Sets the flag for "Ready to play"
-	 * 
+	 *
 	 * @param isReadyToPlay
 	 *            TRUE, if the player is ready to play
 	 */
@@ -122,7 +122,7 @@ public class IconPanel extends JPanel {
 
 	/**
 	 * Sets the flag for "Resign"
-	 * 
+	 *
 	 * @param isResign
 	 *            TRUE, if the player wants to resign
 	 */
@@ -134,7 +134,7 @@ public class IconPanel extends JPanel {
 
 	/**
 	 * Sets the flag for "Thinking"
-	 * 
+	 *
 	 * @param isThinking
 	 *            TRUE, if the player is thinking
 	 */
