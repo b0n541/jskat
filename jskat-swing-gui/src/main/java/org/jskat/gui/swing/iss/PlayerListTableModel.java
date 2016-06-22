@@ -41,8 +41,8 @@ class PlayerListTableModel extends AbstractTableModel {
 	public PlayerListTableModel() {
 
 		this.strings = JSkatResourceBundle.INSTANCE;
-		this.data = new ArrayList<List<Object>>();
-		this.columns = new ArrayList<String>();
+		this.data = new ArrayList<>();
+		this.columns = new ArrayList<>();
 		this.columns.add(this.strings.getString("name"));
 		this.columns.add(this.strings.getString("games"));
 		this.columns.add(this.strings.getString("strength"));
@@ -152,7 +152,7 @@ class PlayerListTableModel extends AbstractTableModel {
 	private void addRow(final String playerName, final String language,
 			final long gamesPlayed, final double strength) {
 
-		ArrayList<Object> newLine = new ArrayList<Object>();
+		ArrayList<Object> newLine = new ArrayList<>();
 		newLine.add(playerName);
 		newLine.add(Long.valueOf(gamesPlayed));
 		newLine.add(Double.valueOf(strength));

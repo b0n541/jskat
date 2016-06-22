@@ -291,13 +291,20 @@ public interface JSkatView {
 	 *            Table name
 	 * @param upperLeftPlayerName
 	 *            Name of left upper player
+	 * @param isUpperLeftPlayerAIPlayer
+	 *            TRUE, if the upper left player is an AI player
 	 * @param upperRightPlayerName
 	 *            Name of right upper player
+	 * @param isUpperRightPlayerAIPlayer
+	 *            TRUE, if the upper right player is an AI player
 	 * @param lowerPlayerName
 	 *            Name of lower player
+	 * @param isLowerPlayerAIPlayer
+	 *            TRUE, if the lower player is an AI player
 	 */
-	public void setPlayerNames(String tableName, String upperLeftPlayerName,
-			String upperRightPlayerName, String lowerPlayerName);
+	public void setPlayerNames(String tableName, String upperLeftPlayerName, boolean isUpperLeftPlayerAIPlayer,
+			String upperRightPlayerName, boolean isUpperRightPlayerAIPlayer, String lowerPlayerName,
+			boolean isLowerPlayerAIPlayer);
 
 	/**
 	 * Sets the declarer player of the table

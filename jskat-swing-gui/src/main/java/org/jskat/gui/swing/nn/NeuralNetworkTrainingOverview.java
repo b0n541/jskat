@@ -144,7 +144,7 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 
 		protected TrainingOverviewTableModel() {
 
-			header = new ArrayList<String>();
+			header = new ArrayList<>();
 			header.add("Game type");
 			header.add("Episodes");
 			header.add("Total won games");
@@ -152,11 +152,11 @@ public class NeuralNetworkTrainingOverview extends JDialog {
 			header.add("Network error declarer");
 			header.add("Network error opponents");
 
-			data = new HashMap<GameType, List<Object>>();
+			data = new HashMap<>();
 
 			for (GameType currGameType : GameType.values()) {
 
-				List<Object> list = new ArrayList<Object>();
+				List<Object> list = new ArrayList<>();
 				list.add(currGameType);
 				for (int i = 1; i < getColumnCount(); i++) {
 					list.add(0);

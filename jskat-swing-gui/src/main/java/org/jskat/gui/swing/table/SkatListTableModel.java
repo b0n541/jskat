@@ -56,11 +56,11 @@ class SkatListTableModel extends AbstractTableModel {
 
 		this.strings = JSkatResourceBundle.INSTANCE;
 
-		this.declarers = new ArrayList<Player>();
-		this.playerResults = new ArrayList<List<Integer>>();
-		this.gameResults = new ArrayList<GameSummary>();
-		this.displayValues = new ArrayList<List<Integer>>();
-		this.columns = new ArrayList<String>();
+		this.declarers = new ArrayList<>();
+		this.playerResults = new ArrayList<>();
+		this.gameResults = new ArrayList<>();
+		this.displayValues = new ArrayList<>();
+		this.columns = new ArrayList<>();
 		setColumns();
 	}
 
@@ -141,7 +141,7 @@ class SkatListTableModel extends AbstractTableModel {
 	void calculateDisplayValues() {
 
 		int currResult = 0;
-		List<Integer> playerResultsSoFar = new ArrayList<Integer>();
+		List<Integer> playerResultsSoFar = new ArrayList<>();
 		for (int i = 0; i < this.playerCount; i++) {
 			playerResultsSoFar.add(new Integer(0));
 		}
@@ -150,7 +150,7 @@ class SkatListTableModel extends AbstractTableModel {
 
 		for (int game = 0; game < this.gameResults.size(); game++) {
 
-			this.displayValues.add(new ArrayList<Integer>());
+			this.displayValues.add(new ArrayList<>());
 
 			// add player values
 			for (int player = 0; player < this.playerCount; player++) {
@@ -299,11 +299,11 @@ class SkatListTableModel extends AbstractTableModel {
 		for (int i = 0; i < this.playerCount; i++) {
 			// FIXME (jan 14.12.2010) get player names
 			this.columns.add("P" + i);
-			this.playerResults.add(new ArrayList<Integer>());
-			this.displayValues.add(new ArrayList<Integer>());
+			this.playerResults.add(new ArrayList<>());
+			this.displayValues.add(new ArrayList<>());
 		}
 		this.columns.add(this.strings.getString("games")); //$NON-NLS-1$
-		this.displayValues.add(new ArrayList<Integer>());
+		this.displayValues.add(new ArrayList<>());
 	}
 
 	void setPlayerNames(final String upperLeftPlayer, final String upperRightPlayer, final String lowerPlayer) {

@@ -22,7 +22,8 @@ import org.jskat.player.AbstractJSkatPlayer;
  * class.
  */
 public abstract class AbstractAIPlayer extends AbstractJSkatPlayer {
-	@Override
+
+    @Override
 	public final Boolean isAIPlayer() {
 		return true;
 	}

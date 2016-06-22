@@ -43,12 +43,12 @@ public class SkatSeriesTest extends AbstractJSkatTest {
 		UnitTestView view = new UnitTestView();
 		series.setView(view);
 
-		List<JSkatPlayer> player = new ArrayList<JSkatPlayer>();
-		player.add(new AIPlayerRND());
-		player.add(new AIPlayerRND());
-		player.add(new AIPlayerRND());
+		List<JSkatPlayer> players = new ArrayList<JSkatPlayer>();
+		players.add(new AIPlayerRND());
+		players.add(new AIPlayerRND());
+		players.add(new AIPlayerRND());
 
-		series.setPlayer(player);
+		series.setPlayers(players);
 
 		series.setMaxRounds(1, false);
 

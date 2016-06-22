@@ -95,7 +95,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 		Container root = getContentPane();
 		root.setLayout(LayoutFactory.getMigLayout());
 
-		List<String> playerTypes = new ArrayList<String>();
+		List<String> playerTypes = new ArrayList<>();
 		for (String aiPlayer : JSkatPlayerResolver
 				.getAllAIPlayerImplementations()) {
 			playerTypes.add(aiPlayer);
@@ -190,12 +190,12 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 				return;
 			}
 
-			List<String> playerTypes = new ArrayList<String>();
+			List<String> playerTypes = new ArrayList<>();
 			playerTypes.add((String) this.player1.getSelectedItem());
 			playerTypes.add((String) this.player2.getSelectedItem());
 			playerTypes.add((String) this.player3.getSelectedItem());
 
-			List<String> playerNames = new ArrayList<String>();
+			List<String> playerNames = new ArrayList<>();
 			playerNames.add(this.player1name.getText());
 			playerNames.add(this.player2name.getText());
 			playerNames.add(this.player3name.getText());

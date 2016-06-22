@@ -23,7 +23,7 @@ import org.jskat.util.CardList;
 import org.jskat.util.Player;
 
 /**
- * Player interface for AI players
+ * Player interface for JSkat players
  */
 public interface JSkatPlayer {
 
