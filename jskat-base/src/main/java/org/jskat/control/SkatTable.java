@@ -93,7 +93,7 @@ public class SkatTable {
 
 		if (player.size() >= 3) {
 
-			series.setPlayer(player);
+			series.setPlayers(player);
 			series.setOnlyPlayRamsch(onlyPlayRamsch);
 			series.setMaxRounds(rounds, unlimitedRounds);
 			series.start();

@@ -49,7 +49,7 @@ public class GameResultPanel extends JPanel {
 	private void initPanel() {
 		setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		trickPanelList = new ArrayList<TrickPanel>();
+		trickPanelList = new ArrayList<>();
 		for (int i = 0; i < 10; i++) {
 
 			trickPanelList.add(new TrickPanel(false));

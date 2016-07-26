@@ -204,9 +204,9 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void setPlayerNames(final String tableName,
-			final String upperLeftPlayerName,
-			final String upperRightPlayerName, final String lowerPlayerName) {
+	public void setPlayerNames(String tableName, String upperLeftPlayerName, boolean isUpperLeftPlayerAIPlayer,
+			String upperRightPlayerName, boolean isUpperRightPlayerAIPlayer, String lowerPlayerName,
+			boolean isLowerPlayerAIPlayer) {
 		// TODO Auto-generated method stub
 
 	}
@@ -252,18 +252,18 @@ public class UnitTestView implements JSkatView {
 	}
 
 	@Override
-	public void setActiveView(String name) {
+	public void setActiveView(final String name) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void showAIPlayedSchwarzMessageDiscarding(String playerName,
-			CardList discardedCard) {
+	public void showAIPlayedSchwarzMessageDiscarding(final String playerName,
+			final CardList discardedCard) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void showAIPlayedSchwarzMessageCardPlay(String playerName, Card card) {
+	public void showAIPlayedSchwarzMessageCardPlay(final String playerName, final Card card) {
 		// TODO Auto-generated method stub
 	}
 }

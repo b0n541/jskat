@@ -91,7 +91,7 @@ public class PlayerInvitationPanel extends JPanel {
 	 */
 	public List<String> getPlayer() {
 
-		List<String> result = new ArrayList<String>();
+		List<String> result = new ArrayList<>();
 
 		if (this.firstPlayerGroup.getSelection() != null) {
 			result.add(this.firstPlayerGroup.getSelection().getActionCommand());

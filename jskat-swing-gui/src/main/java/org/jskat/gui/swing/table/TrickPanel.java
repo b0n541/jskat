@@ -88,8 +88,8 @@ class TrickPanel extends JPanel implements ComponentListener {
 		this.globalScale = globalScale;
 
 		this.trick = new CardList();
-		this.positions = new ArrayList<Player>();
-		this.cardRotations = new ArrayList<Double>();
+		this.positions = new ArrayList<>();
+		this.cardRotations = new ArrayList<>();
 
 		setOpaque(false);
 

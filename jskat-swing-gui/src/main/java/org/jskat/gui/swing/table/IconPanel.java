@@ -26,38 +26,61 @@ import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
 import org.jskat.util.JSkatResourceBundle;
 
 /**
- * Holds information icons for the player
+ * Holds information icons for the player.
  */
 public class IconPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	boolean chatEnabled = false;
-	ImageIcon chatIcon = null;
-	JLabel chatLabel;
-	boolean readyToPlay = false;
-	ImageIcon readyToPlayIcon = null;
-	JLabel readyToPlayLabel;
-	boolean resigned = false;
-	ImageIcon resignedIcon = null;
-	JLabel resignedLabel;
+	private static final ImageIcon CHAT_ENABLED_ICON = new ImageIcon(
+			JSkatGraphicRepository.INSTANCE.getIconImage(Icon.CHAT, IconSize.SMALL));
 
-	JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
+	private static final ImageIcon CHAT_DISABLED_ICON = new ImageIcon(
+			JSkatGraphicRepository.INSTANCE.getIconImage(Icon.CHAT_DISABLED, IconSize.SMALL));
+
+	private static final ImageIcon READY_TO_PLAY_ICON = new ImageIcon(
+			JSkatGraphicRepository.INSTANCE.getIconImage(Icon.OK, IconSize.SMALL));
+
+	private static final ImageIcon NOT_READY_TO_PLAY_ICON = new ImageIcon(
+			JSkatGraphicRepository.INSTANCE.getIconImage(Icon.STOP, IconSize.SMALL));
+
+	private static final ImageIcon RESIGNED_ICON = new ImageIcon(
+			JSkatGraphicRepository.INSTANCE.getIconImage(Icon.WHITE_FLAG, IconSize.SMALL));
+
+	private static final ImageIcon THINKING_ICON = new ImageIcon(
+			JSkatGraphicRepository.INSTANCE.getIconImage(Icon.THINKING, IconSize.SMALL));
+
+	private static final ImageIcon BLANK_ICON = new ImageIcon(
+			JSkatGraphicRepository.INSTANCE.getIconImage(Icon.BLANK, IconSize.SMALL));
+
+	private boolean showIssIcons = false;
+	private boolean chatEnabled = false;
+	private final JLabel chatLabel;
+	private boolean readyToPlay = false;
+	private final JLabel readyToPlayLabel;
+	private boolean resigned = false;
+	private final JLabel resignedLabel;
+	private boolean thinking = false;
+	private final JLabel thinkingLabel;
+
+	private final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
 
 	/**
 	 * Constructor
 	 */
 	public IconPanel() {
 
-		this.chatLabel = new JLabel(this.chatIcon);
-		this.readyToPlayLabel = new JLabel(this.readyToPlayIcon);
-		this.resignedLabel = new JLabel(this.resignedIcon);
+		chatLabel = new JLabel(BLANK_ICON);
+		readyToPlayLabel = new JLabel(BLANK_ICON);
+		resignedLabel = new JLabel(BLANK_ICON);
+		thinkingLabel = new JLabel(BLANK_ICON);
 
-		setIcons();
+		refreshIcons();
 
-		add(this.resignedLabel);
-		add(this.chatLabel);
-		add(this.readyToPlayLabel);
+		add(resignedLabel);
+		add(chatLabel);
+		add(readyToPlayLabel);
+		add(thinkingLabel);
 	}
 
 	/**
@@ -65,89 +88,102 @@ public class IconPanel extends JPanel {
 	 */
 	public void reset() {
 
-		this.resigned = false;
-		setIcons();
+		resigned = false;
+		refreshIcons();
+	}
+
+	public void setShowIssWidgets(boolean isShowIssIcons) {
+		this.showIssIcons = isShowIssIcons;
 	}
 
 	/**
 	 * Sets the flag for enabling chat
-	 * 
+	 *
 	 * @param isChatEnabled
 	 *            TRUE, if chatting is enabled
 	 */
 	public void setChatEnabled(boolean isChatEnabled) {
 
-		this.chatEnabled = isChatEnabled;
-		setIcons();
+		chatEnabled = isChatEnabled;
+		refreshIcons();
 	}
 
 	/**
 	 * Sets the flag for "Ready to play"
-	 * 
+	 *
 	 * @param isReadyToPlay
 	 *            TRUE, if the player is ready to play
 	 */
 	public void setReadyToPlay(boolean isReadyToPlay) {
 
-		this.readyToPlay = isReadyToPlay;
-		setIcons();
+		readyToPlay = isReadyToPlay;
+		refreshIcons();
 	}
 
 	/**
 	 * Sets the flag for "Resign"
-	 * 
+	 *
 	 * @param isResign
 	 *            TRUE, if the player wants to resign
 	 */
 	public void setResign(boolean isResign) {
 
-		this.resigned = isResign;
-		setIcons();
+		resigned = isResign;
+		refreshIcons();
 	}
 
-	private void setIcons() {
+	/**
+	 * Sets the flag for "Thinking"
+	 *
+	 * @param isThinking
+	 *            TRUE, if the player is thinking
+	 */
+	public void setThinking(boolean isThinking) {
+		thinking = isThinking;
+		refreshIcons();
+	}
 
-		String tooltipText = null;
-		if (this.resigned) {
-			this.resignedIcon = new ImageIcon(
-					JSkatGraphicRepository.INSTANCE
-					.getIconImage(Icon.WHITE_FLAG, IconSize.SMALL));
-			tooltipText = this.strings.getString("iss_player_wants_to_resign"); //$NON-NLS-1$
-		} else {
-			this.resignedIcon = new ImageIcon(
-					JSkatGraphicRepository.INSTANCE
-					.getIconImage(Icon.BLANK, IconSize.SMALL));
-			tooltipText = ""; //$NON-NLS-1$
-		}
-		this.resignedLabel.setIcon(this.resignedIcon);
-		this.resignedLabel.setToolTipText(tooltipText);
+	private void refreshIcons() {
 
-		if (this.chatEnabled) {
-			this.chatIcon = new ImageIcon(
-					JSkatGraphicRepository.INSTANCE.getIconImage(Icon.CHAT,
-							IconSize.SMALL));
-			tooltipText = this.strings.getString("iss_chat_enabled"); //$NON-NLS-1$
+		if (thinking) {
+			thinkingLabel.setIcon(THINKING_ICON);
+			thinkingLabel.setToolTipText(strings.getString("player_thinking"));
 		} else {
-			this.chatIcon = new ImageIcon(
-					JSkatGraphicRepository.INSTANCE.getIconImage(
-							Icon.CHAT_DISABLED, IconSize.SMALL));
-			tooltipText = this.strings.getString("iss_chat_disabled"); //$NON-NLS-1$
+			setBlank(thinkingLabel);
 		}
-		this.chatLabel.setIcon(this.chatIcon);
-		this.chatLabel.setToolTipText(tooltipText);
 
-		if (this.readyToPlay) {
-			this.readyToPlayIcon = new ImageIcon(
-					JSkatGraphicRepository.INSTANCE.getIconImage(Icon.OK,
-							IconSize.SMALL));
-			tooltipText = this.strings.getString("iss_ready_to_play"); //$NON-NLS-1$
+		if (!showIssIcons) {
+			setBlank(resignedLabel, chatLabel, readyToPlayLabel);
 		} else {
-			this.readyToPlayIcon = new ImageIcon(
-					JSkatGraphicRepository.INSTANCE.getIconImage(Icon.STOP,
-							IconSize.SMALL));
-			tooltipText = this.strings.getString("iss_not_ready_to_play"); //$NON-NLS-1$
+			if (resigned) {
+				resignedLabel.setIcon(RESIGNED_ICON);
+				resignedLabel.setToolTipText(strings.getString("iss_player_wants_to_resign"));
+			} else {
+				setBlank(resignedLabel);
+			}
+
+			if (chatEnabled) {
+				chatLabel.setIcon(CHAT_ENABLED_ICON);
+				chatLabel.setToolTipText(strings.getString("iss_chat_enabled"));
+			} else {
+				chatLabel.setIcon(CHAT_DISABLED_ICON);
+				chatLabel.setToolTipText(strings.getString("iss_chat_disabled"));
+			}
+
+			if (readyToPlay) {
+				readyToPlayLabel.setIcon(READY_TO_PLAY_ICON);
+				readyToPlayLabel.setToolTipText(strings.getString("iss_ready_to_play"));
+			} else {
+				readyToPlayLabel.setIcon(NOT_READY_TO_PLAY_ICON);
+				readyToPlayLabel.setToolTipText(strings.getString("iss_not_ready_to_play"));
+			}
 		}
-		this.readyToPlayLabel.setIcon(this.readyToPlayIcon);
-		this.readyToPlayLabel.setToolTipText(tooltipText);
+	}
+
+	private void setBlank(JLabel... labels) {
+		for (JLabel label : labels) {
+			label.setIcon(BLANK_ICON);
+			label.setToolTipText("");
+		}
 	}
 }

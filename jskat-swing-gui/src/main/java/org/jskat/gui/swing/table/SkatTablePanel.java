@@ -167,7 +167,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	protected JTabbedPane getLeftPanel() {
 
-		JTabbedPane leftPanel = new JTabbedPane();
+		final JTabbedPane leftPanel = new JTabbedPane();
 
 		leftPanel.addTab(this.strings.getString("score_sheet"),
 				getScoreListPanel());
@@ -235,12 +235,12 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	protected OpponentPanel getOpponentPanel() {
 
-		return new OpponentPanel(getActionMap(), 12, false);
+        return new OpponentPanel(getActionMap(), 12, false);
 	}
 
 	protected JSkatUserPanel createPlayerPanel() {
 
-		return new JSkatUserPanel(getActionMap(), 12, false);
+        return new JSkatUserPanel(getActionMap(), 12, false);
 	}
 
 	protected void addContextPanel(final ContextPanelType panelType,
@@ -300,13 +300,13 @@ public class SkatTablePanel extends AbstractTabPanel {
 
 	// FIXME: same code can be found in class SchieberamschContextPanel
 	private JPanel createCallReAfterContraPanel(final ActionMap actions) {
-		JPanel result = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+		final JPanel result = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
-		JPanel question = new JPanel();
-		JLabel questionIconLabel = new JLabel(new ImageIcon(
+		final JPanel question = new JPanel();
+		final JLabel questionIconLabel = new JLabel(new ImageIcon(
 				JSkatGraphicRepository.INSTANCE.getUserBidBubble()));
 		question.add(questionIconLabel);
-		JLabel questionLabel = new JLabel(
+		final JLabel questionLabel = new JLabel(
 				this.strings.getString("want_call_re_after_contra")); //$NON-NLS-1$
 		questionLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
 		question.add(questionLabel);
@@ -318,7 +318,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 				IconSize.BIG)));
 		callReButton.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
+			public void actionPerformed(final ActionEvent e) {
 				e.setSource(Boolean.TRUE);
 				callReButton.dispatchEvent(e);
 			}
@@ -337,12 +337,12 @@ public class SkatTablePanel extends AbstractTabPanel {
 			}
 		});
 
-		JPanel grandHandPanel = new JPanel();
+		final JPanel grandHandPanel = new JPanel();
 		grandHandPanel.add(callReButton);
 		grandHandPanel.setOpaque(false);
 		result.add(grandHandPanel, "width 50%"); //$NON-NLS-1$
 
-		JPanel schieberamschPanel = new JPanel();
+		final JPanel schieberamschPanel = new JPanel();
 		schieberamschPanel.add(noReAfterContraButton);
 		schieberamschPanel.setOpaque(false);
 		result.add(schieberamschPanel, "width 50%"); //$NON-NLS-1$
@@ -488,7 +488,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 	}
 
 	@Subscribe
-	public void setTrickCardOn(TrickCardPlayedEvent event) {
+	public void setTrickCardOn(final TrickCardPlayedEvent event) {
 		removeCard(event.player, event.card);
 		setTrickCard(event.player, event.card);
 	}
@@ -1097,13 +1097,17 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * @param lowerPlayerName
 	 *            Lower player name
 	 */
-	public void setPlayerNames(final String upperLeftPlayerName,
-			final String upperRightPlayerName, final String lowerPlayerName) {
+	public void setPlayerNames(String upperLeftPlayerName, boolean isUpperLeftPlayerAIPlayer,
+			String upperRightPlayerName, boolean isUpperRightPlayerAIPlayer, String lowerPlayerName,
+			boolean isLowerPlayerAIPlayer) {
 		// FIXME (jan 26.01.2011) possible code duplication with
 		// setPlayerInformation()
-		this.leftOpponentPanel.setPlayerName(upperLeftPlayerName);
-		this.rightOpponentPanel.setPlayerName(upperRightPlayerName);
-		this.userPanel.setPlayerName(lowerPlayerName);
+		leftOpponentPanel.setPlayerName(upperLeftPlayerName);
+		leftOpponentPanel.setAIPlayer(isUpperLeftPlayerAIPlayer);
+		rightOpponentPanel.setPlayerName(upperRightPlayerName);
+		rightOpponentPanel.setAIPlayer(isUpperRightPlayerAIPlayer);
+		userPanel.setPlayerName(lowerPlayerName);
+		userPanel.setAIPlayer(isLowerPlayerAIPlayer);
 		this.skatListTableModel.setPlayerNames(upperLeftPlayerName,
 				upperRightPlayerName, lowerPlayerName);
 	}
@@ -1192,13 +1196,13 @@ public class SkatTablePanel extends AbstractTabPanel {
 	@Subscribe
 	public void showCardsOn(final ShowCardsCommand command) {
 		setCardsForPlayers(command.cards);
-		for (Player player : Player.values()) {
+		for (final Player player : Player.values()) {
 			showCards(player);
 		}
 	}
 
-	private void setCardsForPlayers(Map<Player, CardList> cards) {
-		for (Entry<Player, CardList> playerCards : cards.entrySet()) {
+	private void setCardsForPlayers(final Map<Player, CardList> cards) {
+		for (final Entry<Player, CardList> playerCards : cards.entrySet()) {
 			removeAllCards(playerCards.getKey());
 			getPlayerPanel(playerCards.getKey()).addCards(
 					playerCards.getValue());

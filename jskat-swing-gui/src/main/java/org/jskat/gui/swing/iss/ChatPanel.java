@@ -72,7 +72,7 @@ class ChatPanel extends JPanel implements ChangeListener {
 		setMinimumSize(new Dimension(100, 100));
 		setPreferredSize(new Dimension(100, 100));
 
-		this.chats = new HashMap<String, JTextArea>();
+		this.chats = new HashMap<>();
 		this.chatTabs = new JTabbedPane();
 		this.chatTabs.setTabPlacement(SwingConstants.BOTTOM);
 		this.chatTabs.setAutoscrolls(true);

@@ -251,11 +251,13 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setPlayerNames(
-			@SuppressWarnings("unused") final String tableName,
+	public void setPlayerNames(@SuppressWarnings("unused") final String tableName,
 			@SuppressWarnings("unused") final String upperLeftPlayerName,
+			@SuppressWarnings("unused") final boolean isUpperLeftPlayerAIPlayer,
 			@SuppressWarnings("unused") final String upperRightPlayerName,
-			@SuppressWarnings("unused") final String lowerPlayerName) {
+			@SuppressWarnings("unused") final boolean isUpperRightPlayerAIPlayer,
+			@SuppressWarnings("unused") final String lowerPlayerName,
+			@SuppressWarnings("unused") final boolean isLowerPlayerAIPlayer) {
 		// empty method by intent
 	}
 
@@ -340,7 +342,7 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void setActiveView(String name) {
+	public void setActiveView(final String name) {
 		// empty method by intent
 	}
 
@@ -348,13 +350,13 @@ public class NullView implements JSkatView {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void showAIPlayedSchwarzMessageDiscarding(String playerName,
-			CardList discardedCards) {
+	public void showAIPlayedSchwarzMessageDiscarding(final String playerName,
+			final CardList discardedCards) {
 		// empty method by intent
 	}
 
 	@Override
-	public void showAIPlayedSchwarzMessageCardPlay(String playerName, Card card) {
+	public void showAIPlayedSchwarzMessageCardPlay(final String playerName, final Card card) {
 		// empty method by intent
 	}
 }
