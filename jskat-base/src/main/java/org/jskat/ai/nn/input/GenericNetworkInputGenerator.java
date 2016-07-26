@@ -27,22 +27,20 @@ public class GenericNetworkInputGenerator implements NetworkInputGenerator {
 
 	static {
 		strategies.add(new PlayerPartyMadeCardsAndNextCardStrategy());
-		strategies.add(new UnplayedPlayerPartyCardsAndNextCardStrategy());
 		strategies.add(new OpponentPartyMadeCardsStrategy());
+		strategies.add(new UnplayedCardsAndNextCardStrategy());
+		strategies.add(new UnplayedPlayerPartyCardsAndNextCardStrategy());
 		strategies.add(new UnplayedOpponentPartyCardsStrategy());
 	}
 
 	@Override
-	public double[] getNetInputs(ImmutablePlayerKnowledge knowledge,
-			Card cardToPlay) {
+	public double[] getNetInputs(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
 
 		double[] result = new double[getNeuronCountForAllStrategies()];
 		int index = 0;
-		for (int strategyCount = 0; strategyCount < strategies
-				.size(); strategyCount++) {
+		for (int strategyCount = 0; strategyCount < strategies.size(); strategyCount++) {
 			InputStrategy strategy = strategies.get(strategyCount);
-			double[] networkInput = strategy.getNetworkInput(knowledge,
-					cardToPlay);
+			double[] networkInput = strategy.getNetworkInput(knowledge, cardToPlay);
 			for (int i = 0; i < strategy.getNeuronCount(); i++) {
 				result[index] = networkInput[i];
 				index++;

@@ -33,7 +33,7 @@ import org.jskat.util.GameType;
 public final class SkatNetworks {
 
 	private static int INPUT_NEURONS = GenericNetworkInputGenerator.getNeuronCountForAllStrategies();
-	private static int OUTPUT_NEURONS = 1;
+	private static int OUTPUT_NEURONS = 2;
 	private static int HIDDEN_NEURONS = INPUT_NEURONS * 2;
 
 	private static final boolean USE_BIAS = true;
@@ -145,7 +145,7 @@ public final class SkatNetworks {
 		int[] hiddenLayer = { HIDDEN_NEURONS };
 		NetworkTopology topo = new NetworkTopology(INPUT_NEURONS, hiddenLayer, OUTPUT_NEURONS);
 
-		networks = new HashMap<GameType, Map<PlayerParty, List<INeuralNetwork>>>();
+		networks = new HashMap<>();
 		for (GameType gameType : GameType.values()) {
 			networks.put(gameType, new HashMap<PlayerParty, List<INeuralNetwork>>());
 			for (PlayerParty playerParty : PlayerParty.values()) {
