@@ -38,7 +38,7 @@ import org.encog.neural.networks.training.propagation.resilient.ResilientPropaga
  */
 public class EncogNetworkWrapper implements INeuralNetwork {
 
-	private static final double LEARNING_RATE = 0.3;
+	private static final double LEARNING_RATE = 0.05;
 	private static final double MOMENTUM = 0.9;
 
 	private BasicNetwork network;
@@ -59,7 +59,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 		for (int i = 0; i < topo.getHiddenLayerCount(); i++) {
 			network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias, topo.getHiddenNeuronCount(i)));
 		}
-		network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias, 2));
+		network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias, topo.getOutputNeuronCount()));
 		network.getStructure().finalizeStructure();
 		network.reset();
 

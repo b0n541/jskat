@@ -437,11 +437,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 			final double[][] outputsArray = new double[inputs.size()][];
 			for (int i = 0; i < inputs.size(); i++) {
 				inputsArray[i] = inputs.get(i);
-				if (output == IDEAL_WON) {
-					outputsArray[i] = new double[] { 1.0, 0.0 };
-				} else if (output == IDEAL_LOST) {
-					outputsArray[i] = new double[] { 0.0, 1.0 };
-				}
+				outputsArray[i] = new double[] { output };
 			}
 
 			final INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGameAnnouncement().getGameType(),

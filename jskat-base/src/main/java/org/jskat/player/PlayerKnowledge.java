@@ -36,10 +36,8 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 
 	private void addOwnCard(final Card card) {
 		if (ownCards.add(card)) {
-			possiblePlayerCards.get(playerPosition.getLeftNeighbor())
-					.remove(card);
-			possiblePlayerCards.get(playerPosition.getRightNeighbor())
-					.remove(card);
+			possiblePlayerCards.get(playerPosition.getLeftNeighbor()).remove(card);
+			possiblePlayerCards.get(playerPosition.getRightNeighbor()).remove(card);
 			possibleSkatCards.remove(card);
 		}
 	}
@@ -54,11 +52,8 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 		for (Card card : cards) {
 			addOwnCard(card);
 		}
-		for (Card card : Card.values()) {
-			if (!ownCards.contains(card)) {
-				possiblePlayerCards.get(playerPosition).remove(card);
-			}
-		}
+		possiblePlayerCards.get(playerPosition).clear();
+		possiblePlayerCards.get(playerPosition).addAll(ownCards);
 	}
 
 	/**
@@ -226,10 +221,8 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 	public void setMissingSuit(final Player player, final Suit suit) {
 
 		for (Rank rank : Rank.values()) {
-			if (rank != Rank.JACK || GameType.NULL.equals(getGameType())
-					|| GameType.RAMSCH.equals(getGameType())) {
-				possiblePlayerCards.get(player)
-						.remove(Card.getCard(suit, rank));
+			if (rank != Rank.JACK || GameType.NULL.equals(getGameType()) || GameType.RAMSCH.equals(getGameType())) {
+				possiblePlayerCards.get(player).remove(Card.getCard(suit, rank));
 			}
 		}
 	}
@@ -333,8 +326,7 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 		}
 	}
 
-	private void adjustPossibleCards(final Player otherPlayer,
-			Card firstTrickCard, Card cardPlayed) {
+	private void adjustPossibleCards(final Player otherPlayer, Card firstTrickCard, Card cardPlayed) {
 
 		if (GameType.NULL.equals(getGameType())) {
 			if (!firstTrickCard.isSameSuit(cardPlayed)) {
@@ -343,14 +335,12 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 				// remove all cards from same suit from "could have" cards
 				for (Card currCard : Card.values()) {
 					if (currCard.isSameSuit(firstTrickCard)) {
-						possiblePlayerCards.get(otherPlayer)
-								.remove(currCard);
+						possiblePlayerCards.get(otherPlayer).remove(currCard);
 					}
 				}
 			}
 		} else {
-			SkatRule skatRules = SkatRuleFactory
-					.getSkatRules(getGameType());
+			SkatRule skatRules = SkatRuleFactory.getSkatRules(getGameType());
 
 			if (firstTrickCard.isTrump(getGameType())) {
 				if (!cardPlayed.isTrump(getGameType())) {
@@ -361,15 +351,11 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 					possiblePlayerCards.get(otherPlayer).remove(Card.HJ);
 					possiblePlayerCards.get(otherPlayer).remove(Card.DJ);
 					// remove other trump cards for suit games
-					if (GameType.CLUBS.equals(getGameType())
-							|| GameType.SPADES.equals(getGameType())
-							|| GameType.HEARTS.equals(getGameType())
-							|| GameType.DIAMONDS.equals(getGameType())) {
+					if (GameType.CLUBS.equals(getGameType()) || GameType.SPADES.equals(getGameType())
+							|| GameType.HEARTS.equals(getGameType()) || GameType.DIAMONDS.equals(getGameType())) {
 						for (Card currCard : Card.values()) {
-							if (getGameType().getTrumpSuit()
-									.equals(currCard.getSuit())) {
-								possiblePlayerCards.get(otherPlayer)
-										.remove(currCard);
+							if (getGameType().getTrumpSuit().equals(currCard.getSuit())) {
+								possiblePlayerCards.get(otherPlayer).remove(currCard);
 							}
 						}
 					}
@@ -382,10 +368,8 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 					// remove all cards for that suit in "could have"
 					// cards, except of the jacks
 					for (Card currCard : Card.values()) {
-						if (currCard.isSameSuit(firstTrickCard)
-								&& currCard.getRank() != Rank.JACK) {
-							possiblePlayerCards.get(otherPlayer)
-									.remove(currCard);
+						if (currCard.isSameSuit(firstTrickCard) && currCard.getRank() != Rank.JACK) {
+							possiblePlayerCards.get(otherPlayer).remove(currCard);
 						}
 					}
 				}
