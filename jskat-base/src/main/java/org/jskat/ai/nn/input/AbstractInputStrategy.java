@@ -20,7 +20,7 @@ import org.jskat.util.Card;
 public abstract class AbstractInputStrategy implements InputStrategy {
 
 	public final static double ON = 1.0d;
-	public final static double OFF = -1.0d;
+	public final static double OFF = 0.0d;
 
 	protected final double[] getEmptyInputs() {
 		double[] result = new double[getNeuronCount()];
