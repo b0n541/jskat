@@ -78,7 +78,7 @@ public class JSkatMaster {
 
 		this.issControl = new IssController(this);
 
-		this.runningNNTrainers = new ArrayList<NNTrainer>();
+		this.runningNNTrainers = new ArrayList<>();
 
 		JSkatEventBus.INSTANCE.register(this);
 	}
@@ -139,9 +139,9 @@ public class JSkatMaster {
 
 	/**
 	 * Gets the view implementation.
-	 * 
+	 *
 	 * @return The JSkat view implementation
-	 * 
+	 *
 	 * @deprecated Use only until event processing is completely implemented.
 	 */
 	@Deprecated
@@ -398,34 +398,34 @@ public class JSkatMaster {
 
 		JSkatEventBus.INSTANCE.post(new ShowTrainingOverviewCommand());
 
-		NNTrainer nullTrainer = new NNTrainer();
-		nullTrainer.setGameType(GameType.NULL);
-		nullTrainer.start();
-		this.runningNNTrainers.add(nullTrainer);
+		// NNTrainer nullTrainer = new NNTrainer();
+		// nullTrainer.setGameType(GameType.NULL);
+		// nullTrainer.start();
+		// this.runningNNTrainers.add(nullTrainer);
 		NNTrainer grandTrainer = new NNTrainer();
 		grandTrainer.setGameType(GameType.GRAND);
 		grandTrainer.start();
 		this.runningNNTrainers.add(grandTrainer);
-		NNTrainer clubsTrainer = new NNTrainer();
-		clubsTrainer.setGameType(GameType.CLUBS);
-		clubsTrainer.start();
-		this.runningNNTrainers.add(clubsTrainer);
-		NNTrainer spadesTrainer = new NNTrainer();
-		spadesTrainer.setGameType(GameType.SPADES);
-		spadesTrainer.start();
-		this.runningNNTrainers.add(spadesTrainer);
-		NNTrainer heartsTrainer = new NNTrainer();
-		heartsTrainer.setGameType(GameType.HEARTS);
-		heartsTrainer.start();
-		this.runningNNTrainers.add(heartsTrainer);
-		NNTrainer diamondsTrainer = new NNTrainer();
-		diamondsTrainer.setGameType(GameType.DIAMONDS);
-		diamondsTrainer.start();
-		this.runningNNTrainers.add(diamondsTrainer);
-		NNTrainer ramschTrainer = new NNTrainer();
-		ramschTrainer.setGameType(GameType.RAMSCH);
-		ramschTrainer.start();
-		this.runningNNTrainers.add(ramschTrainer);
+		// NNTrainer clubsTrainer = new NNTrainer();
+		// clubsTrainer.setGameType(GameType.CLUBS);
+		// clubsTrainer.start();
+		// this.runningNNTrainers.add(clubsTrainer);
+		// NNTrainer spadesTrainer = new NNTrainer();
+		// spadesTrainer.setGameType(GameType.SPADES);
+		// spadesTrainer.start();
+		// this.runningNNTrainers.add(spadesTrainer);
+		// NNTrainer heartsTrainer = new NNTrainer();
+		// heartsTrainer.setGameType(GameType.HEARTS);
+		// heartsTrainer.start();
+		// this.runningNNTrainers.add(heartsTrainer);
+		// NNTrainer diamondsTrainer = new NNTrainer();
+		// diamondsTrainer.setGameType(GameType.DIAMONDS);
+		// diamondsTrainer.start();
+		// this.runningNNTrainers.add(diamondsTrainer);
+		// NNTrainer ramschTrainer = new NNTrainer();
+		// ramschTrainer.setGameType(GameType.RAMSCH);
+		// ramschTrainer.start();
+		// this.runningNNTrainers.add(ramschTrainer);
 	}
 
 	public void stopTrainNeuralNetworks() {

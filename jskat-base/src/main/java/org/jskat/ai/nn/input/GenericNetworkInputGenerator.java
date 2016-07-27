@@ -16,21 +16,26 @@
 package org.jskat.ai.nn.input;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GenericNetworkInputGenerator implements NetworkInputGenerator {
+
+	private final static Logger LOG = LoggerFactory.getLogger(GenericNetworkInputGenerator.class);
 
 	private static final List<InputStrategy> strategies = new ArrayList<>();
 
 	static {
-		strategies.add(new PlayerPartyMadeCardsAndNextCardStrategy());
-		strategies.add(new OpponentPartyMadeCardsStrategy());
-		strategies.add(new UnplayedCardsAndNextCardStrategy());
+		// strategies.add(new PlayerPartyMadeCardsAndNextCardStrategy());
+		// strategies.add(new OpponentPartyMadeCardsStrategy());
+		// strategies.add(new UnplayedCardsAndNextCardStrategy());
 		strategies.add(new UnplayedPlayerPartyCardsAndNextCardStrategy());
-		strategies.add(new UnplayedOpponentPartyCardsStrategy());
+		// strategies.add(new UnplayedOpponentPartyCardsStrategy());
 	}
 
 	@Override
@@ -47,7 +52,13 @@ public class GenericNetworkInputGenerator implements NetworkInputGenerator {
 			}
 		}
 
+		LOG.warn(convertToIntArray(result));
+
 		return result;
+	}
+
+	private static String convertToIntArray(double[] result) {
+		return Arrays.toString(Arrays.stream(result).mapToInt(value -> (int) value).toArray());
 	}
 
 	/**

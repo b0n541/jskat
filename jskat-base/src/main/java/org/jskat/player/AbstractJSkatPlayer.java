@@ -101,8 +101,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public final void startGame(final Player newDeclarer,
-			final GameAnnouncement game) {
+	public final void startGame(final Player newDeclarer, final GameAnnouncement game) {
 
 		playerState = PlayerState.PLAYING;
 		internalKnowledge.setDeclarer(newDeclarer);
@@ -177,9 +176,8 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
 		for (final Card card : internalKnowledge.getOwnCards()) {
 
-			if (trick.size() > 0
-					&& rules.isCardAllowed(internalKnowledge.getGameType(),
-							trick.get(0), internalKnowledge.getOwnCards(), card)) {
+			if (trick.size() > 0 && rules.isCardAllowed(internalKnowledge.getGameType(), trick.get(0),
+					internalKnowledge.getOwnCards(), card)) {
 
 				log.debug("Card: " + card + " is allowed after initial card: " //$NON-NLS-1$
 						+ trick.get(0));
@@ -243,8 +241,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 		boolean result = false;
 
 		if (GameType.RAMSCH.equals(internalKnowledge.getGameType())
-				|| internalKnowledge.getDeclarer().equals(
-						internalKnowledge.getPlayerPosition())) {
+				|| internalKnowledge.getDeclarer().equals(internalKnowledge.getPlayerPosition())) {
 
 			result = true;
 		}
