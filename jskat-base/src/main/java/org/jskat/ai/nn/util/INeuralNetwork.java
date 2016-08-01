@@ -58,7 +58,7 @@ public interface INeuralNetwork {
 	 *            Input attributes
 	 * @return Predicted outcome
 	 */
-	public abstract double getPredictedOutcome(double[] inputs);
+	public abstract double[] getPredictedOutcome(double[] inputs);
 
 	/**
 	 * Gets the number of iterations the NeuralNetwork was trained so far

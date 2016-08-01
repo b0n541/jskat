@@ -54,8 +54,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	private final static Double MIN_WON_RATE_FOR_DISCARDING = 0.75;
 	private final static Double MIN_WON_RATE_FOR_HAND_GAME = 0.95;
 
-	public final static Double IDEAL_WON = 1.0;
-	public final static Double IDEAL_LOST = 0.0;
+	public final static Double ON = 1.0;
+	public final static Double OFF = 0.0;
 	public final static Double EPSILON = 0.2;
 
 	// FIXME (jan 10.03.2012) code duplication with NNTrainer
@@ -327,19 +327,22 @@ public class AIPlayerNN extends AbstractAIPlayer {
 			final double[] inputs = inputGenerator.getNetInputs(knowledge, card);
 
 			cardInputs.put(card, inputs);
-			final Double currOutput = net.getPredictedOutcome(inputs);
-			log.warn("net output for card " + card + ": " //$NON-NLS-1$
-					+ formatter.format(currOutput));
+			final double[] currOutput = net.getPredictedOutcome(inputs);
+			double wonSignal = currOutput[0];
+			double lostSignal = currOutput[1];
+			log.warn("net output for card " + card + ": won: " + formatter.format(wonSignal) + " lost: "
+					+ formatter.format(lostSignal));
 
-			if (currOutput > (IDEAL_WON - EPSILON)) {
+			if (wonSignal > (ON - EPSILON) && lostSignal < EPSILON) {
 				bestCards.add(card);
 			}
-			if (currOutput > highestOutput && !formatter.format(currOutput).equals(formatter.format(highestOutput))) {
-				highestOutput = currOutput;
+			if (wonSignal > highestOutput
+					&& !formatter.format(wonSignal).equals(formatter.format(highestOutput))) {
+				highestOutput = wonSignal;
 				highestOutputCards.clear();
 				highestOutputCards.add(card);
-			} else if (currOutput == highestOutput
-					|| formatter.format(currOutput).equals(formatter.format(highestOutput))) {
+			} else if (wonSignal == highestOutput
+					|| formatter.format(wonSignal).equals(formatter.format(highestOutput))) {
 				highestOutputCards.add(card);
 			}
 		}
@@ -407,26 +410,26 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 	private void adjustNeuralNetworks(final List<double[]> inputs) {
 
-		double output = 0.0d;
+		double[] output = { 0.0, 0.0 };
 		if (!GameType.PASSED_IN.equals(knowledge.getGameType())) {
 			if (GameType.RAMSCH.equals(knowledge.getGameType())) {
 				if (isRamschGameWon(gameSummary, knowledge.getPlayerPosition())) {
-					output = IDEAL_WON;
+					output[0] = ON;
 				} else {
-					output = IDEAL_LOST;
+					output[1] = ON;
 				}
 			} else {
 				if (isDeclarer()) {
 					if (gameSummary.isGameWon()) {
-						output = IDEAL_WON;
+						output[0] = ON;
 					} else {
-						output = IDEAL_LOST;
+						output[1] = ON;
 					}
 				} else {
-					if (gameSummary.isGameWon()) {
-						output = IDEAL_LOST;
+					if (!gameSummary.isGameWon()) {
+						output[0] = ON;
 					} else {
-						output = IDEAL_WON;
+						output[1] = ON;
 					}
 				}
 			}
@@ -437,7 +440,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 			final double[][] outputsArray = new double[inputs.size()][];
 			for (int i = 0; i < inputs.size(); i++) {
 				inputsArray[i] = inputs.get(i);
-				outputsArray[i] = new double[] { output };
+				outputsArray[i] = output;
 			}
 
 			final INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGameAnnouncement().getGameType(),

@@ -30,19 +30,18 @@ import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.PersistBasicNetwork;
 import org.encog.neural.networks.layers.BasicLayer;
-import org.encog.neural.networks.training.propagation.resilient.RPROPType;
-import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
+import org.encog.neural.networks.training.propagation.back.Backpropagation;
 
 /**
  * Wraps the Encog network to fulfill the interface {@link INeuralNetwork}
  */
 public class EncogNetworkWrapper implements INeuralNetwork {
 
-	private static final double LEARNING_RATE = 0.05;
+	private static final double LEARNING_RATE = 0.3;
 	private static final double MOMENTUM = 0.9;
 
 	private BasicNetwork network;
-	private ResilientPropagation trainer;
+	private Backpropagation trainer;
 	private final PersistBasicNetwork networkPersister;
 
 	/**
@@ -82,8 +81,9 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 		MLDataSet trainingSet = new BasicMLDataSet(data);
 
 		if (trainer == null) {
-			trainer = new ResilientPropagation(network, trainingSet);
-			trainer.setRPROPType(RPROPType.iRPROPp);
+			// trainer = new ResilientPropagation(network, trainingSet);
+			// trainer.setRPROPType(RPROPType.iRPROPp);
+			trainer = new Backpropagation(network, trainingSet);
 			trainer.setBatchSize(1);
 		} else {
 			trainer.setTraining(trainingSet);
@@ -100,8 +100,9 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 		MLDataSet trainingSet = new BasicMLDataSet(inputValues, outputValues);
 
 		if (trainer == null) {
-			trainer = new ResilientPropagation(network, trainingSet);
-			trainer.setRPROPType(RPROPType.iRPROPp);
+			// trainer = new ResilientPropagation(network, trainingSet);
+			// trainer.setRPROPType(RPROPType.iRPROPp);
+			trainer = new Backpropagation(network, trainingSet);
 			trainer.setBatchSize(0);
 		} else {
 			trainer.setTraining(trainingSet);
@@ -124,9 +125,9 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public synchronized double getPredictedOutcome(final double[] inputValues) {
+	public synchronized double[] getPredictedOutcome(final double[] inputValues) {
 		MLData output = network.compute(new BasicMLData(inputValues));
-		return output.getData(0);
+		return output.getData();
 	}
 
 	/**

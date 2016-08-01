@@ -54,11 +54,11 @@ public class NNTrainer extends JSkatThread {
 	static final String NEURAL_NETWORK_PLAYER_CLASS = "org.jskat.ai.nn.AIPlayerNN";
 	static final String RANDOM_PLAYER_CLASS = "org.jskat.ai.rnd.AIPlayerRND";
 
-	private static final List<String> playerTypes = new ArrayList<String>();
+	private static final List<String> PLAYER_TYPES = new ArrayList<String>();
 
 	static {
-		playerTypes.add(NEURAL_NETWORK_PLAYER_CLASS);
-		playerTypes.add(RANDOM_PLAYER_CLASS);
+		PLAYER_TYPES.add(NEURAL_NETWORK_PLAYER_CLASS);
+		PLAYER_TYPES.add(RANDOM_PLAYER_CLASS);
 	}
 
 	private GameType gameType;
@@ -185,7 +185,7 @@ public class NNTrainer extends JSkatThread {
 		double opponentAvgNetworkErrorSum = 0.0;
 		long opponentParticipations = 0;
 
-		List<List<String>> playerPermutations = createPlayerPermutations(playerTypes);
+		List<List<String>> playerPermutations = createPlayerPermutations(PLAYER_TYPES);
 
 		while (!this.stopTraining /* && totalGames < MAX_TRAINING_EPISODES */) {
 
