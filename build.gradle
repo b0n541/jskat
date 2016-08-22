@@ -1,24 +1,32 @@
 plugins {
-	id "com.github.johnrengelman.shadow" version "1.2.3"
 	id "com.github.hierynomus.license" version "0.12.1"
+	id "com.github.johnrengelman.shadow" version "1.2.3"
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.14'
+    gradleVersion = '3.0'
 }
+
+apply plugin: 'application'
+
+version = '0.16.0'
 
 allprojects {
 	repositories {
 	    mavenCentral()
 	}
-}
 
-allprojects {
-	apply plugin: 'java'
 	apply plugin: 'eclipse'
 	apply plugin: 'idea'
+}
+
+subprojects {
+	apply plugin: 'java'
 	apply plugin: 'jacoco'
 	apply plugin: 'license'
+
+	sourceCompatibility = 1.8
+	targetCompatibility = 1.8
 
 	task sourcesJar(type: Jar, dependsOn: classes) {
 	    classifier = 'sources'
@@ -57,17 +65,11 @@ dependencies {
 	compile project(':jskat-javafx-gui')
 }
 
-version = '0.16.0'
-
-jar {
-    manifest {
-        attributes 'Implementation-Title': 'JSkat',
-                   'Implementation-Version': version,
-                   'Main-Class': 'org.jskat.JSkatFX'
-    }
+startScripts {
+	mainClassName 'org.jskat.JSkatFX'
 }
 
 shadowJar {
 	baseName = 'JSkat'
-	classifier = ''
+	mainClassName = 'org.jskat.JSkatFX'
 }
