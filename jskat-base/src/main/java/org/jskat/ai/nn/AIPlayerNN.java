@@ -17,6 +17,7 @@ package org.jskat.ai.nn;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -326,6 +327,9 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 			final double[] inputs = inputGenerator.getNetInputs(knowledge, card);
 
+			log.debug("net input for card " + card + ": "
+					+ Arrays.toString(Arrays.stream(inputs).mapToInt(x -> Double.valueOf(x).intValue()).toArray()));
+
 			cardInputs.put(card, inputs);
 			final double[] currOutput = net.getPredictedOutcome(inputs);
 			double wonSignal = currOutput[0];
@@ -410,7 +414,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 	private void adjustNeuralNetworks(final List<double[]> inputs) {
 
-		double[] output = { 0.0, 0.0 };
+		double[] output = { OFF, OFF };
 		if (!GameType.PASSED_IN.equals(knowledge.getGameType())) {
 			if (GameType.RAMSCH.equals(knowledge.getGameType())) {
 				if (isRamschGameWon(gameSummary, knowledge.getPlayerPosition())) {
@@ -443,12 +447,18 @@ public class AIPlayerNN extends AbstractAIPlayer {
 				outputsArray[i] = output;
 			}
 
-			final INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGameAnnouncement().getGameType(),
-					isDeclarer(), 0);
-			final double networkError = net.adjustWeightsBatch(inputsArray, outputsArray);
+			// final double networkError = net.adjustWeightsBatch(inputsArray,
+			// outputsArray);
+			double networkError = 0.0;
+			for (int i = 0; i < inputs.size(); i++) {
+				final INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGameAnnouncement().getGameType(),
+						isDeclarer(), i);
+				networkError += net.adjustWeights(inputsArray[i], outputsArray[i]);
+			}
+			networkError = networkError / inputs.size();
 
 			log.warn("learning error: " + networkError);
-			lastAvgNetworkError = networkError;// / inputs.size();
+			lastAvgNetworkError = networkError;
 		}
 	}
 

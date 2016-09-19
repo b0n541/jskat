@@ -52,13 +52,15 @@ public class NNTrainer extends JSkatThread {
 	private static final Integer MAX_TRAINING_EPISODES_WITHOUT_SAVE = 100000;
 
 	static final String NEURAL_NETWORK_PLAYER_CLASS = "org.jskat.ai.nn.AIPlayerNN";
-	static final String RANDOM_PLAYER_CLASS = "org.jskat.ai.rnd.AIPlayerRND";
+	private static final String RANDOM_PLAYER_CLASS = "org.jskat.ai.rnd.AIPlayerRND";
+	private static final String ALGORITHMIC_PLAYER_CLASS = "org.jskat.ai.newalgorithm.AlgorithmAI";
 
 	private static final List<String> PLAYER_TYPES = new ArrayList<String>();
 
 	static {
 		PLAYER_TYPES.add(NEURAL_NETWORK_PLAYER_CLASS);
 		PLAYER_TYPES.add(RANDOM_PLAYER_CLASS);
+		// PLAYER_TYPES.add(ALGORITHMIC_PLAYER_CLASS);
 	}
 
 	private GameType gameType;

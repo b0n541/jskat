@@ -37,9 +37,6 @@ import org.encog.neural.networks.training.propagation.back.Backpropagation;
  */
 public class EncogNetworkWrapper implements INeuralNetwork {
 
-	private static final double LEARNING_RATE = 0.3;
-	private static final double MOMENTUM = 0.9;
-
 	private BasicNetwork network;
 	private Backpropagation trainer;
 	private final PersistBasicNetwork networkPersister;
@@ -58,7 +55,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 		for (int i = 0; i < topo.getHiddenLayerCount(); i++) {
 			network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias, topo.getHiddenNeuronCount(i)));
 		}
-		network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias, topo.getOutputNeuronCount()));
+		network.addLayer(new BasicLayer(new ActivationSigmoid(), false, topo.getOutputNeuronCount()));
 		network.getStructure().finalizeStructure();
 		network.reset();
 
@@ -156,8 +153,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public synchronized void loadNetwork(final String fileName, final int inputNeurons, final int hiddenNeurons,
-			final int outputNeurons) {
+	public synchronized void loadNetwork(final String fileName) {
 		network = (BasicNetwork) networkPersister.read(getClass().getResourceAsStream(fileName));
 	}
 }

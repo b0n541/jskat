@@ -81,12 +81,6 @@ public interface INeuralNetwork {
 	 *
 	 * @param fileName
 	 *            File name to load from
-	 * @param inputNeurons
-	 *            Number of input neurons
-	 * @param hiddenNeurons
-	 *            Number of hidden neurons
-	 * @param outputNeurons
-	 *            Number of output neurons
 	 */
-	public abstract void loadNetwork(String fileName, int inputNeurons, int hiddenNeurons, int outputNeurons);
+	public abstract void loadNetwork(String fileName);
 }
