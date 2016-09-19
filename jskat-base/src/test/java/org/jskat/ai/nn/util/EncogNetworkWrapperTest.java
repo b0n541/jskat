@@ -51,7 +51,7 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	/**
 	 * Maximum iterations for network learning
 	 */
-	private static final int MAX_ITERATIONS = 200;
+	private static final int MAX_ITERATIONS = 2000;
 
 	/**
 	 * Logger.
@@ -103,7 +103,7 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 		BasicNetwork network = new BasicNetwork();
 		network.addLayer(new BasicLayer(new ActivationSigmoid(), true, 2));
 		network.addLayer(new BasicLayer(new ActivationSigmoid(), true, 3));
-		network.addLayer(new BasicLayer(new ActivationSigmoid(), true, 1));
+		network.addLayer(new BasicLayer(new ActivationSigmoid(), false, 1));
 		network.getStructure().finalizeStructure();
 		network.reset();
 
@@ -154,15 +154,43 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 		MLDataSet trainingSet = new BasicMLDataSet(XOR_INPUT, XOR_IDEAL);
 
 		// Train the neural network.
-		final Backpropagation train = new Backpropagation(network, trainingSet, 0.3, 0.9);
+		final Backpropagation train = new Backpropagation(network, trainingSet);
 		train.setBatchSize(1);
 
 		// Evaluate the neural network.
-		EncogUtility.trainToError(train, 0.01);
+		EncogUtility.trainToError(train, EPSILON);
 		EncogUtility.evaluate(network, trainingSet);
 
 		if (train.getIteration() > MAX_ITERATIONS) {
-			fail("Needed more than " + MAX_ITERATIONS + " iterations " + train.getIteration() + ". Error: "
+			fail("Needed more than " + MAX_ITERATIONS + " iterations: " + train.getIteration() + ". Error: "
+					+ train.getError());
+		}
+		// Shut down Encog.
+		Encog.getInstance().shutdown();
+	}
+
+	@Test
+	public void testXORBatchTraining() {
+
+		double XOR_INPUT[][] = { { 0.0, 0.0 }, { 1.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 1.0 } };
+		double XOR_IDEAL[][] = { { 0.0 }, { 1.0 }, { 1.0 }, { 0.0 } };
+
+		// Create a neural network, using the utility.
+		BasicNetwork network = EncogUtility.simpleFeedForward(2, 3, 0, 1, false);
+
+		// Create training data.
+		MLDataSet trainingSet = new BasicMLDataSet(XOR_INPUT, XOR_IDEAL);
+
+		// Train the neural network.
+		final Backpropagation train = new Backpropagation(network, trainingSet);
+		train.setBatchSize(0);
+
+		// Evaluate the neural network.
+		EncogUtility.trainToError(train, EPSILON);
+		EncogUtility.evaluate(network, trainingSet);
+
+		if (train.getIteration() > MAX_ITERATIONS) {
+			fail("Needed more than " + MAX_ITERATIONS + " iterations: " + train.getIteration() + ". Error: "
 					+ train.getError());
 		}
 		// Shut down Encog.
