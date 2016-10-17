@@ -59,7 +59,6 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 		// network.getStructure().finalizeStructure();
 		network = EncogUtility.simpleFeedForward(topo.getInputNeuronCount(), topo.getHiddenNeuronCount(0),
 				topo.getHiddenNeuronCount(1), topo.getOutputNeuronCount(), false);
-
 		network.reset();
 
 		networkPersister = new PersistBasicNetwork();

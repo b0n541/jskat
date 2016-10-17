@@ -89,7 +89,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	private GameType bestGameTypeFromDiscarding;
 	private boolean isLearning = false;
 
-	private double lastAvgNetworkError = 0.0;
+	private double lastAvgDeclarerNetworkError = 0.0;
+	private double lastAvgOpponentNetworkError = 0.0;
 
 	private final List<GameType> feasibleGameTypes = new ArrayList<>();
 
@@ -252,12 +253,21 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	}
 
 	/**
-	 * Gets the last average network error
+	 * Gets the last average network error for declarer network
 	 *
 	 * @return Last average network error
 	 */
-	public double getLastAvgNetworkError() {
-		return lastAvgNetworkError;
+	public double getLastAvgDeclarerNetworkError() {
+		return lastAvgDeclarerNetworkError;
+	}
+
+	/**
+	 * Gets the last average network error for opponent network
+	 *
+	 * @return Last average network error
+	 */
+	public double getLastAvgOpponentNetworkError() {
+		return lastAvgOpponentNetworkError;
 	}
 
 	/**
@@ -327,7 +337,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 			final double[] inputs = inputGenerator.getNetInputs(knowledge, card);
 
-			log.warn(knowledge.toString());
+			log.debug(knowledge.toString());
 			log.debug("net input for card " + card + ": "
 					+ Arrays.toString(Arrays.stream(inputs).mapToInt(x -> Double.valueOf(x).intValue()).toArray()));
 
@@ -461,7 +471,12 @@ public class AIPlayerNN extends AbstractAIPlayer {
 			// networkError = networkError / inputs.size();
 
 			log.warn("learning error: " + networkError);
-			lastAvgNetworkError = networkError;
+
+			if (isDeclarer()) {
+				lastAvgDeclarerNetworkError = networkError;
+			} else {
+				lastAvgOpponentNetworkError = networkError;
+			}
 		}
 	}
 

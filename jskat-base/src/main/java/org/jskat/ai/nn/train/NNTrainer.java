@@ -55,7 +55,7 @@ public class NNTrainer extends JSkatThread {
 	private static final String RANDOM_PLAYER_CLASS = "org.jskat.ai.rnd.AIPlayerRND";
 	private static final String ALGORITHMIC_PLAYER_CLASS = "org.jskat.ai.newalgorithm.AlgorithmAI";
 
-	private static final List<String> PLAYER_TYPES = new ArrayList<String>();
+	private static final List<String> PLAYER_TYPES = new ArrayList<>();
 
 	static {
 		PLAYER_TYPES.add(NEURAL_NETWORK_PLAYER_CLASS);
@@ -182,10 +182,8 @@ public class NNTrainer extends JSkatThread {
 
 		long totalGames = 0;
 		long totalWonGames = 0;
-		double declarerAvgNetworkErrorSum = 0.0;
-		long declarerParticipations = 0;
-		double opponentAvgNetworkErrorSum = 0.0;
-		long opponentParticipations = 0;
+		double declarerAvgNetworkError = 0.0;
+		double opponentAvgNetworkError = 0.0;
 
 		List<List<String>> playerPermutations = createPlayerPermutations(PLAYER_TYPES);
 
@@ -199,11 +197,10 @@ public class NNTrainer extends JSkatThread {
 
 				if (GameType.RAMSCH.equals(gameType)) {
 					JSkatEventBus.INSTANCE.post(new TrainingResultEvent(this.gameType, totalGames, totalWonGames,
-							declarerAvgNetworkErrorSum / declarerParticipations, 0.0));
+							declarerAvgNetworkError, 0.0));
 				} else {
 					JSkatEventBus.INSTANCE.post(new TrainingResultEvent(this.gameType, totalGames, totalWonGames,
-							declarerAvgNetworkErrorSum / declarerParticipations,
-							opponentAvgNetworkErrorSum / opponentParticipations));
+							declarerAvgNetworkError, opponentAvgNetworkError));
 				}
 			}
 
@@ -230,29 +227,23 @@ public class NNTrainer extends JSkatThread {
 
 					if (player1 instanceof AIPlayerNN) {
 						if (player1.isDeclarer()) {
-							declarerAvgNetworkErrorSum += ((AIPlayerNN) player1).getLastAvgNetworkError();
-							declarerParticipations++;
+							declarerAvgNetworkError = ((AIPlayerNN) player1).getLastAvgDeclarerNetworkError();
 						} else {
-							opponentAvgNetworkErrorSum += ((AIPlayerNN) player1).getLastAvgNetworkError();
-							opponentParticipations++;
+							opponentAvgNetworkError = ((AIPlayerNN) player1).getLastAvgOpponentNetworkError();
 						}
 					}
 					if (player2 instanceof AIPlayerNN) {
 						if (player2.isDeclarer()) {
-							declarerAvgNetworkErrorSum += ((AIPlayerNN) player2).getLastAvgNetworkError();
-							declarerParticipations++;
+							declarerAvgNetworkError = ((AIPlayerNN) player2).getLastAvgDeclarerNetworkError();
 						} else {
-							opponentAvgNetworkErrorSum += ((AIPlayerNN) player2).getLastAvgNetworkError();
-							opponentParticipations++;
+							opponentAvgNetworkError = ((AIPlayerNN) player2).getLastAvgOpponentNetworkError();
 						}
 					}
 					if (player3 instanceof AIPlayerNN) {
 						if (player3.isDeclarer()) {
-							declarerAvgNetworkErrorSum += ((AIPlayerNN) player3).getLastAvgNetworkError();
-							declarerParticipations++;
+							declarerAvgNetworkError = ((AIPlayerNN) player3).getLastAvgDeclarerNetworkError();
 						} else {
-							opponentAvgNetworkErrorSum += ((AIPlayerNN) player3).getLastAvgNetworkError();
-							opponentParticipations++;
+							opponentAvgNetworkError = ((AIPlayerNN) player3).getLastAvgOpponentNetworkError();
 						}
 					}
 
@@ -266,7 +257,7 @@ public class NNTrainer extends JSkatThread {
 
 	static List<List<String>> createPlayerPermutations(List<String> playerTypes) {
 
-		List<List<String>> result = new ArrayList<List<String>>();
+		List<List<String>> result = new ArrayList<>();
 
 		for (String player1 : playerTypes) {
 			for (String player2 : playerTypes) {
@@ -275,7 +266,7 @@ public class NNTrainer extends JSkatThread {
 					if (NEURAL_NETWORK_PLAYER_CLASS.equals(player1) || NEURAL_NETWORK_PLAYER_CLASS.equals(player2)
 							|| NEURAL_NETWORK_PLAYER_CLASS.equals(player3)) {
 
-						List<String> playerPermutation = new ArrayList<String>();
+						List<String> playerPermutation = new ArrayList<>();
 						playerPermutation.add(player1);
 						playerPermutation.add(player2);
 						playerPermutation.add(player3);
