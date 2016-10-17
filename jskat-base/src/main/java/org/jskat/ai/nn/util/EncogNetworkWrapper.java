@@ -17,20 +17,17 @@ package org.jskat.ai.nn.util;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
-import org.encog.engine.network.activation.ActivationSigmoid;
 import org.encog.ml.data.MLData;
-import org.encog.ml.data.MLDataPair;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.basic.BasicMLData;
 import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.PersistBasicNetwork;
-import org.encog.neural.networks.layers.BasicLayer;
 import org.encog.neural.networks.training.propagation.back.Backpropagation;
+import org.encog.util.simple.EncogUtility;
 
 /**
  * Wraps the Encog network to fulfill the interface {@link INeuralNetwork}
@@ -50,13 +47,19 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 *            TRUE, if bias nodes should be used
 	 */
 	public EncogNetworkWrapper(NetworkTopology topo, boolean useBias) {
-		network = new BasicNetwork();
-		network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias, topo.getInputNeuronCount()));
-		for (int i = 0; i < topo.getHiddenLayerCount(); i++) {
-			network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias, topo.getHiddenNeuronCount(i)));
-		}
-		network.addLayer(new BasicLayer(new ActivationSigmoid(), false, topo.getOutputNeuronCount()));
-		network.getStructure().finalizeStructure();
+		// network = new BasicNetwork();
+		// network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias,
+		// topo.getInputNeuronCount()));
+		// for (int i = 0; i < topo.getHiddenLayerCount(); i++) {
+		// network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias,
+		// topo.getHiddenNeuronCount(i)));
+		// }
+		// network.addLayer(new BasicLayer(new ActivationSigmoid(), false,
+		// topo.getOutputNeuronCount()));
+		// network.getStructure().finalizeStructure();
+		network = EncogUtility.simpleFeedForward(topo.getInputNeuronCount(), topo.getHiddenNeuronCount(0),
+				topo.getHiddenNeuronCount(1), topo.getOutputNeuronCount(), false);
+
 		network.reset();
 
 		networkPersister = new PersistBasicNetwork();
@@ -73,9 +76,8 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	@Override
 	public synchronized double adjustWeights(final double[] inputValues, final double[] outputValues) {
 
-		List<MLDataPair> data = new ArrayList<>();
-		data.add(new BasicMLDataPair(new BasicMLData(inputValues), new BasicMLData(outputValues)));
-		MLDataSet trainingSet = new BasicMLDataSet(data);
+		MLDataSet trainingSet = new BasicMLDataSet(
+				Arrays.asList(new BasicMLDataPair(new BasicMLData(inputValues), new BasicMLData(outputValues))));
 
 		if (trainer == null) {
 			// trainer = new ResilientPropagation(network, trainingSet);
@@ -101,6 +103,7 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 			// trainer.setRPROPType(RPROPType.iRPROPp);
 			trainer = new Backpropagation(network, trainingSet);
 			trainer.setBatchSize(0);
+
 		} else {
 			trainer.setTraining(trainingSet);
 		}

@@ -44,9 +44,9 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	private static final double EPSILON = 0.1;
 
 	/**
-	 * Minimum difference between calculated output and desired result.
+	 * Maximum error between calculated output and desired result.
 	 */
-	private static final double MIN_DIFF = 0.1;
+	private static final double MAX_ERROR = 0.1;
 
 	/**
 	 * Maximum iterations for network learning
@@ -59,12 +59,48 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	private static Logger log = LoggerFactory.getLogger(EncogNetworkWrapperTest.class);
 
 	/**
-	 * Tests the NetworkWrapper with an XOR example.
+	 * Tests the NetworkWrapper with an XOR example and batch training.
 	 */
 	@Test
-	public final void testXOR() {
+	public final void testXORWrapperBatch() {
 
-		int[] hiddenNeurons = { 3 };
+		int[] hiddenNeurons = { 3, 0 };
+		NetworkTopology topo = new NetworkTopology(2, hiddenNeurons, 1);
+		INeuralNetwork network = new EncogNetworkWrapper(topo, true);
+		network.resetNetwork();
+
+		double[][] input = { { 1.0, 1.0 }, { 1.0, 0.0 }, { 0.0, 1.0 }, { 0.0, 0.0 } };
+		double[][] output = { { 0.0 }, { 1.0 }, { 1.0 }, { 0.0 } };
+
+		double error = 1000.0;
+		int iteration = 0;
+
+		while (error > MAX_ERROR && iteration < MAX_ITERATIONS) {
+			error = network.adjustWeightsBatch(input, output);
+			iteration++;
+		}
+
+		if (iteration == MAX_ITERATIONS) {
+			fail("Needed more than " + MAX_ITERATIONS + " iterations. Error: " + error);
+		} else if (iteration < 50) {
+			fail("Needed too few iterations: " + iteration);
+		} else {
+			log.info("Needed " + iteration + " iterations to learn.");
+			log.info("Testing network:");
+			for (int n = 0; n < input.length; n++) {
+				log.info("Input: " + input[n][0] + " " + input[n][1] + " Expected output: " + output[n][0]
+						+ " Predicted output: " + network.getPredictedOutcome(input[n]));
+			}
+		}
+	}
+
+	/**
+	 * Tests the NetworkWrapper with an XOR example and online training.
+	 */
+	@Test
+	public final void testXORWrapperOnline() {
+
+		int[] hiddenNeurons = { 3, 0 };
 		NetworkTopology topo = new NetworkTopology(2, hiddenNeurons, 1);
 		INeuralNetwork network = new EncogNetworkWrapper(topo, true);
 		network.resetNetwork();
@@ -76,8 +112,7 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 		int i = 0;
 		int iteration = 0;
 
-		while (error > MIN_DIFF && iteration < MAX_ITERATIONS) {
-			// error = network.adjustWeightsBatch(input, output);
+		while (error > MAX_ERROR && iteration < MAX_ITERATIONS) {
 			error = network.adjustWeights(input[i], output[i]);
 			i = (i + 1) % output.length;
 			iteration++;
@@ -85,6 +120,8 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 
 		if (iteration == MAX_ITERATIONS) {
 			fail("Needed more than " + MAX_ITERATIONS + " iterations. Error: " + error);
+		} else if (iteration < 50) {
+			fail("Needed too few iterations: " + iteration);
 		} else {
 			log.info("Needed " + iteration + " iterations to learn.");
 			log.info("Testing network:");
@@ -119,7 +156,7 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 		double error = 1000.0;
 		int i = 0;
 		int iteration = 0;
-		while (error > MIN_DIFF && iteration < MAX_ITERATIONS) {
+		while (error > MAX_ERROR && iteration < MAX_ITERATIONS) {
 			i = (i + 1) % trainingSet.size();
 			Backpropagation trainer = new Backpropagation(network,
 					new BasicMLDataSet(Arrays.asList(trainingSet.get(i))));
@@ -131,6 +168,8 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 
 		if (iteration == MAX_ITERATIONS) {
 			fail("Needed more than " + MAX_ITERATIONS + " iterations. Error: " + error);
+		} else if (iteration < 50) {
+			fail("Needed too few iterations: " + iteration);
 		} else {
 			log.debug("Needed " + iteration + " iterations to learn.");
 			log.debug("Testing network:");
@@ -158,19 +197,22 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 		train.setBatchSize(1);
 
 		// Evaluate the neural network.
-		EncogUtility.trainToError(train, EPSILON);
+		EncogUtility.trainToError(train, MAX_ERROR);
 		EncogUtility.evaluate(network, trainingSet);
 
 		if (train.getIteration() > MAX_ITERATIONS) {
 			fail("Needed more than " + MAX_ITERATIONS + " iterations: " + train.getIteration() + ". Error: "
 					+ train.getError());
 		}
+		else if (train.getIteration() < 50) {
+			fail("Needed too few iterations: " + train.getIteration());
+		}
 		// Shut down Encog.
 		Encog.getInstance().shutdown();
 	}
 
 	@Test
-	public void testXORBatchTraining() {
+	public void testXORDirectBatchTraining() {
 
 		double XOR_INPUT[][] = { { 0.0, 0.0 }, { 1.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 1.0 } };
 		double XOR_IDEAL[][] = { { 0.0 }, { 1.0 }, { 1.0 }, { 0.0 } };
@@ -186,12 +228,14 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 		train.setBatchSize(0);
 
 		// Evaluate the neural network.
-		EncogUtility.trainToError(train, EPSILON);
+		EncogUtility.trainToError(train, MAX_ERROR);
 		EncogUtility.evaluate(network, trainingSet);
 
 		if (train.getIteration() > MAX_ITERATIONS) {
 			fail("Needed more than " + MAX_ITERATIONS + " iterations: " + train.getIteration() + ". Error: "
 					+ train.getError());
+		} else if (train.getIteration() < 50) {
+			fail("Needed too few iterations: " + train.getIteration());
 		}
 		// Shut down Encog.
 		Encog.getInstance().shutdown();

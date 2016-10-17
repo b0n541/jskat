@@ -25,7 +25,7 @@ public interface INeuralNetwork {
 	double getAvgDiff();
 
 	/**
-	 * Adjusts the weights of the net according inputs and desired outputs
+	 * Adjusts the weights of the net.
 	 *
 	 * @param inputs
 	 *            Input attributes
