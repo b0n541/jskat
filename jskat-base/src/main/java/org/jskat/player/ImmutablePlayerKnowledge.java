@@ -576,6 +576,62 @@ public class ImmutablePlayerKnowledge {
 		return schwarzAnnounced;
 	}
 
+	public Set<Player> getPlayerPartyMembers() {
+
+		Set<Player> result = new HashSet<>();
+		if (getDeclarer().equals(getPlayerPosition())) {
+			// player is declarer
+			result.add(getDeclarer());
+		} else {
+			// player is opponent
+			result.add(getDeclarer().getLeftNeighbor());
+			result.add(getDeclarer().getRightNeighbor());
+		}
+		return result;
+	}
+
+	public CardList getPlayerPartyMadeCards() {
+
+		CardList result = new CardList();
+		Set<Player> partyMembers = getPlayerPartyMembers();
+
+		for (Trick trick : getCompletedTricks()) {
+			if (partyMembers.contains(trick.getTrickWinner())) {
+				// trick was won by player's party
+				result.addAll(trick.getCardList());
+			}
+		}
+		return result;
+	}
+
+	public Set<Player> getOpponentPartyMembers() {
+
+		Set<Player> result = new HashSet<>();
+		if (getDeclarer().equals(getPlayerPosition())) {
+			// player is declarer
+			result.add(getDeclarer().getLeftNeighbor());
+			result.add(getDeclarer().getRightNeighbor());
+		} else {
+			// player is opponent
+			result.add(getDeclarer());
+		}
+		return result;
+	}
+
+	public CardList getOpponentPartyMadeCards() {
+
+		CardList result = new CardList();
+		Set<Player> opponents = getOpponentPartyMembers();
+
+		for (Trick trick : getCompletedTricks()) {
+			if (opponents.contains(trick.getTrickWinner())) {
+				// trick was won by opponent's party
+				result.addAll(trick.getCardList());
+			}
+		}
+		return result;
+	}
+
 	/**
 	 * @see Object#toString()
 	 */
@@ -638,6 +694,46 @@ public class ImmutablePlayerKnowledge {
 				if (playedCards.get(Player.FOREHAND).contains(Card.getCard(suit, rank))
 						|| playedCards.get(Player.MIDDLEHAND).contains(Card.getCard(suit, rank))
 						|| playedCards.get(Player.REARHAND).contains(Card.getCard(suit, rank))) {
+
+					result.append(suit.shortString()).append(rank.shortString()).append(' ');
+				} else {
+
+					result.append("-- "); //$NON-NLS-1$
+				}
+			}
+
+			result.append('\n');
+		}
+
+		result.append("Player party made cards:\n");
+		CardList playerPartyMadeCards = getPlayerPartyMadeCards();
+		for (Suit suit : Suit.values()) {
+
+			result.append(suit.shortString()).append(": "); //$NON-NLS-1$
+
+			for (Rank rank : Rank.values()) {
+
+				if (playerPartyMadeCards.contains(Card.getCard(suit, rank))) {
+
+					result.append(suit.shortString()).append(rank.shortString()).append(' ');
+				} else {
+
+					result.append("-- "); //$NON-NLS-1$
+				}
+			}
+
+			result.append('\n');
+		}
+
+		result.append("Opponent party made cards:\n");
+		CardList opponentPartyMadeCards = getOpponentPartyMadeCards();
+		for (Suit suit : Suit.values()) {
+
+			result.append(suit.shortString()).append(": "); //$NON-NLS-1$
+
+			for (Rank rank : Rank.values()) {
+
+				if (opponentPartyMadeCards.contains(Card.getCard(suit, rank))) {
 
 					result.append(suit.shortString()).append(rank.shortString()).append(' ');
 				} else {

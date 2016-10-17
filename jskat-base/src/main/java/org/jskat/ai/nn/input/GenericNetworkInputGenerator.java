@@ -31,6 +31,7 @@ public class GenericNetworkInputGenerator implements NetworkInputGenerator {
 	private static final List<InputStrategy> strategies = new ArrayList<>();
 
 	static {
+		strategies.add(new CurrentTrickAndNextCardStrategy());
 		strategies.add(new PlayerPartyMadeCardsAndNextCardStrategy());
 		strategies.add(new OpponentPartyMadeCardsStrategy());
 		strategies.add(new UnplayedPlayerPartyCardsAndNextCardStrategy());
@@ -53,6 +54,7 @@ public class GenericNetworkInputGenerator implements NetworkInputGenerator {
 
 		// LOG.warn(knowledge.toString());
 		// LOG.warn(convertToIntArray(result));
+		// LOG.warn(Arrays.toString(result));
 
 		return result;
 	}
