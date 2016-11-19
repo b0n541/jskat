@@ -17,12 +17,10 @@ package org.jskat.ai.nn.util;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.util.Arrays;
 
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.basic.BasicMLData;
-import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.PersistBasicNetwork;
@@ -75,37 +73,40 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	@Override
 	public synchronized double adjustWeights(final double[] inputValues, final double[] outputValues) {
 
-		MLDataSet trainingSet = new BasicMLDataSet(
-				Arrays.asList(new BasicMLDataPair(new BasicMLData(inputValues), new BasicMLData(outputValues))));
-
-		if (trainer == null) {
-			// trainer = new ResilientPropagation(network, trainingSet);
-			// trainer.setRPROPType(RPROPType.iRPROPp);
-			trainer = new Backpropagation(network, trainingSet);
-			trainer.setBatchSize(1);
-		} else {
-			trainer.setTraining(trainingSet);
-		}
-
-		trainer.iteration();
-
-		return trainer.getError();
+		// MLDataSet trainingSet = new BasicMLDataSet(
+		// Arrays.asList(new BasicMLDataPair(new BasicMLData(inputValues), new
+		// BasicMLData(outputValues))));
+		//
+		// if (trainer == null) {
+		// // trainer = new ResilientPropagation(network, trainingSet);
+		// // trainer.setRPROPType(RPROPType.iRPROPp);
+		// trainer = new Backpropagation(network, trainingSet);
+		// trainer.setBatchSize(1);
+		// } else {
+		// trainer.setTraining(trainingSet);
+		// }
+		//
+		// trainer.iteration();
+		//
+		// return trainer.getError();
+		return 0.0;
 	}
 
 	@Override
 	public synchronized double adjustWeightsBatch(final double[][] inputValues, final double[][] outputValues) {
 
 		MLDataSet trainingSet = new BasicMLDataSet(inputValues, outputValues);
-
-		if (trainer == null) {
-			// trainer = new ResilientPropagation(network, trainingSet);
-			// trainer.setRPROPType(RPROPType.iRPROPp);
-			trainer = new Backpropagation(network, trainingSet);
-			trainer.setBatchSize(0);
-
-		} else {
-			trainer.setTraining(trainingSet);
-		}
+		// trainer = new ResilientPropagation(network, trainingSet);
+		// trainer.setRPROPType(RPROPType.iRPROPp);
+		//
+		// if (trainer == null) {
+		trainer = new Backpropagation(network, trainingSet);
+		trainer.setBatchSize(0);
+		//
+		// } else {
+		// trainer.setTraining(trainingSet);
+		// trainer.
+		// }
 
 		trainer.iteration();
 

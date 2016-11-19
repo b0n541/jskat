@@ -57,7 +57,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 	private final static Double ON = 1.0;
 	private final static Double OFF = 0.0;
-	private final static Double EPSILON = 0.2;
+	private final static Double EPSILON = 0.1;
 
 	// FIXME (jan 10.03.2012) code duplication with NNTrainer
 	private static boolean isRamschGameWon(final GameSummary gameSummary, final Player currPlayer) {
@@ -79,12 +79,13 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		return ramschGameWon;
 	}
 
-	private final DecimalFormat formatter = new DecimalFormat("0.00000000000000000"); //$NON-NLS-1$
+	private final DecimalFormat formatter = new DecimalFormat("0.00"); //$NON-NLS-1$
 	private final GameSimulator2 gameSimulator2;
 
 	private final NetworkInputGenerator inputGenerator;
 	private final static Random RANDOM = new Random();
 	private final List<double[]> allInputs = new ArrayList<>();
+	private final List<double[]> allOutputs = new ArrayList<>();
 
 	private GameType bestGameTypeFromDiscarding;
 	private boolean isLearning = false;
@@ -201,7 +202,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		if (isLearning && allInputs.size() > 0) {
 			// adjust neural networks
 			// from last trick to first trick
-			adjustNeuralNetworks(allInputs);
+			adjustNeuralNetworks();
 		}
 	}
 
@@ -325,6 +326,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 				+ possibleCards);
 
 		final Map<Card, double[]> cardInputs = new HashMap<>();
+		final Map<Card, double[]> cardOutputs = new HashMap<>();
 
 		final INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGameAnnouncement().getGameType(), isDeclarer(),
 				knowledge.getCurrentTrick().getTrickNumberInGame());
@@ -343,6 +345,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 			cardInputs.put(card, inputs);
 			final double[] currOutput = net.getPredictedOutcome(inputs);
+			cardOutputs.put(card, currOutput);
 			double wonSignal = currOutput[0];
 			double lostSignal = currOutput[1];
 			log.warn("net output for card " + card + ": won: " + formatter.format(wonSignal) + " lost: "
@@ -381,7 +384,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 		// store parameters for the card to play
 		// for adjustment of weights after the game
-		storeInputParameters(cardInputs.get(possibleCards.get(bestCardIndex)));
+		storeInputOuputParameters(cardInputs.get(possibleCards.get(bestCardIndex)),cardOutputs.get(possibleCards.get(bestCardIndex)));
 
 		log.debug("choosing card " + bestCardIndex); //$NON-NLS-1$
 		log.debug("as player " + knowledge.getPlayerPosition() + ": " //$NON-NLS-1$//$NON-NLS-2$
@@ -402,6 +405,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	public void preparateForNewGame() {
 		bestGameTypeFromDiscarding = null;
 		allInputs.clear();
+		allOutputs.clear();
 	}
 
 	/**
@@ -422,7 +426,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		// CHECK Auto-generated method stub
 	}
 
-	private void adjustNeuralNetworks(final List<double[]> inputs) {
+	private void adjustNeuralNetworks() {
 
 		double[] output = { OFF, OFF };
 		if (!GameType.PASSED_IN.equals(knowledge.getGameType())) {
@@ -448,12 +452,16 @@ public class AIPlayerNN extends AbstractAIPlayer {
 				}
 			}
 
-			log.warn("Learning output: " + output);
+			log.warn("Learning output: " + Arrays.toString(output));
 
-			final double[][] inputsArray = new double[inputs.size()][];
-			final double[][] outputsArray = new double[inputs.size()][];
-			for (int i = 0; i < inputs.size(); i++) {
-				inputsArray[i] = inputs.get(i);
+			for (double[] trickOutput : allOutputs) {
+				log.warn("   trick output: " + Arrays.toString(trickOutput));
+			}
+
+			final double[][] inputsArray = new double[allInputs.size()][];
+			final double[][] outputsArray = new double[allInputs.size()][];
+			for (int i = 0; i < allInputs.size(); i++) {
+				inputsArray[i] = allInputs.get(i);
 				outputsArray[i] = output;
 			}
 
@@ -556,7 +564,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		return false;
 	}
 
-	private void storeInputParameters(final double[] inputParameters) {
+	private void storeInputOuputParameters(final double[] inputParameters, final double[] outputParameters) {
 		allInputs.add(inputParameters);
+		allOutputs.add(outputParameters);
 	}
 }
