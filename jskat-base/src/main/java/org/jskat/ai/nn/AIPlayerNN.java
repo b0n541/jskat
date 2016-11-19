@@ -55,9 +55,9 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	private final static Double MIN_WON_RATE_FOR_DISCARDING = 0.75;
 	private final static Double MIN_WON_RATE_FOR_HAND_GAME = 0.95;
 
-	public final static Double ON = 1.0;
-	public final static Double OFF = 0.0;
-	public final static Double EPSILON = 0.2;
+	private final static Double ON = 1.0;
+	private final static Double OFF = 0.0;
+	private final static Double EPSILON = 0.2;
 
 	// FIXME (jan 10.03.2012) code duplication with NNTrainer
 	private static boolean isRamschGameWon(final GameSummary gameSummary, final Player currPlayer) {
