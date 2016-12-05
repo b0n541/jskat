@@ -17,14 +17,17 @@ package org.jskat.ai.nn.util;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.util.Arrays;
 
 import org.encog.ml.data.MLData;
 import org.encog.ml.data.MLDataSet;
 import org.encog.ml.data.basic.BasicMLData;
+import org.encog.ml.data.basic.BasicMLDataPair;
 import org.encog.ml.data.basic.BasicMLDataSet;
 import org.encog.neural.networks.BasicNetwork;
 import org.encog.neural.networks.PersistBasicNetwork;
-import org.encog.neural.networks.training.propagation.back.Backpropagation;
+import org.encog.neural.networks.training.propagation.resilient.RPROPType;
+import org.encog.neural.networks.training.propagation.resilient.ResilientPropagation;
 import org.encog.util.simple.EncogUtility;
 
 /**
@@ -33,7 +36,7 @@ import org.encog.util.simple.EncogUtility;
 public class EncogNetworkWrapper implements INeuralNetwork {
 
 	private BasicNetwork network;
-	private Backpropagation trainer;
+	private ResilientPropagation trainer;
 	private final PersistBasicNetwork networkPersister;
 
 	/**
@@ -45,19 +48,8 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	 *            TRUE, if bias nodes should be used
 	 */
 	public EncogNetworkWrapper(NetworkTopology topo, boolean useBias) {
-		// network = new BasicNetwork();
-		// network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias,
-		// topo.getInputNeuronCount()));
-		// for (int i = 0; i < topo.getHiddenLayerCount(); i++) {
-		// network.addLayer(new BasicLayer(new ActivationSigmoid(), useBias,
-		// topo.getHiddenNeuronCount(i)));
-		// }
-		// network.addLayer(new BasicLayer(new ActivationSigmoid(), false,
-		// topo.getOutputNeuronCount()));
-		// network.getStructure().finalizeStructure();
 		network = EncogUtility.simpleFeedForward(topo.getInputNeuronCount(), topo.getHiddenNeuronCount(0),
 				topo.getHiddenNeuronCount(1), topo.getOutputNeuronCount(), false);
-		network.reset();
 
 		networkPersister = new PersistBasicNetwork();
 	}
@@ -73,40 +65,28 @@ public class EncogNetworkWrapper implements INeuralNetwork {
 	@Override
 	public synchronized double adjustWeights(final double[] inputValues, final double[] outputValues) {
 
-		// MLDataSet trainingSet = new BasicMLDataSet(
-		// Arrays.asList(new BasicMLDataPair(new BasicMLData(inputValues), new
-		// BasicMLData(outputValues))));
-		//
-		// if (trainer == null) {
-		// // trainer = new ResilientPropagation(network, trainingSet);
-		// // trainer.setRPROPType(RPROPType.iRPROPp);
+		MLDataSet trainingSet = new BasicMLDataSet(
+				Arrays.asList(new BasicMLDataPair(new BasicMLData(inputValues), new BasicMLData(outputValues))));
+
+		trainer = new ResilientPropagation(network, trainingSet);
+		trainer.setRPROPType(RPROPType.iRPROPp);
 		// trainer = new Backpropagation(network, trainingSet);
-		// trainer.setBatchSize(1);
-		// } else {
-		// trainer.setTraining(trainingSet);
-		// }
-		//
-		// trainer.iteration();
-		//
-		// return trainer.getError();
-		return 0.0;
+		trainer.setBatchSize(1);
+
+		trainer.iteration();
+
+		return trainer.getError();
 	}
 
 	@Override
 	public synchronized double adjustWeightsBatch(final double[][] inputValues, final double[][] outputValues) {
 
 		MLDataSet trainingSet = new BasicMLDataSet(inputValues, outputValues);
-		// trainer = new ResilientPropagation(network, trainingSet);
-		// trainer.setRPROPType(RPROPType.iRPROPp);
-		//
-		// if (trainer == null) {
-		trainer = new Backpropagation(network, trainingSet);
+
+		trainer = new ResilientPropagation(network, trainingSet);
+		trainer.setRPROPType(RPROPType.iRPROPp);
+		// trainer = new Backpropagation(network, trainingSet);
 		trainer.setBatchSize(0);
-		//
-		// } else {
-		// trainer.setTraining(trainingSet);
-		// trainer.
-		// }
 
 		trainer.iteration();
 
