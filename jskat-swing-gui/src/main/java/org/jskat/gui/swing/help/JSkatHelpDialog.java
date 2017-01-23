@@ -69,8 +69,8 @@ public class JSkatHelpDialog extends JDialog {
 	/**
 	 * Creates new form JSkatHelpDialog
 	 *
-	 * @param parentFrame
-	 *            The parent JFrame
+	 * @param parent
+	 *            The parent {@link Component}
 	 * @param title
 	 *            Dialog title
 	 * @param contentPath
