@@ -17,6 +17,7 @@
 package org.jskat.gui.swing.help;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -37,7 +38,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -61,7 +61,7 @@ public class JSkatHelpDialog extends JDialog {
 
 	protected final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
 
-	private final JFrame parent;
+	private final Component parent;
 	private JScrollPane scrollPane;
 	private JTextPane textPane;
 	private final String contentURL;
@@ -76,14 +76,14 @@ public class JSkatHelpDialog extends JDialog {
 	 * @param contentPath
 	 *            Path to dialog content
 	 */
-	public JSkatHelpDialog(final JFrame parentFrame, final String title, final String contentPath) {
+	public JSkatHelpDialog(final Component parent, final String title, final String contentPath) {
 
-		super(parentFrame, true);
-
-		this.parent = parentFrame;
+		this.parent = parent;
 		this.contentURL = contentPath;
 		initComponents(title);
 		setLocationRelativeTo(this.parent);
+		setModal(true);
+		setModalityType(ModalityType.APPLICATION_MODAL);
 	}
 
 	/**
