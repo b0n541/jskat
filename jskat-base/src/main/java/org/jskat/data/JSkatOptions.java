@@ -17,6 +17,7 @@ package org.jskat.data;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -712,14 +713,22 @@ public final class JSkatOptions {
 	 */
 	public void saveJSkatProperties() {
 
-		FileWriter writer = null;
 		try {
-			writer = new FileWriter(getSavePath() + PROPERTIES_FILENAME);
+			FileWriter writer;
+			File dir = new File(getSavePath());
+			File file = new File(getSavePath() + PROPERTIES_FILENAME);
+			if (file.exists()) {
+				writer = new FileWriter(file);
+			} else {
+				if (!dir.exists()) {
+					dir.mkdirs();
+				}
+				file.createNewFile();
+				writer = new FileWriter(file);
+			}
 			options.store(writer, "JSkat options"); //$NON-NLS-1$
 			writer.close();
 			log.debug("Saved options with rules: " + getRules()); //$NON-NLS-1$
-		} catch (FileNotFoundException e1) {
-			log.warn("No properties file found. Saving of JSkat options failed."); //$NON-NLS-1$
 		} catch (IOException e) {
 			log.warn("Saving of JSkat options failed."); //$NON-NLS-1$
 			log.warn(e.toString());
