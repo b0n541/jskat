@@ -54,7 +54,7 @@ public class LookAndFeelSetter {
 			laf.getDefaults().put("nimbusBase", new Color(96, 65, 34)); //$NON-NLS-1$
 
 			if (ScreenResolution.isVeryBigScreen(targetScreen)) {
-				laf.getDefaults().put("defaultFont", new Font(Font.SANS_SERIF, 0, 18));
+				laf.getDefaults().put("defaultFont", new Font(Font.SANS_SERIF, 0, 14));
 			}
 
 			UIManager.setLookAndFeel(laf);

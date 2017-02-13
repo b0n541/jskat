@@ -1092,10 +1092,16 @@ public class SkatTablePanel extends AbstractTabPanel {
 	 * 
 	 * @param upperLeftPlayerName
 	 *            Upper left player name
+	 * @param isUpperLeftPlayerAIPlayer
+	 *            TRUE if the upper left player is an AI player
 	 * @param upperRightPlayerName
 	 *            Upper right player name
+	 * @param isUpperRightPlayerAIPlayer
+	 *            TRUE if the upper right player is an AI player
 	 * @param lowerPlayerName
 	 *            Lower player name
+	 * @param isLowerPlayerAIPlayer
+	 *            TRUE if the lower player is an AI player
 	 */
 	public void setPlayerNames(String upperLeftPlayerName, boolean isUpperLeftPlayerAIPlayer,
 			String upperRightPlayerName, boolean isUpperRightPlayerAIPlayer, String lowerPlayerName,

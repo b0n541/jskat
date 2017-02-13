@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2016 Jan Schäfer (jansch@users.sourceforge.net)
+ * Copyright (C) 2017 Jan Schäfer (jansch@users.sourceforge.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -701,7 +701,7 @@ public class SkatGame extends JSkatThread {
 			checkWaitCondition();
 		}
 
-		addSkatPointsToPlayerPoints(data.getLastTrickWinner());
+		addSkatPointsToPlayerPoints();
 
 		// set schneider/schwarz/jungfrau/durchmarsch flags
 		switch (this.data.getGameType()) {
@@ -800,24 +800,43 @@ public class SkatGame extends JSkatThread {
 				+ this.data.getPlayerPoints(Player.REARHAND));
 	}
 
-	private void addSkatPointsToPlayerPoints(Player lastTrickWinner) {
+	private void addSkatPointsToPlayerPoints() {
 		this.log.debug("Skat: " + this.data.getSkat());
 		if (this.data.getGameType() == GameType.RAMSCH) {
-			if (JSkatOptions.instance().getRamschSkatOwner() == RamschSkatOwner.LAST_TRICK) {
-				if (lastTrickWinner != null) {
-					this.log.debug(
-							"Skat cards (" + this.data.getSkat().getTotalValue() + " points) are added to player @ " //$NON-NLS-1$ //$NON-NLS-2$
-									+ lastTrickWinner + " (= last trick)"); //$NON-NLS-1$
-					this.data.addPlayerPoints(lastTrickWinner, this.data.getSkat().getTotalValue());
-				} else {
-					this.log.warn("Skat cards cannot be added to winner of final trick - trick winner is unknown"); //$NON-NLS-1$
-				}
-			}
+			addSkatPointsToPlayerPointsInRamschGames();
 		} else {
 			// for all the other games, points to the declarer
 			this.data.addPlayerPoints(this.data.getDeclarer(), this.data.getSkat().getTotalValue());
 		}
 		logPlayerPoints();
+	}
+
+	private void addSkatPointsToPlayerPointsInRamschGames() {
+		if (JSkatOptions.instance().getRamschSkatOwner() == RamschSkatOwner.LAST_TRICK) {
+			try {
+				Player lastTrickWinner = data.getLastTrickWinner();
+				if (lastTrickWinner != null) {
+					log.debug("Skat cards (" + data.getSkat().getTotalValue() + " points) are added to player @ " //$NON-NLS-1$ //$NON-NLS-2$
+							+ lastTrickWinner + " (= last trick)"); //$NON-NLS-1$
+					data.addPlayerPoints(lastTrickWinner, data.getSkat().getTotalValue());
+				}
+			} catch (IllegalArgumentException exception) {
+				// IllegalArgumentException can be thrown if a game was ended
+				// preliminary by a player playing Schwarz
+				this.log.warn("Skat cards cannot be added to winner of final trick - trick winner is unknown"); //$NON-NLS-1$
+			}
+		} else if (JSkatOptions.instance().getRamschSkatOwner() == RamschSkatOwner.LOSER) {
+			int maxPoints = -1;
+			Player looser = null;
+			for (Player player : Player.values()) {
+				int playerPoints = data.getPlayerPoints(player);
+				if (playerPoints > maxPoints) {
+					maxPoints = playerPoints;
+					looser = player;
+				}
+			}
+			data.addPlayerPoints(looser, data.getSkat().getTotalValue());
+		}
 	}
 
 	private void playCard(Player trickForeHand, Card firstTrickCard, Player currPlayer) {

@@ -386,7 +386,7 @@ public class JSkatViewImpl implements JSkatView {
 
 	@Subscribe
 	public void showAboutInformationDialogOn(final ShowAboutInformationCommand command) {
-		JOptionPane.showMessageDialog(null,
+		JOptionPane.showMessageDialog(mainPanel,
 				"JSkat " //$NON-NLS-1$
 						+ this.strings.getString("version") //$NON-NLS-1$
 						+ " " //$NON-NLS-1$
@@ -530,7 +530,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Subscribe
 	public void showHelpDialogOn(final ShowHelpCommand command) {
 
-		new JSkatHelpDialog(null, this.strings.getString("help"), //$NON-NLS-1$
+		new JSkatHelpDialog(mainPanel, this.strings.getString("help"), //$NON-NLS-1$
 				"org/jskat/gui/help/" + JSkatOptions.instance().getI18NCode() //$NON-NLS-1$
 						+ "/contents.html") //$NON-NLS-1$
 								.setVisible(true);
@@ -539,7 +539,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Subscribe
 	public void showLicenceDialogOn(final ShowLicenseCommand command) {
 
-		new JSkatHelpDialog(null, this.strings.getString("license"), //$NON-NLS-1$
+		new JSkatHelpDialog(mainPanel, this.strings.getString("license"), //$NON-NLS-1$
 				"org/jskat/gui/help/gpl3.html").setVisible(true); //$NON-NLS-1$
 	}
 
