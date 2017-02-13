@@ -150,7 +150,7 @@ public final class JSkatMenuFactory {
 
 		helpMenu.getItems().addAll(helpMenuItem, new SeparatorMenuItem(), licenseMenuItem, aboutMenuItem);
 
-		menuBar.getMenus().addAll(fileMenu, skatTableMenu, /* neuralNetworksMenu, */ issMenu, extrasMenu, helpMenu);
+		menuBar.getMenus().addAll(fileMenu, skatTableMenu, neuralNetworksMenu, issMenu, extrasMenu, helpMenu);
 
 		return menuBar;
 	}
