@@ -15,18 +15,31 @@
  */
 package org.jskat.ai.nn.input;
 
+import java.util.Set;
+
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
+import org.jskat.util.Player;
 
-public class OpponentPartyMadeCardsStrategy extends AbstractCardStrategy {
+/**
+ * This strategy tries to reveal the cards of the opponents hands at the
+ * beginning of the trick playing phase.
+ */
+public class OpponentPartyCardsStrategy extends AbstractCardStrategy {
 
 	@Override
 	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
 
 		double[] result = getEmptyInputs();
 
-		for (Card card : knowledge.getOpponentPartyMadeCards()) {
-			result[getNetworkInputIndex(card)] = ON;
+		Set<Player> opponents = knowledge.getOpponentPartyMembers();
+
+		for (Card card : Card.values()) {
+			for (Player member : opponents) {
+				if (knowledge.couldHaveCard(member, card) || knowledge.isCardPlayedBy(member, card)) {
+					result[getNetworkInputIndex(card)] = ON;
+				}
+			}
 		}
 
 		return result;
