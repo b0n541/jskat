@@ -32,12 +32,12 @@ public class GenericNetworkInputGenerator implements NetworkInputGenerator {
 
 	static {
 		strategies.add(new PlayerPartyCardsStrategy());
-		// strategies.add(new OpponentPartyCardsStrategy());
+		strategies.add(new OpponentPartyCardsStrategy());
 		strategies.add(new CurrentTrickAndNextCardStrategy());
 		strategies.add(new PlayerPartyMadeCardsAndNextCardStrategy());
-		// strategies.add(new OpponentPartyMadeCardsStrategy());
+		strategies.add(new OpponentPartyMadeCardsStrategy());
 		strategies.add(new UnplayedPlayerPartyCardsAndNextCardStrategy());
-		// strategies.add(new UnplayedOpponentPartyCardsStrategy());
+		strategies.add(new UnplayedOpponentPartyCardsStrategy());
 	}
 
 	@Override

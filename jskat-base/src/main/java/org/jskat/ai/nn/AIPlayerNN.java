@@ -79,7 +79,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		return ramschGameWon;
 	}
 
-	private final DecimalFormat formatter = new DecimalFormat("0.00"); //$NON-NLS-1$
+	private final DecimalFormat formatter = new DecimalFormat("0.0000"); //$NON-NLS-1$
 	private final GameSimulator2 gameSimulator2;
 
 	private final NetworkInputGenerator inputGenerator;
