@@ -21,3 +21,5 @@ So if you want to contribute to JSkat please create a feature branch from the `d
 towards the `develop` branch.
 
 [![Build Status](https://travis-ci.org/b0n541/jskat-multimodule.png?branch=master)](https://travis-ci.org/b0n541/jskat-multimodule)
+
+[![](https://codescene.io/projects/1209/status.svg) Get more details at **codescene.io**.](https://codescene.io/projects/1209/jobs/latest-successful/results)
