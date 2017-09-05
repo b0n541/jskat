@@ -17,6 +17,7 @@ package org.jskat.ai.nn;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,9 +55,9 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	private final static Double MIN_WON_RATE_FOR_DISCARDING = 0.75;
 	private final static Double MIN_WON_RATE_FOR_HAND_GAME = 0.95;
 
-	public final static Double IDEAL_WON = 1.0;
-	public final static Double IDEAL_LOST = 0.0;
-	public final static Double EPSILON = 0.2;
+	private final static Double ON = 1.0;
+	private final static Double OFF = 0.0;
+	private final static Double EPSILON = 0.1;
 
 	// FIXME (jan 10.03.2012) code duplication with NNTrainer
 	private static boolean isRamschGameWon(final GameSummary gameSummary, final Player currPlayer) {
@@ -78,19 +79,21 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		return ramschGameWon;
 	}
 
-	private final DecimalFormat formatter = new DecimalFormat("0.00000000000000000"); //$NON-NLS-1$
+	private final DecimalFormat formatter = new DecimalFormat("0.0000"); //$NON-NLS-1$
 	private final GameSimulator2 gameSimulator2;
 
 	private final NetworkInputGenerator inputGenerator;
 	private final static Random RANDOM = new Random();
 	private final List<double[]> allInputs = new ArrayList<>();
+	private final List<double[]> allOutputs = new ArrayList<>();
 
 	private GameType bestGameTypeFromDiscarding;
 	private boolean isLearning = false;
 
-	private double lastAvgNetworkError = 0.0;
+	private double lastAvgDeclarerNetworkError = 0.0;
+	private double lastAvgOpponentNetworkError = 0.0;
 
-	private final List<GameType> feasibleGameTypes = new ArrayList<GameType>();
+	private final List<GameType> feasibleGameTypes = new ArrayList<>();
 
 	/**
 	 * Constructor
@@ -199,7 +202,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		if (isLearning && allInputs.size() > 0) {
 			// adjust neural networks
 			// from last trick to first trick
-			adjustNeuralNetworks(allInputs);
+			adjustNeuralNetworks();
 		}
 	}
 
@@ -251,12 +254,21 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	}
 
 	/**
-	 * Gets the last average network error
+	 * Gets the last average network error for declarer network
 	 *
 	 * @return Last average network error
 	 */
-	public double getLastAvgNetworkError() {
-		return lastAvgNetworkError;
+	public double getLastAvgDeclarerNetworkError() {
+		return lastAvgDeclarerNetworkError;
+	}
+
+	/**
+	 * Gets the last average network error for opponent network
+	 *
+	 * @return Last average network error
+	 */
+	public double getLastAvgOpponentNetworkError() {
+		return lastAvgOpponentNetworkError;
 	}
 
 	/**
@@ -313,7 +325,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		log.debug("found " + possibleCards.size() + " possible cards: " //$NON-NLS-1$//$NON-NLS-2$
 				+ possibleCards);
 
-		final Map<Card, double[]> cardInputs = new HashMap<Card, double[]>();
+		final Map<Card, double[]> cardInputs = new HashMap<>();
+		final Map<Card, double[]> cardOutputs = new HashMap<>();
 
 		final INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGameAnnouncement().getGameType(), isDeclarer(),
 				knowledge.getCurrentTrick().getTrickNumberInGame());
@@ -326,20 +339,27 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 			final double[] inputs = inputGenerator.getNetInputs(knowledge, card);
 
-			cardInputs.put(card, inputs);
-			final Double currOutput = net.getPredictedOutcome(inputs);
-			log.warn("net output for card " + card + ": " //$NON-NLS-1$
-					+ formatter.format(currOutput));
+			log.debug(knowledge.toString());
+			log.debug("net input for card " + card + ": "
+					+ Arrays.toString(Arrays.stream(inputs).mapToInt(x -> Double.valueOf(x).intValue()).toArray()));
 
-			if (currOutput > (IDEAL_WON - EPSILON)) {
+			cardInputs.put(card, inputs);
+			final double[] currOutput = net.getPredictedOutcome(inputs);
+			cardOutputs.put(card, currOutput);
+			double wonSignal = currOutput[0];
+			double lostSignal = currOutput[1];
+			log.warn("net output for card " + card + ": won: " + formatter.format(wonSignal) + " lost: "
+					+ formatter.format(lostSignal));
+
+			if (wonSignal > (ON - EPSILON) && lostSignal < EPSILON) {
 				bestCards.add(card);
 			}
-			if (currOutput > highestOutput && !formatter.format(currOutput).equals(formatter.format(highestOutput))) {
-				highestOutput = currOutput;
+			if (wonSignal > highestOutput && !formatter.format(wonSignal).equals(formatter.format(highestOutput))) {
+				highestOutput = wonSignal;
 				highestOutputCards.clear();
 				highestOutputCards.add(card);
-			} else if (currOutput == highestOutput
-					|| formatter.format(currOutput).equals(formatter.format(highestOutput))) {
+			} else if (wonSignal == highestOutput
+					|| formatter.format(wonSignal).equals(formatter.format(highestOutput))) {
 				highestOutputCards.add(card);
 			}
 		}
@@ -364,7 +384,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 		// store parameters for the card to play
 		// for adjustment of weights after the game
-		storeInputParameters(cardInputs.get(possibleCards.get(bestCardIndex)));
+		storeInputOuputParameters(cardInputs.get(possibleCards.get(bestCardIndex)),cardOutputs.get(possibleCards.get(bestCardIndex)));
 
 		log.debug("choosing card " + bestCardIndex); //$NON-NLS-1$
 		log.debug("as player " + knowledge.getPlayerPosition() + ": " //$NON-NLS-1$//$NON-NLS-2$
@@ -385,6 +405,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	public void preparateForNewGame() {
 		bestGameTypeFromDiscarding = null;
 		allInputs.clear();
+		allOutputs.clear();
 	}
 
 	/**
@@ -405,47 +426,65 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		// CHECK Auto-generated method stub
 	}
 
-	private void adjustNeuralNetworks(final List<double[]> inputs) {
+	private void adjustNeuralNetworks() {
 
-		double output = 0.0d;
+		double[] output = { OFF, OFF };
 		if (!GameType.PASSED_IN.equals(knowledge.getGameType())) {
 			if (GameType.RAMSCH.equals(knowledge.getGameType())) {
 				if (isRamschGameWon(gameSummary, knowledge.getPlayerPosition())) {
-					output = IDEAL_WON;
+					output[0] = ON;
 				} else {
-					output = IDEAL_LOST;
+					output[1] = ON;
 				}
 			} else {
 				if (isDeclarer()) {
 					if (gameSummary.isGameWon()) {
-						output = IDEAL_WON;
+						output[0] = ON;
 					} else {
-						output = IDEAL_LOST;
+						output[1] = ON;
 					}
 				} else {
-					if (gameSummary.isGameWon()) {
-						output = IDEAL_LOST;
+					if (!gameSummary.isGameWon()) {
+						output[0] = ON;
 					} else {
-						output = IDEAL_WON;
+						output[1] = ON;
 					}
 				}
 			}
 
-			log.warn("Learning output: " + output);
+			log.warn("Learning output: " + Arrays.toString(output));
 
-			final double[][] inputsArray = new double[inputs.size()][];
-			final double[][] outputsArray = new double[inputs.size()][];
-			for (int i = 0; i < inputs.size(); i++) {
-				inputsArray[i] = inputs.get(i);
-				outputsArray[i] = new double[] { output };
+			for (double[] trickOutput : allOutputs) {
+				log.warn("   trick output: " + Arrays.toString(trickOutput));
 			}
 
-			final INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGameAnnouncement().getGameType(), isDeclarer(),
-					0);
+			final double[][] inputsArray = new double[allInputs.size()][];
+			final double[][] outputsArray = new double[allInputs.size()][];
+			for (int i = 0; i < allInputs.size(); i++) {
+				inputsArray[i] = allInputs.get(i);
+				outputsArray[i] = output;
+			}
+
+			final INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGameAnnouncement().getGameType(),
+					isDeclarer(), 0);
 			final double networkError = net.adjustWeightsBatch(inputsArray, outputsArray);
+			// double networkError = 0.0;
+			// for (int i = 0; i < inputs.size(); i++) {
+			// final INeuralNetwork net =
+			// SkatNetworks.getNetwork(knowledge.getGameAnnouncement().getGameType(),
+			// isDeclarer(), i);
+			// networkError += net.adjustWeights(inputsArray[i],
+			// outputsArray[i]);
+			// }
+			// networkError = networkError / inputs.size();
 
 			log.warn("learning error: " + networkError);
-			lastAvgNetworkError = networkError;
+
+			if (isDeclarer()) {
+				lastAvgDeclarerNetworkError = networkError;
+			} else {
+				lastAvgOpponentNetworkError = networkError;
+			}
 		}
 	}
 
@@ -459,7 +498,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	private List<GameType> filterFeasibleGameTypes(final int bidValue) {
 		// FIXME (jansch 14.09.2011) consider hand and ouvert games
 		// return game announcement instead
-		final List<GameType> result = new ArrayList<GameType>();
+		final List<GameType> result = new ArrayList<>();
 
 		final SkatGameData data = getGameDataForWonGame();
 
@@ -525,7 +564,8 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		return false;
 	}
 
-	private void storeInputParameters(final double[] inputParameters) {
+	private void storeInputOuputParameters(final double[] inputParameters, final double[] outputParameters) {
 		allInputs.add(inputParameters);
+		allOutputs.add(outputParameters);
 	}
 }

@@ -24,28 +24,23 @@ import org.jskat.util.Player;
 import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
 
-public class PlayerPartyMadeCardsAndNextCardStrategy extends
-		PlayerPartyMadeCardsStrategy {
+public class PlayerPartyMadeCardsAndNextCardStrategy extends PlayerPartyMadeCardsStrategy {
 
 	@Override
-	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge,
-			Card cardToPlay) {
+	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
 
 		double[] result = super.getNetworkInput(knowledge, cardToPlay);
 
 		Trick trick = (Trick) knowledge.getCurrentTrick().clone();
 
-		if (trick.getFirstCard() != null && trick.getSecondCard() != null
-				&& trick.getThirdCard() == null) {
+		if (trick.getFirstCard() != null && trick.getSecondCard() != null && trick.getThirdCard() == null) {
 
 			trick.setThirdCard(cardToPlay);
 
-			SkatRule rule = SkatRuleFactory.getSkatRules(knowledge
-					.getGameType());
-			Set<Player> partyMembers = getPlayerPartyMembers(knowledge);
+			SkatRule rule = SkatRuleFactory.getSkatRules(knowledge.getGameType());
+			Set<Player> partyMembers = knowledge.getPlayerPartyMembers();
 
-			if (partyMembers.contains(rule.calculateTrickWinner(
-					knowledge.getGameType(), trick))) {
+			if (partyMembers.contains(rule.calculateTrickWinner(knowledge.getGameType(), trick))) {
 				// trick was won by player's party
 				for (Card card : trick.getCardList()) {
 					result[getNetworkInputIndex(card)] = ON;

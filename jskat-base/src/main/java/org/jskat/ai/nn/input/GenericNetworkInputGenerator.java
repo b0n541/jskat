@@ -16,44 +16,53 @@
 package org.jskat.ai.nn.input;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class GenericNetworkInputGenerator implements NetworkInputGenerator {
+
+	private final static Logger LOG = LoggerFactory.getLogger(GenericNetworkInputGenerator.class);
 
 	private static final List<InputStrategy> strategies = new ArrayList<>();
 
 	static {
-		strategies.add(new DeclarerPositionInputStrategy());
-		strategies.add(new CurrentTrickForehandPositionStrategy());
-		strategies.add(new PlayerPositionInputStrategy());
-		strategies.add(new PlayerPartyMadeCardsAndNextCardStrategy());
-		strategies.add(new UnplayedPlayerPartyCardsAndNextCardStrategy());
-		strategies.add(new OpponentPartyMadeCardsStrategy());
-		strategies.add(new UnplayedOpponentPartyCardsStrategy());
+		strategies.add(new PlayerPartyCardsStrategy());
+		strategies.add(new OpponentPartyCardsStrategy());
 		strategies.add(new CurrentTrickAndNextCardStrategy());
+		strategies.add(new PlayerPartyMadeCardsAndNextCardStrategy());
+		strategies.add(new OpponentPartyMadeCardsStrategy());
+		strategies.add(new UnplayedPlayerPartyCardsAndNextCardStrategy());
+		strategies.add(new UnplayedOpponentPartyCardsStrategy());
 	}
 
 	@Override
-	public double[] getNetInputs(ImmutablePlayerKnowledge knowledge,
-			Card cardToPlay) {
+	public double[] getNetInputs(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
 
 		double[] result = new double[getNeuronCountForAllStrategies()];
 		int index = 0;
-		for (int strategyCount = 0; strategyCount < strategies
-				.size(); strategyCount++) {
+		for (int strategyCount = 0; strategyCount < strategies.size(); strategyCount++) {
 			InputStrategy strategy = strategies.get(strategyCount);
-			double[] networkInput = strategy.getNetworkInput(knowledge,
-					cardToPlay);
+			double[] networkInput = strategy.getNetworkInput(knowledge, cardToPlay);
 			for (int i = 0; i < strategy.getNeuronCount(); i++) {
 				result[index] = networkInput[i];
 				index++;
 			}
 		}
 
+		// LOG.warn(knowledge.toString());
+		// LOG.warn(convertToIntArray(result));
+		// LOG.warn(Arrays.toString(result));
+
 		return result;
+	}
+
+	private static String convertToIntArray(double[] result) {
+		return Arrays.toString(Arrays.stream(result).mapToInt(value -> (int) value).toArray());
 	}
 
 	/**

@@ -36,12 +36,10 @@ public class PlayerKnowledgeTest2 {
 
 	private PlayerKnowledge knowledge;
 
-	CardList playerCards = new CardList(Card.CJ, Card.SJ, Card.CA, Card.CT,
-			Card.C9, Card.SA, Card.ST, Card.S9, Card.HA, Card.HT);
-	CardList opponentCards = new CardList(Card.HJ, Card.DJ, Card.CK, Card.CQ,
-			Card.SK, Card.SQ, Card.HK, Card.HQ, Card.D8, Card.D9, Card.DT,
-			Card.C7, Card.C8, Card.S7, Card.S8, Card.H8, Card.H9, Card.DA,
-			Card.DK, Card.DQ);
+	CardList playerCards = new CardList(Card.CJ, Card.SJ, Card.CA, Card.CT, Card.C9, Card.SA, Card.ST, Card.S9, Card.HA,
+			Card.HT);
+	CardList opponentCards = new CardList(Card.HJ, Card.DJ, Card.CK, Card.CQ, Card.SK, Card.SQ, Card.HK, Card.HQ,
+			Card.D8, Card.D9, Card.DT, Card.C7, Card.C8, Card.S7, Card.S8, Card.H8, Card.H9, Card.DA, Card.DK, Card.DQ);
 	CardList skatCards = new CardList(Card.H7, Card.D7);
 
 	/**
@@ -187,12 +185,10 @@ public class PlayerKnowledgeTest2 {
 		knowledge.setCardPlayed(Player.MIDDLEHAND, Card.D9);
 
 		assertCardCouldBeNowhere(Card.D9);
-		assertCouldHaveCards(Player.MIDDLEHAND, Card.SK, Card.SQ, Card.S8,
-				Card.S7);
+		assertCouldHaveCards(Player.MIDDLEHAND, Card.SK, Card.SQ, Card.S8, Card.S7);
 
 		knowledge.setCardPlayed(Player.REARHAND, Card.CQ);
-		assertCouldHaveCards(Player.REARHAND, Card.SK, Card.SQ, Card.S8,
-				Card.S7);
+		assertCouldHaveCards(Player.REARHAND, Card.SK, Card.SQ, Card.S8, Card.S7);
 
 		assertCardCouldBeNowhere(Card.CQ);
 

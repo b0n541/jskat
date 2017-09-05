@@ -21,16 +21,14 @@ import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.Player;
 
-public class UnplayedPlayerPartyCardsStrategy extends
-		AbstractPlayerPartyCardStrategy {
+public class UnplayedPlayerPartyCardsStrategy extends AbstractCardStrategy {
 
 	@Override
-	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge,
-			Card cardToPlay) {
+	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
 
 		double[] result = getEmptyInputs();
 
-		Set<Player> partyMembers = getPlayerPartyMembers(knowledge);
+		Set<Player> partyMembers = knowledge.getPlayerPartyMembers();
 
 		for (Card card : Card.values()) {
 			for (Player member : partyMembers) {

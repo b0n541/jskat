@@ -53,24 +53,24 @@ public class ImmutablePlayerKnowledge {
 	 * Contains all cards played by the players
 	 */
 	// FIXME (markus 07.11.11.) why is this a "Set<Card>" instead of "CardList"?
-	protected final Map<Player, Set<Card>> playedCards = new HashMap<Player, Set<Card>>();
+	protected final Map<Player, Set<Card>> playedCards = new HashMap<>();
 
 	/**
 	 * Contains all cards that could be on a certain position
 	 */
 	// FIXME (markus 07.11.11.) why is this a "Set<Card>" instead of "CardList"?
-	protected final Map<Player, Set<Card>> possiblePlayerCards = new HashMap<Player, Set<Card>>();
+	protected final Map<Player, Set<Card>> possiblePlayerCards = new HashMap<>();
 
 	/**
 	 * Contains all cards that could be in the skat
 	 */
 	// FIXME (markus 07.11.11.) why is this a "Set<Card>" instead of "CardList"?
-	protected final Set<Card> possibleSkatCards = new HashSet<Card>();
+	protected final Set<Card> possibleSkatCards = new HashSet<>();
 
 	/**
 	 * Holds the highest bid every player has made during bidding
 	 */
-	protected final Map<Player, Integer> highestBid = new HashMap<Player, Integer>();
+	protected final Map<Player, Integer> highestBid = new HashMap<>();
 
 	/**
 	 * The current trick
@@ -115,7 +115,7 @@ public class ImmutablePlayerKnowledge {
 	/**
 	 * Holds trick information
 	 */
-	protected final List<Trick> tricks = new ArrayList<Trick>();
+	protected final List<Trick> tricks = new ArrayList<>();
 
 	/** Player cards */
 	protected final Set<Card> ownCards = new HashSet<>();
@@ -219,8 +219,7 @@ public class ImmutablePlayerKnowledge {
 					}
 				}
 				for (Rank r : Rank.values()) {
-					if (couldHaveCard(p, Card.getCard(getGameAnnouncement()
-							.getGameType().getTrumpSuit(), r))) {
+					if (couldHaveCard(p, Card.getCard(getGameAnnouncement().getGameType().getTrumpSuit(), r))) {
 						return true;
 					}
 				}
@@ -350,8 +349,7 @@ public class ImmutablePlayerKnowledge {
 	 *            TRUE, if Jacks should be included in the count
 	 * @return TRUE if the player could have any card of the suit
 	 */
-	public final int getPotentialSuitCount(final Player player,
-			final Suit suit, final boolean isTrump,
+	public final int getPotentialSuitCount(final Player player, final Suit suit, final boolean isTrump,
 			final boolean includeJacks) {
 		int result = 0;
 		for (Rank r : Rank.values()) {
@@ -490,8 +488,7 @@ public class ImmutablePlayerKnowledge {
 	 */
 	public final boolean isCardPlayed(final Card card) {
 
-		return playedCards.get(Player.FOREHAND).contains(card)
-				|| playedCards.get(Player.MIDDLEHAND).contains(card)
+		return playedCards.get(Player.FOREHAND).contains(card) || playedCards.get(Player.MIDDLEHAND).contains(card)
 				|| playedCards.get(Player.REARHAND).contains(card);
 	}
 
@@ -579,6 +576,62 @@ public class ImmutablePlayerKnowledge {
 		return schwarzAnnounced;
 	}
 
+	public Set<Player> getPlayerPartyMembers() {
+
+		Set<Player> result = new HashSet<>();
+		if (getDeclarer().equals(getPlayerPosition())) {
+			// player is declarer
+			result.add(getDeclarer());
+		} else {
+			// player is opponent
+			result.add(getDeclarer().getLeftNeighbor());
+			result.add(getDeclarer().getRightNeighbor());
+		}
+		return result;
+	}
+
+	public CardList getPlayerPartyMadeCards() {
+
+		CardList result = new CardList();
+		Set<Player> partyMembers = getPlayerPartyMembers();
+
+		for (Trick trick : getCompletedTricks()) {
+			if (partyMembers.contains(trick.getTrickWinner())) {
+				// trick was won by player's party
+				result.addAll(trick.getCardList());
+			}
+		}
+		return result;
+	}
+
+	public Set<Player> getOpponentPartyMembers() {
+
+		Set<Player> result = new HashSet<>();
+		if (getDeclarer().equals(getPlayerPosition())) {
+			// player is declarer
+			result.add(getDeclarer().getLeftNeighbor());
+			result.add(getDeclarer().getRightNeighbor());
+		} else {
+			// player is opponent
+			result.add(getDeclarer());
+		}
+		return result;
+	}
+
+	public CardList getOpponentPartyMadeCards() {
+
+		CardList result = new CardList();
+		Set<Player> opponents = getOpponentPartyMembers();
+
+		for (Trick trick : getCompletedTricks()) {
+			if (opponents.contains(trick.getTrickWinner())) {
+				// trick was won by opponent's party
+				result.addAll(trick.getCardList());
+			}
+		}
+		return result;
+	}
+
 	/**
 	 * @see Object#toString()
 	 */
@@ -587,6 +640,50 @@ public class ImmutablePlayerKnowledge {
 
 		StringBuffer result = new StringBuffer();
 
+		result.append("Player position: " + playerPosition + '\n');
+		result.append("Own cards:\n"); //$NON-NLS-1$
+		for (Suit suit : Suit.values()) {
+
+			result.append(suit.shortString()).append(": "); //$NON-NLS-1$
+
+			for (Rank rank : Rank.values()) {
+
+				if (isOwnCard(Card.getCard(suit, rank))) {
+
+					result.append(suit.shortString()).append(rank.shortString()).append(' ');
+				} else {
+
+					result.append("-- "); //$NON-NLS-1$
+				}
+			}
+
+			result.append('\n');
+		}
+
+		result.append("Could have cards:\n"); //$NON-NLS-1$
+		for (Player player : Player.values()) {
+
+			result.append("Player: " + player + '\n');
+
+			for (Suit suit : Suit.values()) {
+
+				result.append(suit.shortString()).append(": "); //$NON-NLS-1$
+
+				for (Rank rank : Rank.values()) {
+
+					if (couldHaveCard(player, Card.getCard(suit, rank))) {
+
+						result.append(suit.shortString()).append(rank.shortString()).append(' ');
+					} else {
+
+						result.append("-- "); //$NON-NLS-1$
+					}
+				}
+
+				result.append('\n');
+			}
+		}
+
 		result.append("Played cards:\n"); //$NON-NLS-1$
 		for (Suit suit : Suit.values()) {
 
@@ -594,15 +691,51 @@ public class ImmutablePlayerKnowledge {
 
 			for (Rank rank : Rank.values()) {
 
-				if (playedCards.get(Player.FOREHAND).contains(
-						Card.getCard(suit, rank))
-						|| playedCards.get(Player.MIDDLEHAND).contains(
-								Card.getCard(suit, rank))
-						|| playedCards.get(Player.REARHAND).contains(
-								Card.getCard(suit, rank))) {
+				if (playedCards.get(Player.FOREHAND).contains(Card.getCard(suit, rank))
+						|| playedCards.get(Player.MIDDLEHAND).contains(Card.getCard(suit, rank))
+						|| playedCards.get(Player.REARHAND).contains(Card.getCard(suit, rank))) {
 
-					result.append(suit.shortString())
-							.append(rank.shortString()).append(' ');
+					result.append(suit.shortString()).append(rank.shortString()).append(' ');
+				} else {
+
+					result.append("-- "); //$NON-NLS-1$
+				}
+			}
+
+			result.append('\n');
+		}
+
+		result.append("Player party made cards:\n");
+		CardList playerPartyMadeCards = getPlayerPartyMadeCards();
+		for (Suit suit : Suit.values()) {
+
+			result.append(suit.shortString()).append(": "); //$NON-NLS-1$
+
+			for (Rank rank : Rank.values()) {
+
+				if (playerPartyMadeCards.contains(Card.getCard(suit, rank))) {
+
+					result.append(suit.shortString()).append(rank.shortString()).append(' ');
+				} else {
+
+					result.append("-- "); //$NON-NLS-1$
+				}
+			}
+
+			result.append('\n');
+		}
+
+		result.append("Opponent party made cards:\n");
+		CardList opponentPartyMadeCards = getOpponentPartyMadeCards();
+		for (Suit suit : Suit.values()) {
+
+			result.append(suit.shortString()).append(": "); //$NON-NLS-1$
+
+			for (Rank rank : Rank.values()) {
+
+				if (opponentPartyMadeCards.contains(Card.getCard(suit, rank))) {
+
+					result.append(suit.shortString()).append(rank.shortString()).append(' ');
 				} else {
 
 					result.append("-- "); //$NON-NLS-1$

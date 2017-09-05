@@ -78,7 +78,7 @@ public class JSkatMaster {
 
 		this.issControl = new IssController(this);
 
-		this.runningNNTrainers = new ArrayList<NNTrainer>();
+		this.runningNNTrainers = new ArrayList<>();
 
 		JSkatEventBus.INSTANCE.register(this);
 	}
@@ -139,9 +139,9 @@ public class JSkatMaster {
 
 	/**
 	 * Gets the view implementation.
-	 * 
+	 *
 	 * @return The JSkat view implementation
-	 * 
+	 *
 	 * @deprecated Use only until event processing is completely implemented.
 	 */
 	@Deprecated

@@ -15,31 +15,18 @@
  */
 package org.jskat.ai.nn.input;
 
-import java.util.Set;
-
-import org.jskat.data.Trick;
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
-import org.jskat.util.Player;
 
-public class OpponentPartyMadeCardsStrategy extends
-		AbstractOpponentPartyCardStrategy {
+public class OpponentPartyMadeCardsStrategy extends AbstractCardStrategy {
 
 	@Override
-	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge,
-			Card cardToPlay) {
+	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
 
 		double[] result = getEmptyInputs();
 
-		Set<Player> opponents = getOpponentPartyMembers(knowledge);
-
-		for (Trick trick : knowledge.getCompletedTricks()) {
-			if (opponents.contains(trick.getTrickWinner())) {
-				// trick was won by opponent's party
-				for (Card card : trick.getCardList()) {
-					result[getNetworkInputIndex(card)] = ON;
-				}
-			}
+		for (Card card : knowledge.getOpponentPartyMadeCards()) {
+			result[getNetworkInputIndex(card)] = ON;
 		}
 
 		return result;

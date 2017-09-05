@@ -26,15 +26,19 @@ import org.jskat.ai.nn.util.EncogNetworkWrapper;
 import org.jskat.ai.nn.util.INeuralNetwork;
 import org.jskat.ai.nn.util.NetworkTopology;
 import org.jskat.util.GameType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Holds all neural networks for the NN player.
  */
 public final class SkatNetworks {
 
+	private static final Logger LOG = LoggerFactory.getLogger(SkatNetworks.class);
+
 	private static int INPUT_NEURONS = GenericNetworkInputGenerator.getNeuronCountForAllStrategies();
-	private static int OUTPUT_NEURONS = 1;
-	private static int HIDDEN_NEURONS = (INPUT_NEURONS + OUTPUT_NEURONS) * 2;
+	private static int OUTPUT_NEURONS = 2;
+	private static int[] HIDDEN_NEURONS = { INPUT_NEURONS * 2 + 1, 50 };
 
 	private static final boolean USE_BIAS = true;
 
@@ -46,7 +50,6 @@ public final class SkatNetworks {
 	 * Private constructor for singleton class.
 	 */
 	private SkatNetworks() {
-
 		createNetworks();
 		// loadNetworks();
 	}
@@ -95,8 +98,7 @@ public final class SkatNetworks {
 				for (int trick = 0; trick < 10; trick++) {
 					playerPartyNet.getValue().get(trick)
 							.loadNetwork("/org/jskat/ai/nn/data/jskat".concat("." + gameTypeNets.getKey())
-									.concat("." + playerPartyNet.getKey()).concat(".TRICK" + trick).concat(".nnet"),
-							INPUT_NEURONS, HIDDEN_NEURONS, OUTPUT_NEURONS);
+									.concat("." + playerPartyNet.getKey()).concat(".TRICK" + trick).concat(".nnet"));
 				}
 			}
 		}
@@ -143,20 +145,19 @@ public final class SkatNetworks {
 	}
 
 	private static void createNetworks() {
-		int[] hiddenLayer = { HIDDEN_NEURONS };
-		NetworkTopology topo = new NetworkTopology(INPUT_NEURONS, hiddenLayer, OUTPUT_NEURONS);
+		NetworkTopology topo = new NetworkTopology(INPUT_NEURONS, HIDDEN_NEURONS, OUTPUT_NEURONS);
 
-		networks = new HashMap<GameType, Map<PlayerParty, List<INeuralNetwork>>>();
+		networks = new HashMap<>();
 		for (GameType gameType : GameType.values()) {
 			networks.put(gameType, new HashMap<PlayerParty, List<INeuralNetwork>>());
 			for (PlayerParty playerParty : PlayerParty.values()) {
-				List<INeuralNetwork> networkList = new ArrayList<>();
-				networks.get(gameType).put(playerParty, networkList);
-				EncogNetworkWrapper network = new EncogNetworkWrapper(topo, USE_BIAS);
+				networks.get(gameType).put(playerParty, new ArrayList<INeuralNetwork>());
+				INeuralNetwork network = new EncogNetworkWrapper(topo, USE_BIAS);
 				for (int trick = 0; trick < 10; trick++) {
-					networkList.add(network);
+					networks.get(gameType).get(playerParty).add(network);
 				}
 			}
 		}
+		LOG.debug(networks.toString());
 	}
 }
