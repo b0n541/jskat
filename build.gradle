@@ -1,15 +1,15 @@
 plugins {
-	id "com.github.hierynomus.license" version "0.12.1"
-	id "com.github.johnrengelman.shadow" version "1.2.3"
+	id "com.github.hierynomus.license" version "0.14.0"
+	id "com.github.johnrengelman.shadow" version "2.0.0"
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.0'
+    gradleVersion = '4.2'
 }
 
 apply plugin: 'application'
 
-version = '0.16.0'
+version = '0.17.0'
 
 allprojects {
 	repositories {
