@@ -42,7 +42,7 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	/**
 	 * Maximum error between calculated output and desired result.
 	 */
-	private static final double MAX_ERROR = 0.1;
+	private static final double MAX_ERROR = 0.2;
 
 	/**
 	 * Minimum iterations for network learning
@@ -63,10 +63,10 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	public void testXORDirectOnlineTraining() {
 
 		// Create a neural network, using the utility.
-		BasicNetwork network = EncogUtility.simpleFeedForward(2, 3, 0, 1, false);
+		final BasicNetwork network = EncogUtility.simpleFeedForward(2, 3, 0, 1, false);
 
 		// Create training data.
-		MLDataSet trainingSet = new BasicMLDataSet(XOR_INPUT, XOR_IDEAL);
+		final MLDataSet trainingSet = new BasicMLDataSet(XOR_INPUT, XOR_IDEAL);
 
 		// Train the neural network.
 		final Backpropagation train = new Backpropagation(network, trainingSet);
@@ -79,8 +79,7 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 		if (train.getIteration() > MAX_ITERATIONS) {
 			fail("Needed more than " + MAX_ITERATIONS + " iterations: " + train.getIteration() + ". Error: "
 					+ train.getError());
-		}
-		else if (train.getIteration() < MIN_ITERATIONS) {
+		} else if (train.getIteration() < MIN_ITERATIONS) {
 			fail("Needed too few iterations: " + train.getIteration());
 		}
 	}
@@ -89,10 +88,10 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	public void testXORDirectBatchTraining() {
 
 		// Create a neural network, using the utility.
-		BasicNetwork network = EncogUtility.simpleFeedForward(2, 3, 0, 1, false);
+		final BasicNetwork network = EncogUtility.simpleFeedForward(2, 3, 0, 1, false);
 
 		// Create training data.
-		MLDataSet trainingSet = new BasicMLDataSet(XOR_INPUT, XOR_IDEAL);
+		final MLDataSet trainingSet = new BasicMLDataSet(XOR_INPUT, XOR_IDEAL);
 
 		// Train the neural network.
 		final Backpropagation train = new Backpropagation(network, trainingSet);
@@ -114,11 +113,11 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	public void testXORDirectResilientTraining() {
 
 		// Create a neural network, using the utility.
-		BasicNetwork network = EncogUtility.simpleFeedForward(2, 3, 0, 1, false);
+		final BasicNetwork network = EncogUtility.simpleFeedForward(2, 3, 0, 1, false);
 		network.reset();
 
 		// Create training data.
-		MLDataSet trainingSet = new BasicMLDataSet(XOR_INPUT, XOR_IDEAL);
+		final MLDataSet trainingSet = new BasicMLDataSet(XOR_INPUT, XOR_IDEAL);
 
 		// Train the neural network.
 		final ResilientPropagation train = new ResilientPropagation(network, trainingSet);
@@ -142,9 +141,9 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	@Test
 	public final void testXORWrapperBatch() {
 
-		int[] hiddenNeurons = { 3, 0 };
-		NetworkTopology topo = new NetworkTopology(2, hiddenNeurons, 1);
-		INeuralNetwork network = new EncogNetworkWrapper(topo, true);
+		final int[] hiddenNeurons = { 3, 0 };
+		final NetworkTopology topo = new NetworkTopology(2, hiddenNeurons, 1);
+		final INeuralNetwork network = new EncogNetworkWrapper(topo, true);
 		network.resetNetwork();
 
 		double error = 1000.0;
@@ -175,9 +174,9 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	@Test
 	public final void testXORWrapperOnline() {
 
-		int[] hiddenNeurons = { 3, 0 };
-		NetworkTopology topo = new NetworkTopology(2, hiddenNeurons, 1);
-		INeuralNetwork network = new EncogNetworkWrapper(topo, true);
+		final int[] hiddenNeurons = { 3, 0 };
+		final NetworkTopology topo = new NetworkTopology(2, hiddenNeurons, 1);
+		final INeuralNetwork network = new EncogNetworkWrapper(topo, true);
 		network.resetNetwork();
 
 		double error = 1000.0;
