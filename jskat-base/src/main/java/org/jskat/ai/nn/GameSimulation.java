@@ -47,12 +47,13 @@ class GameSimulation {
 	private final JSkatPlayer player2;
 	private final JSkatPlayer player3;
 
-	GameSimulation(GameType gameType, Player playerPosition, CardList playerCards) {
+	GameSimulation(final GameType gameType, final Player playerPosition, final CardList playerCards) {
 
 		this(gameType, playerPosition, playerCards, new CardList());
 	}
 
-	GameSimulation(GameType gameType, Player playerPosition, CardList playerCards, CardList skatCards) {
+	GameSimulation(final GameType gameType, final Player playerPosition, final CardList playerCards,
+			final CardList skatCards) {
 
 		this.gameType = gameType;
 		this.playerPosition = playerPosition;
@@ -64,20 +65,20 @@ class GameSimulation {
 		player3 = new AIPlayerNN(NOPLogger.NOP_LOGGER);
 	}
 
-	SkatGameResult simulateGame(String tableName) {
+	SkatGameResult simulateGame(final String tableName) {
 
-		SkatGame game = new SkatGame(tableName, GameVariant.STANDARD, player1, player2, player3);
+		final SkatGame game = new SkatGame(tableName, GameVariant.STANDARD, player1, player2, player3);
 		game.setView(new NullView());
 		game.setLogger(NOPLogger.NOP_LOGGER);
 
-		CardDeck deck = CardDeckSimulator.simulateUnknownCards(playerPosition, playerCards, skatCards);
+		final CardDeck deck = CardDeckSimulator.simulateUnknownCards(playerPosition, playerCards, skatCards);
 		LOG.debug("Simulated card deck: " + deck); //$NON-NLS-1$
 		game.setCardDeck(deck);
 		game.dealCards();
 
 		game.setDeclarer(playerPosition);
 
-		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+		final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 		factory.setGameType(gameType);
 		game.setGameAnnouncement(factory.getAnnouncement());
 
@@ -86,14 +87,14 @@ class GameSimulation {
 		game.start();
 		try {
 			game.join();
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
 		// FIXME (jansch 28.06.2011) have to call getGameResult() for result
 		// calculation
-		SkatGameResult gameResult = game.getGameResult();
+		final SkatGameResult gameResult = game.getGameResult();
 
 		statistics.adjust(gameResult);
 
@@ -156,7 +157,7 @@ class GameSimulation {
 		private double wonRateWithSchwarz;
 		private final SynchronizedDescriptiveStatistics declarerPointsStats = new SynchronizedDescriptiveStatistics();
 
-		void adjust(SkatGameResult gameResult) {
+		void adjust(final SkatGameResult gameResult) {
 			episodes++;
 			if (gameResult.isWon()) {
 				wonGames++;
