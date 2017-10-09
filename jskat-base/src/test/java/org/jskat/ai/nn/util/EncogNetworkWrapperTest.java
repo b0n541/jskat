@@ -143,7 +143,7 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 
 		final int[] hiddenNeurons = { 3, 0 };
 		final NetworkTopology topo = new NetworkTopology(2, hiddenNeurons, 1);
-		final INeuralNetwork network = new EncogNetworkWrapper(topo, true);
+		final NeuralNetwork network = new EncogNetworkWrapper(topo, true);
 		network.resetNetwork();
 
 		double error = 1000.0;
@@ -176,7 +176,7 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 
 		final int[] hiddenNeurons = { 3, 0 };
 		final NetworkTopology topo = new NetworkTopology(2, hiddenNeurons, 1);
-		final INeuralNetwork network = new EncogNetworkWrapper(topo, true);
+		final NeuralNetwork network = new EncogNetworkWrapper(topo, true);
 		network.resetNetwork();
 
 		double error = 1000.0;

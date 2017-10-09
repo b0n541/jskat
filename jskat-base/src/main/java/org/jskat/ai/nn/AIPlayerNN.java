@@ -27,7 +27,7 @@ import org.jskat.ai.AbstractAIPlayer;
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.input.GenericNetworkInputGenerator;
 import org.jskat.ai.nn.input.NetworkInputGenerator;
-import org.jskat.ai.nn.util.INeuralNetwork;
+import org.jskat.ai.nn.util.NeuralNetwork;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary;
@@ -328,7 +328,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		final Map<Card, double[]> cardInputs = new HashMap<>();
 		final Map<Card, double[]> cardOutputs = new HashMap<>();
 
-		final INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGameAnnouncement().getGameType(), isDeclarer(),
+		final NeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGameAnnouncement().getGameType(), isDeclarer(),
 				knowledge.getCurrentTrick().getTrickNumberInGame());
 
 		final CardList bestCards = new CardList();
@@ -465,7 +465,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 				outputsArray[i] = output;
 			}
 
-			final INeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGameAnnouncement().getGameType(),
+			final NeuralNetwork net = SkatNetworks.getNetwork(knowledge.getGameAnnouncement().getGameType(),
 					isDeclarer(), 0);
 			final double networkError = net.adjustWeightsBatch(inputsArray, outputsArray);
 			// double networkError = 0.0;

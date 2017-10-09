@@ -15,7 +15,7 @@
  */
 package org.jskat.ai.nn.util;
 
-public interface INeuralNetwork {
+public interface NeuralNetwork {
 
 	/**
 	 * Gets the average difference of all output neurons

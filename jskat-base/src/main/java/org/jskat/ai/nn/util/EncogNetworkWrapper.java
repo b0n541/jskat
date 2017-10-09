@@ -31,9 +31,9 @@ import org.encog.neural.networks.training.propagation.resilient.ResilientPropaga
 import org.encog.util.simple.EncogUtility;
 
 /**
- * Wraps the Encog network to fulfill the interface {@link INeuralNetwork}
+ * Wraps the Encog network to fulfill the interface {@link NeuralNetwork}
  */
-public class EncogNetworkWrapper implements INeuralNetwork {
+public class EncogNetworkWrapper implements NeuralNetwork {
 
 	private BasicNetwork network;
 	private ResilientPropagation trainer;
