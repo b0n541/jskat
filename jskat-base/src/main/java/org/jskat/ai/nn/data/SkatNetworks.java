@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.jskat.ai.nn.input.GenericNetworkInputGenerator;
+import org.jskat.ai.nn.util.DeepLearning4JNetworkWrapper;
 import org.jskat.ai.nn.util.EncogNetworkWrapper;
 import org.jskat.ai.nn.util.NeuralNetwork;
 import org.jskat.ai.nn.util.NetworkTopology;
@@ -152,7 +153,8 @@ public final class SkatNetworks {
 			networks.put(gameType, new HashMap<PlayerParty, List<NeuralNetwork>>());
 			for (PlayerParty playerParty : PlayerParty.values()) {
 				networks.get(gameType).put(playerParty, new ArrayList<NeuralNetwork>());
-				NeuralNetwork network = new EncogNetworkWrapper(topo, USE_BIAS);
+				//NeuralNetwork network = new EncogNetworkWrapper(topo, USE_BIAS);
+				NeuralNetwork network = new DeepLearning4JNetworkWrapper(topo, USE_BIAS);
 				for (int trick = 0; trick < 10; trick++) {
 					networks.get(gameType).get(playerParty).add(network);
 				}

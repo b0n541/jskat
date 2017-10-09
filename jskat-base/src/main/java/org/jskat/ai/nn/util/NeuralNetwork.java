@@ -18,13 +18,6 @@ package org.jskat.ai.nn.util;
 public interface NeuralNetwork {
 
 	/**
-	 * Gets the average difference of all output neurons
-	 *
-	 * @return Average difference
-	 */
-	double getAvgDiff();
-
-	/**
 	 * Adjusts the weights of the net.
 	 *
 	 * @param inputs

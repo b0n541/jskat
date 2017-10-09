@@ -54,14 +54,6 @@ public class EncogNetworkWrapper implements NeuralNetwork {
 		networkPersister = new PersistBasicNetwork();
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public double getAvgDiff() {
-		return 0.0;
-	}
-
 	@Override
 	public synchronized double adjustWeights(final double[] inputValues, final double[] outputValues) {
 
