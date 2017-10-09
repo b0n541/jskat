@@ -15,7 +15,7 @@
  */
 package org.jskat.control.event;
 
-import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
@@ -166,7 +166,7 @@ public class TrickCardPlayedEventTest extends AbstractJSkatTest {
 
 	private void assertHand(CardList hand, Card... cards) {
 		assertThat(hand.size(), is(cards.length));
-		assertThat(hand, hasItems(cards));
+		assertThat(hand, containsInAnyOrder(cards));
 	}
 
 	@Test

@@ -52,7 +52,7 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 	/**
 	 * Maximum iterations for network learning
 	 */
-	private static final int MAX_ITERATIONS = 2000;
+	private static final int MAX_ITERATIONS = 5000;
 
 	/**
 	 * Logger.
