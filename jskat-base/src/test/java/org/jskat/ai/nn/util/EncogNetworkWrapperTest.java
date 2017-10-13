@@ -15,6 +15,9 @@
  */
 package org.jskat.ai.nn.util;
 
+import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
@@ -154,6 +157,8 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 			iteration++;
 		}
 
+		assertThat(error < MAX_ERROR, is(true));
+
 		if (iteration == MAX_ITERATIONS) {
 			fail("Needed more than " + MAX_ITERATIONS + " iterations: " + iteration + ". Error: " + error);
 		} else if (iteration < MIN_ITERATIONS) {
@@ -166,6 +171,8 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 						+ " Predicted output: " + network.getPredictedOutcome(XOR_INPUT[n]));
 			}
 		}
+
+		checkNetwork(network);
 	}
 
 	/**
@@ -189,6 +196,8 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 			iteration++;
 		}
 
+		assertThat(error < MAX_ERROR, is(true));
+
 		if (iteration == MAX_ITERATIONS) {
 			fail("Needed more than " + MAX_ITERATIONS + " iterations: " + iteration + ". Error: " + error);
 		} else if (iteration < MIN_ITERATIONS) {
@@ -200,6 +209,14 @@ public class EncogNetworkWrapperTest extends AbstractJSkatTest {
 				log.info("Input: " + XOR_INPUT[n][0] + " " + XOR_INPUT[n][1] + " Expected output: " + XOR_IDEAL[n][0]
 						+ " Predicted output: " + Arrays.toString(network.getPredictedOutcome(XOR_INPUT[n])));
 			}
+		}
+
+		checkNetwork(network);
+	}
+
+	private void checkNetwork(final NeuralNetwork network) {
+		for (int i = 0; i < XOR_INPUT.length; i++) {
+			assertThat(network.getPredictedOutcome(XOR_INPUT[i])[0], closeTo(XOR_IDEAL[i][0], MAX_ERROR));
 		}
 	}
 }

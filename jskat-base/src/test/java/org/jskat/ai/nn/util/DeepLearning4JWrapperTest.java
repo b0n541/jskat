@@ -15,6 +15,9 @@
  */
 package org.jskat.ai.nn.util;
 
+import static org.hamcrest.Matchers.closeTo;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
@@ -52,6 +55,43 @@ public class DeepLearning4JWrapperTest {
 	private static final Logger log = LoggerFactory.getLogger(EncogNetworkWrapperTest.class);
 
 	/**
+	 * Tests the NetworkWrapper with an XOR example and batch training.
+	 */
+	@Test
+	public final void testXORWrapperBatch() {
+
+		final int[] hiddenNeurons = { 3, 0 };
+		final NetworkTopology topo = new NetworkTopology(2, hiddenNeurons, 1);
+		final NeuralNetwork network = new EncogNetworkWrapper(topo, true);
+		network.resetNetwork();
+
+		double error = 1000.0;
+		int iteration = 0;
+
+		while (error > MAX_ERROR && iteration < MAX_ITERATIONS * 2) {
+			error = network.adjustWeightsBatch(XOR_INPUT, XOR_IDEAL);
+			iteration++;
+		}
+
+		assertThat(error < MAX_ERROR, is(true));
+
+		if (iteration == MAX_ITERATIONS) {
+			fail("Needed more than " + MAX_ITERATIONS + " iterations: " + iteration + ". Error: " + error);
+		} else if (iteration < MIN_ITERATIONS) {
+			fail("Needed too few iterations: " + iteration);
+		} else {
+			log.info("Needed " + iteration + " iterations to learn.");
+			log.info("Testing network:");
+			for (int n = 0; n < XOR_INPUT.length; n++) {
+				log.info("Input: " + XOR_INPUT[n][0] + " " + XOR_INPUT[n][1] + " Expected output: " + XOR_IDEAL[n][0]
+						+ " Predicted output: " + network.getPredictedOutcome(XOR_INPUT[n]));
+			}
+		}
+
+		checkNetwork(network);
+	}
+
+	/**
 	 * Tests the NetworkWrapper with an XOR example and online training.
 	 */
 	@Test
@@ -72,6 +112,8 @@ public class DeepLearning4JWrapperTest {
 			iteration++;
 		}
 
+		assertThat(error < MAX_ERROR, is(true));
+
 		if (iteration == MAX_ITERATIONS) {
 			fail("Needed more than " + MAX_ITERATIONS + " iterations: " + iteration + ". Error: " + error);
 		} else if (iteration < MIN_ITERATIONS) {
@@ -84,6 +126,13 @@ public class DeepLearning4JWrapperTest {
 						+ " Predicted output: " + Arrays.toString(network.getPredictedOutcome(XOR_INPUT[n])));
 			}
 		}
+
+		checkNetwork(network);
 	}
 
+	private void checkNetwork(final NeuralNetwork network) {
+		for (int i = 0; i < XOR_INPUT.length; i++) {
+			assertThat(network.getPredictedOutcome(XOR_INPUT[i])[0], closeTo(XOR_IDEAL[i][0], MAX_ERROR));
+		}
+	}
 }
