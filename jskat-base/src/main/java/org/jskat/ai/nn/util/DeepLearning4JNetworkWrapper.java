@@ -19,7 +19,6 @@ import org.deeplearning4j.nn.api.OptimizationAlgorithm;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.distribution.UniformDistribution;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
-import org.deeplearning4j.nn.conf.layers.DenseLayer.Builder;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
@@ -35,6 +34,7 @@ import org.nd4j.linalg.factory.Nd4j;
 public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 
 	private final MultiLayerNetwork net;
+	private final NetworkTopology topo;
 
 	/**
 	 * Constructor
@@ -45,6 +45,8 @@ public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 	 *            TRUE, if bias nodes should be used
 	 */
 	public DeepLearning4JNetworkWrapper(final NetworkTopology topo, final boolean useBias) {
+
+		this.topo = topo;
 
 		final NeuralNetConfiguration.Builder networkBuilder = new NeuralNetConfiguration.Builder()
 				.iterations(1)
@@ -65,11 +67,12 @@ public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 		layerIndex++;
 		for (int i = 0; i < topo.getHiddenLayerCount() - 1; i++) {
 
-			final Builder hiddenLayerBuilder = new DenseLayer.Builder().nIn(topo.getHiddenNeuronCount(i));
-			hiddenLayerBuilder.nOut(topo.getHiddenNeuronCount(i)).activation(Activation.SIGMOID);
-			hiddenLayerBuilder.weightInit(WeightInit.DISTRIBUTION).dist(new UniformDistribution(-1, 1));
-
-			layerBuilder.layer(layerIndex, hiddenLayerBuilder.build());
+			layerBuilder.layer(layerIndex, new DenseLayer.Builder()
+					.nIn(topo.getHiddenNeuronCount(i))
+					.nOut(topo.getHiddenNeuronCount(i + 1))
+					.activation(Activation.SIGMOID)
+					.weightInit(WeightInit.DISTRIBUTION)
+					.dist(new UniformDistribution(-1, 1)).build());
 			layerIndex++;
 		}
 
@@ -81,9 +84,10 @@ public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 				.weightInit(WeightInit.DISTRIBUTION)
 				.dist(new UniformDistribution(-1, 1));
 
-		layerBuilder.layer(layerIndex, outputLayerBuilder.build());
+		layerBuilder.layer(layerIndex, outputLayerBuilder.build()).backprop(true);
 
 		net = new MultiLayerNetwork(layerBuilder.build());
+		net.printConfiguration();
 		net.init();
 	}
 
@@ -102,7 +106,7 @@ public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 
 		net.fit(new DataSet(input, output));
 
-		return net.score();
+		return net.gradientAndScore().getValue();
 	}
 
 	@Override
@@ -125,7 +129,7 @@ public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 
 		net.fit(new DataSet(input, output));
 
-		return net.score();
+		return net.gradientAndScore().getValue();
 	}
 
 	@Override
@@ -136,8 +140,8 @@ public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 	@Override
 	public double[] getPredictedOutcome(final double[] inputs) {
 		final INDArray output = net.output(Nd4j.create(inputs));
-		final double[] result = new double[output.shape()[0]];
-		for (int i = 0; i < output.shape()[0]; i++) {
+		final double[] result = new double[output.length()];
+		for (int i = 0; i < output.length(); i++) {
 			result[i] = output.getDouble(i);
 		}
 		return result;
