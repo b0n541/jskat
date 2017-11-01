@@ -47,17 +47,17 @@ import org.slf4j.Logger;
  */
 public class AIPlayerNN extends AbstractAIPlayer {
 
-	private final static Long MAX_SIMULATIONS_DISCARDING = 2000L;
-	private final static Long MAX_TIME_DISCARDING = 5000L;
-	private final static Long MAX_SIMULATIONS_BIDDING = 100L;
-	private final static Long MAX_SIMULATIONS_HAND_GAME = 500L;
-	private final static Double MIN_WON_RATE_FOR_BIDDING = 0.6;
-	private final static Double MIN_WON_RATE_FOR_DISCARDING = 0.75;
-	private final static Double MIN_WON_RATE_FOR_HAND_GAME = 0.95;
+	private final static long MAX_SIMULATIONS_DISCARDING = 2000L;
+	private final static long MAX_TIME_DISCARDING = 5000L;
+	private final static long MAX_SIMULATIONS_BIDDING = 100L;
+	private final static long MAX_SIMULATIONS_HAND_GAME = 500L;
+	private final static double MIN_WON_RATE_FOR_BIDDING = 0.6;
+	private final static double MIN_WON_RATE_FOR_DISCARDING = 0.75;
+	private final static double MIN_WON_RATE_FOR_HAND_GAME = 0.95;
 
-	private final static Double ON = 1.0;
-	private final static Double OFF = 0.0;
-	private final static Double EPSILON = 0.1;
+	private final static double ON = 1.0;
+	private final static double OFF = -1.0;
+	private final static double EPSILON = 0.2;
 
 	// FIXME (jan 10.03.2012) code duplication with NNTrainer
 	private static boolean isRamschGameWon(final GameSummary gameSummary, final Player currPlayer) {
@@ -79,7 +79,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		return ramschGameWon;
 	}
 
-	private final DecimalFormat formatter = new DecimalFormat("0.0000"); //$NON-NLS-1$
+	private final DecimalFormat formatter = new DecimalFormat("0.0000000"); //$NON-NLS-1$
 	private final GameSimulator2 gameSimulator2;
 
 	private final NetworkInputGenerator inputGenerator;
@@ -322,7 +322,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 		// first find all possible cards
 		final CardList possibleCards = getPlayableCards(knowledge.getTrickCards());
 
-		log.debug("found " + possibleCards.size() + " possible cards: " //$NON-NLS-1$//$NON-NLS-2$
+		log.info("found " + possibleCards.size() + " possible cards: " //$NON-NLS-1$//$NON-NLS-2$
 				+ possibleCards);
 
 		final Map<Card, double[]> cardInputs = new HashMap<>();
@@ -333,7 +333,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 		final CardList bestCards = new CardList();
 		final CardList highestOutputCards = new CardList();
-		Double highestOutput = Double.NEGATIVE_INFINITY;
+		double highestOutput = Double.NEGATIVE_INFINITY;
 		for (final Card card : possibleCards) {
 			log.debug("Testing card " + card); //$NON-NLS-1$
 
@@ -346,15 +346,17 @@ public class AIPlayerNN extends AbstractAIPlayer {
 			cardInputs.put(card, inputs);
 			final double[] currOutput = net.getPredictedOutcome(inputs);
 			cardOutputs.put(card, currOutput);
-			double wonSignal = currOutput[0];
-			double lostSignal = currOutput[1];
-			log.warn("net output for card " + card + ": won: " + formatter.format(wonSignal) + " lost: "
-					+ formatter.format(lostSignal));
+			final double wonSignal = currOutput[0];
+			final double lostSignal = currOutput[1];
+
+			log.warn("net output for card " + card + ":" +
+					" won: " + formatter.format(wonSignal) +
+					" lost: " + formatter.format(lostSignal));
 
 			if (wonSignal > (ON - EPSILON) && lostSignal < EPSILON) {
 				bestCards.add(card);
-			}
-			if (wonSignal > highestOutput && !formatter.format(wonSignal).equals(formatter.format(highestOutput))) {
+			} else if (wonSignal > highestOutput
+					&& !formatter.format(wonSignal).equals(formatter.format(highestOutput))) {
 				highestOutput = wonSignal;
 				highestOutputCards.clear();
 				highestOutputCards.add(card);
@@ -371,20 +373,25 @@ public class AIPlayerNN extends AbstractAIPlayer {
 					+ ": Found best cards. Choosing random from " //$NON-NLS-1$
 					+ bestCards.size() + " out of " + possibleCards.size() + ": " //$NON-NLS-1$ //$NON-NLS-2$
 					+ possibleCards.get(bestCardIndex));
-		} else {
+		} else if (highestOutputCards.size() > 0) {
 			// no best card, get card with best output
 			bestCardIndex = chooseRandomCard(possibleCards, highestOutputCards);
 			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) //$NON-NLS-1$
 					+ ": Found no best cards. Choosing card from " //$NON-NLS-1$
 					+ highestOutputCards.size() + " out of " + possibleCards.size() + " with highest output: "
 					+ possibleCards.get(bestCardIndex));
+		} else {
 			// no best card, get random card out of all cards
-			// bestCardIndex = chooseRandomCard(possibleCards, possibleCards);
+			bestCardIndex = chooseRandomCard(possibleCards, possibleCards);
+			log.warn("Trick " + (knowledge.getNoOfTricks() + 1) //$NON-NLS-1$
+					+ ": Found no highest output card. Choosing random card: "
+					+ possibleCards.get(bestCardIndex));
 		}
 
 		// store parameters for the card to play
 		// for adjustment of weights after the game
-		storeInputOuputParameters(cardInputs.get(possibleCards.get(bestCardIndex)),cardOutputs.get(possibleCards.get(bestCardIndex)));
+		storeInputOuputParameters(cardInputs.get(possibleCards.get(bestCardIndex)),
+				cardOutputs.get(possibleCards.get(bestCardIndex)));
 
 		log.debug("choosing card " + bestCardIndex); //$NON-NLS-1$
 		log.debug("as player " + knowledge.getPlayerPosition() + ": " //$NON-NLS-1$//$NON-NLS-2$
@@ -428,7 +435,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 	private void adjustNeuralNetworks() {
 
-		double[] output = { OFF, OFF };
+		final double[] output = { OFF, OFF };
 		if (!GameType.PASSED_IN.equals(knowledge.getGameType())) {
 			if (GameType.RAMSCH.equals(knowledge.getGameType())) {
 				if (isRamschGameWon(gameSummary, knowledge.getPlayerPosition())) {
@@ -454,7 +461,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 
 			log.warn("Learning output: " + Arrays.toString(output));
 
-			for (double[] trickOutput : allOutputs) {
+			for (final double[] trickOutput : allOutputs) {
 				log.warn("   trick output: " + Arrays.toString(trickOutput));
 			}
 

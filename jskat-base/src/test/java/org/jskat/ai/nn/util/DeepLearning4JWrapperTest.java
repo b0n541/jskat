@@ -22,6 +22,7 @@ import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 
+import org.jskat.AbstractJSkatTest;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -30,7 +31,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Tests for using neural networks with the DeepLearning4J library.
  */
-public class DeepLearning4JWrapperTest {
+public class DeepLearning4JWrapperTest extends AbstractJSkatTest {
 
 	private static final double XOR_INPUT[][] = { { 0.0, 0.0 }, { 1.0, 0.0 }, { 0.0, 1.0 }, { 1.0, 1.0 } };
 	private static final double XOR_IDEAL[][] = { { 0.0, 1.0 }, { 1.0, 0.0 }, { 1.0, 0.0 }, { 0.0, 1.0 } };
@@ -79,7 +80,7 @@ public class DeepLearning4JWrapperTest {
 			iteration++;
 		}
 
-		assertThat(error < MAX_ERROR, is(true));
+		assertThat("error " + error + " should be less than " + MAX_ERROR, error < MAX_ERROR, is(true));
 
 		if (iteration == MAX_ITERATIONS) {
 			fail("Needed more than " + MAX_ITERATIONS + " iterations: " + iteration + ". Error: " + error);
@@ -89,8 +90,9 @@ public class DeepLearning4JWrapperTest {
 			log.info("Needed " + iteration + " iterations to learn.");
 			log.info("Testing network:");
 			for (int n = 0; n < XOR_INPUT.length; n++) {
-				log.info("Input: " + XOR_INPUT[n][0] + " " + XOR_INPUT[n][1] + " Expected output: " + XOR_IDEAL[n][0]
-						+ " Predicted output: " + network.getPredictedOutcome(XOR_INPUT[n]));
+				log.info("Input: " + XOR_INPUT[n][0] + " " + XOR_INPUT[n][1] +
+						" Expected output: " + XOR_IDEAL[n][0] + " " + XOR_IDEAL[n][1] +
+						" Predicted output: " + Arrays.toString(network.getPredictedOutcome(XOR_INPUT[n])));
 			}
 		}
 
@@ -138,6 +140,7 @@ public class DeepLearning4JWrapperTest {
 	}
 
 	private void checkNetwork(final NeuralNetwork network) {
+
 		for (int i = 0; i < XOR_INPUT.length; i++) {
 			final double[] predictedOutCome = network.getPredictedOutcome(XOR_INPUT[i]);
 			for (int j = 0; j < 2; j++) {

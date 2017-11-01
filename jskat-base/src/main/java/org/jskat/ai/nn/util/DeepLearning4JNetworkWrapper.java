@@ -15,17 +15,22 @@
  */
 package org.jskat.ai.nn.util;
 
+import org.deeplearning4j.api.storage.StatsStorage;
 import org.deeplearning4j.nn.api.OptimizationAlgorithm;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
-import org.deeplearning4j.nn.conf.distribution.UniformDistribution;
+import org.deeplearning4j.nn.conf.Updater;
 import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
+import org.deeplearning4j.ui.api.UIServer;
+import org.deeplearning4j.ui.stats.StatsListener;
+import org.deeplearning4j.ui.storage.InMemoryStatsStorage;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.linalg.lossfunctions.LossFunctions;
 
 /**
  * Wraps the DeepLearning4J network to fulfill the interface
@@ -35,6 +40,9 @@ public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 
 	private final MultiLayerNetwork net;
 	private final NetworkTopology topo;
+
+	private static final double LOWER_DIST_BOUND = -0.1;
+	private static final double UPPER_DIST_BOUND = 0.1;
 
 	/**
 	 * Constructor
@@ -50,10 +58,16 @@ public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 
 		final NeuralNetConfiguration.Builder networkBuilder = new NeuralNetConfiguration.Builder()
 				.iterations(1)
-				.weightInit(WeightInit.XAVIER)
 				.optimizationAlgo(OptimizationAlgorithm.STOCHASTIC_GRADIENT_DESCENT)
+				.activation(Activation.RELU)
+				.weightInit(WeightInit.XAVIER)
 				.learningRate(0.05)
-				.miniBatch(false);
+				.miniBatch(false)
+				.updater(Updater.NESTEROVS);
+
+		if (useBias) {
+			networkBuilder.biasInit(0.1).biasLearningRate(0.01);
+		}
 
 		final NeuralNetConfiguration.ListBuilder layerBuilder = new NeuralNetConfiguration.ListBuilder(networkBuilder);
 
@@ -61,38 +75,56 @@ public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 		layerBuilder.layer(layerIndex, new DenseLayer.Builder()
 				.nIn(topo.getInputNeuronCount())
 				.nOut(topo.getHiddenNeuronCount(0))
-				.activation(Activation.SIGMOID)
-				.weightInit(WeightInit.DISTRIBUTION)
-				.dist(new UniformDistribution(-1, 1)).build());
+				.activation(Activation.RELU)
+				.weightInit(WeightInit.XAVIER)
+				.build());
 		layerIndex++;
 		for (int i = 0; i < topo.getHiddenLayerCount() - 1; i++) {
 
 			layerBuilder.layer(layerIndex, new DenseLayer.Builder()
 					.nIn(topo.getHiddenNeuronCount(i))
 					.nOut(topo.getHiddenNeuronCount(i + 1))
-					.activation(Activation.SIGMOID)
-					.weightInit(WeightInit.DISTRIBUTION)
-					.dist(new UniformDistribution(-1, 1)).build());
+					.activation(Activation.RELU)
+					.weightInit(WeightInit.XAVIER)
+					.build());
 			layerIndex++;
 		}
 
-		final OutputLayer.Builder outputLayerBuilder = new OutputLayer.Builder();
-		outputLayerBuilder
+		layerBuilder.layer(layerIndex, new OutputLayer.Builder(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
 				.nIn(topo.getHiddenNeuronCount(topo.getHiddenLayerCount() - 1))
 				.nOut(topo.getOutputNeuronCount())
 				.activation(Activation.SOFTMAX)
-				.weightInit(WeightInit.DISTRIBUTION)
-				.dist(new UniformDistribution(-1, 1));
+				.weightInit(WeightInit.XAVIER)
+				.build());
 
-		layerBuilder.layer(layerIndex, outputLayerBuilder.build()).backprop(true);
+		layerBuilder.backprop(true);
 
 		net = new MultiLayerNetwork(layerBuilder.build());
 		net.printConfiguration();
 		net.init();
+
+		// Initialize the user interface backend
+		final UIServer uiServer = UIServer.getInstance();
+
+		// Configure where the network information (gradients, score vs. time etc) is to
+		// be stored. Here: store in memory.
+		final StatsStorage statsStorage = new InMemoryStatsStorage(); // Alternative: new FileStatsStorage(File), for
+																		// saving and loading later
+
+		// Attach the StatsStorage instance to the UI: this allows the contents of the
+		// StatsStorage to be visualized
+		uiServer.attach(statsStorage);
+
+		// Then add the StatsListener to collect this information from the network, as
+		// it trains
+		final StatsListener statsListener = new StatsListener(statsStorage);
+		statsListener.setSessionID(statsListener.getSessionID() + "Blubb");
+		net.setListeners(statsListener);
+
 	}
 
 	@Override
-	public double adjustWeights(final double[] inputs, final double[] outputs) {
+	public synchronized double adjustWeights(final double[] inputs, final double[] outputs) {
 
 		final INDArray input = Nd4j.zeros(1, inputs.length);
 		final INDArray output = Nd4j.zeros(1, outputs.length);
@@ -110,7 +142,7 @@ public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 	}
 
 	@Override
-	public double adjustWeightsBatch(final double[][] inputs, final double[][] outputs) {
+	public synchronized double adjustWeightsBatch(final double[][] inputs, final double[][] outputs) {
 
 		final INDArray input = Nd4j.zeros(inputs.length, inputs[0].length);
 		final INDArray output = Nd4j.zeros(outputs.length, outputs[0].length);
@@ -133,12 +165,12 @@ public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 	}
 
 	@Override
-	public void resetNetwork() {
+	public synchronized void resetNetwork() {
 		net.init();
 	}
 
 	@Override
-	public double[] getPredictedOutcome(final double[] inputs) {
+	public synchronized double[] getPredictedOutcome(final double[] inputs) {
 		final INDArray output = net.output(Nd4j.create(inputs));
 		final double[] result = new double[output.length()];
 		for (int i = 0; i < output.length(); i++) {
@@ -148,18 +180,18 @@ public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 	}
 
 	@Override
-	public long getIterations() {
+	public synchronized long getIterations() {
 		return net.getLayerWiseConfigurations().getIterationCount();
 	}
 
 	@Override
-	public boolean saveNetwork(final String fileName) {
+	public synchronized boolean saveNetwork(final String fileName) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void loadNetwork(final String fileName) {
+	public synchronized void loadNetwork(final String fileName) {
 		// TODO Auto-generated method stub
 	}
 }

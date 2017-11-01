@@ -47,7 +47,7 @@ public class EncogNetworkWrapper implements NeuralNetwork {
 	 * @param useBias
 	 *            TRUE, if bias nodes should be used
 	 */
-	public EncogNetworkWrapper(NetworkTopology topo, boolean useBias) {
+	public EncogNetworkWrapper(final NetworkTopology topo, final boolean useBias) {
 		network = EncogUtility.simpleFeedForward(topo.getInputNeuronCount(), topo.getHiddenNeuronCount(0),
 				topo.getHiddenNeuronCount(1), topo.getOutputNeuronCount(), false);
 
@@ -57,7 +57,7 @@ public class EncogNetworkWrapper implements NeuralNetwork {
 	@Override
 	public synchronized double adjustWeights(final double[] inputValues, final double[] outputValues) {
 
-		MLDataSet trainingSet = new BasicMLDataSet(
+		final MLDataSet trainingSet = new BasicMLDataSet(
 				Arrays.asList(new BasicMLDataPair(new BasicMLData(inputValues), new BasicMLData(outputValues))));
 
 		trainer = new ResilientPropagation(network, trainingSet);
@@ -73,7 +73,7 @@ public class EncogNetworkWrapper implements NeuralNetwork {
 	@Override
 	public synchronized double adjustWeightsBatch(final double[][] inputValues, final double[][] outputValues) {
 
-		MLDataSet trainingSet = new BasicMLDataSet(inputValues, outputValues);
+		final MLDataSet trainingSet = new BasicMLDataSet(inputValues, outputValues);
 
 		trainer = new ResilientPropagation(network, trainingSet);
 		trainer.setRPROPType(RPROPType.iRPROPp);
@@ -98,7 +98,7 @@ public class EncogNetworkWrapper implements NeuralNetwork {
 	 */
 	@Override
 	public synchronized double[] getPredictedOutcome(final double[] inputValues) {
-		MLData output = network.compute(new BasicMLData(inputValues));
+		final MLData output = network.compute(new BasicMLData(inputValues));
 		return output.getData();
 	}
 
@@ -106,7 +106,7 @@ public class EncogNetworkWrapper implements NeuralNetwork {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public long getIterations() {
+	public synchronized long getIterations() {
 		return 0;
 	}
 
@@ -117,7 +117,7 @@ public class EncogNetworkWrapper implements NeuralNetwork {
 	public synchronized boolean saveNetwork(final String fileName) {
 		try {
 			networkPersister.save(new FileOutputStream(fileName), network);
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

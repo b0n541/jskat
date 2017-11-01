@@ -59,7 +59,7 @@ public class NNTrainer extends JSkatThread {
 
 	static {
 		PLAYER_TYPES.add(NEURAL_NETWORK_PLAYER_CLASS);
-		//PLAYER_TYPES.add(RANDOM_PLAYER_CLASS);
+		// PLAYER_TYPES.add(RANDOM_PLAYER_CLASS);
 		// PLAYER_TYPES.add(ALGORITHMIC_PLAYER_CLASS);
 	}
 
@@ -95,17 +95,17 @@ public class NNTrainer extends JSkatThread {
 	 * @param isStopTraining
 	 *            TRUE, if the training should be stopped
 	 */
-	public void stopTraining(boolean isStopTraining) {
+	public void stopTraining(final boolean isStopTraining) {
 		this.stopTraining = isStopTraining;
 		JSkatEventBus.INSTANCE.post(new RemoveTableCommand(JSkatViewType.TRAINING_TABLE, "TRAIN" + gameType.name()));
 	}
 
-	private JSkatPlayer createPlayer(String playerType) {
+	private JSkatPlayer createPlayer(final String playerType) {
 
-		JSkatPlayer player = JSkatMaster.INSTANCE.createPlayer(playerType);
+		final JSkatPlayer player = JSkatMaster.INSTANCE.createPlayer(playerType);
 
 		if (NEURAL_NETWORK_PLAYER_CLASS.equals(playerType)) {
-			AIPlayerNN nnPlayer = (AIPlayerNN) player;
+			final AIPlayerNN nnPlayer = (AIPlayerNN) player;
 			nnPlayer.setIsLearning(true);
 			nnPlayer.setLogger(NOPLogger.NOP_LOGGER);
 		}
@@ -133,14 +133,14 @@ public class NNTrainer extends JSkatThread {
 		player1.newGame(Player.FOREHAND);
 		player2.newGame(Player.MIDDLEHAND);
 		player3.newGame(Player.REARHAND);
-		SkatGame game = new SkatGame("TRAIN" + gameType.name(), GameVariant.STANDARD, player1, player2, player3);
+		final SkatGame game = new SkatGame("TRAIN" + gameType.name(), GameVariant.STANDARD, player1, player2, player3);
 		game.setView(new NullView());
 		game.setLogger(NOPLogger.NOP_LOGGER);
 
 		if (cardDeck != null) {
 			game.setCardDeck(cardDeck);
 		} else {
-			CardDeck newCardDeck = new CardDeck();
+			final CardDeck newCardDeck = new CardDeck();
 			newCardDeck.shuffle();
 			log.debug("Card deck: " + newCardDeck); //$NON-NLS-1$
 			game.setCardDeck(newCardDeck);
@@ -152,9 +152,9 @@ public class NNTrainer extends JSkatThread {
 			game.setDeclarer(declarer);
 		}
 
-		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+		final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 		factory.setGameType(this.gameType);
-		GameAnnouncement announcement = factory.getAnnouncement();
+		final GameAnnouncement announcement = factory.getAnnouncement();
 		game.setGameAnnouncement(announcement);
 
 		player1.startGame(declarer, announcement);
@@ -169,7 +169,7 @@ public class NNTrainer extends JSkatThread {
 		game.start();
 		try {
 			game.join();
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -185,7 +185,7 @@ public class NNTrainer extends JSkatThread {
 		double declarerAvgNetworkError = 0.0;
 		double opponentAvgNetworkError = 0.0;
 
-		List<List<String>> playerPermutations = createPlayerPermutations(PLAYER_TYPES);
+		final List<List<String>> playerPermutations = createPlayerPermutations(PLAYER_TYPES);
 
 		while (!this.stopTraining /* && totalGames < MAX_TRAINING_EPISODES */) {
 
@@ -204,15 +204,15 @@ public class NNTrainer extends JSkatThread {
 				}
 			}
 
-			for (List<String> playerConstellation : playerPermutations) {
+			for (final List<String> playerConstellation : playerPermutations) {
 
-				for (Player declarer : Player.values()) {
-					JSkatPlayer player1 = createPlayer(playerConstellation.get(0));
-					JSkatPlayer player2 = createPlayer(playerConstellation.get(1));
-					JSkatPlayer player3 = createPlayer(playerConstellation.get(2));
+				for (final Player declarer : Player.values()) {
+					final JSkatPlayer player1 = createPlayer(playerConstellation.get(0));
+					final JSkatPlayer player2 = createPlayer(playerConstellation.get(1));
+					final JSkatPlayer player3 = createPlayer(playerConstellation.get(2));
 
-					SkatGame game = prepareGame(player1, player2, player3, declarer, null);
-					// SkatGame game = prepareGame(player1, player2, player3,
+					final SkatGame game = prepareGame(player1, player2, player3, declarer, null);
+					// final SkatGame game = prepareGame(player1, player2, player3,
 					// Player.FOREHAND,
 					// CardDeck.getPerfectDistribution());
 
@@ -255,18 +255,18 @@ public class NNTrainer extends JSkatThread {
 		}
 	}
 
-	static List<List<String>> createPlayerPermutations(List<String> playerTypes) {
+	static List<List<String>> createPlayerPermutations(final List<String> playerTypes) {
 
-		List<List<String>> result = new ArrayList<>();
+		final List<List<String>> result = new ArrayList<>();
 
-		for (String player1 : playerTypes) {
-			for (String player2 : playerTypes) {
-				for (String player3 : playerTypes) {
+		for (final String player1 : playerTypes) {
+			for (final String player2 : playerTypes) {
+				for (final String player3 : playerTypes) {
 
 					if (NEURAL_NETWORK_PLAYER_CLASS.equals(player1) || NEURAL_NETWORK_PLAYER_CLASS.equals(player2)
 							|| NEURAL_NETWORK_PLAYER_CLASS.equals(player3)) {
 
-						List<String> playerPermutation = new ArrayList<>();
+						final List<String> playerPermutation = new ArrayList<>();
 						playerPermutation.add(player1);
 						playerPermutation.add(player2);
 						playerPermutation.add(player3);
@@ -284,10 +284,10 @@ public class NNTrainer extends JSkatThread {
 	private static boolean isRamschGameWon(final GameSummary gameSummary, final Player currPlayer) {
 
 		boolean ramschGameWon = false;
-		int playerPoints = gameSummary.getPlayerPoints(currPlayer);
+		final int playerPoints = gameSummary.getPlayerPoints(currPlayer);
 		int highestPlayerPoints = 0;
-		for (Player player : Player.values()) {
-			int currPlayerPoints = gameSummary.getPlayerPoints(player);
+		for (final Player player : Player.values()) {
+			final int currPlayerPoints = gameSummary.getPlayerPoints(player);
 
 			if (currPlayerPoints > highestPlayerPoints) {
 				highestPlayerPoints = currPlayerPoints;
