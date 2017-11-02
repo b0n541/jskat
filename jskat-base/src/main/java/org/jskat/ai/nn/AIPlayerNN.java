@@ -56,7 +56,7 @@ public class AIPlayerNN extends AbstractAIPlayer {
 	private final static double MIN_WON_RATE_FOR_HAND_GAME = 0.95;
 
 	private final static double ON = 1.0;
-	private final static double OFF = -1.0;
+	private final static double OFF = 0.0;
 	private final static double EPSILON = 0.2;
 
 	// FIXME (jan 10.03.2012) code duplication with NNTrainer
