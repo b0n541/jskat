@@ -61,7 +61,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Controls a skat game.
  */
-public class SkatGame extends JSkatThread {
+public class SkatGame {
 
 	private Logger log = LoggerFactory.getLogger(SkatGame.class);
 	private int maxSleep;
@@ -94,7 +94,6 @@ public class SkatGame extends JSkatThread {
 			final JSkatPlayer newMiddleHand, final JSkatPlayer newRearHand) {
 
 		this.tableName = newTableName;
-		setName("SkatGame on table " + this.tableName); //$NON-NLS-1$
 		data = new SkatGameData();
 		JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(data);
 
@@ -118,8 +117,7 @@ public class SkatGame extends JSkatThread {
 	 */
 	// FIXME jan 11.07.2013: this method is too long, break it down to smaller
 	// methods or implement it in another way
-	@Override
-	public void run() {
+	public SkatGameResult run() {
 
 		this.view.setGameState(this.tableName, this.data.getGameState());
 
@@ -232,8 +230,7 @@ public class SkatGame extends JSkatThread {
 				break;
 			}
 
-			checkWaitCondition();
-		} while (this.data.getGameState() != GameState.GAME_OVER && !isTerminated());
+		} while (this.data.getGameState() != GameState.GAME_OVER);
 
 		JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).unregister(data);
 
@@ -242,6 +239,8 @@ public class SkatGame extends JSkatThread {
 		for (SkatGameEvent event : data.getGameMoves()) {
 			log.debug(event.toString());
 		}
+
+		return getGameResult();
 	}
 
 	private void contraRe() {
@@ -697,8 +696,6 @@ public class SkatGame extends JSkatThread {
 			if (data.isGameFinished()) {
 				break;
 			}
-
-			checkWaitCondition();
 		}
 
 		addSkatPointsToPlayerPoints();
@@ -997,7 +994,7 @@ public class SkatGame extends JSkatThread {
 
 		if (milliseconds > 0) {
 			try {
-				sleep(milliseconds);
+				Thread.sleep(milliseconds);
 			} catch (final InterruptedException e) {
 				this.log.warn("sleep was interrupted..."); //$NON-NLS-1$
 			}

@@ -15,9 +15,12 @@
  */
 package org.jskat.ai.nn;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.command.table.CreateTableCommand;
@@ -54,17 +57,21 @@ class GameSimulator {
 
 		SimulationResults results = new SimulationResults();
 
+		List<CompletableFuture<Void>> futures = new ArrayList<>();
 		for (GameSimulationThread thread : simThreads.values()) {
-			thread.startSimulationWithMaxEpidodes(maxEpisodes);
+
+			futures.add(CompletableFuture.runAsync(() -> thread.startSimulationWithMaxEpidodes(maxEpisodes)));
 		}
-		for (GameSimulationThread thread : simThreads.values()) {
-			try {
-				thread.join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+		CompletableFuture<Void> combinedFuture = CompletableFuture
+				.allOf(futures.toArray(new CompletableFuture[futures.size()]));
+		try {
+			combinedFuture.get();
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
+
 		for (GameSimulationThread thread : simThreads.values()) {
 			results.setWonRate(thread.getGameType(), thread.getWonRate());
 		}

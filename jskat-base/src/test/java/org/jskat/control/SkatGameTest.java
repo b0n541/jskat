@@ -20,7 +20,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -29,6 +28,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import org.eclipse.jetty.util.log.Log;
 import org.jskat.AbstractJSkatTest;
@@ -39,7 +40,6 @@ import org.jskat.ai.test.PlayNonPossessingCardTestPlayer;
 import org.jskat.ai.test.PlayNotAllowedCardTestPlayer;
 import org.jskat.ai.test.RamschTestPlayer;
 import org.jskat.ai.test.UnitTestPlayer;
-import org.jskat.data.DesktopSavePathResolver;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary;
@@ -90,13 +90,11 @@ public class SkatGameTest extends AbstractJSkatTest {
 	}
 
 	private void runGame(SkatGame game) {
-		game.start();
 		try {
-			game.join();
-		} catch (InterruptedException e) {
-			System.out.println("InterruptedException during game run...");
+			CompletableFuture.runAsync(() -> game.run()).get();
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
-			fail();
 		}
 	}
 
@@ -170,8 +168,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 	}
 
 	/**
-	 * When no player bids, game is passed in even the options for playing
-	 * ramsch are set but the active ruleset is ISPA rules
+	 * When no player bids, game is passed in even the options for playing ramsch
+	 * are set but the active ruleset is ISPA rules
 	 */
 	@Test
 	public void testPassIn_NoBids2() {
@@ -373,7 +371,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 		assertTrue(gameResult.isSchwarz());
 		assertThat(
 				gameResult.getFinalDeclarerPoints()
-						+ gameResult.getFinalOpponentPoints(), is(120));
+						+ gameResult.getFinalOpponentPoints(),
+				is(120));
 	}
 
 	@Test
@@ -392,7 +391,8 @@ public class SkatGameTest extends AbstractJSkatTest {
 		assertTrue(gameResult.isSchwarz());
 		assertThat(
 				gameResult.getFinalDeclarerPoints()
-						+ gameResult.getFinalOpponentPoints(), is(120));
+						+ gameResult.getFinalOpponentPoints(),
+				is(120));
 	}
 
 	@Test

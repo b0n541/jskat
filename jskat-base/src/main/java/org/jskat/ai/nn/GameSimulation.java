@@ -15,6 +15,9 @@
  */
 package org.jskat.ai.nn;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 import org.apache.commons.math3.stat.descriptive.SynchronizedDescriptiveStatistics;
 import org.jskat.control.SkatGame;
 import org.jskat.data.GameAnnouncement;
@@ -84,17 +87,13 @@ class GameSimulation {
 
 		game.setGameState(GameState.TRICK_PLAYING);
 
-		game.start();
+		SkatGameResult gameResult = null;
 		try {
-			game.join();
-		} catch (final InterruptedException e) {
+			gameResult = CompletableFuture.supplyAsync(() -> game.run()).get();
+		} catch (InterruptedException | ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		// FIXME (jansch 28.06.2011) have to call getGameResult() for result
-		// calculation
-		final SkatGameResult gameResult = game.getGameResult();
 
 		statistics.adjust(gameResult);
 

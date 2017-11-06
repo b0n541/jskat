@@ -17,11 +17,12 @@ package org.jskat.ai.nn.train;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import org.jskat.ai.nn.AIPlayerNN;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
-import org.jskat.control.JSkatThread;
 import org.jskat.control.SkatGame;
 import org.jskat.control.command.table.CreateTableCommand;
 import org.jskat.control.command.table.RemoveTableCommand;
@@ -31,6 +32,7 @@ import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary;
 import org.jskat.data.JSkatViewType;
 import org.jskat.data.SkatGameData.GameState;
+import org.jskat.data.SkatGameResult;
 import org.jskat.gui.NullView;
 import org.jskat.player.JSkatPlayer;
 import org.jskat.util.CardDeck;
@@ -44,7 +46,7 @@ import org.slf4j.helpers.NOPLogger;
 /**
  * Trains the neural networks.
  */
-public class NNTrainer extends JSkatThread {
+public class NNTrainer {
 
 	private static Logger log = LoggerFactory.getLogger(NNTrainer.class);
 
@@ -67,10 +69,6 @@ public class NNTrainer extends JSkatThread {
 
 	private boolean stopTraining = false;
 
-	/**
-	 * @see java.lang.Thread#run()
-	 */
-	@Override
 	public void run() {
 
 		trainNets();
@@ -85,7 +83,6 @@ public class NNTrainer extends JSkatThread {
 	public void setGameType(final GameType newGameType) {
 
 		this.gameType = newGameType;
-		setName("NNTrainer for " + this.gameType); //$NON-NLS-1$
 		JSkatEventBus.INSTANCE.post(new CreateTableCommand(JSkatViewType.TRAINING_TABLE, "TRAIN" + gameType.name()));
 	}
 
@@ -166,10 +163,9 @@ public class NNTrainer extends JSkatThread {
 	}
 
 	private void runGame(final SkatGame game) {
-		game.start();
 		try {
-			game.join();
-		} catch (final InterruptedException e) {
+			SkatGameResult result = new CompletableFuture<>().supplyAsync(() -> game.run()).get();
+		} catch (InterruptedException | ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -250,8 +246,6 @@ public class NNTrainer extends JSkatThread {
 					totalGames++;
 				}
 			}
-
-			checkWaitCondition();
 		}
 	}
 

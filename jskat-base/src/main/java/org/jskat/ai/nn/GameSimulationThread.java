@@ -15,11 +15,14 @@
  */
 package org.jskat.ai.nn;
 
-import org.jskat.control.JSkatThread;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 import org.jskat.control.SkatGame;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData.GameState;
+import org.jskat.data.SkatGameResult;
 import org.jskat.gui.NullView;
 import org.jskat.util.CardDeck;
 import org.jskat.util.CardList;
@@ -33,7 +36,7 @@ import org.slf4j.helpers.NOPLogger;
 /**
  * Helper class for simulating games
  */
-class GameSimulationThread extends JSkatThread {
+class GameSimulationThread {
 
 	private static Logger log = LoggerFactory.getLogger(GameSimulationThread.class);
 
@@ -55,7 +58,6 @@ class GameSimulationThread extends JSkatThread {
 	GameSimulationThread(final GameType pGameType, final Player playerPosition, final CardList playerHandCards,
 			final CardList skatCards) {
 
-		setName(pGameType.name());
 		gameType = pGameType;
 		position = playerPosition;
 		cards = new CardList(playerHandCards);
@@ -74,16 +76,11 @@ class GameSimulationThread extends JSkatThread {
 
 	void startSimulationWithMaxEpidodes(final Long episodes) {
 		maxEpisodes = episodes;
-		start();
+		simulateGames();
 	}
 
 	void startSimulationWithTimestamp(final Long timestamp) {
 		maxTimestamp = timestamp;
-		start();
-	}
-
-	@Override
-	public void run() {
 		simulateGames();
 	}
 
@@ -134,17 +131,12 @@ class GameSimulationThread extends JSkatThread {
 
 		game.setGameState(GameState.TRICK_PLAYING);
 
-		game.start();
 		try {
-			game.join();
-		} catch (InterruptedException e) {
+			SkatGameResult result = new CompletableFuture<>().supplyAsync(() -> game.run()).get();
+		} catch (InterruptedException | ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		// FIXME (jansch 28.06.2011) have to call getGameResult() for result
-		// calculation
-		game.getGameResult();
 
 		return game.isGameWon();
 	}

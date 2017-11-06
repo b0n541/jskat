@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.CompletableFuture;
 
 import org.jskat.control.command.skatseries.ReplayGameCommand;
 import org.jskat.control.command.table.NextReplayMoveCommand;
@@ -39,7 +40,7 @@ import com.google.common.eventbus.Subscribe;
 /**
  * Controls a series of skat games
  */
-public class SkatSeries extends JSkatThread {
+public class SkatSeries {
 
 	private static final Logger LOG = LoggerFactory.getLogger(SkatSeries.class);
 
@@ -72,7 +73,6 @@ public class SkatSeries extends JSkatThread {
 
 		JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(this);
 
-		setName("SkatSeries on table " + tableName); //$NON-NLS-1$
 		players = new HashMap<Player, JSkatPlayer>();
 	}
 
@@ -93,14 +93,14 @@ public class SkatSeries extends JSkatThread {
 	}
 
 	/**
-     * Sets the skat players
-     * 
-     * @param newPlayers
-     *            New skat series player
-     */
-    public void setPlayers(final List<JSkatPlayer> newPlayers) {
+	 * Sets the skat players
+	 * 
+	 * @param newPlayers
+	 *            New skat series player
+	 */
+	public void setPlayers(final List<JSkatPlayer> newPlayers) {
 
-        if (newPlayers.size() != 3) {
+		if (newPlayers.size() != 3) {
 			throw new IllegalArgumentException(
 					"Only three players are allowed at the moment."); //$NON-NLS-1$
 		}
@@ -110,15 +110,15 @@ public class SkatSeries extends JSkatThread {
 				newPlayers.get(2).isAIPlayer());
 
 		// memorize third player to find it again after shuffling the players
-        final JSkatPlayer thirdPlayer = newPlayers.get(2);
+		final JSkatPlayer thirdPlayer = newPlayers.get(2);
 
 		// set players in random order
 		// simple Collection.shuffle doesn't work here, because the order of
 		// players should be the same like in start skat series dialog
 		final int startPlayer = RANDOM.nextInt(3);
-        players.put(Player.FOREHAND, newPlayers.get(startPlayer));
-        players.put(Player.MIDDLEHAND, newPlayers.get((startPlayer + 1) % 3));
-        players.put(Player.REARHAND, newPlayers.get((startPlayer + 2) % 3));
+		players.put(Player.FOREHAND, newPlayers.get(startPlayer));
+		players.put(Player.MIDDLEHAND, newPlayers.get((startPlayer + 1) % 3));
+		players.put(Player.REARHAND, newPlayers.get((startPlayer + 2) % 3));
 
 		// if an human player is playing, always show him/her at the bottom
 		// FIXME (jansch 09.05.2012) this is GUI logic, move it to the GUI
@@ -158,16 +158,12 @@ public class SkatSeries extends JSkatThread {
 		data.setState(SeriesState.RUNNING);
 	}
 
-	/**
-	 * @see Thread#run()
-	 */
-	@Override
 	public void run() {
 
 		int roundsPlayed = 0;
 		int gameNumber = 0;
 
-		while ((roundsToGo > 0 || unlimitedRounds) && !isTerminated()) {
+		while ((roundsToGo > 0 || unlimitedRounds)) {
 
 			LOG.debug("Playing round " + (roundsPlayed + 1)); //$NON-NLS-1$
 
@@ -198,9 +194,11 @@ public class SkatSeries extends JSkatThread {
 
 				JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(
 						new GameStartEvent(gameNumber, gameVariant, data
-								.getBottomPlayer().getLeftNeighbor(), data
-								.getBottomPlayer().getRightNeighbor(), data
-								.getBottomPlayer()));
+								.getBottomPlayer().getLeftNeighbor(),
+								data
+										.getBottomPlayer().getRightNeighbor(),
+								data
+										.getBottomPlayer()));
 
 				currSkatGame.setView(view);
 				currSkatGame.setMaxSleep(maxSleep);
@@ -208,56 +206,27 @@ public class SkatSeries extends JSkatThread {
 				LOG.debug("Playing game " + (j + 1)); //$NON-NLS-1$
 
 				data.addGame(currSkatGame);
-				currSkatGame.start();
+
+				CompletableFuture.runAsync(() -> currSkatGame.run()).join();
+
+				LOG.debug("Game ended: join"); //$NON-NLS-1$
+
 				try {
-					currSkatGame.join();
-
-					LOG.debug("Game ended: join"); //$NON-NLS-1$
-
-					sleep(maxSleep);
-
-				} catch (final InterruptedException e) {
+					Thread.sleep(maxSleep);
+				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
-
-				if (isHumanPlayerInvolved()) {
-					// wait for human to start next game
-					startWaiting();
-				}
-
-				checkWaitCondition();
-
-				// Breaks on termination -
-				// the thread has to come to the end
-				if (isTerminated()) {
-					break;
 				}
 			}
 
 			roundsToGo--;
 			roundsPlayed++;
-
-			checkWaitCondition();
 		}
 
 		data.setState(SeriesState.SERIES_FINISHED);
 		view.setSeriesState(data.getTableName(), SeriesState.SERIES_FINISHED);
 
 		LOG.debug(data.getState().name());
-	}
-
-	private boolean isHumanPlayerInvolved() {
-
-		boolean result = false;
-
-		for (final JSkatPlayer currPlayer : players.values()) {
-			if (currPlayer.isHumanPlayer()) {
-				result = true;
-			}
-		}
-
-		return result;
 	}
 
 	/**
@@ -290,39 +259,6 @@ public class SkatSeries extends JSkatThread {
 	}
 
 	/**
-	 * Pauses the current game
-	 */
-	public void pauseSkatGame() {
-
-		synchronized (currSkatGame) {
-
-			currSkatGame.startWaiting();
-		}
-	}
-
-	/**
-	 * Resumes the current game
-	 */
-	public void resumeSkatGame() {
-
-		synchronized (currSkatGame) {
-
-			currSkatGame.stopWaiting();
-			currSkatGame.notify();
-		}
-	}
-
-	/**
-	 * Checks whether the current skat game is paused
-	 * 
-	 * @return TRUE if the current skat game is paused
-	 */
-	public boolean isSkatGameWaiting() {
-
-		return currSkatGame.isWaiting();
-	}
-
-	/**
 	 * Sets the view for the series
 	 * 
 	 * @param newView
@@ -344,9 +280,9 @@ public class SkatSeries extends JSkatThread {
 	}
 
 	/**
-	 * Sets max sleep between actions during the skat series, this must only be
-	 * set in skat series that are run with a GUI, otherwise the default value
-	 * of 0 is used
+	 * Sets max sleep between actions during the skat series, this must only be set
+	 * in skat series that are run with a GUI, otherwise the default value of 0 is
+	 * used
 	 * 
 	 * @param newMaxSleep
 	 *            New value for maximum sleep time in milliseconds

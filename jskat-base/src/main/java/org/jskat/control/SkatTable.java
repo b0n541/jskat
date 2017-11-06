@@ -17,6 +17,7 @@ package org.jskat.control;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.jskat.control.event.table.SkatGameReplayFinishedEvent;
 import org.jskat.control.event.table.SkatSeriesStartedEvent;
@@ -96,21 +97,10 @@ public class SkatTable {
 			series.setPlayers(player);
 			series.setOnlyPlayRamsch(onlyPlayRamsch);
 			series.setMaxRounds(rounds, unlimitedRounds);
-			series.start();
+			CompletableFuture.runAsync(() -> series.run());
 		}
 
 		JSkatEventBus.INSTANCE.post(new SkatSeriesStartedEvent(tableName));
-	}
-
-	/**
-	 * Pauses a skat series
-	 */
-	public void pauseSkatSeries() {
-
-		synchronized (series) {
-
-			series.startWaiting();
-		}
 	}
 
 	/**
@@ -123,45 +113,8 @@ public class SkatTable {
 
 		synchronized (series) {
 
-			series.stopWaiting();
 			series.notify();
 		}
-	}
-
-	/**
-	 * Pauses the current skat game
-	 */
-	public void pauseSkatGame() {
-
-		series.pauseSkatGame();
-	}
-
-	/**
-	 * Resumes the current paused skat game
-	 */
-	public void resumeSkatGame() {
-
-		series.resumeSkatGame();
-	}
-
-	/**
-	 * Checks whether the current skat game is waiting or not
-	 * 
-	 * @return TRUE if the skat game is waiting
-	 */
-	public boolean isSkatGameWaiting() {
-
-		return series.isSkatGameWaiting();
-	}
-
-	/**
-	 * Checks whether the skat series is waiting or not
-	 * 
-	 * @return TRUE if the skat series is waiting
-	 */
-	public boolean isSkatSeriesWaiting() {
-
-		return series.isWaiting();
 	}
 
 	/**

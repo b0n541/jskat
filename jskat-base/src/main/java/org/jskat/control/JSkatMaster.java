@@ -18,6 +18,7 @@ package org.jskat.control;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.train.NNTrainer;
@@ -237,106 +238,6 @@ public class JSkatMaster {
 	}
 
 	/**
-	 * Pauses a skat series at a table
-	 *
-	 * @param tableName
-	 *            Table name
-	 */
-	public void pauseSkatSeries(final String tableName) {
-
-		SkatTable table = this.data.getLocalSkatTable(tableName);
-
-		if (table.isSeriesRunning()) {
-
-			table.pauseSkatSeries();
-		}
-	}
-
-	/**
-	 * Starts a new skat series
-	 */
-	public void resumeSkatSeries() {
-
-		log.debug(this.data.getActiveTable());
-
-		resumeSkatSeries(this.data.getActiveTable());
-	}
-
-	/**
-	 * Resumes a skat series at a table
-	 *
-	 * @param tableName
-	 *            Table name
-	 */
-	public void resumeSkatSeries(final String tableName) {
-
-		SkatTable table = this.data.getLocalSkatTable(tableName);
-
-		if (table.isSeriesRunning()) {
-
-			table.resumeSkatSeries();
-		}
-	}
-
-	/**
-	 * Resumes a skat game at a table
-	 *
-	 * @param tableName
-	 *            Table name
-	 */
-	public void resumeSkatGame(final String tableName) {
-
-		SkatTable table = this.data.getLocalSkatTable(tableName);
-
-		if (table.isSeriesRunning()) {
-
-			table.resumeSkatGame();
-		}
-	}
-
-	/**
-	 * Checks whether a skat game is waiting
-	 *
-	 * @param tableName
-	 *            Table name
-	 * @return TRUE if the game is waiting
-	 */
-	public boolean isSkatGameWaiting(final String tableName) {
-
-		boolean result = false;
-
-		SkatTable table = this.data.getLocalSkatTable(tableName);
-
-		if (table.isSeriesRunning()) {
-
-			result = table.isSkatGameWaiting();
-		}
-
-		return result;
-	}
-
-	/**
-	 * Checks whether a skat series is waiting
-	 *
-	 * @param tableName
-	 *            Table name
-	 * @return TRUE if the series is waiting
-	 */
-	public boolean isSkatSeriesWaiting(final String tableName) {
-
-		boolean result = false;
-
-		SkatTable table = this.data.getLocalSkatTable(tableName);
-
-		if (table.isSeriesRunning()) {
-
-			result = table.isSkatSeriesWaiting();
-		}
-
-		return result;
-	}
-
-	/**
 	 * Places a skat player on a table
 	 *
 	 * @param tableName
@@ -400,31 +301,31 @@ public class JSkatMaster {
 
 		NNTrainer nullTrainer = new NNTrainer();
 		nullTrainer.setGameType(GameType.NULL);
-		nullTrainer.start();
+		CompletableFuture.runAsync(() -> nullTrainer.run());
 		this.runningNNTrainers.add(nullTrainer);
 		NNTrainer grandTrainer = new NNTrainer();
 		grandTrainer.setGameType(GameType.GRAND);
-		grandTrainer.start();
+		CompletableFuture.runAsync(() -> grandTrainer.run());
 		this.runningNNTrainers.add(grandTrainer);
 		NNTrainer clubsTrainer = new NNTrainer();
 		clubsTrainer.setGameType(GameType.CLUBS);
-		clubsTrainer.start();
+		CompletableFuture.runAsync(() -> clubsTrainer.run());
 		this.runningNNTrainers.add(clubsTrainer);
 		NNTrainer spadesTrainer = new NNTrainer();
 		spadesTrainer.setGameType(GameType.SPADES);
-		spadesTrainer.start();
+		CompletableFuture.runAsync(() -> spadesTrainer.run());
 		this.runningNNTrainers.add(spadesTrainer);
 		NNTrainer heartsTrainer = new NNTrainer();
 		heartsTrainer.setGameType(GameType.HEARTS);
-		heartsTrainer.start();
+		CompletableFuture.runAsync(() -> heartsTrainer.run());
 		this.runningNNTrainers.add(heartsTrainer);
 		NNTrainer diamondsTrainer = new NNTrainer();
 		diamondsTrainer.setGameType(GameType.DIAMONDS);
-		diamondsTrainer.start();
+		CompletableFuture.runAsync(() -> diamondsTrainer.run());
 		this.runningNNTrainers.add(diamondsTrainer);
 		NNTrainer ramschTrainer = new NNTrainer();
 		ramschTrainer.setGameType(GameType.RAMSCH);
-		ramschTrainer.start();
+		CompletableFuture.runAsync(() -> ramschTrainer.run());
 		this.runningNNTrainers.add(ramschTrainer);
 	}
 
