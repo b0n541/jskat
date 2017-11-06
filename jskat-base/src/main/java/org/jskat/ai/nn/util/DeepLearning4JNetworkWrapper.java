@@ -63,7 +63,7 @@ public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 				.weightInit(WeightInit.XAVIER)
 				.learningRate(0.05)
 				.miniBatch(false)
-				.updater(Updater.NESTEROVS);
+				.updater(Updater.RMSPROP);
 
 		if (useBias) {
 			networkBuilder.biasInit(0.1).biasLearningRate(0.01);
