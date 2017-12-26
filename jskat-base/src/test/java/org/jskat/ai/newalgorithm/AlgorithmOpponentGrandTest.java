@@ -85,15 +85,7 @@ public class AlgorithmOpponentGrandTest extends AbstractJSkatTest {
 
 		skatGame.setGameState(GameState.TRICK_PLAYING);
 
-		skatGame.start();
-		try {
-			skatGame.join();
-		} catch (final InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		final SkatGameResult gameResult = skatGame.getGameResult();
+		final SkatGameResult gameResult = skatGame.run();
 		assertThat(gameResult.isWon(), is(true));
 		assertAlgorithmAIPlayerFollowsJack(skatGame);
 	}
