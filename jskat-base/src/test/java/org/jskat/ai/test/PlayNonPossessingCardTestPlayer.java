@@ -22,7 +22,7 @@ import org.jskat.util.Card;
 import org.jskat.util.CardDeck;
 
 /**
- * Test player throws an excpetion during card play.
+ * Test player throws an exception during card play.
  */
 public class PlayNonPossessingCardTestPlayer extends AIPlayerRND {
 
@@ -33,7 +33,7 @@ public class PlayNonPossessingCardTestPlayer extends AIPlayerRND {
 
 	@Override
 	public final Card playCard() {
-		CardDeck unpossessedCards = new CardDeck();
+		final CardDeck unpossessedCards = new CardDeck();
 		unpossessedCards.removeAll(knowledge.getOwnCards());
 
 		return unpossessedCards.get(random.nextInt(unpossessedCards.size()));
