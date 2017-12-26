@@ -28,7 +28,7 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 	private static final Logger log = Logger
 			.getLogger(AlgorithmOpponentGrand.class);
 
-	AlgorithmOpponentGrand(final AlgorithmAI p, GameType pGameType) {
+	AlgorithmOpponentGrand(final AlgorithmAI p, final GameType pGameType) {
 		super(p, pGameType);
 
 		log.debug("Defining player <" + myPlayer.getPlayerName() + "> as "
@@ -78,35 +78,35 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 	}
 
 	@Override
-	public CardList discardSkat(BidEvaluator bidEvaluator) {
+	public CardList discardSkat(final BidEvaluator bidEvaluator) {
 		throw new IllegalMethodException(
 				"AlgorithmOpponentGrand has nothing to discard!");
 	}
 
 	// static methods for creating JUnit-tests and test cardplaybehavior
-	public static Card playStartGameCard(CardList pCards, CardList pTrickCards,
-			CardList pPlayedCards, CardList pNotOpponentCards,
-			Situation pSituation, Player pDeclarer) {
+	public static Card playStartGameCard(final CardList pCards, final CardList pTrickCards,
+			final CardList pPlayedCards, final CardList pNotOpponentCards,
+			final Situation pSituation, final Player pDeclarer) {
 		return playForehandCard(pCards, pTrickCards, pPlayedCards,
 				pNotOpponentCards, pSituation, pDeclarer);
 	}
 
-	public static Card playForehandCard(CardList pCards, CardList pTrickCards,
-			CardList pPlayedCards, CardList pNotOpponentCards,
-			Situation pSituation, Player pDeclarer) {
+	public static Card playForehandCard(final CardList pCards, final CardList pTrickCards,
+			final CardList pPlayedCards, final CardList pNotOpponentCards,
+			final Situation pSituation, final Player pDeclarer) {
 		pCards.sort(pSituation.getGameType());
-		boolean tDeclarerInMiddle = Player.FOREHAND.getLeftNeighbor() == pDeclarer;
+		final boolean tDeclarerInMiddle = Player.FOREHAND.getLeftNeighbor() == pDeclarer;
 
 		CardList possibleCards = new CardList();
 
-		for (Suit s : Suit.values()) {
+		for (final Suit s : Suit.values()) {
 			if (!pCards.hasSuit(GameType.GRAND, s)) {
 				continue;
 			}
 
-			Card possibleHighCard = pCards.get(pCards.getFirstIndexOfSuit(s,
+			final Card possibleHighCard = pCards.get(pCards.getFirstIndexOfSuit(s,
 					false)); // highest Card
-			Card possibleLowCard = pCards.get(pCards.getLastIndexOfSuit(s,
+			final Card possibleLowCard = pCards.get(pCards.getLastIndexOfSuit(s,
 					false)); // lowest Card
 
 			// Wenn hoechste Karte und weniger als 5 Karten bislang gespielt
@@ -148,13 +148,13 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 		return getRandomAllowedCard(pCards, null, pSituation.getGameType());
 	}
 
-	public static Card playMiddlehandCard(CardList pCards,
-			CardList pTrickCards, CardList pPlayedCards,
-			CardList pNotOpponentCards, Situation pSituation, Player pDeclarer) {
+	public static Card playMiddlehandCard(final CardList pCards,
+			final CardList pTrickCards, final CardList pPlayedCards,
+			final CardList pNotOpponentCards, final Situation pSituation, final Player pDeclarer) {
 		pCards.sort(GameType.CLUBS);
-		boolean tDeclarerInForehand = Player.MIDDLEHAND.getRightNeighbor() == pDeclarer;
-		Card tForehandCard = pTrickCards.get(0);
-		Suit tSuit = tForehandCard.getSuit();
+		final boolean tDeclarerInForehand = Player.MIDDLEHAND.getRightNeighbor() == pDeclarer;
+		final Card tForehandCard = pTrickCards.get(0);
+		final Suit tSuit = tForehandCard.getSuit();
 
 		CardList possibleCards = new CardList();
 
@@ -167,8 +167,8 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 					// Wenn schlagbar, dann den niedrigsten Buben spielen, der
 					// die Vorhand schlaegt
 					if (pCards.get(0).beats(GameType.GRAND, tForehandCard)) {
-						if (pCards.get(1).beats(GameType.GRAND, tForehandCard)) {
-							if (pCards.get(2).beats(GameType.GRAND,
+						if (pCards.size() > 1 && pCards.get(1).beats(GameType.GRAND, tForehandCard)) {
+							if (pCards.size() > 2 && pCards.get(2).beats(GameType.GRAND,
 									tForehandCard)) {
 								return pCards.get(2);
 							}
@@ -184,18 +184,19 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 				// besser ist
 				if (Helper.countJacks(pNotOpponentCards) != 3
 						&& (!pNotOpponentCards.contains(Card.CJ)
-								&& tForehandCard != Card.CJ || pNotOpponentCards
-								.contains(Card.CJ)
-								&& !pNotOpponentCards.contains(Card.SJ)
-								&& tForehandCard != Card.SJ)) {
-					CardList tPossibleCards = new CardList();
+								&& tForehandCard != Card.CJ
+								|| pNotOpponentCards
+										.contains(Card.CJ)
+										&& !pNotOpponentCards.contains(Card.SJ)
+										&& tForehandCard != Card.SJ)) {
+					final CardList tPossibleCards = new CardList();
 					// Butter eine hohe Karte in der Farbe in der der
 					// Solo-Spieler blank ist
-					for (Suit s : pSituation.getRightPlayerBlankSuits()) {
+					for (final Suit s : pSituation.getRightPlayerBlankSuits()) {
 						if (pCards.getSuitCount(s, false) == 0) {
 							continue;
 						}
-						Card lPossibleHighCard = pCards.get(pCards
+						final Card lPossibleHighCard = pCards.get(pCards
 								.getFirstIndexOfSuit(s, false));
 						if (lPossibleHighCard.getPoints() >= 10) {
 							return lPossibleHighCard;
@@ -207,11 +208,11 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 						return playRandomCard(tPossibleCards);
 					}
 					// Butter eine andere hohe Karte
-					for (Suit s : Suit.values()) {
+					for (final Suit s : Suit.values()) {
 						if (pCards.getSuitCount(s, false) == 0) {
 							continue;
 						}
-						Card lPossibleHighCard = pCards.get(pCards
+						final Card lPossibleHighCard = pCards.get(pCards
 								.getFirstIndexOfSuit(s, false));
 						if (lPossibleHighCard.getPoints() >= 10) {
 							return lPossibleHighCard;
@@ -223,9 +224,9 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 			}
 			// Wenn Farbe gespielt
 			else if (tForehandCard.getRank() != Rank.JACK) {
-				Card possibleHighCard = pCards.get(pCards.getFirstIndexOfSuit(
+				final Card possibleHighCard = pCards.get(pCards.getFirstIndexOfSuit(
 						tSuit, false)); // highest Card
-				Card possibleLowCard = pCards.get(pCards.getLastIndexOfSuit(
+				final Card possibleLowCard = pCards.get(pCards.getLastIndexOfSuit(
 						tSuit, false)); // lowest Card
 
 				// Wenn Karten der Farbe auf der Hand
@@ -278,8 +279,8 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 				}
 			}
 			// Blank Suites vom Solo-Spieler freispielen
-			for (Suit s : pSituation.getRightPlayerBlankSuits()) {
-				Card lPossibleLowCard = pCards.get(pCards.getLastIndexOfSuit(s,
+			for (final Suit s : pSituation.getRightPlayerBlankSuits()) {
+				final Card lPossibleLowCard = pCards.get(pCards.getLastIndexOfSuit(s,
 						false));
 				if (lPossibleLowCard != null
 						&& lPossibleLowCard.getPoints() <= 4) {
@@ -305,9 +306,9 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 
 			// Wenn Spieler bedienen muss
 			if (pCards.getSuitCount(tSuit, false) > 0) {
-				Card possibleHighCard = pCards.get(pCards.getFirstIndexOfSuit(
+				final Card possibleHighCard = pCards.get(pCards.getFirstIndexOfSuit(
 						tSuit, false)); // highest Card
-				Card possibleLowCard = pCards.get(pCards.getLastIndexOfSuit(
+				final Card possibleLowCard = pCards.get(pCards.getLastIndexOfSuit(
 						tSuit, false)); // lowest Card
 				// Hat der Spieler die hoechste Karte -> spielen
 				if (Helper.isHighestSuitCard(possibleHighCard, pPlayedCards,
@@ -356,12 +357,12 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 				pSituation.getGameType());
 	}
 
-	public static Card playRearhandCard(CardList pCards, CardList pTrickCards,
-			CardList pPlayedCards, CardList pNotOpponentCards,
-			Situation pSituation, Player pPlayerPosition, Player pDeclarer) {
+	public static Card playRearhandCard(final CardList pCards, final CardList pTrickCards,
+			final CardList pPlayedCards, final CardList pNotOpponentCards,
+			final Situation pSituation, final Player pPlayerPosition, final Player pDeclarer) {
 		pCards.sort(pSituation.getGameType());
-		Card tForehandCard = pTrickCards.get(0);
-		Card tMiddlehandCard = pTrickCards.get(1);
+		final Card tForehandCard = pTrickCards.get(0);
+		final Card tMiddlehandCard = pTrickCards.get(1);
 
 		Card tCardToBeat = tForehandCard;
 		if (tMiddlehandCard.beats(pSituation.getGameType(), tCardToBeat)) {
@@ -410,9 +411,9 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 			// Muss bedienen
 			if (pCards.hasSuit(pSituation.getGameType(),
 					tForehandCard.getSuit())) {
-				Card possibleHighCard = pCards.get(pCards.getFirstIndexOfSuit(
+				final Card possibleHighCard = pCards.get(pCards.getFirstIndexOfSuit(
 						tForehandCard.getSuit(), false)); // highest Card
-				Card possibleLowCard = pCards.get(pCards.getLastIndexOfSuit(
+				final Card possibleLowCard = pCards.get(pCards.getLastIndexOfSuit(
 						tForehandCard.getSuit(), false)); // lowest Card
 				// Solo-Spieler hat den Stich
 				if (tMiddlehandCard.beats(pSituation.getGameType(),
@@ -447,17 +448,17 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 	}
 
 	// Buttern
-	public static Card getHighValueCard(CardList pCards, Situation pSituation,
-			Card pInitialCard) {
-		CardList possibleCards = new CardList();
+	public static Card getHighValueCard(final CardList pCards, final Situation pSituation,
+			final Card pInitialCard) {
+		final CardList possibleCards = new CardList();
 
-		for (Suit s : Suit.values()) {
-			int lSuitCount = pCards.getSuitCount(s, false);
+		for (final Suit s : Suit.values()) {
+			final int lSuitCount = pCards.getSuitCount(s, false);
 			if (lSuitCount == 0) {
 				continue;
 			}
 
-			Card possibleHighCard = pCards.get(pCards.getFirstIndexOfSuit(s,
+			final Card possibleHighCard = pCards.get(pCards.getFirstIndexOfSuit(s,
 					false)); // highest Card
 
 			if (lSuitCount == 1) {
@@ -483,19 +484,19 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 	}
 
 	// Lusche Werfen
-	public static Card getLowValueCard(CardList pCards, Situation pSituation,
-			Card pInitialCard, CardList pPlayedCards, CardList pTrickCards) {
-		CardList possibleCards = new CardList();
+	public static Card getLowValueCard(final CardList pCards, final Situation pSituation,
+			final Card pInitialCard, final CardList pPlayedCards, final CardList pTrickCards) {
+		final CardList possibleCards = new CardList();
 
-		for (Suit s : Suit.values()) {
-			int lSuitCount = pCards.getSuitCount(s, false);
+		for (final Suit s : Suit.values()) {
+			final int lSuitCount = pCards.getSuitCount(s, false);
 			if (lSuitCount == 0) {
 				continue;
 			}
 
-			Card possibleHighCard = pCards.get(pCards.getFirstIndexOfSuit(s,
+			final Card possibleHighCard = pCards.get(pCards.getFirstIndexOfSuit(s,
 					false)); // highest Card
-			Card possibleLowCard = pCards.get(pCards.getLastIndexOfSuit(s,
+			final Card possibleLowCard = pCards.get(pCards.getLastIndexOfSuit(s,
 					false)); // lowest Card
 
 			if (lSuitCount == 1 && possibleHighCard.getPoints() < 10) {
