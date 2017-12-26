@@ -11,7 +11,7 @@ Build executable fat JAR: `./gradlew clean shadowJar`
 
 Build installation with multiple JARs and start scripts: `./gradlew clean installDist`
 
-Build installation with fat JAR and start scripts: `./gradlew clean installShadowJar`
+Build installation with fat JAR and start scripts: `./gradlew clean installShadowApp`
 
 Continous integration: https://travis-ci.org/b0n541/jskat-multimodule
 
