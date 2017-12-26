@@ -58,7 +58,7 @@ import javafx.util.Duration;
 
 public class JSkatFX extends Application {
 
-	private static final String VERSION = "0.16.0";
+	private static final String VERSION = "0.16.1";
 
 	private static final int SPLASH_WIDTH = 500;
 	private static final int SPLASH_HEIGHT = 300;
@@ -67,7 +67,7 @@ public class JSkatFX extends Application {
 	private ProgressBar splashScreenProgressBar;
 	private Label splashScreenProgressText;
 
-	public static void main(String[] args) {
+	public static void main(final String[] args) {
 
 		PropertyConfigurator.configure(ClassLoader.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
 		JSkatOptions.instance(new DesktopSavePathResolver());
@@ -77,7 +77,7 @@ public class JSkatFX extends Application {
 
 	@Override
 	public void init() {
-		ImageView splashScreenImage = new ImageView(
+		final ImageView splashScreenImage = new ImageView(
 				new Image(JSkatFX.class.getResource("/org/jskat/gui/img/gui/splash.png").toExternalForm()));
 		splashScreenProgressBar = new ProgressBar();
 		splashScreenProgressBar.setPrefWidth(SPLASH_WIDTH);
@@ -92,23 +92,18 @@ public class JSkatFX extends Application {
 	}
 
 	@Override
-	public void start(Stage primaryStage) {
+	public void start(final Stage primaryStage) {
 
-		Point2D savedScreenPosition = getSavedScreenPosition();
-		Screen targetScreen = getTargetScreen(savedScreenPosition);
+		final Point2D savedScreenPosition = getSavedScreenPosition();
+		final Screen targetScreen = getTargetScreen(savedScreenPosition);
 
-		Task<InitializedGuiElements> startupTasks = new Task<InitializedGuiElements>() {
+		final Task<InitializedGuiElements> startupTasks = new Task<InitializedGuiElements>() {
 			@Override
 			protected InitializedGuiElements call() throws Exception {
 
 				updateMessage(JSkatResourceBundle.INSTANCE.getString("splash_init_application"));
 
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						LookAndFeelSetter.setLookAndFeel(targetScreen);
-					}
-				});
+				SwingUtilities.invokeLater(() -> LookAndFeelSetter.setLookAndFeel(targetScreen));
 
 				updateProgress(1, 3);
 				updateMessage(JSkatResourceBundle.INSTANCE.getString("splash_load_card_sets"));
@@ -118,8 +113,8 @@ public class JSkatFX extends Application {
 				updateProgress(2, 3);
 				updateMessage(JSkatResourceBundle.INSTANCE.getString("splash_look_for_ai_players"));
 
-				MenuBar menu = JSkatMenuFactory.build();
-				JSkatViewImpl jskatView = new JSkatViewImpl(targetScreen, menu, VERSION);
+				final MenuBar menu = JSkatMenuFactory.build();
+				final JSkatViewImpl jskatView = new JSkatViewImpl(targetScreen, menu, VERSION);
 				JSkatMaster.INSTANCE.setView(jskatView);
 
 				return new InitializedGuiElements(menu, jskatView);
@@ -133,10 +128,11 @@ public class JSkatFX extends Application {
 		new Thread(startupTasks).start();
 	}
 
-	private static void showJSkatMainWindow(Screen targetScreen, Point2D screenPosition, MenuBar menu,
-			JSkatViewImpl jskatView) {
+	private static void showJSkatMainWindow(final Screen targetScreen, final Point2D screenPosition, final MenuBar menu,
+			final JSkatViewImpl jskatView) {
 
-		JSkatMainWindow jskatMainWindow = new JSkatMainWindow(VERSION, menu, jskatView, targetScreen, screenPosition);
+		final JSkatMainWindow jskatMainWindow = new JSkatMainWindow(VERSION, menu, jskatView, targetScreen,
+				screenPosition);
 
 		jskatMainWindow.show();
 
@@ -149,8 +145,8 @@ public class JSkatFX extends Application {
 		}
 	}
 
-	private void showSplashScreen(Screen targetScreen, final Stage splashStage, Task<?> startupTask,
-			InitializationCompleteHandler initializationCompleteHandler) {
+	private void showSplashScreen(final Screen targetScreen, final Stage splashStage, final Task<?> startupTask,
+			final InitializationCompleteHandler initializationCompleteHandler) {
 
 		splashScreenProgressText.textProperty().bind(startupTask.messageProperty());
 		splashScreenProgressBar.progressProperty().bind(startupTask.progressProperty());
@@ -160,7 +156,7 @@ public class JSkatFX extends Application {
 				splashScreenProgressBar.progressProperty().unbind();
 				splashScreenProgressBar.setProgress(1);
 				splashStage.toFront();
-				FadeTransition fadeSplashScreen = new FadeTransition(Duration.seconds(1), splashScreenLayout);
+				final FadeTransition fadeSplashScreen = new FadeTransition(Duration.seconds(1), splashScreenLayout);
 				fadeSplashScreen.setFromValue(1.0);
 				fadeSplashScreen.setToValue(0.0);
 				fadeSplashScreen.setOnFinished(actionEvent -> splashStage.hide());
@@ -170,7 +166,7 @@ public class JSkatFX extends Application {
 			}
 		});
 
-		Scene splashScene = new Scene(splashScreenLayout);
+		final Scene splashScene = new Scene(splashScreenLayout);
 		splashStage.initStyle(StageStyle.UNDECORATED);
 		splashStage.setScene(splashScene);
 		final Rectangle2D bounds = targetScreen.getBounds();
@@ -180,9 +176,9 @@ public class JSkatFX extends Application {
 		splashStage.show();
 	}
 
-	private static Screen getTargetScreen(Point2D savedScreenPosition) {
+	private static Screen getTargetScreen(final Point2D savedScreenPosition) {
 
-		for (Screen screen : Screen.getScreens()) {
+		for (final Screen screen : Screen.getScreens()) {
 			if (screen.getVisualBounds().contains(savedScreenPosition)) {
 				return screen;
 			}
@@ -193,7 +189,7 @@ public class JSkatFX extends Application {
 
 	private static Point2D getSavedScreenPosition() {
 
-		Point mainFramePosition = JSkatOptions.instance().getMainFramePosition();
+		final Point mainFramePosition = JSkatOptions.instance().getMainFramePosition();
 		return new Point2D(mainFramePosition.getX(), mainFramePosition.getY());
 	}
 
@@ -205,7 +201,7 @@ public class JSkatFX extends Application {
 		final MenuBar menu;
 		final JSkatViewImpl jskatView;
 
-		public InitializedGuiElements(MenuBar menu, JSkatViewImpl jskatView) {
+		public InitializedGuiElements(final MenuBar menu, final JSkatViewImpl jskatView) {
 			this.menu = menu;
 			this.jskatView = jskatView;
 		}
