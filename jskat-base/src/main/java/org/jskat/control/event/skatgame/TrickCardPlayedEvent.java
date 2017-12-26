@@ -15,6 +15,8 @@
  */
 package org.jskat.control.event.skatgame;
 
+import java.util.Objects;
+
 import org.jskat.data.SkatGameData;
 import org.jskat.data.Trick;
 import org.jskat.util.Card;
@@ -28,13 +30,13 @@ public final class TrickCardPlayedEvent extends AbstractPlayerMoveEvent {
 
 	public final Card card;
 
-	public TrickCardPlayedEvent(Player player, Card card) {
+	public TrickCardPlayedEvent(final Player player, final Card card) {
 		super(player);
 		this.card = card;
 	}
 
 	@Override
-	public final void processForward(SkatGameData data) {
+	public final void processForward(final SkatGameData data) {
 
 		data.removePlayerCard(player, card);
 
@@ -45,8 +47,8 @@ public final class TrickCardPlayedEvent extends AbstractPlayerMoveEvent {
 		data.addTrickCard(card);
 
 		if (isTrickCompleted(data)) {
-			Trick trick = data.getCurrentTrick();
-			Player trickWinner = SkatRuleFactory.getSkatRules(
+			final Trick trick = data.getCurrentTrick();
+			final Player trickWinner = SkatRuleFactory.getSkatRules(
 					data.getGameType()).calculateTrickWinner(
 							data.getGameType(), trick);
 			trick.setTrickWinner(trickWinner);
@@ -56,16 +58,16 @@ public final class TrickCardPlayedEvent extends AbstractPlayerMoveEvent {
 		}
 	}
 
-	private boolean isNoTricksPlayed(SkatGameData data) {
+	private boolean isNoTricksPlayed(final SkatGameData data) {
 		return data.getTricks().size() == 0;
 	}
 
-	private boolean isTrickCompleted(SkatGameData data) {
+	private boolean isTrickCompleted(final SkatGameData data) {
 		return data.getCurrentTrick().getThirdCard() != null;
 	}
 
 	@Override
-	public final void processBackward(SkatGameData data) {
+	public final void processBackward(final SkatGameData data) {
 
 		if (isEmptyTrick(data)) {
 			data.removeLastTrick();
@@ -76,7 +78,7 @@ public final class TrickCardPlayedEvent extends AbstractPlayerMoveEvent {
 		data.addPlayerCard(player, card);
 	}
 
-	private boolean isEmptyTrick(SkatGameData data) {
+	private boolean isEmptyTrick(final SkatGameData data) {
 		return data.getCurrentTrick().getFirstCard() == null
 				&& data.getCurrentTrick().getSecondCard() == null
 				&& data.getCurrentTrick().getThirdCard() == null;
@@ -86,4 +88,27 @@ public final class TrickCardPlayedEvent extends AbstractPlayerMoveEvent {
 	protected String getMoveDetails() {
 		return card.toString();
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(player, card);
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final TrickCardPlayedEvent other = (TrickCardPlayedEvent) obj;
+
+		return Objects.equals(player, other.player) &&
+				Objects.equals(card, other.card);
+	}
+
 }
