@@ -15,14 +15,9 @@
  */
 package org.jskat.control.command.table;
 
-import org.jskat.data.JSkatViewType;
-
-public class CreateTableCommand extends AbstractTableCommand {
-
-	public final JSkatViewType tableType;
-
-	public CreateTableCommand(final JSkatViewType tableType, final String tableName) {
-		super(tableName);
-		this.tableType = tableType;
-	}
+/**
+ * This command is created when the next game in a skat series should be
+ * started.
+ */
+public class ReadyForNextGameCommand {
 }

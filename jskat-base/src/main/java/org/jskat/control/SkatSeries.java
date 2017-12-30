@@ -23,6 +23,7 @@ import java.util.concurrent.CompletableFuture;
 
 import org.jskat.control.command.skatseries.ReplayGameCommand;
 import org.jskat.control.command.table.NextReplayMoveCommand;
+import org.jskat.control.command.table.ReadyForNextGameCommand;
 import org.jskat.control.event.skatgame.GameStartEvent;
 import org.jskat.control.event.table.SkatGameReplayStartedEvent;
 import org.jskat.data.SkatGameData.GameState;
@@ -51,6 +52,7 @@ public class SkatSeries {
 	private int roundsToGo = 0;
 	private boolean unlimitedRounds = false;
 	private boolean onlyPlayRamsch = false;
+	private boolean readyForNextGame = false;
 	private final Map<Player, JSkatPlayer> players;
 	private SkatGame currSkatGame;
 	private SkatGameReplayer currReplayGame;
@@ -59,7 +61,7 @@ public class SkatSeries {
 
 	/**
 	 * Constructor
-	 * 
+	 *
 	 * @param tableName
 	 *            Table name
 	 */
@@ -88,13 +90,18 @@ public class SkatSeries {
 	}
 
 	@Subscribe
-	public void replayNextMoveOn(final NextReplayMoveCommand comman) {
+	public void replayNextMoveOn(final NextReplayMoveCommand command) {
 		currReplayGame.oneMoveForward();
+	}
+
+	@Subscribe
+	public void readyForNextGameOn(final ReadyForNextGameCommand command) {
+		readyForNextGame = true;
 	}
 
 	/**
 	 * Sets the skat players
-	 * 
+	 *
 	 * @param newPlayers
 	 *            New skat series player
 	 */
@@ -135,7 +142,7 @@ public class SkatSeries {
 
 	/**
 	 * Checks whether a series is running
-	 * 
+	 *
 	 * @return TRUE if the series is running
 	 */
 	public boolean isRunning() {
@@ -145,7 +152,7 @@ public class SkatSeries {
 
 	/**
 	 * Starts the series
-	 * 
+	 *
 	 * @param rounds
 	 *            Number of rounds to be played
 	 * @param newUnlimitedRound
@@ -193,12 +200,10 @@ public class SkatSeries {
 						players.get(Player.REARHAND));
 
 				JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(
-						new GameStartEvent(gameNumber, gameVariant, data
-								.getBottomPlayer().getLeftNeighbor(),
-								data
-										.getBottomPlayer().getRightNeighbor(),
-								data
-										.getBottomPlayer()));
+						new GameStartEvent(gameNumber, gameVariant,
+								data.getBottomPlayer().getLeftNeighbor(),
+								data.getBottomPlayer().getRightNeighbor(),
+								data.getBottomPlayer()));
 
 				currSkatGame.setView(view);
 				currSkatGame.setMaxSleep(maxSleep);
@@ -211,11 +216,14 @@ public class SkatSeries {
 
 				LOG.debug("Game ended: join"); //$NON-NLS-1$
 
-				try {
-					Thread.sleep(maxSleep);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				readyForNextGame = false;
+				while (isHumanPlayerInvolved() && !readyForNextGame) {
+					try {
+						Thread.sleep(200);
+					} catch (final InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 
@@ -229,9 +237,22 @@ public class SkatSeries {
 		LOG.debug(data.getState().name());
 	}
 
+	private boolean isHumanPlayerInvolved() {
+
+		boolean result = false;
+
+		for (final JSkatPlayer currPlayer : players.values()) {
+			if (currPlayer.isHumanPlayer()) {
+				result = true;
+			}
+		}
+
+		return result;
+	}
+
 	/**
 	 * Gets the state of the series
-	 * 
+	 *
 	 * @return State of the series
 	 */
 	public SeriesState getSeriesState() {
@@ -241,7 +262,7 @@ public class SkatSeries {
 
 	/**
 	 * Gets the game state of the current game
-	 * 
+	 *
 	 * @return Game state
 	 */
 	public GameState getGameState() {
@@ -250,7 +271,7 @@ public class SkatSeries {
 
 	/**
 	 * Gets the ID of the current game
-	 * 
+	 *
 	 * @return ID of the current game
 	 */
 	public int getCurrentGameID() {
@@ -260,7 +281,7 @@ public class SkatSeries {
 
 	/**
 	 * Sets the view for the series
-	 * 
+	 *
 	 * @param newView
 	 *            View
 	 */
@@ -271,7 +292,7 @@ public class SkatSeries {
 
 	/**
 	 * Sets whether only ramsch games are played or not
-	 * 
+	 *
 	 * @param isOnlyPlayRamsch
 	 *            TRUE, if only ramsch games should be played
 	 */
@@ -283,7 +304,7 @@ public class SkatSeries {
 	 * Sets max sleep between actions during the skat series, this must only be set
 	 * in skat series that are run with a GUI, otherwise the default value of 0 is
 	 * used
-	 * 
+	 *
 	 * @param newMaxSleep
 	 *            New value for maximum sleep time in milliseconds
 	 */
