@@ -25,6 +25,7 @@ import org.jskat.control.command.skatseries.ReplayGameCommand;
 import org.jskat.control.command.table.NextReplayMoveCommand;
 import org.jskat.control.command.table.ReadyForNextGameCommand;
 import org.jskat.control.event.skatgame.GameStartEvent;
+import org.jskat.control.event.table.SkatGameReplayFinishedEvent;
 import org.jskat.control.event.table.SkatGameReplayStartedEvent;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData;
@@ -96,6 +97,9 @@ public class SkatSeries {
 
 	@Subscribe
 	public void readyForNextGameOn(final ReadyForNextGameCommand command) {
+
+		JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(
+				new SkatGameReplayFinishedEvent());
 		readyForNextGame = true;
 	}
 
