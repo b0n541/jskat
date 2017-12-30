@@ -78,8 +78,8 @@ public abstract class SuitGrandRamschRule extends AbstractSkatRule {
 						.getSuitGrandOrder()) {
 					// cards have same suit grand order
 					// only possible if two jacks are checked
-					if (cardToBeat.getSuit().getSuitOrder() < card.getSuit()
-							.getSuitOrder()) {
+					if (cardToBeat.getSuit().getSortOrder() < card.getSuit()
+							.getSortOrder()) {
 
 						result = true;
 					}

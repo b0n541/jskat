@@ -31,6 +31,6 @@ public abstract class AbstractInputStrategy implements InputStrategy {
 	}
 
 	protected final static int getNetworkInputIndex(final Card card) {
-		return card.getSuit().getSuitOrder() * 8 + card.getNullOrder();
+		return card.getSuit().getSortOrder() * 8 + card.getNullOrder();
 	}
 }

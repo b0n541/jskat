@@ -25,326 +25,118 @@ public enum Rank {
 	/**
 	 * Seven
 	 */
-	SEVEN {
-		@Override
-		public String shortString() {
-			return "7";
-		}
-
-		@Override
-		public String longString() {
-			return "Seven";
-		}
-
-		@Override
-		public int getSuitGrandOrder() {
-			return 0;
-		}
-
-		@Override
-		public int getNullOrder() {
-			return 0;
-		}
-
-		@Override
-		public int getRamschOrder() {
-			return 0;
-		}
-
-		@Override
-		public int getPoints() {
-			return 0;
-		}
-	},
+	SEVEN("7", "Seven", 0, 0, 0, 0),
 	/**
 	 * Eight
 	 */
-	EIGHT {
-		@Override
-		public String shortString() {
-			return "8";
-		}
-
-		@Override
-		public String longString() {
-			return "Eight";
-		}
-
-		@Override
-		public int getSuitGrandOrder() {
-			return 1;
-		}
-
-		@Override
-		public int getNullOrder() {
-			return 1;
-		}
-
-		@Override
-		public int getRamschOrder() {
-			return 1;
-		}
-
-		@Override
-		public int getPoints() {
-			return 0;
-		}
-	},
+	EIGHT("8", "Eight", 1, 1, 1, 0),
 	/**
 	 * Nine
 	 */
-	NINE {
-		@Override
-		public String shortString() {
-			return "9";
-		}
-
-		@Override
-		public String longString() {
-			return "Nine";
-		}
-
-		@Override
-		public int getSuitGrandOrder() {
-			return 2;
-		}
-
-		@Override
-		public int getNullOrder() {
-			return 2;
-		}
-
-		@Override
-		public int getRamschOrder() {
-			return 2;
-		}
-
-		@Override
-		public int getPoints() {
-			return 0;
-		}
-	},
+	NINE("9", "Nine", 2, 2, 2, 0),
 	/**
 	 * Queen or Ober
 	 */
-	QUEEN {
-		@Override
-		public String shortString() {
-			return "Q";
-		}
-
-		@Override
-		public String longString() {
-			return "Queen";
-		}
-
-		@Override
-		public int getSuitGrandOrder() {
-			return 3;
-		}
-
-		@Override
-		public int getNullOrder() {
-			return 5;
-		}
-
-		@Override
-		public int getRamschOrder() {
-			return 3;
-		}
-
-		@Override
-		public int getPoints() {
-			return 3;
-		}
-	},
+	QUEEN("Q", "Queen", 3, 5, 3, 3),
 	/**
 	 * King or König
 	 */
-	KING {
-		@Override
-		public String shortString() {
-			return "K";
-		}
-
-		@Override
-		public String longString() {
-			return "King";
-		}
-
-		@Override
-		public int getSuitGrandOrder() {
-			return 4;
-		}
-
-		@Override
-		public int getNullOrder() {
-			return 6;
-		}
-
-		@Override
-		public int getRamschOrder() {
-			return 4;
-		}
-
-		@Override
-		public int getPoints() {
-			return 4;
-		}
-	},
+	KING("K", "King", 4, 6, 4, 4),
 	/**
 	 * Ten
 	 */
-	TEN {
-		@Override
-		public String shortString() {
-			return "T";
-		}
-
-		@Override
-		public String longString() {
-			return "Ten";
-		}
-
-		@Override
-		public int getSuitGrandOrder() {
-			return 5;
-		}
-
-		@Override
-		public int getNullOrder() {
-			return 3;
-		}
-
-		@Override
-		public int getRamschOrder() {
-			return 5;
-		}
-
-		@Override
-		public int getPoints() {
-			return 10;
-		}
-	},
+	TEN("T", "Ten", 5, 3, 5, 10),
 	/**
 	 * Ace or Daus
 	 */
-	ACE {
-		@Override
-		public String shortString() {
-			return "A";
-		}
-
-		@Override
-		public String longString() {
-			return "Ace";
-		}
-
-		@Override
-		public int getSuitGrandOrder() {
-			return 6;
-		}
-
-		@Override
-		public int getNullOrder() {
-			return 7;
-		}
-
-		@Override
-		public int getRamschOrder() {
-			return 6;
-		}
-
-		@Override
-		public int getPoints() {
-			return 11;
-		}
-	},
+	ACE("A", "Ace", 6, 7, 6, 11),
 	/**
 	 * Jack or Unter
 	 */
-	JACK {
-		@Override
-		public String shortString() {
-			return "J";
-		}
+	JACK("J", "Jack", 7, 4, 7, 2);
 
-		@Override
-		public String longString() {
-			return "Jack";
-		}
-
-		@Override
-		public int getSuitGrandOrder() {
-			return 7;
-		}
-
-		@Override
-		public int getNullOrder() {
-			return 4;
-		}
-
-		@Override
-		public int getRamschOrder() {
-			return 7;
-		}
-
-		@Override
-		public int getPoints() {
-			return 2;
-		}
-	};
+	private String shortString;
+	private String longString;
+	private int suitGrandOrder;
+	private int nullOrder;
+	private int ramschOrder;
+	private int points;
 
 	/**
-	 * Gets a short string representation of the constant.
-	 * 
-	 * @return Short string representation of the constant
+	 * Constructor
 	 */
-	public abstract String shortString();
+	private Rank(final String shortString, final String longString, final int suitGrandOrder, final int nullOrder,
+			final int ramschOrder, final int points) {
+		this.shortString = shortString;
+		this.longString = longString;
+		this.suitGrandOrder = suitGrandOrder;
+		this.nullOrder = nullOrder;
+		this.ramschOrder = ramschOrder;
+		this.points = points;
+	}
 
 	/**
-	 * Gets a long string representation of the constant.
-	 * 
-	 * @return Long string representation of the constant
+	 * Gets a short string representation of the rank.
+	 *
+	 * @return Short string representation of the rank
 	 */
-	public abstract String longString();
+	public String getShortString() {
+		return shortString;
+	}
 
 	/**
-	 * Gets the order of the constant in suit and grand games.
-	 * 
+	 * Gets a long string representation of the rank.
+	 *
+	 * @return Long string representation of the rank
+	 */
+	public String getLongString() {
+		return longString;
+	}
+
+	/**
+	 * Gets the order of the rank in suit and grand games.
+	 *
 	 * @return Order in suit and grand games
 	 */
-	public abstract int getSuitGrandOrder();
+	public int getSuitGrandOrder() {
+		return suitGrandOrder;
+	}
 
 	/**
-	 * Gets the order of the constant in null games.
-	 * 
+	 * Gets the order of the rank in null games.
+	 *
 	 * @return Order in null games
 	 */
-	public abstract int getNullOrder();
+	public int getNullOrder() {
+		return nullOrder;
+	}
 
 	/**
-	 * Gets the order of the constant in ramsch games.
-	 * 
+	 * Gets the order of the rank in ramsch games.
+	 *
 	 * @return Order in ramsch games
 	 */
-	public abstract int getRamschOrder();
+	public int getRamschOrder() {
+		return ramschOrder;
+	}
 
 	/**
-	 * Gets the points of the card for game value calculation.
-	 * 
+	 * Gets the points of the rank for game value calculation.
+	 *
 	 * @return Points of the card
 	 */
-	public abstract int getPoints();
+	public int getPoints() {
+		return points;
+	}
 
 	/**
 	 * Gets the rank of a card given as string.
-	 * 
+	 *
 	 * @param cardAsString
 	 *            Card as string
 	 * @return Rank of card
 	 */
-	public static Rank getRankFromString(String cardAsString) {
+	public static Rank getRankFromString(final String cardAsString) {
 
 		Rank rank = null;
 
@@ -382,9 +174,9 @@ public enum Rank {
 
 	/**
 	 * Builds an array of the ranks (e.g. to compute the multipliers)
-	 * 
-	 * @return an array containing the ranks without the jack, starting with
-	 *         ace, ending with 7
+	 *
+	 * @return an array containing the ranks without the jack, starting with ace,
+	 *         ending with 7
 	 */
 	public static List<Rank> getRankList() {
 
@@ -393,22 +185,22 @@ public enum Rank {
 	}
 
 	/**
-	 * converts the rank of a card to a specific int value (7=1, 8=2, 9=4, ...
-	 * A=64, J=128)
-	 * 
+	 * converts the rank of a card to a specific int value (7=1, 8=2, 9=4, ... A=64,
+	 * J=128)
+	 *
 	 * @return an int representation of the card's rank
 	 */
 	@Deprecated
 	public int toBinaryFlag() {
-		return (int) Math.pow(2, this.ordinal());
+		return (int) Math.pow(2, ordinal());
 	}
 
 	public int toNullBinaryFlag() {
-		return (int) Math.pow(2, this.getNullOrder());
+		return (int) Math.pow(2, getNullOrder());
 	}
 
 	public int toSuitBinaryFlag() {
-		return (int) Math.pow(2, this.getSuitGrandOrder());
+		return (int) Math.pow(2, getSuitGrandOrder());
 	}
 
 	public int toGrandBinaryFlag() {
@@ -416,6 +208,6 @@ public enum Rank {
 	}
 
 	public int toRamschBinaryFlag() {
-		return (int) Math.pow(2, this.getRamschOrder());
+		return (int) Math.pow(2, getRamschOrder());
 	}
 }

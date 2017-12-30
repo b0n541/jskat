@@ -163,6 +163,6 @@ public class SimpleNetworkInputGenerator implements NetworkInputGenerator {
 
 	private static int getNetInputIndex(final Card card) {
 
-		return card.getSuit().getSuitOrder() * 8 + card.getNullOrder();
+		return card.getSuit().getSortOrder() * 8 + card.getNullOrder();
 	}
 }

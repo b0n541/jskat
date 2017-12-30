@@ -26,99 +26,130 @@ public enum Card {
 	/**
 	 * Ace of clubs
 	 */
-	CA(Suit.CLUBS, Rank.ACE), /**
-								 * Ten of clubs
-								 */
-	CT(Suit.CLUBS, Rank.TEN), /**
-								 * King of clubs
-								 */
-	CK(Suit.CLUBS, Rank.KING), /**
-								 * Queen of clubs
-								 */
-	CQ(Suit.CLUBS, Rank.QUEEN), /**
-								 * Jack of clubs
-								 */
-	CJ(Suit.CLUBS, Rank.JACK), /**
-								 * Nine of clubs
-								 */
-	C9(Suit.CLUBS, Rank.NINE), /**
-								 * Eight of clubs
-								 */
-	C8(Suit.CLUBS, Rank.EIGHT), /**
-								 * Seven of clubs
-								 */
-	C7(Suit.CLUBS, Rank.SEVEN), /**
-								 * Ace of spades
-								 */
-	SA(Suit.SPADES, Rank.ACE), /**
-								 * Ten of spades
-								 */
-	ST(Suit.SPADES, Rank.TEN), /**
-								 * King of spades
-								 */
-	SK(Suit.SPADES, Rank.KING), /**
-								 * Queen of spades
-								 */
-	SQ(Suit.SPADES, Rank.QUEEN), /**
-									 * Jack of spades
-									 */
-	SJ(Suit.SPADES, Rank.JACK), /**
-								 * Nine of spades
-								 */
-	S9(Suit.SPADES, Rank.NINE), /**
-								 * Eight of spades
-								 */
-	S8(Suit.SPADES, Rank.EIGHT), /**
-									 * Seven of spades
-									 */
-	S7(Suit.SPADES, Rank.SEVEN), /**
-									 * Ace of hearts
-									 */
-	HA(Suit.HEARTS, Rank.ACE), /**
-								 * Ten of hearts
-								 */
-	HT(Suit.HEARTS, Rank.TEN), /**
-								 * King of hearts
-								 */
-	HK(Suit.HEARTS, Rank.KING), /**
-								 * Queen of hearts
-								 */
-	HQ(Suit.HEARTS, Rank.QUEEN), /**
-									 * Jack of hearts
-									 */
-	HJ(Suit.HEARTS, Rank.JACK), /**
-								 * Nine of hearts
-								 */
-	H9(Suit.HEARTS, Rank.NINE), /**
-								 * Eight of hearts
-								 */
-	H8(Suit.HEARTS, Rank.EIGHT), /**
-									 * Seven of hearts
-									 */
-	H7(Suit.HEARTS, Rank.SEVEN), /**
-									 * Ace of diamonds
-									 */
-	DA(Suit.DIAMONDS, Rank.ACE), /**
-									 * Ten of diamonds
-									 */
-	DT(Suit.DIAMONDS, Rank.TEN), /**
-									 * King of diamonds
-									 */
-	DK(Suit.DIAMONDS, Rank.KING), /**
-									 * Queen of diamonds
-									 */
-	DQ(Suit.DIAMONDS, Rank.QUEEN), /**
-									 * Jack of diamonds
-									 */
-	DJ(Suit.DIAMONDS, Rank.JACK), /**
-									 * Nine of diamonds
-									 */
-	D9(Suit.DIAMONDS, Rank.NINE), /**
-									 * Eight of diamonds
-									 */
-	D8(Suit.DIAMONDS, Rank.EIGHT), /**
-									 * Seven of diamonds
-									 */
+	CA(Suit.CLUBS, Rank.ACE),
+	/**
+	 * Ten of clubs
+	 */
+	CT(Suit.CLUBS, Rank.TEN),
+	/**
+	 * King of clubs
+	 */
+	CK(Suit.CLUBS, Rank.KING),
+	/**
+	 * Queen of clubs
+	 */
+	CQ(Suit.CLUBS, Rank.QUEEN),
+	/**
+	 * Jack of clubs
+	 */
+	CJ(Suit.CLUBS, Rank.JACK),
+	/**
+	 * Nine of clubs
+	 */
+	C9(Suit.CLUBS, Rank.NINE),
+	/**
+	 * Eight of clubs
+	 */
+	C8(Suit.CLUBS, Rank.EIGHT),
+	/**
+	 * Seven of clubs
+	 */
+	C7(Suit.CLUBS, Rank.SEVEN),
+	/**
+	 * Ace of spades
+	 */
+	SA(Suit.SPADES, Rank.ACE),
+	/**
+	 * Ten of spades
+	 */
+	ST(Suit.SPADES, Rank.TEN),
+	/**
+	 * King of spades
+	 */
+	SK(Suit.SPADES, Rank.KING),
+	/**
+	 * Queen of spades
+	 */
+	SQ(Suit.SPADES, Rank.QUEEN),
+	/**
+	 * Jack of spades
+	 */
+	SJ(Suit.SPADES, Rank.JACK),
+	/**
+	 * Nine of spades
+	 */
+	S9(Suit.SPADES, Rank.NINE),
+	/**
+	 * Eight of spades
+	 */
+	S8(Suit.SPADES, Rank.EIGHT),
+	/**
+	 * Seven of spades
+	 */
+	S7(Suit.SPADES, Rank.SEVEN),
+	/**
+	 * Ace of hearts
+	 */
+	HA(Suit.HEARTS, Rank.ACE),
+	/**
+	 * Ten of hearts
+	 */
+	HT(Suit.HEARTS, Rank.TEN),
+	/**
+	 * King of hearts
+	 */
+	HK(Suit.HEARTS, Rank.KING),
+	/**
+	 * Queen of hearts
+	 */
+	HQ(Suit.HEARTS, Rank.QUEEN),
+	/**
+	 * Jack of hearts
+	 */
+	HJ(Suit.HEARTS, Rank.JACK),
+	/**
+	 * Nine of hearts
+	 */
+	H9(Suit.HEARTS, Rank.NINE),
+	/**
+	 * Eight of hearts
+	 */
+	H8(Suit.HEARTS, Rank.EIGHT),
+	/**
+	 * Seven of hearts
+	 */
+	H7(Suit.HEARTS, Rank.SEVEN),
+	/**
+	 * Ace of diamonds
+	 */
+	DA(Suit.DIAMONDS, Rank.ACE),
+	/**
+	 * Ten of diamonds
+	 */
+	DT(Suit.DIAMONDS, Rank.TEN),
+	/**
+	 * King of diamonds
+	 */
+	DK(Suit.DIAMONDS, Rank.KING),
+	/**
+	 * Queen of diamonds
+	 */
+	DQ(Suit.DIAMONDS, Rank.QUEEN),
+	/**
+	 * Jack of diamonds
+	 */
+	DJ(Suit.DIAMONDS, Rank.JACK),
+	/**
+	 * Nine of diamonds
+	 */
+	D9(Suit.DIAMONDS, Rank.NINE),
+	/**
+	 * Eight of diamonds
+	 */
+	D8(Suit.DIAMONDS, Rank.EIGHT),
+	/**
+	 * Seven of diamonds
+	 */
 	D7(Suit.DIAMONDS, Rank.SEVEN);
 
 	private final Suit suit;
@@ -126,8 +157,8 @@ public enum Card {
 
 	private Card(final Suit newSuit, final Rank newRank) {
 
-		this.suit = newSuit;
-		this.rank = newRank;
+		suit = newSuit;
+		rank = newRank;
 	}
 
 	/**
@@ -137,7 +168,7 @@ public enum Card {
 	 */
 	public Suit getSuit() {
 
-		return this.suit;
+		return suit;
 	}
 
 	/**
@@ -147,7 +178,7 @@ public enum Card {
 	 */
 	public Rank getRank() {
 
-		return this.rank;
+		return rank;
 	}
 
 	/**
@@ -159,7 +190,7 @@ public enum Card {
 	 */
 	public boolean isSameSuit(final Card card) {
 
-		return this.suit.equals(card.getSuit());
+		return suit.equals(card.getSuit());
 	}
 
 	/**
@@ -171,7 +202,7 @@ public enum Card {
 	 */
 	public boolean isSameRank(final Card card) {
 
-		return this.rank.equals(card.getRank());
+		return rank.equals(card.getRank());
 	}
 
 	/**
@@ -181,7 +212,7 @@ public enum Card {
 	 */
 	public int getPoints() {
 
-		return this.rank.getPoints();
+		return rank.getPoints();
 	}
 
 	/**
@@ -191,7 +222,7 @@ public enum Card {
 	 */
 	public int getSuitGrandOrder() {
 
-		return this.rank.getSuitGrandOrder();
+		return rank.getSuitGrandOrder();
 	}
 
 	/**
@@ -201,7 +232,7 @@ public enum Card {
 	 */
 	public int getNullOrder() {
 
-		return this.rank.getNullOrder();
+		return rank.getNullOrder();
 	}
 
 	/**
@@ -211,7 +242,7 @@ public enum Card {
 	 */
 	public int getRamschOrder() {
 
-		return this.rank.getRamschOrder();
+		return rank.getRamschOrder();
 	}
 
 	/**
@@ -259,8 +290,8 @@ public enum Card {
 	}
 
 	/**
-	 * Checks whether the card beats another given card under the current game
-	 * type and trump color with respect to the initial card on the table
+	 * Checks whether the card beats another given card under the current game type
+	 * and trump color with respect to the initial card on the table
 	 *
 	 * @param gameType
 	 *            Game type
@@ -275,9 +306,8 @@ public enum Card {
 	}
 
 	/**
-	 * Creates a list of all cards that would beat the given card under the
-	 * current game type and trump color with respect to the initial card on the
-	 * table
+	 * Creates a list of all cards that would beat the given card under the current
+	 * game type and trump color with respect to the initial card on the table
 	 *
 	 * @param gameType
 	 *            Game type
@@ -289,8 +319,8 @@ public enum Card {
 			final Card cardToBeat) {
 		// TODO (mjl 23.08.2011) write unit tests for Card.getBeatingCards()
 		// FIXME (mjl 05.09.2011) is this supposed to consider trump cards?
-		CardList beatingCards = new CardList();
-		for (Card card : Card.values()) {
+		final CardList beatingCards = new CardList();
+		for (final Card card : Card.values()) {
 			if (card.beats(gameType, cardToBeat)) {
 				beatingCards.add(card);
 			}
@@ -307,8 +337,8 @@ public enum Card {
 	 */
 	public static Card getCardFromString(final String cardAsString) {
 
-		Suit suit = Suit.getSuitFromString(cardAsString);
-		Rank rank = Rank.getRankFromString(cardAsString);
+		final Suit suit = Suit.getSuitFromString(cardAsString);
+		final Rank rank = Rank.getRankFromString(cardAsString);
 
 		return getCard(suit, rank);
 	}
@@ -326,7 +356,7 @@ public enum Card {
 
 		Card result = null;
 
-		for (Card card : Card.values()) {
+		for (final Card card : Card.values()) {
 
 			if (card.getSuit() == suit && card.getRank() == rank) {
 
@@ -338,13 +368,13 @@ public enum Card {
 	}
 
 	/**
-	 * converts the rank of a card to a specific int value (7=1, 8=2, 9=4, ...
-	 * A=64, J=128)
+	 * converts the rank of a card to a specific int value (7=1, 8=2, 9=4, ... A=64,
+	 * J=128)
 	 *
 	 * @return an int representation of the card's rank
 	 */
 	int toBinaryFlag() {
-		return this.getRank().toBinaryFlag();
+		return getRank().toBinaryFlag();
 	}
 
 	/**
@@ -353,19 +383,6 @@ public enum Card {
 	@Override
 	public String toString() {
 
-		return this.suit.shortString() + "-" + this.rank.shortString(); //$NON-NLS-1$
-	}
-
-	/**
-	 * Gets the file name for the card image<br>
-	 * Should be located in a class that provides the card images
-	 *
-	 * @return File name for card image
-	 */
-	@Deprecated
-	public String getPNGString() {
-
-		return (this.suit.shortString() + this.rank.shortString())
-				.toLowerCase();
+		return suit.getSymbol() + rank.getShortString();
 	}
 }

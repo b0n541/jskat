@@ -662,11 +662,11 @@ public class CardList implements Iterable<Card> {
 	private class NullComparator implements Comparator<Card> {
 		@Override
 		public int compare(Card first, Card second) {
-			if (first.getSuit().getSuitOrder() < second.getSuit()
-					.getSuitOrder()) {
+			if (first.getSuit().getSortOrder() < second.getSuit()
+					.getSortOrder()) {
 				return -1;
-			} else if (first.getSuit().getSuitOrder() > second.getSuit()
-					.getSuitOrder()) {
+			} else if (first.getSuit().getSortOrder() > second.getSuit()
+					.getSortOrder()) {
 				return 1;
 			}
 
@@ -683,11 +683,11 @@ public class CardList implements Iterable<Card> {
 		public int compare(Card first, Card second) {
 			// first the jacks
 			if (first.getRank() == Rank.JACK && second.getRank() == Rank.JACK) {
-				if (first.getSuit().getSuitOrder() < second.getSuit()
-						.getSuitOrder()) {
+				if (first.getSuit().getSortOrder() < second.getSuit()
+						.getSortOrder()) {
 					return 1;
-				} else if (first.getSuit().getSuitOrder() > second.getSuit()
-						.getSuitOrder()) {
+				} else if (first.getSuit().getSortOrder() > second.getSuit()
+						.getSortOrder()) {
 					return -1;
 				}
 			} else if (first.getRank() == Rank.JACK) {
@@ -696,11 +696,11 @@ public class CardList implements Iterable<Card> {
 				return 1;
 			}
 
-			if (first.getSuit().getSuitOrder() < second.getSuit()
-					.getSuitOrder()) {
+			if (first.getSuit().getSortOrder() < second.getSuit()
+					.getSortOrder()) {
 				return -1;
-			} else if (first.getSuit().getSuitOrder() > second.getSuit()
-					.getSuitOrder()) {
+			} else if (first.getSuit().getSortOrder() > second.getSuit()
+					.getSortOrder()) {
 				return 1;
 			}
 
@@ -723,11 +723,11 @@ public class CardList implements Iterable<Card> {
 		public int compare(Card first, Card second) {
 			// first the jacks
 			if (first.getRank() == Rank.JACK && second.getRank() == Rank.JACK) {
-				if (first.getSuit().getSuitOrder() < second.getSuit()
-						.getSuitOrder()) {
+				if (first.getSuit().getSortOrder() < second.getSuit()
+						.getSortOrder()) {
 					return 1;
-				} else if (first.getSuit().getSuitOrder() > second.getSuit()
-						.getSuitOrder()) {
+				} else if (first.getSuit().getSortOrder() > second.getSuit()
+						.getSortOrder()) {
 					return -1;
 				}
 			} else if (first.getRank() == Rank.JACK) {
@@ -753,11 +753,11 @@ public class CardList implements Iterable<Card> {
 			}
 
 			// all the other cards
-			if (first.getSuit().getSuitOrder() < second.getSuit()
-					.getSuitOrder()) {
+			if (first.getSuit().getSortOrder() < second.getSuit()
+					.getSortOrder()) {
 				return 1;
-			} else if (first.getSuit().getSuitOrder() > second.getSuit()
-					.getSuitOrder()) {
+			} else if (first.getSuit().getSortOrder() > second.getSuit()
+					.getSortOrder()) {
 				return -1;
 			}
 

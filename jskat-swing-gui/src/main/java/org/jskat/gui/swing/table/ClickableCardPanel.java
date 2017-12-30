@@ -43,7 +43,7 @@ class ClickableCardPanel extends CardPanel {
 
 	/**
 	 * Creates a new instance of CardPanel.
-	 * 
+	 *
 	 * @param parent
 	 *            Parent panel
 	 * @param scaleFactor
@@ -94,7 +94,7 @@ class ClickableCardPanel extends CardPanel {
 
 	/**
 	 * Tells the JSkatMaster when the panel was clicked by the user.
-	 * 
+	 *
 	 * @param event
 	 *            Mouse event
 	 */
@@ -109,18 +109,18 @@ class ClickableCardPanel extends CardPanel {
 			// get card
 			final int cardWidth = bitmaps.getCardImage(Card.CJ).getWidth(this);
 
-			int cardIndex = getCardIndex(xPosition, cardWidth);
+			final int cardIndex = getCardIndex(xPosition, cardWidth);
 
-			Card card = getCard(cardIndex);
+			final Card card = getCard(cardIndex);
 
 			if (card != null) {
-				Action action = getAction();
+				final Action action = getAction();
 
 				if (action != null) {
 
 					action.actionPerformed(new ActionEvent(Card
-							.getCardFromString(card.getSuit().shortString()
-									+ card.getRank().shortString()),
+							.getCardFromString(card.getSuit().getShortString()
+									+ card.getRank().getShortString()),
 							ActionEvent.ACTION_PERFORMED, (String) action
 									.getValue(Action.ACTION_COMMAND_KEY)));
 				} else {
@@ -158,7 +158,7 @@ class ClickableCardPanel extends CardPanel {
 		return action;
 	}
 
-	private Card getCard(int cardIndex) {
+	private Card getCard(final int cardIndex) {
 		Card card = null;
 		if (cardIndex > -1 && cardIndex < cards.size()) {
 			card = cards.get(cardIndex);
@@ -166,7 +166,7 @@ class ClickableCardPanel extends CardPanel {
 		return card;
 	}
 
-	private int getCardIndex(int clickPositionX, int cardWidth) {
+	private int getCardIndex(final int clickPositionX, final int cardWidth) {
 		int cardIndex = -1;
 		if (cards.size() == 1) {
 			log.debug("only one card on hand"); //$NON-NLS-1$
@@ -175,7 +175,7 @@ class ClickableCardPanel extends CardPanel {
 			}
 		} else if (cards.size() > 1) {
 
-			int distanceBetweenCards = (getWidth() - cardWidth)
+			final int distanceBetweenCards = (getWidth() - cardWidth)
 					/ (cards.size() - 1);
 
 			if (cardWidth > distanceBetweenCards) {

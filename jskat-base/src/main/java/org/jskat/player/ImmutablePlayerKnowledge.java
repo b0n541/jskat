@@ -78,14 +78,14 @@ public class ImmutablePlayerKnowledge {
 	protected Trick currentTrick;
 
 	/**
-	 * Card played by the player on the left, represents first card in a trick
-	 * or is NULL otherwise
+	 * Card played by the player on the left, represents first card in a trick or is
+	 * NULL otherwise
 	 */
 	protected Card leftPlayerTrickCard;
 
 	/**
-	 * Card played by the player on the right, represents the first or second
-	 * card in a trick or is NULL otherwise
+	 * Card played by the player on the right, represents the first or second card
+	 * in a trick or is NULL otherwise
 	 */
 	protected Card rightPlayerTrickCard;
 
@@ -97,8 +97,7 @@ public class ImmutablePlayerKnowledge {
 	/**
 	 * Counts the number of cards on players hand for every card
 	 *
-	 * FIXME: do we need this numbers and if do we count the Jacks into this
-	 * number
+	 * FIXME: do we need this numbers and if do we count the Jacks into this number
 	 */
 	// protected final Map<Suit, Integer> suitCount = new HashMap<Suit,
 	// Integer>();
@@ -106,8 +105,7 @@ public class ImmutablePlayerKnowledge {
 	/**
 	 * Counts the points for every suit on players hand
 	 *
-	 * FIXME: do we need this numbers and if do we count the Jacks into this
-	 * number
+	 * FIXME: do we need this numbers and if do we count the Jacks into this number
 	 */
 	// protected final Map<Suit, Integer> suitPoints = new HashMap<Suit,
 	// Integer>();
@@ -139,8 +137,8 @@ public class ImmutablePlayerKnowledge {
 	}
 
 	/**
-	 * Checks whether a player could have a card information, this is an
-	 * uncertain information
+	 * Checks whether a player could have a card information, this is an uncertain
+	 * information
 	 *
 	 * @param player
 	 *            Player ID
@@ -165,7 +163,7 @@ public class ImmutablePlayerKnowledge {
 	 */
 	public final boolean couldHaveSuit(final Player player, final Suit suit) {
 		boolean result = false;
-		for (Rank rank : Rank.values()) {
+		for (final Rank rank : Rank.values()) {
 			if (Rank.JACK.equals(rank)) {
 				continue;
 			}
@@ -175,15 +173,15 @@ public class ImmutablePlayerKnowledge {
 	}
 
 	/**
-	 * Checks whether a player could have any trump cards left, this is an
-	 * uncertain information
+	 * Checks whether a player could have any trump cards left, this is an uncertain
+	 * information
 	 *
 	 * @param player
 	 *            Player ID
 	 * @return TRUE if the player could have any trump card
 	 */
 	public final boolean couldHaveTrump(final Player player) {
-		for (Card c : Card.values()) {
+		for (final Card c : Card.values()) {
 			if (c.isTrump(getGameType()) && couldHaveCard(player, c)) {
 				return true;
 			}
@@ -209,16 +207,16 @@ public class ImmutablePlayerKnowledge {
 	 */
 	public final boolean couldOpponentsHaveTrump() {
 		if (playerPosition == declarer) {
-			for (Player p : Player.values()) {
+			for (final Player p : Player.values()) {
 				if (p == declarer) {
 					continue;
 				}
-				for (Suit s : Suit.values()) {
+				for (final Suit s : Suit.values()) {
 					if (couldHaveCard(p, Card.getCard(s, Rank.JACK))) {
 						return true;
 					}
 				}
-				for (Rank r : Rank.values()) {
+				for (final Rank r : Rank.values()) {
 					if (couldHaveCard(p, Card.getCard(getGameAnnouncement().getGameType().getTrumpSuit(), r))) {
 						return true;
 					}
@@ -301,23 +299,23 @@ public class ImmutablePlayerKnowledge {
 	 * @return the ownCards
 	 */
 	public final CardList getOwnCards() {
-		CardList result = new CardList();
+		final CardList result = new CardList();
 		result.addAll(ownCards);
 		return result;
 	}
 
 	/**
-	 * Converts all the cards from the tricks to the binary matrix, one int for
-	 * each suit<br>
+	 * Converts all the cards from the tricks to the binary matrix, one int for each
+	 * suit<br>
 	 * &nbsp;<br>
 	 * The index of the array equals the Suit ordinal (0=Clubs, 3=Diamonds).
 	 *
 	 * @return an array int[4]
 	 */
 	public final int[] getPlayedCardsBinary() {
-		int[] result = new int[4];
-		for (Trick t : tricks) {
-			int[] tmp = t.getCardList().toBinary();
+		final int[] result = new int[4];
+		for (final Trick t : tricks) {
+			final int[] tmp = t.getCardList().toBinary();
 			for (int i = 0; i < 4; i++) {
 				result[i] += tmp[i];
 			}
@@ -352,7 +350,7 @@ public class ImmutablePlayerKnowledge {
 	public final int getPotentialSuitCount(final Player player, final Suit suit, final boolean isTrump,
 			final boolean includeJacks) {
 		int result = 0;
-		for (Rank r : Rank.values()) {
+		for (final Rank r : Rank.values()) {
 			if (r == Rank.JACK && !includeJacks) {
 				continue;
 			} else if (couldHaveCard(player, Card.getCard(suit, r))) {
@@ -360,7 +358,7 @@ public class ImmutablePlayerKnowledge {
 			}
 		}
 		if (isTrump) {
-			for (Suit s : Suit.values()) {
+			for (final Suit s : Suit.values()) {
 				if (couldHaveCard(player, Card.getCard(s, Rank.JACK))) {
 					result++;
 				}
@@ -373,7 +371,7 @@ public class ImmutablePlayerKnowledge {
 	 * @return the singlePlayerCards
 	 */
 	public final CardList getSinglePlayerCards() {
-		CardList result = new CardList();
+		final CardList result = new CardList();
 		result.addAll(singlePlayerCards);
 		return result;
 	}
@@ -382,7 +380,7 @@ public class ImmutablePlayerKnowledge {
 	 * @return the skat
 	 */
 	public final CardList getSkat() {
-		CardList result = new CardList();
+		final CardList result = new CardList();
 		result.addAll(skat);
 		return result;
 	}
@@ -394,7 +392,7 @@ public class ImmutablePlayerKnowledge {
 	 */
 	public final CardList getTrickCards() {
 
-		CardList trick = new CardList();
+		final CardList trick = new CardList();
 
 		if (leftPlayerTrickCard != null) {
 
@@ -410,8 +408,8 @@ public class ImmutablePlayerKnowledge {
 	}
 
 	/**
-	 * Gets the number of trump cards that is known to the player (either by
-	 * being on his own hand or by having been played)
+	 * Gets the number of trump cards that is known to the player (either by being
+	 * on his own hand or by having been played)
 	 *
 	 * @return the number of known trump cards
 	 */
@@ -454,7 +452,7 @@ public class ImmutablePlayerKnowledge {
 
 		int possessionCount = 0;
 
-		for (Player playerPosition : Player.values()) {
+		for (final Player playerPosition : Player.values()) {
 			if (couldHaveCard(playerPosition, card)) {
 				possessionCount++;
 			}
@@ -513,10 +511,9 @@ public class ImmutablePlayerKnowledge {
 	 *            Player position of the other player
 	 * @param card
 	 *            Card played
-	 * @return TRUE if the card was played by the other player in the current
-	 *         trick
+	 * @return TRUE if the card was played by the other player in the current trick
 	 */
-	public final boolean isCardPlayedInTrick(Player otherPlayer, Card card) {
+	public final boolean isCardPlayedInTrick(final Player otherPlayer, final Card card) {
 
 		boolean result = false;
 
@@ -558,7 +555,7 @@ public class ImmutablePlayerKnowledge {
 	 *            Card
 	 * @return TRUE, if the card is on the players hand
 	 */
-	public final boolean isOwnCard(Card card) {
+	public final boolean isOwnCard(final Card card) {
 		return ownCards.contains(card);
 	}
 
@@ -578,7 +575,7 @@ public class ImmutablePlayerKnowledge {
 
 	public Set<Player> getPlayerPartyMembers() {
 
-		Set<Player> result = new HashSet<>();
+		final Set<Player> result = new HashSet<>();
 		if (getDeclarer().equals(getPlayerPosition())) {
 			// player is declarer
 			result.add(getDeclarer());
@@ -592,10 +589,10 @@ public class ImmutablePlayerKnowledge {
 
 	public CardList getPlayerPartyMadeCards() {
 
-		CardList result = new CardList();
-		Set<Player> partyMembers = getPlayerPartyMembers();
+		final CardList result = new CardList();
+		final Set<Player> partyMembers = getPlayerPartyMembers();
 
-		for (Trick trick : getCompletedTricks()) {
+		for (final Trick trick : getCompletedTricks()) {
 			if (partyMembers.contains(trick.getTrickWinner())) {
 				// trick was won by player's party
 				result.addAll(trick.getCardList());
@@ -606,7 +603,7 @@ public class ImmutablePlayerKnowledge {
 
 	public Set<Player> getOpponentPartyMembers() {
 
-		Set<Player> result = new HashSet<>();
+		final Set<Player> result = new HashSet<>();
 		if (getDeclarer().equals(getPlayerPosition())) {
 			// player is declarer
 			result.add(getDeclarer().getLeftNeighbor());
@@ -620,10 +617,10 @@ public class ImmutablePlayerKnowledge {
 
 	public CardList getOpponentPartyMadeCards() {
 
-		CardList result = new CardList();
-		Set<Player> opponents = getOpponentPartyMembers();
+		final CardList result = new CardList();
+		final Set<Player> opponents = getOpponentPartyMembers();
 
-		for (Trick trick : getCompletedTricks()) {
+		for (final Trick trick : getCompletedTricks()) {
 			if (opponents.contains(trick.getTrickWinner())) {
 				// trick was won by opponent's party
 				result.addAll(trick.getCardList());
@@ -638,19 +635,20 @@ public class ImmutablePlayerKnowledge {
 	@Override
 	public String toString() {
 
-		StringBuffer result = new StringBuffer();
+		final StringBuffer result = new StringBuffer();
 
 		result.append("Player position: " + playerPosition + '\n');
 		result.append("Own cards:\n"); //$NON-NLS-1$
-		for (Suit suit : Suit.values()) {
+		for (final Suit suit : Suit.values()) {
 
-			result.append(suit.shortString()).append(": "); //$NON-NLS-1$
+			result.append(suit.getLongString()).append(": "); //$NON-NLS-1$
 
-			for (Rank rank : Rank.values()) {
+			for (final Rank rank : Rank.values()) {
 
-				if (isOwnCard(Card.getCard(suit, rank))) {
+				final Card card = Card.getCard(suit, rank);
+				if (isOwnCard(card)) {
 
-					result.append(suit.shortString()).append(rank.shortString()).append(' ');
+					result.append(card).append(' ');
 				} else {
 
 					result.append("-- "); //$NON-NLS-1$
@@ -661,19 +659,20 @@ public class ImmutablePlayerKnowledge {
 		}
 
 		result.append("Could have cards:\n"); //$NON-NLS-1$
-		for (Player player : Player.values()) {
+		for (final Player player : Player.values()) {
 
 			result.append("Player: " + player + '\n');
 
-			for (Suit suit : Suit.values()) {
+			for (final Suit suit : Suit.values()) {
 
-				result.append(suit.shortString()).append(": "); //$NON-NLS-1$
+				result.append(suit.getLongString()).append(": "); //$NON-NLS-1$
 
-				for (Rank rank : Rank.values()) {
+				for (final Rank rank : Rank.values()) {
 
-					if (couldHaveCard(player, Card.getCard(suit, rank))) {
+					final Card card = Card.getCard(suit, rank);
+					if (couldHaveCard(player, card)) {
 
-						result.append(suit.shortString()).append(rank.shortString()).append(' ');
+						result.append(card).append(' ');
 					} else {
 
 						result.append("-- "); //$NON-NLS-1$
@@ -685,17 +684,18 @@ public class ImmutablePlayerKnowledge {
 		}
 
 		result.append("Played cards:\n"); //$NON-NLS-1$
-		for (Suit suit : Suit.values()) {
+		for (final Suit suit : Suit.values()) {
 
-			result.append(suit.shortString()).append(": "); //$NON-NLS-1$
+			result.append(suit.getLongString()).append(": "); //$NON-NLS-1$
 
-			for (Rank rank : Rank.values()) {
+			for (final Rank rank : Rank.values()) {
 
-				if (playedCards.get(Player.FOREHAND).contains(Card.getCard(suit, rank))
-						|| playedCards.get(Player.MIDDLEHAND).contains(Card.getCard(suit, rank))
-						|| playedCards.get(Player.REARHAND).contains(Card.getCard(suit, rank))) {
+				final Card card = Card.getCard(suit, rank);
+				if (playedCards.get(Player.FOREHAND).contains(card)
+						|| playedCards.get(Player.MIDDLEHAND).contains(card)
+						|| playedCards.get(Player.REARHAND).contains(card)) {
 
-					result.append(suit.shortString()).append(rank.shortString()).append(' ');
+					result.append(card).append(' ');
 				} else {
 
 					result.append("-- "); //$NON-NLS-1$
@@ -706,16 +706,17 @@ public class ImmutablePlayerKnowledge {
 		}
 
 		result.append("Player party made cards:\n");
-		CardList playerPartyMadeCards = getPlayerPartyMadeCards();
-		for (Suit suit : Suit.values()) {
+		final CardList playerPartyMadeCards = getPlayerPartyMadeCards();
+		for (final Suit suit : Suit.values()) {
 
-			result.append(suit.shortString()).append(": "); //$NON-NLS-1$
+			result.append(suit.getLongString()).append(": "); //$NON-NLS-1$
 
-			for (Rank rank : Rank.values()) {
+			for (final Rank rank : Rank.values()) {
 
-				if (playerPartyMadeCards.contains(Card.getCard(suit, rank))) {
+				final Card card = Card.getCard(suit, rank);
+				if (playerPartyMadeCards.contains(card)) {
 
-					result.append(suit.shortString()).append(rank.shortString()).append(' ');
+					result.append(card).append(' ');
 				} else {
 
 					result.append("-- "); //$NON-NLS-1$
@@ -726,16 +727,17 @@ public class ImmutablePlayerKnowledge {
 		}
 
 		result.append("Opponent party made cards:\n");
-		CardList opponentPartyMadeCards = getOpponentPartyMadeCards();
-		for (Suit suit : Suit.values()) {
+		final CardList opponentPartyMadeCards = getOpponentPartyMadeCards();
+		for (final Suit suit : Suit.values()) {
 
-			result.append(suit.shortString()).append(": "); //$NON-NLS-1$
+			result.append(suit.getLongString()).append(": "); //$NON-NLS-1$
 
-			for (Rank rank : Rank.values()) {
+			for (final Rank rank : Rank.values()) {
 
-				if (opponentPartyMadeCards.contains(Card.getCard(suit, rank))) {
+				final Card card = Card.getCard(suit, rank);
+				if (opponentPartyMadeCards.contains(card)) {
 
-					result.append(suit.shortString()).append(rank.shortString()).append(' ');
+					result.append(card).append(' ');
 				} else {
 
 					result.append("-- "); //$NON-NLS-1$

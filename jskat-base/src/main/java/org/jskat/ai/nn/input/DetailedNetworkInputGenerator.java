@@ -267,19 +267,19 @@ class DetailedNetworkInputGenerator implements NetworkInputGenerator {
 	private static int getNetInputIndexNullGame(final Card card) {
 		// TODO better order cards after frequency or points
 		// normal null ordering
-		return card.getSuit().getSuitOrder() * 8 + card.getNullOrder();
+		return card.getSuit().getSortOrder() * 8 + card.getNullOrder();
 	}
 
 	private static int getNetInputIndexGrandGame(final Card card) {
 		// TODO better order cards after frequency or points
 		// normal suit ordering after all jacks
-		return 4 + card.getSuit().getSuitOrder() * 7 + card.getSuitGrandOrder();
+		return 4 + card.getSuit().getSortOrder() * 7 + card.getSuitGrandOrder();
 	}
 
 	private static int getNetInputIndexRamschGame(final Card card) {
 		// TODO better order cards after frequency or points
 		// ramsch ordering after all jacks
-		return 4 + card.getSuit().getSuitOrder() * 7 + card.getRamschOrder();
+		return 4 + card.getSuit().getSortOrder() * 7 + card.getRamschOrder();
 	}
 
 	private static int getNetInputIndexSuitGame(final GameType gameType,
@@ -294,13 +294,13 @@ class DetailedNetworkInputGenerator implements NetworkInputGenerator {
 		} else {
 			// TODO better order cards after frequency or points
 			// normal suit ordering after all trump cards
-			if (card.getSuit().getSuitOrder() > trump.getSuitOrder()) {
+			if (card.getSuit().getSortOrder() > trump.getSortOrder()) {
 
-				result = 4 + 7 + (card.getSuit().getSuitOrder() - 1) * 7
+				result = 4 + 7 + (card.getSuit().getSortOrder() - 1) * 7
 						+ card.getSuitGrandOrder();
 			} else {
 
-				result = 4 + 7 + card.getSuit().getSuitOrder() * 7
+				result = 4 + 7 + card.getSuit().getSortOrder() * 7
 						+ card.getSuitGrandOrder();
 			}
 		}

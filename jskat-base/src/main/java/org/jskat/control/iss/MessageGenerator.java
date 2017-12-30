@@ -120,7 +120,7 @@ class MessageGenerator {
 
 		if (!gameAnnouncement.isHand()) {
 
-			CardList skat = gameAnnouncement.getDiscardedCards();
+			final CardList skat = gameAnnouncement.getDiscardedCards();
 			gameAnnouncementString += "." + getIssCardString(skat.get(0)) + "." //$NON-NLS-1$ //$NON-NLS-2$
 					+ getIssCardString(skat.get(1));
 		}
@@ -178,7 +178,7 @@ class MessageGenerator {
 	}
 
 	private static String getIssCardString(final Card card) {
-		return card.getSuit().shortString() + card.getRank().shortString();
+		return card.getSuit().getShortString() + card.getRank().getShortString();
 	}
 
 	String getResignMessage(final String tableName) {

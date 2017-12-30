@@ -28,9 +28,9 @@ import org.slf4j.LoggerFactory;
 /**
  * The BidEvaluator is the class to generate the acceptable bid value and to
  * decide, which game to play after discarding the Skat.
- * 
+ *
  * @author Daniel Loreck
- * 
+ *
  */
 class BidEvaluator {
 
@@ -43,7 +43,7 @@ class BidEvaluator {
 	private GameType oSuggestedGameType = GameType.RAMSCH;
 	private Suit oSuggestedTrumpSuit = null;
 
-	private Player oPlayersPosition;
+	private final Player oPlayersPosition;
 
 	private boolean oGrandHand = false;
 	private boolean oGrandSchneider = false;
@@ -58,11 +58,11 @@ class BidEvaluator {
 
 	/**
 	 * default constructor
-	 * 
+	 *
 	 * @param cards
 	 *            hand of the player
 	 */
-	BidEvaluator(CardList pCards, Player pPlayersPosition) {
+	BidEvaluator(final CardList pCards, final Player pPlayersPosition) {
 		oPlayersPosition = pPlayersPosition;
 
 		oLog.debug("Checking out what to bid with [" + pCards + "]"
@@ -70,7 +70,7 @@ class BidEvaluator {
 		eval(pCards);
 	}
 
-	public void eval(CardList pCards) {
+	public void eval(final CardList pCards) {
 		oLog.debug("CARDLISTSIZE: " + pCards.size());
 		if (pCards.size() < 10) {
 			oLog.warn("Not enough cards for bid evaluation!");
@@ -102,7 +102,7 @@ class BidEvaluator {
 		getHighestSuitMultiplier(pCards);
 	}
 
-	private boolean check4Null(CardList pCards) {
+	private boolean check4Null(final CardList pCards) {
 		pCards.sort(GameType.NULL);
 		// Count NullCount
 		int tNullCount = 0;
@@ -122,16 +122,16 @@ class BidEvaluator {
 		return false;
 	}
 
-	private boolean check4Grand(CardList pCards) {
+	private boolean check4Grand(final CardList pCards) {
 		pCards.sort(GameType.GRAND);
 		// if not enough Jacks -> no Grand
-		int tGrandBinary = Helper.getGrandBinary(pCards);
+		final int tGrandBinary = Helper.getGrandBinary(pCards);
 		if (!(tGrandBinary > 1024 || tGrandBinary == 832)) {
 			return false;
 		}
 
 		// Count Jacks
-		int tJackCount = Helper.countJacks(pCards);
+		final int tJackCount = Helper.countJacks(pCards);
 
 		// Count Aces
 		int tAcesCount = 0;
@@ -192,9 +192,10 @@ class BidEvaluator {
 		// Player has a cardlist to win all tricks
 		if (pCards.contains(Card.CJ) && pCards.contains(Card.SJ)
 				&& oPlayersPosition.equals(Player.FOREHAND)
-				&& tFluteCount + tJackCount == 9 || pCards.contains(Card.CJ)
-				&& pCards.contains(Card.SJ) && tJackCount >= 3
-				&& tFluteCount + tJackCount == 10) {
+				&& tFluteCount + tJackCount == 9
+				|| pCards.contains(Card.CJ)
+						&& pCards.contains(Card.SJ) && tJackCount >= 3
+						&& tFluteCount + tJackCount == 10) {
 			oGrandHand = true;
 			oGrandSchneider = true;
 			oGrandSchwarz = true;
@@ -204,19 +205,22 @@ class BidEvaluator {
 		// Player has a cardlist to win 9 tricks
 		if (pCards.contains(Card.CJ) && pCards.contains(Card.SJ)
 				&& oPlayersPosition.equals(Player.FOREHAND)
-				&& tFluteCount + tJackCount == 9 || pCards.contains(Card.CJ)
-				&& pCards.contains(Card.SJ) && tJackCount >= 3
-				&& tFluteCount + tJackCount == 9) {
+				&& tFluteCount + tJackCount == 9
+				|| pCards.contains(Card.CJ)
+						&& pCards.contains(Card.SJ) && tJackCount >= 3
+						&& tFluteCount + tJackCount == 9) {
 			oGrandHand = true;
 			oGrandSchneider = true;
 			return true;
 		}
 		if (tAcesCount + t10DuoCount >= 3
 				|| tAcesCount + t10DuoCount == 2
-				&& (tBlankSuits >= 1 && tJackCount >= 2
-						&& pCards.get(1) == Card.SJ || tFluteCount >= 4
-						&& tJackCount >= 3 || tFluteCount >= 5
-						&& pCards.contains(Card.CJ) && pCards.contains(Card.SJ))
+						&& (tBlankSuits >= 1 && tJackCount >= 2
+								&& pCards.get(1) == Card.SJ
+								|| tFluteCount >= 4
+										&& tJackCount >= 3
+								|| tFluteCount >= 5
+										&& pCards.contains(Card.CJ) && pCards.contains(Card.SJ))
 				|| tFluteCount >= 7 || tFluteCount >= 2 && tBlankSuits == 2) {
 			return true;
 		}
@@ -224,17 +228,17 @@ class BidEvaluator {
 		return false;
 	}
 
-	private void getHighestSuitMultiplier(CardList pCards) {
-		Suit tMostFrequentSuitColor = pCards.getMostFrequentSuit();
-		int tMultiplier = Helper.getSuitMultiplier(pCards,
+	private void getHighestSuitMultiplier(final CardList pCards) {
+		final Suit tMostFrequentSuitColor = pCards.getMostFrequentSuit();
+		final int tMultiplier = Helper.getSuitMultiplier(pCards,
 				tMostFrequentSuitColor);
-		int tNumberOfTrumpCards = pCards.getTrumpCount(tMostFrequentSuitColor);
+		final int tNumberOfTrumpCards = pCards.getTrumpCount(tMostFrequentSuitColor);
 
 		// Count fast blank
 		int tBlankCount = 0;
 		int t1CardCount = 0;
 		int t2CardCount = 0;
-		for (Suit s : Suit.values()) {
+		for (final Suit s : Suit.values()) {
 			if (pCards.getSuitCount(s, false) == 0) {
 				tBlankCount++;
 			} else if (pCards.getSuitCount(s, false) == 1
@@ -248,7 +252,7 @@ class BidEvaluator {
 		}
 
 		// Count Jacks
-		int tJackCount = Helper.countJacks(pCards);
+		final int tJackCount = Helper.countJacks(pCards);
 
 		// Count nicht Trumpf-Asse oder 10+Lusche
 		int tWinCardCount = 0;
@@ -279,13 +283,14 @@ class BidEvaluator {
 				oSuitSchneider = true;
 			}
 			oSuitHand = true;
-			int tMaxBid = (tMultiplier + 1)
+			final int tMaxBid = (tMultiplier + 1)
 					* SkatConstants.getGameBaseValue(GameType
-							.valueOf(tMostFrequentSuitColor.longString()
-									.toUpperCase()), false, false);
+							.valueOf(tMostFrequentSuitColor.getLongString()
+									.toUpperCase()),
+							false, false);
 			if (tMaxBid > oMaxBid) {
 				oSuggestedGameType = GameType.valueOf(tMostFrequentSuitColor
-						.longString().toUpperCase());
+						.getLongString().toUpperCase());
 				oSuggestedTrumpSuit = tMostFrequentSuitColor;
 				oMaxBid = tMaxBid;
 			}
@@ -293,22 +298,24 @@ class BidEvaluator {
 		// Wenn mit 4 und Ass
 		else if (pCards.contains(Card.CJ) && tMultiplier >= 5
 				|| tNumberOfTrumpCards >= 5 && tWinCardCount >= 1
-				&& tBlankCount + t1CardCount > 0 || tNumberOfTrumpCards >= 6
-				&& (tWinCardCount >= 1 || t1CardCount == 2 && t2CardCount == 1)) {
-			int tMaxBid = tMultiplier
+						&& tBlankCount + t1CardCount > 0
+				|| tNumberOfTrumpCards >= 6
+						&& (tWinCardCount >= 1 || t1CardCount == 2 && t2CardCount == 1)) {
+			final int tMaxBid = tMultiplier
 					* SkatConstants.getGameBaseValue(GameType
-							.valueOf(tMostFrequentSuitColor.longString()
-									.toUpperCase()), false, false);
+							.valueOf(tMostFrequentSuitColor.getLongString()
+									.toUpperCase()),
+							false, false);
 			if (tMaxBid > oMaxBid) {
 				oSuggestedGameType = GameType.valueOf(tMostFrequentSuitColor
-						.longString().toUpperCase());
+						.getLongString().toUpperCase());
 				oSuggestedTrumpSuit = tMostFrequentSuitColor;
 				oMaxBid = tMaxBid;
 			}
 		}
 	}
 
-	private int getSuitNullLength(CardList pCards, Suit pSuit) {
+	private int getSuitNullLength(final CardList pCards, final Suit pSuit) {
 		int tNullLength = 0;
 		if (pCards.contains(Card.getCard(pSuit, Rank.SEVEN))) {
 			tNullLength++;
@@ -341,7 +348,7 @@ class BidEvaluator {
 		return tNullLength;
 	}
 
-	private int getSuitFluteLength(CardList pCards, Suit pSuit) {
+	private int getSuitFluteLength(final CardList pCards, final Suit pSuit) {
 		int tFluteLength = 0;
 		if (pCards.contains(Card.getCard(pSuit, Rank.ACE))) { // ACE
 			tFluteLength++;
@@ -369,7 +376,7 @@ class BidEvaluator {
 
 	/**
 	 * Gets the maximum bid value of the player
-	 * 
+	 *
 	 * @return maximum bid value
 	 */
 	public int getMaxBid() {
@@ -378,7 +385,7 @@ class BidEvaluator {
 
 	/**
 	 * tells the AI player whether to pick up the skat or not
-	 * 
+	 *
 	 * @return true, if the skat should be picked up;<br>
 	 *         false, for a hand game
 	 */

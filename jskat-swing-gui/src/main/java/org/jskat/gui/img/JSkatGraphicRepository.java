@@ -78,31 +78,31 @@ public class JSkatGraphicRepository {
 
 		log.debug("Bitmaps for JSkat logo and skat table loaded..."); //$NON-NLS-1$
 
-	this.awtIcons = new ArrayList<List<Image>>();
-		this.icons = new HashMap<>();
+		awtIcons = new ArrayList<List<Image>>();
+		icons = new HashMap<>();
 		loadIcons(tracker);
 
 		log.debug("Bitmaps for icons loaded..."); //$NON-NLS-1$
 
-		this.cards = new HashMap<CardSet, Map<Card, Image>>();
-		this.cardBacks = new HashMap<CardSet, Image>();
+		cards = new HashMap<CardSet, Map<Card, Image>>();
+		cardBacks = new HashMap<CardSet, Image>();
 		loadCards(tracker);
 
 		log.debug("Bitmaps for cards loaded..."); //$NON-NLS-1$
 
-		this.flags = new ArrayList<>();
+		flags = new ArrayList<>();
 		loadFlags(tracker);
 
 		log.debug("Bitmaps for flags loaded..."); //$NON-NLS-1$
 	}
 
-    private void loadFlags(final MediaTracker tracker) {
+	private void loadFlags(final MediaTracker tracker) {
 		// for all flags
 		for (final Flag flag : Flag.values()) {
 			// add flag
-			this.flags.add(Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/" //$NON-NLS-1$
+			flags.add(Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/" //$NON-NLS-1$
 					+ "flag_" + flag.toString().toLowerCase() + ".png"))); //$NON-NLS-1$ //$NON-NLS-2$
-			tracker.addImage(this.flags.get(flag.ordinal()), 3);
+			tracker.addImage(flags.get(flag.ordinal()), 3);
 		}
 
 		try {
@@ -113,23 +113,23 @@ public class JSkatGraphicRepository {
 	}
 
 	private void loadImages(final MediaTracker tracker) {
-		this.skatTable = Toolkit.getDefaultToolkit()
+		skatTable = Toolkit.getDefaultToolkit()
 				.getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/skat_table.png")); //$NON-NLS-1$
-		tracker.addImage(this.skatTable, 0);
-		this.jskatLogo = Toolkit.getDefaultToolkit()
+		tracker.addImage(skatTable, 0);
+		jskatLogo = Toolkit.getDefaultToolkit()
 				.getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/jskat_logo.png")); //$NON-NLS-1$
-		tracker.addImage(this.jskatLogo, 0);
+		tracker.addImage(jskatLogo, 0);
 
-		this.bidBubbles = new ArrayList<>();
-		this.bidBubbles.add(Toolkit.getDefaultToolkit()
+		bidBubbles = new ArrayList<>();
+		bidBubbles.add(Toolkit.getDefaultToolkit()
 				.getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/bid_left.png"))); //$NON-NLS-1$
-		this.bidBubbles.add(Toolkit.getDefaultToolkit()
+		bidBubbles.add(Toolkit.getDefaultToolkit()
 				.getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/bid_right.png"))); //$NON-NLS-1$
-		this.bidBubbles.add(Toolkit.getDefaultToolkit()
+		bidBubbles.add(Toolkit.getDefaultToolkit()
 				.getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/bid_user.png"))); //$NON-NLS-1$
-		tracker.addImage(this.bidBubbles.get(0), 0);
-		tracker.addImage(this.bidBubbles.get(1), 0);
-		tracker.addImage(this.bidBubbles.get(2), 0);
+		tracker.addImage(bidBubbles.get(0), 0);
+		tracker.addImage(bidBubbles.get(1), 0);
+		tracker.addImage(bidBubbles.get(2), 0);
 		try {
 			tracker.waitForID(0);
 		} catch (final InterruptedException e) {
@@ -146,14 +146,14 @@ public class JSkatGraphicRepository {
 		for (final Icon icon : Icon.values()) {
 
 			// new array list for all sizes
-			this.awtIcons.add(new ArrayList<>());
+			awtIcons.add(new ArrayList<>());
 			icons.put(icon, new HashMap<>());
 
 			// for all sizes
 			for (final IconSize size : IconSize.values()) {
 
 				// add icon
-				this.awtIcons.get(icon.ordinal())
+				awtIcons.get(icon.ordinal())
 						.add(Toolkit.getDefaultToolkit().getImage(ClassLoader
 								.getSystemResource("org/jskat/gui/img/gui/"
 										// $NON-NLS-1$
@@ -161,7 +161,7 @@ public class JSkatGraphicRepository {
 										+ size.toString().toLowerCase()
 										+ ".png"))); //$NON-NLS-1$
 				tracker.addImage(
-						this.awtIcons.get(icon.ordinal()).get(size.ordinal()),
+						awtIcons.get(icon.ordinal()).get(size.ordinal()),
 						1);
 
 				icons.get(icon).put(size, new javafx.scene.image.Image("org/jskat/gui/img/gui/" //$NON-NLS-1$
@@ -184,32 +184,37 @@ public class JSkatGraphicRepository {
 	 */
 	private void loadCards(final MediaTracker tracker) {
 
-		this.cards.clear();
+		cards.clear();
 		for (final CardSet set : CardSet.values()) {
 
-			this.cards.put(set, new HashMap<Card, Image>());
+			cards.put(set, new HashMap<Card, Image>());
 
 			for (final Card card : Card.values()) {
 
-				this.cards.get(set).put(card,
+				cards.get(set).put(card,
 						Toolkit.getDefaultToolkit()
 								.getImage(ClassLoader.getSystemResource("org/jskat/gui/img/card/" //$NON-NLS-1$
 										+ set.getCardFace().toString().toLowerCase() + "/" //$NON-NLS-1$
-										+ getCardSetNameInLowerCase(set) + "/" + card.getSuit().shortString() + '-' //$NON-NLS-1$
-										+ card.getRank().shortString() + "." + set.getFileType())));
+										+ getCardSetNameInLowerCase(set) + "/" + getImageFileName(card) + "."
+										+ set.getFileType())));
 
-				tracker.addImage(this.cards.get(set).get(card), 2);
+				tracker.addImage(cards.get(set).get(card), 2);
 			}
 
-			this.cardBacks.put(set, Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource(
+			cardBacks.put(set, Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource(
 					"org/jskat/gui/img/card/back/" + getCardSetNameInLowerCase(set) + "." + set.getFileType()))); //$NON-NLS-1$
-			tracker.addImage(this.cardBacks.get(set), 2);
+			tracker.addImage(cardBacks.get(set), 2);
 		}
 		try {
 			tracker.waitForID(2);
 		} catch (final InterruptedException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public String getImageFileName(final Card card) {
+
+		return (card.getSuit().getShortString() + "-" + card.getRank().getShortString());
 	}
 
 	private String getCardSetNameInLowerCase(final CardSet set) {
@@ -256,10 +261,10 @@ public class JSkatGraphicRepository {
 
 		if (card != null) {
 
-			result = this.cards.get(options.getCardSet()).get(card);
+			result = cards.get(options.getCardSet()).get(card);
 		} else {
 
-			result = this.cardBacks.get(CardSet.ISS_GERMAN);
+			result = cardBacks.get(CardSet.ISS_GERMAN);
 		}
 
 		return result;
@@ -273,7 +278,7 @@ public class JSkatGraphicRepository {
 	 * @return Flag image
 	 */
 	public Image getFlagImage(final Flag flag) {
-		return this.flags.get(flag.ordinal());
+		return flags.get(flag.ordinal());
 	}
 
 	/**
@@ -283,7 +288,7 @@ public class JSkatGraphicRepository {
 	 */
 	public Image getSkatTableImage() {
 
-		return this.skatTable;
+		return skatTable;
 	}
 
 	/**
@@ -293,7 +298,7 @@ public class JSkatGraphicRepository {
 	 */
 	public Image getJSkatLogoImage() {
 
-		return this.jskatLogo;
+		return jskatLogo;
 	}
 
 	public javafx.scene.image.Image getJSkatLogoImageFX() {
@@ -306,7 +311,7 @@ public class JSkatGraphicRepository {
 	 * @return Image for the left opponent bid bubble
 	 */
 	public Image getLeftBidBubble() {
-		return this.bidBubbles.get(0);
+		return bidBubbles.get(0);
 	}
 
 	/**
@@ -315,7 +320,7 @@ public class JSkatGraphicRepository {
 	 * @return Image for the right opponent bid bubble
 	 */
 	public Image getRightBidBubble() {
-		return this.bidBubbles.get(1);
+		return bidBubbles.get(1);
 	}
 
 	/**
@@ -324,12 +329,12 @@ public class JSkatGraphicRepository {
 	 * @return Image for the user bid bubble
 	 */
 	public Image getUserBidBubble() {
-		return this.bidBubbles.get(2);
+		return bidBubbles.get(2);
 	}
 
-    /**
-     * Holds all icon types
-     */
+	/**
+	 * Holds all icon types
+	 */
 	public enum Icon {
 		/**
 		 * About
@@ -466,11 +471,11 @@ public class JSkatGraphicRepository {
 		/**
 		 * REDO
 		 */
-        REDO,
-        /**
-         * Thinking icon
-         */
-        THINKING;
+		REDO,
+		/**
+		 * Thinking icon
+		 */
+		THINKING;
 	}
 
 	/**
@@ -557,26 +562,26 @@ public class JSkatGraphicRepository {
 
 			switch (this) {
 			case GERMAN:
-				result = this.strings.getString("german"); //$NON-NLS-1$
+				result = strings.getString("german"); //$NON-NLS-1$
 				break;
 			case ENGLISH:
-				result = this.strings.getString("english"); //$NON-NLS-1$
+				result = strings.getString("english"); //$NON-NLS-1$
 				break;
 			case FRENCH:
-				result = this.strings.getString("french"); //$NON-NLS-1$
+				result = strings.getString("french"); //$NON-NLS-1$
 				break;
 			case SPANISH:
-				result = this.strings.getString("spanish"); //$NON-NLS-1$
+				result = strings.getString("spanish"); //$NON-NLS-1$
 				break;
 			case POLISH:
-				result = this.strings.getString("polish"); //$NON-NLS-1$
+				result = strings.getString("polish"); //$NON-NLS-1$
 				break;
 			case CZECH:
-				result = this.strings.getString("czech"); //$NON-NLS-1$
+				result = strings.getString("czech"); //$NON-NLS-1$
 				break;
 			}
 
 			return result;
-        }
-    }
+		}
+	}
 }
