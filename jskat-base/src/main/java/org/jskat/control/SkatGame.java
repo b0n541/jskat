@@ -122,7 +122,7 @@ public class SkatGame {
 		view.setGameState(tableName, data.getGameState());
 
 		do {
-			log.debug("SkatGame.do --- Game state: " + data.getGameState()); //$NON-NLS-1$
+			log.debug("Game state: " + data.getGameState());
 
 			switch (data.getGameState()) {
 			case GAME_START:
@@ -246,7 +246,6 @@ public class SkatGame {
 	private void contraRe() {
 		if (getActivePlayerInstance().callContra()) {
 			JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName, new ContraEvent(activePlayer)));
-			setGameState(GameState.RE);
 			final Player activePlayerBeforeContraRe = activePlayer;
 			setActivePlayer(data.getDeclarer());
 			if (getActivePlayerInstance().callRe()) {

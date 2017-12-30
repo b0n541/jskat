@@ -38,8 +38,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SkatGameReplayer {
 
-	private final static Logger LOG = LoggerFactory
-			.getLogger(SkatGameReplayer.class);
+	private final static Logger LOG = LoggerFactory.getLogger(SkatGameReplayer.class);
 
 	private final JSkatView view;
 	private final String tableName;
@@ -47,8 +46,8 @@ public class SkatGameReplayer {
 	private final List<SkatGameEvent> gameMoves = new ArrayList<>();
 	private int currentMove = 0;
 
-	public SkatGameReplayer(JSkatView view, String tableName,
-			List<SkatGameEvent> gameMoves) throws InterruptedException {
+	public SkatGameReplayer(final JSkatView view, final String tableName,
+			final List<SkatGameEvent> gameMoves) throws InterruptedException {
 		this.view = view;
 		this.tableName = tableName;
 		this.gameMoves.addAll(gameMoves);
@@ -91,7 +90,7 @@ public class SkatGameReplayer {
 		return currentMove < gameMoves.size();
 	}
 
-	private void setGameState(SkatGameEvent event) {
+	private void setGameState(final SkatGameEvent event) {
 		if (event instanceof GameStartEvent) {
 			view.setGameState(tableName, GameState.BIDDING);
 		} else if (event instanceof BidEvent) {
@@ -106,7 +105,7 @@ public class SkatGameReplayer {
 	}
 
 	private void oneStepForward() {
-		SkatGameEvent event = gameMoves.get(currentMove);
+		final SkatGameEvent event = gameMoves.get(currentMove);
 
 		setGameState(event);
 
