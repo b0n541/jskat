@@ -31,10 +31,10 @@ public class GameSimulator2Test extends AbstractJSkatTest {
 
 	@Test
 	public void testSimulateGamesWithEpisodeLimit() {
-		GameSimulator2 gameSimulator = new GameSimulator2();
+		final GameSimulator2 gameSimulator = new GameSimulator2();
 		gameSimulator.add(new GameSimulation(GameType.GRAND, Player.FOREHAND, CardList.getPerfectGrandSuitHand()));
 
-		GameSimulation bestSimulation = gameSimulator.simulateMaxEpisodes(10L);
+		final GameSimulation bestSimulation = gameSimulator.simulateMaxEpisodes(10L);
 
 		assertThat(bestSimulation.getEpisodes(), is(equalTo(10L)));
 		assertThat(bestSimulation.getWonGames(), is(equalTo(10L)));
@@ -42,26 +42,26 @@ public class GameSimulator2Test extends AbstractJSkatTest {
 
 	@Test
 	public void testSimulateGamesWithTimeLimit() {
-		GameSimulator2 gameSimulator = new GameSimulator2();
+		final GameSimulator2 gameSimulator = new GameSimulator2();
 		gameSimulator.add(new GameSimulation(GameType.GRAND, Player.FOREHAND, CardList.getPerfectGrandSuitHand()));
 
-		GameSimulation bestSimulation = gameSimulator.simulateMaxTime(1000L);
+		final GameSimulation bestSimulation = gameSimulator.simulateMaxTime(1000L);
 
-		assertThat(bestSimulation.getEpisodes(), is(greaterThan(10L)));
-		assertThat(bestSimulation.getWonGames(), is(greaterThan(10L)));
+		assertThat(bestSimulation.getEpisodes(), is(greaterThan(5L)));
+		assertThat(bestSimulation.getWonGames(), is(greaterThan(5L)));
 	}
 
 	@Test
 	public void testSimulateGamesFiveGameTypesEqualDistribution() {
 
-		GameSimulator2 gameSimulator = new GameSimulator2();
+		final GameSimulator2 gameSimulator = new GameSimulator2();
 		gameSimulator.add(new GameSimulation(GameType.GRAND, Player.FOREHAND, CardList.getPerfectGrandSuitHand()));
 		gameSimulator.add(new GameSimulation(GameType.CLUBS, Player.FOREHAND, CardList.getPerfectGrandSuitHand()));
 		gameSimulator.add(new GameSimulation(GameType.SPADES, Player.FOREHAND, CardList.getPerfectGrandSuitHand()));
 		gameSimulator.add(new GameSimulation(GameType.HEARTS, Player.FOREHAND, CardList.getPerfectGrandSuitHand()));
 		gameSimulator.add(new GameSimulation(GameType.DIAMONDS, Player.FOREHAND, CardList.getPerfectGrandSuitHand()));
 
-		GameSimulation bestSimulation = gameSimulator.simulateMaxEpisodes(100L);
+		final GameSimulation bestSimulation = gameSimulator.simulateMaxEpisodes(100L);
 
 		assertThat(bestSimulation.getEpisodes(), is(20L));
 		assertThat(bestSimulation.getWonGames(), is(20L));
@@ -70,11 +70,11 @@ public class GameSimulator2Test extends AbstractJSkatTest {
 	@Test
 	public void testSimulationSelection() {
 
-		GameSimulator2 gameSimulator = new GameSimulator2();
+		final GameSimulator2 gameSimulator = new GameSimulator2();
 
-		GameSimulation nullSimulation = Mockito.mock(GameSimulation.class);
+		final GameSimulation nullSimulation = Mockito.mock(GameSimulation.class);
 		Mockito.when(nullSimulation.getGameType()).thenReturn(GameType.NULL);
-		GameSimulation grandSimulation = Mockito.mock(GameSimulation.class);
+		final GameSimulation grandSimulation = Mockito.mock(GameSimulation.class);
 		Mockito.when(grandSimulation.getGameType()).thenReturn(GameType.GRAND);
 
 		gameSimulator.add(nullSimulation);
