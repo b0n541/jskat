@@ -32,7 +32,6 @@ import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary;
 import org.jskat.data.JSkatViewType;
 import org.jskat.data.SkatGameData.GameState;
-import org.jskat.data.SkatGameResult;
 import org.jskat.gui.NullView;
 import org.jskat.player.JSkatPlayer;
 import org.jskat.util.CardDeck;
@@ -82,7 +81,7 @@ public class NNTrainer {
 	 */
 	public void setGameType(final GameType newGameType) {
 
-		this.gameType = newGameType;
+		gameType = newGameType;
 		JSkatEventBus.INSTANCE.post(new CreateTableCommand(JSkatViewType.TRAINING_TABLE, "TRAIN" + gameType.name()));
 	}
 
@@ -93,7 +92,7 @@ public class NNTrainer {
 	 *            TRUE, if the training should be stopped
 	 */
 	public void stopTraining(final boolean isStopTraining) {
-		this.stopTraining = isStopTraining;
+		stopTraining = isStopTraining;
 		JSkatEventBus.INSTANCE.post(new RemoveTableCommand(JSkatViewType.TRAINING_TABLE, "TRAIN" + gameType.name()));
 	}
 
@@ -117,7 +116,7 @@ public class NNTrainer {
 		game.getGameResult();
 
 		boolean gameWon = false;
-		if (this.gameType.equals(GameType.RAMSCH)) {
+		if (gameType.equals(GameType.RAMSCH)) {
 			gameWon = isRamschGameWon(game.getGameSummary(), currPlayer);
 		} else {
 			gameWon = game.isGameWon();
@@ -145,12 +144,12 @@ public class NNTrainer {
 
 		game.dealCards();
 
-		if (!GameType.RAMSCH.equals(this.gameType)) {
+		if (!GameType.RAMSCH.equals(gameType)) {
 			game.setDeclarer(declarer);
 		}
 
 		final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-		factory.setGameType(this.gameType);
+		factory.setGameType(gameType);
 		final GameAnnouncement announcement = factory.getAnnouncement();
 		game.setGameAnnouncement(announcement);
 
@@ -164,7 +163,7 @@ public class NNTrainer {
 
 	private void runGame(final SkatGame game) {
 		try {
-			SkatGameResult result = new CompletableFuture<>().supplyAsync(() -> game.run()).get();
+			CompletableFuture.supplyAsync(() -> game.run()).get();
 		} catch (InterruptedException | ExecutionException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -183,19 +182,19 @@ public class NNTrainer {
 
 		final List<List<String>> playerPermutations = createPlayerPermutations(PLAYER_TYPES);
 
-		while (!this.stopTraining /* && totalGames < MAX_TRAINING_EPISODES */) {
+		while (!stopTraining /* && totalGames < MAX_TRAINING_EPISODES */) {
 
 			if (totalGames > 0) {
 
 				if (totalGames % MAX_TRAINING_EPISODES_WITHOUT_SAVE == 0) {
-					JSkatMaster.INSTANCE.saveNeuralNetworks(this.gameType);
+					JSkatMaster.INSTANCE.saveNeuralNetworks(gameType);
 				}
 
 				if (GameType.RAMSCH.equals(gameType)) {
-					JSkatEventBus.INSTANCE.post(new TrainingResultEvent(this.gameType, totalGames, totalWonGames,
+					JSkatEventBus.INSTANCE.post(new TrainingResultEvent(gameType, totalGames, totalWonGames,
 							declarerAvgNetworkError, 0.0));
 				} else {
-					JSkatEventBus.INSTANCE.post(new TrainingResultEvent(this.gameType, totalGames, totalWonGames,
+					JSkatEventBus.INSTANCE.post(new TrainingResultEvent(gameType, totalGames, totalWonGames,
 							declarerAvgNetworkError, opponentAvgNetworkError));
 				}
 			}

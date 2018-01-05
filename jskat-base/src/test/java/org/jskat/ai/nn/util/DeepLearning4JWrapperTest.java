@@ -21,6 +21,8 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
+import java.util.Random;
+import java.util.stream.IntStream;
 
 import org.jskat.AbstractJSkatTest;
 import org.junit.Ignore;
@@ -59,7 +61,7 @@ public class DeepLearning4JWrapperTest extends AbstractJSkatTest {
 	/**
 	 * Logger.
 	 */
-	private static final Logger log = LoggerFactory.getLogger(EncogNetworkWrapperTest.class);
+	private static final Logger log = LoggerFactory.getLogger(DeepLearning4JWrapperTest.class);
 
 	/**
 	 * Tests the NetworkWrapper with an XOR example and batch training.
@@ -147,5 +149,30 @@ public class DeepLearning4JWrapperTest extends AbstractJSkatTest {
 				assertThat(predictedOutCome[j], closeTo(XOR_IDEAL[i][j], MAX_DIFF));
 			}
 		}
+	}
+
+	@Test
+	public void testThroughput() {
+		final int[] hiddenNeurons = { 500, 400, 300, 250, 125, 50, 10 };
+		final NetworkTopology topo = new NetworkTopology(1000, hiddenNeurons, 2);
+		final NeuralNetwork network = new DeepLearning4JNetworkWrapper(topo, true);
+		network.resetNetwork();
+
+		final Random random = new Random();
+		double calculationTimeSum = 0.0;
+		final int iterations = 1000;
+		for (int i = 0; i < iterations; i++) {
+			final double[] inputs = IntStream.rangeClosed(1, 1000)
+					.mapToDouble(integer -> random.nextDouble())
+					.toArray();
+			final long startTime = System.nanoTime();
+			final double[] outputs = network.getPredictedOutcome(inputs);
+			final long endTime = System.nanoTime();
+			final double calculationTime = (endTime - startTime);
+			calculationTimeSum += calculationTime;
+
+			System.out.println(Arrays.toString(outputs) + " calculated in " + calculationTime / 1_000_000 + " ms");
+		}
+		System.out.println("Calculation time: " + calculationTimeSum / iterations / 1_000_000 + " ms");
 	}
 }
