@@ -15,7 +15,6 @@
  */
 package org.jskat.ai.nn.util;
 
-import org.deeplearning4j.api.storage.StatsStorage;
 import org.deeplearning4j.nn.api.OptimizationAlgorithm;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.Updater;
@@ -23,9 +22,6 @@ import org.deeplearning4j.nn.conf.layers.DenseLayer;
 import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
-import org.deeplearning4j.ui.api.UIServer;
-import org.deeplearning4j.ui.stats.StatsListener;
-import org.deeplearning4j.ui.storage.InMemoryStatsStorage;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
@@ -103,28 +99,32 @@ public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 		net.printConfiguration();
 		net.init();
 
-		// Initialize the user interface backend
-		final UIServer uiServer = UIServer.getInstance();
-
-		// Configure where the network information (gradients, score vs. time etc) is to
-		// be stored. Here: store in memory.
-		final StatsStorage statsStorage = new InMemoryStatsStorage(); // Alternative: new FileStatsStorage(File), for
-																		// saving and loading later
-
-		// Attach the StatsStorage instance to the UI: this allows the contents of the
-		// StatsStorage to be visualized
-		uiServer.attach(statsStorage);
-
-		// Then add the StatsListener to collect this information from the network, as
-		// it trains
-		final StatsListener statsListener = new StatsListener(statsStorage);
-		statsListener.setSessionID(statsListener.getSessionID() + "Blubb");
-		net.setListeners(statsListener);
+		// // Initialize the user interface backend
+		// final UIServer uiServer = UIServer.getInstance();
+		//
+		// // Configure where the network information (gradients, score vs. time etc) is
+		// to
+		// // be stored. Here: store in memory.
+		// final StatsStorage statsStorage = new InMemoryStatsStorage(); // Alternative:
+		// new FileStatsStorage(File), for
+		// // saving and loading later
+		//
+		// // Attach the StatsStorage instance to the UI: this allows the contents of
+		// the
+		// // StatsStorage to be visualized
+		// uiServer.attach(statsStorage);
+		//
+		// // Then add the StatsListener to collect this information from the network,
+		// as
+		// // it trains
+		// final StatsListener statsListener = new StatsListener(statsStorage);
+		// statsListener.setSessionID(statsListener.getSessionID() + "Blubb");
+		// net.setListeners(statsListener);
 
 	}
 
 	@Override
-	public synchronized double adjustWeights(final double[] inputs, final double[] outputs) {
+	public double adjustWeights(final double[] inputs, final double[] outputs) {
 
 		final INDArray input = Nd4j.zeros(1, inputs.length);
 		final INDArray output = Nd4j.zeros(1, outputs.length);
@@ -142,7 +142,7 @@ public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 	}
 
 	@Override
-	public synchronized double adjustWeightsBatch(final double[][] inputs, final double[][] outputs) {
+	public double adjustWeightsBatch(final double[][] inputs, final double[][] outputs) {
 
 		final INDArray input = Nd4j.zeros(inputs.length, inputs[0].length);
 		final INDArray output = Nd4j.zeros(outputs.length, outputs[0].length);
@@ -165,12 +165,12 @@ public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 	}
 
 	@Override
-	public synchronized void resetNetwork() {
+	public void resetNetwork() {
 		net.init();
 	}
 
 	@Override
-	public synchronized double[] getPredictedOutcome(final double[] inputs) {
+	public double[] getPredictedOutcome(final double[] inputs) {
 		final INDArray output = net.output(Nd4j.create(inputs));
 		final double[] result = new double[output.length()];
 		for (int i = 0; i < output.length(); i++) {
@@ -180,18 +180,18 @@ public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 	}
 
 	@Override
-	public synchronized long getIterations() {
+	public long getIterations() {
 		return net.getLayerWiseConfigurations().getIterationCount();
 	}
 
 	@Override
-	public synchronized boolean saveNetwork(final String fileName) {
+	public boolean saveNetwork(final String fileName) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public synchronized void loadNetwork(final String fileName) {
+	public void loadNetwork(final String fileName) {
 		// TODO Auto-generated method stub
 	}
 }

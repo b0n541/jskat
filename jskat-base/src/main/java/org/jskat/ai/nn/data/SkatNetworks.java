@@ -23,9 +23,8 @@ import java.util.Map.Entry;
 
 import org.jskat.ai.nn.input.GenericNetworkInputGenerator;
 import org.jskat.ai.nn.util.DeepLearning4JNetworkWrapper;
-import org.jskat.ai.nn.util.EncogNetworkWrapper;
-import org.jskat.ai.nn.util.NeuralNetwork;
 import org.jskat.ai.nn.util.NetworkTopology;
+import org.jskat.ai.nn.util.NeuralNetwork;
 import org.jskat.util.GameType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -66,9 +65,9 @@ public final class SkatNetworks {
 	 *            Trick number in current game
 	 * @return Neural network
 	 */
-	public static NeuralNetwork getNetwork(GameType gameType, boolean isDeclarer, int trickNoInGame) {
+	public static NeuralNetwork getNetwork(final GameType gameType, final boolean isDeclarer, final int trickNoInGame) {
 
-		Map<PlayerParty, List<NeuralNetwork>> gameTypeNets = networks.get(gameType);
+		final Map<PlayerParty, List<NeuralNetwork>> gameTypeNets = networks.get(gameType);
 
 		List<NeuralNetwork> playerPartyNets = null;
 		if (GameType.RAMSCH.equals(gameType) || isDeclarer) {
@@ -94,8 +93,8 @@ public final class SkatNetworks {
 	 * Loads all neural networks from files.
 	 */
 	public static void loadNetworks() {
-		for (Entry<GameType, Map<PlayerParty, List<NeuralNetwork>>> gameTypeNets : networks.entrySet()) {
-			for (Entry<PlayerParty, List<NeuralNetwork>> playerPartyNet : gameTypeNets.getValue().entrySet()) {
+		for (final Entry<GameType, Map<PlayerParty, List<NeuralNetwork>>> gameTypeNets : networks.entrySet()) {
+			for (final Entry<PlayerParty, List<NeuralNetwork>> playerPartyNet : gameTypeNets.getValue().entrySet()) {
 				for (int trick = 0; trick < 10; trick++) {
 					playerPartyNet.getValue().get(trick)
 							.loadNetwork("/org/jskat/ai/nn/data/jskat".concat("." + gameTypeNets.getKey())
@@ -120,7 +119,7 @@ public final class SkatNetworks {
 	 *            Path to files
 	 */
 	public static void saveNetworks(final String savePath) {
-		for (GameType gameType : GameType.values()) {
+		for (final GameType gameType : GameType.values()) {
 			saveNetworks(savePath, gameType);
 		}
 	}
@@ -133,11 +132,11 @@ public final class SkatNetworks {
 	 * @param gameType
 	 *            Game type
 	 */
-	public static void saveNetworks(final String savePath, GameType gameType) {
+	public static void saveNetworks(final String savePath, final GameType gameType) {
 
-		Map<PlayerParty, List<NeuralNetwork>> gameTypeNetworks = networks.get(gameType);
+		final Map<PlayerParty, List<NeuralNetwork>> gameTypeNetworks = networks.get(gameType);
 
-		for (Entry<PlayerParty, List<NeuralNetwork>> playerPartyNets : gameTypeNetworks.entrySet()) {
+		for (final Entry<PlayerParty, List<NeuralNetwork>> playerPartyNets : gameTypeNetworks.entrySet()) {
 			for (int trick = 0; trick < 10; trick++) {
 				playerPartyNets.getValue().get(trick).saveNetwork(savePath.concat("jskat").concat("." + gameType)
 						.concat("." + playerPartyNets.getKey()).concat(".TRICK" + trick).concat(".nnet"));
@@ -146,15 +145,15 @@ public final class SkatNetworks {
 	}
 
 	private static void createNetworks() {
-		NetworkTopology topo = new NetworkTopology(INPUT_NEURONS, HIDDEN_NEURONS, OUTPUT_NEURONS);
+		final NetworkTopology topo = new NetworkTopology(INPUT_NEURONS, HIDDEN_NEURONS, OUTPUT_NEURONS);
 
 		networks = new HashMap<>();
-		for (GameType gameType : GameType.values()) {
+		for (final GameType gameType : GameType.values()) {
 			networks.put(gameType, new HashMap<PlayerParty, List<NeuralNetwork>>());
-			for (PlayerParty playerParty : PlayerParty.values()) {
+			for (final PlayerParty playerParty : PlayerParty.values()) {
 				networks.get(gameType).put(playerParty, new ArrayList<NeuralNetwork>());
-				//NeuralNetwork network = new EncogNetworkWrapper(topo, USE_BIAS);
-				NeuralNetwork network = new DeepLearning4JNetworkWrapper(topo, USE_BIAS);
+				// NeuralNetwork network = new EncogNetworkWrapper(topo, USE_BIAS);
+				final NeuralNetwork network = new DeepLearning4JNetworkWrapper(topo, USE_BIAS);
 				for (int trick = 0; trick < 10; trick++) {
 					networks.get(gameType).get(playerParty).add(network);
 				}
