@@ -1,9 +1,8 @@
 dependencies {
 	compile 'org.slf4j:slf4j-log4j12:1.7.25'
-	compile 'org.encog:encog-core:3.4'
-    compile "org.deeplearning4j:deeplearning4j-core:0.9.1"
-    compile "org.deeplearning4j:deeplearning4j-ui_2.11:0.9.1"
-    compile "org.nd4j:nd4j-native-platform:0.9.1"
+    compile 'org.deeplearning4j:deeplearning4j-core:0.9.1'
+    compile 'org.deeplearning4j:deeplearning4j-ui_2.11:0.9.1'
+    compile 'org.nd4j:nd4j-native-platform:0.9.1'
 	compile 'org.eclipse.jetty:jetty-websocket:8.1.18.v20150929'
 	compile 'org.reflections:reflections:0.9.11'
 	compile 'com.google.guava:guava:23.0'
