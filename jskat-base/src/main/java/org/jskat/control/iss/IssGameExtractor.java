@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
-import org.apache.log4j.PropertyConfigurator;
 import org.jskat.data.SkatGameData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,19 +41,16 @@ public class IssGameExtractor {
 
 	public static void main(final String args[]) throws Exception {
 
-		PropertyConfigurator.configure(ClassLoader
-				.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
-		IssGameExtractor gameExtractor = new IssGameExtractor();
-		gameExtractor
-				.setFilePath("/home/jan/Projekte/jskat/iss/issgames-1-2012.sgf"); //$NON-NLS-1$
+		final IssGameExtractor gameExtractor = new IssGameExtractor();
+		gameExtractor.setFilePath("/home/jan/Projekte/jskat/iss/issgames-1-2012.sgf"); //$NON-NLS-1$
 
 		filterGameDatabase();
 	}
 
 	private static void filterGameDatabase() throws Exception {
-		FileInputStream inputStream = new FileInputStream(new File(filePath));
-		DataInputStream in = new DataInputStream(inputStream);
-		BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		final FileInputStream inputStream = new FileInputStream(new File(filePath));
+		final DataInputStream in = new DataInputStream(inputStream);
+		final BufferedReader br = new BufferedReader(new InputStreamReader(in));
 		String strLine;
 
 		long gameNo = 1;
@@ -62,14 +58,14 @@ public class IssGameExtractor {
 		// Read File Line By Line
 		while ((strLine = br.readLine()) != null) {
 			try {
-				SkatGameData gameData = MessageParser.parseGameSummary(strLine);
-				int declarerPoints = gameData.getGameResult()
+				final SkatGameData gameData = MessageParser.parseGameSummary(strLine);
+				final int declarerPoints = gameData.getGameResult()
 						.getFinalDeclarerPoints();
 				if (declarerPoints > 60 && declarerPoints < 65) {
 					log.warn("Game no. " + gameNo + ": " + strLine); //$NON-NLS-1$//$NON-NLS-2$
 					// log.debug("Game type: " + gameData.getGameType());
 				}
-			} catch (Exception except) {
+			} catch (final Exception except) {
 				log.error("Failed reading game no. " + gameNo + ": " + strLine); //$NON-NLS-1$ //$NON-NLS-2$
 				log.error(except.toString());
 			}
@@ -86,7 +82,7 @@ public class IssGameExtractor {
 
 	/**
 	 * Sets the path to the game database.
-	 * 
+	 *
 	 * @param newFilePath
 	 *            File path
 	 */

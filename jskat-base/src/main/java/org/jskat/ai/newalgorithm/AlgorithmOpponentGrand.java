@@ -15,7 +15,6 @@
  */
 package org.jskat.ai.newalgorithm;
 
-import org.apache.log4j.Logger;
 import org.jskat.ai.newalgorithm.exception.IllegalMethodException;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -23,10 +22,12 @@ import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
-	private static final Logger log = Logger
-			.getLogger(AlgorithmOpponentGrand.class);
+
+	private static final Logger log = LoggerFactory.getLogger(AlgorithmOpponentGrand.class);
 
 	AlgorithmOpponentGrand(final AlgorithmAI p, final GameType pGameType) {
 		super(p, pGameType);

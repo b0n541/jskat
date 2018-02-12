@@ -20,7 +20,6 @@ import java.awt.Point;
 
 import javax.swing.SwingUtilities;
 
-import org.apache.log4j.PropertyConfigurator;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.command.general.ShowWelcomeInformationCommand;
@@ -69,7 +68,6 @@ public class JSkatFX extends Application {
 
 	public static void main(final String[] args) {
 
-		PropertyConfigurator.configure(ClassLoader.getSystemResource("org/jskat/config/log4j.properties")); //$NON-NLS-1$
 		JSkatOptions.instance(new DesktopSavePathResolver());
 
 		launch(args);

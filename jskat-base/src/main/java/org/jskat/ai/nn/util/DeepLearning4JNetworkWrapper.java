@@ -37,9 +37,6 @@ public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 	private final MultiLayerNetwork net;
 	private final NetworkTopology topo;
 
-	private static final double LOWER_DIST_BOUND = -0.1;
-	private static final double UPPER_DIST_BOUND = 0.1;
-
 	/**
 	 * Constructor
 	 *
@@ -98,29 +95,6 @@ public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 		net = new MultiLayerNetwork(layerBuilder.build());
 		net.printConfiguration();
 		net.init();
-
-		// // Initialize the user interface backend
-		// final UIServer uiServer = UIServer.getInstance();
-		//
-		// // Configure where the network information (gradients, score vs. time etc) is
-		// to
-		// // be stored. Here: store in memory.
-		// final StatsStorage statsStorage = new InMemoryStatsStorage(); // Alternative:
-		// new FileStatsStorage(File), for
-		// // saving and loading later
-		//
-		// // Attach the StatsStorage instance to the UI: this allows the contents of
-		// the
-		// // StatsStorage to be visualized
-		// uiServer.attach(statsStorage);
-		//
-		// // Then add the StatsListener to collect this information from the network,
-		// as
-		// // it trains
-		// final StatsListener statsListener = new StatsListener(statsStorage);
-		// statsListener.setSessionID(statsListener.getSessionID() + "Blubb");
-		// net.setListeners(statsListener);
-
 	}
 
 	@Override

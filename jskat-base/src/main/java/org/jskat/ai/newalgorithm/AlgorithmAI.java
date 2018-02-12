@@ -15,7 +15,6 @@
  */
 package org.jskat.ai.newalgorithm;
 
-import org.apache.log4j.Logger;
 import org.jskat.ai.AbstractAIPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
@@ -23,20 +22,23 @@ import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Daniel Loreck
- * 
+ *
  */
 public class AlgorithmAI extends AbstractAIPlayer {
-	private static final Logger log = Logger.getLogger(AlgorithmAI.class);
+
+	private static final Logger log = LoggerFactory.getLogger(AlgorithmAI.class);
 
 	private AbstractAlgorithmAI aiPlayer = null;
 	BidEvaluator bidEvaluator = null;
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.jskat.ai.IJSkatPlayer#preparateForNewGame()
 	 */
 	@Override
@@ -47,7 +49,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.jskat.ai.IJSkatPlayer#finalizeGame()
 	 */
 	@Override
@@ -57,7 +59,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.jskat.ai.IJSkatPlayer#bidMore(int)
 	 */
 	@Override
@@ -74,7 +76,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.jskat.ai.IJSkatPlayer#holdBid(int)
 	 */
 	@Override
@@ -88,7 +90,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.jskat.ai.IJSkatPlayer#pickUpSkat()
 	 */
 	@Override
@@ -102,7 +104,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.jskat.ai.IJSkatPlayer#discardSkat()
 	 */
 	@Override
@@ -124,14 +126,14 @@ public class AlgorithmAI extends AbstractAIPlayer {
 			if (bidEvaluator.getSuggestedGameType() == GameType.NULL) {
 				// aiPlayer = new AlgorithmNull(this,
 				// bidEvaluator.getSuggestedGameType());
-				log.debug(this.playerName
+				log.debug(playerName
 						+ " ist AlgorithmNull-Spieler / getCardsToDiscard");
 			}
 			// Wenn Grand
 			else if (bidEvaluator.getSuggestedGameType() == GameType.GRAND) {
 				aiPlayer = new AlgorithmGrand(this,
 						bidEvaluator.getSuggestedGameType());
-				log.debug(this.playerName
+				log.debug(playerName
 						+ " ist AlgorithmGrand-Spieler / getCardsToDiscard");
 			}
 			// Wenn Farb-Spiel
@@ -141,7 +143,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
 					|| bidEvaluator.getSuggestedGameType() == GameType.DIAMONDS) {
 				aiPlayer = new AlgorithmSuit(this,
 						bidEvaluator.getSuggestedGameType());
-				log.debug(this.playerName
+				log.debug(playerName
 						+ " ist AlgorithmSuit-Spieler / getCardsToDiscard");
 			}
 		}
@@ -151,7 +153,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.jskat.ai.IJSkatPlayer#announceGame()
 	 */
 	@Override
@@ -167,14 +169,14 @@ public class AlgorithmAI extends AbstractAIPlayer {
 		if (bidEvaluator.getSuggestedGameType() == GameType.NULL) {
 			// aiPlayer = new AlgorithmNull(this,
 			// bidEvaluator.getSuggestedGameType());
-			log.debug(this.playerName
+			log.debug(playerName
 					+ " ist AlgorithmNull-Spieler / announceGame");
 		}
 		// Wenn Grand
 		else if (bidEvaluator.getSuggestedGameType() == GameType.GRAND) {
 			aiPlayer = new AlgorithmGrand(this,
 					bidEvaluator.getSuggestedGameType());
-			log.debug(this.playerName
+			log.debug(playerName
 					+ " ist AlgorithmGrand-Spieler / announceGame");
 		}
 		// Wenn Farb-Spiel
@@ -184,18 +186,18 @@ public class AlgorithmAI extends AbstractAIPlayer {
 				|| bidEvaluator.getSuggestedGameType() == GameType.DIAMONDS) {
 			aiPlayer = new AlgorithmSuit(this,
 					bidEvaluator.getSuggestedGameType());
-			log.debug(this.playerName
+			log.debug(playerName
 					+ " ist AlgorithmSuit-Spieler / announceGame");
 		}
 
-		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+		final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 		factory.setGameType(bidEvaluator.getSuggestedGameType());
 		return factory.getAnnouncement();
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.jskat.ai.IJSkatPlayer#playCard()
 	 */
 	@Override
@@ -208,7 +210,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
 		// " ist AlgorithmOpponentGrand-Spieler / playCard");
 		// }
 
-		Card c = aiPlayer.playCard();
+		final Card c = aiPlayer.playCard();
 		if (c != null) {
 			return c;
 		}
@@ -217,7 +219,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
 		if (knowledge.getTrickCards().size() < 1) {
 			return knowledge.getOwnCards().get(0);
 		}
-		for (Card c2 : knowledge.getOwnCards()) {
+		for (final Card c2 : knowledge.getOwnCards()) {
 			if (c2.isAllowed(knowledge.getGameType(), knowledge.getTrickCards()
 					.get(0), knowledge.getOwnCards())) {
 				return c2;
@@ -233,21 +235,21 @@ public class AlgorithmAI extends AbstractAIPlayer {
 			// Wenn RAMSCH-Spiel
 			if (knowledge.getGameType() == GameType.RAMSCH) {
 				aiPlayer = new AlgorithmRamsch(this, knowledge.getGameType());
-				log.debug(this.playerName
+				log.debug(playerName
 						+ " ist AlgorithmRamsch-Spieler / startGame");
 			}
 			// Wenn Null-Spiel
 			if (knowledge.getGameType() == GameType.NULL) {
 				aiPlayer = new AlgorithmOpponentNull(this,
 						knowledge.getGameType());
-				log.debug(this.playerName
+				log.debug(playerName
 						+ " ist AlgorithmOpponentNull-Spieler / startGame");
 			}
 			// Wenn Grand
 			else if (knowledge.getGameType() == GameType.GRAND) {
 				aiPlayer = new AlgorithmOpponentGrand(this,
 						knowledge.getGameType());
-				log.debug(this.playerName
+				log.debug(playerName
 						+ " ist AlgorithmOpponentGrand-Spieler / startGame");
 			}
 			// Wenn Farb-Spiel
@@ -257,7 +259,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
 					|| knowledge.getGameType() == GameType.DIAMONDS) {
 				aiPlayer = new AlgorithmOpponentSuit(this,
 						knowledge.getGameType());
-				log.debug(this.playerName
+				log.debug(playerName
 						+ " ist AlgorithmOpponentSuit-Spieler / startGame");
 			}
 		}

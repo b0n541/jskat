@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>[%-5p] %d{yyyyMMdd HH:mm:ss.SSS} %-30.30C{2} %x (%4L) - %m%n</pattern>
+    </encoder>
+  </appender>
+  <appender name="logfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <!--See also http://logback.qos.ch/manual/appenders.html#RollingFileAppender-->
+    <file>${user.home}/.jskat/JSkat.log</file>
+    <encoder>
+      <pattern>[%-5p] %d{yyyyMMdd HH:mm:ss.SSS} %-30.30C{2} %x (%4L) - %m%n</pattern>
+    </encoder>
+    <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+      <maxIndex>1</maxIndex>
+      <FileNamePattern>${user.home}/.jskat/JSkat.log.%i</FileNamePattern>
+    </rollingPolicy>
+    <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+      <MaxFileSize>5000KB</MaxFileSize>
+    </triggeringPolicy>
+  </appender>
+  <root level="WARN">
+    <appender-ref ref="stdout"/>
+    <appender-ref ref="logfile"/>
+  </root>
+</configuration>

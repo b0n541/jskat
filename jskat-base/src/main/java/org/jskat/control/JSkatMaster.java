@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.jskat.ai.nn.data.SkatNetworks;
 import org.jskat.ai.nn.train.NNTrainer;
@@ -48,6 +50,7 @@ import org.jskat.util.version.VersionChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 
 /**
@@ -300,34 +303,42 @@ public class JSkatMaster {
 
 		JSkatEventBus.INSTANCE.post(new ShowTrainingOverviewCommand());
 
+		final List<NNTrainer> trainer = Lists.newArrayList();
 		final NNTrainer nullTrainer = new NNTrainer();
 		nullTrainer.setGameType(GameType.NULL);
-		CompletableFuture.runAsync(() -> nullTrainer.run());
-		runningNNTrainers.add(nullTrainer);
+		trainer.add(nullTrainer);
+
 		final NNTrainer grandTrainer = new NNTrainer();
 		grandTrainer.setGameType(GameType.GRAND);
-		CompletableFuture.runAsync(() -> grandTrainer.run());
-		runningNNTrainers.add(grandTrainer);
+		trainer.add(grandTrainer);
+
 		final NNTrainer clubsTrainer = new NNTrainer();
 		clubsTrainer.setGameType(GameType.CLUBS);
-		CompletableFuture.runAsync(() -> clubsTrainer.run());
-		runningNNTrainers.add(clubsTrainer);
+		trainer.add(clubsTrainer);
+
 		final NNTrainer spadesTrainer = new NNTrainer();
 		spadesTrainer.setGameType(GameType.SPADES);
-		CompletableFuture.runAsync(() -> spadesTrainer.run());
-		runningNNTrainers.add(spadesTrainer);
+		trainer.add(spadesTrainer);
+
 		final NNTrainer heartsTrainer = new NNTrainer();
 		heartsTrainer.setGameType(GameType.HEARTS);
-		CompletableFuture.runAsync(() -> heartsTrainer.run());
-		runningNNTrainers.add(heartsTrainer);
+		trainer.add(heartsTrainer);
+
 		final NNTrainer diamondsTrainer = new NNTrainer();
 		diamondsTrainer.setGameType(GameType.DIAMONDS);
-		CompletableFuture.runAsync(() -> diamondsTrainer.run());
-		runningNNTrainers.add(diamondsTrainer);
+		trainer.add(diamondsTrainer);
+
 		final NNTrainer ramschTrainer = new NNTrainer();
 		ramschTrainer.setGameType(GameType.RAMSCH);
-		CompletableFuture.runAsync(() -> ramschTrainer.run());
-		runningNNTrainers.add(ramschTrainer);
+		trainer.add(ramschTrainer);
+
+		final ExecutorService executor = Executors.newFixedThreadPool(8);
+		trainer.stream()
+				.map(t -> CompletableFuture.runAsync(() -> t.trainNets(), executor))
+				.forEach(future -> {
+				});
+
+		trainer.stream().forEach(t -> runningNNTrainers.add(t));
 	}
 
 	public void stopTrainNeuralNetworks() {

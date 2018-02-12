@@ -17,17 +17,19 @@ package org.jskat.ai.newalgorithm;
 
 import java.util.ArrayList;
 
-import org.apache.log4j.Logger;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AlgorithmGrand extends AbstractAlgorithmAI {
-	private static final Logger log = Logger.getLogger(AlgorithmGrand.class);
 
-	AlgorithmGrand(final AlgorithmAI p, GameType pGameType) {
+	private static final Logger log = LoggerFactory.getLogger(AlgorithmGrand.class);
+
+	AlgorithmGrand(final AlgorithmAI p, final GameType pGameType) {
 		super(p, pGameType);
 
 		log.debug("Defining player <" + myPlayer.getPlayerName() + "> as "
@@ -74,10 +76,10 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 	}
 
 	@Override
-	public CardList discardSkat(BidEvaluator pBid) {
+	public CardList discardSkat(final BidEvaluator pBid) {
 		log.debug("discardSkat");
 
-		CardList tDiscardCards = discardSkatCards(pBid, knowledge.getOwnCards());
+		final CardList tDiscardCards = discardSkatCards(pBid, knowledge.getOwnCards());
 		// knowledge.removeOwnCards(tDiscardCards.getImmutableCopy());
 
 		// handle wrong discarding
@@ -87,7 +89,7 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 					random.nextInt(knowledge.getOwnCards().size())));
 		}
 
-		CardList cardsAfterDiscarding = new CardList(knowledge.getOwnCards());
+		final CardList cardsAfterDiscarding = new CardList(knowledge.getOwnCards());
 		cardsAfterDiscarding.removeAll(tDiscardCards);
 		oSituation.setCardsAfterDiscarding(cardsAfterDiscarding);
 
@@ -95,9 +97,9 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 	}
 
 	// static methods for creating JUnit-tests and test cardplaybehavior
-	public static Card playStartGameCard(CardList pCards, CardList pTrickCards,
-			CardList pPlayedCards, CardList pNotOpponentCards,
-			Situation pSituation) {
+	public static Card playStartGameCard(final CardList pCards, final CardList pTrickCards,
+			final CardList pPlayedCards, final CardList pNotOpponentCards,
+			final Situation pSituation) {
 		pCards.sort(pSituation.getGameType());
 
 		if (Helper.countJacks(pCards) == 4) {
@@ -116,12 +118,12 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 				pNotOpponentCards, pSituation);
 	}
 
-	public static Card playForehandCard(CardList pCards, CardList pTrickCards,
-			CardList pPlayedCards, CardList pNotOpponentCards,
-			Situation pSituation) {
+	public static Card playForehandCard(final CardList pCards, final CardList pTrickCards,
+			final CardList pPlayedCards, final CardList pNotOpponentCards,
+			final Situation pSituation) {
 		pCards.sort(pSituation.getGameType());
 
-		CardList possibleCards = new CardList();
+		final CardList possibleCards = new CardList();
 
 		// Count Aces
 		int tAcesCount = 0;
@@ -166,10 +168,10 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 			// Wenn schlagbar
 			if (pCards.get(0).getSuit() == Suit.CLUBS
 					|| pCards.get(0).getSuit() == Suit.SPADES
-					&& pPlayedCards.contains(Card.CJ)
+							&& pPlayedCards.contains(Card.CJ)
 					|| pCards.get(0).getSuit() == Suit.HEARTS
-					&& pPlayedCards.contains(Card.CJ)
-					&& pPlayedCards.contains(Card.SJ)) {
+							&& pPlayedCards.contains(Card.CJ)
+							&& pPlayedCards.contains(Card.SJ)) {
 				return pCards.get(0);
 			}
 			// Wenn nicht schlagbar aber 4 Asse oder 10Duo
@@ -203,14 +205,14 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 				}
 				// erst alle Karten spielen, wo die zweite Karte anschlieÃƒÅ¸end
 				// die beste ist
-				for (Suit lSuit : Suit.values()) {
+				for (final Suit lSuit : Suit.values()) {
 					if (pCards.getSuitCount(lSuit, false) > 1) {
-						Card possibleHighCard = pCards.get(pCards
+						final Card possibleHighCard = pCards.get(pCards
 								.getFirstIndexOfSuit(lSuit, false));
-						Card possibleSecondCard = pCards.get(pCards
+						final Card possibleSecondCard = pCards.get(pCards
 								.getFirstIndexOfSuit(lSuit, false) + 1);
 
-						CardList tAfterHighCard = new CardList(pPlayedCards);
+						final CardList tAfterHighCard = new CardList(pPlayedCards);
 						tAfterHighCard.add(possibleHighCard);
 
 						if (Helper.isHighestSuitCard(possibleHighCard, null,
@@ -230,14 +232,14 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 		}
 		// Wenn keine Buben mehr beim Gegner
 		else if (Helper.countJacks(pNotOpponentCards) == 4) {
-			for (Suit lSuit : Suit.values()) {
-				int suitCount = pCards.getSuitCount(lSuit, false);
+			for (final Suit lSuit : Suit.values()) {
+				final int suitCount = pCards.getSuitCount(lSuit, false);
 				if (suitCount == 0) {
 					continue;
 				}
-				Card possibleHighCard = pCards.get(pCards.getFirstIndexOfSuit(
+				final Card possibleHighCard = pCards.get(pCards.getFirstIndexOfSuit(
 						lSuit, false));
-				Card possibleLowCard = pCards.get(pCards.getLastIndexOfSuit(
+				final Card possibleLowCard = pCards.get(pCards.getLastIndexOfSuit(
 						lSuit, false));
 
 				if (Helper.isHighestSuitCard(possibleHighCard,
@@ -255,12 +257,12 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 		return getRandomAllowedCard(pCards, null, pSituation.getGameType());
 	}
 
-	public static Card playMiddlehandCard(CardList pCards,
-			CardList pTrickCards, CardList pPlayedCards,
-			CardList pNotOpponentCards, Situation pSituation) {
+	public static Card playMiddlehandCard(final CardList pCards,
+			final CardList pTrickCards, final CardList pPlayedCards,
+			final CardList pNotOpponentCards, final Situation pSituation) {
 		pCards.sort(pSituation.getGameType());
-		Card tCardToBeat = pTrickCards.get(0);
-		Suit tSuit = tCardToBeat.getSuit();
+		final Card tCardToBeat = pTrickCards.get(0);
+		final Suit tSuit = tCardToBeat.getSuit();
 
 		CardList possibleCards = new CardList();
 
@@ -311,13 +313,13 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 		return getRandomAllowedCard(pCards, null, pSituation.getGameType());
 	}
 
-	public static Card playRearhandCard(CardList pCards, CardList pTrickCards,
-			CardList pPlayedCards, CardList pNotOpponentCards,
-			Situation pSituation) {
+	public static Card playRearhandCard(final CardList pCards, final CardList pTrickCards,
+			final CardList pPlayedCards, final CardList pNotOpponentCards,
+			final Situation pSituation) {
 		pCards.sort(pSituation.getGameType());
-		Card tForehandCard = pTrickCards.get(0);
-		Suit tSuit = tForehandCard.getSuit();
-		Card tMiddlehandCard = pTrickCards.get(1);
+		final Card tForehandCard = pTrickCards.get(0);
+		final Suit tSuit = tForehandCard.getSuit();
+		final Card tMiddlehandCard = pTrickCards.get(1);
 		CardList possibleCards = new CardList();
 
 		Card tCardToBeat = tForehandCard;
@@ -327,7 +329,7 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 
 		// Wenn Vorhand-Karte bedient werden kann/muss
 		if (pCards.getSuitCount(tSuit, false) > 0) {
-			Card possibleHighCard = pCards.get(pCards.getFirstIndexOfSuit(
+			final Card possibleHighCard = pCards.get(pCards.getFirstIndexOfSuit(
 					tSuit, false)); // highest Card
 			int possibleBeatingCardIndex = pCards.getLastIndexOfSuit(tSuit,
 					false); // lowest Card
@@ -378,26 +380,26 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 		return getRandomAllowedCard(pCards, null, pSituation.getGameType());
 	}
 
-	public static CardList discardSkatCards(BidEvaluator pBid,
-			CardList pOwnCards) {
-		CardList tCards = new CardList(pOwnCards);
+	public static CardList discardSkatCards(final BidEvaluator pBid,
+			final CardList pOwnCards) {
+		final CardList tCards = new CardList(pOwnCards);
 		tCards.sort(GameType.GRAND);
 
 		CardList tDiscardCards = new CardList();
-		CardList t1ToDiscard = new CardList();
-		ArrayList<CardList> t2ToDiscard = new ArrayList<CardList>();
-		CardList t1PossibleDiscard = new CardList();
-		ArrayList<CardList> t2PossibleDiscard = new ArrayList<CardList>();
+		final CardList t1ToDiscard = new CardList();
+		final ArrayList<CardList> t2ToDiscard = new ArrayList<CardList>();
+		final CardList t1PossibleDiscard = new CardList();
+		final ArrayList<CardList> t2PossibleDiscard = new ArrayList<CardList>();
 
-		for (Suit lSuit : Suit.values()) {
+		for (final Suit lSuit : Suit.values()) {
 			if (tCards.getSuitCount(lSuit, false) == 0) {
 				continue;
 			}
 
-			int lFirstIndex = tCards.getFirstIndexOfSuit(lSuit, false);
-			int lLastIndex = tCards.getLastIndexOfSuit(lSuit, false);
-			Card lFirstCard = tCards.get(lFirstIndex);
-			Card lLastCard = tCards.get(lLastIndex);
+			final int lFirstIndex = tCards.getFirstIndexOfSuit(lSuit, false);
+			final int lLastIndex = tCards.getLastIndexOfSuit(lSuit, false);
+			final Card lFirstCard = tCards.get(lFirstIndex);
+			final Card lLastCard = tCards.get(lLastIndex);
 
 			// Wenn nur eine Karte der Farbe und diese ist nicht das Ass
 			if (lFirstIndex == lLastIndex) {
@@ -432,7 +434,7 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 				if (lFirstCard.getRank() == Rank.ACE) {
 					// Wenn A, 10, K -> A und 10 druecken
 					if (lLastCard.getRank() == Rank.KING) {
-						CardList t = new CardList();
+						final CardList t = new CardList();
 						t.add(lFirstCard);
 						t.add(tCards.get(lFirstIndex + 1));
 						t2ToDiscard.add(t);
@@ -442,7 +444,7 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 					else if (tCards.get(lFirstIndex + 1).getRank() == Rank.TEN) {
 						t1ToDiscard.add(lFirstCard);
 					} else {
-						CardList t = new CardList();
+						final CardList t = new CardList();
 						t.add(lFirstCard);
 						t.add(tCards.get(lFirstIndex + 1));
 						t2PossibleDiscard.add(t);
@@ -458,7 +460,7 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 						t1PossibleDiscard.add(lLastCard);
 					}
 				}
-				CardList t = new CardList();
+				final CardList t = new CardList();
 				t.add(lFirstCard);
 				t.add(tCards.get(lFirstIndex + 1));
 				t2PossibleDiscard.add(t);
@@ -471,10 +473,10 @@ public class AlgorithmGrand extends AbstractAlgorithmAI {
 		}
 
 		if (tDiscardCards.size() == 0) {
-			for (Card lCardList : t1ToDiscard) {
+			for (final Card lCardList : t1ToDiscard) {
 				tDiscardCards.add(lCardList);
 			}
-			for (Card lCardList : t1PossibleDiscard) {
+			for (final Card lCardList : t1PossibleDiscard) {
 				tDiscardCards.add(lCardList);
 			}
 			while (tDiscardCards.size() > 2) {

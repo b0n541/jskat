@@ -56,12 +56,12 @@ public class JSkatPlayerResolver {
 
 	/**
 	 * Gets all class names including package names of AI player implementations
-	 * 
+	 *
 	 * @return A set of all player implementation classes
 	 */
 	public static Set<String> getAllAIPlayerImplementations() {
 
-		Set<String> result = getAllImplementations();
+		final Set<String> result = getAllImplementations();
 
 		result.removeAll(EXCLUDED_PLAYER_CLASSES);
 		result.removeAll(UNIT_TEST_PLAYER_CLASSES);
@@ -70,12 +70,12 @@ public class JSkatPlayerResolver {
 	}
 
 	private static Set<String> getAllImplementations() {
-		Set<String> result = new HashSet<String>();
-		Reflections reflections = new Reflections("org.jskat");
+		final Set<String> result = new HashSet<String>();
+		final Reflections reflections = new Reflections("org.jskat.ai");
 
-		Set<Class<? extends AbstractJSkatPlayer>> subTypes = reflections
+		final Set<Class<? extends AbstractJSkatPlayer>> subTypes = reflections
 				.getSubTypesOf(AbstractJSkatPlayer.class);
-		for (Class<? extends AbstractJSkatPlayer> jskatPlayer : subTypes) {
+		for (final Class<? extends AbstractJSkatPlayer> jskatPlayer : subTypes) {
 			if (isNotAbstract(jskatPlayer) && isNotHumanPlayer(jskatPlayer)) {
 				result.add(jskatPlayer.getName());
 			}
@@ -84,12 +84,12 @@ public class JSkatPlayerResolver {
 	}
 
 	private static boolean isNotHumanPlayer(
-			Class<? extends AbstractJSkatPlayer> jskatPlayer) {
+			final Class<? extends AbstractJSkatPlayer> jskatPlayer) {
 		return !HUMAN_PLAYER_CLASS.equals(jskatPlayer.getName());
 	}
 
 	private static boolean isNotAbstract(
-			Class<? extends AbstractJSkatPlayer> jskatPlayer) {
+			final Class<? extends AbstractJSkatPlayer> jskatPlayer) {
 		return !Modifier.isAbstract(jskatPlayer.getModifiers());
 	}
 }

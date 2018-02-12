@@ -15,7 +15,6 @@
  */
 package org.jskat.ai.algorithmic;
 
-import org.apache.log4j.Logger;
 import org.jskat.ai.AbstractAIPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
@@ -23,22 +22,24 @@ import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Markus J. Luzius <br>
  *         created: 13.05.2011 17:33:05
- * 
+ *
  */
 public class AlgorithmicAIPlayer extends AbstractAIPlayer {
-	private static final Logger log = Logger
-			.getLogger(AlgorithmicAIPlayer.class);
+
+	private static final Logger log = LoggerFactory.getLogger(AlgorithmicAIPlayer.class);
 
 	private IAlgorithmicAIPlayer aiPlayer = null;
 	BidEvaluator bidEvaluator = null;
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.jskat.ai.IJSkatPlayer#preparateForNewGame()
 	 */
 	@Override
@@ -49,7 +50,7 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.jskat.ai.IJSkatPlayer#finalizeGame()
 	 */
 	@Override
@@ -59,7 +60,7 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.jskat.ai.IJSkatPlayer#bidMore(int)
 	 */
 	@Override
@@ -75,7 +76,7 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.jskat.ai.IJSkatPlayer#holdBid(int)
 	 */
 	@Override
@@ -88,7 +89,7 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.jskat.ai.IJSkatPlayer#pickUpSkat()
 	 */
 	@Override
@@ -101,7 +102,7 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.jskat.ai.IJSkatPlayer#announceGame()
 	 */
 	@Override
@@ -109,7 +110,7 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
 		if (bidEvaluator == null) {
 			bidEvaluator = new BidEvaluator(knowledge.getOwnCards());
 		}
-		GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+		final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 		factory.setGameType(bidEvaluator.getSuggestedGameType());
 		aiPlayer = new AlgorithmicSinglePlayer(this);
 		return factory.getAnnouncement();
@@ -117,7 +118,7 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.jskat.ai.IJSkatPlayer#playCard()
 	 */
 	@Override
@@ -135,7 +136,7 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
 				+ " - " + playerName + " is playing a card of "
 				+ knowledge.getOwnCards() + " (" + aiPlayer.getClass()
 				+ ") -+-+-+-+-+-+-+-+-+-");
-		Card c = aiPlayer.playCard();
+		final Card c = aiPlayer.playCard();
 		if (c != null) {
 			return c;
 		}
@@ -143,7 +144,7 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
 		if (knowledge.getTrickCards().size() < 1) {
 			return knowledge.getOwnCards().get(0);
 		}
-		for (Card c2 : knowledge.getOwnCards()) {
+		for (final Card c2 : knowledge.getOwnCards()) {
 			if (c2.isAllowed(knowledge.getGameType(), knowledge.getTrickCards()
 					.get(0), knowledge.getOwnCards())) {
 				return c2;
@@ -174,7 +175,7 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.jskat.ai.AbstractJSkatPlayer#startGame()
 	 */
 	@Override

@@ -15,7 +15,6 @@
  */
 package org.jskat.ai.algorithmic;
 
-import org.apache.log4j.Logger;
 import org.jskat.data.Trick;
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
@@ -25,23 +24,25 @@ import org.jskat.util.Player;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
 import org.jskat.util.rule.SkatRuleFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Markus J. Luzius <br>
  *         created: 15.06.2011 19:13:50
- * 
+ *
  */
 public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
-	private static final Logger log = Logger
-			.getLogger(AlgorithmicOpponentPlayer.class);
+
+	private static final Logger log = LoggerFactory.getLogger(AlgorithmicOpponentPlayer.class);
 
 	private final AlgorithmicAIPlayer myPlayer;
 	private final ImmutablePlayerKnowledge knowledge;
 
 	/**
-	 * 
+	 *
 	 */
-	AlgorithmicOpponentPlayer(AlgorithmicAIPlayer p) {
+	AlgorithmicOpponentPlayer(final AlgorithmicAIPlayer p) {
 		myPlayer = p;
 		knowledge = p.getKnowledge();
 		log.debug("Defining player <" + myPlayer.getPlayerName() + "> as "
@@ -50,13 +51,14 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.jskat.ai.IJSkatPlayer#playCard()
 	 */
 	@Override
 	public Card playCard() {
-		if (knowledge.getOwnCards().size() == 1)
+		if (knowledge.getOwnCards().size() == 1) {
 			return knowledge.getOwnCards().get(0);
+		}
 		if (knowledge.getTrickCards() == null
 				|| knowledge.getTrickCards().isEmpty()) {
 			if (knowledge.getNoOfTricks() < 1) {
@@ -71,10 +73,10 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 	}
 
 	private Card openGame() {
-		CardList cards = knowledge.getOwnCards();
+		final CardList cards = knowledge.getOwnCards();
 		if (knowledge.getDeclarer() == Player.MIDDLEHAND) {
 			// "kurzer Weg, lange Farbe"
-			Suit longSuit = cards.getMostFrequentSuit(knowledge.getTrumpSuit());
+			final Suit longSuit = cards.getMostFrequentSuit(knowledge.getTrumpSuit());
 			if (longSuit != null
 					&& cards.get(cards.getFirstIndexOfSuit(longSuit)).getRank() == Rank.ACE) {
 				log.debug("playCard (1)");
@@ -88,7 +90,7 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 			// "langer Weg, kurze Farbe"
 			int minCount = 9;
 			Card result = null;
-			for (Card c : cards) {
+			for (final Card c : cards) {
 				if (result == null || result.isTrump(knowledge.getGameType())) {
 					result = c;
 					continue;
@@ -144,8 +146,8 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 	}
 
 	private Card openTrick() {
-		CardList cards = knowledge.getOwnCards();
-		for (Suit s : Suit.values()) {
+		final CardList cards = knowledge.getOwnCards();
+		for (final Suit s : Suit.values()) {
 			if (!knowledge.couldHaveSuit(knowledge.getDeclarer(), s)
 					&& cards.hasSuit(knowledge.getGameType(), s)) {
 				log.debug("playCard (7)");
@@ -159,21 +161,21 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 		log.debug("I (" + myPlayer.getPlayerName()
 				+ ") am in middlehand (OpponentPlayer)");
 		// fallback: take the first valid card
-		CardList cards = knowledge.getOwnCards();
-		Card initialCard = knowledge.getTrickCards().get(0);
-		GameType gameType = knowledge.getGameType();
+		final CardList cards = knowledge.getOwnCards();
+		final Card initialCard = knowledge.getTrickCards().get(0);
+		final GameType gameType = knowledge.getGameType();
 		Card result = null;
 		if (knowledge.getDeclarer() == knowledge.getCurrentTrick()
 				.getForeHand()) {
 			log.debug("Single player has already played a card");
-			for (Card c : cards) {
+			for (final Card c : cards) {
 				if (c.beats(gameType, initialCard)
 						&& c.isAllowed(gameType, initialCard, cards)) {
 					if (result == null) {
 						result = c;
 						continue;
 					}
-					boolean isTrump = initialCard.isTrump(gameType);
+					final boolean isTrump = initialCard.isTrump(gameType);
 					if (!isTrump && c.getRank() != Rank.ACE
 							&& c.getPoints() >= result.getPoints()) {
 						result = c;
@@ -198,7 +200,7 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 				if (knowledge.couldHaveTrump(knowledge.getCurrentTrick()
 						.getRearHand())) {
 					int cnt = 0;
-					for (Card c : Card.getBeatingCards(gameType, initialCard)) {
+					for (final Card c : Card.getBeatingCards(gameType, initialCard)) {
 						if (knowledge.couldHaveCard(knowledge.getCurrentTrick()
 								.getRearHand(), c)) {
 							cnt++;
@@ -207,7 +209,7 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 					if (cnt > 0) {
 						log.debug("Looking for a high value card - rearhand might have "
 								+ cnt + " beating card(s)");
-						for (Card c : cards) {
+						for (final Card c : cards) {
 							if (c.isAllowed(gameType, initialCard, cards)) {
 								if (result == null
 										|| c.getPoints() > result.getPoints()) {
@@ -249,19 +251,21 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 				// rear hand could still have the same suit
 				int cntSuit = 0;
 				int cntTrump = 0;
-				for (Card c : Card.getBeatingCards(gameType, initialCard)) {
+				for (final Card c : Card.getBeatingCards(gameType, initialCard)) {
 					if (knowledge.couldHaveCard(knowledge.getCurrentTrick()
 							.getRearHand(), c)) {
-						if (c.isTrump(gameType))
+						if (c.isTrump(gameType)) {
 							cntTrump++;
-						else
+						} else {
 							cntSuit++;
+						}
 					}
 				}
 				if (cntSuit > 0
 						|| (cntTrump > 1 && knowledge.couldHaveSuit(knowledge
-								.getCurrentTrick().getRearHand(), initialCard
-								.getSuit()))) {
+								.getCurrentTrick().getRearHand(),
+								initialCard
+										.getSuit()))) {
 					if (initialCard.getRank() == Rank.ACE
 							|| (initialCard.getRank() == Rank.TEN && !knowledge
 									.couldHaveCard(Player.REARHAND, Card
@@ -283,7 +287,7 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 							+ cntTrump);
 				}
 				if (result == null) {
-					for (Card c : cards) {
+					for (final Card c : cards) {
 						if (c.isAllowed(gameType, initialCard, cards)) {
 							result = c;
 						}
@@ -330,9 +334,9 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 		log.debug("I (" + myPlayer.getPlayerName()
 				+ ") am in rearhand (OpponentPlayer)");
 		// fallback: take the first valid card
-		CardList cards = knowledge.getOwnCards();
-		Card initialCard = knowledge.getTrickCards().get(0);
-		GameType gameType = knowledge.getGameType();
+		final CardList cards = knowledge.getOwnCards();
+		final Card initialCard = knowledge.getTrickCards().get(0);
+		final GameType gameType = knowledge.getGameType();
 		Card result = null;
 
 		if (initialCard.beats(gameType, knowledge.getTrickCards().get(1))) {
@@ -344,37 +348,42 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 				// it's a single player win so far
 				log.debug("Single player is in forehand and has the trick so far");
 				boolean myTrick = false;
-				for (Card c : cards) {
-					if (!c.isAllowed(gameType, initialCard, cards))
+				for (final Card c : cards) {
+					if (!c.isAllowed(gameType, initialCard, cards)) {
 						continue;
+					}
 					if (result == null) {
 						result = c;
 						continue;
 					}
-					Trick tmpTrick = (Trick) knowledge.getCurrentTrick()
+					final Trick tmpTrick = (Trick) knowledge.getCurrentTrick()
 							.clone();
 					tmpTrick.addCard(c);
 					if (SkatRuleFactory.getSkatRules(gameType)
 							.calculateTrickWinner(gameType, tmpTrick) != knowledge
-							.getDeclarer()) {
+									.getDeclarer()) {
 						if (!myTrick) {
 							log.debug("I can take the trick with " + c);
 							result = c;
 							myTrick = true;
-						} else if (c.getPoints() >= result.getPoints())
+						} else if (c.getPoints() >= result.getPoints()) {
 							result = c;
+						}
 						continue;
-					} else if (!myTrick && c.getPoints() <= result.getPoints())
+					} else if (!myTrick && c.getPoints() <= result.getPoints()) {
 						result = c;
+					}
 				}
 
-				if (result != null)
+				if (result != null) {
 					return result;
-				for (Card c : cards) {
+				}
+				for (final Card c : cards) {
 					if (c.isAllowed(gameType, initialCard, cards)
 							&& (result == null || c.getPoints() <= result
-									.getPoints()))
+									.getPoints())) {
 						result = c;
+					}
 				}
 				log.debug("playRearhandCard() (2)");
 				return result;
@@ -385,22 +394,24 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 					result = cards.get(cards.getFirstIndexOfSuit(
 							initialCard.getSuit(), false));
 				} else {
-					for (Card c : cards) {
+					for (final Card c : cards) {
 						if (c.isAllowed(gameType, initialCard, cards)
 								&& (result == null || c.getPoints() > result
-										.getPoints()))
+										.getPoints())) {
 							result = c;
+						}
 					}
 				}
 				if (result != null) {
 					log.debug("playRearhandCard() (3)");
 					return result;
 				}
-				for (Card c : cards) {
+				for (final Card c : cards) {
 					if (c.isAllowed(gameType, initialCard, cards)
 							&& (result == null || (c.getPoints() > result
-									.getPoints() && c.getRank() != Rank.ACE)))
+									.getPoints() && c.getRank() != Rank.ACE))) {
 						result = c;
+					}
 				}
 				log.debug("playRearhandCard() (4)");
 				return result;
@@ -412,28 +423,31 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 				log.debug("Single player is in middlehand and has the trick so far");
 				// it's a single player win so far
 				boolean myTrick = false;
-				for (Card c : cards) {
-					if (!c.isAllowed(gameType, initialCard, cards))
+				for (final Card c : cards) {
+					if (!c.isAllowed(gameType, initialCard, cards)) {
 						continue;
+					}
 					if (result == null) {
 						result = c;
 						continue;
 					}
-					Trick tmpTrick = (Trick) knowledge.getCurrentTrick()
+					final Trick tmpTrick = (Trick) knowledge.getCurrentTrick()
 							.clone();
 					tmpTrick.addCard(c);
 					if (SkatRuleFactory.getSkatRules(gameType)
 							.calculateTrickWinner(gameType, tmpTrick) != knowledge
-							.getDeclarer()) {
+									.getDeclarer()) {
 						if (!myTrick) {
 							log.debug("I can take the trick with " + c);
 							result = c;
 							myTrick = true;
-						} else if (c.getPoints() >= result.getPoints())
+						} else if (c.getPoints() >= result.getPoints()) {
 							result = c;
+						}
 						continue;
-					} else if (!myTrick && c.getPoints() <= result.getPoints())
+					} else if (!myTrick && c.getPoints() <= result.getPoints()) {
 						result = c;
+					}
 				}
 
 			} else {
@@ -444,20 +458,21 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 							initialCard.getSuit(), false));
 					if (result == null) {
 						// "schmieren"
-						for (Card c : cards) {
-							if (result == null)
+						for (final Card c : cards) {
+							if (result == null) {
 								result = c;
-							else if (result.isTrump(gameType)
+							} else if (result.isTrump(gameType)
 									&& (!c.isTrump(gameType) || c.getPoints() >= result
-											.getPoints()))
+											.getPoints())) {
 								result = c;
-							else if (c.getRank() == Rank.ACE
+							} else if (c.getRank() == Rank.ACE
 									&& !knowledge.couldHaveSuit(
 											knowledge.getDeclarer(),
-											c.getSuit()))
+											c.getSuit())) {
 								result = c;
-							else if (c.getPoints() > result.getPoints())
+							} else if (c.getPoints() > result.getPoints()) {
 								result = c;
+							}
 						}
 						if (result != null) {
 							log.debug("playRearhandCard() (9)");
@@ -465,23 +480,25 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 						}
 					}
 				} else {
-					for (Card c : cards) {
+					for (final Card c : cards) {
 						if (c.isAllowed(gameType, initialCard, cards)
 								&& (result == null
 										|| c.getPoints() > result.getPoints() || result
-										.getRank() == Rank.JACK))
+												.getRank() == Rank.JACK)) {
 							result = c;
+						}
 					}
 				}
 				if (result != null) {
 					log.debug("playRearhandCard() (7)");
 					return result;
 				}
-				for (Card c : cards) {
+				for (final Card c : cards) {
 					if (c.isAllowed(gameType, initialCard, cards)
 							&& (result == null || (c.getPoints() > result
-									.getPoints() && c.getRank() != Rank.ACE)))
+									.getPoints() && c.getRank() != Rank.ACE))) {
 						result = c;
+					}
 				}
 				log.debug("playRearhandCard() (8)");
 				return result;
@@ -493,16 +510,16 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 
 	/**
 	 * Gets a fallback card, if no other algorithm returned a card
-	 * 
+	 *
 	 * @param cards
 	 * @param initialCard
 	 * @param gameType
 	 * @return a default card
 	 */
-	private Card getDefaultCard(CardList cards, Card initialCard,
-			GameType gameType) {
+	private Card getDefaultCard(final CardList cards, final Card initialCard,
+			final GameType gameType) {
 		Card result = null;
-		for (Card c : cards) {
+		for (final Card c : cards) {
 			if (c.isAllowed(gameType, initialCard, cards)) {
 				result = c;
 			}
@@ -519,13 +536,12 @@ public class AlgorithmicOpponentPlayer implements IAlgorithmicAIPlayer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.jskat.ai.algorithmic.IAlgorithmicAIPlayer#discardSkat(org.jskat.ai
+	 *
+	 * @see org.jskat.ai.algorithmic.IAlgorithmicAIPlayer#discardSkat(org.jskat.ai
 	 * .algorithmic.BidEvaluator)
 	 */
 	@Override
-	public CardList discardSkat(BidEvaluator bidEvaluator) {
+	public CardList discardSkat(final BidEvaluator bidEvaluator) {
 		throw new IllegalStateException("opponent player cannot discard a skat");
 	}
 }

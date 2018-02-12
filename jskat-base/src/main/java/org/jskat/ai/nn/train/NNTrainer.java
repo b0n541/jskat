@@ -17,8 +17,6 @@ package org.jskat.ai.nn.train;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 import org.jskat.ai.nn.AIPlayerNN;
 import org.jskat.control.JSkatEventBus;
@@ -67,11 +65,6 @@ public class NNTrainer {
 	private GameType gameType;
 
 	private boolean stopTraining = false;
-
-	public void run() {
-
-		trainNets();
-	}
 
 	/**
 	 * Sets the game type to learn
@@ -161,19 +154,10 @@ public class NNTrainer {
 		return game;
 	}
 
-	private void runGame(final SkatGame game) {
-		try {
-			CompletableFuture.supplyAsync(() -> game.run()).get();
-		} catch (InterruptedException | ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	/**
 	 * Trains the neural networks
 	 */
-	private void trainNets() {
+	public void trainNets() {
 
 		long totalGames = 0;
 		long totalWonGames = 0;
@@ -211,7 +195,7 @@ public class NNTrainer {
 					// Player.FOREHAND,
 					// CardDeck.getPerfectDistribution());
 
-					runGame(game);
+					game.run();
 
 					if (isGameWon(declarer, game)) {
 						log.debug("Game won.");

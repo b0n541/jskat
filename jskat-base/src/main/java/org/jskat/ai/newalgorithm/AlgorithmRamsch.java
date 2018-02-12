@@ -15,25 +15,27 @@
  */
 package org.jskat.ai.newalgorithm;
 
-import org.apache.log4j.Logger;
 import org.jskat.data.JSkatOptions;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Daniel Loreck
  *
  */
 public class AlgorithmRamsch extends AbstractAlgorithmAI {
-	private static final Logger log = Logger.getLogger(AlgorithmRamsch.class);
+
+	private static final Logger log = LoggerFactory.getLogger(AlgorithmRamsch.class);
 
 	/**
 	 *
 	 */
-	AlgorithmRamsch(final AlgorithmAI p, GameType pGameType) {
+	AlgorithmRamsch(final AlgorithmAI p, final GameType pGameType) {
 		super(p, pGameType);
 
 		log.debug(String.format("/s is %s", myPlayer.getPlayerName(), this
@@ -42,14 +44,14 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 
 	@Override
 	public Card startGame() {
-		CardList cards = knowledge.getOwnCards();
+		final CardList cards = knowledge.getOwnCards();
 		if (cards.get(0).getRank() == Rank.JACK
 				&& cards.get(0).getSuit().ordinal() > 2
 				&& cards.get(1).getRank() != Rank.JACK) {
 			return cards.get(0);
 		}
 		int resultIndex = -1;
-		for (Suit s : Suit.values()) {
+		for (final Suit s : Suit.values()) {
 			if (cards.getSuitCount(s, false) == 1) {
 				if (resultIndex < 0
 						|| cards.get(resultIndex).getRamschOrder() > cards.get(
@@ -69,15 +71,15 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 
 	@Override
 	public Card playForehandCard() {
-		CardList cards = knowledge.getOwnCards();
-		int[] playedCards = knowledge.getPlayedCardsBinary();
+		final CardList cards = knowledge.getOwnCards();
+		final int[] playedCards = knowledge.getPlayedCardsBinary();
 		int resultIndex = -1;
 		// see if I want to get rid of any single cards
-		for (Suit s : Suit.values()) {
+		for (final Suit s : Suit.values()) {
 			if ((knowledge.getPlayedCardsBinary()[s.ordinal()] & 127) > 0) {
 				continue;
 			}
-			Card c = cards.get(cards.getFirstIndexOfSuit(s, false));
+			final Card c = cards.get(cards.getFirstIndexOfSuit(s, false));
 			if (cards.getSuitCount(s, false) == 1
 					&& c.getRank().getRamschOrder() < 6
 					&& c.getRank().getRamschOrder() > 2) {
@@ -90,7 +92,7 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 					}
 				}
 			}
-			Card lowCard = cards.get(cards.getLastIndexOfSuit(s, false));
+			final Card lowCard = cards.get(cards.getLastIndexOfSuit(s, false));
 			if (cards.getSuitCount(s, false) == 2
 					&& c.getRank().getRamschOrder() < 6
 					&& lowCard.getRank().getRamschOrder() < 2) {
@@ -98,13 +100,13 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 			}
 		}
 		if (resultIndex >= 0) {
-			Card result = cards.get(resultIndex);
+			final Card result = cards.get(resultIndex);
 			log.debug("Playing single (or high double) suit card: " + result
 					+ " of " + cards);
 			return result;
 		}
 
-		int jack = Rank.JACK.toBinaryFlag();
+		final int jack = Rank.JACK.toBinaryFlag();
 		if ((playedCards[0] & jack) + (playedCards[1] & jack)
 				+ (playedCards[2] & jack) + (playedCards[3] & jack) == 0) {
 			log.debug("no jack played yet - trying it myself");
@@ -116,7 +118,7 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 		}
 
 		// check best card, if there are no "easy" suits
-		for (Card c : cards) {
+		for (final Card c : cards) {
 			if (c.getRamschOrder() == 1) {
 				resultIndex = cards.getIndexOf(c);
 			} else if (c.getRamschOrder() == 0 && resultIndex < 0) {
@@ -133,9 +135,9 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 	public Card playMiddlehandCard() {
 		log.debug("I (" + myPlayer.getPlayerName()
 				+ ") am in middlehand (OpponentPlayer)");
-		CardList cards = myPlayer.getPlayableCards(knowledge.getTrickCards());
-		Card initialCard = knowledge.getTrickCards().get(0);
-		GameType gameType = knowledge.getGameType();
+		final CardList cards = myPlayer.getPlayableCards(knowledge.getTrickCards());
+		final Card initialCard = knowledge.getTrickCards().get(0);
+		final GameType gameType = knowledge.getGameType();
 		// Card result = null;
 		// fallback: get last valid card
 		return getDefaultCard(cards, initialCard, gameType);
@@ -145,13 +147,13 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 	public Card playRearhandCard() {
 		log.debug("I (" + myPlayer.getPlayerName()
 				+ ") am in rearhand (OpponentPlayer)");
-		CardList cards = myPlayer.getPlayableCards(knowledge.getTrickCards());
-		Card initialCard = knowledge.getTrickCards().get(0);
-		Card middlehandCard = knowledge.getTrickCards().get(1);
-		GameType gameType = knowledge.getGameType();
+		final CardList cards = myPlayer.getPlayableCards(knowledge.getTrickCards());
+		final Card initialCard = knowledge.getTrickCards().get(0);
+		final Card middlehandCard = knowledge.getTrickCards().get(1);
+		final GameType gameType = knowledge.getGameType();
 		Card result = null;
-		CardList allowed = new CardList();
-		for (Card c : cards) {
+		final CardList allowed = new CardList();
+		for (final Card c : cards) {
 			if (c.isAllowed(gameType, initialCard, cards)) {
 				allowed.add(c);
 			}
@@ -161,10 +163,10 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 		}
 		// if possible, take the highest card
 		result = allowed.get(0);
-		for (Card c : allowed) {
-			boolean beatsCheck = c.beats(gameType, initialCard)
+		for (final Card c : allowed) {
+			final boolean beatsCheck = c.beats(gameType, initialCard)
 					&& c.beats(gameType, middlehandCard);
-			boolean beatsResult = result.beats(gameType, initialCard)
+			final boolean beatsResult = result.beats(gameType, initialCard)
 					&& result.beats(gameType, middlehandCard);
 			if (beatsResult && !beatsCheck) {
 				result = c;
@@ -187,7 +189,7 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 	private Card getDefaultCard(final CardList cards, final Card initialCard,
 			final GameType gameType) {
 		Card result = null;
-		for (Card c : cards) {
+		for (final Card c : cards) {
 			if (c.isAllowed(gameType, initialCard, cards)) {
 				result = c;
 			}
@@ -204,9 +206,8 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.jskat.ai.algorithmic.IAlgorithmicAIPlayer#discardSkat(org.jskat.ai
+	 *
+	 * @see org.jskat.ai.algorithmic.IAlgorithmicAIPlayer#discardSkat(org.jskat.ai
 	 * .algorithmic.BidEvaluator)
 	 */
 	@Override
@@ -220,8 +221,8 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 	}
 
 	private CardList discardWithJacks() {
-		CardList result = new CardList();
-		CardList cards = new CardList(knowledge.getOwnCards());
+		final CardList result = new CardList();
+		final CardList cards = new CardList(knowledge.getOwnCards());
 		log.debug("cards left before discarding(withJacks): " + cards.size()
 				+ " - " + cards);
 		cards.sort(GameType.RAMSCH);
@@ -247,20 +248,20 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 	}
 
 	private CardList discardNoJacks() {
-		CardList result = new CardList();
-		CardList cards = new CardList(knowledge.getOwnCards());
+		final CardList result = new CardList();
+		final CardList cards = new CardList(knowledge.getOwnCards());
 		cards.sort(GameType.RAMSCH);
 		log.debug("cards left before discarding(noJacks): " + cards.size()
 				+ " - " + cards);
-		for (Card c : cards) {
+		for (final Card c : cards) {
 			if (result.size() < 2 && c.getRank() == Rank.ACE) {
 				result.add(c);
 			} else if (result.size() == 2 && c.getRank() == Rank.ACE) {
-				int len = knowledge.getOwnCards().getSuitCount(c.getSuit(),
+				final int len = knowledge.getOwnCards().getSuitCount(c.getSuit(),
 						false);
-				int len0 = knowledge.getOwnCards().getSuitCount(
+				final int len0 = knowledge.getOwnCards().getSuitCount(
 						result.get(0).getSuit(), false);
-				int len1 = knowledge.getOwnCards().getSuitCount(
+				final int len1 = knowledge.getOwnCards().getSuitCount(
 						result.get(1).getSuit(), false);
 				if (len < len0) {
 					result.remove(0);
@@ -271,15 +272,15 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 				}
 			}
 		}
-		for (Card c : cards) {
+		for (final Card c : cards) {
 			if (result.size() < 2 && c.getRank() == Rank.TEN) {
 				result.add(c);
 			} else if (result.size() == 2 && c.getRank() == Rank.TEN) {
-				int len = knowledge.getOwnCards().getSuitCount(c.getSuit(),
+				final int len = knowledge.getOwnCards().getSuitCount(c.getSuit(),
 						false);
-				int len0 = knowledge.getOwnCards().getSuitCount(
+				final int len0 = knowledge.getOwnCards().getSuitCount(
 						result.get(0).getSuit(), false);
-				int len1 = knowledge.getOwnCards().getSuitCount(
+				final int len1 = knowledge.getOwnCards().getSuitCount(
 						result.get(1).getSuit(), false);
 				if (len < len0) {
 					result.remove(0);
@@ -290,12 +291,12 @@ public class AlgorithmRamsch extends AbstractAlgorithmAI {
 				}
 			}
 		}
-		for (Card c : cards) {
+		for (final Card c : cards) {
 			if (result.size() < 2 && c.getRank() == Rank.KING) {
 				result.add(c);
 			}
 		}
-		for (Card c : cards) {
+		for (final Card c : cards) {
 			if (result.size() < 2 && c.getRank() != Rank.JACK) {
 				result.add(c);
 			}

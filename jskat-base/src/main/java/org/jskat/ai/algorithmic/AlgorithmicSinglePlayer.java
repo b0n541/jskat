@@ -15,28 +15,29 @@
  */
 package org.jskat.ai.algorithmic;
 
-import org.apache.log4j.Logger;
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.Player;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Markus J. Luzius <br>
  *         created: 15.06.2011 19:13:50
- * 
+ *
  */
 public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
-	private static final Logger log = Logger
-			.getLogger(AlgorithmicSinglePlayer.class);
+
+	private static final Logger log = LoggerFactory.getLogger(AlgorithmicSinglePlayer.class);
 
 	private final AlgorithmicAIPlayer myPlayer;
 	private final ImmutablePlayerKnowledge knowledge;
 
 	/**
-	 * 
+	 *
 	 */
 	AlgorithmicSinglePlayer(final AlgorithmicAIPlayer p) {
 		myPlayer = p;
@@ -47,16 +48,15 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.jskat.ai.algorithmic.IAlgorithmicAIPlayer#discardSkat(org.jskat.ai
+	 *
+	 * @see org.jskat.ai.algorithmic.IAlgorithmicAIPlayer#discardSkat(org.jskat.ai
 	 * .algorithmic.BidEvaluator)
 	 */
 	@Override
 	public CardList discardSkat(final BidEvaluator bid) {
-		CardList cards = new CardList(knowledge.getOwnCards());
+		final CardList cards = new CardList(knowledge.getOwnCards());
 		cards.sort(bid.getSuggestedGameType());
-		CardList toDiscard = new CardList();
+		final CardList toDiscard = new CardList();
 		toDiscard.add(cards.remove(10));
 		toDiscard.add(cards.remove(10));
 		return toDiscard;
@@ -64,7 +64,7 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.jskat.ai.IJSkatPlayer#playCard()
 	 */
 	@Override
@@ -86,7 +86,7 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
 		// at present, game is always opened with trump - using a jack, if
 		// possible
 		// TODO (markus 15.07.11) open single player game with none-trump
-		CardList cards = knowledge.getOwnCards();
+		final CardList cards = knowledge.getOwnCards();
 		if (cards.get(0).getRank() != Rank.JACK) {
 			Card c = cards.get(cards.getLastIndexOfSuit(
 					knowledge.getTrumpSuit(), true));
@@ -128,13 +128,13 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
 	}
 
 	private Card openTrick() {
-		CardList cards = knowledge.getOwnCards();
+		final CardList cards = knowledge.getOwnCards();
 		// 1: check, if there are still trump cards out
 		if (knowledge.couldOpponentsHaveTrump()) {
 			if (openGame().getRank() == Rank.JACK) {
 				return openGame();
 			}
-			Card c = cards.get(cards.getLastIndexOfSuit(
+			final Card c = cards.get(cards.getLastIndexOfSuit(
 					knowledge.getTrumpSuit(), true));
 			if (c != null) {
 				return c;
@@ -142,11 +142,11 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
 		}
 		// if both opponent player don't have a suit, but single player has:
 		// play it!
-		suitLoop: for (Suit s : Suit.values()) {
+		suitLoop: for (final Suit s : Suit.values()) {
 			if (!cards.hasSuit(knowledge.getGameType(), s)) {
 				continue;
 			}
-			playerLoop: for (Player p : Player.values()) {
+			playerLoop: for (final Player p : Player.values()) {
 				if (p == knowledge.getDeclarer()) {
 					continue playerLoop;
 				}
@@ -157,7 +157,7 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
 			return cards.get(cards.getLastIndexOfSuit(s));
 		}
 		// do i have any aces?
-		for (Card c : cards) {
+		for (final Card c : cards) {
 			if (c.getRank() == Rank.ACE
 					&& c.getSuit() != knowledge.getTrumpSuit()) {
 				return c;
@@ -176,12 +176,12 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
 			}
 		}
 		// do i have a ten and a lower card of the same suit?
-		int[] myCards = cards.toBinary();
-		for (Suit s : Suit.values()) {
+		final int[] myCards = cards.toBinary();
+		for (final Suit s : Suit.values()) {
 			if (s == knowledge.getTrumpSuit()) {
 				continue;
 			}
-			int i = myCards[s.ordinal()];
+			final int i = myCards[s.ordinal()];
 			if ((i & 63) > 32) {
 				return cards.get(cards.getLastIndexOfSuit(s));
 			}
@@ -195,8 +195,8 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
 		// TODO (mjl 23.08.2011) single player middlehand card
 		// fallback: take the first valid card (which is a trump, if there still
 		// is one)
-		CardList cards = knowledge.getOwnCards();
-		for (Card c : cards) {
+		final CardList cards = knowledge.getOwnCards();
+		for (final Card c : cards) {
 			if (c.isAllowed(knowledge.getGameType(), knowledge.getTrickCards()
 					.isEmpty() ? null : knowledge.getTrickCards().get(0), cards)) {
 				return c;
@@ -213,8 +213,8 @@ public class AlgorithmicSinglePlayer implements IAlgorithmicAIPlayer {
 		// TODO (mjl 23.08.2011) single player rearhand card
 		// fallback: take the first valid card (which is a trump, if there still
 		// is one)
-		CardList cards = knowledge.getOwnCards();
-		for (Card c : cards) {
+		final CardList cards = knowledge.getOwnCards();
+		for (final Card c : cards) {
 			if (c.isAllowed(knowledge.getGameType(), knowledge.getTrickCards()
 					.isEmpty() ? null : knowledge.getTrickCards().get(0), cards)) {
 				return c;
