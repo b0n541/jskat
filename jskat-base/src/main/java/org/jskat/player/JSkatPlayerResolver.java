@@ -20,12 +20,19 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.reflections.Reflections;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
+import org.reflections.util.FilterBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Resolves all implementations of {@link JSkatPlayer} that inherit from
  * {@link AbstractJSkatPlayer} and are not abstract
  */
 public class JSkatPlayerResolver {
+
+	private final static Logger LOG = LoggerFactory.getLogger(JSkatPlayerResolver.class);
 
 	public static final String HUMAN_PLAYER_CLASS = "org.jskat.gui.human.SwingHumanPlayer";
 
@@ -36,22 +43,17 @@ public class JSkatPlayerResolver {
 	static {
 		EXCLUDED_PLAYER_CLASSES = new HashSet<String>();
 		EXCLUDED_PLAYER_CLASSES.add("org.jskat.ai.mjl.AIPlayerMJL");
-		EXCLUDED_PLAYER_CLASSES
-				.add("org.jskat.ai.algorithmic.AlgorithmicAIPlayer");
+		EXCLUDED_PLAYER_CLASSES.add("org.jskat.ai.algorithmic.AlgorithmicAIPlayer");
 
 		UNIT_TEST_PLAYER_CLASSES = new HashSet<String>();
 		UNIT_TEST_PLAYER_CLASSES.add("org.jskat.ai.test.UnitTestPlayer");
 		UNIT_TEST_PLAYER_CLASSES.add("org.jskat.ai.test.RamschTestPlayer");
 		UNIT_TEST_PLAYER_CLASSES.add("org.jskat.ai.test.NoBiddingTestPlayer");
-		UNIT_TEST_PLAYER_CLASSES
-				.add("org.jskat.ai.test.ContraCallingTestPlayer");
-		UNIT_TEST_PLAYER_CLASSES
-				.add("org.jskat.ai.test.ContraReCallingTestPlayer");
+		UNIT_TEST_PLAYER_CLASSES.add("org.jskat.ai.test.ContraCallingTestPlayer");
+		UNIT_TEST_PLAYER_CLASSES.add("org.jskat.ai.test.ContraReCallingTestPlayer");
 		UNIT_TEST_PLAYER_CLASSES.add("org.jskat.ai.test.ExceptionTestPlayer");
-		UNIT_TEST_PLAYER_CLASSES
-				.add("org.jskat.ai.test.PlayNonPossessingCardTestPlayer");
-		UNIT_TEST_PLAYER_CLASSES
-				.add("org.jskat.ai.test.PlayNotAllowedCardTestPlayer");
+		UNIT_TEST_PLAYER_CLASSES.add("org.jskat.ai.test.PlayNonPossessingCardTestPlayer");
+		UNIT_TEST_PLAYER_CLASSES.add("org.jskat.ai.test.PlayNotAllowedCardTestPlayer");
 	}
 
 	/**
@@ -66,20 +68,24 @@ public class JSkatPlayerResolver {
 		result.removeAll(EXCLUDED_PLAYER_CLASSES);
 		result.removeAll(UNIT_TEST_PLAYER_CLASSES);
 
+		LOG.info("Found {} implementations of AbstractJSkatPlayer.", result.size());
+
 		return result;
 	}
 
 	private static Set<String> getAllImplementations() {
 		final Set<String> result = new HashSet<String>();
-		final Reflections reflections = new Reflections("org.jskat.ai");
+		final Reflections reflections = new Reflections(new ConfigurationBuilder()
+				.setUrls(ClasspathHelper.forPackage("org.jskat.ai"))
+				.filterInputsBy(new FilterBuilder().include(".*\\.class")));
 
-		final Set<Class<? extends AbstractJSkatPlayer>> subTypes = reflections
-				.getSubTypesOf(AbstractJSkatPlayer.class);
+		final Set<Class<? extends AbstractJSkatPlayer>> subTypes = reflections.getSubTypesOf(AbstractJSkatPlayer.class);
 		for (final Class<? extends AbstractJSkatPlayer> jskatPlayer : subTypes) {
 			if (isNotAbstract(jskatPlayer) && isNotHumanPlayer(jskatPlayer)) {
 				result.add(jskatPlayer.getName());
 			}
 		}
+
 		return result;
 	}
 
