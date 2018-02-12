@@ -93,8 +93,8 @@ public class DeepLearning4JNetworkWrapper implements NeuralNetwork {
 		layerBuilder.backprop(true);
 
 		net = new MultiLayerNetwork(layerBuilder.build());
-		net.printConfiguration();
 		net.init();
+		net.printConfiguration();
 	}
 
 	@Override
