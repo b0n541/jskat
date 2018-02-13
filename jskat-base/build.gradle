@@ -4,12 +4,13 @@ dependencies {
     compile 'org.deeplearning4j:deeplearning4j-core:0.9.1'
     compile 'org.deeplearning4j:deeplearning4j-parallel-wrapper_2.11:0.9.1'
     compile 'org.nd4j:nd4j-native-platform:0.9.1'
+    compile 'org.nd4j:nd4j-jackson:0.9.1'
 	compile 'org.eclipse.jetty:jetty-websocket:8.1.18.v20150929'
 	compile 'org.reflections:reflections:0.9.11'
 	compile 'com.google.guava:guava:23.0'
 	compile 'org.apache.commons:commons-math3:3.6.1'
 	
 	testCompile 'junit:junit:4.12'
-	testCompile 'org.mockito:mockito-core:2.13.0'
+	testCompile 'org.mockito:mockito-core:2.15.0'
 	testCompile 'org.hamcrest:hamcrest-library:1.3'
 }
