@@ -23,32 +23,34 @@ public class CurrentTrickStrategy extends AbstractInputStrategy {
 
 	@Override
 	public int getNeuronCount() {
-		return 3 * 32;
+		return 3 * 12;
 	}
 
 	@Override
-	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge,
-			Card cardToPlay) {
+	public double[] getNetworkInput(final ImmutablePlayerKnowledge knowledge, final Card cardToPlay) {
 
-		double[] result = getEmptyInputs();
+		final double[] result = getEmptyInputs();
 
-		Trick trick = knowledge.getCurrentTrick();
+		final Trick trick = knowledge.getCurrentTrick();
 
 		setTrickCardInputs(result, trick);
 
 		return result;
 	}
 
-	protected final void setTrickCardInputs(double[] result, Trick trick) {
+	protected final void setTrickCardInputs(final double[] result, final Trick trick) {
 		// set already played cards
 		if (trick.getFirstCard() != null) {
-			result[getNetworkInputIndex(trick.getFirstCard())] = ON;
+			result[trick.getFirstCard().getSuit().getSortOrder()] = ON;
+			result[4 + trick.getFirstCard().getRank().getNullOrder()] = ON;
 		}
 		if (trick.getSecondCard() != null) {
-			result[32 + getNetworkInputIndex(trick.getSecondCard())] = ON;
+			result[12 + trick.getSecondCard().getSuit().getSortOrder()] = ON;
+			result[12 + 4 + trick.getSecondCard().getRank().getNullOrder()] = ON;
 		}
 		if (trick.getThirdCard() != null) {
-			result[64 + getNetworkInputIndex(trick.getThirdCard())] = ON;
+			result[24 + trick.getThirdCard().getSuit().getSortOrder()] = ON;
+			result[24 + 4 + trick.getThirdCard().getRank().getNullOrder()] = ON;
 		}
 	}
 }
