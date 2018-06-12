@@ -24,20 +24,20 @@ import org.jskat.util.Player;
 public class PlayerPartyCardsStrategy extends AbstractCardStrategy {
 
 	@Override
-	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
+	public double[] getNetworkInput(final ImmutablePlayerKnowledge knowledge, final Card cardToPlay) {
 
-		double[] result = getEmptyInputs();
+		final double[] result = getEmptyInputs();
 
-		Set<Player> playerParty = knowledge.getPlayerPartyMembers();
+		final Set<Player> playerParty = knowledge.getPlayerPartyMembers();
 
-		for (Card card : Card.values()) {
-			for (Player member : playerParty) {
+		for (final Card card : Card.values()) {
+			for (final Player member : playerParty) {
 				if (knowledge.couldHaveCard(member, card) || knowledge.isCardPlayedBy(member, card)) {
 					result[getNetworkInputIndex(card)] = ON;
 				}
 			}
 		}
-		return result;
 
+		return result;
 	}
 }
