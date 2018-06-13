@@ -13,29 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.util.version;
+package org.jskat.ai.nn.input;
 
-import org.xml.sax.helpers.DefaultHandler;
+import org.jskat.player.ImmutablePlayerKnowledge;
+import org.jskat.util.Card;
+import org.jskat.util.Player;
 
-/**
- * Extracts the version number from the PAD XML file
- */
-class VersionHandler extends DefaultHandler {
-
-	String versionString = ""; //$NON-NLS-1$
-	String workingString = null;
+public class PlayerPartyPositionInputStrategy extends AbstractPositionInputStrategy {
 
 	@Override
-	public void characters(char[] ch, int start, int length) {
+	public double[] getNetworkInput(final ImmutablePlayerKnowledge knowledge, final Card cardToPlay) {
 
-		workingString = new String(ch, start, length);
-	}
+		final double[] result = getEmptyInputs();
 
-	@Override
-	public void endElement(String uri, String localName, String qName) {
-
-		if ("Program_Version".equals(localName)) { //$NON-NLS-1$
-			versionString = workingString;
+		for (final Player player : knowledge.getPlayerPartyMembers()) {
+			setPositionInput(result, player);
 		}
+
+		return result;
 	}
 }

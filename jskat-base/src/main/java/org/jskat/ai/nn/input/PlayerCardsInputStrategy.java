@@ -17,21 +17,31 @@ package org.jskat.ai.nn.input;
 
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
+import org.jskat.util.Player;
 
 /**
- * Gets the network inputs for the declarer position
+ * Gets network inputs for all cards played by the player
  */
-public class DeclarerPositionInputStrategy extends
-		AbstractPositionInputStrategy {
+public class PlayerCardsInputStrategy extends
+		AbstractCardStrategy {
+
+	private final Player position;
+
+	public PlayerCardsInputStrategy(final Player position) {
+		this.position = position;
+	}
 
 	@Override
-	public double[] getNetworkInput(ImmutablePlayerKnowledge knowledge,
-			Card cardToPlay) {
+	public double[] getNetworkInput(final ImmutablePlayerKnowledge knowledge,
+			final Card cardToPlay) {
 
-		double[] result = getEmptyInputs();
+		final double[] result = getEmptyInputs();
 
-		setPositionInput(result, knowledge.getDeclarer());
-
+		for (final Card card : Card.values()) {
+			if (knowledge.couldHaveCard(position, card) || knowledge.isCardPlayedBy(position, card)) {
+				result[getNetworkInputIndex(card)] = ON;
+			}
+		}
 		return result;
 	}
 }

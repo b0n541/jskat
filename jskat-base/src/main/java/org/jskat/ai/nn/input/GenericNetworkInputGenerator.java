@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2017 Jan Schäfer (jansch@users.sourceforge.net)
+ * Copyright (C) 2018 Jan Schäfer (jansch@users.sourceforge.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
+import org.jskat.util.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,23 +32,26 @@ public class GenericNetworkInputGenerator implements NetworkInputGenerator {
 	private static final List<InputStrategy> strategies = new ArrayList<>();
 
 	static {
-		strategies.add(new PlayerPartyCardsStrategy());
-		strategies.add(new OpponentPartyCardsStrategy());
+		strategies.add(new PlayerPositionInputStrategy());
+		strategies.add(new PlayerPartyPositionInputStrategy());
+		strategies.add(new DeclarerPositionInputStrategy());
+		strategies.add(new PlayerCardsInputStrategy(Player.FOREHAND));
+		strategies.add(new PlayerCardsInputStrategy(Player.MIDDLEHAND));
+		strategies.add(new PlayerCardsInputStrategy(Player.REARHAND));
 		strategies.add(new CurrentTrickAndNextCardStrategy());
 		strategies.add(new PlayerPartyMadeCardsAndNextCardStrategy());
 		strategies.add(new OpponentPartyMadeCardsStrategy());
-		strategies.add(new UnplayedPlayerPartyCardsAndNextCardStrategy());
-		strategies.add(new UnplayedOpponentPartyCardsStrategy());
+		strategies.add(new UnplayedPlayerCardsAndNextCardStrategy());
 	}
 
 	@Override
-	public double[] getNetInputs(ImmutablePlayerKnowledge knowledge, Card cardToPlay) {
+	public double[] getNetInputs(final ImmutablePlayerKnowledge knowledge, final Card cardToPlay) {
 
-		double[] result = new double[getNeuronCountForAllStrategies()];
+		final double[] result = new double[getNeuronCountForAllStrategies()];
 		int index = 0;
 		for (int strategyCount = 0; strategyCount < strategies.size(); strategyCount++) {
-			InputStrategy strategy = strategies.get(strategyCount);
-			double[] networkInput = strategy.getNetworkInput(knowledge, cardToPlay);
+			final InputStrategy strategy = strategies.get(strategyCount);
+			final double[] networkInput = strategy.getNetworkInput(knowledge, cardToPlay);
 			for (int i = 0; i < strategy.getNeuronCount(); i++) {
 				result[index] = networkInput[i];
 				index++;
@@ -61,7 +65,7 @@ public class GenericNetworkInputGenerator implements NetworkInputGenerator {
 		return result;
 	}
 
-	private static String convertToIntArray(double[] result) {
+	private static String convertToIntArray(final double[] result) {
 		return Arrays.toString(Arrays.stream(result).mapToInt(value -> (int) value).toArray());
 	}
 
@@ -73,7 +77,7 @@ public class GenericNetworkInputGenerator implements NetworkInputGenerator {
 	public static int getNeuronCountForAllStrategies() {
 		int result = 0;
 
-		for (InputStrategy strategy : strategies) {
+		for (final InputStrategy strategy : strategies) {
 			result += strategy.getNeuronCount();
 		}
 
