@@ -148,17 +148,18 @@ public final class SkatNetworks {
 		final NetworkTopology topo = new NetworkTopology(INPUT_NEURONS, HIDDEN_NEURONS, OUTPUT_NEURONS);
 
 		networks = new HashMap<>();
-		for (final GameType gameType : GameType.values()) {
-			networks.put(gameType, new HashMap<PlayerParty, List<NeuralNetwork>>());
-			for (final PlayerParty playerParty : PlayerParty.values()) {
-				networks.get(gameType).put(playerParty, new ArrayList<NeuralNetwork>());
-				// NeuralNetwork network = new EncogNetworkWrapper(topo, USE_BIAS);
-				final NeuralNetwork network = new DeepLearning4JNetworkWrapper(topo, USE_BIAS);
-				for (int trick = 0; trick < 10; trick++) {
-					networks.get(gameType).get(playerParty).add(network);
-				}
+		// for (final GameType gameType : GameType.values()) {
+		final GameType gameType = GameType.GRAND;
+		networks.put(gameType, new HashMap<PlayerParty, List<NeuralNetwork>>());
+		for (final PlayerParty playerParty : PlayerParty.values()) {
+			networks.get(gameType).put(playerParty, new ArrayList<NeuralNetwork>());
+			// NeuralNetwork network = new EncogNetworkWrapper(topo, USE_BIAS);
+			final NeuralNetwork network = new DeepLearning4JNetworkWrapper(topo, USE_BIAS);
+			for (int trick = 0; trick < 10; trick++) {
+				networks.get(gameType).get(playerParty).add(network);
 			}
 		}
+		// }
 		LOG.debug(networks.toString());
 	}
 }

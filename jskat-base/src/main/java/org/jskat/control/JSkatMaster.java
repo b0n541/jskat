@@ -304,33 +304,34 @@ public class JSkatMaster {
 		JSkatEventBus.INSTANCE.post(new ShowTrainingOverviewCommand());
 
 		final List<NNTrainer> trainer = Lists.newArrayList();
-		final NNTrainer nullTrainer = new NNTrainer();
-		nullTrainer.setGameType(GameType.NULL);
-		trainer.add(nullTrainer);
 
+		// final NNTrainer nullTrainer = new NNTrainer();
+		// nullTrainer.setGameType(GameType.NULL);
+		// trainer.add(nullTrainer);
+		//
 		final NNTrainer grandTrainer = new NNTrainer();
 		grandTrainer.setGameType(GameType.GRAND);
 		trainer.add(grandTrainer);
-
-		final NNTrainer clubsTrainer = new NNTrainer();
-		clubsTrainer.setGameType(GameType.CLUBS);
-		trainer.add(clubsTrainer);
-
-		final NNTrainer spadesTrainer = new NNTrainer();
-		spadesTrainer.setGameType(GameType.SPADES);
-		trainer.add(spadesTrainer);
-
-		final NNTrainer heartsTrainer = new NNTrainer();
-		heartsTrainer.setGameType(GameType.HEARTS);
-		trainer.add(heartsTrainer);
-
-		final NNTrainer diamondsTrainer = new NNTrainer();
-		diamondsTrainer.setGameType(GameType.DIAMONDS);
-		trainer.add(diamondsTrainer);
-
-		final NNTrainer ramschTrainer = new NNTrainer();
-		ramschTrainer.setGameType(GameType.RAMSCH);
-		trainer.add(ramschTrainer);
+		//
+		// final NNTrainer clubsTrainer = new NNTrainer();
+		// clubsTrainer.setGameType(GameType.CLUBS);
+		// trainer.add(clubsTrainer);
+		//
+		// final NNTrainer spadesTrainer = new NNTrainer();
+		// spadesTrainer.setGameType(GameType.SPADES);
+		// trainer.add(spadesTrainer);
+		//
+		// final NNTrainer heartsTrainer = new NNTrainer();
+		// heartsTrainer.setGameType(GameType.HEARTS);
+		// trainer.add(heartsTrainer);
+		//
+		// final NNTrainer diamondsTrainer = new NNTrainer();
+		// diamondsTrainer.setGameType(GameType.DIAMONDS);
+		// trainer.add(diamondsTrainer);
+		//
+		// final NNTrainer ramschTrainer = new NNTrainer();
+		// ramschTrainer.setGameType(GameType.RAMSCH);
+		// trainer.add(ramschTrainer);
 
 		final ExecutorService executor = Executors.newFixedThreadPool(8);
 		trainer.stream()

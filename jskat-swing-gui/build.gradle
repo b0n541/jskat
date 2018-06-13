@@ -1,4 +1,4 @@
 dependencies {
 	compile project(':jskat-base')
-	compile 'com.miglayout:miglayout-swing:5.0'
+	compile 'com.miglayout:miglayout-swing:5.1'
 }
