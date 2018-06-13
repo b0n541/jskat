@@ -63,6 +63,7 @@ public class GameSimulator2Test extends AbstractJSkatTest {
 
 		final GameSimulation bestSimulation = gameSimulator.simulateMaxEpisodes(100L);
 
+		System.out.println(bestSimulation.getGameType());
 		assertThat(bestSimulation.getEpisodes(), is(20L));
 		assertThat(bestSimulation.getWonGames(), is(20L));
 	}
