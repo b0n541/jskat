@@ -31,6 +31,6 @@ public class JSkatPlayerResolverTest extends AbstractJSkatTest {
 		Set<String> implementations = JSkatPlayerResolver
 				.getAllAIPlayerImplementations();
 
-		assertThat(implementations.size(), is(3));
+		assertThat(implementations.size(), is(2));
 	}
 }
