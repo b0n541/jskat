@@ -19,7 +19,7 @@
       <MaxFileSize>5000KB</MaxFileSize>
     </triggeringPolicy>
   </appender>
-  <root level="WARN">
+  <root level="INFO">
     <appender-ref ref="stdout"/>
     <appender-ref ref="logfile"/>
   </root>

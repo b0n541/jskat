@@ -439,7 +439,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showErrorMessage(final String title, final String message) {
 
-		JOptionPane.showMessageDialog(null, message, title, JOptionPane.ERROR_MESSAGE);
+		JOptionPane.showMessageDialog(mainPanel, message, title, JOptionPane.ERROR_MESSAGE);
 	}
 
 	/**
