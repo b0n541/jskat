@@ -37,15 +37,20 @@ public class LookAndFeelSetter {
 
 	/**
 	 * Sets the look and feel.
-	 * 
+	 *
 	 * @param targetScreen
 	 *            Target screen for main window
 	 */
-	public static void setLookAndFeel(Screen targetScreen) {
+	public static void setLookAndFeel(final Screen targetScreen) {
 
 		try {
-			LookAndFeel laf = (LookAndFeel) Class.forName("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel") //$NON-NLS-1$
-					.newInstance();
+			LookAndFeel laf = null;
+
+			try {
+				laf = (LookAndFeel) Class.forName("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel").newInstance();
+			} catch (final ClassNotFoundException e) {
+				laf = (LookAndFeel) Class.forName("javax.swing.plaf.nimbus.NimbusLookAndFeel").newInstance();
+			}
 
 			laf.getDefaults().put("control", new Color(226, 217, 202)); //$NON-NLS-1$
 			laf.getDefaults().put("text", new Color(0, 0, 0)); //$NON-NLS-1$
@@ -60,13 +65,13 @@ public class LookAndFeelSetter {
 			UIManager.setLookAndFeel(laf);
 			log.debug("NimbusLookAndFeel successfully applied..."); //$NON-NLS-1$
 
-		} catch (UnsupportedLookAndFeelException e) {
+		} catch (final UnsupportedLookAndFeelException e) {
 			log.debug(e.toString());
-		} catch (InstantiationException e) {
+		} catch (final InstantiationException e) {
 			log.debug(e.toString());
-		} catch (IllegalAccessException e) {
+		} catch (final IllegalAccessException e) {
 			log.debug(e.toString());
-		} catch (ClassNotFoundException e) {
+		} catch (final ClassNotFoundException e) {
 			log.info("NimbusLookAndFeel not found (probably not installed/wrong JDK)!"); //$NON-NLS-1$
 		}
 	}
