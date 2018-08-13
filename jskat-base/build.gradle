@@ -1,8 +1,6 @@
 dependencies {
 	compile 'ch.qos.logback:logback-core:1.2.3'
 	compile 'ch.qos.logback:logback-classic:1.2.3'
-    compile 'org.deeplearning4j:deeplearning4j-nn:0.9.1'
-    compile 'org.nd4j:nd4j-native-platform:0.9.1'
 	compile 'org.eclipse.jetty:jetty-websocket:8.1.18.v20150929'
 	compile 'org.reflections:reflections:0.9.11'
 	compile 'com.google.guava:guava:25.1-jre'

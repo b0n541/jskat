@@ -15,16 +15,9 @@
  */
 package org.jskat.control;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
-import org.jskat.ai.nn.data.SkatNetworks;
-import org.jskat.ai.nn.train.NNTrainer;
-import org.jskat.control.command.general.ShowTrainingOverviewCommand;
 import org.jskat.control.command.table.CreateTableCommand;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.iss.IssConnectedEvent;
@@ -45,12 +38,10 @@ import org.jskat.player.JSkatPlayer;
 import org.jskat.player.JSkatPlayerResolver;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
-import org.jskat.util.GameType;
 import org.jskat.util.version.VersionChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Lists;
 import com.google.common.eventbus.Subscribe;
 
 /**
@@ -70,8 +61,6 @@ public class JSkatMaster {
 	private JSkatView view;
 	private final IssController issControl;
 
-	private final List<NNTrainer> runningNNTrainers;
-
 	/**
 	 * Constructor
 	 */
@@ -81,8 +70,6 @@ public class JSkatMaster {
 		data = JSkatApplicationData.INSTANCE;
 
 		issControl = new IssController(this);
-
-		runningNNTrainers = new ArrayList<>();
 
 		JSkatEventBus.INSTANCE.register(this);
 	}
@@ -294,88 +281,6 @@ public class JSkatMaster {
 	public void showEmptyInputNameMessage() {
 
 		JSkatEventBus.INSTANCE.post(new EmptyTableNameInputEvent());
-	}
-
-	/**
-	 * Trains the neural networks
-	 */
-	public void trainNeuralNetworks() {
-
-		JSkatEventBus.INSTANCE.post(new ShowTrainingOverviewCommand());
-
-		final List<NNTrainer> trainer = Lists.newArrayList();
-
-		final NNTrainer nullTrainer = new NNTrainer();
-		nullTrainer.setGameType(GameType.NULL);
-		trainer.add(nullTrainer);
-
-		final NNTrainer grandTrainer = new NNTrainer();
-		grandTrainer.setGameType(GameType.GRAND);
-		trainer.add(grandTrainer);
-
-		final NNTrainer clubsTrainer = new NNTrainer();
-		clubsTrainer.setGameType(GameType.CLUBS);
-		trainer.add(clubsTrainer);
-
-		final NNTrainer spadesTrainer = new NNTrainer();
-		spadesTrainer.setGameType(GameType.SPADES);
-		trainer.add(spadesTrainer);
-
-		final NNTrainer heartsTrainer = new NNTrainer();
-		heartsTrainer.setGameType(GameType.HEARTS);
-		trainer.add(heartsTrainer);
-
-		final NNTrainer diamondsTrainer = new NNTrainer();
-		diamondsTrainer.setGameType(GameType.DIAMONDS);
-		trainer.add(diamondsTrainer);
-
-		final NNTrainer ramschTrainer = new NNTrainer();
-		ramschTrainer.setGameType(GameType.RAMSCH);
-		trainer.add(ramschTrainer);
-
-		final ExecutorService executor = Executors.newFixedThreadPool(8);
-		trainer.stream()
-				.map(t -> CompletableFuture.runAsync(() -> t.trainNets(), executor))
-				.forEach(future -> {
-				});
-
-		trainer.stream().forEach(t -> runningNNTrainers.add(t));
-	}
-
-	public void stopTrainNeuralNetworks() {
-		for (final NNTrainer trainer : runningNNTrainers) {
-			trainer.stopTraining(true);
-		}
-		runningNNTrainers.clear();
-	}
-
-	/**
-	 * Loads the weigths for the neural networks
-	 */
-	public void loadNeuralNetworks() {
-		SkatNetworks.instance();
-		SkatNetworks.loadNetworks();
-	}
-
-	/**
-	 * Resets neural networks
-	 */
-	public void resetNeuralNetworks() {
-		SkatNetworks.instance();
-		SkatNetworks.resetNeuralNetworks();
-	}
-
-	public void saveNeuralNetworks(final GameType gameType) {
-		SkatNetworks.instance();
-		SkatNetworks.saveNetworks(options.getSavePath(), gameType);
-	}
-
-	/**
-	 * Saves the weigths for the neural networks
-	 */
-	public void saveNeuralNetworks() {
-		SkatNetworks.instance();
-		SkatNetworks.saveNetworks(options.getSavePath());
 	}
 
 	/**

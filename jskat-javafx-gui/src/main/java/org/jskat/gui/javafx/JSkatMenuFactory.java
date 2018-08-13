@@ -87,30 +87,6 @@ public final class JSkatMenuFactory {
 		skatTableMenu.getItems().addAll(playOnLocalTable, new SeparatorMenuItem(), startSkatSeriesMenuItem,
 				new SeparatorMenuItem(), replayGameMenuItem, nextReplayMoveMenuItem);
 
-		Menu neuralNetworksMenu = new Menu(strings.getString("neural_networks"));
-
-		MenuItem loadNeuralNetworksMenuItem = new MenuItem(strings.getString("load_nn"));
-		loadNeuralNetworksMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.LOAD, IconSize.SMALL));
-		loadNeuralNetworksMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.loadNeuralNetworks());
-		MenuItem saveNeuralNetworksMenuItem = new MenuItem(strings.getString("save_nn"));
-		saveNeuralNetworksMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.SAVE, IconSize.SMALL));
-		saveNeuralNetworksMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.saveNeuralNetworks());
-		MenuItem resetNeuralNetworksMenuItem = new MenuItem(strings.getString("reset_nn"));
-		resetNeuralNetworksMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.resetNeuralNetworks());
-		resetNeuralNetworksMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.UNDO, IconSize.SMALL));
-		MenuItem trainNeuralNetworksMenuItem = new MenuItem(strings.getString("train_nn"));
-		trainNeuralNetworksMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.trainNeuralNetworks());
-		trainNeuralNetworksMenuItem
-				.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.TRAIN_NN, IconSize.SMALL));
-		MenuItem stopTrainNeuralNetworksMenuItem = new MenuItem(strings.getString("stop_train_nn"));
-		stopTrainNeuralNetworksMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.stopTrainNeuralNetworks());
-		stopTrainNeuralNetworksMenuItem
-				.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.PAUSE, IconSize.SMALL));
-
-		neuralNetworksMenu.getItems().addAll(loadNeuralNetworksMenuItem, saveNeuralNetworksMenuItem,
-				new SeparatorMenuItem(), resetNeuralNetworksMenuItem, trainNeuralNetworksMenuItem,
-				stopTrainNeuralNetworksMenuItem);
-
 		Menu issMenu = new Menu(strings.getString("iss"));
 
 		MenuItem playOnIssMenuItem = new MenuItem(strings.getString("play_on_iss"));
@@ -150,7 +126,7 @@ public final class JSkatMenuFactory {
 
 		helpMenu.getItems().addAll(helpMenuItem, new SeparatorMenuItem(), licenseMenuItem, aboutMenuItem);
 
-		menuBar.getMenus().addAll(fileMenu, skatTableMenu, neuralNetworksMenu, issMenu, extrasMenu, helpMenu);
+		menuBar.getMenus().addAll(fileMenu, skatTableMenu, issMenu, extrasMenu, helpMenu);
 
 		return menuBar;
 	}
