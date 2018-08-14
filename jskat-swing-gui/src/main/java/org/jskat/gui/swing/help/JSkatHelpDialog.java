@@ -43,6 +43,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 import javax.swing.text.html.HTMLEditorKit;
@@ -179,7 +180,13 @@ public class JSkatHelpDialog extends JDialog {
 			setToInitialState();
 		}
 
-		super.setVisible(visible);
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				JSkatHelpDialog.super.setVisible(visible);
+			}
+		});
 	}
 
 	/** Closes the dialog */

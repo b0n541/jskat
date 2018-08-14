@@ -39,6 +39,7 @@ import javax.swing.JSlider;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -599,8 +600,13 @@ public class JSkatOptionsDialog extends JDialog {
 		}
 
 		setOptionValues();
+		SwingUtilities.invokeLater(new Runnable() {
 
-		super.setVisible(isVisible);
+			@Override
+			public void run() {
+				JSkatOptionsDialog.super.setVisible(isVisible);
+			}
+		});
 	}
 
 	private void setOptionValues() {
