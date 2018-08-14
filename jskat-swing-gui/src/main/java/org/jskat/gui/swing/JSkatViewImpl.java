@@ -33,6 +33,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
@@ -367,29 +368,35 @@ public class JSkatViewImpl implements JSkatView {
 
 	@Subscribe
 	public void showAboutInformationDialogOn(final ShowAboutInformationCommand command) {
-		JOptionPane.showMessageDialog(mainPanel,
-				"JSkat " //$NON-NLS-1$
-						+ strings.getString("version") //$NON-NLS-1$
-						+ " " //$NON-NLS-1$
-						+ VERSION + "\n\n" //$NON-NLS-1$
-						+ "http://www.jskat.org\n" //$NON-NLS-1$
-						+ "http://sourceforge.net/projects/jskat" //$NON-NLS-1$
-						+ "\n\n" //$NON-NLS-1$
-						+ strings.getString(
-								"authors") //$NON-NLS-1$
-						+ ":\nJan Schäfer (jansch@users.sourceforge.net)\nMarkus J. Luzius (jskat@luzius.de)\nDaniel Loreck (daniel.loreck@gmail.com)\nSascha Laurien\nSlovasim\nMartin Rothe\n\n" //$NON-NLS-1$
-						+ strings.getString("cards") //$NON-NLS-1$
-						+ ": International Skat Server, KDE project, OpenClipart.org\n\n" //$NON-NLS-1$
-						+ strings.getString("icons") //$NON-NLS-1$
-						+ ": Gnome Desktop Icons, Tango project, Elementary icons,\n" //$NON-NLS-1$
-						+ "Silvestre Herrera, Alex Roberts and Icojoy\n\n" //$NON-NLS-1$
-						+ strings.getString("background_image") + ": webtreats\n\n"
-						+ "This program comes with ABSOLUTELY NO WARRANTY;\n" //$NON-NLS-1$
-						+ "for details see licence dialog\n" //$NON-NLS-1$
-						+ "This is free software, and you are welcome to redistribute it\n" //$NON-NLS-1$
-						+ "under certain conditions; see licence dialog for details.", //$NON-NLS-1$
-				strings.getString("about"), //$NON-NLS-1$
-				JOptionPane.INFORMATION_MESSAGE, new ImageIcon(bitmaps.getJSkatLogoImage()));
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				JOptionPane.showMessageDialog(mainPanel,
+						"JSkat " //$NON-NLS-1$
+								+ strings.getString("version") //$NON-NLS-1$
+								+ " " //$NON-NLS-1$
+								+ VERSION + "\n\n" //$NON-NLS-1$
+								+ "http://www.jskat.org\n" //$NON-NLS-1$
+								+ "http://sourceforge.net/projects/jskat" //$NON-NLS-1$
+								+ "\n\n" //$NON-NLS-1$
+								+ strings.getString(
+										"authors") //$NON-NLS-1$
+								+ ":\nJan Schäfer (jansch@users.sourceforge.net)\nMarkus J. Luzius (jskat@luzius.de)\nDaniel Loreck (daniel.loreck@gmail.com)\nSascha Laurien\nSlovasim\nMartin Rothe\n\n" //$NON-NLS-1$
+								+ strings.getString("cards") //$NON-NLS-1$
+								+ ": International Skat Server, KDE project, OpenClipart.org\n\n" //$NON-NLS-1$
+								+ strings.getString("icons") //$NON-NLS-1$
+								+ ": Gnome Desktop Icons, Tango project, Elementary icons,\n" //$NON-NLS-1$
+								+ "Silvestre Herrera, Alex Roberts and Icojoy\n\n" //$NON-NLS-1$
+								+ strings.getString("background_image") + ": webtreats\n\n"
+								+ "This program comes with ABSOLUTELY NO WARRANTY;\n" //$NON-NLS-1$
+								+ "for details see licence dialog\n" //$NON-NLS-1$
+								+ "This is free software, and you are welcome to redistribute it\n" //$NON-NLS-1$
+								+ "under certain conditions; see licence dialog for details.", //$NON-NLS-1$
+						strings.getString("about"), //$NON-NLS-1$
+						JOptionPane.INFORMATION_MESSAGE, new ImageIcon(bitmaps.getJSkatLogoImage()));
+			}
+		});
 	}
 
 	/**
@@ -511,17 +518,28 @@ public class JSkatViewImpl implements JSkatView {
 	@Subscribe
 	public void showHelpDialogOn(final ShowHelpCommand command) {
 
-		new JSkatHelpDialog(mainPanel, strings.getString("help"), //$NON-NLS-1$
-				"org/jskat/gui/help/" + JSkatOptions.instance().getI18NCode() //$NON-NLS-1$
-						+ "/contents.html") //$NON-NLS-1$
-								.setVisible(true);
+		SwingUtilities.invokeLater(new Runnable() {
+
+			@Override
+			public void run() {
+				new JSkatHelpDialog(mainPanel, strings.getString("help"), //$NON-NLS-1$
+						"org/jskat/gui/help/" + JSkatOptions.instance().getI18NCode() //$NON-NLS-1$
+								+ "/contents.html") //$NON-NLS-1$
+										.setVisible(true);
+			}
+		});
 	}
 
 	@Subscribe
 	public void showLicenceDialogOn(final ShowLicenseCommand command) {
 
-		new JSkatHelpDialog(mainPanel, strings.getString("license"), //$NON-NLS-1$
-				"org/jskat/gui/help/gpl3.html").setVisible(true); //$NON-NLS-1$
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				new JSkatHelpDialog(mainPanel, strings.getString("license"), //$NON-NLS-1$
+						"org/jskat/gui/help/gpl3.html").setVisible(true); //$NON-NLS-1$
+			}
+		});
 	}
 
 	/**
