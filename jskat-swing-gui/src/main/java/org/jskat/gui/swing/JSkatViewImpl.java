@@ -43,12 +43,10 @@ import org.jskat.control.command.general.ShowHelpCommand;
 import org.jskat.control.command.general.ShowLicenseCommand;
 import org.jskat.control.command.general.ShowPreferencesCommand;
 import org.jskat.control.command.general.ShowToolbarCommand;
-import org.jskat.control.command.general.ShowTrainingOverviewCommand;
 import org.jskat.control.command.iss.IssDisconnectCommand;
 import org.jskat.control.command.skatseries.CreateSkatSeriesCommand;
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.iss.IssConnectedEvent;
-import org.jskat.control.event.nntraining.TrainingResultEvent;
 import org.jskat.control.event.skatgame.BidEvent;
 import org.jskat.control.event.skatgame.CardDealEvent;
 import org.jskat.control.event.skatgame.GameAnnouncementEvent;
@@ -130,7 +128,6 @@ import org.jskat.gui.swing.iss.ISSTablePanel;
 import org.jskat.gui.swing.iss.LobbyPanel;
 import org.jskat.gui.swing.iss.LoginPanel;
 import org.jskat.gui.swing.iss.PlayerInvitationPanel;
-import org.jskat.gui.swing.nn.NeuralNetworkTrainingOverview;
 import org.jskat.gui.swing.table.SkatSeriesStartDialog;
 import org.jskat.gui.swing.table.SkatTablePanel;
 import org.jskat.util.Card;
@@ -157,7 +154,6 @@ public class JSkatViewImpl implements JSkatView {
 	private JPanel toolbar;
 	private final SkatSeriesStartDialog skatSeriesStartDialog;
 	private final JSkatOptionsDialog preferencesDialog;
-	private final NeuralNetworkTrainingOverview trainingOverview;
 	private JTabbedPane tabs;
 	private String activeView;
 	@Deprecated
@@ -185,7 +181,6 @@ public class JSkatViewImpl implements JSkatView {
 
 		skatSeriesStartDialog = new SkatSeriesStartDialog(mainPanel);
 		preferencesDialog = new JSkatOptionsDialog(mainPanel);
-		trainingOverview = new NeuralNetworkTrainingOverview(mainPanel);
 
 		initActionMap(menu);
 		initGUI(targetScreen);
@@ -282,13 +277,17 @@ public class JSkatViewImpl implements JSkatView {
 
 	@Subscribe
 	public void hideToolbarOn(final HideToolbarCommand command) {
-		mainPanel.remove(toolbar);
-		mainPanel.validate();
+
+		SwingUtilities.invokeLater(() -> {
+			mainPanel.remove(toolbar);
+			mainPanel.validate();
+		});
 	}
 
 	@Subscribe
 	public void addToolbar(final ShowToolbarCommand command) {
-		addToolbar();
+
+		SwingUtilities.invokeLater(() -> addToolbar());
 	}
 
 	private void addToolbar() {
@@ -346,21 +345,23 @@ public class JSkatViewImpl implements JSkatView {
 			return;
 		}
 
-		final String tableName = event.tableName;
-		String tabTitle = null;
+		SwingUtilities.invokeLater(() -> {
+			final String tableName = event.tableName;
+			String tabTitle = null;
 
-		SkatTablePanel panel = null;
-		if (JSkatViewType.LOCAL_TABLE.equals(event.tableType)) {
-			panel = new SkatTablePanel(tableName, actions);
-			tabTitle = tableName;
-		} else if (JSkatViewType.ISS_TABLE.equals(event.tableType)) {
-			panel = new ISSTablePanel(tableName, actions);
-			tabTitle = strings.getString("iss_table") + ": " + tableName;
-		}
+			SkatTablePanel panel = null;
+			if (JSkatViewType.LOCAL_TABLE.equals(event.tableType)) {
+				panel = new SkatTablePanel(tableName, actions);
+				tabTitle = tableName;
+			} else if (JSkatViewType.ISS_TABLE.equals(event.tableType)) {
+				panel = new ISSTablePanel(tableName, actions);
+				tabTitle = strings.getString("iss_table") + ": " + tableName;
+			}
 
-		tables.put(tableName, panel);
-		addTabPanel(panel, tabTitle);
-		actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(true);
+			tables.put(tableName, panel);
+			addTabPanel(panel, tabTitle);
+			actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(true);
+		});
 	}
 
 	@Subscribe
@@ -528,7 +529,7 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void setBidValueToMake(final String tableName, final int bidValue) {
 
-		tables.get(tableName).setBidValueToMake(bidValue);
+		SwingUtilities.invokeLater(() -> tables.get(tableName).setBidValueToMake(bidValue));
 	}
 
 	/**
@@ -537,13 +538,13 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void setBidValueToHold(final String tableName, final int bidValue) {
 
-		tables.get(tableName).setBidValueToHold(bidValue);
+		SwingUtilities.invokeLater(() -> tables.get(tableName).setBidValueToHold(bidValue));
 	}
 
 	@Subscribe
 	public void showSkatSeriesStartDialogOn(final CreateSkatSeriesCommand command) {
 
-		skatSeriesStartDialog.setVisible(true);
+		SwingUtilities.invokeLater(() -> skatSeriesStartDialog.setVisible(true));
 	}
 
 	/**
@@ -552,8 +553,10 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void showISSLogin() {
 
-		final LoginPanel loginPanel = new LoginPanel("ISS login", actions);
-		addTabPanel(loginPanel, "ISS login");
+		SwingUtilities.invokeLater(() -> {
+			final LoginPanel loginPanel = new LoginPanel("ISS login", actions);
+			addTabPanel(loginPanel, "ISS login");
+		});
 	}
 
 	/**
@@ -572,16 +575,19 @@ public class JSkatViewImpl implements JSkatView {
 	@Override
 	public void removeFromISSLobbyPlayerList(final String playerName) {
 
-		issLobby.removePlayer(playerName);
+		SwingUtilities.invokeLater(() -> issLobby.removePlayer(playerName));
 	}
 
 	@Subscribe
 	public void showIssLobbyOn(final IssConnectedEvent event) {
-		// show ISS lobby if connection was successfull
-		// FIXME (jan 07.12.2010) use constant instead of title
-		closeTabPanel("ISS login"); //$NON-NLS-1$
-		issLobby = new LobbyPanel("ISS lobby", actions);
-		addTabPanel(issLobby, strings.getString("iss_lobby"));
+
+		SwingUtilities.invokeLater(() -> {
+			// show ISS lobby if connection was successfull
+			// FIXME (jan 07.12.2010) use constant instead of title
+			closeTabPanel("ISS login"); //$NON-NLS-1$
+			issLobby = new LobbyPanel("ISS lobby", actions);
+			addTabPanel(issLobby, strings.getString("iss_lobby"));
+		});
 	}
 
 	/**
@@ -805,19 +811,16 @@ public class JSkatViewImpl implements JSkatView {
 	@Subscribe
 	public void showPreferencesDialogOn(final ShowPreferencesCommand command) {
 
-		preferencesDialog.validate();
-		preferencesDialog.setVisible(true);
-	}
-
-	@Subscribe
-	public void showTrainingOverviewDialogOn(final ShowTrainingOverviewCommand command) {
-
-		trainingOverview.setVisible(true);
+		SwingUtilities.invokeLater(() -> {
+			preferencesDialog.validate();
+			preferencesDialog.setVisible(true);
+		});
 	}
 
 	@Subscribe
 	public void closeTableOn(final TableRemovedEvent event) {
-		closeTabPanel(event.tableName);
+
+		SwingUtilities.invokeLater(() -> closeTabPanel(event.tableName));
 	}
 
 	/**
@@ -928,13 +931,6 @@ public class JSkatViewImpl implements JSkatView {
 		showErrorMessage(title, message);
 	}
 
-	@Subscribe
-	public void addTrainingResultOn(final TrainingResultEvent event) {
-
-		trainingOverview.addTrainingResult(event.gameType, event.episodes, event.totalGamesWon,
-				event.avgNetworkErrorDeclarer, event.avgNetworkErrorOpponents);
-	}
-
 	/**
 	 * {@inheritDoc}
 	 */
@@ -960,11 +956,13 @@ public class JSkatViewImpl implements JSkatView {
 	@Subscribe
 	public void closeAllIssTabsOn(final IssDisconnectCommand event) {
 
-		for (final Component currPanel : tabs.getComponents()) {
-			if (currPanel instanceof LobbyPanel || currPanel instanceof ISSTablePanel) {
-				closeTabPanel(currPanel.getName());
+		SwingUtilities.invokeLater(() -> {
+			for (final Component currPanel : tabs.getComponents()) {
+				if (currPanel instanceof LobbyPanel || currPanel instanceof ISSTablePanel) {
+					closeTabPanel(currPanel.getName());
+				}
 			}
-		}
+		});
 	}
 
 	@Subscribe
