@@ -109,14 +109,11 @@ abstract class AbstractHandPanel extends JPanel {
 	/**
 	 * Constructor
 	 *
-	 * @param actions
-	 *            Action map
-	 * @param maxCards
-	 *            the maximum number of cards
-	 * @param showIssWidgets
-	 *            TRUE, if ISS widgets should be shown
-	 * @param isNeuralNetworkPlayer
-	 *            TRUE, if this panel is for a neural network opponent
+	 * @param actions               Action map
+	 * @param maxCards              the maximum number of cards
+	 * @param showIssWidgets        TRUE, if ISS widgets should be shown
+	 * @param isNeuralNetworkPlayer TRUE, if this panel is for a neural network
+	 *                              opponent
 	 */
 	AbstractHandPanel(final ActionMap actions, final int maxCards, final boolean showIssWidgets) {
 
@@ -126,7 +123,7 @@ abstract class AbstractHandPanel extends JPanel {
 		this.maxCardCount = maxCards;
 		this.showIssWidgets = showIssWidgets;
 
-		setOpaque(false);
+		setBackground(new Color(0, 62, 0));
 
 		this.headerLabel = new JLabel(" "); //$NON-NLS-1$
 		this.iconPanel = new IconPanel();
@@ -192,8 +189,7 @@ abstract class AbstractHandPanel extends JPanel {
 	/**
 	 * Sets the player position
 	 *
-	 * @param newPosition
-	 *            Position
+	 * @param newPosition Position
 	 */
 	void setPosition(final Player newPosition) {
 
@@ -218,8 +214,7 @@ abstract class AbstractHandPanel extends JPanel {
 	}
 
 	/**
-	 * Refreshes the header of this hand panel, i.e. the text and the thinking
-	 * icon.
+	 * Refreshes the header of this hand panel, i.e. the text and the thinking icon.
 	 */
 	private void refreshHeader() {
 
@@ -288,8 +283,7 @@ abstract class AbstractHandPanel extends JPanel {
 	/**
 	 * Adds a card to the panel
 	 *
-	 * @param newCard
-	 *            Card
+	 * @param newCard Card
 	 */
 	void addCard(final Card newCard) {
 
@@ -299,8 +293,7 @@ abstract class AbstractHandPanel extends JPanel {
 	/**
 	 * Adds a Collection of cards to the panel
 	 *
-	 * @param newCards
-	 *            card collection
+	 * @param newCards card collection
 	 */
 	void addCards(final CardList newCards) {
 
@@ -310,8 +303,7 @@ abstract class AbstractHandPanel extends JPanel {
 	/**
 	 * Removes a card from the panel
 	 *
-	 * @param cardToRemove
-	 *            Card
+	 * @param cardToRemove Card
 	 */
 	void removeCard(final Card cardToRemove) {
 
@@ -402,12 +394,11 @@ abstract class AbstractHandPanel extends JPanel {
 	}
 
 	/**
-	 * Sets the flag that indicates whether this player is active (it is the
-	 * turn of this player). It also may change the visual indication whether
-	 * this player is thinking or not.
+	 * Sets the flag that indicates whether this player is active (it is the turn of
+	 * this player). It also may change the visual indication whether this player is
+	 * thinking or not.
 	 *
-	 * @param isActivePlayer
-	 *            whether this player is the active player
+	 * @param isActivePlayer whether this player is the active player
 	 */
 	void setActivePlayer(final boolean isActivePlayer) {
 		this.isActivePlayer = isActivePlayer;
@@ -420,8 +411,7 @@ abstract class AbstractHandPanel extends JPanel {
 	/**
 	 * Sets the flag that indicates whether this player is an AI player or not.
 	 *
-	 * @param isAIPlayer
-	 *            TRUE, if the player is an AI player
+	 * @param isAIPlayer TRUE, if the player is an AI player
 	 */
 	void setAIPlayer(final boolean isAIPlayer) {
 
