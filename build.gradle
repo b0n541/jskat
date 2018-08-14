@@ -57,6 +57,17 @@ subprojects {
     	header project.file('LICENSE.header')
     	ext.year = Calendar.getInstance().get(Calendar.YEAR)
     }
+    
+    javadoc {
+    	options.addBooleanOption('html5', true)
+	}
+	
+	test {
+	    testLogging {
+	        events "passed", "skipped", "failed"
+	        exceptionFormat "full"
+	    }
+	}
 }
 
 dependencies {
