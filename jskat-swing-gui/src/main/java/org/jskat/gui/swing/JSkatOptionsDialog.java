@@ -155,8 +155,9 @@ public class JSkatOptionsDialog extends JDialog {
 			JSkatOptionsDialog.this.options.setSchieberRamsch(JSkatOptionsDialog.this.schiebeRamsch.isSelected());
 			JSkatOptionsDialog.this.options
 					.setSchieberRamschJacksInSkat(JSkatOptionsDialog.this.schiebeRamschJacksInSkat.isSelected());
-			JSkatOptionsDialog.this.options.setRamschSkatOwner(JSkatOptionsDialog.this.ramschSkatLastTrick.isSelected()
-					? RamschSkatOwner.LAST_TRICK : RamschSkatOwner.LOSER);
+			JSkatOptionsDialog.this.options.setRamschSkatOwner(
+					JSkatOptionsDialog.this.ramschSkatLastTrick.isSelected() ? RamschSkatOwner.LAST_TRICK
+							: RamschSkatOwner.LOSER);
 
 			JSkatOptionsDialog.this.options.saveJSkatProperties();
 			refreshCardSet();
@@ -191,8 +192,7 @@ public class JSkatOptionsDialog extends JDialog {
 	/**
 	 * Constructor
 	 * 
-	 * @param parent
-	 *            Parent component of the options dialog
+	 * @param parent Parent component of the options dialog
 	 */
 	public JSkatOptionsDialog(final Component parent) {
 
@@ -600,13 +600,8 @@ public class JSkatOptionsDialog extends JDialog {
 		}
 
 		setOptionValues();
-		SwingUtilities.invokeLater(new Runnable() {
 
-			@Override
-			public void run() {
-				JSkatOptionsDialog.super.setVisible(isVisible);
-			}
-		});
+		SwingUtilities.invokeLater(() -> JSkatOptionsDialog.super.setVisible(isVisible));
 	}
 
 	private void setOptionValues() {
