@@ -4,12 +4,12 @@ plugins {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.8'
+    gradleVersion = '4.9'
 }
 
 apply plugin: 'application'
 
-version = '0.17.0'
+version = '0.17.0-SNAPSHOT'
 
 allprojects {
 	repositories {
