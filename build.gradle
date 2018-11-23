@@ -1,3 +1,12 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'com.google.gradle:osdetector-gradle-plugin:1.6.0'
+	}
+}
+
 plugins {
 	id "com.github.hierynomus.license" version "0.12.1"
 	id "com.github.johnrengelman.shadow" version "2.0.2"
@@ -8,6 +17,9 @@ task wrapper(type: Wrapper) {
 }
 
 apply plugin: 'application'
+apply plugin: 'com.google.osdetector'
+
+ext.platform = osdetector.os == 'osx' ? 'mac' : osdetector.os == 'windows' ? 'win' : osdetector.os
 
 version = '0.17.0-SNAPSHOT'
 
@@ -22,11 +34,10 @@ allprojects {
 
 subprojects {
 	apply plugin: 'java'
-	apply plugin: 'jacoco'
 	apply plugin: 'license'
 
-	sourceCompatibility = 1.8
-	targetCompatibility = 1.8
+	sourceCompatibility = 11
+	targetCompatibility = 11
 
 	task sourcesJar(type: Jar, dependsOn: classes) {
 	    classifier = 'sources'
@@ -43,24 +54,15 @@ subprojects {
 	    archives javadocJar
 	}
 	
-	jacocoTestReport {
-	    reports {
-    	    xml.enabled = true
-        	html.enabled = true
-    	}
-    }
-
-	check.dependsOn jacocoTestReport
-	
 	license {
     	include "**/*.java"
     	header project.file('LICENSE.header')
     	ext.year = Calendar.getInstance().get(Calendar.YEAR)
     }
     
-//    javadoc {
-//    	options.addBooleanOption('html5', true)
-//	}
+    javadoc {
+    	options.addBooleanOption('html5', true)
+	}
 	
 	test {
 	    testLogging {

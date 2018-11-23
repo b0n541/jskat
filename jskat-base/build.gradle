@@ -3,10 +3,10 @@ dependencies {
 	compile 'ch.qos.logback:logback-classic:1.2.3'
 	compile 'org.eclipse.jetty:jetty-websocket:8.1.18.v20150929'
 	compile 'org.reflections:reflections:0.9.11'
-	compile 'com.google.guava:guava:25.1-jre'
+	compile 'com.google.guava:guava:27.0-jre'
 	compile 'org.apache.commons:commons-math3:3.6.1'
 	
 	testCompile 'junit:junit:4.12'
-	testCompile 'org.mockito:mockito-core:2.15.0'
+	testCompile 'org.mockito:mockito-core:2.23.4'
 	testCompile 'org.hamcrest:hamcrest-library:1.3'
 }
