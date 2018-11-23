@@ -91,7 +91,8 @@ run {
 	doFirst {
 		jvmArgs = [
 				'--module-path', classpath.asPath,
-				'--add-modules', 'javafx.controls'
+				'--add-modules', 'javafx.controls,javafx.fxml,javafx.swing',
+				'-Djdk.gtk.version=2'
 		]
 	}
 }
