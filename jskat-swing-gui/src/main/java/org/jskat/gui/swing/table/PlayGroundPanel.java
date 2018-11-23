@@ -52,7 +52,7 @@ public class PlayGroundPanel extends JPanel {
 			JPanel gameContextPanel, JSkatUserPanel userPanel) {
 
 		super(LayoutFactory.getMigLayout(
-				"fill", "fill", "[shrink][shrink][grow][shrink][shrink]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				"fill, ins 0, gap 0 0", "fill", "[shrink][shrink][grow][shrink][shrink]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		add(gameInfoPanel, "span 2, growx, shrinky, align center, wrap"); //$NON-NLS-1$
 		add(leftOpponentPanel,
