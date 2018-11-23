@@ -38,7 +38,7 @@ subprojects {
 
 	sourceCompatibility = 11
 	targetCompatibility = 11
-
+	
 	task sourcesJar(type: Jar, dependsOn: classes) {
 	    classifier = 'sources'
 	    from sourceSets.main.allSource
@@ -85,4 +85,13 @@ startScripts {
 shadowJar {
 	baseName = 'JSkat'
 	mainClassName = 'org.jskat.JSkatFX'
+}
+
+run {
+	doFirst {
+		jvmArgs = [
+				'--module-path', classpath.asPath,
+				'--add-modules', 'javafx.controls'
+		]
+	}
 }
