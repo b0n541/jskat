@@ -58,9 +58,9 @@ subprojects {
     	ext.year = Calendar.getInstance().get(Calendar.YEAR)
     }
     
-    javadoc {
-    	options.addBooleanOption('html5', true)
-	}
+//    javadoc {
+//    	options.addBooleanOption('html5', true)
+//	}
 	
 	test {
 	    testLogging {
