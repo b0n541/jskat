@@ -619,6 +619,8 @@ public class MessageParser {
 		// + " p0:" + penalty0 + " p1:" + penalty1 + " p2:" + penalty2
 		// + " l:" + this.left + " to:" + this.timeout + " r:" + (resigned
 		// ? '1' : '0');
+		
+		// TODO: or simply "passed"
 
 		if (token.startsWith("d:")) { //$NON-NLS-1$
 
