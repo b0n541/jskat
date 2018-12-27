@@ -2,24 +2,19 @@ buildscript {
 	repositories {
 		mavenCentral()
 	}
-	dependencies {
-		classpath 'com.google.gradle:osdetector-gradle-plugin:1.6.0'
-	}
 }
 
 plugins {
 	id "com.github.hierynomus.license" version "0.12.1"
 	id "com.github.johnrengelman.shadow" version "2.0.2"
+	id "org.openjfx.javafxplugin" version "0.0.5"
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.10.2'
+    gradleVersion = '5.0'
 }
 
 apply plugin: 'application'
-apply plugin: 'com.google.osdetector'
-
-ext.platform = osdetector.os == 'osx' ? 'mac' : osdetector.os == 'windows' ? 'win' : osdetector.os
 
 version = '0.17.0-SNAPSHOT'
 
@@ -78,21 +73,16 @@ dependencies {
 	compile project(':jskat-javafx-gui')
 }
 
+javafx {
+	modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.swing' ]
+}
+
 startScripts {
 	mainClassName 'org.jskat.JSkatFX'
+	applicationDefaultJvmArgs = ["-Djdk.gtk.version=2"]
 }
 
 shadowJar {
 	baseName = 'JSkat'
 	mainClassName = 'org.jskat.JSkatFX'
-}
-
-run {
-	doFirst {
-		jvmArgs = [
-				'--module-path', classpath.asPath,
-				'--add-modules', 'javafx.controls,javafx.fxml,javafx.swing',
-				'-Djdk.gtk.version=2'
-		]
-	}
 }

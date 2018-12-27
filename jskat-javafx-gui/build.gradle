@@ -2,9 +2,6 @@ dependencies {
 	compile project(':jskat-base')
 	compile project(':jskat-swing-gui')
 
-    compile "org.openjfx:javafx-fxml:11.0.1:$platform"
-    compile "org.openjfx:javafx-web:11.0.1:$platform"
-
     testCompile 'junit:junit:4.12'
 }
 
@@ -15,13 +12,4 @@ sourceSets {
         includes = ["**/*.fxml","**/*.properties"]
     }
   }
-}
-
-compileJava {
-    doFirst {
-        options.compilerArgs = [
-                '--module-path', classpath.asPath,
-                '--add-modules', 'javafx.controls'
-        ]
-    }
 }
