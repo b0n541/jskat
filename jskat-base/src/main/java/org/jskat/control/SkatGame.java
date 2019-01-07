@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2018 Jan Schäfer (jansch@users.sourceforge.net)
+ * Copyright (C) 2019 Jan Schäfer (jansch@users.sourceforge.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -113,7 +113,9 @@ public class SkatGame {
 	}
 
 	/**
-	 * @see Thread#run()
+	 * Runs the skat game.
+	 *
+	 * @return Result of the skat game
 	 */
 	public SkatGameResult run() {
 		// FIXME jan 11.07.2013: this method is too long, break it down to smaller
