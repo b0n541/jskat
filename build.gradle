@@ -6,7 +6,6 @@ buildscript {
 
 plugins {
 	id "com.github.hierynomus.license" version "0.12.1"
-	id "com.github.johnrengelman.shadow" version "2.0.2"
 	id "org.openjfx.javafxplugin" version "0.0.5"
 }
 
@@ -29,7 +28,7 @@ subprojects {
 
 	sourceCompatibility = 11
 	targetCompatibility = 11
-	
+
 	task sourcesJar(type: Jar, dependsOn: classes) {
 	    classifier = 'sources'
 	    from sourceSets.main.allSource
@@ -69,16 +68,18 @@ dependencies {
 	compile project(':jskat-javafx-gui')
 }
 
-javafx {
-	modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.swing' ]
-}
-
 startScripts {
 	mainClassName 'org.jskat.JSkatFX'
 	applicationDefaultJvmArgs = ["-Djdk.gtk.version=2"]
 }
 
-shadowJar {
-	baseName = 'JSkat'
-	mainClassName = 'org.jskat.JSkatFX'
+mainClassName = 'org.jskat.JSkatFX'
+
+jar {
+	manifest {
+		attributes 'Main-Class': 'org.jskat.Launcher'
+	}
+	from {
+		configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+	}
 }
