@@ -10,10 +10,6 @@ plugins {
 	id "org.openjfx.javafxplugin" version "0.0.5"
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '5.0'
-}
-
 apply plugin: 'application'
 
 version = '0.17.0-SNAPSHOT'
