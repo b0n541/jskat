@@ -6,7 +6,7 @@ buildscript {
 
 plugins {
 	id "com.github.hierynomus.license" version "0.12.1"
-	id "org.openjfx.javafxplugin" version "0.0.7"
+	id "org.openjfx.javafxplugin" version "0.0.5"
 }
 
 apply plugin: 'application'
@@ -17,9 +17,6 @@ allprojects {
 	repositories {
 	    mavenCentral()
 	}
-
-	apply plugin: 'eclipse'
-	apply plugin: 'idea'
 }
 
 subprojects {
