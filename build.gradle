@@ -5,8 +5,8 @@ buildscript {
 }
 
 plugins {
-    id "com.github.hierynomus.license" version "0.12.1"
-    id "org.openjfx.javafxplugin" version "0.0.7"
+    id "com.github.hierynomus.license" version "0.15.0"
+    id "org.openjfx.javafxplugin" version "0.0.8"
 }
 
 apply plugin: 'application'
@@ -66,11 +66,11 @@ dependencies {
 }
 
 startScripts {
-    mainClassName 'org.jskat.JSkatFX'
+    mainClassName 'org.jskat.Launcher'
     applicationDefaultJvmArgs = ["-Djdk.gtk.version=2"]
 }
 
-mainClassName = 'org.jskat.JSkatFX'
+mainClassName = 'org.jskat.Launcher'
 
 jar {
     manifest {
