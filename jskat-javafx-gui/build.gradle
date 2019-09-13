@@ -13,7 +13,7 @@ sourceSets {
     main {
         resources {
             srcDirs = ["src/main/resources"]
-            includes = ["**/*.fxml", "**/*.properties"]
+            includes = ["**/*.fxml", "**/*.properties", "**/*.css"]
         }
     }
 }
