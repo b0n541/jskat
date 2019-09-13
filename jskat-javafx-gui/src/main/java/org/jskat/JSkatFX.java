@@ -55,7 +55,7 @@ import java.awt.*;
 
 public class JSkatFX extends Application {
 
-    private static final String VERSION = "0.17.0";
+    private static final String VERSION = "0.18.0";
 
     private static final int SPLASH_WIDTH = 500;
     private static final int SPLASH_HEIGHT = 300;
