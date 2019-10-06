@@ -315,4 +315,89 @@ public class SkatGameResult implements Cloneable {
 		}
 		return sb.toString();
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((durchmarsch == null) ? 0 : durchmarsch.hashCode());
+		result = prime * result + ((finalDeclarerPoints == null) ? 0 : finalDeclarerPoints.hashCode());
+		result = prime * result + ((finalOpponentPoints == null) ? 0 : finalOpponentPoints.hashCode());
+		result = prime * result + ((gameValue == null) ? 0 : gameValue.hashCode());
+		result = prime * result + ((jungfrau == null) ? 0 : jungfrau.hashCode());
+		result = prime * result + ((multiplier == null) ? 0 : multiplier.hashCode());
+		result = prime * result + ((overBidded == null) ? 0 : overBidded.hashCode());
+		result = prime * result + ((playWithJacks == null) ? 0 : playWithJacks.hashCode());
+		result = prime * result + ((schneider == null) ? 0 : schneider.hashCode());
+		result = prime * result + ((schwarz == null) ? 0 : schwarz.hashCode());
+		result = prime * result + ((won == null) ? 0 : won.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		SkatGameResult other = (SkatGameResult) obj;
+		if (durchmarsch == null) {
+			if (other.durchmarsch != null)
+				return false;
+		} else if (!durchmarsch.equals(other.durchmarsch))
+			return false;
+		if (finalDeclarerPoints == null) {
+			if (other.finalDeclarerPoints != null)
+				return false;
+		} else if (!finalDeclarerPoints.equals(other.finalDeclarerPoints))
+			return false;
+		if (finalOpponentPoints == null) {
+			if (other.finalOpponentPoints != null)
+				return false;
+		} else if (!finalOpponentPoints.equals(other.finalOpponentPoints))
+			return false;
+		if (gameValue == null) {
+			if (other.gameValue != null)
+				return false;
+		} else if (!gameValue.equals(other.gameValue))
+			return false;
+		if (jungfrau == null) {
+			if (other.jungfrau != null)
+				return false;
+		} else if (!jungfrau.equals(other.jungfrau))
+			return false;
+		if (multiplier == null) {
+			if (other.multiplier != null)
+				return false;
+		} else if (!multiplier.equals(other.multiplier))
+			return false;
+		if (overBidded == null) {
+			if (other.overBidded != null)
+				return false;
+		} else if (!overBidded.equals(other.overBidded))
+			return false;
+		if (playWithJacks == null) {
+			if (other.playWithJacks != null)
+				return false;
+		} else if (!playWithJacks.equals(other.playWithJacks))
+			return false;
+		if (schneider == null) {
+			if (other.schneider != null)
+				return false;
+		} else if (!schneider.equals(other.schneider))
+			return false;
+		if (schwarz == null) {
+			if (other.schwarz != null)
+				return false;
+		} else if (!schwarz.equals(other.schwarz))
+			return false;
+		if (won == null) {
+			if (other.won != null)
+				return false;
+		} else if (!won.equals(other.won))
+			return false;
+		return true;
+	}
 }

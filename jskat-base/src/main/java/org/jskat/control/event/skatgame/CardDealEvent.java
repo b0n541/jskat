@@ -61,4 +61,36 @@ public final class CardDealEvent implements SkatGameEvent {
 		result += "Skat: " + skat;
 		return result;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((playerCards == null) ? 0 : playerCards.hashCode());
+		result = prime * result + ((skat == null) ? 0 : skat.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		CardDealEvent other = (CardDealEvent) obj;
+		if (playerCards == null) {
+			if (other.playerCards != null)
+				return false;
+		} else if (!playerCards.equals(other.playerCards))
+			return false;
+		if (skat == null) {
+			if (other.skat != null)
+				return false;
+		} else if (!skat.equals(other.skat))
+			return false;
+		return true;
+	}
+	
 }

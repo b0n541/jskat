@@ -39,4 +39,29 @@ public final class GameFinishEvent implements SkatGameEvent {
 	public final void processBackward(SkatGameData data) {
 		data.setResult(new SkatGameResult());
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((gameSummary == null) ? 0 : gameSummary.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GameFinishEvent other = (GameFinishEvent) obj;
+		if (gameSummary == null) {
+			if (other.gameSummary != null)
+				return false;
+		} else if (!gameSummary.equals(other.gameSummary))
+			return false;
+		return true;
+	}
 }

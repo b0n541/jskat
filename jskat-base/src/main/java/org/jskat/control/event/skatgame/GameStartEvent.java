@@ -47,4 +47,41 @@ public final class GameStartEvent implements SkatGameEvent {
 	@Override
 	public void processBackward(SkatGameData data) {
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((gameNo == null) ? 0 : gameNo.hashCode());
+		result = prime * result + ((gameVariant == null) ? 0 : gameVariant.hashCode());
+		result = prime * result + ((leftPlayerPosition == null) ? 0 : leftPlayerPosition.hashCode());
+		result = prime * result + ((rightPlayerPosition == null) ? 0 : rightPlayerPosition.hashCode());
+		result = prime * result + ((userPosition == null) ? 0 : userPosition.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		GameStartEvent other = (GameStartEvent) obj;
+		if (gameNo == null) {
+			if (other.gameNo != null)
+				return false;
+		} else if (!gameNo.equals(other.gameNo))
+			return false;
+		if (gameVariant != other.gameVariant)
+			return false;
+		if (leftPlayerPosition != other.leftPlayerPosition)
+			return false;
+		if (rightPlayerPosition != other.rightPlayerPosition)
+			return false;
+		if (userPosition != other.userPosition)
+			return false;
+		return true;
+	}
 }
