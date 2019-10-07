@@ -15,6 +15,8 @@
  */
 package org.jskat.data;
 
+import java.util.Objects;
+
 /**
  * Data class for skat game result
  */
@@ -314,5 +316,39 @@ public class SkatGameResult implements Cloneable {
 			sb.append(" (Schneider)");
 		}
 		return sb.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects
+				.hash(durchmarsch, finalDeclarerPoints, finalOpponentPoints, gameValue,
+						jungfrau, multiplier, overBidded, playWithJacks, schneider, 
+						schwarz, won);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;			
+		}
+		if (obj == null) {
+			return false;			
+		}
+		if (getClass() != obj.getClass()) {
+			return false;			
+		}
+		final SkatGameResult other = (SkatGameResult) obj;
+
+		return Objects.equals(durchmarsch, other.durchmarsch) &&
+				Objects.equals(finalDeclarerPoints, other.finalDeclarerPoints) &&
+				Objects.equals(finalOpponentPoints, other.finalOpponentPoints) &&
+				Objects.equals(gameValue, other.gameValue) &&
+				Objects.equals(jungfrau, other.jungfrau) &&
+				Objects.equals(multiplier, other.multiplier) &&
+				Objects.equals(overBidded, other.overBidded) &&
+				Objects.equals(playWithJacks, other.playWithJacks) &&
+				Objects.equals(schneider, other.schneider) &&
+				Objects.equals(schwarz, other.schwarz) &&
+				Objects.equals(won, other.won);
 	}
 }

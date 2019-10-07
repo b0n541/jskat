@@ -15,6 +15,8 @@
  */
 package org.jskat.control.event.skatgame;
 
+import java.util.Objects;
+
 import org.jskat.util.Player;
 
 public abstract class AbstractPlayerMoveEvent implements SkatGameEvent {
@@ -28,6 +30,28 @@ public abstract class AbstractPlayerMoveEvent implements SkatGameEvent {
 	@Override
 	public String toString() {
 		return player + ": " + getMoveDetails();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(player);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;			
+		}
+		if (obj == null) {
+			return false;			
+		}
+		if (getClass() != obj.getClass()) {
+			return false;			
+		}
+		
+		final AbstractPlayerMoveEvent other = (AbstractPlayerMoveEvent) obj;
+		
+		return Objects.equals(player, other.player);
 	}
 
 	protected abstract String getMoveDetails();

@@ -15,6 +15,8 @@
  */
 package org.jskat.control.event.skatgame;
 
+import java.util.Objects;
+
 import org.jskat.data.SkatGameData;
 import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
@@ -46,5 +48,31 @@ public final class GameStartEvent implements SkatGameEvent {
 
 	@Override
 	public void processBackward(SkatGameData data) {
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects
+				.hash(gameNo, gameVariant, leftPlayerPosition, rightPlayerPosition, userPosition);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;			
+		}
+		if (obj == null) {
+			return false;			
+		}
+		if (getClass() != obj.getClass()) {
+			return false;			
+		}
+		final GameStartEvent other = (GameStartEvent) obj;
+		
+		return Objects.equals(gameNo, other.gameNo) &&
+				Objects.equals(gameVariant, other.gameVariant) &&
+				Objects.equals(leftPlayerPosition, other.leftPlayerPosition) &&
+				Objects.equals(rightPlayerPosition, other.rightPlayerPosition) &&
+				Objects.equals(userPosition, other.userPosition);
 	}
 }

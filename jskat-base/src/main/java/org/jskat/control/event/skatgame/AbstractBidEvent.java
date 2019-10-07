@@ -15,6 +15,8 @@
  */
 package org.jskat.control.event.skatgame;
 
+import java.util.Objects;
+
 import org.jskat.data.SkatGameData;
 import org.jskat.util.Player;
 
@@ -40,5 +42,26 @@ public abstract class AbstractBidEvent extends AbstractPlayerMoveEvent {
 	@Override
 	protected final String getMoveDetails() {
 		return bid.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(bid);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;			
+		}
+		if (!super.equals(obj)) {
+			return false;			
+		}
+		if (getClass() != obj.getClass()) {
+			return false;			
+		}
+		final AbstractBidEvent other = (AbstractBidEvent) obj;
+		
+		return Objects.equals(bid, other.bid);
 	}
 }

@@ -15,6 +15,8 @@
  */
 package org.jskat.control.event.skatgame;
 
+import java.util.Objects;
+
 import org.jskat.data.SkatGameData;
 import org.jskat.util.CardList;
 import org.jskat.util.Player;
@@ -45,5 +47,26 @@ public final class DiscardSkatEvent extends AbstractPlayerMoveEvent {
 	@Override
 	protected String getMoveDetails() {
 		return discardedSkat.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(discardedSkat);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;			
+		}
+		if (!super.equals(obj)) {
+			return false;			
+		}
+		if (getClass() != obj.getClass()) {
+			return false;			
+		}
+		final DiscardSkatEvent other = (DiscardSkatEvent) obj;
+		
+		return Objects.equals(discardedSkat, other.discardedSkat);
 	}
 }

@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.jskat.control.SkatGame;
@@ -514,5 +515,43 @@ public class GameSummary {
 
 	public Boolean isRe() {
 		return re;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects
+				.hash(foreHand, middleHand, rearHand, declarer, 
+						gameType, ouvert, hand, schneider, schwarz, 
+						contra, re, gameResult, tricks, playerPoints, ramschLosers);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;			
+		}
+		if (obj == null) {
+			return false;			
+		}
+		if (getClass() != obj.getClass()) {
+			return false;			
+		}
+		final GameSummary other = (GameSummary) obj;
+		
+		return Objects.equals(foreHand, other.foreHand) &&
+				Objects.equals(middleHand, other.middleHand) &&
+				Objects.equals(rearHand, other.rearHand) &&
+				Objects.equals(declarer, other.declarer) &&
+				Objects.equals(gameType, other.gameType) &&
+				Objects.equals(ouvert, other.ouvert) &&
+				Objects.equals(hand, other.hand) &&
+				Objects.equals(schneider, other.schneider) &&
+				Objects.equals(schwarz, other.schwarz) &&
+				Objects.equals(contra, other.contra) &&
+				Objects.equals(re, other.re) &&
+				Objects.equals(gameResult, other.gameResult) &&
+				Objects.equals(tricks, other.tricks) &&
+				Objects.equals(playerPoints, other.playerPoints) &&
+				Objects.equals(ramschLosers, other.ramschLosers);
 	}
 }

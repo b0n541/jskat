@@ -15,6 +15,8 @@
  */
 package org.jskat.control.event.skatgame;
 
+import java.util.Objects;
+
 import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameResult;
@@ -38,5 +40,26 @@ public final class GameFinishEvent implements SkatGameEvent {
 	@Override
 	public final void processBackward(SkatGameData data) {
 		data.setResult(new SkatGameResult());
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(gameSummary);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;			
+		}
+		if (obj == null) {
+			return false;			
+		}
+		if (getClass() != obj.getClass()) {
+			return false;			
+		}
+		final GameFinishEvent other = (GameFinishEvent) obj;
+		
+		return Objects.equals(gameSummary, other.gameSummary);
 	}
 }
