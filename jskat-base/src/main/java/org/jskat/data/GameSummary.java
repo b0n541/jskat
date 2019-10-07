@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 import org.jskat.control.SkatGame;
@@ -518,104 +519,39 @@ public class GameSummary {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((contra == null) ? 0 : contra.hashCode());
-		result = prime * result + ((declarer == null) ? 0 : declarer.hashCode());
-		result = prime * result + ((foreHand == null) ? 0 : foreHand.hashCode());
-		result = prime * result + ((gameResult == null) ? 0 : gameResult.hashCode());
-		result = prime * result + ((gameType == null) ? 0 : gameType.hashCode());
-		result = prime * result + ((hand == null) ? 0 : hand.hashCode());
-		result = prime * result + ((middleHand == null) ? 0 : middleHand.hashCode());
-		result = prime * result + ((ouvert == null) ? 0 : ouvert.hashCode());
-		result = prime * result + ((playerPoints == null) ? 0 : playerPoints.hashCode());
-		result = prime * result + ((ramschLosers == null) ? 0 : ramschLosers.hashCode());
-		result = prime * result + ((re == null) ? 0 : re.hashCode());
-		result = prime * result + ((rearHand == null) ? 0 : rearHand.hashCode());
-		result = prime * result + ((schneider == null) ? 0 : schneider.hashCode());
-		result = prime * result + ((schwarz == null) ? 0 : schwarz.hashCode());
-		result = prime * result + ((tricks == null) ? 0 : tricks.hashCode());
-		return result;
+		return Objects
+				.hash(foreHand, middleHand, rearHand, declarer, 
+						gameType, ouvert, hand, schneider, schwarz, 
+						contra, re, gameResult, tricks, playerPoints, ramschLosers);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		GameSummary other = (GameSummary) obj;
-		if (contra == null) {
-			if (other.contra != null)
-				return false;
-		} else if (!contra.equals(other.contra))
-			return false;
-		if (declarer != other.declarer)
-			return false;
-		if (foreHand == null) {
-			if (other.foreHand != null)
-				return false;
-		} else if (!foreHand.equals(other.foreHand))
-			return false;
-		if (gameResult == null) {
-			if (other.gameResult != null)
-				return false;
-		} else if (!gameResult.equals(other.gameResult))
-			return false;
-		if (gameType != other.gameType)
-			return false;
-		if (hand == null) {
-			if (other.hand != null)
-				return false;
-		} else if (!hand.equals(other.hand))
-			return false;
-		if (middleHand == null) {
-			if (other.middleHand != null)
-				return false;
-		} else if (!middleHand.equals(other.middleHand))
-			return false;
-		if (ouvert == null) {
-			if (other.ouvert != null)
-				return false;
-		} else if (!ouvert.equals(other.ouvert))
-			return false;
-		if (playerPoints == null) {
-			if (other.playerPoints != null)
-				return false;
-		} else if (!playerPoints.equals(other.playerPoints))
-			return false;
-		if (ramschLosers == null) {
-			if (other.ramschLosers != null)
-				return false;
-		} else if (!ramschLosers.equals(other.ramschLosers))
-			return false;
-		if (re == null) {
-			if (other.re != null)
-				return false;
-		} else if (!re.equals(other.re))
-			return false;
-		if (rearHand == null) {
-			if (other.rearHand != null)
-				return false;
-		} else if (!rearHand.equals(other.rearHand))
-			return false;
-		if (schneider == null) {
-			if (other.schneider != null)
-				return false;
-		} else if (!schneider.equals(other.schneider))
-			return false;
-		if (schwarz == null) {
-			if (other.schwarz != null)
-				return false;
-		} else if (!schwarz.equals(other.schwarz))
-			return false;
-		if (tricks == null) {
-			if (other.tricks != null)
-				return false;
-		} else if (!tricks.equals(other.tricks))
-			return false;
-		return true;
+		if (this == obj) {
+			return true;			
+		}
+		if (obj == null) {
+			return false;			
+		}
+		if (getClass() != obj.getClass()) {
+			return false;			
+		}
+		final GameSummary other = (GameSummary) obj;
+		
+		return Objects.equals(foreHand, other.foreHand) &&
+				Objects.equals(middleHand, other.middleHand) &&
+				Objects.equals(rearHand, other.rearHand) &&
+				Objects.equals(declarer, other.declarer) &&
+				Objects.equals(gameType, other.gameType) &&
+				Objects.equals(ouvert, other.ouvert) &&
+				Objects.equals(hand, other.hand) &&
+				Objects.equals(schneider, other.schneider) &&
+				Objects.equals(schwarz, other.schwarz) &&
+				Objects.equals(contra, other.contra) &&
+				Objects.equals(re, other.re) &&
+				Objects.equals(gameResult, other.gameResult) &&
+				Objects.equals(tricks, other.tricks) &&
+				Objects.equals(playerPoints, other.playerPoints) &&
+				Objects.equals(ramschLosers, other.ramschLosers);
 	}
 }

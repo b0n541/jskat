@@ -15,6 +15,8 @@
  */
 package org.jskat.control.event.skatgame;
 
+import java.util.Objects;
+
 import org.jskat.data.SkatGameData;
 import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
@@ -50,38 +52,27 @@ public final class GameStartEvent implements SkatGameEvent {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((gameNo == null) ? 0 : gameNo.hashCode());
-		result = prime * result + ((gameVariant == null) ? 0 : gameVariant.hashCode());
-		result = prime * result + ((leftPlayerPosition == null) ? 0 : leftPlayerPosition.hashCode());
-		result = prime * result + ((rightPlayerPosition == null) ? 0 : rightPlayerPosition.hashCode());
-		result = prime * result + ((userPosition == null) ? 0 : userPosition.hashCode());
-		return result;
+		return Objects
+				.hash(gameNo, gameVariant, leftPlayerPosition, rightPlayerPosition, userPosition);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		GameStartEvent other = (GameStartEvent) obj;
-		if (gameNo == null) {
-			if (other.gameNo != null)
-				return false;
-		} else if (!gameNo.equals(other.gameNo))
-			return false;
-		if (gameVariant != other.gameVariant)
-			return false;
-		if (leftPlayerPosition != other.leftPlayerPosition)
-			return false;
-		if (rightPlayerPosition != other.rightPlayerPosition)
-			return false;
-		if (userPosition != other.userPosition)
-			return false;
-		return true;
+		if (this == obj) {
+			return true;			
+		}
+		if (obj == null) {
+			return false;			
+		}
+		if (getClass() != obj.getClass()) {
+			return false;			
+		}
+		final GameStartEvent other = (GameStartEvent) obj;
+		
+		return Objects.equals(gameNo, other.gameNo) &&
+				Objects.equals(gameVariant, other.gameVariant) &&
+				Objects.equals(leftPlayerPosition, other.leftPlayerPosition) &&
+				Objects.equals(rightPlayerPosition, other.rightPlayerPosition) &&
+				Objects.equals(userPosition, other.userPosition);
 	}
 }

@@ -39,16 +39,19 @@ public abstract class AbstractPlayerMoveEvent implements SkatGameEvent {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		AbstractPlayerMoveEvent other = (AbstractPlayerMoveEvent) obj;
-		if (player != other.player)
-			return false;
-		return true;
+		if (this == obj) {
+			return true;			
+		}
+		if (obj == null) {
+			return false;			
+		}
+		if (getClass() != obj.getClass()) {
+			return false;			
+		}
+		
+		final AbstractPlayerMoveEvent other = (AbstractPlayerMoveEvent) obj;
+		
+		return Objects.equals(player, other.player);
 	}
 
 	protected abstract String getMoveDetails();

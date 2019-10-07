@@ -18,6 +18,7 @@ package org.jskat.control.event.skatgame;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Objects;
 
 import org.jskat.data.SkatGameData;
 import org.jskat.util.CardList;
@@ -64,33 +65,24 @@ public final class CardDealEvent implements SkatGameEvent {
 
 	@Override
 	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((playerCards == null) ? 0 : playerCards.hashCode());
-		result = prime * result + ((skat == null) ? 0 : skat.hashCode());
-		return result;
+		return Objects.hash(playerCards, skat);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		CardDealEvent other = (CardDealEvent) obj;
-		if (playerCards == null) {
-			if (other.playerCards != null)
-				return false;
-		} else if (!playerCards.equals(other.playerCards))
-			return false;
-		if (skat == null) {
-			if (other.skat != null)
-				return false;
-		} else if (!skat.equals(other.skat))
-			return false;
-		return true;
+		if (this == obj) {
+			return true;			
+		}
+		if (obj == null) {
+			return false;			
+		}
+		if (getClass() != obj.getClass()) {
+			return false;			
+		}
+		final CardDealEvent other = (CardDealEvent) obj;
+		
+		return Objects.equals(playerCards, other.playerCards) &&
+				Objects.equals(skat, other.skat);		
 	}
 	
 }
