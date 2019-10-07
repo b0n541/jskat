@@ -41,4 +41,23 @@ public final class ReEvent extends AbstractPlayerMoveEvent {
 	protected String getMoveDetails() {
 		return "re";
 	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;			
+		}
+		if (!super.equals(obj)) {
+			return false;			
+		}
+		if (getClass() != obj.getClass()) {
+			return false;			
+		}
+		return true;
+	}
 }

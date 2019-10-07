@@ -15,6 +15,8 @@
  */
 package org.jskat.control.event.skatgame;
 
+import java.util.Objects;
+
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData;
@@ -45,5 +47,26 @@ public final class GameAnnouncementEvent extends AbstractPlayerMoveEvent {
 	@Override
 	protected String getMoveDetails() {
 		return announcement.toString();
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(announcement);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;			
+		}
+		if (!super.equals(obj)) {
+			return false;			
+		}
+		if (getClass() != obj.getClass()) {
+			return false;			
+		}
+		final GameAnnouncementEvent other = (GameAnnouncementEvent) obj;
+		
+		return Objects.equals(announcement, other.announcement);
 	}
 }
