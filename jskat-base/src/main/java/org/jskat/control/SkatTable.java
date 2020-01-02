@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2019 Jan Schäfer (jansch@users.sourceforge.net)
+ * Copyright (C) 2020 Jan Schäfer (jansch@users.sourceforge.net)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
