@@ -6,7 +6,7 @@ dependencies {
     compile project(':jskat-base')
     compile project(':jskat-swing-gui')
 
-    testCompile 'junit:junit:4.12'
+    testCompile 'junit:junit:4.13'
 }
 
 sourceSets {
