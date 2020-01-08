@@ -2,7 +2,7 @@ dependencies {
     compile 'ch.qos.logback:logback-core:1.2.3'
     compile 'ch.qos.logback:logback-classic:1.2.3'
     compile 'org.eclipse.jetty:jetty-websocket:8.2.0.v20160908'
-    compile 'org.reflections:reflections:0.9.11'
+    compile 'org.reflections:reflections:0.9.12'
     compile 'com.google.guava:guava:28.2-jre'
     compile 'org.apache.commons:commons-math3:3.6.1'
 
