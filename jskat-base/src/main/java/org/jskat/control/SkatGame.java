@@ -134,87 +134,27 @@ public class SkatGame {
 				setGameState(GameState.BIDDING);
 				break;
 			case BIDDING:
-				setActivePlayer(Player.MIDDLEHAND);
-
-				if (variant == GameVariant.FORCED_RAMSCH) {
-					// ramsch games are enforced
-					final GameAnnouncementFactory gaf = GameAnnouncement.getFactory();
-					gaf.setGameType(GameType.RAMSCH);
-					setGameAnnouncement(gaf.getAnnouncement());
-				} else {
-					// "normal" game (i.e. no ramsch)
-					bidding();
-				}
-
-				if (GameType.PASSED_IN.equals(data.getGameType())) {
-					setGameState(GameState.PRELIMINARY_GAME_END);
-				} else if (GameType.RAMSCH.equals(data.getGameType())) {
-					setGameState(GameState.RAMSCH_GRAND_HAND_ANNOUNCING);
-				} else {
-					view.setDeclarer(tableName, data.getDeclarer());
-					setGameState(GameState.PICKING_UP_SKAT);
-				}
+				runBidding();
 				break;
 			case RAMSCH_GRAND_HAND_ANNOUNCING:
-				final boolean grandHandAnnounced = grandHand();
-
-				if (grandHandAnnounced) {
-					log.debug(data.getDeclarer() + " is playing grand hand"); //$NON-NLS-1$
-					final GameAnnouncementFactory gaf = GameAnnouncement.getFactory();
-					gaf.setGameType(GameType.GRAND);
-					gaf.setHand(Boolean.TRUE);
-					setGameAnnouncement(gaf.getAnnouncement());
-					setGameState(GameState.TRICK_PLAYING);
-					log.debug("grand hand game started"); //$NON-NLS-1$
+				if(runRamschGrandHandAnnouncing() == true){
 					break;
-				} else {
-					if (JSkatOptions.instance().isSchieberamsch(true)) {
-						log.debug("no grand hand - initiating schieberamsch"); //$NON-NLS-1$
-						setGameState(GameState.SCHIEBERAMSCH);
-					} else {
-						log.debug("no grand hand and no schieberamsch - play ramsch"); //$NON-NLS-1$
-						setGameState(GameState.TRICK_PLAYING);
-					}
 				}
 				break;
 			case SCHIEBERAMSCH:
-				schieberamsch();
-				final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-				factory.setGameType(GameType.RAMSCH);
-				setGameAnnouncement(factory.getAnnouncement());
-				setGameState(GameState.TRICK_PLAYING);
+				runSchieberamsch();
 				break;
 			case PICKING_UP_SKAT:
-				setActivePlayer(data.getDeclarer());
-				if (pickUpSkat()) {
-					setGameState(GameState.DISCARDING);
-				} else {
-					setGameState(GameState.DECLARING);
-				}
+				runPickingUpSkat();
 				break;
 			case DISCARDING:
-				setActivePlayer(data.getDeclarer());
-				discarding();
-				if (!GameState.PRELIMINARY_GAME_END.equals(data.getGameState())) {
-					setGameState(GameState.DECLARING);
-				}
+				runDiscarding();
 				break;
 			case DECLARING:
-				announceGame();
-				if (isContraPlayEnabled(ContraCallingTime.AFTER_GAME_ANNOUNCEMENT, 0)) {
-					setGameState(GameState.CONTRA);
-				} else {
-					setGameState(GameState.TRICK_PLAYING);
-				}
+				runDeclaring();
 				break;
 			case CONTRA:
-				for (final Player player : Player.getOrderedList()) {
-					if (isContraEnabledForPlayer(player, ContraCallingTime.AFTER_GAME_ANNOUNCEMENT, 0)) {
-						setActivePlayer(player);
-						contraRe();
-					}
-				}
-				setGameState(GameState.TRICK_PLAYING);
+				runContra();
 				break;
 			case TRICK_PLAYING:
 				playTricks();
@@ -242,6 +182,98 @@ public class SkatGame {
 		}
 
 		return getGameResult();
+	}
+
+	private void runBidding() {
+		setActivePlayer(Player.MIDDLEHAND);
+
+		if (variant == GameVariant.FORCED_RAMSCH) {
+			// ramsch games are enforced
+			final GameAnnouncementFactory gaf = GameAnnouncement.getFactory();
+			gaf.setGameType(GameType.RAMSCH);
+			setGameAnnouncement(gaf.getAnnouncement());
+		} else {
+			// "normal" game (i.e. no ramsch)
+			bidding();
+		}
+
+		if (GameType.PASSED_IN.equals(data.getGameType())) {
+			setGameState(GameState.PRELIMINARY_GAME_END);
+		} else if (GameType.RAMSCH.equals(data.getGameType())) {
+			setGameState(GameState.RAMSCH_GRAND_HAND_ANNOUNCING);
+		} else {
+			view.setDeclarer(tableName, data.getDeclarer());
+			setGameState(GameState.PICKING_UP_SKAT);
+		}
+	}
+
+	private boolean runRamschGrandHandAnnouncing(){
+		final boolean grandHandAnnounced = grandHand();
+
+		if (grandHandAnnounced) {
+			log.debug(data.getDeclarer() + " is playing grand hand"); //$NON-NLS-1$
+			final GameAnnouncementFactory gaf = GameAnnouncement.getFactory();
+			gaf.setGameType(GameType.GRAND);
+			gaf.setHand(Boolean.TRUE);
+			setGameAnnouncement(gaf.getAnnouncement());
+			setGameState(GameState.TRICK_PLAYING);
+			log.debug("grand hand game started"); //$NON-NLS-1$
+			return true;
+		} else {
+			if (JSkatOptions.instance().isSchieberamsch(true)) {
+				log.debug("no grand hand - initiating schieberamsch"); //$NON-NLS-1$
+				setGameState(GameState.SCHIEBERAMSCH);
+			} else {
+				log.debug("no grand hand and no schieberamsch - play ramsch"); //$NON-NLS-1$
+				setGameState(GameState.TRICK_PLAYING);
+			}
+		}
+
+		return false;
+	}
+
+	private void runSchieberamsch() {
+		schieberamsch();
+		final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+		factory.setGameType(GameType.RAMSCH);
+		setGameAnnouncement(factory.getAnnouncement());
+		setGameState(GameState.TRICK_PLAYING);
+	}
+
+	private void runPickingUpSkat() {
+		setActivePlayer(data.getDeclarer());
+		if (pickUpSkat()) {
+			setGameState(GameState.DISCARDING);
+		} else {
+			setGameState(GameState.DECLARING);
+		}
+	}
+
+	private void runDiscarding() {
+		setActivePlayer(data.getDeclarer());
+		discarding();
+		if (!GameState.PRELIMINARY_GAME_END.equals(data.getGameState())) {
+			setGameState(GameState.DECLARING);
+		}
+	}
+
+	private void runDeclaring() {
+		announceGame();
+		if (isContraPlayEnabled(ContraCallingTime.AFTER_GAME_ANNOUNCEMENT, 0)) {
+			setGameState(GameState.CONTRA);
+		} else {
+			setGameState(GameState.TRICK_PLAYING);
+		}
+	}
+
+	private void runContra() {
+		for (final Player player : Player.getOrderedList()) {
+			if (isContraEnabledForPlayer(player, ContraCallingTime.AFTER_GAME_ANNOUNCEMENT, 0)) {
+				setActivePlayer(player);
+				contraRe();
+			}
+		}
+		setGameState(GameState.TRICK_PLAYING);
 	}
 
 	private void contraRe() {
