@@ -9,9 +9,9 @@ plugins {
     id "org.openjfx.javafxplugin" version "0.0.8"
 }
 
-apply plugin: 'application'
+apply plugin: "application"
 
-version = '0.18.0-SNAPSHOT'
+version = "0.18.0-SNAPSHOT"
 
 allprojects {
     repositories {
@@ -20,19 +20,19 @@ allprojects {
 }
 
 subprojects {
-    apply plugin: 'java'
-    apply plugin: 'license'
+    apply plugin: "java"
+    apply plugin: "license"
 
     sourceCompatibility = 11
     targetCompatibility = 11
 
     task sourcesJar(type: Jar, dependsOn: classes) {
-        classifier = 'sources'
+        classifier = "sources"
         from sourceSets.main.allSource
     }
 
     task javadocJar(type: Jar, dependsOn: javadoc) {
-        classifier = 'javadoc'
+        classifier = "javadoc"
         from javadoc.destinationDir
     }
 
@@ -43,12 +43,12 @@ subprojects {
 
     license {
         include "**/*.java"
-        header project.file('LICENSE.header')
+        header project.file("LICENSE.header")
         ext.year = Calendar.getInstance().get(Calendar.YEAR)
     }
 
     javadoc {
-        options.addBooleanOption('html5', true)
+        options.addBooleanOption("html5", true)
     }
 
     test {
@@ -60,21 +60,21 @@ subprojects {
 }
 
 dependencies {
-    compile project(':jskat-base')
-    compile project(':jskat-swing-gui')
-    compile project(':jskat-javafx-gui')
+    compile project(":jskat-base")
+    compile project(":jskat-swing-gui")
+    compile project(":jskat-javafx-gui")
 }
 
 startScripts {
-    mainClassName 'org.jskat.Launcher'
+    mainClassName "org.jskat.Launcher"
     applicationDefaultJvmArgs = ["-Djdk.gtk.version=2"]
 }
 
-mainClassName = 'org.jskat.Launcher'
+mainClassName = "org.jskat.Launcher"
 
 jar {
     manifest {
-        attributes 'Main-Class': 'org.jskat.Launcher'
+        attributes "Main-Class": "org.jskat.Launcher"
     }
     from {
         configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }

@@ -1,12 +1,12 @@
 plugins {
-    id 'org.openjfx.javafxplugin'
+    id "org.openjfx.javafxplugin"
 }
 
 dependencies {
-    compile project(':jskat-base')
-    compile project(':jskat-swing-gui')
+    compile project(":jskat-base")
+    compile project(":jskat-swing-gui")
 
-    testCompile 'junit:junit:4.13'
+    testCompile "junit:junit:4.13"
 }
 
 sourceSets {
@@ -19,6 +19,6 @@ sourceSets {
 }
 
 javafx {
-    modules = ['javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.swing']
+    modules = ["javafx.controls", "javafx.fxml", "javafx.web", "javafx.swing"]
     version = "11.0.+"
 }

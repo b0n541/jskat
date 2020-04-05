@@ -1,13 +1,13 @@
 plugins {
-    id 'org.openjfx.javafxplugin'
+    id "org.openjfx.javafxplugin"
 }
 
 dependencies {
-    compile project(':jskat-base')
-    compile 'com.miglayout:miglayout-swing:5.2'
+    compile project(":jskat-base")
+    compile "com.miglayout:miglayout-swing:5.2"
 }
 
 javafx {
-    modules = ['javafx.controls', 'javafx.fxml', 'javafx.web', 'javafx.swing']
+    modules = ["javafx.controls", "javafx.fxml", "javafx.web", "javafx.swing"]
     version = "11.0.+"
 }
