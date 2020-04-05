@@ -1,12 +1,15 @@
 plugins {
-    id "org.openjfx.javafxplugin"
+    id("org.openjfx.javafxplugin")
 }
 
 dependencies {
-    compile project(":jskat-base")
-    compile project(":jskat-swing-gui")
+    implementation(project(":jskat-base"))
+    implementation(project(":jskat-swing-gui"))
+    implementation("ch.qos.logback:logback-core:1.2.3")
+    implementation("ch.qos.logback:logback-classic:1.2.3")
+    implementation("com.google.guava:guava:28.2-jre")
 
-    testCompile "junit:junit:4.13"
+    testImplementation("junit:junit:4.13")
 }
 
 sourceSets {

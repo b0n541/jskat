@@ -42,8 +42,8 @@ subprojects {
     }
 
     license {
-        include "**/*.java"
-        header project.file("LICENSE.header")
+        include("**/*.java")
+        header = project.file("LICENSE.header")
         ext.year = Calendar.getInstance().get(Calendar.YEAR)
     }
 
@@ -53,8 +53,8 @@ subprojects {
 
     test {
         testLogging {
-            events "passed", "skipped", "failed"
-            exceptionFormat "full"
+            events = ["passed", "skipped", "failed"]
+            exceptionFormat = "full"
         }
     }
 }
@@ -66,7 +66,7 @@ dependencies {
 }
 
 startScripts {
-    mainClassName "org.jskat.Launcher"
+    mainClassName = "org.jskat.Launcher"
     applicationDefaultJvmArgs = ["-Djdk.gtk.version=2"]
 }
 
