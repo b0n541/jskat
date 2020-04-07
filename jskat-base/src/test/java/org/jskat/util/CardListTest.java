@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2020 Jan Schäfer (jansch@users.sourceforge.net)
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,113 +15,102 @@
  */
 package org.jskat.util;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+
+import org.jskat.AbstractJSkatTest;
+import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
-import org.jskat.AbstractJSkatTest;
-import org.junit.Test;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Test cases for class Card
  */
 public class CardListTest extends AbstractJSkatTest {
 
-	private static final Random RANDOM = new Random();
+    private static final Random RANDOM = new Random();
 
-	/**
-	 * Test double sorting
-	 */
-	@Test
-	public void testSort001() {
+    /**
+     * Test double sorting
+     */
+    @Test
+    public void testSort001() {
 
-		CardList cards = new CardList();
-		cards.add(Card.CA);
-		cards.add(Card.HA);
-		cards.add(Card.DA);
-		cards.add(Card.HT);
-		cards.add(Card.CJ);
-		cards.add(Card.D7);
+        final CardList cards = new CardList();
+        cards.add(Card.CA);
+        cards.add(Card.HA);
+        cards.add(Card.DA);
+        cards.add(Card.HT);
+        cards.add(Card.CJ);
+        cards.add(Card.D7);
 
-		// sort cards
-		cards.sort(GameType.DIAMONDS);
-		// check order
-		assertTrue(cards.get(0) == Card.CJ);
-		assertTrue(cards.get(1) == Card.DA);
-		assertTrue(cards.get(2) == Card.D7);
-		assertTrue(cards.get(3) == Card.CA);
-		assertTrue(cards.get(4) == Card.HA);
-		assertTrue(cards.get(5) == Card.HT);
+        // sort cards
+        cards.sort(GameType.DIAMONDS);
+        // check order
+        assertThat(cards.get(0)).isEqualTo(Card.CJ);
+        assertThat(cards.get(1)).isEqualTo(Card.DA);
+        assertThat(cards.get(2)).isEqualTo(Card.D7);
+        assertThat(cards.get(3)).isEqualTo(Card.CA);
+        assertThat(cards.get(4)).isEqualTo(Card.HA);
+        assertThat(cards.get(5)).isEqualTo(Card.HT);
 
-		// sort cards again
-		cards.sort(GameType.DIAMONDS);
-		// check order
-		assertTrue(cards.get(0) == Card.CJ);
-		assertTrue(cards.get(1) == Card.DA);
-		assertTrue(cards.get(2) == Card.D7);
-		assertTrue(cards.get(3) == Card.CA);
-		assertTrue(cards.get(4) == Card.HA);
-		assertTrue(cards.get(5) == Card.HT);
-	}
+        // sort cards again
+        cards.sort(GameType.DIAMONDS);
+        // check order
+        assertThat(cards.get(0)).isEqualTo(Card.CJ);
+        assertThat(cards.get(1)).isEqualTo(Card.DA);
+        assertThat(cards.get(2)).isEqualTo(Card.D7);
+        assertThat(cards.get(3)).isEqualTo(Card.CA);
+        assertThat(cards.get(4)).isEqualTo(Card.HA);
+        assertThat(cards.get(5)).isEqualTo(Card.HT);
+    }
 
-	/**
-	 * Test card finding
-	 */
-	@Test
-	public void testGetFirstIndexOfSuit() {
+    /**
+     * Test card finding
+     */
+    @Test
+    public void testGetFirstIndexOfSuit() {
 
-		CardList cards = new CardList();
+        final CardList cards = new CardList();
 
-		cards.add(Card.CJ);
-		cards.add(Card.CA);
+        cards.add(Card.CJ);
+        cards.add(Card.CA);
 
-		assertEquals(0, cards.getFirstIndexOfSuit(Suit.CLUBS));
-		assertEquals(0, cards.getFirstIndexOfSuit(Suit.CLUBS, true));
-		assertEquals(1, cards.getFirstIndexOfSuit(Suit.CLUBS, false));
-		assertEquals(-1, cards.getFirstIndexOfSuit(Suit.HEARTS));
-	}
+        assertThat(cards.getFirstIndexOfSuit(Suit.CLUBS)).isEqualTo(0);
+        assertThat(cards.getFirstIndexOfSuit(Suit.CLUBS, true)).isEqualTo(0);
+        assertThat(cards.getFirstIndexOfSuit(Suit.CLUBS, false)).isEqualTo(1);
+        assertThat(cards.getFirstIndexOfSuit(Suit.HEARTS)).isEqualTo(-1);
+    }
 
-	/**
-	 * Test card finding
-	 */
-	@Test
-	public void testGetLastIndexOfSuit() {
+    /**
+     * Test card finding
+     */
+    @Test
+    public void testGetLastIndexOfSuit() {
 
-		CardList cards = new CardList();
+        final CardList cards = new CardList();
 
-		cards.add(Card.CA);
-		cards.add(Card.CJ);
+        cards.add(Card.CA);
+        cards.add(Card.CJ);
 
-		assertEquals(1, cards.getLastIndexOfSuit(Suit.CLUBS));
-		assertEquals(1, cards.getLastIndexOfSuit(Suit.CLUBS, true));
-		assertEquals(0, cards.getLastIndexOfSuit(Suit.CLUBS, false));
-		assertEquals(-1, cards.getLastIndexOfSuit(Suit.HEARTS));
-	}
+        assertThat(cards.getLastIndexOfSuit(Suit.CLUBS)).isEqualTo(1);
+        assertThat(cards.getLastIndexOfSuit(Suit.CLUBS, true)).isEqualTo(1);
+        assertThat(cards.getLastIndexOfSuit(Suit.CLUBS, false)).isEqualTo(0);
+        assertThat(cards.getLastIndexOfSuit(Suit.HEARTS)).isEqualTo(-1);
+    }
 
-	@Test
-	public void testPerfectGrandSuitHand() {
-		CardList cards = CardList.getPerfectGrandSuitHand();
+    @Test
+    public void testPerfectGrandSuitHand() {
+        final CardList cards = CardList.getPerfectGrandSuitHand();
 
-		assertThat(cards.size(), is(10));
+        assertThat(cards).containsExactlyInAnyOrder(
+                Card.CJ, Card.SJ, Card.HJ, Card.DJ, Card.CA,
+                Card.SA, Card.HA, Card.DA, Card.CT, Card.ST);
+    }
 
-		assertTrue(cards.contains(Card.CJ));
-		assertTrue(cards.contains(Card.SJ));
-		assertTrue(cards.contains(Card.HJ));
-		assertTrue(cards.contains(Card.DJ));
-		assertTrue(cards.contains(Card.CA));
-		assertTrue(cards.contains(Card.SA));
-		assertTrue(cards.contains(Card.HA));
-		assertTrue(cards.contains(Card.DA));
-		assertTrue(cards.contains(Card.CT));
-		assertTrue(cards.contains(Card.ST));
-	}
-
-	@Test
-	public void testRandomCards() {
-		CardList cards = CardList.getRandomCards(10);
-		assertThat(cards.size(), is(10));
-	}
+    @Test
+    public void testRandomCards() {
+        final CardList cards = CardList.getRandomCards(10);
+        assertThat(cards).hasSize(10);
+    }
 }

@@ -18,15 +18,14 @@ package org.jskat.gui.javafx.dialog.firststeps.model;
 
 import org.jskat.AbstractJSkatTest;
 import org.jskat.data.JSkatOptions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class FirstStepsDialogModelTest extends AbstractJSkatTest {
     @Test
     public void testModelOnStartUp() {
         final FirstStepsDialogModel model = new FirstStepsDialogModel();
-        assertThat(model.isShowTipsOnStartUp.getValue(), is(JSkatOptions.instance().isShowTipsOnStartUp()));
+        assertThat(model.isShowTipsOnStartUp.getValue()).isEqualTo(JSkatOptions.instance().isShowTipsOnStartUp());
     }
 }

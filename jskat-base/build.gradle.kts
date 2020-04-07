@@ -5,8 +5,4 @@ dependencies {
     implementation("org.reflections:reflections:0.9.12")
     implementation("com.google.guava:guava:28.2-jre")
     implementation("org.apache.commons:commons-math3:3.6.1")
-
-    testImplementation("junit:junit:4.13")
-    testImplementation("org.mockito:mockito-core:3.3.3")
-    testImplementation("org.hamcrest:hamcrest-library:2.2")
 }

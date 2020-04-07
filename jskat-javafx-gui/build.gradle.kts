@@ -8,20 +8,18 @@ dependencies {
     implementation("ch.qos.logback:logback-core:1.2.3")
     implementation("ch.qos.logback:logback-classic:1.2.3")
     implementation("com.google.guava:guava:28.2-jre")
-
-    testImplementation("junit:junit:4.13")
 }
 
-sourceSets {
-    main {
-        resources {
-            srcDirs = ["src/main/resources"]
-            includes = ["**/*.fxml", "**/*.properties", "**/*.css"]
-        }
-    }
-}
+//sourceSets {
+//    main {
+//        resources {
+//            srcDirs = listOf("src/main/resources")
+//            includes = listOf("**/*.fxml", "**/*.properties", "**/*.css")
+//        }
+//    }
+//}
 
 javafx {
-    modules = ["javafx.controls", "javafx.fxml", "javafx.web", "javafx.swing"]
+    modules = listOf("javafx.controls", "javafx.fxml", "javafx.web", "javafx.swing")
     version = "11.0.+"
 }

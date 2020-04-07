@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2020 Jan Schäfer (jansch@users.sourceforge.net)
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,41 +15,42 @@
  */
 package org.jskat.control.event;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 import org.jskat.AbstractJSkatTest;
 import org.jskat.control.event.skatgame.ContraEvent;
 import org.jskat.data.SkatGameData;
 import org.jskat.util.Player;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 public class ContraEventTest extends AbstractJSkatTest {
 
-	private SkatGameData data;
-	private ContraEvent event;
+    private SkatGameData data;
+    private ContraEvent event;
 
-	@Before
-	public void setUp() {
-		data = new SkatGameData();
-		event = new ContraEvent(Player.FOREHAND);
-	}
+    @BeforeEach
+    public void setUp() {
+        data = new SkatGameData();
+        event = new ContraEvent(Player.FOREHAND);
+    }
 
-	@Test
-	public void skatGameDataAfterEvent() {
+    @Test
+    public void skatGameDataAfterEvent() {
 
-		event.processForward(data);
+        event.processForward(data);
 
-		assertThat(data.isContra(), is(true));
-	}
+        assertTrue(data.isContra());
+    }
 
-	@Test
-	public void skatGameDataBeforeEvent() {
+    @Test
+    public void skatGameDataBeforeEvent() {
 
-		event.processForward(data);
-		event.processBackward(data);
+        event.processForward(data);
+        event.processBackward(data);
 
-		assertThat(data.isContra(), is(false));
-	}
+        assertFalse(data.isContra());
+    }
 }
