@@ -73,13 +73,13 @@ class GameAnnouncePanel extends JPanel {
 	JSkatResourceBundle strings;
 	JSkatOptions options;
 
-  JRadioButton grandRadioButton;
-  JRadioButton clubsRadioButton;
-  JRadioButton spadesRadioButton;
-  JRadioButton heartsRadioButton;
-  JRadioButton diamondsRadioButton;
-  JRadioButton nullRadioButton;
-  ButtonGroup gameTypeButtonGroup;
+	JRadioButton grandRadioButton;
+	JRadioButton clubsRadioButton;
+	JRadioButton spadesRadioButton;
+	JRadioButton heartsRadioButton;
+	JRadioButton diamondsRadioButton;
+	JRadioButton nullRadioButton;
+	ButtonGroup gameTypeButtonGroup;
 	JCheckBox handBox = null;
 	JCheckBox ouvertBox = null;
 	JCheckBox schneiderBox = null;
@@ -122,7 +122,7 @@ class GameAnnouncePanel extends JPanel {
 		this.schneiderBox = new JCheckBox(this.strings.getString("schneider")); //$NON-NLS-1$
 		this.schwarzBox = createSchwarzBox();
 
-    ActionListener actionListener = new ActionListener() {
+		ActionListener actionListener = new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				// FIXME (jan 28.11.2010) send sorting game type to JSkatMaster
@@ -158,28 +158,21 @@ class GameAnnouncePanel extends JPanel {
 			}
 		};
     
-    this.grandRadioButton = createRadioButton(GameType.GRAND, actionListener);
-    this.clubsRadioButton = createRadioButton(GameType.CLUBS, actionListener);
-    this.spadesRadioButton = createRadioButton(GameType.SPADES, actionListener);
-    this.heartsRadioButton = createRadioButton(GameType.HEARTS, actionListener);
-    this.diamondsRadioButton = createRadioButton(GameType.DIAMONDS, actionListener);
-    this.nullRadioButton = createRadioButton(GameType.NULL, actionListener);
-    gameTypeButtonGroup = new ButtonGroup();
-    gameTypeButtonGroup.add(grandRadioButton);
-    gameTypeButtonGroup.add(clubsRadioButton);
-    gameTypeButtonGroup.add(spadesRadioButton);
-    gameTypeButtonGroup.add(heartsRadioButton);
-    gameTypeButtonGroup.add(diamondsRadioButton);
-    gameTypeButtonGroup.add(nullRadioButton);
-    
-		//panel.add(this.gameTypeList, "grow, wrap"); //$NON-NLS-1$
-    panel.add(this.grandRadioButton, "wrap");
-    panel.add(this.clubsRadioButton, "wrap");
-    panel.add(this.spadesRadioButton, "wrap");
-    panel.add(this.heartsRadioButton, "wrap");
-    panel.add(this.diamondsRadioButton, "wrap");
-    panel.add(this.nullRadioButton, "wrap");
-    
+		gameTypeButtonGroup = new ButtonGroup();
+		this.grandRadioButton = createRadioButton(GameType.GRAND, actionListener, gameTypeButtonGroup);
+		this.clubsRadioButton = createRadioButton(GameType.CLUBS, actionListener, gameTypeButtonGroup);
+		this.spadesRadioButton = createRadioButton(GameType.SPADES, actionListener, gameTypeButtonGroup);
+		this.heartsRadioButton = createRadioButton(GameType.HEARTS, actionListener, gameTypeButtonGroup);
+		this.diamondsRadioButton = createRadioButton(GameType.DIAMONDS, actionListener, gameTypeButtonGroup);
+		this.nullRadioButton = createRadioButton(GameType.NULL, actionListener, gameTypeButtonGroup);
+
+		panel.add(this.grandRadioButton, "wrap");
+		panel.add(this.clubsRadioButton, "wrap");
+		panel.add(this.spadesRadioButton, "wrap");
+		panel.add(this.heartsRadioButton, "wrap");
+		panel.add(this.diamondsRadioButton, "wrap");
+		panel.add(this.nullRadioButton, "wrap");
+
 		panel.add(this.handBox, "wrap"); //$NON-NLS-1$
 		panel.add(this.ouvertBox, "wrap"); //$NON-NLS-1$
 		panel.add(this.schneiderBox, "wrap"); //$NON-NLS-1$
@@ -257,26 +250,27 @@ class GameAnnouncePanel extends JPanel {
 		resetPanel();
 	}
 
-  private JRadioButton createRadioButton(GameType gameType, ActionListener actionListener) {
+  private JRadioButton createRadioButton(GameType gameType, ActionListener actionListener, ButtonGroup buttonGroup) {
     JRadioButton radioButton = new JRadioButton(this.strings.getGameType(gameType));
     radioButton.setActionCommand(gameType.toString());
     radioButton.addActionListener(actionListener);
+    buttonGroup.add(radioButton);
     return radioButton;
   }
 
-  GameType getSelectedGameType() {
-    for (JRadioButton radioButton : new JRadioButton[]{grandRadioButton,
-      spadesRadioButton,
-      clubsRadioButton,
-      diamondsRadioButton,
-      heartsRadioButton,
-      nullRadioButton}) {
-      if (radioButton != null && radioButton.isSelected()) {
-        return GameType.valueOf(radioButton.getActionCommand());
-      }
-    }
-    return null;
-  }
+	GameType getSelectedGameType() {
+		for (JRadioButton radioButton : new JRadioButton[]{grandRadioButton,
+			spadesRadioButton,
+			clubsRadioButton,
+			diamondsRadioButton,
+			heartsRadioButton,
+			nullRadioButton}) {
+			if (radioButton != null && radioButton.isSelected()) {
+				return GameType.valueOf(radioButton.getActionCommand());
+			}
+		}
+		return null;
+	}
 
 	private JCheckBox createOuvertBox() {
 		final JCheckBox result = new JCheckBox(this.strings.getString("ouvert")); //$NON-NLS-1$
