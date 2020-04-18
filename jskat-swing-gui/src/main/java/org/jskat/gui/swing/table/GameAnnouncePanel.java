@@ -38,11 +38,14 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.ActionMap;
+import javax.swing.ButtonGroup;
+import javax.swing.ButtonModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent;
@@ -70,7 +73,13 @@ class GameAnnouncePanel extends JPanel {
 	JSkatResourceBundle strings;
 	JSkatOptions options;
 
-	JComboBox gameTypeList = null;
+  JRadioButton grandRadioButton;
+  JRadioButton clubsRadioButton;
+  JRadioButton spadesRadioButton;
+  JRadioButton heartsRadioButton;
+  JRadioButton diamondsRadioButton;
+  JRadioButton nullRadioButton;
+  ButtonGroup gameTypeButtonGroup;
 	JCheckBox handBox = null;
 	JCheckBox ouvertBox = null;
 	JCheckBox schneiderBox = null;
@@ -107,17 +116,13 @@ class GameAnnouncePanel extends JPanel {
 
 		JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
 
-		this.gameTypeList = new JComboBox();
-		DefaultComboBoxModel model = new DefaultComboBoxModel();
-		model.addElement(GameType.GRAND);
-		model.addElement(GameType.CLUBS);
-		model.addElement(GameType.SPADES);
-		model.addElement(GameType.HEARTS);
-		model.addElement(GameType.DIAMONDS);
-		model.addElement(GameType.NULL);
-		this.gameTypeList.setModel(model);
-		this.gameTypeList.setRenderer(new GameTypeComboBoxRenderer());
-		this.gameTypeList.addActionListener(new ActionListener() {
+		this.handBox = new JCheckBox(this.strings.getString("hand")); //$NON-NLS-1$
+		this.handBox.setEnabled(false);
+		this.ouvertBox = createOuvertBox();
+		this.schneiderBox = new JCheckBox(this.strings.getString("schneider")); //$NON-NLS-1$
+		this.schwarzBox = createSchwarzBox();
+
+    ActionListener actionListener = new ActionListener() {
 			@Override
 			public void actionPerformed(final ActionEvent e) {
 				// FIXME (jan 28.11.2010) send sorting game type to JSkatMaster
@@ -151,16 +156,30 @@ class GameAnnouncePanel extends JPanel {
 					}
 				}
 			}
-		});
-		this.gameTypeList.setSelectedIndex(-1);
-
-		this.handBox = new JCheckBox(this.strings.getString("hand")); //$NON-NLS-1$
-		this.handBox.setEnabled(false);
-		this.ouvertBox = createOuvertBox();
-		this.schneiderBox = new JCheckBox(this.strings.getString("schneider")); //$NON-NLS-1$
-		this.schwarzBox = createSchwarzBox();
-
-		panel.add(this.gameTypeList, "grow, wrap"); //$NON-NLS-1$
+		};
+    
+    this.grandRadioButton = createRadioButton(GameType.GRAND, actionListener);
+    this.clubsRadioButton = createRadioButton(GameType.CLUBS, actionListener);
+    this.spadesRadioButton = createRadioButton(GameType.SPADES, actionListener);
+    this.heartsRadioButton = createRadioButton(GameType.HEARTS, actionListener);
+    this.diamondsRadioButton = createRadioButton(GameType.DIAMONDS, actionListener);
+    this.nullRadioButton = createRadioButton(GameType.NULL, actionListener);
+    gameTypeButtonGroup = new ButtonGroup();
+    gameTypeButtonGroup.add(grandRadioButton);
+    gameTypeButtonGroup.add(clubsRadioButton);
+    gameTypeButtonGroup.add(spadesRadioButton);
+    gameTypeButtonGroup.add(heartsRadioButton);
+    gameTypeButtonGroup.add(diamondsRadioButton);
+    gameTypeButtonGroup.add(nullRadioButton);
+    
+		//panel.add(this.gameTypeList, "grow, wrap"); //$NON-NLS-1$
+    panel.add(this.grandRadioButton, "wrap");
+    panel.add(this.clubsRadioButton, "wrap");
+    panel.add(this.spadesRadioButton, "wrap");
+    panel.add(this.heartsRadioButton, "wrap");
+    panel.add(this.diamondsRadioButton, "wrap");
+    panel.add(this.nullRadioButton, "wrap");
+    
 		panel.add(this.handBox, "wrap"); //$NON-NLS-1$
 		panel.add(this.ouvertBox, "wrap"); //$NON-NLS-1$
 		panel.add(this.schneiderBox, "wrap"); //$NON-NLS-1$
@@ -238,10 +257,26 @@ class GameAnnouncePanel extends JPanel {
 		resetPanel();
 	}
 
-	GameType getSelectedGameType() {
-		Object selectedItem = this.gameTypeList.getSelectedItem();
-		return (GameType) selectedItem;
-	}
+  private JRadioButton createRadioButton(GameType gameType, ActionListener actionListener) {
+    JRadioButton radioButton = new JRadioButton(this.strings.getGameType(gameType));
+    radioButton.setActionCommand(gameType.toString());
+    radioButton.addActionListener(actionListener);
+    return radioButton;
+  }
+
+  GameType getSelectedGameType() {
+    for (JRadioButton radioButton : new JRadioButton[]{grandRadioButton,
+      spadesRadioButton,
+      clubsRadioButton,
+      diamondsRadioButton,
+      heartsRadioButton,
+      nullRadioButton}) {
+      if (radioButton != null && radioButton.isSelected()) {
+        return GameType.valueOf(radioButton.getActionCommand());
+      }
+    }
+    return null;
+  }
 
 	private JCheckBox createOuvertBox() {
 		final JCheckBox result = new JCheckBox(this.strings.getString("ouvert")); //$NON-NLS-1$
@@ -280,35 +315,16 @@ class GameAnnouncePanel extends JPanel {
 	}
 
 	void resetPanel() {
-
-		this.gameTypeList.setSelectedIndex(-1);
+		this.nullRadioButton.setSelected(false);
+    this.clubsRadioButton.setSelected(false);
+    this.diamondsRadioButton.setSelected(false);
+    this.heartsRadioButton.setSelected(false);
+    this.spadesRadioButton.setSelected(false);
+    this.grandRadioButton.setSelected(false);
 		this.handBox.setSelected(true);
 		this.ouvertBox.setSelected(false);
 		this.schneiderBox.setSelected(false);
 		this.schwarzBox.setSelected(false);
-	}
-
-	private class GameTypeComboBoxRenderer extends AbstractI18NComboBoxRenderer {
-
-		private static final long serialVersionUID = 1L;
-
-		GameTypeComboBoxRenderer() {
-			super();
-		}
-
-		@Override
-		public String getValueText(final Object value) {
-
-			String result = " "; //$NON-NLS-1$
-
-			GameType gameType = (GameType) value;
-
-			if (gameType != null) {
-				result = GameAnnouncePanel.this.strings.getGameType(gameType);
-			}
-
-			return result;
-		}
 	}
 
 	void setUserPickedUpSkat(final boolean isUserPickedUpSkat) {

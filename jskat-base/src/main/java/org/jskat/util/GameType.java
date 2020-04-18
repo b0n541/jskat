@@ -98,4 +98,5 @@ public enum GameType {
 	 * @return Trump suit, null if there is no trump suit
 	 */
 	public abstract Suit getTrumpSuit();
+  
 }
