@@ -250,13 +250,13 @@ class GameAnnouncePanel extends JPanel {
 		resetPanel();
 	}
 
-  private JRadioButton createRadioButton(GameType gameType, ActionListener actionListener, ButtonGroup buttonGroup) {
-    JRadioButton radioButton = new JRadioButton(this.strings.getGameType(gameType));
-    radioButton.setActionCommand(gameType.toString());
-    radioButton.addActionListener(actionListener);
-    buttonGroup.add(radioButton);
-    return radioButton;
-  }
+	private JRadioButton createRadioButton(GameType gameType, ActionListener actionListener, ButtonGroup buttonGroup) {
+		JRadioButton radioButton = new JRadioButton(this.strings.getGameType(gameType));
+		radioButton.setActionCommand(gameType.toString());
+		radioButton.addActionListener(actionListener);
+		buttonGroup.add(radioButton);
+		return radioButton;
+	}
 
 	GameType getSelectedGameType() {
 		for (JRadioButton radioButton : new JRadioButton[]{grandRadioButton,
@@ -310,11 +310,11 @@ class GameAnnouncePanel extends JPanel {
 
 	void resetPanel() {
 		this.nullRadioButton.setSelected(false);
-    this.clubsRadioButton.setSelected(false);
-    this.diamondsRadioButton.setSelected(false);
-    this.heartsRadioButton.setSelected(false);
-    this.spadesRadioButton.setSelected(false);
-    this.grandRadioButton.setSelected(false);
+		this.clubsRadioButton.setSelected(false);
+		this.diamondsRadioButton.setSelected(false);
+		this.heartsRadioButton.setSelected(false);
+		this.spadesRadioButton.setSelected(false);
+		this.grandRadioButton.setSelected(false);
 		this.handBox.setSelected(true);
 		this.ouvertBox.setSelected(false);
 		this.schneiderBox.setSelected(false);
