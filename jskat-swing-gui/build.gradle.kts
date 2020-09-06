@@ -4,10 +4,9 @@ plugins {
 
 dependencies {
     implementation(project(":jskat-base"))
-    implementation("ch.qos.logback:logback-core:1.2.3")
-    implementation("ch.qos.logback:logback-classic:1.2.3")
-    implementation("com.google.guava:guava:28.2-jre")
+    implementation("com.google.guava:guava:29.0-jre")
     implementation("com.miglayout:miglayout-swing:5.2")
+    implementation("org.slf4j:slf4j-api:1.7.30")
 }
 
 javafx {

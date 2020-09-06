@@ -2,7 +2,7 @@ plugins {
     application
 
     id("com.github.hierynomus.license") version "0.15.0"
-    id("org.openjfx.javafxplugin") version "0.0.8"
+    id("org.openjfx.javafxplugin") version "0.0.9"
 }
 
 buildscript {
@@ -24,10 +24,10 @@ subprojects {
     //apply(plugin = "license")
 
     dependencies {
-        testImplementation("org.junit.jupiter:junit-jupiter-api:5.1.0")
-        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.1.0")
-        testImplementation("org.mockito:mockito-core:3.3.3")
-        testImplementation("org.assertj:assertj-core:3.15.0")
+        testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.2")
+        testImplementation("org.mockito:mockito-core:3.5.10")
+        testImplementation("org.assertj:assertj-core:3.17.2")
     }
 
     java {
@@ -66,7 +66,7 @@ tasks {
     jar {
         manifest {
             attributes(
-                    "Main-Class" to "org.jskat.Launcher"
+                "Main-Class" to "org.jskat.Launcher"
             )
         }
     }
