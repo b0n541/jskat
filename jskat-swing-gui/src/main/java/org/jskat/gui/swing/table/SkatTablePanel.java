@@ -43,6 +43,36 @@
  * <p>
  * You should have received a copy of the GNU General Public License
  * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>
+ * This file is part of JSkat.
+ * <p>
+ * JSkat is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * JSkat is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
+ * <p>
+ * This file is part of JSkat.
+ * <p>
+ * JSkat is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * <p>
+ * JSkat is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * <p>
+ * You should have received a copy of the GNU General Public License
+ * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
  * This file is part of JSkat.
@@ -100,12 +130,10 @@ public class SkatTablePanel extends AbstractTabPanel {
 
     private static final long serialVersionUID = 1L;
     private static final Logger log = LoggerFactory.getLogger(SkatTablePanel.class);
-
-    protected Map<String, Player> playerNamesAndPositions;
-
     // FIXME (jan 14.11.2010) looks wrong to me, was made static to avoid
     // NullPointerException during ISS table creation
     protected static Map<Player, Boolean> playerPassed = new HashMap<>();
+    protected Map<String, Player> playerNamesAndPositions;
     // declarer player on the table
     protected Player declarer;
 
@@ -150,6 +178,11 @@ public class SkatTablePanel extends AbstractTabPanel {
         JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(this);
 
         log.debug("SkatTablePanel: name: " + tableName); //$NON-NLS-1$
+    }
+
+    private static GameInformationPanel getGameInfoPanel() {
+
+        return new GameInformationPanel();
     }
 
     /**
@@ -245,11 +278,6 @@ public class SkatTablePanel extends AbstractTabPanel {
                 rightOpponentPanel, gameContextPanel, userPanel);
     }
 
-    private static GameInformationPanel getGameInfoPanel() {
-
-        return new GameInformationPanel();
-    }
-
     protected OpponentPanel getOpponentPanel() {
 
         return new OpponentPanel(getActionMap(), 12, false);
@@ -261,7 +289,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     }
 
     protected void addContextPanel(ContextPanelType panelType,
-								   JPanel panel) {
+                                   JPanel panel) {
 
         if (contextPanels.containsKey(panelType)) {
             // remove existing panel first
@@ -934,7 +962,7 @@ public class SkatTablePanel extends AbstractTabPanel {
      *            Flag for chat enabled yes/no
      */
     public void setPlayerChatEnabled(String playerName,
-									 boolean isChatEnabled) {
+                                     boolean isChatEnabled) {
 
         AbstractHandPanel panel = getHandPanel(playerName);
 
@@ -952,7 +980,7 @@ public class SkatTablePanel extends AbstractTabPanel {
      *            Flag for ready to play yes/no
      */
     public void setPlayerReadyToPlay(String playerName,
-									 boolean isReadyToPlay) {
+                                     boolean isReadyToPlay) {
 
         AbstractHandPanel panel = getHandPanel(playerName);
 
@@ -1122,8 +1150,8 @@ public class SkatTablePanel extends AbstractTabPanel {
      *            TRUE if the lower player is an AI player
      */
     public void setPlayerNames(String upperLeftPlayerName, boolean isUpperLeftPlayerAIPlayer,
-							   String upperRightPlayerName, boolean isUpperRightPlayerAIPlayer, String lowerPlayerName,
-							   boolean isLowerPlayerAIPlayer) {
+                               String upperRightPlayerName, boolean isUpperRightPlayerAIPlayer, String lowerPlayerName,
+                               boolean isLowerPlayerAIPlayer) {
         // FIXME (jan 26.01.2011) possible code duplication with
         // setPlayerInformation()
         leftOpponentPanel.setPlayerName(upperLeftPlayerName);
@@ -1198,7 +1226,7 @@ public class SkatTablePanel extends AbstractTabPanel {
      *            Skat after discarding
      */
     public void setDiscardedSkat(Player player,
-								 CardList skatBefore, CardList discardedSkat) {
+                                 CardList skatBefore, CardList discardedSkat) {
         getPlayerPanel(player);
 
         for (int i = 0; i < 2; i++) {
