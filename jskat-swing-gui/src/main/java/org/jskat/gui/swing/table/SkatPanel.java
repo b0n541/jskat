@@ -71,21 +71,21 @@ public class SkatPanel extends JPanel implements ComponentListener {
 
     @Override
     public void componentResized(ComponentEvent e) {
-
+        repaint();
     }
 
     @Override
     public void componentMoved(ComponentEvent e) {
-
+        // not needed
     }
 
     @Override
     public void componentShown(ComponentEvent e) {
-
+        repaint();
     }
 
     @Override
     public void componentHidden(ComponentEvent e) {
-
+        // not needed
     }
 }
