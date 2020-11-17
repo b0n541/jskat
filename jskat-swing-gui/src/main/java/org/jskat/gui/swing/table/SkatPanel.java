@@ -4,6 +4,7 @@ import org.jskat.data.JSkatOptions;
 import org.jskat.gui.img.CardFace;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.Card;
+import org.jskat.util.CardList;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,10 +31,12 @@ public class SkatPanel extends JPanel implements ComponentListener {
         setOpaque(false);
     }
 
-    public void setSkatCards(Card skatCardOne, Card skatCardTwo) {
-        this.skatCardOne = skatCardOne;
-        this.skatCardTwo = skatCardTwo;
-        repaint();
+    public void setSkatCards(CardList skat) {
+        if (skat.size() == 2) {
+            skatCardOne = skat.get(0);
+            skatCardTwo = skat.get(1);
+            repaint();
+        }
     }
 
     @Override
