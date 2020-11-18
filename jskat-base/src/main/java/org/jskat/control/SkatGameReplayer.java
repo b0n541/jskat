@@ -41,8 +41,7 @@ public class SkatGameReplayer {
     private final List<SkatGameEvent> gameMoves = new ArrayList<>();
     private int currentMove = 0;
 
-    public SkatGameReplayer(JSkatView view, String tableName,
-							List<SkatGameEvent> gameMoves) throws InterruptedException {
+    public SkatGameReplayer(JSkatView view, String tableName, List<SkatGameEvent> gameMoves) {
         this.view = view;
         this.tableName = tableName;
         this.gameMoves.addAll(gameMoves);
@@ -110,7 +109,7 @@ public class SkatGameReplayer {
                 && data.getCurrentTrick().getFirstCard() == null) {
             JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(new TrickCompletedEvent(data.getLastCompletedTrick()));
         } else if (event instanceof GameFinishEvent) {
-            JSkatEventBus.INSTANCE.post(new ShowCardsCommand(tableName, data.getCardsAfterDiscard(), data.getDealtSkat()));
+            JSkatEventBus.INSTANCE.post(new ShowCardsCommand(tableName, data.getCardsAfterDiscard(), data.getSkat()));
         }
 
         event.processForward(data);

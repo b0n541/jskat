@@ -1041,7 +1041,7 @@ public class SkatGame {
 
                 // FIXME: merge this event with the command
                 JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName, new GameFinishEvent(getGameSummary())));
-                JSkatEventBus.INSTANCE.post(new ShowCardsCommand(tableName, data.getCardsAfterDiscard(), data.getDealtSkat()));
+                JSkatEventBus.INSTANCE.post(new ShowCardsCommand(tableName, data.getCardsAfterDiscard(), data.getSkat()));
             }
         }
     }

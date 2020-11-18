@@ -578,7 +578,7 @@ public class IssController {
         view.setGameState(tableName, GameState.GAME_OVER);
         // FIXME: merge event and command
         eventBus.post(new TableGameMoveEvent(tableName, new GameFinishEvent(newGameData.getGameSummary())));
-        eventBus.post(new ShowCardsCommand(tableName, newGameData.getCardsAfterDiscard(), newGameData.getDealtSkat()));
+        eventBus.post(new ShowCardsCommand(tableName, newGameData.getCardsAfterDiscard(), newGameData.getSkat()));
         gameData.put(tableName, newGameData);
     }
 
