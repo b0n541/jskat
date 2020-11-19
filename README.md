@@ -1,4 +1,4 @@
-This is the multi-module of JSkat and JSkat on Android.
+This is the multi-module of JSkat.
 
 ![alt screenshot](http://jskat.org/img/jskat_0.7_bidding.png)
 
