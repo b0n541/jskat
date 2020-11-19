@@ -1,7 +1,6 @@
 plugins {
     application
 
-    id("com.github.hierynomus.license") version "0.15.0"
     id("org.openjfx.javafxplugin") version "0.0.9"
 }
 
@@ -21,13 +20,12 @@ allprojects {
 
 subprojects {
     apply(plugin = "java")
-    //apply(plugin = "license")
 
     dependencies {
-        testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.2")
-        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.6.2")
-        testImplementation("org.mockito:mockito-core:3.5.10")
-        testImplementation("org.assertj:assertj-core:3.17.2")
+        testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.0")
+        testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.0")
+        testImplementation("org.mockito:mockito-core:3.6.0")
+        testImplementation("org.assertj:assertj-core:3.18.1")
     }
 
     java {
@@ -42,12 +40,6 @@ subprojects {
         test {
             useJUnitPlatform()
         }
-
-//        license {
-//            include("**/*.java")
-//            header = project.file("LICENSE.header")
-//            //ext.year = java.util.Calendar.getInstance().get(java.util.Calendar.YEAR)
-//        }
     }
 }
 
