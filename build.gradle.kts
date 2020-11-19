@@ -11,7 +11,7 @@ buildscript {
     }
 }
 
-version = "0.18.0-SNAPSHOT"
+version = "0.19.0-SNAPSHOT"
 
 allprojects {
     repositories {
