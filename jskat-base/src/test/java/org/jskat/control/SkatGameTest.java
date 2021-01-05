@@ -30,6 +30,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
@@ -381,15 +382,15 @@ public class SkatGameTest extends AbstractJSkatTest {
 
         Player declarer = game.getDeclarer();
         SkatGameResult result = game.getGameResult();
-        
+
         if (declarer != null && result.getGameValue() > 0) {
             assertThat(result.getFinalDeclarerPoints() + result.getFinalOpponentPoints()).isEqualTo(120);
             GameSummary summary = game.getGameSummary();
 
-            Map<Player, Integer> playerPointsInTricks = Map.of(
-                    Player.FOREHAND, 0,
-                    Player.MIDDLEHAND, 0,
-                    Player.REARHAND, 0);
+            Map<Player, Integer> playerPointsInTricks = new HashMap();
+            playerPointsInTricks.put(Player.FOREHAND, 0);
+            playerPointsInTricks.put(Player.MIDDLEHAND, 0);
+            playerPointsInTricks.put(Player.REARHAND, 0);
 
             for (Trick trick : summary.getTricks()) {
 
