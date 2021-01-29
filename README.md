@@ -8,6 +8,8 @@ License:
 * JSkat Swing GUI: GNU General Public License (GPL), Version 3.0 (http://www.gnu.org/licenses/gpl.html)
 * JSkat JavaFX GUI: GNU General Public License (GPL), Version 3.0 (http://www.gnu.org/licenses/gpl.html)
 
+Use at least JDK 11 to build and run JSkat.
+
 Build executable fat JAR: `./gradlew clean assemble`
 
 Build installation with multiple JARs and start scripts: `./gradlew clean installDist`
