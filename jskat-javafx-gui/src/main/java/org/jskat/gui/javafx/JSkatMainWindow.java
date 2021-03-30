@@ -135,8 +135,7 @@ public class JSkatMainWindow extends Stage {
         loader.setLocation(
                 JSkatFX.class.getResource("/org/jskat/gui/javafx/dialog/firststeps/view/FirstStepsDialog.fxml"));
         loader.setResources(JSkatResourceBundle.INSTANCE.getStringResources());
-        final VBox rootLayout;
-        rootLayout = (VBox) loader.load();
+        final VBox rootLayout = loader.load();
         final Stage stage = new Stage();
         stage.setTitle(JSkatResourceBundle.INSTANCE.getString("show_tips"));
         final Scene scene = new Scene(rootLayout);
