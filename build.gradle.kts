@@ -79,5 +79,4 @@ tasks {
 
 application {
     mainClassName = "org.jskat.Launcher"
-    applicationDefaultJvmArgs = listOf("-Djdk.gtk.version=2")
 }
