@@ -51,7 +51,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.jskat.data.iss.ChatMessage;
-import org.jskat.gui.action.JSkatAction;
+import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.gui.swing.AbstractTabPanel;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.JSkatResourceBundle;

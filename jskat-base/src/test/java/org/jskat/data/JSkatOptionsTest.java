@@ -20,8 +20,8 @@ import org.jskat.data.JSkatOptions.Option;
 import org.jskat.data.JSkatOptions.SupportedLanguage;
 import org.jskat.data.SkatTableOptions.ContraCallingTime;
 import org.jskat.data.SkatTableOptions.RuleSet;
-import org.jskat.gui.img.CardFace;
-import org.jskat.gui.img.CardSet;
+import org.jskat.control.gui.img.CardFace;
+import org.jskat.control.gui.img.CardSet;
 import org.junit.jupiter.api.Test;
 
 import java.util.Locale;

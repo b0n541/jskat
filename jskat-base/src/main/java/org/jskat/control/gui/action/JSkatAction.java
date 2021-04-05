@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.gui.action;
+package org.jskat.control.gui.action;
 
 /**
  * All actions that can be invoked by a view

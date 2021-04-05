@@ -32,9 +32,10 @@
  */
 package org.jskat.gui.human;
 
+import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.data.GameAnnouncement;
-import org.jskat.gui.action.JSkatAction;
-import org.jskat.gui.action.JSkatActionEvent;
+import org.jskat.control.gui.action.JSkatAction;
+import org.jskat.control.gui.action.JSkatActionEvent;
 import org.jskat.player.JSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;

@@ -24,7 +24,7 @@ import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.SkatTable;
 import org.jskat.control.event.table.TableCreatedEvent;
-import org.jskat.gui.human.AbstractHumanJSkatPlayer;
+import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
 
 import com.google.common.eventbus.Subscribe;
 

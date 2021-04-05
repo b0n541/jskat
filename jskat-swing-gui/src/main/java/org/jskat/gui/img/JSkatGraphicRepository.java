@@ -41,6 +41,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.jskat.control.gui.img.CardSet;
 import org.jskat.data.JSkatOptions;
 import org.jskat.util.Card;
 import org.jskat.util.JSkatResourceBundle;
@@ -193,10 +194,9 @@ public class JSkatGraphicRepository {
 	}
 
 	/**
-	 * Load all card images
+	 * Load all card images.
 	 *
-	 * @param cardFace
-	 *            The directory name for the card set to be loaded
+	 * @param tracker Media tracker for loading images
 	 */
 	private void loadCards(final MediaTracker tracker) {
 

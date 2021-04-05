@@ -30,7 +30,7 @@ import org.jskat.control.event.table.SkatGameReplayStartedEvent;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData;
 import org.jskat.data.SkatSeriesData.SeriesState;
-import org.jskat.gui.JSkatView;
+import org.jskat.control.gui.JSkatView;
 import org.jskat.player.JSkatPlayer;
 import org.jskat.util.GameVariant;
 import org.jskat.util.Player;

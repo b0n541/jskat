@@ -38,8 +38,8 @@ import javax.swing.AbstractAction;
 
 import org.jskat.control.JSkatMaster;
 import org.jskat.gui.action.AbstractJSkatAction;
-import org.jskat.gui.action.JSkatAction;
-import org.jskat.gui.action.JSkatActionEvent;
+import org.jskat.control.gui.action.JSkatAction;
+import org.jskat.control.gui.action.JSkatActionEvent;
 
 /**
  * Implements the action for handling card panel clicks during discarding

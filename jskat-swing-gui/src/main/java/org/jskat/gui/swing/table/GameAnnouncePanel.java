@@ -292,7 +292,7 @@ import org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.JSkatOptions;
-import org.jskat.gui.action.JSkatAction;
+import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;

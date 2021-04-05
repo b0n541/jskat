@@ -112,8 +112,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 		root.setLayout(LayoutFactory.getMigLayout());
 
 		List<String> playerTypes = new ArrayList<>();
-		for (String aiPlayer : JSkatPlayerResolver
-				.getAllAIPlayerImplementations()) {
+		for (String aiPlayer : JSkatPlayerResolver.getAllAIPlayerImplementations()) {
 			playerTypes.add(aiPlayer);
 		}
 		Collections.sort(playerTypes);

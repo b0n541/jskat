@@ -37,7 +37,7 @@ import javax.swing.ActionMap;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import org.jskat.gui.action.JSkatAction;
+import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.Player;

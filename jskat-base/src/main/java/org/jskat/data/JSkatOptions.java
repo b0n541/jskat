@@ -30,7 +30,7 @@ import org.jskat.data.SkatTableOptions.ContraCallingTime;
 import org.jskat.data.SkatTableOptions.RamschSkatOwner;
 import org.jskat.data.SkatTableOptions.RuleSet;
 import org.jskat.data.SkatTableOptions.SavePath;
-import org.jskat.gui.img.CardSet;
+import org.jskat.control.gui.img.CardSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

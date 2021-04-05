@@ -44,7 +44,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import org.jskat.data.iss.LoginCredentials;
-import org.jskat.gui.action.JSkatAction;
+import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.gui.swing.AbstractTabPanel;
 import org.jskat.gui.swing.LayoutFactory;
 import org.slf4j.Logger;

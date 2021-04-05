@@ -40,7 +40,7 @@ import javax.swing.Action;
 import javax.swing.JPanel;
 
 import org.jskat.data.SkatGameData.GameState;
-import org.jskat.gui.action.JSkatAction;
+import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.gui.swing.CardPanel;
 import org.jskat.util.Card;
 import org.slf4j.Logger;

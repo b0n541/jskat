@@ -45,7 +45,7 @@ import javax.swing.JPanel;
 
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
-import org.jskat.gui.action.JSkatAction;
+import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize;

@@ -13,23 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.gui.img;
+package org.jskat.control.gui;
 
-/**
- * Different card face types supported by JSkat
- */
-public enum CardFace {
-
-	/**
-	 * German card faces
-	 */
-	GERMAN,
-	/**
-	 * French card faces
-	 */
-	FRENCH,
-	/**
-	 * Tournament card faces
-	 */
-	TOURNAMENT
+public enum JSkatDialog
+{
+    // General dialogs
+    NEW_JSKAT_VERSION_AVAILABLE,
+    ABOUT,
+    OPTIONS,
+    HELP,
+    LICENSE,
+    NEURAL_NETWORK_TRAINING_OVERVIEW,
+    // Table dialogs
+    EMPTY_TABLE_NAME,
+    DUPLICATE_TABLE_NAME,
+    // Skat series dialogs
+    START_NEW_SERIES,
+    // Game play dialogs
+    CARD_NOT_ALLOWED,
+    SCHWARZ_BY_AI_DURING_DISCARDING,
+    SCHWARZ_BY_AI_DURING_CARD_PLAY,
+    // ISS dialogs
+    ISS_MESSAGE;
 }

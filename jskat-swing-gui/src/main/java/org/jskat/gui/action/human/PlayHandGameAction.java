@@ -35,7 +35,7 @@ package org.jskat.gui.action.human;
 import javax.swing.Action;
 
 import org.jskat.gui.action.AbstractJSkatAction;
-import org.jskat.gui.action.JSkatAction;
+import org.jskat.control.gui.action.JSkatAction;
 
 /**
  * Implements the action for handling card panel clicks

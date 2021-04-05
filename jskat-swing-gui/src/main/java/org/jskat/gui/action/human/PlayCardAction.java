@@ -33,7 +33,7 @@
 package org.jskat.gui.action.human;
 
 import org.jskat.gui.action.AbstractJSkatAction;
-import org.jskat.gui.action.JSkatAction;
+import org.jskat.control.gui.action.JSkatAction;
 
 /**
  * Implements the action for playing a card

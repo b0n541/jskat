@@ -36,6 +36,7 @@ import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 
 import org.jskat.control.JSkatEventBus;
+import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.util.JSkatResourceBundle;

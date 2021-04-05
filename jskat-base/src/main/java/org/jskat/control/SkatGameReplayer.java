@@ -21,7 +21,7 @@ import org.jskat.control.event.table.TableGameMoveEvent;
 import org.jskat.control.event.table.TrickCompletedEvent;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
-import org.jskat.gui.JSkatView;
+import org.jskat.control.gui.JSkatView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

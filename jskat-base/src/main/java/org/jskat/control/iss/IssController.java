@@ -28,7 +28,7 @@ import org.jskat.control.event.table.TableGameMoveEvent;
 import org.jskat.data.*;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.iss.*;
-import org.jskat.gui.JSkatView;
+import org.jskat.control.gui.JSkatView;
 import org.jskat.util.Card;
 import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.Player;

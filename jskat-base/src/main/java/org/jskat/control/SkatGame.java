@@ -25,7 +25,7 @@ import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatTableOptions.ContraCallingTime;
 import org.jskat.data.SkatTableOptions.RamschSkatOwner;
-import org.jskat.gui.JSkatView;
+import org.jskat.control.gui.JSkatView;
 import org.jskat.player.JSkatPlayer;
 import org.jskat.util.*;
 import org.jskat.util.rule.SkatRule;

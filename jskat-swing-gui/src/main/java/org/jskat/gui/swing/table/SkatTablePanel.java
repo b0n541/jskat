@@ -174,7 +174,7 @@ import org.jskat.control.event.skatgame.*;
 import org.jskat.control.event.table.*;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
-import org.jskat.gui.action.JSkatAction;
+import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.gui.action.main.StartSkatSeriesAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;

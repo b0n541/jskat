@@ -44,7 +44,7 @@ import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.PlayerStatus;
 import org.jskat.data.iss.TablePanelStatus;
-import org.jskat.gui.action.JSkatAction;
+import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.gui.swing.table.ContextPanelType;
 import org.jskat.gui.swing.table.JSkatUserPanel;

@@ -46,7 +46,7 @@ import java.util.Random;
 import javax.swing.JPanel;
 
 import org.jskat.data.JSkatOptions;
-import org.jskat.gui.img.CardFace;
+import org.jskat.control.gui.img.CardFace;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;

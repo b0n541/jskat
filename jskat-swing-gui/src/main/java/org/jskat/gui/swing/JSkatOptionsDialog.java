@@ -68,7 +68,7 @@ import org.jskat.data.JSkatOptions.SupportedLanguage;
 import org.jskat.data.SkatTableOptions.RamschSkatOwner;
 import org.jskat.data.SkatTableOptions.RuleSet;
 import org.jskat.data.SkatTableOptions.SavePath;
-import org.jskat.gui.img.CardSet;
+import org.jskat.control.gui.img.CardSet;
 import org.jskat.util.Card;
 import org.jskat.util.CardDeck;
 import org.jskat.util.GameType;

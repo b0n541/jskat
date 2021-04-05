@@ -39,7 +39,7 @@ import javax.swing.Action;
 
 import org.jskat.control.JSkatMaster;
 import org.jskat.gui.action.AbstractJSkatAction;
-import org.jskat.gui.action.JSkatAction;
+import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
 /**

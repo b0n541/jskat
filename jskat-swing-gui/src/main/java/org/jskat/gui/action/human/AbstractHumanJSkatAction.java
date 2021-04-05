@@ -38,7 +38,7 @@ import javax.swing.AbstractAction;
 
 import org.jskat.control.JSkatMaster;
 import org.jskat.gui.action.AbstractJSkatAction;
-import org.jskat.gui.action.JSkatActionEvent;
+import org.jskat.control.gui.action.JSkatActionEvent;
 import org.jskat.player.JSkatPlayer;
 
 /**

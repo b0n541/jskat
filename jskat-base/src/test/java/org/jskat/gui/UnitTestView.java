@@ -21,6 +21,7 @@ import java.util.Set;
 
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.event.table.TableCreatedEvent;
+import org.jskat.control.gui.JSkatView;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
@@ -29,7 +30,7 @@ import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.data.iss.TablePanelStatus;
-import org.jskat.gui.human.AbstractHumanJSkatPlayer;
+import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.Player;

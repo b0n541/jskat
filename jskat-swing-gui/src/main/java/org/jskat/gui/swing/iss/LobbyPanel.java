@@ -48,7 +48,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.table.TableColumnModel;
 
 import org.jskat.data.iss.ChatMessage;
-import org.jskat.gui.action.JSkatAction;
+import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.gui.swing.AbstractTabPanel;
 import org.jskat.gui.swing.LayoutFactory;
 import org.slf4j.Logger;

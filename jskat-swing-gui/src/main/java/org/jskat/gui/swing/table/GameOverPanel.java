@@ -213,7 +213,7 @@
 package org.jskat.gui.swing.table;
 
 import org.jskat.data.GameSummary;
-import org.jskat.gui.action.JSkatAction;
+import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.CardList;
 import org.jskat.util.Player;

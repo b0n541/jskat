@@ -13,26 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.gui.human;
-
-import org.jskat.gui.action.JSkatActionEvent;
-import org.jskat.player.AbstractJSkatPlayer;
+package org.jskat.control.gui.img;
 
 /**
- * Abstract implementation of a human player for JSkat
+ * Different card face types supported by JSkat
  */
-public abstract class AbstractHumanJSkatPlayer extends AbstractJSkatPlayer {
-
-	@Override
-	public final Boolean isAIPlayer() {
-		return false;
-	}
+public enum CardFace {
 
 	/**
-	 * Informs the human player about an action that was performed
-	 * 
-	 * @param e
-	 *            Action
+	 * German card faces
 	 */
-	public abstract void actionPerformed(final JSkatActionEvent e);
+	GERMAN,
+	/**
+	 * French card faces
+	 */
+	FRENCH,
+	/**
+	 * Tournament card faces
+	 */
+	TOURNAMENT
 }

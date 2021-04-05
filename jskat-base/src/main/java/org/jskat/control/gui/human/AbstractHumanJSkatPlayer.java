@@ -13,26 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.gui;
+package org.jskat.control.gui.human;
 
-public enum JSkatDialog
-{
-    // General dialogs
-    NEW_JSKAT_VERSION_AVAILABLE,
-    ABOUT,
-    OPTIONS,
-    HELP,
-    LICENSE,
-    NEURAL_NETWORK_TRAINING_OVERVIEW,
-    // Table dialogs
-    EMPTY_TABLE_NAME,
-    DUPLICATE_TABLE_NAME,
-    // Skat series dialogs
-    START_NEW_SERIES,
-    // Game play dialogs
-    CARD_NOT_ALLOWED,
-    SCHWARZ_BY_AI_DURING_DISCARDING,
-    SCHWARZ_BY_AI_DURING_CARD_PLAY,
-    // ISS dialogs
-    ISS_MESSAGE;
+import org.jskat.control.gui.action.JSkatActionEvent;
+import org.jskat.player.AbstractJSkatPlayer;
+
+/**
+ * Abstract implementation of a human player for JSkat
+ */
+public abstract class AbstractHumanJSkatPlayer extends AbstractJSkatPlayer {
+
+	@Override
+	public final Boolean isAIPlayer() {
+		return false;
+	}
+
+	/**
+	 * Informs the human player about an action that was performed
+	 * 
+	 * @param e
+	 *            Action
+	 */
+	public abstract void actionPerformed(final JSkatActionEvent e);
 }

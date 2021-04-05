@@ -74,7 +74,7 @@ public class JSkatFX extends Application {
     @Override
     public void init() {
         ImageView splashScreenImage = new ImageView(
-                new Image(JSkatFX.class.getResource("/org/jskat/gui/img/gui/splash.png").toExternalForm()));
+                new Image(ClassLoader.getSystemResourceAsStream("/org/jskat/gui/img/gui/splash.png")));
         splashScreenProgressBar = new ProgressBar();
         splashScreenProgressBar.setPrefWidth(SPLASH_WIDTH);
         splashScreenProgressText = new Label("Loading JSkat...");
