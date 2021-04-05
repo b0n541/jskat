@@ -52,7 +52,6 @@ dependencies {
 tasks {
     startScripts {
         mainClassName = "org.jskat.Launcher"
-        defaultJvmOpts = listOf("-Djdk.gtk.version=2")
     }
 
     jar {
