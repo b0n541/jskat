@@ -22,6 +22,9 @@ subprojects {
     apply(plugin = "java")
 
     dependencies {
+        implementation("ch.qos.logback:logback-classic:1.2.3")
+        implementation("org.slf4j:slf4j-api:1.7.30")
+
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.1")
         testImplementation("org.mockito:mockito-core:3.8.0")
@@ -29,6 +32,8 @@ subprojects {
     }
 
     java {
+        modularity.inferModulePath.set(true)
+
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
 
@@ -78,5 +83,5 @@ tasks {
 }
 
 application {
-    mainClassName = "org.jskat.Launcher"
+    mainClass.set("org.jskat.Launcher")
 }

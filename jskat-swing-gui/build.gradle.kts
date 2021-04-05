@@ -6,7 +6,6 @@ dependencies {
     implementation(project(":jskat-base"))
     implementation("com.google.guava:guava:30.1.1-jre")
     implementation("com.miglayout:miglayout-swing:5.2")
-    implementation("org.slf4j:slf4j-api:1.7.30")
 }
 
 javafx {
