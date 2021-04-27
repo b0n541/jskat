@@ -5,6 +5,7 @@ module jskat.swing {
 
     requires org.slf4j;
     requires com.google.common;
+    requires com.miglayout.swing;
 
     requires jskat.base;
 
