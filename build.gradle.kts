@@ -23,7 +23,7 @@ subprojects {
 
     dependencies {
         implementation("ch.qos.logback:logback-classic:1.2.3")
-        implementation("org.slf4j:slf4j-api:1.7.31")
+        implementation("org.slf4j:slf4j-api:1.7.32")
 
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.2")
         testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.7.2")
