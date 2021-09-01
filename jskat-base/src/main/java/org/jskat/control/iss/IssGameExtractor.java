@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2020 Jan Schäfer (jansch@users.sourceforge.net)
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,78 +15,50 @@
  */
 package org.jskat.control.iss;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
-
-import org.jskat.data.SkatGameData;
+import org.jskat.util.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This class helps in finding interesting games from the game library provided
  * by the ISS team.
  */
 public class IssGameExtractor {
-	/**
-	 * Logger.
-	 */
-	private static Logger log = LoggerFactory.getLogger(IssGameExtractor.class);
-	/**
-	 * Path to the file with the game informations.
-	 */
-	private static String filePath;
 
-	public static void main(final String args[]) throws Exception {
+    private static final Logger log = LoggerFactory.getLogger(IssGameExtractor.class);
 
-		final IssGameExtractor gameExtractor = new IssGameExtractor();
-		gameExtractor.setFilePath("/home/jan/Projekte/jskat/iss/issgames-1-2012.sgf"); //$NON-NLS-1$
+    private static String fileName;
 
-		filterGameDatabase();
-	}
+    public static void main(final String args[]) throws Exception {
 
-	private static void filterGameDatabase() throws Exception {
-		final FileInputStream inputStream = new FileInputStream(new File(filePath));
-		final DataInputStream in = new DataInputStream(inputStream);
-		final BufferedReader br = new BufferedReader(new InputStreamReader(in));
-		String strLine;
+        final IssGameExtractor gameExtractor = new IssGameExtractor();
+        gameExtractor.setFilePath("/home/jan/Projects/jskat/iss/iss-games-04-2021.sgf"); //$NON-NLS-1$
 
-		long gameNo = 1;
+        filterGameDatabase();
+    }
 
-		// Read File Line By Line
-		while ((strLine = br.readLine()) != null) {
-			try {
-				final SkatGameData gameData = MessageParser.parseGameSummary(strLine);
-				final int declarerPoints = gameData.getGameResult()
-						.getFinalDeclarerPoints();
-				if (declarerPoints > 60 && declarerPoints < 65) {
-					log.warn("Game no. " + gameNo + ": " + strLine); //$NON-NLS-1$//$NON-NLS-2$
-					// log.debug("Game type: " + gameData.getGameType());
-				}
-			} catch (final Exception except) {
-				log.error("Failed reading game no. " + gameNo + ": " + strLine); //$NON-NLS-1$ //$NON-NLS-2$
-				log.error(except.toString());
-			}
+    private static void filterGameDatabase() throws Exception {
 
-			if (gameNo % 10000 == 0) {
-				log.error("Read " + gameNo + " games."); //$NON-NLS-1$//$NON-NLS-2$
-			}
+        try (final Stream<String> stream = Files.lines(Paths.get(fileName))) {
+            final var kermitForehandGames = stream.map(MessageParser::parseGameSummary)
+                    .filter(it -> it.getDeclarer() == Player.FOREHAND && it.getPlayerName(Player.FOREHAND).startsWith("kermit"))
+                    .filter(it -> it.isGameWon())
+                    .limit(100)
+                    .collect(Collectors.toList());
 
-			gameNo++;
-		}
-		// Close the input stream
-		in.close();
-	}
+            kermitForehandGames.forEach(it -> System.out.println(" "
+                    + it.getDealtCards().get(Player.FOREHAND) + " "
+                    + it.getMaxPlayerBid(Player.FOREHAND) + " "
+                    + it.getAnnoucement().getGameType()));
+        }
+    }
 
-	/**
-	 * Sets the path to the game database.
-	 *
-	 * @param newFilePath
-	 *            File path
-	 */
-	public static void setFilePath(final String newFilePath) {
-		filePath = newFilePath;
-	}
+    public static void setFilePath(final String newFileName) {
+        fileName = newFileName;
+    }
 }
