@@ -34,49 +34,66 @@ import java.util.stream.Stream;
  */
 public class IssGameExtractor {
 
-    private final String fileName;
+    private final String sourceFileName;
 
     public static void main(final String args[]) throws Exception {
         final IssGameExtractor gameExtractor = new IssGameExtractor("/home/jan/Projects/jskat/iss/iss-games-04-2021.sgf");
-        gameExtractor.filterGameDatabase(KERMIT_FOREHAND_GAMES);
+        gameExtractor.filterGameDatabase(KERMIT_WON_GAMES, "kermit_won_games.csv");
     }
 
-    public IssGameExtractor(final String fileName) {
-        this.fileName = fileName;
+    public IssGameExtractor(final String sourceFileName) {
+        this.sourceFileName = sourceFileName;
     }
 
-    private static final Predicate<SkatGameData> KERMIT_FOREHAND_GAMES =
-            it -> it.getDeclarer() == Player.FOREHAND
-                    && it.getPlayerName(Player.FOREHAND).startsWith("kermit")
-                    && it.isGameWon();
+    private void filterGameDatabase(final Predicate<SkatGameData> predicate, final String targetFileName) throws Exception {
 
-    private static final Function<SkatGameData, String> NETWORK_INPUTS = it ->
-            it.getDealtCards().get(Player.FOREHAND) + ": "
-                    + asNetworkInputs(it.getDealtCards().get(Player.FOREHAND))
-                    + it.getMaxPlayerBid(Player.FOREHAND) + ","
-                    + it.getAnnoucement().getGameType() + ","
-                    + (it.getAnnoucement().isHand() ? "1" : "0") + ","
-                    + (it.getAnnoucement().isOuvert() ? "1" : "0") + ","
-                    + (it.getAnnoucement().isSchneider() ? "1" : "0") + ","
-                    + (it.getAnnoucement().isSchwarz() ? "1" : "0");
-
-    private void filterGameDatabase(final Predicate<SkatGameData> predicate) throws Exception {
-
-        try (final Stream<String> stream = Files.lines(Paths.get(fileName))) {
+        try (final Stream<String> stream = Files.lines(Paths.get(sourceFileName))) {
             final var filteredGames = stream.map(MessageParser::parseGameSummary)
                     .filter(predicate)
                     .map(NETWORK_INPUTS)
                     .peek(System.out::println)
-                    .limit(10000)
+                    //.limit(1000)
                     .collect(Collectors.toList());
 
-            // TODO save into file
+            Files.write(Paths.get(targetFileName), filteredGames);
         }
     }
+
+    private static final Predicate<SkatGameData> KERMIT_WON_GAMES =
+            it -> isDeclarer(it, "kermit")
+                    && it.isGameWon();
+
+    private static final boolean isDeclarer(final SkatGameData gameData, final String playerName) {
+        return gameData.getDeclarer() == Player.FOREHAND && gameData.getPlayerName(Player.FOREHAND).startsWith(playerName)
+                || gameData.getDeclarer() == Player.MIDDLEHAND && gameData.getPlayerName(Player.MIDDLEHAND).startsWith(playerName)
+                || gameData.getDeclarer() == Player.REARHAND && gameData.getPlayerName(Player.REARHAND).startsWith(playerName);
+    }
+
+    private static final Function<SkatGameData, String> NETWORK_INPUTS = it ->
+            //it.getDeclarer() + " " + it.getDealtCards().get(it.getDeclarer()) + ": " +
+            asNetworkInputs(it.getDeclarer())
+                    + asNetworkInputs(it.getDealtCards().get(Player.FOREHAND))
+                    + it.getMaxPlayerBid(Player.FOREHAND) + ","
+                    + it.getMaxPlayerBid(Player.MIDDLEHAND) + ","
+                    + it.getMaxPlayerBid(Player.REARHAND) + ","
+                    + it.getAnnoucement().getGameType() + ","
+                    + (it.getAnnoucement().isHand() ? "1" : "0") + ","
+                    + (it.getAnnoucement().isOuvert() ? "1" : "0") + ","
+                    + (it.getAnnoucement().isSchneider() ? "1" : "0") + ","
+                    + (it.getAnnoucement().isSchwarz() ? "1" : "0") + ","
+                    + it.getDeclarerScore() + ","
+                    + (it.isSchneider() ? "1" : "0") + ","
+                    + (it.isSchwarz() ? "1" : "0");
 
     private static String asNetworkInputs(final CardList cards) {
         final StringBuffer result = new StringBuffer();
         Arrays.stream(Card.values()).forEach(it -> result.append(cards.contains(it) ? "1," : "0,"));
+        return result.toString();
+    }
+
+    private static String asNetworkInputs(final Player declarer) {
+        final StringBuffer result = new StringBuffer();
+        Arrays.stream(Player.values()).forEach(it -> result.append(it == declarer ? "1," : "0,"));
         return result.toString();
     }
 }
