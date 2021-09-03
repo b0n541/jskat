@@ -32,7 +32,7 @@ subprojects {
     }
 
     java {
-        modularity.inferModulePath.set(true)
+        //modularity.inferModulePath.set(true)
 
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
