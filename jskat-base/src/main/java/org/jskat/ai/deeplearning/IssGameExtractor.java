@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jskat.control.iss;
+package org.jskat.ai.deeplearning;
 
+import org.jskat.control.iss.MessageParser;
 import org.jskat.data.SkatGameData;
 
 import java.io.IOException;
@@ -28,19 +29,27 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * This class helps in finding interesting games from the game library provided
- * by the ISS team.
+ * This class helps in finding interesting games from the game library provided by the ISS team.
  */
 public class IssGameExtractor {
 
-    public static List<String> filterGameDatabase(final String sourceFileName, final Predicate<SkatGameData> predicate, final Function<SkatGameData, String> networkInputMapper, final String targetFileName) {
+    public static void main(final String[] args) throws IOException, InterruptedException {
+        filterGameDatabase(
+                "/home/jan/Projects/jskat/iss/iss-games-04-2021.sgf",
+                SkatGameDataFilter.KERMIT_WON_GAMES,
+                NetworkInputGenerator.NETWORK_INPUTS,
+                1_000_000,
+                "/home/jan/Projects/jskat/iss/kermit_won_games.cvs");
+    }
+
+    public static List<String> filterGameDatabase(final String sourceFileName, final Predicate<SkatGameData> predicate, final Function<SkatGameData, String> networkInputMapper, final int limit, final String targetFileName) {
 
         try (final Stream<String> stream = Files.lines(Paths.get(sourceFileName))) {
             final var filteredGames = stream.map(MessageParser::parseGameSummary)
                     .filter(predicate)
                     .map(networkInputMapper)
-                    .peek(System.out::println)
-                    .limit(100_000)
+                    //.peek(System.out::println)
+                    .limit(limit)
                     .collect(Collectors.toList());
 
             Files.write(Paths.get(targetFileName), filteredGames);

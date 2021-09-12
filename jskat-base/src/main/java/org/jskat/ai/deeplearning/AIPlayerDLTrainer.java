@@ -18,7 +18,7 @@ import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.dataset.SplitTestAndTrain;
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator;
 import org.nd4j.linalg.dataset.api.preprocessor.DataNormalization;
-import org.nd4j.linalg.dataset.api.preprocessor.NormalizerStandardize;
+import org.nd4j.linalg.dataset.api.preprocessor.NormalizerMinMaxScaler;
 import org.nd4j.linalg.learning.config.Sgd;
 import org.nd4j.linalg.lossfunctions.LossFunctions;
 import org.slf4j.Logger;
@@ -33,22 +33,20 @@ public class AIPlayerDLTrainer {
     private final static Logger log = LoggerFactory.getLogger(AIPlayerDLTrainer.class);
 
     public static void main(final String[] args) throws IOException, InterruptedException {
-//        final List<String> filteredGames = IssGameExtractor.filterGameDatabase(
-//                "/home/jan/Projects/jskat/iss/iss-games-04-2021.sgf",
-//                SkatGameDataFilter.KERMIT_WON_GAMES,
-//                NetworkInputGenerator.NETWORK_INPUTS,
-//                "/home/jan/Projects/jskat/iss/kermit_won_games.cvs");
 
         final RecordReader recordReader = new CSVRecordReader(0, ",");
         recordReader.initialize(new FileSplit(new File("/home/jan/Projects/jskat/iss/kermit_won_games.cvs")));
 
         //Second: the RecordReaderDataSetIterator handles conversion to DataSet objects, ready for use in neural network
-        final int batchSize = 10_000; // 128 records per batch
-        final int numFeatures = 38;
+        final int batchSize = 100; // 128 records per batch
+        final int numFeatures = 35;
         final int labelIndex = numFeatures; // 39 values in each row of the kermit CSV: 38 input features followed by a label (class) index.
         final int numClasses = 6;  // 6 classes (types of skat game) in the kermit data set. Classes have string values CLUBS, SPADES, HEARTS, DIAMONDS, GRAND, NULL
 
         final DataSetIterator iterator = new RecordReaderDataSetIterator(recordReader, batchSize, labelIndex, numClasses);
+
+//        iterator.setPreProcessor(new NormalizerMinMaxScaler());
+
         final DataSet allData = iterator.next();
         allData.shuffle();
         final SplitTestAndTrain testAndTrain = allData.splitTestAndTrain(0.65);  //Use 65% of data for training
@@ -57,7 +55,8 @@ public class AIPlayerDLTrainer {
         final DataSet testData = testAndTrain.getTest();
 
         //We need to normalize our data. We'll use NormalizeStandardize (which gives us mean 0, unit variance):
-        final DataNormalization normalizer = new NormalizerStandardize();
+//        final DataNormalization normalizer = new NormalizerStandardize();
+        final DataNormalization normalizer = new NormalizerMinMaxScaler();
         normalizer.fit(trainingData);           //Collect the statistics (mean/stdev) from the training data. This does not modify the input data
         normalizer.transform(trainingData);     //Apply normalization to the training data
         normalizer.transform(testData);         //Apply normalization to the test data. This is using statistics calculated from the *training* set
