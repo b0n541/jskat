@@ -21,7 +21,7 @@ import org.deeplearning4j.ui.model.storage.InMemoryStatsStorage;
 import org.nd4j.evaluation.classification.Evaluation;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.learning.config.Adam;
-import org.nd4j.linalg.lossfunctions.impl.LossMCXENT;
+import org.nd4j.linalg.lossfunctions.impl.LossNegativeLogLikelihood;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -124,14 +124,12 @@ public class AIPlayerDLTrainerQuickstart {
                 .weightInit(WeightInit.XAVIER)
                 .activation(Activation.RELU)
                 .updater(new Adam.Builder().learningRate(0.001).build())
-                .l2(0.001)
+                .l2(0.01)
                 .list(
-                        new DenseLayer.Builder().nOut(128).build(),
-                        new DenseLayer.Builder().nOut(128).build(),
-                        new DenseLayer.Builder().nOut(128).build(),
-                        new DenseLayer.Builder().nOut(128).build(),
-                        new DenseLayer.Builder().nOut(128).build(),
-                        new OutputLayer.Builder(new LossMCXENT()).nOut(6).activation(Activation.SOFTMAX).build()
+                        new DenseLayer.Builder().nOut(1024).build(),
+                        new DenseLayer.Builder().nOut(1024).build(),
+                        new DenseLayer.Builder().nOut(1024).build(),
+                        new OutputLayer.Builder(new LossNegativeLogLikelihood()).nOut(6).activation(Activation.SOFTMAX).build()
                 )
                 .setInputType(InputType.feedForward(finalSchema.numColumns() - 1))
                 .build();

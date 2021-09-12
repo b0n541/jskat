@@ -38,7 +38,7 @@ public class IssGameExtractor {
                 "/home/jan/Projects/jskat/iss/iss-games-04-2021.sgf",
                 SkatGameDataFilter.KERMIT_WON_GAMES,
                 NetworkInputGenerator.NETWORK_INPUTS,
-                1_000_000,
+                100_000,
                 "/home/jan/Projects/jskat/iss/kermit_won_games.cvs");
     }
 
