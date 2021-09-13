@@ -97,10 +97,10 @@ public class AIPlayerDLTrainerQuickstart {
                 .removeColumns("Hand announced", "Ouvert announced", "Schneider announced", "Schwarz announced")
                 .removeColumns("Declarer score", "Result Schneider", "Result Schwarz")
                 .categoricalToOneHot("Player position")
-                .categoricalToOneHot("Has CA card", "Has CT card", "Has CK card", "Has CQ card", "Has CJ card", "Has C9 card", "Has C8 card", "Has C7 card")
-                .categoricalToOneHot("Has SA card", "Has ST card", "Has SK card", "Has SQ card", "Has SJ card", "Has S9 card", "Has S8 card", "Has S7 card")
-                .categoricalToOneHot("Has HA card", "Has HT card", "Has HK card", "Has HQ card", "Has HJ card", "Has H9 card", "Has H8 card", "Has H7 card")
-                .categoricalToOneHot("Has DA card", "Has DT card", "Has DK card", "Has DQ card", "Has DJ card", "Has D9 card", "Has D8 card", "Has D7 card")
+                .categoricalToInteger("Has CA card", "Has CT card", "Has CK card", "Has CQ card", "Has CJ card", "Has C9 card", "Has C8 card", "Has C7 card")
+                .categoricalToInteger("Has SA card", "Has ST card", "Has SK card", "Has SQ card", "Has SJ card", "Has S9 card", "Has S8 card", "Has S7 card")
+                .categoricalToInteger("Has HA card", "Has HT card", "Has HK card", "Has HQ card", "Has HJ card", "Has H9 card", "Has H8 card", "Has H7 card")
+                .categoricalToInteger("Has DA card", "Has DT card", "Has DK card", "Has DQ card", "Has DJ card", "Has D9 card", "Has D8 card", "Has D7 card")
                 .categoricalToInteger("Game type")
                 .build();
 
@@ -110,7 +110,12 @@ public class AIPlayerDLTrainerQuickstart {
 
         LOG.info(finalSchema.toString());
 
-        final int batchSize = 1000;
+        final int batchSize = 100;
+        final int totalExampleCount = 100;
+        final int epochs = 100;
+        final double l2 = Math.sqrt((batchSize * 1.0) / (totalExampleCount * epochs));
+
+        LOG.info("Recommendation for L2: {}", l2);
 
         final TransformProcessRecordReader trainRecordReader = new TransformProcessRecordReader(new CSVRecordReader(), transformProcess);
         trainRecordReader.initialize(inputSplit);
@@ -123,8 +128,8 @@ public class AIPlayerDLTrainerQuickstart {
                 .seed(0xC0FFEE)
                 .weightInit(WeightInit.XAVIER)
                 .activation(Activation.RELU)
-                .updater(new Adam.Builder().learningRate(0.001).build())
-                .l2(0.01)
+                .updater(new Adam.Builder().learningRate(0.01).build())
+                .l2(l2 * 0.1 * 0.1)
                 .list(
                         new DenseLayer.Builder().nOut(1024).build(),
                         new DenseLayer.Builder().nOut(1024).build(),
@@ -143,7 +148,7 @@ public class AIPlayerDLTrainerQuickstart {
         uiServer.attach(statsStorage);
         model.addListeners(new StatsListener(statsStorage, 50));
 
-        model.fit(trainIterator, 100);
+        model.fit(trainIterator, epochs);
 
         final TransformProcessRecordReader testRecordReader = new TransformProcessRecordReader(new CSVRecordReader(), transformProcess);
         testRecordReader.initialize(new FileSplit(new File("/home/jan/Projects/jskat/iss/kermit_won_games.cvs")));
