@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.Random;
 
 public class AIPlayerDLTrainerQuickstart {
     private final static Logger LOG = LoggerFactory.getLogger(AIPlayerDLTrainerQuickstart.class);
@@ -33,10 +34,9 @@ public class AIPlayerDLTrainerQuickstart {
     public static void main(final String[] args) throws Exception {
 
         // TODO Fix NullPointerException
-//        final Random random = new Random();
-//        random.setSeed(0xC0FFEE);
-//        final FileSplit inputSplit = new FileSplit(new File("/home/jan/Projects/jskat/iss/kermit_won_games.cvs"), random);
-        final FileSplit inputSplit = new FileSplit(new File("/home/jan/Projects/jskat/iss/kermit_won_games.cvs"));
+        final Random random = new Random();
+        random.setSeed(0xC0FFEE);
+        final FileSplit inputSplit = new FileSplit(new File("/home/jan/Projects/jskat/iss/train/"), random);
 
         final CSVRecordReader recordReader = new CSVRecordReader();
         recordReader.initialize(inputSplit);
@@ -110,8 +110,8 @@ public class AIPlayerDLTrainerQuickstart {
 
         LOG.info(finalSchema.toString());
 
-        final int batchSize = 100;
-        final int totalExampleCount = 100;
+        final int batchSize = 128;
+        final int totalExampleCount = 1_000_000;
         final int epochs = 100;
         final double l2 = Math.sqrt((batchSize * 1.0) / (totalExampleCount * epochs));
 
@@ -132,8 +132,10 @@ public class AIPlayerDLTrainerQuickstart {
                 .l2(l2 * 0.1 * 0.1)
                 .list(
                         new DenseLayer.Builder().nOut(1024).build(),
-                        new DenseLayer.Builder().nOut(1024).build(),
-                        new DenseLayer.Builder().nOut(1024).build(),
+                        new DenseLayer.Builder().nOut(512).build(),
+                        new DenseLayer.Builder().nOut(256).build(),
+                        new DenseLayer.Builder().nOut(128).build(),
+                        new DenseLayer.Builder().nOut(64).build(),
                         new OutputLayer.Builder(new LossNegativeLogLikelihood()).nOut(6).activation(Activation.SOFTMAX).build()
                 )
                 .setInputType(InputType.feedForward(finalSchema.numColumns() - 1))
