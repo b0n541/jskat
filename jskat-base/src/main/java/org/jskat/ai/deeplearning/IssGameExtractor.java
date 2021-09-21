@@ -34,12 +34,13 @@ import java.util.stream.Stream;
 public class IssGameExtractor {
 
     public static void main(final String[] args) throws IOException, InterruptedException {
+        final int limit = 1_000_000;
         filterGameDatabase(
                 "/home/jan/Projects/jskat/iss/iss-games-04-2021.sgf",
                 SkatGameDataFilter.KERMIT_WON_GAMES,
                 NetworkInputGenerator.NETWORK_INPUTS,
-                1_000_000,
-                "/home/jan/Projects/jskat/iss/kermit_won_games.cvs");
+                limit,
+                "/home/jan/Projects/jskat/iss/kermit_won_games_" + limit + ".cvs");
     }
 
     public static List<String> filterGameDatabase(final String sourceFileName, final Predicate<SkatGameData> predicate, final Function<SkatGameData, String> networkInputMapper, final int limit, final String targetFileName) {

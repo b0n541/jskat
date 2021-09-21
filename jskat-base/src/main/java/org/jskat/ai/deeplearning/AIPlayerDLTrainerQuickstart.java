@@ -7,6 +7,7 @@ import org.datavec.api.transform.TransformProcess;
 import org.datavec.api.transform.schema.Schema;
 import org.deeplearning4j.core.storage.StatsStorage;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
+import org.deeplearning4j.eval.Evaluation;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
 import org.deeplearning4j.nn.conf.NeuralNetConfiguration;
 import org.deeplearning4j.nn.conf.inputs.InputType;
@@ -18,10 +19,8 @@ import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
 import org.deeplearning4j.ui.api.UIServer;
 import org.deeplearning4j.ui.model.stats.StatsListener;
 import org.deeplearning4j.ui.model.storage.InMemoryStatsStorage;
-import org.nd4j.evaluation.classification.Evaluation;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.learning.config.Adam;
-import org.nd4j.linalg.lossfunctions.impl.LossNegativeLogLikelihood;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -90,7 +89,7 @@ public class AIPlayerDLTrainerQuickstart {
 
         // TODO why do Null games have declarer score > 0?
 //        final DataAnalysis analysis = AnalyzeLocal.analyze(schema, recordReader);
-//        HtmlAnalysis.createHtmlAnalysisFile(analysis, new File("/home/jan/Projects/jskat/iss/kermin_won_games_analysis.html"));
+//        HtmlAnalysis.createHtmlAnalysisFile(analysis, new File("/home/jan/Projects/jskat/iss/kermit_won_won_games_analysis.html"));
 
         final TransformProcess transformProcess = new TransformProcess.Builder(schema)
                 .removeColumns("Bid value fore hand", "Bid value middle hand", "Bid value rear hand")
@@ -110,33 +109,18 @@ public class AIPlayerDLTrainerQuickstart {
 
         LOG.info(finalSchema.toString());
 
-        final int batchSize = 128;
-        final int totalExampleCount = 1_000_000;
-        final int epochs = 100;
-        final double l2 = Math.sqrt((batchSize * 1.0) / (totalExampleCount * epochs));
-
-        LOG.info("Recommendation for L2: {}", l2);
-
-        final TransformProcessRecordReader trainRecordReader = new TransformProcessRecordReader(new CSVRecordReader(), transformProcess);
-        trainRecordReader.initialize(inputSplit);
-
-        final RecordReaderDataSetIterator trainIterator = new RecordReaderDataSetIterator.Builder(trainRecordReader, batchSize)
-                .classification(finalSchema.getIndexOfColumn("Game type"), 6)
-                .build();
-
         final MultiLayerConfiguration config = new NeuralNetConfiguration.Builder()
                 .seed(0xC0FFEE)
                 .weightInit(WeightInit.XAVIER)
                 .activation(Activation.RELU)
-                .updater(new Adam.Builder().learningRate(0.01).build())
-                .l2(l2 * 0.1 * 0.1)
+                .updater(new Adam.Builder().learningRate(0.0001).build())
                 .list(
                         new DenseLayer.Builder().nOut(1024).build(),
-                        new DenseLayer.Builder().nOut(512).build(),
+                        new DenseLayer.Builder().nOut(1024).dropOut(0.6).build(),
+                        new DenseLayer.Builder().nOut(512).dropOut(0.6).build(),
+                        new DenseLayer.Builder().nOut(512).dropOut(0.6).build(),
                         new DenseLayer.Builder().nOut(256).build(),
-                        new DenseLayer.Builder().nOut(128).build(),
-                        new DenseLayer.Builder().nOut(64).build(),
-                        new OutputLayer.Builder(new LossNegativeLogLikelihood()).nOut(6).activation(Activation.SOFTMAX).build()
+                        new OutputLayer.Builder().nOut(6).activation(Activation.SOFTMAX).build()
                 )
                 .setInputType(InputType.feedForward(finalSchema.numColumns() - 1))
                 .build();
@@ -150,15 +134,23 @@ public class AIPlayerDLTrainerQuickstart {
         uiServer.attach(statsStorage);
         model.addListeners(new StatsListener(statsStorage, 50));
 
-        model.fit(trainIterator, epochs);
+        final TransformProcessRecordReader trainRecordReader = new TransformProcessRecordReader(new CSVRecordReader(), transformProcess);
+        trainRecordReader.initialize(inputSplit);
 
-        final TransformProcessRecordReader testRecordReader = new TransformProcessRecordReader(new CSVRecordReader(), transformProcess);
-        testRecordReader.initialize(new FileSplit(new File("/home/jan/Projects/jskat/iss/kermit_won_games.cvs")));
-        final RecordReaderDataSetIterator testIterator = new RecordReaderDataSetIterator.Builder(testRecordReader, batchSize)
+        final int batchSize = 100;
+
+        final RecordReaderDataSetIterator trainIterator = new RecordReaderDataSetIterator.Builder(trainRecordReader, batchSize)
                 .classification(finalSchema.getIndexOfColumn("Game type"), 6)
                 .build();
 
-        final Evaluation evaluate = model.evaluate(testIterator);
-        LOG.info(evaluate.stats());
+        model.fit(trainIterator, 20);
+
+        final TransformProcessRecordReader testRecordReader = new TransformProcessRecordReader(new CSVRecordReader(), transformProcess);
+        testRecordReader.initialize(new FileSplit(new File("/home/jan/Projects/jskat/iss/train/")));
+        final RecordReaderDataSetIterator testIterator = new RecordReaderDataSetIterator.Builder(testRecordReader, 10_000)
+                .classification(finalSchema.getIndexOfColumn("Game type"), 6)
+                .build();
+        final Evaluation evaluation = model.evaluate(testIterator);
+        LOG.info(evaluation.stats());
     }
 }
