@@ -109,6 +109,8 @@ public class AIPlayerDLTrainerQuickstart {
 
         LOG.info(finalSchema.toString());
 
+        final int numClasses = 6;
+
         final MultiLayerConfiguration config = new NeuralNetConfiguration.Builder()
                 .seed(0xC0FFEE)
                 .weightInit(WeightInit.XAVIER)
@@ -116,11 +118,18 @@ public class AIPlayerDLTrainerQuickstart {
                 .updater(new Adam.Builder().learningRate(0.0001).build())
                 .list(
                         new DenseLayer.Builder().nOut(1024).build(),
+                        new DenseLayer.Builder().nOut(1024).build(),
+                        new DenseLayer.Builder().nOut(1024).dropOut(0.6).build(),
                         new DenseLayer.Builder().nOut(1024).dropOut(0.6).build(),
                         new DenseLayer.Builder().nOut(512).dropOut(0.6).build(),
                         new DenseLayer.Builder().nOut(512).dropOut(0.6).build(),
+                        new DenseLayer.Builder().nOut(512).dropOut(0.6).build(),
+                        new DenseLayer.Builder().nOut(512).dropOut(0.6).build(),
                         new DenseLayer.Builder().nOut(256).build(),
-                        new OutputLayer.Builder().nOut(6).activation(Activation.SOFTMAX).build()
+                        new DenseLayer.Builder().nOut(256).build(),
+                        new DenseLayer.Builder().nOut(256).build(),
+                        new DenseLayer.Builder().nOut(256).build(),
+                        new OutputLayer.Builder().nOut(numClasses).activation(Activation.SOFTMAX).build()
                 )
                 .setInputType(InputType.feedForward(finalSchema.numColumns() - 1))
                 .build();
@@ -140,15 +149,16 @@ public class AIPlayerDLTrainerQuickstart {
         final int batchSize = 100;
 
         final RecordReaderDataSetIterator trainIterator = new RecordReaderDataSetIterator.Builder(trainRecordReader, batchSize)
-                .classification(finalSchema.getIndexOfColumn("Game type"), 6)
+                .classification(finalSchema.getIndexOfColumn("Game type"), numClasses)
+                .collectMetaData(true)
                 .build();
 
-        model.fit(trainIterator, 20);
+        model.fit(trainIterator, 100);
 
         final TransformProcessRecordReader testRecordReader = new TransformProcessRecordReader(new CSVRecordReader(), transformProcess);
         testRecordReader.initialize(new FileSplit(new File("/home/jan/Projects/jskat/iss/train/")));
         final RecordReaderDataSetIterator testIterator = new RecordReaderDataSetIterator.Builder(testRecordReader, 10_000)
-                .classification(finalSchema.getIndexOfColumn("Game type"), 6)
+                .classification(finalSchema.getIndexOfColumn("Game type"), numClasses)
                 .build();
         final Evaluation evaluation = model.evaluate(testIterator);
         LOG.info(evaluation.stats());
