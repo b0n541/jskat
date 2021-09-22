@@ -35,7 +35,7 @@ public class AIPlayerDLTrainerQuickstart {
         // TODO Fix NullPointerException
         final Random random = new Random();
         random.setSeed(0xC0FFEE);
-        final FileSplit inputSplit = new FileSplit(new File("/home/jan/Projects/jskat/iss/train/"), random);
+        final FileSplit inputSplit = new FileSplit(new File("/home/jan/git/jskat-multimodule/jskat-base/src/main/resources/org/jskat/ai/deeplearning/bidding/train/"), random);
 
         final CSVRecordReader recordReader = new CSVRecordReader();
         recordReader.initialize(inputSplit);
@@ -153,10 +153,19 @@ public class AIPlayerDLTrainerQuickstart {
                 .collectMetaData(true)
                 .build();
 
-        model.fit(trainIterator, 100);
+        int epoch = 0;
+        do {
+            epoch++;
+            model.fit(trainIterator);
+            model.save(new File("/home/jan/git/jskat-multimodule/jskat-base/src/main/resources/org/jskat/ai/deeplearning/bidding/bidding_epoch" + epoch + ".nn"));
+        } while (model.score() > 0.05);
+
+        LOG.info("Reached score < 0.05 after " + epoch + " epochs.");
+
+        model.save(new File("/home/jan/git/jskat-multimodule/jskat-base/src/main/resources/org/jskat/ai/deeplearning/bidding/bidding.nn"), false);
 
         final TransformProcessRecordReader testRecordReader = new TransformProcessRecordReader(new CSVRecordReader(), transformProcess);
-        testRecordReader.initialize(new FileSplit(new File("/home/jan/Projects/jskat/iss/train/")));
+        testRecordReader.initialize(new FileSplit(new File("/home/jan/git/jskat-multimodule/jskat-base/src/main/resources/org/jskat/ai/deeplearning/bidding/test/")));
         final RecordReaderDataSetIterator testIterator = new RecordReaderDataSetIterator.Builder(testRecordReader, 10_000)
                 .classification(finalSchema.getIndexOfColumn("Game type"), numClasses)
                 .build();
