@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     implementation(project(":jskat-base"))
-    implementation("com.google.guava:guava:30.1.1-jre")
+    implementation("com.google.guava:guava:31.0-jre")
     implementation("com.miglayout:miglayout-swing:11.0")
 }
 
