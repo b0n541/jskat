@@ -15,6 +15,8 @@
  */
 package org.jskat.ai.deeplearning;
 
+import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
+import org.jetbrains.annotations.Nullable;
 import org.jskat.ai.AbstractAIPlayer;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
@@ -22,9 +24,16 @@ import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -32,7 +41,9 @@ import java.util.Random;
  */
 public class AIPlayerDL extends AbstractAIPlayer {
 
-    private static final Logger log = LoggerFactory.getLogger(AIPlayerDL.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AIPlayerDL.class);
+
+    private MultiLayerNetwork biddingNetwork;
 
     /**
      * Random generator for decision making.
@@ -45,17 +56,23 @@ public class AIPlayerDL extends AbstractAIPlayer {
     public AIPlayerDL() {
 
         this("unknown"); //$NON-NLS-1$
+
+        try {
+            final Path path = Paths.get(ClassLoader.getSystemResource("org/jskat/ai/deeplearning/bidding/bidding.nn").toURI());
+            biddingNetwork = MultiLayerNetwork.load(path.toFile(), false);
+        } catch (final IOException | URISyntaxException exception) {
+            LOG.error("File not found.");
+        }
     }
 
     /**
      * Creates a new instance of AIPlayerRND.
      *
-     * @param newPlayerName
-     *            Player's name
+     * @param newPlayerName Player's name
      */
     public AIPlayerDL(final String newPlayerName) {
 
-        log.debug("Constructing new AIPlayerRND"); //$NON-NLS-1$
+        LOG.debug("Constructing new AIPlayerDL"); //$NON-NLS-1$
         setPlayerName(newPlayerName);
     }
 
@@ -71,44 +88,133 @@ public class AIPlayerDL extends AbstractAIPlayer {
 
     @Override
     public GameAnnouncement announceGame() {
-        log.debug("position: " + knowledge.getPlayerPosition()); //$NON-NLS-1$
-        log.debug("bids: " + knowledge.getHighestBid(Player.FOREHAND) + //$NON-NLS-1$
+        LOG.debug("position: " + knowledge.getPlayerPosition()); //$NON-NLS-1$
+        LOG.debug("bids: " + knowledge.getHighestBid(Player.FOREHAND) + //$NON-NLS-1$
                 " " + knowledge.getHighestBid(Player.MIDDLEHAND) + //$NON-NLS-1$
                 " " + knowledge.getHighestBid(Player.REARHAND)); //$NON-NLS-1$
 
         final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 
-        // select a random game type (without RAMSCH and PASSED_IN)
-        final GameType gameType = GameType.values()[random.nextInt(GameType
-                .values().length - 2)];
-        factory.setGameType(gameType);
-        if (Boolean.valueOf(random.nextBoolean())) {
-            factory.setOuvert(true);
-            if (gameType != GameType.NULL) {
-                factory.setHand(true);
-                factory.setSchneider(true);
-                factory.setSchwarz(true);
-            }
-        }
+        factory.setGameType(getBestGameType());
 
         return factory.getAnnouncement();
     }
 
     @Override
     public Integer bidMore(final int nextBidValue) {
-        int result = -1;
 
-        if (random.nextBoolean()) {
+        return possibleBidValue() >= nextBidValue ? nextBidValue : -1;
+    }
 
-            result = nextBidValue;
+    @Nullable
+    private Integer possibleBidValue() {
+        final GameType bestGameType = getBestGameType();
+        return getHighestBidValue(bestGameType, knowledge.getOwnCards());
+    }
+
+    @Nullable
+    private GameType getBestGameType() {
+        GameType bestGameType = null;
+        final int prediction = biddingNetwork.predict(getNetworkInputBidding())[0];
+        switch (prediction) {
+            case 0:
+                bestGameType = GameType.GRAND;
+                break;
+            case 1:
+                bestGameType = GameType.CLUBS;
+                break;
+            case 2:
+                bestGameType = GameType.SPADES;
+                break;
+            case 3:
+                bestGameType = GameType.HEARTS;
+                break;
+            case 4:
+                bestGameType = GameType.DIAMONDS;
+                break;
+            case 5:
+                bestGameType = GameType.NULL;
+                break;
+        }
+        return bestGameType;
+    }
+
+    private INDArray getNetworkInputBidding() {
+        final INDArray input = Nd4j.zeros(1, 35);
+
+        if (knowledge.getPlayerPosition() == Player.FOREHAND) {
+            input.putScalar(0, 1);
+        } else if (knowledge.getPlayerPosition() == Player.MIDDLEHAND) {
+            input.putScalar(1, 1);
+        } else if (knowledge.getPlayerPosition() == Player.REARHAND) {
+            input.putScalar(2, 1);
         }
 
-        return result;
+        final CardList ownCards = knowledge.getOwnCards();
+        Arrays.stream(Card.values()).forEach(it -> {
+            if (ownCards.contains(it)) {
+                input.putScalar(it.ordinal() + 3, 1);
+            }
+        });
+
+        return input;
+    }
+
+    private static int getHighestBidValue(final GameType bestGameType, final CardList ownCards) {
+        if (bestGameType == GameType.NULL) {
+            return 23;
+        }
+
+        int jacks = 0;
+        if (ownCards.contains(Card.CJ)) {
+            jacks++;
+            if (ownCards.contains(Card.SJ)) {
+                jacks++;
+                if (ownCards.contains(Card.HJ)) {
+                    jacks++;
+                    if (ownCards.contains(Card.DJ)) {
+                        jacks++;
+                    }
+                }
+            }
+        }
+//        if (jacks == 0) {
+//            if (!ownCards.contains(Card.CJ)) {
+//                jacks++;
+//                if (!ownCards.contains(Card.SJ)) {
+//                    jacks++;
+//                    if (!ownCards.contains(Card.HJ)) {
+//                        jacks++;
+//                        if (!ownCards.contains(Card.DJ)) {
+//                            jacks++;
+//                        }
+//                    }
+//                }
+//            }
+//        }
+
+        return jacks * getGameTypeBaseValue(bestGameType);
+    }
+
+    private static int getGameTypeBaseValue(final GameType bestGameType) {
+        switch (bestGameType) {
+            case GRAND:
+                return 24;
+            case CLUBS:
+                return 12;
+            case SPADES:
+                return 11;
+            case HEARTS:
+                return 10;
+            case DIAMONDS:
+                return 9;
+        }
+        return 0;
     }
 
     @Override
     public Boolean holdBid(final int currBidValue) {
-        return random.nextBoolean();
+        return possibleBidValue() >= currBidValue ? true : false;
     }
 
     @Override
@@ -121,19 +227,19 @@ public class AIPlayerDL extends AbstractAIPlayer {
 
         int index = -1;
 
-        log.debug('\n' + knowledge.toString());
+        LOG.debug('\n' + knowledge.toString());
 
         // first find all possible cards
         final CardList possibleCards = getPlayableCards(knowledge
                 .getTrickCards());
 
-        log.debug("found " + possibleCards.size() + " possible cards: " + possibleCards); //$NON-NLS-1$//$NON-NLS-2$
+        LOG.debug("found " + possibleCards.size() + " possible cards: " + possibleCards); //$NON-NLS-1$//$NON-NLS-2$
 
         // then choose a random one
         index = random.nextInt(possibleCards.size());
 
-        log.debug("choosing card " + index); //$NON-NLS-1$
-        log.debug("as player " + knowledge.getPlayerPosition() + ": " + possibleCards.get(index)); //$NON-NLS-1$//$NON-NLS-2$
+        LOG.debug("choosing card " + index); //$NON-NLS-1$
+        LOG.debug("as player " + knowledge.getPlayerPosition() + ": " + possibleCards.get(index)); //$NON-NLS-1$//$NON-NLS-2$
 
         return possibleCards.get(index);
     }

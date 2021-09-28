@@ -5,7 +5,6 @@ import org.datavec.api.records.reader.impl.transform.TransformProcessRecordReade
 import org.datavec.api.split.FileSplit;
 import org.datavec.api.transform.TransformProcess;
 import org.datavec.api.transform.schema.Schema;
-import org.deeplearning4j.core.storage.StatsStorage;
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator;
 import org.deeplearning4j.eval.Evaluation;
 import org.deeplearning4j.nn.conf.MultiLayerConfiguration;
@@ -16,9 +15,6 @@ import org.deeplearning4j.nn.conf.layers.OutputLayer;
 import org.deeplearning4j.nn.multilayer.MultiLayerNetwork;
 import org.deeplearning4j.nn.weights.WeightInit;
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener;
-import org.deeplearning4j.ui.api.UIServer;
-import org.deeplearning4j.ui.model.stats.StatsListener;
-import org.deeplearning4j.ui.model.storage.InMemoryStatsStorage;
 import org.nd4j.linalg.activations.Activation;
 import org.nd4j.linalg.learning.config.Adam;
 import org.slf4j.Logger;
@@ -138,10 +134,10 @@ public class AIPlayerDLTrainerQuickstart {
         model.init();
         model.addListeners(new ScoreIterationListener(50));
 
-        final UIServer uiServer = UIServer.getInstance();
-        final StatsStorage statsStorage = new InMemoryStatsStorage();
-        uiServer.attach(statsStorage);
-        model.addListeners(new StatsListener(statsStorage, 50));
+//        final UIServer uiServer = UIServer.getInstance();
+//        final StatsStorage statsStorage = new InMemoryStatsStorage();
+//        uiServer.attach(statsStorage);
+//        model.addListeners(new StatsListener(statsStorage, 50));
 
         final TransformProcessRecordReader trainRecordReader = new TransformProcessRecordReader(new CSVRecordReader(), transformProcess);
         trainRecordReader.initialize(inputSplit);
@@ -153,14 +149,19 @@ public class AIPlayerDLTrainerQuickstart {
                 .collectMetaData(true)
                 .build();
 
+        final long startTime = System.currentTimeMillis();
+
         int epoch = 0;
         do {
             epoch++;
+            LOG.info("Training epoch " + epoch);
             model.fit(trainIterator);
             model.save(new File("/home/jan/git/jskat-multimodule/jskat-base/src/main/resources/org/jskat/ai/deeplearning/bidding/bidding_epoch" + epoch + ".nn"));
         } while (model.score() > 0.05);
 
-        LOG.info("Reached score < 0.05 after " + epoch + " epochs.");
+        final long stopTime = System.currentTimeMillis();
+
+        LOG.info("Reached score < 0.05 after " + epoch + " epochs in " + (stopTime - startTime) + " milliseconds.");
 
         model.save(new File("/home/jan/git/jskat-multimodule/jskat-base/src/main/resources/org/jskat/ai/deeplearning/bidding/bidding.nn"), false);
 
