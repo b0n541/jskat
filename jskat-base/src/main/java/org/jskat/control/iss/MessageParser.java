@@ -603,16 +603,17 @@ public class MessageParser {
                                          final String token) {
 
         // from ISS source code
-        // return "d:"+declarer + (penalty ? " penalty" : (declValue > 0 ? "
-        // win" : " loss"))
+        // return "d:" + declarer + (penalty ? "penalty" : (declValue > 0 ? "win" : " loss"))
         // + " v:" + declValue
-        // + " m:" + matadors + (overbid ? " overbid" : " bidok")
-        // + " p:" + declCardPoints + " t:" + declTricks
-        // + " s:" + (schneider ? '1' : '0') + " z:" + (schwarz ? '1' :
-        // '0')
+        // + " m:" + matadors + (overbid ? "overbid" : "bidok")
+        // + " p:" + declCardPoints
+        // + " t:" + declTricks
+        // + " s:" + (schneider ? '1' : '0')
+        // + " z:" + (schwarz ? '1' : '0')
         // + " p0:" + penalty0 + " p1:" + penalty1 + " p2:" + penalty2
-        // + " l:" + this.left + " to:" + this.timeout + " r:" + (resigned
-        // ? '1' : '0');
+        // + " l:" + this.left
+        // + " to:" + this.timeout
+        // + " r:" + (resigned ? '1' : '0');
 
         // TODO: or simply "passed"
 
@@ -634,19 +635,31 @@ public class MessageParser {
 
         } else if (token.startsWith("v:")) { //$NON-NLS-1$
 
-            gameData.getResult().setGameValue(
-                    Integer.parseInt(token.substring(2)));
+            gameData.getResult().setGameValue(Integer.parseInt(token.substring(2)));
 
-        } else if (token.startsWith("p:")) { //$NON-NLS-1$
+        } else if (token.startsWith("m:")) {
 
-            final int declarerPoints = Integer.parseInt(token.substring(2));
-            gameData.setDeclarerScore(declarerPoints);
-            gameData.getResult().setFinalDeclarerPoints(declarerPoints);
-            gameData.getResult().setFinalOpponentPoints(120 - declarerPoints);
+            final int matadors = Integer.parseInt(token.substring(2));
+
+            gameData.getGameResult().setPlayWithJacks(matadors > 0);
+            gameData.getGameResult().setMultiplier(Math.abs(matadors));
 
         } else if ("overbid".equals(token)) { //$NON-NLS-1$
 
             gameData.getResult().setOverBidded(true);
+
+        } else if (token.startsWith("p:")) { //$NON-NLS-1$
+
+            int declarerPoints = 0;
+            if (GameType.NULL == gameData.getAnnoucement().getGameType() && gameData.isGameLost()
+                    || GameType.NULL != gameData.getAnnoucement().getGameType()) {
+                declarerPoints = Integer.parseInt(token.substring(2));
+            }
+            gameData.setDeclarerScore(declarerPoints);
+            gameData.getResult().setFinalDeclarerPoints(declarerPoints);
+            gameData.getResult().setFinalOpponentPoints(120 - declarerPoints);
+
+        } else if (token.startsWith("t:")) {
 
         } else if ("s:1".equals(token)) { //$NON-NLS-1$
 
