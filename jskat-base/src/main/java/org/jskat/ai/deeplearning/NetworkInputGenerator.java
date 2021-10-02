@@ -10,16 +10,17 @@ import java.util.function.Function;
 
 public class NetworkInputGenerator {
     public static final Function<SkatGameData, String> NETWORK_INPUTS = it ->
-            //it.getDeclarer() + " " + it.getDealtCards().get(it.getDeclarer()) + ": " +
             // features
-            //asNetworkInputs(it.getDeclarer()) // 3 features
             it.getDeclarer() + ","
                     + asNetworkInputs(it.getDealtCards().get(it.getDeclarer())) // 32 features
                     + it.getMaxPlayerBid(Player.FOREHAND) + "," // 1 feature
                     + it.getMaxPlayerBid(Player.MIDDLEHAND) + "," // 1 feature
                     + it.getMaxPlayerBid(Player.REARHAND) + "," // 1 feature
+                    + asNetworkInputs(it.getDealtSkat()) // 32 features
+                    + asNetworkInputs(it.getSkat()) // 32 features
                     // labels
-                    + it.getAnnoucement().getGameType() + "," // 1 label
+                    + it.getGameResult().getMultiplier() + ","
+                    + it.getAnnoucement().getGameType() + ","
                     + (it.getAnnoucement().isHand() ? "1" : "0") + ","
                     + (it.getAnnoucement().isOuvert() ? "1" : "0") + ","
                     + (it.getAnnoucement().isSchneider() ? "1" : "0") + ","

@@ -34,7 +34,7 @@ import java.util.stream.Stream;
 public class IssGameExtractor {
 
     public static void main(final String[] args) throws IOException, InterruptedException {
-        final int limit = 1_000_000;
+        final int limit = 1000000000;
         filterGameDatabase(
                 "/home/jan/Projects/jskat/iss/iss-games-04-2021.sgf",
                 SkatGameDataFilter.KERMIT_WON_GAMES,
@@ -49,8 +49,8 @@ public class IssGameExtractor {
             final var filteredGames = stream.map(MessageParser::parseGameSummary)
                     .filter(predicate)
                     .map(networkInputMapper)
-                    //.peek(System.out::println)
-                    .limit(limit)
+                    .peek(System.out::println)
+                    //.limit(limit)
                     .collect(Collectors.toList());
 
             Files.write(Paths.get(targetFileName), filteredGames);
