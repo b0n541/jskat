@@ -4,9 +4,7 @@ This is the multi-module of JSkat.
 
 License:
 
-* JSkat base: Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
-* JSkat Swing GUI: GNU General Public License (GPL), Version 3.0 (http://www.gnu.org/licenses/gpl.html)
-* JSkat JavaFX GUI: GNU General Public License (GPL), Version 3.0 (http://www.gnu.org/licenses/gpl.html)
+* Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
 
 Use at least JDK 11 to build and run JSkat. The project is organized with the Java Platform Module System (a.k.a. Jigsaw).
 
