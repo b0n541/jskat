@@ -6,7 +6,7 @@ License:
 
 * Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
 
-Use at least JDK 11 to build and run JSkat. The project is organized with the Java Platform Module System (a.k.a. Jigsaw).
+Use at least JDK 17 to build and run JSkat.
 
 Build executable fat JAR: `./gradlew clean fatJar`
 
@@ -14,7 +14,7 @@ Build installation with multiple JARs and start scripts: `./gradlew clean instal
 
 Build installation with fat JAR and start scripts: `./gradlew clean assembleDist`
 
-Continous integration: https://travis-ci.org/b0n541/jskat-multimodule
+Continuous integration: https://travis-ci.org/b0n541/jskat-multimodule
 
 We develop according the GitFlow workflow: http://nvie.com/posts/a-successful-git-branching-model/
 
