@@ -35,7 +35,6 @@ public class AIPlayerDLTrainerQuickstart2 {
 
     public static void main(final String[] args) throws Exception {
 
-        // TODO Fix NullPointerException
         final Random random = new Random();
         random.setSeed(0xC0FFEE);
         final FileSplit inputSplit = new FileSplit(

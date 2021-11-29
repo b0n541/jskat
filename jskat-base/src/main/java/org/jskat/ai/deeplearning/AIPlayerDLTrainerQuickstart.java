@@ -26,8 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class AIPlayerDLTrainerQuickstart {
@@ -35,7 +33,6 @@ public class AIPlayerDLTrainerQuickstart {
 
     public static void main(final String[] args) throws Exception {
 
-        // TODO Fix NullPointerException
         final Random random = new Random();
         random.setSeed(0xC0FFEE);
         final FileSplit inputSplit = new FileSplit(
@@ -239,7 +236,6 @@ public class AIPlayerDLTrainerQuickstart {
 
         int epoch = 0;
         final double scoreThreshold = 0.01;
-        final List<Integer> scores = new ArrayList<>();
         do {
             epoch++;
             LOG.info("Training epoch " + epoch);

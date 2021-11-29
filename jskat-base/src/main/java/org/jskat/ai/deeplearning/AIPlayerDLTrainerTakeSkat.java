@@ -35,7 +35,6 @@ public class AIPlayerDLTrainerTakeSkat {
 
     public static void main(final String[] args) throws Exception {
 
-        // TODO Fix NullPointerException
         final Random random = new Random();
         random.setSeed(0xC0FFEE);
         final FileSplit inputSplit = new FileSplit(new File("/home/jan/git/jskat-multimodule/jskat-base/src/main/resources/org/jskat/ai/deeplearning/takeskat/train/"), random);
@@ -155,7 +154,6 @@ public class AIPlayerDLTrainerTakeSkat {
 
         LOG.info(schema.toString());
 
-        // TODO why do Null games have declarer score > 0?
         final DataAnalysis analysis = AnalyzeLocal.analyze(schema, recordReader);
         HtmlAnalysis.createHtmlAnalysisFile(analysis, new File("/home/jan/Projects/jskat/iss/kermit_won_won_games_analysis.html"));
 
