@@ -3,5 +3,5 @@ sudo: false
 language: java
 
 jdk:
-  - oraclejdk11
-  - openjdk11
+  - oraclejdk17
+  - openjdk17
