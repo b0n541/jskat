@@ -14,14 +14,14 @@ Build installation with multiple JARs and start scripts: `./gradlew clean instal
 
 Build installation with fat JAR and start scripts: `./gradlew clean assembleDist`
 
-Continuous integration: https://travis-ci.org/b0n541/jskat-multimodule
+We build every push to develop with GitHub actions.
 
 We develop according the GitFlow workflow: http://nvie.com/posts/a-successful-git-branching-model/
 
 So if you want to contribute to JSkat please create a feature branch from the `develop` branch and create pull requests
 towards the `develop` branch.
 
-[![Build Status](https://travis-ci.org/b0n541/jskat-multimodule.png?branch=develop)](https://travis-ci.org/b0n541/jskat-multimodule)
+[![Java CI](https://github.com/b0n541/jskat-multimodule/actions/workflows/ci.yml/badge.svg)](https://github.com/b0n541/jskat-multimodule/actions/workflows/ci.yml)
 
 [![CodeScene general](https://codescene.io/images/analyzed-by-codescene-badge.svg)](https://codescene.io/projects/1209)
 
