@@ -1,7 +1,0 @@
-sudo: false
-
-language: java
-
-jdk:
-  - oraclejdk17
-  - openjdk17
