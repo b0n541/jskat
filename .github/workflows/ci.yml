@@ -19,7 +19,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Build with Gradle
-        run: ./gradlew clean buildAlgorithmOpponentSuit
+        run: ./gradlew clean build
       - uses: actions/upload-artifact@v2
         with:
           name: Package
