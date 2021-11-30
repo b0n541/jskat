@@ -17,7 +17,7 @@ Build installation with multiple JARs and start scripts: `./gradlew clean instal
 
 Build installation with fat JAR and start scripts: `./gradlew clean assembleDist`
 
-We build every push to develop with GitHub actions.
+We build every push to develop with GitHub actions. We also build on every pull request.
 
 We develop according the GitFlow workflow: http://nvie.com/posts/a-successful-git-branching-model/
 
