@@ -218,12 +218,9 @@ public class MessageParser {
     static void parsePlayerTimes(final List<String> params,
                                  final MoveInformation info) {
         // parse player times
-        info.putPlayerTime(Player.FOREHAND,
-                new Double(params.get(params.size() - 3)));
-        info.putPlayerTime(Player.MIDDLEHAND,
-                new Double(params.get(params.size() - 2)));
-        info.putPlayerTime(Player.REARHAND,
-                new Double(params.get(params.size() - 1)));
+        info.putPlayerTime(Player.FOREHAND, Double.valueOf(params.get(params.size() - 3)));
+        info.putPlayerTime(Player.MIDDLEHAND, Double.valueOf(params.get(params.size() - 2)));
+        info.putPlayerTime(Player.REARHAND, Double.valueOf(params.get(params.size() - 1)));
     }
 
     private static CardList parseSkatCards(final String move) {
@@ -471,7 +468,7 @@ public class MessageParser {
         return result;
     }
 
-    public static SkatGameData parseGameSummary(final String gameSummary) {
+    static SkatGameData parseGameSummary(final String gameSummary) {
 
         final SkatGameData result = new SkatGameData();
 
@@ -603,17 +600,16 @@ public class MessageParser {
                                          final String token) {
 
         // from ISS source code
-        // return "d:" + declarer + (penalty ? "penalty" : (declValue > 0 ? "win" : " loss"))
+        // return "d:"+declarer + (penalty ? " penalty" : (declValue > 0 ? "
+        // win" : " loss"))
         // + " v:" + declValue
-        // + " m:" + matadors + (overbid ? "overbid" : "bidok")
-        // + " p:" + declCardPoints
-        // + " t:" + declTricks
-        // + " s:" + (schneider ? '1' : '0')
-        // + " z:" + (schwarz ? '1' : '0')
+        // + " m:" + matadors + (overbid ? " overbid" : " bidok")
+        // + " p:" + declCardPoints + " t:" + declTricks
+        // + " s:" + (schneider ? '1' : '0') + " z:" + (schwarz ? '1' :
+        // '0')
         // + " p0:" + penalty0 + " p1:" + penalty1 + " p2:" + penalty2
-        // + " l:" + this.left
-        // + " to:" + this.timeout
-        // + " r:" + (resigned ? '1' : '0');
+        // + " l:" + this.left + " to:" + this.timeout + " r:" + (resigned
+        // ? '1' : '0');
 
         // TODO: or simply "passed"
 

@@ -39,7 +39,7 @@ import java.util.concurrent.ExecutionException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Matchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -59,7 +59,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 
     @Test
     public void testContra_NoContraActivatedInOptions() {
-        SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
+        final SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
                 new ContraReCallingTestPlayer(),
                 new ContraReCallingTestPlayer(),
                 new ContraReCallingTestPlayer());
@@ -67,15 +67,15 @@ public class SkatGameTest extends AbstractJSkatTest {
 
         runGame(game);
 
-        GameSummary summary = game.getGameSummary();
+        final GameSummary summary = game.getGameSummary();
         assertFalse(summary.isContra());
         assertFalse(summary.isRe());
     }
 
-    private static void runGame(SkatGame game) {
+    private static void runGame(final SkatGame game) {
         try {
             CompletableFuture.runAsync(() -> game.run()).get();
-        } catch (InterruptedException | ExecutionException e) {
+        } catch (final InterruptedException | ExecutionException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
@@ -84,11 +84,11 @@ public class SkatGameTest extends AbstractJSkatTest {
     @Test
     public void testContra_ContraActivatedInOptions() {
 
-        JSkatOptions options = JSkatOptions.instance();
+        final JSkatOptions options = JSkatOptions.instance();
         options.setRules(RuleSet.PUB);
         options.setPlayContra(true);
 
-        SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
+        final SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
                 new ContraReCallingTestPlayer(),
                 new ContraReCallingTestPlayer(),
                 new ContraReCallingTestPlayer());
@@ -96,7 +96,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 
         runGame(game);
 
-        GameSummary summary = game.getGameSummary();
+        final GameSummary summary = game.getGameSummary();
         assertTrue(summary.isContra());
         assertTrue(summary.isRe());
     }
@@ -107,17 +107,17 @@ public class SkatGameTest extends AbstractJSkatTest {
     @Test
     public void testPassIn_NoBids() {
 
-        SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
+        final SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
                 getNoBiddingPlayer(), getNoBiddingPlayer(),
                 getNoBiddingPlayer());
         game.setView(new UnitTestView());
 
         runGame(game);
 
-        GameSummary summary = game.getGameSummary();
+        final GameSummary summary = game.getGameSummary();
         assertThat(summary.getGameType()).isEqualTo(GameType.PASSED_IN);
 
-        SkatGameResult result = game.getGameResult();
+        final SkatGameResult result = game.getGameResult();
         assertFalse(result.isWon());
         assertThat(result.getGameValue()).isEqualTo(0);
     }
@@ -128,23 +128,23 @@ public class SkatGameTest extends AbstractJSkatTest {
     @Test
     public void testPassIn_NoBidsMockito() {
 
-        SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
+        final SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
                 getNoBiddingPlayer(), getNoBiddingPlayer(),
                 getNoBiddingPlayer());
         game.setView(new UnitTestView());
 
         runGame(game);
 
-        GameSummary summary = game.getGameSummary();
+        final GameSummary summary = game.getGameSummary();
         assertThat(summary.getGameType()).isEqualTo(GameType.PASSED_IN);
 
-        SkatGameResult result = game.getGameResult();
+        final SkatGameResult result = game.getGameResult();
         assertFalse(result.isWon());
         assertThat(result.getGameValue()).isEqualTo(0);
     }
 
     private static JSkatPlayer getNoBiddingPlayer() {
-        JSkatPlayer player = mock(JSkatPlayer.class);
+        final JSkatPlayer player = mock(JSkatPlayer.class);
         when(player.bidMore(anyInt())).thenReturn(-1);
         when(player.holdBid(anyInt())).thenReturn(false);
         return player;
@@ -157,21 +157,21 @@ public class SkatGameTest extends AbstractJSkatTest {
     @Test
     public void testPassIn_NoBids2() {
 
-        JSkatOptions options = JSkatOptions.instance();
+        final JSkatOptions options = JSkatOptions.instance();
         options.setPlayRamsch(true);
         options.setRamschEventNoBid(true);
 
-        SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
+        final SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
                 getNoBiddingPlayer(), getNoBiddingPlayer(),
                 getNoBiddingPlayer());
         game.setView(new UnitTestView());
 
         runGame(game);
 
-        GameSummary summary = game.getGameSummary();
+        final GameSummary summary = game.getGameSummary();
         assertThat(summary.getGameType()).isEqualTo(GameType.PASSED_IN);
 
-        SkatGameResult result = game.getGameResult();
+        final SkatGameResult result = game.getGameResult();
         assertFalse(result.isWon());
         assertThat(result.getGameValue()).isEqualTo(0);
     }
@@ -182,22 +182,22 @@ public class SkatGameTest extends AbstractJSkatTest {
     @Test
     public void testRamsch_NoBids() {
 
-        JSkatOptions options = JSkatOptions.instance();
+        final JSkatOptions options = JSkatOptions.instance();
         options.setRules(RuleSet.PUB);
         options.setPlayRamsch(true);
         options.setRamschEventNoBid(true);
 
-        SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
+        final SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
                 new RamschTestPlayer(), new RamschTestPlayer(),
                 new RamschTestPlayer());
         game.setView(new UnitTestView());
 
         runGame(game);
 
-        GameSummary summary = game.getGameSummary();
+        final GameSummary summary = game.getGameSummary();
         assertThat(summary.getGameType()).isEqualTo(GameType.RAMSCH);
 
-        SkatGameResult result = game.getGameResult();
+        final SkatGameResult result = game.getGameResult();
         assertFalse(result.isWon());
         assertTrue(result.getGameValue() < 0);
     }
@@ -208,17 +208,17 @@ public class SkatGameTest extends AbstractJSkatTest {
     @Test
     public void testRamsch_Forced() {
 
-        SkatGame game = new SkatGame(TABLE_NAME, GameVariant.FORCED_RAMSCH,
+        final SkatGame game = new SkatGame(TABLE_NAME, GameVariant.FORCED_RAMSCH,
                 new RamschTestPlayer(), new RamschTestPlayer(),
                 new RamschTestPlayer());
         game.setView(new UnitTestView());
 
         runGame(game);
 
-        GameSummary summary = game.getGameSummary();
+        final GameSummary summary = game.getGameSummary();
         assertThat(summary.getGameType()).isEqualTo(GameType.RAMSCH);
 
-        SkatGameResult result = game.getGameResult();
+        final SkatGameResult result = game.getGameResult();
         assertFalse(result.isWon());
         assertTrue(result.getGameValue() < 0);
     }
@@ -229,21 +229,21 @@ public class SkatGameTest extends AbstractJSkatTest {
     @Test
     public void testRamsch_ForcedForeHandGrandHand() {
 
-        RamschTestPlayer grandHandPlayer = new RamschTestPlayer();
+        final RamschTestPlayer grandHandPlayer = new RamschTestPlayer();
         grandHandPlayer.setPlayGrandHand(true);
 
-        SkatGame game = new SkatGame(TABLE_NAME, GameVariant.FORCED_RAMSCH,
+        final SkatGame game = new SkatGame(TABLE_NAME, GameVariant.FORCED_RAMSCH,
                 grandHandPlayer, new AIPlayerRND(), new AIPlayerRND());
         game.setView(new UnitTestView());
 
         runGame(game);
 
         assertThat(game.getDeclarer()).isEqualTo(Player.FOREHAND);
-        GameAnnouncement announcement = game.getGameAnnouncement();
+        final GameAnnouncement announcement = game.getGameAnnouncement();
         assertThat(announcement.getGameType()).isEqualTo(GameType.GRAND);
         assertTrue(announcement.isHand());
 
-        GameSummary summary = game.getGameSummary();
+        final GameSummary summary = game.getGameSummary();
         assertThat(summary.getGameType()).isEqualTo(GameType.GRAND);
     }
 
@@ -253,21 +253,21 @@ public class SkatGameTest extends AbstractJSkatTest {
     @Test
     public void testRamsch_ForcedMiddleHandGrandHand() {
 
-        RamschTestPlayer grandHandPlayer = new RamschTestPlayer();
+        final RamschTestPlayer grandHandPlayer = new RamschTestPlayer();
         grandHandPlayer.setPlayGrandHand(true);
 
-        SkatGame game = new SkatGame(TABLE_NAME, GameVariant.FORCED_RAMSCH,
+        final SkatGame game = new SkatGame(TABLE_NAME, GameVariant.FORCED_RAMSCH,
                 new RamschTestPlayer(), grandHandPlayer, new RamschTestPlayer());
         game.setView(new UnitTestView());
 
         runGame(game);
 
         assertThat(game.getDeclarer()).isEqualTo(Player.MIDDLEHAND);
-        GameAnnouncement announcement = game.getGameAnnouncement();
+        final GameAnnouncement announcement = game.getGameAnnouncement();
         assertThat(announcement.getGameType()).isEqualTo(GameType.GRAND);
         assertTrue(announcement.isHand());
 
-        GameSummary summary = game.getGameSummary();
+        final GameSummary summary = game.getGameSummary();
         assertThat(summary.getGameType()).isEqualTo(GameType.GRAND);
     }
 
@@ -277,27 +277,27 @@ public class SkatGameTest extends AbstractJSkatTest {
     @Test
     public void testRamsch_ForcedRearHandGrandHand() {
 
-        RamschTestPlayer grandHandPlayer = new RamschTestPlayer();
+        final RamschTestPlayer grandHandPlayer = new RamschTestPlayer();
         grandHandPlayer.setPlayGrandHand(true);
 
-        SkatGame game = new SkatGame(TABLE_NAME, GameVariant.FORCED_RAMSCH,
+        final SkatGame game = new SkatGame(TABLE_NAME, GameVariant.FORCED_RAMSCH,
                 new RamschTestPlayer(), new RamschTestPlayer(), grandHandPlayer);
         game.setView(new UnitTestView());
 
         runGame(game);
 
         assertThat(game.getDeclarer()).isEqualTo(Player.REARHAND);
-        GameAnnouncement announcement = game.getGameAnnouncement();
+        final GameAnnouncement announcement = game.getGameAnnouncement();
         assertThat(announcement.getGameType()).isEqualTo(GameType.GRAND);
         assertTrue(announcement.isHand());
 
-        GameSummary summary = game.getGameSummary();
+        final GameSummary summary = game.getGameSummary();
         assertThat(summary.getGameType()).isEqualTo(GameType.GRAND);
     }
 
     @Test
     public void exceptionFromPlayerDuringGame() {
-        SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
+        final SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
                 new ExceptionTestPlayer(), new ExceptionTestPlayer(),
                 new ExceptionTestPlayer());
         game.setView(new UnitTestView());
@@ -306,25 +306,25 @@ public class SkatGameTest extends AbstractJSkatTest {
 
         runGame(game);
 
-        SkatGameResult gameResult = game.getGameResult();
+        final SkatGameResult gameResult = game.getGameResult();
         if (!nullGameEndedPreliminary(game)) {
             assertTrue(gameResult.isSchwarz());
         }
     }
 
-    private static boolean nullGameEndedPreliminary(SkatGame game) {
+    private static boolean nullGameEndedPreliminary(final SkatGame game) {
         // in Null games the game might have ended preliminary before all tricks
         // have been played
         return GameType.NULL.equals(game.getGameAnnouncement().getGameType()) && game
                 .getGameSummary().getTricks().size() < 10;
     }
 
-    private void randomGameAnnouncement(SkatGame game) {
-        CardDeck deck = new CardDeck();
+    private void randomGameAnnouncement(final SkatGame game) {
+        final CardDeck deck = new CardDeck();
         game.setCardDeck(deck);
         game.dealCards();
         game.setDeclarer(Player.values()[random.nextInt(Player.values().length)]);
-        GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
         factory.setGameType(getRandomGameType());
         game.setGameAnnouncement(factory.getAnnouncement());
         game.setGameState(GameState.TRICK_PLAYING);
@@ -338,7 +338,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 
     @Test
     public void playerPlaysNonPossessingCard() {
-        SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
+        final SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
                 new PlayNonPossessingCardTestPlayer(),
                 new PlayNonPossessingCardTestPlayer(),
                 new PlayNonPossessingCardTestPlayer());
@@ -348,14 +348,14 @@ public class SkatGameTest extends AbstractJSkatTest {
 
         runGame(game);
 
-        SkatGameResult gameResult = game.getGameResult();
+        final SkatGameResult gameResult = game.getGameResult();
         assertTrue(gameResult.isSchwarz());
         assertThat(gameResult.getFinalDeclarerPoints() + gameResult.getFinalOpponentPoints()).isEqualTo(120);
     }
 
     @Test
     public void playerPlaysNotAllowedCard() {
-        SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
+        final SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
                 new PlayNotAllowedCardTestPlayer(),
                 new PlayNotAllowedCardTestPlayer(),
                 new PlayNotAllowedCardTestPlayer());
@@ -365,14 +365,14 @@ public class SkatGameTest extends AbstractJSkatTest {
 
         runGame(game);
 
-        SkatGameResult gameResult = game.getGameResult();
+        final SkatGameResult gameResult = game.getGameResult();
         assertTrue(gameResult.isSchwarz());
         assertThat(gameResult.getFinalDeclarerPoints() + gameResult.getFinalOpponentPoints()).isEqualTo(120);
     }
 
     @Test
     public void testCompleteGame() {
-        SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
+        final SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
                 new AIPlayerRND(), new AIPlayerRND(), new AIPlayerRND());
         game.setView(new UnitTestView());
 
@@ -380,19 +380,19 @@ public class SkatGameTest extends AbstractJSkatTest {
 
         runGame(game);
 
-        Player declarer = game.getDeclarer();
-        SkatGameResult result = game.getGameResult();
+        final Player declarer = game.getDeclarer();
+        final SkatGameResult result = game.getGameResult();
 
         if (declarer != null && result.getGameValue() > 0) {
             assertThat(result.getFinalDeclarerPoints() + result.getFinalOpponentPoints()).isEqualTo(120);
-            GameSummary summary = game.getGameSummary();
+            final GameSummary summary = game.getGameSummary();
 
-            Map<Player, Integer> playerPointsInTricks = new HashMap();
+            final Map<Player, Integer> playerPointsInTricks = new HashMap();
             playerPointsInTricks.put(Player.FOREHAND, 0);
             playerPointsInTricks.put(Player.MIDDLEHAND, 0);
             playerPointsInTricks.put(Player.REARHAND, 0);
 
-            for (Trick trick : summary.getTricks()) {
+            for (final Trick trick : summary.getTricks()) {
 
                 Integer playerPoints = playerPointsInTricks.get(trick.getTrickWinner());
                 if (playerPoints == null) {
@@ -410,22 +410,22 @@ public class SkatGameTest extends AbstractJSkatTest {
 
     @Test
     public void testPredefinedCardPlaying() {
-        UnitTestPlayer foreHand = new UnitTestPlayer();
+        final UnitTestPlayer foreHand = new UnitTestPlayer();
         foreHand.setCardsToPlay(
                 Arrays.asList(Card.C7, Card.SJ, Card.C9, Card.H8, Card.DQ, Card.D7, Card.CT, Card.DK, Card.CA, Card.CK));
 
-        UnitTestPlayer middleHand = new UnitTestPlayer();
+        final UnitTestPlayer middleHand = new UnitTestPlayer();
         middleHand.setCardsToPlay(
                 Arrays.asList(Card.CQ, Card.C8, Card.SQ, Card.ST, Card.S9, Card.HT, Card.HA, Card.DA, Card.HK, Card.D9));
 
-        UnitTestPlayer rearHand = new UnitTestPlayer();
+        final UnitTestPlayer rearHand = new UnitTestPlayer();
         rearHand.setCardsToPlay(
                 Arrays.asList(Card.DJ, Card.CJ, Card.HJ, Card.SA, Card.S8, Card.H7, Card.H9, Card.D8, Card.HQ, Card.DT));
 
-        SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD, foreHand, middleHand, rearHand);
+        final SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD, foreHand, middleHand, rearHand);
         game.setView(new UnitTestView());
 
-        CardDeck deck = new CardDeck(
+        final CardDeck deck = new CardDeck(
                 "SJ CA CT CK C9 C7 H8 DK DQ D7",
                 "CQ C8 ST SQ S9 HA HT HK DA D9",
                 "CJ HJ DJ SA S8 HQ H9 H7 DT D8",
@@ -433,14 +433,14 @@ public class SkatGameTest extends AbstractJSkatTest {
         game.setCardDeck(deck);
         game.dealCards();
         game.setDeclarer(Player.MIDDLEHAND);
-        GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
         factory.setGameType(GameType.CLUBS);
         game.setGameAnnouncement(factory.getAnnouncement());
         game.setGameState(GameState.TRICK_PLAYING);
 
         runGame(game);
 
-        SkatGameResult result = game.getGameResult();
+        final SkatGameResult result = game.getGameResult();
         assertThat(result.getFinalDeclarerPoints()).isEqualTo(32);
         assertThat(result.getFinalOpponentPoints()).isEqualTo(88);
     }
@@ -453,22 +453,22 @@ public class SkatGameTest extends AbstractJSkatTest {
     @Test
     public void testGameResultIssue33() {
 
-        UnitTestPlayer foreHand = new UnitTestPlayer();
+        final UnitTestPlayer foreHand = new UnitTestPlayer();
         foreHand.setCardsToPlay(
                 Arrays.asList(Card.SJ, Card.CJ, Card.D8, Card.SA, Card.C7, Card.ST, Card.C9, Card.S7, Card.S9, Card.S8));
 
-        UnitTestPlayer middleHand = new UnitTestPlayer();
+        final UnitTestPlayer middleHand = new UnitTestPlayer();
         middleHand.setCardsToPlay(
                 Arrays.asList(Card.SQ, Card.SK, Card.DA, Card.DT, Card.CK, Card.H8, Card.DQ, Card.DK, Card.HQ, Card.HT));
 
-        UnitTestPlayer rearHand = new UnitTestPlayer();
+        final UnitTestPlayer rearHand = new UnitTestPlayer();
         rearHand.setCardsToPlay(
                 Arrays.asList(Card.DJ, Card.HJ, Card.D7, Card.H7, Card.CT, Card.HA, Card.CQ, Card.C8, Card.H9, Card.HK));
 
-        SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD, foreHand, middleHand, rearHand);
+        final SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD, foreHand, middleHand, rearHand);
         game.setView(new UnitTestView());
 
-        CardDeck deck = new CardDeck(
+        final CardDeck deck = new CardDeck(
                 "CJ SJ SA ST S9 S8 S7 C9 C7 D8",
                 "SK SQ CK HT HQ H8 DA DT DK DQ",
                 "HJ DJ CT CQ C8 HA HK H9 H7 D7",
@@ -476,14 +476,14 @@ public class SkatGameTest extends AbstractJSkatTest {
         game.setCardDeck(deck);
         game.dealCards();
         game.setDeclarer(Player.FOREHAND);
-        GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
         factory.setGameType(GameType.SPADES);
         game.setGameAnnouncement(factory.getAnnouncement());
         game.setGameState(GameState.TRICK_PLAYING);
 
         runGame(game);
 
-        SkatGameResult result = game.getGameResult();
+        final SkatGameResult result = game.getGameResult();
         assertThat(result.getFinalDeclarerPoints()).isEqualTo(89);
         assertThat(result.getFinalOpponentPoints()).isEqualTo(31);
         assertFalse(result.isSchneider());
