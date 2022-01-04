@@ -468,7 +468,7 @@ public class MessageParser {
         return result;
     }
 
-    static SkatGameData parseGameSummary(final String gameSummary) {
+    public static SkatGameData parseGameSummary(final String gameSummary) {
 
         final SkatGameData result = new SkatGameData();
 
