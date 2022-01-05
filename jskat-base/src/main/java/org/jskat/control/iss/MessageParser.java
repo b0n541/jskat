@@ -159,7 +159,7 @@ public class MessageParser {
             // declarer shows cards
             info.setType(MoveType.SHOW_CARDS);
             if (move.length() > 2) {
-                // declarer cards follow, SC could also stand allone
+                // declarer cards follow, SC could also stand alone
                 info.setOuvertCards(parseSkatCards(move.substring(move
                         .indexOf(".") + 1))); //$NON-NLS-1$
             }
@@ -473,8 +473,7 @@ public class MessageParser {
         final SkatGameData result = new SkatGameData();
 
         final Pattern summaryPartPattern = Pattern.compile("(\\w+)\\[(.*?)\\]"); //$NON-NLS-1$
-        final Matcher summaryPartMatcher = summaryPartPattern
-                .matcher(gameSummary);
+        final Matcher summaryPartMatcher = summaryPartPattern.matcher(gameSummary);
 
         while (summaryPartMatcher.find()) {
 
@@ -526,7 +525,7 @@ public class MessageParser {
 
         while (token.hasMoreTokens()) {
 
-            final List<String> moveToken = new ArrayList<String>();
+            final List<String> moveToken = new ArrayList<>();
             moveToken.add(token.nextToken());
             moveToken.add(token.nextToken());
 
