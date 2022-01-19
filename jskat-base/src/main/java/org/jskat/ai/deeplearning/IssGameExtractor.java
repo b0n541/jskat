@@ -36,9 +36,9 @@ public class IssGameExtractor {
     public static void main(final String[] args) throws IOException, InterruptedException {
         filterGameDatabase(
                 System.getProperty("user.home") + "/.jskat/deeplearning/iss-games-04-2021.sgf",
-                SkatGameDataFilter.KERMIT_WON_GAMES,
+                SkatGameDataFilter.KERMIT_WON_SUIT_GAMES,
                 NetworkInputGenerator.NETWORK_INPUTS,
-                System.getProperty("user.home") + "/.jskat/deeplearning/kermit_won_games.csv");
+                System.getProperty("user.home") + "/.jskat/deeplearning/kermit_won_suit_games.csv");
     }
 
     public static List<String> filterGameDatabase(final String sourceFileName, final Predicate<SkatGameData> predicate, final Function<SkatGameData, String> networkInputMapper, final String targetFileName) {

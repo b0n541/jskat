@@ -43,17 +43,18 @@ public class DeepLearning4jBid {
                 .seed(0xC0FFEE)
                 .weightInit(WeightInit.RELU)
                 .activation(Activation.RELU)
-                .updater(new Adam.Builder().learningRate(0.001).build())
-//                .l1(0.0001)
-                .l2(0.0001)
+                .updater(new Adam.Builder().learningRate(0.0005).build())
+//                .weightDecay(0.001, true)
+                .l1(0.00001)
+                .l2(0.00001)
+//                .biasInit(0.01)
                 .list(
-                        new DenseLayer.Builder().nIn(finalSchema.numColumns() - 1).nOut(1024).build(),
-                        new DenseLayer.Builder().nOut(1024).dropOut(0.6).build(),
-                        new DenseLayer.Builder().nOut(512).dropOut(0.6).build(),
-                        new DenseLayer.Builder().nOut(512).dropOut(0.6).build(),
-                        new DenseLayer.Builder().nOut(256).build(),
+                        new DenseLayer.Builder().nIn(finalSchema.numColumns() - 1).nOut(256).dropOut(0.6).build(),
+                        new DenseLayer.Builder().nOut(128).build(),
+                        new DenseLayer.Builder().nOut(64).build(),
+                        new DenseLayer.Builder().nOut(32).build(),
                         new OutputLayer.Builder().nOut(classesCount)
-                                .lossFunction(LossFunctions.LossFunction.NEGATIVELOGLIKELIHOOD)
+                                .lossFunction(LossFunctions.LossFunction.MCXENT)
                                 .activation(Activation.SOFTMAX).build()
                 )
                 .build();

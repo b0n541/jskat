@@ -120,6 +120,7 @@ public class DeepLearning4JTrainer {
             if (epoch % 50 == 0) {
                 model.save(new File(System.getProperty("user.home") + "/.jskat/deeplearning/bid_" + epoch + ".nn"));
             }
+            evaluateData(model, trainingData);
             evaluateData(model, testData);
             epoch++;
         } while (model.score() >= threshold);
