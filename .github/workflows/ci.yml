@@ -22,7 +22,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Build with Gradle
-        run: ./gradlew clean build
+        run: ./gradlew clean assemble
       - uses: actions/upload-artifact@v2
         with:
           name: Package
