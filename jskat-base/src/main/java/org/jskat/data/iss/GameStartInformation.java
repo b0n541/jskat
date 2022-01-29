@@ -1,24 +1,9 @@
-/**
- * Copyright (C) 2020 Jan Schäfer (jansch@users.sourceforge.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.jskat.data.iss;
+
+import org.jskat.util.Player;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import org.jskat.util.Player;
 
 
 /**
@@ -26,58 +11,58 @@ import org.jskat.util.Player;
  */
 public class GameStartInformation {
 
-	private String loginName;
-	private int gameNo = 0;
-	private Map<Player, String> playerNames = new HashMap<Player, String>();
-	private Map<Player, Double> playerTimes = new HashMap<Player, Double>();
+    private String loginName;
+    private int gameNo = 0;
+    private Map<Player, String> playerNames = new HashMap<Player, String>();
+    private Map<Player, Double> playerTimes = new HashMap<Player, Double>();
 
-	public void setGameNo(int newNumber) {
+    public void setGameNo(int newNumber) {
 
-		this.gameNo = newNumber;
-	}
+        this.gameNo = newNumber;
+    }
 
-	public int getGameNo() {
+    public int getGameNo() {
 
-		return this.gameNo;
-	}
+        return this.gameNo;
+    }
 
-	public void clearPlayerNames() {
+    public void clearPlayerNames() {
 
-		this.playerNames.clear();
-	}
+        this.playerNames.clear();
+    }
 
-	public void putPlayerName(Player position, String name) {
+    public void putPlayerName(Player position, String name) {
 
-		this.playerNames.put(position, name);
-	}
+        this.playerNames.put(position, name);
+    }
 
-	public String getPlayerName(Player position) {
+    public String getPlayerName(Player position) {
 
-		return this.playerNames.get(position);
-	}
+        return this.playerNames.get(position);
+    }
 
-	public void clearPlayerTimes() {
+    public void clearPlayerTimes() {
 
-		this.playerTimes.clear();
-	}
+        this.playerTimes.clear();
+    }
 
-	public void putPlayerTime(Player position, Double time) {
+    public void putPlayerTime(Player position, Double time) {
 
-		this.playerTimes.put(position, time);
-	}
+        this.playerTimes.put(position, time);
+    }
 
-	public double getPlayerTime(Player position) {
+    public double getPlayerTime(Player position) {
 
-		return this.playerTimes.get(position).doubleValue();
-	}
+        return this.playerTimes.get(position).doubleValue();
+    }
 
-	public void setLoginName(String newLoginName) {
+    public void setLoginName(String newLoginName) {
 
-		loginName = newLoginName;
-	}
+        loginName = newLoginName;
+    }
 
-	public String getLoginName() {
+    public String getLoginName() {
 
-		return loginName;
-	}
+        return loginName;
+    }
 }

@@ -1,65 +1,3 @@
-/**
- * This file is part of JSkat.
- * <p>
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- * <p>
- * This file is part of JSkat.
- * <p>
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- * <p>
- * This file is part of JSkat.
- * <p>
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- * This file is part of JSkat.
- *
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- */
 package org.jskat.gui.swing;
 
 import com.google.common.eventbus.Subscribe;
@@ -76,6 +14,9 @@ import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.iss.IssConnectedEvent;
 import org.jskat.control.event.skatgame.*;
 import org.jskat.control.event.table.*;
+import org.jskat.control.gui.JSkatView;
+import org.jskat.control.gui.action.JSkatAction;
+import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatViewType;
@@ -84,12 +25,9 @@ import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.Trick;
 import org.jskat.data.iss.*;
-import org.jskat.control.gui.JSkatView;
-import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.gui.action.human.*;
 import org.jskat.gui.action.iss.*;
 import org.jskat.gui.action.main.*;
-import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.gui.human.SwingHumanPlayer;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.swing.help.JSkatHelpDialog;
@@ -484,7 +422,7 @@ public class JSkatViewImpl implements JSkatView {
     public void showLicenceDialogOn(ShowLicenseCommand command) {
 
         SwingUtilities.invokeLater(
-                () -> new JSkatHelpDialog(mainPanel, strings.getString("license"), "org/jskat/gui/help/gpl3.html")
+                () -> new JSkatHelpDialog(mainPanel, strings.getString("license"), "org/jskat/gui/help/apache2.html")
                         .setVisible(true));
     }
 
@@ -529,7 +467,7 @@ public class JSkatViewImpl implements JSkatView {
      */
     @Override
     public void updateISSLobbyPlayerList(String playerName, String language, long gamesPlayed,
-										 double strength) {
+                                         double strength) {
 
         issLobby.updatePlayer(playerName, language, gamesPlayed, strength);
     }
@@ -560,7 +498,7 @@ public class JSkatViewImpl implements JSkatView {
      */
     @Override
     public void updateISSLobbyTableList(String tableName, int maxPlayers, long gamesPlayed,
-										String player1, String player2, String player3) {
+                                        String player1, String player2, String player3) {
 
         issLobby.updateTable(tableName, maxPlayers, gamesPlayed, player1, player2, player3);
     }
@@ -629,7 +567,7 @@ public class JSkatViewImpl implements JSkatView {
     }
 
     private void updateISSTable(String tableName, Player leftOpponent, Player rightOpponent,
-								Player player, GameStartInformation status) {
+                                Player player, GameStartInformation status) {
 
         LOG.debug("Updating ISS table: " + tableName + " " + leftOpponent + " " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
                 + rightOpponent + " " + player); //$NON-NLS-1$
@@ -672,7 +610,7 @@ public class JSkatViewImpl implements JSkatView {
      */
     @Override
     public void updateISSMove(String tableName, SkatGameData gameData,
-							  MoveInformation moveInformation) {
+                              MoveInformation moveInformation) {
 
         Player movePlayer = moveInformation.getPlayer();
 
@@ -899,9 +837,9 @@ public class JSkatViewImpl implements JSkatView {
      */
     @Override
     public void setPlayerNames(String tableName, String upperLeftPlayerName,
-							   boolean isUpperLeftPlayerAIPlayer, String upperRightPlayerName,
-							   boolean isUpperRightPlayerAIPlayer, String lowerPlayerName,
-							   boolean isLowerPlayerAIPlayer) {
+                               boolean isUpperLeftPlayerAIPlayer, String upperRightPlayerName,
+                               boolean isUpperRightPlayerAIPlayer, String lowerPlayerName,
+                               boolean isLowerPlayerAIPlayer) {
 
         tables.get(tableName).setPlayerNames(upperLeftPlayerName, isUpperLeftPlayerAIPlayer, upperRightPlayerName,
                 isUpperRightPlayerAIPlayer, lowerPlayerName, isLowerPlayerAIPlayer);
@@ -973,7 +911,7 @@ public class JSkatViewImpl implements JSkatView {
      */
     @Override
     public void setDiscardedSkat(String tableName, Player player, CardList skatBefore,
-								 CardList discardedSkat) {
+                                 CardList discardedSkat) {
         tables.get(tableName).setDiscardedSkat(player, skatBefore, discardedSkat);
     }
 

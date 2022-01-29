@@ -1,46 +1,4 @@
-/**
- * This file is part of JSkat.
- * <p>
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- * This file is part of JSkat.
- *
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- */
 package org.jskat.gui.swing;
-
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.geom.AffineTransform;
-
-import javax.swing.JPanel;
 
 import org.jskat.data.JSkatOptions;
 import org.jskat.gui.img.JSkatGraphicRepository;
@@ -49,6 +7,12 @@ import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
 
 /**
  * Panel for showing cards.
@@ -77,10 +41,8 @@ public class CardPanel extends JPanel {
     /**
      * Creates a new instance of CardPanel.
      *
-     * @param scaleFactor
-     *            Scale factor for cards
-     * @param showBackside
-     *            TRUE if the Card should hide its face
+     * @param scaleFactor  Scale factor for cards
+     * @param showBackside TRUE if the Card should hide its face
      */
     public CardPanel(final Double scaleFactor, final Boolean showBackside) {
 
@@ -88,7 +50,7 @@ public class CardPanel extends JPanel {
 
         createMouseAdapter();
 
-		this.bitmaps = JSkatGraphicRepository.INSTANCE;
+        this.bitmaps = JSkatGraphicRepository.INSTANCE;
         this.scaleFactor = scaleFactor;
         this.showBackside = showBackside;
 
@@ -144,8 +106,7 @@ public class CardPanel extends JPanel {
     /**
      * Adds a card.
      *
-     * @param newCard
-     *            Card
+     * @param newCard Card
      */
     public final void addCard(final Card newCard) {
 
@@ -157,8 +118,7 @@ public class CardPanel extends JPanel {
     /**
      * Adds a list of cards.
      *
-     * @param newCards
-     *            List of cards
+     * @param newCards List of cards
      */
     public final void addCards(final CardList newCards) {
 
@@ -170,17 +130,16 @@ public class CardPanel extends JPanel {
     /**
      * Removes a card.
      *
-     * @param cardToRemove
-     *            Card to remove
+     * @param cardToRemove Card to remove
      */
     public final void removeCard(final Card cardToRemove) {
 
-		if (cards.contains(cardToRemove)) {
-			cards.remove(cardToRemove);
-		} else if (cards.size() > 0) {
+        if (cards.contains(cardToRemove)) {
+            cards.remove(cardToRemove);
+        } else if (cards.size() > 0) {
             // card panels with hidden cards may contain unknown cards
             // remove the last one
-			cards.remove(cards.size() - 1);
+            cards.remove(cards.size() - 1);
         }
         resetActiveCardPosition();
         repaint();
@@ -189,8 +148,7 @@ public class CardPanel extends JPanel {
     /**
      * Gets a card.
      *
-     * @param index
-     *            Index of card
+     * @param index Index of card
      * @return Card
      */
     public final Card get(final int index) {
@@ -236,7 +194,7 @@ public class CardPanel extends JPanel {
     }
 
     private void paintAllCards(final CardList cardsToPaint,
-            final Graphics2D g2D, final int cardWidth, int cardGap) {
+                               final Graphics2D g2D, final int cardWidth, int cardGap) {
         int cardNo = 0;
         for (final Card card : cardsToPaint) {
 
@@ -329,8 +287,7 @@ public class CardPanel extends JPanel {
     /**
      * Sets the sorting order.
      *
-     * @param newGameType
-     *            Game type
+     * @param newGameType Game type
      */
     public final void setSortType(final GameType newGameType) {
         this.sortGameType = newGameType;
