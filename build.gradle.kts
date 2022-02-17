@@ -1,7 +1,7 @@
 plugins {
     application
 
-    id("org.openjfx.javafxplugin") version "0.0.11"
+    id("org.openjfx.javafxplugin") version "0.0.12"
 }
 
 buildscript {
