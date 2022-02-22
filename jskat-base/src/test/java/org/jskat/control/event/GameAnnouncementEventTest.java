@@ -1,4 +1,3 @@
-
 package org.jskat.control.event;
 
 import org.jskat.AbstractJSkatTest;
@@ -31,8 +30,7 @@ public class GameAnnouncementEventTest extends AbstractJSkatTest {
         factory.setGameType(GameType.GRAND);
         factory.setDiscardedCards(new CardList(Card.CJ, Card.SJ));
 
-        event = new GameAnnouncementEvent(Player.FOREHAND,
-                factory.getAnnouncement());
+        event = new GameAnnouncementEvent(Player.FOREHAND, factory.getAnnouncement());
     }
 
     @Test
@@ -47,6 +45,7 @@ public class GameAnnouncementEventTest extends AbstractJSkatTest {
 
         event.processForward(data);
 
+        assertThat(data.getDeclarer()).isEqualTo(Player.FOREHAND);
         assertThat(data.getAnnoucement().getGameType()).isEqualTo(GameType.GRAND);
         assertThat(data.getAnnoucement().getDiscardedCards()).hasSize(2);
         assertThat(data.getAnnoucement().getDiscardedCards()).containsExactlyInAnyOrder(Card.CJ, Card.SJ);
@@ -62,6 +61,7 @@ public class GameAnnouncementEventTest extends AbstractJSkatTest {
         event.processForward(data);
         event.processBackward(data);
 
+        assertNull(data.getDeclarer());
         assertNull(data.getAnnoucement().getGameType());
         assertThat(data.getAnnoucement().getDiscardedCards()).hasSize(0);
         assertTrue(data.getAnnoucement().isHand());

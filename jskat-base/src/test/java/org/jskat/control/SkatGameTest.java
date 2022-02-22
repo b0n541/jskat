@@ -1,4 +1,3 @@
-
 package org.jskat.control;
 
 import com.google.common.eventbus.EventBus;
@@ -15,10 +14,7 @@ import org.jskat.util.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -398,15 +394,15 @@ public class SkatGameTest extends AbstractJSkatTest {
     public void testPredefinedCardPlaying() {
         final UnitTestPlayer foreHand = new UnitTestPlayer();
         foreHand.setCardsToPlay(
-                Arrays.asList(Card.C7, Card.SJ, Card.C9, Card.H8, Card.DQ, Card.D7, Card.CT, Card.DK, Card.CA, Card.CK));
+                List.of(Card.C7, Card.SJ, Card.C9, Card.H8, Card.DQ, Card.D7, Card.CT, Card.DK, Card.CA, Card.CK));
 
         final UnitTestPlayer middleHand = new UnitTestPlayer();
         middleHand.setCardsToPlay(
-                Arrays.asList(Card.CQ, Card.C8, Card.SQ, Card.ST, Card.S9, Card.HT, Card.HA, Card.DA, Card.HK, Card.D9));
+                List.of(Card.CQ, Card.C8, Card.SQ, Card.ST, Card.S9, Card.HT, Card.HA, Card.DA, Card.HK, Card.D9));
 
         final UnitTestPlayer rearHand = new UnitTestPlayer();
         rearHand.setCardsToPlay(
-                Arrays.asList(Card.DJ, Card.CJ, Card.HJ, Card.SA, Card.S8, Card.H7, Card.H9, Card.D8, Card.HQ, Card.DT));
+                List.of(Card.DJ, Card.CJ, Card.HJ, Card.SA, Card.S8, Card.H7, Card.H9, Card.D8, Card.HQ, Card.DT));
 
         final SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD, foreHand, middleHand, rearHand);
         game.setView(new UnitTestView());

@@ -21,11 +21,13 @@ public final class GameAnnouncementEvent extends AbstractPlayerMoveEvent {
 
     @Override
     public void processForward(SkatGameData data) {
+        data.setDeclarer(player);
         data.setAnnouncement(announcement);
     }
 
     @Override
     public void processBackward(SkatGameData data) {
+        data.setDeclarer(null);
         data.setAnnouncement(GameAnnouncementFactory.getEmptyAnnouncement());
     }
 

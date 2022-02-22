@@ -21,7 +21,7 @@ public final class TrickCardPlayedEvent extends AbstractPlayerMoveEvent {
     }
 
     @Override
-    public final void processForward(final SkatGameData data) {
+    public void processForward(final SkatGameData data) {
 
         data.removePlayerCard(player, card);
 
@@ -40,6 +40,7 @@ public final class TrickCardPlayedEvent extends AbstractPlayerMoveEvent {
             if (data.getTricks().size() < 10) {
                 data.addTrick(new Trick(data.getTricks().size(), trickWinner));
             }
+            data.addPlayerPoints(trickWinner, trick.getValue());
         }
     }
 
@@ -52,9 +53,10 @@ public final class TrickCardPlayedEvent extends AbstractPlayerMoveEvent {
     }
 
     @Override
-    public final void processBackward(final SkatGameData data) {
+    public void processBackward(final SkatGameData data) {
 
         if (isEmptyTrick(data)) {
+            data.addPlayerPoints(data.getLastCompletedTrick().getTrickWinner(), data.getLastCompletedTrick().getValue() * -1);
             data.removeLastTrick();
         }
 

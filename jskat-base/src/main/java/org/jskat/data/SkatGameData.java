@@ -21,7 +21,7 @@ import java.util.*;
  */
 public class SkatGameData {
 
-    private static Logger log = LoggerFactory.getLogger(SkatGameData.class);
+    private static final Logger log = LoggerFactory.getLogger(SkatGameData.class);
 
     /**
      * All possible game states
@@ -40,7 +40,7 @@ public class SkatGameData {
          */
         BIDDING,
         /**
-         * Grand hand announcement instead of an ramsch game
+         * Grand hand announcement instead of a Ramsch game
          */
         RAMSCH_GRAND_HAND_ANNOUNCING,
         /**
@@ -82,7 +82,7 @@ public class SkatGameData {
         /**
          * Game over
          */
-        GAME_OVER;
+        GAME_OVER
     }
 
     private GameState gameState;
@@ -109,7 +109,7 @@ public class SkatGameData {
     /**
      * Points the player made during the game
      */
-    private final Map<Player, Integer> playerPoints = new HashMap<Player, Integer>();
+    private final Map<Player, Integer> playerPoints = new HashMap<>();
 
     /**
      * Game result
@@ -119,7 +119,7 @@ public class SkatGameData {
     /**
      * Player names
      */
-    private final Map<Player, String> playerNames = new HashMap<Player, String>();
+    private final Map<Player, String> playerNames = new HashMap<>();
 
     /**
      * Bids the players made during bidding
@@ -133,7 +133,7 @@ public class SkatGameData {
 
     /**
      * Flag for a geschoben game (the skat was handed over from player to player at
-     * the beginning of a ramsch game)
+     * the beginning of a Ramsch game)
      */
     private int geschoben = 0;
 
@@ -364,9 +364,9 @@ public class SkatGameData {
     }
 
     /**
-     * Checks whether a durchmarsch was done in a ramsch game or not
+     * Checks whether a durchmarsch was done in a Ramsch game or not
      *
-     * @return TRUE if someone did a durchmarsch in a ramsch game
+     * @return TRUE if someone did a durchmarsch in a Ramsch game
      */
     public boolean isDurchmarsch() {
 
@@ -374,9 +374,9 @@ public class SkatGameData {
     }
 
     /**
-     * Checks whether someone was jungfrau in a ramsch game
+     * Checks whether someone was Jungfrau in a Ramsch game
      *
-     * @return TRUE if someone was jungfrau in a ramsch game
+     * @return TRUE if someone was Jungfrau in a Ramsch game
      */
     public boolean isJungfrau() {
 
@@ -403,17 +403,9 @@ public class SkatGameData {
 
         playerPoints.put(declarer, Integer.valueOf(newScore));
 
-        if (newScore < 31 || newScore > 89) {
-            result.setSchneider(true);
-        } else {
-            result.setSchneider(false);
-        }
+        result.setSchneider(newScore < 31 || newScore > 89);
 
-        if (newScore == 0 || newScore == 120) {
-            result.setSchwarz(true);
-        } else {
-            result.setSchwarz(false);
-        }
+        result.setSchwarz(newScore == 0 || newScore == 120);
     }
 
     /**
@@ -500,7 +492,7 @@ public class SkatGameData {
     }
 
     /**
-     * Calculates final results of a ramsch game
+     * Calculates final results of a Ramsch game
      */
     public void finishRamschGame() {
 
@@ -1145,7 +1137,7 @@ public class SkatGameData {
     }
 
     /**
-     * Gets the looses for a ramsch game
+     * Gets the looses for a Ramsch game
      *
      * @return Set of loosing players
      */
@@ -1153,7 +1145,7 @@ public class SkatGameData {
         if (announcement == null
                 || !GameType.RAMSCH.equals(announcement.gameType)) {
             throw new IllegalStateException(
-                    "This game data object is not from a ramsch game!");
+                    "This game data object is not from a Ramsch game!");
         }
         return Collections.unmodifiableSet(ramschLoosers);
     }

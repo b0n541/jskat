@@ -19,7 +19,7 @@ public interface SkatRule {
      * @param card        Card to be checked
      * @return TRUE if the card is allowed to be played
      */
-    public boolean isCardAllowed(GameType gameType, Card initialCard, CardList hand, Card card);
+    boolean isCardAllowed(GameType gameType, Card initialCard, CardList hand, Card card);
 
     /**
      * Checks whether a card beats another card
@@ -29,7 +29,7 @@ public interface SkatRule {
      * @param card       Card to be checked
      * @return TRUE if the card beats the other card
      */
-    public boolean isCardBeatsCard(GameType gameType, Card cardToBeat, Card card);
+    boolean isCardBeatsCard(GameType gameType, Card cardToBeat, Card card);
 
     /**
      * Checks whether a game is won
@@ -37,7 +37,7 @@ public interface SkatRule {
      * @param gameData Game data
      * @return TRUE if the game was won
      */
-    public boolean isGameWon(SkatGameData gameData);
+    boolean isGameWon(SkatGameData gameData);
 
     /**
      * Calculates the value for a game if won
@@ -45,7 +45,7 @@ public interface SkatRule {
      * @param gameData Game data
      * @return Value of the game if won
      */
-    public int getGameValueForWonGame(SkatGameData gameData);
+    int getGameValueForWonGame(SkatGameData gameData);
 
     /**
      * Computes the value for a game
@@ -53,7 +53,7 @@ public interface SkatRule {
      * @param gameData Game data
      * @return Game result
      */
-    public int calcGameResult(SkatGameData gameData);
+    int calcGameResult(SkatGameData gameData);
 
     /**
      * Checks whether one or more cards of a given suit are on the hand
@@ -63,7 +63,7 @@ public interface SkatRule {
      * @param suit     Suit color to search for
      * @return TRUE if one or more cards are on the hand
      */
-    public boolean hasSuit(GameType gameType, CardList hand, Suit suit);
+    boolean hasSuit(GameType gameType, CardList hand, Suit suit);
 
     /**
      * Calculates the trick winner
@@ -72,7 +72,7 @@ public interface SkatRule {
      * @param trick    Trick
      * @return Trick winner
      */
-    public Player calculateTrickWinner(GameType gameType, Trick trick);
+    Player calculateTrickWinner(GameType gameType, Trick trick);
 
     /**
      * calculates the multiplier of a card list with regard to the ruleset
@@ -80,7 +80,7 @@ public interface SkatRule {
      * @param gameData Game data
      * @return the multiplier for bidding and game announcement
      */
-    public int getMultiplier(SkatGameData gameData);
+    int getMultiplier(SkatGameData gameData);
 
     /**
      * Checks whether the game is played with jacks or without
@@ -88,7 +88,7 @@ public interface SkatRule {
      * @param gameData Game data
      * @return TRUE if the game is played with jacks
      */
-    public boolean isPlayWithJacks(SkatGameData gameData);
+    boolean isPlayWithJacks(SkatGameData gameData);
 
     /**
      * Checks whether a game was overbid
@@ -96,5 +96,5 @@ public interface SkatRule {
      * @param gameData Game data
      * @return TRUE if the game was overbid
      */
-    public boolean isOverbid(final SkatGameData gameData);
+    boolean isOverbid(final SkatGameData gameData);
 }

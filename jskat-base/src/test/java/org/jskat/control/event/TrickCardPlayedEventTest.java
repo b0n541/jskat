@@ -1,4 +1,3 @@
-
 package org.jskat.control.event;
 
 import org.jskat.AbstractJSkatTest;
@@ -86,6 +85,7 @@ public class TrickCardPlayedEventTest extends AbstractJSkatTest {
         assertHand(data.getPlayerCards(Player.REARHAND), Card.HA, Card.C9);
         assertTrick(data.getLastCompletedTrick(), Card.CJ, Card.SJ, Card.HJ, Player.FOREHAND);
         assertEmptyTrick(data.getCurrentTrick());
+        assertThat(data.getScore(Player.FOREHAND)).isEqualTo(6);
 
         events.next().processForward(data);
 
@@ -108,6 +108,7 @@ public class TrickCardPlayedEventTest extends AbstractJSkatTest {
         assertHand(data.getPlayerCards(Player.REARHAND), Card.HA);
         assertTrick(data.getLastCompletedTrick(), Card.C7, Card.C8, Card.C9, Player.REARHAND);
         assertEmptyTrick(data.getCurrentTrick());
+        assertThat(data.getScore(Player.REARHAND)).isEqualTo(0);
 
         events.next().processForward(data);
 
@@ -130,6 +131,7 @@ public class TrickCardPlayedEventTest extends AbstractJSkatTest {
         assertHand(data.getPlayerCards(Player.REARHAND));
         assertTrick(data.getLastCompletedTrick(), Card.HA, Card.CA, Card.SA, Player.FOREHAND);
         assertEmptyTrick(data.getCurrentTrick());
+        assertThat(data.getScore(Player.FOREHAND)).isEqualTo(39);
     }
 
     private static void assertEmptyTrick(final Trick trick) {
@@ -166,6 +168,7 @@ public class TrickCardPlayedEventTest extends AbstractJSkatTest {
         assertHand(data.getPlayerCards(Player.MIDDLEHAND), Card.SA);
         assertHand(data.getPlayerCards(Player.REARHAND));
         assertTrick(data.getCurrentTrick(), Card.HA, Card.CA, null, null);
+        assertThat(data.getScore(Player.FOREHAND)).isEqualTo(6);
 
         events.next().processBackward(data);
 

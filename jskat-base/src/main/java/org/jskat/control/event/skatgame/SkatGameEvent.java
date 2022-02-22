@@ -11,12 +11,12 @@ public interface SkatGameEvent {
      *
      * @param data Game data
      */
-    public void processForward(SkatGameData data);
+    void processForward(SkatGameData data);
 
     /**
      * Processes the event backward.
      *
      * @param data Game data
      */
-    public void processBackward(SkatGameData data);
+    void processBackward(SkatGameData data);
 }
