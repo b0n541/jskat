@@ -1,4 +1,3 @@
-
 package org.jskat.util.rule;
 
 
@@ -324,7 +323,7 @@ public class SuitRuleTest extends AbstractJSkatTest {
         data.calcResult();
 
         assertFalse(data.getResult().isWon());
-        assertThat(data.getResult().getGameValue()).isEqualTo(-36);
+        assertThat(data.getResult().getGameValue()).isEqualTo(-54);
         assertTrue(data.getResult().isOverBidded());
     }
 

@@ -841,11 +841,11 @@ public class SkatGame {
         }
     }
 
-    private void endGameBecauseOfSchwarzPlaying(Player currentPlayer) {
+    private void endGameBecauseOfSchwarzPlaying(Player schwarzPlayer) {
         data.getResult().setSchwarz(true);
         // declarer played schwarz
         // opponent played schwarz
-        data.getResult().setWon(!data.getDeclarer().equals(currentPlayer));
+        data.getResult().setWon(!schwarzPlayer.equals(data.getDeclarer()));
         data.setGameState(GameState.PRELIMINARY_GAME_END);
     }
 

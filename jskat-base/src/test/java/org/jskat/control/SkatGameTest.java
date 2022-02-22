@@ -159,7 +159,7 @@ public class SkatGameTest extends AbstractJSkatTest {
     }
 
     /**
-     * When no player bids and pub rules are acitvated, ramsch is played
+     * When no player bids and pub rules are activated, Ramsch is played
      */
     @Test
     public void testRamsch_NoBids() {

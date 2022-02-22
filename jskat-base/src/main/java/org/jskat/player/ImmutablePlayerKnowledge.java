@@ -548,11 +548,11 @@ public class ImmutablePlayerKnowledge {
     public Set<Player> getPlayerPartyMembers() {
 
         final Set<Player> result = new HashSet<>();
-        if (getDeclarer().equals(getPlayerPosition())) {
-            // player is declarer
+        if (getGameType() == GameType.RAMSCH) {
+            result.add(playerPosition);
+        } else if (getDeclarer().equals(getPlayerPosition())) {
             result.add(getDeclarer());
         } else {
-            // player is opponent
             result.add(getDeclarer().getLeftNeighbor());
             result.add(getDeclarer().getRightNeighbor());
         }
@@ -575,16 +575,9 @@ public class ImmutablePlayerKnowledge {
 
     public Set<Player> getOpponentPartyMembers() {
 
-        final Set<Player> result = new HashSet<>();
-        if (getDeclarer().equals(getPlayerPosition())) {
-            // player is declarer
-            result.add(getDeclarer().getLeftNeighbor());
-            result.add(getDeclarer().getRightNeighbor());
-        } else {
-            // player is opponent
-            result.add(getDeclarer());
-        }
-        return result;
+        List<Player> result = Player.getOrderedList();
+        result.removeAll(getPlayerPartyMembers());
+        return Set.copyOf(result);
     }
 
     public CardList getOpponentPartyMadeCards() {

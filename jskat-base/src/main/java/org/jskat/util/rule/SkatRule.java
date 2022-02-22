@@ -56,6 +56,14 @@ public interface SkatRule {
     int calcGameResult(SkatGameData gameData);
 
     /**
+     * Computes the value for an overbid game
+     *
+     * @param gameData Game data
+     * @return Game result
+     */
+    int calcOverbidGameResult(SkatGameData gameData);
+
+    /**
      * Checks whether one or more cards of a given suit are on the hand
      *
      * @param gameType Game type

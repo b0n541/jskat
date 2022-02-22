@@ -124,12 +124,12 @@ public class SkatGameData {
     /**
      * Bids the players made during bidding
      */
-    private final Map<Player, List<Integer>> playerBids = new HashMap<Player, List<Integer>>();
+    private final Map<Player, List<Integer>> playerBids = new HashMap<>();
 
     /**
      * Passes the players made during bidding
      */
-    private final Map<Player, Boolean> playerPasses = new HashMap<Player, Boolean>();
+    private final Map<Player, Boolean> playerPasses = new HashMap<>();
 
     /**
      * Flag for a geschoben game (the skat was handed over from player to player at
@@ -140,12 +140,12 @@ public class SkatGameData {
     /**
      * Tricks made in the game
      */
-    private final List<Trick> tricks = new ArrayList<Trick>();
+    private final List<Trick> tricks = new ArrayList<>();
 
     /**
      * Cards on player hands
      */
-    private final Map<Player, CardList> playerHands = new HashMap<Player, CardList>();
+    private final Map<Player, CardList> playerHands = new HashMap<>();
 
     /**
      * Cards in the skat
@@ -155,7 +155,7 @@ public class SkatGameData {
     /**
      * Holds all cards dealt to the players
      */
-    private final Map<Player, CardList> dealtCards = new HashMap<Player, CardList>();
+    private final Map<Player, CardList> dealtCards = new HashMap<>();
 
     /**
      * Holds all cards dealt to skat
@@ -164,7 +164,7 @@ public class SkatGameData {
 
     private Boolean skatPickedUp = false;
 
-    private final Set<Player> ramschLoosers = new HashSet<Player>();
+    private final Set<Player> ramschLoosers = new HashSet<>();
 
     private final List<SkatGameEvent> gameMoves = new ArrayList<>();
 
@@ -175,7 +175,7 @@ public class SkatGameData {
 
         intializeVariables();
 
-        log.debug("Game data created"); //$NON-NLS-1$
+        log.debug("Game data created");
     }
 
     @Subscribe
@@ -191,11 +191,11 @@ public class SkatGameData {
         result = new SkatGameResult();
 
         for (final Player player : Player.values()) {
-            playerNames.put(player, ""); //$NON-NLS-1$
+            playerNames.put(player, "");
             playerHands.put(player, new CardList());
             dealtCards.put(player, new CardList());
             playerPoints.put(player, 0);
-            playerBids.put(player, new ArrayList<Integer>());
+            playerBids.put(player, new ArrayList<>());
             playerPasses.put(player, Boolean.FALSE);
         }
     }
@@ -219,7 +219,7 @@ public class SkatGameData {
         if (result.getGameValue() == -1
                 && getGameType() != GameType.PASSED_IN) {
 
-            log.warn("Game result hasn't been calculated yet!"); //$NON-NLS-1$
+            log.warn("Game result hasn't been calculated yet!");
             calcResult();
         }
 
@@ -243,7 +243,7 @@ public class SkatGameData {
      */
     public void setDeclarer(final Player singlePlayer) {
 
-        log.debug("Current single Player " + singlePlayer); //$NON-NLS-1$
+        log.debug("Current single Player " + singlePlayer);
 
         declarer = singlePlayer;
     }
@@ -297,7 +297,7 @@ public class SkatGameData {
         // TODO This should not be possible when a Ramsch game is played
         // maybe throw an exception instead?
         if (getGameType() == GameType.RAMSCH) {
-            log.warn("Overbidding cannot happen in Ramsch games: gameType=" //$NON-NLS-1$
+            log.warn("Overbidding cannot happen in Ramsch games: gameType="
                     + getGameType());
         }
         return result.isOverBidded();
@@ -448,20 +448,22 @@ public class SkatGameData {
     public void calcResult() {
 
         if (getGameType() == GameType.PASSED_IN) {
-
             result.setWon(false);
             result.setGameValue(0);
-        } else {
-
-            if (!result.isWon()) {
-                // game could be won already, because of playing schwarz of an
-                // opponent
-                result.setWon(rules.isGameWon(this));
-            }
+        } else if (getGameType() == GameType.RAMSCH) {
+            result.setWon(false);
             result.setGameValue(rules.calcGameResult(this));
-
+        } else {
             if (rules.isOverbid(this)) {
+                result.setWon(false);
                 result.setOverBidded(true);
+                result.setGameValue(rules.calcOverbidGameResult(this));
+            } else {
+                if (!result.isWon()) {
+                    // game could be won already, because of playing schwarz of an opponent
+                    result.setWon(rules.isGameWon(this));
+                    result.setGameValue(rules.calcGameResult(this));
+                }
             }
         }
 
@@ -490,6 +492,7 @@ public class SkatGameData {
             finishRamschGame();
         }
     }
+
 
     /**
      * Calculates final results of a Ramsch game
@@ -593,7 +596,7 @@ public class SkatGameData {
 
         if (getTricks().size() < 2) {
             throw new IllegalStateException(
-                    "No tricks finished in the game so far."); //$NON-NLS-1$
+                    "No tricks finished in the game so far.");
         }
 
         if (tricks.get(tricks.size() - 1).isTrickFinished()) {
@@ -613,7 +616,7 @@ public class SkatGameData {
      */
     public void setTrickWinner(final int trickNumber, final Player winner) {
 
-        log.debug("setTrickWinner(" + trickNumber + ", " + winner + ")"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        log.debug("setTrickWinner(" + trickNumber + ", " + winner + ")");  //$NON-NLS-2$ //$NON-NLS-3$
 
         tricks.get(trickNumber).setTrickWinner(winner);
     }
@@ -656,7 +659,7 @@ public class SkatGameData {
      */
     public int getGeschobenMultiplier() {
 
-        log.debug("geschoben=" + geschoben + ", 2^" + geschoben + "=" //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        log.debug("geschoben=" + geschoben + ", 2^" + geschoben + "="  //$NON-NLS-2$ //$NON-NLS-3$
                 + (1 << geschoben));
 
         int multiplier = 0;

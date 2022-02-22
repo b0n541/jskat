@@ -1,12 +1,7 @@
-
 package org.jskat.util.rule;
 
 import org.jskat.data.SkatGameData;
-import org.jskat.util.Card;
-import org.jskat.util.CardList;
-import org.jskat.util.GameType;
-import org.jskat.util.Player;
-import org.jskat.util.SkatConstants;
+import org.jskat.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,190 +11,172 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class SuitGrandRule extends SuitGrandRamschRule {
 
-	private static Logger log = LoggerFactory.getLogger(SuitGrandRule.class);
+    private static final Logger log = LoggerFactory.getLogger(SuitGrandRule.class);
 
-	/**
-	 * @see SkatRule#isGameWon(SkatGameData)
-	 */
-	@Override
-	public final boolean isGameWon(final SkatGameData gameData) {
+    /**
+     * @see SkatRule#isGameWon(SkatGameData)
+     */
+    @Override
+    public final boolean isGameWon(final SkatGameData gameData) {
 
-		boolean result = false;
+        return gameData.getScore(gameData.getDeclarer()) >= getMinimumWinningScore(gameData) && !isOverbid(gameData);
+    }
 
-		if (gameData.getScore(gameData.getDeclarer()) >= getMinimumWinningScore(gameData)) {
+    private static int getMinimumWinningScore(SkatGameData gameData) {
+        int result = SkatConstants.MIN_WINNING_POINTS;
 
-			if (!isOverbid(gameData)) {
-				// declarer should not overbid
-				result = true;
-			}
-		}
+        if (gameData.getAnnoucement().isSchneider()) {
+            result = SkatConstants.MIN_SCHNEIDER_WINNING_POINTS;
+        }
 
-		return result;
-	}
+        if (gameData.getAnnoucement().isSchwarz()) {
+            result = SkatConstants.MIN_SCHWARZ_WINNING_POINTS;
+        }
 
-	private static int getMinimumWinningScore(SkatGameData gameData) {
-		int result = SkatConstants.MIN_WINNING_POINTS;
+        return result;
+    }
 
-		if (gameData.getAnnoucement().isSchneider()) {
-			result = SkatConstants.MIN_SCHNEIDER_WINNING_POINTS;
-		}
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int getGameValueForWonGame(final SkatGameData gameData) {
+        int multiplier = getMultiplier(gameData);
 
-		if (gameData.getAnnoucement().isSchwarz()) {
-			result = SkatConstants.MIN_SCHWARZ_WINNING_POINTS;
-		}
+        log.debug("calcSuitResult: after Jacks and Trump: multiplier " + multiplier); //$NON-NLS-1$
 
-		return result;
-	}
+        // TODO add option: Hand game is only counted when game was not lost
+        // if (gameData.isHand() && !gameData.isGameLost()) {
+        if (gameData.isHand()) {
+            multiplier++;
+        }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int getGameValueForWonGame(final SkatGameData gameData) {
-		int multiplier = getMultiplier(gameData);
+        if (gameData.isOuvert()) {
+            multiplier++;
+        }
 
-		log.debug("calcSuitResult: after Jacks and Trump: multiplier " + multiplier); //$NON-NLS-1$
+        if (gameData.isSchneider()) {
+            multiplier++;
+            if (gameData.isHand() && gameData.isSchneiderAnnounced()) {
+                multiplier++;
+            }
+            log.debug("calcSuitResult: Schneider: multiplier " + multiplier); //$NON-NLS-1$
+        }
 
-		// TODO add option: Hand game is only counted when game was not lost
-		// if (gameData.isHand() && !gameData.isGameLost()) {
-		if (gameData.isHand()) {
-			multiplier++;
-		}
+        if (gameData.isSchwarz()) {
+            multiplier++;
+            if (gameData.isHand() && gameData.isSchwarzAnnounced()) {
+                multiplier++;
+            }
+            log.debug("calcSuitResult: Schwarz: multiplier " + multiplier); //$NON-NLS-1$
+        }
 
-		if (gameData.isOuvert()) {
-			multiplier++;
-		}
+        if (gameData.isContra()) {
+            multiplier *= 2;
+            log.debug("calcSuitResult: Contra: multiplier " + multiplier);
 
-		if (gameData.isSchneider()) {
-			multiplier++;
-			if (gameData.isHand() && gameData.isSchneiderAnnounced()) {
-				multiplier++;
-			}
-			log.debug("calcSuitResult: Schneider: multiplier " + multiplier); //$NON-NLS-1$
-		}
+            if (gameData.isRe()) {
+                multiplier *= 2;
+                log.debug("calcSuitResult: Re: multiplier " + multiplier);
+            }
+        }
 
-		if (gameData.isSchwarz()) {
-			multiplier++;
-			if (gameData.isHand() && gameData.isSchwarzAnnounced()) {
-				multiplier++;
-			}
-			log.debug("calcSuitResult: Schwarz: multiplier " + multiplier); //$NON-NLS-1$
-		}
+        int gameValue = SkatConstants.getGameBaseValue(gameData.getGameType(),
+                gameData.isHand(), gameData.isOuvert());
 
-		if (gameData.isContra()) {
-			multiplier *= 2;
-			log.debug("calcSuitResult: Contra: multiplier " + multiplier);
+        log.debug("gameValue" + gameValue); //$NON-NLS-1$
 
-			if (gameData.isRe()) {
-				multiplier *= 2;
-				log.debug("calcSuitResult: Re: multiplier " + multiplier);
-			}
-		}
+        return gameValue * multiplier;
+    }
 
-		int gameValue = SkatConstants.getGameBaseValue(gameData.getGameType(),
-				gameData.isHand(), gameData.isOuvert());
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public int calcGameResult(final SkatGameData gameData) {
 
-		log.debug("gameValue" + gameValue); //$NON-NLS-1$
+        int result = getGameValueForWonGame(gameData);
 
-		return gameValue * multiplier;
-	}
+        if (gameData.isGameLost()) {
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public int calcGameResult(final SkatGameData gameData) {
+            // penalty if game lost
+            result = result * -2;
+        }
 
-		int result = getGameValueForWonGame(gameData);
+        return result;
+    }
 
-		if (gameData.isGameLost()) {
+    /**
+     * Gets the multiplier for a suit or grand game
+     *
+     * @param gameData Game data
+     * @return Multiplier
+     */
+    @Override
+    public int getMultiplier(final SkatGameData gameData) {
 
-			// penalty if game lost
-			result = result * -2;
-		}
+        int result = 0;
 
-		return result;
-	}
+        CardList declarerCards = getDeclarerCards(gameData);
 
-	/**
-	 * Gets the multiplier for a suit or grand game
-	 * 
-	 * @param gameData
-	 *            Game data
-	 * @return Multiplier
-	 */
-	@Override
-	public int getMultiplier(final SkatGameData gameData) {
+        result = getMultiplier(declarerCards, gameData.getGameType());
 
-		int result = 0;
+        return result;
+    }
 
-		CardList declarerCards = getDeclarerCards(gameData);
+    private CardList getDeclarerCards(final SkatGameData gameData) {
+        CardList declarerCards = new CardList(gameData.getDealtCards().get(
+                gameData.getDeclarer()));
+        declarerCards.addAll(gameData.getDealtSkat());
+        return declarerCards;
+    }
 
-		result = getMultiplier(declarerCards, gameData.getGameType());
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isPlayWithJacks(final SkatGameData gameData) {
+        CardList declarerCards = getDeclarerCards(gameData);
 
-		return result;
-	}
+        return declarerCards.contains(Card.CJ);
+    }
 
-	private CardList getDeclarerCards(final SkatGameData gameData) {
-		CardList declarerCards = new CardList(gameData.getDealtCards().get(
-				gameData.getDeclarer()));
-		declarerCards.addAll(gameData.getDealtSkat());
-		return declarerCards;
-	}
+    /**
+     * Gets the multiplier for a {@link CardList} and a {@link GameType}
+     *
+     * @param cards    Card list
+     * @param gameType Game type
+     * @return Multiplier
+     */
+    public abstract int getMultiplier(CardList cards, GameType gameType);
 
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public boolean isPlayWithJacks(final SkatGameData gameData) {
-		CardList declarerCards = getDeclarerCards(gameData);
+    /**
+     * Checks whether a game was a schneider game<br>
+     * schneider means one party made only 30 points or below
+     *
+     * @param gameData Game data
+     * @return TRUE if the game was a schneider game
+     */
+    public static boolean isSchneider(final SkatGameData gameData) {
 
-		return declarerCards.contains(Card.CJ);
-	}
-
-	/**
-	 * Gets the multiplier for a {@link CardList} and a {@link GameType}
-	 * 
-	 * @param cards
-	 *            Card list
-	 * @param gameType
-	 *            Game type
-	 * @return Multiplier
-	 */
-	public abstract int getMultiplier(CardList cards, GameType gameType);
-
-	/**
-	 * Checks whether a game was a schneider game<br>
-	 * schneider means one party made only 30 points or below
-	 * 
-	 * @param gameData
-	 *            Game data
-	 * @return TRUE if the game was a schneider game
-	 */
-	public static boolean isSchneider(final SkatGameData gameData) {
-
-		boolean result = false;
-
-		if (gameData.getScore(Player.FOREHAND) < 31
+        boolean result = gameData.getScore(Player.FOREHAND) < 31
 				|| gameData.getScore(Player.MIDDLEHAND) < 31
-				|| gameData.getScore(Player.REARHAND) < 31) {
-			// one player was schneider
-			result = true;
-		}
+				|| gameData.getScore(Player.REARHAND) < 31;
+
+		// one player was schneider
 
 		return result;
-	}
+    }
 
-	/**
-	 * Checks whether a game was a schwarz game<br>
-	 * schwarz means one party made no trick or a wrong card was played
-	 * 
-	 * @param gameData
-	 *            Game data
-	 * @return TRUE, if the game is a schwarz game
-	 */
-	public static boolean isSchwarz(final SkatGameData gameData) {
-		return gameData.isPlayerMadeNoTrick()
-				|| gameData.getResult().isSchwarz();
-	}
+    /**
+     * Checks whether a game was a schwarz game<br>
+     * schwarz means one party made no trick or a wrong card was played
+     *
+     * @param gameData Game data
+     * @return TRUE, if the game is a schwarz game
+     */
+    public static boolean isSchwarz(final SkatGameData gameData) {
+        return gameData.isPlayerMadeNoTrick()
+                || gameData.getResult().isSchwarz();
+    }
 }

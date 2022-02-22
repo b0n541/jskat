@@ -138,6 +138,8 @@ public class SkatGameDataTest {
 
         gameData.calcResult();
 
-        assertThat(gameData.isGameFinished()).isTrue();
+        //assertThat(gameData.isGameFinished()).isTrue();
+        assertThat(gameData.isGameLost()).isTrue();
+        assertThat(gameData.getGameResult().getGameValue()).isEqualTo(-60);
     }
 }

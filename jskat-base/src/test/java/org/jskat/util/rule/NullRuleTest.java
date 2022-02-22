@@ -1,4 +1,3 @@
-
 package org.jskat.util.rule;
 
 
@@ -251,6 +250,6 @@ public class NullRuleTest extends AbstractJSkatTest {
         data.setAnnouncement(factory.getAnnouncement());
         playWinningTricks();
         data.calcResult();
-        assertThat(data.getResult().getGameValue()).isEqualTo(-46);
+        assertThat(data.getResult().getGameValue()).isEqualTo(-92);
     }
 }

@@ -7,7 +7,7 @@ import org.jskat.data.SkatGameResult;
 import java.util.Objects;
 
 /**
- * Event for game start.
+ * Event for game finish.
  */
 public final class GameFinishEvent implements SkatGameEvent {
 
@@ -18,12 +18,12 @@ public final class GameFinishEvent implements SkatGameEvent {
     }
 
     @Override
-    public final void processForward(SkatGameData data) {
+    public void processForward(SkatGameData data) {
         data.setResult(gameSummary.gameResult);
     }
 
     @Override
-    public final void processBackward(SkatGameData data) {
+    public void processBackward(SkatGameData data) {
         data.setResult(new SkatGameResult());
     }
 
