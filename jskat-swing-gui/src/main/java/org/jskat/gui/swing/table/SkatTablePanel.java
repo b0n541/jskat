@@ -1,170 +1,3 @@
-/**
- * This file is part of JSkat.
- * <p>
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- * <p>
- * This file is part of JSkat.
- * <p>
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- * <p>
- * This file is part of JSkat.
- * <p>
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- * <p>
- * This file is part of JSkat.
- * <p>
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- * <p>
- * This file is part of JSkat.
- * <p>
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- * <p>
- * This file is part of JSkat.
- * <p>
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- * <p>
- * This file is part of JSkat.
- * <p>
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- * <p>
- * This file is part of JSkat.
- * <p>
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- * <p>
- * This file is part of JSkat.
- * <p>
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- * <p>
- * This file is part of JSkat.
- * <p>
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- * This file is part of JSkat.
- *
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- */
 package org.jskat.gui.swing.table;
 
 import com.google.common.eventbus.Subscribe;
@@ -172,9 +5,9 @@ import org.jskat.control.JSkatEventBus;
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.skatgame.*;
 import org.jskat.control.event.table.*;
+import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
-import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.gui.action.main.StartSkatSeriesAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
@@ -241,10 +74,8 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Panel for a skat table.
      *
-     * @param tableName
-     *            Table name
-     * @param actions
-     *            Action
+     * @param tableName Table name
+     * @param actions   Action
      */
     public SkatTablePanel(String tableName, ActionMap actions) {
 
@@ -504,8 +335,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets player positions
      *
-     * @param event
-     *            Game start event
+     * @param event Game start event
      */
     @Subscribe
     public void resetTableOn(GameStartEvent event) {
@@ -548,8 +378,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Adds cards to a player
      *
-     * @param event
-     *            Card deal event
+     * @param event Card deal event
      */
     @Subscribe
     public void setDealtCardsOn(CardDealEvent event) {
@@ -559,10 +388,8 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets a card played in a trick
      *
-     * @param player
-     *            Player position
-     * @param card
-     *            Card
+     * @param player Player position
+     * @param card   Card
      */
     public void setTrickCard(Player player, Card card) {
 
@@ -572,8 +399,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Clears trick cards.
      *
-     * @param event
-     *            Trick completed event
+     * @param event Trick completed event
      */
     @Subscribe
     public void clearTrickCardsAndSetLastTrickOn(TrickCompletedEvent event) {
@@ -631,8 +457,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Removes all cards from a player
      *
-     * @param player
-     *            Player
+     * @param player Player
      */
     public void removeAllCards(Player player) {
         switch (player) {
@@ -651,8 +476,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Clears the hand of a player
      *
-     * @param player
-     *            Player
+     * @param player Player
      */
     public void clearHand(Player player) {
 
@@ -662,8 +486,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets the game announcement
      *
-     * @param event
-     *            Game announcement event
+     * @param event Game announcement event
      */
     @Subscribe
     public void setGameAnnouncementOn(GameAnnouncementEvent event) {
@@ -693,8 +516,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets the game state
      *
-     * @param state
-     *            Game state
+     * @param state Game state
      */
     public void setGameState(GameState state) {
 
@@ -769,8 +591,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets the context panel
      *
-     * @param panelType
-     *            Panel type
+     * @param panelType Panel type
      */
     void setContextPanel(ContextPanelType panelType) {
 
@@ -782,8 +603,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Adds a new game result
      *
-     * @param event
-     *            Game finish event
+     * @param event Game finish event
      */
     @Subscribe
     public void addGameResultOn(GameFinishEvent event) {
@@ -842,8 +662,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets the bid value for a player.
      *
-     * @param event
-     *            Bid event
+     * @param event Bid event
      */
     @Subscribe
     public void setBidValueOn(BidEvent event) {
@@ -861,8 +680,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets the bid value for a player.
      *
-     * @param event
-     *            Hold bid event
+     * @param event Hold bid event
      */
     @Subscribe
     public void setBidValueOn(HoldBidEvent event) {
@@ -883,8 +701,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets the skat
      *
-     * @param skat
-     *            Skat
+     * @param skat Skat
      */
     public void setSkat(CardList skat) {
 
@@ -898,8 +715,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Takes a card from skat to user panel
      *
-     * @param card
-     *            Card
+     * @param card Card
      */
     public void takeCardFromSkat(Card card) {
         takeCardFromSkat(userPanel, card);
@@ -908,10 +724,8 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Takes a card from skat
      *
-     * @param player
-     *            Player
-     * @param card
-     *            Card
+     * @param player Player
+     * @param card   Card
      */
     public void takeCardFromSkat(Player player, Card card) {
         takeCardFromSkat(getPlayerPanel(player), card);
@@ -934,8 +748,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Puts a card from the user panel to the skat
      *
-     * @param card
-     *            Card
+     * @param card Card
      */
     public void putCardIntoSkat(Card card) {
         putCardIntoSkat(userPanel, card);
@@ -944,10 +757,8 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Puts a card into the skat
      *
-     * @param player
-     *            Player
-     * @param card
-     *            Card
+     * @param player Player
+     * @param card   Card
      */
     public void putCardIntoSkat(Player player, Card card) {
         putCardIntoSkat(getPlayerPanel(player), card);
@@ -970,8 +781,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Clears the skat list.
      *
-     * @param event
-     *            Skat series started event
+     * @param event Skat series started event
      */
     @Subscribe
     public void clearSkatListOn(SkatSeriesStartedEvent event) {
@@ -982,8 +792,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets maximum number of players
      *
-     * @param maxPlayers
-     *            Maximum number of players
+     * @param maxPlayers Maximum number of players
      */
     protected void setMaxPlayers(int maxPlayers) {
 
@@ -993,10 +802,8 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets player name
      *
-     * @param player
-     *            Player position
-     * @param name
-     *            Player name
+     * @param player Player position
+     * @param name   Player name
      */
     public void setPlayerName(Player player, String name) {
 
@@ -1013,10 +820,8 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets player time
      *
-     * @param player
-     *            Player position
-     * @param time
-     *            Player time
+     * @param player Player position
+     * @param time   Player time
      */
     public void setPlayerTime(Player player, double time) {
 
@@ -1030,10 +835,8 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets player flag for chat enabled yes/no
      *
-     * @param playerName
-     *            Player name
-     * @param isChatEnabled
-     *            Flag for chat enabled yes/no
+     * @param playerName    Player name
+     * @param isChatEnabled Flag for chat enabled yes/no
      */
     public void setPlayerChatEnabled(String playerName,
                                      boolean isChatEnabled) {
@@ -1048,10 +851,8 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets player flag for ready to play yes/no
      *
-     * @param playerName
-     *            Player name
-     * @param isReadyToPlay
-     *            Flag for ready to play yes/no
+     * @param playerName    Player name
+     * @param isReadyToPlay Flag for ready to play yes/no
      */
     public void setPlayerReadyToPlay(String playerName,
                                      boolean isReadyToPlay) {
@@ -1066,8 +867,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets player flag for resign
      *
-     * @param player
-     *            Player
+     * @param player Player
      */
     public void setResign(Player player) {
 
@@ -1113,8 +913,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets the active player
      *
-     * @param event
-     *            Active player changed event
+     * @param event Active player changed event
      */
     @Subscribe
     public void setActivePlayerOn(ActivePlayerChangedEvent event) {
@@ -1140,8 +939,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets passing of a player
      *
-     * @param event
-     *            Pass bid event
+     * @param event Pass bid event
      */
     @Subscribe
     public void setPassOn(PassBidEvent event) {
@@ -1157,8 +955,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets the series state
      *
-     * @param state
-     *            Series state
+     * @param state Series state
      */
     public void setSeriesState(SeriesState state) {
 
@@ -1171,8 +968,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets the bid value to make
      *
-     * @param bidValue
-     *            Bid value
+     * @param bidValue Bid value
      */
     public void setBidValueToMake(int bidValue) {
 
@@ -1182,8 +978,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets the bid value to hold
      *
-     * @param bidValue
-     *            Bid value
+     * @param bidValue Bid value
      */
     public void setBidValueToHold(int bidValue) {
 
@@ -1199,8 +994,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets the trick number
      *
-     * @param trickNumber
-     *            Trick number
+     * @param trickNumber Trick number
      */
     public void setTrickNumber(int trickNumber) {
 
@@ -1210,18 +1004,12 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets the player names
      *
-     * @param upperLeftPlayerName
-     *            Upper left player name
-     * @param isUpperLeftPlayerAIPlayer
-     *            TRUE if the upper left player is an AI player
-     * @param upperRightPlayerName
-     *            Upper right player name
-     * @param isUpperRightPlayerAIPlayer
-     *            TRUE if the upper right player is an AI player
-     * @param lowerPlayerName
-     *            Lower player name
-     * @param isLowerPlayerAIPlayer
-     *            TRUE if the lower player is an AI player
+     * @param upperLeftPlayerName        Upper left player name
+     * @param isUpperLeftPlayerAIPlayer  TRUE if the upper left player is an AI player
+     * @param upperRightPlayerName       Upper right player name
+     * @param isUpperRightPlayerAIPlayer TRUE if the upper right player is an AI player
+     * @param lowerPlayerName            Lower player name
+     * @param isLowerPlayerAIPlayer      TRUE if the lower player is an AI player
      */
     public void setPlayerNames(String upperLeftPlayerName, boolean isUpperLeftPlayerAIPlayer,
                                String upperRightPlayerName, boolean isUpperRightPlayerAIPlayer, String lowerPlayerName,
@@ -1250,8 +1038,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets the declarer player for the table
      *
-     * @param declarer
-     *            Declarer player
+     * @param declarer Declarer player
      */
     public void setDeclarer(Player declarer) {
         this.declarer = declarer;
@@ -1260,8 +1047,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Shows the cards of a player
      *
-     * @param player
-     *            Player
+     * @param player Player
      */
     public void showCards(Player player) {
 
@@ -1271,8 +1057,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Hides the cards of a player
      *
-     * @param player
-     *            Player
+     * @param player Player
      */
     public void hideCards(Player player) {
 
@@ -1282,8 +1067,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets the schieben of a player
      *
-     * @param player
-     *            Player position
+     * @param player Player position
      */
     public void setGeschoben(Player player) {
         getPlayerPanel(player).setGeschoben();
@@ -1292,12 +1076,9 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets the discarded skat
      *
-     * @param player
-     *            Player
-     * @param skatBefore
-     *            Skat before discarding
-     * @param discardedSkat
-     *            Skat after discarding
+     * @param player        Player
+     * @param skatBefore    Skat before discarding
+     * @param discardedSkat Skat after discarding
      */
     public void setDiscardedSkat(Player player,
                                  CardList skatBefore, CardList discardedSkat) {
@@ -1316,8 +1097,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Shows cards of all players
      *
-     * @param command
-     *            Show cards command
+     * @param command Show cards command
      */
     @Subscribe
     public void showCardsOn(ShowCardsCommand command) {

@@ -1,68 +1,35 @@
-/**
- * This file is part of JSkat.
- * <p>
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- * This file is part of JSkat.
- *
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- */
 package org.jskat.gui.action.main;
 
-import java.awt.event.ActionEvent;
-
-import javax.swing.AbstractAction;
-
 import org.jskat.control.JSkatMaster;
-import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.control.gui.action.JSkatActionEvent;
+import org.jskat.gui.action.AbstractJSkatAction;
+
+import javax.swing.*;
+import java.awt.event.ActionEvent;
 
 /**
  * Implements the action for handling card panel clicks during discarding
  */
 public class TakeCardFromSkatAction extends AbstractJSkatAction {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see AbstractJSkatAction#AbstractJSkatAction()
-	 */
-	public TakeCardFromSkatAction() {
+    /**
+     * @see AbstractJSkatAction#AbstractJSkatAction()
+     */
+    public TakeCardFromSkatAction() {
 
-		setActionCommand(JSkatAction.TAKE_CARD_FROM_SKAT);
-	}
+        setActionCommand(JSkatAction.TAKE_CARD_FROM_SKAT);
+    }
 
-	/**
-	 * @see AbstractAction#actionPerformed(ActionEvent)
-	 */
-	@Override
-	public void actionPerformed(final ActionEvent e) {
+    /**
+     * @see AbstractAction#actionPerformed(ActionEvent)
+     */
+    @Override
+    public void actionPerformed(final ActionEvent e) {
 
         JSkatMaster.INSTANCE.takeCardFromSkat(new JSkatActionEvent(e
                 .getActionCommand(), e.getSource()));
-	}
+    }
 }

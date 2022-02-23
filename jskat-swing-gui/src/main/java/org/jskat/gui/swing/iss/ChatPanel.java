@@ -1,183 +1,142 @@
-/**
- * This file is part of JSkat.
- * <p>
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * <p>
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * <p>
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- * This file is part of JSkat.
- *
- * JSkat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * JSkat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with JSkat.  If not, see <http://www.gnu.org/licenses/>.
- */
 package org.jskat.gui.swing.iss;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.swing.ActionMap;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-
-import org.jskat.data.iss.ChatMessage;
 import org.jskat.control.gui.action.JSkatAction;
+import org.jskat.data.iss.ChatMessage;
 import org.jskat.gui.swing.AbstractTabPanel;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.JSkatResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Chat panel for ISS
  */
 class ChatPanel extends JPanel implements ChangeListener {
 
-	private static final long serialVersionUID = 1L;
-	private static Logger log = LoggerFactory.getLogger(ChatPanel.class);
+    private static final long serialVersionUID = 1L;
+    private static Logger log = LoggerFactory.getLogger(ChatPanel.class);
 
-	private JTextField inputLine;
-	private Map<String, JTextArea> chats;
-	private JTabbedPane chatTabs;
+    private JTextField inputLine;
+    private Map<String, JTextArea> chats;
+    private JTabbedPane chatTabs;
 
-	String activeChatName;
+    String activeChatName;
 
-	/**
-	 * Constructor
-	 */
-	ChatPanel(final AbstractTabPanel parent) {
+    /**
+     * Constructor
+     */
+    ChatPanel(final AbstractTabPanel parent) {
 
-		initPanel(parent.getActionMap());
-	}
+        initPanel(parent.getActionMap());
+    }
 
-	private void initPanel(final ActionMap actions) {
+    private void initPanel(final ActionMap actions) {
 
-		JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
+        JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
 
-		setLayout(LayoutFactory.getMigLayout("fill", "fill", "[grow][shrink]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		setMinimumSize(new Dimension(100, 100));
-		setPreferredSize(new Dimension(100, 100));
+        setLayout(LayoutFactory.getMigLayout("fill", "fill", "[grow][shrink]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        setMinimumSize(new Dimension(100, 100));
+        setPreferredSize(new Dimension(100, 100));
 
-		this.chats = new HashMap<>();
-		this.chatTabs = new JTabbedPane();
-		this.chatTabs.setTabPlacement(SwingConstants.BOTTOM);
-		this.chatTabs.setAutoscrolls(true);
-		this.chatTabs.addChangeListener(this);
-		add(this.chatTabs, "grow, wrap"); //$NON-NLS-1$
+        this.chats = new HashMap<>();
+        this.chatTabs = new JTabbedPane();
+        this.chatTabs.setTabPlacement(SwingConstants.BOTTOM);
+        this.chatTabs.setAutoscrolls(true);
+        this.chatTabs.addChangeListener(this);
+        add(this.chatTabs, "grow, wrap"); //$NON-NLS-1$
 
-		addNewChat(strings.getString("lobby"), "lobby"); //$NON-NLS-1$ //$NON-NLS-2$
+        addNewChat(strings.getString("lobby"), "lobby"); //$NON-NLS-1$ //$NON-NLS-2$
 
-		this.inputLine = new JTextField(20);
-		this.inputLine.setAction(actions.get(JSkatAction.SEND_CHAT_MESSAGE));
-		this.inputLine.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(final ActionEvent e) {
+        this.inputLine = new JTextField(20);
+        this.inputLine.setAction(actions.get(JSkatAction.SEND_CHAT_MESSAGE));
+        this.inputLine.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
 
-				String message = ChatPanel.this.inputLine.getText();
-				log.debug("Chat message: " + message); //$NON-NLS-1$
+                String message = ChatPanel.this.inputLine.getText();
+                log.debug("Chat message: " + message); //$NON-NLS-1$
 
-				ChatMessage chatMessage = new ChatMessage(
-						ChatPanel.this.activeChatName, message);
-				e.setSource(chatMessage);
-				// fire event again
-				ChatPanel.this.inputLine.dispatchEvent(e);
+                ChatMessage chatMessage = new ChatMessage(
+                        ChatPanel.this.activeChatName, message);
+                e.setSource(chatMessage);
+                // fire event again
+                ChatPanel.this.inputLine.dispatchEvent(e);
 
-				ChatPanel.this.inputLine.setText(null);
-			}
-		});
-		add(this.inputLine, "growx"); //$NON-NLS-1$
-	}
+                ChatPanel.this.inputLine.setText(null);
+            }
+        });
+        add(this.inputLine, "growx"); //$NON-NLS-1$
+    }
 
-	JTextArea addNewChat(final String title, final String name) {
+    JTextArea addNewChat(final String title, final String name) {
 
-		JTextArea chat = getChat();
-		this.chats.put(name, chat);
-		JScrollPane scrollPane = new JScrollPane(chat);
-		scrollPane
-				.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		scrollPane.setName(name);
+        JTextArea chat = getChat();
+        this.chats.put(name, chat);
+        JScrollPane scrollPane = new JScrollPane(chat);
+        scrollPane
+                .setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setName(name);
 
-		this.chatTabs.add(title, scrollPane);
-		this.chatTabs.setSelectedIndex(this.chatTabs.getComponentCount() - 1);
-		this.activeChatName = name;
+        this.chatTabs.add(title, scrollPane);
+        this.chatTabs.setSelectedIndex(this.chatTabs.getComponentCount() - 1);
+        this.activeChatName = name;
 
-		return chat;
-	}
+        return chat;
+    }
 
-	private JTextArea getChat() {
+    private JTextArea getChat() {
 
-		JTextArea chat = new JTextArea(7, 50);
-		chat.setEditable(false);
-		chat.setLineWrap(true);
+        JTextArea chat = new JTextArea(7, 50);
+        chat.setEditable(false);
+        chat.setLineWrap(true);
 
-		return chat;
-	}
+        return chat;
+    }
 
-	void appendMessage(final ChatMessage message) {
+    void appendMessage(final ChatMessage message) {
 
-		log.debug("Appending chat message: " + message); //$NON-NLS-1$
+        log.debug("Appending chat message: " + message); //$NON-NLS-1$
 
-		JTextArea chat = this.chats.get(message.getChatName());
+        JTextArea chat = this.chats.get(message.getChatName());
 
-		if (chat == null) {
-			// new chat --> create chat text area first
-			chat = addNewChat(message.getChatName(), message.getChatName());
-		}
+        if (chat == null) {
+            // new chat --> create chat text area first
+            chat = addNewChat(message.getChatName(), message.getChatName());
+        }
 
-		chat.append(message.getMessage() + '\n');
-		moveScrollBarToBottom(chat);
-	}
+        chat.append(message.getMessage() + '\n');
+        moveScrollBarToBottom(chat);
+    }
 
-	private void moveScrollBarToBottom(JTextArea chat) {
-		chat.selectAll();
-		int x = chat.getSelectionEnd();
-		chat.select(x, x);
-	}
+    private void moveScrollBarToBottom(JTextArea chat) {
+        chat.selectAll();
+        int x = chat.getSelectionEnd();
+        chat.select(x, x);
+    }
 
-	@Override
-	public void stateChanged(final ChangeEvent e) {
+    @Override
+    public void stateChanged(final ChangeEvent e) {
 
-		if (e.getSource() instanceof JTabbedPane) {
+        if (e.getSource() instanceof JTabbedPane) {
 
-			JTabbedPane tabs = (JTabbedPane) e.getSource();
-			Component tab = tabs.getSelectedComponent();
+            JTabbedPane tabs = (JTabbedPane) e.getSource();
+            Component tab = tabs.getSelectedComponent();
 
-			this.activeChatName = tab.getName();
-			log.debug("Chat " + this.activeChatName + " activated."); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-	}
+            this.activeChatName = tab.getName();
+            log.debug("Chat " + this.activeChatName + " activated."); //$NON-NLS-1$ //$NON-NLS-2$
+        }
+    }
 
-	public void setFocus() {
-		this.inputLine.requestFocus();
-	}
+    public void setFocus() {
+        this.inputLine.requestFocus();
+    }
 }

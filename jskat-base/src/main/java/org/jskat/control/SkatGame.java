@@ -1,18 +1,3 @@
-/**
- * Copyright (C) 2020 Jan Schäfer (jansch@users.sourceforge.net)
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.jskat.control;
 
 import org.jskat.control.command.table.ShowCardsCommand;
@@ -20,12 +5,12 @@ import org.jskat.control.event.skatgame.*;
 import org.jskat.control.event.table.ActivePlayerChangedEvent;
 import org.jskat.control.event.table.TableGameMoveEvent;
 import org.jskat.control.event.table.TrickCompletedEvent;
+import org.jskat.control.gui.JSkatView;
 import org.jskat.data.*;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatTableOptions.ContraCallingTime;
 import org.jskat.data.SkatTableOptions.RamschSkatOwner;
-import org.jskat.control.gui.JSkatView;
 import org.jskat.player.JSkatPlayer;
 import org.jskat.util.*;
 import org.jskat.util.rule.SkatRule;
@@ -643,7 +628,6 @@ public class SkatGame {
             doSleep(maxSleep);
 
             Trick lastTrick = data.getLastCompletedTrick();
-            data.addPlayerPoints(lastTrick.getTrickWinner(), lastTrick.getValue());
 
             informPlayersAboutCompletedTrick(lastTrick);
 
@@ -695,29 +679,20 @@ public class SkatGame {
                 && options.getContraCallingTime() == gameTime && isGameWithDeclarer()) {
             if (ContraCallingTime.AFTER_GAME_ANNOUNCEMENT == gameTime) {
                 return true;
-            } else if (ContraCallingTime.BEFORE_FIRST_CARD == gameTime && trickNo == 0) {
-                return true;
-            }
+            } else return ContraCallingTime.BEFORE_FIRST_CARD == gameTime && trickNo == 0;
         }
         return false;
     }
 
     private Boolean isGameWithDeclarer() {
         GameType gameType = data.getGameType();
-        if (gameType == GameType.CLUBS || gameType == GameType.SPADES || gameType == GameType.HEARTS
-                || gameType == GameType.DIAMONDS || gameType == GameType.GRAND || gameType == GameType.NULL) {
-            return true;
-        }
-        return false;
+        return gameType == GameType.CLUBS || gameType == GameType.SPADES || gameType == GameType.HEARTS
+                || gameType == GameType.DIAMONDS || gameType == GameType.GRAND || gameType == GameType.NULL;
     }
 
     private Boolean isContraEnabledForPlayer(Player player, ContraCallingTime gameTime, int trickNo) {
-        if (isContraPlayEnabled(gameTime, trickNo) && isNoContraCalledYet() && isPlayerOpponent(player)
-                && isPlayerBidHighEnoughForContra(player)) {
-            return true;
-        }
-
-        return false;
+        return isContraPlayEnabled(gameTime, trickNo) && isNoContraCalledYet() && isPlayerOpponent(player)
+                && isPlayerBidHighEnoughForContra(player);
     }
 
     private boolean isPlayerBidHighEnoughForContra(Player player) {
@@ -853,7 +828,7 @@ public class SkatGame {
 
             for (JSkatPlayer playerInstance : player.values()) {
                 // inform all players
-                // cloning of card is not neccessary, because Card is immutable
+                // cloning of card is not necessary, because Card is immutable
                 playerInstance.cardPlayed(currPlayer, playedCard);
             }
 
@@ -866,15 +841,11 @@ public class SkatGame {
         }
     }
 
-    private void endGameBecauseOfSchwarzPlaying(Player currentPlayer) {
+    private void endGameBecauseOfSchwarzPlaying(Player schwarzPlayer) {
         data.getResult().setSchwarz(true);
-        if (data.getDeclarer().equals(currentPlayer)) {
-            // declarer played schwarz
-            data.getResult().setWon(false);
-        } else {
-            // opponent played schwarz
-            data.getResult().setWon(true);
-        }
+        // declarer played schwarz
+        // opponent played schwarz
+        data.getResult().setWon(!schwarzPlayer.equals(data.getDeclarer()));
         data.setGameState(GameState.PRELIMINARY_GAME_END);
     }
 
@@ -1012,8 +983,7 @@ public class SkatGame {
 
         data.setAnnouncement(ann);
         rules = SkatRuleFactory.getSkatRules(data.getGameType());
-        JSkatEventBus.INSTANCE
-                .post(new TableGameMoveEvent(tableName, new GameAnnouncementEvent(data.getDeclarer(), ann)));
+        JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName, new GameAnnouncementEvent(data.getDeclarer(), ann)));
 
         // inform all players
         for (JSkatPlayer playerInstance : player.values()) {

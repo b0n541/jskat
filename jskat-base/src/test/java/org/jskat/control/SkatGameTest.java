@@ -1,18 +1,3 @@
-/**
- * Copyright (C) 2020 Jan Schäfer (jansch@users.sourceforge.net)
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.jskat.control;
 
 import com.google.common.eventbus.EventBus;
@@ -29,10 +14,7 @@ import org.jskat.util.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -177,7 +159,7 @@ public class SkatGameTest extends AbstractJSkatTest {
     }
 
     /**
-     * When no player bids and pub rules are acitvated, ramsch is played
+     * When no player bids and pub rules are activated, Ramsch is played
      */
     @Test
     public void testRamsch_NoBids() {
@@ -412,15 +394,15 @@ public class SkatGameTest extends AbstractJSkatTest {
     public void testPredefinedCardPlaying() {
         final UnitTestPlayer foreHand = new UnitTestPlayer();
         foreHand.setCardsToPlay(
-                Arrays.asList(Card.C7, Card.SJ, Card.C9, Card.H8, Card.DQ, Card.D7, Card.CT, Card.DK, Card.CA, Card.CK));
+                List.of(Card.C7, Card.SJ, Card.C9, Card.H8, Card.DQ, Card.D7, Card.CT, Card.DK, Card.CA, Card.CK));
 
         final UnitTestPlayer middleHand = new UnitTestPlayer();
         middleHand.setCardsToPlay(
-                Arrays.asList(Card.CQ, Card.C8, Card.SQ, Card.ST, Card.S9, Card.HT, Card.HA, Card.DA, Card.HK, Card.D9));
+                List.of(Card.CQ, Card.C8, Card.SQ, Card.ST, Card.S9, Card.HT, Card.HA, Card.DA, Card.HK, Card.D9));
 
         final UnitTestPlayer rearHand = new UnitTestPlayer();
         rearHand.setCardsToPlay(
-                Arrays.asList(Card.DJ, Card.CJ, Card.HJ, Card.SA, Card.S8, Card.H7, Card.H9, Card.D8, Card.HQ, Card.DT));
+                List.of(Card.DJ, Card.CJ, Card.HJ, Card.SA, Card.S8, Card.H7, Card.H9, Card.D8, Card.HQ, Card.DT));
 
         final SkatGame game = new SkatGame(TABLE_NAME, GameVariant.STANDARD, foreHand, middleHand, rearHand);
         game.setView(new UnitTestView());

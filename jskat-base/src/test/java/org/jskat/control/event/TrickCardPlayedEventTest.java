@@ -1,18 +1,3 @@
-/**
- * Copyright (C) 2020 Jan Schäfer (jansch@users.sourceforge.net)
- * <p>
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package org.jskat.control.event;
 
 import org.jskat.AbstractJSkatTest;
@@ -100,6 +85,7 @@ public class TrickCardPlayedEventTest extends AbstractJSkatTest {
         assertHand(data.getPlayerCards(Player.REARHAND), Card.HA, Card.C9);
         assertTrick(data.getLastCompletedTrick(), Card.CJ, Card.SJ, Card.HJ, Player.FOREHAND);
         assertEmptyTrick(data.getCurrentTrick());
+        assertThat(data.getScore(Player.FOREHAND)).isEqualTo(6);
 
         events.next().processForward(data);
 
@@ -122,6 +108,7 @@ public class TrickCardPlayedEventTest extends AbstractJSkatTest {
         assertHand(data.getPlayerCards(Player.REARHAND), Card.HA);
         assertTrick(data.getLastCompletedTrick(), Card.C7, Card.C8, Card.C9, Player.REARHAND);
         assertEmptyTrick(data.getCurrentTrick());
+        assertThat(data.getScore(Player.REARHAND)).isEqualTo(0);
 
         events.next().processForward(data);
 
@@ -144,6 +131,7 @@ public class TrickCardPlayedEventTest extends AbstractJSkatTest {
         assertHand(data.getPlayerCards(Player.REARHAND));
         assertTrick(data.getLastCompletedTrick(), Card.HA, Card.CA, Card.SA, Player.FOREHAND);
         assertEmptyTrick(data.getCurrentTrick());
+        assertThat(data.getScore(Player.FOREHAND)).isEqualTo(39);
     }
 
     private static void assertEmptyTrick(final Trick trick) {
@@ -180,6 +168,7 @@ public class TrickCardPlayedEventTest extends AbstractJSkatTest {
         assertHand(data.getPlayerCards(Player.MIDDLEHAND), Card.SA);
         assertHand(data.getPlayerCards(Player.REARHAND));
         assertTrick(data.getCurrentTrick(), Card.HA, Card.CA, null, null);
+        assertThat(data.getScore(Player.FOREHAND)).isEqualTo(6);
 
         events.next().processBackward(data);
 
