@@ -10,7 +10,7 @@ buildscript {
     }
 }
 
-version = "0.20.0-SNAPSHOT"
+version = "0.20.0"
 
 allprojects {
     repositories {
