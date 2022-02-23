@@ -52,34 +52,41 @@ dependencies {
     implementation(project("jskat-javafx-gui"))
 }
 
-tasks {
-    startScripts {
-        mainClassName = "org.jskat.Launcher"
-    }
-
-    jar {
-        manifest {
-            attributes(
-                "Main-Class" to "org.jskat.Launcher"
-            )
-        }
-    }
-
-    register("fatJar", Jar::class.java) {
-        archiveClassifier.set("all")
-        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        manifest {
-            attributes("Main-Class" to "org.jskat.Launcher")
-        }
-        from(configurations.runtimeClasspath.get()
-            .onEach { println("add from dependencies: ${it.name}") }
-            .map { if (it.isDirectory) it else zipTree(it) })
-        val sourcesMain = sourceSets.main.get()
-        sourcesMain.allSource.forEach { println("add from sources: ${it.name}") }
-        from(sourcesMain.output)
-    }
-}
+var mainClassWithPackage = "org.jskat.Launcher"
 
 application {
-    mainClass.set("org.jskat.Launcher")
+    mainClass.set(mainClassWithPackage)
+}
+
+tasks.startScripts {
+    mainClassName = mainClassWithPackage
+}
+
+tasks.register("fatjar", Jar::class.java) {
+
+    dependsOn("build")
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    manifest {
+        attributes(
+            "Main-Class" to mainClassWithPackage
+        )
+    }
+
+    from(configurations.runtimeClasspath.get()
+        .onEach { println("add from dependencies: ${it.name}") }
+        .map { if (it.isDirectory) it else zipTree(it) })
+
+    archiveBaseName.set(rootProject.name)
+
+    val os: OperatingSystem =
+        org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem()
+    if (os.isLinux) {
+        archiveClassifier.set("linux")
+    } else if (os.isMacOsX) {
+        archiveClassifier.set("macos")
+    } else if (os.isWindows) {
+        archiveClassifier.set("windows")
+    }
 }

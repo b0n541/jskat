@@ -11,7 +11,7 @@ License:
 
 Use at least JDK 17 to build and run JSkat.
 
-Build executable fat JAR: `./gradlew clean fatJar`
+Build executable fat JAR: `./gradlew clean fatjar`
 
 Build installation with multiple JARs and start scripts: `./gradlew clean installDist`
 
