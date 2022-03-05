@@ -1,4 +1,4 @@
-var deeplearning4jVersion = "1.0.0-M1.1"
+var deeplearning4jVersion = "1.0.0-M2"
 
 dependencies {
     implementation("com.google.guava", "guava", "31.0.1-jre")
