@@ -67,6 +67,7 @@ tasks.register("fatjar", Jar::class.java) {
     dependsOn("build")
 
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    isZip64 = true
 
     manifest {
         attributes(
