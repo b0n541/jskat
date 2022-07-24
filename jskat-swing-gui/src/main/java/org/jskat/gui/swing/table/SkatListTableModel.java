@@ -73,18 +73,13 @@ class SkatListTableModel extends AbstractTableModel {
 
         Object result = null;
 
-        if (displayValues.get(rowIndex).get(columnIndex) != null) {
-            result = displayValues.get(rowIndex).get(columnIndex);
-        } else {
-            result = "-"; //$NON-NLS-1$
+        if (rowIndex < getRowCount() && columnIndex < getColumnCount()) {
+            if (displayValues.get(rowIndex).get(columnIndex) != null) {
+                result = displayValues.get(rowIndex).get(columnIndex);
+            } else {
+                result = "-"; //$NON-NLS-1$
+            }
         }
-
-        return result;
-    }
-
-    static Integer getPlayerValue(final int playerColumn, final int gameRow) {
-
-        final Integer result = null;
 
         return result;
     }
@@ -95,7 +90,10 @@ class SkatListTableModel extends AbstractTableModel {
     @Override
     public String getColumnName(final int col) {
 
-        return columns.get(col);
+        if (col >= 0 && col < getColumnCount()) {
+            return columns.get(col);
+        }
+        return null;
     }
 
     /**
@@ -104,21 +102,10 @@ class SkatListTableModel extends AbstractTableModel {
     @Override
     public Class<?> getColumnClass(final int col) {
 
-        return Integer.class;
-    }
-
-    /**
-     * Sets the skat list mode
-     *
-     * @param newMode
-     */
-    void setSkatListMode(final SkatListMode newMode) {
-
-        mode = newMode;
-
-        calculateDisplayValues();
-
-        fireTableDataChanged();
+        if (col >= 0 && col < getColumnCount()) {
+            return Integer.class;
+        }
+        return null;
     }
 
     private void calculateDisplayValues() {
@@ -252,19 +239,6 @@ class SkatListTableModel extends AbstractTableModel {
         gameResults.clear();
         displayValues.clear();
 
-        fireTableDataChanged();
-    }
-
-    void setPlayerCount(final int newPlayerCount) {
-
-        declarers.clear();
-        gameResults.clear();
-
-        playerCount = newPlayerCount;
-
-        setColumns();
-
-        fireTableStructureChanged();
         fireTableDataChanged();
     }
 

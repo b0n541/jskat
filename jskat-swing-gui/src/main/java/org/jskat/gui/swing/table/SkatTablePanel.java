@@ -790,16 +790,6 @@ public class SkatTablePanel extends AbstractTabPanel {
     }
 
     /**
-     * Sets maximum number of players
-     *
-     * @param maxPlayers Maximum number of players
-     */
-    protected void setMaxPlayers(int maxPlayers) {
-
-        skatListTableModel.setPlayerCount(maxPlayers);
-    }
-
-    /**
      * Sets player name
      *
      * @param player Player position

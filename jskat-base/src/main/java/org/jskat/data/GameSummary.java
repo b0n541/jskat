@@ -17,18 +17,6 @@ public class GameSummary {
 
     private static Logger LOG = LoggerFactory.getLogger(GameSummary.class);
     /**
-     * Fore hand player
-     */
-    public String foreHand;
-    /**
-     * Middle hand player
-     */
-    public String middleHand;
-    /**
-     * Rear hand player
-     */
-    public String rearHand;
-    /**
      * Declarer
      */
     public Player declarer;
@@ -106,8 +94,8 @@ public class GameSummary {
          *
          * @return Game announcement
          */
-        public final GameSummary getSummary() {
-            GameSummary result = null;
+        public GameSummary getSummary() {
+            GameSummary result;
             if (validate()) {
                 result = tmpSummary;
                 tmpSummary = new GameSummary();
@@ -122,7 +110,7 @@ public class GameSummary {
          *
          * @param gameType Game type
          */
-        public final void setGameType(final GameType gameType) {
+        public void setGameType(final GameType gameType) {
             tmpSummary.gameType = gameType;
         }
 
@@ -131,7 +119,7 @@ public class GameSummary {
          *
          * @param isHand TRUE, if a hand game was announced
          */
-        public final void setHand(final Boolean isHand) {
+        public void setHand(final Boolean isHand) {
             tmpSummary.hand = isHand;
         }
 
@@ -140,7 +128,7 @@ public class GameSummary {
          *
          * @param isOuvert TRUE, if an ouvert game was announced
          */
-        public final void setOuvert(final Boolean isOuvert) {
+        public void setOuvert(final Boolean isOuvert) {
             tmpSummary.ouvert = isOuvert;
         }
 
@@ -149,7 +137,7 @@ public class GameSummary {
          *
          * @param isSchneider TRUE, if schneider was announced
          */
-        public final void setSchneider(final Boolean isSchneider) {
+        public void setSchneider(final Boolean isSchneider) {
             tmpSummary.schneider = isSchneider;
         }
 
@@ -158,7 +146,7 @@ public class GameSummary {
          *
          * @param isSchwarz TRUE, if a schwarz was announced
          */
-        public final void setSchwarz(final Boolean isSchwarz) {
+        public void setSchwarz(final Boolean isSchwarz) {
             tmpSummary.schwarz = isSchwarz;
         }
 
@@ -167,12 +155,12 @@ public class GameSummary {
          *
          * @param tricks Tricks of the game
          */
-        public final void setTricks(final List<Trick> tricks) {
+        public void setTricks(final List<Trick> tricks) {
             tmpSummary.tricks.clear();
             tmpSummary.tricks.addAll(tricks);
         }
 
-        public final void setPlayerPoints(final Map<Player, Integer> playerAndPoints) {
+        public void setPlayerPoints(final Map<Player, Integer> playerAndPoints) {
             tmpSummary.playerPoints.putAll(playerAndPoints);
         }
 
@@ -181,47 +169,21 @@ public class GameSummary {
          *
          * @param gameResult Game result
          */
-        public final void setGameResult(final SkatGameResult gameResult) {
+        public void setGameResult(final SkatGameResult gameResult) {
             tmpSummary.gameResult = gameResult;
         }
 
-        /**
-         * Sets the fore hand player
-         *
-         * @param name Name of fore hand player
-         */
-        public final void setForeHand(final String name) {
-            tmpSummary.foreHand = name;
-        }
-
-        /**
-         * Sets the middle hand player
-         *
-         * @param name Name of middle hand player
-         */
-        public final void setMiddleHand(final String name) {
-            tmpSummary.middleHand = name;
-        }
-
-        /**
-         * Sets the rear hand player
-         *
-         * @param name Name of rear hand player
-         */
-        public final void setRearHand(final String name) {
-            tmpSummary.rearHand = name;
-        }
 
         /**
          * Sets the declarer
          *
          * @param position Position of declarer
          */
-        public final void setDeclarer(final Player position) {
+        public void setDeclarer(final Player position) {
             tmpSummary.declarer = position;
         }
 
-        public final void addRamschLooser(Player looser) {
+        public void addRamschLooser(Player looser) {
             tmpSummary.ramschLosers.add(looser);
         }
 
@@ -232,15 +194,6 @@ public class GameSummary {
             } else if (!GameType.RAMSCH.equals(tmpSummary.gameType) && !GameType.PASSED_IN.equals(tmpSummary.gameType)
                     && tmpSummary.declarer == null) {
                 LOG.error("declarer is null"); //$NON-NLS-1$
-                return false;
-            } else if (tmpSummary.foreHand == null) {
-                LOG.error("fore hand is null"); //$NON-NLS-1$
-                return false;
-            } else if (tmpSummary.middleHand == null) {
-                LOG.error("middle hand is null"); //$NON-NLS-1$
-                return false;
-            } else if (tmpSummary.rearHand == null) {
-                LOG.error("rear hand is null"); //$NON-NLS-1$
                 return false;
             } else if (tmpSummary.tricks.size() > 10) {
                 LOG.error("more than 10 tricks"); //$NON-NLS-1$
@@ -372,33 +325,6 @@ public class GameSummary {
     }
 
     /**
-     * Gets the fore hand player
-     *
-     * @return Fore hand player
-     */
-    public final String getForeHand() {
-        return foreHand;
-    }
-
-    /**
-     * Gets the middle hand player
-     *
-     * @return Middle hand player
-     */
-    public final String getMiddleHand() {
-        return middleHand;
-    }
-
-    /**
-     * Gets the rear hand player
-     *
-     * @return Rear hand player
-     */
-    public final String getRearHand() {
-        return rearHand;
-    }
-
-    /**
      * Gets the position of declarer
      *
      * @return Declarer position
@@ -448,9 +374,6 @@ public class GameSummary {
 
         result.append(" game value: " + gameResult.getGameValue()); //$NON-NLS-1$
 
-        result.append(" fore hand: " + foreHand); //$NON-NLS-1$
-        result.append(" middle hand: " + middleHand); //$NON-NLS-1$
-        result.append(" rear hand: " + rearHand); //$NON-NLS-1$
         result.append(" declarer: " + declarer); //$NON-NLS-1$
 
         return result.toString();
@@ -485,10 +408,9 @@ public class GameSummary {
 
     @Override
     public int hashCode() {
-        return Objects
-                .hash(foreHand, middleHand, rearHand, declarer,
-                        gameType, ouvert, hand, schneider, schwarz,
-                        contra, re, gameResult, tricks, playerPoints, ramschLosers);
+        return Objects.hash(declarer,
+                gameType, ouvert, hand, schneider, schwarz,
+                contra, re, gameResult, tricks, playerPoints, ramschLosers);
     }
 
     @Override
@@ -504,10 +426,7 @@ public class GameSummary {
         }
         final GameSummary other = (GameSummary) obj;
 
-        return Objects.equals(foreHand, other.foreHand) &&
-                Objects.equals(middleHand, other.middleHand) &&
-                Objects.equals(rearHand, other.rearHand) &&
-                Objects.equals(declarer, other.declarer) &&
+        return Objects.equals(declarer, other.declarer) &&
                 Objects.equals(gameType, other.gameType) &&
                 Objects.equals(ouvert, other.ouvert) &&
                 Objects.equals(hand, other.hand) &&
