@@ -63,7 +63,7 @@ public class SkatListTableModelTest {
     }
 
     @Test
-    void addWonGame() {
+    void addWonGames() {
 
         SkatGameResult result = new SkatGameResult();
         result.setWon(true);
@@ -77,12 +77,13 @@ public class SkatListTableModelTest {
 
         GameSummary summary = factory.getSummary();
 
-        model.addResult(Player.MIDDLEHAND, Player.REARHAND, Player.FOREHAND, Player.FOREHAND, summary);
+        model.addResult(Player.MIDDLEHAND, Player.REARHAND, Player.FOREHAND, summary);
 
         assertThat(model.getRowCount()).isEqualTo(1);
         assertThat(model.getValueAt(0, 0)).isEqualTo("-");
         assertThat(model.getValueAt(0, 1)).isEqualTo("-");
         assertThat(model.getValueAt(0, 2)).isEqualTo(24);
+        assertThat(model.getValueAt(0, 3)).isEqualTo(24);
 
         result = new SkatGameResult();
         result.setWon(true);
@@ -96,16 +97,17 @@ public class SkatListTableModelTest {
 
         summary = factory.getSummary();
 
-        model.addResult(Player.REARHAND, Player.FOREHAND, Player.MIDDLEHAND, Player.MIDDLEHAND, summary);
+        model.addResult(Player.REARHAND, Player.FOREHAND, Player.MIDDLEHAND, summary);
 
         assertThat(model.getRowCount()).isEqualTo(2);
-        assertThat(model.getValueAt(0, 0)).isEqualTo("-");
-        assertThat(model.getValueAt(0, 1)).isEqualTo("-");
-        assertThat(model.getValueAt(0, 2)).isEqualTo(44);
+        assertThat(model.getValueAt(1, 0)).isEqualTo("-");
+        assertThat(model.getValueAt(1, 1)).isEqualTo("-");
+        assertThat(model.getValueAt(1, 2)).isEqualTo(44);
+        assertThat(model.getValueAt(1, 3)).isEqualTo(20);
     }
 
     @Test
-    void addLostGame() {
+    void addLostGames() {
 
         SkatGameResult result = new SkatGameResult();
         result.setWon(false);
@@ -119,11 +121,76 @@ public class SkatListTableModelTest {
 
         GameSummary summary = factory.getSummary();
 
-        model.addResult(Player.MIDDLEHAND, Player.REARHAND, Player.FOREHAND, Player.MIDDLEHAND, summary);
+        model.addResult(Player.MIDDLEHAND, Player.REARHAND, Player.FOREHAND, summary);
 
         assertThat(model.getRowCount()).isEqualTo(1);
         assertThat(model.getValueAt(0, 0)).isEqualTo(-44);
         assertThat(model.getValueAt(0, 1)).isEqualTo("-");
         assertThat(model.getValueAt(0, 2)).isEqualTo("-");
+        assertThat(model.getValueAt(0, 3)).isEqualTo(-44);
+
+        result = new SkatGameResult();
+        result.setWon(true);
+        result.setGameValue(-36);
+
+        factory = GameSummary.getFactory();
+        factory.setDeclarer(Player.FOREHAND);
+        factory.setGameType(GameType.DIAMONDS);
+        factory.setGameResult(result);
+        factory.setPlayerPoints(Map.of(Player.FOREHAND, 23, Player.MIDDLEHAND, 20, Player.REARHAND, 87));
+
+        summary = factory.getSummary();
+
+        model.addResult(Player.REARHAND, Player.FOREHAND, Player.MIDDLEHAND, summary);
+
+        assertThat(model.getRowCount()).isEqualTo(2);
+        assertThat(model.getValueAt(1, 0)).isEqualTo("-");
+        assertThat(model.getValueAt(1, 1)).isEqualTo(-36);
+        assertThat(model.getValueAt(1, 2)).isEqualTo("-");
+        assertThat(model.getValueAt(1, 3)).isEqualTo(-36);
+    }
+
+    @Test
+    void addRamschGames() {
+        SkatGameResult result = new SkatGameResult();
+        result.setWon(false);
+        result.setGameValue(-67);
+
+        GameSummary.GameSummaryFactory factory = GameSummary.getFactory();
+        factory.setGameType(GameType.RAMSCH);
+        factory.setGameResult(result);
+        factory.setPlayerPoints(Map.of(Player.FOREHAND, 67, Player.MIDDLEHAND, 23, Player.REARHAND, 40));
+        factory.addRamschLooser(Player.FOREHAND);
+
+        GameSummary summary = factory.getSummary();
+
+        model.addResult(Player.MIDDLEHAND, Player.REARHAND, Player.FOREHAND, summary);
+
+        assertThat(model.getRowCount()).isEqualTo(1);
+        assertThat(model.getValueAt(0, 0)).isEqualTo("-");
+        assertThat(model.getValueAt(0, 1)).isEqualTo("-");
+        assertThat(model.getValueAt(0, 2)).isEqualTo(-67);
+        assertThat(model.getValueAt(0, 3)).isEqualTo(-67);
+
+        result = new SkatGameResult();
+        result.setWon(false);
+        result.setGameValue(-50);
+
+        factory = GameSummary.getFactory();
+        factory.setGameType(GameType.RAMSCH);
+        factory.setGameResult(result);
+        factory.setPlayerPoints(Map.of(Player.FOREHAND, 20, Player.MIDDLEHAND, 50, Player.REARHAND, 50));
+        factory.addRamschLooser(Player.MIDDLEHAND);
+        factory.addRamschLooser(Player.REARHAND);
+
+        summary = factory.getSummary();
+
+        model.addResult(Player.REARHAND, Player.FOREHAND, Player.MIDDLEHAND, summary);
+
+        assertThat(model.getRowCount()).isEqualTo(2);
+        assertThat(model.getValueAt(1, 0)).isEqualTo(-50);
+        assertThat(model.getValueAt(1, 1)).isEqualTo("-");
+        assertThat(model.getValueAt(1, 2)).isEqualTo(-117);
+        assertThat(model.getValueAt(1, 3)).isEqualTo(-50);
     }
 }

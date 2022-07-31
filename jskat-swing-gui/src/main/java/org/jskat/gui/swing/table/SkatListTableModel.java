@@ -5,12 +5,13 @@ import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.Player;
 import org.jskat.util.SkatConstants;
 import org.jskat.util.SkatListMode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Provides a model for the skat list table
@@ -19,16 +20,14 @@ class SkatListTableModel extends AbstractTableModel {
 
     private static final long serialVersionUID = 1L;
 
-    private static final Logger log = LoggerFactory.getLogger(SkatListTableModel.class);
-
     private final JSkatResourceBundle strings;
 
     private SkatListMode mode = SkatListMode.NORMAL;
 
     private int playerCount = 3;
-    private final List<Player> declarers;
     private final List<List<Integer>> playerResults;
     private final List<GameSummary> gameResults;
+    private final List<List<Boolean>> playerWithChangedPoints;
     private final List<String> columns;
     private final List<List<Integer>> displayValues;
 
@@ -39,9 +38,9 @@ class SkatListTableModel extends AbstractTableModel {
 
         strings = JSkatResourceBundle.INSTANCE;
 
-        declarers = new ArrayList<>();
         playerResults = new ArrayList<>();
         gameResults = new ArrayList<>();
+        playerWithChangedPoints = new ArrayList<>();
         displayValues = new ArrayList<>();
         columns = new ArrayList<>();
         setColumns();
@@ -62,7 +61,7 @@ class SkatListTableModel extends AbstractTableModel {
     @Override
     public int getRowCount() {
 
-        return declarers.size();
+        return gameResults.size();
     }
 
     /**
@@ -113,7 +112,7 @@ class SkatListTableModel extends AbstractTableModel {
         int currResult = 0;
         final List<Integer> playerResultsSoFar = new ArrayList<>();
         for (int i = 0; i < playerCount; i++) {
-            playerResultsSoFar.add(Integer.valueOf(0));
+            playerResultsSoFar.add(0);
         }
 
         displayValues.clear();
@@ -128,10 +127,10 @@ class SkatListTableModel extends AbstractTableModel {
                 int previousResult = 0;
                 currResult = 0;
 
-                if (declarers.get(game) != null) {
+                if ("" != null) {
 
                     // get previous result for player values
-                    previousResult = playerResultsSoFar.get(player).intValue();
+                    previousResult = playerResultsSoFar.get(player);
 
                     // get player results from current game
                     switch (mode) {
@@ -151,7 +150,7 @@ class SkatListTableModel extends AbstractTableModel {
 
                 if (currResult != 0) {
 
-                    final Integer newResult = Integer.valueOf(previousResult + currResult);
+                    final int newResult = previousResult + currResult;
                     displayValues.get(game).add(newResult);
                     playerResultsSoFar.set(player, newResult);
 
@@ -182,23 +181,35 @@ class SkatListTableModel extends AbstractTableModel {
      * @param leftOpponent  Position of the upper left opponent
      * @param rightOpponent Position of the upper right opponent
      * @param user          Position of the player
-     * @param declarer      Position of the game declarer
      * @param gameSummary   Game summary
      */
-    void addResult(final Player leftOpponent, final Player rightOpponent, final Player user, final Player declarer,
-                   final GameSummary gameSummary) {
+    void addResult(final Player leftOpponent, final Player rightOpponent, final Player user, final GameSummary gameSummary) {
 
         // FIXME works only on 3 player series
         // FIXME (jansch 21.03.2011) provide only one method for addResult()
-        declarers.add(declarer);
         gameResults.add(gameSummary);
+        List<Boolean> currPlayerWithChangedPoints = Arrays.asList(false, false, false);
 
-        final int declarerColumn = getDeclarerColumn(leftOpponent, rightOpponent, user, declarer);
+        if (gameSummary.getDeclarer() != null) {
+            final int declarerColumn = getDeclarerColumn(leftOpponent, rightOpponent, user, gameSummary.getDeclarer());
+            playerResults.get(declarerColumn).add(gameSummary.getGameValue());
+            playerResults.get((declarerColumn + 1) % 3).add(0);
+            playerResults.get((declarerColumn + 2) % 3).add(0);
+            currPlayerWithChangedPoints.set(declarerColumn, true);
+        } else if (!gameSummary.getRamschLosers().isEmpty()) {
 
-        if (declarer != null) {
-            playerResults.get(declarerColumn).add(Integer.valueOf(gameSummary.getGameValue()));
-            playerResults.get((declarerColumn + 1) % 3).add(Integer.valueOf(0));
-            playerResults.get((declarerColumn + 2) % 3).add(Integer.valueOf(0));
+            Set<Integer> ramschLoserColumns = gameSummary.getRamschLosers().stream()
+                    .map(it -> getDeclarerColumn(leftOpponent, rightOpponent, user, it))
+                    .collect(Collectors.toSet());
+
+            for (int i = 0; i < playerCount; i++) {
+                if (ramschLoserColumns.contains(i)) {
+                    playerResults.get(i).add(gameSummary.getGameValue());
+                    currPlayerWithChangedPoints.set(i, true);
+                } else {
+                    playerResults.get(i).add(0);
+                }
+            }
         } else {
             // game was passed in
             for (int i = 0; i < playerCount; i++) {
@@ -231,7 +242,6 @@ class SkatListTableModel extends AbstractTableModel {
      */
     void clearList() {
 
-        declarers.clear();
         for (final List<Integer> currList : playerResults) {
 
             currList.clear();

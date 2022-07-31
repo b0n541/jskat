@@ -615,7 +615,7 @@ public class SkatTablePanel extends AbstractTabPanel {
                     leftOpponentPanel.getPosition(),
                     rightOpponentPanel.getPosition(),
                     userPanel.getPosition(),
-                    event.gameSummary.getDeclarer(), event.gameSummary);
+                    event.gameSummary);
             scrollSkatListToTheEnd();
         }
 
