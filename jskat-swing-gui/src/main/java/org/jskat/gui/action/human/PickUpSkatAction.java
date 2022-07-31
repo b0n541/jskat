@@ -18,7 +18,7 @@ public class PickUpSkatAction extends AbstractHumanJSkatAction {
      */
     public PickUpSkatAction() {
 
-        putValue(Action.NAME, STRINGS.getString("pick_up_skat")); //$NON-NLS-1$
+        putValue(Action.NAME, STRINGS.getString("pick_up_skat"));
 
         setActionCommand(JSkatAction.PICK_UP_SKAT);
         setIcon(Icon.PLAY);

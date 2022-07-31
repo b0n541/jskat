@@ -118,20 +118,20 @@ public class SkatGame {
                     boolean grandHandAnnounced = grandHand();
 
                     if (grandHandAnnounced) {
-                        log.debug(data.getDeclarer() + " is playing grand hand"); //$NON-NLS-1$
+                        log.debug(data.getDeclarer() + " is playing grand hand");
                         GameAnnouncementFactory gaf = GameAnnouncement.getFactory();
                         gaf.setGameType(GameType.GRAND);
                         gaf.setHand(Boolean.TRUE);
                         setGameAnnouncement(gaf.getAnnouncement());
                         setGameState(GameState.TRICK_PLAYING);
-                        log.debug("grand hand game started"); //$NON-NLS-1$
+                        log.debug("grand hand game started");
                         break;
                     } else {
                         if (JSkatOptions.instance().isSchieberamsch(true)) {
-                            log.debug("no grand hand - initiating schieberamsch"); //$NON-NLS-1$
+                            log.debug("no grand hand - initiating schieberamsch");
                             setGameState(GameState.SCHIEBERAMSCH);
                         } else {
-                            log.debug("no grand hand and no schieberamsch - play ramsch"); //$NON-NLS-1$
+                            log.debug("no grand hand and no schieberamsch - play ramsch");
                             setGameState(GameState.TRICK_PLAYING);
                         }
                     }
@@ -235,7 +235,7 @@ public class SkatGame {
         for (Player currPlayer : Player.getOrderedList()) {
             setActivePlayer(currPlayer);
             if (!pickUpSkat()) {
-                log.debug("Player " + currPlayer + " does schieben."); //$NON-NLS-1$
+                log.debug("Player " + currPlayer + " does schieben.");
                 data.addGeschoben();
                 view.setGeschoben(tableName, activePlayer);
             } else {
@@ -273,7 +273,7 @@ public class SkatGame {
             // Skat game has no cards, yet
             deck = new CardDeck();
 
-            log.debug("shuffling..."); //$NON-NLS-1$
+            log.debug("shuffling...");
             deck.shuffle();
 
             log.debug(deck.toString());
@@ -281,7 +281,7 @@ public class SkatGame {
 
         doSleep(maxSleep);
 
-        log.debug("dealing..."); //$NON-NLS-1$
+        log.debug("dealing...");
 
         // deal three rounds of cards
         // deal three cards
@@ -297,11 +297,11 @@ public class SkatGame {
 
         doSleep(maxSleep);
 
-        log.debug("Fore hand: " + data.getPlayerCards(Player.FOREHAND)); //$NON-NLS-1$
-        log.debug("Middle hand: " //$NON-NLS-1$
+        log.debug("Fore hand: " + data.getPlayerCards(Player.FOREHAND));
+        log.debug("Middle hand: "
                 + data.getPlayerCards(Player.MIDDLEHAND));
-        log.debug("Rear hand: " + data.getPlayerCards(Player.REARHAND)); //$NON-NLS-1$
-        log.debug("Skat: " + data.getSkat()); //$NON-NLS-1$
+        log.debug("Rear hand: " + data.getPlayerCards(Player.REARHAND));
+        log.debug("Skat: " + data.getSkat());
     }
 
     /**
@@ -330,21 +330,21 @@ public class SkatGame {
 
         int bidValue = 0;
 
-        log.debug("ask middle and fore hand..."); //$NON-NLS-1$
+        log.debug("ask middle and fore hand...");
 
         bidValue = twoPlayerBidding(Player.MIDDLEHAND, Player.FOREHAND, bidValue);
 
-        log.debug("Bid value after first bidding: " //$NON-NLS-1$
+        log.debug("Bid value after first bidding: "
                 + bidValue);
 
         Player firstWinner = getBiddingWinner(Player.MIDDLEHAND, Player.FOREHAND);
 
-        log.debug("First bidding winner: " + firstWinner); //$NON-NLS-1$
-        log.debug("ask rear hand and first winner..."); //$NON-NLS-1$
+        log.debug("First bidding winner: " + firstWinner);
+        log.debug("ask rear hand and first winner...");
 
         bidValue = twoPlayerBidding(Player.REARHAND, firstWinner, bidValue);
 
-        log.debug("Bid value after second bidding: " //$NON-NLS-1$
+        log.debug("Bid value after second bidding: "
                 + bidValue);
 
         // get second winner
@@ -352,18 +352,18 @@ public class SkatGame {
 
         if (secondWinner == Player.FOREHAND && bidValue == 0) {
 
-            log.debug("Check whether fore hand holds at least one bid"); //$NON-NLS-1$
+            log.debug("Check whether fore hand holds at least one bid");
 
             setActivePlayer(Player.FOREHAND);
 
             // check whether fore hand holds at least one bid
             if (getPlayerInstance(Player.FOREHAND).bidMore(18) > -1) {
 
-                log.debug("Fore hand holds 18"); //$NON-NLS-1$
+                log.debug("Fore hand holds 18");
                 JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName, new BidEvent(secondWinner, 18)));
             } else {
 
-                log.debug("Fore hand passes too"); //$NON-NLS-1$
+                log.debug("Fore hand passes too");
                 JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName, new PassBidEvent(Player.FOREHAND)));
                 secondWinner = null;
             }
@@ -374,15 +374,15 @@ public class SkatGame {
             setDeclarer(secondWinner);
             setActivePlayer(secondWinner);
 
-            log.debug("Player " + data.getDeclarer() //$NON-NLS-1$
-                    + " wins the bidding."); //$NON-NLS-1$
+            log.debug("Player " + data.getDeclarer()
+                    + " wins the bidding.");
         } else {
             // FIXME (jansch 02.01.2012) use cloned rule options here (see
             // MantisBT: 0000037)
             JSkatOptions options = JSkatOptions.instance();
 
             if (options.isPlayRamsch() && options.isRamschEventNoBid()) {
-                log.debug("Playing ramsch due to no bid"); //$NON-NLS-1$
+                log.debug("Playing ramsch due to no bid");
                 GameAnnouncementFactory factory = GameAnnouncement.getFactory();
                 factory.setGameType(GameType.RAMSCH);
                 setGameAnnouncement(factory.getAnnouncement());
@@ -433,7 +433,7 @@ public class SkatGame {
 
             if (announcerBidValue > -1 && SkatConstants.bidOrder.contains(Integer.valueOf(announcerBidValue))) {
 
-                log.debug("announcer bids " + announcerBidValue); //$NON-NLS-1$
+                log.debug("announcer bids " + announcerBidValue);
 
                 // announcing hand holds bid
                 currBidValue = announcerBidValue;
@@ -446,7 +446,7 @@ public class SkatGame {
                 setActivePlayer(hearer);
                 if (getPlayerInstance(hearer).holdBid(currBidValue)) {
 
-                    log.debug("hearer holds " + currBidValue); //$NON-NLS-1$
+                    log.debug("hearer holds " + currBidValue);
 
                     // hearing hand holds bid
                     data.addPlayerBid(hearer, announcerBidValue);
@@ -456,7 +456,7 @@ public class SkatGame {
 
                 } else {
 
-                    log.debug("hearer passed at " + announcerBidValue); //$NON-NLS-1$
+                    log.debug("hearer passed at " + announcerBidValue);
 
                     // hearing hand passed
                     hearerPassed = true;
@@ -465,7 +465,7 @@ public class SkatGame {
                 }
             } else {
 
-                log.debug("announcer passed at " + nextBidValue); //$NON-NLS-1$
+                log.debug("announcer passed at " + nextBidValue);
 
                 // announcing hand passes
                 announcerPassed = true;
@@ -496,8 +496,8 @@ public class SkatGame {
 
         view.setSkat(tableName, data.getSkat());
 
-        log.debug("Player " + activePlayer + " looks into the skat..."); //$NON-NLS-1$ //$NON-NLS-2$
-        log.debug("Skat before discarding: " + data.getSkat()); //$NON-NLS-1$
+        log.debug("Player " + activePlayer + " looks into the skat...");
+        log.debug("Skat before discarding: " + data.getSkat());
 
         CardList skatBefore = new CardList(data.getSkat());
 
@@ -516,7 +516,7 @@ public class SkatGame {
             view.showAIPlayedSchwarzMessageDiscarding(activePlayerInstance.getPlayerName(), discardedSkat);
             endGameBecauseOfSchwarzPlaying(activePlayer);
         } else {
-            log.debug("Discarded cards: " + discardedSkat); //$NON-NLS-1$
+            log.debug("Discarded cards: " + discardedSkat);
 
             data.setDiscardedSkat(activePlayer, discardedSkat);
             if (!activePlayerInstance.isHumanPlayer()) {
@@ -533,17 +533,17 @@ public class SkatGame {
 
         if (discardedSkat == null) {
 
-            log.error("Player is fooling!!! Skat is empty!"); //$NON-NLS-1$
+            log.error("Player is fooling!!! Skat is empty!");
             result = false;
         } else if (discardedSkat.size() != 2) {
 
-            log.error("Player is fooling!!! Skat doesn't have two cards!"); //$NON-NLS-1$
+            log.error("Player is fooling!!! Skat doesn't have two cards!");
             result = false;
         } else if (discardedSkat.get(0) == discardedSkat.get(1)) {
-            log.error("Player is fooling!!! Skat cards are identical!"); //$NON-NLS-1$
+            log.error("Player is fooling!!! Skat cards are identical!");
             result = false;
         } else if (!playerHasCard(player, discardedSkat.get(0)) || !playerHasCard(player, discardedSkat.get(1))) {
-            log.error("Player is fooling!!! Player doesn't have had discarded card! Dis"); //$NON-NLS-1$
+            log.error("Player is fooling!!! Player doesn't have had discarded card! Dis");
             result = false;
         }
         // TODO check for jacks in the discarded skat in ramsch games
@@ -553,15 +553,15 @@ public class SkatGame {
 
     private void announceGame() {
 
-        log.debug("declaring game..."); //$NON-NLS-1$
+        log.debug("declaring game...");
 
         // TODO check for valid game announcements
         GameAnnouncement ann = getPlayerInstance(data.getDeclarer()).announceGame();
         if (ann != null) {
             setGameAnnouncement(ann);
         } else {
-            view.showErrorMessage(strings.getString("invalid_game_announcement_title"), //$NON-NLS-1$
-                    strings.getString("invalid_game_announcement_message", ann)); //$NON-NLS-1$
+            view.showErrorMessage(strings.getString("invalid_game_announcement_title"),
+                    strings.getString("invalid_game_announcement_message", ann));
         }
 
         doSleep(maxSleep);
@@ -571,7 +571,7 @@ public class SkatGame {
 
         for (int trickNo = 0; trickNo < 10; trickNo++) {
 
-            log.debug("=============== Play trick " + (trickNo + 1) + " ==============="); //$NON-NLS-1$ //$NON-NLS-2$
+            log.debug("=============== Play trick " + (trickNo + 1) + " ===============");
             doSleep(maxSleep);
 
             Player trickForehand = getTrickForeHand(trickNo);
@@ -580,7 +580,7 @@ public class SkatGame {
             informPlayersAboutNewTrick(trickNo, trickForehand);
 
             // Ask players for their cards
-            log.debug("fore hand plays"); //$NON-NLS-1$
+            log.debug("fore hand plays");
             if (isContraEnabledForPlayer(activePlayer, ContraCallingTime.BEFORE_FIRST_CARD, trickNo)) {
                 setGameState(GameState.CONTRA);
                 contraRe();
@@ -595,7 +595,7 @@ public class SkatGame {
 
             doSleep(maxSleep);
 
-            log.debug("middle hand plays"); //$NON-NLS-1$
+            log.debug("middle hand plays");
             setActivePlayer(activePlayer.getLeftNeighbor());
             if (isContraEnabledForPlayer(activePlayer, ContraCallingTime.BEFORE_FIRST_CARD, trickNo)) {
                 setGameState(GameState.CONTRA);
@@ -611,7 +611,7 @@ public class SkatGame {
 
             doSleep(maxSleep);
 
-            log.debug("rear hand plays"); //$NON-NLS-1$
+            log.debug("rear hand plays");
             setActivePlayer(activePlayer.getLeftNeighbor());
             if (isContraEnabledForPlayer(activePlayer, ContraCallingTime.BEFORE_FIRST_CARD, trickNo)) {
                 setGameState(GameState.CONTRA);
@@ -640,7 +640,7 @@ public class SkatGame {
                 }
             }
 
-            log.debug("Trick cards: " + lastTrick.getCardList()); //$NON-NLS-1$
+            log.debug("Trick cards: " + lastTrick.getCardList());
             logPlayerPoints();
 
             if (getActivePlayerInstance().isAIPlayer()) {
@@ -736,9 +736,9 @@ public class SkatGame {
     }
 
     private void logPlayerPoints() {
-        log.debug("Points: forehand: " + data.getPlayerPoints(Player.FOREHAND) + //$NON-NLS-1$
-                " middlehand: " //$NON-NLS-1$
-                + data.getPlayerPoints(Player.MIDDLEHAND) + " rearhand: " //$NON-NLS-1$
+        log.debug("Points: forehand: " + data.getPlayerPoints(Player.FOREHAND) +
+                " middlehand: "
+                + data.getPlayerPoints(Player.MIDDLEHAND) + " rearhand: "
                 + data.getPlayerPoints(Player.REARHAND));
     }
 
@@ -758,14 +758,14 @@ public class SkatGame {
             try {
                 Player lastTrickWinner = data.getLastTrickWinner();
                 if (lastTrickWinner != null) {
-                    log.debug("Skat cards (" + data.getSkat().getTotalValue() + " points) are added to player @ " //$NON-NLS-1$ //$NON-NLS-2$
-                            + lastTrickWinner + " (= last trick)"); //$NON-NLS-1$
+                    log.debug("Skat cards (" + data.getSkat().getTotalValue() + " points) are added to player @ "
+                            + lastTrickWinner + " (= last trick)");
                     data.addPlayerPoints(lastTrickWinner, data.getSkat().getTotalValue());
                 }
             } catch (IllegalArgumentException exception) {
                 // IllegalArgumentException can be thrown if a game was ended
                 // preliminary by a player playing Schwarz
-                log.warn("Skat cards cannot be added to winner of final trick - trick winner is unknown"); //$NON-NLS-1$
+                log.warn("Skat cards cannot be added to winner of final trick - trick winner is unknown");
             }
         } else if (JSkatOptions.instance().getRamschSkatOwner() == RamschSkatOwner.LOSER) {
             int maxPoints = -1;
@@ -795,13 +795,13 @@ public class SkatGame {
                 // ask player for the next card
                 playedCard = skatPlayer.playCard();
             } catch (Exception exp) {
-                log.error("Exception thrown by player " + skatPlayer + " playing " + currPlayer + ": " + exp); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                log.error("Exception thrown by player " + skatPlayer + " playing " + currPlayer + ": " + exp);
                 if (!skatPlayer.isHumanPlayer()) {
                     aiPlayerPlayedSchwarz = true;
                 }
             }
 
-            log.debug(playedCard + " " + data); //$NON-NLS-1$
+            log.debug(playedCard + " " + data);
 
             if (isCardSchwarzPlay(skatPlayer, currPlayer, firstTrickCard, playedCard)) {
                 if (skatPlayer.isHumanPlayer()) {
@@ -832,7 +832,7 @@ public class SkatGame {
                 playerInstance.cardPlayed(currPlayer, playedCard);
             }
 
-            log.debug("playing card " + playedCard); //$NON-NLS-1$
+            log.debug("playing card " + playedCard);
         }
 
         if (aiPlayerPlayedSchwarz) {
@@ -854,21 +854,21 @@ public class SkatGame {
         boolean isSchwarz = false;
         if (playedCard == null) {
 
-            log.error("Player is fooling!!! Did not play a card!"); //$NON-NLS-1$
+            log.error("Player is fooling!!! Did not play a card!");
             isSchwarz = true;
 
         } else if (!playerHasCard(position, playedCard)) {
 
-            log.error("Player (" + skatPlayer + ") is fooling!!! Doesn't have card " + playedCard + "!"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+            log.error("Player (" + skatPlayer + ") is fooling!!! Doesn't have card " + playedCard + "!");
             isSchwarz = true;
 
         } else if (!rules.isCardAllowed(data.getGameType(), firstTrickCard, data.getPlayerCards(position),
                 playedCard)) {
 
             log.error(
-                    "Player " + skatPlayer.getClass().toString() + " card not allowed: " + playedCard + " game type: " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                            + data.getGameType() + " first trick card: " //$NON-NLS-1$
-                            + firstTrickCard + " player cards: " //$NON-NLS-1$
+                    "Player " + skatPlayer.getClass().toString() + " card not allowed: " + playedCard + " game type: "
+                            + data.getGameType() + " first trick card: "
+                            + firstTrickCard + " player cards: "
                             + data.getPlayerCards(position));
             isSchwarz = true;
         }
@@ -894,7 +894,7 @@ public class SkatGame {
 
         boolean result = false;
 
-        log.debug("Player " + player + " has card: player cards: " + data.getPlayerCards(player) //$NON-NLS-1$
+        log.debug("Player " + player + " has card: player cards: " + data.getPlayerCards(player)
                 + " card to check: " + card);
 
         for (Card handCard : data.getPlayerCards(player)) {
@@ -910,16 +910,16 @@ public class SkatGame {
 
     private void calculateGameValue() {
 
-        log.debug("Calculate game value"); //$NON-NLS-1$
+        log.debug("Calculate game value");
 
         // FIXME (jan 07.12.2010) don't let a data class calculate it's values
         data.calcResult();
 
-        log.debug("game value=" + data.getResult() + ", bid value=" //$NON-NLS-1$ //$NON-NLS-2$
+        log.debug("game value=" + data.getResult() + ", bid value="
                 + data.getMaxBidValue());
 
-        log.debug("Final game result: lost:" + data.isGameLost() + //$NON-NLS-1$
-                " game value: " + data.getResult()); //$NON-NLS-1$
+        log.debug("Final game result: lost:" + data.isGameLost() +
+                " game value: " + data.getResult());
 
         log.debug("Final result: " + data.getDeclarerScore() + "/" + data.getOpponentScore());
 
@@ -937,7 +937,7 @@ public class SkatGame {
             try {
                 Thread.sleep(milliseconds);
             } catch (InterruptedException e) {
-                log.warn("sleep was interrupted..."); //$NON-NLS-1$
+                log.warn("sleep was interrupted...");
             }
         }
     }
@@ -990,8 +990,8 @@ public class SkatGame {
             playerInstance.startGame(data.getDeclarer(), ann);
         }
 
-        log.debug(".setGameAnnouncement(): " + data.getAnnoucement() + " by " + data.getDeclarer() //$NON-NLS-1$ //$NON-NLS-2$
-                + ", rules=" + rules); //$NON-NLS-1$
+        log.debug(".setGameAnnouncement(): " + data.getAnnoucement() + " by " + data.getDeclarer()
+                + ", rules=" + rules);
     }
 
     /**

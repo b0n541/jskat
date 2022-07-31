@@ -19,8 +19,8 @@ public class LicenseAction extends AbstractJSkatAction {
      */
     public LicenseAction() {
 
-        putValue(Action.NAME, STRINGS.getString("license")); //$NON-NLS-1$
-        putValue(Action.SHORT_DESCRIPTION, STRINGS.getString("license_tooltip")); //$NON-NLS-1$
+        putValue(Action.NAME, STRINGS.getString("license"));
+        putValue(Action.SHORT_DESCRIPTION, STRINGS.getString("license_tooltip"));
 
         setIcon(Icon.LICENSE);
     }
@@ -31,6 +31,6 @@ public class LicenseAction extends AbstractJSkatAction {
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        this.EVENTBUS.post(new ShowLicenseCommand());
+        EVENTBUS.post(new ShowLicenseCommand());
     }
 }

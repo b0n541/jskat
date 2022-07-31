@@ -19,9 +19,9 @@ public class PreferencesAction extends AbstractJSkatAction {
      */
     public PreferencesAction() {
 
-        putValue(Action.NAME, STRINGS.getString("preferences")); //$NON-NLS-1$
+        putValue(Action.NAME, STRINGS.getString("preferences"));
         putValue(Action.SHORT_DESCRIPTION,
-                STRINGS.getString("preferences_tooltip")); //$NON-NLS-1$
+                STRINGS.getString("preferences_tooltip"));
 
         setIcon(Icon.PREFERENCES);
     }

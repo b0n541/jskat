@@ -18,7 +18,7 @@ import java.awt.event.MouseListener;
 class ClickableCardPanel extends CardPanel {
 
     private static final long serialVersionUID = 1L;
-    private static Logger log = LoggerFactory
+    private static final Logger log = LoggerFactory
             .getLogger(ClickableCardPanel.class);
 
     private JPanel parent = null;
@@ -103,7 +103,7 @@ class ClickableCardPanel extends CardPanel {
                             .getValue(Action.ACTION_COMMAND_KEY)));
                 } else {
 
-                    log.debug("Action is null"); //$NON-NLS-1$
+                    log.debug("Action is null");
                 }
             }
         }
@@ -131,7 +131,7 @@ class ClickableCardPanel extends CardPanel {
             }
         } else {
 
-            log.debug("Other parent " + parent); //$NON-NLS-1$
+            log.debug("Other parent " + parent);
         }
         return action;
     }
@@ -147,7 +147,7 @@ class ClickableCardPanel extends CardPanel {
     private int getCardIndex(final int clickPositionX, final int cardWidth) {
         int cardIndex = -1;
         if (cards.size() == 1) {
-            log.debug("only one card on hand"); //$NON-NLS-1$
+            log.debug("only one card on hand");
             if (clickPositionX < cardWidth) {
                 cardIndex = 0;
             }
@@ -157,13 +157,13 @@ class ClickableCardPanel extends CardPanel {
                     / (cards.size() - 1);
 
             if (cardWidth > distanceBetweenCards) {
-                log.debug("cards with overlaping"); //$NON-NLS-1$
+                log.debug("cards with overlaping");
                 cardIndex = 0;
                 while (cardIndex * distanceBetweenCards < activeCardMinXPosition) {
                     cardIndex++;
                 }
             } else {
-                log.debug("cards without overlaping"); //$NON-NLS-1$
+                log.debug("cards without overlaping");
                 cardIndex = (int) (clickPositionX * (1 / scaleFactor) / cardWidth);
             }
         }

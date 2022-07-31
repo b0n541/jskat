@@ -95,7 +95,7 @@ public class SkatSeries {
 
         if (newPlayers.size() != 3) {
             throw new IllegalArgumentException(
-                    "Only three players are allowed at the moment."); //$NON-NLS-1$
+                    "Only three players are allowed at the moment.");
         }
 
         view.setPlayerNames(data.getTableName(), newPlayers.get(0).getPlayerName(), newPlayers.get(0).isAIPlayer(),
@@ -123,7 +123,7 @@ public class SkatSeries {
             }
         }
 
-        LOG.debug("Player order: " + players); //$NON-NLS-1$
+        LOG.debug("Player order: " + players);
     }
 
     /**
@@ -156,7 +156,7 @@ public class SkatSeries {
 
         while ((roundsToGo > 0 || unlimitedRounds)) {
 
-            LOG.debug("Playing round " + (roundsPlayed + 1)); //$NON-NLS-1$
+            LOG.debug("Playing round " + (roundsPlayed + 1));
 
             for (int j = 0; j < 3; j++) {
 
@@ -192,13 +192,13 @@ public class SkatSeries {
                 currSkatGame.setView(view);
                 currSkatGame.setMaxSleep(maxSleep);
 
-                LOG.debug("Playing game " + (j + 1)); //$NON-NLS-1$
+                LOG.debug("Playing game " + (j + 1));
 
                 data.addGame(currSkatGame);
 
                 CompletableFuture.runAsync(() -> currSkatGame.run()).join();
 
-                LOG.debug("Game ended: join"); //$NON-NLS-1$
+                LOG.debug("Game ended: join");
 
                 readyForNextGame = false;
                 while (isHumanPlayerInvolved() && !readyForNextGame) {

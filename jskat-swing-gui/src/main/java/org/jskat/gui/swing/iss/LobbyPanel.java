@@ -21,7 +21,7 @@ import java.awt.event.MouseListener;
 public class LobbyPanel extends AbstractTabPanel {
 
     private static final long serialVersionUID = 1L;
-    private static Logger log = LoggerFactory.getLogger(LobbyPanel.class);
+    private static final Logger log = LoggerFactory.getLogger(LobbyPanel.class);
 
     private PlayerListTableModel playerListTableModel;
     private JTable playerListTable;
@@ -44,7 +44,7 @@ public class LobbyPanel extends AbstractTabPanel {
 
         super(tableName, actions);
 
-        log.debug("SkatTablePanel: name: " + tableName); //$NON-NLS-1$
+        log.debug("SkatTablePanel: name: " + tableName);
     }
 
     /**
@@ -53,34 +53,34 @@ public class LobbyPanel extends AbstractTabPanel {
     @Override
     protected void initPanel() {
 
-        setLayout(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+        setLayout(LayoutFactory.getMigLayout("fill"));
 
-        add(getLobbyPanel(), "center"); //$NON-NLS-1$
+        add(getLobbyPanel(), "center");
 
         LobbyPanel.actions = getActionMap();
     }
 
     private JPanel getLobbyPanel() {
 
-        final JPanel lobby = new JPanel(LayoutFactory.getMigLayout("fill", "fill", //$NON-NLS-1$ //$NON-NLS-2$
-                "[shrink][shrink][shrink][shrink][grow]")); //$NON-NLS-1$
+        final JPanel lobby = new JPanel(LayoutFactory.getMigLayout("fill", "fill",
+                "[shrink][shrink][shrink][shrink][grow]"));
 
-        final JLabel headerLabel = new JLabel(this.strings.getString("welcome_to_iss_title")); //$NON-NLS-1$
+        final JLabel headerLabel = new JLabel(this.strings.getString("welcome_to_iss_title"));
         headerLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 32));
-        final JPanel headerPanel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
-        headerPanel.add(headerLabel, "center"); //$NON-NLS-1$
+        final JPanel headerPanel = new JPanel(LayoutFactory.getMigLayout("fill"));
+        headerPanel.add(headerLabel, "center");
 
-        lobby.add(headerPanel, "span 2, growx, align center, wrap"); //$NON-NLS-1$
-        lobby.add(new JLabel(this.strings.getString("players")), "width 50%"); //$NON-NLS-1$ //$NON-NLS-2$
-        lobby.add(new JLabel(this.strings.getString("tables")), "wrap"); //$NON-NLS-1$ //$NON-NLS-2$
+        lobby.add(headerPanel, "span 2, growx, align center, wrap");
+        lobby.add(new JLabel(this.strings.getString("players")), "width 50%");
+        lobby.add(new JLabel(this.strings.getString("tables")), "wrap");
 
         lobby.add(getPlayerListPanel());
-        lobby.add(getTableListPanel(), "wrap"); //$NON-NLS-1$
+        lobby.add(getTableListPanel(), "wrap");
 
-        lobby.add(getActionButtonPanel(), "span 2, wrap"); //$NON-NLS-1$
+        lobby.add(getActionButtonPanel(), "span 2, wrap");
 
         this.chatPanel = new ChatPanel(this);
-        lobby.add(this.chatPanel, "span 2, hmin 200px, growy, align center"); //$NON-NLS-1$
+        lobby.add(this.chatPanel, "span 2, hmin 200px, growy, align center");
 
         lobby.setPreferredSize(new Dimension(800, 600));
 
@@ -89,7 +89,7 @@ public class LobbyPanel extends AbstractTabPanel {
 
     private JPanel getPlayerListPanel() {
 
-        final JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        final JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill"));
 
         this.playerListTableModel = new PlayerListTableModel();
         this.playerListTable = new JTable(this.playerListTableModel);
@@ -113,7 +113,7 @@ public class LobbyPanel extends AbstractTabPanel {
 
     private JPanel getTableListPanel() {
 
-        final JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        final JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill"));
 
         this.tableListTableModel = new TableListTableModel();
         this.tableListTable = new JTable(this.tableListTableModel);
@@ -157,7 +157,7 @@ public class LobbyPanel extends AbstractTabPanel {
                     // FIXME (jansch 27.04.2011) doesn't work
                     // LobbyPanel.actions.get(JSkatAction.OBSERVE_ISS_TABLE).actionPerformed(
                     // new ActionEvent(tableName, 1, null));
-                } else if (value.equals(".")) { //$NON-NLS-1$
+                } else if (value.equals(".")) {
                     // sit down on free seat at table
                     LobbyPanel.actions.get(JSkatAction.JOIN_ISS_TABLE)
                             .actionPerformed(new ActionEvent(tableName, 1, null));
@@ -178,10 +178,10 @@ public class LobbyPanel extends AbstractTabPanel {
 
     private JPanel getActionButtonPanel() {
 
-        final JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        final JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill"));
 
-        panel.add(new JButton(getActionMap().get(JSkatAction.CREATE_ISS_TABLE)), "width 50%"); //$NON-NLS-1$
-        panel.add(new JButton(getActionMap().get(JSkatAction.DISCONNECT_FROM_ISS)), "width 50%"); //$NON-NLS-1$
+        panel.add(new JButton(getActionMap().get(JSkatAction.CREATE_ISS_TABLE)), "width 50%");
+        panel.add(new JButton(getActionMap().get(JSkatAction.DISCONNECT_FROM_ISS)), "width 50%");
 
         return panel;
     }
@@ -243,7 +243,7 @@ public class LobbyPanel extends AbstractTabPanel {
      */
     public void appendChatMessage(final ChatMessage message) {
 
-        log.debug("Appending chat message: " + message); //$NON-NLS-1$
+        log.debug("Appending chat message: " + message);
 
         this.chatPanel.appendMessage(message);
     }

@@ -96,7 +96,7 @@ public class IssController {
     private void closeConnectionIfOpen() {
         if (issConnector != null && issConnector.isConnected()) {
 
-            log.debug("connection to ISS still open"); //$NON-NLS-1$
+            log.debug("connection to ISS still open");
 
             issConnector.closeConnection();
         }
@@ -113,14 +113,14 @@ public class IssController {
     @Subscribe
     public void establishConnectionOn(IssConnectCommand command) {
 
-        log.debug("connectToISS"); //$NON-NLS-1$
+        log.debug("connectToISS");
 
         if (issConnector == null) {
             issConnector = new StreamConnector();
             // issConnector = new WebSocketConnector();
         }
 
-        log.debug("connector created"); //$NON-NLS-1$
+        log.debug("connector created");
 
         login = command.loginCredentials.getLoginName();
         password = command.loginCredentials.getPassword();
@@ -132,7 +132,7 @@ public class IssController {
                     .establishConnection(this);
 
             if (isConnected) {
-                log.debug("Connection to ISS established: " + issConnector.isConnected()); //$NON-NLS-1$
+                log.debug("Connection to ISS established: " + issConnector.isConnected());
                 issMsg = new MessageGenerator(login);
                 issOut = issConnector.getOutputChannel();
                 sendToIss(login);
@@ -240,18 +240,18 @@ public class IssController {
 
     void addLobbyChatMessage(List<String> params) {
 
-        log.debug("addLobbyChatMessage"); //$NON-NLS-1$
+        log.debug("addLobbyChatMessage");
 
         StringBuffer message = new StringBuffer();
 
         // first the sender of the message
-        message.append(params.get(0)).append(": "); //$NON-NLS-1$
+        message.append(params.get(0)).append(": ");
         // then the text
         for (int i = 1; i < params.size(); i++) {
             message.append(params.get(i)).append(' ');
         }
 
-        ChatMessage chatMessage = new ChatMessage("Lobby", //$NON-NLS-1$
+        ChatMessage chatMessage = new ChatMessage("Lobby",
                 message.toString());
 
         view.appendISSChatMessage(ChatMessageType.LOBBY, chatMessage);
@@ -266,7 +266,7 @@ public class IssController {
 
         StringBuffer message = new StringBuffer();
         // second the sender of the message
-        message.append(params.get(1)).append(": "); //$NON-NLS-1$
+        message.append(params.get(1)).append(": ");
         // then the text
         for (int i = 2; i < params.size(); i++) {
             message.append(params.get(i)).append(' ');
@@ -573,7 +573,7 @@ public class IssController {
      * @param message Message
      */
     public void showMessage(String message) {
-        view.showMessage(strings.getString("iss_message"), message); //$NON-NLS-1$
+        view.showMessage(strings.getString("iss_message"), message);
     }
 
     /**
@@ -583,7 +583,7 @@ public class IssController {
      */
     public void showErrorMessage(String message) {
         view.showErrorMessage(
-                strings.getString("iss_message"), message); //$NON-NLS-1$
+                strings.getString("iss_message"), message);
     }
 
     /**

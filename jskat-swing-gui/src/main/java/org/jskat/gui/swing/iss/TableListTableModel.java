@@ -26,12 +26,12 @@ class TableListTableModel extends AbstractTableModel {
         this.strings = JSkatResourceBundle.INSTANCE;
         this.data = new ArrayList<>();
         this.columns = new ArrayList<>();
-        this.columns.add(this.strings.getString("name")); //$NON-NLS-1$
-        this.columns.add(this.strings.getString("seats")); //$NON-NLS-1$
-        this.columns.add(this.strings.getString("games")); //$NON-NLS-1$
-        this.columns.add(this.strings.getString("player") + " 1"); //$NON-NLS-1$
-        this.columns.add(this.strings.getString("player") + " 2"); //$NON-NLS-1$
-        this.columns.add(this.strings.getString("player") + " 3"); //$NON-NLS-1$
+        this.columns.add(this.strings.getString("name"));
+        this.columns.add(this.strings.getString("seats"));
+        this.columns.add(this.strings.getString("games"));
+        this.columns.add(this.strings.getString("player") + " 1");
+        this.columns.add(this.strings.getString("player") + " 2");
+        this.columns.add(this.strings.getString("player") + " 3");
     }
 
     /**

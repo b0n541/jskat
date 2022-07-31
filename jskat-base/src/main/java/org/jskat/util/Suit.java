@@ -26,7 +26,7 @@ public enum Suit {
     private final String symbol;
     private final int sortOrder;
 
-    private Suit(final String shortString, final String longString, final String symbol, final int sortOrder) {
+    Suit(final String shortString, final String longString, final String symbol, final int sortOrder) {
         this.shortString = shortString;
         this.longString = longString;
         this.symbol = symbol;
@@ -81,16 +81,16 @@ public enum Suit {
 
         if (cardAsString.length() == 2) {
             // parse only, if the string is two characters long
-            if (cardAsString.startsWith("C")) { //$NON-NLS-1$
+            if (cardAsString.startsWith("C")) {
 
                 suit = CLUBS;
-            } else if (cardAsString.startsWith("S")) { //$NON-NLS-1$
+            } else if (cardAsString.startsWith("S")) {
 
                 suit = SPADES;
-            } else if (cardAsString.startsWith("H")) { //$NON-NLS-1$
+            } else if (cardAsString.startsWith("H")) {
 
                 suit = HEARTS;
-            } else if (cardAsString.startsWith("D")) { //$NON-NLS-1$
+            } else if (cardAsString.startsWith("D")) {
 
                 suit = DIAMONDS;
             }

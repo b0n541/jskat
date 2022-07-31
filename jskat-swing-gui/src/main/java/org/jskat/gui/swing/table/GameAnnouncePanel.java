@@ -66,14 +66,14 @@ class GameAnnouncePanel extends JPanel {
 
     private void initPanel(final ActionMap actions) {
 
-        this.setLayout(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+        this.setLayout(LayoutFactory.getMigLayout("fill"));
 
-        final JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+        final JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill"));
 
-        this.handBox = new JCheckBox(this.strings.getString("hand")); //$NON-NLS-1$
+        this.handBox = new JCheckBox(this.strings.getString("hand"));
         this.handBox.setEnabled(false);
         this.ouvertBox = createOuvertBox();
-        this.schneiderBox = new JCheckBox(this.strings.getString("schneider")); //$NON-NLS-1$
+        this.schneiderBox = new JCheckBox(this.strings.getString("schneider"));
         this.schwarzBox = createSchwarzBox();
 
         final ActionListener actionListener = new ActionListener() {
@@ -87,11 +87,7 @@ class GameAnnouncePanel extends JPanel {
                     GameAnnouncePanel.this.userPanel.setSortGameType(gameType);
 
                     if (GameAnnouncePanel.this.userPickedUpSkat) {
-                        if (gameType == GameType.NULL) {
-                            GameAnnouncePanel.this.ouvertBox.setEnabled(true);
-                        } else {
-                            GameAnnouncePanel.this.ouvertBox.setEnabled(false);
-                        }
+                        GameAnnouncePanel.this.ouvertBox.setEnabled(gameType == GameType.NULL);
                     } else {
                         GameAnnouncePanel.this.ouvertBox.setEnabled(true);
                         if (gameType != GameType.NULL) {
@@ -131,10 +127,10 @@ class GameAnnouncePanel extends JPanel {
 
         panel.add(new JLabel(strings.getString("win_levels")), "span 2, wrap");
 
-        panel.add(this.handBox); //$NON-NLS-1$
-        panel.add(this.ouvertBox, "wrap"); //$NON-NLS-1$
-        panel.add(this.schneiderBox); //$NON-NLS-1$
-        panel.add(this.schwarzBox, "wrap"); //$NON-NLS-1$
+        panel.add(this.handBox);
+        panel.add(this.ouvertBox, "wrap");
+        panel.add(this.schneiderBox);
+        panel.add(this.schwarzBox, "wrap");
 
         final JButton announceButton = new JButton(actions.get(JSkatAction.ANNOUNCE_GAME));
         announceButton.addActionListener(new ActionListener() {
@@ -200,7 +196,7 @@ class GameAnnouncePanel extends JPanel {
         });
         panel.add(announceButton, "center, span 2");
 
-        add(panel, "center"); //$NON-NLS-1$
+        add(panel, "center");
 
         setOpaque(false);
 
@@ -230,7 +226,7 @@ class GameAnnouncePanel extends JPanel {
     }
 
     private JCheckBox createOuvertBox() {
-        final JCheckBox result = new JCheckBox(this.strings.getString("ouvert")); //$NON-NLS-1$
+        final JCheckBox result = new JCheckBox(this.strings.getString("ouvert"));
 
         result.addItemListener(new ItemListener() {
             @Override
@@ -250,7 +246,7 @@ class GameAnnouncePanel extends JPanel {
     }
 
     private JCheckBox createSchwarzBox() {
-        final JCheckBox result = new JCheckBox(this.strings.getString("schwarz")); //$NON-NLS-1$
+        final JCheckBox result = new JCheckBox(this.strings.getString("schwarz"));
 
         result.addItemListener(new ItemListener() {
 
@@ -284,11 +280,7 @@ class GameAnnouncePanel extends JPanel {
 
         if (isUserPickedUpSkat) {
             this.handBox.setSelected(false);
-            if (GameType.NULL.equals(getSelectedGameType())) {
-                this.ouvertBox.setEnabled(true);
-            } else {
-                this.ouvertBox.setEnabled(false);
-            }
+            this.ouvertBox.setEnabled(GameType.NULL.equals(getSelectedGameType()));
             this.schneiderBox.setEnabled(false);
             this.schwarzBox.setEnabled(false);
         } else {

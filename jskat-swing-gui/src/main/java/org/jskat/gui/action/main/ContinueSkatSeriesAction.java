@@ -21,8 +21,8 @@ public class ContinueSkatSeriesAction extends AbstractJSkatAction {
      */
     public ContinueSkatSeriesAction() {
 
-        putValue(NAME, STRINGS.getString("continue_series")); //$NON-NLS-1$
-        putValue(SHORT_DESCRIPTION, STRINGS.getString("continue_series_tooltip")); //$NON-NLS-1$
+        putValue(NAME, STRINGS.getString("continue_series"));
+        putValue(SHORT_DESCRIPTION, STRINGS.getString("continue_series_tooltip"));
 
         setIcon(Icon.PLAY);
     }

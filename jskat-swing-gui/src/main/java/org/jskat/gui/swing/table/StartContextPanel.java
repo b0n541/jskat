@@ -9,7 +9,7 @@ class StartContextPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
-    private StartSkatSeriesAction action;
+    private final StartSkatSeriesAction action;
 
     public StartContextPanel(StartSkatSeriesAction newAction) {
 
@@ -19,12 +19,12 @@ class StartContextPanel extends JPanel {
 
     public void initPanel() {
 
-        this.setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+        this.setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill"));
 
-        JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
-        panel.add(new JButton(this.action), "center"); //$NON-NLS-1$
+        JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill"));
+        panel.add(new JButton(this.action), "center");
         panel.setOpaque(false);
-        this.add(panel, "center"); //$NON-NLS-1$
+        this.add(panel, "center");
 
         setOpaque(false);
     }

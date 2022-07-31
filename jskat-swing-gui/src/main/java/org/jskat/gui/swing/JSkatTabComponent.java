@@ -36,7 +36,7 @@ public class JSkatTabComponent extends JPanel {
         super(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
         if (newPane == null) {
-            throw new IllegalArgumentException("TabbedPane is null"); //$NON-NLS-1$
+            throw new IllegalArgumentException("TabbedPane is null");
         }
         this.pane = newPane;
         setOpaque(false);

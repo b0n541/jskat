@@ -20,7 +20,7 @@ import java.awt.geom.AffineTransform;
 public class CardPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
-    private static Logger log = LoggerFactory.getLogger(CardPanel.class);
+    private static final Logger log = LoggerFactory.getLogger(CardPanel.class);
 
     protected final JSkatGraphicRepository bitmaps;
 
@@ -46,7 +46,7 @@ public class CardPanel extends JPanel {
      */
     public CardPanel(final Double scaleFactor, final Boolean showBackside) {
 
-        setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill"));
 
         createMouseAdapter();
 

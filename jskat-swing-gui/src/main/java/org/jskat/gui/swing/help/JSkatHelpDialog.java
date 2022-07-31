@@ -23,7 +23,7 @@ import java.net.URISyntaxException;
 public class JSkatHelpDialog extends JDialog {
 
     private static final long serialVersionUID = 1L;
-    private static Logger log = LoggerFactory.getLogger(JSkatHelpDialog.class);
+    private static final Logger log = LoggerFactory.getLogger(JSkatHelpDialog.class);
 
     protected final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
 
@@ -95,7 +95,7 @@ public class JSkatHelpDialog extends JDialog {
 
     protected JPanel getButtonPanel() {
         JPanel southPanel = new JPanel();
-        JButton closeButton = new JButton(this.strings.getString("close")); //$NON-NLS-1$
+        JButton closeButton = new JButton(this.strings.getString("close"));
         closeButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent evt) {
@@ -114,7 +114,7 @@ public class JSkatHelpDialog extends JDialog {
             BufferedReader bfr = new java.io.BufferedReader(isr);
 
             while (bfr.ready()) {
-                message.append(bfr.readLine()).append("\n"); //$NON-NLS-1$
+                message.append(bfr.readLine()).append("\n");
             }
 
         } catch (java.io.IOException e) {

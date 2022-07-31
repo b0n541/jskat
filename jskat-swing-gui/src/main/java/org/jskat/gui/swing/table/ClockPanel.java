@@ -79,8 +79,8 @@ public class ClockPanel extends JPanel {
         int seconds = (int) (this.playerTimeInSeconds - (minutes * 60));
 
         DecimalFormat format = ((DecimalFormat) NumberFormat.getInstance());
-        format.applyPattern("00"); //$NON-NLS-1$
-        return format.format(minutes) + ":" + format.format(seconds); //$NON-NLS-1$
+        format.applyPattern("00");
+        return format.format(minutes) + ":" + format.format(seconds);
     }
 
     private class CountDownThread extends Thread {

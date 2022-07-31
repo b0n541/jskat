@@ -19,7 +19,7 @@ public class ReadyAction extends AbstractJSkatAction {
      */
     public ReadyAction() {
 
-        putValue(Action.NAME, STRINGS.getString("ready")); //$NON-NLS-1$
+        putValue(Action.NAME, STRINGS.getString("ready"));
 
         setIcon(Icon.OK);
     }

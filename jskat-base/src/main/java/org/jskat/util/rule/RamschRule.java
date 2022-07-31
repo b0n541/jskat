@@ -132,11 +132,11 @@ public class RamschRule extends SuitGrandRamschRule {
         int multiplier = 1;
 
         if (gameData.isJungfrau()) {
-            log.debug("One player is jungfrau"); //$NON-NLS-1$
+            log.debug("One player is jungfrau");
             multiplier = 2;
         }
 
-        log.debug(gameData.getGeschoben() + " player did schieben"); //$NON-NLS-1$
+        log.debug(gameData.getGeschoben() + " player did schieben");
         multiplier = (int) (multiplier * Math.pow(2, gameData.getGeschoben()));
 
         return multiplier;

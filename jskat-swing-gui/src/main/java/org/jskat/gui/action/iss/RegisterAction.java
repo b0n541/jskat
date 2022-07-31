@@ -19,7 +19,7 @@ public class RegisterAction extends AbstractJSkatAction {
      */
     public RegisterAction() {
 
-        putValue(Action.NAME, STRINGS.getString("register_on_iss")); //$NON-NLS-1$
+        putValue(Action.NAME, STRINGS.getString("register_on_iss"));
 
         setIcon(Icon.REGISTER);
     }

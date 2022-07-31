@@ -18,7 +18,7 @@ public class HoldBidAction extends AbstractHumanJSkatAction {
      */
     public HoldBidAction() {
 
-        putValue(Action.NAME, "hold bid"); //$NON-NLS-1$
+        putValue(Action.NAME, "hold bid");
         putValue(Action.SHORT_DESCRIPTION, "Hold this bid");
 
         setActionCommand(JSkatAction.HOLD_BID);

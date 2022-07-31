@@ -27,10 +27,10 @@ class SchieberamschContextPanel extends JPanel {
     JSkatGraphicRepository bitmaps = JSkatGraphicRepository.INSTANCE;
     JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
 
-    private static final String GRAND_HAND = "GRAND_HAND"; //$NON-NLS-1$
-    private static final String DISCARD = "DISCARD"; //$NON-NLS-1$
+    private static final String GRAND_HAND = "GRAND_HAND";
+    private static final String DISCARD = "DISCARD";
     private static final long serialVersionUID = 1L;
-    private static Logger log = LoggerFactory
+    private static final Logger log = LoggerFactory
             .getLogger(SchieberamschContextPanel.class);
 
     private final DiscardPanel discardPanel;
@@ -40,11 +40,11 @@ class SchieberamschContextPanel extends JPanel {
                               final JSkatUserPanel newUserPanel, final int maxCards) {
 
         setLayout(LayoutFactory.getMigLayout(
-                "fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+                "fill", "[shrink][grow][shrink]", "fill"));
 
         JPanel blankPanel = new JPanel();
         blankPanel.setOpaque(false);
-        add(blankPanel, "width 25%"); //$NON-NLS-1$
+        add(blankPanel, "width 25%");
 
         this.centerPanel = new JPanel(new CardLayout());
         JPanel grandHandPanel = getGrandHandSchiebeRamschPanel(actions);
@@ -54,9 +54,9 @@ class SchieberamschContextPanel extends JPanel {
         this.centerPanel.add(this.discardPanel, DISCARD);
 
         this.centerPanel.setOpaque(false);
-        add(this.centerPanel, "grow"); //$NON-NLS-1$
+        add(this.centerPanel, "grow");
 
-        add(new SkatSchiebenPanel(actions, this.discardPanel), "width 25%"); //$NON-NLS-1$
+        add(new SkatSchiebenPanel(actions, this.discardPanel), "width 25%");
 
         setOpaque(false);
 
@@ -66,23 +66,23 @@ class SchieberamschContextPanel extends JPanel {
     // FIXME: same code can be found in class SkatTabelPanel for
     // Contra-Re-Context-Panel
     public JPanel getGrandHandSchiebeRamschPanel(final ActionMap actions) {
-        JPanel result = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+        JPanel result = new JPanel(LayoutFactory.getMigLayout("fill"));
 
         JPanel question = new JPanel();
         JLabel questionIconLabel = new JLabel(new ImageIcon(
                 this.bitmaps.getUserBidBubble()));
         question.add(questionIconLabel);
         JLabel questionLabel = new JLabel(
-                this.strings.getString("want_play_grand_hand")); //$NON-NLS-1$
+                this.strings.getString("want_play_grand_hand"));
         questionLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
         question.add(questionLabel);
-        result.add(question, "center, growx, span 2, wrap"); //$NON-NLS-1$
+        result.add(question, "center, growx, span 2, wrap");
 
         final JButton grandHandButton = new JButton(
                 actions.get(JSkatAction.PLAY_GRAND_HAND));
         grandHandButton.setIcon(new ImageIcon(this.bitmaps.getIconImage(Icon.OK,
                 IconSize.BIG)));
-        grandHandButton.setText(this.strings.getString("yes")); //$NON-NLS-1$
+        grandHandButton.setText(this.strings.getString("yes"));
         grandHandButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -109,7 +109,7 @@ class SchieberamschContextPanel extends JPanel {
                 actions.get(JSkatAction.PLAY_SCHIEBERAMSCH));
         schieberamschButton.setIcon(new ImageIcon(this.bitmaps.getIconImage(
                 Icon.STOP, IconSize.BIG)));
-        schieberamschButton.setText(this.strings.getString("no")); //$NON-NLS-1$
+        schieberamschButton.setText(this.strings.getString("no"));
         schieberamschButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -124,12 +124,12 @@ class SchieberamschContextPanel extends JPanel {
         JPanel grandHandPanel = new JPanel();
         grandHandPanel.add(grandHandButton);
         grandHandPanel.setOpaque(false);
-        result.add(grandHandPanel, "width 50%"); //$NON-NLS-1$
+        result.add(grandHandPanel, "width 50%");
 
         JPanel schieberamschPanel = new JPanel();
         schieberamschPanel.add(schieberamschButton);
         schieberamschPanel.setOpaque(false);
-        result.add(schieberamschPanel, "width 50%"); //$NON-NLS-1$
+        result.add(schieberamschPanel, "width 50%");
 
         result.setOpaque(false);
 

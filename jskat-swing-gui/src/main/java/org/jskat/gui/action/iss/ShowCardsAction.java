@@ -19,7 +19,7 @@ public class ShowCardsAction extends AbstractJSkatAction {
      */
     public ShowCardsAction() {
 
-        putValue(Action.NAME, STRINGS.getString("show_cards")); //$NON-NLS-1$
+        putValue(Action.NAME, STRINGS.getString("show_cards"));
 
         setIcon(Icon.PLAY);
     }

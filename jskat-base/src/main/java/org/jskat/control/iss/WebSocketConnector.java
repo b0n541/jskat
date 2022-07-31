@@ -28,7 +28,7 @@
 //	@Override
 //	public boolean establishConnection(final IssController issControl) {
 //
-//		log.debug("WebSocketConnector.establishConnection()"); //$NON-NLS-1$
+//		log.debug("WebSocketConnector.establishConnection()"); 
 //
 //		try {
 //			WebSocketClientFactory factory = new WebSocketClientFactory();
@@ -44,7 +44,7 @@
 //
 //			Connection connection = client
 //					.open(new URI(
-//							"ws://"	+ options.getString(Option.ISS_ADDRESS) + ":" //$NON-NLS-1$ //$NON-NLS-2$
+//							"ws://"	+ options.getString(Option.ISS_ADDRESS) + ":"  
 //									+ options.getInteger(Option.ISS_PORT)),
 //							webSocket, 10, TimeUnit.SECONDS);
 //
@@ -53,12 +53,12 @@
 //			}
 //
 //		} catch (java.net.UnknownHostException e) {
-//			log.error("Cannot open connection to ISS"); //$NON-NLS-1$
+//			log.error("Cannot open connection to ISS"); 
 //			issControl.showErrorMessage(strings
-//					.getString("cant_connect_to_iss")); //$NON-NLS-1$
+//					.getString("cant_connect_to_iss")); 
 //			return false;
 //		} catch (java.io.IOException e) {
-//			log.error("IOException: " + e.toString()); //$NON-NLS-1$
+//			log.error("IOException: " + e.toString()); 
 //			return false;
 //		} catch (Exception e) {
 //			// TODO Auto-generated catch block
@@ -80,7 +80,7 @@
 //	public void closeConnection() {
 //		webSocket.messageHandler.interrupt();
 //		webSocket.connection.close();
-//		log.debug("connection closed"); //$NON-NLS-1$
+//		log.debug("connection closed"); 
 //	}
 //
 //	/**

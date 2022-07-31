@@ -19,7 +19,7 @@ public class ResignAction extends AbstractJSkatAction {
      */
     public ResignAction() {
 
-        putValue(Action.NAME, STRINGS.getString("resign")); //$NON-NLS-1$
+        putValue(Action.NAME, STRINGS.getString("resign"));
 
         setIcon(Icon.WHITE_FLAG);
     }

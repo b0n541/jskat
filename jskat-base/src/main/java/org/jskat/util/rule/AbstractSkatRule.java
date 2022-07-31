@@ -60,8 +60,8 @@ public abstract class AbstractSkatRule implements SkatRule {
             }
         }
 
-        log.debug("Trick fore hand: " + trickForeHand); //$NON-NLS-1$
-        log.debug("Trick winner: " + trickWinner); //$NON-NLS-1$
+        log.debug("Trick fore hand: " + trickForeHand);
+        log.debug("Trick winner: " + trickWinner);
 
         return trickWinner;
     }

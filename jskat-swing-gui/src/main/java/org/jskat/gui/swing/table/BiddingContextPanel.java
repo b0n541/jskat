@@ -42,18 +42,18 @@ class BiddingContextPanel extends JPanel {
                            JSkatUserPanel userPanel) {
 
         setLayout(LayoutFactory.getMigLayout(
-                "fill", "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                "fill", "[shrink][grow][shrink]", "fill"));
 
         JPanel blankPanel = new JPanel();
         blankPanel.setOpaque(false);
-        add(blankPanel, "width 25%"); //$NON-NLS-1$
+        add(blankPanel, "width 25%");
 
         JPanel biddingPanel = getBiddingPanel(actions, bitmaps);
         biddingPanel.setOpaque(false);
-        add(biddingPanel, "grow"); //$NON-NLS-1$
+        add(biddingPanel, "grow");
 
         this.announcePanel = new GameAnnouncePanel(actions, userPanel, null);
-        add(this.announcePanel, "width 25%"); //$NON-NLS-1$
+        add(this.announcePanel, "width 25%");
 
         setOpaque(false);
     }
@@ -61,22 +61,22 @@ class BiddingContextPanel extends JPanel {
     private JPanel getBiddingPanel(ActionMap actions,
                                    JSkatGraphicRepository bitmaps) {
 
-        JPanel biddingPanel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+        JPanel biddingPanel = new JPanel(LayoutFactory.getMigLayout("fill"));
 
         this.leftOpponentBid = new BidBubblePanel(bitmaps.getLeftBidBubble());
         this.rightOpponentBid = new BidBubblePanel(bitmaps.getRightBidBubble());
         this.userBid = new BidBubblePanel(bitmaps.getUserBidBubble());
 
-        biddingPanel.add(this.leftOpponentBid, "center"); //$NON-NLS-1$
-        biddingPanel.add(this.rightOpponentBid, "center, wrap"); //$NON-NLS-1$
-        biddingPanel.add(this.userBid, "span 2, center, wrap"); //$NON-NLS-1$
+        biddingPanel.add(this.leftOpponentBid, "center");
+        biddingPanel.add(this.rightOpponentBid, "center, wrap");
+        biddingPanel.add(this.userBid, "span 2, center, wrap");
 
         this.makeBidAction = actions.get(JSkatAction.MAKE_BID);
         this.holdBidAction = actions.get(JSkatAction.HOLD_BID);
         this.bidButton = new JButton(this.makeBidAction);
         this.passButton = new JButton(actions.get(JSkatAction.PASS_BID));
-        biddingPanel.add(this.bidButton, "center"); //$NON-NLS-1$
-        biddingPanel.add(this.passButton, "center"); //$NON-NLS-1$
+        biddingPanel.add(this.bidButton, "center");
+        biddingPanel.add(this.passButton, "center");
 
         return biddingPanel;
     }

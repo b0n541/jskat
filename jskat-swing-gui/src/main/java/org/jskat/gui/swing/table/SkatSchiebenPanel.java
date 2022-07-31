@@ -19,7 +19,7 @@ import java.awt.event.ActionListener;
 class SkatSchiebenPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
-    private static Logger log = LoggerFactory
+    private static final Logger log = LoggerFactory
             .getLogger(SkatSchiebenPanel.class);
 
     JSkatResourceBundle strings;
@@ -44,10 +44,10 @@ class SkatSchiebenPanel extends JPanel {
 
     private void initPanel(final ActionMap actions) {
 
-        this.setLayout(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+        this.setLayout(LayoutFactory.getMigLayout("fill"));
         setOpaque(false);
 
-        JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+        JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill"));
         panel.setOpaque(false);
 
         final JButton schiebenButton = new JButton(
@@ -76,8 +76,8 @@ class SkatSchiebenPanel extends JPanel {
                         JOptionPane
                                 .showMessageDialog(
                                         SkatSchiebenPanel.this,
-                                        SkatSchiebenPanel.this.strings.getString("invalid_number_of_cards_in_skat_message"), //$NON-NLS-1$
-                                        SkatSchiebenPanel.this.strings.getString("invalid_number_of_cards_in_skat_title"), //$NON-NLS-1$
+                                        SkatSchiebenPanel.this.strings.getString("invalid_number_of_cards_in_skat_message"),
+                                        SkatSchiebenPanel.this.strings.getString("invalid_number_of_cards_in_skat_title"),
                                         JOptionPane.ERROR_MESSAGE);
                         return null;
                     }
@@ -103,6 +103,6 @@ class SkatSchiebenPanel extends JPanel {
         });
         panel.add(schiebenButton, "center");
 
-        this.add(panel, "center"); //$NON-NLS-1$
+        this.add(panel, "center");
     }
 }

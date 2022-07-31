@@ -12,7 +12,7 @@ import java.awt.*;
  */
 public class LookAndFeelSetter {
 
-    private static Logger log = LoggerFactory.getLogger(LookAndFeelSetter.class);
+    private static final Logger log = LoggerFactory.getLogger(LookAndFeelSetter.class);
 
     /**
      * Sets the look and feel.
@@ -30,18 +30,18 @@ public class LookAndFeelSetter {
                 laf = (LookAndFeel) Class.forName("javax.swing.plaf.nimbus.NimbusLookAndFeel").newInstance();
             }
 
-            laf.getDefaults().put("control", new Color(226, 217, 202)); //$NON-NLS-1$
-            laf.getDefaults().put("text", new Color(0, 0, 0)); //$NON-NLS-1$
-            laf.getDefaults().put("nimbusFocus", new Color(255, 245, 193)); //$NON-NLS-1$
-            laf.getDefaults().put("nimbusLightBackground", new Color(241, 238, 229)); //$NON-NLS-1$
-            laf.getDefaults().put("nimbusBase", new Color(96, 65, 34)); //$NON-NLS-1$
+            laf.getDefaults().put("control", new Color(226, 217, 202));
+            laf.getDefaults().put("text", new Color(0, 0, 0));
+            laf.getDefaults().put("nimbusFocus", new Color(255, 245, 193));
+            laf.getDefaults().put("nimbusLightBackground", new Color(241, 238, 229));
+            laf.getDefaults().put("nimbusBase", new Color(96, 65, 34));
 
             if (ScreenResolution.isVeryBigScreen(targetScreen)) {
                 laf.getDefaults().put("defaultFont", new Font(Font.SANS_SERIF, 0, 14));
             }
 
             UIManager.setLookAndFeel(laf);
-            log.debug("NimbusLookAndFeel successfully applied..."); //$NON-NLS-1$
+            log.debug("NimbusLookAndFeel successfully applied...");
 
         } catch (final UnsupportedLookAndFeelException e) {
             log.debug(e.toString());
@@ -50,7 +50,7 @@ public class LookAndFeelSetter {
         } catch (final IllegalAccessException e) {
             log.debug(e.toString());
         } catch (final ClassNotFoundException e) {
-            log.info("NimbusLookAndFeel not found (probably not installed/wrong JDK)!"); //$NON-NLS-1$
+            log.info("NimbusLookAndFeel not found (probably not installed/wrong JDK)!");
         }
     }
 }

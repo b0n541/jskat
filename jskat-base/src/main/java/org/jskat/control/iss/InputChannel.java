@@ -1,117 +1,115 @@
-
 package org.jskat.control.iss;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * Reads data from ISS until an interrupt signal occures
- * 
+ * <p>
  * Idea is taken from the book Java Threads by Scott Oaks and Henry Wong
  */
 class InputChannel extends Thread {
 
-	private static Logger log = LoggerFactory.getLogger(InputChannel.class);
+    private static final Logger log = LoggerFactory.getLogger(InputChannel.class);
 
-	MessageHandler messageHandler;
+    MessageHandler messageHandler;
 
-	Object lock = new Object();
-	InputStream stream;
-	BufferedReader reader;
-	boolean done = false;
+    Object lock = new Object();
+    InputStream stream;
+    BufferedReader reader;
+    boolean done = false;
 
-	/**
-	 * Constructor
-	 * 
-	 * @param controller
-	 * @param conn
-	 * @param is
-	 *            Input stream
-	 */
-	InputChannel(final IssController controller,
-			final StreamConnector conn, final InputStream is) {
+    /**
+     * Constructor
+     *
+     * @param controller
+     * @param conn
+     * @param is         Input stream
+     */
+    InputChannel(final IssController controller,
+                 final StreamConnector conn, final InputStream is) {
 
-		this.stream = is;
-		this.reader = new BufferedReader(new InputStreamReader(this.stream));
-		this.messageHandler = new MessageHandler(conn, controller);
-		messageHandler.start();
-	}
+        this.stream = is;
+        this.reader = new BufferedReader(new InputStreamReader(this.stream));
+        this.messageHandler = new MessageHandler(conn, controller);
+        messageHandler.start();
+    }
 
-	/**
-	 * Helper class for reading incoming information
-	 */
-	class ReaderClass extends Thread {
+    /**
+     * Helper class for reading incoming information
+     */
+    class ReaderClass extends Thread {
 
-		@Override
-		public void run() {
+        @Override
+        public void run() {
 
-			log.debug("... listening to ISS");
-			String line;
-			while (!InputChannel.this.done) {
-				try {
+            log.debug("... listening to ISS");
+            String line;
+            while (!InputChannel.this.done) {
+                try {
 
-					line = InputChannel.this.reader.readLine();
-					
-					log.debug("ISS    |--> " + line); //$NON-NLS-1$
-					
-					InputChannel.this.messageHandler.addMessage(line);
+                    line = InputChannel.this.reader.readLine();
 
-					if (line == null) {
-						InputChannel.this.done = true;
-					}
+                    log.debug("ISS    |--> " + line);
 
-				} catch (IOException ioe) {
+                    InputChannel.this.messageHandler.addMessage(line);
 
-					log.debug("IO exception --> lost connection to ISS"); //$NON-NLS-1$
-					InputChannel.this.done = true;
-				}
-			}
+                    if (line == null) {
+                        InputChannel.this.done = true;
+                    }
 
-			synchronized (InputChannel.this.lock) {
-				InputChannel.this.lock.notify();
-			}
-		}
-	}
+                } catch (IOException ioe) {
 
-	/**
-	 * @see Thread#run()
-	 */
-	@Override
-	public void run() {
+                    log.debug("IO exception --> lost connection to ISS");
+                    InputChannel.this.done = true;
+                }
+            }
 
-		ReaderClass rc = new ReaderClass();
+            synchronized (InputChannel.this.lock) {
+                InputChannel.this.lock.notify();
+            }
+        }
+    }
 
-		synchronized (this.lock) {
+    /**
+     * @see Thread#run()
+     */
+    @Override
+    public void run() {
 
-			rc.start();
+        ReaderClass rc = new ReaderClass();
 
-			while (!this.done) {
-				try {
-					this.lock.wait();
-				} catch (InterruptedException ie) {
+        synchronized (this.lock) {
 
-					log.debug("InputChannel interrupted"); //$NON-NLS-1$
+            rc.start();
 
-					rc.interrupt();
-					this.done = true;
+            while (!this.done) {
+                try {
+                    this.lock.wait();
+                } catch (InterruptedException ie) {
 
-					try {
+                    log.debug("InputChannel interrupted");
 
-						log.debug("Closing stream"); //$NON-NLS-1$
+                    rc.interrupt();
+                    this.done = true;
 
-						stream.close();
+                    try {
 
-					} catch (IOException e) {
+                        log.debug("Closing stream");
 
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-	}
+                        stream.close();
+
+                    } catch (IOException e) {
+
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
 }

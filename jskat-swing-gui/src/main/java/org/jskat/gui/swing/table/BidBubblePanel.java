@@ -12,20 +12,20 @@ class BidBubblePanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
 
-    private Image bubbleImage;
-    private JLabel bidLabel;
+    private final Image bubbleImage;
+    private final JLabel bidLabel;
 
     BidBubblePanel(Image newBubbleImage) {
 
         bubbleImage = newBubbleImage;
 
-        setLayout(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+        setLayout(LayoutFactory.getMigLayout("fill"));
 
         bidLabel = new JLabel();
         bidLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
         setBidValue(0);
 
-        add(bidLabel, "center"); //$NON-NLS-1$
+        add(bidLabel, "center");
         setMinimumSize(new Dimension(75, 75));
     }
 
@@ -37,7 +37,7 @@ class BidBubblePanel extends JPanel {
 
         } else {
 
-            bidLabel.setText("X"); //$NON-NLS-1$
+            bidLabel.setText("X");
         }
     }
 

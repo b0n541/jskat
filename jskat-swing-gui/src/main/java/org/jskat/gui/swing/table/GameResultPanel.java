@@ -17,7 +17,7 @@ import java.util.List;
 public class GameResultPanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
-    private static Logger log = LoggerFactory.getLogger(GameResultPanel.class);
+    private static final Logger log = LoggerFactory.getLogger(GameResultPanel.class);
 
     private Player userPosition;
     private List<TrickPanel> trickPanelList;
@@ -30,7 +30,7 @@ public class GameResultPanel extends JPanel {
     }
 
     private void initPanel() {
-        setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill"));
 
         trickPanelList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
@@ -39,13 +39,13 @@ public class GameResultPanel extends JPanel {
         }
 
         final JPanel trickPanel = new JPanel(LayoutFactory.getMigLayout(
-                "fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+                "fill", "fill", "fill"));
         for (final TrickPanel panel : trickPanelList) {
             trickPanel.add(panel);
         }
         trickPanel.setOpaque(false);
 
-        add(trickPanel, "grow"); //$NON-NLS-1$
+        add(trickPanel, "grow");
 
         setOpaque(false);
     }
@@ -54,7 +54,7 @@ public class GameResultPanel extends JPanel {
 
         final List<Trick> tricks = summary.getTricks();
 
-        log.debug("Trick size: " + tricks.size()); //$NON-NLS-1$
+        log.debug("Trick size: " + tricks.size());
 
         for (int i = 0; i < 10; i++) {
 

@@ -1,4 +1,3 @@
-
 package org.jskat.control.iss;
 
 import org.jskat.data.GameAnnouncement;
@@ -12,174 +11,174 @@ import org.jskat.util.GameType;
  */
 class MessageGenerator {
 
-	String loginName;
+    String loginName;
 
-	MessageGenerator(final String loginName) {
-		this.loginName = loginName;
-	}
+    MessageGenerator(final String loginName) {
+        this.loginName = loginName;
+    }
 
-	String getLoginAndPasswordMessage(final String password) {
-		return "login " + loginName + " " + password; //$NON-NLS-1$ //$NON-NLS-2$
-	}
+    String getLoginAndPasswordMessage(final String password) {
+        return "login " + loginName + " " + password;
+    }
 
-	static String getPasswordMessage(final String password) {
+    static String getPasswordMessage(final String password) {
 
-		return password;
-	}
+        return password;
+    }
 
-	String getChatMessage(final ChatMessage message) {
-		// FIXME (jan 30.01.2011) refactor ChatMessage with ChatMessageType
-		if ("Lobby".equals(message.getChatName())) { //$NON-NLS-1$
-			return "yell " + message.getMessage(); //$NON-NLS-1$
-		} else {
-			return "table " + message.getChatName() + ' ' + loginName + " tell " + message.getMessage(); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-	}
+    String getChatMessage(final ChatMessage message) {
+        // FIXME (jan 30.01.2011) refactor ChatMessage with ChatMessageType
+        if ("Lobby".equals(message.getChatName())) {
+            return "yell " + message.getMessage();
+        } else {
+            return "table " + message.getChatName() + ' ' + loginName + " tell " + message.getMessage();
+        }
+    }
 
-	static String getTableCreationMessage() {
+    static String getTableCreationMessage() {
 
-		// TODO table creation for four player
-		return "create / 3"; //$NON-NLS-1$
-	}
+        // TODO table creation for four player
+        return "create / 3";
+    }
 
-	static String getJoinTableMessage(final String tableName) {
+    static String getJoinTableMessage(final String tableName) {
 
-		return "join " + tableName; //$NON-NLS-1$
-	}
+        return "join " + tableName;
+    }
 
-	static String getObserveTableMessage(final String tableName) {
+    static String getObserveTableMessage(final String tableName) {
 
-		return "observe " + tableName; //$NON-NLS-1$
-	}
+        return "observe " + tableName;
+    }
 
-	String getLeaveTableMessage(final String tableName) {
+    String getLeaveTableMessage(final String tableName) {
 
-		return "table " + tableName + ' ' + loginName + " leave"; //$NON-NLS-1$ //$NON-NLS-2$
-	}
+        return "table " + tableName + ' ' + loginName + " leave";
+    }
 
-	String getReadyMessage(final String tableName) {
+    String getReadyMessage(final String tableName) {
 
-		return "table " + tableName + ' ' + loginName + " ready"; //$NON-NLS-1$ //$NON-NLS-2$
-	}
+        return "table " + tableName + ' ' + loginName + " ready";
+    }
 
-	String getTalkEnabledMessage(final String tableName) {
+    String getTalkEnabledMessage(final String tableName) {
 
-		return "table " + tableName + ' ' + loginName + " gametalk"; //$NON-NLS-1$ //$NON-NLS-2$
-	}
+        return "table " + tableName + ' ' + loginName + " gametalk";
+    }
 
-	String getTableSeatChangeMessage(final String tableName) {
+    String getTableSeatChangeMessage(final String tableName) {
 
-		return "table " + tableName + ' ' + loginName + " 34"; //$NON-NLS-1$ //$NON-NLS-2$
-	}
+        return "table " + tableName + ' ' + loginName + " 34";
+    }
 
-	String getInvitePlayerMessage(final String tableName, final String invitee) {
+    String getInvitePlayerMessage(final String tableName, final String invitee) {
 
-		return "table " + tableName + ' ' + loginName + " invite " + invitee; //$NON-NLS-1$//$NON-NLS-2$
-	}
+        return "table " + tableName + ' ' + loginName + " invite " + invitee;
+    }
 
-	String getPassMoveMessage(final String tableName) {
+    String getPassMoveMessage(final String tableName) {
 
-		return "table " + tableName + ' ' + loginName + " play p"; //$NON-NLS-1$//$NON-NLS-2$
-	}
+        return "table " + tableName + ' ' + loginName + " play p";
+    }
 
-	String getHoldBidMoveMessage(final String tableName) {
+    String getHoldBidMoveMessage(final String tableName) {
 
-		return "table " + tableName + ' ' + loginName + " play y"; //$NON-NLS-1$//$NON-NLS-2$
-	}
+        return "table " + tableName + ' ' + loginName + " play y";
+    }
 
-	String getBidMoveMessage(final String tableName, final int bidValue) {
+    String getBidMoveMessage(final String tableName, final int bidValue) {
 
-		return "table " + tableName + ' ' + loginName + " play " + bidValue; //$NON-NLS-1$//$NON-NLS-2$
-	}
+        return "table " + tableName + ' ' + loginName + " play " + bidValue;
+    }
 
-	String getPickUpSkatMoveMessage(final String tableName) {
-		return "table " + tableName + ' ' + loginName + " play s"; //$NON-NLS-1$//$NON-NLS-2$
-	}
+    String getPickUpSkatMoveMessage(final String tableName) {
+        return "table " + tableName + ' ' + loginName + " play s";
+    }
 
-	String getGameAnnouncementMoveMessage(final String tableName,
-			final GameAnnouncement gameAnnouncement) {
+    String getGameAnnouncementMoveMessage(final String tableName,
+                                          final GameAnnouncement gameAnnouncement) {
 
-		String gameAnnouncementString = getGameTypeString(
-				gameAnnouncement.getGameType(), gameAnnouncement.isHand(),
-				gameAnnouncement.isOuvert(), gameAnnouncement.isSchneider(),
-				gameAnnouncement.isSchwarz());
+        String gameAnnouncementString = getGameTypeString(
+                gameAnnouncement.getGameType(), gameAnnouncement.isHand(),
+                gameAnnouncement.isOuvert(), gameAnnouncement.isSchneider(),
+                gameAnnouncement.isSchwarz());
 
-		if (!gameAnnouncement.isHand()) {
+        if (!gameAnnouncement.isHand()) {
 
-			final CardList skat = gameAnnouncement.getDiscardedCards();
-			gameAnnouncementString += "." + getIssCardString(skat.get(0)) + "." //$NON-NLS-1$ //$NON-NLS-2$
-					+ getIssCardString(skat.get(1));
-		}
+            final CardList skat = gameAnnouncement.getDiscardedCards();
+            gameAnnouncementString += "." + getIssCardString(skat.get(0)) + "."
+                    + getIssCardString(skat.get(1));
+        }
 
-		return "table " + tableName + ' ' + loginName + " play " + gameAnnouncementString; //$NON-NLS-1$//$NON-NLS-2$
-	}
+        return "table " + tableName + ' ' + loginName + " play " + gameAnnouncementString;
+    }
 
-	private String getGameTypeString(final GameType gameType,
-			final boolean hand, final boolean ouvert, final boolean schneider,
-			final boolean schwarz) {
+    private String getGameTypeString(final GameType gameType,
+                                     final boolean hand, final boolean ouvert, final boolean schneider,
+                                     final boolean schwarz) {
 
-		String result = getGameTypeString(gameType);
+        String result = getGameTypeString(gameType);
 
-		if (hand) {
-			result += "H"; //$NON-NLS-1$
-		}
+        if (hand) {
+            result += "H";
+        }
 
-		if (ouvert) {
-			result += "O"; //$NON-NLS-1$
-		}
+        if (ouvert) {
+            result += "O";
+        }
 
-		if (schneider) {
-			result += "S"; //$NON-NLS-1$
-		}
+        if (schneider) {
+            result += "S";
+        }
 
-		if (schwarz) {
-			result += "Z"; //$NON-NLS-1$
-		}
+        if (schwarz) {
+            result += "Z";
+        }
 
-		return result;
-	}
+        return result;
+    }
 
-	private static String getGameTypeString(final GameType gameType) {
-		switch (gameType) {
-		case CLUBS:
-			return "C"; //$NON-NLS-1$
-		case SPADES:
-			return "S"; //$NON-NLS-1$
-		case HEARTS:
-			return "H"; //$NON-NLS-1$
-		case DIAMONDS:
-			return "D"; //$NON-NLS-1$
-		case NULL:
-			return "N"; //$NON-NLS-1$
-		case GRAND:
-			return "G"; //$NON-NLS-1$
-		default:
-			// FIXME (jan 02.11.2010) Ramsch games are not allowed on ISS
-			return null;
-		}
-	}
+    private static String getGameTypeString(final GameType gameType) {
+        switch (gameType) {
+            case CLUBS:
+                return "C";
+            case SPADES:
+                return "S";
+            case HEARTS:
+                return "H";
+            case DIAMONDS:
+                return "D";
+            case NULL:
+                return "N";
+            case GRAND:
+                return "G";
+            default:
+                // FIXME (jan 02.11.2010) Ramsch games are not allowed on ISS
+                return null;
+        }
+    }
 
-	String getCardMoveMessage(final String tableName, final Card card) {
-		return "table " + tableName + ' ' + loginName + " play " + getIssCardString(card); //$NON-NLS-1$//$NON-NLS-2$
-	}
+    String getCardMoveMessage(final String tableName, final Card card) {
+        return "table " + tableName + ' ' + loginName + " play " + getIssCardString(card);
+    }
 
-	private static String getIssCardString(final Card card) {
-		return card.getSuit().getShortString() + card.getRank().getShortString();
-	}
+    private static String getIssCardString(final Card card) {
+        return card.getSuit().getShortString() + card.getRank().getShortString();
+    }
 
-	String getResignMessage(final String tableName) {
+    String getResignMessage(final String tableName) {
 
-		return "table " + tableName + ' ' + loginName + " play RE"; //$NON-NLS-1$ //$NON-NLS-2$
-	}
+        return "table " + tableName + ' ' + loginName + " play RE";
+    }
 
-	String getShowCardsMessage(final String tableName) {
+    String getShowCardsMessage(final String tableName) {
 
-		return "table " + tableName + ' ' + loginName + " play SC"; //$NON-NLS-1$ //$NON-NLS-2$
-	}
+        return "table " + tableName + ' ' + loginName + " play SC";
+    }
 
-	static String getInvitationAcceptedMessage(final String tableName,
-			final String invitationTicket) {
+    static String getInvitationAcceptedMessage(final String tableName,
+                                               final String invitationTicket) {
 
-		return "join " + tableName + " " + invitationTicket; //$NON-NLS-1$//$NON-NLS-2$
-	}
+        return "join " + tableName + " " + invitationTicket;
+    }
 }

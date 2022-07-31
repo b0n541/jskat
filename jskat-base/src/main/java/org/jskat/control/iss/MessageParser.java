@@ -1,4 +1,3 @@
-
 package org.jskat.control.iss;
 
 import org.jskat.data.GameAnnouncement;
@@ -50,12 +49,12 @@ public class MessageParser {
         // get player status
         for (int i = 0; i < status.getMaxPlayers(); i++) {
             // parse only non empty seats
-            if (!".".equals(params.get(i * 10 + 5))) { //$NON-NLS-1$
+            if (!".".equals(params.get(i * 10 + 5))) {
                 // there is player information
                 final PlayerStatus playerStatus = parsePlayerStatus(params
                         .subList(i * 10 + 5, i * 10 + 16));
                 // has player left already
-                if (".".equals(params.get(i + 1))) { //$NON-NLS-1$
+                if (".".equals(params.get(i + 1))) {
                     playerStatus.setPlayerLeft(true);
                 }
                 status.addPlayer(playerStatus.getName(), playerStatus);
@@ -96,7 +95,7 @@ public class MessageParser {
     static GameStartInformation getGameStartStatus(final String loginName,
                                                    final List<String> params) {
 
-        log.debug("game start parameter: " + params); //$NON-NLS-1$
+        log.debug("game start parameter: " + params);
 
         final GameStartInformation status = new GameStartInformation();
 
@@ -121,35 +120,35 @@ public class MessageParser {
 
         // FIXME Unhandled moves
         final String move = params.get(1);
-        log.debug("Move: " + move); //$NON-NLS-1$
-        if ("y".equals(move)) { //$NON-NLS-1$
+        log.debug("Move: " + move);
+        if ("y".equals(move)) {
             // holding bid move
             info.setType(MoveType.HOLD_BID);
-        } else if ("p".equals(move)) { //$NON-NLS-1$
+        } else if ("p".equals(move)) {
             // pass move
             info.setType(MoveType.PASS);
-        } else if ("s".equals(move)) { //$NON-NLS-1$
+        } else if ("s".equals(move)) {
             // skat request move
             info.setType(MoveType.SKAT_REQUEST);
-        } else if ("??.??".equals(move)) { //$NON-NLS-1$
+        } else if ("??.??".equals(move)) {
             // hidden skat given to a player
             info.setType(MoveType.PICK_UP_SKAT);
-        } else if (move.startsWith("TI.")) { //$NON-NLS-1$
+        } else if (move.startsWith("TI.")) {
             // time out for player
             info.setType(MoveType.TIME_OUT);
             info.setTimeOutPlayer(parseTimeOut(move));
-        } else if (move.equals("RE")) { //$NON-NLS-1$
+        } else if (move.equals("RE")) {
             // resigning of player
             info.setType(MoveType.RESIGN);
-        } else if (move.startsWith("SC")) { //$NON-NLS-1$
+        } else if (move.startsWith("SC")) {
             // declarer shows cards
             info.setType(MoveType.SHOW_CARDS);
             if (move.length() > 2) {
                 // declarer cards follow, SC could also stand allone
                 info.setOuvertCards(parseSkatCards(move.substring(move
-                        .indexOf(".") + 1))); //$NON-NLS-1$
+                        .indexOf(".") + 1)));
             }
-        } else if (move.startsWith("LE.")) { //$NON-NLS-1$
+        } else if (move.startsWith("LE.")) {
             // one player left the table during the game
             info.setType(MoveType.LEAVE_TABLE);
             info.setLeavingPlayer(parseLeaveTable(move));
@@ -211,7 +210,7 @@ public class MessageParser {
 
     private static CardList parseSkatCards(final String move) {
 
-        final StringTokenizer token = new StringTokenizer(move, "."); //$NON-NLS-1$
+        final StringTokenizer token = new StringTokenizer(move, ".");
         final CardList result = new CardList();
 
         while (token.hasMoreTokens()) {
@@ -224,17 +223,17 @@ public class MessageParser {
     private static void getMovePlayer(final String movePlayer,
                                       final MoveInformation info) {
 
-        log.debug("Move player: " + movePlayer); //$NON-NLS-1$
-        if ("w".equals(movePlayer)) { //$NON-NLS-1$
+        log.debug("Move player: " + movePlayer);
+        if ("w".equals(movePlayer)) {
             // world move
             info.setMovePlayer(MovePlayer.WORLD);
-        } else if ("0".equals(movePlayer)) { //$NON-NLS-1$
+        } else if ("0".equals(movePlayer)) {
             // fore hand move
             info.setMovePlayer(MovePlayer.FOREHAND);
-        } else if ("1".equals(movePlayer)) { //$NON-NLS-1$
+        } else if ("1".equals(movePlayer)) {
             // middle hand move
             info.setMovePlayer(MovePlayer.MIDDLEHAND);
-        } else if ("2".equals(movePlayer)) { //$NON-NLS-1$
+        } else if ("2".equals(movePlayer)) {
             // rear hand move
             info.setMovePlayer(MovePlayer.REARHAND);
         }
@@ -248,34 +247,34 @@ public class MessageParser {
     private static GameAnnouncement parseGameAnnoucement(
             final MoveInformation info, final String move) {
 
-        final StringTokenizer annToken = new StringTokenizer(move, "."); //$NON-NLS-1$
+        final StringTokenizer annToken = new StringTokenizer(move, ".");
         final String gameTypeString = annToken.nextToken();
 
         final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
 
         // at first the game type
         GameType gameType = null;
-        if (gameTypeString.startsWith("G")) { //$NON-NLS-1$
+        if (gameTypeString.startsWith("G")) {
 
             gameType = GameType.GRAND;
 
-        } else if (gameTypeString.startsWith("C")) { //$NON-NLS-1$
+        } else if (gameTypeString.startsWith("C")) {
 
             gameType = GameType.CLUBS;
 
-        } else if (gameTypeString.startsWith("S")) { //$NON-NLS-1$
+        } else if (gameTypeString.startsWith("S")) {
 
             gameType = GameType.SPADES;
 
-        } else if (gameTypeString.startsWith("H")) { //$NON-NLS-1$
+        } else if (gameTypeString.startsWith("H")) {
 
             gameType = GameType.HEARTS;
 
-        } else if (gameTypeString.startsWith("D")) { //$NON-NLS-1$
+        } else if (gameTypeString.startsWith("D")) {
 
             gameType = GameType.DIAMONDS;
 
-        } else if (gameTypeString.startsWith("N")) { //$NON-NLS-1$
+        } else if (gameTypeString.startsWith("N")) {
 
             gameType = GameType.NULL;
         }
@@ -355,7 +354,7 @@ public class MessageParser {
 
     private static List<CardList> parseCardDeal(final String move) {
 
-        if (move.contains("|") && move.contains("??")) { //$NON-NLS-1$
+        if (move.contains("|") && move.contains("??")) {
             return parseCardDealFromISSMessage(move);
         }
 
@@ -371,7 +370,7 @@ public class MessageParser {
      */
     private static List<CardList> parseCardDealFromISSMessage(final String move) {
 
-        final StringTokenizer handTokens = new StringTokenizer(move, "|"); //$NON-NLS-1$
+        final StringTokenizer handTokens = new StringTokenizer(move, "|");
         final List<CardList> result = new ArrayList<CardList>();
 
         while (handTokens.hasMoreTokens()) {
@@ -410,7 +409,7 @@ public class MessageParser {
 
     private static CardList parseHand(final String hand) {
 
-        final StringTokenizer cardTokens = new StringTokenizer(hand, "."); //$NON-NLS-1$
+        final StringTokenizer cardTokens = new StringTokenizer(hand, ".");
         final CardList result = new CardList();
 
         while (cardTokens.hasMoreTokens()) {
@@ -458,7 +457,7 @@ public class MessageParser {
 
         final SkatGameData result = new SkatGameData();
 
-        final Pattern summaryPartPattern = Pattern.compile("(\\w+)\\[(.*?)\\]"); //$NON-NLS-1$
+        final Pattern summaryPartPattern = Pattern.compile("(\\w+)\\[(.*?)\\]");
         final Matcher summaryPartMatcher = summaryPartPattern
                 .matcher(gameSummary);
 
@@ -478,23 +477,23 @@ public class MessageParser {
     private static void parseSummaryPart(final SkatGameData result,
                                          final String summaryPartMarker, final String summaryPart) {
 
-        if ("P0".equals(summaryPartMarker)) { //$NON-NLS-1$
+        if ("P0".equals(summaryPartMarker)) {
 
             result.setPlayerName(Player.FOREHAND, summaryPart);
 
-        } else if ("P1".equals(summaryPartMarker)) { //$NON-NLS-1$
+        } else if ("P1".equals(summaryPartMarker)) {
 
             result.setPlayerName(Player.MIDDLEHAND, summaryPart);
 
-        } else if ("P2".equals(summaryPartMarker)) { //$NON-NLS-1$
+        } else if ("P2".equals(summaryPartMarker)) {
 
             result.setPlayerName(Player.REARHAND, summaryPart);
 
-        } else if ("MV".equals(summaryPartMarker)) { //$NON-NLS-1$
+        } else if ("MV".equals(summaryPartMarker)) {
 
             parseMoves(result, summaryPart);
 
-        } else if ("R".equals(summaryPartMarker)) { //$NON-NLS-1$
+        } else if ("R".equals(summaryPartMarker)) {
 
             parseGameResult(result, summaryPart);
         }
@@ -599,43 +598,43 @@ public class MessageParser {
 
         // TODO: or simply "passed"
 
-        if (token.startsWith("d:")) { //$NON-NLS-1$
+        if (token.startsWith("d:")) {
 
             parseDeclarerToken(gameData, token);
 
-        } else if ("penalty".equals(token)) { //$NON-NLS-1$
+        } else if ("penalty".equals(token)) {
 
             // FIXME (jan 07.12.2010) handle this token
 
-        } else if ("loss".equals(token)) { //$NON-NLS-1$
+        } else if ("loss".equals(token)) {
 
             gameData.getResult().setWon(false);
 
-        } else if ("win".equals(token)) { //$NON-NLS-1$
+        } else if ("win".equals(token)) {
 
             gameData.getResult().setWon(true);
 
-        } else if (token.startsWith("v:")) { //$NON-NLS-1$
+        } else if (token.startsWith("v:")) {
 
             gameData.getResult().setGameValue(
                     Integer.parseInt(token.substring(2)));
 
-        } else if (token.startsWith("p:")) { //$NON-NLS-1$
+        } else if (token.startsWith("p:")) {
 
             final int declarerPoints = Integer.parseInt(token.substring(2));
             gameData.setDeclarerScore(declarerPoints);
             gameData.getResult().setFinalDeclarerPoints(declarerPoints);
             gameData.getResult().setFinalOpponentPoints(120 - declarerPoints);
 
-        } else if ("overbid".equals(token)) { //$NON-NLS-1$
+        } else if ("overbid".equals(token)) {
 
             gameData.getResult().setOverBidded(true);
 
-        } else if ("s:1".equals(token)) { //$NON-NLS-1$
+        } else if ("s:1".equals(token)) {
 
             gameData.getResult().setSchneider(true);
 
-        } else if ("z:1".equals(token)) { //$NON-NLS-1$
+        } else if ("z:1".equals(token)) {
 
             gameData.getResult().setSchwarz(true);
         }
@@ -644,11 +643,11 @@ public class MessageParser {
     private static void parseDeclarerToken(final SkatGameData result,
                                            final String token) {
 
-        if ("d:0".equals(token)) { //$NON-NLS-1$
+        if ("d:0".equals(token)) {
             result.setDeclarer(Player.FOREHAND);
-        } else if ("d:1".equals(token)) { //$NON-NLS-1$
+        } else if ("d:1".equals(token)) {
             result.setDeclarer(Player.MIDDLEHAND);
-        } else if ("d:2".equals(token)) { //$NON-NLS-1$
+        } else if ("d:2".equals(token)) {
             result.setDeclarer(Player.REARHAND);
         }
     }
@@ -666,7 +665,7 @@ public class MessageParser {
 
         final StringBuffer text = new StringBuffer();
 
-        text.append(detailParams.get(0)).append(": "); //$NON-NLS-1$
+        text.append(detailParams.get(0)).append(": ");
         for (int i = 1; i < detailParams.size(); i++) {
             text.append(detailParams.get(i)).append(' ');
         }

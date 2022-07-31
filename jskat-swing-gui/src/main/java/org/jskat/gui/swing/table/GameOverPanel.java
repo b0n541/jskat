@@ -23,23 +23,23 @@ class GameOverPanel extends JPanel {
 
     private void initPanel(ActionMap actions, List<JSkatAction> activeActions) {
 
-        setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill"));
 
-        JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "[grow][shrink]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "[grow][shrink]"));
         gameResultPanel = new GameResultPanel();
-        panel.add(gameResultPanel, "grow, wrap"); //$NON-NLS-1$
+        panel.add(gameResultPanel, "grow, wrap");
 
-        JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+        JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout("fill"));
         skatPanel = new SkatPanel();
         buttonPanel.add(skatPanel, "grow");
         for (JSkatAction action : activeActions) {
-            buttonPanel.add(new JButton(actions.get(action)), "center, shrink"); //$NON-NLS-1$
+            buttonPanel.add(new JButton(actions.get(action)), "center, shrink");
         }
         buttonPanel.setOpaque(false);
-        panel.add(buttonPanel, "center"); //$NON-NLS-1$
+        panel.add(buttonPanel, "center");
 
         panel.setOpaque(false);
-        add(panel, "center"); //$NON-NLS-1$
+        add(panel, "center");
 
         setOpaque(false);
     }

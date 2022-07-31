@@ -413,7 +413,7 @@ public class CardList implements Iterable<Card> {
 
         StringBuffer output = new StringBuffer();
 
-        output.append("{"); //$NON-NLS-1$
+        output.append("{");
 
         Iterator<Card> iter = cards.iterator();
         while (iter.hasNext()) {
@@ -424,7 +424,7 @@ public class CardList implements Iterable<Card> {
                 output.append(' ');
             }
         }
-        output.append("}"); //$NON-NLS-1$
+        output.append("}");
 
         return output.toString();
     }
@@ -572,13 +572,8 @@ public class CardList implements Iterable<Card> {
         }
         CardList other = (CardList) obj;
         if (cards == null) {
-            if (other.cards != null) {
-                return false;
-            }
-        } else if (!cards.equals(other.cards)) {
-            return false;
-        }
-        return true;
+            return other.cards == null;
+        } else return cards.equals(other.cards);
     }
 
     /**

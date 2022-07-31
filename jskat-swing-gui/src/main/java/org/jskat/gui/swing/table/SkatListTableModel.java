@@ -22,9 +22,9 @@ class SkatListTableModel extends AbstractTableModel {
 
     private final JSkatResourceBundle strings;
 
-    private SkatListMode mode = SkatListMode.NORMAL;
+    private final SkatListMode mode = SkatListMode.NORMAL;
 
-    private int playerCount = 3;
+    private final int playerCount = 3;
     private final List<List<Integer>> playerResults;
     private final List<GameSummary> gameResults;
     private final List<List<Boolean>> playerWithChangedPoints;
@@ -76,7 +76,7 @@ class SkatListTableModel extends AbstractTableModel {
             if (displayValues.get(rowIndex).get(columnIndex) != null) {
                 result = displayValues.get(rowIndex).get(columnIndex);
             } else {
-                result = "-"; //$NON-NLS-1$
+                result = "-";
             }
         }
 
@@ -264,7 +264,7 @@ class SkatListTableModel extends AbstractTableModel {
             playerResults.add(new ArrayList<>());
             displayValues.add(new ArrayList<>());
         }
-        columns.add(strings.getString("games")); //$NON-NLS-1$
+        columns.add(strings.getString("games"));
         displayValues.add(new ArrayList<>());
     }
 

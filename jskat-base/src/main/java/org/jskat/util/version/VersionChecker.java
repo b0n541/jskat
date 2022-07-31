@@ -24,14 +24,14 @@ public class VersionChecker {
      */
     public static String getLatestVersion() {
 
-        String result = ""; //$NON-NLS-1$
+        String result = "";
 
         try {
             VersionHandler handler = new VersionHandler();
             XMLReader xmlReader = XMLReaderFactory.createXMLReader();
             xmlReader.setContentHandler(handler);
             xmlReader.parse(new InputSource(new URL(
-                    "http://jskat.org/pad/jskat.xml").openStream())); //$NON-NLS-1$
+                    "http://jskat.org/pad/jskat.xml").openStream()));
             result = handler.versionString;
         } catch (SAXException e) {
             // TODO Auto-generated catch block
@@ -82,7 +82,7 @@ public class VersionChecker {
 
     private static List<Integer> getVersionParts(final String version) {
         List<Integer> result = new ArrayList<Integer>();
-        StringTokenizer token = new StringTokenizer(version, "."); //$NON-NLS-1$
+        StringTokenizer token = new StringTokenizer(version, ".");
         while (token.hasMoreTokens()) {
             result.add(Integer.valueOf(token.nextToken()));
         }

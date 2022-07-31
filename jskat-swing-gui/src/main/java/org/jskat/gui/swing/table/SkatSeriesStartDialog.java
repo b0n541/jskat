@@ -23,13 +23,13 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
     private static final long serialVersionUID = 1L;
 
-    private static final String CANCEL = "CANCEL"; //$NON-NLS-1$
-    private static final String START = "START"; //$NON-NLS-1$
+    private static final String CANCEL = "CANCEL";
+    private static final String START = "START";
 
-    private static final String PLAYER1_DEFAULT_NAME = "Jan"; //$NON-NLS-1$
-    private static final String PLAYER2_DEFAULT_NAME = "Markus"; //$NON-NLS-1$
+    private static final String PLAYER1_DEFAULT_NAME = "Jan";
+    private static final String PLAYER2_DEFAULT_NAME = "Markus";
     private static final String PLAYER3_DEFAULT_NAME = System
-            .getProperty("user.name"); //$NON-NLS-1$
+            .getProperty("user.name");
 
     private final Component parent;
 
@@ -63,7 +63,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
         setModalityType(ModalityType.APPLICATION_MODAL);
         setResizable(false);
 
-        setTitle(this.strings.getString("start_series")); //$NON-NLS-1$
+        setTitle(this.strings.getString("start_series"));
 
         Container root = getContentPane();
         root.setLayout(LayoutFactory.getMigLayout());
@@ -74,60 +74,56 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
         }
         Collections.sort(playerTypes);
 
-        root.add(new JLabel(this.strings.getString("player") + " 1")); //$NON-NLS-1$//$NON-NLS-2$
+        root.add(new JLabel(this.strings.getString("player") + " 1"));
         this.player1name = new JTextField(PLAYER1_DEFAULT_NAME);
-        root.add(this.player1name, "span2, growx"); //$NON-NLS-1$
+        root.add(this.player1name, "span2, growx");
         this.player1 = new JComboBox(playerTypes.toArray());
         this.player1.setRenderer(new PlayerComboBoxRenderer());
-        root.add(this.player1, "growx, wrap"); //$NON-NLS-1$
+        root.add(this.player1, "growx, wrap");
 
-        root.add(new JLabel(this.strings.getString("player") + " 2")); //$NON-NLS-1$ //$NON-NLS-2$
+        root.add(new JLabel(this.strings.getString("player") + " 2"));
         this.player2name = new JTextField(PLAYER2_DEFAULT_NAME);
-        root.add(this.player2name, "span2, growx"); //$NON-NLS-1$
+        root.add(this.player2name, "span2, growx");
         this.player2 = new JComboBox(playerTypes.toArray());
         this.player2.setRenderer(new PlayerComboBoxRenderer());
-        root.add(this.player2, "growx, wrap"); //$NON-NLS-1$
-        root.add(new JLabel(this.strings.getString("player") + " 3")); //$NON-NLS-1$//$NON-NLS-2$
+        root.add(this.player2, "growx, wrap");
+        root.add(new JLabel(this.strings.getString("player") + " 3"));
 
         this.player3name = new JTextField(PLAYER3_DEFAULT_NAME);
-        root.add(this.player3name, "span2, growx"); //$NON-NLS-1$
+        root.add(this.player3name, "span2, growx");
         // Human player can only be player 3
         playerTypes.add(JSkatPlayerResolver.HUMAN_PLAYER_CLASS);
         this.player3 = new JComboBox(playerTypes.toArray());
         this.player3.setRenderer(new PlayerComboBoxRenderer());
         this.player3.setSelectedIndex(this.player3.getItemCount() - 1);
-        root.add(this.player3, "span2, growx, wrap"); //$NON-NLS-1$
+        root.add(this.player3, "span2, growx, wrap");
 
-        root.add(new JLabel(this.strings.getString("number_of_rounds"))); //$NON-NLS-1$
+        root.add(new JLabel(this.strings.getString("number_of_rounds")));
         this.numberOfRounds = new JSpinner(new SpinnerNumberModel(12, 1, 48, 1));
         root.add(this.numberOfRounds);
-        this.unlimited = new JCheckBox(this.strings.getString("unlimited")); //$NON-NLS-1$
+        this.unlimited = new JCheckBox(this.strings.getString("unlimited"));
         this.unlimited.addChangeListener(new ChangeListener() {
 
             @Override
             public void stateChanged(final ChangeEvent e) {
-                if (SkatSeriesStartDialog.this.unlimited.isSelected()) {
-                    SkatSeriesStartDialog.this.numberOfRounds.setEnabled(false);
-                } else {
-                    SkatSeriesStartDialog.this.numberOfRounds.setEnabled(true);
-                }
+                SkatSeriesStartDialog.this.numberOfRounds.setEnabled(!SkatSeriesStartDialog.this.unlimited.isSelected());
             }
         });
-        root.add(this.unlimited, "wrap"); //$NON-NLS-1$
-        root.add(new JLabel(this.strings.getString("ramsch"))); //$NON-NLS-1$
-        this.onlyPlayRamsch = new JCheckBox(this.strings.getString("only_play_ramsch")); //$NON-NLS-1$
-        root.add(this.onlyPlayRamsch, "wrap"); //$NON-NLS-1$
+        root.add(this.unlimited, "wrap");
+        root.add(new JLabel(this.strings.getString("ramsch")));
+        this.onlyPlayRamsch = new JCheckBox(this.strings.getString("only_play_ramsch"));
+        root.add(this.onlyPlayRamsch, "wrap");
 
         JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout());
-        JButton start = new JButton(this.strings.getString("start")); //$NON-NLS-1$
+        JButton start = new JButton(this.strings.getString("start"));
         start.setActionCommand(START);
         start.addActionListener(this);
         buttonPanel.add(start);
-        JButton cancel = new JButton(this.strings.getString("cancel")); //$NON-NLS-1$
+        JButton cancel = new JButton(this.strings.getString("cancel"));
         cancel.setActionCommand(CANCEL);
         cancel.addActionListener(this);
         buttonPanel.add(cancel);
-        root.add(buttonPanel, "span 4, center"); //$NON-NLS-1$
+        root.add(buttonPanel, "span 4, center");
 
         pack();
     }
@@ -191,22 +187,22 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
         @Override
         public String getValueText(final Object value) {
 
-            String result = " "; //$NON-NLS-1$
+            String result = " ";
 
             String player = (String) value;
 
             if (player != null) {
                 if ("org.jskat.ai.newalgorithm.AlgorithmAI".equals(player)) {
-                    result = SkatSeriesStartDialog.this.strings.getString("algorithmic_nextgen_player"); //$NON-NLS-1$
+                    result = SkatSeriesStartDialog.this.strings.getString("algorithmic_nextgen_player");
                 } else if ("org.jskat.ai.mjl.AIPlayerMJL".equals(player)) {
-                    result = SkatSeriesStartDialog.this.strings.getString("algorithmic_player"); //$NON-NLS-1$
+                    result = SkatSeriesStartDialog.this.strings.getString("algorithmic_player");
                 } else if ("org.jskat.ai.rnd.AIPlayerRND".equals(player)) {
-                    result = SkatSeriesStartDialog.this.strings.getString("random_player"); //$NON-NLS-1$
+                    result = SkatSeriesStartDialog.this.strings.getString("random_player");
                 } else if ("org.jskat.ai.nn.AIPlayerNN".equals(player)) {
-                    result = SkatSeriesStartDialog.this.strings.getString("neural_network_player"); //$NON-NLS-1$
+                    result = SkatSeriesStartDialog.this.strings.getString("neural_network_player");
                 } else if ("org.jskat.gui.human.SwingHumanPlayer"
                         .equals(player)) {
-                    result = SkatSeriesStartDialog.this.strings.getString("human_player"); //$NON-NLS-1$
+                    result = SkatSeriesStartDialog.this.strings.getString("human_player");
                 } else {
                     result = player;
                 }

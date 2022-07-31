@@ -31,7 +31,7 @@ import java.awt.event.KeyEvent;
 public class JSkatOptionsDialog extends JDialog {
 
     private static final long serialVersionUID = 1L;
-    private static Logger log = LoggerFactory.getLogger(JSkatOptionsDialog.class);
+    private static final Logger log = LoggerFactory.getLogger(JSkatOptionsDialog.class);
 
     private final JSkatResourceBundle strings;
     private final JSkatOptions options;
@@ -173,7 +173,7 @@ public class JSkatOptionsDialog extends JDialog {
         setModalityType(ModalityType.APPLICATION_MODAL);
         setResizable(false);
 
-        setTitle(strings.getString("preferences")); //$NON-NLS-1$
+        setTitle(strings.getString("preferences"));
 
         final JPanel root = new JPanel(LayoutFactory.getMigLayout());
 
@@ -181,33 +181,33 @@ public class JSkatOptionsDialog extends JDialog {
 
         final JPanel commonTab = getCommonPanel();
         log.debug("Common tab: " + commonTab.getPreferredSize().toString());
-        prefTabs.addTab(strings.getString("common_options"), commonTab); //$NON-NLS-1$
+        prefTabs.addTab(strings.getString("common_options"), commonTab);
 
         final JPanel cardSetTab = getCardSetSelectionPanel();
         log.debug("Card set tab: " + cardSetTab.getPreferredSize().toString());
-        prefTabs.addTab(strings.getString("cardset_options"), cardSetTab); //$NON-NLS-1$
+        prefTabs.addTab(strings.getString("cardset_options"), cardSetTab);
 
         final JPanel skatRulesTab = getSkatRulesPanel();
         log.debug("Skat rules tab: " + skatRulesTab.getPreferredSize().toString());
-        prefTabs.addTab(strings.getString("skat_rules"), skatRulesTab); //$NON-NLS-1$
+        prefTabs.addTab(strings.getString("skat_rules"), skatRulesTab);
 
         final JPanel issTab = getIssPanel();
         log.debug("ISS tab: " + issTab.getPreferredSize().toString());
-        prefTabs.addTab(strings.getString("iss"), issTab); //$NON-NLS-1$
+        prefTabs.addTab(strings.getString("iss"), issTab);
 
-        root.add(prefTabs, "wrap"); //$NON-NLS-1$
+        root.add(prefTabs, "wrap");
 
         final JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout());
         final JButton start = new JButton();
         start.setAction(this.okAction);
-        start.setText("OK"); //$NON-NLS-1$
+        start.setText("OK");
         buttonPanel.add(start);
         final JButton cancel = new JButton();
         cancel.setAction(this.cancelAction);
-        cancel.setText(strings.getString("cancel")); //$NON-NLS-1$
+        cancel.setText(strings.getString("cancel"));
         buttonPanel.add(cancel);
 
-        root.add(buttonPanel, "center"); //$NON-NLS-1$
+        root.add(buttonPanel, "center");
         root.validate();
 
         final InputMap im = root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -225,8 +225,8 @@ public class JSkatOptionsDialog extends JDialog {
     private JPanel getCardSetSelectionPanel() {
         JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "", "[shrink][grow]"));
 
-        panel.add(new JLabel(strings.getString("card_face"))); //$NON-NLS-1$
-        panel.add(getCardSetPanel(), "growx, wrap"); //$NON-NLS-1$
+        panel.add(new JLabel(strings.getString("card_face")));
+        panel.add(getCardSetPanel(), "growx, wrap");
 
         panel.add(getCardPanel(), "span 2, grow");
 
@@ -249,10 +249,10 @@ public class JSkatOptionsDialog extends JDialog {
     private JPanel getIssPanel() {
         final JPanel issPanel = new JPanel(LayoutFactory.getMigLayout());
 
-        issPanel.add(new JLabel(strings.getString("iss_address")), "shrinky"); //$NON-NLS-1$
-        issPanel.add(getIssAddressPanel(), "shrinky, wrap"); //$NON-NLS-1$
-        issPanel.add(new JLabel(strings.getString("iss_port")), "shrinky"); //$NON-NLS-1$
-        issPanel.add(getIssPortPanel(), "shrinky, wrap"); //$NON-NLS-1$
+        issPanel.add(new JLabel(strings.getString("iss_address")), "shrinky");
+        issPanel.add(getIssAddressPanel(), "shrinky, wrap");
+        issPanel.add(new JLabel(strings.getString("iss_port")), "shrinky");
+        issPanel.add(getIssPortPanel(), "shrinky, wrap");
 
         issPanel.validate();
 
@@ -264,13 +264,13 @@ public class JSkatOptionsDialog extends JDialog {
         final JPanel savePathPanel = new JPanel(LayoutFactory.getMigLayout());
 
         final ButtonGroup savePathGroup = new ButtonGroup();
-        this.savePathUserHome = new JRadioButton(strings.getString("user_home")); //$NON-NLS-1$
+        this.savePathUserHome = new JRadioButton(strings.getString("user_home"));
         savePathGroup.add(this.savePathUserHome);
-        this.savePathWorkingDirectory = new JRadioButton(strings.getString("working_directory")); //$NON-NLS-1$
+        this.savePathWorkingDirectory = new JRadioButton(strings.getString("working_directory"));
         savePathGroup.add(this.savePathWorkingDirectory);
 
         savePathPanel.add(this.savePathUserHome); // $NON-NLS-1$
-        savePathPanel.add(this.savePathWorkingDirectory, "wrap"); //$NON-NLS-1$
+        savePathPanel.add(this.savePathWorkingDirectory, "wrap");
 
         return savePathPanel;
     }
@@ -278,7 +278,7 @@ public class JSkatOptionsDialog extends JDialog {
     private JPanel getIssAddressPanel() {
 
         this.issAddress = new JTextField(20);
-        final JPanel issAddressPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "shrink")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        final JPanel issAddressPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "shrink"));
         issAddressPanel.add(this.issAddress);
 
         return issAddressPanel;
@@ -287,7 +287,7 @@ public class JSkatOptionsDialog extends JDialog {
     private JPanel getIssPortPanel() {
 
         this.issPort = new JTextField(20);
-        final JPanel issPortPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "shrink")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        final JPanel issPortPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "shrink"));
         issPortPanel.add(this.issPort);
         return issPortPanel;
     }
@@ -306,27 +306,27 @@ public class JSkatOptionsDialog extends JDialog {
             }
         });
 
-        final JPanel cardSetPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        final JPanel cardSetPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill"));
         cardSetPanel.add(this.cardSet);
         return cardSetPanel;
     }
 
     private JPanel getShowTipsPanel() {
-        this.showTipsAtStartUp = new JCheckBox(strings.getString("show_tips_at_startup")); //$NON-NLS-1$
-        final JPanel showTipsPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        this.showTipsAtStartUp = new JCheckBox(strings.getString("show_tips_at_startup"));
+        final JPanel showTipsPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill"));
         showTipsPanel.add(this.showTipsAtStartUp);
         return showTipsPanel;
     }
 
     private JPanel getCheckVersionPanel() {
-        this.checkForNewVersion = new JCheckBox(strings.getString("check_for_new_version_at_startup")); //$NON-NLS-1$
-        final JPanel checkVersionPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        this.checkForNewVersion = new JCheckBox(strings.getString("check_for_new_version_at_startup"));
+        final JPanel checkVersionPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill"));
         checkVersionPanel.add(this.checkForNewVersion);
         return checkVersionPanel;
     }
 
     private JPanel getHideToolbarPanel() {
-        hideToolbar = new JCheckBox(strings.getString("hide_toolbar")); //$NON-NLS-1$
+        hideToolbar = new JCheckBox(strings.getString("hide_toolbar"));
         hideToolbar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -338,7 +338,7 @@ public class JSkatOptionsDialog extends JDialog {
             }
         });
 
-        final JPanel hideToolbarPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        final JPanel hideToolbarPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill"));
         hideToolbarPanel.add(hideToolbar);
         return hideToolbarPanel;
     }
@@ -346,7 +346,7 @@ public class JSkatOptionsDialog extends JDialog {
     private JPanel getLanguagePanel() {
         this.language = new JComboBox(SupportedLanguage.values());
         this.language.setRenderer(new LanguageComboBoxRenderer());
-        final JPanel languagePanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        final JPanel languagePanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill"));
         languagePanel.add(this.language);
         return languagePanel;
     }
@@ -355,20 +355,20 @@ public class JSkatOptionsDialog extends JDialog {
 
         final JPanel commonPanel = new JPanel(LayoutFactory.getMigLayout());
 
-        commonPanel.add(new JLabel(strings.getString("show_tips"))); //$NON-NLS-1$
-        commonPanel.add(getShowTipsPanel(), "wrap"); //$NON-NLS-1$
+        commonPanel.add(new JLabel(strings.getString("show_tips")));
+        commonPanel.add(getShowTipsPanel(), "wrap");
 
-        commonPanel.add(new JLabel(strings.getString("check_for_new_version"))); //$NON-NLS-1$
-        commonPanel.add(getCheckVersionPanel(), "wrap"); //$NON-NLS-1$
+        commonPanel.add(new JLabel(strings.getString("check_for_new_version")));
+        commonPanel.add(getCheckVersionPanel(), "wrap");
 
-        commonPanel.add(new JLabel(strings.getString("toolbar"))); //$NON-NLS-1$
-        commonPanel.add(getHideToolbarPanel(), "wrap"); //$NON-NLS-1$
+        commonPanel.add(new JLabel(strings.getString("toolbar")));
+        commonPanel.add(getHideToolbarPanel(), "wrap");
 
-        commonPanel.add(new JLabel(strings.getString("language"))); //$NON-NLS-1$
-        commonPanel.add(getLanguagePanel(), "wrap"); //$NON-NLS-1$
+        commonPanel.add(new JLabel(strings.getString("language")));
+        commonPanel.add(getLanguagePanel(), "wrap");
 
-        commonPanel.add(new JLabel(strings.getString("save_path"))); //$NON-NLS-1$
-        commonPanel.add(getSavePathPanel(), "wrap"); //$NON-NLS-1$
+        commonPanel.add(new JLabel(strings.getString("save_path")));
+        commonPanel.add(getSavePathPanel(), "wrap");
 
         commonPanel.add(new JLabel(strings.getString("wait_time_after_trick")));
         commonPanel.add(getWaitTimeAfterTrickPanel(), "wrap");
@@ -384,7 +384,7 @@ public class JSkatOptionsDialog extends JDialog {
         waitTimeAfterTrick.setMinorTickSpacing(1);
         waitTimeAfterTrick.setPaintTicks(true);
         waitTimeAfterTrick.setPaintLabels(true);
-        final JPanel waitTimeAfterTrickPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        final JPanel waitTimeAfterTrickPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill"));
         waitTimeAfterTrickPanel.add(waitTimeAfterTrick);
         waitTimeAfterTrickPanel.add(new JLabel(strings.getString("seconds")));
         return waitTimeAfterTrickPanel;
@@ -397,18 +397,18 @@ public class JSkatOptionsDialog extends JDialog {
         final JPanel rulesPanel = new JPanel(LayoutFactory.getMigLayout());
 
         final ButtonGroup ruleSetGroup = new ButtonGroup();
-        this.ruleSetISPA = new JRadioButton(strings.getString("ispa_rules")); //$NON-NLS-1$
+        this.ruleSetISPA = new JRadioButton(strings.getString("ispa_rules"));
         this.ruleSetISPA.addChangeListener(this.ruleButtonChangeListener);
         ruleSetGroup.add(this.ruleSetISPA);
-        this.ruleSetPub = new JRadioButton(strings.getString("pub_rules")); //$NON-NLS-1$
+        this.ruleSetPub = new JRadioButton(strings.getString("pub_rules"));
         this.ruleSetPub.addChangeListener(this.ruleButtonChangeListener);
         ruleSetGroup.add(this.ruleSetPub);
 
-        rulesPanel.add(this.ruleSetISPA, "wrap"); //$NON-NLS-1$
-        rulesPanel.add(this.ruleSetPub, "wrap"); //$NON-NLS-1$
+        rulesPanel.add(this.ruleSetISPA, "wrap");
+        rulesPanel.add(this.ruleSetPub, "wrap");
 
         final JPanel pubRulesPanel = getPubRulesPanel();
-        rulesPanel.add(pubRulesPanel, "gapleft 20px"); //$NON-NLS-1$
+        rulesPanel.add(pubRulesPanel, "gapleft 20px");
 
         rulesPanel.validate();
 
@@ -418,38 +418,38 @@ public class JSkatOptionsDialog extends JDialog {
     private JPanel getPubRulesPanel() {
         final JPanel pubRulesPanel = new JPanel(LayoutFactory.getMigLayout());
 
-        this.resetPubRulesButton = new JButton(strings.getString("reset_to_defaults")); //$NON-NLS-1$
-        pubRulesPanel.add(this.resetPubRulesButton, "wrap"); //$NON-NLS-1$
+        this.resetPubRulesButton = new JButton(strings.getString("reset_to_defaults"));
+        pubRulesPanel.add(this.resetPubRulesButton, "wrap");
 
         final JPanel contraPanel = new JPanel(LayoutFactory.getMigLayout());
 
-        this.playContra = new JCheckBox(strings.getString("play_contra_re")); //$NON-NLS-1$
-        contraPanel.add(this.playContra, "wrap"); //$NON-NLS-1$
+        this.playContra = new JCheckBox(strings.getString("play_contra_re"));
+        contraPanel.add(this.playContra, "wrap");
 
-        this.contraAfterBid18 = new JCheckBox(strings.getString("contra_after_bid_18")); //$NON-NLS-1$
-        contraPanel.add(this.contraAfterBid18, "gapleft 20px"); //$NON-NLS-1$
-        pubRulesPanel.add(contraPanel, "wrap"); //$NON-NLS-1$
+        this.contraAfterBid18 = new JCheckBox(strings.getString("contra_after_bid_18"));
+        contraPanel.add(this.contraAfterBid18, "gapleft 20px");
+        pubRulesPanel.add(contraPanel, "wrap");
 
         final JPanel bockPanel = getBockPanel();
-        // pubRulesPanel.add(bockPanel, "wrap"); //$NON-NLS-1$
+        // pubRulesPanel.add(bockPanel, "wrap"); 
 
         final JPanel ramschPanel = new JPanel(LayoutFactory.getMigLayout());
 
-        this.playRamsch = new JCheckBox(strings.getString("play_ramsch")); //$NON-NLS-1$
-        ramschPanel.add(this.playRamsch, "wrap"); //$NON-NLS-1$
+        this.playRamsch = new JCheckBox(strings.getString("play_ramsch"));
+        ramschPanel.add(this.playRamsch, "wrap");
 
         final JPanel schiebeRamschPanel = getSchiebeRamschPanel();
-        ramschPanel.add(schiebeRamschPanel, "wrap"); //$NON-NLS-1$
+        ramschPanel.add(schiebeRamschPanel, "wrap");
 
         final JPanel ramschEventPanel = getRamschEventPanel();
-        ramschPanel.add(ramschEventPanel, "gapleft 20px, wrap"); //$NON-NLS-1$
+        ramschPanel.add(ramschEventPanel, "gapleft 20px, wrap");
 
         final JPanel ramschSkatOwnerPanel = getRamschSkatOwnerPanel();
-        ramschPanel.add(ramschSkatOwnerPanel, "gapleft 20px"); //$NON-NLS-1$
+        ramschPanel.add(ramschSkatOwnerPanel, "gapleft 20px");
 
-        pubRulesPanel.add(ramschPanel, "wrap"); //$NON-NLS-1$
+        pubRulesPanel.add(ramschPanel, "wrap");
 
-        this.playRevolution = new JCheckBox(strings.getString("play_revolution")); //$NON-NLS-1$
+        this.playRevolution = new JCheckBox(strings.getString("play_revolution"));
         // pubRulesPanel.add(playRevolution);
 
         return pubRulesPanel;
@@ -458,42 +458,42 @@ public class JSkatOptionsDialog extends JDialog {
     private JPanel getBockPanel() {
         final JPanel bockPanel = new JPanel(LayoutFactory.getMigLayout());
 
-        this.playBock = new JCheckBox(strings.getString("play_bock")); //$NON-NLS-1$
-        bockPanel.add(this.playBock, "wrap"); //$NON-NLS-1$
+        this.playBock = new JCheckBox(strings.getString("play_bock"));
+        bockPanel.add(this.playBock, "wrap");
 
         final JPanel bockDetailsPanel = getBockDetailsPanel();
-        bockPanel.add(bockDetailsPanel, "gapleft 20px"); //$NON-NLS-1$
+        bockPanel.add(bockDetailsPanel, "gapleft 20px");
         return bockPanel;
     }
 
     private JPanel getBockDetailsPanel() {
         final JPanel bockDetailsPanel = new JPanel(LayoutFactory.getMigLayout());
 
-        this.bockEventLabel = new JLabel(strings.getString("bock_events")); //$NON-NLS-1$
-        bockDetailsPanel.add(this.bockEventLabel, "span 2, wrap"); //$NON-NLS-1$
-        this.bockEventAllPlayersPassed = new JCheckBox(strings.getString("bock_event_all_players_passed")); //$NON-NLS-1$
+        this.bockEventLabel = new JLabel(strings.getString("bock_events"));
+        bockDetailsPanel.add(this.bockEventLabel, "span 2, wrap");
+        this.bockEventAllPlayersPassed = new JCheckBox(strings.getString("bock_event_all_players_passed"));
         bockDetailsPanel.add(this.bockEventAllPlayersPassed, "wrap");
-        this.bockEventLostAfterContra = new JCheckBox(strings.getString("bock_event_lost_contra")); //$NON-NLS-1$
+        this.bockEventLostAfterContra = new JCheckBox(strings.getString("bock_event_lost_contra"));
         bockDetailsPanel.add(this.bockEventLostAfterContra, "wrap");
-        this.bockEventLostWith60 = new JCheckBox(strings.getString("bock_event_lost_game_with_60")); //$NON-NLS-1$
+        this.bockEventLostWith60 = new JCheckBox(strings.getString("bock_event_lost_game_with_60"));
         this.bockEventLostWith60.setSelected(this.options.isBockEventLostWith60(false).booleanValue());
-        bockDetailsPanel.add(this.bockEventLostWith60, "wrap"); //$NON-NLS-1$
-        this.bockEventContraReAnnounced = new JCheckBox(strings.getString("bock_event_contra_re")); //$NON-NLS-1$
+        bockDetailsPanel.add(this.bockEventLostWith60, "wrap");
+        this.bockEventContraReAnnounced = new JCheckBox(strings.getString("bock_event_contra_re"));
         bockDetailsPanel.add(this.bockEventContraReAnnounced);
-        this.bockEventPlayerHasX00Points = new JCheckBox(strings.getString("bock_event_player_x00_points")); //$NON-NLS-1$
-        bockDetailsPanel.add(this.bockEventPlayerHasX00Points, "wrap"); //$NON-NLS-1$
-        this.bockEventLostGrand = new JCheckBox(strings.getString("bock_event_lost_grand")); //$NON-NLS-1$
+        this.bockEventPlayerHasX00Points = new JCheckBox(strings.getString("bock_event_player_x00_points"));
+        bockDetailsPanel.add(this.bockEventPlayerHasX00Points, "wrap");
+        this.bockEventLostGrand = new JCheckBox(strings.getString("bock_event_lost_grand"));
         bockDetailsPanel.add(this.bockEventLostGrand);
         return bockDetailsPanel;
     }
 
     private JPanel getRamschSkatOwnerPanel() {
         final JPanel ramschSkatOwnerPanel = new JPanel(LayoutFactory.getMigLayout());
-        this.ramschSkatLabel = new JLabel(strings.getString("ramsch_skat_owner")); //$NON-NLS-1$
-        ramschSkatOwnerPanel.add(this.ramschSkatLabel, "wrap"); //$NON-NLS-1$
-        this.ramschSkatLastTrick = new JRadioButton(strings.getString("ramsch_skat_last_trick")); //$NON-NLS-1$
-        ramschSkatOwnerPanel.add(this.ramschSkatLastTrick, "wrap"); //$NON-NLS-1$
-        this.ramschSkatLoser = new JRadioButton(strings.getString("ramsch_skat_loser")); //$NON-NLS-1$
+        this.ramschSkatLabel = new JLabel(strings.getString("ramsch_skat_owner"));
+        ramschSkatOwnerPanel.add(this.ramschSkatLabel, "wrap");
+        this.ramschSkatLastTrick = new JRadioButton(strings.getString("ramsch_skat_last_trick"));
+        ramschSkatOwnerPanel.add(this.ramschSkatLastTrick, "wrap");
+        this.ramschSkatLoser = new JRadioButton(strings.getString("ramsch_skat_loser"));
         ramschSkatOwnerPanel.add(this.ramschSkatLoser);
 
         this.ramschSkatOwner = new ButtonGroup();
@@ -506,22 +506,22 @@ public class JSkatOptionsDialog extends JDialog {
     private JPanel getSchiebeRamschPanel() {
         final JPanel schiebeRamschPanel = new JPanel(LayoutFactory.getMigLayout());
 
-        this.schiebeRamsch = new JCheckBox(strings.getString("schieberamsch")); //$NON-NLS-1$
-        schiebeRamschPanel.add(this.schiebeRamsch, "gapleft 20px, wrap"); //$NON-NLS-1$
+        this.schiebeRamsch = new JCheckBox(strings.getString("schieberamsch"));
+        schiebeRamschPanel.add(this.schiebeRamsch, "gapleft 20px, wrap");
 
-        this.schiebeRamschJacksInSkat = new JCheckBox(strings.getString("schieberamsch_jacks_in_skat")); //$NON-NLS-1$
-        schiebeRamschPanel.add(this.schiebeRamschJacksInSkat, "gapleft 40px, wrap"); //$NON-NLS-1$
+        this.schiebeRamschJacksInSkat = new JCheckBox(strings.getString("schieberamsch_jacks_in_skat"));
+        schiebeRamschPanel.add(this.schiebeRamschJacksInSkat, "gapleft 40px, wrap");
         return schiebeRamschPanel;
     }
 
     private JPanel getRamschEventPanel() {
         final JPanel ramschEventPanel = new JPanel(LayoutFactory.getMigLayout());
 
-        this.ramschEventLabel = new JLabel(strings.getString("ramsch_events")); //$NON-NLS-1$
-        ramschEventPanel.add(this.ramschEventLabel, "span 2, wrap"); //$NON-NLS-1$
-        this.ramschEventNoBid = new JCheckBox(strings.getString("ramsch_event_no_bid")); //$NON-NLS-1$
+        this.ramschEventLabel = new JLabel(strings.getString("ramsch_events"));
+        ramschEventPanel.add(this.ramschEventLabel, "span 2, wrap");
+        this.ramschEventNoBid = new JCheckBox(strings.getString("ramsch_event_no_bid"));
         ramschEventPanel.add(this.ramschEventNoBid);
-        this.ramschEventBockRamsch = new JCheckBox(strings.getString("ramsch_event_bock_ramsch")); //$NON-NLS-1$
+        this.ramschEventBockRamsch = new JCheckBox(strings.getString("ramsch_event_bock_ramsch"));
         // ramschEventPanel.add(ramschEventBockRamsch);
         return ramschEventPanel;
     }
@@ -639,17 +639,17 @@ public class JSkatOptionsDialog extends JDialog {
         @Override
         public String getValueText(final Object value) {
 
-            String result = " "; //$NON-NLS-1$
+            String result = " ";
 
             final SupportedLanguage language = (SupportedLanguage) value;
 
             if (language != null) {
                 switch (language) {
                     case ENGLISH:
-                        result = JSkatOptionsDialog.this.strings.getString("english"); //$NON-NLS-1$
+                        result = JSkatOptionsDialog.this.strings.getString("english");
                         break;
                     case GERMAN:
-                        result = JSkatOptionsDialog.this.strings.getString("german"); //$NON-NLS-1$
+                        result = JSkatOptionsDialog.this.strings.getString("german");
                         break;
                 }
             }
@@ -669,13 +669,13 @@ public class JSkatOptionsDialog extends JDialog {
         @Override
         public String getValueText(final Object value) {
 
-            String result = " "; //$NON-NLS-1$
+            String result = " ";
 
             final CardSet cardSet = (CardSet) value;
 
             if (cardSet != null) {
                 result = JSkatOptionsDialog.this.strings.getString(
-                        "cardset_" + getCardSetNameInLowerCase(cardSet) + "_" + getCardFaceInLowerCase(cardSet)); //$NON-NLS-1$
+                        "cardset_" + getCardSetNameInLowerCase(cardSet) + "_" + getCardFaceInLowerCase(cardSet));
             }
 
             return result;

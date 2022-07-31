@@ -15,10 +15,10 @@ import java.net.Socket;
  */
 class StreamConnector extends AbstractIssConnector {
 
-    private static Logger log = LoggerFactory.getLogger(StreamConnector.class);
+    private static final Logger log = LoggerFactory.getLogger(StreamConnector.class);
 
-    private static JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
-    private static JSkatOptions options = JSkatOptions.instance();
+    private static final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
+    private static final JSkatOptions options = JSkatOptions.instance();
 
     private Socket socket;
     private PrintWriter output;
@@ -33,7 +33,7 @@ class StreamConnector extends AbstractIssConnector {
     @Override
     public boolean establishConnection(final IssController issControl) {
 
-        log.debug("StreamConnector.establishConnection()"); //$NON-NLS-1$
+        log.debug("StreamConnector.establishConnection()");
 
         try {
             this.socket = new Socket(options.getString(Option.ISS_ADDRESS),
@@ -44,15 +44,15 @@ class StreamConnector extends AbstractIssConnector {
             this.issIn = new InputChannel(issControl, this,
                     this.socket.getInputStream());
             this.issIn.start();
-            log.debug("Connection established..."); //$NON-NLS-1$
+            log.debug("Connection established...");
 
         } catch (java.net.UnknownHostException e) {
-            log.error("Cannot open connection to ISS"); //$NON-NLS-1$
+            log.error("Cannot open connection to ISS");
             issControl.showErrorMessage(strings
-                    .getString("cant_connect_to_iss")); //$NON-NLS-1$
+                    .getString("cant_connect_to_iss"));
             return false;
         } catch (java.io.IOException e) {
-            log.error("IOException: " + e.toString()); //$NON-NLS-1$
+            log.error("IOException: " + e);
             return false;
         }
 
@@ -71,16 +71,16 @@ class StreamConnector extends AbstractIssConnector {
     public void closeConnection() {
 
         try {
-            log.debug("closing connection"); //$NON-NLS-1$
+            log.debug("closing connection");
             this.issIn.interrupt();
-            log.debug("input channel closed"); //$NON-NLS-1$
+            log.debug("input channel closed");
             this.output.close();
-            log.debug("output channel closed"); //$NON-NLS-1$
+            log.debug("output channel closed");
             this.socket.close();
-            log.debug("socket closed"); //$NON-NLS-1$
+            log.debug("socket closed");
         } catch (IOException e) {
             // TODO Auto-generated catch block
-            log.debug("ISS connector IOException"); //$NON-NLS-1$
+            log.debug("ISS connector IOException");
             e.printStackTrace();
         }
     }

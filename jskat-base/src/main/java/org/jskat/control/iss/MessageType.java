@@ -8,59 +8,59 @@ public enum MessageType {
     /**
      * Password message
      */
-    PASSWORD("password:"), //$NON-NLS-1$
+    PASSWORD("password:"),
     /**
      * Welcome message
      */
-    WELCOME("Welcome"), //$NON-NLS-1$
+    WELCOME("Welcome"),
     /**
      * Version message
      */
-    VERSION("Version"), //$NON-NLS-1$
+    VERSION("Version"),
     /**
      * Clients update message
      */
-    CLIENTS("clients"), //$NON-NLS-1$
+    CLIENTS("clients"),
     /**
      * Tables update message
      */
-    TABLES("tables"), //$NON-NLS-1$
+    TABLES("tables"),
     /**
      * Table create message
      */
-    CREATE("create"), //$NON-NLS-1$
+    CREATE("create"),
     /**
      * Table invite message
      */
-    INVITE("invite"), //$NON-NLS-1$
+    INVITE("invite"),
     /**
      * Table update message
      */
-    TABLE("table"), //$NON-NLS-1$
+    TABLE("table"),
     /**
      * Table destroy message
      */
-    DESTROY("destroy"), //$NON-NLS-1$
+    DESTROY("destroy"),
     /**
      * Error message
      */
-    ERROR("error"), //$NON-NLS-1$
+    ERROR("error"),
     /**
      * Chat message
      */
-    TEXT("text"), //$NON-NLS-1$
+    TEXT("text"),
     /**
      * Lobby message
      */
-    YELL("yell"), //$NON-NLS-1$
+    YELL("yell"),
     /**
      * UNKNOWN message
      */
-    UNKNOWN(""); //$NON-NLS-1$
+    UNKNOWN("");
 
-    private String messageStart;
+    private final String messageStart;
 
-    private MessageType(String startToken) {
+    MessageType(String startToken) {
         messageStart = startToken;
     }
 

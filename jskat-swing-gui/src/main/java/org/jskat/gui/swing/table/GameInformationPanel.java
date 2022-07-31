@@ -59,7 +59,7 @@ class GameInformationPanel extends JPanel {
 
     private void initPanel() {
 
-        setLayout(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+        setLayout(LayoutFactory.getMigLayout("fill"));
 
         setOpaque(true);
 
@@ -73,7 +73,7 @@ class GameInformationPanel extends JPanel {
 
     void clear() {
 
-        label.setText(" "); //$NON-NLS-1$
+        label.setText(" ");
     }
 
     void setGameState(final GameState newGameState) {
@@ -142,16 +142,16 @@ class GameInformationPanel extends JPanel {
 
     private void appendGameOverDetails(StringBuffer text) {
         if (gameType != GameType.PASSED_IN) {
-            text.append(" - "); //$NON-NLS-1$
+            text.append(" - ");
             if (gameWon) {
-                text.append(strings.getString("won")); //$NON-NLS-1$
+                text.append(strings.getString("won"));
             } else {
-                text.append(strings.getString("lost")); //$NON-NLS-1$
+                text.append(strings.getString("lost"));
             }
         }
 
         if (gameType == GameType.RAMSCH) {
-            text.append(" - "); //$NON-NLS-1$
+            text.append(" - ");
 
             Iterator<Player> iterator = ramschLoosers.iterator();
             if (iterator.hasNext()) {
@@ -163,31 +163,31 @@ class GameInformationPanel extends JPanel {
             }
 
         } else if (gameType != GameType.NULL && gameType != GameType.PASSED_IN) {
-            text.append(" - "); //$NON-NLS-1$
+            text.append(" - ");
 
             text.append(
                     declarerPoints + " " + strings.getString("versus") + " ");
-            text.append(opponentPoints + " " + strings.getString("points")); //$NON-NLS-1$//$NON-NLS-2$
+            text.append(opponentPoints + " " + strings.getString("points"));
         }
     }
 
     private void appendTrickPlayingDetails(StringBuffer text) {
-        text.append(" " + strings.getString("trick") + " " + trick); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+        text.append(" " + strings.getString("trick") + " " + trick);
     }
 
     private void appendGameType(StringBuffer text) {
         if (gameType != null) {
-            text.append(" [" + strings.getGameType(gameType)); //$NON-NLS-1$
+            text.append(" [" + strings.getGameType(gameType));
 
             if (gameState.equals(GameState.GAME_OVER) && multiplier > 0) {
                 if (playWithJacks) {
-                    text.append(" " + strings.getString("with")); //$NON-NLS-1$//$NON-NLS-2$
+                    text.append(" " + strings.getString("with"));
                 } else {
-                    text.append(" " + strings.getString("without")); //$NON-NLS-1$//$NON-NLS-2$
+                    text.append(" " + strings.getString("without"));
                 }
-                text.append(" " + (multiplier - 1)); //$NON-NLS-1$
-                text.append(" " + strings.getString("play")); //$NON-NLS-1$//$NON-NLS-2$
-                text.append(" " + multiplier); //$NON-NLS-1$
+                text.append(" " + (multiplier - 1));
+                text.append(" " + strings.getString("play"));
+                text.append(" " + multiplier);
             }
 
             if (handGame) {
@@ -222,13 +222,13 @@ class GameInformationPanel extends JPanel {
                 text.append(" " + strings.getString("overbidded"));
             }
 
-            text.append("]"); //$NON-NLS-1$
+            text.append("]");
         }
     }
 
     private void appendGameNumber(StringBuffer text) {
         if (gameNumber > 0) {
-            text.append(strings.getString("game") + " " + gameNumber + ": "); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+            text.append(strings.getString("game") + " " + gameNumber + ": ");
         }
     }
 
@@ -252,36 +252,36 @@ class GameInformationPanel extends JPanel {
 
         switch (state) {
             case BIDDING:
-                result = strings.getString("bidding_phase"); //$NON-NLS-1$
+                result = strings.getString("bidding_phase");
                 break;
             case CALCULATING_GAME_VALUE:
-                result = strings.getString("calc_game_value_phase"); //$NON-NLS-1$
+                result = strings.getString("calc_game_value_phase");
                 break;
             case DEALING:
-                result = strings.getString("dealing_phase"); //$NON-NLS-1$
+                result = strings.getString("dealing_phase");
                 break;
             case DECLARING:
-                result = strings.getString("declaring_phase"); //$NON-NLS-1$
+                result = strings.getString("declaring_phase");
                 break;
             case DISCARDING:
-                result = strings.getString("discarding_phase"); //$NON-NLS-1$
+                result = strings.getString("discarding_phase");
                 break;
             case GAME_OVER:
-                result = strings.getString("game_over_phase"); //$NON-NLS-1$
+                result = strings.getString("game_over_phase");
                 break;
             case GAME_START:
-                result = strings.getString("game_start_phase"); //$NON-NLS-1$
+                result = strings.getString("game_start_phase");
                 break;
             case PICKING_UP_SKAT:
             case RAMSCH_GRAND_HAND_ANNOUNCING:
             case SCHIEBERAMSCH:
-                result = strings.getString("pick_up_skat_phase"); //$NON-NLS-1$
+                result = strings.getString("pick_up_skat_phase");
                 break;
             case PRELIMINARY_GAME_END:
-                result = strings.getString("preliminary_game_end_phase"); //$NON-NLS-1$
+                result = strings.getString("preliminary_game_end_phase");
                 break;
             case TRICK_PLAYING:
-                result = strings.getString("trick_playing_phase"); //$NON-NLS-1$
+                result = strings.getString("trick_playing_phase");
                 break;
             case CONTRA:
                 result = strings.getString("contra_or_play_phase");

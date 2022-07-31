@@ -55,9 +55,9 @@ public class ISSTablePanel extends SkatTablePanel {
     protected JPanel getPlayGroundPanel() {
 
         final JPanel panel = new JPanel(LayoutFactory.getMigLayout(
-                "fill,insets 0", "[grow][shrink]", //$NON-NLS-1$ //$NON-NLS-2$
-                "fill")); //$NON-NLS-1$
-        panel.add(super.getPlayGroundPanel(), "width 80%, grow"); //$NON-NLS-1$
+                "fill,insets 0", "[grow][shrink]",
+                "fill"));
+        panel.add(super.getPlayGroundPanel(), "width 80%, grow");
 
         // replace game start context panel
         addContextPanel(
@@ -75,8 +75,8 @@ public class ISSTablePanel extends SkatTablePanel {
 
         this.chatPanel = getChatPanel();
         this.chatPanel.addNewChat(
-                this.strings.getString("table") + " " + getName(), getName()); //$NON-NLS-1$//$NON-NLS-2$
-        leftPanel.add(this.strings.getString("chat"), this.chatPanel); //$NON-NLS-1$
+                this.strings.getString("table") + " " + getName(), getName());
+        leftPanel.add(this.strings.getString("chat"), this.chatPanel);
 
         return leftPanel;
     }
@@ -106,10 +106,10 @@ public class ISSTablePanel extends SkatTablePanel {
 
         final JButton resignButton = new JButton(getActionMap().get(
                 JSkatAction.RESIGN));
-        additionalActionsPanel.add(resignButton, "growx, wrap"); //$NON-NLS-1$
+        additionalActionsPanel.add(resignButton, "growx, wrap");
         final JButton showCardsButton = new JButton(getActionMap().get(
                 JSkatAction.SHOW_CARDS));
-        additionalActionsPanel.add(showCardsButton, "growx"); //$NON-NLS-1$
+        additionalActionsPanel.add(showCardsButton, "growx");
 
         return additionalActionsPanel;
     }
@@ -145,7 +145,7 @@ public class ISSTablePanel extends SkatTablePanel {
 
     private void addPlayerName(final String playerName) {
 
-        if (!this.playerNamesAndPositions.keySet().contains(playerName)) {
+        if (!this.playerNamesAndPositions.containsKey(playerName)) {
 
             this.playerNamesAndPositions.put(playerName, null);
 
@@ -166,21 +166,21 @@ public class ISSTablePanel extends SkatTablePanel {
 
     private void removePlayerName(final String playerName) {
 
-        if (this.playerNamesAndPositions.keySet().contains(playerName)) {
+        if (this.playerNamesAndPositions.containsKey(playerName)) {
 
             this.playerNamesAndPositions.remove(playerName);
 
             if (playerName.equals(this.userPanel.getPlayerName())) {
 
-                this.userPanel.setPlayerName(""); //$NON-NLS-1$
+                this.userPanel.setPlayerName("");
 
             } else if (playerName.equals(this.leftOpponentPanel.getPlayerName())) {
 
-                this.leftOpponentPanel.setPlayerName(""); //$NON-NLS-1$
+                this.leftOpponentPanel.setPlayerName("");
 
             } else if (playerName.equals(this.rightOpponentPanel.getPlayerName())) {
 
-                this.rightOpponentPanel.setPlayerName(""); //$NON-NLS-1$
+                this.rightOpponentPanel.setPlayerName("");
             }
         }
     }

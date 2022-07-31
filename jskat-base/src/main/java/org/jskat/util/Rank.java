@@ -40,17 +40,17 @@ public enum Rank {
      */
     JACK("J", "Jack", 7, 4, 7, 2);
 
-    private String shortString;
-    private String longString;
-    private int suitGrandOrder;
-    private int nullOrder;
-    private int ramschOrder;
-    private int points;
+    private final String shortString;
+    private final String longString;
+    private final int suitGrandOrder;
+    private final int nullOrder;
+    private final int ramschOrder;
+    private final int points;
 
     /**
      * Constructor
      */
-    private Rank(final String shortString, final String longString, final int suitGrandOrder, final int nullOrder,
+    Rank(final String shortString, final String longString, final int suitGrandOrder, final int nullOrder,
                  final int ramschOrder, final int points) {
         this.shortString = shortString;
         this.longString = longString;
@@ -126,28 +126,28 @@ public enum Rank {
 
         if (cardAsString.length() == 2) {
             // parse only, iff the string is two characters long
-            if (cardAsString.endsWith("A")) { //$NON-NLS-1$
+            if (cardAsString.endsWith("A")) {
 
                 rank = ACE;
-            } else if (cardAsString.endsWith("T")) { //$NON-NLS-1$
+            } else if (cardAsString.endsWith("T")) {
 
                 rank = TEN;
-            } else if (cardAsString.endsWith("K")) { //$NON-NLS-1$
+            } else if (cardAsString.endsWith("K")) {
 
                 rank = KING;
-            } else if (cardAsString.endsWith("Q")) { //$NON-NLS-1$
+            } else if (cardAsString.endsWith("Q")) {
 
                 rank = QUEEN;
-            } else if (cardAsString.endsWith("J")) { //$NON-NLS-1$
+            } else if (cardAsString.endsWith("J")) {
 
                 rank = JACK;
-            } else if (cardAsString.endsWith("9")) { //$NON-NLS-1$
+            } else if (cardAsString.endsWith("9")) {
 
                 rank = NINE;
-            } else if (cardAsString.endsWith("8")) { //$NON-NLS-1$
+            } else if (cardAsString.endsWith("8")) {
 
                 rank = EIGHT;
-            } else if (cardAsString.endsWith("7")) { //$NON-NLS-1$
+            } else if (cardAsString.endsWith("7")) {
 
                 rank = SEVEN;
             }

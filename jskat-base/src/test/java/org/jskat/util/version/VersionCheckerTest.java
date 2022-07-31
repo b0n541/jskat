@@ -1,4 +1,3 @@
-
 package org.jskat.util.version;
 
 
@@ -18,11 +17,11 @@ public class VersionCheckerTest extends AbstractJSkatTest {
      */
     @Test
     public void testIsHigherVersionAvailable() {
-        assertTrue(VersionChecker.isHigherVersionAvailable("0.10.0", "0.10.1")); //$NON-NLS-1$//$NON-NLS-2$
-        assertTrue(VersionChecker.isHigherVersionAvailable("0.10.1", "1.0.0")); //$NON-NLS-1$ //$NON-NLS-2$
-        assertTrue(VersionChecker.isHigherVersionAvailable("0.10.1", "0.11.0")); //$NON-NLS-1$//$NON-NLS-2$
-        assertFalse(VersionChecker.isHigherVersionAvailable("0.11.0", "0.10.1")); //$NON-NLS-1$ //$NON-NLS-2$
-        assertFalse(VersionChecker.isHigherVersionAvailable("0.10.0", "0.10.0")); //$NON-NLS-1$//$NON-NLS-2$
-        assertFalse(VersionChecker.isHigherVersionAvailable("0.10.0", "0.9.0")); //$NON-NLS-1$//$NON-NLS-2$
+        assertTrue(VersionChecker.isHigherVersionAvailable("0.10.0", "0.10.1"));
+        assertTrue(VersionChecker.isHigherVersionAvailable("0.10.1", "1.0.0"));
+        assertTrue(VersionChecker.isHigherVersionAvailable("0.10.1", "0.11.0"));
+        assertFalse(VersionChecker.isHigherVersionAvailable("0.11.0", "0.10.1"));
+        assertFalse(VersionChecker.isHigherVersionAvailable("0.10.0", "0.10.0"));
+        assertFalse(VersionChecker.isHigherVersionAvailable("0.10.0", "0.9.0"));
     }
 }

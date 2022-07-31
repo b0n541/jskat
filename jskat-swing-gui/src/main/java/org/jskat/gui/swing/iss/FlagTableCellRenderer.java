@@ -25,7 +25,7 @@ public class FlagTableCellRenderer extends DefaultTableCellRenderer {
                                                    final boolean hasFocus, final int row, final int column) {
 
         if (!(value instanceof String)) {
-            throw new IllegalArgumentException("Cell doesn't contain a String!"); //$NON-NLS-1$
+            throw new IllegalArgumentException("Cell doesn't contain a String!");
         }
 
         Component defaultComponent = super.getTableCellRendererComponent(table,

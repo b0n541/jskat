@@ -616,7 +616,7 @@ public class SkatGameData {
      */
     public void setTrickWinner(final int trickNumber, final Player winner) {
 
-        log.debug("setTrickWinner(" + trickNumber + ", " + winner + ")");  //$NON-NLS-2$ //$NON-NLS-3$
+        log.debug("setTrickWinner(" + trickNumber + ", " + winner + ")");
 
         tricks.get(trickNumber).setTrickWinner(winner);
     }
@@ -659,7 +659,7 @@ public class SkatGameData {
      */
     public int getGeschobenMultiplier() {
 
-        log.debug("geschoben=" + geschoben + ", 2^" + geschoben + "="  //$NON-NLS-2$ //$NON-NLS-3$
+        log.debug("geschoben=" + geschoben + ", 2^" + geschoben + "="
                 + (1 << geschoben));
 
         int multiplier = 0;

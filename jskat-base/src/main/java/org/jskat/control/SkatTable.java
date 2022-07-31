@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public class SkatTable {
 
-    private static Logger log = LoggerFactory.getLogger(SkatTable.class);
+    private static final Logger log = LoggerFactory.getLogger(SkatTable.class);
 
     private final String tableName;
     private final SkatTableOptions options;
@@ -35,7 +35,7 @@ public class SkatTable {
         this.tableName = tableName;
         this.options = options;
 
-        log.debug("SkatTable created with max. " + options.getMaxPlayerCount() + " players."); //$NON-NLS-1$ //$NON-NLS-2$
+        log.debug("SkatTable created with max. " + options.getMaxPlayerCount() + " players.");
     }
 
     /**

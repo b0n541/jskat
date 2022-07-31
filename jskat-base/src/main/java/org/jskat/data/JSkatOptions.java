@@ -19,7 +19,7 @@ import java.util.Properties;
  */
 public final class JSkatOptions {
 
-    private final static String PROPERTIES_FILENAME = "jskat.properties"; //$NON-NLS-1$
+    private final static String PROPERTIES_FILENAME = "jskat.properties";
 
     /**
      * Languages supported by JSkat.
@@ -32,7 +32,7 @@ public final class JSkatOptions {
         /**
          * German.
          */
-        GERMAN;
+        GERMAN
     }
 
     public enum Option {
@@ -180,11 +180,11 @@ public final class JSkatOptions {
         public final Class clazz;
         public final Option parent = null;
 
-        private Option(Class clazz) {
+        Option(Class clazz) {
             this.clazz = clazz;
         }
 
-        private Option(Class clazz, Option parent) {
+        Option(Class clazz, Option parent) {
             this.clazz = clazz;
         }
 
@@ -222,7 +222,7 @@ public final class JSkatOptions {
     /**
      * Logger.
      */
-    private static Logger log = LoggerFactory.getLogger(JSkatOptions.class);
+    private static final Logger log = LoggerFactory.getLogger(JSkatOptions.class);
 
     /**
      * Instance for options.
@@ -259,7 +259,7 @@ public final class JSkatOptions {
     static public JSkatOptions instance() {
 
         if (optionsInstance == null) {
-            throw new IllegalStateException("Options not intialized, yet."); //$NON-NLS-1$
+            throw new IllegalStateException("Options not intialized, yet.");
         }
 
         return optionsInstance;
@@ -279,10 +279,10 @@ public final class JSkatOptions {
 
         } catch (FileNotFoundException e) {
 
-            log.debug("No properties file found. Using standard values."); //$NON-NLS-1$
+            log.debug("No properties file found. Using standard values.");
 
         } catch (IOException e) {
-            log.warn("Could not load properties: " + e.getClass() + ": " //$NON-NLS-1$ //$NON-NLS-2$
+            log.warn("Could not load properties: " + e.getClass() + ": "
                     + e.getMessage());
         }
     }
@@ -701,11 +701,11 @@ public final class JSkatOptions {
                 file.createNewFile();
                 writer = new FileWriter(file);
             }
-            options.store(writer, "JSkat options"); //$NON-NLS-1$
+            options.store(writer, "JSkat options");
             writer.close();
-            log.debug("Saved options with rules: " + getRules()); //$NON-NLS-1$
+            log.debug("Saved options with rules: " + getRules());
         } catch (IOException e) {
-            log.warn("Saving of JSkat options failed."); //$NON-NLS-1$
+            log.warn("Saving of JSkat options failed.");
             log.warn(e.toString());
         }
     }
@@ -979,10 +979,10 @@ public final class JSkatOptions {
             try {
                 option = Option.valueOfProperty(property);
             } catch (IllegalArgumentException e) {
-                log.error("Unknown option " + property + " with value " + value); //$NON-NLS-1$ //$NON-NLS-2$
+                log.error("Unknown option " + property + " with value " + value);
 
                 // handle obsolete or renamed options
-                if ("ramschSkat".equals(property)) { //$NON-NLS-1$
+                if ("ramschSkat".equals(property)) {
                     option = Option.RAMSCH_SKAT_OWNER;
                 }
             }
@@ -1117,7 +1117,7 @@ public final class JSkatOptions {
     }
 
     private static void logEnumParseError(final Option option, final String defaultValue) {
-        log.warn("Parsing of option " + option.name() + " failed. Using default value: " + defaultValue); //$NON-NLS-1$ //$NON-NLS-2$
+        log.warn("Parsing of option " + option.name() + " failed. Using default value: " + defaultValue);
     }
 
     /**
@@ -1127,10 +1127,10 @@ public final class JSkatOptions {
      */
     public String getI18NCode() {
 
-        String result = "en"; //$NON-NLS-1$
+        String result = "en";
 
         if (SupportedLanguage.GERMAN.equals(getLanguage())) {
-            result = "de"; //$NON-NLS-1$
+            result = "de";
         }
 
         return result;
@@ -1204,7 +1204,7 @@ public final class JSkatOptions {
         setOption(Option.SCHIEBERAMSCH_JACKS_IN_SKAT, Boolean.FALSE);
         setOption(Option.RAMSCH_GRAND_HAND_POSSIBLE, Boolean.TRUE);
         setOption(Option.PLAY_REVOLUTION, Boolean.FALSE);
-        setOption(Option.ISS_ADDRESS, "skatgame.net"); //$NON-NLS-1$
+        setOption(Option.ISS_ADDRESS, "skatgame.net");
         setOption(Option.ISS_PORT, Integer.valueOf(7000));
         setOption(Option.WAIT_TIME_AFTER_TRICK, Integer.valueOf(0));
         setOption(Option.MAIN_FRAME_X_POSITION, Integer.MIN_VALUE);

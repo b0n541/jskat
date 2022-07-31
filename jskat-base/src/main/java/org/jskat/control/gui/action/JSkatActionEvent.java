@@ -62,6 +62,6 @@ public class JSkatActionEvent {
 
     @Override
     public String toString() {
-        return "Action: " + actionCommand + " source: " + actionSource; //$NON-NLS-1$//$NON-NLS-2$
+        return "Action: " + actionCommand + " source: " + actionSource;
     }
 }

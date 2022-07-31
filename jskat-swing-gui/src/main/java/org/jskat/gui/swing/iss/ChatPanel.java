@@ -23,7 +23,7 @@ import java.util.Map;
 class ChatPanel extends JPanel implements ChangeListener {
 
     private static final long serialVersionUID = 1L;
-    private static Logger log = LoggerFactory.getLogger(ChatPanel.class);
+    private static final Logger log = LoggerFactory.getLogger(ChatPanel.class);
 
     private JTextField inputLine;
     private Map<String, JTextArea> chats;
@@ -43,7 +43,7 @@ class ChatPanel extends JPanel implements ChangeListener {
 
         JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
 
-        setLayout(LayoutFactory.getMigLayout("fill", "fill", "[grow][shrink]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        setLayout(LayoutFactory.getMigLayout("fill", "fill", "[grow][shrink]"));
         setMinimumSize(new Dimension(100, 100));
         setPreferredSize(new Dimension(100, 100));
 
@@ -52,9 +52,9 @@ class ChatPanel extends JPanel implements ChangeListener {
         this.chatTabs.setTabPlacement(SwingConstants.BOTTOM);
         this.chatTabs.setAutoscrolls(true);
         this.chatTabs.addChangeListener(this);
-        add(this.chatTabs, "grow, wrap"); //$NON-NLS-1$
+        add(this.chatTabs, "grow, wrap");
 
-        addNewChat(strings.getString("lobby"), "lobby"); //$NON-NLS-1$ //$NON-NLS-2$
+        addNewChat(strings.getString("lobby"), "lobby");
 
         this.inputLine = new JTextField(20);
         this.inputLine.setAction(actions.get(JSkatAction.SEND_CHAT_MESSAGE));
@@ -63,7 +63,7 @@ class ChatPanel extends JPanel implements ChangeListener {
             public void actionPerformed(final ActionEvent e) {
 
                 String message = ChatPanel.this.inputLine.getText();
-                log.debug("Chat message: " + message); //$NON-NLS-1$
+                log.debug("Chat message: " + message);
 
                 ChatMessage chatMessage = new ChatMessage(
                         ChatPanel.this.activeChatName, message);
@@ -74,7 +74,7 @@ class ChatPanel extends JPanel implements ChangeListener {
                 ChatPanel.this.inputLine.setText(null);
             }
         });
-        add(this.inputLine, "growx"); //$NON-NLS-1$
+        add(this.inputLine, "growx");
     }
 
     JTextArea addNewChat(final String title, final String name) {
@@ -104,7 +104,7 @@ class ChatPanel extends JPanel implements ChangeListener {
 
     void appendMessage(final ChatMessage message) {
 
-        log.debug("Appending chat message: " + message); //$NON-NLS-1$
+        log.debug("Appending chat message: " + message);
 
         JTextArea chat = this.chats.get(message.getChatName());
 
@@ -132,7 +132,7 @@ class ChatPanel extends JPanel implements ChangeListener {
             Component tab = tabs.getSelectedComponent();
 
             this.activeChatName = tab.getName();
-            log.debug("Chat " + this.activeChatName + " activated."); //$NON-NLS-1$ //$NON-NLS-2$
+            log.debug("Chat " + this.activeChatName + " activated.");
         }
     }
 

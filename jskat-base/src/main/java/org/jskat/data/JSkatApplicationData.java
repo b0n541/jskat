@@ -113,7 +113,7 @@ public class JSkatApplicationData {
 
         if (result == null) {
             throw new IllegalArgumentException(
-                    "Unknown table name: " + tableName); //$NON-NLS-1$
+                    "Unknown table name: " + tableName);
         }
 
         return result;
@@ -254,6 +254,6 @@ public class JSkatApplicationData {
      * @return TRUE, if the table is a local table
      */
     public boolean isExistingLocalSkatTable(String tableName) {
-        return localSkatTables.keySet().contains(tableName);
+        return localSkatTables.containsKey(tableName);
     }
 }

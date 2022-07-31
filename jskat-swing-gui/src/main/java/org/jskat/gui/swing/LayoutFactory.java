@@ -78,9 +78,9 @@ public class LayoutFactory {
         if (layoutConstraints == null || layoutConstraints.length() == 0) {
             // no layout constraints set
             result = getMacOSInsets();
-        } else if (!layoutConstraints.contains("ins") && !layoutConstraints.contains("insets")) { //$NON-NLS-1$ //$NON-NLS-2$
+        } else if (!layoutConstraints.contains("ins") && !layoutConstraints.contains("insets")) {
             // set Mac OS specific insets only if insets are not set already
-            result = getMacOSInsets() + ", " + layoutConstraints; //$NON-NLS-1$
+            result = getMacOSInsets() + ", " + layoutConstraints;
         }
 
         LOG.debug("Layout constraints: " + result);
@@ -91,13 +91,11 @@ public class LayoutFactory {
     private static boolean isMacOS() {
         String osName = System.getProperty("os.name").toUpperCase();
 
-        if (osName.contains("MAC")) { //$NON-NLS-1$ //$NON-NLS-2$
-            return true;
-        }
-        return false;
+
+        return osName.contains("MAC");
     }
 
     private static String getMacOSInsets() {
-        return "insets 5"; //$NON-NLS-1$
+        return "insets 5";
     }
 }

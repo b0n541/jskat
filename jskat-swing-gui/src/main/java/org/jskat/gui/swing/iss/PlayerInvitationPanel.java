@@ -31,7 +31,7 @@ public class PlayerInvitationPanel extends JPanel {
 
     void initPanel(Set<String> player) {
 
-        this.setLayout(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+        this.setLayout(LayoutFactory.getMigLayout("fill"));
 
         this.firstPlayerGroup = new ButtonGroup();
         this.secondPlayerGroup = new ButtonGroup();
@@ -39,7 +39,7 @@ public class PlayerInvitationPanel extends JPanel {
 
         for (String currPlayer : player) {
 
-            addPlayerInvitationLabel(currPlayer); //$NON-NLS-1$
+            addPlayerInvitationLabel(currPlayer);
         }
     }
 
@@ -55,12 +55,12 @@ public class PlayerInvitationPanel extends JPanel {
         JRadioButton secondButton = new JRadioButton();
         secondButton.setActionCommand(playerName);
         this.secondPlayerGroup.add(secondButton);
-        this.add(secondButton, "wrap"); //$NON-NLS-1$
+        this.add(secondButton, "wrap");
 
         // JRadioButton thirdButton = new JRadioButton();
         // thirdButton.setActionCommand(playerName);
         // this.thirdPlayerGroup.add(thirdButton);
-        // this.add(thirdButton, "wrap"); //$NON-NLS-1$
+        // this.add(thirdButton, "wrap"); 
     }
 
     /**

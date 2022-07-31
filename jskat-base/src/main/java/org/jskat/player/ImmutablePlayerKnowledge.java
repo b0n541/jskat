@@ -405,7 +405,7 @@ public class ImmutablePlayerKnowledge {
      */
     public final Suit getTrumpSuit() {
         if (announcement == null || announcement.getGameType() == null) {
-            throw new IllegalStateException("Game type not available."); //$NON-NLS-1$
+            throw new IllegalStateException("Game type not available.");
         }
         return announcement.getGameType().getTrumpSuit();
     }
@@ -603,10 +603,10 @@ public class ImmutablePlayerKnowledge {
         final StringBuffer result = new StringBuffer();
 
         result.append("Player position: " + playerPosition + '\n');
-        result.append("Own cards:\n"); //$NON-NLS-1$
+        result.append("Own cards:\n");
         for (final Suit suit : Suit.values()) {
 
-            result.append(suit.getLongString()).append(": "); //$NON-NLS-1$
+            result.append(suit.getLongString()).append(": ");
 
             for (final Rank rank : Rank.values()) {
 
@@ -616,21 +616,21 @@ public class ImmutablePlayerKnowledge {
                     result.append(card).append(' ');
                 } else {
 
-                    result.append("-- "); //$NON-NLS-1$
+                    result.append("-- ");
                 }
             }
 
             result.append('\n');
         }
 
-        result.append("Could have cards:\n"); //$NON-NLS-1$
+        result.append("Could have cards:\n");
         for (final Player player : Player.values()) {
 
             result.append("Player: " + player + '\n');
 
             for (final Suit suit : Suit.values()) {
 
-                result.append(suit.getLongString()).append(": "); //$NON-NLS-1$
+                result.append(suit.getLongString()).append(": ");
 
                 for (final Rank rank : Rank.values()) {
 
@@ -640,7 +640,7 @@ public class ImmutablePlayerKnowledge {
                         result.append(card).append(' ');
                     } else {
 
-                        result.append("-- "); //$NON-NLS-1$
+                        result.append("-- ");
                     }
                 }
 
@@ -648,10 +648,10 @@ public class ImmutablePlayerKnowledge {
             }
         }
 
-        result.append("Played cards:\n"); //$NON-NLS-1$
+        result.append("Played cards:\n");
         for (final Suit suit : Suit.values()) {
 
-            result.append(suit.getLongString()).append(": "); //$NON-NLS-1$
+            result.append(suit.getLongString()).append(": ");
 
             for (final Rank rank : Rank.values()) {
 
@@ -663,7 +663,7 @@ public class ImmutablePlayerKnowledge {
                     result.append(card).append(' ');
                 } else {
 
-                    result.append("-- "); //$NON-NLS-1$
+                    result.append("-- ");
                 }
             }
 
@@ -674,7 +674,7 @@ public class ImmutablePlayerKnowledge {
         final CardList playerPartyMadeCards = getPlayerPartyMadeCards();
         for (final Suit suit : Suit.values()) {
 
-            result.append(suit.getLongString()).append(": "); //$NON-NLS-1$
+            result.append(suit.getLongString()).append(": ");
 
             for (final Rank rank : Rank.values()) {
 
@@ -684,7 +684,7 @@ public class ImmutablePlayerKnowledge {
                     result.append(card).append(' ');
                 } else {
 
-                    result.append("-- "); //$NON-NLS-1$
+                    result.append("-- ");
                 }
             }
 
@@ -695,7 +695,7 @@ public class ImmutablePlayerKnowledge {
         final CardList opponentPartyMadeCards = getOpponentPartyMadeCards();
         for (final Suit suit : Suit.values()) {
 
-            result.append(suit.getLongString()).append(": "); //$NON-NLS-1$
+            result.append(suit.getLongString()).append(": ");
 
             for (final Rank rank : Rank.values()) {
 
@@ -705,7 +705,7 @@ public class ImmutablePlayerKnowledge {
                     result.append(card).append(' ');
                 } else {
 
-                    result.append("-- "); //$NON-NLS-1$
+                    result.append("-- ");
                 }
             }
 

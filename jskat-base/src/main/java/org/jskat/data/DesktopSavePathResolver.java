@@ -19,9 +19,9 @@ public class DesktopSavePathResolver implements SavePathResolver {
      */
     @Override
     public String getDefaultSavePath() {
-        return System.getProperty("user.home") //$NON-NLS-1$
-                + System.getProperty("file.separator") + ".jskat" //$NON-NLS-1$ //$NON-NLS-2$
-                + System.getProperty("file.separator"); //$NON-NLS-1$
+        return System.getProperty("user.home")
+                + System.getProperty("file.separator") + ".jskat"
+                + System.getProperty("file.separator");
     }
 
     @Override

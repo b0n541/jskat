@@ -21,8 +21,8 @@ public class NextReplayMoveAction extends AbstractJSkatAction {
      */
     public NextReplayMoveAction() {
 
-        putValue(NAME, STRINGS.getString("next_replay_move")); //$NON-NLS-1$
-        putValue(SHORT_DESCRIPTION, STRINGS.getString("next_replay_move_tooltip")); //$NON-NLS-1$
+        putValue(NAME, STRINGS.getString("next_replay_move"));
+        putValue(SHORT_DESCRIPTION, STRINGS.getString("next_replay_move_tooltip"));
 
         setIcon(Icon.NEXT);
     }

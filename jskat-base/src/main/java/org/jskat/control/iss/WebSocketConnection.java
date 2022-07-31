@@ -34,14 +34,14 @@
 //
 //	@Override
 //	public void onMessage(final String message) {
-//		log.debug("ISS    |---> " + message); //$NON-NLS-1$
+//		log.debug("ISS    |---> " + message); 
 //		messageHandler.addMessage(message);
 //	}
 //
 //	@Override
 //	public void sendMessage(final String message) {
 //		try {
-//			log.debug("ISS <--|    " + message); //$NON-NLS-1$
+//			log.debug("ISS <--|    " + message); 
 //			connection.sendMessage(message);
 //		} catch (IOException e) {
 //			// TODO Auto-generated catch block

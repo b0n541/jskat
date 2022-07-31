@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 // FIXME: make member variables private, implement fluent interface for factory
 public class GameAnnouncement {
 
-    private static Logger log = LoggerFactory.getLogger(GameAnnouncement.class);
+    private static final Logger log = LoggerFactory.getLogger(GameAnnouncement.class);
     /**
      * Game type
      */
@@ -207,7 +207,7 @@ public class GameAnnouncement {
             }
 
             if (!isValid) {
-                log.debug("Invalid " + tmpAnnouncement); //$NON-NLS-1$
+                log.debug("Invalid " + tmpAnnouncement);
             }
 
             return isValid;
@@ -281,31 +281,31 @@ public class GameAnnouncement {
 
         final StringBuffer result = new StringBuffer();
 
-        result.append("Game announcement: ").append(gameType); //$NON-NLS-1$
+        result.append("Game announcement: ").append(gameType);
 
         if (hand.booleanValue()) {
 
-            result.append(" hand"); //$NON-NLS-1$
+            result.append(" hand");
         }
 
         if (ouvert.booleanValue()) {
 
-            result.append(" ouvert"); //$NON-NLS-1$
+            result.append(" ouvert");
         }
 
         if (schneider.booleanValue()) {
 
-            result.append(" schneider"); //$NON-NLS-1$
+            result.append(" schneider");
         }
 
         if (schwarz.booleanValue()) {
 
-            result.append(" schwarz"); //$NON-NLS-1$
+            result.append(" schwarz");
         }
 
         if (discardedCards.size() > 0) {
 
-            result.append(" discarded " + discardedCards); //$NON-NLS-1$
+            result.append(" discarded " + discardedCards);
         }
 
         return result.toString();
@@ -370,12 +370,7 @@ public class GameAnnouncement {
             return false;
         }
         if (schwarz == null) {
-            if (other.schwarz != null) {
-                return false;
-            }
-        } else if (!schwarz.equals(other.schwarz)) {
-            return false;
-        }
-        return true;
+            return other.schwarz == null;
+        } else return schwarz.equals(other.schwarz);
     }
 }

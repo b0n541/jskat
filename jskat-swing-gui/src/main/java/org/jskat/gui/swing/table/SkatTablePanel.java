@@ -83,7 +83,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
         JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(this);
 
-        log.debug("SkatTablePanel: name: " + tableName); //$NON-NLS-1$
+        log.debug("SkatTablePanel: name: " + tableName);
     }
 
     private static GameInformationPanel getGameInfoPanel() {
@@ -107,7 +107,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     @Override
     protected void initPanel() {
 
-        setLayout(LayoutFactory.getMigLayout("fill,insets 0", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        setLayout(LayoutFactory.getMigLayout("fill,insets 0", "fill", "fill"));
 
         playerNamesAndPositions = new HashMap<>();
 
@@ -118,7 +118,7 @@ public class SkatTablePanel extends AbstractTabPanel {
         JSplitPane splitPane = new JSplitPane(
                 JSplitPane.HORIZONTAL_SPLIT, getLeftPanel(),
                 getPlayGroundPanel());
-        add(splitPane, "grow"); //$NON-NLS-1$
+        add(splitPane, "grow");
     }
 
     protected JTabbedPane getLeftPanel() {
@@ -134,7 +134,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     private JPanel getScoreListPanel() {
 
         JPanel panel = new JPanel(LayoutFactory.getMigLayout(
-                "fill", "fill", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                "fill", "fill", "fill"));
 
         skatListTableModel = new SkatListTableModel();
         scoreListTable = new JTable(skatListTableModel);
@@ -162,7 +162,7 @@ public class SkatTablePanel extends AbstractTabPanel {
         scoreListScrollPane
                 .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
-        panel.add(scoreListScrollPane, "growy"); //$NON-NLS-1$
+        panel.add(scoreListScrollPane, "growy");
 
         return panel;
     }
@@ -233,14 +233,14 @@ public class SkatTablePanel extends AbstractTabPanel {
                 createCallReAfterContraPanel(getActionMap()));
 
         JPanel trickHoldingPanel = new JPanel(LayoutFactory.getMigLayout(
-                "fill", "[shrink][grow][shrink]", //$NON-NLS-1$ //$NON-NLS-2$
-                "fill")); //$NON-NLS-1$
+                "fill", "[shrink][grow][shrink]",
+                "fill"));
         lastTrickPanel = new TrickPanel(0.6, false);
-        trickHoldingPanel.add(lastTrickPanel, "width 25%"); //$NON-NLS-1$
+        trickHoldingPanel.add(lastTrickPanel, "width 25%");
         trickPanel = new TrickPanel(0.8, true);
-        trickHoldingPanel.add(trickPanel, "grow"); //$NON-NLS-1$
+        trickHoldingPanel.add(trickPanel, "grow");
 
-        trickHoldingPanel.add(getRightPanelForTrickPanel(), "width 25%"); //$NON-NLS-1$
+        trickHoldingPanel.add(getRightPanelForTrickPanel(), "width 25%");
         trickHoldingPanel.setOpaque(false);
         addContextPanel(ContextPanelType.TRICK_PLAYING, trickHoldingPanel);
 
@@ -251,17 +251,17 @@ public class SkatTablePanel extends AbstractTabPanel {
 
     // FIXME: same code can be found in class SchieberamschContextPanel
     private JPanel createCallReAfterContraPanel(ActionMap actions) {
-        JPanel result = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+        JPanel result = new JPanel(LayoutFactory.getMigLayout("fill"));
 
         JPanel question = new JPanel();
         JLabel questionIconLabel = new JLabel(new ImageIcon(
                 JSkatGraphicRepository.INSTANCE.getUserBidBubble()));
         question.add(questionIconLabel);
         JLabel questionLabel = new JLabel(
-                strings.getString("want_call_re_after_contra")); //$NON-NLS-1$
+                strings.getString("want_call_re_after_contra"));
         questionLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
         question.add(questionLabel);
-        result.add(question, "center, growx, span 2, wrap"); //$NON-NLS-1$
+        result.add(question, "center, growx, span 2, wrap");
 
         JButton callReButton = new JButton(
                 actions.get(JSkatAction.CALL_RE));
@@ -291,12 +291,12 @@ public class SkatTablePanel extends AbstractTabPanel {
         JPanel grandHandPanel = new JPanel();
         grandHandPanel.add(callReButton);
         grandHandPanel.setOpaque(false);
-        result.add(grandHandPanel, "width 50%"); //$NON-NLS-1$
+        result.add(grandHandPanel, "width 50%");
 
         JPanel schieberamschPanel = new JPanel();
         schieberamschPanel.add(noReAfterContraButton);
         schieberamschPanel.setOpaque(false);
-        result.add(schieberamschPanel, "width 50%"); //$NON-NLS-1$
+        result.add(schieberamschPanel, "width 50%");
 
         result.setOpaque(false);
 
@@ -317,7 +317,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
         JButton resignButton = new JButton(getActionMap().get(
                 JSkatAction.CALL_CONTRA));
-        additionalActionsPanel.add(resignButton, "growx, wrap"); //$NON-NLS-1$
+        additionalActionsPanel.add(resignButton, "growx, wrap");
 
         return additionalActionsPanel;
     }
@@ -520,7 +520,7 @@ public class SkatTablePanel extends AbstractTabPanel {
      */
     public void setGameState(GameState state) {
 
-        log.debug(".setGameState(" + state + ")"); //$NON-NLS-1$ //$NON-NLS-2$
+        log.debug(".setGameState(" + state + ")");
 
         gameInfoPanel.setGameState(state);
 
@@ -741,7 +741,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
         } else {
 
-            log.debug("Player panel full!!!"); //$NON-NLS-1$
+            log.debug("Player panel full!!!");
         }
     }
 
@@ -774,7 +774,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
         } else {
 
-            log.debug("Discard panel full!!!"); //$NON-NLS-1$
+            log.debug("Discard panel full!!!");
         }
     }
 
@@ -934,7 +934,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     @Subscribe
     public void setPassOn(PassBidEvent event) {
 
-        log.debug(event.player + " passes"); //$NON-NLS-1$
+        log.debug(event.player + " passes");
 
         playerPassed.put(event.player, Boolean.TRUE);
 

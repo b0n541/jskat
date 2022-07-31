@@ -36,7 +36,7 @@ import java.util.Set;
 // SRP
 public class JSkatMaster {
 
-    private static Logger log = LoggerFactory.getLogger(JSkatMaster.class);
+    private static final Logger log = LoggerFactory.getLogger(JSkatMaster.class);
 
     public final static JSkatMaster INSTANCE = new JSkatMaster();
 
@@ -65,10 +65,10 @@ public class JSkatMaster {
      * @param latestRemoteVersion Remote version
      */
     public void checkJSkatVersion(final String latestLocalVersion, final String latestRemoteVersion) {
-        log.debug("Latest version web: " + latestRemoteVersion); //$NON-NLS-1$
-        log.debug("Latest version local: " + latestLocalVersion); //$NON-NLS-1$
+        log.debug("Latest version web: " + latestRemoteVersion);
+        log.debug("Latest version local: " + latestLocalVersion);
         if (VersionChecker.isHigherVersionAvailable(latestLocalVersion, latestRemoteVersion)) {
-            log.debug("Newer version " + latestRemoteVersion + " is available on the JSkat website."); //$NON-NLS-1$//$NON-NLS-2$
+            log.debug("Newer version " + latestRemoteVersion + " is available on the JSkat website.");
 
             JSkatEventBus.INSTANCE.post(new NewJSkatVersionAvailableEvent(latestRemoteVersion));
         }
@@ -85,7 +85,7 @@ public class JSkatMaster {
         final String tableName = view.getNewTableName(data.getLocalTablesCreated());
 
         if (tableName == null) {
-            log.debug("Create table was cancelled..."); //$NON-NLS-1$
+            log.debug("Create table was cancelled...");
             return;
         }
 
@@ -304,7 +304,7 @@ public class JSkatMaster {
                 // issControl.sendDiscardMove(tableName,
                 // discardSkat.get(0), discardSkat.get(1));
             } else {
-                log.warn("No discarded cards found for " + command); //$NON-NLS-1$
+                log.warn("No discarded cards found for " + command);
             }
         } else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
 
@@ -315,7 +315,7 @@ public class JSkatMaster {
                 final GameAnnouncement gameAnnouncement = (GameAnnouncement) source;
                 issControl.sendGameAnnouncementMove(tableName, gameAnnouncement);
             } else {
-                log.warn("No game announcement found for " + command); //$NON-NLS-1$
+                log.warn("No game announcement found for " + command);
             }
         } else if (JSkatAction.PLAY_CARD.toString().equals(command) && source instanceof Card) {
 
@@ -323,7 +323,7 @@ public class JSkatMaster {
             issControl.sendCardMove(tableName, nextCard);
         } else {
 
-            log.error("Unknown action event occured: " + command + " from " + source); //$NON-NLS-1$ //$NON-NLS-2$
+            log.error("Unknown action event occured: " + command + " from " + source);
         }
     }
 
@@ -464,15 +464,15 @@ public class JSkatMaster {
 
     private String getISSHomepageLink() {
 
-        String result = "http://www.skatgame.net/iss/"; //$NON-NLS-1$
+        String result = "http://www.skatgame.net/iss/";
 
         final SupportedLanguage lang = JSkatOptions.instance().getLanguage();
         switch (lang) {
             case GERMAN:
-                result += "index-de.html"; //$NON-NLS-1$
+                result += "index-de.html";
                 break;
             case ENGLISH:
-                result += "index.html"; //$NON-NLS-1$
+                result += "index.html";
                 break;
         }
 
@@ -493,15 +493,15 @@ public class JSkatMaster {
 
     private String getIssRegisterLink() {
 
-        String result = "http://skatgame.net:7000/"; //$NON-NLS-1$
+        String result = "http://skatgame.net:7000/";
 
         final SupportedLanguage lang = JSkatOptions.instance().getLanguage();
         switch (lang) {
             case GERMAN:
-                result += "de-register"; //$NON-NLS-1$
+                result += "de-register";
                 break;
             case ENGLISH:
-                result += "en-register"; //$NON-NLS-1$
+                result += "en-register";
                 break;
         }
 

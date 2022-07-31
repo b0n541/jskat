@@ -20,14 +20,14 @@ class StartContextPanel extends JPanel {
 
     public void initPanel(final ActionMap actions, final List<JSkatAction> activeActions) {
 
-        this.setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+        this.setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill"));
 
-        JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+        JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill"));
         for (JSkatAction action : activeActions) {
-            panel.add(new JButton(actions.get(action)), "center"); //$NON-NLS-1$
+            panel.add(new JButton(actions.get(action)), "center");
         }
         panel.setOpaque(false);
-        this.add(panel, "center"); //$NON-NLS-1$
+        this.add(panel, "center");
 
         setOpaque(false);
     }

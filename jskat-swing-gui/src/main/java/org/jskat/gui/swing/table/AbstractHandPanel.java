@@ -101,7 +101,7 @@ abstract class AbstractHandPanel extends JPanel {
 
         setBackground(new Color(0, 62, 0));
 
-        this.headerLabel = new JLabel(" "); //$NON-NLS-1$
+        this.headerLabel = new JLabel(" ");
         this.iconPanel = new IconPanel();
         this.clockPanel = new ClockPanel();
 
@@ -113,7 +113,7 @@ abstract class AbstractHandPanel extends JPanel {
      */
     void initPanel() {
 
-        setLayout(LayoutFactory.getMigLayout("fill, insets 0", "fill", "[shrink][grow]")); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
+        setLayout(LayoutFactory.getMigLayout("fill, insets 0", "fill", "[shrink][grow]"));
 
         setBorder(getPanelBorder(this.isActivePlayer));
 
@@ -124,7 +124,7 @@ abstract class AbstractHandPanel extends JPanel {
             headerInsets = headerInsets + "5";
         }
 
-        this.header = new JPanel(LayoutFactory.getMigLayout("fill, " + headerInsets, "[shrink][grow][shrink]", "fill")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        this.header = new JPanel(LayoutFactory.getMigLayout("fill, " + headerInsets, "[shrink][grow][shrink]", "fill"));
         this.header.add(this.headerLabel);
         // blank panel
         this.header.add(new JPanel());
@@ -133,10 +133,10 @@ abstract class AbstractHandPanel extends JPanel {
             iconPanel.setShowIssWidgets(true);
             this.header.add(this.clockPanel);
         }
-        add(this.header, "shrinky, wrap"); //$NON-NLS-1$
+        add(this.header, "shrinky, wrap");
 
         this.cardPanel = new ClickableCardPanel(this, 1.0, true);
-        add(this.cardPanel, "growy"); //$NON-NLS-1$
+        add(this.cardPanel, "growy");
 
         if (JSkatOptions.instance().isCheatDebugMode().booleanValue()) {
             showCards();
@@ -196,34 +196,34 @@ abstract class AbstractHandPanel extends JPanel {
 
         final StringBuffer headerText = new StringBuffer();
 
-        headerText.append(this.playerName).append(": "); //$NON-NLS-1$
+        headerText.append(this.playerName).append(": ");
 
         if (this.position != null) {
             switch (this.position) {
                 case FOREHAND:
-                    headerText.append(this.strings.getString("forehand")); //$NON-NLS-1$
+                    headerText.append(this.strings.getString("forehand"));
                     break;
                 case MIDDLEHAND:
-                    headerText.append(this.strings.getString("middlehand")); //$NON-NLS-1$
+                    headerText.append(this.strings.getString("middlehand"));
                     break;
                 case REARHAND:
-                    headerText.append(this.strings.getString("rearhand")); //$NON-NLS-1$
+                    headerText.append(this.strings.getString("rearhand"));
                     break;
             }
 
-            headerText.append(" " + this.strings.getString("bid") + ": "); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+            headerText.append(" " + this.strings.getString("bid") + ": ");
             headerText.append(this.bidValue);
 
             if (playerPassed || playerGeschoben || playerContra || playerRe) {
 
-                headerText.append(" ("); //$NON-NLS-1$
+                headerText.append(" (");
 
                 String passedGeschobenContraRe = "";
                 if (playerPassed) {
-                    passedGeschobenContraRe = strings.getString("passed"); //$NON-NLS-1$
+                    passedGeschobenContraRe = strings.getString("passed");
                 }
                 if (playerGeschoben) {
-                    passedGeschobenContraRe = strings.getString("geschoben"); //$NON-NLS-1$
+                    passedGeschobenContraRe = strings.getString("geschoben");
                 }
 
                 if (passedGeschobenContraRe.length() > 0 && (playerContra || playerRe)) {
@@ -239,19 +239,15 @@ abstract class AbstractHandPanel extends JPanel {
 
                 headerText.append(passedGeschobenContraRe);
 
-                headerText.append(")"); //$NON-NLS-1$
+                headerText.append(")");
             }
 
             if (this.declarer) {
-                headerText.append(" (" + this.strings.getString("declarer") + ")"); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+                headerText.append(" (" + this.strings.getString("declarer") + ")");
             }
         }
 
-        if (isActivePlayer && isAIPlayer) {
-            iconPanel.setThinking(true);
-        } else {
-            iconPanel.setThinking(false);
-        }
+        iconPanel.setThinking(isActivePlayer && isAIPlayer);
 
         this.headerLabel.setText(headerText.toString());
     }

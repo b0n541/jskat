@@ -1,4 +1,3 @@
-
 package org.jskat.control;
 
 
@@ -25,12 +24,12 @@ public class JSkatMasterTest extends AbstractJSkatTest {
         JSkatMaster.INSTANCE.createTable();
 
         assertThat(view.tables.size()).isEqualTo(1);
-        assertTrue(view.tables.contains("UnitTestTable 1")); //$NON-NLS-1$
+        assertTrue(view.tables.contains("UnitTestTable 1"));
 
         JSkatMaster.INSTANCE.createTable();
 
         assertThat(view.tables.size()).isEqualTo(2);
-        assertTrue(view.tables.contains("UnitTestTable 1")); //$NON-NLS-1$
-        assertTrue(view.tables.contains("UnitTestTable 2")); //$NON-NLS-1$
+        assertTrue(view.tables.contains("UnitTestTable 1"));
+        assertTrue(view.tables.contains("UnitTestTable 2"));
     }
 }

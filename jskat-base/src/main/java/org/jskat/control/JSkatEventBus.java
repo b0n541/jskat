@@ -41,7 +41,7 @@ public class JSkatEventBus {
 
     @Subscribe
     public void on(DeadEvent event) {
-        LOG.error("Recieved dead event: " + event.getEvent());
+        LOG.error("Received dead event: " + event.getEvent());
     }
 
     @Subscribe

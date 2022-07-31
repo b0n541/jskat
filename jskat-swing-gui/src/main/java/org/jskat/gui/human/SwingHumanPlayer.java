@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
-    private static Logger log = LoggerFactory.getLogger(SwingHumanPlayer.class);
+    private static final Logger log = LoggerFactory.getLogger(SwingHumanPlayer.class);
 
     private Idler idler = new Idler();
 
@@ -53,7 +53,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
         /**
          * Game announcement is done
          */
-        DONE_GAME_ANNOUNCEMENT;
+        DONE_GAME_ANNOUNCEMENT
     }
 
     /**
@@ -69,7 +69,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
     @Override
     public GameAnnouncement announceGame() {
 
-        log.debug("Waiting for human game announcing..."); //$NON-NLS-1$
+        log.debug("Waiting for human game announcing...");
 
         waitForUserInput();
 
@@ -84,7 +84,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
     @Override
     public Integer bidMore(final int nextBidValue) {
 
-        log.debug("Waiting for human next bid value..."); //$NON-NLS-1$
+        log.debug("Waiting for human next bid value...");
 
         waitForUserInput();
 
@@ -105,7 +105,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
     @Override
     public CardList getCardsToDiscard() {
 
-        log.debug("Waiting for human discarding..."); //$NON-NLS-1$
+        log.debug("Waiting for human discarding...");
 
         waitForUserInput();
 
@@ -135,7 +135,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
     @Override
     public Boolean holdBid(final int currBidValue) {
 
-        log.debug("Waiting for human holding bid..."); //$NON-NLS-1$
+        log.debug("Waiting for human holding bid...");
 
         waitForUserInput();
 
@@ -148,7 +148,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
     @Override
     public Boolean playGrandHand() {
 
-        log.debug("Waiting for human to decide if playing a grand hand..."); //$NON-NLS-1$
+        log.debug("Waiting for human to decide if playing a grand hand...");
 
         waitForUserInput();
 
@@ -161,7 +161,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
     @Override
     public Boolean pickUpSkat() {
 
-        log.debug("Waiting for human looking into skat..."); //$NON-NLS-1$
+        log.debug("Waiting for human looking into skat...");
 
         waitForUserInput();
 
@@ -174,7 +174,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
     @Override
     public Card playCard() {
 
-        log.debug("Waiting for human playing next card..."); //$NON-NLS-1$
+        log.debug("Waiting for human playing next card...");
 
         Card cardToPlay = null;
 
@@ -241,7 +241,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
                     gameAnnouncementStep = GameAnnouncementStep.DISCARDED_SKAT;
                 }
             } else {
-                log.warn("Wrong source for " + command); //$NON-NLS-1$
+                log.warn("Wrong source for " + command);
                 interrupt = false;
             }
         } else if (JSkatAction.PLAY_CARD.toString().equals(command)
@@ -251,7 +251,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
         } else {
 
-            log.warn("Unknown action event occured: " + command + " from " + source); //$NON-NLS-1$ //$NON-NLS-2$
+            log.warn("Unknown action event occured: " + command + " from " + source);
         }
 
         if (interrupt) {
@@ -281,14 +281,10 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
     private boolean isPlayerHasAlreadyPlayed() {
 
-        log.debug("Game announcement step: " + gameAnnouncementStep); //$NON-NLS-1$
+        log.debug("Game announcement step: " + gameAnnouncementStep);
 
-        boolean result = false;
-
-        if (GameAnnouncementStep.DISCARDED_SKAT.equals(gameAnnouncementStep)
-                || GameAnnouncementStep.PLAYS_HAND.equals(gameAnnouncementStep)) {
-            result = true;
-        }
+        boolean result = GameAnnouncementStep.DISCARDED_SKAT.equals(gameAnnouncementStep)
+                || GameAnnouncementStep.PLAYS_HAND.equals(gameAnnouncementStep);
 
         return result;
     }
@@ -370,24 +366,24 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
     @Override
     public Boolean callContra() {
 
-        log.debug("Waiting for human calling contra..."); //$NON-NLS-1$
+        log.debug("Waiting for human calling contra...");
 
         if (callContra == null) {
             waitForUserInput();
         }
 
-        return callContra == null ? false : callContra;
+        return callContra != null && callContra;
     }
 
     @Override
     public Boolean callRe() {
 
-        log.debug("Waiting for human calling re..."); //$NON-NLS-1$
+        log.debug("Waiting for human calling re...");
 
         if (callRe == null) {
             waitForUserInput();
         }
 
-        return callRe == null ? false : callRe;
+        return callRe != null && callRe;
     }
 }

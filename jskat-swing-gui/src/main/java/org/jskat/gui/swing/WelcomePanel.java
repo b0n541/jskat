@@ -13,7 +13,7 @@ import java.awt.*;
 public class WelcomePanel extends AbstractTabPanel {
 
     private static final long serialVersionUID = 1L;
-    private static Logger log = LoggerFactory.getLogger(WelcomePanel.class);
+    private static final Logger log = LoggerFactory.getLogger(WelcomePanel.class);
 
     /**
      * @param newTableName Table name
@@ -23,7 +23,7 @@ public class WelcomePanel extends AbstractTabPanel {
     public WelcomePanel(final String newTableName, final ActionMap actions) {
 
         super(newTableName, actions);
-        log.debug("SkatTablePanel: name: " + newTableName); //$NON-NLS-1$
+        log.debug("SkatTablePanel: name: " + newTableName);
     }
 
     /**
@@ -32,17 +32,17 @@ public class WelcomePanel extends AbstractTabPanel {
     @Override
     protected void initPanel() {
 
-        setLayout(LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
-        add(getWelcomePanel(), "grow, center"); //$NON-NLS-1$
+        setLayout(LayoutFactory.getMigLayout("fill"));
+        add(getWelcomePanel(), "grow, center");
     }
 
     private JScrollPane getWelcomePanel() {
 
         final JPanel welcomePanel = new JPanel(LayoutFactory.getMigLayout(
-                "fill", "[]", "[shrink][grow]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+                "fill", "[]", "[shrink][grow]"));
 
-        welcomePanel.add(createHeaderPanel(), "center, wrap"); //$NON-NLS-1$
-        welcomePanel.add(createButtonPanel(), "center"); //$NON-NLS-1$
+        welcomePanel.add(createHeaderPanel(), "center, wrap");
+        welcomePanel.add(createButtonPanel(), "center");
 
         return new JScrollPane(welcomePanel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
                 JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -51,14 +51,14 @@ public class WelcomePanel extends AbstractTabPanel {
     private JPanel createHeaderPanel() {
 
         final JPanel headerPanel = new JPanel(
-                LayoutFactory.getMigLayout("fill")); //$NON-NLS-1$
+                LayoutFactory.getMigLayout("fill"));
         final JLabel logoLabel = new JLabel(new ImageIcon(
                 this.bitmaps.getJSkatLogoImage()));
         headerPanel.add(logoLabel);
         final JLabel headerLabel = new JLabel(
-                this.strings.getString("welcome_to_jskat")); //$NON-NLS-1$
+                this.strings.getString("welcome_to_jskat"));
         headerLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 32));
-        headerPanel.add(headerLabel, "center"); //$NON-NLS-1$
+        headerPanel.add(headerLabel, "center");
         return headerPanel;
     }
 
@@ -67,35 +67,35 @@ public class WelcomePanel extends AbstractTabPanel {
         final JButton issTableButton = new JButton(getActionMap().get(
                 JSkatAction.SHOW_ISS_LOGIN));
         final JLabel issTableDescription = new JLabel("<html>"
-                + this.strings.getString("explain_iss_table_1") + "<br>" //$NON-NLS-1$ //$NON-NLS-2$
-                + this.strings.getString("explain_iss_table_2")); //$NON-NLS-1$//$NON-NLS-2$
+                + this.strings.getString("explain_iss_table_1") + "<br>"
+                + this.strings.getString("explain_iss_table_2"));
 
         final JButton localTableButton = new JButton(this.getActionMap().get(
                 JSkatAction.CREATE_LOCAL_TABLE));
-        final JLabel localTableDescription = new JLabel("<html>" //$NON-NLS-1$
-                + this.strings.getString("explain_local_table_1") + "<br>" //$NON-NLS-1$ //$NON-NLS-2$
-                + this.strings.getString("explain_local_table_2")); //$NON-NLS-1$//$NON-NLS-2$
+        final JLabel localTableDescription = new JLabel("<html>"
+                + this.strings.getString("explain_local_table_1") + "<br>"
+                + this.strings.getString("explain_local_table_2"));
 
         final JButton optionsButton = new JButton(getActionMap().get(
                 JSkatAction.PREFERENCES));
         final JLabel optionsDescription = new JLabel(
-                this.strings.getString("explain_options_1")); //$NON-NLS-1$//$NON-NLS-2$
+                this.strings.getString("explain_options_1"));
 
         final JButton quitButton = new JButton(getActionMap().get(
                 JSkatAction.EXIT_JSKAT));
         final JLabel quitDescription = new JLabel(
-                this.strings.getString("explain_exit")); //$NON-NLS-1$//$NON-NLS-2$
+                this.strings.getString("explain_exit"));
 
         final JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout(
-                "", "[][]", "[center][center][center][center]")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        buttonPanel.add(issTableButton, "growx, shrinky"); //$NON-NLS-1$
-        buttonPanel.add(issTableDescription, "wrap"); //$NON-NLS-1$
-        buttonPanel.add(localTableButton, "growx, shrinky"); //$NON-NLS-1$
-        buttonPanel.add(localTableDescription, "wrap"); //$NON-NLS-1$
-        buttonPanel.add(optionsButton, "growx, shrinky, gapy 1cm"); //$NON-NLS-1$
-        buttonPanel.add(optionsDescription, "gapy 1cm, wrap"); //$NON-NLS-1$
-        buttonPanel.add(quitButton, "growx, shrinky, gapy 1cm"); //$NON-NLS-1$
-        buttonPanel.add(quitDescription, "gapy 1cm, wrap"); //$NON-NLS-1$
+                "", "[][]", "[center][center][center][center]"));
+        buttonPanel.add(issTableButton, "growx, shrinky");
+        buttonPanel.add(issTableDescription, "wrap");
+        buttonPanel.add(localTableButton, "growx, shrinky");
+        buttonPanel.add(localTableDescription, "wrap");
+        buttonPanel.add(optionsButton, "growx, shrinky, gapy 1cm");
+        buttonPanel.add(optionsDescription, "gapy 1cm, wrap");
+        buttonPanel.add(quitButton, "growx, shrinky, gapy 1cm");
+        buttonPanel.add(quitDescription, "gapy 1cm, wrap");
 
         return buttonPanel;
     }

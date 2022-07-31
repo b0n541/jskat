@@ -39,7 +39,7 @@ public class JSkatResourceBundle {
             locale = Locale.getDefault();
         }
 
-        this.strings = ResourceBundle.getBundle("org/jskat/i18n/jskat_strings", //$NON-NLS-1$
+        this.strings = ResourceBundle.getBundle("org/jskat/i18n/jskat_strings",
                 locale);
     }
 
@@ -101,16 +101,16 @@ public class JSkatResourceBundle {
                 result = getGameTypeStringForCardFace(gameType);
                 break;
             case NULL:
-                result = this.strings.getString("null"); //$NON-NLS-1$
+                result = this.strings.getString("null");
                 break;
             case GRAND:
-                result = this.strings.getString("grand"); //$NON-NLS-1$
+                result = this.strings.getString("grand");
                 break;
             case RAMSCH:
-                result = this.strings.getString("ramsch"); //$NON-NLS-1$
+                result = this.strings.getString("ramsch");
                 break;
             case PASSED_IN:
-                result = this.strings.getString("passed_in"); //$NON-NLS-1$
+                result = this.strings.getString("passed_in");
                 break;
         }
 
@@ -125,7 +125,7 @@ public class JSkatResourceBundle {
      */
     public String getCardStringForCardFace(final Card card) {
 
-        return getSuitStringForCardFace(card.getSuit()) + " " + getRankStringForCardFace(card.getRank()); //$NON-NLS-1$
+        return getSuitStringForCardFace(card.getSuit()) + " " + getRankStringForCardFace(card.getRank());
     }
 
     /**
@@ -156,28 +156,28 @@ public class JSkatResourceBundle {
 
         switch (rank) {
             case ACE:
-                result = this.strings.getString("ace"); //$NON-NLS-1$
+                result = this.strings.getString("ace");
                 break;
             case KING:
-                result = this.strings.getString("king"); //$NON-NLS-1$
+                result = this.strings.getString("king");
                 break;
             case QUEEN:
-                result = this.strings.getString("queen"); //$NON-NLS-1$
+                result = this.strings.getString("queen");
                 break;
             case JACK:
-                result = this.strings.getString("jack"); //$NON-NLS-1$
+                result = this.strings.getString("jack");
                 break;
             case TEN:
-                result = this.strings.getString("ten"); //$NON-NLS-1$
+                result = this.strings.getString("ten");
                 break;
             case NINE:
-                result = this.strings.getString("nine"); //$NON-NLS-1$
+                result = this.strings.getString("nine");
                 break;
             case EIGHT:
-                result = this.strings.getString("eight"); //$NON-NLS-1$
+                result = this.strings.getString("eight");
                 break;
             case SEVEN:
-                result = this.strings.getString("seven"); //$NON-NLS-1$
+                result = this.strings.getString("seven");
                 break;
         }
 
@@ -190,28 +190,28 @@ public class JSkatResourceBundle {
 
         switch (rank) {
             case ACE:
-                result = this.strings.getString("ace_german"); //$NON-NLS-1$
+                result = this.strings.getString("ace_german");
                 break;
             case KING:
-                result = this.strings.getString("king_german"); //$NON-NLS-1$
+                result = this.strings.getString("king_german");
                 break;
             case QUEEN:
-                result = this.strings.getString("queen_german"); //$NON-NLS-1$
+                result = this.strings.getString("queen_german");
                 break;
             case JACK:
-                result = this.strings.getString("jack_german"); //$NON-NLS-1$
+                result = this.strings.getString("jack_german");
                 break;
             case TEN:
-                result = this.strings.getString("ten_german"); //$NON-NLS-1$
+                result = this.strings.getString("ten_german");
                 break;
             case NINE:
-                result = this.strings.getString("nine_german"); //$NON-NLS-1$
+                result = this.strings.getString("nine_german");
                 break;
             case EIGHT:
-                result = this.strings.getString("eight_german"); //$NON-NLS-1$
+                result = this.strings.getString("eight_german");
                 break;
             case SEVEN:
-                result = this.strings.getString("seven_german"); //$NON-NLS-1$
+                result = this.strings.getString("seven_german");
                 break;
         }
 
@@ -247,16 +247,16 @@ public class JSkatResourceBundle {
 
         switch (suit) {
             case CLUBS:
-                result = this.strings.getString("clubs"); //$NON-NLS-1$
+                result = this.strings.getString("clubs");
                 break;
             case SPADES:
-                result = this.strings.getString("spades"); //$NON-NLS-1$
+                result = this.strings.getString("spades");
                 break;
             case HEARTS:
-                result = this.strings.getString("hearts"); //$NON-NLS-1$
+                result = this.strings.getString("hearts");
                 break;
             case DIAMONDS:
-                result = this.strings.getString("diamonds"); //$NON-NLS-1$
+                result = this.strings.getString("diamonds");
                 break;
         }
         return result;
@@ -268,16 +268,16 @@ public class JSkatResourceBundle {
 
         switch (suit) {
             case CLUBS:
-                result = this.strings.getString("clubs_german"); //$NON-NLS-1$
+                result = this.strings.getString("clubs_german");
                 break;
             case SPADES:
-                result = this.strings.getString("spades_german"); //$NON-NLS-1$
+                result = this.strings.getString("spades_german");
                 break;
             case HEARTS:
-                result = this.strings.getString("hearts_german"); //$NON-NLS-1$
+                result = this.strings.getString("hearts_german");
                 break;
             case DIAMONDS:
-                result = this.strings.getString("diamonds_german"); //$NON-NLS-1$
+                result = this.strings.getString("diamonds_german");
                 break;
         }
         return result;
@@ -306,16 +306,16 @@ public class JSkatResourceBundle {
 
         switch (gameType) {
             case CLUBS:
-                result = this.strings.getString("clubs_german"); //$NON-NLS-1$
+                result = this.strings.getString("clubs_german");
                 break;
             case SPADES:
-                result = this.strings.getString("spades_german"); //$NON-NLS-1$
+                result = this.strings.getString("spades_german");
                 break;
             case HEARTS:
-                result = this.strings.getString("hearts_german"); //$NON-NLS-1$
+                result = this.strings.getString("hearts_german");
                 break;
             case DIAMONDS:
-                result = this.strings.getString("diamonds_german"); //$NON-NLS-1$
+                result = this.strings.getString("diamonds_german");
                 break;
             default:
                 // other game types not needed here
@@ -331,16 +331,16 @@ public class JSkatResourceBundle {
 
         switch (gameType) {
             case CLUBS:
-                result = this.strings.getString("clubs"); //$NON-NLS-1$
+                result = this.strings.getString("clubs");
                 break;
             case SPADES:
-                result = this.strings.getString("spades"); //$NON-NLS-1$
+                result = this.strings.getString("spades");
                 break;
             case HEARTS:
-                result = this.strings.getString("hearts"); //$NON-NLS-1$
+                result = this.strings.getString("hearts");
                 break;
             case DIAMONDS:
-                result = this.strings.getString("diamonds"); //$NON-NLS-1$
+                result = this.strings.getString("diamonds");
                 break;
             default:
                 // other game types not needed here

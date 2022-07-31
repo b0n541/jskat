@@ -172,8 +172,8 @@ public class JSkatViewImpl implements JSkatView {
 
         // main area
         addTabbedPane();
-        addTabPanel(new WelcomePanel(strings.getString("welcome"), actions), //$NON-NLS-1$
-                strings.getString("welcome")); //$NON-NLS-1$
+        addTabPanel(new WelcomePanel(strings.getString("welcome"), actions),
+                strings.getString("welcome"));
 
         LOG.debug("GUI initialization finished.");
     }
@@ -212,7 +212,7 @@ public class JSkatViewImpl implements JSkatView {
 
                     AbstractTabPanel panel = (AbstractTabPanel) tab;
                     String tableName = panel.getName();
-                    LOG.debug("showing table panel of table " + tableName); //$NON-NLS-1$
+                    LOG.debug("showing table panel of table " + tableName);
                     panel.setFocus();
 
                     JSkatMaster.INSTANCE.setActiveTable(tableName);
@@ -270,26 +270,26 @@ public class JSkatViewImpl implements JSkatView {
     @Subscribe
     public void showAboutInformationDialogOn(ShowAboutInformationCommand command) {
 
-        SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mainPanel, "JSkat " //$NON-NLS-1$
-                        + strings.getString("version") //$NON-NLS-1$
-                        + " " //$NON-NLS-1$
-                        + VERSION + "\n\n" //$NON-NLS-1$
-                        + "http://www.jskat.org\n" //$NON-NLS-1$
-                        + "http://sourceforge.net/projects/jskat" //$NON-NLS-1$
-                        + "\n\n" //$NON-NLS-1$
-                        + strings.getString("authors") //$NON-NLS-1$
-                        + ":\nJan Schäfer (jansch@users.sourceforge.net)\nMarkus J. Luzius (jskat@luzius.de)\nDaniel Loreck (daniel.loreck@gmail.com)\nSascha Laurien\nSlovasim\nMartin Rothe\nTobias Markus\n\n" //$NON-NLS-1$
-                        + strings.getString("cards") //$NON-NLS-1$
-                        + ": International Skat Server, KDE project, OpenClipart.org\n\n" //$NON-NLS-1$
-                        + strings.getString("icons") //$NON-NLS-1$
-                        + ": Gnome Desktop Icons, Tango project, Elementary icons,\n" //$NON-NLS-1$
-                        + "Silvestre Herrera, Alex Roberts and Icojoy\n\n" //$NON-NLS-1$
+        SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mainPanel, "JSkat "
+                        + strings.getString("version")
+                        + " "
+                        + VERSION + "\n\n"
+                        + "http://www.jskat.org\n"
+                        + "http://sourceforge.net/projects/jskat"
+                        + "\n\n"
+                        + strings.getString("authors")
+                        + ":\nJan Schäfer (jansch@users.sourceforge.net)\nMarkus J. Luzius (jskat@luzius.de)\nDaniel Loreck (daniel.loreck@gmail.com)\nSascha Laurien\nSlovasim\nMartin Rothe\nTobias Markus\n\n"
+                        + strings.getString("cards")
+                        + ": International Skat Server, KDE project, OpenClipart.org\n\n"
+                        + strings.getString("icons")
+                        + ": Gnome Desktop Icons, Tango project, Elementary icons,\n"
+                        + "Silvestre Herrera, Alex Roberts and Icojoy\n\n"
                         + strings.getString("background_image") + ": webtreats\n\n"
-                        + "This program comes with ABSOLUTELY NO WARRANTY;\n" //$NON-NLS-1$
-                        + "for details see licence dialog\n" //$NON-NLS-1$
-                        + "This is free software, and you are welcome to redistribute it\n" //$NON-NLS-1$
-                        + "under certain conditions; see licence dialog for details.", //$NON-NLS-1$
-                strings.getString("about"), //$NON-NLS-1$
+                        + "This program comes with ABSOLUTELY NO WARRANTY;\n"
+                        + "for details see licence dialog\n"
+                        + "This is free software, and you are welcome to redistribute it\n"
+                        + "under certain conditions; see licence dialog for details.",
+                strings.getString("about"),
                 JOptionPane.INFORMATION_MESSAGE, new ImageIcon(bitmaps.getJSkatLogoImage())));
     }
 
@@ -395,11 +395,7 @@ public class JSkatViewImpl implements JSkatView {
                 actions.get(JSkatAction.ANNOUNCE_GAME).setEnabled(true);
                 break;
             case TRICK_PLAYING:
-                if (options.isPlayContra()) {
-                    actions.get(JSkatAction.CALL_CONTRA).setEnabled(true);
-                } else {
-                    actions.get(JSkatAction.CALL_CONTRA).setEnabled(false);
-                }
+                actions.get(JSkatAction.CALL_CONTRA).setEnabled(options.isPlayContra());
                 break;
             case GAME_OVER:
                 actions.get(JSkatAction.CONTINUE_LOCAL_SERIES).setEnabled(true);
@@ -487,7 +483,7 @@ public class JSkatViewImpl implements JSkatView {
         SwingUtilities.invokeLater(() -> {
             // show ISS lobby if connection was successfull
             // FIXME (jan 07.12.2010) use constant instead of title
-            closeTabPanel("ISS login"); //$NON-NLS-1$
+            closeTabPanel("ISS login");
             issLobby = new LobbyPanel("ISS lobby", actions);
             addTabPanel(issLobby, strings.getString("iss_lobby"));
         });
@@ -518,7 +514,7 @@ public class JSkatViewImpl implements JSkatView {
     @Override
     public void appendISSChatMessage(ChatMessageType messageType, ChatMessage message) {
 
-        LOG.debug("appendISSChatMessage"); //$NON-NLS-1$
+        LOG.debug("appendISSChatMessage");
 
         issLobby.appendChatMessage(message);
 
@@ -569,8 +565,8 @@ public class JSkatViewImpl implements JSkatView {
     private void updateISSTable(String tableName, Player leftOpponent, Player rightOpponent,
                                 Player player, GameStartInformation status) {
 
-        LOG.debug("Updating ISS table: " + tableName + " " + leftOpponent + " " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-                + rightOpponent + " " + player); //$NON-NLS-1$
+        LOG.debug("Updating ISS table: " + tableName + " " + leftOpponent + " "
+                + rightOpponent + " " + player);
 
         JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(
                 new GameStartEvent(status.getGameNo(), GameVariant.STANDARD, leftOpponent, rightOpponent, player));
@@ -595,9 +591,8 @@ public class JSkatViewImpl implements JSkatView {
     @Override
     public String getNewTableName(int localTablesCreated) {
         // get table name
-        String tableName = JOptionPane.showInputDialog(null, strings.getString("new_table_dialog_message"), //$NON-NLS-1$
-                strings.getString("local_table") + " " //$NON-NLS-1$ //$NON-NLS-2$
-                        + (localTablesCreated + 1));
+        String tableName = JOptionPane.showInputDialog(null, strings.getString("new_table_dialog_message"),
+                strings.getString("local_table") + " " + (localTablesCreated + 1));
         // truncate table name
         if (tableName != null && tableName.length() > 100) {
             tableName = tableName.substring(0, 100);
@@ -756,14 +751,14 @@ public class JSkatViewImpl implements JSkatView {
 
         PlayerInvitationPanel invitationPanel = new PlayerInvitationPanel(playerNames);
         int dialogResult = JOptionPane.showConfirmDialog(null, invitationPanel,
-                strings.getString("invite_players"), //$NON-NLS-1$
+                strings.getString("invite_players"),
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (dialogResult == JOptionPane.OK_OPTION) {
             result.addAll(invitationPanel.getPlayer());
         }
 
-        LOG.debug("Players to invite: " + result); //$NON-NLS-1$
+        LOG.debug("Players to invite: " + result);
 
         return result;
     }
@@ -802,11 +797,11 @@ public class JSkatViewImpl implements JSkatView {
 
         boolean result = false;
 
-        String question = strings.getString("iss_table_invitation", //$NON-NLS-1$
+        String question = strings.getString("iss_table_invitation",
                 invitor, tableName);
 
         int answer = JOptionPane.showConfirmDialog(null, question,
-                strings.getString("iss_table_invitation_title"), //$NON-NLS-1$
+                strings.getString("iss_table_invitation_title"),
                 JOptionPane.YES_NO_OPTION);
 
         if (answer == JOptionPane.YES_OPTION) {
@@ -823,11 +818,11 @@ public class JSkatViewImpl implements JSkatView {
     @Override
     public void showCardNotAllowedMessage(Card card) {
 
-        String title = strings.getString("card_not_allowed_title"); //$NON-NLS-1$
+        String title = strings.getString("card_not_allowed_title");
 
-        String message = strings.getString("card_not_allowed_message", //$NON-NLS-1$
-                card != null ? strings.getSuitStringForCardFace(card.getSuit()) : "--", //$NON-NLS-1$
-                card != null ? strings.getRankStringForCardFace(card.getRank()) : "--"); //$NON-NLS-1$
+        String message = strings.getString("card_not_allowed_message",
+                card != null ? strings.getSuitStringForCardFace(card.getSuit()) : "--",
+                card != null ? strings.getRankStringForCardFace(card.getRank()) : "--");
 
         showErrorMessage(title, message);
     }
@@ -868,24 +863,24 @@ public class JSkatViewImpl implements JSkatView {
 
     @Subscribe
     public void showErrorMessageOn(InvalidNumberOfCardsInDiscardedSkatEvent event) {
-        showErrorMessage(strings.getString("invalid_number_of_cards_in_skat_title"), //$NON-NLS-1$
+        showErrorMessage(strings.getString("invalid_number_of_cards_in_skat_title"),
                 strings.getString("invalid_number_of_cards_in_skat_message"));
     }
 
     @Subscribe
     public void showErrorMessageOn(DuplicateTableNameInputEvent event) {
 
-        String message = strings.getString("duplicate_table_name_message", //$NON-NLS-1$
+        String message = strings.getString("duplicate_table_name_message",
                 event.tableName);
 
-        showErrorMessage(strings.getString("duplicate_table_name_title"), //$NON-NLS-1$
+        showErrorMessage(strings.getString("duplicate_table_name_title"),
                 message);
     }
 
     @Subscribe
     public void showErrorMessageOn(EmptyTableNameInputEvent event) {
 
-        showErrorMessage(strings.getString("invalid_name_input_null_title"), //$NON-NLS-1$
+        showErrorMessage(strings.getString("invalid_name_input_null_title"),
                 strings.getString("invalid_name_input_null_message"));
     }
 
