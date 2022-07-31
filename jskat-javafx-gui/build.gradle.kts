@@ -5,7 +5,6 @@ plugins {
 dependencies {
     implementation(project(":jskat-base"))
     implementation(project(":jskat-swing-gui"))
-    implementation("com.google.guava", "guava", "31.0.1-jre")
 }
 
 javafx {
