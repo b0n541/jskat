@@ -121,22 +121,17 @@ public class MessageHandler extends Thread {
         final MessageType type = MessageType.getByString(first);
 
         if (MessageType.UNKNOWN.equals(type)) {
-
             log.error("UNHANDLED MESSAGE: " + first + params.toString());
-        }
-    } else
-
-    {
-        // FIXME (jansch 30.05.2011) put message into a queue
-        try {
-            handleMessageObsolete(type, params);
-        } catch (final Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } else {
+            // FIXME (jansch 30.05.2011) put message into a queue
+            try {
+                handleMessageObsolete(type, params);
+            } catch (final Exception e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
     }
-
-}
 
     void handleMessageObsolete(final MessageType type, final List<String> params)
             throws Exception {
@@ -309,7 +304,7 @@ public class MessageHandler extends Thread {
 
             } else {
 
-                log.debug("unhandled action command: " + actionCommand + " for table " + tableName);  
+                log.debug("unhandled action command: " + actionCommand + " for table " + tableName);
             }
         }
     }
