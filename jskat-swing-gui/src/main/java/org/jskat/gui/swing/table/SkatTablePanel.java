@@ -615,7 +615,7 @@ public class SkatTablePanel extends AbstractTabPanel {
                     leftOpponentPanel.getPosition(),
                     rightOpponentPanel.getPosition(),
                     userPanel.getPosition(),
-                    event.gameSummary.getDeclarer(), event.gameSummary);
+                    event.gameSummary);
             scrollSkatListToTheEnd();
         }
 
@@ -787,16 +787,6 @@ public class SkatTablePanel extends AbstractTabPanel {
     public void clearSkatListOn(SkatSeriesStartedEvent event) {
 
         skatListTableModel.clearList();
-    }
-
-    /**
-     * Sets maximum number of players
-     *
-     * @param maxPlayers Maximum number of players
-     */
-    protected void setMaxPlayers(int maxPlayers) {
-
-        skatListTableModel.setPlayerCount(maxPlayers);
     }
 
     /**
