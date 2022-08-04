@@ -58,7 +58,8 @@ public class LayoutFactory {
      * @return Layout manager
      */
     public static MigLayout getMigLayout(String layoutConstraints,
-                                         String columnConstraints, String rowConstraints) {
+                                         String columnConstraints,
+                                         String rowConstraints) {
 
         String finalLayoutConstraints = layoutConstraints;
 
@@ -87,10 +88,7 @@ public class LayoutFactory {
     }
 
     private static boolean isMacOS() {
-        String osName = System.getProperty("os.name").toUpperCase();
-
-
-        return osName.contains("MAC");
+        return System.getProperty("os.name").toUpperCase().contains("MAC");
     }
 
     private static String getMacOSInsets() {
