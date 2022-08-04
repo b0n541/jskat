@@ -64,7 +64,7 @@ public class JSkatViewImpl implements JSkatView {
     private final JSkatGraphicRepository bitmaps = JSkatGraphicRepository.INSTANCE;
     private final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
     private final JSkatOptions options = JSkatOptions.instance();
-    static ActionMap actions;
+    public static ActionMap actions;
     private LobbyPanel issLobby;
 
     private static String VERSION;

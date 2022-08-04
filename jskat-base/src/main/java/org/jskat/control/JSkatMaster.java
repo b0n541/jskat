@@ -65,10 +65,10 @@ public class JSkatMaster {
      * @param latestRemoteVersion Remote version
      */
     public void checkJSkatVersion(final String latestLocalVersion, final String latestRemoteVersion) {
-        log.debug("Latest version web: " + latestRemoteVersion);
-        log.debug("Latest version local: " + latestLocalVersion);
+        log.info("Latest version web: " + latestRemoteVersion);
+        log.info("Latest version local: " + latestLocalVersion);
         if (VersionChecker.isHigherVersionAvailable(latestLocalVersion, latestRemoteVersion)) {
-            log.debug("Newer version " + latestRemoteVersion + " is available on the JSkat website.");
+            log.info("Newer version " + latestRemoteVersion + " is available on the JSkat website.");
 
             JSkatEventBus.INSTANCE.post(new NewJSkatVersionAvailableEvent(latestRemoteVersion));
         }
@@ -102,6 +102,14 @@ public class JSkatMaster {
             JSkatEventBus.INSTANCE.post(new DuplicateTableNameInputEvent(tableName));
             // try again
             createTable();
+        }
+    }
+
+    public void createTable(String tableName) {
+        if (data.isFreeTableName(tableName)) {
+            createLocalTable(tableName, view.getHumanPlayerForGUI());
+        } else {
+            JSkatEventBus.INSTANCE.post(new DuplicateTableNameInputEvent(tableName));
         }
     }
 

@@ -4,6 +4,7 @@ import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -36,6 +37,7 @@ import org.jskat.util.version.VersionChecker;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 
 public class JSkatFX extends Application {
 
@@ -115,6 +117,12 @@ public class JSkatFX extends Application {
 
         jskatMainWindow.show();
 
+        try {
+            showNewMainWindow(VERSION);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         if (JSkatOptions.instance().getBoolean(Option.SHOW_TIPS_AT_START_UP)) {
             JSkatEventBus.INSTANCE.post(new ShowWelcomeInformationCommand());
         }
@@ -122,6 +130,19 @@ public class JSkatFX extends Application {
         if (JSkatOptions.instance().getBoolean(Option.CHECK_FOR_NEW_VERSION_AT_START_UP)) {
             JSkatMaster.INSTANCE.checkJSkatVersion(VERSION, VersionChecker.getLatestVersion());
         }
+    }
+
+    private static void showNewMainWindow(String version) throws IOException {
+        final FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(JSkatFX.class.getResource("/org/jskat/gui/javafx/main/JSkatMainWindow.fxml"));
+        loader.setResources(JSkatResourceBundle.INSTANCE.getStringResources());
+        final VBox rootLayout = loader.load();
+        final Stage stage = new Stage();
+        stage.setTitle("JSkat " + version);
+        final Scene scene = new Scene(rootLayout);
+        stage.setScene(scene);
+        stage.setOnCloseRequest(event -> JSkatMaster.INSTANCE.exitJSkat());
+        stage.show();
     }
 
     private void showSplashScreen(final Screen targetScreen, final Stage splashStage, final Task<?> startupTask,
