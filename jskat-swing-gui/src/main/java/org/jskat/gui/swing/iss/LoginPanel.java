@@ -17,7 +17,7 @@ import java.awt.event.ActionListener;
  */
 public class LoginPanel extends AbstractTabPanel {
 
-    private static final long serialVersionUID = 1L;
+
     private static final Logger log = LoggerFactory.getLogger(LoginPanel.class);
 
     JTextField loginField;

@@ -22,7 +22,7 @@ import java.util.Map;
  */
 class ChatPanel extends JPanel implements ChangeListener {
 
-    private static final long serialVersionUID = 1L;
+
     private static final Logger log = LoggerFactory.getLogger(ChatPanel.class);
 
     private JTextField inputLine;

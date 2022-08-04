@@ -22,7 +22,6 @@ class DiscardPanel extends JPanel {
 
     private static final String CARD_PANEL = "CARD_PANEL";
 
-    private static final long serialVersionUID = 1L;
 
     private Action pickUpSkatAction;
     private JButton pickUpSkatButton;

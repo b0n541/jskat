@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
  */
 class SkatListTableModel extends AbstractTableModel {
 
-    private static final long serialVersionUID = 1L;
 
     private final JSkatResourceBundle strings;
 

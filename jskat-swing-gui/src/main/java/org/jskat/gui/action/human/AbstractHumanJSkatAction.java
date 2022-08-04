@@ -15,7 +15,6 @@ import java.awt.event.ActionEvent;
  */
 public abstract class AbstractHumanJSkatAction extends AbstractJSkatAction {
 
-    private static final long serialVersionUID = 1L;
 
     /**
      * @see AbstractAction#actionPerformed(ActionEvent)

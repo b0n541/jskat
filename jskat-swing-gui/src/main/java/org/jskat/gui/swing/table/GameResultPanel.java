@@ -16,7 +16,7 @@ import java.util.List;
  */
 public class GameResultPanel extends JPanel {
 
-    private static final long serialVersionUID = 1L;
+
     private static final Logger log = LoggerFactory.getLogger(GameResultPanel.class);
 
     private Player userPosition;

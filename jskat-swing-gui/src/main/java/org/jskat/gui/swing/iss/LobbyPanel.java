@@ -20,7 +20,7 @@ import java.awt.event.MouseListener;
  */
 public class LobbyPanel extends AbstractTabPanel {
 
-    private static final long serialVersionUID = 1L;
+
     private static final Logger log = LoggerFactory.getLogger(LobbyPanel.class);
 
     private PlayerListTableModel playerListTableModel;

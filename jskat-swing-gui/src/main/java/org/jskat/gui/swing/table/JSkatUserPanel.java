@@ -11,8 +11,8 @@ import javax.swing.*;
  */
 public class JSkatUserPanel extends AbstractHandPanel {
 
-    private static final long serialVersionUID = 1L;
-    private static Logger log = LoggerFactory.getLogger(JSkatUserPanel.class);
+
+    private static final Logger log = LoggerFactory.getLogger(JSkatUserPanel.class);
 
     private ClickableCardPanel lastClickedCardPanel;
     private GameState gameState;

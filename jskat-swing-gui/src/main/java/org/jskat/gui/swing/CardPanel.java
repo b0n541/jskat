@@ -19,7 +19,7 @@ import java.awt.geom.AffineTransform;
  */
 public class CardPanel extends JPanel {
 
-    private static final long serialVersionUID = 1L;
+
     private static final Logger log = LoggerFactory.getLogger(CardPanel.class);
 
     protected final JSkatGraphicRepository bitmaps;

@@ -11,7 +11,6 @@ import javax.swing.*;
  */
 class DeclaringContextPanel extends JPanel {
 
-    private static final long serialVersionUID = 1L;
 
     private final DiscardPanel discardPanel;
     private final GameAnnouncePanel announcePanel;

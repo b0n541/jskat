@@ -11,7 +11,6 @@ import java.util.List;
 
 class GameOverPanel extends JPanel {
 
-    private static final long serialVersionUID = 1L;
 
     private GameResultPanel gameResultPanel;
     private SkatPanel skatPanel;

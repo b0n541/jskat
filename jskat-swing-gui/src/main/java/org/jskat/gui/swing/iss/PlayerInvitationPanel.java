@@ -12,7 +12,6 @@ import java.util.Set;
  */
 public class PlayerInvitationPanel extends JPanel {
 
-    private static final long serialVersionUID = 1L;
 
     private ButtonGroup firstPlayerGroup;
     private ButtonGroup secondPlayerGroup;

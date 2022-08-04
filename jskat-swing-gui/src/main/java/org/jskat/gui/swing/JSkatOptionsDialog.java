@@ -30,7 +30,7 @@ import java.awt.event.KeyEvent;
  */
 public class JSkatOptionsDialog extends JDialog {
 
-    private static final long serialVersionUID = 1L;
+
     private static final Logger log = LoggerFactory.getLogger(JSkatOptionsDialog.class);
 
     private final JSkatResourceBundle strings;
@@ -630,7 +630,6 @@ public class JSkatOptionsDialog extends JDialog {
 
     private class LanguageComboBoxRenderer extends AbstractI18NComboBoxRenderer {
 
-        private static final long serialVersionUID = 1L;
 
         LanguageComboBoxRenderer() {
             super();
@@ -660,7 +659,6 @@ public class JSkatOptionsDialog extends JDialog {
 
     private class CardSetComboBoxRenderer extends AbstractI18NComboBoxRenderer {
 
-        private static final long serialVersionUID = 1L;
 
         CardSetComboBoxRenderer() {
             super();

@@ -14,7 +14,6 @@ import java.awt.*;
  */
 abstract class AbstractHandPanel extends JPanel {
 
-    private static final long serialVersionUID = 1L;
 
     /**
      * Player position

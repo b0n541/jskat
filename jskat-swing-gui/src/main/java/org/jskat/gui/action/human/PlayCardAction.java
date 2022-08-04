@@ -8,7 +8,6 @@ import org.jskat.gui.action.AbstractJSkatAction;
  */
 public class PlayCardAction extends AbstractHumanJSkatAction {
 
-    private static final long serialVersionUID = 1L;
 
     /**
      * @see AbstractJSkatAction#AbstractJSkatAction()

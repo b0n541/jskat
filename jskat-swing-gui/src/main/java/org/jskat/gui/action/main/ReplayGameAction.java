@@ -14,7 +14,6 @@ import java.awt.event.ActionEvent;
  */
 public class ReplayGameAction extends AbstractJSkatAction {
 
-    private static final long serialVersionUID = 1L;
 
     /**
      * @see AbstractJSkatAction#AbstractJSkatAction()

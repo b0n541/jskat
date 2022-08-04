@@ -19,7 +19,6 @@ import java.awt.event.ActionListener;
  */
 public class JSkatTabComponent extends JPanel {
 
-    private static final long serialVersionUID = 1L;
 
     final JTabbedPane pane;
 
@@ -44,7 +43,6 @@ public class JSkatTabComponent extends JPanel {
         // make JLabel read titles from JTabbedPane
         JLabel label = new JLabel() {
 
-            private static final long serialVersionUID = 1L;
 
             @Override
             public String getText() {
@@ -69,7 +67,6 @@ public class JSkatTabComponent extends JPanel {
 
     private class TabButton extends JButton implements ActionListener {
 
-        private static final long serialVersionUID = 1L;
 
         JSkatGraphicRepository bitmaps;
 

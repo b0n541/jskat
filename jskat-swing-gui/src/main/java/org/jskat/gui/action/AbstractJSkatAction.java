@@ -14,7 +14,6 @@ import javax.swing.*;
  */
 public abstract class AbstractJSkatAction extends AbstractAction {
 
-    private static final long serialVersionUID = 1L;
 
     /**
      * JSkat graphics repository

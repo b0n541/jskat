@@ -22,7 +22,7 @@ import java.net.URISyntaxException;
  */
 public class JSkatHelpDialog extends JDialog {
 
-    private static final long serialVersionUID = 1L;
+
     private static final Logger log = LoggerFactory.getLogger(JSkatHelpDialog.class);
 
     protected final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;

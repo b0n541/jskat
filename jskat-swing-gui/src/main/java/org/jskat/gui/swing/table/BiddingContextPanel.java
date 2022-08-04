@@ -12,7 +12,6 @@ import javax.swing.*;
  */
 class BiddingContextPanel extends JPanel {
 
-    private static final long serialVersionUID = 1L;
 
     private BidBubblePanel leftOpponentBid;
     private BidBubblePanel rightOpponentBid;

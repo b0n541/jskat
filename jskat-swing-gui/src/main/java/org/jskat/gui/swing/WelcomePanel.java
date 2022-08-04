@@ -12,7 +12,7 @@ import java.awt.*;
  */
 public class WelcomePanel extends AbstractTabPanel {
 
-    private static final long serialVersionUID = 1L;
+    
     private static final Logger log = LoggerFactory.getLogger(WelcomePanel.class);
 
     /**

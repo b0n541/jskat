@@ -11,7 +11,6 @@ import java.awt.*;
  */
 public class PlayGroundPanel extends JPanel {
 
-    private static final long serialVersionUID = 1L;
 
     private final Image backGroundImage;
 

@@ -17,7 +17,7 @@ import java.awt.event.MouseListener;
  */
 class ClickableCardPanel extends CardPanel {
 
-    private static final long serialVersionUID = 1L;
+
     private static final Logger log = LoggerFactory
             .getLogger(ClickableCardPanel.class);
 

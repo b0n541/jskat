@@ -20,7 +20,6 @@ import java.util.List;
  */
 public class ISSTablePanel extends SkatTablePanel {
 
-    private static final long serialVersionUID = 1L;
 
     ChatPanel chatPanel;
 

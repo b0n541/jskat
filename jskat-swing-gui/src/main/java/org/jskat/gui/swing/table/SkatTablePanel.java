@@ -36,7 +36,7 @@ import java.util.Map.Entry;
  */
 public class SkatTablePanel extends AbstractTabPanel {
 
-    private static final long serialVersionUID = 1L;
+
     private static final Logger log = LoggerFactory.getLogger(SkatTablePanel.class);
     // FIXME (jan 14.11.2010) looks wrong to me, was made static to avoid
     // NullPointerException during ISS table creation

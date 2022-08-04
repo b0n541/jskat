@@ -11,7 +11,6 @@ import java.awt.event.ActionEvent;
  */
 public class ChangeTableSeatsAction extends AbstractJSkatAction {
 
-    private static final long serialVersionUID = 1L;
 
     /**
      * @see AbstractJSkatAction#AbstractJSkatAction()

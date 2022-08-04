@@ -24,7 +24,7 @@ import java.awt.event.ItemListener;
  */
 class GameAnnouncePanel extends JPanel {
 
-    private static final long serialVersionUID = 1L;
+
     private static final Logger log = LoggerFactory.getLogger(GameAnnouncePanel.class);
 
     JSkatResourceBundle strings;

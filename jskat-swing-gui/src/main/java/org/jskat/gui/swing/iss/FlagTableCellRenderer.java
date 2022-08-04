@@ -12,7 +12,6 @@ import java.awt.*;
  */
 public class FlagTableCellRenderer extends DefaultTableCellRenderer {
 
-    private static final long serialVersionUID = 1L;
 
     private final static JSkatGraphicRepository bitmaps = JSkatGraphicRepository.INSTANCE;
 

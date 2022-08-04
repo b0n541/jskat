@@ -9,7 +9,6 @@ import java.awt.*;
 public abstract class AbstractI18NComboBoxRenderer extends JPanel implements
         ListCellRenderer {
 
-    private static final long serialVersionUID = 1L;
 
     JLabel cellItemLabel;
 

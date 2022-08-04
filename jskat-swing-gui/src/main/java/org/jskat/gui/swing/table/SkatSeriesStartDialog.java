@@ -21,7 +21,6 @@ import java.util.List;
  */
 public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
-    private static final long serialVersionUID = 1L;
 
     private static final String CANCEL = "CANCEL";
     private static final String START = "START";
@@ -178,7 +177,6 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
     private class PlayerComboBoxRenderer extends AbstractI18NComboBoxRenderer {
 
-        private static final long serialVersionUID = 1L;
 
         PlayerComboBoxRenderer() {
             super();
