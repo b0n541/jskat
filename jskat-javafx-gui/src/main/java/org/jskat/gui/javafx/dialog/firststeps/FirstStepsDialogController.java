@@ -1,4 +1,3 @@
-
 package org.jskat.gui.javafx.dialog.firststeps;
 
 import javafx.fxml.FXML;
@@ -29,8 +28,8 @@ public class FirstStepsDialogController {
         root.getStylesheets().add(getClass().getResource("/org/jskat/gui/javafx/jskat.css").toExternalForm());
         loadFirstStepsText();
         showTipsOnStartUp.selectedProperty().bindBidirectional(model.isShowTipsOnStartUp);
-        showTipsOnStartUp.selectedProperty().addListener(
-                (observable, oldValue, newValue) -> JSkatOptions.instance().setShowTipsAtStartUp(newValue));
+        showTipsOnStartUp.selectedProperty().addListener((observable, oldValue, newValue) ->
+                JSkatOptions.instance().setShowTipsAtStartUp(newValue));
     }
 
     @FXML
