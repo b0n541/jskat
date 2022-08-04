@@ -9,8 +9,7 @@ import org.slf4j.LoggerFactory;
  */
 public class LayoutFactory {
 
-    private final static Logger LOG = LoggerFactory
-            .getLogger(LayoutFactory.class);
+    private final static Logger LOG = LoggerFactory.getLogger(LayoutFactory.class);
 
     /**
      * Gets layout manager for {@link MigLayout}<br>
@@ -67,8 +66,7 @@ public class LayoutFactory {
             finalLayoutConstraints = injectMacOSLayoutConstraints(layoutConstraints);
         }
 
-        return new MigLayout(finalLayoutConstraints, columnConstraints,
-                rowConstraints);
+        return new MigLayout(finalLayoutConstraints, columnConstraints, rowConstraints);
     }
 
     private static String injectMacOSLayoutConstraints(String layoutConstraints) {
