@@ -6,6 +6,7 @@ import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.iss.IssConnectedEvent;
 import org.jskat.control.event.table.DuplicateTableNameInputEvent;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
+import org.jskat.control.event.table.SkatGameStateChangedEvent;
 import org.jskat.control.event.table.TableRemovedEvent;
 import org.jskat.control.gui.JSkatView;
 import org.jskat.control.gui.action.JSkatAction;
@@ -410,7 +411,7 @@ public class JSkatMaster {
         }
 
         if (type == JSkatViewType.LOCAL_TABLE) {
-            view.setGameState(tableName, data.getLocalSkatTable(tableName).getGameState());
+            JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, data.getLocalSkatTable(tableName).getGameState()));
         }
     }
 

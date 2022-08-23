@@ -2,9 +2,7 @@ package org.jskat.control;
 
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.skatgame.*;
-import org.jskat.control.event.table.ActivePlayerChangedEvent;
-import org.jskat.control.event.table.TableGameMoveEvent;
-import org.jskat.control.event.table.TrickCompletedEvent;
+import org.jskat.control.event.table.*;
 import org.jskat.control.gui.JSkatView;
 import org.jskat.data.*;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
@@ -79,7 +77,7 @@ public class SkatGame {
     public SkatGameResult run() {
         // FIXME jan 11.07.2013: this method is too long, break it down to smaller
         // methods or implement it in another way
-        view.setGameState(tableName, data.getGameState());
+        JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, data.getGameState()));
 
         do {
             log.debug("Game state: " + data.getGameState());
@@ -110,7 +108,6 @@ public class SkatGame {
                     } else if (GameType.RAMSCH.equals(data.getGameType())) {
                         setGameState(GameState.RAMSCH_GRAND_HAND_ANNOUNCING);
                     } else {
-                        view.setDeclarer(tableName, data.getDeclarer());
                         setGameState(GameState.PICKING_UP_SKAT);
                     }
                     break;
@@ -240,7 +237,7 @@ public class SkatGame {
                 view.setGeschoben(tableName, activePlayer);
             } else {
                 log.debug("Player " + currPlayer + " wants to look into skat.");
-                view.setSkat(tableName, data.getSkat());
+                JSkatEventBus.INSTANCE.post(new SkatCardsChangedEvent(tableName, data.getSkat()));
                 discarding();
             }
         }
@@ -334,8 +331,7 @@ public class SkatGame {
 
         bidValue = twoPlayerBidding(Player.MIDDLEHAND, Player.FOREHAND, bidValue);
 
-        log.debug("Bid value after first bidding: "
-                + bidValue);
+        log.debug("Bid value after first bidding: " + bidValue);
 
         Player firstWinner = getBiddingWinner(Player.MIDDLEHAND, Player.FOREHAND);
 
@@ -344,8 +340,7 @@ public class SkatGame {
 
         bidValue = twoPlayerBidding(Player.REARHAND, firstWinner, bidValue);
 
-        log.debug("Bid value after second bidding: "
-                + bidValue);
+        log.debug("Bid value after second bidding: " + bidValue);
 
         // get second winner
         Player secondWinner = getBiddingWinner(Player.REARHAND, firstWinner);
@@ -374,8 +369,7 @@ public class SkatGame {
             setDeclarer(secondWinner);
             setActivePlayer(secondWinner);
 
-            log.debug("Player " + data.getDeclarer()
-                    + " wins the bidding.");
+            log.debug("Player " + data.getDeclarer() + " wins the bidding.");
         } else {
             // FIXME (jansch 02.01.2012) use cloned rule options here (see
             // MantisBT: 0000037)
@@ -494,7 +488,7 @@ public class SkatGame {
 
         JSkatPlayer activePlayerInstance = getActivePlayerInstance();
 
-        view.setSkat(tableName, data.getSkat());
+        JSkatEventBus.INSTANCE.post(new SkatCardsChangedEvent(tableName, data.getSkat()));
 
         log.debug("Player " + activePlayer + " looks into the skat...");
         log.debug("Skat before discarding: " + data.getSkat());
@@ -1005,7 +999,7 @@ public class SkatGame {
 
         if (view != null) {
 
-            view.setGameState(tableName, newState);
+            JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, newState));
 
             if (newState == GameState.GAME_OVER) {
 
@@ -1024,7 +1018,7 @@ public class SkatGame {
     public void setDeclarer(Player declarer) {
 
         data.setDeclarer(declarer);
-        view.setDeclarer(tableName, declarer);
+        JSkatEventBus.INSTANCE.post(new DeclarerChangedEvent(tableName, declarer));
     }
 
     /**

@@ -1,7 +1,6 @@
 package org.jskat.gui.swing.iss;
 
 import org.jskat.control.gui.action.JSkatAction;
-import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.PlayerStatus;
 import org.jskat.data.iss.TablePanelStatus;
@@ -53,16 +52,11 @@ public class ISSTablePanel extends SkatTablePanel {
     @Override
     protected JPanel getPlayGroundPanel() {
 
-        final JPanel panel = new JPanel(LayoutFactory.getMigLayout(
-                "fill,insets 0", "[grow][shrink]",
-                "fill"));
+        final JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill,insets 0", "[grow][shrink]", "fill"));
         panel.add(super.getPlayGroundPanel(), "width 80%, grow");
 
         // replace game start context panel
-        addContextPanel(
-                ContextPanelType.START,
-                new StartContextPanel(this.getActionMap(), getGameOverActions()));
-        setGameState(GameState.GAME_START);
+        addContextPanel(ContextPanelType.START, new StartContextPanel(this.getActionMap(), getGameOverActions()));
 
         return panel;
     }

@@ -18,8 +18,7 @@ import java.util.Map;
  */
 public class JSkatEventBus {
 
-    private final static Logger LOG = LoggerFactory
-            .getLogger(JSkatEventBus.class);
+    private final static Logger LOG = LoggerFactory.getLogger(JSkatEventBus.class);
 
     private final EventBus mainEventBus;
 
@@ -68,24 +67,44 @@ public class JSkatEventBus {
     }
 
     @Subscribe
+    public void dispatchTableEventOn(DeclarerChangedEvent event) {
+        LOG.info("Forwarding game event " + event + " to table " + event.tableName);
+        JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(event);
+    }
+
+    @Subscribe
     public void dispatchTableEventOn(TableGameMoveEvent event) {
-        LOG.info("Forwarding game event " + event.gameEvent + " to table "
-                + event.tableName);
-        JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName)
-                .post(event.gameEvent);
+        LOG.info("Forwarding game event " + event.gameEvent + " to table " + event.tableName);
+        JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(event.gameEvent);
     }
 
     @Subscribe
     public void dispatchTableEventOn(SkatSeriesStartedEvent event) {
-        LOG.info("Forwarding table event " + event + " to table "
-                + event.tableName);
+        LOG.info("Forwarding table event " + event + " to table " + event.tableName);
+        JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(event);
+    }
+
+    @Subscribe
+    public void dispatchTableEventOn(PlayerNamesChangedEvent event) {
+        LOG.info("Forwarding table event " + event + " to table " + event.tableName);
+        JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(event);
+    }
+
+    @Subscribe
+    public void dispatchTableEventOn(SkatGameStateChangedEvent event) {
+        LOG.info("Forwarding table event " + event + " to table " + event.tableName);
+        JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(event);
+    }
+
+    @Subscribe
+    public void dispatchTableEventOn(SkatCardsChangedEvent event) {
+        LOG.info("Forwarding table event " + event + " to table " + event.tableName);
         JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(event);
     }
 
     @Subscribe
     public void dispatchTableCommandOn(ShowCardsCommand command) {
-        LOG.info("Forwarding command " + command + " to table "
-                + command.tableName);
+        LOG.info("Forwarding command " + command + " to table " + command.tableName);
         JSkatEventBus.TABLE_EVENT_BUSSES.get(command.tableName).post(command);
     }
 }

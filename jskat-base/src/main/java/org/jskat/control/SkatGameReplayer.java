@@ -2,6 +2,7 @@ package org.jskat.control;
 
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.skatgame.*;
+import org.jskat.control.event.table.SkatGameStateChangedEvent;
 import org.jskat.control.event.table.TableGameMoveEvent;
 import org.jskat.control.event.table.TrickCompletedEvent;
 import org.jskat.control.gui.JSkatView;
@@ -71,15 +72,15 @@ public class SkatGameReplayer {
 
     private void setGameState(SkatGameEvent event) {
         if (event instanceof GameStartEvent) {
-            view.setGameState(tableName, GameState.BIDDING);
+            JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.BIDDING));
         } else if (event instanceof BidEvent) {
-            view.setGameState(tableName, GameState.BIDDING);
+            JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.BIDDING));
         } else if (event instanceof GameAnnouncementEvent) {
-            view.setGameState(tableName, GameState.DECLARING);
+            JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.DECLARING));
         } else if (event instanceof TrickCardPlayedEvent) {
-            view.setGameState(tableName, GameState.TRICK_PLAYING);
+            JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.TRICK_PLAYING));
         } else if (event instanceof GameFinishEvent) {
-            view.setGameState(tableName, GameState.GAME_OVER);
+            JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.GAME_OVER));
         }
     }
 

@@ -30,8 +30,7 @@ public class VersionChecker {
             VersionHandler handler = new VersionHandler();
             XMLReader xmlReader = XMLReaderFactory.createXMLReader();
             xmlReader.setContentHandler(handler);
-            xmlReader.parse(new InputSource(new URL(
-                    "http://jskat.org/pad/jskat.xml").openStream()));
+            xmlReader.parse(new InputSource(new URL("http://jskat.org/pad/jskat.xml").openStream()));
             result = handler.versionString;
         } catch (SAXException e) {
             // TODO Auto-generated catch block

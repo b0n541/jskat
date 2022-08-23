@@ -5,6 +5,7 @@ import org.jskat.control.command.skatseries.ReplayGameCommand;
 import org.jskat.control.command.table.NextReplayMoveCommand;
 import org.jskat.control.command.table.ReadyForNextGameCommand;
 import org.jskat.control.event.skatgame.GameStartEvent;
+import org.jskat.control.event.table.PlayerNamesChangedEvent;
 import org.jskat.control.event.table.SkatGameReplayFinishedEvent;
 import org.jskat.control.event.table.SkatGameReplayStartedEvent;
 import org.jskat.control.gui.JSkatView;
@@ -94,13 +95,13 @@ public class SkatSeries {
     public void setPlayers(final List<JSkatPlayer> newPlayers) {
 
         if (newPlayers.size() != 3) {
-            throw new IllegalArgumentException(
-                    "Only three players are allowed at the moment.");
+            throw new IllegalArgumentException("Only three players are allowed at the moment.");
         }
 
-        view.setPlayerNames(data.getTableName(), newPlayers.get(0).getPlayerName(), newPlayers.get(0).isAIPlayer(),
-                newPlayers.get(1).getPlayerName(), newPlayers.get(1).isAIPlayer(), newPlayers.get(2).getPlayerName(),
-                newPlayers.get(2).isAIPlayer());
+        JSkatEventBus.INSTANCE.post(new PlayerNamesChangedEvent(data.getTableName(),
+                newPlayers.get(0).getPlayerName(), newPlayers.get(0).isAIPlayer(),
+                newPlayers.get(1).getPlayerName(), newPlayers.get(1).isAIPlayer(),
+                newPlayers.get(2).getPlayerName(), newPlayers.get(2).isAIPlayer()));
 
         // memorize third player to find it again after shuffling the players
         final JSkatPlayer thirdPlayer = newPlayers.get(2);

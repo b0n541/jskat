@@ -9,8 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Holds widgets for deciding of looking into skat or playing hand game
@@ -58,20 +56,17 @@ class DiscardPanel extends JPanel {
 
         pickUpSkatAction = getActionMap().get(JSkatAction.PICK_UP_SKAT);
         pickUpSkatButton = new JButton(pickUpSkatAction);
-        pickUpSkatButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
+        pickUpSkatButton.addActionListener(e -> {
 
-                log.debug("user picked up skat");
-                userPickedUpSkat = true;
-                if (announcePanel != null) {
-                    announcePanel.setUserPickedUpSkat(true);
-                }
-                DiscardPanel.this.showPanel(CARD_PANEL);
-
-                // fire event again
-                pickUpSkatButton.dispatchEvent(e);
+            log.debug("user picked up skat");
+            userPickedUpSkat = true;
+            if (announcePanel != null) {
+                announcePanel.setUserPickedUpSkat(true);
             }
+            DiscardPanel.this.showPanel(CARD_PANEL);
+
+            // fire event again
+            pickUpSkatButton.dispatchEvent(e);
         });
 
         JPanel lookIntoSkatPanel = new JPanel(
@@ -112,7 +107,7 @@ class DiscardPanel extends JPanel {
     }
 
     protected void showPanel(final String panelType) {
-        ((CardLayout) getLayout()).show(DiscardPanel.this, panelType);
+        ((CardLayout) getLayout()).show(this, panelType);
     }
 
     public CardList getDiscardedCards() {
@@ -125,10 +120,6 @@ class DiscardPanel extends JPanel {
 
     public boolean isHandFull() {
         return cardPanel.getCardCount() == maxCardCount;
-    }
-
-    boolean isUserPickedUpSkat() {
-        return userPickedUpSkat;
     }
 
     void setAnnouncePanel(final GameAnnouncePanel announcePanel) {

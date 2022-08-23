@@ -3,7 +3,6 @@ package org.jskat.control.gui;
 import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.SkatGameData;
-import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.GameStartInformation;
@@ -35,16 +34,6 @@ public class NullView implements JSkatView {
      */
     @Override
     public void startGame(@SuppressWarnings("unused") final String tableName) {
-        // empty method by intent
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setGameState(
-            @SuppressWarnings("unused") final String tableName,
-            @SuppressWarnings("unused") final GameState state) {
         // empty method by intent
     }
 
@@ -207,15 +196,6 @@ public class NullView implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public void setSkat(@SuppressWarnings("unused") final String tableName,
-                        @SuppressWarnings("unused") final CardList skat) {
-        // empty method by intent
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public boolean showISSTableInvitation(
             @SuppressWarnings("unused") final String invitor,
             @SuppressWarnings("unused") final String tableName) {
@@ -229,29 +209,6 @@ public class NullView implements JSkatView {
     @Override
     public void showCardNotAllowedMessage(
             @SuppressWarnings("unused") final Card card) {
-        // empty method by intent
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setPlayerNames(@SuppressWarnings("unused") final String tableName,
-                               @SuppressWarnings("unused") final String upperLeftPlayerName,
-                               @SuppressWarnings("unused") final boolean isUpperLeftPlayerAIPlayer,
-                               @SuppressWarnings("unused") final String upperRightPlayerName,
-                               @SuppressWarnings("unused") final boolean isUpperRightPlayerAIPlayer,
-                               @SuppressWarnings("unused") final String lowerPlayerName,
-                               @SuppressWarnings("unused") final boolean isLowerPlayerAIPlayer) {
-        // empty method by intent
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setDeclarer(@SuppressWarnings("unused") final String tableName,
-                            @SuppressWarnings("unused") final Player declarer) {
         // empty method by intent
     }
 

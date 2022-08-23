@@ -518,13 +518,14 @@ public class SkatTablePanel extends AbstractTabPanel {
      *
      * @param state Game state
      */
-    public void setGameState(GameState state) {
+    @Subscribe
+    public void setGameStateOn(SkatGameStateChangedEvent event) {
 
-        log.debug(".setGameState(" + state + ")");
+        log.info("New game state: {}", event.gameState);
 
-        gameInfoPanel.setGameState(state);
+        gameInfoPanel.setGameState(event.gameState);
 
-        switch (state) {
+        switch (event.gameState) {
             case GAME_START:
                 setContextPanel(ContextPanelType.START);
                 resetGameData();
@@ -537,21 +538,21 @@ public class SkatTablePanel extends AbstractTabPanel {
                 break;
             case RAMSCH_GRAND_HAND_ANNOUNCING:
                 setContextPanel(ContextPanelType.SCHIEBERAMSCH);
-                userPanel.setGameState(state);
+                userPanel.setGameState(event.gameState);
                 break;
             case SCHIEBERAMSCH:
                 setContextPanel(ContextPanelType.SCHIEBERAMSCH);
-                userPanel.setGameState(state);
+                userPanel.setGameState(event.gameState);
                 break;
             case PICKING_UP_SKAT:
                 if (userPanel.getPosition().equals(declarer)) {
                     setContextPanel(ContextPanelType.DECLARING);
-                    userPanel.setGameState(state);
+                    userPanel.setGameState(event.gameState);
                 }
                 break;
             case DISCARDING:
                 if (userPanel.getPosition().equals(declarer)) {
-                    userPanel.setGameState(state);
+                    userPanel.setGameState(event.gameState);
                 }
                 break;
             case DECLARING:
@@ -564,7 +565,7 @@ public class SkatTablePanel extends AbstractTabPanel {
                 break;
             case TRICK_PLAYING:
                 setContextPanel(ContextPanelType.TRICK_PLAYING);
-                userPanel.setGameState(state);
+                userPanel.setGameState(event.gameState);
                 break;
             case CALCULATING_GAME_VALUE:
             case PRELIMINARY_GAME_END:
@@ -595,8 +596,7 @@ public class SkatTablePanel extends AbstractTabPanel {
      */
     void setContextPanel(ContextPanelType panelType) {
 
-        ((CardLayout) gameContextPanel.getLayout()).show(
-                gameContextPanel, panelType.toString());
+        ((CardLayout) gameContextPanel.getLayout()).show(gameContextPanel, panelType.toString());
         gameContextPanel.validate();
     }
 
@@ -698,17 +698,13 @@ public class SkatTablePanel extends AbstractTabPanel {
         clearTable();
     }
 
-    /**
-     * Sets the skat
-     *
-     * @param skat Skat
-     */
-    public void setSkat(CardList skat) {
+    @Subscribe
+    public void setSkatOn(SkatCardsChangedEvent event) {
 
         if (ramsch) {
-            schieberamschPanel.setSkat(skat);
+            schieberamschPanel.setSkat(event.cards);
         } else {
-            declaringPanel.setSkat(skat);
+            declaringPanel.setSkat(event.cards);
         }
     }
 
@@ -991,29 +987,15 @@ public class SkatTablePanel extends AbstractTabPanel {
         gameInfoPanel.setTrickNumber(trickNumber);
     }
 
-    /**
-     * Sets the player names
-     *
-     * @param upperLeftPlayerName        Upper left player name
-     * @param isUpperLeftPlayerAIPlayer  TRUE if the upper left player is an AI player
-     * @param upperRightPlayerName       Upper right player name
-     * @param isUpperRightPlayerAIPlayer TRUE if the upper right player is an AI player
-     * @param lowerPlayerName            Lower player name
-     * @param isLowerPlayerAIPlayer      TRUE if the lower player is an AI player
-     */
-    public void setPlayerNames(String upperLeftPlayerName, boolean isUpperLeftPlayerAIPlayer,
-                               String upperRightPlayerName, boolean isUpperRightPlayerAIPlayer, String lowerPlayerName,
-                               boolean isLowerPlayerAIPlayer) {
-        // FIXME (jan 26.01.2011) possible code duplication with
-        // setPlayerInformation()
-        leftOpponentPanel.setPlayerName(upperLeftPlayerName);
-        leftOpponentPanel.setAIPlayer(isUpperLeftPlayerAIPlayer);
-        rightOpponentPanel.setPlayerName(upperRightPlayerName);
-        rightOpponentPanel.setAIPlayer(isUpperRightPlayerAIPlayer);
-        userPanel.setPlayerName(lowerPlayerName);
-        userPanel.setAIPlayer(isLowerPlayerAIPlayer);
-        skatListTableModel.setPlayerNames(upperLeftPlayerName,
-                upperRightPlayerName, lowerPlayerName);
+    @Subscribe
+    public void setPlayerNamesOn(PlayerNamesChangedEvent event) {
+        leftOpponentPanel.setPlayerName(event.upperLeftPlayerName);
+        leftOpponentPanel.setAIPlayer(event.isUpperLeftPlayerAIPlayer);
+        rightOpponentPanel.setPlayerName(event.upperRightPlayerName);
+        rightOpponentPanel.setAIPlayer(event.isUpperRightPlayerAIPlayer);
+        userPanel.setPlayerName(event.lowerPlayerName);
+        userPanel.setAIPlayer(event.isLowerPlayerAIPlayer);
+        skatListTableModel.setPlayerNames(event.upperLeftPlayerName, event.upperRightPlayerName, event.lowerPlayerName);
     }
 
     /**
@@ -1025,13 +1007,10 @@ public class SkatTablePanel extends AbstractTabPanel {
         return declarer;
     }
 
-    /**
-     * Sets the declarer player for the table
-     *
-     * @param declarer Declarer player
-     */
-    public void setDeclarer(Player declarer) {
-        this.declarer = declarer;
+    @Subscribe
+    public void setDeclarerOn(DeclarerChangedEvent event) {
+        log.info("New declarer: {}", event.declarer);
+        this.declarer = event.declarer;
     }
 
     /**

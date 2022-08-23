@@ -7,8 +7,6 @@ import org.jskat.player.JSkatPlayerResolver;
 import org.jskat.util.JSkatResourceBundle;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -101,13 +99,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
         this.numberOfRounds = new JSpinner(new SpinnerNumberModel(12, 1, 48, 1));
         root.add(this.numberOfRounds);
         this.unlimited = new JCheckBox(this.strings.getString("unlimited"));
-        this.unlimited.addChangeListener(new ChangeListener() {
-
-            @Override
-            public void stateChanged(final ChangeEvent e) {
-                SkatSeriesStartDialog.this.numberOfRounds.setEnabled(!SkatSeriesStartDialog.this.unlimited.isSelected());
-            }
-        });
+        this.unlimited.addChangeListener(e -> SkatSeriesStartDialog.this.numberOfRounds.setEnabled(!SkatSeriesStartDialog.this.unlimited.isSelected()));
         root.add(this.unlimited, "wrap");
         root.add(new JLabel(this.strings.getString("ramsch")));
         this.onlyPlayRamsch = new JCheckBox(this.strings.getString("only_play_ramsch"));

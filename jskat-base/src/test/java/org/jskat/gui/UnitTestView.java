@@ -7,7 +7,6 @@ import org.jskat.control.gui.JSkatView;
 import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.SkatGameData;
-import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.GameStartInformation;
@@ -86,12 +85,6 @@ public class UnitTestView implements JSkatView {
 
     @Override
     public void showCardNotAllowedMessage(final Card card) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void setGameState(final String tableName, final GameState state) {
         // TODO Auto-generated method stub
 
     }
@@ -176,30 +169,10 @@ public class UnitTestView implements JSkatView {
     }
 
     @Override
-    public void setSkat(final String tableName, final CardList skat) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public boolean showISSTableInvitation(final String invitor,
                                           final String tableName) {
         // TODO Auto-generated method stub
         return false;
-    }
-
-    @Override
-    public void setPlayerNames(String tableName, String upperLeftPlayerName, boolean isUpperLeftPlayerAIPlayer,
-                               String upperRightPlayerName, boolean isUpperRightPlayerAIPlayer, String lowerPlayerName,
-                               boolean isLowerPlayerAIPlayer) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void setDeclarer(final String tableName, final Player declarer) {
-        // TODO Auto-generated method stub
-
     }
 
     @Override

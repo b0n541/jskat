@@ -9,6 +9,8 @@ import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.iss.IssDisconnectedEvent;
 import org.jskat.control.event.skatgame.GameFinishEvent;
 import org.jskat.control.event.table.ActivePlayerChangedEvent;
+import org.jskat.control.event.table.DeclarerChangedEvent;
+import org.jskat.control.event.table.SkatGameStateChangedEvent;
 import org.jskat.control.event.table.TableGameMoveEvent;
 import org.jskat.control.gui.JSkatView;
 import org.jskat.data.*;
@@ -392,74 +394,52 @@ public class IssController {
 
         // TODO (jan 19.11.2010) extract this into separate methods
         if (MoveType.DEAL.equals(moveInformation.getType())) {
-            JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName,
-                    Player.MIDDLEHAND));
+            JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName, Player.MIDDLEHAND));
         } else if (MoveType.BID.equals(moveInformation.getType())
                 || MoveType.HOLD_BID.equals(moveInformation.getType())
                 || MoveType.PASS.equals(moveInformation.getType())) {
 
             if (MoveType.BID.equals(moveInformation.getType())) {
-                if (MovePlayer.MIDDLEHAND.equals(moveInformation
-                        .getMovePlayer())) {
-                    JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(
-                            tableName, Player.FOREHAND));
-                } else if (MovePlayer.REARHAND.equals(moveInformation
-                        .getMovePlayer())) {
+                if (MovePlayer.MIDDLEHAND.equals(moveInformation.getMovePlayer())) {
+                    JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName, Player.FOREHAND));
+                } else if (MovePlayer.REARHAND.equals(moveInformation.getMovePlayer())) {
                     if (!currGame.isPlayerPass(Player.FOREHAND)) {
-                        JSkatEventBus.INSTANCE
-                                .post(new ActivePlayerChangedEvent(tableName,
-                                        Player.FOREHAND));
+                        JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName, Player.FOREHAND));
                     } else {
-                        JSkatEventBus.INSTANCE
-                                .post(new ActivePlayerChangedEvent(tableName,
-                                        Player.MIDDLEHAND));
+                        JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName, Player.MIDDLEHAND));
                     }
                 }
             } else if (MoveType.HOLD_BID.equals(moveInformation.getType())) {
                 if (MovePlayer.FOREHAND.equals(moveInformation.getMovePlayer())) {
                     if (!currGame.isPlayerPass(Player.MIDDLEHAND)) {
-                        JSkatEventBus.INSTANCE
-                                .post(new ActivePlayerChangedEvent(tableName,
-                                        Player.MIDDLEHAND));
+                        JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName, Player.MIDDLEHAND));
                     } else {
-                        JSkatEventBus.INSTANCE
-                                .post(new ActivePlayerChangedEvent(tableName,
-                                        Player.REARHAND));
+                        JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName, Player.REARHAND));
                     }
-                } else if (MovePlayer.MIDDLEHAND.equals(moveInformation
-                        .getMovePlayer())) {
-                    JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(
-                            tableName, Player.REARHAND));
+                } else if (MovePlayer.MIDDLEHAND.equals(moveInformation.getMovePlayer())) {
+                    JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName, Player.REARHAND));
                 }
             } else if (MoveType.PASS.equals(moveInformation.getType())) {
                 if (MovePlayer.FOREHAND.equals(moveInformation.getMovePlayer())
-                        || MovePlayer.MIDDLEHAND.equals(moveInformation
-                        .getMovePlayer())) {
-                    JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(
-                            tableName, Player.REARHAND));
-                } else if (MovePlayer.REARHAND.equals(moveInformation
-                        .getMovePlayer())) {
+                        || MovePlayer.MIDDLEHAND.equals(moveInformation.getMovePlayer())) {
+                    JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName, Player.REARHAND));
+                } else if (MovePlayer.REARHAND.equals(moveInformation.getMovePlayer())) {
                     if (!currGame.isPlayerPass(Player.FOREHAND)) {
-                        JSkatEventBus.INSTANCE
-                                .post(new ActivePlayerChangedEvent(tableName,
-                                        Player.FOREHAND));
+                        JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName, Player.FOREHAND));
                     } else {
-                        JSkatEventBus.INSTANCE
-                                .post(new ActivePlayerChangedEvent(tableName,
-                                        Player.MIDDLEHAND));
+                        JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName, Player.MIDDLEHAND));
                     }
                 }
             }
 
             if (isBiddingFinished(currGame)) {
-                view.setDeclarer(tableName, currGame.getDeclarer());
-                view.setGameState(tableName, GameState.PICKING_UP_SKAT);
+                JSkatEventBus.INSTANCE.post(new DeclarerChangedEvent(tableName, currGame.getDeclarer()));
+                JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.PICKING_UP_SKAT));
             }
 
         } else if (MoveType.GAME_ANNOUNCEMENT.equals(moveInformation.getType())) {
 
-            JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName,
-                    Player.FOREHAND));
+            JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName, Player.FOREHAND));
 
         } else if (MoveType.CARD_PLAY.equals(moveInformation.getType())) {
 
@@ -468,25 +448,20 @@ public class IssController {
 
             if (trick.getThirdCard() != null) {
 
-                Player trickWinner = SkatRuleFactory.getSkatRules(
-                        currGame.getGameType()).calculateTrickWinner(
-                        currGame.getGameType(), trick);
+                Player trickWinner = SkatRuleFactory.getSkatRules(currGame.getGameType())
+                        .calculateTrickWinner(currGame.getGameType(), trick);
                 trick.setTrickWinner(trickWinner);
-                currGame.addTrick(new Trick(currGame.getTricks().size(), trick
-                        .getTrickWinner()));
+                currGame.addTrick(new Trick(currGame.getTricks().size(), trick.getTrickWinner()));
 
-                JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(
-                        tableName, currGame.getCurrentTrick().getForeHand()));
+                JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName, currGame.getCurrentTrick().getForeHand()));
 
             } else if (trick.getSecondCard() != null) {
 
-                JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(
-                        tableName, trick.getForeHand().getRightNeighbor()));
+                JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName, trick.getForeHand().getRightNeighbor()));
 
             } else if (trick.getFirstCard() != null) {
 
-                JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(
-                        tableName, trick.getForeHand().getLeftNeighbor()));
+                JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName, trick.getForeHand().getLeftNeighbor()));
             }
         }
     }
@@ -560,7 +535,7 @@ public class IssController {
      */
     public void endGame(String tableName, SkatGameData newGameData) {
 
-        view.setGameState(tableName, GameState.GAME_OVER);
+        JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.GAME_OVER));
         // FIXME: merge event and command
         eventBus.post(new TableGameMoveEvent(tableName, new GameFinishEvent(newGameData.getGameSummary())));
         eventBus.post(new ShowCardsCommand(tableName, newGameData.getCardsAfterDiscard(), newGameData.getSkat()));
