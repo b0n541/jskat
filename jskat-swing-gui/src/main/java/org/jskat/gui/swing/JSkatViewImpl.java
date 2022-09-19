@@ -203,14 +203,12 @@ public class JSkatViewImpl implements JSkatView {
         tabs.setAutoscrolls(true);
         tabs.addChangeListener(e -> {
 
-            if (e.getSource() instanceof JTabbedPane) {
+            if (e.getSource() instanceof JTabbedPane changedTabs) {
 
-                JTabbedPane changedTabs = (JTabbedPane) e.getSource();
                 Component tab = changedTabs.getSelectedComponent();
 
-                if (tab instanceof AbstractTabPanel) {
+                if (tab instanceof AbstractTabPanel panel) {
 
-                    AbstractTabPanel panel = (AbstractTabPanel) tab;
                     String tableName = panel.getName();
                     LOG.debug("showing table panel of table " + tableName);
                     panel.setFocus();
@@ -518,8 +516,7 @@ public class JSkatViewImpl implements JSkatView {
         issLobby.appendChatMessage(message);
 
         for (SkatTablePanel table : tables.values()) {
-            if (table instanceof ISSTablePanel) {
-                ISSTablePanel issTable = (ISSTablePanel) table;
+            if (table instanceof ISSTablePanel issTable) {
                 String chatname = message.getChatName();
                 if ("Lobby".equals(chatname) || issTable.getName().equals(chatname)) {
                     issTable.appendChatMessage(message);
@@ -871,22 +868,6 @@ public class JSkatViewImpl implements JSkatView {
     public void setDiscardedSkat(String tableName, Player player, CardList skatBefore,
                                  CardList discardedSkat) {
         tables.get(tableName).setDiscardedSkat(player, skatBefore, discardedSkat);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void takeCardFromSkat(String tableName, Card card) {
-        tables.get(tableName).takeCardFromSkat(card);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void putCardIntoSkat(String tableName, Card card) {
-        tables.get(tableName).putCardIntoSkat(card);
     }
 
     /**

@@ -18,8 +18,7 @@ import java.awt.event.MouseListener;
 class ClickableCardPanel extends CardPanel {
 
 
-    private static final Logger log = LoggerFactory
-            .getLogger(ClickableCardPanel.class);
+    private static final Logger log = LoggerFactory.getLogger(ClickableCardPanel.class);
 
     private JPanel parent = null;
 
@@ -30,8 +29,7 @@ class ClickableCardPanel extends CardPanel {
      * @param scaleFactor  Scale factor for cards
      * @param showBackside TRUE if the Card should hide its face
      */
-    ClickableCardPanel(final JPanel parent, final Double scaleFactor,
-                       final Boolean showBackside) {
+    ClickableCardPanel(final JPanel parent, final Double scaleFactor, final Boolean showBackside) {
 
         super(scaleFactor, showBackside);
 
@@ -81,8 +79,7 @@ class ClickableCardPanel extends CardPanel {
         final int xPosition = event.getX();
         final int yPosition = event.getY();
 
-        if (xPosition > -1 && xPosition < getWidth() && yPosition > -1
-                && yPosition < getHeight()) {
+        if (xPosition > -1 && xPosition < getWidth() && yPosition > -1 && yPosition < getHeight()) {
 
             // get card
             final int cardWidth = bitmaps.getCardImage(Card.CJ).getWidth(this);
@@ -121,8 +118,7 @@ class ClickableCardPanel extends CardPanel {
 
             final GameState state = ((JSkatUserPanel) parent).getGameState();
 
-            if (state == GameState.DISCARDING
-                    || state == GameState.SCHIEBERAMSCH) {
+            if (state == GameState.DISCARDING || state == GameState.SCHIEBERAMSCH) {
                 // discarding phase
                 action = getActionMap().get(JSkatAction.PUT_CARD_INTO_SKAT);
             } else if (state == GameState.TRICK_PLAYING) {
@@ -153,17 +149,16 @@ class ClickableCardPanel extends CardPanel {
             }
         } else if (cards.size() > 1) {
 
-            final int distanceBetweenCards = (getWidth() - cardWidth)
-                    / (cards.size() - 1);
+            final int distanceBetweenCards = (getWidth() - cardWidth) / (cards.size() - 1);
 
             if (cardWidth > distanceBetweenCards) {
-                log.debug("cards with overlaping");
+                log.debug("cards with overlapping");
                 cardIndex = 0;
                 while (cardIndex * distanceBetweenCards < activeCardMinXPosition) {
                     cardIndex++;
                 }
             } else {
-                log.debug("cards without overlaping");
+                log.debug("cards without overlapping");
                 cardIndex = (int) (clickPositionX * (1 / scaleFactor) / cardWidth);
             }
         }

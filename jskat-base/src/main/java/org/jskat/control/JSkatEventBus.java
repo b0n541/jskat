@@ -103,6 +103,18 @@ public class JSkatEventBus {
     }
 
     @Subscribe
+    public void dispatchTableEventOn(SkatCardTakenEvent event) {
+        LOG.info("Forwarding table event " + event + " to table " + event.tableName);
+        JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(event);
+    }
+
+    @Subscribe
+    public void dispatchTableEventOn(SkatCardPutEvent event) {
+        LOG.info("Forwarding table event " + event + " to table " + event.tableName);
+        JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(event);
+    }
+
+    @Subscribe
     public void dispatchTableCommandOn(ShowCardsCommand command) {
         LOG.info("Forwarding command " + command + " to table " + command.tableName);
         JSkatEventBus.TABLE_EVENT_BUSSES.get(command.tableName).post(command);

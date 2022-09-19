@@ -23,8 +23,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -267,12 +265,9 @@ public class SkatTablePanel extends AbstractTabPanel {
                 actions.get(JSkatAction.CALL_RE));
         callReButton.setIcon(new ImageIcon(bitmaps.getIconImage(Icon.OK,
                 IconSize.BIG)));
-        callReButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                e.setSource(Boolean.TRUE);
-                callReButton.dispatchEvent(e);
-            }
+        callReButton.addActionListener(e -> {
+            e.setSource(Boolean.TRUE);
+            callReButton.dispatchEvent(e);
         });
 
         JButton noReAfterContraButton = new JButton(
@@ -280,12 +275,9 @@ public class SkatTablePanel extends AbstractTabPanel {
         noReAfterContraButton.setText(strings.getString("no"));
         noReAfterContraButton.setIcon(new ImageIcon(bitmaps.getIconImage(
                 Icon.STOP, IconSize.BIG)));
-        noReAfterContraButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                e.setSource(Boolean.FALSE);
-                noReAfterContraButton.dispatchEvent(e);
-            }
+        noReAfterContraButton.addActionListener(e -> {
+            e.setSource(Boolean.FALSE);
+            noReAfterContraButton.dispatchEvent(e);
         });
 
         JPanel grandHandPanel = new JPanel();
@@ -516,7 +508,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets the game state
      *
-     * @param state Game state
+     * @param event
      */
     @Subscribe
     public void setGameStateOn(SkatGameStateChangedEvent event) {
@@ -537,9 +529,6 @@ public class SkatTablePanel extends AbstractTabPanel {
                 setContextPanel(ContextPanelType.BIDDING);
                 break;
             case RAMSCH_GRAND_HAND_ANNOUNCING:
-                setContextPanel(ContextPanelType.SCHIEBERAMSCH);
-                userPanel.setGameState(event.gameState);
-                break;
             case SCHIEBERAMSCH:
                 setContextPanel(ContextPanelType.SCHIEBERAMSCH);
                 userPanel.setGameState(event.gameState);
@@ -631,11 +620,6 @@ public class SkatTablePanel extends AbstractTabPanel {
         scoreListScrollPane.getViewport().setViewPosition(loc);
     }
 
-    Player getHumanPosition() {
-
-        return userPanel.getPosition();
-    }
-
     /**
      * Clears the skat table
      */
@@ -711,10 +695,11 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Takes a card from skat to user panel
      *
-     * @param card Card
+     * @param event
      */
-    public void takeCardFromSkat(Card card) {
-        takeCardFromSkat(userPanel, card);
+    @Subscribe
+    public void takeCardFromSkatOn(SkatCardTakenEvent event) {
+        takeCardFromSkat(userPanel, event.card);
     }
 
     /**
@@ -744,10 +729,11 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Puts a card from the user panel to the skat
      *
-     * @param card Card
+     * @param event
      */
-    public void putCardIntoSkat(Card card) {
-        putCardIntoSkat(userPanel, card);
+    @Subscribe
+    public void putCardIntoSkatOn(SkatCardPutEvent event) {
+        putCardIntoSkat(userPanel, event.card);
     }
 
     /**

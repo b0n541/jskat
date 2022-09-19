@@ -4,10 +4,7 @@ import com.google.common.eventbus.Subscribe;
 import org.jskat.control.command.table.CreateTableCommand;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.iss.IssConnectedEvent;
-import org.jskat.control.event.table.DuplicateTableNameInputEvent;
-import org.jskat.control.event.table.EmptyTableNameInputEvent;
-import org.jskat.control.event.table.SkatGameStateChangedEvent;
-import org.jskat.control.event.table.TableRemovedEvent;
+import org.jskat.control.event.table.*;
 import org.jskat.control.gui.JSkatView;
 import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.control.gui.action.JSkatActionEvent;
@@ -302,9 +299,8 @@ public class JSkatMaster {
             // FIXME (jan 02.11.2010) decision is not sent to ISS
         } else if (JSkatAction.DISCARD_CARDS.toString().equals(command)) {
 
-            if (source instanceof CardList) {
+            if (source instanceof final CardList discardSkat) {
                 // player discarded cards
-                final CardList discardSkat = (CardList) source;
                 log.debug(discardSkat.toString());
 
                 // FIXME (jan 02.11.2010) Discarded cards are sent with the
@@ -317,18 +313,16 @@ public class JSkatMaster {
             }
         } else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
 
-            if (source instanceof GameAnnouncement) {
+            if (source instanceof final GameAnnouncement gameAnnouncement) {
                 // player did game announcement
                 // FIXME (jan 02.11.2010) Discarded cards are sent with the
                 // game announcement to ISS
-                final GameAnnouncement gameAnnouncement = (GameAnnouncement) source;
                 issControl.sendGameAnnouncementMove(tableName, gameAnnouncement);
             } else {
                 log.warn("No game announcement found for " + command);
             }
-        } else if (JSkatAction.PLAY_CARD.toString().equals(command) && source instanceof Card) {
+        } else if (JSkatAction.PLAY_CARD.toString().equals(command) && source instanceof final Card nextCard) {
 
-            final Card nextCard = (Card) source;
             issControl.sendCardMove(tableName, nextCard);
         } else {
 
@@ -346,14 +340,14 @@ public class JSkatMaster {
      *
      * @param e Event
      */
-    public void takeCardFromSkat(final JSkatActionEvent e) {
+    public void takeCardFromSkat(final JSkatActionEvent event) {
 
-        if (!(e.getSource() instanceof Card)) {
+        if (!(event.getSource() instanceof Card)) {
 
             throw new IllegalArgumentException();
         }
 
-        view.takeCardFromSkat(data.getActiveTable(), (Card) e.getSource());
+        JSkatEventBus.INSTANCE.post(new SkatCardTakenEvent(data.getActiveTable(), (Card) event.getSource()));
     }
 
     /**
@@ -368,7 +362,7 @@ public class JSkatMaster {
             throw new IllegalArgumentException();
         }
 
-        view.putCardIntoSkat(data.getActiveTable(), (Card) event.getSource());
+        JSkatEventBus.INSTANCE.post(new SkatCardPutEvent(data.getActiveTable(), (Card) event.getSource()));
     }
 
     /**

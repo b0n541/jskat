@@ -96,22 +96,6 @@ public interface JSkatView {
     void setBidValueToHold(String tableName, int bidValue);
 
     /**
-     * Takes a card from the skat to the user
-     *
-     * @param tableName Table name
-     * @param card      Card
-     */
-    void takeCardFromSkat(String tableName, Card card);
-
-    /**
-     * Puts a card from the user into the skat
-     *
-     * @param tableName Table name
-     * @param card      Card
-     */
-    void putCardIntoSkat(String tableName, Card card);
-
-    /**
      * Updates the client list of the ISS lobby
      *
      * @param playerName  Player name
