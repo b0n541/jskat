@@ -10,6 +10,7 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextInputDialog;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
+import org.jskat.control.command.general.ShowPreferencesCommand;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
 import org.jskat.control.event.table.TableCreatedEvent;
 import org.jskat.data.JSkatViewType;
@@ -78,8 +79,7 @@ public class JSkatMainWindowController {
     @FXML
     public void showPreferences() {
         SwingUtilities.invokeLater(() -> {
-            preferencesDialog.validate();
-            preferencesDialog.setVisible(true);
+            JSkatEventBus.INSTANCE.post(new ShowPreferencesCommand());
         });
     }
 
