@@ -338,7 +338,7 @@ public class JSkatMaster {
     /**
      * Takes a card from the skat on the active skat table
      *
-     * @param e Event
+     * @param event Event
      */
     public void takeCardFromSkat(final JSkatActionEvent event) {
 

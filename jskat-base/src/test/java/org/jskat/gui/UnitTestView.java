@@ -189,16 +189,6 @@ public class UnitTestView implements JSkatView {
     }
 
     @Override
-    public void takeCardFromSkat(final String tableName, final Card card) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
-    public void putCardIntoSkat(final String tableName, final Card card) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
     public void openWebPage(final String link) {
         // TODO Auto-generated method stub
     }
