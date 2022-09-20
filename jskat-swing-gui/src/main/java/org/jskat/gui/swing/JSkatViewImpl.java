@@ -188,7 +188,7 @@ public class JSkatViewImpl implements JSkatView {
     }
 
     @Subscribe
-    public void addToolbar(ShowToolbarCommand command) {
+    public void showToolbarOn(ShowToolbarCommand command) {
 
         SwingUtilities.invokeLater(() -> addToolbar());
     }

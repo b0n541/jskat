@@ -47,11 +47,12 @@
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="root" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jskat.gui.javafx.main.JSkatMainWindowController">
+<VBox fx:id="root" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jskat.gui.javafx.main.JSkatMainWindowController">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
@@ -193,10 +194,10 @@
                                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </VBox.margin>
                                 </HBox>
-                                <GridPane alignment="TOP_CENTER" hgap="10.0" maxHeight="400.0" maxWidth="600.0" VBox.vgrow="ALWAYS">
+                                <GridPane alignment="TOP_CENTER" hgap="10.0" maxWidth="-Infinity" VBox.vgrow="ALWAYS">
                                     <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="300.0" />
-                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                        <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" minWidth="10.0" />
                                     </columnConstraints>
                                     <rowConstraints>
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -214,7 +215,7 @@
                                                 </ImageView>
                                             </graphic>
                                         </Button>
-                                        <Label text="Label" GridPane.columnIndex="1" />
+                                        <Label text="%explain.iss.table" GridPane.columnIndex="1" GridPane.hgrow="NEVER" />
                                         <Button fx:id="playOnLocalTableButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#createNewLocalTable" prefWidth="300.0" text="%play.on.local.table" GridPane.rowIndex="1">
                                             <graphic>
                                                 <ImageView pickOnBounds="true" preserveRatio="true">
@@ -224,7 +225,7 @@
                                                 </ImageView>
                                             </graphic>
                                         </Button>
-                                        <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                        <Label text="%explain.local.table" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="1" />
                                         <Button fx:id="preferencesButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#showPreferences" prefWidth="300.0" text="%preferences" GridPane.rowIndex="2">
                                             <graphic>
                                                 <ImageView pickOnBounds="true" preserveRatio="true">
@@ -234,7 +235,7 @@
                                                 </ImageView>
                                             </graphic>
                                         </Button>
-                                        <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                        <Label text="%explain.preferences" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="2" />
                                         <Button fx:id="exitButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#exitJSkat" prefWidth="300.0" text="%exit.jskat" GridPane.rowIndex="3">
                                             <graphic>
                                                 <ImageView pickOnBounds="true" preserveRatio="true">
@@ -244,12 +245,13 @@
                                                 </ImageView>
                                             </graphic>
                                         </Button>
-                                        <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                        <Label text="%explain.exit" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="3" />
                                     </children>
                                     <VBox.margin>
                                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </VBox.margin>
                                 </GridPane>
+                        <Pane VBox.vgrow="ALWAYS" />
                             </children>
                         </VBox>
                     </content>
