@@ -8,6 +8,7 @@ import org.jskat.control.event.skatgame.GameStartEvent;
 import org.jskat.control.event.table.PlayerNamesChangedEvent;
 import org.jskat.control.event.table.SkatGameReplayFinishedEvent;
 import org.jskat.control.event.table.SkatGameReplayStartedEvent;
+import org.jskat.control.event.table.SkatSeriesFinishedEvent;
 import org.jskat.control.gui.JSkatView;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData;
@@ -217,7 +218,8 @@ public class SkatSeries {
         }
 
         data.setState(SeriesState.SERIES_FINISHED);
-        view.setSeriesState(data.getTableName(), SeriesState.SERIES_FINISHED);
+
+        JSkatEventBus.INSTANCE.post(new SkatSeriesFinishedEvent(data.getTableName()));
 
         LOG.debug(data.getState().name());
     }

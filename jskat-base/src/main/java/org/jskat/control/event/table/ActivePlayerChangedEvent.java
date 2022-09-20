@@ -10,4 +10,9 @@ public class ActivePlayerChangedEvent extends AbstractTableEvent {
         super(tableName);
         this.player = player;
     }
+
+    @Override
+    public String toString() {
+        return "ActivePlayerChangedEvent: " + player;
+    }
 }

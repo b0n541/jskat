@@ -22,7 +22,6 @@ import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatViewType;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
-import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.Trick;
 import org.jskat.data.iss.*;
 import org.jskat.gui.action.human.*;
@@ -760,15 +759,6 @@ public class JSkatViewImpl implements JSkatView {
         tabs.setTabComponentAt(tabs.indexOfComponent(newPanel), new JSkatTabComponent(tabs, bitmaps));
         tabs.setSelectedComponent(newPanel);
         newPanel.setFocus();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setSeriesState(String tableName, SeriesState state) {
-
-        tables.get(tableName).setSeriesState(state);
     }
 
     /**

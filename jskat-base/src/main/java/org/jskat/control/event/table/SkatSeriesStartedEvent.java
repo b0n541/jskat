@@ -8,6 +8,6 @@ public class SkatSeriesStartedEvent extends AbstractTableEvent {
 
     @Override
     public String toString() {
-        return "SkatSeriesStartedEvent: tableName: " + tableName;
+        return "SkatSeriesStartedEvent";
     }
 }

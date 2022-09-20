@@ -3,7 +3,6 @@ package org.jskat.control.gui;
 import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.SkatGameData;
-import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.MoveInformation;
@@ -70,14 +69,6 @@ public interface JSkatView {
      * @param card Card
      */
     void showCardNotAllowedMessage(Card card);
-
-    /**
-     * Set a new series state
-     *
-     * @param tableName Table name
-     * @param state     New series state
-     */
-    void setSeriesState(String tableName, SeriesState state);
 
     /**
      * Sets the bid value to make

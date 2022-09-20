@@ -7,7 +7,6 @@ import org.jskat.control.event.skatgame.*;
 import org.jskat.control.event.table.*;
 import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.data.SkatGameData.GameState;
-import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.gui.action.main.StartSkatSeriesAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
@@ -95,8 +94,7 @@ public class SkatTablePanel extends AbstractTabPanel {
      * @return List of actions for the game over context
      */
     protected List<JSkatAction> getGameOverActions() {
-        return Arrays.asList(JSkatAction.CONTINUE_LOCAL_SERIES,
-                JSkatAction.REPLAY_GAME);
+        return Arrays.asList(JSkatAction.CONTINUE_LOCAL_SERIES, JSkatAction.REPLAY_GAME);
     }
 
     /**
@@ -511,7 +509,7 @@ public class SkatTablePanel extends AbstractTabPanel {
      * @param event
      */
     @Subscribe
-    public void setGameStateOn(SkatGameStateChangedEvent event) {
+    private void setGameStateOn(SkatGameStateChangedEvent event) {
 
         log.info("New game state: {}", event.gameState);
 
@@ -924,17 +922,10 @@ public class SkatTablePanel extends AbstractTabPanel {
         biddingPanel.setPass(event.player);
     }
 
-    /**
-     * Sets the series state
-     *
-     * @param state Series state
-     */
-    public void setSeriesState(SeriesState state) {
+    @Subscribe
+    public void setContextPanelOn(SkatSeriesFinishedEvent event) {
 
-        if (SeriesState.SERIES_FINISHED.equals(state)) {
-
-            setContextPanel(ContextPanelType.START);
-        }
+        setContextPanel(ContextPanelType.START);
     }
 
     /**

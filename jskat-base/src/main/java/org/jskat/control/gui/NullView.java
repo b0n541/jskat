@@ -3,7 +3,6 @@ package org.jskat.control.gui;
 import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.SkatGameData;
-import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.MoveInformation;
@@ -160,16 +159,6 @@ public class NullView implements JSkatView {
             @SuppressWarnings("unused") final Set<String> playerNames) {
         // empty method by intent
         return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setSeriesState(
-            @SuppressWarnings("unused") final String tableName,
-            @SuppressWarnings("unused") final SeriesState state) {
-        // empty method by intent
     }
 
     /**

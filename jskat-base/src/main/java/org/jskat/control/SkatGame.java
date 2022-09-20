@@ -563,6 +563,7 @@ public class SkatGame {
 
     private void playTricks() {
 
+        setGameState(GameState.TRICK_PLAYING);
         for (int trickNo = 0; trickNo < 10; trickNo++) {
 
             log.debug("=============== Play trick " + (trickNo + 1) + " ===============");
@@ -578,8 +579,8 @@ public class SkatGame {
             if (isContraEnabledForPlayer(activePlayer, ContraCallingTime.BEFORE_FIRST_CARD, trickNo)) {
                 setGameState(GameState.CONTRA);
                 contraRe();
+                setGameState(GameState.TRICK_PLAYING);
             }
-            setGameState(GameState.TRICK_PLAYING);
 
             playCard(trickForehand, null, activePlayer);
 
@@ -594,8 +595,8 @@ public class SkatGame {
             if (isContraEnabledForPlayer(activePlayer, ContraCallingTime.BEFORE_FIRST_CARD, trickNo)) {
                 setGameState(GameState.CONTRA);
                 contraRe();
+                setGameState(GameState.TRICK_PLAYING);
             }
-            setGameState(GameState.TRICK_PLAYING);
 
             playCard(trickForehand, data.getCurrentTrick().getFirstCard(), activePlayer);
 
@@ -610,8 +611,8 @@ public class SkatGame {
             if (isContraEnabledForPlayer(activePlayer, ContraCallingTime.BEFORE_FIRST_CARD, trickNo)) {
                 setGameState(GameState.CONTRA);
                 contraRe();
+                setGameState(GameState.TRICK_PLAYING);
             }
-            setGameState(GameState.TRICK_PLAYING);
 
             playCard(trickForehand, data.getCurrentTrick().getFirstCard(), activePlayer);
 
@@ -896,6 +897,7 @@ public class SkatGame {
             if (handCard.equals(card)) {
 
                 result = true;
+                break;
             }
         }
 
