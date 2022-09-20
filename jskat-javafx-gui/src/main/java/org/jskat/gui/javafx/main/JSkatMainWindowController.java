@@ -4,10 +4,7 @@ import com.google.common.eventbus.Subscribe;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.command.general.ShowPreferencesCommand;
@@ -37,7 +34,11 @@ public class JSkatMainWindowController {
     @FXML
     private Button preferencesButton;
     @FXML
-    private Button exitButton;
+    private MenuItem preferencesMenuItem;
+    @FXML
+    private Button exitJSkatButton;
+    @FXML
+    private MenuItem exitJSkatMenuItem;
 
     private JSkatOptionsDialog preferencesDialog;
 

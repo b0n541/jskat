@@ -58,18 +58,30 @@
             <menus>
                 <Menu mnemonicParsing="false" text="%jskat">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="New" />
-                        <MenuItem mnemonicParsing="false" text="Open…" />
-                        <Menu mnemonicParsing="false" text="Open Recent" />
+                        <MenuItem mnemonicParsing="false" text="%open.skatseries" />
+                        <Menu mnemonicParsing="false" text="%open.recent.skatseries" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="Close" />
-                        <MenuItem mnemonicParsing="false" text="Save" />
-                        <MenuItem mnemonicParsing="false" text="Save As…" />
-                        <MenuItem mnemonicParsing="false" text="Revert" />
+                        <MenuItem mnemonicParsing="false" text="%save.skatseries" />
+                        <MenuItem mnemonicParsing="false" text="%save.as.skatseries" />
+                        <MenuItem mnemonicParsing="false" text="%close.skatseries" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="Preferences…" />
+                        <MenuItem fx:id="preferencesMenuItem" mnemonicParsing="false" onAction="#showPreferences" text="%preferences">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/preferences_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="Quit" />
+                        <MenuItem fx:id="exitJskatMenuItem" mnemonicParsing="false" onAction="#exitJSkat" text="%exit.jskat">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/exit_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="%iss">
@@ -89,18 +101,6 @@
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" text="Select All" />
                         <MenuItem mnemonicParsing="false" text="Unselect All" />
-                    </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="%extras">
-                    <items>
-                        <MenuItem mnemonicParsing="false" onAction="#showPreferences" text="%preferences">
-                     <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@/org/jskat/gui/img/gui/preferences_small.png" />
-                           </image>
-                        </ImageView>
-                     </graphic></MenuItem>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="%help">
@@ -236,7 +236,7 @@
                                             </graphic>
                                         </Button>
                                         <Label text="%explain.preferences" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="2" />
-                                        <Button fx:id="exitButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#exitJSkat" prefWidth="300.0" text="%exit.jskat" GridPane.rowIndex="3">
+                                        <Button fx:id="exitJSkatButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#exitJSkat" prefWidth="300.0" text="%exit.jskat" GridPane.rowIndex="3">
                                             <graphic>
                                                 <ImageView pickOnBounds="true" preserveRatio="true">
                                                     <image>
