@@ -1,9 +1,9 @@
 package org.jskat.control;
 
 import com.google.common.eventbus.Subscribe;
-import org.jskat.control.command.skatseries.ReplayGameCommand;
 import org.jskat.control.command.table.NextReplayMoveCommand;
 import org.jskat.control.command.table.ReadyForNextGameCommand;
+import org.jskat.control.command.table.ReplayGameCommand;
 import org.jskat.control.event.skatgame.GameStartEvent;
 import org.jskat.control.event.table.PlayerNamesChangedEvent;
 import org.jskat.control.event.table.SkatGameReplayFinishedEvent;
@@ -65,8 +65,7 @@ public class SkatSeries {
     }
 
     @Subscribe
-    public void startReplayGameOn(final ReplayGameCommand command)
-            throws InterruptedException {
+    public void startReplayGameOn(final ReplayGameCommand command) {
 
         JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(
                 new SkatGameReplayStartedEvent());
@@ -83,8 +82,7 @@ public class SkatSeries {
     @Subscribe
     public void readyForNextGameOn(final ReadyForNextGameCommand command) {
 
-        JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(
-                new SkatGameReplayFinishedEvent());
+        JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(new SkatGameReplayFinishedEvent());
         readyForNextGame = true;
     }
 

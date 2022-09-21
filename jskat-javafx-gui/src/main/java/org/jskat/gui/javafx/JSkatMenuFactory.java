@@ -10,9 +10,9 @@ import org.jskat.control.command.general.ShowAboutInformationCommand;
 import org.jskat.control.command.general.ShowHelpCommand;
 import org.jskat.control.command.general.ShowLicenseCommand;
 import org.jskat.control.command.general.ShowPreferencesCommand;
-import org.jskat.control.command.skatseries.CreateSkatSeriesCommand;
-import org.jskat.control.command.skatseries.ReplayGameCommand;
 import org.jskat.control.command.table.NextReplayMoveCommand;
+import org.jskat.control.command.table.ReplayGameCommand;
+import org.jskat.control.command.table.StartSkatSeriesCommand;
 import org.jskat.data.JSkatApplicationData;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
@@ -22,6 +22,7 @@ import org.jskat.util.JSkatResourceBundle;
 /**
  * Factory for building the menu for JSkat.
  */
+@Deprecated
 public final class JSkatMenuFactory {
 
     /**
@@ -56,15 +57,13 @@ public final class JSkatMenuFactory {
         playOnLocalTable.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.TABLE, IconSize.SMALL));
         playOnLocalTable.setOnAction(actionEvent -> JSkatMaster.INSTANCE.createTable());
         final MenuItem startSkatSeriesMenuItem = new MenuItem(strings.getString("start_series"));
-        startSkatSeriesMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE.post(new CreateSkatSeriesCommand()));
+        startSkatSeriesMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE.post(new StartSkatSeriesCommand(JSkatApplicationData.INSTANCE.getActiveTable())));
         startSkatSeriesMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.PLAY, IconSize.SMALL));
         final MenuItem replayGameMenuItem = new MenuItem(strings.getString("replay_game"));
-        replayGameMenuItem.setOnAction(actionEvent -> JSkatEventBus.TABLE_EVENT_BUSSES
-                .get(JSkatApplicationData.INSTANCE.getActiveTable()).post(new ReplayGameCommand()));
+        replayGameMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE.post(new ReplayGameCommand(JSkatApplicationData.INSTANCE.getActiveTable())));
         replayGameMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.FIRST, IconSize.SMALL));
         final MenuItem nextReplayMoveMenuItem = new MenuItem(strings.getString("next_replay_move"));
-        nextReplayMoveMenuItem.setOnAction(actionEvent -> JSkatEventBus.TABLE_EVENT_BUSSES
-                .get(JSkatApplicationData.INSTANCE.getActiveTable()).post(new NextReplayMoveCommand()));
+        nextReplayMoveMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE.post(new NextReplayMoveCommand(JSkatApplicationData.INSTANCE.getActiveTable())));
         nextReplayMoveMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.NEXT, IconSize.SMALL));
 
         skatTableMenu.getItems().addAll(playOnLocalTable, new SeparatorMenuItem(), startSkatSeriesMenuItem,

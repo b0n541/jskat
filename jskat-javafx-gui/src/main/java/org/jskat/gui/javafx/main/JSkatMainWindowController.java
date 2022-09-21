@@ -11,8 +11,12 @@ import org.jskat.control.command.general.ShowAboutInformationCommand;
 import org.jskat.control.command.general.ShowHelpCommand;
 import org.jskat.control.command.general.ShowLicenseCommand;
 import org.jskat.control.command.general.ShowPreferencesCommand;
+import org.jskat.control.command.table.NextReplayMoveCommand;
+import org.jskat.control.command.table.ReplayGameCommand;
+import org.jskat.control.command.table.StartSkatSeriesCommand;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
 import org.jskat.control.event.table.TableCreatedEvent;
+import org.jskat.data.JSkatApplicationData;
 import org.jskat.data.JSkatViewType;
 import org.jskat.gui.swing.JSkatOptionsDialog;
 import org.jskat.gui.swing.JSkatViewImpl;
@@ -32,16 +36,35 @@ public class JSkatMainWindowController {
     private Parent root;
     @FXML
     private TabPane tabs;
-    @FXML
-    private Button playOnLocalTableButton;
-    @FXML
-    private Button preferencesButton;
+
     @FXML
     private MenuItem preferencesMenuItem;
     @FXML
-    private Button exitJSkatButton;
+    private Button preferencesButton;
     @FXML
     private MenuItem exitJSkatMenuItem;
+    @FXML
+    private Button exitJSkatButton;
+
+    @FXML
+    private MenuItem localTableMenuItem;
+    @FXML
+    private Button localTableToolbarButton;
+    @FXML
+    private Button localTableButton;
+    @FXML
+    private MenuItem startSkatSeriesMenuItem;
+    @FXML
+    private Button startSkatSeriesToolbarButton;
+    @FXML
+    private MenuItem replayGameMenuItem;
+    @FXML
+    private Button replayGameToolbarButton;
+    @FXML
+    private MenuItem nextReplayMoveMenuItem;
+    @FXML
+    private Button nextReplayMoveButton;
+
     @FXML
     private Button helpButton;
     @FXML
@@ -60,6 +83,19 @@ public class JSkatMainWindowController {
         JSkatEventBus.INSTANCE.register(this);
 
         preferencesDialog = new JSkatOptionsDialog(null);
+    }
+
+    @FXML
+    public void showPreferences() {
+        SwingUtilities.invokeLater(() -> {
+            JSkatEventBus.INSTANCE.post(new ShowPreferencesCommand());
+        });
+    }
+
+    @FXML
+    public void exitJSkat() {
+        // FIXME get rid of that god class
+        JSkatMaster.INSTANCE.exitJSkat();
     }
 
     @FXML
@@ -89,16 +125,18 @@ public class JSkatMainWindowController {
     }
 
     @FXML
-    public void showPreferences() {
-        SwingUtilities.invokeLater(() -> {
-            JSkatEventBus.INSTANCE.post(new ShowPreferencesCommand());
-        });
+    public void startSkatSeries() {
+        JSkatEventBus.INSTANCE.post(new StartSkatSeriesCommand(JSkatApplicationData.INSTANCE.getActiveTable()));
     }
 
     @FXML
-    public void exitJSkat() {
-        // FIXME get rid of that god class
-        JSkatMaster.INSTANCE.exitJSkat();
+    public void replayGame() {
+        JSkatEventBus.INSTANCE.post(new ReplayGameCommand(JSkatApplicationData.INSTANCE.getActiveTable()));
+    }
+
+    @FXML
+    public void nextReplayMove() {
+        JSkatEventBus.INSTANCE.post(new NextReplayMoveCommand(JSkatApplicationData.INSTANCE.getActiveTable()));
     }
 
     @FXML

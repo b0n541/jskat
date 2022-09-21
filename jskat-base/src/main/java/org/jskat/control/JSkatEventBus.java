@@ -3,9 +3,9 @@ package org.jskat.control;
 import com.google.common.eventbus.DeadEvent;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import org.jskat.control.command.table.AbstractTableCommand;
 import org.jskat.control.command.table.CreateTableCommand;
 import org.jskat.control.command.table.RemoveTableCommand;
-import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.table.AbstractTableEvent;
 import org.jskat.control.event.table.TableCreatedEvent;
 import org.jskat.control.event.table.TableGameMoveEvent;
@@ -77,7 +77,7 @@ public class JSkatEventBus {
     }
 
     @Subscribe
-    public void dispatchTableCommandOn(ShowCardsCommand command) {
+    public void dispatchTableCommandOn(AbstractTableCommand command) {
         LOG.info("Forwarding command " + command + " to table " + command.tableName);
         JSkatEventBus.TABLE_EVENT_BUSSES.get(command.tableName).post(command);
     }

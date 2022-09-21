@@ -58,11 +58,32 @@
             <menus>
                 <Menu mnemonicParsing="false" text="%jskat">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="%open.skatseries" />
+                        <MenuItem mnemonicParsing="false" text="%open.skatseries">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/load_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
                         <Menu mnemonicParsing="false" text="%open.recent.skatseries" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="%save.skatseries" />
-                        <MenuItem mnemonicParsing="false" text="%save.as.skatseries" />
+                        <MenuItem mnemonicParsing="false" text="%save.skatseries">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/save_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                        <MenuItem mnemonicParsing="false" text="%save.as.skatseries">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/save_as_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
                         <MenuItem mnemonicParsing="false" text="%close.skatseries" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem fx:id="preferencesMenuItem" mnemonicParsing="false" onAction="#showPreferences" text="%preferences">
@@ -91,16 +112,40 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="%skat_table">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Undo" />
-                        <MenuItem mnemonicParsing="false" text="Redo" />
+                        <MenuItem fx:id="localTableMenuItem" mnemonicParsing="false" onAction="#createNewLocalTable" text="%local.table">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/table_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="Cut" />
-                        <MenuItem mnemonicParsing="false" text="Copy" />
-                        <MenuItem mnemonicParsing="false" text="Paste" />
-                        <MenuItem mnemonicParsing="false" text="Delete" />
+                        <MenuItem fx:id="startSkatSeriesMenuItem" mnemonicParsing="false" onAction="#startSkatSeries" text="%start.skat.series">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/play_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem mnemonicParsing="false" text="Select All" />
-                        <MenuItem mnemonicParsing="false" text="Unselect All" />
+                        <MenuItem fx:id="replayGameMenuItem" mnemonicParsing="false" onAction="#replayGame" text="%replay.game">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/first_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                        <MenuItem fx:id="nextReplayMoveMenuItem" mnemonicParsing="false" onAction="#nextReplayMove" text="%next.replay.move">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/next_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="%help">
@@ -138,7 +183,7 @@
         </MenuBar>
         <ToolBar prefHeight="40.0" prefWidth="200.0">
             <items>
-                <Button mnemonicParsing="false" text="%play.on.iss">
+                <Button mnemonicParsing="false" text="%international.skat.server">
                     <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -147,7 +192,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button mnemonicParsing="false" text="%play.on.local.table">
+                <Button fx:id="localTableToolbarButton" mnemonicParsing="false" onAction="#createNewLocalTable" text="%local.table">
                     <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -156,7 +201,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button mnemonicParsing="false" text="%start.skat.series">
+                <Button fx:id="startSkatSeriesToolbarButton" mnemonicParsing="false" onAction="#startSkatSeries" text="%start.skat.series">
                     <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -165,7 +210,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button mnemonicParsing="false" text="%replay.game">
+                <Button fx:id="replayGameToolbarButton" mnemonicParsing="false" onAction="#replayGame" text="%replay.game">
                     <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -174,7 +219,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button mnemonicParsing="false" text="%next.replay.move">
+                <Button fx:id="nextReplayMoveButton" mnemonicParsing="false" onAction="#nextReplayMove" text="%next.replay.move">
                     <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -232,7 +277,7 @@
                                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     </rowConstraints>
                                     <children>
-                                        <Button maxWidth="-Infinity" mnemonicParsing="false" prefWidth="300.0" text="%play.on.iss">
+                                        <Button maxWidth="-Infinity" mnemonicParsing="false" prefWidth="300.0" text="%international.skat.server">
                                             <graphic>
                                                 <ImageView pickOnBounds="true" preserveRatio="true">
                                                     <image>
@@ -242,7 +287,7 @@
                                             </graphic>
                                         </Button>
                                         <Label text="%explain.iss.table" GridPane.columnIndex="1" GridPane.hgrow="NEVER" />
-                                        <Button fx:id="playOnLocalTableButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#createNewLocalTable" prefWidth="300.0" text="%play.on.local.table" GridPane.rowIndex="1">
+                                        <Button fx:id="localTableButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#createNewLocalTable" prefWidth="300.0" text="%local.table" GridPane.rowIndex="1">
                                             <graphic>
                                                 <ImageView pickOnBounds="true" preserveRatio="true">
                                                     <image>

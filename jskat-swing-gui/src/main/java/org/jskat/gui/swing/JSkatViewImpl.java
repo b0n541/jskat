@@ -9,8 +9,8 @@ import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.command.general.*;
 import org.jskat.control.command.iss.IssDisconnectCommand;
-import org.jskat.control.command.skatseries.CreateSkatSeriesCommand;
 import org.jskat.control.command.table.ShowCardsCommand;
+import org.jskat.control.command.table.StartSkatSeriesCommand;
 import org.jskat.control.event.iss.IssConnectedEvent;
 import org.jskat.control.event.skatgame.*;
 import org.jskat.control.event.table.*;
@@ -437,7 +437,7 @@ public class JSkatViewImpl implements JSkatView {
     }
 
     @Subscribe
-    public void showSkatSeriesStartDialogOn(CreateSkatSeriesCommand command) {
+    public void showSkatSeriesStartDialogOn(StartSkatSeriesCommand command) {
 
         SwingUtilities.invokeLater(() -> skatSeriesStartDialog.setVisible(true));
     }
