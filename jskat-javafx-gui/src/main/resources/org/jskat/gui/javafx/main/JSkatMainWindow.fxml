@@ -52,7 +52,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="root" prefHeight="700.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jskat.gui.javafx.main.JSkatMainWindowController">
+<VBox fx:id="root" prefHeight="700.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jskat.gui.javafx.main.JSkatMainWindowController">
     <children>
         <MenuBar VBox.vgrow="NEVER">
             <menus>
@@ -181,7 +181,7 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <ToolBar prefHeight="40.0" prefWidth="200.0">
+        <ToolBar>
             <items>
                 <Button mnemonicParsing="false" text="%international.skat.server">
                     <graphic>
@@ -239,7 +239,7 @@
                 </Button>
             </items>
         </ToolBar>
-        <TabPane fx:id="tabs" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
+        <TabPane fx:id="tabs" VBox.vgrow="ALWAYS">
             <tabs>
                 <Tab closable="false" text="%welcome">
                     <content>
