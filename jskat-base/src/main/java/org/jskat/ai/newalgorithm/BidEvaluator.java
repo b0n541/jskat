@@ -45,8 +45,10 @@ class BidEvaluator {
 	/**
 	 * default constructor
 	 *
-	 * @param cards
+	 * @param pCards
 	 *            hand of the player
+	 * @param pPlayersPosition
+	 *            position of the player
 	 */
 	BidEvaluator(final CardList pCards, final Player pPlayersPosition) {
 		oPlayersPosition = pPlayersPosition;

@@ -87,8 +87,6 @@ abstract class AbstractHandPanel extends JPanel {
      * @param actions               Action map
      * @param maxCards              the maximum number of cards
      * @param showIssWidgets        TRUE, if ISS widgets should be shown
-     * @param isNeuralNetworkPlayer TRUE, if this panel is for a neural network
-     *                              opponent
      */
     AbstractHandPanel(final ActionMap actions, final int maxCards, final boolean showIssWidgets) {
 

@@ -32,7 +32,6 @@ class SkatSchiebenPanel extends JPanel {
      *
      * @param actions            Action map
      * @param discardPanel       Discard panel
-     * @param showAnnounceButton TRUE, if the announce button should be shown
      */
     SkatSchiebenPanel(final ActionMap actions, final DiscardPanel discardPanel) {
 
