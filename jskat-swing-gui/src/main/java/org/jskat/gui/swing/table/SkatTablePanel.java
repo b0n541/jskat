@@ -381,7 +381,7 @@ public class SkatTablePanel extends AbstractTabPanel {
      * @param player Player position
      * @param card   Card
      */
-    public void setTrickCard(Player player, Card card) {
+    private void setTrickCard(Player player, Card card) {
 
         trickPanel.addCard(player, card);
     }
@@ -621,7 +621,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Clears the skat table
      */
-    public void clearTable() {
+    private void clearTable() {
 
         gameInfoPanel.clear();
         biddingPanel.resetPanel();

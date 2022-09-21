@@ -26,6 +26,7 @@ public class JSkatEventBus {
     private final EventBus mainEventBus;
 
     public final static JSkatEventBus INSTANCE = new JSkatEventBus();
+    // TODO should be private
     public final static Map<String, EventBus> TABLE_EVENT_BUSSES = new HashMap<>();
 
     private JSkatEventBus() {

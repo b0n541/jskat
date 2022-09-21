@@ -271,11 +271,11 @@ public class JSkatViewImpl implements JSkatView {
                         + strings.getString("version")
                         + " "
                         + VERSION + "\n\n"
-                        + "http://www.jskat.org\n"
-                        + "http://sourceforge.net/projects/jskat"
+                        + "https://www.jskat.org\n"
+                        + "https://github.com/b0n541/jskat-multimodule"
                         + "\n\n"
                         + strings.getString("authors")
-                        + ":\nJan Schäfer (jansch@users.sourceforge.net)\nMarkus J. Luzius (jskat@luzius.de)\nDaniel Loreck (daniel.loreck@gmail.com)\nSascha Laurien\nSlovasim\nMartin Rothe\nTobias Markus\n\n"
+                        + ":\nJan Schäfer (jnschfr@gmail.com)\nMarkus J. Luzius (jskat@luzius.de)\nDaniel Loreck (daniel.loreck@gmail.com)\nSascha Laurien\nSlovasim\nMartin Rothe\nTobias Markus\n\n"
                         + strings.getString("cards")
                         + ": International Skat Server, KDE project, OpenClipart.org\n\n"
                         + strings.getString("icons")

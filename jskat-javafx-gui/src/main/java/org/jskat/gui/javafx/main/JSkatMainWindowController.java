@@ -7,6 +7,9 @@ import javafx.scene.Parent;
 import javafx.scene.control.*;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
+import org.jskat.control.command.general.ShowAboutInformationCommand;
+import org.jskat.control.command.general.ShowHelpCommand;
+import org.jskat.control.command.general.ShowLicenseCommand;
 import org.jskat.control.command.general.ShowPreferencesCommand;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
 import org.jskat.control.event.table.TableCreatedEvent;
@@ -39,6 +42,14 @@ public class JSkatMainWindowController {
     private Button exitJSkatButton;
     @FXML
     private MenuItem exitJSkatMenuItem;
+    @FXML
+    private Button helpButton;
+    @FXML
+    private MenuItem helpMenuItem;
+    @FXML
+    private MenuItem licenseMenuItem;
+    @FXML
+    private MenuItem aboutMenuItem;
 
     private JSkatOptionsDialog preferencesDialog;
 
@@ -88,6 +99,27 @@ public class JSkatMainWindowController {
     public void exitJSkat() {
         // FIXME get rid of that god class
         JSkatMaster.INSTANCE.exitJSkat();
+    }
+
+    @FXML
+    public void showHelp() {
+        SwingUtilities.invokeLater(() -> {
+            JSkatEventBus.INSTANCE.post(new ShowHelpCommand());
+        });
+    }
+
+    @FXML
+    public void showLicense() {
+        SwingUtilities.invokeLater(() -> {
+            JSkatEventBus.INSTANCE.post(new ShowLicenseCommand());
+        });
+    }
+
+    @FXML
+    public void showAboutInformation() {
+        SwingUtilities.invokeLater(() -> {
+            JSkatEventBus.INSTANCE.post(new ShowAboutInformationCommand());
+        });
     }
 
     @Subscribe

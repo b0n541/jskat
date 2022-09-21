@@ -105,7 +105,33 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="%help">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+                        <MenuItem fx:id="helpMenuItem" mnemonicParsing="false" onAction="#showHelp" text="%help">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/help_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="licenseMenuItem" mnemonicParsing="false" onAction="#showLicense" text="%license">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/license_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#showAboutInformation" text="%about">
+                     <graphic>
+                        <ImageView pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/about_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
                     </items>
                 </Menu>
             </menus>
@@ -157,7 +183,7 @@
                         </ImageView>
                     </graphic>
                 </Button>
-                <Button mnemonicParsing="false" text="%help">
+                <Button fx:id="helpButton" mnemonicParsing="false" onAction="#showHelp" text="%help">
                     <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                             <image>
