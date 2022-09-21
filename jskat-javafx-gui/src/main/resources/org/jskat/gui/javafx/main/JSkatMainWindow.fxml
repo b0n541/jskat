@@ -239,7 +239,7 @@
                 </Button>
             </items>
         </ToolBar>
-        <TabPane fx:id="tabs" VBox.vgrow="ALWAYS">
+        <TabPane fx:id="tabs" tabClosingPolicy="ALL_TABS" VBox.vgrow="ALWAYS">
             <tabs>
                 <Tab closable="false" text="%welcome">
                     <content>
