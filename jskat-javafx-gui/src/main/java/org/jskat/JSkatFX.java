@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -28,7 +29,6 @@ import org.jskat.data.DesktopSavePathResolver;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatOptions.Option;
 import org.jskat.gui.img.JSkatGraphicRepository;
-import org.jskat.gui.javafx.JSkatMainWindow;
 import org.jskat.gui.javafx.JSkatMenuFactory;
 import org.jskat.gui.swing.JSkatViewImpl;
 import org.jskat.gui.swing.LookAndFeelSetter;
@@ -112,13 +112,13 @@ public class JSkatFX extends Application {
     private static void showJSkatMainWindow(final Screen targetScreen, final Point2D screenPosition, final MenuBar menu,
                                             final JSkatViewImpl jskatView) {
 
-        final JSkatMainWindow jskatMainWindow = new JSkatMainWindow(VERSION, menu, jskatView, targetScreen,
-                screenPosition);
-
-        jskatMainWindow.show();
+//        final JSkatMainWindow jskatMainWindow = new JSkatMainWindow(VERSION, menu, jskatView, targetScreen,
+//                screenPosition);
+//
+//        jskatMainWindow.show();
 
         try {
-            showNewMainWindow(VERSION);
+            showNewMainWindow(targetScreen, screenPosition, VERSION);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -132,16 +132,33 @@ public class JSkatFX extends Application {
         }
     }
 
-    private static void showNewMainWindow(String version) throws IOException {
+    private static void showNewMainWindow(final Screen targetScreen, final Point2D screenPosition, String version) throws IOException {
         final FXMLLoader loader = new FXMLLoader();
         loader.setLocation(JSkatFX.class.getResource("/org/jskat/gui/javafx/main/JSkatMainWindow.fxml"));
         loader.setResources(JSkatResourceBundle.INSTANCE.getStringResources());
         final VBox rootLayout = loader.load();
+
+        final Dimension2D dimension = getMainWindowDimension(targetScreen);
+        final Scene scene = new Scene(rootLayout, dimension.getWidth(), dimension.getHeight());
+        scene.widthProperty().addListener(
+                (observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameWidth(newValue.intValue()));
+        scene.heightProperty().addListener(
+                (observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameHeight(newValue.intValue()));
+
         final Stage stage = new Stage();
         stage.setTitle("JSkat " + version);
-        final Scene scene = new Scene(rootLayout);
         stage.setScene(scene);
         stage.setOnCloseRequest(event -> JSkatMaster.INSTANCE.exitJSkat());
+
+        stage.xProperty().addListener((observable, oldValue, newValue) ->
+                JSkatOptions.instance().setMainFrameXPosition(newValue.intValue()));
+        stage.yProperty().addListener((observable, oldValue, newValue) ->
+                JSkatOptions.instance().setMainFrameYPosition(newValue.intValue()));
+
+        stage.setOnCloseRequest(event -> JSkatMaster.INSTANCE.exitJSkat());
+
+        placeMainWindow(targetScreen, stage, screenPosition);
+
         stage.show();
     }
 
@@ -177,7 +194,6 @@ public class JSkatFX extends Application {
     }
 
     private static Screen getTargetScreen(final Point2D savedScreenPosition) {
-
         for (final Screen screen : Screen.getScreens()) {
             if (screen.getVisualBounds().contains(savedScreenPosition)) {
                 return screen;
@@ -188,9 +204,27 @@ public class JSkatFX extends Application {
     }
 
     private static Point2D getSavedScreenPosition() {
-
         final Point mainFramePosition = JSkatOptions.instance().getMainFramePosition();
         return new Point2D(mainFramePosition.getX(), mainFramePosition.getY());
+    }
+
+    private static Dimension2D getMainWindowDimension(final Screen targetScreen) {
+        final double width = JSkatOptions.instance().getMainFrameSize().getWidth();
+        final double height = JSkatOptions.instance().getMainFrameSize().getHeight();
+
+        // on first startup the default values for width and height are 2/3 of screen size
+        return new Dimension2D(width > 0 ? width : targetScreen.getBounds().getWidth() * 2 / 3,
+                height > 0 ? height : targetScreen.getBounds().getHeight() * 2 / 3);
+    }
+
+    private static void placeMainWindow(final Screen screen, final Stage mainWindow, final Point2D position) {
+
+        if (screen.getVisualBounds().contains(position)) {
+            mainWindow.setX(position.getX());
+            mainWindow.setY(position.getY());
+        } else {
+            mainWindow.centerOnScreen();
+        }
     }
 
     private interface InitializationCompleteHandler {

@@ -32,6 +32,7 @@ import java.io.IOException;
 /**
  * Main window for JSkat.
  */
+@Deprecated
 public class JSkatMainWindow extends Stage {
 
     private static final JSkatResourceBundle STRINGS = JSkatResourceBundle.INSTANCE;
