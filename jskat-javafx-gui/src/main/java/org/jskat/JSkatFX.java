@@ -118,11 +118,11 @@ public class JSkatFX extends Application {
 
         jskatMainWindow.show();
 
-//        try {
-//            showNewMainWindow(targetScreen, screenPosition, VERSION);
-//        } catch (final IOException e) {
-//            throw new RuntimeException(e);
-//        }
+        try {
+            showNewMainWindow(targetScreen, screenPosition, VERSION);
+        } catch (final IOException e) {
+            throw new RuntimeException(e);
+        }
 
         if (JSkatOptions.instance().getBoolean(Option.SHOW_TIPS_AT_START_UP)) {
             JSkatEventBus.INSTANCE.post(new ShowWelcomeInformationCommand());

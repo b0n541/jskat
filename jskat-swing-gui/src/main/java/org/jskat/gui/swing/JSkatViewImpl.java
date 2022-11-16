@@ -13,6 +13,7 @@ import org.jskat.control.command.iss.IssShowLoginCommand;
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.command.table.StartSkatSeriesCommand;
 import org.jskat.control.event.iss.IssConnectedEvent;
+import org.jskat.control.event.iss.IssPlayerDataUpdatedEvent;
 import org.jskat.control.event.iss.IssTableDataUpdatedEvent;
 import org.jskat.control.event.iss.IssTableDeletedEvent;
 import org.jskat.control.event.skatgame.*;
@@ -168,7 +169,9 @@ public class JSkatViewImpl implements JSkatView {
         mainPanel.setLayout(new BorderLayout());
 
         createToolbar();
-        if (ScreenResolution.isBigScreen(targetScreen) && !options.isHideToolbar()) addToolbar();
+        if (ScreenResolution.isBigScreen(targetScreen) && !options.isHideToolbar()) {
+            addToolbar();
+        }
 
         // main area
         addTabbedPane();
@@ -242,7 +245,9 @@ public class JSkatViewImpl implements JSkatView {
     @Subscribe
     public void createSkatTablePanelOn(final TableCreatedEvent event) {
 
-        if (JSkatViewType.TRAINING_TABLE.equals(event.tableType)) return;
+        if (JSkatViewType.TRAINING_TABLE.equals(event.tableType)) {
+            return;
+        }
 
         SwingUtilities.invokeLater(() -> {
             final String tableName = event.tableName;
@@ -304,10 +309,13 @@ public class JSkatViewImpl implements JSkatView {
 
         String cardString = "";
 
-        if (discardedCards != null)
-            for (final Card card : discardedCards) cardString += " " + strings.getCardStringForCardFace(card);
-        else
+        if (discardedCards != null) {
+            for (final Card card : discardedCards) {
+                cardString += " " + strings.getCardStringForCardFace(card);
+            }
+        } else {
             cardString = strings.getString("unknown_cards");
+        }
 
         showMessage(strings.getString("player_played_schwarz_title"),
                 strings.getString("player_played_schwarz_discarding", playerName, cardString));
@@ -318,9 +326,11 @@ public class JSkatViewImpl implements JSkatView {
 
         String cardString = null;
 
-        if (card != null) cardString = strings.getCardStringForCardFace(card);
-        else
+        if (card != null) {
+            cardString = strings.getCardStringForCardFace(card);
+        } else {
             cardString = strings.getString("unknown_card");
+        }
 
         showMessage(strings.getString("player_played_schwarz_title"),
                 strings.getString("player_played_schwarz_card_play", playerName, cardString));
@@ -342,7 +352,9 @@ public class JSkatViewImpl implements JSkatView {
     @Subscribe
     public void setGameStateOn(final SkatGameStateChangedEvent event) {
 
-        if (activeView.equals(event.tableName)) setActions(event.gameState);
+        if (activeView.equals(event.tableName)) {
+            setActions(event.gameState);
+        }
     }
 
     private void setActions(final GameState state) {
@@ -445,8 +457,8 @@ public class JSkatViewImpl implements JSkatView {
      * {@inheritDoc}
      */
     @Subscribe
-    public void updateISSLobbyPlayerListOn(final String playerName, final String language, final long gamesPlayed, final double strength) {
-        issLobby.updatePlayer(playerName, language, gamesPlayed, strength);
+    public void updateISSLobbyPlayerListOn(final IssPlayerDataUpdatedEvent event) {
+        issLobby.updatePlayer(event.playerName(), event.language(), event.gamesPlayed(), event.strength());
     }
 
     /**
@@ -495,12 +507,14 @@ public class JSkatViewImpl implements JSkatView {
 
         issLobby.appendChatMessage(message);
 
-        for (final SkatTablePanel table : tables.values())
+        for (final SkatTablePanel table : tables.values()) {
             if (table instanceof ISSTablePanel issTable) {
                 final String chatname = message.getChatName();
-                if ("Lobby".equals(chatname) || issTable.getName().equals(chatname))
+                if ("Lobby".equals(chatname) || issTable.getName().equals(chatname)) {
                     issTable.appendChatMessage(message);
+                }
             }
+        }
     }
 
     /**
@@ -512,7 +526,9 @@ public class JSkatViewImpl implements JSkatView {
         // FIXME (jan 08.11.2010) seems very complicated
         final SkatTablePanel panel = tables.get(tableName);
 
-        if (panel instanceof ISSTablePanel) ((ISSTablePanel) panel).setTableStatus(tableStatus);
+        if (panel instanceof ISSTablePanel) {
+            ((ISSTablePanel) panel).setTableStatus(tableStatus);
+        }
     }
 
     /**
@@ -521,12 +537,13 @@ public class JSkatViewImpl implements JSkatView {
     @Override
     public void updateISSTable(final String tableName, final String issLogin, final GameStartInformation status) {
 
-        if (issLogin.equals(status.getPlayerName(Player.FOREHAND)))
+        if (issLogin.equals(status.getPlayerName(Player.FOREHAND))) {
             updateISSTable(tableName, Player.MIDDLEHAND, Player.REARHAND, Player.FOREHAND, status);
-        else if (issLogin.equals(status.getPlayerName(Player.MIDDLEHAND)))
+        } else if (issLogin.equals(status.getPlayerName(Player.MIDDLEHAND))) {
             updateISSTable(tableName, Player.REARHAND, Player.FOREHAND, Player.MIDDLEHAND, status);
-        else if (issLogin.equals(status.getPlayerName(Player.REARHAND)))
+        } else if (issLogin.equals(status.getPlayerName(Player.REARHAND))) {
             updateISSTable(tableName, Player.FOREHAND, Player.MIDDLEHAND, Player.REARHAND, status);
+        }
     }
 
     private void updateISSTable(final String tableName, final Player leftOpponent, final Player rightOpponent,
@@ -556,7 +573,9 @@ public class JSkatViewImpl implements JSkatView {
         String tableName = JOptionPane.showInputDialog(null, strings.getString("new_table_dialog_message"),
                 strings.getString("local_table") + " " + (localTablesCreated + 1));
         // truncate table name
-        if (tableName != null && tableName.length() > 100) tableName = tableName.substring(0, 100);
+        if (tableName != null && tableName.length() > 100) {
+            tableName = tableName.substring(0, 100);
+        }
         return tableName;
     }
 
@@ -607,15 +626,17 @@ public class JSkatViewImpl implements JSkatView {
                 break;
             case PICK_UP_SKAT:
                 JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.DISCARDING));
-                if (moveInformation.getSkat().size() == 2)
+                if (moveInformation.getSkat().size() == 2) {
                     JSkatEventBus.INSTANCE.post(new SkatCardsChangedEvent(tableName, moveInformation.getSkat()));
+                }
                 break;
             case GAME_ANNOUNCEMENT:
                 JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.DECLARING));
                 JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName,
                         new GameAnnouncementEvent(movePlayer, moveInformation.getGameAnnouncement())));
-                if (moveInformation.getGameAnnouncement().isOuvert())
+                if (moveInformation.getGameAnnouncement().isOuvert()) {
                     showCardsForPlayer(tableName, movePlayer, moveInformation.getOuvertCards());
+                }
                 JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.TRICK_PLAYING));
                 break;
             case CARD_PLAY:
@@ -628,8 +649,9 @@ public class JSkatViewImpl implements JSkatView {
 
                     // first card in new trick
                     if (currentTrick.getFirstCard() != null && currentTrick.getSecondCard() == null
-                            && currentTrick.getThirdCard() == null)
+                            && currentTrick.getThirdCard() == null) {
                         JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(new TrickCompletedEvent(lastTrick));
+                    }
                 }
 
                 JSkatEventBus.INSTANCE.post(
@@ -682,11 +704,18 @@ public class JSkatViewImpl implements JSkatView {
     private void closeTabPanel(final String tabName) {
 
         AbstractTabPanel panel = (AbstractTabPanel) tabs.getSelectedComponent();
-        if (!tabName.equals(panel.getName())) for (final Component currPanel : tabs.getComponents())
-            if (tabName.equals(currPanel.getName())) panel = (AbstractTabPanel) currPanel;
+        if (!tabName.equals(panel.getName())) {
+            for (final Component currPanel : tabs.getComponents()) {
+                if (tabName.equals(currPanel.getName())) {
+                    panel = (AbstractTabPanel) currPanel;
+                }
+            }
+        }
 
         // remove from table list
-        if (panel instanceof SkatTablePanel || panel instanceof ISSTablePanel) tables.remove(panel.getName());
+        if (panel instanceof SkatTablePanel || panel instanceof ISSTablePanel) {
+            tables.remove(panel.getName());
+        }
 
         tabs.remove(panel);
     }
@@ -704,7 +733,9 @@ public class JSkatViewImpl implements JSkatView {
                 strings.getString("invite_players"),
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-        if (dialogResult == JOptionPane.OK_OPTION) result.addAll(invitationPanel.getPlayer());
+        if (dialogResult == JOptionPane.OK_OPTION) {
+            result.addAll(invitationPanel.getPlayer());
+        }
 
         LOG.debug("Players to invite: " + result);
 
@@ -733,7 +764,9 @@ public class JSkatViewImpl implements JSkatView {
                 strings.getString("iss_table_invitation_title"),
                 JOptionPane.YES_NO_OPTION);
 
-        if (answer == JOptionPane.YES_OPTION) result = true;
+        if (answer == JOptionPane.YES_OPTION) {
+            result = true;
+        }
 
         return result;
     }
@@ -757,9 +790,11 @@ public class JSkatViewImpl implements JSkatView {
     public void closeAllIssTabsOn(final IssDisconnectCommand event) {
 
         SwingUtilities.invokeLater(() -> {
-            for (final Component currPanel : tabs.getComponents())
-                if (currPanel instanceof LobbyPanel || currPanel instanceof ISSTablePanel)
+            for (final Component currPanel : tabs.getComponents()) {
+                if (currPanel instanceof LobbyPanel || currPanel instanceof ISSTablePanel) {
                     closeTabPanel(currPanel.getName());
+                }
+            }
         });
     }
 
