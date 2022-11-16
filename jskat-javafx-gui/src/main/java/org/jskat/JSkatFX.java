@@ -29,6 +29,7 @@ import org.jskat.data.DesktopSavePathResolver;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatOptions.Option;
 import org.jskat.gui.img.JSkatGraphicRepository;
+import org.jskat.gui.javafx.JSkatMainWindow;
 import org.jskat.gui.javafx.JSkatMenuFactory;
 import org.jskat.gui.swing.JSkatViewImpl;
 import org.jskat.gui.swing.LookAndFeelSetter;
@@ -112,27 +113,27 @@ public class JSkatFX extends Application {
     private static void showJSkatMainWindow(final Screen targetScreen, final Point2D screenPosition, final MenuBar menu,
                                             final JSkatViewImpl jskatView) {
 
-//        final JSkatMainWindow jskatMainWindow = new JSkatMainWindow(VERSION, menu, jskatView, targetScreen,
-//                screenPosition);
-//
-//        jskatMainWindow.show();
+        final JSkatMainWindow jskatMainWindow = new JSkatMainWindow(VERSION, menu, jskatView, targetScreen,
+                screenPosition);
 
-        try {
-            showNewMainWindow(targetScreen, screenPosition, VERSION);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        jskatMainWindow.show();
+
+//        try {
+//            showNewMainWindow(targetScreen, screenPosition, VERSION);
+//        } catch (final IOException e) {
+//            throw new RuntimeException(e);
+//        }
 
         if (JSkatOptions.instance().getBoolean(Option.SHOW_TIPS_AT_START_UP)) {
             JSkatEventBus.INSTANCE.post(new ShowWelcomeInformationCommand());
         }
 
         if (JSkatOptions.instance().getBoolean(Option.CHECK_FOR_NEW_VERSION_AT_START_UP)) {
-            JSkatMaster.INSTANCE.checkJSkatVersion(VERSION, VersionChecker.getLatestVersion());
+            JSkatMaster.checkJSkatVersion(VERSION, VersionChecker.getLatestVersion());
         }
     }
 
-    private static void showNewMainWindow(final Screen targetScreen, final Point2D screenPosition, String version) throws IOException {
+    private static void showNewMainWindow(final Screen targetScreen, final Point2D screenPosition, final String version) throws IOException {
         final FXMLLoader loader = new FXMLLoader();
         loader.setLocation(JSkatFX.class.getResource("/org/jskat/gui/javafx/main/JSkatMainWindow.fxml"));
         loader.setResources(JSkatResourceBundle.INSTANCE.getStringResources());

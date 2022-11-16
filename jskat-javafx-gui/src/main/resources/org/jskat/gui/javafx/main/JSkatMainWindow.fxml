@@ -107,7 +107,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="%iss">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="About MyHelloApp" />
+                        <MenuItem fx:id="issLoginMenuItem" mnemonicParsing="false" onAction="#showIssLoginPanel" text="%international.skat.server" />
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="%skat_table">
@@ -183,7 +183,7 @@
         </MenuBar>
         <ToolBar>
             <items>
-                <Button mnemonicParsing="false" text="%international.skat.server">
+                <Button fx:id="issLoginToolbarButton" mnemonicParsing="false" onAction="#showIssLoginPanel" text="%international.skat.server">
                     <graphic>
                         <ImageView pickOnBounds="true" preserveRatio="true">
                             <image>
@@ -245,7 +245,7 @@
                     <content>
                         <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                             <children>
-                        <Pane minWidth="10.0" prefHeight="10.0" VBox.vgrow="ALWAYS" />
+                        <Pane prefHeight="10.0" VBox.vgrow="ALWAYS" />
                                 <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
                                     <children>
                                         <ImageView pickOnBounds="true" preserveRatio="true">
@@ -278,7 +278,7 @@
                                         <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
                                     </rowConstraints>
                                     <children>
-                                        <Button maxWidth="-Infinity" mnemonicParsing="false" prefWidth="300.0" text="%international.skat.server">
+                                        <Button fx:id="issLoginButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#showIssLoginPanel" prefWidth="300.0" text="%international.skat.server">
                                             <graphic>
                                                 <ImageView pickOnBounds="true" preserveRatio="true">
                                                     <image>
@@ -323,7 +323,7 @@
                                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </VBox.margin>
                                 </GridPane>
-                        <Pane minWidth="10.0" prefHeight="10.0" VBox.vgrow="ALWAYS" />
+                        <Pane prefHeight="10.0" VBox.vgrow="ALWAYS" />
                             </children>
                         </VBox>
                     </content>

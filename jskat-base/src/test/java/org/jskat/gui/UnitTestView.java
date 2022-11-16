@@ -30,20 +30,20 @@ public class UnitTestView implements JSkatView {
      * Constructor
      */
     public UnitTestView() {
-        this.tables = new ArrayList<String>();
+        tables = new ArrayList<String>();
         JSkatEventBus.INSTANCE.register(this);
     }
 
     @Subscribe
     public void handle(final TableCreatedEvent event) {
-        this.tables.add(event.tableName);
+        tables.add(event.tableName);
     }
 
     /**
      * Resets the view
      */
     public void reset() {
-        this.tables.clear();
+        tables.clear();
     }
 
     @Override
@@ -54,12 +54,6 @@ public class UnitTestView implements JSkatView {
 
     @Override
     public void startGame(final String tableName) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void showISSLogin() {
         // TODO Auto-generated method stub
 
     }
@@ -96,33 +90,6 @@ public class UnitTestView implements JSkatView {
 
     @Override
     public void setBidValueToHold(final String tableName, final int bidValue) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void updateISSLobbyPlayerList(final String playerName,
-                                         final String language, final long gamesPlayed, final double strength) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void removeFromISSLobbyPlayerList(final String playerName) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void updateISSLobbyTableList(final String tableName,
-                                        final int maxPlayers, final long gamesPlayed, final String player1,
-                                        final String player2, final String player3) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void removeFromISSLobbyTableList(final String tableName) {
         // TODO Auto-generated method stub
 
     }

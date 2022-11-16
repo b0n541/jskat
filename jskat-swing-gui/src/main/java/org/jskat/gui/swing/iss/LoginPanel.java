@@ -9,8 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Panel for login into International Skat Server (ISS)
@@ -62,18 +60,15 @@ public class LoginPanel extends AbstractTabPanel {
         login.add(this.passwordField, "growx, wrap");
 
         final JButton loginButton = new JButton(this.getActionMap().get(JSkatAction.CONNECT_TO_ISS));
-        loginButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
+        loginButton.addActionListener(e -> {
+            final LoginCredentials loginCredentials =
+                    new LoginCredentials(
+                            LoginPanel.this.loginField.getText(),
+                            new String(LoginPanel.this.passwordField.getPassword()));
 
-                final LoginCredentials loginCredentials = new LoginCredentials();
-                loginCredentials.setLoginName(LoginPanel.this.loginField.getText());
-                loginCredentials.setPassword(new String(LoginPanel.this.passwordField.getPassword()));
-
-                e.setSource(loginCredentials);
-                // fire event again
-                loginButton.dispatchEvent(e);
-            }
+            e.setSource(loginCredentials);
+            // fire event again
+            loginButton.dispatchEvent(e);
         });
         final JButton issHomepageButton = new JButton(getActionMap().get(JSkatAction.OPEN_ISS_HOMEPAGE));
         final JButton issRegisterButton = new JButton(getActionMap().get(JSkatAction.REGISTER_ON_ISS));

@@ -10,6 +10,7 @@ import org.jskat.control.command.general.ShowAboutInformationCommand;
 import org.jskat.control.command.general.ShowHelpCommand;
 import org.jskat.control.command.general.ShowLicenseCommand;
 import org.jskat.control.command.general.ShowPreferencesCommand;
+import org.jskat.control.command.iss.IssShowLoginCommand;
 import org.jskat.control.command.table.NextReplayMoveCommand;
 import org.jskat.control.command.table.ReplayGameCommand;
 import org.jskat.control.command.table.StartSkatSeriesCommand;
@@ -72,7 +73,7 @@ public final class JSkatMenuFactory {
         final Menu issMenu = new Menu(strings.getString("iss"));
 
         final MenuItem playOnIssMenuItem = new MenuItem(strings.getString("play_on_iss"));
-        playOnIssMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.getIssController().showISSLoginPanel());
+        playOnIssMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE.post(new IssShowLoginCommand()));
         playOnIssMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.CONNECT_ISS, IconSize.SMALL));
         final MenuItem createNewTableOnIssMenuItem = new MenuItem(strings.getString("new_table"));
         createNewTableOnIssMenuItem

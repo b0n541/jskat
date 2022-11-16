@@ -35,11 +35,6 @@ public interface JSkatView {
     void startGame(String tableName);
 
     /**
-     * Shows the login for ISS
-     */
-    void showISSLogin();
-
-    /**
      * Gets the players to invite
      *
      * @param playerNames Available players
@@ -85,44 +80,6 @@ public interface JSkatView {
      * @param bidValue  Bid value
      */
     void setBidValueToHold(String tableName, int bidValue);
-
-    /**
-     * Updates the client list of the ISS lobby
-     *
-     * @param playerName  Player name
-     * @param language    Languages spoken by the human player or '-' for AI player
-     * @param gamesPlayed Number of games played so far
-     * @param strength    Playing strength after ISS evaluation
-     */
-    void updateISSLobbyPlayerList(String playerName, String language,
-                                  long gamesPlayed, double strength);
-
-    /**
-     * Removes a client from the list of the ISS lobby
-     *
-     * @param playerName Player name
-     */
-    void removeFromISSLobbyPlayerList(String playerName);
-
-    /**
-     * Updates the table list of the ISS lobby
-     *
-     * @param tableName   Table name
-     * @param maxPlayers  Maximum players allowed on the table
-     * @param gamesPlayed Games played so far
-     * @param player1     Player 1 (? for free seat)
-     * @param player2     Player 2 (? for free seat)
-     * @param player3     Player 3 (? for free seat)
-     */
-    void updateISSLobbyTableList(String tableName, int maxPlayers,
-                                 long gamesPlayed, String player1, String player2, String player3);
-
-    /**
-     * Removes a table from the table list of the ISS lobby
-     *
-     * @param tableName Table name
-     */
-    void removeFromISSLobbyTableList(String tableName);
 
     /**
      * Appends a new chat message to a chat

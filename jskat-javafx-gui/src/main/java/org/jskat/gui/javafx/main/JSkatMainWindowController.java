@@ -1,6 +1,7 @@
 package org.jskat.gui.javafx.main;
 
 import com.google.common.eventbus.Subscribe;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingNode;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -15,10 +16,12 @@ import org.jskat.JSkatFX;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.command.general.*;
+import org.jskat.control.command.iss.IssShowLoginCommand;
 import org.jskat.control.command.table.NextReplayMoveCommand;
 import org.jskat.control.command.table.ReplayGameCommand;
 import org.jskat.control.command.table.StartSkatSeriesCommand;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
+import org.jskat.control.event.iss.*;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
 import org.jskat.control.event.table.TableCreatedEvent;
 import org.jskat.data.JSkatApplicationData;
@@ -26,6 +29,7 @@ import org.jskat.data.JSkatViewType;
 import org.jskat.gui.swing.JSkatOptionsDialog;
 import org.jskat.gui.swing.JSkatViewImpl;
 import org.jskat.gui.swing.iss.ISSTablePanel;
+import org.jskat.gui.swing.iss.LobbyPanel;
 import org.jskat.gui.swing.table.SkatTablePanel;
 import org.jskat.util.JSkatResourceBundle;
 
@@ -47,11 +51,13 @@ public class JSkatMainWindowController {
     private MenuItem preferencesMenuItem;
     @FXML
     private Button preferencesButton;
-    @FXML
-    private MenuItem exitJSkatMenuItem;
-    @FXML
-    private Button exitJSkatButton;
 
+    @FXML
+    private MenuItem issLoginMenuItem;
+    @FXML
+    private Button issLoginToolbarButton;
+    @FXML
+    private Button issLoginButton;
     @FXML
     private MenuItem localTableMenuItem;
     @FXML
@@ -80,7 +86,14 @@ public class JSkatMainWindowController {
     @FXML
     private MenuItem aboutMenuItem;
 
+    @FXML
+    private MenuItem exitJSkatMenuItem;
+    @FXML
+    private Button exitJSkatButton;
+
+    // TODO remove when Swing has been retired
     private JSkatOptionsDialog preferencesDialog;
+    private LobbyPanel issLobby;
 
     @FXML
     public void initialize() {
@@ -89,6 +102,11 @@ public class JSkatMainWindowController {
         JSkatEventBus.INSTANCE.register(this);
 
         preferencesDialog = new JSkatOptionsDialog(null);
+    }
+
+    @FXML
+    public void showIssLoginPanel() {
+        JSkatEventBus.INSTANCE.post(new IssShowLoginCommand());
     }
 
     @FXML
@@ -107,13 +125,13 @@ public class JSkatMainWindowController {
     @FXML
     public void createNewLocalTable() {
 
-        TextInputDialog dialog = new TextInputDialog(strings.getString("local.table") + " " + 1);
+        final TextInputDialog dialog = new TextInputDialog(strings.getString("local.table") + " " + 1);
 
         dialog.setTitle(strings.getString("new.table.dialog.title"));
         dialog.setHeaderText(strings.getString("new.table.dialog.message"));
         dialog.setContentText(strings.getString("name"));
 
-        Optional<String> result = dialog.showAndWait();
+        final Optional<String> result = dialog.showAndWait();
 
         if (result.isPresent()) {
             String tableName = result.get();
@@ -183,7 +201,7 @@ public class JSkatMainWindowController {
     }
 
     @Subscribe
-    public void showNewVersionInfoMessageOn(final NewJSkatVersionAvailableEvent event) {
+    public void showNewVersionInfoOn(final NewJSkatVersionAvailableEvent event) {
         final Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.initOwner(root.getScene().getWindow());
         alert.setTitle(JSkatResourceBundle.INSTANCE.getString("new_version_title"));
@@ -198,10 +216,26 @@ public class JSkatMainWindowController {
     }
 
     @Subscribe
+    public void showIssLoginOn(final IssShowLoginCommand command) throws IOException {
+        final FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/org/jskat/gui/javafx/iss/IssLogin.fxml"));
+        loader.setResources(JSkatResourceBundle.INSTANCE.getStringResources());
+        final VBox loginPanel = loader.load();
+
+        final Tab tab = new Tab(strings.getString("iss_login"));
+        tab.setId(JSkatMainWindowTabType.ISS_LOGIN.name());
+        tab.setClosable(true);
+        tab.setContent(loginPanel);
+
+        tabs.getTabs().add(tab);
+        tabs.getSelectionModel().select(tab);
+    }
+
+    @Subscribe
     public void addNewTableTabOn(final TableCreatedEvent event) {
 
-        SwingNode swingNode = new SwingNode();
-        String tableName = event.tableName;
+        final SwingNode swingNode = new SwingNode();
+        final String tableName = event.tableName;
 
         SwingUtilities.invokeLater(() -> {
             SkatTablePanel panel = null;
@@ -214,16 +248,63 @@ public class JSkatMainWindowController {
         });
 
         String tabTitle = null;
+        String tabId = null;
         if (JSkatViewType.LOCAL_TABLE.equals(event.tableType)) {
             tabTitle = tableName;
+            tabId = JSkatMainWindowTabType.LOCAL_TABLE.name();
         } else if (JSkatViewType.ISS_TABLE.equals(event.tableType)) {
             tabTitle = strings.getString("iss_table") + ": " + tableName;
+            tabId = JSkatMainWindowTabType.ISS_TABLE.name();
         }
 
-        Tab tab = new Tab(tabTitle);
+        final Tab tab = new Tab(tabTitle);
+        tab.setId(tabId);
         tab.setClosable(true);
         tab.setContent(swingNode);
         tabs.getTabs().add(tab);
         tabs.getSelectionModel().select(tab);
+    }
+
+    @Subscribe
+    public void showIssLobbyOn(final IssConnectedEvent event) {
+        tabs.getTabs().stream()
+                .filter(tab -> JSkatMainWindowTabType.ISS_LOGIN.name().equals(tab.getId()))
+                .findFirst()
+                .ifPresent(tab -> Platform.runLater(() -> tabs.getTabs().remove(tab)));
+
+        final SwingNode swingNode = new SwingNode();
+        SwingUtilities.invokeLater(() -> {
+            issLobby = new LobbyPanel("ISS Lobby", JSkatViewImpl.actions);
+            swingNode.setContent(issLobby);
+        });
+
+        Platform.runLater(() -> {
+            final Tab tab = new Tab("ISS Lobby");
+            tab.setId(JSkatMainWindowTabType.ISS_LOBBY.name());
+            tab.setClosable(true);
+            tab.setContent(swingNode);
+            tabs.getTabs().add(tab);
+            tabs.getSelectionModel().select(tab);
+        });
+    }
+
+    @Subscribe
+    public void updateIssTableListOn(final IssTableDataUpdatedEvent event) {
+        issLobby.updateTable(event.tableName(), event.maxPlayers(), event.gamesPlayed(), event.player1(), event.player2(), event.player3());
+    }
+
+    @Subscribe
+    public void deleteTableFromIssTableListOn(final IssTableDeletedEvent event) {
+        issLobby.removeTable(event.tableName());
+    }
+
+    @Subscribe
+    public void updateIssPlayerListOn(final IssPlayerDataUpdatedEvent event) {
+        issLobby.updatePlayer(event.playerName(), event.language(), event.gamesPlayed(), event.strength());
+    }
+
+    @Subscribe
+    public void deletePlayerFromIssPlayerListOn(final IssPlayerLeftEvent event) {
+        issLobby.removeTable(event.playerName());
     }
 }

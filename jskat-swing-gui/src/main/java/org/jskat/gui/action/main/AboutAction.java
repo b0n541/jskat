@@ -1,6 +1,5 @@
 package org.jskat.gui.action.main;
 
-import org.jskat.control.JSkatEventBus;
 import org.jskat.control.command.general.ShowAboutInformationCommand;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
@@ -28,6 +27,6 @@ public class AboutAction extends AbstractJSkatAction {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        JSkatEventBus.INSTANCE.post(new ShowAboutInformationCommand());
+        EVENTBUS.post(new ShowAboutInformationCommand());
     }
 }

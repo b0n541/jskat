@@ -19,15 +19,6 @@ import java.util.Set;
  * is needed for simulating games without gui
  */
 public class NullView implements JSkatView {
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void showISSLogin() {
-        // empty method by intent
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -52,50 +43,6 @@ public class NullView implements JSkatView {
     public void showErrorMessage(
             @SuppressWarnings("unused") final String title,
             @SuppressWarnings("unused") final String message) {
-        // empty method by intent
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void updateISSLobbyPlayerList(
-            @SuppressWarnings("unused") final String playerName,
-            @SuppressWarnings("unused") final String playerLanguage1,
-            @SuppressWarnings("unused") final long gamesPlayed,
-            @SuppressWarnings("unused") final double strength) {
-        // empty method by intent
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void removeFromISSLobbyPlayerList(
-            @SuppressWarnings("unused") final String playerName) {
-        // empty method by intent
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void removeFromISSLobbyTableList(
-            @SuppressWarnings("unused") final String tableName) {
-        // empty method by intent
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void updateISSLobbyTableList(
-            @SuppressWarnings("unused") final String tableName,
-            @SuppressWarnings("unused") final int maxPlayers,
-            @SuppressWarnings("unused") final long gamesPlayed,
-            @SuppressWarnings("unused") final String player1,
-            @SuppressWarnings("unused") final String player2,
-            @SuppressWarnings("unused") final String player3) {
         // empty method by intent
     }
 
