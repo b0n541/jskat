@@ -93,9 +93,8 @@ public class MessageHandler extends Thread {
             eventBus.post(new IssDisconnectedEvent());
         } else {
 
-            final StringTokenizer tokenizer = new StringTokenizer(message); // get
-            // first
-            // command
+            final StringTokenizer tokenizer = new StringTokenizer(message);
+            // get command first
             final String first = tokenizer.nextToken();
             // get all parameters
             final List<String> params = new ArrayList<String>();
@@ -104,13 +103,10 @@ public class MessageHandler extends Thread {
             }
 
             try {
-
                 handleMessage(first, params);
-
             } catch (final Exception except) {
                 log.error("Error in parsing ISS protocoll", except);
-                issControl.showErrorMessage(strings
-                        .getString("iss_error_parsing_iss_protocol"));
+                issControl.showErrorMessage(strings.getString("iss_error_parsing_iss_protocol"));
             }
         }
     }

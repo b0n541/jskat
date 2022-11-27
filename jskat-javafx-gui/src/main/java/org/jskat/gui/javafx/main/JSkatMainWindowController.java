@@ -36,6 +36,7 @@ import org.jskat.util.JSkatResourceBundle;
 import javax.swing.*;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.Set;
 
 
 public class JSkatMainWindowController {
@@ -261,8 +262,11 @@ public class JSkatMainWindowController {
         tab.setId(tabId);
         tab.setClosable(true);
         tab.setContent(swingNode);
-        tabs.getTabs().add(tab);
-        tabs.getSelectionModel().select(tab);
+
+        Platform.runLater(() -> {
+            tabs.getTabs().add(tab);
+            tabs.getSelectionModel().select(tab);
+        });
     }
 
     @Subscribe
@@ -278,14 +282,26 @@ public class JSkatMainWindowController {
             swingNode.setContent(issLobby);
         });
 
+        final Tab tab = new Tab("ISS Lobby");
+        tab.setId(JSkatMainWindowTabType.ISS_LOBBY.name());
+        tab.setClosable(true);
+        tab.setContent(swingNode);
+
         Platform.runLater(() -> {
-            final Tab tab = new Tab("ISS Lobby");
-            tab.setId(JSkatMainWindowTabType.ISS_LOBBY.name());
-            tab.setClosable(true);
-            tab.setContent(swingNode);
             tabs.getTabs().add(tab);
             tabs.getSelectionModel().select(tab);
         });
+    }
+
+    @Subscribe
+    public void closeAllIssTabsOn(final IssDisconnectedEvent event) {
+        tabs.getTabs().stream()
+                .filter(tab -> Set.of(
+                                JSkatMainWindowTabType.ISS_LOGIN.name(),
+                                JSkatMainWindowTabType.ISS_LOBBY.name(),
+                                JSkatMainWindowTabType.ISS_TABLE.name())
+                        .contains(tab.getId()))
+                .forEach(tab -> Platform.runLater(() -> tabs.getTabs().remove(tab)));
     }
 
     @Subscribe
