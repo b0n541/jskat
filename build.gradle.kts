@@ -59,6 +59,10 @@ application {
     mainClass.set(mainClassWithPackage)
 }
 
+tasks.wrapper {
+    gradleVersion = "7.6"
+}
+
 tasks.startScripts {
     mainClassName = mainClassWithPackage
 }
