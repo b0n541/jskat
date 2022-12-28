@@ -60,7 +60,7 @@
                     <items>
                         <MenuItem mnemonicParsing="false" text="%open.skatseries">
                      <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@/org/jskat/gui/img/gui/load_small.png" />
                            </image>
@@ -70,7 +70,7 @@
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem mnemonicParsing="false" text="%save.skatseries">
                      <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@/org/jskat/gui/img/gui/save_small.png" />
                            </image>
@@ -78,7 +78,7 @@
                      </graphic></MenuItem>
                         <MenuItem mnemonicParsing="false" text="%save.as.skatseries">
                      <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@/org/jskat/gui/img/gui/save_as_small.png" />
                            </image>
@@ -88,7 +88,7 @@
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem fx:id="preferencesMenuItem" mnemonicParsing="false" onAction="#showPreferences" text="%preferences">
                      <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@/org/jskat/gui/img/gui/preferences_small.png" />
                            </image>
@@ -97,7 +97,7 @@
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem fx:id="exitJskatMenuItem" mnemonicParsing="false" onAction="#exitJSkat" text="%exit.jskat">
                      <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@/org/jskat/gui/img/gui/exit_small.png" />
                            </image>
@@ -114,7 +114,7 @@
                     <items>
                         <MenuItem fx:id="localTableMenuItem" mnemonicParsing="false" onAction="#createNewLocalTable" text="%local.table">
                      <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@/org/jskat/gui/img/gui/table_small.png" />
                            </image>
@@ -123,7 +123,7 @@
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem fx:id="startSkatSeriesMenuItem" mnemonicParsing="false" onAction="#startSkatSeries" text="%start.skat.series">
                      <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@/org/jskat/gui/img/gui/play_small.png" />
                            </image>
@@ -132,7 +132,7 @@
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem fx:id="replayGameMenuItem" mnemonicParsing="false" onAction="#replayGame" text="%replay.game">
                      <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@/org/jskat/gui/img/gui/first_small.png" />
                            </image>
@@ -140,7 +140,7 @@
                      </graphic></MenuItem>
                         <MenuItem fx:id="nextReplayMoveMenuItem" mnemonicParsing="false" onAction="#nextReplayMove" text="%next.replay.move">
                      <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@/org/jskat/gui/img/gui/next_small.png" />
                            </image>
@@ -152,7 +152,7 @@
                     <items>
                         <MenuItem fx:id="helpMenuItem" mnemonicParsing="false" onAction="#showHelp" text="%help">
                      <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@/org/jskat/gui/img/gui/help_small.png" />
                            </image>
@@ -161,7 +161,7 @@
                   <SeparatorMenuItem mnemonicParsing="false" />
                   <MenuItem fx:id="licenseMenuItem" mnemonicParsing="false" onAction="#showLicense" text="%license">
                      <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@/org/jskat/gui/img/gui/license_small.png" />
                            </image>
@@ -170,7 +170,7 @@
                   </MenuItem>
                   <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#showAboutInformation" text="%about">
                      <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@/org/jskat/gui/img/gui/about_small.png" />
                            </image>
@@ -185,7 +185,7 @@
             <items>
                 <Button fx:id="issLoginToolbarButton" mnemonicParsing="false" onAction="#showIssLoginPanel" text="%international.skat.server">
                     <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@/org/jskat/gui/img/gui/connect_iss_small.png" />
                             </image>
@@ -194,7 +194,7 @@
                 </Button>
                 <Button fx:id="localTableToolbarButton" mnemonicParsing="false" onAction="#createNewLocalTable" text="%local.table">
                     <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@/org/jskat/gui/img/gui/table_small.png" />
                             </image>
@@ -203,7 +203,7 @@
                 </Button>
                 <Button fx:id="startSkatSeriesToolbarButton" mnemonicParsing="false" onAction="#startSkatSeries" text="%start.skat.series">
                     <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@/org/jskat/gui/img/gui/play_small.png" />
                             </image>
@@ -212,7 +212,7 @@
                 </Button>
                 <Button fx:id="replayGameToolbarButton" mnemonicParsing="false" onAction="#replayGame" text="%replay.game">
                     <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@/org/jskat/gui/img/gui/first_small.png" />
                             </image>
@@ -221,7 +221,7 @@
                 </Button>
                 <Button fx:id="nextReplayMoveButton" mnemonicParsing="false" onAction="#nextReplayMove" text="%next.replay.move">
                     <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@/org/jskat/gui/img/gui/next_small.png" />
                             </image>
@@ -230,7 +230,7 @@
                 </Button>
                 <Button fx:id="helpButton" mnemonicParsing="false" onAction="#showHelp" text="%help">
                     <graphic>
-                        <ImageView pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                             <image>
                                 <Image url="@/org/jskat/gui/img/gui/help_small.png" />
                             </image>
@@ -266,7 +266,7 @@
                                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                     </VBox.margin>
                                 </HBox>
-                                <GridPane alignment="TOP_CENTER" hgap="10.0" maxWidth="-Infinity" VBox.vgrow="ALWAYS">
+                                <GridPane alignment="TOP_CENTER" hgap="10.0" maxWidth="-Infinity" vgap="10.0" VBox.vgrow="ALWAYS">
                                     <columnConstraints>
                                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="300.0" />
                                         <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" minWidth="10.0" />
@@ -280,7 +280,7 @@
                                     <children>
                                         <Button fx:id="issLoginButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#showIssLoginPanel" prefWidth="300.0" text="%international.skat.server">
                                             <graphic>
-                                                <ImageView pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
                                                         <Image url="@/org/jskat/gui/img/gui/connect_iss_big.png" />
                                                     </image>
@@ -290,7 +290,7 @@
                                         <Label text="%explain.iss.table" GridPane.columnIndex="1" GridPane.hgrow="NEVER" />
                                         <Button fx:id="localTableButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#createNewLocalTable" prefWidth="300.0" text="%local.table" GridPane.rowIndex="1">
                                             <graphic>
-                                                <ImageView pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
                                                         <Image url="@/org/jskat/gui/img/gui/table_big.png" />
                                                     </image>
@@ -300,7 +300,7 @@
                                         <Label text="%explain.local.table" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="1" />
                                         <Button fx:id="preferencesButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#showPreferences" prefWidth="300.0" text="%preferences" GridPane.rowIndex="2">
                                             <graphic>
-                                                <ImageView pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
                                                         <Image url="@/org/jskat/gui/img/gui/preferences_big.png" />
                                                     </image>
@@ -310,7 +310,7 @@
                                         <Label text="%explain.preferences" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="2" />
                                         <Button fx:id="exitJSkatButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#exitJSkat" prefWidth="300.0" text="%exit.jskat" GridPane.rowIndex="3">
                                             <graphic>
-                                                <ImageView pickOnBounds="true" preserveRatio="true">
+                                                <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                                                     <image>
                                                         <Image url="@/org/jskat/gui/img/gui/exit_big.png" />
                                                     </image>
