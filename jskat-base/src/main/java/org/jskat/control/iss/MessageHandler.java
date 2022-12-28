@@ -105,7 +105,7 @@ public class MessageHandler extends Thread {
             try {
                 handleMessage(first, params);
             } catch (final Exception except) {
-                log.error("Error in parsing ISS protocoll", except);
+                log.error("Error in parsing ISS protocol", except);
                 issControl.showErrorMessage(strings.getString("iss_error_parsing_iss_protocol"));
             }
         }
