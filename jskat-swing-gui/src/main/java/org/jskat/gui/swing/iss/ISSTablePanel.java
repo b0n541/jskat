@@ -19,7 +19,6 @@ import java.util.List;
  */
 public class ISSTablePanel extends SkatTablePanel {
 
-
     ChatPanel chatPanel;
 
     // FIXME (jansch 05.04.2011) Dirty hack
@@ -32,7 +31,6 @@ public class ISSTablePanel extends SkatTablePanel {
      * @param actions   Action map
      */
     public ISSTablePanel(final String tableName, final ActionMap actions) {
-
         super(tableName, actions);
     }
 
@@ -41,8 +39,10 @@ public class ISSTablePanel extends SkatTablePanel {
      */
     @Override
     protected List<JSkatAction> getGameOverActions() {
-        return Arrays.asList(JSkatAction.INVITE_ISS_PLAYER,
-                JSkatAction.READY_TO_PLAY, JSkatAction.TALK_ENABLED,
+        return Arrays.asList(
+                JSkatAction.INVITE_ISS_PLAYER,
+                JSkatAction.READY_TO_PLAY,
+                JSkatAction.TALK_ENABLED,
                 JSkatAction.LEAVE_ISS_TABLE);
     }
 
@@ -51,19 +51,18 @@ public class ISSTablePanel extends SkatTablePanel {
      */
     @Override
     protected JPanel getPlayGroundPanel() {
-
         final JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill,insets 0", "[grow][shrink]", "fill"));
         panel.add(super.getPlayGroundPanel(), "width 80%, grow");
 
         // replace game start context panel
-        addContextPanel(ContextPanelType.START, new StartContextPanel(this.getActionMap(), getGameOverActions()));
+        addContextPanel(ContextPanelType.START, new StartContextPanel(getActionMap(), getGameOverActions()));
+        setContextPanel(ContextPanelType.START);
 
         return panel;
     }
 
     @Override
     protected JTabbedPane getLeftPanel() {
-
         JTabbedPane leftPanel = super.getLeftPanel();
 
         this.chatPanel = getChatPanel();
@@ -76,32 +75,26 @@ public class ISSTablePanel extends SkatTablePanel {
 
     @Override
     protected OpponentPanel getOpponentPanel() {
-
         return new OpponentPanel(getActionMap(), 12, true);
     }
 
     @Override
     protected JSkatUserPanel createPlayerPanel() {
-
         return new JSkatUserPanel(getActionMap(), 12, true);
     }
 
     private ChatPanel getChatPanel() {
-
         return new ChatPanel(this);
     }
 
     @Override
     protected JPanel getRightPanelForTrickPanel() {
-        final JPanel additionalActionsPanel = new JPanel(
-                LayoutFactory.getMigLayout());
+        final JPanel additionalActionsPanel = new JPanel(LayoutFactory.getMigLayout());
         additionalActionsPanel.setOpaque(false);
 
-        final JButton resignButton = new JButton(getActionMap().get(
-                JSkatAction.RESIGN));
+        final JButton resignButton = new JButton(getActionMap().get(JSkatAction.RESIGN));
         additionalActionsPanel.add(resignButton, "growx, wrap");
-        final JButton showCardsButton = new JButton(getActionMap().get(
-                JSkatAction.SHOW_CARDS));
+        final JButton showCardsButton = new JButton(getActionMap().get(JSkatAction.SHOW_CARDS));
         additionalActionsPanel.add(showCardsButton, "growx");
 
         return additionalActionsPanel;
@@ -117,11 +110,9 @@ public class ISSTablePanel extends SkatTablePanel {
         // FIXME (jansch 05.04.2011) make 3<>4 change possible
         // setMaxPlayers(tableStatus.getMaxPlayers());
 
-        for (final String playerName : tableStatus.getPlayerInformations()
-                .keySet()) {
+        for (final String playerName : tableStatus.getPlayerInformations().keySet()) {
 
-            final PlayerStatus status = tableStatus
-                    .getPlayerInformation(playerName);
+            final PlayerStatus status = tableStatus.getPlayerInformation(playerName);
 
             if (!status.isPlayerLeft()) {
                 addPlayerName(playerName);

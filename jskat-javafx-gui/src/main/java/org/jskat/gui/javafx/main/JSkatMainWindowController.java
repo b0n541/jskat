@@ -24,6 +24,7 @@ import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.iss.*;
 import org.jskat.control.event.table.EmptyTableNameInputEvent;
 import org.jskat.control.event.table.TableCreatedEvent;
+import org.jskat.control.event.table.TableRemovedEvent;
 import org.jskat.data.JSkatApplicationData;
 import org.jskat.data.JSkatViewType;
 import org.jskat.gui.swing.JSkatOptionsDialog;
@@ -35,6 +36,7 @@ import org.jskat.util.JSkatResourceBundle;
 
 import javax.swing.*;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 import java.util.Set;
 
@@ -238,24 +240,28 @@ public class JSkatMainWindowController {
         final SwingNode swingNode = new SwingNode();
         final String tableName = event.tableName;
 
-        SwingUtilities.invokeLater(() -> {
-            SkatTablePanel panel = null;
-            if (JSkatViewType.LOCAL_TABLE.equals(event.tableType)) {
-                panel = new SkatTablePanel(tableName, JSkatViewImpl.actions);
-            } else if (JSkatViewType.ISS_TABLE.equals(event.tableType)) {
-                panel = new ISSTablePanel(tableName, JSkatViewImpl.actions);
-            }
-            swingNode.setContent(panel);
-        });
+        try {
+            SwingUtilities.invokeAndWait(() -> {
+                SkatTablePanel panel = null;
+                if (JSkatViewType.LOCAL_TABLE.equals(event.tableType)) {
+                    panel = new SkatTablePanel(tableName, JSkatViewImpl.actions);
+                } else if (JSkatViewType.ISS_TABLE.equals(event.tableType)) {
+                    panel = new ISSTablePanel(tableName, JSkatViewImpl.actions);
+                }
+                swingNode.setContent(panel);
+            });
+        } catch (InterruptedException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
 
         String tabTitle = null;
         String tabId = null;
         if (JSkatViewType.LOCAL_TABLE.equals(event.tableType)) {
             tabTitle = tableName;
-            tabId = JSkatMainWindowTabType.LOCAL_TABLE.name();
+            tabId = JSkatMainWindowTabType.LOCAL_TABLE.name() + ":" + tableName;
         } else if (JSkatViewType.ISS_TABLE.equals(event.tableType)) {
             tabTitle = strings.getString("iss_table") + ": " + tableName;
-            tabId = JSkatMainWindowTabType.ISS_TABLE.name();
+            tabId = JSkatMainWindowTabType.ISS_TABLE.name() + ":" + tableName;
         }
 
         final Tab tab = new Tab(tabTitle);
@@ -277,10 +283,14 @@ public class JSkatMainWindowController {
                 .ifPresent(tab -> Platform.runLater(() -> tabs.getTabs().remove(tab)));
 
         final SwingNode swingNode = new SwingNode();
-        SwingUtilities.invokeLater(() -> {
-            issLobby = new LobbyPanel("ISS Lobby", JSkatViewImpl.actions);
-            swingNode.setContent(issLobby);
-        });
+        try {
+            SwingUtilities.invokeAndWait(() -> {
+                issLobby = new LobbyPanel("ISS Lobby", JSkatViewImpl.actions);
+                swingNode.setContent(issLobby);
+            });
+        } catch (InterruptedException | InvocationTargetException e) {
+            throw new RuntimeException(e);
+        }
 
         final Tab tab = new Tab("ISS Lobby");
         tab.setId(JSkatMainWindowTabType.ISS_LOBBY.name());
@@ -291,6 +301,15 @@ public class JSkatMainWindowController {
             tabs.getTabs().add(tab);
             tabs.getSelectionModel().select(tab);
         });
+    }
+
+    @Subscribe
+    public void removeTableOn(TableRemovedEvent event) {
+        tabs.getTabs().stream()
+                .filter(tab ->
+                        tab.getId().contains(JSkatMainWindowTabType.ISS_TABLE.name()) &&
+                                tab.getId().contains(event.tableName))
+                .forEach(tab -> Platform.runLater(() -> tabs.getTabs().remove(tab)));
     }
 
     @Subscribe

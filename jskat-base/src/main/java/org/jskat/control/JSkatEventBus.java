@@ -49,7 +49,6 @@ public class JSkatEventBus {
 
     @Subscribe
     public void createTableEventBusOn(final CreateTableCommand command) {
-
         if (!JSkatEventBus.TABLE_EVENT_BUSSES.containsKey(command.tableName)) {
             EventBus eventBus = new EventBus("Table " + command.tableName);
             JSkatEventBus.TABLE_EVENT_BUSSES.put(command.tableName, eventBus);

@@ -11,9 +11,7 @@ import java.util.List;
  */
 class StartContextPanel extends JPanel {
 
-
     public StartContextPanel(final ActionMap actions, final List<JSkatAction> activeActions) {
-
         initPanel(actions, activeActions);
     }
 

@@ -33,7 +33,6 @@ import java.util.Map.Entry;
  */
 public class SkatTablePanel extends AbstractTabPanel {
 
-
     private static final Logger log = LoggerFactory.getLogger(SkatTablePanel.class);
     // FIXME (jan 14.11.2010) looks wrong to me, was made static to avoid
     // NullPointerException during ISS table creation
@@ -121,8 +120,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
         JTabbedPane leftPanel = new JTabbedPane();
 
-        leftPanel.addTab(strings.getString("score_sheet"),
-                getScoreListPanel());
+        leftPanel.addTab(strings.getString("score_sheet"), getScoreListPanel());
 
         return leftPanel;
     }
@@ -135,18 +133,14 @@ public class SkatTablePanel extends AbstractTabPanel {
         skatListTableModel = new SkatListTableModel();
         scoreListTable = new JTable(skatListTableModel);
 
-        for (int i = 0; i < scoreListTable.getColumnModel()
-                .getColumnCount(); i++) {
+        for (int i = 0; i < scoreListTable.getColumnModel().getColumnCount(); i++) {
 
             if (i == 3) {
-
                 // game colum is bigger
-                scoreListTable.getColumnModel().getColumn(i)
-                        .setPreferredWidth(40);
+                scoreListTable.getColumnModel().getColumn(i).setPreferredWidth(40);
             } else {
 
-                scoreListTable.getColumnModel().getColumn(i)
-                        .setPreferredWidth(20);
+                scoreListTable.getColumnModel().getColumn(i).setPreferredWidth(20);
             }
         }
 
@@ -240,8 +234,7 @@ public class SkatTablePanel extends AbstractTabPanel {
         trickHoldingPanel.setOpaque(false);
         addContextPanel(ContextPanelType.TRICK_PLAYING, trickHoldingPanel);
 
-        gameOverPanel = new GameOverPanel(getActionMap(),
-                getGameOverActions());
+        gameOverPanel = new GameOverPanel(getActionMap(), getGameOverActions());
         addContextPanel(ContextPanelType.GAME_OVER, gameOverPanel);
     }
 
@@ -581,7 +574,7 @@ public class SkatTablePanel extends AbstractTabPanel {
      *
      * @param panelType Panel type
      */
-    void setContextPanel(ContextPanelType panelType) {
+    protected void setContextPanel(ContextPanelType panelType) {
 
         ((CardLayout) gameContextPanel.getLayout()).show(gameContextPanel, panelType.toString());
         gameContextPanel.validate();
