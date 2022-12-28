@@ -13,6 +13,7 @@ import java.awt.*;
 /**
  * Panel for login into International Skat Server (ISS)
  */
+@Deprecated
 public class LoginPanel extends AbstractTabPanel {
 
 

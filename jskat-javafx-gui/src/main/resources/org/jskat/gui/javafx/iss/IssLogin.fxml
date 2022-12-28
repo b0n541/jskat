@@ -47,7 +47,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="root" prefHeight="700.0" prefWidth="671.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jskat.gui.javafx.main.JSkatMainWindowController">
+<VBox fx:id="root" prefHeight="700.0" prefWidth="671.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jskat.gui.javafx.iss.IssLoginController">
     <children>
       <Pane prefHeight="10.0" VBox.vgrow="ALWAYS" />
               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
@@ -79,8 +79,8 @@
                         <children>
                             <Label alignment="CENTER_RIGHT" text="%iss.username" GridPane.hgrow="NEVER" />
                             <Label alignment="CENTER_RIGHT" text="%iss.password" GridPane.hgrow="NEVER" GridPane.rowIndex="1" />
-                  <TextField GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
-                  <PasswordField GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+                  <TextField fx:id="userNameField" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+                  <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
                         </children>
                <padding>
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -90,7 +90,7 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
          <children>
-            <Button mnemonicParsing="false" text="%iss.connect">
+            <Button fx:id="issConnectButton" mnemonicParsing="false" onAction="#connectToIss" text="%iss.connect">
                <graphic>
                   <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -99,7 +99,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button mnemonicParsing="false" text="%iss.open.homepage">
+            <Button fx:id="issOpenHomepageButton" mnemonicParsing="false" onAction="#openIssHomepage" text="%iss.open.homepage">
                <graphic>
                   <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -108,7 +108,7 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button mnemonicParsing="false" text="%iss.register">
+            <Button fx:id="issRegisterButton" mnemonicParsing="false" onAction="#registerOnIss" text="%iss.register">
                <graphic>
                   <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
                      <image>
