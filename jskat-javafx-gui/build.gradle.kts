@@ -9,5 +9,5 @@ dependencies {
 
 javafx {
     modules = listOf("javafx.controls", "javafx.fxml", "javafx.web", "javafx.swing")
-    version = "18.0.+"
+    version = "19"
 }
