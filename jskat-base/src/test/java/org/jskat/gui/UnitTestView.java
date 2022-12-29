@@ -8,9 +8,7 @@ import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.iss.ChatMessage;
-import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.MoveInformation;
-import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.Player;
@@ -97,20 +95,6 @@ public class UnitTestView implements JSkatView {
     @Override
     public void appendISSChatMessage(final ChatMessageType messageType,
                                      final ChatMessage message) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void updateISSTable(final String tableName,
-                               final TablePanelStatus status) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void updateISSTable(final String tableName, final String loginName,
-                               final GameStartInformation status) {
         // TODO Auto-generated method stub
 
     }

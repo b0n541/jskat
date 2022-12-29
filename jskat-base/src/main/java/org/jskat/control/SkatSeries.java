@@ -42,7 +42,7 @@ public class SkatSeries {
     private boolean readyForNextGame = false;
     private final Map<Player, JSkatPlayer> players;
     private SkatGame currSkatGame;
-    private SkatGameReplayer currReplayGame;
+    private SkatGameReplay currReplayGame;
 
     private JSkatView view;
 
@@ -70,8 +70,7 @@ public class SkatSeries {
         JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(
                 new SkatGameReplayStartedEvent());
 
-        currReplayGame = new SkatGameReplayer(view, data.getTableName(),
-                currSkatGame.getGameMoves());
+        currReplayGame = new SkatGameReplay(data.getTableName(), currSkatGame.getGameMoves());
     }
 
     @Subscribe

@@ -1,4 +1,3 @@
-
 package org.jskat.control.iss;
 
 import org.jskat.AbstractJSkatTest;
@@ -300,7 +299,7 @@ public class MessageParserTest extends AbstractJSkatTest {
         final TablePanelStatus status = MessageParser.getTableStatus(creator, detailParams);
 
         assertThat(status.getMaxPlayers()).isEqualTo(3);
-        assertThat(status.getPlayerInformations()).hasSize(3);
+        assertThat(status.getPlayerInformation()).hasSize(3);
 
         final PlayerStatus playerStatus = status.getPlayerInformation("xskat");
         assertNotNull(playerStatus);

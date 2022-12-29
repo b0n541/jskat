@@ -47,14 +47,14 @@ public class MessageHandler extends Thread {
 
         strings = JSkatResourceBundle.INSTANCE;
 
-        messageList = new ArrayList<String>();
+        messageList = new ArrayList<>();
     }
 
     public MessageHandler(final IssController controller) {
         issControl = controller;
         strings = JSkatResourceBundle.INSTANCE;
 
-        messageList = new ArrayList<String>();
+        messageList = new ArrayList<>();
     }
 
     /**
@@ -78,26 +78,22 @@ public class MessageHandler extends Thread {
     }
 
     synchronized void addMessage(final String newMessage) {
-
         messageList.add(newMessage);
     }
 
     private synchronized String getNextMessage() {
-
         return messageList.remove(0);
     }
 
     void handleMessage(final String message) {
-
         if (message == null) {
             eventBus.post(new IssDisconnectedEvent());
         } else {
-
             final StringTokenizer tokenizer = new StringTokenizer(message);
             // get command first
             final String first = tokenizer.nextToken();
             // get all parameters
-            final List<String> params = new ArrayList<String>();
+            final List<String> params = new ArrayList<>();
             while (tokenizer.hasMoreTokens()) {
                 params.add(tokenizer.nextToken());
             }
@@ -265,24 +261,17 @@ public class MessageHandler extends Thread {
             if (actionCommand.equals("error")) {
                 handleErrorMessage(params.subList(3, params.size()));
             } else if (actionCommand.equals("state")) {
-                issControl.updateISSTableState(tableName,
-                        MessageParser.getTableStatus(creator, detailParams));
+                issControl.updateISSTableState(tableName, MessageParser.getTableStatus(creator, detailParams));
             } else if (actionCommand.equals("start")) {
-                issControl
-                        .updateISSGame(tableName, MessageParser
-                                .getGameStartStatus(creator, detailParams));
+                issControl.updateISSGame(tableName, MessageParser.getGameStartStatus(creator, detailParams));
             } else if (actionCommand.equals("go")) {
                 issControl.startGame(tableName);
             } else if (actionCommand.equals("play")) {
-
-                final MoveInformation moveInfo = MessageParser
-                        .getMoveInformation(detailParams);
+                final MoveInformation moveInfo = MessageParser.getMoveInformation(detailParams);
                 MessageParser.parsePlayerTimes(detailParams, moveInfo);
                 issControl.updateMove(tableName, moveInfo);
-
             } else if (actionCommand.equals("tell")) {
-                issControl.updateISSTableChatMessage(tableName, MessageParser
-                        .getTableChatMessage(tableName, detailParams));
+                issControl.updateISSTableChatMessage(tableName, MessageParser.getTableChatMessage(tableName, detailParams));
             } else if (actionCommand.equals("end")) {
                 issControl.endGame(tableName, getGameInformation(detailParams));
             } else {

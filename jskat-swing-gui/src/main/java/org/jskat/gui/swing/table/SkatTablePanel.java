@@ -324,20 +324,20 @@ public class SkatTablePanel extends AbstractTabPanel {
     public void resetTableOn(GameStartEvent event) {
 
         gameInfoPanel.setGameState(GameState.GAME_START);
-        gameInfoPanel.setGameNumber(event.gameNo);
+        gameInfoPanel.setGameNumber(event.gameNo());
 
-        leftOpponentPanel.setPosition(event.leftPlayerPosition);
-        rightOpponentPanel.setPosition(event.rightPlayerPosition);
-        userPanel.setPosition(event.userPosition);
+        leftOpponentPanel.setPosition(event.leftPlayerPosition());
+        rightOpponentPanel.setPosition(event.rightPlayerPosition());
+        userPanel.setPosition(event.userPosition());
 
-        biddingPanel.setUserPosition(event.userPosition);
-        trickPanel.setUserPosition(event.userPosition);
-        lastTrickPanel.setUserPosition(event.userPosition);
-        gameOverPanel.setUserPosition(event.userPosition);
+        biddingPanel.setUserPosition(event.userPosition());
+        trickPanel.setUserPosition(event.userPosition());
+        lastTrickPanel.setUserPosition(event.userPosition());
+        gameOverPanel.setUserPosition(event.userPosition());
 
         // FIXME (jansch 09.11.2010) code duplication with
         // BiddingPanel.setPlayerPositions()
-        switch (event.userPosition) {
+        switch (event.userPosition()) {
             case FOREHAND:
                 foreHand = userPanel;
                 middleHand = leftOpponentPanel;
@@ -615,7 +615,6 @@ public class SkatTablePanel extends AbstractTabPanel {
      * Clears the skat table
      */
     private void clearTable() {
-
         gameInfoPanel.clear();
         biddingPanel.resetPanel();
         declaringPanel.resetPanel();
@@ -669,7 +668,6 @@ public class SkatTablePanel extends AbstractTabPanel {
      * Starts a game
      */
     public void startGame() {
-
         clearTable();
     }
 
@@ -927,7 +925,6 @@ public class SkatTablePanel extends AbstractTabPanel {
      * @param bidValue Bid value
      */
     public void setBidValueToMake(int bidValue) {
-
         biddingPanel.setBidValueToMake(bidValue);
     }
 
@@ -937,7 +934,6 @@ public class SkatTablePanel extends AbstractTabPanel {
      * @param bidValue Bid value
      */
     public void setBidValueToHold(int bidValue) {
-
         biddingPanel.setBidValueToHold(bidValue);
     }
 

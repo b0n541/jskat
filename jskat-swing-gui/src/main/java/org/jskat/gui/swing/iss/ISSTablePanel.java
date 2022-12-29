@@ -1,7 +1,12 @@
 package org.jskat.gui.swing.iss;
 
+import com.google.common.eventbus.Subscribe;
+import org.jskat.control.event.iss.IssTableGameStartedEvent;
+import org.jskat.control.event.iss.IssTableStateChangedEvent;
+import org.jskat.control.event.skatgame.GameStartEvent;
 import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.data.iss.ChatMessage;
+import org.jskat.data.iss.GameStartInformation;
 import org.jskat.data.iss.PlayerStatus;
 import org.jskat.data.iss.TablePanelStatus;
 import org.jskat.gui.swing.LayoutFactory;
@@ -9,6 +14,8 @@ import org.jskat.gui.swing.table.ContextPanelType;
 import org.jskat.gui.swing.table.JSkatUserPanel;
 import org.jskat.gui.swing.table.OpponentPanel;
 import org.jskat.gui.swing.table.SkatTablePanel;
+import org.jskat.util.GameVariant;
+import org.jskat.util.Player;
 
 import javax.swing.*;
 import java.util.Arrays;
@@ -101,16 +108,48 @@ public class ISSTablePanel extends SkatTablePanel {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Subscribe
+    public void clearTableOn(IssTableGameStartedEvent event) {
+
+        if (event.gameStart.loginName().equals(event.gameStart.playerNames().get(Player.FOREHAND))) {
+            clearTable(event.tableName, Player.MIDDLEHAND, Player.REARHAND, Player.FOREHAND, event.gameStart);
+        } else if (event.gameStart.loginName().equals(event.gameStart.playerNames().get(Player.MIDDLEHAND))) {
+            clearTable(event.tableName, Player.REARHAND, Player.FOREHAND, Player.MIDDLEHAND, event.gameStart);
+        } else if (event.gameStart.loginName().equals(event.gameStart.playerNames().get(Player.REARHAND))) {
+            clearTable(event.tableName, Player.FOREHAND, Player.MIDDLEHAND, Player.REARHAND, event.gameStart);
+        }
+    }
+
+    private void clearTable(String tableName, final Player leftOpponent, final Player rightOpponent,
+                            final Player player, final GameStartInformation gameStart) {
+
+        // FIXME: should have been sent via the event bus, event is missing in history
+        resetTableOn(new GameStartEvent(gameStart.gameNo(), GameVariant.STANDARD, leftOpponent, rightOpponent, player));
+
+        setPlayerName(leftOpponent, gameStart.playerNames().get(leftOpponent));
+        setPlayerTime(leftOpponent, gameStart.playerTimes().get(leftOpponent));
+        setPlayerName(rightOpponent, gameStart.playerNames().get(rightOpponent));
+        setPlayerTime(rightOpponent, gameStart.playerTimes().get(rightOpponent));
+        setPlayerName(player, gameStart.playerNames().get(player));
+        setPlayerTime(player, gameStart.playerTimes().get(player));
+    }
+
+    /**
      * Updates the panel with the new status
      *
-     * @param tableStatus New table status
+     * @param event Table status changed event
      */
-    public void setTableStatus(final TablePanelStatus tableStatus) {
+    @Subscribe
+    public void updateTableStatusOn(IssTableStateChangedEvent event) {
+
+        TablePanelStatus tableStatus = event.status;
 
         // FIXME (jansch 05.04.2011) make 3<>4 change possible
         // setMaxPlayers(tableStatus.getMaxPlayers());
 
-        for (final String playerName : tableStatus.getPlayerInformations().keySet()) {
+        for (final String playerName : tableStatus.getPlayerInformation().keySet()) {
 
             final PlayerStatus status = tableStatus.getPlayerInformation(playerName);
 
@@ -175,7 +214,6 @@ public class ISSTablePanel extends SkatTablePanel {
      * @param message Chat message
      */
     public void appendChatMessage(final ChatMessage message) {
-
         this.chatPanel.appendMessage(message);
     }
 }

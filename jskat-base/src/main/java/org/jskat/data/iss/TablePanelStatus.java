@@ -10,7 +10,7 @@ public class TablePanelStatus {
 
     private int maxPlayers;
 
-    Map<String, PlayerStatus> playerInfos = new HashMap<String, PlayerStatus>();
+    private Map<String, PlayerStatus> playerInfos = new HashMap<>();
 
     private String loginName;
 
@@ -23,42 +23,34 @@ public class TablePanelStatus {
      * @param status     Player status
      */
     public void addPlayer(String playerName, PlayerStatus status) {
-
-        this.playerInfos.put(playerName, status);
+        playerInfos.put(playerName, status);
     }
 
     public int getNumberOfPlayers() {
-
-        return this.playerInfos.size();
+        return playerInfos.size();
     }
 
-    public Map<String, PlayerStatus> getPlayerInformations() {
-
+    public Map<String, PlayerStatus> getPlayerInformation() {
         return playerInfos;
     }
 
     public PlayerStatus getPlayerInformation(String playerName) {
-
         return playerInfos.get(playerName);
     }
 
     public int getMaxPlayers() {
-
-        return this.maxPlayers;
+        return maxPlayers;
     }
 
     public void setMaxPlayers(int maxPlayers) {
-
         this.maxPlayers = maxPlayers;
     }
 
     public void setLoginName(String newLoginName) {
-
         loginName = newLoginName;
     }
 
     public String getLoginName() {
-
         return loginName;
     }
 }

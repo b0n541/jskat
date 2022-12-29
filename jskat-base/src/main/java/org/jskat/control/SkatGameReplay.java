@@ -5,7 +5,6 @@ import org.jskat.control.event.skatgame.*;
 import org.jskat.control.event.table.SkatGameStateChangedEvent;
 import org.jskat.control.event.table.TableGameMoveEvent;
 import org.jskat.control.event.table.TrickCompletedEvent;
-import org.jskat.control.gui.JSkatView;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.slf4j.Logger;
@@ -17,18 +16,16 @@ import java.util.List;
 /**
  * This class is used for replaying skat games
  */
-public class SkatGameReplayer {
+public class SkatGameReplay {
 
-    private final static Logger LOG = LoggerFactory.getLogger(SkatGameReplayer.class);
+    private final static Logger LOG = LoggerFactory.getLogger(SkatGameReplay.class);
 
-    private final JSkatView view;
     private final String tableName;
     private SkatGameData data;
     private final List<SkatGameEvent> gameMoves = new ArrayList<>();
     private int currentMove = 0;
 
-    public SkatGameReplayer(JSkatView view, String tableName, List<SkatGameEvent> gameMoves) {
-        this.view = view;
+    public SkatGameReplay(String tableName, List<SkatGameEvent> gameMoves) {
         this.tableName = tableName;
         this.gameMoves.addAll(gameMoves);
         resetReplay();

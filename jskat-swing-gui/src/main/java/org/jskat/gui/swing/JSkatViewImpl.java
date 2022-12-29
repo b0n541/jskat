@@ -27,7 +27,9 @@ import org.jskat.data.JSkatViewType;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.Trick;
-import org.jskat.data.iss.*;
+import org.jskat.data.iss.ChatMessage;
+import org.jskat.data.iss.MoveInformation;
+import org.jskat.data.iss.MovePlayer;
 import org.jskat.gui.action.human.*;
 import org.jskat.gui.action.iss.*;
 import org.jskat.gui.action.main.*;
@@ -238,7 +240,6 @@ public class JSkatViewImpl implements JSkatView {
      */
     @Override
     public void startGame(final String tableName) {
-
         tables.get(tableName).startGame();
     }
 
@@ -416,7 +417,6 @@ public class JSkatViewImpl implements JSkatView {
 
     @Subscribe
     public void showLicenceDialogOn(final ShowLicenseCommand command) {
-
         SwingUtilities.invokeLater(
                 () -> new JSkatHelpDialog(mainPanel, strings.getString("license"), "org/jskat/gui/help/apache2.html")
                         .setVisible(true));
@@ -427,7 +427,6 @@ public class JSkatViewImpl implements JSkatView {
      */
     @Override
     public void setBidValueToMake(final String tableName, final int bidValue) {
-
         SwingUtilities.invokeLater(() -> tables.get(tableName).setBidValueToMake(bidValue));
     }
 
@@ -436,7 +435,6 @@ public class JSkatViewImpl implements JSkatView {
      */
     @Override
     public void setBidValueToHold(final String tableName, final int bidValue) {
-
         SwingUtilities.invokeLater(() -> tables.get(tableName).setBidValueToHold(bidValue));
     }
 
@@ -515,53 +513,6 @@ public class JSkatViewImpl implements JSkatView {
                 }
             }
         }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void updateISSTable(final String tableName, final TablePanelStatus tableStatus) {
-
-        // FIXME (jan 08.11.2010) seems very complicated
-        final SkatTablePanel panel = tables.get(tableName);
-
-        if (panel instanceof ISSTablePanel) {
-            ((ISSTablePanel) panel).setTableStatus(tableStatus);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void updateISSTable(final String tableName, final String issLogin, final GameStartInformation status) {
-
-        if (issLogin.equals(status.getPlayerName(Player.FOREHAND))) {
-            updateISSTable(tableName, Player.MIDDLEHAND, Player.REARHAND, Player.FOREHAND, status);
-        } else if (issLogin.equals(status.getPlayerName(Player.MIDDLEHAND))) {
-            updateISSTable(tableName, Player.REARHAND, Player.FOREHAND, Player.MIDDLEHAND, status);
-        } else if (issLogin.equals(status.getPlayerName(Player.REARHAND))) {
-            updateISSTable(tableName, Player.FOREHAND, Player.MIDDLEHAND, Player.REARHAND, status);
-        }
-    }
-
-    private void updateISSTable(final String tableName, final Player leftOpponent, final Player rightOpponent,
-                                final Player player, final GameStartInformation status) {
-
-        LOG.debug("Updating ISS table: " + tableName + " " + leftOpponent + " " + rightOpponent + " " + player);
-
-        JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(
-                new GameStartEvent(status.getGameNo(), GameVariant.STANDARD, leftOpponent, rightOpponent, player));
-
-        // FIXME (jansch 09.11.2010) this is only done for ISS games
-        final SkatTablePanel table = tables.get(tableName);
-        table.setPlayerName(leftOpponent, status.getPlayerName(leftOpponent));
-        table.setPlayerTime(leftOpponent, status.getPlayerTime(leftOpponent));
-        table.setPlayerName(rightOpponent, status.getPlayerName(rightOpponent));
-        table.setPlayerTime(rightOpponent, status.getPlayerTime(rightOpponent));
-        table.setPlayerName(player, status.getPlayerName(player));
-        table.setPlayerTime(player, status.getPlayerTime(player));
     }
 
     /**
@@ -826,7 +777,6 @@ public class JSkatViewImpl implements JSkatView {
      */
     @Override
     public void setResign(final String tableName, final Player player) {
-
         tables.get(tableName).setResign(player);
     }
 
