@@ -42,7 +42,10 @@ import org.jskat.gui.swing.iss.LoginPanel;
 import org.jskat.gui.swing.iss.PlayerInvitationPanel;
 import org.jskat.gui.swing.table.SkatSeriesStartDialog;
 import org.jskat.gui.swing.table.SkatTablePanel;
-import org.jskat.util.*;
+import org.jskat.util.Card;
+import org.jskat.util.CardList;
+import org.jskat.util.JSkatResourceBundle;
+import org.jskat.util.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -246,19 +249,19 @@ public class JSkatViewImpl implements JSkatView {
     @Subscribe
     public void createSkatTablePanelOn(final TableCreatedEvent event) {
 
-        if (JSkatViewType.TRAINING_TABLE.equals(event.tableType)) {
+        if (JSkatViewType.TRAINING_TABLE.equals(event.tableType())) {
             return;
         }
 
         SwingUtilities.invokeLater(() -> {
-            final String tableName = event.tableName;
+            final String tableName = event.tableName();
             String tabTitle = null;
 
             SkatTablePanel panel = null;
-            if (JSkatViewType.LOCAL_TABLE.equals(event.tableType)) {
+            if (JSkatViewType.LOCAL_TABLE.equals(event.tableType())) {
                 panel = new SkatTablePanel(tableName, actions);
                 tabTitle = tableName;
-            } else if (JSkatViewType.ISS_TABLE.equals(event.tableType)) {
+            } else if (JSkatViewType.ISS_TABLE.equals(event.tableType())) {
                 panel = new ISSTablePanel(tableName, actions);
                 tabTitle = strings.getString("iss_table") + ": " + tableName;
             }
@@ -422,22 +425,6 @@ public class JSkatViewImpl implements JSkatView {
                         .setVisible(true));
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setBidValueToMake(final String tableName, final int bidValue) {
-        SwingUtilities.invokeLater(() -> tables.get(tableName).setBidValueToMake(bidValue));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setBidValueToHold(final String tableName, final int bidValue) {
-        SwingUtilities.invokeLater(() -> tables.get(tableName).setBidValueToHold(bidValue));
-    }
-
     @Subscribe
     public void showSkatSeriesStartDialogOn(final StartSkatSeriesCommand command) {
         SwingUtilities.invokeLater(() -> skatSeriesStartDialog.setVisible(true));
@@ -559,18 +546,15 @@ public class JSkatViewImpl implements JSkatView {
                 JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.BIDDING));
                 JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName)
                         .post(new BidEvent(movePlayer, moveInformation.getBidValue()));
-                setBidValueToHold(tableName, moveInformation.getBidValue());
                 break;
             case HOLD_BID:
                 JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.BIDDING));
                 JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName)
                         .post(new HoldBidEvent(movePlayer, gameData.getMaxBidValue()));
-                setBidValueToMake(tableName, SkatConstants.getNextBidValue(gameData.getMaxBidValue()));
                 break;
             case PASS:
                 JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.BIDDING));
                 JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(new PassBidEvent(movePlayer));
-                setBidValueToMake(tableName, SkatConstants.getNextBidValue(gameData.getMaxBidValue()));
                 break;
             case SKAT_REQUEST:
                 JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.PICKING_UP_SKAT));
@@ -646,7 +630,7 @@ public class JSkatViewImpl implements JSkatView {
     @Subscribe
     public void closeTableOn(final TableRemovedEvent event) {
 
-        SwingUtilities.invokeLater(() -> closeTabPanel(event.tableName));
+        SwingUtilities.invokeLater(() -> closeTabPanel(event.tableName()));
     }
 
     /**

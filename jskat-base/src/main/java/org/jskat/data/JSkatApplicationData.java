@@ -44,19 +44,19 @@ public class JSkatApplicationData {
     @Subscribe
     synchronized public void adjustTableDataOn(final TableCreatedEvent event) {
 
-        SkatTable table = new SkatTable(event.tableName,
+        SkatTable table = new SkatTable(event.tableName(),
                 JSkatOptions.instance().getSkatTableOptions());
-        if (JSkatViewType.LOCAL_TABLE.equals(event.tableType)) {
+        if (JSkatViewType.LOCAL_TABLE.equals(event.tableType())) {
             addLocalSkatTable(table);
             registerHumanPlayerObject(table,
                     JSkatMaster.INSTANCE.getView().getHumanPlayerForGUI());
-        } else if (JSkatViewType.ISS_TABLE.equals(event.tableType)) {
+        } else if (JSkatViewType.ISS_TABLE.equals(event.tableType())) {
             addJoinedIssSkatTable(table);
         }
 
-        if (JSkatViewType.LOCAL_TABLE.equals(event.tableType)
-                || JSkatViewType.ISS_TABLE.equals(event.tableType)) {
-            setActiveTable(event.tableType, event.tableName);
+        if (JSkatViewType.LOCAL_TABLE.equals(event.tableType())
+                || JSkatViewType.ISS_TABLE.equals(event.tableType())) {
+            setActiveTable(event.tableType(), event.tableName());
         }
     }
 

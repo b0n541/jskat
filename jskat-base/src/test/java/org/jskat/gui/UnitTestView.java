@@ -28,13 +28,13 @@ public class UnitTestView implements JSkatView {
      * Constructor
      */
     public UnitTestView() {
-        tables = new ArrayList<String>();
+        tables = new ArrayList<>();
         JSkatEventBus.INSTANCE.register(this);
     }
 
     @Subscribe
     public void handle(final TableCreatedEvent event) {
-        tables.add(event.tableName);
+        tables.add(event.tableName());
     }
 
     /**
@@ -76,18 +76,6 @@ public class UnitTestView implements JSkatView {
 
     @Override
     public void showCardNotAllowedMessage(final Card card) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void setBidValueToMake(final String tableName, final int bidValue) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void setBidValueToHold(final String tableName, final int bidValue) {
         // TODO Auto-generated method stub
 
     }

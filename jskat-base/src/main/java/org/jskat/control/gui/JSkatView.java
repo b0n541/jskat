@@ -64,22 +64,6 @@ public interface JSkatView {
     void showCardNotAllowedMessage(Card card);
 
     /**
-     * Sets the bid value to make
-     *
-     * @param tableName Table name
-     * @param bidValue  Bid value
-     */
-    void setBidValueToMake(String tableName, int bidValue);
-
-    /**
-     * Sets the bid value to hold
-     *
-     * @param tableName Table name
-     * @param bidValue  Bid value
-     */
-    void setBidValueToHold(String tableName, int bidValue);
-
-    /**
      * Appends a new chat message to a chat
      *
      * @param messageType Type of message

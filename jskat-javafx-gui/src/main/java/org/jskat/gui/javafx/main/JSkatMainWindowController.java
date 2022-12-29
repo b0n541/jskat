@@ -238,14 +238,14 @@ public class JSkatMainWindowController {
     public void addNewTableTabOn(final TableCreatedEvent event) {
 
         final SwingNode swingNode = new SwingNode();
-        final String tableName = event.tableName;
+        final String tableName = event.tableName();
 
         try {
             SwingUtilities.invokeAndWait(() -> {
                 SkatTablePanel panel = null;
-                if (JSkatViewType.LOCAL_TABLE.equals(event.tableType)) {
+                if (JSkatViewType.LOCAL_TABLE.equals(event.tableType())) {
                     panel = new SkatTablePanel(tableName, JSkatViewImpl.actions);
-                } else if (JSkatViewType.ISS_TABLE.equals(event.tableType)) {
+                } else if (JSkatViewType.ISS_TABLE.equals(event.tableType())) {
                     panel = new ISSTablePanel(tableName, JSkatViewImpl.actions);
                 }
                 swingNode.setContent(panel);
@@ -256,10 +256,10 @@ public class JSkatMainWindowController {
 
         String tabTitle = null;
         String tabId = null;
-        if (JSkatViewType.LOCAL_TABLE.equals(event.tableType)) {
+        if (JSkatViewType.LOCAL_TABLE.equals(event.tableType())) {
             tabTitle = tableName;
             tabId = JSkatMainWindowTabType.LOCAL_TABLE.name() + ":" + tableName;
-        } else if (JSkatViewType.ISS_TABLE.equals(event.tableType)) {
+        } else if (JSkatViewType.ISS_TABLE.equals(event.tableType())) {
             tabTitle = strings.getString("iss_table") + ": " + tableName;
             tabId = JSkatMainWindowTabType.ISS_TABLE.name() + ":" + tableName;
         }
@@ -308,7 +308,7 @@ public class JSkatMainWindowController {
         tabs.getTabs().stream()
                 .filter(tab ->
                         tab.getId().contains(JSkatMainWindowTabType.ISS_TABLE.name()) &&
-                                tab.getId().contains(event.tableName))
+                                tab.getId().contains(event.tableName()))
                 .forEach(tab -> Platform.runLater(() -> tabs.getTabs().remove(tab)));
     }
 

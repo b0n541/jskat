@@ -5,6 +5,7 @@ import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.command.iss.*;
 import org.jskat.control.command.table.CreateTableCommand;
+import org.jskat.control.command.table.RemoveTableCommand;
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.iss.*;
 import org.jskat.control.event.skatgame.GameFinishEvent;
@@ -271,6 +272,10 @@ public class IssController {
     public void createTable(final String tableName, final String creator, final int maxPlayers) {
         eventBus.post(new CreateTableCommand(JSkatViewType.ISS_TABLE, tableName));
         jskat.setActiveTable(JSkatViewType.ISS_TABLE, tableName);
+    }
+
+    public void removeTable(String tableName) {
+        eventBus.post(new RemoveTableCommand(JSkatViewType.ISS_TABLE, tableName));
     }
 
     /**

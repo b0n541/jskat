@@ -29,7 +29,6 @@ import org.jskat.data.DesktopSavePathResolver;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatOptions.Option;
 import org.jskat.gui.img.JSkatGraphicRepository;
-import org.jskat.gui.javafx.JSkatMainWindow;
 import org.jskat.gui.javafx.JSkatMenuFactory;
 import org.jskat.gui.swing.JSkatViewImpl;
 import org.jskat.gui.swing.LookAndFeelSetter;
@@ -113,10 +112,10 @@ public class JSkatFX extends Application {
     private static void showJSkatMainWindow(final Screen targetScreen, final Point2D screenPosition, final MenuBar menu,
                                             final JSkatViewImpl jskatView) {
 
-        final JSkatMainWindow jskatMainWindow = new JSkatMainWindow(VERSION, menu, jskatView, targetScreen,
-                screenPosition);
-
-        jskatMainWindow.show();
+//        final JSkatMainWindow jskatMainWindow = new JSkatMainWindow(VERSION, menu, jskatView, targetScreen,
+//                screenPosition);
+//
+//        jskatMainWindow.show();
 
         try {
             showNewMainWindow(targetScreen, screenPosition, VERSION);

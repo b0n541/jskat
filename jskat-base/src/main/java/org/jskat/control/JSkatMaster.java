@@ -114,7 +114,6 @@ public class JSkatMaster {
     }
 
     private static void createLocalTable(final String tableName, final AbstractHumanJSkatPlayer humanPlayer) {
-
         JSkatEventBus.INSTANCE.post(new CreateTableCommand(JSkatViewType.LOCAL_TABLE, tableName));
     }
 
@@ -136,10 +135,10 @@ public class JSkatMaster {
      */
     @Subscribe
     public void removeTableDataOn(final TableRemovedEvent event) {
-        if (JSkatViewType.LOCAL_TABLE.equals(event.tableType)) {
-            data.removeLocalSkatTable(event.tableName);
-        } else if (JSkatViewType.ISS_TABLE.equals(event.tableType)) {
-            data.removeJoinedIssSkatTable(event.tableName);
+        if (JSkatViewType.LOCAL_TABLE.equals(event.tableType())) {
+            data.removeLocalSkatTable(event.tableName());
+        } else if (JSkatViewType.ISS_TABLE.equals(event.tableType())) {
+            data.removeJoinedIssSkatTable(event.tableName());
         }
     }
 

@@ -13,10 +13,7 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
 import org.jskat.gui.swing.AbstractTabPanel;
 import org.jskat.gui.swing.LayoutFactory;
-import org.jskat.util.Card;
-import org.jskat.util.CardList;
-import org.jskat.util.GameType;
-import org.jskat.util.Player;
+import org.jskat.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -919,22 +916,14 @@ public class SkatTablePanel extends AbstractTabPanel {
         setContextPanel(ContextPanelType.START);
     }
 
-    /**
-     * Sets the bid value to make
-     *
-     * @param bidValue Bid value
-     */
-    public void setBidValueToMake(int bidValue) {
-        biddingPanel.setBidValueToMake(bidValue);
+    @Subscribe
+    public void setBidValueToHoldOn(BidEvent event) {
+        biddingPanel.setBidValueToHold(event.bid);
     }
 
-    /**
-     * Sets the bid value to hold
-     *
-     * @param bidValue Bid value
-     */
-    public void setBidValueToHold(int bidValue) {
-        biddingPanel.setBidValueToHold(bidValue);
+    @Subscribe
+    public void setBidValueToMakeOn(HoldBidEvent event) {
+        biddingPanel.setBidValueToMake(SkatConstants.getNextBidValue(event.bid));
     }
 
     @Override

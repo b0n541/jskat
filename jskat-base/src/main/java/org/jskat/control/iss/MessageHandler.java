@@ -3,8 +3,6 @@ package org.jskat.control.iss;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.event.iss.IssConnectedEvent;
 import org.jskat.control.event.iss.IssDisconnectedEvent;
-import org.jskat.control.event.table.TableRemovedEvent;
-import org.jskat.data.JSkatViewType;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.util.JSkatResourceBundle;
@@ -212,7 +210,6 @@ public class MessageHandler extends Thread {
     }
 
     void handleTableCreateMessage(final List<String> params) {
-
         log.debug("table creation message");
 
         final String tableName = params.get(0);
@@ -222,12 +219,10 @@ public class MessageHandler extends Thread {
     }
 
     void handleTableDestroyMessage(final List<String> params) {
-
         log.debug("table destroy message");
 
         final String tableName = params.get(0);
-
-        eventBus.post(new TableRemovedEvent(tableName, JSkatViewType.ISS_TABLE));
+        issControl.removeTable(tableName);
     }
 
     void handleTableInvitationMessage(final List<String> params) {

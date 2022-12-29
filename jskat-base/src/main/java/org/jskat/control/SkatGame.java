@@ -36,6 +36,8 @@ public class SkatGame {
     private JSkatView view;
     private SkatRule rules;
 
+    private JSkatEventBus eventBus = JSkatEventBus.INSTANCE;
+
     private final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
 
     /**
@@ -43,7 +45,7 @@ public class SkatGame {
      *
      * @param newTableName  Table name
      * @param variant       Game variant
-     * @param newForeHand   Fore hand player
+     * @param newForeHand   Forehand player
      * @param newMiddleHand Middle hand player
      * @param newRearHand   Rear hand player
      */
@@ -77,7 +79,7 @@ public class SkatGame {
     public SkatGameResult run() {
         // FIXME jan 11.07.2013: this method is too long, break it down to smaller
         // methods or implement it in another way
-        JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, data.getGameState()));
+        eventBus.post(new SkatGameStateChangedEvent(tableName, data.getGameState()));
 
         do {
             log.debug("Game state: " + data.getGameState());
@@ -202,11 +204,11 @@ public class SkatGame {
 
     private void contraRe() {
         if (getActivePlayerInstance().callContra()) {
-            JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName, new ContraEvent(activePlayer)));
+            eventBus.post(new TableGameMoveEvent(tableName, new ContraEvent(activePlayer)));
             Player activePlayerBeforeContraRe = activePlayer;
             setActivePlayer(data.getDeclarer());
             if (getActivePlayerInstance().callRe()) {
-                JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName, new ReEvent(activePlayer)));
+                eventBus.post(new TableGameMoveEvent(tableName, new ReEvent(activePlayer)));
             }
             setActivePlayer(activePlayerBeforeContraRe);
         }
@@ -237,7 +239,7 @@ public class SkatGame {
                 view.setGeschoben(tableName, activePlayer);
             } else {
                 log.debug("Player " + currPlayer + " wants to look into skat.");
-                JSkatEventBus.INSTANCE.post(new SkatCardsChangedEvent(tableName, data.getSkat()));
+                eventBus.post(new SkatCardsChangedEvent(tableName, data.getSkat()));
                 discarding();
             }
         }
@@ -245,7 +247,7 @@ public class SkatGame {
 
     private void setActivePlayer(Player newPlayer) {
         activePlayer = newPlayer;
-        JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName, activePlayer));
+        eventBus.post(new ActivePlayerChangedEvent(tableName, activePlayer));
     }
 
     private boolean playGrandHand() {
@@ -290,7 +292,7 @@ public class SkatGame {
         // deal three cards
         dealCards(3, dealtCards);
 
-        JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName, new CardDealEvent(dealtCards, skat)));
+        eventBus.post(new TableGameMoveEvent(tableName, new CardDealEvent(dealtCards, skat)));
 
         doSleep(maxSleep);
 
@@ -355,11 +357,11 @@ public class SkatGame {
             if (getPlayerInstance(Player.FOREHAND).bidMore(18) > -1) {
 
                 log.debug("Fore hand holds 18");
-                JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName, new BidEvent(secondWinner, 18)));
+                eventBus.post(new TableGameMoveEvent(tableName, new BidEvent(secondWinner, 18)));
             } else {
 
                 log.debug("Fore hand passes too");
-                JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName, new PassBidEvent(Player.FOREHAND)));
+                eventBus.post(new TableGameMoveEvent(tableName, new PassBidEvent(Player.FOREHAND)));
                 secondWinner = null;
             }
         }
@@ -380,8 +382,7 @@ public class SkatGame {
                 GameAnnouncementFactory factory = GameAnnouncement.getFactory();
                 factory.setGameType(GameType.RAMSCH);
                 setGameAnnouncement(factory.getAnnouncement());
-                JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName,
-                        new GameAnnouncementEvent(data.getDeclarer(), data.getAnnoucement())));
+                eventBus.post(new TableGameMoveEvent(tableName, new GameAnnouncementEvent(data.getDeclarer(), data.getAnnoucement())));
                 setActivePlayer(Player.FOREHAND);
                 // do not call "setGameAnnouncement(..)" here!
             } else {
@@ -420,7 +421,6 @@ public class SkatGame {
 
             // get bid value
             int nextBidValue = SkatConstants.getNextBidValue(currBidValue);
-            view.setBidValueToMake(tableName, nextBidValue);
             // ask player
             setActivePlayer(announcer);
             int announcerBidValue = getPlayerInstance(announcer).bidMore(nextBidValue);
@@ -434,8 +434,7 @@ public class SkatGame {
 
                 data.addPlayerBid(announcer, announcerBidValue);
                 informPlayersAboutBid(announcer, announcerBidValue);
-                JSkatEventBus.INSTANCE
-                        .post(new TableGameMoveEvent(tableName, new BidEvent(announcer, announcerBidValue)));
+                eventBus.post(new TableGameMoveEvent(tableName, new BidEvent(announcer, announcerBidValue)));
 
                 setActivePlayer(hearer);
                 if (getPlayerInstance(hearer).holdBid(currBidValue)) {
@@ -445,8 +444,7 @@ public class SkatGame {
                     // hearing hand holds bid
                     data.addPlayerBid(hearer, announcerBidValue);
                     informPlayersAboutBid(hearer, announcerBidValue);
-                    JSkatEventBus.INSTANCE
-                            .post(new TableGameMoveEvent(tableName, new HoldBidEvent(hearer, announcerBidValue)));
+                    eventBus.post(new TableGameMoveEvent(tableName, new HoldBidEvent(hearer, announcerBidValue)));
 
                 } else {
 
@@ -455,7 +453,7 @@ public class SkatGame {
                     // hearing hand passed
                     hearerPassed = true;
                     data.setPlayerPass(hearer, true);
-                    JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName, new PassBidEvent(hearer)));
+                    eventBus.post(new TableGameMoveEvent(tableName, new PassBidEvent(hearer)));
                 }
             } else {
 
@@ -464,7 +462,7 @@ public class SkatGame {
                 // announcing hand passes
                 announcerPassed = true;
                 data.setPlayerPass(announcer, true);
-                JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName, new PassBidEvent(announcer)));
+                eventBus.post(new TableGameMoveEvent(tableName, new PassBidEvent(announcer)));
             }
         }
 
@@ -488,7 +486,7 @@ public class SkatGame {
 
         JSkatPlayer activePlayerInstance = getActivePlayerInstance();
 
-        JSkatEventBus.INSTANCE.post(new SkatCardsChangedEvent(tableName, data.getSkat()));
+        eventBus.post(new SkatCardsChangedEvent(tableName, data.getSkat()));
 
         log.debug("Player " + activePlayer + " looks into the skat...");
         log.debug("Skat before discarding: " + data.getSkat());
@@ -537,7 +535,7 @@ public class SkatGame {
             log.error("Player is fooling!!! Skat cards are identical!");
             result = false;
         } else if (!playerHasCard(player, discardedSkat.get(0)) || !playerHasCard(player, discardedSkat.get(1))) {
-            log.error("Player is fooling!!! Player doesn't have had discarded card! Dis");
+            log.error("Player is fooling!!! Player doesn't have had discarded card!");
             result = false;
         }
         // TODO check for jacks in the discarded skat in ramsch games
@@ -731,9 +729,9 @@ public class SkatGame {
     }
 
     private void logPlayerPoints() {
-        log.debug("Points: forehand: " + data.getPlayerPoints(Player.FOREHAND) +
-                " middlehand: "
-                + data.getPlayerPoints(Player.MIDDLEHAND) + " rearhand: "
+        log.debug("Points: fore hand: " + data.getPlayerPoints(Player.FOREHAND) +
+                " middle hand: "
+                + data.getPlayerPoints(Player.MIDDLEHAND) + " rear hand: "
                 + data.getPlayerPoints(Player.REARHAND));
     }
 
@@ -818,7 +816,7 @@ public class SkatGame {
                         .post(new TrickCompletedEvent(data.getLastCompletedTrick()));
             }
 
-            JSkatEventBus.INSTANCE
+            eventBus
                     .post(new TableGameMoveEvent(tableName, new TrickCardPlayedEvent(currPlayer, playedCard)));
 
             for (JSkatPlayer playerInstance : player.values()) {
@@ -979,7 +977,7 @@ public class SkatGame {
 
         data.setAnnouncement(ann);
         rules = SkatRuleFactory.getSkatRules(data.getGameType());
-        JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName, new GameAnnouncementEvent(data.getDeclarer(), ann)));
+        eventBus.post(new TableGameMoveEvent(tableName, new GameAnnouncementEvent(data.getDeclarer(), ann)));
 
         // inform all players
         for (JSkatPlayer playerInstance : player.values()) {
@@ -1001,13 +999,13 @@ public class SkatGame {
 
         if (view != null) {
 
-            JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, newState));
+            eventBus.post(new SkatGameStateChangedEvent(tableName, newState));
 
             if (newState == GameState.GAME_OVER) {
 
                 // FIXME: merge this event with the command
-                JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName, new GameFinishEvent(getGameSummary())));
-                JSkatEventBus.INSTANCE.post(new ShowCardsCommand(tableName, data.getCardsAfterDiscard(), data.getSkat()));
+                eventBus.post(new TableGameMoveEvent(tableName, new GameFinishEvent(getGameSummary())));
+                eventBus.post(new ShowCardsCommand(tableName, data.getCardsAfterDiscard(), data.getSkat()));
             }
         }
     }
@@ -1018,9 +1016,8 @@ public class SkatGame {
      * @param declarer Declarer
      */
     public void setDeclarer(Player declarer) {
-
         data.setDeclarer(declarer);
-        JSkatEventBus.INSTANCE.post(new DeclarerChangedEvent(tableName, declarer));
+        eventBus.post(new DeclarerChangedEvent(tableName, declarer));
     }
 
     /**
