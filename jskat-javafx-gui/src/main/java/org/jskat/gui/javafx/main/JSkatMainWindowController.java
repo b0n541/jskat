@@ -306,9 +306,7 @@ public class JSkatMainWindowController {
     @Subscribe
     public void removeTableOn(TableRemovedEvent event) {
         tabs.getTabs().stream()
-                .filter(tab ->
-                        tab.getId().contains(JSkatMainWindowTabType.ISS_TABLE.name()) &&
-                                tab.getId().contains(event.tableName()))
+                .filter(tab -> tab.getId().contains(event.tableName()))
                 .forEach(tab -> Platform.runLater(() -> tabs.getTabs().remove(tab)));
     }
 
