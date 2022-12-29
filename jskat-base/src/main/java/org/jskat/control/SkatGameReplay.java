@@ -70,8 +70,10 @@ public class SkatGameReplay {
     private void setGameState(SkatGameEvent event) {
         if (event instanceof GameStartEvent) {
             JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.BIDDING));
-        } else if (event instanceof BidEvent) {
+        } else if (event instanceof BidEvent || event instanceof HoldBidEvent || event instanceof PassBidEvent) {
             JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.BIDDING));
+        } else if (event instanceof PickUpSkatEvent) {
+            JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.PICKING_UP_SKAT));
         } else if (event instanceof GameAnnouncementEvent) {
             JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.DECLARING));
         } else if (event instanceof TrickCardPlayedEvent) {
