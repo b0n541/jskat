@@ -81,6 +81,7 @@ public class IssController {
     @Subscribe
     public void disconnectFromIssOn(final IssDisconnectCommand command) {
         closeConnectionIfOpen();
+        eventBus.post(new IssDisconnectedEvent());
     }
 
     /**

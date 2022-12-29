@@ -13,8 +13,6 @@ import javax.swing.*;
  * Defines an abstract action for JSkat
  */
 public abstract class AbstractJSkatAction extends AbstractAction {
-
-
     /**
      * JSkat graphics repository
      */

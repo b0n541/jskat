@@ -11,8 +11,6 @@ import java.awt.event.ActionEvent;
  * Implements the action for leaving the ISS
  */
 public class LogoutAction extends AbstractJSkatAction {
-
-
     /**
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
@@ -27,7 +25,6 @@ public class LogoutAction extends AbstractJSkatAction {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-
         EVENTBUS.post(new IssDisconnectCommand());
     }
 }
