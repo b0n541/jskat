@@ -5,10 +5,7 @@ import org.jskat.control.command.table.NextReplayMoveCommand;
 import org.jskat.control.command.table.ReadyForNextGameCommand;
 import org.jskat.control.command.table.ReplayGameCommand;
 import org.jskat.control.event.skatgame.GameStartEvent;
-import org.jskat.control.event.table.PlayerNamesChangedEvent;
-import org.jskat.control.event.table.SkatGameReplayFinishedEvent;
-import org.jskat.control.event.table.SkatGameReplayStartedEvent;
-import org.jskat.control.event.table.SkatSeriesFinishedEvent;
+import org.jskat.control.event.table.*;
 import org.jskat.control.gui.JSkatView;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData;
@@ -182,11 +179,12 @@ public class SkatSeries {
                         players.get(Player.MIDDLEHAND),
                         players.get(Player.REARHAND));
 
-                JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(
-                        new GameStartEvent(gameNumber, gameVariant,
-                                data.getBottomPlayer().getLeftNeighbor(),
-                                data.getBottomPlayer().getRightNeighbor(),
-                                data.getBottomPlayer()));
+                JSkatEventBus.INSTANCE.post(
+                        new TableGameMoveEvent(data.getTableName(),
+                                new GameStartEvent(gameNumber, gameVariant,
+                                        data.getBottomPlayer().getLeftNeighbor(),
+                                        data.getBottomPlayer().getRightNeighbor(),
+                                        data.getBottomPlayer())));
 
                 currSkatGame.setView(view);
                 currSkatGame.setMaxSleep(maxSleep);
