@@ -1,8 +1,11 @@
-
 package org.jskat.util;
 
 import org.jskat.AbstractJSkatTest;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -11,27 +14,45 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class SkatConstantsTest extends AbstractJSkatTest {
 
+    private static Stream<Arguments> testCasesForTournamentGameValue() {
+        return Stream.of(
+                Arguments.of(true, 18, 3, 68),
+                Arguments.of(true, 18, 4, 68),
+                Arguments.of(true, -36, 3, -86),
+                Arguments.of(true, -36, 4, -86),
+                Arguments.of(true, 20, 3, 70),
+                Arguments.of(true, 20, 4, 70),
+                Arguments.of(true, -40, 3, -90),
+                Arguments.of(true, -40, 4, -90),
+                Arguments.of(false, 18, 3, 0),
+                Arguments.of(false, 18, 4, 0),
+                Arguments.of(false, -36, 3, 40),
+                Arguments.of(false, -36, 4, 30),
+                Arguments.of(false, 20, 3, 0),
+                Arguments.of(false, 20, 4, 0),
+                Arguments.of(false, -40, 3, 40),
+                Arguments.of(false, -40, 4, 30));
+    }
+
     /**
      * Tests calculation of game values after tournament rules
      */
-    @Test
-    public void getTournamentGameValue001() {
+    @ParameterizedTest
+    @MethodSource("testCasesForTournamentGameValue")
+    public void tournamentGameValue(boolean isDeclarer, int gameValue, int numberOfPlayers, int expectedTournamentValue) {
+        assertThat(SkatConstants.getTournamentGameValue(isDeclarer, gameValue, numberOfPlayers)).isEqualTo(expectedTournamentValue);
+    }
 
-        assertThat(SkatConstants.getTournamentGameValue(true, 18, 3)).isEqualTo(68);
-        assertThat(SkatConstants.getTournamentGameValue(true, 18, 4)).isEqualTo(68);
-        assertThat(SkatConstants.getTournamentGameValue(true, -36, 3)).isEqualTo(-86);
-        assertThat(SkatConstants.getTournamentGameValue(true, -36, 4)).isEqualTo(-86);
-        assertThat(SkatConstants.getTournamentGameValue(true, 20, 3)).isEqualTo(70);
-        assertThat(SkatConstants.getTournamentGameValue(true, 20, 4)).isEqualTo(70);
-        assertThat(SkatConstants.getTournamentGameValue(true, -40, 3)).isEqualTo(-90);
-        assertThat(SkatConstants.getTournamentGameValue(true, -40, 4)).isEqualTo(-90);
-        assertThat(SkatConstants.getTournamentGameValue(false, 18, 3)).isEqualTo(0);
-        assertThat(SkatConstants.getTournamentGameValue(false, 18, 4)).isEqualTo(0);
-        assertThat(SkatConstants.getTournamentGameValue(false, -36, 3)).isEqualTo(40);
-        assertThat(SkatConstants.getTournamentGameValue(false, -36, 4)).isEqualTo(30);
-        assertThat(SkatConstants.getTournamentGameValue(false, 20, 3)).isEqualTo(0);
-        assertThat(SkatConstants.getTournamentGameValue(false, 20, 4)).isEqualTo(0);
-        assertThat(SkatConstants.getTournamentGameValue(false, -40, 3)).isEqualTo(40);
-        assertThat(SkatConstants.getTournamentGameValue(false, -40, 4)).isEqualTo(30);
+    private static Stream<Arguments> testCasesForNextBidValue() {
+        return Stream.of(
+                Arguments.of(0, 18),
+                Arguments.of(18, 20),
+                Arguments.of(264, 264));
+    }
+
+    @ParameterizedTest
+    @MethodSource("testCasesForNextBidValue")
+    public void nextBidValue(int currBidValue, int expectedNextBidValue) {
+        assertThat(SkatConstants.getNextBidValue(currBidValue)).isEqualTo(expectedNextBidValue);
     }
 }
