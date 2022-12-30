@@ -144,8 +144,7 @@ public class MessageParser {
             info.setType(MoveType.SHOW_CARDS);
             if (move.length() > 2) {
                 // declarer cards follow, SC could also stand allone
-                info.setOuvertCards(parseSkatCards(move.substring(move
-                        .indexOf(".") + 1)));
+                info.setOuvertCards(parseSkatCards(move.substring(move.indexOf(".") + 1)));
             }
         } else if (move.startsWith("LE.")) {
             // one player left the table during the game
@@ -524,12 +523,10 @@ public class MessageParser {
                     result.setDealtSkatCards(moveInfo.getSkat());
                     break;
                 case BID:
-                    result.addPlayerBid(moveInfo.getPlayer(),
-                            moveInfo.getBidValue());
+                    result.addPlayerBid(moveInfo.getPlayer(), moveInfo.getBidValue());
                     break;
                 case HOLD_BID:
-                    result.addPlayerBid(moveInfo.getPlayer(),
-                            result.getMaxBidValue());
+                    result.addPlayerBid(moveInfo.getPlayer(), result.getMaxBidValue());
                     break;
                 case PASS:
                     result.setPlayerPass(moveInfo.getPlayer(), true);
@@ -537,8 +534,7 @@ public class MessageParser {
                 case GAME_ANNOUNCEMENT:
                     result.setAnnouncement(moveInfo.getGameAnnouncement());
                     if (!moveInfo.getGameAnnouncement().isHand()) {
-                        result.setDiscardedSkat(moveInfo.getPlayer(), moveInfo
-                                .getGameAnnouncement().getDiscardedCards());
+                        result.setDiscardedSkat(moveInfo.getPlayer(), moveInfo.getGameAnnouncement().getDiscardedCards());
                     }
                     break;
                 case CARD_PLAY:
@@ -548,11 +544,9 @@ public class MessageParser {
                     } else if (result.getCurrentTrick().getThirdCard() != null) {
                         // last card of trick is played
                         // set trick winner
-                        result.getCurrentTrick().setTrickWinner(
-                                moveInfo.getPlayer());
+                        result.getCurrentTrick().setTrickWinner(moveInfo.getPlayer());
                         // create next trick
-                        result.addTrick(new Trick(result.getTricks().size(),
-                                moveInfo.getPlayer()));
+                        result.addTrick(new Trick(result.getTricks().size(), moveInfo.getPlayer()));
                     }
                     result.addTrickCard(moveInfo.getCard());
 

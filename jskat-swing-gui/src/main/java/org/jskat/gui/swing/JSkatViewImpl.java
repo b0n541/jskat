@@ -521,8 +521,7 @@ public class JSkatViewImpl implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public void updateISSMove(final String tableName, final SkatGameData gameData,
-                              final MoveInformation moveInformation) {
+    public void updateISSMove(final String tableName, final SkatGameData gameData, final MoveInformation moveInformation) {
 
         final Player movePlayer = moveInformation.getPlayer();
 
@@ -554,7 +553,7 @@ public class JSkatViewImpl implements JSkatView {
                 break;
             case PASS:
                 JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.BIDDING));
-                JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(new PassBidEvent(movePlayer));
+                JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(new PassBidEvent(movePlayer, gameData.getNextBidValue()));
                 break;
             case SKAT_REQUEST:
                 JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.PICKING_UP_SKAT));

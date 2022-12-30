@@ -630,17 +630,18 @@ public class SkatTablePanel extends AbstractTabPanel {
         resetGameData();
     }
 
-    /**
-     * Sets the bid value for a player.
-     *
-     * @param event Bid event
-     */
     @Subscribe
     public void setBidValueOn(BidEvent event) {
-
         log.debug(event.player + " bids: " + event.bid);
-
         setBidValue(event);
+        biddingPanel.setBidValueToHold(event.bid);
+    }
+
+    @Subscribe
+    public void setBidValueOn(HoldBidEvent event) {
+        log.debug(event.player + " holds: " + event.bid);
+        setBidValue(event);
+        biddingPanel.setNextBidValue(SkatConstants.getNextBidValue(event.bid));
     }
 
     private void setBidValue(AbstractBidEvent event) {
@@ -648,17 +649,10 @@ public class SkatTablePanel extends AbstractTabPanel {
         getPlayerPanel(event.player).setBidValue(event.bid);
     }
 
-    /**
-     * Sets the bid value for a player.
-     *
-     * @param event Hold bid event
-     */
     @Subscribe
-    public void setBidValueOn(HoldBidEvent event) {
-
-        log.debug(event.player + " holds: " + event.bid);
-
-        setBidValue(event);
+    public void setBidValueOn(PassBidEvent event) {
+        log.debug(event.player + " passes, next bid: " + event.nextBidValue);
+        biddingPanel.setNextBidValue(event.nextBidValue);
     }
 
     /**
@@ -916,16 +910,6 @@ public class SkatTablePanel extends AbstractTabPanel {
         setContextPanel(ContextPanelType.START);
     }
 
-    @Subscribe
-    public void setBidValueToHoldOn(BidEvent event) {
-        biddingPanel.setBidValueToHold(event.bid);
-    }
-
-    @Subscribe
-    public void setBidValueToMakeOn(HoldBidEvent event) {
-        biddingPanel.setBidValueToMake(SkatConstants.getNextBidValue(event.bid));
-    }
-
     @Override
     protected void setFocus() {
         // FIXME (jan 20.11.2010) set active/inactive actions
@@ -965,7 +949,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     @Subscribe
     public void setDeclarerOn(DeclarerChangedEvent event) {
         log.info("New declarer: {}", event.declarer);
-        this.declarer = event.declarer;
+        declarer = event.declarer;
     }
 
     /**

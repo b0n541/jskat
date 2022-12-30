@@ -464,10 +464,7 @@ public class IssController {
                 currGame.setGameState(GameState.BIDDING);
                 currGame.setPlayerPass(movePlayer, true);
                 break;
-            case SKAT_REQUEST:
-                currGame.setGameState(GameState.DISCARDING);
-                break;
-            case PICK_UP_SKAT:
+            case SKAT_REQUEST, PICK_UP_SKAT:
                 currGame.setGameState(GameState.DISCARDING);
                 break;
             case GAME_ANNOUNCEMENT:

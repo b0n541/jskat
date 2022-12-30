@@ -355,13 +355,11 @@ public class SkatGame {
 
             // check whether forehand holds at least one bid
             if (getPlayerInstance(Player.FOREHAND).bidMore(18) > 0) {
-
                 log.debug("Fore hand holds 18");
-                eventBus.post(new TableGameMoveEvent(tableName, new BidEvent(secondWinner, 18)));
+                eventBus.post(new TableGameMoveEvent(tableName, new BidEvent(secondWinner, data.getMaxBidValue())));
             } else {
-
                 log.debug("Fore hand passes too");
-                eventBus.post(new TableGameMoveEvent(tableName, new PassBidEvent(Player.FOREHAND, bidValue)));
+                eventBus.post(new TableGameMoveEvent(tableName, new PassBidEvent(Player.FOREHAND, data.getNextBidValue())));
                 secondWinner = null;
             }
         }
@@ -424,7 +422,7 @@ public class SkatGame {
             setActivePlayer(announcer);
             int announcerBidValue = getPlayerInstance(announcer).bidMore(nextBidValue);
 
-            if (announcerBidValue > -1 && SkatConstants.bidOrder.contains(Integer.valueOf(announcerBidValue))) {
+            if (announcerBidValue > 0 && SkatConstants.bidOrder.contains(Integer.valueOf(announcerBidValue))) {
 
                 log.debug("announcer bids " + announcerBidValue);
 
@@ -452,7 +450,7 @@ public class SkatGame {
                     // hearing hand passed
                     hearerPassed = true;
                     data.setPlayerPass(hearer, true);
-                    eventBus.post(new TableGameMoveEvent(tableName, new PassBidEvent(hearer, announcerBidValue)));
+                    eventBus.post(new TableGameMoveEvent(tableName, new PassBidEvent(hearer, data.getNextBidValue())));
                 }
             } else {
 
@@ -461,7 +459,7 @@ public class SkatGame {
                 // announcing hand passes
                 announcerPassed = true;
                 data.setPlayerPass(announcer, true);
-                eventBus.post(new TableGameMoveEvent(tableName, new PassBidEvent(announcer, nextBidValue)));
+                eventBus.post(new TableGameMoveEvent(tableName, new PassBidEvent(announcer, data.getNextBidValue())));
             }
         }
 
