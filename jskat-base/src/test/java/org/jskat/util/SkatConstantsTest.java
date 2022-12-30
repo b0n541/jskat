@@ -47,6 +47,10 @@ public class SkatConstantsTest extends AbstractJSkatTest {
         return Stream.of(
                 Arguments.of(0, 18),
                 Arguments.of(18, 20),
+                Arguments.of(20, 22),
+                Arguments.of(22, 23),
+                Arguments.of(216, 240),
+                Arguments.of(240, 264),
                 Arguments.of(264, 264));
     }
 
