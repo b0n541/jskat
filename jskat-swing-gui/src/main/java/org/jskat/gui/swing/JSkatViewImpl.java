@@ -280,7 +280,7 @@ public class JSkatViewImpl implements JSkatView {
                         + " "
                         + VERSION + "\n\n"
                         + "https://www.jskat.org\n"
-                        + "https://github.com/b0n541/jskat-multimodule"
+                        + "https://github.com/b0n541/jskat"
                         + "\n\n"
                         + strings.getString("authors")
                         + ":\nJan Schäfer (jnschfr@gmail.com)\nMarkus J. Luzius (jskat@luzius.de)\nDaniel Loreck (daniel.loreck@gmail.com)\nSascha Laurien\nSlovasim\nMartin Rothe\nTobias Markus\n\n"
