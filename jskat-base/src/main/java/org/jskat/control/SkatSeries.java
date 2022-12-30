@@ -61,7 +61,7 @@ public class SkatSeries {
 
         JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(this);
 
-        players = new HashMap<Player, JSkatPlayer>();
+        players = new HashMap<>();
     }
 
     @Subscribe
@@ -152,22 +152,22 @@ public class SkatSeries {
 
         int roundsPlayed = 0;
         int gameNumber = 0;
+        int gamesPerRound = 3;
 
-        while ((roundsToGo > 0 || unlimitedRounds)) {
+        while (roundsToGo > 0 || unlimitedRounds) {
 
             LOG.debug("Playing round " + (roundsPlayed + 1));
 
-            for (int j = 0; j < 3; j++) {
+            for (int gameInRound = 0; gameInRound < gamesPerRound; gameInRound++) {
 
-                if (j > 0 || roundsPlayed > 0) {
+                if (gameInRound > 0 || roundsPlayed > 0) {
                     // change player positions after first game
                     final JSkatPlayer helper = players.get(Player.REARHAND);
                     players.put(Player.REARHAND, players.get(Player.FOREHAND));
                     players.put(Player.FOREHAND, players.get(Player.MIDDLEHAND));
                     players.put(Player.MIDDLEHAND, helper);
 
-                    data.setBottomPlayer(data.getBottomPlayer()
-                            .getRightNeighbor());
+                    data.setBottomPlayer(data.getBottomPlayer().getRightNeighbor());
                 }
 
                 gameNumber++;
@@ -191,7 +191,7 @@ public class SkatSeries {
                 currSkatGame.setView(view);
                 currSkatGame.setMaxSleep(maxSleep);
 
-                LOG.debug("Playing game " + (j + 1));
+                LOG.debug("Playing game " + (gameInRound + 1) + " of " + gamesPerRound + " for round " + (roundsPlayed + 1));
 
                 data.addGame(currSkatGame);
 

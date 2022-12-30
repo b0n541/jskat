@@ -57,7 +57,7 @@ class GameAnnouncePanel extends JPanel {
     GameAnnouncePanel(final ActionMap actions, final JSkatUserPanel userPanel,
                       final DiscardPanel discardPanel) {
 
-        this.strings = JSkatResourceBundle.INSTANCE;
+        strings = JSkatResourceBundle.INSTANCE;
         this.userPanel = userPanel;
         this.discardPanel = discardPanel;
 
@@ -66,15 +66,15 @@ class GameAnnouncePanel extends JPanel {
 
     private void initPanel(final ActionMap actions) {
 
-        this.setLayout(LayoutFactory.getMigLayout("fill"));
+        setLayout(LayoutFactory.getMigLayout("fill"));
 
         final JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill"));
 
-        this.handBox = new JCheckBox(this.strings.getString("hand"));
-        this.handBox.setEnabled(false);
-        this.ouvertBox = createOuvertBox();
-        this.schneiderBox = new JCheckBox(this.strings.getString("schneider"));
-        this.schwarzBox = createSchwarzBox();
+        handBox = new JCheckBox(strings.getString("hand"));
+        handBox.setEnabled(false);
+        ouvertBox = createOuvertBox();
+        schneiderBox = new JCheckBox(strings.getString("schneider"));
+        schwarzBox = createSchwarzBox();
 
         final ActionListener actionListener = new ActionListener() {
             @Override
@@ -84,24 +84,24 @@ class GameAnnouncePanel extends JPanel {
                 final GameType gameType = getSelectedGameType();
 
                 if (gameType != null) {
-                    GameAnnouncePanel.this.userPanel.setSortGameType(gameType);
+                    userPanel.setSortGameType(gameType);
 
-                    if (GameAnnouncePanel.this.userPickedUpSkat) {
-                        GameAnnouncePanel.this.ouvertBox.setEnabled(gameType == GameType.NULL);
+                    if (userPickedUpSkat) {
+                        ouvertBox.setEnabled(gameType == GameType.NULL);
                     } else {
-                        GameAnnouncePanel.this.ouvertBox.setEnabled(true);
+                        ouvertBox.setEnabled(true);
                         if (gameType != GameType.NULL) {
-                            GameAnnouncePanel.this.schneiderBox.setEnabled(true);
-                            GameAnnouncePanel.this.schwarzBox.setEnabled(true);
-                            if (GameAnnouncePanel.this.ouvertBox.isSelected()) {
-                                GameAnnouncePanel.this.schneiderBox.setSelected(true);
-                                GameAnnouncePanel.this.schwarzBox.setSelected(true);
+                            schneiderBox.setEnabled(true);
+                            schwarzBox.setEnabled(true);
+                            if (ouvertBox.isSelected()) {
+                                schneiderBox.setSelected(true);
+                                schwarzBox.setSelected(true);
                             }
                         } else {
-                            GameAnnouncePanel.this.schneiderBox.setEnabled(false);
-                            GameAnnouncePanel.this.schneiderBox.setSelected(false);
-                            GameAnnouncePanel.this.schwarzBox.setEnabled(false);
-                            GameAnnouncePanel.this.schwarzBox.setSelected(false);
+                            schneiderBox.setEnabled(false);
+                            schneiderBox.setSelected(false);
+                            schwarzBox.setEnabled(false);
+                            schwarzBox.setSelected(false);
                         }
                     }
                 }
@@ -109,28 +109,28 @@ class GameAnnouncePanel extends JPanel {
         };
 
         gameTypeButtonGroup = new ButtonGroup();
-        this.grandRadioButton = createRadioButton(GameType.GRAND, actionListener, gameTypeButtonGroup);
-        this.clubsRadioButton = createRadioButton(GameType.CLUBS, actionListener, gameTypeButtonGroup);
-        this.spadesRadioButton = createRadioButton(GameType.SPADES, actionListener, gameTypeButtonGroup);
-        this.heartsRadioButton = createRadioButton(GameType.HEARTS, actionListener, gameTypeButtonGroup);
-        this.diamondsRadioButton = createRadioButton(GameType.DIAMONDS, actionListener, gameTypeButtonGroup);
-        this.nullRadioButton = createRadioButton(GameType.NULL, actionListener, gameTypeButtonGroup);
+        grandRadioButton = createRadioButton(GameType.GRAND, actionListener, gameTypeButtonGroup);
+        clubsRadioButton = createRadioButton(GameType.CLUBS, actionListener, gameTypeButtonGroup);
+        spadesRadioButton = createRadioButton(GameType.SPADES, actionListener, gameTypeButtonGroup);
+        heartsRadioButton = createRadioButton(GameType.HEARTS, actionListener, gameTypeButtonGroup);
+        diamondsRadioButton = createRadioButton(GameType.DIAMONDS, actionListener, gameTypeButtonGroup);
+        nullRadioButton = createRadioButton(GameType.NULL, actionListener, gameTypeButtonGroup);
 
         panel.add(new JLabel(strings.getString("game")), "span 2, wrap");
 
-        panel.add(this.clubsRadioButton);
-        panel.add(this.spadesRadioButton, "wrap");
-        panel.add(this.heartsRadioButton);
-        panel.add(this.diamondsRadioButton, "wrap");
-        panel.add(this.grandRadioButton);
-        panel.add(this.nullRadioButton, "wrap");
+        panel.add(clubsRadioButton);
+        panel.add(spadesRadioButton, "wrap");
+        panel.add(heartsRadioButton);
+        panel.add(diamondsRadioButton, "wrap");
+        panel.add(grandRadioButton);
+        panel.add(nullRadioButton, "wrap");
 
         panel.add(new JLabel(strings.getString("win_levels")), "span 2, wrap");
 
-        panel.add(this.handBox);
-        panel.add(this.ouvertBox, "wrap");
-        panel.add(this.schneiderBox);
-        panel.add(this.schwarzBox, "wrap");
+        panel.add(handBox);
+        panel.add(ouvertBox, "wrap");
+        panel.add(schneiderBox);
+        panel.add(schwarzBox, "wrap");
 
         final JButton announceButton = new JButton(actions.get(JSkatAction.ANNOUNCE_GAME));
         announceButton.addActionListener(new ActionListener() {
@@ -161,9 +161,9 @@ class GameAnnouncePanel extends JPanel {
                 final GameType gameType = getSelectedGameType();
                 factory.setGameType(gameType);
 
-                if (GameAnnouncePanel.this.discardPanel.isUserLookedIntoSkat()) {
+                if (discardPanel.isUserLookedIntoSkat()) {
 
-                    final CardList discardedCards = GameAnnouncePanel.this.discardPanel.getDiscardedCards();
+                    final CardList discardedCards = discardPanel.getDiscardedCards();
                     if (discardedCards.size() != 2) {
 
                         JSkatEventBus.INSTANCE
@@ -172,21 +172,21 @@ class GameAnnouncePanel extends JPanel {
                     }
                     factory.setDiscardedCards(discardedCards);
                     if (GameType.NULL.equals(gameType)
-                            && GameAnnouncePanel.this.ouvertBox.isSelected()) {
+                            && ouvertBox.isSelected()) {
                         factory.setOuvert(true);
                     }
                 } else {
 
-                    if (GameAnnouncePanel.this.handBox.isSelected()) {
+                    if (handBox.isSelected()) {
                         factory.setHand(Boolean.TRUE);
                     }
-                    if (GameAnnouncePanel.this.ouvertBox.isSelected()) {
+                    if (ouvertBox.isSelected()) {
                         factory.setOuvert(Boolean.TRUE);
                     }
-                    if (GameAnnouncePanel.this.schneiderBox.isSelected()) {
+                    if (schneiderBox.isSelected()) {
                         factory.setSchneider(Boolean.TRUE);
                     }
-                    if (GameAnnouncePanel.this.schwarzBox.isSelected()) {
+                    if (schwarzBox.isSelected()) {
                         factory.setSchneider(Boolean.TRUE);
                     }
                 }
@@ -204,7 +204,7 @@ class GameAnnouncePanel extends JPanel {
     }
 
     private JRadioButton createRadioButton(final GameType gameType, final ActionListener actionListener, final ButtonGroup buttonGroup) {
-        final JRadioButton radioButton = new JRadioButton(this.strings.getGameType(gameType));
+        final JRadioButton radioButton = new JRadioButton(strings.getGameType(gameType));
         radioButton.setActionCommand(gameType.toString());
         radioButton.addActionListener(actionListener);
         buttonGroup.add(radioButton);
@@ -226,17 +226,17 @@ class GameAnnouncePanel extends JPanel {
     }
 
     private JCheckBox createOuvertBox() {
-        final JCheckBox result = new JCheckBox(this.strings.getString("ouvert"));
+        final JCheckBox result = new JCheckBox(strings.getString("ouvert"));
 
         result.addItemListener(new ItemListener() {
             @Override
             public void itemStateChanged(final ItemEvent arg0) {
-                if (result.isSelected() && GameAnnouncePanel.this.handBox.isSelected()
+                if (result.isSelected() && handBox.isSelected()
                         && getSelectedGameType() != null) {
                     // hand ouvert
                     if (GameType.NULL != getSelectedGameType()) {
-                        GameAnnouncePanel.this.schneiderBox.setSelected(true);
-                        GameAnnouncePanel.this.schwarzBox.setSelected(true);
+                        schneiderBox.setSelected(true);
+                        schwarzBox.setSelected(true);
                     }
                 }
             }
@@ -246,14 +246,14 @@ class GameAnnouncePanel extends JPanel {
     }
 
     private JCheckBox createSchwarzBox() {
-        final JCheckBox result = new JCheckBox(this.strings.getString("schwarz"));
+        final JCheckBox result = new JCheckBox(strings.getString("schwarz"));
 
         result.addItemListener(new ItemListener() {
 
             @Override
             public void itemStateChanged(final ItemEvent e) {
                 if (result.isSelected()) {
-                    GameAnnouncePanel.this.schneiderBox.setSelected(true);
+                    schneiderBox.setSelected(true);
                 }
             }
         });
@@ -262,32 +262,27 @@ class GameAnnouncePanel extends JPanel {
     }
 
     void resetPanel() {
-        this.nullRadioButton.setSelected(false);
-        this.clubsRadioButton.setSelected(false);
-        this.diamondsRadioButton.setSelected(false);
-        this.heartsRadioButton.setSelected(false);
-        this.spadesRadioButton.setSelected(false);
-        this.grandRadioButton.setSelected(false);
-        this.handBox.setSelected(true);
-        this.ouvertBox.setSelected(false);
-        this.schneiderBox.setSelected(false);
-        this.schwarzBox.setSelected(false);
+        gameTypeButtonGroup.clearSelection();
+        handBox.setSelected(true);
+        ouvertBox.setSelected(false);
+        schneiderBox.setSelected(false);
+        schwarzBox.setSelected(false);
     }
 
     void setUserPickedUpSkat(final boolean isUserPickedUpSkat) {
 
-        this.userPickedUpSkat = isUserPickedUpSkat;
+        userPickedUpSkat = isUserPickedUpSkat;
 
         if (isUserPickedUpSkat) {
-            this.handBox.setSelected(false);
-            this.ouvertBox.setEnabled(GameType.NULL.equals(getSelectedGameType()));
-            this.schneiderBox.setEnabled(false);
-            this.schwarzBox.setEnabled(false);
+            handBox.setSelected(false);
+            ouvertBox.setEnabled(GameType.NULL.equals(getSelectedGameType()));
+            schneiderBox.setEnabled(false);
+            schwarzBox.setEnabled(false);
         } else {
-            this.handBox.setSelected(true);
-            this.ouvertBox.setEnabled(true);
-            this.schneiderBox.setEnabled(true);
-            this.schwarzBox.setEnabled(true);
+            handBox.setSelected(true);
+            ouvertBox.setEnabled(true);
+            schneiderBox.setEnabled(true);
+            schwarzBox.setEnabled(true);
         }
     }
 }
