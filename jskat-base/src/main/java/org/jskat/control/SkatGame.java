@@ -373,8 +373,7 @@ public class SkatGame {
 
             log.debug("Player " + data.getDeclarer() + " wins the bidding.");
         } else {
-            // FIXME (jansch 02.01.2012) use cloned rule options here (see
-            // MantisBT: 0000037)
+            // FIXME (jansch 02.01.2012) use cloned rule options here (see MantisBT: 0000037)
             JSkatOptions options = JSkatOptions.instance();
 
             if (options.isPlayRamsch() && options.isRamschEventNoBid()) {
