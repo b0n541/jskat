@@ -7,12 +7,12 @@ import org.jskat.ai.rnd.AIPlayerRND;
  */
 public class ContraCallingTestPlayer extends AIPlayerRND {
     @Override
-    public Boolean callContra() {
+    public boolean callContra() {
         return true;
     }
 
     @Override
-    public Boolean callRe() {
+    public boolean callRe() {
         return false;
     }
 }

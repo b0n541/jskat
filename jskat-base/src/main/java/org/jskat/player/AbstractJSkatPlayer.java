@@ -83,7 +83,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
         internalKnowledge.resetCurrentGameData();
         internalKnowledge.setPlayerPosition(newPosition);
 
-        preparateForNewGame();
+        prepareForNewGame();
     }
 
     /**
@@ -115,10 +115,8 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
     }
 
     /**
-     * does certain startGame operations
-     * <p>
      * A method that is called by the abstract player to allow individual
-     * players to implement certain start-up operations
+     * players to implement certain start-up operations.
      */
     public abstract void startGame();
 
@@ -154,33 +152,31 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
     }
 
     /**
-     * Gets all playable cards
+     * Gets all playable cards.
      *
      * @param trick Current trick
      * @return List of all playable cards
      */
     public final CardList getPlayableCards(final CardList trick) {
 
-        boolean isCardAllowed = false;
+        boolean isCardAllowed;
         final CardList result = new CardList();
 
         log.debug("game type: " + internalKnowledge.getGameType());
-        log.debug("player cards (" + internalKnowledge.getOwnCards().size()
-                + "): " + internalKnowledge.getOwnCards());
+        log.debug("player cards (" + internalKnowledge.getOwnCards().size() + "): " + internalKnowledge.getOwnCards());
         log.debug("trick size: " + trick.size());
 
         for (final Card card : internalKnowledge.getOwnCards()) {
+            if (trick.size() > 0 &&
+                    rules.isCardAllowed(internalKnowledge.getGameType(), trick.get(0), internalKnowledge.getOwnCards(), card)) {
 
-            if (trick.size() > 0 && rules.isCardAllowed(internalKnowledge.getGameType(), trick.get(0),
-                    internalKnowledge.getOwnCards(), card)) {
-
-                log.debug("Card: " + card + " is allowed after initial card: "
-                        + trick.get(0));
+                log.debug("Card: " + card + " is allowed after initial card: " + trick.get(0));
                 isCardAllowed = true;
-            } else isCardAllowed = trick.size() == 0;
+            } else {
+                isCardAllowed = trick.size() == 0;
+            }
 
             if (isCardAllowed) {
-
                 result.add(card);
             }
         }
@@ -193,7 +189,6 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
      */
     @Override
     public final void cardPlayed(final Player player, final Card card) {
-
         internalKnowledge.setCardPlayed(player, card);
     }
 
@@ -217,7 +212,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
      * {@inheritDoc}
      */
     @Override
-    public final Boolean isHumanPlayer() {
+    public final boolean isHumanPlayer() {
         return !isAIPlayer();
     }
 
@@ -225,12 +220,9 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
      * {@inheritDoc}
      */
     @Override
-    public final Boolean isDeclarer() {
-
-        boolean result = GameType.RAMSCH.equals(internalKnowledge.getGameType())
+    public final boolean isDeclarer() {
+        return GameType.RAMSCH.equals(internalKnowledge.getGameType())
                 || internalKnowledge.getDeclarer().equals(internalKnowledge.getPlayerPosition());
-
-        return result;
     }
 
     /**
@@ -238,7 +230,6 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
      */
     @Override
     public final void lookAtOuvertCards(final CardList ouvertCards) {
-
         internalKnowledge.getSinglePlayerCards().addAll(ouvertCards);
     }
 
@@ -250,15 +241,13 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
         final CardList result = new CardList();
 
-        log.debug("Player cards before discarding: "
-                + internalKnowledge.getOwnCards());
+        log.debug("Player cards before discarding: " + internalKnowledge.getOwnCards());
 
         result.addAll(getCardsToDiscard());
 
         internalKnowledge.removeOwnCards(result.getImmutableCopy());
 
-        log.debug("Player cards after discarding: "
-                + internalKnowledge.getOwnCards());
+        log.debug("Player cards after discarding: " + internalKnowledge.getOwnCards());
 
         return result;
     }
@@ -270,7 +259,6 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
      */
     @Override
     public final void setGameSummary(final GameSummary gameSummary) {
-
         this.gameSummary = gameSummary;
     }
 

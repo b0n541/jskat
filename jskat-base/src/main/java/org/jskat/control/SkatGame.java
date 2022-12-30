@@ -36,7 +36,7 @@ public class SkatGame {
     private JSkatView view;
     private SkatRule rules;
 
-    private JSkatEventBus eventBus = JSkatEventBus.INSTANCE;
+    private final JSkatEventBus eventBus = JSkatEventBus.INSTANCE;
 
     private final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
 
@@ -353,15 +353,15 @@ public class SkatGame {
 
             setActivePlayer(Player.FOREHAND);
 
-            // check whether fore hand holds at least one bid
-            if (getPlayerInstance(Player.FOREHAND).bidMore(18) > -1) {
+            // check whether forehand holds at least one bid
+            if (getPlayerInstance(Player.FOREHAND).bidMore(18) > 0) {
 
                 log.debug("Fore hand holds 18");
                 eventBus.post(new TableGameMoveEvent(tableName, new BidEvent(secondWinner, 18)));
             } else {
 
                 log.debug("Fore hand passes too");
-                eventBus.post(new TableGameMoveEvent(tableName, new PassBidEvent(Player.FOREHAND)));
+                eventBus.post(new TableGameMoveEvent(tableName, new PassBidEvent(Player.FOREHAND, bidValue)));
                 secondWinner = null;
             }
         }
@@ -453,7 +453,7 @@ public class SkatGame {
                     // hearing hand passed
                     hearerPassed = true;
                     data.setPlayerPass(hearer, true);
-                    eventBus.post(new TableGameMoveEvent(tableName, new PassBidEvent(hearer)));
+                    eventBus.post(new TableGameMoveEvent(tableName, new PassBidEvent(hearer, announcerBidValue)));
                 }
             } else {
 
@@ -462,7 +462,7 @@ public class SkatGame {
                 // announcing hand passes
                 announcerPassed = true;
                 data.setPlayerPass(announcer, true);
-                eventBus.post(new TableGameMoveEvent(tableName, new PassBidEvent(announcer)));
+                eventBus.post(new TableGameMoveEvent(tableName, new PassBidEvent(announcer, nextBidValue)));
             }
         }
 
@@ -672,7 +672,9 @@ public class SkatGame {
                 && options.getContraCallingTime() == gameTime && isGameWithDeclarer()) {
             if (ContraCallingTime.AFTER_GAME_ANNOUNCEMENT == gameTime) {
                 return true;
-            } else return ContraCallingTime.BEFORE_FIRST_CARD == gameTime && trickNo == 0;
+            } else {
+                return ContraCallingTime.BEFORE_FIRST_CARD == gameTime && trickNo == 0;
+            }
         }
         return false;
     }

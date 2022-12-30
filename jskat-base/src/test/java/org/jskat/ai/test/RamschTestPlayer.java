@@ -10,12 +10,12 @@ public class RamschTestPlayer extends AIPlayerRND {
     private boolean playGrandHand = false;
 
     @Override
-    public Integer bidMore(final int nextBidValue) {
-        return -1;
+    public int bidMore(final int nextBidValue) {
+        return 0;
     }
 
     @Override
-    public Boolean holdBid(final int currBidValue) {
+    public boolean holdBid(final int currBidValue) {
         return false;
     }
 
@@ -32,7 +32,7 @@ public class RamschTestPlayer extends AIPlayerRND {
      * {@inheritDoc}
      */
     @Override
-    public Boolean playGrandHand() {
+    public boolean playGrandHand() {
         return playGrandHand;
     }
 }
