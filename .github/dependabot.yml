@@ -20,3 +20,4 @@ updates:
     target-branch: "develop"
     schedule:
       interval: "daily"
+
