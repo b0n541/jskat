@@ -2,22 +2,18 @@ version: 2
 updates:
   - package-ecosystem: "gradle"
     directory: "/"
-    target-branch: "develop"
     schedule:
       interval: "daily"
   - package-ecosystem: "gradle"
     directory: "/jskat-base"
-    target-branch: "develop"
     schedule:
       interval: "daily"
   - package-ecosystem: "gradle"
     directory: "/jskat-javafx-gui"
-    target-branch: "develop"
     schedule:
       interval: "daily"
   - package-ecosystem: "gradle"
     directory: "/jskat-swing-gui"
-    target-branch: "develop"
     schedule:
       interval: "daily"
 
