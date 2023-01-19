@@ -4,16 +4,18 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+
   - package-ecosystem: "gradle"
-    directory: "/jskat-base/"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "gradle"
-    directory: "/jskat-javafx-gui/"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "gradle"
-    directory: "/jskat-swing-gui/"
+    directory: "/jskat-base"
     schedule:
       interval: "daily"
 
+  - package-ecosystem: "gradle"
+    directory: "/jskat-javafx-gui"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "gradle"
+    directory: "/jskat-swing-gui"
+    schedule:
+      interval: "daily"
