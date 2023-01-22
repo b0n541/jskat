@@ -43,19 +43,15 @@ public class JSkatApplicationData {
 
     @Subscribe
     synchronized public void adjustTableDataOn(final TableCreatedEvent event) {
-
-        SkatTable table = new SkatTable(event.tableName(),
-                JSkatOptions.instance().getSkatTableOptions());
+        SkatTable table = new SkatTable(event.tableName(), JSkatOptions.instance().getSkatTableOptions());
         if (JSkatViewType.LOCAL_TABLE.equals(event.tableType())) {
             addLocalSkatTable(table);
-            registerHumanPlayerObject(table,
-                    JSkatMaster.INSTANCE.getView().getHumanPlayerForGUI());
+            registerHumanPlayerObject(table, JSkatMaster.INSTANCE.getView().getHumanPlayerForGUI());
         } else if (JSkatViewType.ISS_TABLE.equals(event.tableType())) {
             addJoinedIssSkatTable(table);
         }
 
-        if (JSkatViewType.LOCAL_TABLE.equals(event.tableType())
-                || JSkatViewType.ISS_TABLE.equals(event.tableType())) {
+        if (JSkatViewType.LOCAL_TABLE.equals(event.tableType()) || JSkatViewType.ISS_TABLE.equals(event.tableType())) {
             setActiveTable(event.tableType(), event.tableName());
         }
     }
@@ -97,7 +93,6 @@ public class JSkatApplicationData {
      * @return Number of local tables created so far
      */
     public int getLocalTablesCreated() {
-
         return localSkatTables.size();
     }
 
@@ -136,9 +131,7 @@ public class JSkatApplicationData {
      * @param tableName Table name
      */
     public void setActiveTable(JSkatViewType type, String tableName) {
-
-        if (JSkatViewType.LOCAL_TABLE.equals(type)
-                || JSkatViewType.ISS_TABLE.equals(type)) {
+        if (JSkatViewType.LOCAL_TABLE.equals(type) || JSkatViewType.ISS_TABLE.equals(type)) {
             this.tableName = tableName;
         }
     }

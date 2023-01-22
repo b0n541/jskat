@@ -80,7 +80,7 @@ public class JSkatMaster {
     public void createTable() {
 
         // TODO check whether a connection to ISS is established
-        // TODO ask whether a local or a remote tabel should be created
+        // TODO ask whether a local or a remote table should be created
 
         final String tableName = view.getNewTableName(data.getLocalTablesCreated());
 

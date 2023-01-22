@@ -44,6 +44,7 @@ import java.util.Set;
 public class JSkatMainWindowController {
 
     private final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
+    private final JSkatApplicationData applicationData = JSkatApplicationData.INSTANCE;
 
     @FXML
     private Parent root;
@@ -128,7 +129,9 @@ public class JSkatMainWindowController {
     @FXML
     public void createNewLocalTable() {
 
-        final TextInputDialog dialog = new TextInputDialog(strings.getString("local.table") + " " + 1);
+        final TextInputDialog dialog = new TextInputDialog(
+                strings.getString("local.table") + " " +
+                        (applicationData.getLocalTablesCreated() + 1));
 
         dialog.setTitle(strings.getString("new.table.dialog.title"));
         dialog.setHeaderText(strings.getString("new.table.dialog.message"));
