@@ -13,9 +13,6 @@ import javax.swing.*;
  * Defines an abstract action for JSkat
  */
 public abstract class AbstractJSkatAction extends AbstractAction {
-
-    private static final long serialVersionUID = 1L;
-
     /**
      * JSkat graphics repository
      */

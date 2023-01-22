@@ -19,10 +19,7 @@ import java.awt.event.MouseListener;
  * that are currently online
  */
 public class LobbyPanel extends AbstractTabPanel {
-
-    private static final long serialVersionUID = 1L;
     private static final Logger log = LoggerFactory.getLogger(LobbyPanel.class);
-
     private PlayerListTableModel playerListTableModel;
     private JTable playerListTable;
     private JScrollPane playerListScrollPane;
@@ -31,7 +28,6 @@ public class LobbyPanel extends AbstractTabPanel {
     JTable tableListTable;
     private JScrollPane tableListScrollPane;
     private ChatPanel chatPanel;
-
     static ActionMap actions;
 
     /**

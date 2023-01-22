@@ -19,7 +19,6 @@ import java.util.Set;
  */
 class GameInformationPanel extends JPanel {
 
-    private static final long serialVersionUID = 1L;
 
     // private JSkatGraphicRepository bitmaps;
     private final JSkatResourceBundle strings;

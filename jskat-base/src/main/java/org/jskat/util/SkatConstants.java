@@ -1,7 +1,5 @@
 package org.jskat.util;
 
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -12,7 +10,7 @@ public final class SkatConstants {
     /**
      * All possible bid values ordered from the lowest to the highest bid value
      */
-    public static final List<Integer> bidOrder = Arrays.asList(18, 20, 22, 23,
+    public static final List<Integer> bidOrder = List.of(18, 20, 22, 23,
             24, 27, 30, 33, 35, 36, 40, 44, 45, 46, 48, 50, 54, 55, 59, 60, 63,
             66, 70, 72, 77, 80, 81, 84, 88, 90, 96, 99, 100, 108, 110, 117,
             120, 121, 126, 130, 132, 135, 140, 143, 144, 150, 153, 154, 156,
@@ -38,23 +36,11 @@ public final class SkatConstants {
      * @param currBidValue Current bid value
      * @return Next valid bid value or the last possible bid value
      */
-    public static final int getNextBidValue(int currBidValue) {
-
-        int result = -1;
-        boolean nextBidValueFound = false;
-
-        Iterator<Integer> iter = bidOrder.iterator();
-        while (iter.hasNext() && !nextBidValueFound) {
-
-            result = iter.next().intValue();
-
-            if (result > currBidValue) {
-
-                nextBidValueFound = true;
-            }
-        }
-
-        return result;
+    public static int getNextBidValue(int currBidValue) {
+        return bidOrder.stream()
+                .filter(bidValue -> bidValue > currBidValue)
+                .findFirst()
+                .orElse(bidOrder.get(bidOrder.size() - 1));
     }
 
     /**
@@ -65,8 +51,8 @@ public final class SkatConstants {
      * @param ouvert   TRUE if game is an ouvert game
      * @return Multiplier
      */
-    public static final int getGameBaseValue(GameType gameType, boolean hand,
-                                             boolean ouvert) {
+    public static int getGameBaseValue(GameType gameType, boolean hand,
+                                       boolean ouvert) {
 
         int multiplier = 0;
 
@@ -119,8 +105,8 @@ public final class SkatConstants {
      * @param numberOfPlayers Number of players on the skat table
      * @return Tournament value
      */
-    public static final int getTournamentGameValue(boolean declarer,
-                                                   int gameValue, int numberOfPlayers) {
+    public static int getTournamentGameValue(boolean declarer,
+                                             int gameValue, int numberOfPlayers) {
 
         int result = 0;
 

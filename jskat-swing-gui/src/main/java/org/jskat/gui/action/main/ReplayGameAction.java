@@ -1,7 +1,7 @@
 package org.jskat.gui.action.main;
 
 import org.jskat.control.JSkatEventBus;
-import org.jskat.control.command.skatseries.ReplayGameCommand;
+import org.jskat.control.command.table.ReplayGameCommand;
 import org.jskat.data.JSkatApplicationData;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
@@ -14,7 +14,6 @@ import java.awt.event.ActionEvent;
  */
 public class ReplayGameAction extends AbstractJSkatAction {
 
-    private static final long serialVersionUID = 1L;
 
     /**
      * @see AbstractJSkatAction#AbstractJSkatAction()
@@ -22,8 +21,7 @@ public class ReplayGameAction extends AbstractJSkatAction {
     public ReplayGameAction() {
 
         putValue(NAME, STRINGS.getString("replay_game"));
-        putValue(SHORT_DESCRIPTION,
-                STRINGS.getString("replay_game_tooltip"));
+        putValue(SHORT_DESCRIPTION, STRINGS.getString("replay_game_tooltip"));
 
         setIcon(Icon.FIRST);
     }
@@ -33,8 +31,6 @@ public class ReplayGameAction extends AbstractJSkatAction {
      */
     @Override
     public void actionPerformed(final ActionEvent e) {
-        JSkatEventBus.TABLE_EVENT_BUSSES.get(
-                JSkatApplicationData.INSTANCE.getActiveTable()).post(
-                new ReplayGameCommand());
+        JSkatEventBus.INSTANCE.post(new ReplayGameCommand(JSkatApplicationData.INSTANCE.getActiveTable()));
     }
 }

@@ -1,12 +1,11 @@
 package org.jskat.control;
 
 import com.google.common.eventbus.Subscribe;
-import org.jskat.control.command.skatseries.ReplayGameCommand;
 import org.jskat.control.command.table.NextReplayMoveCommand;
 import org.jskat.control.command.table.ReadyForNextGameCommand;
+import org.jskat.control.command.table.ReplayGameCommand;
 import org.jskat.control.event.skatgame.GameStartEvent;
-import org.jskat.control.event.table.SkatGameReplayFinishedEvent;
-import org.jskat.control.event.table.SkatGameReplayStartedEvent;
+import org.jskat.control.event.table.*;
 import org.jskat.control.gui.JSkatView;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatSeriesData;
@@ -40,7 +39,7 @@ public class SkatSeries {
     private boolean readyForNextGame = false;
     private final Map<Player, JSkatPlayer> players;
     private SkatGame currSkatGame;
-    private SkatGameReplayer currReplayGame;
+    private SkatGameReplay currReplayGame;
 
     private JSkatView view;
 
@@ -59,18 +58,16 @@ public class SkatSeries {
 
         JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(this);
 
-        players = new HashMap<Player, JSkatPlayer>();
+        players = new HashMap<>();
     }
 
     @Subscribe
-    public void startReplayGameOn(final ReplayGameCommand command)
-            throws InterruptedException {
+    public void startReplayGameOn(final ReplayGameCommand command) {
 
         JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(
                 new SkatGameReplayStartedEvent());
 
-        currReplayGame = new SkatGameReplayer(view, data.getTableName(),
-                currSkatGame.getGameMoves());
+        currReplayGame = new SkatGameReplay(data.getTableName(), currSkatGame.getGameMoves());
     }
 
     @Subscribe
@@ -81,8 +78,7 @@ public class SkatSeries {
     @Subscribe
     public void readyForNextGameOn(final ReadyForNextGameCommand command) {
 
-        JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(
-                new SkatGameReplayFinishedEvent());
+        JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(new SkatGameReplayFinishedEvent());
         readyForNextGame = true;
     }
 
@@ -94,13 +90,13 @@ public class SkatSeries {
     public void setPlayers(final List<JSkatPlayer> newPlayers) {
 
         if (newPlayers.size() != 3) {
-            throw new IllegalArgumentException(
-                    "Only three players are allowed at the moment.");
+            throw new IllegalArgumentException("Only three players are allowed at the moment.");
         }
 
-        view.setPlayerNames(data.getTableName(), newPlayers.get(0).getPlayerName(), newPlayers.get(0).isAIPlayer(),
-                newPlayers.get(1).getPlayerName(), newPlayers.get(1).isAIPlayer(), newPlayers.get(2).getPlayerName(),
-                newPlayers.get(2).isAIPlayer());
+        JSkatEventBus.INSTANCE.post(new PlayerNamesChangedEvent(data.getTableName(),
+                newPlayers.get(0).getPlayerName(), newPlayers.get(0).isAIPlayer(),
+                newPlayers.get(1).getPlayerName(), newPlayers.get(1).isAIPlayer(),
+                newPlayers.get(2).getPlayerName(), newPlayers.get(2).isAIPlayer()));
 
         // memorize third player to find it again after shuffling the players
         final JSkatPlayer thirdPlayer = newPlayers.get(2);
@@ -153,22 +149,22 @@ public class SkatSeries {
 
         int roundsPlayed = 0;
         int gameNumber = 0;
+        int gamesPerRound = 3;
 
-        while ((roundsToGo > 0 || unlimitedRounds)) {
+        while (roundsToGo > 0 || unlimitedRounds) {
 
             LOG.debug("Playing round " + (roundsPlayed + 1));
 
-            for (int j = 0; j < 3; j++) {
+            for (int gameInRound = 0; gameInRound < gamesPerRound; gameInRound++) {
 
-                if (j > 0 || roundsPlayed > 0) {
+                if (gameInRound > 0 || roundsPlayed > 0) {
                     // change player positions after first game
                     final JSkatPlayer helper = players.get(Player.REARHAND);
                     players.put(Player.REARHAND, players.get(Player.FOREHAND));
                     players.put(Player.FOREHAND, players.get(Player.MIDDLEHAND));
                     players.put(Player.MIDDLEHAND, helper);
 
-                    data.setBottomPlayer(data.getBottomPlayer()
-                            .getRightNeighbor());
+                    data.setBottomPlayer(data.getBottomPlayer().getRightNeighbor());
                 }
 
                 gameNumber++;
@@ -183,16 +179,17 @@ public class SkatSeries {
                         players.get(Player.MIDDLEHAND),
                         players.get(Player.REARHAND));
 
-                JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(
-                        new GameStartEvent(gameNumber, gameVariant,
-                                data.getBottomPlayer().getLeftNeighbor(),
-                                data.getBottomPlayer().getRightNeighbor(),
-                                data.getBottomPlayer()));
+                JSkatEventBus.INSTANCE.post(
+                        new TableGameMoveEvent(data.getTableName(),
+                                new GameStartEvent(gameNumber, gameVariant,
+                                        data.getBottomPlayer().getLeftNeighbor(),
+                                        data.getBottomPlayer().getRightNeighbor(),
+                                        data.getBottomPlayer())));
 
                 currSkatGame.setView(view);
                 currSkatGame.setMaxSleep(maxSleep);
 
-                LOG.debug("Playing game " + (j + 1));
+                LOG.debug("Playing game " + (gameInRound + 1) + " of " + gamesPerRound + " for round " + (roundsPlayed + 1));
 
                 data.addGame(currSkatGame);
 
@@ -216,7 +213,8 @@ public class SkatSeries {
         }
 
         data.setState(SeriesState.SERIES_FINISHED);
-        view.setSeriesState(data.getTableName(), SeriesState.SERIES_FINISHED);
+
+        JSkatEventBus.INSTANCE.post(new SkatSeriesFinishedEvent(data.getTableName()));
 
         LOG.debug(data.getState().name());
     }

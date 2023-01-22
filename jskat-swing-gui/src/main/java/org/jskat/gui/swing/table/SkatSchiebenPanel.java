@@ -18,7 +18,7 @@ import java.awt.event.ActionListener;
  */
 class SkatSchiebenPanel extends JPanel {
 
-    private static final long serialVersionUID = 1L;
+
     private static final Logger log = LoggerFactory
             .getLogger(SkatSchiebenPanel.class);
 
@@ -32,7 +32,6 @@ class SkatSchiebenPanel extends JPanel {
      *
      * @param actions            Action map
      * @param discardPanel       Discard panel
-     * @param showAnnounceButton TRUE, if the announce button should be shown
      */
     SkatSchiebenPanel(final ActionMap actions, final DiscardPanel discardPanel) {
 

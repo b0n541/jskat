@@ -29,7 +29,7 @@ class SchieberamschContextPanel extends JPanel {
 
     private static final String GRAND_HAND = "GRAND_HAND";
     private static final String DISCARD = "DISCARD";
-    private static final long serialVersionUID = 1L;
+
     private static final Logger log = LoggerFactory
             .getLogger(SchieberamschContextPanel.class);
 

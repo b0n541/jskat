@@ -7,7 +7,6 @@ import javax.swing.*;
 
 class StartContextPanel extends JPanel {
 
-    private static final long serialVersionUID = 1L;
 
     private final StartSkatSeriesAction action;
 

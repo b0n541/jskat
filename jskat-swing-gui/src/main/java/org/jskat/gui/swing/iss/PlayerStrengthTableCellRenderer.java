@@ -6,7 +6,6 @@ import java.text.NumberFormat;
 
 public class PlayerStrengthTableCellRenderer extends DefaultTableCellRenderer {
 
-    private static final long serialVersionUID = 1L;
 
     PlayerStrengthTableCellRenderer() {
         setHorizontalAlignment(SwingConstants.RIGHT);

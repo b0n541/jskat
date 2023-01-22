@@ -44,12 +44,12 @@ public class AIPlayerRND extends AbstractAIPlayer {
     }
 
     @Override
-    public Boolean pickUpSkat() {
+    public boolean pickUpSkat() {
         return random.nextBoolean();
     }
 
     @Override
-    public Boolean playGrandHand() {
+    public boolean playGrandHand() {
         return random.nextBoolean();
     }
 
@@ -79,11 +79,10 @@ public class AIPlayerRND extends AbstractAIPlayer {
     }
 
     @Override
-    public Integer bidMore(final int nextBidValue) {
-        int result = -1;
+    public int bidMore(final int nextBidValue) {
+        int result = 0;
 
         if (random.nextBoolean()) {
-
             result = nextBidValue;
         }
 
@@ -91,7 +90,7 @@ public class AIPlayerRND extends AbstractAIPlayer {
     }
 
     @Override
-    public Boolean holdBid(final int currBidValue) {
+    public boolean holdBid(final int currBidValue) {
         return random.nextBoolean();
     }
 
@@ -138,7 +137,7 @@ public class AIPlayerRND extends AbstractAIPlayer {
     }
 
     @Override
-    public void preparateForNewGame() {
+    public void prepareForNewGame() {
         // nothing to do for AIPlayerRND
     }
 
@@ -148,12 +147,12 @@ public class AIPlayerRND extends AbstractAIPlayer {
     }
 
     @Override
-    public Boolean callContra() {
+    public boolean callContra() {
         return random.nextBoolean();
     }
 
     @Override
-    public Boolean callRe() {
+    public boolean callRe() {
         return random.nextBoolean();
     }
 }

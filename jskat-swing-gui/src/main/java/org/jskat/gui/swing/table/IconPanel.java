@@ -12,7 +12,6 @@ import javax.swing.*;
  */
 public class IconPanel extends JPanel {
 
-    private static final long serialVersionUID = 1L;
 
     private static final ImageIcon CHAT_ENABLED_ICON = new ImageIcon(
             JSkatGraphicRepository.INSTANCE.getIconImage(Icon.CHAT, IconSize.SMALL));

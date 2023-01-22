@@ -7,24 +7,18 @@ import org.jskat.control.event.skatgame.*;
 import org.jskat.control.event.table.*;
 import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.data.SkatGameData.GameState;
-import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.gui.action.main.StartSkatSeriesAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
 import org.jskat.gui.swing.AbstractTabPanel;
 import org.jskat.gui.swing.LayoutFactory;
-import org.jskat.util.Card;
-import org.jskat.util.CardList;
-import org.jskat.util.GameType;
-import org.jskat.util.Player;
+import org.jskat.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +30,6 @@ import java.util.Map.Entry;
  */
 public class SkatTablePanel extends AbstractTabPanel {
 
-    private static final long serialVersionUID = 1L;
     private static final Logger log = LoggerFactory.getLogger(SkatTablePanel.class);
     // FIXME (jan 14.11.2010) looks wrong to me, was made static to avoid
     // NullPointerException during ISS table creation
@@ -97,8 +90,7 @@ public class SkatTablePanel extends AbstractTabPanel {
      * @return List of actions for the game over context
      */
     protected List<JSkatAction> getGameOverActions() {
-        return Arrays.asList(JSkatAction.CONTINUE_LOCAL_SERIES,
-                JSkatAction.REPLAY_GAME);
+        return Arrays.asList(JSkatAction.CONTINUE_LOCAL_SERIES, JSkatAction.REPLAY_GAME);
     }
 
     /**
@@ -125,8 +117,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
         JTabbedPane leftPanel = new JTabbedPane();
 
-        leftPanel.addTab(strings.getString("score_sheet"),
-                getScoreListPanel());
+        leftPanel.addTab(strings.getString("score_sheet"), getScoreListPanel());
 
         return leftPanel;
     }
@@ -139,18 +130,14 @@ public class SkatTablePanel extends AbstractTabPanel {
         skatListTableModel = new SkatListTableModel();
         scoreListTable = new JTable(skatListTableModel);
 
-        for (int i = 0; i < scoreListTable.getColumnModel()
-                .getColumnCount(); i++) {
+        for (int i = 0; i < scoreListTable.getColumnModel().getColumnCount(); i++) {
 
             if (i == 3) {
-
                 // game colum is bigger
-                scoreListTable.getColumnModel().getColumn(i)
-                        .setPreferredWidth(40);
+                scoreListTable.getColumnModel().getColumn(i).setPreferredWidth(40);
             } else {
 
-                scoreListTable.getColumnModel().getColumn(i)
-                        .setPreferredWidth(20);
+                scoreListTable.getColumnModel().getColumn(i).setPreferredWidth(20);
             }
         }
 
@@ -244,8 +231,7 @@ public class SkatTablePanel extends AbstractTabPanel {
         trickHoldingPanel.setOpaque(false);
         addContextPanel(ContextPanelType.TRICK_PLAYING, trickHoldingPanel);
 
-        gameOverPanel = new GameOverPanel(getActionMap(),
-                getGameOverActions());
+        gameOverPanel = new GameOverPanel(getActionMap(), getGameOverActions());
         addContextPanel(ContextPanelType.GAME_OVER, gameOverPanel);
     }
 
@@ -267,12 +253,9 @@ public class SkatTablePanel extends AbstractTabPanel {
                 actions.get(JSkatAction.CALL_RE));
         callReButton.setIcon(new ImageIcon(bitmaps.getIconImage(Icon.OK,
                 IconSize.BIG)));
-        callReButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                e.setSource(Boolean.TRUE);
-                callReButton.dispatchEvent(e);
-            }
+        callReButton.addActionListener(e -> {
+            e.setSource(Boolean.TRUE);
+            callReButton.dispatchEvent(e);
         });
 
         JButton noReAfterContraButton = new JButton(
@@ -280,12 +263,9 @@ public class SkatTablePanel extends AbstractTabPanel {
         noReAfterContraButton.setText(strings.getString("no"));
         noReAfterContraButton.setIcon(new ImageIcon(bitmaps.getIconImage(
                 Icon.STOP, IconSize.BIG)));
-        noReAfterContraButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                e.setSource(Boolean.FALSE);
-                noReAfterContraButton.dispatchEvent(e);
-            }
+        noReAfterContraButton.addActionListener(e -> {
+            e.setSource(Boolean.FALSE);
+            noReAfterContraButton.dispatchEvent(e);
         });
 
         JPanel grandHandPanel = new JPanel();
@@ -341,20 +321,20 @@ public class SkatTablePanel extends AbstractTabPanel {
     public void resetTableOn(GameStartEvent event) {
 
         gameInfoPanel.setGameState(GameState.GAME_START);
-        gameInfoPanel.setGameNumber(event.gameNo);
+        gameInfoPanel.setGameNumber(event.gameNo());
 
-        leftOpponentPanel.setPosition(event.leftPlayerPosition);
-        rightOpponentPanel.setPosition(event.rightPlayerPosition);
-        userPanel.setPosition(event.userPosition);
+        leftOpponentPanel.setPosition(event.leftPlayerPosition());
+        rightOpponentPanel.setPosition(event.rightPlayerPosition());
+        userPanel.setPosition(event.userPosition());
 
-        biddingPanel.setUserPosition(event.userPosition);
-        trickPanel.setUserPosition(event.userPosition);
-        lastTrickPanel.setUserPosition(event.userPosition);
-        gameOverPanel.setUserPosition(event.userPosition);
+        biddingPanel.setUserPosition(event.userPosition());
+        trickPanel.setUserPosition(event.userPosition());
+        lastTrickPanel.setUserPosition(event.userPosition());
+        gameOverPanel.setUserPosition(event.userPosition());
 
         // FIXME (jansch 09.11.2010) code duplication with
         // BiddingPanel.setPlayerPositions()
-        switch (event.userPosition) {
+        switch (event.userPosition()) {
             case FOREHAND:
                 foreHand = userPanel;
                 middleHand = leftOpponentPanel;
@@ -391,7 +371,7 @@ public class SkatTablePanel extends AbstractTabPanel {
      * @param player Player position
      * @param card   Card
      */
-    public void setTrickCard(Player player, Card card) {
+    private void setTrickCard(Player player, Card card) {
 
         trickPanel.addCard(player, card);
     }
@@ -516,15 +496,16 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Sets the game state
      *
-     * @param state Game state
+     * @param event
      */
-    public void setGameState(GameState state) {
+    @Subscribe
+    private void setGameStateOn(SkatGameStateChangedEvent event) {
 
-        log.debug(".setGameState(" + state + ")");
+        log.info("New game state: {}", event.gameState);
 
-        gameInfoPanel.setGameState(state);
+        gameInfoPanel.setGameState(event.gameState);
 
-        switch (state) {
+        switch (event.gameState) {
             case GAME_START:
                 setContextPanel(ContextPanelType.START);
                 resetGameData();
@@ -536,22 +517,19 @@ public class SkatTablePanel extends AbstractTabPanel {
                 setContextPanel(ContextPanelType.BIDDING);
                 break;
             case RAMSCH_GRAND_HAND_ANNOUNCING:
-                setContextPanel(ContextPanelType.SCHIEBERAMSCH);
-                userPanel.setGameState(state);
-                break;
             case SCHIEBERAMSCH:
                 setContextPanel(ContextPanelType.SCHIEBERAMSCH);
-                userPanel.setGameState(state);
+                userPanel.setGameState(event.gameState);
                 break;
             case PICKING_UP_SKAT:
                 if (userPanel.getPosition().equals(declarer)) {
                     setContextPanel(ContextPanelType.DECLARING);
-                    userPanel.setGameState(state);
+                    userPanel.setGameState(event.gameState);
                 }
                 break;
             case DISCARDING:
                 if (userPanel.getPosition().equals(declarer)) {
-                    userPanel.setGameState(state);
+                    userPanel.setGameState(event.gameState);
                 }
                 break;
             case DECLARING:
@@ -564,7 +542,7 @@ public class SkatTablePanel extends AbstractTabPanel {
                 break;
             case TRICK_PLAYING:
                 setContextPanel(ContextPanelType.TRICK_PLAYING);
-                userPanel.setGameState(state);
+                userPanel.setGameState(event.gameState);
                 break;
             case CALCULATING_GAME_VALUE:
             case PRELIMINARY_GAME_END:
@@ -593,10 +571,9 @@ public class SkatTablePanel extends AbstractTabPanel {
      *
      * @param panelType Panel type
      */
-    void setContextPanel(ContextPanelType panelType) {
+    protected void setContextPanel(ContextPanelType panelType) {
 
-        ((CardLayout) gameContextPanel.getLayout()).show(
-                gameContextPanel, panelType.toString());
+        ((CardLayout) gameContextPanel.getLayout()).show(gameContextPanel, panelType.toString());
         gameContextPanel.validate();
     }
 
@@ -631,16 +608,10 @@ public class SkatTablePanel extends AbstractTabPanel {
         scoreListScrollPane.getViewport().setViewPosition(loc);
     }
 
-    Player getHumanPosition() {
-
-        return userPanel.getPosition();
-    }
-
     /**
      * Clears the skat table
      */
-    public void clearTable() {
-
+    private void clearTable() {
         gameInfoPanel.clear();
         biddingPanel.resetPanel();
         declaringPanel.resetPanel();
@@ -659,17 +630,18 @@ public class SkatTablePanel extends AbstractTabPanel {
         resetGameData();
     }
 
-    /**
-     * Sets the bid value for a player.
-     *
-     * @param event Bid event
-     */
     @Subscribe
     public void setBidValueOn(BidEvent event) {
-
         log.debug(event.player + " bids: " + event.bid);
-
         setBidValue(event);
+        biddingPanel.setBidValueToHold(event.bid);
+    }
+
+    @Subscribe
+    public void setBidValueOn(HoldBidEvent event) {
+        log.debug(event.player + " holds: " + event.bid);
+        setBidValue(event);
+        biddingPanel.setNextBidValue(SkatConstants.getNextBidValue(event.bid));
     }
 
     private void setBidValue(AbstractBidEvent event) {
@@ -677,48 +649,37 @@ public class SkatTablePanel extends AbstractTabPanel {
         getPlayerPanel(event.player).setBidValue(event.bid);
     }
 
-    /**
-     * Sets the bid value for a player.
-     *
-     * @param event Hold bid event
-     */
     @Subscribe
-    public void setBidValueOn(HoldBidEvent event) {
-
-        log.debug(event.player + " holds: " + event.bid);
-
-        setBidValue(event);
+    public void setBidValueOn(PassBidEvent event) {
+        log.debug(event.player + " passes, next bid: " + event.nextBidValue);
+        biddingPanel.setNextBidValue(event.nextBidValue);
     }
 
     /**
      * Starts a game
      */
     public void startGame() {
-
         clearTable();
     }
 
-    /**
-     * Sets the skat
-     *
-     * @param skat Skat
-     */
-    public void setSkat(CardList skat) {
+    @Subscribe
+    public void setSkatOn(SkatCardsChangedEvent event) {
 
         if (ramsch) {
-            schieberamschPanel.setSkat(skat);
+            schieberamschPanel.setSkat(event.cards);
         } else {
-            declaringPanel.setSkat(skat);
+            declaringPanel.setSkat(event.cards);
         }
     }
 
     /**
      * Takes a card from skat to user panel
      *
-     * @param card Card
+     * @param event
      */
-    public void takeCardFromSkat(Card card) {
-        takeCardFromSkat(userPanel, card);
+    @Subscribe
+    public void takeCardFromSkatOn(SkatCardTakenEvent event) {
+        takeCardFromSkat(userPanel, event.card);
     }
 
     /**
@@ -748,10 +709,11 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Puts a card from the user panel to the skat
      *
-     * @param card Card
+     * @param event
      */
-    public void putCardIntoSkat(Card card) {
-        putCardIntoSkat(userPanel, card);
+    @Subscribe
+    public void putCardIntoSkatOn(SkatCardPutEvent event) {
+        putCardIntoSkat(userPanel, event.card);
     }
 
     /**
@@ -942,37 +904,10 @@ public class SkatTablePanel extends AbstractTabPanel {
         biddingPanel.setPass(event.player);
     }
 
-    /**
-     * Sets the series state
-     *
-     * @param state Series state
-     */
-    public void setSeriesState(SeriesState state) {
+    @Subscribe
+    public void setContextPanelOn(SkatSeriesFinishedEvent event) {
 
-        if (SeriesState.SERIES_FINISHED.equals(state)) {
-
-            setContextPanel(ContextPanelType.START);
-        }
-    }
-
-    /**
-     * Sets the bid value to make
-     *
-     * @param bidValue Bid value
-     */
-    public void setBidValueToMake(int bidValue) {
-
-        biddingPanel.setBidValueToMake(bidValue);
-    }
-
-    /**
-     * Sets the bid value to hold
-     *
-     * @param bidValue Bid value
-     */
-    public void setBidValueToHold(int bidValue) {
-
-        biddingPanel.setBidValueToHold(bidValue);
+        setContextPanel(ContextPanelType.START);
     }
 
     @Override
@@ -991,29 +926,15 @@ public class SkatTablePanel extends AbstractTabPanel {
         gameInfoPanel.setTrickNumber(trickNumber);
     }
 
-    /**
-     * Sets the player names
-     *
-     * @param upperLeftPlayerName        Upper left player name
-     * @param isUpperLeftPlayerAIPlayer  TRUE if the upper left player is an AI player
-     * @param upperRightPlayerName       Upper right player name
-     * @param isUpperRightPlayerAIPlayer TRUE if the upper right player is an AI player
-     * @param lowerPlayerName            Lower player name
-     * @param isLowerPlayerAIPlayer      TRUE if the lower player is an AI player
-     */
-    public void setPlayerNames(String upperLeftPlayerName, boolean isUpperLeftPlayerAIPlayer,
-                               String upperRightPlayerName, boolean isUpperRightPlayerAIPlayer, String lowerPlayerName,
-                               boolean isLowerPlayerAIPlayer) {
-        // FIXME (jan 26.01.2011) possible code duplication with
-        // setPlayerInformation()
-        leftOpponentPanel.setPlayerName(upperLeftPlayerName);
-        leftOpponentPanel.setAIPlayer(isUpperLeftPlayerAIPlayer);
-        rightOpponentPanel.setPlayerName(upperRightPlayerName);
-        rightOpponentPanel.setAIPlayer(isUpperRightPlayerAIPlayer);
-        userPanel.setPlayerName(lowerPlayerName);
-        userPanel.setAIPlayer(isLowerPlayerAIPlayer);
-        skatListTableModel.setPlayerNames(upperLeftPlayerName,
-                upperRightPlayerName, lowerPlayerName);
+    @Subscribe
+    public void setPlayerNamesOn(PlayerNamesChangedEvent event) {
+        leftOpponentPanel.setPlayerName(event.upperLeftPlayerName);
+        leftOpponentPanel.setAIPlayer(event.isUpperLeftPlayerAIPlayer);
+        rightOpponentPanel.setPlayerName(event.upperRightPlayerName);
+        rightOpponentPanel.setAIPlayer(event.isUpperRightPlayerAIPlayer);
+        userPanel.setPlayerName(event.lowerPlayerName);
+        userPanel.setAIPlayer(event.isLowerPlayerAIPlayer);
+        skatListTableModel.setPlayerNames(event.upperLeftPlayerName, event.upperRightPlayerName, event.lowerPlayerName);
     }
 
     /**
@@ -1025,13 +946,10 @@ public class SkatTablePanel extends AbstractTabPanel {
         return declarer;
     }
 
-    /**
-     * Sets the declarer player for the table
-     *
-     * @param declarer Declarer player
-     */
-    public void setDeclarer(Player declarer) {
-        this.declarer = declarer;
+    @Subscribe
+    public void setDeclarerOn(DeclarerChangedEvent event) {
+        log.info("New declarer: {}", event.declarer);
+        declarer = event.declarer;
     }
 
     /**

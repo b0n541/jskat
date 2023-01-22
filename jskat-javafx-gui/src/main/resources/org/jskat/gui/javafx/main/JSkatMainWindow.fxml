@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright (c) 2015, 2019, Gluon and/or its affiliates.
+  All rights reserved. Use is subject to license terms.
+
+  This file is available and licensed under the following license:
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met:
+
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  - Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the distribution.
+  - Neither the name of Oracle Corporation nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="root" prefHeight="700.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jskat.gui.javafx.main.JSkatMainWindowController">
+    <children>
+        <MenuBar VBox.vgrow="NEVER">
+            <menus>
+                <Menu mnemonicParsing="false" text="%jskat">
+                    <items>
+                        <MenuItem mnemonicParsing="false" text="%open.skatseries">
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/load_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                        <Menu mnemonicParsing="false" text="%open.recent.skatseries" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem mnemonicParsing="false" text="%save.skatseries">
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/save_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                        <MenuItem mnemonicParsing="false" text="%save.as.skatseries">
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/save_as_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                        <MenuItem mnemonicParsing="false" text="%close.skatseries" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="preferencesMenuItem" mnemonicParsing="false" onAction="#showPreferences" text="%preferences">
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/preferences_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="exitJskatMenuItem" mnemonicParsing="false" onAction="#exitJSkat" text="%exit.jskat">
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/exit_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="%iss">
+                    <items>
+                        <MenuItem fx:id="issLoginMenuItem" mnemonicParsing="false" onAction="#showIssLoginPanel" text="%international.skat.server" />
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="%skat_table">
+                    <items>
+                        <MenuItem fx:id="localTableMenuItem" mnemonicParsing="false" onAction="#createNewLocalTable" text="%local.table">
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/table_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="startSkatSeriesMenuItem" mnemonicParsing="false" onAction="#startSkatSeries" text="%start.skat.series">
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/play_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="replayGameMenuItem" mnemonicParsing="false" onAction="#replayGame" text="%replay.game">
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/first_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                        <MenuItem fx:id="nextReplayMoveMenuItem" mnemonicParsing="false" onAction="#nextReplayMove" text="%next.replay.move">
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/next_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="%help">
+                    <items>
+                        <MenuItem fx:id="helpMenuItem" mnemonicParsing="false" onAction="#showHelp" text="%help">
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/help_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
+                  <SeparatorMenuItem mnemonicParsing="false" />
+                  <MenuItem fx:id="licenseMenuItem" mnemonicParsing="false" onAction="#showLicense" text="%license">
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/license_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                  <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#showAboutInformation" text="%about">
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/about_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </MenuItem>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <ToolBar>
+            <items>
+                <Button fx:id="issLoginToolbarButton" mnemonicParsing="false" onAction="#showIssLoginPanel" text="%international.skat.server">
+                    <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/org/jskat/gui/img/gui/connect_iss_small.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="localTableToolbarButton" mnemonicParsing="false" onAction="#createNewLocalTable" text="%local.table">
+                    <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/org/jskat/gui/img/gui/table_small.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="startSkatSeriesToolbarButton" mnemonicParsing="false" onAction="#startSkatSeries" text="%start.skat.series">
+                    <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/org/jskat/gui/img/gui/play_small.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="replayGameToolbarButton" mnemonicParsing="false" onAction="#replayGame" text="%replay.game">
+                    <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/org/jskat/gui/img/gui/first_small.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="nextReplayMoveButton" mnemonicParsing="false" onAction="#nextReplayMove" text="%next.replay.move">
+                    <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/org/jskat/gui/img/gui/next_small.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+                <Button fx:id="helpButton" mnemonicParsing="false" onAction="#showHelp" text="%help">
+                    <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@/org/jskat/gui/img/gui/help_small.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+            </items>
+        </ToolBar>
+        <TabPane fx:id="tabs" tabClosingPolicy="ALL_TABS" VBox.vgrow="ALWAYS">
+            <tabs>
+                <Tab id="WELCOME" closable="false" text="%welcome">
+                    <content>
+                        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                            <children>
+                        <Pane prefHeight="10.0" VBox.vgrow="ALWAYS" />
+                                <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                                    <children>
+                                        <ImageView pickOnBounds="true" preserveRatio="true">
+                                            <image>
+                                                <Image url="@/org/jskat/gui/img/gui/jskat_logo.png" />
+                                            </image>
+                                        </ImageView>
+                                        <Label text="%welcome.to.jskat">
+                                            <HBox.margin>
+                                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                            </HBox.margin>
+                                            <font>
+                                                <Font name="System Bold" size="36.0" />
+                                            </font>
+                                        </Label>
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </VBox.margin>
+                                </HBox>
+                                <GridPane alignment="TOP_CENTER" hgap="10.0" maxWidth="-Infinity" vgap="10.0" VBox.vgrow="ALWAYS">
+                                    <columnConstraints>
+                                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="300.0" />
+                                        <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" minWidth="10.0" />
+                                    </columnConstraints>
+                                    <rowConstraints>
+                                        <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
+                                        <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
+                                        <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
+                                        <RowConstraints minHeight="10.0" vgrow="ALWAYS" />
+                                    </rowConstraints>
+                                    <children>
+                                        <Button fx:id="issLoginButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#showIssLoginPanel" prefWidth="300.0" text="%international.skat.server">
+                                            <graphic>
+                                                <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@/org/jskat/gui/img/gui/connect_iss_big.png" />
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                        </Button>
+                                        <Label text="%explain.iss.table" GridPane.columnIndex="1" GridPane.hgrow="NEVER" />
+                                        <Button fx:id="localTableButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#createNewLocalTable" prefWidth="300.0" text="%local.table" GridPane.rowIndex="1">
+                                            <graphic>
+                                                <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@/org/jskat/gui/img/gui/table_big.png" />
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                        </Button>
+                                        <Label text="%explain.local.table" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="1" />
+                                        <Button fx:id="preferencesButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#showPreferences" prefWidth="300.0" text="%preferences" GridPane.rowIndex="2">
+                                            <graphic>
+                                                <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@/org/jskat/gui/img/gui/preferences_big.png" />
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                        </Button>
+                                        <Label text="%explain.preferences" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="2" />
+                                        <Button fx:id="exitJSkatButton" maxWidth="-Infinity" mnemonicParsing="false" onAction="#exitJSkat" prefWidth="300.0" text="%exit.jskat" GridPane.rowIndex="3">
+                                            <graphic>
+                                                <ImageView fitHeight="48.0" fitWidth="48.0" pickOnBounds="true" preserveRatio="true">
+                                                    <image>
+                                                        <Image url="@/org/jskat/gui/img/gui/exit_big.png" />
+                                                    </image>
+                                                </ImageView>
+                                            </graphic>
+                                        </Button>
+                                        <Label text="%explain.exit" GridPane.columnIndex="1" GridPane.hgrow="NEVER" GridPane.rowIndex="3" />
+                                    </children>
+                                    <VBox.margin>
+                                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                                    </VBox.margin>
+                                </GridPane>
+                        <Pane prefHeight="10.0" VBox.vgrow="ALWAYS" />
+                            </children>
+                        </VBox>
+                    </content>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </children>
+</VBox>

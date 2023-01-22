@@ -10,7 +10,6 @@ import javax.swing.*;
  */
 public class DiscardAction extends AbstractHumanJSkatAction {
 
-    private static final long serialVersionUID = 1L;
 
     /**
      * @see AbstractJSkatAction#AbstractJSkatAction()

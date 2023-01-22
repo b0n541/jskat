@@ -1,9 +1,7 @@
-
 package org.jskat.gui.javafx;
 
 import com.google.common.eventbus.Subscribe;
 import javafx.embed.swing.SwingNode;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
@@ -15,7 +13,10 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-import javafx.stage.*;
+import javafx.stage.Modality;
+import javafx.stage.Screen;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.jskat.JSkatFX;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
@@ -31,6 +32,7 @@ import java.io.IOException;
 /**
  * Main window for JSkat.
  */
+@Deprecated
 public class JSkatMainWindow extends Stage {
 
     private static final JSkatResourceBundle STRINGS = JSkatResourceBundle.INSTANCE;
@@ -64,17 +66,12 @@ public class JSkatMainWindow extends Stage {
 
         setScene(scene);
 
-        xProperty().addListener(
-                (observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameXPosition(newValue.intValue()));
-        yProperty().addListener(
-                (observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameYPosition(newValue.intValue()));
+        xProperty().addListener((observable, oldValue, newValue) ->
+                JSkatOptions.instance().setMainFrameXPosition(newValue.intValue()));
+        yProperty().addListener((observable, oldValue, newValue) ->
+                JSkatOptions.instance().setMainFrameYPosition(newValue.intValue()));
 
-        setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(final WindowEvent we) {
-                JSkatMaster.INSTANCE.exitJSkat();
-            }
-        });
+        setOnCloseRequest(event -> JSkatMaster.INSTANCE.exitJSkat());
 
         placeMainWindow(targetScreen, this, screenPosition);
     }
@@ -84,7 +81,7 @@ public class JSkatMainWindow extends Stage {
         final double height = JSkatOptions.instance().getMainFrameSize().getHeight();
 
         // on first startup the default values for width and height are
-        // Integer.MIN_VALUE
+        // Integer.MIN_VALUEjskatviewIm
         return new Dimension2D(width > 0 ? width : targetScreen.getBounds().getWidth() * 2 / 3,
                 height > 0 ? height : targetScreen.getBounds().getHeight() * 2 / 3);
     }

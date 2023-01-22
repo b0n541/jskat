@@ -22,7 +22,7 @@ public class SkatTable {
     private final String tableName;
     private final SkatTableOptions options;
     private SkatSeries series;
-    private final List<JSkatPlayer> player = new ArrayList<JSkatPlayer>();
+    private final List<JSkatPlayer> player = new ArrayList<>();
 
     /**
      * Constructor
@@ -54,7 +54,7 @@ public class SkatTable {
      * @param rounds            Number of rounds to be played
      * @param unlimitedRounds   TRUE, if the number of rounds is not limited
      * @param onlyPlayRamsch    TRUE, if only Ramsch games should be played
-     * @param sleepBetweenMoves Number of miliseconds to sleep between moves
+     * @param sleepBetweenMoves Number of milliseconds to sleep between moves
      */
     public void startSkatSeries(final int rounds,
                                 final boolean unlimitedRounds, final boolean onlyPlayRamsch,

@@ -10,7 +10,6 @@ import javax.swing.*;
  */
 public class PlayHandGameAction extends AbstractHumanJSkatAction {
 
-    private static final long serialVersionUID = 1L;
 
     /**
      * @see AbstractJSkatAction#AbstractJSkatAction()

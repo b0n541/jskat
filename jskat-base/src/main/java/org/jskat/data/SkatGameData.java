@@ -4,10 +4,7 @@ import com.google.common.eventbus.Subscribe;
 import org.jskat.control.event.skatgame.SkatGameEvent;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.GameSummary.GameSummaryFactory;
-import org.jskat.util.Card;
-import org.jskat.util.CardList;
-import org.jskat.util.GameType;
-import org.jskat.util.Player;
+import org.jskat.util.*;
 import org.jskat.util.rule.RamschRule;
 import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
@@ -253,9 +250,8 @@ public class SkatGameData {
      *
      * @return Highest bid value
      */
-    public Integer getMaxBidValue() {
-
-        Integer result = 0;
+    public int getMaxBidValue() {
+        int result = 0;
 
         for (final List<Integer> bids : playerBids.values()) {
             final int maxBid = bids.size() > 0 ? bids.get(bids.size() - 1) : 0;
@@ -265,6 +261,15 @@ public class SkatGameData {
         }
 
         return result;
+    }
+
+    /**
+     * Returns the next bid value of the game
+     *
+     * @return Next bid value
+     */
+    public int getNextBidValue() {
+        return SkatConstants.getNextBidValue(getMaxBidValue());
     }
 
     /**
@@ -1092,7 +1097,7 @@ public class SkatGameData {
      */
     public boolean isPlayerMadeNoTrick(final Player player) {
 
-        final Set<Player> trickWinners = new HashSet<Player>();
+        final Set<Player> trickWinners = new HashSet<>();
 
         for (int i = 0; i < getTricks().size(); i++) {
             trickWinners.add(getTrickWinner(i));
@@ -1118,7 +1123,7 @@ public class SkatGameData {
      */
     public Map<Player, CardList> getCardsAfterDiscard() {
 
-        final Map<Player, CardList> result = new HashMap<Player, CardList>();
+        final Map<Player, CardList> result = new HashMap<>();
 
         for (final Player player : Player.values()) {
             final CardList cards = new CardList();

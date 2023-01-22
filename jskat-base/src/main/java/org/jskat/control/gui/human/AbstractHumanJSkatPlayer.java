@@ -9,7 +9,7 @@ import org.jskat.player.AbstractJSkatPlayer;
 public abstract class AbstractHumanJSkatPlayer extends AbstractJSkatPlayer {
 
     @Override
-    public final Boolean isAIPlayer() {
+    public final boolean isAIPlayer() {
         return false;
     }
 

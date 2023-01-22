@@ -2,9 +2,9 @@ package org.jskat.control;
 
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.skatgame.*;
+import org.jskat.control.event.table.SkatGameStateChangedEvent;
 import org.jskat.control.event.table.TableGameMoveEvent;
 import org.jskat.control.event.table.TrickCompletedEvent;
-import org.jskat.control.gui.JSkatView;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
 import org.slf4j.Logger;
@@ -16,18 +16,16 @@ import java.util.List;
 /**
  * This class is used for replaying skat games
  */
-public class SkatGameReplayer {
+public class SkatGameReplay {
 
-    private final static Logger LOG = LoggerFactory.getLogger(SkatGameReplayer.class);
+    private final static Logger LOG = LoggerFactory.getLogger(SkatGameReplay.class);
 
-    private final JSkatView view;
     private final String tableName;
     private SkatGameData data;
     private final List<SkatGameEvent> gameMoves = new ArrayList<>();
     private int currentMove = 0;
 
-    public SkatGameReplayer(JSkatView view, String tableName, List<SkatGameEvent> gameMoves) {
-        this.view = view;
+    public SkatGameReplay(String tableName, List<SkatGameEvent> gameMoves) {
         this.tableName = tableName;
         this.gameMoves.addAll(gameMoves);
         resetReplay();
@@ -71,15 +69,17 @@ public class SkatGameReplayer {
 
     private void setGameState(SkatGameEvent event) {
         if (event instanceof GameStartEvent) {
-            view.setGameState(tableName, GameState.BIDDING);
-        } else if (event instanceof BidEvent) {
-            view.setGameState(tableName, GameState.BIDDING);
+            JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.BIDDING));
+        } else if (event instanceof BidEvent || event instanceof HoldBidEvent || event instanceof PassBidEvent) {
+            JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.BIDDING));
+        } else if (event instanceof PickUpSkatEvent) {
+            JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.PICKING_UP_SKAT));
         } else if (event instanceof GameAnnouncementEvent) {
-            view.setGameState(tableName, GameState.DECLARING);
+            JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.DECLARING));
         } else if (event instanceof TrickCardPlayedEvent) {
-            view.setGameState(tableName, GameState.TRICK_PLAYING);
+            JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.TRICK_PLAYING));
         } else if (event instanceof GameFinishEvent) {
-            view.setGameState(tableName, GameState.GAME_OVER);
+            JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.GAME_OVER));
         }
     }
 

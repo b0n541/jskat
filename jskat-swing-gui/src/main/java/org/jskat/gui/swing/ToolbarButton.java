@@ -1,8 +1,6 @@
 package org.jskat.gui.swing;
 
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 
@@ -11,9 +9,6 @@ import javax.swing.*;
  */
 public class ToolbarButton extends JButton {
 
-    private static final long serialVersionUID = 1L;
-    private static Logger log = LoggerFactory.getLogger(ToolbarButton.class);
-
     /**
      * @param action Action
      * @see JButton#JButton(Action)
@@ -21,15 +16,7 @@ public class ToolbarButton extends JButton {
     public ToolbarButton(final Action action) {
 
         super(action);
-        // setTextPosition();
-        // setPreferredSize(new Dimension(120, 100));
         setIconSize(IconSize.SMALL);
-    }
-
-    private void setTextPosition() {
-
-        setVerticalTextPosition(SwingConstants.BOTTOM);
-        setHorizontalTextPosition(SwingConstants.CENTER);
     }
 
     /**

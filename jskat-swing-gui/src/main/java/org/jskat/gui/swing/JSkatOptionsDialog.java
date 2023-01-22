@@ -18,7 +18,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -30,7 +29,7 @@ import java.awt.event.KeyEvent;
  */
 public class JSkatOptionsDialog extends JDialog {
 
-    private static final long serialVersionUID = 1L;
+
     private static final Logger log = LoggerFactory.getLogger(JSkatOptionsDialog.class);
 
     private final JSkatResourceBundle strings;
@@ -138,18 +137,15 @@ public class JSkatOptionsDialog extends JDialog {
         }
     };
 
-    final ChangeListener ruleButtonChangeListener = new ChangeListener() {
-
-        @Override
-        public void stateChanged(final ChangeEvent e) {
-            if (JSkatOptionsDialog.this.ruleSetISPA.isSelected()) {
-                activatePubRules(false);
-            }
-            if (JSkatOptionsDialog.this.ruleSetPub.isSelected()) {
-                activatePubRules(true);
-            }
+    final ChangeListener ruleButtonChangeListener = e -> {
+        if (JSkatOptionsDialog.this.ruleSetISPA.isSelected()) {
+            activatePubRules(false);
+        }
+        if (JSkatOptionsDialog.this.ruleSetPub.isSelected()) {
+            activatePubRules(true);
         }
     };
+
     private JLabel bockEventLabel;
     private JLabel ramschEventLabel;
     private JLabel ramschSkatLabel;
@@ -160,12 +156,16 @@ public class JSkatOptionsDialog extends JDialog {
      * @param parent Parent component of the options dialog
      */
     public JSkatOptionsDialog(final Component parent) {
-
         strings = JSkatResourceBundle.INSTANCE;
-        this.options = JSkatOptions.instance();
+        options = JSkatOptions.instance();
+
         this.parent = parent;
 
         initGUI();
+    }
+
+    public JSkatOptionsDialog() {
+        this(null);
     }
 
     private void initGUI() {
@@ -624,13 +624,14 @@ public class JSkatOptionsDialog extends JDialog {
     }
 
     void refreshCardSet() {
-        this.repaint();
-        this.parent.repaint();
+        repaint();
+        if (parent != null) {
+            parent.repaint();
+        }
     }
 
     private class LanguageComboBoxRenderer extends AbstractI18NComboBoxRenderer {
 
-        private static final long serialVersionUID = 1L;
 
         LanguageComboBoxRenderer() {
             super();
@@ -660,7 +661,6 @@ public class JSkatOptionsDialog extends JDialog {
 
     private class CardSetComboBoxRenderer extends AbstractI18NComboBoxRenderer {
 
-        private static final long serialVersionUID = 1L;
 
         CardSetComboBoxRenderer() {
             super();

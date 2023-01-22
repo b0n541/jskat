@@ -4,9 +4,9 @@ import com.google.common.eventbus.Subscribe;
 import org.jskat.control.command.table.CreateTableCommand;
 import org.jskat.control.event.general.NewJSkatVersionAvailableEvent;
 import org.jskat.control.event.iss.IssConnectedEvent;
-import org.jskat.control.event.table.DuplicateTableNameInputEvent;
-import org.jskat.control.event.table.EmptyTableNameInputEvent;
-import org.jskat.control.event.table.TableRemovedEvent;
+import org.jskat.control.event.iss.IssPlayerDataUpdatedEvent;
+import org.jskat.control.event.iss.IssPlayerLeftEvent;
+import org.jskat.control.event.table.*;
 import org.jskat.control.gui.JSkatView;
 import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.control.gui.action.JSkatActionEvent;
@@ -64,11 +64,11 @@ public class JSkatMaster {
      * @param latestLocalVersion  Local version
      * @param latestRemoteVersion Remote version
      */
-    public void checkJSkatVersion(final String latestLocalVersion, final String latestRemoteVersion) {
-        log.debug("Latest version web: " + latestRemoteVersion);
-        log.debug("Latest version local: " + latestLocalVersion);
+    public static void checkJSkatVersion(final String latestLocalVersion, final String latestRemoteVersion) {
+        log.info("Latest version web: " + latestRemoteVersion);
+        log.info("Latest version local: " + latestLocalVersion);
         if (VersionChecker.isHigherVersionAvailable(latestLocalVersion, latestRemoteVersion)) {
-            log.debug("Newer version " + latestRemoteVersion + " is available on the JSkat website.");
+            log.info("Newer version " + latestRemoteVersion + " is available on the JSkat website.");
 
             JSkatEventBus.INSTANCE.post(new NewJSkatVersionAvailableEvent(latestRemoteVersion));
         }
@@ -105,8 +105,15 @@ public class JSkatMaster {
         }
     }
 
-    private void createLocalTable(final String tableName, final AbstractHumanJSkatPlayer humanPlayer) {
+    public void createTable(final String tableName) {
+        if (data.isFreeTableName(tableName)) {
+            createLocalTable(tableName, view.getHumanPlayerForGUI());
+        } else {
+            JSkatEventBus.INSTANCE.post(new DuplicateTableNameInputEvent(tableName));
+        }
+    }
 
+    private static void createLocalTable(final String tableName, final AbstractHumanJSkatPlayer humanPlayer) {
         JSkatEventBus.INSTANCE.post(new CreateTableCommand(JSkatViewType.LOCAL_TABLE, tableName));
     }
 
@@ -128,10 +135,10 @@ public class JSkatMaster {
      */
     @Subscribe
     public void removeTableDataOn(final TableRemovedEvent event) {
-        if (JSkatViewType.LOCAL_TABLE.equals(event.tableType)) {
-            data.removeLocalSkatTable(event.tableName);
-        } else if (JSkatViewType.ISS_TABLE.equals(event.tableType)) {
-            data.removeJoinedIssSkatTable(event.tableName);
+        if (JSkatViewType.LOCAL_TABLE.equals(event.tableType())) {
+            data.removeLocalSkatTable(event.tableName());
+        } else if (JSkatViewType.ISS_TABLE.equals(event.tableType())) {
+            data.removeJoinedIssSkatTable(event.tableName());
         }
     }
 
@@ -185,7 +192,7 @@ public class JSkatMaster {
         table.startSkatSeries(numberOfRounds, unlimited, onlyPlayRamsch, sleeps);
     }
 
-    public JSkatPlayer createPlayer(final String player) {
+    public static JSkatPlayer createPlayer(final String player) {
         JSkatPlayer newPlayer = null;
         try {
             newPlayer = (JSkatPlayer) Class.forName(player).newInstance();
@@ -216,9 +223,7 @@ public class JSkatMaster {
         final SkatTable table = data.getLocalSkatTable(tableName);
 
         if (!table.isSeriesRunning()) {
-
             if (table.getPlayerCount() < table.getMaxPlayerCount()) {
-
                 result = table.placePlayer(player);
             }
         }
@@ -249,7 +254,7 @@ public class JSkatMaster {
     /**
      * Shows the error message of wrong (null) name input
      */
-    public void showEmptyInputNameMessage() {
+    public static void showEmptyInputNameMessage() {
 
         JSkatEventBus.INSTANCE.post(new EmptyTableNameInputEvent());
     }
@@ -276,55 +281,46 @@ public class JSkatMaster {
 
     private void handleHumanInputForISSTable(final String tableName, final String command, final Object source) {
 
+        // player passed
         if (JSkatAction.PASS_BID.toString().equals(command)) {
-            // player passed
             issControl.sendPassBidMove(tableName);
-        } else if (JSkatAction.MAKE_BID.toString().equals(command)) {
-            // player makes bid
-            issControl.sendBidMove(tableName);
-        } else if (JSkatAction.HOLD_BID.toString().equals(command)) {
-            // player hold bid
-            issControl.sendHoldBidMove(tableName);
-        } else if (JSkatAction.PICK_UP_SKAT.toString().equals(command)) {
-            // player wants to pick up the skat
-            issControl.sendPickUpSkatMove(tableName);
-        } else if (JSkatAction.PLAY_HAND_GAME.toString().equals(command)) {
-            // player wants to play a hand game
-            // FIXME (jan 02.11.2010) decision is not sent to ISS
-        } else if (JSkatAction.DISCARD_CARDS.toString().equals(command)) {
-
-            if (source instanceof CardList) {
-                // player discarded cards
-                final CardList discardSkat = (CardList) source;
-                log.debug(discardSkat.toString());
-
-                // FIXME (jan 02.11.2010) Discarded cards are sent with the
-                // game announcement to ISS
-
-                // issControl.sendDiscardMove(tableName,
-                // discardSkat.get(0), discardSkat.get(1));
-            } else {
-                log.warn("No discarded cards found for " + command);
-            }
-        } else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
-
-            if (source instanceof GameAnnouncement) {
-                // player did game announcement
-                // FIXME (jan 02.11.2010) Discarded cards are sent with the
-                // game announcement to ISS
-                final GameAnnouncement gameAnnouncement = (GameAnnouncement) source;
-                issControl.sendGameAnnouncementMove(tableName, gameAnnouncement);
-            } else {
-                log.warn("No game announcement found for " + command);
-            }
-        } else if (JSkatAction.PLAY_CARD.toString().equals(command) && source instanceof Card) {
-
-            final Card nextCard = (Card) source;
-            issControl.sendCardMove(tableName, nextCard);
-        } else {
-
-            log.error("Unknown action event occured: " + command + " from " + source);
-        }
+        } else // player makes bid
+            if (JSkatAction.MAKE_BID.toString().equals(command)) {
+                issControl.sendBidMove(tableName);
+            } else // player hold bid
+                if (JSkatAction.HOLD_BID.toString().equals(command)) {
+                    issControl.sendHoldBidMove(tableName);
+                } else // player wants to pick up the skat
+                    if (JSkatAction.PICK_UP_SKAT.toString().equals(command)) {
+                        issControl.sendPickUpSkatMove(tableName);
+                    } else if (JSkatAction.PLAY_HAND_GAME.toString().equals(command)) {
+                        // player wants to play a hand game
+                        // FIXME (jan 02.11.2010) decision is not sent to ISS
+                    } else // player discarded cards
+                        // FIXME (jan 02.11.2010) Discarded cards are sent with the
+                        // game announcement to ISS
+                        // issControl.sendDiscardMove(tableName,
+                        // discardSkat.get(0), discardSkat.get(1));
+                        if (JSkatAction.DISCARD_CARDS.toString().equals(command)) {
+                            if (source instanceof final CardList discardSkat) {
+                                log.debug(discardSkat.toString());
+                            } else {
+                                log.warn("No discarded cards found for " + command);
+                            }
+                        } else // player did game announcement
+                            // FIXME (jan 02.11.2010) Discarded cards are sent with the
+                            // game announcement to ISS
+                            if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
+                                if (source instanceof final GameAnnouncement gameAnnouncement) {
+                                    issControl.sendGameAnnouncementMove(tableName, gameAnnouncement);
+                                } else {
+                                    log.warn("No game announcement found for " + command);
+                                }
+                            } else if (JSkatAction.PLAY_CARD.toString().equals(command) && source instanceof final Card nextCard) {
+                                issControl.sendCardMove(tableName, nextCard);
+                            } else {
+                                log.error("Unknown action event occured: " + command + " from " + source);
+                            }
     }
 
     private boolean isIssTable(final String tableName) {
@@ -335,16 +331,15 @@ public class JSkatMaster {
     /**
      * Takes a card from the skat on the active skat table
      *
-     * @param e Event
+     * @param event Event
      */
-    public void takeCardFromSkat(final JSkatActionEvent e) {
+    public void takeCardFromSkat(final JSkatActionEvent event) {
 
-        if (!(e.getSource() instanceof Card)) {
-
+        if (!(event.getSource() instanceof Card)) {
             throw new IllegalArgumentException();
         }
 
-        view.takeCardFromSkat(data.getActiveTable(), (Card) e.getSource());
+        JSkatEventBus.INSTANCE.post(new SkatCardTakenEvent(data.getActiveTable(), (Card) event.getSource()));
     }
 
     /**
@@ -355,11 +350,10 @@ public class JSkatMaster {
     public void putCardIntoSkat(final JSkatActionEvent event) {
 
         if (!(event.getSource() instanceof Card)) {
-
             throw new IllegalArgumentException();
         }
 
-        view.putCardIntoSkat(data.getActiveTable(), (Card) event.getSource());
+        JSkatEventBus.INSTANCE.post(new SkatCardPutEvent(data.getActiveTable(), (Card) event.getSource()));
     }
 
     /**
@@ -396,13 +390,13 @@ public class JSkatMaster {
     public void setActiveTable(final JSkatViewType type, final String tableName) {
 
         data.setActiveTable(type, tableName);
+        // might not be instantiated yet
         if (view != null) {
-            // might not be instantiated yet
             view.setActiveView(tableName);
         }
 
         if (type == JSkatViewType.LOCAL_TABLE) {
-            view.setGameState(tableName, data.getLocalSkatTable(tableName).getGameState());
+            JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, data.getLocalSkatTable(tableName).getGameState()));
         }
     }
 
@@ -431,27 +425,21 @@ public class JSkatMaster {
     /**
      * Updates ISS player information
      *
-     * @param playerName  Player name
-     * @param language    Language
-     * @param gamesPlayed Games played
-     * @param strength    Playing strength
+     * @param event ISS player update event
      */
-    public void updateISSPlayer(final String playerName, final String language, final long gamesPlayed,
-                                final double strength) {
-
-        data.addAvailableISSPlayer(playerName);
-        view.updateISSLobbyPlayerList(playerName, language, gamesPlayed, strength);
+    @Subscribe
+    public void updateISSPlayerOn(final IssPlayerDataUpdatedEvent event) {
+        data.addAvailableISSPlayer(event.playerName());
     }
 
     /**
      * Removes an ISS player
      *
-     * @param playerName Player name
+     * @param event ISS player left event
      */
-    public void removeISSPlayer(final String playerName) {
-
-        data.removeAvailableISSPlayer(playerName);
-        view.removeFromISSLobbyPlayerList(playerName);
+    @Subscribe
+    public void removeISSPlayer(final IssPlayerLeftEvent event) {
+        data.removeAvailableISSPlayer(event.playerName());
     }
 
     /**
@@ -462,7 +450,7 @@ public class JSkatMaster {
         openWebPage(getISSHomepageLink());
     }
 
-    private String getISSHomepageLink() {
+    private static String getISSHomepageLink() {
 
         String result = "http://www.skatgame.net/iss/";
 
@@ -491,7 +479,7 @@ public class JSkatMaster {
         openWebPage(getIssRegisterLink());
     }
 
-    private String getIssRegisterLink() {
+    private static String getIssRegisterLink() {
 
         String result = "http://skatgame.net:7000/";
 

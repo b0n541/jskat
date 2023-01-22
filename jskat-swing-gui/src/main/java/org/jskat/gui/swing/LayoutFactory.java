@@ -9,8 +9,7 @@ import org.slf4j.LoggerFactory;
  */
 public class LayoutFactory {
 
-    private final static Logger LOG = LoggerFactory
-            .getLogger(LayoutFactory.class);
+    private final static Logger LOG = LoggerFactory.getLogger(LayoutFactory.class);
 
     /**
      * Gets layout manager for {@link MigLayout}<br>
@@ -59,7 +58,8 @@ public class LayoutFactory {
      * @return Layout manager
      */
     public static MigLayout getMigLayout(String layoutConstraints,
-                                         String columnConstraints, String rowConstraints) {
+                                         String columnConstraints,
+                                         String rowConstraints) {
 
         String finalLayoutConstraints = layoutConstraints;
 
@@ -67,8 +67,7 @@ public class LayoutFactory {
             finalLayoutConstraints = injectMacOSLayoutConstraints(layoutConstraints);
         }
 
-        return new MigLayout(finalLayoutConstraints, columnConstraints,
-                rowConstraints);
+        return new MigLayout(finalLayoutConstraints, columnConstraints, rowConstraints);
     }
 
     private static String injectMacOSLayoutConstraints(String layoutConstraints) {
@@ -89,10 +88,7 @@ public class LayoutFactory {
     }
 
     private static boolean isMacOS() {
-        String osName = System.getProperty("os.name").toUpperCase();
-
-
-        return osName.contains("MAC");
+        return System.getProperty("os.name").toUpperCase().contains("MAC");
     }
 
     private static String getMacOSInsets() {

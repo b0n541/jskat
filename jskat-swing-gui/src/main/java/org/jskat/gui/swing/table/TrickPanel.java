@@ -23,12 +23,12 @@ import java.util.Random;
  */
 class TrickPanel extends JPanel implements ComponentListener {
 
-    private static final long serialVersionUID = 1L;
-    private static Logger log = LoggerFactory.getLogger(TrickPanel.class);
+
+    private static final Logger log = LoggerFactory.getLogger(TrickPanel.class);
 
     private static final double TRICK_SIZE_FACTOR = 1.0d + 2.0d / 3.0d;
 
-    private static JSkatOptions options = JSkatOptions.instance();
+    private static final JSkatOptions options = JSkatOptions.instance();
     private final JSkatGraphicRepository bitmaps = JSkatGraphicRepository.INSTANCE;
     private final List<Double> cardRotations;
     private final List<Player> positions;

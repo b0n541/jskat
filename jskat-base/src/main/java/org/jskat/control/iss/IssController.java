@@ -5,10 +5,13 @@ import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.command.iss.*;
 import org.jskat.control.command.table.CreateTableCommand;
+import org.jskat.control.command.table.RemoveTableCommand;
 import org.jskat.control.command.table.ShowCardsCommand;
-import org.jskat.control.event.iss.IssDisconnectedEvent;
+import org.jskat.control.event.iss.*;
 import org.jskat.control.event.skatgame.GameFinishEvent;
 import org.jskat.control.event.table.ActivePlayerChangedEvent;
+import org.jskat.control.event.table.DeclarerChangedEvent;
+import org.jskat.control.event.table.SkatGameStateChangedEvent;
 import org.jskat.control.event.table.TableGameMoveEvent;
 import org.jskat.control.gui.JSkatView;
 import org.jskat.data.*;
@@ -40,7 +43,7 @@ public class IssController {
     private JSkatView view;
     private IssConnector issConnector;
 
-    private String login;
+    private String userName;
     private String password;
 
     private MessageGenerator issMsg;
@@ -53,7 +56,7 @@ public class IssController {
      *
      * @param jskatMaster JSkat master
      */
-    public IssController(JSkatMaster jskatMaster) {
+    public IssController(final JSkatMaster jskatMaster) {
 
         jskat = jskatMaster;
         gameData = new HashMap<>();
@@ -66,8 +69,7 @@ public class IssController {
      *
      * @param newView View
      */
-    public void setView(JSkatView newView) {
-
+    public void setView(final JSkatView newView) {
         view = newView;
     }
 
@@ -77,9 +79,9 @@ public class IssController {
      * @param command ISS disconnect command
      */
     @Subscribe
-    public void disconnectFromIssOn(IssDisconnectCommand command) {
-
+    public void disconnectFromIssOn(final IssDisconnectCommand command) {
         closeConnectionIfOpen();
+        eventBus.post(new IssDisconnectedEvent());
     }
 
     /**
@@ -88,60 +90,48 @@ public class IssController {
      * @param event ISS disconnected event
      */
     @Subscribe
-    public void closeConnectionOn(IssDisconnectedEvent event) {
-
+    public void closeConnectionOn(final IssDisconnectedEvent event) {
         closeConnectionIfOpen();
     }
 
     private void closeConnectionIfOpen() {
         if (issConnector != null && issConnector.isConnected()) {
-
             log.debug("connection to ISS still open");
-
             issConnector.closeConnection();
         }
     }
 
-    /**
-     * Shows the login panel for ISS
-     */
-    public void showISSLoginPanel() {
-
-        view.showISSLogin();
-    }
-
     @Subscribe
-    public void establishConnectionOn(IssConnectCommand command) {
-
+    public void establishConnectionOn(final IssConnectCommand command) {
         log.debug("connectToISS");
 
+        // issConnector = new WebSocketConnector();
         if (issConnector == null) {
             issConnector = new StreamConnector();
-            // issConnector = new WebSocketConnector();
         }
 
         log.debug("connector created");
 
-        login = command.loginCredentials.getLoginName();
-        password = command.loginCredentials.getPassword();
+        userName = command.loginCredentials.userName();
+        password = command.loginCredentials.password();
 
         if (issConnector != null && !issConnector.isConnected()) {
 
-            issConnector.setConnectionData(login, password);
-            boolean isConnected = issConnector
+            issConnector.setConnectionData(userName, password);
+            final boolean isConnected = issConnector
                     .establishConnection(this);
 
             if (isConnected) {
                 log.debug("Connection to ISS established: " + issConnector.isConnected());
-                issMsg = new MessageGenerator(login);
+                issMsg = new MessageGenerator(userName);
                 issOut = issConnector.getOutputChannel();
-                sendToIss(login);
+                sendToIss(userName);
                 // sendToIss(issMsg.getLoginAndPasswordMessage(password));
             }
         }
     }
 
-    private void sendToIss(String message) {
+    private void sendToIss(final String message) {
         issOut.sendMessage(message);
     }
 
@@ -153,10 +143,8 @@ public class IssController {
      * @param gamesPlayed Games played
      * @param strength    Play strength
      */
-    public void updateISSPlayerList(String playerName,
-                                    String language, long gamesPlayed, double strength) {
-
-        jskat.updateISSPlayer(playerName, language, gamesPlayed, strength);
+    public void updateISSPlayerList(final String playerName, final String language, final long gamesPlayed, final double strength) {
+        eventBus.post(new IssPlayerDataUpdatedEvent(playerName, language, gamesPlayed, strength));
     }
 
     /**
@@ -164,9 +152,8 @@ public class IssController {
      *
      * @param playerName Player name
      */
-    public void removeISSPlayerFromList(String playerName) {
-
-        jskat.removeISSPlayer(playerName);
+    public void removeISSPlayerFromList(final String playerName) {
+        eventBus.post(new IssPlayerLeftEvent(playerName));
     }
 
     /**
@@ -179,12 +166,9 @@ public class IssController {
      * @param player2     Player 2 (? for free seat)
      * @param player3     Player 3 (? for free seat)
      */
-    public void updateISSTableList(String tableName,
-                                   int maxPlayers, long gamesPlayed, String player1,
-                                   String player2, String player3) {
-
-        view.updateISSLobbyTableList(tableName, maxPlayers, gamesPlayed,
-                player1, player2, player3);
+    public void updateISSTableList(final String tableName, final int maxPlayers, final long gamesPlayed,
+                                   final String player1, final String player2, final String player3) {
+        eventBus.post(new IssTableDataUpdatedEvent(tableName, maxPlayers, gamesPlayed, player1, player2, player3));
     }
 
     /**
@@ -192,9 +176,8 @@ public class IssController {
      *
      * @param tableName Table name
      */
-    public void removeISSTableFromList(String tableName) {
-
-        view.removeFromISSLobbyTableList(tableName);
+    public void removeISSTableFromList(final String tableName) {
+        eventBus.post(new IssTableDeletedEvent(tableName));
     }
 
     /**
@@ -211,8 +194,7 @@ public class IssController {
      *
      * @param message Chat message
      */
-    public void sendChatMessage(ChatMessage message) {
-
+    public void sendChatMessage(final ChatMessage message) {
         sendToIss(issMsg.getChatMessage(message));
     }
 
@@ -222,9 +204,7 @@ public class IssController {
      * @param messageType Chat message type
      * @param params      Chat message
      */
-    public void addChatMessage(ChatMessageType messageType,
-                               List<String> params) {
-
+    public void addChatMessage(final ChatMessageType messageType, final List<String> params) {
         switch (messageType) {
             case LOBBY:
                 addLobbyChatMessage(params);
@@ -238,11 +218,10 @@ public class IssController {
         }
     }
 
-    void addLobbyChatMessage(List<String> params) {
-
+    void addLobbyChatMessage(final List<String> params) {
         log.debug("addLobbyChatMessage");
 
-        StringBuffer message = new StringBuffer();
+        final StringBuffer message = new StringBuffer();
 
         // first the sender of the message
         message.append(params.get(0)).append(": ");
@@ -251,20 +230,19 @@ public class IssController {
             message.append(params.get(i)).append(' ');
         }
 
-        ChatMessage chatMessage = new ChatMessage("Lobby",
+        final ChatMessage chatMessage = new ChatMessage("Lobby",
                 message.toString());
 
         view.appendISSChatMessage(ChatMessageType.LOBBY, chatMessage);
     }
 
-    void addTableChatMessage(List<String> params) {
-
+    void addTableChatMessage(final List<String> params) {
         log.debug("addTableChatMessage");
 
         // first the table for the message
-        String tableName = params.get(0);
+        final String tableName = params.get(0);
 
-        StringBuffer message = new StringBuffer();
+        final StringBuffer message = new StringBuffer();
         // second the sender of the message
         message.append(params.get(1)).append(": ");
         // then the text
@@ -272,7 +250,7 @@ public class IssController {
             message.append(params.get(i)).append(' ');
         }
 
-        ChatMessage chatMessage = new ChatMessage(tableName,
+        final ChatMessage chatMessage = new ChatMessage(tableName,
                 message.toString());
 
         view.appendISSChatMessage(ChatMessageType.TABLE, chatMessage);
@@ -282,7 +260,6 @@ public class IssController {
      * Requests the creation of a new table on the ISS
      */
     public void requestTableCreation() {
-
         sendToIss(MessageGenerator.getTableCreationMessage());
     }
 
@@ -293,12 +270,13 @@ public class IssController {
      * @param creator    Table creator
      * @param maxPlayers Maximum number of players
      */
-    public void createTable(String tableName, String creator,
-                            int maxPlayers) {
-
-        eventBus.post(new CreateTableCommand(JSkatViewType.ISS_TABLE,
-                tableName));
+    public void createTable(final String tableName, final String creator, final int maxPlayers) {
+        eventBus.post(new CreateTableCommand(JSkatViewType.ISS_TABLE, tableName));
         jskat.setActiveTable(JSkatViewType.ISS_TABLE, tableName);
+    }
+
+    public void removeTable(String tableName) {
+        eventBus.post(new RemoveTableCommand(JSkatViewType.ISS_TABLE, tableName));
     }
 
     /**
@@ -306,7 +284,7 @@ public class IssController {
      *
      * @param tableName Table name
      */
-    public void joinTable(String tableName) {
+    public void joinTable(final String tableName) {
         sendToIss(MessageGenerator.getJoinTableMessage(tableName));
     }
 
@@ -315,7 +293,7 @@ public class IssController {
      *
      * @param tableName Table name
      */
-    public void observeTable(String tableName) {
+    public void observeTable(final String tableName) {
         sendToIss(MessageGenerator.getObserveTableMessage(tableName));
     }
 
@@ -324,7 +302,7 @@ public class IssController {
      *
      * @param tableName Table name
      */
-    public void leaveTable(String tableName) {
+    public void leaveTable(final String tableName) {
         sendToIss(issMsg.getLeaveTableMessage(tableName));
     }
 
@@ -334,9 +312,8 @@ public class IssController {
      * @param tableName Table name
      * @param status    New table status
      */
-    public void updateISSTableState(String tableName,
-                                    TablePanelStatus status) {
-        view.updateISSTable(tableName, status);
+    public void updateISSTableState(final String tableName, final TablePanelStatus status) {
+        eventBus.post(new IssTableStateChangedEvent(tableName, status));
     }
 
     /**
@@ -345,22 +322,17 @@ public class IssController {
      * @param tableName Table name
      * @param status    New game status
      */
-    public void updateISSGame(String tableName,
-                              GameStartInformation status) {
-
-        view.updateISSTable(tableName, appData.getIssLoginName(),
-                status);
-
+    public void updateISSGame(final String tableName, final GameStartInformation status) {
+        eventBus.post(new IssTableGameStartedEvent(tableName, status));
         gameData.put(tableName, createSkatGameData(status));
     }
 
-    private static SkatGameData createSkatGameData(GameStartInformation status) {
-
-        SkatGameData result = new SkatGameData();
+    private static SkatGameData createSkatGameData(final GameStartInformation status) {
+        final SkatGameData result = new SkatGameData();
 
         result.setGameState(GameState.GAME_START);
-        for (Player player : Player.values()) {
-            result.setPlayerName(player, status.getPlayerName(player));
+        for (final Player player : Player.values()) {
+            result.setPlayerName(player, status.playerNames().get(player));
         }
 
         return result;
@@ -371,8 +343,7 @@ public class IssController {
      *
      * @param tableName Table name
      */
-    public void startGame(String tableName) {
-
+    public void startGame(final String tableName) {
         view.startGame(tableName);
     }
 
@@ -382,121 +353,86 @@ public class IssController {
      * @param tableName       Table name
      * @param moveInformation Move information
      */
-    public void updateMove(String tableName,
-                           MoveInformation moveInformation) {
-
-        SkatGameData currGame = gameData.get(tableName);
+    public void updateMove(final String tableName, final MoveInformation moveInformation) {
+        final SkatGameData currGame = gameData.get(tableName);
         updateGameData(currGame, moveInformation);
 
         view.updateISSMove(tableName, currGame, moveInformation);
 
         // TODO (jan 19.11.2010) extract this into separate methods
         if (MoveType.DEAL.equals(moveInformation.getType())) {
-            JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName,
-                    Player.MIDDLEHAND));
+            eventBus.post(new ActivePlayerChangedEvent(tableName, Player.MIDDLEHAND));
         } else if (MoveType.BID.equals(moveInformation.getType())
                 || MoveType.HOLD_BID.equals(moveInformation.getType())
                 || MoveType.PASS.equals(moveInformation.getType())) {
 
             if (MoveType.BID.equals(moveInformation.getType())) {
-                if (MovePlayer.MIDDLEHAND.equals(moveInformation
-                        .getMovePlayer())) {
-                    JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(
-                            tableName, Player.FOREHAND));
-                } else if (MovePlayer.REARHAND.equals(moveInformation
-                        .getMovePlayer())) {
+                if (MovePlayer.MIDDLEHAND.equals(moveInformation.getMovePlayer())) {
+                    eventBus.post(new ActivePlayerChangedEvent(tableName, Player.FOREHAND));
+                } else if (MovePlayer.REARHAND.equals(moveInformation.getMovePlayer())) {
                     if (!currGame.isPlayerPass(Player.FOREHAND)) {
-                        JSkatEventBus.INSTANCE
-                                .post(new ActivePlayerChangedEvent(tableName,
-                                        Player.FOREHAND));
+                        eventBus.post(new ActivePlayerChangedEvent(tableName, Player.FOREHAND));
                     } else {
-                        JSkatEventBus.INSTANCE
-                                .post(new ActivePlayerChangedEvent(tableName,
-                                        Player.MIDDLEHAND));
+                        eventBus.post(new ActivePlayerChangedEvent(tableName, Player.MIDDLEHAND));
                     }
                 }
             } else if (MoveType.HOLD_BID.equals(moveInformation.getType())) {
                 if (MovePlayer.FOREHAND.equals(moveInformation.getMovePlayer())) {
                     if (!currGame.isPlayerPass(Player.MIDDLEHAND)) {
-                        JSkatEventBus.INSTANCE
-                                .post(new ActivePlayerChangedEvent(tableName,
-                                        Player.MIDDLEHAND));
+                        eventBus.post(new ActivePlayerChangedEvent(tableName, Player.MIDDLEHAND));
                     } else {
-                        JSkatEventBus.INSTANCE
-                                .post(new ActivePlayerChangedEvent(tableName,
-                                        Player.REARHAND));
+                        eventBus.post(new ActivePlayerChangedEvent(tableName, Player.REARHAND));
                     }
-                } else if (MovePlayer.MIDDLEHAND.equals(moveInformation
-                        .getMovePlayer())) {
-                    JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(
-                            tableName, Player.REARHAND));
+                } else if (MovePlayer.MIDDLEHAND.equals(moveInformation.getMovePlayer())) {
+                    eventBus.post(new ActivePlayerChangedEvent(tableName, Player.REARHAND));
                 }
             } else if (MoveType.PASS.equals(moveInformation.getType())) {
                 if (MovePlayer.FOREHAND.equals(moveInformation.getMovePlayer())
-                        || MovePlayer.MIDDLEHAND.equals(moveInformation
-                        .getMovePlayer())) {
-                    JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(
-                            tableName, Player.REARHAND));
-                } else if (MovePlayer.REARHAND.equals(moveInformation
-                        .getMovePlayer())) {
+                        || MovePlayer.MIDDLEHAND.equals(moveInformation.getMovePlayer())) {
+                    eventBus.post(new ActivePlayerChangedEvent(tableName, Player.REARHAND));
+                } else if (MovePlayer.REARHAND.equals(moveInformation.getMovePlayer())) {
                     if (!currGame.isPlayerPass(Player.FOREHAND)) {
-                        JSkatEventBus.INSTANCE
-                                .post(new ActivePlayerChangedEvent(tableName,
-                                        Player.FOREHAND));
+                        eventBus.post(new ActivePlayerChangedEvent(tableName, Player.FOREHAND));
                     } else {
-                        JSkatEventBus.INSTANCE
-                                .post(new ActivePlayerChangedEvent(tableName,
-                                        Player.MIDDLEHAND));
+                        eventBus.post(new ActivePlayerChangedEvent(tableName, Player.MIDDLEHAND));
                     }
                 }
             }
 
             if (isBiddingFinished(currGame)) {
-                view.setDeclarer(tableName, currGame.getDeclarer());
-                view.setGameState(tableName, GameState.PICKING_UP_SKAT);
+                eventBus.post(new DeclarerChangedEvent(tableName, currGame.getDeclarer()));
+                eventBus.post(new SkatGameStateChangedEvent(tableName, GameState.PICKING_UP_SKAT));
             }
 
         } else if (MoveType.GAME_ANNOUNCEMENT.equals(moveInformation.getType())) {
-
-            JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(tableName,
-                    Player.FOREHAND));
-
+            eventBus.post(new ActivePlayerChangedEvent(tableName, Player.FOREHAND));
         } else if (MoveType.CARD_PLAY.equals(moveInformation.getType())) {
 
             // handle trick playing
-            Trick trick = currGame.getCurrentTrick();
+            final Trick trick = currGame.getCurrentTrick();
 
             if (trick.getThirdCard() != null) {
 
-                Player trickWinner = SkatRuleFactory.getSkatRules(
-                        currGame.getGameType()).calculateTrickWinner(
-                        currGame.getGameType(), trick);
+                final Player trickWinner = SkatRuleFactory.getSkatRules(currGame.getGameType())
+                        .calculateTrickWinner(currGame.getGameType(), trick);
                 trick.setTrickWinner(trickWinner);
-                currGame.addTrick(new Trick(currGame.getTricks().size(), trick
-                        .getTrickWinner()));
+                currGame.addTrick(new Trick(currGame.getTricks().size(), trick.getTrickWinner()));
 
-                JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(
-                        tableName, currGame.getCurrentTrick().getForeHand()));
+                eventBus.post(new ActivePlayerChangedEvent(tableName, currGame.getCurrentTrick().getForeHand()));
 
             } else if (trick.getSecondCard() != null) {
-
-                JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(
-                        tableName, trick.getForeHand().getRightNeighbor()));
-
+                eventBus.post(new ActivePlayerChangedEvent(tableName, trick.getForeHand().getRightNeighbor()));
             } else if (trick.getFirstCard() != null) {
-
-                JSkatEventBus.INSTANCE.post(new ActivePlayerChangedEvent(
-                        tableName, trick.getForeHand().getLeftNeighbor()));
+                eventBus.post(new ActivePlayerChangedEvent(tableName, trick.getForeHand().getLeftNeighbor()));
             }
         }
     }
 
-    private static boolean isBiddingFinished(SkatGameData currGame) {
-
+    private static boolean isBiddingFinished(final SkatGameData currGame) {
         boolean result = false;
 
         if (currGame.getNumberOfPasses() == 2) {
-            for (Player currPlayer : Player.values()) {
+            for (final Player currPlayer : Player.values()) {
                 if (!currGame.isPlayerPass(currPlayer)) {
                     if (currGame.getMaxPlayerBid(currPlayer) > 0) {
                         result = true;
@@ -509,10 +445,8 @@ public class IssController {
         return result;
     }
 
-    private static void updateGameData(SkatGameData currGame,
-                                       MoveInformation moveInformation) {
-
-        Player movePlayer = moveInformation.getPlayer();
+    private static void updateGameData(final SkatGameData currGame, final MoveInformation moveInformation) {
+        final Player movePlayer = moveInformation.getPlayer();
 
         switch (moveInformation.getType()) {
             case DEAL:
@@ -530,10 +464,7 @@ public class IssController {
                 currGame.setGameState(GameState.BIDDING);
                 currGame.setPlayerPass(movePlayer, true);
                 break;
-            case SKAT_REQUEST:
-                currGame.setGameState(GameState.DISCARDING);
-                break;
-            case PICK_UP_SKAT:
+            case SKAT_REQUEST, PICK_UP_SKAT:
                 currGame.setGameState(GameState.DISCARDING);
                 break;
             case GAME_ANNOUNCEMENT:
@@ -558,9 +489,8 @@ public class IssController {
      * @param tableName   Table name
      * @param newGameData Game data
      */
-    public void endGame(String tableName, SkatGameData newGameData) {
-
-        view.setGameState(tableName, GameState.GAME_OVER);
+    public void endGame(final String tableName, final SkatGameData newGameData) {
+        eventBus.post(new SkatGameStateChangedEvent(tableName, GameState.GAME_OVER));
         // FIXME: merge event and command
         eventBus.post(new TableGameMoveEvent(tableName, new GameFinishEvent(newGameData.getGameSummary())));
         eventBus.post(new ShowCardsCommand(tableName, newGameData.getCardsAfterDiscard(), newGameData.getSkat()));
@@ -572,7 +502,7 @@ public class IssController {
      *
      * @param message Message
      */
-    public void showMessage(String message) {
+    public void showMessage(final String message) {
         view.showMessage(strings.getString("iss_message"), message);
     }
 
@@ -581,9 +511,8 @@ public class IssController {
      *
      * @param message Message
      */
-    public void showErrorMessage(String message) {
-        view.showErrorMessage(
-                strings.getString("iss_message"), message);
+    public void showErrorMessage(final String message) {
+        view.showErrorMessage(strings.getString("iss_message"), message);
     }
 
     /**
@@ -592,7 +521,7 @@ public class IssController {
      * @param tableName Table name
      * @param invitee   Invited player
      */
-    public void invitePlayer(String tableName, String invitee) {
+    public void invitePlayer(final String tableName, final String invitee) {
         sendToIss(issMsg.getInvitePlayerMessage(tableName, invitee));
     }
 
@@ -602,8 +531,7 @@ public class IssController {
      * @param command ISS ready to play command
      */
     @Subscribe
-    public void sendReadyToPlayOn(IssReadyToPlayCommand command) {
-
+    public void sendReadyToPlayOn(final IssReadyToPlayCommand command) {
         sendToIss(issMsg.getReadyMessage(appData.getActiveTable()));
     }
 
@@ -613,11 +541,8 @@ public class IssController {
      * @param command ISS toggle talk enabled command
      */
     @Subscribe
-    public void sendToggleTalkEnabledOn(
-            IssToggleTalkEnabledCommand command) {
-
-        sendToIss(issMsg.getTalkEnabledMessage(appData
-                .getActiveTable()));
+    public void sendToggleTalkEnabledOn(final IssToggleTalkEnabledCommand command) {
+        sendToIss(issMsg.getTalkEnabledMessage(appData.getActiveTable()));
     }
 
     /**
@@ -626,8 +551,7 @@ public class IssController {
      * @param command ISS resign command
      */
     @Subscribe
-    public void sendResignOn(IssResignCommand command) {
-
+    public void sendResignOn(final IssResignCommand command) {
         sendToIss(issMsg.getResignMessage(appData.getActiveTable()));
     }
 
@@ -637,10 +561,8 @@ public class IssController {
      * @param command ISS show cards command
      */
     @Subscribe
-    public void sendShowCardsOn(IssShowCardsCommand command) {
-
-        sendToIss(issMsg
-                .getShowCardsMessage(appData.getActiveTable()));
+    public void sendShowCardsOn(final IssShowCardsCommand command) {
+        sendToIss(issMsg.getShowCardsMessage(appData.getActiveTable()));
     }
 
     /**
@@ -649,9 +571,8 @@ public class IssController {
      * @param command ISS table seat change command
      */
     @Subscribe
-    public void sendTableSeatChangeOn(IssTableSeatChangeCommand command) {
-        sendToIss(issMsg.getTableSeatChangeMessage(appData
-                .getActiveTable()));
+    public void sendTableSeatChangeOn(final IssTableSeatChangeCommand command) {
+        sendToIss(issMsg.getTableSeatChangeMessage(appData.getActiveTable()));
     }
 
     /**
@@ -659,7 +580,7 @@ public class IssController {
      *
      * @param tableName Table name
      */
-    public void sendPassBidMove(String tableName) {
+    public void sendPassBidMove(final String tableName) {
         sendToIss(issMsg.getPassMoveMessage(tableName));
     }
 
@@ -668,7 +589,7 @@ public class IssController {
      *
      * @param tableName Table name
      */
-    public void sendHoldBidMove(String tableName) {
+    public void sendHoldBidMove(final String tableName) {
         sendToIss(issMsg.getHoldBidMoveMessage(tableName));
     }
 
@@ -677,12 +598,8 @@ public class IssController {
      *
      * @param tableName Table name
      */
-    public void sendBidMove(String tableName) {
-        sendToIss(issMsg
-                .getBidMoveMessage(
-                        tableName,
-                        SkatConstants.getNextBidValue(gameData.get(
-                                tableName).getMaxBidValue())));
+    public void sendBidMove(final String tableName) {
+        sendToIss(issMsg.getBidMoveMessage(tableName, SkatConstants.getNextBidValue(gameData.get(tableName).getMaxBidValue())));
     }
 
     /**
@@ -690,7 +607,7 @@ public class IssController {
      *
      * @param tableName Table name
      */
-    public void sendPickUpSkatMove(String tableName) {
+    public void sendPickUpSkatMove(final String tableName) {
         sendToIss(issMsg.getPickUpSkatMoveMessage(tableName));
     }
 
@@ -700,10 +617,8 @@ public class IssController {
      * @param tableName        Table name
      * @param gameAnnouncement Game announcement
      */
-    public void sendGameAnnouncementMove(String tableName,
-                                         GameAnnouncement gameAnnouncement) {
-        sendToIss(issMsg.getGameAnnouncementMoveMessage(tableName,
-                gameAnnouncement));
+    public void sendGameAnnouncementMove(final String tableName, final GameAnnouncement gameAnnouncement) {
+        sendToIss(issMsg.getGameAnnouncementMoveMessage(tableName, gameAnnouncement));
     }
 
     /**
@@ -712,7 +627,7 @@ public class IssController {
      * @param tableName Table name
      * @param nextCard  Card
      */
-    public void sendCardMove(String tableName, Card nextCard) {
+    public void sendCardMove(final String tableName, final Card nextCard) {
         sendToIss(issMsg.getCardMoveMessage(tableName, nextCard));
     }
 
@@ -723,11 +638,9 @@ public class IssController {
      * @param tableName        Table name
      * @param invitationTicket Invitation ticket
      */
-    public void handleInvitation(String invitor, String tableName,
-                                 String invitationTicket) {
+    public void handleInvitation(final String invitor, final String tableName, final String invitationTicket) {
         if (view.showISSTableInvitation(invitor, tableName)) {
-            sendToIss(MessageGenerator.getInvitationAcceptedMessage(tableName,
-                    invitationTicket));
+            sendToIss(MessageGenerator.getInvitationAcceptedMessage(tableName, invitationTicket));
         }
     }
 
@@ -737,8 +650,7 @@ public class IssController {
      * @param tableName Table name
      * @param message   Chat message
      */
-    public void updateISSTableChatMessage(String tableName,
-                                          ChatMessage message) {
+    public void updateISSTableChatMessage(final String tableName, final ChatMessage message) {
         // FIXME (jan 30.01.2011) tableName not needed here?
         view.appendISSChatMessage(ChatMessageType.TABLE, message);
     }
@@ -749,8 +661,7 @@ public class IssController {
      * @param tableName Table name
      * @return TRUE iff the table is joined
      */
-    public boolean isTableJoined(String tableName) {
-
+    public boolean isTableJoined(final String tableName) {
         return appData.isTableJoined(tableName);
     }
 }

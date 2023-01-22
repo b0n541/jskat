@@ -1,4 +1,3 @@
-
 package org.jskat.control.event;
 
 import org.jskat.AbstractJSkatTest;
@@ -22,9 +21,9 @@ public class PassBidEventTest extends AbstractJSkatTest {
     @BeforeEach
     public void setUp() {
         data = new SkatGameData();
-        event = new PassBidEvent(Player.FOREHAND);
-        event2 = new PassBidEvent(Player.MIDDLEHAND);
-        event3 = new PassBidEvent(Player.REARHAND);
+        event = new PassBidEvent(Player.FOREHAND, 18);
+        event2 = new PassBidEvent(Player.MIDDLEHAND, 18);
+        event3 = new PassBidEvent(Player.REARHAND, 18);
     }
 
     @Test

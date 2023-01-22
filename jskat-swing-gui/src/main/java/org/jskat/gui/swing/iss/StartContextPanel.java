@@ -11,10 +11,7 @@ import java.util.List;
  */
 class StartContextPanel extends JPanel {
 
-    private static final long serialVersionUID = 1L;
-
     public StartContextPanel(final ActionMap actions, final List<JSkatAction> activeActions) {
-
         initPanel(actions, activeActions);
     }
 

@@ -11,18 +11,15 @@ import java.util.List;
 
 class GameOverPanel extends JPanel {
 
-    private static final long serialVersionUID = 1L;
 
     private GameResultPanel gameResultPanel;
     private SkatPanel skatPanel;
 
     public GameOverPanel(ActionMap actions, List<JSkatAction> activeActions) {
-
         initPanel(actions, activeActions);
     }
 
     private void initPanel(ActionMap actions, List<JSkatAction> activeActions) {
-
         setLayout(LayoutFactory.getMigLayout("fill", "fill", "fill"));
 
         JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "[grow][shrink]"));
@@ -45,22 +42,18 @@ class GameOverPanel extends JPanel {
     }
 
     void setUserPosition(Player player) {
-
         gameResultPanel.setUserPosition(player);
     }
 
     void setGameSummary(GameSummary summary) {
-
         gameResultPanel.setGameSummary(summary);
     }
 
     void setDealtSkat(CardList skat) {
-
         skatPanel.setSkatCards(skat);
     }
 
     public void resetPanel() {
-
         gameResultPanel.resetPanel();
         skatPanel.resetPanel();
     }

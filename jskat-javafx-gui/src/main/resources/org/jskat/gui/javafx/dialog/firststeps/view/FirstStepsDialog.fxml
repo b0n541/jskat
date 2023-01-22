@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.web.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.layout.AnchorPane?>
-
-<VBox fx:id="root" prefHeight="400.0" prefWidth="600.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" xmlns="http://javafx.com/javafx/8.0.66" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jskat.gui.javafx.dialog.firststeps.FirstStepsDialogController">
-	<children>
-		<WebView fx:id="firstStepsContent" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS" />
-		<HBox alignment="BASELINE_CENTER">
-			<children>
-				<CheckBox fx:id="showTipsOnStartUp" mnemonicParsing="false" text="%show_tips_at_startup" />
-				<Pane HBox.hgrow="ALWAYS" />
-				<Button mnemonicParsing="false" onAction="#closeFirstStepsDialog" text="%close" />
-			</children>
-		</HBox>
-	</children>
-	<padding>
-		<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-	</padding>
+<?import javafx.scene.web.WebView?>
+<VBox fx:id="root" prefHeight="400.0" prefWidth="600.0" spacing="10.0" AnchorPane.bottomAnchor="0.0"
+	  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"
+	  xmlns="http://javafx.com/javafx/8.0.66" xmlns:fx="http://javafx.com/fxml/1"
+	  fx:controller="org.jskat.gui.javafx.dialog.firststeps.FirstStepsDialogController">
+    <children>
+        <WebView fx:id="firstStepsContent" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS"/>
+        <HBox alignment="BASELINE_CENTER">
+            <children>
+                <CheckBox fx:id="showTipsOnStartUp" mnemonicParsing="false" text="%show_tips_at_startup"/>
+                <Pane HBox.hgrow="ALWAYS"/>
+                <Button mnemonicParsing="false" onAction="#closeFirstStepsDialog" text="%close"/>
+            </children>
+        </HBox>
+    </children>
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+    </padding>
 </VBox>

@@ -35,7 +35,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
      */
     private enum GameAnnouncementStep {
         /**
-         * Before any anouncement
+         * Before any announcement
          */
         BEFORE_ANNOUNCEMENT,
         /**
@@ -75,28 +75,26 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
         gameAnnouncementStep = GameAnnouncementStep.DONE_GAME_ANNOUNCEMENT;
 
-        return this.gameAnnouncement;
+        return gameAnnouncement;
     }
 
     /**
      * @see JSkatPlayer#bidMore(int)
      */
     @Override
-    public Integer bidMore(final int nextBidValue) {
+    public int bidMore(final int nextBidValue) {
 
         log.debug("Waiting for human next bid value...");
 
         waitForUserInput();
 
-        if (this.holdBid) {
-
-            this.bidValue = nextBidValue;
+        if (holdBid) {
+            bidValue = nextBidValue;
         } else {
-
-            this.bidValue = -1;
+            bidValue = 0;
         }
 
-        return this.bidValue;
+        return bidValue;
     }
 
     /**
@@ -109,14 +107,14 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
         waitForUserInput();
 
-        return this.discardSkat;
+        return discardSkat;
     }
 
     /**
-     * @see JSkatPlayer#preparateForNewGame()
+     * @see JSkatPlayer#prepareForNewGame()
      */
     @Override
-    public void preparateForNewGame() {
+    public void prepareForNewGame() {
 
         resetPlayer();
     }
@@ -133,39 +131,39 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
      * @see JSkatPlayer#holdBid(int)
      */
     @Override
-    public Boolean holdBid(final int currBidValue) {
+    public boolean holdBid(final int currBidValue) {
 
         log.debug("Waiting for human holding bid...");
 
         waitForUserInput();
 
-        return this.holdBid;
+        return holdBid;
     }
 
     /**
      * @see JSkatPlayer#pickUpSkat()
      */
     @Override
-    public Boolean playGrandHand() {
+    public boolean playGrandHand() {
 
         log.debug("Waiting for human to decide if playing a grand hand...");
 
         waitForUserInput();
 
-        return this.playGrandHand;
+        return playGrandHand;
     }
 
     /**
      * @see JSkatPlayer#pickUpSkat()
      */
     @Override
-    public Boolean pickUpSkat() {
+    public boolean pickUpSkat() {
 
         log.debug("Waiting for human looking into skat...");
 
         waitForUserInput();
 
-        return this.pickUpSkat;
+        return pickUpSkat;
     }
 
     /**
@@ -197,18 +195,18 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
         if (JSkatAction.PASS_BID.toString().equals(command)) {
             // player passed
-            this.holdBid = false;
+            holdBid = false;
         } else if (JSkatAction.MAKE_BID.toString().equals(command)) {
             // player makes next bid value
-            this.holdBid = true;
+            holdBid = true;
         } else if (JSkatAction.HOLD_BID.toString().equals(command)) {
             // player hold bid
-            this.holdBid = true;
+            holdBid = true;
         } else if (JSkatAction.PLAY_GRAND_HAND.toString().equals(command)) {
             // player wants to play a grand hand
-            this.playGrandHand = true;
+            playGrandHand = true;
         } else if (JSkatAction.PLAY_SCHIEBERAMSCH.toString().equals(command)) {
-            this.playGrandHand = false;
+            playGrandHand = false;
         } else if (JSkatAction.CALL_CONTRA.toString().equals(command)) {
             callContra = true;
         } else if (JSkatAction.CALL_RE.toString().equals(command)) {
@@ -217,11 +215,10 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
             }
         } else if (JSkatAction.PICK_UP_SKAT.toString().equals(command)) {
             // player wants to pick up the skat
-            this.pickUpSkat = true;
+            pickUpSkat = true;
             gameAnnouncementStep = GameAnnouncementStep.LOOKED_INTO_SKAT;
         } else if (JSkatAction.SCHIEBEN.toString().equals(command)) {
-            if (source instanceof CardList) {
-                CardList cards = (CardList) source;
+            if (source instanceof CardList cards) {
                 if (cards.size() == 0) {
                     pickUpSkat = false;
                 } else {
@@ -247,7 +244,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
         } else if (JSkatAction.PLAY_CARD.toString().equals(command)
                 && source instanceof Card) {
 
-            this.nextCard = (Card) source;
+            nextCard = (Card) source;
 
         } else {
 
@@ -256,7 +253,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
         if (interrupt) {
 
-            this.idler.interrupt();
+            idler.interrupt();
         }
     }
 
@@ -265,14 +262,14 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
      */
     public void waitForUserInput() {
 
-        this.idler = new Idler();
-        this.idler.setMonitor(this);
+        idler = new Idler();
+        idler.setMonitor(this);
 
         if (!isPlayerHasAlreadyPlayed()) {
 
-            this.idler.start();
+            idler.start();
             try {
-                this.idler.join();
+                idler.join();
             } catch (InterruptedException e) {
                 log.warn("wait for user input was interrupted");
             }
@@ -309,15 +306,14 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
          */
         public void setMonitor(final Object newMonitor) {
 
-            this.monitor = newMonitor;
+            monitor = newMonitor;
         }
 
         /**
          * Stops the waiting
          */
         public void stopWaiting() {
-
-            this.doWait = false;
+            doWait = false;
         }
 
         /**
@@ -325,12 +321,10 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
          */
         @Override
         public void run() {
-
-            synchronized (this.monitor) {
-
-                while (this.doWait) {
+            synchronized (monitor) {
+                while (doWait) {
                     try {
-                        this.monitor.wait();
+                        monitor.wait();
                     } catch (InterruptedException e) {
                         stopWaiting();
                     }
@@ -364,7 +358,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
     }
 
     @Override
-    public Boolean callContra() {
+    public boolean callContra() {
 
         log.debug("Waiting for human calling contra...");
 
@@ -376,7 +370,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
     }
 
     @Override
-    public Boolean callRe() {
+    public boolean callRe() {
 
         log.debug("Waiting for human calling re...");
 

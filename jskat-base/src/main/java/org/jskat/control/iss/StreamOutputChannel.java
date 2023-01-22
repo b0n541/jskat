@@ -7,8 +7,7 @@ import java.io.PrintWriter;
 
 class StreamOutputChannel implements OutputChannel {
 
-    private static final Logger log = LoggerFactory
-            .getLogger(StreamOutputChannel.class);
+    private static final Logger log = LoggerFactory.getLogger(StreamOutputChannel.class);
 
     private final PrintWriter output;
 
@@ -27,7 +26,7 @@ class StreamOutputChannel implements OutputChannel {
      */
     @Override
     public void sendMessage(final String message) {
-        log.debug("ISS <--|    " + message);
+        log.info("ISS <--|    " + message);
         this.output.println(message);
     }
 }

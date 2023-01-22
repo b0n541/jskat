@@ -7,28 +7,25 @@ import org.jskat.ai.rnd.AIPlayerRND;
  */
 public class ContraReCallingTestPlayer extends AIPlayerRND {
     @Override
-    public Boolean callContra() {
+    public boolean callContra() {
         return true;
     }
 
     @Override
-    public Boolean callRe() {
+    public boolean callRe() {
         return true;
     }
 
     @Override
-    public Integer bidMore(int currentBid) {
+    public int bidMore(int currentBid) {
         if (currentBid == 18) {
             return 20;
         }
-        return -1;
+        return 0;
     }
 
     @Override
-    public Boolean holdBid(int currentBid) {
-        if (currentBid == 18) {
-            return true;
-        }
-        return false;
+    public boolean holdBid(int currentBid) {
+        return currentBid == 18;
     }
 }

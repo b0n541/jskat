@@ -11,7 +11,6 @@ import javax.swing.*;
  */
 public abstract class AbstractTabPanel extends JPanel {
 
-    private static final long serialVersionUID = 1L;
 
     /**
      * JSkat bitmaps

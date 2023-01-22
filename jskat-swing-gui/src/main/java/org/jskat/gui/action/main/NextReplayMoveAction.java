@@ -14,7 +14,6 @@ import java.awt.event.ActionEvent;
  */
 public class NextReplayMoveAction extends AbstractJSkatAction {
 
-    private static final long serialVersionUID = 1L;
 
     /**
      * @see AbstractJSkatAction#AbstractJSkatAction()
@@ -32,8 +31,6 @@ public class NextReplayMoveAction extends AbstractJSkatAction {
      */
     @Override
     public void actionPerformed(final ActionEvent e) {
-        JSkatEventBus.TABLE_EVENT_BUSSES.get(
-                JSkatApplicationData.INSTANCE.getActiveTable()).post(
-                new NextReplayMoveCommand());
+        JSkatEventBus.INSTANCE.post(new NextReplayMoveCommand(JSkatApplicationData.INSTANCE.getActiveTable()));
     }
 }

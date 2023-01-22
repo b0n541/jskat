@@ -9,9 +9,13 @@ import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.command.general.*;
 import org.jskat.control.command.iss.IssDisconnectCommand;
-import org.jskat.control.command.skatseries.CreateSkatSeriesCommand;
+import org.jskat.control.command.iss.IssShowLoginCommand;
 import org.jskat.control.command.table.ShowCardsCommand;
+import org.jskat.control.command.table.StartSkatSeriesCommand;
 import org.jskat.control.event.iss.IssConnectedEvent;
+import org.jskat.control.event.iss.IssPlayerDataUpdatedEvent;
+import org.jskat.control.event.iss.IssTableDataUpdatedEvent;
+import org.jskat.control.event.iss.IssTableDeletedEvent;
 import org.jskat.control.event.skatgame.*;
 import org.jskat.control.event.table.*;
 import org.jskat.control.gui.JSkatView;
@@ -22,9 +26,10 @@ import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatViewType;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.SkatGameData.GameState;
-import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.data.Trick;
-import org.jskat.data.iss.*;
+import org.jskat.data.iss.ChatMessage;
+import org.jskat.data.iss.MoveInformation;
+import org.jskat.data.iss.MovePlayer;
 import org.jskat.gui.action.human.*;
 import org.jskat.gui.action.iss.*;
 import org.jskat.gui.action.main.*;
@@ -37,7 +42,10 @@ import org.jskat.gui.swing.iss.LoginPanel;
 import org.jskat.gui.swing.iss.PlayerInvitationPanel;
 import org.jskat.gui.swing.table.SkatSeriesStartDialog;
 import org.jskat.gui.swing.table.SkatTablePanel;
-import org.jskat.util.*;
+import org.jskat.util.Card;
+import org.jskat.util.CardList;
+import org.jskat.util.JSkatResourceBundle;
+import org.jskat.util.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,7 +72,7 @@ public class JSkatViewImpl implements JSkatView {
     private final JSkatGraphicRepository bitmaps = JSkatGraphicRepository.INSTANCE;
     private final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
     private final JSkatOptions options = JSkatOptions.instance();
-    static ActionMap actions;
+    public static ActionMap actions;
     private LobbyPanel issLobby;
 
     private static String VERSION;
@@ -76,7 +84,7 @@ public class JSkatViewImpl implements JSkatView {
      * @param menu         Menu bar
      * @param version      JSkat version
      */
-    public JSkatViewImpl(Screen targetScreen, MenuBar menu, String version) {
+    public JSkatViewImpl(final Screen targetScreen, final MenuBar menu, final String version) {
 
         JSkatViewImpl.VERSION = version;
 
@@ -89,19 +97,19 @@ public class JSkatViewImpl implements JSkatView {
         initGUI(targetScreen);
     }
 
-    private static void initActionMap(MenuBar menu) {
+    private static void initActionMap(final MenuBar menu) {
 
         actions = new ActionMap();
 
         // common actions
-        ObservableList<Menu> menus = menu.getMenus();
-        LoadSeriesAction loadSeriesAction = new LoadSeriesAction();
+        final ObservableList<Menu> menus = menu.getMenus();
+        final LoadSeriesAction loadSeriesAction = new LoadSeriesAction();
         loadSeriesAction.setMenuItem(menus.get(0).getItems().get(0));
         actions.put(JSkatAction.LOAD_SERIES, loadSeriesAction);
-        SaveSeriesAction saveSeriesAction = new SaveSeriesAction();
+        final SaveSeriesAction saveSeriesAction = new SaveSeriesAction();
         saveSeriesAction.setMenuItem(menus.get(0).getItems().get(1));
         actions.put(JSkatAction.SAVE_SERIES, saveSeriesAction);
-        SaveSeriesAsAction saveSeriesAsAction = new SaveSeriesAsAction();
+        final SaveSeriesAsAction saveSeriesAsAction = new SaveSeriesAsAction();
         saveSeriesAsAction.setMenuItem(menus.get(0).getItems().get(2));
         actions.put(JSkatAction.SAVE_SERIES_AS, saveSeriesAsAction);
         actions.put(JSkatAction.HELP, new HelpAction());
@@ -161,7 +169,7 @@ public class JSkatViewImpl implements JSkatView {
         actions.get(JSkatAction.NEXT_REPLAY_STEP).setEnabled(false);
     }
 
-    private void initGUI(Screen targetScreen) {
+    private void initGUI(final Screen targetScreen) {
 
         mainPanel.setLayout(new BorderLayout());
 
@@ -179,7 +187,7 @@ public class JSkatViewImpl implements JSkatView {
     }
 
     @Subscribe
-    public void hideToolbarOn(HideToolbarCommand command) {
+    public void hideToolbarOn(final HideToolbarCommand command) {
 
         SwingUtilities.invokeLater(() -> {
             mainPanel.remove(toolbar);
@@ -188,7 +196,7 @@ public class JSkatViewImpl implements JSkatView {
     }
 
     @Subscribe
-    public void addToolbar(ShowToolbarCommand command) {
+    public void showToolbarOn(final ShowToolbarCommand command) {
 
         SwingUtilities.invokeLater(() -> addToolbar());
     }
@@ -203,15 +211,13 @@ public class JSkatViewImpl implements JSkatView {
         tabs.setAutoscrolls(true);
         tabs.addChangeListener(e -> {
 
-            if (e.getSource() instanceof JTabbedPane) {
+            if (e.getSource() instanceof JTabbedPane changedTabs) {
 
-                JTabbedPane changedTabs = (JTabbedPane) e.getSource();
-                Component tab = changedTabs.getSelectedComponent();
+                final Component tab = changedTabs.getSelectedComponent();
 
-                if (tab instanceof AbstractTabPanel) {
+                if (tab instanceof AbstractTabPanel panel) {
 
-                    AbstractTabPanel panel = (AbstractTabPanel) tab;
-                    String tableName = panel.getName();
+                    final String tableName = panel.getName();
                     LOG.debug("showing table panel of table " + tableName);
                     panel.setFocus();
 
@@ -236,27 +242,26 @@ public class JSkatViewImpl implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public void startGame(String tableName) {
-
+    public void startGame(final String tableName) {
         tables.get(tableName).startGame();
     }
 
     @Subscribe
-    public void createSkatTablePanelOn(TableCreatedEvent event) {
+    public void createSkatTablePanelOn(final TableCreatedEvent event) {
 
-        if (JSkatViewType.TRAINING_TABLE.equals(event.tableType)) {
+        if (JSkatViewType.TRAINING_TABLE.equals(event.tableType())) {
             return;
         }
 
         SwingUtilities.invokeLater(() -> {
-            String tableName = event.tableName;
+            final String tableName = event.tableName();
             String tabTitle = null;
 
             SkatTablePanel panel = null;
-            if (JSkatViewType.LOCAL_TABLE.equals(event.tableType)) {
+            if (JSkatViewType.LOCAL_TABLE.equals(event.tableType())) {
                 panel = new SkatTablePanel(tableName, actions);
                 tabTitle = tableName;
-            } else if (JSkatViewType.ISS_TABLE.equals(event.tableType)) {
+            } else if (JSkatViewType.ISS_TABLE.equals(event.tableType())) {
                 panel = new ISSTablePanel(tableName, actions);
                 tabTitle = strings.getString("iss_table") + ": " + tableName;
             }
@@ -268,17 +273,17 @@ public class JSkatViewImpl implements JSkatView {
     }
 
     @Subscribe
-    public void showAboutInformationDialogOn(ShowAboutInformationCommand command) {
+    public void showAboutInformationDialogOn(final ShowAboutInformationCommand command) {
 
         SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mainPanel, "JSkat "
                         + strings.getString("version")
                         + " "
                         + VERSION + "\n\n"
-                        + "http://www.jskat.org\n"
-                        + "http://sourceforge.net/projects/jskat"
+                        + "https://www.jskat.org\n"
+                        + "https://github.com/b0n541/jskat"
                         + "\n\n"
                         + strings.getString("authors")
-                        + ":\nJan Schäfer (jansch@users.sourceforge.net)\nMarkus J. Luzius (jskat@luzius.de)\nDaniel Loreck (daniel.loreck@gmail.com)\nSascha Laurien\nSlovasim\nMartin Rothe\nTobias Markus\n\n"
+                        + ":\nJan Schäfer (jnschfr@gmail.com)\nMarkus J. Luzius (jskat@luzius.de)\nDaniel Loreck (daniel.loreck@gmail.com)\nSascha Laurien\nSlovasim\nMartin Rothe\nTobias Markus\n\n"
                         + strings.getString("cards")
                         + ": International Skat Server, KDE project, OpenClipart.org\n\n"
                         + strings.getString("icons")
@@ -297,19 +302,19 @@ public class JSkatViewImpl implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public void showMessage(String title, String message) {
+    public void showMessage(final String title, final String message) {
 
         SwingUtilities.invokeLater(
                 () -> JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE));
     }
 
     @Override
-    public void showAIPlayedSchwarzMessageDiscarding(String playerName, CardList discardedCards) {
+    public void showAIPlayedSchwarzMessageDiscarding(final String playerName, final CardList discardedCards) {
 
         String cardString = "";
 
         if (discardedCards != null) {
-            for (Card card : discardedCards) {
+            for (final Card card : discardedCards) {
                 cardString += " " + strings.getCardStringForCardFace(card);
             }
         } else {
@@ -321,7 +326,7 @@ public class JSkatViewImpl implements JSkatView {
     }
 
     @Override
-    public void showAIPlayedSchwarzMessageCardPlay(String playerName, Card card) {
+    public void showAIPlayedSchwarzMessageCardPlay(final String playerName, final Card card) {
 
         String cardString = null;
 
@@ -339,7 +344,7 @@ public class JSkatViewImpl implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public void showErrorMessage(String title, String message) {
+    public void showErrorMessage(final String title, final String message) {
 
         SwingUtilities
                 .invokeLater(() -> JOptionPane.showMessageDialog(mainPanel, message, title, JOptionPane.ERROR_MESSAGE));
@@ -348,16 +353,15 @@ public class JSkatViewImpl implements JSkatView {
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void setGameState(String tableName, GameState state) {
+    @Subscribe
+    public void setGameStateOn(final SkatGameStateChangedEvent event) {
 
-        tables.get(tableName).setGameState(state);
-        if (activeView.equals(tableName)) {
-            setActions(state);
+        if (activeView.equals(event.tableName)) {
+            setActions(event.gameState);
         }
     }
 
-    private void setActions(GameState state) {
+    private void setActions(final GameState state) {
         switch (state) {
             case GAME_START:
                 actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(true);
@@ -408,83 +412,56 @@ public class JSkatViewImpl implements JSkatView {
     }
 
     @Subscribe
-    public void showHelpDialogOn(ShowHelpCommand command) {
+    public void showHelpDialogOn(final ShowHelpCommand command) {
 
         SwingUtilities.invokeLater(() -> new JSkatHelpDialog(mainPanel, strings.getString("help"),
                 "org/jskat/gui/help/" + JSkatOptions.instance().getI18NCode() + "/contents.html").setVisible(true));
     }
 
     @Subscribe
-    public void showLicenceDialogOn(ShowLicenseCommand command) {
-
+    public void showLicenceDialogOn(final ShowLicenseCommand command) {
         SwingUtilities.invokeLater(
                 () -> new JSkatHelpDialog(mainPanel, strings.getString("license"), "org/jskat/gui/help/apache2.html")
                         .setVisible(true));
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setBidValueToMake(String tableName, int bidValue) {
-
-        SwingUtilities.invokeLater(() -> tables.get(tableName).setBidValueToMake(bidValue));
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setBidValueToHold(String tableName, int bidValue) {
-
-        SwingUtilities.invokeLater(() -> tables.get(tableName).setBidValueToHold(bidValue));
-    }
-
     @Subscribe
-    public void showSkatSeriesStartDialogOn(CreateSkatSeriesCommand command) {
-
+    public void showSkatSeriesStartDialogOn(final StartSkatSeriesCommand command) {
         SwingUtilities.invokeLater(() -> skatSeriesStartDialog.setVisible(true));
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void showISSLogin() {
-
+    @Subscribe
+    public void showISSLoginOn(final IssShowLoginCommand command) {
         SwingUtilities.invokeLater(() -> {
-            LoginPanel loginPanel = new LoginPanel("ISS login", actions);
-            addTabPanel(loginPanel, "ISS login");
+            final LoginPanel loginPanel = new LoginPanel(strings.getString("iss_login"), actions);
+            addTabPanel(loginPanel, strings.getString("iss_login"));
         });
     }
 
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void updateISSLobbyPlayerList(String playerName, String language, long gamesPlayed,
-                                         double strength) {
-
-        issLobby.updatePlayer(playerName, language, gamesPlayed, strength);
+    @Subscribe
+    public void updateISSLobbyPlayerListOn(final IssPlayerDataUpdatedEvent event) {
+        issLobby.updatePlayer(event.playerName(), event.language(), event.gamesPlayed(), event.strength());
     }
 
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void removeFromISSLobbyPlayerList(String playerName) {
-
+    @Subscribe
+    public void removePlayerFromISSLobbyPlayerListOn(final String playerName) {
         SwingUtilities.invokeLater(() -> issLobby.removePlayer(playerName));
     }
 
     @Subscribe
-    public void showIssLobbyOn(IssConnectedEvent event) {
+    public void showIssLobbyOn(final IssConnectedEvent event) {
 
         SwingUtilities.invokeLater(() -> {
             // show ISS lobby if connection was successfull
             // FIXME (jan 07.12.2010) use constant instead of title
-            closeTabPanel("ISS login");
-            issLobby = new LobbyPanel("ISS lobby", actions);
+            closeTabPanel(strings.getString("iss_login"));
+            issLobby = new LobbyPanel(strings.getString("iss_lobby"), actions);
             addTabPanel(issLobby, strings.getString("iss_lobby"));
         });
     }
@@ -492,36 +469,32 @@ public class JSkatViewImpl implements JSkatView {
     /**
      * {@inheritDoc}
      */
-    @Override
-    public void updateISSLobbyTableList(String tableName, int maxPlayers, long gamesPlayed,
-                                        String player1, String player2, String player3) {
+    @Subscribe
+    public void updateISSLobbyTableListOn(final IssTableDataUpdatedEvent event) {
+        issLobby.updateTable(event.tableName(), event.maxPlayers(), event.gamesPlayed(), event.player1(), event.player2(), event.player3());
+    }
 
-        issLobby.updateTable(tableName, maxPlayers, gamesPlayed, player1, player2, player3);
+    /**
+     * {@inheritDoc}
+     */
+    @Subscribe
+    public void removeTableFromISSLobbyTableListOn(final IssTableDeletedEvent event) {
+        issLobby.removeTable(event.tableName());
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void removeFromISSLobbyTableList(String tableName) {
-
-        issLobby.removeTable(tableName);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void appendISSChatMessage(ChatMessageType messageType, ChatMessage message) {
+    public void appendISSChatMessage(final ChatMessageType messageType, final ChatMessage message) {
 
         LOG.debug("appendISSChatMessage");
 
         issLobby.appendChatMessage(message);
 
-        for (SkatTablePanel table : tables.values()) {
-            if (table instanceof ISSTablePanel) {
-                ISSTablePanel issTable = (ISSTablePanel) table;
-                String chatname = message.getChatName();
+        for (final SkatTablePanel table : tables.values()) {
+            if (table instanceof ISSTablePanel issTable) {
+                final String chatname = message.getChatName();
                 if ("Lobby".equals(chatname) || issTable.getName().equals(chatname)) {
                     issTable.appendChatMessage(message);
                 }
@@ -533,63 +506,7 @@ public class JSkatViewImpl implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public void updateISSTable(String tableName, TablePanelStatus tableStatus) {
-
-        // FIXME (jan 08.11.2010) seems very complicated
-        SkatTablePanel panel = tables.get(tableName);
-
-        if (panel instanceof ISSTablePanel) {
-
-            ((ISSTablePanel) panel).setTableStatus(tableStatus);
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void updateISSTable(String tableName, String issLogin, GameStartInformation status) {
-
-        if (issLogin.equals(status.getPlayerName(Player.FOREHAND))) {
-
-            updateISSTable(tableName, Player.MIDDLEHAND, Player.REARHAND, Player.FOREHAND, status);
-        } else if (issLogin.equals(status.getPlayerName(Player.MIDDLEHAND))) {
-
-            updateISSTable(tableName, Player.REARHAND, Player.FOREHAND, Player.MIDDLEHAND, status);
-        } else if (issLogin.equals(status.getPlayerName(Player.REARHAND))) {
-
-            updateISSTable(tableName, Player.FOREHAND, Player.MIDDLEHAND, Player.REARHAND, status);
-        }
-    }
-
-    private void updateISSTable(String tableName, Player leftOpponent, Player rightOpponent,
-                                Player player, GameStartInformation status) {
-
-        LOG.debug("Updating ISS table: " + tableName + " " + leftOpponent + " "
-                + rightOpponent + " " + player);
-
-        JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(
-                new GameStartEvent(status.getGameNo(), GameVariant.STANDARD, leftOpponent, rightOpponent, player));
-
-        // FIXME (jansch 09.11.2010) this is only done for ISS games
-        SkatTablePanel table = tables.get(tableName);
-        table.setGameState(GameState.GAME_START);
-        table.setPlayerName(leftOpponent, status.getPlayerName(leftOpponent));
-        table.setPlayerTime(leftOpponent, status.getPlayerTime(leftOpponent));
-        table.setPlayerName(rightOpponent, status.getPlayerName(rightOpponent));
-        table.setPlayerTime(rightOpponent, status.getPlayerTime(rightOpponent));
-        table.setPlayerName(player, status.getPlayerName(player));
-        table.setPlayerTime(player, status.getPlayerTime(player));
-
-        table.setPlayerNames(status.getPlayerName(leftOpponent), false, status.getPlayerName(rightOpponent), false,
-                status.getPlayerName(player), false);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getNewTableName(int localTablesCreated) {
+    public String getNewTableName(final int localTablesCreated) {
         // get table name
         String tableName = JOptionPane.showInputDialog(null, strings.getString("new_table_dialog_message"),
                 strings.getString("local_table") + " " + (localTablesCreated + 1));
@@ -604,73 +521,69 @@ public class JSkatViewImpl implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public void updateISSMove(String tableName, SkatGameData gameData,
-                              MoveInformation moveInformation) {
+    public void updateISSMove(final String tableName, final SkatGameData gameData, final MoveInformation moveInformation) {
 
-        Player movePlayer = moveInformation.getPlayer();
+        final Player movePlayer = moveInformation.getPlayer();
 
         switch (moveInformation.getType()) {
             // TODO add other types too
             case DEAL:
-                setGameState(tableName, GameState.DEALING);
-                SkatTablePanel table = tables.get(tableName);
+                JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.DEALING));
+                final SkatTablePanel table = tables.get(tableName);
                 table.hideCards(Player.FOREHAND);
                 table.hideCards(Player.MIDDLEHAND);
                 table.hideCards(Player.REARHAND);
 
-                Map<Player, CardList> dealtCards = new HashMap<>();
+                final Map<Player, CardList> dealtCards = new HashMap<>();
                 dealtCards.put(Player.FOREHAND, moveInformation.getCards(Player.FOREHAND));
                 dealtCards.put(Player.MIDDLEHAND, moveInformation.getCards(Player.MIDDLEHAND));
                 dealtCards.put(Player.REARHAND, moveInformation.getCards(Player.REARHAND));
                 JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(new CardDealEvent(dealtCards, new CardList()));
-                setGameState(tableName, GameState.BIDDING);
+                JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.BIDDING));
                 break;
             case BID:
-                setGameState(tableName, GameState.BIDDING);
+                JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.BIDDING));
                 JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName)
                         .post(new BidEvent(movePlayer, moveInformation.getBidValue()));
-                setBidValueToHold(tableName, moveInformation.getBidValue());
                 break;
             case HOLD_BID:
-                setGameState(tableName, GameState.BIDDING);
+                JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.BIDDING));
                 JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName)
                         .post(new HoldBidEvent(movePlayer, gameData.getMaxBidValue()));
-                setBidValueToMake(tableName, SkatConstants.getNextBidValue(gameData.getMaxBidValue()));
                 break;
             case PASS:
-                setGameState(tableName, GameState.BIDDING);
-                JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(new PassBidEvent(movePlayer));
-                setBidValueToMake(tableName, SkatConstants.getNextBidValue(gameData.getMaxBidValue()));
+                JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.BIDDING));
+                JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(new PassBidEvent(movePlayer, gameData.getNextBidValue()));
                 break;
             case SKAT_REQUEST:
-                setGameState(tableName, GameState.PICKING_UP_SKAT);
+                JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.PICKING_UP_SKAT));
                 break;
             case PICK_UP_SKAT:
-                setGameState(tableName, GameState.DISCARDING);
+                JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.DISCARDING));
                 if (moveInformation.getSkat().size() == 2) {
-                    setSkat(tableName, moveInformation.getSkat());
+                    JSkatEventBus.INSTANCE.post(new SkatCardsChangedEvent(tableName, moveInformation.getSkat()));
                 }
                 break;
             case GAME_ANNOUNCEMENT:
-                setGameState(tableName, GameState.DECLARING);
+                JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.DECLARING));
                 JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName,
                         new GameAnnouncementEvent(movePlayer, moveInformation.getGameAnnouncement())));
                 if (moveInformation.getGameAnnouncement().isOuvert()) {
                     showCardsForPlayer(tableName, movePlayer, moveInformation.getOuvertCards());
                 }
-                setGameState(tableName, GameState.TRICK_PLAYING);
+                JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.TRICK_PLAYING));
                 break;
             case CARD_PLAY:
-                setGameState(tableName, GameState.TRICK_PLAYING);
+                JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.TRICK_PLAYING));
 
                 if (gameData.getTricks().size() > 1) {
 
-                    Trick currentTrick = gameData.getCurrentTrick();
-                    Trick lastTrick = gameData.getLastCompletedTrick();
+                    final Trick currentTrick = gameData.getCurrentTrick();
+                    final Trick lastTrick = gameData.getLastCompletedTrick();
 
+                    // first card in new trick
                     if (currentTrick.getFirstCard() != null && currentTrick.getSecondCard() == null
                             && currentTrick.getThirdCard() == null) {
-                        // first card in new trick
                         JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(new TrickCompletedEvent(lastTrick));
                     }
                 }
@@ -692,7 +605,7 @@ public class JSkatViewImpl implements JSkatView {
         // adjust player times
         if (moveInformation.getMovePlayer() != MovePlayer.WORLD) {
             // FIXME dirty hack
-            SkatTablePanel table = tables.get(tableName);
+            final SkatTablePanel table = tables.get(tableName);
 
             table.setPlayerTime(Player.FOREHAND, moveInformation.getPlayerTime(Player.FOREHAND));
             table.setPlayerTime(Player.MIDDLEHAND, moveInformation.getPlayerTime(Player.MIDDLEHAND));
@@ -700,12 +613,12 @@ public class JSkatViewImpl implements JSkatView {
         }
     }
 
-    private static void showCardsForPlayer(String tableName, Player player, CardList cards) {
+    private static void showCardsForPlayer(final String tableName, final Player player, final CardList cards) {
         JSkatEventBus.INSTANCE.post(new ShowCardsCommand(tableName, player, cards));
     }
 
     @Subscribe
-    public void showPreferencesDialogOn(ShowPreferencesCommand command) {
+    public void showPreferencesDialogOn(final ShowPreferencesCommand command) {
 
         SwingUtilities.invokeLater(() -> {
             preferencesDialog.validate();
@@ -714,27 +627,27 @@ public class JSkatViewImpl implements JSkatView {
     }
 
     @Subscribe
-    public void closeTableOn(TableRemovedEvent event) {
+    public void closeTableOn(final TableRemovedEvent event) {
 
-        SwingUtilities.invokeLater(() -> closeTabPanel(event.tableName));
+        SwingUtilities.invokeLater(() -> closeTabPanel(event.tableName()));
     }
 
     /**
      * {@inheritDoc}
      */
-    private void closeTabPanel(String tabName) {
+    private void closeTabPanel(final String tabName) {
 
         AbstractTabPanel panel = (AbstractTabPanel) tabs.getSelectedComponent();
         if (!tabName.equals(panel.getName())) {
-            for (Component currPanel : tabs.getComponents()) {
+            for (final Component currPanel : tabs.getComponents()) {
                 if (tabName.equals(currPanel.getName())) {
                     panel = (AbstractTabPanel) currPanel;
                 }
             }
         }
 
+        // remove from table list
         if (panel instanceof SkatTablePanel || panel instanceof ISSTablePanel) {
-            // remove from table list
             tables.remove(panel.getName());
         }
 
@@ -745,12 +658,12 @@ public class JSkatViewImpl implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public List<String> getPlayerForInvitation(Set<String> playerNames) {
+    public List<String> getPlayerForInvitation(final Set<String> playerNames) {
 
-        List<String> result = new ArrayList<>();
+        final List<String> result = new ArrayList<>();
 
-        PlayerInvitationPanel invitationPanel = new PlayerInvitationPanel(playerNames);
-        int dialogResult = JOptionPane.showConfirmDialog(null, invitationPanel,
+        final PlayerInvitationPanel invitationPanel = new PlayerInvitationPanel(playerNames);
+        final int dialogResult = JOptionPane.showConfirmDialog(null, invitationPanel,
                 strings.getString("invite_players"),
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
@@ -763,8 +676,7 @@ public class JSkatViewImpl implements JSkatView {
         return result;
     }
 
-    private void addTabPanel(AbstractTabPanel newPanel, String title) {
-
+    private void addTabPanel(final AbstractTabPanel newPanel, final String title) {
         tabs.addTab(title, newPanel);
         tabs.setTabComponentAt(tabs.indexOfComponent(newPanel), new JSkatTabComponent(tabs, bitmaps));
         tabs.setSelectedComponent(newPanel);
@@ -775,37 +687,18 @@ public class JSkatViewImpl implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public void setSeriesState(String tableName, SeriesState state) {
-
-        tables.get(tableName).setSeriesState(state);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setSkat(String tableName, CardList skat) {
-
-        tables.get(tableName).setSkat(skat);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean showISSTableInvitation(String invitor, String tableName) {
+    public boolean showISSTableInvitation(final String invitor, final String tableName) {
 
         boolean result = false;
 
-        String question = strings.getString("iss_table_invitation",
+        final String question = strings.getString("iss_table_invitation",
                 invitor, tableName);
 
-        int answer = JOptionPane.showConfirmDialog(null, question,
+        final int answer = JOptionPane.showConfirmDialog(null, question,
                 strings.getString("iss_table_invitation_title"),
                 JOptionPane.YES_NO_OPTION);
 
         if (answer == JOptionPane.YES_OPTION) {
-
             result = true;
         }
 
@@ -816,44 +709,22 @@ public class JSkatViewImpl implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public void showCardNotAllowedMessage(Card card) {
+    public void showCardNotAllowedMessage(final Card card) {
 
-        String title = strings.getString("card_not_allowed_title");
+        final String title = strings.getString("card_not_allowed_title");
 
-        String message = strings.getString("card_not_allowed_message",
+        final String message = strings.getString("card_not_allowed_message",
                 card != null ? strings.getSuitStringForCardFace(card.getSuit()) : "--",
                 card != null ? strings.getRankStringForCardFace(card.getRank()) : "--");
 
         showErrorMessage(title, message);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setPlayerNames(String tableName, String upperLeftPlayerName,
-                               boolean isUpperLeftPlayerAIPlayer, String upperRightPlayerName,
-                               boolean isUpperRightPlayerAIPlayer, String lowerPlayerName,
-                               boolean isLowerPlayerAIPlayer) {
-
-        tables.get(tableName).setPlayerNames(upperLeftPlayerName, isUpperLeftPlayerAIPlayer, upperRightPlayerName,
-                isUpperRightPlayerAIPlayer, lowerPlayerName, isLowerPlayerAIPlayer);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setDeclarer(String tableName, Player declarer) {
-
-        tables.get(tableName).setDeclarer(declarer);
-    }
-
     @Subscribe
-    public void closeAllIssTabsOn(IssDisconnectCommand event) {
+    public void closeAllIssTabsOn(final IssDisconnectCommand event) {
 
         SwingUtilities.invokeLater(() -> {
-            for (Component currPanel : tabs.getComponents()) {
+            for (final Component currPanel : tabs.getComponents()) {
                 if (currPanel instanceof LobbyPanel || currPanel instanceof ISSTablePanel) {
                     closeTabPanel(currPanel.getName());
                 }
@@ -862,15 +733,15 @@ public class JSkatViewImpl implements JSkatView {
     }
 
     @Subscribe
-    public void showErrorMessageOn(InvalidNumberOfCardsInDiscardedSkatEvent event) {
+    public void showErrorMessageOn(final InvalidNumberOfCardsInDiscardedSkatEvent event) {
         showErrorMessage(strings.getString("invalid_number_of_cards_in_skat_title"),
                 strings.getString("invalid_number_of_cards_in_skat_message"));
     }
 
     @Subscribe
-    public void showErrorMessageOn(DuplicateTableNameInputEvent event) {
+    public void showErrorMessageOn(final DuplicateTableNameInputEvent event) {
 
-        String message = strings.getString("duplicate_table_name_message",
+        final String message = strings.getString("duplicate_table_name_message",
                 event.tableName);
 
         showErrorMessage(strings.getString("duplicate_table_name_title"),
@@ -878,7 +749,7 @@ public class JSkatViewImpl implements JSkatView {
     }
 
     @Subscribe
-    public void showErrorMessageOn(EmptyTableNameInputEvent event) {
+    public void showErrorMessageOn(final EmptyTableNameInputEvent event) {
 
         showErrorMessage(strings.getString("invalid_name_input_null_title"),
                 strings.getString("invalid_name_input_null_message"));
@@ -888,8 +759,7 @@ public class JSkatViewImpl implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public void setResign(String tableName, Player player) {
-
+    public void setResign(final String tableName, final Player player) {
         tables.get(tableName).setResign(player);
     }
 
@@ -897,7 +767,7 @@ public class JSkatViewImpl implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public void setGeschoben(String tableName, Player player) {
+    public void setGeschoben(final String tableName, final Player player) {
         tables.get(tableName).setGeschoben(player);
     }
 
@@ -905,8 +775,8 @@ public class JSkatViewImpl implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public void setDiscardedSkat(String tableName, Player player, CardList skatBefore,
-                                 CardList discardedSkat) {
+    public void setDiscardedSkat(final String tableName, final Player player, final CardList skatBefore,
+                                 final CardList discardedSkat) {
         tables.get(tableName).setDiscardedSkat(player, skatBefore, discardedSkat);
     }
 
@@ -914,30 +784,14 @@ public class JSkatViewImpl implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public void takeCardFromSkat(String tableName, Card card) {
-        tables.get(tableName).takeCardFromSkat(card);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void putCardIntoSkat(String tableName, Card card) {
-        tables.get(tableName).putCardIntoSkat(card);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void openWebPage(String link) {
+    public void openWebPage(final String link) {
         try {
-            Desktop desktop = java.awt.Desktop.getDesktop();
-            URI uri = new URI(link);
+            final Desktop desktop = java.awt.Desktop.getDesktop();
+            final URI uri = new URI(link);
             desktop.browse(uri);
-        } catch (URISyntaxException except) {
+        } catch (final URISyntaxException except) {
             LOG.error(except.toString());
-        } catch (IOException except) {
+        } catch (final IOException except) {
             LOG.error(except.toString());
         }
     }
@@ -948,7 +802,7 @@ public class JSkatViewImpl implements JSkatView {
     }
 
     @Override
-    public void setActiveView(String viewName) {
+    public void setActiveView(final String viewName) {
         activeView = viewName;
     }
 }

@@ -55,7 +55,7 @@ class InputChannel extends Thread {
 
                     line = InputChannel.this.reader.readLine();
 
-                    log.debug("ISS    |--> " + line);
+                    log.info("ISS    |--> " + line);
 
                     InputChannel.this.messageHandler.addMessage(line);
 

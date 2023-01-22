@@ -26,7 +26,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
      * @see org.jskat.ai.IJSkatPlayer#preparateForNewGame()
      */
     @Override
-    public void preparateForNewGame() {
+    public void prepareForNewGame() {
         log.debug("New game preparation for player <" + playerName + ">");
         aiPlayer = null;
     }
@@ -47,7 +47,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
      * @see org.jskat.ai.IJSkatPlayer#bidMore(int)
      */
     @Override
-    public Integer bidMore(final int nextBidValue) {
+    public int bidMore(final int nextBidValue) {
         if (bidEvaluator == null) {
             bidEvaluator = new BidEvaluator(knowledge.getOwnCards(),
                     knowledge.getPlayerPosition());
@@ -55,7 +55,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
         if (bidEvaluator.getMaxBid() >= nextBidValue) {
             return nextBidValue;
         }
-        return -1;
+        return 0;
     }
 
     /*
@@ -64,7 +64,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
      * @see org.jskat.ai.IJSkatPlayer#holdBid(int)
      */
     @Override
-    public Boolean holdBid(final int currBidValue) {
+    public boolean holdBid(final int currBidValue) {
         if (bidEvaluator == null) {
             bidEvaluator = new BidEvaluator(knowledge.getOwnCards(),
                     knowledge.getPlayerPosition());
@@ -78,7 +78,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
      * @see org.jskat.ai.IJSkatPlayer#pickUpSkat()
      */
     @Override
-    public Boolean pickUpSkat() {
+    public boolean pickUpSkat() {
         if (bidEvaluator == null) {
             bidEvaluator = new BidEvaluator(knowledge.getOwnCards(),
                     knowledge.getPlayerPosition());
@@ -254,19 +254,19 @@ public class AlgorithmAI extends AbstractAIPlayer {
     }
 
     @Override
-    public Boolean callContra() {
+    public boolean callContra() {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public Boolean callRe() {
+    public boolean callRe() {
         // TODO Auto-generated method stub
         return false;
     }
 
     @Override
-    public Boolean playGrandHand() {
+    public boolean playGrandHand() {
         // TODO Auto-generated method stub
         return false;
     }

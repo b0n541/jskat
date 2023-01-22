@@ -10,7 +10,6 @@ import java.awt.*;
  */
 class BidBubblePanel extends JPanel {
 
-    private static final long serialVersionUID = 1L;
 
     private final Image bubbleImage;
     private final JLabel bidLabel;

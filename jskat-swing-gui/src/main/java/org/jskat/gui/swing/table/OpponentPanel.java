@@ -7,7 +7,6 @@ import javax.swing.*;
  */
 public class OpponentPanel extends AbstractHandPanel {
 
-    private static final long serialVersionUID = 1L;
 
     /**
      * @param actions        Actions

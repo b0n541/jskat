@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -97,17 +98,15 @@ public class MessageParser {
 
         log.debug("game start parameter: " + params);
 
-        final GameStartInformation status = new GameStartInformation();
-
-        status.setLoginName(loginName);
-
-        status.setGameNo(Integer.parseInt(params.get(0)));
-        status.putPlayerName(Player.FOREHAND, params.get(1));
-        status.putPlayerTime(Player.FOREHAND, Double.valueOf(params.get(2)));
-        status.putPlayerName(Player.MIDDLEHAND, params.get(3));
-        status.putPlayerTime(Player.MIDDLEHAND, Double.valueOf(params.get(4)));
-        status.putPlayerName(Player.REARHAND, params.get(5));
-        status.putPlayerTime(Player.REARHAND, Double.valueOf(params.get(6)));
+        final GameStartInformation status = new GameStartInformation(
+                loginName,
+                Integer.parseInt(params.get(0)),
+                Map.of(Player.FOREHAND, params.get(1),
+                        Player.MIDDLEHAND, params.get(3),
+                        Player.REARHAND, params.get(5)),
+                Map.of(Player.FOREHAND, Double.valueOf(params.get(2)),
+                        Player.MIDDLEHAND, Double.valueOf(params.get(4)),
+                        Player.REARHAND, Double.valueOf(params.get(6))));
 
         return status;
     }
@@ -145,8 +144,7 @@ public class MessageParser {
             info.setType(MoveType.SHOW_CARDS);
             if (move.length() > 2) {
                 // declarer cards follow, SC could also stand allone
-                info.setOuvertCards(parseSkatCards(move.substring(move
-                        .indexOf(".") + 1)));
+                info.setOuvertCards(parseSkatCards(move.substring(move.indexOf(".") + 1)));
             }
         } else if (move.startsWith("LE.")) {
             // one player left the table during the game
@@ -525,12 +523,10 @@ public class MessageParser {
                     result.setDealtSkatCards(moveInfo.getSkat());
                     break;
                 case BID:
-                    result.addPlayerBid(moveInfo.getPlayer(),
-                            moveInfo.getBidValue());
+                    result.addPlayerBid(moveInfo.getPlayer(), moveInfo.getBidValue());
                     break;
                 case HOLD_BID:
-                    result.addPlayerBid(moveInfo.getPlayer(),
-                            result.getMaxBidValue());
+                    result.addPlayerBid(moveInfo.getPlayer(), result.getMaxBidValue());
                     break;
                 case PASS:
                     result.setPlayerPass(moveInfo.getPlayer(), true);
@@ -538,8 +534,7 @@ public class MessageParser {
                 case GAME_ANNOUNCEMENT:
                     result.setAnnouncement(moveInfo.getGameAnnouncement());
                     if (!moveInfo.getGameAnnouncement().isHand()) {
-                        result.setDiscardedSkat(moveInfo.getPlayer(), moveInfo
-                                .getGameAnnouncement().getDiscardedCards());
+                        result.setDiscardedSkat(moveInfo.getPlayer(), moveInfo.getGameAnnouncement().getDiscardedCards());
                     }
                     break;
                 case CARD_PLAY:
@@ -549,11 +544,9 @@ public class MessageParser {
                     } else if (result.getCurrentTrick().getThirdCard() != null) {
                         // last card of trick is played
                         // set trick winner
-                        result.getCurrentTrick().setTrickWinner(
-                                moveInfo.getPlayer());
+                        result.getCurrentTrick().setTrickWinner(moveInfo.getPlayer());
                         // create next trick
-                        result.addTrick(new Trick(result.getTricks().size(),
-                                moveInfo.getPlayer()));
+                        result.addTrick(new Trick(result.getTricks().size(), moveInfo.getPlayer()));
                     }
                     result.addTrickCard(moveInfo.getCard());
 

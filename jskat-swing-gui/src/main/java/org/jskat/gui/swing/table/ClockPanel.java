@@ -14,7 +14,6 @@ import java.text.NumberFormat;
  */
 public class ClockPanel extends JPanel {
 
-    private static final long serialVersionUID = 1L;
 
     private final JLabel timeLabel;
     double playerTimeInSeconds;

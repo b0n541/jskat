@@ -10,16 +10,12 @@ import javax.swing.*;
  * Context panel for discarding
  */
 class DeclaringContextPanel extends JPanel {
-
-    private static final long serialVersionUID = 1L;
-
     private final DiscardPanel discardPanel;
     private final GameAnnouncePanel announcePanel;
 
     DeclaringContextPanel(ActionMap actions, JSkatUserPanel newUserPanel) {
 
-        setLayout(LayoutFactory.getMigLayout(
-                "fill", "[shrink][grow][shrink]", "fill"));
+        setLayout(LayoutFactory.getMigLayout("fill", "[shrink][grow][shrink]", "fill"));
 
         JPanel blankPanel = new JPanel();
         blankPanel.setOpaque(false);
@@ -57,7 +53,6 @@ class DeclaringContextPanel extends JPanel {
     }
 
     public void setSkat(CardList skat) {
-
         this.discardPanel.setSkat(skat);
     }
 }

@@ -3,10 +3,13 @@ package org.jskat.control;
 import com.google.common.eventbus.DeadEvent;
 import com.google.common.eventbus.EventBus;
 import com.google.common.eventbus.Subscribe;
+import org.jskat.control.command.table.AbstractTableCommand;
 import org.jskat.control.command.table.CreateTableCommand;
 import org.jskat.control.command.table.RemoveTableCommand;
-import org.jskat.control.command.table.ShowCardsCommand;
-import org.jskat.control.event.table.*;
+import org.jskat.control.event.table.AbstractTableEvent;
+import org.jskat.control.event.table.TableCreatedEvent;
+import org.jskat.control.event.table.TableGameMoveEvent;
+import org.jskat.control.event.table.TableRemovedEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,12 +21,12 @@ import java.util.Map;
  */
 public class JSkatEventBus {
 
-    private final static Logger LOG = LoggerFactory
-            .getLogger(JSkatEventBus.class);
+    private final static Logger LOG = LoggerFactory.getLogger(JSkatEventBus.class);
 
     private final EventBus mainEventBus;
 
     public final static JSkatEventBus INSTANCE = new JSkatEventBus();
+    // TODO should be private
     public final static Map<String, EventBus> TABLE_EVENT_BUSSES = new HashMap<>();
 
     private JSkatEventBus() {
@@ -46,7 +49,6 @@ public class JSkatEventBus {
 
     @Subscribe
     public void createTableEventBusOn(final CreateTableCommand command) {
-
         if (!JSkatEventBus.TABLE_EVENT_BUSSES.containsKey(command.tableName)) {
             EventBus eventBus = new EventBus("Table " + command.tableName);
             JSkatEventBus.TABLE_EVENT_BUSSES.put(command.tableName, eventBus);
@@ -63,29 +65,19 @@ public class JSkatEventBus {
     }
 
     @Subscribe
-    public void dispatchTableEventOn(ActivePlayerChangedEvent event) {
-        JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(event);
+    public void dispatchTableEventOn(AbstractTableEvent event) {
+        if (event instanceof TableGameMoveEvent tableGameMoveEvent) {
+            LOG.info("Forwarding game move event " + tableGameMoveEvent.gameEvent + " to table " + tableGameMoveEvent.tableName);
+            JSkatEventBus.TABLE_EVENT_BUSSES.get(tableGameMoveEvent.tableName).post(tableGameMoveEvent.gameEvent);
+        } else {
+            LOG.info("Forwarding table event " + event + " to table " + event.tableName);
+            JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(event);
+        }
     }
 
     @Subscribe
-    public void dispatchTableEventOn(TableGameMoveEvent event) {
-        LOG.info("Forwarding game event " + event.gameEvent + " to table "
-                + event.tableName);
-        JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName)
-                .post(event.gameEvent);
-    }
-
-    @Subscribe
-    public void dispatchTableEventOn(SkatSeriesStartedEvent event) {
-        LOG.info("Forwarding table event " + event + " to table "
-                + event.tableName);
-        JSkatEventBus.TABLE_EVENT_BUSSES.get(event.tableName).post(event);
-    }
-
-    @Subscribe
-    public void dispatchTableCommandOn(ShowCardsCommand command) {
-        LOG.info("Forwarding command " + command + " to table "
-                + command.tableName);
+    public void dispatchTableCommandOn(AbstractTableCommand command) {
+        LOG.info("Forwarding command " + command + " to table " + command.tableName);
         JSkatEventBus.TABLE_EVENT_BUSSES.get(command.tableName).post(command);
     }
 }

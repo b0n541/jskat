@@ -11,7 +11,6 @@ import javax.swing.*;
  */
 public class HoldBidAction extends AbstractHumanJSkatAction {
 
-    private static final long serialVersionUID = 1L;
 
     /**
      * @see AbstractJSkatAction#AbstractJSkatAction()
