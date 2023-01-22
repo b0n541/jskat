@@ -1,4 +1,3 @@
-
 //package org.jskat.ai.newalgorithm;
 //
 //import org.apache.log4j.Logger;
@@ -53,8 +52,8 @@
 //		for (Suit s : Suit.values()) {
 //			if (cards.getSuitCount(s, false) == 1) {
 //				if (resultIndex < 0
-//						|| cards.get(resultIndex).getRamschOrder() > cards.get(cards.getFirstIndexOfSuit(s))
-//								.getRamschOrder()) {
+//						|| cards.get(resultIndex).getSuitGrandOrder() > cards.get(cards.getFirstIndexOfSuit(s))
+//								.getSuitGrandOrder()) {
 //					resultIndex = cards.getFirstIndexOfSuit(s);
 //				}
 //			} else if (cards.getSuitCount(s, false) == 2

@@ -48,6 +48,10 @@ public class CardList implements Iterable<Card> {
         this(Arrays.asList(cards));
     }
 
+    public static CardList of(Card... cards) {
+        return new CardList(cards);
+    }
+
     /**
      * Gets a copy of a card list that is immutable
      *
@@ -375,13 +379,11 @@ public class CardList implements Iterable<Card> {
                 case NULL:
                     Collections.sort(cards, new NullComparator());
                     break;
-                case RAMSCH:
-                    Collections.sort(cards, new RamschComparator());
-                    break;
                 case CLUBS:
                 case SPADES:
                 case HEARTS:
                 case DIAMONDS:
+                case RAMSCH:
                     Collections.sort(cards, new SuitComparator(gameType));
                     break;
                 case GRAND:
@@ -399,6 +401,7 @@ public class CardList implements Iterable<Card> {
         for (Card card : cards) {
             if (null == card) {
                 result = true;
+                break;
             }
         }
 
@@ -573,7 +576,9 @@ public class CardList implements Iterable<Card> {
         CardList other = (CardList) obj;
         if (cards == null) {
             return other.cards == null;
-        } else return cards.equals(other.cards);
+        } else {
+            return cards.equals(other.cards);
+        }
     }
 
     /**
@@ -604,49 +609,13 @@ public class CardList implements Iterable<Card> {
     private class NullComparator implements Comparator<Card> {
         @Override
         public int compare(Card first, Card second) {
-            if (first.getSuit().getSortOrder() < second.getSuit()
-                    .getSortOrder()) {
+            if (first.getSuit().getSortOrder() > second.getSuit().getSortOrder()) {
                 return -1;
-            } else if (first.getSuit().getSortOrder() > second.getSuit()
-                    .getSortOrder()) {
+            } else if (first.getSuit().getSortOrder() < second.getSuit().getSortOrder()) {
                 return 1;
             }
 
             if (first.getNullOrder() < second.getNullOrder()) {
-                return 1;
-            } else {
-                return -1;
-            }
-        }
-    }
-
-    private class RamschComparator implements Comparator<Card> {
-        @Override
-        public int compare(Card first, Card second) {
-            // first the jacks
-            if (first.getRank() == Rank.JACK && second.getRank() == Rank.JACK) {
-                if (first.getSuit().getSortOrder() < second.getSuit()
-                        .getSortOrder()) {
-                    return 1;
-                } else if (first.getSuit().getSortOrder() > second.getSuit()
-                        .getSortOrder()) {
-                    return -1;
-                }
-            } else if (first.getRank() == Rank.JACK) {
-                return -1;
-            } else if (second.getRank() == Rank.JACK) {
-                return 1;
-            }
-
-            if (first.getSuit().getSortOrder() < second.getSuit()
-                    .getSortOrder()) {
-                return -1;
-            } else if (first.getSuit().getSortOrder() > second.getSuit()
-                    .getSortOrder()) {
-                return 1;
-            }
-
-            if (first.getRamschOrder() < second.getRamschOrder()) {
                 return 1;
             } else {
                 return -1;
@@ -665,11 +634,9 @@ public class CardList implements Iterable<Card> {
         public int compare(Card first, Card second) {
             // first the jacks
             if (first.getRank() == Rank.JACK && second.getRank() == Rank.JACK) {
-                if (first.getSuit().getSortOrder() < second.getSuit()
-                        .getSortOrder()) {
+                if (first.getSuit().getSortOrder() < second.getSuit().getSortOrder()) {
                     return 1;
-                } else if (first.getSuit().getSortOrder() > second.getSuit()
-                        .getSortOrder()) {
+                } else if (first.getSuit().getSortOrder() > second.getSuit().getSortOrder()) {
                     return -1;
                 }
             } else if (first.getRank() == Rank.JACK) {
@@ -679,14 +646,11 @@ public class CardList implements Iterable<Card> {
             }
 
             // trump cards follow
-            if (first.getSuit() == gameType.getTrumpSuit()
-                    && second.getSuit() != gameType.getTrumpSuit()) {
+            if (first.getSuit() == gameType.getTrumpSuit() && second.getSuit() != gameType.getTrumpSuit()) {
                 return -1;
-            } else if (first.getSuit() != gameType.getTrumpSuit()
-                    && second.getSuit() == gameType.getTrumpSuit()) {
+            } else if (first.getSuit() != gameType.getTrumpSuit() && second.getSuit() == gameType.getTrumpSuit()) {
                 return 1;
-            } else if (first.getSuit() == gameType.getTrumpSuit()
-                    && second.getSuit() == gameType.getTrumpSuit()) {
+            } else if (first.getSuit() == gameType.getTrumpSuit() && second.getSuit() == gameType.getTrumpSuit()) {
                 if (first.getSuitGrandOrder() < second.getSuitGrandOrder()) {
                     return 1;
                 } else {
@@ -695,11 +659,9 @@ public class CardList implements Iterable<Card> {
             }
 
             // all the other cards
-            if (first.getSuit().getSortOrder() < second.getSuit()
-                    .getSortOrder()) {
+            if (first.getSuit().getSortOrder() < second.getSuit().getSortOrder()) {
                 return 1;
-            } else if (first.getSuit().getSortOrder() > second.getSuit()
-                    .getSortOrder()) {
+            } else if (first.getSuit().getSortOrder() > second.getSuit().getSortOrder()) {
                 return -1;
             }
 

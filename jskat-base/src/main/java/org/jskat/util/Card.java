@@ -140,7 +140,7 @@ public enum Card {
     private final Suit suit;
     private final Rank rank;
 
-    private Card(final Suit newSuit, final Rank newRank) {
+    Card(final Suit newSuit, final Rank newRank) {
 
         suit = newSuit;
         rank = newRank;
@@ -216,16 +216,6 @@ public enum Card {
     public int getNullOrder() {
 
         return rank.getNullOrder();
-    }
-
-    /**
-     * Get the card order value for ramsch games
-     *
-     * @return Order of the card in ramsch games
-     */
-    public int getRamschOrder() {
-
-        return rank.getRamschOrder();
     }
 
     /**

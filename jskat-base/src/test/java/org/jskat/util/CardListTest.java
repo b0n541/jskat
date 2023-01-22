@@ -1,11 +1,13 @@
-
 package org.jskat.util;
 
 
 import org.jskat.AbstractJSkatTest;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Random;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,42 +15,59 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Test cases for class Card
  */
 public class CardListTest extends AbstractJSkatTest {
+    private static Stream<Arguments> testCasesForSort() {
+        return Stream.of(
+                Arguments.of(
+                        GameType.GRAND,
+                        CardList.of(Card.D7, Card.DA, Card.H7, Card.HA, Card.S7, Card.SA, Card.C7, Card.CA, Card.DJ, Card.CJ),
+                        CardList.of(Card.CJ, Card.DJ, Card.CA, Card.C7, Card.SA, Card.S7, Card.HA, Card.H7, Card.DA, Card.D7)),
+                Arguments.of(
+                        GameType.CLUBS,
+                        CardList.of(Card.D7, Card.DA, Card.H7, Card.HA, Card.S7, Card.SA, Card.C7, Card.CA, Card.DJ, Card.CJ),
+                        CardList.of(Card.CJ, Card.DJ, Card.CA, Card.C7, Card.SA, Card.S7, Card.HA, Card.H7, Card.DA, Card.D7)),
+                Arguments.of(
+                        GameType.SPADES,
+                        CardList.of(Card.D7, Card.DA, Card.H7, Card.HA, Card.S7, Card.SA, Card.C7, Card.CA, Card.DJ, Card.CJ),
+                        CardList.of(Card.CJ, Card.DJ, Card.SA, Card.S7, Card.CA, Card.C7, Card.HA, Card.H7, Card.DA, Card.D7)),
+                Arguments.of(
+                        GameType.HEARTS,
+                        CardList.of(Card.D7, Card.DA, Card.H7, Card.HA, Card.S7, Card.SA, Card.C7, Card.CA, Card.DJ, Card.CJ),
+                        CardList.of(Card.CJ, Card.DJ, Card.HA, Card.H7, Card.CA, Card.C7, Card.SA, Card.S7, Card.DA, Card.D7)),
+                Arguments.of(
+                        GameType.DIAMONDS,
+                        CardList.of(Card.D7, Card.DA, Card.H7, Card.HA, Card.S7, Card.SA, Card.C7, Card.CA, Card.DJ, Card.CJ),
+                        CardList.of(Card.CJ, Card.DJ, Card.DA, Card.D7, Card.CA, Card.C7, Card.SA, Card.S7, Card.HA, Card.H7)),
+                Arguments.of(
+                        GameType.NULL,
+                        CardList.of(Card.CJ, Card.SJ, Card.D7, Card.DT, Card.DJ, Card.DK, Card.DA, Card.HA, Card.SA, Card.CA),
+                        CardList.of(Card.CA, Card.CJ, Card.SA, Card.SJ, Card.HA, Card.DA, Card.DK, Card.DJ, Card.DT, Card.D7)),
+                Arguments.of(
+                        GameType.RAMSCH,
+                        CardList.of(Card.D7, Card.DA, Card.H7, Card.HA, Card.S7, Card.SA, Card.C7, Card.CA, Card.DJ, Card.CJ),
+                        CardList.of(Card.CJ, Card.DJ, Card.CA, Card.C7, Card.SA, Card.S7, Card.HA, Card.H7, Card.DA, Card.D7))
+        );
+    }
 
-    private static final Random RANDOM = new Random();
+    @ParameterizedTest
+    @MethodSource("testCasesForSort")
+    public void sort(GameType gameType, CardList unsortedCards, CardList expectedSortedCardList) {
 
-    /**
-     * Test double sorting
-     */
+        unsortedCards.sort(gameType);
+
+        assertThat(unsortedCards).containsExactlyElementsOf(expectedSortedCardList);
+    }
+
     @Test
-    public void testSort001() {
+    public void sortTwoTimes() {
+        CardList cards = CardList.getPerfectGrandSuitHand();
 
-        final CardList cards = new CardList();
-        cards.add(Card.CA);
-        cards.add(Card.HA);
-        cards.add(Card.DA);
-        cards.add(Card.HT);
-        cards.add(Card.CJ);
-        cards.add(Card.D7);
+        cards.sort(GameType.GRAND);
 
-        // sort cards
-        cards.sort(GameType.DIAMONDS);
-        // check order
-        assertThat(cards.get(0)).isEqualTo(Card.CJ);
-        assertThat(cards.get(1)).isEqualTo(Card.DA);
-        assertThat(cards.get(2)).isEqualTo(Card.D7);
-        assertThat(cards.get(3)).isEqualTo(Card.CA);
-        assertThat(cards.get(4)).isEqualTo(Card.HA);
-        assertThat(cards.get(5)).isEqualTo(Card.HT);
+        assertThat(cards).containsExactly(Card.CJ, Card.SJ, Card.HJ, Card.DJ, Card.CA, Card.CT, Card.SA, Card.ST, Card.HA, Card.DA);
 
-        // sort cards again
-        cards.sort(GameType.DIAMONDS);
-        // check order
-        assertThat(cards.get(0)).isEqualTo(Card.CJ);
-        assertThat(cards.get(1)).isEqualTo(Card.DA);
-        assertThat(cards.get(2)).isEqualTo(Card.D7);
-        assertThat(cards.get(3)).isEqualTo(Card.CA);
-        assertThat(cards.get(4)).isEqualTo(Card.HA);
-        assertThat(cards.get(5)).isEqualTo(Card.HT);
+        cards.sort(GameType.GRAND);
+
+        assertThat(cards).containsExactly(Card.CJ, Card.SJ, Card.HJ, Card.DJ, Card.CA, Card.CT, Card.SA, Card.ST, Card.HA, Card.DA);
     }
 
     /**

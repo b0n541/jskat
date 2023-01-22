@@ -23,7 +23,7 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
     AlgorithmicRamschPlayer(final AlgorithmicAIPlayer p) {
         myPlayer = p;
         knowledge = p.getKnowledge();
-        log.debug("Defining player <" + myPlayer.getPlayerName() + "> as " + this.getClass().getName());
+        log.debug("Defining player <" + myPlayer.getPlayerName() + "> as " + getClass().getName());
     }
 
     /*
@@ -58,8 +58,7 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
         for (final Suit s : Suit.values()) {
             if (cards.getSuitCount(s, false) == 1) {
                 if (resultIndex < 0
-                        || cards.get(resultIndex).getRamschOrder() > cards.get(cards.getFirstIndexOfSuit(s))
-                        .getRamschOrder()) {
+                        || cards.get(resultIndex).getSuitGrandOrder() > cards.get(cards.getFirstIndexOfSuit(s)).getSuitGrandOrder()) {
                     resultIndex = cards.getFirstIndexOfSuit(s);
                 }
             } else if (cards.getSuitCount(s, false) == 2
@@ -83,19 +82,19 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
                 continue;
             }
             final Card c = cards.get(cards.getFirstIndexOfSuit(s, false));
-            if (cards.getSuitCount(s, false) == 1 && c.getRank().getRamschOrder() < 6
-                    && c.getRank().getRamschOrder() > 2) {
+            if (cards.getSuitCount(s, false) == 1 && c.getRank().getSuitGrandOrder() < 6
+                    && c.getRank().getSuitGrandOrder() > 2) {
                 if (resultIndex < 0) {
                     resultIndex = cards.getIndexOf(c);
                 } else {
-                    if (c.getRamschOrder() > cards.get(resultIndex).getRamschOrder()) {
+                    if (c.getSuitGrandOrder() > cards.get(resultIndex).getSuitGrandOrder()) {
                         resultIndex = cards.getIndexOf(c);
                     }
                 }
             }
             final Card lowCard = cards.get(cards.getLastIndexOfSuit(s, false));
-            if (cards.getSuitCount(s, false) == 2 && c.getRank().getRamschOrder() < 6
-                    && lowCard.getRank().getRamschOrder() < 2) {
+            if (cards.getSuitCount(s, false) == 2 && c.getRank().getSuitGrandOrder() < 6
+                    && lowCard.getRank().getSuitGrandOrder() < 2) {
                 resultIndex = cards.getIndexOf(c);
             }
         }
@@ -117,9 +116,9 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
 
         // check best card, if there are no "easy" suits
         for (final Card c : cards) {
-            if (c.getRamschOrder() == 1) {
+            if (c.getSuitGrandOrder() == 1) {
                 resultIndex = cards.getIndexOf(c);
-            } else if (c.getRamschOrder() == 0 && resultIndex < 0) {
+            } else if (c.getSuitGrandOrder() == 0 && resultIndex < 0) {
                 resultIndex = cards.getIndexOf(c);
             }
         }
@@ -177,7 +176,7 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
      * @param gameType
      * @return a default card
      */
-    private Card getDefaultCard(final CardList cards, final Card initialCard, final GameType gameType) {
+    private static Card getDefaultCard(final CardList cards, final Card initialCard, final GameType gameType) {
         Card result = null;
         for (final Card c : cards) {
             if (c.isAllowed(gameType, initialCard, cards)) {
@@ -201,7 +200,7 @@ public class AlgorithmicRamschPlayer implements IAlgorithmicAIPlayer {
      */
     @Override
     public CardList discardSkat(final BidEvaluator bidEvaluator) {
-        log.debug(myPlayer.getPlayerName() + " (" + this.getClass() + ") is discarding cards");
+        log.debug(myPlayer.getPlayerName() + " (" + getClass() + ") is discarding cards");
         if (JSkatOptions.instance().isSchieberamschJacksInSkat()) {
             return discardWithJacks();
         }

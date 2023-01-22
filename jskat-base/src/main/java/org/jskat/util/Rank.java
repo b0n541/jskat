@@ -10,53 +10,54 @@ public enum Rank {
     /**
      * Seven
      */
-    SEVEN("7", "Seven", 0, 0, 0, 0),
+    SEVEN("7", "Seven", 0, 0, 0),
     /**
      * Eight
      */
-    EIGHT("8", "Eight", 1, 1, 1, 0),
+    EIGHT("8", "Eight", 1, 1, 0),
     /**
      * Nine
      */
-    NINE("9", "Nine", 2, 2, 2, 0),
+    NINE("9", "Nine", 2, 2, 0),
     /**
      * Queen or Ober
      */
-    QUEEN("Q", "Queen", 3, 5, 3, 3),
+    QUEEN("Q", "Queen", 3, 5, 3),
     /**
      * King or König
      */
-    KING("K", "King", 4, 6, 4, 4),
+    KING("K", "King", 4, 6, 4),
     /**
      * Ten
      */
-    TEN("T", "Ten", 5, 3, 5, 10),
+    TEN("T", "Ten", 5, 3, 10),
     /**
      * Ace or Daus
      */
-    ACE("A", "Ace", 6, 7, 6, 11),
+    ACE("A", "Ace", 6, 7, 11),
     /**
      * Jack or Unter
      */
-    JACK("J", "Jack", 7, 4, 7, 2);
+    JACK("J", "Jack", 7, 4, 2);
 
     private final String shortString;
     private final String longString;
     private final int suitGrandOrder;
     private final int nullOrder;
-    private final int ramschOrder;
     private final int points;
 
     /**
      * Constructor
      */
-    Rank(final String shortString, final String longString, final int suitGrandOrder, final int nullOrder,
-                 final int ramschOrder, final int points) {
+    Rank(final String shortString,
+         final String longString,
+         final int suitGrandOrder,
+         final int nullOrder,
+         final int points) {
         this.shortString = shortString;
         this.longString = longString;
         this.suitGrandOrder = suitGrandOrder;
         this.nullOrder = nullOrder;
-        this.ramschOrder = ramschOrder;
         this.points = points;
     }
 
@@ -94,15 +95,6 @@ public enum Rank {
      */
     public int getNullOrder() {
         return nullOrder;
-    }
-
-    /**
-     * Gets the order of the rank in ramsch games.
-     *
-     * @return Order in ramsch games
-     */
-    public int getRamschOrder() {
-        return ramschOrder;
     }
 
     /**
@@ -189,9 +181,5 @@ public enum Rank {
 
     public int toGrandBinaryFlag() {
         return toSuitBinaryFlag();
-    }
-
-    public int toRamschBinaryFlag() {
-        return (int) Math.pow(2, getRamschOrder());
     }
 }
