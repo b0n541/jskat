@@ -1,13 +1,16 @@
 plugins {
-    id("org.openjfx.javafxplugin")
+    id("jskat.java-library-conventions")
+
+    id("org.openjfx.javafxplugin") version "0.0.13"
 }
 
 dependencies {
     implementation(project(":jskat-base"))
+
     implementation("com.miglayout", "miglayout-swing", "11.0")
 }
 
 javafx {
-    modules = listOf("javafx.controls", "javafx.fxml", "javafx.web", "javafx.swing")
-    version = "17.0.+"
+    modules = listOf("javafx.controls")
+    version = "19.0.+"
 }
