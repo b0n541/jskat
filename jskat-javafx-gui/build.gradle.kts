@@ -51,32 +51,3 @@ tasks.register("fatjar", Jar::class.java) {
         .onEach { println("add from dependencies : ${it.name}") }
         .map { if (it.isDirectory) it else zipTree(it) })
 }
-
-//tasks.register("fatjar", Jar::class.java) {
-//
-//    dependsOn("build")
-//
-//    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-//
-//    manifest {
-//        attributes(
-//            "Main-Class" to mainClassWithPackage
-//        )
-//    }
-//
-//    from(configurations.runtimeClasspath.get()
-//        .onEach { println("add from dependencies: ${it.name}") }
-//        .map { if (it.isDirectory) it else zipTree(it) })
-//
-//    archiveBaseName.set(rootProject.name)
-//
-//    val os: OperatingSystem =
-//        org.gradle.nativeplatform.platform.internal.DefaultNativePlatform.getCurrentOperatingSystem()
-//    if (os.isLinux) {
-//        archiveClassifier.set("linux")
-//    } else if (os.isMacOsX) {
-//        archiveClassifier.set("macos")
-//    } else if (os.isWindows) {
-//        archiveClassifier.set("windows")
-//    }
-//}
