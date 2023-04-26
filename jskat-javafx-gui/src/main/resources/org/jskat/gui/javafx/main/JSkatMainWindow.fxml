@@ -107,7 +107,14 @@
                 </Menu>
                 <Menu mnemonicParsing="false" text="%iss">
                     <items>
-                        <MenuItem fx:id="issLoginMenuItem" mnemonicParsing="false" onAction="#showIssLoginPanel" text="%international.skat.server" />
+                        <MenuItem fx:id="issLoginMenuItem" mnemonicParsing="false" onAction="#showIssLoginPanel" text="%international.skat.server">
+                     <graphic>
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@/org/jskat/gui/img/gui/connect_iss_small.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></MenuItem>
                     </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="%skat_table">
