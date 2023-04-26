@@ -91,6 +91,8 @@ public class MessageParserTest extends AbstractJSkatTest {
 
         assertFalse(gameData.isGameWon());
         assertThat(gameData.getResult().getGameValue()).isEqualTo(-54);
+        assertThat(gameData.getResult().isPlayWithJacks()).isFalse();
+        assertThat(gameData.getResult().getMultiplier()).isEqualTo(2);
         assertThat(gameData.getDeclarerScore()).isEqualTo(59);
         assertThat(gameData.getOpponentScore()).isEqualTo(61);
         assertFalse(gameData.isSchneider());
@@ -157,6 +159,8 @@ public class MessageParserTest extends AbstractJSkatTest {
 
         assertTrue(gameData.isGameWon());
         assertThat(gameData.getResult().getGameValue()).isEqualTo(96);
+        assertThat(gameData.getResult().isPlayWithJacks()).isTrue();
+        assertThat(gameData.getResult().getMultiplier()).isEqualTo(3);
         assertThat(gameData.getDeclarerScore()).isEqualTo(85);
         assertThat(gameData.getOpponentScore()).isEqualTo(35);
         assertFalse(gameData.isSchneider());
@@ -228,6 +232,8 @@ public class MessageParserTest extends AbstractJSkatTest {
 
         assertFalse(gameData.isGameWon());
         assertThat(gameData.getResult().getGameValue()).isEqualTo(0);
+        assertThat(gameData.getResult().isPlayWithJacks()).isFalse();
+        assertThat(gameData.getResult().getMultiplier()).isEqualTo(0);
         assertThat(gameData.getDeclarerScore()).isEqualTo(0);
         assertThat(gameData.getOpponentScore()).isEqualTo(0);
         assertFalse(gameData.isSchneider());

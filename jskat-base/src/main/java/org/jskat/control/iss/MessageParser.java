@@ -143,7 +143,7 @@ public class MessageParser {
             // declarer shows cards
             info.setType(MoveType.SHOW_CARDS);
             if (move.length() > 2) {
-                // declarer cards follow, SC could also stand allone
+                // declarer cards follow, SC could also stand alone
                 info.setOuvertCards(parseSkatCards(move.substring(move.indexOf(".") + 1)));
             }
         } else if (move.startsWith("LE.")) {
@@ -509,7 +509,7 @@ public class MessageParser {
 
         while (token.hasMoreTokens()) {
 
-            final List<String> moveToken = new ArrayList<String>();
+            final List<String> moveToken = new ArrayList<>();
             moveToken.add(token.nextToken());
             moveToken.add(token.nextToken());
 
@@ -609,19 +609,30 @@ public class MessageParser {
 
         } else if (token.startsWith("v:")) {
 
-            gameData.getResult().setGameValue(
-                    Integer.parseInt(token.substring(2)));
+            gameData.getResult().setGameValue(Integer.parseInt(token.substring(2)));
 
-        } else if (token.startsWith("p:")) {
+        } else if (token.startsWith("m:")) {
 
-            final int declarerPoints = Integer.parseInt(token.substring(2));
-            gameData.setDeclarerScore(declarerPoints);
-            gameData.getResult().setFinalDeclarerPoints(declarerPoints);
-            gameData.getResult().setFinalOpponentPoints(120 - declarerPoints);
+            final int matadors = Integer.parseInt(token.substring(2));
+
+            gameData.getGameResult().setPlayWithJacks(matadors > 0);
+            gameData.getGameResult().setMultiplier(Math.abs(matadors));
 
         } else if ("overbid".equals(token)) {
 
             gameData.getResult().setOverBidded(true);
+
+        } else if (token.startsWith("p:")) {
+
+            int declarerPoints = 0;
+            if (GameType.NULL != gameData.getAnnoucement().getGameType() || gameData.isGameLost()) {
+                declarerPoints = Integer.parseInt(token.substring(2));
+            }
+            gameData.setDeclarerScore(declarerPoints);
+            gameData.getResult().setFinalDeclarerPoints(declarerPoints);
+            gameData.getResult().setFinalOpponentPoints(120 - declarerPoints);
+
+        } else if (token.startsWith("t:")) {
 
         } else if ("s:1".equals(token)) {
 
