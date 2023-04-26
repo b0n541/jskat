@@ -1,3 +1,3 @@
 plugins {
-    id("jskat.java-library-conventions")
+    id("jskat.kotlin-library-conventions")
 }

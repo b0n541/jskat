@@ -1,5 +1,5 @@
 plugins {
-    id("jskat.java-library-conventions")
+    id("jskat.kotlin-library-conventions")
 
     id("org.openjfx.javafxplugin") version "0.0.13"
 }
@@ -12,5 +12,5 @@ dependencies {
 
 javafx {
     modules = listOf("javafx.controls")
-    version = "19.0.+"
+    version = "20.0.+"
 }
