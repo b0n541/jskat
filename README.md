@@ -1,6 +1,7 @@
-JSkat is a free implementation of the German card game Skat in Java. It runs on Linux, Mac OS and Windows.
+JSkat is a free implementation of the German card game Skat in Java and Kotlin. It runs on Linux, Mac OS and Windows.
 
-You can contribute to this project by either helping to migrate the GUI to JavaFX or by implementing new AI player. Bug
+You can contribute to this project by either helping to migrate the GUI to JavaFX or by implementing a new AI player.
+Bug
 fixes or other contributions are also welcome.
 
 ![alt screenshot](http://jskat.org/img/jskat_0.7_bidding.png)
