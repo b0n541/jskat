@@ -101,10 +101,7 @@ public class JSkatMainWindowController {
 
     @FXML
     public void initialize() {
-        root.getStylesheets().add(getClass().getResource("/org/jskat/gui/javafx/jskat.css").toExternalForm());
-
         JSkatEventBus.INSTANCE.register(this);
-
         preferencesDialog = new JSkatOptionsDialog(null);
     }
 
@@ -132,6 +129,9 @@ public class JSkatMainWindowController {
         final TextInputDialog dialog = new TextInputDialog(
                 strings.getString("local.table") + " " +
                         (applicationData.getLocalTablesCreated() + 1));
+
+        // TODO: set this globally
+        dialog.getDialogPane().getStylesheets().add("/org/jskat/gui/javafx/jskat.css");
 
         dialog.setTitle(strings.getString("new.table.dialog.title"));
         dialog.setHeaderText(strings.getString("new.table.dialog.message"));
@@ -200,6 +200,8 @@ public class JSkatMainWindowController {
         final Stage stage = new Stage();
         stage.setTitle(JSkatResourceBundle.INSTANCE.getString("show_tips"));
         final Scene scene = new Scene(rootLayout);
+        // TODO: set JSkat style globally
+        scene.getStylesheets().add("/org/jskat/gui/javafx/jskat.css");
         stage.setScene(scene);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.initOwner(root.getScene().getWindow());

@@ -16,7 +16,6 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -46,10 +45,6 @@ public class JSkatFX extends Application {
     private static final int SPLASH_WIDTH = 500;
     private static final int SPLASH_HEIGHT = 300;
 
-    private Pane splashScreenLayout;
-    private ProgressBar splashScreenProgressBar;
-    private Label splashScreenProgressText;
-
     public static void main(final String[] args) {
 
         JSkatOptions.instance(new DesktopSavePathResolver());
@@ -59,21 +54,13 @@ public class JSkatFX extends Application {
 
     @Override
     public void init() {
-        final ImageView splashScreenImage = new ImageView(
-                new Image(ClassLoader.getSystemResourceAsStream("org/jskat/gui/img/gui/splash.png")));
-        splashScreenProgressBar = new ProgressBar();
-        splashScreenProgressBar.setPrefWidth(SPLASH_WIDTH);
-        splashScreenProgressText = new Label("Loading JSkat...");
-        splashScreenProgressText.setAlignment(Pos.CENTER);
-        splashScreenLayout = new VBox();
-        splashScreenLayout.getChildren().addAll(splashScreenImage, splashScreenProgressBar, splashScreenProgressText);
-        splashScreenLayout.getStylesheets().add(getClass().getResource("/org/jskat/gui/javafx/jskat.css").toExternalForm());
-        splashScreenLayout.setStyle("-fx-padding: 5; -fx-spacing: 5; -fx-border-width:2;");
-        splashScreenLayout.setEffect(new DropShadow());
     }
 
     @Override
     public void start(final Stage primaryStage) {
+
+        // TODO: set JSkat style here globally
+        // Application.setUserAgentStylesheet("/org/jskat/gui/javafx/jskat.css");
 
         final Point2D savedScreenPosition = getSavedScreenPosition();
         final Screen targetScreen = getTargetScreen(savedScreenPosition);
@@ -140,6 +127,10 @@ public class JSkatFX extends Application {
 
         final Dimension2D dimension = getMainWindowDimension(targetScreen);
         final Scene scene = new Scene(rootLayout, dimension.getWidth(), dimension.getHeight());
+
+        // TODO: set this globally
+        scene.getStylesheets().add("/org/jskat/gui/javafx/jskat.css");
+
         scene.widthProperty().addListener(
                 (observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameWidth(newValue.intValue()));
         scene.heightProperty().addListener(
@@ -165,6 +156,17 @@ public class JSkatFX extends Application {
     private void showSplashScreen(final Screen targetScreen, final Stage splashStage, final Task<?> startupTask,
                                   final InitializationCompleteHandler initializationCompleteHandler) {
 
+        final ImageView splashScreenImage = new ImageView(
+                new Image(ClassLoader.getSystemResourceAsStream("org/jskat/gui/img/gui/splash.png")));
+        ProgressBar splashScreenProgressBar = new ProgressBar();
+        splashScreenProgressBar.setPrefWidth(SPLASH_WIDTH);
+        Label splashScreenProgressText = new Label("Loading JSkat...");
+        splashScreenProgressText.setAlignment(Pos.CENTER);
+        VBox splashScreenLayout = new VBox();
+        splashScreenLayout.getChildren().addAll(splashScreenImage, splashScreenProgressBar, splashScreenProgressText);
+        splashScreenLayout.setStyle("-fx-padding: 5; -fx-spacing: 5; -fx-border-width:2;");
+        splashScreenLayout.setEffect(new DropShadow());
+
         splashScreenProgressText.textProperty().bind(startupTask.messageProperty());
         splashScreenProgressBar.progressProperty().bind(startupTask.progressProperty());
 
@@ -184,6 +186,8 @@ public class JSkatFX extends Application {
         });
 
         final Scene splashScene = new Scene(splashScreenLayout);
+        // TODO: set this globally
+        splashScene.getStylesheets().add("/org/jskat/gui/javafx/jskat.css");
         splashStage.initStyle(StageStyle.UNDECORATED);
         splashStage.setScene(splashScene);
         final Rectangle2D bounds = targetScreen.getBounds();

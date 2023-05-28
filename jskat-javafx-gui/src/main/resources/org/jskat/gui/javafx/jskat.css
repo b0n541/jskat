@@ -1,3 +1,30 @@
 .root {
-    -fx-base: #e2d9ca;
+    -color-primary-0: #E2D9CA; /* Main Primary color */
+    -color-primary-1: #FFFEFD;
+    -color-primary-2: #FFFBF3;
+    -color-primary-3: #BFB19B;
+    -color-primary-4: #A08E70;
+
+    -color-secondary-1-0: #908E9D; /* Main Secondary color (1) */
+    -color-secondary-1-0-alpha: #908E9D44;
+    -color-secondary-1-1: #E5E5E7;
+    -color-secondary-1-2: #B5B4BC;
+    -color-secondary-1-3: #726F84;
+    -color-secondary-1-4: #56526F;
+
+    -color-secondary-2-0: #82928E; /* Main Secondary color (2) */
+    -color-secondary-2-0-alpha: #82928E44;
+    -color-secondary-2-1: #E1E3E3;
+    -color-secondary-2-2: #A9B1AF;
+    -color-secondary-2-3: #647B76;
+    -color-secondary-2-4: #486760;
+
+    -color-highlight: #FFBF00;
+    -color-danger: #FC2E20;
+
+    -fx-base: -color-primary-0;
+    -fx-accent: -color-secondary-2-0;
+    -fx-default-button: -color-secondary-2-0;
+    -fx-focus-color: -color-secondary-2-0;
+    -fx-faint-focus-color: -color-secondary-2-0-alpha;
 }

@@ -62,8 +62,6 @@ public class JSkatMainWindow extends Stage {
         scene.heightProperty().addListener(
                 (observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameHeight(newValue.intValue()));
 
-        scene.getStylesheets().add(getClass().getResource("/org/jskat/gui/javafx/jskat.css").toExternalForm());
-
         setScene(scene);
 
         xProperty().addListener((observable, oldValue, newValue) ->

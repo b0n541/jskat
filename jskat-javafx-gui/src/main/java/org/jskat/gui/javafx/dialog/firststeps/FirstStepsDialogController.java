@@ -25,7 +25,6 @@ public class FirstStepsDialogController {
 
     @FXML
     public void initialize() {
-        root.getStylesheets().add(getClass().getResource("/org/jskat/gui/javafx/jskat.css").toExternalForm());
         loadFirstStepsText();
         showTipsOnStartUp.selectedProperty().bindBidirectional(model.isShowTipsOnStartUp);
         showTipsOnStartUp.selectedProperty().addListener((observable, oldValue, newValue) ->
