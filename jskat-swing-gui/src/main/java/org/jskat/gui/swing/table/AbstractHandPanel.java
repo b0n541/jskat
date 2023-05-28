@@ -84,9 +84,9 @@ abstract class AbstractHandPanel extends JPanel {
     /**
      * Constructor
      *
-     * @param actions               Action map
-     * @param maxCards              the maximum number of cards
-     * @param showIssWidgets        TRUE, if ISS widgets should be shown
+     * @param actions        Action map
+     * @param maxCards       the maximum number of cards
+     * @param showIssWidgets TRUE, if ISS widgets should be shown
      */
     AbstractHandPanel(final ActionMap actions, final int maxCards, final boolean showIssWidgets) {
 
@@ -96,7 +96,7 @@ abstract class AbstractHandPanel extends JPanel {
         this.maxCardCount = maxCards;
         this.showIssWidgets = showIssWidgets;
 
-        setBackground(new Color(0, 62, 0));
+        setBackground(new Color(72, 103, 96));
 
         this.headerLabel = new JLabel(" ");
         this.iconPanel = new IconPanel();
@@ -151,7 +151,7 @@ abstract class AbstractHandPanel extends JPanel {
         Border resultingBorder = null;
 
         if (isActivePlayer) {
-            resultingBorder = BorderFactory.createLineBorder(Color.yellow, 3);
+            resultingBorder = BorderFactory.createLineBorder(new Color(255, 191, 0), 3);
         } else {
             resultingBorder = BorderFactory.createLineBorder(Color.black, 3);
         }
@@ -241,6 +241,11 @@ abstract class AbstractHandPanel extends JPanel {
 
             if (this.declarer) {
                 headerText.append(" (" + this.strings.getString("declarer") + ")");
+                var font = headerLabel.getFont();
+                headerLabel.setFont(font.deriveFont(font.getStyle() | Font.BOLD));
+            } else {
+                var font = headerLabel.getFont();
+                headerLabel.setFont(font.deriveFont(font.getStyle() & ~Font.BOLD));
             }
         }
 
