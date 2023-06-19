@@ -21,9 +21,9 @@ public class IssGameExtractor {
 
     private final String sourceFileName;
 
-    public static void main(final String args[]) throws Exception {
+    public static void main(final String[] args) throws Exception {
         final IssGameExtractor gameExtractor = new IssGameExtractor("/home/jan/Projects/jskat/iss/iss-games-04-2021.sgf");
-        gameExtractor.filterGameDatabase(KERMIT_WON_GAMES, "kermit_won_games.csv");
+        gameExtractor.filterGameDatabase(KERMIT_GAMES, "kermit_games.csv");
     }
 
     public IssGameExtractor(final String sourceFileName) {
@@ -37,16 +37,14 @@ public class IssGameExtractor {
                     .filter(predicate)
                     .map(NETWORK_INPUTS)
                     .peek(System.out::println)
-                    //.limit(1000)
+                    .limit(10)
                     .collect(Collectors.toList());
 
             Files.write(Paths.get(targetFileName), filteredGames);
         }
     }
 
-    private static final Predicate<SkatGameData> KERMIT_WON_GAMES =
-            it -> isDeclarer(it, "kermit")
-                    && it.isGameWon();
+    private static final Predicate<SkatGameData> KERMIT_GAMES = it -> isDeclarer(it, "kermit");
 
     private static final boolean isDeclarer(final SkatGameData gameData, final String playerName) {
         return gameData.getDeclarer() == Player.FOREHAND && gameData.getPlayerName(Player.FOREHAND).startsWith(playerName)
@@ -55,9 +53,8 @@ public class IssGameExtractor {
     }
 
     private static final Function<SkatGameData, String> NETWORK_INPUTS = it ->
-            //it.getDeclarer() + " " + it.getDealtCards().get(it.getDeclarer()) + ": " +
-            asNetworkInputs(it.getDeclarer())
-                    + asNetworkInputs(it.getDealtCards().get(Player.FOREHAND))
+            it.getDeclarer() + ","
+                    + asNetworkInputs(it.getDeclarerCardsAfterDiscarding())
                     + it.getMaxPlayerBid(Player.FOREHAND) + ","
                     + it.getMaxPlayerBid(Player.MIDDLEHAND) + ","
                     + it.getMaxPlayerBid(Player.REARHAND) + ","
@@ -66,6 +63,7 @@ public class IssGameExtractor {
                     + (it.getAnnoucement().isOuvert() ? "1" : "0") + ","
                     + (it.getAnnoucement().isSchneider() ? "1" : "0") + ","
                     + (it.getAnnoucement().isSchwarz() ? "1" : "0") + ","
+                    + (it.isGameWon() ? "1" : "0") + ","
                     + it.getDeclarerScore() + ","
                     + (it.isSchneider() ? "1" : "0") + ","
                     + (it.isSchwarz() ? "1" : "0");
