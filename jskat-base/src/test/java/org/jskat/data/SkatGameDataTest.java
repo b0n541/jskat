@@ -89,7 +89,7 @@ public class SkatGameDataTest {
         factory.setGameType(GameType.HEARTS);
         factory.setDiscardedCards(new CardList(Card.C9, Card.S9));
 
-        List<SkatGameEvent> gameEvents = List.of(
+        List.of(
                 new CardDealEvent(
                         Map.of(
                                 Player.FOREHAND, new CardList(Card.S9, Card.HA, Card.HK, Card.H9, Card.H8, Card.SA, Card.DT, Card.DK, Card.DQ, Card.D8),
@@ -132,14 +132,49 @@ public class SkatGameDataTest {
                 new TrickCardPlayedEvent(Player.FOREHAND, Card.D8),
                 new TrickCardPlayedEvent(Player.MIDDLEHAND, Card.H7),
                 new TrickCardPlayedEvent(Player.REARHAND, Card.ST)
-        );
-
-        gameEvents.forEach(event -> event.processForward(gameData));
+        ).forEach(event -> event.processForward(gameData));
 
         gameData.calcResult();
 
         //assertThat(gameData.isGameFinished()).isTrue();
         assertThat(gameData.isGameLost()).isTrue();
         assertThat(gameData.getGameResult().getGameValue()).isEqualTo(-60);
+    }
+
+    @Test
+    void getDeclarerCardsAfterDiscarding() {
+
+        var factory = GameAnnouncement.getFactory();
+        factory.setGameType(GameType.HEARTS);
+        factory.setDiscardedCards(new CardList(Card.C9, Card.S9));
+
+        List.of(
+                new CardDealEvent(
+                        Map.of(
+                                Player.FOREHAND, new CardList(Card.S9, Card.HA, Card.HK, Card.H9, Card.H8, Card.SA, Card.DT, Card.DK, Card.DQ, Card.D8),
+                                Player.MIDDLEHAND, new CardList(Card.SJ, Card.DJ, Card.HT, Card.HQ, Card.H7, Card.CA, Card.CK, Card.C8, Card.SK, Card.S8),
+                                Player.REARHAND, new CardList(Card.HJ, Card.CT, Card.CQ, Card.C7, Card.ST, Card.SQ, Card.S7, Card.DA, Card.D9, Card.D7)),
+                        new CardList(Card.CJ, Card.C9)),
+                new BidEvent(Player.MIDDLEHAND, 24),
+                new HoldBidEvent(Player.FOREHAND, 24),
+                new PassBidEvent(Player.FOREHAND, 24),
+                new PassBidEvent(Player.REARHAND, 24),
+                new PickUpSkatEvent(Player.FOREHAND)
+        ).forEach(event -> event.processForward(gameData));
+
+        assertThat(gameData.getDeclarerCardsAfterDiscarding()).isEmpty();
+
+        var discardEvent = new DiscardSkatEvent(Player.FOREHAND, new CardList(Card.C9, Card.S9));
+        discardEvent.processForward(gameData);
+
+        List.of(
+                new GameAnnouncementEvent(Player.FOREHAND, factory.getAnnouncement()),
+                new TrickCardPlayedEvent(Player.FOREHAND, Card.SA),
+                new TrickCardPlayedEvent(Player.MIDDLEHAND, Card.S8),
+                new TrickCardPlayedEvent(Player.REARHAND, Card.S7)
+        ).forEach(event -> event.processForward(gameData));
+
+        assertThat(gameData.getDeclarerCardsAfterDiscarding())
+                .containsExactlyInAnyOrder(Card.HA, Card.HK, Card.H9, Card.H8, Card.SA, Card.DT, Card.DK, Card.DQ, Card.D8, Card.CJ);
     }
 }

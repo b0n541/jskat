@@ -154,6 +154,8 @@ public class SkatGameData {
      */
     private final Map<Player, CardList> dealtCards = new HashMap<>();
 
+    private final CardList dealerCardsAfterDiscarding = new CardList();
+
     /**
      * Holds all cards dealt to skat
      */
@@ -195,6 +197,16 @@ public class SkatGameData {
             playerBids.put(player, new ArrayList<>());
             playerPasses.put(player, Boolean.FALSE);
         }
+    }
+
+    /**
+     * Returns the declarer cards after discarding.
+     *
+     * @return Declarer cards after discarding
+     * @throws IllegalStateException if discarding hasn't finished
+     */
+    public CardList getDeclarerCardsAfterDiscarding() {
+        return dealerCardsAfterDiscarding;
     }
 
     /**
@@ -718,8 +730,9 @@ public class SkatGameData {
      */
     public void setDiscardedSkat(final Player player, final CardList newSkat) {
 
+        dealerCardsAfterDiscarding.addAll(playerHands.get(player));
+        dealerCardsAfterDiscarding.removeAll(newSkat);
         playerHands.get(player).removeAll(newSkat);
-
         skat.clear();
         skat.addAll(newSkat);
     }
