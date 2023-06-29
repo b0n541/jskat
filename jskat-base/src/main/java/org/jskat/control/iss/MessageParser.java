@@ -456,8 +456,7 @@ public class MessageParser {
         final SkatGameData result = new SkatGameData();
 
         final Pattern summaryPartPattern = Pattern.compile("(\\w+)\\[(.*?)\\]");
-        final Matcher summaryPartMatcher = summaryPartPattern
-                .matcher(gameSummary);
+        final Matcher summaryPartMatcher = summaryPartPattern.matcher(gameSummary);
 
         while (summaryPartMatcher.find()) {
 
@@ -500,11 +499,6 @@ public class MessageParser {
     private static void parseMoves(final SkatGameData result,
                                    final String summaryPart) {
 
-        // FIXME (jansch 12.02.2012) parse moves correctly
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(GameType.PASSED_IN);
-        result.setAnnouncement(factory.getAnnouncement());
-
         final StringTokenizer token = new StringTokenizer(summaryPart);
 
         while (token.hasMoreTokens()) {
@@ -531,11 +525,22 @@ public class MessageParser {
                 case PASS:
                     result.setPlayerPass(moveInfo.getPlayer(), true);
                     break;
+                case SKAT_REQUEST:
+                    result.setDeclarer(moveInfo.getPlayer());
+                    break;
+                case PICK_UP_SKAT:
+                    result.setDealtSkatCards(moveInfo.getSkat());
+                    result.addPlayerCard(result.getDeclarer(), moveInfo.getSkat().get(0));
+                    result.addPlayerCard(result.getDeclarer(), moveInfo.getSkat().get(1));
+                    break;
                 case GAME_ANNOUNCEMENT:
-                    result.setAnnouncement(moveInfo.getGameAnnouncement());
+                    result.setDeclarer(moveInfo.getPlayer());
                     if (!moveInfo.getGameAnnouncement().isHand()) {
+                        result.removePlayerCard(moveInfo.getPlayer(), moveInfo.getGameAnnouncement().getDiscardedCards().get(0));
+                        result.removePlayerCard(moveInfo.getPlayer(), moveInfo.getGameAnnouncement().getDiscardedCards().get(1));
                         result.setDiscardedSkat(moveInfo.getPlayer(), moveInfo.getGameAnnouncement().getDiscardedCards());
                     }
+                    result.setAnnouncement(moveInfo.getGameAnnouncement());
                     break;
                 case CARD_PLAY:
                     if (result.getTricks().size() == 0) {
@@ -550,16 +555,20 @@ public class MessageParser {
                     }
                     result.addTrickCard(moveInfo.getCard());
 
-                    if (result.getTricks().size() == 10
-                            && result.getCurrentTrick().getThirdCard() != null) {
+                    if (result.getTricks().size() == 10 && result.getCurrentTrick().getThirdCard() != null) {
                         // set the trick winner of the last trick
-                        final SkatRule skatRules = SkatRuleFactory
-                                .getSkatRules(result.getGameType());
+                        final SkatRule skatRules = SkatRuleFactory.getSkatRules(result.getGameType());
                         result.setTrickWinner(9, skatRules.calculateTrickWinner(
                                 result.getGameType(), result.getCurrentTrick()));
                     }
                     break;
             }
+        }
+
+        if (result.getMaxBidValue() == 0) {
+            final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+            factory.setGameType(GameType.PASSED_IN);
+            result.setAnnouncement(factory.getAnnouncement());
         }
     }
 

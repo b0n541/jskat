@@ -13,13 +13,13 @@ public final class PickUpSkatEvent extends AbstractPlayerMoveEvent {
     }
 
     @Override
-    public final void processForward(SkatGameData data) {
+    public void processForward(SkatGameData data) {
         data.setSkatPickUp(true);
         data.addSkatToPlayer(player);
     }
 
     @Override
-    public final void processBackward(SkatGameData data) {
+    public void processBackward(SkatGameData data) {
         data.setSkatPickUp(false);
         data.removeSkatFromPlayer(player);
     }
@@ -42,9 +42,6 @@ public final class PickUpSkatEvent extends AbstractPlayerMoveEvent {
         if (!super.equals(obj)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        return true;
+        return getClass() == obj.getClass();
     }
 }

@@ -160,7 +160,7 @@ public class SkatListTableModelTest {
         factory.setGameType(GameType.RAMSCH);
         factory.setGameResult(result);
         factory.setPlayerPoints(Map.of(Player.FOREHAND, 67, Player.MIDDLEHAND, 23, Player.REARHAND, 40));
-        factory.addRamschLooser(Player.FOREHAND);
+        factory.addRamschLoser(Player.FOREHAND);
 
         GameSummary summary = factory.getSummary();
 
@@ -180,8 +180,8 @@ public class SkatListTableModelTest {
         factory.setGameType(GameType.RAMSCH);
         factory.setGameResult(result);
         factory.setPlayerPoints(Map.of(Player.FOREHAND, 20, Player.MIDDLEHAND, 50, Player.REARHAND, 50));
-        factory.addRamschLooser(Player.MIDDLEHAND);
-        factory.addRamschLooser(Player.REARHAND);
+        factory.addRamschLoser(Player.MIDDLEHAND);
+        factory.addRamschLoser(Player.REARHAND);
 
         summary = factory.getSummary();
 

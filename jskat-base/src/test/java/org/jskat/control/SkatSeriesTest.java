@@ -1,4 +1,3 @@
-
 package org.jskat.control;
 
 
@@ -32,7 +31,7 @@ public class SkatSeriesTest extends AbstractJSkatTest {
         final UnitTestView view = new UnitTestView();
         series.setView(view);
 
-        final List<JSkatPlayer> players = new ArrayList<JSkatPlayer>();
+        final List<JSkatPlayer> players = new ArrayList();
         players.add(new AIPlayerRND());
         players.add(new AIPlayerRND());
         players.add(new AIPlayerRND());

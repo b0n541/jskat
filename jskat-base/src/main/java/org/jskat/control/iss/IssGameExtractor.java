@@ -3,11 +3,14 @@ package org.jskat.control.iss;
 import org.jskat.data.SkatGameData;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
+import org.jskat.util.GameType;
 import org.jskat.util.Player;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -37,14 +40,19 @@ public class IssGameExtractor {
                     .filter(predicate)
                     .map(NETWORK_INPUTS)
                     .peek(System.out::println)
-                    .limit(10)
+                    .limit(10_000)
                     .collect(Collectors.toList());
 
-            Files.write(Paths.get(targetFileName), filteredGames);
+            var lines = new ArrayList<String>();
+            lines.add(headerFields().stream().collect(Collectors.joining(",")));
+            lines.addAll(filteredGames);
+
+            Files.write(Paths.get(targetFileName), lines);
         }
     }
 
-    private static final Predicate<SkatGameData> KERMIT_GAMES = it -> isDeclarer(it, "kermit");
+    private static final Predicate<SkatGameData> KERMIT_GAMES =
+            it -> isDeclarer(it, "kermit") && it.getGameType() != GameType.PASSED_IN;
 
     private static final boolean isDeclarer(final SkatGameData gameData, final String playerName) {
         return gameData.getDeclarer() == Player.FOREHAND && gameData.getPlayerName(Player.FOREHAND).startsWith(playerName)
@@ -52,9 +60,28 @@ public class IssGameExtractor {
                 || gameData.getDeclarer() == Player.REARHAND && gameData.getPlayerName(Player.REARHAND).startsWith(playerName);
     }
 
+    private static final List<String> headerFields() {
+        var result = new ArrayList<String>();
+        result.add("declarer");
+        Arrays.stream(Card.values()).toList().forEach(it -> result.add(it.toString()));
+        result.add("maxBidForehand");
+        result.add("maxBidMiddlehand");
+        result.add("maxBidRearhand");
+        result.add("gameType");
+        result.add("hand");
+        result.add("ouvert");
+        result.add("annSchneider");
+        result.add("annSchwarz");
+        result.add("won");
+        result.add("declarerScore");
+        result.add("schneider");
+        result.add("schwarz");
+        return result;
+    }
+
     private static final Function<SkatGameData, String> NETWORK_INPUTS = it ->
             it.getDeclarer() + ","
-                    + asNetworkInputs(it.getDeclarerCardsAfterDiscarding())
+                    + asNetworkInputs(it.getDeclarerCardsBeforeFirstTrick())
                     + it.getMaxPlayerBid(Player.FOREHAND) + ","
                     + it.getMaxPlayerBid(Player.MIDDLEHAND) + ","
                     + it.getMaxPlayerBid(Player.REARHAND) + ","

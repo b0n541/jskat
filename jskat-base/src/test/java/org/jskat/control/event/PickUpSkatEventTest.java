@@ -1,4 +1,3 @@
-
 package org.jskat.control.event;
 
 
@@ -26,6 +25,7 @@ public class PickUpSkatEventTest extends AbstractJSkatTest {
 
         final CardList skat = new CardList(Card.CJ, Card.SJ);
 
+        data.addDealtCards(Player.FOREHAND, new CardList(Card.HJ, Card.DJ, Card.CA, Card.CK, Card.CQ, Card.CT, Card.C9, Card.C8, Card.C7, Card.SA));
         data.setDealtSkatCards(skat);
         event = new PickUpSkatEvent(Player.FOREHAND);
     }
@@ -36,7 +36,7 @@ public class PickUpSkatEventTest extends AbstractJSkatTest {
         event.processForward(data);
 
         assertFalse(data.isHand());
-        assertThat(data.getPlayerCards(Player.FOREHAND)).containsExactlyInAnyOrder(Card.CJ, Card.SJ);
+        assertThat(data.getPlayerCards(Player.FOREHAND)).containsExactlyInAnyOrder(Card.CJ, Card.SJ, Card.HJ, Card.DJ, Card.CA, Card.CK, Card.CQ, Card.CT, Card.C9, Card.C8, Card.C7, Card.SA);
         assertThat(data.getSkat()).hasSize(0);
         assertTrue(data.isSkatPickedUp());
     }
@@ -48,7 +48,7 @@ public class PickUpSkatEventTest extends AbstractJSkatTest {
         event.processBackward(data);
 
         assertTrue(data.isHand());
-        assertThat(data.getPlayerCards(Player.FOREHAND)).hasSize(0);
+        assertThat(data.getPlayerCards(Player.FOREHAND)).contains(Card.HJ, Card.DJ, Card.CA, Card.CK, Card.CQ, Card.CT, Card.C9, Card.C8, Card.C7, Card.SA);
         assertThat(data.getSkat()).containsExactlyInAnyOrder(Card.CJ, Card.SJ);
         assertFalse(data.isSkatPickedUp());
     }

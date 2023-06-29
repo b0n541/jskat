@@ -15,7 +15,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -41,21 +40,13 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertThat(gameData.getPlayerName(Player.MIDDLEHAND)).isEqualTo("kermit");
         assertThat(gameData.getPlayerName(Player.REARHAND)).isEqualTo("foo");
 
-        assertThat(gameData.getDealtCards().get(Player.FOREHAND)).hasSize(10);
-        for (final Card card : Arrays.asList(Card.HA, Card.SK, Card.SJ, Card.SA, Card.CQ, Card.S8, Card.C9, Card.H7, Card.H9, Card.DQ)) {
-            assertTrue(gameData.getDealtCards().get(Player.FOREHAND).contains(card));
-        }
-        assertThat(gameData.getDealtCards().get(Player.MIDDLEHAND)).hasSize(10);
-        for (final Card card : Arrays.asList(Card.CJ, Card.S9, Card.DJ, Card.S7, Card.D9, Card.SQ, Card.C8, Card.HQ, Card.DK, Card.CA)) {
-            assertTrue(gameData.getDealtCards().get(Player.MIDDLEHAND).contains(card));
-        }
-        assertThat(gameData.getDealtCards().get(Player.REARHAND)).hasSize(10);
-        for (final Card card : Arrays.asList(Card.D8, Card.D7, Card.DT, Card.CT, Card.ST, Card.C7, Card.HK, Card.DA, Card.HT, Card.HJ)) {
-            assertTrue(gameData.getDealtCards().get(Player.REARHAND).contains(card));
-        }
-
+        assertThat(gameData.getDealtCards().get(Player.FOREHAND))
+                .containsExactlyInAnyOrder(Card.HA, Card.SK, Card.SJ, Card.SA, Card.CQ, Card.S8, Card.C9, Card.H7, Card.H9, Card.DQ);
+        assertThat(gameData.getDealtCards().get(Player.MIDDLEHAND))
+                .containsExactlyInAnyOrder(Card.CJ, Card.S9, Card.DJ, Card.S7, Card.D9, Card.SQ, Card.C8, Card.HQ, Card.DK, Card.CA);
+        assertThat(gameData.getDealtCards().get(Player.REARHAND))
+                .containsExactlyInAnyOrder(Card.D8, Card.D7, Card.DT, Card.CT, Card.ST, Card.C7, Card.HK, Card.DA, Card.HT, Card.HJ);
         assertThat(gameData.getDealtSkat()).containsExactlyInAnyOrder(Card.H8, Card.CK);
-        assertThat(gameData.getSkat()).containsExactlyInAnyOrder(Card.ST, Card.H8);
 
         assertThat(gameData.getMaxPlayerBid(Player.FOREHAND)).isEqualTo(0);
         assertThat(gameData.getMaxPlayerBid(Player.MIDDLEHAND)).isEqualTo(0);
@@ -63,9 +54,11 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertThat(gameData.getMaxBidValue()).isEqualTo(18);
         assertThat(gameData.getDeclarer()).isEqualTo(Player.REARHAND);
 
-        assertTrue(gameData.getDealtSkat().contains(Card.H8));
-        assertTrue(gameData.getDealtSkat().contains(Card.CK));
+        assertThat(gameData.getSkat()).containsExactlyInAnyOrder(Card.ST, Card.H8);
+        assertThat(gameData.getDeclarerCardsBeforeFirstTrick())
+                .containsExactlyInAnyOrder(Card.D8, Card.D7, Card.DT, Card.CT, Card.C7, Card.HK, Card.DA, Card.HT, Card.HJ, Card.CK);
 
+        assertThat(gameData.getDeclarer()).isEqualTo(Player.REARHAND);
         assertThat(gameData.getGameType()).isEqualTo(GameType.DIAMONDS);
         assertFalse(gameData.isHand());
         assertFalse(gameData.isOuvert());
@@ -130,10 +123,10 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertThat(gameData.getMaxPlayerBid(Player.MIDDLEHAND)).isEqualTo(24);
         assertThat(gameData.getMaxPlayerBid(Player.REARHAND)).isEqualTo(27);
         assertThat(gameData.getMaxBidValue()).isEqualTo(27);
-        assertThat(gameData.getDeclarer()).isEqualTo(Player.REARHAND);
 
         assertThat(gameData.getDealtSkat()).containsExactlyInAnyOrder(Card.HT, Card.H9);
 
+        assertThat(gameData.getDeclarer()).isEqualTo(Player.REARHAND);
         assertThat(gameData.getGameType()).isEqualTo(GameType.GRAND);
         assertFalse(gameData.isHand());
         assertFalse(gameData.isOuvert());

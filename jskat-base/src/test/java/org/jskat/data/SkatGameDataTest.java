@@ -162,7 +162,7 @@ public class SkatGameDataTest {
                 new PickUpSkatEvent(Player.FOREHAND)
         ).forEach(event -> event.processForward(gameData));
 
-        assertThat(gameData.getDeclarerCardsAfterDiscarding()).isEmpty();
+        assertThat(gameData.getDeclarerCardsBeforeFirstTrick().isEmpty());
 
         var discardEvent = new DiscardSkatEvent(Player.FOREHAND, new CardList(Card.C9, Card.S9));
         discardEvent.processForward(gameData);
@@ -174,7 +174,8 @@ public class SkatGameDataTest {
                 new TrickCardPlayedEvent(Player.REARHAND, Card.S7)
         ).forEach(event -> event.processForward(gameData));
 
-        assertThat(gameData.getDeclarerCardsAfterDiscarding())
+        assertThat(gameData.getSkat()).containsExactlyInAnyOrder(Card.C9, Card.S9);
+        assertThat(gameData.getDeclarerCardsBeforeFirstTrick())
                 .containsExactlyInAnyOrder(Card.HA, Card.HK, Card.H9, Card.H8, Card.SA, Card.DT, Card.DK, Card.DQ, Card.D8, Card.CJ);
     }
 }

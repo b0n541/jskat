@@ -29,6 +29,7 @@ public class TrickCardPlayedEventTest extends AbstractJSkatTest {
     @BeforeEach
     public void setUp() {
         data = new SkatGameData();
+        data.setDeclarer(Player.FOREHAND);
         final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
         factory.setGameType(GameType.CLUBS);
         data.setAnnouncement(factory.getAnnouncement());

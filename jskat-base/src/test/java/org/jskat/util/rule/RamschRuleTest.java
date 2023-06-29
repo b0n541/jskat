@@ -1,4 +1,3 @@
-
 package org.jskat.util.rule;
 
 import org.jskat.AbstractJSkatTest;
@@ -22,8 +21,7 @@ public class RamschRuleTest extends AbstractJSkatTest {
     private SkatGameData data;
     private GameAnnouncementFactory factory;
 
-    private static final SkatRule ramschRules = SkatRuleFactory
-            .getSkatRules(GameType.RAMSCH);
+    private static final SkatRule ramschRules = SkatRuleFactory.getSkatRules(GameType.RAMSCH);
 
     /**
      * {@inheritDoc}
@@ -49,6 +47,7 @@ public class RamschRuleTest extends AbstractJSkatTest {
     public void testWrongGameData_NoRamschAnnouncement() {
         assertThrows(IllegalStateException.class, () -> {
             data = new SkatGameData();
+            data.setDeclarer(Player.FOREHAND);
             final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
             factory.setGameType(GameType.CLUBS);
             data.setAnnouncement(factory.getAnnouncement());

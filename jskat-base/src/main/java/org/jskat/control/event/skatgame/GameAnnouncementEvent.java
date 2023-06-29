@@ -1,7 +1,6 @@
 package org.jskat.control.event.skatgame;
 
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData;
 import org.jskat.util.Player;
 
@@ -27,8 +26,8 @@ public final class GameAnnouncementEvent extends AbstractPlayerMoveEvent {
 
     @Override
     public void processBackward(SkatGameData data) {
+        data.setAnnouncement(null);
         data.setDeclarer(null);
-        data.setAnnouncement(GameAnnouncementFactory.getEmptyAnnouncement());
     }
 
     @Override

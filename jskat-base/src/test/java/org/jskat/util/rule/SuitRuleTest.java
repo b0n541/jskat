@@ -23,8 +23,7 @@ public class SuitRuleTest extends AbstractJSkatTest {
 
     private GameAnnouncementFactory factory;
 
-    private static final SkatRule clubsRules = SkatRuleFactory
-            .getSkatRules(GameType.CLUBS);
+    private static final SkatRule clubsRules = SkatRuleFactory.getSkatRules(GameType.CLUBS);
 
     @BeforeEach
     public void initialize() {
@@ -39,8 +38,8 @@ public class SuitRuleTest extends AbstractJSkatTest {
     @Test
     public void calcGameWon() {
         final SkatGameData data = new SkatGameData();
-        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarer(Player.FOREHAND);
+        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarerScore(61);
         assertTrue(clubsRules.isGameWon(data));
     }
@@ -50,8 +49,8 @@ public class SuitRuleTest extends AbstractJSkatTest {
         factory.setHand(Boolean.TRUE);
         factory.setSchneider(Boolean.TRUE);
         final SkatGameData data = new SkatGameData();
-        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarer(Player.FOREHAND);
+        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarerScore(90);
         assertTrue(clubsRules.isGameWon(data));
     }
@@ -61,8 +60,8 @@ public class SuitRuleTest extends AbstractJSkatTest {
         factory.setHand(Boolean.TRUE);
         factory.setSchneider(Boolean.TRUE);
         final SkatGameData data = new SkatGameData();
-        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarer(Player.FOREHAND);
+        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarerScore(89);
         assertFalse(clubsRules.isGameWon(data));
     }
@@ -73,8 +72,8 @@ public class SuitRuleTest extends AbstractJSkatTest {
         factory.setSchneider(Boolean.TRUE);
         factory.setSchwarz(Boolean.TRUE);
         final SkatGameData data = new SkatGameData();
-        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarer(Player.FOREHAND);
+        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarerScore(120);
         assertTrue(clubsRules.isGameWon(data));
     }
@@ -85,8 +84,8 @@ public class SuitRuleTest extends AbstractJSkatTest {
         factory.setSchneider(Boolean.TRUE);
         factory.setSchwarz(Boolean.TRUE);
         final SkatGameData data = new SkatGameData();
-        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarer(Player.FOREHAND);
+        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarerScore(119);
         assertFalse(clubsRules.isGameWon(data));
     }
@@ -98,8 +97,8 @@ public class SuitRuleTest extends AbstractJSkatTest {
     public void calcGameResultGameWonWithoutJacks() {
         final SkatGameData data = new SkatGameData();
         factory.setHand(false);
-        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarer(Player.FOREHAND);
+        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarerScore(61);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CA));
         data.calcResult();
@@ -114,8 +113,8 @@ public class SuitRuleTest extends AbstractJSkatTest {
     public void calcGameResultGameWonClubJack() {
         final SkatGameData data = new SkatGameData();
         factory.setHand(false);
-        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarer(Player.FOREHAND);
+        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarerScore(61);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ, Card.DJ, Card.CA));
         data.calcResult();
@@ -126,9 +125,9 @@ public class SuitRuleTest extends AbstractJSkatTest {
     public void calcGameResultGameWonClubJackContra() {
         final SkatGameData data = new SkatGameData();
         factory.setHand(false);
+        data.setDeclarer(Player.FOREHAND);
         data.setAnnouncement(factory.getAnnouncement());
         data.setContra(true);
-        data.setDeclarer(Player.FOREHAND);
         data.setDeclarerScore(61);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ, Card.DJ, Card.CA));
         data.calcResult();
@@ -139,10 +138,10 @@ public class SuitRuleTest extends AbstractJSkatTest {
     public void calcGameResultGameWonClubJackContraRe() {
         final SkatGameData data = new SkatGameData();
         factory.setHand(false);
+        data.setDeclarer(Player.FOREHAND);
         data.setAnnouncement(factory.getAnnouncement());
         data.setContra(true);
         data.setRe(true);
-        data.setDeclarer(Player.FOREHAND);
         data.setDeclarerScore(61);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ, Card.DJ, Card.CA));
         data.calcResult();
@@ -153,8 +152,8 @@ public class SuitRuleTest extends AbstractJSkatTest {
     public void calcGameResultGameLostClubJack() {
         final SkatGameData data = new SkatGameData();
         factory.setHand(false);
-        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarer(Player.FOREHAND);
+        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarerScore(60);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ, Card.DJ, Card.CA));
         data.calcResult();
@@ -165,9 +164,9 @@ public class SuitRuleTest extends AbstractJSkatTest {
     public void calcGameResultGameLostClubJackContra() {
         final SkatGameData data = new SkatGameData();
         factory.setHand(false);
+        data.setDeclarer(Player.FOREHAND);
         data.setAnnouncement(factory.getAnnouncement());
         data.setContra(true);
-        data.setDeclarer(Player.FOREHAND);
         data.setDeclarerScore(60);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ, Card.DJ, Card.CA));
         data.calcResult();
@@ -178,10 +177,10 @@ public class SuitRuleTest extends AbstractJSkatTest {
     public void calcGameResultGameLostClubJackContraRe() {
         final SkatGameData data = new SkatGameData();
         factory.setHand(false);
+        data.setDeclarer(Player.FOREHAND);
         data.setAnnouncement(factory.getAnnouncement());
         data.setContra(true);
         data.setRe(true);
-        data.setDeclarer(Player.FOREHAND);
         data.setDeclarerScore(60);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ, Card.DJ, Card.CA));
         data.calcResult();
@@ -194,8 +193,8 @@ public class SuitRuleTest extends AbstractJSkatTest {
     @Test
     public void calcGameResultGameWonClubJackSchneider() {
         final SkatGameData data = new SkatGameData();
-        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarer(Player.FOREHAND);
+        data.setAnnouncement(factory.getAnnouncement());
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ));
         data.setDeclarerScore(90);
         data.calcResult();
@@ -208,8 +207,8 @@ public class SuitRuleTest extends AbstractJSkatTest {
     @Test
     public void calcGameResultGameWonClubJackSchneiderSchwarz() {
         final SkatGameData data = new SkatGameData();
-        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarer(Player.FOREHAND);
+        data.setAnnouncement(factory.getAnnouncement());
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ));
         data.setDeclarerScore(120);
         data.calcResult();
@@ -259,8 +258,8 @@ public class SuitRuleTest extends AbstractJSkatTest {
     public void calcGameResultGameWonClubSpadeHeartJack() {
         final SkatGameData data = new SkatGameData();
         factory.setHand(false);
-        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarer(Player.FOREHAND);
+        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarerScore(61);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.SJ, Card.HJ, Card.CA));
         data.calcResult();
@@ -275,8 +274,8 @@ public class SuitRuleTest extends AbstractJSkatTest {
     public void calcGameResultGameWonClubSpadeHeartDiamondJack() {
         final SkatGameData data = new SkatGameData();
         factory.setHand(false);
-        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarer(Player.FOREHAND);
+        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarerScore(61);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.SJ, Card.HJ, Card.DJ, Card.CT));
         data.calcResult();
@@ -291,8 +290,8 @@ public class SuitRuleTest extends AbstractJSkatTest {
     public void calcGameResultGameWonMoreTops() {
         final SkatGameData data = new SkatGameData();
         factory.setHand(false);
-        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarer(Player.FOREHAND);
+        data.setAnnouncement(factory.getAnnouncement());
         data.setDeclarerScore(61);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.SJ, Card.HJ, Card.DJ, Card.CA, Card.CT, Card.CQ));
         data.calcResult();

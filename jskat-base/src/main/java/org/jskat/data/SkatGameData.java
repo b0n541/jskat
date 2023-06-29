@@ -154,7 +154,7 @@ public class SkatGameData {
      */
     private final Map<Player, CardList> dealtCards = new HashMap<>();
 
-    private final CardList dealerCardsAfterDiscarding = new CardList();
+    private final CardList declarerCardsBeforeFirstTrick = new CardList();
 
     /**
      * Holds all cards dealt to skat
@@ -163,7 +163,7 @@ public class SkatGameData {
 
     private Boolean skatPickedUp = false;
 
-    private final Set<Player> ramschLoosers = new HashSet<>();
+    private final Set<Player> ramschLosers = new HashSet<>();
 
     private final List<SkatGameEvent> gameMoves = new ArrayList<>();
 
@@ -200,13 +200,12 @@ public class SkatGameData {
     }
 
     /**
-     * Returns the declarer cards after discarding.
+     * Returns the declarer cards before the first trick is played.
      *
-     * @return Declarer cards after discarding
-     * @throws IllegalStateException if discarding hasn't finished
+     * @return Declarer cards before the first trick
      */
-    public CardList getDeclarerCardsAfterDiscarding() {
-        return dealerCardsAfterDiscarding;
+    public CardList getDeclarerCardsBeforeFirstTrick() {
+        return declarerCardsBeforeFirstTrick;
     }
 
     /**
@@ -251,9 +250,6 @@ public class SkatGameData {
      * @param singlePlayer Player ID of the single player
      */
     public void setDeclarer(final Player singlePlayer) {
-
-        log.debug("Current single Player " + singlePlayer);
-
         declarer = singlePlayer;
     }
 
@@ -527,7 +523,7 @@ public class SkatGameData {
         }
         for (final Player player : Player.values()) {
             if (playerPoints.get(player).equals(highestPoints)) {
-                ramschLoosers.add(player);
+                ramschLosers.add(player);
             }
         }
 
@@ -729,9 +725,6 @@ public class SkatGameData {
      * @param newSkat CardList of the new skat
      */
     public void setDiscardedSkat(final Player player, final CardList newSkat) {
-
-        dealerCardsAfterDiscarding.addAll(playerHands.get(player));
-        dealerCardsAfterDiscarding.removeAll(newSkat);
         playerHands.get(player).removeAll(newSkat);
         skat.clear();
         skat.addAll(newSkat);
@@ -887,30 +880,33 @@ public class SkatGameData {
      */
     public void setAnnouncement(final GameAnnouncement announcement) {
 
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(announcement.getGameType());
-        if (announcement.getGameType() != GameType.RAMSCH) {
-            // if (!declarerPickedUpSkat) {
-            // factory.setHand(Boolean.TRUE);
-            // }
-            factory.setHand(announcement.isHand());
-            factory.setOuvert(announcement.isOuvert());
-            factory.setSchneider(announcement.isSchneider());
-            factory.setSchwarz(announcement.isSchwarz());
-            factory.setDiscardedCards(announcement.discardedCards);
-        }
-        this.announcement = factory.getAnnouncement();
-
-        if (this.announcement == null) {
+        if (announcement == null) {
             this.announcement = GameAnnouncementFactory.getEmptyAnnouncement();
             rules = null;
         } else {
+            final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
+            factory.setGameType(announcement.getGameType());
+            if (announcement.getGameType() != GameType.RAMSCH) {
+                // if (!declarerPickedUpSkat) {
+                // factory.setHand(Boolean.TRUE);
+                // }
+                factory.setHand(announcement.isHand());
+                factory.setOuvert(announcement.isOuvert());
+                factory.setSchneider(announcement.isSchneider());
+                factory.setSchwarz(announcement.isSchwarz());
+                factory.setDiscardedCards(announcement.discardedCards);
+            }
+            this.announcement = factory.getAnnouncement();
             rules = SkatRuleFactory.getSkatRules(getGameType());
-        }
 
-        if (GameType.PASSED_IN.equals(getGameType())) {
-            gameState = GameState.GAME_OVER;
-            calcResult();
+            if (GameType.PASSED_IN.equals(getGameType())) {
+                gameState = GameState.GAME_OVER;
+                calcResult();
+            }
+            if (Set.of(GameType.CLUBS, GameType.SPADES, GameType.HEARTS, GameType.DIAMONDS, GameType.NULL, GameType.GRAND)
+                    .contains(getGameType())) {
+                declarerCardsBeforeFirstTrick.addAll(playerHands.get(declarer));
+            }
         }
     }
 
@@ -1071,8 +1067,8 @@ public class SkatGameData {
         factory.setPlayerPoints(playerPoints);
 
         if (announcement.gameType == GameType.RAMSCH) {
-            for (final Player looser : ramschLoosers) {
-                factory.addRamschLooser(looser);
+            for (final Player loser : ramschLosers) {
+                factory.addRamschLoser(loser);
             }
         }
 
@@ -1160,12 +1156,10 @@ public class SkatGameData {
      * @return Set of loosing players
      */
     public Set<Player> getRamschLoosers() {
-        if (announcement == null
-                || !GameType.RAMSCH.equals(announcement.gameType)) {
-            throw new IllegalStateException(
-                    "This game data object is not from a Ramsch game!");
+        if (announcement == null || !GameType.RAMSCH.equals(announcement.gameType)) {
+            throw new IllegalStateException("This game data object is not from a Ramsch game!");
         }
-        return Collections.unmodifiableSet(ramschLoosers);
+        return Collections.unmodifiableSet(ramschLosers);
     }
 
     /**

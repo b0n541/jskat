@@ -183,7 +183,7 @@ public class GameSummary {
             tmpSummary.declarer = position;
         }
 
-        public void addRamschLooser(Player looser) {
+        public void addRamschLoser(Player looser) {
             tmpSummary.ramschLosers.add(looser);
         }
 
