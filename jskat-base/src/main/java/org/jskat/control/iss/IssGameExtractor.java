@@ -40,7 +40,7 @@ public class IssGameExtractor {
                     .filter(predicate)
                     .map(NETWORK_INPUTS)
                     .peek(System.out::println)
-                    .limit(10_000)
+                    .limit(100_000)
                     .collect(Collectors.toList());
 
             var lines = new ArrayList<String>();

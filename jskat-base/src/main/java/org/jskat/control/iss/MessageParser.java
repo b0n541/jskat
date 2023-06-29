@@ -535,7 +535,7 @@ public class MessageParser {
                     break;
                 case GAME_ANNOUNCEMENT:
                     result.setDeclarer(moveInfo.getPlayer());
-                    if (!moveInfo.getGameAnnouncement().isHand()) {
+                    if (!moveInfo.getGameAnnouncement().isHand() && !moveInfo.getGameAnnouncement().getDiscardedCards().isEmpty()) {
                         result.removePlayerCard(moveInfo.getPlayer(), moveInfo.getGameAnnouncement().getDiscardedCards().get(0));
                         result.removePlayerCard(moveInfo.getPlayer(), moveInfo.getGameAnnouncement().getDiscardedCards().get(1));
                         result.setDiscardedSkat(moveInfo.getPlayer(), moveInfo.getGameAnnouncement().getDiscardedCards());
