@@ -80,18 +80,12 @@ public class AIPlayerSascha extends AbstractAIPlayer {
 
     @Override
     public int bidMore(final int nextBidValue) {
-        int result = 0;
-
-        if (random.nextBoolean()) {
-            result = nextBidValue;
-        }
-
-        return result;
+        return 0;
     }
 
     @Override
     public boolean holdBid(final int currBidValue) {
-        return random.nextBoolean();
+        return false;
     }
 
     @Override
@@ -103,6 +97,7 @@ public class AIPlayerSascha extends AbstractAIPlayer {
     public Card playCard() {
 
         int index = -1;
+        
 
         log.debug('\n' + knowledge.toString());
 
