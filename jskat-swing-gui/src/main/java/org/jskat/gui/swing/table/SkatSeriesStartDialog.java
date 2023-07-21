@@ -19,7 +19,6 @@ import java.util.List;
  */
 public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
-
     private static final String CANCEL = "CANCEL";
     private static final String START = "START";
 
@@ -66,7 +65,8 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
         root.setLayout(LayoutFactory.getMigLayout());
 
         final List<String> playerTypes = new ArrayList<>();
-        for (final String aiPlayer : JSkatPlayerResolver.getAllAIPlayerImplementations()) playerTypes.add(aiPlayer);
+        for (final String aiPlayer : JSkatPlayerResolver.getAllAIPlayerImplementations())
+            playerTypes.add(aiPlayer);
         Collections.sort(playerTypes);
 
         root.add(new JLabel(strings.getString("player") + " 1"));
@@ -123,7 +123,8 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
     @Override
     public void setVisible(final boolean isVisible) {
 
-        if (isVisible) setLocationRelativeTo(parent);
+        if (isVisible)
+            setLocationRelativeTo(parent);
 
         super.setVisible(isVisible);
     }
@@ -134,7 +135,8 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
     @Override
     public void actionPerformed(final ActionEvent e) {
 
-        if (CANCEL.equals(e.getActionCommand())) setVisible(false);
+        if (CANCEL.equals(e.getActionCommand()))
+            setVisible(false);
         else if (START.equals(e.getActionCommand())) {
             if (player1name.getText().isEmpty()
                     || player2name.getText().isEmpty()
@@ -163,7 +165,6 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
     private class PlayerComboBoxRenderer extends AbstractI18NComboBoxRenderer {
 
-
         PlayerComboBoxRenderer() {
             super();
         }
@@ -175,16 +176,26 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
             final String player = (String) value;
 
-            if (player != null) if ("org.jskat.ai.newalgorithm.AlgorithmAI".equals(player))
-                result = strings.getString("algorithmic_nextgen_player");
-            else if ("org.jskat.ai.mjl.AIPlayerMJL".equals(player))
-                result = strings.getString("algorithmic_player");
-            else if ("org.jskat.ai.rnd.AIPlayerRND".equals(player)) result = strings.getString("random_player");
-            else if ("org.jskat.ai.nn.AIPlayerNN".equals(player))
-                result = strings.getString("neural_network_player");
-            else if ("org.jskat.gui.human.SwingHumanPlayer"
-                    .equals(player)) result = strings.getString("human_player");
-            else result = player;
+            if (player != null)
+                if ("org.jskat.ai.newalgorithm.AlgorithmAI".equals(player))
+                    result = strings.getString("algorithmic_nextgen_player");
+                else if ("org.jskat.ai.mjl.AIPlayerMJL".equals(player))
+                    result = strings.getString("algorithmic_player");
+                else if ("org.jskat.ai.rnd.AIPlayerRND".equals(player))
+                    result = strings.getString("random_player");
+                else if ("org.jskat.ai.nn.AIPlayerNN".equals(player))
+                    result = strings.getString("neural_network_player");
+                else if ("org.jskat.gui.human.SwingHumanPlayer"
+                        .equals(player))
+                    result = strings.getString("human_player");
+                else if ("org.jskat.ai.sascha.AIPlayerSascha".equals(player))
+                    result = "Sascha";
+                else if ("org.jskat.ai.alex.AIPlayerAlex".equals(player))
+                    result = "Alex";
+                else if ("org.jskat.ai.jens.AIPlayerJens".equals(player))
+                    result = "Jens";
+                else
+                    result = player;
             return result;
         }
     }
