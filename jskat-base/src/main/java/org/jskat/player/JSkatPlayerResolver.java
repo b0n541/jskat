@@ -14,6 +14,9 @@ public class JSkatPlayerResolver {
     public static Set<String> getAllAIPlayerImplementations() {
         return Set.of(
                 "org.jskat.ai.rnd.AIPlayerRND",
+                "org.jskat.ai.alex.AIPlayerAlex",
+                "org.jskat.ai.jens.AIPlayerJens",
+                "org.jskat.ai.sascha.AIPlayerSascha",
                 "org.jskat.ai.newalgorithm.AlgorithmAI"
         );
     }
