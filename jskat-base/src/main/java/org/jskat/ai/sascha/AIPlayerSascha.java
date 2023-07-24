@@ -25,6 +25,7 @@ public class AIPlayerSascha extends AbstractAIPlayer {
     private final Random random = new Random();
 
     private Bidder bider = null;
+    private int aggroLevel = 0;
 
     /**
      * Creates a new instance of AIPlayerRND.
@@ -47,45 +48,25 @@ public class AIPlayerSascha extends AbstractAIPlayer {
 
     @Override
     public boolean pickUpSkat() {
-        return random.nextBoolean();
+        return true;
     }
 
     @Override
     public boolean playGrandHand() {
-        return random.nextBoolean();
+        return false;
     }
 
     @Override
     public GameAnnouncement announceGame() {
-        log.debug("position: " + knowledge.getPlayerPosition());
-        log.debug("bids: " + knowledge.getHighestBid(Player.FOREHAND) +
-                " " + knowledge.getHighestBid(Player.MIDDLEHAND) +
-                " " + knowledge.getHighestBid(Player.REARHAND));
-
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-
-        // select a random game type (without RAMSCH and PASSED_IN)
-        final GameType gameType = GameType.values()[random.nextInt(GameType
-                .values().length - 2)];
-        factory.setGameType(gameType);
-        if (Boolean.valueOf(random.nextBoolean())) {
-            factory.setOuvert(true);
-            if (gameType != GameType.NULL) {
-                factory.setHand(true);
-                factory.setSchneider(true);
-                factory.setSchwarz(true);
-            }
-        }
-
-        return factory.getAnnouncement();
+        return bider.gameAnnouncement();
     }
 
     @Override
     public int bidMore(final int nextBidValue) {
-        if (bider == null){
-            bider = new Bidder(knowledge.getOwnCards(),knowledge.getPlayerPosition().getOrder());
+        if (bider == null) {
+            bider = new Bidder(knowledge.getOwnCards(), knowledge.getPlayerPosition().getOrder(), aggroLevel);
         }
-        if(bider.isGrand()){
+        if (bider.getGameValue() >= nextBidValue) {
             return nextBidValue;
         }
         return 0;
@@ -93,10 +74,10 @@ public class AIPlayerSascha extends AbstractAIPlayer {
 
     @Override
     public boolean holdBid(final int currBidValue) {
-        if (bider == null){
-            bider = new Bidder(knowledge.getOwnCards(),knowledge.getPlayerPosition().getOrder());
+        if (bider == null) {
+            bider = new Bidder(knowledge.getOwnCards(), knowledge.getPlayerPosition().getOrder(), aggroLevel);
         }
-        return bider.isGrand();
+        return bider.getGameValue() >= currBidValue;
     }
 
     @Override

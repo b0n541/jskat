@@ -1,6 +1,5 @@
 package org.jskat.ai.sascha;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.Arrays;
@@ -17,12 +16,13 @@ public class BidderTest extends AbstractJSkatTest {
     private static final Logger log = LoggerFactory.getLogger(BidEvaluatorTest.class);
 
     @Test
-    public void testNotGrand() {
+    public void testMediocoreHand() {
         final CardList cards = new CardList(Arrays.asList(Card.CJ, Card.DJ, Card.CA, Card.CK, Card.CQ, Card.C8, Card.SQ,
                 Card.HT, Card.H8, Card.D9));
 
-        Bidder cut = new Bidder(cards, 0);
+        Bidder cut = new Bidder(cards, 0, 0);
         assertThat(cut.isGrand()).isFalse();
+        assertThat(cut.getGameValue()).isEqualTo(24);
     }
 
     @Test
@@ -30,7 +30,30 @@ public class BidderTest extends AbstractJSkatTest {
         final CardList cards = new CardList(Arrays.asList(Card.CJ, Card.SJ, Card.HJ, Card.CA, Card.CT, Card.HA, Card.HK,
                 Card.ST, Card.SK, Card.SQ));
 
-        Bidder cut = new Bidder(cards, 0);
+        Bidder cut = new Bidder(cards, 0, 0);
         assertThat(cut.isGrand()).isTrue();
+        assertThat(cut.getGameValue()).isEqualTo(96);
+    }
+
+    @Test
+    public void testGarbageHand() {
+        final CardList cards = new CardList(Arrays.asList(Card.CJ, Card.CA, Card.CK, Card.CQ, Card.C8, Card.SQ,
+                Card.HT, Card.H8, Card.D9, Card.D8));
+
+        Bidder cut = new Bidder(cards, 0, 0);
+        assertThat(cut.getGameValue()).isEqualTo(0);
+
+        cut = new Bidder(cards, 0, 6);
+        assertThat(cut.getGameValue()).isEqualTo(24);
+    }
+
+    @Test
+    public void testClubsGame() {
+        final CardList cards = new CardList(Arrays.asList(Card.CJ, Card.DJ, Card.CA, Card.CK, Card.CQ, Card.C8, Card.SA,
+                Card.HT, Card.H8, Card.D9));
+
+        Bidder cut = new Bidder(cards, 0, 0);
+        assertThat(cut.isGrand()).isFalse();
+        assertThat(cut.getGameValue()).isEqualTo(24);
     }
 }
