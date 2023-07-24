@@ -56,4 +56,14 @@ public class BidderTest extends AbstractJSkatTest {
         assertThat(cut.isGrand()).isFalse();
         assertThat(cut.getGameValue()).isEqualTo(24);
     }
+
+    @Test
+    public void testDiscard() {
+        final CardList cards = new CardList(Arrays.asList(Card.CJ, Card.DJ, Card.CA, Card.CK, Card.CQ, Card.C8, Card.SA,
+                Card.HT, Card.H8, Card.D9, Card.DA, Card.H7 ));
+
+        Bidder cut = new Bidder(cards, 0, 0);
+        assertThat(cut.getGameValue()).isEqualTo(24);
+        assertThat(cut.getCardsToDiscard()).contains(Card.HT);
+    }
 }

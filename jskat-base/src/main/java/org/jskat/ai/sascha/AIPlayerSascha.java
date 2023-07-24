@@ -109,17 +109,7 @@ public class AIPlayerSascha extends AbstractAIPlayer {
 
     @Override
     public CardList getCardsToDiscard() {
-        final CardList result = new CardList();
-
-        CardList discardableCards = new CardList(knowledge.getOwnCards());
-
-        // just discard two random cards
-        result.add(discardableCards.remove(random.nextInt(discardableCards
-                .size())));
-        result.add(discardableCards.remove(random.nextInt(discardableCards
-                .size())));
-
-        return result;
+        return bider.getCardsToDiscard();
     }
 
     @Override

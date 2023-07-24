@@ -4,6 +4,7 @@ import org.jskat.util.Suit;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.util.CardList;
+import org.jskat.util.Card;
 import org.jskat.util.GameType;
 
 import java.util.HashMap;
@@ -92,15 +93,19 @@ public class Bidder {
         return this.gameValue;
     }
 
-    public boolean isPlayable(Suit tsuite) {
+    private int weaknessSum(Suit tsuite) {
         int wSum = -aggroLevel;
-        ;
-        int tSum = 0;
-
         for (Suit s : Suit.values()) {
             if (s != tsuite)
                 wSum += weaknesses.get(s);
         }
+        return wSum;
+    }
+
+    public boolean isPlayable(Suit tsuite) {
+        int wSum = weaknessSum(tsuite);
+        ;
+        int tSum = 0;
 
         tSum = jacksCount + c.getSuitCount(tsuite, false);
 
@@ -114,18 +119,62 @@ public class Bidder {
         return tSum > 6;
     }
 
-    public boolean isNull() {
+    private int weaknessSumNull() {
         int wSum = 0;
         for (Suit s : Suit.values()) {
             wSum += Util.suiteNullWeakness(c, s);
         }
 
-        return wSum < 4;
+        return wSum;
+    }
+
+    public boolean isNull() {
+        return weaknessSumNull() < 4;
+    }
+
+    public CardList getCardsToDiscard() {
+        Card c1 = c.get(0), c2 = c.get(1);
+        int p1 = -1, p2 = -1;
+        int v1 = -1, v2 = -1;
+
+        int w;
+
+        if (gameType == GameType.NULL) {
+            w = weaknessSumNull();
+        } else {
+            w = weaknessSum(gameType.getTrumpSuit());
+        }
+        for (Card card : this.c) {
+            CardList eval = new CardList(c);
+            eval.remove(card);
+            Bidder evalBidder = new Bidder(eval, postion, aggroLevel);
+            int v;
+            if (gameType == GameType.NULL) {
+                v = w - evalBidder.weaknessSumNull();
+            } else {
+                v = w - evalBidder.weaknessSum(gameType.getTrumpSuit());
+            }
+            if (v < v1 || ((v == v1) && card.getPoints() > p1)) {
+                c1 = card;
+                v1 = v;
+                p1 = card.getPoints();
+                continue;
+            }
+            if (v < v2 || ((v == v2) && card.getPoints() > p2)) {
+                c2 = card;
+                v2 = v;
+                p2 = card.getPoints();
+            }
+
+        }
+
+        return new CardList(c1, c2);
+
     }
 
     public boolean isGrand() {
 
-        int wSum = -aggroLevel;
+        int wSum = weaknessSum(null);
 
         for (Suit s : Suit.values()) {
             wSum += weaknesses.get(s);
