@@ -24,6 +24,8 @@ public class AIPlayerSascha extends AbstractAIPlayer {
      */
     private final Random random = new Random();
 
+    private Bidder bider = null;
+
     /**
      * Creates a new instance of AIPlayerRND.
      */
@@ -80,12 +82,21 @@ public class AIPlayerSascha extends AbstractAIPlayer {
 
     @Override
     public int bidMore(final int nextBidValue) {
+        if (bider == null){
+            bider = new Bidder(knowledge.getOwnCards(),knowledge.getPlayerPosition().getOrder());
+        }
+        if(bider.isGrand()){
+            return nextBidValue;
+        }
         return 0;
     }
 
     @Override
     public boolean holdBid(final int currBidValue) {
-        return false;
+        if (bider == null){
+            bider = new Bidder(knowledge.getOwnCards(),knowledge.getPlayerPosition().getOrder());
+        }
+        return bider.isGrand();
     }
 
     @Override
@@ -97,7 +108,6 @@ public class AIPlayerSascha extends AbstractAIPlayer {
     public Card playCard() {
 
         int index = -1;
-        
 
         log.debug('\n' + knowledge.toString());
 
@@ -138,6 +148,7 @@ public class AIPlayerSascha extends AbstractAIPlayer {
 
     @Override
     public void finalizeGame() {
+        bider = null;
         // nothing to do for AIPlayerRND
     }
 
