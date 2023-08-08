@@ -2,11 +2,9 @@ package org.jskat.ai.sascha;
 
 import org.jskat.ai.AbstractAIPlayer;
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
-import org.jskat.util.GameType;
-import org.jskat.util.Player;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +40,7 @@ public class AIPlayerSascha extends AbstractAIPlayer {
      */
     public AIPlayerSascha(final String newPlayerName) {
 
-        log.debug("Constructing new AIPlayerRND");
+        log.debug("Constructing new Sascha");
         setPlayerName(newPlayerName);
     }
 
@@ -109,6 +107,7 @@ public class AIPlayerSascha extends AbstractAIPlayer {
 
     @Override
     public CardList getCardsToDiscard() {
+        bider = new Bidder(knowledge.getOwnCards(), aggroLevel, aggroLevel);
         return bider.getCardsToDiscard();
     }
 
@@ -120,7 +119,6 @@ public class AIPlayerSascha extends AbstractAIPlayer {
     @Override
     public void finalizeGame() {
         bider = null;
-        // nothing to do for AIPlayerRND
     }
 
     @Override

@@ -98,6 +98,16 @@ public final class Util {
         return -2;
     }
 
+    public static final CardList filterSuiteNull(final CardList pCards, final Suit pSuit) {
+        CardList r = new CardList();
+        pCards.forEach((c) -> {
+            if (c.getSuit() == pSuit) {
+                r.add(c);
+            }
+        });
+        return r;
+    }
+
     public static final CardList filterSuite(final CardList pCards, final Suit pSuit) {
         CardList r = new CardList();
         pCards.forEach((c) -> {
@@ -105,7 +115,7 @@ public final class Util {
                 r.add(c);
             }
         });
-        return r.getImmutableCopy();
+        return r;
     }
 
     public static int countJacks(CardList pCards) {

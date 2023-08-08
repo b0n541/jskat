@@ -60,6 +60,11 @@ public class Bidder {
             gameValue = 9 * jacksMultiplier;
             return;
         }
+        if (isNull()) {
+            gameType = GameType.NULL;
+            gameValue = 23;
+            return;
+        }
     }
 
     private int jacksMultiplier() {
