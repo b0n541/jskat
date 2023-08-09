@@ -2,7 +2,6 @@ package org.jskat.ai.sascha.solo;
 
 import java.util.HashMap;
 
-import org.jskat.ai.newalgorithm.AlgorithmAI;
 import org.jskat.ai.sascha.AbstractPlayer;
 import org.jskat.ai.sascha.Util;
 import org.jskat.data.Trick;
@@ -18,8 +17,8 @@ public class SuitPlayer extends AbstractPlayer {
     private boolean pulldown;
     protected HashMap<Suit, SuitHelper> suits = new HashMap<Suit, SuitHelper>();
 
-    public SuitPlayer(final AlgorithmAI p, final ImmutablePlayerKnowledge k) {
-        super(p, k);
+    public SuitPlayer(final ImmutablePlayerKnowledge k) {
+        super(k);
         for (Suit s : Suit.values()) {
             if (s != k.getTrumpSuit()) {
                 suits.put(s, new SuitHelper(s, k.getOwnCards()));
@@ -43,10 +42,9 @@ public class SuitPlayer extends AbstractPlayer {
 
     @Override
     protected Card midHand(Card firstCard) {
-        var sh = suits.get(firstCard.getSuit());
-        if (sh == null) {
+        if (isTrump(firstCard))
             return reactTrump();
-        }
+        var sh = suits.get(firstCard.getSuit());
         if (sh.isEmpty()) {
             if (firstCard.getPoints() < 4 && shouldDiscard()) {
                 return discardCard();
@@ -58,10 +56,10 @@ public class SuitPlayer extends AbstractPlayer {
         }
     }
 
-    private Card reactTrump(){
-        if (k.getOwnCards().hasTrump(k.getGameType())){
+    private Card reactTrump() {
+        if (k.getOwnCards().hasTrump(k.getGameType())) {
             return drawTump();
-        }else{
+        } else {
             return discardCard();
         }
     }
@@ -120,16 +118,18 @@ public class SuitPlayer extends AbstractPlayer {
     }
 
     @Override
-    protected Card rearHand(Card firstCard, Card seconCard) {
+    protected Card rearHand(Card firstCard, Card secondCard) {
+        if (isTrump(firstCard))
+            return reactTrump();
         var sh = suits.get(firstCard.getSuit());
         if (sh.isEmpty()) {
-            if (firstCard.getPoints() + seconCard.getPoints() < 7 && shouldDiscard()) {
+            if (firstCard.getPoints() + secondCard.getPoints() < 7 && shouldDiscard()) {
                 return discardCard();
             } else {
                 return trumpSuitCard();
             }
         } else {
-            return rearSuitCard(firstCard, seconCard);
+            return rearSuitCard(firstCard, secondCard);
         }
     }
 

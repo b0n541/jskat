@@ -2,7 +2,6 @@ package org.jskat.ai.sascha.solo;
 
 import java.util.HashMap;
 
-import org.jskat.ai.newalgorithm.AlgorithmAI;
 import org.jskat.ai.sascha.AbstractPlayer;
 import org.jskat.ai.sascha.util.CardListWithInt;
 import org.jskat.data.Trick;
@@ -13,8 +12,8 @@ import org.jskat.util.Suit;
 public class NullPlayer extends AbstractPlayer {
     protected HashMap<Suit, NullSuitHelper> suits = new HashMap<Suit, NullSuitHelper>();
 
-    public NullPlayer(AlgorithmAI p, ImmutablePlayerKnowledge k) {
-        super(p, k);
+    public NullPlayer(ImmutablePlayerKnowledge k) {
+        super(k);
 
         for (Suit s : Suit.values()) {
             if (s != k.getTrumpSuit()) {

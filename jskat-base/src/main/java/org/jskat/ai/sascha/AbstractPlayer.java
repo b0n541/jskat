@@ -1,23 +1,19 @@
 package org.jskat.ai.sascha;
 
-
-import org.jskat.ai.newalgorithm.AlgorithmAI;
 import org.jskat.data.Trick;
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
+import org.jskat.util.Rank;
 import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
 
 public abstract class AbstractPlayer {
-    protected final AlgorithmAI p;
     protected final ImmutablePlayerKnowledge k;
     protected CardList oppCardList;
     protected SkatRule rules;
-    
 
-    public AbstractPlayer(final AlgorithmAI p, final ImmutablePlayerKnowledge k) {
-        this.p = p;
+    public AbstractPlayer(final ImmutablePlayerKnowledge k) {
         this.k = k;
         this.rules = SkatRuleFactory.getSkatRules(k.getGameType());
 
@@ -39,6 +35,10 @@ public abstract class AbstractPlayer {
     protected abstract void beforeCard();
 
     protected abstract void afterTrick(Trick t);
+
+    protected boolean isTrump(Card c){
+        return (c.getRank() == Rank.JACK || c.getSuit() == k.getTrumpSuit());
+    }
 
     protected Card getPlayableCard() {
 
@@ -75,9 +75,6 @@ public abstract class AbstractPlayer {
 
         if (k.getNoOfTricks() > 0)
             oppCardList.removeAll(k.getCompletedTricks().get(k.getNoOfTricks() - 1).getCardList());
-
-        if (p.getPlayableCards(k.getTrickCards()).size() == 1)
-            return p.getPlayableCards(k.getTrickCards()).get(0);
 
         if (k.getTrickCards() == null || k.getTrickCards().isEmpty())
             return foreHand();

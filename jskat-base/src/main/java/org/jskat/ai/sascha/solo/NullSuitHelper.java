@@ -11,7 +11,6 @@ import org.jskat.util.Suit;
 import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
 
-
 public class NullSuitHelper {
     private CardList own, out, opp;
     private Suit s;
@@ -51,13 +50,13 @@ public class NullSuitHelper {
         own.removeAll(sc);
     }
 
-    public CardListWithInt getWeakness(){
+    public CardListWithInt getWeakness() {
         return getWeakness(own, opp);
     }
 
     private CardListWithInt getWeakness(CardList mine, CardList theirs) {
         CardListWithInt r = new CardListWithInt();
-        r.cl = mine;
+        r.cl = new CardList(own);
         for (Card o : theirs) {
             Card played = null;
             for (Card m : r.cl) {

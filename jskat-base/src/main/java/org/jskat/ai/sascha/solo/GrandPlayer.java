@@ -2,7 +2,6 @@ package org.jskat.ai.sascha.solo;
 
 import java.util.HashMap;
 
-import org.jskat.ai.newalgorithm.AlgorithmAI;
 import org.jskat.ai.sascha.AbstractPlayer;
 import org.jskat.ai.sascha.Util;
 import org.jskat.data.Trick;
@@ -17,8 +16,8 @@ public class GrandPlayer extends AbstractPlayer {
     private boolean jacksOut;
     protected HashMap<Suit, SuitHelper> suits = new HashMap<Suit, SuitHelper>();
 
-    public GrandPlayer(final AlgorithmAI p, final ImmutablePlayerKnowledge k) {
-        super(p, k);
+    public GrandPlayer(final ImmutablePlayerKnowledge k) {
+        super( k);
         for (Suit s : Suit.values()) {
             if (s != k.getTrumpSuit()) {
                 suits.put(s, new SuitHelper(s, k.getOwnCards()));
