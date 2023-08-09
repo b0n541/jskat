@@ -1,14 +1,11 @@
 package org.jskat.ai.sascha;
 
-import java.util.HashMap;
 
 import org.jskat.ai.newalgorithm.AlgorithmAI;
-import org.jskat.ai.sascha.solo.SuitHelper;
 import org.jskat.data.Trick;
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
-import org.jskat.util.Suit;
 import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
 
@@ -17,7 +14,7 @@ public abstract class AbstractPlayer {
     protected final ImmutablePlayerKnowledge k;
     protected CardList oppCardList;
     protected SkatRule rules;
-    protected HashMap<Suit, SuitHelper> suits = new HashMap<Suit, SuitHelper>();
+    
 
     public AbstractPlayer(final AlgorithmAI p, final ImmutablePlayerKnowledge k) {
         this.p = p;
@@ -31,12 +28,6 @@ public abstract class AbstractPlayer {
         for (Card c : k.getSkat()) {
             oppCardList.remove(c);
         }
-
-        for (Suit s : Suit.values()) {
-            if (s != k.getTrumpSuit()) {
-                suits.put(s, new SuitHelper(s, k.getOwnCards()));
-            }
-        }
     }
 
     protected abstract Card foreHand();
@@ -49,15 +40,34 @@ public abstract class AbstractPlayer {
 
     protected abstract void afterTrick(Trick t);
 
+    protected Card getPlayableCard() {
+
+        boolean isCardAllowed;
+
+        var trick = k.getCurrentTrick().getCardList();
+
+        for (final Card card : k.getOwnCards()) {
+            if (trick.size() > 0 &&
+                    rules.isCardAllowed(k.getGameType(), trick.get(0), k.getOwnCards(), card)) {
+                isCardAllowed = true;
+            } else {
+                isCardAllowed = trick.size() == 0;
+            }
+
+            if (isCardAllowed) {
+                return card;
+            }
+        }
+        return null;
+
+    }
+
     public Card playCard() {
         oppCardList.removeAll(k.getTrickCards());
 
         if (k.getNoOfTricks() > 0) {
             Trick t = k.getCompletedTricks().get(k.getNoOfTricks() - 1);
             oppCardList.removeAll(t.getCardList());
-            for (SuitHelper sh : this.suits.values()) {
-                sh.registerTrick(t);
-            }
             afterTrick(t);
         }
 

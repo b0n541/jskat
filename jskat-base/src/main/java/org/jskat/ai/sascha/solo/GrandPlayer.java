@@ -1,20 +1,29 @@
 package org.jskat.ai.sascha.solo;
 
+import java.util.HashMap;
+
 import org.jskat.ai.newalgorithm.AlgorithmAI;
 import org.jskat.ai.sascha.AbstractPlayer;
 import org.jskat.ai.sascha.Util;
 import org.jskat.data.Trick;
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
+import org.jskat.util.Suit;
 
 
 public class GrandPlayer extends AbstractPlayer {
     private int trumpCount;
 
     private boolean jacksOut;
+    protected HashMap<Suit, SuitHelper> suits = new HashMap<Suit, SuitHelper>();
 
     public GrandPlayer(final AlgorithmAI p, final ImmutablePlayerKnowledge k) {
         super(p, k);
+        for (Suit s : Suit.values()) {
+            if (s != k.getTrumpSuit()) {
+                suits.put(s, new SuitHelper(s, k.getOwnCards()));
+            }
+        }
         trumpCount = Util.countJacks(k.getOwnCards());
         if (trumpCount < 1)
             jacksOut = true;
@@ -144,27 +153,7 @@ public class GrandPlayer extends AbstractPlayer {
         return getPlayableCard();
     }
 
-    private Card getPlayableCard() {
 
-        boolean isCardAllowed;
-
-        var trick = k.getCurrentTrick().getCardList();
-
-        for (final Card card : k.getOwnCards()) {
-            if (trick.size() > 0 &&
-                    rules.isCardAllowed(k.getGameType(), trick.get(0), k.getOwnCards(), card)) {
-                isCardAllowed = true;
-            } else {
-                isCardAllowed = trick.size() == 0;
-            }
-
-            if (isCardAllowed) {
-                return card;
-            }
-        }
-        return null;
-
-    }
 
     private Card clearSuite() {
         for (SuitHelper sh : this.suits.values()) {
@@ -190,6 +179,9 @@ public class GrandPlayer extends AbstractPlayer {
 
     @Override
     protected void afterTrick(Trick t) {
+        for (SuitHelper sh : this.suits.values()) {
+            sh.registerTrick(t);
+        }
 
     }
 }

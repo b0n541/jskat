@@ -1,6 +1,7 @@
 package org.jskat.ai.sascha.solo;
 
 import org.jskat.ai.sascha.Util;
+import org.jskat.ai.sascha.util.CardListWithInt;
 import org.jskat.data.Trick;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -9,6 +10,7 @@ import org.jskat.util.Rank;
 import org.jskat.util.Suit;
 import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
+
 
 public class NullSuitHelper {
     private CardList own, out, opp;
@@ -30,6 +32,10 @@ public class NullSuitHelper {
 
     }
 
+    public int size() {
+        return own.size();
+    }
+
     public boolean isOwn(Rank r) {
         return own.contains(Card.getCard(s, r));
     }
@@ -45,22 +51,33 @@ public class NullSuitHelper {
         own.removeAll(sc);
     }
 
-    private boolean isUnbeatable(CardList mine, CardList theirs) {
-        CardList my = new CardList(mine);
+    public CardListWithInt getWeakness(){
+        return getWeakness(own, opp);
+    }
+
+    private CardListWithInt getWeakness(CardList mine, CardList theirs) {
+        CardListWithInt r = new CardListWithInt();
+        r.cl = mine;
         for (Card o : theirs) {
             Card played = null;
-            for (Card m : my) {
+            for (Card m : r.cl) {
                 if (rules.isCardBeatsCard(GameType.NULL, m, o)) {
                     played = m;
                     break;
                 }
             }
-            if (played == null)
-                return false;
-            my.remove(played);
+            if (played == null) {
+                r.i++;
+            } else {
+                r.cl.remove(played);
+            }
         }
 
-        return true;
+        return r;
+    }
+
+    private boolean isUnbeatable(CardList mine, CardList theirs) {
+        return (getWeakness(mine, theirs).i == 0);
     }
 
     public boolean isUnbeatable() {
@@ -82,7 +99,7 @@ public class NullSuitHelper {
 
     public Card getUnderCard(Card o1, Card o2) {
         // if (o1.getSuit() != o2.getSuit())
-        //     return getUnderCard(o1);
+        // return getUnderCard(o1);
 
         if (rules.isCardBeatsCard(GameType.NULL, o1, o2)) {
             return getUnderCard(o2);
@@ -108,9 +125,5 @@ public class NullSuitHelper {
         }
         return null;
     }
-
-    // public int getDiscardPriority() {
-
-    // }
 
 }
