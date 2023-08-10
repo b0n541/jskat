@@ -57,7 +57,7 @@ public class AIPlayerSascha extends AbstractAIPlayer {
 
     @Override
     public boolean pickUpSkat() {
-        log.info("picking up skat");
+        log.info("pickUpSkat");
         return true;
     }
 
@@ -68,6 +68,7 @@ public class AIPlayerSascha extends AbstractAIPlayer {
 
     @Override
     public GameAnnouncement announceGame() {
+        log.info("announceGame");
         myGame = true;
         var a = bidder.gameAnnouncement();
         log.info("announcing game " + a + " on bid: " + knowledge.getHighestBid(knowledge.getPlayerPosition()));
@@ -76,9 +77,9 @@ public class AIPlayerSascha extends AbstractAIPlayer {
 
     @Override
     public int bidMore(final int nextBidValue) {
-
+        log.info("bidMore");
         if (bidder == null) {
-            bidder = new Bidder(knowledge.getOwnCards(), knowledge.getPlayerPosition().getOrder(), aggroLevel);
+            bidder = new Bidder(knowledge.getOwnCards(), knowledge.getPlayerPosition());
         }
         if (bidder.getGameValue() >= nextBidValue) {
             log.info("bidding more");
@@ -90,9 +91,10 @@ public class AIPlayerSascha extends AbstractAIPlayer {
 
     @Override
     public boolean holdBid(final int currBidValue) {
+        log.info("holdBid");
         if (bidder == null) {
             log.info("holding bid");
-            bidder = new Bidder(knowledge.getOwnCards(), knowledge.getPlayerPosition().getOrder(), aggroLevel);
+            bidder = new Bidder(knowledge.getOwnCards(), knowledge.getPlayerPosition());
         }
         log.info("passing");
         return bidder.getGameValue() >= currBidValue;
@@ -100,57 +102,66 @@ public class AIPlayerSascha extends AbstractAIPlayer {
 
     @Override
     public void startGame() {
-        if (knowledge.getDeclarer() == knowledge.getPlayerPosition()) {
-            switch (knowledge.getGameType()) {
-                case GRAND:
-                    player = new GrandPlayer(knowledge);
-                    break;
-                case NULL:
-                    player = new NullPlayer(knowledge);
-                    break;
-                default:
-                    player = new SuitPlayer(knowledge);
-                    break;
-            }
+        log.info("startGame");
+        try {
+            if (knowledge.getDeclarer() == null || knowledge.getDeclarer() == knowledge.getPlayerPosition()) {
+                switch (knowledge.getGameType()) {
+                    case GRAND:
+                        player = new GrandPlayer(knowledge);
+                        break;
+                    case NULL:
+                        player = new NullPlayer(knowledge);
+                        break;
+                    default:
+                        player = new SuitPlayer(knowledge);
+                        break;
+                }
 
-        } else if (knowledge.getDeclarer().getLeftNeighbor() == knowledge.getPlayerPosition()) {
-            switch (knowledge.getGameType()) {
-                case GRAND:
-                    player = new LeftOpponentGrand(knowledge);
-                    break;
-                case NULL:
-                    player = new LeftOpponentNull(knowledge);
-                    break;
-                default:
-                    player = new LeftOpponentSuit(knowledge);
-                    break;
-            }
+            } else if (knowledge.getDeclarer().getLeftNeighbor() == knowledge.getPlayerPosition()) {
+                switch (knowledge.getGameType()) {
+                    case GRAND:
+                        player = new LeftOpponentGrand(knowledge);
+                        break;
+                    case NULL:
+                        player = new LeftOpponentNull(knowledge);
+                        break;
+                    default:
+                        player = new LeftOpponentSuit(knowledge);
+                        break;
+                }
 
-        } else if (knowledge.getDeclarer().getRightNeighbor() == knowledge.getPlayerPosition()) {
-            switch (knowledge.getGameType()) {
-                case GRAND:
-                    player = new RightOpponentGrand(knowledge);
-                    break;
-                case NULL:
-                    player = new RightOpponentNull(knowledge);
-                    break;
-                default:
-                    player = new RightOpponentSuit(knowledge);
-                    break;
-            }
+            } else if (knowledge.getDeclarer().getRightNeighbor() == knowledge.getPlayerPosition()) {
+                switch (knowledge.getGameType()) {
+                    case GRAND:
+                        player = new RightOpponentGrand(knowledge);
+                        break;
+                    case NULL:
+                        player = new RightOpponentNull(knowledge);
+                        break;
+                    default:
+                        player = new RightOpponentSuit(knowledge);
+                        break;
+                }
 
-        } else {
-            log.error("no player stance created");
+            } else {
+                log.error("no player stance created");
+            }
+        } catch (Exception e) {
+
+            log.error("", e);
+            System.exit(1);
         }
     }
 
     @Override
     public Card playCard() {
+        log.info("playCard");
         Card c;
         try {
             c = player.playCard();
         } catch (Exception e) {
             log.error("exception", e);
+            System.exit(1);
             throw e;
         }
 
@@ -158,10 +169,12 @@ public class AIPlayerSascha extends AbstractAIPlayer {
 
         if (!knowledge.getOwnCards().contains(c)) {
             log.error("trying to play non-own card: " + c);
+            System.exit(1);
         }
         if (!getPlayableCards(knowledge.getCurrentTrick().getCardList()).contains(c)) {
             log.error("trying to play non-allowed card: " + c);
             log.error(player.getClass().getName());
+            System.exit(1);
         }
 
         return c;
@@ -169,29 +182,39 @@ public class AIPlayerSascha extends AbstractAIPlayer {
 
     @Override
     public CardList getCardsToDiscard() {
-        bidder = new Bidder(knowledge.getOwnCards(), aggroLevel, aggroLevel);
+        log.info("getCardsToDiscard " + Util.makeReadable(knowledge.getOwnCards()));
+        bidder = new Bidder(knowledge.getOwnCards(), knowledge.getPlayerPosition());
         log.info("discarding: " + bidder.getCardsToDiscard());
-        return bidder.getCardsToDiscard();
+        try {
+            return bidder.getCardsToDiscard();
+        } catch (Exception e) {
+            log.error("", e);
+            System.exit(1);
+            throw e;
+        }
+
     }
 
     @Override
     public void prepareForNewGame() {
+        log.info("prepareForNewGame");
         myGame = false;
         // nothing to do for AIPlayerRND
     }
 
     @Override
     public void finalizeGame() {
+        log.info("finalizeGame");
         bidder = null;
     }
 
     @Override
     public boolean callContra() {
-        return random.nextBoolean();
+        return false;
     }
 
     @Override
     public boolean callRe() {
-        return random.nextBoolean();
+        return false;
     }
 }

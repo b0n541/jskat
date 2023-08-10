@@ -7,11 +7,14 @@ import org.jskat.util.CardList;
 import org.jskat.util.Rank;
 import org.jskat.util.rule.SkatRule;
 import org.jskat.util.rule.SkatRuleFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractPlayer {
     protected final ImmutablePlayerKnowledge k;
     protected CardList oppCardList;
     protected SkatRule rules;
+    private static final Logger log = LoggerFactory.getLogger(AIPlayerSascha.class);
 
     public AbstractPlayer(final ImmutablePlayerKnowledge k) {
         this.k = k;
@@ -43,6 +46,8 @@ public abstract class AbstractPlayer {
     protected Card getPlayableCard() {
 
         boolean isCardAllowed;
+
+        log.info("playing fallback card");
 
         var trick = k.getCurrentTrick().getCardList();
 

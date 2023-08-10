@@ -6,14 +6,14 @@ import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.util.CardList;
 import org.jskat.util.Card;
 import org.jskat.util.GameType;
+import org.jskat.util.Player;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Bidder {
-    private final int postion;
+    private final Player postion;
     private CardList c;
-    private int aggroLevel;
 
     private int jacksMultiplier = 0;
     private int jacksCount = 0;
@@ -22,8 +22,7 @@ public class Bidder {
     private int gameValue;
     private Map<Suit, Integer> weaknesses;
 
-    public Bidder(final CardList c, int postion, int aggroLevel) {
-        this.aggroLevel = aggroLevel;
+    public Bidder(final CardList c, Player postion) {
         this.c = c;
         this.postion = postion;
 
@@ -40,6 +39,26 @@ public class Bidder {
             gameValue = 24 * jacksMultiplier;
             return;
         }
+
+        if (isNull()) {
+            gameType = GameType.NULL;
+            gameValue = 23;
+            return;
+        }
+
+        Suit best = null;
+
+        int bestW = 10000000;
+
+        for (Suit s : Suit.values()) {
+            int thisW = weaknessSum(s);
+            if (thisW < bestW) {
+                best = s;
+                bestW = thisW;
+            }
+        }
+        gameType = Util.GameTypeOfSuit(best);
+
         if (isPlayable(Suit.CLUBS)) {
             gameType = GameType.CLUBS;
             gameValue = 12 * jacksMultiplier;
@@ -60,11 +79,7 @@ public class Bidder {
             gameValue = 9 * jacksMultiplier;
             return;
         }
-        if (isNull()) {
-            gameType = GameType.NULL;
-            gameValue = 23;
-            return;
-        }
+
     }
 
     private int jacksMultiplier() {
@@ -99,7 +114,7 @@ public class Bidder {
     }
 
     private int weaknessSum(Suit tsuite) {
-        int wSum = -aggroLevel;
+        int wSum = 0;
         for (Suit s : Suit.values()) {
             if (s != tsuite)
                 wSum += weaknesses.get(s);
@@ -152,7 +167,7 @@ public class Bidder {
         for (Card card : this.c) {
             CardList eval = new CardList(c);
             eval.remove(card);
-            Bidder evalBidder = new Bidder(eval, postion, aggroLevel);
+            Bidder evalBidder = new Bidder(eval, postion);
             int v;
             if (gameType == GameType.NULL) {
                 v = w - evalBidder.weaknessSumNull();
@@ -191,7 +206,7 @@ public class Bidder {
             return wSum < 16;
         }
 
-        if (postion == 0) {
+        if (postion == Player.FOREHAND) {
             if (c.hasJack(Suit.CLUBS) && jacksCount > 1) {
                 return (wSum < 8);
             } else {
