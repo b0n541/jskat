@@ -90,7 +90,7 @@ public class SuitHelper {
     }
 
     public boolean hasHighest() {
-        return isHighest(0);
+        return (own.size() > 0 && isHighest(0));
     }
 
     public Card getDiscardCard() {

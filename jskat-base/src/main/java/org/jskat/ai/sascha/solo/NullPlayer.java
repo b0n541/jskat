@@ -47,7 +47,7 @@ public class NullPlayer extends AbstractPlayer {
                 CardListWithInt w2 = sh.getWeakness();
                 if (w2.i > w.i) {
                     w = w2;
-                } else if (w2.i == w.i && w2.cl.size() < w.cl.size()) {
+                } else if (w2.i == w.i && w.cl != null && w2.cl.size() < w.cl.size()) {
                     w = w2;
                 }
             }

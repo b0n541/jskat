@@ -9,7 +9,6 @@ import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.Suit;
 
-
 public class GrandPlayer extends AbstractPlayer {
     private int trumpCount;
 
@@ -17,7 +16,7 @@ public class GrandPlayer extends AbstractPlayer {
     protected HashMap<Suit, SuitHelper> suits = new HashMap<Suit, SuitHelper>();
 
     public GrandPlayer(final ImmutablePlayerKnowledge k) {
-        super( k);
+        super(k);
         for (Suit s : Suit.values()) {
             if (s != k.getTrumpSuit()) {
                 suits.put(s, new SuitHelper(s, k.getOwnCards()));
@@ -45,13 +44,13 @@ public class GrandPlayer extends AbstractPlayer {
             return Card.CJ;
         }
         if (k.getOwnCards().contains(Card.SJ)) {
-            return Card.CJ;
+            return Card.SJ;
         }
         if (k.getOwnCards().contains(Card.HJ)) {
-            return Card.CJ;
+            return Card.HJ;
         }
         if (k.getOwnCards().contains(Card.DJ)) {
-            return Card.CJ;
+            return Card.DJ;
         }
 
         return getPlayableCard();
@@ -59,6 +58,8 @@ public class GrandPlayer extends AbstractPlayer {
 
     @Override
     protected Card midHand(Card firstCard) {
+        if (isTrump(firstCard))
+            return trumpSuitCard();
         var sh = suits.get(firstCard.getSuit());
         if (sh.isEmpty()) {
             if (firstCard.getPoints() < 11 && shouldDiscard()) {
@@ -127,6 +128,8 @@ public class GrandPlayer extends AbstractPlayer {
 
     @Override
     protected Card rearHand(Card firstCard, Card seconCard) {
+        if (isTrump(firstCard))
+            return trumpSuitCard();
         var sh = suits.get(firstCard.getSuit());
         if (sh.isEmpty()) {
             if (firstCard.getPoints() + seconCard.getPoints() < 11 && shouldDiscard()) {
@@ -151,8 +154,6 @@ public class GrandPlayer extends AbstractPlayer {
 
         return getPlayableCard();
     }
-
-
 
     private Card clearSuite() {
         for (SuitHelper sh : this.suits.values()) {

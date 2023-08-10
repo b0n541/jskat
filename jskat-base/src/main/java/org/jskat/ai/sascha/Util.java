@@ -98,6 +98,14 @@ public final class Util {
         return -2;
     }
 
+    public static String makeReadable(CardList cl) {
+        String r = "[ ";
+        for (Card c : cl) {
+            r = r + c.getSuit().getShortString() + c.getRank().getShortString() + "; ";
+        }
+        return r + "]";
+    }
+
     public static final CardList filterSuiteNull(final CardList pCards, final Suit pSuit) {
         CardList r = new CardList();
         pCards.forEach((c) -> {
@@ -116,6 +124,22 @@ public final class Util {
             }
         });
         return r;
+    }
+
+    public static GameType GameTypeOfSuit(Suit s) {
+        switch (s) {
+            case CLUBS:
+                return GameType.CLUBS;
+            case DIAMONDS:
+                return GameType.DIAMONDS;
+            case HEARTS:
+                return GameType.HEARTS;
+            case SPADES:
+                return GameType.SPADES;
+            default:
+                return GameType.GRAND;
+        }
+
     }
 
     public static int countJacks(CardList pCards) {

@@ -135,11 +135,11 @@ public class SuitPlayer extends AbstractPlayer {
 
     private Card pullDown() {
         for (SuitHelper sh : this.suits.values()) {
-            if (sh.isUnbeatable())
+            if (sh.isUnbeatable() && sh.size() > 0)
                 return sh.getPullCard();
         }
         for (SuitHelper sh : this.suits.values()) {
-            if (sh.hasHighest())
+            if (sh.hasHighest() && sh.size() > 0)
                 return sh.getPullCard();
         }
 
