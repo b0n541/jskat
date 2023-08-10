@@ -24,12 +24,8 @@ import java.util.Random;
 public class AIPlayerAlex extends AbstractAIPlayer {
 
     private static final Logger log = LoggerFactory.getLogger(AIPlayerAlex.class);
-
-    /**
-     * Random generator for decision making.
-     */
-    private final Random random = new Random();
     private MyState state = null;
+    private PlayerAlex player = new PlayerAlex();
 
     /**
      * Creates a new instance of AIPlayerRND.
@@ -103,19 +99,10 @@ public class AIPlayerAlex extends AbstractAIPlayer {
 
     @Override
     public Card playCard() {
-        int index = -1;
-        log.debug('\n' + knowledge.toString());
-
         // first find all possible cards
         final CardList possibleCards = getPlayableCards(knowledge.getTrickCards());
         log.debug("found " + possibleCards.size() + " possible cards: " + possibleCards);
-
-        // then choose a random one
-        index = random.nextInt(possibleCards.size());
-        log.debug("choosing card " + index);
-        log.debug("as player " + knowledge.getPlayerPosition() + ": " + possibleCards.get(index));
-
-        return possibleCards.get(index);
+        return player.playCard(possibleCards, knowledge.getGameType(), knowledge.getTrickCards());
     }
 
     @Override
@@ -156,8 +143,6 @@ class MyState {
 }
 
 class Util {
-    private static final Logger log = LoggerFactory.getLogger(Util.class);
-
     public static MyState CreateState(CardList myCards) {
         MyState newState = new MyState();
 
@@ -176,7 +161,6 @@ class Util {
         final int jacks = Util.countRank(myCards, Rank.JACK);
         if ((mostFrequentSuitCards + jacks) >= 6) {
             newState.game = GameType.valueOf(myCards.getMostFrequentSuit().toString());
-            // TODO check how much i can bid with jacks
             newState.maxBid = jacksMultiplier(myCards) * SkatConstants.getGameBaseValue(newState.game, false, false);
             newState.pickUpSkat = true;
         }
