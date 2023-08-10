@@ -21,11 +21,15 @@ public class SuiteHelperTest {
         SuitHelper cut = new SuitHelper(Suit.CLUBS, cards);
         assertThat(cut.isUnbeatable()).isFalse();
         assertThat(cut.hasHighest()).isTrue();
-        assertThat(cut.getDiscardPriority()).isZero();
+        assertThat(cut.getThrowPriority()).isZero();
         assertThat((cut.getPullCard() == Card.CA)).isTrue();
         assertThat((cut.getClearCard() == Card.C8)).isTrue();
         assertThat(cut.isOwn(Rank.QUEEN)).isTrue();
 
+        assertThat(cut.estimateLostTricks()).isEqualTo(1);
+        assertThat(cut.comebacks()).isEqualTo(1);
+        assertThat(cut.getThrowPriority()).isZero();
+        assertThat(cut.neededClears()).isEqualTo(1);
         Trick t = new Trick(0, Player.FOREHAND);
 
         t.addCard(Card.CQ);
@@ -46,9 +50,9 @@ public class SuiteHelperTest {
         SuitHelper cut = new SuitHelper(Suit.CLUBS, cards);
         assertThat(cut.isUnbeatable()).isFalse();
         assertThat(cut.hasHighest()).isTrue();
-        assertThat(cut.getDiscardPriority()).isEqualTo(5);
+        assertThat(cut.getThrowPriority()).isEqualTo(0);
         assertThat((cut.getPullCard() == Card.CA)).isTrue();
-        assertThat((cut.getDiscardCard() == Card.C9)).isTrue();
+        assertThat((cut.getThrowCard() == Card.C9)).isTrue();
     }
 
     @Test
@@ -59,8 +63,8 @@ public class SuiteHelperTest {
         SuitHelper cut = new SuitHelper(Suit.CLUBS, cards);
         assertThat(cut.isUnbeatable()).isFalse();
         assertThat(cut.hasHighest()).isFalse();
-        assertThat(cut.getDiscardPriority()).isEqualTo(10);
-        assertThat((cut.getDiscardCard() == Card.C7)).isTrue();
+        assertThat(cut.getThrowPriority()).isEqualTo(10);
+        assertThat((cut.getThrowCard() == Card.C7)).isTrue();
     }
 
     @Test
@@ -71,7 +75,7 @@ public class SuiteHelperTest {
         SuitHelper cut = new SuitHelper(Suit.CLUBS, cards);
         assertThat(cut.isUnbeatable()).isFalse();
         assertThat(cut.hasHighest()).isFalse();
-        assertThat(cut.getDiscardPriority()).isEqualTo(0);
+        assertThat(cut.getThrowPriority()).isEqualTo(0);
         assertThat((cut.getClearCard() == Card.C7)).isTrue();
     }
 

@@ -69,7 +69,7 @@ public class SuitPlayer extends AbstractPlayer {
         if (sh.hasHighest())
             return sh.getPullCard();
 
-        return sh.getDiscardCard();
+        return sh.getThrowCard();
     }
 
     private Card rearSuitCard(Card firstCard, Card secondCard) {
@@ -80,7 +80,7 @@ public class SuitPlayer extends AbstractPlayer {
         if (sh.hasHighest())
             return sh.getPullCard();
 
-        return sh.getDiscardCard();
+        return sh.getThrowCard();
     }
 
     private Card trumpSuitCard() {
@@ -99,8 +99,8 @@ public class SuitPlayer extends AbstractPlayer {
     private boolean shouldDiscard() {
         int discardPriority = 0;
         for (SuitHelper sh : this.suits.values()) {
-            if (sh.getDiscardPriority() > discardPriority)
-                discardPriority = sh.getDiscardPriority();
+            if (sh.getThrowPriority() > discardPriority)
+                discardPriority = sh.getThrowPriority();
         }
         return (discardPriority > 3 || discardPriority > 0 && trumpCount > 5);
     }
@@ -109,9 +109,9 @@ public class SuitPlayer extends AbstractPlayer {
         Card r = getPlayableCard();
         int discardPriority = 0;
         for (SuitHelper sh : this.suits.values()) {
-            if (sh.getDiscardPriority() > discardPriority) {
-                discardPriority = sh.getDiscardPriority();
-                r = sh.getDiscardCard();
+            if (sh.getThrowPriority() > discardPriority) {
+                discardPriority = sh.getThrowPriority();
+                r = sh.getThrowCard();
             }
         }
         return r;

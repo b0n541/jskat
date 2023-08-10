@@ -1,24 +1,31 @@
 package org.jskat.ai.sascha;
 
 import org.jskat.util.Suit;
+import org.jskat.ai.sascha.solo.SuitHelper;
+import org.jskat.ai.sascha.solo.TrumpHelper;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.util.CardList;
 import org.jskat.util.Card;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
+import org.jskat.util.SkatConstants;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Bidder {
     private final Player postion;
     private CardList c;
 
-    private int jacksMultiplier = 0;
-    private int jacksCount = 0;
+    protected HashMap<Suit, SuitHelper> suits = new HashMap<Suit, SuitHelper>();
+    protected List<TrumpHelper> trumps = new ArrayList<TrumpHelper>();
 
     private GameType gameType;
+    private boolean isBiddable;
     private int gameValue;
     private Map<Suit, Integer> weaknesses;
 
@@ -26,60 +33,46 @@ public class Bidder {
         this.c = c;
         this.postion = postion;
 
-        jacksMultiplier = jacksMultiplier();
-        jacksCount = Util.countJacks(c);
-        weaknesses = new HashMap<>();
+        var longestSuitSize = 0;
 
         for (Suit s : Suit.values()) {
-            weaknesses.put(s, Util.suiteWeakness(c, s));
+            var n = new SuitHelper(s, c);
+            suits.put(s, n);
+            longestSuitSize = Math.max(longestSuitSize, n.size());
         }
 
+        initGameType(longestSuitSize);
+        if (isBiddable) {
+            gameValue = SkatConstants.getGameBaseValue(gameType, false, false) * jacksMultiplier();
+        }
+
+    }
+
+    private void initGameType(int longestSuitSize) {
         if (isGrand()) {
             gameType = GameType.GRAND;
-            gameValue = 24 * jacksMultiplier;
+            isBiddable = true;
             return;
         }
-
         if (isNull()) {
-            gameType = GameType.NULL;
-            gameValue = 23;
+            gameType = GameType.GRAND;
+            isBiddable = true;
             return;
         }
 
-        Suit best = null;
-
-        int bestW = 10000000;
-
-        for (Suit s : Suit.values()) {
-            int thisW = weaknessSum(s);
-            if (thisW < bestW) {
-                best = s;
-                bestW = thisW;
-            }
-        }
-        gameType = Util.GameTypeOfSuit(best);
-
-        if (isPlayable(Suit.CLUBS)) {
-            gameType = GameType.CLUBS;
-            gameValue = 12 * jacksMultiplier;
-            return;
-        }
-        if (isPlayable(Suit.SPADES)) {
-            gameType = GameType.SPADES;
-            gameValue = 11 * jacksMultiplier;
-            return;
-        }
-        if (isPlayable(Suit.HEARTS)) {
-            gameType = GameType.HEARTS;
-            gameValue = 10 * jacksMultiplier;
-            return;
-        }
-        if (isPlayable(Suit.DIAMONDS)) {
-            gameType = GameType.DIAMONDS;
-            gameValue = 9 * jacksMultiplier;
-            return;
+        var suit = bestTrumpSuit(longestSuitSize);
+        switch (suit) {
+            case CLUBS:
+                gameType = GameType.CLUBS;
+            case DIAMONDS:
+                gameType = GameType.DIAMONDS;
+            case HEARTS:
+                gameType = GameType.HEARTS;
+            case SPADES:
+                gameType = GameType.SPADES;
         }
 
+        isBiddable = checkSuit(suit);
     }
 
     private int jacksMultiplier() {
@@ -113,32 +106,6 @@ public class Bidder {
         return this.gameValue;
     }
 
-    private int weaknessSum(Suit tsuite) {
-        int wSum = 0;
-        for (Suit s : Suit.values()) {
-            if (s != tsuite)
-                wSum += weaknesses.get(s);
-        }
-        return wSum;
-    }
-
-    public boolean isPlayable(Suit tsuite) {
-        int wSum = weaknessSum(tsuite);
-        ;
-        int tSum = 0;
-
-        tSum = jacksCount + c.getSuitCount(tsuite, false);
-
-        if (tSum == 4)
-            return wSum < 7;
-
-        if (tSum == 5)
-            return wSum < 10;
-        if (tSum == 6)
-            return wSum < 12;
-        return tSum > 6;
-    }
-
     private int weaknessSumNull() {
         int wSum = 0;
         for (Suit s : Suit.values()) {
@@ -154,70 +121,62 @@ public class Bidder {
 
     public CardList getCardsToDiscard() {
         Card c1 = c.get(0), c2 = c.get(1);
-        int p1 = -1, p2 = -1;
-        int v1 = -1, v2 = -1;
-
-        int w;
-
-        if (gameType == GameType.NULL) {
-            w = weaknessSumNull();
-        } else {
-            w = weaknessSum(gameType.getTrumpSuit());
-        }
-        for (Card card : this.c) {
-            CardList eval = new CardList(c);
-            eval.remove(card);
-            Bidder evalBidder = new Bidder(eval, postion);
-            int v;
-            if (gameType == GameType.NULL) {
-                v = w - evalBidder.weaknessSumNull();
-            } else {
-                v = w - evalBidder.weaknessSum(gameType.getTrumpSuit());
-            }
-            if (v < v1 || ((v == v1) && card.getPoints() > p1)) {
-                c1 = card;
-                v1 = v;
-                p1 = card.getPoints();
-                continue;
-            }
-            if (v < v2 || ((v == v2) && card.getPoints() > p2)) {
-                c2 = card;
-                v2 = v;
-                p2 = card.getPoints();
-            }
-
-        }
 
         return new CardList(c1, c2);
 
     }
 
-    public boolean isGrand() {
-
-        int wSum = weaknessSum(null);
-
-        for (Suit s : Suit.values()) {
-            wSum += weaknesses.get(s);
+    private List<Suit> longestSuits(int longestSuitSize) {
+        List<Suit> r = new ArrayList<Suit>();
+        for (var sh : suits.values()) {
+            if (sh.size() == longestSuitSize)
+                r.add(sh.getS());
         }
-        if (jacksCount == 3) {
-            return wSum < 12;
-        }
-        if (jacksCount == 4) {
-            return wSum < 16;
-        }
+        return r;
+    }
 
-        if (postion == Player.FOREHAND) {
-            if (c.hasJack(Suit.CLUBS) && jacksCount > 1) {
-                return (wSum < 8);
-            } else {
-                return (wSum < 4);
+    private Suit bestTrumpSuit(int longestSuitSize) {
+
+        Suit r = null;
+        int lostTricksBest = 10;
+        for (var s : longestSuits(longestSuitSize)) {
+            int comebacks = 0, lostTricks = 0, clears = 0;
+            for (SuitHelper sh : suits.values()) {
+                if (sh.getS() != s) {
+                    comebacks += sh.comebacks();
+                    lostTricks += sh.estimateLostTricks();
+                    clears += sh.neededClears();
+                }
             }
-        } else {
-            if (c.hasJack(Suit.CLUBS) && jacksCount > 1)
-                return (wSum < 5);
-
-            return (wSum < 9);
+            if (lostTricks < lostTricksBest) {
+                r = s;
+                lostTricksBest = lostTricks;
+            }
         }
+        return r;
+    }
+
+    private boolean checkSuit(Suit s) {
+        int comebacks = 0, lostTricks = 0, clears = 0;
+        if (postion == Player.FOREHAND)
+            comebacks++;
+        for (SuitHelper sh : suits.values()) {
+            if (sh.getS() != s) {
+                comebacks += sh.comebacks();
+                lostTricks += sh.estimateLostTricks();
+                clears += sh.neededClears();
+            }
+        }
+        var th = new TrumpHelper(s, c);
+        comebacks += th.comebacks();
+        lostTricks += th.estimateLostTricks();
+        clears += th.neededClears();
+
+        return (comebacks > clears && lostTricks < 5);
+    }
+
+    public boolean isGrand() {
+        return checkSuit(null);
     }
 
 }

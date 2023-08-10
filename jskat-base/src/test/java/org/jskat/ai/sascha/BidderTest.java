@@ -22,13 +22,13 @@ public class BidderTest extends AbstractJSkatTest {
         final CardList cards = new CardList(Arrays.asList(Card.CJ, Card.DJ, Card.CA, Card.CK, Card.CQ, Card.C8, Card.SQ,
                 Card.HT, Card.H8, Card.D9));
 
-        Bidder cut = new Bidder(cards, Player.FOREHAND);
+        Bidder cut = new Bidder(cards, Player.MIDDLEHAND);
         assertThat(cut.isGrand()).isFalse();
         assertThat(cut.getGameValue()).isEqualTo(24);
     }
 
     @Test
-    public void testGrand() {
+    public void testBidGrand() {
         CardList cards = new CardList(Arrays.asList(Card.CJ, Card.SJ, Card.HJ, Card.CA, Card.CT, Card.HA, Card.HK,
                 Card.ST, Card.SK, Card.SQ));
 

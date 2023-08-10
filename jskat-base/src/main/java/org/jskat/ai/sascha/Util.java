@@ -142,6 +142,15 @@ public final class Util {
 
     }
 
+    public static CardList getJacks(CardList cl) {
+        var r = new CardList();
+        for (Card c : cl) {
+            if (c.getRank() == Rank.JACK)
+                r.add(c);
+        }
+        return r;
+    }
+
     public static int countJacks(CardList pCards) {
         int counter = 0;
         for (Card lCard : pCards) {
