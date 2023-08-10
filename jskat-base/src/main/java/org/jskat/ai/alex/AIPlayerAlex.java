@@ -184,11 +184,11 @@ class Util {
         return newState;
     }
 
-    public static Suit getLeastFrequentSuit(CardList cards, boolean atleastOne) {
-        int count = 7;
+    public static Suit getLeastFrequentSuit(CardList cards, boolean atleastOne, boolean countJack) {
+        int count = 8;
         Suit suitResult = null;
         for (Suit suit : Suit.values()) {
-            int suitCount = cards.getSuitCount(suit, false);
+            int suitCount = cards.getSuitCount(suit, countJack);
             if (suitCount <= count && !(atleastOne == true && suitCount == 0)) {
                 count = suitCount;
                 suitResult = suit;
@@ -212,14 +212,34 @@ class Util {
     public final static CardList discardCards(CardList hand) {
         final CardList result = new CardList();
         CardList discardableCards = new CardList(hand);
-        // TODO 
-        // 1. discard cards where we have only one in this color and it's NOT an ace
-        // 2. discard cards where we have only two in this color
-        for (int i = 0; i< 2; i++) {
-            Suit leastSuit = Util.getLeastFrequentSuit(discardableCards, true);
-            discardableCards.getSuitCount(leastSuit, false);
-            discardableCards.getFirstIndexOfSuit(leastSuit);
-            result.add(discardableCards.remove(discardableCards.getFirstIndexOfSuit(leastSuit)));
+
+        while (result.size() < 2) {
+            Suit leastSuit = Util.getLeastFrequentSuit(discardableCards, true, false);
+            CardList suitCards = Util.filterSuite(discardableCards, leastSuit, true);
+
+            // kepp 10 if Ace and 10 is in throwable
+            if (Util.countRank(suitCards, Rank.TEN) == 1 && Util.countRank(suitCards, Rank.ACE) == 1) {
+                discardableCards.remove(Card.getCard(leastSuit, Rank.TEN));
+                discardableCards.remove(Card.getCard(leastSuit, Rank.ACE));
+                continue;
+            }
+            // do not discard Aces
+            if (Util.countRank(suitCards, Rank.ACE) == 1) {
+                discardableCards.remove(Card.getCard(leastSuit, Rank.ACE));
+                continue;
+            }
+            // discard single tens
+            if (Util.countRank(suitCards, Rank.TEN) == 1) {
+                Card ten = Card.getCard(leastSuit, Rank.TEN);
+                discardableCards.remove(ten);
+                result.add(ten);
+                continue;
+            }
+
+            // discard the lowest card of least suit
+            Card lowestCard = Util.getLowest(suitCards, leastSuit, true);
+            discardableCards.remove(lowestCard);
+            result.add(lowestCard);
         }
 
         return result;
@@ -235,6 +255,7 @@ class Util {
         return count;
     }
 
+    // util  bidder
     public final static int jacksMultiplier(CardList hand) {
         var mit = hand.hasJack(Suit.CLUBS);
         if (mit) {
@@ -255,6 +276,26 @@ class Util {
             return 5;
         }
     }
-}
 
-// TODO 
+    public static final CardList filterSuite(final CardList cards, final Suit suit, boolean ignoreJacks) {
+        CardList r = new CardList();
+        cards.forEach((c) -> {
+            if (c.getSuit() == suit && !(ignoreJacks && c.getRank() == Rank.JACK)) {
+                r.add(c);
+            }
+        });
+        return r;
+    }
+
+    public static final Card getLowest(final CardList cards, final Suit suit, boolean ignoreJacks) {
+        Card lowest = cards.get(cards.getFirstIndexOfSuit(suit));
+        for (Card c : cards) {
+            if (c.getSuit() == suit && !(ignoreJacks && c.getRank() == Rank.JACK)) {
+                if (lowest.beats(GameType.CLUBS, c)) {
+                    lowest = c;
+                }
+            }
+        };
+        return lowest;
+    }
+}
