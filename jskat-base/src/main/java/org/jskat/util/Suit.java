@@ -7,11 +7,11 @@ public enum Suit {
     /**
      * Club or Eichel
      */
-    CLUBS("C", "Clubs", "♠", 3),
+    CLUBS("C", "Clubs", "♣", 3),
     /**
      * Spades or Grün
      */
-    SPADES("S", "Spades", "♣", 2),
+    SPADES("S", "Spades", "♠", 2),
     /**
      * Hearts or Herz
      */
