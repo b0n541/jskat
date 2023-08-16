@@ -3,6 +3,7 @@ package org.jskat.ai.sascha.solo;
 import java.util.Arrays;
 
 import org.jskat.ai.sascha.Util;
+import org.jskat.ai.sascha.util.CardWithInt;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.Rank;
@@ -37,7 +38,7 @@ public class TrumpHelper extends AbstractSuitHelper {
     @Override
     public int comebacks() {
         double x = (double) own.size();
-        double y = (double) opp.size();
+        double y = (double) opp.size() + 1;
         return (int) Math.floor(x - y / 2.0);
     }
 
@@ -46,21 +47,34 @@ public class TrumpHelper extends AbstractSuitHelper {
         return 0;
     }
 
-    @Override
-    public int neededClears() {
-        int clears = (int) Math.ceil((double) opp.size() / 2.0);
-
-        for (int i = 0; i < size() && clears > 0; i++) {
-            if (isHighest(i))
-                clears--;
+    public Card stab() {
+        Card r = own.get(0);
+        for (Card c : own) {
+            if (r.getRank() == Rank.JACK || c.getPoints() > r.getPoints())
+                r = c;
         }
-
-        return clears;
+        return r;
     }
+
+    // public int neededClears() {
+    // int clears = (int) Math.ceil(((double) opp.size()) / 2.0);
+
+    // for (int i = 0; i < size() && clears > 0; i++) {
+    // if (isHighest(i))
+    // clears--;
+    // }
+
+    // return clears;
+    // }
 
     @Override
     public int estimateLostTricks() {
-        return neededClears();
+        return getNeededClears();
+    }
+
+    @Override
+    public CardWithInt getDiscardPriority() {
+        return new CardWithInt(-15, own.get(own.size() - 1));
     }
 
 }

@@ -5,6 +5,7 @@ import org.jskat.util.CardList;
 import org.jskat.util.Suit;
 import org.jskat.util.Rank;
 import org.jskat.ai.sascha.Util;
+import org.jskat.ai.sascha.util.CardWithInt;
 
 public class SuitHelper extends AbstractSuitHelper {
 
@@ -53,56 +54,98 @@ public class SuitHelper extends AbstractSuitHelper {
 
     @Override
     public int comebacks() {
-        int comebacks = 0;
-        if (hasHighest()) {
-            comebacks++;
-            if (opp.size() > 2 && has(Rank.TEN)) {
-                comebacks++;
-            }
+        if (hasHighest() && opp.size() > 2) {
+            if (isHighest(1) && opp.size() > 3)
+                return 2;
+            return 1;
         }
-        return comebacks;
+        return 0;
     }
 
-    @Override
-    public int neededClears() {
 
-        boolean hh = hasHighest();
-        if (size() < 3) {
-            return 0;
-        }
-        if (opp.size() == 0)
-            return 0;
+    // public int neededClears() {
 
-        if (opp.size() == 1) {
-            if (hh)
-                return 0;
+    //     boolean hh = hasHighest();
+    //     if (size() == 1) {
+    //         return 0;
+    //     }
+    //     if (opp.size() == 0)
+    //         return 0;
 
-            return size() > 1 ? 1 : 0;
-        }
+    //     if (opp.size() == 1) {
+    //         if (hh)
+    //             return 0;
 
-        if (size() < 5) {
-            if (hh) {
-                if (isHighest(1))
-                    return 0;
-                if (opp.size() < 3)
-                    return 0;
-                return 1;
-            } else {
-                return has2ndHighest() ? 1 : 0;
-            }
-        }
+    //         return size() > 1 ? 1 : 0;
+    //     }
 
-        return isUnbeatable() ? 0 : 1;
-    }
+    //     if (size() < 5) {
+    //         if (hh) {
+    //             if (isHighest(1))
+    //                 return 0;
+    //             if (opp.size() < 3)
+    //                 return 0;
+    //             return 1;
+    //         } else {
+    //             return has2ndHighest() ? 1 : 0;
+    //         }
+    //     }
+
+    //     return isUnbeatable() ? 0 : 1;
+    // }
 
     @Override
     public int estimateLostTricks() {
-        int r = 0;
-        for (int i = 0; i * 2 < opp.size() && i < own.size(); i++) {
-            if (!own.get(i).beats(g, opp.get(i * 2)))
-                r++;
+        if (isUnbeatable())
+            return 0;
+        boolean hh = hasHighest();
+
+        switch (size()) {
+            case 0:
+                return 0;
+            case 1:
+                return hh ? 0 : 1;
+            case 2:
+                return hh || has2ndHighest() ? 1 : 2;
+            case 3:
+                return hh && has2ndHighest() ? 1 : 2;
+            default:
+                return hh || has2ndHighest() ? 1 : 2;
         }
-        return r;
+    }
+
+    @Override
+    public CardWithInt getDiscardPriority() {
+        if (size() == 0) {
+            return new CardWithInt(-1000, null);
+        }
+
+        Card c0 = own.get(0);
+        boolean hasAce = (c0.getRank() == Rank.ACE);
+        int discardedPoints = getDiscardedPoints();
+        if (size() == 1) {
+            if (hasAce) {
+                return new CardWithInt(-20, c0);
+            }
+            return new CardWithInt(15 + c0.getPoints() - discardedPoints, c0);
+        }
+        Card c1 = own.get(1);
+        if (size() == 2) {
+            if (hasAce) {
+                if (c1.getRank() == Rank.TEN)
+                    return new CardWithInt(-10, c1);
+                return new CardWithInt(3, c1);
+            }
+            if (c0.getRank() == Rank.TEN) {
+                if (c1.getRank() == Rank.KING)
+                    return new CardWithInt(-5, c0);
+                return new CardWithInt(8, c0);
+            }
+            return new CardWithInt(5 + c0.getPoints() - discardedPoints, c0);
+        }
+
+        return new CardWithInt(0, own.get(own.size() - 1));
+
     }
 
 }

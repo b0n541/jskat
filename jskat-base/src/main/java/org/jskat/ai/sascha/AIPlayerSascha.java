@@ -1,6 +1,7 @@
 package org.jskat.ai.sascha;
 
 import org.jskat.ai.AbstractAIPlayer;
+import org.jskat.ai.sascha.bidder.Bidder;
 import org.jskat.ai.sascha.opponent.LeftOpponentGrand;
 import org.jskat.ai.sascha.opponent.LeftOpponentNull;
 import org.jskat.ai.sascha.opponent.LeftOpponentSuit;
@@ -107,7 +108,7 @@ public class AIPlayerSascha extends AbstractAIPlayer {
             if (knowledge.getDeclarer() == null || knowledge.getDeclarer() == knowledge.getPlayerPosition()) {
                 switch (knowledge.getGameType()) {
                     case GRAND:
-                        player = new GrandPlayer(knowledge);
+                        player = new SuitPlayer(knowledge);
                         break;
                     case NULL:
                         player = new NullPlayer(knowledge);
@@ -149,7 +150,6 @@ public class AIPlayerSascha extends AbstractAIPlayer {
         } catch (Exception e) {
 
             log.error("", e);
-            System.exit(1);
         }
     }
 
@@ -161,7 +161,6 @@ public class AIPlayerSascha extends AbstractAIPlayer {
             c = player.playCard();
         } catch (Exception e) {
             log.error("exception", e);
-            System.exit(1);
             throw e;
         }
 
@@ -169,12 +168,10 @@ public class AIPlayerSascha extends AbstractAIPlayer {
 
         if (!knowledge.getOwnCards().contains(c)) {
             log.error("trying to play non-own card: " + c);
-            System.exit(1);
         }
         if (!getPlayableCards(knowledge.getCurrentTrick().getCardList()).contains(c)) {
             log.error("trying to play non-allowed card: " + c);
             log.error(player.getClass().getName());
-            System.exit(1);
         }
 
         return c;
@@ -189,7 +186,6 @@ public class AIPlayerSascha extends AbstractAIPlayer {
             return bidder.getCardsToDiscard();
         } catch (Exception e) {
             log.error("", e);
-            System.exit(1);
             throw e;
         }
 

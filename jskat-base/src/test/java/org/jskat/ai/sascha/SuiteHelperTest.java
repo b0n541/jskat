@@ -23,13 +23,16 @@ public class SuiteHelperTest {
         assertThat(cut.hasHighest()).isTrue();
         assertThat(cut.getThrowPriority()).isZero();
         assertThat((cut.getPullCard() == Card.CA)).isTrue();
-        assertThat((cut.getClearCard() == Card.C8)).isTrue();
+        assertThat((cut.getClearCard())).isEqualTo(Card.CQ);
+        assertThat(cut.getNeededClears()).isEqualTo(1);
+        assertThat(cut.getNeededClears()).isEqualTo(1);
         assertThat(cut.isOwn(Rank.QUEEN)).isTrue();
 
         assertThat(cut.estimateLostTricks()).isEqualTo(1);
         assertThat(cut.comebacks()).isEqualTo(1);
         assertThat(cut.getThrowPriority()).isZero();
-        assertThat(cut.neededClears()).isEqualTo(1);
+        // assertThat(cut.neededClears()).isEqualTo(1);
+        assertThat(cut.getNeededClears()).isEqualTo(1);
         Trick t = new Trick(0, Player.FOREHAND);
 
         t.addCard(Card.CQ);
@@ -40,6 +43,39 @@ public class SuiteHelperTest {
         assertThat(cut.isUnbeatable()).isTrue();
 
         assertThat(cut.isOwn(Rank.QUEEN)).isFalse();
+    }
+
+    @Test
+    public void testUnbeatable() {
+        final CardList cards = new CardList(Arrays.asList(Card.HA, Card.HT, Card.HK, Card.H7));
+        SuitHelper cut = new SuitHelper(Suit.HEARTS, cards);
+
+        assertThat(cut.isUnbeatable()).isTrue();
+        assertThat(cut.getClearCard()).isNull();
+        assertThat(cut.getNeededClears()).isEqualTo(0);
+
+    }
+
+    @Test
+    public void testAceTenSeven() {
+        final CardList cards = new CardList(Arrays.asList(Card.HA, Card.HT, Card.H7));
+        SuitHelper cut = new SuitHelper(Suit.HEARTS, cards);
+
+        assertThat(cut.isUnbeatable()).isFalse();
+        assertThat(cut.getClearCard()).isEqualTo(Card.H7);
+        assertThat(cut.getNeededClears()).isEqualTo(0);
+
+    }
+
+    @Test
+    public void testAceSeven() {
+        final CardList cards = new CardList(Arrays.asList(Card.HA, Card.H7));
+        SuitHelper cut = new SuitHelper(Suit.HEARTS, cards);
+
+        assertThat(cut.isUnbeatable()).isFalse();
+        assertThat(cut.getClearCard()).isEqualTo(Card.H7);
+        assertThat(cut.getNeededClears()).isEqualTo(0);
+
     }
 
     @Test
@@ -76,7 +112,8 @@ public class SuiteHelperTest {
         assertThat(cut.isUnbeatable()).isFalse();
         assertThat(cut.hasHighest()).isFalse();
         assertThat(cut.getThrowPriority()).isEqualTo(0);
-        assertThat((cut.getClearCard() == Card.C7)).isTrue();
+        assertThat((cut.getClearCard())).isEqualTo(Card.C7);
+        assertThat((cut.getClearCard())).isEqualTo(Card.C7);
     }
 
 }

@@ -1,8 +1,11 @@
-package org.jskat.ai.sascha;
+package org.jskat.ai.sascha.bidder;
 
 import org.jskat.util.Suit;
+import org.jskat.ai.sascha.Util;
+import org.jskat.ai.sascha.solo.AbstractSuitHelper;
 import org.jskat.ai.sascha.solo.SuitHelper;
 import org.jskat.ai.sascha.solo.TrumpHelper;
+import org.jskat.ai.sascha.util.CardWithInt;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.util.CardList;
@@ -22,18 +25,21 @@ public class Bidder {
     private CardList c;
 
     protected HashMap<Suit, SuitHelper> suits = new HashMap<Suit, SuitHelper>();
-    protected List<TrumpHelper> trumps = new ArrayList<TrumpHelper>();
+    private TrumpHelper trump;
 
     private GameType gameType;
+    private Suit trumpSuit;
+
+    public Suit getTrumpSuit() {
+        return trumpSuit;
+    }
+
     private boolean isBiddable;
-    private int gameValue;
-    private Map<Suit, Integer> weaknesses;
+    private int gameValue, longestSuitSize = 0;
 
     public Bidder(final CardList c, Player postion) {
         this.c = c;
         this.postion = postion;
-
-        var longestSuitSize = 0;
 
         for (Suit s : Suit.values()) {
             var n = new SuitHelper(s, c);
@@ -41,38 +47,51 @@ public class Bidder {
             longestSuitSize = Math.max(longestSuitSize, n.size());
         }
 
-        initGameType(longestSuitSize);
+        initGameType();
         if (isBiddable) {
-            gameValue = SkatConstants.getGameBaseValue(gameType, false, false) * jacksMultiplier();
+            if (gameType == GameType.NULL) {
+                gameValue = SkatConstants.getGameBaseValue(gameType, false, false);
+            } else {
+                gameValue = SkatConstants.getGameBaseValue(gameType, false, false) * jacksMultiplier();
+            }
+
         }
 
     }
 
-    private void initGameType(int longestSuitSize) {
+    private void initGameType() {
         if (isGrand()) {
             gameType = GameType.GRAND;
             isBiddable = true;
+            trump = new TrumpHelper(null, c);
             return;
         }
-        if (isNull()) {
-            gameType = GameType.GRAND;
-            isBiddable = true;
-            return;
-        }
+        // if (isNull()) {
+        // gameType = GameType.NULL;
+        // isBiddable = true;
+        // return;
+        // }
 
-        var suit = bestTrumpSuit(longestSuitSize);
+        trumpSuit = bestTrumpSuit();
+        trump = new TrumpHelper(trumpSuit, c);
+        gameType = gameTypeOfSuit(trumpSuit);
+
+        isBiddable = checkSuit(trumpSuit);
+    }
+
+    private GameType gameTypeOfSuit(Suit suit) {
         switch (suit) {
             case CLUBS:
-                gameType = GameType.CLUBS;
+                return GameType.CLUBS;
             case DIAMONDS:
-                gameType = GameType.DIAMONDS;
+                return GameType.DIAMONDS;
             case HEARTS:
-                gameType = GameType.HEARTS;
+                return GameType.HEARTS;
             case SPADES:
-                gameType = GameType.SPADES;
+                return GameType.SPADES;
+            default:
+                return GameType.GRAND;
         }
-
-        isBiddable = checkSuit(suit);
     }
 
     private int jacksMultiplier() {
@@ -119,10 +138,29 @@ public class Bidder {
         return weaknessSumNull() < 4;
     }
 
-    public CardList getCardsToDiscard() {
-        Card c1 = c.get(0), c2 = c.get(1);
+    private Card discardCard() {
 
-        return new CardList(c1, c2);
+        AbstractSuitHelper h = trump;
+        CardWithInt r = h.getDiscardPriority();
+
+        for (SuitHelper sh : suits.values()) {
+            if (sh.getS() == trumpSuit) {
+                continue;
+            }
+            CardWithInt r2 = sh.getDiscardPriority();
+            if (r2.i > r.i) {
+                r = r2;
+                h = sh;
+            }
+        }
+
+        h.discardCard(r.c);
+        return r.c;
+    }
+
+    public CardList getCardsToDiscard() {
+
+        return new CardList(discardCard(), discardCard());
 
     }
 
@@ -135,7 +173,7 @@ public class Bidder {
         return r;
     }
 
-    private Suit bestTrumpSuit(int longestSuitSize) {
+    public Suit bestTrumpSuit() {
 
         Suit r = null;
         int lostTricksBest = 10;
@@ -145,7 +183,7 @@ public class Bidder {
                 if (sh.getS() != s) {
                     comebacks += sh.comebacks();
                     lostTricks += sh.estimateLostTricks();
-                    clears += sh.neededClears();
+                    clears += sh.getNeededClears();
                 }
             }
             if (lostTricks < lostTricksBest) {
@@ -156,7 +194,7 @@ public class Bidder {
         return r;
     }
 
-    private boolean checkSuit(Suit s) {
+    public boolean checkSuit(Suit s) {
         int comebacks = 0, lostTricks = 0, clears = 0;
         if (postion == Player.FOREHAND)
             comebacks++;
@@ -164,15 +202,19 @@ public class Bidder {
             if (sh.getS() != s) {
                 comebacks += sh.comebacks();
                 lostTricks += sh.estimateLostTricks();
-                clears += sh.neededClears();
+                clears += sh.getNeededClears();
             }
         }
         var th = new TrumpHelper(s, c);
         comebacks += th.comebacks();
         lostTricks += th.estimateLostTricks();
-        clears += th.neededClears();
+        clears += th.getNeededClears();
 
-        return (comebacks > clears && lostTricks < 5);
+        // can't clear trump so we will loose some tricks
+        if (th.oppSize() > th.size())
+            clears += th.oppSize() - th.size() - 1;
+
+        return (comebacks > clears && lostTricks < 6) || (th.size() > 5 && th.getNeededClears() < 3);
     }
 
     public boolean isGrand() {
