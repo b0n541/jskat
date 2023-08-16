@@ -125,19 +125,6 @@ public class Bidder {
         return this.gameValue;
     }
 
-    private int weaknessSumNull() {
-        int wSum = 0;
-        for (Suit s : Suit.values()) {
-            wSum += Util.suiteNullWeakness(c, s);
-        }
-
-        return wSum;
-    }
-
-    public boolean isNull() {
-        return weaknessSumNull() < 4;
-    }
-
     private Card discardCard() {
 
         AbstractSuitHelper h = trump;
@@ -195,26 +182,47 @@ public class Bidder {
     }
 
     public boolean checkSuit(Suit s) {
-        int comebacks = 0, lostTricks = 0, clears = 0;
+        var th = new TrumpHelper(s, c);
+        if (th.size() > 6)
+            return true;
+
+        int comebacks = 0, lostTricks = 0, clears = 0, bigOnes = 0, aces = 0;
         if (postion == Player.FOREHAND)
             comebacks++;
         for (SuitHelper sh : suits.values()) {
             if (sh.getS() != s) {
+                aces += sh.getAcesCount();
+                bigOnes += sh.getBigOnesCount();
                 comebacks += sh.comebacks();
                 lostTricks += sh.estimateLostTricks();
                 clears += sh.getNeededClears();
             }
         }
-        var th = new TrumpHelper(s, c);
+
         comebacks += th.comebacks();
         lostTricks += th.estimateLostTricks();
         clears += th.getNeededClears();
+        bigOnes += th.getBigOnesCount();
+
+        int jacksCount = Util.countJacks(c);
 
         // can't clear trump so we will loose some tricks
         if (th.oppSize() > th.size())
             clears += th.oppSize() - th.size() - 1;
 
-        return (comebacks > clears && lostTricks < 6) || (th.size() > 5 && th.getNeededClears() < 3);
+        if (th.size() > 3 && bigOnes > 3 && aces > 1)
+            return true;
+
+        if (jacksCount > 1 && th.size() > 4 && bigOnes > 2 && aces > 0)
+            return true;
+
+        if (comebacks > clears && lostTricks < 6)
+            return true;
+
+        if (th.size() > 5 && th.getNeededClears() < 3)
+            return true;
+
+        return false;
     }
 
     public boolean isGrand() {

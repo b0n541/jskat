@@ -71,6 +71,31 @@ public class BidderTest extends AbstractJSkatTest {
                 cut = new Bidder(cards, Player.FOREHAND);
                 assertThat(cut.getGameValue()).isEqualTo(0);
 
+                cards = new CardList(Arrays.asList(Card.C9, Card.C8, Card.SA, Card.S8, Card.S7, Card.H9, Card.DT,
+                                Card.DQ, Card.D9, Card.D7));
+                cut = new Bidder(cards, Player.FOREHAND);
+                assertThat(cut.getGameValue()).isEqualTo(0);
+
+                cards = new CardList(Arrays.asList(Card.HJ, Card.C7, Card.SK, Card.SQ, Card.S7, Card.HA, Card.HT,
+                                Card.H9, Card.D9, Card.D8));
+                cut = new Bidder(cards, Player.FOREHAND);
+                assertThat(cut.getGameValue()).isEqualTo(0);
+
+                cards = new CardList(Arrays.asList(Card.CA, Card.CK, Card.CQ, Card.C7, Card.SK, Card.S8, Card.HT,
+                                Card.H9, Card.DT, Card.DK));
+                cut = new Bidder(cards, Player.FOREHAND);
+                assertThat(cut.getGameValue()).isEqualTo(0);
+
+                cards = new CardList(Arrays.asList(Card.CA, Card.CK, Card.CQ, Card.SA, Card.ST, Card.S9, Card.S7,
+                                Card.HQ, Card.DK, Card.DQ));
+                cut = new Bidder(cards, Player.FOREHAND);
+                assertThat(cut.getGameValue()).isEqualTo(0);
+
+                cards = new CardList(Arrays.asList(Card.DJ, Card.C8, Card.C7, Card.SQ, Card.S7, Card.HA, Card.HT,
+                                Card.H8, Card.DT, Card.D9));
+                cut = new Bidder(cards, Player.FOREHAND);
+                assertThat(cut.getGameValue()).isEqualTo(0);
+
         }
 
         @Test
@@ -87,11 +112,16 @@ public class BidderTest extends AbstractJSkatTest {
                 assertThat(cut.bestTrumpSuit()).isEqualTo(Suit.HEARTS);
                 assertThat(cut.checkSuit(Suit.HEARTS)).isTrue();
 
-                // cards = new CardList(Arrays.asList(Card.CT, Card.SA, Card.SQ, Card.HA,
-                // Card.HT, Card.HK, Card.HQ,
-                // Card.H7, Card.DK, Card.D8));
-                // cut = new Bidder(cards, Player.MIDDLEHAND);
-                // assertThat(cut.getGameValue()).isEqualTo(20);
+                cards = new CardList(Arrays.asList(Card.HJ, Card.C9, Card.ST, Card.SQ, Card.HA, Card.HQ, Card.H8,
+                                Card.H7, Card.DA, Card.DT));
+
+                cut = new Bidder(cards, Player.MIDDLEHAND);
+                assertThat(cut.checkSuit(Suit.HEARTS)).isTrue();
+
+                cards = new CardList(Arrays.asList(Card.CJ, Card.SJ, Card.CQ, Card.C7, Card.ST, Card.HA, Card.HQ,
+                                Card.H9, Card.H7, Card.DA));
+                cut = new Bidder(cards, Player.MIDDLEHAND);
+                assertThat(cut.checkSuit(Suit.HEARTS)).isTrue();
 
         }
 
@@ -109,6 +139,16 @@ public class BidderTest extends AbstractJSkatTest {
         }
 
         @Test
+        public void testDiamonds() {
+                CardList cards;
+                Bidder cut;
+                cards = new CardList(Arrays.asList(Card.CJ, Card.SJ, Card.HJ, Card.C8, Card.S8, Card.HT, Card.H7,
+                                Card.DK, Card.D8, Card.D7));
+                cut = new Bidder(cards, Player.MIDDLEHAND);
+                assertThat(cut.checkSuit(Suit.DIAMONDS)).isTrue();
+        }
+
+        @Test
         public void testClubsGame() {
                 CardList cards = new CardList(
                                 Arrays.asList(Card.CJ, Card.DJ, Card.C9, Card.CK, Card.CQ, Card.C8, Card.SA,
@@ -121,6 +161,19 @@ public class BidderTest extends AbstractJSkatTest {
                 cards = new CardList(Arrays.asList(Card.SJ, Card.DJ, Card.CA, Card.C9, Card.C8, Card.SQ, Card.S8,
                                 Card.HT, Card.DA, Card.DK));
                 cut = new Bidder(cards, Player.MIDDLEHAND);
+
+                assertThat(cut.checkSuit(Suit.CLUBS)).isTrue();
+
+                cards = new CardList(Arrays.asList(Card.CJ, Card.DJ, Card.CA, Card.CK, Card.C8, Card.C7, Card.HT,
+                                Card.H9, Card.H8, Card.D8));
+                cut = new Bidder(cards, Player.MIDDLEHAND);
+
+                assertThat(cut.checkSuit(Suit.CLUBS)).isTrue();
+
+                cards = new CardList(Arrays.asList(Card.DJ, Card.CT, Card.CK, Card.CQ, Card.SK, Card.HA, Card.HK,
+                                Card.DA, Card.DT, Card.D8));
+
+                cut = new Bidder(cards, Player.FOREHAND);
 
                 assertThat(cut.checkSuit(Suit.CLUBS)).isTrue();
 

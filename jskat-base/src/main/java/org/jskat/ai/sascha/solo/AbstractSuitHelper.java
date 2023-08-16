@@ -123,6 +123,22 @@ public abstract class AbstractSuitHelper {
 
     }
 
+    public int getAcesCount() {
+        if (size() == 2 && has(Rank.ACE) && has(Rank.TEN))
+            return 2;
+        return has(Rank.ACE) ? 1 : 0;
+    }
+
+    public int getBigOnesCount() {
+        int r = 0;
+        for (Card c : own) {
+            if (c.getRank() == Rank.ACE || c.getRank() == Rank.TEN) {
+                r++;
+            }
+        }
+        return r;
+    }
+
     public Card getThrowCard() {
         return own.get(own.size() - 1);
     }
