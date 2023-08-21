@@ -59,6 +59,7 @@ public class BidderTest extends AbstractJSkatTest {
                                                 Card.H7, Card.DQ));
                 cut = new Bidder(cards, Player.FOREHAND);
                 assertThat(cut.checkSuit(Suit.HEARTS)).isFalse();
+                assertThat(cut.isNull()).isFalse();
                 assertThat(cut.getGameValue()).isEqualTo(0);
 
                 cards = new CardList(
@@ -67,9 +68,6 @@ public class BidderTest extends AbstractJSkatTest {
                 cut = new Bidder(cards, Player.FOREHAND);
                 assertThat(cut.getGameValue()).isEqualTo(0);
 
-                cards = new CardList(Arrays.asList(Card.C9, Card.C8, Card.SA, Card.S8, Card.S7, Card.H9, Card.DT,
-                                Card.DQ, Card.D9, Card.D7));
-                cut = new Bidder(cards, Player.FOREHAND);
                 assertThat(cut.getGameValue()).isEqualTo(0);
 
                 cards = new CardList(Arrays.asList(Card.HJ, Card.C7, Card.SK, Card.SQ, Card.S7, Card.HA, Card.HT,
@@ -179,6 +177,17 @@ public class BidderTest extends AbstractJSkatTest {
                 // cut = new Bidder(cards, Player.MIDDLEHAND);
                 // assertThat(cut.isGrand()).isFalse();
                 // assertThat(cut.getGameValue()).isEqualTo(24);
+        }
+
+        @Test
+        public void testNullBidding() {
+                CardList cards;
+                Bidder cut;
+                cards = new CardList(Arrays.asList(Card.SJ, Card.CA, Card.CT, Card.C9, Card.C8, Card.C7, Card.SQ,
+                                Card.S9, Card.S7, Card.DK));
+                cut = new Bidder(cards, Player.FOREHAND);
+                assertThat(cut.isNull()).isTrue();
+
         }
 
         @Test

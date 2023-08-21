@@ -18,13 +18,15 @@ public class NullSuiteHelperTest {
 
         assertThat(cut.isUnbeatable()).isTrue();
 
-        assertThat(cut.getUnderCard(Card.CT, Card.HA) ).isEqualTo(Card.C9);
+        assertThat(cut.getUnderCard(Card.CT, Card.HA)).isEqualTo(Card.C9);
 
-        assertThat(cut.getUnderCard(Card.CT, Card.C8) ).isEqualTo(Card.C9);
+        assertThat(cut.getUnderCard(Card.CT, Card.C8)).isEqualTo(Card.C9);
 
-        assertThat(cut.getUnderCard( Card.C8, Card.CT) ).isEqualTo(Card.C9);
+        assertThat(cut.getUnderCard(Card.C8, Card.CT)).isEqualTo(Card.C9);
 
-        assertThat(cut.getUnderCard( Card.C8, Card.HT) ).isEqualTo(Card.C7);
+        assertThat(cut.getUnderCard(Card.C8, Card.HT)).isEqualTo(Card.C7);
+
+        assertThat(cut.getPullCard()).isNull();
 
     }
 

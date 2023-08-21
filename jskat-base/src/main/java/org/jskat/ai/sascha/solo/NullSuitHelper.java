@@ -31,6 +31,10 @@ public class NullSuitHelper {
 
     }
 
+    public void discardCard(Card c) {
+        own.remove(c);
+    }
+
     public int size() {
         return own.size();
     }
@@ -50,16 +54,28 @@ public class NullSuitHelper {
         own.removeAll(sc);
     }
 
+    public CardListWithInt getStartPointWeakness() {
+        if (size() < 3 && isOwn(Rank.EIGHT)) {
+            CardList mine = new CardList(own);
+            mine.remove(Card.getCard(s, Rank.EIGHT));
+            return getWeakness(mine, opp);
+        }
+        return getWeakness(own, opp);
+    }
+
     public CardListWithInt getWeakness() {
         return getWeakness(own, opp);
     }
 
-    private CardListWithInt getWeakness(CardList mine, CardList theirs) {
+    private CardListWithInt getWeakness(CardList pmine, CardList theirs) {
         CardListWithInt r = new CardListWithInt();
-        r.cl = new CardList(own);
+        r.cl = new CardList();
+        CardList mine = new CardList(pmine);
         for (Card o : theirs) {
+            if (mine.size() == 0)
+                break;
             Card played = null;
-            for (Card m : r.cl) {
+            for (Card m : mine) {
                 if (rules.isCardBeatsCard(GameType.NULL, m, o)) {
                     played = m;
                     break;
@@ -67,9 +83,15 @@ public class NullSuitHelper {
             }
             if (played == null) {
                 r.i++;
+                r.cl.add(mine.get(mine.size() - 1));
+                mine.remove(mine.size() - 1);
             } else {
-                r.cl.remove(played);
+                mine.remove(played);
             }
+        }
+        if (r.i < 2 && theirs.size() > 3 && pmine.size() > 3) {
+            r.i = 0;
+            r.cl = new CardList();
         }
 
         return r;
@@ -85,6 +107,10 @@ public class NullSuitHelper {
 
     public Card lowest() {
         return own.get(own.size() - 1);
+    }
+
+    public Card highest() {
+        return own.get(0);
     }
 
     public Card getUnderCard(Card o) {
@@ -113,7 +139,7 @@ public class NullSuitHelper {
         CardList theirs = new CardList(opp);
 
         mine.remove(lowest());
-        theirs.remove(0);
+        theirs.remove(theirs.size() - 1);
         return isUnbeatable(mine, theirs);
 
     }

@@ -38,7 +38,7 @@ public class NullPlayer extends AbstractPlayer {
         return getPlayableCard();
     }
 
-    private Card discardCard() {
+    private Card throwCard() {
 
         CardListWithInt w = new CardListWithInt();
 
@@ -56,8 +56,13 @@ public class NullPlayer extends AbstractPlayer {
         if (w.cl.size() > 0) {
             return w.cl.get(w.cl.size() - 1);
         } else {
-            return getPlayableCard();
+            for (NullSuitHelper sh : this.suits.values()) {
+                if (sh.size() > 0)
+                    return sh.highest();
+            }
         }
+
+        return getPlayableCard();
 
     }
 
@@ -67,7 +72,7 @@ public class NullPlayer extends AbstractPlayer {
         if (sh.size() > 0) {
             return sh.getUnderCard(firstCard);
         } else {
-            return discardCard();
+            return throwCard();
         }
     }
 
@@ -77,7 +82,7 @@ public class NullPlayer extends AbstractPlayer {
         if (sh.size() > 0) {
             return sh.getUnderCard(firstCard, secondCard);
         } else {
-            return discardCard();
+            return throwCard();
         }
     }
 
