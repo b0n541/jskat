@@ -30,14 +30,14 @@ public class AnnouncementTest {
         assertThat(cut.getTrumpSuit()).isEqualTo(Suit.SPADES);
         assertThat(cut.getCardsToDiscard()).contains(Card.C9, Card.C7);
 
-        cards = new CardList(Arrays.asList(Card.DJ, Card.C7, Card.ST, Card.SK, Card.SQ, Card.S9, Card.HA, Card.HK,
+        cards = new CardList(Arrays.asList(Card.DJ, Card.C7, Card.ST, Card.SK, Card.SQ, Card.S9, Card.HA, Card.HQ,
                 Card.H9, Card.DK, Card.D9, Card.D8));
         cut = new Bidder(cards, Player.FOREHAND);
         assertThat(cut.isGrand()).isFalse();
         assertThat(cut.getTrumpSuit()).isEqualTo(Suit.SPADES);
-        assertThat(cut.getCardsToDiscard()).contains(Card.C7);
+        // assertThat(cut.getCardsToDiscard()).contains(Card.C7);
 
-        // todo: assertThat(cut.getCardsToDiscard()).contains(Card.C7, Card.DK);
+        assertThat(cut.getCardsToDiscard()).contains(Card.C7, Card.DK);
     }
 
     @Test
@@ -49,7 +49,6 @@ public class AnnouncementTest {
         cut = new Bidder(cards, Player.MIDDLEHAND);
         assertThat(cut.isGrand()).isTrue();
         assertThat(cut.getTrumpSuit()).isEqualTo(null);
-        // TODO: discard points
         assertThat(cut.getCardsToDiscard()).contains(Card.H8);
 
         cards = new CardList(Arrays.asList(Card.CJ, Card.SJ, Card.CA, Card.CT, Card.CK, Card.C9, Card.S9, Card.S8,
@@ -84,9 +83,11 @@ public class AnnouncementTest {
     public void testDiamonds() {
         Bidder cut;
         CardList cards;
-
-        // assertThat(cut.getTrumpSuit()).isEqualTo(Suit.SPADES);
-        // assertThat(cut.getCardsToDiscard()).contains(Card.DT, Card.D9);
+        cards = new CardList(Arrays.asList(Card.SJ, Card.DJ, Card.DK, Card.DQ, Card.D7, Card.CA, Card.CT, Card.C9,
+                Card.SK, Card.S9, Card.HT, Card.HK));
+        cut = new Bidder(cards, Player.MIDDLEHAND);
+        assertThat(cut.getTrumpSuit()).isEqualTo(Suit.DIAMONDS);
+        assertThat(cut.getCardsToDiscard()).contains(Card.SK, Card.S9);
 
     }
 

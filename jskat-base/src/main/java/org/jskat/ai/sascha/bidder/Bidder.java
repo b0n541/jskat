@@ -15,10 +15,9 @@ import org.jskat.util.Player;
 import org.jskat.util.SkatConstants;
 
 import java.util.ArrayList;
-import java.util.Collection;
+
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Bidder {
     private final Player postion;
@@ -165,12 +164,12 @@ public class Bidder {
         Suit r = null;
         int lostTricksBest = 10;
         for (var s : longestSuits(longestSuitSize)) {
-            int comebacks = 0, lostTricks = 0, clears = 0;
+            int lostTricks = 0;
             for (SuitHelper sh : suits.values()) {
                 if (sh.getS() != s) {
-                    comebacks += sh.comebacks();
+                    // comebacks += sh.comebacks();
                     lostTricks += sh.estimateLostTricks();
-                    clears += sh.getNeededClears();
+                    // clears += sh.getNeededClears();
                 }
             }
             if (lostTricks < lostTricksBest) {

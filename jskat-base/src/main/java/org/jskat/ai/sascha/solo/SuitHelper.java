@@ -62,36 +62,35 @@ public class SuitHelper extends AbstractSuitHelper {
         return 0;
     }
 
-
     // public int neededClears() {
 
-    //     boolean hh = hasHighest();
-    //     if (size() == 1) {
-    //         return 0;
-    //     }
-    //     if (opp.size() == 0)
-    //         return 0;
+    // boolean hh = hasHighest();
+    // if (size() == 1) {
+    // return 0;
+    // }
+    // if (opp.size() == 0)
+    // return 0;
 
-    //     if (opp.size() == 1) {
-    //         if (hh)
-    //             return 0;
+    // if (opp.size() == 1) {
+    // if (hh)
+    // return 0;
 
-    //         return size() > 1 ? 1 : 0;
-    //     }
+    // return size() > 1 ? 1 : 0;
+    // }
 
-    //     if (size() < 5) {
-    //         if (hh) {
-    //             if (isHighest(1))
-    //                 return 0;
-    //             if (opp.size() < 3)
-    //                 return 0;
-    //             return 1;
-    //         } else {
-    //             return has2ndHighest() ? 1 : 0;
-    //         }
-    //     }
+    // if (size() < 5) {
+    // if (hh) {
+    // if (isHighest(1))
+    // return 0;
+    // if (opp.size() < 3)
+    // return 0;
+    // return 1;
+    // } else {
+    // return has2ndHighest() ? 1 : 0;
+    // }
+    // }
 
-    //     return isUnbeatable() ? 0 : 1;
+    // return isUnbeatable() ? 0 : 1;
     // }
 
     @Override
@@ -133,8 +132,8 @@ public class SuitHelper extends AbstractSuitHelper {
         if (size() == 2) {
             if (hasAce) {
                 if (c1.getRank() == Rank.TEN)
-                    return new CardWithInt(-10, c1);
-                return new CardWithInt(3, c1);
+                    return new CardWithInt(-16, c0);
+                return new CardWithInt(4, c1);
             }
             if (c0.getRank() == Rank.TEN) {
                 if (c1.getRank() == Rank.KING)
@@ -144,7 +143,26 @@ public class SuitHelper extends AbstractSuitHelper {
             return new CardWithInt(5 + c0.getPoints() - discardedPoints, c0);
         }
 
-        return new CardWithInt(0, own.get(own.size() - 1));
+        Card c2 = own.get(2);
+
+        if (size() == 3) {
+            if (hasAce) {
+                if (c1.getRank() == Rank.TEN) {
+                    if (c2.getRank() == Rank.KING)
+                        return new CardWithInt(-7, c0);
+                    return new CardWithInt(c2.getPoints(), c2);
+                }
+                return new CardWithInt(c1.getPoints(), c1);
+            }
+            if (c0.getRank() == Rank.TEN) {
+                if (c1.getRank() == Rank.KING)
+                    return new CardWithInt(0, c0);
+                return new CardWithInt(5, c0);
+            }
+            return new CardWithInt(c0.getPoints() + 1, c0);
+        }
+
+        return new CardWithInt(-1, own.get(own.size() - 1));
 
     }
 

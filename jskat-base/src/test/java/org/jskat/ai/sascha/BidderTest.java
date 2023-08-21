@@ -5,19 +5,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.Arrays;
 
 import org.jskat.AbstractJSkatTest;
-import org.jskat.ai.algorithmic.BidEvaluatorTest;
+
 import org.jskat.ai.sascha.bidder.Bidder;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.jskat.util.Suit;
 
 public class BidderTest extends AbstractJSkatTest {
-        private static final Logger log = LoggerFactory.getLogger(BidEvaluatorTest.class);
 
         @Test
         public void testMediocoreHand() {

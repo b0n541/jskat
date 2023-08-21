@@ -8,7 +8,6 @@ import org.jskat.ai.sascha.opponent.LeftOpponentSuit;
 import org.jskat.ai.sascha.opponent.RightOpponentGrand;
 import org.jskat.ai.sascha.opponent.RightOpponentNull;
 import org.jskat.ai.sascha.opponent.RightOpponentSuit;
-import org.jskat.ai.sascha.solo.GrandPlayer;
 import org.jskat.ai.sascha.solo.NullPlayer;
 import org.jskat.ai.sascha.solo.SuitPlayer;
 import org.jskat.data.GameAnnouncement;
@@ -17,8 +16,6 @@ import org.jskat.util.CardList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Random;
 
 /**
  * Random player for testing purposes and driving the other players nuts.
@@ -30,19 +27,15 @@ public class AIPlayerSascha extends AbstractAIPlayer {
     /**
      * Random generator for decision making.
      */
-    private final Random random = new Random();
 
     private Bidder bidder = null;
-    private boolean myGame = false;
     private AbstractPlayer player = null;
-    private int aggroLevel = 0;
 
     /**
      * Creates a new instance of AIPlayerRND.
      */
     public AIPlayerSascha() {
-
-        this("unknown");
+        this("Sascha");
     }
 
     /**
@@ -70,7 +63,6 @@ public class AIPlayerSascha extends AbstractAIPlayer {
     @Override
     public GameAnnouncement announceGame() {
         log.info("announceGame");
-        myGame = true;
         var a = bidder.gameAnnouncement();
         log.info("announcing game " + a + " on bid: " + knowledge.getHighestBid(knowledge.getPlayerPosition()));
         return bidder.gameAnnouncement();
@@ -148,7 +140,6 @@ public class AIPlayerSascha extends AbstractAIPlayer {
                 log.error("no player stance created");
             }
         } catch (Exception e) {
-
             log.error("", e);
         }
     }
@@ -194,7 +185,6 @@ public class AIPlayerSascha extends AbstractAIPlayer {
     @Override
     public void prepareForNewGame() {
         log.info("prepareForNewGame");
-        myGame = false;
         // nothing to do for AIPlayerRND
     }
 

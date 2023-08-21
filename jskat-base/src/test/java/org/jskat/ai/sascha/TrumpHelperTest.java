@@ -3,11 +3,10 @@ package org.jskat.ai.sascha;
 import java.util.Arrays;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.jskat.ai.sascha.bidder.Bidder;
+
 import org.jskat.ai.sascha.solo.TrumpHelper;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
-import org.jskat.util.Player;
 import org.jskat.util.Suit;
 import org.junit.jupiter.api.Test;
 
