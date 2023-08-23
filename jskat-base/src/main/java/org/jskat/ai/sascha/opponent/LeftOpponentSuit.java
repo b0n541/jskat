@@ -209,7 +209,10 @@ public class LeftOpponentSuit extends AbstractPlayer {
             return throwCard();
         }
 
-        return getPlayableCard();
+        if (sh.highest().beats(k.getGameType(), firstCard))
+            return sh.highest();
+
+        return sh.lowest();
     }
 
     private Card reactTrump(Card firstCard) {
@@ -231,7 +234,7 @@ public class LeftOpponentSuit extends AbstractPlayer {
 
     @Override
     protected Card rearHand(Card firstCard, Card secondCard) {
-        boolean oppTrick = !(firstCard.beats(k.getGameType(), secondCard));
+        boolean oppTrick = secondCard.beats(k.getGameType(), firstCard);
 
         if (firstCard.isTrump(k.getGameType())) {
             if (oppTrick) {
@@ -248,20 +251,23 @@ public class LeftOpponentSuit extends AbstractPlayer {
             return th.highestPointCard();
         }
         var sh = suits.get(firstCard.getSuit());
-        if (oppTrick) {
-            if (sh.size() == 0) {
-                var bc = th.beatingCards(firstCard);
-                if (bc.size() > 0)
+        if (sh.size() == 0) {
+            if (oppTrick) {
+                var bc = th.beatingCards(secondCard);
+                if (bc.size() > 0 && secondCard.getPoints() + firstCard.getPoints() > 7)
                     return bc.get(bc.size() - 1);
                 return throwCard();
             }
-            return sh.lowest();
-        }
-
-        if (sh.size() == 0) {
             return schmotzCard();
         }
-        return sh.highest();
+
+        var hc = sh.highest();
+        if (oppTrick) {
+            if (hc.beats(k.getGameType(), secondCard))
+                return hc;
+            return sh.lowest();
+        }
+        return hc;
     }
 
     @Override
