@@ -171,12 +171,6 @@ public class BidderTest extends AbstractJSkatTest {
 
                 assertThat(cut.checkSuit(Suit.CLUBS)).isTrue();
 
-                // cards = new CardList(Arrays.asList(Card.DJ, Card.CA, Card.CK, Card.CQ,
-                // Card.C9, Card.ST, Card.SK, Card.HA,
-                // Card.DT, Card.D7));
-                // cut = new Bidder(cards, Player.MIDDLEHAND);
-                // assertThat(cut.isGrand()).isFalse();
-                // assertThat(cut.getGameValue()).isEqualTo(24);
         }
 
         @Test

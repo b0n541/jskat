@@ -528,7 +528,8 @@ public final class JSkatOptions {
      * @return Value of property cheatDebugMode.
      */
     public Boolean isCheatDebugMode() {
-        return getBoolean(Option.CHEAT_DEBUG_MODE);
+        return true;
+        // return getBoolean(Option.CHEAT_DEBUG_MODE);
     }
 
     /**
