@@ -1,5 +1,7 @@
 package org.jskat.util;
 
+import java.util.List;
+
 import org.jskat.util.rule.SkatRuleFactory;
 import org.jskat.util.rule.SuitGrandRamschRule;
 
@@ -156,6 +158,56 @@ public enum Card {
         return suit;
     }
 
+    public Card getNextHighest(GameType g) {
+        List<Rank> rl;
+        if (g == GameType.NULL) {
+            rl = Rank.getNullRankList();
+            int i = rl.indexOf(rank);
+            if (i == 0)
+                return null;
+            return Card.getCard(suit, rl.get(i - 1));
+        }
+        if (rank == Rank.JACK) {
+            if (suit == Suit.CLUBS)
+                return null;
+            if (suit == Suit.SPADES)
+                return Card.CJ;
+            if (suit == Suit.HEARTS)
+                return Card.SJ;
+            return Card.HJ;
+        }
+        rl = Rank.getRankList();
+        int i = Rank.getNullRankList().indexOf(rank);
+        if (i == 0)
+            return (g.getTrumpSuit() == suit) ? Card.DJ : null;
+        return Card.getCard(suit, rl.get(i - 1));
+    }
+
+    public Card getNextLowest(GameType g) {
+        List<Rank> rl;
+        if (g == GameType.NULL) {
+            rl = Rank.getNullRankList();
+            int i = rl.indexOf(rank);
+            if (i == rl.size() - 1)
+                return null;
+            return Card.getCard(suit, rl.get(i + 1));
+        }
+        if (rank == Rank.JACK) {
+            if (suit == Suit.CLUBS)
+                return Card.SJ;
+            if (suit == Suit.SPADES)
+                return Card.HJ;
+            if (suit == Suit.HEARTS)
+                return Card.DJ;
+            return Card.getCard(g.getTrumpSuit(), Rank.ACE);
+        }
+        rl = Rank.getRankList();
+        int i = Rank.getNullRankList().indexOf(rank);
+        if (i == rl.size() - 1)
+            return null;
+        return Card.getCard(suit, rl.get(i + 1));
+    }
+
     /**
      * Gets the rank of the card
      *
@@ -227,7 +279,7 @@ public enum Card {
      * @return TRUE, when the card is allowed to be played
      */
     public boolean isAllowed(final GameType gameType, final Card initialCard,
-                             final CardList hand) {
+            final CardList hand) {
 
         boolean result = false;
 
@@ -281,7 +333,7 @@ public enum Card {
      * @return a CardList with all the cards that would beat the initial card
      */
     public static CardList getBeatingCards(final GameType gameType,
-                                           final Card cardToBeat) {
+            final Card cardToBeat) {
         // TODO (mjl 23.08.2011) write unit tests for Card.getBeatingCards()
         // FIXME (mjl 05.09.2011) is this supposed to consider trump cards?
         final CardList beatingCards = new CardList();

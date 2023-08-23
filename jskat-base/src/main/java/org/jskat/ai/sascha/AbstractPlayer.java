@@ -12,21 +12,12 @@ import org.slf4j.LoggerFactory;
 
 public abstract class AbstractPlayer {
     protected final ImmutablePlayerKnowledge k;
-    protected CardList oppCardList;
     protected SkatRule rules;
     private static final Logger log = LoggerFactory.getLogger(AIPlayerSascha.class);
 
     public AbstractPlayer(final ImmutablePlayerKnowledge k) {
         this.k = k;
         this.rules = SkatRuleFactory.getSkatRules(k.getGameType());
-
-        oppCardList = new CardList(Card.values());
-        for (Card c : k.getOwnCards()) {
-            oppCardList.remove(c);
-        }
-        for (Card c : k.getSkat()) {
-            oppCardList.remove(c);
-        }
     }
 
     protected abstract Card foreHand();
@@ -68,18 +59,13 @@ public abstract class AbstractPlayer {
     }
 
     public Card playCard() {
-        oppCardList.removeAll(k.getTrickCards());
 
         if (k.getNoOfTricks() > 0) {
             Trick t = k.getCompletedTricks().get(k.getNoOfTricks() - 1);
-            oppCardList.removeAll(t.getCardList());
             afterTrick(t);
         }
 
         beforeCard();
-
-        if (k.getNoOfTricks() > 0)
-            oppCardList.removeAll(k.getCompletedTricks().get(k.getNoOfTricks() - 1).getCardList());
 
         if (k.getTrickCards() == null || k.getTrickCards().isEmpty())
             return foreHand();

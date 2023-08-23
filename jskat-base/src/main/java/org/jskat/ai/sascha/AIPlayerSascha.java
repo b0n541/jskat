@@ -98,6 +98,7 @@ public class AIPlayerSascha extends AbstractAIPlayer {
         log.info("startGame");
         try {
             if (knowledge.getDeclarer() == null || knowledge.getDeclarer() == knowledge.getPlayerPosition()) {
+                log.info("being announcer");
                 switch (knowledge.getGameType()) {
                     case GRAND:
                         player = new SuitPlayer(knowledge);
@@ -111,9 +112,10 @@ public class AIPlayerSascha extends AbstractAIPlayer {
                 }
 
             } else if (knowledge.getDeclarer().getLeftNeighbor() == knowledge.getPlayerPosition()) {
+                log.info("being left opponent");
                 switch (knowledge.getGameType()) {
                     case GRAND:
-                        player = new LeftOpponentGrand(knowledge);
+                        player = new LeftOpponentSuit(knowledge);
                         break;
                     case NULL:
                         player = new LeftOpponentNull(knowledge);
@@ -124,9 +126,10 @@ public class AIPlayerSascha extends AbstractAIPlayer {
                 }
 
             } else if (knowledge.getDeclarer().getRightNeighbor() == knowledge.getPlayerPosition()) {
+                log.info("being right opponent");
                 switch (knowledge.getGameType()) {
                     case GRAND:
-                        player = new RightOpponentGrand(knowledge);
+                        player = new RightOpponentSuit(knowledge);
                         break;
                     case NULL:
                         player = new RightOpponentNull(knowledge);

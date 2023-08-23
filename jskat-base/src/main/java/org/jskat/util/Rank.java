@@ -50,10 +50,10 @@ public enum Rank {
      * Constructor
      */
     Rank(final String shortString,
-         final String longString,
-         final int suitGrandOrder,
-         final int nullOrder,
-         final int points) {
+            final String longString,
+            final int suitGrandOrder,
+            final int nullOrder,
+            final int points) {
         this.shortString = shortString;
         this.longString = longString;
         this.suitGrandOrder = suitGrandOrder;
@@ -152,11 +152,17 @@ public enum Rank {
      * Builds an array of the ranks (e.g. to compute the multipliers)
      *
      * @return an array containing the ranks without the jack, starting with ace,
-     * ending with 7
+     *         ending with 7
      */
     public static List<Rank> getRankList() {
 
         return Arrays.asList(Rank.ACE, Rank.TEN, Rank.KING, Rank.QUEEN,
+                Rank.NINE, Rank.EIGHT, Rank.SEVEN);
+    }
+
+    public static List<Rank> getNullRankList() {
+
+        return Arrays.asList(Rank.ACE, Rank.KING, Rank.QUEEN, Rank.JACK, Rank.TEN,
                 Rank.NINE, Rank.EIGHT, Rank.SEVEN);
     }
 
