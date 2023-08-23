@@ -229,7 +229,7 @@ public class RightOpponentSuit extends AbstractPlayer {
             return sh.highest();
 
         Card c = sh.lowestOwnBeatingCard(firstCard);
-        if (c != null)
+        if (c != null && c.getPoints() < 10)
             return c;
         // letze wahl, wegbleiben
         return sh.lowest();

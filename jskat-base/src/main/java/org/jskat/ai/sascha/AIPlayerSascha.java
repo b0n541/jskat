@@ -1,5 +1,7 @@
 package org.jskat.ai.sascha;
 
+import java.util.Random;
+
 import org.jskat.ai.AbstractAIPlayer;
 import org.jskat.ai.sascha.bidder.Bidder;
 import org.jskat.ai.sascha.opponent.LeftOpponentGrand;
@@ -30,6 +32,7 @@ public class AIPlayerSascha extends AbstractAIPlayer {
 
     private Bidder bidder = null;
     private AbstractPlayer player = null;
+    private final Random random = new Random();
 
     /**
      * Creates a new instance of AIPlayerRND.
@@ -147,25 +150,44 @@ public class AIPlayerSascha extends AbstractAIPlayer {
         }
     }
 
+    private Card playRandomCard() {
+
+        int index = -1;
+
+        // first find all possible cards
+        final CardList possibleCards = getPlayableCards(knowledge
+                .getTrickCards());
+
+        // then choose a random one
+        index = random.nextInt(possibleCards.size());
+
+        return possibleCards.get(index);
+    }
+
     @Override
     public Card playCard() {
         log.info("playCard");
+        var playableCards = getPlayableCards(knowledge.getCurrentTrick().getCardList());
+        if (playableCards.size() == 1)
+            return playableCards.get(0);
         Card c;
         try {
             c = player.playCard();
         } catch (Exception e) {
             log.error("exception", e);
-            throw e;
+            return playRandomCard();
         }
 
         log.info("playing card: " + c);
 
         if (!knowledge.getOwnCards().contains(c)) {
             log.error("trying to play non-own card: " + c);
+            return playRandomCard();
         }
-        if (!getPlayableCards(knowledge.getCurrentTrick().getCardList()).contains(c)) {
+        if (!playableCards.contains(c)) {
             log.error("trying to play non-allowed card: " + c);
             log.error(player.getClass().getName());
+            return playRandomCard();
         }
 
         return c;
