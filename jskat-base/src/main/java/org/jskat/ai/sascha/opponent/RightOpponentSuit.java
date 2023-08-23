@@ -1,6 +1,7 @@
 package org.jskat.ai.sascha.opponent;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 import org.jskat.ai.sascha.AbstractPlayer;
@@ -96,18 +97,23 @@ public class RightOpponentSuit extends AbstractPlayer {
     }
 
     private Card schmotzCard() {
+        ArrayList<SuitHelper> suits = new ArrayList<SuitHelper>();
+        for (var sh : this.suits.values()) {
+            if (sh.size() > 0)
+                suits.add(sh);
+        }
         // blanke zehner
-        for (var sh : suits.values()) {
-            if (!sh.hasHighest() && sh.size() == 1 && sh.isOwn(Rank.TEN))
+        for (var sh : suits) {
+            if (sh.size() == 1 && !sh.hasHighest() && sh.isOwn(Rank.TEN))
                 return sh.highest();
         }
         // dicke, die bei gegner blank sitzen
-        for (var sh : suits.values()) {
+        for (var sh : suits) {
             if (sh.isOppEmpty() && (sh.isOwn(Rank.ACE) || sh.isOwn(Rank.TEN)))
                 return sh.highest();
         }
         // ass und zehn
-        for (var sh : suits.values()) {
+        for (var sh : suits) {
             if (sh.isOwn(Rank.ACE) && sh.isOwn(Rank.TEN))
                 return sh.highest();
         }
@@ -115,23 +121,23 @@ public class RightOpponentSuit extends AbstractPlayer {
         if (th.size() > 0 && th.getStartingSize() < 3 && th.highestPointCard().getPoints() > 4)
             return th.highestPointCard();
         // schlecht gedeckte zehner
-        for (var sh : suits.values()) {
-            if (!sh.hasHighest() && sh.isOwn(Rank.TEN) && !sh.isOwn(Rank.KING))
+        for (var sh : suits) {
+            if (sh.isOwn(Rank.TEN) && !sh.hasHighest() && !sh.isOwn(Rank.KING))
                 return sh.highest();
         }
         // lange farbe
-        for (var sh : suits.values()) {
+        for (var sh : suits) {
             if (sh.getStartingSize() > 3 && (sh.isOwn(Rank.ACE) || sh.isOwn(Rank.TEN)))
                 return sh.highest();
         }
         // blanke könige
-        for (var sh : suits.values()) {
-            if (!sh.hasHighest() && sh.size() == 1 && sh.isOwn(Rank.KING))
+        for (var sh : suits) {
+            if (sh.size() == 1 && !sh.hasHighest() && sh.isOwn(Rank.KING))
                 return sh.highest();
         }
         // gut gedeckte zehner
-        for (var sh : suits.values()) {
-            if (!sh.hasHighest() && sh.isOwn(Rank.TEN))
+        for (var sh : suits) {
+            if (sh.isOwn(Rank.TEN) && !sh.hasHighest())
                 return sh.highest();
         }
         // nichts zum buttern => abwerfen
@@ -153,36 +159,38 @@ public class RightOpponentSuit extends AbstractPlayer {
     }
 
     private Card throwCard() {
-        // gespielte farben blank werfen
-        if (prefPlaySuit.size() > 0)
-            return prefPlaySuit.lowest();
 
         var shortestSuits = nextShortestSuit();
 
         if (shortestSuits.size() == 0) // keine farbe mehr da
             return th.LowestPointCard();
+        ArrayList<SuitHelper> suits = new ArrayList<SuitHelper>();
+        for (var sh : this.suits.values()) {
+            if (sh.size() > 0)
+                suits.add(sh);
+        }
 
         // nur ein schwacher trumpf und keine kurze farbe
         if (th.getStartingSize() < 3 && th.size() == 1 && shortestSuits.get(0).size() > 1)
             return th.LowestPointCard();
 
         // von anfang an blanke miese
-        for (var sh : suits.values()) {
+        for (var sh : suits) {
             if (sh.getStartingSize() == 1 && sh.highest().getPoints() == 0)
                 return sh.highest();
         }
         // von anfang an blankes bild
-        for (var sh : suits.values()) {
+        for (var sh : suits) {
             if (sh.getStartingSize() == 1 && sh.highest().getPoints() < 10)
                 return sh.highest();
         }
         // kurze miese
-        for (var sh : suits.values()) {
+        for (var sh : suits) {
             if (sh.lowest().getPoints() == 0)
                 return sh.lowest();
         }
         // kurzes bild
-        for (var sh : suits.values()) {
+        for (var sh : suits) {
             if (sh.lowest().getPoints() < 10)
                 return sh.lowest();
         }
@@ -248,7 +256,7 @@ public class RightOpponentSuit extends AbstractPlayer {
         }
 
         var sh = suits.get(firstCard.getSuit());
-        if (sh.size() < 0) {
+        if (sh.size() == 0) {
             // partner higher
             if (secondCard.beats(k.getGameType(), firstCard)) {
                 return schmotzCard();
@@ -284,7 +292,6 @@ public class RightOpponentSuit extends AbstractPlayer {
         }
 
         th.registerTrick(t);
-
 
         if (prefPlaySuit != null && prefPlaySuit.size() == 0) {
             prefPlaySuit = null;

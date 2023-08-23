@@ -158,6 +158,7 @@ public class TrumpHelper {
 
     public void registerTrick(Trick t) {
         CardList tc = Util.filterSuite(t.getCardList(), s);
+        tc.addAll(Util.getJacks(t.getCardList()));
         own.removeAll(tc);
         out.addAll(tc);
 

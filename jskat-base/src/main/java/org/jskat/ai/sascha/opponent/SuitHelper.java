@@ -89,7 +89,7 @@ public class SuitHelper {
     }
 
     public Card lowestOwnBeatingCard(Card c) {
-        for (int i = size() - 1; i >= 0; i++) {
+        for (int i = size() - 1; i >= 0; i--) {
             if (own.get(i).beats(g, c))
                 return own.get(i);
         }
