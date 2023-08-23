@@ -98,7 +98,7 @@ public class AIPlayerSascha extends AbstractAIPlayer {
 
     @Override
     public void startGame() {
-        log.info("startGame with declarer " + knowledge.getDeclarer().toString());
+        log.info("startGame with declarer " + knowledge.getDeclarer());
         try {
             if (knowledge.getDeclarer() == null || knowledge.getDeclarer() == knowledge.getPlayerPosition()) {
                 log.info(knowledge.getPlayerPosition() + " being announcer");
