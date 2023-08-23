@@ -177,7 +177,7 @@ public enum Card {
             return Card.HJ;
         }
         rl = Rank.getRankList();
-        int i = Rank.getNullRankList().indexOf(rank);
+        int i = rl.indexOf(rank);
         if (i == 0)
             return (g.getTrumpSuit() == suit) ? Card.DJ : null;
         return Card.getCard(suit, rl.get(i - 1));
@@ -202,7 +202,7 @@ public enum Card {
             return Card.getCard(g.getTrumpSuit(), Rank.ACE);
         }
         rl = Rank.getRankList();
-        int i = Rank.getNullRankList().indexOf(rank);
+        int i = rl.indexOf(rank);
         if (i == rl.size() - 1)
             return null;
         return Card.getCard(suit, rl.get(i + 1));

@@ -151,6 +151,11 @@ public abstract class AbstractSuitHelper {
         return own.contains(Card.getCard(s, r));
     }
 
+    public boolean couldBeUnbeatable(){
+        // todo implement
+        throw new UnsupportedOperationException("not implemented yet");
+    }
+
     public boolean isUnbeatable() {
         for (int i = 0; i < opp.size() && i < own.size(); i++) {
             if (!isHighest(i))

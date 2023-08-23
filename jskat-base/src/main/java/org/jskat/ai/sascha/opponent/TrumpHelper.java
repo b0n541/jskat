@@ -28,6 +28,7 @@ public class TrumpHelper {
         this.s = g.getTrumpSuit();
         this.out = new CardList();
         this.own = Util.filterSuite(own, s);
+        this.own.addAll(Util.getJacks(own));
         this.own.sort(g);
 
         this.partner = partner;

@@ -1,0 +1,115 @@
+6946 [JavaFX Application Thread] INFO  org.jskat.control.JSkatEventBus     (80  ) - Forwarding command org.jskat.control.command.table.CreateTableCommand@636b16d7 to table Local table 1
+7008 [AWT-EventQueue-0] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event SkatGameStateChangedEvent: GAME_START to table Local table 1
+7008 [AWT-EventQueue-0] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: GAME_START
+7877 [JavaFX Application Thread] INFO  org.jskat.control.JSkatEventBus     (80  ) - Forwarding command org.jskat.control.command.table.StartSkatSeriesCommand@5a9837c4 to table Local table 1
+13927 [AWT-EventQueue-0] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event PlayerNamesChangedEvent: Jan, Markus, D047491 to table Local table 1
+13931 [AWT-EventQueue-0] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event SkatSeriesStartedEvent to table Local table 1
+13934 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (190 ) - prepareForNewGame
+13935 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (190 ) - prepareForNewGame
+13935 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (190 ) - prepareForNewGame
+13952 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (70  ) - Forwarding game move event GameStartEvent[gameNo=1, gameVariant=STANDARD, leftPlayerPosition=MIDDLEHAND, rightPlayerPosition=REARHAND, userPosition=FOREHAND] to table Local table 1
+13964 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event SkatGameStateChangedEvent: GAME_START to table Local table 1
+13964 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: GAME_START
+13966 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: GAME_START
+13973 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event SkatGameStateChangedEvent: DEALING to table Local table 1
+13973 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: DEALING
+13974 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: DEALING
+14081 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (70  ) - Forwarding game move event Dealt cards:
+FOREHAND: {â™¥K â™£A â™£9 â™¥7 â™¥A â™£K â™ A â™£8 â™¥J â™ 8}
+MIDDLEHAND: {â™£T â™£7 â™ K â™ 9 â™¦T â™¥Q â™¦9 â™¦8 â™¥T â™£J}
+REARHAND: {â™ 7 â™¦J â™¦A â™¦7 â™¦Q â™ T â™¦K â™¥8 â™¥9 â™ Q}
+Skat: {â™£Q â™ J} to table Local table 1
+14183 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event SkatGameStateChangedEvent: BIDDING to table Local table 1
+14185 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: BIDDING
+14185 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: BIDDING
+14187 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event ActivePlayerChangedEvent: MIDDLEHAND to table Local table 1
+14206 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event ActivePlayerChangedEvent: MIDDLEHAND to table Local table 1
+14208 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (73  ) - bidMore
+14223 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (81  ) - passing
+14224 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (70  ) - Forwarding game move event MIDDLEHAND: pass to table Local table 1
+14225 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event ActivePlayerChangedEvent: REARHAND to table Local table 1
+14225 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (73  ) - bidMore
+14226 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (81  ) - passing
+14227 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (70  ) - Forwarding game move event REARHAND: pass to table Local table 1
+14232 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event ActivePlayerChangedEvent: FOREHAND to table Local table 1
+14237 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (73  ) - bidMore
+14237 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (81  ) - passing
+14237 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (70  ) - Forwarding game move event FOREHAND: pass to table Local table 1
+14239 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (70  ) - Forwarding game move event null: Game announcement: PASSED_IN to table Local table 1
+63065 [JavaFX Application Thread] INFO  org.jskat.control.JSkatEventBus     (80  ) - Forwarding command org.jskat.control.command.table.CreateTableCommand@35aabc2d to table Local table 2
+63076 [AWT-EventQueue-0] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event SkatGameStateChangedEvent: GAME_START to table Local table 2
+63077 [AWT-EventQueue-0] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: GAME_START
+63780 [JavaFX Application Thread] INFO  org.jskat.control.JSkatEventBus     (80  ) - Forwarding command org.jskat.control.command.table.StartSkatSeriesCommand@3c1b3e16 to table Local table 2
+65874 [AWT-EventQueue-0] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event PlayerNamesChangedEvent: Jan, Markus, D047491 to table Local table 2
+65875 [AWT-EventQueue-0] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event SkatSeriesStartedEvent to table Local table 2
+65875 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (190 ) - prepareForNewGame
+65875 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (190 ) - prepareForNewGame
+65875 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (190 ) - prepareForNewGame
+65876 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (70  ) - Forwarding game move event GameStartEvent[gameNo=1, gameVariant=STANDARD, leftPlayerPosition=REARHAND, rightPlayerPosition=FOREHAND, userPosition=MIDDLEHAND] to table Local table 2
+65876 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event SkatGameStateChangedEvent: GAME_START to table Local table 2
+65877 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: GAME_START
+65877 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: GAME_START
+65886 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event SkatGameStateChangedEvent: DEALING to table Local table 2
+65887 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: DEALING
+65893 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: DEALING
+66001 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (70  ) - Forwarding game move event Dealt cards:
+FOREHAND: {â™£Q â™ T â™¦7 â™ A â™ J â™¦8 â™£T â™¥A â™¥Q â™£7}
+MIDDLEHAND: {â™£9 â™¥T â™£A â™¥9 â™ 7 â™¥K â™ 8 â™¦T â™£J â™¦Q}
+REARHAND: {â™¦K â™¦9 â™ 9 â™¦A â™¥J â™ Q â™ K â™¦J â™£8 â™£K}
+Skat: {â™¥7 â™¥8} to table Local table 2
+66102 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event SkatGameStateChangedEvent: BIDDING to table Local table 2
+66102 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: BIDDING
+66102 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: BIDDING
+66103 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event ActivePlayerChangedEvent: MIDDLEHAND to table Local table 2
+66108 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event ActivePlayerChangedEvent: MIDDLEHAND to table Local table 2
+66113 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (73  ) - bidMore
+66113 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (81  ) - passing
+66114 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (70  ) - Forwarding game move event MIDDLEHAND: pass to table Local table 2
+66117 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event ActivePlayerChangedEvent: REARHAND to table Local table 2
+66119 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (73  ) - bidMore
+66119 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (81  ) - passing
+66120 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (70  ) - Forwarding game move event REARHAND: pass to table Local table 2
+66122 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event ActivePlayerChangedEvent: FOREHAND to table Local table 2
+66123 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (73  ) - bidMore
+66124 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (78  ) - bidding more
+66124 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (70  ) - Forwarding game move event FOREHAND: 0 to table Local table 2
+66127 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event DeclarerChangedEvent: FOREHAND to table Local table 2
+66127 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (951 ) - New declarer: FOREHAND
+66127 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (951 ) - New declarer: FOREHAND
+66128 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event ActivePlayerChangedEvent: FOREHAND to table Local table 2
+66234 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event SkatGameStateChangedEvent: PICKING_UP_SKAT to table Local table 2
+66235 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: PICKING_UP_SKAT
+66236 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: PICKING_UP_SKAT
+66239 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event ActivePlayerChangedEvent: FOREHAND to table Local table 2
+66241 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (54  ) - pickUpSkat
+66241 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event SkatGameStateChangedEvent: DISCARDING to table Local table 2
+66242 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: DISCARDING
+66243 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: DISCARDING
+66246 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event ActivePlayerChangedEvent: FOREHAND to table Local table 2
+66248 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event SkatCardsChangedEvent: {â™¥7 â™¥8} to table Local table 2
+66249 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (176 ) - getCardsToDiscard [ SJ; H7; SA; D8; C7; HA; D7; ST; H8; CQ; CT; HQ; ]
+66250 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (178 ) - discarding: {â™£T â™¦8}
+66251 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event SkatGameStateChangedEvent: DECLARING to table Local table 2
+66251 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: DECLARING
+66253 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: DECLARING
+66254 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (65  ) - announceGame
+66255 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (67  ) - announcing game Game announcement: HEARTS on bid: 0
+66255 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (70  ) - Forwarding game move event FOREHAND: Game announcement: HEARTS to table Local table 2
+66259 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (98  ) - startGame with declarer FOREHAND
+66260 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (101 ) - being announcer
+66260 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (98  ) - startGame with declarer FOREHAND
+66260 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (115 ) - being left opponent
+66262 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (98  ) - startGame with declarer FOREHAND
+66262 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (129 ) - being right opponent
+66364 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event SkatGameStateChangedEvent: TRICK_PLAYING to table Local table 2
+66364 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: TRICK_PLAYING
+66364 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: TRICK_PLAYING
+66365 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event SkatGameStateChangedEvent: TRICK_PLAYING to table Local table 2
+66365 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: TRICK_PLAYING
+66366 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.gui.swing.table.SkatTablePanel (504 ) - New game state: TRICK_PLAYING
+66469 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event ActivePlayerChangedEvent: FOREHAND to table Local table 2
+66470 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (152 ) - playCard
+66470 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (161 ) - playing card: â™¥7
+66471 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (70  ) - Forwarding game move event FOREHAND: â™¥7 to table Local table 2
+66573 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.control.JSkatEventBus     (73  ) - Forwarding table event ActivePlayerChangedEvent: MIDDLEHAND to table Local table 2
+66574 [ForkJoinPool.commonPool-worker-1] INFO  org.jskat.ai.sascha.AIPlayerSascha  (152 ) - playCard

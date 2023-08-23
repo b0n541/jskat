@@ -285,7 +285,8 @@ public class RightOpponentSuit extends AbstractPlayer {
 
         th.registerTrick(t);
 
-        if (prefPlaySuit.size() == 0) {
+
+        if (prefPlaySuit != null && prefPlaySuit.size() == 0) {
             prefPlaySuit = null;
         }
 

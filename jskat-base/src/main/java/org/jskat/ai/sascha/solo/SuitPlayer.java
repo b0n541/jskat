@@ -32,6 +32,9 @@ public class SuitPlayer extends AbstractPlayer {
         if (th.opp.size() > 0) {
             if (th.isUnbeatable() && th.size() > 0)
                 return th.getPullCard();
+            if (th.hasHighest() && th.opp.size() < 3)
+                return th.getPullCard();
+
             Card c = th.getClearCard();
             if (c != null)
                 return c;
