@@ -166,7 +166,7 @@ public class AIPlayerSascha extends AbstractAIPlayer {
 
     @Override
     public Card playCard() {
-        log.info("playCard");
+        log.info(player.getClass() + ": playCard");
         var playableCards = getPlayableCards(knowledge.getCurrentTrick().getCardList());
         if (playableCards.size() == 1)
             return playableCards.get(0);

@@ -68,6 +68,7 @@ public class SuitHelper {
         while (nh != null) {
             if (!out.contains(nh))
                 return false;
+            nh = nh.getNextHighest(g);
         }
         return true;
     }
