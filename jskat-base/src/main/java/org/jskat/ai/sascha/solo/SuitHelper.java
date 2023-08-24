@@ -35,7 +35,7 @@ public class SuitHelper extends AbstractSuitHelper {
 
     public int getThrowPriority() {
         if (isUnbeatable() || has2ndHighest())
-            return 0;
+            return -1;
 
         switch (size()) {
             case 1:

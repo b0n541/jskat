@@ -6,6 +6,7 @@ import org.jskat.ai.sascha.AbstractPlayer;
 import org.jskat.data.Trick;
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
+import org.jskat.util.Rank;
 import org.jskat.util.Suit;
 
 public class SuitPlayer extends AbstractPlayer {
@@ -104,8 +105,12 @@ public class SuitPlayer extends AbstractPlayer {
                 return throwSuit();
             if (firstCard.getPoints() > 7)
                 return th.stab();
-            if (shouldThrow())
-                return throwSuit();
+            if (shouldThrow()) {
+                Card toThrow = throwSuit();
+                if (toThrow.getPoints() > 4)
+                    return th.stab();
+                return toThrow;
+            }
             return th.stab();
         } else {
             return midSuitCard(firstCard);
