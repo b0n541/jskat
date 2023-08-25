@@ -8,12 +8,15 @@ import org.jskat.util.GameType;
 import org.jskat.util.Player;
 
 import org.jskat.util.Suit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TrumpHelper {
     private Suit s;
     private CardList own, out;
     private GameType g;
     private Player partner, opp;
+    private static Logger log;
 
     private boolean partnerEmpty, oppEmpty;
 
@@ -24,6 +27,7 @@ public class TrumpHelper {
     }
 
     public TrumpHelper(CardList own, GameType g, Player partner, Player opp) {
+        log = LoggerFactory.getLogger(this.getClass());
         this.g = g;
         this.s = g.getTrumpSuit();
         this.out = new CardList();
@@ -159,7 +163,8 @@ public class TrumpHelper {
     public void registerTrick(Trick t) {
         CardList tc = Util.filterSuite(t.getCardList(), s);
         tc.addAll(Util.getJacks(t.getCardList()));
-        own.removeAll(tc);
+        if (own.removeAll(tc))
+            log.info("{} Helper: removed {} from {}", s, t.getCardList(), own);
         out.addAll(tc);
 
         if (!t.getFirstCard().isTrump(g))

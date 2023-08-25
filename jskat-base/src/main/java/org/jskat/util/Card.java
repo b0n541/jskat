@@ -397,6 +397,6 @@ public enum Card {
     @Override
     public String toString() {
 
-        return suit.getSymbol() + rank.getShortString();
+        return suit.getShortString() + rank.getShortString();
     }
 }

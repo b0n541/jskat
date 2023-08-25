@@ -8,11 +8,14 @@ import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SuitPlayer extends AbstractPlayer {
 
     protected HashMap<Suit, SuitHelper> suits = new HashMap<Suit, SuitHelper>();
     private TrumpHelper th;
+    private static Logger log;
 
     public SuitPlayer(final ImmutablePlayerKnowledge k) {
         super(k);
@@ -22,6 +25,7 @@ public class SuitPlayer extends AbstractPlayer {
             }
         }
         th = new TrumpHelper(k.getTrumpSuit(), k.getOwnCards());
+        log = LoggerFactory.getLogger(this.getClass());
     }
 
     @Override
@@ -35,8 +39,9 @@ public class SuitPlayer extends AbstractPlayer {
                 return th.getPullCard();
             if (th.hasHighest() && th.opp.size() < 3)
                 return th.getPullCard();
-
-            Card c = th.getClearCard();
+            Card c = null;
+            if (th.size() > 0)
+                c = th.getClearCard();
             if (c != null)
                 return c;
             return pullSuit();
@@ -185,13 +190,16 @@ public class SuitPlayer extends AbstractPlayer {
 
     @Override
     protected void afterTrick(Trick t) {
+
         for (SuitHelper sh : this.suits.values()) {
             sh.registerTrick(t);
         }
+        log.info("helper: {}; actual: {}", th.getS(), k.getTrumpSuit());
         th.registerTrick(t);
     }
 
     @Override
     protected void beforeCard() {
+
     }
 }

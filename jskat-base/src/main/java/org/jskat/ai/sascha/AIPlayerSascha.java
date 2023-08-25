@@ -66,6 +66,8 @@ public class AIPlayerSascha extends AbstractAIPlayer {
     @Override
     public GameAnnouncement announceGame() {
         log.info("announceGame");
+        log.info("having {} and {}}", knowledge.getOwnCards(), knowledge.getSkat());
+        log.info("thinking {} and {}}", bidder.getC(), knowledge.getSkat());
         var a = bidder.gameAnnouncement();
         log.info("announcing game " + a + " on bid: " + knowledge.getHighestBid(knowledge.getPlayerPosition()));
         return bidder.gameAnnouncement();
@@ -168,8 +170,6 @@ public class AIPlayerSascha extends AbstractAIPlayer {
     public Card playCard() {
         log.info(player.getClass() + ": playCard");
         var playableCards = getPlayableCards(knowledge.getCurrentTrick().getCardList());
-        if (playableCards.size() == 1)
-            return playableCards.get(0);
         Card c;
         try {
             c = player.playCard();
@@ -197,9 +197,10 @@ public class AIPlayerSascha extends AbstractAIPlayer {
     public CardList getCardsToDiscard() {
         log.info("getCardsToDiscard " + Util.makeReadable(knowledge.getOwnCards()));
         bidder = new Bidder(knowledge.getOwnCards(), knowledge.getPlayerPosition());
-        log.info("discarding: " + bidder.getCardsToDiscard());
+        var r = bidder.getCardsToDiscard();
+        log.info("discarding: " + r);
         try {
-            return bidder.getCardsToDiscard();
+            return r;
         } catch (Exception e) {
             log.error("", e);
             throw e;

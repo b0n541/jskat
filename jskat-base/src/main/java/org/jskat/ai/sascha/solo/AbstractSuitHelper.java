@@ -1,5 +1,6 @@
 package org.jskat.ai.sascha.solo;
 
+import org.jskat.ai.sascha.AIPlayerSascha;
 import org.jskat.ai.sascha.util.CardWithInt;
 import org.jskat.data.Trick;
 import org.jskat.util.Card;
@@ -7,14 +8,18 @@ import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Rank;
 import org.jskat.util.Suit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class AbstractSuitHelper {
     protected CardList own, out, opp, discardedCards;
     protected GameType g = GameType.GRAND;
     protected Suit s;
+    private static Logger log;
 
     public AbstractSuitHelper() {
         discardedCards = new CardList();
+        log = LoggerFactory.getLogger(this.getClass());
     }
 
     public Suit getS() {
@@ -151,7 +156,7 @@ public abstract class AbstractSuitHelper {
         return own.contains(Card.getCard(s, r));
     }
 
-    public boolean couldBeUnbeatable(){
+    public boolean couldBeUnbeatable() {
         // todo implement
         throw new UnsupportedOperationException("not implemented yet");
     }
@@ -191,7 +196,9 @@ public abstract class AbstractSuitHelper {
     public void registerTrick(Trick trick) {
         out.addAll(trick.getCardList());
         opp.removeAll(trick.getCardList());
-        own.removeAll(trick.getCardList());
+        if (own.removeAll(trick.getCardList()))
+            log.info("{} Helper: removed {} from {}", s, trick.getCardList(), own);
+
     };
 
 }

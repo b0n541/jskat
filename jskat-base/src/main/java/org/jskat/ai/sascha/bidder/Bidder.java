@@ -25,6 +25,10 @@ public class Bidder {
     private final Player postion;
     private CardList c;
 
+    public CardList getC() {
+        return c;
+    }
+
     protected HashMap<Suit, SuitHelper> suits = new HashMap<Suit, SuitHelper>();
     private ArrayList<NullSuitHelper> nullSuits = new ArrayList<NullSuitHelper>();
     private TrumpHelper trump;
@@ -40,7 +44,7 @@ public class Bidder {
     private int gameValue, longestSuitSize = 0;
 
     public Bidder(final CardList c, Player postion) {
-        this.c = c;
+        this.c = new CardList(c);
         this.postion = postion;
 
         for (Suit s : Suit.values()) {
