@@ -7,6 +7,7 @@ import org.jskat.ai.sascha.util.CardListWithInt;
 import org.jskat.data.Trick;
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
+import org.jskat.util.CardList;
 import org.jskat.util.Suit;
 
 public class NullPlayer extends AbstractPlayer {
@@ -41,6 +42,8 @@ public class NullPlayer extends AbstractPlayer {
     private Card throwCard() {
 
         CardListWithInt w = new CardListWithInt();
+        w.cl = new CardList();
+        w.i = -1;
 
         for (NullSuitHelper sh : this.suits.values()) {
             if (sh.size() > 0) {
