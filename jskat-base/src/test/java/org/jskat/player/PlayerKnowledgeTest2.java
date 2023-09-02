@@ -1,4 +1,3 @@
-
 package org.jskat.player;
 
 import org.jskat.data.GameAnnouncement;
@@ -224,6 +223,19 @@ public class PlayerKnowledgeTest2 {
 
         assertCardCouldBeNowhere(Card.S9);
         assertCouldHaveCards(Player.REARHAND, Card.HJ, Card.DJ);
+    }
+
+    @Test
+    public void declarerCards() {
+        knowledge.resetCurrentGameData();
+
+        assertThat(knowledge.getDeclarerPlayerCards()).isEmpty();
+
+        knowledge.addDeclarerCards(CardList.of(Card.CJ, Card.SJ, Card.SA));
+
+        assertThat(knowledge.getDeclarerPlayerCards()).containsExactlyInAnyOrder(Card.CJ, Card.SJ, Card.SA);
+
+        // TODO implement and test removal of declarer cards during game play
     }
 
     private void assertCouldHaveCards(final Player player, final Card... cards) {

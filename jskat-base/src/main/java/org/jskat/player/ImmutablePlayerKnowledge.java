@@ -351,7 +351,12 @@ public class ImmutablePlayerKnowledge {
     /**
      * @return the singlePlayerCards
      */
+    @Deprecated
     public final CardList getSinglePlayerCards() {
+        return getDeclarerPlayerCards();
+    }
+
+    public final CardList getDeclarerPlayerCards() {
         final CardList result = new CardList();
         result.addAll(singlePlayerCards);
         return result;

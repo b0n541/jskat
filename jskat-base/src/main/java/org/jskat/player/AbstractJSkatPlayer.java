@@ -230,7 +230,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
      */
     @Override
     public final void lookAtOuvertCards(final CardList ouvertCards) {
-        internalKnowledge.getSinglePlayerCards().addAll(ouvertCards);
+        internalKnowledge.addDeclarerCards(ouvertCards);
     }
 
     /**

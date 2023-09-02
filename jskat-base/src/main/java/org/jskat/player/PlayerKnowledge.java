@@ -36,6 +36,17 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
     }
 
     /**
+     * Adds card to the hand of the declarer player e.g. when they get revealed in an ouvert game.
+     *
+     * @param cards Cards of the declarer
+     */
+    public void addDeclarerCards(CardList cards) {
+        for (Card card : cards) {
+            singlePlayerCards.add(card);
+        }
+    }
+
+    /**
      * Adds a trick to the knowledge
      *
      * @param trick Trick to be added
