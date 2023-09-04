@@ -2,7 +2,6 @@ package org.jskat.ai.rnd;
 
 import org.jskat.ai.AbstractAIPlayer;
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -20,7 +19,7 @@ public class AIPlayerRND extends AbstractAIPlayer {
     private static final Logger log = LoggerFactory.getLogger(AIPlayerRND.class);
 
     /**
-     * Random generator for decision making.
+     * Random generator for decision-making.
      */
     private final Random random = new Random();
 
@@ -60,22 +59,19 @@ public class AIPlayerRND extends AbstractAIPlayer {
                 " " + knowledge.getHighestBid(Player.MIDDLEHAND) +
                 " " + knowledge.getHighestBid(Player.REARHAND));
 
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-
         // select a random game type (without RAMSCH and PASSED_IN)
-        final GameType gameType = GameType.values()[random.nextInt(GameType
-                .values().length - 2)];
-        factory.setGameType(gameType);
+        final GameType gameType = GameType.values()[random.nextInt(GameType.values().length - 2)];
+        var builder = GameAnnouncement.builder(gameType);
         if (Boolean.valueOf(random.nextBoolean())) {
-            factory.setOuvert(true);
+            builder.ouvert(knowledge.getOwnCards());
             if (gameType != GameType.NULL) {
-                factory.setHand(true);
-                factory.setSchneider(true);
-                factory.setSchwarz(true);
+                builder.hand();
+                builder.schneider();
+                builder.schwarz();
             }
         }
 
-        return factory.getAnnouncement();
+        return builder.build();
     }
 
     @Override
@@ -128,10 +124,8 @@ public class AIPlayerRND extends AbstractAIPlayer {
         CardList discardableCards = new CardList(knowledge.getOwnCards());
 
         // just discard two random cards
-        result.add(discardableCards.remove(random.nextInt(discardableCards
-                .size())));
-        result.add(discardableCards.remove(random.nextInt(discardableCards
-                .size())));
+        result.add(discardableCards.remove(random.nextInt(discardableCards.size())));
+        result.add(discardableCards.remove(random.nextInt(discardableCards.size())));
 
         return result;
     }

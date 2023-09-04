@@ -203,7 +203,7 @@ public class ImmutablePlayerKnowledge {
                     }
                 }
                 for (final Rank r : Rank.values()) {
-                    if (couldHaveCard(p, Card.getCard(getGameAnnouncement().getGameType().getTrumpSuit(), r))) {
+                    if (couldHaveCard(p, Card.getCard(getGameAnnouncement().gameType().getTrumpSuit(), r))) {
                         return true;
                     }
                 }
@@ -257,7 +257,7 @@ public class ImmutablePlayerKnowledge {
         if (announcement == null) {
             return null;
         }
-        return announcement.getGameType();
+        return announcement.gameType();
     }
 
     /**
@@ -409,10 +409,10 @@ public class ImmutablePlayerKnowledge {
      * @return Trump suit or null if there is no trump
      */
     public final Suit getTrumpSuit() {
-        if (announcement == null || announcement.getGameType() == null) {
+        if (announcement == null || announcement.gameType() == null) {
             throw new IllegalStateException("Game type not available.");
         }
-        return announcement.getGameType().getTrumpSuit();
+        return announcement.gameType().getTrumpSuit();
     }
 
     /**

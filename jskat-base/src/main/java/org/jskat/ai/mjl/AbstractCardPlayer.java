@@ -22,6 +22,6 @@ public abstract class AbstractCardPlayer implements CardPlayer {
     @Override
     public void startGame(final ImmutablePlayerKnowledge knowledge) {
         log.debug("Starting game...");
-        cards.sort(knowledge.getGameAnnouncement().getGameType());
+        cards.sort(knowledge.getGameAnnouncement().gameType());
     }
 }

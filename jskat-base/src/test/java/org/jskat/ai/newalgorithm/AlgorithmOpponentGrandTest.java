@@ -1,4 +1,3 @@
-
 package org.jskat.ai.newalgorithm;
 
 
@@ -10,7 +9,6 @@ import org.jskat.control.JSkatEventBus;
 import org.jskat.control.SkatGame;
 import org.jskat.control.event.skatgame.TrickCardPlayedEvent;
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatGameResult;
@@ -57,13 +55,11 @@ public class AlgorithmOpponentGrandTest extends AbstractJSkatTest {
         skatGame.dealCards();
 
         skatGame.setDeclarer(Player.FOREHAND);
-        final GameAnnouncementFactory announcementFactory = GameAnnouncement.getFactory();
-        announcementFactory.setGameType(GameType.GRAND);
-        final GameAnnouncement announcement = announcementFactory.getAnnouncement();
-        skatGame.setGameAnnouncement(announcement);
-        deterministicPlayer.startGame(Player.FOREHAND, announcement);
-        faultyPlayer.startGame(Player.FOREHAND, announcement);
-        helperPlayer.startGame(Player.FOREHAND, announcement);
+        var gameAnnouncement = GameAnnouncement.builder(GameType.GRAND).build();
+        skatGame.setGameAnnouncement(gameAnnouncement);
+        deterministicPlayer.startGame(Player.FOREHAND, gameAnnouncement);
+        faultyPlayer.startGame(Player.FOREHAND, gameAnnouncement);
+        helperPlayer.startGame(Player.FOREHAND, gameAnnouncement);
 
         skatGame.setGameState(GameState.TRICK_PLAYING);
 

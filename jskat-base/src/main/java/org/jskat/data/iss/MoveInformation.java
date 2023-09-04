@@ -313,6 +313,7 @@ public class MoveInformation {
      *
      * @param newOuvertCards Ouvert cards
      */
+    @Deprecated
     public void setOuvertCards(final CardList newOuvertCards) {
         ouvertCards = newOuvertCards;
     }
@@ -322,6 +323,7 @@ public class MoveInformation {
      *
      * @return Ouvert cards
      */
+    @Deprecated
     public CardList getOuvertCards() {
         return ouvertCards;
     }

@@ -568,7 +568,7 @@ public class JSkatViewImpl implements JSkatView {
                 JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.DECLARING));
                 JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName,
                         new GameAnnouncementEvent(movePlayer, moveInformation.getGameAnnouncement())));
-                if (moveInformation.getGameAnnouncement().isOuvert()) {
+                if (moveInformation.getGameAnnouncement().ouvert()) {
                     showCardsForPlayer(tableName, movePlayer, moveInformation.getOuvertCards());
                 }
                 JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.TRICK_PLAYING));

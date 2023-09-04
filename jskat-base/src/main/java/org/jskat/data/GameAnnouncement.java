@@ -5,372 +5,146 @@ import org.jskat.util.GameType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/**
- * Game announcement
- * <p>
- * An object of this class is returned by a player for game announcement
- */
-// FIXME: make member variables private, implement fluent interface for factory
-public class GameAnnouncement {
+public record GameAnnouncement(
+        GameType gameType,
+        boolean hand,
+        boolean schneider,
+        boolean schwarz,
+        boolean ouvert,
+        CardList ouvertCards) {
 
-    private static final Logger log = LoggerFactory.getLogger(GameAnnouncement.class);
-    /**
-     * Game type
-     */
-    GameType gameType;
-    /**
-     * Discarded cards
-     */
-    CardList discardedCards = new CardList();
-    /**
-     * Ouvert announcement
-     */
-    Boolean ouvert = Boolean.FALSE;
-    /**
-     * Hand announcement
-     */
-    Boolean hand = Boolean.FALSE;
-    /**
-     * Schneider announcement
-     */
-    Boolean schneider = Boolean.FALSE;
-    /**
-     * Schwarz announcement
-     */
-    Boolean schwarz = Boolean.FALSE;
-    /**
-     * Contra called
-     */
-    Boolean contra = Boolean.FALSE;
-    /**
-     * Re called
-     */
-    Boolean re = Boolean.FALSE;
-
-    /**
-     * Constructor
-     */
-    GameAnnouncement() {
+    public GameAnnouncement(GameType gameType) {
+        this(gameType, false, false, false, false, new CardList());
     }
 
-    /**
-     * Gets the factory for a {@link GameAnnouncement}
-     *
-     * @return Factory
-     */
-    public static GameAnnouncementFactory getFactory() {
-        return new GameAnnouncementFactory();
+    public GameAnnouncement(GameType gameType, boolean hand) {
+        this(gameType, hand, false, false, false, new CardList());
     }
 
-    /**
-     * Factory for a {@link GameAnnouncement}
-     */
-    public final static class GameAnnouncementFactory {
+    public GameAnnouncement(GameType gameType, boolean hand, boolean schneider) {
+        this(gameType, hand, schneider, false, false, new CardList());
+    }
 
-        private GameAnnouncement tmpAnnouncement;
+    public GameAnnouncement(GameType gameType, boolean hand, boolean schneider, boolean schwarz) {
+        this(gameType, hand, schneider, schwarz, false, new CardList());
+    }
 
-        GameAnnouncementFactory() {
-            tmpAnnouncement = new GameAnnouncement();
+    public GameAnnouncement(GameType gameType, boolean ouvert, CardList ouvertCards) {
+        this(gameType, false, false, false, ouvert, ouvertCards);
+    }
+
+    public GameAnnouncement(GameType gameType, boolean hand, boolean ouvert, CardList ouvertCards) {
+        this(gameType, hand, false, false, ouvert, ouvertCards);
+    }
+
+    public static Builder builder(GameType gameType) {
+        return new Builder(gameType);
+    }
+
+    public static final class Builder {
+        private final Logger LOG = LoggerFactory.getLogger(GameAnnouncement.Builder.class);
+        private final GameType gameType;
+        private boolean hand;
+        private boolean schneider;
+        private boolean schwarz;
+        private boolean ouvert;
+        private final CardList ouvertCards = new CardList();
+
+        private Builder(GameType gameType) {
+            this.gameType = gameType;
         }
 
-        /**
-         * Gets an empty {@link GameAnnouncement}
-         *
-         * @return Empty {@link GameAnnouncement}
-         */
-        public final static GameAnnouncement getEmptyAnnouncement() {
-            GameAnnouncement result = new GameAnnouncement();
-            result.hand = true;
-            return result;
+        public Builder hand() {
+            this.hand = true;
+            return this;
         }
 
-        /**
-         * Gets the {@link GameAnnouncement}
-         *
-         * @return Game announcement
-         */
-        public final GameAnnouncement getAnnouncement() {
-            GameAnnouncement result = null;
-            if (validate()) {
-                result = tmpAnnouncement;
-                tmpAnnouncement = new GameAnnouncement();
+        public Builder schneider() {
+            this.schneider = true;
+            return this;
+        }
+
+        public Builder schwarz() {
+            this.schwarz = true;
+            return this;
+        }
+
+        public Builder ouvert(CardList ouvertCards) {
+            this.ouvert = true;
+            this.ouvertCards.addAll(ouvertCards);
+            return this;
+        }
+
+        public GameAnnouncement build() {
+            if (isValid()) {
+                return new GameAnnouncement(gameType, hand, schneider, schwarz, ouvert, ouvertCards);
             }
-            return result;
+
+            throw new IllegalStateException("Invalid game announcement.");
         }
 
-        /**
-         * Sets the {@link GameType}
-         *
-         * @param gameType Game type
-         */
-        public final void setGameType(final GameType gameType) {
-            tmpAnnouncement.gameType = gameType;
-        }
-
-        /**
-         * Sets the discarded cards
-         *
-         * @param discardedCards Discarded cards
-         */
-        public final void setDiscardedCards(final CardList discardedCards) {
-            tmpAnnouncement.discardedCards.addAll(discardedCards);
-            // FIXME: re-activate when factory is fixed
-            // if (discardedCards != null && discardedCards.size() == 2) {
-            // tmpAnnouncement.hand = false;
-            // }
-        }
-
-        /**
-         * Sets the flag for a hand game
-         *
-         * @param isHand TRUE, if a hand game was announced
-         */
-        public final void setHand(final Boolean isHand) {
-            tmpAnnouncement.hand = isHand;
-        }
-
-        /**
-         * Sets the flag for an ouvert game
-         *
-         * @param isOuvert TRUE, if an ouvert game was announced
-         */
-        public final void setOuvert(final Boolean isOuvert) {
-            tmpAnnouncement.ouvert = isOuvert;
-        }
-
-        /**
-         * Sets the flag for a schneider game
-         *
-         * @param isSchneider TRUE, if schneider was announced
-         */
-        public final void setSchneider(final Boolean isSchneider) {
-            tmpAnnouncement.schneider = isSchneider;
-        }
-
-        /**
-         * Sets the flag for a schwarz game
-         *
-         * @param isSchwarz TRUE, if a schwarz was announced
-         */
-        public final void setSchwarz(final Boolean isSchwarz) {
-            tmpAnnouncement.schwarz = isSchwarz;
-        }
-
-        private boolean validate() {
-
+        private boolean isValid() {
             boolean isValid = true;
 
-            if (tmpAnnouncement.gameType == null) {
+            if (gameType == null) {
+                LOG.warn("Validation failed: Missing game type.");
                 isValid = false;
-            } else if (tmpAnnouncement.discardedCards.size() != 0
-                    && tmpAnnouncement.discardedCards.size() != 2) {
+            }
+            if (ouvert && (ouvertCards.size() != 10)) {
+                LOG.warn("Validation failed: Wrong number of ouvert cards in ouvert game.");
                 isValid = false;
-            } else if (tmpAnnouncement.gameType == GameType.RAMSCH
-                    || tmpAnnouncement.gameType == GameType.PASSED_IN) {
-                if (tmpAnnouncement.hand || tmpAnnouncement.ouvert
-                        || tmpAnnouncement.isSchneider()
-                        || tmpAnnouncement.isSchwarz()
-                        || tmpAnnouncement.discardedCards.size() != 0) {
+            }
+            if (!ouvert && !ouvertCards.isEmpty()) {
+                LOG.warn("Validation failed: Wrong number of ouvert cards.");
+                isValid = false;
+            }
+            if (gameType == GameType.RAMSCH || gameType == GameType.PASSED_IN) {
+                if (hand || ouvert || ouvertCards.size() != 0 || schneider || schwarz) {
+                    LOG.warn("Validation failed: Invalid modifiers in Ramsch or passed in game.");
                     isValid = false;
                 }
-            } else if (tmpAnnouncement.gameType == GameType.NULL) {
-                if (tmpAnnouncement.hand
-                        && tmpAnnouncement.discardedCards.size() != 0) {
-                    isValid = false;
-                } else if (tmpAnnouncement.isSchneider()
-                        || tmpAnnouncement.isSchwarz()) {
-                    isValid = false;
-                }
-            } else if (tmpAnnouncement.gameType == GameType.CLUBS
-                    || tmpAnnouncement.gameType == GameType.SPADES
-                    || tmpAnnouncement.gameType == GameType.HEARTS
-                    || tmpAnnouncement.gameType == GameType.DIAMONDS
-                    || tmpAnnouncement.gameType == GameType.GRAND) {
+            }
+            if (gameType == GameType.NULL && (schneider || schwarz)) {
+                LOG.warn("Validation failed: Invalid modifier in Null game.");
+                isValid = false;
+            }
+            if (gameType == GameType.CLUBS
+                    || gameType == GameType.SPADES
+                    || gameType == GameType.HEARTS
+                    || gameType == GameType.DIAMONDS
+                    || gameType == GameType.GRAND) {
 
-                if (tmpAnnouncement.hand
-                        && tmpAnnouncement.discardedCards.size() != 0) {
+                if (ouvert && (!hand || !schneider || !schwarz)) {
+                    LOG.warn("Validation failed: Invalid modifier in Suit or Grand game.");
                     isValid = false;
-                } else if (!tmpAnnouncement.hand
-                        && tmpAnnouncement.discardedCards.size() != 0
-                        && tmpAnnouncement.discardedCards.size() != 2) {
+                }
+                if (schwarz && !schneider) {
+                    LOG.warn("Validation failed: Invalid modifier in Suit or Grand game.");
                     isValid = false;
-                } else if (tmpAnnouncement.ouvert
-                        && (!tmpAnnouncement.hand || !tmpAnnouncement.schneider || !tmpAnnouncement.schwarz)) {
-                    isValid = false;
-                } else if (tmpAnnouncement.schwarz
-                        && !tmpAnnouncement.schneider) {
-                    isValid = false;
-                } else if ((tmpAnnouncement.schwarz || tmpAnnouncement.schneider)
-                        && !tmpAnnouncement.hand) {
+                }
+                if ((schwarz || schneider) && !hand) {
+                    LOG.warn("Validation failed: Invalid modifier in Suit or Grand game.");
                     isValid = false;
                 }
             }
 
             if (!isValid) {
-                log.debug("Invalid " + tmpAnnouncement);
+                LOG.warn("Invalid game announcement " + this);
             }
 
             return isValid;
         }
-    }
 
-    /**
-     * Gets the game type
-     *
-     * @return Game type
-     */
-    public final GameType getGameType() {
-
-        return gameType;
-    }
-
-    /**
-     * Gets the discarded cards
-     *
-     * @return Discarded cards
-     */
-    public final CardList getDiscardedCards() {
-        return discardedCards.getImmutableCopy();
-    }
-
-    /**
-     * Checks whether schneider was announced or not
-     *
-     * @return TRUE if schneider was announced
-     */
-    public final boolean isSchneider() {
-
-        return schneider.booleanValue();
-    }
-
-    /**
-     * Checks whether schwarz was announced or not
-     *
-     * @return TRUE if schwarz was announced
-     */
-    public final boolean isSchwarz() {
-
-        return schwarz.booleanValue();
-    }
-
-    /**
-     * Checks whether an ouvert game was announced or not
-     *
-     * @return TRUE if an ouvert game was announced
-     */
-    public final boolean isOuvert() {
-
-        return ouvert.booleanValue();
-    }
-
-    /**
-     * Checks whether a hand game was announced or not
-     *
-     * @return TRUE if a hand game was announced
-     */
-    public final boolean isHand() {
-
-        return hand.booleanValue();
-    }
-
-    /**
-     * @see Object#toString()
-     */
-    @Override
-    public String toString() {
-
-        final StringBuffer result = new StringBuffer();
-
-        result.append("Game announcement: ").append(gameType);
-
-        if (hand.booleanValue()) {
-
-            result.append(" hand");
+        @Override
+        public String toString() {
+            return "GameAnnouncement{" +
+                    "gameType=" + gameType +
+                    ", hand=" + hand +
+                    ", schneider=" + schneider +
+                    ", schwarz=" + schwarz +
+                    ", ouvert=" + ouvert +
+                    ", ouvertCards=" + ouvertCards +
+                    '}';
         }
-
-        if (ouvert.booleanValue()) {
-
-            result.append(" ouvert");
-        }
-
-        if (schneider.booleanValue()) {
-
-            result.append(" schneider");
-        }
-
-        if (schwarz.booleanValue()) {
-
-            result.append(" schwarz");
-        }
-
-        if (discardedCards.size() > 0) {
-
-            result.append(" discarded " + discardedCards);
-        }
-
-        return result.toString();
-    }
-
-    @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result
-                + (discardedCards == null ? 0 : discardedCards.hashCode());
-        result = prime * result + (gameType == null ? 0 : gameType.hashCode());
-        result = prime * result + (hand == null ? 0 : hand.hashCode());
-        result = prime * result + (ouvert == null ? 0 : ouvert.hashCode());
-        result = prime * result
-                + (schneider == null ? 0 : schneider.hashCode());
-        result = prime * result + (schwarz == null ? 0 : schwarz.hashCode());
-        return result;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
-        final GameAnnouncement other = (GameAnnouncement) obj;
-        if (discardedCards == null) {
-            if (other.discardedCards != null) {
-                return false;
-            }
-        } else if (!discardedCards.equals(other.discardedCards)) {
-            return false;
-        }
-        if (gameType != other.gameType) {
-            return false;
-        }
-        if (hand == null) {
-            if (other.hand != null) {
-                return false;
-            }
-        } else if (!hand.equals(other.hand)) {
-            return false;
-        }
-        if (ouvert == null) {
-            if (other.ouvert != null) {
-                return false;
-            }
-        } else if (!ouvert.equals(other.ouvert)) {
-            return false;
-        }
-        if (schneider == null) {
-            if (other.schneider != null) {
-                return false;
-            }
-        } else if (!schneider.equals(other.schneider)) {
-            return false;
-        }
-        if (schwarz == null) {
-            return other.schwarz == null;
-        } else return schwarz.equals(other.schwarz);
     }
 }

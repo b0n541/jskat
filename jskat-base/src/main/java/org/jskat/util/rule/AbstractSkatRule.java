@@ -69,7 +69,7 @@ public abstract class AbstractSkatRule implements SkatRule {
     @Override
     public int calcOverbidGameResult(SkatGameData gameData) {
         int declarerBidValue = gameData.getMaxBidValue();
-        int gameBaseValue = SkatConstants.getGameBaseValue(gameData.getAnnoucement().getGameType(), false, false);
+        int gameBaseValue = SkatConstants.getGameBaseValue(gameData.getAnnouncement().gameType(), false, false);
 
         int overbidMultiplier = 0;
         while (overbidMultiplier * gameBaseValue < declarerBidValue) {

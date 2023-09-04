@@ -97,7 +97,7 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertThat(gameData.getOpponentScore()).isEqualTo(61);
         assertFalse(gameData.isSchneider());
         assertFalse(gameData.isSchwarz());
-        assertFalse(gameData.isOverBidded());
+        assertFalse(gameData.isOverBid());
     }
 
     private static void checkTrick(final Trick trick,
@@ -381,6 +381,9 @@ public class MessageParserTest extends AbstractJSkatTest {
         final GameAnnouncement announcement = moveInfo.getGameAnnouncement();
         assertThat(announcement.getGameType()).isEqualTo(GameType.NULL);
         assertTrue(announcement.isOuvert());
+        assertThat(announcement.getOuvertCards())
+                .containsExactlyInAnyOrder(
+                        Card.D8, Card.D9, Card.DQ, Card.H8, Card.HT, Card.HQ, Card.C7, Card.C8, Card.CK, Card.CA);
 
         assertThat(moveInfo.getOuvertCards())
                 .containsExactlyInAnyOrder(
@@ -408,6 +411,9 @@ public class MessageParserTest extends AbstractJSkatTest {
         final GameAnnouncement announcement = moveInfo.getGameAnnouncement();
         assertThat(announcement.getGameType()).isEqualTo(GameType.NULL);
         assertTrue(announcement.isOuvert());
+        assertThat(announcement.getOuvertCards())
+                .containsExactlyInAnyOrder(
+                        Card.D8, Card.D9, Card.DQ, Card.H8, Card.HT, Card.HQ, Card.C7, Card.C8, Card.CK, Card.CA);
 
         assertThat(moveInfo.getOuvertCards())
                 .containsExactlyInAnyOrder(
@@ -436,6 +442,9 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertThat(announcement.getGameType()).isEqualTo(GameType.SPADES);
         assertTrue(announcement.isHand());
         assertTrue(announcement.isOuvert());
+        assertThat(announcement.getOuvertCards())
+                .containsExactlyInAnyOrder(
+                        Card.D8, Card.D9, Card.DQ, Card.H8, Card.HT, Card.HQ, Card.C7, Card.C8, Card.CK, Card.CA);
 
         assertThat(moveInfo.getOuvertCards())
                 .containsExactlyInAnyOrder(
@@ -464,6 +473,9 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertThat(announcement.getGameType()).isEqualTo(GameType.SPADES);
         assertTrue(announcement.isHand());
         assertTrue(announcement.isOuvert());
+        assertThat(announcement.getOuvertCards())
+                .containsExactlyInAnyOrder(
+                        Card.D8, Card.D9, Card.DQ, Card.H8, Card.HT, Card.HQ, Card.C7, Card.C8, Card.CK, Card.CA);
 
         assertThat(moveInfo.getOuvertCards())
                 .containsExactlyInAnyOrder(
@@ -492,6 +504,9 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertThat(announcement.getGameType()).isEqualTo(GameType.GRAND);
         assertTrue(announcement.isHand());
         assertTrue(announcement.isOuvert());
+        assertThat(announcement.getOuvertCards())
+                .containsExactlyInAnyOrder(
+                        Card.D8, Card.D9, Card.DQ, Card.H8, Card.HT, Card.HQ, Card.C7, Card.C8, Card.CK, Card.CA);
 
         assertThat(moveInfo.getOuvertCards())
                 .containsExactlyInAnyOrder(
@@ -520,6 +535,9 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertThat(announcement.getGameType()).isEqualTo(GameType.GRAND);
         assertTrue(announcement.isHand());
         assertTrue(announcement.isOuvert());
+        assertThat(announcement.getOuvertCards())
+                .containsExactlyInAnyOrder(
+                        Card.D8, Card.D9, Card.DQ, Card.H8, Card.HT, Card.HQ, Card.C7, Card.C8, Card.CK, Card.CA);
 
         assertThat(moveInfo.getOuvertCards())
                 .containsExactlyInAnyOrder(

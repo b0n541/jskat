@@ -2,7 +2,6 @@ package org.jskat.ai.mjl;
 
 import org.jskat.ai.AbstractAIPlayer;
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.slf4j.Logger;
@@ -89,10 +88,9 @@ public class AIPlayerMJL extends AbstractAIPlayer {
      */
     @Override
     public GameAnnouncement announceGame() {
-        GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(new Bidding(knowledge.getOwnCards())
-                .getSuggestedGameType());
-        return factory.getAnnouncement();
+        return GameAnnouncement.builder(
+                        new Bidding(knowledge.getOwnCards()).getSuggestedGameType())
+                .build();
     }
 
     /*

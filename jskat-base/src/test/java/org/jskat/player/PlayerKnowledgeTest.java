@@ -3,7 +3,6 @@ package org.jskat.player;
 
 import org.jskat.AbstractJSkatTest;
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.Trick;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -112,9 +111,7 @@ public class PlayerKnowledgeTest extends AbstractJSkatTest {
 
         dealPlayerCards();
 
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(GameType.CLUBS);
-        knowledge.setGame(factory.getAnnouncement());
+        knowledge.setGame(GameAnnouncement.builder(GameType.CLUBS).build());
         knowledge.setDeclarer(Player.FOREHAND);
 
         knowledge.setNextTrick(0, Player.FOREHAND);

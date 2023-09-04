@@ -41,19 +41,18 @@ public class Trick {
     }
 
     /**
-     * Gets the fore hand player of this trick
+     * Gets the forehand player of this trick
      *
-     * @return Fore hand player
+     * @return Forehand player
      */
     public Player getForeHand() {
-
         return foreHand;
     }
 
     /**
      * Gets the middle hand player of this trick
      *
-     * @return Fore hand player
+     * @return Middle hand player
      */
     public Player getMiddleHand() {
         return foreHand.getLeftNeighbor();
@@ -62,7 +61,7 @@ public class Trick {
     /**
      * Gets the rear hand player of this trick
      *
-     * @return Fore hand player
+     * @return Rear hand player
      */
     public Player getRearHand() {
         return foreHand.getRightNeighbor();

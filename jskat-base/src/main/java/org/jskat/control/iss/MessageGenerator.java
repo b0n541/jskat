@@ -99,13 +99,12 @@ class MessageGenerator {
                                           final GameAnnouncement gameAnnouncement) {
 
         String gameAnnouncementString = getGameTypeString(
-                gameAnnouncement.getGameType(), gameAnnouncement.isHand(),
-                gameAnnouncement.isOuvert(), gameAnnouncement.isSchneider(),
-                gameAnnouncement.isSchwarz());
+                gameAnnouncement.gameType(), gameAnnouncement.hand(),
+                gameAnnouncement.ouvert(), gameAnnouncement.schneider(),
+                gameAnnouncement.schwarz());
 
-        if (!gameAnnouncement.isHand()) {
-
-            final CardList skat = gameAnnouncement.getDiscardedCards();
+        if (!gameAnnouncement.hand()) {
+            final CardList skat = gameAnnouncement.discardedCards();
             gameAnnouncementString += "." + getIssCardString(skat.get(0)) + "."
                     + getIssCardString(skat.get(1));
         }
@@ -114,7 +113,9 @@ class MessageGenerator {
     }
 
     private String getGameTypeString(final GameType gameType,
-                                     final boolean hand, final boolean ouvert, final boolean schneider,
+                                     final boolean hand,
+                                     final boolean ouvert,
+                                     final boolean schneider,
                                      final boolean schwarz) {
 
         String result = getGameTypeString(gameType);

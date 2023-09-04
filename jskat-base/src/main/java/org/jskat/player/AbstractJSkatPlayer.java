@@ -98,16 +98,20 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
      * {@inheritDoc}
      */
     @Override
-    public final void startGame(final Player newDeclarer, final GameAnnouncement game) {
+    public final void startGame(final Player newDeclarer, final GameAnnouncement announcement) {
 
         playerState = PlayerState.PLAYING;
         internalKnowledge.setDeclarer(newDeclarer);
-        internalKnowledge.setGame(game);
+        internalKnowledge.setGame(announcement);
 
-        rules = SkatRuleFactory.getSkatRules(game.getGameType());
-        if (!GameType.PASSED_IN.equals(game.getGameType())) {
+        if (announcement.ouvert()) {
+            internalKnowledge.addDeclarerCards(announcement.ouvertCards());
+        }
+
+        rules = SkatRuleFactory.getSkatRules(announcement.gameType());
+        if (!GameType.PASSED_IN.equals(announcement.gameType())) {
             log.debug("Starting game for " + getPlayerName() + ": "
-                    + game.getGameType() + " (rules="
+                    + announcement.gameType() + " (rules="
                     + rules.getClass() + ")");
         }
 

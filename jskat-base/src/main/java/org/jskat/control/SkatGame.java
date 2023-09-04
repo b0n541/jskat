@@ -5,7 +5,6 @@ import org.jskat.control.event.skatgame.*;
 import org.jskat.control.event.table.*;
 import org.jskat.control.gui.JSkatView;
 import org.jskat.data.*;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatTableOptions.ContraCallingTime;
 import org.jskat.data.SkatTableOptions.RamschSkatOwner;
@@ -49,8 +48,8 @@ public class SkatGame {
      * @param newMiddleHand Middle hand player
      * @param newRearHand   Rear hand player
      */
-    public SkatGame(String newTableName, GameVariant variant, JSkatPlayer newForeHand,
-                    JSkatPlayer newMiddleHand, JSkatPlayer newRearHand) {
+    public SkatGame(final String newTableName, final GameVariant variant, final JSkatPlayer newForeHand,
+                    final JSkatPlayer newMiddleHand, final JSkatPlayer newRearHand) {
 
         tableName = newTableName;
         data = new SkatGameData();
@@ -64,7 +63,7 @@ public class SkatGame {
         player.put(Player.REARHAND, newRearHand);
 
         // inform all players about the starting of the new game
-        for (Player pos : player.keySet()) {
+        for (final Player pos : player.keySet()) {
             getPlayerInstance(pos).newGame(pos);
         }
 
@@ -96,10 +95,7 @@ public class SkatGame {
                     setActivePlayer(Player.MIDDLEHAND);
 
                     if (variant == GameVariant.FORCED_RAMSCH) {
-                        // ramsch games are enforced
-                        GameAnnouncementFactory gaf = GameAnnouncement.getFactory();
-                        gaf.setGameType(GameType.RAMSCH);
-                        setGameAnnouncement(gaf.getAnnouncement());
+                        setGameAnnouncement(GameAnnouncement.builder(GameType.RAMSCH).build());
                     } else {
                         // "normal" game (i.e. no ramsch)
                         bidding();
@@ -114,14 +110,11 @@ public class SkatGame {
                     }
                     break;
                 case RAMSCH_GRAND_HAND_ANNOUNCING:
-                    boolean grandHandAnnounced = grandHand();
+                    final boolean grandHandAnnounced = grandHand();
 
                     if (grandHandAnnounced) {
                         log.debug(data.getDeclarer() + " is playing grand hand");
-                        GameAnnouncementFactory gaf = GameAnnouncement.getFactory();
-                        gaf.setGameType(GameType.GRAND);
-                        gaf.setHand(Boolean.TRUE);
-                        setGameAnnouncement(gaf.getAnnouncement());
+                        setGameAnnouncement(GameAnnouncement.builder(GameType.GRAND).hand().build());
                         setGameState(GameState.TRICK_PLAYING);
                         log.debug("grand hand game started");
                         break;
@@ -137,9 +130,7 @@ public class SkatGame {
                     break;
                 case SCHIEBERAMSCH:
                     schieberamsch();
-                    GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-                    factory.setGameType(GameType.RAMSCH);
-                    setGameAnnouncement(factory.getAnnouncement());
+                    setGameAnnouncement(GameAnnouncement.builder(GameType.RAMSCH).build());
                     setGameState(GameState.TRICK_PLAYING);
                     break;
                 case PICKING_UP_SKAT:
@@ -166,7 +157,7 @@ public class SkatGame {
                     }
                     break;
                 case CONTRA:
-                    for (Player player : Player.getOrderedList()) {
+                    for (final Player player : Player.getOrderedList()) {
                         if (isContraEnabledForPlayer(player, ContraCallingTime.AFTER_GAME_ANNOUNCEMENT, 0)) {
                             setActivePlayer(player);
                             contraRe();
@@ -195,7 +186,7 @@ public class SkatGame {
 
         log.debug(data.getGameState().name());
         log.debug("Game moves:");
-        for (SkatGameEvent event : data.getGameMoves()) {
+        for (final SkatGameEvent event : data.getGameMoves()) {
             log.debug(event.toString());
         }
 
@@ -205,7 +196,7 @@ public class SkatGame {
     private void contraRe() {
         if (getActivePlayerInstance().callContra()) {
             eventBus.post(new TableGameMoveEvent(tableName, new ContraEvent(activePlayer)));
-            Player activePlayerBeforeContraRe = activePlayer;
+            final Player activePlayerBeforeContraRe = activePlayer;
             setActivePlayer(data.getDeclarer());
             if (getActivePlayerInstance().callRe()) {
                 eventBus.post(new TableGameMoveEvent(tableName, new ReEvent(activePlayer)));
@@ -217,7 +208,7 @@ public class SkatGame {
     private boolean grandHand() {
         boolean grandHandAnnounced = false;
 
-        for (Player currPlayer : Player.getOrderedList()) {
+        for (final Player currPlayer : Player.getOrderedList()) {
             setActivePlayer(currPlayer);
             if (!grandHandAnnounced && playGrandHand()) {
                 log.debug("Player " + activePlayer + " is playing grand hand.");
@@ -231,7 +222,7 @@ public class SkatGame {
     }
 
     private void schieberamsch() {
-        for (Player currPlayer : Player.getOrderedList()) {
+        for (final Player currPlayer : Player.getOrderedList()) {
             setActivePlayer(currPlayer);
             if (!pickUpSkat()) {
                 log.debug("Player " + currPlayer + " does schieben.");
@@ -245,7 +236,7 @@ public class SkatGame {
         }
     }
 
-    private void setActivePlayer(Player newPlayer) {
+    private void setActivePlayer(final Player newPlayer) {
         activePlayer = newPlayer;
         eventBus.post(new ActivePlayerChangedEvent(tableName, activePlayer));
     }
@@ -263,8 +254,8 @@ public class SkatGame {
      */
     public void dealCards() {
 
-        Map<Player, CardList> dealtCards = new HashMap<>();
-        for (Player player : Player.values()) {
+        final Map<Player, CardList> dealtCards = new HashMap<>();
+        for (final Player player : Player.values()) {
             dealtCards.put(player, new CardList());
         }
 
@@ -286,7 +277,7 @@ public class SkatGame {
         // deal three cards
         dealCards(3, dealtCards);
         // and put two cards into the skat
-        CardList skat = new CardList(deck.remove(0), deck.remove(0));
+        final CardList skat = new CardList(deck.remove(0), deck.remove(0));
         // deal four cards
         dealCards(4, dealtCards);
         // deal three cards
@@ -308,10 +299,10 @@ public class SkatGame {
      *
      * @param cardCount Number of cards to be dealt to a player
      */
-    private void dealCards(int cardCount, Map<Player, CardList> dealtCards) {
+    private void dealCards(final int cardCount, final Map<Player, CardList> dealtCards) {
 
-        for (Player hand : Player.getOrderedList()) {
-            CardList cards = new CardList();
+        for (final Player hand : Player.getOrderedList()) {
+            final CardList cards = new CardList();
             for (int j = 0; j < cardCount; j++) {
                 // deal amount of cards
                 cards.add(deck.remove(0));
@@ -335,7 +326,7 @@ public class SkatGame {
 
         log.debug("Bid value after first bidding: " + bidValue);
 
-        Player firstWinner = getBiddingWinner(Player.MIDDLEHAND, Player.FOREHAND);
+        final Player firstWinner = getBiddingWinner(Player.MIDDLEHAND, Player.FOREHAND);
 
         log.debug("First bidding winner: " + firstWinner);
         log.debug("ask rear hand and first winner...");
@@ -372,30 +363,25 @@ public class SkatGame {
             log.debug("Player " + data.getDeclarer() + " wins the bidding.");
         } else {
             // FIXME (jansch 02.01.2012) use cloned rule options here (see MantisBT: 0000037)
-            JSkatOptions options = JSkatOptions.instance();
+            final JSkatOptions options = JSkatOptions.instance();
 
             if (options.isPlayRamsch() && options.isRamschEventNoBid()) {
                 log.debug("Playing ramsch due to no bid");
-                GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-                factory.setGameType(GameType.RAMSCH);
-                setGameAnnouncement(factory.getAnnouncement());
-                eventBus.post(new TableGameMoveEvent(tableName, new GameAnnouncementEvent(data.getDeclarer(), data.getAnnoucement())));
+                setGameAnnouncement(GameAnnouncement.builder(GameType.RAMSCH).build());
+                eventBus.post(new TableGameMoveEvent(tableName, new GameAnnouncementEvent(data.getDeclarer(), data.getAnnouncement())));
                 setActivePlayer(Player.FOREHAND);
                 // do not call "setGameAnnouncement(..)" here!
             } else {
-                // pass in
-                GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-                factory.setGameType(GameType.PASSED_IN);
-                setGameAnnouncement(factory.getAnnouncement());
+                setGameAnnouncement(GameAnnouncement.builder(GameType.PASSED_IN).build());
             }
         }
 
         doSleep(maxSleep);
     }
 
-    private void informPlayersAboutBid(Player bidPlayer, int bidValue) {
+    private void informPlayersAboutBid(final Player bidPlayer, final int bidValue) {
         // inform all players about the last bid
-        for (JSkatPlayer playerInstance : player.values()) {
+        for (final JSkatPlayer playerInstance : player.values()) {
             playerInstance.bidByPlayer(bidPlayer, bidValue);
         }
     }
@@ -408,7 +394,7 @@ public class SkatGame {
      * @param startBidValue Bid value to start from
      * @return the final bid value
      */
-    private int twoPlayerBidding(Player announcer, Player hearer, int startBidValue) {
+    private int twoPlayerBidding(final Player announcer, final Player hearer, final int startBidValue) {
 
         int currBidValue = startBidValue;
         boolean announcerPassed = false;
@@ -417,10 +403,10 @@ public class SkatGame {
         while (!announcerPassed && !hearerPassed) {
 
             // get bid value
-            int nextBidValue = SkatConstants.getNextBidValue(currBidValue);
+            final int nextBidValue = SkatConstants.getNextBidValue(currBidValue);
             // ask player
             setActivePlayer(announcer);
-            int announcerBidValue = getPlayerInstance(announcer).bidMore(nextBidValue);
+            final int announcerBidValue = getPlayerInstance(announcer).bidMore(nextBidValue);
 
             if (announcerBidValue > 0 && SkatConstants.bidOrder.contains(Integer.valueOf(announcerBidValue))) {
 
@@ -466,7 +452,7 @@ public class SkatGame {
         return currBidValue;
     }
 
-    private Player getBiddingWinner(Player announcer, Player hearer) {
+    private Player getBiddingWinner(final Player announcer, final Player hearer) {
 
         Player biddingWinner = null;
 
@@ -481,14 +467,14 @@ public class SkatGame {
 
     private void discarding() {
 
-        JSkatPlayer activePlayerInstance = getActivePlayerInstance();
+        final JSkatPlayer activePlayerInstance = getActivePlayerInstance();
 
         eventBus.post(new SkatCardsChangedEvent(tableName, data.getSkat()));
 
         log.debug("Player " + activePlayer + " looks into the skat...");
         log.debug("Skat before discarding: " + data.getSkat());
 
-        CardList skatBefore = new CardList(data.getSkat());
+        final CardList skatBefore = new CardList(data.getSkat());
 
         // create a clone of the skat before sending it to the player
         // otherwise the player could change the skat after discarding
@@ -498,7 +484,7 @@ public class SkatGame {
         // ask player for the cards to be discarded
         // cloning is done to prevent the player
         // from manipulating the skat afterwards
-        CardList discardedSkat = new CardList();
+        final CardList discardedSkat = new CardList();
         discardedSkat.addAll(activePlayerInstance.discardSkat());
 
         if (!checkDiscardedCards(activePlayer, discardedSkat)) {
@@ -515,7 +501,7 @@ public class SkatGame {
         }
     }
 
-    private boolean checkDiscardedCards(Player player, CardList discardedSkat) {
+    private boolean checkDiscardedCards(final Player player, final CardList discardedSkat) {
 
         // TODO move this to skat rules?
         boolean result = true;
@@ -545,7 +531,7 @@ public class SkatGame {
         log.debug("declaring game...");
 
         // TODO check for valid game announcements
-        GameAnnouncement ann = getPlayerInstance(data.getDeclarer()).announceGame();
+        final GameAnnouncement ann = getPlayerInstance(data.getDeclarer()).announceGame();
         if (ann != null) {
             setGameAnnouncement(ann);
         } else {
@@ -564,7 +550,7 @@ public class SkatGame {
             log.debug("=============== Play trick " + (trickNo + 1) + " ===============");
             doSleep(maxSleep);
 
-            Player trickForehand = getTrickForeHand(trickNo);
+            final Player trickForehand = getTrickForeHand(trickNo);
             setActivePlayer(trickForehand);
 
             informPlayersAboutNewTrick(trickNo, trickForehand);
@@ -617,7 +603,7 @@ public class SkatGame {
 
             doSleep(maxSleep);
 
-            Trick lastTrick = data.getLastCompletedTrick();
+            final Trick lastTrick = data.getLastCompletedTrick();
 
             informPlayersAboutCompletedTrick(lastTrick);
 
@@ -663,8 +649,8 @@ public class SkatGame {
         }
     }
 
-    private Boolean isContraPlayEnabled(ContraCallingTime gameTime, int trickNo) {
-        JSkatOptions options = JSkatOptions.instance();
+    private Boolean isContraPlayEnabled(final ContraCallingTime gameTime, final int trickNo) {
+        final JSkatOptions options = JSkatOptions.instance();
         if (!GameVariant.FORCED_RAMSCH.equals(variant) && options.isPlayContra(true)
                 && options.getContraCallingTime() == gameTime && isGameWithDeclarer()) {
             if (ContraCallingTime.AFTER_GAME_ANNOUNCEMENT == gameTime) {
@@ -677,25 +663,25 @@ public class SkatGame {
     }
 
     private Boolean isGameWithDeclarer() {
-        GameType gameType = data.getGameType();
+        final GameType gameType = data.getGameType();
         return gameType == GameType.CLUBS || gameType == GameType.SPADES || gameType == GameType.HEARTS
                 || gameType == GameType.DIAMONDS || gameType == GameType.GRAND || gameType == GameType.NULL;
     }
 
-    private Boolean isContraEnabledForPlayer(Player player, ContraCallingTime gameTime, int trickNo) {
+    private Boolean isContraEnabledForPlayer(final Player player, final ContraCallingTime gameTime, final int trickNo) {
         return isContraPlayEnabled(gameTime, trickNo) && isNoContraCalledYet() && isPlayerOpponent(player)
                 && isPlayerBidHighEnoughForContra(player);
     }
 
-    private boolean isPlayerBidHighEnoughForContra(Player player) {
-        JSkatOptions options = JSkatOptions.instance();
+    private boolean isPlayerBidHighEnoughForContra(final Player player) {
+        final JSkatOptions options = JSkatOptions.instance();
         if (options.isContraAfterBid18() && data.getMaxPlayerBid(player) > 0) {
             return true;
         }
         return true;
     }
 
-    private boolean isPlayerOpponent(Player player) {
+    private boolean isPlayerOpponent(final Player player) {
         return player != data.getDeclarer();
     }
 
@@ -703,19 +689,19 @@ public class SkatGame {
         return !data.isContra();
     }
 
-    private void informPlayersAboutCompletedTrick(Trick trick) {
-        for (Player currPosition : Player.getOrderedList()) {
+    private void informPlayersAboutCompletedTrick(final Trick trick) {
+        for (final Player currPosition : Player.getOrderedList()) {
             getPlayerInstance(currPosition).showTrick((Trick) trick.clone());
         }
     }
 
-    private void informPlayersAboutNewTrick(int trickNo, Player trickForehand) {
-        for (Player currPosition : Player.getOrderedList()) {
+    private void informPlayersAboutNewTrick(final int trickNo, final Player trickForehand) {
+        for (final Player currPosition : Player.getOrderedList()) {
             getPlayerInstance(currPosition).newTrick(trickNo, trickForehand);
         }
     }
 
-    private Player getTrickForeHand(int currentTrickNo) {
+    private Player getTrickForeHand(final int currentTrickNo) {
         Player trickForeHand = null;
         if (currentTrickNo == 0) {
             // first trick
@@ -748,13 +734,13 @@ public class SkatGame {
     private void addSkatPointsToPlayerPointsInRamschGames() {
         if (JSkatOptions.instance().getRamschSkatOwner() == RamschSkatOwner.LAST_TRICK) {
             try {
-                Player lastTrickWinner = data.getLastTrickWinner();
+                final Player lastTrickWinner = data.getLastTrickWinner();
                 if (lastTrickWinner != null) {
                     log.debug("Skat cards (" + data.getSkat().getTotalValue() + " points) are added to player @ "
                             + lastTrickWinner + " (= last trick)");
                     data.addPlayerPoints(lastTrickWinner, data.getSkat().getTotalValue());
                 }
-            } catch (IllegalArgumentException exception) {
+            } catch (final IllegalArgumentException exception) {
                 // IllegalArgumentException can be thrown if a game was ended
                 // preliminary by a player playing Schwarz
                 log.warn("Skat cards cannot be added to winner of final trick - trick winner is unknown");
@@ -762,8 +748,8 @@ public class SkatGame {
         } else if (JSkatOptions.instance().getRamschSkatOwner() == RamschSkatOwner.LOSER) {
             int maxPoints = -1;
             Player looser = null;
-            for (Player player : Player.values()) {
-                int playerPoints = data.getPlayerPoints(player);
+            for (final Player player : Player.values()) {
+                final int playerPoints = data.getPlayerPoints(player);
                 if (playerPoints > maxPoints) {
                     maxPoints = playerPoints;
                     looser = player;
@@ -773,10 +759,10 @@ public class SkatGame {
         }
     }
 
-    private void playCard(Player trickForeHand, Card firstTrickCard, Player currPlayer) {
+    private void playCard(final Player trickForeHand, final Card firstTrickCard, final Player currPlayer) {
 
         Card playedCard = null;
-        JSkatPlayer skatPlayer = getActivePlayerInstance();
+        final JSkatPlayer skatPlayer = getActivePlayerInstance();
 
         boolean cardAccepted = false;
         boolean aiPlayerPlayedSchwarz = false;
@@ -786,7 +772,7 @@ public class SkatGame {
             try {
                 // ask player for the next card
                 playedCard = skatPlayer.playCard();
-            } catch (Exception exp) {
+            } catch (final Exception exp) {
                 log.error("Exception thrown by player " + skatPlayer + " playing " + currPlayer + ": " + exp);
                 if (!skatPlayer.isHumanPlayer()) {
                     aiPlayerPlayedSchwarz = true;
@@ -818,7 +804,7 @@ public class SkatGame {
             eventBus
                     .post(new TableGameMoveEvent(tableName, new TrickCardPlayedEvent(currPlayer, playedCard)));
 
-            for (JSkatPlayer playerInstance : player.values()) {
+            for (final JSkatPlayer playerInstance : player.values()) {
                 // inform all players
                 // cloning of card is not necessary, because Card is immutable
                 playerInstance.cardPlayed(currPlayer, playedCard);
@@ -833,7 +819,7 @@ public class SkatGame {
         }
     }
 
-    private void endGameBecauseOfSchwarzPlaying(Player schwarzPlayer) {
+    private void endGameBecauseOfSchwarzPlaying(final Player schwarzPlayer) {
         data.getResult().setSchwarz(true);
         // declarer played schwarz
         // opponent played schwarz
@@ -841,8 +827,8 @@ public class SkatGame {
         data.setGameState(GameState.PRELIMINARY_GAME_END);
     }
 
-    private boolean isCardSchwarzPlay(JSkatPlayer skatPlayer, Player position, Card firstTrickCard,
-                                      Card playedCard) {
+    private boolean isCardSchwarzPlay(final JSkatPlayer skatPlayer, final Player position, final Card firstTrickCard,
+                                      final Card playedCard) {
         boolean isSchwarz = false;
         if (playedCard == null) {
 
@@ -858,7 +844,7 @@ public class SkatGame {
                 playedCard)) {
 
             log.error(
-                    "Player " + skatPlayer.getClass().toString() + " card not allowed: " + playedCard + " game type: "
+                    "Player " + skatPlayer.getClass() + " card not allowed: " + playedCard + " game type: "
                             + data.getGameType() + " first trick card: "
                             + firstTrickCard + " player cards: "
                             + data.getPlayerCards(position));
@@ -872,7 +858,7 @@ public class SkatGame {
         return player.get(activePlayer);
     }
 
-    private JSkatPlayer getPlayerInstance(Player position) {
+    private JSkatPlayer getPlayerInstance(final Player position) {
         return player.get(position);
     }
 
@@ -882,14 +868,14 @@ public class SkatGame {
      * @param card Card to check
      * @return TRUE if the card is on player's hand
      */
-    private boolean playerHasCard(Player player, Card card) {
+    private boolean playerHasCard(final Player player, final Card card) {
 
         boolean result = false;
 
         log.debug("Player " + player + " has card: player cards: " + data.getPlayerCards(player)
                 + " card to check: " + card);
 
-        for (Card handCard : data.getPlayerCards(player)) {
+        for (final Card handCard : data.getPlayerCards(player)) {
 
             if (handCard.equals(card)) {
 
@@ -916,7 +902,7 @@ public class SkatGame {
 
         log.debug("Final result: " + data.getDeclarerScore() + "/" + data.getOpponentScore());
 
-        for (JSkatPlayer playerInstance : player.values()) {
+        for (final JSkatPlayer playerInstance : player.values()) {
             playerInstance.setGameSummary(data.getGameSummary());
             playerInstance.finalizeGame();
         }
@@ -924,12 +910,12 @@ public class SkatGame {
         doSleep(maxSleep);
     }
 
-    private void doSleep(int milliseconds) {
+    private void doSleep(final int milliseconds) {
 
         if (milliseconds > 0) {
             try {
                 Thread.sleep(milliseconds);
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
                 log.warn("sleep was interrupted...");
             }
         }
@@ -943,7 +929,7 @@ public class SkatGame {
      * busses now.
      */
     @Deprecated
-    public void setView(JSkatView newView) {
+    public void setView(final JSkatView newView) {
 
         view = newView;
     }
@@ -953,7 +939,7 @@ public class SkatGame {
      *
      * @param newLogger New logger
      */
-    public void setLogger(Logger newLogger) {
+    public void setLogger(final Logger newLogger) {
         log = newLogger;
     }
 
@@ -962,7 +948,7 @@ public class SkatGame {
      *
      * @param newDeck Card deck
      */
-    public void setCardDeck(CardDeck newDeck) {
+    public void setCardDeck(final CardDeck newDeck) {
 
         deck = newDeck;
     }
@@ -972,19 +958,18 @@ public class SkatGame {
      *
      * @param ann Game announcement
      */
-    public void setGameAnnouncement(GameAnnouncement ann) {
+    public void setGameAnnouncement(final GameAnnouncement ann) {
 
         data.setAnnouncement(ann);
         rules = SkatRuleFactory.getSkatRules(data.getGameType());
         eventBus.post(new TableGameMoveEvent(tableName, new GameAnnouncementEvent(data.getDeclarer(), ann)));
 
         // inform all players
-        for (JSkatPlayer playerInstance : player.values()) {
+        for (final JSkatPlayer playerInstance : player.values()) {
             playerInstance.startGame(data.getDeclarer(), ann);
         }
 
-        log.debug(".setGameAnnouncement(): " + data.getAnnoucement() + " by " + data.getDeclarer()
-                + ", rules=" + rules);
+        log.debug(".setGameAnnouncement(): " + data.getAnnouncement() + " by " + data.getDeclarer() + ", rules=" + rules);
     }
 
     /**
@@ -992,7 +977,7 @@ public class SkatGame {
      *
      * @param newState Game state
      */
-    public void setGameState(GameState newState) {
+    public void setGameState(final GameState newState) {
 
         data.setGameState(newState);
 
@@ -1014,7 +999,7 @@ public class SkatGame {
      *
      * @param declarer Declarer
      */
-    public void setDeclarer(Player declarer) {
+    public void setDeclarer(final Player declarer) {
         data.setDeclarer(declarer);
         eventBus.post(new DeclarerChangedEvent(tableName, declarer));
     }
@@ -1053,7 +1038,7 @@ public class SkatGame {
      *
      * @param newMaxSleep Maximum sleep time
      */
-    public void setMaxSleep(int newMaxSleep) {
+    public void setMaxSleep(final int newMaxSleep) {
 
         maxSleep = newMaxSleep;
     }

@@ -3,7 +3,6 @@ package org.jskat.control.event;
 import org.jskat.AbstractJSkatTest;
 import org.jskat.control.event.skatgame.TrickCardPlayedEvent;
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.Trick;
 import org.jskat.util.Card;
@@ -29,9 +28,7 @@ public class TrickCardPlayedEventTest extends AbstractJSkatTest {
     @BeforeEach
     public void setUp() {
         data = new SkatGameData();
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(GameType.CLUBS);
-        data.setAnnouncement(factory.getAnnouncement());
+        data.setAnnouncement(GameAnnouncement.builder(GameType.CLUBS).build());
         data.addPlayerCard(Player.FOREHAND, Card.CJ);
         data.addPlayerCard(Player.FOREHAND, Card.CA);
         data.addPlayerCard(Player.FOREHAND, Card.C7);

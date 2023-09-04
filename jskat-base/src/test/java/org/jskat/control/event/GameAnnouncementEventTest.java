@@ -3,7 +3,6 @@ package org.jskat.control.event;
 import org.jskat.AbstractJSkatTest;
 import org.jskat.control.event.skatgame.GameAnnouncementEvent;
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class GameAnnouncementEventTest extends AbstractJSkatTest {
 
@@ -26,33 +24,33 @@ public class GameAnnouncementEventTest extends AbstractJSkatTest {
 
         data = new SkatGameData();
 
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(GameType.GRAND);
-        factory.setDiscardedCards(new CardList(Card.CJ, Card.SJ));
+        final var builder = GameAnnouncement.builder(GameType.GRAND);
+        builder.discardedCards(new CardList(Card.CJ, Card.SJ));
 
-        event = new GameAnnouncementEvent(Player.FOREHAND, factory.getAnnouncement());
+        event = new GameAnnouncementEvent(Player.FOREHAND, builder.build());
     }
 
     @Test
     public void skatGameDataAfterEvent() {
-
-        assertNull(data.getAnnoucement().getGameType());
-        assertThat(data.getAnnoucement().getDiscardedCards()).hasSize(0);
-        assertTrue(data.getAnnoucement().isHand());
-        assertFalse(data.getAnnoucement().isOuvert());
-        assertFalse(data.getAnnoucement().isSchneider());
-        assertFalse(data.getAnnoucement().isSchwarz());
+        assertThat(data.getDeclarer()).isNull();
+        assertThat(data.getAnnouncement().gameType()).isNull();
+        assertThat(data.getAnnouncement().discardedCards()).isEmpty();
+        assertThat(data.getAnnouncement().hand()).isTrue();
+        assertThat(data.getAnnouncement().ouvert()).isFalse();
+        assertThat(data.getAnnouncement().ouvertCards()).isEmpty();
+        assertThat(data.getAnnouncement().schneider()).isFalse();
+        assertThat(data.getAnnouncement().schwarz()).isFalse();
 
         event.processForward(data);
 
         assertThat(data.getDeclarer()).isEqualTo(Player.FOREHAND);
-        assertThat(data.getAnnoucement().getGameType()).isEqualTo(GameType.GRAND);
-        assertThat(data.getAnnoucement().getDiscardedCards()).hasSize(2);
-        assertThat(data.getAnnoucement().getDiscardedCards()).containsExactlyInAnyOrder(Card.CJ, Card.SJ);
-        assertFalse(data.getAnnoucement().isHand());
-        assertFalse(data.getAnnoucement().isOuvert());
-        assertFalse(data.getAnnoucement().isSchneider());
-        assertFalse(data.getAnnoucement().isSchwarz());
+        assertThat(data.getAnnouncement().gameType()).isEqualTo(GameType.GRAND);
+        assertThat(data.getAnnouncement().discardedCards()).containsExactlyInAnyOrder(Card.CJ, Card.SJ);
+        assertThat(data.getAnnouncement().hand()).isFalse();
+        assertThat(data.getAnnouncement().ouvert()).isFalse();
+        assertThat(data.getAnnouncement().ouvertCards()).isEmpty();
+        assertThat(data.getAnnouncement().schneider()).isFalse();
+        assertThat(data.getAnnouncement().schwarz()).isFalse();
     }
 
     @Test
@@ -61,12 +59,13 @@ public class GameAnnouncementEventTest extends AbstractJSkatTest {
         event.processForward(data);
         event.processBackward(data);
 
-        assertNull(data.getDeclarer());
-        assertNull(data.getAnnoucement().getGameType());
-        assertThat(data.getAnnoucement().getDiscardedCards()).hasSize(0);
-        assertTrue(data.getAnnoucement().isHand());
-        assertFalse(data.getAnnoucement().isOuvert());
-        assertFalse(data.getAnnoucement().isSchneider());
-        assertFalse(data.getAnnoucement().isSchwarz());
+        assertThat(data.getDeclarer()).isNull();
+        assertThat(data.getAnnouncement().gameType()).isNull();
+        assertThat(data.getAnnouncement().discardedCards()).hasSize(0);
+        assertThat(data.getAnnouncement().hand()).isTrue();
+        assertThat(data.getAnnouncement().ouvert()).isFalse();
+        assertThat(data.getAnnouncement().ouvertCards()).isEmpty();
+        assertThat(data.getAnnouncement().schneider()).isFalse();
+        assertThat(data.getAnnouncement().schwarz()).isFalse();
     }
 }

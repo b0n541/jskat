@@ -471,24 +471,22 @@ public class SkatTablePanel extends AbstractTabPanel {
     @Subscribe
     public void setGameAnnouncementOn(GameAnnouncementEvent event) {
 
-        if (event.announcement.getGameType() == GameType.RAMSCH) {
+        if (GameType.RAMSCH == event.announcement.gameType()) {
             ramsch = true;
         }
 
         gameInfoPanel.setGameAnnouncement(event.announcement);
 
-        leftOpponentPanel
-                .setSortGameType(event.announcement.getGameType());
-        rightOpponentPanel.setSortGameType(event.announcement
-                .getGameType());
-        userPanel.setSortGameType(event.announcement.getGameType());
+        leftOpponentPanel.setSortGameType(event.announcement.gameType());
+        rightOpponentPanel.setSortGameType(event.announcement.gameType());
+        userPanel.setSortGameType(event.announcement.gameType());
 
-        if (event.announcement.getGameType() != GameType.PASSED_IN
-                && event.announcement.getGameType() != GameType.RAMSCH) {
+        if (GameType.PASSED_IN != event.announcement.gameType()
+                && GameType.RAMSCH != event.announcement.gameType()) {
             getPlayerPanel(event.player).setDeclarer(true);
         }
 
-        if (event.announcement.isOuvert()) {
+        if (event.announcement.ouvert()) {
             getPlayerPanel(event.player).showCards();
         }
     }

@@ -88,11 +88,11 @@ class GameInformationPanel extends JPanel {
     }
 
     void setGameAnnouncement(final GameAnnouncement announcement) {
-        gameType = announcement.getGameType();
-        handGame = announcement.isHand();
-        ouvertGame = announcement.isOuvert();
-        schneiderAnnounced = announcement.isSchneider();
-        schwarzAnnounced = announcement.isSchwarz();
+        gameType = announcement.gameType();
+        handGame = announcement.hand();
+        ouvertGame = announcement.ouvert();
+        schneiderAnnounced = announcement.schneider();
+        schwarzAnnounced = announcement.schwarz();
     }
 
     private void resetGameData() {

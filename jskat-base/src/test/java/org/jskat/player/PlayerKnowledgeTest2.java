@@ -1,7 +1,6 @@
 package org.jskat.player;
 
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.Trick;
 import org.jskat.util.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -273,9 +272,7 @@ public class PlayerKnowledgeTest2 {
     }
 
     private void gameAnnouncement(final GameType gameType, final Player declarer) {
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(gameType);
         knowledge.setDeclarer(declarer);
-        knowledge.setGame(factory.getAnnouncement());
+        knowledge.setGame(GameAnnouncement.builder(gameType).build());
     }
 }

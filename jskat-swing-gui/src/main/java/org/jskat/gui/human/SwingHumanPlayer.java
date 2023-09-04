@@ -231,10 +231,10 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
                 // player did game announcement
                 gameAnnouncement = (GameAnnouncement) source;
 
-                if (gameAnnouncement.isHand()) {
+                if (gameAnnouncement.hand()) {
                     gameAnnouncementStep = GameAnnouncementStep.PLAYS_HAND;
                 } else {
-                    setDiscardedSkatCards(gameAnnouncement.getDiscardedCards());
+                    setDiscardedSkatCards(gameAnnouncement.discardedCards());
                     gameAnnouncementStep = GameAnnouncementStep.DISCARDED_SKAT;
                 }
             } else {

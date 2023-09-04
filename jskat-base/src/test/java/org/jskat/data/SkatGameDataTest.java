@@ -85,11 +85,10 @@ public class SkatGameDataTest {
     @Test
     void overbid() {
 
-        GameAnnouncement.GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(GameType.HEARTS);
-        factory.setDiscardedCards(new CardList(Card.C9, Card.S9));
+        final var builder = GameAnnouncement.builder(GameType.HEARTS);
+        builder.discardedCards(new CardList(Card.C9, Card.S9));
 
-        List<SkatGameEvent> gameEvents = List.of(
+        final List<SkatGameEvent> gameEvents = List.of(
                 new CardDealEvent(
                         Map.of(
                                 Player.FOREHAND, new CardList(Card.S9, Card.HA, Card.HK, Card.H9, Card.H8, Card.SA, Card.DT, Card.DK, Card.DQ, Card.D8),
@@ -102,7 +101,7 @@ public class SkatGameDataTest {
                 new PassBidEvent(Player.REARHAND, 24),
                 new PickUpSkatEvent(Player.FOREHAND),
                 new DiscardSkatEvent(Player.FOREHAND, new CardList(Card.C9, Card.S9)),
-                new GameAnnouncementEvent(Player.FOREHAND, factory.getAnnouncement()),
+                new GameAnnouncementEvent(Player.FOREHAND, builder.build()),
                 new TrickCardPlayedEvent(Player.FOREHAND, Card.SA),
                 new TrickCardPlayedEvent(Player.MIDDLEHAND, Card.S8),
                 new TrickCardPlayedEvent(Player.REARHAND, Card.S7),

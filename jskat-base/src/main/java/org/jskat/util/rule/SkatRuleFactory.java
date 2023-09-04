@@ -1,4 +1,3 @@
-
 package org.jskat.util.rule;
 
 import org.jskat.util.GameType;
@@ -8,45 +7,44 @@ import org.jskat.util.GameType;
  */
 public class SkatRuleFactory {
 
-	/**
-	 * Returns the right SkatRules object according to the game type
-	 * 
-	 * @param gameType
-	 *            Game type
-	 * @return SkatRules object
-	 */
-	public static SkatRule getSkatRules(GameType gameType) {
+    /**
+     * Returns the right SkatRules object according to the game type
+     *
+     * @param gameType Game type
+     * @return SkatRules object
+     */
+    public static SkatRule getSkatRules(GameType gameType) {
 
-		SkatRule rules = null;
+        SkatRule rules = null;
 
-		switch (gameType) {
-		case CLUBS:
-		case SPADES:
-		case HEARTS:
-		case DIAMONDS:
-			rules = suitRules;
-			break;
-		case GRAND:
-			rules = grandRules;
-			break;
-		case NULL:
-			rules = nullRules;
-			break;
-		case RAMSCH:
-			rules = ramschRules;
-			break;
-		case PASSED_IN:
-			break;
-		}
+        switch (gameType) {
+            case CLUBS:
+            case SPADES:
+            case HEARTS:
+            case DIAMONDS:
+                rules = suitRules;
+                break;
+            case GRAND:
+                rules = grandRules;
+                break;
+            case NULL:
+                rules = nullRules;
+                break;
+            case RAMSCH:
+                rules = ramschRules;
+                break;
+            case PASSED_IN:
+                break;
+        }
 
-		return rules;
-	}
+        return rules;
+    }
 
-	private static SuitRule suitRules = new SuitRule();
+    private static final SuitRule suitRules = new SuitRule();
 
-	private static GrandRule grandRules = new GrandRule();
+    private static final GrandRule grandRules = new GrandRule();
 
-	private static SkatRule nullRules = new NullRule();
+    private static final SkatRule nullRules = new NullRule();
 
-	private static SkatRule ramschRules = new RamschRule();
+    private static final SkatRule ramschRules = new RamschRule();
 }

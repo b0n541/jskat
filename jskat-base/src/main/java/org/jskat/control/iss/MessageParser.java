@@ -1,7 +1,6 @@
 package org.jskat.control.iss;
 
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.Trick;
 import org.jskat.data.iss.*;
@@ -248,9 +247,6 @@ public class MessageParser {
         final StringTokenizer annToken = new StringTokenizer(move, ".");
         final String gameTypeString = annToken.nextToken();
 
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-
-        // at first the game type
         GameType gameType = null;
         if (gameTypeString.startsWith("G")) {
 
@@ -276,7 +272,7 @@ public class MessageParser {
 
             gameType = GameType.NULL;
         }
-        factory.setGameType(gameType);
+        final var builder = GameAnnouncement.builder(gameType);
 
         boolean handGame = false;
         boolean ouvertGame = false;
@@ -288,64 +284,66 @@ public class MessageParser {
 
             if (mod == 'O') {
 
-                factory.setOuvert(Boolean.TRUE);
+                builder.ouvert();
                 ouvertGame = true;
 
             } else if (mod == 'H') {
 
-                factory.setHand(Boolean.TRUE);
+                builder.hand();
                 handGame = true;
             } else if (mod == 'S') {
 
-                factory.setSchneider(Boolean.TRUE);
+                builder.schneider();
             } else if (mod == 'Z') {
 
-                factory.setSchwarz(Boolean.TRUE);
+                builder.schwarz();
                 schwarzGame = true;
             }
         }
 
+        // FIXME this should be moved to the builder logic of the GameAnnouncement
         if (gameType != GameType.NULL && handGame && schwarzGame) {
-            factory.setSchneider(true);
+            builder.schneider();
         }
         if (gameType != GameType.NULL && ouvertGame) {
-            factory.setHand(true);
+            builder.ouvert();
             handGame = true;
         }
         if (gameType != GameType.NULL && ouvertGame && handGame) {
-            factory.setSchneider(true);
-            factory.setSchwarz(true);
+            builder.schneider();
+            builder.schwarz();
         }
 
         if (annToken.hasMoreTokens()) {
 
-            final CardList showedCards = new CardList();
+            final CardList cards = new CardList();
 
             while (annToken.hasMoreTokens()) {
-                showedCards.add(Card.getCardFromString(annToken.nextToken()));
+                cards.add(Card.getCardFromString(annToken.nextToken()));
             }
 
             final CardList discardedCards = new CardList();
             final CardList ouvertCards = new CardList();
 
             if (handGame) {
-                ouvertCards.addAll(showedCards);
-            } else if (showedCards.size() == 2) {
-                discardedCards.addAll(showedCards);
+                ouvertCards.addAll(cards);
+            } else if (cards.size() == 2) {
+                discardedCards.addAll(cards);
             } else {
-                discardedCards.add(showedCards.get(0));
-                discardedCards.add(showedCards.get(1));
+                discardedCards.add(cards.get(0));
+                discardedCards.add(cards.get(1));
 
-                for (int i = 2; i < showedCards.size(); i++) {
-                    ouvertCards.add(showedCards.get(i));
+                for (int i = 2; i < cards.size(); i++) {
+                    ouvertCards.add(cards.get(i));
                 }
             }
 
             info.setOuvertCards(ouvertCards);
-            factory.setDiscardedCards(discardedCards);
+            builder.ouvert(ouvertCards);
+            builder.discardedCards(discardedCards);
         }
 
-        final GameAnnouncement ann = factory.getAnnouncement();
+        final GameAnnouncement ann = builder.build();
         info.setGameAnnouncement(ann);
         return ann;
     }
@@ -501,9 +499,7 @@ public class MessageParser {
                                    final String summaryPart) {
 
         // FIXME (jansch 12.02.2012) parse moves correctly
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(GameType.PASSED_IN);
-        result.setAnnouncement(factory.getAnnouncement());
+        result.setAnnouncement(GameAnnouncement.builder(GameType.PASSED_IN).build());
 
         final StringTokenizer token = new StringTokenizer(summaryPart);
 
@@ -533,8 +529,8 @@ public class MessageParser {
                     break;
                 case GAME_ANNOUNCEMENT:
                     result.setAnnouncement(moveInfo.getGameAnnouncement());
-                    if (!moveInfo.getGameAnnouncement().isHand()) {
-                        result.setDiscardedSkat(moveInfo.getPlayer(), moveInfo.getGameAnnouncement().getDiscardedCards());
+                    if (!moveInfo.getGameAnnouncement().hand()) {
+                        result.setDiscardedSkat(moveInfo.getPlayer(), moveInfo.getGameAnnouncement().discardedCards());
                     }
                     break;
                 case CARD_PLAY:
@@ -625,7 +621,7 @@ public class MessageParser {
         } else if (token.startsWith("p:")) {
 
             int declarerPoints = 0;
-            if (GameType.NULL != gameData.getAnnoucement().getGameType() || gameData.isGameLost()) {
+            if (GameType.NULL != gameData.getAnnouncement().gameType() || gameData.isGameLost()) {
                 declarerPoints = Integer.parseInt(token.substring(2));
             }
             gameData.setDeclarerScore(declarerPoints);

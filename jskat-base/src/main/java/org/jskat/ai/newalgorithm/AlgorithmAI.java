@@ -2,7 +2,6 @@ package org.jskat.ai.newalgorithm;
 
 import org.jskat.ai.AbstractAIPlayer;
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -174,9 +173,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
                     + " ist AlgorithmSuit-Spieler / announceGame");
         }
 
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(bidEvaluator.getSuggestedGameType());
-        return factory.getAnnouncement();
+        return GameAnnouncement.builder(bidEvaluator.getSuggestedGameType()).build();
     }
 
     /*
