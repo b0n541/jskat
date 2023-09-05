@@ -7,7 +7,7 @@
 plugins {
     id("jskat.kotlin-application-conventions")
 
-    id("org.openjfx.javafxplugin") version "0.0.14"
+    id("org.openjfx.javafxplugin") version "0.1.0"
 }
 
 dependencies {
