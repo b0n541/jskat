@@ -275,7 +275,7 @@ public class IssController {
         jskat.setActiveTable(JSkatViewType.ISS_TABLE, tableName);
     }
 
-    public void removeTable(String tableName) {
+    public void removeTable(final String tableName) {
         eventBus.post(new RemoveTableCommand(JSkatViewType.ISS_TABLE, tableName));
     }
 
@@ -614,11 +614,11 @@ public class IssController {
     /**
      * Send game announcement to ISS
      *
-     * @param tableName        Table name
-     * @param gameAnnouncement Game announcement
+     * @param tableName    Table name
+     * @param gameContract Game announcement
      */
-    public void sendGameAnnouncementMove(final String tableName, final GameAnnouncement gameAnnouncement) {
-        sendToIss(issMsg.getGameAnnouncementMoveMessage(tableName, gameAnnouncement));
+    public void sendGameAnnouncementMove(final String tableName, final GameAnnouncement announcement) {
+        sendToIss(issMsg.getGameAnnouncementMoveMessage(tableName, announcement));
     }
 
     /**

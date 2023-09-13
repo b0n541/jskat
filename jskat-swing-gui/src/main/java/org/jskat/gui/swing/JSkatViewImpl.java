@@ -211,11 +211,11 @@ public class JSkatViewImpl implements JSkatView {
         tabs.setAutoscrolls(true);
         tabs.addChangeListener(e -> {
 
-            if (e.getSource() instanceof JTabbedPane changedTabs) {
+            if (e.getSource() instanceof final JTabbedPane changedTabs) {
 
                 final Component tab = changedTabs.getSelectedComponent();
 
-                if (tab instanceof AbstractTabPanel panel) {
+                if (tab instanceof final AbstractTabPanel panel) {
 
                     final String tableName = panel.getName();
                     LOG.debug("showing table panel of table " + tableName);
@@ -493,7 +493,7 @@ public class JSkatViewImpl implements JSkatView {
         issLobby.appendChatMessage(message);
 
         for (final SkatTablePanel table : tables.values()) {
-            if (table instanceof ISSTablePanel issTable) {
+            if (table instanceof final ISSTablePanel issTable) {
                 final String chatname = message.getChatName();
                 if ("Lobby".equals(chatname) || issTable.getName().equals(chatname)) {
                     issTable.appendChatMessage(message);
@@ -568,8 +568,8 @@ public class JSkatViewImpl implements JSkatView {
                 JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.DECLARING));
                 JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName,
                         new GameAnnouncementEvent(movePlayer, moveInformation.getGameAnnouncement())));
-                if (moveInformation.getGameAnnouncement().ouvert()) {
-                    showCardsForPlayer(tableName, movePlayer, moveInformation.getOuvertCards());
+                if (moveInformation.getGameAnnouncement().contract().ouvert()) {
+                    showCardsForPlayer(tableName, movePlayer, moveInformation.getGameAnnouncement().contract().ouvertCards());
                 }
                 JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.TRICK_PLAYING));
                 break;
@@ -592,7 +592,7 @@ public class JSkatViewImpl implements JSkatView {
                         new TableGameMoveEvent(tableName, new TrickCardPlayedEvent(movePlayer, moveInformation.getCard())));
                 break;
             case SHOW_CARDS:
-                showCardsForPlayer(tableName, movePlayer, moveInformation.getOuvertCards());
+                showCardsForPlayer(tableName, movePlayer, moveInformation.getGameAnnouncement().contract().ouvertCards());
                 break;
             case RESIGN:
                 setResign(tableName, movePlayer);

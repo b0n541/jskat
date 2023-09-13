@@ -9,6 +9,7 @@ import org.jskat.control.JSkatEventBus;
 import org.jskat.control.SkatGame;
 import org.jskat.control.event.skatgame.TrickCardPlayedEvent;
 import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameContract;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatGameResult;
@@ -55,8 +56,8 @@ public class AlgorithmOpponentGrandTest extends AbstractJSkatTest {
         skatGame.dealCards();
 
         skatGame.setDeclarer(Player.FOREHAND);
-        var gameAnnouncement = GameAnnouncement.builder(GameType.GRAND).build();
-        skatGame.setGameAnnouncement(gameAnnouncement);
+        final var gameAnnouncement = new GameContract(GameType.GRAND);
+        skatGame.setGameAnnouncement(new GameAnnouncement(gameAnnouncement, CardList.of(Card.D8, Card.D7)));
         deterministicPlayer.startGame(Player.FOREHAND, gameAnnouncement);
         faultyPlayer.startGame(Player.FOREHAND, gameAnnouncement);
         helperPlayer.startGame(Player.FOREHAND, gameAnnouncement);
@@ -64,6 +65,7 @@ public class AlgorithmOpponentGrandTest extends AbstractJSkatTest {
         skatGame.setGameState(GameState.TRICK_PLAYING);
 
         final SkatGameResult gameResult = skatGame.run();
+        
         assertTrue(gameResult.isWon());
         assertAlgorithmAIPlayerFollowsJack(skatGame);
     }

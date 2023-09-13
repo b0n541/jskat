@@ -96,17 +96,24 @@ class MessageGenerator {
     }
 
     String getGameAnnouncementMoveMessage(final String tableName,
-                                          final GameAnnouncement gameAnnouncement) {
+                                          final GameAnnouncement announcement) {
 
+        final var contract = announcement.contract();
         String gameAnnouncementString = getGameTypeString(
-                gameAnnouncement.gameType(), gameAnnouncement.hand(),
-                gameAnnouncement.ouvert(), gameAnnouncement.schneider(),
-                gameAnnouncement.schwarz());
+                contract.gameType(),
+                contract.hand(),
+                contract.ouvert(),
+                contract.schneider(),
+                contract.schwarz());
 
-        if (!gameAnnouncement.hand()) {
-            final CardList skat = gameAnnouncement.discardedCards();
-            gameAnnouncementString += "." + getIssCardString(skat.get(0)) + "."
-                    + getIssCardString(skat.get(1));
+        if (!contract.hand()) {
+            final CardList skat = announcement.discardedCards();
+            gameAnnouncementString += "." + getIssCardString(skat.get(0)) + "." + getIssCardString(skat.get(1));
+        }
+        if (contract.ouvert()) {
+            for (final Card card : contract.ouvertCards()) {
+                gameAnnouncementString += "." + getIssCardString(card);
+            }
         }
 
         return "table " + tableName + ' ' + loginName + " play " + gameAnnouncementString;

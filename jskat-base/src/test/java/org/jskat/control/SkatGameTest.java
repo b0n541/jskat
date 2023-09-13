@@ -55,7 +55,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 
     private static void runGame(final SkatGame game) {
         try {
-            CompletableFuture.runAsync(() -> game.run()).get();
+            CompletableFuture.runAsync(game::run).get();
         } catch (final InterruptedException | ExecutionException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -220,7 +220,7 @@ public class SkatGameTest extends AbstractJSkatTest {
         runGame(game);
 
         assertThat(game.getDeclarer()).isEqualTo(Player.FOREHAND);
-        final GameAnnouncement announcement = game.getGameAnnouncement();
+        final GameContract announcement = game.getGameAnnouncement().contract();
         assertThat(announcement.gameType()).isEqualTo(GameType.GRAND);
         assertThat(announcement.hand()).isTrue();
 
@@ -244,9 +244,9 @@ public class SkatGameTest extends AbstractJSkatTest {
         runGame(game);
 
         assertThat(game.getDeclarer()).isEqualTo(Player.MIDDLEHAND);
-        final GameAnnouncement announcement = game.getGameAnnouncement();
-        assertThat(announcement.gameType()).isEqualTo(GameType.GRAND);
-        assertThat(announcement.hand()).isTrue();
+        final GameContract contract = game.getGameAnnouncement().contract();
+        assertThat(contract.gameType()).isEqualTo(GameType.GRAND);
+        assertThat(contract.hand()).isTrue();
 
         final GameSummary summary = game.getGameSummary();
         assertThat(summary.getGameType()).isEqualTo(GameType.GRAND);
@@ -268,9 +268,9 @@ public class SkatGameTest extends AbstractJSkatTest {
         runGame(game);
 
         assertThat(game.getDeclarer()).isEqualTo(Player.REARHAND);
-        final GameAnnouncement announcement = game.getGameAnnouncement();
-        assertThat(announcement.gameType()).isEqualTo(GameType.GRAND);
-        assertThat(announcement.hand()).isTrue();
+        final GameContract contract = game.getGameAnnouncement().contract();
+        assertThat(contract.gameType()).isEqualTo(GameType.GRAND);
+        assertThat(contract.hand()).isTrue();
 
         final GameSummary summary = game.getGameSummary();
         assertThat(summary.getGameType()).isEqualTo(GameType.GRAND);
@@ -296,7 +296,7 @@ public class SkatGameTest extends AbstractJSkatTest {
     private static boolean nullGameEndedPreliminary(final SkatGame game) {
         // in Null games the game might have ended preliminary before all tricks
         // have been played
-        return GameType.NULL == game.getGameAnnouncement().gameType()
+        return GameType.NULL == game.getGameAnnouncement().contract().gameType()
                 && game.getGameSummary().getTricks().size() < 10;
     }
 
@@ -305,7 +305,7 @@ public class SkatGameTest extends AbstractJSkatTest {
         game.setCardDeck(deck);
         game.dealCards();
         game.setDeclarer(Player.values()[random.nextInt(Player.values().length)]);
-        game.setGameAnnouncement(GameAnnouncement.builder(getRandomGameType()).build());
+        game.setGameAnnouncement(new GameAnnouncement(new GameContract(getRandomGameType())));
         game.setGameState(GameState.TRICK_PLAYING);
     }
 
@@ -412,7 +412,7 @@ public class SkatGameTest extends AbstractJSkatTest {
         game.setCardDeck(deck);
         game.dealCards();
         game.setDeclarer(Player.MIDDLEHAND);
-        game.setGameAnnouncement(GameAnnouncement.builder(GameType.CLUBS).build());
+        game.setGameAnnouncement(new GameAnnouncement(new GameContract(GameType.CLUBS), CardList.of(Card.SK, Card.S7)));
         game.setGameState(GameState.TRICK_PLAYING);
 
         runGame(game);
@@ -453,7 +453,7 @@ public class SkatGameTest extends AbstractJSkatTest {
         game.setCardDeck(deck);
         game.dealCards();
         game.setDeclarer(Player.FOREHAND);
-        game.setGameAnnouncement(GameAnnouncement.builder(GameType.SPADES).build());
+        game.setGameAnnouncement(new GameAnnouncement(new GameContract(GameType.SPADES)));
         game.setGameState(GameState.TRICK_PLAYING);
 
         runGame(game);

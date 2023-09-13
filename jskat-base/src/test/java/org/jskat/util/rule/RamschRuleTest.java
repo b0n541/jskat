@@ -2,6 +2,7 @@ package org.jskat.util.rule;
 
 import org.jskat.AbstractJSkatTest;
 import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameContract;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.Trick;
 import org.jskat.util.GameType;
@@ -27,7 +28,7 @@ public class RamschRuleTest extends AbstractJSkatTest {
     @BeforeEach
     public void initialize() {
         data = new SkatGameData();
-        data.setAnnouncement(GameAnnouncement.builder(GameType.RAMSCH).build());
+        data.setAnnouncement(new GameAnnouncement(new GameContract(GameType.RAMSCH)));
     }
 
     @Test
@@ -42,7 +43,7 @@ public class RamschRuleTest extends AbstractJSkatTest {
     public void testWrongGameData_NoRamschAnnouncement() {
         assertThrows(IllegalStateException.class, () -> {
             data = new SkatGameData();
-            data.setAnnouncement(GameAnnouncement.builder(GameType.CLUBS).build());
+            data.setAnnouncement(new GameAnnouncement(new GameContract(GameType.CLUBS).withHand()));
 
             data.getRamschLosers();
         });

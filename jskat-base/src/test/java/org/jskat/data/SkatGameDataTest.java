@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -26,13 +27,37 @@ public class SkatGameDataTest {
     }
 
     @Test
-    void hand() {
+    void hand_noAnnouncement() {
+
+        assertThatThrownBy(() -> gameData.isHand())
+                .isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    void hand_Announcement() {
+
+        gameData.setAnnouncement(new GameAnnouncement(new GameContract(GameType.GRAND, true)));
 
         assertTrue(gameData.isHand());
+    }
 
-        gameData.addSkatToPlayer(Player.FOREHAND);
+    @Test
+    void ouvert_noAnnouncement() {
 
-        assertFalse(gameData.isHand());
+        assertThatThrownBy(() -> gameData.isOuvert())
+                .isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    void ouvert_Announcement() {
+
+        gameData.setAnnouncement(new GameAnnouncement(
+                new GameContract(
+                        GameType.GRAND,
+                        true,
+                        CardList.of(Card.CJ, Card.SJ, Card.HJ, Card.DJ, Card.CA, Card.CT, Card.CK, Card.CQ, Card.C9, Card.C8))));
+
+        assertTrue(gameData.isOuvert());
     }
 
     @Test
@@ -85,9 +110,6 @@ public class SkatGameDataTest {
     @Test
     void overbid() {
 
-        final var builder = GameAnnouncement.builder(GameType.HEARTS);
-        builder.discardedCards(new CardList(Card.C9, Card.S9));
-
         final List<SkatGameEvent> gameEvents = List.of(
                 new CardDealEvent(
                         Map.of(
@@ -101,7 +123,7 @@ public class SkatGameDataTest {
                 new PassBidEvent(Player.REARHAND, 24),
                 new PickUpSkatEvent(Player.FOREHAND),
                 new DiscardSkatEvent(Player.FOREHAND, new CardList(Card.C9, Card.S9)),
-                new GameAnnouncementEvent(Player.FOREHAND, builder.build()),
+                new GameAnnouncementEvent(Player.FOREHAND, new GameAnnouncement(new GameContract(GameType.HEARTS), CardList.of(Card.C9, Card.S9))),
                 new TrickCardPlayedEvent(Player.FOREHAND, Card.SA),
                 new TrickCardPlayedEvent(Player.MIDDLEHAND, Card.S8),
                 new TrickCardPlayedEvent(Player.REARHAND, Card.S7),

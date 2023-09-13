@@ -10,27 +10,27 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Holds all data for a ISS skat game
+ * Holds all data for a move in an ISS skat game.
  */
+// TODO: refactor to Java records
 public class MoveInformation {
-
     private MovePlayer movePlayer;
-    private final Map<Player, Double> playerTimes = new HashMap<Player, Double>();
+    private final Map<Player, Double> playerTimes = new HashMap<>();
     private MoveType type;
     private int bidValue;
     private GameAnnouncement announcement;
     // FIXME (jan 23.11.2010) this doesn't work until card lists are static
-    private CardList skat = new CardList();
-    private CardList foreHandCards = new CardList();
-    private CardList middleHandCards = new CardList();
-    private CardList rearHandCards = new CardList();
-    private CardList ouvertCards = new CardList();
+    private final CardList skat = new CardList();
+    private final CardList foreHandCards = new CardList();
+    private final CardList middleHandCards = new CardList();
+    private final CardList rearHandCards = new CardList();
+    private final CardList revealedCards = new CardList();
     private Card card;
     private Player timeOutPlayer;
     private Player leavingPlayer;
 
     /**
-     * Gets the game announcement
+     * Gets the game announcement.
      *
      * @return Game announcement
      */
@@ -39,21 +39,20 @@ public class MoveInformation {
     }
 
     /**
-     * Sets the game announcement
+     * Sets the game announcement.
      *
-     * @param ann Game announcement
+     * @param announcement Game announcement
      */
-    public void setGameAnnouncement(final GameAnnouncement ann) {
-        announcement = ann;
+    public void setGameAnnouncement(final GameAnnouncement announcement) {
+        this.announcement = announcement;
     }
 
     /**
-     * Gets the skat
+     * Gets the skat.
      *
      * @return CardList
      */
     public CardList getSkat() {
-
         return skat.getImmutableCopy();
     }
 
@@ -63,8 +62,7 @@ public class MoveInformation {
      * @param newSkat Skat cards
      */
     public void setSkat(final CardList newSkat) {
-
-        skat = newSkat;
+        skat.addAll(newSkat);
     }
 
     /**
@@ -73,7 +71,6 @@ public class MoveInformation {
      * @return Position of the player
      */
     public MovePlayer getMovePlayer() {
-
         return movePlayer;
     }
 
@@ -235,11 +232,10 @@ public class MoveInformation {
      */
     // FIXME: parameter deal should be a Map
     public void setDealCards(final List<CardList> deal) {
-
-        foreHandCards = deal.get(0);
-        middleHandCards = deal.get(1);
-        rearHandCards = deal.get(2);
-        skat = deal.get(3);
+        foreHandCards.addAll(deal.get(0));
+        middleHandCards.addAll(deal.get(1));
+        rearHandCards.addAll(deal.get(2));
+        skat.addAll(deal.get(3));
     }
 
     /**
@@ -309,26 +305,6 @@ public class MoveInformation {
     }
 
     /**
-     * Sets the ouvert cards
-     *
-     * @param newOuvertCards Ouvert cards
-     */
-    @Deprecated
-    public void setOuvertCards(final CardList newOuvertCards) {
-        ouvertCards = newOuvertCards;
-    }
-
-    /**
-     * Gets the ouvert cards
-     *
-     * @return Ouvert cards
-     */
-    @Deprecated
-    public CardList getOuvertCards() {
-        return ouvertCards;
-    }
-
-    /**
      * Sets the player who left the table
      *
      * @param player Player
@@ -344,5 +320,13 @@ public class MoveInformation {
      */
     public Player getLeavingPlayer() {
         return leavingPlayer;
+    }
+
+    public void setRevealedCards(final CardList cards) {
+        revealedCards.addAll(cards);
+    }
+
+    public CardList getRevealedCards() {
+        return revealedCards.getImmutableCopy();
     }
 }

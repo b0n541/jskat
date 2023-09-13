@@ -35,10 +35,10 @@ public abstract class AbstractSkatRule implements SkatRule {
                                        final Trick trick) {
 
         Player trickWinner = null;
-        Card first = trick.getFirstCard();
-        Card second = trick.getSecondCard();
-        Card third = trick.getThirdCard();
-        Player trickForeHand = trick.getForeHand();
+        final Card first = trick.getFirstCard();
+        final Card second = trick.getSecondCard();
+        final Card third = trick.getThirdCard();
+        final Player trickForeHand = trick.getForeHand();
 
         if (isCardBeatsCard(gameType, first, second)) {
 
@@ -67,9 +67,9 @@ public abstract class AbstractSkatRule implements SkatRule {
     }
 
     @Override
-    public int calcOverbidGameResult(SkatGameData gameData) {
-        int declarerBidValue = gameData.getMaxBidValue();
-        int gameBaseValue = SkatConstants.getGameBaseValue(gameData.getAnnouncement().gameType(), false, false);
+    public int calcOverbidGameResult(final SkatGameData gameData) {
+        final int declarerBidValue = gameData.getMaxBidValue();
+        final int gameBaseValue = SkatConstants.getGameBaseValue(gameData.getContract().gameType(), false, false);
 
         int overbidMultiplier = 0;
         while (overbidMultiplier * gameBaseValue < declarerBidValue) {

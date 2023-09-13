@@ -1,6 +1,6 @@
 package org.jskat.player;
 
-import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameContract;
 import org.jskat.data.Trick;
 import org.jskat.util.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -273,6 +273,6 @@ public class PlayerKnowledgeTest2 {
 
     private void gameAnnouncement(final GameType gameType, final Player declarer) {
         knowledge.setDeclarer(declarer);
-        knowledge.setGame(GameAnnouncement.builder(gameType).build());
+        knowledge.setContract(new GameContract(gameType));
     }
 }

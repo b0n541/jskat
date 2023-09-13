@@ -1,7 +1,7 @@
 package org.jskat.ai.test;
 
 import org.jskat.ai.AbstractAIPlayer;
-import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameContract;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 
@@ -22,12 +22,12 @@ public class UnitTestPlayer extends AbstractAIPlayer {
     }
 
     @Override
-    public int bidMore(int nextBidValue) {
+    public int bidMore(final int nextBidValue) {
         return 0;
     }
 
     @Override
-    public boolean holdBid(int currBidValue) {
+    public boolean holdBid(final int currBidValue) {
         return false;
     }
 
@@ -37,11 +37,11 @@ public class UnitTestPlayer extends AbstractAIPlayer {
     }
 
     @Override
-    public GameAnnouncement announceGame() {
+    public GameContract announceGame() {
         return null;
     }
 
-    public void setCardsToPlay(List<Card> cardsToPlay) {
+    public void setCardsToPlay(final List<Card> cardsToPlay) {
         this.cardsToPlay.addAll(cardsToPlay);
     }
 

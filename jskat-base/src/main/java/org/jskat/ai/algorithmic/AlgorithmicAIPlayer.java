@@ -1,7 +1,7 @@
 package org.jskat.ai.algorithmic;
 
 import org.jskat.ai.AbstractAIPlayer;
-import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameContract;
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -89,12 +89,12 @@ public class AlgorithmicAIPlayer extends AbstractAIPlayer {
      * @see org.jskat.ai.IJSkatPlayer#announceGame()
      */
     @Override
-    public GameAnnouncement announceGame() {
+    public GameContract announceGame() {
         if (bidEvaluator == null) {
             bidEvaluator = new BidEvaluator(knowledge.getOwnCards());
         }
         aiPlayer = new AlgorithmicSinglePlayer(this);
-        return GameAnnouncement.builder(bidEvaluator.getSuggestedGameType()).build();
+        return new GameContract(bidEvaluator.getSuggestedGameType());
     }
 
     /*

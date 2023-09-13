@@ -95,7 +95,7 @@ public class SkatGame {
                     setActivePlayer(Player.MIDDLEHAND);
 
                     if (variant == GameVariant.FORCED_RAMSCH) {
-                        setGameAnnouncement(GameAnnouncement.builder(GameType.RAMSCH).build());
+                        setGameAnnouncement(new GameAnnouncement(new GameContract(GameType.RAMSCH)));
                     } else {
                         // "normal" game (i.e. no ramsch)
                         bidding();
@@ -114,7 +114,7 @@ public class SkatGame {
 
                     if (grandHandAnnounced) {
                         log.debug(data.getDeclarer() + " is playing grand hand");
-                        setGameAnnouncement(GameAnnouncement.builder(GameType.GRAND).hand().build());
+                        setGameAnnouncement(new GameAnnouncement(new GameContract(GameType.GRAND, true)));
                         setGameState(GameState.TRICK_PLAYING);
                         log.debug("grand hand game started");
                         break;
@@ -130,7 +130,7 @@ public class SkatGame {
                     break;
                 case SCHIEBERAMSCH:
                     schieberamsch();
-                    setGameAnnouncement(GameAnnouncement.builder(GameType.RAMSCH).build());
+                    setGameAnnouncement(new GameAnnouncement(new GameContract(GameType.RAMSCH)));
                     setGameState(GameState.TRICK_PLAYING);
                     break;
                 case PICKING_UP_SKAT:
@@ -367,12 +367,12 @@ public class SkatGame {
 
             if (options.isPlayRamsch() && options.isRamschEventNoBid()) {
                 log.debug("Playing ramsch due to no bid");
-                setGameAnnouncement(GameAnnouncement.builder(GameType.RAMSCH).build());
+                setGameAnnouncement(new GameAnnouncement(new GameContract(GameType.RAMSCH)));
                 eventBus.post(new TableGameMoveEvent(tableName, new GameAnnouncementEvent(data.getDeclarer(), data.getAnnouncement())));
                 setActivePlayer(Player.FOREHAND);
                 // do not call "setGameAnnouncement(..)" here!
             } else {
-                setGameAnnouncement(GameAnnouncement.builder(GameType.PASSED_IN).build());
+                setGameAnnouncement(new GameAnnouncement(new GameContract(GameType.PASSED_IN)));
             }
         }
 
@@ -474,7 +474,7 @@ public class SkatGame {
         log.debug("Player " + activePlayer + " looks into the skat...");
         log.debug("Skat before discarding: " + data.getSkat());
 
-        final CardList skatBefore = new CardList(data.getSkat());
+        final CardList skatBefore = data.getSkat().getImmutableCopy();
 
         // create a clone of the skat before sending it to the player
         // otherwise the player could change the skat after discarding
@@ -483,9 +483,8 @@ public class SkatGame {
 
         // ask player for the cards to be discarded
         // cloning is done to prevent the player
-        // from manipulating the skat afterwards
-        final CardList discardedSkat = new CardList();
-        discardedSkat.addAll(activePlayerInstance.discardSkat());
+        // from manipulating the skat afterward
+        final CardList discardedSkat = activePlayerInstance.discardSkat().getImmutableCopy();
 
         if (!checkDiscardedCards(activePlayer, discardedSkat)) {
             view.showAIPlayedSchwarzMessageDiscarding(activePlayerInstance.getPlayerName(), discardedSkat);
@@ -507,11 +506,9 @@ public class SkatGame {
         boolean result = true;
 
         if (discardedSkat == null) {
-
             log.error("Player is fooling!!! Skat is empty!");
             result = false;
         } else if (discardedSkat.size() != 2) {
-
             log.error("Player is fooling!!! Skat doesn't have two cards!");
             result = false;
         } else if (discardedSkat.get(0) == discardedSkat.get(1)) {
@@ -521,7 +518,7 @@ public class SkatGame {
             log.error("Player is fooling!!! Player doesn't have had discarded card!");
             result = false;
         }
-        // TODO check for jacks in the discarded skat in ramsch games
+        // TODO: check for jacks in the discarded skat in ramsch games
 
         return result;
     }
@@ -530,13 +527,17 @@ public class SkatGame {
 
         log.debug("declaring game...");
 
-        // TODO check for valid game announcements
-        final GameAnnouncement ann = getPlayerInstance(data.getDeclarer()).announceGame();
-        if (ann != null) {
-            setGameAnnouncement(ann);
+        final var contract = getPlayerInstance(data.getDeclarer()).announceGame();
+        if (contract != null) {
+            // TODO check for valid game announcements
+            if (contract.hand()) {
+                setGameAnnouncement(new GameAnnouncement(contract));
+            } else {
+                setGameAnnouncement(new GameAnnouncement(contract, data.getSkat()));
+            }
         } else {
             view.showErrorMessage(strings.getString("invalid_game_announcement_title"),
-                    strings.getString("invalid_game_announcement_message", ann));
+                    strings.getString("invalid_game_announcement_message", contract));
         }
 
         doSleep(maxSleep);
@@ -956,17 +957,17 @@ public class SkatGame {
     /**
      * Sets the game announcement from the outside
      *
-     * @param ann Game announcement
+     * @param announcement Game announcement
      */
-    public void setGameAnnouncement(final GameAnnouncement ann) {
+    public void setGameAnnouncement(final GameAnnouncement announcement) {
 
-        data.setAnnouncement(ann);
+        data.setAnnouncement(announcement);
         rules = SkatRuleFactory.getSkatRules(data.getGameType());
-        eventBus.post(new TableGameMoveEvent(tableName, new GameAnnouncementEvent(data.getDeclarer(), ann)));
+        eventBus.post(new TableGameMoveEvent(tableName, new GameAnnouncementEvent(data.getDeclarer(), announcement)));
 
         // inform all players
         for (final JSkatPlayer playerInstance : player.values()) {
-            playerInstance.startGame(data.getDeclarer(), ann);
+            playerInstance.startGame(data.getDeclarer(), announcement.contract());
         }
 
         log.debug(".setGameAnnouncement(): " + data.getAnnouncement() + " by " + data.getDeclarer() + ", rules=" + rules);
@@ -1086,7 +1087,7 @@ public class SkatGame {
      * @return Game announcement
      */
     public GameAnnouncement getGameAnnouncement() {
-        return data.getAnnoucement();
+        return data.getAnnouncement();
     }
 
     /**

@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Data class for a Skat game
@@ -19,18 +18,6 @@ import java.util.stream.Collectors;
 public class SkatGameData {
 
     private static final Logger log = LoggerFactory.getLogger(SkatGameData.class);
-
-    private static final Set<GameType> SUIT_GRAND_NULL_GAME_TYPES = Set.of(
-            GameType.CLUBS,
-            GameType.SPADES,
-            GameType.HEARTS,
-            GameType.DIAMONDS,
-            GameType.GRAND,
-            GameType.NULL);
-
-    private static final Set<GameType> SUIT_GRAND_GAME_TYPES = SUIT_GRAND_NULL_GAME_TYPES.stream()
-            .filter(it -> GameType.NULL != it)
-            .collect(Collectors.toUnmodifiableSet());
 
     /**
      * All possible game states
@@ -109,6 +96,9 @@ public class SkatGameData {
      * The game announcement made by the declarer
      */
     private GameAnnouncement announcement;
+
+    private boolean contra;
+    private boolean re;
 
     /**
      * Declarer player
@@ -223,9 +213,7 @@ public class SkatGameData {
      */
     public SkatGameResult getGameResult() {
 
-        if (result.getGameValue() == -1
-                && getGameType() != GameType.PASSED_IN) {
-
+        if (result.getGameValue() == -1 && getGameType() != GameType.PASSED_IN) {
             log.warn("Game result hasn't been calculated yet!");
             calcResult();
         }
@@ -324,8 +312,11 @@ public class SkatGameData {
      * @return TRUE, if the single player has played a hand game
      */
     public boolean isHand() {
+        if (announcement == null) {
+            throw new IllegalStateException("No game announcement done, yet.");
+        }
 
-        return announcement.hand();
+        return announcement.contract().hand();
     }
 
     /**
@@ -334,8 +325,10 @@ public class SkatGameData {
      * @return TRUE if the single player has played an ouvert game
      */
     public boolean isOuvert() {
-
-        return announcement.ouvert();
+        if (announcement == null) {
+            throw new IllegalStateException("No game announcement done, yet.");
+        }
+        return announcement.contract().ouvert();
     }
 
     /**
@@ -355,7 +348,7 @@ public class SkatGameData {
      */
     public boolean isSchneiderAnnounced() {
 
-        return announcement.schneider();
+        return announcement.contract().schneider();
     }
 
     /**
@@ -375,7 +368,7 @@ public class SkatGameData {
      */
     public boolean isSchwarzAnnounced() {
 
-        return announcement.schwarz();
+        return announcement.contract().schwarz();
     }
 
     /**
@@ -482,17 +475,17 @@ public class SkatGameData {
             }
         }
 
-        if (SUIT_GRAND_NULL_GAME_TYPES.contains(announcement.gameType())) {
+        if (GameType.GRAND_SUIT_NULL.contains(announcement.contract().gameType())) {
             result.setFinalDeclarerPoints(getDeclarerScore());
             result.setFinalOpponentPoints(getOpponentScore());
         }
 
-        if (SUIT_GRAND_GAME_TYPES.contains(announcement.gameType())) {
+        if (GameType.GRAND_SUIT.contains(announcement.contract().gameType())) {
             result.setMultiplier(rules.getMultiplier(this));
             result.setPlayWithJacks(rules.isPlayWithJacks(this));
         }
 
-        if (GameType.RAMSCH == announcement.gameType()) {
+        if (GameType.RAMSCH == announcement.contract().gameType()) {
             finishRamschGame();
         }
     }
@@ -658,7 +651,7 @@ public class SkatGameData {
         log.debug("geschoben=" + geschoben + ", 2^" + geschoben + "="
                 + (1 << geschoben));
 
-        int multiplier;
+        final int multiplier;
 
         if (geschoben < 0) {
 
@@ -851,9 +844,22 @@ public class SkatGameData {
     }
 
     /**
-     * Sets the game announcement
+     * Gets the game contract.
      *
-     * @param announcement The game announcement
+     * @return Game contract
+     */
+    public GameContract getContract() {
+        return announcement.contract();
+    }
+
+    public GameAnnouncement getAnnouncement() {
+        return announcement;
+    }
+
+    /**
+     * Sets the game announcement.
+     *
+     * @param announcement Game announcement
      */
     public void setAnnouncement(final GameAnnouncement announcement) {
 
@@ -861,11 +867,11 @@ public class SkatGameData {
 
         if (this.announcement != null) {
             rules = SkatRuleFactory.getSkatRules(getGameType());
-        }
 
-        if (GameType.PASSED_IN.equals(getGameType())) {
-            gameState = GameState.GAME_OVER;
-            calcResult();
+            if (GameType.PASSED_IN.equals(getGameType())) {
+                gameState = GameState.GAME_OVER;
+                calcResult();
+            }
         }
     }
 
@@ -880,16 +886,7 @@ public class SkatGameData {
             throw new IllegalStateException("No game announcement available!");
         }
 
-        return announcement.gameType();
-    }
-
-    /**
-     * Gets the game announcement
-     *
-     * @return The game announcement
-     */
-    public GameAnnouncement getAnnouncement() {
-        return announcement;
+        return announcement.contract().gameType();
     }
 
     /**
@@ -1018,7 +1015,7 @@ public class SkatGameData {
 
         factory.setPlayerPoints(playerPoints);
 
-        if (GameType.RAMSCH == announcement.gameType()) {
+        if (GameType.RAMSCH == announcement.contract().gameType()) {
             for (final Player looser : ramschLoosers) {
                 factory.addRamschLooser(looser);
             }
@@ -1107,7 +1104,7 @@ public class SkatGameData {
      * @return Set of loosing players
      */
     public Set<Player> getRamschLosers() {
-        if (announcement == null || GameType.RAMSCH != announcement.gameType()) {
+        if (announcement == null || GameType.RAMSCH != announcement.contract().gameType()) {
             throw new IllegalStateException("This game data object is not from a Ramsch game!");
         }
         return Collections.unmodifiableSet(ramschLoosers);
@@ -1139,9 +1136,12 @@ public class SkatGameData {
      * @param player Player
      */
     public void addSkatToPlayer(final Player player) {
+        if (announcement != null) {
+            throw new IllegalStateException("Game announcement already done.");
+        }
+
         playerHands.get(player).addAll(skat);
         skat.clear();
-        announcement.hand = false;
     }
 
     /**
@@ -1152,7 +1152,6 @@ public class SkatGameData {
     public void removeSkatFromPlayer(final Player player) {
         playerHands.get(player).removeAll(dealtSkat);
         skat.addAll(dealtSkat);
-        announcement.hand = true;
     }
 
     /**
@@ -1191,7 +1190,7 @@ public class SkatGameData {
      * @param isContra <code>true</code>, if Contra was called.
      */
     public void setContra(final boolean isContra) {
-        announcement.contra = isContra;
+        contra = isContra;
     }
 
     /**
@@ -1199,8 +1198,8 @@ public class SkatGameData {
      *
      * @return <code>true</code>, if Contra was called.
      */
-    public Boolean isContra() {
-        return announcement.contra;
+    public boolean isContra() {
+        return contra;
     }
 
     /**
@@ -1209,7 +1208,7 @@ public class SkatGameData {
      * @param isRe <code>true</code>, if Re was called.
      */
     public void setRe(final boolean isRe) {
-        announcement.re = isRe;
+        re = isRe;
     }
 
     /**
@@ -1217,8 +1216,8 @@ public class SkatGameData {
      *
      * @return <code>true</code>, if Re was called.
      */
-    public Boolean isRe() {
-        return announcement.re;
+    public boolean isRe() {
+        return re;
     }
 
     /**
@@ -1235,7 +1234,7 @@ public class SkatGameData {
      *
      * @return TRUE if the skat was picked up
      */
-    public Boolean isSkatPickedUp() {
+    public boolean isSkatPickedUp() {
         return skatPickedUp;
     }
 }

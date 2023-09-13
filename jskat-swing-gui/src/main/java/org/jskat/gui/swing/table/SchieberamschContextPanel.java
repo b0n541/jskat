@@ -1,7 +1,7 @@
 package org.jskat.gui.swing.table;
 
 import org.jskat.control.gui.action.JSkatAction;
-import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameContract;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
@@ -57,8 +57,6 @@ class SchieberamschContextPanel extends JPanel {
         resetPanel();
     }
 
-    // FIXME: same code can be found in class SkatTabelPanel for
-    // Contra-Re-Context-Panel
     public JPanel getGrandHandSchiebeRamschPanel(final ActionMap actions) {
         final JPanel result = new JPanel(LayoutFactory.getMigLayout("fill"));
 
@@ -75,9 +73,9 @@ class SchieberamschContextPanel extends JPanel {
         grandHandButton.setText(this.strings.getString("yes"));
         grandHandButton.addActionListener(event -> {
             try {
-                final GameAnnouncement ann = GameAnnouncement.builder(GameType.GRAND).hand().build();
+                final GameContract contract = new GameContract(GameType.GRAND).withHand();
 
-                event.setSource(ann);
+                event.setSource(contract);
                 // fire event again
                 grandHandButton.dispatchEvent(event);
             } catch (final IllegalArgumentException except) {

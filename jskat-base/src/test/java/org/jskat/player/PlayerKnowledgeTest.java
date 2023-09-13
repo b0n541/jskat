@@ -2,7 +2,7 @@ package org.jskat.player;
 
 
 import org.jskat.AbstractJSkatTest;
-import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameContract;
 import org.jskat.data.Trick;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -111,7 +111,7 @@ public class PlayerKnowledgeTest extends AbstractJSkatTest {
 
         dealPlayerCards();
 
-        knowledge.setGame(GameAnnouncement.builder(GameType.CLUBS).build());
+        knowledge.setContract(new GameContract(GameType.CLUBS));
         knowledge.setDeclarer(Player.FOREHAND);
 
         knowledge.setNextTrick(0, Player.FOREHAND);

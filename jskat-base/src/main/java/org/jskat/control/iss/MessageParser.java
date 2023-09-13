@@ -1,6 +1,7 @@
 package org.jskat.control.iss;
 
 import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameContract;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.Trick;
 import org.jskat.data.iss.*;
@@ -143,7 +144,7 @@ public class MessageParser {
             info.setType(MoveType.SHOW_CARDS);
             if (move.length() > 2) {
                 // declarer cards follow, SC could also stand alone
-                info.setOuvertCards(parseSkatCards(move.substring(move.indexOf(".") + 1)));
+                info.setRevealedCards(parseSkatCards(move.substring(move.indexOf(".") + 1)));
             }
         } else if (move.startsWith("LE.")) {
             // one player left the table during the game
@@ -188,7 +189,7 @@ public class MessageParser {
                     } else {
                         // game announcement
                         info.setType(MoveType.GAME_ANNOUNCEMENT);
-                        parseGameAnnoucement(info, move);
+                        parseGameAnnouncement(info, move);
                     }
                 }
             }
@@ -241,8 +242,7 @@ public class MessageParser {
      * [H] (hand, not given if O + trump game) [S] (schneider announced, only in
      * H games, not if O or Z) [Z] (schwarz announced, only in H games)
      */
-    private static GameAnnouncement parseGameAnnoucement(
-            final MoveInformation info, final String move) {
+    private static void parseGameAnnouncement(final MoveInformation info, final String move) {
 
         final StringTokenizer annToken = new StringTokenizer(move, ".");
         final String gameTypeString = annToken.nextToken();
@@ -272,60 +272,34 @@ public class MessageParser {
 
             gameType = GameType.NULL;
         }
-        final var builder = GameAnnouncement.builder(gameType);
 
-        boolean handGame = false;
-        boolean ouvertGame = false;
-        boolean schwarzGame = false;
+        boolean hand = false;
+        boolean schneider = false;
+        boolean schwarz = false;
+        boolean ouvert = false;
+
         // parse other game modifiers
         for (int i = 1; i < gameTypeString.length(); i++) {
-
-            final char mod = gameTypeString.charAt(i);
-
-            if (mod == 'O') {
-
-                builder.ouvert();
-                ouvertGame = true;
-
-            } else if (mod == 'H') {
-
-                builder.hand();
-                handGame = true;
-            } else if (mod == 'S') {
-
-                builder.schneider();
-            } else if (mod == 'Z') {
-
-                builder.schwarz();
-                schwarzGame = true;
+            switch (gameTypeString.charAt(i)) {
+                case '0' -> ouvert = true;
+                case 'H' -> hand = true;
+                case 'S' -> schneider = true;
+                case 'Z' -> schwarz = true;
+                default -> log.warn("Unknown game modifier.");
             }
         }
 
-        // FIXME this should be moved to the builder logic of the GameAnnouncement
-        if (gameType != GameType.NULL && handGame && schwarzGame) {
-            builder.schneider();
-        }
-        if (gameType != GameType.NULL && ouvertGame) {
-            builder.ouvert();
-            handGame = true;
-        }
-        if (gameType != GameType.NULL && ouvertGame && handGame) {
-            builder.schneider();
-            builder.schwarz();
-        }
+        final CardList discardedCards = new CardList();
+        final CardList ouvertCards = new CardList();
 
         if (annToken.hasMoreTokens()) {
-
             final CardList cards = new CardList();
 
             while (annToken.hasMoreTokens()) {
                 cards.add(Card.getCardFromString(annToken.nextToken()));
             }
 
-            final CardList discardedCards = new CardList();
-            final CardList ouvertCards = new CardList();
-
-            if (handGame) {
+            if (hand) {
                 ouvertCards.addAll(cards);
             } else if (cards.size() == 2) {
                 discardedCards.addAll(cards);
@@ -337,15 +311,18 @@ public class MessageParser {
                     ouvertCards.add(cards.get(i));
                 }
             }
-
-            info.setOuvertCards(ouvertCards);
-            builder.ouvert(ouvertCards);
-            builder.discardedCards(discardedCards);
         }
 
-        final GameAnnouncement ann = builder.build();
-        info.setGameAnnouncement(ann);
-        return ann;
+        info.setGameAnnouncement(
+                new GameAnnouncement(
+                        new GameContract(
+                                gameType,
+                                hand,
+                                schneider,
+                                schwarz,
+                                ouvert,
+                                ouvertCards),
+                        discardedCards));
     }
 
     private static List<CardList> parseCardDeal(final String move) {
@@ -499,7 +476,7 @@ public class MessageParser {
                                    final String summaryPart) {
 
         // FIXME (jansch 12.02.2012) parse moves correctly
-        result.setAnnouncement(GameAnnouncement.builder(GameType.PASSED_IN).build());
+        result.setAnnouncement(new GameAnnouncement(new GameContract(GameType.PASSED_IN)));
 
         final StringTokenizer token = new StringTokenizer(summaryPart);
 
@@ -529,7 +506,7 @@ public class MessageParser {
                     break;
                 case GAME_ANNOUNCEMENT:
                     result.setAnnouncement(moveInfo.getGameAnnouncement());
-                    if (!moveInfo.getGameAnnouncement().hand()) {
+                    if (!moveInfo.getGameAnnouncement().contract().hand()) {
                         result.setDiscardedSkat(moveInfo.getPlayer(), moveInfo.getGameAnnouncement().discardedCards());
                     }
                     break;
@@ -549,8 +526,7 @@ public class MessageParser {
                     if (result.getTricks().size() == 10
                             && result.getCurrentTrick().getThirdCard() != null) {
                         // set the trick winner of the last trick
-                        final SkatRule skatRules = SkatRuleFactory
-                                .getSkatRules(result.getGameType());
+                        final SkatRule skatRules = SkatRuleFactory.getSkatRules(result.getGameType());
                         result.setTrickWinner(9, skatRules.calculateTrickWinner(
                                 result.getGameType(), result.getCurrentTrick()));
                     }
@@ -621,7 +597,7 @@ public class MessageParser {
         } else if (token.startsWith("p:")) {
 
             int declarerPoints = 0;
-            if (GameType.NULL != gameData.getAnnouncement().gameType() || gameData.isGameLost()) {
+            if (GameType.NULL != gameData.getAnnouncement().contract().gameType() || gameData.isGameLost()) {
                 declarerPoints = Integer.parseInt(token.substring(2));
             }
             gameData.setDeclarerScore(declarerPoints);

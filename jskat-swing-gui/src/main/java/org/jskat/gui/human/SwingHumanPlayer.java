@@ -4,6 +4,7 @@ import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.control.gui.action.JSkatActionEvent;
 import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameContract;
 import org.jskat.player.JSkatPlayer;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -27,7 +28,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
     private Boolean callRe;
     private Boolean pickUpSkat;
     private CardList discardSkat;
-    private GameAnnouncement gameAnnouncement;
+    private GameContract gameContract;
     private Card nextCard;
 
     /**
@@ -67,7 +68,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
      * @see JSkatPlayer#announceGame()
      */
     @Override
-    public GameAnnouncement announceGame() {
+    public GameContract announceGame() {
 
         log.debug("Waiting for human game announcing...");
 
@@ -75,7 +76,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
         gameAnnouncementStep = GameAnnouncementStep.DONE_GAME_ANNOUNCEMENT;
 
-        return gameAnnouncement;
+        return gameContract;
     }
 
     /**
@@ -189,8 +190,8 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
     @Override
     public void actionPerformed(final JSkatActionEvent e) {
 
-        Object source = e.getSource();
-        String command = e.getActionCommand();
+        final Object source = e.getSource();
+        final String command = e.getActionCommand();
         boolean interrupt = true;
 
         if (JSkatAction.PASS_BID.toString().equals(command)) {
@@ -218,7 +219,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
             pickUpSkat = true;
             gameAnnouncementStep = GameAnnouncementStep.LOOKED_INTO_SKAT;
         } else if (JSkatAction.SCHIEBEN.toString().equals(command)) {
-            if (source instanceof CardList cards) {
+            if (source instanceof final CardList cards) {
                 if (cards.size() == 0) {
                     pickUpSkat = false;
                 } else {
@@ -227,14 +228,13 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
                 }
             }
         } else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
-            if (source instanceof GameAnnouncement) {
-                // player did game announcement
-                gameAnnouncement = (GameAnnouncement) source;
+            if (source instanceof final GameAnnouncement announcement) {
+                gameContract = announcement.contract();
 
-                if (gameAnnouncement.hand()) {
+                if (gameContract.hand()) {
                     gameAnnouncementStep = GameAnnouncementStep.PLAYS_HAND;
                 } else {
-                    setDiscardedSkatCards(gameAnnouncement.discardedCards());
+                    discardSkat = announcement.discardedCards();
                     gameAnnouncementStep = GameAnnouncementStep.DISCARDED_SKAT;
                 }
             } else {
@@ -270,7 +270,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
             idler.start();
             try {
                 idler.join();
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
                 log.warn("wait for user input was interrupted");
             }
         }
@@ -280,14 +280,10 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
 
         log.debug("Game announcement step: " + gameAnnouncementStep);
 
-        boolean result = GameAnnouncementStep.DISCARDED_SKAT.equals(gameAnnouncementStep)
+        final boolean result = GameAnnouncementStep.DISCARDED_SKAT.equals(gameAnnouncementStep)
                 || GameAnnouncementStep.PLAYS_HAND.equals(gameAnnouncementStep);
 
         return result;
-    }
-
-    private void setDiscardedSkatCards(final CardList discardedCards) {
-        discardSkat = discardedCards;
     }
 
     /*-------------------------------------------------------------------
@@ -325,7 +321,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
                 while (doWait) {
                     try {
                         monitor.wait();
-                    } catch (InterruptedException e) {
+                    } catch (final InterruptedException e) {
                         stopWaiting();
                     }
                 }
@@ -353,7 +349,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
         gameAnnouncementStep = GameAnnouncementStep.BEFORE_ANNOUNCEMENT;
         pickUpSkat = false;
         discardSkat = null;
-        gameAnnouncement = null;
+        gameContract = null;
         nextCard = null;
     }
 

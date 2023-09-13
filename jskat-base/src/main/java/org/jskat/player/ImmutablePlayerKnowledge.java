@@ -1,6 +1,6 @@
 package org.jskat.player;
 
-import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameContract;
 import org.jskat.data.Trick;
 import org.jskat.util.*;
 
@@ -20,7 +20,7 @@ public class ImmutablePlayerKnowledge {
     /**
      * the basic game information
      */
-    protected GameAnnouncement announcement;
+    protected GameContract contract;
 
     /**
      * Player position
@@ -203,7 +203,7 @@ public class ImmutablePlayerKnowledge {
                     }
                 }
                 for (final Rank r : Rank.values()) {
-                    if (couldHaveCard(p, Card.getCard(getGameAnnouncement().gameType().getTrumpSuit(), r))) {
+                    if (couldHaveCard(p, Card.getCard(getGameContract().gameType().getTrumpSuit(), r))) {
                         return true;
                     }
                 }
@@ -243,9 +243,8 @@ public class ImmutablePlayerKnowledge {
     /**
      * @return the game
      */
-    public final GameAnnouncement getGameAnnouncement() {
-        // FIXME jan 29.10.2013: make game announcement clonable
-        return announcement;
+    public final GameContract getGameContract() {
+        return contract;
     }
 
     /**
@@ -254,10 +253,10 @@ public class ImmutablePlayerKnowledge {
      * @return the gameType
      */
     public final GameType getGameType() {
-        if (announcement == null) {
+        if (contract == null) {
             return null;
         }
-        return announcement.gameType();
+        return contract.gameType();
     }
 
     /**
@@ -409,10 +408,10 @@ public class ImmutablePlayerKnowledge {
      * @return Trump suit or null if there is no trump
      */
     public final Suit getTrumpSuit() {
-        if (announcement == null || announcement.gameType() == null) {
+        if (contract == null || contract.gameType() == null) {
             throw new IllegalStateException("Game type not available.");
         }
-        return announcement.gameType().getTrumpSuit();
+        return contract.gameType().getTrumpSuit();
     }
 
     /**
@@ -580,7 +579,7 @@ public class ImmutablePlayerKnowledge {
 
     public Set<Player> getOpponentPartyMembers() {
 
-        List<Player> result = Player.getOrderedList();
+        final List<Player> result = Player.getOrderedList();
         result.removeAll(getPlayerPartyMembers());
         return Set.copyOf(result);
     }

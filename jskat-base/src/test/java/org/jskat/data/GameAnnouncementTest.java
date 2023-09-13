@@ -18,10 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
- * Tests for {@link GameAnnouncement}
+ * Tests for {@link GameContract}
  */
 public class GameAnnouncementTest extends AbstractJSkatTest {
-
     private static final CardList VALID_DISCARDED_CARDS = CardList.of(Card.CJ, Card.SJ);
     private static final CardList VALID_OUVERT_CARDS = CardList.of(
             Card.C7, Card.S7, Card.H7, Card.D7,
@@ -32,15 +31,12 @@ public class GameAnnouncementTest extends AbstractJSkatTest {
 
     @BeforeAll
     public static void createAllValidGameAnnouncements() {
-        validAnnouncements.add(createNullWithoutDiscardedCards());
         validAnnouncements.add(createNull());
         validAnnouncements.add(createNullHand());
         validAnnouncements.add(createNullOuvert());
-        validAnnouncements.add(createNullOuvertWithoutDiscardedCards());
         validAnnouncements.add(createNullHandOuvert());
 
-        for (final GameType suitGrand : List.of(GameType.GRAND, GameType.CLUBS, GameType.SPADES, GameType.HEARTS, GameType.DIAMONDS)) {
-            validAnnouncements.add(createSuitGrandWithoutDiscardedCards(suitGrand));
+        for (final GameType suitGrand : GameType.GRAND_SUIT) {
             validAnnouncements.add(createSuitGrand(suitGrand));
             validAnnouncements.add(createSuitGrandHand(suitGrand));
             validAnnouncements.add(createSuitGrandHandSchneider(suitGrand));
@@ -55,95 +51,85 @@ public class GameAnnouncementTest extends AbstractJSkatTest {
     }
 
     private static GameAnnouncement createRamsch() {
-        return new GameAnnouncement(GameType.RAMSCH);
+        return new GameAnnouncement(new GameContract(GameType.RAMSCH));
     }
 
     private static GameAnnouncement createPassedIn() {
-        return new GameAnnouncement(GameType.PASSED_IN);
+        return new GameAnnouncement(new GameContract(GameType.PASSED_IN));
     }
 
     private static GameAnnouncement createSuitGrand(final GameType gameType) {
-        final var result = new GameAnnouncement(gameType);
-        builder.discardedCards = VALID_DISCARDED_CARDS;
-        return result;
-    }
-
-    @Deprecated
-    private static GameAnnouncement createSuitGrandWithoutDiscardedCards(final GameType gameType) {
-        return new GameAnnouncement(gameType);
+        return new GameAnnouncement(new GameContract(gameType), VALID_DISCARDED_CARDS);
     }
 
     private static GameAnnouncement createSuitGrandHand(final GameType gameType) {
-        return new GameAnnouncement(gameType, true);
+        return new GameAnnouncement(new GameContract(gameType, true));
     }
 
     private static GameAnnouncement createSuitGrandHandSchneider(final GameType gameType) {
-        return new GameAnnouncement(gameType, true, true);
+        return new GameAnnouncement(new GameContract(gameType, true, false));
     }
 
     private static GameAnnouncement createSuitGrandHandSchneiderSchwarz(final GameType gameType) {
-        return new GameAnnouncement(gameType, true, true, true);
+        return new GameAnnouncement(new GameContract(gameType, true, true));
     }
 
     private static GameAnnouncement createSuitGrandOuvert(final GameType gameType) {
-        return new GameAnnouncement(gameType, true, true, true, true, VALID_OUVERT_CARDS);
-    }
-
-    @Deprecated
-    private static GameAnnouncement createNullWithoutDiscardedCards() {
-        return new GameAnnouncement(GameType.NULL);
+        return new GameAnnouncement(new GameContract(gameType, true, VALID_OUVERT_CARDS));
     }
 
     private static GameAnnouncement createNull() {
-        final GameAnnouncement result = new GameAnnouncement(GameType.NULL);
-        result.discardedCards = VALID_DISCARDED_CARDS;
-        return result;
+        return new GameAnnouncement(new GameContract(GameType.NULL), VALID_DISCARDED_CARDS);
     }
 
     private static GameAnnouncement createNullHand() {
-        return new GameAnnouncement(GameType.NULL, true);
-    }
-
-    @Deprecated
-    private static GameAnnouncement createNullOuvertWithoutDiscardedCards() {
-        return new GameAnnouncement(GameType.NULL, true, VALID_OUVERT_CARDS);
+        return new GameAnnouncement(new GameContract(GameType.NULL, true));
     }
 
     private static GameAnnouncement createNullOuvert() {
-        final GameAnnouncement result = new GameAnnouncement(GameType.NULL, true, VALID_OUVERT_CARDS);
-        result.discardedCards = VALID_DISCARDED_CARDS;
-        return result;
+        return new GameAnnouncement(new GameContract(GameType.NULL, true, VALID_OUVERT_CARDS), VALID_DISCARDED_CARDS);
     }
 
     private static GameAnnouncement createNullHandOuvert() {
-        return new GameAnnouncement(GameType.NULL, true, true, VALID_OUVERT_CARDS);
+        return new GameAnnouncement(new GameContract(GameType.NULL, true, false, false, true, VALID_OUVERT_CARDS));
     }
 
     @Test
-    public void testEmptyGameType() {
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        final GameAnnouncement announcement = factory.getAnnouncement();
-        assertNull(announcement);
+    public void handGameWithoutDiscardedCards() {
+        assertThat(new GameAnnouncement(new GameContract(GameType.GRAND)))
+                .extracting("discardedCards")
+                .isEqualTo(CardList.empty());
     }
 
     @Test
     public void testAllAnnouncementPermutations() {
 
         for (final GameType gameType : GameType.values()) {
-            for (final Boolean isHand : getAllBooleanExpressions()) {
-                for (final Boolean isOuvert : getAllBooleanExpressions()) {
-                    for (final CardList ouvertCards : getAllOuvertCardsExpressions()) {
-                        for (final Boolean isSchneider : getAllBooleanExpressions()) {
-                            for (final Boolean isSchwarz : getAllBooleanExpressions()) {
+            for (final Boolean hand : getAllBooleanExpressions()) {
+                for (final Boolean schneider : getAllBooleanExpressions()) {
+                    for (final Boolean schwarz : getAllBooleanExpressions()) {
+                        for (final Boolean ouvert : getAllBooleanExpressions()) {
+                            for (final CardList ouvertCards : getAllOuvertCardsExpressions()) {
                                 for (final CardList discardedCards : getAllDiscardedCardsExpressions()) {
 
                                     final GameAnnouncement announcement = prepareAnnouncement(
-                                            gameType, isHand, isOuvert, ouvertCards,
-                                            isSchneider, isSchwarz, discardedCards);
+                                            gameType,
+                                            hand,
+                                            schneider,
+                                            schwarz,
+                                            ouvert,
+                                            ouvertCards,
+                                            discardedCards);
 
-                                    testAnnouncement(announcement, gameType,
-                                            isHand, isOuvert, ouvertCards, isSchneider,
-                                            isSchwarz, discardedCards);
+                                    testAnnouncement(
+                                            announcement,
+                                            gameType,
+                                            hand,
+                                            schneider,
+                                            schwarz,
+                                            ouvert,
+                                            ouvertCards,
+                                            discardedCards);
                                 }
                             }
                         }
@@ -155,68 +141,53 @@ public class GameAnnouncementTest extends AbstractJSkatTest {
 
     private static void testAnnouncement(final GameAnnouncement announcement,
                                          final GameType gameType,
-                                         final boolean isHand,
-                                         final boolean isOuvert,
+                                         final boolean hand,
+                                         final boolean schneider,
+                                         final boolean schwarz,
+                                         final boolean ouvert,
                                          final CardList ouvertCards,
-                                         final boolean isSchneider,
-                                         final boolean isSchwarz,
                                          final CardList discardedCards) {
 
         if (isValidAnnouncement(announcement)) {
-            checkAnnouncement(announcement, gameType, isHand, isOuvert, ouvertCards, isSchneider, isSchwarz, discardedCards);
+            checkAnnouncement(announcement, gameType, hand, schneider, schwarz, ouvert, ouvertCards, discardedCards);
         } else {
             // cross-check
-            final GameAnnouncement ann = new GameAnnouncement(gameType, isHand, isSchneider, isSchwarz, isOuvert, ouvertCards);
+            final GameContract contract = new GameContract(gameType, hand, schneider, schwarz, ouvert, ouvertCards);
 
-            assertFalse(validAnnouncements.contains(ann));
+            assertFalse(validAnnouncements.contains(contract));
             assertNull(announcement);
         }
     }
 
     private static GameAnnouncement prepareAnnouncement(final GameType gameType,
-                                                        final boolean isHand,
-                                                        final boolean isOuvert,
+                                                        final boolean hand,
+                                                        final boolean schneider,
+                                                        final boolean schwarz,
+                                                        final boolean ouvert,
                                                         final CardList ouvertCards,
-                                                        final boolean isSchneider,
-                                                        final boolean isSchwarz,
                                                         final CardList discardedCards) {
 
-        final var builder = GameAnnouncement.builder(gameType);
-        if (isHand) {
-            builder.hand();
-        }
-        if (isSchneider) {
-            builder.schneider();
-        }
-        if (isSchwarz) {
-            builder.schwarz();
-        }
-        if (isOuvert) {
-            builder.ouvert(ouvertCards);
-        }
-        factory.setDiscardedCards(discardedCards);
-
-        return builder.build();
+        return new GameAnnouncement(new GameContract(gameType, hand, schneider, schwarz, ouvert, ouvertCards), discardedCards);
     }
 
     private static void checkAnnouncement(final GameAnnouncement announcement,
                                           final GameType gameType,
-                                          final boolean isHand,
-                                          final boolean isOuvert,
+                                          final boolean hand,
+                                          final boolean schneider,
+                                          final boolean schwarz,
+                                          final boolean ouvert,
                                           final CardList ouvertCards,
-                                          final boolean isSchneider,
-                                          final boolean isSchwarz,
                                           final CardList discardedCards) {
-        assertThat(announcement.gameType()).isEqualTo(gameType);
-        assertThat(announcement.hand()).isEqualTo(isHand);
-        assertThat(announcement.ouvert()).isEqualTo(isOuvert);
-        if (isOuvert) {
-            assertThat(announcement.ouvertCards()).containsExactlyElementsOf(ouvertCards);
+        assertThat(announcement.contract().gameType()).isEqualTo(gameType);
+        assertThat(announcement.contract().hand()).isEqualTo(hand);
+        assertThat(announcement.contract().schneider()).isEqualTo(schneider);
+        assertThat(announcement.contract().schwarz()).isEqualTo(schwarz);
+        assertThat(announcement.contract().ouvert()).isEqualTo(ouvert);
+        if (ouvert) {
+            assertThat(announcement.contract().ouvertCards()).containsExactlyElementsOf(ouvertCards);
         } else {
-            assertThat(announcement.ouvertCards()).isEmpty();
+            assertThat(announcement.contract().ouvertCards()).isEmpty();
         }
-        assertThat(announcement.schneider()).isEqualTo(isSchneider);
-        assertThat(announcement.schwarz()).isEqualTo(isSchwarz);
         assertThat(announcement.discardedCards()).containsExactlyElementsOf(discardedCards);
     }
 

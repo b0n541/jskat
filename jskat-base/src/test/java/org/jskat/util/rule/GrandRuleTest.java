@@ -3,6 +3,7 @@ package org.jskat.util.rule;
 
 import org.jskat.AbstractJSkatTest;
 import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameContract;
 import org.jskat.data.SkatGameData;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -18,11 +19,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class GrandRuleTest extends AbstractJSkatTest {
 
-    private GameAnnouncement.Builder builder;
+    private static final CardList DISCARDED_CARDS = CardList.of(Card.D7, Card.H7);
+    private GameContract contract;
 
     @BeforeEach
     public void initialize() {
-        builder = GameAnnouncement.builder(GameType.GRAND);
+        contract = new GameContract(GameType.GRAND);
     }
 
     /**
@@ -31,7 +33,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     @Test
     public void calcGameWon() {
         final var data = new SkatGameData();
-        data.setAnnouncement(builder.build());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setDeclarer(Player.FOREHAND);
         data.setDeclarerScore(61);
         data.calcResult();
@@ -41,7 +43,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     @Test
     public void calcGameWonSchneiderAnnounced() {
         final var data = new SkatGameData();
-        data.setAnnouncement(builder.hand().schneider().build());
+        data.setAnnouncement(new GameAnnouncement(contract.withSchneider()));
         data.setDeclarer(Player.FOREHAND);
         data.setDeclarerScore(90);
         data.calcResult();
@@ -51,7 +53,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     @Test
     public void calcGameLostSchneiderAnnounced() {
         final var data = new SkatGameData();
-        data.setAnnouncement(builder.hand().schneider().build());
+        data.setAnnouncement(new GameAnnouncement(contract.withSchneider()));
         data.setDeclarer(Player.FOREHAND);
         data.setDeclarerScore(89);
         data.calcResult();
@@ -61,7 +63,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     @Test
     public void calcGameWonSchwarzAnnounced() {
         final var data = new SkatGameData();
-        data.setAnnouncement(builder.hand().schneider().schwarz().build());
+        data.setAnnouncement(new GameAnnouncement(contract.withSchwarz()));
         data.setDeclarer(Player.FOREHAND);
         data.setDeclarerScore(120);
         data.calcResult();
@@ -71,7 +73,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     @Test
     public void calcGameLostSchwarzAnnounced() {
         final var data = new SkatGameData();
-        data.setAnnouncement(builder.hand().schneider().schwarz().build());
+        data.setAnnouncement(new GameAnnouncement(contract.withSchwarz()));
         data.setDeclarer(Player.FOREHAND);
         data.setDeclarerScore(119);
         data.calcResult();
@@ -84,18 +86,18 @@ public class GrandRuleTest extends AbstractJSkatTest {
     @Test
     public void calcGameLost() {
         final var data = new SkatGameData();
-        data.setAnnouncement(builder.build());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setDeclarer(Player.FOREHAND);
         data.setDeclarerScore(60);
         data.calcResult();
-        assertThat(data.getResult().isWon()).isFalse();
+        assertThat(data.isGameLost()).isTrue();
     }
 
     @Test
     public void calcGameResultGameLostClubJack() {
         final var data = new SkatGameData();
         data.addSkatToPlayer(Player.FOREHAND);
-        data.setAnnouncement(builder.build());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setDeclarer(Player.FOREHAND);
         data.setDeclarerScore(60);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ));
@@ -107,7 +109,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     public void calcGameResultGameLostClubJackContra() {
         final var data = new SkatGameData();
         data.addSkatToPlayer(Player.FOREHAND);
-        data.setAnnouncement(builder.build());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setContra(true);
         data.setDeclarer(Player.FOREHAND);
         data.setDeclarerScore(60);
@@ -120,7 +122,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     public void calcGameResultGameLostClubJackContraRe() {
         final var data = new SkatGameData();
         data.addSkatToPlayer(Player.FOREHAND);
-        data.setAnnouncement(builder.build());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setContra(true);
         data.setRe(true);
         data.setDeclarer(Player.FOREHAND);
@@ -137,7 +139,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     public void calcGameResultGameWonClubJack() {
         final var data = new SkatGameData();
         data.addSkatToPlayer(Player.FOREHAND);
-        data.setAnnouncement(builder.build());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setDeclarer(Player.FOREHAND);
         data.setDeclarerScore(61);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ));
@@ -149,7 +151,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     public void calcGameResultGameWonClubJackContra() {
         final var data = new SkatGameData();
         data.addSkatToPlayer(Player.FOREHAND);
-        data.setAnnouncement(builder.build());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setContra(true);
         data.setDeclarer(Player.FOREHAND);
         data.setDeclarerScore(61);
@@ -162,7 +164,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     public void calcGameResultGameWonClubJackContraRe() {
         final var data = new SkatGameData();
         data.addSkatToPlayer(Player.FOREHAND);
-        data.setAnnouncement(builder.build());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setContra(true);
         data.setRe(true);
         data.setDeclarer(Player.FOREHAND);
@@ -178,7 +180,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     @Test
     public void calcGameResultGameWonHandWithClubAndSpadeJack() {
         final var data = new SkatGameData();
-        data.setAnnouncement(builder.hand().build());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setDeclarer(Player.FOREHAND);
         data.setDeclarerScore(61);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.SJ, Card.DJ));
@@ -192,7 +194,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     @Test
     public void calcGameResultGameWonWithClubAndHeartJack() {
         final var data = new SkatGameData();
-        data.setAnnouncement(builder.build());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setDeclarer(Player.FOREHAND);
         data.setDeclarerScore(61);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ));
@@ -206,7 +208,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     @Test
     public void calcGameResultGameWonHandWithClubJack() {
         final var data = new SkatGameData();
-        data.setAnnouncement(builder.hand().build());
+        data.setAnnouncement(new GameAnnouncement(contract.withHand(), DISCARDED_CARDS));
         data.setDeclarer(Player.FOREHAND);
         data.setDeclarerScore(61);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ));
@@ -220,7 +222,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     @Test
     public void calcGameResultGameWonClubJackSchneider() {
         final var data = new SkatGameData();
-        data.setAnnouncement(builder.build());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setDeclarer(Player.FOREHAND);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ));
         data.setDeclarerScore(90);
@@ -234,7 +236,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     @Test
     public void calcGameResultGameWonClubJackSchneiderSchwarz() {
         final var data = new SkatGameData();
-        data.setAnnouncement(builder.build());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setDeclarer(Player.FOREHAND);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ));
         data.setDeclarerScore(120);
@@ -248,7 +250,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     @Test
     public void calcGameResultGameWonSchneiderAnnouncedClubJack() {
         final var data = new SkatGameData();
-        data.setAnnouncement(builder.hand().schneider().build());
+        data.setAnnouncement(new GameAnnouncement(contract.withSchneider()));
         data.setDeclarer(Player.FOREHAND);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ));
         data.setDeclarerScore(90);
@@ -261,9 +263,9 @@ public class GrandRuleTest extends AbstractJSkatTest {
      * Checks @see GrandRule#calcGameResult()
      */
     @Test
-    public void calcGameResultGameWonSchwarzAnncouncedClubJack() {
+    public void calcGameResultGameWonSchwarzAnnouncedClubJack() {
         final var data = new SkatGameData();
-        data.setAnnouncement(builder.hand().schneider().schwarz().build());
+        data.setAnnouncement(new GameAnnouncement(contract.withSchwarz()));
         data.setDeclarer(Player.FOREHAND);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ));
         data.setDeclarerScore(120);
@@ -280,7 +282,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     public void testGrandWithout2And89PointsForDeclarer() {
         final var data = new SkatGameData();
         data.setDeclarer(Player.FOREHAND);
-        data.setAnnouncement(builder.build());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setDeclarerScore(89);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.HJ, Card.DJ));
         data.calcResult();
@@ -294,7 +296,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     public void testGrandWithFour() {
         final var data = new SkatGameData();
         data.setDeclarer(Player.FOREHAND);
-        data.setAnnouncement(builder.build());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setDeclarerScore(61);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.SJ, Card.HJ, Card.DJ));
         data.calcResult();
@@ -308,7 +310,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     public void testGrandWithFourSchneider() {
         final var data = new SkatGameData();
         data.setDeclarer(Player.FOREHAND);
-        data.setAnnouncement(builder.build());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setDeclarerScore(90);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.SJ, Card.HJ, Card.DJ));
         data.calcResult();
@@ -322,7 +324,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     public void testGrandWithFourSchneiderSchwarz() {
         final var data = new SkatGameData();
         data.setDeclarer(Player.FOREHAND);
-        data.setAnnouncement(builder.build());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setDeclarerScore(120);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.SJ, Card.HJ, Card.DJ));
         data.calcResult();

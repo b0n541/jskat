@@ -29,14 +29,12 @@ public class Helper {
             return !knowledge
                     .getTrickCards()
                     .get(1)
-                    .beats(knowledge.getGameAnnouncement().gameType(),
-                            knowledge.getTrickCards().get(0));
+                    .beats(knowledge.getGameContract().gameType(), knowledge.getTrickCards().get(0));
         } else if (knowledge.getDeclarer() == Player.MIDDLEHAND) {
             return knowledge
                     .getTrickCards()
                     .get(1)
-                    .beats(knowledge.getGameAnnouncement().gameType(),
-                            knowledge.getTrickCards().get(0));
+                    .beats(knowledge.getGameContract().gameType(), knowledge.getTrickCards().get(0));
         } else {
             log.warn("Request for wrong singlePlayerPos ("
                     + knowledge.getDeclarer() + ")!");
@@ -83,7 +81,7 @@ public class Helper {
                                         final Card initialCard, final GameType gameType) {
         boolean result = false;
         for (int i = 0; i < cards.size(); i++) {
-            boolean sameSuit = (cards.get(i).getSuit() == initialCard.getSuit());
+            final boolean sameSuit = (cards.get(i).getSuit() == initialCard.getSuit());
             if (cards.get(i).isAllowed(gameType, initialCard, cards)) {
                 if (gameType != GameType.NULL) {
                     if (cards.get(i).isTrump(gameType)
@@ -115,7 +113,7 @@ public class Helper {
     public static int getHighestTrump(final CardList cards, final Suit currTrump) {
         // if (cards.size() < 1)
         // return 0;
-        int index = 0;
+        final int index = 0;
         // for (int i = 1; i < cards.size(); i++) {
         // if (cards.get(i).beats(cards.get(index),
         // GameType.SUIT, currTrump, cards.get(i)))

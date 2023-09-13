@@ -25,11 +25,10 @@ public abstract class SuitGrandRule extends SuitGrandRamschRule {
     private static int getMinimumWinningScore(final SkatGameData gameData) {
         int result = SkatConstants.MIN_WINNING_POINTS;
 
-        if (gameData.getAnnouncement().schneider()) {
+        if (gameData.isSchneiderAnnounced()) {
             result = SkatConstants.MIN_SCHNEIDER_WINNING_POINTS;
         }
-
-        if (gameData.getAnnouncement().schwarz()) {
+        if (gameData.isSchwarzAnnounced()) {
             result = SkatConstants.MIN_SCHWARZ_WINNING_POINTS;
         }
 

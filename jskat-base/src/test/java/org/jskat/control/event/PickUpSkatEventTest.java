@@ -1,4 +1,3 @@
-
 package org.jskat.control.event;
 
 
@@ -12,8 +11,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PickUpSkatEventTest extends AbstractJSkatTest {
 
@@ -35,10 +32,9 @@ public class PickUpSkatEventTest extends AbstractJSkatTest {
 
         event.processForward(data);
 
-        assertFalse(data.isHand());
         assertThat(data.getPlayerCards(Player.FOREHAND)).containsExactlyInAnyOrder(Card.CJ, Card.SJ);
         assertThat(data.getSkat()).hasSize(0);
-        assertTrue(data.isSkatPickedUp());
+        assertThat(data.isSkatPickedUp()).isTrue();
     }
 
     @Test
@@ -47,9 +43,8 @@ public class PickUpSkatEventTest extends AbstractJSkatTest {
         event.processForward(data);
         event.processBackward(data);
 
-        assertTrue(data.isHand());
         assertThat(data.getPlayerCards(Player.FOREHAND)).hasSize(0);
         assertThat(data.getSkat()).containsExactlyInAnyOrder(Card.CJ, Card.SJ);
-        assertFalse(data.isSkatPickedUp());
+        assertThat(data.isSkatPickedUp()).isFalse();
     }
 }

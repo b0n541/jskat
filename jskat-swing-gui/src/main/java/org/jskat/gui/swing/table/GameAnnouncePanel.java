@@ -4,6 +4,7 @@ import org.jskat.control.JSkatEventBus;
 import org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent;
 import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameContract;
 import org.jskat.data.JSkatOptions;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.CardList;
@@ -139,11 +140,11 @@ class GameAnnouncePanel extends JPanel {
                 if (getSelectedGameType() != null) {
 
                     try {
-                        final GameAnnouncement ann = getGameAnnouncement();
-                        if (ann == null) {
+                        final GameAnnouncement announcement = getGameAnnouncement();
+                        if (announcement == null) {
                             return;
                         }
-                        e.setSource(ann);
+                        e.setSource(announcement);
                     } catch (final IllegalArgumentException except) {
                         log.error(except.getMessage());
                     }
@@ -157,37 +158,41 @@ class GameAnnouncePanel extends JPanel {
 
             private GameAnnouncement getGameAnnouncement() {
 
-                var gameType = getSelectedGameType();
-                var builder = GameAnnouncement.builder(gameType);
+                final var gameType = getSelectedGameType();
+                var contract = new GameContract(gameType);
 
                 if (discardPanel.isUserLookedIntoSkat()) {
 
                     final CardList discardedCards = discardPanel.getDiscardedCards();
+
                     if (discardedCards.size() != 2) {
 
                         JSkatEventBus.INSTANCE.post(new InvalidNumberOfCardsInDiscardedSkatEvent());
                         return null;
                     }
-                    builder.discardedCards(discardedCards);
                     if (GameType.NULL == gameType && ouvertBox.isSelected()) {
-                        builder.ouvert(true);
+                        contract = contract.withOuvert(userPanel.cardPanel.getCards());
                     }
+
+                    return new GameAnnouncement(contract, discardedCards);
+
                 } else {
 
                     if (handBox.isSelected()) {
-                        builder.hand();
-                    }
-                    if (ouvertBox.isSelected()) {
-                        builder.ouvert(Boolean.TRUE);
+                        contract = contract.withHand();
                     }
                     if (schneiderBox.isSelected()) {
-                        builder.schneider();
+                        contract = contract.withSchneider();
                     }
                     if (schwarzBox.isSelected()) {
-                        builder.schwarz();
+                        contract = contract.withSchwarz();
                     }
+                    if (ouvertBox.isSelected()) {
+                        contract = contract.withOuvert(userPanel.cardPanel.getCards());
+                    }
+
+                    return new GameAnnouncement(contract, CardList.empty());
                 }
-                return builder.build();
             }
 
         });

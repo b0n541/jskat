@@ -1,6 +1,6 @@
 package org.jskat.gui.swing.table;
 
-import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameContract;
 import org.jskat.data.GameSummary;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.gui.swing.LayoutFactory;
@@ -87,12 +87,12 @@ class GameInformationPanel extends JPanel {
         refreshText();
     }
 
-    void setGameAnnouncement(final GameAnnouncement announcement) {
-        gameType = announcement.gameType();
-        handGame = announcement.hand();
-        ouvertGame = announcement.ouvert();
-        schneiderAnnounced = announcement.schneider();
-        schwarzAnnounced = announcement.schwarz();
+    void setGameContract(final GameContract contract) {
+        gameType = contract.gameType();
+        handGame = contract.hand();
+        ouvertGame = contract.ouvert();
+        schneiderAnnounced = contract.schneider();
+        schwarzAnnounced = contract.schwarz();
     }
 
     private void resetGameData() {
@@ -117,7 +117,7 @@ class GameInformationPanel extends JPanel {
 
     private void refreshText() {
 
-        StringBuffer text = new StringBuffer();
+        final StringBuffer text = new StringBuffer();
 
         appendGameNumber(text);
 
@@ -130,7 +130,7 @@ class GameInformationPanel extends JPanel {
         label.setText(text.toString());
     }
 
-    private void appendGameStateDetails(StringBuffer text) {
+    private void appendGameStateDetails(final StringBuffer text) {
         if (gameState.equals(GameState.TRICK_PLAYING)) {
             appendTrickPlayingDetails(text);
         } else if (gameState.equals(GameState.GAME_OVER)) {
@@ -139,7 +139,7 @@ class GameInformationPanel extends JPanel {
         }
     }
 
-    private void appendGameOverDetails(StringBuffer text) {
+    private void appendGameOverDetails(final StringBuffer text) {
         if (gameType != GameType.PASSED_IN) {
             text.append(" - ");
             if (gameWon) {
@@ -152,7 +152,7 @@ class GameInformationPanel extends JPanel {
         if (gameType == GameType.RAMSCH) {
             text.append(" - ");
 
-            Iterator<Player> iterator = ramschLoosers.iterator();
+            final Iterator<Player> iterator = ramschLoosers.iterator();
             if (iterator.hasNext()) {
                 text.append(strings.getPlayerString(iterator.next()));
             }
@@ -170,11 +170,11 @@ class GameInformationPanel extends JPanel {
         }
     }
 
-    private void appendTrickPlayingDetails(StringBuffer text) {
+    private void appendTrickPlayingDetails(final StringBuffer text) {
         text.append(" " + strings.getString("trick") + " " + trick);
     }
 
-    private void appendGameType(StringBuffer text) {
+    private void appendGameType(final StringBuffer text) {
         if (gameType != null) {
             text.append(" [" + strings.getGameType(gameType));
 
@@ -225,7 +225,7 @@ class GameInformationPanel extends JPanel {
         }
     }
 
-    private void appendGameNumber(StringBuffer text) {
+    private void appendGameNumber(final StringBuffer text) {
         if (gameNumber > 0) {
             text.append(strings.getString("game") + " " + gameNumber + ": ");
         }
