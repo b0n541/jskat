@@ -416,82 +416,7 @@ public class MessageParserTest extends AbstractJSkatTest {
     }
 
     @Test
-    public void testParseTableUpdateShowCards_ThreeCardsLeft() {
-        final var showCards = "table .7 bonsai play 2 SC.S8.SJ.CJ 225.1 226.1 213.2";
-        final var token = new StringTokenizer(showCards);
-        token.nextToken(); // table
-        token.nextToken(); // .7
-        final var creator = token.nextToken(); // bonsai
-        token.nextToken(); // play
-        final var detailParams = new ArrayList<String>();
-        while (token.hasMoreTokens()) {
-            detailParams.add(token.nextToken());
-        }
-
-        final var moveInfo = MessageParser.getMoveInformation(detailParams);
-
-        assertThat(moveInfo.getType()).isEqualTo(MoveType.SHOW_CARDS);
-        assertThat(moveInfo.getRevealedCards()).containsExactlyInAnyOrder(Card.S8, Card.SJ, Card.CJ);
-    }
-
-    @Test
-    public void testParseTableUpdateSuitHandOuvertGame_JSkatUser() {
-
-        final String ouvertGame = "table .0 foo play 1 SHO.D8.D9.DQ.H8.HT.HQ.C7.C8.CK.CA 237.6 225.8 237.7";
-        final StringTokenizer token = new StringTokenizer(ouvertGame);
-        token.nextToken(); // table
-        token.nextToken(); // .1
-        final String creator = token.nextToken(); // foo
-        token.nextToken(); // play
-        final List<String> detailParams = new ArrayList<>();
-        while (token.hasMoreTokens()) {
-            detailParams.add(token.nextToken());
-        }
-
-        final MoveInformation moveInfo = MessageParser.getMoveInformation(detailParams);
-
-        assertThat(moveInfo.getType()).isEqualTo(MoveType.GAME_ANNOUNCEMENT);
-
-        final GameAnnouncement announcement = moveInfo.getGameAnnouncement();
-        assertThat(announcement.contract().gameType()).isEqualTo(GameType.SPADES);
-        assertTrue(announcement.contract().hand());
-        assertTrue(announcement.contract().ouvert());
-
-        assertThat(announcement.contract().ouvertCards())
-                .containsExactlyInAnyOrder(
-                        Card.D8, Card.D9, Card.DQ, Card.H8, Card.HT, Card.HQ, Card.C7, Card.C8, Card.CK, Card.CA);
-    }
-
-    @Test
-    public void testParseTableUpdateSuitHandOuvertGame_OtherPlayer() {
-
-        final String ouvertGame = "table .0 foo play 1 SHO.D8.D9.DQ.H8.HT.HQ.C7.C8.CK.CA 237.6 225.8 237.7";
-        final StringTokenizer token = new StringTokenizer(ouvertGame);
-        token.nextToken(); // table
-        token.nextToken(); // .1
-        final String creator = token.nextToken(); // foo
-        token.nextToken(); // play
-        final List<String> detailParams = new ArrayList<>();
-        while (token.hasMoreTokens()) {
-            detailParams.add(token.nextToken());
-        }
-
-        final MoveInformation moveInfo = MessageParser.getMoveInformation(detailParams);
-
-        assertThat(moveInfo.getType()).isEqualTo(MoveType.GAME_ANNOUNCEMENT);
-
-        final GameAnnouncement announcement = moveInfo.getGameAnnouncement();
-        assertThat(announcement.contract().gameType()).isEqualTo(GameType.SPADES);
-        assertTrue(announcement.contract().hand());
-        assertTrue(announcement.contract().ouvert());
-
-        assertThat(announcement.contract().ouvertCards())
-                .containsExactlyInAnyOrder(
-                        Card.D8, Card.D9, Card.DQ, Card.H8, Card.HT, Card.HQ, Card.C7, Card.C8, Card.CK, Card.CA);
-    }
-
-    @Test
-    public void testParseTableUpdateGrandHandOuvertGame_JSkatUser() {
+    public void testParseTableUpdateGrandHandOuvertGame() {
 
         final String ouvertGame = "table .0 foo play 1 GHO.D8.D9.DQ.H8.HT.HQ.C7.C8.CK.CA 237.6 225.8 237.7";
         final StringTokenizer token = new StringTokenizer(ouvertGame);
@@ -514,12 +439,17 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertThat(contract.ouvert()).isTrue();
         assertThat(contract.ouvertCards())
                 .containsExactlyInAnyOrder(Card.D8, Card.D9, Card.DQ, Card.H8, Card.HT, Card.HQ, Card.C7, Card.C8, Card.CK, Card.CA);
+        assertThat(contract.schneider()).isTrue();
+        assertThat(contract.schwarz()).isTrue();
     }
 
+    /**
+     * The ISS omitted some game modifiers in the past.
+     */
     @Test
-    public void testParseTableUpdateGrandHandOuvertGame_OtherPlayer() {
+    public void testParseTableUpdateSpadesHandOuvertGame_LegacyAnnouncement() {
 
-        final String ouvertGame = "table .0 foo play 1 GHO.D8.D9.DQ.H8.HT.HQ.C7.C8.CK.CA 237.6 225.8 237.7";
+        final String ouvertGame = "table .0 foo play 1 SHO.D8.D9.DQ.H8.HT.HQ.C7.C8.CK.CA 237.6 225.8 237.7";
         final StringTokenizer token = new StringTokenizer(ouvertGame);
         token.nextToken(); // table
         token.nextToken(); // .1
@@ -534,11 +464,65 @@ public class MessageParserTest extends AbstractJSkatTest {
 
         assertThat(moveInfo.getType()).isEqualTo(MoveType.GAME_ANNOUNCEMENT);
 
+        final GameAnnouncement announcement = moveInfo.getGameAnnouncement();
+        assertThat(announcement.contract().gameType()).isEqualTo(GameType.SPADES);
+        assertTrue(announcement.contract().hand());
+        assertTrue(announcement.contract().ouvert());
+        assertThat(announcement.contract().ouvertCards())
+                .containsExactlyInAnyOrder(
+                        Card.D8, Card.D9, Card.DQ, Card.H8, Card.HT, Card.HQ, Card.C7, Card.C8, Card.CK, Card.CA);
+        assertThat(announcement.contract().schneider()).isTrue();
+        assertThat(announcement.contract().schwarz()).isTrue();
+    }
+
+    @Test
+    public void testParseTableUpdateClubsOuvertGame_FullAnnouncement() {
+        final var showCards = "table .7 bonsai play 2 CHOSZ.D7.D9.DQ.H8.HT.HQ.H7.S8.SK.SA 225.1 226.1 213.2";
+        final var token = new StringTokenizer(showCards);
+        token.nextToken(); // table
+        token.nextToken(); // .7
+        final var creator = token.nextToken(); // bonsai
+        token.nextToken(); // play
+        final var detailParams = new ArrayList<String>();
+        while (token.hasMoreTokens()) {
+            detailParams.add(token.nextToken());
+        }
+
+        final var moveInfo = MessageParser.getMoveInformation(detailParams);
+
+        assertThat(moveInfo.getType()).isEqualTo(MoveType.GAME_ANNOUNCEMENT);
+
         final GameContract contract = moveInfo.getGameAnnouncement().contract();
-        assertThat(contract.gameType()).isEqualTo(GameType.GRAND);
-        assertTrue(contract.hand());
-        assertTrue(contract.ouvert());
+        assertThat(contract.gameType()).isEqualTo(GameType.CLUBS);
+        assertThat(contract.hand()).isTrue();
+        assertThat(contract.ouvert()).isTrue();
         assertThat(contract.ouvertCards())
-                .containsExactlyInAnyOrder(Card.D8, Card.D9, Card.DQ, Card.H8, Card.HT, Card.HQ, Card.C7, Card.C8, Card.CK, Card.CA);
+                .containsExactlyInAnyOrder(Card.D7, Card.D9, Card.DQ, Card.H8, Card.HT, Card.HQ, Card.H7, Card.S8, Card.SK, Card.SA);
+        assertThat(contract.schneider()).isTrue();
+        assertThat(contract.schwarz()).isTrue();
+    }
+
+    @Test
+    public void testParseTableUpdateClubsHandSchneiderSchwarzGame() {
+        final var showCards = "table .7 bonsai play 2 CHZ 225.1 226.1 213.2";
+        final var token = new StringTokenizer(showCards);
+        token.nextToken(); // table
+        token.nextToken(); // .7
+        final var creator = token.nextToken(); // bonsai
+        token.nextToken(); // play
+        final var detailParams = new ArrayList<String>();
+        while (token.hasMoreTokens()) {
+            detailParams.add(token.nextToken());
+        }
+
+        final var moveInfo = MessageParser.getMoveInformation(detailParams);
+
+        assertThat(moveInfo.getType()).isEqualTo(MoveType.GAME_ANNOUNCEMENT);
+
+        final GameContract contract = moveInfo.getGameAnnouncement().contract();
+        assertThat(contract.gameType()).isEqualTo(GameType.CLUBS);
+        assertThat(contract.hand()).isTrue();
+        assertThat(contract.schneider()).isTrue();
+        assertThat(contract.schwarz()).isTrue();
     }
 }
