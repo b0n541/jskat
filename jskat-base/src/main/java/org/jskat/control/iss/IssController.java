@@ -615,7 +615,7 @@ public class IssController {
      * Send game announcement to ISS
      *
      * @param tableName    Table name
-     * @param gameContract Game announcement
+     * @param announcement Game announcement
      */
     public void sendGameAnnouncementMove(final String tableName, final GameAnnouncement announcement) {
         sendToIss(issMsg.getGameAnnouncementMoveMessage(tableName, announcement));
