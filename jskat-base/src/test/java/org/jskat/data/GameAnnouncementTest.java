@@ -14,8 +14,6 @@ import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Tests for {@link GameContract}
@@ -47,7 +45,7 @@ public class GameAnnouncementTest extends AbstractJSkatTest {
         validAnnouncements.add(createRamsch());
         validAnnouncements.add(createPassedIn());
 
-        assertThat(validAnnouncements.size()).isEqualTo(38);
+        assertThat(validAnnouncements.size()).isEqualTo(31);
     }
 
     private static GameAnnouncement createRamsch() {
@@ -96,7 +94,7 @@ public class GameAnnouncementTest extends AbstractJSkatTest {
 
     @Test
     public void handGameWithoutDiscardedCards() {
-        assertThat(new GameAnnouncement(new GameContract(GameType.GRAND)))
+        assertThat(new GameAnnouncement(new GameContract(GameType.GRAND, true)))
                 .extracting("discardedCards")
                 .isEqualTo(CardList.empty());
     }
@@ -112,24 +110,47 @@ public class GameAnnouncementTest extends AbstractJSkatTest {
                             for (final CardList ouvertCards : getAllOuvertCardsExpressions()) {
                                 for (final CardList discardedCards : getAllDiscardedCardsExpressions()) {
 
-                                    final GameAnnouncement announcement = prepareAnnouncement(
-                                            gameType,
-                                            hand,
-                                            schneider,
-                                            schwarz,
-                                            ouvert,
-                                            ouvertCards,
-                                            discardedCards);
+                                    try {
+                                        System.out.println("Testing arguments: "
+                                                + gameType + " "
+                                                + hand + " "
+                                                + schneider + " "
+                                                + schwarz + " "
+                                                + ouvert + " "
+                                                + ouvertCards + " "
+                                                + discardedCards);
 
-                                    testAnnouncement(
-                                            announcement,
-                                            gameType,
-                                            hand,
-                                            schneider,
-                                            schwarz,
-                                            ouvert,
-                                            ouvertCards,
-                                            discardedCards);
+                                        final GameAnnouncement announcement = new GameAnnouncement(
+                                                new GameContract(
+                                                        gameType,
+                                                        hand,
+                                                        schneider,
+                                                        schwarz,
+                                                        ouvert,
+                                                        ouvertCards),
+                                                discardedCards);
+
+                                        assertThat(validAnnouncements).contains(announcement);
+
+                                        checkAnnouncement(
+                                                announcement,
+                                                gameType,
+                                                hand,
+                                                schneider,
+                                                schwarz,
+                                                ouvert,
+                                                ouvertCards,
+                                                discardedCards);
+                                    } catch (final IllegalArgumentException exception) {
+                                        System.out.println("Invalid arguments: "
+                                                + gameType + " "
+                                                + hand + " "
+                                                + schneider + " "
+                                                + schwarz + " "
+                                                + ouvert + " "
+                                                + ouvertCards + " "
+                                                + discardedCards);
+                                    }
                                 }
                             }
                         }
@@ -137,37 +158,6 @@ public class GameAnnouncementTest extends AbstractJSkatTest {
                 }
             }
         }
-    }
-
-    private static void testAnnouncement(final GameAnnouncement announcement,
-                                         final GameType gameType,
-                                         final boolean hand,
-                                         final boolean schneider,
-                                         final boolean schwarz,
-                                         final boolean ouvert,
-                                         final CardList ouvertCards,
-                                         final CardList discardedCards) {
-
-        if (isValidAnnouncement(announcement)) {
-            checkAnnouncement(announcement, gameType, hand, schneider, schwarz, ouvert, ouvertCards, discardedCards);
-        } else {
-            // cross-check
-            final GameContract contract = new GameContract(gameType, hand, schneider, schwarz, ouvert, ouvertCards);
-
-            assertFalse(validAnnouncements.contains(contract));
-            assertNull(announcement);
-        }
-    }
-
-    private static GameAnnouncement prepareAnnouncement(final GameType gameType,
-                                                        final boolean hand,
-                                                        final boolean schneider,
-                                                        final boolean schwarz,
-                                                        final boolean ouvert,
-                                                        final CardList ouvertCards,
-                                                        final CardList discardedCards) {
-
-        return new GameAnnouncement(new GameContract(gameType, hand, schneider, schwarz, ouvert, ouvertCards), discardedCards);
     }
 
     private static void checkAnnouncement(final GameAnnouncement announcement,

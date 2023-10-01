@@ -34,7 +34,7 @@ public record GameContract(
         if (!ouvert && !ouvertCards.isEmpty()) {
             throw new IllegalArgumentException("Validation failed: Wrong number of ouvert cards.");
         }
-        if (gameType == GameType.RAMSCH || gameType == GameType.PASSED_IN) {
+        if (GameType.RAMSCH_PASSED_IN.contains(gameType)) {
             if (hand || ouvert || ouvertCards.size() != 0 || schneider || schwarz) {
                 throw new IllegalArgumentException("Validation failed: Invalid modifiers in Ramsch or passed in game.");
             }
@@ -67,6 +67,16 @@ public record GameContract(
         this(
                 gameType,
                 GameType.GRAND_SUIT.contains(gameType),
+                GameType.GRAND_SUIT.contains(gameType),
+                GameType.GRAND_SUIT.contains(gameType),
+                ouvert,
+                ouvertCards);
+    }
+
+    public GameContract(final GameType gameType, final boolean hand, final boolean ouvert, final CardList ouvertCards) {
+        this(
+                gameType,
+                GameType.GRAND_SUIT.contains(gameType) || hand,
                 GameType.GRAND_SUIT.contains(gameType),
                 GameType.GRAND_SUIT.contains(gameType),
                 ouvert,
@@ -106,9 +116,9 @@ public record GameContract(
 
     public GameContract withOuvert(final CardList ouvertCards) {
         return new GameContract(gameType,
-                gameType == GameType.NULL && hand,
-                gameType == GameType.NULL && schneider,
-                gameType == GameType.NULL && schwarz,
+                gameType != GameType.NULL || hand,
+                gameType != GameType.NULL || schneider,
+                gameType != GameType.NULL || schwarz,
                 true,
                 ouvertCards);
     }

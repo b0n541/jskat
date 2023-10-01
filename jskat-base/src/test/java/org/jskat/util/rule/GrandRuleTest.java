@@ -208,7 +208,7 @@ public class GrandRuleTest extends AbstractJSkatTest {
     @Test
     public void calcGameResultGameWonHandWithClubJack() {
         final var data = new SkatGameData();
-        data.setAnnouncement(new GameAnnouncement(contract.withHand(), DISCARDED_CARDS));
+        data.setAnnouncement(new GameAnnouncement(contract.withHand()));
         data.setDeclarer(Player.FOREHAND);
         data.setDeclarerScore(61);
         data.addDealtCards(Player.FOREHAND, new CardList(Card.CJ, Card.HJ));

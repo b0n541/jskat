@@ -17,10 +17,18 @@ public record GameAnnouncement(GameContract contract, CardList discardedCards) {
         Objects.requireNonNull(contract);
         Objects.requireNonNull(discardedCards);
 
-        if (GameType.GRAND_SUIT_NULL.contains(contract.gameType())
-                && !contract.hand()
-                && discardedCards.size() != 2) {
-            throw new IllegalArgumentException("Two discarded cards needed in non hand games.");
+        if (GameType.GRAND_SUIT_NULL.contains(contract.gameType())) {
+            if (contract.hand() && discardedCards.size() != 0) {
+                throw new IllegalArgumentException("No discarded cards allowed in hand games.");
+            }
+            if (!contract.hand() && discardedCards.size() != 2) {
+                throw new IllegalArgumentException("Two discarded cards needed in non hand games.");
+            }
+        }
+        if (GameType.RAMSCH_PASSED_IN.contains(contract.gameType())) {
+            if (discardedCards.size() != 0) {
+                throw new IllegalArgumentException("No discarded cards allowed in hand games.");
+            }
         }
     }
 
