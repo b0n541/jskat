@@ -101,10 +101,12 @@ public class SkatGame {
                         bidding();
                     }
 
-                    if (GameType.PASSED_IN.equals(data.getGameType())) {
-                        setGameState(GameState.PRELIMINARY_GAME_END);
-                    } else if (GameType.RAMSCH.equals(data.getGameType())) {
-                        setGameState(GameState.RAMSCH_GRAND_HAND_ANNOUNCING);
+                    if (data.getDeclarer() == null) {
+                        if (GameType.PASSED_IN.equals(data.getGameType())) {
+                            setGameState(GameState.PRELIMINARY_GAME_END);
+                        } else if (GameType.RAMSCH.equals(data.getGameType())) {
+                            setGameState(GameState.RAMSCH_GRAND_HAND_ANNOUNCING);
+                        }
                     } else {
                         setGameState(GameState.PICKING_UP_SKAT);
                     }

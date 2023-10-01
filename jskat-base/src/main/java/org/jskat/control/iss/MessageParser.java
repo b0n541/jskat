@@ -281,10 +281,22 @@ public class MessageParser {
         // parse other game modifiers
         for (int i = 1; i < gameTypeString.length(); i++) {
             switch (gameTypeString.charAt(i)) {
-                case '0' -> ouvert = true;
+                case 'O' -> {
+                    ouvert = true;
+                    // FIXME this should be moved to the GameContract record initialization
+                    if (GameType.GRAND_SUIT.contains(gameType)) {
+                        hand = true;
+                        schneider = true;
+                        schwarz = true;
+                    }
+                }
                 case 'H' -> hand = true;
                 case 'S' -> schneider = true;
-                case 'Z' -> schwarz = true;
+                case 'Z' -> {
+                    schwarz = true;
+                    // FIXME this should be moved to the GameContract record initialization
+                    schneider = true;
+                }
                 default -> log.warn("Unknown game modifier.");
             }
         }

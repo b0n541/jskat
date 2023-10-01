@@ -305,7 +305,7 @@ public class SkatGameTest extends AbstractJSkatTest {
         game.setCardDeck(deck);
         game.dealCards();
         game.setDeclarer(Player.values()[random.nextInt(Player.values().length)]);
-        game.setGameAnnouncement(new GameAnnouncement(new GameContract(getRandomGameType())));
+        game.setGameAnnouncement(new GameAnnouncement(new GameContract(getRandomGameType()), CardList.of(Card.D7, Card.H7)));
         game.setGameState(GameState.TRICK_PLAYING);
     }
 
@@ -453,7 +453,7 @@ public class SkatGameTest extends AbstractJSkatTest {
         game.setCardDeck(deck);
         game.dealCards();
         game.setDeclarer(Player.FOREHAND);
-        game.setGameAnnouncement(new GameAnnouncement(new GameContract(GameType.SPADES)));
+        game.setGameAnnouncement(new GameAnnouncement(new GameContract(GameType.SPADES), CardList.of(Card.D9, Card.CA)));
         game.setGameState(GameState.TRICK_PLAYING);
 
         runGame(game);
