@@ -592,7 +592,7 @@ public class JSkatViewImpl implements JSkatView {
                         new TableGameMoveEvent(tableName, new TrickCardPlayedEvent(movePlayer, moveInformation.getCard())));
                 break;
             case SHOW_CARDS:
-                showCardsForPlayer(tableName, movePlayer, moveInformation.getGameAnnouncement().contract().ouvertCards());
+                showCardsForPlayer(tableName, movePlayer, moveInformation.getRevealedCards());
                 break;
             case RESIGN:
                 setResign(tableName, movePlayer);
