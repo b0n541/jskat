@@ -27,7 +27,6 @@ public class AIPlayerRND extends AbstractAIPlayer {
      * Creates a new instance of AIPlayerRND.
      */
     public AIPlayerRND() {
-
         this("unknown");
     }
 
@@ -37,8 +36,6 @@ public class AIPlayerRND extends AbstractAIPlayer {
      * @param newPlayerName Player's name
      */
     public AIPlayerRND(final String newPlayerName) {
-
-        log.debug("Constructing new AIPlayerRND");
         setPlayerName(newPlayerName);
     }
 
