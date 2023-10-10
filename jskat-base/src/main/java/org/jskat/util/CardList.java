@@ -26,6 +26,10 @@ public class CardList implements Iterable<Card> {
 
     }
 
+    public static final CardList empty() {
+        return new CardList();
+    }
+
     /**
      * Constructor with predefined cards
      *
@@ -44,11 +48,11 @@ public class CardList implements Iterable<Card> {
         cards.addAll(newCards.cards);
     }
 
-    public CardList(Card... cards) {
+    public CardList(final Card... cards) {
         this(Arrays.asList(cards));
     }
 
-    public static CardList of(Card... cards) {
+    public static CardList of(final Card... cards) {
         return new CardList(cards);
     }
 
@@ -206,7 +210,7 @@ public class CardList implements Iterable<Card> {
      * @return TRUE, when a trump card was found in the CardList
      */
     public boolean hasTrump(final GameType gameType) {
-        for (Card card : cards) {
+        for (final Card card : cards) {
             if (card.isTrump(gameType)) {
                 return true;
             }
@@ -247,7 +251,7 @@ public class CardList implements Iterable<Card> {
     public Card get(final int index) {
         try {
             return cards.get(index);
-        } catch (IndexOutOfBoundsException e) {
+        } catch (final IndexOutOfBoundsException e) {
             if (index == -1) {
                 return null;
             }
@@ -309,11 +313,11 @@ public class CardList implements Iterable<Card> {
 
         int maxCount = 0;
         Suit mostFrequentSuitColor = null;
-        for (Suit suit : Suit.values()) {
+        for (final Suit suit : Suit.values()) {
             if (exclude != null && suit == exclude) {
                 continue;
             }
-            int cardCount = getSuitCount(suit, false);
+            final int cardCount = getSuitCount(suit, false);
             if (cardCount > maxCount) {
                 mostFrequentSuitColor = suit;
                 maxCount = cardCount;
@@ -335,7 +339,7 @@ public class CardList implements Iterable<Card> {
 
         int count = 0;
 
-        for (Card card : cards) {
+        for (final Card card : cards) {
             if (card.getSuit() == suit
                     && (card.getRank() != Rank.JACK || countJack)) {
                 count++;
@@ -354,7 +358,7 @@ public class CardList implements Iterable<Card> {
     public int getTrumpCount(final Suit trumpSuit) {
         int count = 0;
 
-        for (Card card : cards) {
+        for (final Card card : cards) {
             if (card.getRank() == Rank.JACK || card.getSuit() == trumpSuit) {
                 count++;
             }
@@ -398,7 +402,7 @@ public class CardList implements Iterable<Card> {
 
         boolean result = false;
 
-        for (Card card : cards) {
+        for (final Card card : cards) {
             if (null == card) {
                 result = true;
                 break;
@@ -414,11 +418,11 @@ public class CardList implements Iterable<Card> {
     @Override
     public String toString() {
 
-        StringBuffer output = new StringBuffer();
+        final StringBuffer output = new StringBuffer();
 
         output.append("{");
 
-        Iterator<Card> iter = cards.iterator();
+        final Iterator<Card> iter = cards.iterator();
         while (iter.hasNext()) {
 
             output.append(iter.next());
@@ -444,7 +448,7 @@ public class CardList implements Iterable<Card> {
                                    final boolean includeJacks) {
         int result = -1;
         int index = 0;
-        for (Card card : cards) {
+        for (final Card card : cards) {
             if (result == -1 && card.getSuit() == suit) {
                 if (card.getRank() != Rank.JACK || card.getRank() == Rank.JACK
                         && includeJacks) {
@@ -492,7 +496,7 @@ public class CardList implements Iterable<Card> {
 
         int result = -1;
         int index = 0;
-        for (Card card : cards) {
+        for (final Card card : cards) {
             if (card.getSuit() == suit) {
                 if (card.getRank() != Rank.JACK || card.getRank() == Rank.JACK
                         && includeJacks) {
@@ -511,7 +515,7 @@ public class CardList implements Iterable<Card> {
      */
     public int getTotalValue() {
         int result = 0;
-        for (Card c : cards) {
+        for (final Card c : cards) {
             result += c.getPoints();
         }
 
@@ -529,8 +533,8 @@ public class CardList implements Iterable<Card> {
      * @return an int[4] array
      */
     public int[] toBinary() {
-        int[] result = new int[4];
-        for (Card c : cards) {
+        final int[] result = new int[4];
+        for (final Card c : cards) {
             result[c.getSuit().ordinal()] += c.toBinaryFlag();
         }
         return result;
@@ -543,9 +547,9 @@ public class CardList implements Iterable<Card> {
      * @return a loggable String (containing CR/LF chars!)
      */
     public String dumpFlag() {
-        StringBuilder sb = new StringBuilder();
+        final StringBuilder sb = new StringBuilder();
         sb.append('\n');
-        for (int i : toBinary()) {
+        for (final int i : toBinary()) {
             for (int j = 0; j < 8; j++) {
                 sb.append((i & (int) Math.pow(2, j)) > 0 ? '1' : '0');
             }
@@ -563,7 +567,7 @@ public class CardList implements Iterable<Card> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -573,7 +577,7 @@ public class CardList implements Iterable<Card> {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        CardList other = (CardList) obj;
+        final CardList other = (CardList) obj;
         if (cards == null) {
             return other.cards == null;
         } else {
@@ -597,9 +601,9 @@ public class CardList implements Iterable<Card> {
      * @param cardCount Number of cards
      * @return Random hand
      */
-    public final static CardList getRandomCards(int cardCount) {
-        CardDeck cardDeck = new CardDeck();
-        CardList result = new CardList();
+    public final static CardList getRandomCards(final int cardCount) {
+        final CardDeck cardDeck = new CardDeck();
+        final CardList result = new CardList();
         for (int i = 0; i < cardCount; i++) {
             result.add(cardDeck.remove(RANDOM.nextInt(cardDeck.size())));
         }
@@ -608,7 +612,7 @@ public class CardList implements Iterable<Card> {
 
     private class NullComparator implements Comparator<Card> {
         @Override
-        public int compare(Card first, Card second) {
+        public int compare(final Card first, final Card second) {
             if (first.getSuit().getSortOrder() > second.getSuit().getSortOrder()) {
                 return -1;
             } else if (first.getSuit().getSortOrder() < second.getSuit().getSortOrder()) {
@@ -626,12 +630,12 @@ public class CardList implements Iterable<Card> {
     private class SuitComparator implements Comparator<Card> {
         private final GameType gameType;
 
-        public SuitComparator(GameType pGameType) {
+        public SuitComparator(final GameType pGameType) {
             gameType = pGameType;
         }
 
         @Override
-        public int compare(Card first, Card second) {
+        public int compare(final Card first, final Card second) {
             // first the jacks
             if (first.getRank() == Rank.JACK && second.getRank() == Rank.JACK) {
                 if (first.getSuit().getSortOrder() < second.getSuit().getSortOrder()) {

@@ -21,7 +21,7 @@ public class IssGameExtractor {
 
     private final String sourceFileName;
 
-    public static void main(final String args[]) throws Exception {
+    public static void main(final String[] args) throws Exception {
         final IssGameExtractor gameExtractor = new IssGameExtractor("/home/jan/Projects/jskat/iss/iss-games-04-2021.sgf");
         gameExtractor.filterGameDatabase(KERMIT_WON_GAMES, "kermit_won_games.csv");
     }
@@ -61,11 +61,11 @@ public class IssGameExtractor {
                     + it.getMaxPlayerBid(Player.FOREHAND) + ","
                     + it.getMaxPlayerBid(Player.MIDDLEHAND) + ","
                     + it.getMaxPlayerBid(Player.REARHAND) + ","
-                    + it.getAnnoucement().getGameType() + ","
-                    + (it.getAnnoucement().isHand() ? "1" : "0") + ","
-                    + (it.getAnnoucement().isOuvert() ? "1" : "0") + ","
-                    + (it.getAnnoucement().isSchneider() ? "1" : "0") + ","
-                    + (it.getAnnoucement().isSchwarz() ? "1" : "0") + ","
+                    + it.getAnnouncement().contract().gameType() + ","
+                    + (it.getAnnouncement().contract().hand() ? "1" : "0") + ","
+                    + (it.getAnnouncement().contract().ouvert() ? "1" : "0") + ","
+                    + (it.getAnnouncement().contract().schneider() ? "1" : "0") + ","
+                    + (it.getAnnouncement().contract().schwarz() ? "1" : "0") + ","
                     + it.getDeclarerScore() + ","
                     + (it.isSchneider() ? "1" : "0") + ","
                     + (it.isSchwarz() ? "1" : "0");

@@ -1,8 +1,6 @@
-
 package org.jskat.player;
 
-import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
+import org.jskat.data.GameContract;
 import org.jskat.data.Trick;
 import org.jskat.util.*;
 import org.junit.jupiter.api.BeforeEach;
@@ -226,6 +224,19 @@ public class PlayerKnowledgeTest2 {
         assertCouldHaveCards(Player.REARHAND, Card.HJ, Card.DJ);
     }
 
+    @Test
+    public void declarerCards() {
+        knowledge.resetCurrentGameData();
+
+        assertThat(knowledge.getDeclarerPlayerCards()).isEmpty();
+
+        knowledge.addDeclarerCards(CardList.of(Card.CJ, Card.SJ, Card.SA));
+
+        assertThat(knowledge.getDeclarerPlayerCards()).containsExactlyInAnyOrder(Card.CJ, Card.SJ, Card.SA);
+
+        // TODO implement and test removal of declarer cards during game play
+    }
+
     private void assertCouldHaveCards(final Player player, final Card... cards) {
         for (final Card card : cards) {
             assertTrue(knowledge.couldHaveCard(player, card));
@@ -261,9 +272,7 @@ public class PlayerKnowledgeTest2 {
     }
 
     private void gameAnnouncement(final GameType gameType, final Player declarer) {
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(gameType);
         knowledge.setDeclarer(declarer);
-        knowledge.setGame(factory.getAnnouncement());
+        knowledge.setContract(new GameContract(gameType));
     }
 }

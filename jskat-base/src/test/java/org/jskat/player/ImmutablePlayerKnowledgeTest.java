@@ -1,6 +1,6 @@
 package org.jskat.player;
 
-import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameContract;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,9 +39,7 @@ class ImmutablePlayerKnowledgeTest {
     void getPlayerPartyMembers_Ramsch() {
 
         knowledge.playerPosition = Player.FOREHAND;
-        GameAnnouncement.GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(GameType.RAMSCH);
-        knowledge.announcement = factory.getAnnouncement();
+        knowledge.contract = new GameContract(GameType.RAMSCH);
 
         assertThat(knowledge.getPlayerPartyMembers()).contains(Player.FOREHAND);
     }
@@ -68,9 +66,7 @@ class ImmutablePlayerKnowledgeTest {
     void getOpponentPartyMembers_Ramsch() {
 
         knowledge.playerPosition = Player.FOREHAND;
-        GameAnnouncement.GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(GameType.RAMSCH);
-        knowledge.announcement = factory.getAnnouncement();
+        knowledge.contract = new GameContract(GameType.RAMSCH);
 
         assertThat(knowledge.getOpponentPartyMembers()).contains(Player.MIDDLEHAND, Player.REARHAND);
     }

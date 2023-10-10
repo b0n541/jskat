@@ -1,21 +1,15 @@
-
 package org.jskat.player;
 
 
 import org.jskat.AbstractJSkatTest;
-import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
+import org.jskat.data.GameContract;
 import org.jskat.data.Trick;
 import org.jskat.util.Card;
+import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.HashSet;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -26,12 +20,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class PlayerKnowledgeTest extends AbstractJSkatTest {
 
-    private static final Logger log = LoggerFactory
-            .getLogger(PlayerKnowledgeTest.class);
-
     PlayerKnowledge knowledge;
-    Set<Card> playerCards;
-    Set<Card> otherCards;
+    CardList playerCards;
+    CardList otherCards;
 
     /**
      * Setting up all variables
@@ -44,20 +35,10 @@ public class PlayerKnowledgeTest extends AbstractJSkatTest {
         knowledge.setPlayerPosition(Player.MIDDLEHAND);
 
         // Cards for the player
-        playerCards = new HashSet<>();
-        playerCards.add(Card.CA);
-        playerCards.add(Card.CQ);
-        playerCards.add(Card.C8);
-        playerCards.add(Card.ST);
-        playerCards.add(Card.SQ);
-        playerCards.add(Card.DT);
-        playerCards.add(Card.DK);
-        playerCards.add(Card.D7);
-        playerCards.add(Card.HJ);
-        playerCards.add(Card.HA);
+        playerCards = CardList.of(Card.CA, Card.CQ, Card.C8, Card.ST, Card.SQ, Card.DT, Card.DK, Card.D7, Card.HJ, Card.HA);
 
         // other cards
-        otherCards = new HashSet<Card>();
+        otherCards = new CardList();
         for (final Card card : Card.values()) {
             if (!playerCards.contains(card)) {
                 otherCards.add(card);
@@ -130,9 +111,7 @@ public class PlayerKnowledgeTest extends AbstractJSkatTest {
 
         dealPlayerCards();
 
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(GameType.CLUBS);
-        knowledge.setGame(factory.getAnnouncement());
+        knowledge.setContract(new GameContract(GameType.CLUBS));
         knowledge.setDeclarer(Player.FOREHAND);
 
         knowledge.setNextTrick(0, Player.FOREHAND);

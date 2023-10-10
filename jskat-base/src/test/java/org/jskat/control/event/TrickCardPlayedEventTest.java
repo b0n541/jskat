@@ -3,7 +3,7 @@ package org.jskat.control.event;
 import org.jskat.AbstractJSkatTest;
 import org.jskat.control.event.skatgame.TrickCardPlayedEvent;
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
+import org.jskat.data.GameContract;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.Trick;
 import org.jskat.util.Card;
@@ -29,18 +29,10 @@ public class TrickCardPlayedEventTest extends AbstractJSkatTest {
     @BeforeEach
     public void setUp() {
         data = new SkatGameData();
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(GameType.CLUBS);
-        data.setAnnouncement(factory.getAnnouncement());
-        data.addPlayerCard(Player.FOREHAND, Card.CJ);
-        data.addPlayerCard(Player.FOREHAND, Card.CA);
-        data.addPlayerCard(Player.FOREHAND, Card.C7);
-        data.addPlayerCard(Player.MIDDLEHAND, Card.SJ);
-        data.addPlayerCard(Player.MIDDLEHAND, Card.SA);
-        data.addPlayerCard(Player.MIDDLEHAND, Card.C8);
-        data.addPlayerCard(Player.REARHAND, Card.HJ);
-        data.addPlayerCard(Player.REARHAND, Card.HA);
-        data.addPlayerCard(Player.REARHAND, Card.C9);
+        data.setAnnouncement(new GameAnnouncement(new GameContract(GameType.CLUBS, true)));
+        data.addPlayerCards(Player.FOREHAND, CardList.of(Card.CJ, Card.CA, Card.C7));
+        data.addPlayerCards(Player.MIDDLEHAND, CardList.of(Card.SJ, Card.SA, Card.C8));
+        data.addPlayerCards(Player.REARHAND, CardList.of(Card.HJ, Card.HA, Card.C9));
 
         eventList = new ArrayList<>();
         eventList.add(new TrickCardPlayedEvent(Player.FOREHAND, Card.CJ));

@@ -15,15 +15,15 @@ jobs:
         os: [ ubuntu-latest, macOS-latest, windows-latest ]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@main
       - name: Set up JDK 17
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@main
         with:
           java-version: '17'
           distribution: 'temurin'
       - name: Build with Gradle
-        run: ./gradlew clean fatjar
-      - uses: actions/upload-artifact@v2
+        run: ./gradlew clean build fatjar
+      - uses: actions/upload-artifact@main
         with:
           name: Package
           path: app/build/libs

@@ -1,36 +1,35 @@
-
 package org.jskat.util.rule;
 
 
 import org.jskat.AbstractJSkatTest;
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
+import org.jskat.data.GameContract;
 import org.jskat.data.SkatGameData;
+import org.jskat.util.Card;
+import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Tests schneider and schwarz rules
  */
 public class SchneiderSchwarzRuleTest extends AbstractJSkatTest {
 
+    private static final CardList DISCARDED_CARDS = CardList.of(Card.C7, Card.S7);
     private SkatGameData data;
-    private GameAnnouncementFactory factory;
+    private GameContract contract;
 
-    private static final SuitGrandRule clubRules = (SuitGrandRule) SkatRuleFactory
-            .getSkatRules(GameType.CLUBS);
+    private static final SuitGrandRule clubRules = (SuitGrandRule) SkatRuleFactory.getSkatRules(GameType.CLUBS);
 
     @BeforeEach
     public void setUp() {
-
         data = new SkatGameData();
-        factory = GameAnnouncement.getFactory();
-        factory.setGameType(GameType.CLUBS);
+        contract = new GameContract(GameType.CLUBS);
         data.setDeclarer(Player.FOREHAND);
     }
 
@@ -39,10 +38,9 @@ public class SchneiderSchwarzRuleTest extends AbstractJSkatTest {
      */
     @Test
     public void testSchneider000() {
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
 
-        factory.setHand(false);
-        data.setAnnouncement(factory.getAnnouncement());
-        assertTrue(clubRules.isSchneider(data));
+        assertThat(SuitGrandRule.isSchneider(data)).isTrue();
     }
 
     /**
@@ -50,9 +48,9 @@ public class SchneiderSchwarzRuleTest extends AbstractJSkatTest {
      */
     @Test
     public void testSchwarz000() {
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
 
-        data.setAnnouncement(factory.getAnnouncement());
-        assertTrue(clubRules.isSchwarz(data));
+        assertThat(SuitGrandRule.isSchwarz(data)).isTrue();
     }
 
     /**
@@ -61,7 +59,7 @@ public class SchneiderSchwarzRuleTest extends AbstractJSkatTest {
     @Test
     public void testCast001() {
         assertThrows(ClassCastException.class, () -> {
-            data.setAnnouncement(factory.getAnnouncement());
+            data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
             final SuitGrandRule nullRules = (SuitGrandRule) SkatRuleFactory.getSkatRules(GameType.NULL);
         });
     }
@@ -72,7 +70,7 @@ public class SchneiderSchwarzRuleTest extends AbstractJSkatTest {
     @Test
     public void testCast002() {
         assertThrows(ClassCastException.class, () -> {
-            data.setAnnouncement(factory.getAnnouncement());
+            data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
             final SuitGrandRule nullRules = (SuitGrandRule) SkatRuleFactory.getSkatRules(GameType.RAMSCH);
         });
     }

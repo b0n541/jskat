@@ -1,6 +1,6 @@
 package org.jskat.player;
 
-import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameContract;
 import org.jskat.data.GameSummary;
 import org.jskat.data.Trick;
 import org.jskat.util.Card;
@@ -109,18 +109,16 @@ public interface JSkatPlayer {
      *
      * @return Game announcement
      */
-    GameAnnouncement announceGame();
+    GameContract announceGame();
 
     /**
      * Start the game: inform player of game type, trumpf and special options
      *
      * @param singlePlayer Single player position
-     * @param game         Game announcement containing all relevant information about
+     * @param contract     Game announcement containing all relevant information about
      *                     the new game
      */
-    // FIXME (jan 17.01.2011) change game announcement parameter to immutable
-    // GameAnnouncement
-    void startGame(Player singlePlayer, GameAnnouncement game);
+    void startGame(Player singlePlayer, GameContract contract);
 
     /**
      * Shows the cards of the single player to the opponents in Ouvert games
