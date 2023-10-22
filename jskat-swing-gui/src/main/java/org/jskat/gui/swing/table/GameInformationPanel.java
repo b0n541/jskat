@@ -112,7 +112,7 @@ class GameInformationPanel extends JPanel {
         gameWon = false;
         declarerPoints = 0;
         opponentPoints = 0;
-        ramschLoosers = new HashSet<Player>();
+        ramschLoosers = new HashSet<>();
     }
 
     private void refreshText() {

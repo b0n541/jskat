@@ -350,4 +350,18 @@ public class SuitRuleTest extends AbstractJSkatTest {
         assertTrue(data.getResult().isWon());
         assertThat(data.getResult().getGameValue()).isEqualTo(27);
     }
+
+    @Test
+    public void testGetMultiplier() {
+        final var rule = new SuitRule();
+
+        assertThat(rule.getMultiplier(
+                CardList.of(Card.SJ, Card.HJ, Card.DJ, Card.DT, Card.D8, Card.SQ, Card.S9, Card.HA, Card.HK, Card.HQ),
+                GameType.DIAMONDS))
+                .isEqualTo(2);
+        assertThat(rule.getMultiplier(
+                CardList.of(Card.HJ, Card.DJ, Card.DT, Card.D8, Card.SQ, Card.S9, Card.HA, Card.HK, Card.HQ, Card.H7),
+                GameType.DIAMONDS))
+                .isEqualTo(3);
+    }
 }

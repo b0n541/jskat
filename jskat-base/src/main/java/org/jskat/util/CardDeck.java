@@ -13,51 +13,21 @@ public class CardDeck extends CardList {
     public final static Map<Rank, List<Card>> RANK_CARDS;
 
     static {
-        Map<Suit, List<Card>> suitCards = new HashMap<>();
-        suitCards.put(Suit.CLUBS,
-                Collections.unmodifiableList(
-                        Arrays.asList(Card.CJ, Card.CA, Card.CT, Card.CK,
-                                Card.CQ, Card.C9, Card.C8, Card.C7)));
-        suitCards.put(Suit.SPADES,
-                Collections.unmodifiableList(
-                        Arrays.asList(Card.SJ, Card.SA, Card.ST, Card.SK,
-                                Card.SQ, Card.S9, Card.S8, Card.S7)));
-        suitCards.put(Suit.HEARTS,
-                Collections.unmodifiableList(
-                        Arrays.asList(Card.HJ, Card.HA, Card.HT, Card.HK,
-                                Card.HQ, Card.H9, Card.H8, Card.H7)));
-        suitCards.put(Suit.DIAMONDS,
-                Collections.unmodifiableList(
-                        Arrays.asList(Card.DJ, Card.DA, Card.DT, Card.DK,
-                                Card.DQ, Card.D9, Card.D8, Card.D7)));
-        SUIT_CARDS = Collections.unmodifiableMap(suitCards);
+        SUIT_CARDS = Map.of(
+                Suit.CLUBS, List.of(Card.CJ, Card.CA, Card.CT, Card.CK, Card.CQ, Card.C9, Card.C8, Card.C7),
+                Suit.SPADES, List.of(Card.SJ, Card.SA, Card.ST, Card.SK, Card.SQ, Card.S9, Card.S8, Card.S7),
+                Suit.HEARTS, List.of(Card.HJ, Card.HA, Card.HT, Card.HK, Card.HQ, Card.H9, Card.H8, Card.H7),
+                Suit.DIAMONDS, List.of(Card.DJ, Card.DA, Card.DT, Card.DK, Card.DQ, Card.D9, Card.D8, Card.D7));
 
-        Map<Rank, List<Card>> rankCards = new HashMap<>();
-        rankCards.put(Rank.JACK,
-                Collections.unmodifiableList(
-                        Arrays.asList(Card.CJ, Card.SJ, Card.HJ, Card.DJ)));
-        rankCards.put(Rank.ACE,
-                Collections.unmodifiableList(
-                        Arrays.asList(Card.CA, Card.SA, Card.HA, Card.DA)));
-        rankCards.put(Rank.TEN,
-                Collections.unmodifiableList(
-                        Arrays.asList(Card.CT, Card.ST, Card.HT, Card.DT)));
-        rankCards.put(Rank.KING,
-                Collections.unmodifiableList(
-                        Arrays.asList(Card.CK, Card.SK, Card.HK, Card.DK)));
-        rankCards.put(Rank.QUEEN,
-                Collections.unmodifiableList(
-                        Arrays.asList(Card.CQ, Card.SQ, Card.HQ, Card.DQ)));
-        rankCards.put(Rank.NINE,
-                Collections.unmodifiableList(
-                        Arrays.asList(Card.C9, Card.S9, Card.H9, Card.D9)));
-        rankCards.put(Rank.EIGHT,
-                Collections.unmodifiableList(
-                        Arrays.asList(Card.C8, Card.S8, Card.H8, Card.D8)));
-        rankCards.put(Rank.SEVEN,
-                Collections.unmodifiableList(
-                        Arrays.asList(Card.C7, Card.S7, Card.H7, Card.D7)));
-        RANK_CARDS = Collections.unmodifiableMap(rankCards);
+        RANK_CARDS = Map.of(
+                Rank.JACK, List.of(Card.CJ, Card.SJ, Card.HJ, Card.DJ),
+                Rank.ACE, List.of(Card.CA, Card.SA, Card.HA, Card.DA),
+                Rank.TEN, List.of(Card.CT, Card.ST, Card.HT, Card.DT),
+                Rank.KING, List.of(Card.CK, Card.SK, Card.HK, Card.DK),
+                Rank.QUEEN, List.of(Card.CQ, Card.SQ, Card.HQ, Card.DQ),
+                Rank.NINE, List.of(Card.C9, Card.S9, Card.H9, Card.D9),
+                Rank.EIGHT, List.of(Card.C8, Card.S8, Card.H8, Card.D8),
+                Rank.SEVEN, List.of(Card.C7, Card.S7, Card.H7, Card.D7));
     }
 
     /**
@@ -68,8 +38,7 @@ public class CardDeck extends CardList {
         super();
 
         // Adds a card for every suit and value
-        for (Card card : Card.values()) {
-
+        for (final Card card : Card.values()) {
             add(card);
         }
     }
@@ -82,8 +51,10 @@ public class CardDeck extends CardList {
      * @param rearHandCards   Cards of rear hand
      * @param skatCards       Cards of skat
      */
-    public CardDeck(List<Card> foreHandCards, List<Card> middleHandCards,
-                    List<Card> rearHandCards, List<Card> skatCards) {
+    public CardDeck(final List<Card> foreHandCards,
+                    final List<Card> middleHandCards,
+                    final List<Card> rearHandCards,
+                    final List<Card> skatCards) {
         addAll(foreHandCards.subList(0, 3));
         addAll(middleHandCards.subList(0, 3));
         addAll(rearHandCards.subList(0, 3));
@@ -104,8 +75,10 @@ public class CardDeck extends CardList {
      * @param rearHandCards   Cards of rear hand
      * @param skatCards       Cards of skat
      */
-    public CardDeck(String foreHandCards, String middleHandCards,
-                    String rearHandCards, String skatCards) {
+    public CardDeck(final String foreHandCards,
+                    final String middleHandCards,
+                    final String rearHandCards,
+                    final String skatCards) {
         this(getCardsFromString(foreHandCards),
                 getCardsFromString(middleHandCards),
                 getCardsFromString(rearHandCards),
@@ -124,11 +97,10 @@ public class CardDeck extends CardList {
 
     private static List<Card> getCardsFromString(final String cards) {
 
-        List<Card> result = new ArrayList<Card>();
-        StringTokenizer token = new StringTokenizer(cards);
+        final List<Card> result = new ArrayList<>();
+        final StringTokenizer token = new StringTokenizer(cards);
 
         while (token.hasMoreTokens()) {
-
             result.add(Card.getCardFromString(token.nextToken()));
         }
 
@@ -152,12 +124,10 @@ public class CardDeck extends CardList {
     public boolean add(final Card card) {
 
         if (size() == MAX_CARDS) {
-            throw new IllegalStateException("Card deck is already filled with "
-                    + MAX_CARDS + " cards.");
+            throw new IllegalStateException("Card deck is already filled with " + MAX_CARDS + " cards.");
         }
         if (contains(card)) {
-            throw new IllegalArgumentException("Card " + card
-                    + " is already contained in card deck.");
+            throw new IllegalArgumentException("Card " + card + " is already contained in card deck.");
         }
 
         return super.add(card);
@@ -170,7 +140,7 @@ public class CardDeck extends CardList {
      */
     public static EnumSet<Card> getAllCards() {
 
-        EnumSet<Card> allCards = EnumSet.allOf(Card.class);
+        final EnumSet<Card> allCards = EnumSet.allOf(Card.class);
 
         return allCards;
     }
