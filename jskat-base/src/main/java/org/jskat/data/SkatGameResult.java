@@ -7,29 +7,29 @@ import java.util.Objects;
  */
 public class SkatGameResult implements Cloneable {
 
-    private Integer gameValue;
-    private Integer multiplier;
-    private Integer finalDeclarerPoints;
-    private Integer finalOpponentPoints;
-    private Boolean playWithJacks;
-    private Boolean won;
-    private Boolean overBidded;
-    private Boolean schneider;
-    private Boolean schwarz;
-    private Boolean durchmarsch;
-    private Boolean jungfrau;
+    private int gameValue;
+    private int finalDeclarerPoints;
+    private int finalOpponentPoints;
+    private boolean playWithJacks;
+    private int matadors;
+    private boolean won;
+    private boolean overBid;
+    private boolean schneider;
+    private boolean schwarz;
+    private boolean durchmarsch;
+    private boolean jungfrau;
 
     /**
      * Constructor
      */
     public SkatGameResult() {
         gameValue = -1;
-        multiplier = 0;
+        matadors = 0;
         finalDeclarerPoints = 0;
         finalOpponentPoints = 0;
         playWithJacks = false;
         won = false;
-        overBidded = false;
+        overBid = false;
         schneider = false;
         schwarz = false;
         durchmarsch = false;
@@ -42,12 +42,12 @@ public class SkatGameResult implements Cloneable {
     @Override
     public SkatGameResult clone() {
 
-        SkatGameResult result = new SkatGameResult();
+        final SkatGameResult result = new SkatGameResult();
         result.setGameValue(gameValue);
-        result.setMultiplier(multiplier);
+        result.setMatadors(matadors);
         result.setPlayWithJacks(playWithJacks);
         result.setWon(won);
-        result.setOverBidded(overBidded);
+        result.setOverBid(overBid);
         result.setSchneider(schneider);
         result.setSchwarz(schwarz);
         result.setDurchmarsch(durchmarsch);
@@ -79,17 +79,17 @@ public class SkatGameResult implements Cloneable {
      *
      * @return TRUE, if the declarer did overbid
      */
-    public boolean isOverBidded() {
-        return overBidded;
+    public boolean getOverBid() {
+        return overBid;
     }
 
     /**
      * Sets whether the declarer did overbid
      *
-     * @param overBidded TRUE, if the declarer did overvid
+     * @param overBid TRUE, if the declarer did overvid
      */
-    public void setOverBidded(final boolean overBidded) {
-        this.overBidded = overBidded;
+    public void setOverBid(final boolean overBid) {
+        this.overBid = overBid;
     }
 
     /**
@@ -150,7 +150,7 @@ public class SkatGameResult implements Cloneable {
      */
     public void setDurchmarsch(final boolean durchmarsch) {
         if (durchmarsch) {
-            setJungfrau(true);
+            setJungfrau(false);
         }
         this.durchmarsch = durchmarsch;
     }
@@ -193,27 +193,7 @@ public class SkatGameResult implements Cloneable {
     }
 
     /**
-     * Gets the multiplier<br>
-     * only meaningful in suit and grand games
-     *
-     * @return Multiplier
-     */
-    public int getMultiplier() {
-        return multiplier;
-    }
-
-    /**
-     * Sets the multiplier<br>
-     * only meaningful in suit and grand games
-     *
-     * @param multiplier Multiplier
-     */
-    public void setMultiplier(final int multiplier) {
-        this.multiplier = multiplier;
-    }
-
-    /**
-     * Gets wether the declarer played with or without jacks
+     * Gets whether the declarer played with or without jacks
      *
      * @return TRUE, if the declarer played with jacks
      */
@@ -228,6 +208,24 @@ public class SkatGameResult implements Cloneable {
      */
     public void setPlayWithJacks(final boolean playWithJacks) {
         this.playWithJacks = playWithJacks;
+    }
+
+    /**
+     * Gets the number of matadors (Jacks and trump cards in a row without gaps).
+     *
+     * @return Number of matadors
+     */
+    public int getMatadors() {
+        return matadors;
+    }
+
+    /**
+     * Sets the number of matadors.
+     *
+     * @param matadors Number of matadors.
+     */
+    public void setMatadors(final int matadors) {
+        this.matadors = matadors;
     }
 
     /**
@@ -273,10 +271,18 @@ public class SkatGameResult implements Cloneable {
      */
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(gameValue).append(", mult:").append(multiplier);
-        if (overBidded) {
-            sb.append(" (overbidded)");
+        final StringBuilder sb = new StringBuilder();
+        sb.append(gameValue);
+        if (matadors > 0) {
+            if (playWithJacks) {
+                sb.append(" with: ");
+            } else {
+                sb.append(" without: ");
+            }
+            sb.append(matadors).append(" play ").append(matadors + 1);
+        }
+        if (overBid) {
+            sb.append(" (overbid)");
         }
         if (durchmarsch) {
             sb.append(" (Durchmarsch)");
@@ -296,12 +302,12 @@ public class SkatGameResult implements Cloneable {
     public int hashCode() {
         return Objects
                 .hash(durchmarsch, finalDeclarerPoints, finalOpponentPoints, gameValue,
-                        jungfrau, multiplier, overBidded, playWithJacks, schneider,
+                        jungfrau, matadors, overBid, playWithJacks, schneider,
                         schwarz, won);
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }
@@ -318,8 +324,8 @@ public class SkatGameResult implements Cloneable {
                 Objects.equals(finalOpponentPoints, other.finalOpponentPoints) &&
                 Objects.equals(gameValue, other.gameValue) &&
                 Objects.equals(jungfrau, other.jungfrau) &&
-                Objects.equals(multiplier, other.multiplier) &&
-                Objects.equals(overBidded, other.overBidded) &&
+                Objects.equals(matadors, other.matadors) &&
+                Objects.equals(overBid, other.overBid) &&
                 Objects.equals(playWithJacks, other.playWithJacks) &&
                 Objects.equals(schneider, other.schneider) &&
                 Objects.equals(schwarz, other.schwarz) &&

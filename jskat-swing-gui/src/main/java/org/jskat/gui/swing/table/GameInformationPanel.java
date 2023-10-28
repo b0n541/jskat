@@ -28,22 +28,22 @@ class GameInformationPanel extends JPanel {
     private int gameNumber;
     private GameState gameState;
     private GameType gameType;
-    private int multiplier;
     private boolean playWithJacks;
+    private int matadors;
     private boolean handGame;
     private boolean ouvertGame;
     private boolean schneiderAnnounced;
     private boolean schneider;
     private boolean schwarzAnnounced;
     private boolean schwarz;
-    private boolean overBidded;
+    private boolean overBid;
     private boolean contra;
     private boolean re;
     private int trick;
     private boolean gameWon;
     private int declarerPoints;
     private int opponentPoints;
-    private Set<Player> ramschLoosers;
+    private Set<Player> ramschLosers;
 
     /**
      * Constructor
@@ -97,7 +97,7 @@ class GameInformationPanel extends JPanel {
 
     private void resetGameData() {
         gameType = null;
-        multiplier = 0;
+        matadors = 0;
         playWithJacks = false;
         handGame = false;
         ouvertGame = false;
@@ -105,14 +105,14 @@ class GameInformationPanel extends JPanel {
         schneider = false;
         schwarzAnnounced = false;
         schwarz = false;
-        overBidded = false;
+        overBid = false;
         contra = false;
         re = false;
         trick = 1;
         gameWon = false;
         declarerPoints = 0;
         opponentPoints = 0;
-        ramschLoosers = new HashSet<>();
+        ramschLosers = new HashSet<>();
     }
 
     private void refreshText() {
@@ -152,7 +152,7 @@ class GameInformationPanel extends JPanel {
         if (gameType == GameType.RAMSCH) {
             text.append(" - ");
 
-            final Iterator<Player> iterator = ramschLoosers.iterator();
+            final Iterator<Player> iterator = ramschLosers.iterator();
             if (iterator.hasNext()) {
                 text.append(strings.getPlayerString(iterator.next()));
             }
@@ -164,8 +164,7 @@ class GameInformationPanel extends JPanel {
         } else if (gameType != GameType.NULL && gameType != GameType.PASSED_IN) {
             text.append(" - ");
 
-            text.append(
-                    declarerPoints + " " + strings.getString("versus") + " ");
+            text.append(declarerPoints + " " + strings.getString("versus") + " ");
             text.append(opponentPoints + " " + strings.getString("points"));
         }
     }
@@ -178,15 +177,15 @@ class GameInformationPanel extends JPanel {
         if (gameType != null) {
             text.append(" [" + strings.getGameType(gameType));
 
-            if (gameState.equals(GameState.GAME_OVER) && multiplier > 0) {
+            if (gameState.equals(GameState.GAME_OVER) && matadors > 0) {
                 if (playWithJacks) {
                     text.append(" " + strings.getString("with"));
                 } else {
                     text.append(" " + strings.getString("without"));
                 }
-                text.append(" " + (multiplier - 1));
+                text.append(" " + matadors);
                 text.append(" " + strings.getString("play"));
-                text.append(" " + multiplier);
+                text.append(" " + (matadors + 1));
             }
 
             if (handGame) {
@@ -217,7 +216,7 @@ class GameInformationPanel extends JPanel {
                 text.append(" " + strings.getString("re"));
             }
 
-            if (overBidded) {
+            if (overBid) {
                 text.append(" " + strings.getString("overbidded"));
             }
 
@@ -233,13 +232,13 @@ class GameInformationPanel extends JPanel {
 
     void setGameSummary(final GameSummary summary) {
 
-        multiplier = summary.getGameMultiplier();
         playWithJacks = summary.isGamePlayedWithJacks();
+        matadors = summary.getMatadors();
         gameWon = summary.isGameWon();
         declarerPoints = summary.getFinalDeclarerPoints();
         opponentPoints = summary.getFinalOpponentScore();
-        ramschLoosers = summary.getRamschLosers();
-        overBidded = summary.gameResult.isOverBidded();
+        ramschLosers = summary.getRamschLosers();
+        overBid = summary.gameResult.getOverBid();
         schneider = summary.gameResult.isSchneider();
         schwarz = summary.gameResult.isSchwarz();
         refreshText();

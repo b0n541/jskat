@@ -1,4 +1,3 @@
-
 package org.jskat.util;
 
 
@@ -48,7 +47,10 @@ public class CardDeckTest extends AbstractJSkatTest {
     public void addTooMuchCards() {
         assertThrows(IllegalStateException.class, () -> {
             final CardDeck cards = new CardDeck(
-                    "CJ SJ HJ CK CQ SK C7 C8 S7 H7 D7 DJ CA CT C9 SQ HA HK HQ S8 H8 H9 HT SA ST S9 D8 D9 DT DA DK DQ");
+                    "CJ SJ HJ CK CQ SK C7 C8 S7 H7",
+                    "D7 DJ CA CT C9 SQ HA HK HQ S8",
+                    "H8 H9 HT SA ST S9 D8 D9 DT DA",
+                    "DK DQ");
             cards.add(Card.CJ);
         });
     }
