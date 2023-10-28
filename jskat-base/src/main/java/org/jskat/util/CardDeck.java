@@ -30,6 +30,8 @@ public class CardDeck extends CardList {
                 Rank.SEVEN, List.of(Card.C7, Card.S7, Card.H7, Card.D7));
     }
 
+    private boolean isShuffled = false;
+
     /**
      * Creates a new instance of CardDeck
      */
@@ -37,10 +39,7 @@ public class CardDeck extends CardList {
 
         super();
 
-        // Adds a card for every suit and value
-        for (final Card card : Card.values()) {
-            add(card);
-        }
+        addAll(Arrays.stream(Card.values()).toList());
     }
 
     /**
@@ -65,6 +64,8 @@ public class CardDeck extends CardList {
         addAll(foreHandCards.subList(7, 10));
         addAll(middleHandCards.subList(7, 10));
         addAll(rearHandCards.subList(7, 10));
+
+        isShuffled = true;
     }
 
     /**
@@ -85,16 +86,6 @@ public class CardDeck extends CardList {
                 getCardsFromString(skatCards));
     }
 
-    /**
-     * Constructor
-     *
-     * @param cards Card distribution
-     */
-    public CardDeck(final String cards) {
-
-        addAll(getCardsFromString(cards));
-    }
-
     private static List<Card> getCardsFromString(final String cards) {
 
         final List<Card> result = new ArrayList<>();
@@ -105,16 +96,6 @@ public class CardDeck extends CardList {
         }
 
         return result;
-    }
-
-    /**
-     * Constructor
-     *
-     * @param cards Card distribution
-     */
-    public CardDeck(final CardList cards) {
-
-        addAll(cards);
     }
 
     /**
@@ -131,6 +112,15 @@ public class CardDeck extends CardList {
         }
 
         return super.add(card);
+    }
+
+    @Override
+    public boolean addAll(final Collection<Card> newCards) {
+        boolean result = false;
+        for (final Card card : newCards) {
+            result |= add(card);
+        }
+        return result;
     }
 
     /**
@@ -152,14 +142,20 @@ public class CardDeck extends CardList {
      */
     public static CardDeck getPerfectDistribution() {
         return new CardDeck(
-                "CJ SJ HJ CK CQ SK C7 C8 S7 H7 D7 DJ CA CT C9 SQ HA HK HQ S8 H8 H9 HT SA ST S9 D8 D9 DT DA DK DQ");
+                "CJ SJ HJ DJ CA CT C9 SA ST S9",
+                "CK CQ SK SQ HA HK HQ D8 D9 DT",
+                "C7 C8 S7 S8 H8 H9 HT DA DK DQ",
+                "H7 D7");
     }
 
     /**
      * Shuffles the CardDeck
      */
     public void shuffle() {
-        // Simple random shuffling
-        Collections.shuffle(cards);
+        if (!isShuffled) {
+            // Simple random shuffling
+            Collections.shuffle(cards);
+            isShuffled = true;
+        }
     }
 }
