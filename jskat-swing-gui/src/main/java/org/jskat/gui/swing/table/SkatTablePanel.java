@@ -204,12 +204,10 @@ public class SkatTablePanel extends AbstractTabPanel {
                 new StartContextPanel((StartSkatSeriesAction) getActionMap()
                         .get(JSkatAction.START_LOCAL_SERIES)));
 
-        biddingPanel = new BiddingContextPanel(getActionMap(),
-                bitmaps, userPanel);
+        biddingPanel = new BiddingContextPanel(getActionMap(), bitmaps, userPanel);
         addContextPanel(ContextPanelType.BIDDING, biddingPanel);
 
-        declaringPanel = new DeclaringContextPanel(getActionMap(),
-                userPanel);
+        declaringPanel = new DeclaringContextPanel(getActionMap(), userPanel);
         addContextPanel(ContextPanelType.DECLARING, declaringPanel);
 
         schieberamschPanel = new SchieberamschContextPanel(getActionMap(),

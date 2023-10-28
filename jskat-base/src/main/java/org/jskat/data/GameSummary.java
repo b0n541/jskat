@@ -95,7 +95,7 @@ public class GameSummary {
          * @return Game announcement
          */
         public GameSummary getSummary() {
-            GameSummary result;
+            final GameSummary result;
             if (validate()) {
                 result = tmpSummary;
                 tmpSummary = new GameSummary();
@@ -183,7 +183,7 @@ public class GameSummary {
             tmpSummary.declarer = position;
         }
 
-        public void addRamschLooser(Player looser) {
+        public void addRamschLooser(final Player looser) {
             tmpSummary.ramschLosers.add(looser);
         }
 
@@ -210,11 +210,11 @@ public class GameSummary {
             return true;
         }
 
-        public void setContra(Boolean contra) {
+        public void setContra(final Boolean contra) {
             tmpSummary.contra = contra;
         }
 
-        public void setRe(Boolean re) {
+        public void setRe(final Boolean re) {
             tmpSummary.re = re;
         }
     }
@@ -307,12 +307,12 @@ public class GameSummary {
     }
 
     /**
-     * Gets the multiplier for the game
+     * Gets the matadors for the game
      *
-     * @return Multiplier for the game
+     * @return Matadors for the game
      */
-    public int getGameMultiplier() {
-        return gameResult.getMultiplier();
+    public int getMatadors() {
+        return gameResult.getMatadors();
     }
 
     /**
@@ -348,7 +348,7 @@ public class GameSummary {
     @Override
     public String toString() {
 
-        StringBuffer result = new StringBuffer();
+        final StringBuffer result = new StringBuffer();
 
         result.append("Game summary: ").append(gameType);
 
@@ -414,7 +414,7 @@ public class GameSummary {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }

@@ -303,7 +303,7 @@ public class SkatGameData {
             log.warn("Overbidding cannot happen in Ramsch games: gameType="
                     + getGameType());
         }
-        return result.isOverBidded();
+        return result.getOverBid();
     }
 
     /**
@@ -464,7 +464,7 @@ public class SkatGameData {
         } else {
             if (rules.isOverbid(this)) {
                 result.setWon(false);
-                result.setOverBidded(true);
+                result.setOverBid(true);
                 result.setGameValue(rules.calcOverbidGameResult(this));
             } else {
                 if (!result.isWon()) {
@@ -481,8 +481,8 @@ public class SkatGameData {
         }
 
         if (GameType.GRAND_SUIT.contains(announcement.contract().gameType())) {
-            result.setMultiplier(rules.getMultiplier(this));
             result.setPlayWithJacks(rules.isPlayWithJacks(this));
+            result.setMatadors(rules.getMatadors(this));
         }
 
         if (GameType.RAMSCH == announcement.contract().gameType()) {
@@ -717,6 +717,13 @@ public class SkatGameData {
                 Player.MIDDLEHAND, dealtCards.get(Player.MIDDLEHAND).getImmutableCopy(),
                 Player.REARHAND, dealtCards.get(Player.REARHAND).getImmutableCopy());
     }
+
+    public CardList getDealtDeclarerCardsAndSkat() {
+        final CardList declarerCards = new CardList(getDealtCards().get(getDeclarer()));
+        declarerCards.addAll(getDealtSkat());
+        return declarerCards;
+    }
+
 
     /**
      * Gets the dealt skat

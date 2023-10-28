@@ -93,7 +93,7 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertFalse(gameData.isGameWon());
         assertThat(gameData.getResult().getGameValue()).isEqualTo(-54);
         assertThat(gameData.getResult().isPlayWithJacks()).isFalse();
-        assertThat(gameData.getResult().getMultiplier()).isEqualTo(2);
+        assertThat(gameData.getResult().getMatadors()).isEqualTo(2);
         assertThat(gameData.getDeclarerScore()).isEqualTo(59);
         assertThat(gameData.getOpponentScore()).isEqualTo(61);
         assertFalse(gameData.isSchneider());
@@ -102,10 +102,11 @@ public class MessageParserTest extends AbstractJSkatTest {
     }
 
     private static void checkTrick(final Trick trick,
-                                   final Player trickForeHand, final Card firstCard,
-                                   final Card secondCard, final Card thirdCard,
+                                   final Player trickForeHand,
+                                   final Card firstCard,
+                                   final Card secondCard,
+                                   final Card thirdCard,
                                    final Player trickWinner) {
-        final int trickNo = trick.getTrickNumberInGame();
         assertThat(trick.getForeHand()).isEqualTo(trickForeHand);
         assertThat(trick.getFirstCard()).isEqualTo(firstCard);
         assertThat(trick.getSecondCard()).isEqualTo(secondCard);
@@ -161,7 +162,7 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertTrue(gameData.isGameWon());
         assertThat(gameData.getResult().getGameValue()).isEqualTo(96);
         assertThat(gameData.getResult().isPlayWithJacks()).isTrue();
-        assertThat(gameData.getResult().getMultiplier()).isEqualTo(3);
+        assertThat(gameData.getResult().getMatadors()).isEqualTo(3);
         assertThat(gameData.getDeclarerScore()).isEqualTo(85);
         assertThat(gameData.getOpponentScore()).isEqualTo(35);
         assertFalse(gameData.isSchneider());
@@ -235,7 +236,7 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertFalse(gameData.isGameWon());
         assertThat(gameData.getResult().getGameValue()).isEqualTo(0);
         assertThat(gameData.getResult().isPlayWithJacks()).isFalse();
-        assertThat(gameData.getResult().getMultiplier()).isEqualTo(0);
+        assertThat(gameData.getResult().getMatadors()).isEqualTo(0);
         assertThat(gameData.getDeclarerScore()).isEqualTo(0);
         assertThat(gameData.getOpponentScore()).isEqualTo(0);
         assertFalse(gameData.isSchneider());
@@ -288,6 +289,16 @@ public class MessageParserTest extends AbstractJSkatTest {
         final String gameSummary = "(;GM[Skat]PC[Internet Skat Server]SE[2171]ID[18358]DT[2008-05-25/17:57:24/UTC]P0[kermit2]P1[kermit1]P2[mic]R0[0.0]R1[null]R2[0.0]MV[w C9.D7.HT.HA.SA.HQ.SJ.S7.C8.HJ.H7.CQ.DQ.D9.H9.S8.H8.CT.HK.SQ.CA.CK.SK.CJ.D8.DT.DK.C7.DJ.S9.ST.DA 1 18 0 p 2 20 1 p 2 s w ST.DA 2 G.DT.ST 0 ?? w LE.1 ]R[d:2 win v:96 m:1 bidok p:120 t:10 s:1 z:1 p0:0 p1:0 p2:0 l:1 to:-1] ;)";
 
         final SkatGameData gameData = MessageParser.parseGameSummary(gameSummary);
+    }
+
+    @Test
+    public void testParseGameSummary_OverbidSuitGame() {
+
+        final String gameSummary = "(;GM[Skat]PC[International Skat Server]CO[]SE[403949]ID[8650652]DT[2023-10-18/18:44:11/UTC]P0[kermit]P1[bonsai]P2[kermit:2]R0[]R1[0.0]R2[]MV[w DQ.CK.HT.CT.SK.C9.DA.D9.DK.S8.H9.S7.SA.H8.C7.CA.H7.CJ.CQ.D7.SQ.S9.C8.DT.SJ.HA.ST.D8.DJ.HJ.HQ.HK 1 18 0 p 2 20 1 y 2 22 1 y 2 23 1 y 2 24 1 y 2 27 1 y 2 30 1 y 2 33 1 y 2 35 1 y 2 36 1 p 2 s w HQ.HK 2 D.C8.ST 0 HT 1 H9 2 HA 2 DJ 0 D9 1 D7 2 HJ 0 DQ 1 CJ 1 CA 2 DT 0 C9 2 SJ 0 DK 1 H8 2 HK 0 S8 1 H7 2 HQ 0 SK 1 C7 2 SQ 0 CT 1 SA 1 S7 2 S9 0 CK 2 D8 0 DA 1 CQ ]R[d:2 loss v:-72 m:-1 overbid p:75 t:7 s:0 z:0 p0:0 p1:0 p2:0 l:-1 to:-1 r:0] ;)";
+
+        final SkatGameData gameData = MessageParser.parseGameSummary(gameSummary);
+
+        assertThat(gameData.getResult().getMatadors()).isEqualTo(1);
     }
 
     @Test

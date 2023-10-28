@@ -327,7 +327,7 @@ public class SuitRuleTest extends AbstractJSkatTest {
 
         assertThat(data.getResult().isWon()).isFalse();
         assertThat(data.getResult().getGameValue()).isEqualTo(-54);
-        assertThat(data.getResult().isOverBidded()).isTrue();
+        assertThat(data.getResult().getOverBid()).isTrue();
     }
 
     /**
@@ -349,5 +349,19 @@ public class SuitRuleTest extends AbstractJSkatTest {
 
         assertTrue(data.getResult().isWon());
         assertThat(data.getResult().getGameValue()).isEqualTo(27);
+    }
+
+    @Test
+    public void testGetMultiplier() {
+        final var rule = new SuitRule();
+
+        assertThat(rule.getMatadors(
+                CardList.of(Card.SJ, Card.HJ, Card.DJ, Card.DT, Card.D8, Card.SQ, Card.S9, Card.HA, Card.HK, Card.HQ),
+                GameType.DIAMONDS))
+                .isEqualTo(1);
+        assertThat(rule.getMatadors(
+                CardList.of(Card.HJ, Card.DJ, Card.DT, Card.D8, Card.SQ, Card.S9, Card.HA, Card.HK, Card.HQ, Card.H7),
+                GameType.DIAMONDS))
+                .isEqualTo(2);
     }
 }

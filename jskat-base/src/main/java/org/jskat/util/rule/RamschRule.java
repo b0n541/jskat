@@ -20,9 +20,9 @@ public class RamschRule extends SuitGrandRamschRule {
      */
     @Override
     public int getGameValueForWonGame(final SkatGameData gameData) {
-        int highestPlayerPoints = getGetHighestPlayerPoints(gameData);
+        final int highestPlayerPoints = getGetHighestPlayerPoints(gameData);
 
-        return highestPlayerPoints * getMultiplier(gameData);
+        return highestPlayerPoints * getBaseMultiplier(gameData);
     }
 
     /**
@@ -38,10 +38,10 @@ public class RamschRule extends SuitGrandRamschRule {
 
         int result = 0;
 
-        int foreHandPoints = gameData.getPlayerPoints(Player.FOREHAND);
-        int middleHandPoints = gameData.getPlayerPoints(Player.MIDDLEHAND);
-        int rearHandPoints = gameData.getPlayerPoints(Player.REARHAND);
-        int skatPoints = JSkatOptions.instance().getRamschSkatOwner() == RamschSkatOwner.LOSER ? gameData
+        final int foreHandPoints = gameData.getPlayerPoints(Player.FOREHAND);
+        final int middleHandPoints = gameData.getPlayerPoints(Player.MIDDLEHAND);
+        final int rearHandPoints = gameData.getPlayerPoints(Player.REARHAND);
+        final int skatPoints = JSkatOptions.instance().getRamschSkatOwner() == RamschSkatOwner.LOSER ? gameData
                 .getSkat().getTotalValue() : 0;
 
         // FIXME (jan 18.11.2011) make this simpler
@@ -91,7 +91,7 @@ public class RamschRule extends SuitGrandRamschRule {
     public static final boolean isDurchmarsch(final Player player,
                                               final SkatGameData gameData) {
         if (gameData.getTricks().size() == 10) {
-            for (Trick t : gameData.getTricks()) {
+            for (final Trick t : gameData.getTricks()) {
                 if (t.getTrickWinner() != player) {
                     return false;
                 }
@@ -113,7 +113,7 @@ public class RamschRule extends SuitGrandRamschRule {
     public static final boolean isJungfrau(final Player player,
                                            final SkatGameData gameData) {
         if (gameData.getTricks().size() == 10) {
-            for (Trick t : gameData.getTricks()) {
+            for (final Trick t : gameData.getTricks()) {
                 if (t.getTrickWinner() == player) {
                     return false;
                 }
@@ -126,8 +126,7 @@ public class RamschRule extends SuitGrandRamschRule {
     /**
      * {@inheritDoc}
      */
-    @Override
-    public int getMultiplier(final SkatGameData gameData) {
+    public int getBaseMultiplier(final SkatGameData gameData) {
 
         int multiplier = 1;
 
@@ -140,6 +139,11 @@ public class RamschRule extends SuitGrandRamschRule {
         multiplier = (int) (multiplier * Math.pow(2, gameData.getGeschoben()));
 
         return multiplier;
+    }
+
+    @Override
+    public int getMatadors(final SkatGameData gameData) {
+        return 0;
     }
 
     /**

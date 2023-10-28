@@ -265,11 +265,11 @@ public class SkatGame {
             // Skat game has no cards, yet
             deck = new CardDeck();
 
-            log.debug("shuffling...");
-            deck.shuffle();
-
             log.debug(deck.toString());
         }
+
+        log.info("shuffling...");
+        deck.shuffle();
 
         doSleep(maxSleep);
 

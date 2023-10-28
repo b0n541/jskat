@@ -443,8 +443,7 @@ public class MessageParser {
         final SkatGameData result = new SkatGameData();
 
         final Pattern summaryPartPattern = Pattern.compile("(\\w+)\\[(.*?)\\]");
-        final Matcher summaryPartMatcher = summaryPartPattern
-                .matcher(gameSummary);
+        final Matcher summaryPartMatcher = summaryPartPattern.matcher(gameSummary);
 
         while (summaryPartMatcher.find()) {
 
@@ -600,11 +599,11 @@ public class MessageParser {
             final int matadors = Integer.parseInt(token.substring(2));
 
             gameData.getGameResult().setPlayWithJacks(matadors > 0);
-            gameData.getGameResult().setMultiplier(Math.abs(matadors));
+            gameData.getGameResult().setMatadors(Math.abs(matadors));
 
         } else if ("overbid".equals(token)) {
 
-            gameData.getResult().setOverBidded(true);
+            gameData.getResult().setOverBid(true);
 
         } else if (token.startsWith("p:")) {
 
