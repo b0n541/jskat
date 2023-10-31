@@ -12,5 +12,5 @@ dependencies {
 
 javafx {
     modules = listOf("javafx.controls")
-    version = "20.0.+"
+    version = "21.0.+"
 }

@@ -16,10 +16,10 @@ dependencies {
 
 javafx {
     modules = listOf("javafx.base", "javafx.fxml", "javafx.web", "javafx.swing")
-    version = "20.0.+"
+    version = "21.0.+"
 }
 
-version = "0.22.0"
+version = "0.23.0-SNAPSHOT"
 
 val mainClassName = "org.jskat.JSkatKt"
 
