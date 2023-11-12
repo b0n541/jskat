@@ -22,14 +22,13 @@ public abstract class SuitGrandRule extends SuitGrandRamschRule {
         return gameData.getScore(gameData.getDeclarer()) >= getMinimumWinningScore(gameData) && !isOverbid(gameData);
     }
 
-    private static int getMinimumWinningScore(SkatGameData gameData) {
+    private static int getMinimumWinningScore(final SkatGameData gameData) {
         int result = SkatConstants.MIN_WINNING_POINTS;
 
-        if (gameData.getAnnoucement().isSchneider()) {
+        if (gameData.isSchneiderAnnounced()) {
             result = SkatConstants.MIN_SCHNEIDER_WINNING_POINTS;
         }
-
-        if (gameData.getAnnoucement().isSchwarz()) {
+        if (gameData.isSchwarzAnnounced()) {
             result = SkatConstants.MIN_SCHWARZ_WINNING_POINTS;
         }
 
@@ -41,7 +40,7 @@ public abstract class SuitGrandRule extends SuitGrandRamschRule {
      */
     @Override
     public int getGameValueForWonGame(final SkatGameData gameData) {
-        int multiplier = getMultiplier(gameData);
+        int multiplier = getBaseMultiplier(gameData);
 
         log.debug("calcSuitResult: after Jacks and Trump: multiplier " + multiplier);
 
@@ -81,7 +80,7 @@ public abstract class SuitGrandRule extends SuitGrandRamschRule {
             }
         }
 
-        int gameValue = SkatConstants.getGameBaseValue(gameData.getGameType(),
+        final int gameValue = SkatConstants.getGameBaseValue(gameData.getGameType(),
                 gameData.isHand(), gameData.isOuvert());
 
         log.debug("gameValue" + gameValue);
@@ -112,33 +111,8 @@ public abstract class SuitGrandRule extends SuitGrandRamschRule {
      * @param gameData Game data
      * @return Multiplier
      */
-    @Override
-    public int getMultiplier(final SkatGameData gameData) {
-
-        int result = 0;
-
-        CardList declarerCards = getDeclarerCards(gameData);
-
-        result = getMultiplier(declarerCards, gameData.getGameType());
-
-        return result;
-    }
-
-    private CardList getDeclarerCards(final SkatGameData gameData) {
-        CardList declarerCards = new CardList(gameData.getDealtCards().get(
-                gameData.getDeclarer()));
-        declarerCards.addAll(gameData.getDealtSkat());
-        return declarerCards;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean isPlayWithJacks(final SkatGameData gameData) {
-        CardList declarerCards = getDeclarerCards(gameData);
-
-        return declarerCards.contains(Card.CJ);
+    public int getBaseMultiplier(final SkatGameData gameData) {
+        return getBaseMultiplier(gameData.getDealtDeclarerCardsAndSkat(), gameData.getGameType());
     }
 
     /**
@@ -148,7 +122,22 @@ public abstract class SuitGrandRule extends SuitGrandRamschRule {
      * @param gameType Game type
      * @return Multiplier
      */
-    public abstract int getMultiplier(CardList cards, GameType gameType);
+    protected abstract int getBaseMultiplier(CardList cards, GameType gameType);
+
+    @Override
+    public int getMatadors(final SkatGameData gameData) {
+        return getMatadors(gameData.getDealtDeclarerCardsAndSkat(), gameData.getGameType());
+    }
+
+    public abstract int getMatadors(CardList cards, GameType gameType);
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isPlayWithJacks(final SkatGameData gameData) {
+        return gameData.getDealtDeclarerCardsAndSkat().contains(Card.CJ);
+    }
 
     /**
      * Checks whether a game was a schneider game<br>
@@ -159,7 +148,7 @@ public abstract class SuitGrandRule extends SuitGrandRamschRule {
      */
     public static boolean isSchneider(final SkatGameData gameData) {
 
-        boolean result = gameData.getScore(Player.FOREHAND) < 31
+        final boolean result = gameData.getScore(Player.FOREHAND) < 31
                 || gameData.getScore(Player.MIDDLEHAND) < 31
                 || gameData.getScore(Player.REARHAND) < 31;
 

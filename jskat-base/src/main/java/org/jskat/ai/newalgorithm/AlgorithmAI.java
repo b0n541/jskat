@@ -1,8 +1,7 @@
 package org.jskat.ai.newalgorithm;
 
 import org.jskat.ai.AbstractAIPlayer;
-import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
+import org.jskat.data.GameContract;
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -141,7 +140,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
      * @see org.jskat.ai.IJSkatPlayer#announceGame()
      */
     @Override
-    public GameAnnouncement announceGame() {
+    public GameContract announceGame() {
         if (bidEvaluator == null) {
             bidEvaluator = new BidEvaluator(knowledge.getOwnCards(),
                     knowledge.getPlayerPosition());
@@ -174,9 +173,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
                     + " ist AlgorithmSuit-Spieler / announceGame");
         }
 
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(bidEvaluator.getSuggestedGameType());
-        return factory.getAnnouncement();
+        return new GameContract(bidEvaluator.getSuggestedGameType());
     }
 
     /*

@@ -121,12 +121,8 @@ public class NullRule extends AbstractSkatRule {
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public int getMultiplier(
-            @SuppressWarnings("unused") final SkatGameData gameData) {
+    public int getMatadors(final SkatGameData gameData) {
         return 0;
     }
 

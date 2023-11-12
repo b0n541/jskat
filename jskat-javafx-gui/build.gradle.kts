@@ -1,7 +1,7 @@
 plugins {
     id("jskat.kotlin-library-conventions")
 
-    id("org.openjfx.javafxplugin") version "0.0.14"
+    id("org.openjfx.javafxplugin") version "0.1.0"
 }
 
 dependencies {
@@ -11,5 +11,5 @@ dependencies {
 
 javafx {
     modules = listOf("javafx.base", "javafx.fxml", "javafx.web", "javafx.swing")
-    version = "20.0.+"
+    version = "21.0.+"
 }

@@ -33,6 +33,8 @@ import org.jskat.gui.swing.JSkatViewImpl;
 import org.jskat.gui.swing.LookAndFeelSetter;
 import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.version.VersionChecker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,7 +42,8 @@ import java.io.IOException;
 
 public class JSkatFX extends Application {
 
-    private static final String VERSION = "0.22.0";
+    private static final Logger LOG = LoggerFactory.getLogger(JSkatFX.class);
+    private static final String VERSION = "0.23.0";
 
     private static final int SPLASH_WIDTH = 500;
     private static final int SPLASH_HEIGHT = 300;
@@ -126,27 +129,25 @@ public class JSkatFX extends Application {
         final VBox rootLayout = loader.load();
 
         final Dimension2D dimension = getMainWindowDimension(targetScreen);
+        LOG.info("Main window size {}x{}", dimension.getWidth(), dimension.getHeight());
         final Scene scene = new Scene(rootLayout, dimension.getWidth(), dimension.getHeight());
 
         // TODO: set this globally
         scene.getStylesheets().add("/org/jskat/gui/javafx/jskat.css");
 
-        scene.widthProperty().addListener(
-                (observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameWidth(newValue.intValue()));
-        scene.heightProperty().addListener(
-                (observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameHeight(newValue.intValue()));
+        scene.widthProperty().addListener((observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameWidth(newValue.intValue()));
+        scene.heightProperty().addListener((observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameHeight(newValue.intValue()));
 
         final Stage stage = new Stage();
         stage.setTitle("JSkat " + version);
+        stage.setOnCloseRequest(event -> JSkatMaster.INSTANCE.exitJSkat());
+
         stage.setScene(scene);
-        stage.setOnCloseRequest(event -> JSkatMaster.INSTANCE.exitJSkat());
 
-        stage.xProperty().addListener((observable, oldValue, newValue) ->
-                JSkatOptions.instance().setMainFrameXPosition(newValue.intValue()));
-        stage.yProperty().addListener((observable, oldValue, newValue) ->
-                JSkatOptions.instance().setMainFrameYPosition(newValue.intValue()));
-
-        stage.setOnCloseRequest(event -> JSkatMaster.INSTANCE.exitJSkat());
+        stage.setWidth(dimension.getWidth());
+        stage.setHeight(dimension.getHeight());
+        stage.xProperty().addListener((observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameXPosition(newValue.intValue()));
+        stage.yProperty().addListener((observable, oldValue, newValue) -> JSkatOptions.instance().setMainFrameYPosition(newValue.intValue()));
 
         placeMainWindow(targetScreen, stage, screenPosition);
 
@@ -158,11 +159,11 @@ public class JSkatFX extends Application {
 
         final ImageView splashScreenImage = new ImageView(
                 new Image(ClassLoader.getSystemResourceAsStream("org/jskat/gui/img/gui/splash.png")));
-        ProgressBar splashScreenProgressBar = new ProgressBar();
+        final ProgressBar splashScreenProgressBar = new ProgressBar();
         splashScreenProgressBar.setPrefWidth(SPLASH_WIDTH);
-        Label splashScreenProgressText = new Label("Loading JSkat...");
+        final Label splashScreenProgressText = new Label("Loading JSkat...");
         splashScreenProgressText.setAlignment(Pos.CENTER);
-        VBox splashScreenLayout = new VBox();
+        final VBox splashScreenLayout = new VBox();
         splashScreenLayout.getChildren().addAll(splashScreenImage, splashScreenProgressBar, splashScreenProgressText);
         splashScreenLayout.setStyle("-fx-padding: 5; -fx-spacing: 5; -fx-border-width:2;");
         splashScreenLayout.setEffect(new DropShadow());

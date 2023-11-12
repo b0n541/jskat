@@ -1,7 +1,7 @@
 package org.jskat.control.iss;
 
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
+import org.jskat.data.GameContract;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.Trick;
 import org.jskat.data.iss.*;
@@ -144,7 +144,7 @@ public class MessageParser {
             info.setType(MoveType.SHOW_CARDS);
             if (move.length() > 2) {
                 // declarer cards follow, SC could also stand alone
-                info.setOuvertCards(parseSkatCards(move.substring(move.indexOf(".") + 1)));
+                info.setRevealedCards(parseSkatCards(move.substring(move.indexOf(".") + 1)));
             }
         } else if (move.startsWith("LE.")) {
             // one player left the table during the game
@@ -189,7 +189,7 @@ public class MessageParser {
                     } else {
                         // game announcement
                         info.setType(MoveType.GAME_ANNOUNCEMENT);
-                        parseGameAnnoucement(info, move);
+                        parseGameAnnouncement(info, move);
                     }
                 }
             }
@@ -242,15 +242,11 @@ public class MessageParser {
      * [H] (hand, not given if O + trump game) [S] (schneider announced, only in
      * H games, not if O or Z) [Z] (schwarz announced, only in H games)
      */
-    private static GameAnnouncement parseGameAnnoucement(
-            final MoveInformation info, final String move) {
+    private static void parseGameAnnouncement(final MoveInformation info, final String move) {
 
         final StringTokenizer annToken = new StringTokenizer(move, ".");
         final String gameTypeString = annToken.nextToken();
 
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-
-        // at first the game type
         GameType gameType = null;
         if (gameTypeString.startsWith("G")) {
 
@@ -276,78 +272,69 @@ public class MessageParser {
 
             gameType = GameType.NULL;
         }
-        factory.setGameType(gameType);
 
-        boolean handGame = false;
-        boolean ouvertGame = false;
-        boolean schwarzGame = false;
+        boolean hand = false;
+        boolean schneider = false;
+        boolean schwarz = false;
+        boolean ouvert = false;
+
         // parse other game modifiers
         for (int i = 1; i < gameTypeString.length(); i++) {
-
-            final char mod = gameTypeString.charAt(i);
-
-            if (mod == 'O') {
-
-                factory.setOuvert(Boolean.TRUE);
-                ouvertGame = true;
-
-            } else if (mod == 'H') {
-
-                factory.setHand(Boolean.TRUE);
-                handGame = true;
-            } else if (mod == 'S') {
-
-                factory.setSchneider(Boolean.TRUE);
-            } else if (mod == 'Z') {
-
-                factory.setSchwarz(Boolean.TRUE);
-                schwarzGame = true;
+            switch (gameTypeString.charAt(i)) {
+                case 'O' -> {
+                    ouvert = true;
+                    // FIXME this should be moved to the GameContract record initialization
+                    if (GameType.GRAND_SUIT.contains(gameType)) {
+                        hand = true;
+                        schneider = true;
+                        schwarz = true;
+                    }
+                }
+                case 'H' -> hand = true;
+                case 'S' -> schneider = true;
+                case 'Z' -> {
+                    schwarz = true;
+                    // FIXME this should be moved to the GameContract record initialization
+                    schneider = true;
+                }
+                default -> log.warn("Unknown game modifier.");
             }
         }
 
-        if (gameType != GameType.NULL && handGame && schwarzGame) {
-            factory.setSchneider(true);
-        }
-        if (gameType != GameType.NULL && ouvertGame) {
-            factory.setHand(true);
-            handGame = true;
-        }
-        if (gameType != GameType.NULL && ouvertGame && handGame) {
-            factory.setSchneider(true);
-            factory.setSchwarz(true);
-        }
+        final CardList discardedCards = new CardList();
+        final CardList ouvertCards = new CardList();
 
         if (annToken.hasMoreTokens()) {
-
-            final CardList showedCards = new CardList();
+            final CardList cards = new CardList();
 
             while (annToken.hasMoreTokens()) {
-                showedCards.add(Card.getCardFromString(annToken.nextToken()));
+                cards.add(Card.getCardFromString(annToken.nextToken()));
             }
 
-            final CardList discardedCards = new CardList();
-            final CardList ouvertCards = new CardList();
-
-            if (handGame) {
-                ouvertCards.addAll(showedCards);
-            } else if (showedCards.size() == 2) {
-                discardedCards.addAll(showedCards);
+            if (hand) {
+                ouvertCards.addAll(cards);
+            } else if (cards.size() == 2) {
+                discardedCards.addAll(cards);
             } else {
-                discardedCards.add(showedCards.get(0));
-                discardedCards.add(showedCards.get(1));
+                discardedCards.add(cards.get(0));
+                discardedCards.add(cards.get(1));
 
-                for (int i = 2; i < showedCards.size(); i++) {
-                    ouvertCards.add(showedCards.get(i));
+                for (int i = 2; i < cards.size(); i++) {
+                    ouvertCards.add(cards.get(i));
                 }
             }
-
-            info.setOuvertCards(ouvertCards);
-            factory.setDiscardedCards(discardedCards);
         }
 
-        final GameAnnouncement ann = factory.getAnnouncement();
-        info.setGameAnnouncement(ann);
-        return ann;
+        info.setGameAnnouncement(
+                new GameAnnouncement(
+                        new GameContract(
+                                gameType,
+                                hand,
+                                schneider,
+                                schwarz,
+                                ouvert,
+                                ouvertCards),
+                        discardedCards));
     }
 
     private static List<CardList> parseCardDeal(final String move) {
@@ -625,16 +612,16 @@ public class MessageParser {
             final int matadors = Integer.parseInt(token.substring(2));
 
             gameData.getGameResult().setPlayWithJacks(matadors > 0);
-            gameData.getGameResult().setMultiplier(Math.abs(matadors));
+            gameData.getGameResult().setMatadors(Math.abs(matadors));
 
         } else if ("overbid".equals(token)) {
 
-            gameData.getResult().setOverBidded(true);
+            gameData.getResult().setOverBid(true);
 
         } else if (token.startsWith("p:")) {
 
             int declarerPoints = 0;
-            if (GameType.NULL != gameData.getAnnoucement().getGameType() || gameData.isGameLost()) {
+            if (GameType.NULL != gameData.getAnnouncement().contract().gameType() || gameData.isGameLost()) {
                 declarerPoints = Integer.parseInt(token.substring(2));
             }
             gameData.setDeclarerScore(declarerPoints);

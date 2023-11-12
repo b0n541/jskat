@@ -83,12 +83,11 @@ public interface SkatRule {
     Player calculateTrickWinner(GameType gameType, Trick trick);
 
     /**
-     * calculates the multiplier of a card list with regard to the ruleset
-     *
-     * @param gameData Game data
-     * @return the multiplier for bidding and game announcement
+     * Calculates the number of matadors (Jacks and trump cards in a row without gaps).
+     * <p>
+     * return Number of matadors
      */
-    int getMultiplier(SkatGameData gameData);
+    int getMatadors(SkatGameData gameData);
 
     /**
      * Checks whether the game is played with jacks or without

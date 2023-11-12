@@ -12,12 +12,17 @@ public class GrandRule extends SuitGrandRule {
     /**
      * {@inheritDoc}
      */
-    @Override
-    public int getMultiplier(CardList cards, GameType gameType) {
+    public int getBaseMultiplier(final CardList cards, final GameType gameType) {
         if (gameType != GameType.GRAND) {
             throw new IllegalArgumentException("Wrong ruleset - " + gameType);
         }
-        int result = 1;
+
+        return getMatadors(cards, gameType) + 1;
+    }
+
+    public int getMatadors(final CardList cards, final GameType gameType) {
+        int result = 0;
+
         if (cards.contains(Card.CJ)) {
             result++;
             if (cards.contains(Card.SJ)) {
@@ -41,6 +46,7 @@ public class GrandRule extends SuitGrandRule {
                 }
             }
         }
+
         return result;
     }
 }

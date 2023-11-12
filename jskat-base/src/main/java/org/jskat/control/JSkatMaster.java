@@ -308,18 +308,17 @@ public class JSkatMaster {
                                 log.warn("No discarded cards found for " + command);
                             }
                         } else // player did game announcement
-                            // FIXME (jan 02.11.2010) Discarded cards are sent with the
-                            // game announcement to ISS
                             if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
-                                if (source instanceof final GameAnnouncement gameAnnouncement) {
-                                    issControl.sendGameAnnouncementMove(tableName, gameAnnouncement);
+                                if (source instanceof final GameAnnouncement announcement) {
+                                    issControl.sendGameAnnouncementMove(tableName, announcement);
                                 } else {
                                     log.warn("No game announcement found for " + command);
                                 }
-                            } else if (JSkatAction.PLAY_CARD.toString().equals(command) && source instanceof final Card nextCard) {
+                            } else if (JSkatAction.PLAY_CARD.toString().equals(command)
+                                    && source instanceof final Card nextCard) {
                                 issControl.sendCardMove(tableName, nextCard);
                             } else {
-                                log.error("Unknown action event occured: " + command + " from " + source);
+                                log.error("Unknown action event occurred: " + command + " from " + source);
                             }
     }
 

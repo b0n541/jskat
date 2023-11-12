@@ -2,7 +2,7 @@ package org.jskat.util.rule;
 
 import org.jskat.AbstractJSkatTest;
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
+import org.jskat.data.GameContract;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.Trick;
 import org.jskat.util.GameType;
@@ -19,27 +19,23 @@ import static org.junit.jupiter.api.Assertions.*;
 public class RamschRuleTest extends AbstractJSkatTest {
 
     private SkatGameData data;
-    private GameAnnouncementFactory factory;
 
-    private static final SkatRule ramschRules = SkatRuleFactory.getSkatRules(GameType.RAMSCH);
+    private static final RamschRule ramschRules = (RamschRule) SkatRuleFactory.getSkatRules(GameType.RAMSCH);
 
     /**
      * {@inheritDoc}
      */
     @BeforeEach
     public void initialize() {
-
         data = new SkatGameData();
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(GameType.RAMSCH);
-        data.setAnnouncement(factory.getAnnouncement());
+        data.setAnnouncement(new GameAnnouncement(new GameContract(GameType.RAMSCH)));
     }
 
     @Test
     public void testWrongGameData_NoAnnouncement() {
         assertThrows(IllegalStateException.class, () -> {
             data = new SkatGameData();
-            data.getRamschLoosers();
+            data.getRamschLosers();
         });
     }
 
@@ -47,12 +43,9 @@ public class RamschRuleTest extends AbstractJSkatTest {
     public void testWrongGameData_NoRamschAnnouncement() {
         assertThrows(IllegalStateException.class, () -> {
             data = new SkatGameData();
-            data.setDeclarer(Player.FOREHAND);
-            final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-            factory.setGameType(GameType.CLUBS);
-            data.setAnnouncement(factory.getAnnouncement());
+            data.setAnnouncement(new GameAnnouncement(new GameContract(GameType.CLUBS).withHand()));
 
-            data.getRamschLoosers();
+            data.getRamschLosers();
         });
     }
 
@@ -73,7 +66,7 @@ public class RamschRuleTest extends AbstractJSkatTest {
         data.finishRamschGame();
 
         assertNull(data.getDeclarer());
-        assertThat(data.getRamschLoosers()).containsExactlyInAnyOrder(Player.FOREHAND);
+        assertThat(data.getRamschLosers()).containsExactlyInAnyOrder(Player.FOREHAND);
     }
 
     /**
@@ -93,7 +86,7 @@ public class RamschRuleTest extends AbstractJSkatTest {
         data.finishRamschGame();
 
         assertNull(data.getDeclarer());
-        assertThat(data.getRamschLoosers()).containsExactlyInAnyOrder(Player.MIDDLEHAND);
+        assertThat(data.getRamschLosers()).containsExactlyInAnyOrder(Player.MIDDLEHAND);
     }
 
     /**
@@ -113,7 +106,7 @@ public class RamschRuleTest extends AbstractJSkatTest {
         data.finishRamschGame();
 
         assertNull(data.getDeclarer());
-        assertThat(data.getRamschLoosers()).containsExactlyInAnyOrder(Player.REARHAND);
+        assertThat(data.getRamschLosers()).containsExactlyInAnyOrder(Player.REARHAND);
     }
 
     /**
@@ -133,7 +126,7 @@ public class RamschRuleTest extends AbstractJSkatTest {
         data.finishRamschGame();
 
         assertNull(data.getDeclarer());
-        assertThat(data.getRamschLoosers()).containsExactlyInAnyOrder(Player.FOREHAND, Player.MIDDLEHAND);
+        assertThat(data.getRamschLosers()).containsExactlyInAnyOrder(Player.FOREHAND, Player.MIDDLEHAND);
     }
 
     /**
@@ -153,7 +146,7 @@ public class RamschRuleTest extends AbstractJSkatTest {
         data.finishRamschGame();
 
         assertNull(data.getDeclarer());
-        assertThat(data.getRamschLoosers()).containsExactlyInAnyOrder(Player.MIDDLEHAND, Player.REARHAND);
+        assertThat(data.getRamschLosers()).containsExactlyInAnyOrder(Player.MIDDLEHAND, Player.REARHAND);
     }
 
     /**
@@ -185,7 +178,7 @@ public class RamschRuleTest extends AbstractJSkatTest {
         data.finishRamschGame();
 
         assertNull(data.getDeclarer());
-        assertThat(data.getRamschLoosers()).containsExactlyInAnyOrder(Player.MIDDLEHAND, Player.REARHAND);
+        assertThat(data.getRamschLosers()).containsExactlyInAnyOrder(Player.MIDDLEHAND, Player.REARHAND);
     }
 
     /**
@@ -205,7 +198,7 @@ public class RamschRuleTest extends AbstractJSkatTest {
         data.finishRamschGame();
 
         assertNull(data.getDeclarer());
-        assertThat(data.getRamschLoosers()).containsExactlyInAnyOrder(Player.FOREHAND, Player.REARHAND);
+        assertThat(data.getRamschLosers()).containsExactlyInAnyOrder(Player.FOREHAND, Player.REARHAND);
     }
 
     /**
@@ -225,25 +218,25 @@ public class RamschRuleTest extends AbstractJSkatTest {
         data.finishRamschGame();
 
         assertNull(data.getDeclarer());
-        assertThat(data.getRamschLoosers()).containsExactlyInAnyOrder(Player.FOREHAND, Player.MIDDLEHAND, Player.REARHAND);
+        assertThat(data.getRamschLosers()).containsExactlyInAnyOrder(Player.FOREHAND, Player.MIDDLEHAND, Player.REARHAND);
     }
 
     @Test
     public void testGetMultiplierGeschoben() {
 
-        assertThat(ramschRules.getMultiplier(data)).isEqualTo(1);
+        assertThat(ramschRules.getBaseMultiplier(data)).isEqualTo(1);
 
         data.addGeschoben();
 
-        assertThat(ramschRules.getMultiplier(data)).isEqualTo(2);
+        assertThat(ramschRules.getBaseMultiplier(data)).isEqualTo(2);
 
         data.addGeschoben();
 
-        assertThat(ramschRules.getMultiplier(data)).isEqualTo(4);
+        assertThat(ramschRules.getBaseMultiplier(data)).isEqualTo(4);
 
         data.addGeschoben();
 
-        assertThat(ramschRules.getMultiplier(data)).isEqualTo(8);
+        assertThat(ramschRules.getBaseMultiplier(data)).isEqualTo(8);
     }
 
     /**
@@ -252,7 +245,7 @@ public class RamschRuleTest extends AbstractJSkatTest {
     @Test
     public void testMultiplierJungfrau() {
 
-        assertThat(ramschRules.getMultiplier(data)).isEqualTo(1);
+        assertThat(ramschRules.getBaseMultiplier(data)).isEqualTo(1);
 
         for (int i = 0; i < 10; i++) {
             final Trick trick = new Trick(0, Player.FOREHAND);
@@ -266,7 +259,7 @@ public class RamschRuleTest extends AbstractJSkatTest {
 
         data.setJungfrauDurchmarsch();
 
-        assertThat(ramschRules.getMultiplier(data)).isEqualTo(2);
+        assertThat(ramschRules.getBaseMultiplier(data)).isEqualTo(2);
         assertTrue(data.isJungfrau());
         assertFalse(data.isDurchmarsch());
     }
@@ -277,7 +270,7 @@ public class RamschRuleTest extends AbstractJSkatTest {
     @Test
     public void testMultiplierGeschobenJungfrau() {
 
-        assertThat(ramschRules.getMultiplier(data)).isEqualTo(1);
+        assertThat(ramschRules.getBaseMultiplier(data)).isEqualTo(1);
 
         data.addGeschoben();
         data.addGeschoben();
@@ -295,7 +288,7 @@ public class RamschRuleTest extends AbstractJSkatTest {
 
         data.setJungfrauDurchmarsch();
 
-        assertThat(ramschRules.getMultiplier(data)).isEqualTo(16);
+        assertThat(ramschRules.getBaseMultiplier(data)).isEqualTo(16);
         assertTrue(data.isJungfrau());
         assertFalse(data.isDurchmarsch());
     }
@@ -306,7 +299,7 @@ public class RamschRuleTest extends AbstractJSkatTest {
     @Test
     public void testMultiplierDurchmarsch() {
 
-        assertThat(ramschRules.getMultiplier(data)).isEqualTo(1);
+        assertThat(ramschRules.getBaseMultiplier(data)).isEqualTo(1);
 
         // all tricks are made by forehand player
         for (int i = 0; i < 10; i++) {
@@ -317,7 +310,7 @@ public class RamschRuleTest extends AbstractJSkatTest {
 
         data.setJungfrauDurchmarsch();
 
-        assertThat(ramschRules.getMultiplier(data)).isEqualTo(2);
+        assertThat(ramschRules.getBaseMultiplier(data)).isEqualTo(2);
         assertTrue(data.isJungfrau());
         assertTrue(data.isDurchmarsch());
     }

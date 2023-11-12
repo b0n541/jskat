@@ -13,21 +13,21 @@ public final class GameAnnouncementEvent extends AbstractPlayerMoveEvent {
 
     public final GameAnnouncement announcement;
 
-    public GameAnnouncementEvent(Player player, GameAnnouncement announcement) {
+    public GameAnnouncementEvent(final Player player, final GameAnnouncement announcement) {
         super(player);
         this.announcement = announcement;
     }
 
     @Override
-    public void processForward(SkatGameData data) {
+    public void processForward(final SkatGameData data) {
         data.setDeclarer(player);
         data.setAnnouncement(announcement);
     }
 
     @Override
-    public void processBackward(SkatGameData data) {
-        data.setAnnouncement(null);
+    public void processBackward(final SkatGameData data) {
         data.setDeclarer(null);
+        data.setAnnouncement(null);
     }
 
     @Override
@@ -41,7 +41,7 @@ public final class GameAnnouncementEvent extends AbstractPlayerMoveEvent {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }

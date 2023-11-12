@@ -3,10 +3,11 @@ package org.jskat.util.rule;
 
 import org.jskat.AbstractJSkatTest;
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
+import org.jskat.data.GameContract;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.Trick;
 import org.jskat.util.Card;
+import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,18 +22,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class NullRuleTest extends AbstractJSkatTest {
 
+    private static final CardList DISCARDED_CARDS = CardList.of(Card.CA, Card.SA);
     private SkatGameData data;
-    private GameAnnouncementFactory factory;
+    private GameContract contract;
 
+    private final CardList OUVERT_CARDS = CardList.of(
+            Card.CJ, Card.SJ, Card.HJ, Card.DJ,
+            Card.CA, Card.SA, Card.HA, Card.DA,
+            Card.CT, Card.ST);
     private static final SkatRule nullRules = SkatRuleFactory.getSkatRules(GameType.NULL);
 
     @BeforeEach
     public void initialize() {
-
         data = new SkatGameData();
-        factory = GameAnnouncement.getFactory();
-        factory.setGameType(GameType.NULL);
         data.setDeclarer(Player.FOREHAND);
+        contract = new GameContract(GameType.NULL);
     }
 
     private void playWinningTricks() {
@@ -53,8 +57,7 @@ public class NullRuleTest extends AbstractJSkatTest {
      */
     @Test
     public void calcGameWon() {
-
-        data.setAnnouncement(factory.getAnnouncement());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         playWinningTricks();
         data.calcResult();
         assertTrue(data.getResult().isWon());
@@ -65,8 +68,7 @@ public class NullRuleTest extends AbstractJSkatTest {
      */
     @Test
     public void calcGameLost() {
-
-        data.setAnnouncement(factory.getAnnouncement());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         playWinningTricks();
         playLoosingTrick();
         data.calcResult();
@@ -78,9 +80,7 @@ public class NullRuleTest extends AbstractJSkatTest {
      */
     @Test
     public void calcGameResultGameWon() {
-
-        factory.setHand(false);
-        data.setAnnouncement(factory.getAnnouncement());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         playWinningTricks();
         data.calcResult();
         assertThat(data.getResult().getGameValue()).isEqualTo(23);
@@ -88,9 +88,7 @@ public class NullRuleTest extends AbstractJSkatTest {
 
     @Test
     public void calcGameResultGameWonContra() {
-
-        factory.setHand(false);
-        data.setAnnouncement(factory.getAnnouncement());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setContra(true);
         playWinningTricks();
         data.calcResult();
@@ -99,9 +97,7 @@ public class NullRuleTest extends AbstractJSkatTest {
 
     @Test
     public void calcGameResultGameWonContraRe() {
-
-        factory.setHand(false);
-        data.setAnnouncement(factory.getAnnouncement());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setContra(true);
         data.setRe(true);
         playWinningTricks();
@@ -114,9 +110,7 @@ public class NullRuleTest extends AbstractJSkatTest {
      */
     @Test
     public void calcGameResultGameWonHand() {
-
-        factory.setHand(true);
-        data.setAnnouncement(factory.getAnnouncement());
+        data.setAnnouncement(new GameAnnouncement(contract.withHand()));
         playWinningTricks();
         data.calcResult();
         assertThat(data.getResult().getGameValue()).isEqualTo(35);
@@ -127,10 +121,7 @@ public class NullRuleTest extends AbstractJSkatTest {
      */
     @Test
     public void calcGameResultGameWonOuvert() {
-
-        factory.setHand(false);
-        factory.setOuvert(Boolean.TRUE);
-        data.setAnnouncement(factory.getAnnouncement());
+        data.setAnnouncement(new GameAnnouncement(contract.withOuvert(OUVERT_CARDS), DISCARDED_CARDS));
         playWinningTricks();
         data.calcResult();
         assertThat(data.getResult().getGameValue()).isEqualTo(46);
@@ -141,9 +132,7 @@ public class NullRuleTest extends AbstractJSkatTest {
      */
     @Test
     public void calcGameResultGameWonHandOuvert() {
-        factory.setHand(true);
-        factory.setOuvert(true);
-        data.setAnnouncement(factory.getAnnouncement());
+        data.setAnnouncement(new GameAnnouncement(contract.withHand().withOuvert(OUVERT_CARDS)));
         playWinningTricks();
         data.calcResult();
         assertThat(data.getResult().getGameValue()).isEqualTo(59);
@@ -154,9 +143,7 @@ public class NullRuleTest extends AbstractJSkatTest {
      */
     @Test
     public void calcGameResultGameLost() {
-
-        factory.setHand(false);
-        data.setAnnouncement(factory.getAnnouncement());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         playWinningTricks();
         playLoosingTrick();
         data.calcResult();
@@ -165,9 +152,7 @@ public class NullRuleTest extends AbstractJSkatTest {
 
     @Test
     public void calcGameResultGameLostContra() {
-
-        factory.setHand(false);
-        data.setAnnouncement(factory.getAnnouncement());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setContra(true);
         playWinningTricks();
         playLoosingTrick();
@@ -177,9 +162,7 @@ public class NullRuleTest extends AbstractJSkatTest {
 
     @Test
     public void calcGameResultGameLostContraRe() {
-
-        factory.setHand(false);
-        data.setAnnouncement(factory.getAnnouncement());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         data.setContra(true);
         data.setRe(true);
         playWinningTricks();
@@ -202,8 +185,7 @@ public class NullRuleTest extends AbstractJSkatTest {
      */
     @Test
     public void calcGameResultGameLostHand() {
-        factory.setHand(true);
-        data.setAnnouncement(factory.getAnnouncement());
+        data.setAnnouncement(new GameAnnouncement(contract.withHand()));
         playWinningTricks();
         playLoosingTrick();
         data.calcResult();
@@ -215,10 +197,7 @@ public class NullRuleTest extends AbstractJSkatTest {
      */
     @Test
     public void calcGameResultGameLostOuvert() {
-
-        factory.setHand(false);
-        factory.setOuvert(Boolean.TRUE);
-        data.setAnnouncement(factory.getAnnouncement());
+        data.setAnnouncement(new GameAnnouncement(contract.withOuvert(OUVERT_CARDS), DISCARDED_CARDS));
         playWinningTricks();
         playLoosingTrick();
         data.calcResult();
@@ -230,9 +209,7 @@ public class NullRuleTest extends AbstractJSkatTest {
      */
     @Test
     public void calcGameResultGameLostHandOuvert() {
-        factory.setHand(true);
-        factory.setOuvert(true);
-        data.setAnnouncement(factory.getAnnouncement());
+        data.setAnnouncement(new GameAnnouncement(contract.withHand().withOuvert(OUVERT_CARDS)));
         playWinningTricks();
         playLoosingTrick();
         data.calcResult();
@@ -244,10 +221,8 @@ public class NullRuleTest extends AbstractJSkatTest {
      */
     @Test
     public void testOverbid() {
-
         data.addPlayerBid(Player.FOREHAND, 24);
-        factory.setHand(false);
-        data.setAnnouncement(factory.getAnnouncement());
+        data.setAnnouncement(new GameAnnouncement(contract, DISCARDED_CARDS));
         playWinningTricks();
         data.calcResult();
         assertThat(data.getResult().getGameValue()).isEqualTo(-92);

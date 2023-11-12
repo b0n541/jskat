@@ -1,8 +1,7 @@
 package org.jskat.ai.mjl;
 
 import org.jskat.ai.AbstractAIPlayer;
-import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
+import org.jskat.data.GameContract;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.slf4j.Logger;
@@ -63,7 +62,7 @@ public class AIPlayerMJL extends AbstractAIPlayer {
         if (maxBidValue < 0) {
             maxBidValue = new Bidding(knowledge.getOwnCards()).getMaxBid();
         }
-        boolean result = !(maxBidValue < 18) && maxBidValue >= currBidValue;
+        final boolean result = !(maxBidValue < 18) && maxBidValue >= currBidValue;
         if (!result) {
             aiPlayer = new OpponentPlayer(knowledge.getOwnCards(), playerName);
         }
@@ -88,11 +87,8 @@ public class AIPlayerMJL extends AbstractAIPlayer {
      * @see org.jskat.ai.JSkatPlayer#announceGame()
      */
     @Override
-    public GameAnnouncement announceGame() {
-        GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(new Bidding(knowledge.getOwnCards())
-                .getSuggestedGameType());
-        return factory.getAnnouncement();
+    public GameContract announceGame() {
+        return new GameContract(new Bidding(knowledge.getOwnCards()).getSuggestedGameType());
     }
 
     /*
@@ -148,14 +144,14 @@ public class AIPlayerMJL extends AbstractAIPlayer {
                 + ") ----------------------------------");
         log.debug(".playCard(): my position: " + knowledge.getPlayerPosition()
                 + ", single player: " + knowledge.getDeclarer());
-        Card toPlay = aiPlayer.playNextCard(knowledge);
+        final Card toPlay = aiPlayer.playNextCard(knowledge);
         // make sure, that there is a card
         if (toPlay != null) {
             return toPlay;
         }
         // if there is none, just play the first valid card
         log.debug("no card returned from AIPlayer - just taking the first valid card");
-        CardList result = getPlayableCards(this.knowledge.getTrickCards());
+        final CardList result = getPlayableCards(this.knowledge.getTrickCards());
         if (result.size() < 1) {
             log.warn("no playable cards - shouldn't be possible!");
             log.debug("my cards: " + knowledge.getOwnCards() + ", trick: "

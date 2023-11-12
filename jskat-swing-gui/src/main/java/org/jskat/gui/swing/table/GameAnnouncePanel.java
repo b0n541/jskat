@@ -4,7 +4,7 @@ import org.jskat.control.JSkatEventBus;
 import org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent;
 import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
+import org.jskat.data.GameContract;
 import org.jskat.data.JSkatOptions;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.CardList;
@@ -140,11 +140,11 @@ class GameAnnouncePanel extends JPanel {
                 if (getSelectedGameType() != null) {
 
                     try {
-                        final GameAnnouncement ann = getGameAnnouncement();
-                        if (ann == null) {
+                        final GameAnnouncement announcement = getGameAnnouncement();
+                        if (announcement == null) {
                             return;
                         }
-                        e.setSource(ann);
+                        e.setSource(announcement);
                     } catch (final IllegalArgumentException except) {
                         log.error(except.getMessage());
                     }
@@ -157,40 +157,42 @@ class GameAnnouncePanel extends JPanel {
             }
 
             private GameAnnouncement getGameAnnouncement() {
-                final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-                final GameType gameType = getSelectedGameType();
-                factory.setGameType(gameType);
+
+                final var gameType = getSelectedGameType();
+                var contract = new GameContract(gameType);
 
                 if (discardPanel.isUserLookedIntoSkat()) {
 
                     final CardList discardedCards = discardPanel.getDiscardedCards();
+
                     if (discardedCards.size() != 2) {
 
-                        JSkatEventBus.INSTANCE
-                                .post(new InvalidNumberOfCardsInDiscardedSkatEvent());
+                        JSkatEventBus.INSTANCE.post(new InvalidNumberOfCardsInDiscardedSkatEvent());
                         return null;
                     }
-                    factory.setDiscardedCards(discardedCards);
-                    if (GameType.NULL.equals(gameType)
-                            && ouvertBox.isSelected()) {
-                        factory.setOuvert(true);
+                    if (GameType.NULL == gameType && ouvertBox.isSelected()) {
+                        contract = contract.withOuvert(userPanel.cardPanel.getCards());
                     }
+
+                    return new GameAnnouncement(contract, discardedCards);
+
                 } else {
 
                     if (handBox.isSelected()) {
-                        factory.setHand(Boolean.TRUE);
-                    }
-                    if (ouvertBox.isSelected()) {
-                        factory.setOuvert(Boolean.TRUE);
+                        contract = contract.withHand();
                     }
                     if (schneiderBox.isSelected()) {
-                        factory.setSchneider(Boolean.TRUE);
+                        contract = contract.withSchneider();
                     }
                     if (schwarzBox.isSelected()) {
-                        factory.setSchneider(Boolean.TRUE);
+                        contract = contract.withSchwarz();
                     }
+                    if (ouvertBox.isSelected()) {
+                        contract = contract.withOuvert(userPanel.cardPanel.getCards());
+                    }
+
+                    return new GameAnnouncement(contract, CardList.empty());
                 }
-                return factory.getAnnouncement();
             }
 
         });

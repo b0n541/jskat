@@ -1,5 +1,8 @@
 package org.jskat.util;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * Contains all game types
  */
@@ -76,6 +79,27 @@ public enum GameType {
             return null;
         }
     };
+
+    /**
+     * All game types that are announced by a declarer.
+     */
+    public static final Set<GameType> GRAND_SUIT_NULL = Set.of(
+                    GameType.GRAND,
+                    GameType.CLUBS,
+                    GameType.SPADES,
+                    GameType.HEARTS,
+                    GameType.DIAMONDS,
+                    GameType.NULL).stream()
+            .collect(Collectors.toUnmodifiableSet());
+
+    /**
+     * Same as {@link GameType#GRAND_SUIT_NULL} but without NULL games.
+     */
+    public static final Set<GameType> GRAND_SUIT = GRAND_SUIT_NULL.stream()
+            .filter(gameType -> NULL != gameType)
+            .collect(Collectors.toUnmodifiableSet());
+
+    public static final Set<GameType> RAMSCH_PASSED_IN = Set.of(RAMSCH, PASSED_IN);
 
     /**
      * Gets the trump suit

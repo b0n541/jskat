@@ -7,7 +7,7 @@
 plugins {
     id("jskat.kotlin-application-conventions")
 
-    id("org.openjfx.javafxplugin") version "0.0.14"
+    id("org.openjfx.javafxplugin") version "0.1.0"
 }
 
 dependencies {
@@ -16,10 +16,10 @@ dependencies {
 
 javafx {
     modules = listOf("javafx.base", "javafx.fxml", "javafx.web", "javafx.swing")
-    version = "20.0.+"
+    version = "21.0.+"
 }
 
-version = "0.22.0-SNAPSHOT"
+version = "0.23.0-SNAPSHOT"
 
 val mainClassName = "org.jskat.JSkatKt"
 

@@ -5,7 +5,6 @@ import org.jskat.AbstractJSkatTest;
 import org.jskat.ai.rnd.AIPlayerRND;
 import org.jskat.ai.test.*;
 import org.jskat.data.*;
-import org.jskat.data.GameAnnouncement.GameAnnouncementFactory;
 import org.jskat.data.SkatGameData.GameState;
 import org.jskat.data.SkatTableOptions.RuleSet;
 import org.jskat.gui.UnitTestView;
@@ -56,7 +55,7 @@ public class SkatGameTest extends AbstractJSkatTest {
 
     private static void runGame(final SkatGame game) {
         try {
-            CompletableFuture.runAsync(() -> game.run()).get();
+            CompletableFuture.runAsync(game::run).get();
         } catch (final InterruptedException | ExecutionException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -221,9 +220,9 @@ public class SkatGameTest extends AbstractJSkatTest {
         runGame(game);
 
         assertThat(game.getDeclarer()).isEqualTo(Player.FOREHAND);
-        final GameAnnouncement announcement = game.getGameAnnouncement();
-        assertThat(announcement.getGameType()).isEqualTo(GameType.GRAND);
-        assertTrue(announcement.isHand());
+        final GameContract announcement = game.getGameAnnouncement().contract();
+        assertThat(announcement.gameType()).isEqualTo(GameType.GRAND);
+        assertThat(announcement.hand()).isTrue();
 
         final GameSummary summary = game.getGameSummary();
         assertThat(summary.getGameType()).isEqualTo(GameType.GRAND);
@@ -245,9 +244,9 @@ public class SkatGameTest extends AbstractJSkatTest {
         runGame(game);
 
         assertThat(game.getDeclarer()).isEqualTo(Player.MIDDLEHAND);
-        final GameAnnouncement announcement = game.getGameAnnouncement();
-        assertThat(announcement.getGameType()).isEqualTo(GameType.GRAND);
-        assertTrue(announcement.isHand());
+        final GameContract contract = game.getGameAnnouncement().contract();
+        assertThat(contract.gameType()).isEqualTo(GameType.GRAND);
+        assertThat(contract.hand()).isTrue();
 
         final GameSummary summary = game.getGameSummary();
         assertThat(summary.getGameType()).isEqualTo(GameType.GRAND);
@@ -269,9 +268,9 @@ public class SkatGameTest extends AbstractJSkatTest {
         runGame(game);
 
         assertThat(game.getDeclarer()).isEqualTo(Player.REARHAND);
-        final GameAnnouncement announcement = game.getGameAnnouncement();
-        assertThat(announcement.getGameType()).isEqualTo(GameType.GRAND);
-        assertTrue(announcement.isHand());
+        final GameContract contract = game.getGameAnnouncement().contract();
+        assertThat(contract.gameType()).isEqualTo(GameType.GRAND);
+        assertThat(contract.hand()).isTrue();
 
         final GameSummary summary = game.getGameSummary();
         assertThat(summary.getGameType()).isEqualTo(GameType.GRAND);
@@ -297,8 +296,8 @@ public class SkatGameTest extends AbstractJSkatTest {
     private static boolean nullGameEndedPreliminary(final SkatGame game) {
         // in Null games the game might have ended preliminary before all tricks
         // have been played
-        return GameType.NULL.equals(game.getGameAnnouncement().getGameType()) && game
-                .getGameSummary().getTricks().size() < 10;
+        return GameType.NULL == game.getGameAnnouncement().contract().gameType()
+                && game.getGameSummary().getTricks().size() < 10;
     }
 
     private void randomGameAnnouncement(final SkatGame game) {
@@ -306,9 +305,7 @@ public class SkatGameTest extends AbstractJSkatTest {
         game.setCardDeck(deck);
         game.dealCards();
         game.setDeclarer(Player.values()[random.nextInt(Player.values().length)]);
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(getRandomGameType());
-        game.setGameAnnouncement(factory.getAnnouncement());
+        game.setGameAnnouncement(new GameAnnouncement(new GameContract(getRandomGameType()), CardList.of(Card.D7, Card.H7)));
         game.setGameState(GameState.TRICK_PLAYING);
     }
 
@@ -415,9 +412,7 @@ public class SkatGameTest extends AbstractJSkatTest {
         game.setCardDeck(deck);
         game.dealCards();
         game.setDeclarer(Player.MIDDLEHAND);
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(GameType.CLUBS);
-        game.setGameAnnouncement(factory.getAnnouncement());
+        game.setGameAnnouncement(new GameAnnouncement(new GameContract(GameType.CLUBS), CardList.of(Card.SK, Card.S7)));
         game.setGameState(GameState.TRICK_PLAYING);
 
         runGame(game);
@@ -458,9 +453,7 @@ public class SkatGameTest extends AbstractJSkatTest {
         game.setCardDeck(deck);
         game.dealCards();
         game.setDeclarer(Player.FOREHAND);
-        final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-        factory.setGameType(GameType.SPADES);
-        game.setGameAnnouncement(factory.getAnnouncement());
+        game.setGameAnnouncement(new GameAnnouncement(new GameContract(GameType.SPADES), CardList.of(Card.D9, Card.CA)));
         game.setGameState(GameState.TRICK_PLAYING);
 
         runGame(game);

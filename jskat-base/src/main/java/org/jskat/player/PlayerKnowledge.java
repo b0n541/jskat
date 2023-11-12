@@ -1,6 +1,6 @@
 package org.jskat.player;
 
-import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameContract;
 import org.jskat.data.Trick;
 import org.jskat.util.*;
 import org.jskat.util.rule.SkatRule;
@@ -33,6 +33,17 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
         }
         possiblePlayerCards.get(playerPosition).clear();
         possiblePlayerCards.get(playerPosition).addAll(ownCards);
+    }
+
+    /**
+     * Adds card to the hand of the declarer player e.g. when they get revealed in an ouvert game.
+     *
+     * @param cards Cards of the declarer
+     */
+    public void addDeclarerCards(final CardList cards) {
+        for (final Card card : cards) {
+            singlePlayerCards.add(card);
+        }
     }
 
     /**
@@ -132,23 +143,23 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
     }
 
     /**
-     * Set the declarer position
+     * Sets the declarer position.
      *
-     * @param newDeclarer Declarer position
+     * @param declarer Declarer position
      */
-    public void setDeclarer(final Player newDeclarer) {
+    public void setDeclarer(final Player declarer) {
 
-        declarer = newDeclarer;
+        this.declarer = declarer;
     }
 
     /**
-     * Sets the game announcement
+     * Sets the game contract.
      *
-     * @param gameAnn Game announcement to set
+     * @param contract Game contract
      */
-    public void setGame(final GameAnnouncement gameAnn) {
+    public void setContract(final GameContract contract) {
 
-        announcement = gameAnn;
+        this.contract = contract;
         trumpCount = 0;
         if (!GameType.PASSED_IN.equals(getGameType())) {
             for (final Card c : ownCards) {

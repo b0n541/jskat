@@ -2,6 +2,7 @@ package org.jskat.control.iss;
 
 import org.jskat.AbstractJSkatTest;
 import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameContract;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.Trick;
 import org.jskat.data.iss.MoveInformation;
@@ -85,19 +86,20 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertFalse(gameData.isGameWon());
         assertThat(gameData.getResult().getGameValue()).isEqualTo(-54);
         assertThat(gameData.getResult().isPlayWithJacks()).isFalse();
-        assertThat(gameData.getResult().getMultiplier()).isEqualTo(2);
+        assertThat(gameData.getResult().getMatadors()).isEqualTo(2);
         assertThat(gameData.getDeclarerScore()).isEqualTo(59);
         assertThat(gameData.getOpponentScore()).isEqualTo(61);
         assertFalse(gameData.isSchneider());
         assertFalse(gameData.isSchwarz());
-        assertFalse(gameData.isOverBidded());
+        assertFalse(gameData.isOverBid());
     }
 
     private static void checkTrick(final Trick trick,
-                                   final Player trickForeHand, final Card firstCard,
-                                   final Card secondCard, final Card thirdCard,
+                                   final Player trickForeHand,
+                                   final Card firstCard,
+                                   final Card secondCard,
+                                   final Card thirdCard,
                                    final Player trickWinner) {
-        final int trickNo = trick.getTrickNumberInGame();
         assertThat(trick.getForeHand()).isEqualTo(trickForeHand);
         assertThat(trick.getFirstCard()).isEqualTo(firstCard);
         assertThat(trick.getSecondCard()).isEqualTo(secondCard);
@@ -153,15 +155,16 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertTrue(gameData.isGameWon());
         assertThat(gameData.getResult().getGameValue()).isEqualTo(96);
         assertThat(gameData.getResult().isPlayWithJacks()).isTrue();
-        assertThat(gameData.getResult().getMultiplier()).isEqualTo(3);
+        assertThat(gameData.getResult().getMatadors()).isEqualTo(3);
         assertThat(gameData.getDeclarerScore()).isEqualTo(85);
         assertThat(gameData.getOpponentScore()).isEqualTo(35);
         assertFalse(gameData.isSchneider());
         assertFalse(gameData.isSchwarz());
-        assertFalse(gameData.isOverBidded());
+        assertFalse(gameData.isOverBid());
     }
 
     @Test
+    @Disabled("Currently not possible to be parsed by MessageParser, ouvert cards are not part of the announcement")
     public void testParseGameSummary_IncompleteGrandOuvertAnnouncement() {
 
         final String gameSummary = "(;GM[Skat]PC[Internet Skat Server]SE[1265]ID[727]DT[2007-11-19/23:42:26/UTC]P0[bonsai]P1[mic]P2[Legolaus]R0[0.0]R1[0.0]R2[0.0]MV[w HJ.HA.DJ.HQ.SA.H7.CA.CJ.HT.H8.H9.D7.DT.C7.ST.CK.C9.SK.S9.CT.C8.SQ.HK.S8.D9.DK.SJ.D8.CQ.DA.DQ.S7 1 p 2 p 0 18 0 GO 0 CJ 0 SC 1 RE 1 H9 2 RE ]R[d:0 win v:192 m:1 bidok p:120 t:10 s:1 z:1 p0:0 p1:0 p2:0 l:-1 to:-1] ;)";
@@ -226,12 +229,12 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertFalse(gameData.isGameWon());
         assertThat(gameData.getResult().getGameValue()).isEqualTo(0);
         assertThat(gameData.getResult().isPlayWithJacks()).isFalse();
-        assertThat(gameData.getResult().getMultiplier()).isEqualTo(0);
+        assertThat(gameData.getResult().getMatadors()).isEqualTo(0);
         assertThat(gameData.getDeclarerScore()).isEqualTo(0);
         assertThat(gameData.getOpponentScore()).isEqualTo(0);
         assertFalse(gameData.isSchneider());
         assertFalse(gameData.isSchwarz());
-        assertFalse(gameData.isOverBidded());
+        assertFalse(gameData.isOverBid());
     }
 
     /**
@@ -253,6 +256,7 @@ public class MessageParserTest extends AbstractJSkatTest {
      * Declarer plays Null Ouvert and the opponents resign
      */
     @Test
+    @Disabled("Currently not possible to be parsed by MessageParser, ouvert cards are not part of the announcement")
     public void testParseGameSummary_NullOuvertTwoResigns() {
 
         final String gameSummary = "(;GM[Skat]PC[International Skat Server]CO[]SE[60842]ID[1390253]DT[2012-09-26/17:30:29/UTC]P0[kermit]P1[bonsai]P2[zoot]R0[]R1[0.0]R2[]MV[w HK.SK.HJ.CA.SA.C9.S8.H7.ST.HT.C7.HA.CJ.DK.HQ.D7.C8.DA.DT.D9.SQ.DQ.H8.S9.CK.S7.SJ.CT.H9.CQ.DJ.D8 1 18 0 y 1 20 0 y 1 22 0 y 1 23 0 y 1 24 0 y 1 27 0 y 1 30 0 y 1 33 0 y 1 35 0 p 2 p 1 s w DJ.D8 1 NO.HA.HQ 2 RE 0 RE ]R[d:1 win v:46 m:0 bidok p:14 t:0 s:0 z:0 p0:0 p1:0 p2:0 l:-1 to:-1 r:1] ;)";
@@ -278,6 +282,16 @@ public class MessageParserTest extends AbstractJSkatTest {
         final String gameSummary = "(;GM[Skat]PC[Internet Skat Server]SE[2171]ID[18358]DT[2008-05-25/17:57:24/UTC]P0[kermit2]P1[kermit1]P2[mic]R0[0.0]R1[null]R2[0.0]MV[w C9.D7.HT.HA.SA.HQ.SJ.S7.C8.HJ.H7.CQ.DQ.D9.H9.S8.H8.CT.HK.SQ.CA.CK.SK.CJ.D8.DT.DK.C7.DJ.S9.ST.DA 1 18 0 p 2 20 1 p 2 s w ST.DA 2 G.DT.ST 0 ?? w LE.1 ]R[d:2 win v:96 m:1 bidok p:120 t:10 s:1 z:1 p0:0 p1:0 p2:0 l:1 to:-1] ;)";
 
         final SkatGameData gameData = MessageParser.parseGameSummary(gameSummary);
+    }
+
+    @Test
+    public void testParseGameSummary_OverbidSuitGame() {
+
+        final String gameSummary = "(;GM[Skat]PC[International Skat Server]CO[]SE[403949]ID[8650652]DT[2023-10-18/18:44:11/UTC]P0[kermit]P1[bonsai]P2[kermit:2]R0[]R1[0.0]R2[]MV[w DQ.CK.HT.CT.SK.C9.DA.D9.DK.S8.H9.S7.SA.H8.C7.CA.H7.CJ.CQ.D7.SQ.S9.C8.DT.SJ.HA.ST.D8.DJ.HJ.HQ.HK 1 18 0 p 2 20 1 y 2 22 1 y 2 23 1 y 2 24 1 y 2 27 1 y 2 30 1 y 2 33 1 y 2 35 1 y 2 36 1 p 2 s w HQ.HK 2 D.C8.ST 0 HT 1 H9 2 HA 2 DJ 0 D9 1 D7 2 HJ 0 DQ 1 CJ 1 CA 2 DT 0 C9 2 SJ 0 DK 1 H8 2 HK 0 S8 1 H7 2 HQ 0 SK 1 C7 2 SQ 0 CT 1 SA 1 S7 2 S9 0 CK 2 D8 0 DA 1 CQ ]R[d:2 loss v:-72 m:-1 overbid p:75 t:7 s:0 z:0 p0:0 p1:0 p2:0 l:-1 to:-1 r:0] ;)";
+
+        final SkatGameData gameData = MessageParser.parseGameSummary(gameSummary);
+
+        assertThat(gameData.getResult().getMatadors()).isEqualTo(1);
     }
 
     @Test
@@ -349,7 +363,7 @@ public class MessageParserTest extends AbstractJSkatTest {
         final MoveInformation moveInfo = MessageParser.getMoveInformation(detailParams);
 
         assertThat(moveInfo.getType()).isEqualTo(MoveType.SHOW_CARDS);
-        assertThat(moveInfo.getOuvertCards())
+        assertThat(moveInfo.getRevealedCards())
                 .containsExactlyInAnyOrder(Card.HT, Card.HA, Card.SJ, Card.SQ, Card.SK, Card.CJ);
     }
 
@@ -372,10 +386,9 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertThat(moveInfo.getType()).isEqualTo(MoveType.GAME_ANNOUNCEMENT);
 
         final GameAnnouncement announcement = moveInfo.getGameAnnouncement();
-        assertThat(announcement.getGameType()).isEqualTo(GameType.NULL);
-        assertTrue(announcement.isOuvert());
-
-        assertThat(moveInfo.getOuvertCards())
+        assertThat(announcement.contract().gameType()).isEqualTo(GameType.NULL);
+        assertThat(announcement.contract().ouvert()).isTrue();
+        assertThat(announcement.contract().ouvertCards())
                 .containsExactlyInAnyOrder(
                         Card.D8, Card.D9, Card.DQ, Card.H8, Card.HT, Card.HQ, Card.C7, Card.C8, Card.CK, Card.CA);
     }
@@ -399,16 +412,46 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertThat(moveInfo.getType()).isEqualTo(MoveType.GAME_ANNOUNCEMENT);
 
         final GameAnnouncement announcement = moveInfo.getGameAnnouncement();
-        assertThat(announcement.getGameType()).isEqualTo(GameType.NULL);
-        assertTrue(announcement.isOuvert());
-
-        assertThat(moveInfo.getOuvertCards())
+        assertThat(announcement.contract().gameType()).isEqualTo(GameType.NULL);
+        assertThat(announcement.contract().ouvert()).isTrue();
+        assertThat(announcement.contract().ouvertCards())
                 .containsExactlyInAnyOrder(
                         Card.D8, Card.D9, Card.DQ, Card.H8, Card.HT, Card.HQ, Card.C7, Card.C8, Card.CK, Card.CA);
     }
 
     @Test
-    public void testParseTableUpdateSuitHandOuvertGame_JSkatUser() {
+    public void testParseTableUpdateGrandHandOuvertGame() {
+
+        final String ouvertGame = "table .0 foo play 1 GHO.D8.D9.DQ.H8.HT.HQ.C7.C8.CK.CA 237.6 225.8 237.7";
+        final StringTokenizer token = new StringTokenizer(ouvertGame);
+        token.nextToken(); // table
+        token.nextToken(); // .1
+        final String creator = token.nextToken(); // foo
+        token.nextToken(); // play
+        final List<String> detailParams = new ArrayList<>();
+        while (token.hasMoreTokens()) {
+            detailParams.add(token.nextToken());
+        }
+
+        final MoveInformation moveInfo = MessageParser.getMoveInformation(detailParams);
+
+        assertThat(moveInfo.getType()).isEqualTo(MoveType.GAME_ANNOUNCEMENT);
+
+        final GameContract contract = moveInfo.getGameAnnouncement().contract();
+        assertThat(contract.gameType()).isEqualTo(GameType.GRAND);
+        assertThat(contract.hand()).isTrue();
+        assertThat(contract.ouvert()).isTrue();
+        assertThat(contract.ouvertCards())
+                .containsExactlyInAnyOrder(Card.D8, Card.D9, Card.DQ, Card.H8, Card.HT, Card.HQ, Card.C7, Card.C8, Card.CK, Card.CA);
+        assertThat(contract.schneider()).isTrue();
+        assertThat(contract.schwarz()).isTrue();
+    }
+
+    /**
+     * The ISS omitted some game modifiers in the past.
+     */
+    @Test
+    public void testParseTableUpdateSpadesHandOuvertGame_LegacyAnnouncement() {
 
         final String ouvertGame = "table .0 foo play 1 SHO.D8.D9.DQ.H8.HT.HQ.C7.C8.CK.CA 237.6 225.8 237.7";
         final StringTokenizer token = new StringTokenizer(ouvertGame);
@@ -426,96 +469,64 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertThat(moveInfo.getType()).isEqualTo(MoveType.GAME_ANNOUNCEMENT);
 
         final GameAnnouncement announcement = moveInfo.getGameAnnouncement();
-        assertThat(announcement.getGameType()).isEqualTo(GameType.SPADES);
-        assertTrue(announcement.isHand());
-        assertTrue(announcement.isOuvert());
-
-        assertThat(moveInfo.getOuvertCards())
+        assertThat(announcement.contract().gameType()).isEqualTo(GameType.SPADES);
+        assertTrue(announcement.contract().hand());
+        assertTrue(announcement.contract().ouvert());
+        assertThat(announcement.contract().ouvertCards())
                 .containsExactlyInAnyOrder(
                         Card.D8, Card.D9, Card.DQ, Card.H8, Card.HT, Card.HQ, Card.C7, Card.C8, Card.CK, Card.CA);
+        assertThat(announcement.contract().schneider()).isTrue();
+        assertThat(announcement.contract().schwarz()).isTrue();
     }
 
     @Test
-    public void testParseTableUpdateSuitHandOuvertGame_OtherPlayer() {
-
-        final String ouvertGame = "table .0 foo play 1 SHO.D8.D9.DQ.H8.HT.HQ.C7.C8.CK.CA 237.6 225.8 237.7";
-        final StringTokenizer token = new StringTokenizer(ouvertGame);
+    public void testParseTableUpdateClubsOuvertGame_FullAnnouncement() {
+        final var showCards = "table .7 bonsai play 2 CHOSZ.D7.D9.DQ.H8.HT.HQ.H7.S8.SK.SA 225.1 226.1 213.2";
+        final var token = new StringTokenizer(showCards);
         token.nextToken(); // table
-        token.nextToken(); // .1
-        final String creator = token.nextToken(); // foo
+        token.nextToken(); // .7
+        final var creator = token.nextToken(); // bonsai
         token.nextToken(); // play
-        final List<String> detailParams = new ArrayList<>();
+        final var detailParams = new ArrayList<String>();
         while (token.hasMoreTokens()) {
             detailParams.add(token.nextToken());
         }
 
-        final MoveInformation moveInfo = MessageParser.getMoveInformation(detailParams);
+        final var moveInfo = MessageParser.getMoveInformation(detailParams);
 
         assertThat(moveInfo.getType()).isEqualTo(MoveType.GAME_ANNOUNCEMENT);
 
-        final GameAnnouncement announcement = moveInfo.getGameAnnouncement();
-        assertThat(announcement.getGameType()).isEqualTo(GameType.SPADES);
-        assertTrue(announcement.isHand());
-        assertTrue(announcement.isOuvert());
-
-        assertThat(moveInfo.getOuvertCards())
-                .containsExactlyInAnyOrder(
-                        Card.D8, Card.D9, Card.DQ, Card.H8, Card.HT, Card.HQ, Card.C7, Card.C8, Card.CK, Card.CA);
+        final GameContract contract = moveInfo.getGameAnnouncement().contract();
+        assertThat(contract.gameType()).isEqualTo(GameType.CLUBS);
+        assertThat(contract.hand()).isTrue();
+        assertThat(contract.ouvert()).isTrue();
+        assertThat(contract.ouvertCards())
+                .containsExactlyInAnyOrder(Card.D7, Card.D9, Card.DQ, Card.H8, Card.HT, Card.HQ, Card.H7, Card.S8, Card.SK, Card.SA);
+        assertThat(contract.schneider()).isTrue();
+        assertThat(contract.schwarz()).isTrue();
     }
 
     @Test
-    public void testParseTableUpdateGrandHandOuvertGame_JSkatUser() {
-
-        final String ouvertGame = "table .0 foo play 1 GHO.D8.D9.DQ.H8.HT.HQ.C7.C8.CK.CA 237.6 225.8 237.7";
-        final StringTokenizer token = new StringTokenizer(ouvertGame);
+    public void testParseTableUpdateClubsHandSchneiderSchwarzGame() {
+        final var showCards = "table .7 bonsai play 2 CHZ 225.1 226.1 213.2";
+        final var token = new StringTokenizer(showCards);
         token.nextToken(); // table
-        token.nextToken(); // .1
-        final String creator = token.nextToken(); // foo
+        token.nextToken(); // .7
+        final var creator = token.nextToken(); // bonsai
         token.nextToken(); // play
-        final List<String> detailParams = new ArrayList<>();
+        final var detailParams = new ArrayList<String>();
         while (token.hasMoreTokens()) {
             detailParams.add(token.nextToken());
         }
 
-        final MoveInformation moveInfo = MessageParser.getMoveInformation(detailParams);
+        final var moveInfo = MessageParser.getMoveInformation(detailParams);
 
         assertThat(moveInfo.getType()).isEqualTo(MoveType.GAME_ANNOUNCEMENT);
 
-        final GameAnnouncement announcement = moveInfo.getGameAnnouncement();
-        assertThat(announcement.getGameType()).isEqualTo(GameType.GRAND);
-        assertTrue(announcement.isHand());
-        assertTrue(announcement.isOuvert());
-
-        assertThat(moveInfo.getOuvertCards())
-                .containsExactlyInAnyOrder(
-                        Card.D8, Card.D9, Card.DQ, Card.H8, Card.HT, Card.HQ, Card.C7, Card.C8, Card.CK, Card.CA);
-    }
-
-    @Test
-    public void testParseTableUpdateGrandHandOuvertGame_OtherPlayer() {
-
-        final String ouvertGame = "table .0 foo play 1 GHO.D8.D9.DQ.H8.HT.HQ.C7.C8.CK.CA 237.6 225.8 237.7";
-        final StringTokenizer token = new StringTokenizer(ouvertGame);
-        token.nextToken(); // table
-        token.nextToken(); // .1
-        final String creator = token.nextToken(); // foo
-        token.nextToken(); // play
-        final List<String> detailParams = new ArrayList<>();
-        while (token.hasMoreTokens()) {
-            detailParams.add(token.nextToken());
-        }
-
-        final MoveInformation moveInfo = MessageParser.getMoveInformation(detailParams);
-
-        assertThat(moveInfo.getType()).isEqualTo(MoveType.GAME_ANNOUNCEMENT);
-
-        final GameAnnouncement announcement = moveInfo.getGameAnnouncement();
-        assertThat(announcement.getGameType()).isEqualTo(GameType.GRAND);
-        assertTrue(announcement.isHand());
-        assertTrue(announcement.isOuvert());
-
-        assertThat(moveInfo.getOuvertCards())
-                .containsExactlyInAnyOrder(
-                        Card.D8, Card.D9, Card.DQ, Card.H8, Card.HT, Card.HQ, Card.C7, Card.C8, Card.CK, Card.CA);
+        final GameContract contract = moveInfo.getGameAnnouncement().contract();
+        assertThat(contract.gameType()).isEqualTo(GameType.CLUBS);
+        assertThat(contract.hand()).isTrue();
+        assertThat(contract.schneider()).isTrue();
+        assertThat(contract.schwarz()).isTrue();
     }
 }

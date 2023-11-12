@@ -1,6 +1,6 @@
 package org.jskat.player;
 
-import org.jskat.data.GameAnnouncement;
+import org.jskat.data.GameContract;
 import org.jskat.data.GameSummary;
 import org.jskat.data.Trick;
 import org.jskat.util.Card;
@@ -98,16 +98,20 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
      * {@inheritDoc}
      */
     @Override
-    public final void startGame(final Player newDeclarer, final GameAnnouncement game) {
+    public final void startGame(final Player declarer, final GameContract contract) {
 
         playerState = PlayerState.PLAYING;
-        internalKnowledge.setDeclarer(newDeclarer);
-        internalKnowledge.setGame(game);
+        internalKnowledge.setDeclarer(declarer);
+        internalKnowledge.setContract(contract);
 
-        rules = SkatRuleFactory.getSkatRules(game.getGameType());
-        if (!GameType.PASSED_IN.equals(game.getGameType())) {
+        if (contract.ouvert()) {
+            internalKnowledge.addDeclarerCards(contract.ouvertCards());
+        }
+
+        rules = SkatRuleFactory.getSkatRules(contract.gameType());
+        if (!GameType.PASSED_IN.equals(contract.gameType())) {
             log.debug("Starting game for " + getPlayerName() + ": "
-                    + game.getGameType() + " (rules="
+                    + contract.gameType() + " (rules="
                     + rules.getClass() + ")");
         }
 
@@ -230,7 +234,7 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
      */
     @Override
     public final void lookAtOuvertCards(final CardList ouvertCards) {
-        internalKnowledge.getSinglePlayerCards().addAll(ouvertCards);
+        internalKnowledge.addDeclarerCards(ouvertCards);
     }
 
     /**
