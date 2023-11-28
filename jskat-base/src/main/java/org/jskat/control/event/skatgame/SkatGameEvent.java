@@ -1,5 +1,6 @@
 package org.jskat.control.event.skatgame;
 
+
 import org.jskat.data.SkatGameData;
 
 /**

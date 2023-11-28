@@ -522,10 +522,10 @@ public class MessageParser {
                     break;
                 case GAME_ANNOUNCEMENT:
                     result.setDeclarer(moveInfo.getPlayer());
-                    if (!moveInfo.getGameAnnouncement().isHand() && !moveInfo.getGameAnnouncement().getDiscardedCards().isEmpty()) {
-                        result.removePlayerCard(moveInfo.getPlayer(), moveInfo.getGameAnnouncement().getDiscardedCards().get(0));
-                        result.removePlayerCard(moveInfo.getPlayer(), moveInfo.getGameAnnouncement().getDiscardedCards().get(1));
-                        result.setDiscardedSkat(moveInfo.getPlayer(), moveInfo.getGameAnnouncement().getDiscardedCards());
+                    if (!moveInfo.getGameAnnouncement().contract().hand() && !moveInfo.getGameAnnouncement().discardedCards().isEmpty()) {
+                        result.removePlayerCard(moveInfo.getPlayer(), moveInfo.getGameAnnouncement().discardedCards().get(0));
+                        result.removePlayerCard(moveInfo.getPlayer(), moveInfo.getGameAnnouncement().discardedCards().get(1));
+                        result.setDiscardedSkat(moveInfo.getPlayer(), moveInfo.getGameAnnouncement().discardedCards());
                     }
                     result.setAnnouncement(moveInfo.getGameAnnouncement());
                     break;
@@ -553,9 +553,7 @@ public class MessageParser {
         }
 
         if (result.getMaxBidValue() == 0) {
-            final GameAnnouncementFactory factory = GameAnnouncement.getFactory();
-            factory.setGameType(GameType.PASSED_IN);
-            result.setAnnouncement(factory.getAnnouncement());
+            result.setAnnouncement(new GameAnnouncement(new GameContract(GameType.PASSED_IN)));
         }
     }
 
@@ -621,7 +619,8 @@ public class MessageParser {
         } else if (token.startsWith("p:")) {
 
             int declarerPoints = 0;
-            if (GameType.NULL != gameData.getAnnouncement().contract().gameType() || gameData.isGameLost()) {
+            if (gameData.getAnnouncement() != null && GameType.NULL != gameData.getAnnouncement().contract().gameType()
+                    || gameData.isGameLost()) {
                 declarerPoints = Integer.parseInt(token.substring(2));
             }
             gameData.setDeclarerScore(declarerPoints);

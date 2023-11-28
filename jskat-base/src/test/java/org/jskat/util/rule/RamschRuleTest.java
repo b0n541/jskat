@@ -43,6 +43,7 @@ public class RamschRuleTest extends AbstractJSkatTest {
     public void testWrongGameData_NoRamschAnnouncement() {
         assertThrows(IllegalStateException.class, () -> {
             data = new SkatGameData();
+            data.setDeclarer(Player.FOREHAND);
             data.setAnnouncement(new GameAnnouncement(new GameContract(GameType.CLUBS).withHand()));
 
             data.getRamschLosers();

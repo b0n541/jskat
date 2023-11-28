@@ -36,6 +36,7 @@ public class SkatGameDataTest {
     @Test
     void hand_Announcement() {
 
+        gameData.setDeclarer(Player.FOREHAND);
         gameData.setAnnouncement(new GameAnnouncement(new GameContract(GameType.GRAND, true)));
 
         assertTrue(gameData.isHand());
@@ -51,6 +52,7 @@ public class SkatGameDataTest {
     @Test
     void ouvert_Announcement() {
 
+        gameData.setDeclarer(Player.FOREHAND);
         gameData.setAnnouncement(new GameAnnouncement(
                 new GameContract(
                         GameType.GRAND,
@@ -167,10 +169,6 @@ public class SkatGameDataTest {
     @Test
     void getDeclarerCardsAfterDiscarding() {
 
-        var factory = GameAnnouncement.getFactory();
-        factory.setGameType(GameType.HEARTS);
-        factory.setDiscardedCards(new CardList(Card.C9, Card.S9));
-
         List.of(
                 new CardDealEvent(
                         Map.of(
@@ -187,11 +185,13 @@ public class SkatGameDataTest {
 
         assertThat(gameData.getDeclarerCardsBeforeFirstTrick().isEmpty());
 
-        var discardEvent = new DiscardSkatEvent(Player.FOREHAND, new CardList(Card.C9, Card.S9));
+        final var discardEvent = new DiscardSkatEvent(Player.FOREHAND, new CardList(Card.C9, Card.S9));
         discardEvent.processForward(gameData);
 
+        final var gameAnnouncement = new GameAnnouncement(new GameContract(GameType.HEARTS), new CardList(Card.C9, Card.S9));
+
         List.of(
-                new GameAnnouncementEvent(Player.FOREHAND, factory.getAnnouncement()),
+                new GameAnnouncementEvent(Player.FOREHAND, gameAnnouncement),
                 new TrickCardPlayedEvent(Player.FOREHAND, Card.SA),
                 new TrickCardPlayedEvent(Player.MIDDLEHAND, Card.S8),
                 new TrickCardPlayedEvent(Player.REARHAND, Card.S7)

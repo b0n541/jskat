@@ -1034,7 +1034,7 @@ public class SkatGameData {
 
         factory.setPlayerPoints(playerPoints);
 
-        if (announcement.gameType == GameType.RAMSCH) {
+        if (announcement.contract().gameType() == GameType.RAMSCH) {
             for (final Player loser : ramschLosers) {
                 factory.addRamschLoser(loser);
             }
