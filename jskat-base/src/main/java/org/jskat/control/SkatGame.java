@@ -93,25 +93,26 @@ public class SkatGame {
                     setActivePlayer(Player.MIDDLEHAND);
 
                     if (variant == GameVariant.FORCED_RAMSCH) {
-                        setGameAnnouncement(new GameAnnouncement(new GameContract(GameType.RAMSCH)));
+                        log.info("Playing forced ramsch");
+                        setGameState(GameState.RAMSCH_GRAND_HAND_ANNOUNCING);
                     } else {
                         // "normal" game (i.e. no ramsch)
                         bidding();
-                    }
 
-                    if (data.getDeclarer() == null) {
-                        // FIXME (jansch 02.01.2012) use cloned rule options here (see MantisBT: 0000037)
-                        final JSkatOptions options = JSkatOptions.instance();
+                        if (data.getDeclarer() == null) {
+                            // FIXME (jansch 02.01.2012) use cloned rule options here (see MantisBT: 0000037)
+                            final JSkatOptions options = JSkatOptions.instance();
 
-                        if (options.isPlayRamsch() && options.isRamschEventNoBid()) {
-                            log.info("Playing ramsch due to no bid");
-                            setGameState(GameState.RAMSCH_GRAND_HAND_ANNOUNCING);
+                            if (options.isPlayRamsch() && options.isRamschEventNoBid()) {
+                                log.info("Playing ramsch due to no bid");
+                                setGameState(GameState.RAMSCH_GRAND_HAND_ANNOUNCING);
+                            } else {
+                                setGameAnnouncement(new GameAnnouncement(new GameContract(GameType.PASSED_IN)));
+                                setGameState(GameState.PRELIMINARY_GAME_END);
+                            }
                         } else {
-                            setGameAnnouncement(new GameAnnouncement(new GameContract(GameType.PASSED_IN)));
-                            setGameState(GameState.PRELIMINARY_GAME_END);
+                            setGameState(GameState.PICKING_UP_SKAT);
                         }
-                    } else {
-                        setGameState(GameState.PICKING_UP_SKAT);
                     }
                     break;
                 case RAMSCH_GRAND_HAND_ANNOUNCING:
