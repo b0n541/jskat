@@ -13,21 +13,20 @@ class DeclaringContextPanel extends JPanel {
     private final DiscardPanel discardPanel;
     private final GameAnnouncePanel announcePanel;
 
-    DeclaringContextPanel(ActionMap actions, JSkatUserPanel newUserPanel) {
+    DeclaringContextPanel(final ActionMap actions, final JSkatUserPanel newUserPanel) {
 
         setLayout(LayoutFactory.getMigLayout("fill", "[shrink][grow][shrink]", "fill"));
 
-        JPanel blankPanel = new JPanel();
+        final JPanel blankPanel = new JPanel();
         blankPanel.setOpaque(false);
         add(blankPanel, "width 25%");
 
-        this.discardPanel = new DiscardPanel(actions, 4);
-        add(this.discardPanel, "grow");
+        discardPanel = new DiscardPanel(actions, 4);
+        add(discardPanel, "grow");
 
-        this.announcePanel = new GameAnnouncePanel(actions, newUserPanel,
-                this.discardPanel);
-        add(this.announcePanel, "width 25%");
-        this.discardPanel.setAnnouncePanel(this.announcePanel);
+        announcePanel = new GameAnnouncePanel(actions, newUserPanel, discardPanel);
+        add(announcePanel, "width 25%");
+        discardPanel.setAnnouncePanel(announcePanel);
 
         setOpaque(false);
 
@@ -36,23 +35,23 @@ class DeclaringContextPanel extends JPanel {
 
     public void resetPanel() {
 
-        this.discardPanel.resetPanel();
-        this.announcePanel.resetPanel();
+        discardPanel.resetPanel();
+        announcePanel.resetPanel();
     }
 
-    public void removeCard(Card card) {
-        this.discardPanel.removeCard(card);
+    public void removeCard(final Card card) {
+        discardPanel.removeCard(card);
     }
 
     public boolean isHandFull() {
-        return this.discardPanel.isHandFull();
+        return discardPanel.isHandFull();
     }
 
-    public void addCard(Card card) {
-        this.discardPanel.addCard(card);
+    public void addCard(final Card card) {
+        discardPanel.addCard(card);
     }
 
-    public void setSkat(CardList skat) {
-        this.discardPanel.setSkat(skat);
+    public void setSkat(final CardList skat) {
+        discardPanel.setSkat(skat);
     }
 }

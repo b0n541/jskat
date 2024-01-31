@@ -78,10 +78,8 @@ public class SkatGame {
     public SkatGameResult run() {
         // FIXME jan 11.07.2013: this method is too long, break it down to smaller
         // methods or implement it in another way
-        eventBus.post(new SkatGameStateChangedEvent(tableName, data.getGameState()));
-
         do {
-            log.debug("Game state: " + data.getGameState());
+            log.info("Game state: " + data.getGameState());
 
             switch (data.getGameState()) {
                 case GAME_START:
@@ -102,16 +100,23 @@ public class SkatGame {
                     }
 
                     if (data.getDeclarer() == null) {
-                        if (GameType.PASSED_IN.equals(data.getGameType())) {
-                            setGameState(GameState.PRELIMINARY_GAME_END);
-                        } else if (GameType.RAMSCH.equals(data.getGameType())) {
+                        // FIXME (jansch 02.01.2012) use cloned rule options here (see MantisBT: 0000037)
+                        final JSkatOptions options = JSkatOptions.instance();
+
+                        if (options.isPlayRamsch() && options.isRamschEventNoBid()) {
+                            log.info("Playing ramsch due to no bid");
                             setGameState(GameState.RAMSCH_GRAND_HAND_ANNOUNCING);
+                        } else {
+                            setGameAnnouncement(new GameAnnouncement(new GameContract(GameType.PASSED_IN)));
+                            setGameState(GameState.PRELIMINARY_GAME_END);
                         }
                     } else {
                         setGameState(GameState.PICKING_UP_SKAT);
                     }
                     break;
                 case RAMSCH_GRAND_HAND_ANNOUNCING:
+                    setActivePlayer(Player.FOREHAND);
+
                     final boolean grandHandAnnounced = grandHand();
 
                     if (grandHandAnnounced) {
@@ -126,6 +131,7 @@ public class SkatGame {
                             setGameState(GameState.SCHIEBERAMSCH);
                         } else {
                             log.debug("no grand hand and no schieberamsch - play ramsch");
+                            setGameAnnouncement(new GameAnnouncement(new GameContract(GameType.RAMSCH)));
                             setGameState(GameState.TRICK_PLAYING);
                         }
                     }
@@ -213,11 +219,11 @@ public class SkatGame {
         for (final Player currPlayer : Player.getOrderedList()) {
             setActivePlayer(currPlayer);
             if (!grandHandAnnounced && playGrandHand()) {
-                log.debug("Player " + activePlayer + " is playing grand hand.");
+                log.info("Player " + activePlayer + " is playing grand hand.");
                 setDeclarer(activePlayer);
                 grandHandAnnounced = true;
             } else {
-                log.debug("Player " + activePlayer + " doesn't want to play grand hand.");
+                log.info("Player " + activePlayer + " doesn't want to play grand hand.");
             }
         }
         return grandHandAnnounced;
@@ -227,12 +233,11 @@ public class SkatGame {
         for (final Player currPlayer : Player.getOrderedList()) {
             setActivePlayer(currPlayer);
             if (!pickUpSkat()) {
-                log.debug("Player " + currPlayer + " does schieben.");
+                log.info("Player " + currPlayer + " does schieben.");
                 data.addGeschoben();
                 view.setGeschoben(tableName, activePlayer);
             } else {
-                log.debug("Player " + currPlayer + " wants to look into skat.");
-                eventBus.post(new SkatCardsChangedEvent(tableName, data.getSkat()));
+                log.info("Player " + currPlayer + " wants to look into skat.");
                 discarding();
             }
         }
@@ -363,19 +368,6 @@ public class SkatGame {
             setActivePlayer(secondWinner);
 
             log.debug("Player " + data.getDeclarer() + " wins the bidding.");
-        } else {
-            // FIXME (jansch 02.01.2012) use cloned rule options here (see MantisBT: 0000037)
-            final JSkatOptions options = JSkatOptions.instance();
-
-            if (options.isPlayRamsch() && options.isRamschEventNoBid()) {
-                log.debug("Playing ramsch due to no bid");
-                setGameAnnouncement(new GameAnnouncement(new GameContract(GameType.RAMSCH)));
-                eventBus.post(new TableGameMoveEvent(tableName, new GameAnnouncementEvent(data.getDeclarer(), data.getAnnouncement())));
-                setActivePlayer(Player.FOREHAND);
-                // do not call "setGameAnnouncement(..)" here!
-            } else {
-                setGameAnnouncement(new GameAnnouncement(new GameContract(GameType.PASSED_IN)));
-            }
         }
 
         doSleep(maxSleep);
@@ -471,10 +463,10 @@ public class SkatGame {
 
         final JSkatPlayer activePlayerInstance = getActivePlayerInstance();
 
-        eventBus.post(new SkatCardsChangedEvent(tableName, data.getSkat()));
+        log.info("Player " + activePlayer + " looks into the skat...");
+        log.info("Skat before discarding: " + data.getSkat());
 
-        log.debug("Player " + activePlayer + " looks into the skat...");
-        log.debug("Skat before discarding: " + data.getSkat());
+        eventBus.post(new SkatCardsChangedEvent(tableName, data.getSkat()));
 
         final CardList skatBefore = data.getSkat().getImmutableCopy();
 
@@ -492,13 +484,14 @@ public class SkatGame {
             view.showAIPlayedSchwarzMessageDiscarding(activePlayerInstance.getPlayerName(), discardedSkat);
             endGameBecauseOfSchwarzPlaying(activePlayer);
         } else {
-            log.debug("Discarded cards: " + discardedSkat);
+            log.info("Discarded cards: " + discardedSkat);
 
             data.setDiscardedSkat(activePlayer, discardedSkat);
             if (!activePlayerInstance.isHumanPlayer()) {
                 // human player has changed the cards in the GUI already
                 view.setDiscardedSkat(tableName, activePlayer, skatBefore, discardedSkat);
             }
+            eventBus.post(new SkatCardsChangedEvent(tableName, discardedSkat));
         }
     }
 
@@ -972,7 +965,7 @@ public class SkatGame {
             playerInstance.startGame(data.getDeclarer(), announcement.contract());
         }
 
-        log.debug(".setGameAnnouncement(): " + data.getAnnouncement() + " by " + data.getDeclarer() + ", rules=" + rules);
+        log.info(".setGameAnnouncement(): " + data.getAnnouncement() + " by " + data.getDeclarer() + ", rules=" + rules);
     }
 
     /**

@@ -245,13 +245,13 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
 
         final CardList result = new CardList();
 
-        log.debug("Player cards before discarding: " + internalKnowledge.getOwnCards());
+        log.info("Player cards before discarding: " + internalKnowledge.getOwnCards());
 
         result.addAll(getCardsToDiscard());
 
         internalKnowledge.removeOwnCards(result.getImmutableCopy());
 
-        log.debug("Player cards after discarding: " + internalKnowledge.getOwnCards());
+        log.info("Player cards after discarding: " + internalKnowledge.getOwnCards());
 
         return result;
     }

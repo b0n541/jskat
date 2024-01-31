@@ -30,8 +30,8 @@ class SkatSchiebenPanel extends JPanel {
     /**
      * Constructor
      *
-     * @param actions            Action map
-     * @param discardPanel       Discard panel
+     * @param actions      Action map
+     * @param discardPanel Discard panel
      */
     SkatSchiebenPanel(final ActionMap actions, final DiscardPanel discardPanel) {
 
@@ -46,16 +46,15 @@ class SkatSchiebenPanel extends JPanel {
         this.setLayout(LayoutFactory.getMigLayout("fill"));
         setOpaque(false);
 
-        JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill"));
+        final JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill"));
         panel.setOpaque(false);
 
-        final JButton schiebenButton = new JButton(
-                actions.get(JSkatAction.SCHIEBEN));
+        final JButton schiebenButton = new JButton(actions.get(JSkatAction.SCHIEBEN));
         schiebenButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 try {
-                    CardList discardedCards = getDiscardedCards();
+                    final CardList discardedCards = getDiscardedCards();
                     if (discardedCards == null) {
                         return; // no valid announcement
                     }
@@ -63,14 +62,14 @@ class SkatSchiebenPanel extends JPanel {
                     e.setSource(discardedCards);
                     // fire event again
                     schiebenButton.dispatchEvent(e);
-                } catch (IllegalArgumentException except) {
+                } catch (final IllegalArgumentException except) {
                     log.error(except.getMessage());
                 }
             }
 
             private CardList getDiscardedCards() {
                 if (SkatSchiebenPanel.this.discardPanel.isUserLookedIntoSkat()) {
-                    CardList discardedCards = SkatSchiebenPanel.this.discardPanel.getDiscardedCards();
+                    final CardList discardedCards = SkatSchiebenPanel.this.discardPanel.getDiscardedCards();
                     if (discardedCards.size() != 2) {
                         JOptionPane
                                 .showMessageDialog(
@@ -81,8 +80,7 @@ class SkatSchiebenPanel extends JPanel {
                         return null;
                     }
                     if (!JSkatOptions.instance().isSchieberamschJacksInSkat()
-                            && (discardedCards.get(0).getRank() == Rank.JACK || discardedCards
-                            .get(1).getRank() == Rank.JACK)) {
+                            && (discardedCards.get(0).getRank() == Rank.JACK || discardedCards.get(1).getRank() == Rank.JACK)) {
                         JOptionPane
                                 .showMessageDialog(
                                         SkatSchiebenPanel.this,

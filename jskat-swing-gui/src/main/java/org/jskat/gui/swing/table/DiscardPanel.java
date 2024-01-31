@@ -69,8 +69,7 @@ class DiscardPanel extends JPanel {
             pickUpSkatButton.dispatchEvent(e);
         });
 
-        JPanel lookIntoSkatPanel = new JPanel(
-                LayoutFactory.getMigLayout("fill"));
+        final JPanel lookIntoSkatPanel = new JPanel(LayoutFactory.getMigLayout("fill"));
         lookIntoSkatPanel.add(pickUpSkatButton, "center");
         lookIntoSkatPanel.setOpaque(false);
         add(lookIntoSkatPanel, PICK_UP_SKAT_BUTTON);
@@ -125,5 +124,4 @@ class DiscardPanel extends JPanel {
     void setAnnouncePanel(final GameAnnouncePanel announcePanel) {
         this.announcePanel = announcePanel;
     }
-
 }
