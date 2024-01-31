@@ -129,7 +129,7 @@ public class JSkatFX extends Application {
         final VBox rootLayout = loader.load();
 
         final Dimension2D dimension = getMainWindowDimension(targetScreen);
-        LOG.info("Main window size {}x{}", dimension.getWidth(), dimension.getHeight());
+        LOG.info("Main window size {} x {}", dimension.getWidth(), dimension.getHeight());
         final Scene scene = new Scene(rootLayout, dimension.getWidth(), dimension.getHeight());
 
         // TODO: set this globally
