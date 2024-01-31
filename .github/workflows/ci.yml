@@ -15,15 +15,15 @@ jobs:
         os: [ ubuntu-latest, macOS-latest, windows-latest ]
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@main
       - name: Set up JDK 20
         uses: actions/setup-java@main
         with:
-          java-version: '20'
+          java-version: '21'
           distribution: 'temurin'
       - name: Build with Gradle
         run: ./gradlew clean build fatjar
       - uses: actions/upload-artifact@main
         with:
-          name: Package
+          name: ${{ matrix.os }}
           path: app/build/libs
