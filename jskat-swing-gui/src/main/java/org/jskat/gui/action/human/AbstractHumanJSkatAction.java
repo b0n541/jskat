@@ -9,7 +9,7 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 
 /**
- * Abstract implementation of an human player action for JSkat<br>
+ * Abstract implementation of a human player action for JSkat<br>
  * When the action is performed the GUI player implementation of
  * {@link JSkatPlayer} is triggered
  */
@@ -20,7 +20,7 @@ public abstract class AbstractHumanJSkatAction extends AbstractJSkatAction {
      * @see AbstractAction#actionPerformed(ActionEvent)
      */
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(final ActionEvent e) {
         JSkatMaster.INSTANCE.triggerHuman(new JSkatActionEvent(e
                 .getActionCommand(), e
                 .getSource()));

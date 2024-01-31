@@ -104,7 +104,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
     @Override
     public CardList getCardsToDiscard() {
 
-        log.debug("Waiting for human discarding...");
+        log.info("Waiting for human discarding...");
 
         waitForUserInput();
 
@@ -160,7 +160,7 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
     @Override
     public boolean pickUpSkat() {
 
-        log.debug("Waiting for human looking into skat...");
+        log.info("Waiting for human looking into skat...");
 
         waitForUserInput();
 
@@ -241,14 +241,13 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
                 log.warn("Wrong source for " + command);
                 interrupt = false;
             }
-        } else if (JSkatAction.PLAY_CARD.toString().equals(command)
-                && source instanceof Card) {
+        } else if (JSkatAction.PLAY_CARD.toString().equals(command) && source instanceof Card) {
 
             nextCard = (Card) source;
 
         } else {
 
-            log.warn("Unknown action event occured: " + command + " from " + source);
+            log.warn("Unknown action event occurred: " + command + " from " + source);
         }
 
         if (interrupt) {

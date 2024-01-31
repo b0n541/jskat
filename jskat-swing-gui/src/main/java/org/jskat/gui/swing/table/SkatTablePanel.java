@@ -470,9 +470,6 @@ public class SkatTablePanel extends AbstractTabPanel {
     public void setGameAnnouncementOn(final GameAnnouncementEvent event) {
 
         final var contract = event.announcement.contract();
-        if (GameType.RAMSCH == contract.gameType()) {
-            ramsch = true;
-        }
 
         gameInfoPanel.setGameContract(contract);
 
@@ -514,9 +511,13 @@ public class SkatTablePanel extends AbstractTabPanel {
                 setContextPanel(ContextPanelType.BIDDING);
                 break;
             case RAMSCH_GRAND_HAND_ANNOUNCING:
+                setContextPanel(ContextPanelType.SCHIEBERAMSCH);
+                userPanel.setGameState(event.gameState);
+                break;
             case SCHIEBERAMSCH:
                 setContextPanel(ContextPanelType.SCHIEBERAMSCH);
                 userPanel.setGameState(event.gameState);
+                ramsch = true;
                 break;
             case PICKING_UP_SKAT:
                 if (userPanel.getPosition().equals(declarer)) {
@@ -725,7 +726,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
     private void putCardIntoSkat(final AbstractHandPanel panel, final Card card) {
 
-        if (!declaringPanel.isHandFull()) {
+        if (!declaringPanel.isHandFull() && !schieberamschPanel.isHandFull()) {
 
             panel.removeCard(card);
             declaringPanel.addCard(card);

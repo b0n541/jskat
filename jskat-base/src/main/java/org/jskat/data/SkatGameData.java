@@ -313,6 +313,7 @@ public class SkatGameData {
      */
     public boolean isHand() {
         if (announcement == null) {
+            log.error("No game announcement done, yet.");
             throw new IllegalStateException("No game announcement done, yet.");
         }
 
@@ -326,6 +327,7 @@ public class SkatGameData {
      */
     public boolean isOuvert() {
         if (announcement == null) {
+            log.error("No game announcement done, yet.");
             throw new IllegalStateException("No game announcement done, yet.");
         }
         return announcement.contract().ouvert();
@@ -890,7 +892,8 @@ public class SkatGameData {
     public GameType getGameType() {
 
         if (announcement == null) {
-            throw new IllegalStateException("No game announcement available!");
+            log.error("No game announcement done, yet.");
+            throw new IllegalStateException("No game announcement done, yet.");
         }
 
         return announcement.contract().gameType();
@@ -1144,6 +1147,7 @@ public class SkatGameData {
      */
     public void addSkatToPlayer(final Player player) {
         if (announcement != null) {
+            log.error("Game announcement already done.");
             throw new IllegalStateException("Game announcement already done.");
         }
 
