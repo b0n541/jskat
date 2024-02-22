@@ -739,6 +739,13 @@ public class JSkatViewImpl implements JSkatView {
     }
 
     @Subscribe
+    public void showErrorMessageOn(final NoJacksAllowedInDiscardedSkatEvent event) {
+
+        showErrorMessage(strings.getString("no_jacks_allowed_in_schieberamsch_skat_title"),
+                strings.getString("no_jacks_allowed_in_schieberamsch_skat_message"));
+    }
+
+    @Subscribe
     public void showErrorMessageOn(final DuplicateTableNameInputEvent event) {
 
         final String message = strings.getString("duplicate_table_name_message",
