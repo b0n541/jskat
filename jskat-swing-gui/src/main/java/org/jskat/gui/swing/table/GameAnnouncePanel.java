@@ -136,9 +136,9 @@ class GameAnnouncePanel extends JPanel {
         announceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
+                e.setSource(null);
 
                 if (getSelectedGameType() != null) {
-
                     try {
                         final GameAnnouncement announcement = getGameAnnouncement();
                         if (announcement == null) {
@@ -148,8 +148,6 @@ class GameAnnouncePanel extends JPanel {
                     } catch (final IllegalArgumentException except) {
                         log.error(except.getMessage());
                     }
-                } else {
-                    e.setSource(null);
                 }
 
                 // fire event again

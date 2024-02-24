@@ -226,6 +226,9 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
                     pickUpSkat = true;
                     discardSkat = new CardList(cards);
                 }
+            } else {
+                log.warn("Wrong source for " + command);
+                interrupt = false;
             }
         } else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
             if (source instanceof final GameAnnouncement announcement) {
