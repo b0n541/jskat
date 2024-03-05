@@ -1,5 +1,8 @@
 package org.jskat.gui.swing.table;
 
+import org.jskat.control.JSkatEventBus;
+import org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent;
+import org.jskat.control.event.skatgame.NoJacksAllowedInDiscardedSkatEvent;
 import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.data.JSkatOptions;
 import org.jskat.gui.swing.LayoutFactory;
@@ -30,8 +33,8 @@ class SkatSchiebenPanel extends JPanel {
     /**
      * Constructor
      *
-     * @param actions            Action map
-     * @param discardPanel       Discard panel
+     * @param actions      Action map
+     * @param discardPanel Discard panel
      */
     SkatSchiebenPanel(final ActionMap actions, final DiscardPanel discardPanel) {
 
@@ -46,51 +49,39 @@ class SkatSchiebenPanel extends JPanel {
         this.setLayout(LayoutFactory.getMigLayout("fill"));
         setOpaque(false);
 
-        JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill"));
+        final JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill"));
         panel.setOpaque(false);
 
-        final JButton schiebenButton = new JButton(
-                actions.get(JSkatAction.SCHIEBEN));
+        final JButton schiebenButton = new JButton(actions.get(JSkatAction.SCHIEBEN));
         schiebenButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
+                e.setSource(null);
                 try {
-                    CardList discardedCards = getDiscardedCards();
+                    final CardList discardedCards = getDiscardedCards();
                     if (discardedCards == null) {
                         return; // no valid announcement
                     }
 
                     e.setSource(discardedCards);
-                    // fire event again
-                    schiebenButton.dispatchEvent(e);
-                } catch (IllegalArgumentException except) {
+                } catch (final IllegalArgumentException except) {
                     log.error(except.getMessage());
                 }
+
+                // fire event again
+                schiebenButton.dispatchEvent(e);
             }
 
             private CardList getDiscardedCards() {
                 if (SkatSchiebenPanel.this.discardPanel.isUserLookedIntoSkat()) {
-                    CardList discardedCards = SkatSchiebenPanel.this.discardPanel.getDiscardedCards();
+                    final CardList discardedCards = SkatSchiebenPanel.this.discardPanel.getDiscardedCards();
                     if (discardedCards.size() != 2) {
-                        JOptionPane
-                                .showMessageDialog(
-                                        SkatSchiebenPanel.this,
-                                        SkatSchiebenPanel.this.strings.getString("invalid_number_of_cards_in_skat_message"),
-                                        SkatSchiebenPanel.this.strings.getString("invalid_number_of_cards_in_skat_title"),
-                                        JOptionPane.ERROR_MESSAGE);
+                        JSkatEventBus.INSTANCE.post(new InvalidNumberOfCardsInDiscardedSkatEvent());
                         return null;
                     }
                     if (!JSkatOptions.instance().isSchieberamschJacksInSkat()
-                            && (discardedCards.get(0).getRank() == Rank.JACK || discardedCards
-                            .get(1).getRank() == Rank.JACK)) {
-                        JOptionPane
-                                .showMessageDialog(
-                                        SkatSchiebenPanel.this,
-                                        // FIXME: should not be checked in GUI
-                                        // code
-                                        SkatSchiebenPanel.this.strings.getString("no_jacks_allowed_in_schieberamsch_skat_message"),
-                                        SkatSchiebenPanel.this.strings.getString("no_jacks_allowed_in_schieberamsch_skat_title"),
-                                        JOptionPane.ERROR_MESSAGE);
+                            && (discardedCards.get(0).getRank() == Rank.JACK || discardedCards.get(1).getRank() == Rank.JACK)) {
+                        JSkatEventBus.INSTANCE.post(new NoJacksAllowedInDiscardedSkatEvent());
                         return null;
                     }
 

@@ -218,8 +218,7 @@ public class SkatTablePanel extends AbstractTabPanel {
                 createCallReAfterContraPanel(getActionMap()));
 
         final JPanel trickHoldingPanel = new JPanel(LayoutFactory.getMigLayout(
-                "fill", "[shrink][grow][shrink]",
-                "fill"));
+                "fill", "[shrink][grow][shrink]", "fill"));
         lastTrickPanel = new TrickPanel(0.6, false);
         trickHoldingPanel.add(lastTrickPanel, "width 25%");
         trickPanel = new TrickPanel(0.8, true);
@@ -238,29 +237,23 @@ public class SkatTablePanel extends AbstractTabPanel {
         final JPanel result = new JPanel(LayoutFactory.getMigLayout("fill"));
 
         final JPanel question = new JPanel();
-        final JLabel questionIconLabel = new JLabel(new ImageIcon(
-                JSkatGraphicRepository.INSTANCE.getUserBidBubble()));
+        final JLabel questionIconLabel = new JLabel(new ImageIcon(JSkatGraphicRepository.INSTANCE.getUserBidBubble()));
         question.add(questionIconLabel);
-        final JLabel questionLabel = new JLabel(
-                strings.getString("want_call_re_after_contra"));
+        final JLabel questionLabel = new JLabel(strings.getString("want_call_re_after_contra"));
         questionLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
         question.add(questionLabel);
         result.add(question, "center, growx, span 2, wrap");
 
-        final JButton callReButton = new JButton(
-                actions.get(JSkatAction.CALL_RE));
-        callReButton.setIcon(new ImageIcon(bitmaps.getIconImage(Icon.OK,
-                IconSize.BIG)));
+        final JButton callReButton = new JButton(actions.get(JSkatAction.CALL_RE));
+        callReButton.setIcon(new ImageIcon(bitmaps.getIconImage(Icon.OK, IconSize.BIG)));
         callReButton.addActionListener(e -> {
             e.setSource(Boolean.TRUE);
             callReButton.dispatchEvent(e);
         });
 
-        final JButton noReAfterContraButton = new JButton(
-                actions.get(JSkatAction.CALL_RE));
+        final JButton noReAfterContraButton = new JButton(actions.get(JSkatAction.CALL_RE));
         noReAfterContraButton.setText(strings.getString("no"));
-        noReAfterContraButton.setIcon(new ImageIcon(bitmaps.getIconImage(
-                Icon.STOP, IconSize.BIG)));
+        noReAfterContraButton.setIcon(new ImageIcon(bitmaps.getIconImage(Icon.STOP, IconSize.BIG)));
         noReAfterContraButton.addActionListener(e -> {
             e.setSource(Boolean.FALSE);
             noReAfterContraButton.dispatchEvent(e);
@@ -282,20 +275,15 @@ public class SkatTablePanel extends AbstractTabPanel {
     }
 
     private AbstractHandPanel getPlayerPanel(final Player player) {
-
-        final AbstractHandPanel result = getHandPanel(player);
-
-        return result;
+        return getHandPanel(player);
     }
 
     protected JPanel getRightPanelForTrickPanel() {
-        final JPanel additionalActionsPanel = new JPanel(
-                LayoutFactory.getMigLayout());
+        final JPanel additionalActionsPanel = new JPanel(LayoutFactory.getMigLayout());
         additionalActionsPanel.setOpaque(false);
 
-        final JButton resignButton = new JButton(getActionMap().get(
-                JSkatAction.CALL_CONTRA));
-        additionalActionsPanel.add(resignButton, "growx, wrap");
+        final JButton contraButton = new JButton(getActionMap().get(JSkatAction.CALL_CONTRA));
+        additionalActionsPanel.add(contraButton, "growx, wrap");
 
         return additionalActionsPanel;
     }
@@ -470,9 +458,6 @@ public class SkatTablePanel extends AbstractTabPanel {
     public void setGameAnnouncementOn(final GameAnnouncementEvent event) {
 
         final var contract = event.announcement.contract();
-        if (GameType.RAMSCH == contract.gameType()) {
-            ramsch = true;
-        }
 
         gameInfoPanel.setGameContract(contract);
 
@@ -514,9 +499,13 @@ public class SkatTablePanel extends AbstractTabPanel {
                 setContextPanel(ContextPanelType.BIDDING);
                 break;
             case RAMSCH_GRAND_HAND_ANNOUNCING:
+                setContextPanel(ContextPanelType.SCHIEBERAMSCH);
+                userPanel.setGameState(event.gameState);
+                break;
             case SCHIEBERAMSCH:
                 setContextPanel(ContextPanelType.SCHIEBERAMSCH);
                 userPanel.setGameState(event.gameState);
+                ramsch = true;
                 break;
             case PICKING_UP_SKAT:
                 if (userPanel.getPosition().equals(declarer)) {
@@ -725,7 +714,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
     private void putCardIntoSkat(final AbstractHandPanel panel, final Card card) {
 
-        if (!declaringPanel.isHandFull()) {
+        if (!declaringPanel.isHandFull() && !schieberamschPanel.isHandFull()) {
 
             panel.removeCard(card);
             declaringPanel.addCard(card);

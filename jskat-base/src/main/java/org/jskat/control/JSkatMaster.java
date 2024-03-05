@@ -266,7 +266,7 @@ public class JSkatMaster {
      */
     public void triggerHuman(final JSkatActionEvent event) {
 
-        log.debug(event.toString());
+        log.info(event.toString());
 
         final String tableName = data.getActiveTable();
         final String command = event.getActionCommand();

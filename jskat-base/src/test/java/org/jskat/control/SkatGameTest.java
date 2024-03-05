@@ -177,6 +177,34 @@ public class SkatGameTest extends AbstractJSkatTest {
 
         final GameSummary summary = game.getGameSummary();
         assertThat(summary.getGameType()).isEqualTo(GameType.RAMSCH);
+        assertThat(summary.ramschLosers).isNotEmpty();
+
+        final SkatGameResult result = game.getGameResult();
+        assertFalse(result.isWon());
+        assertTrue(result.getGameValue() < 0);
+    }
+
+    /**
+     * Tests the fix for Issue #172:<br>
+     * <p>
+     * https://github.com/b0n541/jskat/issues/172
+     */
+    @Test
+    void testRamsch_Issue172() {
+        final var options = JSkatOptions.instance();
+        options.setRules(RuleSet.PUB);
+        options.setPlayRamsch(true);
+        options.setRamschEventNoBid(true);
+
+        final var game = new SkatGame(TABLE_NAME, GameVariant.STANDARD,
+                new RamschTestPlayer(), new RamschTestPlayer(), new RamschTestPlayer());
+        game.setView(new UnitTestView());
+
+        runGame(game);
+
+        final var summary = game.getGameSummary();
+        assertThat(summary.getGameType()).isEqualTo(GameType.RAMSCH);
+        assertThat(summary.ramschLosers).isNotEmpty();
 
         final SkatGameResult result = game.getGameResult();
         assertFalse(result.isWon());
@@ -205,7 +233,7 @@ public class SkatGameTest extends AbstractJSkatTest {
     }
 
     /**
-     * Forced ramsch game, grand hand is played if fore hand wants to
+     * Forced ramsch game, grand hand is played if forehand wants to
      */
     @Test
     public void testRamsch_ForcedForeHandGrandHand() {
