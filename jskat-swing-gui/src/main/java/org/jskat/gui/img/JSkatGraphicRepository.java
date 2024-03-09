@@ -239,7 +239,7 @@ public class JSkatGraphicRepository {
             result = cards.get(options.getCardSet()).get(card);
         } else {
 
-            result = cardBacks.get(CardSet.ISS_GERMAN);
+            result = cardBacks.get(options.getCardSet());
         }
 
         return result;
