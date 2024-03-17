@@ -1,6 +1,7 @@
 package org.jskat.player;
 
 import org.jskat.data.GameContract;
+import org.jskat.data.SkatGameData;
 import org.jskat.data.Trick;
 import org.jskat.util.*;
 import org.jskat.util.rule.SkatRule;
@@ -69,7 +70,6 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
      * Initializes all parameters
      */
     private void initializeVariables() {
-
         resetCurrentGameData();
     }
 
@@ -87,6 +87,10 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
      * Resets the data of the current game
      */
     public void resetCurrentGameData() {
+        gameState = null;
+        declarer = null;
+        contract = null;
+        playerPosition = null;
         ownCards.clear();
         skat.clear();
         singlePlayerCards.clear();
@@ -105,10 +109,10 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
 
         leftPlayerTrickCard = null;
         rightPlayerTrickCard = null;
+        tricks.clear();
+        currentTrick = null;
 
         trumpCount = 0;
-
-        tricks.clear();
     }
 
     /**
@@ -140,6 +144,15 @@ public final class PlayerKnowledge extends ImmutablePlayerKnowledge {
     public void setNextTrick(final int trickNo, final Player trickForehand) {
         currentTrick = new Trick(trickNo, trickForehand);
         clearTrickCards();
+    }
+
+    /**
+     * Sets the game state.
+     *
+     * @param gameState Game state
+     */
+    public void setGameState(final SkatGameData.GameState gameState) {
+        this.gameState = gameState;
     }
 
     /**

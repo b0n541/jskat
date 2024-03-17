@@ -2,6 +2,7 @@ package org.jskat.player;
 
 import org.jskat.data.GameContract;
 import org.jskat.data.GameSummary;
+import org.jskat.data.SkatGameData;
 import org.jskat.data.Trick;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -119,6 +120,13 @@ public interface JSkatPlayer {
      *                     the new game
      */
     void startGame(Player singlePlayer, GameContract contract);
+
+    /**
+     * Sets the current game state.
+     *
+     * @param gameState Game state
+     */
+    void setGameState(SkatGameData.GameState gameState);
 
     /**
      * Shows the cards of the single player to the opponents in Ouvert games

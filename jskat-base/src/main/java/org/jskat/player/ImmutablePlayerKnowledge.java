@@ -1,6 +1,7 @@
 package org.jskat.player;
 
 import org.jskat.data.GameContract;
+import org.jskat.data.SkatGameData;
 import org.jskat.data.Trick;
 import org.jskat.util.*;
 
@@ -11,6 +12,11 @@ import java.util.*;
  * information
  */
 public class ImmutablePlayerKnowledge {
+
+    /**
+     * Game state
+     */
+    protected SkatGameData.GameState gameState;
 
     /**
      * Declarer player
@@ -228,6 +234,15 @@ public class ImmutablePlayerKnowledge {
      */
     public final Trick getCurrentTrick() {
         return (Trick) currentTrick.clone();
+    }
+
+    /**
+     * Gets the current game state.
+     *
+     * @return Game state
+     */
+    public SkatGameData.GameState getGameState() {
+        return gameState;
     }
 
     /**

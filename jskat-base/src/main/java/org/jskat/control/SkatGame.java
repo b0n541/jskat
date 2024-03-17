@@ -48,8 +48,11 @@ public class SkatGame {
      * @param newMiddleHand Middle hand player
      * @param newRearHand   Rear hand player
      */
-    public SkatGame(final String newTableName, final GameVariant variant, final JSkatPlayer newForeHand,
-                    final JSkatPlayer newMiddleHand, final JSkatPlayer newRearHand) {
+    public SkatGame(final String newTableName,
+                    final GameVariant variant,
+                    final JSkatPlayer newForeHand,
+                    final JSkatPlayer newMiddleHand,
+                    final JSkatPlayer newRearHand) {
 
         tableName = newTableName;
         data = new SkatGameData();
@@ -970,13 +973,17 @@ public class SkatGame {
     }
 
     /**
-     * Sets the game state from outside
+     * Sets the game state.
      *
      * @param newState Game state
      */
     public void setGameState(final GameState newState) {
 
         data.setGameState(newState);
+
+        for (final JSkatPlayer playerInstance : player.values()) {
+            playerInstance.setGameState(newState);
+        }
 
         if (view != null) {
 
