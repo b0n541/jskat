@@ -1,6 +1,7 @@
 package org.jskat.gui.swing.table;
 
 import org.jskat.control.JSkatMaster;
+import org.jskat.data.JSkatOptions;
 import org.jskat.gui.swing.AbstractI18NComboBoxRenderer;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.player.JSkatPlayerResolver;
@@ -30,6 +31,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
     private final Component parent;
 
+    private final JSkatOptions options;
     private final JSkatResourceBundle strings;
 
     private JTextField player1name;
@@ -51,6 +53,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
         this.parent = parent;
         strings = JSkatResourceBundle.INSTANCE;
+        options = JSkatOptions.instance();
 
         initGUI();
     }
@@ -123,7 +126,16 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
     @Override
     public void setVisible(final boolean isVisible) {
 
-        if (isVisible) setLocationRelativeTo(parent);
+        if (options.isPlayRamsch(true)) {
+            onlyPlayRamsch.setEnabled(true);
+        } else {
+            onlyPlayRamsch.setSelected(false);
+            onlyPlayRamsch.setEnabled(false);
+        }
+
+        if (isVisible) {
+            setLocationRelativeTo(parent);
+        }
 
         super.setVisible(isVisible);
     }
