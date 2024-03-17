@@ -20,10 +20,7 @@ import java.awt.event.ActionListener;
  * Holds widgets for announcing a game
  */
 class SkatSchiebenPanel extends JPanel {
-
-
-    private static final Logger log = LoggerFactory
-            .getLogger(SkatSchiebenPanel.class);
+    private static final Logger log = LoggerFactory.getLogger(SkatSchiebenPanel.class);
 
     JSkatResourceBundle strings;
     JSkatOptions options;
@@ -38,7 +35,7 @@ class SkatSchiebenPanel extends JPanel {
      */
     SkatSchiebenPanel(final ActionMap actions, final DiscardPanel discardPanel) {
 
-        this.strings = JSkatResourceBundle.INSTANCE;
+        strings = JSkatResourceBundle.INSTANCE;
         this.discardPanel = discardPanel;
 
         initPanel(actions);
@@ -46,7 +43,7 @@ class SkatSchiebenPanel extends JPanel {
 
     private void initPanel(final ActionMap actions) {
 
-        this.setLayout(LayoutFactory.getMigLayout("fill"));
+        setLayout(LayoutFactory.getMigLayout("fill"));
         setOpaque(false);
 
         final JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill"));
@@ -73,8 +70,8 @@ class SkatSchiebenPanel extends JPanel {
             }
 
             private CardList getDiscardedCards() {
-                if (SkatSchiebenPanel.this.discardPanel.isUserLookedIntoSkat()) {
-                    final CardList discardedCards = SkatSchiebenPanel.this.discardPanel.getDiscardedCards();
+                if (discardPanel.isUserLookedIntoSkat()) {
+                    final CardList discardedCards = discardPanel.getDiscardedCards();
                     if (discardedCards.size() != 2) {
                         JSkatEventBus.INSTANCE.post(new InvalidNumberOfCardsInDiscardedSkatEvent());
                         return null;
@@ -93,6 +90,6 @@ class SkatSchiebenPanel extends JPanel {
         });
         panel.add(schiebenButton, "center");
 
-        this.add(panel, "center");
+        add(panel, "center");
     }
 }

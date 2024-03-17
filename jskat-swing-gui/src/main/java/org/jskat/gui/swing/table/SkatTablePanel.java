@@ -649,12 +649,20 @@ public class SkatTablePanel extends AbstractTabPanel {
     }
 
     @Subscribe
-    public void setSkatOn(final SkatCardsChangedEvent event) {
+    public void setSkatOn(final SkatCardsPickedUpEvent event) {
+        setSkat(event.cards);
+    }
 
+    @Subscribe
+    public void setSkatOn(final SkatCardsChangedEvent event) {
+        setSkat(event.cards);
+    }
+
+    private void setSkat(final CardList skat) {
         if (ramsch) {
-            schieberamschPanel.setSkat(event.cards);
+            schieberamschPanel.setSkat(skat);
         } else {
-            declaringPanel.setSkat(event.cards);
+            declaringPanel.setSkat(skat);
         }
     }
 

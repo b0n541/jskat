@@ -34,7 +34,6 @@ class DeclaringContextPanel extends JPanel {
     }
 
     public void resetPanel() {
-
         discardPanel.resetPanel();
         announcePanel.resetPanel();
     }

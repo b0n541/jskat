@@ -470,7 +470,7 @@ public class SkatGame {
         log.info("Player " + activePlayer + " looks into the skat...");
         log.info("Skat before discarding: " + data.getSkat());
 
-        eventBus.post(new SkatCardsChangedEvent(tableName, data.getSkat()));
+        eventBus.post(new SkatCardsPickedUpEvent(tableName, data.getSkat()));
 
         final CardList skatBefore = data.getSkat().getImmutableCopy();
 
