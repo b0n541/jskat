@@ -76,14 +76,14 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
         player1name = new JTextField(PLAYER1_DEFAULT_NAME);
         root.add(player1name, "span2, growx");
         player1 = new JComboBox(playerTypes.toArray());
-        player1.setRenderer(new PlayerComboBoxRenderer());
+        player1.setRenderer(new PlayerTypeComboBoxRenderer());
         root.add(player1, "growx, wrap");
 
         root.add(new JLabel(strings.getString("player") + " 2"));
         player2name = new JTextField(PLAYER2_DEFAULT_NAME);
         root.add(player2name, "span2, growx");
         player2 = new JComboBox(playerTypes.toArray());
-        player2.setRenderer(new PlayerComboBoxRenderer());
+        player2.setRenderer(new PlayerTypeComboBoxRenderer());
         root.add(player2, "growx, wrap");
         root.add(new JLabel(strings.getString("player") + " 3"));
 
@@ -92,7 +92,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
         // Human player can only be player 3
         playerTypes.add(JSkatPlayerResolver.HUMAN_PLAYER_CLASS);
         player3 = new JComboBox(playerTypes.toArray());
-        player3.setRenderer(new PlayerComboBoxRenderer());
+        player3.setRenderer(new PlayerTypeComboBoxRenderer());
         player3.setSelectedIndex(player3.getItemCount() - 1);
         root.add(player3, "span2, growx, wrap");
 
@@ -141,7 +141,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
     }
 
     /**
-     * @see java.awt.event.ActionListener#actionPerformed(java.awt.event.ActionEvent)
+     * @see ActionListener#actionPerformed(ActionEvent)
      */
     @Override
     public void actionPerformed(final ActionEvent e) {
@@ -173,31 +173,31 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
         }
     }
 
-    private class PlayerComboBoxRenderer extends AbstractI18NComboBoxRenderer {
+    private class PlayerTypeComboBoxRenderer extends AbstractI18NComboBoxRenderer {
 
+        private final String AI_CLASS_NEW_ALGORITHMIC = "org.jskat.ai.newalgorithm.AlgorithmAI";
+        private final String AI_CLASS_ALGORITHMIC = "org.jskat.ai.mjl.AIPlayerMJL";
+        private final String AI_CLASS_RANDOM = "org.jskat.ai.rnd.AIPlayerRND";
+        private final String AI_CLASS_NEURAL_NETWORK = "org.jskat.ai.nn.AIPlayerNN";
+        private final String AI_CLASS_HUMAN = "org.jskat.gui.human.SwingHumanPlayer";
 
-        PlayerComboBoxRenderer() {
+        PlayerTypeComboBoxRenderer() {
             super();
         }
 
         @Override
         public String getValueText(final Object value) {
 
-            String result = " ";
+            final String playerType = (String) value;
 
-            final String player = (String) value;
-
-            if (player != null) if ("org.jskat.ai.newalgorithm.AlgorithmAI".equals(player))
-                result = strings.getString("algorithmic_nextgen_player");
-            else if ("org.jskat.ai.mjl.AIPlayerMJL".equals(player))
-                result = strings.getString("algorithmic_player");
-            else if ("org.jskat.ai.rnd.AIPlayerRND".equals(player)) result = strings.getString("random_player");
-            else if ("org.jskat.ai.nn.AIPlayerNN".equals(player))
-                result = strings.getString("neural_network_player");
-            else if ("org.jskat.gui.human.SwingHumanPlayer"
-                    .equals(player)) result = strings.getString("human_player");
-            else result = player;
-            return result;
+            return switch (playerType) {
+                case AI_CLASS_NEW_ALGORITHMIC -> strings.getString("algorithmic_nextgen_player");
+                case AI_CLASS_ALGORITHMIC -> strings.getString("algorithmic_player");
+                case AI_CLASS_RANDOM -> strings.getString("random_player");
+                case AI_CLASS_NEURAL_NETWORK -> strings.getString("neural_network_player");
+                case AI_CLASS_HUMAN -> strings.getString("human_player");
+                default -> playerType;
+            };
         }
     }
 }
