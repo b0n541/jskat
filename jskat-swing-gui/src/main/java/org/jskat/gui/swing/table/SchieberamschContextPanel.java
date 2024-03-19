@@ -40,15 +40,15 @@ class SchieberamschContextPanel extends JPanel {
         blankPanel.setOpaque(false);
         add(blankPanel, "width 25%");
 
-        this.centerPanel = new JPanel(new CardLayout());
+        centerPanel = new JPanel(new CardLayout());
         final JPanel grandHandPanel = getGrandHandSchiebeRamschPanel(actions);
-        this.centerPanel.add(grandHandPanel, GRAND_HAND);
+        centerPanel.add(grandHandPanel, GRAND_HAND);
 
         discardPanel = new DiscardPanel(actions, 4);
-        this.centerPanel.add(discardPanel, DISCARD);
+        centerPanel.add(discardPanel, DISCARD);
 
-        this.centerPanel.setOpaque(false);
-        add(this.centerPanel, "grow");
+        centerPanel.setOpaque(false);
+        add(centerPanel, "grow");
 
         add(new SkatSchiebenPanel(actions, discardPanel), "width 25%");
 
@@ -61,16 +61,16 @@ class SchieberamschContextPanel extends JPanel {
         final JPanel result = new JPanel(LayoutFactory.getMigLayout("fill"));
 
         final JPanel question = new JPanel();
-        final JLabel questionIconLabel = new JLabel(new ImageIcon(this.bitmaps.getUserBidBubble()));
+        final JLabel questionIconLabel = new JLabel(new ImageIcon(bitmaps.getUserBidBubble()));
         question.add(questionIconLabel);
-        final JLabel questionLabel = new JLabel(this.strings.getString("want_play_grand_hand"));
+        final JLabel questionLabel = new JLabel(strings.getString("want_play_grand_hand"));
         questionLabel.setFont(new Font(Font.DIALOG, Font.BOLD, 16));
         question.add(questionLabel);
         result.add(question, "center, growx, span 2, wrap");
 
         final JButton grandHandButton = new JButton(actions.get(JSkatAction.PLAY_GRAND_HAND));
-        grandHandButton.setIcon(new ImageIcon(this.bitmaps.getIconImage(Icon.OK, IconSize.BIG)));
-        grandHandButton.setText(this.strings.getString("yes"));
+        grandHandButton.setIcon(new ImageIcon(bitmaps.getIconImage(Icon.OK, IconSize.BIG)));
+        grandHandButton.setText(strings.getString("yes"));
         grandHandButton.addActionListener(event -> {
             try {
                 final GameContract contract = new GameContract(GameType.GRAND).withHand();
@@ -84,8 +84,8 @@ class SchieberamschContextPanel extends JPanel {
         });
 
         final JButton schieberamschButton = new JButton(actions.get(JSkatAction.PLAY_SCHIEBERAMSCH));
-        schieberamschButton.setIcon(new ImageIcon(this.bitmaps.getIconImage(Icon.STOP, IconSize.BIG)));
-        schieberamschButton.setText(this.strings.getString("no"));
+        schieberamschButton.setIcon(new ImageIcon(bitmaps.getIconImage(Icon.STOP, IconSize.BIG)));
+        schieberamschButton.setText(strings.getString("no"));
         schieberamschButton.addActionListener(event -> {
             try {
                 showPanel(DISCARD);
@@ -115,7 +115,7 @@ class SchieberamschContextPanel extends JPanel {
     }
 
     void showPanel(final String panelName) {
-        ((CardLayout) this.centerPanel.getLayout()).show(this.centerPanel, panelName);
+        ((CardLayout) centerPanel.getLayout()).show(centerPanel, panelName);
     }
 
     public void removeCard(final Card card) {

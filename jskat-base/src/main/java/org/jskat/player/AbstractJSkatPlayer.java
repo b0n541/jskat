@@ -2,6 +2,7 @@ package org.jskat.player;
 
 import org.jskat.data.GameContract;
 import org.jskat.data.GameSummary;
+import org.jskat.data.SkatGameData;
 import org.jskat.data.Trick;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -84,6 +85,10 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
         internalKnowledge.setPlayerPosition(newPosition);
 
         prepareForNewGame();
+    }
+
+    public final void setGameState(final SkatGameData.GameState gameState) {
+        internalKnowledge.setGameState(gameState);
     }
 
     /**

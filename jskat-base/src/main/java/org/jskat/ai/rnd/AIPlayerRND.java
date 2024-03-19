@@ -2,6 +2,8 @@ package org.jskat.ai.rnd;
 
 import org.jskat.ai.AbstractAIPlayer;
 import org.jskat.data.GameContract;
+import org.jskat.data.JSkatOptions;
+import org.jskat.data.SkatGameData;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -9,6 +11,7 @@ import org.jskat.util.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -112,6 +115,11 @@ public class AIPlayerRND extends AbstractAIPlayer {
         final CardList result = new CardList();
 
         final CardList discardableCards = new CardList(knowledge.getOwnCards());
+
+        if (knowledge.getGameState() == SkatGameData.GameState.SCHIEBERAMSCH
+                && !JSkatOptions.instance().isSchieberamschJacksInSkat()) {
+            discardableCards.removeAll(List.of(Card.CJ, Card.SJ, Card.HJ, Card.DJ));
+        }
 
         // just discard two random cards
         result.add(discardableCards.remove(random.nextInt(discardableCards.size())));

@@ -561,13 +561,15 @@ public class JSkatViewImpl implements JSkatView {
             case PICK_UP_SKAT:
                 JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.DISCARDING));
                 if (moveInformation.getSkat().size() == 2) {
-                    JSkatEventBus.INSTANCE.post(new SkatCardsChangedEvent(tableName, moveInformation.getSkat()));
+                    JSkatEventBus.INSTANCE.post(new SkatCardsPickedUpEvent(tableName, moveInformation.getSkat()));
                 }
                 break;
             case GAME_ANNOUNCEMENT:
                 JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.DECLARING));
-                JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName,
-                        new GameAnnouncementEvent(movePlayer, moveInformation.getGameAnnouncement())));
+                JSkatEventBus.INSTANCE.post(new TableGameMoveEvent(tableName, new GameAnnouncementEvent(movePlayer, moveInformation.getGameAnnouncement())));
+                if (!moveInformation.getGameAnnouncement().contract().hand()) {
+                    JSkatEventBus.INSTANCE.post(new SkatCardsChangedEvent(tableName, moveInformation.getGameAnnouncement().discardedCards()));
+                }
                 if (moveInformation.getGameAnnouncement().contract().ouvert()) {
                     showCardsForPlayer(tableName, movePlayer, moveInformation.getGameAnnouncement().contract().ouvertCards());
                 }

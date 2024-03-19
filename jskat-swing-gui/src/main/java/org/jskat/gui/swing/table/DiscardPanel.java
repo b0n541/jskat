@@ -14,12 +14,10 @@ import java.awt.*;
  * Holds widgets for deciding of looking into skat or playing hand game
  */
 class DiscardPanel extends JPanel {
-
     private static final Logger log = LoggerFactory.getLogger(DiscardPanel.class);
     private static final String PICK_UP_SKAT_BUTTON = "PICK_UP_SKAT_BUTTON";
 
     private static final String CARD_PANEL = "CARD_PANEL";
-
 
     private Action pickUpSkatAction;
     private JButton pickUpSkatButton;
@@ -57,13 +55,12 @@ class DiscardPanel extends JPanel {
         pickUpSkatAction = getActionMap().get(JSkatAction.PICK_UP_SKAT);
         pickUpSkatButton = new JButton(pickUpSkatAction);
         pickUpSkatButton.addActionListener(e -> {
-
             log.debug("user picked up skat");
             userPickedUpSkat = true;
             if (announcePanel != null) {
                 announcePanel.setUserPickedUpSkat(true);
             }
-            DiscardPanel.this.showPanel(CARD_PANEL);
+            showPanel(CARD_PANEL);
 
             // fire event again
             pickUpSkatButton.dispatchEvent(e);
@@ -79,12 +76,9 @@ class DiscardPanel extends JPanel {
     }
 
     protected void setSkat(final CardList skat) {
-
         clearCards();
         addCard(skat.get(0));
         addCard(skat.get(1));
-
-        userPickedUpSkat = true;
     }
 
     void clearCards() {

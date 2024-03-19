@@ -2,6 +2,7 @@ package org.jskat.ai.newalgorithm;
 
 import org.jskat.ai.AbstractAIPlayer;
 import org.jskat.data.GameContract;
+import org.jskat.data.SkatGameData;
 import org.jskat.player.ImmutablePlayerKnowledge;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -48,8 +49,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
     @Override
     public int bidMore(final int nextBidValue) {
         if (bidEvaluator == null) {
-            bidEvaluator = new BidEvaluator(knowledge.getOwnCards(),
-                    knowledge.getPlayerPosition());
+            bidEvaluator = new BidEvaluator(knowledge.getOwnCards(), knowledge.getPlayerPosition());
         }
         if (bidEvaluator.getMaxBid() >= nextBidValue) {
             return nextBidValue;
@@ -65,8 +65,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
     @Override
     public boolean holdBid(final int currBidValue) {
         if (bidEvaluator == null) {
-            bidEvaluator = new BidEvaluator(knowledge.getOwnCards(),
-                    knowledge.getPlayerPosition());
+            bidEvaluator = new BidEvaluator(knowledge.getOwnCards(), knowledge.getPlayerPosition());
         }
         return bidEvaluator.getMaxBid() >= currBidValue;
     }
@@ -79,8 +78,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
     @Override
     public boolean pickUpSkat() {
         if (bidEvaluator == null) {
-            bidEvaluator = new BidEvaluator(knowledge.getOwnCards(),
-                    knowledge.getPlayerPosition());
+            bidEvaluator = new BidEvaluator(knowledge.getOwnCards(), knowledge.getPlayerPosition());
         }
         return !bidEvaluator.canPlayHandGame();
     }
@@ -93,15 +91,14 @@ public class AlgorithmAI extends AbstractAIPlayer {
     @Override
     public CardList getCardsToDiscard() {
         // Wenn Ramschspiel
-        if (knowledge.getGameType() == GameType.RAMSCH) {
+        if (knowledge.getGameState() == SkatGameData.GameState.SCHIEBERAMSCH) {
             aiPlayer = new AlgorithmRamsch(this, GameType.RAMSCH);
         } else {
             // Ermitteln was gespielt werden soll
             // normalerweise muss der BidEvaluator gesetzt sein, sonst kann er
-            // eigentlich garnicht hier reinlaufen
+            // eigentlich gar nicht hier rein laufen
             if (bidEvaluator == null) {
-                bidEvaluator = new BidEvaluator(knowledge.getOwnCards(),
-                        knowledge.getPlayerPosition());
+                bidEvaluator = new BidEvaluator(knowledge.getOwnCards(), knowledge.getPlayerPosition());
             }
             bidEvaluator.eval(knowledge.getOwnCards());
 
@@ -109,25 +106,20 @@ public class AlgorithmAI extends AbstractAIPlayer {
             if (bidEvaluator.getSuggestedGameType() == GameType.NULL) {
                 // aiPlayer = new AlgorithmNull(this,
                 // bidEvaluator.getSuggestedGameType());
-                log.debug(playerName
-                        + " ist AlgorithmNull-Spieler / getCardsToDiscard");
+                log.debug(playerName + " ist AlgorithmNull-Spieler / getCardsToDiscard");
             }
             // Wenn Grand
             else if (bidEvaluator.getSuggestedGameType() == GameType.GRAND) {
-                aiPlayer = new AlgorithmGrand(this,
-                        bidEvaluator.getSuggestedGameType());
-                log.debug(playerName
-                        + " ist AlgorithmGrand-Spieler / getCardsToDiscard");
+                aiPlayer = new AlgorithmGrand(this, bidEvaluator.getSuggestedGameType());
+                log.debug(playerName + " ist AlgorithmGrand-Spieler / getCardsToDiscard");
             }
             // Wenn Farb-Spiel
             else if (bidEvaluator.getSuggestedGameType() == GameType.CLUBS
                     || bidEvaluator.getSuggestedGameType() == GameType.SPADES
                     || bidEvaluator.getSuggestedGameType() == GameType.HEARTS
                     || bidEvaluator.getSuggestedGameType() == GameType.DIAMONDS) {
-                aiPlayer = new AlgorithmSuit(this,
-                        bidEvaluator.getSuggestedGameType());
-                log.debug(playerName
-                        + " ist AlgorithmSuit-Spieler / getCardsToDiscard");
+                aiPlayer = new AlgorithmSuit(this, bidEvaluator.getSuggestedGameType());
+                log.debug(playerName + " ist AlgorithmSuit-Spieler / getCardsToDiscard");
             }
         }
 
@@ -152,25 +144,20 @@ public class AlgorithmAI extends AbstractAIPlayer {
         if (bidEvaluator.getSuggestedGameType() == GameType.NULL) {
             // aiPlayer = new AlgorithmNull(this,
             // bidEvaluator.getSuggestedGameType());
-            log.debug(playerName
-                    + " ist AlgorithmNull-Spieler / announceGame");
+            log.debug(playerName + " ist AlgorithmNull-Spieler / announceGame");
         }
         // Wenn Grand
         else if (bidEvaluator.getSuggestedGameType() == GameType.GRAND) {
-            aiPlayer = new AlgorithmGrand(this,
-                    bidEvaluator.getSuggestedGameType());
-            log.debug(playerName
-                    + " ist AlgorithmGrand-Spieler / announceGame");
+            aiPlayer = new AlgorithmGrand(this, bidEvaluator.getSuggestedGameType());
+            log.debug(playerName + " ist AlgorithmGrand-Spieler / announceGame");
         }
         // Wenn Farb-Spiel
         else if (bidEvaluator.getSuggestedGameType() == GameType.CLUBS
                 || bidEvaluator.getSuggestedGameType() == GameType.SPADES
                 || bidEvaluator.getSuggestedGameType() == GameType.HEARTS
                 || bidEvaluator.getSuggestedGameType() == GameType.DIAMONDS) {
-            aiPlayer = new AlgorithmSuit(this,
-                    bidEvaluator.getSuggestedGameType());
-            log.debug(playerName
-                    + " ist AlgorithmSuit-Spieler / announceGame");
+            aiPlayer = new AlgorithmSuit(this, bidEvaluator.getSuggestedGameType());
+            log.debug(playerName + " ist AlgorithmSuit-Spieler / announceGame");
         }
 
         return new GameContract(bidEvaluator.getSuggestedGameType());
@@ -201,8 +188,7 @@ public class AlgorithmAI extends AbstractAIPlayer {
             return knowledge.getOwnCards().get(0);
         }
         for (final Card c2 : knowledge.getOwnCards()) {
-            if (c2.isAllowed(knowledge.getGameType(), knowledge.getTrickCards()
-                    .get(0), knowledge.getOwnCards())) {
+            if (c2.isAllowed(knowledge.getGameType(), knowledge.getTrickCards().get(0), knowledge.getOwnCards())) {
                 return c2;
             }
         }
@@ -216,32 +202,25 @@ public class AlgorithmAI extends AbstractAIPlayer {
             // Wenn RAMSCH-Spiel
             if (knowledge.getGameType() == GameType.RAMSCH) {
                 aiPlayer = new AlgorithmRamsch(this, knowledge.getGameType());
-                log.debug(playerName
-                        + " ist AlgorithmRamsch-Spieler / startGame");
+                log.debug(playerName + " ist AlgorithmRamsch-Spieler / startGame");
             }
             // Wenn Null-Spiel
             if (knowledge.getGameType() == GameType.NULL) {
-                aiPlayer = new AlgorithmOpponentNull(this,
-                        knowledge.getGameType());
-                log.debug(playerName
-                        + " ist AlgorithmOpponentNull-Spieler / startGame");
+                aiPlayer = new AlgorithmOpponentNull(this, knowledge.getGameType());
+                log.debug(playerName + " ist AlgorithmOpponentNull-Spieler / startGame");
             }
             // Wenn Grand
             else if (knowledge.getGameType() == GameType.GRAND) {
-                aiPlayer = new AlgorithmOpponentGrand(this,
-                        knowledge.getGameType());
-                log.debug(playerName
-                        + " ist AlgorithmOpponentGrand-Spieler / startGame");
+                aiPlayer = new AlgorithmOpponentGrand(this, knowledge.getGameType());
+                log.debug(playerName + " ist AlgorithmOpponentGrand-Spieler / startGame");
             }
             // Wenn Farb-Spiel
             else if (knowledge.getGameType() == GameType.CLUBS
                     || knowledge.getGameType() == GameType.SPADES
                     || knowledge.getGameType() == GameType.HEARTS
                     || knowledge.getGameType() == GameType.DIAMONDS) {
-                aiPlayer = new AlgorithmOpponentSuit(this,
-                        knowledge.getGameType());
-                log.debug(playerName
-                        + " ist AlgorithmOpponentSuit-Spieler / startGame");
+                aiPlayer = new AlgorithmOpponentSuit(this, knowledge.getGameType());
+                log.debug(playerName + " ist AlgorithmOpponentSuit-Spieler / startGame");
             }
         }
     }

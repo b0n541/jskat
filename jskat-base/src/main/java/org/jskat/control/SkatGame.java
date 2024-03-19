@@ -48,8 +48,11 @@ public class SkatGame {
      * @param newMiddleHand Middle hand player
      * @param newRearHand   Rear hand player
      */
-    public SkatGame(final String newTableName, final GameVariant variant, final JSkatPlayer newForeHand,
-                    final JSkatPlayer newMiddleHand, final JSkatPlayer newRearHand) {
+    public SkatGame(final String newTableName,
+                    final GameVariant variant,
+                    final JSkatPlayer newForeHand,
+                    final JSkatPlayer newMiddleHand,
+                    final JSkatPlayer newRearHand) {
 
         tableName = newTableName;
         data = new SkatGameData();
@@ -467,7 +470,7 @@ public class SkatGame {
         log.info("Player " + activePlayer + " looks into the skat...");
         log.info("Skat before discarding: " + data.getSkat());
 
-        eventBus.post(new SkatCardsChangedEvent(tableName, data.getSkat()));
+        eventBus.post(new SkatCardsPickedUpEvent(tableName, data.getSkat()));
 
         final CardList skatBefore = data.getSkat().getImmutableCopy();
 
@@ -504,17 +507,25 @@ public class SkatGame {
         if (discardedSkat == null) {
             log.error("Player is fooling!!! Skat is empty!");
             result = false;
-        } else if (discardedSkat.size() != 2) {
+        }
+        if (discardedSkat.size() != 2) {
             log.error("Player is fooling!!! Skat doesn't have two cards!");
             result = false;
-        } else if (discardedSkat.get(0) == discardedSkat.get(1)) {
+        }
+        if (discardedSkat.get(0) == discardedSkat.get(1)) {
             log.error("Player is fooling!!! Skat cards are identical!");
             result = false;
-        } else if (!playerHasCard(player, discardedSkat.get(0)) || !playerHasCard(player, discardedSkat.get(1))) {
+        }
+        if (!playerHasCard(player, discardedSkat.get(0)) || !playerHasCard(player, discardedSkat.get(1))) {
             log.error("Player is fooling!!! Player doesn't have had discarded card!");
             result = false;
         }
-        // TODO: check for jacks in the discarded skat in ramsch games
+        if (GameState.SCHIEBERAMSCH == getGameState()
+                && !JSkatOptions.instance().isSchieberamschJacksInSkat()
+                && (discardedSkat.get(0).getRank() == Rank.JACK || discardedSkat.get(1).getRank() == Rank.JACK)) {
+            log.error("Player is fooling!!! Jacks are not allowed to be discarded.");
+            result = false;
+        }
 
         return result;
     }
@@ -970,13 +981,17 @@ public class SkatGame {
     }
 
     /**
-     * Sets the game state from outside
+     * Sets the game state.
      *
      * @param newState Game state
      */
     public void setGameState(final GameState newState) {
 
         data.setGameState(newState);
+
+        for (final JSkatPlayer playerInstance : player.values()) {
+            playerInstance.setGameState(newState);
+        }
 
         if (view != null) {
 

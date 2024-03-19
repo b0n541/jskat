@@ -6,10 +6,7 @@ import java.awt.*;
 /**
  * Abstract implementation of a combo box renderer with I18N functionality
  */
-public abstract class AbstractI18NComboBoxRenderer extends JPanel implements
-        ListCellRenderer {
-
-
+public abstract class AbstractI18NComboBoxRenderer extends JPanel implements ListCellRenderer {
     JLabel cellItemLabel;
 
     /**
@@ -25,9 +22,11 @@ public abstract class AbstractI18NComboBoxRenderer extends JPanel implements
     }
 
     @Override
-    public Component getListCellRendererComponent(JList list, Object value,
-                                                  @SuppressWarnings("unused") int index, boolean isSelected,
-                                                  @SuppressWarnings("unused") boolean cellHasFocus) {
+    public Component getListCellRendererComponent(final JList list,
+                                                  final Object value,
+                                                  @SuppressWarnings("unused") final int index,
+                                                  final boolean isSelected,
+                                                  @SuppressWarnings("unused") final boolean cellHasFocus) {
 
         cellItemLabel.setFont(list.getFont());
 
