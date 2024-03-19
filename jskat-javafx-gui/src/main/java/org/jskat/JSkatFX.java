@@ -43,7 +43,7 @@ import java.io.IOException;
 public class JSkatFX extends Application {
 
     private static final Logger LOG = LoggerFactory.getLogger(JSkatFX.class);
-    private static final String VERSION = "0.24.0";
+    private static final String VERSION = "0.23.0";
 
     private static final int SPLASH_WIDTH = 500;
     private static final int SPLASH_HEIGHT = 300;

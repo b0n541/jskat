@@ -19,7 +19,7 @@ javafx {
     version = "21.0.+"
 }
 
-version = "0.24.0-SNAPSHOT"
+version = "0.23.0"
 
 val mainClassName = "org.jskat.JSkatKt"
 
