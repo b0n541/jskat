@@ -10,7 +10,7 @@ License:
 
 * Apache License, Version 2.0 (http://www.apache.org/licenses/LICENSE-2.0)
 
-Use at least JDK 17 to build and run JSkat.
+Use at least JDK 21 to build and run JSkat.
 
 Build executable fat JAR: `./gradlew clean fatjar`
 
