@@ -507,17 +507,25 @@ public class SkatGame {
         if (discardedSkat == null) {
             log.error("Player is fooling!!! Skat is empty!");
             result = false;
-        } else if (discardedSkat.size() != 2) {
+        }
+        if (discardedSkat.size() != 2) {
             log.error("Player is fooling!!! Skat doesn't have two cards!");
             result = false;
-        } else if (discardedSkat.get(0) == discardedSkat.get(1)) {
+        }
+        if (discardedSkat.get(0) == discardedSkat.get(1)) {
             log.error("Player is fooling!!! Skat cards are identical!");
             result = false;
-        } else if (!playerHasCard(player, discardedSkat.get(0)) || !playerHasCard(player, discardedSkat.get(1))) {
+        }
+        if (!playerHasCard(player, discardedSkat.get(0)) || !playerHasCard(player, discardedSkat.get(1))) {
             log.error("Player is fooling!!! Player doesn't have had discarded card!");
             result = false;
         }
-        // TODO: check for jacks in the discarded skat in ramsch games
+        if (GameState.SCHIEBERAMSCH == getGameState()
+                && !JSkatOptions.instance().isSchieberamschJacksInSkat()
+                && (discardedSkat.get(0).getRank() == Rank.JACK || discardedSkat.get(1).getRank() == Rank.JACK)) {
+            log.error("Player is fooling!!! Jacks are not allowed to be discarded.");
+            result = false;
+        }
 
         return result;
     }
