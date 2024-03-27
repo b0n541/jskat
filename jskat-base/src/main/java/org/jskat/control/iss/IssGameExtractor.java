@@ -5,12 +5,15 @@ import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 import org.jskat.util.Player;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -22,6 +25,7 @@ import java.util.stream.Stream;
  */
 public class IssGameExtractor {
 
+    private static final Logger LOG = LoggerFactory.getLogger(IssGameExtractor.class);
     private final String sourceFileName;
 
     public static void main(final String[] args) throws Exception {
@@ -36,7 +40,14 @@ public class IssGameExtractor {
     private void filterGameDatabase(final Predicate<SkatGameData> predicate, final String targetFileName) throws Exception {
 
         try (final Stream<String> stream = Files.lines(Paths.get(sourceFileName))) {
+            final AtomicInteger count = new AtomicInteger();
             final var filteredGames = stream
+                    .peek(it -> {
+                        final var newCount = count.incrementAndGet();
+                        if (newCount % 100_000 == 0) {
+                            LOG.info("{} games processed", newCount);
+                        }
+                    })
                     .map(MessageParser::parseGameSummary)
                     .filter(skatGameData -> skatGameData != null)
                     .map(SkatGameData::toString)
