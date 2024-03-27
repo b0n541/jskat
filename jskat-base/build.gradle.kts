@@ -3,6 +3,9 @@ plugins {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlinx:kotlin-deeplearning-tensorflow:0.5.2")
-    implementation("org.jetbrains.kotlinx:dataframe:0.11.0")
+    implementation(platform("ai.djl:bom:0.26.0"))
+    implementation("ai.djl:api")
+    implementation("ai.djl:model-zoo")
+    implementation("ai.djl:basicdataset")
+    runtimeOnly("ai.djl.mxnet:mxnet-engine")
 }
