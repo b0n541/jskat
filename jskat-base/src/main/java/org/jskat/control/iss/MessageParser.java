@@ -162,7 +162,7 @@ public class MessageParser {
                 // card parsing failed
 
                 // test bidding
-                int bid = -1;
+                int bid;
                 try {
 
                     bid = Integer.parseInt(move);
@@ -310,11 +310,12 @@ public class MessageParser {
                 cards.add(Card.getCardFromString(annToken.nextToken()));
             }
 
-            if (hand) {
+            if (GameType.GRAND_SUIT.contains(gameType) && hand) {
                 ouvertCards.addAll(cards);
             } else if (cards.size() == 2) {
                 discardedCards.addAll(cards);
             } else {
+                // null hand ouvert
                 discardedCards.add(cards.get(0));
                 discardedCards.add(cards.get(1));
 
@@ -449,11 +450,12 @@ public class MessageParser {
                 LOG.debug(summaryPartMatcher.group());
 
                 final String summaryPartMarker = summaryPartMatcher.group(1);
-                final String summeryPart = summaryPartMatcher.group(2);
+                final String summaryPart = summaryPartMatcher.group(2);
 
-                parseSummaryPart(result, summaryPartMarker, summeryPart);
+                parseSummaryPart(result, summaryPartMarker, summaryPart);
             }
         } catch (final Exception exception) {
+            LOG.info(exception.getMessage());
             LOG.info("Unparsable game summary: {}", gameSummary);
             return null;
         }

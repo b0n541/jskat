@@ -164,7 +164,7 @@ public class MessageParserTest extends AbstractJSkatTest {
     }
 
     @Test
-    @Disabled("Currently not possible to be parsed by MessageParser, ouvert cards are not part of the announcement")
+    @Disabled("Currently not possible to be parsed by MessageParser, ouvert cards are not part of the announcement in SGF")
     public void testParseGameSummary_IncompleteGrandOuvertAnnouncement() {
 
         final String gameSummary = "(;GM[Skat]PC[Internet Skat Server]SE[1265]ID[727]DT[2007-11-19/23:42:26/UTC]P0[bonsai]P1[mic]P2[Legolaus]R0[0.0]R1[0.0]R2[0.0]MV[w HJ.HA.DJ.HQ.SA.H7.CA.CJ.HT.H8.H9.D7.DT.C7.ST.CK.C9.SK.S9.CT.C8.SQ.HK.S8.D9.DK.SJ.D8.CQ.DA.DQ.S7 1 p 2 p 0 18 0 GO 0 CJ 0 SC 1 RE 1 H9 2 RE ]R[d:0 win v:192 m:1 bidok p:120 t:10 s:1 z:1 p0:0 p1:0 p2:0 l:-1 to:-1] ;)";
@@ -189,12 +189,26 @@ public class MessageParserTest extends AbstractJSkatTest {
     }
 
     @Test
-    public void testParseGameSummary_PickUpSkatNoDiscard() {
+    @Disabled("Currently not possible to be parsed by MessageParser, because game announcement and discarding of skat is done in two moves in SGF")
+    public void testParseGameSummary_PickUpSkatAndDiscardInTwoMoves() {
 
         final String gameSummary = "(;GM[Skat]PC[International Skat Server]CO[]SE[26702]ID[596891]DT[2011-02-02/18:10:12/UTC]P0[xskat]P1[Knesebec]P2[bernie]R0[]R1[0.0]R2[]MV[w SJ.D8.D7.DA.HT.CT.DT.CK.DJ.S8.H9.HA.HQ.SK.C8.C7.H8.S7.S9.C9.D9.DQ.CQ.HJ.SQ.SA.CJ.H7.CA.ST.DK.HK 1 18 0 y 1 20 0 p 2 22 1 y 2 23 1 y 2 24 1 y 2 27 1 y 2 30 1 y 2 33 1 y 2 35 1 y 2 36 1 p 2 s w DK.HK 2 D 2 D9.DQ 0 S8 1 S9 2 SA 2 ST 0 DA 1 SK 0 CK 1 C7 2 CQ 0 D7 1 S7 2 DK 2 CA 0 CT 1 C8 2 CJ 0 D8 1 C9 2 SQ 0 DT 1 HA 0 SJ 1 HQ 2 HJ 0 DJ 1 H9 2 HK 0 HT 1 H8 2 H7 ]R[d:2 loss v:-72 m:1 overbid p:41 t:4 s:0 z:0 p0:0 p1:0 p2:0 l:-1 to:-1 r:0] ;)";
 
+        // deal
+        // forehand       SJ.D8.D7.DA.HT.CT.DT.CK.DJ.S8
+        // middelhand     H9.HA.HQ.SK.C8.C7.H8.S7.S9.C9
+        // rearhand       D9.DQ.CQ.HJ.SQ.SA.CJ.H7.CA.ST
+        // skat           DK.HK
+        // discard        D9.DQ
+        // declarer cards CQ.HJ.SQ.SA.CJ.H7.CA.ST.DK.HK
+        // rearhand play  CQ.HJ.SQ.SA.CJ.H7.CA.ST.DK.HK
+
         final SkatGameData gameData = MessageParser.parseGameSummary(gameSummary);
 
+        assertThat(gameData.getDealtCards().get(Player.REARHAND))
+                .containsExactlyInAnyOrder(Card.D9, Card.DQ, Card.CQ, Card.HJ, Card.SQ, Card.SA, Card.CJ, Card.H7, Card.CA, Card.ST);
+        assertThat(gameData.getDeclarerCardsBeforeFirstTrick())
+                .containsExactlyInAnyOrder(Card.CQ, Card.HJ, Card.SQ, Card.SA, Card.CJ, Card.H7, Card.CA, Card.ST, Card.DK, Card.HK);
         assertThat(gameData.getContract().gameType()).isEqualTo(GameType.DIAMONDS);
         assertThat(gameData.getResult().isWon()).isFalse();
         assertThat(gameData.getResult().getGameValue()).isEqualTo(-72);
@@ -267,7 +281,7 @@ public class MessageParserTest extends AbstractJSkatTest {
      * Declarer plays Null Ouvert and the opponents resign
      */
     @Test
-    @Disabled("Currently not possible to be parsed by MessageParser, ouvert cards are not part of the announcement")
+    @Disabled("Currently not possible to be parsed by MessageParser, ouvert cards are not part of the announcement move in SGF")
     public void testParseGameSummary_NullOuvertTwoResigns() {
 
         final String gameSummary = "(;GM[Skat]PC[International Skat Server]CO[]SE[60842]ID[1390253]DT[2012-09-26/17:30:29/UTC]P0[kermit]P1[bonsai]P2[zoot]R0[]R1[0.0]R2[]MV[w HK.SK.HJ.CA.SA.C9.S8.H7.ST.HT.C7.HA.CJ.DK.HQ.D7.C8.DA.DT.D9.SQ.DQ.H8.S9.CK.S7.SJ.CT.H9.CQ.DJ.D8 1 18 0 y 1 20 0 y 1 22 0 y 1 23 0 y 1 24 0 y 1 27 0 y 1 30 0 y 1 33 0 y 1 35 0 p 2 p 1 s w DJ.D8 1 NO.HA.HQ 2 RE 0 RE ]R[d:1 win v:46 m:0 bidok p:14 t:0 s:0 z:0 p0:0 p1:0 p2:0 l:-1 to:-1 r:1] ;)";

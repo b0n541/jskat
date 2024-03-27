@@ -29,10 +29,10 @@ public record GameContract(
         Objects.requireNonNull(ouvertCards);
 
         if (ouvert && (ouvertCards.size() != 10)) {
-            throw new IllegalArgumentException("Validation failed: Wrong number of ouvert cards in ouvert game.");
+            throw new IllegalArgumentException("Validation failed: Wrong number of ouvert cards in ouvert game: " + ouvertCards);
         }
         if (!ouvert && !ouvertCards.isEmpty()) {
-            throw new IllegalArgumentException("Validation failed: Wrong number of ouvert cards.");
+            throw new IllegalArgumentException("Validation failed: No ouvert cards allowed in non-ouvert games: " + ouvertCards);
         }
         if (GameType.RAMSCH_PASSED_IN.contains(gameType)) {
             if (hand || ouvert || ouvertCards.size() != 0 || schneider || schwarz) {

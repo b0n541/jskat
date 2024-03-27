@@ -22,7 +22,7 @@ public record GameAnnouncement(GameContract contract, CardList discardedCards) {
                 throw new IllegalArgumentException("No discarded cards allowed in hand games.");
             }
             if (!contract.hand() && discardedCards.size() != 2) {
-                throw new IllegalArgumentException("Two discarded cards needed in non hand games.");
+                throw new IllegalArgumentException("Two discarded cards needed in non-hand games.");
             }
         }
         if (GameType.RAMSCH_PASSED_IN.contains(contract.gameType())) {
