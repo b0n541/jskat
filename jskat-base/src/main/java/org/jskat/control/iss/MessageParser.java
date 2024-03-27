@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -440,26 +439,31 @@ public class MessageParser {
 
     static SkatGameData parseGameSummary(final String gameSummary) {
 
-        final SkatGameData result = new SkatGameData();
+        final SkatGameData result = new SkatGameData(gameSummary);
 
-        final Pattern summaryPartPattern = Pattern.compile("(\\w+)\\[(.*?)\\]");
-        final Matcher summaryPartMatcher = summaryPartPattern.matcher(gameSummary);
+        final var summaryPartMatcher = Pattern.compile("(\\w+)\\[(.*?)\\]").matcher(gameSummary);
 
-        while (summaryPartMatcher.find()) {
+        try {
+            while (summaryPartMatcher.find()) {
 
-            log.debug(summaryPartMatcher.group());
+                log.debug(summaryPartMatcher.group());
 
-            final String summaryPartMarker = summaryPartMatcher.group(1);
-            final String summeryPart = summaryPartMatcher.group(2);
+                final String summaryPartMarker = summaryPartMatcher.group(1);
+                final String summeryPart = summaryPartMatcher.group(2);
 
-            parseSummaryPart(result, summaryPartMarker, summeryPart);
+                parseSummaryPart(result, summaryPartMarker, summeryPart);
+            }
+        } catch (final Exception exception) {
+            log.info("Unparsable game summary: {}", gameSummary);
+            return null;
         }
 
         return result;
     }
 
     private static void parseSummaryPart(final SkatGameData result,
-                                         final String summaryPartMarker, final String summaryPart) {
+                                         final String summaryPartMarker,
+                                         final String summaryPart) {
 
         if ("P0".equals(summaryPartMarker)) {
 

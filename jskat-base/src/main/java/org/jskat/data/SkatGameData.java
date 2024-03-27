@@ -81,6 +81,8 @@ public class SkatGameData {
         GAME_OVER
     }
 
+    private String sgf;
+
     private GameState gameState;
     /**
      * Flag for the Skat rules
@@ -173,10 +175,12 @@ public class SkatGameData {
      * Creates a new instance of a Skat game data
      */
     public SkatGameData() {
-
         initializeVariables();
+    }
 
-        log.debug("Game data created");
+    public SkatGameData(final String sgf) {
+        this();
+        this.sgf = sgf;
     }
 
     @Subscribe
@@ -1259,5 +1263,13 @@ public class SkatGameData {
      */
     public boolean isSkatPickedUp() {
         return skatPickedUp;
+    }
+
+    @Override
+    public String toString() {
+        if (sgf != null) {
+            return sgf;
+        }
+        return super.toString();
     }
 }

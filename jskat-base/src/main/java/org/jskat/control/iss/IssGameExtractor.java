@@ -25,7 +25,7 @@ public class IssGameExtractor {
     private final String sourceFileName;
 
     public static void main(final String[] args) throws Exception {
-        final IssGameExtractor gameExtractor = new IssGameExtractor("/home/jan/Projects/jskat/iss/iss-games-04-2021.sgf");
+        final IssGameExtractor gameExtractor = new IssGameExtractor("/home/jan/Projects/jskat/iss/iss-games-10-2023.sgf");
         gameExtractor.filterGameDatabase(KERMIT_GAMES, "kermit_games.csv");
     }
 
@@ -36,15 +36,17 @@ public class IssGameExtractor {
     private void filterGameDatabase(final Predicate<SkatGameData> predicate, final String targetFileName) throws Exception {
 
         try (final Stream<String> stream = Files.lines(Paths.get(sourceFileName))) {
-            final var filteredGames = stream.map(MessageParser::parseGameSummary)
-                    .filter(predicate)
-                    .map(NETWORK_INPUTS)
-                    .peek(System.out::println)
-                    .limit(100_000)
+            final var filteredGames = stream
+                    .map(MessageParser::parseGameSummary)
+                    .filter(skatGameData -> skatGameData != null)
+                    .map(SkatGameData::toString)
+//                    .filter(predicate)
+//                    .map(NETWORK_INPUTS)
+                    .limit(100)
                     .collect(Collectors.toList());
 
-            var lines = new ArrayList<String>();
-            lines.add(headerFields().stream().collect(Collectors.joining(",")));
+            final var lines = new ArrayList<String>();
+//            lines.add(headerFields().stream().collect(Collectors.joining(",")));
             lines.addAll(filteredGames);
 
             Files.write(Paths.get(targetFileName), lines);
@@ -54,14 +56,14 @@ public class IssGameExtractor {
     private static final Predicate<SkatGameData> KERMIT_GAMES =
             it -> isDeclarer(it, "kermit") && it.getGameType() != GameType.PASSED_IN;
 
-    private static final boolean isDeclarer(final SkatGameData gameData, final String playerName) {
+    private static boolean isDeclarer(final SkatGameData gameData, final String playerName) {
         return gameData.getDeclarer() == Player.FOREHAND && gameData.getPlayerName(Player.FOREHAND).startsWith(playerName)
                 || gameData.getDeclarer() == Player.MIDDLEHAND && gameData.getPlayerName(Player.MIDDLEHAND).startsWith(playerName)
                 || gameData.getDeclarer() == Player.REARHAND && gameData.getPlayerName(Player.REARHAND).startsWith(playerName);
     }
 
     private static final List<String> headerFields() {
-        var result = new ArrayList<String>();
+        final var result = new ArrayList<String>();
         result.add("declarer");
         Arrays.stream(Card.values()).toList().forEach(it -> result.add(it.toString()));
         result.add("maxBidForehand");
