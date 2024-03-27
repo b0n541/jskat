@@ -1,5 +1,6 @@
 package org.jskat.control.iss;
 
+import org.jetbrains.annotations.NotNull;
 import org.jskat.data.SkatGameData;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -42,12 +44,7 @@ public class IssGameExtractor {
         try (final Stream<String> stream = Files.lines(Paths.get(sourceFileName))) {
             final AtomicInteger count = new AtomicInteger();
             final var filteredGames = stream
-                    .peek(it -> {
-                        final var newCount = count.incrementAndGet();
-                        if (newCount % 100_000 == 0) {
-                            LOG.info("{} games processed", newCount);
-                        }
-                    })
+                    .peek(logProgress(count))
                     .map(MessageParser::parseGameSummary)
                     .filter(skatGameData -> skatGameData != null)
                     .map(SkatGameData::toString)
@@ -62,6 +59,15 @@ public class IssGameExtractor {
 
             Files.write(Paths.get(targetFileName), lines);
         }
+    }
+
+    @NotNull
+    private static Consumer<String> logProgress(final AtomicInteger count) {
+        return it -> {
+            if (count.incrementAndGet() % 100_000 == 0) {
+                LOG.info("{} games processed", count.get());
+            }
+        };
     }
 
     private static final Predicate<SkatGameData> KERMIT_GAMES =

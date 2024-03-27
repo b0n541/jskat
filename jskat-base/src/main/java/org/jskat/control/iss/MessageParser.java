@@ -25,7 +25,7 @@ import java.util.regex.Pattern;
  */
 public class MessageParser {
 
-    private static final Logger log = LoggerFactory.getLogger(MessageParser.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MessageParser.class);
 
     /**
      * table .1 bar state --> was cut away before <br>
@@ -95,7 +95,7 @@ public class MessageParser {
     static GameStartInformation getGameStartStatus(final String loginName,
                                                    final List<String> params) {
 
-        log.debug("game start parameter: " + params);
+        LOG.debug("game start parameter: " + params);
 
         final GameStartInformation status = new GameStartInformation(
                 loginName,
@@ -118,7 +118,7 @@ public class MessageParser {
 
         // FIXME Unhandled moves
         final String move = params.get(1);
-        log.debug("Move: " + move);
+        LOG.debug("Move: " + move);
         if ("y".equals(move)) {
             // holding bid move
             info.setType(MoveType.HOLD_BID);
@@ -220,7 +220,7 @@ public class MessageParser {
     private static void getMovePlayer(final String movePlayer,
                                       final MoveInformation info) {
 
-        log.debug("Move player: " + movePlayer);
+        LOG.debug("Move player: " + movePlayer);
         if ("w".equals(movePlayer)) {
             // world move
             info.setMovePlayer(MovePlayer.WORLD);
@@ -296,7 +296,7 @@ public class MessageParser {
                     // FIXME this should be moved to the GameContract record initialization
                     schneider = true;
                 }
-                default -> log.warn("Unknown game modifier.");
+                default -> LOG.warn("Unknown game modifier.");
             }
         }
 
@@ -446,7 +446,7 @@ public class MessageParser {
         try {
             while (summaryPartMatcher.find()) {
 
-                log.debug(summaryPartMatcher.group());
+                LOG.debug(summaryPartMatcher.group());
 
                 final String summaryPartMarker = summaryPartMatcher.group(1);
                 final String summeryPart = summaryPartMatcher.group(2);
@@ -454,7 +454,7 @@ public class MessageParser {
                 parseSummaryPart(result, summaryPartMarker, summeryPart);
             }
         } catch (final Exception exception) {
-            log.info("Unparsable game summary: {}", gameSummary);
+            LOG.info("Unparsable game summary: {}", gameSummary);
             return null;
         }
 
