@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jskat.data.SkatGameData;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
-import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,10 +46,10 @@ public class IssGameExtractor {
                     .peek(logProgress(count))
                     .map(MessageParser::parseGameSummary)
                     .filter(skatGameData -> skatGameData != null)
+                    .filter(predicate)
                     .map(SkatGameData::toString)
-//                    .filter(predicate)
-//                    .map(NETWORK_INPUTS)
-                    .limit(100)
+                    //.map(NETWORK_INPUTS)
+                    //.limit(1_000_000)
                     .collect(Collectors.toList());
 
             final var lines = new ArrayList<String>();
@@ -58,6 +57,8 @@ public class IssGameExtractor {
             lines.addAll(filteredGames);
 
             Files.write(Paths.get(targetFileName), lines);
+
+            LOG.info("Game extraction completed.");
         }
     }
 
@@ -71,7 +72,7 @@ public class IssGameExtractor {
     }
 
     private static final Predicate<SkatGameData> KERMIT_GAMES =
-            it -> isDeclarer(it, "kermit") && it.getGameType() != GameType.PASSED_IN;
+            it -> isDeclarer(it, "kermit");// && it.getGameType() != GameType.PASSED_IN;
 
     private static boolean isDeclarer(final SkatGameData gameData, final String playerName) {
         return gameData.getDeclarer() == Player.FOREHAND && gameData.getPlayerName(Player.FOREHAND).startsWith(playerName)
