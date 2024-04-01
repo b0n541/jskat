@@ -1,5 +1,6 @@
 package org.jskat.control.iss;
 
+import org.jetbrains.annotations.Nullable;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameContract;
 import org.jskat.data.SkatGameData;
@@ -14,10 +15,7 @@ import org.jskat.util.rule.SkatRuleFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -48,11 +46,10 @@ public class MessageParser {
 
         // get player status
         for (int i = 0; i < status.getMaxPlayers(); i++) {
-            // parse only non empty seats
+            // parse only non-empty seats
             if (!".".equals(params.get(i * 10 + 5))) {
                 // there is player information
-                final PlayerStatus playerStatus = parsePlayerStatus(params
-                        .subList(i * 10 + 5, i * 10 + 16));
+                final PlayerStatus playerStatus = parsePlayerStatus(params.subList(i * 10 + 5, i * 10 + 16));
                 // has player left already
                 if (".".equals(params.get(i + 1))) {
                     playerStatus.setPlayerLeft(true);
@@ -111,6 +108,10 @@ public class MessageParser {
     }
 
     static MoveInformation getMoveInformation(final List<String> params) {
+        return getMoveInformation(params, null);
+    }
+
+    static MoveInformation getMoveInformation(final List<String> params, final SkatGameData gameData) {
 
         final MoveInformation info = new MoveInformation();
 
@@ -181,14 +182,14 @@ public class MessageParser {
                         // card dealing
                         info.setType(MoveType.DEAL);
                         info.setDealCards(parseCardDeal(move));
-                    } else if (move.length() == 5) {
+                    } else if (move.length() == 5 && move.contains(".")) {
                         // open skat given to a player
                         info.setType(MoveType.PICK_UP_SKAT);
                         info.setSkat(parseSkatCards(move));
                     } else {
                         // game announcement
                         info.setType(MoveType.GAME_ANNOUNCEMENT);
-                        parseGameAnnouncement(info, move);
+                        parseGameAnnouncement(info, move, gameData);
                     }
                 }
             }
@@ -241,36 +242,13 @@ public class MessageParser {
      * [H] (hand, not given if O + trump game) [S] (schneider announced, only in
      * H games, not if O or Z) [Z] (schwarz announced, only in H games)
      */
-    private static void parseGameAnnouncement(final MoveInformation info, final String move) {
+    private static void parseGameAnnouncement(final MoveInformation info, final String move, final SkatGameData gameData) {
 
         final StringTokenizer annToken = new StringTokenizer(move, ".");
+
         final String gameTypeString = annToken.nextToken();
 
-        GameType gameType = null;
-        if (gameTypeString.startsWith("G")) {
-
-            gameType = GameType.GRAND;
-
-        } else if (gameTypeString.startsWith("C")) {
-
-            gameType = GameType.CLUBS;
-
-        } else if (gameTypeString.startsWith("S")) {
-
-            gameType = GameType.SPADES;
-
-        } else if (gameTypeString.startsWith("H")) {
-
-            gameType = GameType.HEARTS;
-
-        } else if (gameTypeString.startsWith("D")) {
-
-            gameType = GameType.DIAMONDS;
-
-        } else if (gameTypeString.startsWith("N")) {
-
-            gameType = GameType.NULL;
-        }
+        final var gameType = getGameType(gameTypeString);
 
         boolean hand = false;
         boolean schneider = false;
@@ -303,24 +281,34 @@ public class MessageParser {
         final CardList discardedCards = new CardList();
         final CardList ouvertCards = new CardList();
 
-        if (annToken.hasMoreTokens()) {
-            final CardList cards = new CardList();
+        final CardList cards = new CardList();
+        while (annToken.hasMoreTokens()) {
+            cards.add(Card.getCardFromString(annToken.nextToken()));
+        }
 
-            while (annToken.hasMoreTokens()) {
-                cards.add(Card.getCardFromString(annToken.nextToken()));
-            }
-
-            if (GameType.GRAND_SUIT.contains(gameType) && hand) {
+        if (hand) {
+            if (ouvert) {
                 ouvertCards.addAll(cards);
-            } else if (cards.size() == 2) {
-                discardedCards.addAll(cards);
-            } else {
-                // null hand ouvert
-                discardedCards.add(cards.get(0));
-                discardedCards.add(cards.get(1));
+                if (ouvertCards.size() == 0) {
+                    ouvertCards.addAll(gameData.getDealtCards().get(info.getPlayer()));
+                }
+            }
+        } else {
+            discardedCards.add(cards.get(0));
+            discardedCards.add(cards.get(1));
 
-                for (int i = 2; i < cards.size(); i++) {
-                    ouvertCards.add(cards.get(i));
+            if (GameType.NULL == gameType) {
+
+                if (ouvert) {
+                    for (int i = 2; i < cards.size(); i++) {
+                        ouvertCards.add(cards.get(i));
+                    }
+                    if (ouvertCards.size() == 0) {
+                        final var cardsAfterDiscard = new CardList(gameData.getDealtCards().get(info.getPlayer()));
+                        cardsAfterDiscard.addAll(gameData.getDealtSkat());
+                        cardsAfterDiscard.removeAll(discardedCards);
+                        ouvertCards.addAll(cardsAfterDiscard);
+                    }
                 }
             }
         }
@@ -335,6 +323,36 @@ public class MessageParser {
                                 ouvert,
                                 ouvertCards),
                         discardedCards));
+    }
+
+    @Nullable
+    private static GameType getGameType(final String gameTypeString) {
+        GameType gameType = null;
+        if (gameTypeString.startsWith("G")) {
+
+            gameType = GameType.GRAND;
+
+        } else if (gameTypeString.startsWith("C")) {
+
+            gameType = GameType.CLUBS;
+
+        } else if (gameTypeString.startsWith("S")) {
+
+            gameType = GameType.SPADES;
+
+        } else if (gameTypeString.startsWith("H")) {
+
+            gameType = GameType.HEARTS;
+
+        } else if (gameTypeString.startsWith("D")) {
+
+            gameType = GameType.DIAMONDS;
+
+        } else if (gameTypeString.startsWith("N")) {
+
+            gameType = GameType.NULL;
+        }
+        return gameType;
     }
 
     private static List<CardList> parseCardDeal(final String move) {
@@ -438,7 +456,7 @@ public class MessageParser {
         return result;
     }
 
-    static SkatGameData parseGameSummary(final String gameSummary) {
+    public static SkatGameData parseGameSummary(final String gameSummary) {
 
         final SkatGameData result = new SkatGameData(gameSummary);
 
@@ -500,7 +518,20 @@ public class MessageParser {
             moveToken.add(token.nextToken());
             moveToken.add(token.nextToken());
 
-            final MoveInformation moveInfo = getMoveInformation(moveToken);
+            // Fix for old game data in SGF format where game announcement and discarded cards were sent in two moves
+            if (Set.of("C", "S", "H", "D").contains(moveToken.getLast())) {
+                final var player = token.nextToken();
+                final var discardedCards = token.nextToken();
+
+                if (moveToken.getFirst().equals(player)) {
+                    moveToken.add(moveToken.removeLast() + "." + discardedCards);
+                } else {
+                    LOG.error("Consumed too many tokens: {} - {} - {}", moveToken, player, discardedCards);
+                    throw new IllegalStateException("Error in move parsing.");
+                }
+            }
+
+            final MoveInformation moveInfo = getMoveInformation(moveToken, result);
 
             switch (moveInfo.getType()) {
                 case DEAL:
@@ -578,16 +609,13 @@ public class MessageParser {
                                          final String token) {
 
         // from ISS source code
-        // return "d:"+declarer + (penalty ? " penalty" : (declValue > 0 ? "
-        // win" : " loss"))
+        // return "d:"+declarer + (penalty ? " penalty" : (declValue > 0 ? "win" : " loss"))
         // + " v:" + declValue
         // + " m:" + matadors + (overbid ? " overbid" : " bidok")
         // + " p:" + declCardPoints + " t:" + declTricks
-        // + " s:" + (schneider ? '1' : '0') + " z:" + (schwarz ? '1' :
-        // '0')
+        // + " s:" + (schneider ? '1' : '0') + " z:" + (schwarz ? '1' : '0')
         // + " p0:" + penalty0 + " p1:" + penalty1 + " p2:" + penalty2
-        // + " l:" + this.left + " to:" + this.timeout + " r:" + (resigned
-        // ? '1' : '0');
+        // + " l:" + this.left + " to:" + this.timeout + " r:" + (resigned ? '1' : '0');
 
         // TODO: or simply "passed"
 
