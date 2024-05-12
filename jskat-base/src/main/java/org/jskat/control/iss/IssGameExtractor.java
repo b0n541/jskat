@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jskat.data.SkatGameData;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
+import org.jskat.util.GameType;
 import org.jskat.util.Player;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,7 @@ public class IssGameExtractor {
 
     public static void main(final String[] args) throws Exception {
         final IssGameExtractor gameExtractor = new IssGameExtractor("/home/jan/Projects/jskat/iss/iss-games-10-2023.sgf");
-        gameExtractor.filterGameDatabase(KERMIT_GAMES, "kermit_games.csv");
+        gameExtractor.filterGameDatabase(KERMIT_GAMES, "data/kermit_games.csv");
     }
 
     public IssGameExtractor(final String sourceFileName) {
@@ -44,16 +45,23 @@ public class IssGameExtractor {
             final AtomicInteger count = new AtomicInteger();
             final var filteredGames = stream
                     .peek(logProgress(count))
+                    .peek(System.out::println)
+                    // TODO: fix parsing of filtered games
+                    .filter(gameString ->
+                            !gameString.contains("ID[19897]") &&
+                                    !gameString.contains("ID[29067]") &&
+                                    !gameString.contains("ID[1026432]") &&
+                                    !gameString.contains("ID[1271056]"))
                     .map(MessageParser::parseGameSummary)
                     .filter(skatGameData -> skatGameData != null)
                     .filter(predicate)
-                    .map(SkatGameData::toString)
-                    //.map(NETWORK_INPUTS)
-                    //.limit(1_000_000)
+                    //.map(SkatGameData::toString)
+                    .map(NETWORK_INPUTS)
+                    .limit(100_000)
                     .collect(Collectors.toList());
 
             final var lines = new ArrayList<String>();
-//            lines.add(headerFields().stream().collect(Collectors.joining(",")));
+            lines.add(headerFields().stream().collect(Collectors.joining(",")));
             lines.addAll(filteredGames);
 
             Files.write(Paths.get(targetFileName), lines);
@@ -72,7 +80,9 @@ public class IssGameExtractor {
     }
 
     private static final Predicate<SkatGameData> KERMIT_GAMES =
-            it -> isDeclarer(it, "kermit");// && it.getGameType() != GameType.PASSED_IN;
+            it -> isDeclarer(it, "kermit")
+                    && it.getGameType() != GameType.PASSED_IN
+                    && it.isGameWon();
 
     private static boolean isDeclarer(final SkatGameData gameData, final String playerName) {
         return gameData.getDeclarer() == Player.FOREHAND && gameData.getPlayerName(Player.FOREHAND).startsWith(playerName)
