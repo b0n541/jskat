@@ -20,7 +20,7 @@ Build installation with fat JAR and start scripts: `./gradlew clean assembleDist
 
 We build every push to develop with GitHub actions. We also build on every pull request.
 
-We develop according the GitFlow workflow: http://nvie.com/posts/a-successful-git-branching-model/
+We develop according the GitHub flow: https://docs.github.com/en/get-started/using-github/github-flow
 
 So if you want to contribute to JSkat please create a feature branch from the `develop` branch and create pull requests
 towards the `develop` branch.
