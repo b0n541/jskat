@@ -31,7 +31,8 @@ public class IssGameExtractor {
     private final String sourceFileName;
 
     public static void main(final String[] args) throws Exception {
-        final IssGameExtractor gameExtractor = new IssGameExtractor("/home/jan/Projects/jskat/iss/iss-games-10-2023.sgf");
+        // download ISS game files from https://skatgame.net/iss/
+        final IssGameExtractor gameExtractor = new IssGameExtractor("data/iss-games-07-2024.sgf");
         gameExtractor.filterGameDatabase(KERMIT_GAMES, "data/kermit_games.csv");
     }
 
@@ -44,20 +45,40 @@ public class IssGameExtractor {
         try (final Stream<String> stream = Files.lines(Paths.get(sourceFileName))) {
             final AtomicInteger count = new AtomicInteger();
             final var filteredGames = stream
+                    .skip(9_000_000)
                     .peek(logProgress(count))
-                    .peek(System.out::println)
+                    //.peek(System.out::println)
                     // TODO: fix parsing of filtered games
                     .filter(gameString ->
-                            !gameString.contains("ID[19897]") &&
-                                    !gameString.contains("ID[29067]") &&
-                                    !gameString.contains("ID[1026432]") &&
-                                    !gameString.contains("ID[1271056]"))
+                            !gameString.contains("ID[19897]")
+                                    && !gameString.contains("ID[29067]")
+                                    && !gameString.contains("ID[55355]")
+                                    && !gameString.contains("ID[119716]")
+                                    && !gameString.contains("ID[119815]")
+                                    && !gameString.contains("ID[1026432]")
+                                    && !gameString.contains("ID[1271056]")
+                                    && !gameString.contains("ID[1841955]")
+                                    && !gameString.contains("ID[1926081]")
+                                    && !gameString.contains("ID[1930276]")
+                                    && !gameString.contains("ID[1979120]")
+                                    && !gameString.contains("ID[2492322]")
+                                    && !gameString.contains("ID[5484298]")
+                                    && !gameString.contains("ID[5517615]")
+                                    && !gameString.contains("ID[5534151]")
+                                    && !gameString.contains("ID[5562697]")
+                                    && !gameString.contains("ID[7322708]")
+                                    && !gameString.contains("ID[7323008]")
+                                    && !gameString.contains("ID[7323032]")
+                                    && !gameString.contains("ID[7323074]")
+                                    && !gameString.contains("ID[8034006]")
+                                    && !gameString.contains("ID[8066495]")
+                                    && !gameString.contains("ID[8015909]"))
                     .map(MessageParser::parseGameSummary)
                     .filter(skatGameData -> skatGameData != null)
                     .filter(predicate)
                     //.map(SkatGameData::toString)
                     .map(NETWORK_INPUTS)
-                    .limit(100_000)
+                    .limit(100)
                     .collect(Collectors.toList());
 
             final var lines = new ArrayList<String>();
@@ -66,15 +87,16 @@ public class IssGameExtractor {
 
             Files.write(Paths.get(targetFileName), lines);
 
-            LOG.info("Game extraction completed.");
+            LOG.info("Game extraction completed. " + count.get() + " games processed.");
         }
     }
 
     @NotNull
     private static Consumer<String> logProgress(final AtomicInteger count) {
         return it -> {
-            if (count.incrementAndGet() % 100_000 == 0) {
-                LOG.info("{} games processed", count.get());
+            final var currentCount = count.incrementAndGet();
+            if (currentCount % 100_000 == 0) {
+                LOG.info("{} games processed", currentCount);
             }
         };
     }
