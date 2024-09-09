@@ -45,7 +45,7 @@ public class IssGameExtractor {
         try (final Stream<String> stream = Files.lines(Paths.get(sourceFileName))) {
             final AtomicInteger count = new AtomicInteger();
             final var filteredGames = stream
-                    .skip(9_000_000)
+                    .skip(6_000_000)
                     .peek(logProgress(count))
                     //.peek(System.out::println)
                     // TODO: fix parsing of filtered games
@@ -78,7 +78,7 @@ public class IssGameExtractor {
                     .filter(predicate)
                     //.map(SkatGameData::toString)
                     .map(NETWORK_INPUTS)
-                    .limit(100)
+                    .limit(100_000)
                     .collect(Collectors.toList());
 
             final var lines = new ArrayList<String>();
