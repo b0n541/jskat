@@ -8,7 +8,7 @@ class DataFrameDataSetTest {
     @Test
     fun creation() {
         val builder = DataFrameDataSet.Builder()
-        builder.filePath = "/home/jan/git/jskat/data/kermit_games.csv"
+        builder.filePath = "data/kermit_games_test.csv"
         builder.setSampling(10, true)
         builder.addCategoricalFeature("declarer", true)
         listOf(
@@ -23,7 +23,7 @@ class DataFrameDataSetTest {
         val dataSet = builder.build()
         dataSet.prepare()
 
-        assertThat(dataSet.size()).isEqualTo(100)
+        assertThat(dataSet.size()).isEqualTo(10)
         assertThat(dataSet.featureSize).isEqualTo(33)
         assertThat(dataSet.labelSize).isEqualTo(1)
 
@@ -40,13 +40,13 @@ class DataFrameDataSetTest {
         assertThat(splitData.size).isEqualTo(2)
 
         val training = splitData[0]
-        assertThat(training.size()).isEqualTo(80)
+        assertThat(training.size()).isEqualTo(8)
 
         val record = training.get(ndManager, 0)
         assertThat(record.data[0].size()).isEqualTo(35)
         assertThat(record.labels[0].size()).isEqualTo(6)
 
         val test = splitData[1]
-        assertThat(test.size()).isEqualTo(20)
+        assertThat(test.size()).isEqualTo(2)
     }
 }
