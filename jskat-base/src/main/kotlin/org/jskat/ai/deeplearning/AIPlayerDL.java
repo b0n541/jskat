@@ -27,8 +27,7 @@ public class AIPlayerDL extends AbstractAIPlayer {
      * Creates a new instance of AIPlayerRND.
      */
     public AIPlayerDL() {
-
-        this("unknown");
+        this("AIPlayerDL");
     }
 
     /**
