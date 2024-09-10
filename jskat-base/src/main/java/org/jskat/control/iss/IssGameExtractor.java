@@ -42,10 +42,10 @@ public class IssGameExtractor {
 
     private void filterGameDatabase(final Predicate<SkatGameData> predicate, final String targetFileName) throws Exception {
 
-        try (final Stream<String> stream = Files.lines(Paths.get(sourceFileName))) {
+        try (final Stream<String> stream = Files.lines(Paths.get(sourceFileName)).parallel()) {
             final AtomicInteger count = new AtomicInteger();
             final var filteredGames = stream
-                    .skip(6_000_000)
+                    //.skip(6_000_000)
                     .peek(logProgress(count))
                     //.peek(System.out::println)
                     // TODO: fix parsing of filtered games
@@ -77,8 +77,8 @@ public class IssGameExtractor {
                     .filter(skatGameData -> skatGameData != null)
                     .filter(predicate)
                     //.map(SkatGameData::toString)
+                    .limit(1_000_000)
                     .map(NETWORK_INPUTS)
-                    .limit(100_000)
                     .collect(Collectors.toList());
 
             final var lines = new ArrayList<String>();

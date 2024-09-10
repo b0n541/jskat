@@ -12,7 +12,7 @@ class DataFrameDataSet(builder: Builder<*>) : TabularDataset(builder) {
 
     private val filePath: String = builder.filePath!!
     private var dataFrame: DataFrame<Any?> =
-        DataFrame.readCSV(filePath).fillNulls("gameType").with { "NULL" }
+        DataFrame.readCSV(filePath).fillNulls("gameType").with { "NULL_GAME" }
 
     override fun prepare(progress: Progress?) {
         prepareFeaturizers()
