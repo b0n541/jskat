@@ -1,6 +1,7 @@
 package org.jskat.ai.deeplearning
 
 import ai.djl.Model
+import ai.djl.basicdataset.tabular.CsvDataset
 import ai.djl.metric.Metrics
 import ai.djl.modality.Classifications
 import ai.djl.nn.Activation
@@ -15,16 +16,74 @@ import ai.djl.training.listener.TrainingListener
 import ai.djl.training.loss.SoftmaxCrossEntropyLoss
 import ai.djl.training.optimizer.Optimizer
 import ai.djl.training.util.ProgressBar
+import org.apache.commons.csv.CSVFormat
+import java.io.File
 import java.nio.file.Paths
 
 
 fun main() {
 
     val batchSize = 10_000
-    val builder = DataFrameDataSet.Builder()
-    builder.filePath = "data/kermit_games.csv"
-    builder.setSampling(batchSize, true)
-    builder.addCategoricalFeature("declarer", true)
+    val builder = CsvDataset.CsvBuilder()
+        .optCsvFile(File("data/kermit_games.csv").toPath())
+        .setCsvFormat(
+            CSVFormat.DEFAULT
+                .builder()
+                .setHeader(
+                    "declarer",
+                    "♣A",
+                    "♣T",
+                    "♣K",
+                    "♣Q",
+                    "♣J",
+                    "♣9",
+                    "♣8",
+                    "♣7",
+                    "♠A",
+                    "♠T",
+                    "♠K",
+                    "♠Q",
+                    "♠J",
+                    "♠9",
+                    "♠8",
+                    "♠7",
+                    "♥A",
+                    "♥T",
+                    "♥K",
+                    "♥Q",
+                    "♥J",
+                    "♥9",
+                    "♥8",
+                    "♥7",
+                    "♦A",
+                    "♦T",
+                    "♦K",
+                    "♦Q",
+                    "♦J",
+                    "♦9",
+                    "♦8",
+                    "♦7",
+                    "maxBidForehand",
+                    "maxBidMiddlehand",
+                    "maxBidRearhand",
+                    "gameType",
+                    "hand",
+                    "ouvert",
+                    "annSchneider",
+                    "annSchwarz",
+                    "won",
+                    "declarerScore",
+                    "schneider",
+                    "schwarz"
+                )
+                .setSkipHeaderRecord(true)
+                .setIgnoreHeaderCase(true)
+                .setTrim(true)
+                .build()
+        )
+        .setSampling(batchSize, true)
+        .addCategoricalFeature("declarer", true)
+
     listOf(
         "♣A", "♣T", "♣K", "♣Q", "♣J", "♣9", "♣8", "♣7",
         "♠A", "♠T", "♠K", "♠Q", "♠J", "♠9", "♠8", "♠7",
@@ -33,7 +92,9 @@ fun main() {
     ).forEach {
         builder.addNumericFeature(it)
     }
+
     builder.addCategoricalLabel("gameType", true)
+
     val dataSet = builder.build()
     dataSet.prepare(ProgressBar())
 

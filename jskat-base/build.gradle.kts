@@ -3,10 +3,8 @@ plugins {
 }
 
 dependencies {
-    implementation(platform("ai.djl:bom:0.29.0"))
+    implementation(platform("ai.djl:bom:0.31.1"))
     implementation("ai.djl:api")
     implementation("ai.djl:basicdataset")
     runtimeOnly("ai.djl.mxnet:mxnet-engine")
-
-    implementation("org.jetbrains.kotlinx:dataframe:0.13.1")
 }
