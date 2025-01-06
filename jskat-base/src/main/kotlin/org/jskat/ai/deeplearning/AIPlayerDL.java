@@ -24,14 +24,14 @@ public class AIPlayerDL extends AbstractAIPlayer {
     private final Random random = new Random();
 
     /**
-     * Creates a new instance of AIPlayerRND.
+     * Creates a new instance of AIPlayerDL.
      */
     public AIPlayerDL() {
         this("AIPlayerDL");
     }
 
     /**
-     * Creates a new instance of AIPlayerRND.
+     * Creates a new instance of AIPlayerDL.
      *
      * @param newPlayerName Player's name
      */

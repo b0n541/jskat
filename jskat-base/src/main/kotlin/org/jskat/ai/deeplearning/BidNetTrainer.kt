@@ -12,69 +12,33 @@ import ai.djl.training.DefaultTrainingConfig
 import ai.djl.training.EasyTrain
 import ai.djl.training.evaluator.Accuracy
 import ai.djl.training.initializer.NormalInitializer
+import ai.djl.training.listener.EarlyStoppingListener
 import ai.djl.training.listener.TrainingListener
 import ai.djl.training.loss.SoftmaxCrossEntropyLoss
 import ai.djl.training.optimizer.Optimizer
 import ai.djl.training.util.ProgressBar
 import org.apache.commons.csv.CSVFormat
-import java.io.File
 import java.nio.file.Paths
+import java.time.Duration
 
 
 fun main() {
 
     val batchSize = 10_000
     val builder = CsvDataset.CsvBuilder()
-        .optCsvFile(File("data/kermit_games.csv").toPath())
+        .optCsvFile(Paths.get("data/kermit_games.csv"))
         .setCsvFormat(
             CSVFormat.DEFAULT
                 .builder()
                 .setHeader(
                     "declarer",
-                    "♣A",
-                    "♣T",
-                    "♣K",
-                    "♣Q",
-                    "♣J",
-                    "♣9",
-                    "♣8",
-                    "♣7",
-                    "♠A",
-                    "♠T",
-                    "♠K",
-                    "♠Q",
-                    "♠J",
-                    "♠9",
-                    "♠8",
-                    "♠7",
-                    "♥A",
-                    "♥T",
-                    "♥K",
-                    "♥Q",
-                    "♥J",
-                    "♥9",
-                    "♥8",
-                    "♥7",
-                    "♦A",
-                    "♦T",
-                    "♦K",
-                    "♦Q",
-                    "♦J",
-                    "♦9",
-                    "♦8",
-                    "♦7",
-                    "maxBidForehand",
-                    "maxBidMiddlehand",
-                    "maxBidRearhand",
-                    "gameType",
-                    "hand",
-                    "ouvert",
-                    "annSchneider",
-                    "annSchwarz",
-                    "won",
-                    "declarerScore",
-                    "schneider",
-                    "schwarz"
+                    "♣A", "♣T", "♣K", "♣Q", "♣J", "♣9", "♣8", "♣7",
+                    "♠A", "♠T", "♠K", "♠Q", "♠J", "♠9", "♠8", "♠7",
+                    "♥A", "♥T", "♥K", "♥Q", "♥J", "♥9", "♥8", "♥7",
+                    "♦A", "♦T", "♦K", "♦Q", "♦J", "♦9", "♦8", "♦7",
+                    "maxBidForehand", "maxBidMiddlehand", "maxBidRearhand",
+                    "gameType", "hand", "ouvert", "annSchneider", "annSchwarz",
+                    "won", "declarerScore", "schneider", "schwarz"
                 )
                 .setSkipHeaderRecord(true)
                 .setIgnoreHeaderCase(true)
@@ -160,17 +124,27 @@ fun main() {
         .optOptimizer(Optimizer.adam().build())
         .addEvaluator(Accuracy()) // Use accuracy so we humans can understand how accurate the model is
         .addTrainingListeners(*TrainingListener.Defaults.logging())
+        .addTrainingListeners(
+            EarlyStoppingListener.builder()
+                .optEpochPatience(1)
+                .optEarlyStopPctImprovement(1.0)
+                .optMaxDuration(Duration.ofMinutes(42))
+                .optMinEpochs(1)
+                .build()
+        )
 
     val trainer = model.newTrainer(config)
     //trainer.initialize(Shape(batchSize.toLong(), outputSize.toLong()))
     trainer.metrics = Metrics()
 
-    val epoch = 20
+    val epoch = 100
 
-    EasyTrain.fit(trainer, epoch, training, test)
-
-//    println("Model input: ${model.describeInput()}")
-//    println("Model output: ${model.describeOutput()}")
+    try {
+        EasyTrain.fit(trainer, epoch, training, test)
+    } catch (exception: EarlyStoppingListener.EarlyStoppedException) {
+        // handle early stopping
+        println("Stopped early at epoch ${exception.stopEpoch} because: ${exception.message}")
+    }
 
     val result = trainer.trainingResult
 
