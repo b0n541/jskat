@@ -38,7 +38,7 @@ fun main() {
                     "♦A", "♦T", "♦K", "♦Q", "♦J", "♦9", "♦8", "♦7",
                     "maxBidForehand", "maxBidMiddlehand", "maxBidRearhand",
                     "gameType", "hand", "ouvert", "annSchneider", "annSchwarz",
-                    "won", "declarerScore", "schneider", "schwarz"
+                    "won", "schneider", "schwarz", "declarerScore"
                 )
                 .setSkipHeaderRecord(true)
                 .setIgnoreHeaderCase(true)
