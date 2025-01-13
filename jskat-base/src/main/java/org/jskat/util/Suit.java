@@ -7,19 +7,19 @@ public enum Suit {
     /**
      * Club or Eichel
      */
-    CLUBS("C", "Clubs", "♣", 3),
+    CLUBS("C", "Clubs", "♣\uFE0F", 3),
     /**
      * Spades or Grün
      */
-    SPADES("S", "Spades", "♠", 2),
+    SPADES("S", "Spades", "♠\uFE0F", 2),
     /**
      * Hearts or Herz
      */
-    HEARTS("H", "Hearts", "♥", 1),
+    HEARTS("H", "Hearts", "♥\uFE0F", 1),
     /**
      * Diamonds or Schellen
      */
-    DIAMONDS("D", "Diamonds", "♦", 0);
+    DIAMONDS("D", "Diamonds", "♦\uFE0F", 0);
 
     private final String shortString;
     private final String longString;

@@ -11,10 +11,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class SuitTest {
     private static Stream<Arguments> suitSymbols() {
         return Stream.of(
-                Arguments.of(Suit.CLUBS, "♣"),
-                Arguments.of(Suit.SPADES, "♠"),
-                Arguments.of(Suit.HEARTS, "♥"),
-                Arguments.of(Suit.DIAMONDS, "♦")
+                Arguments.of(Suit.CLUBS, "♣\uFE0F"),
+                Arguments.of(Suit.SPADES, "♠\uFE0F"),
+                Arguments.of(Suit.HEARTS, "♥\uFE0F"),
+                Arguments.of(Suit.DIAMONDS, "♦\uFE0F")
         );
     }
 
