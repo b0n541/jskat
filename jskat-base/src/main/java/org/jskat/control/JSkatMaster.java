@@ -166,9 +166,12 @@ public class JSkatMaster {
      * @param onlyPlayRamsch TRUE, if only Ramsch games should be played
      * @param sleeps         Milliseconds to wait after a games ends during a series
      */
-    public void startSeries(final List<String> allPlayer, final List<String> playerNames, final int numberOfRounds,
+    public void startSeries(final List<String> allPlayer,
+                            final List<String> playerNames,
+                            final int numberOfRounds,
                             final boolean unlimited,
-                            final boolean onlyPlayRamsch, final int sleeps) {
+                            final boolean onlyPlayRamsch,
+                            final int sleeps) {
 
         log.debug(data.getActiveTable());
 

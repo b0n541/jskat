@@ -26,8 +26,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
 
     private static final String PLAYER1_DEFAULT_NAME = "Jan";
     private static final String PLAYER2_DEFAULT_NAME = "Markus";
-    private static final String PLAYER3_DEFAULT_NAME = System
-            .getProperty("user.name");
+    private static final String PLAYER3_DEFAULT_NAME = System.getProperty("user.name");
 
     private final Component parent;
 
@@ -178,7 +177,7 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
         private final String AI_CLASS_NEW_ALGORITHMIC = "org.jskat.ai.newalgorithm.AlgorithmAI";
         private final String AI_CLASS_ALGORITHMIC = "org.jskat.ai.mjl.AIPlayerMJL";
         private final String AI_CLASS_RANDOM = "org.jskat.ai.rnd.AIPlayerRND";
-        private final String AI_CLASS_NEURAL_NETWORK = "org.jskat.ai.nn.AIPlayerNN";
+        private final String AI_CLASS_NEURAL_NETWORK = "org.jskat.ai.deeplearning.AIPlayerDL";
         private final String AI_CLASS_HUMAN = "org.jskat.gui.human.SwingHumanPlayer";
 
         PlayerTypeComboBoxRenderer() {
