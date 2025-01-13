@@ -125,9 +125,9 @@ public class IssGameExtractor {
         result.add("annSchneider");
         result.add("annSchwarz");
         result.add("won");
-        result.add("declarerScore");
         result.add("schneider");
         result.add("schwarz");
+        result.add("declarerScore");
         return result;
     }
 
@@ -143,9 +143,9 @@ public class IssGameExtractor {
                     + (it.getAnnouncement().contract().schneider() ? "1" : "0") + ","
                     + (it.getAnnouncement().contract().schwarz() ? "1" : "0") + ","
                     + (it.isGameWon() ? "1" : "0") + ","
-                    + it.getDeclarerScore() + ","
                     + (it.isSchneider() ? "1" : "0") + ","
-                    + (it.isSchwarz() ? "1" : "0");
+                    + (it.isSchwarz() ? "1" : "0") + ","
+                    + it.getDeclarerScore();
 
     private static String asNetworkInputs(final CardList cards) {
         final StringBuffer result = new StringBuffer();
