@@ -3,6 +3,7 @@ package org.jskat.ai.deeplearning
 import ai.djl.Model
 import ai.djl.inference.Predictor
 import ai.djl.modality.Classifications
+import ai.djl.modality.Classifications.Classification
 import ai.djl.nn.Activation
 import ai.djl.nn.SequentialBlock
 import ai.djl.nn.core.Linear
@@ -43,15 +44,26 @@ class BiddingModel() {
     }
 
     fun predictGameType(position: Player, hand: CardList): GameType {
-        val classes = predictor.predict(toFloatArray(position) + toFloatArray(hand))
-        val best = classes.best<Classifications.Classification>()
 
-        logger.info("Best game type ${best.className} with probability of ${best.probability}")
+        var best = bestGameType(position, hand)
 
         if (best.probability > 0.5) {
             return GameType.valueOf(best.className)
         }
         return GameType.PASSED_IN
+    }
+
+    fun handGamePossible(position: Player, hand: CardList): Boolean {
+        return bestGameType(position, hand).probability >= 0.9
+    }
+
+    private fun bestGameType(position: Player, hand: CardList): Classification {
+        val classes = predictor.predict(toFloatArray(position) + toFloatArray(hand))
+        val best = classes.best<Classification>()
+
+        logger.info("Best game type ${best.className} with probability of ${best.probability}")
+
+        return best
     }
 
     private fun toFloatArray(postion: Player): FloatArray {

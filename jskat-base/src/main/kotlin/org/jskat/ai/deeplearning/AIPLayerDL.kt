@@ -73,8 +73,7 @@ class AIPLayerDL(val name: String = "AIPlayerDL") : AbstractJSkatPlayer() {
     }
 
     override fun pickUpSkat(): Boolean {
-        // TODO find better cards
-        return false
+        return !biddingModel.handGamePossible(knowledge.playerPosition, knowledge.ownCards)
     }
 
     override fun getCardsToDiscard(): CardList {
