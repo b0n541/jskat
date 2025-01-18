@@ -17,7 +17,6 @@ import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.jskat.JSkatFX;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.command.general.ShowWelcomeInformationCommand;
@@ -113,7 +112,7 @@ public class JSkatMainWindow extends Stage {
     public void showWelcomeDialogOn(final ShowWelcomeInformationCommand command) throws IOException {
         final FXMLLoader loader = new FXMLLoader();
         loader.setLocation(
-                JSkatFX.class.getResource("/org/jskat/gui/javafx/dialog/firststeps/view/FirstStepsDialog.fxml"));
+                JSkatMainWindow.class.getResource("/org/jskat/gui/javafx/dialog/firststeps/view/FirstStepsDialog.fxml"));
         loader.setResources(JSkatResourceBundle.INSTANCE.getStringResources());
         final VBox rootLayout = loader.load();
         final Stage stage = new Stage();
