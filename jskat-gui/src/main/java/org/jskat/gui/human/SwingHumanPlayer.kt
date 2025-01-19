@@ -1,56 +1,56 @@
-package org.jskat.gui.human;
+package org.jskat.gui.human
 
-import org.jskat.control.gui.action.JSkatAction;
-import org.jskat.control.gui.action.JSkatActionEvent;
-import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
-import org.jskat.data.GameAnnouncement;
-import org.jskat.data.GameContract;
-import org.jskat.player.JSkatPlayer;
-import org.jskat.util.Card;
-import org.jskat.util.CardList;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jskat.control.gui.action.JSkatAction
+import org.jskat.control.gui.action.JSkatActionEvent
+import org.jskat.control.gui.human.AbstractHumanJSkatPlayer
+import org.jskat.data.GameAnnouncement
+import org.jskat.data.GameContract
+import org.jskat.util.Card
+import org.jskat.util.CardList
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
  * Human player
  */
-public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
+class SwingHumanPlayer : AbstractHumanJSkatPlayer() {
+    private var idler = Idler()
 
-    private static final Logger log = LoggerFactory.getLogger(SwingHumanPlayer.class);
-
-    private Idler idler = new Idler();
-
-    private Boolean holdBid;
-    private Integer bidValue;
-    private GameAnnouncementStep gameAnnouncementStep;
-    private Boolean playGrandHand;
-    private Boolean callContra;
-    private Boolean callRe;
-    private Boolean pickUpSkat;
-    private CardList discardSkat;
-    private GameContract gameContract;
-    private Card nextCard;
+    private var holdBid: Boolean = false
+    private var bidValue: Int = 0
+    private var gameAnnouncementStep: GameAnnouncementStep? = null
+    private var playGrandHand: Boolean = false
+    private var callContra: Boolean = false
+    private var callRe: Boolean = false
+    private var pickUpSkat: Boolean = false
+    private var discardSkat: CardList? = null
+    private var gameContract: GameContract? = null
+    private var nextCard: Card? = null
 
     /**
      * Used for situations where a human player can make more than one move.
      */
-    private enum GameAnnouncementStep {
+    private enum class GameAnnouncementStep {
         /**
          * Before any announcement
          */
         BEFORE_ANNOUNCEMENT,
+
         /**
          * Player looked into skat
          */
         LOOKED_INTO_SKAT,
+
         /**
          * Player discarded skat
          */
         DISCARDED_SKAT,
+
         /**
          * Player announced hand game
          */
         PLAYS_HAND,
+
         /**
          * Game announcement is done
          */
@@ -60,322 +60,292 @@ public class SwingHumanPlayer extends AbstractHumanJSkatPlayer {
     /**
      * Constructor
      */
-    public SwingHumanPlayer() {
-        resetPlayer();
+    init {
+        resetPlayer()
     }
 
     /**
-     * @see JSkatPlayer#announceGame()
+     * @see JSkatPlayer.announceGame
      */
-    @Override
-    public GameContract announceGame() {
+    override fun announceGame(): GameContract? {
+        Companion.log.debug("Waiting for human game announcing...")
 
-        log.debug("Waiting for human game announcing...");
+        waitForUserInput()
 
-        waitForUserInput();
+        gameAnnouncementStep = GameAnnouncementStep.DONE_GAME_ANNOUNCEMENT
 
-        gameAnnouncementStep = GameAnnouncementStep.DONE_GAME_ANNOUNCEMENT;
-
-        return gameContract;
+        return gameContract
     }
 
     /**
-     * @see JSkatPlayer#bidMore(int)
+     * @see JSkatPlayer.bidMore
      */
-    @Override
-    public int bidMore(final int nextBidValue) {
+    override fun bidMore(nextBidValue: Int): Int {
+        Companion.log.debug("Waiting for human next bid value...")
 
-        log.debug("Waiting for human next bid value...");
-
-        waitForUserInput();
+        waitForUserInput()
 
         if (holdBid) {
-            bidValue = nextBidValue;
+            bidValue = nextBidValue
         } else {
-            bidValue = 0;
+            bidValue = 0
         }
 
-        return bidValue;
+        return bidValue!!
     }
 
     /**
-     * @see JSkatPlayer#discardSkat()
+     * @see JSkatPlayer.discardSkat
      */
-    @Override
-    public CardList getCardsToDiscard() {
+    public override fun getCardsToDiscard(): CardList? {
+        Companion.log.info("Waiting for human discarding...")
 
-        log.info("Waiting for human discarding...");
+        waitForUserInput()
 
-        waitForUserInput();
-
-        return discardSkat;
+        return discardSkat
     }
 
     /**
-     * @see JSkatPlayer#prepareForNewGame()
+     * @see JSkatPlayer.prepareForNewGame
      */
-    @Override
-    public void prepareForNewGame() {
-
-        resetPlayer();
+    override fun prepareForNewGame() {
+        resetPlayer()
     }
 
     /**
-     * @see JSkatPlayer#finalizeGame()
+     * @see JSkatPlayer.finalizeGame
      */
-    @Override
-    public void finalizeGame() {
+    override fun finalizeGame() {
         // TODO implement it
     }
 
     /**
-     * @see JSkatPlayer#holdBid(int)
+     * @see JSkatPlayer.holdBid
      */
-    @Override
-    public boolean holdBid(final int currBidValue) {
+    override fun holdBid(currBidValue: Int): Boolean {
+        Companion.log.debug("Waiting for human holding bid...")
 
-        log.debug("Waiting for human holding bid...");
+        waitForUserInput()
 
-        waitForUserInput();
-
-        return holdBid;
+        return holdBid!!
     }
 
     /**
-     * @see JSkatPlayer#pickUpSkat()
+     * @see JSkatPlayer.pickUpSkat
      */
-    @Override
-    public boolean playGrandHand() {
+    override fun playGrandHand(): Boolean {
+        Companion.log.debug("Waiting for human to decide if playing a grand hand...")
 
-        log.debug("Waiting for human to decide if playing a grand hand...");
+        waitForUserInput()
 
-        waitForUserInput();
-
-        return playGrandHand;
+        return playGrandHand!!
     }
 
     /**
-     * @see JSkatPlayer#pickUpSkat()
+     * @see JSkatPlayer.pickUpSkat
      */
-    @Override
-    public boolean pickUpSkat() {
+    override fun pickUpSkat(): Boolean {
+        Companion.log.info("Waiting for human looking into skat...")
 
-        log.info("Waiting for human looking into skat...");
+        waitForUserInput()
 
-        waitForUserInput();
-
-        return pickUpSkat;
+        return pickUpSkat!!
     }
 
     /**
-     * @see JSkatPlayer#playCard()
+     * @see JSkatPlayer.playCard
      */
-    @Override
-    public Card playCard() {
+    override fun playCard(): Card? {
+        Companion.log.debug("Waiting for human playing next card...")
 
-        log.debug("Waiting for human playing next card...");
-
-        Card cardToPlay = null;
+        var cardToPlay: Card? = null
 
         if (nextCard == null) {
-            waitForUserInput();
+            waitForUserInput()
         }
 
-        cardToPlay = nextCard;
-        nextCard = null;
+        cardToPlay = nextCard
+        nextCard = null
 
-        return cardToPlay;
+        return cardToPlay
     }
 
-    @Override
-    public void actionPerformed(final JSkatActionEvent e) {
+    override fun actionPerformed(e: JSkatActionEvent) {
+        val source = e.source
+        val command = e.actionCommand
+        var interrupt = true
 
-        final Object source = e.getSource();
-        final String command = e.getActionCommand();
-        boolean interrupt = true;
-
-        if (JSkatAction.PASS_BID.toString().equals(command)) {
+        if (JSkatAction.PASS_BID.toString() == command) {
             // player passed
-            holdBid = false;
-        } else if (JSkatAction.MAKE_BID.toString().equals(command)) {
+            holdBid = false
+        } else if (JSkatAction.MAKE_BID.toString() == command) {
             // player makes next bid value
-            holdBid = true;
-        } else if (JSkatAction.HOLD_BID.toString().equals(command)) {
+            holdBid = true
+        } else if (JSkatAction.HOLD_BID.toString() == command) {
             // player hold bid
-            holdBid = true;
-        } else if (JSkatAction.PLAY_GRAND_HAND.toString().equals(command)) {
+            holdBid = true
+        } else if (JSkatAction.PLAY_GRAND_HAND.toString() == command) {
             // player wants to play a grand hand
-            playGrandHand = true;
-        } else if (JSkatAction.PLAY_SCHIEBERAMSCH.toString().equals(command)) {
-            playGrandHand = false;
-        } else if (JSkatAction.CALL_CONTRA.toString().equals(command)) {
-            callContra = true;
-        } else if (JSkatAction.CALL_RE.toString().equals(command)) {
-            if (source instanceof Boolean) {
-                callRe = (Boolean) source;
+            playGrandHand = true
+        } else if (JSkatAction.PLAY_SCHIEBERAMSCH.toString() == command) {
+            playGrandHand = false
+        } else if (JSkatAction.CALL_CONTRA.toString() == command) {
+            callContra = true
+        } else if (JSkatAction.CALL_RE.toString() == command) {
+            if (source is Boolean) {
+                callRe = source
             }
-        } else if (JSkatAction.PICK_UP_SKAT.toString().equals(command)) {
+        } else if (JSkatAction.PICK_UP_SKAT.toString() == command) {
             // player wants to pick up the skat
-            pickUpSkat = true;
-            gameAnnouncementStep = GameAnnouncementStep.LOOKED_INTO_SKAT;
-        } else if (JSkatAction.SCHIEBEN.toString().equals(command)) {
-            if (source instanceof final CardList cards) {
-                if (cards.size() == 0) {
-                    pickUpSkat = false;
+            pickUpSkat = true
+            gameAnnouncementStep = GameAnnouncementStep.LOOKED_INTO_SKAT
+        } else if (JSkatAction.SCHIEBEN.toString() == command) {
+            if (source is CardList) {
+                if (source.size() == 0) {
+                    pickUpSkat = false
                 } else {
-                    pickUpSkat = true;
-                    discardSkat = new CardList(cards);
+                    pickUpSkat = true
+                    discardSkat = CardList(source)
                 }
             } else {
-                log.warn("Wrong source {} for command {}", source, command);
-                interrupt = false;
+                Companion.log.warn("Wrong source {} for command {}", source, command)
+                interrupt = false
             }
-        } else if (JSkatAction.ANNOUNCE_GAME.toString().equals(command)) {
-            if (source instanceof final GameAnnouncement announcement) {
-                gameContract = announcement.contract();
+        } else if (JSkatAction.ANNOUNCE_GAME.toString() == command) {
+            if (source is GameAnnouncement) {
+                gameContract = source.contract
 
-                if (gameContract.hand()) {
-                    gameAnnouncementStep = GameAnnouncementStep.PLAYS_HAND;
+                if (gameContract!!.hand) {
+                    gameAnnouncementStep = GameAnnouncementStep.PLAYS_HAND
                 } else {
-                    discardSkat = announcement.discardedCards();
-                    gameAnnouncementStep = GameAnnouncementStep.DISCARDED_SKAT;
+                    discardSkat = source.discardedCards
+                    gameAnnouncementStep = GameAnnouncementStep.DISCARDED_SKAT
                 }
             } else {
-                log.warn("Wrong source for " + command);
-                interrupt = false;
+                Companion.log.warn("Wrong source for " + command)
+                interrupt = false
             }
-        } else if (JSkatAction.PLAY_CARD.toString().equals(command) && source instanceof Card) {
-
-            nextCard = (Card) source;
-
+        } else if (JSkatAction.PLAY_CARD.toString() == command && source is Card) {
+            nextCard = source
         } else {
-
-            log.warn("Unknown action event occurred: " + command + " from " + source);
+            Companion.log.warn("Unknown action event occurred: " + command + " from " + source)
         }
 
         if (interrupt) {
-
-            idler.interrupt();
+            idler.interrupt()
         }
     }
 
     /**
      * Starts waiting for user input
      */
-    public void waitForUserInput() {
+    fun waitForUserInput() {
+        idler = Idler()
+        idler.setMonitor(this)
 
-        idler = new Idler();
-        idler.setMonitor(this);
-
-        if (!isPlayerHasAlreadyPlayed()) {
-
-            idler.start();
+        if (!this.isPlayerHasAlreadyPlayed) {
+            idler.start()
             try {
-                idler.join();
-            } catch (final InterruptedException e) {
-                log.warn("wait for user input was interrupted");
+                idler.join()
+            } catch (e: InterruptedException) {
+                Companion.log.warn("wait for user input was interrupted")
             }
         }
     }
 
-    private boolean isPlayerHasAlreadyPlayed() {
+    private val isPlayerHasAlreadyPlayed: Boolean
+        get() {
+            Companion.log.debug("Game announcement step: " + gameAnnouncementStep)
 
-        log.debug("Game announcement step: " + gameAnnouncementStep);
+            val result = GameAnnouncementStep.DISCARDED_SKAT == gameAnnouncementStep
+                    || GameAnnouncementStep.PLAYS_HAND == gameAnnouncementStep
 
-        final boolean result = GameAnnouncementStep.DISCARDED_SKAT.equals(gameAnnouncementStep)
-                || GameAnnouncementStep.PLAYS_HAND.equals(gameAnnouncementStep);
-
-        return result;
-    }
+            return result
+        }
 
     /*-------------------------------------------------------------------
      * Inner class
      *-------------------------------------------------------------------*/
-
     /**
      * Protected class implementing the waiting thread for user input
      */
-    protected static class Idler extends Thread {
-
+    protected class Idler : Thread() {
         /**
          * Sets the monitoring object
          *
          * @param newMonitor Monitor
          */
-        public void setMonitor(final Object newMonitor) {
-
-            monitor = newMonitor;
+        fun setMonitor(newMonitor: Any?) {
+            monitor = newMonitor
         }
 
         /**
          * Stops the waiting
          */
-        public void stopWaiting() {
-            doWait = false;
+        fun stopWaiting() {
+            doWait = false
         }
 
         /**
-         * @see Thread#run()
+         * @see Thread.run
          */
-        @Override
-        public void run() {
-            synchronized (monitor) {
+        override fun run() {
+            synchronized(monitor!!) {
                 while (doWait) {
                     try {
-                        monitor.wait();
-                    } catch (final InterruptedException e) {
-                        stopWaiting();
+                        (monitor as Object).wait()
+                    } catch (e: InterruptedException) {
+                        stopWaiting()
                     }
                 }
             }
         }
 
-        private boolean doWait = true;
-        private Object monitor = null;
+        private var doWait = true
+        private var monitor: Any? = null
     }
 
     /**
-     * @see org.jskat.player.AbstractJSkatPlayer#startGame()
+     * @see org.jskat.player.AbstractJSkatPlayer.startGame
      */
-    @Override
-    public void startGame() {
+    override fun startGame() {
         // TODO is there something todo?
     }
 
-    private void resetPlayer() {
-        bidValue = 0;
-        holdBid = false;
-        playGrandHand = false;
-        callContra = false;
-        callRe = false;
-        gameAnnouncementStep = GameAnnouncementStep.BEFORE_ANNOUNCEMENT;
-        pickUpSkat = false;
-        discardSkat = null;
-        gameContract = null;
-        nextCard = null;
+    private fun resetPlayer() {
+        bidValue = 0
+        holdBid = false
+        playGrandHand = false
+        callContra = false
+        callRe = false
+        gameAnnouncementStep = GameAnnouncementStep.BEFORE_ANNOUNCEMENT
+        pickUpSkat = false
+        discardSkat = null
+        gameContract = null
+        nextCard = null
     }
 
-    @Override
-    public boolean callContra() {
-
-        log.debug("Waiting for human calling contra...");
+    override fun callContra(): Boolean {
+        Companion.log.debug("Waiting for human calling contra...")
 
         if (callContra == null) {
-            waitForUserInput();
+            waitForUserInput()
         }
 
-        return callContra != null && callContra;
+        return callContra != null && callContra
     }
 
-    @Override
-    public boolean callRe() {
-
-        log.debug("Waiting for human calling re...");
+    override fun callRe(): Boolean {
+        Companion.log.debug("Waiting for human calling re...")
 
         if (callRe == null) {
-            waitForUserInput();
+            waitForUserInput()
         }
 
-        return callRe != null && callRe;
+        return callRe != null && callRe
+    }
+
+    companion object {
+        private val log: Logger = LoggerFactory.getLogger(SwingHumanPlayer::class.java)
     }
 }

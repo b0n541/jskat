@@ -11,7 +11,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":jskat-javafx-gui"))
+    implementation(project(":jskat-gui"))
 }
 
 javafx {
@@ -49,7 +49,8 @@ tasks.register("fatjar", Jar::class.java) {
 
     from(sourceSets.main.get().output)
     dependsOn(configurations.runtimeClasspath)
-    from(configurations.runtimeClasspath.get()
+    from(
+        configurations.runtimeClasspath.get()
         .onEach { println("add from dependencies : ${it.name}") }
         .map { if (it.isDirectory) it else zipTree(it) })
 }
