@@ -19,18 +19,18 @@ public class JSkatResourceBundle {
 
     private JSkatResourceBundle() {
 
-        this.options = JSkatOptions.instance();
+        options = JSkatOptions.instance();
         loadStrings();
     }
 
     private void loadStrings() {
 
         Locale locale = null;
-        if (SupportedLanguage.ENGLISH.equals(this.options.getLanguage())) {
+        if (SupportedLanguage.ENGLISH.equals(options.getLanguage())) {
 
             locale = Locale.ENGLISH;
 
-        } else if (SupportedLanguage.GERMAN.equals(this.options.getLanguage())) {
+        } else if (SupportedLanguage.GERMAN.equals(options.getLanguage())) {
 
             locale = Locale.GERMAN;
 
@@ -39,7 +39,7 @@ public class JSkatResourceBundle {
             locale = Locale.getDefault();
         }
 
-        this.strings = ResourceBundle.getBundle("org/jskat/i18n/jskat_strings",
+        strings = ResourceBundle.getBundle("org/jskat/i18n/jskat_strings",
                 locale);
     }
 
@@ -69,7 +69,7 @@ public class JSkatResourceBundle {
      */
     public String getString(final String key) {
 
-        return this.strings.getString(key);
+        return strings.getString(key);
     }
 
     /**
@@ -79,8 +79,8 @@ public class JSkatResourceBundle {
      * @param params Parameters
      * @return i18n string
      */
-    public String getString(final String key, Object... params) {
-        return MessageFormat.format(this.strings.getString(key), params);
+    public String getString(final String key, final Object... params) {
+        return MessageFormat.format(strings.getString(key), params);
     }
 
     /**
@@ -101,16 +101,16 @@ public class JSkatResourceBundle {
                 result = getGameTypeStringForCardFace(gameType);
                 break;
             case NULL:
-                result = this.strings.getString("null");
+                result = strings.getString("null");
                 break;
             case GRAND:
-                result = this.strings.getString("grand");
+                result = strings.getString("grand");
                 break;
             case RAMSCH:
-                result = this.strings.getString("ramsch");
+                result = strings.getString("ramsch");
                 break;
             case PASSED_IN:
-                result = this.strings.getString("passed_in");
+                result = strings.getString("passed_in");
                 break;
         }
 
@@ -138,7 +138,7 @@ public class JSkatResourceBundle {
 
         String result = null;
 
-        switch (this.options.getCardSet().getCardFace()) {
+        switch (options.getCardSet().getCardFace()) {
             case FRENCH:
             case TOURNAMENT:
                 result = getFrenchRankString(rank);
@@ -156,28 +156,28 @@ public class JSkatResourceBundle {
 
         switch (rank) {
             case ACE:
-                result = this.strings.getString("ace");
+                result = strings.getString("ace");
                 break;
             case KING:
-                result = this.strings.getString("king");
+                result = strings.getString("king");
                 break;
             case QUEEN:
-                result = this.strings.getString("queen");
+                result = strings.getString("queen");
                 break;
             case JACK:
-                result = this.strings.getString("jack");
+                result = strings.getString("jack");
                 break;
             case TEN:
-                result = this.strings.getString("ten");
+                result = strings.getString("ten");
                 break;
             case NINE:
-                result = this.strings.getString("nine");
+                result = strings.getString("nine");
                 break;
             case EIGHT:
-                result = this.strings.getString("eight");
+                result = strings.getString("eight");
                 break;
             case SEVEN:
-                result = this.strings.getString("seven");
+                result = strings.getString("seven");
                 break;
         }
 
@@ -190,28 +190,28 @@ public class JSkatResourceBundle {
 
         switch (rank) {
             case ACE:
-                result = this.strings.getString("ace_german");
+                result = strings.getString("ace_german");
                 break;
             case KING:
-                result = this.strings.getString("king_german");
+                result = strings.getString("king_german");
                 break;
             case QUEEN:
-                result = this.strings.getString("queen_german");
+                result = strings.getString("queen_german");
                 break;
             case JACK:
-                result = this.strings.getString("jack_german");
+                result = strings.getString("jack_german");
                 break;
             case TEN:
-                result = this.strings.getString("ten_german");
+                result = strings.getString("ten_german");
                 break;
             case NINE:
-                result = this.strings.getString("nine_german");
+                result = strings.getString("nine_german");
                 break;
             case EIGHT:
-                result = this.strings.getString("eight_german");
+                result = strings.getString("eight_german");
                 break;
             case SEVEN:
-                result = this.strings.getString("seven_german");
+                result = strings.getString("seven_german");
                 break;
         }
 
@@ -229,7 +229,7 @@ public class JSkatResourceBundle {
 
         String result = null;
 
-        switch (this.options.getCardSet().getCardFace()) {
+        switch (options.getCardSet().getCardFace()) {
             case FRENCH:
             case TOURNAMENT:
                 result = getFrenchSuitString(suit);
@@ -247,16 +247,16 @@ public class JSkatResourceBundle {
 
         switch (suit) {
             case CLUBS:
-                result = this.strings.getString("clubs");
+                result = strings.getString("clubs");
                 break;
             case SPADES:
-                result = this.strings.getString("spades");
+                result = strings.getString("spades");
                 break;
             case HEARTS:
-                result = this.strings.getString("hearts");
+                result = strings.getString("hearts");
                 break;
             case DIAMONDS:
-                result = this.strings.getString("diamonds");
+                result = strings.getString("diamonds");
                 break;
         }
         return result;
@@ -268,16 +268,16 @@ public class JSkatResourceBundle {
 
         switch (suit) {
             case CLUBS:
-                result = this.strings.getString("clubs_german");
+                result = strings.getString("clubs_german");
                 break;
             case SPADES:
-                result = this.strings.getString("spades_german");
+                result = strings.getString("spades_german");
                 break;
             case HEARTS:
-                result = this.strings.getString("hearts_german");
+                result = strings.getString("hearts_german");
                 break;
             case DIAMONDS:
-                result = this.strings.getString("diamonds_german");
+                result = strings.getString("diamonds_german");
                 break;
         }
         return result;
@@ -287,7 +287,7 @@ public class JSkatResourceBundle {
 
         String result = null;
 
-        switch (this.options.getCardSet().getCardFace()) {
+        switch (options.getCardSet().getCardFace()) {
             case FRENCH:
             case TOURNAMENT:
                 result = getFrenchGameTypeString(gameType);
@@ -306,16 +306,16 @@ public class JSkatResourceBundle {
 
         switch (gameType) {
             case CLUBS:
-                result = this.strings.getString("clubs_german");
+                result = strings.getString("clubs_german");
                 break;
             case SPADES:
-                result = this.strings.getString("spades_german");
+                result = strings.getString("spades_german");
                 break;
             case HEARTS:
-                result = this.strings.getString("hearts_german");
+                result = strings.getString("hearts_german");
                 break;
             case DIAMONDS:
-                result = this.strings.getString("diamonds_german");
+                result = strings.getString("diamonds_german");
                 break;
             default:
                 // other game types not needed here
@@ -331,16 +331,16 @@ public class JSkatResourceBundle {
 
         switch (gameType) {
             case CLUBS:
-                result = this.strings.getString("clubs");
+                result = strings.getString("clubs");
                 break;
             case SPADES:
-                result = this.strings.getString("spades");
+                result = strings.getString("spades");
                 break;
             case HEARTS:
-                result = this.strings.getString("hearts");
+                result = strings.getString("hearts");
                 break;
             case DIAMONDS:
-                result = this.strings.getString("diamonds");
+                result = strings.getString("diamonds");
                 break;
             default:
                 // other game types not needed here
@@ -357,7 +357,7 @@ public class JSkatResourceBundle {
      */
     public Locale getLocale() {
 
-        return this.strings.getLocale();
+        return strings.getLocale();
     }
 
     /**
@@ -366,18 +366,18 @@ public class JSkatResourceBundle {
      * @param position Player position
      * @return i18n for player position
      */
-    public Object getPlayerString(Player position) {
+    public Object getPlayerString(final Player position) {
         String result = null;
 
         switch (position) {
             case FOREHAND:
-                result = this.strings.getString("forehand");
+                result = strings.getString("forehand");
                 break;
             case MIDDLEHAND:
-                result = this.strings.getString("middlehand");
+                result = strings.getString("middlehand");
                 break;
             case REARHAND:
-                result = this.strings.getString("rearhand");
+                result = strings.getString("rearhand");
                 break;
         }
         return result;

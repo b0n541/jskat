@@ -6,13 +6,10 @@ import javafx.embed.swing.SwingNode
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
-import javafx.scene.Scene
 import javafx.scene.control.*
 import javafx.scene.layout.Region
 import javafx.scene.layout.VBox
-import javafx.stage.Modality
 import javafx.stage.Stage
-import org.jskat.JSkatFX
 import org.jskat.control.JSkatEventBus
 import org.jskat.control.JSkatMaster
 import org.jskat.control.command.general.*
@@ -27,6 +24,7 @@ import org.jskat.control.event.table.TableCreatedEvent
 import org.jskat.control.event.table.TableRemovedEvent
 import org.jskat.data.JSkatApplicationData
 import org.jskat.data.JSkatViewType
+import org.jskat.gui.javafx.dialog.firststeps.FirstStepsDialog
 import org.jskat.gui.swing.JSkatOptionsDialog
 import org.jskat.gui.swing.JSkatViewImpl
 import org.jskat.gui.swing.iss.ISSTablePanel
@@ -198,22 +196,7 @@ class JSkatMainWindowController {
 
     @Subscribe
     fun showWelcomeDialogOn(command: ShowWelcomeInformationCommand) {
-        val loader = FXMLLoader().apply {
-            location =
-                JSkatFX::class.java.getResource("/org/jskat/gui/javafx/dialog/firststeps/view/FirstStepsDialog.fxml")
-            resources = JSkatResourceBundle.INSTANCE.stringResources
-        }
-        val rootLayout: VBox = loader.load()
-
-        Stage().apply {
-            title = JSkatResourceBundle.INSTANCE.getString("show_tips")
-            scene = Scene(rootLayout).apply {
-                stylesheets.add("/org/jskat/gui/javafx/jskat.css")
-            }
-            initModality(Modality.APPLICATION_MODAL)
-            initOwner(root.scene.window)
-            show()
-        }
+        FirstStepsDialog(root.scene.window as Stage).show()
     }
 
     @Subscribe
