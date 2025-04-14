@@ -19,7 +19,6 @@ import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
 
 import javax.swing.*;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -152,7 +151,6 @@ public class ISSTablePanel extends SkatTablePanel {
         // FIXME (jansch 05.04.2011) make 3<>4 change possible
         // setMaxPlayers(tableStatus.getMaxPlayers());
 
-        final var playerNames = new ArrayList<String>();
         for (final String playerName : tableStatus.getPlayerInformation().keySet()) {
 
             final PlayerStatus status = tableStatus.getPlayerInformation(playerName);
