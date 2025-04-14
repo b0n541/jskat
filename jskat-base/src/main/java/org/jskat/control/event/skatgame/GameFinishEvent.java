@@ -11,19 +11,21 @@ import java.util.Objects;
  */
 public final class GameFinishEvent implements SkatGameEvent {
 
+    public String declarerName;
     public final GameSummary gameSummary;
 
-    public GameFinishEvent(GameSummary gameSummary) {
+    public GameFinishEvent(final String declarerName, final GameSummary gameSummary) {
+        this.declarerName = declarerName;
         this.gameSummary = gameSummary;
     }
 
     @Override
-    public void processForward(SkatGameData data) {
+    public void processForward(final SkatGameData data) {
         data.setResult(gameSummary.gameResult);
     }
 
     @Override
-    public void processBackward(SkatGameData data) {
+    public void processBackward(final SkatGameData data) {
         data.setResult(new SkatGameResult());
     }
 
@@ -33,7 +35,7 @@ public final class GameFinishEvent implements SkatGameEvent {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (this == obj) {
             return true;
         }

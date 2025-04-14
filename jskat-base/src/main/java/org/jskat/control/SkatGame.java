@@ -56,6 +56,9 @@ public class SkatGame {
 
         tableName = newTableName;
         data = new SkatGameData();
+        data.setPlayerName(Player.FOREHAND, newForeHand.getPlayerName());
+        data.setPlayerName(Player.MIDDLEHAND, newMiddleHand.getPlayerName());
+        data.setPlayerName(Player.REARHAND, newRearHand.getPlayerName());
         JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(data);
 
         this.variant = variant;
@@ -1000,7 +1003,7 @@ public class SkatGame {
             if (newState == GameState.GAME_OVER) {
 
                 // FIXME: merge this event with the command
-                eventBus.post(new TableGameMoveEvent(tableName, new GameFinishEvent(getGameSummary())));
+                eventBus.post(new TableGameMoveEvent(tableName, new GameFinishEvent(data.getPlayerName(data.getDeclarer()), getGameSummary())));
                 eventBus.post(new ShowCardsCommand(tableName, data.getCardsAfterDiscard(), data.getSkat()));
             }
         }

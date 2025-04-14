@@ -317,7 +317,7 @@ public class IssController {
     }
 
     /**
-     * Updates a local representation of an ISS table
+     * Updates a local representation of an ISS game
      *
      * @param tableName Table name
      * @param status    New game status
@@ -492,7 +492,7 @@ public class IssController {
     public void endGame(final String tableName, final SkatGameData newGameData) {
         eventBus.post(new SkatGameStateChangedEvent(tableName, GameState.GAME_OVER));
         // FIXME: merge event and command
-        eventBus.post(new TableGameMoveEvent(tableName, new GameFinishEvent(newGameData.getGameSummary())));
+        eventBus.post(new TableGameMoveEvent(tableName, new GameFinishEvent(newGameData.getPlayerName(newGameData.getDeclarer()), newGameData.getGameSummary())));
         eventBus.post(new ShowCardsCommand(tableName, newGameData.getCardsAfterDiscard(), newGameData.getSkat()));
         gameData.put(tableName, newGameData);
     }

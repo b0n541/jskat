@@ -1,6 +1,15 @@
 package org.jskat.gui.swing.table;
 
 import com.google.common.eventbus.Subscribe;
+import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.embed.swing.JFXPanel;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.skatgame.*;
@@ -11,6 +20,8 @@ import org.jskat.gui.action.main.StartSkatSeriesAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
+import org.jskat.gui.javafx.table.ScoreListEntry;
+import org.jskat.gui.javafx.table.ScoreListTableView;
 import org.jskat.gui.swing.AbstractTabPanel;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.*;
@@ -53,8 +64,8 @@ public class SkatTablePanel extends AbstractTabPanel {
     /**
      * Table model for skat list
      */
-    protected SkatListTableModel skatListTableModel;
     protected JTable scoreListTable;
+    protected ScoreListTableView scoreListTableViewFX;
     protected JScrollPane scoreListScrollPane;
     protected BiddingContextPanel biddingPanel;
     protected DeclaringContextPanel declaringPanel;
@@ -108,48 +119,34 @@ public class SkatTablePanel extends AbstractTabPanel {
         getActionMap().get(JSkatAction.INVITE_ISS_PLAYER).setEnabled(true);
 
         final JSplitPane splitPane = new JSplitPane(
-                JSplitPane.HORIZONTAL_SPLIT, getLeftPanel(),
+                JSplitPane.HORIZONTAL_SPLIT,
+                getLeftPanel(),
                 getPlayGroundPanel());
         add(splitPane, "grow");
     }
 
-    protected JTabbedPane getLeftPanel() {
+    protected Component getLeftPanel() {
 
-        final JTabbedPane leftPanel = new JTabbedPane();
+        final var panel = new JFXPanel();
 
-        leftPanel.addTab(strings.getString("score_sheet"), getScoreListPanel());
+        Platform.runLater(() -> {
+            scoreListTableViewFX = new ScoreListTableView(List.of("1", "2", "3"));
+            scoreListTableViewFX.setItems(FXCollections.observableArrayList(FXCollections.emptyObservableList()));
+            VBox.setVgrow(scoreListTableViewFX, Priority.ALWAYS);
 
-        return leftPanel;
-    }
+            final var vbox = new VBox();
+            vbox.getChildren().add(scoreListTableViewFX);
+            vbox.setPadding(new Insets(5));
 
-    private JPanel getScoreListPanel() {
+            final var scoreListTab = new Tab(strings.getString("score_sheet"), vbox);
+            final var tabPane = new TabPane();
+            tabPane.getTabs().add(scoreListTab);
 
-        final JPanel panel = new JPanel(LayoutFactory.getMigLayout(
-                "fill", "fill", "fill"));
+            tabPane.getStylesheets().add("/org/jskat/gui/javafx/jskat.css");
 
-        skatListTableModel = new SkatListTableModel();
-        scoreListTable = new JTable(skatListTableModel);
-
-        for (int i = 0; i < scoreListTable.getColumnModel().getColumnCount(); i++) {
-
-            if (i == 3) {
-                // game colum is bigger
-                scoreListTable.getColumnModel().getColumn(i).setPreferredWidth(40);
-            } else {
-
-                scoreListTable.getColumnModel().getColumn(i).setPreferredWidth(20);
-            }
-        }
-
-        scoreListTable.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
-
-        scoreListScrollPane = new JScrollPane(scoreListTable);
-        scoreListScrollPane.setMinimumSize(new Dimension(150, 100));
-        scoreListScrollPane.setPreferredSize(new Dimension(300, 100));
-        scoreListScrollPane
-                .setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-
-        panel.add(scoreListScrollPane, "growy");
+            final var scene = new Scene(tabPane, 350.0, 300.0);
+            panel.setScene(scene);
+        });
 
         return panel;
     }
@@ -574,24 +571,17 @@ public class SkatTablePanel extends AbstractTabPanel {
         gameOverPanel.setGameSummary(event.gameSummary);
 
         if (!replay) {
-            skatListTableModel.addResult(
-                    leftOpponentPanel.getPosition(),
-                    rightOpponentPanel.getPosition(),
-                    userPanel.getPosition(),
-                    event.gameSummary);
-            scrollSkatListToTheEnd();
+            Platform.runLater(() -> {
+                scoreListTableViewFX.getItems().add(
+                        event.declarerName != null
+                                ? new ScoreListEntry(Map.of(event.declarerName, event.gameSummary.getGameValue()))
+                                : new ScoreListEntry(Map.of("", 0)));
+                scoreListTableViewFX.scrollTo(scoreListTableViewFX.getItems().size() - 1);
+            });
+//            scrollSkatListToTheEnd();
         }
 
         gameInfoPanel.setGameSummary(event.gameSummary);
-    }
-
-    private void scrollSkatListToTheEnd() {
-        // scroll skat list if the new result is out of scope
-        final Rectangle bounds = scoreListTable.getCellRect(
-                skatListTableModel.getRowCount() - 1, 0, true);
-        final Point loc = bounds.getLocation();
-        loc.move(loc.x, loc.y + bounds.height);
-        scoreListScrollPane.getViewport().setViewPosition(loc);
     }
 
     /**
@@ -742,7 +732,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     @Subscribe
     public void clearSkatListOn(final SkatSeriesStartedEvent event) {
 
-        skatListTableModel.clearList();
+        Platform.runLater(() -> scoreListTableViewFX.getItems().clear());
     }
 
     /**
@@ -928,7 +918,8 @@ public class SkatTablePanel extends AbstractTabPanel {
         rightOpponentPanel.setAIPlayer(event.isUpperRightPlayerAIPlayer);
         userPanel.setPlayerName(event.lowerPlayerName);
         userPanel.setAIPlayer(event.isLowerPlayerAIPlayer);
-        skatListTableModel.setPlayerNames(event.upperLeftPlayerName, event.upperRightPlayerName, event.lowerPlayerName);
+
+        Platform.runLater(() -> scoreListTableViewFX.setPlayerNames(event.upperLeftPlayerName, event.upperRightPlayerName, event.lowerPlayerName));
     }
 
     /**

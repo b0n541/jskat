@@ -1,6 +1,7 @@
 package org.jskat.gui.swing.iss;
 
 import com.google.common.eventbus.Subscribe;
+import javafx.application.Platform;
 import org.jskat.control.event.iss.IssTableGameStartedEvent;
 import org.jskat.control.event.iss.IssTableStateChangedEvent;
 import org.jskat.control.event.skatgame.GameStartEvent;
@@ -18,6 +19,7 @@ import org.jskat.util.GameVariant;
 import org.jskat.util.Player;
 
 import javax.swing.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -68,17 +70,18 @@ public class ISSTablePanel extends SkatTablePanel {
         return panel;
     }
 
-    @Override
-    protected JTabbedPane getLeftPanel() {
-        JTabbedPane leftPanel = super.getLeftPanel();
-
-        this.chatPanel = getChatPanel();
-        this.chatPanel.addNewChat(
-                this.strings.getString("table") + " " + getName(), getName());
-        leftPanel.add(this.strings.getString("chat"), this.chatPanel);
-
-        return leftPanel;
-    }
+    // TODO: migrate to JavaFX
+//    @Override
+//    protected JTabbedPane getLeftPanel() {
+//        final JTabbedPane leftPanel = super.getLeftPanel();
+//
+//        chatPanel = getChatPanel();
+//        chatPanel.addNewChat(
+//                strings.getString("table") + " " + getName(), getName());
+//        leftPanel.add(strings.getString("chat"), chatPanel);
+//
+//        return leftPanel;
+//    }
 
     @Override
     protected OpponentPanel getOpponentPanel() {
@@ -111,7 +114,7 @@ public class ISSTablePanel extends SkatTablePanel {
      * {@inheritDoc}
      */
     @Subscribe
-    public void clearTableOn(IssTableGameStartedEvent event) {
+    public void clearTableOn(final IssTableGameStartedEvent event) {
 
         if (event.gameStart.loginName().equals(event.gameStart.playerNames().get(Player.FOREHAND))) {
             clearTable(event.tableName, Player.MIDDLEHAND, Player.REARHAND, Player.FOREHAND, event.gameStart);
@@ -122,7 +125,7 @@ public class ISSTablePanel extends SkatTablePanel {
         }
     }
 
-    private void clearTable(String tableName, final Player leftOpponent, final Player rightOpponent,
+    private void clearTable(final String tableName, final Player leftOpponent, final Player rightOpponent,
                             final Player player, final GameStartInformation gameStart) {
 
         // FIXME: should have been sent via the event bus, event is missing in history
@@ -142,13 +145,14 @@ public class ISSTablePanel extends SkatTablePanel {
      * @param event Table status changed event
      */
     @Subscribe
-    public void updateTableStatusOn(IssTableStateChangedEvent event) {
+    public void updateTableStatusOn(final IssTableStateChangedEvent event) {
 
-        TablePanelStatus tableStatus = event.status;
+        final TablePanelStatus tableStatus = event.status;
 
         // FIXME (jansch 05.04.2011) make 3<>4 change possible
         // setMaxPlayers(tableStatus.getMaxPlayers());
 
+        final var playerNames = new ArrayList<String>();
         for (final String playerName : tableStatus.getPlayerInformation().keySet()) {
 
             final PlayerStatus status = tableStatus.getPlayerInformation(playerName);
@@ -163,47 +167,54 @@ public class ISSTablePanel extends SkatTablePanel {
             }
         }
 
-        this.lastTableStatus = tableStatus;
+        lastTableStatus = tableStatus;
     }
 
     private void addPlayerName(final String playerName) {
 
-        if (!this.playerNamesAndPositions.containsKey(playerName)) {
+        if (!playerNamesAndPositions.containsKey(playerName)) {
 
-            this.playerNamesAndPositions.put(playerName, null);
+            playerNamesAndPositions.put(playerName, null);
 
-            if (this.userPanel.getPlayerName() == null) {
+            if (userPanel.getPlayerName() == null) {
 
-                this.userPanel.setPlayerName(playerName);
+                userPanel.setPlayerName(playerName);
 
-            } else if (this.leftOpponentPanel.getPlayerName() == null) {
+                Platform.runLater(() -> scoreListTableViewFX.setPlayerName(1, playerName));
 
-                this.leftOpponentPanel.setPlayerName(playerName);
+            } else if (leftOpponentPanel.getPlayerName() == null) {
 
-            } else if (this.rightOpponentPanel.getPlayerName() == null) {
+                leftOpponentPanel.setPlayerName(playerName);
 
-                this.rightOpponentPanel.setPlayerName(playerName);
+                Platform.runLater(() -> scoreListTableViewFX.setPlayerName(2, playerName));
+
+            } else if (rightOpponentPanel.getPlayerName() == null) {
+
+                rightOpponentPanel.setPlayerName(playerName);
+
+                Platform.runLater(() -> scoreListTableViewFX.setPlayerName(3, playerName));
+
             }
         }
     }
 
     private void removePlayerName(final String playerName) {
 
-        if (this.playerNamesAndPositions.containsKey(playerName)) {
+        if (playerNamesAndPositions.containsKey(playerName)) {
 
-            this.playerNamesAndPositions.remove(playerName);
+            playerNamesAndPositions.remove(playerName);
 
-            if (playerName.equals(this.userPanel.getPlayerName())) {
+            if (playerName.equals(userPanel.getPlayerName())) {
 
-                this.userPanel.setPlayerName("");
+                userPanel.setPlayerName("");
 
-            } else if (playerName.equals(this.leftOpponentPanel.getPlayerName())) {
+            } else if (playerName.equals(leftOpponentPanel.getPlayerName())) {
 
-                this.leftOpponentPanel.setPlayerName("");
+                leftOpponentPanel.setPlayerName("");
 
-            } else if (playerName.equals(this.rightOpponentPanel.getPlayerName())) {
+            } else if (playerName.equals(rightOpponentPanel.getPlayerName())) {
 
-                this.rightOpponentPanel.setPlayerName("");
+                rightOpponentPanel.setPlayerName("");
             }
         }
     }
@@ -214,6 +225,6 @@ public class ISSTablePanel extends SkatTablePanel {
      * @param message Chat message
      */
     public void appendChatMessage(final ChatMessage message) {
-        this.chatPanel.appendMessage(message);
+        chatPanel.appendMessage(message);
     }
 }
