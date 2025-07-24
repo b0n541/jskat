@@ -1,6 +1,7 @@
 package org.jskat.gui.swing;
 
 import com.google.common.eventbus.Subscribe;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -35,12 +36,12 @@ import org.jskat.gui.action.iss.*;
 import org.jskat.gui.action.main.*;
 import org.jskat.gui.human.SwingHumanPlayer;
 import org.jskat.gui.img.JSkatGraphicRepository;
+import org.jskat.gui.javafx.table.SkatSeriesStartDialog;
 import org.jskat.gui.swing.help.JSkatHelpDialog;
 import org.jskat.gui.swing.iss.ISSTablePanel;
 import org.jskat.gui.swing.iss.LobbyPanel;
 import org.jskat.gui.swing.iss.LoginPanel;
 import org.jskat.gui.swing.iss.PlayerInvitationPanel;
-import org.jskat.gui.swing.table.SkatSeriesStartDialog;
 import org.jskat.gui.swing.table.SkatTablePanel;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -54,8 +55,8 @@ import java.awt.*;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 
 public class JSkatViewImpl implements JSkatView {
 
@@ -63,7 +64,8 @@ public class JSkatViewImpl implements JSkatView {
 
     public final JPanel mainPanel = new JPanel();
     private JPanel toolbar;
-    private final SkatSeriesStartDialog skatSeriesStartDialog;
+    // REMOVE the field for the dialog, it will be created on-demand
+    // private final SkatSeriesStartDialog skatSeriesStartDialog;
     private final JSkatOptionsDialog preferencesDialog;
     private JTabbedPane tabs;
     private String activeView;
@@ -90,7 +92,8 @@ public class JSkatViewImpl implements JSkatView {
 
         JSkatEventBus.INSTANCE.register(this);
 
-        skatSeriesStartDialog = new SkatSeriesStartDialog(mainPanel);
+        // REMOVE the instantiation of the dialog from the constructor
+        // skatSeriesStartDialog = new SkatSeriesStartDialog(mainPanel);
         preferencesDialog = new JSkatOptionsDialog(mainPanel);
 
         initActionMap(menu);
@@ -427,7 +430,14 @@ public class JSkatViewImpl implements JSkatView {
 
     @Subscribe
     public void showSkatSeriesStartDialogOn(final StartSkatSeriesCommand command) {
-        SwingUtilities.invokeLater(() -> skatSeriesStartDialog.setVisible(true));
+        // JavaFX UI operations must run on the JavaFX Application Thread.
+        // Platform.runLater ensures this happens correctly.
+        Platform.runLater(() -> {
+            // Create the dialog, passing null for the owner since we're in a Swing context.
+            final SkatSeriesStartDialog dialog = new SkatSeriesStartDialog(null);
+            // Use the new method to show the dialog and handle the result.
+            dialog.showAndWaitAndStartSeries();
+        });
     }
 
     @Subscribe
