@@ -64,8 +64,6 @@ public class JSkatViewImpl implements JSkatView {
 
     public final JPanel mainPanel = new JPanel();
     private JPanel toolbar;
-    // REMOVE the field for the dialog, it will be created on-demand
-    // private final SkatSeriesStartDialog skatSeriesStartDialog;
     private final JSkatOptionsDialog preferencesDialog;
     private JTabbedPane tabs;
     private String activeView;
@@ -92,8 +90,6 @@ public class JSkatViewImpl implements JSkatView {
 
         JSkatEventBus.INSTANCE.register(this);
 
-        // REMOVE the instantiation of the dialog from the constructor
-        // skatSeriesStartDialog = new SkatSeriesStartDialog(mainPanel);
         preferencesDialog = new JSkatOptionsDialog(mainPanel);
 
         initActionMap(menu);
