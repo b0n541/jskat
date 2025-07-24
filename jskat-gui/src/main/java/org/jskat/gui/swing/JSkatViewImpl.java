@@ -430,13 +430,31 @@ public class JSkatViewImpl implements JSkatView {
 
     @Subscribe
     public void showSkatSeriesStartDialogOn(final StartSkatSeriesCommand command) {
-        // JavaFX UI operations must run on the JavaFX Application Thread.
-        // Platform.runLater ensures this happens correctly.
+        // Get the top-level window (the JFrame) that contains our main panel.
+        final Window mainFrame = SwingUtilities.getWindowAncestor(mainPanel);
+
+        // Disable the main Swing window on the Event Dispatch Thread (EDT).
+        // This makes it unresponsive, effectively making our dialog modal.
+        // TODO: remove and make the dialog really modal once everything is migrated to JavaFX
+        if (mainFrame != null) {
+            mainFrame.setEnabled(false);
+        }
+
+        // Schedule the JavaFX dialog to be shown on the JavaFX Application Thread.
         Platform.runLater(() -> {
-            // Create the dialog, passing null for the owner since we're in a Swing context.
-            final SkatSeriesStartDialog dialog = new SkatSeriesStartDialog(null);
-            // Use the new method to show the dialog and handle the result.
-            dialog.showAndWaitAndStartSeries();
+            try {
+                // Create the dialog, passing null for the owner as we are in a Swing context.
+                final SkatSeriesStartDialog dialog = new SkatSeriesStartDialog(null);
+                // This method internally calls showAndWait(), which blocks this (FX) thread.
+                dialog.showAndWaitAndStartSeries();
+            } finally {
+                // This 'finally' block ensures the main window is ALWAYS re-enabled,
+                // even if an error occurs in the dialog.
+                if (mainFrame != null) {
+                    // Re-enable the main frame back on the EDT.
+                    SwingUtilities.invokeLater(() -> mainFrame.setEnabled(true));
+                }
+            }
         });
     }
 
