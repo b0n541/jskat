@@ -245,19 +245,19 @@ public class JSkatMainWindowController {
         final SwingNode swingNode = new SwingNode();
         final String tableName = event.tableName();
 
-        try {
-            SwingUtilities.invokeAndWait(() -> {
-                SkatTablePanel panel = null;
-                if (JSkatViewType.LOCAL_TABLE.equals(event.tableType())) {
-                    panel = new SkatTablePanel(tableName, JSkatViewImpl.actions);
-                } else if (JSkatViewType.ISS_TABLE.equals(event.tableType())) {
-                    panel = new ISSTablePanel(tableName, JSkatViewImpl.actions);
-                }
-                swingNode.setContent(panel);
-            });
-        } catch (InterruptedException | InvocationTargetException e) {
-            throw new RuntimeException(e);
-        }
+        SwingUtilities.invokeLater(() -> {
+            SkatTablePanel panel = null;
+            if (JSkatViewType.LOCAL_TABLE.equals(event.tableType())) {
+                panel = new SkatTablePanel(tableName, JSkatViewImpl.actions);
+            } else if (JSkatViewType.ISS_TABLE.equals(event.tableType())) {
+                panel = new ISSTablePanel(tableName, JSkatViewImpl.actions);
+            }
+
+            if (panel != null) {
+                final SkatTablePanel finalPanel = panel;
+                Platform.runLater(() -> swingNode.setContent(finalPanel));
+            }
+        });
 
         String tabTitle = null;
         String tabId = null;
