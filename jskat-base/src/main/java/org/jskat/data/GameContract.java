@@ -28,7 +28,7 @@ public record GameContract(
         Objects.requireNonNull(gameType);
         Objects.requireNonNull(ouvertCards);
 
-        if (ouvert && (ouvertCards.size() != 10)) {
+        if (ouvert && !ouvertCards.isEmpty() && (ouvertCards.size() != 10)) {
             throw new IllegalArgumentException("Validation failed: Wrong number of ouvert cards in ouvert game.");
         }
         if (!ouvert && !ouvertCards.isEmpty()) {
