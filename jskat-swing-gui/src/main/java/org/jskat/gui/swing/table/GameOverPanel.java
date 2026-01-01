@@ -26,14 +26,18 @@ class GameOverPanel extends JPanel {
         gameResultPanel = new GameResultPanel();
         panel.add(gameResultPanel, "grow, wrap");
 
-        JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout("fill"));
+        JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout("insets 0, fill", "[280!][grow]", "[fill]"));
         skatPanel = new SkatPanel();
-        buttonPanel.add(skatPanel, "grow");
+        buttonPanel.add(skatPanel, "w 280!, hmax 150");
+
+        JPanel buttonsGroup = new JPanel(LayoutFactory.getMigLayout("insets 0, gap 15", "", ""));
         for (JSkatAction action : activeActions) {
-            buttonPanel.add(new JButton(actions.get(action)), "center, shrink");
+            buttonsGroup.add(new JButton(actions.get(action)));
         }
+        buttonsGroup.setOpaque(false);
+        buttonPanel.add(buttonsGroup, "center");
         buttonPanel.setOpaque(false);
-        panel.add(buttonPanel, "center");
+        panel.add(buttonPanel, "growx");
 
         panel.setOpaque(false);
         add(panel, "center");

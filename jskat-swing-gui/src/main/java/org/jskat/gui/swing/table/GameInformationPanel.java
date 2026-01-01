@@ -26,6 +26,7 @@ class GameInformationPanel extends JPanel {
     private JLabel label;
 
     private int gameNumber;
+    private boolean practiceGame;
     private GameState gameState;
     private GameType gameType;
     private boolean playWithJacks;
@@ -96,6 +97,7 @@ class GameInformationPanel extends JPanel {
     }
 
     private void resetGameData() {
+        practiceGame = false;
         gameType = null;
         matadors = 0;
         playWithJacks = false;
@@ -226,7 +228,11 @@ class GameInformationPanel extends JPanel {
 
     private void appendGameNumber(final StringBuffer text) {
         if (gameNumber > 0) {
-            text.append(strings.getString("game") + " " + gameNumber + ": ");
+            text.append(strings.getString("game") + " " + gameNumber);
+            if (practiceGame) {
+                text.append(" (" + strings.getString("unscored") + ")");
+            }
+            text.append(": ");
         }
     }
 
@@ -312,6 +318,16 @@ class GameInformationPanel extends JPanel {
      */
     public void setGameNumber(final int newGameNumber) {
         gameNumber = newGameNumber;
+        refreshText();
+    }
+
+    /**
+     * Sets whether this is a practice game (replay with same cards).
+     *
+     * @param isPracticeGame true if this is a practice game
+     */
+    public void setPracticeGame(final boolean isPracticeGame) {
+        practiceGame = isPracticeGame;
         refreshText();
     }
 

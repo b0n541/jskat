@@ -1109,4 +1109,22 @@ public class SkatGame {
     public GameState getGameState() {
         return data.getGameState();
     }
+
+    /**
+     * Gets the cards that were dealt to each player at the start of the game.
+     *
+     * @return Map of player positions to their dealt cards
+     */
+    public Map<Player, CardList> getDealtCards() {
+        return data.getDealtCards();
+    }
+
+    /**
+     * Gets the skat cards that were dealt at the start of the game.
+     *
+     * @return The dealt skat cards
+     */
+    public CardList getDealtSkat() {
+        return data.getDealtSkat();
+    }
 }

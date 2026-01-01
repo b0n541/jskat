@@ -4,6 +4,9 @@ import com.google.common.eventbus.Subscribe;
 import org.jskat.control.command.table.NextReplayMoveCommand;
 import org.jskat.control.command.table.ReadyForNextGameCommand;
 import org.jskat.control.command.table.ReplayGameCommand;
+import org.jskat.control.command.table.ReplayWithSameCardsCommand;
+import org.jskat.util.CardDeck;
+import org.jskat.util.CardList;
 import org.jskat.control.event.skatgame.GameStartEvent;
 import org.jskat.control.event.table.*;
 import org.jskat.control.gui.JSkatView;
@@ -21,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.StreamSupport;
 
 /**
  * Controls a series of skat games
@@ -37,6 +41,8 @@ public class SkatSeries {
     private boolean unlimitedRounds = false;
     private boolean onlyPlayRamsch = false;
     private boolean readyForNextGame = false;
+    private boolean replayWithSameCardsRequested = false;
+    private CardDeck replayDeck = null;
     private final Map<Player, JSkatPlayer> players;
     private SkatGame currSkatGame;
     private SkatGameReplay currReplayGame;
@@ -80,6 +86,31 @@ public class SkatSeries {
 
         JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(new SkatGameReplayFinishedEvent());
         readyForNextGame = true;
+    }
+
+    @Subscribe
+    public void replayWithSameCardsOn(final ReplayWithSameCardsCommand command) {
+
+        LOG.debug("Replay with same cards requested");
+
+        JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(new SkatGameReplayFinishedEvent());
+
+        // Build the deck from the current game's dealt cards
+        if (currSkatGame != null) {
+            final Map<Player, CardList> dealtCards = currSkatGame.getDealtCards();
+            final CardList dealtSkat = currSkatGame.getDealtSkat();
+
+            // Convert CardList to List<Card> for the CardDeck constructor
+            replayDeck = new CardDeck(
+                    StreamSupport.stream(dealtCards.get(Player.FOREHAND).spliterator(), false).toList(),
+                    StreamSupport.stream(dealtCards.get(Player.MIDDLEHAND).spliterator(), false).toList(),
+                    StreamSupport.stream(dealtCards.get(Player.REARHAND).spliterator(), false).toList(),
+                    StreamSupport.stream(dealtSkat.spliterator(), false).toList());
+
+            replayWithSameCardsRequested = true;
+        } else {
+            LOG.warn("No current game available for replay");
+        }
     }
 
     /**
@@ -197,15 +228,23 @@ public class SkatSeries {
 
                 LOG.debug("Game ended: join");
 
-                readyForNextGame = false;
-                while (isHumanPlayerInvolved() && !readyForNextGame) {
-                    try {
-                        Thread.sleep(200);
-                    } catch (final InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                // Wait for user action, handling replay-with-same-cards requests
+                do {
+                    readyForNextGame = false;
+                    replayWithSameCardsRequested = false;
+                    while (isHumanPlayerInvolved() && !readyForNextGame && !replayWithSameCardsRequested) {
+                        try {
+                            Thread.sleep(200);
+                        } catch (final InterruptedException e) {
+                            LOG.warn("Interrupted while waiting for next game", e);
+                            Thread.currentThread().interrupt();
+                        }
                     }
-                }
+
+                    if (replayWithSameCardsRequested && replayDeck != null) {
+                        playReplayGame(gameNumber, gameVariant);
+                    }
+                } while (replayWithSameCardsRequested);
             }
 
             roundsToGo--;
@@ -230,6 +269,50 @@ public class SkatSeries {
         }
 
         return result;
+    }
+
+    /**
+     * Plays a replay game with the same card deal. This game does not count
+     * towards the series score and does not affect player rotation.
+     *
+     * @param gameNumber  The display game number (for UI purposes)
+     * @param gameVariant The game variant to use
+     */
+    private void playReplayGame(final int gameNumber, final GameVariant gameVariant) {
+
+        LOG.info("Playing replay game with same cards (practice mode)");
+
+        final SkatGame replayGame = new SkatGame(data.getTableName(), gameVariant,
+                players.get(Player.FOREHAND),
+                players.get(Player.MIDDLEHAND),
+                players.get(Player.REARHAND));
+
+        // Set the pre-dealt deck so cards will be the same
+        replayGame.setCardDeck(replayDeck);
+
+        JSkatEventBus.INSTANCE.post(
+                new TableGameMoveEvent(data.getTableName(),
+                        new GameStartEvent(gameNumber, gameVariant,
+                                data.getBottomPlayer().getLeftNeighbor(),
+                                data.getBottomPlayer().getRightNeighbor(),
+                                data.getBottomPlayer(),
+                                true)));
+
+        replayGame.setView(view);
+        replayGame.setMaxSleep(maxSleep);
+
+        // Note: We intentionally do NOT call data.addGame(replayGame)
+        // because this is a practice game that should not count for score
+
+        CompletableFuture.runAsync(() -> replayGame.run()).join();
+
+        LOG.info("Replay game ended");
+
+        // Store the replay game as currSkatGame so that another replay can be requested
+        currSkatGame = replayGame;
+
+        // Clear the replay deck
+        replayDeck = null;
     }
 
     /**
