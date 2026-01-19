@@ -468,6 +468,8 @@ public class SkatTablePanel extends AbstractTabPanel {
         }
 
         if (contract.ouvert()) {
+            getPlayerPanel(event.player).removeAllCards();
+            getPlayerPanel(event.player).addCards(contract.ouvertCards());
             getPlayerPanel(event.player).showCards();
         }
     }

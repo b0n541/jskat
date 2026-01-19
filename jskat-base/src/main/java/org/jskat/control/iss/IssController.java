@@ -490,6 +490,27 @@ public class IssController {
      * @param newGameData Game data
      */
     public void endGame(final String tableName, final SkatGameData newGameData) {
+        // If summary has ouvert but no cards, get them from live game data
+        final SkatGameData liveGame = gameData.get(tableName);
+        if (liveGame != null
+                && newGameData.getAnnouncement() != null
+                && newGameData.getAnnouncement().contract().ouvert()
+                && newGameData.getAnnouncement().contract().ouvertCards().isEmpty()
+                && liveGame.getAnnouncement() != null
+                && !liveGame.getAnnouncement().contract().ouvertCards().isEmpty()) {
+            final var liveContract = liveGame.getAnnouncement().contract();
+            final var newContract = newGameData.getAnnouncement().contract();
+            newGameData.setAnnouncement(new GameAnnouncement(
+                    new GameContract(
+                            newContract.gameType(),
+                            newContract.hand(),
+                            newContract.schneider(),
+                            newContract.schwarz(),
+                            newContract.ouvert(),
+                            liveContract.ouvertCards()),
+                    newGameData.getAnnouncement().discardedCards()));
+        }
+
         eventBus.post(new SkatGameStateChangedEvent(tableName, GameState.GAME_OVER));
         // FIXME: merge event and command
         eventBus.post(new TableGameMoveEvent(tableName, new GameFinishEvent(newGameData.getPlayerName(newGameData.getDeclarer()), newGameData.getGameSummary())));
