@@ -179,6 +179,8 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
         private final String AI_CLASS_ALGORITHMIC = "org.jskat.ai.mjl.AIPlayerMJL";
         private final String AI_CLASS_RANDOM = "org.jskat.ai.rnd.AIPlayerRND";
         private final String AI_CLASS_NEURAL_NETWORK = "org.jskat.ai.nn.AIPlayerNN";
+        private final String AI_CLASS_ML_PLAYER = "org.jskat.ai.ml.MLPlayer";
+        private final String AI_CLASS_ML_PLAYER_PRO = "org.jskat.ai.ml.MLPlayerPro";
         private final String AI_CLASS_HUMAN = "org.jskat.gui.human.SwingHumanPlayer";
 
         PlayerTypeComboBoxRenderer() {
@@ -195,6 +197,8 @@ public class SkatSeriesStartDialog extends JDialog implements ActionListener {
                 case AI_CLASS_ALGORITHMIC -> strings.getString("algorithmic_player");
                 case AI_CLASS_RANDOM -> strings.getString("random_player");
                 case AI_CLASS_NEURAL_NETWORK -> strings.getString("neural_network_player");
+                case AI_CLASS_ML_PLAYER -> strings.getString("ml_player");
+                case AI_CLASS_ML_PLAYER_PRO -> strings.getString("ml_player_pro");
                 case AI_CLASS_HUMAN -> strings.getString("human_player");
                 default -> playerType;
             };

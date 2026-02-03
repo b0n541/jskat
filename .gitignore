@@ -6,3 +6,6 @@
 /bin/
 /.idea/
 /out/
+
+# Downloaded ML models (from skat-ml-models releases)
+/.jskat/
