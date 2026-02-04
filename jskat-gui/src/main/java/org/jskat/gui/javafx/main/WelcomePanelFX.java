@@ -8,6 +8,7 @@ import org.jskat.gui.swing.AbstractTabPanel;
 import javax.swing.*;
 import java.awt.*;
 
+@Deprecated
 public class WelcomePanelFX extends AbstractTabPanel {
 
     public WelcomePanelFX(String tableName, ActionMap actions) {
