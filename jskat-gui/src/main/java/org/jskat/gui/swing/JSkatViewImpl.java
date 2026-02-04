@@ -36,12 +36,12 @@ import org.jskat.gui.action.iss.*;
 import org.jskat.gui.action.main.*;
 import org.jskat.gui.human.SwingHumanPlayer;
 import org.jskat.gui.img.JSkatGraphicRepository;
+import org.jskat.gui.javafx.iss.LoginPanelFX;
 import org.jskat.gui.javafx.main.WelcomePanelFX;
 import org.jskat.gui.javafx.table.SkatSeriesStartDialog;
 import org.jskat.gui.swing.help.JSkatHelpDialog;
 import org.jskat.gui.swing.iss.ISSTablePanel;
 import org.jskat.gui.swing.iss.LobbyPanel;
-import org.jskat.gui.swing.iss.LoginPanel;
 import org.jskat.gui.swing.iss.PlayerInvitationPanel;
 import org.jskat.gui.swing.table.SkatTablePanel;
 import org.jskat.util.Card;
@@ -458,7 +458,7 @@ public class JSkatViewImpl implements JSkatView {
     @Subscribe
     public void showISSLoginOn(final IssShowLoginCommand command) {
         SwingUtilities.invokeLater(() -> {
-            final LoginPanel loginPanel = new LoginPanel(strings.getString("iss_login"), actions);
+            final LoginPanelFX loginPanel = new LoginPanelFX(strings.getString("iss_login"), actions);
             addTabPanel(loginPanel, strings.getString("iss_login"));
         });
     }
