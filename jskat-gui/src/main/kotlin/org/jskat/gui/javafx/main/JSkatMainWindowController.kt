@@ -25,10 +25,10 @@ import org.jskat.control.event.table.TableRemovedEvent
 import org.jskat.data.JSkatApplicationData
 import org.jskat.data.JSkatViewType
 import org.jskat.gui.javafx.dialog.firststeps.FirstStepsDialog
+import org.jskat.gui.javafx.iss.LobbyPanel
 import org.jskat.gui.swing.JSkatOptionsDialog
 import org.jskat.gui.swing.JSkatViewImpl
 import org.jskat.gui.swing.iss.ISSTablePanel
-import org.jskat.gui.swing.iss.LobbyPanel
 import org.jskat.gui.swing.table.SkatTablePanel
 import org.jskat.util.JSkatResourceBundle
 import javax.swing.SwingUtilities
@@ -282,16 +282,18 @@ class JSkatMainWindowController {
                 Platform.runLater { tabs.tabs.remove(loginTab) }
             }
 
-        val swingNode = SwingNode()
-        SwingUtilities.invokeAndWait {
-            issLobby = LobbyPanel("ISS Lobby", JSkatViewImpl.actions)
-            swingNode.content = issLobby
+        issLobby = LobbyPanel(JSkatViewImpl.actions)
+        val scrollPane = ScrollPane(issLobby).apply {
+            isFitToWidth = true
+            isFitToHeight = true
         }
+        issLobby.prefWidthProperty().bind(scrollPane.widthProperty())
+        issLobby.prefHeightProperty().bind(scrollPane.heightProperty())
 
         val tab = Tab("ISS Lobby").apply {
             id = JSkatMainWindowTabType.ISS_LOBBY.name
             isClosable = true
-            content = swingNode
+            content = scrollPane
         }
 
         Platform.runLater {
@@ -349,6 +351,6 @@ class JSkatMainWindowController {
 
     @Subscribe
     fun deletePlayerFromIssPlayerListOn(event: IssPlayerLeftEvent) {
-        issLobby.removeTable(event.playerName())
+        issLobby.removePlayer(event.playerName())
     }
 }

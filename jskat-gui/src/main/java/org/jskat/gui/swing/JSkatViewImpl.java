@@ -36,12 +36,12 @@ import org.jskat.gui.action.iss.*;
 import org.jskat.gui.action.main.*;
 import org.jskat.gui.human.SwingHumanPlayer;
 import org.jskat.gui.img.JSkatGraphicRepository;
+import org.jskat.gui.javafx.iss.LobbyPanelFX;
 import org.jskat.gui.javafx.iss.LoginPanelFX;
 import org.jskat.gui.javafx.main.WelcomePanelFX;
 import org.jskat.gui.javafx.table.SkatSeriesStartDialog;
 import org.jskat.gui.swing.help.JSkatHelpDialog;
 import org.jskat.gui.swing.iss.ISSTablePanel;
-import org.jskat.gui.swing.iss.LobbyPanel;
 import org.jskat.gui.swing.iss.PlayerInvitationPanel;
 import org.jskat.gui.swing.table.SkatTablePanel;
 import org.jskat.util.Card;
@@ -74,7 +74,7 @@ public class JSkatViewImpl implements JSkatView {
     private final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
     private final JSkatOptions options = JSkatOptions.instance();
     public static ActionMap actions;
-    private LobbyPanel issLobby;
+    private LobbyPanelFX issLobby;
 
     private static String VERSION;
 
@@ -468,7 +468,9 @@ public class JSkatViewImpl implements JSkatView {
      */
     @Subscribe
     public void updateISSLobbyPlayerListOn(final IssPlayerDataUpdatedEvent event) {
-        issLobby.updatePlayer(event.playerName(), event.language(), event.gamesPlayed(), event.strength());
+        if (issLobby != null) {
+            issLobby.updatePlayer(event.playerName(), event.language(), event.gamesPlayed(), event.strength());
+        }
     }
 
     /**
@@ -476,7 +478,9 @@ public class JSkatViewImpl implements JSkatView {
      */
     @Subscribe
     public void removePlayerFromISSLobbyPlayerListOn(final String playerName) {
-        SwingUtilities.invokeLater(() -> issLobby.removePlayer(playerName));
+        if (issLobby != null) {
+            SwingUtilities.invokeLater(() -> issLobby.removePlayer(playerName));
+        }
     }
 
     @Subscribe
@@ -486,8 +490,10 @@ public class JSkatViewImpl implements JSkatView {
             // show ISS lobby if connection was successfull
             // FIXME (jan 07.12.2010) use constant instead of title
             closeTabPanel(strings.getString("iss_login"));
-            issLobby = new LobbyPanel(strings.getString("iss_lobby"), actions);
-            addTabPanel(issLobby, strings.getString("iss_lobby"));
+            issLobby = new LobbyPanelFX(strings.getString("iss_lobby"), actions);
+            final JPanel panel = new JPanel(new BorderLayout());
+            panel.add(issLobby, BorderLayout.CENTER);
+            addTabPanel(panel, strings.getString("iss_lobby"));
         });
     }
 
@@ -496,7 +502,9 @@ public class JSkatViewImpl implements JSkatView {
      */
     @Subscribe
     public void updateISSLobbyTableListOn(final IssTableDataUpdatedEvent event) {
-        issLobby.updateTable(event.tableName(), event.maxPlayers(), event.gamesPlayed(), event.player1(), event.player2(), event.player3());
+        if (issLobby != null) {
+            issLobby.updateTable(event.tableName(), event.maxPlayers(), event.gamesPlayed(), event.player1(), event.player2(), event.player3());
+        }
     }
 
     /**
@@ -504,7 +512,9 @@ public class JSkatViewImpl implements JSkatView {
      */
     @Subscribe
     public void removeTableFromISSLobbyTableListOn(final IssTableDeletedEvent event) {
-        issLobby.removeTable(event.tableName());
+        if (issLobby != null) {
+            issLobby.removeTable(event.tableName());
+        }
     }
 
     /**
@@ -515,7 +525,9 @@ public class JSkatViewImpl implements JSkatView {
 
         LOG.debug("appendISSChatMessage");
 
-        issLobby.appendChatMessage(message);
+        if (issLobby != null) {
+            issLobby.appendChatMessage(message);
+        }
 
         for (final SkatTablePanel table : tables.values()) {
             if (table instanceof final ISSTablePanel issTable) {
@@ -710,6 +722,12 @@ public class JSkatViewImpl implements JSkatView {
         newPanel.setFocus();
     }
 
+    private void addTabPanel(final JPanel newPanel, final String title) {
+        tabs.addTab(title, newPanel);
+        tabs.setTabComponentAt(tabs.indexOfComponent(newPanel), new JSkatTabComponent(tabs, bitmaps));
+        tabs.setSelectedComponent(newPanel);
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -752,7 +770,7 @@ public class JSkatViewImpl implements JSkatView {
 
         SwingUtilities.invokeLater(() -> {
             for (final Component currPanel : tabs.getComponents()) {
-                if (currPanel instanceof LobbyPanel || currPanel instanceof ISSTablePanel) {
+                if (currPanel instanceof LobbyPanelFX || currPanel instanceof ISSTablePanel) {
                     closeTabPanel(currPanel.getName());
                 }
             }
