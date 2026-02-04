@@ -36,6 +36,7 @@ import org.jskat.gui.action.iss.*;
 import org.jskat.gui.action.main.*;
 import org.jskat.gui.human.SwingHumanPlayer;
 import org.jskat.gui.img.JSkatGraphicRepository;
+import org.jskat.gui.javafx.main.WelcomePanelFX;
 import org.jskat.gui.javafx.table.SkatSeriesStartDialog;
 import org.jskat.gui.swing.help.JSkatHelpDialog;
 import org.jskat.gui.swing.iss.ISSTablePanel;
@@ -179,7 +180,7 @@ public class JSkatViewImpl implements JSkatView {
 
         // main area
         addTabbedPane();
-        addTabPanel(new WelcomePanel(strings.getString("welcome"), actions),
+        addTabPanel(new WelcomePanelFX(strings.getString("welcome"), actions),
                 strings.getString("welcome"));
 
         LOG.debug("GUI initialization finished.");
