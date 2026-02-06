@@ -13,7 +13,7 @@ dependencies {
 }
 
 // ML Models download configuration
-val mlModelsVersion = "1.2.0"
+val mlModelsVersion = "1.3.0"
 val mlModelsDir = rootProject.file(".jskat/models")
 val mlModelsBaseUrl = "https://github.com/avaskys/skat-ml-models/releases/download/v$mlModelsVersion"
 
