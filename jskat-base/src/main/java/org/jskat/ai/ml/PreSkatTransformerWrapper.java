@@ -93,13 +93,13 @@ public class PreSkatTransformerWrapper implements AutoCloseable {
             inputs.put("hand_cards", handTensor);
             inputs.put("position", positionTensor);
 
-            var results = session.run(inputs);
+            try (var results = session.run(inputs)) {
+                // Extract outputs
+                float[][] pickupProbs = (float[][]) results.get("pickup_probs").get().getValue();
+                float[][] handProbs = (float[][]) results.get("hand_probs").get().getValue();
 
-            // Extract outputs
-            float[][] pickupProbs = (float[][]) results.get("pickup_probs").get().getValue();
-            float[][] handProbs = (float[][]) results.get("hand_probs").get().getValue();
-
-            return new Result(pickupProbs[0], handProbs[0]);
+                return new Result(pickupProbs[0], handProbs[0]);
+            }
         }
     }
 

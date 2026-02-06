@@ -158,11 +158,11 @@ public class TransformerModelWrapper implements AutoCloseable {
             inputs.put("legal_mask", OnnxTensor.createTensor(env, legalMask2D));
 
             // Run inference
-            var results = session.run(inputs);
-
-            // Extract logits [1, 32] -> [32]
-            float[][] logits = (float[][]) results.get("logits").get().getValue();
-            return logits[0];
+            try (var results = session.run(inputs)) {
+                // Extract logits [1, 32] -> [32]
+                float[][] logits = (float[][]) results.get("logits").get().getValue();
+                return logits[0];
+            }
 
         } finally {
             // Clean up tensors

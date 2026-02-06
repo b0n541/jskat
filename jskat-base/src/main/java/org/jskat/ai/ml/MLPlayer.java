@@ -52,6 +52,14 @@ public class MLPlayer extends AbstractMLPlayer {
     }
 
     @Override
+    public void close() {
+        super.close();
+        if (gameEvalDenseModel != null) {
+            gameEvalDenseModel.close();
+        }
+    }
+
+    @Override
     protected GameSearchResult evaluateGameContract(CardList playingHand, CardList matadorHand, Player position, GameContract contract,
                                                      boolean isHandGame, int bidConstraint, CardList skatCards) {
         try {

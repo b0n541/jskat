@@ -72,6 +72,17 @@ public class MLPlayerPro extends AbstractMLPlayer {
         logger.info("MLPlayerPro initialized (biddingTransformer={})", biddingTransformerModel != null);
     }
 
+    @Override
+    public void close() {
+        super.close();
+        if (gameEvalTransformerModel != null) {
+            gameEvalTransformerModel.close();
+        }
+        if (biddingTransformerModel != null) {
+            biddingTransformerModel.close();
+        }
+    }
+
     // ==================== Bidding (Transformer override) ====================
 
     /**
@@ -80,20 +91,6 @@ public class MLPlayerPro extends AbstractMLPlayer {
      */
     @Override
     protected void calculateMLMaxBid() {
-        // Always calculate dense bidding model bid for logging/comparison
-        int denseMaxPickupBid = 0;
-        int denseMaxHandBid = 0;
-        try {
-            CardList hand = knowledge.getOwnCards();
-            Player position = knowledge.getPlayerPosition();
-            float[] features = MLFeatureExtractor.extractBiddingFeatures(hand, position);
-            ONNXModelWrapper.BiddingResult denseResult = biddingDenseModel.predictBidding(features);
-            denseMaxPickupBid = findMaxBid(denseResult.pickupProbs, BID_CONFIDENCE_THRESHOLD);
-            denseMaxHandBid = findMaxBid(denseResult.handProbs, BID_CONFIDENCE_THRESHOLD);
-        } catch (OrtException e) {
-            logger.warn("Dense bidding inference failed for comparison logging", e);
-        }
-
         // Use bidding transformer if available
         if (biddingTransformerModel != null) {
             try {
@@ -125,9 +122,19 @@ public class MLPlayerPro extends AbstractMLPlayer {
                 logger.debug("Transformer max pickup bid at {}: {}", BID_CONFIDENCE_THRESHOLD, maxPickupBid);
                 logger.debug("Transformer max hand bid at {}: {}", BID_CONFIDENCE_THRESHOLD, maxHandBid);
 
-                // Log dense model comparison
-                logger.info("Dense bidding model would have bid: pickup={}, hand={} -> max={}",
-                        denseMaxPickupBid, denseMaxHandBid, Math.max(denseMaxPickupBid, denseMaxHandBid));
+                // Run dense model only for comparison logging when info logging is enabled
+                if (logger.isInfoEnabled()) {
+                    try {
+                        float[] features = MLFeatureExtractor.extractBiddingFeatures(hand, position);
+                        ONNXModelWrapper.BiddingResult denseResult = biddingDenseModel.predictBidding(features);
+                        int denseMaxPickupBid = findMaxBid(denseResult.pickupProbs, BID_CONFIDENCE_THRESHOLD);
+                        int denseMaxHandBid = findMaxBid(denseResult.handProbs, BID_CONFIDENCE_THRESHOLD);
+                        logger.info("Dense bidding model would have bid: pickup={}, hand={} -> max={}",
+                                denseMaxPickupBid, denseMaxHandBid, Math.max(denseMaxPickupBid, denseMaxHandBid));
+                    } catch (OrtException e) {
+                        logger.warn("Dense bidding inference failed for comparison logging", e);
+                    }
+                }
 
                 if (maxHandBid > maxPickupBid) {
                     mlMaxBidValue = maxHandBid;
@@ -147,8 +154,6 @@ public class MLPlayerPro extends AbstractMLPlayer {
         }
 
         // Fallback to parent implementation (dense bidding model)
-        logger.info("Using dense bidding model (max bid: pickup={}, hand={})",
-                denseMaxPickupBid, denseMaxHandBid);
         super.calculateMLMaxBid();
     }
 

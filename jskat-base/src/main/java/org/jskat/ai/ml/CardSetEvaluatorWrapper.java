@@ -8,8 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.LongBuffer;
-import java.nio.FloatBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -135,16 +133,16 @@ public class CardSetEvaluatorWrapper implements AutoCloseable {
             inputs.put("is_hand", isHandTensor);
             inputs.put("bid", bidTensor);
 
-            var results = session.run(inputs);
-
-            // Extract output
-            Object value = results.get("win_prob").get().getValue();
-            if (value instanceof float[]) {
-                return ((float[]) value)[0];
-            } else if (value instanceof float[][]) {
-                return ((float[][]) value)[0][0];
-            } else {
-                throw new OrtException("Unexpected output type: " + value.getClass().getName());
+            try (var results = session.run(inputs)) {
+                // Extract output
+                Object value = results.get("win_prob").get().getValue();
+                if (value instanceof float[]) {
+                    return ((float[]) value)[0];
+                } else if (value instanceof float[][]) {
+                    return ((float[][]) value)[0][0];
+                } else {
+                    throw new OrtException("Unexpected output type: " + value.getClass().getName());
+                }
             }
         }
     }

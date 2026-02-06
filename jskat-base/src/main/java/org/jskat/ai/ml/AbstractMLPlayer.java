@@ -21,21 +21,10 @@ import java.util.Random;
  * <p>
  * Subclasses implement their own game evaluation (for discard/announce).
  */
-public abstract class AbstractMLPlayer extends AbstractAIPlayer {
+public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoCloseable {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractMLPlayer.class);
     protected final Random random = new Random();
-
-    /**
-     * Valid bid values in Skat (from SkatConstants)
-     */
-    protected static final int[] BID_VALUES = {
-            18, 20, 22, 23, 24, 27, 30, 33, 35, 36, 40, 44, 45, 46, 48,
-            50, 54, 55, 59, 60, 63, 66, 70, 72, 77, 80, 81, 84, 88, 90,
-            96, 99, 100, 108, 110, 117, 120, 121, 126, 130, 132, 135,
-            140, 143, 144, 150, 153, 154, 156, 160, 162, 165, 168, 170,
-            176, 180, 187, 192, 198, 204, 216, 240, 264
-    };
 
     /**
      * Confidence threshold for bidding (only bid if win probability >= threshold)
@@ -58,19 +47,30 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer {
     /**
      * Resolves the default model path, checking multiple locations.
      * Models are downloaded from skat-ml-models releases via Gradle task.
+     * <p>
+     * Search order:
+     * 1. System property {@code jskat.models.dir} (for fat JAR / custom deployments)
+     * 2. Project-local .jskat/models/ (downloaded by Gradle)
+     * 3-5. Parent directories (for running from submodules)
+     * 6. User home ~/.jskat/models/ (shared across projects)
      */
     protected static String getDefaultModelPath(String modelFileName) {
-        // Search paths in order of preference:
-        // 1. Project-local .jskat/models/ (downloaded by Gradle)
-        // 2-4. Parent directories (for running from submodules)
-        // 5. User home (shared across projects)
-        String[] searchPaths = {
-                ".jskat/models/" + modelFileName,
-                "../.jskat/models/" + modelFileName,
-                "../../.jskat/models/" + modelFileName,
-                "../../../.jskat/models/" + modelFileName,
-                System.getProperty("user.home") + "/.jskat/models/" + modelFileName,
-        };
+        java.util.List<String> searchPaths = new java.util.ArrayList<>();
+
+        // 1. Explicit system property (highest priority)
+        String customDir = System.getProperty("jskat.models.dir");
+        if (customDir != null && !customDir.isEmpty()) {
+            searchPaths.add(customDir + "/" + modelFileName);
+        }
+
+        // 2-5. Project-relative paths (for development / Gradle downloads)
+        searchPaths.add(".jskat/models/" + modelFileName);
+        searchPaths.add("../.jskat/models/" + modelFileName);
+        searchPaths.add("../../.jskat/models/" + modelFileName);
+        searchPaths.add("../../../.jskat/models/" + modelFileName);
+
+        // 6. User home (shared across projects)
+        searchPaths.add(System.getProperty("user.home") + "/.jskat/models/" + modelFileName);
 
         for (String path : searchPaths) {
             java.io.File file = new java.io.File(path);
@@ -82,7 +82,8 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer {
 
         // Return project-local path as default (Gradle should have downloaded here)
         String defaultPath = ".jskat/models/" + modelFileName;
-        logger.warn("Model not found. Run './gradlew downloadMlModels' to download. Trying: {}", defaultPath);
+        logger.warn("Model not found. Run './gradlew downloadMlModels' to download " +
+                "or set -Djskat.models.dir=<path>. Trying: {}", defaultPath);
         return defaultPath;
     }
 
@@ -112,6 +113,16 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer {
 
     @Override
     public void finalizeGame() {
+    }
+
+    @Override
+    public void close() {
+        if (biddingDenseModel != null) {
+            biddingDenseModel.close();
+        }
+        if (cardPlayTransformerModel != null) {
+            cardPlayTransformerModel.close();
+        }
     }
 
     @Override
@@ -176,7 +187,7 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer {
     protected int findMaxBid(float[] probabilities, float threshold) {
         for (int i = probabilities.length - 1; i >= 0; i--) {
             if (probabilities[i] >= threshold) {
-                return BID_VALUES[i];
+                return MLConstants.BID_VALUES[i];
             }
         }
         return 0;

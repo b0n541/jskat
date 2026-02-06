@@ -88,12 +88,12 @@ public class ONNXModelWrapper implements AutoCloseable {
             Map<String, OnnxTensor> inputs = new HashMap<>();
             inputs.put("features", tensor);
 
-            var results = session.run(inputs);
+            try (var results = session.run(inputs)) {
+                float[][] pickupProbs = (float[][]) results.get("pickup_probs").get().getValue();
+                float[][] handProbs = (float[][]) results.get("hand_probs").get().getValue();
 
-            float[][] pickupProbs = (float[][]) results.get("pickup_probs").get().getValue();
-            float[][] handProbs = (float[][]) results.get("hand_probs").get().getValue();
-
-            return new BiddingResult(pickupProbs[0], handProbs[0]);
+                return new BiddingResult(pickupProbs[0], handProbs[0]);
+            }
         }
     }
 
@@ -120,18 +120,18 @@ public class ONNXModelWrapper implements AutoCloseable {
             Map<String, OnnxTensor> inputs = new HashMap<>();
             inputs.put("features", tensor);
 
-            var results = session.run(inputs);
-
-            // Handle both 1D [1] and 2D [1, 1] output shapes
-            Object value = results.get("win_prob").get().getValue();
-            if (value instanceof float[][]) {
-                float[][] winProb = (float[][]) value;
-                return winProb[0][0];
-            } else if (value instanceof float[]) {
-                float[] winProb = (float[]) value;
-                return winProb[0];
-            } else {
-                throw new OrtException("Unexpected output type: " + value.getClass().getName());
+            try (var results = session.run(inputs)) {
+                // Handle both 1D [1] and 2D [1, 1] output shapes
+                Object value = results.get("win_prob").get().getValue();
+                if (value instanceof float[][]) {
+                    float[][] winProb = (float[][]) value;
+                    return winProb[0][0];
+                } else if (value instanceof float[]) {
+                    float[] winProb = (float[]) value;
+                    return winProb[0];
+                } else {
+                    throw new OrtException("Unexpected output type: " + value.getClass().getName());
+                }
             }
         }
     }
