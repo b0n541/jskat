@@ -272,32 +272,6 @@ public class JSkatViewImpl implements JSkatView {
         });
     }
 
-    @Subscribe
-    public void showAboutInformationDialogOn(final ShowAboutInformationCommand command) {
-
-        SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(mainPanel, "JSkat "
-                        + strings.getString("version")
-                        + " "
-                        + VERSION + "\n\n"
-                        + "https://www.jskat.org\n"
-                        + "https://github.com/b0n541/jskat"
-                        + "\n\n"
-                        + strings.getString("authors")
-                        + ":\nJan Schäfer (jnschfr@gmail.com)\nMarkus J. Luzius (jskat@luzius.de)\nDaniel Loreck (daniel.loreck@gmail.com)\nSascha Laurien\nSlovasim\nMartin Rothe\nTobias Markus\n\n"
-                        + strings.getString("cards")
-                        + ": International Skat Server, KDE project, OpenClipart.org\n\n"
-                        + strings.getString("icons")
-                        + ": Gnome Desktop Icons, Tango project, Elementary icons,\n"
-                        + "Silvestre Herrera, Alex Roberts and Icojoy\n\n"
-                        + strings.getString("background_image") + ": webtreats\n\n"
-                        + "This program comes with ABSOLUTELY NO WARRANTY;\n"
-                        + "for details see licence dialog\n"
-                        + "This is free software, and you are welcome to redistribute it\n"
-                        + "under certain conditions; see licence dialog for details.",
-                strings.getString("about"),
-                JOptionPane.INFORMATION_MESSAGE, new ImageIcon(bitmaps.getJSkatLogoImage())));
-    }
-
     /**
      * {@inheritDoc}
      */

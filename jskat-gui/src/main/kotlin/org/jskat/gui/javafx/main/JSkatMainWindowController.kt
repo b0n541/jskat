@@ -7,6 +7,7 @@ import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
 import javafx.scene.control.*
+import javafx.scene.image.ImageView
 import javafx.scene.layout.Region
 import javafx.scene.layout.VBox
 import javafx.stage.Stage
@@ -24,6 +25,7 @@ import org.jskat.control.event.table.TableCreatedEvent
 import org.jskat.control.event.table.TableRemovedEvent
 import org.jskat.data.JSkatApplicationData
 import org.jskat.data.JSkatViewType
+import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.gui.javafx.dialog.firststeps.FirstStepsDialog
 import org.jskat.gui.javafx.iss.LobbyPanel
 import org.jskat.gui.swing.JSkatOptionsDialog
@@ -37,6 +39,7 @@ class JSkatMainWindowController {
 
     private val strings = JSkatResourceBundle.INSTANCE
     private val applicationData = JSkatApplicationData.INSTANCE
+    private val VERSION = "0.24.0"
 
     @FXML
     private lateinit var root: Parent
@@ -187,10 +190,40 @@ class JSkatMainWindowController {
         }
     }
 
-    @FXML
+    //    @FXML
     fun showAboutInformation() {
-        SwingUtilities.invokeLater {
-            JSkatEventBus.INSTANCE.post(ShowAboutInformationCommand())
+        showAboutDialog()
+    }
+
+    @Subscribe
+    fun showAboutInformationOn(command: ShowAboutInformationCommand) {
+        Platform.runLater { showAboutDialog() }
+    }
+
+    private fun showAboutDialog() {
+        Alert(Alert.AlertType.INFORMATION).apply {
+            initOwner(root.scene.window)
+            title = strings.getString("about")
+            headerText = "JSkat ${strings.getString("version")} $VERSION"
+            graphic = ImageView(JSkatGraphicRepository.INSTANCE.jSkatLogoImageFX)
+            contentText = """
+                https://www.jskat.org
+                https://github.com/b0n541/jskat
+                
+                ${strings.getString("authors")}: Jan Schäfer (jnschfr@gmail.com), Markus J. Luzius, Daniel Loreck, Sascha Laurien, Slovasim, Martin Rothe, Tobias Markus
+                
+                ${strings.getString("cards")}: International Skat Server, KDE project, OpenClipart.org
+                
+                ${strings.getString("icons")}: Gnome Desktop Icons, Tango project, Elementary icons, Silvestre Herrera, Alex Roberts and Icojoy
+                
+                ${strings.getString("background_image")}: webtreats
+                
+                This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions. See license dialog for details.
+            """.trimIndent()
+
+            dialogPane.minWidth = 600.0
+
+            showAndWait()
         }
     }
 
