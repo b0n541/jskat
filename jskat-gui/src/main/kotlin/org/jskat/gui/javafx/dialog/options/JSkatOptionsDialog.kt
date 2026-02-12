@@ -33,6 +33,7 @@ class JSkatOptionsDialog(owner: Window) : Dialog<ButtonType>() {
 
     // Card set options
     private val cardSetProperty = SimpleObjectProperty(options.cardSet)
+    private val originalCardSet = options.cardSet
 
     // Skat Rules options
     private val rulesProperty = SimpleObjectProperty(options.rules)
@@ -80,6 +81,12 @@ class JSkatOptionsDialog(owner: Window) : Dialog<ButtonType>() {
                 saveOptions()
             }
             dialogButton
+        }
+
+        setOnHidden {
+            if (result != ButtonType.OK) {
+                options.cardSet = originalCardSet
+            }
         }
     }
 
@@ -173,7 +180,8 @@ class JSkatOptionsDialog(owner: Window) : Dialog<ButtonType>() {
             valueProperty().bindBidirectional(cardSetProperty)
         }
         val cardPane = CardPane()
-        cardSetProperty.addListener { _, _, _ ->
+        cardSetProperty.addListener { _, _, newValue ->
+            options.cardSet = newValue
             cardPane.redraw()
         }
 
