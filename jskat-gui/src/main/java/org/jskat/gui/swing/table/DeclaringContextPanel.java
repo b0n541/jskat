@@ -17,16 +17,18 @@ class DeclaringContextPanel extends JPanel {
 
         setLayout(LayoutFactory.getMigLayout("fill", "[shrink][grow][shrink]", "fill"));
 
-        final JPanel blankPanel = new JPanel();
-        blankPanel.setOpaque(false);
-        add(blankPanel, "width 25%");
-
         discardPanel = new DiscardPanel(actions, 4);
-        add(discardPanel, "grow");
 
         announcePanel = new GameAnnouncePanel(actions, newUserPanel, discardPanel);
         add(announcePanel, "width 25%");
         discardPanel.setAnnouncePanel(announcePanel);
+
+        add(discardPanel, "grow");
+
+
+        final JPanel blankPanel = new JPanel();
+        blankPanel.setOpaque(false);
+        add(blankPanel, "width 25%");
 
         setOpaque(false);
 

@@ -12,7 +12,6 @@ import javax.swing.*;
  */
 class BiddingContextPanel extends JPanel {
 
-
     private BidBubblePanel leftOpponentBid;
     private BidBubblePanel rightOpponentBid;
     private BidBubblePanel userBid;
@@ -31,36 +30,38 @@ class BiddingContextPanel extends JPanel {
      *
      * @param actions Action map
      */
-    BiddingContextPanel(ActionMap actions, JSkatGraphicRepository bitmaps,
-                        JSkatUserPanel userPanel) {
+    BiddingContextPanel(final ActionMap actions,
+                        final JSkatGraphicRepository bitmaps,
+                        final JSkatUserPanel userPanel) {
 
         initPanel(actions, bitmaps, userPanel);
     }
 
-    private void initPanel(ActionMap actions, JSkatGraphicRepository bitmaps,
-                           JSkatUserPanel userPanel) {
+    private void initPanel(final ActionMap actions,
+                           final JSkatGraphicRepository bitmaps,
+                           final JSkatUserPanel userPanel) {
 
         setLayout(LayoutFactory.getMigLayout(
                 "fill", "[shrink][grow][shrink]", "fill"));
 
-        JPanel blankPanel = new JPanel();
-        blankPanel.setOpaque(false);
-        add(blankPanel, "width 25%");
+        announcePanel = new GameAnnouncePanel(actions, userPanel, null);
+        add(announcePanel, "width 25%");
 
-        JPanel biddingPanel = getBiddingPanel(actions, bitmaps);
+        final JPanel biddingPanel = getBiddingPanel(actions, bitmaps);
         biddingPanel.setOpaque(false);
         add(biddingPanel, "grow");
 
-        announcePanel = new GameAnnouncePanel(actions, userPanel, null);
-        add(announcePanel, "width 25%");
+        final JPanel blankPanel = new JPanel();
+        blankPanel.setOpaque(false);
+        add(blankPanel, "width 25%");
 
         setOpaque(false);
     }
 
-    private JPanel getBiddingPanel(ActionMap actions,
-                                   JSkatGraphicRepository bitmaps) {
+    private JPanel getBiddingPanel(final ActionMap actions,
+                                   final JSkatGraphicRepository bitmaps) {
 
-        JPanel biddingPanel = new JPanel(LayoutFactory.getMigLayout("fill"));
+        final JPanel biddingPanel = new JPanel(LayoutFactory.getMigLayout("fill"));
 
         leftOpponentBid = new BidBubblePanel(bitmaps.getLeftBidBubble());
         rightOpponentBid = new BidBubblePanel(bitmaps.getRightBidBubble());
