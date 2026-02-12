@@ -169,7 +169,7 @@ class JSkatOptionsDialog(owner: Window) : Dialog<ButtonType>() {
     private fun createCardSetTab(): VBox {
         val cardSetLabel = Label(strings.getString("card_face"))
         val cardSetComboBox = ComboBox<CardSet>().apply {
-            items.addAll(CardSet.values())
+            items.addAll(CardSet.entries.toTypedArray())
             valueProperty().bindBidirectional(cardSetProperty)
         }
         val cardPane = CardPane()

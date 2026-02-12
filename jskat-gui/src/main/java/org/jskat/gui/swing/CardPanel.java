@@ -19,7 +19,6 @@ import java.awt.geom.AffineTransform;
  */
 public class CardPanel extends JPanel {
 
-
     private static final Logger log = LoggerFactory.getLogger(CardPanel.class);
 
     protected final JSkatGraphicRepository bitmaps;
@@ -50,32 +49,32 @@ public class CardPanel extends JPanel {
 
         createMouseAdapter();
 
-        this.bitmaps = JSkatGraphicRepository.INSTANCE;
+        bitmaps = JSkatGraphicRepository.INSTANCE;
         this.scaleFactor = scaleFactor;
         this.showBackside = showBackside;
 
-        this.cards = new CardList();
+        cards = new CardList();
 
         setOpaque(false);
     }
 
     private void createMouseAdapter() {
-        MouseAdapter adapter = new MouseAdapter() {
+        final MouseAdapter adapter = new MouseAdapter() {
             @Override
-            public void mouseMoved(MouseEvent e) {
-                CardPanel.this.mouseXPosition = e.getX();
+            public void mouseMoved(final MouseEvent e) {
+                mouseXPosition = e.getX();
                 repaintIfNecessary();
             }
 
             @Override
-            public void mouseEntered(MouseEvent e) {
-                CardPanel.this.mouseXPosition = e.getX();
+            public void mouseEntered(final MouseEvent e) {
+                mouseXPosition = e.getX();
                 resetActiveCardPosition();
                 repaintIfNecessary();
             }
 
             @Override
-            public void mouseExited(MouseEvent e) {
+            public void mouseExited(final MouseEvent e) {
                 resetMousePositions();
                 repaint();
             }
@@ -86,19 +85,19 @@ public class CardPanel extends JPanel {
     }
 
     private void resetMousePositions() {
-        this.mouseXPosition = Integer.MAX_VALUE;
+        mouseXPosition = Integer.MAX_VALUE;
         resetActiveCardPosition();
     }
 
     private void resetActiveCardPosition() {
-        this.activeCardMinXPosition = Integer.MAX_VALUE;
-        this.activeCardMaxXPosition = Integer.MAX_VALUE;
+        activeCardMinXPosition = Integer.MAX_VALUE;
+        activeCardMaxXPosition = Integer.MAX_VALUE;
     }
 
     protected void repaintIfNecessary() {
 
-        if (!this.showBackside
-                && (this.mouseXPosition < this.activeCardMinXPosition || this.mouseXPosition > this.activeCardMaxXPosition)) {
+        if (!showBackside
+                && (mouseXPosition < activeCardMinXPosition || mouseXPosition > activeCardMaxXPosition)) {
             repaint();
         }
     }
@@ -110,8 +109,8 @@ public class CardPanel extends JPanel {
      */
     public final void addCard(final Card newCard) {
 
-        this.cards.add(newCard);
-        this.cards.sort(this.sortGameType);
+        cards.add(newCard);
+        cards.sort(sortGameType);
         repaint();
     }
 
@@ -122,8 +121,8 @@ public class CardPanel extends JPanel {
      */
     public final void addCards(final CardList newCards) {
 
-        this.cards.addAll(newCards);
-        this.cards.sort(this.sortGameType);
+        cards.addAll(newCards);
+        cards.sort(sortGameType);
         repaint();
     }
 
@@ -153,7 +152,7 @@ public class CardPanel extends JPanel {
      */
     public final Card get(final int index) {
 
-        return this.cards.get(index);
+        return cards.get(index);
     }
 
     /**
@@ -165,7 +164,7 @@ public class CardPanel extends JPanel {
         super.paintComponent(g);
 
         // copying cards prevents ConcurrentModificationException
-        final CardList cardsToPaint = new CardList(this.cards);
+        final CardList cardsToPaint = new CardList(cards);
 
         // rendering hints
         final Graphics2D g2D = (Graphics2D) g;
@@ -175,9 +174,9 @@ public class CardPanel extends JPanel {
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         // calculate card gap
-        int panelWidth = getWidth();
-        int cardWidth = this.bitmaps.getCardImage(Card.CJ).getWidth(this);
-        int cardGap = calculateCardGap(panelWidth, cardWidth);
+        final int panelWidth = getWidth();
+        final int cardWidth = bitmaps.getCardImage(Card.CJ).getWidth(this);
+        final int cardGap = calculateCardGap(panelWidth, cardWidth);
 
         adjustActiveCardPositions(cardWidth, cardGap);
         paintAllCards(cardsToPaint, g2D, cardWidth, cardGap);
@@ -186,24 +185,24 @@ public class CardPanel extends JPanel {
 
     private int calculateCardGap(final int panelWidth, final int cardWidth) {
         int cardGap = cardWidth;
-        if (this.cards.size() * cardGap > panelWidth) {
+        if (cards.size() * cardGap > panelWidth) {
             // cards overlap
-            cardGap = (panelWidth - cardWidth) / (this.cards.size() - 1);
+            cardGap = (panelWidth - cardWidth) / (cards.size() - 1);
         }
         return cardGap;
     }
 
     private void paintAllCards(final CardList cardsToPaint,
-                               final Graphics2D g2D, final int cardWidth, int cardGap) {
+                               final Graphics2D g2D, final int cardWidth, final int cardGap) {
         int cardNo = 0;
         for (final Card card : cardsToPaint) {
 
             final AffineTransform transform = new AffineTransform();
-            transform.scale(this.scaleFactor, this.scaleFactor);
+            transform.scale(scaleFactor, scaleFactor);
 
-            if (cardNo * cardGap <= this.activeCardMinXPosition) {
+            if (cardNo * cardGap <= activeCardMinXPosition) {
                 transform.translate(cardNo * cardGap, 0);
-            } else if (this.activeCardMaxXPosition < cardNo * cardGap + cardWidth) {
+            } else if (activeCardMaxXPosition < cardNo * cardGap + cardWidth) {
                 transform.translate((cardNo - 1) * cardGap + cardWidth, 0);
             }
             g2D.drawImage(getCardImage(card), transform, this);
@@ -212,27 +211,27 @@ public class CardPanel extends JPanel {
         }
     }
 
-    private void adjustActiveCardPositions(int cardWidth, int cardGap) {
-        if (this.mouseXPosition < this.activeCardMinXPosition) {
-            this.activeCardMinXPosition = (this.mouseXPosition / cardGap) * cardGap;
-        } else if (this.mouseXPosition > this.activeCardMaxXPosition) {
-            this.activeCardMinXPosition = ((this.mouseXPosition - cardWidth + cardGap) / (cardGap))
+    private void adjustActiveCardPositions(final int cardWidth, final int cardGap) {
+        if (mouseXPosition < activeCardMinXPosition) {
+            activeCardMinXPosition = (mouseXPosition / cardGap) * cardGap;
+        } else if (mouseXPosition > activeCardMaxXPosition) {
+            activeCardMinXPosition = ((mouseXPosition - cardWidth + cardGap) / (cardGap))
                     * cardGap;
         }
-        this.activeCardMaxXPosition = this.activeCardMinXPosition + cardWidth;
+        activeCardMaxXPosition = activeCardMinXPosition + cardWidth;
     }
 
     private Image getCardImage(final Card card) {
         Image image = null;
 
-        if (this.showBackside) {
-            image = this.bitmaps.getCardImage(null);
+        if (showBackside) {
+            image = bitmaps.getCardImage(null);
         } else {
             if (card == null) {
                 // e.g. in debug mode
-                image = this.bitmaps.getCardImage(null);
+                image = bitmaps.getCardImage(null);
             } else {
-                image = this.bitmaps.getCardImage(card);
+                image = bitmaps.getCardImage(card);
             }
         }
         return image;
@@ -242,7 +241,7 @@ public class CardPanel extends JPanel {
      * Clears the card panel.
      */
     public final void clearCards() {
-        this.cards.clear();
+        cards.clear();
         repaint();
     }
 
@@ -250,7 +249,7 @@ public class CardPanel extends JPanel {
      * Flips the cards.
      */
     public final void flipCards() {
-        if (this.showBackside) {
+        if (showBackside) {
             showCards();
         } else {
             hideCards();
@@ -261,7 +260,7 @@ public class CardPanel extends JPanel {
      * Shows the cards.
      */
     public final void showCards() {
-        this.showBackside = false;
+        showBackside = false;
         repaint();
     }
 
@@ -270,7 +269,7 @@ public class CardPanel extends JPanel {
      */
     public final void hideCards() {
         if (!JSkatOptions.instance().isCheatDebugMode().booleanValue()) {
-            this.showBackside = true;
+            showBackside = true;
             repaint();
         }
     }
@@ -281,7 +280,7 @@ public class CardPanel extends JPanel {
      * @return Number of cards
      */
     public final int getCardCount() {
-        return this.cards.size();
+        return cards.size();
     }
 
     /**
@@ -290,8 +289,8 @@ public class CardPanel extends JPanel {
      * @param newGameType Game type
      */
     public final void setSortType(final GameType newGameType) {
-        this.sortGameType = newGameType;
-        this.cards.sort(this.sortGameType);
+        sortGameType = newGameType;
+        cards.sort(sortGameType);
         repaint();
     }
 
@@ -301,6 +300,6 @@ public class CardPanel extends JPanel {
      * @return Cards
      */
     public final CardList getCards() {
-        return this.cards.getImmutableCopy();
+        return cards.getImmutableCopy();
     }
 }
