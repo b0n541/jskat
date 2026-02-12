@@ -42,102 +42,21 @@ public class MLInterfaceParityTest {
      * Converts card name (e.g., "CJ", "SA") to Card enum.
      */
     private Card cardFromString(String cardName) {
-        if (cardName.length() != 2) {
-            throw new IllegalArgumentException("Invalid card name: " + cardName);
-        }
-
-        char suit = cardName.charAt(0);
-        char rank = cardName.charAt(1);
-
-        return switch (suit) {
-            case 'C' -> switch (rank) {
-                case 'J' -> Card.CJ;
-                case 'A' -> Card.CA;
-                case 'T' -> Card.CT;
-                case 'K' -> Card.CK;
-                case 'Q' -> Card.CQ;
-                case '9' -> Card.C9;
-                case '8' -> Card.C8;
-                case '7' -> Card.C7;
-                default -> throw new IllegalArgumentException("Invalid rank: " + rank);
-            };
-            case 'S' -> switch (rank) {
-                case 'J' -> Card.SJ;
-                case 'A' -> Card.SA;
-                case 'T' -> Card.ST;
-                case 'K' -> Card.SK;
-                case 'Q' -> Card.SQ;
-                case '9' -> Card.S9;
-                case '8' -> Card.S8;
-                case '7' -> Card.S7;
-                default -> throw new IllegalArgumentException("Invalid rank: " + rank);
-            };
-            case 'H' -> switch (rank) {
-                case 'J' -> Card.HJ;
-                case 'A' -> Card.HA;
-                case 'T' -> Card.HT;
-                case 'K' -> Card.HK;
-                case 'Q' -> Card.HQ;
-                case '9' -> Card.H9;
-                case '8' -> Card.H8;
-                case '7' -> Card.H7;
-                default -> throw new IllegalArgumentException("Invalid rank: " + rank);
-            };
-            case 'D' -> switch (rank) {
-                case 'J' -> Card.DJ;
-                case 'A' -> Card.DA;
-                case 'T' -> Card.DT;
-                case 'K' -> Card.DK;
-                case 'Q' -> Card.DQ;
-                case '9' -> Card.D9;
-                case '8' -> Card.D8;
-                case '7' -> Card.D7;
-                default -> throw new IllegalArgumentException("Invalid rank: " + rank);
-            };
-            default -> throw new IllegalArgumentException("Invalid suit: " + suit);
-        };
+        return Card.valueOf(cardName);
     }
 
     /**
      * Converts game type string to GameType enum.
      */
     private GameType gameTypeFromString(String gameTypeName) {
-        return switch (gameTypeName) {
-            case "DIAMONDS" -> GameType.DIAMONDS;
-            case "HEARTS" -> GameType.HEARTS;
-            case "SPADES" -> GameType.SPADES;
-            case "CLUBS" -> GameType.CLUBS;
-            case "GRAND" -> GameType.GRAND;
-            case "NULL" -> GameType.NULL;
-            default -> throw new IllegalArgumentException("Invalid game type: " + gameTypeName);
-        };
+        return GameType.valueOf(gameTypeName);
     }
 
     /**
      * Converts position string to Player enum.
      */
     private Player positionFromString(String positionName) {
-        return switch (positionName) {
-            case "FOREHAND" -> Player.FOREHAND;
-            case "MIDDLEHAND" -> Player.MIDDLEHAND;
-            case "REARHAND" -> Player.REARHAND;
-            default -> throw new IllegalArgumentException("Invalid position: " + positionName);
-        };
-    }
-
-    /**
-     * Get the game type index used by the ML models.
-     */
-    private int getGameTypeIndex(GameType gameType) {
-        return switch (gameType) {
-            case DIAMONDS -> 0;
-            case HEARTS -> 1;
-            case SPADES -> 2;
-            case CLUBS -> 3;
-            case GRAND -> 4;
-            case NULL -> 5;
-            default -> throw new IllegalArgumentException("Unsupported game type: " + gameType);
-        };
+        return Player.valueOf(positionName);
     }
 
     /**
@@ -174,7 +93,7 @@ public class MLInterfaceParityTest {
             int expectedIndex = testCase.get("expected_index").asInt();
 
             GameType gameType = gameTypeFromString(gameTypeName);
-            int actualIndex = getGameTypeIndex(gameType);
+            int actualIndex = MLFeatureExtractor.getGameTypeIndex(gameType);
 
             assertThat(actualIndex)
                     .as("Game type encoding for %s", gameTypeName)
@@ -273,7 +192,7 @@ public class MLInterfaceParityTest {
             // Verify game type encoding
             String gameTypeName = input.get("game_type").asText();
             GameType gameType = gameTypeFromString(gameTypeName);
-            int gameTypeIdx = getGameTypeIndex(gameType);
+            int gameTypeIdx = MLFeatureExtractor.getGameTypeIndex(gameType);
             assertThat(gameTypeIdx)
                     .as("Game type index in eval test '%s'", description)
                     .isBetween(0, 5);
@@ -302,7 +221,7 @@ public class MLInterfaceParityTest {
             // Verify game type encoding
             String gameTypeName = input.get("game_type").asText();
             GameType gameType = gameTypeFromString(gameTypeName);
-            int gameTypeIdx = getGameTypeIndex(gameType);
+            int gameTypeIdx = MLFeatureExtractor.getGameTypeIndex(gameType);
             assertThat(gameTypeIdx)
                     .as("Game type index in play test '%s'", description)
                     .isBetween(0, 5);

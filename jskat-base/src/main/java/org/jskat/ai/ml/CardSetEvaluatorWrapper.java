@@ -1,16 +1,9 @@
 package org.jskat.ai.ml;
 
 import ai.onnxruntime.OnnxTensor;
-import ai.onnxruntime.OrtEnvironment;
 import ai.onnxruntime.OrtException;
-import ai.onnxruntime.OrtSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,20 +26,11 @@ import java.util.Map;
  * Output:
  * - win_prob: (batch,) - win probability 0.0-1.0
  */
-public class CardSetEvaluatorWrapper implements AutoCloseable {
-
-    private static final Logger logger = LoggerFactory.getLogger(CardSetEvaluatorWrapper.class);
+public class CardSetEvaluatorWrapper extends AbstractONNXWrapper {
 
     private static final int MAX_HAND = 10;
     private static final int MAX_SKAT = 2;
-    private static final int CARD_PAD_IDX = 32;
-
-    // Bid normalization constants (matching Python)
-    private static final int MIN_BID = 18;
-    private static final int MAX_BID = 264;
-
-    private final OrtEnvironment env;
-    private final OrtSession session;
+    private static final int CARD_PAD_IDX = MLConstants.PAD_INDEX;
 
     /**
      * Creates a CardSetEvaluator wrapper.
@@ -56,22 +40,7 @@ public class CardSetEvaluatorWrapper implements AutoCloseable {
      * @throws IOException  If file cannot be read
      */
     public CardSetEvaluatorWrapper(String modelPath) throws OrtException, IOException {
-        this.env = OrtEnvironment.getEnvironment();
-
-        Path path = Paths.get(modelPath);
-        if (!Files.exists(path)) {
-            String absolutePath = path.toAbsolutePath().toString();
-            String cwd = System.getProperty("user.dir");
-            throw new IOException(String.format(
-                    "CardSetEvaluator model not found: %s\n" +
-                    "  Absolute path tried: %s\n" +
-                    "  Current working directory: %s",
-                    modelPath, absolutePath, cwd));
-        }
-
-        logger.info("Loading CardSetEvaluator from {}", modelPath);
-        this.session = env.createSession(modelPath, new OrtSession.SessionOptions());
-        logger.info("CardSetEvaluator loaded successfully");
+        super(modelPath, "CardSetEvaluator");
     }
 
     /**
@@ -112,7 +81,7 @@ public class CardSetEvaluatorWrapper implements AutoCloseable {
         long[] isHandArr = {isHand ? 1 : 0};
 
         // Normalize bid
-        float normalizedBid = (float) (bidValue - MIN_BID) / (MAX_BID - MIN_BID);
+        float normalizedBid = (float) (bidValue - MLConstants.MIN_BID) / (MLConstants.MAX_BID - MLConstants.MIN_BID);
         float[] bid = {normalizedBid};
 
         // Create tensors
@@ -143,17 +112,6 @@ public class CardSetEvaluatorWrapper implements AutoCloseable {
                 } else {
                     throw new OrtException("Unexpected output type: " + value.getClass().getName());
                 }
-            }
-        }
-    }
-
-    @Override
-    public void close() {
-        if (session != null) {
-            try {
-                session.close();
-            } catch (OrtException e) {
-                logger.error("Error closing CardSetEvaluator session", e);
             }
         }
     }

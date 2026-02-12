@@ -1,16 +1,9 @@
 package org.jskat.ai.ml;
 
 import ai.onnxruntime.OnnxTensor;
-import ai.onnxruntime.OrtEnvironment;
 import ai.onnxruntime.OrtException;
-import ai.onnxruntime.OrtSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,12 +11,8 @@ import java.util.Map;
  * Wrapper for ONNX dense (MLP) model loading and inference.
  * Handles bidding and game evaluation dense models.
  */
-public class ONNXModelWrapper implements AutoCloseable {
+public class ONNXModelWrapper extends AbstractONNXWrapper {
 
-    private static final Logger logger = LoggerFactory.getLogger(ONNXModelWrapper.class);
-
-    private final OrtEnvironment env;
-    private final OrtSession session;
     private final ModelType modelType;
 
     public enum ModelType {
@@ -42,27 +31,8 @@ public class ONNXModelWrapper implements AutoCloseable {
      * @throws IOException  If file cannot be read
      */
     public ONNXModelWrapper(String modelPath, ModelType modelType) throws OrtException, IOException {
+        super(modelPath, modelType.name());
         this.modelType = modelType;
-        this.env = OrtEnvironment.getEnvironment();
-
-        Path path = Paths.get(modelPath);
-        if (!Files.exists(path)) {
-            String absolutePath = path.toAbsolutePath().toString();
-            String cwd = System.getProperty("user.dir");
-            throw new IOException(String.format(
-                    "Model file not found: %s\n" +
-                    "  Absolute path tried: %s\n" +
-                    "  Current working directory: %s\n" +
-                    "  Please ensure model files are in one of these locations:\n" +
-                    "    - ml-player/models/ (relative to project root)\n" +
-                    "    - ~/.jskat/models/ (in user home)\n" +
-                    "    - Or provide absolute path to MLPlayer constructor",
-                    modelPath, absolutePath, cwd));
-        }
-
-        logger.info("Loading {} from {}", modelType, modelPath);
-        this.session = env.createSession(modelPath, new OrtSession.SessionOptions());
-        logger.info("Model loaded successfully: {}", modelType);
     }
 
     /**
@@ -132,17 +102,6 @@ public class ONNXModelWrapper implements AutoCloseable {
                 } else {
                     throw new OrtException("Unexpected output type: " + value.getClass().getName());
                 }
-            }
-        }
-    }
-
-    @Override
-    public void close() {
-        if (session != null) {
-            try {
-                session.close();
-            } catch (OrtException e) {
-                logger.error("Error closing ONNX session", e);
             }
         }
     }

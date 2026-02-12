@@ -5,6 +5,8 @@ import org.jskat.data.SkatGameData;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.Player;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -14,114 +16,83 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
  */
 public class MLPlayerTest extends AbstractJSkatTest {
 
+    private MLPlayer player;
+
+    @BeforeEach
+    void setUp() {
+        player = new MLPlayer();
+    }
+
+    @AfterEach
+    void tearDown() {
+        player.close();
+    }
+
+    /**
+     * Sets up the player with the given hand in forehand position and triggers bid calculation.
+     *
+     * @return whether the player wants to pick up the skat
+     */
+    private boolean shouldPickUpSkatWith(CardList hand) {
+        player.newGame(Player.FOREHAND);
+        player.takeCards(hand);
+        player.setGameState(SkatGameData.GameState.BIDDING);
+        player.setUpBidding();
+        player.bidMore(18);
+        return player.pickUpSkat();
+    }
+
     /**
      * Test that MLPlayer correctly identifies a perfect grand hand
      * and chooses to play it as a hand game (not picking up the skat).
-     *
-     * Perfect grand hand: All 4 jacks + high trump cards + high-value cards.
-     * Expected: Should NOT pick up skat (mlShouldPickupSkat = false)
      */
     @Test
     public void testPerfectGrandHandShouldNotPickupSkat() {
-        MLPlayer player = new MLPlayer();
-
         // Invincible grand hand: All 4 jacks + top two cards of three suits
-        CardList perfectGrandHand = new CardList(
-            Card.CJ, Card.SJ, Card.HJ, Card.DJ,  // All 4 jacks (trump in Grand)
-            Card.CA, Card.CT,                    // Clubs: Ace + Ten
-            Card.SA, Card.ST,                    // Spades: Ace + Ten
-            Card.HA, Card.HT                     // Hearts: Ace + Ten
+        CardList hand = new CardList(
+            Card.CJ, Card.SJ, Card.HJ, Card.DJ,
+            Card.CA, Card.CT,
+            Card.SA, Card.ST,
+            Card.HA, Card.HT
         );
 
-        // Setup game state
-        player.newGame(Player.FOREHAND);
-        player.takeCards(perfectGrandHand);
-        player.setGameState(SkatGameData.GameState.BIDDING);
-        player.setUpBidding();
-
-        // Trigger bid calculation by calling bidMore
-        // This will internally call calculateMLMaxBid()
-        player.bidMore(18);
-
-        // Verify that the player chooses NOT to pick up the skat
-        boolean shouldPickupSkat = player.pickUpSkat();
-
-        assertFalse(shouldPickupSkat,
-            "Perfect grand hand should be played as hand game (not picking up skat). " +
-            "Hand: " + perfectGrandHand);
+        assertFalse(shouldPickUpSkatWith(hand),
+            "Perfect grand hand should be played as hand game. Hand: " + hand);
     }
 
     /**
      * Test that MLPlayer correctly identifies a perfect suit hand
      * and chooses to play it as a hand game (not picking up the skat).
-     *
-     * Perfect clubs hand: All 4 jacks + strong clubs suit.
-     * Expected: Should NOT pick up skat (mlShouldPickupSkat = false)
      */
     @Test
     public void testPerfectSuitHandShouldNotPickupSkat() {
-        MLPlayer player = new MLPlayer();
-
-        // Perfect clubs hand: All 4 jacks + strong clubs
-        // With all 4 jacks (With 4) + good clubs suit
-        CardList perfectClubsHand = new CardList(
-            Card.CJ, Card.SJ, Card.HJ, Card.DJ,  // All 4 jacks
-            Card.CA, Card.CT, Card.CK,            // Clubs: A, T, K (very strong)
-            Card.SA, Card.HA, Card.DA             // Side aces for control
+        // Perfect clubs hand: All 4 jacks + strong clubs + side aces
+        CardList hand = new CardList(
+            Card.CJ, Card.SJ, Card.HJ, Card.DJ,
+            Card.CA, Card.CT, Card.CK,
+            Card.SA, Card.HA, Card.DA
         );
 
-        // Setup game state
-        player.newGame(Player.FOREHAND);
-        player.takeCards(perfectClubsHand);
-        player.setGameState(SkatGameData.GameState.BIDDING);
-        player.setUpBidding();
-
-        // Trigger bid calculation
-        player.bidMore(18);
-
-        // Verify that the player chooses NOT to pick up the skat
-        boolean shouldPickupSkat = player.pickUpSkat();
-
-        assertFalse(shouldPickupSkat,
-            "Perfect clubs hand should be played as hand game (not picking up skat). " +
-            "Hand: " + perfectClubsHand);
+        assertFalse(shouldPickUpSkatWith(hand),
+            "Perfect clubs hand should be played as hand game. Hand: " + hand);
     }
 
     /**
      * Test that MLPlayer correctly identifies a perfect null hand
      * and chooses to play it as a hand game (not picking up the skat).
-     *
-     * Perfect null hand: All low cards (7-9) with no aces, tens, or face cards.
-     * Expected: Should NOT pick up skat (mlShouldPickupSkat = false)
      */
     @Test
     public void testPerfectNullHandShouldNotPickupSkat() {
-        MLPlayer player = new MLPlayer();
-
         // Perfect null hand: All low cards (7, 8, 9) - unbeatable in Null
-        // No aces, tens, jacks, queens, or kings
-        CardList perfectNullHand = new CardList(
-            Card.C7, Card.C8, Card.C9,  // Clubs: 7, 8, 9
-            Card.S7, Card.S8,            // Spades: 7, 8
-            Card.H7, Card.H8,            // Hearts: 7, 8
-            Card.D7, Card.D8, Card.D9   // Diamonds: 7, 8, 9
+        CardList hand = new CardList(
+            Card.C7, Card.C8, Card.C9,
+            Card.S7, Card.S8,
+            Card.H7, Card.H8,
+            Card.D7, Card.D8, Card.D9
         );
 
-        // Setup game state
-        player.newGame(Player.FOREHAND);
-        player.takeCards(perfectNullHand);
-        player.setGameState(SkatGameData.GameState.BIDDING);
-        player.setUpBidding();
-
-        // Trigger bid calculation
-        player.bidMore(18);
-
-        // Verify that the player chooses NOT to pick up the skat
-        boolean shouldPickupSkat = player.pickUpSkat();
-
-        assertFalse(shouldPickupSkat,
-            "Perfect null hand should be played as hand game (not picking up skat). " +
-            "Hand: " + perfectNullHand);
+        assertFalse(shouldPickUpSkatWith(hand),
+            "Perfect null hand should be played as hand game. Hand: " + hand);
     }
 
     /**
@@ -130,30 +101,15 @@ public class MLPlayerTest extends AbstractJSkatTest {
      */
     @Test
     public void testStandardPerfectDistributionShouldNotPickupSkat() {
-        MLPlayer player = new MLPlayer();
-
-        // Invincible grand hand (Modified from CardDeck.getPerfectDistribution to be truly unbeatable)
-        CardList standardPerfectHand = new CardList(
-            Card.CJ, Card.SJ, Card.HJ, Card.DJ,  // All 4 jacks
-            Card.CA, Card.CT,                    // Clubs
-            Card.SA, Card.ST,                    // Spades
-            Card.HA, Card.HT                     // Hearts
+        // Invincible grand hand
+        CardList hand = new CardList(
+            Card.CJ, Card.SJ, Card.HJ, Card.DJ,
+            Card.CA, Card.CT,
+            Card.SA, Card.ST,
+            Card.HA, Card.HT
         );
 
-        // Setup game state
-        player.newGame(Player.FOREHAND);
-        player.takeCards(standardPerfectHand);
-        player.setGameState(SkatGameData.GameState.BIDDING);
-        player.setUpBidding();
-
-        // Trigger bid calculation
-        player.bidMore(18);
-
-        // Verify that the player chooses NOT to pick up the skat
-        boolean shouldPickupSkat = player.pickUpSkat();
-
-        assertFalse(shouldPickupSkat,
-            "Standard perfect hand should be played as hand game (not picking up skat). " +
-            "Hand: " + standardPerfectHand);
+        assertFalse(shouldPickUpSkatWith(hand),
+            "Standard perfect hand should be played as hand game. Hand: " + hand);
     }
 }

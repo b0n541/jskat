@@ -1,17 +1,10 @@
 package org.jskat.ai.ml;
 
 import ai.onnxruntime.OnnxTensor;
-import ai.onnxruntime.OrtEnvironment;
 import ai.onnxruntime.OrtException;
-import ai.onnxruntime.OrtSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.LongBuffer;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,18 +15,13 @@ import java.util.Map;
  * This model processes the game state as a sequence and learns patterns like
  * trump tracking, void detection, and signaling.
  */
-public class TransformerModelWrapper implements AutoCloseable {
-
-    private static final Logger logger = LoggerFactory.getLogger(TransformerModelWrapper.class);
+public class TransformerModelWrapper extends AbstractONNXWrapper {
 
     // Fixed sizes matching FastTransformerDataset
     public static final int MAX_HAND = 10;
     public static final int MAX_OUVERT = 10;
     public static final int MAX_HISTORY = 27;
     public static final int MAX_TRICK = 2;
-
-    private final OrtEnvironment env;
-    private final OrtSession session;
 
     /**
      * Creates a transformer model wrapper.
@@ -43,16 +31,7 @@ public class TransformerModelWrapper implements AutoCloseable {
      * @throws IOException  If file cannot be read
      */
     public TransformerModelWrapper(String modelPath) throws OrtException, IOException {
-        this.env = OrtEnvironment.getEnvironment();
-
-        Path path = Paths.get(modelPath);
-        if (!Files.exists(path)) {
-            throw new IOException("Transformer model not found: " + modelPath);
-        }
-
-        logger.info("Loading transformer model from {}", modelPath);
-        this.session = env.createSession(modelPath, new OrtSession.SessionOptions());
-        logger.info("Transformer model loaded successfully");
+        super(modelPath, "Card Play Transformer");
     }
 
     /**
@@ -168,17 +147,6 @@ public class TransformerModelWrapper implements AutoCloseable {
             // Clean up tensors
             for (OnnxTensor tensor : inputs.values()) {
                 tensor.close();
-            }
-        }
-    }
-
-    @Override
-    public void close() {
-        if (session != null) {
-            try {
-                session.close();
-            } catch (OrtException e) {
-                logger.error("Error closing transformer session", e);
             }
         }
     }

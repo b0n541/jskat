@@ -4,11 +4,17 @@ import ai.onnxruntime.OrtException;
 import org.jskat.ai.AbstractAIPlayer;
 import org.jskat.data.GameContract;
 import org.jskat.util.*;
+import org.jskat.util.rule.GrandRule;
+import org.jskat.util.rule.SkatRule;
+import org.jskat.util.rule.SkatRuleFactory;
+import org.jskat.util.rule.SuitRule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -55,7 +61,7 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
      * 6. User home ~/.jskat/models/ (shared across projects)
      */
     protected static String getDefaultModelPath(String modelFileName) {
-        java.util.List<String> searchPaths = new java.util.ArrayList<>();
+        List<String> searchPaths = new ArrayList<>();
 
         // 1. Explicit system property (highest priority)
         String customDir = System.getProperty("jskat.models.dir");
@@ -73,7 +79,7 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
         searchPaths.add(System.getProperty("user.home") + "/.jskat/models/" + modelFileName);
 
         for (String path : searchPaths) {
-            java.io.File file = new java.io.File(path);
+            File file = new File(path);
             if (file.exists()) {
                 logger.info("Found model at: {}", file.getAbsolutePath());
                 return file.getAbsolutePath();
@@ -278,9 +284,7 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
         double bestEV = Double.NEGATIVE_INFINITY;
 
         List<Card> cards = new ArrayList<>();
-        for (Card card : currentHand) {
-            cards.add(card);
-        }
+        currentHand.forEach(cards::add);
         int totalSearches = 0;
         int topResultsToLog = 5;
         List<DiscardSearchResult> topResults = new ArrayList<>();
@@ -469,19 +473,11 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
     protected float[] playCardWithTransformer(CardList playable) throws OrtException {
         Player me = knowledge.getPlayerPosition();
         Player left = me.getLeftNeighbor();
-        Player right = me.getRightNeighbor();
 
         int gameTypeIdx = MLFeatureExtractor.getGameTypeIndex(knowledge.getGameType());
 
-        int declarerIdx;
         Player declarer = knowledge.getDeclarer();
-        if (declarer == me) {
-            declarerIdx = 0;
-        } else if (declarer == left) {
-            declarerIdx = 1;
-        } else {
-            declarerIdx = 2;
-        }
+        int declarerIdx = relativePosition(declarer, me, left);
 
         long[] hand = new long[TransformerModelWrapper.MAX_HAND];
         CardList myCards = knowledge.getOwnCards();
@@ -491,7 +487,7 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
         for (int i = 0; i < handLen; i++) {
             handIndices[i] = MLFeatureExtractor.getMLIndex(myCards.get(i));
         }
-        java.util.Arrays.sort(handIndices);
+        Arrays.sort(handIndices);
         for (int i = 0; i < handLen; i++) {
             hand[i] = handIndices[i];
         }
@@ -502,12 +498,7 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
             for (Player p : new Player[]{Player.FOREHAND, Player.MIDDLEHAND, Player.REARHAND}) {
                 Card c = t.getCard(p);
                 if (c != null && historyLen < TransformerModelWrapper.MAX_HISTORY) {
-                    int relPlayer;
-                    if (p == me) relPlayer = 0;
-                    else if (p == left) relPlayer = 1;
-                    else relPlayer = 2;
-
-                    history[historyLen][0] = relPlayer;
+                    history[historyLen][0] = relativePosition(p, me, left);
                     history[historyLen][1] = MLFeatureExtractor.getMLIndex(c);
                     historyLen++;
                 }
@@ -517,19 +508,12 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
         long[][] trick = new long[TransformerModelWrapper.MAX_TRICK][2];
         int trickLen = 0;
         CardList trickCards = knowledge.getTrickCards();
-        Player trickLeader = knowledge.getCurrentTrick().getForeHand();
-        Player currentPlayer = trickLeader;
+        Player currentPlayer = knowledge.getCurrentTrick().getForeHand();
         for (int i = 0; i < trickCards.size() && trickLen < TransformerModelWrapper.MAX_TRICK; i++) {
             Card c = trickCards.get(i);
-            int relPlayer;
-            if (currentPlayer == me) relPlayer = 0;
-            else if (currentPlayer == left) relPlayer = 1;
-            else relPlayer = 2;
-
-            trick[trickLen][0] = relPlayer;
+            trick[trickLen][0] = relativePosition(currentPlayer, me, left);
             trick[trickLen][1] = MLFeatureExtractor.getMLIndex(c);
             trickLen++;
-
             currentPlayer = currentPlayer.getLeftNeighbor();
         }
 
@@ -554,7 +538,7 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
             for (int i = 0; i < declarerCards.size(); i++) {
                 ouvertIndices[i] = MLFeatureExtractor.getMLIndex(declarerCards.get(i));
             }
-            java.util.Arrays.sort(ouvertIndices);
+            Arrays.sort(ouvertIndices);
 
             ouvertHandLen = Math.min(ouvertIndices.length, TransformerModelWrapper.MAX_OUVERT);
             for (int i = 0; i < ouvertHandLen; i++) {
@@ -576,6 +560,15 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
                 trickLen,
                 legalMask
         );
+    }
+
+    /**
+     * Maps a player to a relative position index (0=me, 1=left neighbor, 2=right neighbor).
+     */
+    private static int relativePosition(Player player, Player me, Player left) {
+        if (player == me) return 0;
+        if (player == left) return 1;
+        return 2;
     }
 
     // ==================== Utility Methods ====================
@@ -600,93 +593,31 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
     }
 
     protected int calculateGameValue(GameContract contract, CardList hand) {
-        GameType gameType = contract.gameType();
-
-        if (gameType == GameType.NULL) {
-            if (contract.hand() && contract.ouvert()) return 59;
-            if (contract.hand()) return 35;
-            if (contract.ouvert()) return 46;
-            return 23;
-        }
-
-        int baseValue = SkatConstants.getGameBaseValue(gameType, contract.hand(), contract.ouvert());
+        int baseValue = SkatConstants.getGameBaseValue(contract.gameType(), contract.hand(), contract.ouvert());
         int multiplier = getGameMultiplier(contract, hand);
-
         return baseValue * multiplier;
     }
 
     protected int getGameMultiplier(GameContract contract, CardList hand) {
         GameType gameType = contract.gameType();
-        List<Card> trumps = getTrumpsInOrder(gameType);
 
-        int matadors = 0;
-        if (trumps.isEmpty()) {
+        SkatRule rule = SkatRuleFactory.getSkatRules(gameType);
+        int multiplier;
+        if (rule instanceof SuitRule suitRule) {
+            multiplier = suitRule.getBaseMultiplier(hand, gameType);
+        } else if (rule instanceof GrandRule grandRule) {
+            multiplier = grandRule.getBaseMultiplier(hand, gameType);
+        } else {
+            // NULL and RAMSCH have fixed values, multiplier is 1
             return 1;
         }
 
-        boolean hasFirst = hand.contains(trumps.get(0));
-
-        if (hasFirst) {
-            for (Card c : trumps) {
-                if (hand.contains(c)) {
-                    matadors++;
-                } else {
-                    break;
-                }
-            }
-        } else {
-            for (Card c : trumps) {
-                if (!hand.contains(c)) {
-                    matadors++;
-                } else {
-                    break;
-                }
-            }
-        }
-
-        int multiplier = 1;
-        multiplier += matadors;
-
-        if (contract.hand()) {
-            multiplier++;
-        }
-        if (contract.schneider()) {
-            multiplier++;
-        }
-        if (contract.schwarz()) {
-            multiplier++;
-        }
-        if (contract.ouvert()) {
-            multiplier++;
-        }
+        if (contract.hand()) multiplier++;
+        if (contract.schneider()) multiplier++;
+        if (contract.schwarz()) multiplier++;
+        if (contract.ouvert()) multiplier++;
 
         return multiplier;
-    }
-
-    protected List<Card> getTrumpsInOrder(GameType gameType) {
-        List<Card> trumps = new ArrayList<>();
-
-        trumps.add(Card.CJ);
-        trumps.add(Card.SJ);
-        trumps.add(Card.HJ);
-        trumps.add(Card.DJ);
-
-        if (gameType == GameType.GRAND) {
-            return trumps;
-        }
-
-        if (gameType != GameType.NULL && gameType != GameType.RAMSCH) {
-            Suit suit = gameType.getTrumpSuit();
-            trumps.add(Card.getCard(suit, Rank.ACE));
-            trumps.add(Card.getCard(suit, Rank.TEN));
-            trumps.add(Card.getCard(suit, Rank.KING));
-            trumps.add(Card.getCard(suit, Rank.QUEEN));
-            trumps.add(Card.getCard(suit, Rank.NINE));
-            trumps.add(Card.getCard(suit, Rank.EIGHT));
-            trumps.add(Card.getCard(suit, Rank.SEVEN));
-        }
-
-        return trumps;
     }
 
     // ==================== Helper Classes ====================

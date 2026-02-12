@@ -1,16 +1,9 @@
 package org.jskat.ai.ml;
 
 import ai.onnxruntime.OnnxTensor;
-import ai.onnxruntime.OrtEnvironment;
 import ai.onnxruntime.OrtException;
-import ai.onnxruntime.OrtSession;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,15 +21,9 @@ import java.util.Map;
  * - pickup_probs: (batch, 63) - win probability at each bid level for pickup game
  * - hand_probs: (batch, 63) - win probability at each bid level for hand game
  */
-public class PreSkatTransformerWrapper implements AutoCloseable {
-
-    private static final Logger logger = LoggerFactory.getLogger(PreSkatTransformerWrapper.class);
+public class PreSkatTransformerWrapper extends AbstractONNXWrapper {
 
     private static final int NUM_CARDS = 10;
-    private static final int NUM_BID_LEVELS = 63;
-
-    private final OrtEnvironment env;
-    private final OrtSession session;
 
     /**
      * Creates a PreSkatTransformer wrapper.
@@ -46,22 +33,7 @@ public class PreSkatTransformerWrapper implements AutoCloseable {
      * @throws IOException  If file cannot be read
      */
     public PreSkatTransformerWrapper(String modelPath) throws OrtException, IOException {
-        this.env = OrtEnvironment.getEnvironment();
-
-        Path path = Paths.get(modelPath);
-        if (!Files.exists(path)) {
-            String absolutePath = path.toAbsolutePath().toString();
-            String cwd = System.getProperty("user.dir");
-            throw new IOException(String.format(
-                    "PreSkatTransformer model not found: %s\n" +
-                    "  Absolute path tried: %s\n" +
-                    "  Current working directory: %s",
-                    modelPath, absolutePath, cwd));
-        }
-
-        logger.info("Loading PreSkatTransformer from {}", modelPath);
-        this.session = env.createSession(modelPath, new OrtSession.SessionOptions());
-        logger.info("PreSkatTransformer loaded successfully");
+        super(modelPath, "PreSkatTransformer");
     }
 
     /**
@@ -103,17 +75,6 @@ public class PreSkatTransformerWrapper implements AutoCloseable {
         }
     }
 
-    @Override
-    public void close() {
-        if (session != null) {
-            try {
-                session.close();
-            } catch (OrtException e) {
-                logger.error("Error closing PreSkatTransformer session", e);
-            }
-        }
-    }
-
     /**
      * Result container for PreSkatTransformer predictions.
      */
@@ -124,25 +85,6 @@ public class PreSkatTransformerWrapper implements AutoCloseable {
         public Result(float[] pickupProbs, float[] handProbs) {
             this.pickupProbs = pickupProbs;
             this.handProbs = handProbs;
-        }
-
-        /**
-         * Finds the maximum bid value where probability exceeds threshold.
-         *
-         * @param bidValues Array of valid bid values (length 63)
-         * @param forHand   Whether to use hand probabilities
-         * @param threshold Minimum probability threshold
-         * @return Maximum bid value, or 0 to pass
-         */
-        public int getMaxBid(int[] bidValues, boolean forHand, float threshold) {
-            float[] probs = forHand ? handProbs : pickupProbs;
-
-            for (int i = probs.length - 1; i >= 0; i--) {
-                if (probs[i] >= threshold) {
-                    return bidValues[i];
-                }
-            }
-            return 0;  // Pass
         }
     }
 }

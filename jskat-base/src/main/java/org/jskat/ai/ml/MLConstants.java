@@ -1,5 +1,7 @@
 package org.jskat.ai.ml;
 
+import org.jskat.util.SkatConstants;
+
 /**
  * Shared constants for Machine Learning player components.
  * Ensures parity between Python training (skat-ml-models) and Java inference.
@@ -34,31 +36,26 @@ public class MLConstants {
     public static final int PAD_INDEX = 32;
 
     /**
-     * Number of valid bid levels in Skat.
+     * Valid bid values in Skat, ordered from lowest to highest.
+     * Derived from {@link SkatConstants#bidOrder}.
      */
-    public static final int NUM_BID_LEVELS = 63;
+    public static final int[] BID_VALUES = SkatConstants.bidOrder.stream()
+            .mapToInt(Integer::intValue).toArray();
 
     /**
-     * Maximum bid value for normalization.
+     * Number of valid bid levels in Skat.
      */
-    public static final int MAX_BID = 264;
+    public static final int NUM_BID_LEVELS = BID_VALUES.length;
 
     /**
      * Minimum bid value.
      */
-    public static final int MIN_BID = 18;
+    public static final int MIN_BID = BID_VALUES[0];
 
     /**
-     * Valid bid values in Skat, ordered from lowest to highest.
-     * Length matches {@link #NUM_BID_LEVELS}.
+     * Maximum bid value for normalization.
      */
-    public static final int[] BID_VALUES = {
-            18, 20, 22, 23, 24, 27, 30, 33, 35, 36, 40, 44, 45, 46, 48,
-            50, 54, 55, 59, 60, 63, 66, 70, 72, 77, 80, 81, 84, 88, 90,
-            96, 99, 100, 108, 110, 117, 120, 121, 126, 130, 132, 135,
-            140, 143, 144, 150, 153, 154, 156, 160, 162, 165, 168, 170,
-            176, 180, 187, 192, 198, 204, 216, 240, 264
-    };
+    public static final int MAX_BID = BID_VALUES[BID_VALUES.length - 1];
 
     private MLConstants() {
         // Prevent instantiation
