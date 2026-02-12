@@ -1,0 +1,135 @@
+{
+  "version": "1.0.0",
+  "description": "Reference inputs and expected outputs for validating implementations",
+  "test_cases": {
+    "card_encoding": [
+      {
+        "description": "First card (Club Jack)",
+        "card": "CJ",
+        "expected_index": 0
+      },
+      {
+        "description": "Last card (Diamond 7)",
+        "card": "D7",
+        "expected_index": 31
+      },
+      {
+        "description": "Spade Jack",
+        "card": "SJ",
+        "expected_index": 1
+      },
+      {
+        "description": "Club Ace",
+        "card": "CA",
+        "expected_index": 4
+      },
+      {
+        "description": "Heart 10",
+        "card": "HT",
+        "expected_index": 19
+      }
+    ],
+    "game_type_encoding": [
+      {
+        "game_type": "DIAMONDS",
+        "expected_index": 0
+      },
+      {
+        "game_type": "GRAND",
+        "expected_index": 4
+      },
+      {
+        "game_type": "NULL",
+        "expected_index": 5
+      }
+    ],
+    "position_encoding": [
+      {
+        "position": "FOREHAND",
+        "expected_index": 0
+      },
+      {
+        "position": "MIDDLEHAND",
+        "expected_index": 1
+      },
+      {
+        "position": "REARHAND",
+        "expected_index": 2
+      }
+    ],
+    "bidding_transformer": [
+      {
+        "description": "Strong Grand hand - all 4 Jacks + Aces",
+        "input": {
+          "hand_cards": ["CJ", "SJ", "HJ", "DJ", "CA", "SA", "HA", "DA", "CT", "ST"],
+          "position": "FOREHAND"
+        },
+        "expected": {
+          "description": "Should have high win probability at Grand bid levels",
+          "pickup_prob_at_bid_18_min": 0.9,
+          "hand_prob_at_bid_18_min": 0.85
+        }
+      },
+      {
+        "description": "Weak hand - no Jacks, scattered low cards",
+        "input": {
+          "hand_cards": ["C7", "C8", "S7", "S8", "H7", "H8", "D7", "D8", "C9", "S9"],
+          "position": "REARHAND"
+        },
+        "expected": {
+          "description": "Should have low win probability at most bid levels",
+          "pickup_prob_at_bid_18_max": 0.3,
+          "hand_prob_at_bid_18_max": 0.2
+        }
+      }
+    ],
+    "game_eval_transformer": [
+      {
+        "description": "Strong Clubs hand after skat pickup",
+        "input": {
+          "hand_cards": ["CJ", "SJ", "CA", "CT", "CK", "CQ", "C9", "C8", "SA", "ST"],
+          "skat_cards": ["C7", "D7"],
+          "skat_len": 2,
+          "game_type": "CLUBS",
+          "position": "FOREHAND",
+          "is_hand": 0,
+          "bid": 0.068
+        },
+        "expected": {
+          "description": "Should predict high win probability for Clubs",
+          "win_prob_min": 0.8
+        }
+      }
+    ],
+    "card_play_transformer": [
+      {
+        "description": "Opening lead in Clubs game as declarer with strong trumps",
+        "input": {
+          "game_type": "CLUBS",
+          "declarer": 0,
+          "is_ouvert": 0,
+          "hand": ["CJ", "SJ", "CA", "CT", "CK", "SA", "ST", "HA", "DA", "D7"],
+          "hand_len": 10,
+          "ouvert_hand": [],
+          "ouvert_hand_len": 0,
+          "history": [],
+          "history_len": 0,
+          "trick": [],
+          "trick_len": 0,
+          "legal_mask_cards": ["CJ", "SJ", "CA", "CT", "CK", "SA", "ST", "HA", "DA", "D7"]
+        },
+        "expected": {
+          "description": "Should prefer leading a Jack to draw trumps",
+          "top_cards": ["CJ", "SJ"],
+          "top_prob_min": 0.3
+        }
+      }
+    ]
+  },
+  "notes": {
+    "bid_normalization": "Normalize bid values by dividing by 264 (max bid)",
+    "card_indices": "Convert card names to indices using card_encoding.order",
+    "legal_mask": "Create boolean array of size 32, True for cards in hand that are legal to play",
+    "padding": "Use pad_index (32) for empty slots in variable-length sequences"
+  }
+}
