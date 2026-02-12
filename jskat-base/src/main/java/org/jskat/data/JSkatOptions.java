@@ -698,8 +698,8 @@ public final class JSkatOptions {
 
         try {
             final FileWriter writer;
-            final File dir = new File(getSavePath());
-            final File file = new File(getSavePath() + PROPERTIES_FILENAME);
+            final File dir = resolveSavePath().toFile();
+            final File file = new File(dir, PROPERTIES_FILENAME);
             if (file.exists()) {
                 writer = new FileWriter(file);
             } else {
