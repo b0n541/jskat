@@ -148,7 +148,7 @@ public class JSkatMaster {
     public void invitePlayer() {
 
         final Set<String> issPlayerNames = data.getAvailableISSPlayer();
-        issPlayerNames.remove(data.getIssLoginName());
+        issPlayerNames.remove(data.getIssUserName());
 
         final List<String> player = view.getPlayerForInvitation(issPlayerNames);
         for (final String currPlayer : player) {
@@ -405,9 +405,9 @@ public class JSkatMaster {
      * @param event ISS connected event
      */
     @Subscribe
-    public void setLoginNameOn(final IssConnectedEvent event) {
+    public void setUserNameOn(final IssConnectedEvent event) {
 
-        data.setIssLoginName(event.login);
+        data.setIssUserName(event.userName());
     }
 
     /**

@@ -18,7 +18,7 @@ import org.jskat.util.JSkatResourceBundle
 import java.awt.image.BufferedImage
 import javax.swing.ActionMap
 
-class LobbyPanel(private val actions: ActionMap) : VBox() {
+class LobbyPanel(private val actions: ActionMap, private val userName: String) : VBox() {
 
     private val strings = JSkatResourceBundle.INSTANCE
 
@@ -26,6 +26,7 @@ class LobbyPanel(private val actions: ActionMap) : VBox() {
     private val tableList = FXCollections.observableArrayList<Table>()
     private val chatPanel = ChatPanel(actions)
     private val bitmaps = JSkatGraphicRepository.INSTANCE
+    private val playerTableView = TableView(playerList)
 
     init {
         padding = Insets(10.0)
@@ -76,7 +77,7 @@ class LobbyPanel(private val actions: ActionMap) : VBox() {
     }
 
     private fun createPlayerTable(): TableView<Player> {
-        val table = TableView(playerList)
+        val table = playerTableView
         table.columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
         table.columns.add(TableColumn<Player, String>(strings.getString("name")).apply {
             cellValueFactory = javafx.util.Callback { it.value.name }
@@ -123,6 +124,18 @@ class LobbyPanel(private val actions: ActionMap) : VBox() {
             }
         }
         )
+        table.setRowFactory {
+            object : TableRow<Player>() {
+                override fun updateItem(item: Player?, empty: Boolean) {
+                    super.updateItem(item, empty)
+                    if (item != null && item.name.get() == userName) {
+                        styleClass.add("table-row-highlighted")
+                    } else {
+                        styleClass.remove("table-row-highlighted")
+                    }
+                }
+            }
+        }
         return table
     }
 

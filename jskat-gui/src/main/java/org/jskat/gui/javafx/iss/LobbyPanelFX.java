@@ -14,7 +14,7 @@ public class LobbyPanelFX extends AbstractTabPanel {
 
     private LobbyPanel lobbyPanel;
 
-    public LobbyPanelFX(String tableName, ActionMap actions) {
+    public LobbyPanelFX(final String tableName, final ActionMap actions) {
         super(tableName, actions);
     }
 
@@ -27,11 +27,11 @@ public class LobbyPanelFX extends AbstractTabPanel {
         add(fxPanel, BorderLayout.CENTER);
 
         Platform.runLater(() -> {
-            lobbyPanel = new LobbyPanel(getActionMap());
+            lobbyPanel = new LobbyPanel(getActionMap(), null);
             // Bind JavaFX panel's preferred size to JFXPanel's actual size
             lobbyPanel.prefWidthProperty().bind(fxPanel.getScene().heightProperty());
             lobbyPanel.prefHeightProperty().bind(fxPanel.getScene().heightProperty());
-            Scene scene = new Scene(lobbyPanel);
+            final Scene scene = new Scene(lobbyPanel);
             fxPanel.setScene(scene);
         });
     }

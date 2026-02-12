@@ -327,7 +327,7 @@ public class MessageHandler extends Thread {
      */
     void handleWelcomeMessage(final List<String> params) {
 
-        final String login = params.get(0);
+        final String userName = params.get(0);
         final double issProtocolVersion = Double.parseDouble(params.get(params
                 .size() - 1));
 
@@ -341,7 +341,7 @@ public class MessageHandler extends Thread {
             log.error("local version: " + protocolVersion);
         }
 
-        eventBus.post(new IssConnectedEvent(login));
+        eventBus.post(new IssConnectedEvent(userName));
     }
 
     /**

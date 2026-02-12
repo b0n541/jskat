@@ -36,3 +36,7 @@
 .center-aligned {
     -fx-alignment: CENTER;
 }
+
+.table-row-highlighted {
+    -fx-background-color: #FFBF00;
+}

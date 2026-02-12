@@ -282,7 +282,7 @@ class JSkatMainWindowController {
                 Platform.runLater { tabs.tabs.remove(loginTab) }
             }
 
-        issLobby = LobbyPanel(JSkatViewImpl.actions)
+        issLobby = LobbyPanel(JSkatViewImpl.actions, event.userName)
         val scrollPane = ScrollPane(issLobby).apply {
             isFitToWidth = true
             isFitToHeight = true
