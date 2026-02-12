@@ -29,7 +29,7 @@ class FirstStepsDialog(owner: Window) : Stage() {
     private lateinit var showTipsOnStartUp: CheckBox
     private lateinit var closeButton: Button
 
-    private val showTipsAtStartUpProperty = SimpleBooleanProperty(JSkatOptions.instance().isShowTipsOnStartUp)
+    private val showTipsAtStartUpProperty = SimpleBooleanProperty(JSkatOptions.instance().isShowTipsAtStartUp)
 
     init {
         LOG.debug("Initializing FirstStepsDialog")
@@ -51,7 +51,7 @@ class FirstStepsDialog(owner: Window) : Stage() {
             selectedProperty().bindBidirectional(showTipsAtStartUpProperty)
         }
         showTipsAtStartUpProperty.addListener { _, _, newValue ->
-            JSkatOptions.instance().setShowTipsAtStartUp(newValue)
+            JSkatOptions.instance().isShowTipsAtStartUp = newValue
         }
 
         closeButton = Button().apply {

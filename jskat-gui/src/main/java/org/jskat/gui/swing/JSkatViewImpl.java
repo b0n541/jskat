@@ -36,6 +36,7 @@ import org.jskat.gui.action.iss.*;
 import org.jskat.gui.action.main.*;
 import org.jskat.gui.human.SwingHumanPlayer;
 import org.jskat.gui.img.JSkatGraphicRepository;
+import org.jskat.gui.javafx.dialog.options.JSkatOptionsDialog;
 import org.jskat.gui.javafx.iss.LobbyPanelFX;
 import org.jskat.gui.javafx.iss.LoginPanelFX;
 import org.jskat.gui.javafx.main.WelcomePanelFX;
@@ -65,7 +66,6 @@ public class JSkatViewImpl implements JSkatView {
 
     public final JPanel mainPanel = new JPanel();
     private JPanel toolbar;
-    private final JSkatOptionsDialog preferencesDialog;
     private JTabbedPane tabs;
     private String activeView;
     @Deprecated
@@ -90,8 +90,6 @@ public class JSkatViewImpl implements JSkatView {
         JSkatViewImpl.VERSION = version;
 
         JSkatEventBus.INSTANCE.register(this);
-
-        preferencesDialog = new JSkatOptionsDialog(mainPanel);
 
         initActionMap(menu);
         initGUI(targetScreen);
@@ -632,11 +630,7 @@ public class JSkatViewImpl implements JSkatView {
 
     @Subscribe
     public void showPreferencesDialogOn(final ShowPreferencesCommand command) {
-
-        SwingUtilities.invokeLater(() -> {
-            preferencesDialog.validate();
-            preferencesDialog.setVisible(true);
-        });
+        Platform.runLater(() -> new JSkatOptionsDialog(null).showAndWait());
     }
 
     @Subscribe

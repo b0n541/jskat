@@ -27,8 +27,8 @@ import org.jskat.data.JSkatApplicationData
 import org.jskat.data.JSkatViewType
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.gui.javafx.dialog.firststeps.FirstStepsDialog
+import org.jskat.gui.javafx.dialog.options.JSkatOptionsDialog
 import org.jskat.gui.javafx.iss.LobbyPanel
-import org.jskat.gui.swing.JSkatOptionsDialog
 import org.jskat.gui.swing.JSkatViewImpl
 import org.jskat.gui.swing.iss.ISSTablePanel
 import org.jskat.gui.swing.table.SkatTablePanel
@@ -108,13 +108,11 @@ class JSkatMainWindowController {
     private lateinit var exitJSkatButton: Button
 
     // TODO remove when Swing has been retired
-    private lateinit var preferencesDialog: JSkatOptionsDialog
     private lateinit var issLobby: LobbyPanel
 
     @FXML
     fun initialize() {
         JSkatEventBus.INSTANCE.register(this)
-        preferencesDialog = JSkatOptionsDialog(null)
     }
 
     @FXML
@@ -124,9 +122,7 @@ class JSkatMainWindowController {
 
     @FXML
     fun showPreferences() {
-        SwingUtilities.invokeLater {
-            JSkatEventBus.INSTANCE.post(ShowPreferencesCommand())
-        }
+        JSkatOptionsDialog(root.scene.window).showAndWait()
     }
 
     @FXML

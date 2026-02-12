@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.io.*;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Properties;
@@ -180,11 +182,11 @@ public final class JSkatOptions {
         public final Class clazz;
         public final Option parent = null;
 
-        Option(Class clazz) {
+        Option(final Class clazz) {
             this.clazz = clazz;
         }
 
-        Option(Class clazz, Option parent) {
+        Option(final Class clazz, final Option parent) {
             this.clazz = clazz;
         }
 
@@ -198,9 +200,9 @@ public final class JSkatOptions {
         public String propertyName() {
             String result = name().toLowerCase();
             while (result.contains("_")) {
-                int startIndex = result.indexOf('_');
-                String search = result.substring(startIndex, startIndex + 2);
-                String replace = search.substring(1).toUpperCase();
+                final int startIndex = result.indexOf('_');
+                final String search = result.substring(startIndex, startIndex + 2);
+                final String replace = search.substring(1).toUpperCase();
                 result = result.replace(search, replace);
             }
             return result;
@@ -213,8 +215,8 @@ public final class JSkatOptions {
          * @param property Property
          * @return Enum
          */
-        public static Option valueOfProperty(String property) {
-            String result = property.replaceAll("[A-Z]|[0-9]+", "_$0");
+        public static Option valueOfProperty(final String property) {
+            final String result = property.replaceAll("[A-Z]|[0-9]+", "_$0");
             return Option.valueOf(result.toUpperCase());
         }
     }
@@ -277,11 +279,11 @@ public final class JSkatOptions {
         try {
             loadOptions();
 
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
 
             log.debug("No properties file found. Using standard values.");
 
-        } catch (IOException e) {
+        } catch (final IOException e) {
             log.warn("Could not load properties: " + e.getClass() + ": "
                     + e.getMessage());
         }
@@ -338,17 +340,11 @@ public final class JSkatOptions {
      * @return Value of property savePath.
      */
     public String getSavePath() {
-        switch (getSavePathInternal()) {
-            case USER_HOME:
-                return savePathResolver.getDefaultSavePath();
-            case WORKING_DIRECTORY:
-                return savePathResolver.getCurrentWorkingDirectory();
-        }
-        return null;
+        return getString(Option.SAVE_PATH);
     }
 
-    public SavePath getSavePathInternal() {
-        return SavePath.valueOf(get(Option.SAVE_PATH));
+    public void setSavePath(final String savePath) {
+        setOption(Option.SAVE_PATH, savePath);
     }
 
     public Integer getWaitTimeAfterTrick() {
@@ -359,11 +355,11 @@ public final class JSkatOptions {
         return new Dimension(getInteger(Option.MAIN_FRAME_WIDTH), getInteger(Option.MAIN_FRAME_HEIGHT));
     }
 
-    public void setMainFrameWidth(Integer width) {
+    public void setMainFrameWidth(final Integer width) {
         setOption(Option.MAIN_FRAME_WIDTH, width);
     }
 
-    public void setMainFrameHeight(Integer height) {
+    public void setMainFrameHeight(final Integer height) {
         setOption(Option.MAIN_FRAME_HEIGHT, height);
     }
 
@@ -371,15 +367,15 @@ public final class JSkatOptions {
         return new Point(getInteger(Option.MAIN_FRAME_X_POSITION), getInteger(Option.MAIN_FRAME_Y_POSITION));
     }
 
-    public void setMainFrameXPosition(Integer xPosition) {
+    public void setMainFrameXPosition(final Integer xPosition) {
         setOption(Option.MAIN_FRAME_X_POSITION, xPosition);
     }
 
-    public void setMainFrameYPosition(Integer yPosition) {
+    public void setMainFrameYPosition(final Integer yPosition) {
         setOption(Option.MAIN_FRAME_Y_POSITION, yPosition);
     }
 
-    public void setWaitTimeAfterTrick(Integer waitTime) {
+    public void setWaitTimeAfterTrick(final Integer waitTime) {
         setOption(Option.WAIT_TIME_AFTER_TRICK, waitTime);
     }
 
@@ -387,7 +383,7 @@ public final class JSkatOptions {
         return getBoolean(Option.HIDE_TOOLBAR);
     }
 
-    public void setHideToolbar(Boolean isHideToolbar) {
+    public void setHideToolbar(final Boolean isHideToolbar) {
         setOption(Option.HIDE_TOOLBAR, isHideToolbar);
     }
 
@@ -398,7 +394,7 @@ public final class JSkatOptions {
      */
     public SkatTableOptions getSkatTableOptions() {
 
-        SkatTableOptions result = new SkatTableOptions();
+        final SkatTableOptions result = new SkatTableOptions();
 
         result.setMaxPlayerCount(getMaxPlayerCount());
 
@@ -421,7 +417,7 @@ public final class JSkatOptions {
         return isBockEventAllPlayersPassed(true);
     }
 
-    public Boolean isBockEventAllPlayersPassed(boolean checkParentOption) {
+    public Boolean isBockEventAllPlayersPassed(final boolean checkParentOption) {
         return getBooleanWithParentCheck(Option.BOCK_EVENT_NO_BID, checkParentOption, isPlayBock(checkParentOption));
     }
 
@@ -520,6 +516,14 @@ public final class JSkatOptions {
     public Boolean isContraAfterBid18(final boolean checkParentOption) {
         return getBooleanWithParentCheck(Option.CONTRA_AFTER_BID_18, checkParentOption,
                 isPlayContra(checkParentOption));
+    }
+
+    public String getIssAddress() {
+        return getString(Option.ISS_ADDRESS);
+    }
+
+    public Integer getIssPort() {
+        return getInteger(Option.ISS_PORT);
     }
 
     /**
@@ -679,8 +683,12 @@ public final class JSkatOptions {
                 isSchieberamsch(checkParentOption));
     }
 
-    public Boolean isShowTipsOnStartUp() {
+    public Boolean isShowTipsAtStartUp() {
         return getBoolean(Option.SHOW_TIPS_AT_START_UP);
+    }
+
+    public Boolean isCheckForNewVersionAtStartUp() {
+        return getBoolean(Option.CHECK_FOR_NEW_VERSION_AT_START_UP);
     }
 
     /**
@@ -689,9 +697,9 @@ public final class JSkatOptions {
     public void saveJSkatProperties() {
 
         try {
-            FileWriter writer;
-            File dir = new File(getSavePath());
-            File file = new File(getSavePath() + PROPERTIES_FILENAME);
+            final FileWriter writer;
+            final File dir = new File(getSavePath());
+            final File file = new File(getSavePath() + PROPERTIES_FILENAME);
             if (file.exists()) {
                 writer = new FileWriter(file);
             } else {
@@ -704,13 +712,20 @@ public final class JSkatOptions {
             options.store(writer, "JSkat options");
             writer.close();
             log.debug("Saved options with rules: " + getRules());
-        } catch (IOException e) {
+        } catch (final IOException e) {
             log.warn("Saving of JSkat options failed.");
             log.warn(e.toString());
         }
     }
 
-    public void setBockEventNoBid(Boolean bockEventAllPlayersPassed) {
+    private Path resolveSavePath() {
+        return switch (SavePath.valueOf(getSavePath())) {
+            case USER_HOME -> FileSystems.getDefault().getPath(savePathResolver.getDefaultSavePath());
+            case WORKING_DIRECTORY -> FileSystems.getDefault().getPath(savePathResolver.getCurrentWorkingDirectory());
+        };
+    }
+
+    public void setBockEventNoBid(final Boolean bockEventAllPlayersPassed) {
         setOption(Option.BOCK_EVENT_NO_BID, bockEventAllPlayersPassed);
     }
 
@@ -785,6 +800,10 @@ public final class JSkatOptions {
      */
     public void setCheatDebugMode(final Boolean isCheatDebugMode) {
         setOption(Option.CHEAT_DEBUG_MODE, isCheatDebugMode);
+    }
+
+    public void setShowTipsAtStartUp(final boolean isShowTipsAtStartUp) {
+        setOption(Option.SHOW_TIPS_AT_START_UP, isShowTipsAtStartUp);
     }
 
     /**
@@ -958,15 +977,15 @@ public final class JSkatOptions {
         try {
             stream = new FileInputStream(savePathResolver.getCurrentWorkingDirectory() + PROPERTIES_FILENAME);
             setSavePath(SavePath.WORKING_DIRECTORY);
-        } catch (FileNotFoundException e) {
+        } catch (final FileNotFoundException e) {
             stream = new FileInputStream(savePathResolver.getDefaultSavePath() + PROPERTIES_FILENAME);
             setSavePath(SavePath.USER_HOME);
         }
 
-        Properties loadedOptions = new Properties();
+        final Properties loadedOptions = new Properties();
         loadedOptions.load(stream);
 
-        Enumeration<Object> props = loadedOptions.keys();
+        final Enumeration<Object> props = loadedOptions.keys();
         String property;
         String value;
 
@@ -978,7 +997,7 @@ public final class JSkatOptions {
             Option option = null;
             try {
                 option = Option.valueOfProperty(property);
-            } catch (IllegalArgumentException e) {
+            } catch (final IllegalArgumentException e) {
                 log.error("Unknown option " + property + " with value " + value);
 
                 // handle obsolete or renamed options
@@ -1018,7 +1037,7 @@ public final class JSkatOptions {
             case CARD_SET:
                 try {
                     setCardSet(CardSet.valueOf(value));
-                } catch (IllegalArgumentException e) {
+                } catch (final IllegalArgumentException e) {
                     // parsing of older options failed
                     logEnumParseError(option, getCardSet().name());
                 }
@@ -1041,7 +1060,7 @@ public final class JSkatOptions {
             case LANGUAGE:
                 try {
                     setLanguage(SupportedLanguage.valueOf(value));
-                } catch (IllegalArgumentException e) {
+                } catch (final IllegalArgumentException e) {
                     // parsing of older options failed
                     logEnumParseError(option, getLanguage().name());
                 }
@@ -1073,7 +1092,7 @@ public final class JSkatOptions {
             case RAMSCH_SKAT_OWNER:
                 try {
                     setRamschSkatOwner(RamschSkatOwner.valueOf(value));
-                } catch (IllegalArgumentException e) {
+                } catch (final IllegalArgumentException e) {
                     // parsing of older options failed
                     logEnumParseError(option, getRamschSkatOwner().name());
                 }
@@ -1081,7 +1100,7 @@ public final class JSkatOptions {
             case RULES:
                 try {
                     setRules(RuleSet.valueOf(value));
-                } catch (IllegalArgumentException e) {
+                } catch (final IllegalArgumentException e) {
                     // parsing of older options failed
                     logEnumParseError(option, getRules().name());
                 }
@@ -1136,39 +1155,39 @@ public final class JSkatOptions {
         return result;
     }
 
-    private void setOption(Option option, Boolean value) {
+    private void setOption(final Option option, final Boolean value) {
         options.setProperty(option.propertyName(), value.toString());
     }
 
-    private void setOption(Option option, CardSet value) {
+    private void setOption(final Option option, final CardSet value) {
         options.setProperty(option.propertyName(), value.name());
     }
 
-    private void setOption(Option option, Integer value) {
+    private void setOption(final Option option, final Integer value) {
         options.setProperty(option.propertyName(), value.toString());
     }
 
-    private void setOption(Option option, RamschSkatOwner value) {
+    private void setOption(final Option option, final RamschSkatOwner value) {
         options.setProperty(option.propertyName(), value.name());
     }
 
-    private void setOption(Option option, SavePath value) {
+    private void setOption(final Option option, final SavePath value) {
         options.setProperty(option.propertyName(), value.name());
     }
 
-    private void setOption(Option option, String value) {
+    private void setOption(final Option option, final String value) {
         options.setProperty(option.propertyName(), value);
     }
 
-    private void setOption(Option option, SupportedLanguage value) {
+    private void setOption(final Option option, final SupportedLanguage value) {
         options.setProperty(option.propertyName(), value.name());
     }
 
-    private void setOption(Option option, RuleSet ruleSet) {
+    private void setOption(final Option option, final RuleSet ruleSet) {
         options.setProperty(option.propertyName(), ruleSet.name());
     }
 
-    private void setOption(Option option, ContraCallingTime value) {
+    private void setOption(final Option option, final ContraCallingTime value) {
         options.setProperty(option.propertyName(), value.name());
     }
 
@@ -1214,21 +1233,12 @@ public final class JSkatOptions {
     }
 
     /**
-     * Sets the flag for showing the welcome dialog with first steps at startup
-     *
-     * @param isShowTips TRUE, if first steps should be shown
-     */
-    public void setShowTipsAtStartUp(final Boolean isShowTips) {
-        setOption(Option.SHOW_TIPS_AT_START_UP, isShowTips);
-    }
-
-    /**
      * Gets any option as {@link String}
      *
      * @param option Option
      * @return Value
      */
-    public String get(Option option) {
+    public String get(final Option option) {
 
         return getProperty(option);
     }
@@ -1239,14 +1249,14 @@ public final class JSkatOptions {
      * @param option Option
      * @return Value
      */
-    public String getString(Option option) {
+    public String getString(final Option option) {
         if (option.clazz != String.class) {
             throw new IllegalArgumentException("Option " + option + " is not a string option.");
         }
         return getProperty(option);
     }
 
-    private String getProperty(Option option) {
+    private String getProperty(final Option option) {
         return options.getProperty(option.propertyName());
     }
 
@@ -1256,7 +1266,7 @@ public final class JSkatOptions {
      * @param option Option
      * @return Value
      */
-    public final Boolean getBoolean(final Option option) {
+    public Boolean getBoolean(final Option option) {
         if (option.clazz != Boolean.class) {
             throw new IllegalArgumentException("Option " + option + " is not a boolean option.");
         }
@@ -1269,7 +1279,7 @@ public final class JSkatOptions {
      * @param option Option
      * @return Value
      */
-    public final Integer getInteger(final Option option) {
+    public Integer getInteger(final Option option) {
         if (option.clazz != Integer.class) {
             throw new IllegalArgumentException("Option " + option + " is not an integer option.");
         }
@@ -1292,12 +1302,12 @@ public final class JSkatOptions {
         setDefaultProperties();
     }
 
-    public void setMainFrameSize(Dimension size) {
+    public void setMainFrameSize(final Dimension size) {
         setOption(Option.MAIN_FRAME_WIDTH, (int) size.getWidth());
         setOption(Option.MAIN_FRAME_HEIGHT, (int) size.getHeight());
     }
 
-    public void setMainFramePosition(Point locationOnScreen) {
+    public void setMainFramePosition(final Point locationOnScreen) {
         setOption(Option.MAIN_FRAME_X_POSITION, locationOnScreen.x);
         setOption(Option.MAIN_FRAME_Y_POSITION, locationOnScreen.y);
     }

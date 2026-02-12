@@ -245,6 +245,20 @@ public class JSkatGraphicRepository {
         return result;
     }
 
+    public javafx.scene.image.Image getCardImageFX(final Card card) {
+        final CardSet set = options.getCardSet();
+        final String path;
+        if (card != null) {
+            path = "/org/jskat/gui/img/card/"
+                    + set.getCardFace().toString().toLowerCase() + "/"
+                    + getCardSetNameInLowerCase(set) + "/" + getImageFileName(card) + "."
+                    + set.getFileType();
+        } else {
+            path = "/org/jskat/gui/img/card/back/" + getCardSetNameInLowerCase(set) + "." + set.getFileType();
+        }
+        return new javafx.scene.image.Image(getClass().getResourceAsStream(path));
+    }
+
     /**
      * Gets a flag image
      *
