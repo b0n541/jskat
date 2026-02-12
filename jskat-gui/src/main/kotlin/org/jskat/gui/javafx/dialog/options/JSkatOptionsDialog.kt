@@ -65,6 +65,7 @@ class JSkatOptionsDialog(owner: Window) : Dialog<ButtonType>() {
         title = strings.getString("preferences")
 
         val tabPane = TabPane().apply {
+            padding = Insets.EMPTY
             tabs.add(Tab(strings.getString("common_options"), createGeneralTab()))
             tabs.add(Tab(strings.getString("cardset_options"), createCardSetTab()))
             tabs.add(Tab(strings.getString("skat_rules"), createSkatRulesTab()))
