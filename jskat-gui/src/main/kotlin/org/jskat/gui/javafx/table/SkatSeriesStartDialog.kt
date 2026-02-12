@@ -180,7 +180,7 @@ class SkatSeriesStartDialog(owner: Node?) {
                 "org.jskat.ai.rnd.AIPlayerRND" -> strings.getString("random_player")
                 "org.jskat.ai.nn.AIPlayerNN" -> strings.getString("neural_network_player")
                 "org.jskat.ai.ml.MLPlayer" -> strings.getString("ml_player")
-                "org.jskat.ai.ml.MLPlayerPro" -> strings.getString("mp_player_pro")
+                "org.jskat.ai.ml.MLPlayerPro" -> strings.getString("ml_player_pro")
                 JSkatPlayerResolver.HUMAN_PLAYER_CLASS -> strings.getString("human_player")
                 else -> item
             }
