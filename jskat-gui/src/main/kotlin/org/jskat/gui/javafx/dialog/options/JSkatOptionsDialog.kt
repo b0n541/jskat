@@ -10,6 +10,7 @@ import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.VBox
 import javafx.stage.Window
+import javafx.util.Callback
 import org.jskat.control.JSkatEventBus
 import org.jskat.control.command.general.HideToolbarCommand
 import org.jskat.control.command.general.ShowToolbarCommand
@@ -127,6 +128,26 @@ class JSkatOptionsDialog(owner: Window) : Dialog<ButtonType>() {
         val languageComboBox = ComboBox<JSkatOptions.SupportedLanguage>().apply {
             items.addAll(JSkatOptions.SupportedLanguage.values())
             valueProperty().bindBidirectional(languageProperty)
+
+            val cellFactory =
+                Callback<ListView<JSkatOptions.SupportedLanguage>, ListCell<JSkatOptions.SupportedLanguage>> {
+                    object : ListCell<JSkatOptions.SupportedLanguage>() {
+                        override fun updateItem(item: JSkatOptions.SupportedLanguage?, empty: Boolean) {
+                            super.updateItem(item, empty)
+                            text = if (item == null || empty) {
+                                null
+                            } else {
+                                when (item) {
+                                    JSkatOptions.SupportedLanguage.ENGLISH -> strings.getString("english")
+                                    JSkatOptions.SupportedLanguage.GERMAN -> strings.getString("german")
+                                    else -> item.name
+                                }
+                            }
+                        }
+                    }
+                }
+            setCellFactory(cellFactory)
+            buttonCell = cellFactory.call(null)
         }
         grid.add(languageLabel, 0, 3)
         grid.add(languageComboBox, 1, 3)
@@ -176,8 +197,25 @@ class JSkatOptionsDialog(owner: Window) : Dialog<ButtonType>() {
     private fun createCardSetTab(): VBox {
         val cardSetLabel = Label(strings.getString("card_face"))
         val cardSetComboBox = ComboBox<CardSet>().apply {
-            items.addAll(CardSet.entries.toTypedArray())
+            items.addAll(CardSet.values())
             valueProperty().bindBidirectional(cardSetProperty)
+
+            val cellFactory = Callback<ListView<CardSet>, ListCell<CardSet>> {
+                object : ListCell<CardSet>() {
+                    override fun updateItem(item: CardSet?, empty: Boolean) {
+                        super.updateItem(item, empty)
+                        text = if (item == null || empty) {
+                            null
+                        } else {
+                            val cardSetName = item.cardSetName.lowercase().replace(" ", "")
+                            val cardFace = item.cardFace.toString().lowercase()
+                            strings.getString("cardset_${cardSetName}_${cardFace}")
+                        }
+                    }
+                }
+            }
+            setCellFactory(cellFactory)
+            buttonCell = cellFactory.call(null)
         }
         val cardPane = CardPane()
         cardSetProperty.addListener { _, _, newValue ->

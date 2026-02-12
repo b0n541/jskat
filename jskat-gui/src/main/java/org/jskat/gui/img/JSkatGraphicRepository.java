@@ -198,7 +198,7 @@ public class JSkatGraphicRepository {
     }
 
     private String getCardSetNameInLowerCase(final CardSet set) {
-        return set.getName().toLowerCase().replace(" ", "");
+        return set.getCardSetName().toLowerCase().replace(" ", "");
     }
 
     /**
