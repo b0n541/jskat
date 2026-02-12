@@ -157,18 +157,18 @@ class JSkatOptionsDialog(owner: Window) : Dialog<ButtonType>() {
         val savePathGroup = ToggleGroup()
         val userHomeRadioButton = RadioButton(strings.getString("user_home")).apply {
             toggleGroup = savePathGroup
-            userData = SkatTableOptions.SavePath.USER_HOME
+            userData = JSkatOptions.SavePath.USER_HOME
         }
         val workingDirRadioButton = RadioButton(strings.getString("working_directory")).apply {
             toggleGroup = savePathGroup
-            userData = SkatTableOptions.SavePath.WORKING_DIRECTORY
+            userData = JSkatOptions.SavePath.WORKING_DIRECTORY
         }
         savePathGroup.selectedToggleProperty().addListener { _, _, newToggle ->
             if (newToggle != null) {
-                savePathProperty.set((newToggle.userData as SkatTableOptions.SavePath).name)
+                savePathProperty.set((newToggle.userData as JSkatOptions.SavePath).name)
             }
         }
-        if (SkatTableOptions.SavePath.USER_HOME.name == options.savePath) {
+        if (JSkatOptions.SavePath.USER_HOME.name == options.savePath) {
             savePathGroup.selectToggle(userHomeRadioButton)
         } else {
             savePathGroup.selectToggle(workingDirRadioButton)

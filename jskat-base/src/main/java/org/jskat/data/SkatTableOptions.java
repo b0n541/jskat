@@ -33,7 +33,7 @@ public class SkatTableOptions extends Observable {
          * Calling contra before the player plays out the first card from
          * his/her hand
          */
-        BEFORE_FIRST_CARD;
+        BEFORE_FIRST_CARD
     }
 
     /**
@@ -48,20 +48,6 @@ public class SkatTableOptions extends Observable {
          * Skat goes to player with the most points
          */
         LOSER
-    }
-
-    /**
-     * Supported save paths
-     */
-    public enum SavePath {
-        /**
-         * User home
-         */
-        USER_HOME,
-        /**
-         * Working directory
-         */
-        WORKING_DIRECTORY;
     }
 
     private Integer maxPlayerCount;
@@ -103,7 +89,7 @@ public class SkatTableOptions extends Observable {
      *
      * @param newFirstPlayerName New value of property firstPlayerName.
      */
-    public void setFirstPlayerName(String newFirstPlayerName) {
+    public void setFirstPlayerName(final String newFirstPlayerName) {
 
         firstPlayerName = newFirstPlayerName;
     }
@@ -123,7 +109,7 @@ public class SkatTableOptions extends Observable {
      *
      * @param type New value of property firstPlayerType.
      */
-    public void setFirstPlayerType(String type) {
+    public void setFirstPlayerType(final String type) {
         firstPlayerType = type;
     }
 
@@ -142,7 +128,7 @@ public class SkatTableOptions extends Observable {
      *
      * @param newSecondPlayerName New value of property secondPlayerName.
      */
-    public void setSecondPlayerName(String newSecondPlayerName) {
+    public void setSecondPlayerName(final String newSecondPlayerName) {
 
         secondPlayerName = newSecondPlayerName;
     }
@@ -162,7 +148,7 @@ public class SkatTableOptions extends Observable {
      *
      * @param type Player type
      */
-    public void setSecondPlayerType(String type) {
+    public void setSecondPlayerType(final String type) {
         secondPlayerType = type;
     }
 
@@ -181,7 +167,7 @@ public class SkatTableOptions extends Observable {
      *
      * @param newThirdPlayerName New value of property thirdPlayerName.
      */
-    public void setThirdPlayerName(String newThirdPlayerName) {
+    public void setThirdPlayerName(final String newThirdPlayerName) {
 
         thirdPlayerName = newThirdPlayerName;
     }
@@ -201,7 +187,7 @@ public class SkatTableOptions extends Observable {
      *
      * @param type New value of property thirdPlayerType.
      */
-    public void setThirdPlayerType(String type) {
+    public void setThirdPlayerType(final String type) {
 
         thirdPlayerType = type;
     }
@@ -221,7 +207,7 @@ public class SkatTableOptions extends Observable {
      *
      * @param newRules New value of property rules.
      */
-    public void setRules(RuleSet newRules) {
+    public void setRules(final RuleSet newRules) {
 
         rules = newRules;
     }
@@ -241,7 +227,7 @@ public class SkatTableOptions extends Observable {
      *
      * @param newPlayBock New value of property playBock.
      */
-    public void setPlayBock(Boolean newPlayBock) {
+    public void setPlayBock(final Boolean newPlayBock) {
 
         playBock = newPlayBock;
     }
@@ -261,7 +247,7 @@ public class SkatTableOptions extends Observable {
      *
      * @param newPlayContra New value of property playKontra.
      */
-    public void setPlayContra(Boolean newPlayContra) {
+    public void setPlayContra(final Boolean newPlayContra) {
 
         playContra = newPlayContra;
     }
@@ -281,7 +267,7 @@ public class SkatTableOptions extends Observable {
      *
      * @param newPlayRamsch New value of property playRamsch.
      */
-    public void setPlayRamsch(Boolean newPlayRamsch) {
+    public void setPlayRamsch(final Boolean newPlayRamsch) {
 
         playRamsch = newPlayRamsch;
     }
@@ -301,7 +287,7 @@ public class SkatTableOptions extends Observable {
      *
      * @param newPlayRevolution New value of property playRevolution.
      */
-    public void setPlayRevolution(Boolean newPlayRevolution) {
+    public void setPlayRevolution(final Boolean newPlayRevolution) {
 
         playRevolution = newPlayRevolution;
     }
@@ -321,7 +307,7 @@ public class SkatTableOptions extends Observable {
      *
      * @param newBockEventLostGrand New value of property bockEventLostGrand
      */
-    public void setBockEventLostGrand(Boolean newBockEventLostGrand) {
+    public void setBockEventLostGrand(final Boolean newBockEventLostGrand) {
 
         bockEventLostGrand = newBockEventLostGrand;
     }
@@ -341,7 +327,7 @@ public class SkatTableOptions extends Observable {
      *
      * @param newBockEventLostWith60 New value of property bockEventLostWith60
      */
-    public void setBockEventLostWith60(Boolean newBockEventLostWith60) {
+    public void setBockEventLostWith60(final Boolean newBockEventLostWith60) {
 
         bockEventLostWith60 = newBockEventLostWith60;
     }
@@ -361,7 +347,7 @@ public class SkatTableOptions extends Observable {
      *
      * @param newBockEventLostAfterContra New value of property bockEventLostAfterContra
      */
-    public void setBockEventLostAfterContra(Boolean newBockEventLostAfterContra) {
+    public void setBockEventLostAfterContra(final Boolean newBockEventLostAfterContra) {
 
         bockEventLostAfterContra = newBockEventLostAfterContra;
     }
@@ -382,7 +368,7 @@ public class SkatTableOptions extends Observable {
      * @param newBockEventContraReAnnounced New value of property bockEventContraReAnnounced
      */
     public void setBockEventContraReAnnounced(
-            Boolean newBockEventContraReAnnounced) {
+            final Boolean newBockEventContraReAnnounced) {
 
         bockEventContraReAnnounced = newBockEventContraReAnnounced;
     }
@@ -412,7 +398,7 @@ public class SkatTableOptions extends Observable {
      *
      * @param newRamschSkat New value of property ramschSkatOwner.
      */
-    public void setRamschSkat(RamschSkatOwner newRamschSkat) {
+    public void setRamschSkat(final RamschSkatOwner newRamschSkat) {
 
         ramschSkat = newRamschSkat;
     }
@@ -432,7 +418,7 @@ public class SkatTableOptions extends Observable {
      *
      * @param newSchieberRamsch New value of property schieberRamsch
      */
-    public void setSchieberRamsch(Boolean newSchieberRamsch) {
+    public void setSchieberRamsch(final Boolean newSchieberRamsch) {
 
         schieberRamsch = newSchieberRamsch;
     }
@@ -453,7 +439,7 @@ public class SkatTableOptions extends Observable {
      * @param newSchieberRamschJacksInSkat New value of property schieberRamschJacksInSkat
      */
     public void setSchieberRamschJacksInSkat(
-            Boolean newSchieberRamschJacksInSkat) {
+            final Boolean newSchieberRamschJacksInSkat) {
 
         schieberRamschJacksInSkat = newSchieberRamschJacksInSkat;
     }
@@ -473,7 +459,7 @@ public class SkatTableOptions extends Observable {
      *
      * @param newRamschEventNoBid New value of property ramschEventNoBid
      */
-    public void setRamschEventNoBid(Boolean newRamschEventNoBid) {
+    public void setRamschEventNoBid(final Boolean newRamschEventNoBid) {
 
         ramschEventNoBid = newRamschEventNoBid;
     }
@@ -494,7 +480,7 @@ public class SkatTableOptions extends Observable {
      * @param newRamschEventRamschAfterBock New value of property ramschEventRamschAfterBock
      */
     public void setRamschEventRamschAfterBock(
-            Boolean newRamschEventRamschAfterBock) {
+            final Boolean newRamschEventRamschAfterBock) {
 
         ramschEventRamschAfterBock = newRamschEventRamschAfterBock;
     }
@@ -514,7 +500,7 @@ public class SkatTableOptions extends Observable {
      *
      * @param newRamschGrandHandPossible New value of property ramschGrandHandPossible
      */
-    public void setRamschGrandHandPossible(Boolean newRamschGrandHandPossible) {
+    public void setRamschGrandHandPossible(final Boolean newRamschGrandHandPossible) {
 
         ramschGrandHandPossible = newRamschGrandHandPossible;
     }
@@ -534,13 +520,13 @@ public class SkatTableOptions extends Observable {
      *
      * @param newMaxPlayerCount Maximum player count
      */
-    public void setMaxPlayerCount(Integer newMaxPlayerCount) {
+    public void setMaxPlayerCount(final Integer newMaxPlayerCount) {
 
         maxPlayerCount = newMaxPlayerCount;
     }
 
     public void setBockEventMultipleOfHundredScore(
-            Boolean isBockEventMultipleOfHundredScore) {
+            final Boolean isBockEventMultipleOfHundredScore) {
         bockEventMultipleOfHundredScore = isBockEventMultipleOfHundredScore;
     }
 }

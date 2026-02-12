@@ -29,6 +29,8 @@ class LoginPanel(private val actions: ActionMap) : VBox() {
 
         children.add(createHeader())
         children.add(createLoginForm())
+
+        loginField.requestFocus()
     }
 
     private fun createHeader(): Label {

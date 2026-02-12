@@ -1,13 +1,12 @@
-
 package org.jskat.data;
 
 import org.jskat.AbstractJSkatTest;
+import org.jskat.control.gui.img.CardFace;
+import org.jskat.control.gui.img.CardSet;
 import org.jskat.data.JSkatOptions.Option;
 import org.jskat.data.JSkatOptions.SupportedLanguage;
 import org.jskat.data.SkatTableOptions.ContraCallingTime;
 import org.jskat.data.SkatTableOptions.RuleSet;
-import org.jskat.control.gui.img.CardFace;
-import org.jskat.control.gui.img.CardSet;
 import org.junit.jupiter.api.Test;
 
 import java.util.Locale;
@@ -44,7 +43,7 @@ public class JSkatOptionsTest extends AbstractJSkatTest {
         assertThat(options.getWaitTimeAfterTrick()).isEqualTo(0);
         assertThat(options.getCardSet()).isEqualTo(CardSet.ISS_TOURNAMENT);
         assertThat(options.getCardSet().getCardFace()).isEqualTo(CardFace.TOURNAMENT);
-        assertThat(options.getSavePath()).isEqualTo(new DesktopSavePathResolver().getDefaultSavePath());
+        assertThat(options.getSavePath()).isEqualTo(JSkatOptions.SavePath.USER_HOME.name());
 
         // rule defaults
         assertThat(options.getRules()).isEqualTo(RuleSet.ISPA);

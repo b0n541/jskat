@@ -4,7 +4,6 @@ import org.jskat.control.gui.img.CardSet;
 import org.jskat.data.SkatTableOptions.ContraCallingTime;
 import org.jskat.data.SkatTableOptions.RamschSkatOwner;
 import org.jskat.data.SkatTableOptions.RuleSet;
-import org.jskat.data.SkatTableOptions.SavePath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -975,10 +974,10 @@ public final class JSkatOptions {
         FileInputStream stream = null;
 
         try {
-            stream = new FileInputStream(savePathResolver.getCurrentWorkingDirectory() + PROPERTIES_FILENAME);
+            stream = new FileInputStream(new File(savePathResolver.getCurrentWorkingDirectory(), PROPERTIES_FILENAME));
             setSavePath(SavePath.WORKING_DIRECTORY);
         } catch (final FileNotFoundException e) {
-            stream = new FileInputStream(savePathResolver.getDefaultSavePath() + PROPERTIES_FILENAME);
+            stream = new FileInputStream(new File(savePathResolver.getDefaultSavePath(), PROPERTIES_FILENAME));
             setSavePath(SavePath.USER_HOME);
         }
 
@@ -1310,5 +1309,19 @@ public final class JSkatOptions {
     public void setMainFramePosition(final Point locationOnScreen) {
         setOption(Option.MAIN_FRAME_X_POSITION, locationOnScreen.x);
         setOption(Option.MAIN_FRAME_Y_POSITION, locationOnScreen.y);
+    }
+
+    /**
+     * Supported save paths
+     */
+    public enum SavePath {
+        /**
+         * User home
+         */
+        USER_HOME,
+        /**
+         * Working directory
+         */
+        WORKING_DIRECTORY
     }
 }
