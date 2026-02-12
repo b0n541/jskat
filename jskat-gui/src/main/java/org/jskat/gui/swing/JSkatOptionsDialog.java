@@ -29,7 +29,6 @@ import java.awt.event.KeyEvent;
  */
 public class JSkatOptionsDialog extends JDialog {
 
-
     private static final Logger log = LoggerFactory.getLogger(JSkatOptionsDialog.class);
 
     private final JSkatResourceBundle strings;
@@ -74,56 +73,48 @@ public class JSkatOptionsDialog extends JDialog {
     private JTextField issPort;
 
     private final Action okAction = new AbstractAction("OK") {
+
         @Override
         public void actionPerformed(final ActionEvent e) {
-            JSkatOptionsDialog.this.options
-                    .setShowTipsAtStartUp(JSkatOptionsDialog.this.showTipsAtStartUp.isSelected());
-            JSkatOptionsDialog.this.options
-                    .setCheckForNewVersionAtStartUp(JSkatOptionsDialog.this.checkForNewVersion.isSelected());
-            JSkatOptionsDialog.this.options.setHideToolbar(JSkatOptionsDialog.this.hideToolbar.isSelected());
-            JSkatOptionsDialog.this.options
-                    .setLanguage((SupportedLanguage) JSkatOptionsDialog.this.language.getSelectedItem());
-            JSkatOptionsDialog.this.options.setCardSet(getSelectedCardSet());
+            options.setShowTipsAtStartUp(showTipsAtStartUp.isSelected());
+            options.setCheckForNewVersionAtStartUp(checkForNewVersion.isSelected());
+            options.setHideToolbar(hideToolbar.isSelected());
+            options.setLanguage((SupportedLanguage) language.getSelectedItem());
+            options.setCardSet(getSelectedCardSet());
 
-            if (JSkatOptionsDialog.this.savePathUserHome.isSelected()) {
-                JSkatOptionsDialog.this.options.setSavePath(SavePath.USER_HOME);
-            } else if (JSkatOptionsDialog.this.savePathWorkingDirectory.isSelected()) {
-                JSkatOptionsDialog.this.options.setSavePath(SavePath.WORKING_DIRECTORY);
+            if (savePathUserHome.isSelected()) {
+                options.setSavePath(SavePath.USER_HOME);
+            } else if (savePathWorkingDirectory.isSelected()) {
+                options.setSavePath(SavePath.WORKING_DIRECTORY);
             }
 
-            JSkatOptionsDialog.this.options
-                    .setWaitTimeAfterTrick(JSkatOptionsDialog.this.waitTimeAfterTrick.getValue());
-            JSkatOptionsDialog.this.options.setIssAddress(JSkatOptionsDialog.this.issAddress.getText());
-            JSkatOptionsDialog.this.options.setIssPort(Integer.valueOf(JSkatOptionsDialog.this.issPort.getText()));
+            options.setWaitTimeAfterTrick(waitTimeAfterTrick.getValue());
+            options.setIssAddress(issAddress.getText());
+            options.setIssPort(Integer.valueOf(issPort.getText()));
 
-            if (JSkatOptionsDialog.this.ruleSetISPA.isSelected()) {
-                JSkatOptionsDialog.this.options.setRules(RuleSet.ISPA);
-            } else if (JSkatOptionsDialog.this.ruleSetPub.isSelected()) {
-                JSkatOptionsDialog.this.options.setRules(RuleSet.PUB);
+            if (ruleSetISPA.isSelected()) {
+                options.setRules(RuleSet.ISPA);
+            } else if (ruleSetPub.isSelected()) {
+                options.setRules(RuleSet.PUB);
             }
 
-            JSkatOptionsDialog.this.options.setRamschEventNoBid(JSkatOptionsDialog.this.ramschEventNoBid.isSelected());
-            JSkatOptionsDialog.this.options
-                    .setBockEventContraReCalled(JSkatOptionsDialog.this.bockEventContraReAnnounced.isSelected());
-            JSkatOptionsDialog.this.options
-                    .setBockEventLostGrand(JSkatOptionsDialog.this.bockEventLostGrand.isSelected());
-            JSkatOptionsDialog.this.options
-                    .setBockEventLostAfterContra(JSkatOptionsDialog.this.bockEventLostAfterContra.isSelected());
-            JSkatOptionsDialog.this.options
-                    .setBockEventLostWith60(JSkatOptionsDialog.this.bockEventLostWith60.isSelected());
-            JSkatOptionsDialog.this.options.setPlayContra(JSkatOptionsDialog.this.playContra.isSelected());
-            JSkatOptionsDialog.this.options.setContraAfterBid18(JSkatOptionsDialog.this.contraAfterBid18.isSelected());
-            JSkatOptionsDialog.this.options.setPlayRamsch(JSkatOptionsDialog.this.playRamsch.isSelected());
-            JSkatOptionsDialog.this.options.setPlayBock(JSkatOptionsDialog.this.playBock.isSelected());
-            JSkatOptionsDialog.this.options.setPlayRevolution(JSkatOptionsDialog.this.playRevolution.isSelected());
-            JSkatOptionsDialog.this.options.setSchieberRamsch(JSkatOptionsDialog.this.schiebeRamsch.isSelected());
-            JSkatOptionsDialog.this.options
-                    .setSchieberRamschJacksInSkat(JSkatOptionsDialog.this.schiebeRamschJacksInSkat.isSelected());
-            JSkatOptionsDialog.this.options.setRamschSkatOwner(
-                    JSkatOptionsDialog.this.ramschSkatLastTrick.isSelected() ? RamschSkatOwner.LAST_TRICK
+            options.setRamschEventNoBid(ramschEventNoBid.isSelected());
+            options.setBockEventContraReCalled(bockEventContraReAnnounced.isSelected());
+            options.setBockEventLostGrand(bockEventLostGrand.isSelected());
+            options.setBockEventLostAfterContra(bockEventLostAfterContra.isSelected());
+            options.setBockEventLostWith60(bockEventLostWith60.isSelected());
+            options.setPlayContra(playContra.isSelected());
+            options.setContraAfterBid18(contraAfterBid18.isSelected());
+            options.setPlayRamsch(playRamsch.isSelected());
+            options.setPlayBock(playBock.isSelected());
+            options.setPlayRevolution(playRevolution.isSelected());
+            options.setSchieberRamsch(schiebeRamsch.isSelected());
+            options.setSchieberRamschJacksInSkat(schiebeRamschJacksInSkat.isSelected());
+            options.setRamschSkatOwner(
+                    ramschSkatLastTrick.isSelected() ? RamschSkatOwner.LAST_TRICK
                             : RamschSkatOwner.LOSER);
 
-            JSkatOptionsDialog.this.options.saveJSkatProperties();
+            options.saveJSkatProperties();
             refreshCardSet();
 
             setVisible(false);
@@ -138,10 +129,10 @@ public class JSkatOptionsDialog extends JDialog {
     };
 
     final ChangeListener ruleButtonChangeListener = e -> {
-        if (JSkatOptionsDialog.this.ruleSetISPA.isSelected()) {
+        if (ruleSetISPA.isSelected()) {
             activatePubRules(false);
         }
-        if (JSkatOptionsDialog.this.ruleSetPub.isSelected()) {
+        if (ruleSetPub.isSelected()) {
             activatePubRules(true);
         }
     };
@@ -199,11 +190,11 @@ public class JSkatOptionsDialog extends JDialog {
 
         final JPanel buttonPanel = new JPanel(LayoutFactory.getMigLayout());
         final JButton start = new JButton();
-        start.setAction(this.okAction);
+        start.setAction(okAction);
         start.setText("OK");
         buttonPanel.add(start);
         final JButton cancel = new JButton();
-        cancel.setAction(this.cancelAction);
+        cancel.setAction(cancelAction);
         cancel.setText(strings.getString("cancel"));
         buttonPanel.add(cancel);
 
@@ -213,9 +204,9 @@ public class JSkatOptionsDialog extends JDialog {
         final InputMap im = root.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         final ActionMap am = root.getActionMap();
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "OK");
-        am.put("OK", this.okAction);
+        am.put("OK", okAction);
         im.put(KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "CANCEL");
-        am.put("CANCEL", this.cancelAction);
+        am.put("CANCEL", cancelAction);
 
         setContentPane(root);
         validate();
@@ -223,7 +214,7 @@ public class JSkatOptionsDialog extends JDialog {
     }
 
     private JPanel getCardSetSelectionPanel() {
-        JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "", "[shrink][grow]"));
+        final JPanel panel = new JPanel(LayoutFactory.getMigLayout("fill", "", "[shrink][grow]"));
 
         panel.add(new JLabel(strings.getString("card_face")));
         panel.add(getCardSetPanel(), "growx, wrap");
@@ -236,9 +227,9 @@ public class JSkatOptionsDialog extends JDialog {
     }
 
     private CardPanel getCardPanel() {
-        CardPanel cardPanel = new CardPanel(1.0, false);
+        final CardPanel cardPanel = new CardPanel(1.0, false);
 
-        for (Card card : CardDeck.getAllCards()) {
+        for (final Card card : CardDeck.getAllCards()) {
             cardPanel.addCard(card);
         }
         cardPanel.setSortType(GameType.GRAND);
@@ -264,64 +255,64 @@ public class JSkatOptionsDialog extends JDialog {
         final JPanel savePathPanel = new JPanel(LayoutFactory.getMigLayout());
 
         final ButtonGroup savePathGroup = new ButtonGroup();
-        this.savePathUserHome = new JRadioButton(strings.getString("user_home"));
-        savePathGroup.add(this.savePathUserHome);
-        this.savePathWorkingDirectory = new JRadioButton(strings.getString("working_directory"));
-        savePathGroup.add(this.savePathWorkingDirectory);
+        savePathUserHome = new JRadioButton(strings.getString("user_home"));
+        savePathGroup.add(savePathUserHome);
+        savePathWorkingDirectory = new JRadioButton(strings.getString("working_directory"));
+        savePathGroup.add(savePathWorkingDirectory);
 
-        savePathPanel.add(this.savePathUserHome); // $NON-NLS-1$
-        savePathPanel.add(this.savePathWorkingDirectory, "wrap");
+        savePathPanel.add(savePathUserHome); // $NON-NLS-1$
+        savePathPanel.add(savePathWorkingDirectory, "wrap");
 
         return savePathPanel;
     }
 
     private JPanel getIssAddressPanel() {
 
-        this.issAddress = new JTextField(20);
+        issAddress = new JTextField(20);
         final JPanel issAddressPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "shrink"));
-        issAddressPanel.add(this.issAddress);
+        issAddressPanel.add(issAddress);
 
         return issAddressPanel;
     }
 
     private JPanel getIssPortPanel() {
 
-        this.issPort = new JTextField(20);
+        issPort = new JTextField(20);
         final JPanel issPortPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "shrink"));
-        issPortPanel.add(this.issPort);
+        issPortPanel.add(issPort);
         return issPortPanel;
     }
 
     private JPanel getCardSetPanel() {
 
-        this.cardSet = new JComboBox(CardSet.values());
-        this.cardSet.setSelectedIndex(0);
-        this.cardSet.setRenderer(new CardSetComboBoxRenderer());
+        cardSet = new JComboBox(CardSet.values());
+        cardSet.setSelectedIndex(0);
+        cardSet.setRenderer(new CardSetComboBoxRenderer());
 
-        this.cardSet.addActionListener(new ActionListener() {
+        cardSet.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                JSkatOptionsDialog.this.options.setCardSet((CardSet) JSkatOptionsDialog.this.cardSet.getSelectedItem());
+            public void actionPerformed(final ActionEvent e) {
+                options.setCardSet((CardSet) cardSet.getSelectedItem());
                 refreshCardSet();
             }
         });
 
         final JPanel cardSetPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill"));
-        cardSetPanel.add(this.cardSet);
+        cardSetPanel.add(cardSet);
         return cardSetPanel;
     }
 
     private JPanel getShowTipsPanel() {
-        this.showTipsAtStartUp = new JCheckBox(strings.getString("show_tips_at_startup"));
+        showTipsAtStartUp = new JCheckBox(strings.getString("show_tips_at_startup"));
         final JPanel showTipsPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill"));
-        showTipsPanel.add(this.showTipsAtStartUp);
+        showTipsPanel.add(showTipsAtStartUp);
         return showTipsPanel;
     }
 
     private JPanel getCheckVersionPanel() {
-        this.checkForNewVersion = new JCheckBox(strings.getString("check_for_new_version_at_startup"));
+        checkForNewVersion = new JCheckBox(strings.getString("check_for_new_version_at_startup"));
         final JPanel checkVersionPanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill"));
-        checkVersionPanel.add(this.checkForNewVersion);
+        checkVersionPanel.add(checkForNewVersion);
         return checkVersionPanel;
     }
 
@@ -329,7 +320,7 @@ public class JSkatOptionsDialog extends JDialog {
         hideToolbar = new JCheckBox(strings.getString("hide_toolbar"));
         hideToolbar.addActionListener(new ActionListener() {
             @Override
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(final ActionEvent e) {
                 if (hideToolbar.isSelected()) {
                     JSkatEventBus.INSTANCE.post(new HideToolbarCommand());
                 } else {
@@ -344,10 +335,10 @@ public class JSkatOptionsDialog extends JDialog {
     }
 
     private JPanel getLanguagePanel() {
-        this.language = new JComboBox(SupportedLanguage.values());
-        this.language.setRenderer(new LanguageComboBoxRenderer());
+        language = new JComboBox(SupportedLanguage.values());
+        language.setRenderer(new LanguageComboBoxRenderer());
         final JPanel languagePanel = new JPanel(LayoutFactory.getMigLayout("fill", "fill", "fill"));
-        languagePanel.add(this.language);
+        languagePanel.add(language);
         return languagePanel;
     }
 
@@ -392,20 +383,20 @@ public class JSkatOptionsDialog extends JDialog {
 
     private JPanel getSkatRulesPanel() {
 
-        log.debug("Loaded rules: " + this.options.getRules());
+        log.debug("Loaded rules: " + options.getRules());
 
         final JPanel rulesPanel = new JPanel(LayoutFactory.getMigLayout());
 
         final ButtonGroup ruleSetGroup = new ButtonGroup();
-        this.ruleSetISPA = new JRadioButton(strings.getString("ispa_rules"));
-        this.ruleSetISPA.addChangeListener(this.ruleButtonChangeListener);
-        ruleSetGroup.add(this.ruleSetISPA);
-        this.ruleSetPub = new JRadioButton(strings.getString("pub_rules"));
-        this.ruleSetPub.addChangeListener(this.ruleButtonChangeListener);
-        ruleSetGroup.add(this.ruleSetPub);
+        ruleSetISPA = new JRadioButton(strings.getString("ispa_rules"));
+        ruleSetISPA.addChangeListener(ruleButtonChangeListener);
+        ruleSetGroup.add(ruleSetISPA);
+        ruleSetPub = new JRadioButton(strings.getString("pub_rules"));
+        ruleSetPub.addChangeListener(ruleButtonChangeListener);
+        ruleSetGroup.add(ruleSetPub);
 
-        rulesPanel.add(this.ruleSetISPA, "wrap");
-        rulesPanel.add(this.ruleSetPub, "wrap");
+        rulesPanel.add(ruleSetISPA, "wrap");
+        rulesPanel.add(ruleSetPub, "wrap");
 
         final JPanel pubRulesPanel = getPubRulesPanel();
         rulesPanel.add(pubRulesPanel, "gapleft 20px");
@@ -418,16 +409,16 @@ public class JSkatOptionsDialog extends JDialog {
     private JPanel getPubRulesPanel() {
         final JPanel pubRulesPanel = new JPanel(LayoutFactory.getMigLayout());
 
-        this.resetPubRulesButton = new JButton(strings.getString("reset_to_defaults"));
-        pubRulesPanel.add(this.resetPubRulesButton, "wrap");
+        resetPubRulesButton = new JButton(strings.getString("reset_to_defaults"));
+        pubRulesPanel.add(resetPubRulesButton, "wrap");
 
         final JPanel contraPanel = new JPanel(LayoutFactory.getMigLayout());
 
-        this.playContra = new JCheckBox(strings.getString("play_contra_re"));
-        contraPanel.add(this.playContra, "wrap");
+        playContra = new JCheckBox(strings.getString("play_contra_re"));
+        contraPanel.add(playContra, "wrap");
 
-        this.contraAfterBid18 = new JCheckBox(strings.getString("contra_after_bid_18"));
-        contraPanel.add(this.contraAfterBid18, "gapleft 20px");
+        contraAfterBid18 = new JCheckBox(strings.getString("contra_after_bid_18"));
+        contraPanel.add(contraAfterBid18, "gapleft 20px");
         pubRulesPanel.add(contraPanel, "wrap");
 
         final JPanel bockPanel = getBockPanel();
@@ -435,8 +426,8 @@ public class JSkatOptionsDialog extends JDialog {
 
         final JPanel ramschPanel = new JPanel(LayoutFactory.getMigLayout());
 
-        this.playRamsch = new JCheckBox(strings.getString("play_ramsch"));
-        ramschPanel.add(this.playRamsch, "wrap");
+        playRamsch = new JCheckBox(strings.getString("play_ramsch"));
+        ramschPanel.add(playRamsch, "wrap");
 
         final JPanel schiebeRamschPanel = getSchiebeRamschPanel();
         ramschPanel.add(schiebeRamschPanel, "wrap");
@@ -449,7 +440,7 @@ public class JSkatOptionsDialog extends JDialog {
 
         pubRulesPanel.add(ramschPanel, "wrap");
 
-        this.playRevolution = new JCheckBox(strings.getString("play_revolution"));
+        playRevolution = new JCheckBox(strings.getString("play_revolution"));
         // pubRulesPanel.add(playRevolution);
 
         return pubRulesPanel;
@@ -458,8 +449,8 @@ public class JSkatOptionsDialog extends JDialog {
     private JPanel getBockPanel() {
         final JPanel bockPanel = new JPanel(LayoutFactory.getMigLayout());
 
-        this.playBock = new JCheckBox(strings.getString("play_bock"));
-        bockPanel.add(this.playBock, "wrap");
+        playBock = new JCheckBox(strings.getString("play_bock"));
+        bockPanel.add(playBock, "wrap");
 
         final JPanel bockDetailsPanel = getBockDetailsPanel();
         bockPanel.add(bockDetailsPanel, "gapleft 20px");
@@ -469,36 +460,36 @@ public class JSkatOptionsDialog extends JDialog {
     private JPanel getBockDetailsPanel() {
         final JPanel bockDetailsPanel = new JPanel(LayoutFactory.getMigLayout());
 
-        this.bockEventLabel = new JLabel(strings.getString("bock_events"));
-        bockDetailsPanel.add(this.bockEventLabel, "span 2, wrap");
-        this.bockEventAllPlayersPassed = new JCheckBox(strings.getString("bock_event_all_players_passed"));
-        bockDetailsPanel.add(this.bockEventAllPlayersPassed, "wrap");
-        this.bockEventLostAfterContra = new JCheckBox(strings.getString("bock_event_lost_contra"));
-        bockDetailsPanel.add(this.bockEventLostAfterContra, "wrap");
-        this.bockEventLostWith60 = new JCheckBox(strings.getString("bock_event_lost_game_with_60"));
-        this.bockEventLostWith60.setSelected(this.options.isBockEventLostWith60(false).booleanValue());
-        bockDetailsPanel.add(this.bockEventLostWith60, "wrap");
-        this.bockEventContraReAnnounced = new JCheckBox(strings.getString("bock_event_contra_re"));
-        bockDetailsPanel.add(this.bockEventContraReAnnounced);
-        this.bockEventPlayerHasX00Points = new JCheckBox(strings.getString("bock_event_player_x00_points"));
-        bockDetailsPanel.add(this.bockEventPlayerHasX00Points, "wrap");
-        this.bockEventLostGrand = new JCheckBox(strings.getString("bock_event_lost_grand"));
-        bockDetailsPanel.add(this.bockEventLostGrand);
+        bockEventLabel = new JLabel(strings.getString("bock_events"));
+        bockDetailsPanel.add(bockEventLabel, "span 2, wrap");
+        bockEventAllPlayersPassed = new JCheckBox(strings.getString("bock_event_all_players_passed"));
+        bockDetailsPanel.add(bockEventAllPlayersPassed, "wrap");
+        bockEventLostAfterContra = new JCheckBox(strings.getString("bock_event_lost_contra"));
+        bockDetailsPanel.add(bockEventLostAfterContra, "wrap");
+        bockEventLostWith60 = new JCheckBox(strings.getString("bock_event_lost_game_with_60"));
+        bockEventLostWith60.setSelected(options.isBockEventLostWith60(false).booleanValue());
+        bockDetailsPanel.add(bockEventLostWith60, "wrap");
+        bockEventContraReAnnounced = new JCheckBox(strings.getString("bock_event_contra_re"));
+        bockDetailsPanel.add(bockEventContraReAnnounced);
+        bockEventPlayerHasX00Points = new JCheckBox(strings.getString("bock_event_player_x00_points"));
+        bockDetailsPanel.add(bockEventPlayerHasX00Points, "wrap");
+        bockEventLostGrand = new JCheckBox(strings.getString("bock_event_lost_grand"));
+        bockDetailsPanel.add(bockEventLostGrand);
         return bockDetailsPanel;
     }
 
     private JPanel getRamschSkatOwnerPanel() {
         final JPanel ramschSkatOwnerPanel = new JPanel(LayoutFactory.getMigLayout());
-        this.ramschSkatLabel = new JLabel(strings.getString("ramsch_skat_owner"));
-        ramschSkatOwnerPanel.add(this.ramschSkatLabel, "wrap");
-        this.ramschSkatLastTrick = new JRadioButton(strings.getString("ramsch_skat_last_trick"));
-        ramschSkatOwnerPanel.add(this.ramschSkatLastTrick, "wrap");
-        this.ramschSkatLoser = new JRadioButton(strings.getString("ramsch_skat_loser"));
-        ramschSkatOwnerPanel.add(this.ramschSkatLoser);
+        ramschSkatLabel = new JLabel(strings.getString("ramsch_skat_owner"));
+        ramschSkatOwnerPanel.add(ramschSkatLabel, "wrap");
+        ramschSkatLastTrick = new JRadioButton(strings.getString("ramsch_skat_last_trick"));
+        ramschSkatOwnerPanel.add(ramschSkatLastTrick, "wrap");
+        ramschSkatLoser = new JRadioButton(strings.getString("ramsch_skat_loser"));
+        ramschSkatOwnerPanel.add(ramschSkatLoser);
 
-        this.ramschSkatOwner = new ButtonGroup();
-        this.ramschSkatOwner.add(this.ramschSkatLastTrick);
-        this.ramschSkatOwner.add(this.ramschSkatLoser);
+        ramschSkatOwner = new ButtonGroup();
+        ramschSkatOwner.add(ramschSkatLastTrick);
+        ramschSkatOwner.add(ramschSkatLoser);
 
         return ramschSkatOwnerPanel;
     }
@@ -506,52 +497,52 @@ public class JSkatOptionsDialog extends JDialog {
     private JPanel getSchiebeRamschPanel() {
         final JPanel schiebeRamschPanel = new JPanel(LayoutFactory.getMigLayout());
 
-        this.schiebeRamsch = new JCheckBox(strings.getString("schieberamsch"));
-        schiebeRamschPanel.add(this.schiebeRamsch, "gapleft 20px, wrap");
+        schiebeRamsch = new JCheckBox(strings.getString("schieberamsch"));
+        schiebeRamschPanel.add(schiebeRamsch, "gapleft 20px, wrap");
 
-        this.schiebeRamschJacksInSkat = new JCheckBox(strings.getString("schieberamsch_jacks_in_skat"));
-        schiebeRamschPanel.add(this.schiebeRamschJacksInSkat, "gapleft 40px, wrap");
+        schiebeRamschJacksInSkat = new JCheckBox(strings.getString("schieberamsch_jacks_in_skat"));
+        schiebeRamschPanel.add(schiebeRamschJacksInSkat, "gapleft 40px, wrap");
         return schiebeRamschPanel;
     }
 
     private JPanel getRamschEventPanel() {
         final JPanel ramschEventPanel = new JPanel(LayoutFactory.getMigLayout());
 
-        this.ramschEventLabel = new JLabel(strings.getString("ramsch_events"));
-        ramschEventPanel.add(this.ramschEventLabel, "span 2, wrap");
-        this.ramschEventNoBid = new JCheckBox(strings.getString("ramsch_event_no_bid"));
-        ramschEventPanel.add(this.ramschEventNoBid);
-        this.ramschEventBockRamsch = new JCheckBox(strings.getString("ramsch_event_bock_ramsch"));
+        ramschEventLabel = new JLabel(strings.getString("ramsch_events"));
+        ramschEventPanel.add(ramschEventLabel, "span 2, wrap");
+        ramschEventNoBid = new JCheckBox(strings.getString("ramsch_event_no_bid"));
+        ramschEventPanel.add(ramschEventNoBid);
+        ramschEventBockRamsch = new JCheckBox(strings.getString("ramsch_event_bock_ramsch"));
         // ramschEventPanel.add(ramschEventBockRamsch);
         return ramschEventPanel;
     }
 
     void activatePubRules(final boolean isActivated) {
 
-        this.resetPubRulesButton.setEnabled(isActivated);
+        resetPubRulesButton.setEnabled(isActivated);
 
-        this.playContra.setEnabled(isActivated);
-        this.contraAfterBid18.setEnabled(isActivated);
+        playContra.setEnabled(isActivated);
+        contraAfterBid18.setEnabled(isActivated);
 
-        this.playBock.setEnabled(isActivated);
-        this.bockEventLabel.setEnabled(isActivated);
-        this.bockEventContraReAnnounced.setEnabled(isActivated);
-        this.bockEventLostAfterContra.setEnabled(isActivated);
-        this.bockEventLostGrand.setEnabled(isActivated);
-        this.bockEventLostWith60.setEnabled(isActivated);
-        this.bockEventPlayerHasX00Points.setEnabled(isActivated);
+        playBock.setEnabled(isActivated);
+        bockEventLabel.setEnabled(isActivated);
+        bockEventContraReAnnounced.setEnabled(isActivated);
+        bockEventLostAfterContra.setEnabled(isActivated);
+        bockEventLostGrand.setEnabled(isActivated);
+        bockEventLostWith60.setEnabled(isActivated);
+        bockEventPlayerHasX00Points.setEnabled(isActivated);
 
-        this.playRamsch.setEnabled(isActivated);
-        this.schiebeRamsch.setEnabled(isActivated);
-        this.schiebeRamschJacksInSkat.setEnabled(isActivated);
-        this.ramschSkatLabel.setEnabled(isActivated);
-        this.ramschSkatLastTrick.setEnabled(isActivated);
-        this.ramschSkatLoser.setEnabled(isActivated);
-        this.ramschEventLabel.setEnabled(isActivated);
-        this.ramschEventNoBid.setEnabled(isActivated);
-        this.ramschEventBockRamsch.setEnabled(isActivated);
+        playRamsch.setEnabled(isActivated);
+        schiebeRamsch.setEnabled(isActivated);
+        schiebeRamschJacksInSkat.setEnabled(isActivated);
+        ramschSkatLabel.setEnabled(isActivated);
+        ramschSkatLastTrick.setEnabled(isActivated);
+        ramschSkatLoser.setEnabled(isActivated);
+        ramschEventLabel.setEnabled(isActivated);
+        ramschEventNoBid.setEnabled(isActivated);
+        ramschEventBockRamsch.setEnabled(isActivated);
 
-        this.playRevolution.setEnabled(isActivated);
+        playRevolution.setEnabled(isActivated);
     }
 
     /**
@@ -561,7 +552,7 @@ public class JSkatOptionsDialog extends JDialog {
     public void setVisible(final boolean isVisible) {
 
         if (isVisible) {
-            setLocationRelativeTo(this.parent);
+            setLocationRelativeTo(parent);
         }
 
         setOptionValues();
@@ -620,7 +611,7 @@ public class JSkatOptionsDialog extends JDialog {
     }
 
     CardSet getSelectedCardSet() {
-        return (CardSet) this.cardSet.getSelectedItem();
+        return (CardSet) cardSet.getSelectedItem();
     }
 
     void refreshCardSet() {
@@ -647,10 +638,10 @@ public class JSkatOptionsDialog extends JDialog {
             if (language != null) {
                 switch (language) {
                     case ENGLISH:
-                        result = JSkatOptionsDialog.this.strings.getString("english");
+                        result = strings.getString("english");
                         break;
                     case GERMAN:
-                        result = JSkatOptionsDialog.this.strings.getString("german");
+                        result = strings.getString("german");
                         break;
                 }
             }
@@ -674,7 +665,7 @@ public class JSkatOptionsDialog extends JDialog {
             final CardSet cardSet = (CardSet) value;
 
             if (cardSet != null) {
-                result = JSkatOptionsDialog.this.strings.getString(
+                result = strings.getString(
                         "cardset_" + getCardSetNameInLowerCase(cardSet) + "_" + getCardFaceInLowerCase(cardSet));
             }
 
