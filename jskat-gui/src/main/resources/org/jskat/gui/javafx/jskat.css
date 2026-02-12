@@ -28,3 +28,11 @@
     -fx-focus-color: -color-secondary-2-0;
     -fx-faint-focus-color: -color-secondary-2-0-alpha;
 }
+
+.right-aligned {
+    -fx-alignment: CENTER-RIGHT;
+}
+
+.center-aligned {
+    -fx-alignment: CENTER;
+}

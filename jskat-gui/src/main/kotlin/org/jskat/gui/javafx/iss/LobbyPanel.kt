@@ -14,10 +14,13 @@ import javafx.scene.text.Font
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.data.iss.ChatMessage
 import org.jskat.gui.img.JSkatGraphicRepository
+import org.jskat.util.JSkatResourceBundle
 import java.awt.image.BufferedImage
 import javax.swing.ActionMap
 
 class LobbyPanel(private val actions: ActionMap) : VBox() {
+
+    private val strings = JSkatResourceBundle.INSTANCE
 
     private val playerList = FXCollections.observableArrayList<Player>()
     private val tableList = FXCollections.observableArrayList<Table>()
@@ -28,17 +31,19 @@ class LobbyPanel(private val actions: ActionMap) : VBox() {
         padding = Insets(10.0)
         spacing = 10.0
 
-        val header = Label("Welcome to ISS").apply {
+        val header = Label(strings.getString("welcome_to_iss_title")).apply {
             font = Font("System Bold", 32.0)
+            alignment = Pos.CENTER
+            maxWidth = Double.MAX_VALUE
         }
         children.add(header)
 
         val tablesAndPlayers = GridPane().apply {
             hgap = 10.0
             vgap = 10.0
-            add(Label("Players"), 0, 0)
+            add(Label(strings.getString("players")), 0, 0)
             add(createPlayerTable(), 0, 1)
-            add(Label("Tables"), 1, 0)
+            add(Label(strings.getString("tables")), 1, 0)
             add(createTableTable(), 1, 1)
 
             val col1 = ColumnConstraints().apply { hgrow = Priority.ALWAYS; percentWidth = 50.0 }
@@ -51,30 +56,40 @@ class LobbyPanel(private val actions: ActionMap) : VBox() {
         val buttons = HBox(10.0).apply {
             alignment = Pos.CENTER
             children.addAll(
-                createActionButton("Create table", JSkatAction.CREATE_ISS_TABLE, JSkatGraphicRepository.Icon.TABLE),
-                createActionButton("Disconnect", JSkatAction.DISCONNECT_FROM_ISS, JSkatGraphicRepository.Icon.LOG_OUT)
+                createActionButton(
+                    strings.getString("iss.new.table"),
+                    JSkatAction.CREATE_ISS_TABLE,
+                    JSkatGraphicRepository.Icon.TABLE
+                ),
+                createActionButton(
+                    strings.getString("iss.disconnect"),
+                    JSkatAction.DISCONNECT_FROM_ISS,
+                    JSkatGraphicRepository.Icon.LOG_OUT
+                )
             )
         }
         children.add(buttons)
 
         setVgrow(chatPanel, Priority.ALWAYS)
         children.add(chatPanel)
-        chatPanel.addNewChat("Lobby", "Lobby")
+        chatPanel.addNewChat(strings.getString("lobby"), strings.getString("lobby"))
     }
 
     private fun createPlayerTable(): TableView<Player> {
         val table = TableView(playerList)
         table.columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
-        table.columns.add(TableColumn<Player, String>("Name").apply {
+        table.columns.add(TableColumn<Player, String>(strings.getString("name")).apply {
             cellValueFactory = javafx.util.Callback { it.value.name }
         })
-        table.columns.add(TableColumn<Player, Long>("Games").apply {
+        table.columns.add(TableColumn<Player, Long>(strings.getString("games")).apply {
             cellValueFactory = javafx.util.Callback { it.value.gamesPlayed as javafx.beans.value.ObservableValue<Long> }
+            styleClass.add("right-aligned")
         })
-        table.columns.add(TableColumn<Player, Double>("Strength").apply {
+        table.columns.add(TableColumn<Player, Double>(strings.getString("strength")).apply {
             cellValueFactory = javafx.util.Callback { it.value.strength as javafx.beans.value.ObservableValue<Double> }
+            styleClass.add("right-aligned")
         })
-        table.columns.add(TableColumn<Player, String>("Language").apply {
+        table.columns.add(TableColumn<Player, String>(strings.getString("language")).apply {
             cellValueFactory = javafx.util.Callback { it.value.language }
             cellFactory = javafx.util.Callback {
                 object : TableCell<Player, String>() {
@@ -84,31 +99,30 @@ class LobbyPanel(private val actions: ActionMap) : VBox() {
                         graphic = if (empty || item == null) {
                             null
                         } else {
-                            val flagChar = item.firstOrNull()
-                            if (flagChar != null) {
-                                val flag = JSkatGraphicRepository.Flag.valueOf(flagChar)
-                                if (flag != null) {
-                                    val awtImage = bitmaps.getFlagImage(flag)
-                                    val bufferedImage = BufferedImage(
-                                        awtImage.getWidth(null),
-                                        awtImage.getHeight(null),
-                                        BufferedImage.TYPE_INT_ARGB
-                                    )
-                                    val g = bufferedImage.createGraphics()
-                                    g.drawImage(awtImage, 0, 0, null)
-                                    g.dispose()
-                                    ImageView(SwingFXUtils.toFXImage(bufferedImage, null))
-                                } else {
-                                    null
+                            HBox(2.0).apply {
+                                alignment = Pos.CENTER
+                                item.forEach { flagChar ->
+                                    val flag = JSkatGraphicRepository.Flag.valueOf(flagChar)
+                                    if (flag != null) {
+                                        val awtImage = bitmaps.getFlagImage(flag)
+                                        val bufferedImage = BufferedImage(
+                                            awtImage.getWidth(null),
+                                            awtImage.getHeight(null),
+                                            BufferedImage.TYPE_INT_ARGB
+                                        )
+                                        val g = bufferedImage.createGraphics()
+                                        g.drawImage(awtImage, 0, 0, null)
+                                        g.dispose()
+                                        children.add(ImageView(SwingFXUtils.toFXImage(bufferedImage, null)))
+                                    }
                                 }
-                            } else {
-                                null
                             }
                         }
                     }
                 }
             }
-        })
+        }
+        )
         return table
     }
 
@@ -120,9 +134,11 @@ class LobbyPanel(private val actions: ActionMap) : VBox() {
         })
         table.columns.add(TableColumn<Table, Long>("Seats").apply {
             cellValueFactory = javafx.util.Callback { it.value.maxPlayers as javafx.beans.value.ObservableValue<Long> }
+            styleClass.add("right-aligned")
         })
         table.columns.add(TableColumn<Table, Long>("Games").apply {
             cellValueFactory = javafx.util.Callback { it.value.gamesPlayed as javafx.beans.value.ObservableValue<Long> }
+            styleClass.add("right-aligned")
         })
         table.columns.add(TableColumn<Table, String>("Player 1").apply {
             cellValueFactory = javafx.util.Callback { it.value.player1 }
