@@ -273,6 +273,7 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertThat(gameData.getGameType()).isEqualTo(GameType.NULL);
         assertTrue(gameData.isGameWon());
     }
+       
 
     @Test
     public void testParseGameSummary_PlayerLeft() {
@@ -536,4 +537,22 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertThat(contract.schneider()).isTrue();
         assertThat(contract.schwarz()).isTrue();
     }
+     @Test
+    public void testParseGameSummary_NullGameShouldNotSetSchneiderOrSchwarz() {
+
+        final String gameSummary =
+            "(;GM[Skat]PC[International Skat Server]CO[]SE[1]ID[1]DT[2024-01-01/00:00:00/UTC]" +
+            "P0[a]P1[b]P2[c]" +
+            "MV[w C7.C8.C9.CJ.CQ.CK.CA.D7.D8.D9.DT.DJ.DQ.DK.DA.H7.H8.H9.HT.HJ.HQ.HK.HA.S7.S8.S9.ST.SJ.SQ.SK.SA " +
+            "1 18 0 p 2 p 1 s w N 0]" +   // <-- NULL GAME ANNOUNCEMENT
+            "R[d:1 win v:23 m:0 bidok p:0 t:0 s:1 z:1 p0:0 p1:0 p2:0 l:-1 to:-1 r:0] ;)" ;
+
+        final SkatGameData gameData = MessageParser.parseGameSummary(gameSummary);
+
+         assertThat(gameData.getGameType()).isEqualTo(GameType.NULL);
+         assertFalse(gameData.isSchneider());
+         assertFalse(gameData.isSchwarz());
+}
+
+
 }
