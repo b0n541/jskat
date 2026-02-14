@@ -13,7 +13,10 @@ import javafx.scene.layout.VBox
 import javafx.stage.Stage
 import org.jskat.control.JSkatEventBus
 import org.jskat.control.JSkatMaster
-import org.jskat.control.command.general.*
+import org.jskat.control.command.general.ShowAboutInformationCommand
+import org.jskat.control.command.general.ShowHelpCommand
+import org.jskat.control.command.general.ShowLicenseCommand
+import org.jskat.control.command.general.ShowWelcomeInformationCommand
 import org.jskat.control.command.iss.IssShowLoginCommand
 import org.jskat.control.command.table.NextReplayMoveCommand
 import org.jskat.control.command.table.ReplayGameCommand
@@ -206,7 +209,7 @@ class JSkatMainWindowController {
                 https://www.jskat.org
                 https://github.com/b0n541/jskat
                 
-                ${strings.getString("authors")}: Jan Schäfer (jnschfr@gmail.com), Markus J. Luzius, Daniel Loreck, Sascha Laurien, Slovasim, Martin Rothe, Tobias Markus
+                ${strings.getString("authors")}: Jan Schäfer (support@jskat.org), Markus J. Luzius, Daniel Loreck, Andrius Vaskys
                 
                 ${strings.getString("cards")}: International Skat Server, KDE project, OpenClipart.org
                 
