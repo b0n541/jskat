@@ -617,15 +617,22 @@ public class MessageParser {
 
         } else if (token.startsWith("t:")) {
 
-        } else if ("s:1".equals(token)) {
+        }  else if ("s:1".equals(token)) {
 
+        if (gameData.getAnnouncement() != null
+                && gameData.getAnnouncement().contract().gameType() != GameType.NULL) {
             gameData.getResult().setSchneider(true);
+        }
 
-        } else if ("z:1".equals(token)) {
+    } else if ("z:1".equals(token)) {
 
+        if (gameData.getAnnouncement() != null
+                && gameData.getAnnouncement().contract().gameType() != GameType.NULL) {
             gameData.getResult().setSchwarz(true);
         }
     }
+
+}
 
     private static void parseDeclarerToken(final SkatGameData result,
                                            final String token) {
