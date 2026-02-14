@@ -66,6 +66,11 @@ public class SkatGameDataTest {
         assertFalse(gameData.isSchneider());
         assertFalse(gameData.isSchwarz());
 
+        gameData.setAnnouncement(
+                new GameAnnouncement(
+                        new GameContract(GameType.GRAND),
+                        CardList.of(Card.D7, Card.D8)));
+
         gameData.setDeclarerScore(0);
 
         assertTrue(gameData.isSchneider());
@@ -105,6 +110,23 @@ public class SkatGameDataTest {
 
         assertTrue(gameData.isSchneider());
         assertTrue(gameData.isSchwarz());
+    }
+
+    @Test
+    void noSchneiderSchwarzForNullGames() {
+
+        assertFalse(gameData.isSchneider());
+        assertFalse(gameData.isSchwarz());
+
+        gameData.setAnnouncement(
+                new GameAnnouncement(
+                        new GameContract(GameType.NULL),
+                        CardList.of(Card.CA, Card.SA)));
+
+        gameData.setDeclarerScore(0);
+
+        assertFalse(gameData.isSchneider());
+        assertFalse(gameData.isSchwarz());
     }
 
     @Test
