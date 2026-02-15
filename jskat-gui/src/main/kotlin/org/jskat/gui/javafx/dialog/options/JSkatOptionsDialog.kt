@@ -19,7 +19,7 @@ import org.jskat.data.JSkatOptions
 import org.jskat.data.SkatTableOptions
 import org.jskat.util.JSkatResourceBundle
 
-class JSkatOptionsDialog(owner: Window) : Dialog<ButtonType>() {
+class JSkatOptionsDialog(owner: Window? = null) : Dialog<ButtonType>() {
 
     private val strings = JSkatResourceBundle.INSTANCE
     private val options = JSkatOptions.instance()

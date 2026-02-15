@@ -36,12 +36,12 @@ import org.jskat.gui.action.iss.*;
 import org.jskat.gui.action.main.*;
 import org.jskat.gui.human.SwingHumanPlayer;
 import org.jskat.gui.img.JSkatGraphicRepository;
+import org.jskat.gui.javafx.dialog.help.JSkatHelpDialog;
 import org.jskat.gui.javafx.dialog.options.JSkatOptionsDialog;
 import org.jskat.gui.javafx.iss.LobbyPanelFX;
 import org.jskat.gui.javafx.iss.LoginPanelFX;
 import org.jskat.gui.javafx.main.WelcomePanelFX;
 import org.jskat.gui.javafx.table.SkatSeriesStartDialog;
-import org.jskat.gui.swing.help.JSkatHelpDialog;
 import org.jskat.gui.swing.iss.ISSTablePanel;
 import org.jskat.gui.swing.iss.PlayerInvitationPanel;
 import org.jskat.gui.swing.table.SkatTablePanel;
@@ -386,15 +386,15 @@ public class JSkatViewImpl implements JSkatView {
     @Subscribe
     public void showHelpDialogOn(final ShowHelpCommand command) {
 
-        SwingUtilities.invokeLater(() -> new JSkatHelpDialog(mainPanel, strings.getString("help"),
-                "org/jskat/gui/help/" + JSkatOptions.instance().getI18NCode() + "/contents.html").setVisible(true));
+        Platform.runLater(() -> new JSkatHelpDialog(strings.getString("help"),
+                "org/jskat/gui/help/" + JSkatOptions.instance().getI18NCode() + "/contents.html").showAndWait());
     }
 
     @Subscribe
     public void showLicenceDialogOn(final ShowLicenseCommand command) {
-        SwingUtilities.invokeLater(
-                () -> new JSkatHelpDialog(mainPanel, strings.getString("license"), "org/jskat/gui/help/apache2.html")
-                        .setVisible(true));
+        Platform.runLater(
+                () -> new JSkatHelpDialog(strings.getString("license"), "org/jskat/gui/help/apache2.html")
+                        .showAndWait());
     }
 
     @Subscribe
