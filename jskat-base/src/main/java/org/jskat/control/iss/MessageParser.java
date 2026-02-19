@@ -347,11 +347,11 @@ public class MessageParser {
     }
 
     /**
-     * During playing on ISS the deal is send in the following format<br />
+     * During playing on ISS the deal is sent in the following format<br />
      * ??.??.??.??.??.??.??.??.??.??|D9.S9.ST.S8.C9.DT.DQ.CJ.SA.HA|??.??.??.??.?
      * ?.??.??.??.??.??|??.??<br />
      * ?? - hidden card<br />
-     * fore hand cards|middle hand cards|rear hand cards|skat
+     * forehand cards|middle hand cards|rear hand cards|skat
      */
     private static List<CardList> parseCardDealFromISSMessage(final String move) {
 
@@ -459,7 +459,8 @@ public class MessageParser {
     }
 
     private static void parseSummaryPart(final SkatGameData result,
-                                         final String summaryPartMarker, final String summaryPart) {
+                                         final String summaryPartMarker,
+                                         final String summaryPart) {
 
         if ("P0".equals(summaryPartMarker)) {
 
@@ -617,14 +618,24 @@ public class MessageParser {
 
         } else if (token.startsWith("t:")) {
 
+            // FIXME handle this token
+
         } else if ("s:1".equals(token)) {
 
-            gameData.getResult().setSchneider(true);
+            if (isNotNullGame(gameData)) {
+                gameData.getResult().setSchneider(true);
+            }
 
         } else if ("z:1".equals(token)) {
 
-            gameData.getResult().setSchwarz(true);
+            if (isNotNullGame(gameData)) {
+                gameData.getResult().setSchwarz(true);
+            }
         }
+    }
+
+    private static boolean isNotNullGame(final SkatGameData gameData) {
+        return gameData.getAnnouncement() != null && gameData.getAnnouncement().contract().gameType() != GameType.NULL;
     }
 
     private static void parseDeclarerToken(final SkatGameData result,

@@ -13,7 +13,7 @@ dependencies {
 }
 
 // ML Models download configuration
-val mlModelsVersion = "1.3.0"
+val mlModelsVersion = "1.4.0"
 val mlModelsDir = rootProject.file(".jskat/models")
 val mlModelsBaseUrl = "https://github.com/avaskys/skat-ml-models/releases/download/v$mlModelsVersion"
 
@@ -36,6 +36,14 @@ tasks.register("downloadMlModels") {
     outputs.dir(mlModelsDir)
 
     doLast {
+        val versionFile = File(mlModelsDir, ".version")
+        val needsDownload = !versionFile.exists() || versionFile.readText().trim() != mlModelsVersion
+
+        if (needsDownload) {
+            logger.lifecycle("Models version changed or missing, clearing old models...")
+            mlModelsDir.deleteRecursively()
+        }
+
         mlModelsDir.mkdirs()
 
         mlModelFiles.forEach { fileName ->
@@ -57,6 +65,8 @@ tasks.register("downloadMlModels") {
                 logger.lifecycle("$fileName already exists, skipping")
             }
         }
+
+        versionFile.writeText(mlModelsVersion)
     }
 }
 

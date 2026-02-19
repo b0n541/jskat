@@ -536,4 +536,16 @@ public class MessageParserTest extends AbstractJSkatTest {
         assertThat(contract.schneider()).isTrue();
         assertThat(contract.schwarz()).isTrue();
     }
+
+    @Test
+    public void testParseGameSummary_NullGameShouldNotSetSchneiderOrSchwarz() {
+
+        final String gameSummary = "(;GM[Skat]PC[International Skat Server]CO[]SE[420996]ID[9097862]DT[2024-07-18/05:12:13/UTC]P0[SkatJKS]P1[theCount]P2[xskat]R0[0.0]R1[]R2[]MV[w HJ.CK.CQ.DJ.S8.HK.C8.DA.H9.SK.HT.H7.S7.CA.C7.SJ.ST.H8.D7.S9.HA.SQ.D8.DQ.C9.D9.CT.SA.DK.HQ.CJ.DT 1 18 0 p 2 p 1 s w CJ.DT 1 N.CJ.CA 0 S8 1 S7 2 SA 2 SQ 0 SK 1 SJ 0 C8 1 C7 2 CT 2 C9 0 CK 1 DT 0 H9 1 SC 1 H8 2 RE 2 HA 2 HQ 0 RE ]R[d:1 win v:23 m:0 bidok p:13 t:0 s:0 z:0 p0:0 p1:0 p2:0 l:-1 to:-1 r:1] ;)";
+
+        final SkatGameData gameData = MessageParser.parseGameSummary(gameSummary);
+
+        assertThat(gameData.getGameType()).isEqualTo(GameType.NULL);
+        assertThat(gameData.isSchneider()).isFalse();
+        assertThat(gameData.isSchwarz()).isFalse();
+    }
 }

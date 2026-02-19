@@ -411,11 +411,9 @@ public class SkatGameData {
      */
     public void setDeclarerScore(final int newScore) {
 
-        playerPoints.put(declarer, Integer.valueOf(newScore));
-
-        result.setSchneider(newScore < 31 || newScore > 89);
-
-        result.setSchwarz(newScore == 0 || newScore == 120);
+        playerPoints.put(declarer, newScore);
+        result.setSchneider(GameType.GRAND_SUIT.contains(getGameType()) && (newScore < 31 || newScore > 89));
+        result.setSchwarz(GameType.GRAND_SUIT.contains(getGameType()) && (newScore == 0 || newScore == 120));
     }
 
     /**
