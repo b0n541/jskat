@@ -322,7 +322,7 @@ class GameInformationPanel extends JPanel {
     }
 
     /**
-     * Sets whether this is a practice game (replay with same cards).
+     * Sets whether this is a practice game (practice with same cards).
      *
      * @param isPracticeGame true if this is a practice game
      */

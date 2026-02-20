@@ -4,7 +4,7 @@ import com.google.common.eventbus.Subscribe;
 import org.jskat.control.command.table.NextReplayMoveCommand;
 import org.jskat.control.command.table.ReadyForNextGameCommand;
 import org.jskat.control.command.table.ReplayGameCommand;
-import org.jskat.control.command.table.ReplayWithSameCardsCommand;
+import org.jskat.control.command.table.PracticeWithSameCardsCommand;
 import org.jskat.util.CardDeck;
 import org.jskat.util.CardList;
 import org.jskat.control.event.skatgame.GameStartEvent;
@@ -41,8 +41,8 @@ public class SkatSeries {
     private boolean unlimitedRounds = false;
     private boolean onlyPlayRamsch = false;
     private boolean readyForNextGame = false;
-    private boolean replayWithSameCardsRequested = false;
-    private CardDeck replayDeck = null;
+    private boolean practiceRequested = false;
+    private CardDeck practiceDeck = null;
     private final Map<Player, JSkatPlayer> players;
     private SkatGame currSkatGame;
     private SkatGameReplay currReplayGame;
@@ -89,9 +89,9 @@ public class SkatSeries {
     }
 
     @Subscribe
-    public void replayWithSameCardsOn(final ReplayWithSameCardsCommand command) {
+    public void practiceWithSameCardsOn(final PracticeWithSameCardsCommand command) {
 
-        LOG.debug("Replay with same cards requested");
+        LOG.debug("Practice with same cards requested");
 
         JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(new SkatGameReplayFinishedEvent());
 
@@ -101,15 +101,15 @@ public class SkatSeries {
             final CardList dealtSkat = currSkatGame.getDealtSkat();
 
             // Convert CardList to List<Card> for the CardDeck constructor
-            replayDeck = new CardDeck(
+            practiceDeck = new CardDeck(
                     StreamSupport.stream(dealtCards.get(Player.FOREHAND).spliterator(), false).toList(),
                     StreamSupport.stream(dealtCards.get(Player.MIDDLEHAND).spliterator(), false).toList(),
                     StreamSupport.stream(dealtCards.get(Player.REARHAND).spliterator(), false).toList(),
                     StreamSupport.stream(dealtSkat.spliterator(), false).toList());
 
-            replayWithSameCardsRequested = true;
+            practiceRequested = true;
         } else {
-            LOG.warn("No current game available for replay");
+            LOG.warn("No current game available for practice");
         }
     }
 
@@ -228,11 +228,11 @@ public class SkatSeries {
 
                 LOG.debug("Game ended: join");
 
-                // Wait for user action, handling replay-with-same-cards requests
+                // Wait for user action, handling practice-with-same-cards requests
                 do {
                     readyForNextGame = false;
-                    replayWithSameCardsRequested = false;
-                    while (isHumanPlayerInvolved() && !readyForNextGame && !replayWithSameCardsRequested) {
+                    practiceRequested = false;
+                    while (isHumanPlayerInvolved() && !readyForNextGame && !practiceRequested) {
                         try {
                             Thread.sleep(200);
                         } catch (final InterruptedException e) {
@@ -241,10 +241,10 @@ public class SkatSeries {
                         }
                     }
 
-                    if (replayWithSameCardsRequested && replayDeck != null) {
-                        playReplayGame(gameNumber, gameVariant);
+                    if (practiceRequested && practiceDeck != null) {
+                        playPracticeGame(gameNumber, gameVariant);
                     }
-                } while (replayWithSameCardsRequested);
+                } while (practiceRequested);
             }
 
             roundsToGo--;
@@ -272,23 +272,23 @@ public class SkatSeries {
     }
 
     /**
-     * Plays a replay game with the same card deal. This game does not count
+     * Plays a practice game with the same card deal. This game does not count
      * towards the series score and does not affect player rotation.
      *
      * @param gameNumber  The display game number (for UI purposes)
      * @param gameVariant The game variant to use
      */
-    private void playReplayGame(final int gameNumber, final GameVariant gameVariant) {
+    private void playPracticeGame(final int gameNumber, final GameVariant gameVariant) {
 
-        LOG.info("Playing replay game with same cards (practice mode)");
+        LOG.info("Playing practice game with same cards");
 
-        final SkatGame replayGame = new SkatGame(data.getTableName(), gameVariant,
+        final SkatGame practiceGame = new SkatGame(data.getTableName(), gameVariant,
                 players.get(Player.FOREHAND),
                 players.get(Player.MIDDLEHAND),
                 players.get(Player.REARHAND));
 
         // Set the pre-dealt deck so cards will be the same
-        replayGame.setCardDeck(replayDeck);
+        practiceGame.setCardDeck(practiceDeck);
 
         JSkatEventBus.INSTANCE.post(
                 new TableGameMoveEvent(data.getTableName(),
@@ -298,21 +298,21 @@ public class SkatSeries {
                                 data.getBottomPlayer(),
                                 true)));
 
-        replayGame.setView(view);
-        replayGame.setMaxSleep(maxSleep);
+        practiceGame.setView(view);
+        practiceGame.setMaxSleep(maxSleep);
 
-        // Note: We intentionally do NOT call data.addGame(replayGame)
+        // Note: We intentionally do NOT call data.addGame(practiceGame)
         // because this is a practice game that should not count for score
 
-        CompletableFuture.runAsync(() -> replayGame.run()).join();
+        CompletableFuture.runAsync(() -> practiceGame.run()).join();
 
-        LOG.info("Replay game ended");
+        LOG.info("Practice game ended");
 
-        // Store the replay game as currSkatGame so that another replay can be requested
-        currSkatGame = replayGame;
+        // Store the practice game as currSkatGame so that another practice can be requested
+        currSkatGame = practiceGame;
 
-        // Clear the replay deck
-        replayDeck = null;
+        // Clear the practice deck
+        practiceDeck = null;
     }
 
     /**

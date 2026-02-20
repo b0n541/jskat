@@ -91,7 +91,7 @@ public class SkatTablePanel extends AbstractTabPanel {
      * @return List of actions for the game over context
      */
     protected List<JSkatAction> getGameOverActions() {
-        return Arrays.asList(JSkatAction.CONTINUE_LOCAL_SERIES, JSkatAction.REPLAY_GAME_WITH_SAME_CARDS, JSkatAction.REPLAY_GAME);
+        return Arrays.asList(JSkatAction.CONTINUE_LOCAL_SERIES, JSkatAction.PRACTICE_GAME_WITH_SAME_CARDS, JSkatAction.REPLAY_GAME);
     }
 
     /**
