@@ -39,8 +39,7 @@ public class JSkatResourceBundle {
             locale = Locale.getDefault();
         }
 
-        strings = ResourceBundle.getBundle("org/jskat/i18n/jskat_strings",
-                locale);
+        strings = ResourceBundle.getBundle("org/jskat/i18n/jskat_strings", locale);
     }
 
     /**

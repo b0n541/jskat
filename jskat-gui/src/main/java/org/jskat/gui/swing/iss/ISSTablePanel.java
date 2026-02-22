@@ -1,7 +1,6 @@
 package org.jskat.gui.swing.iss;
 
 import com.google.common.eventbus.Subscribe;
-import javafx.application.Platform;
 import org.jskat.control.event.iss.IssTableGameStartedEvent;
 import org.jskat.control.event.iss.IssTableStateChangedEvent;
 import org.jskat.control.event.skatgame.GameStartEvent;
@@ -27,7 +26,7 @@ import java.util.List;
  */
 public class ISSTablePanel extends SkatTablePanel {
 
-    ChatPanel chatPanel;
+    private ChatPanel chatPanel;
 
     // FIXME (jansch 05.04.2011) Dirty hack
     TablePanelStatus lastTableStatus;
@@ -40,6 +39,17 @@ public class ISSTablePanel extends SkatTablePanel {
      */
     public ISSTablePanel(final String tableName, final ActionMap actions) {
         super(tableName, actions);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    protected void initPanel() {
+        super.initPanel();
+
+        chatPanel = new ChatPanel(this);
+        chatPanel.addNewChat(strings.getString("table") + " " + getName(), getName());
     }
 
     /**
@@ -69,19 +79,6 @@ public class ISSTablePanel extends SkatTablePanel {
         return panel;
     }
 
-    // TODO: migrate to JavaFX
-//    @Override
-//    protected JTabbedPane getLeftPanel() {
-//        final JTabbedPane leftPanel = super.getLeftPanel();
-//
-//        chatPanel = getChatPanel();
-//        chatPanel.addNewChat(
-//                strings.getString("table") + " " + getName(), getName());
-//        leftPanel.add(strings.getString("chat"), chatPanel);
-//
-//        return leftPanel;
-//    }
-
     @Override
     protected OpponentPanel getOpponentPanel() {
         return new OpponentPanel(getActionMap(), 12, true);
@@ -90,10 +87,6 @@ public class ISSTablePanel extends SkatTablePanel {
     @Override
     protected JSkatUserPanel createPlayerPanel() {
         return new JSkatUserPanel(getActionMap(), 12, true);
-    }
-
-    private ChatPanel getChatPanel() {
-        return new ChatPanel(this);
     }
 
     @Override
@@ -178,20 +171,13 @@ public class ISSTablePanel extends SkatTablePanel {
 
                 userPanel.setPlayerName(playerName);
 
-                Platform.runLater(() -> scoreListTableViewFX.setPlayerName(1, playerName));
-
             } else if (leftOpponentPanel.getPlayerName() == null) {
 
                 leftOpponentPanel.setPlayerName(playerName);
 
-                Platform.runLater(() -> scoreListTableViewFX.setPlayerName(2, playerName));
-
             } else if (rightOpponentPanel.getPlayerName() == null) {
 
                 rightOpponentPanel.setPlayerName(playerName);
-
-                Platform.runLater(() -> scoreListTableViewFX.setPlayerName(3, playerName));
-
             }
         }
     }
@@ -224,5 +210,9 @@ public class ISSTablePanel extends SkatTablePanel {
      */
     public void appendChatMessage(final ChatMessage message) {
         chatPanel.appendMessage(message);
+    }
+
+    public JPanel getChatPanel() {
+        return chatPanel;
     }
 }

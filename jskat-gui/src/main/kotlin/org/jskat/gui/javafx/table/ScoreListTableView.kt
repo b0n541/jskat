@@ -12,7 +12,6 @@ class ScoreListTableView(playerNames: List<String>) : TableView<ScoreListEntry>(
     private val strings = JSkatResourceBundle.INSTANCE
 
     init {
-
         val gameNoColumn = TableColumn<ScoreListEntry, Int>("#").apply {
             prefWidth = 30.0
             setCellFactory {

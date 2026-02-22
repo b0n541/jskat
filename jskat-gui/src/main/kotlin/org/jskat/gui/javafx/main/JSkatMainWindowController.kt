@@ -32,6 +32,7 @@ import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.gui.javafx.dialog.firststeps.FirstStepsDialog
 import org.jskat.gui.javafx.dialog.options.JSkatOptionsDialog
 import org.jskat.gui.javafx.iss.LobbyPanel
+import org.jskat.gui.javafx.table.SkatTableNode
 import org.jskat.gui.swing.JSkatViewImpl
 import org.jskat.gui.swing.iss.ISSTablePanel
 import org.jskat.gui.swing.table.SkatTablePanel
@@ -268,16 +269,24 @@ class JSkatMainWindowController {
 
     @Subscribe
     fun addNewTableTabOn(event: TableCreatedEvent) {
-        val swingNode = SwingNode()
         val tableName = event.tableName()
 
-        SwingUtilities.invokeAndWait {
-            val panel = when (event.tableType()) {
-                JSkatViewType.LOCAL_TABLE -> SkatTablePanel(tableName, JSkatViewImpl.actions)
-                JSkatViewType.ISS_TABLE -> ISSTablePanel(tableName, JSkatViewImpl.actions)
-                else -> null
+        val panel = when (event.tableType()) {
+            JSkatViewType.LOCAL_TABLE -> {
+                var skatTablePanel: SkatTablePanel? = null
+                SwingUtilities.invokeAndWait {
+                    skatTablePanel = SkatTablePanel(tableName, JSkatViewImpl.actions)
+                }
+                SkatTableNode(skatTablePanel!!)
             }
-            swingNode.content = panel
+            JSkatViewType.ISS_TABLE -> {
+                var issTablePanel: ISSTablePanel? = null
+                SwingUtilities.invokeAndWait {
+                    issTablePanel = ISSTablePanel(tableName, JSkatViewImpl.actions)
+                }
+                SkatTableNode(issTablePanel!!)
+            }
+            else -> null
         }
 
         val (tabTitle, tabId) = when (event.tableType()) {
@@ -297,7 +306,7 @@ class JSkatMainWindowController {
         val tab = Tab(tabTitle).apply {
             id = tabId
             isClosable = true
-            content = swingNode
+            content = panel
         }
 
         Platform.runLater {

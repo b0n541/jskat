@@ -1,15 +1,6 @@
 package org.jskat.gui.swing.table;
 
 import com.google.common.eventbus.Subscribe;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.embed.swing.JFXPanel;
-import javafx.geometry.Insets;
-import javafx.scene.Scene;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.skatgame.*;
@@ -20,8 +11,6 @@ import org.jskat.gui.action.main.StartSkatSeriesAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
-import org.jskat.gui.javafx.table.ScoreListEntry;
-import org.jskat.gui.javafx.table.ScoreListTableView;
 import org.jskat.gui.swing.AbstractTabPanel;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.*;
@@ -61,12 +50,6 @@ public class SkatTablePanel extends AbstractTabPanel {
     protected TrickPanel trickPanel;
     protected TrickPanel lastTrickPanel;
     protected GameOverPanel gameOverPanel;
-    /**
-     * Table model for skat list
-     */
-    protected JTable scoreListTable;
-    protected ScoreListTableView scoreListTableViewFX;
-    protected JScrollPane scoreListScrollPane;
     protected BiddingContextPanel biddingPanel;
     protected DeclaringContextPanel declaringPanel;
     protected SchieberamschContextPanel schieberamschPanel;
@@ -118,37 +101,7 @@ public class SkatTablePanel extends AbstractTabPanel {
 
         getActionMap().get(JSkatAction.INVITE_ISS_PLAYER).setEnabled(true);
 
-        final JSplitPane splitPane = new JSplitPane(
-                JSplitPane.HORIZONTAL_SPLIT,
-                getLeftPanel(),
-                getPlayGroundPanel());
-        add(splitPane, "grow");
-    }
-
-    protected Component getLeftPanel() {
-
-        final var panel = new JFXPanel();
-
-        Platform.runLater(() -> {
-            scoreListTableViewFX = new ScoreListTableView(List.of("1", "2", "3"));
-            scoreListTableViewFX.setItems(FXCollections.observableArrayList(FXCollections.emptyObservableList()));
-            VBox.setVgrow(scoreListTableViewFX, Priority.ALWAYS);
-
-            final var vbox = new VBox();
-            vbox.getChildren().add(scoreListTableViewFX);
-            vbox.setPadding(new Insets(5));
-
-            final var scoreListTab = new Tab(strings.getString("score_sheet"), vbox);
-            final var tabPane = new TabPane();
-            tabPane.getTabs().add(scoreListTab);
-
-            tabPane.getStylesheets().add("/org/jskat/gui/javafx/jskat.css");
-
-            final var scene = new Scene(tabPane, 350.0, 300.0);
-            panel.setScene(scene);
-        });
-
-        return panel;
+        add(getPlayGroundPanel(), "grow");
     }
 
     /**
@@ -572,17 +525,6 @@ public class SkatTablePanel extends AbstractTabPanel {
 
         gameOverPanel.setGameSummary(event.gameSummary);
 
-        if (!replay) {
-            Platform.runLater(() -> {
-                scoreListTableViewFX.getItems().add(
-                        event.declarerName != null
-                                ? new ScoreListEntry(Map.of(event.declarerName, event.gameSummary.getGameValue()))
-                                : new ScoreListEntry(Map.of("", 0)));
-                scoreListTableViewFX.scrollTo(scoreListTableViewFX.getItems().size() - 1);
-            });
-//            scrollSkatListToTheEnd();
-        }
-
         gameInfoPanel.setGameSummary(event.gameSummary);
     }
 
@@ -733,8 +675,7 @@ public class SkatTablePanel extends AbstractTabPanel {
      */
     @Subscribe
     public void clearSkatListOn(final SkatSeriesStartedEvent event) {
-
-        Platform.runLater(() -> scoreListTableViewFX.getItems().clear());
+        // handled in SkatTableNode
     }
 
     /**
@@ -920,8 +861,6 @@ public class SkatTablePanel extends AbstractTabPanel {
         rightOpponentPanel.setAIPlayer(event.isUpperRightPlayerAIPlayer);
         userPanel.setPlayerName(event.lowerPlayerName);
         userPanel.setAIPlayer(event.isLowerPlayerAIPlayer);
-
-        Platform.runLater(() -> scoreListTableViewFX.setPlayerNames(event.upperLeftPlayerName, event.upperRightPlayerName, event.lowerPlayerName));
     }
 
     /**
