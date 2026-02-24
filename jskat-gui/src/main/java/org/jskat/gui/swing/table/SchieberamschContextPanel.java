@@ -1,10 +1,15 @@
 package org.jskat.gui.swing.table;
 
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.data.GameContract;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
+import org.jskat.gui.javafx.table.DiscardPanel;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -45,7 +50,10 @@ class SchieberamschContextPanel extends JPanel {
         centerPanel.add(grandHandPanel, GRAND_HAND);
 
         discardPanel = new DiscardPanel(actions, 4);
-        centerPanel.add(discardPanel, DISCARD);
+        final JFXPanel discardPanelContainer = new JFXPanel();
+        discardPanelContainer.setOpaque(false);
+        Platform.runLater(() -> discardPanelContainer.setScene(new Scene(discardPanel, Color.TRANSPARENT)));
+        centerPanel.add(discardPanelContainer, DISCARD);
 
         centerPanel.setOpaque(false);
         add(centerPanel, "grow");

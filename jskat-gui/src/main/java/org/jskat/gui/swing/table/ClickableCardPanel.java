@@ -110,10 +110,7 @@ class ClickableCardPanel extends CardPanel {
         // send event only, if the card panel shows a card
         Action action = null;
 
-        if (parent instanceof DiscardPanel) {
-            // card panel in discard panel was clicked
-            action = getActionMap().get(JSkatAction.TAKE_CARD_FROM_SKAT);
-        } else if (parent instanceof JSkatUserPanel) {
+        if (parent instanceof JSkatUserPanel) {
             // card panel in player panel was clicked
 
             final GameState state = ((JSkatUserPanel) parent).getGameState();

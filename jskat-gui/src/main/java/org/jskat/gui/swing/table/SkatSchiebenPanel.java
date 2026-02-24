@@ -5,6 +5,7 @@ import org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent
 import org.jskat.control.event.skatgame.NoJacksAllowedInDiscardedSkatEvent;
 import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.data.JSkatOptions;
+import org.jskat.gui.javafx.table.DiscardPanel;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.CardList;
 import org.jskat.util.JSkatResourceBundle;
@@ -70,7 +71,7 @@ class SkatSchiebenPanel extends JPanel {
             }
 
             private CardList getDiscardedCards() {
-                if (discardPanel.isUserLookedIntoSkat()) {
+                if (discardPanel.getUserPickedUpSkat()) {
                     final CardList discardedCards = discardPanel.getDiscardedCards();
                     if (discardedCards.size() != 2) {
                         JSkatEventBus.INSTANCE.post(new InvalidNumberOfCardsInDiscardedSkatEvent());

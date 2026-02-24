@@ -1,0 +1,130 @@
+package org.jskat.gui.javafx.table
+
+import javafx.application.Platform
+import javafx.scene.control.Button
+import javafx.scene.image.ImageView
+import javafx.scene.layout.HBox
+import javafx.scene.layout.StackPane
+import javafx.scene.paint.Color
+import org.jskat.control.gui.action.JSkatAction
+import org.jskat.gui.img.JSkatGraphicRepository
+import org.jskat.gui.swing.table.GameAnnouncePanel
+import org.jskat.util.Card
+import org.jskat.util.CardList
+import java.awt.event.ActionEvent
+import javax.swing.ActionMap
+import javax.swing.SwingUtilities
+
+class DiscardPanel(
+    private val actions: ActionMap,
+    private val maxCardCount: Int
+) : StackPane() {
+
+    private val cards = CardList()
+    private val cardViews = HBox()
+    private val pickUpSkatButton = Button("Pick up Skat")
+    private val bitmaps = JSkatGraphicRepository.INSTANCE
+    private var announcePanel: GameAnnouncePanel? = null
+
+    var userPickedUpSkat: Boolean = false
+        private set
+
+    val discardedCards: CardList
+        get() = CardList(cards)
+
+    init {
+        style = "-fx-background-color: transparent;"
+        sceneProperty().addListener { _, _, newScene ->
+            newScene?.fill = Color.TRANSPARENT
+        }
+        pickUpSkatButton.setOnAction {
+            userPickedUpSkat = true
+            announcePanel?.setUserPickedUpSkat(true)
+            children.setAll(cardViews)
+
+            val action = actions.get(JSkatAction.PICK_UP_SKAT)
+            if (action != null) {
+                SwingUtilities.invokeLater {
+                    action.actionPerformed(
+                        ActionEvent(
+                            this,
+                            ActionEvent.ACTION_PERFORMED,
+                            JSkatAction.PICK_UP_SKAT.toString()
+                        )
+                    )
+                }
+            }
+        }
+        children.add(pickUpSkatButton)
+    }
+
+    fun setSkat(skat: CardList) {
+        Platform.runLater {
+            cards.clear()
+            cards.addAll(skat)
+            updateView()
+        }
+    }
+
+    fun clearSkat() {
+        Platform.runLater {
+            cards.clear()
+            updateView()
+        }
+    }
+
+    fun addCard(card: Card) {
+        Platform.runLater {
+            if (cards.size() < maxCardCount) {
+                cards.add(card)
+                updateView()
+            }
+        }
+    }
+
+    fun removeCard(card: Card) {
+        Platform.runLater {
+            cards.remove(card)
+            updateView()
+        }
+    }
+
+    fun resetPanel() {
+        Platform.runLater {
+            userPickedUpSkat = false
+            cards.clear()
+            updateView()
+            children.setAll(pickUpSkatButton)
+        }
+    }
+
+    fun isHandFull(): Boolean {
+        return cards.size() == maxCardCount
+    }
+
+    fun setAnnouncePanel(announcePanel: GameAnnouncePanel) {
+        this.announcePanel = announcePanel
+    }
+
+    private fun updateView() {
+        cardViews.children.clear()
+        for (card in cards) {
+            val cardView = ImageView(bitmaps.getCardImageFX(card))
+            cardView.setOnMouseClicked {
+                val action = actions.get(JSkatAction.TAKE_CARD_FROM_SKAT)
+                if (action != null) {
+                    SwingUtilities.invokeLater {
+                        action.actionPerformed(
+                            ActionEvent(
+                                card,
+                                ActionEvent.ACTION_PERFORMED,
+                                JSkatAction.TAKE_CARD_FROM_SKAT.toString()
+                            )
+                        )
+                    }
+                }
+            }
+            cardViews.children.add(cardView)
+        }
+    }
+}

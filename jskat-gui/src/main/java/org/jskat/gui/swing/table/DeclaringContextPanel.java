@@ -1,5 +1,10 @@
 package org.jskat.gui.swing.table;
 
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
+import org.jskat.gui.javafx.table.DiscardPanel;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -23,7 +28,10 @@ class DeclaringContextPanel extends JPanel {
         add(announcePanel, "width 25%");
         discardPanel.setAnnouncePanel(announcePanel);
 
-        add(discardPanel, "grow");
+        final JFXPanel discardPanelContainer = new JFXPanel();
+        discardPanelContainer.setOpaque(false);
+        Platform.runLater(() -> discardPanelContainer.setScene(new Scene(discardPanel, Color.TRANSPARENT)));
+        add(discardPanelContainer, "grow");
 
 
         final JPanel blankPanel = new JPanel();

@@ -6,6 +6,7 @@ import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.GameContract;
 import org.jskat.data.JSkatOptions;
+import org.jskat.gui.javafx.table.DiscardPanel;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
@@ -22,7 +23,7 @@ import java.awt.event.ItemListener;
 /**
  * Holds widgets for announcing a game
  */
-class GameAnnouncePanel extends JPanel {
+public class GameAnnouncePanel extends JPanel {
 
 
     private static final Logger log = LoggerFactory.getLogger(GameAnnouncePanel.class);
@@ -159,7 +160,7 @@ class GameAnnouncePanel extends JPanel {
                 final var gameType = getSelectedGameType();
                 var contract = new GameContract(gameType);
 
-                if (discardPanel.isUserLookedIntoSkat()) {
+                if (discardPanel.getUserPickedUpSkat()) {
 
                     final CardList discardedCards = discardPanel.getDiscardedCards();
 
@@ -269,7 +270,7 @@ class GameAnnouncePanel extends JPanel {
         schwarzBox.setSelected(false);
     }
 
-    void setUserPickedUpSkat(final boolean isUserPickedUpSkat) {
+    public void setUserPickedUpSkat(final boolean isUserPickedUpSkat) {
 
         userPickedUpSkat = isUserPickedUpSkat;
 
