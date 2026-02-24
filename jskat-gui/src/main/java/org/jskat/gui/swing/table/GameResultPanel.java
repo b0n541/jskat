@@ -1,7 +1,12 @@
 package org.jskat.gui.swing.table;
 
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import org.jskat.data.GameSummary;
 import org.jskat.data.Trick;
+import org.jskat.gui.javafx.table.TrickPanel;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.Player;
 import org.slf4j.Logger;
@@ -35,13 +40,15 @@ public class GameResultPanel extends JPanel {
         trickPanelList = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
 
-            trickPanelList.add(new TrickPanel(false));
+            trickPanelList.add(new TrickPanel(0.8, false));
         }
 
         final JPanel trickPanel = new JPanel(LayoutFactory.getMigLayout(
                 "fill", "fill", "fill"));
         for (final TrickPanel panel : trickPanelList) {
-            trickPanel.add(panel);
+            final JFXPanel container = new JFXPanel();
+            Platform.runLater(() -> container.setScene(new Scene(panel, Color.TRANSPARENT)));
+            trickPanel.add(container);
         }
         trickPanel.setOpaque(false);
 

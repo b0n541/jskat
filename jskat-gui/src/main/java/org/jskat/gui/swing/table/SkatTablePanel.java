@@ -1,6 +1,9 @@
 package org.jskat.gui.swing.table;
 
 import com.google.common.eventbus.Subscribe;
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.event.skatgame.*;
@@ -11,6 +14,7 @@ import org.jskat.gui.action.main.StartSkatSeriesAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
+import org.jskat.gui.javafx.table.TrickPanel;
 import org.jskat.gui.swing.AbstractTabPanel;
 import org.jskat.gui.swing.LayoutFactory;
 import org.jskat.util.*;
@@ -169,10 +173,18 @@ public class SkatTablePanel extends AbstractTabPanel {
 
         final JPanel trickHoldingPanel = new JPanel(LayoutFactory.getMigLayout(
                 "fill", "[shrink][grow][shrink]", "fill"));
+        
         lastTrickPanel = new TrickPanel(0.6, false);
-        trickHoldingPanel.add(lastTrickPanel, "width 25%");
+        final JFXPanel lastTrickPanelContainer = new JFXPanel();
+        lastTrickPanelContainer.setOpaque(false);
+        Platform.runLater(() -> lastTrickPanelContainer.setScene(new Scene(lastTrickPanel, javafx.scene.paint.Color.TRANSPARENT)));
+        trickHoldingPanel.add(lastTrickPanelContainer, "width 25%");
+        
         trickPanel = new TrickPanel(0.8, true);
-        trickHoldingPanel.add(trickPanel, "grow");
+        final JFXPanel trickPanelContainer = new JFXPanel();
+        trickPanelContainer.setOpaque(false);
+        Platform.runLater(() -> trickPanelContainer.setScene(new Scene(trickPanel, javafx.scene.paint.Color.TRANSPARENT)));
+        trickHoldingPanel.add(trickPanelContainer, "grow");
 
         trickHoldingPanel.add(getRightPanelForTrickPanel(), "width 25%");
         trickHoldingPanel.setOpaque(false);
