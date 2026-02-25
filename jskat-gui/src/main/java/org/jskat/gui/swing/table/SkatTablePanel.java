@@ -14,6 +14,8 @@ import org.jskat.gui.action.main.StartSkatSeriesAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
+import org.jskat.gui.javafx.table.DeclaringContextPanel;
+import org.jskat.gui.javafx.table.SchieberamschContextPanel;
 import org.jskat.gui.javafx.table.TrickPanel;
 import org.jskat.gui.swing.AbstractTabPanel;
 import org.jskat.gui.swing.LayoutFactory;
@@ -50,7 +52,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     protected JSkatUserPanel userPanel;
     protected GameInformationPanel gameInfoPanel;
     protected JPanel gameContextPanel;
-    protected Map<ContextPanelType, JPanel> contextPanels;
+    protected Map<ContextPanelType, JComponent> contextPanels;
     protected TrickPanel trickPanel;
     protected TrickPanel lastTrickPanel;
     protected GameOverPanel gameOverPanel;
@@ -136,7 +138,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     }
 
     protected void addContextPanel(final ContextPanelType panelType,
-                                   final JPanel panel) {
+                                   final JComponent panel) {
 
         if (contextPanels.containsKey(panelType)) {
             // remove existing panel first
@@ -162,11 +164,17 @@ public class SkatTablePanel extends AbstractTabPanel {
         addContextPanel(ContextPanelType.BIDDING, biddingPanel);
 
         declaringPanel = new DeclaringContextPanel(getActionMap(), userPanel);
-        addContextPanel(ContextPanelType.DECLARING, declaringPanel);
+        final JFXPanel declaringPanelContainer = new JFXPanel();
+        declaringPanelContainer.setOpaque(false);
+        Platform.runLater(() -> declaringPanelContainer.setScene(new Scene(declaringPanel, javafx.scene.paint.Color.TRANSPARENT)));
+        addContextPanel(ContextPanelType.DECLARING, declaringPanelContainer);
 
         schieberamschPanel = new SchieberamschContextPanel(getActionMap(),
                 userPanel, 4);
-        addContextPanel(ContextPanelType.SCHIEBERAMSCH, schieberamschPanel);
+        final JFXPanel schieberamschPanelContainer = new JFXPanel();
+        schieberamschPanelContainer.setOpaque(false);
+        Platform.runLater(() -> schieberamschPanelContainer.setScene(new Scene(schieberamschPanel, javafx.scene.paint.Color.TRANSPARENT)));
+        addContextPanel(ContextPanelType.SCHIEBERAMSCH, schieberamschPanelContainer);
 
         addContextPanel(ContextPanelType.RE_AFTER_CONTRA,
                 createCallReAfterContraPanel(getActionMap()));
@@ -840,7 +848,7 @@ public class SkatTablePanel extends AbstractTabPanel {
         playerPassed.put(event.player, Boolean.TRUE);
 
         getPlayerPanel(event.player).setPass(true);
-        biddingPanel.setPass(event.player);
+biddingPanel.setPass(event.player);
     }
 
     @Subscribe
@@ -891,7 +899,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     }
 
     /**
-     * Shows the cards of a player
+     * Shows the.
      *
      * @param player Player
      */

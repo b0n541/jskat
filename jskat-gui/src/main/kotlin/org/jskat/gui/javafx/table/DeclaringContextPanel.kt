@@ -1,0 +1,64 @@
+package org.jskat.gui.javafx.table
+
+import javafx.scene.layout.ColumnConstraints
+import javafx.scene.layout.GridPane
+import javafx.scene.layout.Priority
+import javafx.scene.layout.Region
+import javafx.scene.paint.Color
+import org.jskat.gui.swing.table.JSkatUserPanel
+import org.jskat.util.Card
+import org.jskat.util.CardList
+import javax.swing.ActionMap
+
+class DeclaringContextPanel(
+    actions: ActionMap,
+    newUserPanel: JSkatUserPanel
+) : GridPane() {
+
+    private val discardPanel = DiscardPanel(actions, 4)
+    private val announcePanel = GameAnnouncePanel(actions, newUserPanel, discardPanel)
+
+    init {
+        style = "-fx-background-color: transparent;"
+        sceneProperty().addListener { _, _, newScene ->
+            newScene?.fill = Color.TRANSPARENT
+        }
+
+        val col1 = ColumnConstraints()
+        col1.percentWidth = 25.0
+        val col2 = ColumnConstraints()
+        col2.hgrow = Priority.ALWAYS
+        val col3 = ColumnConstraints()
+        col3.percentWidth = 25.0
+        columnConstraints.addAll(col1, col2, col3)
+
+        add(announcePanel, 0, 0)
+
+        discardPanel.setAnnouncePanel(announcePanel)
+        add(discardPanel, 1, 0)
+
+        val blankRegion = Region()
+        add(blankRegion, 2, 0)
+    }
+
+    fun resetPanel() {
+        discardPanel.resetPanel()
+        announcePanel.resetPanel()
+    }
+
+    fun removeCard(card: Card) {
+        discardPanel.removeCard(card)
+    }
+
+    fun isHandFull(): Boolean {
+        return discardPanel.isHandFull()
+    }
+
+    fun addCard(card: Card) {
+        discardPanel.addCard(card)
+    }
+
+    fun setSkat(skat: CardList) {
+        discardPanel.setSkat(skat)
+    }
+}

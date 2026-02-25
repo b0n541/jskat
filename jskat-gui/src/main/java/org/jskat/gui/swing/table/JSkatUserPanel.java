@@ -1,6 +1,7 @@
 package org.jskat.gui.swing.table;
 
 import org.jskat.data.SkatGameData.GameState;
+import org.jskat.util.GameType;
 
 import javax.swing.*;
 
@@ -36,5 +37,13 @@ public class JSkatUserPanel extends AbstractHandPanel {
     @Override
     void hideCards() {
         // ignore hiding of cards for user panel
+    }
+
+    public org.jskat.util.CardList getHandCards() {
+        return this.cardPanel.getCards();
+    }
+
+    public void setSortGameType(final GameType newGameType) {
+        this.cardPanel.setSortType(newGameType);
     }
 }

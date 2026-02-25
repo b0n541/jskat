@@ -1,5 +1,8 @@
 package org.jskat.gui.swing.table;
 
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
 import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.swing.LayoutFactory;
@@ -20,7 +23,9 @@ class BiddingContextPanel extends JPanel {
     private BidBubblePanel rearHandBidLabel;
     private JButton bidButton;
     private JButton passButton;
-    private GameAnnouncePanel announcePanel;
+    
+    private JFXPanel announcePanelContainer;
+    private org.jskat.gui.javafx.table.GameAnnouncePanel announcePanel;
 
     Action makeBidAction;
     Action holdBidAction;
@@ -44,8 +49,14 @@ class BiddingContextPanel extends JPanel {
         setLayout(LayoutFactory.getMigLayout(
                 "fill", "[shrink][grow][shrink]", "fill"));
 
-        announcePanel = new GameAnnouncePanel(actions, userPanel, null);
-        add(announcePanel, "width 25%");
+        announcePanelContainer = new JFXPanel();
+        announcePanelContainer.setOpaque(false);
+        add(announcePanelContainer, "width 25%");
+        
+        Platform.runLater(() -> {
+            announcePanel = new org.jskat.gui.javafx.table.GameAnnouncePanel(actions, userPanel, null);
+            announcePanelContainer.setScene(new Scene(announcePanel, javafx.scene.paint.Color.TRANSPARENT));
+        });
 
         final JPanel biddingPanel = getBiddingPanel(actions, bitmaps);
         biddingPanel.setOpaque(false);
@@ -150,6 +161,8 @@ class BiddingContextPanel extends JPanel {
         middleHandBidLabel.setBidValue(0);
         rearHandBidLabel.setBidValue(0);
         setNextBidValue(18);
-        announcePanel.resetPanel();
+        if (announcePanel != null) {
+            announcePanel.resetPanel();
+        }
     }
 }

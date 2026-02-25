@@ -8,7 +8,6 @@ import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
-import org.jskat.gui.swing.table.GameAnnouncePanel
 import org.jskat.util.Card
 import org.jskat.util.CardList
 import java.awt.event.ActionEvent
