@@ -7,7 +7,7 @@ plugins {
 dependencies {
     implementation(project(":jskat-base"))
 
-    implementation("com.miglayout:miglayout-swing:11.4.2")
+    implementation("com.miglayout:miglayout-swing:11.4.3")
 }
 
 javafx {
