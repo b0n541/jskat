@@ -15,7 +15,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * Panel for showing game informations
+ * Panel for showing game information
  */
 class GameInformationPanel extends JPanel {
 

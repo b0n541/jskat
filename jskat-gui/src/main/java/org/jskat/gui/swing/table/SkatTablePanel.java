@@ -15,6 +15,7 @@ import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
 import org.jskat.gui.javafx.table.DeclaringContextPanel;
+import org.jskat.gui.javafx.table.GameOverPanel;
 import org.jskat.gui.javafx.table.SchieberamschContextPanel;
 import org.jskat.gui.javafx.table.StartContextPanel;
 import org.jskat.gui.javafx.table.TrickPanel;
@@ -203,7 +204,10 @@ public class SkatTablePanel extends AbstractTabPanel {
         addContextPanel(ContextPanelType.TRICK_PLAYING, trickHoldingPanel);
 
         gameOverPanel = new GameOverPanel(getActionMap(), getGameOverActions());
-        addContextPanel(ContextPanelType.GAME_OVER, gameOverPanel);
+        final JFXPanel gameOverPanelContainer = new JFXPanel();
+        gameOverPanelContainer.setOpaque(false);
+        Platform.runLater(() -> gameOverPanelContainer.setScene(new Scene(gameOverPanel, javafx.scene.paint.Color.TRANSPARENT)));
+        addContextPanel(ContextPanelType.GAME_OVER, gameOverPanelContainer);
     }
 
     // FIXME: same code can be found in class SchieberamschContextPanel
