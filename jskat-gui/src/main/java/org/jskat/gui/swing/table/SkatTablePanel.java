@@ -14,6 +14,7 @@ import org.jskat.gui.action.main.StartSkatSeriesAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
+import org.jskat.gui.javafx.table.BiddingContextPanel;
 import org.jskat.gui.javafx.table.DeclaringContextPanel;
 import org.jskat.gui.javafx.table.GameOverPanel;
 import org.jskat.gui.javafx.table.SchieberamschContextPanel;
@@ -166,7 +167,10 @@ public class SkatTablePanel extends AbstractTabPanel {
         addContextPanel(ContextPanelType.START, startPanelContainer);
 
         biddingPanel = new BiddingContextPanel(getActionMap(), bitmaps, userPanel);
-        addContextPanel(ContextPanelType.BIDDING, biddingPanel);
+        final JFXPanel biddingPanelContainer = new JFXPanel();
+        biddingPanelContainer.setOpaque(false);
+        Platform.runLater(() -> biddingPanelContainer.setScene(new Scene(biddingPanel, javafx.scene.paint.Color.TRANSPARENT)));
+        addContextPanel(ContextPanelType.BIDDING, biddingPanelContainer);
 
         declaringPanel = new DeclaringContextPanel(getActionMap(), userPanel);
         final JFXPanel declaringPanelContainer = new JFXPanel();
