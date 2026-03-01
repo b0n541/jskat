@@ -5,7 +5,6 @@ import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.control.*
 import javafx.scene.layout.GridPane
-import javafx.scene.paint.Color
 import org.jskat.control.JSkatEventBus
 import org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent
 import org.jskat.control.gui.action.JSkatAction
@@ -42,19 +41,19 @@ class GameAnnouncePanel(
     private val schneiderBox = CheckBox(strings.getString("schneider"))
     private val schwarzBox = CheckBox(strings.getString("schwarz"))
 
-    private val announceButton = Button(actions.get(JSkatAction.ANNOUNCE_GAME).getValue(javax.swing.Action.NAME) as String)
+    private val announceButton =
+        Button(actions.get(JSkatAction.ANNOUNCE_GAME).getValue(javax.swing.Action.NAME) as String)
 
     private var userPickedUpSkat = false
 
     init {
+        style = "-fx-background-color: -fx-base;"
         initPanel()
     }
 
     private fun initPanel() {
-        style = "-fx-background-color: transparent;"
-        sceneProperty().addListener { _, _, newScene ->
-            newScene?.fill = Color.TRANSPARENT
-        }
+
+        stylesheets.add("/org/jskat/gui/javafx/jskat.css")
 
         padding = Insets(10.0)
         hgap = 10.0
@@ -62,7 +61,7 @@ class GameAnnouncePanel(
         alignment = Pos.CENTER
 
         add(Label(strings.getString("game")), 0, 0, 2, 1)
-        
+
         add(clubsButton, 0, 1)
         add(spadesButton, 1, 1)
         add(heartsButton, 0, 2)
@@ -81,7 +80,7 @@ class GameAnnouncePanel(
         announceButton.maxWidth = Double.MAX_VALUE
 
         handBox.isDisable = true
-        
+
         gameTypeGroup.selectedToggleProperty().addListener { _, _, newToggle ->
             if (newToggle != null) {
                 val gameType = (newToggle as RadioButton).userData as GameType
@@ -160,20 +159,20 @@ class GameAnnouncePanel(
         SwingUtilities.invokeLater {
             try {
                 var contract = GameContract(gameType)
-                
+
                 if (pickedUpSkat) {
                     if (discardedCards.size() != 2) {
                         JSkatEventBus.INSTANCE.post(InvalidNumberOfCardsInDiscardedSkatEvent())
                         return@invokeLater
                     }
-                    
+
                     if (GameType.NULL == gameType && isOuvert) {
-                         contract = contract.withOuvert(userPanel.handCards)
+                        contract = contract.withOuvert(userPanel.handCards)
                     }
-                    
+
                     val announcement = GameAnnouncement(contract, discardedCards)
                     fireAnnounceAction(announcement)
-                    
+
                 } else {
                     if (isHand) contract = contract.withHand()
                     if (isSchneider) contract = contract.withSchneider()
@@ -181,7 +180,7 @@ class GameAnnouncePanel(
                     if (isOuvert) {
                         contract = contract.withOuvert(userPanel.handCards)
                     }
-                    
+
                     val announcement = GameAnnouncement(contract, CardList.empty())
                     fireAnnounceAction(announcement)
                 }
@@ -193,7 +192,8 @@ class GameAnnouncePanel(
 
     private fun fireAnnounceAction(announcement: GameAnnouncement) {
         val action = actions.get(JSkatAction.ANNOUNCE_GAME)
-        val event = SwingActionEvent(announcement, SwingActionEvent.ACTION_PERFORMED, JSkatAction.ANNOUNCE_GAME.toString())
+        val event =
+            SwingActionEvent(announcement, SwingActionEvent.ACTION_PERFORMED, JSkatAction.ANNOUNCE_GAME.toString())
         action.actionPerformed(event)
     }
 

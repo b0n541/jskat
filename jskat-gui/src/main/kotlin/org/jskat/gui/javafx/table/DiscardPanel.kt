@@ -5,7 +5,6 @@ import javafx.scene.control.Button
 import javafx.scene.image.ImageView
 import javafx.scene.layout.HBox
 import javafx.scene.layout.StackPane
-import javafx.scene.paint.Color
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.Card
@@ -32,10 +31,8 @@ class DiscardPanel(
         get() = CardList(cards)
 
     init {
-        style = "-fx-background-color: transparent;"
-        sceneProperty().addListener { _, _, newScene ->
-            newScene?.fill = Color.TRANSPARENT
-        }
+        stylesheets.add("/org/jskat/gui/javafx/jskat.css")
+
         pickUpSkatButton.setOnAction {
             userPickedUpSkat = true
             announcePanel?.setUserPickedUpSkat(true)
@@ -103,6 +100,7 @@ class DiscardPanel(
 
     fun setAnnouncePanel(announcePanel: GameAnnouncePanel) {
         this.announcePanel = announcePanel
+        announcePanel.stylesheets.add("/org/jskat/gui/javafx/jskat.css")
     }
 
     private fun updateView() {
