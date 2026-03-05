@@ -80,7 +80,7 @@ abstract class AbstractHandPanel(
     init {
         style = "-fx-background-color: #486760;"
 
-        cardPanel = CardPanel(1.0, true)
+        cardPanel = createCardPanel()
         initPanel()
         children.add(cardPanel)
         setVgrow(cardPanel, Priority.ALWAYS)
@@ -88,6 +88,10 @@ abstract class AbstractHandPanel(
         if (JSkatOptions.instance().isCheatDebugMode) {
             showCards()
         }
+    }
+
+    protected open fun createCardPanel(): CardPanel {
+        return CardPanel(1.0, true)
     }
 
     private fun initPanel() {

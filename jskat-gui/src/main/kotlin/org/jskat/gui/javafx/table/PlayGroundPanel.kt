@@ -2,7 +2,6 @@ package org.jskat.gui.javafx.table
 
 import javafx.geometry.Insets
 import javafx.scene.layout.*
-import javafx.scene.paint.Color
 import org.jskat.gui.img.JSkatGraphicRepository
 
 class PlayGroundPanel(
@@ -26,28 +25,29 @@ class PlayGroundPanel(
         )
         this.background = background
 
-        val topBox = HBox(gameInfoPanel).apply {
+        val gameInfoBox = HBox(gameInfoPanel).apply {
             padding = Insets(5.0)
             alignment = javafx.geometry.Pos.CENTER
+            minHeight = 0.0 // Allow gameInfoBox to shrink
         }
-        this.top = topBox
 
-        val centerBox = HBox(leftOpponentPanel, rightOpponentPanel).apply {
+        val opponentBox = HBox(leftOpponentPanel, rightOpponentPanel).apply {
             padding = Insets(5.0)
             alignment = javafx.geometry.Pos.CENTER
             spacing = 10.0
         }
         HBox.setHgrow(leftOpponentPanel, Priority.ALWAYS)
         HBox.setHgrow(rightOpponentPanel, Priority.ALWAYS)
-        
-        val mainContent = VBox(centerBox, gameContextStackPane, userPanel).apply {
-            alignment = javafx.geometry.Pos.CENTER
-            spacing = 10.0
-        }
-        VBox.setVgrow(gameContextStackPane, Priority.ALWAYS)
-        VBox.setVgrow(centerBox, Priority.ALWAYS)
-        VBox.setVgrow(userPanel, Priority.ALWAYS)
 
-        this.center = mainContent
+        val topArea = VBox(gameInfoBox, opponentBox).apply {
+            alignment = javafx.geometry.Pos.CENTER
+            minHeight = 0.0 // Allow topArea to shrink
+        }
+        VBox.setVgrow(gameInfoBox, Priority.NEVER) // gameInfoBox takes only its preferred height
+        VBox.setVgrow(opponentBox, Priority.ALWAYS) // opponentBox takes all remaining space and shrinks
+
+        this.top = topArea
+        this.center = gameContextStackPane
+        this.bottom = userPanel
     }
 }
