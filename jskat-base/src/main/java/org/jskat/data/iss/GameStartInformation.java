@@ -6,7 +6,7 @@ import java.util.Map;
 
 
 /**
- * Holds all data for a ISS skat game
+ * Holds all data for an ISS skat game
  */
 public record GameStartInformation(
         String loginName,

@@ -10,7 +10,6 @@ import org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.data.GameAnnouncement
 import org.jskat.data.GameContract
-import org.jskat.gui.swing.table.JSkatUserPanel
 import org.jskat.util.CardList
 import org.jskat.util.GameType
 import org.jskat.util.JSkatResourceBundle
@@ -167,7 +166,7 @@ class GameAnnouncePanel(
                     }
 
                     if (GameType.NULL == gameType && isOuvert) {
-                        contract = contract.withOuvert(userPanel.handCards)
+                        contract = contract.withOuvert(userPanel.getHandCards())
                     }
 
                     val announcement = GameAnnouncement(contract, discardedCards)
@@ -178,7 +177,7 @@ class GameAnnouncePanel(
                     if (isSchneider) contract = contract.withSchneider()
                     if (isSchwarz) contract = contract.withSchwarz()
                     if (isOuvert) {
-                        contract = contract.withOuvert(userPanel.handCards)
+                        contract = contract.withOuvert(userPanel.getHandCards())
                     }
 
                     val announcement = GameAnnouncement(contract, CardList.empty())

@@ -279,6 +279,10 @@ public class JSkatGraphicRepository {
         return skatTable;
     }
 
+    public javafx.scene.image.Image getSkatTableImageFX() {
+        return new javafx.scene.image.Image(getClass().getResourceAsStream("/org/jskat/gui/img/gui/skat_table.png"));
+    }
+
     /**
      * Gets the image for the JSkat logo
      *

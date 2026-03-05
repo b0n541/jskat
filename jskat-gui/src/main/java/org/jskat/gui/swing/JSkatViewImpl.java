@@ -42,9 +42,10 @@ import org.jskat.gui.javafx.iss.LobbyPanelFX;
 import org.jskat.gui.javafx.iss.LoginPanelFX;
 import org.jskat.gui.javafx.main.WelcomePanelFX;
 import org.jskat.gui.javafx.table.SkatSeriesStartDialog;
-import org.jskat.gui.swing.iss.ISSTablePanel;
+import org.jskat.gui.javafx.table.SkatTablePanel;
+import org.jskat.gui.swing.iss.ISSTablePanelWrapper;
 import org.jskat.gui.swing.iss.PlayerInvitationPanel;
-import org.jskat.gui.swing.table.SkatTablePanel;
+import org.jskat.gui.swing.table.SkatTablePanelWrapper;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.JSkatResourceBundle;
@@ -69,7 +70,7 @@ public class JSkatViewImpl implements JSkatView {
     private JTabbedPane tabs;
     private String activeView;
     @Deprecated
-    private final Map<String, SkatTablePanel> tables = new HashMap<>();
+    private final Map<String, SkatTablePanelWrapper> tables = new HashMap<>();
     private final JSkatGraphicRepository bitmaps = JSkatGraphicRepository.INSTANCE;
     private final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
     private final JSkatOptions options = JSkatOptions.instance();
@@ -241,7 +242,7 @@ public class JSkatViewImpl implements JSkatView {
      */
     @Override
     public void startGame(final String tableName) {
-        tables.get(tableName).startGame();
+        tables.get(tableName).getSkatTablePanel().startGame();
     }
 
     @Subscribe
@@ -255,12 +256,12 @@ public class JSkatViewImpl implements JSkatView {
             final String tableName = event.tableName();
             String tabTitle = null;
 
-            SkatTablePanel panel = null;
+            SkatTablePanelWrapper panel = null;
             if (JSkatViewType.LOCAL_TABLE.equals(event.tableType())) {
-                panel = new SkatTablePanel(tableName, actions);
+                panel = new SkatTablePanelWrapper(tableName, actions);
                 tabTitle = tableName;
             } else if (JSkatViewType.ISS_TABLE.equals(event.tableType())) {
-                panel = new ISSTablePanel(tableName, actions);
+                panel = new ISSTablePanelWrapper(tableName, actions);
                 tabTitle = strings.getString("iss_table") + ": " + tableName;
             }
 
@@ -501,11 +502,11 @@ public class JSkatViewImpl implements JSkatView {
             issLobby.appendChatMessage(message);
         }
 
-        for (final SkatTablePanel table : tables.values()) {
-            if (table instanceof final ISSTablePanel issTable) {
+        for (final SkatTablePanelWrapper table : tables.values()) {
+            if (table instanceof final ISSTablePanelWrapper issTable) {
                 final String chatname = message.getChatName();
                 if ("Lobby".equals(chatname) || issTable.getName().equals(chatname)) {
-                    issTable.appendChatMessage(message);
+                    issTable.getIssTablePanel().appendChatMessage(message);
                 }
             }
         }
@@ -538,7 +539,7 @@ public class JSkatViewImpl implements JSkatView {
             // TODO add other types too
             case DEAL:
                 JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.DEALING));
-                final SkatTablePanel table = tables.get(tableName);
+                final SkatTablePanel table = tables.get(tableName).getSkatTablePanel();
                 table.hideCards(Player.FOREHAND);
                 table.hideCards(Player.MIDDLEHAND);
                 table.hideCards(Player.REARHAND);
@@ -616,7 +617,7 @@ public class JSkatViewImpl implements JSkatView {
         // adjust player times
         if (moveInformation.getMovePlayer() != MovePlayer.WORLD) {
             // FIXME dirty hack
-            final SkatTablePanel table = tables.get(tableName);
+            final SkatTablePanel table = tables.get(tableName).getSkatTablePanel();
 
             table.setPlayerTime(Player.FOREHAND, moveInformation.getPlayerTime(Player.FOREHAND));
             table.setPlayerTime(Player.MIDDLEHAND, moveInformation.getPlayerTime(Player.MIDDLEHAND));
@@ -654,7 +655,7 @@ public class JSkatViewImpl implements JSkatView {
         }
 
         // remove from table list
-        if (panel instanceof SkatTablePanel || panel instanceof ISSTablePanel) {
+        if (panel instanceof SkatTablePanelWrapper || panel instanceof ISSTablePanelWrapper) {
             tables.remove(panel.getName());
         }
 
@@ -738,7 +739,7 @@ public class JSkatViewImpl implements JSkatView {
 
         SwingUtilities.invokeLater(() -> {
             for (final Component currPanel : tabs.getComponents()) {
-                if (currPanel instanceof LobbyPanelFX || currPanel instanceof ISSTablePanel) {
+                if (currPanel instanceof LobbyPanelFX || currPanel instanceof ISSTablePanelWrapper) {
                     closeTabPanel(currPanel.getName());
                 }
             }
@@ -780,7 +781,7 @@ public class JSkatViewImpl implements JSkatView {
      */
     @Override
     public void setResign(final String tableName, final Player player) {
-        tables.get(tableName).setResign(player);
+        tables.get(tableName).getSkatTablePanel().setResign(player);
     }
 
     /**
@@ -788,7 +789,7 @@ public class JSkatViewImpl implements JSkatView {
      */
     @Override
     public void setGeschoben(final String tableName, final Player player) {
-        tables.get(tableName).setGeschoben(player);
+        tables.get(tableName).getSkatTablePanel().setGeschoben(player);
     }
 
     /**
@@ -797,7 +798,7 @@ public class JSkatViewImpl implements JSkatView {
     @Override
     public void setDiscardedSkat(final String tableName, final Player player, final CardList skatBefore,
                                  final CardList discardedSkat) {
-        tables.get(tableName).setDiscardedSkat(player, skatBefore, discardedSkat);
+        tables.get(tableName).getSkatTablePanel().setDiscardedSkat(player, skatBefore, discardedSkat);
     }
 
     /**

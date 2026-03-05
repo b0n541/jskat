@@ -12,7 +12,6 @@ import javafx.scene.layout.Region
 import javafx.scene.paint.Color
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
-import org.jskat.gui.swing.table.JSkatUserPanel
 import org.jskat.util.Player
 import java.awt.event.ActionEvent
 import java.awt.image.BufferedImage

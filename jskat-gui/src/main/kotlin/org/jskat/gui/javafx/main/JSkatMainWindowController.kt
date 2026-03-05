@@ -2,7 +2,6 @@ package org.jskat.gui.javafx.main
 
 import com.google.common.eventbus.Subscribe
 import javafx.application.Platform
-import javafx.embed.swing.SwingNode
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.Parent
@@ -32,10 +31,10 @@ import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.gui.javafx.dialog.firststeps.FirstStepsDialog
 import org.jskat.gui.javafx.dialog.options.JSkatOptionsDialog
 import org.jskat.gui.javafx.iss.LobbyPanel
+import org.jskat.gui.javafx.table.ISSTablePanel
 import org.jskat.gui.javafx.table.SkatTableNode
+import org.jskat.gui.javafx.table.SkatTablePanel
 import org.jskat.gui.swing.JSkatViewImpl
-import org.jskat.gui.swing.iss.ISSTablePanel
-import org.jskat.gui.swing.table.SkatTablePanel
 import org.jskat.util.JSkatResourceBundle
 import javax.swing.SwingUtilities
 
@@ -279,6 +278,7 @@ class JSkatMainWindowController {
                 }
                 SkatTableNode(skatTablePanel!!)
             }
+
             JSkatViewType.ISS_TABLE -> {
                 var issTablePanel: ISSTablePanel? = null
                 SwingUtilities.invokeAndWait {
@@ -286,6 +286,7 @@ class JSkatMainWindowController {
                 }
                 SkatTableNode(issTablePanel!!)
             }
+
             else -> null
         }
 

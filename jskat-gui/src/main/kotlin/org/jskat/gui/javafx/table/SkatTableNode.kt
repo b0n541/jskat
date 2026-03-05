@@ -3,7 +3,6 @@ package org.jskat.gui.javafx.table
 import com.google.common.eventbus.Subscribe
 import javafx.application.Platform
 import javafx.collections.FXCollections
-import javafx.embed.swing.SwingNode
 import javafx.scene.control.SplitPane
 import javafx.scene.control.Tab
 import javafx.scene.control.TabPane
@@ -15,8 +14,6 @@ import org.jskat.control.event.table.PlayerNamesChangedEvent
 import org.jskat.control.event.table.SkatGameReplayFinishedEvent
 import org.jskat.control.event.table.SkatGameReplayStartedEvent
 import org.jskat.control.event.table.SkatSeriesStartedEvent
-import org.jskat.gui.swing.iss.ISSTablePanel
-import org.jskat.gui.swing.table.SkatTablePanel
 import org.jskat.util.JSkatResourceBundle
 
 class SkatTableNode(val skatTablePanel: SkatTablePanel) : SplitPane() {
@@ -26,15 +23,12 @@ class SkatTableNode(val skatTablePanel: SkatTablePanel) : SplitPane() {
     private var replay = false
 
     init {
-        val swingNode = SwingNode()
-        swingNode.content = skatTablePanel
-
-        items.addAll(getLeftPanel(), swingNode)
+        items.addAll(getLeftPanel(), skatTablePanel)
         Platform.runLater {
             setDividerPositions(0.2)
         }
 
-        JSkatEventBus.TABLE_EVENT_BUSSES[skatTablePanel.name]?.register(this)
+        JSkatEventBus.TABLE_EVENT_BUSSES[skatTablePanel.tableName]?.register(this)
     }
 
     private fun getLeftPanel(): VBox {
@@ -50,9 +44,7 @@ class SkatTableNode(val skatTablePanel: SkatTablePanel) : SplitPane() {
         tabPane.tabs.add(scoreListTab)
 
         if (skatTablePanel is ISSTablePanel) {
-            val chatSwingNode = SwingNode()
-            chatSwingNode.content = skatTablePanel.chatPanel
-            val chatTab = Tab(strings.getString("chat"), chatSwingNode)
+            val chatTab = Tab(strings.getString("chat"), skatTablePanel.getChatPanel())
             tabPane.tabs.add(chatTab)
         }
 
