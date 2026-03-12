@@ -10,7 +10,7 @@ class PlayGroundPanel(
     private val rightOpponentPanel: OpponentPanel,
     private val gameContextStackPane: StackPane,
     private val userPanel: JSkatUserPanel
-) : BorderPane() {
+) : GridPane() {
 
     init {
         val backgroundImage = JSkatGraphicRepository.INSTANCE.skatTableImageFX
@@ -24,6 +24,15 @@ class PlayGroundPanel(
             )
         )
         this.background = background
+
+        // Configure rows for 30/40/30 distribution
+        rowConstraints.addAll(
+            RowConstraints().apply { percentHeight = 30.0 },
+            RowConstraints().apply { percentHeight = 40.0 },
+            RowConstraints().apply { percentHeight = 30.0 }
+        )
+        // Configure column to grow
+        columnConstraints.add(ColumnConstraints().apply { hgrow = Priority.ALWAYS })
 
         val gameInfoBox = HBox(gameInfoPanel).apply {
             padding = Insets(5.0)
@@ -46,8 +55,8 @@ class PlayGroundPanel(
         VBox.setVgrow(gameInfoBox, Priority.NEVER) // gameInfoBox takes only its preferred height
         VBox.setVgrow(opponentBox, Priority.ALWAYS) // opponentBox takes all remaining space and shrinks
 
-        this.top = topArea
-        this.center = gameContextStackPane
-        this.bottom = userPanel
+        add(topArea, 0, 0)
+        add(gameContextStackPane, 0, 1)
+        add(userPanel, 0, 2)
     }
 }

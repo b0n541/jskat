@@ -117,7 +117,7 @@ class GameAnnouncePanel(
     }
 
     private fun updateGameType(gameType: GameType) {
-        SwingUtilities.invokeLater {
+        Platform.runLater {
             userPanel.setSortGameType(gameType)
         }
 

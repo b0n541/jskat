@@ -79,6 +79,7 @@ abstract class AbstractHandPanel(
 
     init {
         style = "-fx-background-color: #486760;"
+        minHeight = 0.0
 
         cardPanel = createCardPanel()
         initPanel()

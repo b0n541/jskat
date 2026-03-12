@@ -16,6 +16,7 @@ class JSkatUserPanel(
 
     init {
         showCards()
+        minHeight = 0.0
 
         cardPanel.onCardClicked = { card ->
             when (gameState) {
