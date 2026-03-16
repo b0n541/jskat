@@ -7,6 +7,7 @@ import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
+import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.layout.VBox
 import org.jskat.control.JSkatEventBus
@@ -102,8 +103,10 @@ open class SkatTablePanel(val tableName: String, protected val actions: ActionMa
         // trickHoldingPanel.isOpaque = false // Removed
         lastTrickPanel = TrickPanel(0.6, false)
         trickHoldingPanel.children.add(lastTrickPanel)
+        HBox.setHgrow(lastTrickPanel, Priority.ALWAYS)
         trickPanel = TrickPanel(0.8, true)
         trickHoldingPanel.children.add(trickPanel)
+        HBox.setHgrow(trickPanel, Priority.ALWAYS)
         trickHoldingPanel.children.add(getRightPanelForTrickPanel())
         addContextPanel(ContextPanelType.TRICK_PLAYING, trickHoldingPanel)
 
@@ -228,8 +231,8 @@ open class SkatTablePanel(val tableName: String, protected val actions: ActionMa
             lastTrickPanel.clearCards()
             val trick = event.trick
             lastTrickPanel.addCard(trick.foreHand, trick.firstCard)
-            lastTrickPanel.addCard(trick.foreHand.leftNeighbor, trick.secondCard)
-            lastTrickPanel.addCard(trick.foreHand.rightNeighbor, trick.thirdCard)
+            lastTrickPanel.addCard(trick.middleHand, trick.secondCard)
+            lastTrickPanel.addCard(trick.rearHand, trick.thirdCard)
             trickPanel.clearCards()
             setTrickNumber(trick.trickNumberInGame + 2)
         }
