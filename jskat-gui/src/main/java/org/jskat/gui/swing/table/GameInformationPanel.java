@@ -1,1 +1,0 @@
-// Migrated to Kotlin: org.jskat.gui.javafx.table.GameInformationPanel

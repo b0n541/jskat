@@ -145,8 +145,9 @@ public class JSkatGraphicRepository {
                         awtIcons.get(icon.ordinal()).get(size.ordinal()),
                         1);
 
-                icons.get(icon).put(size, new javafx.scene.image.Image("org/jskat/gui/img/gui/"
-                        + icon.toString().toLowerCase() + '_' + size.toString().toLowerCase() + ".png"));
+                String path = "/org/jskat/gui/img/gui/"
+                        + icon.toString().toLowerCase() + '_' + size.toString().toLowerCase() + ".png";
+                icons.get(icon).put(size, new javafx.scene.image.Image(getClass().getResourceAsStream(path)));
             }
         }
 

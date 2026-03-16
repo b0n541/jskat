@@ -1,6 +1,7 @@
 package org.jskat.gui.javafx.table
 
 import com.google.common.eventbus.Subscribe
+import javafx.application.Platform
 import javafx.scene.Node
 import javafx.scene.control.Button
 import javafx.scene.layout.HBox
@@ -55,7 +56,7 @@ class ISSTablePanel(tableName: String, actions: ActionMap) : SkatTablePanel(tabl
     }
 
     override fun createPlayerPanel(): JSkatUserPanel {
-        return JSkatUserPanel(12, true)
+        return JSkatUserPanel(12, true, actions)
     }
 
     override fun getRightPanelForTrickPanel(): Node {
@@ -87,7 +88,13 @@ class ISSTablePanel(tableName: String, actions: ActionMap) : SkatTablePanel(tabl
         val userLogin = gameStart.loginName
         val playerNames = gameStart.playerNames
 
-        val userPosition = playerNames.entries.find { it.value == userLogin }?.key
+        var userPosition: Player? = null
+        for ((key, value) in playerNames) {
+            if (value == userLogin) {
+                userPosition = key
+                break
+            }
+        }
 
         if (userPosition != null) {
             val leftOpponent = userPosition.leftNeighbor
@@ -160,15 +167,21 @@ class ISSTablePanel(tableName: String, actions: ActionMap) : SkatTablePanel(tabl
     }
 
     private fun setPlayerName(player: Player, playerName: String) {
-        super.getHandPanel(player).playerName = playerName
+        Platform.runLater {
+            super.getHandPanel(player).playerName = playerName
+        }
     }
 
     private fun setPlayerReadyToPlay(playerName: String, readyToPlay: Boolean) {
-        super.getHandPanel(playerName)?.setReadyToPlay(readyToPlay)
+        Platform.runLater {
+            super.getHandPanel(playerName)?.setReadyToPlay(readyToPlay)
+        }
     }
 
     private fun setPlayerChatEnabled(playerName: String, chatEnabled: Boolean) {
-        super.getHandPanel(playerName)?.setChatEnabled(chatEnabled)
+        Platform.runLater {
+            super.getHandPanel(playerName)?.setChatEnabled(chatEnabled)
+        }
     }
 
     fun appendChatMessage(message: ChatMessage) {

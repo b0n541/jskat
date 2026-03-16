@@ -18,6 +18,7 @@ class CardPanel(
     private var sortGameType = GameType.GRAND
 
     var onCardClicked: ((Card) -> Unit)? = null
+    var isHumanPlayer: Boolean = false
 
     init {
         // Initial setup if needed
@@ -89,8 +90,16 @@ class CardPanel(
             imageView.fitHeight = image.height * scaleFactor
             imageView.isPreserveRatio = true
 
-            imageView.setOnMouseClicked {
-                onCardClicked?.invoke(card)
+            if (isHumanPlayer) {
+                imageView.setOnMouseClicked {
+                    onCardClicked?.invoke(card)
+                }
+                imageView.setOnMouseEntered {
+                    imageView.style = "-fx-cursor: hand;"
+                }
+                imageView.setOnMouseExited {
+                    imageView.style = "-fx-cursor: default;"
+                }
             }
 
             cardViews[card] = imageView

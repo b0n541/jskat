@@ -6,6 +6,7 @@ import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.GameType;
 
+
 /**
  * Generator for ISS messages
  */
@@ -93,6 +94,10 @@ class MessageGenerator {
 
     String getPickUpSkatMoveMessage(final String tableName) {
         return "table " + tableName + ' ' + loginName + " play s";
+    }
+
+    String getPlayHandGameMoveMessage(final String tableName) {
+        return "table " + tableName + ' ' + loginName + " play h";
     }
 
     String getGameAnnouncementMoveMessage(final String tableName,

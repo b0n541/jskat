@@ -9,6 +9,7 @@ import org.jskat.control.gui.action.JSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.Card
 import org.jskat.util.CardList
+import org.jskat.util.JSkatResourceBundle
 import java.awt.event.ActionEvent
 import javax.swing.ActionMap
 import javax.swing.SwingUtilities
@@ -20,7 +21,7 @@ class DiscardPanel(
 
     private val cards = CardList()
     private val cardViews = HBox()
-    private val pickUpSkatButton = Button("Pick up Skat")
+    private val pickUpSkatButton = Button(JSkatResourceBundle.INSTANCE.getString("pick_up_skat"))
     private val bitmaps = JSkatGraphicRepository.INSTANCE
     private var announcePanel: GameAnnouncePanel? = null
 
@@ -34,10 +35,9 @@ class DiscardPanel(
         stylesheets.add("/org/jskat/gui/javafx/jskat.css")
 
         pickUpSkatButton.setOnAction {
-            userPickedUpSkat = true
-            announcePanel?.setUserPickedUpSkat(true)
-            children.setAll(cardViews)
+            pickUpSkatButton.isDisable = true
 
+            // Fire the event to request the skat cards from the game logic
             val action = actions.get(JSkatAction.PICK_UP_SKAT)
             if (action != null) {
                 SwingUtilities.invokeLater {
@@ -51,15 +51,19 @@ class DiscardPanel(
                 }
             }
         }
+
+        // Initially, only the button is visible
         children.add(pickUpSkatButton)
     }
 
     fun setSkat(skat: CardList) {
-        Platform.runLater {
-            cards.clear()
-            cards.addAll(skat)
-            updateView()
-        }
+        // This method is called when the SkatCardsPickedUpEvent is received
+        userPickedUpSkat = true
+        announcePanel?.setUserPickedUpSkat(true)
+        children.setAll(cardViews)
+        cards.clear()
+        cards.addAll(skat)
+        updateView()
     }
 
     fun clearSkat() {
@@ -90,6 +94,7 @@ class DiscardPanel(
             userPickedUpSkat = false
             cards.clear()
             updateView()
+            pickUpSkatButton.isDisable = false
             children.setAll(pickUpSkatButton)
         }
     }

@@ -633,6 +633,15 @@ public class IssController {
     }
 
     /**
+     * Send play hand game move to ISS
+     *
+     * @param tableName Table name
+     */
+    public void sendPlayHandGameMove(final String tableName) {
+        sendToIss(issMsg.getPlayHandGameMoveMessage(tableName));
+    }
+
+    /**
      * Send game announcement to ISS
      *
      * @param tableName    Table name

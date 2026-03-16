@@ -174,4 +174,9 @@ public class NullView implements JSkatView {
     public void showAIPlayedSchwarzMessageCardPlay(final String playerName, final Card card) {
         // empty method by intent
     }
+
+    @Override
+    public void setSkat(String tableName, CardList skat) {
+        // empty method by intent
+    }
 }

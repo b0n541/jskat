@@ -155,4 +155,12 @@ public interface JSkatView {
      * @param card       Card
      */
     void showAIPlayedSchwarzMessageCardPlay(String playerName, Card card);
+
+    /**
+     * Sets the skat cards
+     *
+     * @param tableName Table name
+     * @param skat      Skat cards
+     */
+    void setSkat(String tableName, CardList skat);
 }

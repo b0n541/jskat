@@ -295,7 +295,7 @@ public class JSkatMaster {
                         issControl.sendPickUpSkatMove(tableName);
                     } else if (JSkatAction.PLAY_HAND_GAME.toString().equals(command)) {
                         // player wants to play a hand game
-                        // FIXME (jan 02.11.2010) decision is not sent to ISS
+                        issControl.sendPlayHandGameMove(tableName);
                     } else // player discarded cards
                         // FIXME (jan 02.11.2010) Discarded cards are sent with the
                         // game announcement to ISS

@@ -146,4 +146,9 @@ public class UnitTestView implements JSkatView {
     public void showAIPlayedSchwarzMessageCardPlay(final String playerName, final Card card) {
         // TODO Auto-generated method stub
     }
+
+    @Override
+    public void setSkat(String tableName, CardList skat) {
+        // TODO Auto-generated method stub
+    }
 }

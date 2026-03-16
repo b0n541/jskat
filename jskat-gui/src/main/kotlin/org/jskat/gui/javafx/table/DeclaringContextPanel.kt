@@ -14,7 +14,7 @@ class DeclaringContextPanel(
     newUserPanel: JSkatUserPanel
 ) : GridPane() {
 
-    private val discardPanel = DiscardPanel(actions, 4)
+    private val discardPanel = DiscardPanel(actions, 2)
     private val announcePanel = GameAnnouncePanel(actions, newUserPanel, discardPanel)
 
     init {

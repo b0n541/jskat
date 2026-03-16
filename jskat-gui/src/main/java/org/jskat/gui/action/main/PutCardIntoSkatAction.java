@@ -12,8 +12,6 @@ import java.awt.event.ActionEvent;
  * Implements the action for handling card panel clicks during discarding
  */
 public class PutCardIntoSkatAction extends AbstractJSkatAction {
-
-
     /**
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
@@ -27,8 +25,6 @@ public class PutCardIntoSkatAction extends AbstractJSkatAction {
      */
     @Override
     public void actionPerformed(final ActionEvent e) {
-
-        JSkatMaster.INSTANCE.putCardIntoSkat(new JSkatActionEvent(e
-                .getActionCommand(), e.getSource()));
+        JSkatMaster.INSTANCE.putCardIntoSkat(new JSkatActionEvent(e.getActionCommand(), e.getSource()));
     }
 }

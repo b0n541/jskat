@@ -77,7 +77,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: ActionMa
 
     protected open fun getOpponentPanel(): OpponentPanel = OpponentPanel(12, false)
 
-    protected open fun createPlayerPanel(): JSkatUserPanel = JSkatUserPanel(12, false)
+    protected open fun createPlayerPanel(): JSkatUserPanel = JSkatUserPanel(12, false, actions)
 
     private fun createGameContextStackPane() {
         gameContextStackPane = StackPane()
@@ -372,12 +372,16 @@ open class SkatTablePanel(val tableName: String, protected val actions: ActionMa
     }
 
     @Subscribe
-    fun setSkatOn(event: SkatCardsPickedUpEvent) = Platform.runLater { setSkat(event.cards) }
+    fun setSkatOn(event: SkatCardsPickedUpEvent) {
+        Platform.runLater { setSkat(event.cards) }
+    }
 
     @Subscribe
-    fun setSkatOn(event: SkatCardsChangedEvent) = Platform.runLater { setSkat(event.cards) }
+    fun setSkatOn(event: SkatCardsChangedEvent) {
+        Platform.runLater { setSkat(event.cards) }
+    }
 
-    private fun setSkat(skat: CardList) {
+    open fun setSkat(skat: CardList) {
         if (ramsch) schieberamschPanel.setSkat(skat) else declaringPanel.setSkat(skat)
     }
 

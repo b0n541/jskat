@@ -23,7 +23,7 @@ class SwingHumanPlayer : AbstractHumanJSkatPlayer() {
     private var callContra: Boolean = false
     private var callRe: Boolean = false
     private var pickUpSkat: Boolean = false
-    private var discardSkat: CardList? = null
+    private var discardSkat: CardList = CardList()
     private var gameContract: GameContract? = null
     private var nextCard: Card? = null
 
@@ -97,7 +97,7 @@ class SwingHumanPlayer : AbstractHumanJSkatPlayer() {
     /**
      * @see JSkatPlayer.discardSkat
      */
-    public override fun getCardsToDiscard(): CardList? {
+    public override fun getCardsToDiscard(): CardList {
         Companion.log.info("Waiting for human discarding...")
 
         waitForUserInput()
@@ -145,9 +145,11 @@ class SwingHumanPlayer : AbstractHumanJSkatPlayer() {
      * @see JSkatPlayer.pickUpSkat
      */
     override fun pickUpSkat(): Boolean {
-        Companion.log.info("Waiting for human looking into skat...")
+        if (gameAnnouncementStep != GameAnnouncementStep.LOOKED_INTO_SKAT) {
+            Companion.log.info("Waiting for human looking into skat...")
 
-        waitForUserInput()
+            waitForUserInput()
+        }
 
         return pickUpSkat!!
     }
@@ -199,6 +201,9 @@ class SwingHumanPlayer : AbstractHumanJSkatPlayer() {
             // player wants to pick up the skat
             pickUpSkat = true
             gameAnnouncementStep = GameAnnouncementStep.LOOKED_INTO_SKAT
+        } else if (JSkatAction.PLAY_HAND_GAME.toString() == command) {
+            pickUpSkat = false
+            gameAnnouncementStep = GameAnnouncementStep.PLAYS_HAND
         } else if (JSkatAction.SCHIEBEN.toString() == command) {
             if (source is CardList) {
                 if (source.size() == 0) {
@@ -255,7 +260,7 @@ class SwingHumanPlayer : AbstractHumanJSkatPlayer() {
 
     private val isPlayerHasAlreadyPlayed: Boolean
         get() {
-            Companion.log.debug("Game announcement step: " + gameAnnouncementStep)
+            Companion.log.debug("Game announcement step: $gameAnnouncementStep")
 
             val result = GameAnnouncementStep.DISCARDED_SKAT == gameAnnouncementStep
                     || GameAnnouncementStep.PLAYS_HAND == gameAnnouncementStep
@@ -320,7 +325,7 @@ class SwingHumanPlayer : AbstractHumanJSkatPlayer() {
         callRe = false
         gameAnnouncementStep = GameAnnouncementStep.BEFORE_ANNOUNCEMENT
         pickUpSkat = false
-        discardSkat = null
+        discardSkat = CardList()
         gameContract = null
         nextCard = null
     }

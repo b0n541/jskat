@@ -473,9 +473,8 @@ public class SkatGame {
         log.info("Player " + activePlayer + " looks into the skat...");
         log.info("Skat before discarding: " + data.getSkat());
 
-        eventBus.post(new SkatCardsPickedUpEvent(tableName, data.getSkat()));
-
         final CardList skatBefore = data.getSkat().getImmutableCopy();
+        JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(new SkatCardsPickedUpEvent(tableName, skatBefore));
 
         // create a clone of the skat before sending it to the player
         // otherwise the player could change the skat after discarding
