@@ -245,10 +245,12 @@ abstract class AbstractHandPanel(
 
     fun setChatEnabled(isChatEnabled: Boolean) {
         iconPanel.isChatEnabled = isChatEnabled
+        iconPanel.refreshIcons()
     }
 
     fun setReadyToPlay(isReadyToPlay: Boolean) {
         iconPanel.isReadyToPlay = isReadyToPlay
+        iconPanel.refreshIcons()
     }
 
     fun setResign(isResign: Boolean) {

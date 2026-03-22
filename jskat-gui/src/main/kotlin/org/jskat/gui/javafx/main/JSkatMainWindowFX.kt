@@ -19,6 +19,7 @@ import org.jskat.control.command.iss.IssShowLoginCommand
 import org.jskat.control.command.table.StartSkatSeriesCommand
 import org.jskat.control.event.iss.*
 import org.jskat.control.event.table.TableCreatedEvent
+import org.jskat.control.event.table.TableRemovedEvent
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.data.JSkatViewType
 import org.jskat.gui.img.JSkatGraphicRepository
@@ -58,6 +59,13 @@ class JSkatMainWindowFX : VBox() {
 
         children.addAll(toolbar, content)
 
+        content.selectionModel.selectedItemProperty().addListener { _, _, newTab ->
+            if (newTab != null) {
+                // assume that the title of the tab is the table name
+                jskatMaster.setActiveTable(newTab.text)
+            }
+        }
+
         addWelcomeTab()
     }
 
@@ -89,6 +97,15 @@ class JSkatMainWindowFX : VBox() {
                     actions[JSkatAction.START_LOCAL_SERIES].isEnabled = true
                 }
             }
+        }
+    }
+
+    @Subscribe
+    fun onTableRemoved(event: TableRemovedEvent) {
+        Platform.runLater {
+            content.tabs
+                .filter { it.text == event.tableName() }
+                .forEach { content.tabs.remove(it) }
         }
     }
 

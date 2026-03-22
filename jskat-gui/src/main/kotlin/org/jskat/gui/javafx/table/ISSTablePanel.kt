@@ -125,17 +125,19 @@ class ISSTablePanel(tableName: String, actions: ActionMap) : SkatTablePanel(tabl
     fun updateTableStatusOn(event: IssTableStateChangedEvent) {
         val tableStatus = event.status
 
-        for ((playerName, status) in tableStatus.playerInformation) {
-            if (!status.isPlayerLeft) {
-                addPlayerName(playerName)
+        Platform.runLater {
+            for ((playerName, status) in tableStatus.playerInformation) {
+                if (!status.isPlayerLeft) {
+                    addPlayerName(playerName)
+                }
+                setPlayerReadyToPlay(playerName, status.isReadyToPlay)
+                setPlayerChatEnabled(playerName, status.isTalkEnabled)
+                if (status.isPlayerLeft) {
+                    removePlayerName(playerName)
+                }
             }
-            setPlayerReadyToPlay(playerName, status.isReadyToPlay)
-            setPlayerChatEnabled(playerName, status.isTalkEnabled)
-            if (status.isPlayerLeft) {
-                removePlayerName(playerName)
-            }
+            lastTableStatus = tableStatus
         }
-        lastTableStatus = tableStatus
     }
 
     private fun addPlayerName(playerName: String) {
@@ -173,15 +175,15 @@ class ISSTablePanel(tableName: String, actions: ActionMap) : SkatTablePanel(tabl
     }
 
     private fun setPlayerReadyToPlay(playerName: String, readyToPlay: Boolean) {
-        Platform.runLater {
+        // Platform.runLater {
             super.getHandPanel(playerName)?.setReadyToPlay(readyToPlay)
-        }
+        // }
     }
 
     private fun setPlayerChatEnabled(playerName: String, chatEnabled: Boolean) {
-        Platform.runLater {
+        // Platform.runLater {
             super.getHandPanel(playerName)?.setChatEnabled(chatEnabled)
-        }
+        // }
     }
 
     fun appendChatMessage(message: ChatMessage) {

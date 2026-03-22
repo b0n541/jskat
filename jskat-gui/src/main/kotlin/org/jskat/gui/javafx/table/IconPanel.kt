@@ -50,7 +50,7 @@ class IconPanel : HBox() {
         refreshIcons()
     }
 
-    private fun refreshIcons() {
+    fun refreshIcons() {
         if (isThinking) {
             thinkingLabel.image = JSkatGraphicRepository.INSTANCE.getImageView(Icon.THINKING, IconSize.SMALL).image
             Tooltip.install(thinkingLabel, Tooltip(strings.getString("player_thinking")))
