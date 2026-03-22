@@ -26,6 +26,7 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize
 import org.jskat.gui.javafx.dialog.options.JSkatOptionsDialog
 import org.jskat.gui.javafx.iss.LobbyPanel
+import org.jskat.gui.javafx.table.ISSTablePanel
 import org.jskat.gui.javafx.table.SkatSeriesStartDialog
 import org.jskat.gui.javafx.table.SkatTableNode
 import org.jskat.gui.javafx.table.SkatTablePanel
@@ -62,18 +63,31 @@ class JSkatMainWindowFX : VBox() {
 
     @Subscribe
     fun onTableCreated(event: TableCreatedEvent) {
-        if (event.tableType() == JSkatViewType.LOCAL_TABLE) {
+        val tableName = event.tableName()
+        val panel = when (event.tableType()) {
+            JSkatViewType.LOCAL_TABLE -> {
+                val skatTablePanel = SkatTablePanel(tableName, actions)
+                SkatTableNode(skatTablePanel)
+            }
+            JSkatViewType.ISS_TABLE -> {
+                val issTablePanel = ISSTablePanel(tableName, actions)
+                SkatTableNode(issTablePanel)
+            }
+            else -> null
+        }
+
+        if (panel != null) {
             Platform.runLater {
-                val skatTablePanel = SkatTablePanel(event.tableName(), actions)
-                val skatTableNode = SkatTableNode(skatTablePanel)
-                val newTab = Tab(event.tableName()).apply {
-                    content = skatTableNode
+                val newTab = Tab(tableName).apply {
+                    content = panel
                     isClosable = true
                 }
                 content.tabs.add(newTab)
                 content.selectionModel.select(newTab)
 
-                actions[JSkatAction.START_LOCAL_SERIES].isEnabled = true
+                if (event.tableType() == JSkatViewType.LOCAL_TABLE) {
+                    actions[JSkatAction.START_LOCAL_SERIES].isEnabled = true
+                }
             }
         }
     }
