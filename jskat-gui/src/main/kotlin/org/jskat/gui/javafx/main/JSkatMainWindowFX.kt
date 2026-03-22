@@ -17,6 +17,7 @@ import org.jskat.control.JSkatEventBus
 import org.jskat.control.JSkatMaster
 import org.jskat.control.command.iss.IssShowLoginCommand
 import org.jskat.control.command.table.StartSkatSeriesCommand
+import org.jskat.control.event.iss.*
 import org.jskat.control.event.table.TableCreatedEvent
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.data.JSkatViewType
@@ -24,6 +25,7 @@ import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.gui.img.JSkatGraphicRepository.Icon
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize
 import org.jskat.gui.javafx.dialog.options.JSkatOptionsDialog
+import org.jskat.gui.javafx.iss.LobbyPanel
 import org.jskat.gui.javafx.table.SkatSeriesStartDialog
 import org.jskat.gui.javafx.table.SkatTableNode
 import org.jskat.gui.javafx.table.SkatTablePanel
@@ -37,6 +39,7 @@ class JSkatMainWindowFX : VBox() {
     private val actions = JSkatActions.createActionMap()
 
     private val content: TabPane = TabPane()
+    private lateinit var issLobby: LobbyPanel
 
     init {
         JSkatEventBus.INSTANCE.register(this)
@@ -98,6 +101,82 @@ class JSkatMainWindowFX : VBox() {
 
             content.tabs.add(tab)
             content.selectionModel.select(tab)
+        }
+    }
+
+    @Subscribe
+    fun showIssLobbyOn(event: IssConnectedEvent) {
+        Platform.runLater {
+            content.tabs
+                .find { it.id == "ISS_LOGIN" }
+                ?.let { loginTab ->
+                    content.tabs.remove(loginTab)
+                }
+
+            issLobby = LobbyPanel(actions, event.userName)
+            val scrollPane = ScrollPane(issLobby).apply {
+                isFitToWidth = true
+                isFitToHeight = true
+            }
+            issLobby.prefWidthProperty().bind(scrollPane.widthProperty())
+            issLobby.prefHeightProperty().bind(scrollPane.heightProperty())
+
+            val tab = Tab("ISS Lobby").apply {
+                id = "ISS_LOBBY"
+                isClosable = true
+                content = scrollPane
+            }
+
+            content.tabs.add(tab)
+            content.selectionModel.select(tab)
+        }
+    }
+
+    @Subscribe
+    fun updateIssTableListOn(event: IssTableDataUpdatedEvent) {
+        if (::issLobby.isInitialized) {
+            Platform.runLater {
+                issLobby.updateTable(
+                    event.tableName(),
+                    event.maxPlayers(),
+                    event.gamesPlayed(),
+                    event.player1(),
+                    event.player2(),
+                    event.player3()
+                )
+            }
+        }
+    }
+
+    @Subscribe
+    fun deleteTableFromIssTableListOn(event: IssTableDeletedEvent) {
+        if (::issLobby.isInitialized) {
+            Platform.runLater {
+                issLobby.removeTable(event.tableName())
+            }
+        }
+    }
+
+    @Subscribe
+    fun updateIssPlayerListOn(event: IssPlayerDataUpdatedEvent) {
+        if (::issLobby.isInitialized) {
+            Platform.runLater {
+                issLobby.updatePlayer(
+                    event.playerName(),
+                    event.language(),
+                    event.gamesPlayed(),
+                    event.strength()
+                )
+            }
+        }
+    }
+
+    @Subscribe
+    fun deletePlayerFromIssPlayerListOn(event: IssPlayerLeftEvent) {
+        if (::issLobby.isInitialized) {
+            Platform.runLater {
+                issLobby.removePlayer(event.playerName())
+            }
         }
     }
 
