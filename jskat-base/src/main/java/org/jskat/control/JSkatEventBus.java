@@ -77,7 +77,11 @@ public class JSkatEventBus {
 
     @Subscribe
     public void dispatchTableCommandOn(AbstractTableCommand command) {
-        LOG.info("Forwarding command " + command + " to table " + command.tableName);
-        JSkatEventBus.TABLE_EVENT_BUSSES.get(command.tableName).post(command);
+        if (JSkatEventBus.TABLE_EVENT_BUSSES.containsKey(command.tableName)) {
+            LOG.info("Forwarding command " + command + " to table " + command.tableName);
+            JSkatEventBus.TABLE_EVENT_BUSSES.get(command.tableName).post(command);
+        } else {
+            LOG.warn("No event bus found for table " + command.tableName);
+        }
     }
 }

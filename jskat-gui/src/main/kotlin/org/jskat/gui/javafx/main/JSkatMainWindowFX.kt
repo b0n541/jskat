@@ -4,6 +4,7 @@ import com.google.common.eventbus.Subscribe
 import javafx.application.Platform
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
+import javafx.fxml.FXMLLoader
 import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.control.*
@@ -78,6 +79,25 @@ class JSkatMainWindowFX : VBox() {
     fun onStartSkatSeries(command: StartSkatSeriesCommand) {
         Platform.runLater {
             SkatSeriesStartDialog(this).showAndWaitAndStartSeries()
+        }
+    }
+
+    @Subscribe
+    fun showIssLoginOn(command: IssShowLoginCommand) {
+        Platform.runLater {
+            val loader = FXMLLoader()
+            loader.location = JSkatMainWindowFX::class.java.getResource("/org/jskat/gui/javafx/iss/IssLogin.fxml")
+            loader.resources = resourceBundle.stringResources
+            val loginPanel: VBox = loader.load()
+
+            val tab = Tab(resourceBundle.getString("iss_login")).apply {
+                id = "ISS_LOGIN"
+                isClosable = true
+                content = loginPanel
+            }
+
+            content.tabs.add(tab)
+            content.selectionModel.select(tab)
         }
     }
 
