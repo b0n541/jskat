@@ -1,12 +1,13 @@
 package org.jskat.gui.javafx.main
 
-import javafx.geometry.HPos
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.image.ImageView
-import javafx.scene.layout.*
+import javafx.scene.layout.HBox
+import javafx.scene.layout.Priority
+import javafx.scene.layout.VBox
 import javafx.scene.text.Font
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
@@ -44,51 +45,76 @@ class WelcomePanel(private val actions: ActionMap) : VBox() {
         return header
     }
 
-    private fun createButtonGrid(): GridPane {
-        val grid = GridPane()
-        grid.hgap = 10.0
-        grid.vgap = 10.0
-        grid.padding = Insets(10.0)
-        grid.alignment = Pos.CENTER
-
-        val col1 = ColumnConstraints()
-        col1.prefWidth = 200.0
-        col1.hgrow = Priority.SOMETIMES
-        val col2 = ColumnConstraints()
-        col2.hgrow = Priority.SOMETIMES
-        grid.columnConstraints.addAll(col1, col2)
+    private fun createButtonGrid(): VBox {
+        val vbox = VBox()
+        vbox.spacing = 10.0
+        vbox.padding = Insets(10.0)
+        vbox.alignment = Pos.CENTER_LEFT
+        vbox.maxWidth = USE_PREF_SIZE
 
         // ISS Table
-        val issButton = createActionButton(JSkatAction.SHOW_ISS_LOGIN, strings.getString("show_iss_lobby"))
+        val issButton = createActionButton(
+            JSkatAction.SHOW_ISS_LOGIN,
+            strings.getString("show_iss_login"),
+            JSkatGraphicRepository.Icon.CONNECT_ISS
+        )
         val issDescription =
             Label(strings.getString("explain_iss_table_1") + "\n" + strings.getString("explain_iss_table_2"))
         issDescription.isWrapText = true
-        grid.addRow(0, issButton, issDescription)
+        vbox.children.add(createRow(issButton, issDescription))
 
         // Local Table
-        val localButton = createActionButton(JSkatAction.CREATE_LOCAL_TABLE, strings.getString("create_local_table"))
+        val localButton = createActionButton(
+            JSkatAction.CREATE_LOCAL_TABLE,
+            strings.getString("create_local_table"),
+            JSkatGraphicRepository.Icon.TABLE
+        )
         val localDescription =
             Label(strings.getString("explain_local_table_1") + "\n" + strings.getString("explain_local_table_2"))
         localDescription.isWrapText = true
-        grid.addRow(1, localButton, localDescription)
+        vbox.children.add(createRow(localButton, localDescription))
 
         // Options
-        val optionsButton = createActionButton(JSkatAction.PREFERENCES, strings.getString("preferences"))
+        val optionsButton = createActionButton(
+            JSkatAction.PREFERENCES,
+            strings.getString("preferences"),
+            JSkatGraphicRepository.Icon.PREFERENCES
+        )
         val optionsDescription = Label(strings.getString("explain_options_1"))
         optionsDescription.isWrapText = true
-        grid.addRow(2, optionsButton, optionsDescription)
+        vbox.children.add(createRow(optionsButton, optionsDescription))
 
         // Quit
-        val quitButton = createActionButton(JSkatAction.EXIT_JSKAT, strings.getString("exit_jskat"))
+        val quitButton = createActionButton(
+            JSkatAction.EXIT_JSKAT,
+            strings.getString("exit_jskat"),
+            JSkatGraphicRepository.Icon.EXIT
+        )
         val quitDescription = Label(strings.getString("explain_exit"))
         quitDescription.isWrapText = true
-        grid.addRow(3, quitButton, quitDescription)
+        vbox.children.add(createRow(quitButton, quitDescription))
 
-        return grid
+        return vbox
     }
 
-    private fun createActionButton(action: JSkatAction, text: String): Button {
+    private fun createRow(button: Button, description: Label): HBox {
+        val hbox = HBox(20.0)
+        hbox.alignment = Pos.CENTER_LEFT
+        // Allow the label to grow
+        HBox.setHgrow(description, Priority.ALWAYS)
+        // Ensure button has a consistent size or at least isn't tiny.
+        button.minWidth = 250.0 // Ensure buttons are wide enough and "bigger"
+        hbox.children.addAll(button, description)
+        return hbox
+    }
+
+    private fun createActionButton(
+        action: JSkatAction,
+        text: String,
+        icon: JSkatGraphicRepository.Icon
+    ): Button {
         val button = Button(text)
+        button.graphic = bitmaps.getImageView(icon, JSkatGraphicRepository.IconSize.BIG)
         button.maxWidth = Double.MAX_VALUE
         button.setOnAction { e ->
             val swingAction = actions.get(action)
@@ -100,7 +126,6 @@ class WelcomePanel(private val actions: ActionMap) : VBox() {
                 )
             )
         }
-        GridPane.setHalignment(button, HPos.CENTER)
         return button
     }
 }

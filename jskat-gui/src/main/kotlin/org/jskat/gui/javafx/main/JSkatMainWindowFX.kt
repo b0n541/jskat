@@ -227,51 +227,8 @@ class JSkatMainWindowFX : VBox() {
     private fun addWelcomeTab() {
         val welcomeTab = Tab(resourceBundle.getString("welcome"))
         welcomeTab.isClosable = false
-
-        val welcomeActions = HBox(
-            createWelcomeAction("local_table", "explain.local.table", Icon.TABLE) { createNewLocalTable() },
-            createWelcomeAction("iss_table", "explain.iss.table", Icon.CONNECT_ISS) { showIssLogin() },
-            createWelcomeAction("preferences", "explain.preferences", Icon.PREFERENCES) { showPreferences() },
-            createWelcomeAction("exit.jskat", "explain.exit", Icon.EXIT) { exitJSkat() }
-        ).apply {
-            alignment = Pos.CENTER
-            spacing = 20.0
-        }
-
-        val welcomeHeader = Label(resourceBundle.getString("welcome.to.jskat")).apply {
-            style = "-fx-font-size: 24px;"
-        }
-
-        val welcomeContent = VBox(welcomeHeader, welcomeActions).apply {
-            alignment = Pos.CENTER
-            spacing = 40.0
-            style = "-fx-padding: 20px;"
-        }
-
-        welcomeTab.content = welcomeContent
+        welcomeTab.content = WelcomePanel(actions)
         content.tabs.add(welcomeTab)
-    }
-
-    private fun createWelcomeAction(
-        textKey: String,
-        descriptionKey: String,
-        icon: Icon,
-        eventHandler: EventHandler<ActionEvent>
-    ): Node {
-        val button = Button(resourceBundle.getString(textKey)).apply {
-            graphic = graphicRepository.getImageView(icon, IconSize.BIG)
-            onAction = eventHandler
-            contentDisplay = ContentDisplay.TOP
-        }
-        val description = Label(resourceBundle.getString(descriptionKey)).apply {
-            isWrapText = true
-            textAlignment = TextAlignment.CENTER
-        }
-        return VBox(button, description).apply {
-            alignment = Pos.CENTER
-            spacing = 10.0
-            maxWidth = 200.0
-        }
     }
 
     private fun createNewLocalTable() {
