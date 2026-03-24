@@ -3,8 +3,14 @@ package org.jskat.gui.swing;
 import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
 import javafx.stage.Screen;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
@@ -44,7 +50,6 @@ import org.jskat.gui.javafx.main.WelcomePanelFX;
 import org.jskat.gui.javafx.table.SkatSeriesStartDialog;
 import org.jskat.gui.javafx.table.SkatTablePanel;
 import org.jskat.gui.swing.iss.ISSTablePanelWrapper;
-import org.jskat.gui.swing.iss.PlayerInvitationPanel;
 import org.jskat.gui.swing.table.SkatTablePanelWrapper;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -60,6 +65,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.FutureTask;
 
 public class JSkatViewImpl implements JSkatView {
 
@@ -670,13 +676,28 @@ public class JSkatViewImpl implements JSkatView {
 
         final List<String> result = new ArrayList<>();
 
-        final PlayerInvitationPanel invitationPanel = new PlayerInvitationPanel(playerNames);
-        final int dialogResult = JOptionPane.showConfirmDialog(null, invitationPanel,
-                strings.getString("invite_players"),
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-
-        if (dialogResult == JOptionPane.OK_OPTION) {
-            result.addAll(invitationPanel.getPlayer());
+        if (Platform.isFxApplicationThread()) {
+            try {
+                final PlayerInvitationDialog dialog = new PlayerInvitationDialog(playerNames);
+                dialog.initModality(Modality.APPLICATION_MODAL);
+                final Optional<List<String>> dialogResult = dialog.showAndWait();
+                dialogResult.ifPresent(result::addAll);
+            } catch (Throwable e) {
+                LOG.error("Error showing invitation dialog", e);
+            }
+        } else {
+            final FutureTask<List<String>> task = new FutureTask<>(() -> {
+                final PlayerInvitationDialog dialog = new PlayerInvitationDialog(playerNames);
+                dialog.initModality(Modality.APPLICATION_MODAL);
+                final Optional<List<String>> dialogResult = dialog.showAndWait();
+                return dialogResult.orElse(Collections.emptyList());
+            });
+            Platform.runLater(task);
+            try {
+                result.addAll(task.get());
+            } catch (Exception e) {
+                LOG.error("Error showing invitation dialog", e);
+            }
         }
 
         LOG.debug("Players to invite: " + result);
@@ -830,5 +851,56 @@ public class JSkatViewImpl implements JSkatView {
     @Override
     public void setSkat(final String tableName, final CardList skat) {
         Platform.runLater(() -> tables.get(tableName).getSkatTablePanel().setSkat(skat));
+    }
+
+    private static class PlayerInvitationDialog extends Dialog<List<String>> {
+        private final ToggleGroup firstPlayerGroup = new ToggleGroup();
+        private final ToggleGroup secondPlayerGroup = new ToggleGroup();
+
+        public PlayerInvitationDialog(Set<String> playerNames) {
+            setTitle(JSkatResourceBundle.INSTANCE.getString("invite_players"));
+
+            GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20));
+
+            int row = 0;
+            List<String> sortedPlayers = new ArrayList<>(playerNames);
+            Collections.sort(sortedPlayers);
+
+            for (String playerName : sortedPlayers) {
+                grid.add(new Label(playerName), 0, row);
+
+                RadioButton firstButton = new RadioButton();
+                firstButton.setUserData(playerName);
+                firstButton.setToggleGroup(firstPlayerGroup);
+                grid.add(firstButton, 1, row);
+
+                RadioButton secondButton = new RadioButton();
+                secondButton.setUserData(playerName);
+                secondButton.setToggleGroup(secondPlayerGroup);
+                grid.add(secondButton, 2, row);
+
+                row++;
+            }
+
+            getDialogPane().setContent(grid);
+            getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+            setResultConverter(buttonType -> {
+                if (buttonType == ButtonType.OK) {
+                    List<String> result = new ArrayList<>();
+                    if (firstPlayerGroup.getSelectedToggle() != null) {
+                        result.add((String) firstPlayerGroup.getSelectedToggle().getUserData());
+                    }
+                    if (secondPlayerGroup.getSelectedToggle() != null) {
+                        result.add((String) secondPlayerGroup.getSelectedToggle().getUserData());
+                    }
+                    return result;
+                }
+                return null;
+            });
+        }
     }
 }

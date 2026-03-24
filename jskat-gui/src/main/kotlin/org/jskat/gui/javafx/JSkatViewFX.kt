@@ -1,16 +1,27 @@
 package org.jskat.gui.javafx
 
+import javafx.application.Platform
+import javafx.stage.Modality
+import org.jskat.control.JSkatEventBus
+import org.jskat.control.command.table.ShowCardsCommand
+import org.jskat.control.event.skatgame.*
+import org.jskat.control.event.table.*
 import org.jskat.control.gui.JSkatView
 import org.jskat.control.gui.human.AbstractHumanJSkatPlayer
 import org.jskat.control.iss.ChatMessageType
 import org.jskat.data.SkatGameData
+import org.jskat.data.SkatGameData.GameState
 import org.jskat.data.iss.ChatMessage
 import org.jskat.data.iss.MoveInformation
+import org.jskat.data.iss.MoveType
+import org.jskat.gui.javafx.iss.PlayerInvitationDialog
 import org.jskat.gui.javafx.main.JSkatMainWindowFX
 import org.jskat.util.Card
 import org.jskat.util.CardList
 import org.jskat.util.Player
 import org.slf4j.LoggerFactory
+import java.util.*
+import java.util.concurrent.FutureTask
 
 class JSkatViewFX(
     val mainWindow: JSkatMainWindowFX,
@@ -28,7 +39,33 @@ class JSkatViewFX(
     }
 
     override fun getPlayerForInvitation(playerNames: Set<String>): List<String> {
-        return emptyList()
+        val result = mutableListOf<String>()
+        if (Platform.isFxApplicationThread()) {
+            try {
+                val dialog = PlayerInvitationDialog(playerNames)
+                dialog.initModality(Modality.APPLICATION_MODAL)
+                val dialogResult = dialog.showAndWait()
+                if (dialogResult.isPresent) {
+                    result.addAll(dialogResult.get())
+                }
+            } catch (e: Throwable) {
+                log.error("Error showing invitation dialog", e)
+            }
+        } else {
+            val task = FutureTask {
+                val dialog = PlayerInvitationDialog(playerNames)
+                dialog.initModality(Modality.APPLICATION_MODAL)
+                val dialogResult = dialog.showAndWait()
+                dialogResult.orElse(Collections.emptyList())
+            }
+            Platform.runLater(task)
+            try {
+                result.addAll(task.get())
+            } catch (e: Exception) {
+                log.error("Error showing invitation dialog", e)
+            }
+        }
+        return result
     }
 
     override fun showMessage(title: String, message: String) {
@@ -48,7 +85,108 @@ class JSkatViewFX(
     }
 
     override fun updateISSMove(tableName: String, gameData: SkatGameData, moveInformation: MoveInformation) {
-        log.debug("updateISSMove: $tableName, $gameData, $moveInformation")
+        val movePlayer = moveInformation.player
+
+        when (moveInformation.type) {
+            MoveType.DEAL -> {
+                JSkatEventBus.INSTANCE.post(SkatGameStateChangedEvent(tableName, GameState.DEALING))
+
+                val dealtCards = mutableMapOf<Player, CardList>()
+                dealtCards[Player.FOREHAND] = moveInformation.getCards(Player.FOREHAND)
+                dealtCards[Player.MIDDLEHAND] = moveInformation.getCards(Player.MIDDLEHAND)
+                dealtCards[Player.REARHAND] = moveInformation.getCards(Player.REARHAND)
+
+                JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName)?.post(CardDealEvent(dealtCards, CardList()))
+                JSkatEventBus.INSTANCE.post(SkatGameStateChangedEvent(tableName, GameState.BIDDING))
+            }
+
+            MoveType.BID -> {
+                JSkatEventBus.INSTANCE.post(SkatGameStateChangedEvent(tableName, GameState.BIDDING))
+                JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName)?.post(BidEvent(movePlayer, moveInformation.bidValue))
+            }
+
+            MoveType.HOLD_BID -> {
+                JSkatEventBus.INSTANCE.post(SkatGameStateChangedEvent(tableName, GameState.BIDDING))
+                JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName)?.post(HoldBidEvent(movePlayer, gameData.maxBidValue))
+            }
+
+            MoveType.PASS -> {
+                JSkatEventBus.INSTANCE.post(SkatGameStateChangedEvent(tableName, GameState.BIDDING))
+                JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName)?.post(PassBidEvent(movePlayer, gameData.nextBidValue))
+            }
+
+            MoveType.SKAT_REQUEST -> {
+                JSkatEventBus.INSTANCE.post(SkatGameStateChangedEvent(tableName, GameState.PICKING_UP_SKAT))
+            }
+
+            MoveType.PICK_UP_SKAT -> {
+                JSkatEventBus.INSTANCE.post(SkatGameStateChangedEvent(tableName, GameState.DISCARDING))
+                if (moveInformation.skat.size() == 2) {
+                    JSkatEventBus.INSTANCE.post(SkatCardsPickedUpEvent(tableName, moveInformation.skat))
+                }
+            }
+
+            MoveType.GAME_ANNOUNCEMENT -> {
+                JSkatEventBus.INSTANCE.post(SkatGameStateChangedEvent(tableName, GameState.DECLARING))
+                JSkatEventBus.INSTANCE.post(
+                    TableGameMoveEvent(
+                        tableName,
+                        GameAnnouncementEvent(movePlayer, moveInformation.gameAnnouncement)
+                    )
+                )
+                if (!moveInformation.gameAnnouncement.contract().hand()) {
+                    JSkatEventBus.INSTANCE.post(
+                        SkatCardsChangedEvent(
+                            tableName,
+                            moveInformation.gameAnnouncement.discardedCards()
+                        )
+                    )
+                }
+                if (moveInformation.gameAnnouncement.contract().ouvert()) {
+                    JSkatEventBus.INSTANCE.post(
+                        ShowCardsCommand(
+                            tableName,
+                            movePlayer,
+                            moveInformation.gameAnnouncement.contract().ouvertCards()
+                        )
+                    )
+                }
+                JSkatEventBus.INSTANCE.post(SkatGameStateChangedEvent(tableName, GameState.TRICK_PLAYING))
+            }
+
+            MoveType.CARD_PLAY -> {
+                JSkatEventBus.INSTANCE.post(SkatGameStateChangedEvent(tableName, GameState.TRICK_PLAYING))
+                if (gameData.tricks.size > 1) {
+                    val currentTrick = gameData.currentTrick
+                    val lastTrick = gameData.lastCompletedTrick
+                    if (currentTrick.firstCard != null && currentTrick.secondCard == null && currentTrick.thirdCard == null) {
+                        JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName)?.post(TrickCompletedEvent(lastTrick))
+                    }
+                }
+                JSkatEventBus.INSTANCE.post(
+                    TableGameMoveEvent(
+                        tableName,
+                        TrickCardPlayedEvent(movePlayer, moveInformation.card)
+                    )
+                )
+            }
+
+            MoveType.SHOW_CARDS -> {
+                JSkatEventBus.INSTANCE.post(ShowCardsCommand(tableName, movePlayer, moveInformation.revealedCards))
+            }
+
+            MoveType.RESIGN -> {
+                setResign(tableName, movePlayer)
+            }
+
+            MoveType.TIME_OUT -> {
+                // TODO show message box
+            }
+
+            else -> {
+                log.warn("Unknown move type: ${moveInformation.type}")
+            }
+        }
     }
 
     override fun setResign(tableName: String, player: Player) {
