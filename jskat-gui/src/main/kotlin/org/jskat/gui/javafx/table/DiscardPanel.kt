@@ -5,6 +5,7 @@ import javafx.scene.control.Button
 import javafx.scene.image.ImageView
 import javafx.scene.layout.HBox
 import javafx.scene.layout.StackPane
+import javafx.scene.shape.Rectangle
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.Card
@@ -33,6 +34,14 @@ class DiscardPanel(
 
     init {
         stylesheets.add("/org/jskat/gui/javafx/jskat.css")
+
+        minHeight = 0.0
+        cardViews.minHeight = 0.0
+
+        val clipRect = Rectangle()
+        clipRect.widthProperty().bind(widthProperty())
+        clipRect.heightProperty().bind(heightProperty())
+        clip = clipRect
 
         pickUpSkatButton.setOnAction {
             pickUpSkatButton.isDisable = true

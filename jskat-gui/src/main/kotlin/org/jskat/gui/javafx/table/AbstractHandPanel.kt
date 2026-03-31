@@ -80,6 +80,7 @@ abstract class AbstractHandPanel(
     init {
         style = "-fx-background-color: #486760;"
         minHeight = 0.0
+        minWidth = 0.0
 
         cardPanel = createCardPanel()
         initPanel()
@@ -97,6 +98,10 @@ abstract class AbstractHandPanel(
 
     private fun initPanel() {
         setVgrow(header, Priority.NEVER)
+        header.minHeight = USE_PREF_SIZE
+        header.minWidth = 0.0
+        headerLabel.minWidth = 0.0
+
         border = getPanelBorder(isActivePlayer)
 
         val headerInsets = if (showIssWidgets) {
