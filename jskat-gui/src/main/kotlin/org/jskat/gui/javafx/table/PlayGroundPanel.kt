@@ -3,6 +3,7 @@ package org.jskat.gui.javafx.table
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.layout.*
+import javafx.scene.paint.Color
 import org.jskat.gui.img.JSkatGraphicRepository
 
 class PlayGroundPanel(
@@ -26,6 +27,10 @@ class PlayGroundPanel(
         )
         this.background = background
 
+        padding = Insets(10.0)
+        vgap = 10.0
+        hgap = 10.0
+
         // Configure rows for 30/40/30 distribution
         // Use minHeight to ensure panels don't completely disappear when window is very small
         rowConstraints.addAll(
@@ -45,16 +50,7 @@ class PlayGroundPanel(
         // Configure column to grow
         columnConstraints.add(ColumnConstraints().apply { hgrow = Priority.ALWAYS })
 
-        val gameInfoBox = HBox(gameInfoPanel).apply {
-            padding = Insets(5.0)
-            alignment = Pos.CENTER
-            minHeight = USE_PREF_SIZE
-            minWidth = 0.0 // Allow shrinking
-            HBox.setHgrow(gameInfoPanel, Priority.ALWAYS)
-        }
-
         val opponentBox = HBox(leftOpponentPanel, rightOpponentPanel).apply {
-            padding = Insets(5.0)
             alignment = Pos.CENTER
             spacing = 10.0
             minWidth = 0.0 // Allow shrinking
@@ -62,13 +58,23 @@ class PlayGroundPanel(
         HBox.setHgrow(leftOpponentPanel, Priority.ALWAYS)
         HBox.setHgrow(rightOpponentPanel, Priority.ALWAYS)
 
-        val topArea = VBox(gameInfoBox, opponentBox).apply {
-            alignment = Pos.TOP_CENTER // Use TOP_CENTER to prevent gameInfoPanel from being clipped first
+        val topArea = VBox(gameInfoPanel, opponentBox).apply {
+            alignment = Pos.TOP_CENTER
+            spacing = 10.0
             minHeight = 0.0
-            minWidth = 0.0 // Allow shrinking
+            minWidth = 0.0
         }
-        VBox.setVgrow(gameInfoBox, Priority.NEVER)
         VBox.setVgrow(opponentBox, Priority.ALWAYS)
+
+        gameContextStackPane.background = Background(
+            BackgroundFill(
+                Color.rgb(255, 255, 255, 0.2),
+                CornerRadii(10.0),
+                null
+            )
+        )
+        // Add some internal padding to the context pane so content doesn't touch the rounded edges
+        gameContextStackPane.padding = Insets(10.0)
 
         add(topArea, 0, 0)
         add(gameContextStackPane, 0, 1)

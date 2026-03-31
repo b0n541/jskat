@@ -1,9 +1,7 @@
 package org.jskat.gui.javafx.table
 
 import javafx.scene.control.Label
-import javafx.scene.layout.HBox
-import javafx.scene.layout.Priority
-import javafx.scene.layout.VBox
+import javafx.scene.layout.*
 import javafx.scene.paint.Color
 import org.jskat.data.JSkatOptions
 import org.jskat.gui.img.JSkatGraphicRepository
@@ -44,6 +42,7 @@ abstract class AbstractHandPanel(
         set(value) {
             field = value
             refreshHeader()
+            background = getPanelBackground(value)
             border = getPanelBorder(value)
             updateIssWidgets(value)
         }
@@ -78,7 +77,6 @@ abstract class AbstractHandPanel(
     internal var cardPanel: CardPanel
 
     init {
-        style = "-fx-background-color: #486760;"
         minHeight = 0.0
         minWidth = 0.0
 
@@ -102,6 +100,7 @@ abstract class AbstractHandPanel(
         header.minWidth = 0.0
         headerLabel.minWidth = 0.0
 
+        background = getPanelBackground(isActivePlayer)
         border = getPanelBorder(isActivePlayer)
 
         val headerInsets = if (showIssWidgets) {
@@ -124,23 +123,33 @@ abstract class AbstractHandPanel(
         children.add(header)
     }
 
-    private fun getPanelBorder(isActivePlayer: Boolean): javafx.scene.layout.Border {
+    private fun getPanelBackground(isActivePlayer: Boolean): Background {
+        return Background(
+            BackgroundFill(
+                Color.web("#486760"),
+                CornerRadii(10.0),
+                null
+            )
+        )
+    }
+
+    private fun getPanelBorder(isActivePlayer: Boolean): Border {
         return if (isActivePlayer) {
-            javafx.scene.layout.Border(
-                javafx.scene.layout.BorderStroke(
+            Border(
+                BorderStroke(
                     Color.rgb(255, 191, 0),
-                    javafx.scene.layout.BorderStrokeStyle.SOLID,
-                    javafx.scene.layout.CornerRadii.EMPTY,
-                    javafx.scene.layout.BorderWidths(3.0)
+                    BorderStrokeStyle.SOLID,
+                    CornerRadii(10.0),
+                    BorderWidths(3.0)
                 )
             )
         } else {
-            javafx.scene.layout.Border(
-                javafx.scene.layout.BorderStroke(
+            Border(
+                BorderStroke(
                     Color.BLACK,
-                    javafx.scene.layout.BorderStrokeStyle.SOLID,
-                    javafx.scene.layout.CornerRadii.EMPTY,
-                    javafx.scene.layout.BorderWidths(3.0)
+                    BorderStrokeStyle.SOLID,
+                    CornerRadii(10.0),
+                    BorderWidths(3.0)
                 )
             )
         }

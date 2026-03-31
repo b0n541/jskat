@@ -3,8 +3,8 @@ package org.jskat.gui.javafx.table
 import javafx.geometry.Pos
 import javafx.scene.control.Label
 import javafx.scene.control.OverrunStyle
-import javafx.scene.layout.HBox
-import javafx.scene.layout.Priority
+import javafx.scene.layout.*
+import javafx.scene.paint.Color
 import javafx.scene.text.Font
 import javafx.scene.text.FontWeight
 import org.jskat.data.GameContract
@@ -40,7 +40,13 @@ class GameInformationPanel : HBox() {
     private var ramschLosers: Set<Player> = HashSet()
 
     init {
-        style = "-fx-background-color: #E2D9CA;"
+        background = Background(
+            BackgroundFill(
+                Color.web("#E2D9CA"),
+                CornerRadii(10.0),
+                null
+            )
+        )
         minHeight = 25.0
         maxHeight = 25.0
         minWidth = 0.0
