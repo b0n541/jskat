@@ -6,6 +6,7 @@ import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.scene.control.Label
 import javafx.scene.layout.HBox
+import javafx.scene.paint.Color
 import javafx.util.Duration
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.gui.img.JSkatGraphicRepository.Icon
@@ -23,6 +24,7 @@ class ClockPanel : HBox() {
     init {
         val clockImageView = JSkatGraphicRepository.INSTANCE.getImageView(Icon.CLOCK, IconSize.SMALL)
         this.timeLabel = Label(getPlayerTimeString())
+        this.timeLabel.textFill = Color.WHITE
 
         children.addAll(clockImageView, this.timeLabel)
     }

@@ -1,5 +1,6 @@
 package org.jskat.gui.javafx.table
 
+import javafx.geometry.Insets
 import javafx.scene.control.Label
 import javafx.scene.layout.*
 import javafx.scene.paint.Color
@@ -99,6 +100,7 @@ abstract class AbstractHandPanel(
         header.minHeight = USE_PREF_SIZE
         header.minWidth = 0.0
         headerLabel.minWidth = 0.0
+        headerLabel.style = "-fx-text-fill: white;"
 
         background = getPanelBackground(isActivePlayer)
         border = getPanelBorder(isActivePlayer)
@@ -121,6 +123,7 @@ abstract class AbstractHandPanel(
             header.children.add(clockPanel)
         }
         children.add(header)
+        VBox.setMargin(cardPanel, Insets(0.0, 5.0, 5.0, 5.0))
     }
 
     private fun getPanelBackground(isActivePlayer: Boolean): Background {
@@ -197,9 +200,9 @@ abstract class AbstractHandPanel(
 
             if (declarer) {
                 headerText.append(" (${strings.getString("declarer")})")
-                headerLabel.style = "-fx-font-weight: bold;"
+                headerLabel.style = "-fx-font-weight: bold; -fx-text-fill: white;"
             } else {
-                headerLabel.style = "-fx-font-weight: normal;"
+                headerLabel.style = "-fx-font-weight: normal; -fx-text-fill: white;"
             }
         }
 
