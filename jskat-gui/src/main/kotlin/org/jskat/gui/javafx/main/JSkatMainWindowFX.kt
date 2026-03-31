@@ -25,6 +25,7 @@ import org.jskat.data.JSkatViewType
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.gui.img.JSkatGraphicRepository.Icon
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize
+import org.jskat.gui.javafx.JSkatMenuFactory
 import org.jskat.gui.javafx.dialog.options.JSkatOptionsDialog
 import org.jskat.gui.javafx.iss.LobbyPanel
 import org.jskat.gui.javafx.table.ISSTablePanel
@@ -46,6 +47,8 @@ class JSkatMainWindowFX : VBox() {
     init {
         JSkatEventBus.INSTANCE.register(this)
 
+        val menuBar = JSkatMenuFactory.build()
+
         val toolbar = ToolBar()
         toolbar.items.addAll(
             createToolbarButton("new_table", "new_table_tooltip", Icon.NEW) { createNewLocalTable() },
@@ -57,7 +60,7 @@ class JSkatMainWindowFX : VBox() {
         )
         VBox.setVgrow(content, Priority.ALWAYS)
 
-        children.addAll(toolbar, content)
+        children.addAll(menuBar, toolbar, content)
 
         content.selectionModel.selectedItemProperty().addListener { _, _, newTab ->
             if (newTab != null) {
