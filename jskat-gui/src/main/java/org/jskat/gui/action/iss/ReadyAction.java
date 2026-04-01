@@ -1,34 +1,28 @@
 package org.jskat.gui.action.iss;
 
-import org.jskat.control.command.iss.IssReadyToPlayCommand;
+import org.jskat.control.JSkatMaster;
+import org.jskat.control.gui.action.JSkatActionEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
-import org.jskat.gui.img.JSkatGraphicRepository.Icon;
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
 
 /**
- * Implements the action for leaving a skat table on ISS
+ * Implements the action for sending a ready message to ISS
  */
 public class ReadyAction extends AbstractJSkatAction {
-
 
     /**
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public ReadyAction() {
 
-        putValue(Action.NAME, STRINGS.getString("ready"));
-
-        setIcon(Icon.OK);
+        putValue(NAME, STRINGS.getString("ready"));
     }
 
-    /**
-     * @see AbstractAction#actionPerformed(ActionEvent)
-     */
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(JSkatActionEvent e) {
 
-        EVENTBUS.post(new IssReadyToPlayCommand());
+        if (e.getSource() instanceof String) {
+
+            JSkatMaster.INSTANCE.getIssController().sendReadySignal((String) e.getSource());
+        }
     }
 }

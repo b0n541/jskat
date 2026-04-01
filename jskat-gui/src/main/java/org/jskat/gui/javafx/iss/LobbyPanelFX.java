@@ -3,18 +3,20 @@ package org.jskat.gui.javafx.iss;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
+import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.data.iss.ChatMessage;
+import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.swing.AbstractTabPanel;
 
-import javax.swing.*;
 import java.awt.*;
+import java.util.Map;
 
 @Deprecated
 public class LobbyPanelFX extends AbstractTabPanel {
 
     private LobbyPanel lobbyPanel;
 
-    public LobbyPanelFX(final String tableName, final ActionMap actions) {
+    public LobbyPanelFX(final String tableName, final Map<JSkatAction, AbstractJSkatAction> actions) {
         super(tableName, actions);
     }
 
@@ -27,7 +29,7 @@ public class LobbyPanelFX extends AbstractTabPanel {
         add(fxPanel, BorderLayout.CENTER);
 
         Platform.runLater(() -> {
-            lobbyPanel = new LobbyPanel(getActionMap(), null);
+            lobbyPanel = new LobbyPanel(actions, null);
             // Bind JavaFX panel's preferred size to JFXPanel's actual size
             lobbyPanel.prefWidthProperty().bind(fxPanel.getScene().heightProperty());
             lobbyPanel.prefHeightProperty().bind(fxPanel.getScene().heightProperty());

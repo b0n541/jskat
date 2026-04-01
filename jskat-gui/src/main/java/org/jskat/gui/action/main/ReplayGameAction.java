@@ -1,19 +1,14 @@
 package org.jskat.gui.action.main;
 
-import org.jskat.control.JSkatEventBus;
-import org.jskat.control.command.table.ReplayGameCommand;
-import org.jskat.data.JSkatApplicationData;
+import org.jskat.control.JSkatMaster;
+import org.jskat.control.gui.action.JSkatActionEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
 
 /**
  * Implements the action for replaying a game
  */
 public class ReplayGameAction extends AbstractJSkatAction {
-
 
     /**
      * @see AbstractJSkatAction#AbstractJSkatAction()
@@ -21,16 +16,15 @@ public class ReplayGameAction extends AbstractJSkatAction {
     public ReplayGameAction() {
 
         putValue(NAME, STRINGS.getString("replay_game"));
-        putValue(SHORT_DESCRIPTION, STRINGS.getString("replay_game_tooltip"));
+        putValue(SHORT_DESCRIPTION,
+                STRINGS.getString("replay_game_tooltip"));
 
-        setIcon(Icon.FIRST);
+        setIcon(Icon.REPLAY);
     }
 
-    /**
-     * @see AbstractAction#actionPerformed(ActionEvent)
-     */
     @Override
-    public void actionPerformed(final ActionEvent e) {
-        JSkatEventBus.INSTANCE.post(new ReplayGameCommand(JSkatApplicationData.INSTANCE.getActiveTable()));
+    public void actionPerformed(JSkatActionEvent e) {
+
+        JSkatMaster.INSTANCE.replayGame(e.getActionCommand());
     }
 }

@@ -10,12 +10,12 @@ import javafx.scene.control.TextField
 import javafx.scene.layout.*
 import javafx.scene.text.Font
 import org.jskat.control.gui.action.JSkatAction
+import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.iss.LoginCredentials
+import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.util.JSkatResourceBundle
-import java.awt.event.ActionEvent
-import javax.swing.ActionMap
 
-class LoginPanel(private val actions: ActionMap) : VBox() {
+class LoginPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) : VBox() {
 
 
     private val strings = JSkatResourceBundle.INSTANCE
@@ -65,41 +65,23 @@ class LoginPanel(private val actions: ActionMap) : VBox() {
         val loginButton = Button(strings.getString("connect_to_iss"))
         loginButton.setOnAction {
             val credentials = LoginCredentials(loginField.text, passwordField.text)
-            val swingAction = actions.get(JSkatAction.CONNECT_TO_ISS)
-            // Pass credentials as source, similar to the Swing implementation
-            swingAction?.actionPerformed(
-                ActionEvent(
-                    credentials,
-                    ActionEvent.ACTION_PERFORMED,
-                    null
-                )
-            )
+            val action = actions[JSkatAction.CONNECT_TO_ISS]
+            // Pass credentials as source
+            action?.actionPerformed(JSkatActionEvent(JSkatAction.CONNECT_TO_ISS.toString(), credentials))
         }
         loginButton.defaultButtonProperty()
             .bind(loginField.textProperty().isNotEmpty.and(passwordField.textProperty().isNotEmpty))
 
         val homepageButton = Button(strings.getString("iss_homepage"))
         homepageButton.setOnAction {
-            val swingAction = actions.get(JSkatAction.OPEN_ISS_HOMEPAGE)
-            swingAction?.actionPerformed(
-                ActionEvent(
-                    it.source,
-                    ActionEvent.ACTION_PERFORMED,
-                    null
-                )
-            )
+            val action = actions[JSkatAction.OPEN_ISS_HOMEPAGE]
+            action?.actionPerformed(JSkatActionEvent(JSkatAction.OPEN_ISS_HOMEPAGE, it.source))
         }
 
         val registerButton = Button(strings.getString("register_on_iss"))
         registerButton.setOnAction {
-            val swingAction = actions.get(JSkatAction.REGISTER_ON_ISS)
-            swingAction?.actionPerformed(
-                ActionEvent(
-                    it.source,
-                    ActionEvent.ACTION_PERFORMED,
-                    null
-                )
-            )
+            val action = actions[JSkatAction.REGISTER_ON_ISS]
+            action?.actionPerformed(JSkatActionEvent(JSkatAction.REGISTER_ON_ISS, it.source))
         }
 
         buttonBox.children.addAll(loginButton, homepageButton, registerButton)

@@ -1,22 +1,39 @@
 package org.jskat.gui.swing;
 
+import org.jskat.control.gui.action.JSkatActionEvent;
+import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Creates toolbar buttons with text under the icon to save space
  */
 public class ToolbarButton extends JButton {
 
+    private final AbstractJSkatAction jskatAction;
+
     /**
      * @param action Action
-     * @see JButton#JButton(Action)
      */
-    public ToolbarButton(final Action action) {
+    public ToolbarButton(final AbstractJSkatAction action) {
+        this.jskatAction = action;
 
-        super(action);
-        setIconSize(IconSize.SMALL);
+        if (action != null) {
+            setText((String) action.getValue(AbstractJSkatAction.NAME));
+            setToolTipText((String) action.getValue(AbstractJSkatAction.SHORT_DESCRIPTION));
+            setEnabled(action.isEnabled());
+            action.enabledProperty().addListener((observable, oldValue, newValue) ->
+                    SwingUtilities.invokeLater(() -> setEnabled(newValue)));
+
+            addActionListener(e -> action.actionPerformed(new JSkatActionEvent(
+                    (String) action.getValue(AbstractJSkatAction.ACTION_COMMAND_KEY),
+                    e.getSource()
+            )));
+
+            setIconSize(IconSize.SMALL);
+        }
     }
 
     /**
@@ -26,18 +43,22 @@ public class ToolbarButton extends JButton {
      */
     public void setIconSize(final IconSize iconSize) {
 
-        ImageIcon icon = null;
+        if (jskatAction == null) {
+            return;
+        }
+
+        Image iconImage = null;
         switch (iconSize) {
             case SMALL:
-                icon = (ImageIcon) getAction().getValue(Action.SMALL_ICON);
+                iconImage = (Image) jskatAction.getValue(AbstractJSkatAction.SMALL_ICON);
                 break;
             case BIG:
-                icon = (ImageIcon) getAction().getValue(Action.LARGE_ICON_KEY);
+                iconImage = (Image) jskatAction.getValue(AbstractJSkatAction.LARGE_ICON_KEY);
                 break;
         }
 
-        if (icon != null) {
-            setIcon(icon);
+        if (iconImage != null) {
+            setIcon(new ImageIcon(iconImage));
         }
     }
 }

@@ -1,30 +1,24 @@
 package org.jskat.gui.action.main;
 
 import org.jskat.control.JSkatMaster;
+import org.jskat.control.gui.action.JSkatActionEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-
 /**
- * Implements the action for creating a new table
+ * Implements the action for changing the active table
  */
 public class ChangeActiveTableAction extends AbstractJSkatAction {
-
 
     /**
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public ChangeActiveTableAction() {
 
-        putValue(Action.NAME, "Change active table");
+        putValue(NAME, "Change active table");
     }
 
-    /**
-     * @see AbstractAction#actionPerformed(ActionEvent)
-     */
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(JSkatActionEvent e) {
 
         JSkatMaster.INSTANCE.setActiveTable(e.getActionCommand());
     }

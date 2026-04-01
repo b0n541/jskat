@@ -1,35 +1,27 @@
 package org.jskat.gui.action.iss;
 
 import org.jskat.control.command.iss.IssShowLoginCommand;
-import org.jskat.control.gui.action.JSkatAction;
+import org.jskat.control.gui.action.JSkatActionEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-
 /**
- * Implements the action for showing about dialog
+ * Implements the action for showing the ISS login panel
  */
 public class ShowLoginPanelAction extends AbstractJSkatAction {
-
 
     /**
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public ShowLoginPanelAction() {
 
-        putValue(Action.NAME, STRINGS.getString("play_on_iss"));
-
-        setActionCommand(JSkatAction.SHOW_ISS_LOGIN);
-        setIcon(Icon.CONNECT_ISS);
+        putValue(NAME, STRINGS.getString("iss_login"));
+        setIcon(Icon.LOG_IN);
     }
 
-    /**
-     * @see AbstractAction#actionPerformed(ActionEvent)
-     */
     @Override
-    public void actionPerformed(final ActionEvent e) {
+    public void actionPerformed(JSkatActionEvent e) {
+
         EVENTBUS.post(new IssShowLoginCommand());
     }
 }

@@ -1,34 +1,25 @@
 package org.jskat.gui.action.iss;
 
 import org.jskat.control.JSkatMaster;
+import org.jskat.control.gui.action.JSkatActionEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
-import org.jskat.gui.img.JSkatGraphicRepository.Icon;
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
 
 /**
- * Implements the action for leaving a skat table on ISS
+ * Implements the action for inviting a player to a skat table on ISS
  */
 public class InvitePlayerAction extends AbstractJSkatAction {
-
 
     /**
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public InvitePlayerAction() {
 
-        putValue(NAME, STRINGS.getString("invite"));
-
-        setIcon(Icon.INVITE);
+        putValue(NAME, STRINGS.getString("invite_player"));
     }
 
-    /**
-     * @see AbstractAction#actionPerformed(ActionEvent)
-     */
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(JSkatActionEvent e) {
 
-        JSkatMaster.INSTANCE.invitePlayer();
+        JSkatMaster.INSTANCE.getIssController().invitePlayer();
     }
 }

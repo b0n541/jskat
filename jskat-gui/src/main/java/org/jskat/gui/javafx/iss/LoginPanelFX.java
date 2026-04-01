@@ -3,17 +3,19 @@ package org.jskat.gui.javafx.iss;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
+import org.jskat.control.gui.action.JSkatAction;
+import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.swing.AbstractTabPanel;
 
-import javax.swing.*;
 import java.awt.*;
+import java.util.Map;
 
 @Deprecated
 public class LoginPanelFX extends AbstractTabPanel {
 
     private LoginPanel loginPanel;
 
-    public LoginPanelFX(String tableName, ActionMap actions) {
+    public LoginPanelFX(String tableName, Map<JSkatAction, AbstractJSkatAction> actions) {
         super(tableName, actions);
     }
 
@@ -24,7 +26,7 @@ public class LoginPanelFX extends AbstractTabPanel {
         add(fxPanel, BorderLayout.CENTER);
 
         Platform.runLater(() -> {
-            loginPanel = new LoginPanel(getActionMap());
+            loginPanel = new LoginPanel(actions);
             Scene scene = new Scene(loginPanel);
             fxPanel.setScene(scene);
         });

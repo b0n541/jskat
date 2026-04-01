@@ -1,10 +1,13 @@
 package org.jskat.gui.swing;
 
+import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.data.JSkatOptions;
+import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.util.JSkatResourceBundle;
 
 import javax.swing.*;
+import java.util.Map;
 
 /**
  * Generic Tab Panel for JSkat
@@ -25,6 +28,8 @@ public abstract class AbstractTabPanel extends JPanel {
      */
     protected JSkatOptions options;
 
+    protected Map<JSkatAction, AbstractJSkatAction> actions;
+
     /**
      * Constructor
      *
@@ -40,11 +45,11 @@ public abstract class AbstractTabPanel extends JPanel {
      * @param tabName Table name
      * @param actions JSkat actions
      */
-    public AbstractTabPanel(final String tabName, final ActionMap actions) {
+    public AbstractTabPanel(final String tabName, final Map<JSkatAction, AbstractJSkatAction> actions) {
 
         super();
         setName(tabName);
-        setActionMap(actions);
+        this.actions = actions;
         this.bitmaps = JSkatGraphicRepository.INSTANCE;
         this.strings = JSkatResourceBundle.INSTANCE;
         this.options = JSkatOptions.instance();

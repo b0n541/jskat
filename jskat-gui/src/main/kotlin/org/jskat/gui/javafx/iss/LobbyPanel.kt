@@ -12,13 +12,14 @@ import javafx.scene.image.ImageView
 import javafx.scene.layout.*
 import javafx.scene.text.Font
 import org.jskat.control.gui.action.JSkatAction
+import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.iss.ChatMessage
+import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.JSkatResourceBundle
 import java.awt.image.BufferedImage
-import javax.swing.ActionMap
 
-class LobbyPanel(private val actions: ActionMap, private val userName: String) : VBox() {
+class LobbyPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>, private val userName: String?) : VBox() {
 
     private val strings = JSkatResourceBundle.INSTANCE
 
@@ -103,7 +104,7 @@ class LobbyPanel(private val actions: ActionMap, private val userName: String) :
                             HBox(2.0).apply {
                                 alignment = Pos.CENTER
                                 item.forEach { flagChar ->
-                                    val flag = JSkatGraphicRepository.Flag.valueOf(flagChar)
+                                    val flag = JSkatGraphicRepository.Flag.valueOf(flagChar.toString())
                                     if (flag != null) {
                                         val awtImage = bitmaps.getFlagImage(flag)
                                         val bufferedImage = BufferedImage(
@@ -167,14 +168,8 @@ class LobbyPanel(private val actions: ActionMap, private val userName: String) :
             if (event.clickCount == 2) {
                 val selectedTable = table.selectionModel.selectedItem
                 if (selectedTable != null) {
-                    val action = actions.get(JSkatAction.JOIN_ISS_TABLE)
-                    action?.actionPerformed(
-                        java.awt.event.ActionEvent(
-                            selectedTable.name.get(),
-                            java.awt.event.ActionEvent.ACTION_PERFORMED,
-                            null
-                        )
-                    )
+                    val action = actions[JSkatAction.JOIN_ISS_TABLE]
+                    action?.actionPerformed(JSkatActionEvent(JSkatAction.JOIN_ISS_TABLE, selectedTable.name.get()))
                 }
             }
         }
@@ -186,14 +181,8 @@ class LobbyPanel(private val actions: ActionMap, private val userName: String) :
         val button = Button(text)
         button.graphic = bitmaps.getImageView(icon, JSkatGraphicRepository.IconSize.BIG)
         button.setOnAction {
-            val swingAction = actions.get(action)
-            swingAction?.actionPerformed(
-                java.awt.event.ActionEvent(
-                    it.source,
-                    java.awt.event.ActionEvent.ACTION_PERFORMED,
-                    null
-                )
-            )
+            val jskatAction = actions[action]
+            jskatAction?.actionPerformed(JSkatActionEvent(action, it.source))
         }
         return button
     }

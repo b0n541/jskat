@@ -1,36 +1,30 @@
 package org.jskat.gui.action.main;
 
-import org.jskat.control.JSkatEventBus;
-import org.jskat.control.command.table.NextReplayMoveCommand;
-import org.jskat.data.JSkatApplicationData;
+import org.jskat.control.JSkatMaster;
+import org.jskat.control.gui.action.JSkatActionEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-
 /**
- * Implements the action for replaying a game
+ * Implements the action for doing the next move in a replay
  */
 public class NextReplayMoveAction extends AbstractJSkatAction {
-
 
     /**
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public NextReplayMoveAction() {
 
-        putValue(NAME, STRINGS.getString("next_replay_move"));
-        putValue(SHORT_DESCRIPTION, STRINGS.getString("next_replay_move_tooltip"));
+        putValue(NAME, STRINGS.getString("next_replay_step"));
+        putValue(SHORT_DESCRIPTION,
+                STRINGS.getString("next_replay_step_tooltip"));
 
-        setIcon(Icon.NEXT);
+        setIcon(Icon.FAST_FORWARD);
     }
 
-    /**
-     * @see AbstractAction#actionPerformed(ActionEvent)
-     */
     @Override
-    public void actionPerformed(final ActionEvent e) {
-        JSkatEventBus.INSTANCE.post(new NextReplayMoveCommand(JSkatApplicationData.INSTANCE.getActiveTable()));
+    public void actionPerformed(JSkatActionEvent e) {
+
+        JSkatMaster.INSTANCE.stepForwardReplay(e.getActionCommand());
     }
 }

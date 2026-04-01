@@ -1,34 +1,26 @@
 package org.jskat.gui.action.iss;
 
 import org.jskat.control.JSkatMaster;
+import org.jskat.control.gui.action.JSkatActionEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
-import org.jskat.gui.img.JSkatGraphicRepository.Icon;
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
 
 /**
- * Implements the action for registering on ISS
+ * Implements the action for opening the ISS registration page in the default
+ * browser
  */
 public class RegisterAction extends AbstractJSkatAction {
-
 
     /**
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public RegisterAction() {
 
-        putValue(Action.NAME, STRINGS.getString("register_on_iss"));
-
-        setIcon(Icon.REGISTER);
+        putValue(NAME, STRINGS.getString("register_on_iss"));
     }
 
-    /**
-     * @see AbstractAction#actionPerformed(ActionEvent)
-     */
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(JSkatActionEvent e) {
 
-        JSkatMaster.INSTANCE.openIssRegisterPage();
+        JSkatMaster.INSTANCE.getView().openWebPage("http://www.skatgame.net/iss/register");
     }
 }

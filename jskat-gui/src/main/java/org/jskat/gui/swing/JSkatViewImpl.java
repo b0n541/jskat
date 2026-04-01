@@ -33,6 +33,7 @@ import org.jskat.data.Trick;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.data.iss.MovePlayer;
+import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.human.SwingHumanPlayer;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.javafx.dialog.help.JSkatHelpDialog;
@@ -128,7 +129,7 @@ public class JSkatViewImpl implements JSkatView {
 
     private void createToolbar() {
         toolbar = new JPanel(LayoutFactory.getMigLayout());
-        ActionMap actions = JSkatActions.INSTANCE.getActionMap();
+        Map<JSkatAction, AbstractJSkatAction> actions = JSkatActions.INSTANCE.getActionMap();
         toolbar.add(new ToolbarButton(actions.get(JSkatAction.CREATE_LOCAL_TABLE)));
         toolbar.add(new ToolbarButton(actions.get(JSkatAction.START_LOCAL_SERIES)));
         toolbar.add(new ToolbarButton(actions.get(JSkatAction.SHOW_ISS_LOGIN)));
@@ -156,7 +157,7 @@ public class JSkatViewImpl implements JSkatView {
             final String tableName = event.tableName();
             String tabTitle = null;
 
-            ActionMap actions = JSkatActions.INSTANCE.getActionMap();
+            Map<JSkatAction, AbstractJSkatAction> actions = JSkatActions.INSTANCE.getActionMap();
             SkatTablePanelWrapper panel = null;
             if (JSkatViewType.LOCAL_TABLE.equals(event.tableType())) {
                 panel = new SkatTablePanelWrapper(tableName, actions);
@@ -236,7 +237,7 @@ public class JSkatViewImpl implements JSkatView {
     }
 
     private void setActions(final GameState state) {
-        ActionMap actions = JSkatActions.INSTANCE.getActionMap();
+        Map<JSkatAction, AbstractJSkatAction> actions = JSkatActions.INSTANCE.getActionMap();
         switch (state) {
             case GAME_START:
                 actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(true);
@@ -333,7 +334,7 @@ public class JSkatViewImpl implements JSkatView {
     @Subscribe
     public void showISSLoginOn(final IssShowLoginCommand command) {
         SwingUtilities.invokeLater(() -> {
-            ActionMap actions = JSkatActions.INSTANCE.getActionMap();
+            Map<JSkatAction, AbstractJSkatAction> actions = JSkatActions.INSTANCE.getActionMap();
             final LoginPanelFX loginPanel = new LoginPanelFX(strings.getString("iss_login"), actions);
             addTabPanel(loginPanel, strings.getString("iss_login"));
         });
@@ -366,7 +367,7 @@ public class JSkatViewImpl implements JSkatView {
             // show ISS lobby if connection was successfull
             // FIXME (jan 07.12.2010) use constant instead of title
             closeTabPanel(strings.getString("iss_login"));
-            ActionMap actions = JSkatActions.INSTANCE.getActionMap();
+            Map<JSkatAction, AbstractJSkatAction> actions = JSkatActions.INSTANCE.getActionMap();
             issLobby = new LobbyPanelFX(strings.getString("iss_lobby"), actions);
             final JPanel panel = new JPanel(new BorderLayout());
             panel.add(issLobby, BorderLayout.CENTER);
