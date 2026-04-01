@@ -2,16 +2,12 @@ package org.jskat.gui.swing;
 
 import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
-import javafx.stage.Screen;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.command.general.*;
@@ -37,16 +33,12 @@ import org.jskat.data.Trick;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.data.iss.MovePlayer;
-import org.jskat.gui.action.human.*;
-import org.jskat.gui.action.iss.*;
-import org.jskat.gui.action.main.*;
 import org.jskat.gui.human.SwingHumanPlayer;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.javafx.dialog.help.JSkatHelpDialog;
 import org.jskat.gui.javafx.dialog.options.JSkatOptionsDialog;
 import org.jskat.gui.javafx.iss.LobbyPanelFX;
 import org.jskat.gui.javafx.iss.LoginPanelFX;
-import org.jskat.gui.javafx.main.WelcomePanelFX;
 import org.jskat.gui.javafx.table.SkatSeriesStartDialog;
 import org.jskat.gui.javafx.table.SkatTablePanel;
 import org.jskat.gui.swing.iss.ISSTablePanelWrapper;
@@ -83,113 +75,6 @@ public class JSkatViewImpl implements JSkatView {
     public static ActionMap actions;
     private LobbyPanelFX issLobby;
 
-    private static String VERSION;
-
-    /**
-     * Constructor
-     *
-     * @param targetScreen Target screen for main window
-     * @param menu         Menu bar
-     * @param version      JSkat version
-     */
-    public JSkatViewImpl(final Screen targetScreen, final MenuBar menu, final String version) {
-
-        JSkatViewImpl.VERSION = version;
-
-        JSkatEventBus.INSTANCE.register(this);
-
-        initActionMap(menu);
-        initGUI(targetScreen);
-    }
-
-    private static void initActionMap(final MenuBar menu) {
-
-        actions = new ActionMap();
-
-        // common actions
-        final ObservableList<Menu> menus = menu.getMenus();
-        final LoadSeriesAction loadSeriesAction = new LoadSeriesAction();
-        loadSeriesAction.setMenuItem(menus.get(0).getItems().get(0));
-        actions.put(JSkatAction.LOAD_SERIES, loadSeriesAction);
-        final SaveSeriesAction saveSeriesAction = new SaveSeriesAction();
-        saveSeriesAction.setMenuItem(menus.get(0).getItems().get(1));
-        actions.put(JSkatAction.SAVE_SERIES, saveSeriesAction);
-        final SaveSeriesAsAction saveSeriesAsAction = new SaveSeriesAsAction();
-        saveSeriesAsAction.setMenuItem(menus.get(0).getItems().get(2));
-        actions.put(JSkatAction.SAVE_SERIES_AS, saveSeriesAsAction);
-        actions.put(JSkatAction.HELP, new HelpAction());
-        actions.put(JSkatAction.LICENSE, new LicenseAction());
-        actions.put(JSkatAction.EXIT_JSKAT, new ExitAction());
-        actions.put(JSkatAction.PREFERENCES, new PreferencesAction());
-        actions.put(JSkatAction.ABOUT_JSKAT, new AboutAction());
-        actions.put(JSkatAction.CHANGE_ACTIVE_TABLE, new ChangeActiveTableAction());
-        // skat table actions
-        actions.put(JSkatAction.CREATE_LOCAL_TABLE, new CreateTableAction());
-        actions.put(JSkatAction.START_LOCAL_SERIES, new StartSkatSeriesAction());
-        actions.put(JSkatAction.CONTINUE_LOCAL_SERIES, new ContinueSkatSeriesAction());
-        actions.put(JSkatAction.REPLAY_GAME, new ReplayGameAction());
-        actions.put(JSkatAction.NEXT_REPLAY_STEP, new NextReplayMoveAction());
-        // ISS actions
-        actions.put(JSkatAction.REGISTER_ON_ISS, new RegisterAction());
-        actions.put(JSkatAction.OPEN_ISS_HOMEPAGE, new OpenHomepageAction());
-        actions.put(JSkatAction.SHOW_ISS_LOGIN, new ShowLoginPanelAction());
-        actions.put(JSkatAction.CONNECT_TO_ISS, new ConnectAction());
-        actions.put(JSkatAction.DISCONNECT_FROM_ISS, new LogoutAction());
-        actions.put(JSkatAction.SEND_CHAT_MESSAGE, new SendChatMessageAction());
-        actions.put(JSkatAction.CREATE_ISS_TABLE, new CreateIssTableAction());
-        actions.put(JSkatAction.JOIN_ISS_TABLE, new JoinIssTableAction());
-        actions.put(JSkatAction.LEAVE_ISS_TABLE, new LeaveIssTableAction());
-        actions.put(JSkatAction.OBSERVE_ISS_TABLE, new ObserveTableAction());
-        actions.put(JSkatAction.READY_TO_PLAY, new ReadyAction());
-        actions.put(JSkatAction.TALK_ENABLED, new TalkEnableAction());
-        actions.put(JSkatAction.CHANGE_TABLE_SEATS, new ChangeTableSeatsAction());
-        actions.put(JSkatAction.INVITE_ISS_PLAYER, new InvitePlayerAction());
-        actions.put(JSkatAction.RESIGN, new ResignAction());
-        actions.put(JSkatAction.SHOW_CARDS, new ShowCardsAction());
-        // Human player actions
-        actions.put(JSkatAction.MAKE_BID, new MakeBidAction());
-        actions.put(JSkatAction.HOLD_BID, new HoldBidAction());
-        actions.put(JSkatAction.PASS_BID, new PassBidAction());
-        actions.put(JSkatAction.PICK_UP_SKAT, new PickUpSkatAction());
-        actions.put(JSkatAction.PLAY_GRAND_HAND, new PlayGrandHandAction());
-        actions.put(JSkatAction.CALL_CONTRA, new CallContraAction());
-        actions.put(JSkatAction.CALL_RE, new CallReAction());
-        actions.put(JSkatAction.PLAY_SCHIEBERAMSCH, new PlaySchiebeRamschAction());
-        actions.put(JSkatAction.SCHIEBEN, new SchiebenAction());
-        actions.put(JSkatAction.PLAY_HAND_GAME, new PlayHandGameAction());
-        actions.put(JSkatAction.ANNOUNCE_GAME, new GameAnnounceAction());
-        actions.put(JSkatAction.PUT_CARD_INTO_SKAT, new PutCardIntoSkatAction());
-        actions.put(JSkatAction.TAKE_CARD_FROM_SKAT, new TakeCardFromSkatAction());
-        actions.put(JSkatAction.DISCARD_CARDS, new DiscardAction());
-        actions.put(JSkatAction.PLAY_CARD, new PlayCardAction());
-
-        // disable some actions
-        actions.get(JSkatAction.LOAD_SERIES).setEnabled(false);
-        actions.get(JSkatAction.SAVE_SERIES).setEnabled(false);
-        actions.get(JSkatAction.SAVE_SERIES_AS).setEnabled(false);
-        actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(false);
-        actions.get(JSkatAction.CREATE_ISS_TABLE).setEnabled(false);
-        actions.get(JSkatAction.INVITE_ISS_PLAYER).setEnabled(false);
-        actions.get(JSkatAction.REPLAY_GAME).setEnabled(false);
-        actions.get(JSkatAction.NEXT_REPLAY_STEP).setEnabled(false);
-    }
-
-    private void initGUI(final Screen targetScreen) {
-
-        mainPanel.setLayout(new BorderLayout());
-
-        createToolbar();
-        if (ScreenResolution.isBigScreen(targetScreen) && !options.isHideToolbar()) {
-            addToolbar();
-        }
-
-        // main area
-        addTabbedPane();
-        addTabPanel(new WelcomePanelFX(strings.getString("welcome"), actions),
-                strings.getString("welcome"));
-
-        LOG.debug("GUI initialization finished.");
-    }
 
     @Subscribe
     public void hideToolbarOn(final HideToolbarCommand command) {
