@@ -105,12 +105,7 @@ abstract class AbstractHandPanel(
         background = getPanelBackground(isActivePlayer)
         border = getPanelBorder(isActivePlayer)
 
-        val headerInsets = if (showIssWidgets) {
-            "-fx-padding: 0 5 0 0;"
-        } else {
-            "-fx-padding: 5;"
-        }
-        header.style = headerInsets
+        header.padding = Insets(10.0)
 
         header.children.add(headerLabel)
         val blankPanel = HBox()
@@ -123,7 +118,7 @@ abstract class AbstractHandPanel(
             header.children.add(clockPanel)
         }
         children.add(header)
-        VBox.setMargin(cardPanel, Insets(0.0, 5.0, 5.0, 5.0))
+        setMargin(cardPanel, Insets(0.0, 5.0, 5.0, 5.0))
     }
 
     private fun getPanelBackground(isActivePlayer: Boolean): Background {
