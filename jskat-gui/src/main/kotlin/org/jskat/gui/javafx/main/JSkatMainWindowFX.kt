@@ -5,14 +5,10 @@ import javafx.application.Platform
 import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.fxml.FXMLLoader
-import javafx.geometry.Pos
-import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.image.ImageView
-import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
-import javafx.scene.text.TextAlignment
 import org.jskat.control.JSkatEventBus
 import org.jskat.control.JSkatMaster
 import org.jskat.control.command.iss.IssShowLoginCommand
@@ -39,7 +35,7 @@ class JSkatMainWindowFX : VBox() {
     private val jskatMaster: JSkatMaster = JSkatMaster.INSTANCE
     private val resourceBundle: JSkatResourceBundle = JSkatResourceBundle.INSTANCE
     private val graphicRepository: JSkatGraphicRepository = JSkatGraphicRepository.INSTANCE
-    private val actions = JSkatActions.createActionMap()
+    private val actions = JSkatActions.actionMap
 
     private val content: TabPane = TabPane()
     private lateinit var issLobby: LobbyPanel
@@ -58,7 +54,7 @@ class JSkatMainWindowFX : VBox() {
             createToolbarButton("help", "help_tooltip", Icon.HELP) { showAbout() },
             createToolbarButton("about", "about_tooltip", Icon.ABOUT) { showAbout() }
         )
-        VBox.setVgrow(content, Priority.ALWAYS)
+        setVgrow(content, Priority.ALWAYS)
 
         children.addAll(menuBar, toolbar, content)
 
@@ -80,10 +76,12 @@ class JSkatMainWindowFX : VBox() {
                 val skatTablePanel = SkatTablePanel(tableName, actions)
                 SkatTableNode(skatTablePanel)
             }
+
             JSkatViewType.ISS_TABLE -> {
                 val issTablePanel = ISSTablePanel(tableName, actions)
                 SkatTableNode(issTablePanel)
             }
+
             else -> null
         }
 

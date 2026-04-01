@@ -34,7 +34,6 @@ import org.jskat.gui.javafx.iss.LobbyPanel
 import org.jskat.gui.javafx.table.ISSTablePanel
 import org.jskat.gui.javafx.table.SkatTableNode
 import org.jskat.gui.javafx.table.SkatTablePanel
-import org.jskat.gui.swing.JSkatViewImpl
 import org.jskat.util.JSkatResourceBundle
 import javax.swing.SwingUtilities
 
@@ -274,7 +273,7 @@ class JSkatMainWindowController {
             JSkatViewType.LOCAL_TABLE -> {
                 var skatTablePanel: SkatTablePanel? = null
                 SwingUtilities.invokeAndWait {
-                    skatTablePanel = SkatTablePanel(tableName, JSkatViewImpl.actions)
+                    skatTablePanel = SkatTablePanel(tableName, JSkatActions.actionMap)
                 }
                 SkatTableNode(skatTablePanel!!)
             }
@@ -282,7 +281,7 @@ class JSkatMainWindowController {
             JSkatViewType.ISS_TABLE -> {
                 var issTablePanel: ISSTablePanel? = null
                 SwingUtilities.invokeAndWait {
-                    issTablePanel = ISSTablePanel(tableName, JSkatViewImpl.actions)
+                    issTablePanel = ISSTablePanel(tableName, JSkatActions.actionMap)
                 }
                 SkatTableNode(issTablePanel!!)
             }
@@ -324,7 +323,7 @@ class JSkatMainWindowController {
                 Platform.runLater { tabs.tabs.remove(loginTab) }
             }
 
-        issLobby = LobbyPanel(JSkatViewImpl.actions, event.userName)
+        issLobby = LobbyPanel(JSkatActions.actionMap, event.userName)
         val scrollPane = ScrollPane(issLobby).apply {
             isFitToWidth = true
             isFitToHeight = true

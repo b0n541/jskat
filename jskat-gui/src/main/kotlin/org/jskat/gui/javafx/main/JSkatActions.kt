@@ -7,7 +7,7 @@ import org.jskat.gui.action.main.*
 import javax.swing.ActionMap
 
 object JSkatActions {
-    fun createActionMap(): ActionMap {
+    val actionMap: ActionMap by lazy {
         val actions = ActionMap()
 
         // common actions
@@ -70,6 +70,6 @@ object JSkatActions {
         actions.get(JSkatAction.REPLAY_GAME).isEnabled = false
         actions.get(JSkatAction.NEXT_REPLAY_STEP).isEnabled = false
 
-        return actions
+        actions
     }
 }
