@@ -6,14 +6,14 @@ import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
 import javafx.scene.paint.Color
 import org.jskat.control.gui.action.JSkatAction
+import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.GameSummary
+import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.util.CardList
 import org.jskat.util.Player
-import javax.swing.ActionMap
-import java.awt.event.ActionEvent
 
 class GameOverPanel(
-    actions: ActionMap,
+    actions: Map<JSkatAction, AbstractJSkatAction>,
     activeActions: List<JSkatAction>
 ) : BorderPane() {
 
@@ -35,13 +35,14 @@ class GameOverPanel(
         buttonPanel.children.add(skatPanel)
         
         for (action in activeActions) {
-            val swingAction = actions.get(action)
-            val button = Button(swingAction.getValue(javax.swing.Action.NAME) as String)
-            button.setOnAction { 
-                // Trigger Swing action
-                swingAction.actionPerformed(ActionEvent(this, ActionEvent.ACTION_PERFORMED, null))
+            val actionInstance = actions[action]
+            if (actionInstance != null) {
+                val button = Button(actionInstance.getValue(AbstractJSkatAction.NAME) as? String ?: action.name)
+                button.setOnAction { 
+                    actionInstance.actionPerformed(JSkatActionEvent(action, it.source))
+                }
+                buttonPanel.children.add(button)
             }
-            buttonPanel.children.add(button)
         }
         
         bottom = buttonPanel

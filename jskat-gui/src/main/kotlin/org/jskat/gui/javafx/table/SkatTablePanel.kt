@@ -15,16 +15,15 @@ import org.jskat.control.command.table.ShowCardsCommand
 import org.jskat.control.event.skatgame.*
 import org.jskat.control.event.table.*
 import org.jskat.control.gui.action.JSkatAction
+import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.SkatGameData
+import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.action.main.StartSkatSeriesAction
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.*
 import org.slf4j.LoggerFactory
-import java.awt.event.ActionEvent
-import javax.swing.Action
-import javax.swing.ActionMap
 
-open class SkatTablePanel(val tableName: String, protected val actions: ActionMap) : BorderPane() {
+open class SkatTablePanel(val tableName: String, protected val actions: Map<JSkatAction, AbstractJSkatAction>) : BorderPane() {
 
     private val log = LoggerFactory.getLogger(SkatTablePanel::class.java)
     protected val strings: JSkatResourceBundle = JSkatResourceBundle.INSTANCE
@@ -84,7 +83,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: ActionMa
         gameContextStackPane = StackPane()
         // gameContextStackPane.isOpaque = false // Removed
 
-        val startSkatSeriesAction = actions.get(JSkatAction.START_LOCAL_SERIES) as StartSkatSeriesAction
+        val startSkatSeriesAction = actions[JSkatAction.START_LOCAL_SERIES] as StartSkatSeriesAction
         val startPanel = StartContextPanel(startSkatSeriesAction)
         addContextPanel(ContextPanelType.START, startPanel)
 
@@ -137,22 +136,22 @@ open class SkatTablePanel(val tableName: String, protected val actions: ActionMa
 
         val buttonBox = HBox(10.0)
         buttonBox.alignment = javafx.geometry.Pos.CENTER
-        val callReAction = actions.get(JSkatAction.CALL_RE)
-        val callReButton = Button(callReAction.getValue(Action.NAME) as String)
-        callReButton.graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.OK, JSkatGraphicRepository.IconSize.BIG)
-        callReButton.setOnAction {
-            val awtEvent = ActionEvent(true, ActionEvent.ACTION_PERFORMED, JSkatAction.CALL_RE.name)
-            callReAction.actionPerformed(awtEvent)
-        }
-        buttonBox.children.add(callReButton)
+        val callReAction = actions[JSkatAction.CALL_RE]
+        if (callReAction != null) {
+            val callReButton = Button(callReAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.CALL_RE.name)
+            callReButton.graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.OK, JSkatGraphicRepository.IconSize.BIG)
+            callReButton.setOnAction {
+                callReAction.actionPerformed(JSkatActionEvent(JSkatAction.CALL_RE, true))
+            }
+            buttonBox.children.add(callReButton)
 
-        val noReButton = Button(strings.getString("no"))
-        noReButton.graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.STOP, JSkatGraphicRepository.IconSize.BIG)
-        noReButton.setOnAction {
-            val awtEvent = ActionEvent(false, ActionEvent.ACTION_PERFORMED, JSkatAction.CALL_RE.name)
-            callReAction.actionPerformed(awtEvent)
+            val noReButton = Button(strings.getString("no"))
+            noReButton.graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.STOP, JSkatGraphicRepository.IconSize.BIG)
+            noReButton.setOnAction {
+                callReAction.actionPerformed(JSkatActionEvent(JSkatAction.CALL_RE, false))
+            }
+            buttonBox.children.add(noReButton)
         }
-        buttonBox.children.add(noReButton)
 
         result.children.add(buttonBox)
         return result
@@ -162,13 +161,14 @@ open class SkatTablePanel(val tableName: String, protected val actions: ActionMa
         val additionalActionsPanel = VBox()
         // additionalActionsPanel.isOpaque = false // Removed
 
-        val contraAction = actions.get(JSkatAction.CALL_CONTRA)
-        val contraButton = Button(contraAction.getValue(Action.NAME) as String)
-        contraButton.setOnAction {
-            val awtEvent = ActionEvent(it.source, ActionEvent.ACTION_PERFORMED, null)
-            contraAction.actionPerformed(awtEvent)
+        val contraAction = actions[JSkatAction.CALL_CONTRA]
+        if (contraAction != null) {
+            val contraButton = Button(contraAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.CALL_CONTRA.name)
+            contraButton.setOnAction {
+                contraAction.actionPerformed(JSkatActionEvent(JSkatAction.CALL_CONTRA, it.source))
+            }
+            additionalActionsPanel.children.add(contraButton)
         }
-        additionalActionsPanel.children.add(contraButton)
         return additionalActionsPanel
     }
 

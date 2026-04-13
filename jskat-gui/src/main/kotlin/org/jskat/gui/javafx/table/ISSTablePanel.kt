@@ -11,18 +11,17 @@ import org.jskat.control.event.iss.IssTableGameStartedEvent
 import org.jskat.control.event.iss.IssTableStateChangedEvent
 import org.jskat.control.event.skatgame.GameStartEvent
 import org.jskat.control.gui.action.JSkatAction
+import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.iss.ChatMessage
 import org.jskat.data.iss.GameStartInformation
 import org.jskat.data.iss.TablePanelStatus
+import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.javafx.iss.ChatPanel
 import org.jskat.gui.javafx.iss.IssStartContextPanel
 import org.jskat.util.GameVariant
 import org.jskat.util.Player
-import java.awt.event.ActionEvent
-import javax.swing.Action
-import javax.swing.ActionMap
 
-class ISSTablePanel(tableName: String, actions: ActionMap) : SkatTablePanel(tableName, actions) {
+class ISSTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAction>) : SkatTablePanel(tableName, actions) {
 
     private lateinit var chatPanel: ChatPanel
     private var lastTableStatus: TablePanelStatus? = null
@@ -63,21 +62,23 @@ class ISSTablePanel(tableName: String, actions: ActionMap) : SkatTablePanel(tabl
         val additionalActionsPanel = VBox()
         additionalActionsPanel.spacing = 10.0
 
-        val resignAction = actions.get(JSkatAction.RESIGN)
-        val resignButton = Button(resignAction.getValue(Action.NAME) as String)
-        resignButton.setOnAction {
-            val awtEvent = ActionEvent(it.source, ActionEvent.ACTION_PERFORMED, null)
-            resignAction.actionPerformed(awtEvent)
+        val resignAction = actions[JSkatAction.RESIGN]
+        if (resignAction != null) {
+            val resignButton = Button(resignAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.RESIGN.name)
+            resignButton.setOnAction {
+                resignAction.actionPerformed(JSkatActionEvent(JSkatAction.RESIGN, it.source))
+            }
+            additionalActionsPanel.children.add(resignButton)
         }
-        additionalActionsPanel.children.add(resignButton)
 
-        val showCardsAction = actions.get(JSkatAction.SHOW_CARDS)
-        val showCardsButton = Button(showCardsAction.getValue(Action.NAME) as String)
-        showCardsButton.setOnAction {
-            val awtEvent = ActionEvent(it.source, ActionEvent.ACTION_PERFORMED, null)
-            showCardsAction.actionPerformed(awtEvent)
+        val showCardsAction = actions[JSkatAction.SHOW_CARDS]
+        if (showCardsAction != null) {
+            val showCardsButton = Button(showCardsAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.SHOW_CARDS.name)
+            showCardsButton.setOnAction {
+                showCardsAction.actionPerformed(JSkatActionEvent(JSkatAction.SHOW_CARDS, it.source))
+            }
+            additionalActionsPanel.children.add(showCardsButton)
         }
-        additionalActionsPanel.children.add(showCardsButton)
 
         return additionalActionsPanel
     }

@@ -4,13 +4,12 @@ import javafx.geometry.Pos
 import javafx.scene.control.Button
 import javafx.scene.layout.VBox
 import org.jskat.control.gui.action.JSkatAction
-import java.awt.event.ActionEvent
-import javax.swing.Action
-import javax.swing.ActionMap
+import org.jskat.control.gui.action.JSkatActionEvent
+import org.jskat.gui.action.AbstractJSkatAction
 
 class IssStartContextPanel(
-    private val actions: ActionMap,
-    private val actionList: List<JSkatAction>
+    actions: Map<JSkatAction, AbstractJSkatAction>,
+    actionList: List<JSkatAction>
 ) : VBox() {
 
     init {
@@ -18,13 +17,12 @@ class IssStartContextPanel(
         alignment = Pos.CENTER
 
         actionList.forEach { jskatAction ->
-            val swingAction = actions.get(jskatAction)
-            if (swingAction != null) {
-                val buttonText = swingAction.getValue(Action.NAME) as? String ?: jskatAction.name
+            val action = actions[jskatAction]
+            if (action != null) {
+                val buttonText = action.getValue(AbstractJSkatAction.NAME) as? String ?: jskatAction.name
                 val button = Button(buttonText)
                 button.setOnAction {
-                    val awtEvent = ActionEvent(it.source, ActionEvent.ACTION_PERFORMED, null)
-                    swingAction.actionPerformed(awtEvent)
+                    action.actionPerformed(JSkatActionEvent(jskatAction, it.source))
                 }
                 children.add(button)
             }

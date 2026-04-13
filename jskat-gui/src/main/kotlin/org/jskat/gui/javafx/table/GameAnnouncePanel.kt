@@ -5,21 +5,17 @@ import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.control.*
 import javafx.scene.layout.GridPane
-import org.jskat.control.JSkatEventBus
-import org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent
 import org.jskat.control.gui.action.JSkatAction
+import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.GameAnnouncement
-import org.jskat.data.GameContract
+import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.util.CardList
 import org.jskat.util.GameType
 import org.jskat.util.JSkatResourceBundle
 import org.slf4j.LoggerFactory
-import javax.swing.ActionMap
-import javax.swing.SwingUtilities
-import java.awt.event.ActionEvent as SwingActionEvent
 
 class GameAnnouncePanel(
-    private val actions: ActionMap,
+    private val actions: Map<JSkatAction, AbstractJSkatAction>,
     private val userPanel: JSkatUserPanel,
     private val discardPanel: DiscardPanel?
 ) : GridPane() {
@@ -41,7 +37,7 @@ class GameAnnouncePanel(
     private val schwarzBox = CheckBox(strings.getString("schwarz"))
 
     private val announceButton =
-        Button(actions.get(JSkatAction.ANNOUNCE_GAME).getValue(javax.swing.Action.NAME) as String)
+        Button(actions[JSkatAction.ANNOUNCE_GAME]?.getValue(AbstractJSkatAction.NAME) as? String ?: "")
 
     private var userPickedUpSkat = false
 
@@ -155,45 +151,40 @@ class GameAnnouncePanel(
         val pickedUpSkat = discardPanel?.userPickedUpSkat ?: false
         val discardedCards = discardPanel?.discardedCards ?: CardList()
 
-        SwingUtilities.invokeLater {
-            try {
-                var contract = GameContract(gameType)
+        try {
+            var contract = org.jskat.data.GameContract(gameType)
 
-                if (pickedUpSkat) {
-                    if (discardedCards.size() != 2) {
-                        JSkatEventBus.INSTANCE.post(InvalidNumberOfCardsInDiscardedSkatEvent())
-                        return@invokeLater
-                    }
-
-                    if (GameType.NULL == gameType && isOuvert) {
-                        contract = contract.withOuvert(userPanel.getHandCards())
-                    }
-
-                    val announcement = GameAnnouncement(contract, discardedCards)
-                    fireAnnounceAction(announcement)
-
-                } else {
-                    if (isHand) contract = contract.withHand()
-                    if (isSchneider) contract = contract.withSchneider()
-                    if (isSchwarz) contract = contract.withSchwarz()
-                    if (isOuvert) {
-                        contract = contract.withOuvert(userPanel.getHandCards())
-                    }
-
-                    val announcement = GameAnnouncement(contract, CardList.empty())
-                    fireAnnounceAction(announcement)
+            if (pickedUpSkat) {
+                if (discardedCards.size() != 2) {
+                    org.jskat.control.JSkatEventBus.INSTANCE.post(org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent())
+                    return
                 }
-            } catch (e: Exception) {
-                log.error(e.message)
+
+                if (GameType.NULL == gameType && isOuvert) {
+                    contract = contract.withOuvert(userPanel.getHandCards())
+                }
+
+                val announcement = GameAnnouncement(contract, discardedCards)
+                fireAnnounceAction(announcement)
+
+            } else {
+                if (isHand) contract = contract.withHand()
+                if (isSchneider) contract = contract.withSchneider()
+                if (isSchwarz) contract = contract.withSchwarz()
+                if (isOuvert) {
+                    contract = contract.withOuvert(userPanel.getHandCards())
+                }
+
+                val announcement = GameAnnouncement(contract, CardList.empty())
+                fireAnnounceAction(announcement)
             }
+        } catch (e: Exception) {
+            log.error(e.message)
         }
     }
 
     private fun fireAnnounceAction(announcement: GameAnnouncement) {
-        val action = actions.get(JSkatAction.ANNOUNCE_GAME)
-        val event =
-            SwingActionEvent(announcement, SwingActionEvent.ACTION_PERFORMED, JSkatAction.ANNOUNCE_GAME.toString())
-        action.actionPerformed(event)
+        actions[JSkatAction.ANNOUNCE_GAME]?.actionPerformed(JSkatActionEvent(JSkatAction.ANNOUNCE_GAME, announcement))
     }
 
     fun resetPanel() {

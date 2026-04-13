@@ -11,14 +11,14 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.Region
 import javafx.scene.paint.Color
 import org.jskat.control.gui.action.JSkatAction
+import org.jskat.control.gui.action.JSkatActionEvent
+import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.Player
-import java.awt.event.ActionEvent
 import java.awt.image.BufferedImage
-import javax.swing.ActionMap
 
 class BiddingContextPanel(
-    actions: ActionMap,
+    private val actions: Map<JSkatAction, AbstractJSkatAction>,
     bitmaps: JSkatGraphicRepository,
     userPanel: JSkatUserPanel
 ) : GridPane() {
@@ -36,8 +36,8 @@ class BiddingContextPanel(
     private val bidButton: Button
     private val passButton: Button
 
-    private val makeBidAction = actions.get(JSkatAction.MAKE_BID)
-    private val holdBidAction = actions.get(JSkatAction.HOLD_BID)
+    private val makeBidAction = actions[JSkatAction.MAKE_BID]
+    private val holdBidAction = actions[JSkatAction.HOLD_BID]
     private var currentBidAction = makeBidAction
 
     init {
@@ -76,34 +76,20 @@ class BiddingContextPanel(
         biddingGrid.add(userBid, 0, 1, 2, 1)
         setHalignment(userBid, HPos.CENTER)
 
-        bidButton = Button(makeBidAction.getValue(javax.swing.Action.NAME) as String)
+        bidButton = Button(currentBidAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "")
         bidButton.setOnAction {
-            val action = actions.get(JSkatAction.MAKE_BID)
-            if (action != null) {
+            currentBidAction?.let { action ->
                 Platform.runLater {
-                    action.actionPerformed(
-                        ActionEvent(
-                            this,
-                            ActionEvent.ACTION_PERFORMED,
-                            JSkatAction.MAKE_BID.toString()
-                        )
-                    )
+                    action.actionPerformed(JSkatActionEvent(JSkatAction.MAKE_BID, it.source))
                 }
             }
         }
 
-        passButton = Button(actions.get(JSkatAction.PASS_BID).getValue(javax.swing.Action.NAME) as String)
+        passButton = Button(actions[JSkatAction.PASS_BID]?.getValue(AbstractJSkatAction.NAME) as? String ?: "")
         passButton.setOnAction {
-            val action = actions.get(JSkatAction.PASS_BID)
-            if (action != null) {
+            actions[JSkatAction.PASS_BID]?.let { action ->
                 Platform.runLater {
-                    action.actionPerformed(
-                        ActionEvent(
-                            this,
-                            ActionEvent.ACTION_PERFORMED,
-                            JSkatAction.PASS_BID.toString()
-                        )
-                    )
+                    action.actionPerformed(JSkatActionEvent(JSkatAction.PASS_BID, it.source))
                 }
             }
         }

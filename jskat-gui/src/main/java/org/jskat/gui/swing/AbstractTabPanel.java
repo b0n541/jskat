@@ -65,4 +65,13 @@ public abstract class AbstractTabPanel extends JPanel {
      * Sets the focus.
      */
     protected abstract void setFocus();
+
+    /**
+     * Gets the action map.
+     *
+     * @return Action map
+     */
+    public Map<JSkatAction, AbstractJSkatAction> getActions() {
+        return actions;
+    }
 }

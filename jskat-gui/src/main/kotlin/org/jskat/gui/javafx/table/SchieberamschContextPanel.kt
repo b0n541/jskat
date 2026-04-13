@@ -8,17 +8,17 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import org.jskat.control.gui.action.JSkatAction
+import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.GameContract
+import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.util.Card
 import org.jskat.util.CardList
 import org.jskat.util.GameType
 import org.jskat.util.JSkatResourceBundle
 import org.slf4j.LoggerFactory
-import java.awt.event.ActionEvent
-import javax.swing.ActionMap
 
 class SchieberamschContextPanel(
-    private val actions: ActionMap,
+    actions: Map<JSkatAction, AbstractJSkatAction>,
     private val userPanel: JSkatUserPanel,
     maxCards: Int
 ) : GridPane() {
@@ -51,7 +51,7 @@ class SchieberamschContextPanel(
         resetPanel()
     }
 
-    private fun createGrandHandSchiebeRamschPanel(actions: ActionMap): GridPane {
+    private fun createGrandHandSchiebeRamschPanel(actions: Map<JSkatAction, AbstractJSkatAction>): GridPane {
         val result = GridPane()
         result.style = "-fx-background-color: transparent;"
 
@@ -63,8 +63,7 @@ class SchieberamschContextPanel(
         grandHandButton.setOnAction {
             try {
                 val contract = GameContract(GameType.GRAND).withHand()
-                val event = ActionEvent(contract, ActionEvent.ACTION_PERFORMED, JSkatAction.PLAY_GRAND_HAND.toString())
-                actions.get(JSkatAction.PLAY_GRAND_HAND).actionPerformed(event)
+                actions[JSkatAction.PLAY_GRAND_HAND]?.actionPerformed(JSkatActionEvent(JSkatAction.PLAY_GRAND_HAND, contract))
             } catch (e: IllegalArgumentException) {
                 log.error(e.message)
             }

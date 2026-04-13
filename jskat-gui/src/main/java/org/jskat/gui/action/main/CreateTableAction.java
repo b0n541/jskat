@@ -1,6 +1,6 @@
 package org.jskat.gui.action.main;
 
-import org.jskat.control.JSkatMaster;
+import org.jskat.control.command.table.RequestCreateTableCommand;
 import org.jskat.control.gui.action.JSkatActionEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
@@ -26,6 +26,6 @@ public class CreateTableAction extends AbstractJSkatAction {
     @Override
     public void actionPerformed(final JSkatActionEvent e) {
 
-        JSkatMaster.INSTANCE.createTable();
+        EVENTBUS.post(new RequestCreateTableCommand());
     }
 }

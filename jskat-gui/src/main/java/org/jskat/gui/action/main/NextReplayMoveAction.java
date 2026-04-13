@@ -1,6 +1,6 @@
 package org.jskat.gui.action.main;
 
-import org.jskat.control.JSkatMaster;
+import org.jskat.control.command.table.NextReplayMoveCommand;
 import org.jskat.control.gui.action.JSkatActionEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
@@ -19,12 +19,12 @@ public class NextReplayMoveAction extends AbstractJSkatAction {
         putValue(SHORT_DESCRIPTION,
                 STRINGS.getString("next_replay_step_tooltip"));
 
-        setIcon(Icon.FAST_FORWARD);
+        setIcon(Icon.NEXT);
     }
 
     @Override
     public void actionPerformed(JSkatActionEvent e) {
 
-        JSkatMaster.INSTANCE.stepForwardReplay(e.getActionCommand());
+        EVENTBUS.post(new NextReplayMoveCommand(e.getActionCommand()));
     }
 }

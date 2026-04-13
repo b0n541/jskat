@@ -10,12 +10,12 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import javafx.scene.text.Font
 import org.jskat.control.gui.action.JSkatAction
+import org.jskat.control.gui.action.JSkatActionEvent
+import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.JSkatResourceBundle
-import java.awt.event.ActionEvent
-import javax.swing.ActionMap
 
-class WelcomePanel(private val actions: ActionMap) : VBox() {
+class WelcomePanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) : VBox() {
 
     private val strings = JSkatResourceBundle.INSTANCE
     private val bitmaps = JSkatGraphicRepository.INSTANCE
@@ -117,14 +117,7 @@ class WelcomePanel(private val actions: ActionMap) : VBox() {
         button.graphic = bitmaps.getImageView(icon, JSkatGraphicRepository.IconSize.BIG)
         button.maxWidth = Double.MAX_VALUE
         button.setOnAction { e ->
-            val swingAction = actions.get(action)
-            swingAction?.actionPerformed(
-                ActionEvent(
-                    e.source,
-                    ActionEvent.ACTION_PERFORMED,
-                    null
-                )
-            )
+            actions[action]?.actionPerformed(JSkatActionEvent(action, e.source))
         }
         return button
     }

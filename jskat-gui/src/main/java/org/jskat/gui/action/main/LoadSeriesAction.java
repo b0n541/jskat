@@ -1,6 +1,6 @@
 package org.jskat.gui.action.main;
 
-import org.jskat.control.JSkatMaster;
+import org.jskat.control.command.table.LoadSeriesCommand;
 import org.jskat.control.gui.action.JSkatActionEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
@@ -19,12 +19,12 @@ public class LoadSeriesAction extends AbstractJSkatAction {
         putValue(SHORT_DESCRIPTION,
                 STRINGS.getString("load_series_tooltip"));
 
-        setIcon(Icon.OPEN);
+        setIcon(Icon.LOAD);
     }
 
     @Override
     public void actionPerformed(JSkatActionEvent e) {
 
-        JSkatMaster.INSTANCE.loadSeries();
+        EVENTBUS.post(new LoadSeriesCommand());
     }
 }

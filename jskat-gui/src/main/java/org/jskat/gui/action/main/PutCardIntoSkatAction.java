@@ -1,6 +1,6 @@
 package org.jskat.gui.action.main;
 
-import org.jskat.control.JSkatMaster;
+import org.jskat.control.command.table.PutCardIntoSkatCommand;
 import org.jskat.control.gui.action.JSkatActionEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.util.Card;
@@ -23,7 +23,7 @@ public class PutCardIntoSkatAction extends AbstractJSkatAction {
 
         if (e.getSource() instanceof Card) {
 
-            JSkatMaster.INSTANCE.putCardIntoSkat(e.getActionCommand(), (Card) e.getSource());
+            EVENTBUS.post(new PutCardIntoSkatCommand(e.getActionCommand(), (Card) e.getSource()));
         }
     }
 }

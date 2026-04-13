@@ -1,17 +1,18 @@
 package org.jskat.gui.javafx
 
 import javafx.scene.layout.BorderPane
+import org.jskat.control.gui.action.JSkatAction
 import org.jskat.data.JSkatOptions
+import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.JSkatResourceBundle
-import javax.swing.ActionMap
 
 /**
  * Generic Tab Panel for JSkat
  */
 abstract class AbstractTabPanel(
     val tabName: String,
-    protected val actions: ActionMap?
+    protected val actions: Map<JSkatAction, AbstractJSkatAction>?
 ) : BorderPane() {
 
     /**

@@ -95,7 +95,7 @@ class JSkatMainWindowFX : VBox() {
                 content.selectionModel.select(newTab)
 
                 if (event.tableType() == JSkatViewType.LOCAL_TABLE) {
-                    actions[JSkatAction.START_LOCAL_SERIES].isEnabled = true
+                    actions[JSkatAction.START_LOCAL_SERIES]?.setEnabled(true)
                 }
             }
         }

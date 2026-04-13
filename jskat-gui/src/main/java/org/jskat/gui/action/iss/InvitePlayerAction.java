@@ -1,6 +1,6 @@
 package org.jskat.gui.action.iss;
 
-import org.jskat.control.JSkatMaster;
+import org.jskat.control.command.iss.IssInvitePlayerCommand;
 import org.jskat.control.gui.action.JSkatActionEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
 
@@ -20,6 +20,6 @@ public class InvitePlayerAction extends AbstractJSkatAction {
     @Override
     public void actionPerformed(JSkatActionEvent e) {
 
-        JSkatMaster.INSTANCE.getIssController().invitePlayer();
+        EVENTBUS.post(new IssInvitePlayerCommand());
     }
 }

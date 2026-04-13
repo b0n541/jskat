@@ -1,6 +1,6 @@
 package org.jskat.gui.action.iss;
 
-import org.jskat.control.JSkatMaster;
+import org.jskat.control.command.iss.IssReadyToPlayCommand;
 import org.jskat.control.gui.action.JSkatActionEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
 
@@ -22,7 +22,7 @@ public class ReadyAction extends AbstractJSkatAction {
 
         if (e.getSource() instanceof String) {
 
-            JSkatMaster.INSTANCE.getIssController().sendReadySignal((String) e.getSource());
+            EVENTBUS.post(new IssReadyToPlayCommand((String) e.getSource()));
         }
     }
 }

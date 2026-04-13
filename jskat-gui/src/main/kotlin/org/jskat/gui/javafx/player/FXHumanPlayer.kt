@@ -7,7 +7,6 @@ import org.jskat.data.GameAnnouncement
 import org.jskat.data.GameContract
 import org.jskat.util.Card
 import org.jskat.util.CardList
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 class FXHumanPlayer : AbstractHumanJSkatPlayer() {
@@ -223,6 +222,13 @@ class FXHumanPlayer : AbstractHumanJSkatPlayer() {
                     gameAnnouncementStep = GameAnnouncementStep.PLAYS_HAND
                 } else {
                     discardSkat = source.discardedCards
+                    gameAnnouncementStep = GameAnnouncementStep.DISCARDED_SKAT
+                }
+            } else if (source is GameContract) {
+                gameContract = source
+                if (gameContract!!.hand) {
+                    gameAnnouncementStep = GameAnnouncementStep.PLAYS_HAND
+                } else {
                     gameAnnouncementStep = GameAnnouncementStep.DISCARDED_SKAT
                 }
             } else {

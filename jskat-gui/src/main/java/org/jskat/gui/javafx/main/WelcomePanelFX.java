@@ -3,15 +3,17 @@ package org.jskat.gui.javafx.main;
 import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
+import org.jskat.control.gui.action.JSkatAction;
+import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.swing.AbstractTabPanel;
 
-import javax.swing.*;
 import java.awt.*;
+import java.util.Map;
 
 @Deprecated
 public class WelcomePanelFX extends AbstractTabPanel {
 
-    public WelcomePanelFX(String tableName, ActionMap actions) {
+    public WelcomePanelFX(String tableName, Map<JSkatAction, AbstractJSkatAction> actions) {
         super(tableName, actions);
     }
 
@@ -22,7 +24,7 @@ public class WelcomePanelFX extends AbstractTabPanel {
         add(fxPanel, BorderLayout.CENTER);
 
         Platform.runLater(() -> {
-            WelcomePanel welcomePanel = new WelcomePanel(getActionMap());
+            WelcomePanel welcomePanel = new WelcomePanel(getActions());
             Scene scene = new Scene(welcomePanel);
             fxPanel.setScene(scene);
         });

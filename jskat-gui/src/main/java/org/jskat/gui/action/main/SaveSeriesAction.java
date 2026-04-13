@@ -1,6 +1,7 @@
 package org.jskat.gui.action.main;
 
-import org.jskat.control.JSkatMaster;
+import org.jskat.control.JSkatEventBus;
+import org.jskat.control.command.table.SaveSeriesCommand;
 import org.jskat.control.gui.action.JSkatActionEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
@@ -25,6 +26,6 @@ public class SaveSeriesAction extends AbstractJSkatAction {
     @Override
     public void actionPerformed(JSkatActionEvent e) {
 
-        JSkatMaster.INSTANCE.saveSeries(e.getActionCommand());
+        EVENTBUS.post(new SaveSeriesCommand(e.getActionCommand()));
     }
 }

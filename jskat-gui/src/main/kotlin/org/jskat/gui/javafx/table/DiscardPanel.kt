@@ -7,16 +7,15 @@ import javafx.scene.layout.HBox
 import javafx.scene.layout.StackPane
 import javafx.scene.shape.Rectangle
 import org.jskat.control.gui.action.JSkatAction
+import org.jskat.control.gui.action.JSkatActionEvent
+import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.Card
 import org.jskat.util.CardList
 import org.jskat.util.JSkatResourceBundle
-import java.awt.event.ActionEvent
-import javax.swing.ActionMap
-import javax.swing.SwingUtilities
 
 class DiscardPanel(
-    private val actions: ActionMap,
+    private val actions: Map<JSkatAction, AbstractJSkatAction>,
     private val maxCardCount: Int
 ) : StackPane() {
 
@@ -47,18 +46,9 @@ class DiscardPanel(
             pickUpSkatButton.isDisable = true
 
             // Fire the event to request the skat cards from the game logic
-            val action = actions.get(JSkatAction.PICK_UP_SKAT)
-            if (action != null) {
-                SwingUtilities.invokeLater {
-                    action.actionPerformed(
-                        ActionEvent(
-                            this,
-                            ActionEvent.ACTION_PERFORMED,
-                            JSkatAction.PICK_UP_SKAT.toString()
-                        )
-                    )
-                }
-            }
+            actions[JSkatAction.PICK_UP_SKAT]?.actionPerformed(
+                JSkatActionEvent(JSkatAction.PICK_UP_SKAT, it.source)
+            )
         }
 
         // Initially, only the button is visible
@@ -122,18 +112,9 @@ class DiscardPanel(
         for (card in cards) {
             val cardView = ImageView(bitmaps.getCardImageFX(card))
             cardView.setOnMouseClicked {
-                val action = actions.get(JSkatAction.TAKE_CARD_FROM_SKAT)
-                if (action != null) {
-                    SwingUtilities.invokeLater {
-                        action.actionPerformed(
-                            ActionEvent(
-                                card,
-                                ActionEvent.ACTION_PERFORMED,
-                                JSkatAction.TAKE_CARD_FROM_SKAT.toString()
-                            )
-                        )
-                    }
-                }
+                actions[JSkatAction.TAKE_CARD_FROM_SKAT]?.actionPerformed(
+                    JSkatActionEvent(JSkatAction.TAKE_CARD_FROM_SKAT, card)
+                )
             }
             cardViews.children.add(cardView)
         }

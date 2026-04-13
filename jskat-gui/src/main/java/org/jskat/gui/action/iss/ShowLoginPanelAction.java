@@ -16,7 +16,7 @@ public class ShowLoginPanelAction extends AbstractJSkatAction {
     public ShowLoginPanelAction() {
 
         putValue(NAME, STRINGS.getString("iss_login"));
-        setIcon(Icon.LOG_IN);
+        setIcon(Icon.CONNECT_ISS);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package org.jskat.gui.action.main;
 
-import org.jskat.control.JSkatMaster;
+import org.jskat.control.command.table.SetActiveTableCommand;
 import org.jskat.control.gui.action.JSkatActionEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
 
@@ -20,6 +20,6 @@ public class ChangeActiveTableAction extends AbstractJSkatAction {
     @Override
     public void actionPerformed(JSkatActionEvent e) {
 
-        JSkatMaster.INSTANCE.setActiveTable(e.getActionCommand());
+        EVENTBUS.post(new SetActiveTableCommand(e.getActionCommand()));
     }
 }

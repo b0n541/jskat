@@ -1,6 +1,6 @@
 package org.jskat.gui.action.main;
 
-import org.jskat.control.JSkatMaster;
+import org.jskat.control.command.table.TakeCardFromSkatCommand;
 import org.jskat.control.gui.action.JSkatActionEvent;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.util.Card;
@@ -23,7 +23,7 @@ public class TakeCardFromSkatAction extends AbstractJSkatAction {
 
         if (e.getSource() instanceof Card) {
 
-            JSkatMaster.INSTANCE.takeCardFromSkat(e.getActionCommand(), (Card) e.getSource());
+            EVENTBUS.post(new TakeCardFromSkatCommand(e.getActionCommand(), (Card) e.getSource()));
         }
     }
 }

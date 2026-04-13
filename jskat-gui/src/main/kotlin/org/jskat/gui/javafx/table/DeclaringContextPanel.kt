@@ -5,12 +5,13 @@ import javafx.scene.layout.GridPane
 import javafx.scene.layout.Priority
 import javafx.scene.layout.Region
 import javafx.scene.paint.Color
+import org.jskat.control.gui.action.JSkatAction
+import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.util.Card
 import org.jskat.util.CardList
-import javax.swing.ActionMap
 
 class DeclaringContextPanel(
-    actions: ActionMap,
+    actions: Map<JSkatAction, AbstractJSkatAction>,
     newUserPanel: JSkatUserPanel
 ) : GridPane() {
 
