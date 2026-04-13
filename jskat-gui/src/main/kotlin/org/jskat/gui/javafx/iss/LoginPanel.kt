@@ -72,7 +72,7 @@ class LoginPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) : V
         loginButton.defaultButtonProperty()
             .bind(loginField.textProperty().isNotEmpty.and(passwordField.textProperty().isNotEmpty))
 
-        val homepageButton = Button(strings.getString("iss_homepage"))
+        val homepageButton = Button(strings.getString("open_iss_homepage"))
         homepageButton.setOnAction {
             val action = actions[JSkatAction.OPEN_ISS_HOMEPAGE]
             action?.actionPerformed(JSkatActionEvent(JSkatAction.OPEN_ISS_HOMEPAGE, it.source))

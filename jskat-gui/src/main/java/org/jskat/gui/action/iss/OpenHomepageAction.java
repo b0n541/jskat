@@ -14,7 +14,7 @@ public class OpenHomepageAction extends AbstractJSkatAction {
      */
     public OpenHomepageAction() {
 
-        putValue(NAME, STRINGS.getString("iss_homepage"));
+        putValue(NAME, STRINGS.getString("open_iss_homepage"));
     }
 
     @Override
