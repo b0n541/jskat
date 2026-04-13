@@ -14,7 +14,7 @@ public class JoinIssTableAction extends AbstractJSkatAction {
      */
     public JoinIssTableAction() {
 
-        putValue(NAME, STRINGS.getString("join_table"));
+        putValue(NAME, STRINGS.getString("iss_join_table"));
     }
 
     @Override

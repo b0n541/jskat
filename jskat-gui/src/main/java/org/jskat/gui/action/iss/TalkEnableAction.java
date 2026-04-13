@@ -14,7 +14,7 @@ public class TalkEnableAction extends AbstractJSkatAction {
      */
     public TalkEnableAction() {
 
-        putValue(NAME, STRINGS.getString("talk_enabled"));
+        putValue(NAME, STRINGS.getString("iss_chat_enabled"));
     }
 
     @Override
