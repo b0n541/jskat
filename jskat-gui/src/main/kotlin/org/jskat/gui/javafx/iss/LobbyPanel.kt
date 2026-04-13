@@ -104,7 +104,7 @@ class LobbyPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>, pri
                             HBox(2.0).apply {
                                 alignment = Pos.CENTER
                                 item.forEach { flagChar ->
-                                    val flag = JSkatGraphicRepository.Flag.valueOf(flagChar.toString())
+                                    val flag = JSkatGraphicRepository.Flag.valueOf(flagChar)
                                     if (flag != null) {
                                         val awtImage = bitmaps.getFlagImage(flag)
                                         val bufferedImage = BufferedImage(
