@@ -47,8 +47,10 @@ class GameInformationPanel : HBox() {
                 null
             )
         )
+        // Fixed height as requested
         minHeight = 25.0
         maxHeight = 25.0
+        prefHeight = 25.0
         minWidth = 0.0
         alignment = Pos.CENTER
         

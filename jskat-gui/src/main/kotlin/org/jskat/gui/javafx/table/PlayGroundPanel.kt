@@ -1,9 +1,12 @@
 package org.jskat.gui.javafx.table
 
+import javafx.geometry.HPos
 import javafx.geometry.Insets
 import javafx.geometry.Pos
+import javafx.geometry.VPos
 import javafx.scene.layout.*
 import javafx.scene.paint.Color
+import javafx.scene.shape.Rectangle
 import org.jskat.gui.img.JSkatGraphicRepository
 
 class PlayGroundPanel(
@@ -32,23 +35,28 @@ class PlayGroundPanel(
         hgap = 10.0
 
         // Configure rows for 30/40/30 distribution
-        // Use minHeight to ensure panels don't completely disappear when window is very small
         rowConstraints.addAll(
             RowConstraints().apply {
                 percentHeight = 30.0
-                minHeight = 50.0
+                valignment = VPos.CENTER
+                vgrow = Priority.ALWAYS
             },
             RowConstraints().apply {
                 percentHeight = 40.0
-                minHeight = 100.0
+                valignment = VPos.CENTER
+                vgrow = Priority.ALWAYS
             },
             RowConstraints().apply {
                 percentHeight = 30.0
-                minHeight = 50.0
+                valignment = VPos.CENTER
+                vgrow = Priority.ALWAYS
             }
         )
         // Configure column to grow
-        columnConstraints.add(ColumnConstraints().apply { hgrow = Priority.ALWAYS })
+        columnConstraints.add(ColumnConstraints().apply {
+            hgrow = Priority.ALWAYS
+            halignment = HPos.CENTER
+        })
 
         val opponentBox = HBox(leftOpponentPanel, rightOpponentPanel).apply {
             alignment = Pos.CENTER
@@ -73,8 +81,15 @@ class PlayGroundPanel(
                 null
             )
         )
-        // Add some internal padding to the context pane so content doesn't touch the rounded edges
         gameContextStackPane.padding = Insets(10.0)
+        gameContextStackPane.minHeight = 0.0
+        gameContextStackPane.minWidth = 0.0
+        
+        // Add clipping to the middle panel to prevent it from overflowing into other rows
+        val clipRect = Rectangle()
+        clipRect.widthProperty().bind(gameContextStackPane.widthProperty())
+        clipRect.heightProperty().bind(gameContextStackPane.heightProperty())
+        gameContextStackPane.clip = clipRect
 
         add(topArea, 0, 0)
         add(gameContextStackPane, 0, 1)
