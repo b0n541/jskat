@@ -13,6 +13,7 @@ import org.jskat.control.command.general.ShowPreferencesCommand;
 import org.jskat.control.command.iss.IssShowLoginCommand;
 import org.jskat.control.command.table.NextReplayMoveCommand;
 import org.jskat.control.command.table.ReplayGameCommand;
+import org.jskat.control.command.table.RequestCreateTableCommand;
 import org.jskat.control.command.table.StartSkatSeriesCommand;
 import org.jskat.data.JSkatApplicationData;
 import org.jskat.gui.img.JSkatGraphicRepository;
@@ -56,7 +57,7 @@ public final class JSkatMenuFactory {
 
         final MenuItem playOnLocalTable = new MenuItem(strings.getString("play_on_local_table"));
         playOnLocalTable.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.TABLE, IconSize.SMALL));
-        playOnLocalTable.setOnAction(actionEvent -> JSkatMaster.INSTANCE.createTable());
+        playOnLocalTable.setOnAction(actionEvent -> JSkatEventBus.INSTANCE.post(new RequestCreateTableCommand()));
         final MenuItem startSkatSeriesMenuItem = new MenuItem(strings.getString("start_series"));
         startSkatSeriesMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE.post(new StartSkatSeriesCommand(JSkatApplicationData.INSTANCE.getActiveTable())));
         startSkatSeriesMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.PLAY, IconSize.SMALL));

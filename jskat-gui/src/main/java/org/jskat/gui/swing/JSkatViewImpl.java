@@ -12,7 +12,9 @@ import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
 import org.jskat.control.command.general.*;
 import org.jskat.control.command.iss.IssDisconnectCommand;
+import org.jskat.control.command.iss.IssInvitePlayerCommand;
 import org.jskat.control.command.iss.IssShowLoginCommand;
+import org.jskat.control.command.table.RequestCreateTableCommand;
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.command.table.StartSkatSeriesCommand;
 import org.jskat.control.event.iss.IssConnectedEvent;
@@ -25,6 +27,7 @@ import org.jskat.control.gui.JSkatView;
 import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.control.iss.ChatMessageType;
+import org.jskat.data.JSkatApplicationData;
 import org.jskat.data.JSkatOptions;
 import org.jskat.data.JSkatViewType;
 import org.jskat.data.SkatGameData;
@@ -83,6 +86,8 @@ public class JSkatViewImpl implements JSkatView {
         mainPanel.setLayout(new BorderLayout());
         addTabbedPane();
         createToolbar();
+
+        JSkatEventBus.INSTANCE.register(this);
     }
 
     @Subscribe
@@ -537,6 +542,23 @@ public class JSkatViewImpl implements JSkatView {
     @Subscribe
     public void showPreferencesDialogOn(final ShowPreferencesCommand command) {
         Platform.runLater(() -> new JSkatOptionsDialog(null).showAndWait());
+    }
+
+    @Subscribe
+    public void onRequestCreateTable(final RequestCreateTableCommand command) {
+        SwingUtilities.invokeLater(() -> JSkatMaster.INSTANCE.createTable());
+    }
+
+    @Subscribe
+    public void onIssInvitePlayer(final IssInvitePlayerCommand command) {
+        final JSkatApplicationData data = JSkatApplicationData.INSTANCE;
+        final Set<String> issPlayerNames = new HashSet<>(data.getAvailableISSPlayer());
+        issPlayerNames.remove(data.getIssUserName());
+
+        final List<String> player = getPlayerForInvitation(issPlayerNames);
+        for (final String currPlayer : player) {
+            JSkatMaster.INSTANCE.getIssController().invitePlayer(data.getActiveTable(), currPlayer);
+        }
     }
 
     @Subscribe

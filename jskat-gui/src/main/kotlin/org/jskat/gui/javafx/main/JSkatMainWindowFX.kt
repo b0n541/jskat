@@ -11,12 +11,15 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import org.jskat.control.JSkatEventBus
 import org.jskat.control.JSkatMaster
+import org.jskat.control.command.iss.IssInvitePlayerCommand
 import org.jskat.control.command.iss.IssShowLoginCommand
+import org.jskat.control.command.table.RequestCreateTableCommand
 import org.jskat.control.command.table.StartSkatSeriesCommand
 import org.jskat.control.event.iss.*
 import org.jskat.control.event.table.TableCreatedEvent
 import org.jskat.control.event.table.TableRemovedEvent
 import org.jskat.control.gui.action.JSkatAction
+import org.jskat.data.JSkatApplicationData
 import org.jskat.data.JSkatViewType
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.gui.img.JSkatGraphicRepository.Icon
@@ -33,6 +36,7 @@ import org.jskat.util.JSkatResourceBundle
 class JSkatMainWindowFX : VBox() {
 
     private val jskatMaster: JSkatMaster = JSkatMaster.INSTANCE
+    private val data: JSkatApplicationData = JSkatApplicationData.INSTANCE
     private val resourceBundle: JSkatResourceBundle = JSkatResourceBundle.INSTANCE
     private val graphicRepository: JSkatGraphicRepository = JSkatGraphicRepository.INSTANCE
     private val actions = JSkatActions.actionMap
@@ -208,6 +212,26 @@ class JSkatMainWindowFX : VBox() {
         if (::issLobby.isInitialized) {
             Platform.runLater {
                 issLobby.removePlayer(event.playerName())
+            }
+        }
+    }
+
+    @Subscribe
+    fun onRequestCreateTable(command: RequestCreateTableCommand) {
+        Platform.runLater {
+            createNewLocalTable()
+        }
+    }
+
+    @Subscribe
+    fun onIssInvitePlayer(command: IssInvitePlayerCommand) {
+        Platform.runLater {
+            val issPlayerNames = data.availableISSPlayer.toMutableSet()
+            issPlayerNames.remove(data.issUserName)
+
+            val players = jskatMaster.view.getPlayerForInvitation(issPlayerNames)
+            for (player in players) {
+                jskatMaster.issController.invitePlayer(data.activeTable, player)
             }
         }
     }

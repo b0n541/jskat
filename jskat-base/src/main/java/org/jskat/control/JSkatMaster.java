@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Controls everything in JSkat
@@ -76,7 +75,11 @@ public class JSkatMaster {
 
     /**
      * Creates a new skat table
+     *
+     * @deprecated Use {@link org.jskat.control.command.table.RequestCreateTableCommand}
+     * instead.
      */
+    @Deprecated
     public void createTable() {
 
         // TODO check whether a connection to ISS is established
@@ -144,16 +147,13 @@ public class JSkatMaster {
 
     /**
      * Invites players on ISS to the current table
+     *
+     * @deprecated Use {@link org.jskat.control.command.iss.IssInvitePlayerCommand}
+     * instead.
      */
+    @Deprecated
     public void invitePlayer() {
-
-        final Set<String> issPlayerNames = data.getAvailableISSPlayer();
-        issPlayerNames.remove(data.getIssUserName());
-
-        final List<String> player = view.getPlayerForInvitation(issPlayerNames);
-        for (final String currPlayer : player) {
-            getIssController().invitePlayer(data.getActiveTable(), currPlayer);
-        }
+        // moved to UI
     }
 
     /**
