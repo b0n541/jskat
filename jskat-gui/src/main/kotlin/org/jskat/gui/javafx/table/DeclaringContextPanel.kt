@@ -11,11 +11,12 @@ import org.jskat.util.Card
 import org.jskat.util.CardList
 
 class DeclaringContextPanel(
+    tableName: String,
     actions: Map<JSkatAction, AbstractJSkatAction>,
     newUserPanel: JSkatUserPanel
 ) : GridPane() {
 
-    private val discardPanel = DiscardPanel(actions, 2)
+    private val discardPanel = DiscardPanel(tableName, actions, 2)
     private val announcePanel = GameAnnouncePanel(actions, newUserPanel, discardPanel)
 
     init {

@@ -18,6 +18,7 @@ import org.jskat.util.JSkatResourceBundle
 import org.slf4j.LoggerFactory
 
 class SchieberamschContextPanel(
+    tableName: String,
     actions: Map<JSkatAction, AbstractJSkatAction>,
     private val userPanel: JSkatUserPanel,
     maxCards: Int
@@ -26,7 +27,7 @@ class SchieberamschContextPanel(
     private val strings = JSkatResourceBundle.INSTANCE
     private val log = LoggerFactory.getLogger(SchieberamschContextPanel::class.java)
 
-    private val discardPanel = DiscardPanel(actions, maxCards)
+    private val discardPanel = DiscardPanel(tableName, actions, maxCards)
     private val centerPanel = StackPane()
     private val grandHandPanel: GridPane
 

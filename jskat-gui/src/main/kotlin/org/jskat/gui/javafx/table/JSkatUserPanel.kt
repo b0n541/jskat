@@ -8,6 +8,7 @@ import org.jskat.util.CardList
 import org.slf4j.LoggerFactory
 
 class JSkatUserPanel(
+    private val tableName: String,
     maxCards: Int,
     showIssWidgets: Boolean,
     actions: Map<JSkatAction, AbstractJSkatAction>
@@ -19,14 +20,13 @@ class JSkatUserPanel(
 
     init {
         showCards()
-        minHeight = 0.0
 
         cardPanel.onCardClicked = { card ->
             when (gameState) {
                 SkatGameData.GameState.DISCARDING, SkatGameData.GameState.SCHIEBERAMSCH -> {
                     log.debug("Card clicked in discarding phase: $card")
                     actions[JSkatAction.PUT_CARD_INTO_SKAT]?.actionPerformed(
-                        JSkatActionEvent(JSkatAction.PUT_CARD_INTO_SKAT, card)
+                        JSkatActionEvent(tableName, card)
                     )
                 }
 

@@ -1,6 +1,9 @@
 package org.jskat.control;
 
+import com.google.common.eventbus.Subscribe;
+import org.jskat.control.command.table.PutCardIntoSkatCommand;
 import org.jskat.control.command.table.ShowCardsCommand;
+import org.jskat.control.command.table.TakeCardFromSkatCommand;
 import org.jskat.control.event.skatgame.*;
 import org.jskat.control.event.table.*;
 import org.jskat.control.gui.JSkatView;
@@ -60,6 +63,7 @@ public class SkatGame {
         data.setPlayerName(Player.MIDDLEHAND, newMiddleHand.getPlayerName());
         data.setPlayerName(Player.REARHAND, newRearHand.getPlayerName());
         JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(data);
+        JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(this);
 
         this.variant = variant;
 
@@ -198,6 +202,7 @@ public class SkatGame {
         } while (data.getGameState() != GameState.GAME_OVER);
 
         JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).unregister(data);
+        JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).unregister(this);
 
         log.debug(data.getGameState().name());
         log.debug("Game moves:");
@@ -1110,5 +1115,21 @@ public class SkatGame {
      */
     public GameState getGameState() {
         return data.getGameState();
+    }
+
+    @Subscribe
+    public void takeCardFromSkatOn(final TakeCardFromSkatCommand command) {
+        data.removeDealtSkatCards(new CardList(command.card));
+        data.addPlayerCard(activePlayer, command.card);
+        eventBus.post(new SkatCardTakenEvent(tableName, command.card));
+    }
+
+    @Subscribe
+    public void putCardIntoSkatOn(final PutCardIntoSkatCommand command) {
+        data.removePlayerCard(activePlayer, command.card);
+        var cards = new CardList(data.getSkat());
+        cards.add(command.card);
+        data.setSkatCards(cards);
+        eventBus.post(new SkatCardPutEvent(tableName, command.card));
     }
 }

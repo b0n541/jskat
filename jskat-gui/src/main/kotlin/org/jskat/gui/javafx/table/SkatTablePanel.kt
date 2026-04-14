@@ -77,7 +77,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
 
     protected open fun getOpponentPanel(): OpponentPanel = OpponentPanel(12, false)
 
-    protected open fun createPlayerPanel(): JSkatUserPanel = JSkatUserPanel(12, false, actions)
+    protected open fun createPlayerPanel(): JSkatUserPanel = JSkatUserPanel(tableName, 12, false, actions)
 
     private fun createGameContextStackPane() {
         gameContextStackPane = StackPane()
@@ -90,10 +90,10 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
         biddingPanel = BiddingContextPanel(actions, bitmaps, userPanel)
         addContextPanel(ContextPanelType.BIDDING, biddingPanel)
 
-        declaringPanel = DeclaringContextPanel(actions, userPanel)
+        declaringPanel = DeclaringContextPanel(tableName, actions, userPanel)
         addContextPanel(ContextPanelType.DECLARING, declaringPanel)
 
-        schieberamschPanel = SchieberamschContextPanel(actions, userPanel, 4)
+        schieberamschPanel = SchieberamschContextPanel(tableName, actions, userPanel, 4)
         addContextPanel(ContextPanelType.SCHIEBERAMSCH, schieberamschPanel)
 
         addContextPanel(ContextPanelType.RE_AFTER_CONTRA, createCallReAfterContraPanel())

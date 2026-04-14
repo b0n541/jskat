@@ -21,7 +21,8 @@ import org.jskat.gui.javafx.iss.IssStartContextPanel
 import org.jskat.util.GameVariant
 import org.jskat.util.Player
 
-class ISSTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAction>) : SkatTablePanel(tableName, actions) {
+class ISSTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAction>) :
+    SkatTablePanel(tableName, actions) {
 
     private lateinit var chatPanel: ChatPanel
     private var lastTableStatus: TablePanelStatus? = null
@@ -55,7 +56,7 @@ class ISSTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
     }
 
     override fun createPlayerPanel(): JSkatUserPanel {
-        return JSkatUserPanel(12, true, actions)
+        return JSkatUserPanel(tableName, 12, true, actions)
     }
 
     override fun getRightPanelForTrickPanel(): Node {
@@ -64,7 +65,8 @@ class ISSTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
 
         val resignAction = actions[JSkatAction.RESIGN]
         if (resignAction != null) {
-            val resignButton = Button(resignAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.RESIGN.name)
+            val resignButton =
+                Button(resignAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.RESIGN.name)
             resignButton.setOnAction {
                 resignAction.actionPerformed(JSkatActionEvent(JSkatAction.RESIGN, it.source))
             }
@@ -73,7 +75,8 @@ class ISSTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
 
         val showCardsAction = actions[JSkatAction.SHOW_CARDS]
         if (showCardsAction != null) {
-            val showCardsButton = Button(showCardsAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.SHOW_CARDS.name)
+            val showCardsButton =
+                Button(showCardsAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.SHOW_CARDS.name)
             showCardsButton.setOnAction {
                 showCardsAction.actionPerformed(JSkatActionEvent(JSkatAction.SHOW_CARDS, it.source))
             }
@@ -177,13 +180,13 @@ class ISSTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
 
     private fun setPlayerReadyToPlay(playerName: String, readyToPlay: Boolean) {
         // Platform.runLater {
-            super.getHandPanel(playerName)?.setReadyToPlay(readyToPlay)
+        super.getHandPanel(playerName)?.setReadyToPlay(readyToPlay)
         // }
     }
 
     private fun setPlayerChatEnabled(playerName: String, chatEnabled: Boolean) {
         // Platform.runLater {
-            super.getHandPanel(playerName)?.setChatEnabled(chatEnabled)
+        super.getHandPanel(playerName)?.setChatEnabled(chatEnabled)
         // }
     }
 

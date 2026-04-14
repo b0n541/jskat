@@ -15,6 +15,7 @@ import org.jskat.util.CardList
 import org.jskat.util.JSkatResourceBundle
 
 class DiscardPanel(
+    private val tableName: String,
     private val actions: Map<JSkatAction, AbstractJSkatAction>,
     private val maxCardCount: Int
 ) : StackPane() {
@@ -33,9 +34,6 @@ class DiscardPanel(
 
     init {
         stylesheets.add("/org/jskat/gui/javafx/jskat.css")
-
-        minHeight = 0.0
-        cardViews.minHeight = 0.0
 
         val clipRect = Rectangle()
         clipRect.widthProperty().bind(widthProperty())
@@ -113,7 +111,7 @@ class DiscardPanel(
             val cardView = ImageView(bitmaps.getCardImageFX(card))
             cardView.setOnMouseClicked {
                 actions[JSkatAction.TAKE_CARD_FROM_SKAT]?.actionPerformed(
-                    JSkatActionEvent(JSkatAction.TAKE_CARD_FROM_SKAT, card)
+                    JSkatActionEvent(tableName, card)
                 )
             }
             cardViews.children.add(cardView)
