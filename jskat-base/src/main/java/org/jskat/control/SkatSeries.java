@@ -1,6 +1,7 @@
 package org.jskat.control;
 
 import com.google.common.eventbus.Subscribe;
+import org.jskat.control.command.table.ContinueSkatSeriesCommand;
 import org.jskat.control.command.table.NextReplayMoveCommand;
 import org.jskat.control.command.table.ReadyForNextGameCommand;
 import org.jskat.control.command.table.ReplayGameCommand;
@@ -79,6 +80,11 @@ public class SkatSeries {
     public void readyForNextGameOn(final ReadyForNextGameCommand command) {
 
         JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(new SkatGameReplayFinishedEvent());
+        readyForNextGame = true;
+    }
+
+    @Subscribe
+    public void continueSkatSeriesOn(final ContinueSkatSeriesCommand command) {
         readyForNextGame = true;
     }
 
@@ -197,6 +203,7 @@ public class SkatSeries {
 
                 LOG.debug("Game ended: join");
 
+                // TODO: active waiting with polling the readyForNextGame flag is not the right way
                 readyForNextGame = false;
                 while (isHumanPlayerInvolved() && !readyForNextGame) {
                     try {
