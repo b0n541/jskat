@@ -48,18 +48,18 @@ class GameInformationPanel : HBox() {
             )
         )
         // Fixed height as requested
-        minHeight = 25.0
-        maxHeight = 25.0
-        prefHeight = 25.0
+        minHeight = 30.0
+        maxHeight = 30.0
+        prefHeight = 30.0
         minWidth = 0.0
         alignment = Pos.CENTER
-        
+
         label.font = Font.font("Dialog", FontWeight.BOLD, 16.0)
         label.alignment = Pos.CENTER
         label.maxWidth = Double.MAX_VALUE
         label.minWidth = 0.0
         label.textOverrun = OverrunStyle.ELLIPSIS
-        
+
         children.add(label)
         setHgrow(label, Priority.ALWAYS)
 
@@ -227,7 +227,10 @@ class GameInformationPanel : HBox() {
             GameState.DISCARDING -> strings.getString("discarding_phase")
             GameState.GAME_OVER -> strings.getString("game_over_phase")
             GameState.GAME_START -> strings.getString("game_start_phase")
-            GameState.PICKING_UP_SKAT, GameState.RAMSCH_GRAND_HAND_ANNOUNCING, GameState.SCHIEBERAMSCH -> strings.getString("pick_up_skat_phase")
+            GameState.PICKING_UP_SKAT, GameState.RAMSCH_GRAND_HAND_ANNOUNCING, GameState.SCHIEBERAMSCH -> strings.getString(
+                "pick_up_skat_phase"
+            )
+
             GameState.PRELIMINARY_GAME_END -> strings.getString("preliminary_game_end_phase")
             GameState.TRICK_PLAYING -> strings.getString("trick_playing_phase")
             GameState.CONTRA -> strings.getString("contra_or_play_phase")
