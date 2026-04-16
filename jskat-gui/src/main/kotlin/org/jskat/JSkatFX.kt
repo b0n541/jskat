@@ -36,12 +36,47 @@ class JSkatFX : Application() {
         val screen = Screen.getPrimary()
         val bounds = screen.visualBounds
 
-        stage.x = bounds.minX
-        stage.y = bounds.minY
-        stage.width = bounds.width
-        stage.height = bounds.height
+        val position = jskatOptions.mainFramePosition
+        val size = jskatOptions.mainFrameSize
 
-        val scene = Scene(jskatView.mainWindow, bounds.width, bounds.height)
+        if (position.x != Int.MIN_VALUE && position.y != Int.MIN_VALUE) {
+            stage.x = position.x.toDouble()
+            stage.y = position.y.toDouble()
+        } else {
+            stage.x = bounds.minX
+            stage.y = bounds.minY
+        }
+
+        if (size.width != Int.MIN_VALUE && size.height != Int.MIN_VALUE) {
+            stage.width = size.width.toDouble()
+            stage.height = size.height.toDouble()
+        } else {
+            stage.width = bounds.width
+            stage.height = bounds.height
+        }
+
+        stage.xProperty().addListener { _, _, newValue ->
+            if (!stage.isMaximized) {
+                jskatOptions.setMainFrameXPosition(newValue.toInt())
+            }
+        }
+        stage.yProperty().addListener { _, _, newValue ->
+            if (!stage.isMaximized) {
+                jskatOptions.setMainFrameYPosition(newValue.toInt())
+            }
+        }
+        stage.widthProperty().addListener { _, _, newValue ->
+            if (!stage.isMaximized) {
+                jskatOptions.setMainFrameWidth(newValue.toInt())
+            }
+        }
+        stage.heightProperty().addListener { _, _, newValue ->
+            if (!stage.isMaximized) {
+                jskatOptions.setMainFrameHeight(newValue.toInt())
+            }
+        }
+
+        val scene = Scene(jskatView.mainWindow, stage.width, stage.height)
         scene.stylesheets.add(JSkatFX::class.java.getResource("/org/jskat/gui/javafx/jskat.css").toExternalForm())
         stage.scene = scene
 
