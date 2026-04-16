@@ -110,7 +110,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
         addContextPanel(ContextPanelType.TRICK_PLAYING, trickHoldingPanel)
 
         val gameOverActions = listOf(JSkatAction.CONTINUE_LOCAL_SERIES, JSkatAction.REPLAY_GAME)
-        gameOverPanel = GameOverPanel(actions, gameOverActions)
+        gameOverPanel = GameOverPanel(tableName, actions, gameOverActions)
         addContextPanel(ContextPanelType.GAME_OVER, gameOverPanel)
 
         setContextPanel(ContextPanelType.START)

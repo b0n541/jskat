@@ -13,6 +13,7 @@ import org.jskat.util.CardList
 import org.jskat.util.Player
 
 class GameOverPanel(
+    private val tableName: String,
     actions: Map<JSkatAction, AbstractJSkatAction>,
     activeActions: List<JSkatAction>
 ) : BorderPane() {
@@ -39,7 +40,7 @@ class GameOverPanel(
             if (actionInstance != null) {
                 val button = Button(actionInstance.getValue(AbstractJSkatAction.NAME) as? String ?: action.name)
                 button.setOnAction { 
-                    actionInstance.actionPerformed(JSkatActionEvent(action, it.source))
+                    actionInstance.actionPerformed(JSkatActionEvent(tableName, it.source))
                 }
                 buttonPanel.children.add(button)
             }

@@ -484,7 +484,12 @@ public class SkatGame {
         // create a clone of the skat before sending it to the player
         // otherwise the player could change the skat after discarding
         activePlayerInstance.takeSkat(skatBefore);
-        data.addSkatToPlayer(activePlayer);
+
+        // For human players, cards remain in the skat panel and are moved interactively.
+        // For AI players, they must be added to the hand immediately.
+        if (!activePlayerInstance.isHumanPlayer()) {
+            data.addSkatToPlayer(activePlayer);
+        }
 
         // ask player for the cards to be discarded
         // cloning is done to prevent the player
@@ -516,17 +521,24 @@ public class SkatGame {
             result = false;
         }
         if (discardedSkat.size() != 2) {
-            log.error("Player is fooling!!! Skat doesn't have two cards!");
+            log.error("Player is fooling!!! Skat doesn't have two cards! (is " + (discardedSkat == null ? 0 : discardedSkat.size()) + ")");
             result = false;
         }
-        if (discardedSkat.get(0) == discardedSkat.get(1)) {
+        if (discardedSkat.size() == 2 && discardedSkat.get(0).equals(discardedSkat.get(1))) {
             log.error("Player is fooling!!! Skat cards are identical!");
             result = false;
         }
-        if (!playerHasCard(player, discardedSkat.get(0)) || !playerHasCard(player, discardedSkat.get(1))) {
-            log.error("Player is fooling!!! Player doesn't have had discarded card!");
+
+        // Final validation of player hand and skat
+        if (data.getPlayerCards(player).size() != 10) {
+            log.error("Player is fooling!!! Player doesn't have 10 cards! (is " + data.getPlayerCards(player).size() + ")");
             result = false;
         }
+        if (data.getSkat().size() != 2) {
+            log.error("Player is fooling!!! Skat doesn't have 2 cards! (is " + data.getSkat().size() + ")");
+            result = false;
+        }
+
         if (GameState.SCHIEBERAMSCH == getGameState()
                 && !JSkatOptions.instance().isSchieberamschJacksInSkat()
                 && (discardedSkat.get(0).getRank() == Rank.JACK || discardedSkat.get(1).getRank() == Rank.JACK)) {
@@ -1119,7 +1131,7 @@ public class SkatGame {
 
     @Subscribe
     public void takeCardFromSkatOn(final TakeCardFromSkatCommand command) {
-        data.removeDealtSkatCards(new CardList(command.card));
+        data.removeCardFromCurrentSkat(command.card);
         data.addPlayerCard(activePlayer, command.card);
         eventBus.post(new SkatCardTakenEvent(tableName, command.card));
     }
@@ -1127,9 +1139,7 @@ public class SkatGame {
     @Subscribe
     public void putCardIntoSkatOn(final PutCardIntoSkatCommand command) {
         data.removePlayerCard(activePlayer, command.card);
-        var cards = new CardList(data.getSkat());
-        cards.add(command.card);
-        data.setSkatCards(cards);
+        data.addCardToCurrentSkat(command.card);
         eventBus.post(new SkatCardPutEvent(tableName, command.card));
     }
 }

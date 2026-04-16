@@ -1194,6 +1194,24 @@ public class SkatGameData {
     }
 
     /**
+     * Removes a card from the current skat.
+     *
+     * @param card The card to remove.
+     */
+    public void removeCardFromCurrentSkat(final Card card) {
+        skat.remove(card);
+    }
+
+    /**
+     * Adds a card to the current skat.
+     *
+     * @param card The card to add.
+     */
+    public void addCardToCurrentSkat(final Card card) {
+        skat.add(card);
+    }
+
+    /**
      * Sets Contra information.
      *
      * @param isContra <code>true</code>, if Contra was called.
