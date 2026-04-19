@@ -8,6 +8,7 @@ import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.action.main.StartSkatSeriesAction
+import org.jskat.gui.img.JSkatGraphicRepository
 
 class StartContextPanel(private val action: StartSkatSeriesAction) : StackPane() {
 
@@ -19,20 +20,24 @@ class StartContextPanel(private val action: StartSkatSeriesAction) : StackPane()
             newScene?.fill = Color.TRANSPARENT
         }
 
-        val buttonText = action.getValue(AbstractJSkatAction.NAME) as? String ?: "Start Skat Series"
-        button = Button(buttonText)
-        button.setOnAction {
-            action.actionPerformed(JSkatActionEvent(JSkatAction.START_LOCAL_SERIES, it.source))
-        }
+        button = Button(action.getValue(AbstractJSkatAction.NAME) as? String ?: "Start Skat Series").apply {
+            setOnAction {
+                action.actionPerformed(JSkatActionEvent(JSkatAction.START_LOCAL_SERIES, it.source))
+            }
 
-        // Initially set the button's disabled state
-        button.isDisable = !action.isEnabled
+            graphic = JSkatGraphicRepository.INSTANCE.getImageView(
+                action.icon, JSkatGraphicRepository.IconSize.BIG
+            )
 
-        // Add a listener to the AbstractJSkatAction to observe changes to its "enabled" property
-        action.enabledProperty().addListener { _, _, newValue ->
-            // Update the JavaFX button on the JavaFX Application Thread
-            Platform.runLater {
-                button.isDisable = !newValue
+            // Initially set the button's disabled state
+            isDisable = !action.isEnabled
+
+            // Add a listener to the AbstractJSkatAction to observe changes to its "enabled" property
+            action.enabledProperty().addListener { _, _, newValue ->
+                // Update the JavaFX button on the JavaFX Application Thread
+                Platform.runLater {
+                    button.isDisable = !newValue
+                }
             }
         }
 
