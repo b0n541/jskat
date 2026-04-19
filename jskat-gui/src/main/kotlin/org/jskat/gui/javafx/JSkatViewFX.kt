@@ -82,7 +82,7 @@ class JSkatViewFX(
     }
 
     override fun startGame(tableName: String) {
-        log.debug("startGame: $tableName")
+        TODO("Not implemented yet startGame: $tableName")
     }
 
     override fun getPlayerForInvitation(playerNames: Set<String>): List<String> {
@@ -118,15 +118,15 @@ class JSkatViewFX(
     }
 
     override fun showMessage(title: String, message: String) {
-        log.debug("showMessage: $title, $message")
+        TODO("Not implemented yet showMessage: $title, $message")
     }
 
     override fun showErrorMessage(title: String, message: String) {
-        log.debug("showErrorMessage: $title, $message")
+        TODO("Not implemented yet showErrorMessage: $title, $message")
     }
 
     override fun showCardNotAllowedMessage(card: Card) {
-        log.debug("showCardNotAllowedMessage: $card")
+        TODO("Not implemented yet showCardNotAllowedMessage: $card")
     }
 
     override fun appendISSChatMessage(messageType: ChatMessageType, message: ChatMessage) {
@@ -239,16 +239,16 @@ class JSkatViewFX(
     }
 
     override fun setResign(tableName: String, player: Player) {
-        log.debug("setResign: $tableName, $player")
+        TODO("Not implemented yet setResign: $tableName, $player")
     }
 
     override fun showISSTableInvitation(invitor: String, tableName: String): Boolean {
-        log.debug("showISSTableInvitation: $invitor, $tableName")
+        TODO("Not implemented yet showISSTableInvitation: $invitor, $tableName")
         return false
     }
 
     override fun setGeschoben(tableName: String, player: Player) {
-        log.debug("setGeschoben: $tableName, $player")
+        TODO("Not implemented yet setGeschoben: $tableName, $player")
     }
 
     override fun setDiscardedSkat(
@@ -257,11 +257,11 @@ class JSkatViewFX(
         skatBefore: CardList,
         discardedSkat: CardList
     ) {
-        log.debug("setDiscardedSkat: $tableName, $activePlayer, $skatBefore, $discardedSkat")
+        TODO("Not implemented yet setDiscardedSkat: $tableName, $activePlayer, $skatBefore, $discardedSkat")
     }
 
     override fun openWebPage(link: String) {
-        log.debug("openWebPage: $link")
+        TODO("Not implemented yet openWebPage: $link")
     }
 
     override fun getHumanPlayerForGUI(): AbstractHumanJSkatPlayer {
@@ -269,18 +269,18 @@ class JSkatViewFX(
     }
 
     override fun setActiveView(name: String) {
-        mainWindow.setActiveView(name)
+        mainWindow.setActiveTab(name)
     }
 
     override fun showAIPlayedSchwarzMessageDiscarding(playerName: String, discardedCards: CardList) {
-        log.debug("showAIPlayedSchwarzMessageDiscarding: $playerName, $discardedCards")
+        TODO("Not yet implemented showAIPlayedSchwarzMessageDiscarding: $playerName, $discardedCards")
     }
 
     override fun showAIPlayedSchwarzMessageCardPlay(playerName: String, card: Card) {
-        log.debug("showAIPlayedSchwarzMessageCardPlay: $playerName, $card")
+        TODO("Not yet implemented showAIPlayedSchwarzMessageCardPlay: $playerName, $card")
     }
 
     override fun setSkat(tableName: String?, skat: CardList?) {
-        TODO("Not yet implemented")
+        TODO("Not yet implemented setSkat: $tableName, $skat")
     }
 }

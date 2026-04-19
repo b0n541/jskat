@@ -1,9 +1,11 @@
 package org.jskat.gui.javafx.main
 
+import javafx.event.EventHandler
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.control.Button
 import javafx.scene.control.Label
+import javafx.scene.control.Tooltip
 import javafx.scene.image.ImageView
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
@@ -13,6 +15,7 @@ import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
+import org.jskat.gui.img.JSkatGraphicRepository.IconSize
 import org.jskat.util.JSkatResourceBundle
 
 class WelcomePanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) : VBox() {
@@ -53,11 +56,7 @@ class WelcomePanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) :
         vbox.maxWidth = USE_PREF_SIZE
 
         // ISS Table
-        val issButton = createActionButton(
-            JSkatAction.SHOW_ISS_LOGIN,
-            strings.getString("show_iss_login"),
-            JSkatGraphicRepository.Icon.CONNECT_ISS
-        )
+        val issButton = createMainButton(actions[JSkatAction.CONNECT_TO_ISS]!!)
         val issDescription =
             Label(strings.getString("explain_iss_table_1") + "\n" + strings.getString("explain_iss_table_2"))
         issDescription.isWrapText = true
@@ -114,11 +113,19 @@ class WelcomePanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) :
         icon: JSkatGraphicRepository.Icon
     ): Button {
         val button = Button(text)
-        button.graphic = bitmaps.getImageView(icon, JSkatGraphicRepository.IconSize.BIG)
+        button.graphic = bitmaps.getImageView(icon, IconSize.BIG)
         button.maxWidth = Double.MAX_VALUE
         button.setOnAction { e ->
             actions[action]?.actionPerformed(JSkatActionEvent(action, e.source))
         }
         return button
+    }
+
+    private fun createMainButton(action: AbstractJSkatAction): Button {
+        return Button(action.getValue(AbstractJSkatAction.NAME).toString()).apply {
+            graphic = bitmaps.getImageView(action.icon, IconSize.BIG)
+            tooltip = Tooltip(action.tooltip)
+            onAction = EventHandler { action.actionPerformed(null) }
+        }
     }
 }

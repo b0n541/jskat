@@ -10,7 +10,10 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
-import org.jskat.control.command.general.*;
+import org.jskat.control.command.general.HideToolbarCommand;
+import org.jskat.control.command.general.ShowHelpCommand;
+import org.jskat.control.command.general.ShowLicenseCommand;
+import org.jskat.control.command.general.ShowToolbarCommand;
 import org.jskat.control.command.iss.IssDisconnectCommand;
 import org.jskat.control.command.iss.IssInvitePlayerCommand;
 import org.jskat.control.command.iss.IssShowLoginCommand;
@@ -27,12 +30,8 @@ import org.jskat.control.gui.JSkatView;
 import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.control.iss.ChatMessageType;
-import org.jskat.data.JSkatApplicationData;
-import org.jskat.data.JSkatOptions;
-import org.jskat.data.JSkatViewType;
-import org.jskat.data.SkatGameData;
+import org.jskat.data.*;
 import org.jskat.data.SkatGameData.GameState;
-import org.jskat.data.Trick;
 import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.data.iss.MovePlayer;
@@ -40,7 +39,6 @@ import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.human.SwingHumanPlayer;
 import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.javafx.dialog.help.JSkatHelpDialog;
-import org.jskat.gui.javafx.dialog.options.JSkatOptionsDialog;
 import org.jskat.gui.javafx.iss.LobbyPanelFX;
 import org.jskat.gui.javafx.iss.LoginPanelFX;
 import org.jskat.gui.javafx.main.JSkatActions;
@@ -537,11 +535,6 @@ public class JSkatViewImpl implements JSkatView {
 
     private static void showCardsForPlayer(final String tableName, final Player player, final CardList cards) {
         JSkatEventBus.INSTANCE.post(new ShowCardsCommand(tableName, player, cards));
-    }
-
-    @Subscribe
-    public void showPreferencesDialogOn(final ShowPreferencesCommand command) {
-        Platform.runLater(() -> new JSkatOptionsDialog(null).showAndWait());
     }
 
     @Subscribe

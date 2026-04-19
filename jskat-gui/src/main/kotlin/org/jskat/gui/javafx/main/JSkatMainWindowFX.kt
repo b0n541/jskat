@@ -34,11 +34,11 @@ class JSkatMainWindowFX : VBox() {
 
     private val jskatMaster: JSkatMaster = JSkatMaster.INSTANCE
     private val data: JSkatApplicationData = JSkatApplicationData.INSTANCE
-    private val resourceBundle: JSkatResourceBundle = JSkatResourceBundle.INSTANCE
-    private val graphicRepository: JSkatGraphicRepository = JSkatGraphicRepository.INSTANCE
+    private val strings: JSkatResourceBundle = JSkatResourceBundle.INSTANCE
+    private val bitmaps: JSkatGraphicRepository = JSkatGraphicRepository.INSTANCE
     private val actions = JSkatActions.actionMap
 
-    private val content: TabPane = TabPane()
+    private val tabs: TabPane = TabPane()
     private lateinit var issLobby: LobbyPanel
 
     init {
@@ -54,11 +54,11 @@ class JSkatMainWindowFX : VBox() {
             createToolbarButton(actions[JSkatAction.HELP]!!),
             createToolbarButton(actions[JSkatAction.ABOUT_JSKAT]!!)
         )
-        setVgrow(content, Priority.ALWAYS)
+        setVgrow(tabs, Priority.ALWAYS)
 
-        children.addAll(menuBar, toolbar, content)
+        children.addAll(menuBar, toolbar, tabs)
 
-        content.selectionModel.selectedItemProperty().addListener { _, _, newTab ->
+        tabs.selectionModel.selectedItemProperty().addListener { _, _, newTab ->
             if (newTab != null) {
                 // assume that the title of the tab is the table name
                 jskatMaster.setActiveTable(newTab.text)
@@ -66,6 +66,10 @@ class JSkatMainWindowFX : VBox() {
         }
 
         addWelcomeTab()
+    }
+
+    fun setActiveTab(name: String) {
+        tabs.selectionModel.select(tabs.tabs.first { it.text == name })
     }
 
     @Subscribe
@@ -91,8 +95,8 @@ class JSkatMainWindowFX : VBox() {
                     content = panel
                     isClosable = true
                 }
-                content.tabs.add(newTab)
-                content.selectionModel.select(newTab)
+                tabs.tabs.add(newTab)
+                tabs.selectionModel.select(newTab)
 
                 if (event.tableType() == JSkatViewType.LOCAL_TABLE) {
                     actions[JSkatAction.START_LOCAL_SERIES]?.isEnabled = true
@@ -104,9 +108,9 @@ class JSkatMainWindowFX : VBox() {
     @Subscribe
     fun onTableRemoved(event: TableRemovedEvent) {
         Platform.runLater {
-            content.tabs
+            tabs.tabs
                 .filter { it.text == event.tableName() }
-                .forEach { content.tabs.remove(it) }
+                .forEach { tabs.tabs.remove(it) }
         }
     }
 
@@ -122,27 +126,27 @@ class JSkatMainWindowFX : VBox() {
         Platform.runLater {
             val loader = FXMLLoader()
             loader.location = JSkatMainWindowFX::class.java.getResource("/org/jskat/gui/javafx/iss/IssLogin.fxml")
-            loader.resources = resourceBundle.stringResources
+            loader.resources = strings.stringResources
             val loginPanel: VBox = loader.load()
 
-            val tab = Tab(resourceBundle.getString("iss_login")).apply {
+            val tab = Tab(strings.getString("iss_login")).apply {
                 id = "ISS_LOGIN"
                 isClosable = true
                 content = loginPanel
             }
 
-            content.tabs.add(tab)
-            content.selectionModel.select(tab)
+            tabs.tabs.add(tab)
+            tabs.selectionModel.select(tab)
         }
     }
 
     @Subscribe
     fun showIssLobbyOn(event: IssConnectedEvent) {
         Platform.runLater {
-            content.tabs
+            tabs.tabs
                 .find { it.id == "ISS_LOGIN" }
                 ?.let { loginTab ->
-                    content.tabs.remove(loginTab)
+                    tabs.tabs.remove(loginTab)
                 }
 
             issLobby = LobbyPanel(actions, event.userName)
@@ -159,8 +163,8 @@ class JSkatMainWindowFX : VBox() {
                 content = scrollPane
             }
 
-            content.tabs.add(tab)
-            content.selectionModel.select(tab)
+            tabs.tabs.add(tab)
+            tabs.selectionModel.select(tab)
         }
     }
 
@@ -234,26 +238,26 @@ class JSkatMainWindowFX : VBox() {
 
     private fun createToolbarButton(action: AbstractJSkatAction): Button {
         return Button(action.getValue(AbstractJSkatAction.NAME).toString()).apply {
-            graphic = graphicRepository.getImageView(action.icon, IconSize.SMALL)
+            graphic = bitmaps.getImageView(action.icon, IconSize.SMALL)
             tooltip = Tooltip(action.tooltip)
             onAction = EventHandler { action.actionPerformed(null) }
         }
     }
 
     private fun addWelcomeTab() {
-        val welcomeTab = Tab(resourceBundle.getString("welcome"))
+        val welcomeTab = Tab(strings.getString("welcome"))
         welcomeTab.isClosable = false
         welcomeTab.content = WelcomePanel(actions)
-        content.tabs.add(welcomeTab)
+        tabs.tabs.add(welcomeTab)
     }
 
     private fun createNewLocalTable() {
         val dialog = TextInputDialog(
-            "${resourceBundle.getString("local.table")} ${jskatMaster.view.getNewTableName(0)}"
+            "${strings.getString("local.table")} ${jskatMaster.view.getNewTableName(0)}"
         )
-        dialog.title = resourceBundle.getString("new.table.dialog.title")
-        dialog.headerText = resourceBundle.getString("new.table.dialog.message")
-        dialog.contentText = resourceBundle.getString("name")
+        dialog.title = strings.getString("new.table.dialog.title")
+        dialog.headerText = strings.getString("new.table.dialog.message")
+        dialog.contentText = strings.getString("name")
         dialog.dialogPane.stylesheets.add("/org/jskat/gui/javafx/jskat.css")
 
         dialog.showAndWait().ifPresent { tableName ->
