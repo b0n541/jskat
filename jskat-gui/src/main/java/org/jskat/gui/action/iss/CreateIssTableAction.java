@@ -18,6 +18,8 @@ public class CreateIssTableAction extends AbstractJSkatAction {
         // FIXME (jan 23.11.2010) use CreateTableAction
 
         putValue(NAME, STRINGS.getString("new_table"));
+        putValue(SHORT_DESCRIPTION,
+                STRINGS.getString("new_table_tooltip"));
         setIcon(Icon.TABLE);
     }
 

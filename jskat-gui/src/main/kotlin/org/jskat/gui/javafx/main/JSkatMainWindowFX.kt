@@ -2,11 +2,9 @@ package org.jskat.gui.javafx.main
 
 import com.google.common.eventbus.Subscribe
 import javafx.application.Platform
-import javafx.event.ActionEvent
 import javafx.event.EventHandler
 import javafx.fxml.FXMLLoader
 import javafx.scene.control.*
-import javafx.scene.image.ImageView
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import org.jskat.control.JSkatEventBus
@@ -21,11 +19,10 @@ import org.jskat.control.event.table.TableRemovedEvent
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.data.JSkatApplicationData
 import org.jskat.data.JSkatViewType
+import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
-import org.jskat.gui.img.JSkatGraphicRepository.Icon
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize
 import org.jskat.gui.javafx.JSkatMenuFactory
-import org.jskat.gui.javafx.dialog.options.JSkatOptionsDialog
 import org.jskat.gui.javafx.iss.LobbyPanel
 import org.jskat.gui.javafx.table.ISSTablePanel
 import org.jskat.gui.javafx.table.SkatSeriesStartDialog
@@ -51,12 +48,11 @@ class JSkatMainWindowFX : VBox() {
 
         val toolbar = ToolBar()
         toolbar.items.addAll(
-            createToolbarButton("new_table", "new_table_tooltip", Icon.NEW) { createNewLocalTable() },
-            createToolbarButton("local_table", "play_on_local_table", Icon.TABLE) { createNewLocalTable() },
-            createToolbarButton("iss_table", "play_on_iss_tooltip", Icon.CONNECT_ISS) { showIssLogin() },
-            createToolbarButton("preferences", "preferences_tooltip", Icon.PREFERENCES) { showPreferences() },
-            createToolbarButton("help", "help_tooltip", Icon.HELP) { showAbout() },
-            createToolbarButton("about", "about_tooltip", Icon.ABOUT) { showAbout() }
+            createToolbarButton(actions[JSkatAction.CREATE_LOCAL_TABLE]!!),
+            createToolbarButton(actions[JSkatAction.CONNECT_TO_ISS]!!),
+            createToolbarButton(actions[JSkatAction.PREFERENCES]!!),
+            createToolbarButton(actions[JSkatAction.HELP]!!),
+            createToolbarButton(actions[JSkatAction.ABOUT_JSKAT]!!)
         )
         setVgrow(content, Priority.ALWAYS)
 
@@ -99,7 +95,7 @@ class JSkatMainWindowFX : VBox() {
                 content.selectionModel.select(newTab)
 
                 if (event.tableType() == JSkatViewType.LOCAL_TABLE) {
-                    actions[JSkatAction.START_LOCAL_SERIES]?.setEnabled(true)
+                    actions[JSkatAction.START_LOCAL_SERIES]?.isEnabled = true
                 }
             }
         }
@@ -236,17 +232,12 @@ class JSkatMainWindowFX : VBox() {
         }
     }
 
-    private fun createToolbarButton(
-        textKey: String,
-        tooltipKey: String,
-        icon: Icon,
-        eventHandler: EventHandler<ActionEvent>
-    ): Button {
-        val button = Button(resourceBundle.getString(textKey))
-        button.graphic = graphicRepository.getImageView(icon, IconSize.SMALL)
-        button.tooltip = Tooltip(resourceBundle.getString(tooltipKey))
-        button.onAction = eventHandler
-        return button
+    private fun createToolbarButton(action: AbstractJSkatAction): Button {
+        return Button(action.getValue(AbstractJSkatAction.NAME).toString()).apply {
+            graphic = graphicRepository.getImageView(action.icon, IconSize.SMALL)
+            tooltip = Tooltip(action.tooltip)
+            onAction = EventHandler { action.actionPerformed(null) }
+        }
     }
 
     private fun addWelcomeTab() {
@@ -270,49 +261,5 @@ class JSkatMainWindowFX : VBox() {
                 jskatMaster.createTable(tableName)
             }
         }
-    }
-
-    private fun showIssLogin() {
-        JSkatEventBus.INSTANCE.post(IssShowLoginCommand())
-    }
-
-    private fun showPreferences() {
-        JSkatOptionsDialog(scene.window).showAndWait()
-    }
-
-    private fun showAbout() {
-        Alert(Alert.AlertType.INFORMATION).apply {
-            initOwner(scene.window)
-            title = resourceBundle.getString("about")
-            headerText = "JSkat ${resourceBundle.getString("version")} 0.24.0"
-            graphic = ImageView(graphicRepository.jSkatLogoImageFX)
-            contentText = """
-                https://www.jskat.org
-                https://github.com/b0n541/jskat
-                
-                ${resourceBundle.getString("authors")}: Jan Schäfer (support@jskat.org), Markus J. Luzius, Daniel Loreck, Andrius Vaskys
-                
-                ${resourceBundle.getString("cards")}: International Skat Server, KDE project, OpenClipart.org
-                
-                ${resourceBundle.getString("icons")}: Gnome Desktop Icons, Tango project, Elementary icons, Silvestre Herrera, Alex Roberts and Icojoy
-                
-                ${resourceBundle.getString("background_image")}: webtreats
-                
-                This program comes with ABSOLUTELY NO WARRANTY. This is free software, and you are welcome to redistribute it under certain conditions. See license dialog for details.
-            """.trimIndent()
-
-            dialogPane.minWidth = 600.0
-            dialogPane.stylesheets.add("/org/jskat/gui/javafx/jskat.css")
-
-            showAndWait()
-        }
-    }
-
-    private fun exitJSkat() {
-        jskatMaster.exitJSkat()
-    }
-
-    fun setActiveView(tableName: String) {
-        // FIXME: implement
     }
 }

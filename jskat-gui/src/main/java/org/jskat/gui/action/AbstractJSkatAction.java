@@ -36,7 +36,10 @@ public abstract class AbstractJSkatAction {
     public final static String LARGE_ICON_KEY = "LargeIconKey";
     public final static String ACTION_COMMAND_KEY = "ActionCommandKey";
 
+    // deprecated: replace with dedicated fields for text and icons
     private final Map<String, Object> values = new HashMap<>();
+
+    private Icon icon;
     private final BooleanProperty enabled = new SimpleBooleanProperty(true);
 
     protected MenuItem menuItem;
@@ -64,8 +67,17 @@ public abstract class AbstractJSkatAction {
     }
 
     protected void setIcon(JSkatGraphicRepository.Icon icon) {
+        this.icon = icon;
         putValue(SMALL_ICON, BITMAPS.getIconImage(icon, JSkatGraphicRepository.IconSize.SMALL));
         putValue(LARGE_ICON_KEY, BITMAPS.getIconImage(icon, JSkatGraphicRepository.IconSize.BIG));
+    }
+
+    public Icon getIcon() {
+        return icon;
+    }
+
+    public String getTooltip() {
+        return values.get(SHORT_DESCRIPTION).toString();
     }
 
     protected void setActionCommand(JSkatAction action) {
