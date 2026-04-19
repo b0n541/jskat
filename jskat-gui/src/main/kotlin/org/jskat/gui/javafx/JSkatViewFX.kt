@@ -8,7 +8,6 @@ import org.jskat.control.command.general.ShowHelpCommand
 import org.jskat.control.command.general.ShowLicenseCommand
 import org.jskat.control.command.general.ShowPreferencesCommand
 import org.jskat.control.command.table.ShowCardsCommand
-import org.jskat.control.command.table.StartSkatSeriesCommand
 import org.jskat.control.event.skatgame.*
 import org.jskat.control.event.table.*
 import org.jskat.control.gui.JSkatView
@@ -24,7 +23,6 @@ import org.jskat.gui.javafx.dialog.help.JSkatHelpDialog
 import org.jskat.gui.javafx.dialog.options.JSkatOptionsDialog
 import org.jskat.gui.javafx.iss.PlayerInvitationDialog
 import org.jskat.gui.javafx.main.JSkatMainWindowFX
-import org.jskat.gui.javafx.table.SkatSeriesStartDialog
 import org.jskat.util.Card
 import org.jskat.util.CardList
 import org.jskat.util.JSkatResourceBundle
@@ -66,14 +64,6 @@ class JSkatViewFX(
                 JSkatResourceBundle.INSTANCE.getString("license"),
                 "org/jskat/gui/help/apache2.html"
             ).showAndWait()
-        }
-    }
-
-    @Subscribe
-    fun showSkatSeriesStartDialogOn(command: StartSkatSeriesCommand) {
-        Platform.runLater {
-            val dialog = SkatSeriesStartDialog(null)
-            dialog.showAndWaitAndStartSeries()
         }
     }
 

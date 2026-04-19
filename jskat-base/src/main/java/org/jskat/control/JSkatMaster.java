@@ -393,10 +393,6 @@ public class JSkatMaster {
         if (view != null) {
             view.setActiveView(tableName);
         }
-
-        if (type == JSkatViewType.LOCAL_TABLE) {
-            JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, data.getLocalSkatTable(tableName).getGameState()));
-        }
     }
 
     /**
