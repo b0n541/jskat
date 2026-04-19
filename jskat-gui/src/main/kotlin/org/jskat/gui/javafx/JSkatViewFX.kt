@@ -1,23 +1,33 @@
 package org.jskat.gui.javafx
 
+import com.google.common.eventbus.Subscribe
 import javafx.application.Platform
 import javafx.stage.Modality
 import org.jskat.control.JSkatEventBus
+import org.jskat.control.command.general.ShowHelpCommand
+import org.jskat.control.command.general.ShowLicenseCommand
+import org.jskat.control.command.general.ShowPreferencesCommand
 import org.jskat.control.command.table.ShowCardsCommand
+import org.jskat.control.command.table.StartSkatSeriesCommand
 import org.jskat.control.event.skatgame.*
 import org.jskat.control.event.table.*
 import org.jskat.control.gui.JSkatView
 import org.jskat.control.gui.human.AbstractHumanJSkatPlayer
 import org.jskat.control.iss.ChatMessageType
+import org.jskat.data.JSkatOptions
 import org.jskat.data.SkatGameData
 import org.jskat.data.SkatGameData.GameState
 import org.jskat.data.iss.ChatMessage
 import org.jskat.data.iss.MoveInformation
 import org.jskat.data.iss.MoveType
+import org.jskat.gui.javafx.dialog.help.JSkatHelpDialog
+import org.jskat.gui.javafx.dialog.options.JSkatOptionsDialog
 import org.jskat.gui.javafx.iss.PlayerInvitationDialog
 import org.jskat.gui.javafx.main.JSkatMainWindowFX
+import org.jskat.gui.javafx.table.SkatSeriesStartDialog
 import org.jskat.util.Card
 import org.jskat.util.CardList
+import org.jskat.util.JSkatResourceBundle
 import org.jskat.util.Player
 import org.slf4j.LoggerFactory
 import java.util.*
@@ -30,6 +40,43 @@ class JSkatViewFX(
 
     private val log = LoggerFactory.getLogger(JSkatViewFX::class.java)
 
+    init {
+        JSkatEventBus.INSTANCE.register(this)
+    }
+
+    @Subscribe
+    fun showPreferencesDialogOn(command: ShowPreferencesCommand) {
+        Platform.runLater { JSkatOptionsDialog(null).showAndWait() }
+    }
+
+    @Subscribe
+    fun showHelpDialogOn(command: ShowHelpCommand) {
+        Platform.runLater {
+            JSkatHelpDialog(
+                JSkatResourceBundle.INSTANCE.getString("help"),
+                "org/jskat/gui/help/" + JSkatOptions.instance().i18NCode + "/contents.html"
+            ).showAndWait()
+        }
+    }
+
+    @Subscribe
+    fun showLicenceDialogOn(command: ShowLicenseCommand) {
+        Platform.runLater {
+            JSkatHelpDialog(
+                JSkatResourceBundle.INSTANCE.getString("license"),
+                "org/jskat/gui/help/apache2.html"
+            ).showAndWait()
+        }
+    }
+
+    @Subscribe
+    fun showSkatSeriesStartDialogOn(command: StartSkatSeriesCommand) {
+        Platform.runLater {
+            val dialog = SkatSeriesStartDialog(null)
+            dialog.showAndWaitAndStartSeries()
+        }
+    }
+
     override fun getNewTableName(localTablesCreated: Int): String {
         return "Table " + (localTablesCreated + 1)
     }
@@ -40,6 +87,8 @@ class JSkatViewFX(
 
     override fun getPlayerForInvitation(playerNames: Set<String>): List<String> {
         val result = mutableListOf<String>()
+
+        // TODO: there should only be one case
         if (Platform.isFxApplicationThread()) {
             try {
                 val dialog = PlayerInvitationDialog(playerNames)
