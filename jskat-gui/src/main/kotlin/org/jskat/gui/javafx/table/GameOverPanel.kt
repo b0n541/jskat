@@ -9,14 +9,16 @@ import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.GameSummary
 import org.jskat.gui.action.AbstractJSkatAction
+import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.CardList
 import org.jskat.util.Player
 
 class GameOverPanel(
     private val tableName: String,
-    actions: Map<JSkatAction, AbstractJSkatAction>,
-    activeActions: List<JSkatAction>
+    actions: Map<JSkatAction, AbstractJSkatAction>
 ) : BorderPane() {
+
+    private val bitmaps = JSkatGraphicRepository.INSTANCE
 
     private val gameResultPanel = GameResultPanel()
     private val skatPanel = SkatPanel()
@@ -31,21 +33,20 @@ class GameOverPanel(
 
         val buttonPanel = HBox()
         buttonPanel.spacing = 10.0
-        
+
         HBox.setHgrow(skatPanel, Priority.ALWAYS)
         buttonPanel.children.add(skatPanel)
-        
-        for (action in activeActions) {
-            val actionInstance = actions[action]
-            if (actionInstance != null) {
-                val button = Button(actionInstance.getValue(AbstractJSkatAction.NAME) as? String ?: action.name)
-                button.setOnAction { 
-                    actionInstance.actionPerformed(JSkatActionEvent(tableName, it.source))
+
+        val continueSkatSeriesAction = actions[JSkatAction.CONTINUE_LOCAL_SERIES]
+        val continueSkatSeriesButton =
+            Button(continueSkatSeriesAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "").apply {
+                graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.PLAY, JSkatGraphicRepository.IconSize.BIG)
+                setOnAction {
+                    continueSkatSeriesAction?.actionPerformed(JSkatActionEvent(tableName, it.source))
                 }
-                buttonPanel.children.add(button)
             }
-        }
-        
+
+        buttonPanel.children.add(continueSkatSeriesButton)
         bottom = buttonPanel
     }
 

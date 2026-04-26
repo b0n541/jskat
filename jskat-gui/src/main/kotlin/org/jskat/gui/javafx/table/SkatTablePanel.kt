@@ -5,11 +5,7 @@ import javafx.application.Platform
 import javafx.scene.Node
 import javafx.scene.control.Button
 import javafx.scene.control.Label
-import javafx.scene.layout.BorderPane
-import javafx.scene.layout.HBox
-import javafx.scene.layout.Priority
-import javafx.scene.layout.StackPane
-import javafx.scene.layout.VBox
+import javafx.scene.layout.*
 import org.jskat.control.JSkatEventBus
 import org.jskat.control.command.table.ShowCardsCommand
 import org.jskat.control.event.skatgame.*
@@ -23,11 +19,12 @@ import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.*
 import org.slf4j.LoggerFactory
 
-open class SkatTablePanel(val tableName: String, protected val actions: Map<JSkatAction, AbstractJSkatAction>) : BorderPane() {
+open class SkatTablePanel(val tableName: String, protected val actions: Map<JSkatAction, AbstractJSkatAction>) :
+    BorderPane() {
 
     private val log = LoggerFactory.getLogger(SkatTablePanel::class.java)
     protected val strings: JSkatResourceBundle = JSkatResourceBundle.INSTANCE
-    private val bitmaps = JSkatGraphicRepository.INSTANCE
+    protected val bitmaps = JSkatGraphicRepository.INSTANCE
 
     protected val playerPassed: MutableMap<Player, Boolean> = mutableMapOf()
     protected val playerNamesAndPositions: MutableMap<String, Player?> = mutableMapOf()
@@ -109,8 +106,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
         trickHoldingPanel.children.add(getRightPanelForTrickPanel())
         addContextPanel(ContextPanelType.TRICK_PLAYING, trickHoldingPanel)
 
-        val gameOverActions = listOf(JSkatAction.CONTINUE_LOCAL_SERIES, JSkatAction.REPLAY_GAME)
-        gameOverPanel = GameOverPanel(tableName, actions, gameOverActions)
+        gameOverPanel = GameOverPanel(tableName, actions)
         addContextPanel(ContextPanelType.GAME_OVER, gameOverPanel)
 
         setContextPanel(ContextPanelType.START)
@@ -138,15 +134,18 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
         buttonBox.alignment = javafx.geometry.Pos.CENTER
         val callReAction = actions[JSkatAction.CALL_RE]
         if (callReAction != null) {
-            val callReButton = Button(callReAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.CALL_RE.name)
-            callReButton.graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.OK, JSkatGraphicRepository.IconSize.BIG)
+            val callReButton =
+                Button(callReAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.CALL_RE.name)
+            callReButton.graphic =
+                bitmaps.getImageView(JSkatGraphicRepository.Icon.OK, JSkatGraphicRepository.IconSize.BIG)
             callReButton.setOnAction {
                 callReAction.actionPerformed(JSkatActionEvent(JSkatAction.CALL_RE, true))
             }
             buttonBox.children.add(callReButton)
 
             val noReButton = Button(strings.getString("no"))
-            noReButton.graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.STOP, JSkatGraphicRepository.IconSize.BIG)
+            noReButton.graphic =
+                bitmaps.getImageView(JSkatGraphicRepository.Icon.STOP, JSkatGraphicRepository.IconSize.BIG)
             noReButton.setOnAction {
                 callReAction.actionPerformed(JSkatActionEvent(JSkatAction.CALL_RE, false))
             }
@@ -163,7 +162,8 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
 
         val contraAction = actions[JSkatAction.CALL_CONTRA]
         if (contraAction != null) {
-            val contraButton = Button(contraAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.CALL_CONTRA.name)
+            val contraButton =
+                Button(contraAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.CALL_CONTRA.name)
             contraButton.setOnAction {
                 contraAction.actionPerformed(JSkatActionEvent(JSkatAction.CALL_CONTRA, it.source))
             }

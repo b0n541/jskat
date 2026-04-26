@@ -10,6 +10,7 @@ import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
+import org.jskat.gui.img.JSkatGraphicRepository.Icon
 import org.jskat.util.Card
 import org.jskat.util.CardList
 import org.jskat.util.JSkatResourceBundle
@@ -40,6 +41,7 @@ class DiscardPanel(
         clipRect.heightProperty().bind(heightProperty())
         clip = clipRect
 
+        pickUpSkatButton.graphic = bitmaps.getImageView(Icon.PLAY, JSkatGraphicRepository.IconSize.BIG)
         pickUpSkatButton.setOnAction {
             pickUpSkatButton.isDisable = true
 

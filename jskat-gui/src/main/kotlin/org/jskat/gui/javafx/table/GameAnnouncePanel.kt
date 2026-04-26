@@ -9,6 +9,7 @@ import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.GameAnnouncement
 import org.jskat.gui.action.AbstractJSkatAction
+import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.CardList
 import org.jskat.util.GameType
 import org.jskat.util.JSkatResourceBundle
@@ -21,6 +22,7 @@ class GameAnnouncePanel(
 ) : GridPane() {
 
     private val strings = JSkatResourceBundle.INSTANCE
+    private val bitmaps = JSkatGraphicRepository.INSTANCE
     private val log = LoggerFactory.getLogger(GameAnnouncePanel::class.java)
 
     private val gameTypeGroup = ToggleGroup()
@@ -71,8 +73,10 @@ class GameAnnouncePanel(
         add(schneiderBox, 0, 6)
         add(schwarzBox, 1, 6)
 
-        add(announceButton, 0, 7, 2, 1)
+        announceButton.graphic =
+            bitmaps.getImageView(JSkatGraphicRepository.Icon.PLAY, JSkatGraphicRepository.IconSize.BIG)
         announceButton.maxWidth = Double.MAX_VALUE
+        add(announceButton, 0, 7, 2, 1)
 
         handBox.isDisable = true
 

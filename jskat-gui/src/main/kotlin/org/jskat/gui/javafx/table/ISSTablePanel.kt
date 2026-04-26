@@ -16,6 +16,7 @@ import org.jskat.data.iss.ChatMessage
 import org.jskat.data.iss.GameStartInformation
 import org.jskat.data.iss.TablePanelStatus
 import org.jskat.gui.action.AbstractJSkatAction
+import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.gui.javafx.iss.ChatPanel
 import org.jskat.gui.javafx.iss.IssStartContextPanel
 import org.jskat.util.GameVariant
@@ -66,10 +67,16 @@ class ISSTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
         val resignAction = actions[JSkatAction.RESIGN]
         if (resignAction != null) {
             val resignButton =
-                Button(resignAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.RESIGN.name)
-            resignButton.setOnAction {
-                resignAction.actionPerformed(JSkatActionEvent(JSkatAction.RESIGN, it.source))
-            }
+                Button(resignAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.RESIGN.name).apply {
+                    graphic =
+                        bitmaps.getImageView(
+                            JSkatGraphicRepository.Icon.WHITE_FLAG,
+                            JSkatGraphicRepository.IconSize.BIG
+                        )
+                    setOnAction {
+                        resignAction.actionPerformed(JSkatActionEvent(JSkatAction.RESIGN, it.source))
+                    }
+                }
             additionalActionsPanel.children.add(resignButton)
         }
 

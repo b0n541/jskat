@@ -76,20 +76,24 @@ class BiddingContextPanel(
         biddingGrid.add(userBid, 0, 1, 2, 1)
         setHalignment(userBid, HPos.CENTER)
 
-        bidButton = Button(currentBidAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "")
-        bidButton.setOnAction {
-            currentBidAction?.let { action ->
-                Platform.runLater {
-                    action.actionPerformed(JSkatActionEvent(JSkatAction.MAKE_BID, it.source))
+        bidButton = Button(currentBidAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "").apply {
+            graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.OK, JSkatGraphicRepository.IconSize.BIG)
+            setOnAction {
+                currentBidAction?.let { action ->
+                    Platform.runLater {
+                        action.actionPerformed(JSkatActionEvent(JSkatAction.MAKE_BID, it.source))
+                    }
                 }
             }
         }
 
-        passButton = Button(actions[JSkatAction.PASS_BID]?.getValue(AbstractJSkatAction.NAME) as? String ?: "")
-        passButton.setOnAction {
-            actions[JSkatAction.PASS_BID]?.let { action ->
-                Platform.runLater {
-                    action.actionPerformed(JSkatActionEvent(JSkatAction.PASS_BID, it.source))
+        passButton = Button(actions[JSkatAction.PASS_BID]?.getValue(AbstractJSkatAction.NAME) as? String ?: "").apply {
+            graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.STOP, JSkatGraphicRepository.IconSize.BIG)
+            setOnAction {
+                actions[JSkatAction.PASS_BID]?.let { action ->
+                    Platform.runLater {
+                        action.actionPerformed(JSkatActionEvent(JSkatAction.PASS_BID, it.source))
+                    }
                 }
             }
         }
