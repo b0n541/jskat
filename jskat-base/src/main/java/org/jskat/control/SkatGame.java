@@ -521,21 +521,11 @@ public class SkatGame {
             result = false;
         }
         if (discardedSkat.size() != 2) {
-            log.error("Player is fooling!!! Skat doesn't have two cards! (is " + (discardedSkat == null ? 0 : discardedSkat.size()) + ")");
+            log.error("Player is fooling!!! Skat doesn't have two cards! (is {})", discardedSkat == null ? 0 : discardedSkat.size());
             result = false;
         }
-        if (discardedSkat.size() == 2 && discardedSkat.get(0).equals(discardedSkat.get(1))) {
+        if (discardedSkat.get(0).equals(discardedSkat.get(1))) {
             log.error("Player is fooling!!! Skat cards are identical!");
-            result = false;
-        }
-
-        // Final validation of player hand and skat
-        if (data.getPlayerCards(player).size() != 10) {
-            log.error("Player is fooling!!! Player doesn't have 10 cards! (is " + data.getPlayerCards(player).size() + ")");
-            result = false;
-        }
-        if (data.getSkat().size() != 2) {
-            log.error("Player is fooling!!! Skat doesn't have 2 cards! (is " + data.getSkat().size() + ")");
             result = false;
         }
 
