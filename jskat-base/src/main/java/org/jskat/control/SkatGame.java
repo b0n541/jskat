@@ -889,8 +889,7 @@ public class SkatGame {
 
         boolean result = false;
 
-        log.debug("Player " + player + " has card: player cards: " + data.getPlayerCards(player)
-                + " card to check: " + card);
+        log.info("Player {} has card: player cards: {} card to check: {}", player, data.getPlayerCards(player), card);
 
         for (final Card handCard : data.getPlayerCards(player)) {
 
@@ -906,18 +905,14 @@ public class SkatGame {
 
     private void calculateGameValue() {
 
-        log.debug("Calculate game value");
+        log.info("Calculating game value");
 
         // FIXME (jan 07.12.2010) don't let a data class calculate it's values
         data.calcResult();
 
-        log.debug("game value=" + data.getResult() + ", bid value="
-                + data.getMaxBidValue());
-
-        log.debug("Final game result: lost:" + data.isGameLost() +
-                " game value: " + data.getResult());
-
-        log.debug("Final result: " + data.getDeclarerScore() + "/" + data.getOpponentScore());
+        log.info("game value={}, bid value={}", data.getResult(), data.getMaxBidValue());
+        log.info("Final game result: lost:{} game value: {}", data.isGameLost(), data.getResult());
+        log.info("Final result: {}/{}", data.getDeclarerScore(), data.getOpponentScore());
 
         for (final JSkatPlayer playerInstance : player.values()) {
             playerInstance.setGameSummary(data.getGameSummary());
