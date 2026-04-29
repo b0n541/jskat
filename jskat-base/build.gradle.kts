@@ -6,7 +6,7 @@ plugins {
 
 dependencies {
     // ONNX Runtime for ML model inference (1.17+ required for IR version 10)
-    implementation("com.microsoft.onnxruntime:onnxruntime:1.25.0")
+    implementation("com.microsoft.onnxruntime:onnxruntime:1.25.1")
 
     // Jackson for JSON parsing in tests
     testImplementation("com.fasterxml.jackson.core:jackson-databind:2.21.2")
