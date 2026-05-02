@@ -1,11 +1,9 @@
 package org.jskat.gui.javafx.main
 
-import javafx.event.EventHandler
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.control.Button
 import javafx.scene.control.Label
-import javafx.scene.control.Tooltip
 import javafx.scene.image.ImageView
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
@@ -56,7 +54,11 @@ class WelcomePanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) :
         vbox.maxWidth = USE_PREF_SIZE
 
         // ISS Table
-        val issButton = createMainButton(actions[JSkatAction.CONNECT_TO_ISS]!!)
+        val issButton = createActionButton(
+            JSkatAction.SHOW_ISS_LOGIN,
+            strings.getString("play_on_iss"),
+            JSkatGraphicRepository.Icon.CONNECT_ISS
+        )
         val issDescription =
             Label(strings.getString("explain_iss_table_1") + "\n" + strings.getString("explain_iss_table_2"))
         issDescription.isWrapText = true
@@ -115,17 +117,9 @@ class WelcomePanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) :
         val button = Button(text)
         button.graphic = bitmaps.getImageView(icon, IconSize.BIG)
         button.maxWidth = Double.MAX_VALUE
-        button.setOnAction { e ->
-            actions[action]?.actionPerformed(JSkatActionEvent(action, e.source))
+        button.setOnAction { event ->
+            actions[action]?.actionPerformed(JSkatActionEvent(action, event.source))
         }
         return button
-    }
-
-    private fun createMainButton(action: AbstractJSkatAction): Button {
-        return Button(action.getValue(AbstractJSkatAction.NAME).toString()).apply {
-            graphic = bitmaps.getImageView(action.icon, IconSize.BIG)
-            tooltip = Tooltip(action.tooltip)
-            onAction = EventHandler { action.actionPerformed(null) }
-        }
     }
 }

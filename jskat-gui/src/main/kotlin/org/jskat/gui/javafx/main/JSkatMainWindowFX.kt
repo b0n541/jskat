@@ -3,7 +3,6 @@ package org.jskat.gui.javafx.main
 import com.google.common.eventbus.Subscribe
 import javafx.application.Platform
 import javafx.event.EventHandler
-import javafx.fxml.FXMLLoader
 import javafx.scene.control.*
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
@@ -24,6 +23,7 @@ import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize
 import org.jskat.gui.javafx.JSkatMenuFactory
 import org.jskat.gui.javafx.iss.LobbyPanel
+import org.jskat.gui.javafx.iss.LoginPanel
 import org.jskat.gui.javafx.table.ISSTablePanel
 import org.jskat.gui.javafx.table.SkatSeriesStartDialog
 import org.jskat.gui.javafx.table.SkatTableNode
@@ -49,7 +49,7 @@ class JSkatMainWindowFX : VBox() {
         val toolbar = ToolBar()
         toolbar.items.addAll(
             createToolbarButton(actions[JSkatAction.CREATE_LOCAL_TABLE]!!),
-            createToolbarButton(actions[JSkatAction.CONNECT_TO_ISS]!!),
+            createToolbarButton(actions[JSkatAction.SHOW_ISS_LOGIN]!!),
             createToolbarButton(actions[JSkatAction.PREFERENCES]!!),
             createToolbarButton(actions[JSkatAction.HELP]!!),
             createToolbarButton(actions[JSkatAction.ABOUT_JSKAT]!!)
@@ -124,10 +124,7 @@ class JSkatMainWindowFX : VBox() {
     @Subscribe
     fun showIssLoginOn(command: IssShowLoginCommand) {
         Platform.runLater {
-            val loader = FXMLLoader()
-            loader.location = JSkatMainWindowFX::class.java.getResource("/org/jskat/gui/javafx/iss/IssLogin.fxml")
-            loader.resources = strings.stringResources
-            val loginPanel: VBox = loader.load()
+            val loginPanel: VBox = LoginPanel(actions)
 
             val tab = Tab(strings.getString("iss_login")).apply {
                 id = "ISS_LOGIN"
