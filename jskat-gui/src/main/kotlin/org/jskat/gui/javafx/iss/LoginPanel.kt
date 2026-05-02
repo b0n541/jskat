@@ -13,11 +13,13 @@ import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.iss.LoginCredentials
 import org.jskat.gui.action.AbstractJSkatAction
+import org.jskat.gui.img.JSkatGraphicRepository
+import org.jskat.gui.img.JSkatGraphicRepository.IconSize
 import org.jskat.util.JSkatResourceBundle
 
 class LoginPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) : VBox() {
 
-
+    private val bitmaps = JSkatGraphicRepository.INSTANCE
     private val strings = JSkatResourceBundle.INSTANCE
     private val loginField = TextField()
     private val passwordField = PasswordField()
@@ -60,27 +62,26 @@ class LoginPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) : V
         val buttonBox = HBox(10.0)
         buttonBox.alignment = Pos.CENTER
 
-        val loginButton = Button(strings.getString("connect_to_iss"))
-        loginButton.setOnAction {
-            val credentials = LoginCredentials(loginField.text, passwordField.text)
-            val action = actions[JSkatAction.CONNECT_TO_ISS]
-            // Pass credentials as source
-            action?.actionPerformed(JSkatActionEvent(JSkatAction.CONNECT_TO_ISS.toString(), credentials))
-        }
+        val loginButton = createActionButton(
+            JSkatAction.CONNECT_TO_ISS,
+            strings.getString("connect_to_iss"),
+            JSkatGraphicRepository.Icon.CONNECT_ISS,
+            LoginCredentials(loginField.text, passwordField.text)
+        )
         loginButton.defaultButtonProperty()
             .bind(loginField.textProperty().isNotEmpty.and(passwordField.textProperty().isNotEmpty))
 
-        val homepageButton = Button(strings.getString("open_iss_homepage"))
-        homepageButton.setOnAction {
-            val action = actions[JSkatAction.OPEN_ISS_HOMEPAGE]
-            action?.actionPerformed(JSkatActionEvent(JSkatAction.OPEN_ISS_HOMEPAGE, it.source))
-        }
+        val homepageButton = createActionButton(
+            JSkatAction.OPEN_ISS_HOMEPAGE,
+            strings.getString("open_iss_homepage"),
+            JSkatGraphicRepository.Icon.WEB
+        )
 
-        val registerButton = Button(strings.getString("register_on_iss"))
-        registerButton.setOnAction {
-            val action = actions[JSkatAction.REGISTER_ON_ISS]
-            action?.actionPerformed(JSkatActionEvent(JSkatAction.REGISTER_ON_ISS, it.source))
-        }
+        val registerButton = createActionButton(
+            JSkatAction.REGISTER_ON_ISS,
+            strings.getString("register_on_iss"),
+            JSkatGraphicRepository.Icon.REGISTER
+        )
 
         buttonBox.children.addAll(loginButton, homepageButton, registerButton)
 
@@ -92,5 +93,34 @@ class LoginPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) : V
 
     fun setFocus() {
         loginField.requestFocus()
+    }
+
+    private fun createActionButton(
+        action: JSkatAction,
+        text: String,
+        icon: JSkatGraphicRepository.Icon,
+        actionSource: LoginCredentials
+    ): Button {
+        val button = Button(text)
+        button.graphic = bitmaps.getImageView(icon, IconSize.BIG)
+        button.maxWidth = Double.MAX_VALUE
+        button.setOnAction { event ->
+            actions[action]?.actionPerformed(JSkatActionEvent(action, actionSource))
+        }
+        return button
+    }
+
+    private fun createActionButton(
+        action: JSkatAction,
+        text: String,
+        icon: JSkatGraphicRepository.Icon
+    ): Button {
+        val button = Button(text)
+        button.graphic = bitmaps.getImageView(icon, IconSize.BIG)
+        button.maxWidth = Double.MAX_VALUE
+        button.setOnAction { event ->
+            actions[action]?.actionPerformed(JSkatActionEvent(action, event.source))
+        }
+        return button
     }
 }

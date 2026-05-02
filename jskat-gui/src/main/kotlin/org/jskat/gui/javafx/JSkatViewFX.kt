@@ -28,6 +28,8 @@ import org.jskat.util.CardList
 import org.jskat.util.JSkatResourceBundle
 import org.jskat.util.Player
 import org.slf4j.LoggerFactory
+import java.awt.Desktop
+import java.net.URI
 import java.util.*
 import java.util.concurrent.FutureTask
 
@@ -219,7 +221,7 @@ class JSkatViewFX(
             }
 
             MoveType.TIME_OUT -> {
-                // TODO show message box
+                TODO("Not implemented yet time out")
             }
 
             else -> {
@@ -251,7 +253,11 @@ class JSkatViewFX(
     }
 
     override fun openWebPage(link: String) {
-        TODO("Not implemented yet openWebPage: $link")
+        try {
+            Desktop.getDesktop().browse(URI(link))
+        } catch (e: Exception) {
+            log.error("Error opening web page: $link", e)
+        }
     }
 
     override fun getHumanPlayerForGUI(): AbstractHumanJSkatPlayer {
