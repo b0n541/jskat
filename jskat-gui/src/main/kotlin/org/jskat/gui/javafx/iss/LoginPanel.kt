@@ -48,9 +48,7 @@ class LoginPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) : V
 
         val col1 = ColumnConstraints()
         col1.hgrow = Priority.NEVER
-        val col2 = ColumnConstraints()
-        col2.hgrow = Priority.ALWAYS
-        grid.columnConstraints.addAll(col1, col2)
+        grid.columnConstraints.addAll(col1)
 
         // Login
         grid.addRow(0, Label(strings.getString("login")), loginField)
