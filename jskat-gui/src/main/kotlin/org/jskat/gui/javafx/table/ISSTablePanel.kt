@@ -47,7 +47,7 @@ class ISSTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
             JSkatAction.TALK_ENABLED,
             JSkatAction.LEAVE_ISS_TABLE
         )
-        val issStartPanel = IssStartContextPanel(actions, issStartActions)
+        val issStartPanel = IssStartContextPanel(tableName, actions, issStartActions)
         addContextPanel(ContextPanelType.START, issStartPanel)
         setContextPanel(ContextPanelType.START)
     }
