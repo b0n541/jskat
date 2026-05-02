@@ -66,7 +66,6 @@ class LoginPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) : V
             JSkatAction.CONNECT_TO_ISS,
             strings.getString("connect_to_iss"),
             JSkatGraphicRepository.Icon.CONNECT_ISS,
-            LoginCredentials(loginField.text, passwordField.text)
         )
         loginButton.defaultButtonProperty()
             .bind(loginField.textProperty().isNotEmpty.and(passwordField.textProperty().isNotEmpty))
@@ -98,28 +97,19 @@ class LoginPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) : V
     private fun createActionButton(
         action: JSkatAction,
         text: String,
-        icon: JSkatGraphicRepository.Icon,
-        actionSource: LoginCredentials
-    ): Button {
-        val button = Button(text)
-        button.graphic = bitmaps.getImageView(icon, IconSize.BIG)
-        button.maxWidth = Double.MAX_VALUE
-        button.setOnAction { event ->
-            actions[action]?.actionPerformed(JSkatActionEvent(action, actionSource))
-        }
-        return button
-    }
-
-    private fun createActionButton(
-        action: JSkatAction,
-        text: String,
         icon: JSkatGraphicRepository.Icon
     ): Button {
         val button = Button(text)
         button.graphic = bitmaps.getImageView(icon, IconSize.BIG)
         button.maxWidth = Double.MAX_VALUE
         button.setOnAction { event ->
-            actions[action]?.actionPerformed(JSkatActionEvent(action, event.source))
+            var actionSource = if (action == JSkatAction.CONNECT_TO_ISS) {
+                LoginCredentials(loginField.text, passwordField.text)
+            } else {
+                event.source
+            }
+
+            actions[action]?.actionPerformed(JSkatActionEvent(action, actionSource))
         }
         return button
     }
