@@ -6,10 +6,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.JSkatMaster;
-import org.jskat.control.command.general.ShowAboutInformationCommand;
-import org.jskat.control.command.general.ShowHelpCommand;
-import org.jskat.control.command.general.ShowLicenseCommand;
-import org.jskat.control.command.general.ShowPreferencesCommand;
+import org.jskat.control.command.general.*;
 import org.jskat.control.command.iss.IssShowLoginCommand;
 import org.jskat.control.command.table.NextReplayMoveCommand;
 import org.jskat.control.command.table.ReplayGameCommand;
@@ -48,7 +45,7 @@ public final class JSkatMenuFactory {
         saveSeriesAsMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.SAVE_AS, IconSize.SMALL));
         final MenuItem exitJSkatMenuItem = new MenuItem(strings.getString("exit_jskat"));
         exitJSkatMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.EXIT, IconSize.SMALL));
-        exitJSkatMenuItem.setOnAction(actionEvent -> JSkatMaster.INSTANCE.exitJSkat());
+        exitJSkatMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE.post(new ExitCommand()));
 
         fileMenu.getItems().addAll(loadSeriesMenuItem, saveSeriesMenuItem, saveSeriesAsMenuItem,
                 new SeparatorMenuItem(), exitJSkatMenuItem);

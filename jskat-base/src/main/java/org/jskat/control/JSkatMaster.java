@@ -243,15 +243,6 @@ public class JSkatMaster {
     }
 
     /**
-     * Exits JSkat
-     */
-    public void exitJSkat() {
-
-        options.saveJSkatProperties();
-        System.exit(0);
-    }
-
-    /**
      * Shows the error message of wrong (null) name input
      */
     public static void showEmptyInputNameMessage() {

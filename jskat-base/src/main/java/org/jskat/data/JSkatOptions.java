@@ -694,7 +694,6 @@ public final class JSkatOptions {
      * Saves the options to a file .jskat in user home
      */
     public void saveJSkatProperties() {
-
         try {
             final FileWriter writer;
             final File dir = resolveSavePath().toFile();

@@ -1,10 +1,14 @@
 package org.jskat
 
+import com.google.common.eventbus.Subscribe
 import javafx.application.Application
+import javafx.application.Platform
 import javafx.scene.Scene
 import javafx.stage.Screen
 import javafx.stage.Stage
+import org.jskat.control.JSkatEventBus
 import org.jskat.control.JSkatMaster
+import org.jskat.control.command.general.ExitCommand
 import org.jskat.data.JSkatOptions
 import org.jskat.gui.human.SwingHumanPlayer
 import org.jskat.gui.javafx.JSkatViewFX
@@ -16,6 +20,7 @@ class JSkatFX : Application() {
 
     private val log: Logger = LoggerFactory.getLogger(JSkatFX::class.java)
 
+    private val eventBus = JSkatEventBus.INSTANCE
     private val jskatMaster: JSkatMaster = JSkatMaster.INSTANCE
     private val jskatOptions: JSkatOptions = JSkatOptions.instance()
 
@@ -24,13 +29,15 @@ class JSkatFX : Application() {
     override fun start(stage: Stage) {
         this.stage = stage
 
+        eventBus.register(this)
+
         val human = SwingHumanPlayer()
         val jskatView = JSkatViewFX(JSkatMainWindowFX(), human)
         jskatMaster.view = jskatView
 
         stage.title = "JSkat"
         stage.setOnCloseRequest {
-            jskatMaster.exitJSkat()
+            eventBus.post(ExitCommand())
         }
 
         val screen = Screen.getPrimary()
@@ -81,6 +88,12 @@ class JSkatFX : Application() {
         stage.scene = scene
 
         stage.show()
+    }
+
+    @Subscribe
+    fun exitJSkatOn(command: ExitCommand) {
+        jskatOptions.saveJSkatProperties()
+        Platform.exit()
     }
 
     companion object {
