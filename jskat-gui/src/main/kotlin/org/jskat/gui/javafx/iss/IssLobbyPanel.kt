@@ -149,24 +149,24 @@ class IssLobbyPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>, 
     private fun createTableTable(): TableView<Table> {
         val table = TableView(tableList)
         table.columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY
-        table.columns.add(TableColumn<Table, String>("Name").apply {
+        table.columns.add(TableColumn<Table, String>(strings.getString("name")).apply {
             cellValueFactory = javafx.util.Callback { it.value.name }
         })
-        table.columns.add(TableColumn<Table, Long>("Seats").apply {
+        table.columns.add(TableColumn<Table, Long>(strings.getString("seats")).apply {
             cellValueFactory = javafx.util.Callback { it.value.maxPlayers as javafx.beans.value.ObservableValue<Long> }
             styleClass.add("right-aligned")
         })
-        table.columns.add(TableColumn<Table, Long>("Games").apply {
+        table.columns.add(TableColumn<Table, Long>(strings.getString("games")).apply {
             cellValueFactory = javafx.util.Callback { it.value.gamesPlayed as javafx.beans.value.ObservableValue<Long> }
             styleClass.add("right-aligned")
         })
-        table.columns.add(TableColumn<Table, String>("Player 1").apply {
+        table.columns.add(TableColumn<Table, String>(strings.getString("player") + " 1").apply {
             cellValueFactory = javafx.util.Callback { it.value.player1 }
         })
-        table.columns.add(TableColumn<Table, String>("Player 2").apply {
+        table.columns.add(TableColumn<Table, String>(strings.getString("player") + " 2").apply {
             cellValueFactory = javafx.util.Callback { it.value.player2 }
         })
-        table.columns.add(TableColumn<Table, String>("Player 3").apply {
+        table.columns.add(TableColumn<Table, String>(strings.getString("player") + " 3").apply {
             cellValueFactory = javafx.util.Callback { it.value.player3 }
         })
 
