@@ -10,11 +10,11 @@ import javafx.scene.shape.Rectangle
 import org.jskat.gui.img.JSkatGraphicRepository
 
 class PlayGroundPanel(
-    private val gameInfoPanel: GameInformationPanel,
-    private val leftOpponentPanel: OpponentPanel,
-    private val rightOpponentPanel: OpponentPanel,
-    private val gameContextStackPane: StackPane,
-    private val userPanel: JSkatUserPanel
+    gameInfoPanel: GameInformationPanel,
+    leftOpponentPanel: OpponentPanel,
+    rightOpponentPanel: OpponentPanel,
+    gameContextStackPane: StackPane,
+    userPanel: JSkatUserPanel
 ) : GridPane() {
 
     init {
@@ -65,6 +65,8 @@ class PlayGroundPanel(
         }
         HBox.setHgrow(leftOpponentPanel, Priority.ALWAYS)
         HBox.setHgrow(rightOpponentPanel, Priority.ALWAYS)
+        leftOpponentPanel.prefWidth = 0.0 // Ensure equal distribution
+        rightOpponentPanel.prefWidth = 0.0 // Ensure equal distribution
 
         val topArea = VBox(gameInfoPanel, opponentBox).apply {
             alignment = Pos.TOP_CENTER
@@ -84,7 +86,7 @@ class PlayGroundPanel(
         gameContextStackPane.padding = Insets(10.0)
         gameContextStackPane.minHeight = 0.0
         gameContextStackPane.minWidth = 0.0
-        
+
         // Add clipping to the middle panel to prevent it from overflowing into other rows
         val clipRect = Rectangle()
         clipRect.widthProperty().bind(gameContextStackPane.widthProperty())

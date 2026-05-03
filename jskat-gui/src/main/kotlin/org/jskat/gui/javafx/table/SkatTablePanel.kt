@@ -98,12 +98,20 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
         val trickHoldingPanel = HBox()
         // trickHoldingPanel.isOpaque = false // Removed
         lastTrickPanel = TrickPanel(0.6, false)
-        trickHoldingPanel.children.add(lastTrickPanel)
+        lastTrickPanel.prefWidth = 0.0
         HBox.setHgrow(lastTrickPanel, Priority.ALWAYS)
+        trickHoldingPanel.children.add(lastTrickPanel)
+
         trickPanel = TrickPanel(0.8, true)
-        trickHoldingPanel.children.add(trickPanel)
+        lastTrickPanel.prefWidth = 0.0
         HBox.setHgrow(trickPanel, Priority.ALWAYS)
-        trickHoldingPanel.children.add(getRightPanelForTrickPanel())
+        trickHoldingPanel.children.add(trickPanel)
+
+        val rightPanel = getRightPanelForTrickPanel()
+        rightPanel.prefWidth = 0.0
+        HBox.setHgrow(rightPanel, Priority.ALWAYS)
+        trickHoldingPanel.children.add(rightPanel)
+
         addContextPanel(ContextPanelType.TRICK_PLAYING, trickHoldingPanel)
 
         gameOverPanel = GameOverPanel(tableName, actions)
@@ -156,7 +164,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
         return result
     }
 
-    protected open fun getRightPanelForTrickPanel(): Node {
+    protected open fun getRightPanelForTrickPanel(): Pane {
         val additionalActionsPanel = VBox()
         // additionalActionsPanel.isOpaque = false // Removed
 

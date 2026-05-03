@@ -2,9 +2,9 @@ package org.jskat.gui.javafx.iss
 
 import com.google.common.eventbus.Subscribe
 import javafx.application.Platform
-import javafx.scene.Node
 import javafx.scene.control.Button
 import javafx.scene.layout.HBox
+import javafx.scene.layout.Pane
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import org.jskat.control.event.iss.IssTableGameStartedEvent
@@ -61,7 +61,7 @@ class IssTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
         return JSkatUserPanel(tableName, 12, true, actions)
     }
 
-    override fun getRightPanelForTrickPanel(): Node {
+    override fun getRightPanelForTrickPanel(): Pane {
         val additionalActionsPanel = VBox()
         additionalActionsPanel.spacing = 10.0
 
