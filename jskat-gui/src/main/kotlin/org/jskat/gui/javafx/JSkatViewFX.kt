@@ -43,7 +43,9 @@ class JSkatViewFX(
 
     @Subscribe
     fun showPreferencesDialogOn(command: ShowPreferencesCommand) {
-        Platform.runLater { JSkatOptionsDialog(null).showAndWait() }
+        Platform.runLater {
+            JSkatOptionsDialog(null).showAndWait()
+        }
     }
 
     @Subscribe
@@ -90,20 +92,24 @@ class JSkatViewFX(
     }
 
     override fun showMessage(title: String, message: String) {
-        Alert(Alert.AlertType.INFORMATION).apply {
-            setTitle(title)
-            headerText = null // or null
-            contentText = message
-            showAndWait()
+        Platform.runLater {
+            Alert(Alert.AlertType.INFORMATION).apply {
+                setTitle(title)
+                headerText = null // or null
+                contentText = message
+                showAndWait()
+            }
         }
     }
 
     override fun showErrorMessage(title: String, message: String) {
-        Alert(Alert.AlertType.ERROR).apply {
-            setTitle(title)
-            headerText = null // or null
-            contentText = message
-            showAndWait()
+        Platform.runLater {
+            Alert(Alert.AlertType.ERROR).apply {
+                setTitle(title)
+                headerText = null // or null
+                contentText = message
+                showAndWait()
+            }
         }
     }
 
