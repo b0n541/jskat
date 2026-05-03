@@ -256,10 +256,6 @@ class JSkatViewFX(
         return human
     }
 
-    override fun setActiveView(name: String) {
-        mainWindow.setActiveTab(name)
-    }
-
     override fun showAIPlayedSchwarzMessageDiscarding(playerName: String, discardedCards: CardList) {
         TODO("Not yet implemented showAIPlayedSchwarzMessageDiscarding: $playerName, $discardedCards")
     }

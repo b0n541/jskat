@@ -7,6 +7,7 @@ import org.jskat.gui.swing.table.SkatTablePanelWrapper;
 
 import java.util.Map;
 
+@Deprecated
 public class ISSTablePanelWrapper extends SkatTablePanelWrapper {
 
     public ISSTablePanelWrapper(String tableName, Map<JSkatAction, AbstractJSkatAction> actions) {

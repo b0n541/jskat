@@ -132,11 +132,6 @@ public class UnitTestView implements JSkatView {
     }
 
     @Override
-    public void setActiveView(final String name) {
-        // TODO Auto-generated method stub
-    }
-
-    @Override
     public void showAIPlayedSchwarzMessageDiscarding(final String playerName,
                                                      final CardList discardedCard) {
         // TODO Auto-generated method stub

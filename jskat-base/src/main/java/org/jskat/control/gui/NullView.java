@@ -157,14 +157,6 @@ public class NullView implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public void setActiveView(final String name) {
-        // empty method by intent
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void showAIPlayedSchwarzMessageDiscarding(final String playerName,
                                                      final CardList discardedCards) {
         // empty method by intent

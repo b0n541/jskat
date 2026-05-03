@@ -758,11 +758,6 @@ public class JSkatViewImpl implements JSkatView {
     }
 
     @Override
-    public void setActiveView(final String viewName) {
-        activeView = viewName;
-    }
-
-    @Override
     public void setSkat(final String tableName, final CardList skat) {
         Platform.runLater(() -> tables.get(tableName).getSkatTablePanel().setSkat(skat));
     }

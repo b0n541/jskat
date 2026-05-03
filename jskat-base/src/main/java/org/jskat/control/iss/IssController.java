@@ -96,21 +96,18 @@ public class IssController {
 
     private void closeConnectionIfOpen() {
         if (issConnector != null && issConnector.isConnected()) {
-            log.debug("connection to ISS still open");
             issConnector.closeConnection();
+            log.info("Connection to ISS closed.");
         }
     }
 
     @Subscribe
     public void establishConnectionOn(final IssConnectCommand command) {
-        log.debug("connectToISS");
 
         // issConnector = new WebSocketConnector();
         if (issConnector == null) {
             issConnector = new StreamConnector();
         }
-
-        log.debug("connector created");
 
         userName = command.loginCredentials.userName();
         password = command.loginCredentials.password();
@@ -122,7 +119,7 @@ public class IssController {
                     .establishConnection(this);
 
             if (isConnected) {
-                log.debug("Connection to ISS established: " + issConnector.isConnected());
+                log.info("Connection to ISS established: " + issConnector.isConnected());
                 issMsg = new MessageGenerator(userName);
                 issOut = issConnector.getOutputChannel();
                 sendToIss(userName);

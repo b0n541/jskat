@@ -8,6 +8,7 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import org.jskat.control.JSkatEventBus
 import org.jskat.control.JSkatMaster
+import org.jskat.control.command.iss.IssDisconnectCommand
 import org.jskat.control.command.iss.IssInvitePlayerCommand
 import org.jskat.control.command.iss.IssShowLoginCommand
 import org.jskat.control.command.table.RequestCreateTableCommand
@@ -68,20 +69,19 @@ class JSkatMainWindowFX : VBox() {
         addWelcomeTab()
     }
 
-    fun setActiveTab(name: String) {
-        tabs.selectionModel.select(tabs.tabs.first { it.text == name })
-    }
-
     @Subscribe
     fun onTableCreated(event: TableCreatedEvent) {
         val tableName = event.tableName()
+        var tabId: String = ""
         val panel = when (event.tableType()) {
             JSkatViewType.LOCAL_TABLE -> {
+                tabId = "LOCAL_TABLE{$tableName}"
                 val skatTablePanel = SkatTablePanel(tableName, actions)
                 SkatTableNode(skatTablePanel)
             }
 
             JSkatViewType.ISS_TABLE -> {
+                tabId = "ISS_TABLE{$tableName}"
                 val issTablePanel = ISSTablePanel(tableName, actions)
                 SkatTableNode(issTablePanel)
             }
@@ -92,6 +92,7 @@ class JSkatMainWindowFX : VBox() {
         if (panel != null) {
             Platform.runLater {
                 val newTab = Tab(tableName).apply {
+                    id = tabId
                     content = panel
                     isClosable = true
                 }
@@ -140,11 +141,7 @@ class JSkatMainWindowFX : VBox() {
     @Subscribe
     fun showIssLobbyOn(event: IssConnectedEvent) {
         Platform.runLater {
-            tabs.tabs
-                .find { it.id == "ISS_LOGIN" }
-                ?.let { loginTab ->
-                    tabs.tabs.remove(loginTab)
-                }
+            tabs.tabs.removeIf { it.id == "ISS_LOGIN" }
 
             issLobby = LobbyPanel(actions, event.userName)
             val scrollPane = ScrollPane(issLobby).apply {
@@ -154,7 +151,7 @@ class JSkatMainWindowFX : VBox() {
             issLobby.prefWidthProperty().bind(scrollPane.widthProperty())
             issLobby.prefHeightProperty().bind(scrollPane.heightProperty())
 
-            val tab = Tab("ISS Lobby").apply {
+            val tab = Tab(strings.getString("iss_lobby")).apply {
                 id = "ISS_LOBBY"
                 isClosable = true
                 content = scrollPane
@@ -233,6 +230,13 @@ class JSkatMainWindowFX : VBox() {
         }
     }
 
+    @Subscribe
+    fun closeAllIssTabsOn(event: IssDisconnectCommand) {
+        tabs.tabs.removeIf {
+            it.id != null && (it.id == "ISS_LOBBY" || it.id.startsWith("ISS_TABLE"))
+        }
+    }
+
     private fun createToolbarButton(action: AbstractJSkatAction): Button {
         return Button(action.getValue(AbstractJSkatAction.NAME).toString()).apply {
             graphic = bitmaps.getImageView(action.icon, IconSize.SMALL)
@@ -250,6 +254,7 @@ class JSkatMainWindowFX : VBox() {
 
     private fun createNewLocalTable() {
         val dialog = TextInputDialog(
+            // TODO: set number of local tables created correctly
             "${strings.getString("local.table")} ${jskatMaster.view.getNewTableName(0)}"
         )
         dialog.title = strings.getString("new.table.dialog.title")

@@ -133,13 +133,6 @@ public interface JSkatView {
     AbstractHumanJSkatPlayer getHumanPlayerForGUI();
 
     /**
-     * Sets the active view part for JSkat
-     *
-     * @param name Name of the view
-     */
-    void setActiveView(String name);
-
-    /**
      * Shows a messages if an AI player played schwarz during discarding
      *
      * @param playerName     Player name

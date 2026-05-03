@@ -378,12 +378,7 @@ public class JSkatMaster {
      * @param tableName Table name
      */
     public void setActiveTable(final JSkatViewType type, final String tableName) {
-
         data.setActiveTable(type, tableName);
-        // might not be instantiated yet
-        if (view != null) {
-            view.setActiveView(tableName);
-        }
     }
 
     /**
