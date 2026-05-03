@@ -14,6 +14,7 @@ import org.jskat.control.event.table.PlayerNamesChangedEvent
 import org.jskat.control.event.table.SkatGameReplayFinishedEvent
 import org.jskat.control.event.table.SkatGameReplayStartedEvent
 import org.jskat.control.event.table.SkatSeriesStartedEvent
+import org.jskat.gui.javafx.iss.IssTablePanel
 import org.jskat.util.JSkatResourceBundle
 
 class SkatTableNode(val skatTablePanel: SkatTablePanel) : SplitPane() {
@@ -43,7 +44,7 @@ class SkatTableNode(val skatTablePanel: SkatTablePanel) : SplitPane() {
         val tabPane = TabPane()
         tabPane.tabs.add(scoreListTab)
 
-        if (skatTablePanel is ISSTablePanel) {
+        if (skatTablePanel is IssTablePanel) {
             val chatTab = Tab(strings.getString("chat"), skatTablePanel.getChatPanel())
             tabPane.tabs.add(chatTab)
         }

@@ -5,7 +5,7 @@ import javafx.scene.control.*
 import javafx.scene.layout.GridPane
 import org.jskat.util.JSkatResourceBundle
 
-class PlayerInvitationDialog(playerNames: Set<String>) : Dialog<List<String>>() {
+class IssPlayerInvitationDialog(playerNames: Set<String>) : Dialog<List<String>>() {
 
     private val strings = JSkatResourceBundle.INSTANCE
     private val firstPlayerGroup = ToggleGroup()

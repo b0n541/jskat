@@ -227,10 +227,9 @@ public class IssController {
             message.append(params.get(i)).append(' ');
         }
 
-        final ChatMessage chatMessage = new ChatMessage("Lobby",
-                message.toString());
+        final ChatMessage chatMessage = new ChatMessage("Lobby", message.toString());
 
-        view.appendISSChatMessage(ChatMessageType.LOBBY, chatMessage);
+        eventBus.post(new IssNewChatMessageEvent(ChatMessageType.LOBBY, chatMessage));
     }
 
     void addTableChatMessage(final List<String> params) {
@@ -247,10 +246,9 @@ public class IssController {
             message.append(params.get(i)).append(' ');
         }
 
-        final ChatMessage chatMessage = new ChatMessage(tableName,
-                message.toString());
+        final ChatMessage chatMessage = new ChatMessage(tableName, message.toString());
 
-        view.appendISSChatMessage(ChatMessageType.TABLE, chatMessage);
+        eventBus.post(new IssNewChatMessageEvent(ChatMessageType.TABLE, chatMessage));
     }
 
     /**
@@ -674,12 +672,10 @@ public class IssController {
     /**
      * Updates a chat message on an ISS table
      *
-     * @param tableName Table name
-     * @param message   Chat message
+     * @param message Chat message
      */
-    public void updateISSTableChatMessage(final String tableName, final ChatMessage message) {
-        // FIXME (jan 30.01.2011) tableName not needed here?
-        view.appendISSChatMessage(ChatMessageType.TABLE, message);
+    public void updateISSTableChatMessage(final ChatMessage message) {
+        eventBus.post(new IssNewChatMessageEvent(ChatMessageType.TABLE, message));
     }
 
     /**

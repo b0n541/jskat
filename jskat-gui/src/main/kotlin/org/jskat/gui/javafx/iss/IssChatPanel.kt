@@ -11,7 +11,7 @@ import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.iss.ChatMessage
 import org.jskat.gui.action.AbstractJSkatAction
 
-class ChatPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) : VBox() {
+class IssChatPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) : VBox() {
 
     private val inputLine = TextField()
     private val chatTabs = TabPane()
@@ -19,7 +19,7 @@ class ChatPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) : VB
     private var activeChatName: String = ""
 
     init {
-        VBox.setVgrow(chatTabs, Priority.ALWAYS)
+        setVgrow(chatTabs, Priority.ALWAYS)
         children.addAll(chatTabs, inputLine)
 
         inputLine.setOnAction {

@@ -29,10 +29,8 @@ import org.jskat.control.event.table.*;
 import org.jskat.control.gui.JSkatView;
 import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
-import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.*;
 import org.jskat.data.SkatGameData.GameState;
-import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.data.iss.MovePlayer;
 import org.jskat.gui.action.AbstractJSkatAction;
@@ -395,28 +393,6 @@ public class JSkatViewImpl implements JSkatView {
     public void removeTableFromISSLobbyTableListOn(final IssTableDeletedEvent event) {
         if (issLobby != null) {
             issLobby.removeTable(event.tableName());
-        }
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void appendISSChatMessage(final ChatMessageType messageType, final ChatMessage message) {
-
-        LOG.debug("appendISSChatMessage");
-
-        if (issLobby != null) {
-            issLobby.appendChatMessage(message);
-        }
-
-        for (final SkatTablePanelWrapper table : tables.values()) {
-            if (table instanceof final ISSTablePanelWrapper issTable) {
-                final String chatname = message.getChatName();
-                if ("Lobby".equals(chatname) || issTable.getName().equals(chatname)) {
-                    issTable.getIssTablePanel().appendChatMessage(message);
-                }
-            }
         }
     }
 

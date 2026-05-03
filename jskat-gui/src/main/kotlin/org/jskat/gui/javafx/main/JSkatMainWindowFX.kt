@@ -23,9 +23,9 @@ import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize
 import org.jskat.gui.javafx.JSkatMenuFactory
-import org.jskat.gui.javafx.iss.LobbyPanel
-import org.jskat.gui.javafx.iss.LoginPanel
-import org.jskat.gui.javafx.table.ISSTablePanel
+import org.jskat.gui.javafx.iss.IssLobbyPanel
+import org.jskat.gui.javafx.iss.IssLoginPanel
+import org.jskat.gui.javafx.iss.IssTablePanel
 import org.jskat.gui.javafx.table.SkatSeriesStartDialog
 import org.jskat.gui.javafx.table.SkatTableNode
 import org.jskat.gui.javafx.table.SkatTablePanel
@@ -40,7 +40,7 @@ class JSkatMainWindowFX : VBox() {
     private val actions = JSkatActions.actionMap
 
     private val tabs: TabPane = TabPane()
-    private lateinit var issLobby: LobbyPanel
+    private lateinit var issLobby: IssLobbyPanel
 
     init {
         JSkatEventBus.INSTANCE.register(this)
@@ -82,7 +82,7 @@ class JSkatMainWindowFX : VBox() {
 
             JSkatViewType.ISS_TABLE -> {
                 tabId = "ISS_TABLE{$tableName}"
-                val issTablePanel = ISSTablePanel(tableName, actions)
+                val issTablePanel = IssTablePanel(tableName, actions)
                 SkatTableNode(issTablePanel)
             }
 
@@ -125,7 +125,7 @@ class JSkatMainWindowFX : VBox() {
     @Subscribe
     fun showIssLoginOn(command: IssShowLoginCommand) {
         Platform.runLater {
-            val loginPanel: VBox = LoginPanel(actions)
+            val loginPanel: VBox = IssLoginPanel(actions)
 
             val tab = Tab(strings.getString("iss_login")).apply {
                 id = "ISS_LOGIN"
@@ -143,7 +143,7 @@ class JSkatMainWindowFX : VBox() {
         Platform.runLater {
             tabs.tabs.removeIf { it.id == "ISS_LOGIN" }
 
-            issLobby = LobbyPanel(actions, event.userName)
+            issLobby = IssLobbyPanel(actions, event.userName)
             val scrollPane = ScrollPane(issLobby).apply {
                 isFitToWidth = true
                 isFitToHeight = true

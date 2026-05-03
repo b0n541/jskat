@@ -13,7 +13,7 @@ import java.util.Map;
 @Deprecated
 public class LoginPanelFX extends AbstractTabPanel {
 
-    private LoginPanel loginPanel;
+    private IssLoginPanel loginPanel;
 
     public LoginPanelFX(String tableName, Map<JSkatAction, AbstractJSkatAction> actions) {
         super(tableName, actions);
@@ -26,7 +26,7 @@ public class LoginPanelFX extends AbstractTabPanel {
         add(fxPanel, BorderLayout.CENTER);
 
         Platform.runLater(() -> {
-            loginPanel = new LoginPanel(actions);
+            loginPanel = new IssLoginPanel(actions);
             Scene scene = new Scene(loginPanel);
             fxPanel.setScene(scene);
         });

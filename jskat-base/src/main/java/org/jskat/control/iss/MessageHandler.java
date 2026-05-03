@@ -166,7 +166,6 @@ public class MessageHandler extends Thread {
     }
 
     void handleLobbyChatMessage(final List<String> params) {
-
         issControl.addChatMessage(ChatMessageType.LOBBY, params);
     }
 
@@ -180,7 +179,6 @@ public class MessageHandler extends Thread {
     }
 
     void handleErrorMessage(final List<String> params) {
-
         log.error(params.toString());
         issControl.showErrorMessage(getI18ErrorString(getErrorString(params)));
     }
@@ -266,11 +264,11 @@ public class MessageHandler extends Thread {
                 MessageParser.parsePlayerTimes(detailParams, moveInfo);
                 issControl.updateMove(tableName, moveInfo);
             } else if (actionCommand.equals("tell")) {
-                issControl.updateISSTableChatMessage(tableName, MessageParser.getTableChatMessage(tableName, detailParams));
+                issControl.updateISSTableChatMessage(MessageParser.getTableChatMessage(tableName, detailParams));
             } else if (actionCommand.equals("end")) {
                 issControl.endGame(tableName, getGameInformation(detailParams));
             } else {
-                log.debug("unhandled action command: " + actionCommand + " for table " + tableName);
+                log.error("unhandled action command: " + actionCommand + " for table " + tableName);
             }
         }
     }
@@ -392,7 +390,6 @@ public class MessageHandler extends Thread {
      * @param params Table information
      */
     void removeTableFromList(final List<String> params) {
-
         issControl.removeISSTableFromList(params.get(0));
     }
 }

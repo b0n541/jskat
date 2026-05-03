@@ -1,9 +1,7 @@
 package org.jskat.control.gui;
 
 import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
-import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.SkatGameData;
-import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -41,16 +39,6 @@ public class NullView implements JSkatView {
     public void showErrorMessage(
             @SuppressWarnings("unused") final String title,
             @SuppressWarnings("unused") final String message) {
-        // empty method by intent
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void appendISSChatMessage(
-            @SuppressWarnings("unused") final ChatMessageType messageType,
-            @SuppressWarnings("unused") final ChatMessage message) {
         // empty method by intent
     }
 

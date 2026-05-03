@@ -17,7 +17,7 @@ import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.gui.img.JSkatGraphicRepository.IconSize
 import org.jskat.util.JSkatResourceBundle
 
-class LoginPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) : VBox() {
+class IssLoginPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) : VBox() {
 
     private val bitmaps = JSkatGraphicRepository.INSTANCE
     private val strings = JSkatResourceBundle.INSTANCE

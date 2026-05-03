@@ -5,9 +5,7 @@ import org.jskat.control.JSkatEventBus;
 import org.jskat.control.event.table.TableCreatedEvent;
 import org.jskat.control.gui.JSkatView;
 import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
-import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.SkatGameData;
-import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -76,13 +74,6 @@ public class UnitTestView implements JSkatView {
 
     @Override
     public void showCardNotAllowedMessage(final Card card) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void appendISSChatMessage(final ChatMessageType messageType,
-                                     final ChatMessage message) {
         // TODO Auto-generated method stub
 
     }

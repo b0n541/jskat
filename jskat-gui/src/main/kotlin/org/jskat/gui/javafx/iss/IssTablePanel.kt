@@ -1,4 +1,4 @@
-package org.jskat.gui.javafx.table
+package org.jskat.gui.javafx.iss
 
 import com.google.common.eventbus.Subscribe
 import javafx.application.Platform
@@ -12,26 +12,27 @@ import org.jskat.control.event.iss.IssTableStateChangedEvent
 import org.jskat.control.event.skatgame.GameStartEvent
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
-import org.jskat.data.iss.ChatMessage
 import org.jskat.data.iss.GameStartInformation
 import org.jskat.data.iss.TablePanelStatus
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
-import org.jskat.gui.javafx.iss.ChatPanel
-import org.jskat.gui.javafx.iss.IssStartContextPanel
+import org.jskat.gui.javafx.table.ContextPanelType
+import org.jskat.gui.javafx.table.JSkatUserPanel
+import org.jskat.gui.javafx.table.OpponentPanel
+import org.jskat.gui.javafx.table.SkatTablePanel
 import org.jskat.util.GameVariant
 import org.jskat.util.Player
 
-class ISSTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAction>) :
+class IssTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAction>) :
     SkatTablePanel(tableName, actions) {
 
-    private lateinit var chatPanel: ChatPanel
+    private lateinit var chatPanel: IssChatPanel
     private var lastTableStatus: TablePanelStatus? = null
 
     override fun initPanel() {
         // Don't call super.initPanel() as we are replacing the entire layout
 
-        chatPanel = ChatPanel(actions)
+        chatPanel = IssChatPanel(actions)
         chatPanel.addNewChat(strings.getString("table") + " " + tableName, tableName)
 
         val playGroundPanel = super.getPlayGroundPanel()
@@ -197,11 +198,7 @@ class ISSTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
         // }
     }
 
-    fun appendChatMessage(message: ChatMessage) {
-        chatPanel.appendMessage(message)
-    }
-
-    fun getChatPanel(): ChatPanel {
+    fun getChatPanel(): IssChatPanel {
         return chatPanel
     }
 }

@@ -1,5 +1,6 @@
 package org.jskat.gui.javafx.iss
 
+import com.google.common.eventbus.Subscribe
 import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleLongProperty
 import javafx.beans.property.SimpleStringProperty
@@ -11,21 +12,24 @@ import javafx.scene.control.*
 import javafx.scene.image.ImageView
 import javafx.scene.layout.*
 import javafx.scene.text.Font
+import org.jskat.control.JSkatEventBus
+import org.jskat.control.event.iss.IssNewChatMessageEvent
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
-import org.jskat.data.iss.ChatMessage
+import org.jskat.control.iss.ChatMessageType
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.JSkatResourceBundle
 import java.awt.image.BufferedImage
 
-class LobbyPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>, private val userName: String?) : VBox() {
+class IssLobbyPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>, private val userName: String?) :
+    VBox() {
 
     private val strings = JSkatResourceBundle.INSTANCE
 
     private val playerList = FXCollections.observableArrayList<Player>()
     private val tableList = FXCollections.observableArrayList<Table>()
-    private val chatPanel = ChatPanel(actions)
+    private val chatPanel = IssChatPanel(actions)
     private val bitmaps = JSkatGraphicRepository.INSTANCE
     private val playerTableView = TableView(playerList)
 
@@ -75,6 +79,8 @@ class LobbyPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>, pri
         setVgrow(chatPanel, Priority.ALWAYS)
         children.add(chatPanel)
         chatPanel.addNewChat(strings.getString("lobby"), strings.getString("lobby"))
+
+        JSkatEventBus.INSTANCE.register(this)
     }
 
     private fun createPlayerTable(): TableView<Player> {
@@ -226,8 +232,11 @@ class LobbyPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>, pri
         tableList.removeIf { it.name.get() == tableName }
     }
 
-    fun appendChatMessage(message: ChatMessage) {
-        chatPanel.appendMessage(message)
+    @Subscribe
+    fun appendChatMessageOn(event: IssNewChatMessageEvent) {
+        if (event.messageType == ChatMessageType.LOBBY) {
+            chatPanel.appendMessage(event.message)
+        }
     }
 
     fun setFocus() {

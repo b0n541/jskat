@@ -1,9 +1,7 @@
 package org.jskat.control.gui;
 
 import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
-import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.SkatGameData;
-import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -62,15 +60,6 @@ public interface JSkatView {
      * @param card Card
      */
     void showCardNotAllowedMessage(Card card);
-
-    /**
-     * Appends a new chat message to a chat
-     *
-     * @param messageType Type of message
-     * @param message     Message
-     */
-    void appendISSChatMessage(ChatMessageType messageType,
-                              ChatMessage message);
 
     /**
      * Updates move information

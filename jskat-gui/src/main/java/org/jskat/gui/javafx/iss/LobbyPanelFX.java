@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import javafx.embed.swing.JFXPanel;
 import javafx.scene.Scene;
 import org.jskat.control.gui.action.JSkatAction;
-import org.jskat.data.iss.ChatMessage;
 import org.jskat.gui.action.AbstractJSkatAction;
 import org.jskat.gui.swing.AbstractTabPanel;
 
@@ -14,7 +13,7 @@ import java.util.Map;
 @Deprecated
 public class LobbyPanelFX extends AbstractTabPanel {
 
-    private LobbyPanel lobbyPanel;
+    private IssLobbyPanel lobbyPanel;
 
     public LobbyPanelFX(final String tableName, final Map<JSkatAction, AbstractJSkatAction> actions) {
         super(tableName, actions);
@@ -29,7 +28,7 @@ public class LobbyPanelFX extends AbstractTabPanel {
         add(fxPanel, BorderLayout.CENTER);
 
         Platform.runLater(() -> {
-            lobbyPanel = new LobbyPanel(actions, null);
+            lobbyPanel = new IssLobbyPanel(actions, null);
             // Bind JavaFX panel's preferred size to JFXPanel's actual size
             lobbyPanel.prefWidthProperty().bind(fxPanel.getScene().heightProperty());
             lobbyPanel.prefHeightProperty().bind(fxPanel.getScene().heightProperty());
@@ -66,12 +65,6 @@ public class LobbyPanelFX extends AbstractTabPanel {
     public void removeTable(final String tableName) {
         if (lobbyPanel != null) {
             Platform.runLater(() -> lobbyPanel.removeTable(tableName));
-        }
-    }
-
-    public void appendChatMessage(final ChatMessage message) {
-        if (lobbyPanel != null) {
-            Platform.runLater(() -> lobbyPanel.appendChatMessage(message));
         }
     }
 }

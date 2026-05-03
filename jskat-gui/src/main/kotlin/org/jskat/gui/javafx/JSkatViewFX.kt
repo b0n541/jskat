@@ -13,16 +13,14 @@ import org.jskat.control.event.skatgame.*
 import org.jskat.control.event.table.*
 import org.jskat.control.gui.JSkatView
 import org.jskat.control.gui.human.AbstractHumanJSkatPlayer
-import org.jskat.control.iss.ChatMessageType
 import org.jskat.data.JSkatOptions
 import org.jskat.data.SkatGameData
 import org.jskat.data.SkatGameData.GameState
-import org.jskat.data.iss.ChatMessage
 import org.jskat.data.iss.MoveInformation
 import org.jskat.data.iss.MoveType
 import org.jskat.gui.javafx.dialog.help.JSkatHelpDialog
 import org.jskat.gui.javafx.dialog.options.JSkatOptionsDialog
-import org.jskat.gui.javafx.iss.PlayerInvitationDialog
+import org.jskat.gui.javafx.iss.IssPlayerInvitationDialog
 import org.jskat.gui.javafx.main.JSkatMainWindowFX
 import org.jskat.util.Card
 import org.jskat.util.CardList
@@ -81,7 +79,7 @@ class JSkatViewFX(
     override fun getPlayerForInvitation(playerNames: Set<String>): List<String> {
         val result = mutableListOf<String>()
 
-        val dialog = PlayerInvitationDialog(playerNames)
+        val dialog = IssPlayerInvitationDialog(playerNames)
         dialog.initModality(Modality.APPLICATION_MODAL)
         val dialogResult = dialog.showAndWait()
         if (dialogResult.isPresent) {
@@ -111,10 +109,6 @@ class JSkatViewFX(
 
     override fun showCardNotAllowedMessage(card: Card) {
         TODO("Not implemented yet showCardNotAllowedMessage: $card")
-    }
-
-    override fun appendISSChatMessage(messageType: ChatMessageType, message: ChatMessage) {
-        TODO("Not implemented yet appendISSChatMessage: $messageType $message")
     }
 
     override fun updateISSMove(tableName: String, gameData: SkatGameData, moveInformation: MoveInformation) {
