@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory
 /**
  * Human player
  */
+@Deprecated("Should be replaced by an implementation without waiting thread")
 class SwingHumanPlayer : AbstractHumanJSkatPlayer() {
     private var idler = Idler()
 

@@ -2,6 +2,7 @@ package org.jskat.gui.javafx
 
 import com.google.common.eventbus.Subscribe
 import javafx.application.Platform
+import javafx.scene.control.Alert
 import javafx.stage.Modality
 import org.jskat.control.JSkatEventBus
 import org.jskat.control.command.general.ShowHelpCommand
@@ -30,8 +31,6 @@ import org.jskat.util.Player
 import org.slf4j.LoggerFactory
 import java.awt.Desktop
 import java.net.URI
-import java.util.*
-import java.util.concurrent.FutureTask
 
 class JSkatViewFX(
     val mainWindow: JSkatMainWindowFX,
@@ -70,51 +69,44 @@ class JSkatViewFX(
     }
 
     override fun getNewTableName(localTablesCreated: Int): String {
+        // TODO: i18n
         return "Table " + (localTablesCreated + 1)
     }
 
     override fun startGame(tableName: String) {
+
         TODO("Not implemented yet startGame: $tableName")
     }
 
     override fun getPlayerForInvitation(playerNames: Set<String>): List<String> {
         val result = mutableListOf<String>()
 
-        // TODO: there should only be one case
-        if (Platform.isFxApplicationThread()) {
-            try {
-                val dialog = PlayerInvitationDialog(playerNames)
-                dialog.initModality(Modality.APPLICATION_MODAL)
-                val dialogResult = dialog.showAndWait()
-                if (dialogResult.isPresent) {
-                    result.addAll(dialogResult.get())
-                }
-            } catch (e: Throwable) {
-                log.error("Error showing invitation dialog", e)
-            }
-        } else {
-            val task = FutureTask {
-                val dialog = PlayerInvitationDialog(playerNames)
-                dialog.initModality(Modality.APPLICATION_MODAL)
-                val dialogResult = dialog.showAndWait()
-                dialogResult.orElse(Collections.emptyList())
-            }
-            Platform.runLater(task)
-            try {
-                result.addAll(task.get())
-            } catch (e: Exception) {
-                log.error("Error showing invitation dialog", e)
-            }
+        val dialog = PlayerInvitationDialog(playerNames)
+        dialog.initModality(Modality.APPLICATION_MODAL)
+        val dialogResult = dialog.showAndWait()
+        if (dialogResult.isPresent) {
+            result.addAll(dialogResult.get())
         }
+
         return result
     }
 
     override fun showMessage(title: String, message: String) {
-        TODO("Not implemented yet showMessage: $title, $message")
+        Alert(Alert.AlertType.INFORMATION).apply {
+            setTitle(title)
+            headerText = null // or null
+            contentText = message
+            showAndWait()
+        }
     }
 
     override fun showErrorMessage(title: String, message: String) {
-        TODO("Not implemented yet showErrorMessage: $title, $message")
+        Alert(Alert.AlertType.ERROR).apply {
+            setTitle(title)
+            headerText = null // or null
+            contentText = message
+            showAndWait()
+        }
     }
 
     override fun showCardNotAllowedMessage(card: Card) {
@@ -122,7 +114,7 @@ class JSkatViewFX(
     }
 
     override fun appendISSChatMessage(messageType: ChatMessageType, message: ChatMessage) {
-        log.debug("appendISSChatMessage: $messageType, $message")
+        TODO("Not implemented yet appendISSChatMessage: $messageType $message")
     }
 
     override fun updateISSMove(tableName: String, gameData: SkatGameData, moveInformation: MoveInformation) {

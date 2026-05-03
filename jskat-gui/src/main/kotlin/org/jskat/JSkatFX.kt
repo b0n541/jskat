@@ -31,6 +31,7 @@ class JSkatFX : Application() {
 
         eventBus.register(this)
 
+        // TODO: Replace with better approach
         val human = SwingHumanPlayer()
         val jskatView = JSkatViewFX(JSkatMainWindowFX(), human)
         jskatMaster.view = jskatView
