@@ -115,8 +115,7 @@ public class IssController {
         if (issConnector != null && !issConnector.isConnected()) {
 
             issConnector.setConnectionData(userName, password);
-            final boolean isConnected = issConnector
-                    .establishConnection(this);
+            final boolean isConnected = issConnector.establishConnection(this);
 
             if (isConnected) {
                 log.info("Connection to ISS established: " + issConnector.isConnected());

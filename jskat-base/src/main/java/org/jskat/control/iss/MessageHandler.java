@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Handles messages from ISS
@@ -20,39 +22,31 @@ public class MessageHandler extends Thread {
 
     private static final Logger log = LoggerFactory.getLogger(MessageHandler.class);
 
-    private StreamConnector connect;
     private final IssController issControl;
 
     private final JSkatResourceBundle strings;
 
-    private final List<String> messageList;
+    private final BlockingQueue<String> messageQueue; // Changed to BlockingQueue
 
     private final JSkatEventBus eventBus = JSkatEventBus.INSTANCE;
 
     private final static int protocolVersion = 14;
 
+    private volatile boolean running = true; // Added volatile flag for graceful shutdown
+
     /**
      * Constructor
      *
-     * @param conn       Connection to ISS
      * @param controller ISS controller for JSkat
      */
-    public MessageHandler(final StreamConnector conn,
-                          final IssController controller) {
-
-        connect = conn;
-        issControl = controller;
-
-        strings = JSkatResourceBundle.INSTANCE;
-
-        messageList = new ArrayList<>();
-    }
-
     public MessageHandler(final IssController controller) {
+
         issControl = controller;
+
         strings = JSkatResourceBundle.INSTANCE;
 
-        messageList = new ArrayList<>();
+        messageQueue = new LinkedBlockingQueue<>(); // Initialized as LinkedBlockingQueue
+        setName("ISS-MessageHandler"); // Give a name for easier debugging
     }
 
     /**
@@ -60,27 +54,41 @@ public class MessageHandler extends Thread {
      */
     @Override
     public void run() {
-        while (true) {
-            if (messageList.size() > 0) {
-
-                final String message = getNextMessage();
-                handleMessage(message);
-            } else {
-                try {
-                    Thread.sleep(100);
-                } catch (final InterruptedException e) {
-                    log.warn("Thread.sleep() was interrupted");
+        while (running) { // Check the running flag
+            try {
+                final String message = getNextMessage(); // Will block until a message is available
+                if (message != null) { // getNextMessage might return null if interrupted during take()
+                    handleMessage(message);
                 }
+            } catch (final InterruptedException e) {
+                log.debug("MessageHandler interrupted while waiting for message.", e);
+                Thread.currentThread().interrupt(); // Restore the interrupted status
+                // If interrupted, check running flag again. If running is false, loop will exit.
             }
+        }
+        log.debug("MessageHandler stopped.");
+    }
+
+    /**
+     * Signals the MessageHandler to stop processing messages and terminate.
+     */
+    public void stopHandling() {
+        log.debug("stopHandling() called for MessageHandler.");
+        running = false;
+        this.interrupt(); // Interrupt to wake up from take() if necessary
+    }
+
+    void addMessage(final String newMessage) {
+        try {
+            messageQueue.put(newMessage); // Use put() which blocks if queue is full (unlikely for LinkedBlockingQueue)
+        } catch (InterruptedException e) {
+            log.error("Failed to add message to queue due to interruption.", e);
+            Thread.currentThread().interrupt();
         }
     }
 
-    synchronized void addMessage(final String newMessage) {
-        messageList.add(newMessage);
-    }
-
-    private synchronized String getNextMessage() {
-        return messageList.remove(0);
+    private String getNextMessage() throws InterruptedException {
+        return messageQueue.take(); // Will block until a message is available
     }
 
     void handleMessage(final String message) {
@@ -122,8 +130,7 @@ public class MessageHandler extends Thread {
         }
     }
 
-    void handleMessageObsolete(final MessageType type, final List<String> params)
-            throws Exception {
+    void handleMessageObsolete(final MessageType type, final List<String> params) {
 
         switch (type) {
             case PASSWORD:
