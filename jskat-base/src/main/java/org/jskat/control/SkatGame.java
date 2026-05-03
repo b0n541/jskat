@@ -164,10 +164,12 @@ public class SkatGame {
                     setActivePlayer(data.getDeclarer());
                     discarding();
                     if (!GameState.PRELIMINARY_GAME_END.equals(data.getGameState())) {
+                        log.info("Transitioning to DECLARING state after discarding.");
                         setGameState(GameState.DECLARING);
                     }
                     break;
                 case DECLARING:
+                    log.info("Entering announceGame() method.");
                     announceGame();
                     if (isContraPlayEnabled(ContraCallingTime.AFTER_GAME_ANNOUNCEMENT, 0)) {
                         setGameState(GameState.CONTRA);
@@ -503,10 +505,6 @@ public class SkatGame {
             log.info("Discarded cards: " + discardedSkat);
 
             data.setDiscardedSkat(activePlayer, discardedSkat);
-            if (!activePlayerInstance.isHumanPlayer()) {
-                // human player has changed the cards in the GUI already
-                view.setDiscardedSkat(tableName, activePlayer, skatBefore, discardedSkat);
-            }
             eventBus.post(new SkatCardsChangedEvent(tableName, discardedSkat));
         }
     }
@@ -540,7 +538,7 @@ public class SkatGame {
     }
 
     private void announceGame() {
-
+        log.info("Entering announceGame() method.");
         log.debug("declaring game...");
 
         final var contract = getPlayerInstance(data.getDeclarer()).announceGame();
@@ -800,13 +798,12 @@ public class SkatGame {
 
             if (isCardSchwarzPlay(skatPlayer, currPlayer, firstTrickCard, playedCard)) {
                 if (skatPlayer.isHumanPlayer()) {
-                    view.showCardNotAllowedMessage(playedCard);
+                    eventBus.post(new CardNotAllowedToPlayEvent(playedCard));
                 } else {
                     view.showAIPlayedSchwarzMessageCardPlay(skatPlayer.getPlayerName(), playedCard);
                     aiPlayerPlayedSchwarz = true;
                 }
             } else {
-
                 cardAccepted = true;
             }
         }
@@ -814,12 +811,12 @@ public class SkatGame {
         if (playedCard != null) {
             // TODO: code duplication with SkatGameReplayer.oneStepForward()
             if (data.getCurrentTrick() != null && data.getCurrentTrick().getFirstCard() == null) {
+                // TODO: post it into the main event bus
                 JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName)
                         .post(new TrickCompletedEvent(data.getLastCompletedTrick()));
             }
 
-            eventBus
-                    .post(new TableGameMoveEvent(tableName, new TrickCardPlayedEvent(currPlayer, playedCard)));
+            eventBus.post(new TableGameMoveEvent(tableName, new TrickCardPlayedEvent(currPlayer, playedCard)));
 
             for (final JSkatPlayer playerInstance : player.values()) {
                 // inform all players

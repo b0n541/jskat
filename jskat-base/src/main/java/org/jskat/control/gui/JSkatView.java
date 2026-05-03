@@ -55,13 +55,6 @@ public interface JSkatView {
     void showErrorMessage(String title, String message);
 
     /**
-     * Shows a message, that a card is not allowed
-     *
-     * @param card Card
-     */
-    void showCardNotAllowedMessage(Card card);
-
-    /**
      * Updates move information
      *
      * @param tableName       Table name
@@ -95,17 +88,6 @@ public interface JSkatView {
      * @param player    Player position
      */
     void setGeschoben(String tableName, Player player);
-
-    /**
-     * Sets the discards skat
-     *
-     * @param tableName     Table name
-     * @param activePlayer  Discarding player
-     * @param skatBefore    Skat before discarding
-     * @param discardedSkat Skat after discarding
-     */
-    void setDiscardedSkat(String tableName, Player activePlayer,
-                          CardList skatBefore, CardList discardedSkat);
 
     /**
      * Opens a web page in the browser

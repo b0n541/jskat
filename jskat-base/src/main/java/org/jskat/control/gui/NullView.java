@@ -80,15 +80,6 @@ public class NullView implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public void showCardNotAllowedMessage(
-            @SuppressWarnings("unused") final Card card) {
-        // empty method by intent
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void setResign(@SuppressWarnings("unused") final String tableName,
                           @SuppressWarnings("unused") final Player player) {
         // empty method by intent
@@ -101,18 +92,6 @@ public class NullView implements JSkatView {
     public void setGeschoben(
             @SuppressWarnings("unused") final String tableName,
             @SuppressWarnings("unused") final Player player) {
-        // empty method by intent
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setDiscardedSkat(
-            @SuppressWarnings("unused") final String tableName,
-            @SuppressWarnings("unused") final Player activePlayer,
-            @SuppressWarnings("unused") final CardList skatBefore,
-            @SuppressWarnings("unused") final CardList discardedSkat) {
         // empty method by intent
     }
 

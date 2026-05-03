@@ -622,21 +622,6 @@ public class JSkatViewImpl implements JSkatView {
         return result;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void showCardNotAllowedMessage(final Card card) {
-
-        final String title = strings.getString("card_not_allowed_title");
-
-        final String message = strings.getString("card_not_allowed_message",
-                card != null ? strings.getSuitStringForCardFace(card.getSuit()) : "--",
-                card != null ? strings.getRankStringForCardFace(card.getRank()) : "--");
-
-        showErrorMessage(title, message);
-    }
-
     @Subscribe
     public void closeAllIssTabsOn(final IssDisconnectCommand event) {
 
@@ -693,15 +678,6 @@ public class JSkatViewImpl implements JSkatView {
     @Override
     public void setGeschoben(final String tableName, final Player player) {
         tables.get(tableName).getSkatTablePanel().setGeschoben(player);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setDiscardedSkat(final String tableName, final Player player, final CardList skatBefore,
-                                 final CardList discardedSkat) {
-        tables.get(tableName).getSkatTablePanel().setDiscardedSkat(player, skatBefore, discardedSkat);
     }
 
     /**

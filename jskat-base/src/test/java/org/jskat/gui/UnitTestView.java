@@ -67,12 +67,6 @@ public class UnitTestView implements JSkatView {
     }
 
     @Override
-    public void showCardNotAllowedMessage(final Card card) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
     public void updateISSMove(final String tableName,
                               final SkatGameData gameData, final MoveInformation moveInformation) {
         // TODO Auto-generated method stub
@@ -96,13 +90,6 @@ public class UnitTestView implements JSkatView {
     public void setGeschoben(final String tableName, final Player player) {
         // TODO Auto-generated method stub
 
-    }
-
-    @Override
-    public void setDiscardedSkat(final String tableName,
-                                 final Player activePlayer, final CardList skatBefore,
-                                 final CardList discardedSkat) {
-        // TODO Auto-generated method stub
     }
 
     @Override

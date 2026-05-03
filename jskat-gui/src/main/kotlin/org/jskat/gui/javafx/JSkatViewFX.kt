@@ -36,6 +36,7 @@ class JSkatViewFX(
 ) : JSkatView {
 
     private val log = LoggerFactory.getLogger(JSkatViewFX::class.java)
+    private val strings = JSkatResourceBundle.INSTANCE
 
     init {
         JSkatEventBus.INSTANCE.register(this)
@@ -108,8 +109,16 @@ class JSkatViewFX(
         }
     }
 
-    override fun showCardNotAllowedMessage(card: Card) {
-        TODO("Not implemented yet showCardNotAllowedMessage: $card")
+    @Subscribe
+    fun showErrorMessageOn(event: CardNotAllowedToPlayEvent) {
+        showErrorMessage(
+            strings.getString("card_not_allowed_title"),
+            strings.getString(
+                "card_not_allowed_message",
+                strings.getSuitStringForCardFace(event.card.suit),
+                strings.getRankStringForCardFace(event.card.rank)
+            )
+        )
     }
 
     override fun updateISSMove(tableName: String, gameData: SkatGameData, moveInformation: MoveInformation) {
@@ -228,15 +237,6 @@ class JSkatViewFX(
 
     override fun setGeschoben(tableName: String, player: Player) {
         TODO("Not implemented yet setGeschoben: $tableName, $player")
-    }
-
-    override fun setDiscardedSkat(
-        tableName: String,
-        activePlayer: Player,
-        skatBefore: CardList,
-        discardedSkat: CardList
-    ) {
-        TODO("Not implemented yet setDiscardedSkat: $tableName, $activePlayer, $skatBefore, $discardedSkat")
     }
 
     override fun openWebPage(link: String) {
