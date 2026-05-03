@@ -333,15 +333,6 @@ public class IssController {
     }
 
     /**
-     * Starts a game on a local representation of an ISS table
-     *
-     * @param tableName Table name
-     */
-    public void startGame(final String tableName) {
-        view.startGame(tableName);
-    }
-
-    /**
      * Updates a move on a local representation of an ISS table
      *
      * @param tableName       Table name

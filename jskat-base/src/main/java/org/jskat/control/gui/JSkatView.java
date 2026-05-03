@@ -23,12 +23,12 @@ public interface JSkatView {
      */
     String getNewTableName(int localTablesCreated);
 
-    /**
-     * Starts a new game
-     *
-     * @param tableName Table name
-     */
-    void startGame(String tableName);
+//    /**
+//     * Starts a new game
+//     *
+//     * @param tableName Table name
+//     */
+//    void startGame(String tableName);
 
     /**
      * Gets the players to invite

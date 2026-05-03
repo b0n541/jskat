@@ -73,11 +73,6 @@ class JSkatViewFX(
         return "Table " + (localTablesCreated + 1)
     }
 
-    override fun startGame(tableName: String) {
-
-        TODO("Not implemented yet startGame: $tableName")
-    }
-
     override fun getPlayerForInvitation(playerNames: Set<String>): List<String> {
         val result = mutableListOf<String>()
 

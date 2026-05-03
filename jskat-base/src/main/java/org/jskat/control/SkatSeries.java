@@ -5,7 +5,7 @@ import org.jskat.control.command.table.ContinueSkatSeriesCommand;
 import org.jskat.control.command.table.NextReplayMoveCommand;
 import org.jskat.control.command.table.ReadyForNextGameCommand;
 import org.jskat.control.command.table.ReplayGameCommand;
-import org.jskat.control.event.skatgame.GameStartEvent;
+import org.jskat.control.event.skatgame.GameStartedEvent;
 import org.jskat.control.event.table.*;
 import org.jskat.control.gui.JSkatView;
 import org.jskat.data.SkatGameData.GameState;
@@ -64,10 +64,7 @@ public class SkatSeries {
 
     @Subscribe
     public void startReplayGameOn(final ReplayGameCommand command) {
-
-        JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(
-                new SkatGameReplayStartedEvent());
-
+        JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(new SkatGameReplayStartedEvent());
         currReplayGame = new SkatGameReplay(data.getTableName(), currSkatGame.getGameMoves());
     }
 
@@ -186,8 +183,11 @@ public class SkatSeries {
                         players.get(Player.REARHAND));
 
                 JSkatEventBus.INSTANCE.post(
-                        new TableGameMoveEvent(data.getTableName(),
-                                new GameStartEvent(gameNumber, gameVariant,
+                        new TableGameMoveEvent(
+                                data.getTableName(),
+                                new GameStartedEvent(
+                                        gameNumber,
+                                        gameVariant,
                                         data.getBottomPlayer().getLeftNeighbor(),
                                         data.getBottomPlayer().getRightNeighbor(),
                                         data.getBottomPlayer())));

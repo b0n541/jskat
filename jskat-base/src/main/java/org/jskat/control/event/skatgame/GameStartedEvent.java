@@ -7,8 +7,12 @@ import org.jskat.util.Player;
 /**
  * Event for game start.
  */
-public record GameStartEvent(Integer gameNo, GameVariant gameVariant, Player leftPlayerPosition,
-                             Player rightPlayerPosition, Player userPosition) implements SkatGameEvent {
+public record GameStartedEvent(
+        Integer gameNo,
+        GameVariant gameVariant,
+        Player leftPlayerPosition,
+        Player rightPlayerPosition,
+        Player userPosition) implements SkatGameEvent {
 
     @Override
     public void processForward(SkatGameData data) {

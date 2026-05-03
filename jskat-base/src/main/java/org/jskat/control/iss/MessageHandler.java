@@ -265,7 +265,7 @@ public class MessageHandler extends Thread {
             } else if (actionCommand.equals("start")) {
                 issControl.updateISSGame(tableName, MessageParser.getGameStartStatus(creator, detailParams));
             } else if (actionCommand.equals("go")) {
-                issControl.startGame(tableName);
+                // handle go message
             } else if (actionCommand.equals("play")) {
                 final MoveInformation moveInfo = MessageParser.getMoveInformation(detailParams);
                 MessageParser.parsePlayerTimes(detailParams, moveInfo);

@@ -139,14 +139,6 @@ public class JSkatViewImpl implements JSkatView {
         toolbar.add(new ToolbarButton(actions.get(JSkatAction.HELP)));
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void startGame(final String tableName) {
-        tables.get(tableName).getSkatTablePanel().startGame();
-    }
-
     @Subscribe
     public void createSkatTablePanelOn(final TableCreatedEvent event) {
 

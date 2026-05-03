@@ -182,8 +182,9 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
         replay = false
     }
 
+    // TODO: this does similar things like IssTablePanel.resetTableOn(event: IssTableGameStartedEvent)
     @Subscribe
-    fun resetTableOn(event: GameStartEvent) {
+    fun resetTableOn(event: GameStartedEvent) {
         Platform.runLater {
             gameInfoPanel.setGameState(SkatGameData.GameState.GAME_START)
             gameInfoPanel.setGameNumber(event.gameNo)
@@ -216,8 +217,22 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
                     rearHand = userPanel
                 }
             }
+
             clearTable()
         }
+    }
+
+    protected fun clearTable() {
+        gameInfoPanel.clear()
+        biddingPanel.resetPanel()
+        declaringPanel.resetPanel()
+        gameOverPanel.resetPanel()
+        schieberamschPanel.resetPanel()
+        Player.entries.forEach { clearHand(it) }
+        trickPanel.clearCards()
+        lastTrickPanel.clearCards()
+        listOf(leftOpponentPanel, rightOpponentPanel, userPanel).forEach { it.setSortGameType(GameType.GRAND) }
+        resetGameData()
     }
 
     @Subscribe
@@ -325,19 +340,6 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
             gameOverPanel.setGameSummary(event.gameSummary)
             gameInfoPanel.setGameSummary(event.gameSummary)
         }
-    }
-
-    private fun clearTable() {
-        gameInfoPanel.clear()
-        biddingPanel.resetPanel()
-        declaringPanel.resetPanel()
-        gameOverPanel.resetPanel()
-        schieberamschPanel.resetPanel()
-        Player.entries.forEach { clearHand(it) }
-        trickPanel.clearCards()
-        lastTrickPanel.clearCards()
-        listOf(leftOpponentPanel, rightOpponentPanel, userPanel).forEach { it.setSortGameType(GameType.GRAND) }
-        resetGameData()
     }
 
     @Subscribe
@@ -504,10 +506,6 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     fun clearHand(player: Player) = getHandPanel(player).clearHandPanel()
     fun showCards(player: Player) = getHandPanel(player).showCards()
     fun setTrickNumber(trickNumber: Int) = gameInfoPanel.setTrickNumber(trickNumber)
-
-    fun startGame() {
-        clearTable()
-    }
 
     fun setResign(player: Player) {
         Platform.runLater { getHandPanel(player).setResign(true) }

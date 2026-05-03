@@ -9,7 +9,7 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import org.jskat.control.event.iss.IssTableGameStartedEvent
 import org.jskat.control.event.iss.IssTableStateChangedEvent
-import org.jskat.control.event.skatgame.GameStartEvent
+import org.jskat.control.event.skatgame.GameStartedEvent
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.iss.GameStartInformation
@@ -94,24 +94,29 @@ class IssTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
         return additionalActionsPanel
     }
 
+    // TODO: this does similar things like SkatTablePanel.resetTableOn(event: GameStartEvent)
     @Subscribe
-    fun clearTableOn(event: IssTableGameStartedEvent) {
-        val gameStart = event.gameStart
-        val userLogin = gameStart.loginName
-        val playerNames = gameStart.playerNames
+    fun resetTableOn(event: IssTableGameStartedEvent) {
+        Platform.runLater {
+            val gameStart = event.gameStart
+            val userLogin = gameStart.loginName
+            val playerNames = gameStart.playerNames
 
-        var userPosition: Player? = null
-        for ((key, value) in playerNames) {
-            if (value == userLogin) {
-                userPosition = key
-                break
+            var userPosition: Player? = null
+            for ((key, value) in playerNames) {
+                if (value == userLogin) {
+                    userPosition = key
+                    break
+                }
             }
-        }
 
-        if (userPosition != null) {
-            val leftOpponent = userPosition.leftNeighbor
-            val rightOpponent = userPosition.rightNeighbor
-            clearTable(leftOpponent, rightOpponent, userPosition, gameStart)
+            if (userPosition != null) {
+                val leftOpponent = userPosition.leftNeighbor
+                val rightOpponent = userPosition.rightNeighbor
+                clearTable(leftOpponent, rightOpponent, userPosition, gameStart)
+            }
+
+            clearTable()
         }
     }
 
@@ -121,7 +126,7 @@ class IssTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
         player: Player,
         gameStart: GameStartInformation
     ) {
-        resetTableOn(GameStartEvent(gameStart.gameNo, GameVariant.STANDARD, leftOpponent, rightOpponent, player))
+        resetTableOn(GameStartedEvent(gameStart.gameNo, GameVariant.STANDARD, leftOpponent, rightOpponent, player))
 
         setPlayerName(leftOpponent, gameStart.playerNames[leftOpponent]!!)
         setPlayerTime(leftOpponent, gameStart.playerTimes[leftOpponent]!!)
