@@ -165,7 +165,7 @@ class GameAnnouncePanel(
                 }
 
                 if (GameType.NULL == gameType && isOuvert) {
-                    contract = contract.withOuvert(userPanel.getHandCards())
+                    contract = contract.withOuvert(CardList(userPanel.getHandCards()))
                 }
 
                 val announcement = GameAnnouncement(contract, discardedCards)
@@ -176,10 +176,10 @@ class GameAnnouncePanel(
                 if (isSchneider) contract = contract.withSchneider()
                 if (isSchwarz) contract = contract.withSchwarz()
                 if (isOuvert) {
-                    contract = contract.withOuvert(userPanel.getHandCards())
+                    contract = contract.withOuvert(CardList(userPanel.getHandCards()))
                 }
 
-                val announcement = GameAnnouncement(contract, CardList.empty())
+                val announcement = GameAnnouncement(contract, discardedCards)
                 fireAnnounceAction(announcement)
             }
         } catch (e: Exception) {

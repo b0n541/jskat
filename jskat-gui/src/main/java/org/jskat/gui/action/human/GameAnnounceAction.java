@@ -13,9 +13,7 @@ public class GameAnnounceAction extends AbstractHumanJSkatAction {
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public GameAnnounceAction() {
-
         putValue(NAME, STRINGS.getString("announce"));
-
         setActionCommand(JSkatAction.ANNOUNCE_GAME);
         setIcon(Icon.PLAY);
     }
