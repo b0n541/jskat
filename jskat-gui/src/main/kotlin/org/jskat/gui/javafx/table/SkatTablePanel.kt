@@ -171,10 +171,16 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
         val contraAction = actions[JSkatAction.CALL_CONTRA]
         if (contraAction != null) {
             val contraButton =
-                Button(contraAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.CALL_CONTRA.name)
-            contraButton.setOnAction {
-                contraAction.actionPerformed(JSkatActionEvent(JSkatAction.CALL_CONTRA, it.source))
-            }
+                Button(
+                    contraAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.CALL_CONTRA.name
+                ).apply {
+                    setOnAction {
+                        contraAction.actionPerformed(JSkatActionEvent(JSkatAction.CALL_CONTRA, it.source))
+                    }
+                    graphic = JSkatGraphicRepository.INSTANCE.getImageView(
+                        contraAction.icon, JSkatGraphicRepository.IconSize.BIG
+                    )
+                }
             additionalActionsPanel.children.add(contraButton)
         }
         return additionalActionsPanel
