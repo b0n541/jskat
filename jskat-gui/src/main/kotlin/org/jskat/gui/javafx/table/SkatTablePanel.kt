@@ -97,7 +97,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
 
         val trickHoldingPanel = HBox()
         // trickHoldingPanel.isOpaque = false // Removed
-        lastTrickPanel = TrickPanel(0.6, false)
+        lastTrickPanel = TrickPanel(0.5, false)
         lastTrickPanel.prefWidth = 0.0
         HBox.setHgrow(lastTrickPanel, Priority.ALWAYS)
         trickHoldingPanel.children.add(lastTrickPanel)
