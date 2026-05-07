@@ -103,7 +103,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
         trickHoldingPanel.children.add(lastTrickPanel)
 
         trickPanel = TrickPanel(0.8, true)
-        lastTrickPanel.prefWidth = 0.0
+        trickPanel.prefWidth = 0.0
         HBox.setHgrow(trickPanel, Priority.ALWAYS)
         trickHoldingPanel.children.add(trickPanel)
 
