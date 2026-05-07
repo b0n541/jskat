@@ -5,9 +5,12 @@ import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.control.*
 import javafx.scene.layout.GridPane
+import org.jskat.control.JSkatEventBus
+import org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.GameAnnouncement
+import org.jskat.data.GameContract
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.CardList
@@ -154,18 +157,19 @@ class GameAnnouncePanel(
         val isSchwarz = schwarzBox.isSelected
         val pickedUpSkat = discardPanel?.userPickedUpSkat ?: false
         val discardedCards = discardPanel?.discardedCards ?: CardList()
+        val userHand = CardList(userPanel.getHandCards())
 
         try {
-            var contract = org.jskat.data.GameContract(gameType)
+            var contract = GameContract(gameType)
 
             if (pickedUpSkat) {
                 if (discardedCards.size() != 2) {
-                    org.jskat.control.JSkatEventBus.INSTANCE.post(org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent())
+                    JSkatEventBus.INSTANCE.post(InvalidNumberOfCardsInDiscardedSkatEvent())
                     return
                 }
 
                 if (GameType.NULL == gameType && isOuvert) {
-                    contract = contract.withOuvert(CardList(userPanel.getHandCards()))
+                    contract = contract.withOuvert(userHand)
                 }
 
                 val announcement = GameAnnouncement(contract, discardedCards)
@@ -176,7 +180,7 @@ class GameAnnouncePanel(
                 if (isSchneider) contract = contract.withSchneider()
                 if (isSchwarz) contract = contract.withSchwarz()
                 if (isOuvert) {
-                    contract = contract.withOuvert(CardList(userPanel.getHandCards()))
+                    contract = contract.withOuvert(userHand)
                 }
 
                 val announcement = GameAnnouncement(contract, discardedCards)
