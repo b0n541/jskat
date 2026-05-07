@@ -110,6 +110,14 @@ class JSkatViewFX(
     }
 
     @Subscribe
+    fun showErrorMessageOn(event: InvalidNumberOfCardsInDiscardedSkatEvent) {
+        showErrorMessage(
+            strings.getString("invalid_number_of_cards_in_skat_title"),
+            strings.getString("invalid_number_of_cards_in_skat_message")
+        )
+    }
+
+    @Subscribe
     fun showErrorMessageOn(event: CardNotAllowedToPlayEvent) {
         showErrorMessage(
             strings.getString("card_not_allowed_title"),
