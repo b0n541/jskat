@@ -2,6 +2,7 @@ package org.jskat.gui.javafx.table
 
 import com.google.common.eventbus.Subscribe
 import javafx.application.Platform
+import javafx.geometry.Pos
 import javafx.scene.Node
 import javafx.scene.control.Button
 import javafx.scene.control.Label
@@ -12,6 +13,7 @@ import org.jskat.control.event.skatgame.*
 import org.jskat.control.event.table.*
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
+import org.jskat.data.JSkatOptions
 import org.jskat.data.SkatGameData
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.action.main.StartSkatSeriesAction
@@ -23,7 +25,8 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     BorderPane() {
 
     private val log = LoggerFactory.getLogger(SkatTablePanel::class.java)
-    protected val strings: JSkatResourceBundle = JSkatResourceBundle.INSTANCE
+    protected val strings = JSkatResourceBundle.INSTANCE
+    protected val options = JSkatOptions.instance()
     protected val bitmaps = JSkatGraphicRepository.INSTANCE
 
     protected val playerPassed: MutableMap<Player, Boolean> = mutableMapOf()
@@ -128,10 +131,10 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
 
     private fun createCallReAfterContraPanel(): Node {
         val result = VBox(10.0)
-        result.alignment = javafx.geometry.Pos.CENTER
+        result.alignment = Pos.CENTER
 
         val question = HBox(10.0)
-        question.alignment = javafx.geometry.Pos.CENTER
+        question.alignment = Pos.CENTER
         val questionIconLabel =
             Label("", bitmaps.getImageView(JSkatGraphicRepository.Icon.USER_INFO, JSkatGraphicRepository.IconSize.BIG))
         val questionLabel = Label(strings.getString("want_call_re_after_contra"))
@@ -139,7 +142,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
         result.children.add(question)
 
         val buttonBox = HBox(10.0)
-        buttonBox.alignment = javafx.geometry.Pos.CENTER
+        buttonBox.alignment = Pos.CENTER
         val callReAction = actions[JSkatAction.CALL_RE]
         if (callReAction != null) {
             val callReButton =
@@ -166,10 +169,10 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
 
     protected open fun getRightPanelForTrickPanel(): Pane {
         val additionalActionsPanel = VBox()
-        // additionalActionsPanel.isOpaque = false // Removed
+        additionalActionsPanel.alignment = Pos.CENTER
 
         val contraAction = actions[JSkatAction.CALL_CONTRA]
-        if (contraAction != null) {
+        if (options.isPlayContra && contraAction != null) {
             val contraButton =
                 Button(
                     contraAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.CALL_CONTRA.name
@@ -180,9 +183,11 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
                     graphic = JSkatGraphicRepository.INSTANCE.getImageView(
                         contraAction.icon, JSkatGraphicRepository.IconSize.BIG
                     )
+                    alignment = Pos.CENTER
                 }
             additionalActionsPanel.children.add(contraButton)
         }
+
         return additionalActionsPanel
     }
 
