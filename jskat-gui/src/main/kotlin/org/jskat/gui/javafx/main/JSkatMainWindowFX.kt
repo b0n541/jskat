@@ -17,6 +17,7 @@ import org.jskat.control.event.iss.*
 import org.jskat.control.event.table.TableCreatedEvent
 import org.jskat.control.event.table.TableRemovedEvent
 import org.jskat.control.gui.action.JSkatAction
+import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.JSkatApplicationData
 import org.jskat.data.JSkatViewType
 import org.jskat.gui.action.AbstractJSkatAction
@@ -50,6 +51,8 @@ class JSkatMainWindowFX : VBox() {
         val toolbar = ToolBar()
         toolbar.items.addAll(
             createToolbarButton(actions[JSkatAction.CREATE_LOCAL_TABLE]!!),
+            createToolbarButtonWithActiveTableContext(actions[JSkatAction.REPLAY_GAME]!!),
+            createToolbarButtonWithActiveTableContext(actions[JSkatAction.NEXT_REPLAY_STEP]!!),
             createToolbarButton(actions[JSkatAction.SHOW_ISS_LOGIN]!!),
             createToolbarButton(actions[JSkatAction.PREFERENCES]!!),
             createToolbarButton(actions[JSkatAction.HELP]!!),
@@ -234,6 +237,14 @@ class JSkatMainWindowFX : VBox() {
     fun closeAllIssTabsOn(event: IssDisconnectCommand) {
         tabs.tabs.removeIf {
             it.id != null && (it.id == "ISS_LOBBY" || it.id.startsWith("ISS_TABLE"))
+        }
+    }
+
+    private fun createToolbarButtonWithActiveTableContext(action: AbstractJSkatAction): Button {
+        return Button(action.getValue(AbstractJSkatAction.NAME).toString()).apply {
+            graphic = bitmaps.getImageView(action.icon, IconSize.SMALL)
+            tooltip = Tooltip(action.tooltip)
+            onAction = EventHandler { action.actionPerformed(JSkatActionEvent(data.activeTable, it.source)) }
         }
     }
 

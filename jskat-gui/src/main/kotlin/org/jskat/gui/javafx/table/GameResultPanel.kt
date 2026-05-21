@@ -1,38 +1,35 @@
 package org.jskat.gui.javafx.table
 
-import javafx.scene.layout.FlowPane
+import javafx.scene.layout.HBox
 import org.jskat.data.GameSummary
 import org.jskat.util.Player
 
-class GameResultPanel : FlowPane() {
+class GameResultPanel : HBox() {
     private val trickPanels = mutableListOf<TrickPanel>()
     private var userPosition: Player? = null
 
     init {
-        // Set gap between trick panels
-        hgap = 10.0
-        vgap = 10.0
-        
         for (i in 0 until 10) {
-            val panel = TrickPanel(0.8, false)
-            panel.setPrefSize(200.0, 200.0)
+            val panel = TrickPanel(randomPlacement = false)
+            panel.setPrefSize(100.0, 100.0)
             trickPanels.add(panel)
             children.add(panel)
         }
     }
 
     fun setGameSummary(summary: GameSummary) {
-        val tricks = summary.tricks
         for (i in 0 until 10) {
-            val panel = trickPanels[i]
-            panel.clearCards()
-            if (i < tricks.size) {
-                val trick = tricks[i]
-                if (userPosition != null) {
-                    panel.setUserPosition(userPosition!!)
-                    panel.addCard(trick.foreHand, trick.firstCard)
-                    panel.addCard(trick.foreHand.leftNeighbor, trick.secondCard)
-                    panel.addCard(trick.foreHand.rightNeighbor, trick.thirdCard)
+            trickPanels[i].apply {
+                clearCards()
+
+                if (i < summary.tricks.size) {
+                    val trick = summary.tricks[i]
+                    if (userPosition != null && trick.firstCard != null && trick.secondCard != null && trick.thirdCard != null) {
+                        setUserPosition(userPosition!!)
+                        addCard(trick.foreHand, trick.firstCard)
+                        addCard(trick.foreHand.leftNeighbor, trick.secondCard)
+                        addCard(trick.foreHand.rightNeighbor, trick.thirdCard)
+                    }
                 }
             }
         }

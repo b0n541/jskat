@@ -4,13 +4,12 @@ import javafx.application.Platform
 import javafx.scene.image.ImageView
 import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
-import javafx.scene.shape.Rectangle
 import org.jskat.control.gui.img.CardFace
 import org.jskat.data.JSkatOptions
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.Card
 import org.jskat.util.Player
-import java.util.Random
+import java.util.*
 
 class TrickPanel(
     private val globalScale: Double = 1.0,
@@ -34,12 +33,6 @@ class TrickPanel(
         sceneProperty().addListener { _, _, newScene ->
             newScene?.fill = Color.TRANSPARENT
         }
-
-        minHeight = 0.0
-        val clipRect = Rectangle()
-        clipRect.widthProperty().bind(widthProperty())
-        clipRect.heightProperty().bind(heightProperty())
-        clip = clipRect
     }
 
     fun addCard(player: Player, card: Card) {

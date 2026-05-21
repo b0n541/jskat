@@ -1,9 +1,9 @@
 package org.jskat.gui.javafx.table
 
 import javafx.scene.control.Button
-import javafx.scene.layout.BorderPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
+import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
@@ -16,7 +16,7 @@ import org.jskat.util.Player
 class GameOverPanel(
     private val tableName: String,
     actions: Map<JSkatAction, AbstractJSkatAction>
-) : BorderPane() {
+) : VBox() {
 
     private val bitmaps = JSkatGraphicRepository.INSTANCE
 
@@ -29,7 +29,7 @@ class GameOverPanel(
             newScene?.fill = Color.TRANSPARENT
         }
 
-        center = gameResultPanel
+        children.add(gameResultPanel)
 
         val buttonPanel = HBox()
         buttonPanel.spacing = 10.0
@@ -45,9 +45,19 @@ class GameOverPanel(
                     continueSkatSeriesAction?.actionPerformed(JSkatActionEvent(tableName, it.source))
                 }
             }
-
         buttonPanel.children.add(continueSkatSeriesButton)
-        bottom = buttonPanel
+
+        val replayGameAction = actions[JSkatAction.REPLAY_GAME]
+        val replayGameButton =
+            Button(replayGameAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "").apply {
+                graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.FIRST, JSkatGraphicRepository.IconSize.BIG)
+                setOnAction {
+                    replayGameAction?.actionPerformed(JSkatActionEvent(tableName, it.source))
+                }
+            }
+        buttonPanel.children.add(replayGameButton)
+
+        children.add(buttonPanel)
     }
 
     fun setUserPosition(player: Player) {
