@@ -1,11 +1,11 @@
 package org.jskat.gui.javafx.table
 
 import javafx.application.Platform
+import javafx.geometry.Pos
 import javafx.scene.control.Button
 import javafx.scene.image.ImageView
 import javafx.scene.layout.HBox
 import javafx.scene.layout.StackPane
-import javafx.scene.shape.Rectangle
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.gui.action.AbstractJSkatAction
@@ -36,10 +36,7 @@ class DiscardPanel(
     init {
         stylesheets.add("/org/jskat/gui/javafx/jskat.css")
 
-        val clipRect = Rectangle()
-        clipRect.widthProperty().bind(widthProperty())
-        clipRect.heightProperty().bind(heightProperty())
-        clip = clipRect
+        alignment = Pos.CENTER
 
         pickUpSkatButton.graphic = bitmaps.getImageView(Icon.PLAY, JSkatGraphicRepository.IconSize.BIG)
         pickUpSkatButton.setOnAction {
@@ -50,6 +47,8 @@ class DiscardPanel(
                 JSkatActionEvent(JSkatAction.PICK_UP_SKAT, it.source)
             )
         }
+
+        cardViews.alignment = Pos.CENTER
 
         // Initially, only the button is visible
         children.add(pickUpSkatButton)
