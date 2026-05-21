@@ -1,19 +1,20 @@
 package org.jskat.gui.javafx.table
 
 import javafx.scene.layout.HBox
+import javafx.scene.layout.Priority
 import org.jskat.data.GameSummary
 import org.jskat.util.Player
 
-class GameResultPanel : HBox() {
+class GameOverTrickPanel : HBox() {
     private val trickPanels = mutableListOf<TrickPanel>()
     private var userPosition: Player? = null
 
     init {
         for (i in 0 until 10) {
             val panel = TrickPanel(randomPlacement = false)
-            panel.setPrefSize(100.0, 100.0)
             trickPanels.add(panel)
             children.add(panel)
+            setHgrow(panel, Priority.ALWAYS)
         }
     }
 

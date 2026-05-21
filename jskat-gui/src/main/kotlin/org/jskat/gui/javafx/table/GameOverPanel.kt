@@ -20,7 +20,7 @@ class GameOverPanel(
 
     private val bitmaps = JSkatGraphicRepository.INSTANCE
 
-    private val gameResultPanel = GameResultPanel()
+    private val gameOverTrickPanel = GameOverTrickPanel()
     private val skatPanel = SkatPanel()
 
     init {
@@ -29,12 +29,12 @@ class GameOverPanel(
             newScene?.fill = Color.TRANSPARENT
         }
 
-        children.add(gameResultPanel)
+        children.add(gameOverTrickPanel)
+        setVgrow(gameOverTrickPanel, Priority.ALWAYS)
 
         val buttonPanel = HBox()
         buttonPanel.spacing = 10.0
 
-        HBox.setHgrow(skatPanel, Priority.ALWAYS)
         buttonPanel.children.add(skatPanel)
 
         val continueSkatSeriesAction = actions[JSkatAction.CONTINUE_LOCAL_SERIES]
@@ -58,14 +58,15 @@ class GameOverPanel(
         buttonPanel.children.add(replayGameButton)
 
         children.add(buttonPanel)
+        setVgrow(buttonPanel, Priority.SOMETIMES)
     }
 
     fun setUserPosition(player: Player) {
-        gameResultPanel.setUserPosition(player)
+        gameOverTrickPanel.setUserPosition(player)
     }
 
     fun setGameSummary(summary: GameSummary) {
-        gameResultPanel.setGameSummary(summary)
+        gameOverTrickPanel.setGameSummary(summary)
     }
 
     fun setDealtSkat(skat: CardList) {
@@ -73,7 +74,7 @@ class GameOverPanel(
     }
 
     fun resetPanel() {
-        gameResultPanel.resetPanel()
+        gameOverTrickPanel.resetPanel()
         skatPanel.resetPanel()
     }
 }
