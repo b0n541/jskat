@@ -1,5 +1,6 @@
 package org.jskat.gui.javafx.table
 
+import javafx.geometry.Rectangle2D
 import javafx.scene.image.ImageView
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
@@ -20,6 +21,13 @@ class SkatPanel : HBox() {
         // Make sure images preserve ratio if resized, though usually they are fixed size
         card1View.isPreserveRatio = true
         card2View.isPreserveRatio = true
+
+        // Set viewport to show only the upper part of the cards
+        // Assuming card height is around 96 pixels, showing top 30 pixels
+        // This might need adjustment based on actual card image dimensions
+        // TODO: find a better solution
+        card1View.viewport = Rectangle2D(0.0, 0.0, 200.0, 50.0)
+        card2View.viewport = Rectangle2D(0.0, 0.0, 200.0, 50.0)
     }
 
     fun setSkatCards(skat: CardList) {

@@ -34,6 +34,8 @@ class GameOverPanel(
 
         val buttonPanel = HBox()
         buttonPanel.spacing = 10.0
+        buttonPanel.minHeight = 50.0 // Allow buttonPanel to shrink
+        buttonPanel.maxHeight = USE_PREF_SIZE // But prefer its computed size
 
         buttonPanel.children.add(skatPanel)
 
@@ -58,7 +60,7 @@ class GameOverPanel(
         buttonPanel.children.add(replayGameButton)
 
         children.add(buttonPanel)
-        setVgrow(buttonPanel, Priority.SOMETIMES)
+        setVgrow(buttonPanel, Priority.NEVER) // Still NEVER for growth, but minHeight allows shrinking
     }
 
     fun setUserPosition(player: Player) {
