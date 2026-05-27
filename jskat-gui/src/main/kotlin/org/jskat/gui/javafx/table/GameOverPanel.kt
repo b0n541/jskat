@@ -29,13 +29,20 @@ class GameOverPanel(
             newScene?.fill = Color.TRANSPARENT
         }
 
+        this.spacing = 10.0 // Padding between trick panel and button panel
+
         children.add(gameOverTrickPanel)
-        setVgrow(gameOverTrickPanel, Priority.ALWAYS)
+        setVgrow(gameOverTrickPanel, Priority.ALWAYS) // Allow trick panel to scale
+        // Ensure trick panel is always visible with a minimum height, based on card height
+        gameOverTrickPanel.minHeight = 100.0
+        gameOverTrickPanel.prefHeight = USE_COMPUTED_SIZE // Allow trick panel to grow
+        gameOverTrickPanel.maxHeight = USE_COMPUTED_SIZE // Allow trick panel to grow
 
         val buttonPanel = HBox()
         buttonPanel.spacing = 10.0
-        buttonPanel.minHeight = 50.0 // Allow buttonPanel to shrink
-        buttonPanel.maxHeight = USE_PREF_SIZE // But prefer its computed size
+        buttonPanel.minHeight = 25.0
+        buttonPanel.prefHeight = USE_COMPUTED_SIZE // Allow buttonPanel to grow
+        buttonPanel.maxHeight = USE_COMPUTED_SIZE // Allow buttonPanel to grow
 
         buttonPanel.children.add(skatPanel)
 
@@ -60,7 +67,7 @@ class GameOverPanel(
         buttonPanel.children.add(replayGameButton)
 
         children.add(buttonPanel)
-        setVgrow(buttonPanel, Priority.NEVER) // Still NEVER for growth, but minHeight allows shrinking
+        setVgrow(buttonPanel, Priority.ALWAYS) // Button panel shrinks first due to smaller minHeight
     }
 
     fun setUserPosition(player: Player) {

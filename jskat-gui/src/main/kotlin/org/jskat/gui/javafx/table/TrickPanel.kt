@@ -13,7 +13,7 @@ import java.util.*
 
 class TrickPanel(
     private val globalScale: Double = 1.0,
-    private val randomPlacement: Boolean
+    private val randomPlacement: Boolean = true
 ) : Pane() {
 
     private val jskatOptions = JSkatOptions.instance()
@@ -81,57 +81,74 @@ class TrickPanel(
         val panelWidth = width
         val panelHeight = height
 
-        val cardScale = getCardScale() * globalScale
         val image = bitmaps.getCardImageFX(Card.CJ)
+        val unscaledCardWidth = image.width
+        val unscaledCardHeight = image.height
 
-        val xScaleSize = image.width
-        val xAllTrickCardsSize = xScaleSize * TRICK_SIZE_FACTOR
-        val xBorder = (panelWidth * (1 / cardScale) - xAllTrickCardsSize) / 2.0
+        val trickAreaUnscaledWidth = unscaledCardWidth * TRICK_SIZE_FACTOR
+        val trickAreaUnscaledHeight = unscaledCardHeight * TRICK_SIZE_FACTOR
 
-        val yScaleSize = image.height
-        val yAllTrickCardsSize = yScaleSize * TRICK_SIZE_FACTOR
-        val yBorder = (panelHeight * (1 / cardScale) - yAllTrickCardsSize) / 2.0
+        // Avoid division by zero if panel dimensions are zero or unscaled trick area is zero
+        if (panelWidth <= 0 || panelHeight <= 0 || trickAreaUnscaledWidth <= 0 || trickAreaUnscaledHeight <= 0) {
+            return
+        }
+
+        // 1. Calculate maxFitScale: the largest scale factor that allows the entire unscaled trick area to fit within the panel
+        val maxFitScaleX = panelWidth / trickAreaUnscaledWidth
+        val maxFitScaleY = panelHeight / trickAreaUnscaledHeight
+        var maxFitScale = minOf(maxFitScaleX, maxFitScaleY)
+
+        // Apply safety margin to ensure cards are always within bounds
+        maxFitScale *= SAFETY_MARGIN_FACTOR
+
+        // 2. Calculate desiredScale: maxFitScale multiplied by globalScale
+        val desiredScale = maxFitScale * globalScale
+
+        // 3. Determine finalScaleFactor: ensure cards are always inside the panel
+        // globalScale can only make the cards smaller than the maximum fit, or keep them at max fit if globalScale >= 1.0
+        val finalScaleFactor = minOf(maxFitScale, desiredScale)
+
+        // Calculate the actual displayed width and height of the trick area with the finalScaleFactor
+        val finalTrickAreaWidth = trickAreaUnscaledWidth * finalScaleFactor
+        val finalTrickAreaHeight = trickAreaUnscaledHeight * finalScaleFactor
+
+        // Calculate the offsets to center this 'finalTrickArea' within the panel
+        val xOffset = (panelWidth - finalTrickAreaWidth) / 2.0
+        val yOffset = (panelHeight - finalTrickAreaHeight) / 2.0
 
         for (i in trick.indices) {
             val card = trick[i]
             val player = positions[i]
 
-            var posX = 0.0
-            var posY = 0.0
+            var relativePosX = 0.0
+            var relativePosY = 0.0
+
+            // Calculate relative positions within the unscaled trick area
             if (player == leftOpponent) {
-                posX = xBorder
-                posY = yBorder + yScaleSize * (1.0 / 3.0)
+                relativePosX = 0.0
+                relativePosY = unscaledCardHeight * (1.0 / 3.0)
             } else if (player == rightOpponent) {
-                posX = xBorder + xScaleSize * (2.0 / 3.0)
-                posY = yBorder
+                relativePosX = unscaledCardWidth * (2.0 / 3.0)
+                relativePosY = 0.0
             } else if (player == userPosition) {
-                posX = xBorder + xScaleSize * (1.0 / 3.0)
-                posY = yBorder + yScaleSize * (2.0 / 3.0)
+                relativePosX = unscaledCardWidth * (1.0 / 3.0)
+                relativePosY = unscaledCardHeight * (2.0 / 3.0)
             }
 
             val cardView = ImageView(bitmaps.getCardImageFX(card))
-            cardView.x = posX * cardScale
-            cardView.y = posY * cardScale
+
+            // Use fitWidth and fitHeight for scaling
+            cardView.fitWidth = unscaledCardWidth * finalScaleFactor
+            cardView.fitHeight = unscaledCardHeight * finalScaleFactor
+            cardView.isPreserveRatio = true // Maintain aspect ratio
+
+            // Apply the centering offset and then scale the relative position using finalScaleFactor
+            cardView.x = xOffset + (relativePosX * finalScaleFactor)
+            cardView.y = yOffset + (relativePosY * finalScaleFactor)
             cardView.rotate = Math.toDegrees(cardRotations[i])
-            cardView.scaleX = cardScale
-            cardView.scaleY = cardScale
+
             children.add(cardView)
         }
-    }
-
-    private fun getCardScale(): Double {
-        val sampleCard = bitmaps.getCardImageFX(Card.CJ)
-        val imageWidth = sampleCard.width * TRICK_SIZE_FACTOR
-        val imageHeight = sampleCard.height * TRICK_SIZE_FACTOR
-
-        val scaleX = width / imageWidth
-        val scaleY = height / imageHeight
-
-        var scaleFactor = 1.0
-        if (scaleX < 1.0 || scaleY < 1.0) {
-            scaleFactor = if (scaleX < scaleY) scaleX else scaleY
-        }
-        return scaleFactor
     }
 
     private val isNewCardFace: Boolean
@@ -148,5 +165,6 @@ class TrickPanel(
 
     companion object {
         private const val TRICK_SIZE_FACTOR = 1.0 + 2.0 / 3.0
+        private const val SAFETY_MARGIN_FACTOR = 0.95 // Added safety margin
     }
 }
