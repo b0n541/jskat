@@ -1,6 +1,7 @@
 package org.jskat.control;
 
 import com.google.common.eventbus.Subscribe;
+import org.jskat.ai.AIPlayerDelayWrapper;
 import org.jskat.control.command.table.PutCardIntoSkatCommand;
 import org.jskat.control.command.table.ShowCardsCommand;
 import org.jskat.control.command.table.TakeCardFromSkatCommand;
@@ -941,6 +942,24 @@ public class SkatGame {
     public void setView(final JSkatView newView) {
 
         view = newView;
+
+        if (view != null) {
+            // Wrap AI players with delay wrapper
+            wrapAiPlayers();
+        }
+    }
+
+    /**
+     * Wraps all AI players with the delay wrapper.
+     * This centralizes the delay logic without modifying AI player implementations.
+     */
+    private void wrapAiPlayers() {
+        for (final Player pos : Player.values()) {
+            final JSkatPlayer currentPlayer = player.get(pos);
+            if (currentPlayer.isAIPlayer() && !(currentPlayer instanceof AIPlayerDelayWrapper)) {
+                player.put(pos, new AIPlayerDelayWrapper(currentPlayer));
+            }
+        }
     }
 
     /**
