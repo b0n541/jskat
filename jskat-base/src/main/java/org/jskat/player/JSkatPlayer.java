@@ -194,13 +194,6 @@ public interface JSkatPlayer {
     boolean isAIPlayer();
 
     /**
-     * Checks whether the player is the declaring player
-     *
-     * @return TRUE if the player is the declaring player
-     */
-    boolean isDeclarer();
-
-    /**
      * Asks for the new skat cards during discarding
      *
      * @return CardList The new cards for the skat
