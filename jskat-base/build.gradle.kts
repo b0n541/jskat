@@ -9,7 +9,7 @@ dependencies {
     implementation("com.microsoft.onnxruntime:onnxruntime:1.27.0")
 
     // Jackson for JSON parsing in tests
-    testImplementation("com.fasterxml.jackson.core:jackson-databind:2.22.0")
+    testImplementation("com.fasterxml.jackson.core:jackson-databind:2.22.1")
 }
 
 // ML Models download configuration
