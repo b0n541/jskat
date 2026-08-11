@@ -21,6 +21,6 @@ public class RegisterAction extends AbstractJSkatAction {
     @Override
     public void actionPerformed(JSkatActionEvent e) {
 
-        JSkatMaster.INSTANCE.getView().openWebPage("http://www.skatgame.net/iss/register");
+        JSkatMaster.INSTANCE.getView().openWebPage("https://skatgame.net/iss/registration.html");
     }
 }

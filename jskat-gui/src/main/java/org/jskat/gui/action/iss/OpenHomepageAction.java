@@ -20,6 +20,6 @@ public class OpenHomepageAction extends AbstractJSkatAction {
     @Override
     public void actionPerformed(JSkatActionEvent e) {
 
-        JSkatMaster.INSTANCE.getView().openWebPage("http://www.skatgame.net/iss/");
+        JSkatMaster.INSTANCE.getView().openWebPage("https://skatgame.net/iss/");
     }
 }
