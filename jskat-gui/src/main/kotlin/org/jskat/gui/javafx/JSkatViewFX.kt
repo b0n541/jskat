@@ -27,6 +27,7 @@ import org.jskat.util.CardList
 import org.jskat.util.JSkatResourceBundle
 import org.jskat.util.Player
 import org.slf4j.LoggerFactory
+import java.util.concurrent.FutureTask
 
 class JSkatViewFX(
     val mainWindow: JSkatMainWindowFX,
@@ -76,16 +77,11 @@ class JSkatViewFX(
     }
 
     override fun getPlayerForInvitation(playerNames: Set<String>): List<String> {
-        val result = mutableListOf<String>()
-
-        val dialog = IssPlayerInvitationDialog(playerNames)
-        dialog.initModality(Modality.APPLICATION_MODAL)
-        val dialogResult = dialog.showAndWait()
-        if (dialogResult.isPresent) {
-            result.addAll(dialogResult.get())
+        return runOnFxThread {
+            IssPlayerInvitationDialog(playerNames).apply {
+                initModality(Modality.APPLICATION_MODAL)
+            }.showAndWait().orElse(emptyList())
         }
-
-        return result
     }
 
     override fun showMessage(title: String, message: String) {
@@ -136,6 +132,7 @@ class JSkatViewFX(
         when (moveInformation.type) {
             MoveType.DEAL -> {
                 JSkatEventBus.INSTANCE.post(SkatGameStateChangedEvent(tableName, GameState.DEALING))
+                withTablePanel(tableName) { table -> Player.entries.forEach(table::hideCards) }
 
                 val dealtCards = mutableMapOf<Player, CardList>()
                 dealtCards[Player.FOREHAND] = moveInformation.getCards(Player.FOREHAND)
@@ -226,26 +223,46 @@ class JSkatViewFX(
             }
 
             MoveType.TIME_OUT -> {
-                TODO("Not implemented yet time out")
+                // Player clocks are refreshed before the notification below.
             }
 
-            else -> {
-                log.warn("Unknown move type: ${moveInformation.type}")
+            MoveType.LEAVE_TABLE -> {
+                log.debug("Player ${moveInformation.leavingPlayer} left ISS table $tableName")
             }
+        }
+
+        withTablePanel(tableName) { table ->
+            IssMoveFeedback.clockUpdates(moveInformation).forEach { (player, time) ->
+                table.setPlayerTime(player, time)
+            }
+        }
+        if (moveInformation.type == MoveType.TIME_OUT) {
+            showMessage(
+                strings.getString("iss_timeout_title"),
+                strings.getString(
+                    "iss_timeout_message",
+                    IssMoveFeedback.timedOutPlayerName(gameData, moveInformation)
+                )
+            )
         }
     }
 
     override fun setResign(tableName: String, player: Player) {
-        TODO("Not implemented yet setResign: $tableName, $player")
+        withTablePanel(tableName) { it.setResign(player) }
     }
 
     override fun showISSTableInvitation(invitor: String, tableName: String): Boolean {
-        TODO("Not implemented yet showISSTableInvitation: $invitor, $tableName")
-        return false
+        return IssMoveFeedback.invitationAccepted(runOnFxThread {
+            Alert(Alert.AlertType.CONFIRMATION).apply {
+                title = strings.getString("iss_table_invitation_title")
+                headerText = null
+                contentText = strings.getString("iss_table_invitation", invitor, tableName)
+            }.showAndWait()
+        })
     }
 
     override fun setGeschoben(tableName: String, player: Player) {
-        TODO("Not implemented yet setGeschoben: $tableName, $player")
+        withTablePanel(tableName) { it.setGeschoben(player) }
     }
 
     override fun openWebPage(link: String) {
@@ -265,6 +282,25 @@ class JSkatViewFX(
     }
 
     override fun setSkat(tableName: String?, skat: CardList?) {
-        TODO("Not yet implemented setSkat: $tableName, $skat")
+        if (tableName != null && skat != null) {
+            withTablePanel(tableName) { it.setSkat(skat) }
+        }
     }
+
+    private fun withTablePanel(tableName: String, action: (org.jskat.gui.javafx.table.SkatTablePanel) -> Unit) {
+        if (Platform.isFxApplicationThread()) {
+            mainWindow.tablePanel(tableName)?.let(action)
+        } else {
+            Platform.runLater { mainWindow.tablePanel(tableName)?.let(action) }
+        }
+    }
+
+    private fun <T> runOnFxThread(action: () -> T): T =
+        if (Platform.isFxApplicationThread()) {
+            action()
+        } else {
+            val task = FutureTask(action)
+            Platform.runLater(task)
+            task.get()
+        }
 }

@@ -527,15 +527,15 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     fun setTrickNumber(trickNumber: Int) = gameInfoPanel.setTrickNumber(trickNumber)
 
     fun setResign(player: Player) {
-        Platform.runLater { getHandPanel(player).setResign(true) }
+        runOnFxThread { getHandPanel(player).setResign(true) }
     }
 
     fun setGeschoben(player: Player) {
-        Platform.runLater { getHandPanel(player).setGeschoben() }
+        runOnFxThread { getHandPanel(player).setGeschoben() }
     }
 
     fun setPlayerTime(player: Player, time: Double) {
-        Platform.runLater { getHandPanel(player).setPlayerTime(time) }
+        runOnFxThread { getHandPanel(player).setPlayerTime(time) }
     }
 
     fun setDiscardedSkat(player: Player, skatBefore: CardList, discardedSkat: CardList) {
@@ -550,6 +550,10 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     }
 
     fun hideCards(player: Player) {
-        Platform.runLater { getHandPanel(player).hideCards() }
+        runOnFxThread { getHandPanel(player).hideCards() }
+    }
+
+    private fun runOnFxThread(action: () -> Unit) {
+        if (Platform.isFxApplicationThread()) action() else Platform.runLater(action)
     }
 }

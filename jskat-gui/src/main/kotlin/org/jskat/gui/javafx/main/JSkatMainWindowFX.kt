@@ -251,6 +251,13 @@ class JSkatMainWindowFX : VBox() {
         }
     }
 
+    fun tablePanel(tableName: String): SkatTablePanel? =
+        tabs.tabs
+            .firstOrNull { it.text == tableName }
+            ?.content
+            ?.let { it as? SkatTableNode }
+            ?.skatTablePanel
+
     private fun createToolbarButtonWithActiveTableContext(action: AbstractJSkatAction): Button {
         return Button(action.getValue(AbstractJSkatAction.NAME).toString()).apply {
             graphic = bitmaps.getImageView(action.icon, IconSize.SMALL)
