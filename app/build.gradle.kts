@@ -16,7 +16,7 @@ dependencies {
 
 javafx {
     modules = listOf("javafx.base", "javafx.fxml", "javafx.web", "javafx.swing")
-    version = "21.0.+"
+    version = "26.0.1"
 }
 
 version = "0.24.0-SNAPSHOT"
