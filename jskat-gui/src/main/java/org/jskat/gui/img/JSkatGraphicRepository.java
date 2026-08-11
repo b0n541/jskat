@@ -271,6 +271,17 @@ public class JSkatGraphicRepository {
     }
 
     /**
+     * Gets a flag image for the JavaFX UI.
+     *
+     * @param flag Flag
+     * @return JavaFX flag image
+     */
+    public javafx.scene.image.Image getFlagImageFX(final Flag flag) {
+        String path = "/org/jskat/gui/img/gui/flag_" + flag.toString().toLowerCase() + ".png";
+        return new javafx.scene.image.Image(getClass().getResourceAsStream(path));
+    }
+
+    /**
      * Gets the image for the skat table
      *
      * @return The image for the skat table
@@ -307,6 +318,10 @@ public class JSkatGraphicRepository {
         return bidBubbles.get(0);
     }
 
+    public javafx.scene.image.Image getLeftBidBubbleFX() {
+        return getGuiImageFX("bid_left.png");
+    }
+
     /**
      * Gets the image for the right opponent bid bubble
      *
@@ -316,6 +331,10 @@ public class JSkatGraphicRepository {
         return bidBubbles.get(1);
     }
 
+    public javafx.scene.image.Image getRightBidBubbleFX() {
+        return getGuiImageFX("bid_right.png");
+    }
+
     /**
      * Gets the image for the user bid bubble
      *
@@ -323,6 +342,14 @@ public class JSkatGraphicRepository {
      */
     public Image getUserBidBubble() {
         return bidBubbles.get(2);
+    }
+
+    public javafx.scene.image.Image getUserBidBubbleFX() {
+        return getGuiImageFX("bid_user.png");
+    }
+
+    private javafx.scene.image.Image getGuiImageFX(final String fileName) {
+        return new javafx.scene.image.Image(getClass().getResourceAsStream("/org/jskat/gui/img/gui/" + fileName));
     }
 
     /**

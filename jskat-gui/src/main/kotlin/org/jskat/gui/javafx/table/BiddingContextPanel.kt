@@ -1,7 +1,6 @@
 package org.jskat.gui.javafx.table
 
 import javafx.application.Platform
-import javafx.embed.swing.SwingFXUtils
 import javafx.geometry.HPos
 import javafx.geometry.Pos
 import javafx.scene.control.Button
@@ -15,7 +14,6 @@ import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.Player
-import java.awt.image.BufferedImage
 
 class BiddingContextPanel(
     private val actions: Map<JSkatAction, AbstractJSkatAction>,
@@ -62,14 +60,9 @@ class BiddingContextPanel(
         biddingGrid.hgap = 10.0
         biddingGrid.vgap = 10.0
 
-        // Convert AWT images to FX images
-        val leftBubble = SwingFXUtils.toFXImage(toBufferedImage(bitmaps.leftBidBubble), null)
-        val rightBubble = SwingFXUtils.toFXImage(toBufferedImage(bitmaps.rightBidBubble), null)
-        val userBubble = SwingFXUtils.toFXImage(toBufferedImage(bitmaps.userBidBubble), null)
-
-        leftOpponentBid = BidBubblePanel(leftBubble)
-        rightOpponentBid = BidBubblePanel(rightBubble)
-        userBid = BidBubblePanel(userBubble)
+        leftOpponentBid = BidBubblePanel(bitmaps.leftBidBubbleFX)
+        rightOpponentBid = BidBubblePanel(bitmaps.rightBidBubbleFX)
+        userBid = BidBubblePanel(bitmaps.userBidBubbleFX)
 
         biddingGrid.add(leftOpponentBid, 0, 0)
         biddingGrid.add(rightOpponentBid, 1, 0)
@@ -105,22 +98,6 @@ class BiddingContextPanel(
 
         val blankRegion = Region()
         add(blankRegion, 2, 0)
-    }
-
-    private fun toBufferedImage(img: java.awt.Image): BufferedImage {
-        if (img is BufferedImage) {
-            return img
-        }
-
-        // Create a buffered image with transparency
-        val bimage = BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB)
-
-        // Draw the image on to the buffered image
-        val bGr = bimage.createGraphics()
-        bGr.drawImage(img, 0, 0, null)
-        bGr.dispose()
-
-        return bimage
     }
 
     fun setUserPosition(player: Player) {

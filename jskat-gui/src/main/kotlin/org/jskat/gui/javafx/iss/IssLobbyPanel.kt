@@ -5,7 +5,6 @@ import javafx.beans.property.SimpleDoubleProperty
 import javafx.beans.property.SimpleLongProperty
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
-import javafx.embed.swing.SwingFXUtils
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.control.*
@@ -20,7 +19,6 @@ import org.jskat.control.iss.ChatMessageType
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.JSkatResourceBundle
-import java.awt.image.BufferedImage
 
 class IssLobbyPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>, private val userName: String?) :
     VBox() {
@@ -112,16 +110,7 @@ class IssLobbyPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>, 
                                 item.forEach { flagChar ->
                                     val flag = JSkatGraphicRepository.Flag.valueOf(flagChar)
                                     if (flag != null) {
-                                        val awtImage = bitmaps.getFlagImage(flag)
-                                        val bufferedImage = BufferedImage(
-                                            awtImage.getWidth(null),
-                                            awtImage.getHeight(null),
-                                            BufferedImage.TYPE_INT_ARGB
-                                        )
-                                        val g = bufferedImage.createGraphics()
-                                        g.drawImage(awtImage, 0, 0, null)
-                                        g.dispose()
-                                        children.add(ImageView(SwingFXUtils.toFXImage(bufferedImage, null)))
+                                        children.add(ImageView(bitmaps.getFlagImageFX(flag)))
                                     }
                                 }
                             }
