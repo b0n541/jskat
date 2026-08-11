@@ -12,6 +12,7 @@ import org.jskat.control.command.iss.IssDisconnectCommand
 import org.jskat.control.command.iss.IssInvitePlayerCommand
 import org.jskat.control.command.iss.IssShowLoginCommand
 import org.jskat.control.command.table.RequestCreateTableCommand
+import org.jskat.control.command.table.RemoveTableCommand
 import org.jskat.control.command.table.StartSkatSeriesCommand
 import org.jskat.control.event.iss.*
 import org.jskat.control.event.table.TableCreatedEvent
@@ -63,10 +64,13 @@ class JSkatMainWindowFX : VBox() {
         children.addAll(menuBar, toolbar, tabs)
 
         tabs.selectionModel.selectedItemProperty().addListener { _, _, newTab ->
-            if (newTab != null) {
-                // assume that the title of the tab is the table name
-                jskatMaster.setActiveTable(newTab.text)
-            }
+            JavaFxTableLifecycle.selectTable(
+                newTab?.userData as? JavaFxTableLifecycle.Table,
+                activateTable = { table ->
+                jskatMaster.setActiveTable(table.type, table.name)
+                },
+                requestFocus = { (newTab?.content as? SkatTableNode)?.skatTablePanel?.requestFocus() }
+            )
         }
 
         addWelcomeTab()
@@ -97,7 +101,12 @@ class JSkatMainWindowFX : VBox() {
                 val newTab = Tab(tableName).apply {
                     id = tabId
                     content = panel
+                    userData = JavaFxTableLifecycle.Table(event.tableType(), tableName)
                     isClosable = true
+                    setOnCloseRequest { closeEvent ->
+                        closeEvent.consume()
+                        closeTable(userData as JavaFxTableLifecycle.Table)
+                    }
                 }
                 tabs.tabs.add(newTab)
                 tabs.selectionModel.select(newTab)
@@ -113,7 +122,9 @@ class JSkatMainWindowFX : VBox() {
     fun onTableRemoved(event: TableRemovedEvent) {
         Platform.runLater {
             tabs.tabs
-                .filter { it.text == event.tableName() }
+                .filter {
+                    it.userData == JavaFxTableLifecycle.Table(event.tableType(), event.tableName())
+                }
                 .forEach { tabs.tabs.remove(it) }
         }
     }
@@ -265,8 +276,10 @@ class JSkatMainWindowFX : VBox() {
 
     private fun createNewLocalTable() {
         val dialog = TextInputDialog(
-            // TODO: set number of local tables created correctly
-            "${strings.getString("local.table")} ${jskatMaster.view.getNewTableName(0)}"
+            JavaFxTableLifecycle.defaultLocalTableName(
+                strings.getString("local.table"),
+                data.localTablesCreated
+            )
         )
         dialog.title = strings.getString("new.table.dialog.title")
         dialog.headerText = strings.getString("new.table.dialog.message")
@@ -274,9 +287,26 @@ class JSkatMainWindowFX : VBox() {
         dialog.dialogPane.stylesheets.add("/org/jskat/gui/javafx/jskat.css")
 
         dialog.showAndWait().ifPresent { tableName ->
-            if (tableName.isNotEmpty()) {
-                jskatMaster.createTable(tableName)
+            val submittedTableName = JavaFxTableLifecycle.submittedTableName(tableName)
+            if (!JavaFxTableLifecycle.isValidTableName(submittedTableName)) {
+                JSkatMaster.showEmptyInputNameMessage()
+            } else {
+                jskatMaster.createTable(submittedTableName)
             }
         }
+    }
+
+    private fun closeTable(table: JavaFxTableLifecycle.Table) {
+        JavaFxTableLifecycle.closeTable(
+            table,
+            removeLocalTable = { tableName ->
+                JSkatEventBus.INSTANCE.post(RemoveTableCommand(JSkatViewType.LOCAL_TABLE, tableName))
+            },
+            leaveIssTable = { tableName ->
+                actions[JSkatAction.LEAVE_ISS_TABLE]?.actionPerformed(
+                    JSkatActionEvent(JSkatAction.LEAVE_ISS_TABLE, tableName)
+                )
+            }
+        )
     }
 }
