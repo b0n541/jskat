@@ -86,7 +86,7 @@ internal fun prepareHelpContent(
     }
     val withContent = template.replace("@@insert@@", resolvedLocalLinks)
 
-    return withContent.replace("</head>", "$css</head>")
+    return withContent.replace("</head>", "<meta charset=\"UTF-8\">$css</head>")
 }
 
 private val LOCAL_HELP_LINK = Regex("""href=\"(org/jskat/gui/help/[^\"]+)\"""")

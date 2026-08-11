@@ -6,6 +6,16 @@ import org.junit.jupiter.api.Test
 class JSkatHelpContentTest {
 
     @Test
+    fun `help document declares UTF-8`() {
+        val document = prepareHelpContent(
+            "<p>können</p>",
+            "<html><head></head><body>@@insert@@</body></html>",
+        ) { null }
+
+        assertThat(document).contains("<meta charset=\"UTF-8\">")
+    }
+
+    @Test
     fun `local help links use their resource URL`() {
         val gettingStartedPath = "org/jskat/gui/help/en/gettingStarted.html"
         val gettingStarted = checkNotNull(ClassLoader.getSystemResource(gettingStartedPath)).toExternalForm()
