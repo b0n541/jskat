@@ -3,6 +3,7 @@ package org.jskat
 import com.google.common.eventbus.Subscribe
 import javafx.application.Application
 import javafx.application.Platform
+import javafx.geometry.Rectangle2D
 import javafx.scene.Scene
 import javafx.stage.Screen
 import javafx.stage.Stage
@@ -10,6 +11,7 @@ import org.jskat.control.JSkatEventBus
 import org.jskat.control.JSkatMaster
 import org.jskat.control.command.general.ExitCommand
 import org.jskat.data.JSkatOptions
+import org.jskat.data.WindowGeometry
 import org.jskat.gui.human.SwingHumanPlayer
 import org.jskat.gui.javafx.JSkatViewFX
 import org.jskat.gui.javafx.main.JSkatMainWindowFX
@@ -44,24 +46,11 @@ class JSkatFX : Application() {
         val screen = Screen.getPrimary()
         val bounds = screen.visualBounds
 
-        val position = jskatOptions.mainFramePosition
-        val size = jskatOptions.mainFrameSize
-
-        if (position.x != Int.MIN_VALUE && position.y != Int.MIN_VALUE) {
-            stage.x = position.x.toDouble()
-            stage.y = position.y.toDouble()
-        } else {
-            stage.x = bounds.minX
-            stage.y = bounds.minY
-        }
-
-        if (size.width != Int.MIN_VALUE && size.height != Int.MIN_VALUE) {
-            stage.width = size.width.toDouble()
-            stage.height = size.height.toDouble()
-        } else {
-            stage.width = bounds.width
-            stage.height = bounds.height
-        }
+        val restoredGeometry = restoreWindowGeometry(jskatOptions.mainFrameGeometry, bounds)
+        stage.x = restoredGeometry.minX
+        stage.y = restoredGeometry.minY
+        stage.width = restoredGeometry.width
+        stage.height = restoredGeometry.height
 
         stage.xProperty().addListener { _, _, newValue ->
             if (!stage.isMaximized) {
@@ -104,4 +93,12 @@ class JSkatFX : Application() {
             launch(JSkatFX::class.java)
         }
     }
+}
+
+internal fun restoreWindowGeometry(saved: WindowGeometry, screenBounds: Rectangle2D): Rectangle2D {
+    val x = if (saved.hasPosition()) saved.x().toDouble() else screenBounds.minX
+    val y = if (saved.hasPosition()) saved.y().toDouble() else screenBounds.minY
+    val width = if (saved.hasSize()) saved.width().toDouble() else screenBounds.width
+    val height = if (saved.hasSize()) saved.height().toDouble() else screenBounds.height
+    return Rectangle2D(x, y, width, height)
 }

@@ -7,7 +7,6 @@ import org.jskat.data.SkatTableOptions.RuleSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.*;
 import java.io.*;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -350,10 +349,6 @@ public final class JSkatOptions {
         return getInteger(Option.WAIT_TIME_AFTER_TRICK);
     }
 
-    public Dimension getMainFrameSize() {
-        return new Dimension(getInteger(Option.MAIN_FRAME_WIDTH), getInteger(Option.MAIN_FRAME_HEIGHT));
-    }
-
     public void setMainFrameWidth(final Integer width) {
         setOption(Option.MAIN_FRAME_WIDTH, width);
     }
@@ -362,8 +357,12 @@ public final class JSkatOptions {
         setOption(Option.MAIN_FRAME_HEIGHT, height);
     }
 
-    public Point getMainFramePosition() {
-        return new Point(getInteger(Option.MAIN_FRAME_X_POSITION), getInteger(Option.MAIN_FRAME_Y_POSITION));
+    public WindowGeometry getMainFrameGeometry() {
+        return new WindowGeometry(
+                getInteger(Option.MAIN_FRAME_X_POSITION),
+                getInteger(Option.MAIN_FRAME_Y_POSITION),
+                getInteger(Option.MAIN_FRAME_WIDTH),
+                getInteger(Option.MAIN_FRAME_HEIGHT));
     }
 
     public void setMainFrameXPosition(final Integer xPosition) {
@@ -1300,14 +1299,11 @@ public final class JSkatOptions {
         setDefaultProperties();
     }
 
-    public void setMainFrameSize(final Dimension size) {
-        setOption(Option.MAIN_FRAME_WIDTH, (int) size.getWidth());
-        setOption(Option.MAIN_FRAME_HEIGHT, (int) size.getHeight());
-    }
-
-    public void setMainFramePosition(final Point locationOnScreen) {
-        setOption(Option.MAIN_FRAME_X_POSITION, locationOnScreen.x);
-        setOption(Option.MAIN_FRAME_Y_POSITION, locationOnScreen.y);
+    public void setMainFrameGeometry(final WindowGeometry geometry) {
+        setOption(Option.MAIN_FRAME_X_POSITION, geometry.x());
+        setOption(Option.MAIN_FRAME_Y_POSITION, geometry.y());
+        setOption(Option.MAIN_FRAME_WIDTH, geometry.width());
+        setOption(Option.MAIN_FRAME_HEIGHT, geometry.height());
     }
 
     /**
