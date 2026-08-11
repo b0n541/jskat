@@ -16,10 +16,11 @@ import javafx.stage.Stage
 import javafx.stage.Window
 import org.jskat.JSkatFX
 import org.jskat.data.JSkatOptions
+import org.jskat.gui.javafx.JavaFxHostDocumentOpener
 import org.jskat.util.JSkatResourceBundle
 import org.slf4j.LoggerFactory
 
-class FirstStepsDialog(owner: Window) : Stage() {
+class FirstStepsDialog(owner: Window, documentOpener: JavaFxHostDocumentOpener) : Stage() {
 
     private val LOG = LoggerFactory.getLogger(FirstStepsDialog::class.java)
     private val strings = JSkatResourceBundle.INSTANCE
@@ -45,6 +46,9 @@ class FirstStepsDialog(owner: Window) : Stage() {
         }
 
         firstStepsContent = WebView()
+        firstStepsContent.engine.locationProperty().addListener { _, _, location ->
+            documentOpener.openIfExternal(location)
+        }
         VBox.setVgrow(firstStepsContent, Priority.ALWAYS)
 
         showTipsOnStartUp = CheckBox(strings.getString("show_tips_at_startup")).apply {

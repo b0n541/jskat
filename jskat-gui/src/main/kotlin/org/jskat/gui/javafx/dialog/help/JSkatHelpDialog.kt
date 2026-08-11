@@ -4,11 +4,16 @@ import javafx.scene.control.ButtonType
 import javafx.scene.control.Dialog
 import javafx.scene.web.WebView
 import org.jskat.util.JSkatResourceBundle
+import org.jskat.gui.javafx.JavaFxHostDocumentOpener
 import org.slf4j.LoggerFactory
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-class JSkatHelpDialog(title: String, contentPath: String) : Dialog<ButtonType>() {
+class JSkatHelpDialog @JvmOverloads constructor(
+    title: String,
+    contentPath: String,
+    private val documentOpener: JavaFxHostDocumentOpener? = null
+) : Dialog<ButtonType>() {
 
     private val strings = JSkatResourceBundle.INSTANCE
     private val webView = WebView()
@@ -23,6 +28,10 @@ class JSkatHelpDialog(title: String, contentPath: String) : Dialog<ButtonType>()
         webView.prefHeight = 600.0
 
         dialogPane.stylesheets.add("/org/jskat/gui/javafx/jskat.css")
+
+        webView.engine.locationProperty().addListener { _, _, location ->
+            documentOpener?.openIfExternal(location)
+        }
 
         setFile(contentPath)
     }

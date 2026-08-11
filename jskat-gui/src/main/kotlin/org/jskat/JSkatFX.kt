@@ -13,6 +13,7 @@ import org.jskat.control.command.general.ExitCommand
 import org.jskat.data.JSkatOptions
 import org.jskat.data.WindowGeometry
 import org.jskat.gui.human.SwingHumanPlayer
+import org.jskat.gui.javafx.JavaFxHostDocumentOpener
 import org.jskat.gui.javafx.JSkatViewFX
 import org.jskat.gui.javafx.main.JSkatMainWindowFX
 import org.slf4j.Logger
@@ -35,7 +36,7 @@ class JSkatFX : Application() {
 
         // TODO: Replace with better approach
         val human = SwingHumanPlayer()
-        val jskatView = JSkatViewFX(JSkatMainWindowFX(), human)
+        val jskatView = JSkatViewFX(JSkatMainWindowFX(), human, JavaFxHostDocumentOpener(hostServices::showDocument))
         jskatMaster.view = jskatView
 
         stage.title = "JSkat"

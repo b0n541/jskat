@@ -27,12 +27,11 @@ import org.jskat.util.CardList
 import org.jskat.util.JSkatResourceBundle
 import org.jskat.util.Player
 import org.slf4j.LoggerFactory
-import java.awt.Desktop
-import java.net.URI
 
 class JSkatViewFX(
     val mainWindow: JSkatMainWindowFX,
-    private val human: AbstractHumanJSkatPlayer
+    private val human: AbstractHumanJSkatPlayer,
+    private val documentOpener: JavaFxHostDocumentOpener
 ) : JSkatView {
 
     private val log = LoggerFactory.getLogger(JSkatViewFX::class.java)
@@ -54,7 +53,8 @@ class JSkatViewFX(
         Platform.runLater {
             JSkatHelpDialog(
                 JSkatResourceBundle.INSTANCE.getString("help"),
-                "org/jskat/gui/help/" + JSkatOptions.instance().i18NCode + "/contents.html"
+                "org/jskat/gui/help/" + JSkatOptions.instance().i18NCode + "/contents.html",
+                documentOpener
             ).showAndWait()
         }
     }
@@ -64,7 +64,8 @@ class JSkatViewFX(
         Platform.runLater {
             JSkatHelpDialog(
                 JSkatResourceBundle.INSTANCE.getString("license"),
-                "org/jskat/gui/help/apache2.html"
+                "org/jskat/gui/help/apache2.html",
+                documentOpener
             ).showAndWait()
         }
     }
@@ -248,11 +249,7 @@ class JSkatViewFX(
     }
 
     override fun openWebPage(link: String) {
-        try {
-            Desktop.getDesktop().browse(URI(link))
-        } catch (e: Exception) {
-            log.error("Error opening web page: $link", e)
-        }
+        documentOpener.open(link)
     }
 
     override fun getHumanPlayerForGUI(): AbstractHumanJSkatPlayer {
