@@ -7,15 +7,15 @@ import javafx.scene.control.TableColumn
 import javafx.scene.control.TableView
 import org.jskat.util.JSkatResourceBundle
 
-class ScoreListTableView(playerNames: List<String>) : TableView<ScoreListEntry>() {
+class ScoreListTableView(playerNames: List<String>) : TableView<ScoreHistoryRow>() {
 
     private val strings = JSkatResourceBundle.INSTANCE
 
     init {
-        val gameNoColumn = TableColumn<ScoreListEntry, Int>("#").apply {
+        val gameNoColumn = TableColumn<ScoreHistoryRow, Int>("#").apply {
             prefWidth = 30.0
             setCellFactory {
-                object : TableCell<ScoreListEntry, Int>() {
+                object : TableCell<ScoreHistoryRow, Int>() {
                     override fun updateItem(item: Int?, empty: Boolean) {
                         super.updateItem(item, empty)
                         text = if (tableRow.index <= items.size - 1)
@@ -31,32 +31,18 @@ class ScoreListTableView(playerNames: List<String>) : TableView<ScoreListEntry>(
         columns.add(gameNoColumn)
 
         val playerColumns = playerNames.map { playerName ->
-            TableColumn<ScoreListEntry, Int>(playerName)
+            TableColumn<ScoreHistoryRow, Int>(playerName)
         }
 
         for ((i, column) in playerColumns.withIndex()) {
+            column.setCellValueFactory { cellData ->
+                ReadOnlyObjectWrapper(cellData.value.playerTotals[i])
+            }
             column.setCellFactory {
-                object : TableCell<ScoreListEntry, Int>() {
+                object : TableCell<ScoreHistoryRow, Int>() {
                     override fun updateItem(item: Int?, empty: Boolean) {
                         super.updateItem(item, empty)
-                        // If this cell is empty or no valid row is available, clear the text.
-                        if (empty || tableRow == null || tableRow.index < 0) {
-                            text = null
-                        } else {
-                            val currentIndex = tableRow.index
-                            val playerName = tableColumn.text
-                            if (tableView.items[currentIndex].data[playerName] == null) {
-                                text = "-"
-                            } else {
-                                // Compute the cumulative total for this player by filtering
-                                // all GameData items up to (and including) this row.
-                                val cumulative = tableView.items
-                                    .take(currentIndex + 1)
-                                    .filter { it.data.containsKey(playerName) }
-                                    .sumOf { it.data[playerName] ?: 0 }
-                                text = cumulative.toString()
-                            }
-                        }
+                        text = if (empty) null else item?.toString() ?: "-"
                     }
                 }
             }
@@ -64,10 +50,10 @@ class ScoreListTableView(playerNames: List<String>) : TableView<ScoreListEntry>(
 
         columns.addAll(playerColumns)
 
-        val gameValueColumn = TableColumn<ScoreListEntry, Int>(strings.getString("game")).apply {
+        val gameValueColumn = TableColumn<ScoreHistoryRow, Int>(strings.getString("game")).apply {
             prefWidth = 60.0
             setCellValueFactory { cellData ->
-                ReadOnlyObjectWrapper(cellData.value.data.entries.first().value)
+                ReadOnlyObjectWrapper(cellData.value.gameValue)
             }
         }
 

@@ -10,6 +10,7 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import org.jskat.control.JSkatEventBus
 import org.jskat.control.event.skatgame.GameFinishEvent
+import org.jskat.control.event.skatgame.GameStartedEvent
 import org.jskat.control.event.table.PlayerNamesChangedEvent
 import org.jskat.control.event.table.SkatGameReplayFinishedEvent
 import org.jskat.control.event.table.SkatGameReplayStartedEvent
@@ -20,8 +21,10 @@ import org.jskat.util.JSkatResourceBundle
 class SkatTableNode(val skatTablePanel: SkatTablePanel) : SplitPane() {
 
     private val strings = JSkatResourceBundle.INSTANCE
-    private val scoreListTableView = ScoreListTableView(listOf("1", "2", "3"))
+    private val scoreHistory = ScoreHistoryProjection(listOf("1", "2", "3"))
+    private val scoreListTableView = ScoreListTableView(scoreHistory.playerNames)
     private var replay = false
+    private lateinit var playerOrder: ScoreHistoryPlayerOrder
 
     init {
         items.addAll(getLeftPanel(), skatTablePanel)
@@ -60,27 +63,40 @@ class SkatTableNode(val skatTablePanel: SkatTablePanel) : SplitPane() {
     @Subscribe
     fun addGameResultOn(event: GameFinishEvent) {
         if (!replay) {
+            val completedGamePlayerOrder = playerOrder
             Platform.runLater {
-                scoreListTableView.items.add(
-                    if (event.declarerName != null) {
-                        ScoreListEntry(mapOf(event.declarerName to event.gameSummary.gameValue))
-                    } else {
-                        ScoreListEntry(mapOf("" to 0))
-                    }
-                )
+                scoreHistory.addResult(completedGamePlayerOrder, event.gameSummary)
+                scoreListTableView.items.setAll(scoreHistory.rows)
                 scoreListTableView.scrollTo(scoreListTableView.items.size - 1)
             }
         }
     }
 
     @Subscribe
+    fun setPlayerOrderOn(event: GameStartedEvent) {
+        playerOrder = ScoreHistoryPlayerOrder(
+            event.leftPlayerPosition(),
+            event.rightPlayerPosition(),
+            event.userPosition(),
+        )
+    }
+
+    @Subscribe
     fun clearSkatListOn(event: SkatSeriesStartedEvent) {
-        Platform.runLater { scoreListTableView.items.clear() }
+        Platform.runLater {
+            scoreHistory.clear()
+            scoreListTableView.items.clear()
+        }
     }
 
     @Subscribe
     fun setPlayerNamesOn(event: PlayerNamesChangedEvent) {
         Platform.runLater {
+            scoreHistory.setPlayerNames(
+                event.upperLeftPlayerName,
+                event.upperRightPlayerName,
+                event.lowerPlayerName
+            )
             scoreListTableView.setPlayerNames(
                 event.upperLeftPlayerName,
                 event.upperRightPlayerName,
