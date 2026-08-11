@@ -39,22 +39,11 @@ class JSkatHelpDialog @JvmOverloads constructor(
     private fun setFile(filename: String) {
         val content = getResource(filename)
         val template = getResource("org/jskat/gui/help/frame.html")
-        var finalContent = template.replace("@@insert@@", content)
-        
-        // Inject CSS for better readability
-        val css = """
-            <style>
-                body {
-                    font-family: sans-serif;
-                    font-size: 16px;
-                    padding: 20px;
-                }
-            </style>
-        """.trimIndent()
-        
-        finalContent = finalContent.replace("</head>", "$css</head>")
+        val classpathRoot = checkNotNull(JSkatHelpDialog::class.java.getResource("/")) {
+            "Could not find the application classpath root"
+        }.toExternalForm()
 
-        webView.engine.loadContent(finalContent)
+        webView.engine.loadContent(prepareHelpContent(content, template, classpathRoot))
     }
 
     private fun getResource(url: String): String {
@@ -77,4 +66,19 @@ class JSkatHelpDialog @JvmOverloads constructor(
         }
         return message.toString()
     }
+}
+
+internal fun prepareHelpContent(content: String, template: String, classpathRoot: String): String {
+    val css = """
+        <style>
+            body {
+                font-family: sans-serif;
+                font-size: 16px;
+                padding: 20px;
+            }
+        </style>
+    """.trimIndent()
+    val withContent = template.replace("@@insert@@", content)
+
+    return withContent.replace("</head>", "<base href=\"$classpathRoot\">$css</head>")
 }
