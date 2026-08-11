@@ -39,11 +39,10 @@ class JSkatHelpDialog @JvmOverloads constructor(
     private fun setFile(filename: String) {
         val content = getResource(filename)
         val template = getResource("org/jskat/gui/help/frame.html")
-        val classpathRoot = checkNotNull(JSkatHelpDialog::class.java.getResource("/")) {
-            "Could not find the application classpath root"
-        }.toExternalForm()
 
-        webView.engine.loadContent(prepareHelpContent(content, template, classpathRoot))
+        webView.engine.loadContent(prepareHelpContent(content, template) { link ->
+            ClassLoader.getSystemResource(link)?.toExternalForm()
+        })
     }
 
     private fun getResource(url: String): String {
@@ -68,7 +67,11 @@ class JSkatHelpDialog @JvmOverloads constructor(
     }
 }
 
-internal fun prepareHelpContent(content: String, template: String, classpathRoot: String): String {
+internal fun prepareHelpContent(
+    content: String,
+    template: String,
+    localLinkUrl: (String) -> String?
+): String {
     val css = """
         <style>
             body {
@@ -78,7 +81,12 @@ internal fun prepareHelpContent(content: String, template: String, classpathRoot
             }
         </style>
     """.trimIndent()
-    val withContent = template.replace("@@insert@@", content)
+    val resolvedLocalLinks = LOCAL_HELP_LINK.replace(content) { match ->
+        localLinkUrl(match.groupValues[1])?.let { "href=\"$it\"" } ?: match.value
+    }
+    val withContent = template.replace("@@insert@@", resolvedLocalLinks)
 
-    return withContent.replace("</head>", "<base href=\"$classpathRoot\">$css</head>")
+    return withContent.replace("</head>", "$css</head>")
 }
+
+private val LOCAL_HELP_LINK = Regex("""href=\"(org/jskat/gui/help/[^\"]+)\"""")

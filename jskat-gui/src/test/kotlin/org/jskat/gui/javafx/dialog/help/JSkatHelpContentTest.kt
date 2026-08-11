@@ -2,21 +2,22 @@ package org.jskat.gui.javafx.dialog.help
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.net.URI
 
 class JSkatHelpContentTest {
 
     @Test
-    fun `local help links resolve from the classpath root`() {
-        val classpathRoot = "file:/application/classes/"
+    fun `local help links use their resource URL`() {
+        val gettingStartedPath = "org/jskat/gui/help/en/gettingStarted.html"
+        val gettingStarted = checkNotNull(ClassLoader.getSystemResource(gettingStartedPath)).toExternalForm()
         val document = prepareHelpContent(
-            "<a href=\"org/jskat/gui/help/en/gettingStarted.html\">Getting started</a>",
+            "<a href=\"$gettingStartedPath\">Getting started</a>"
+                + "<a href=\"https://github.com\">GitHub</a>",
             "<html><head></head><body>@@insert@@</body></html>",
-            classpathRoot
-        )
+        ) { path ->
+            ClassLoader.getSystemResource(path)?.toExternalForm()
+        }
 
-        assertThat(document).contains("<base href=\"$classpathRoot\">")
-        assertThat(URI(classpathRoot).resolve("org/jskat/gui/help/en/gettingStarted.html"))
-            .isEqualTo(URI("file:/application/classes/org/jskat/gui/help/en/gettingStarted.html"))
+        assertThat(document).contains("href=\"$gettingStarted\"")
+        assertThat(document).contains("href=\"https://github.com\"")
     }
 }
