@@ -123,6 +123,7 @@ public class JSkatViewImpl implements JSkatView {
         actions.put(JSkatAction.START_LOCAL_SERIES, new StartSkatSeriesAction());
         actions.put(JSkatAction.CONTINUE_LOCAL_SERIES, new ContinueSkatSeriesAction());
         actions.put(JSkatAction.REPLAY_GAME, new ReplayGameAction());
+        actions.put(JSkatAction.PRACTICE_GAME_WITH_SAME_CARDS, new PracticeWithSameCardsAction());
         actions.put(JSkatAction.NEXT_REPLAY_STEP, new NextReplayMoveAction());
         // ISS actions
         actions.put(JSkatAction.REGISTER_ON_ISS, new RegisterAction());
@@ -166,6 +167,7 @@ public class JSkatViewImpl implements JSkatView {
         actions.get(JSkatAction.CREATE_ISS_TABLE).setEnabled(false);
         actions.get(JSkatAction.INVITE_ISS_PLAYER).setEnabled(false);
         actions.get(JSkatAction.REPLAY_GAME).setEnabled(false);
+        actions.get(JSkatAction.PRACTICE_GAME_WITH_SAME_CARDS).setEnabled(false);
         actions.get(JSkatAction.NEXT_REPLAY_STEP).setEnabled(false);
     }
 
@@ -366,6 +368,7 @@ public class JSkatViewImpl implements JSkatView {
             case GAME_START:
                 actions.get(JSkatAction.START_LOCAL_SERIES).setEnabled(true);
                 actions.get(JSkatAction.REPLAY_GAME).setEnabled(false);
+                actions.get(JSkatAction.PRACTICE_GAME_WITH_SAME_CARDS).setEnabled(false);
                 actions.get(JSkatAction.NEXT_REPLAY_STEP).setEnabled(false);
                 break;
             case BIDDING:
@@ -404,6 +407,7 @@ public class JSkatViewImpl implements JSkatView {
             case GAME_OVER:
                 actions.get(JSkatAction.CONTINUE_LOCAL_SERIES).setEnabled(true);
                 actions.get(JSkatAction.REPLAY_GAME).setEnabled(true);
+                actions.get(JSkatAction.PRACTICE_GAME_WITH_SAME_CARDS).setEnabled(true);
                 actions.get(JSkatAction.NEXT_REPLAY_STEP).setEnabled(true);
                 break;
             default:

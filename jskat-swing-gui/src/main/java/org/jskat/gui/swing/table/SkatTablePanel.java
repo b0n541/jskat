@@ -63,6 +63,7 @@ public class SkatTablePanel extends AbstractTabPanel {
     protected boolean ramsch = false;
 
     protected boolean replay = false;
+    protected boolean practiceGame = false;
 
     /**
      * Panel for a skat table.
@@ -90,7 +91,7 @@ public class SkatTablePanel extends AbstractTabPanel {
      * @return List of actions for the game over context
      */
     protected List<JSkatAction> getGameOverActions() {
-        return Arrays.asList(JSkatAction.CONTINUE_LOCAL_SERIES, JSkatAction.REPLAY_GAME);
+        return Arrays.asList(JSkatAction.CONTINUE_LOCAL_SERIES, JSkatAction.PRACTICE_GAME_WITH_SAME_CARDS, JSkatAction.REPLAY_GAME);
     }
 
     /**
@@ -308,6 +309,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 
         gameInfoPanel.setGameState(GameState.GAME_START);
         gameInfoPanel.setGameNumber(event.gameNo());
+        gameInfoPanel.setPracticeGame(event.isPracticeGame());
+        practiceGame = event.isPracticeGame();
 
         leftOpponentPanel.setPosition(event.leftPlayerPosition());
         rightOpponentPanel.setPosition(event.rightPlayerPosition());
@@ -575,7 +578,8 @@ public class SkatTablePanel extends AbstractTabPanel {
 
         gameOverPanel.setGameSummary(event.gameSummary);
 
-        if (!replay) {
+        // Don't add scores for view-replay mode or practice games
+        if (!replay && !practiceGame) {
             skatListTableModel.addResult(
                     leftOpponentPanel.getPosition(),
                     rightOpponentPanel.getPosition(),
@@ -1017,7 +1021,8 @@ public class SkatTablePanel extends AbstractTabPanel {
             removeAllCards(playerCards.getKey());
             getPlayerPanel(playerCards.getKey()).addCards(
                     playerCards.getValue());
-            if (replay) {
+            // Only show all cards for view-replay mode, not for practice games
+            if (replay && !practiceGame) {
                 showCards(playerCards.getKey());
             }
         }

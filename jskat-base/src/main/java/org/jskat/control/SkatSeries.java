@@ -4,6 +4,9 @@ import com.google.common.eventbus.Subscribe;
 import org.jskat.control.command.table.NextReplayMoveCommand;
 import org.jskat.control.command.table.ReadyForNextGameCommand;
 import org.jskat.control.command.table.ReplayGameCommand;
+import org.jskat.control.command.table.PracticeWithSameCardsCommand;
+import org.jskat.util.CardDeck;
+import org.jskat.util.CardList;
 import org.jskat.control.event.skatgame.GameStartEvent;
 import org.jskat.control.event.table.*;
 import org.jskat.control.gui.JSkatView;
@@ -21,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.StreamSupport;
 
 /**
  * Controls a series of skat games
@@ -37,6 +41,8 @@ public class SkatSeries {
     private boolean unlimitedRounds = false;
     private boolean onlyPlayRamsch = false;
     private boolean readyForNextGame = false;
+    private boolean practiceRequested = false;
+    private CardDeck practiceDeck = null;
     private final Map<Player, JSkatPlayer> players;
     private SkatGame currSkatGame;
     private SkatGameReplay currReplayGame;
@@ -80,6 +86,31 @@ public class SkatSeries {
 
         JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(new SkatGameReplayFinishedEvent());
         readyForNextGame = true;
+    }
+
+    @Subscribe
+    public void practiceWithSameCardsOn(final PracticeWithSameCardsCommand command) {
+
+        LOG.debug("Practice with same cards requested");
+
+        JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(new SkatGameReplayFinishedEvent());
+
+        // Build the deck from the current game's dealt cards
+        if (currSkatGame != null) {
+            final Map<Player, CardList> dealtCards = currSkatGame.getDealtCards();
+            final CardList dealtSkat = currSkatGame.getDealtSkat();
+
+            // Convert CardList to List<Card> for the CardDeck constructor
+            practiceDeck = new CardDeck(
+                    StreamSupport.stream(dealtCards.get(Player.FOREHAND).spliterator(), false).toList(),
+                    StreamSupport.stream(dealtCards.get(Player.MIDDLEHAND).spliterator(), false).toList(),
+                    StreamSupport.stream(dealtCards.get(Player.REARHAND).spliterator(), false).toList(),
+                    StreamSupport.stream(dealtSkat.spliterator(), false).toList());
+
+            practiceRequested = true;
+        } else {
+            LOG.warn("No current game available for practice");
+        }
     }
 
     /**
@@ -197,15 +228,23 @@ public class SkatSeries {
 
                 LOG.debug("Game ended: join");
 
-                readyForNextGame = false;
-                while (isHumanPlayerInvolved() && !readyForNextGame) {
-                    try {
-                        Thread.sleep(200);
-                    } catch (final InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                // Wait for user action, handling practice-with-same-cards requests
+                do {
+                    readyForNextGame = false;
+                    practiceRequested = false;
+                    while (isHumanPlayerInvolved() && !readyForNextGame && !practiceRequested) {
+                        try {
+                            Thread.sleep(200);
+                        } catch (final InterruptedException e) {
+                            LOG.warn("Interrupted while waiting for next game", e);
+                            Thread.currentThread().interrupt();
+                        }
                     }
-                }
+
+                    if (practiceRequested && practiceDeck != null) {
+                        playPracticeGame(gameNumber, gameVariant);
+                    }
+                } while (practiceRequested);
             }
 
             roundsToGo--;
@@ -230,6 +269,50 @@ public class SkatSeries {
         }
 
         return result;
+    }
+
+    /**
+     * Plays a practice game with the same card deal. This game does not count
+     * towards the series score and does not affect player rotation.
+     *
+     * @param gameNumber  The display game number (for UI purposes)
+     * @param gameVariant The game variant to use
+     */
+    private void playPracticeGame(final int gameNumber, final GameVariant gameVariant) {
+
+        LOG.info("Playing practice game with same cards");
+
+        final SkatGame practiceGame = new SkatGame(data.getTableName(), gameVariant,
+                players.get(Player.FOREHAND),
+                players.get(Player.MIDDLEHAND),
+                players.get(Player.REARHAND));
+
+        // Set the pre-dealt deck so cards will be the same
+        practiceGame.setCardDeck(practiceDeck);
+
+        JSkatEventBus.INSTANCE.post(
+                new TableGameMoveEvent(data.getTableName(),
+                        new GameStartEvent(gameNumber, gameVariant,
+                                data.getBottomPlayer().getLeftNeighbor(),
+                                data.getBottomPlayer().getRightNeighbor(),
+                                data.getBottomPlayer(),
+                                true)));
+
+        practiceGame.setView(view);
+        practiceGame.setMaxSleep(maxSleep);
+
+        // Note: We intentionally do NOT call data.addGame(practiceGame)
+        // because this is a practice game that should not count for score
+
+        CompletableFuture.runAsync(() -> practiceGame.run()).join();
+
+        LOG.info("Practice game ended");
+
+        // Store the practice game as currSkatGame so that another practice can be requested
+        currSkatGame = practiceGame;
+
+        // Clear the practice deck
+        practiceDeck = null;
     }
 
     /**

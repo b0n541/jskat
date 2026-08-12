@@ -61,6 +61,10 @@ public enum JSkatAction {
      */
     REPLAY_GAME,
     /**
+     * Practices a game with the same card deal (doesn't count for score)
+     */
+    PRACTICE_GAME_WITH_SAME_CARDS,
+    /**
      * Plays the next replay step
      */
     NEXT_REPLAY_STEP,
