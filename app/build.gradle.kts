@@ -16,7 +16,7 @@ dependencies {
 
 javafx {
     modules = listOf("javafx.base", "javafx.fxml", "javafx.web", "javafx.swing")
-    version = "26.0.1"
+    version = "26.0.2"
 }
 
 version = "0.24.0-SNAPSHOT"
@@ -51,6 +51,6 @@ tasks.register("fatjar", Jar::class.java) {
     dependsOn(configurations.runtimeClasspath)
     from(
         configurations.runtimeClasspath.get()
-        .onEach { println("add from dependencies : ${it.name}") }
-        .map { if (it.isDirectory) it else zipTree(it) })
+            .onEach { println("add from dependencies : ${it.name}") }
+            .map { if (it.isDirectory) it else zipTree(it) })
 }

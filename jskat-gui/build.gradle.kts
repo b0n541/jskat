@@ -12,5 +12,5 @@ dependencies {
 
 javafx {
     modules = listOf("javafx.base", "javafx.fxml", "javafx.web", "javafx.swing")
-    version = "26.0.1"
+    version = "26.0.2"
 }
