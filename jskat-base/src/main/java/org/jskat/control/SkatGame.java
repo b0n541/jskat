@@ -943,15 +943,13 @@ public class SkatGame {
 
         view = newView;
 
-        if (view != null) {
-            // Wrap AI players with delay wrapper
+        if (view != null && view.usesAiActionDelay()) {
             wrapAiPlayers();
         }
     }
 
     /**
-     * Wraps all AI players with the delay wrapper.
-     * This centralizes the delay logic without modifying AI player implementations.
+     * Wraps all AI players with a delay when the game is visible to a human.
      */
     private void wrapAiPlayers() {
         for (final Player pos : Player.values()) {

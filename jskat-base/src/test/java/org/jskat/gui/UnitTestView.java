@@ -30,6 +30,11 @@ public class UnitTestView implements JSkatView {
         JSkatEventBus.INSTANCE.register(this);
     }
 
+    @Override
+    public boolean usesAiActionDelay() {
+        return false;
+    }
+
     @Subscribe
     public void handle(final TableCreatedEvent event) {
         tables.add(event.tableName());

@@ -16,6 +16,15 @@ import java.util.Set;
 public interface JSkatView {
 
     /**
+     * Whether AI actions should be paced for a human watching the game.
+     *
+     * @return {@code true} for interactive views
+     */
+    default boolean usesAiActionDelay() {
+        return true;
+    }
+
+    /**
      * Gets a new table name from the view
      *
      * @param localTablesCreated Local tables created so far
