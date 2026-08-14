@@ -969,18 +969,21 @@ public final class JSkatOptions {
 
     private void loadOptions() throws IOException {
 
-        FileInputStream stream = null;
+        final Properties loadedOptions = new Properties();
 
         try {
-            stream = new FileInputStream(new File(savePathResolver.getCurrentWorkingDirectory(), PROPERTIES_FILENAME));
             setSavePath(SavePath.WORKING_DIRECTORY);
+            try (final FileInputStream stream = new FileInputStream(
+                    new File(savePathResolver.getCurrentWorkingDirectory(), PROPERTIES_FILENAME))) {
+                loadedOptions.load(stream);
+            }
         } catch (final FileNotFoundException e) {
-            stream = new FileInputStream(new File(savePathResolver.getDefaultSavePath(), PROPERTIES_FILENAME));
             setSavePath(SavePath.USER_HOME);
+            try (final FileInputStream stream = new FileInputStream(
+                    new File(savePathResolver.getDefaultSavePath(), PROPERTIES_FILENAME))) {
+                loadedOptions.load(stream);
+            }
         }
-
-        final Properties loadedOptions = new Properties();
-        loadedOptions.load(stream);
 
         final Enumeration<Object> props = loadedOptions.keys();
         String property;
