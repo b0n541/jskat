@@ -30,7 +30,7 @@ val generateApplicationVersionSource by tasks.registering {
     }
 
     inputs.property("applicationVersion", applicationVersion)
-    outputs.file(outputFile)
+    outputs.dir(generatedVersionSourceDirectory)
 
     doLast {
         outputFile.get().asFile.apply {
@@ -50,12 +50,8 @@ val generateApplicationVersionSource by tasks.registering {
 
 kotlin {
     sourceSets.named("main") {
-        kotlin.srcDir(generatedVersionSourceDirectory)
+        kotlin.srcDir(generateApplicationVersionSource)
     }
-}
-
-tasks.named("compileKotlin") {
-    dependsOn(generateApplicationVersionSource)
 }
 
 val mainClassName = "org.jskat.JSkatKt"
