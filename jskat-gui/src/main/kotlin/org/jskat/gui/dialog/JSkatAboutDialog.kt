@@ -15,17 +15,29 @@ class JSkatAboutDialog(
     owner: Window? = null
 ) : Alert(AlertType.INFORMATION) {
 
-    private val strings = JSkatResourceBundle.INSTANCE
+    private val content = JSkatAboutDialogContent(applicationVersion)
 
     init {
         if (owner != null) {
             initOwner(owner)
         }
 
-        title = strings.getString("about")
-        headerText = "JSkat ${strings.getString("version")} $applicationVersion"
+        title = content.title
+        headerText = content.headerText
         graphic = ImageView(JSkatGraphicRepository.INSTANCE.jSkatLogoImageFX)
-        contentText = """
+        contentText = content.text
+        dialogPane.minWidth = 600.0
+        dialogPane.buttonTypes.setAll(ButtonType.CLOSE)
+    }
+}
+
+internal class JSkatAboutDialogContent(applicationVersion: String) {
+
+    private val strings = JSkatResourceBundle.INSTANCE
+
+    val title = strings.getString("about")
+    val headerText = "JSkat ${strings.getString("version")} $applicationVersion"
+    val text = """
             https://www.jskat.org
             https://github.com/b0n541/jskat
 
@@ -50,7 +62,4 @@ class JSkatAboutDialog(
             This is free software, and you are welcome to redistribute it
             under certain conditions; see licence dialog for details.
         """.trimIndent()
-        dialogPane.minWidth = 600.0
-        dialogPane.buttonTypes.setAll(ButtonType.CLOSE)
-    }
 }
