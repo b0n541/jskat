@@ -14,5 +14,5 @@ javafx {
 }
 
 tasks.named<Jar>("jar") {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    duplicatesStrategy = DuplicatesStrategy.FAIL
 }
