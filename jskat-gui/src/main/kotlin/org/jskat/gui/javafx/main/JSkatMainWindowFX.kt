@@ -8,6 +8,8 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import org.jskat.control.JSkatEventBus
 import org.jskat.control.JSkatMaster
+import org.jskat.control.command.general.HideToolbarCommand
+import org.jskat.control.command.general.ShowToolbarCommand
 import org.jskat.control.command.iss.IssDisconnectCommand
 import org.jskat.control.command.iss.IssInvitePlayerCommand
 import org.jskat.control.command.iss.IssShowLoginCommand
@@ -15,11 +17,13 @@ import org.jskat.control.command.table.RequestCreateTableCommand
 import org.jskat.control.command.table.RemoveTableCommand
 import org.jskat.control.command.table.StartSkatSeriesCommand
 import org.jskat.control.event.iss.*
+import org.jskat.control.event.table.SkatGameStateChangedEvent
 import org.jskat.control.event.table.TableCreatedEvent
 import org.jskat.control.event.table.TableRemovedEvent
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.JSkatApplicationData
+import org.jskat.data.JSkatOptions
 import org.jskat.data.JSkatViewType
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
@@ -42,6 +46,8 @@ class JSkatMainWindowFX : VBox() {
     private val actions = JSkatActions.actionMap
 
     private val tabs: TabPane = TabPane()
+    private val toolbar = ToolBar()
+    private val toolbarVisibility = JavaFxGlobalControls.ToolbarVisibility()
     private lateinit var issLobby: IssLobbyPanel
 
     init {
@@ -49,12 +55,12 @@ class JSkatMainWindowFX : VBox() {
 
         val menuBar = JSkatMenuFactory.build()
 
-        val toolbar = ToolBar()
         toolbar.items.addAll(
             createToolbarButton(actions[JSkatAction.CREATE_LOCAL_TABLE]!!),
+            createToolbarButtonWithActiveTableContext(actions[JSkatAction.START_LOCAL_SERIES]!!),
+            createToolbarButton(actions[JSkatAction.SHOW_ISS_LOGIN]!!),
             createToolbarButtonWithActiveTableContext(actions[JSkatAction.REPLAY_GAME]!!),
             createToolbarButtonWithActiveTableContext(actions[JSkatAction.NEXT_REPLAY_STEP]!!),
-            createToolbarButton(actions[JSkatAction.SHOW_ISS_LOGIN]!!),
             createToolbarButton(actions[JSkatAction.PREFERENCES]!!),
             createToolbarButton(actions[JSkatAction.HELP]!!),
             createToolbarButton(actions[JSkatAction.ABOUT_JSKAT]!!)
@@ -115,6 +121,34 @@ class JSkatMainWindowFX : VBox() {
                     actions[JSkatAction.START_LOCAL_SERIES]?.isEnabled = true
                 }
             }
+        }
+    }
+
+    @Subscribe
+    fun hideToolbarOn(command: HideToolbarCommand) {
+        toolbarVisibility.hide(command)
+        Platform.runLater {
+            renderToolbarVisibility()
+        }
+    }
+
+    @Subscribe
+    fun showToolbarOn(command: ShowToolbarCommand) {
+        toolbarVisibility.show(command)
+        Platform.runLater {
+            renderToolbarVisibility()
+        }
+    }
+
+    @Subscribe
+    fun setGameStateOn(event: SkatGameStateChangedEvent) {
+        Platform.runLater {
+            JavaFxGlobalControls.applyGameState(
+                data.activeTable,
+                event,
+                JSkatOptions.instance().isPlayContra,
+                actions
+            )
         }
     }
 
@@ -262,14 +296,21 @@ class JSkatMainWindowFX : VBox() {
         return Button(action.getValue(AbstractJSkatAction.NAME).toString()).apply {
             graphic = bitmaps.getImageView(action.icon, IconSize.SMALL)
             tooltip = Tooltip(action.tooltip)
+            disableProperty().bind(action.enabledProperty().not())
             onAction = EventHandler { action.actionPerformed(JSkatActionEvent(data.activeTable, it.source)) }
         }
+    }
+
+    private fun renderToolbarVisibility() {
+        toolbar.isVisible = toolbarVisibility.isVisible
+        toolbar.isManaged = toolbarVisibility.isVisible
     }
 
     private fun createToolbarButton(action: AbstractJSkatAction): Button {
         return Button(action.getValue(AbstractJSkatAction.NAME).toString()).apply {
             graphic = bitmaps.getImageView(action.icon, IconSize.SMALL)
             tooltip = Tooltip(action.tooltip)
+            disableProperty().bind(action.enabledProperty().not())
             onAction = EventHandler { action.actionPerformed(null) }
         }
     }

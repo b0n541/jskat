@@ -14,3 +14,7 @@ javafx {
     modules = listOf("javafx.base", "javafx.fxml", "javafx.web", "javafx.swing")
     version = "26.0.2"
 }
+
+tasks.named<Jar>("jar") {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}

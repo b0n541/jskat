@@ -108,10 +108,7 @@ class JSkatViewFX(
 
     @Subscribe
     fun showErrorMessageOn(event: InvalidNumberOfCardsInDiscardedSkatEvent) {
-        showErrorMessage(
-            strings.getString("invalid_number_of_cards_in_skat_title"),
-            strings.getString("invalid_number_of_cards_in_skat_message")
-        )
+        showError(JavaFxFeedback.invalidNumberOfDiscardedCards())
     }
 
     @Subscribe
@@ -124,6 +121,21 @@ class JSkatViewFX(
                 strings.getRankStringForCardFace(event.card.rank)
             )
         )
+    }
+
+    @Subscribe
+    fun showErrorMessageOn(event: NoJacksAllowedInDiscardedSkatEvent) {
+        showError(JavaFxFeedback.noJacksAllowedInDiscardedSkat())
+    }
+
+    @Subscribe
+    fun showErrorMessageOn(event: DuplicateTableNameInputEvent) {
+        showError(JavaFxFeedback.duplicateTableName(event.tableName))
+    }
+
+    @Subscribe
+    fun showErrorMessageOn(event: EmptyTableNameInputEvent) {
+        showError(JavaFxFeedback.emptyTableName())
     }
 
     override fun updateISSMove(tableName: String, gameData: SkatGameData, moveInformation: MoveInformation) {
@@ -274,11 +286,11 @@ class JSkatViewFX(
     }
 
     override fun showAIPlayedSchwarzMessageDiscarding(playerName: String, discardedCards: CardList) {
-        TODO("Not yet implemented showAIPlayedSchwarzMessageDiscarding: $playerName, $discardedCards")
+        showMessage(JavaFxFeedback.schwarzDiscarding(playerName, discardedCards))
     }
 
     override fun showAIPlayedSchwarzMessageCardPlay(playerName: String, card: Card) {
-        TODO("Not yet implemented showAIPlayedSchwarzMessageCardPlay: $playerName, $card")
+        showMessage(JavaFxFeedback.schwarzCardPlay(playerName, card))
     }
 
     override fun setSkat(tableName: String?, skat: CardList?) {
@@ -293,6 +305,14 @@ class JSkatViewFX(
         } else {
             Platform.runLater { mainWindow.tablePanel(tableName)?.let(action) }
         }
+    }
+
+    private fun showError(feedback: JavaFxFeedback) {
+        showErrorMessage(feedback.title, feedback.message)
+    }
+
+    private fun showMessage(feedback: JavaFxFeedback) {
+        showMessage(feedback.title, feedback.message)
     }
 
     private fun <T> runOnFxThread(action: () -> T): T =
