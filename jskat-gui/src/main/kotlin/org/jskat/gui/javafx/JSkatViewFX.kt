@@ -5,6 +5,7 @@ import javafx.application.Platform
 import javafx.scene.control.Alert
 import javafx.stage.Modality
 import org.jskat.control.JSkatEventBus
+import org.jskat.control.command.general.ShowAboutInformationCommand
 import org.jskat.control.command.general.ShowHelpCommand
 import org.jskat.control.command.general.ShowLicenseCommand
 import org.jskat.control.command.general.ShowPreferencesCommand
@@ -19,6 +20,7 @@ import org.jskat.data.SkatGameData.GameState
 import org.jskat.data.iss.MoveInformation
 import org.jskat.data.iss.MoveType
 import org.jskat.gui.javafx.dialog.help.JSkatHelpDialog
+import org.jskat.gui.dialog.JSkatAboutDialog
 import org.jskat.gui.javafx.dialog.options.JSkatOptionsDialog
 import org.jskat.gui.javafx.iss.IssPlayerInvitationDialog
 import org.jskat.gui.javafx.main.JSkatMainWindowFX
@@ -40,6 +42,13 @@ class JSkatViewFX(
 
     init {
         JSkatEventBus.INSTANCE.register(this)
+    }
+
+    @Subscribe
+    fun showAboutDialogOn(command: ShowAboutInformationCommand) {
+        Platform.runLater {
+            JSkatAboutDialog(mainWindow.scene?.window).showAndWait()
+        }
     }
 
     @Subscribe

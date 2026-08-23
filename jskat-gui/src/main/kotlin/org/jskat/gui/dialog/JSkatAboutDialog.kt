@@ -1,0 +1,57 @@
+package org.jskat.gui.dialog
+
+import javafx.scene.control.Alert
+import javafx.scene.control.ButtonType
+import javafx.scene.image.ImageView
+import javafx.stage.Window
+import org.jskat.gui.img.JSkatGraphicRepository
+import org.jskat.util.JSkatResourceBundle
+
+/**
+ * Native JavaFX replacement for the About dialog that was available in v0.23.
+ */
+class JSkatAboutDialog(owner: Window? = null) : Alert(AlertType.INFORMATION) {
+
+    private val strings = JSkatResourceBundle.INSTANCE
+
+    init {
+        if (owner != null) {
+            initOwner(owner)
+        }
+
+        title = strings.getString("about")
+        headerText = "JSkat ${strings.getString("version")} $APPLICATION_VERSION"
+        graphic = ImageView(JSkatGraphicRepository.INSTANCE.jSkatLogoImageFX)
+        contentText = """
+            https://www.jskat.org
+            https://github.com/b0n541/jskat
+
+            ${strings.getString("authors")}:
+            Jan Schäfer (jnschfr@gmail.com)
+            Markus J. Luzius (jskat@luzius.de)
+            Daniel Loreck (daniel.loreck@gmail.com)
+            Sascha Laurien
+            Slovasim
+            Martin Rothe
+            Tobias Markus
+
+            ${strings.getString("cards")}: International Skat Server, KDE project, OpenClipart.org
+
+            ${strings.getString("icons")}: Gnome Desktop Icons, Tango project, Elementary icons,
+            Silvestre Herrera, Alex Roberts and Icojoy
+
+            ${strings.getString("background_image")}: webtreats
+
+            This program comes with ABSOLUTELY NO WARRANTY;
+            for details see licence dialog.
+            This is free software, and you are welcome to redistribute it
+            under certain conditions; see licence dialog for details.
+        """.trimIndent()
+        dialogPane.minWidth = 600.0
+        dialogPane.buttonTypes.setAll(ButtonType.CLOSE)
+    }
+
+    private companion object {
+        const val APPLICATION_VERSION = "0.24.0-SNAPSHOT"
+    }
+}
