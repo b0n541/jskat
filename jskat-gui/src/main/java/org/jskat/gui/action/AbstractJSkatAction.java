@@ -6,7 +6,6 @@ import javafx.scene.control.MenuItem;
 import org.jskat.control.JSkatEventBus;
 import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.control.gui.action.JSkatActionEvent;
-import org.jskat.gui.img.JSkatGraphicRepository;
 import org.jskat.gui.img.JSkatGraphicRepository.Icon;
 import org.jskat.util.JSkatResourceBundle;
 
@@ -18,10 +17,6 @@ import java.util.Map;
  */
 public abstract class AbstractJSkatAction {
     /**
-     * JSkat graphics repository
-     */
-    protected final static JSkatGraphicRepository BITMAPS = JSkatGraphicRepository.INSTANCE;
-    /**
      * JSkat i18n strings
      */
     protected final static JSkatResourceBundle STRINGS = JSkatResourceBundle.INSTANCE;
@@ -32,8 +27,6 @@ public abstract class AbstractJSkatAction {
 
     public final static String NAME = "Name";
     public final static String SHORT_DESCRIPTION = "ShortDescription";
-    public final static String SMALL_ICON = "SmallIcon";
-    public final static String LARGE_ICON_KEY = "LargeIconKey";
     public final static String ACTION_COMMAND_KEY = "ActionCommandKey";
 
     // deprecated: replace with dedicated fields for text and icons
@@ -66,10 +59,8 @@ public abstract class AbstractJSkatAction {
         return values.get(key);
     }
 
-    protected void setIcon(JSkatGraphicRepository.Icon icon) {
+    protected void setIcon(Icon icon) {
         this.icon = icon;
-        putValue(SMALL_ICON, BITMAPS.getIconImage(icon, JSkatGraphicRepository.IconSize.SMALL));
-        putValue(LARGE_ICON_KEY, BITMAPS.getIconImage(icon, JSkatGraphicRepository.IconSize.BIG));
     }
 
     public Icon getIcon() {

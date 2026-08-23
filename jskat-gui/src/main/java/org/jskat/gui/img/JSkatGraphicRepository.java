@@ -1,5 +1,6 @@
 package org.jskat.gui.img;
 
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.jskat.control.gui.img.CardSet;
 import org.jskat.data.JSkatOptions;
@@ -8,7 +9,6 @@ import org.jskat.util.JSkatResourceBundle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,19 +25,10 @@ public class JSkatGraphicRepository {
 
     private static final JSkatOptions options = JSkatOptions.instance();
 
-    private Image skatTable;
-
     private Map<CardSet, Map<Card, Image>> cards;
-
     private Map<CardSet, Image> cardBacks;
-
-    private List<List<Image>> awtIcons;
-    private Map<Icon, Map<IconSize, javafx.scene.image.Image>> icons;
-
+    private Map<Icon, Map<IconSize, Image>> icons;
     private List<Image> flags;
-
-    private Image jskatLogo;
-
     private List<Image> bidBubbles;
 
     /**
@@ -53,165 +44,76 @@ public class JSkatGraphicRepository {
     }
 
     private void loadAllJSkatImages() {
-        final MediaTracker tracker = new MediaTracker(new Canvas());
+        loadBidBubbles();
 
-        loadImages(tracker);
-
-        log.debug("Bitmaps for JSkat logo and skat table loaded...");
-
-        awtIcons = new ArrayList<List<Image>>();
         icons = new HashMap<>();
-        loadIcons(tracker);
+        loadIcons();
 
         log.debug("Bitmaps for icons loaded...");
 
-        cards = new HashMap<CardSet, Map<Card, Image>>();
-        cardBacks = new HashMap<CardSet, Image>();
-        loadCards(tracker);
+        cards = new HashMap<>();
+        cardBacks = new HashMap<>();
+        loadCards();
 
         log.debug("Bitmaps for cards loaded...");
 
         flags = new ArrayList<>();
-        loadFlags(tracker);
+        loadFlags();
 
         log.debug("Bitmaps for flags loaded...");
     }
 
-    private void loadFlags(final MediaTracker tracker) {
-        // for all flags
+    private void loadFlags() {
         for (final Flag flag : Flag.values()) {
-            // add flag
-            flags.add(Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/"
-                    + "flag_" + flag.toString().toLowerCase() + ".png")));
-            tracker.addImage(flags.get(flag.ordinal()), 3);
-        }
-
-        try {
-            tracker.waitForID(3);
-        } catch (final InterruptedException e) {
-            e.printStackTrace();
+            flags.add(loadGuiImage("flag_" + flag.toString().toLowerCase() + ".png"));
         }
     }
 
-    private void loadImages(final MediaTracker tracker) {
-        skatTable = Toolkit.getDefaultToolkit()
-                .getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/skat_table.png"));
-        tracker.addImage(skatTable, 0);
-        jskatLogo = Toolkit.getDefaultToolkit()
-                .getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/jskat_logo.png"));
-        tracker.addImage(jskatLogo, 0);
-
+    private void loadBidBubbles() {
         bidBubbles = new ArrayList<>();
-        bidBubbles.add(Toolkit.getDefaultToolkit()
-                .getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/bid_left.png")));
-        bidBubbles.add(Toolkit.getDefaultToolkit()
-                .getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/bid_right.png")));
-        bidBubbles.add(Toolkit.getDefaultToolkit()
-                .getImage(ClassLoader.getSystemResource("org/jskat/gui/img/gui/bid_user.png")));
-        tracker.addImage(bidBubbles.get(0), 0);
-        tracker.addImage(bidBubbles.get(1), 0);
-        tracker.addImage(bidBubbles.get(2), 0);
-        try {
-            tracker.waitForID(0);
-        } catch (final InterruptedException e) {
-            e.printStackTrace();
-        }
+        bidBubbles.add(loadGuiImage("bid_left.png"));
+        bidBubbles.add(loadGuiImage("bid_right.png"));
+        bidBubbles.add(loadGuiImage("bid_user.png"));
     }
 
     /**
      * Loads all icons
      */
-    private void loadIcons(final MediaTracker tracker) {
-
-        // for all icons
+    private void loadIcons() {
         for (final Icon icon : Icon.values()) {
-
-            // new array list for all sizes
-            awtIcons.add(new ArrayList<>());
             icons.put(icon, new HashMap<>());
-
-            // for all sizes
             for (final IconSize size : IconSize.values()) {
-
-                // add icon
-                awtIcons.get(icon.ordinal())
-                        .add(Toolkit.getDefaultToolkit().getImage(ClassLoader
-                                .getSystemResource("org/jskat/gui/img/gui/"
-                                        // $NON-NLS-1$
-                                        + icon.toString().toLowerCase() + '_'
-                                        + size.toString().toLowerCase()
-                                        + ".png")));
-                tracker.addImage(
-                        awtIcons.get(icon.ordinal()).get(size.ordinal()),
-                        1);
-
-                String path = "/org/jskat/gui/img/gui/"
-                        + icon.toString().toLowerCase() + '_' + size.toString().toLowerCase() + ".png";
-                icons.get(icon).put(size, new javafx.scene.image.Image(getClass().getResourceAsStream(path)));
+                icons.get(icon).put(size, loadGuiImage(
+                        icon.toString().toLowerCase() + '_' + size.toString().toLowerCase() + ".png"));
             }
-        }
-
-        try {
-            tracker.waitForID(1);
-        } catch (final InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
     /**
      * Load all card images.
-     *
-     * @param tracker Media tracker for loading images
      */
-    private void loadCards(final MediaTracker tracker) {
-
-        cards.clear();
+    private void loadCards() {
         for (final CardSet set : CardSet.values()) {
-
-            cards.put(set, new HashMap<Card, Image>());
-
+            cards.put(set, new HashMap<>());
             for (final Card card : Card.values()) {
-
                 cards.get(set).put(card,
-                        Toolkit.getDefaultToolkit()
-                                .getImage(ClassLoader.getSystemResource("org/jskat/gui/img/card/"
-                                        + set.getCardFace().toString().toLowerCase() + "/"
-                                        + getCardSetNameInLowerCase(set) + "/" + getImageFileName(card) + "."
-                                        + set.getFileType())));
-
-                tracker.addImage(cards.get(set).get(card), 2);
+                        loadImage("/org/jskat/gui/img/card/"
+                                + set.getCardFace().toString().toLowerCase() + "/"
+                                + getCardSetNameInLowerCase(set) + "/" + getImageFileName(card) + "."
+                                + set.getFileType()));
             }
-
-            cardBacks.put(set, Toolkit.getDefaultToolkit().getImage(ClassLoader.getSystemResource(
-                    "org/jskat/gui/img/card/back/" + getCardSetNameInLowerCase(set) + "." + set.getFileType())));
-            tracker.addImage(cardBacks.get(set), 2);
-        }
-        try {
-            tracker.waitForID(2);
-        } catch (final InterruptedException e) {
-            e.printStackTrace();
+            cardBacks.put(set, loadImage(
+                    "/org/jskat/gui/img/card/back/" + getCardSetNameInLowerCase(set) + "." + set.getFileType()));
         }
     }
 
     public String getImageFileName(final Card card) {
 
-        return (card.getSuit().getShortString() + "-" + card.getRank().getShortString());
+        return card.getSuit().getShortString() + "-" + card.getRank().getShortString();
     }
 
     private String getCardSetNameInLowerCase(final CardSet set) {
         return set.getCardSetName().toLowerCase().replace(" ", "");
-    }
-
-    /**
-     * Gets an icon image
-     *
-     * @param icon Icon name
-     * @param size Icon size
-     * @return The icon image
-     */
-    public Image getIconImage(final Icon icon, final IconSize size) {
-
-        return awtIcons.get(icon.ordinal()).get(size.ordinal());
     }
 
     /**
@@ -225,131 +127,41 @@ public class JSkatGraphicRepository {
         return new ImageView(icons.get(icon).get(size));
     }
 
-    /**
-     * Gets the card image
-     *
-     * @param card Card
-     * @return The card image
-     */
-    public Image getCardImage(final Card card) {
-
-        Image result = null;
-
-        if (card != null) {
-
-            result = cards.get(options.getCardSet()).get(card);
-        } else {
-
-            result = cardBacks.get(CardSet.ISS_GERMAN);
-        }
-
-        return result;
-    }
-
-    public javafx.scene.image.Image getCardImageFX(final Card card) {
+    public Image getCardImageFX(final Card card) {
         final CardSet set = options.getCardSet();
-        final String path;
-        if (card != null) {
-            path = "/org/jskat/gui/img/card/"
-                    + set.getCardFace().toString().toLowerCase() + "/"
-                    + getCardSetNameInLowerCase(set) + "/" + getImageFileName(card) + "."
-                    + set.getFileType();
-        } else {
-            path = "/org/jskat/gui/img/card/back/" + getCardSetNameInLowerCase(set) + "." + set.getFileType();
-        }
-        return new javafx.scene.image.Image(getClass().getResourceAsStream(path));
+        return card == null ? cardBacks.get(set) : cards.get(set).get(card);
     }
 
-    /**
-     * Gets a flag image
-     *
-     * @param flag Flag
-     * @return Flag image
-     */
-    public Image getFlagImage(final Flag flag) {
+    public Image getFlagImageFX(final Flag flag) {
         return flags.get(flag.ordinal());
     }
 
-    /**
-     * Gets a flag image for the JavaFX UI.
-     *
-     * @param flag Flag
-     * @return JavaFX flag image
-     */
-    public javafx.scene.image.Image getFlagImageFX(final Flag flag) {
-        String path = "/org/jskat/gui/img/gui/flag_" + flag.toString().toLowerCase() + ".png";
-        return new javafx.scene.image.Image(getClass().getResourceAsStream(path));
+    public Image getSkatTableImageFX() {
+        return loadGuiImage("skat_table.png");
     }
 
-    /**
-     * Gets the image for the skat table
-     *
-     * @return The image for the skat table
-     */
-    public Image getSkatTableImage() {
-
-        return skatTable;
+    public Image getJSkatLogoImageFX() {
+        return loadGuiImage("jskat_logo.png");
     }
 
-    public javafx.scene.image.Image getSkatTableImageFX() {
-        return new javafx.scene.image.Image(getClass().getResourceAsStream("/org/jskat/gui/img/gui/skat_table.png"));
-    }
-
-    /**
-     * Gets the image for the JSkat logo
-     *
-     * @return The image for the JSkat logo
-     */
-    public Image getJSkatLogoImage() {
-
-        return jskatLogo;
-    }
-
-    public javafx.scene.image.Image getJSkatLogoImageFX() {
-        return new javafx.scene.image.Image(getClass().getResourceAsStream("/org/jskat/gui/img/gui/jskat_logo.png"));
-    }
-
-    /**
-     * Gets the image for the left opponent bid bubble
-     *
-     * @return Image for the left opponent bid bubble
-     */
-    public Image getLeftBidBubble() {
+    public Image getLeftBidBubbleFX() {
         return bidBubbles.get(0);
     }
 
-    public javafx.scene.image.Image getLeftBidBubbleFX() {
-        return getGuiImageFX("bid_left.png");
-    }
-
-    /**
-     * Gets the image for the right opponent bid bubble
-     *
-     * @return Image for the right opponent bid bubble
-     */
-    public Image getRightBidBubble() {
+    public Image getRightBidBubbleFX() {
         return bidBubbles.get(1);
     }
 
-    public javafx.scene.image.Image getRightBidBubbleFX() {
-        return getGuiImageFX("bid_right.png");
-    }
-
-    /**
-     * Gets the image for the user bid bubble
-     *
-     * @return Image for the user bid bubble
-     */
-    public Image getUserBidBubble() {
+    public Image getUserBidBubbleFX() {
         return bidBubbles.get(2);
     }
 
-    public javafx.scene.image.Image getUserBidBubbleFX() {
-        return getGuiImageFX("bid_user.png");
+    private Image loadGuiImage(final String fileName) {
+        return loadImage("/org/jskat/gui/img/gui/" + fileName);
     }
 
-    private javafx.scene.image.Image getGuiImageFX(final String fileName) {
-        return new javafx.scene.image.Image(getClass().getResourceAsStream("/org/jskat/gui/img/gui/" + fileName));
+    private Image loadImage(final String path) {
+        return new Image(getClass().getResourceAsStream(path));
     }
 
     /**
