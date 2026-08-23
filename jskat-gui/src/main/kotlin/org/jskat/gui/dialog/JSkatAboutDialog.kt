@@ -10,7 +10,10 @@ import org.jskat.util.JSkatResourceBundle
 /**
  * Native JavaFX replacement for the About dialog that was available in v0.23.
  */
-class JSkatAboutDialog(owner: Window? = null) : Alert(AlertType.INFORMATION) {
+class JSkatAboutDialog(
+    private val applicationVersion: String,
+    owner: Window? = null
+) : Alert(AlertType.INFORMATION) {
 
     private val strings = JSkatResourceBundle.INSTANCE
 
@@ -20,7 +23,7 @@ class JSkatAboutDialog(owner: Window? = null) : Alert(AlertType.INFORMATION) {
         }
 
         title = strings.getString("about")
-        headerText = "JSkat ${strings.getString("version")} $APPLICATION_VERSION"
+        headerText = "JSkat ${strings.getString("version")} $applicationVersion"
         graphic = ImageView(JSkatGraphicRepository.INSTANCE.jSkatLogoImageFX)
         contentText = """
             https://www.jskat.org
@@ -49,9 +52,5 @@ class JSkatAboutDialog(owner: Window? = null) : Alert(AlertType.INFORMATION) {
         """.trimIndent()
         dialogPane.minWidth = 600.0
         dialogPane.buttonTypes.setAll(ButtonType.CLOSE)
-    }
-
-    private companion object {
-        const val APPLICATION_VERSION = "0.24.0-SNAPSHOT"
     }
 }

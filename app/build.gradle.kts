@@ -21,6 +21,43 @@ javafx {
 
 version = "0.24.0-SNAPSHOT"
 
+val applicationVersion = version.toString()
+val generatedVersionSourceDirectory = layout.buildDirectory.dir("generated/sources/application-version/kotlin")
+
+val generateApplicationVersionSource by tasks.registering {
+    val outputFile = generatedVersionSourceDirectory.map {
+        it.file("org/jskat/ApplicationVersion.kt")
+    }
+
+    inputs.property("applicationVersion", applicationVersion)
+    outputs.file(outputFile)
+
+    doLast {
+        outputFile.get().asFile.apply {
+            parentFile.mkdirs()
+            writeText(
+                """
+                package org.jskat
+
+                internal object ApplicationVersion {
+                    const val VALUE = "$applicationVersion"
+                }
+                """.trimIndent() + "\n"
+            )
+        }
+    }
+}
+
+kotlin {
+    sourceSets.named("main") {
+        kotlin.srcDir(generatedVersionSourceDirectory)
+    }
+}
+
+tasks.named("compileKotlin") {
+    dependsOn(generateApplicationVersionSource)
+}
+
 val mainClassName = "org.jskat.JSkatKt"
 
 application {

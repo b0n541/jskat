@@ -32,7 +32,7 @@ class JSkatAboutDialogTest {
     @Test
     fun `recreates the v0 23 about information in a JavaFX dialog`() {
         onJavaFxThread {
-            val dialog = JSkatAboutDialog()
+            val dialog = JSkatAboutDialog("0.24.0-SNAPSHOT")
 
             assertThat(dialog.title).isEqualTo(JSkatResourceBundle.INSTANCE.getString("about"))
             assertThat(dialog.headerText).isEqualTo("JSkat Version 0.24.0-SNAPSHOT")

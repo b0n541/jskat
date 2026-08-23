@@ -34,7 +34,8 @@ import java.util.concurrent.FutureTask
 class JSkatViewFX(
     val mainWindow: JSkatMainWindowFX,
     private val human: AbstractHumanJSkatPlayer,
-    private val documentOpener: JavaFxHostDocumentOpener
+    private val documentOpener: JavaFxHostDocumentOpener,
+    private val applicationVersion: String
 ) : JSkatView {
 
     private val log = LoggerFactory.getLogger(JSkatViewFX::class.java)
@@ -47,7 +48,7 @@ class JSkatViewFX(
     @Subscribe
     fun showAboutDialogOn(command: ShowAboutInformationCommand) {
         Platform.runLater {
-            JSkatAboutDialog(mainWindow.scene?.window).showAndWait()
+            JSkatAboutDialog(applicationVersion, mainWindow.scene?.window).showAndWait()
         }
     }
 

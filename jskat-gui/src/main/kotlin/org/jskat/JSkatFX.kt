@@ -38,7 +38,12 @@ class JSkatFX : Application() {
 
         // TODO: Replace with better approach
         val human = SwingHumanPlayer()
-        val jskatView = JSkatViewFX(JSkatMainWindowFX(), human, JavaFxHostDocumentOpener(hostServices::showDocument))
+        val jskatView = JSkatViewFX(
+            JSkatMainWindowFX(),
+            human,
+            JavaFxHostDocumentOpener(hostServices::showDocument),
+            applicationVersion
+        )
         jskatMaster.view = jskatView
 
         stage.title = "JSkat"
@@ -88,8 +93,11 @@ class JSkatFX : Application() {
     }
 
     companion object {
+        private lateinit var applicationVersion: String
+
         @JvmStatic
-        fun main(args: Array<String>) {
+        fun main(args: Array<String>, applicationVersion: String) {
+            this.applicationVersion = applicationVersion
             JSkatOptions.instance(DesktopSavePathResolver())
             launch(JSkatFX::class.java)
         }
