@@ -52,8 +52,6 @@ class SkatTableNode(val skatTablePanel: SkatTablePanel) : SplitPane() {
             tabPane.tabs.add(chatTab)
         }
 
-        tabPane.stylesheets.add("/org/jskat/gui/javafx/jskat.css")
-
         val result = VBox()
         VBox.setVgrow(tabPane, Priority.ALWAYS)
         result.children.add(tabPane)

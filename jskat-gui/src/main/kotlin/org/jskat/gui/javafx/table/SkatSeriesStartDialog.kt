@@ -52,8 +52,6 @@ class SkatSeriesStartDialog(owner: Node?) {
         // Use a safe call to handle the nullable owner
         dialog.initOwner(owner?.scene?.window)
 
-        dialog.dialogPane.stylesheets.add("/org/jskat/gui/javafx/jskat.css")
-
         dialog.dialogPane.content = createContentPane()
         setupButtons()
         setupResultConverter()

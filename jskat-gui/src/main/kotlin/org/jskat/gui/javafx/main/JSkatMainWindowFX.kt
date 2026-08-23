@@ -332,8 +332,6 @@ class JSkatMainWindowFX : VBox() {
         dialog.title = strings.getString("new.table.dialog.title")
         dialog.headerText = strings.getString("new.table.dialog.message")
         dialog.contentText = strings.getString("name")
-        dialog.dialogPane.stylesheets.add("/org/jskat/gui/javafx/jskat.css")
-
         dialog.showAndWait().ifPresent { tableName ->
             val submittedTableName = JavaFxTableLifecycle.submittedTableName(tableName)
             if (!JavaFxTableLifecycle.isValidTableName(submittedTableName)) {

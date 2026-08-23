@@ -77,10 +77,7 @@ class FirstStepsDialog(owner: Window, documentOpener: JavaFxHostDocumentOpener) 
 
         loadFirstStepsText()
 
-        this.scene = Scene(root, 600.0, 400.0).apply {
-            // TODO remove when Swing has been retired
-            stylesheets.add("/org/jskat/gui/javafx/jskat.css")
-        }
+        this.scene = Scene(root, 600.0, 400.0)
     }
 
     private fun loadFirstStepsText() {

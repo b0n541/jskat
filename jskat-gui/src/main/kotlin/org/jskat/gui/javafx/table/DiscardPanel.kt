@@ -34,8 +34,6 @@ class DiscardPanel(
         get() = CardList(cards)
 
     init {
-        stylesheets.add("/org/jskat/gui/javafx/jskat.css")
-
         alignment = Pos.CENTER
 
         pickUpSkatButton.graphic = bitmaps.getImageView(Icon.PLAY, JSkatGraphicRepository.IconSize.BIG)
@@ -103,7 +101,6 @@ class DiscardPanel(
 
     fun setAnnouncePanel(announcePanel: GameAnnouncePanel) {
         this.announcePanel = announcePanel
-        announcePanel.stylesheets.add("/org/jskat/gui/javafx/jskat.css")
     }
 
     private fun updateView() {

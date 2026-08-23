@@ -53,8 +53,6 @@ class GameAnnouncePanel(
 
     private fun initPanel() {
 
-        stylesheets.add("/org/jskat/gui/javafx/jskat.css")
-
         padding = Insets(10.0)
         hgap = 10.0
         vgap = 5.0

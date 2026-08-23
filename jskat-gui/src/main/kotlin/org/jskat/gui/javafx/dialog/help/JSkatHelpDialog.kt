@@ -27,8 +27,6 @@ class JSkatHelpDialog @JvmOverloads constructor(
         webView.prefWidth = 800.0
         webView.prefHeight = 600.0
 
-        dialogPane.stylesheets.add("/org/jskat/gui/javafx/jskat.css")
-
         webView.engine.locationProperty().addListener { _, _, location ->
             documentOpener?.openIfExternal(location)
         }

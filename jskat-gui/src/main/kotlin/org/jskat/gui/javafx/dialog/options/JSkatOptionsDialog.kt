@@ -76,8 +76,6 @@ class JSkatOptionsDialog(owner: Window? = null) : Dialog<ButtonType>() {
 
         dialogPane.buttonTypes.addAll(ButtonType.OK, ButtonType.CANCEL)
 
-        dialogPane.stylesheets.add("/org/jskat/gui/javafx/jskat.css")
-
         setResultConverter { dialogButton ->
             if (dialogButton == ButtonType.OK) {
                 saveOptions()

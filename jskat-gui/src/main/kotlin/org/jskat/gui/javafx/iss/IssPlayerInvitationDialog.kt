@@ -14,8 +14,6 @@ class IssPlayerInvitationDialog(playerNames: Set<String>) : Dialog<List<String>>
     init {
         title = strings.getString("invite_players")
 
-        dialogPane.stylesheets.add("/org/jskat/gui/javafx/jskat.css")
-
         val grid = GridPane()
         grid.hgap = 10.0
         grid.vgap = 10.0

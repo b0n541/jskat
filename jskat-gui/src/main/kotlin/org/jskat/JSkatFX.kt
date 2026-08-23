@@ -14,6 +14,7 @@ import org.jskat.data.JSkatOptions
 import org.jskat.data.WindowGeometry
 import org.jskat.gui.human.SwingHumanPlayer
 import org.jskat.gui.javafx.JavaFxHostDocumentOpener
+import org.jskat.gui.javafx.JSkatTheme
 import org.jskat.gui.javafx.JSkatViewFX
 import org.jskat.gui.javafx.main.JSkatMainWindowFX
 import org.slf4j.Logger
@@ -31,6 +32,7 @@ class JSkatFX : Application() {
 
     override fun start(stage: Stage) {
         this.stage = stage
+        JSkatTheme.install()
 
         eventBus.register(this)
 
@@ -74,9 +76,7 @@ class JSkatFX : Application() {
             }
         }
 
-        val scene = Scene(jskatView.mainWindow, stage.width, stage.height)
-        scene.stylesheets.add(JSkatFX::class.java.getResource("/org/jskat/gui/javafx/jskat.css").toExternalForm())
-        stage.scene = scene
+        stage.scene = Scene(jskatView.mainWindow, stage.width, stage.height)
 
         stage.show()
     }
