@@ -11,12 +11,12 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":jskat-javafx-gui"))
+    implementation(project(":jskat-gui"))
 }
 
 javafx {
-    modules = listOf("javafx.base", "javafx.fxml", "javafx.web", "javafx.swing")
-    version = "21.0.+"
+    modules = listOf("javafx.base", "javafx.fxml", "javafx.web")
+    version = "26.0.2"
 }
 
 version = "0.24.0-SNAPSHOT"
@@ -49,7 +49,8 @@ tasks.register("fatjar", Jar::class.java) {
 
     from(sourceSets.main.get().output)
     dependsOn(configurations.runtimeClasspath)
-    from(configurations.runtimeClasspath.get()
-        .onEach { println("add from dependencies : ${it.name}") }
-        .map { if (it.isDirectory) it else zipTree(it) })
+    from(
+        configurations.runtimeClasspath.get()
+            .onEach { println("add from dependencies : ${it.name}") }
+            .map { if (it.isDirectory) it else zipTree(it) })
 }

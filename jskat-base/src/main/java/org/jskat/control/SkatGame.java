@@ -1,6 +1,10 @@
 package org.jskat.control;
 
+import com.google.common.eventbus.Subscribe;
+import org.jskat.ai.AIPlayerDelayWrapper;
+import org.jskat.control.command.table.PutCardIntoSkatCommand;
 import org.jskat.control.command.table.ShowCardsCommand;
+import org.jskat.control.command.table.TakeCardFromSkatCommand;
 import org.jskat.control.event.skatgame.*;
 import org.jskat.control.event.table.*;
 import org.jskat.control.gui.JSkatView;
@@ -56,7 +60,11 @@ public class SkatGame {
 
         tableName = newTableName;
         data = new SkatGameData();
+        data.setPlayerName(Player.FOREHAND, newForeHand.getPlayerName());
+        data.setPlayerName(Player.MIDDLEHAND, newMiddleHand.getPlayerName());
+        data.setPlayerName(Player.REARHAND, newRearHand.getPlayerName());
         JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(data);
+        JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).register(this);
 
         this.variant = variant;
 
@@ -157,10 +165,12 @@ public class SkatGame {
                     setActivePlayer(data.getDeclarer());
                     discarding();
                     if (!GameState.PRELIMINARY_GAME_END.equals(data.getGameState())) {
+                        log.info("Transitioning to DECLARING state after discarding.");
                         setGameState(GameState.DECLARING);
                     }
                     break;
                 case DECLARING:
+                    log.info("Entering announceGame() method.");
                     announceGame();
                     if (isContraPlayEnabled(ContraCallingTime.AFTER_GAME_ANNOUNCEMENT, 0)) {
                         setGameState(GameState.CONTRA);
@@ -195,6 +205,7 @@ public class SkatGame {
         } while (data.getGameState() != GameState.GAME_OVER);
 
         JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).unregister(data);
+        JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).unregister(this);
 
         log.debug(data.getGameState().name());
         log.debug("Game moves:");
@@ -470,14 +481,18 @@ public class SkatGame {
         log.info("Player " + activePlayer + " looks into the skat...");
         log.info("Skat before discarding: " + data.getSkat());
 
-        eventBus.post(new SkatCardsPickedUpEvent(tableName, data.getSkat()));
-
         final CardList skatBefore = data.getSkat().getImmutableCopy();
+        JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName).post(new SkatCardsPickedUpEvent(tableName, skatBefore));
 
         // create a clone of the skat before sending it to the player
         // otherwise the player could change the skat after discarding
         activePlayerInstance.takeSkat(skatBefore);
-        data.addSkatToPlayer(activePlayer);
+
+        // For human players, cards remain in the skat panel and are moved interactively.
+        // For AI players, they must be added to the hand immediately.
+        if (!activePlayerInstance.isHumanPlayer()) {
+            data.addSkatToPlayer(activePlayer);
+        }
 
         // ask player for the cards to be discarded
         // cloning is done to prevent the player
@@ -491,10 +506,6 @@ public class SkatGame {
             log.info("Discarded cards: " + discardedSkat);
 
             data.setDiscardedSkat(activePlayer, discardedSkat);
-            if (!activePlayerInstance.isHumanPlayer()) {
-                // human player has changed the cards in the GUI already
-                view.setDiscardedSkat(tableName, activePlayer, skatBefore, discardedSkat);
-            }
             eventBus.post(new SkatCardsChangedEvent(tableName, discardedSkat));
         }
     }
@@ -509,17 +520,14 @@ public class SkatGame {
             result = false;
         }
         if (discardedSkat.size() != 2) {
-            log.error("Player is fooling!!! Skat doesn't have two cards!");
+            log.error("Player is fooling!!! Skat doesn't have two cards! (is {})", discardedSkat == null ? 0 : discardedSkat.size());
             result = false;
         }
-        if (discardedSkat.get(0) == discardedSkat.get(1)) {
+        if (discardedSkat.get(0).equals(discardedSkat.get(1))) {
             log.error("Player is fooling!!! Skat cards are identical!");
             result = false;
         }
-        if (!playerHasCard(player, discardedSkat.get(0)) || !playerHasCard(player, discardedSkat.get(1))) {
-            log.error("Player is fooling!!! Player doesn't have had discarded card!");
-            result = false;
-        }
+
         if (GameState.SCHIEBERAMSCH == getGameState()
                 && !JSkatOptions.instance().isSchieberamschJacksInSkat()
                 && (discardedSkat.get(0).getRank() == Rank.JACK || discardedSkat.get(1).getRank() == Rank.JACK)) {
@@ -531,7 +539,7 @@ public class SkatGame {
     }
 
     private void announceGame() {
-
+        log.info("Entering announceGame() method.");
         log.debug("declaring game...");
 
         final var contract = getPlayerInstance(data.getDeclarer()).announceGame();
@@ -791,13 +799,12 @@ public class SkatGame {
 
             if (isCardSchwarzPlay(skatPlayer, currPlayer, firstTrickCard, playedCard)) {
                 if (skatPlayer.isHumanPlayer()) {
-                    view.showCardNotAllowedMessage(playedCard);
+                    eventBus.post(new CardNotAllowedToPlayEvent(playedCard));
                 } else {
                     view.showAIPlayedSchwarzMessageCardPlay(skatPlayer.getPlayerName(), playedCard);
                     aiPlayerPlayedSchwarz = true;
                 }
             } else {
-
                 cardAccepted = true;
             }
         }
@@ -805,12 +812,12 @@ public class SkatGame {
         if (playedCard != null) {
             // TODO: code duplication with SkatGameReplayer.oneStepForward()
             if (data.getCurrentTrick() != null && data.getCurrentTrick().getFirstCard() == null) {
+                // TODO: post it into the main event bus
                 JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName)
                         .post(new TrickCompletedEvent(data.getLastCompletedTrick()));
             }
 
-            eventBus
-                    .post(new TableGameMoveEvent(tableName, new TrickCardPlayedEvent(currPlayer, playedCard)));
+            eventBus.post(new TableGameMoveEvent(tableName, new TrickCardPlayedEvent(currPlayer, playedCard)));
 
             for (final JSkatPlayer playerInstance : player.values()) {
                 // inform all players
@@ -880,8 +887,7 @@ public class SkatGame {
 
         boolean result = false;
 
-        log.debug("Player " + player + " has card: player cards: " + data.getPlayerCards(player)
-                + " card to check: " + card);
+        log.info("Player {} has card: player cards: {} card to check: {}", player, data.getPlayerCards(player), card);
 
         for (final Card handCard : data.getPlayerCards(player)) {
 
@@ -897,18 +903,14 @@ public class SkatGame {
 
     private void calculateGameValue() {
 
-        log.debug("Calculate game value");
+        log.info("Calculating game value");
 
         // FIXME (jan 07.12.2010) don't let a data class calculate it's values
         data.calcResult();
 
-        log.debug("game value=" + data.getResult() + ", bid value="
-                + data.getMaxBidValue());
-
-        log.debug("Final game result: lost:" + data.isGameLost() +
-                " game value: " + data.getResult());
-
-        log.debug("Final result: " + data.getDeclarerScore() + "/" + data.getOpponentScore());
+        log.info("game value={}, bid value={}", data.getResult(), data.getMaxBidValue());
+        log.info("Final game result: lost:{} game value: {}", data.isGameLost(), data.getResult());
+        log.info("Final result: {}/{}", data.getDeclarerScore(), data.getOpponentScore());
 
         for (final JSkatPlayer playerInstance : player.values()) {
             playerInstance.setGameSummary(data.getGameSummary());
@@ -940,6 +942,22 @@ public class SkatGame {
     public void setView(final JSkatView newView) {
 
         view = newView;
+
+        if (view != null && view.usesAiActionDelay()) {
+            wrapAiPlayers();
+        }
+    }
+
+    /**
+     * Wraps all AI players with a delay when the game is visible to a human.
+     */
+    private void wrapAiPlayers() {
+        for (final Player pos : Player.values()) {
+            final JSkatPlayer currentPlayer = player.get(pos);
+            if (currentPlayer.isAIPlayer() && !(currentPlayer instanceof AIPlayerDelayWrapper)) {
+                player.put(pos, new AIPlayerDelayWrapper(currentPlayer));
+            }
+        }
     }
 
     /**
@@ -1000,7 +1018,7 @@ public class SkatGame {
             if (newState == GameState.GAME_OVER) {
 
                 // FIXME: merge this event with the command
-                eventBus.post(new TableGameMoveEvent(tableName, new GameFinishEvent(getGameSummary())));
+                eventBus.post(new TableGameMoveEvent(tableName, new GameFinishEvent(data.getPlayerName(data.getDeclarer()), getGameSummary())));
                 eventBus.post(new ShowCardsCommand(tableName, data.getCardsAfterDiscard(), data.getSkat()));
             }
         }
@@ -1108,5 +1126,19 @@ public class SkatGame {
      */
     public GameState getGameState() {
         return data.getGameState();
+    }
+
+    @Subscribe
+    public void takeCardFromSkatOn(final TakeCardFromSkatCommand command) {
+        data.removeCardFromCurrentSkat(command.card);
+        data.addPlayerCard(activePlayer, command.card);
+        eventBus.post(new SkatCardTakenEvent(tableName, command.card));
+    }
+
+    @Subscribe
+    public void putCardIntoSkatOn(final PutCardIntoSkatCommand command) {
+        data.removePlayerCard(activePlayer, command.card);
+        data.addCardToCurrentSkat(command.card);
+        eventBus.post(new SkatCardPutEvent(tableName, command.card));
     }
 }

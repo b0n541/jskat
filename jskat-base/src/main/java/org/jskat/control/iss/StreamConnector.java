@@ -21,7 +21,7 @@ class StreamConnector extends AbstractIssConnector {
     private static final JSkatOptions options = JSkatOptions.instance();
 
     private Socket socket;
-    private PrintWriter output;
+    private PrintWriter writer;
     private InputChannel issIn;
     private StreamOutputChannel issOut;
 
@@ -36,20 +36,16 @@ class StreamConnector extends AbstractIssConnector {
         log.debug("StreamConnector.establishConnection()");
 
         try {
-            this.socket = new Socket(options.getString(Option.ISS_ADDRESS),
-                    options.getInteger(Option.ISS_PORT));
+            socket = new Socket(options.getString(Option.ISS_ADDRESS), options.getInteger(Option.ISS_PORT));
+            writer = new PrintWriter(socket.getOutputStream(), true);
+            issOut = new StreamOutputChannel(writer);
+            issIn = new InputChannel(issControl, socket.getInputStream());
 
-            this.output = new PrintWriter(this.socket.getOutputStream(), true);
-            this.issOut = new StreamOutputChannel(this.output);
-            this.issIn = new InputChannel(issControl, this,
-                    this.socket.getInputStream());
-            this.issIn.start();
             log.debug("Connection established...");
 
         } catch (java.net.UnknownHostException e) {
             log.error("Cannot open connection to ISS");
-            issControl.showErrorMessage(strings
-                    .getString("cant_connect_to_iss"));
+            issControl.showErrorMessage(strings.getString("cant_connect_to_iss"));
             return false;
         } catch (java.io.IOException e) {
             log.error("IOException: " + e);
@@ -71,17 +67,18 @@ class StreamConnector extends AbstractIssConnector {
     public void closeConnection() {
 
         try {
-            log.debug("closing connection");
-            this.issIn.interrupt();
-            log.debug("input channel closed");
-            this.output.close();
-            log.debug("output channel closed");
-            this.socket.close();
-            log.debug("socket closed");
+            // Close the socket first to unblock any blocking read operations on its input stream
+            if (socket != null) {
+                socket.close();
+                log.debug("socket closed");
+            }
+            // Now signal the input channel to stop and clean up its threads
+            if (this.issIn != null) {
+                this.issIn.close();
+                log.debug("input channel closed");
+            }
         } catch (IOException e) {
-            // TODO Auto-generated catch block
-            log.debug("ISS connector IOException");
-            e.printStackTrace();
+            log.error("Error while closing ISS connection", e);
         }
     }
 
@@ -92,7 +89,6 @@ class StreamConnector extends AbstractIssConnector {
      */
     @Override
     public boolean isConnected() {
-
         return this.socket != null && !this.socket.isClosed();
     }
 }

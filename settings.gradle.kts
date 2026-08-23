@@ -5,4 +5,4 @@ pluginManagement {
 
 rootProject.name = "JSkat"
 
-include("jskat-base", "jskat-swing-gui", "jskat-javafx-gui", "app")
+include("jskat-base", "jskat-gui", "app")

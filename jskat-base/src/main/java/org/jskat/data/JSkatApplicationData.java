@@ -23,7 +23,7 @@ public class JSkatApplicationData {
     private final Map<String, SkatTable> localSkatTables;
     private final Map<String, SkatTable> joinedIssTables;
     private String tableName;
-    private String issLoginName;
+    private String issUserName;
     private final Set<String> availableIssPlayer;
     private final Map<String, AbstractHumanJSkatPlayer> humanPlayers;
 
@@ -43,7 +43,7 @@ public class JSkatApplicationData {
 
     @Subscribe
     synchronized public void adjustTableDataOn(final TableCreatedEvent event) {
-        SkatTable table = new SkatTable(event.tableName(), JSkatOptions.instance().getSkatTableOptions());
+        final SkatTable table = new SkatTable(event.tableName(), JSkatOptions.instance().getSkatTableOptions());
         if (JSkatViewType.LOCAL_TABLE.equals(event.tableType())) {
             addLocalSkatTable(table);
             registerHumanPlayerObject(table, JSkatMaster.INSTANCE.getView().getHumanPlayerForGUI());
@@ -104,7 +104,7 @@ public class JSkatApplicationData {
      */
     public SkatTable getLocalSkatTable(final String tableName) {
 
-        SkatTable result = localSkatTables.get(tableName);
+        final SkatTable result = localSkatTables.get(tableName);
 
         if (result == null) {
             throw new IllegalArgumentException(
@@ -130,7 +130,7 @@ public class JSkatApplicationData {
      * @param type      View type
      * @param tableName Table name
      */
-    public void setActiveTable(JSkatViewType type, String tableName) {
+    public void setActiveTable(final JSkatViewType type, final String tableName) {
         if (JSkatViewType.LOCAL_TABLE.equals(type) || JSkatViewType.ISS_TABLE.equals(type)) {
             this.tableName = tableName;
         }
@@ -147,21 +147,21 @@ public class JSkatApplicationData {
     }
 
     /**
-     * Sets the login name on ISS
+     * Sets the user name on ISS
      *
-     * @param newISSLoginName Login name
+     * @param newISSUserName User name
      */
-    public void setIssLoginName(final String newISSLoginName) {
-        issLoginName = newISSLoginName;
+    public void setIssUserName(final String newISSUserName) {
+        issUserName = newISSUserName;
     }
 
     /**
-     * Gets the login name on ISS
+     * Gets the user name on ISS
      *
-     * @return Login name
+     * @return User name
      */
-    public String getIssLoginName() {
-        return issLoginName;
+    public String getIssUserName() {
+        return issUserName;
     }
 
     /**
@@ -246,7 +246,7 @@ public class JSkatApplicationData {
      * @param tableName Table name
      * @return TRUE, if the table is a local table
      */
-    public boolean isExistingLocalSkatTable(String tableName) {
+    public boolean isExistingLocalSkatTable(final String tableName) {
         return localSkatTables.containsKey(tableName);
     }
 }

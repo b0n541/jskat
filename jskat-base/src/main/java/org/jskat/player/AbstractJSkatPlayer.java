@@ -229,15 +229,6 @@ public abstract class AbstractJSkatPlayer implements JSkatPlayer {
      * {@inheritDoc}
      */
     @Override
-    public final boolean isDeclarer() {
-        return GameType.RAMSCH.equals(internalKnowledge.getGameType())
-                || internalKnowledge.getDeclarer().equals(internalKnowledge.getPlayerPosition());
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public final void lookAtOuvertCards(final CardList ouvertCards) {
         internalKnowledge.addDeclarerCards(ouvertCards);
     }

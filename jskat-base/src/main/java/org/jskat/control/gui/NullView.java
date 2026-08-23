@@ -1,9 +1,7 @@
 package org.jskat.control.gui;
 
 import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
-import org.jskat.control.iss.ChatMessageType;
 import org.jskat.data.SkatGameData;
-import org.jskat.data.iss.ChatMessage;
 import org.jskat.data.iss.MoveInformation;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
@@ -17,12 +15,9 @@ import java.util.Set;
  * is needed for simulating games without gui
  */
 public class NullView implements JSkatView {
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public void startGame(@SuppressWarnings("unused") final String tableName) {
-        // empty method by intent
+    public boolean usesAiActionDelay() {
+        return false;
     }
 
     /**
@@ -41,16 +36,6 @@ public class NullView implements JSkatView {
     public void showErrorMessage(
             @SuppressWarnings("unused") final String title,
             @SuppressWarnings("unused") final String message) {
-        // empty method by intent
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void appendISSChatMessage(
-            @SuppressWarnings("unused") final ChatMessageType messageType,
-            @SuppressWarnings("unused") final ChatMessage message) {
         // empty method by intent
     }
 
@@ -100,15 +85,6 @@ public class NullView implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public void showCardNotAllowedMessage(
-            @SuppressWarnings("unused") final Card card) {
-        // empty method by intent
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void setResign(@SuppressWarnings("unused") final String tableName,
                           @SuppressWarnings("unused") final Player player) {
         // empty method by intent
@@ -121,18 +97,6 @@ public class NullView implements JSkatView {
     public void setGeschoben(
             @SuppressWarnings("unused") final String tableName,
             @SuppressWarnings("unused") final Player player) {
-        // empty method by intent
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setDiscardedSkat(
-            @SuppressWarnings("unused") final String tableName,
-            @SuppressWarnings("unused") final Player activePlayer,
-            @SuppressWarnings("unused") final CardList skatBefore,
-            @SuppressWarnings("unused") final CardList discardedSkat) {
         // empty method by intent
     }
 
@@ -157,14 +121,6 @@ public class NullView implements JSkatView {
      * {@inheritDoc}
      */
     @Override
-    public void setActiveView(final String name) {
-        // empty method by intent
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void showAIPlayedSchwarzMessageDiscarding(final String playerName,
                                                      final CardList discardedCards) {
         // empty method by intent
@@ -172,6 +128,11 @@ public class NullView implements JSkatView {
 
     @Override
     public void showAIPlayedSchwarzMessageCardPlay(final String playerName, final Card card) {
+        // empty method by intent
+    }
+
+    @Override
+    public void setSkat(String tableName, CardList skat) {
         // empty method by intent
     }
 }

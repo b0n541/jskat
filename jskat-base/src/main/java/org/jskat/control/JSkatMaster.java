@@ -26,7 +26,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Controls everything in JSkat
@@ -76,7 +75,11 @@ public class JSkatMaster {
 
     /**
      * Creates a new skat table
+     *
+     * @deprecated Use {@link org.jskat.control.command.table.RequestCreateTableCommand}
+     * instead.
      */
+    @Deprecated
     public void createTable() {
 
         // TODO check whether a connection to ISS is established
@@ -144,16 +147,13 @@ public class JSkatMaster {
 
     /**
      * Invites players on ISS to the current table
+     *
+     * @deprecated Use {@link org.jskat.control.command.iss.IssInvitePlayerCommand}
+     * instead.
      */
+    @Deprecated
     public void invitePlayer() {
-
-        final Set<String> issPlayerNames = data.getAvailableISSPlayer();
-        issPlayerNames.remove(data.getIssLoginName());
-
-        final List<String> player = view.getPlayerForInvitation(issPlayerNames);
-        for (final String currPlayer : player) {
-            getIssController().invitePlayer(data.getActiveTable(), currPlayer);
-        }
+        // moved to UI
     }
 
     /**
@@ -243,15 +243,6 @@ public class JSkatMaster {
     }
 
     /**
-     * Exits JSkat
-     */
-    public void exitJSkat() {
-
-        options.saveJSkatProperties();
-        System.exit(0);
-    }
-
-    /**
      * Shows the error message of wrong (null) name input
      */
     public static void showEmptyInputNameMessage() {
@@ -295,7 +286,7 @@ public class JSkatMaster {
                         issControl.sendPickUpSkatMove(tableName);
                     } else if (JSkatAction.PLAY_HAND_GAME.toString().equals(command)) {
                         // player wants to play a hand game
-                        // FIXME (jan 02.11.2010) decision is not sent to ISS
+                        issControl.sendPlayHandGameMove(tableName);
                     } else // player discarded cards
                         // FIXME (jan 02.11.2010) Discarded cards are sent with the
                         // game announcement to ISS
@@ -387,16 +378,7 @@ public class JSkatMaster {
      * @param tableName Table name
      */
     public void setActiveTable(final JSkatViewType type, final String tableName) {
-
         data.setActiveTable(type, tableName);
-        // might not be instantiated yet
-        if (view != null) {
-            view.setActiveView(tableName);
-        }
-
-        if (type == JSkatViewType.LOCAL_TABLE) {
-            JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, data.getLocalSkatTable(tableName).getGameState()));
-        }
     }
 
     /**
@@ -405,9 +387,9 @@ public class JSkatMaster {
      * @param event ISS connected event
      */
     @Subscribe
-    public void setLoginNameOn(final IssConnectedEvent event) {
+    public void setUserNameOn(final IssConnectedEvent event) {
 
-        data.setIssLoginName(event.login);
+        data.setIssUserName(event.userName());
     }
 
     /**

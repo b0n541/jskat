@@ -1,15 +1,20 @@
-
 package org.jskat.data;
 
 import org.jskat.AbstractJSkatTest;
+import org.jskat.control.gui.img.CardFace;
+import org.jskat.control.gui.img.CardSet;
 import org.jskat.data.JSkatOptions.Option;
 import org.jskat.data.JSkatOptions.SupportedLanguage;
 import org.jskat.data.SkatTableOptions.ContraCallingTime;
 import org.jskat.data.SkatTableOptions.RuleSet;
-import org.jskat.control.gui.img.CardFace;
-import org.jskat.control.gui.img.CardSet;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
+import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Locale;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -20,6 +25,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Tests for JSkat options
  */
 public class JSkatOptionsTest extends AbstractJSkatTest {
+
+    @TempDir
+    Path temporaryDirectory;
 
     /**
      * Tests the default values
@@ -44,7 +52,7 @@ public class JSkatOptionsTest extends AbstractJSkatTest {
         assertThat(options.getWaitTimeAfterTrick()).isEqualTo(0);
         assertThat(options.getCardSet()).isEqualTo(CardSet.ISS_TOURNAMENT);
         assertThat(options.getCardSet().getCardFace()).isEqualTo(CardFace.TOURNAMENT);
-        assertThat(options.getSavePath()).isEqualTo(new DesktopSavePathResolver().getDefaultSavePath());
+        assertThat(options.getSavePath()).isEqualTo(JSkatOptions.SavePath.USER_HOME.name());
 
         // rule defaults
         assertThat(options.getRules()).isEqualTo(RuleSet.ISPA);
@@ -103,5 +111,58 @@ public class JSkatOptionsTest extends AbstractJSkatTest {
         assertThat(JSkatOptions.Option.valueOfProperty("cardSet")).isEqualTo(JSkatOptions.Option.CARD_SET);
         assertThat(JSkatOptions.Option.valueOfProperty("bockEventNoBid")).isEqualTo(JSkatOptions.Option.BOCK_EVENT_NO_BID);
         assertThat(JSkatOptions.Option.valueOfProperty("contraAfterBid18")).isEqualTo(JSkatOptions.Option.CONTRA_AFTER_BID_18);
+    }
+
+    @Test
+    public void loadsAndSavesWindowGeometryWithExistingPropertyNames() throws IOException {
+        final Path propertiesFile = temporaryDirectory.resolve("jskat.properties");
+        Files.writeString(propertiesFile, """
+                mainFrameXPosition=123
+                mainFrameYPosition=-45
+                mainFrameWidth=1024
+                mainFrameHeight=768
+                """);
+        final JSkatOptions options = createOptions(temporaryDirectory);
+
+        assertThat(options.getMainFrameGeometry()).isEqualTo(new WindowGeometry(123, -45, 1024, 768));
+
+        options.setMainFrameGeometry(new WindowGeometry(12, 34, 800, 600));
+        options.saveJSkatProperties();
+        final String savedProperties = Files.readString(propertiesFile);
+        assertThat(savedProperties).contains(
+                "mainFrameXPosition=12",
+                "mainFrameYPosition=34",
+                "mainFrameWidth=800",
+                "mainFrameHeight=600");
+    }
+
+    @Test
+    public void defaultWindowGeometryIsUnset() {
+        final JSkatOptions options = createOptions(temporaryDirectory);
+
+        assertThat(options.getMainFrameGeometry()).isEqualTo(WindowGeometry.unset());
+    }
+
+    private static JSkatOptions createOptions(final Path path) {
+        try {
+            final Constructor<JSkatOptions> constructor = JSkatOptions.class.getDeclaredConstructor(SavePathResolver.class);
+            constructor.setAccessible(true);
+            return constructor.newInstance(new FixedSavePathResolver(path));
+        } catch (final NoSuchMethodException | InstantiationException | IllegalAccessException |
+                       InvocationTargetException e) {
+            throw new AssertionError("Could not create isolated options", e);
+        }
+    }
+
+    private record FixedSavePathResolver(Path path) implements SavePathResolver {
+        @Override
+        public String getDefaultSavePath() {
+            return path.toString();
+        }
+
+        @Override
+        public String getCurrentWorkingDirectory() {
+            return path.toString();
+        }
     }
 }

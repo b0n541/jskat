@@ -68,7 +68,7 @@ public class SkatGameReplay {
     }
 
     private void setGameState(SkatGameEvent event) {
-        if (event instanceof GameStartEvent) {
+        if (event instanceof GameStartedEvent) {
             JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.BIDDING));
         } else if (event instanceof BidEvent || event instanceof HoldBidEvent || event instanceof PassBidEvent) {
             JSkatEventBus.INSTANCE.post(new SkatGameStateChangedEvent(tableName, GameState.BIDDING));

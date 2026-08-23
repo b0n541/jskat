@@ -15,8 +15,7 @@ public class JSkatActionEvent {
      * @param actionCommand Action command
      * @param actionSource  Action source
      */
-    public JSkatActionEvent(final String actionCommand,
-                            final Object actionSource) {
+    public JSkatActionEvent(final String actionCommand, final Object actionSource) {
         this.actionCommand = actionCommand;
         this.actionSource = actionSource;
     }
@@ -27,8 +26,7 @@ public class JSkatActionEvent {
      * @param jskatAction  JSkat action
      * @param actionSource Action source
      */
-    public JSkatActionEvent(final JSkatAction jskatAction,
-                            final Object actionSource) {
+    public JSkatActionEvent(final JSkatAction jskatAction, final Object actionSource) {
         this.actionCommand = jskatAction.toString();
         this.actionSource = actionSource;
     }

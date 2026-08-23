@@ -96,21 +96,18 @@ public class IssController {
 
     private void closeConnectionIfOpen() {
         if (issConnector != null && issConnector.isConnected()) {
-            log.debug("connection to ISS still open");
             issConnector.closeConnection();
+            log.info("Connection to ISS closed.");
         }
     }
 
     @Subscribe
     public void establishConnectionOn(final IssConnectCommand command) {
-        log.debug("connectToISS");
 
         // issConnector = new WebSocketConnector();
         if (issConnector == null) {
             issConnector = new StreamConnector();
         }
-
-        log.debug("connector created");
 
         userName = command.loginCredentials.userName();
         password = command.loginCredentials.password();
@@ -118,11 +115,10 @@ public class IssController {
         if (issConnector != null && !issConnector.isConnected()) {
 
             issConnector.setConnectionData(userName, password);
-            final boolean isConnected = issConnector
-                    .establishConnection(this);
+            final boolean isConnected = issConnector.establishConnection(this);
 
             if (isConnected) {
-                log.debug("Connection to ISS established: " + issConnector.isConnected());
+                log.info("Connection to ISS established: " + issConnector.isConnected());
                 issMsg = new MessageGenerator(userName);
                 issOut = issConnector.getOutputChannel();
                 sendToIss(userName);
@@ -230,10 +226,9 @@ public class IssController {
             message.append(params.get(i)).append(' ');
         }
 
-        final ChatMessage chatMessage = new ChatMessage("Lobby",
-                message.toString());
+        final ChatMessage chatMessage = new ChatMessage("Lobby", message.toString());
 
-        view.appendISSChatMessage(ChatMessageType.LOBBY, chatMessage);
+        eventBus.post(new IssNewChatMessageEvent(ChatMessageType.LOBBY, chatMessage));
     }
 
     void addTableChatMessage(final List<String> params) {
@@ -250,10 +245,9 @@ public class IssController {
             message.append(params.get(i)).append(' ');
         }
 
-        final ChatMessage chatMessage = new ChatMessage(tableName,
-                message.toString());
+        final ChatMessage chatMessage = new ChatMessage(tableName, message.toString());
 
-        view.appendISSChatMessage(ChatMessageType.TABLE, chatMessage);
+        eventBus.post(new IssNewChatMessageEvent(ChatMessageType.TABLE, chatMessage));
     }
 
     /**
@@ -317,7 +311,7 @@ public class IssController {
     }
 
     /**
-     * Updates a local representation of an ISS table
+     * Updates a local representation of an ISS game
      *
      * @param tableName Table name
      * @param status    New game status
@@ -336,15 +330,6 @@ public class IssController {
         }
 
         return result;
-    }
-
-    /**
-     * Starts a game on a local representation of an ISS table
-     *
-     * @param tableName Table name
-     */
-    public void startGame(final String tableName) {
-        view.startGame(tableName);
     }
 
     /**
@@ -513,7 +498,7 @@ public class IssController {
 
         eventBus.post(new SkatGameStateChangedEvent(tableName, GameState.GAME_OVER));
         // FIXME: merge event and command
-        eventBus.post(new TableGameMoveEvent(tableName, new GameFinishEvent(newGameData.getGameSummary())));
+        eventBus.post(new TableGameMoveEvent(tableName, new GameFinishEvent(newGameData.getPlayerName(newGameData.getDeclarer()), newGameData.getGameSummary())));
         eventBus.post(new ShowCardsCommand(tableName, newGameData.getCardsAfterDiscard(), newGameData.getSkat()));
         gameData.put(tableName, newGameData);
     }
@@ -633,6 +618,15 @@ public class IssController {
     }
 
     /**
+     * Send play hand game move to ISS
+     *
+     * @param tableName Table name
+     */
+    public void sendPlayHandGameMove(final String tableName) {
+        sendToIss(issMsg.getPlayHandGameMoveMessage(tableName));
+    }
+
+    /**
      * Send game announcement to ISS
      *
      * @param tableName    Table name
@@ -668,12 +662,10 @@ public class IssController {
     /**
      * Updates a chat message on an ISS table
      *
-     * @param tableName Table name
-     * @param message   Chat message
+     * @param message Chat message
      */
-    public void updateISSTableChatMessage(final String tableName, final ChatMessage message) {
-        // FIXME (jan 30.01.2011) tableName not needed here?
-        view.appendISSChatMessage(ChatMessageType.TABLE, message);
+    public void updateISSTableChatMessage(final ChatMessage message) {
+        eventBus.post(new IssNewChatMessageEvent(ChatMessageType.TABLE, message));
     }
 
     /**

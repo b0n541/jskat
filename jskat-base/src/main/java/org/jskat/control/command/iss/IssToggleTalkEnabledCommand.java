@@ -5,5 +5,9 @@ package org.jskat.control.command.iss;
  * setting on ISS.
  */
 public class IssToggleTalkEnabledCommand {
+    public final String tableName;
 
+    public IssToggleTalkEnabledCommand(String tableName) {
+        this.tableName = tableName;
+    }
 }

@@ -47,18 +47,18 @@ public enum CardSet {
      */
     TIGULLIOBRIDGE_FRENCH("Tigullio Bridge", CardFace.FRENCH, "png");
 
-    private String name = null;
+    private String cardSetName = null;
     private CardFace cardFace = null;
     private String fileType = null;
 
-    CardSet(String name, CardFace cardFace, String fileType) {
-        this.name = name;
+    CardSet(final String cardSetName, final CardFace cardFace, final String fileType) {
+        this.cardSetName = cardSetName;
         this.cardFace = cardFace;
         this.fileType = fileType;
     }
 
-    public String getName() {
-        return name;
+    public String getCardSetName() {
+        return cardSetName;
     }
 
     public CardFace getCardFace() {
