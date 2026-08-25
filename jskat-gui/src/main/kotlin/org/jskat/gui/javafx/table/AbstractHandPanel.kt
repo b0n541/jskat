@@ -3,7 +3,6 @@ package org.jskat.gui.javafx.table
 import javafx.geometry.Insets
 import javafx.scene.control.Label
 import javafx.scene.layout.*
-import javafx.scene.paint.Color
 import org.jskat.data.JSkatOptions
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.*
@@ -43,8 +42,7 @@ abstract class AbstractHandPanel(
         set(value) {
             field = value
             refreshHeader()
-            background = getPanelBackground(value)
-            border = getPanelBorder(value)
+            updateActivePlayerStyle(value)
             updateIssWidgets(value)
         }
 
@@ -63,6 +61,7 @@ abstract class AbstractHandPanel(
         set(value) {
             field = value
             refreshHeader()
+            updateDeclarerStyle(value)
         }
     var playerContra = false
         set(value) {
@@ -96,14 +95,15 @@ abstract class AbstractHandPanel(
     }
 
     private fun initPanel() {
+        styleClass.add("hand-panel")
+        updateActivePlayerStyle(isActivePlayer)
+        updateDeclarerStyle(declarer)
+
         setVgrow(header, Priority.NEVER)
         header.minHeight = USE_PREF_SIZE
         header.minWidth = 0.0
         headerLabel.minWidth = 0.0
         headerLabel.style = "-fx-text-fill: white;"
-
-        background = getPanelBackground(isActivePlayer)
-        border = getPanelBorder(isActivePlayer)
 
         header.padding = Insets(10.0)
 
@@ -121,35 +121,19 @@ abstract class AbstractHandPanel(
         setMargin(cardPanel, Insets(0.0, 5.0, 5.0, 5.0))
     }
 
-    private fun getPanelBackground(isActivePlayer: Boolean): Background {
-        return Background(
-            BackgroundFill(
-                Color.web("#486760"),
-                CornerRadii(10.0),
-                null
-            )
-        )
+    private fun updateActivePlayerStyle(isActivePlayer: Boolean) {
+        updateStyleClass("active-hand-panel", isActivePlayer)
     }
 
-    private fun getPanelBorder(isActivePlayer: Boolean): Border {
-        return if (isActivePlayer) {
-            Border(
-                BorderStroke(
-                    Color.rgb(255, 191, 0),
-                    BorderStrokeStyle.SOLID,
-                    CornerRadii(10.0),
-                    BorderWidths(3.0)
-                )
-            )
-        } else {
-            Border(
-                BorderStroke(
-                    Color.BLACK,
-                    BorderStrokeStyle.SOLID,
-                    CornerRadii(10.0),
-                    BorderWidths(3.0)
-                )
-            )
+    private fun updateDeclarerStyle(isDeclarer: Boolean) {
+        updateStyleClass("declarer-hand-panel", isDeclarer)
+    }
+
+    private fun updateStyleClass(styleClassName: String, enabled: Boolean) {
+        if (enabled && styleClassName !in styleClass) {
+            styleClass.add(styleClassName)
+        } else if (!enabled) {
+            styleClass.remove(styleClassName)
         }
     }
 

@@ -21,6 +21,8 @@
 
     -color-highlight: #FFBF00;
     -color-danger: #FC2E20;
+    -color-declarer-hand: #6A7D3C;
+    -color-hand-panel-border: black;
 
     -fx-base: -color-primary-0;
     -fx-accent: -color-secondary-2-0;
@@ -39,6 +41,22 @@
 
 .table-row-highlighted {
     -fx-background-color: #FFBF00;
+}
+
+.hand-panel {
+    -fx-background-color: -color-secondary-2-4;
+    -fx-background-radius: 10;
+    -fx-border-color: -color-hand-panel-border;
+    -fx-border-radius: 10;
+    -fx-border-width: 3;
+}
+
+.hand-panel.declarer-hand-panel {
+    -fx-background-color: -color-declarer-hand;
+}
+
+.hand-panel.active-hand-panel {
+    -fx-border-color: -color-highlight;
 }
 
 .action-panel {

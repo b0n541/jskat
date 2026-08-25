@@ -460,6 +460,11 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     fun setDeclarerOn(event: DeclarerChangedEvent) {
         log.info("New declarer: {}", event.declarer)
         declarer = event.declarer
+        Platform.runLater {
+            Player.entries.forEach { player ->
+                getHandPanel(player).declarer = (player == event.declarer)
+            }
+        }
     }
 
     @Subscribe
