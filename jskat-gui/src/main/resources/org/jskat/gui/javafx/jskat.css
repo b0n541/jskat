@@ -40,3 +40,22 @@
 .table-row-highlighted {
     -fx-background-color: #FFBF00;
 }
+
+.action-panel {
+    -fx-background-color: -color-primary-0;
+    -fx-background-radius: 6;
+    -fx-border-color: -color-secondary-2-3;
+    -fx-border-radius: 6;
+}
+
+.action-panel-title {
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-primary-1;
+    -fx-background-color: -color-secondary-2-4;
+    -fx-background-radius: 4;
+    -fx-padding: 5 7 5 7;
+}
+
+.action-panel-section-label {
+    -fx-font-weight: bold;
+}

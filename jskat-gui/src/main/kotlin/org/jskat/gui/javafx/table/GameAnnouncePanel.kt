@@ -4,7 +4,9 @@ import javafx.application.Platform
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.control.*
+import javafx.scene.layout.ColumnConstraints
 import javafx.scene.layout.GridPane
+import javafx.scene.layout.Priority
 import org.jskat.control.JSkatEventBus
 import org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent
 import org.jskat.control.gui.action.JSkatAction
@@ -47,37 +49,47 @@ class GameAnnouncePanel(
     private var userPickedUpSkat = false
 
     init {
-        style = "-fx-background-color: -fx-base;"
         initPanel()
     }
 
     private fun initPanel() {
-
-        padding = Insets(10.0)
-        hgap = 10.0
-        vgap = 5.0
+        styleClass.add("action-panel")
+        padding = Insets(8.0)
+        hgap = 12.0
+        vgap = 7.0
         alignment = Pos.CENTER
 
-        add(Label(strings.getString("game")), 0, 0, 2, 1)
+        columnConstraints.addAll(
+            ColumnConstraints().apply { hgrow = Priority.ALWAYS },
+            ColumnConstraints().apply { hgrow = Priority.ALWAYS }
+        )
 
-        add(clubsButton, 0, 1)
-        add(spadesButton, 1, 1)
-        add(heartsButton, 0, 2)
-        add(diamondsButton, 1, 2)
-        add(grandButton, 0, 3)
-        add(nullButton, 1, 3)
+        val title = Label(announceButton.text).apply {
+            styleClass.add("action-panel-title")
+            maxWidth = Double.MAX_VALUE
+        }
+        add(title, 0, 0, 2, 1)
 
-        add(Label(strings.getString("win_levels")), 0, 4, 2, 1)
+        val gameLabel = createSectionLabel(strings.getString("game"))
+        add(gameLabel, 0, 1, 2, 1)
+        add(clubsButton, 0, 2)
+        add(spadesButton, 1, 2)
+        add(heartsButton, 0, 3)
+        add(diamondsButton, 1, 3)
+        add(grandButton, 0, 4)
+        add(nullButton, 1, 4)
 
-        add(handBox, 0, 5)
-        add(ouvertBox, 1, 5)
-        add(schneiderBox, 0, 6)
-        add(schwarzBox, 1, 6)
+        val levelsLabel = createSectionLabel(strings.getString("win_levels"))
+        add(levelsLabel, 0, 5, 2, 1)
+        add(handBox, 0, 6)
+        add(ouvertBox, 1, 6)
+        add(schneiderBox, 0, 7)
+        add(schwarzBox, 1, 7)
 
         announceButton.graphic =
             bitmaps.getImageView(JSkatGraphicRepository.Icon.PLAY, JSkatGraphicRepository.IconSize.BIG)
         announceButton.maxWidth = Double.MAX_VALUE
-        add(announceButton, 0, 7, 2, 1)
+        add(announceButton, 0, 8, 2, 1)
 
         handBox.isDisable = true
 
@@ -115,6 +127,12 @@ class GameAnnouncePanel(
         button.userData = gameType
         button.toggleGroup = gameTypeGroup
         return button
+    }
+
+    private fun createSectionLabel(text: String): Label {
+        return Label(text).apply {
+            styleClass.add("action-panel-section-label")
+        }
     }
 
     private fun updateGameType(gameType: GameType) {
