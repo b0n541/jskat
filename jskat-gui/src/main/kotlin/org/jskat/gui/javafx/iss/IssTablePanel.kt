@@ -12,7 +12,6 @@ import org.jskat.control.event.iss.IssTableStateChangedEvent
 import org.jskat.control.event.skatgame.GameStartedEvent
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
-import org.jskat.data.iss.GameStartInformation
 import org.jskat.data.iss.TablePanelStatus
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
@@ -58,6 +57,8 @@ class IssTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
     }
 
     override fun showReplayGameButton(): Boolean = false
+
+    override fun continueSeriesAction(): JSkatAction = JSkatAction.READY_TO_PLAY
 
     override fun createPlayerPanel(): JSkatUserPanel {
         return JSkatUserPanel(tableName, 12, true, actions)
@@ -137,29 +138,18 @@ class IssTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
             if (userPosition != null) {
                 val leftOpponent = userPosition.leftNeighbor
                 val rightOpponent = userPosition.rightNeighbor
-                clearTable(leftOpponent, rightOpponent, userPosition, gameStart)
+                resetTable(GameStartedEvent(gameStart.gameNo, GameVariant.STANDARD, leftOpponent, rightOpponent, userPosition))
+
+                setPlayerName(leftOpponent, gameStart.playerNames[leftOpponent]!!)
+                setPlayerTime(leftOpponent, gameStart.playerTimes[leftOpponent]!!)
+
+                setPlayerName(rightOpponent, gameStart.playerNames[rightOpponent]!!)
+                setPlayerTime(rightOpponent, gameStart.playerTimes[rightOpponent]!!)
+
+                setPlayerName(userPosition, gameStart.playerNames[userPosition]!!)
+                setPlayerTime(userPosition, gameStart.playerTimes[userPosition]!!)
             }
-
-            clearTable()
         }
-    }
-
-    private fun clearTable(
-        leftOpponent: Player,
-        rightOpponent: Player,
-        player: Player,
-        gameStart: GameStartInformation
-    ) {
-        resetTableOn(GameStartedEvent(gameStart.gameNo, GameVariant.STANDARD, leftOpponent, rightOpponent, player))
-
-        setPlayerName(leftOpponent, gameStart.playerNames[leftOpponent]!!)
-        setPlayerTime(leftOpponent, gameStart.playerTimes[leftOpponent]!!)
-
-        setPlayerName(rightOpponent, gameStart.playerNames[rightOpponent]!!)
-        setPlayerTime(rightOpponent, gameStart.playerTimes[rightOpponent]!!)
-
-        setPlayerName(player, gameStart.playerNames[player]!!)
-        setPlayerTime(player, gameStart.playerTimes[player]!!)
     }
 
     @Subscribe
@@ -210,9 +200,7 @@ class IssTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
     }
 
     private fun setPlayerName(player: Player, playerName: String) {
-        Platform.runLater {
-            super.getHandPanel(player).playerName = playerName
-        }
+        super.getHandPanel(player).playerName = playerName
     }
 
     private fun setPlayerReadyToPlay(playerName: String, readyToPlay: Boolean) {

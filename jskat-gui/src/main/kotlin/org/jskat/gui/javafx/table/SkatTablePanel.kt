@@ -79,6 +79,8 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
 
     protected open fun showReplayGameButton(): Boolean = true
 
+    protected open fun continueSeriesAction(): JSkatAction = JSkatAction.CONTINUE_LOCAL_SERIES
+
     protected open fun createPlayerPanel(): JSkatUserPanel = JSkatUserPanel(tableName, 12, false, actions)
 
     private fun createGameContextStackPane() {
@@ -120,7 +122,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
 
         addContextPanel(ContextPanelType.TRICK_PLAYING, trickHoldingPanel)
 
-        gameOverPanel = GameOverPanel(tableName, actions, showReplayGameButton())
+        gameOverPanel = GameOverPanel(tableName, actions, showReplayGameButton(), continueSeriesAction())
         addContextPanel(ContextPanelType.GAME_OVER, gameOverPanel)
 
         setContextPanel(ContextPanelType.START)
@@ -205,41 +207,43 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     // TODO: this does similar things like IssTablePanel.resetTableOn(event: IssTableGameStartedEvent)
     @Subscribe
     fun resetTableOn(event: GameStartedEvent) {
-        Platform.runLater {
-            gameInfoPanel.setGameState(SkatGameData.GameState.GAME_START)
-            gameInfoPanel.setGameNumber(event.gameNo)
+        Platform.runLater { resetTable(event) }
+    }
 
-            leftOpponentPanel.position = event.leftPlayerPosition
-            rightOpponentPanel.position = event.rightPlayerPosition
-            userPanel.position = event.userPosition
+    protected fun resetTable(event: GameStartedEvent) {
+        gameInfoPanel.setGameState(SkatGameData.GameState.GAME_START)
+        gameInfoPanel.setGameNumber(event.gameNo)
 
-            biddingPanel.setUserPosition(event.userPosition)
-            trickPanel.setUserPosition(event.userPosition)
-            lastTrickPanel.setUserPosition(event.userPosition)
-            gameOverPanel.setUserPosition(event.userPosition)
+        leftOpponentPanel.position = event.leftPlayerPosition
+        rightOpponentPanel.position = event.rightPlayerPosition
+        userPanel.position = event.userPosition
 
-            when (event.userPosition) {
-                Player.FOREHAND -> {
-                    foreHand = userPanel
-                    middleHand = leftOpponentPanel
-                    rearHand = rightOpponentPanel
-                }
+        biddingPanel.setUserPosition(event.userPosition)
+        trickPanel.setUserPosition(event.userPosition)
+        lastTrickPanel.setUserPosition(event.userPosition)
+        gameOverPanel.setUserPosition(event.userPosition)
 
-                Player.MIDDLEHAND -> {
-                    foreHand = rightOpponentPanel
-                    middleHand = userPanel
-                    rearHand = leftOpponentPanel
-                }
-
-                Player.REARHAND -> {
-                    foreHand = leftOpponentPanel
-                    middleHand = rightOpponentPanel
-                    rearHand = userPanel
-                }
+        when (event.userPosition) {
+            Player.FOREHAND -> {
+                foreHand = userPanel
+                middleHand = leftOpponentPanel
+                rearHand = rightOpponentPanel
             }
 
-            clearTable()
+            Player.MIDDLEHAND -> {
+                foreHand = rightOpponentPanel
+                middleHand = userPanel
+                rearHand = leftOpponentPanel
+            }
+
+            Player.REARHAND -> {
+                foreHand = leftOpponentPanel
+                middleHand = rightOpponentPanel
+                rearHand = userPanel
+            }
         }
+
+        clearTable()
     }
 
     protected fun clearTable() {

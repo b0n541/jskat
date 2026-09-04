@@ -546,7 +546,7 @@ public class IssController {
      */
     @Subscribe
     public void sendReadyToPlayOn(final IssReadyToPlayCommand command) {
-        sendToIss(issMsg.getReadyMessage(appData.getActiveTable()));
+        sendToIss(issMsg.getReadyMessage(command.tableName));
     }
 
     /**

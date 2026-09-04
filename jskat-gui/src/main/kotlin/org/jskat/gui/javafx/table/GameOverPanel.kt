@@ -17,7 +17,8 @@ import org.jskat.util.Player
 class GameOverPanel(
     private val tableName: String,
     actions: Map<JSkatAction, AbstractJSkatAction>,
-    showReplayGameButton: Boolean = true
+    showReplayGameButton: Boolean = true,
+    continueAction: JSkatAction = JSkatAction.CONTINUE_LOCAL_SERIES
 ) : VBox() {
 
     private val bitmaps = JSkatGraphicRepository.INSTANCE
@@ -50,12 +51,17 @@ class GameOverPanel(
 
         val buttonSpacer = Pane().apply { HBox.setHgrow(this, Priority.ALWAYS) }
 
-        val continueSkatSeriesAction = actions[JSkatAction.CONTINUE_LOCAL_SERIES]
+        val continueSkatSeriesAction = actions[continueAction]
         val continueSkatSeriesButton =
             Button(continueSkatSeriesAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "").apply {
                 graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.PLAY, JSkatGraphicRepository.IconSize.BIG)
                 setOnAction {
-                    continueSkatSeriesAction?.actionPerformed(JSkatActionEvent(tableName, it.source))
+                    val event = if (continueAction == JSkatAction.CONTINUE_LOCAL_SERIES) {
+                        JSkatActionEvent(tableName, it.source)
+                    } else {
+                        JSkatActionEvent(continueAction, tableName)
+                    }
+                    continueSkatSeriesAction?.actionPerformed(event)
                 }
             }
         if (showReplayGameButton) {

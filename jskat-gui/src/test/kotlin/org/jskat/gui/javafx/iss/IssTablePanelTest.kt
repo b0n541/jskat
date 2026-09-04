@@ -10,6 +10,7 @@ import org.jskat.data.DesktopSavePathResolver
 import org.jskat.data.JSkatOptions
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository.Icon
+import org.jskat.gui.javafx.table.GameOverPanel
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import java.util.concurrent.CountDownLatch
@@ -48,6 +49,31 @@ class IssTablePanelTest {
     fun `ISS game actions provide big-button icons`() {
         assertThat(org.jskat.gui.action.iss.ResignAction().icon).isEqualTo(Icon.WHITE_FLAG)
         assertThat(org.jskat.gui.action.iss.ShowCardsAction().icon).isEqualTo(Icon.PLAY)
+    }
+
+    @Test
+    fun `ISS game-over continuation uses the ready action`() {
+        val localContinuation = RecordingAction("Continue local series")
+        val ready = RecordingAction("Ready")
+
+        val button = onFxThread {
+            val panel = GameOverPanel(
+                "ISS-42",
+                mapOf(
+                    JSkatAction.CONTINUE_LOCAL_SERIES to localContinuation,
+                    JSkatAction.READY_TO_PLAY to ready
+                ),
+                showReplayGameButton = false,
+                continueAction = JSkatAction.READY_TO_PLAY
+            )
+            Scene(panel)
+            (panel.children[1] as javafx.scene.layout.HBox).children.filterIsInstance<Button>().single()
+        }
+
+        onFxThread { button.fire() }
+
+        assertThat(ready.source).isEqualTo("ISS-42")
+        assertThat(localContinuation.source).isNull()
     }
 
     @Test
@@ -102,4 +128,5 @@ class IssTablePanelTest {
             source = event.source
         }
     }
+
 }
