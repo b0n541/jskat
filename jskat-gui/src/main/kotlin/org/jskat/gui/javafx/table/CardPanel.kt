@@ -16,9 +16,11 @@ class CardPanel(
 ) : Pane() {
 
     private companion object {
-        const val FAN_CARD_GAP_RATIO = 0.42
+        const val FAN_CARD_GAP_RATIO = 0.50
         const val FAN_ANGLE_PER_CARD = 5.0
+        const val FAN_ARC_DEPTH_PER_CARD = 1.25
         const val HOVER_LIFT_RATIO = 0.18
+        const val FAN_BOTTOM_CLIP = 24.0
     }
 
     internal val cards = CardList()
@@ -135,6 +137,7 @@ class CardPanel(
         val handWidth = cardWidth + cardGap * (cards.size() - 1)
         val handStartX = (availableWidth - handWidth) / 2
         val middleCardIndex = (cards.size() - 1) / 2.0
+        val handLayoutY = handLayoutY(cardWidth, cardHeight, middleCardIndex)
 
         for (i in 0 until cards.size()) {
             val card = cards[i]
@@ -142,7 +145,7 @@ class CardPanel(
             if (view != null) {
                 val angle = (i - middleCardIndex) * FAN_ANGLE_PER_CARD
                 view.layoutX = handStartX + i * cardGap
-                view.layoutY = 0.0
+                view.layoutY = handLayoutY + fanArcOffset(i - middleCardIndex)
                 view.transforms.setAll(Rotate(angle, cardWidth / 2, cardHeight))
             }
         }
@@ -155,4 +158,16 @@ class CardPanel(
         val gapThatFits = (availableWidth - cardWidth) / (cardCount - 1)
         return preferredGap.coerceAtMost(gapThatFits.coerceAtLeast(0.0))
     }
+
+    private fun handLayoutY(cardWidth: Double, cardHeight: Double, middleCardIndex: Double): Double {
+        val outerCardAngle = Math.toRadians(middleCardIndex * FAN_ANGLE_PER_CARD)
+        val outerCardTopOverhang = (
+            cardWidth / 2 * kotlin.math.sin(outerCardAngle) - cardHeight * (1 - kotlin.math.cos(outerCardAngle))
+            ).coerceAtLeast(0.0)
+        val topClearance = cardHeight * HOVER_LIFT_RATIO + outerCardTopOverhang
+        return (height - cardHeight + FAN_BOTTOM_CLIP).coerceAtLeast(topClearance)
+    }
+
+    private fun fanArcOffset(distanceFromMiddle: Double): Double =
+        distanceFromMiddle * distanceFromMiddle * FAN_ARC_DEPTH_PER_CARD
 }
