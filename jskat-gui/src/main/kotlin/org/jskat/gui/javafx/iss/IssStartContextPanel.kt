@@ -1,5 +1,6 @@
 package org.jskat.gui.javafx.iss
 
+import javafx.application.Platform
 import javafx.geometry.Pos
 import javafx.scene.control.Button
 import javafx.scene.layout.VBox
@@ -20,6 +21,7 @@ class IssStartContextPanel(
         alignment = Pos.CENTER
 
         val bitmaps = JSkatGraphicRepository.INSTANCE
+        val actionButtons = mutableListOf<Button>()
 
         actionList.forEach { jskatAction ->
             val action = actions[jskatAction]
@@ -31,6 +33,21 @@ class IssStartContextPanel(
                     action.actionPerformed(JSkatActionEvent(jskatAction, tableName))
                 }
                 children.add(button)
+                actionButtons.add(button)
+            }
+        }
+
+        sceneProperty().addListener { _, _, scene ->
+            if (scene != null) {
+                Platform.runLater {
+                    actionButtons.forEach(Button::applyCss)
+                    val widestButton = actionButtons.maxOfOrNull { it.prefWidth(-1.0) } ?: return@runLater
+                    actionButtons.forEach { button ->
+                        button.minWidth = widestButton
+                        button.prefWidth = widestButton
+                        button.maxWidth = widestButton
+                    }
+                }
             }
         }
     }

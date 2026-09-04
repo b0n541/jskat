@@ -1,5 +1,8 @@
 package org.jskat.gui.javafx.iss
 
+import javafx.application.Platform
+import javafx.scene.Scene
+import javafx.scene.control.Button
 import org.assertj.core.api.Assertions.assertThat
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
@@ -9,6 +12,8 @@ import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository.Icon
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 class IssTablePanelTest {
 
@@ -17,6 +22,13 @@ class IssTablePanelTest {
         @JvmStatic
         fun initializeOptions() {
             JSkatOptions.instance(DesktopSavePathResolver())
+            val toolkitStarted = CountDownLatch(1)
+            try {
+                Platform.startup(toolkitStarted::countDown)
+                check(toolkitStarted.await(1, TimeUnit.SECONDS))
+            } catch (_: IllegalStateException) {
+                // The JavaFX toolkit was initialized by another test class.
+            }
         }
     }
 
@@ -36,6 +48,47 @@ class IssTablePanelTest {
     fun `ISS game actions provide big-button icons`() {
         assertThat(org.jskat.gui.action.iss.ResignAction().icon).isEqualTo(Icon.WHITE_FLAG)
         assertThat(org.jskat.gui.action.iss.ShowCardsAction().icon).isEqualTo(Icon.PLAY)
+    }
+
+    @Test
+    fun `ISS start-context actions have the same width`() {
+        val buttons = onFxThread {
+            val panel = IssStartContextPanel(
+                "ISS-42",
+                mapOf(
+                    JSkatAction.INVITE_ISS_PLAYER to RecordingAction("Invite player"),
+                    JSkatAction.READY_TO_PLAY to RecordingAction("Ready")
+                ),
+                listOf(JSkatAction.INVITE_ISS_PLAYER, JSkatAction.READY_TO_PLAY)
+            )
+            Scene(panel)
+            panel.children.filterIsInstance<Button>()
+        }
+
+        onFxThread { Unit }
+
+        assertThat(buttons).hasSize(2)
+        assertThat(buttons.map(Button::getPrefWidth)).containsOnly(buttons.first().prefWidth)
+        assertThat(buttons.map(Button::getMaxWidth)).containsOnly(buttons.first().maxWidth)
+    }
+
+    private fun <T> onFxThread(action: () -> T): T {
+        val result = arrayOfNulls<Any>(1)
+        val failure = arrayOfNulls<Throwable>(1)
+        val completed = CountDownLatch(1)
+        Platform.runLater {
+            try {
+                result[0] = action()
+            } catch (error: Throwable) {
+                failure[0] = error
+            } finally {
+                completed.countDown()
+            }
+        }
+        check(completed.await(1, TimeUnit.SECONDS))
+        failure[0]?.let { throw it }
+        @Suppress("UNCHECKED_CAST")
+        return result[0] as T
     }
 
     private class RecordingAction(name: String) : AbstractJSkatAction() {
