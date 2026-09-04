@@ -3,6 +3,7 @@ package org.jskat.gui.javafx.table
 import javafx.scene.image.ImageView
 import javafx.scene.layout.Pane
 import javafx.scene.shape.Rectangle
+import javafx.scene.transform.Rotate
 import org.jskat.data.JSkatOptions
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.Card
@@ -13,6 +14,12 @@ class CardPanel(
     private val scaleFactor: Double = 1.0,
     private var showBackside: Boolean = true
 ) : Pane() {
+
+    private companion object {
+        const val FAN_CARD_GAP_RATIO = 0.42
+        const val FAN_ANGLE_PER_CARD = 5.0
+        const val HOVER_LIFT_RATIO = 0.18
+    }
 
     internal val cards = CardList()
     private val cardViews = mutableMapOf<Card, ImageView>()
@@ -102,9 +109,11 @@ class CardPanel(
                 }
                 imageView.setOnMouseEntered {
                     imageView.style = "-fx-cursor: hand;"
+                    imageView.translateY = -imageView.fitHeight * HOVER_LIFT_RATIO
                 }
                 imageView.setOnMouseExited {
                     imageView.style = "-fx-cursor: default;"
+                    imageView.translateY = 0.0
                 }
             }
 
@@ -120,22 +129,30 @@ class CardPanel(
         if (cards.isEmpty) return
 
         val cardWidth = if (children.isNotEmpty()) (children[0] as ImageView).fitWidth else 0.0
+        val cardHeight = if (children.isNotEmpty()) (children[0] as ImageView).fitHeight else 0.0
         val availableWidth = width
-
-        var cardGap = cardWidth
-        if (cards.size() * cardGap > availableWidth) {
-            if (cards.size() > 1) {
-                cardGap = (availableWidth - cardWidth) / (cards.size() - 1)
-            }
-        }
+        val cardGap = fanCardGap(cardWidth, availableWidth, cards.size())
+        val handWidth = cardWidth + cardGap * (cards.size() - 1)
+        val handStartX = (availableWidth - handWidth) / 2
+        val middleCardIndex = (cards.size() - 1) / 2.0
 
         for (i in 0 until cards.size()) {
             val card = cards[i]
             val view = cardViews[card]
             if (view != null) {
-                view.layoutX = i * cardGap
+                val angle = (i - middleCardIndex) * FAN_ANGLE_PER_CARD
+                view.layoutX = handStartX + i * cardGap
                 view.layoutY = 0.0
+                view.transforms.setAll(Rotate(angle, cardWidth / 2, cardHeight))
             }
         }
+    }
+
+    private fun fanCardGap(cardWidth: Double, availableWidth: Double, cardCount: Int): Double {
+        if (cardCount < 2) return 0.0
+
+        val preferredGap = cardWidth * FAN_CARD_GAP_RATIO
+        val gapThatFits = (availableWidth - cardWidth) / (cardCount - 1)
+        return preferredGap.coerceAtMost(gapThatFits.coerceAtLeast(0.0))
     }
 }
