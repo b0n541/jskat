@@ -12,6 +12,9 @@ class ScoreListTableView(playerNames: List<String>) : TableView<ScoreHistoryRow>
     private val strings = JSkatResourceBundle.INSTANCE
 
     init {
+        // Keep every score column in the viewport; the score sheet is not meant to scroll sideways.
+        columnResizePolicy = TableView.CONSTRAINED_RESIZE_POLICY_FLEX_NEXT_COLUMN
+
         val gameNoColumn = TableColumn<ScoreHistoryRow, Int>("#").apply {
             prefWidth = 30.0
             setCellFactory {

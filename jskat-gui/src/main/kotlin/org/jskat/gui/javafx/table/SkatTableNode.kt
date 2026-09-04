@@ -27,12 +27,19 @@ class SkatTableNode(val skatTablePanel: SkatTablePanel) : SplitPane() {
     private lateinit var playerOrder: ScoreHistoryPlayerOrder
 
     init {
-        items.addAll(getLeftPanel(), skatTablePanel)
-        Platform.runLater {
-            setDividerPositions(0.2)
+        val scorePanel = getLeftPanel().apply {
+            minWidth = SCORE_PANEL_WIDTH
+            prefWidth = SCORE_PANEL_WIDTH
+            maxWidth = SCORE_PANEL_WIDTH
         }
+        items.addAll(scorePanel, skatTablePanel)
+        setResizableWithParent(scorePanel, false)
 
         JSkatEventBus.TABLE_EVENT_BUSSES[skatTablePanel.tableName]?.register(this)
+    }
+
+    private companion object {
+        const val SCORE_PANEL_WIDTH = 300.0
     }
 
     private fun getLeftPanel(): VBox {
