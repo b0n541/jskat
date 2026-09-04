@@ -50,6 +50,7 @@ public class IssController {
     private OutputChannel issOut;
 
     private final Map<String, SkatGameData> gameData;
+    private final Map<String, IssSkatCardTransferHandler> skatCardTransferHandlers;
 
     /**
      * Constructor
@@ -60,6 +61,7 @@ public class IssController {
 
         jskat = jskatMaster;
         gameData = new HashMap<>();
+        skatCardTransferHandlers = new HashMap<>();
 
         eventBus.register(this);
     }
@@ -266,10 +268,16 @@ public class IssController {
      */
     public void createTable(final String tableName, final String creator, final int maxPlayers) {
         eventBus.post(new CreateTableCommand(JSkatViewType.ISS_TABLE, tableName));
+        skatCardTransferHandlers.computeIfAbsent(tableName, name -> {
+            final IssSkatCardTransferHandler handler = new IssSkatCardTransferHandler(name);
+            JSkatEventBus.TABLE_EVENT_BUSSES.get(name).register(handler);
+            return handler;
+        });
         jskat.setActiveTable(JSkatViewType.ISS_TABLE, tableName);
     }
 
     public void removeTable(final String tableName) {
+        skatCardTransferHandlers.remove(tableName);
         eventBus.post(new RemoveTableCommand(JSkatViewType.ISS_TABLE, tableName));
     }
 
