@@ -13,7 +13,7 @@ class GameOverTrickPanel : HBox() {
         this.spacing = 10.0 // Padding between individual trick panels
 
         for (i in 0 until 10) {
-            val panel = TrickPanel(0.8, false)
+            val panel = TrickPanel(1.0, false)
             trickPanels.add(panel)
             children.add(panel)
             setHgrow(panel, Priority.ALWAYS)

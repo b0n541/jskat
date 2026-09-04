@@ -2,6 +2,7 @@ package org.jskat.gui.javafx.table
 
 import javafx.scene.control.Button
 import javafx.scene.layout.HBox
+import javafx.scene.layout.Pane
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
@@ -46,6 +47,8 @@ class GameOverPanel(
 
         buttonPanel.children.add(skatPanel)
 
+        val buttonSpacer = Pane().apply { HBox.setHgrow(this, Priority.ALWAYS) }
+
         val continueSkatSeriesAction = actions[JSkatAction.CONTINUE_LOCAL_SERIES]
         val continueSkatSeriesButton =
             Button(continueSkatSeriesAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "").apply {
@@ -54,8 +57,6 @@ class GameOverPanel(
                     continueSkatSeriesAction?.actionPerformed(JSkatActionEvent(tableName, it.source))
                 }
             }
-        buttonPanel.children.add(continueSkatSeriesButton)
-
         val replayGameAction = actions[JSkatAction.REPLAY_GAME]
         val replayGameButton =
             Button(replayGameAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "").apply {
@@ -64,7 +65,7 @@ class GameOverPanel(
                     replayGameAction?.actionPerformed(JSkatActionEvent(tableName, it.source))
                 }
             }
-        buttonPanel.children.add(replayGameButton)
+        buttonPanel.children.addAll(buttonSpacer, replayGameButton, continueSkatSeriesButton)
 
         children.add(buttonPanel)
         setVgrow(buttonPanel, Priority.NEVER) // Button panel has fixed height, doesn't compete for space
