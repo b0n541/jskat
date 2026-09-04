@@ -54,6 +54,7 @@ class BiddingContextPanel(
         columnConstraints.addAll(col1, col2, col3)
 
         add(announcePanel, 0, 0)
+        GridPane.setHalignment(announcePanel, HPos.CENTER)
 
         // Bidding Panel (Center)
         val biddingGrid = GridPane()

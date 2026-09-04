@@ -1,5 +1,6 @@
 package org.jskat.gui.javafx.table
 
+import javafx.geometry.HPos
 import javafx.geometry.Pos
 import javafx.scene.layout.ColumnConstraints
 import javafx.scene.layout.GridPane
@@ -36,6 +37,7 @@ class DeclaringContextPanel(
         columnConstraints.addAll(col1, col2, col3)
 
         add(announcePanel, 0, 0)
+        GridPane.setHalignment(announcePanel, HPos.CENTER)
 
         discardPanel.setAnnouncePanel(announcePanel)
         add(discardPanel, 1, 0)

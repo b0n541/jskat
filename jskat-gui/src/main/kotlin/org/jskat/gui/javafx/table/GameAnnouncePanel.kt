@@ -2,11 +2,13 @@ package org.jskat.gui.javafx.table
 
 import javafx.application.Platform
 import javafx.geometry.Insets
+import javafx.geometry.HPos
 import javafx.geometry.Pos
 import javafx.scene.control.*
 import javafx.scene.layout.ColumnConstraints
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Priority
+import javafx.scene.layout.Region
 import org.jskat.control.JSkatEventBus
 import org.jskat.control.event.skatgame.InvalidNumberOfCardsInDiscardedSkatEvent
 import org.jskat.control.gui.action.JSkatAction
@@ -88,8 +90,9 @@ class GameAnnouncePanel(
 
         announceButton.graphic =
             bitmaps.getImageView(JSkatGraphicRepository.Icon.PLAY, JSkatGraphicRepository.IconSize.BIG)
-        announceButton.maxWidth = Double.MAX_VALUE
+        announceButton.maxWidth = Region.USE_PREF_SIZE
         add(announceButton, 0, 8, 2, 1)
+        GridPane.setHalignment(announceButton, HPos.CENTER)
 
         handBox.isDisable = true
 
