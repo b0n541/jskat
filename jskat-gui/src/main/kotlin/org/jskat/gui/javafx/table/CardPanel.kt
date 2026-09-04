@@ -25,8 +25,8 @@ class CardPanel(
     }
 
     internal val cards = CardList()
-    private val cardViews = mutableMapOf<Card, ImageView>()
-    private val cardHitAreas = mutableMapOf<Card, Pane>()
+    private val cardViews = mutableListOf<ImageView>()
+    private val cardHitAreas = mutableListOf<Pane>()
     private var sortGameType = GameType.GRAND
 
     var onCardClicked: ((Card) -> Unit)? = null
@@ -128,8 +128,8 @@ class CardPanel(
                 }
             }
 
-            cardViews[card] = imageView
-            cardHitAreas[card] = hitArea
+            cardViews.add(imageView)
+            cardHitAreas.add(hitArea)
             children.add(hitArea)
         }
         requestLayout()
@@ -142,7 +142,7 @@ class CardPanel(
 
         fitOpponentCardsToPanel()
 
-        val sampleCard = cardViews.values.firstOrNull() ?: return
+        val sampleCard = cardViews.firstOrNull() ?: return
         val cardWidth = sampleCard.fitWidth
         val cardHeight = sampleCard.fitHeight
         val availableWidth = width
@@ -154,18 +154,15 @@ class CardPanel(
         val handLayoutY = handLayoutY(cardWidth, cardHeight, middleCardIndex)
 
         for (i in 0 until cards.size()) {
-            val card = cards[i]
-            val hitArea = cardHitAreas[card]
-            if (hitArea != null) {
-                val angle = (i - middleCardIndex) * FAN_ANGLE_PER_CARD
-                hitArea.resizeRelocate(
-                    handStartX + i * cardGap,
-                    handLayoutY + fanArcOffset(i - middleCardIndex, cardScale),
-                    cardWidth,
-                    cardHeight
-                )
-                hitArea.transforms.setAll(Rotate(angle, cardWidth / 2, cardHeight))
-            }
+            val hitArea = cardHitAreas[i]
+            val angle = (i - middleCardIndex) * FAN_ANGLE_PER_CARD
+            hitArea.resizeRelocate(
+                handStartX + i * cardGap,
+                handLayoutY + fanArcOffset(i - middleCardIndex, cardScale),
+                cardWidth,
+                cardHeight
+            )
+            hitArea.transforms.setAll(Rotate(angle, cardWidth / 2, cardHeight))
         }
     }
 
@@ -194,7 +191,7 @@ class CardPanel(
     private fun fitOpponentCardsToPanel() {
         if (isHumanPlayer || children.isEmpty() || height <= 0.0) return
 
-        val sampleCard = cardViews.values.firstOrNull() ?: return
+        val sampleCard = cardViews.firstOrNull() ?: return
         val fullCardWidth = sampleCard.image.width * scaleFactor
         val fullCardHeight = sampleCard.image.height * scaleFactor
         val middleCardIndex = (cards.size() - 1) / 2.0
@@ -207,7 +204,7 @@ class CardPanel(
             fanArcOffset(middleCardIndex, 1.0)
         val cardScale = (height / fullHandHeight).coerceAtMost(1.0)
 
-        cardViews.values.forEach { view ->
+        cardViews.forEach { view ->
             view.fitWidth = fullCardWidth * cardScale
             view.fitHeight = fullCardHeight * cardScale
         }

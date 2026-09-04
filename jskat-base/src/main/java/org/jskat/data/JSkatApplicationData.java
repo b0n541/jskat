@@ -175,8 +175,6 @@ public class JSkatApplicationData {
 
     /**
      * Adds an available player on ISS
-     *
-     * @param newPlayer New player
      */
     public void updateAvailableISSPlayer(
             final String playerName,
