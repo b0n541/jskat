@@ -1,5 +1,6 @@
 package org.jskat.gui.javafx.table
 
+import javafx.scene.Cursor
 import javafx.scene.image.ImageView
 import javafx.scene.layout.Pane
 import javafx.scene.shape.Rectangle
@@ -25,6 +26,7 @@ class CardPanel(
 
     internal val cards = CardList()
     private val cardViews = mutableMapOf<Card, ImageView>()
+    private val cardHitAreas = mutableMapOf<Card, Pane>()
     private var sortGameType = GameType.GRAND
 
     var onCardClicked: ((Card) -> Unit)? = null
@@ -93,6 +95,7 @@ class CardPanel(
     private fun updateCardViews() {
         children.clear()
         cardViews.clear()
+        cardHitAreas.clear()
 
         for (card in cards) {
             val image = if (showBackside) {
@@ -105,22 +108,29 @@ class CardPanel(
             imageView.fitHeight = image.height * scaleFactor
             imageView.isPreserveRatio = true
 
+            // The hit area must not move when the image is lifted.  Otherwise a
+            // cursor near an edge can leave the image as it moves, which drops it
+            // back under the cursor and causes the hover state to oscillate.
+            val hitArea = Pane(imageView)
+            hitArea.isPickOnBounds = true
+            imageView.isMouseTransparent = true
+
             if (isHumanPlayer) {
-                imageView.setOnMouseClicked {
+                hitArea.cursor = Cursor.HAND
+                hitArea.setOnMouseClicked {
                     onCardClicked?.invoke(card)
                 }
-                imageView.setOnMouseEntered {
-                    imageView.style = "-fx-cursor: hand;"
+                hitArea.setOnMouseEntered {
                     imageView.translateY = -imageView.fitHeight * HOVER_LIFT_RATIO
                 }
-                imageView.setOnMouseExited {
-                    imageView.style = "-fx-cursor: default;"
+                hitArea.setOnMouseExited {
                     imageView.translateY = 0.0
                 }
             }
 
             cardViews[card] = imageView
-            children.add(imageView)
+            cardHitAreas[card] = hitArea
+            children.add(hitArea)
         }
         requestLayout()
     }
@@ -132,24 +142,29 @@ class CardPanel(
 
         fitOpponentCardsToPanel()
 
-        val cardWidth = if (children.isNotEmpty()) (children[0] as ImageView).fitWidth else 0.0
-        val cardHeight = if (children.isNotEmpty()) (children[0] as ImageView).fitHeight else 0.0
+        val sampleCard = cardViews.values.firstOrNull() ?: return
+        val cardWidth = sampleCard.fitWidth
+        val cardHeight = sampleCard.fitHeight
         val availableWidth = width
         val cardGap = fanCardGap(cardWidth, availableWidth, cards.size())
         val handWidth = cardWidth + cardGap * (cards.size() - 1)
         val handStartX = (availableWidth - handWidth) / 2
         val middleCardIndex = (cards.size() - 1) / 2.0
-        val cardScale = cardWidth / ((children[0] as ImageView).image.width * scaleFactor)
+        val cardScale = cardWidth / (sampleCard.image.width * scaleFactor)
         val handLayoutY = handLayoutY(cardWidth, cardHeight, middleCardIndex)
 
         for (i in 0 until cards.size()) {
             val card = cards[i]
-            val view = cardViews[card]
-            if (view != null) {
+            val hitArea = cardHitAreas[card]
+            if (hitArea != null) {
                 val angle = (i - middleCardIndex) * FAN_ANGLE_PER_CARD
-                view.layoutX = handStartX + i * cardGap
-                view.layoutY = handLayoutY + fanArcOffset(i - middleCardIndex, cardScale)
-                view.transforms.setAll(Rotate(angle, cardWidth / 2, cardHeight))
+                hitArea.resizeRelocate(
+                    handStartX + i * cardGap,
+                    handLayoutY + fanArcOffset(i - middleCardIndex, cardScale),
+                    cardWidth,
+                    cardHeight
+                )
+                hitArea.transforms.setAll(Rotate(angle, cardWidth / 2, cardHeight))
             }
         }
     }
@@ -179,7 +194,7 @@ class CardPanel(
     private fun fitOpponentCardsToPanel() {
         if (isHumanPlayer || children.isEmpty() || height <= 0.0) return
 
-        val sampleCard = children[0] as ImageView
+        val sampleCard = cardViews.values.firstOrNull() ?: return
         val fullCardWidth = sampleCard.image.width * scaleFactor
         val fullCardHeight = sampleCard.image.height * scaleFactor
         val middleCardIndex = (cards.size() - 1) / 2.0
@@ -192,7 +207,7 @@ class CardPanel(
             fanArcOffset(middleCardIndex, 1.0)
         val cardScale = (height / fullHandHeight).coerceAtMost(1.0)
 
-        children.filterIsInstance<ImageView>().forEach { view ->
+        cardViews.values.forEach { view ->
             view.fitWidth = fullCardWidth * cardScale
             view.fitHeight = fullCardHeight * cardScale
         }
