@@ -57,6 +57,8 @@ class IssTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
         return OpponentPanel(12, true)
     }
 
+    override fun showReplayGameButton(): Boolean = false
+
     override fun createPlayerPanel(): JSkatUserPanel {
         return JSkatUserPanel(tableName, 12, true, actions)
     }

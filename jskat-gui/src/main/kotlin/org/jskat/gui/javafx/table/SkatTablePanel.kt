@@ -77,6 +77,8 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
 
     protected open fun getOpponentPanel(): OpponentPanel = OpponentPanel(12, false)
 
+    protected open fun showReplayGameButton(): Boolean = true
+
     protected open fun createPlayerPanel(): JSkatUserPanel = JSkatUserPanel(tableName, 12, false, actions)
 
     private fun createGameContextStackPane() {
@@ -118,7 +120,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
 
         addContextPanel(ContextPanelType.TRICK_PLAYING, trickHoldingPanel)
 
-        gameOverPanel = GameOverPanel(tableName, actions)
+        gameOverPanel = GameOverPanel(tableName, actions, showReplayGameButton())
         addContextPanel(ContextPanelType.GAME_OVER, gameOverPanel)
 
         setContextPanel(ContextPanelType.START)

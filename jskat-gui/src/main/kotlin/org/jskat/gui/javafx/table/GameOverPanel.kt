@@ -16,7 +16,8 @@ import org.jskat.util.Player
 
 class GameOverPanel(
     private val tableName: String,
-    actions: Map<JSkatAction, AbstractJSkatAction>
+    actions: Map<JSkatAction, AbstractJSkatAction>,
+    showReplayGameButton: Boolean = true
 ) : VBox() {
 
     private val bitmaps = JSkatGraphicRepository.INSTANCE
@@ -57,15 +58,19 @@ class GameOverPanel(
                     continueSkatSeriesAction?.actionPerformed(JSkatActionEvent(tableName, it.source))
                 }
             }
-        val replayGameAction = actions[JSkatAction.REPLAY_GAME]
-        val replayGameButton =
-            Button(replayGameAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "").apply {
-                graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.FIRST, JSkatGraphicRepository.IconSize.BIG)
-                setOnAction {
-                    replayGameAction?.actionPerformed(JSkatActionEvent(tableName, it.source))
+        if (showReplayGameButton) {
+            val replayGameAction = actions[JSkatAction.REPLAY_GAME]
+            val replayGameButton =
+                Button(replayGameAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "").apply {
+                    graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.FIRST, JSkatGraphicRepository.IconSize.BIG)
+                    setOnAction {
+                        replayGameAction?.actionPerformed(JSkatActionEvent(tableName, it.source))
+                    }
                 }
-            }
-        buttonPanel.children.addAll(buttonSpacer, replayGameButton, continueSkatSeriesButton)
+            buttonPanel.children.addAll(buttonSpacer, replayGameButton, continueSkatSeriesButton)
+        } else {
+            buttonPanel.children.addAll(buttonSpacer, continueSkatSeriesButton)
+        }
 
         children.add(buttonPanel)
         setVgrow(buttonPanel, Priority.NEVER) // Button panel has fixed height, doesn't compete for space
