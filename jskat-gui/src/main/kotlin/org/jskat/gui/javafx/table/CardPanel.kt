@@ -130,6 +130,8 @@ class CardPanel(
 
         if (cards.isEmpty) return
 
+        fitOpponentCardsToPanel()
+
         val cardWidth = if (children.isNotEmpty()) (children[0] as ImageView).fitWidth else 0.0
         val cardHeight = if (children.isNotEmpty()) (children[0] as ImageView).fitHeight else 0.0
         val availableWidth = width
@@ -137,6 +139,7 @@ class CardPanel(
         val handWidth = cardWidth + cardGap * (cards.size() - 1)
         val handStartX = (availableWidth - handWidth) / 2
         val middleCardIndex = (cards.size() - 1) / 2.0
+        val cardScale = cardWidth / ((children[0] as ImageView).image.width * scaleFactor)
         val handLayoutY = handLayoutY(cardWidth, cardHeight, middleCardIndex)
 
         for (i in 0 until cards.size()) {
@@ -145,7 +148,7 @@ class CardPanel(
             if (view != null) {
                 val angle = (i - middleCardIndex) * FAN_ANGLE_PER_CARD
                 view.layoutX = handStartX + i * cardGap
-                view.layoutY = handLayoutY + fanArcOffset(i - middleCardIndex)
+                view.layoutY = handLayoutY + fanArcOffset(i - middleCardIndex, cardScale)
                 view.transforms.setAll(Rotate(angle, cardWidth / 2, cardHeight))
             }
         }
@@ -164,10 +167,37 @@ class CardPanel(
         val outerCardTopOverhang = (
             cardWidth / 2 * kotlin.math.sin(outerCardAngle) - cardHeight * (1 - kotlin.math.cos(outerCardAngle))
             ).coerceAtLeast(0.0)
-        val topClearance = cardHeight * HOVER_LIFT_RATIO + outerCardTopOverhang
-        return (height - cardHeight + FAN_BOTTOM_CLIP).coerceAtLeast(topClearance)
+        val topClearance = if (isHumanPlayer) cardHeight * HOVER_LIFT_RATIO else 0.0
+        val requiredTopClearance = topClearance + outerCardTopOverhang
+        return if (isHumanPlayer) {
+            (height - cardHeight + FAN_BOTTOM_CLIP).coerceAtLeast(requiredTopClearance)
+        } else {
+            requiredTopClearance
+        }
     }
 
-    private fun fanArcOffset(distanceFromMiddle: Double): Double =
-        distanceFromMiddle * distanceFromMiddle * FAN_ARC_DEPTH_PER_CARD
+    private fun fitOpponentCardsToPanel() {
+        if (isHumanPlayer || children.isEmpty() || height <= 0.0) return
+
+        val sampleCard = children[0] as ImageView
+        val fullCardWidth = sampleCard.image.width * scaleFactor
+        val fullCardHeight = sampleCard.image.height * scaleFactor
+        val middleCardIndex = (cards.size() - 1) / 2.0
+        val outerCardAngle = Math.toRadians(middleCardIndex * FAN_ANGLE_PER_CARD)
+        val outerCardTopOverhang = (
+            fullCardWidth / 2 * kotlin.math.sin(outerCardAngle) - fullCardHeight * (1 - kotlin.math.cos(outerCardAngle))
+            ).coerceAtLeast(0.0)
+        val outerCardBottomOverhang = fullCardWidth / 2 * kotlin.math.sin(outerCardAngle)
+        val fullHandHeight = fullCardHeight + outerCardTopOverhang + outerCardBottomOverhang +
+            fanArcOffset(middleCardIndex, 1.0)
+        val cardScale = (height / fullHandHeight).coerceAtMost(1.0)
+
+        children.filterIsInstance<ImageView>().forEach { view ->
+            view.fitWidth = fullCardWidth * cardScale
+            view.fitHeight = fullCardHeight * cardScale
+        }
+    }
+
+    private fun fanArcOffset(distanceFromMiddle: Double, cardScale: Double): Double =
+        distanceFromMiddle * distanceFromMiddle * FAN_ARC_DEPTH_PER_CARD * cardScale
 }
