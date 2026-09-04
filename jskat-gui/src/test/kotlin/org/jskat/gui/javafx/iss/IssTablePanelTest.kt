@@ -77,6 +77,32 @@ class IssTablePanelTest {
     }
 
     @Test
+    fun `ISS game-over leave-table action uses the table name`() {
+        val leaveTable = RecordingAction("Leave table")
+
+        val button = onFxThread {
+            val panel = GameOverPanel(
+                "ISS-42",
+                mapOf(
+                    JSkatAction.READY_TO_PLAY to RecordingAction("Ready"),
+                    JSkatAction.LEAVE_ISS_TABLE to leaveTable
+                ),
+                showReplayGameButton = false,
+                continueAction = JSkatAction.READY_TO_PLAY,
+                additionalAction = JSkatAction.LEAVE_ISS_TABLE
+            )
+            Scene(panel)
+            (panel.children[1] as javafx.scene.layout.HBox).children
+                .filterIsInstance<Button>()
+                .single { it.text == "Leave table" }
+        }
+
+        onFxThread { button.fire() }
+
+        assertThat(leaveTable.source).isEqualTo("ISS-42")
+    }
+
+    @Test
     fun `ISS start-context actions have the same width`() {
         val buttons = onFxThread {
             val panel = IssStartContextPanel(

@@ -18,7 +18,8 @@ class GameOverPanel(
     private val tableName: String,
     actions: Map<JSkatAction, AbstractJSkatAction>,
     showReplayGameButton: Boolean = true,
-    continueAction: JSkatAction = JSkatAction.CONTINUE_LOCAL_SERIES
+    continueAction: JSkatAction = JSkatAction.CONTINUE_LOCAL_SERIES,
+    additionalAction: JSkatAction? = null
 ) : VBox() {
 
     private val bitmaps = JSkatGraphicRepository.INSTANCE
@@ -64,6 +65,16 @@ class GameOverPanel(
                     continueSkatSeriesAction?.actionPerformed(event)
                 }
             }
+        val additionalButton = additionalAction?.let { actionType ->
+            actions[actionType]?.let { action ->
+                Button(action.getValue(AbstractJSkatAction.NAME) as? String ?: actionType.name).apply {
+                    graphic = bitmaps.getImageView(action.icon, JSkatGraphicRepository.IconSize.BIG)
+                    setOnAction {
+                        action.actionPerformed(JSkatActionEvent(actionType, tableName))
+                    }
+                }
+            }
+        }
         if (showReplayGameButton) {
             val replayGameAction = actions[JSkatAction.REPLAY_GAME]
             val replayGameButton =
@@ -73,9 +84,13 @@ class GameOverPanel(
                         replayGameAction?.actionPerformed(JSkatActionEvent(tableName, it.source))
                     }
                 }
-            buttonPanel.children.addAll(buttonSpacer, replayGameButton, continueSkatSeriesButton)
+            buttonPanel.children.add(buttonSpacer)
+            additionalButton?.let(buttonPanel.children::add)
+            buttonPanel.children.addAll(replayGameButton, continueSkatSeriesButton)
         } else {
-            buttonPanel.children.addAll(buttonSpacer, continueSkatSeriesButton)
+            buttonPanel.children.add(buttonSpacer)
+            additionalButton?.let(buttonPanel.children::add)
+            buttonPanel.children.add(continueSkatSeriesButton)
         }
 
         children.add(buttonPanel)

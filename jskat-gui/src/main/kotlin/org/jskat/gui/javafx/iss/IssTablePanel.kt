@@ -60,6 +60,8 @@ class IssTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
 
     override fun continueSeriesAction(): JSkatAction = JSkatAction.READY_TO_PLAY
 
+    override fun gameOverAdditionalAction(): JSkatAction = JSkatAction.LEAVE_ISS_TABLE
+
     override fun createPlayerPanel(): JSkatUserPanel {
         return JSkatUserPanel(tableName, 12, true, actions)
     }
