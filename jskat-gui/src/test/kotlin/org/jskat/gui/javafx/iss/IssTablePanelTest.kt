@@ -4,12 +4,18 @@ import javafx.application.Platform
 import javafx.scene.Scene
 import javafx.scene.control.Button
 import org.assertj.core.api.Assertions.assertThat
+import org.jskat.control.event.iss.IssTableStateChangedEvent
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.DesktopSavePathResolver
+import org.jskat.data.JSkatApplicationData
 import org.jskat.data.JSkatOptions
+import org.jskat.data.iss.PlayerStatus
+import org.jskat.data.iss.TablePanelStatus
 import org.jskat.gui.action.AbstractJSkatAction
+import org.jskat.gui.action.main.StartSkatSeriesAction
 import org.jskat.gui.img.JSkatGraphicRepository.Icon
+import org.jskat.gui.javafx.table.AbstractHandPanel
 import org.jskat.gui.javafx.table.GameOverPanel
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -122,6 +128,39 @@ class IssTablePanelTest {
         assertThat(buttons).hasSize(2)
         assertThat(buttons.map(Button::getPrefWidth)).containsOnly(buttons.first().prefWidth)
         assertThat(buttons.map(Button::getMaxWidth)).containsOnly(buttons.first().maxWidth)
+    }
+
+    @Test
+    fun `ISS table state keeps the signed-in player in the user panel`() {
+        val status = TablePanelStatus().apply {
+            addPlayer("Alice", PlayerStatus())
+            addPlayer("Me", PlayerStatus())
+            addPlayer("Zoe", PlayerStatus())
+        }
+
+        val panel = onFxThread {
+            JSkatApplicationData.INSTANCE.setIssUserName("Me")
+            IssTablePanel(
+                "ISS-42",
+                mapOf(JSkatAction.START_LOCAL_SERIES to StartSkatSeriesAction())
+            ).also {
+                it.updateTableStatusOn(IssTableStateChangedEvent("ISS-42", status))
+            }
+        }
+
+        onFxThread { Unit }
+
+        assertThat(handPanelNames(panel)).containsExactlyInAnyOrder("Alice", "Me", "Zoe")
+        assertThat(handPanelNames(panel).last()).isEqualTo("Me")
+    }
+
+    private fun handPanelNames(panel: IssTablePanel): List<String?> {
+        val fields = listOf("leftOpponentPanel", "rightOpponentPanel", "userPanel")
+        return fields.map { fieldName ->
+            val field = panel.javaClass.superclass.getDeclaredField(fieldName)
+            field.isAccessible = true
+            (field.get(panel) as AbstractHandPanel).playerName
+        }
     }
 
     private fun <T> onFxThread(action: () -> T): T {

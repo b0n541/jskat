@@ -12,6 +12,7 @@ import org.jskat.control.event.iss.IssTableStateChangedEvent
 import org.jskat.control.event.skatgame.GameStartedEvent
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
+import org.jskat.data.JSkatApplicationData
 import org.jskat.data.iss.TablePanelStatus
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
@@ -141,14 +142,18 @@ class IssTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
                 val leftOpponent = userPosition.leftNeighbor
                 val rightOpponent = userPosition.rightNeighbor
                 resetTable(GameStartedEvent(gameStart.gameNo, GameVariant.STANDARD, leftOpponent, rightOpponent, userPosition))
+                playerNamesAndPositions.clear()
 
                 setPlayerName(leftOpponent, gameStart.playerNames[leftOpponent]!!)
+                playerNamesAndPositions[gameStart.playerNames[leftOpponent]!!] = leftOpponent
                 setPlayerTime(leftOpponent, gameStart.playerTimes[leftOpponent]!!)
 
                 setPlayerName(rightOpponent, gameStart.playerNames[rightOpponent]!!)
+                playerNamesAndPositions[gameStart.playerNames[rightOpponent]!!] = rightOpponent
                 setPlayerTime(rightOpponent, gameStart.playerTimes[rightOpponent]!!)
 
                 setPlayerName(userPosition, gameStart.playerNames[userPosition]!!)
+                playerNamesAndPositions[gameStart.playerNames[userPosition]!!] = userPosition
                 setPlayerTime(userPosition, gameStart.playerTimes[userPosition]!!)
             }
         }
@@ -175,18 +180,19 @@ class IssTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
 
     private fun addPlayerName(playerName: String) {
         if (!playerNamesAndPositions.containsKey(playerName)) {
-            if (userPanel.playerName == null || userPanel.playerName!!.isEmpty()) {
+            val localPlayerName = JSkatApplicationData.INSTANCE.issUserName ?: ""
+            if (playerName == localPlayerName) {
                 userPanel.playerName = playerName
-                userPanel.position?.let { playerNamesAndPositions[playerName] = it }
             } else if (leftOpponentPanel.playerName == null || leftOpponentPanel.playerName!!.isEmpty()) {
                 leftOpponentPanel.playerName = playerName
-                leftOpponentPanel.position?.let { playerNamesAndPositions[playerName] = it }
             } else if (rightOpponentPanel.playerName == null || rightOpponentPanel.playerName!!.isEmpty()) {
                 rightOpponentPanel.playerName = playerName
-                rightOpponentPanel.position?.let { playerNamesAndPositions[playerName] = it }
+            } else if (localPlayerName.isEmpty() && (userPanel.playerName == null || userPanel.playerName!!.isEmpty())) {
+                userPanel.playerName = playerName
             } else {
-                playerNamesAndPositions[playerName] = null
+                return
             }
+            playerNamesAndPositions[playerName] = getHandPanel(playerName)?.position
         }
     }
 
