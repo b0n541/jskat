@@ -64,31 +64,53 @@ class IssTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
     override fun getRightPanelForTrickPanel(): Pane {
         val additionalActionsPanel = VBox()
         additionalActionsPanel.spacing = 10.0
+        val actionButtons = mutableListOf<Button>()
 
         val resignAction = actions[JSkatAction.RESIGN]
         if (resignAction != null) {
             val resignButton =
-                Button(resignAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.RESIGN.name).apply {
-                    graphic =
-                        bitmaps.getImageView(
-                            JSkatGraphicRepository.Icon.WHITE_FLAG,
-                            JSkatGraphicRepository.IconSize.BIG
-                        )
+                Button(
+                    resignAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.RESIGN.name
+                ).apply {
+                    maxWidth = Double.MAX_VALUE
+                    graphic = bitmaps.getImageView(resignAction.icon, JSkatGraphicRepository.IconSize.BIG)
                     setOnAction {
-                        resignAction.actionPerformed(JSkatActionEvent(JSkatAction.RESIGN, it.source))
+                        performIssTableAction(resignAction, JSkatAction.RESIGN, tableName)
                     }
                 }
             additionalActionsPanel.children.add(resignButton)
+            actionButtons.add(resignButton)
         }
 
         val showCardsAction = actions[JSkatAction.SHOW_CARDS]
         if (showCardsAction != null) {
             val showCardsButton =
-                Button(showCardsAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.SHOW_CARDS.name)
-            showCardsButton.setOnAction {
-                showCardsAction.actionPerformed(JSkatActionEvent(JSkatAction.SHOW_CARDS, it.source))
-            }
+                Button(
+                    showCardsAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.SHOW_CARDS.name
+                ).apply {
+                    maxWidth = Double.MAX_VALUE
+                    graphic = bitmaps.getImageView(showCardsAction.icon, JSkatGraphicRepository.IconSize.BIG)
+                    setOnAction {
+                        performIssTableAction(showCardsAction, JSkatAction.SHOW_CARDS, tableName)
+                    }
+                }
+
             additionalActionsPanel.children.add(showCardsButton)
+            actionButtons.add(showCardsButton)
+        }
+
+        additionalActionsPanel.sceneProperty().addListener { _, _, scene ->
+            if (scene != null) {
+                Platform.runLater {
+                    actionButtons.forEach(Button::applyCss)
+                    val widestButton = actionButtons.maxOfOrNull { it.prefWidth(-1.0) } ?: return@runLater
+                    actionButtons.forEach { button ->
+                        button.minWidth = widestButton
+                        button.prefWidth = widestButton
+                        button.maxWidth = widestButton
+                    }
+                }
+            }
         }
 
         return additionalActionsPanel
@@ -207,3 +229,9 @@ class IssTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
         return chatPanel
     }
 }
+
+internal fun performIssTableAction(
+    action: AbstractJSkatAction,
+    actionType: JSkatAction,
+    tableName: String
+) = action.actionPerformed(JSkatActionEvent(actionType, tableName))
