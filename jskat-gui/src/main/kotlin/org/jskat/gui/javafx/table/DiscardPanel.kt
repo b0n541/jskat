@@ -47,6 +47,7 @@ class DiscardPanel(
         }
 
         cardViews.alignment = Pos.CENTER
+        cardViews.spacing = 8.0
 
         // Initially, only the button is visible
         children.add(pickUpSkatButton)
