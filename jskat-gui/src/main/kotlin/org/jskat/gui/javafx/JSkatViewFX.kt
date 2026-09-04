@@ -90,6 +90,7 @@ class JSkatViewFX(
         return runOnFxThread {
             IssPlayerInvitationDialog(playerNames).apply {
                 initModality(Modality.APPLICATION_MODAL)
+                initOwner(mainWindow.scene?.window)
             }.showAndWait().orElse(emptyList())
         }
     }
