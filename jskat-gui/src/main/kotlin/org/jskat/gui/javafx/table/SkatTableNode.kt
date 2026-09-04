@@ -9,6 +9,7 @@ import javafx.scene.control.TabPane
 import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import org.jskat.control.JSkatEventBus
+import org.jskat.control.event.iss.IssTableGameStartedEvent
 import org.jskat.control.event.skatgame.GameFinishEvent
 import org.jskat.control.event.skatgame.GameStartedEvent
 import org.jskat.control.event.table.PlayerNamesChangedEvent
@@ -83,6 +84,19 @@ class SkatTableNode(val skatTablePanel: SkatTablePanel) : SplitPane() {
             event.leftPlayerPosition(),
             event.rightPlayerPosition(),
             event.userPosition(),
+        )
+    }
+
+    @Subscribe
+    fun setPlayerOrderOn(event: IssTableGameStartedEvent) {
+        val userPosition = event.gameStart.playerNames.entries
+            .firstOrNull { (_, playerName) -> playerName == event.gameStart.loginName }
+            ?.key
+            ?: return
+        playerOrder = ScoreHistoryPlayerOrder(
+            userPosition.leftNeighbor,
+            userPosition.rightNeighbor,
+            userPosition,
         )
     }
 

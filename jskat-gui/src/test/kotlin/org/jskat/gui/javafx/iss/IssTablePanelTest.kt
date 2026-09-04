@@ -4,12 +4,14 @@ import javafx.application.Platform
 import javafx.scene.Scene
 import javafx.scene.control.Button
 import org.assertj.core.api.Assertions.assertThat
+import org.jskat.control.event.iss.IssTableGameStartedEvent
 import org.jskat.control.event.iss.IssTableStateChangedEvent
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.DesktopSavePathResolver
 import org.jskat.data.JSkatApplicationData
 import org.jskat.data.JSkatOptions
+import org.jskat.data.iss.GameStartInformation
 import org.jskat.data.iss.PlayerStatus
 import org.jskat.data.iss.TablePanelStatus
 import org.jskat.gui.action.AbstractJSkatAction
@@ -17,6 +19,9 @@ import org.jskat.gui.action.main.StartSkatSeriesAction
 import org.jskat.gui.img.JSkatGraphicRepository.Icon
 import org.jskat.gui.javafx.table.AbstractHandPanel
 import org.jskat.gui.javafx.table.GameOverPanel
+import org.jskat.gui.javafx.table.ScoreHistoryPlayerOrder
+import org.jskat.gui.javafx.table.SkatTableNode
+import org.jskat.util.Player
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import java.util.concurrent.CountDownLatch
@@ -154,6 +159,35 @@ class IssTablePanelTest {
         assertThat(handPanelNames(panel).last()).isEqualTo("Me")
     }
 
+    @Test
+    fun `ISS game start initializes the score history player order`() {
+        val node = onFxThread {
+            JSkatApplicationData.INSTANCE.setIssUserName("Me")
+            SkatTableNode(
+                IssTablePanel(
+                    "ISS-score-history",
+                    mapOf(JSkatAction.START_LOCAL_SERIES to StartSkatSeriesAction()),
+                ),
+            )
+        }
+
+        node.setPlayerOrderOn(
+            IssTableGameStartedEvent(
+                "ISS-score-history",
+                GameStartInformation(
+                    "Me",
+                    7,
+                    mapOf(Player.FOREHAND to "Alice", Player.MIDDLEHAND to "Me", Player.REARHAND to "Zoe"),
+                    mapOf(Player.FOREHAND to 0.0, Player.MIDDLEHAND to 0.0, Player.REARHAND to 0.0),
+                ),
+            ),
+        )
+
+        assertThat(playerOrderOf(node)).isEqualTo(
+            ScoreHistoryPlayerOrder(Player.REARHAND, Player.FOREHAND, Player.MIDDLEHAND),
+        )
+    }
+
     private fun handPanelNames(panel: IssTablePanel): List<String?> {
         val fields = listOf("leftOpponentPanel", "rightOpponentPanel", "userPanel")
         return fields.map { fieldName ->
@@ -161,6 +195,12 @@ class IssTablePanelTest {
             field.isAccessible = true
             (field.get(panel) as AbstractHandPanel).playerName
         }
+    }
+
+    private fun playerOrderOf(node: SkatTableNode): ScoreHistoryPlayerOrder {
+        val playerOrder = node.javaClass.getDeclaredField("playerOrder")
+        playerOrder.isAccessible = true
+        return playerOrder.get(node) as ScoreHistoryPlayerOrder
     }
 
     private fun <T> onFxThread(action: () -> T): T {
