@@ -75,8 +75,10 @@ class BiddingContextPanel(
             graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.OK, JSkatGraphicRepository.IconSize.BIG)
             setOnAction {
                 currentBidAction?.let { action ->
+                    val command = if (action === holdBidAction) JSkatAction.HOLD_BID else JSkatAction.MAKE_BID
+                    val source = it.source
                     Platform.runLater {
-                        action.actionPerformed(JSkatActionEvent(JSkatAction.MAKE_BID, it.source))
+                        action.actionPerformed(JSkatActionEvent(command, source))
                     }
                 }
             }
