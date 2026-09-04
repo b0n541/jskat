@@ -41,7 +41,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     protected lateinit var userPanel: JSkatUserPanel
     protected lateinit var gameInfoPanel: GameInformationPanel
     private lateinit var gameContextStackPane: StackPane
-    private val contextPanels: MutableMap<ContextPanelType, Node> = mutableMapOf()
+    private lateinit var contextPanelStack: ContextPanelStack
     protected lateinit var trickPanel: TrickPanel
     protected lateinit var lastTrickPanel: TrickPanel
     protected lateinit var gameOverPanel: GameOverPanel
@@ -80,7 +80,8 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     protected open fun createPlayerPanel(): JSkatUserPanel = JSkatUserPanel(tableName, 12, false, actions)
 
     private fun createGameContextStackPane() {
-        gameContextStackPane = StackPane()
+        contextPanelStack = ContextPanelStack()
+        gameContextStackPane = contextPanelStack.pane
         // gameContextStackPane.isOpaque = false // Removed
 
         val startSkatSeriesAction = actions[JSkatAction.START_LOCAL_SERIES] as StartSkatSeriesAction
@@ -124,9 +125,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     }
 
     protected fun addContextPanel(panelType: ContextPanelType, panel: Node) {
-        contextPanels[panelType] = panel
-        gameContextStackPane.children.add(panel)
-        panel.isVisible = false
+        contextPanelStack.add(panelType, panel)
     }
 
     private fun createCallReAfterContraPanel(): Node {
@@ -350,7 +349,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     }
 
     protected fun setContextPanel(panelType: ContextPanelType) {
-        contextPanels.forEach { (type, panel) -> panel.isVisible = (type == panelType) }
+        contextPanelStack.show(panelType)
     }
 
     @Subscribe
