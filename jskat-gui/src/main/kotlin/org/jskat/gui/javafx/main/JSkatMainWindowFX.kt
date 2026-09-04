@@ -268,10 +268,9 @@ class JSkatMainWindowFX : VBox() {
     @Subscribe
     fun onIssInvitePlayer(command: IssInvitePlayerCommand) {
         Platform.runLater {
-            val issPlayerNames = data.availableISSPlayer.toMutableSet()
-            issPlayerNames.remove(data.issUserName)
+            val issPlayers = data.availableISSPlayers.filter { it.login != data.issUserName }
 
-            val players = jskatMaster.view.getPlayerForInvitation(issPlayerNames)
+            val players = jskatMaster.view.getPlayerForInvitation(issPlayers)
             for (player in players) {
                 jskatMaster.issController.invitePlayer(data.activeTable, player)
             }

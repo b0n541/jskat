@@ -7,13 +7,14 @@ import org.jskat.control.gui.JSkatView;
 import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.iss.MoveInformation;
+import org.jskat.data.iss.PlayerData;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.Player;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Helper class that represent a GUI view during unit tests
@@ -54,7 +55,7 @@ public class UnitTestView implements JSkatView {
     }
 
     @Override
-    public List<String> getPlayerForInvitation(final Set<String> playerNames) {
+    public List<String> getPlayerForInvitation(final Collection<PlayerData> players) {
         // TODO Auto-generated method stub
         return null;
     }

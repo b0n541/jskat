@@ -410,7 +410,7 @@ public class JSkatMaster {
      */
     @Subscribe
     public void updateISSPlayerOn(final IssPlayerDataUpdatedEvent event) {
-        data.addAvailableISSPlayer(event.playerName());
+        data.updateAvailableISSPlayer(event.playerName(), event.language(), event.gamesPlayed(), event.strength());
     }
 
     /**

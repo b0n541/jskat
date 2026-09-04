@@ -3,12 +3,13 @@ package org.jskat.control.gui;
 import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.iss.MoveInformation;
+import org.jskat.data.iss.PlayerData;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.Player;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Interface for JSkat views
@@ -42,10 +43,10 @@ public interface JSkatView {
     /**
      * Gets the players to invite
      *
-     * @param playerNames Available players
+     * @param players Available players
      * @return List of player names
      */
-    List<String> getPlayerForInvitation(Set<String> playerNames);
+    List<String> getPlayerForInvitation(Collection<PlayerData> players);
 
     /**
      * Shows a message dialog

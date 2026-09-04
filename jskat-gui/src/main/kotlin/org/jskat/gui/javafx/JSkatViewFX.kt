@@ -19,6 +19,7 @@ import org.jskat.data.SkatGameData
 import org.jskat.data.SkatGameData.GameState
 import org.jskat.data.iss.MoveInformation
 import org.jskat.data.iss.MoveType
+import org.jskat.data.iss.PlayerData
 import org.jskat.gui.javafx.dialog.help.JSkatHelpDialog
 import org.jskat.gui.dialog.JSkatAboutDialog
 import org.jskat.gui.javafx.dialog.options.JSkatOptionsDialog
@@ -86,9 +87,9 @@ class JSkatViewFX(
         return "Table " + (localTablesCreated + 1)
     }
 
-    override fun getPlayerForInvitation(playerNames: Set<String>): List<String> {
+    override fun getPlayerForInvitation(players: Collection<PlayerData>): List<String> {
         return runOnFxThread {
-            IssPlayerInvitationDialog(playerNames).apply {
+            IssPlayerInvitationDialog(players).apply {
                 initModality(Modality.APPLICATION_MODAL)
                 initOwner(mainWindow.scene?.window)
             }.showAndWait().orElse(emptyList())

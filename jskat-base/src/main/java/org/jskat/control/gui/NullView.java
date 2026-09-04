@@ -3,12 +3,13 @@ package org.jskat.control.gui;
 import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
 import org.jskat.data.SkatGameData;
 import org.jskat.data.iss.MoveInformation;
+import org.jskat.data.iss.PlayerData;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
 import org.jskat.util.Player;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Doesn't do anything<br>
@@ -65,7 +66,7 @@ public class NullView implements JSkatView {
      */
     @Override
     public List<String> getPlayerForInvitation(
-            @SuppressWarnings("unused") final Set<String> playerNames) {
+            @SuppressWarnings("unused") final Collection<PlayerData> players) {
         // empty method by intent
         return null;
     }

@@ -6,11 +6,11 @@ import org.jskat.control.JSkatMaster;
 import org.jskat.control.SkatTable;
 import org.jskat.control.event.table.TableCreatedEvent;
 import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
+import org.jskat.data.iss.PlayerData;
 
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Holds all application data
@@ -24,7 +24,7 @@ public class JSkatApplicationData {
     private final Map<String, SkatTable> joinedIssTables;
     private String tableName;
     private String issUserName;
-    private final Set<String> availableIssPlayer;
+    private final Map<String, PlayerData> availableIssPlayers;
     private final Map<String, AbstractHumanJSkatPlayer> humanPlayers;
 
     /**
@@ -35,7 +35,7 @@ public class JSkatApplicationData {
         options = JSkatOptions.instance();
         localSkatTables = new HashMap<>();
         humanPlayers = new HashMap<>();
-        availableIssPlayer = new HashSet<>();
+        availableIssPlayers = new HashMap<>();
         joinedIssTables = new HashMap<>();
 
         JSkatEventBus.INSTANCE.register(this);
@@ -169,8 +169,8 @@ public class JSkatApplicationData {
      *
      * @return Available player
      */
-    public Set<String> getAvailableISSPlayer() {
-        return availableIssPlayer;
+    public Collection<PlayerData> getAvailableISSPlayers() {
+        return availableIssPlayers.values();
     }
 
     /**
@@ -178,8 +178,16 @@ public class JSkatApplicationData {
      *
      * @param newPlayer New player
      */
-    public void addAvailableISSPlayer(final String newPlayer) {
-        availableIssPlayer.add(newPlayer);
+    public void updateAvailableISSPlayer(
+            final String playerName,
+            final String language,
+            final long gamesPlayed,
+            final double strength) {
+        final PlayerData player = availableIssPlayers.computeIfAbsent(playerName, ignored -> new PlayerData());
+        player.setLogin(playerName);
+        player.setLanguages(language);
+        player.setGamesPlayed(gamesPlayed);
+        player.setStrength(strength);
     }
 
     /**
@@ -197,7 +205,7 @@ public class JSkatApplicationData {
      * @param player Player to be removed
      */
     public void removeAvailableISSPlayer(final String player) {
-        availableIssPlayer.remove(player);
+        availableIssPlayers.remove(player);
     }
 
     /**

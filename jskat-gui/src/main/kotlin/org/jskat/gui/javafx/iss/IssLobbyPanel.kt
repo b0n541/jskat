@@ -107,12 +107,7 @@ class IssLobbyPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>, 
                         } else {
                             HBox(2.0).apply {
                                 alignment = Pos.CENTER
-                                item.forEach { flagChar ->
-                                    val flag = JSkatGraphicRepository.Flag.valueOf(flagChar)
-                                    if (flag != null) {
-                                        children.add(ImageView(bitmaps.getFlagImageFX(flag)))
-                                    }
-                                }
+                                children.addAll(languageFlagImageViews(item, bitmaps))
                             }
                         }
                     }
