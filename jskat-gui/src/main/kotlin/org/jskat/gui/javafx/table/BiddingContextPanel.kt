@@ -40,6 +40,7 @@ class BiddingContextPanel(
 
     init {
         style = "-fx-background-color: transparent;"
+        alignment = Pos.CENTER
         sceneProperty().addListener { _, _, newScene ->
             newScene?.fill = Color.TRANSPARENT
         }

@@ -1,5 +1,6 @@
 package org.jskat.gui.javafx.table
 
+import javafx.geometry.Pos
 import javafx.scene.layout.ColumnConstraints
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.Priority
@@ -21,6 +22,7 @@ class DeclaringContextPanel(
 
     init {
         style = "-fx-background-color: transparent;"
+        alignment = Pos.CENTER
         sceneProperty().addListener { _, _, newScene ->
             newScene?.fill = Color.TRANSPARENT
         }
