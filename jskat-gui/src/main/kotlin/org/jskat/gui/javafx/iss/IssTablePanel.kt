@@ -2,6 +2,7 @@ package org.jskat.gui.javafx.iss
 
 import com.google.common.eventbus.Subscribe
 import javafx.application.Platform
+import javafx.geometry.Pos
 import javafx.scene.control.Button
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Pane
@@ -69,6 +70,7 @@ class IssTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
 
     override fun getRightPanelForTrickPanel(): Pane {
         val additionalActionsPanel = VBox()
+        additionalActionsPanel.alignment = Pos.TOP_RIGHT
         additionalActionsPanel.spacing = 10.0
         val actionButtons = mutableListOf<Button>()
 
