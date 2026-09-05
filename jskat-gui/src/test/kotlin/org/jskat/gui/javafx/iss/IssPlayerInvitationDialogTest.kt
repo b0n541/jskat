@@ -5,6 +5,7 @@ import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.control.Button
 import javafx.scene.control.ButtonType
+import javafx.scene.image.ImageView
 import org.assertj.core.api.Assertions.assertThat
 import org.jskat.data.DesktopSavePathResolver
 import org.jskat.data.JSkatOptions
@@ -51,6 +52,19 @@ class IssPlayerInvitationDialogTest {
             .containsExactly("Marta")
     }
 
+    @Test
+    fun `invitation places keep their size and show a remove icon`() {
+        val dialog = onFxThread { IssPlayerInvitationDialog(listOf(player("SkatBot", isAI = true))) }
+        val slotWidth = onFxThread { invitationPlaceButtons(dialog).first().prefWidth }
+
+        onFxThread { invitationButton(dialog, "SkatBot").fire() }
+
+        assertThat(onFxThread { invitationPlaceButtons(dialog).map(Button::getPrefWidth) })
+            .containsOnly(slotWidth)
+        assertThat(onFxThread { invitationPlaceButtons(dialog).single { it.accessibleText.startsWith("Remove") }.graphic })
+            .isInstanceOf(ImageView::class.java)
+    }
+
     private fun player(login: String, isAI: Boolean = false) = PlayerData().apply {
         this.login = login
         strength = 1234.56
@@ -63,6 +77,14 @@ class IssPlayerInvitationDialogTest {
     private fun availableInvitationButtons(dialog: IssPlayerInvitationDialog): List<Button> =
         descendantsOf(dialog.dialogPane.content).filterIsInstance<Button>()
             .filter { it.accessibleText?.startsWith("Invite ") == true }
+            .toList()
+
+    private fun invitationPlaceButtons(dialog: IssPlayerInvitationDialog): List<Button> =
+        descendantsOf(dialog.dialogPane.content).filterIsInstance<Button>()
+            .filter {
+                it.accessibleText?.startsWith("Open invitation place") == true ||
+                    it.accessibleText?.startsWith("Remove") == true
+            }
             .toList()
 
     private fun descendantsOf(node: Node): Sequence<Node> = sequence {

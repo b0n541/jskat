@@ -20,23 +20,32 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
         title = strings.getString("invite_players")
 
         val invitations = mutableListOf<PlayerData>()
-        val invitationSlots = HBox(10.0)
-        val availablePlayers = VBox(4.0)
-        val content = VBox(10.0, invitationSlots, availablePlayers).apply {
-            padding = Insets(20.0)
+        val invitationSlots = HBox(SLOT_GAP)
+        val availablePlayers = VBox(PLAYER_GAP)
+        val content = VBox(CONTENT_GAP, invitationSlots, availablePlayers).apply {
+            padding = Insets(CONTENT_PADDING)
         }
 
         fun refresh() {
             invitationSlots.children.setAll((0 until MAXIMUM_INVITATIONS).map { index ->
                 invitations.getOrNull(index)?.let { player ->
                     Button("${index + 1}. ${player.login}").apply {
+                        accessibleText = "Remove ${player.login} from place ${index + 1}"
+                        graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.CLOSE, JSkatGraphicRepository.IconSize.SMALL)
+                        contentDisplay = ContentDisplay.RIGHT
+                        graphicTextGap = 10.0
+                        setSlotWidth()
                         tooltip = Tooltip("Remove ${player.login}")
                         setOnAction {
                             invitations.removeAt(index)
                             refresh()
                         }
                     }
-                } ?: Label("${index + 1}. Open place")
+                } ?: Button("${index + 1}. Open place").apply {
+                    accessibleText = "Open invitation place ${index + 1}"
+                    isDisable = true
+                    setSlotWidth()
+                }
             })
 
             availablePlayers.children.setAll(
@@ -48,7 +57,8 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
                             graphic = playerRow(player)
                             contentDisplay = ContentDisplay.GRAPHIC_ONLY
                             alignment = Pos.CENTER_LEFT
-                            maxWidth = Double.MAX_VALUE
+                            prefWidth = PLAYER_ROW_WIDTH
+                            maxWidth = PLAYER_ROW_WIDTH
                             isDisable = invitations.size == MAXIMUM_INVITATIONS
                             setOnAction {
                                 invitations += player
@@ -61,6 +71,7 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
 
         refresh()
         dialogPane.content = content
+        dialogPane.prefWidth = DIALOG_WIDTH
         dialogPane.buttonTypes.addAll(ButtonType.OK, ButtonType.CANCEL)
 
         setResultConverter { dialogButton ->
@@ -78,8 +89,9 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
         children.addAll(languageFlagImageViews(player.languages.orEmpty(), bitmaps))
     }
 
-    private fun playerRow(player: PlayerData): HBox = HBox(10.0).apply {
+    private fun playerRow(player: PlayerData): HBox = HBox(PLAYER_ROW_GAP).apply {
         alignment = Pos.CENTER_LEFT
+        prefWidth = PLAYER_ROW_WIDTH
         children.add(playerNameAndFlags(player).apply { HBox.setHgrow(this, Priority.ALWAYS) })
         children.add(Label(String.format(Locale.ROOT, "%.2f", player.strength)).apply {
             alignment = Pos.CENTER_RIGHT
@@ -87,7 +99,21 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
         })
     }
 
+    private fun Button.setSlotWidth() {
+        minWidth = SLOT_WIDTH
+        prefWidth = SLOT_WIDTH
+        maxWidth = SLOT_WIDTH
+    }
+
     private companion object {
         const val MAXIMUM_INVITATIONS = 2
+        const val DIALOG_WIDTH = 680.0
+        const val CONTENT_PADDING = 28.0
+        const val CONTENT_GAP = 18.0
+        const val SLOT_GAP = 16.0
+        const val PLAYER_GAP = 8.0
+        const val SLOT_WIDTH = 296.0
+        const val PLAYER_ROW_WIDTH = 624.0
+        const val PLAYER_ROW_GAP = 16.0
     }
 }
