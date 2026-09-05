@@ -104,8 +104,8 @@ class GameAnnouncePanel(
         }
 
         ouvertBox.selectedProperty().addListener { _, _, isSelected ->
-            if (isSelected && handBox.isSelected && getSelectedGameType() != null) {
-                if (GameType.NULL != getSelectedGameType()) {
+            if (isSelected && handBox.isSelected && selectedGameType() != null) {
+                if (GameType.NULL != selectedGameType()) {
                     schneiderBox.isSelected = true
                     schwarzBox.isSelected = true
                 }
@@ -163,12 +163,25 @@ class GameAnnouncePanel(
         }
     }
 
-    private fun getSelectedGameType(): GameType? {
+    fun selectedGameType(): GameType? {
         return gameTypeGroup.selectedToggle?.userData as? GameType
     }
 
+    fun selectGameType(gameType: GameType?) {
+        val select = {
+            val toggle = gameTypeGroup.toggles.firstOrNull { it.userData == gameType }
+            gameTypeGroup.selectToggle(toggle)
+        }
+
+        if (Platform.isFxApplicationThread()) {
+            select()
+        } else {
+            Platform.runLater(select)
+        }
+    }
+
     private fun announceGame() {
-        val gameType = getSelectedGameType() ?: return
+        val gameType = selectedGameType() ?: return
 
         val isHand = handBox.isSelected
         val isOuvert = ouvertBox.isSelected
@@ -216,7 +229,7 @@ class GameAnnouncePanel(
 
     fun resetPanel() {
         Platform.runLater {
-            gameTypeGroup.selectToggle(null)
+            selectGameType(null)
             handBox.isSelected = true
             ouvertBox.isSelected = false
             schneiderBox.isSelected = false
@@ -229,7 +242,7 @@ class GameAnnouncePanel(
             userPickedUpSkat = isUserPickedUpSkat
             if (isUserPickedUpSkat) {
                 handBox.isSelected = false
-                ouvertBox.isDisable = (GameType.NULL == getSelectedGameType())
+                ouvertBox.isDisable = (GameType.NULL == selectedGameType())
                 schneiderBox.isDisable = true
                 schwarzBox.isDisable = true
             } else {

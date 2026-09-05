@@ -338,6 +338,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
 
                 SkatGameData.GameState.PICKING_UP_SKAT, SkatGameData.GameState.DISCARDING, SkatGameData.GameState.DECLARING -> {
                     if (userPanel.position == declarer) {
+                        declaringPanel.preselectGameTypeIfUnset(biddingPanel.selectedGameType())
                         setContextPanel(ContextPanelType.DECLARING)
                     }
                 }

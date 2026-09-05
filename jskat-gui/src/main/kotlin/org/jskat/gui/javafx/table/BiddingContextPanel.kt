@@ -13,6 +13,7 @@ import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
+import org.jskat.util.GameType
 import org.jskat.util.Player
 
 class BiddingContextPanel(
@@ -165,4 +166,6 @@ class BiddingContextPanel(
             announcePanel.resetPanel()
         }
     }
+
+    fun selectedGameType(): GameType? = announcePanel.selectedGameType()
 }

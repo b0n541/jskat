@@ -11,6 +11,7 @@ import org.jskat.control.gui.action.JSkatAction
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.util.Card
 import org.jskat.util.CardList
+import org.jskat.util.GameType
 
 class DeclaringContextPanel(
     tableName: String,
@@ -66,4 +67,12 @@ class DeclaringContextPanel(
     fun setSkat(skat: CardList) {
         discardPanel.setSkat(skat)
     }
+
+    fun preselectGameTypeIfUnset(gameType: GameType?) {
+        if (announcePanel.selectedGameType() == null && gameType != null) {
+            announcePanel.selectGameType(gameType)
+        }
+    }
+
+    fun selectedGameType(): GameType? = announcePanel.selectedGameType()
 }

@@ -1,6 +1,7 @@
 package org.jskat.gui.javafx.table
 
 import javafx.scene.control.Button
+import javafx.scene.control.RadioButton
 import javafx.application.Platform
 import org.assertj.core.api.Assertions.assertThat
 import org.jskat.control.gui.action.JSkatAction
@@ -10,6 +11,7 @@ import org.jskat.data.JSkatOptions
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.gui.javafx.JavaFxTestSupport
+import org.jskat.util.GameType
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import java.util.concurrent.CountDownLatch
@@ -44,6 +46,25 @@ class BiddingContextPanelTest {
 
         assertThat(holdBid.awaitEvent()?.actionCommand).isEqualTo(JSkatAction.HOLD_BID.toString())
         assertThat(makeBid.awaitEvent(10)).isNull()
+    }
+
+    @Test
+    fun `selected bidding game type preselects the declaring announcement`() {
+        onFxThread {
+            val actions = emptyMap<JSkatAction, AbstractJSkatAction>()
+            val userPanel = JSkatUserPanel("local", 10, true, actions)
+            val biddingPanel = BiddingContextPanel(actions, JSkatGraphicRepository.INSTANCE, userPanel)
+            val declaringPanel = DeclaringContextPanel("local", actions, userPanel)
+
+            biddingPanel.lookupAll(".radio-button")
+                .filterIsInstance<RadioButton>()
+                .single { it.userData == GameType.HEARTS }
+                .fire()
+
+            declaringPanel.preselectGameTypeIfUnset(biddingPanel.selectedGameType())
+
+            assertThat(declaringPanel.selectedGameType()).isEqualTo(GameType.HEARTS)
+        }
     }
 
     private fun bidButton(panel: BiddingContextPanel): Button {
