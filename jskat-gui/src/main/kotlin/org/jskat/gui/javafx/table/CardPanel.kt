@@ -107,6 +107,7 @@ class CardPanel(
             imageView.fitWidth = image.width * scaleFactor
             imageView.fitHeight = image.height * scaleFactor
             imageView.isPreserveRatio = true
+            imageView.isSmooth = true
 
             // The hit area must not move when the image is lifted.  Otherwise a
             // cursor near an edge can leave the image as it moves, which drops it

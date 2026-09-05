@@ -141,6 +141,7 @@ class TrickPanel(
             cardView.fitWidth = unscaledCardWidth * finalScaleFactor
             cardView.fitHeight = unscaledCardHeight * finalScaleFactor
             cardView.isPreserveRatio = true // Maintain aspect ratio
+            cardView.isSmooth = true
 
             // Apply the centering offset and then scale the relative position using finalScaleFactor
             cardView.x = xOffset + (relativePosX * finalScaleFactor)

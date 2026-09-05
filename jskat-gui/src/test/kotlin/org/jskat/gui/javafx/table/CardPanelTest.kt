@@ -1,6 +1,8 @@
 package org.jskat.gui.javafx.table
 
 import org.assertj.core.api.Assertions.assertThat
+import javafx.scene.image.ImageView
+import javafx.scene.layout.Pane
 import org.jskat.data.DesktopSavePathResolver
 import org.jskat.data.JSkatOptions
 import org.jskat.util.Card
@@ -27,5 +29,16 @@ class CardPanelTest {
         cardPanel.layout()
 
         assertThat(cardPanel.children.map { it.layoutX }.distinct()).hasSize(10)
+    }
+
+    @Test
+    fun `renders hand cards with smooth scaling`() {
+        val cardPanel = CardPanel()
+        cardPanel.addCard(Card.CJ)
+
+        val hitArea = cardPanel.children.single() as Pane
+        val cardView = hitArea.children.single() as ImageView
+
+        assertThat(cardView.isSmooth).isTrue()
     }
 }
