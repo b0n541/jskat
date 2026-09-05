@@ -20,7 +20,7 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
         title = strings.getString("invite_players")
 
         val invitations = mutableListOf<PlayerData>()
-        val invitationSlots = HBox(SLOT_GAP)
+        val invitationSlots = VBox(SLOT_GAP)
         val availablePlayers = VBox(PLAYER_GAP)
         val content = VBox(CONTENT_GAP, invitationSlots, availablePlayers).apply {
             padding = Insets(CONTENT_PADDING)
@@ -119,9 +119,9 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
         const val DIALOG_WIDTH = 680.0
         const val CONTENT_PADDING = 28.0
         const val CONTENT_GAP = 18.0
-        const val SLOT_GAP = 16.0
+        const val SLOT_GAP = 8.0
         const val PLAYER_GAP = 8.0
-        const val SLOT_WIDTH = 296.0
+        const val SLOT_WIDTH = 624.0
         const val PLAYER_ROW_WIDTH = 624.0
         const val PLAYER_ROW_GAP = 16.0
         const val SLOT_BUTTON_HEIGHT = 48.0

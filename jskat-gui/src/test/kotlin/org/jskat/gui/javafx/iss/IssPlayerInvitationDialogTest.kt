@@ -66,6 +66,8 @@ class IssPlayerInvitationDialogTest {
             .containsOnly(slotHeight)
         assertThat(onFxThread { availableInvitationButtons(dialog).single().prefHeight })
             .isEqualTo(slotHeight)
+        assertThat(onFxThread { invitationPlaceButtons(dialog).first().prefWidth })
+            .isEqualTo(onFxThread { availableInvitationButtons(dialog).single().prefWidth })
         assertThat(onFxThread { invitationPlaceButtons(dialog).single { it.graphic != null }.graphic })
             .isInstanceOf(ImageView::class.java)
     }
