@@ -9,6 +9,7 @@ import org.jskat.data.DesktopSavePathResolver
 import org.jskat.data.JSkatOptions
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
+import org.jskat.gui.javafx.JavaFxTestSupport
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import java.util.concurrent.CountDownLatch
@@ -21,9 +22,7 @@ class BiddingContextPanelTest {
         @JvmStatic
         fun initializeOptions() {
             JSkatOptions.instance(DesktopSavePathResolver())
-            val toolkitStarted = CountDownLatch(1)
-            Platform.startup(toolkitStarted::countDown)
-            check(toolkitStarted.await(1, TimeUnit.SECONDS))
+            JavaFxTestSupport.initializeToolkit()
         }
     }
 

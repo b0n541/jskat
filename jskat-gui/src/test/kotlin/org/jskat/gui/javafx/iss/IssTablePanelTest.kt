@@ -17,6 +17,7 @@ import org.jskat.data.iss.TablePanelStatus
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.action.main.StartSkatSeriesAction
 import org.jskat.gui.img.JSkatGraphicRepository.Icon
+import org.jskat.gui.javafx.JavaFxTestSupport
 import org.jskat.gui.javafx.table.AbstractHandPanel
 import org.jskat.gui.javafx.table.GameOverPanel
 import org.jskat.gui.javafx.table.ScoreHistoryPlayerOrder
@@ -34,13 +35,7 @@ class IssTablePanelTest {
         @JvmStatic
         fun initializeOptions() {
             JSkatOptions.instance(DesktopSavePathResolver())
-            val toolkitStarted = CountDownLatch(1)
-            try {
-                Platform.startup(toolkitStarted::countDown)
-                check(toolkitStarted.await(1, TimeUnit.SECONDS))
-            } catch (_: IllegalStateException) {
-                // The JavaFX toolkit was initialized by another test class.
-            }
+            JavaFxTestSupport.initializeToolkit()
         }
     }
 
