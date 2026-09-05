@@ -3,6 +3,7 @@ package org.jskat.gui.javafx.dialog.help
 import javafx.scene.control.ButtonType
 import javafx.scene.control.Dialog
 import javafx.scene.web.WebView
+import javafx.stage.Window
 import org.jskat.util.JSkatResourceBundle
 import org.jskat.gui.javafx.JavaFxHostDocumentOpener
 import org.slf4j.LoggerFactory
@@ -12,7 +13,8 @@ import java.io.InputStreamReader
 class JSkatHelpDialog @JvmOverloads constructor(
     title: String,
     contentPath: String,
-    private val documentOpener: JavaFxHostDocumentOpener? = null
+    private val documentOpener: JavaFxHostDocumentOpener? = null,
+    owner: Window? = null
 ) : Dialog<ButtonType>() {
 
     private val strings = JSkatResourceBundle.INSTANCE
@@ -20,6 +22,9 @@ class JSkatHelpDialog @JvmOverloads constructor(
     private val log = LoggerFactory.getLogger(JSkatHelpDialog::class.java)
 
     init {
+        if (owner != null) {
+            initOwner(owner)
+        }
         this.title = title
         dialogPane.content = webView
         dialogPane.buttonTypes.add(ButtonType.CLOSE)

@@ -56,7 +56,7 @@ class JSkatViewFX(
     @Subscribe
     fun showPreferencesDialogOn(command: ShowPreferencesCommand) {
         Platform.runLater {
-            JSkatOptionsDialog(null).showAndWait()
+            JSkatOptionsDialog(mainWindow.scene?.window).showAndWait()
         }
     }
 
@@ -66,7 +66,8 @@ class JSkatViewFX(
             JSkatHelpDialog(
                 JSkatResourceBundle.INSTANCE.getString("help"),
                 "org/jskat/gui/help/" + JSkatOptions.instance().i18NCode + "/contents.html",
-                documentOpener
+                documentOpener,
+                mainWindow.scene?.window
             ).showAndWait()
         }
     }
@@ -77,7 +78,8 @@ class JSkatViewFX(
             JSkatHelpDialog(
                 JSkatResourceBundle.INSTANCE.getString("license"),
                 "org/jskat/gui/help/apache2.html",
-                documentOpener
+                documentOpener,
+                mainWindow.scene?.window
             ).showAndWait()
         }
     }
@@ -99,6 +101,7 @@ class JSkatViewFX(
     override fun showMessage(title: String, message: String) {
         Platform.runLater {
             Alert(Alert.AlertType.INFORMATION).apply {
+                initOwner(mainWindow.scene?.window)
                 setTitle(title)
                 headerText = null // or null
                 contentText = message
@@ -110,6 +113,7 @@ class JSkatViewFX(
     override fun showErrorMessage(title: String, message: String) {
         Platform.runLater {
             Alert(Alert.AlertType.ERROR).apply {
+                initOwner(mainWindow.scene?.window)
                 setTitle(title)
                 headerText = null // or null
                 contentText = message
@@ -278,6 +282,7 @@ class JSkatViewFX(
     override fun showISSTableInvitation(invitor: String, tableName: String): Boolean {
         return IssMoveFeedback.invitationAccepted(runOnFxThread {
             Alert(Alert.AlertType.CONFIRMATION).apply {
+                initOwner(mainWindow.scene?.window)
                 title = strings.getString("iss_table_invitation_title")
                 headerText = null
                 contentText = strings.getString("iss_table_invitation", invitor, tableName)
