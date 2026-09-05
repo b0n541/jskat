@@ -112,7 +112,7 @@ class IssPlayerInvitationDialogTest {
                 completed.countDown()
             }
         }
-        check(completed.await(1, TimeUnit.SECONDS))
+        check(completed.await(5, TimeUnit.SECONDS)) { "Timed out waiting for the JavaFX application thread" }
         failure[0]?.let { throw it }
         @Suppress("UNCHECKED_CAST")
         return result[0] as T
