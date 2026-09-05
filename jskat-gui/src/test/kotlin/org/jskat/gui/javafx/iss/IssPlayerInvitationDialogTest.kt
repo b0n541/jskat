@@ -47,7 +47,7 @@ class IssPlayerInvitationDialogTest {
         onFxThread { invitationButton(dialog, "Marta").fire() }
 
         assertThat(onFxThread { availableInvitationButtons(dialog) })
-            .noneMatch { it.accessibleText == "Invite Marta" }
+            .noneMatch { it.id == "invite-player-Marta" }
         assertThat(onFxThread { dialog.resultConverter.call(ButtonType.OK) })
             .containsExactly("Marta")
     }
@@ -61,7 +61,7 @@ class IssPlayerInvitationDialogTest {
 
         assertThat(onFxThread { invitationPlaceButtons(dialog).map(Button::getPrefWidth) })
             .containsOnly(slotWidth)
-        assertThat(onFxThread { invitationPlaceButtons(dialog).single { it.accessibleText.startsWith("Remove") }.graphic })
+        assertThat(onFxThread { invitationPlaceButtons(dialog).single { it.graphic != null }.graphic })
             .isInstanceOf(ImageView::class.java)
     }
 
@@ -72,19 +72,16 @@ class IssPlayerInvitationDialogTest {
     }
 
     private fun invitationButton(dialog: IssPlayerInvitationDialog, login: String): Button =
-        availableInvitationButtons(dialog).single { it.accessibleText == "Invite $login" }
+        availableInvitationButtons(dialog).single { it.id == "invite-player-$login" }
 
     private fun availableInvitationButtons(dialog: IssPlayerInvitationDialog): List<Button> =
         descendantsOf(dialog.dialogPane.content).filterIsInstance<Button>()
-            .filter { it.accessibleText?.startsWith("Invite ") == true }
+            .filter { it.id?.startsWith("invite-player-") == true }
             .toList()
 
     private fun invitationPlaceButtons(dialog: IssPlayerInvitationDialog): List<Button> =
         descendantsOf(dialog.dialogPane.content).filterIsInstance<Button>()
-            .filter {
-                it.accessibleText?.startsWith("Open invitation place") == true ||
-                    it.accessibleText?.startsWith("Remove") == true
-            }
+            .filter { it.id?.startsWith("invitation-place-") == true }
             .toList()
 
     private fun descendantsOf(node: Node): Sequence<Node> = sequence {

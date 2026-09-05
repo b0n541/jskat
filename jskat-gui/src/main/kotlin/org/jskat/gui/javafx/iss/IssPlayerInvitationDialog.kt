@@ -29,20 +29,22 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
         fun refresh() {
             invitationSlots.children.setAll((0 until MAXIMUM_INVITATIONS).map { index ->
                 invitations.getOrNull(index)?.let { player ->
-                    Button("${index + 1}. ${player.login}").apply {
-                        accessibleText = "Remove ${player.login} from place ${index + 1}"
+                    Button(strings.getString("iss_invitation_occupied_place", index + 1, player.login)).apply {
+                        id = "invitation-place-$index"
+                        accessibleText = strings.getString("iss_invitation_remove_player_from_place", player.login, index + 1)
                         graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.CLOSE, JSkatGraphicRepository.IconSize.SMALL)
                         contentDisplay = ContentDisplay.RIGHT
                         graphicTextGap = 10.0
                         setSlotWidth()
-                        tooltip = Tooltip("Remove ${player.login}")
+                        tooltip = Tooltip(strings.getString("iss_invitation_remove_player", player.login))
                         setOnAction {
                             invitations.removeAt(index)
                             refresh()
                         }
                     }
-                } ?: Button("${index + 1}. Open place").apply {
-                    accessibleText = "Open invitation place ${index + 1}"
+                } ?: Button(strings.getString("iss_invitation_open_place", index + 1)).apply {
+                    id = "invitation-place-$index"
+                    accessibleText = strings.getString("iss_invitation_open_place_accessible", index + 1)
                     isDisable = true
                     setSlotWidth()
                 }
@@ -53,7 +55,8 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
                     .filter { player -> player.isKIPlayer || player !in invitations }
                     .map { player ->
                         Button().apply {
-                            accessibleText = "Invite ${player.login}"
+                            id = "invite-player-${player.login}"
+                            accessibleText = strings.getString("iss_invitation_invite_player", player.login)
                             graphic = playerRow(player)
                             contentDisplay = ContentDisplay.GRAPHIC_ONLY
                             alignment = Pos.CENTER_LEFT
