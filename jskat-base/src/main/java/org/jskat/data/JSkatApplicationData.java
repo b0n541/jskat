@@ -184,6 +184,7 @@ public class JSkatApplicationData {
         final PlayerData player = availableIssPlayers.computeIfAbsent(playerName, ignored -> new PlayerData());
         player.setLogin(playerName);
         player.setLanguages(language);
+        player.setKIPlayer("-".equals(language));
         player.setGamesPlayed(gamesPlayed);
         player.setStrength(strength);
     }

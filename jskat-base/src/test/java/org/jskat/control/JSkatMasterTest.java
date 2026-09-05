@@ -56,4 +56,23 @@ public class JSkatMasterTest extends AbstractJSkatTest {
             JSkatApplicationData.INSTANCE.removeAvailableISSPlayer(playerName);
         }
     }
+
+    @Test
+    public void recognizesAIISSPlayersForInvitations() {
+        final String playerName = "invitation-test-ai-player";
+
+        try {
+            JSkatMaster.INSTANCE.updateISSPlayerOn(
+                    new IssPlayerDataUpdatedEvent(playerName, "-", 42, 1.75));
+
+            final PlayerData player = JSkatApplicationData.INSTANCE.getAvailableISSPlayers().stream()
+                    .filter(candidate -> playerName.equals(candidate.getLogin()))
+                    .findFirst()
+                    .orElseThrow();
+
+            assertTrue(player.isKIPlayer());
+        } finally {
+            JSkatApplicationData.INSTANCE.removeAvailableISSPlayer(playerName);
+        }
+    }
 }
