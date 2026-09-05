@@ -15,7 +15,7 @@ public class RegisterAction extends AbstractJSkatAction {
      */
     public RegisterAction() {
 
-        putValue(NAME, STRINGS.getString("register_on_iss"));
+        putValue(NAME, STRINGS.getString("registerOnIss"));
     }
 
     @Override

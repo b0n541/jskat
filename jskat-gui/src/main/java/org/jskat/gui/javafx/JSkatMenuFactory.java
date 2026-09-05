@@ -37,31 +37,31 @@ public final class JSkatMenuFactory {
 
         final Menu fileMenu = new Menu(strings.getString("file"));
 
-        final MenuItem loadSeriesMenuItem = new MenuItem(strings.getString("load_series"));
+        final MenuItem loadSeriesMenuItem = new MenuItem(strings.getString("loadSeries"));
         loadSeriesMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.LOAD, IconSize.SMALL));
-        final MenuItem saveSeriesMenuItem = new MenuItem(strings.getString("save_series"));
+        final MenuItem saveSeriesMenuItem = new MenuItem(strings.getString("saveSeries"));
         saveSeriesMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.SAVE, IconSize.SMALL));
-        final MenuItem saveSeriesAsMenuItem = new MenuItem(strings.getString("save_series_as"));
+        final MenuItem saveSeriesAsMenuItem = new MenuItem(strings.getString("saveSeriesAs"));
         saveSeriesAsMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.SAVE_AS, IconSize.SMALL));
-        final MenuItem exitJSkatMenuItem = new MenuItem(strings.getString("exit_jskat"));
+        final MenuItem exitJSkatMenuItem = new MenuItem(strings.getString("exitJSkat"));
         exitJSkatMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.EXIT, IconSize.SMALL));
         exitJSkatMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE.post(new ExitCommand()));
 
         fileMenu.getItems().addAll(loadSeriesMenuItem, saveSeriesMenuItem, saveSeriesAsMenuItem,
                 new SeparatorMenuItem(), exitJSkatMenuItem);
 
-        final Menu skatTableMenu = new Menu(strings.getString("skat_table"));
+        final Menu skatTableMenu = new Menu(strings.getString("skatTable"));
 
-        final MenuItem playOnLocalTable = new MenuItem(strings.getString("play_on_local_table"));
+        final MenuItem playOnLocalTable = new MenuItem(strings.getString("playOnLocalTable"));
         playOnLocalTable.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.TABLE, IconSize.SMALL));
         playOnLocalTable.setOnAction(actionEvent -> JSkatEventBus.INSTANCE.post(new RequestCreateTableCommand()));
-        final MenuItem startSkatSeriesMenuItem = new MenuItem(strings.getString("start_series"));
+        final MenuItem startSkatSeriesMenuItem = new MenuItem(strings.getString("startSeries"));
         startSkatSeriesMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE.post(new StartSkatSeriesCommand(JSkatApplicationData.INSTANCE.getActiveTable())));
         startSkatSeriesMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.PLAY, IconSize.SMALL));
-        final MenuItem replayGameMenuItem = new MenuItem(strings.getString("replay_game"));
+        final MenuItem replayGameMenuItem = new MenuItem(strings.getString("replayGame"));
         replayGameMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE.post(new ReplayGameCommand(JSkatApplicationData.INSTANCE.getActiveTable())));
         replayGameMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.FIRST, IconSize.SMALL));
-        final MenuItem nextReplayMoveMenuItem = new MenuItem(strings.getString("next_replay_move"));
+        final MenuItem nextReplayMoveMenuItem = new MenuItem(strings.getString("nextReplayMove"));
         nextReplayMoveMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE.post(new NextReplayMoveCommand(JSkatApplicationData.INSTANCE.getActiveTable())));
         nextReplayMoveMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.NEXT, IconSize.SMALL));
 
@@ -70,10 +70,10 @@ public final class JSkatMenuFactory {
 
         final Menu issMenu = new Menu(strings.getString("iss"));
 
-        final MenuItem playOnIssMenuItem = new MenuItem(strings.getString("play_on_iss"));
+        final MenuItem playOnIssMenuItem = new MenuItem(strings.getString("playOnIss"));
         playOnIssMenuItem.setOnAction(actionEvent -> JSkatEventBus.INSTANCE.post(new IssShowLoginCommand()));
         playOnIssMenuItem.setGraphic(JSkatGraphicRepository.INSTANCE.getImageView(Icon.CONNECT_ISS, IconSize.SMALL));
-        final MenuItem createNewTableOnIssMenuItem = new MenuItem(strings.getString("new_table"));
+        final MenuItem createNewTableOnIssMenuItem = new MenuItem(strings.getString("newTable"));
         createNewTableOnIssMenuItem
                 .setOnAction(actionEvent -> JSkatMaster.INSTANCE.getIssController().requestTableCreation());
         createNewTableOnIssMenuItem

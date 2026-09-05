@@ -14,7 +14,7 @@ public class LogoutAction extends AbstractJSkatAction {
      */
     public LogoutAction() {
 
-        putValue(NAME, STRINGS.getString("disconnect_from_iss"));
+        putValue(NAME, STRINGS.getString("disconnectFromIss"));
         setIcon(Icon.LOG_OUT);
     }
 

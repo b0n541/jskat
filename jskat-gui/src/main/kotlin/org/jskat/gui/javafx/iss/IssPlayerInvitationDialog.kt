@@ -18,13 +18,13 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
     private val bitmaps = JSkatGraphicRepository.INSTANCE
 
     init {
-        title = strings.getString("invite_players")
+        title = strings.getString("invitePlayers")
 
         val invitations = mutableListOf<PlayerData>()
         val invitationSlots = HBox(SLOT_GAP)
         val availablePlayers = VBox(PLAYER_GAP)
-        val seatSection = section(strings.getString("iss_invitation_table_seats"), invitationSlots)
-        val playerSection = section(strings.getString("iss_invitation_available_player"), availablePlayers)
+        val seatSection = section(strings.getString("issInvitationTableSeats"), invitationSlots)
+        val playerSection = section(strings.getString("issInvitationAvailablePlayer"), availablePlayers)
         val content = VBox(CONTENT_GAP, seatSection, playerSection).apply {
             padding = Insets(CONTENT_PADDING)
         }
@@ -32,22 +32,22 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
         fun refresh() {
             invitationSlots.children.setAll((0 until MAXIMUM_INVITATIONS).map { index ->
                 invitations.getOrNull(index)?.let { player ->
-                    Button(strings.getString("iss_invitation_occupied_place", index + 1, player.login)).apply {
+                    Button(strings.getString("issInvitationOccupiedPlace", index + 1, player.login)).apply {
                         id = "invitation-place-$index"
-                        accessibleText = strings.getString("iss_invitation_remove_player_from_place", player.login, index + 1)
+                        accessibleText = strings.getString("issInvitationRemovePlayerFromPlace", player.login, index + 1)
                         graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.CLOSE, JSkatGraphicRepository.IconSize.SMALL)
                         contentDisplay = ContentDisplay.RIGHT
                         graphicTextGap = 10.0
                         setSlotWidth()
-                        tooltip = Tooltip(strings.getString("iss_invitation_remove_player", player.login))
+                        tooltip = Tooltip(strings.getString("issInvitationRemovePlayer", player.login))
                         setOnAction {
                             invitations.removeAt(index)
                             refresh()
                         }
                     }
-                } ?: Button(strings.getString("iss_invitation_open_place", index + 1)).apply {
+                } ?: Button(strings.getString("issInvitationOpenPlace", index + 1)).apply {
                     id = "invitation-place-$index"
-                    accessibleText = strings.getString("iss_invitation_open_place_accessible", index + 1)
+                    accessibleText = strings.getString("issInvitationOpenPlaceAccessible", index + 1)
                     isDisable = true
                     setSlotWidth()
                 }
@@ -58,7 +58,7 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
                     .map { player ->
                         Button().apply {
                             id = "invite-player-${player.login}"
-                            accessibleText = strings.getString("iss_invitation_invite_player", player.login)
+                            accessibleText = strings.getString("issInvitationInvitePlayer", player.login)
                             graphic = playerRow(player)
                             contentDisplay = ContentDisplay.GRAPHIC_ONLY
                             alignment = Pos.CENTER_LEFT

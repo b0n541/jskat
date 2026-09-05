@@ -81,7 +81,7 @@ class GameAnnouncePanel(
         add(grandButton, 0, 4)
         add(nullButton, 1, 4)
 
-        val levelsLabel = createSectionLabel(strings.getString("win_levels"))
+        val levelsLabel = createSectionLabel(strings.getString("winLevels"))
         add(levelsLabel, 0, 5, 2, 1)
         add(handBox, 0, 6)
         add(ouvertBox, 1, 6)

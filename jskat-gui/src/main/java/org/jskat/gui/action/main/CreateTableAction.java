@@ -16,9 +16,9 @@ public class CreateTableAction extends AbstractJSkatAction {
      */
     public CreateTableAction() {
 
-        putValue(NAME, STRINGS.getString("play_on_local_table"));
+        putValue(NAME, STRINGS.getString("playOnLocalTable"));
         putValue(SHORT_DESCRIPTION,
-                STRINGS.getString("new_table_tooltip"));
+                STRINGS.getString("newTableTooltip"));
 
         setIcon(Icon.TABLE);
     }

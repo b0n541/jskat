@@ -130,9 +130,9 @@ class JSkatViewFX(
     @Subscribe
     fun showErrorMessageOn(event: CardNotAllowedToPlayEvent) {
         showErrorMessage(
-            strings.getString("card_not_allowed_title"),
+            strings.getString("cardNotAllowedTitle"),
             strings.getString(
-                "card_not_allowed_message",
+                "cardNotAllowedMessage",
                 strings.getSuitStringForCardFace(event.card.suit),
                 strings.getRankStringForCardFace(event.card.rank)
             )
@@ -266,9 +266,9 @@ class JSkatViewFX(
         }
         if (moveInformation.type == MoveType.TIME_OUT) {
             showMessage(
-                strings.getString("iss_timeout_title"),
+                strings.getString("issTimeoutTitle"),
                 strings.getString(
-                    "iss_timeout_message",
+                    "issTimeoutMessage",
                     IssMoveFeedback.timedOutPlayerName(gameData, moveInformation)
                 )
             )
@@ -283,9 +283,9 @@ class JSkatViewFX(
         return IssMoveFeedback.invitationAccepted(runOnFxThread {
             Alert(Alert.AlertType.CONFIRMATION).apply {
                 initOwner(mainWindow.scene?.window)
-                title = strings.getString("iss_table_invitation_title")
+                title = strings.getString("issTableInvitationTitle")
                 headerText = null
-                contentText = strings.getString("iss_table_invitation", invitor, tableName)
+                contentText = strings.getString("issTableInvitation", invitor, tableName)
             }.showAndWait()
         })
     }

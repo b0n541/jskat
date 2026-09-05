@@ -29,7 +29,7 @@ class JSkatAboutDialogTest {
             JSkatResourceBundle.INSTANCE.getString("authors"),
             JSkatResourceBundle.INSTANCE.getString("cards"),
             JSkatResourceBundle.INSTANCE.getString("icons"),
-            JSkatResourceBundle.INSTANCE.getString("background_image")
+            JSkatResourceBundle.INSTANCE.getString("backgroundImage")
         )
     }
 }

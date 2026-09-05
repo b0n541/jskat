@@ -551,8 +551,8 @@ public class SkatGame {
                 setGameAnnouncement(new GameAnnouncement(contract, data.getSkat()));
             }
         } else {
-            view.showErrorMessage(strings.getString("invalid_game_announcement_title"),
-                    strings.getString("invalid_game_announcement_message", contract));
+            view.showErrorMessage(strings.getString("invalidGameAnnouncementTitle"),
+                    strings.getString("invalidGameAnnouncementMessage", contract));
         }
 
         doSleep(maxSleep);

@@ -35,7 +35,7 @@ class FirstStepsDialog(owner: Window, documentOpener: JavaFxHostDocumentOpener) 
     init {
         LOG.debug("Initializing FirstStepsDialog")
 
-        title = strings.getString("show_tips")
+        title = strings.getString("showTips")
 
         initModality(Modality.APPLICATION_MODAL)
         initOwner(owner)
@@ -51,7 +51,7 @@ class FirstStepsDialog(owner: Window, documentOpener: JavaFxHostDocumentOpener) 
         }
         VBox.setVgrow(firstStepsContent, Priority.ALWAYS)
 
-        showTipsOnStartUp = CheckBox(strings.getString("show_tips_at_startup")).apply {
+        showTipsOnStartUp = CheckBox(strings.getString("showTipsAtStartup")).apply {
             selectedProperty().bindBidirectional(showTipsAtStartUpProperty)
         }
         showTipsAtStartUpProperty.addListener { _, _, newValue ->

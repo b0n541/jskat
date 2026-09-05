@@ -14,7 +14,7 @@ public class InvitePlayerAction extends AbstractJSkatAction {
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public InvitePlayerAction() {
-        putValue(NAME, STRINGS.getString("invite_player"));
+        putValue(NAME, STRINGS.getString("invitePlayer"));
         setIcon(JSkatGraphicRepository.Icon.INVITE);
     }
 

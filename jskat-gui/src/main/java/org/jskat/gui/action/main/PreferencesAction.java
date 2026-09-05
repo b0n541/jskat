@@ -17,7 +17,7 @@ public class PreferencesAction extends AbstractJSkatAction {
 
         putValue(NAME, STRINGS.getString("preferences"));
         putValue(SHORT_DESCRIPTION,
-                STRINGS.getString("preferences_tooltip"));
+                STRINGS.getString("preferencesTooltip"));
 
         setIcon(Icon.PREFERENCES);
     }

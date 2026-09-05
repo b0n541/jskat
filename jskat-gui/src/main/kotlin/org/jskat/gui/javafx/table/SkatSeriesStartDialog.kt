@@ -46,9 +46,9 @@ class SkatSeriesStartDialog(owner: Node?) {
     private lateinit var ramschCheck: CheckBox
 
     init {
-        dialog.title = strings.getString("start_series")
+        dialog.title = strings.getString("startSeries")
         // TODO: add a different string for the dialog header
-        dialog.headerText = strings.getString("start_series")
+        dialog.headerText = strings.getString("startSeries")
         // Use a safe call to handle the nullable owner
         dialog.initOwner(owner?.scene?.window)
 
@@ -90,7 +90,7 @@ class SkatSeriesStartDialog(owner: Node?) {
         add(player3TypeCombo, 2, 2)
 
         // Rounds
-        add(Label(strings.getString("number_of_rounds")), 0, 3)
+        add(Label(strings.getString("numberOfRounds")), 0, 3)
         roundsSpinner = Spinner(1, 48, 12)
         add(roundsSpinner, 1, 3)
         unlimitedCheck = CheckBox(strings.getString("unlimited"))
@@ -99,7 +99,7 @@ class SkatSeriesStartDialog(owner: Node?) {
 
         // Ramsch
         add(Label(strings.getString("ramsch")), 0, 4)
-        ramschCheck = CheckBox(strings.getString("only_play_ramsch"))
+        ramschCheck = CheckBox(strings.getString("onlyPlayRamsch"))
         add(ramschCheck, 1, 4, 2, 1)
     }
 
@@ -173,13 +173,13 @@ class SkatSeriesStartDialog(owner: Node?) {
             text = if (empty || item == null) {
                 null
             } else when (item) {
-                "org.jskat.ai.newalgorithm.AlgorithmAI" -> strings.getString("algorithmic_nextgen_player")
-                "org.jskat.ai.mjl.AIPlayerMJL" -> strings.getString("algorithmic_player")
-                "org.jskat.ai.rnd.AIPlayerRND" -> strings.getString("random_player")
-                "org.jskat.ai.nn.AIPlayerNN" -> strings.getString("neural_network_player")
-                "org.jskat.ai.ml.MLPlayer" -> strings.getString("ml_player")
-                "org.jskat.ai.ml.MLPlayerPro" -> strings.getString("ml_player_pro")
-                JSkatPlayerResolver.HUMAN_PLAYER_CLASS -> strings.getString("human_player")
+                "org.jskat.ai.newalgorithm.AlgorithmAI" -> strings.getString("algorithmicNextgenPlayer")
+                "org.jskat.ai.mjl.AIPlayerMJL" -> strings.getString("algorithmicPlayer")
+                "org.jskat.ai.rnd.AIPlayerRND" -> strings.getString("randomPlayer")
+                "org.jskat.ai.nn.AIPlayerNN" -> strings.getString("neuralNetworkPlayer")
+                "org.jskat.ai.ml.MLPlayer" -> strings.getString("mlPlayer")
+                "org.jskat.ai.ml.MLPlayerPro" -> strings.getString("mlPlayerPro")
+                JSkatPlayerResolver.HUMAN_PLAYER_CLASS -> strings.getString("humanPlayer")
                 else -> item
             }
         }

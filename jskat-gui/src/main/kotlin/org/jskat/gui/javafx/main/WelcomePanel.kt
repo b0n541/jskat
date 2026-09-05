@@ -39,7 +39,7 @@ class WelcomePanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) :
         logo.fitWidth = 100.0
         logo.isPreserveRatio = true
 
-        val title = Label(strings.getString("welcome_to_jskat"))
+        val title = Label(strings.getString("welcomeToJSkat"))
         title.font = Font("System Bold", 32.0)
 
         header.children.addAll(logo, title)
@@ -56,22 +56,22 @@ class WelcomePanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) :
         // ISS Table
         val issButton = createActionButton(
             JSkatAction.SHOW_ISS_LOGIN,
-            strings.getString("play_on_iss"),
+            strings.getString("playOnIss"),
             JSkatGraphicRepository.Icon.CONNECT_ISS
         )
         val issDescription =
-            Label(strings.getString("explain_iss_table_1") + "\n" + strings.getString("explain_iss_table_2"))
+            Label(strings.getString("explainIssTable1") + "\n" + strings.getString("explainIssTable2"))
         issDescription.isWrapText = true
         vbox.children.add(createRow(issButton, issDescription))
 
         // Local Table
         val localButton = createActionButton(
             JSkatAction.CREATE_LOCAL_TABLE,
-            strings.getString("create_local_table"),
+            strings.getString("createLocalTable"),
             JSkatGraphicRepository.Icon.TABLE
         )
         val localDescription =
-            Label(strings.getString("explain_local_table_1") + "\n" + strings.getString("explain_local_table_2"))
+            Label(strings.getString("explainLocalTable1") + "\n" + strings.getString("explainLocalTable2"))
         localDescription.isWrapText = true
         vbox.children.add(createRow(localButton, localDescription))
 
@@ -81,17 +81,17 @@ class WelcomePanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) :
             strings.getString("preferences"),
             JSkatGraphicRepository.Icon.PREFERENCES
         )
-        val optionsDescription = Label(strings.getString("explain_options_1"))
+        val optionsDescription = Label(strings.getString("explainOptions1"))
         optionsDescription.isWrapText = true
         vbox.children.add(createRow(optionsButton, optionsDescription))
 
         // Quit
         val quitButton = createActionButton(
             JSkatAction.EXIT_JSKAT,
-            strings.getString("exit_jskat"),
+            strings.getString("exitJSkat"),
             JSkatGraphicRepository.Icon.EXIT
         )
-        val quitDescription = Label(strings.getString("explain_exit"))
+        val quitDescription = Label(strings.getString("explainExit"))
         quitDescription.isWrapText = true
         vbox.children.add(createRow(quitButton, quitDescription))
 

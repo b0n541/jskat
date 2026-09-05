@@ -15,7 +15,7 @@ public class LeaveIssTableAction extends AbstractJSkatAction {
      * @see AbstractJSkatAction#AbstractJSkatAction()
      */
     public LeaveIssTableAction() {
-        putValue(NAME, STRINGS.getString("leave_table"));
+        putValue(NAME, STRINGS.getString("leaveTable"));
         setIcon(JSkatGraphicRepository.Icon.LOG_OUT);
     }
 

@@ -23,7 +23,7 @@ class DiscardPanel(
 
     private val cards = CardList()
     private val cardViews = HBox()
-    private val pickUpSkatButton = Button(JSkatResourceBundle.INSTANCE.getString("pick_up_skat"))
+    private val pickUpSkatButton = Button(JSkatResourceBundle.INSTANCE.getString("pickUpSkat"))
     private val bitmaps = JSkatGraphicRepository.INSTANCE
     private var announcePanel: GameAnnouncePanel? = null
 

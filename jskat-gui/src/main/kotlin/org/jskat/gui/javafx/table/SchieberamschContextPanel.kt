@@ -56,7 +56,7 @@ class SchieberamschContextPanel(
         val result = GridPane()
         result.style = "-fx-background-color: transparent;"
 
-        val question = Label(strings.getString("want_play_grand_hand"))
+        val question = Label(strings.getString("wantPlayGrandHand"))
         question.style = "-fx-font-size: 16px; -fx-font-weight: bold;"
         result.add(question, 0, 0, 2, 1)
 

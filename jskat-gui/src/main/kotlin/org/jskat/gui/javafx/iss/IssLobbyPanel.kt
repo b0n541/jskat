@@ -35,7 +35,7 @@ class IssLobbyPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>, 
         padding = Insets(10.0)
         spacing = 10.0
 
-        val header = Label(strings.getString("welcome_to_iss_title")).apply {
+        val header = Label(strings.getString("welcomeToIssTitle")).apply {
             font = Font("System Bold", 32.0)
             alignment = Pos.CENTER
             maxWidth = Double.MAX_VALUE
@@ -61,12 +61,12 @@ class IssLobbyPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>, 
             alignment = Pos.CENTER
             children.addAll(
                 createActionButton(
-                    strings.getString("iss.new.table"),
+                    strings.getString("issNewTable"),
                     JSkatAction.CREATE_ISS_TABLE,
                     JSkatGraphicRepository.Icon.TABLE
                 ),
                 createActionButton(
-                    strings.getString("iss.disconnect"),
+                    strings.getString("issDisconnect"),
                     JSkatAction.DISCONNECT_FROM_ISS,
                     JSkatGraphicRepository.Icon.LOG_OUT
                 )

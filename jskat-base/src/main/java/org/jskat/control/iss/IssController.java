@@ -517,7 +517,7 @@ public class IssController {
      * @param message Message
      */
     public void showMessage(final String message) {
-        view.showMessage(strings.getString("iss_message"), message);
+        view.showMessage(strings.getString("issMessage"), message);
     }
 
     /**
@@ -526,7 +526,7 @@ public class IssController {
      * @param message Message
      */
     public void showErrorMessage(final String message) {
-        view.showErrorMessage(strings.getString("iss_message"), message);
+        view.showErrorMessage(strings.getString("issMessage"), message);
     }
 
     /**

@@ -55,7 +55,7 @@ internal class JSkatAboutDialogContent(applicationVersion: String) {
             ${strings.getString("icons")}: Gnome Desktop Icons, Tango project, Elementary icons,
             Silvestre Herrera, Alex Roberts and Icojoy
 
-            ${strings.getString("background_image")}: webtreats
+            ${strings.getString("backgroundImage")}: webtreats
 
             This program comes with ABSOLUTELY NO WARRANTY;
             for details see licence dialog.

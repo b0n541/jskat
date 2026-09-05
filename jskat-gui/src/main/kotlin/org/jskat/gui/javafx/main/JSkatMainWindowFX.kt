@@ -175,7 +175,7 @@ class JSkatMainWindowFX : VBox() {
         Platform.runLater {
             val loginPanel = IssLoginPanel(actions)
 
-            val tab = Tab(strings.getString("iss_login")).apply {
+            val tab = Tab(strings.getString("issLogin")).apply {
                 id = "ISS_LOGIN"
                 isClosable = true
                 content = loginPanel
@@ -200,7 +200,7 @@ class JSkatMainWindowFX : VBox() {
             issLobby.prefWidthProperty().bind(scrollPane.widthProperty())
             issLobby.prefHeightProperty().bind(scrollPane.heightProperty())
 
-            val tab = Tab(strings.getString("iss_lobby")).apply {
+            val tab = Tab(strings.getString("issLobby")).apply {
                 id = "ISS_LOBBY"
                 isClosable = true
                 content = scrollPane
@@ -325,12 +325,12 @@ class JSkatMainWindowFX : VBox() {
     private fun createNewLocalTable() {
         val dialog = TextInputDialog(
             JavaFxTableLifecycle.defaultLocalTableName(
-                strings.getString("local.table"),
+                strings.getString("localTable"),
                 data.localTablesCreated
             )
         )
-        dialog.title = strings.getString("new.table.dialog.title")
-        dialog.headerText = strings.getString("new.table.dialog.message")
+        dialog.title = strings.getString("newTableDialogTitle")
+        dialog.headerText = strings.getString("newTableDialogMessage")
         dialog.contentText = strings.getString("name")
         dialog.initOwner(scene?.window)
         dialog.showAndWait().ifPresent { tableName ->

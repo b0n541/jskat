@@ -15,7 +15,7 @@ public class LicenseAction extends AbstractJSkatAction {
     public LicenseAction() {
 
         putValue(NAME, STRINGS.getString("license"));
-        putValue(SHORT_DESCRIPTION, STRINGS.getString("license_tooltip"));
+        putValue(SHORT_DESCRIPTION, STRINGS.getString("licenseTooltip"));
     }
 
     @Override

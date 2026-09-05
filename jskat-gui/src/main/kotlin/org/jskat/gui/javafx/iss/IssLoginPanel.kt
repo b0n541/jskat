@@ -36,7 +36,7 @@ class IssLoginPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) 
     }
 
     private fun createHeader(): Label {
-        val headerLabel = Label(strings.getString("login_to_iss_title"))
+        val headerLabel = Label(strings.getString("loginToIssTitle"))
         headerLabel.font = Font("System Bold", 32.0)
         return headerLabel
     }
@@ -64,7 +64,7 @@ class IssLoginPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) 
 
         val loginButton = createActionButton(
             JSkatAction.CONNECT_TO_ISS,
-            strings.getString("connect_to_iss"),
+            strings.getString("connectToIss"),
             JSkatGraphicRepository.Icon.CONNECT_ISS,
         )
         loginButton.defaultButtonProperty()
@@ -72,13 +72,13 @@ class IssLoginPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) 
 
         val homepageButton = createActionButton(
             JSkatAction.OPEN_ISS_HOMEPAGE,
-            strings.getString("open_iss_homepage"),
+            strings.getString("openIssHomepage"),
             JSkatGraphicRepository.Icon.WEB
         )
 
         val registerButton = createActionButton(
             JSkatAction.REGISTER_ON_ISS,
-            strings.getString("register_on_iss"),
+            strings.getString("registerOnIss"),
             JSkatGraphicRepository.Icon.REGISTER
         )
 

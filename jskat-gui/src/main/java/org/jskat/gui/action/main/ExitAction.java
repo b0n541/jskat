@@ -15,8 +15,8 @@ public class ExitAction extends AbstractJSkatAction {
      */
     public ExitAction() {
 
-        putValue(NAME, STRINGS.getString("exit_jskat"));
-        putValue(SHORT_DESCRIPTION, STRINGS.getString("exit_jskat_tooltip"));
+        putValue(NAME, STRINGS.getString("exitJSkat"));
+        putValue(SHORT_DESCRIPTION, STRINGS.getString("exitJSkatTooltip"));
 
         setIcon(Icon.EXIT);
     }

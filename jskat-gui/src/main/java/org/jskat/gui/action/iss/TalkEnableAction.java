@@ -15,7 +15,7 @@ public class TalkEnableAction extends AbstractJSkatAction {
      */
     public TalkEnableAction() {
 
-        putValue(NAME, STRINGS.getString("iss_chat_enabled"));
+        putValue(NAME, STRINGS.getString("issChatEnabled"));
         setIcon(JSkatGraphicRepository.Icon.CHAT);
     }
 

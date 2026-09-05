@@ -15,7 +15,7 @@ public class AboutAction extends AbstractJSkatAction {
      */
     public AboutAction() {
         putValue(NAME, STRINGS.getString("about"));
-        putValue(SHORT_DESCRIPTION, STRINGS.getString("about_tooltip"));
+        putValue(SHORT_DESCRIPTION, STRINGS.getString("aboutTooltip"));
         setIcon(Icon.ABOUT);
     }
 

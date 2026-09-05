@@ -51,7 +51,7 @@ class SkatTableNode(val skatTablePanel: SkatTablePanel) : SplitPane() {
         vbox.children.add(scoreListTableView)
         vbox.padding = javafx.geometry.Insets(5.0)
 
-        val scoreListTab = Tab(strings.getString("score_sheet"), vbox)
+        val scoreListTab = Tab(strings.getString("scoreSheet"), vbox)
         val tabPane = TabPane()
         tabPane.tabs.add(scoreListTab)
 

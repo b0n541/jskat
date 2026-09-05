@@ -15,7 +15,7 @@ public class ShowCardsAction extends AbstractJSkatAction {
      */
     public ShowCardsAction() {
 
-        putValue(NAME, STRINGS.getString("show_cards"));
+        putValue(NAME, STRINGS.getString("showCards"));
         setIcon(Icon.PLAY);
     }
 

@@ -109,7 +109,7 @@ public class JSkatResourceBundle {
                 result = strings.getString("ramsch");
                 break;
             case PASSED_IN:
-                result = strings.getString("passed_in");
+                result = strings.getString("passedIn");
                 break;
         }
 
@@ -189,28 +189,28 @@ public class JSkatResourceBundle {
 
         switch (rank) {
             case ACE:
-                result = strings.getString("ace_german");
+                result = strings.getString("aceGerman");
                 break;
             case KING:
-                result = strings.getString("king_german");
+                result = strings.getString("kingGerman");
                 break;
             case QUEEN:
-                result = strings.getString("queen_german");
+                result = strings.getString("queenGerman");
                 break;
             case JACK:
-                result = strings.getString("jack_german");
+                result = strings.getString("jackGerman");
                 break;
             case TEN:
-                result = strings.getString("ten_german");
+                result = strings.getString("tenGerman");
                 break;
             case NINE:
-                result = strings.getString("nine_german");
+                result = strings.getString("nineGerman");
                 break;
             case EIGHT:
-                result = strings.getString("eight_german");
+                result = strings.getString("eightGerman");
                 break;
             case SEVEN:
-                result = strings.getString("seven_german");
+                result = strings.getString("sevenGerman");
                 break;
         }
 
@@ -267,16 +267,16 @@ public class JSkatResourceBundle {
 
         switch (suit) {
             case CLUBS:
-                result = strings.getString("clubs_german");
+                result = strings.getString("clubsGerman");
                 break;
             case SPADES:
-                result = strings.getString("spades_german");
+                result = strings.getString("spadesGerman");
                 break;
             case HEARTS:
-                result = strings.getString("hearts_german");
+                result = strings.getString("heartsGerman");
                 break;
             case DIAMONDS:
-                result = strings.getString("diamonds_german");
+                result = strings.getString("diamondsGerman");
                 break;
         }
         return result;
@@ -305,16 +305,16 @@ public class JSkatResourceBundle {
 
         switch (gameType) {
             case CLUBS:
-                result = strings.getString("clubs_german");
+                result = strings.getString("clubsGerman");
                 break;
             case SPADES:
-                result = strings.getString("spades_german");
+                result = strings.getString("spadesGerman");
                 break;
             case HEARTS:
-                result = strings.getString("hearts_german");
+                result = strings.getString("heartsGerman");
                 break;
             case DIAMONDS:
-                result = strings.getString("diamonds_german");
+                result = strings.getString("diamondsGerman");
                 break;
             default:
                 // other game types not needed here

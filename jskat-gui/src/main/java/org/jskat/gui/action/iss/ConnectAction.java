@@ -17,8 +17,8 @@ public class ConnectAction extends AbstractJSkatAction {
      */
     public ConnectAction() {
 
-        putValue(NAME, STRINGS.getString("connect_to_iss"));
-        putValue(SHORT_DESCRIPTION, STRINGS.getString("connect_to_iss"));
+        putValue(NAME, STRINGS.getString("connectToIss"));
+        putValue(SHORT_DESCRIPTION, STRINGS.getString("connectToIss"));
 
         setActionCommand(JSkatAction.CONNECT_TO_ISS);
         setIcon(Icon.CONNECT_ISS);

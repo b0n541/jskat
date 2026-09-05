@@ -14,8 +14,8 @@ public class CallContraAction extends AbstractHumanJSkatAction {
      */
     public CallContraAction() {
 
-        putValue(NAME, STRINGS.getString("call_contra"));
-        putValue(SHORT_DESCRIPTION, STRINGS.getString("call_contra"));
+        putValue(NAME, STRINGS.getString("callContra"));
+        putValue(SHORT_DESCRIPTION, STRINGS.getString("callContra"));
 
         setActionCommand(JSkatAction.CALL_CONTRA);
         setIcon(Icon.PLAY);

@@ -15,7 +15,7 @@ public class SendChatMessageAction extends AbstractJSkatAction {
      */
     public SendChatMessageAction() {
 
-        putValue(NAME, STRINGS.getString("send_chat_message"));
+        putValue(NAME, STRINGS.getString("sendChatMessage"));
     }
 
     @Override

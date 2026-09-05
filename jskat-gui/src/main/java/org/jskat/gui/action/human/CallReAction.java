@@ -14,8 +14,8 @@ public class CallReAction extends AbstractHumanJSkatAction {
      */
     public CallReAction() {
 
-        putValue(NAME, STRINGS.getString("call_re"));
-        putValue(SHORT_DESCRIPTION, STRINGS.getString("call_re"));
+        putValue(NAME, STRINGS.getString("callRe"));
+        putValue(SHORT_DESCRIPTION, STRINGS.getString("callRe"));
 
         setActionCommand(JSkatAction.CALL_RE);
         setIcon(Icon.PLAY);

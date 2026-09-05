@@ -26,48 +26,48 @@ class JavaFxFeedbackTest {
         val discarding = JavaFxFeedback.schwarzDiscarding("Ada", CardList.of(Card.CA, Card.SK))
         val cardPlay = JavaFxFeedback.schwarzCardPlay("Bert", Card.H7)
 
-        assertThat(discarding.title).isEqualTo(strings.getString("player_played_schwarz_title"))
+        assertThat(discarding.title).isEqualTo(strings.getString("playerPlayedSchwarzTitle"))
         assertThat(discarding.message).isEqualTo(
             strings.getString(
-                "player_played_schwarz_discarding",
+                "playerPlayedSchwarzDiscarding",
                 "Ada",
                 " ${strings.getCardStringForCardFace(Card.CA)} ${strings.getCardStringForCardFace(Card.SK)}"
             )
         )
         assertThat(cardPlay.message).isEqualTo(
-            strings.getString("player_played_schwarz_card_play", "Bert", strings.getCardStringForCardFace(Card.H7))
+            strings.getString("playerPlayedSchwarzCardPlay", "Bert", strings.getCardStringForCardFace(Card.H7))
         )
     }
 
     @Test
     fun `localizes unknown Schwarz cards instead of failing`() {
         assertThat(JavaFxFeedback.schwarzDiscarding("Ada", null).message)
-            .contains(strings.getString("unknown_card"))
+            .contains(strings.getString("unknownCard"))
         assertThat(JavaFxFeedback.schwarzCardPlay("Bert", null).message)
-            .contains(strings.getString("unknown_card"))
+            .contains(strings.getString("unknownCard"))
     }
 
     @Test
     fun `localizes every validation error shown to the user`() {
         assertThat(JavaFxFeedback.invalidNumberOfDiscardedCards()).isEqualTo(
             JavaFxFeedback(
-                strings.getString("invalid_number_of_cards_in_skat_title"),
-                strings.getString("invalid_number_of_cards_in_skat_message")
+                strings.getString("invalidNumberOfCardsInSkatTitle"),
+                strings.getString("invalidNumberOfCardsInSkatMessage")
             )
         )
         assertThat(JavaFxFeedback.noJacksAllowedInDiscardedSkat()).isEqualTo(
             JavaFxFeedback(
-                strings.getString("no_jacks_allowed_in_schieberamsch_skat_title"),
-                strings.getString("no_jacks_allowed_in_schieberamsch_skat_message")
+                strings.getString("noJacksAllowedInSchieberamschSkatTitle"),
+                strings.getString("noJacksAllowedInSchieberamschSkatMessage")
             )
         )
         assertThat(JavaFxFeedback.duplicateTableName("Table 1").message).isEqualTo(
-            strings.getString("duplicate_table_name_message", "Table 1")
+            strings.getString("duplicateTableNameMessage", "Table 1")
         )
         assertThat(JavaFxFeedback.emptyTableName()).isEqualTo(
             JavaFxFeedback(
-                strings.getString("invalid_name_input_null_title"),
-                strings.getString("invalid_name_input_null_message")
+                strings.getString("invalidNameInputNullTitle"),
+                strings.getString("invalidNameInputNullMessage")
             )
         )
     }

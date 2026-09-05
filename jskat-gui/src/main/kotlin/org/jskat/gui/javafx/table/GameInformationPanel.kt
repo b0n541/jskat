@@ -177,12 +177,12 @@ class GameInformationPanel : HBox() {
                 text.append(" ${strings.getString("ouvert")}")
             }
             if (schneiderAnnounced) {
-                text.append(" ${strings.getString("schneider_announced")}")
+                text.append(" ${strings.getString("schneiderAnnounced")}")
             } else if (schneider) {
                 text.append(" ${strings.getString("schneider")}")
             }
             if (schwarzAnnounced) {
-                text.append(" ${strings.getString("schwarz_announced")}")
+                text.append(" ${strings.getString("schwarzAnnounced")}")
             } else if (schwarz) {
                 text.append(" ${strings.getString("schwarz")}")
             }
@@ -220,21 +220,21 @@ class GameInformationPanel : HBox() {
 
     private fun getGameStateString(state: GameState): String {
         return when (state) {
-            GameState.BIDDING -> strings.getString("bidding_phase")
-            GameState.CALCULATING_GAME_VALUE -> strings.getString("calc_game_value_phase")
-            GameState.DEALING -> strings.getString("dealing_phase")
-            GameState.DECLARING -> strings.getString("declaring_phase")
-            GameState.DISCARDING -> strings.getString("discarding_phase")
-            GameState.GAME_OVER -> strings.getString("game_over_phase")
-            GameState.GAME_START -> strings.getString("game_start_phase")
+            GameState.BIDDING -> strings.getString("biddingPhase")
+            GameState.CALCULATING_GAME_VALUE -> strings.getString("calcGameValuePhase")
+            GameState.DEALING -> strings.getString("dealingPhase")
+            GameState.DECLARING -> strings.getString("declaringPhase")
+            GameState.DISCARDING -> strings.getString("discardingPhase")
+            GameState.GAME_OVER -> strings.getString("gameOverPhase")
+            GameState.GAME_START -> strings.getString("gameStartPhase")
             GameState.PICKING_UP_SKAT, GameState.RAMSCH_GRAND_HAND_ANNOUNCING, GameState.SCHIEBERAMSCH -> strings.getString(
-                "pick_up_skat_phase"
+                "pickUpSkatPhase"
             )
 
-            GameState.PRELIMINARY_GAME_END -> strings.getString("preliminary_game_end_phase")
-            GameState.TRICK_PLAYING -> strings.getString("trick_playing_phase")
-            GameState.CONTRA -> strings.getString("contra_or_play_phase")
-            GameState.RE -> strings.getString("re_or_play_phase")
+            GameState.PRELIMINARY_GAME_END -> strings.getString("preliminaryGameEndPhase")
+            GameState.TRICK_PLAYING -> strings.getString("trickPlayingPhase")
+            GameState.CONTRA -> strings.getString("contraOrPlayPhase")
+            GameState.RE -> strings.getString("reOrPlayPhase")
             else -> state.name
         }
     }

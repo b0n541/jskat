@@ -16,7 +16,7 @@ public class PassBidAction extends AbstractHumanJSkatAction {
 
         putValue(NAME, STRINGS.getString("pass"));
         putValue(SHORT_DESCRIPTION,
-                STRINGS.getString("pass_short_description"));
+                STRINGS.getString("passShortDescription"));
 
         setActionCommand(JSkatAction.PASS_BID);
         setIcon(Icon.STOP);

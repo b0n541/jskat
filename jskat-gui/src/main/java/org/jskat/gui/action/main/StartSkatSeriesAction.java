@@ -15,9 +15,9 @@ public class StartSkatSeriesAction extends AbstractJSkatAction {
      */
     public StartSkatSeriesAction() {
 
-        putValue(NAME, STRINGS.getString("start_series"));
+        putValue(NAME, STRINGS.getString("startSeries"));
         putValue(SHORT_DESCRIPTION,
-                STRINGS.getString("start_series_tooltip"));
+                STRINGS.getString("startSeriesTooltip"));
 
         setIcon(Icon.PLAY);
     }

@@ -14,7 +14,7 @@ public class ObserveTableAction extends AbstractJSkatAction {
      */
     public ObserveTableAction() {
 
-        putValue(NAME, STRINGS.getString("iss_observe_table"));
+        putValue(NAME, STRINGS.getString("issObserveTable"));
     }
 
     @Override

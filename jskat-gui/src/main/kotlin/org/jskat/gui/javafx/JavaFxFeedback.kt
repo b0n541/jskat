@@ -11,40 +11,40 @@ data class JavaFxFeedback(val title: String, val message: String) {
         fun schwarzDiscarding(playerName: String, discardedCards: CardList?): JavaFxFeedback {
             val cardString = discardedCards?.joinToString(separator = "") {
                 " ${strings.getCardStringForCardFace(it)}"
-            } ?: strings.getString("unknown_card")
+            } ?: strings.getString("unknownCard")
             return JavaFxFeedback(
-                strings.getString("player_played_schwarz_title"),
-                strings.getString("player_played_schwarz_discarding", playerName, cardString)
+                strings.getString("playerPlayedSchwarzTitle"),
+                strings.getString("playerPlayedSchwarzDiscarding", playerName, cardString)
             )
         }
 
         fun schwarzCardPlay(playerName: String, card: Card?): JavaFxFeedback = JavaFxFeedback(
-            strings.getString("player_played_schwarz_title"),
+            strings.getString("playerPlayedSchwarzTitle"),
             strings.getString(
-                "player_played_schwarz_card_play",
+                "playerPlayedSchwarzCardPlay",
                 playerName,
-                card?.let(strings::getCardStringForCardFace) ?: strings.getString("unknown_card")
+                card?.let(strings::getCardStringForCardFace) ?: strings.getString("unknownCard")
             )
         )
 
         fun invalidNumberOfDiscardedCards(): JavaFxFeedback = error(
-            "invalid_number_of_cards_in_skat_title",
-            "invalid_number_of_cards_in_skat_message"
+            "invalidNumberOfCardsInSkatTitle",
+            "invalidNumberOfCardsInSkatMessage"
         )
 
         fun noJacksAllowedInDiscardedSkat(): JavaFxFeedback = error(
-            "no_jacks_allowed_in_schieberamsch_skat_title",
-            "no_jacks_allowed_in_schieberamsch_skat_message"
+            "noJacksAllowedInSchieberamschSkatTitle",
+            "noJacksAllowedInSchieberamschSkatMessage"
         )
 
         fun duplicateTableName(tableName: String): JavaFxFeedback = JavaFxFeedback(
-            strings.getString("duplicate_table_name_title"),
-            strings.getString("duplicate_table_name_message", tableName)
+            strings.getString("duplicateTableNameTitle"),
+            strings.getString("duplicateTableNameMessage", tableName)
         )
 
         fun emptyTableName(): JavaFxFeedback = error(
-            "invalid_name_input_null_title",
-            "invalid_name_input_null_message"
+            "invalidNameInputNullTitle",
+            "invalidNameInputNullMessage"
         )
 
         private fun error(titleKey: String, messageKey: String): JavaFxFeedback = JavaFxFeedback(

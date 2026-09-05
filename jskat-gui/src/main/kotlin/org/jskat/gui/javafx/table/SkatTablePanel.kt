@@ -148,7 +148,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
         question.alignment = Pos.CENTER
         val questionIconLabel =
             Label("", bitmaps.getImageView(JSkatGraphicRepository.Icon.USER_INFO, JSkatGraphicRepository.IconSize.BIG))
-        val questionLabel = Label(strings.getString("want_call_re_after_contra"))
+        val questionLabel = Label(strings.getString("wantCallReAfterContra"))
         question.children.addAll(questionIconLabel, questionLabel)
         result.children.add(question)
 

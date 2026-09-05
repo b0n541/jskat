@@ -108,7 +108,7 @@ public class MessageHandler extends Thread {
                 handleMessage(first, params);
             } catch (final Exception except) {
                 log.error("Error in parsing ISS protocol", except);
-                issControl.showErrorMessage(strings.getString("iss_error_parsing_iss_protocol"));
+                issControl.showErrorMessage(strings.getString("issErrorParsingIssProtocol"));
             }
         }
     }
@@ -204,11 +204,11 @@ public class MessageHandler extends Thread {
     private String getI18ErrorString(final String errorString) {
 
         if ("_id_pw_mismatch".equals(errorString)) {
-            return strings.getString("iss_login_password_wrong");
+            return strings.getString("issLoginPasswordWrong");
         } else if ("_not_your_turn".equals(errorString)) {
-            return strings.getString("iss_not_your_turn");
+            return strings.getString("issNotYourTurn");
         } else if ("_invalid_move_colon".equals(errorString)) {
-            return strings.getString("iss_invalid_move_colon");
+            return strings.getString("issInvalidMoveColon");
         }
 
         return errorString;

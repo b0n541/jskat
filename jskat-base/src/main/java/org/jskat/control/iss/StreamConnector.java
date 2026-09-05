@@ -45,7 +45,7 @@ class StreamConnector extends AbstractIssConnector {
 
         } catch (java.net.UnknownHostException e) {
             log.error("Cannot open connection to ISS");
-            issControl.showErrorMessage(strings.getString("cant_connect_to_iss"));
+            issControl.showErrorMessage(strings.getString("cantConnectToIss"));
             return false;
         } catch (java.io.IOException e) {
             log.error("IOException: " + e);

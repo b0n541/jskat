@@ -53,7 +53,7 @@ class IconPanel : HBox() {
     fun refreshIcons() {
         if (isThinking) {
             thinkingLabel.image = JSkatGraphicRepository.INSTANCE.getImageView(Icon.THINKING, IconSize.SMALL).image
-            Tooltip.install(thinkingLabel, Tooltip(strings.getString("player_thinking")))
+            Tooltip.install(thinkingLabel, Tooltip(strings.getString("playerThinking")))
         } else {
             setBlank(thinkingLabel)
         }
@@ -64,25 +64,25 @@ class IconPanel : HBox() {
             if (isResigned) {
                 resignedLabel.image =
                     JSkatGraphicRepository.INSTANCE.getImageView(Icon.WHITE_FLAG, IconSize.SMALL).image
-                Tooltip.install(resignedLabel, Tooltip(strings.getString("iss_player_wants_to_resign")))
+                Tooltip.install(resignedLabel, Tooltip(strings.getString("issPlayerWantsToResign")))
             } else {
                 setBlank(resignedLabel)
             }
 
             if (isChatEnabled) {
                 chatLabel.image = JSkatGraphicRepository.INSTANCE.getImageView(Icon.CHAT, IconSize.SMALL).image
-                Tooltip.install(chatLabel, Tooltip(strings.getString("iss_chat_enabled")))
+                Tooltip.install(chatLabel, Tooltip(strings.getString("issChatEnabled")))
             } else {
                 chatLabel.image = JSkatGraphicRepository.INSTANCE.getImageView(Icon.CHAT_DISABLED, IconSize.SMALL).image
-                Tooltip.install(chatLabel, Tooltip(strings.getString("iss_chat_disabled")))
+                Tooltip.install(chatLabel, Tooltip(strings.getString("issChatDisabled")))
             }
 
             if (isReadyToPlay) {
                 readyToPlayLabel.image = JSkatGraphicRepository.INSTANCE.getImageView(Icon.OK, IconSize.SMALL).image
-                Tooltip.install(readyToPlayLabel, Tooltip(strings.getString("iss_ready_to_play")))
+                Tooltip.install(readyToPlayLabel, Tooltip(strings.getString("issReadyToPlay")))
             } else {
                 readyToPlayLabel.image = JSkatGraphicRepository.INSTANCE.getImageView(Icon.STOP, IconSize.SMALL).image
-                Tooltip.install(readyToPlayLabel, Tooltip(strings.getString("iss_not_ready_to_play")))
+                Tooltip.install(readyToPlayLabel, Tooltip(strings.getString("issNotReadyToPlay")))
             }
         }
     }

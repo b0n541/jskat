@@ -16,9 +16,9 @@ public class SaveSeriesAction extends AbstractJSkatAction {
      */
     public SaveSeriesAction() {
 
-        putValue(NAME, STRINGS.getString("save_series"));
+        putValue(NAME, STRINGS.getString("saveSeries"));
         putValue(SHORT_DESCRIPTION,
-                STRINGS.getString("save_series_tooltip"));
+                STRINGS.getString("saveSeriesTooltip"));
 
         setIcon(Icon.SAVE);
     }

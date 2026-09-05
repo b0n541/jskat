@@ -66,9 +66,9 @@ class JSkatOptionsDialog(owner: Window? = null) : Dialog<ButtonType>() {
 
         val tabPane = TabPane().apply {
             padding = Insets.EMPTY
-            tabs.add(Tab(strings.getString("common_options"), createGeneralTab()))
-            tabs.add(Tab(strings.getString("cardset_options"), createCardSetTab()))
-            tabs.add(Tab(strings.getString("skat_rules"), createSkatRulesTab()))
+            tabs.add(Tab(strings.getString("commonOptions"), createGeneralTab()))
+            tabs.add(Tab(strings.getString("cardsetOptions"), createCardSetTab()))
+            tabs.add(Tab(strings.getString("skatRules"), createSkatRulesTab()))
             tabs.add(Tab(strings.getString("iss"), createIssTab()))
         }
 
@@ -98,19 +98,19 @@ class JSkatOptionsDialog(owner: Window? = null) : Dialog<ButtonType>() {
         }
 
         // Show tips at startup
-        val showTipsCheckBox = CheckBox(strings.getString("show_tips_at_startup")).apply {
+        val showTipsCheckBox = CheckBox(strings.getString("showTipsAtStartup")).apply {
             selectedProperty().bindBidirectional(showTipsAtStartUpProperty)
         }
         grid.add(showTipsCheckBox, 0, 0, 2, 1)
 
         // Check for new version at startup
-        val checkForNewVersionCheckBox = CheckBox(strings.getString("check_for_new_version_at_startup")).apply {
+        val checkForNewVersionCheckBox = CheckBox(strings.getString("checkForNewVersionAtStartup")).apply {
             selectedProperty().bindBidirectional(checkForNewVersionAtStartUpProperty)
         }
         grid.add(checkForNewVersionCheckBox, 0, 1, 2, 1)
 
         // Hide toolbar
-        val hideToolbarCheckBox = CheckBox(strings.getString("hide_toolbar")).apply {
+        val hideToolbarCheckBox = CheckBox(strings.getString("hideToolbar")).apply {
             selectedProperty().bindBidirectional(hideToolbarProperty)
         }
         hideToolbarProperty.addListener { _, _, newValue ->
@@ -152,13 +152,13 @@ class JSkatOptionsDialog(owner: Window? = null) : Dialog<ButtonType>() {
         grid.add(languageComboBox, 1, 3)
 
         // Save path
-        val savePathLabel = Label(strings.getString("save_path"))
+        val savePathLabel = Label(strings.getString("savePath"))
         val savePathGroup = ToggleGroup()
-        val userHomeRadioButton = RadioButton(strings.getString("user_home")).apply {
+        val userHomeRadioButton = RadioButton(strings.getString("userHome")).apply {
             toggleGroup = savePathGroup
             userData = JSkatOptions.SavePath.USER_HOME
         }
-        val workingDirRadioButton = RadioButton(strings.getString("working_directory")).apply {
+        val workingDirRadioButton = RadioButton(strings.getString("workingDirectory")).apply {
             toggleGroup = savePathGroup
             userData = JSkatOptions.SavePath.WORKING_DIRECTORY
         }
@@ -177,7 +177,7 @@ class JSkatOptionsDialog(owner: Window? = null) : Dialog<ButtonType>() {
         grid.add(savePathBox, 1, 4)
 
         // Wait time after trick
-        val waitTimeLabel = Label(strings.getString("wait_time_after_trick"))
+        val waitTimeLabel = Label(strings.getString("waitTimeAfterTrick"))
         val waitTimeSlider = Slider(0.0, 10.0, options.waitTimeAfterTrick.toDouble()).apply {
             majorTickUnit = 5.0
             minorTickCount = 1
@@ -194,7 +194,7 @@ class JSkatOptionsDialog(owner: Window? = null) : Dialog<ButtonType>() {
     }
 
     private fun createCardSetTab(): VBox {
-        val cardSetLabel = Label(strings.getString("card_face"))
+        val cardSetLabel = Label(strings.getString("cardFace"))
         val cardSetComboBox = ComboBox<CardSet>().apply {
             items.addAll(CardSet.values())
             valueProperty().bindBidirectional(cardSetProperty)
@@ -207,8 +207,10 @@ class JSkatOptionsDialog(owner: Window? = null) : Dialog<ButtonType>() {
                             null
                         } else {
                             val cardSetName = item.cardSetName.lowercase().replace(" ", "")
+                                .replaceFirstChar { it.uppercase() }
                             val cardFace = item.cardFace.toString().lowercase()
-                            strings.getString("cardset_${cardSetName}_${cardFace}")
+                                .replaceFirstChar { it.uppercase() }
+                            strings.getString("cardset${cardSetName}${cardFace}")
                         }
                     }
                 }
@@ -234,11 +236,11 @@ class JSkatOptionsDialog(owner: Window? = null) : Dialog<ButtonType>() {
         }
 
         val rulesGroup = ToggleGroup()
-        val ispaRules = RadioButton(strings.getString("ispa_rules")).apply {
+        val ispaRules = RadioButton(strings.getString("ispaRules")).apply {
             toggleGroup = rulesGroup
             userData = SkatTableOptions.RuleSet.ISPA
         }
-        val pubRules = RadioButton(strings.getString("pub_rules")).apply {
+        val pubRules = RadioButton(strings.getString("pubRules")).apply {
             toggleGroup = rulesGroup
             userData = SkatTableOptions.RuleSet.PUB
         }
@@ -262,39 +264,39 @@ class JSkatOptionsDialog(owner: Window? = null) : Dialog<ButtonType>() {
         }
 
         // Contra/Re
-        val playContra = CheckBox(strings.getString("play_contra_re")).apply {
+        val playContra = CheckBox(strings.getString("playContraRe")).apply {
             selectedProperty().bindBidirectional(playContraProperty)
         }
-        val contraAfterBid18 = CheckBox(strings.getString("contra_after_bid_18")).apply {
+        val contraAfterBid18 = CheckBox(strings.getString("contraAfterBid18")).apply {
             selectedProperty().bindBidirectional(contraAfterBid18Property)
             padding = Insets(0.0, 0.0, 0.0, 20.0)
         }
         pubRulesBox.children.addAll(playContra, contraAfterBid18)
 
         // Bock
-        val playBock = CheckBox(strings.getString("play_bock")).apply {
+        val playBock = CheckBox(strings.getString("playBock")).apply {
             selectedProperty().bindBidirectional(playBockProperty)
         }
         val bockBox = VBox(5.0).apply {
             padding = Insets(0.0, 0.0, 0.0, 20.0)
         }
-        val bockEventLabel = Label(strings.getString("bock_events"))
-        val bockEventAllPlayersPassed = CheckBox(strings.getString("bock_event_all_players_passed")).apply {
+        val bockEventLabel = Label(strings.getString("bockEvents"))
+        val bockEventAllPlayersPassed = CheckBox(strings.getString("bockEventAllPlayersPassed")).apply {
             selectedProperty().bindBidirectional(bockEventAllPlayersPassedProperty)
         }
-        val bockEventLostAfterContra = CheckBox(strings.getString("bock_event_lost_contra")).apply {
+        val bockEventLostAfterContra = CheckBox(strings.getString("bockEventLostContra")).apply {
             selectedProperty().bindBidirectional(bockEventLostAfterContraProperty)
         }
-        val bockEventLostWith60 = CheckBox(strings.getString("bock_event_lost_game_with_60")).apply {
+        val bockEventLostWith60 = CheckBox(strings.getString("bockEventLostGameWith60")).apply {
             selectedProperty().bindBidirectional(bockEventLostWith60Property)
         }
-        val bockEventContraReAnnounced = CheckBox(strings.getString("bock_event_contra_re")).apply {
+        val bockEventContraReAnnounced = CheckBox(strings.getString("bockEventContraRe")).apply {
             selectedProperty().bindBidirectional(bockEventContraReAnnouncedProperty)
         }
-        val bockEventPlayerHasX00Points = CheckBox(strings.getString("bock_event_player_x00_points")).apply {
+        val bockEventPlayerHasX00Points = CheckBox(strings.getString("bockEventPlayerX00Points")).apply {
             selectedProperty().bindBidirectional(bockEventPlayerHasX00PointsProperty)
         }
-        val bockEventLostGrand = CheckBox(strings.getString("bock_event_lost_grand")).apply {
+        val bockEventLostGrand = CheckBox(strings.getString("bockEventLostGrand")).apply {
             selectedProperty().bindBidirectional(bockEventLostGrandProperty)
         }
         bockBox.children.addAll(
@@ -309,7 +311,7 @@ class JSkatOptionsDialog(owner: Window? = null) : Dialog<ButtonType>() {
         pubRulesBox.children.addAll(playBock, bockBox)
 
         // Ramsch
-        val playRamsch = CheckBox(strings.getString("play_ramsch")).apply {
+        val playRamsch = CheckBox(strings.getString("playRamsch")).apply {
             selectedProperty().bindBidirectional(playRamschProperty)
         }
         val ramschBox = VBox(5.0).apply {
@@ -318,24 +320,24 @@ class JSkatOptionsDialog(owner: Window? = null) : Dialog<ButtonType>() {
         val schiebeRamsch = CheckBox(strings.getString("schieberamsch")).apply {
             selectedProperty().bindBidirectional(schiebeRamschProperty)
         }
-        val schiebeRamschJacksInSkat = CheckBox(strings.getString("schieberamsch_jacks_in_skat")).apply {
+        val schiebeRamschJacksInSkat = CheckBox(strings.getString("schieberamschJacksInSkat")).apply {
             selectedProperty().bindBidirectional(schiebeRamschJacksInSkatProperty)
             padding = Insets(0.0, 0.0, 0.0, 20.0)
         }
-        val ramschEventLabel = Label(strings.getString("ramsch_events"))
-        val ramschEventNoBid = CheckBox(strings.getString("ramsch_event_no_bid")).apply {
+        val ramschEventLabel = Label(strings.getString("ramschEvents"))
+        val ramschEventNoBid = CheckBox(strings.getString("ramschEventNoBid")).apply {
             selectedProperty().bindBidirectional(ramschEventNoBidProperty)
         }
-        val ramschEventBockRamsch = CheckBox(strings.getString("ramsch_event_bock_ramsch")).apply {
+        val ramschEventBockRamsch = CheckBox(strings.getString("ramschEventBockRamsch")).apply {
             selectedProperty().bindBidirectional(ramschEventBockRamschProperty)
         }
-        val ramschSkatOwnerLabel = Label(strings.getString("ramsch_skat_owner"))
+        val ramschSkatOwnerLabel = Label(strings.getString("ramschSkatOwner"))
         val ramschSkatOwnerGroup = ToggleGroup()
-        val ramschSkatLastTrick = RadioButton(strings.getString("ramsch_skat_last_trick")).apply {
+        val ramschSkatLastTrick = RadioButton(strings.getString("ramschSkatLastTrick")).apply {
             toggleGroup = ramschSkatOwnerGroup
             userData = SkatTableOptions.RamschSkatOwner.LAST_TRICK
         }
-        val ramschSkatLoser = RadioButton(strings.getString("ramsch_skat_loser")).apply {
+        val ramschSkatLoser = RadioButton(strings.getString("ramschSkatLoser")).apply {
             toggleGroup = ramschSkatOwnerGroup
             userData = SkatTableOptions.RamschSkatOwner.LOSER
         }
@@ -363,7 +365,7 @@ class JSkatOptionsDialog(owner: Window? = null) : Dialog<ButtonType>() {
         pubRulesBox.children.addAll(playRamsch, ramschBox)
 
         // Revolution
-        val playRevolution = CheckBox(strings.getString("play_revolution")).apply {
+        val playRevolution = CheckBox(strings.getString("playRevolution")).apply {
             selectedProperty().bindBidirectional(playRevolutionProperty)
         }
         pubRulesBox.children.add(playRevolution)
@@ -392,14 +394,14 @@ class JSkatOptionsDialog(owner: Window? = null) : Dialog<ButtonType>() {
             padding = Insets(20.0)
         }
 
-        val issAddressLabel = Label(strings.getString("iss_address"))
+        val issAddressLabel = Label(strings.getString("issAddress"))
         val issAddressField = TextField().apply {
             textProperty().bindBidirectional(issAddressProperty)
         }
         grid.add(issAddressLabel, 0, 0)
         grid.add(issAddressField, 1, 0)
 
-        val issPortLabel = Label(strings.getString("iss_port"))
+        val issPortLabel = Label(strings.getString("issPort"))
         val issPortField = TextField().apply {
             textProperty().bindBidirectional(issPortProperty)
         }

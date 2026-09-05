@@ -16,7 +16,7 @@ public class HelpAction extends AbstractJSkatAction {
     public HelpAction() {
 
         putValue(NAME, STRINGS.getString("help"));
-        putValue(SHORT_DESCRIPTION, STRINGS.getString("help_tooltip"));
+        putValue(SHORT_DESCRIPTION, STRINGS.getString("helpTooltip"));
         setIcon(Icon.HELP);
     }
 
