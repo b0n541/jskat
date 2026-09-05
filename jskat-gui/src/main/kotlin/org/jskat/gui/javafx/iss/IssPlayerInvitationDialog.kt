@@ -3,10 +3,9 @@ package org.jskat.gui.javafx.iss
 import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.control.*
-import javafx.scene.layout.ColumnConstraints
-import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
+import javafx.scene.layout.VBox
 import org.jskat.data.iss.PlayerData
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.JSkatResourceBundle
@@ -20,45 +19,53 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
     init {
         title = strings.getString("invite_players")
 
-        val grid = GridPane()
-        grid.hgap = 10.0
-        grid.vgap = 10.0
-        grid.padding = Insets(20.0)
-        grid.columnConstraints.addAll(
-            ColumnConstraints(),
-            ColumnConstraints().apply { hgrow = Priority.ALWAYS },
-            ColumnConstraints().apply { minWidth = 95.0 }
-        )
-
-        val playerSelections = players.sortedBy { it.login }.associateWith { CheckBox() }
-
-        var row = 0
-        playerSelections.forEach { (player, selection) ->
-            grid.add(selection, 0, row)
-            grid.add(playerNameAndFlags(player), 1, row)
-            grid.add(Label(String.format(Locale.ROOT, "%.2f", player.strength)).apply {
-                alignment = Pos.CENTER_RIGHT
-                maxWidth = Double.MAX_VALUE
-            }, 2, row)
-
-            row++
+        val invitations = mutableListOf<PlayerData>()
+        val invitationSlots = HBox(10.0)
+        val availablePlayers = VBox(4.0)
+        val content = VBox(10.0, invitationSlots, availablePlayers).apply {
+            padding = Insets(20.0)
         }
 
-        dialogPane.content = grid
+        fun refresh() {
+            invitationSlots.children.setAll((0 until MAXIMUM_INVITATIONS).map { index ->
+                invitations.getOrNull(index)?.let { player ->
+                    Button("${index + 1}. ${player.login}").apply {
+                        tooltip = Tooltip("Remove ${player.login}")
+                        setOnAction {
+                            invitations.removeAt(index)
+                            refresh()
+                        }
+                    }
+                } ?: Label("${index + 1}. Open place")
+            })
+
+            availablePlayers.children.setAll(
+                players.sortedBy { it.login }
+                    .filter { player -> player.isKIPlayer || player !in invitations }
+                    .map { player ->
+                        Button().apply {
+                            accessibleText = "Invite ${player.login}"
+                            graphic = playerRow(player)
+                            contentDisplay = ContentDisplay.GRAPHIC_ONLY
+                            alignment = Pos.CENTER_LEFT
+                            maxWidth = Double.MAX_VALUE
+                            isDisable = invitations.size == MAXIMUM_INVITATIONS
+                            setOnAction {
+                                invitations += player
+                                refresh()
+                            }
+                        }
+                    }
+            )
+        }
+
+        refresh()
+        dialogPane.content = content
         dialogPane.buttonTypes.addAll(ButtonType.OK, ButtonType.CANCEL)
-
-        playerSelections.values.forEach { selection ->
-            selection.selectedProperty().addListener { _, _, _ ->
-                val maximumSelected = playerSelections.values.count { it.isSelected } >= MAXIMUM_INVITATIONS
-                playerSelections.values.forEach { checkbox ->
-                    checkbox.isDisable = maximumSelected && !checkbox.isSelected
-                }
-            }
-        }
 
         setResultConverter { dialogButton ->
             if (dialogButton == ButtonType.OK) {
-                playerSelections.filterValues { it.isSelected }.keys.map { it.login }
+                invitations.map { it.login }
             } else {
                 null
             }
@@ -69,6 +76,15 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
         alignment = Pos.CENTER_LEFT
         children.add(Label(player.login))
         children.addAll(languageFlagImageViews(player.languages.orEmpty(), bitmaps))
+    }
+
+    private fun playerRow(player: PlayerData): HBox = HBox(10.0).apply {
+        alignment = Pos.CENTER_LEFT
+        children.add(playerNameAndFlags(player).apply { HBox.setHgrow(this, Priority.ALWAYS) })
+        children.add(Label(String.format(Locale.ROOT, "%.2f", player.strength)).apply {
+            alignment = Pos.CENTER_RIGHT
+            minWidth = 95.0
+        })
     }
 
     private companion object {
