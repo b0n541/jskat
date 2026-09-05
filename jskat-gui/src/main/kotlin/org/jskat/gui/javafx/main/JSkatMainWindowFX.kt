@@ -173,7 +173,7 @@ class JSkatMainWindowFX : VBox() {
     @Subscribe
     fun showIssLoginOn(command: IssShowLoginCommand) {
         Platform.runLater {
-            val loginPanel: VBox = IssLoginPanel(actions)
+            val loginPanel = IssLoginPanel(actions)
 
             val tab = Tab(strings.getString("iss_login")).apply {
                 id = "ISS_LOGIN"
@@ -183,6 +183,7 @@ class JSkatMainWindowFX : VBox() {
 
             tabs.tabs.add(tab)
             tabs.selectionModel.select(tab)
+            loginPanel.setFocus()
         }
     }
 
