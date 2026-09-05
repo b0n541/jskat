@@ -187,7 +187,11 @@ public class MessageHandler extends Thread {
 
     void handleErrorMessage(final List<String> params) {
         log.error(params.toString());
-        issControl.showErrorMessage(getI18ErrorString(getErrorString(params)));
+        final String errorString = getErrorString(params);
+        if ("_id_pw_mismatch".equals(errorString)) {
+            eventBus.post(new IssDisconnectedEvent());
+        }
+        issControl.showErrorMessage(getI18ErrorString(errorString));
     }
 
     private static String getErrorString(final List<String> params) {

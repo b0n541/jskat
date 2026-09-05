@@ -100,7 +100,7 @@ class InputChannel {
             }
         }
 
-        if (messageHandler != null) {
+        if (messageHandler != null && Thread.currentThread() != messageHandler) {
             messageHandler.interrupt();
             try {
                 messageHandler.join(5000);
