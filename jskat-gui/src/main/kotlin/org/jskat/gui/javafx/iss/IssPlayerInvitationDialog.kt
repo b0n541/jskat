@@ -2,6 +2,7 @@ package org.jskat.gui.javafx.iss
 
 import javafx.geometry.Insets
 import javafx.geometry.Pos
+import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Priority
@@ -20,9 +21,11 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
         title = strings.getString("invite_players")
 
         val invitations = mutableListOf<PlayerData>()
-        val invitationSlots = VBox(SLOT_GAP)
+        val invitationSlots = HBox(SLOT_GAP)
         val availablePlayers = VBox(PLAYER_GAP)
-        val content = VBox(CONTENT_GAP, invitationSlots, availablePlayers).apply {
+        val seatSection = section(strings.getString("iss_invitation_table_seats"), invitationSlots)
+        val playerSection = section(strings.getString("iss_invitation_available_player"), availablePlayers)
+        val content = VBox(CONTENT_GAP, seatSection, playerSection).apply {
             padding = Insets(CONTENT_PADDING)
         }
 
@@ -52,7 +55,6 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
 
             availablePlayers.children.setAll(
                 players.sortedBy { it.login }
-                    .filter { player -> player.isKIPlayer || player !in invitations }
                     .map { player ->
                         Button().apply {
                             id = "invite-player-${player.login}"
@@ -65,7 +67,8 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
                             minHeight = PLAYER_BUTTON_HEIGHT
                             prefHeight = PLAYER_BUTTON_HEIGHT
                             maxHeight = PLAYER_BUTTON_HEIGHT
-                            isDisable = invitations.size == MAXIMUM_INVITATIONS
+                            isDisable = invitations.size == MAXIMUM_INVITATIONS ||
+                                (!player.isKIPlayer && player in invitations)
                             setOnAction {
                                 invitations += player
                                 refresh()
@@ -114,16 +117,21 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
         maxHeight = SLOT_BUTTON_HEIGHT
     }
 
+    private fun section(title: String, content: Node): VBox = VBox(SECTION_GAP, Label(title).apply {
+        styleClass.add("action-panel-section-label")
+    }, content)
+
     private companion object {
         const val MAXIMUM_INVITATIONS = 2
         const val DIALOG_WIDTH = 680.0
         const val CONTENT_PADDING = 28.0
         const val CONTENT_GAP = 18.0
-        const val SLOT_GAP = 8.0
+        const val SLOT_GAP = 16.0
         const val PLAYER_GAP = 8.0
-        const val SLOT_WIDTH = 624.0
+        const val SLOT_WIDTH = 304.0
         const val PLAYER_ROW_WIDTH = 624.0
         const val PLAYER_ROW_GAP = 16.0
+        const val SECTION_GAP = 7.0
         const val SLOT_BUTTON_HEIGHT = 48.0
         const val PLAYER_BUTTON_HEIGHT = 48.0
     }

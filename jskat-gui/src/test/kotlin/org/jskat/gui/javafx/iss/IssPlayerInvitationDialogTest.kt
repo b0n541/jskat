@@ -41,15 +41,18 @@ class IssPlayerInvitationDialogTest {
     }
 
     @Test
-    fun `human player is removed after being placed`() {
+    fun `human player is disabled after being placed and re-enabled when removed`() {
         val dialog = onFxThread { IssPlayerInvitationDialog(listOf(player("Marta"))) }
 
         onFxThread { invitationButton(dialog, "Marta").fire() }
 
-        assertThat(onFxThread { availableInvitationButtons(dialog) })
-            .noneMatch { it.id == "invite-player-Marta" }
+        assertThat(onFxThread { invitationButton(dialog, "Marta").isDisable }).isTrue()
         assertThat(onFxThread { dialog.resultConverter.call(ButtonType.OK) })
             .containsExactly("Marta")
+
+        onFxThread { invitationPlaceButtons(dialog).single { it.graphic != null }.fire() }
+
+        assertThat(onFxThread { invitationButton(dialog, "Marta").isDisable }).isFalse()
     }
 
     @Test
@@ -66,8 +69,6 @@ class IssPlayerInvitationDialogTest {
             .containsOnly(slotHeight)
         assertThat(onFxThread { availableInvitationButtons(dialog).single().prefHeight })
             .isEqualTo(slotHeight)
-        assertThat(onFxThread { invitationPlaceButtons(dialog).first().prefWidth })
-            .isEqualTo(onFxThread { availableInvitationButtons(dialog).single().prefWidth })
         assertThat(onFxThread { invitationPlaceButtons(dialog).single { it.graphic != null }.graphic })
             .isInstanceOf(ImageView::class.java)
     }
