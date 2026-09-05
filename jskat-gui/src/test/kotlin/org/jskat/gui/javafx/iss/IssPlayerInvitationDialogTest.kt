@@ -56,11 +56,16 @@ class IssPlayerInvitationDialogTest {
     fun `invitation places keep their size and show a remove icon`() {
         val dialog = onFxThread { IssPlayerInvitationDialog(listOf(player("SkatBot", isAI = true))) }
         val slotWidth = onFxThread { invitationPlaceButtons(dialog).first().prefWidth }
+        val slotHeight = onFxThread { invitationPlaceButtons(dialog).first().prefHeight }
 
         onFxThread { invitationButton(dialog, "SkatBot").fire() }
 
         assertThat(onFxThread { invitationPlaceButtons(dialog).map(Button::getPrefWidth) })
             .containsOnly(slotWidth)
+        assertThat(onFxThread { invitationPlaceButtons(dialog).map(Button::getPrefHeight) })
+            .containsOnly(slotHeight)
+        assertThat(onFxThread { availableInvitationButtons(dialog).single().prefHeight })
+            .isEqualTo(slotHeight)
         assertThat(onFxThread { invitationPlaceButtons(dialog).single { it.graphic != null }.graphic })
             .isInstanceOf(ImageView::class.java)
     }

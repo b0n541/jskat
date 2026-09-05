@@ -62,6 +62,9 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
                             alignment = Pos.CENTER_LEFT
                             prefWidth = PLAYER_ROW_WIDTH
                             maxWidth = PLAYER_ROW_WIDTH
+                            minHeight = PLAYER_BUTTON_HEIGHT
+                            prefHeight = PLAYER_BUTTON_HEIGHT
+                            maxHeight = PLAYER_BUTTON_HEIGHT
                             isDisable = invitations.size == MAXIMUM_INVITATIONS
                             setOnAction {
                                 invitations += player
@@ -106,6 +109,9 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
         minWidth = SLOT_WIDTH
         prefWidth = SLOT_WIDTH
         maxWidth = SLOT_WIDTH
+        minHeight = SLOT_BUTTON_HEIGHT
+        prefHeight = SLOT_BUTTON_HEIGHT
+        maxHeight = SLOT_BUTTON_HEIGHT
     }
 
     private companion object {
@@ -118,5 +124,7 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
         const val SLOT_WIDTH = 296.0
         const val PLAYER_ROW_WIDTH = 624.0
         const val PLAYER_ROW_GAP = 16.0
+        const val SLOT_BUTTON_HEIGHT = 48.0
+        const val PLAYER_BUTTON_HEIGHT = 48.0
     }
 }
