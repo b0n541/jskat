@@ -92,6 +92,45 @@ class SkatTablePanelReplayNavigationTest {
     }
 
     @Test
+    fun `local bidding keeps controls in the shared action area and dispatches them`() {
+        val makeBid = RecordingAction("Make bid")
+        val holdBid = RecordingAction("Hold bid")
+        val passBid = RecordingAction("Pass bid")
+        val tableName = "Local-42"
+        val tableEvents = EventBus("Table $tableName")
+        val panel = onFxThread {
+            JSkatEventBus.TABLE_EVENT_BUSSES[tableName] = tableEvents
+            SkatTablePanel(
+                tableName,
+                mapOf(
+                    JSkatAction.START_LOCAL_SERIES to StartSkatSeriesAction(),
+                    JSkatAction.MAKE_BID to makeBid,
+                    JSkatAction.HOLD_BID to holdBid,
+                    JSkatAction.PASS_BID to passBid,
+                ),
+            ).also(::Scene)
+        }
+
+        try {
+            tableEvents.post(SkatGameStateChangedEvent(tableName, GameState.BIDDING))
+            flushFxEvents()
+
+            val biddingButtons = sharedActionButtons(panel)
+            assertThat(biddingButtons.map(Button::getText)).containsExactly("Make bid", "Pass bid")
+            assertThat(contextButtons(panel).map(Button::getText)).doesNotContain("Make bid", "Pass bid")
+
+            onFxThread { biddingButtons.forEach(Button::fire) }
+            flushFxEvents()
+
+            assertThat(makeBid.actionCommands).containsExactly(JSkatAction.MAKE_BID.toString())
+            assertThat(passBid.actionCommands).containsExactly(JSkatAction.PASS_BID.toString())
+            assertThat(holdBid.actionCommands).isEmpty()
+        } finally {
+            JSkatEventBus.TABLE_EVENT_BUSSES.remove(tableName)
+        }
+    }
+
+    @Test
     fun `replay skat is inert, shown only during trick play, and cleared when replay ends`() {
         val takeCard = RecordingAction("Take card")
         val tableName = "Replay-skat"
@@ -141,6 +180,7 @@ class SkatTablePanelReplayNavigationTest {
             tableEvents.post(SkatGameReplayFinishedEvent())
             onFxThread { Unit }
             assertThat(replaySkatSlot(panel).children).isEmpty()
+            assertThat(discardPanel(panel).children).isEmpty()
 
             tableEvents.post(SkatGameReplayStartedEvent())
             flushFxEvents()
@@ -153,6 +193,7 @@ class SkatTablePanelReplayNavigationTest {
             tableEvents.post(GameStartedEvent(2, GameVariant.STANDARD, Player.MIDDLEHAND, Player.REARHAND, Player.FOREHAND))
             onFxThread { Unit }
             assertThat(replaySkatSlot(panel).children).isEmpty()
+            assertThat(discardPanel(panel).children).isEmpty()
         } finally {
             JSkatEventBus.TABLE_EVENT_BUSSES.remove(tableName)
         }
@@ -168,6 +209,14 @@ class SkatTablePanelReplayNavigationTest {
 
     private fun discardCards(panel: SkatTablePanel): HBox = onFxThread {
         panel.lookup("#discard-card-views") as HBox
+    }
+
+    private fun discardPanel(panel: SkatTablePanel): StackPane = onFxThread {
+        panel.lookup("#discard-panel") as StackPane
+    }
+
+    private fun contextButtons(panel: SkatTablePanel): Set<Button> = onFxThread {
+        (panel.lookup("#context-panel-stack") as StackPane).lookupAll(".button").filterIsInstance<Button>().toSet()
     }
 
     private fun flushFxEvents() {

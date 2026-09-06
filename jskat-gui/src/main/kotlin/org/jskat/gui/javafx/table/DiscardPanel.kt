@@ -37,6 +37,7 @@ class DiscardPanel(
         get() = pickUpSkatButton
 
     init {
+        id = "discard-panel"
         alignment = Pos.CENTER
 
         pickUpSkatButton.graphic = bitmaps.getImageView(Icon.PLAY, JSkatGraphicRepository.IconSize.BIG)

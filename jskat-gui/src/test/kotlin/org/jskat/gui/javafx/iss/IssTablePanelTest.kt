@@ -1,9 +1,11 @@
 package org.jskat.gui.javafx.iss
 
+import com.google.common.eventbus.EventBus
 import javafx.application.Platform
 import javafx.scene.Scene
 import javafx.scene.control.Button
 import org.assertj.core.api.Assertions.assertThat
+import org.jskat.control.JSkatEventBus
 import org.jskat.control.event.iss.IssTableGameStartedEvent
 import org.jskat.control.event.iss.IssTableStateChangedEvent
 import org.jskat.control.event.table.SkatGameStateChangedEvent
@@ -82,6 +84,36 @@ class IssTablePanelTest {
 
         assertThat(resign.source).isEqualTo("ISS-42")
         assertThat(showCards.source).isEqualTo("ISS-42")
+    }
+
+    @Test
+    fun `ISS table events expose trick commands only for trick play`() {
+        val tableName = "ISS-event-42"
+        val tableEvents = EventBus("Table $tableName")
+        val panel = onFxThread {
+            JSkatEventBus.TABLE_EVENT_BUSSES[tableName] = tableEvents
+            IssTablePanel(
+                tableName,
+                mapOf(
+                    JSkatAction.START_LOCAL_SERIES to StartSkatSeriesAction(),
+                    JSkatAction.RESIGN to RecordingAction("Give up"),
+                    JSkatAction.SHOW_CARDS to RecordingAction("Show cards"),
+                ),
+            ).also(::Scene)
+        }
+
+        try {
+            tableEvents.post(SkatGameStateChangedEvent(tableName, GameState.BIDDING))
+            onFxThread { Unit }
+            assertThat(sharedActionButtons(panel)).isEmpty()
+
+            tableEvents.post(SkatGameStateChangedEvent(tableName, GameState.TRICK_PLAYING))
+            onFxThread { Unit }
+            assertThat(sharedActionButtons(panel).map(Button::getText)).containsExactly("Give up", "Show cards")
+            assertThat(contextButtons(panel).map(Button::getText)).doesNotContain("Give up", "Show cards")
+        } finally {
+            JSkatEventBus.TABLE_EVENT_BUSSES.remove(tableName)
+        }
     }
 
     @Test
@@ -248,6 +280,15 @@ class IssTablePanelTest {
         is Button -> listOf(node)
         is javafx.scene.Parent -> node.childrenUnmodifiable.flatMap(::buttonsBelow)
         else -> emptyList()
+    }
+
+    private fun sharedActionButtons(panel: IssTablePanel): List<Button> = onFxThread {
+        (panel.lookup("#shared-action-area") as javafx.scene.layout.HBox).children.filterIsInstance<Button>()
+    }
+
+    private fun contextButtons(panel: IssTablePanel): Set<Button> = onFxThread {
+        (panel.lookup("#context-panel-stack") as javafx.scene.layout.StackPane)
+            .lookupAll(".button").filterIsInstance<Button>().toSet()
     }
 
     private fun playerOrderOf(node: SkatTableNode): ScoreHistoryPlayerOrder {
