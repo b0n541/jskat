@@ -6,11 +6,13 @@ import javafx.scene.control.Button
 import org.assertj.core.api.Assertions.assertThat
 import org.jskat.control.event.iss.IssTableGameStartedEvent
 import org.jskat.control.event.iss.IssTableStateChangedEvent
+import org.jskat.control.event.table.SkatGameStateChangedEvent
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.DesktopSavePathResolver
 import org.jskat.data.JSkatApplicationData
 import org.jskat.data.JSkatOptions
+import org.jskat.data.SkatGameData.GameState
 import org.jskat.data.iss.GameStartInformation
 import org.jskat.data.iss.PlayerStatus
 import org.jskat.data.iss.TablePanelStatus
@@ -20,6 +22,7 @@ import org.jskat.gui.img.JSkatGraphicRepository.Icon
 import org.jskat.gui.javafx.JavaFxTestSupport
 import org.jskat.gui.javafx.table.AbstractHandPanel
 import org.jskat.gui.javafx.table.GameOverPanel
+import org.jskat.gui.javafx.table.ContextCompositionHost
 import org.jskat.gui.javafx.table.ScoreHistoryPlayerOrder
 import org.jskat.gui.javafx.table.SkatTableNode
 import org.jskat.util.Player
@@ -46,6 +49,36 @@ class IssTablePanelTest {
 
         performIssTableAction(resign, JSkatAction.RESIGN, "ISS-42")
         performIssTableAction(showCards, JSkatAction.SHOW_CARDS, "ISS-42")
+
+        assertThat(resign.source).isEqualTo("ISS-42")
+        assertThat(showCards.source).isEqualTo("ISS-42")
+    }
+
+    @Test
+    fun `ISS trick commands render only in the shared action area and keep the table name`() {
+        val resign = RecordingAction("Give up")
+        val showCards = RecordingAction("Show cards")
+        val panel = onFxThread {
+            IssTablePanel(
+                "ISS-42",
+                mapOf(
+                    JSkatAction.START_LOCAL_SERIES to StartSkatSeriesAction(),
+                    JSkatAction.RESIGN to resign,
+                    JSkatAction.SHOW_CARDS to showCards
+                )
+            )
+        }
+
+        onFxThread { setGameState(panel, GameState.TRICK_PLAYING) }
+        onFxThread { Unit }
+
+        val actionButtons = onFxThread {
+            contextCompositionHost(panel).sharedActionArea.pane.children.filterIsInstance<Button>()
+        }
+        assertThat(actionButtons.map(Button::getText)).containsExactly("Give up", "Show cards")
+        assertThat(trickContentButtons(panel)).isEmpty()
+
+        onFxThread { actionButtons.forEach(Button::fire) }
 
         assertThat(resign.source).isEqualTo("ISS-42")
         assertThat(showCards.source).isEqualTo("ISS-42")
@@ -190,6 +223,31 @@ class IssTablePanelTest {
             field.isAccessible = true
             (field.get(panel) as AbstractHandPanel).playerName
         }
+    }
+
+    private fun contextCompositionHost(panel: IssTablePanel): ContextCompositionHost {
+        val field = panel.javaClass.superclass.getDeclaredField("contextCompositionHost")
+        field.isAccessible = true
+        return field.get(panel) as ContextCompositionHost
+    }
+
+    private fun setGameState(panel: IssTablePanel, state: GameState) {
+        val method = panel.javaClass.superclass.getDeclaredMethod(
+            "setGameStateOn", SkatGameStateChangedEvent::class.java
+        )
+        method.isAccessible = true
+        method.invoke(panel, SkatGameStateChangedEvent(panel.tableName, state))
+    }
+
+    private fun trickContentButtons(panel: IssTablePanel): List<Button> =
+        contextCompositionHost(panel).contextPanelStack.pane.children
+            .filter { it.isVisible }
+            .flatMap(::buttonsBelow)
+
+    private fun buttonsBelow(node: javafx.scene.Node): List<Button> = when (node) {
+        is Button -> listOf(node)
+        is javafx.scene.Parent -> node.childrenUnmodifiable.flatMap(::buttonsBelow)
+        else -> emptyList()
     }
 
     private fun playerOrderOf(node: SkatTableNode): ScoreHistoryPlayerOrder {

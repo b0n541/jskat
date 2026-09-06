@@ -158,8 +158,8 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
         contextPanelStack.add(panelType, panel)
     }
 
-    private fun registerSharedAction(phaseContent: ContextPanelType, action: JSkatAction, control: Node?) {
-        if (contextMode() == ContextMode.LOCAL && control != null) {
+    protected fun registerSharedAction(phaseContent: ContextPanelType, action: JSkatAction, control: Node?) {
+        if (control != null) {
             contextCompositionHost.sharedActionArea.register(phaseContent, action, control)
         }
     }
