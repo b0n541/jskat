@@ -21,7 +21,11 @@ jobs:
         with:
           java-version: '25'
           distribution: 'temurin'
+      - name: Build with Gradle (Linux)
+        if: runner.os == 'Linux'
+        run: xvfb-run --auto-servernum ./gradlew clean build fatjar
       - name: Build with Gradle
+        if: runner.os != 'Linux'
         run: ./gradlew clean build fatjar
       - uses: actions/upload-artifact@main
         with:
