@@ -40,7 +40,8 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     protected lateinit var rightOpponentPanel: OpponentPanel
     protected lateinit var userPanel: JSkatUserPanel
     protected lateinit var gameInfoPanel: GameInformationPanel
-    private lateinit var gameContextStackPane: StackPane
+    private lateinit var gameContextStackPane: Pane
+    private lateinit var contextCompositionHost: ContextCompositionHost
     private lateinit var contextPanelStack: ContextPanelStack
     protected lateinit var trickPanel: TrickPanel
     protected lateinit var lastTrickPanel: TrickPanel
@@ -79,6 +80,8 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
 
     protected open fun showReplayGameButton(): Boolean = true
 
+    protected open fun contextMode(): ContextMode = ContextMode.LOCAL
+
     protected open fun continueSeriesAction(): JSkatAction = JSkatAction.CONTINUE_LOCAL_SERIES
 
     protected open fun gameOverAdditionalAction(): JSkatAction? = null
@@ -86,8 +89,9 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     protected open fun createPlayerPanel(): JSkatUserPanel = JSkatUserPanel(tableName, 12, false, actions)
 
     private fun createGameContextStackPane() {
-        contextPanelStack = ContextPanelStack()
-        gameContextStackPane = contextPanelStack.pane
+        contextCompositionHost = ContextCompositionHost()
+        contextPanelStack = contextCompositionHost.contextPanelStack
+        gameContextStackPane = contextCompositionHost.pane
         // gameContextStackPane.isOpaque = false // Removed
 
         val startSkatSeriesAction = actions[JSkatAction.START_LOCAL_SERIES] as StartSkatSeriesAction
@@ -343,36 +347,37 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
             gameInfoPanel.setGameState(event.gameState)
             userPanel.gameState = event.gameState
 
+            SharedContextRenderer.render(
+                ContextRenderingState(
+                    contextMode(),
+                    event.gameState,
+                    replay,
+                    userPanel.position == declarer,
+                    options.isPlayContra
+                ),
+                contextCompositionHost
+            )
+
             when (event.gameState) {
                 SkatGameData.GameState.GAME_START -> {
-                    setContextPanel(ContextPanelType.START)
                     resetGameData()
                 }
 
-                SkatGameData.GameState.DEALING -> setContextPanel(ContextPanelType.START)
-                SkatGameData.GameState.BIDDING -> setContextPanel(ContextPanelType.BIDDING)
                 SkatGameData.GameState.RAMSCH_GRAND_HAND_ANNOUNCING, SkatGameData.GameState.SCHIEBERAMSCH -> {
-                    setContextPanel(ContextPanelType.SCHIEBERAMSCH)
                     ramsch = true
                 }
 
                 SkatGameData.GameState.PICKING_UP_SKAT, SkatGameData.GameState.DISCARDING, SkatGameData.GameState.DECLARING -> {
                     if (userPanel.position == declarer) {
                         declaringPanel.preselectGameTypeIfUnset(biddingPanel.selectedGameType())
-                        setContextPanel(ContextPanelType.DECLARING)
                     }
                 }
 
-                SkatGameData.GameState.RE -> setContextPanel(ContextPanelType.RE_AFTER_CONTRA)
-                SkatGameData.GameState.CONTRA -> {
-                    // Handle CONTRA state if needed
-                }
-
-                SkatGameData.GameState.TRICK_PLAYING -> setContextPanel(ContextPanelType.TRICK_PLAYING)
                 SkatGameData.GameState.CALCULATING_GAME_VALUE, SkatGameData.GameState.PRELIMINARY_GAME_END, SkatGameData.GameState.GAME_OVER -> {
-                    setContextPanel(ContextPanelType.GAME_OVER)
                     listOf(foreHand, middleHand, rearHand).forEach { it.isActivePlayer = false }
                 }
+
+                else -> Unit
             }
         }
     }

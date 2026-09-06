@@ -18,6 +18,7 @@ import org.jskat.data.iss.TablePanelStatus
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.gui.javafx.table.ContextPanelType
+import org.jskat.gui.javafx.table.ContextMode
 import org.jskat.gui.javafx.table.JSkatUserPanel
 import org.jskat.gui.javafx.table.OpponentPanel
 import org.jskat.gui.javafx.table.SkatTablePanel
@@ -59,6 +60,8 @@ class IssTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
     }
 
     override fun showReplayGameButton(): Boolean = false
+
+    override fun contextMode(): ContextMode = ContextMode.ISS
 
     override fun continueSeriesAction(): JSkatAction = JSkatAction.READY_TO_PLAY
 
