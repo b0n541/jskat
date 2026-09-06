@@ -79,7 +79,7 @@ class GameOverPanel(
                 }
             }
         }
-        val replayGameButton = if (showReplayGameButton) {
+        val replayGameButton = if (showReplayGameButton && !moveCommandsToSharedActionArea) {
             val replayGameAction = actions[JSkatAction.REPLAY_GAME]
             Button(replayGameAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "").apply {
                 graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.FIRST, JSkatGraphicRepository.IconSize.BIG)

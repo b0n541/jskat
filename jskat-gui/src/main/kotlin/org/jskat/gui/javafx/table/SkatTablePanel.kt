@@ -52,6 +52,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
 
     protected var ramsch: Boolean = false
     protected var replay: Boolean = false
+    private var contextGameState = SkatGameData.GameState.GAME_START
 
     init {
         JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName)?.register(this)
@@ -147,9 +148,12 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
             moveCommandsToSharedActionArea = contextMode() == ContextMode.LOCAL
         )
         addContextPanel(ContextPanelType.GAME_OVER, gameOverPanel)
-        registerSharedAction(ContextPanelType.GAME_OVER, JSkatAction.REPLAY_GAME, gameOverPanel.actionControl(JSkatAction.REPLAY_GAME))
+        registerSharedActionIndependentOfPhase(JSkatAction.REPLAY_GAME, createReplayActionControl(JSkatAction.REPLAY_GAME))
         registerSharedAction(ContextPanelType.GAME_OVER, continueSeriesAction(), gameOverPanel.actionControl(continueSeriesAction()))
-        registerSharedAction(ContextPanelType.TRICK_PLAYING, JSkatAction.NEXT_REPLAY_STEP, createReplayStepActionControl())
+        registerSharedActionIndependentOfPhase(
+            JSkatAction.NEXT_REPLAY_STEP,
+            createReplayActionControl(JSkatAction.NEXT_REPLAY_STEP, bindEnabledState = true)
+        )
 
         setContextPanel(ContextPanelType.START)
     }
@@ -164,11 +168,19 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
         }
     }
 
-    private fun createReplayStepActionControl(): Button? =
-        actions[JSkatAction.NEXT_REPLAY_STEP]?.let { action ->
-            Button(action.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.NEXT_REPLAY_STEP.name).apply {
+    private fun registerSharedActionIndependentOfPhase(action: JSkatAction, control: Node?) {
+        if (control != null) {
+            contextCompositionHost.sharedActionArea.registerIndependentOfPhase(action, control)
+        }
+    }
+
+    private fun createReplayActionControl(actionType: JSkatAction, bindEnabledState: Boolean = false): Button? =
+        actions[actionType]?.let { action ->
+            Button(action.getValue(AbstractJSkatAction.NAME) as? String ?: actionType.name).apply {
                 graphic = bitmaps.getImageView(action.icon, JSkatGraphicRepository.IconSize.BIG)
-                disableProperty().bind(action.enabledProperty().not())
+                if (bindEnabledState) {
+                    disableProperty().bind(action.enabledProperty().not())
+                }
                 setOnAction { action.actionPerformed(JSkatActionEvent(tableName, it.source)) }
             }
         }
@@ -240,11 +252,16 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     @Subscribe
     fun setReplayModeOn(event: SkatGameReplayStartedEvent) {
         replay = true
+        Platform.runLater {
+            contextGameState = SkatGameData.GameState.GAME_START
+            renderContext()
+        }
     }
 
     @Subscribe
     fun setReplayModeOff(event: SkatGameReplayFinishedEvent) {
         replay = false
+        Platform.runLater(::renderContext)
     }
 
     // TODO: this does similar things like IssTablePanel.resetTableOn(event: IssTableGameStartedEvent)
@@ -378,16 +395,8 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
             gameInfoPanel.setGameState(event.gameState)
             userPanel.gameState = event.gameState
 
-            SharedContextRenderer.render(
-                ContextRenderingState(
-                    contextMode(),
-                    event.gameState,
-                    replay,
-                    userPanel.position == declarer,
-                    options.isPlayContra
-                ),
-                contextCompositionHost
-            )
+            contextGameState = event.gameState
+            renderContext()
 
             when (event.gameState) {
                 SkatGameData.GameState.GAME_START -> {
@@ -411,6 +420,19 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
                 else -> Unit
             }
         }
+    }
+
+    private fun renderContext() {
+        SharedContextRenderer.render(
+            ContextRenderingState(
+                contextMode(),
+                contextGameState,
+                replay,
+                userPanel.position == declarer,
+                options.isPlayContra
+            ),
+            contextCompositionHost
+        )
     }
 
     private fun resetGameData() {
