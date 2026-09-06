@@ -1,15 +1,25 @@
 package org.jskat.control.event.skatgame;
 
 import org.jskat.data.SkatGameData;
+import org.jskat.util.CardList;
 import org.jskat.util.Player;
+
+import java.util.Objects;
 
 /**
  * Event for picking up the skat.
  */
 public final class PickUpSkatEvent extends AbstractPlayerMoveEvent {
 
+    public final CardList pickedUpSkat;
+
     public PickUpSkatEvent(Player player) {
+        this(player, new CardList());
+    }
+
+    public PickUpSkatEvent(Player player, CardList pickedUpSkat) {
         super(player);
+        this.pickedUpSkat = pickedUpSkat.getImmutableCopy();
     }
 
     @Override
@@ -31,7 +41,7 @@ public final class PickUpSkatEvent extends AbstractPlayerMoveEvent {
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return Objects.hash(super.hashCode(), pickedUpSkat);
     }
 
     @Override
@@ -45,6 +55,8 @@ public final class PickUpSkatEvent extends AbstractPlayerMoveEvent {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final PickUpSkatEvent other = (PickUpSkatEvent) obj;
+
+        return Objects.equals(pickedUpSkat, other.pickedUpSkat);
     }
 }

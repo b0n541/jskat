@@ -273,6 +273,26 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     }
 
     @Subscribe
+    fun replayPickedUpSkatOn(event: PickUpSkatEvent) {
+        if (replay) {
+            Platform.runLater {
+                setSkat(event.pickedUpSkat)
+                getHandPanel(event.player).addCards(event.pickedUpSkat)
+            }
+        }
+    }
+
+    @Subscribe
+    fun replayDiscardedSkatOn(event: DiscardSkatEvent) {
+        if (replay) {
+            Platform.runLater {
+                event.discardedSkat.forEach { getHandPanel(event.player).removeCard(it) }
+                setSkat(event.discardedSkat)
+            }
+        }
+    }
+
+    @Subscribe
     fun handleTrickCompleted(event: TrickCompletedEvent) {
         Platform.runLater {
             lastTrickPanel.clearCards()

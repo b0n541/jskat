@@ -488,11 +488,7 @@ public class SkatGame {
         // otherwise the player could change the skat after discarding
         activePlayerInstance.takeSkat(skatBefore);
 
-        // For human players, cards remain in the skat panel and are moved interactively.
-        // For AI players, they must be added to the hand immediately.
-        if (!activePlayerInstance.isHumanPlayer()) {
-            data.addSkatToPlayer(activePlayer);
-        }
+        eventBus.post(new TableGameMoveEvent(tableName, new PickUpSkatEvent(activePlayer, skatBefore)));
 
         // ask player for the cards to be discarded
         // cloning is done to prevent the player
@@ -505,7 +501,7 @@ public class SkatGame {
         } else {
             log.info("Discarded cards: " + discardedSkat);
 
-            data.setDiscardedSkat(activePlayer, discardedSkat);
+            eventBus.post(new TableGameMoveEvent(tableName, new DiscardSkatEvent(activePlayer, discardedSkat)));
             eventBus.post(new SkatCardsChangedEvent(tableName, discardedSkat));
         }
     }
@@ -1130,15 +1126,11 @@ public class SkatGame {
 
     @Subscribe
     public void takeCardFromSkatOn(final TakeCardFromSkatCommand command) {
-        data.removeCardFromCurrentSkat(command.card);
-        data.addPlayerCard(activePlayer, command.card);
         eventBus.post(new SkatCardTakenEvent(tableName, command.card));
     }
 
     @Subscribe
     public void putCardIntoSkatOn(final PutCardIntoSkatCommand command) {
-        data.removePlayerCard(activePlayer, command.card);
-        data.addCardToCurrentSkat(command.card);
         eventBus.post(new SkatCardPutEvent(tableName, command.card));
     }
 }
