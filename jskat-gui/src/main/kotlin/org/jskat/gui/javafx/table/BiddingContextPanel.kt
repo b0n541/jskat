@@ -35,6 +35,11 @@ class BiddingContextPanel(
     private val bidButton: Button
     private val passButton: Button
 
+    val bidActionControl: Button
+        get() = bidButton
+    val passActionControl: Button
+        get() = passButton
+
     private val makeBidAction = actions[JSkatAction.MAKE_BID]
     private val holdBidAction = actions[JSkatAction.HOLD_BID]
     private var currentBidAction = makeBidAction
@@ -95,9 +100,6 @@ class BiddingContextPanel(
                 }
             }
         }
-
-        biddingGrid.add(bidButton, 0, 2)
-        biddingGrid.add(passButton, 1, 2)
 
         add(biddingGrid, 1, 0)
 

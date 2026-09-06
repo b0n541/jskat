@@ -11,6 +11,7 @@ internal class ContextCompositionHost {
     val contextPanelStack = ContextPanelStack()
     val lowerLeft = StackPane()
     val lowerRight = StackPane()
+    val sharedActionArea = SharedActionArea()
     private val lowerSpacer = StackPane()
     val lowerRow = HBox(lowerLeft, lowerSpacer, lowerRight)
     val pane = VBox(10.0, contextPanelStack.pane, lowerRow)
@@ -25,6 +26,8 @@ internal class ContextCompositionHost {
         HBox.setHgrow(lowerLeft, Priority.ALWAYS)
         HBox.setHgrow(lowerSpacer, Priority.ALWAYS)
         HBox.setHgrow(lowerRight, Priority.ALWAYS)
+        StackPane.setAlignment(sharedActionArea.pane, Pos.CENTER_RIGHT)
+        lowerRight.children.add(sharedActionArea.pane)
         VBox.setVgrow(contextPanelStack.pane, Priority.ALWAYS)
         VBox.setVgrow(lowerRow, Priority.NEVER)
     }
@@ -32,5 +35,6 @@ internal class ContextCompositionHost {
     fun render(projection: ContextRenderingProjection) {
         renderedProjection = projection
         contextPanelStack.show(projection.phaseContent)
+        sharedActionArea.render(projection)
     }
 }

@@ -45,7 +45,7 @@ class GameAnnouncePanel(
     private val schneiderBox = CheckBox(strings.getString("schneider"))
     private val schwarzBox = CheckBox(strings.getString("schwarz"))
 
-    private val announceButton =
+    val announceActionControl =
         Button(actions[JSkatAction.ANNOUNCE_GAME]?.getValue(AbstractJSkatAction.NAME) as? String ?: "")
 
     private var userPickedUpSkat = false
@@ -66,7 +66,7 @@ class GameAnnouncePanel(
             ColumnConstraints().apply { hgrow = Priority.ALWAYS }
         )
 
-        val title = Label(announceButton.text).apply {
+        val title = Label(announceActionControl.text).apply {
             styleClass.add("action-panel-title")
             maxWidth = Double.MAX_VALUE
         }
@@ -88,11 +88,9 @@ class GameAnnouncePanel(
         add(schneiderBox, 0, 7)
         add(schwarzBox, 1, 7)
 
-        announceButton.graphic =
+        announceActionControl.graphic =
             bitmaps.getImageView(JSkatGraphicRepository.Icon.PLAY, JSkatGraphicRepository.IconSize.BIG)
-        announceButton.maxWidth = Region.USE_PREF_SIZE
-        add(announceButton, 0, 8, 2, 1)
-        GridPane.setHalignment(announceButton, HPos.CENTER)
+        announceActionControl.maxWidth = Region.USE_PREF_SIZE
 
         handBox.isDisable = true
 
@@ -118,7 +116,7 @@ class GameAnnouncePanel(
             }
         }
 
-        announceButton.setOnAction {
+        announceActionControl.setOnAction {
             announceGame()
         }
 

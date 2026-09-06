@@ -30,6 +30,20 @@ class SchieberamschContextPanel(
     private val discardPanel = DiscardPanel(tableName, actions, maxCards)
     private val centerPanel = StackPane()
     private val grandHandPanel: GridPane
+    private lateinit var grandHandButton: Button
+    private lateinit var schieberamschButton: Button
+    private val schiebenButton = Button(
+        actions[JSkatAction.SCHIEBEN]?.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.SCHIEBEN.name
+    )
+
+    val grandHandActionControl: Button
+        get() = grandHandButton
+    val schieberamschActionControl: Button
+        get() = schieberamschButton
+    val pickUpActionControl: Button
+        get() = discardPanel.pickUpActionControl
+    val schiebenActionControl: Button
+        get() = schiebenButton
 
     init {
         style = "-fx-background-color: transparent;"
@@ -46,6 +60,11 @@ class SchieberamschContextPanel(
         columnConstraints.addAll(col1, col2, col3)
 
         grandHandPanel = createGrandHandSchiebeRamschPanel(actions)
+        schiebenButton.setOnAction {
+            actions[JSkatAction.SCHIEBEN]?.actionPerformed(
+                JSkatActionEvent(JSkatAction.SCHIEBEN, discardPanel.discardedCards)
+            )
+        }
         centerPanel.children.addAll(grandHandPanel, discardPanel)
         add(centerPanel, 1, 0)
 
@@ -60,7 +79,7 @@ class SchieberamschContextPanel(
         question.style = "-fx-font-size: 16px; -fx-font-weight: bold;"
         result.add(question, 0, 0, 2, 1)
 
-        val grandHandButton = Button(strings.getString("yes"))
+        grandHandButton = Button(strings.getString("yes"))
         grandHandButton.setOnAction {
             try {
                 val contract = GameContract(GameType.GRAND).withHand()
@@ -69,14 +88,12 @@ class SchieberamschContextPanel(
                 log.error(e.message)
             }
         }
-        result.add(grandHandButton, 0, 1)
-
-        val schieberamschButton = Button(strings.getString("no"))
+        schieberamschButton = Button(strings.getString("no"))
         schieberamschButton.setOnAction {
-            showPanel(DISCARD)
+            actions[JSkatAction.PLAY_SCHIEBERAMSCH]?.actionPerformed(
+                JSkatActionEvent(JSkatAction.PLAY_SCHIEBERAMSCH, it.source)
+            )
         }
-        result.add(schieberamschButton, 1, 1)
-
         return result
     }
 

@@ -19,13 +19,17 @@ class GameOverPanel(
     actions: Map<JSkatAction, AbstractJSkatAction>,
     showReplayGameButton: Boolean = true,
     continueAction: JSkatAction = JSkatAction.CONTINUE_LOCAL_SERIES,
-    additionalAction: JSkatAction? = null
+    additionalAction: JSkatAction? = null,
+    private val moveCommandsToSharedActionArea: Boolean = false
 ) : VBox() {
 
     private val bitmaps = JSkatGraphicRepository.INSTANCE
 
     private val gameOverTrickPanel = GameOverTrickPanel()
     private val skatPanel = SkatPanel()
+    private val actionControls = mutableMapOf<JSkatAction, Button>()
+
+    fun actionControl(action: JSkatAction): Button? = actionControls[action]
 
     init {
         style = "-fx-background-color: transparent;"
@@ -75,21 +79,24 @@ class GameOverPanel(
                 }
             }
         }
-        if (showReplayGameButton) {
+        val replayGameButton = if (showReplayGameButton) {
             val replayGameAction = actions[JSkatAction.REPLAY_GAME]
-            val replayGameButton =
-                Button(replayGameAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "").apply {
-                    graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.FIRST, JSkatGraphicRepository.IconSize.BIG)
-                    setOnAction {
-                        replayGameAction?.actionPerformed(JSkatActionEvent(tableName, it.source))
-                    }
+            Button(replayGameAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "").apply {
+                graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.FIRST, JSkatGraphicRepository.IconSize.BIG)
+                setOnAction {
+                    replayGameAction?.actionPerformed(JSkatActionEvent(tableName, it.source))
                 }
-            buttonPanel.children.add(buttonSpacer)
-            additionalButton?.let(buttonPanel.children::add)
-            buttonPanel.children.addAll(replayGameButton, continueSkatSeriesButton)
+            }.also { actionControls[JSkatAction.REPLAY_GAME] = it }
         } else {
-            buttonPanel.children.add(buttonSpacer)
+            null
+        }
+
+        actionControls[continueAction] = continueSkatSeriesButton
+        additionalAction?.let { action -> additionalButton?.let { actionControls[action] = it } }
+        buttonPanel.children.add(buttonSpacer)
+        if (!moveCommandsToSharedActionArea) {
             additionalButton?.let(buttonPanel.children::add)
+            replayGameButton?.let(buttonPanel.children::add)
             buttonPanel.children.add(continueSkatSeriesButton)
         }
 

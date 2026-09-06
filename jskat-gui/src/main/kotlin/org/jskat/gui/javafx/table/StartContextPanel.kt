@@ -12,7 +12,7 @@ import org.jskat.gui.img.JSkatGraphicRepository
 
 class StartContextPanel(private val action: StartSkatSeriesAction) : StackPane() {
 
-    private val button: Button
+    val actionControl: Button
 
     init {
         style = "-fx-background-color: transparent;"
@@ -20,7 +20,7 @@ class StartContextPanel(private val action: StartSkatSeriesAction) : StackPane()
             newScene?.fill = Color.TRANSPARENT
         }
 
-        button = Button(action.getValue(AbstractJSkatAction.NAME) as? String ?: "Start Skat Series").apply {
+        actionControl = Button(action.getValue(AbstractJSkatAction.NAME) as? String ?: "Start Skat Series").apply {
             setOnAction {
                 action.actionPerformed(JSkatActionEvent(JSkatAction.START_LOCAL_SERIES, it.source))
             }
@@ -36,11 +36,10 @@ class StartContextPanel(private val action: StartSkatSeriesAction) : StackPane()
             action.enabledProperty().addListener { _, _, newValue ->
                 // Update the JavaFX button on the JavaFX Application Thread
                 Platform.runLater {
-                    button.isDisable = !newValue
+                    actionControl.isDisable = !newValue
                 }
             }
         }
 
-        children.add(button)
     }
 }

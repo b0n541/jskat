@@ -22,6 +22,9 @@ class DeclaringContextPanel(
     private val discardPanel = DiscardPanel(tableName, actions, 2)
     private val announcePanel = GameAnnouncePanel(actions, newUserPanel, discardPanel)
 
+    val announceActionControl get() = announcePanel.announceActionControl
+    val pickUpActionControl get() = discardPanel.pickUpActionControl
+
     init {
         style = "-fx-background-color: transparent;"
         alignment = Pos.CENTER

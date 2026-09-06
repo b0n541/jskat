@@ -1,11 +1,33 @@
 package org.jskat.gui.javafx.table
 
 import org.assertj.core.api.Assertions.assertThat
+import javafx.scene.layout.Pane
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.data.SkatGameData.GameState
 import org.junit.jupiter.api.Test
 
 class ContextCompositionHostTest {
+
+    @Test
+    fun `renders selected command controls only in the shared action area`() {
+        val host = ContextCompositionHost()
+        val bidControl = Pane()
+        val passControl = Pane()
+        host.sharedActionArea.register(ContextPanelType.BIDDING, JSkatAction.MAKE_BID, bidControl)
+        host.sharedActionArea.register(ContextPanelType.BIDDING, JSkatAction.HOLD_BID, bidControl)
+        host.sharedActionArea.register(ContextPanelType.BIDDING, JSkatAction.PASS_BID, passControl)
+
+        host.render(
+            ContextRenderingProjection(
+                ContextPanelType.BIDDING,
+                LowerLeftContent.NONE,
+                listOf(JSkatAction.MAKE_BID, JSkatAction.HOLD_BID, JSkatAction.PASS_BID)
+            )
+        )
+
+        assertThat(host.sharedActionArea.pane.children).containsExactly(bidControl, passControl)
+        assertThat(host.lowerRight.children).containsExactly(host.sharedActionArea.pane)
+    }
 
     @Test
     fun `keeps phase content above an always-present stable lower row`() {

@@ -32,6 +32,8 @@ class DiscardPanel(
 
     val discardedCards: CardList
         get() = CardList(cards)
+    val pickUpActionControl: Button
+        get() = pickUpSkatButton
 
     init {
         alignment = Pos.CENTER
@@ -49,8 +51,6 @@ class DiscardPanel(
         cardViews.alignment = Pos.CENTER
         cardViews.spacing = 8.0
 
-        // Initially, only the button is visible
-        children.add(pickUpSkatButton)
     }
 
     fun setSkat(skat: CardList) {
@@ -92,7 +92,7 @@ class DiscardPanel(
             cards.clear()
             updateView()
             pickUpSkatButton.isDisable = false
-            children.setAll(pickUpSkatButton)
+            children.clear()
         }
     }
 
