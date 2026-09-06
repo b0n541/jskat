@@ -52,7 +52,7 @@ object SharedContextRenderer {
         GameState.BIDDING -> ContextPanelType.BIDDING
         GameState.RAMSCH_GRAND_HAND_ANNOUNCING, GameState.SCHIEBERAMSCH -> ContextPanelType.SCHIEBERAMSCH
         GameState.PICKING_UP_SKAT, GameState.DISCARDING, GameState.DECLARING ->
-            if (state.isDeclarer) ContextPanelType.DECLARING else ContextPanelType.BIDDING
+            if (state.isReplay || state.isDeclarer) ContextPanelType.DECLARING else ContextPanelType.BIDDING
         GameState.RE, GameState.CONTRA -> ContextPanelType.RE_AFTER_CONTRA
         GameState.TRICK_PLAYING -> ContextPanelType.TRICK_PLAYING
         GameState.CALCULATING_GAME_VALUE, GameState.PRELIMINARY_GAME_END, GameState.GAME_OVER -> ContextPanelType.GAME_OVER

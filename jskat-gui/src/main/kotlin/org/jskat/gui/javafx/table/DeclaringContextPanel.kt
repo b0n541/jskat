@@ -24,6 +24,7 @@ class DeclaringContextPanel(
 
     val announceActionControl get() = announcePanel.announceActionControl
     val pickUpActionControl get() = discardPanel.pickUpActionControl
+    val replaySkatPanel get() = discardPanel
 
     init {
         style = "-fx-background-color: transparent;"
@@ -70,6 +71,8 @@ class DeclaringContextPanel(
     fun setSkat(skat: CardList) {
         discardPanel.setSkat(skat)
     }
+
+    fun setReplaySkatPresentation(isPresented: Boolean) = discardPanel.setCardSelectionEnabled(!isPresented)
 
     fun preselectGameTypeIfUnset(gameType: GameType?) {
         if (announcePanel.selectedGameType() == null && gameType != null) {

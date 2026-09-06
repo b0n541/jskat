@@ -26,6 +26,7 @@ class DiscardPanel(
     private val pickUpSkatButton = Button(JSkatResourceBundle.INSTANCE.getString("pickUpSkat"))
     private val bitmaps = JSkatGraphicRepository.INSTANCE
     private var announcePanel: GameAnnouncePanel? = null
+    private var cardSelectionEnabled = true
 
     var userPickedUpSkat: Boolean = false
         private set
@@ -50,6 +51,7 @@ class DiscardPanel(
 
         cardViews.alignment = Pos.CENTER
         cardViews.spacing = 8.0
+        cardViews.id = "discard-card-views"
 
     }
 
@@ -104,14 +106,21 @@ class DiscardPanel(
         this.announcePanel = announcePanel
     }
 
+    fun setCardSelectionEnabled(enabled: Boolean) {
+        cardSelectionEnabled = enabled
+        updateView()
+    }
+
     private fun updateView() {
         cardViews.children.clear()
         for (card in cards) {
             val cardView = ImageView(bitmaps.getCardImageFX(card))
-            cardView.setOnMouseClicked {
-                actions[JSkatAction.TAKE_CARD_FROM_SKAT]?.actionPerformed(
-                    JSkatActionEvent(tableName, card)
-                )
+            if (cardSelectionEnabled) {
+                cardView.setOnMouseClicked {
+                    actions[JSkatAction.TAKE_CARD_FROM_SKAT]?.actionPerformed(
+                        JSkatActionEvent(tableName, card)
+                    )
+                }
             }
             cardViews.children.add(cardView)
         }

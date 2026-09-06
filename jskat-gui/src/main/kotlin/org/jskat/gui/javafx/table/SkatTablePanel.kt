@@ -108,6 +108,11 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
 
         declaringPanel = DeclaringContextPanel(tableName, actions, userPanel)
         addContextPanel(ContextPanelType.DECLARING, declaringPanel)
+        contextCompositionHost.registerLowerLeftContent(
+            LowerLeftContent.REPLAY_SKAT,
+            declaringPanel.replaySkatPanel,
+            declaringPanel::setReplaySkatPresentation
+        )
         registerSharedAction(ContextPanelType.DECLARING, JSkatAction.ANNOUNCE_GAME, declaringPanel.announceActionControl)
         registerSharedAction(ContextPanelType.DECLARING, JSkatAction.PICK_UP_SKAT, declaringPanel.pickUpActionControl)
 
@@ -253,6 +258,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     fun setReplayModeOn(event: SkatGameReplayStartedEvent) {
         replay = true
         Platform.runLater {
+            declaringPanel.resetPanel()
             contextGameState = SkatGameData.GameState.GAME_START
             renderContext()
         }
@@ -261,7 +267,10 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     @Subscribe
     fun setReplayModeOff(event: SkatGameReplayFinishedEvent) {
         replay = false
-        Platform.runLater(::renderContext)
+        Platform.runLater {
+            declaringPanel.resetPanel()
+            renderContext()
+        }
     }
 
     // TODO: this does similar things like IssTablePanel.resetTableOn(event: IssTableGameStartedEvent)
@@ -307,6 +316,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     }
 
     protected fun clearTable() {
+        contextCompositionHost.clearLowerLeftContent()
         gameInfoPanel.clear()
         biddingPanel.resetPanel()
         declaringPanel.resetPanel()
@@ -423,16 +433,15 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     }
 
     private fun renderContext() {
-        SharedContextRenderer.render(
-            ContextRenderingState(
-                contextMode(),
-                contextGameState,
-                replay,
-                userPanel.position == declarer,
-                options.isPlayContra
-            ),
-            contextCompositionHost
+        val state = ContextRenderingState(
+            contextMode(),
+            contextGameState,
+            replay,
+            userPanel.position == declarer,
+            options.isPlayContra
         )
+        val projection = SharedContextRenderer.project(state)
+        contextCompositionHost.render(projection)
     }
 
     private fun resetGameData() {

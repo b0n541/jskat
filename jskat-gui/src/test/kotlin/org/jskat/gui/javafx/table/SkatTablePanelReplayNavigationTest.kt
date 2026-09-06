@@ -4,8 +4,16 @@ import com.google.common.eventbus.EventBus
 import javafx.application.Platform
 import javafx.scene.Scene
 import javafx.scene.control.Button
+import javafx.scene.image.ImageView
+import javafx.scene.input.MouseEvent
+import javafx.scene.layout.HBox
+import javafx.scene.layout.StackPane
 import org.assertj.core.api.Assertions.assertThat
 import org.jskat.control.JSkatEventBus
+import org.jskat.control.event.skatgame.DiscardSkatEvent
+import org.jskat.control.event.skatgame.GameStartedEvent
+import org.jskat.control.event.skatgame.PickUpSkatEvent
+import org.jskat.control.event.table.SkatGameReplayFinishedEvent
 import org.jskat.control.event.table.SkatGameReplayStartedEvent
 import org.jskat.control.event.table.SkatGameStateChangedEvent
 import org.jskat.control.gui.action.JSkatAction
@@ -18,6 +26,10 @@ import org.jskat.gui.action.main.StartSkatSeriesAction
 import org.jskat.gui.javafx.JavaFxTestSupport
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
+import org.jskat.util.Card
+import org.jskat.util.CardList
+import org.jskat.util.GameVariant
+import org.jskat.util.Player
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
@@ -79,8 +91,88 @@ class SkatTablePanelReplayNavigationTest {
         }
     }
 
+    @Test
+    fun `replay skat is inert, shown only during trick play, and cleared when replay ends`() {
+        val takeCard = RecordingAction("Take card")
+        val tableName = "Replay-skat"
+        val tableEvents = EventBus("Table $tableName")
+        val panel = onFxThread {
+            JSkatEventBus.TABLE_EVENT_BUSSES[tableName] = tableEvents
+            SkatTablePanel(
+                tableName,
+                mapOf(
+                    JSkatAction.START_LOCAL_SERIES to StartSkatSeriesAction(),
+                    JSkatAction.TAKE_CARD_FROM_SKAT to takeCard,
+                ),
+            ).also(::Scene)
+        }
+
+        try {
+            tableEvents.post(GameStartedEvent(1, GameVariant.STANDARD, Player.MIDDLEHAND, Player.REARHAND, Player.FOREHAND))
+            flushFxEvents()
+            tableEvents.post(SkatGameReplayStartedEvent())
+            flushFxEvents()
+            tableEvents.post(SkatGameStateChangedEvent(tableName, GameState.PICKING_UP_SKAT))
+            onFxThread { Unit }
+            tableEvents.post(PickUpSkatEvent(Player.FOREHAND, CardList(Card.C9, Card.S9)))
+            onFxThread { Unit }
+            assertThat(discardCards(panel).children.filterIsInstance<ImageView>()).hasSize(2)
+            tableEvents.post(SkatGameStateChangedEvent(tableName, GameState.DISCARDING))
+            onFxThread { Unit }
+            tableEvents.post(DiscardSkatEvent(Player.FOREHAND, CardList(Card.H9, Card.D9)))
+            onFxThread { Unit }
+
+            assertThat(replaySkatSlot(panel).children).isEmpty()
+
+            tableEvents.post(SkatGameStateChangedEvent(tableName, GameState.TRICK_PLAYING))
+            onFxThread { Unit }
+
+            val replaySkat = replaySkatSlot(panel)
+            val cards = discardCards(panel)
+            assertThat(cards.children.filterIsInstance<ImageView>()).hasSize(2)
+            onFxThread {
+                cards.children.filterIsInstance<ImageView>().first().fireEvent(
+                    MouseEvent(MouseEvent.MOUSE_CLICKED, 0.0, 0.0, 0.0, 0.0, javafx.scene.input.MouseButton.PRIMARY, 1,
+                        false, false, false, false, true, false, false, true, false, false, null)
+                )
+            }
+            assertThat(takeCard.actionCommands).isEmpty()
+
+            tableEvents.post(SkatGameReplayFinishedEvent())
+            onFxThread { Unit }
+            assertThat(replaySkatSlot(panel).children).isEmpty()
+
+            tableEvents.post(SkatGameReplayStartedEvent())
+            flushFxEvents()
+            tableEvents.post(PickUpSkatEvent(Player.FOREHAND, CardList(Card.C9, Card.S9)))
+            tableEvents.post(DiscardSkatEvent(Player.FOREHAND, CardList(Card.H9, Card.D9)))
+            tableEvents.post(SkatGameStateChangedEvent(tableName, GameState.TRICK_PLAYING))
+            onFxThread { Unit }
+            assertThat(replaySkatSlot(panel).children).isNotEmpty()
+
+            tableEvents.post(GameStartedEvent(2, GameVariant.STANDARD, Player.MIDDLEHAND, Player.REARHAND, Player.FOREHAND))
+            onFxThread { Unit }
+            assertThat(replaySkatSlot(panel).children).isEmpty()
+        } finally {
+            JSkatEventBus.TABLE_EVENT_BUSSES.remove(tableName)
+        }
+    }
+
     private fun sharedActionButtons(panel: SkatTablePanel): List<Button> = onFxThread {
         (panel.lookup("#shared-action-area") as javafx.scene.layout.HBox).children.filterIsInstance<Button>()
+    }
+
+    private fun replaySkatSlot(panel: SkatTablePanel): StackPane = onFxThread {
+        panel.lookup("#shared-lower-left") as StackPane
+    }
+
+    private fun discardCards(panel: SkatTablePanel): HBox = onFxThread {
+        panel.lookup("#discard-card-views") as HBox
+    }
+
+    private fun flushFxEvents() {
+        onFxThread { Unit }
+        onFxThread { Unit }
     }
 
     private fun <T> onFxThread(action: () -> T): T {
