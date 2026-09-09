@@ -370,8 +370,9 @@ public class AlgorithmOpponentGrand extends AbstractAlgorithmAI {
 				if (tMiddlehandCard.beats(pSituation.getGameType(),
 						tForehandCard) == (pPlayerPosition.getRightNeighbor() == pDeclarer)) {
 					if (pCards.get(0).beats(GameType.GRAND, tForehandCard)) {
-						if (pCards.get(1).beats(GameType.GRAND, tForehandCard)) {
-							if (pCards.get(2).beats(GameType.GRAND,
+						if (pCards.size() > 1 && pCards.get(1).beats(GameType.GRAND,
+								tForehandCard)) {
+							if (pCards.size() > 2 && pCards.get(2).beats(GameType.GRAND,
 									tForehandCard)) {
 								return pCards.get(2);
 							}

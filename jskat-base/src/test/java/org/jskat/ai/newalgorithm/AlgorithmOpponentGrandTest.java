@@ -19,7 +19,10 @@ import org.jskat.util.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AlgorithmOpponentGrandTest extends AbstractJSkatTest {
@@ -68,6 +71,25 @@ public class AlgorithmOpponentGrandTest extends AbstractJSkatTest {
         
         assertTrue(gameResult.isWon());
         assertAlgorithmAIPlayerFollowsJack(skatGame);
+    }
+
+    /**
+     * Rearhand holding fewer than three cards must not read past the end of its
+     * hand while choosing between its best jacks. Two cards left is ordinary by
+     * the ninth trick.
+     */
+    @Test
+    public void playRearhandCardWithFewerThanThreeCardsInHand() {
+        final CardList hand = CardList.of(Card.CJ, Card.SJ);
+        final CardList trick = CardList.of(Card.DJ, Card.HJ);
+        final Situation situation = new Situation(GameType.GRAND.getTrumpSuit(),
+                GameType.GRAND, Suit.CLUBS, new ArrayList<>(), 0, false, false,
+                new ArrayList<>(), new ArrayList<>());
+
+        assertThatCode(() -> AlgorithmOpponentGrand.playRearhandCard(hand, trick,
+                new CardList(), new CardList(), situation, Player.REARHAND,
+                Player.REARHAND.getRightNeighbor()))
+                .doesNotThrowAnyException();
     }
 
     private static void assertAlgorithmAIPlayerFollowsJack(final SkatGame skatGame) {

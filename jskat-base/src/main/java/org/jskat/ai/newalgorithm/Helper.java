@@ -323,7 +323,8 @@ public class Helper {
 				tMultiplier++;
 			}
 		} else { // Without
-			while ((tCardsBinary & (tStartBinary = tStartBinary >> 1)) == 0) {
+			while ((tStartBinary = tStartBinary >> 1) != 0
+					&& (tCardsBinary & tStartBinary) == 0) {
 				tMultiplier++;
 			}
 		}
