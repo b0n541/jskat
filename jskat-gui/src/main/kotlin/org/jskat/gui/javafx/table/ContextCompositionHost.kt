@@ -23,13 +23,14 @@ internal class ContextCompositionHost {
 
     init {
         lowerLeft.id = "shared-lower-left"
+        lowerLeft.alignment = Pos.CENTER_LEFT
         lowerRow.alignment = Pos.CENTER
         lowerRow.minHeight = 75.0
         lowerRow.prefHeight = 75.0
         lowerRow.maxHeight = 75.0
-        HBox.setHgrow(lowerLeft, Priority.ALWAYS)
+        HBox.setHgrow(lowerLeft, Priority.NEVER)
         HBox.setHgrow(lowerSpacer, Priority.ALWAYS)
-        HBox.setHgrow(lowerRight, Priority.ALWAYS)
+        HBox.setHgrow(lowerRight, Priority.NEVER)
         StackPane.setAlignment(sharedActionArea.pane, Pos.CENTER_RIGHT)
         lowerRight.children.add(sharedActionArea.pane)
         VBox.setVgrow(contextPanelStack.pane, Priority.ALWAYS)

@@ -41,7 +41,9 @@ class SharedContextRendererTest {
             val projection = SharedContextRenderer.project(ContextRenderingState(ContextMode.LOCAL, gameState))
 
             assertThat(projection.phaseContent).isEqualTo(phaseContent)
-            assertThat(projection.lowerLeftContent).isEqualTo(LowerLeftContent.NONE)
+            assertThat(projection.lowerLeftContent).isEqualTo(
+                if (gameState == GameState.GAME_OVER) LowerLeftContent.GAME_OVER_SKAT else LowerLeftContent.NONE
+            )
         }
     }
 
@@ -92,7 +94,7 @@ class SharedContextRendererTest {
         )
 
         assertThat(projection.phaseContent).isEqualTo(ContextPanelType.GAME_OVER)
-        assertThat(projection.lowerLeftContent).isEqualTo(LowerLeftContent.NONE)
+        assertThat(projection.lowerLeftContent).isEqualTo(LowerLeftContent.GAME_OVER_SKAT)
         assertThat(projection.actions).containsExactly(JSkatAction.REPLAY_GAME, JSkatAction.CONTINUE_LOCAL_SERIES)
     }
 }

@@ -18,11 +18,8 @@ class SkatPanel : HBox() {
         // Make sure images preserve ratio if resized, though usually they are fixed size
         card1View.isPreserveRatio = true
         card2View.isPreserveRatio = true
-
-        // Keep the cards compact while showing enough of their faces to identify them easily.
-        val visibleCardHeight = 70.0
-        card1View.viewport = Rectangle2D(0.0, 0.0, 200.0, visibleCardHeight)
-        card2View.viewport = Rectangle2D(0.0, 0.0, 200.0, visibleCardHeight)
+        card1View.viewport = COMPACT_CARD_VIEWPORT
+        card2View.viewport = COMPACT_CARD_VIEWPORT
     }
 
     fun setSkatCards(skat: CardList) {
@@ -35,5 +32,9 @@ class SkatPanel : HBox() {
     fun resetPanel() {
         card1View.image = null
         card2View.image = null
+    }
+
+    private companion object {
+        val COMPACT_CARD_VIEWPORT = Rectangle2D(0.0, 0.0, 200.0, 70.0)
     }
 }

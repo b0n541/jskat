@@ -2,6 +2,7 @@ package org.jskat.gui.javafx.table
 
 import javafx.application.Platform
 import javafx.geometry.Pos
+import javafx.geometry.Rectangle2D
 import javafx.scene.control.Button
 import javafx.scene.image.ImageView
 import javafx.scene.layout.HBox
@@ -27,6 +28,7 @@ class DiscardPanel(
     private val bitmaps = JSkatGraphicRepository.INSTANCE
     private var announcePanel: GameAnnouncePanel? = null
     private var cardSelectionEnabled = true
+    private var compactReplayPresentation = false
 
     var userPickedUpSkat: Boolean = false
         private set
@@ -107,15 +109,18 @@ class DiscardPanel(
         this.announcePanel = announcePanel
     }
 
-    fun setCardSelectionEnabled(enabled: Boolean) {
-        cardSelectionEnabled = enabled
+    fun setReplaySkatPresentation(isPresented: Boolean) {
+        cardSelectionEnabled = !isPresented
+        compactReplayPresentation = isPresented
         updateView()
     }
 
     private fun updateView() {
         cardViews.children.clear()
         for (card in cards) {
-            val cardView = ImageView(bitmaps.getCardImageFX(card))
+            val cardView = ImageView(bitmaps.getCardImageFX(card)).apply {
+                viewport = COMPACT_CARD_VIEWPORT.takeIf { compactReplayPresentation }
+            }
             if (cardSelectionEnabled) {
                 cardView.setOnMouseClicked {
                     actions[JSkatAction.TAKE_CARD_FROM_SKAT]?.actionPerformed(
@@ -125,5 +130,9 @@ class DiscardPanel(
             }
             cardViews.children.add(cardView)
         }
+    }
+
+    private companion object {
+        val COMPACT_CARD_VIEWPORT = Rectangle2D(0.0, 0.0, 200.0, 70.0)
     }
 }

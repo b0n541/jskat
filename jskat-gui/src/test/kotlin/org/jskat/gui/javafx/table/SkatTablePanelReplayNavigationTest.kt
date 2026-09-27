@@ -67,6 +67,7 @@ class SkatTablePanelReplayNavigationTest {
         try {
             tableEvents.post(SkatGameStateChangedEvent(tableName, GameState.GAME_OVER))
             onFxThread { Unit }
+            assertThat(replaySkatSlot(panel).children).singleElement().isInstanceOf(SkatPanel::class.java)
             tableEvents.post(SkatGameReplayStartedEvent())
             onFxThread { Unit }
 
@@ -80,6 +81,7 @@ class SkatTablePanelReplayNavigationTest {
             tableEvents.post(SkatGameStateChangedEvent(tableName, GameState.GAME_OVER))
             onFxThread { Unit }
 
+            assertThat(replaySkatSlot(panel).children).singleElement().isInstanceOf(SkatPanel::class.java)
             val completedReplayButtons = sharedActionButtons(panel)
             assertThat(completedReplayButtons.map(Button::getText))
                 .containsExactly("Reset to Start", "Continue Skat Series")
@@ -156,6 +158,9 @@ class SkatTablePanelReplayNavigationTest {
             tableEvents.post(PickUpSkatEvent(Player.FOREHAND, CardList(Card.C9, Card.S9)))
             onFxThread { Unit }
             assertThat(discardCards(panel).children.filterIsInstance<ImageView>()).hasSize(2)
+            assertThat(discardCards(panel).children.filterIsInstance<ImageView>()).allSatisfy { card ->
+                assertThat(card.viewport).isNull()
+            }
             tableEvents.post(SkatGameStateChangedEvent(tableName, GameState.DISCARDING))
             onFxThread { Unit }
             tableEvents.post(DiscardSkatEvent(Player.FOREHAND, CardList(Card.H9, Card.D9)))
@@ -169,6 +174,9 @@ class SkatTablePanelReplayNavigationTest {
             val replaySkat = replaySkatSlot(panel)
             val cards = discardCards(panel)
             assertThat(cards.children.filterIsInstance<ImageView>()).hasSize(2)
+            assertThat(cards.children.filterIsInstance<ImageView>()).allSatisfy { card ->
+                assertThat(card.viewport.height).isEqualTo(70.0)
+            }
             onFxThread {
                 cards.children.filterIsInstance<ImageView>().first().fireEvent(
                     MouseEvent(MouseEvent.MOUSE_CLICKED, 0.0, 0.0, 0.0, 0.0, javafx.scene.input.MouseButton.PRIMARY, 1,

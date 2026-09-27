@@ -16,7 +16,7 @@ data class ContextRenderingState(
 )
 
 /** The only card content the shared lower-left slot may select. */
-enum class LowerLeftContent { NONE, REPLAY_SKAT }
+enum class LowerLeftContent { NONE, REPLAY_SKAT, GAME_OVER_SKAT }
 
 /** A presentation-only selection; action enablement remains owned by the existing actions. */
 data class ContextRenderingProjection(
@@ -35,7 +35,11 @@ object SharedContextRenderer {
         if (state.isReplay) {
             return ContextRenderingProjection(
                 phaseContent,
-                if (state.gameState == GameState.TRICK_PLAYING) LowerLeftContent.REPLAY_SKAT else LowerLeftContent.NONE,
+                when (state.gameState) {
+                    GameState.TRICK_PLAYING -> LowerLeftContent.REPLAY_SKAT
+                    GameState.GAME_OVER -> LowerLeftContent.GAME_OVER_SKAT
+                    else -> LowerLeftContent.NONE
+                },
                 if (state.gameState == GameState.GAME_OVER) {
                     listOf(JSkatAction.REPLAY_GAME, JSkatAction.CONTINUE_LOCAL_SERIES)
                 } else {
@@ -44,7 +48,11 @@ object SharedContextRenderer {
             )
         }
 
-        return ContextRenderingProjection(phaseContent, LowerLeftContent.NONE, actionsFor(state))
+        return ContextRenderingProjection(
+            phaseContent,
+            if (state.gameState == GameState.GAME_OVER) LowerLeftContent.GAME_OVER_SKAT else LowerLeftContent.NONE,
+            actionsFor(state)
+        )
     }
 
     private fun phaseFor(state: ContextRenderingState): ContextPanelType = when (state.gameState) {

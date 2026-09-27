@@ -153,6 +153,10 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
             moveCommandsToSharedActionArea = contextMode() == ContextMode.LOCAL
         )
         addContextPanel(ContextPanelType.GAME_OVER, gameOverPanel)
+        contextCompositionHost.registerLowerLeftContent(
+            LowerLeftContent.GAME_OVER_SKAT,
+            gameOverPanel.replaySkatPanel
+        )
         registerSharedActionIndependentOfPhase(JSkatAction.REPLAY_GAME, createReplayActionControl(JSkatAction.REPLAY_GAME))
         registerSharedAction(ContextPanelType.GAME_OVER, continueSeriesAction(), gameOverPanel.actionControl(continueSeriesAction()))
         registerSharedActionIndependentOfPhase(

@@ -30,6 +30,7 @@ class GameOverPanel(
     private val actionControls = mutableMapOf<JSkatAction, Button>()
 
     fun actionControl(action: JSkatAction): Button? = actionControls[action]
+    val replaySkatPanel get() = skatPanel
 
     init {
         style = "-fx-background-color: transparent;"

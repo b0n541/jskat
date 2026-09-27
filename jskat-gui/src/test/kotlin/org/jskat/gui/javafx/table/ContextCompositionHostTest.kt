@@ -1,7 +1,10 @@
 package org.jskat.gui.javafx.table
 
 import org.assertj.core.api.Assertions.assertThat
+import javafx.geometry.Pos
+import javafx.scene.layout.HBox
 import javafx.scene.layout.Pane
+import javafx.scene.layout.Priority
 import org.jskat.control.gui.action.JSkatAction
 import org.jskat.data.SkatGameData.GameState
 import org.junit.jupiter.api.Test
@@ -38,6 +41,16 @@ class ContextCompositionHostTest {
         assertThat(host.lowerRow.minHeight).isEqualTo(75.0)
         assertThat(host.lowerRow.prefHeight).isEqualTo(75.0)
         assertThat(host.lowerRow.maxHeight).isEqualTo(75.0)
+    }
+
+    @Test
+    fun `aligns lower-left content with the table edge`() {
+        val host = ContextCompositionHost()
+
+        assertThat(host.lowerLeft.alignment).isEqualTo(Pos.CENTER_LEFT)
+        assertThat(HBox.getHgrow(host.lowerLeft)).isEqualTo(Priority.NEVER)
+        assertThat(HBox.getHgrow(host.lowerRight)).isEqualTo(Priority.NEVER)
+        assertThat(HBox.getHgrow(host.lowerRow.children[1])).isEqualTo(Priority.ALWAYS)
     }
 
     @Test

@@ -72,7 +72,7 @@ class DeclaringContextPanel(
         discardPanel.setSkat(skat)
     }
 
-    fun setReplaySkatPresentation(isPresented: Boolean) = discardPanel.setCardSelectionEnabled(!isPresented)
+    fun setReplaySkatPresentation(isPresented: Boolean) = discardPanel.setReplaySkatPresentation(isPresented)
 
     fun preselectGameTypeIfUnset(gameType: GameType?) {
         if (announcePanel.selectedGameType() == null && gameType != null) {
