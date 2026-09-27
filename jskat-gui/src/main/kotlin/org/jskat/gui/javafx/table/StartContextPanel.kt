@@ -2,6 +2,7 @@ package org.jskat.gui.javafx.table
 
 import javafx.application.Platform
 import javafx.scene.control.Button
+import javafx.geometry.Pos
 import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
 import org.jskat.control.gui.action.JSkatAction
@@ -16,6 +17,7 @@ class StartContextPanel(private val action: StartSkatSeriesAction) : StackPane()
 
     init {
         style = "-fx-background-color: transparent;"
+        alignment = Pos.CENTER
         sceneProperty().addListener { _, _, newScene ->
             newScene?.fill = Color.TRANSPARENT
         }
@@ -41,5 +43,6 @@ class StartContextPanel(private val action: StartSkatSeriesAction) : StackPane()
             }
         }
 
+        children.add(actionControl)
     }
 }
