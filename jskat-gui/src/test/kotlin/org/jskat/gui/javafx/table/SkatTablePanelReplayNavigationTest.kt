@@ -133,6 +133,48 @@ class SkatTablePanelReplayNavigationTest {
     }
 
     @Test
+    fun `starting a new game after replay completion restores bidding commands in the shared action area`() {
+        val reset = RecordingAction("Reset to Start")
+        val nextMove = RecordingAction("Next Move")
+        val makeBid = RecordingAction("Make bid")
+        val holdBid = RecordingAction("Hold bid")
+        val passBid = RecordingAction("Pass bid")
+        val tableName = "Replay-to-new-game"
+        val tableEvents = EventBus("Table $tableName")
+        val panel = onFxThread {
+            JSkatEventBus.TABLE_EVENT_BUSSES[tableName] = tableEvents
+            SkatTablePanel(
+                tableName,
+                mapOf(
+                    JSkatAction.START_LOCAL_SERIES to StartSkatSeriesAction(),
+                    JSkatAction.REPLAY_GAME to reset,
+                    JSkatAction.NEXT_REPLAY_STEP to nextMove,
+                    JSkatAction.MAKE_BID to makeBid,
+                    JSkatAction.HOLD_BID to holdBid,
+                    JSkatAction.PASS_BID to passBid,
+                ),
+            ).also(::Scene)
+        }
+
+        try {
+            tableEvents.post(SkatGameReplayStartedEvent())
+            tableEvents.post(SkatGameStateChangedEvent(tableName, GameState.TRICK_PLAYING))
+            flushFxEvents()
+            assertThat(sharedActionButtons(panel).map(Button::getText))
+                .containsExactly("Reset to Start", "Next Move")
+
+            tableEvents.post(SkatGameReplayFinishedEvent())
+            tableEvents.post(GameStartedEvent(2, GameVariant.STANDARD, Player.MIDDLEHAND, Player.REARHAND, Player.FOREHAND))
+            tableEvents.post(SkatGameStateChangedEvent(tableName, GameState.BIDDING))
+            flushFxEvents()
+
+            assertThat(sharedActionButtons(panel).map(Button::getText)).containsExactly("18", "Pass bid")
+        } finally {
+            JSkatEventBus.TABLE_EVENT_BUSSES.remove(tableName)
+        }
+    }
+
+    @Test
     fun `replay skat is inert, shown only during trick play, and cleared when replay ends`() {
         val takeCard = RecordingAction("Take card")
         val tableName = "Replay-skat"
