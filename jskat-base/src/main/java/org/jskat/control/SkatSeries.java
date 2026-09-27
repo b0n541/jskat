@@ -82,6 +82,7 @@ public class SkatSeries {
 
     @Subscribe
     public void continueSkatSeriesOn(final ContinueSkatSeriesCommand command) {
+        JSkatEventBus.TABLE_EVENT_BUSSES.get(data.getTableName()).post(new SkatGameReplayFinishedEvent());
         readyForNextGame = true;
     }
 

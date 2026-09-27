@@ -8,3 +8,6 @@
   * keep selected game type from bidding for discarding
 * centralize big button creation
 * add some waiting time during bidding of AI player (100 ms?)
+
+* move discard panel to the right
+* start skat series button at the first start of table

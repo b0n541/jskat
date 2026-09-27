@@ -5,7 +5,7 @@ import javafx.scene.layout.StackPane
 
 /** Holds the mutually exclusive panels displayed in the centre of a skat table. */
 internal class ContextPanelStack {
-    val pane = StackPane()
+    val pane = StackPane().apply { id = "context-panel-stack" }
     private val panels = mutableMapOf<ContextPanelType, Node>()
 
     fun add(panelType: ContextPanelType, panel: Node) {

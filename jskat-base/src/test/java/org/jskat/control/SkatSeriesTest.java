@@ -3,8 +3,11 @@ package org.jskat.control;
 
 
 import com.google.common.eventbus.EventBus;
+import com.google.common.eventbus.Subscribe;
 import org.jskat.AbstractJSkatTest;
 import org.jskat.ai.rnd.AIPlayerRND;
+import org.jskat.control.command.table.ContinueSkatSeriesCommand;
+import org.jskat.control.event.table.SkatGameReplayFinishedEvent;
 import org.jskat.data.SkatSeriesData.SeriesState;
 import org.jskat.gui.UnitTestView;
 import org.jskat.player.JSkatPlayer;
@@ -49,5 +52,27 @@ public class SkatSeriesTest extends AbstractJSkatTest {
         }
 
         assertThat(series.getSeriesState()).isEqualTo(SeriesState.SERIES_FINISHED);
+    }
+
+    @Test
+    public void continuingSeriesFinishesReplayBeforeTheNextGame() {
+        final EventBus tableEvents = new EventBus();
+        final ReplayFinishedListener listener = new ReplayFinishedListener();
+        tableEvents.register(listener);
+        JSkatEventBus.TABLE_EVENT_BUSSES.put(TABLE_NAME, tableEvents);
+        final SkatSeries series = new SkatSeries(TABLE_NAME);
+
+        series.continueSkatSeriesOn(new ContinueSkatSeriesCommand(TABLE_NAME));
+
+        assertThat(listener.replayFinished).isTrue();
+    }
+
+    private static final class ReplayFinishedListener {
+        private boolean replayFinished;
+
+        @Subscribe
+        public void on(final SkatGameReplayFinishedEvent event) {
+            replayFinished = true;
+        }
     }
 }

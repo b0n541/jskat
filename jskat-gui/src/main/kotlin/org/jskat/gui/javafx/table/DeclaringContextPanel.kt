@@ -22,6 +22,10 @@ class DeclaringContextPanel(
     private val discardPanel = DiscardPanel(tableName, actions, 2)
     private val announcePanel = GameAnnouncePanel(actions, newUserPanel, discardPanel)
 
+    val announceActionControl get() = announcePanel.announceActionControl
+    val pickUpActionControl get() = discardPanel.pickUpActionControl
+    val replaySkatPanel get() = discardPanel
+
     init {
         style = "-fx-background-color: transparent;"
         alignment = Pos.CENTER
@@ -37,14 +41,14 @@ class DeclaringContextPanel(
         col3.percentWidth = 25.0
         columnConstraints.addAll(col1, col2, col3)
 
-        add(announcePanel, 0, 0)
+        add(announcePanel, 2, 0)
         GridPane.setHalignment(announcePanel, HPos.CENTER)
 
         discardPanel.setAnnouncePanel(announcePanel)
         add(discardPanel, 1, 0)
 
         val blankRegion = Region()
-        add(blankRegion, 2, 0)
+        add(blankRegion, 0, 0)
     }
 
     fun resetPanel() {
@@ -67,6 +71,8 @@ class DeclaringContextPanel(
     fun setSkat(skat: CardList) {
         discardPanel.setSkat(skat)
     }
+
+    fun setReplaySkatPresentation(isPresented: Boolean) = discardPanel.setReplaySkatPresentation(isPresented)
 
     fun preselectGameTypeIfUnset(gameType: GameType?) {
         if (announcePanel.selectedGameType() == null && gameType != null) {

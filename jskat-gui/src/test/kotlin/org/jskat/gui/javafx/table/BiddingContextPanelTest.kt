@@ -2,6 +2,7 @@ package org.jskat.gui.javafx.table
 
 import javafx.scene.control.Button
 import javafx.scene.control.RadioButton
+import javafx.scene.layout.GridPane
 import javafx.application.Platform
 import org.assertj.core.api.Assertions.assertThat
 import org.jskat.control.gui.action.JSkatAction
@@ -64,6 +65,18 @@ class BiddingContextPanelTest {
             declaringPanel.preselectGameTypeIfUnset(biddingPanel.selectedGameType())
 
             assertThat(declaringPanel.selectedGameType()).isEqualTo(GameType.HEARTS)
+        }
+    }
+
+    @Test
+    fun `game announce panel is positioned to the right of the bidding context`() {
+        onFxThread {
+            val actions = emptyMap<JSkatAction, AbstractJSkatAction>()
+            val userPanel = JSkatUserPanel("local", 10, true, actions)
+            val panel = BiddingContextPanel(actions, JSkatGraphicRepository.INSTANCE, userPanel)
+
+            val announcePanel = panel.children.single { it is GameAnnouncePanel }
+            assertThat(GridPane.getColumnIndex(announcePanel)).isEqualTo(2)
         }
     }
 

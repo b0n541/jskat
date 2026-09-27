@@ -13,7 +13,7 @@ class PlayGroundPanel(
     gameInfoPanel: GameInformationPanel,
     leftOpponentPanel: OpponentPanel,
     rightOpponentPanel: OpponentPanel,
-    gameContextStackPane: StackPane,
+    gameContextStackPane: Pane,
     userPanel: JSkatUserPanel
 ) : GridPane() {
 

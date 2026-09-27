@@ -2,12 +2,10 @@ package org.jskat.gui.javafx.iss
 
 import com.google.common.eventbus.Subscribe
 import javafx.application.Platform
-import javafx.geometry.Pos
 import javafx.scene.control.Button
 import javafx.scene.layout.HBox
 import javafx.scene.layout.Pane
 import javafx.scene.layout.Priority
-import javafx.scene.layout.VBox
 import org.jskat.control.event.iss.IssTableGameStartedEvent
 import org.jskat.control.event.iss.IssTableStateChangedEvent
 import org.jskat.control.event.skatgame.GameStartedEvent
@@ -16,8 +14,9 @@ import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.JSkatApplicationData
 import org.jskat.data.iss.TablePanelStatus
 import org.jskat.gui.action.AbstractJSkatAction
-import org.jskat.gui.img.JSkatGraphicRepository
+import org.jskat.gui.javafx.table.BigActionButton
 import org.jskat.gui.javafx.table.ContextPanelType
+import org.jskat.gui.javafx.table.ContextMode
 import org.jskat.gui.javafx.table.JSkatUserPanel
 import org.jskat.gui.javafx.table.OpponentPanel
 import org.jskat.gui.javafx.table.SkatTablePanel
@@ -60,6 +59,8 @@ class IssTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
 
     override fun showReplayGameButton(): Boolean = false
 
+    override fun contextMode(): ContextMode = ContextMode.ISS
+
     override fun continueSeriesAction(): JSkatAction = JSkatAction.READY_TO_PLAY
 
     override fun gameOverAdditionalAction(): JSkatAction = JSkatAction.LEAVE_ISS_TABLE
@@ -69,60 +70,18 @@ class IssTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
     }
 
     override fun getRightPanelForTrickPanel(): Pane {
-        val additionalActionsPanel = VBox()
-        additionalActionsPanel.alignment = Pos.TOP_RIGHT
-        additionalActionsPanel.spacing = 10.0
-        val actionButtons = mutableListOf<Button>()
-
-        val resignAction = actions[JSkatAction.RESIGN]
-        if (resignAction != null) {
-            val resignButton =
-                Button(
-                    resignAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.RESIGN.name
-                ).apply {
-                    maxWidth = Double.MAX_VALUE
-                    graphic = bitmaps.getImageView(resignAction.icon, JSkatGraphicRepository.IconSize.BIG)
-                    setOnAction {
-                        performIssTableAction(resignAction, JSkatAction.RESIGN, tableName)
-                    }
-                }
-            additionalActionsPanel.children.add(resignButton)
-            actionButtons.add(resignButton)
-        }
-
-        val showCardsAction = actions[JSkatAction.SHOW_CARDS]
-        if (showCardsAction != null) {
-            val showCardsButton =
-                Button(
-                    showCardsAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.SHOW_CARDS.name
-                ).apply {
-                    maxWidth = Double.MAX_VALUE
-                    graphic = bitmaps.getImageView(showCardsAction.icon, JSkatGraphicRepository.IconSize.BIG)
-                    setOnAction {
-                        performIssTableAction(showCardsAction, JSkatAction.SHOW_CARDS, tableName)
-                    }
-                }
-
-            additionalActionsPanel.children.add(showCardsButton)
-            actionButtons.add(showCardsButton)
-        }
-
-        additionalActionsPanel.sceneProperty().addListener { _, _, scene ->
-            if (scene != null) {
-                Platform.runLater {
-                    actionButtons.forEach(Button::applyCss)
-                    val widestButton = actionButtons.maxOfOrNull { it.prefWidth(-1.0) } ?: return@runLater
-                    actionButtons.forEach { button ->
-                        button.minWidth = widestButton
-                        button.prefWidth = widestButton
-                        button.maxWidth = widestButton
-                    }
-                }
-            }
-        }
-
-        return additionalActionsPanel
+        registerSharedAction(ContextPanelType.TRICK_PLAYING, JSkatAction.RESIGN, createTrickActionControl(JSkatAction.RESIGN))
+        registerSharedAction(ContextPanelType.TRICK_PLAYING, JSkatAction.SHOW_CARDS, createTrickActionControl(JSkatAction.SHOW_CARDS))
+        return Pane()
     }
+
+    private fun createTrickActionControl(actionType: JSkatAction): Button? =
+        actions[actionType]?.let { action ->
+            BigActionButton.create(
+                action.getValue(AbstractJSkatAction.NAME) as? String ?: actionType.name,
+                action.icon
+            ) { BigActionButton.dispatch(action, actionType, tableName) }
+        }
 
     // TODO: this does similar things like SkatTablePanel.resetTableOn(event: GameStartEvent)
     @Subscribe
@@ -234,4 +193,4 @@ internal fun performIssTableAction(
     action: AbstractJSkatAction,
     actionType: JSkatAction,
     tableName: String
-) = action.actionPerformed(JSkatActionEvent(actionType, tableName))
+) = BigActionButton.dispatch(action, actionType, tableName)

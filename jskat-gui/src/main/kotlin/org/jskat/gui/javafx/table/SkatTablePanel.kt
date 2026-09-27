@@ -12,7 +12,6 @@ import org.jskat.control.command.table.ShowCardsCommand
 import org.jskat.control.event.skatgame.*
 import org.jskat.control.event.table.*
 import org.jskat.control.gui.action.JSkatAction
-import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.JSkatOptions
 import org.jskat.data.SkatGameData
 import org.jskat.gui.action.AbstractJSkatAction
@@ -40,7 +39,8 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     protected lateinit var rightOpponentPanel: OpponentPanel
     protected lateinit var userPanel: JSkatUserPanel
     protected lateinit var gameInfoPanel: GameInformationPanel
-    private lateinit var gameContextStackPane: StackPane
+    private lateinit var gameContextStackPane: Pane
+    private lateinit var contextCompositionHost: ContextCompositionHost
     private lateinit var contextPanelStack: ContextPanelStack
     protected lateinit var trickPanel: TrickPanel
     protected lateinit var lastTrickPanel: TrickPanel
@@ -51,6 +51,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
 
     protected var ramsch: Boolean = false
     protected var replay: Boolean = false
+    private var contextGameState = SkatGameData.GameState.GAME_START
 
     init {
         JSkatEventBus.TABLE_EVENT_BUSSES.get(tableName)?.register(this)
@@ -79,6 +80,8 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
 
     protected open fun showReplayGameButton(): Boolean = true
 
+    protected open fun contextMode(): ContextMode = ContextMode.LOCAL
+
     protected open fun continueSeriesAction(): JSkatAction = JSkatAction.CONTINUE_LOCAL_SERIES
 
     protected open fun gameOverAdditionalAction(): JSkatAction? = null
@@ -86,22 +89,38 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     protected open fun createPlayerPanel(): JSkatUserPanel = JSkatUserPanel(tableName, 12, false, actions)
 
     private fun createGameContextStackPane() {
-        contextPanelStack = ContextPanelStack()
-        gameContextStackPane = contextPanelStack.pane
+        contextCompositionHost = ContextCompositionHost()
+        contextPanelStack = contextCompositionHost.contextPanelStack
+        gameContextStackPane = contextCompositionHost.pane
         // gameContextStackPane.isOpaque = false // Removed
 
         val startSkatSeriesAction = actions[JSkatAction.START_LOCAL_SERIES] as StartSkatSeriesAction
         val startPanel = StartContextPanel(startSkatSeriesAction)
         addContextPanel(ContextPanelType.START, startPanel)
+        registerSharedAction(ContextPanelType.START, JSkatAction.START_LOCAL_SERIES, startPanel.actionControl)
 
         biddingPanel = BiddingContextPanel(actions, bitmaps, userPanel)
         addContextPanel(ContextPanelType.BIDDING, biddingPanel)
+        registerSharedAction(ContextPanelType.BIDDING, JSkatAction.MAKE_BID, biddingPanel.bidActionControl)
+        registerSharedAction(ContextPanelType.BIDDING, JSkatAction.HOLD_BID, biddingPanel.bidActionControl)
+        registerSharedAction(ContextPanelType.BIDDING, JSkatAction.PASS_BID, biddingPanel.passActionControl)
 
         declaringPanel = DeclaringContextPanel(tableName, actions, userPanel)
         addContextPanel(ContextPanelType.DECLARING, declaringPanel)
+        contextCompositionHost.registerLowerLeftContent(
+            LowerLeftContent.REPLAY_SKAT,
+            declaringPanel.replaySkatPanel,
+            declaringPanel::setReplaySkatPresentation
+        )
+        registerSharedAction(ContextPanelType.DECLARING, JSkatAction.ANNOUNCE_GAME, declaringPanel.announceActionControl)
+        registerSharedAction(ContextPanelType.DECLARING, JSkatAction.PICK_UP_SKAT, declaringPanel.pickUpActionControl)
 
         schieberamschPanel = SchieberamschContextPanel(tableName, actions, userPanel, 4)
         addContextPanel(ContextPanelType.SCHIEBERAMSCH, schieberamschPanel)
+        registerSharedAction(ContextPanelType.SCHIEBERAMSCH, JSkatAction.PLAY_GRAND_HAND, schieberamschPanel.grandHandActionControl)
+        registerSharedAction(ContextPanelType.SCHIEBERAMSCH, JSkatAction.PLAY_SCHIEBERAMSCH, schieberamschPanel.schieberamschActionControl)
+        registerSharedAction(ContextPanelType.SCHIEBERAMSCH, JSkatAction.SCHIEBEN, schieberamschPanel.schiebenActionControl)
+        registerSharedAction(ContextPanelType.SCHIEBERAMSCH, JSkatAction.PICK_UP_SKAT, schieberamschPanel.pickUpActionControl)
 
         addContextPanel(ContextPanelType.RE_AFTER_CONTRA, createCallReAfterContraPanel())
 
@@ -129,9 +148,20 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
             actions,
             showReplayGameButton(),
             continueSeriesAction(),
-            gameOverAdditionalAction()
+            gameOverAdditionalAction(),
+            moveCommandsToSharedActionArea = contextMode() == ContextMode.LOCAL
         )
         addContextPanel(ContextPanelType.GAME_OVER, gameOverPanel)
+        contextCompositionHost.registerLowerLeftContent(
+            LowerLeftContent.GAME_OVER_SKAT,
+            gameOverPanel.replaySkatPanel
+        )
+        registerSharedActionIndependentOfPhase(JSkatAction.REPLAY_GAME, createReplayActionControl(JSkatAction.REPLAY_GAME))
+        registerSharedAction(ContextPanelType.GAME_OVER, continueSeriesAction(), gameOverPanel.actionControl(continueSeriesAction()))
+        registerSharedActionIndependentOfPhase(
+            JSkatAction.NEXT_REPLAY_STEP,
+            createReplayActionControl(JSkatAction.NEXT_REPLAY_STEP, bindEnabledState = true)
+        )
 
         setContextPanel(ContextPanelType.START)
     }
@@ -139,6 +169,27 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     protected fun addContextPanel(panelType: ContextPanelType, panel: Node) {
         contextPanelStack.add(panelType, panel)
     }
+
+    protected fun registerSharedAction(phaseContent: ContextPanelType, action: JSkatAction, control: Node?) {
+        if (control != null) {
+            contextCompositionHost.sharedActionArea.register(phaseContent, action, control)
+        }
+    }
+
+    private fun registerSharedActionIndependentOfPhase(action: JSkatAction, control: Node?) {
+        if (control != null) {
+            contextCompositionHost.sharedActionArea.registerIndependentOfPhase(action, control)
+        }
+    }
+
+    private fun createReplayActionControl(actionType: JSkatAction, bindEnabledState: Boolean = false): Button? =
+        actions[actionType]?.let { action ->
+            BigActionButton.create(
+                action.getValue(AbstractJSkatAction.NAME) as? String ?: actionType.name,
+                action.icon,
+                action.enabledProperty().takeIf { bindEnabledState }
+            ) { BigActionButton.dispatchTableCommand(action, tableName, it.source) }
+        }
 
     private fun createCallReAfterContraPanel(): Node {
         val result = VBox(10.0)
@@ -156,22 +207,22 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
         buttonBox.alignment = Pos.CENTER
         val callReAction = actions[JSkatAction.CALL_RE]
         if (callReAction != null) {
-            val callReButton =
-                Button(callReAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.CALL_RE.name)
-            callReButton.graphic =
-                bitmaps.getImageView(JSkatGraphicRepository.Icon.OK, JSkatGraphicRepository.IconSize.BIG)
-            callReButton.setOnAction {
-                callReAction.actionPerformed(JSkatActionEvent(JSkatAction.CALL_RE, true))
+            val callReButton = BigActionButton.create(
+                callReAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.CALL_RE.name,
+                JSkatGraphicRepository.Icon.OK
+            ) {
+                BigActionButton.dispatch(callReAction, JSkatAction.CALL_RE, true)
             }
             buttonBox.children.add(callReButton)
 
-            val noReButton = Button(strings.getString("no"))
-            noReButton.graphic =
-                bitmaps.getImageView(JSkatGraphicRepository.Icon.STOP, JSkatGraphicRepository.IconSize.BIG)
-            noReButton.setOnAction {
-                callReAction.actionPerformed(JSkatActionEvent(JSkatAction.CALL_RE, false))
+            val noReButton = BigActionButton.create(
+                strings.getString("no"),
+                JSkatGraphicRepository.Icon.STOP
+            ) {
+                BigActionButton.dispatch(callReAction, JSkatAction.CALL_RE, false)
             }
-            buttonBox.children.add(noReButton)
+            registerSharedAction(ContextPanelType.RE_AFTER_CONTRA, JSkatAction.CALL_RE, callReButton)
+            registerSharedAction(ContextPanelType.RE_AFTER_CONTRA, JSkatAction.CALL_RE, noReButton)
         }
 
         result.children.add(buttonBox)
@@ -184,19 +235,14 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
 
         val contraAction = actions[JSkatAction.CALL_CONTRA]
         if (options.isPlayContra && contraAction != null) {
-            val contraButton =
-                Button(
-                    contraAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.CALL_CONTRA.name
-                ).apply {
-                    setOnAction {
-                        contraAction.actionPerformed(JSkatActionEvent(JSkatAction.CALL_CONTRA, it.source))
-                    }
-                    graphic = JSkatGraphicRepository.INSTANCE.getImageView(
-                        contraAction.icon, JSkatGraphicRepository.IconSize.BIG
-                    )
-                    alignment = Pos.CENTER
-                }
+            val contraButton = BigActionButton.create(
+                contraAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.CALL_CONTRA.name,
+                contraAction.icon
+            ) {
+                BigActionButton.dispatch(contraAction, JSkatAction.CALL_CONTRA, it.source)
+            }.apply { alignment = Pos.CENTER }
             additionalActionsPanel.children.add(contraButton)
+            registerSharedAction(ContextPanelType.TRICK_PLAYING, JSkatAction.CALL_CONTRA, contraButton)
         }
 
         return additionalActionsPanel
@@ -205,11 +251,20 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     @Subscribe
     fun setReplayModeOn(event: SkatGameReplayStartedEvent) {
         replay = true
+        Platform.runLater {
+            declaringPanel.resetPanel()
+            contextGameState = SkatGameData.GameState.GAME_START
+            renderContext()
+        }
     }
 
     @Subscribe
     fun setReplayModeOff(event: SkatGameReplayFinishedEvent) {
         replay = false
+        Platform.runLater {
+            declaringPanel.resetPanel()
+            renderContext()
+        }
     }
 
     // TODO: this does similar things like IssTablePanel.resetTableOn(event: IssTableGameStartedEvent)
@@ -255,6 +310,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     }
 
     protected fun clearTable() {
+        contextCompositionHost.clearLowerLeftContent()
         gameInfoPanel.clear()
         biddingPanel.resetPanel()
         declaringPanel.resetPanel()
@@ -343,38 +399,43 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
             gameInfoPanel.setGameState(event.gameState)
             userPanel.gameState = event.gameState
 
+            contextGameState = event.gameState
+            renderContext()
+
             when (event.gameState) {
                 SkatGameData.GameState.GAME_START -> {
-                    setContextPanel(ContextPanelType.START)
                     resetGameData()
                 }
 
-                SkatGameData.GameState.DEALING -> setContextPanel(ContextPanelType.START)
-                SkatGameData.GameState.BIDDING -> setContextPanel(ContextPanelType.BIDDING)
                 SkatGameData.GameState.RAMSCH_GRAND_HAND_ANNOUNCING, SkatGameData.GameState.SCHIEBERAMSCH -> {
-                    setContextPanel(ContextPanelType.SCHIEBERAMSCH)
                     ramsch = true
                 }
 
                 SkatGameData.GameState.PICKING_UP_SKAT, SkatGameData.GameState.DISCARDING, SkatGameData.GameState.DECLARING -> {
                     if (userPanel.position == declarer) {
                         declaringPanel.preselectGameTypeIfUnset(biddingPanel.selectedGameType())
-                        setContextPanel(ContextPanelType.DECLARING)
                     }
                 }
 
-                SkatGameData.GameState.RE -> setContextPanel(ContextPanelType.RE_AFTER_CONTRA)
-                SkatGameData.GameState.CONTRA -> {
-                    // Handle CONTRA state if needed
-                }
-
-                SkatGameData.GameState.TRICK_PLAYING -> setContextPanel(ContextPanelType.TRICK_PLAYING)
                 SkatGameData.GameState.CALCULATING_GAME_VALUE, SkatGameData.GameState.PRELIMINARY_GAME_END, SkatGameData.GameState.GAME_OVER -> {
-                    setContextPanel(ContextPanelType.GAME_OVER)
                     listOf(foreHand, middleHand, rearHand).forEach { it.isActivePlayer = false }
                 }
+
+                else -> Unit
             }
         }
+    }
+
+    private fun renderContext() {
+        val state = ContextRenderingState(
+            contextMode(),
+            contextGameState,
+            replay,
+            userPanel.position == declarer,
+            options.isPlayContra
+        )
+        val projection = SharedContextRenderer.project(state)
+        contextCompositionHost.render(projection)
     }
 
     private fun resetGameData() {

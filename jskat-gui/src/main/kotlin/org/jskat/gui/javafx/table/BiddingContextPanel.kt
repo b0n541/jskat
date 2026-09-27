@@ -10,7 +10,6 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.Region
 import javafx.scene.paint.Color
 import org.jskat.control.gui.action.JSkatAction
-import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.GameType
@@ -35,6 +34,11 @@ class BiddingContextPanel(
     private val bidButton: Button
     private val passButton: Button
 
+    val bidActionControl: Button
+        get() = bidButton
+    val passActionControl: Button
+        get() = passButton
+
     private val makeBidAction = actions[JSkatAction.MAKE_BID]
     private val holdBidAction = actions[JSkatAction.HOLD_BID]
     private var currentBidAction = makeBidAction
@@ -54,7 +58,7 @@ class BiddingContextPanel(
         col3.percentWidth = 25.0
         columnConstraints.addAll(col1, col2, col3)
 
-        add(announcePanel, 0, 0)
+        add(announcePanel, 2, 0)
         GridPane.setHalignment(announcePanel, HPos.CENTER)
 
         // Bidding Panel (Center)
@@ -72,37 +76,27 @@ class BiddingContextPanel(
         biddingGrid.add(userBid, 0, 1, 2, 1)
         setHalignment(userBid, HPos.CENTER)
 
-        bidButton = Button(currentBidAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "").apply {
-            graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.OK, JSkatGraphicRepository.IconSize.BIG)
-            setOnAction {
+        bidButton = BigActionButton.create(
+            currentBidAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "",
+            JSkatGraphicRepository.Icon.OK
+        ) {
                 currentBidAction?.let { action ->
                     val command = if (action === holdBidAction) JSkatAction.HOLD_BID else JSkatAction.MAKE_BID
                     val source = it.source
-                    Platform.runLater {
-                        action.actionPerformed(JSkatActionEvent(command, source))
-                    }
+                    BigActionButton.dispatch(action, command, source)
                 }
-            }
         }
 
-        passButton = Button(actions[JSkatAction.PASS_BID]?.getValue(AbstractJSkatAction.NAME) as? String ?: "").apply {
-            graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.STOP, JSkatGraphicRepository.IconSize.BIG)
-            setOnAction {
-                actions[JSkatAction.PASS_BID]?.let { action ->
-                    Platform.runLater {
-                        action.actionPerformed(JSkatActionEvent(JSkatAction.PASS_BID, it.source))
-                    }
-                }
-            }
-        }
-
-        biddingGrid.add(bidButton, 0, 2)
-        biddingGrid.add(passButton, 1, 2)
+        val passBidAction = actions[JSkatAction.PASS_BID]
+        passButton = BigActionButton.create(
+            passBidAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "",
+            JSkatGraphicRepository.Icon.STOP
+        ) { BigActionButton.dispatch(passBidAction, JSkatAction.PASS_BID, it.source) }
 
         add(biddingGrid, 1, 0)
 
         val blankRegion = Region()
-        add(blankRegion, 2, 0)
+        add(blankRegion, 0, 0)
     }
 
     fun setUserPosition(player: Player) {

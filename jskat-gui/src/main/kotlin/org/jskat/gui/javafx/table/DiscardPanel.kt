@@ -2,6 +2,7 @@ package org.jskat.gui.javafx.table
 
 import javafx.application.Platform
 import javafx.geometry.Pos
+import javafx.geometry.Rectangle2D
 import javafx.scene.control.Button
 import javafx.scene.image.ImageView
 import javafx.scene.layout.HBox
@@ -10,7 +11,6 @@ import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
-import org.jskat.gui.img.JSkatGraphicRepository.Icon
 import org.jskat.util.Card
 import org.jskat.util.CardList
 import org.jskat.util.JSkatResourceBundle
@@ -23,34 +23,33 @@ class DiscardPanel(
 
     private val cards = CardList()
     private val cardViews = HBox()
-    private val pickUpSkatButton = Button(JSkatResourceBundle.INSTANCE.getString("pickUpSkat"))
+    private val pickUpSkatButton = BigActionButton.create(
+        JSkatResourceBundle.INSTANCE.getString("pickUpSkat"), JSkatGraphicRepository.Icon.PLAY
+    ) {
+        (it.source as Button).isDisable = true
+        BigActionButton.dispatch(actions[JSkatAction.PICK_UP_SKAT], JSkatAction.PICK_UP_SKAT, it.source)
+    }
     private val bitmaps = JSkatGraphicRepository.INSTANCE
     private var announcePanel: GameAnnouncePanel? = null
+    private var cardSelectionEnabled = true
+    private var compactReplayPresentation = false
 
     var userPickedUpSkat: Boolean = false
         private set
 
     val discardedCards: CardList
         get() = CardList(cards)
+    val pickUpActionControl: Button
+        get() = pickUpSkatButton
 
     init {
+        id = "discard-panel"
         alignment = Pos.CENTER
-
-        pickUpSkatButton.graphic = bitmaps.getImageView(Icon.PLAY, JSkatGraphicRepository.IconSize.BIG)
-        pickUpSkatButton.setOnAction {
-            pickUpSkatButton.isDisable = true
-
-            // Fire the event to request the skat cards from the game logic
-            actions[JSkatAction.PICK_UP_SKAT]?.actionPerformed(
-                JSkatActionEvent(JSkatAction.PICK_UP_SKAT, it.source)
-            )
-        }
 
         cardViews.alignment = Pos.CENTER
         cardViews.spacing = 8.0
+        cardViews.id = "discard-card-views"
 
-        // Initially, only the button is visible
-        children.add(pickUpSkatButton)
     }
 
     fun setSkat(skat: CardList) {
@@ -92,7 +91,7 @@ class DiscardPanel(
             cards.clear()
             updateView()
             pickUpSkatButton.isDisable = false
-            children.setAll(pickUpSkatButton)
+            children.clear()
         }
     }
 
@@ -104,16 +103,30 @@ class DiscardPanel(
         this.announcePanel = announcePanel
     }
 
+    fun setReplaySkatPresentation(isPresented: Boolean) {
+        cardSelectionEnabled = !isPresented
+        compactReplayPresentation = isPresented
+        updateView()
+    }
+
     private fun updateView() {
         cardViews.children.clear()
         for (card in cards) {
-            val cardView = ImageView(bitmaps.getCardImageFX(card))
-            cardView.setOnMouseClicked {
-                actions[JSkatAction.TAKE_CARD_FROM_SKAT]?.actionPerformed(
-                    JSkatActionEvent(tableName, card)
-                )
+            val cardView = ImageView(bitmaps.getCardImageFX(card)).apply {
+                viewport = COMPACT_CARD_VIEWPORT.takeIf { compactReplayPresentation }
+            }
+            if (cardSelectionEnabled) {
+                cardView.setOnMouseClicked {
+                    actions[JSkatAction.TAKE_CARD_FROM_SKAT]?.actionPerformed(
+                        JSkatActionEvent(tableName, card)
+                    )
+                }
             }
             cardViews.children.add(cardView)
         }
+    }
+
+    private companion object {
+        val COMPACT_CARD_VIEWPORT = Rectangle2D(0.0, 0.0, 200.0, 70.0)
     }
 }
