@@ -11,7 +11,6 @@ import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
-import org.jskat.gui.img.JSkatGraphicRepository.Icon
 import org.jskat.util.Card
 import org.jskat.util.CardList
 import org.jskat.util.JSkatResourceBundle
@@ -24,7 +23,12 @@ class DiscardPanel(
 
     private val cards = CardList()
     private val cardViews = HBox()
-    private val pickUpSkatButton = Button(JSkatResourceBundle.INSTANCE.getString("pickUpSkat"))
+    private val pickUpSkatButton = BigActionButton.create(
+        JSkatResourceBundle.INSTANCE.getString("pickUpSkat"), JSkatGraphicRepository.Icon.PLAY
+    ) {
+        (it.source as Button).isDisable = true
+        BigActionButton.dispatch(actions[JSkatAction.PICK_UP_SKAT], JSkatAction.PICK_UP_SKAT, it.source)
+    }
     private val bitmaps = JSkatGraphicRepository.INSTANCE
     private var announcePanel: GameAnnouncePanel? = null
     private var cardSelectionEnabled = true
@@ -41,16 +45,6 @@ class DiscardPanel(
     init {
         id = "discard-panel"
         alignment = Pos.CENTER
-
-        pickUpSkatButton.graphic = bitmaps.getImageView(Icon.PLAY, JSkatGraphicRepository.IconSize.BIG)
-        pickUpSkatButton.setOnAction {
-            pickUpSkatButton.isDisable = true
-
-            // Fire the event to request the skat cards from the game logic
-            actions[JSkatAction.PICK_UP_SKAT]?.actionPerformed(
-                JSkatActionEvent(JSkatAction.PICK_UP_SKAT, it.source)
-            )
-        }
 
         cardViews.alignment = Pos.CENTER
         cardViews.spacing = 8.0

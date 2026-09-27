@@ -14,7 +14,9 @@ class JSkatThemeTest {
         assertThat(JSkatTheme.stylesheetUrl).isEqualTo(stylesheet.toExternalForm())
         assertThat(stylesheet.readText()).contains(
             "-color-primary-0: #E2D9CA",
-            "-fx-base: -color-primary-0"
+            "-fx-base: -color-primary-0",
+            ".big-action-button",
+            "-fx-graphic-text-gap: 8px"
         )
     }
 }

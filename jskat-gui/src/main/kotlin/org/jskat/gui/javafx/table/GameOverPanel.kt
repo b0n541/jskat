@@ -7,7 +7,6 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.VBox
 import javafx.scene.paint.Color
 import org.jskat.control.gui.action.JSkatAction
-import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.GameSummary
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
@@ -22,8 +21,6 @@ class GameOverPanel(
     additionalAction: JSkatAction? = null,
     private val moveCommandsToSharedActionArea: Boolean = false
 ) : VBox() {
-
-    private val bitmaps = JSkatGraphicRepository.INSTANCE
 
     private val gameOverTrickPanel = GameOverTrickPanel()
     private val skatPanel = SkatPanel()
@@ -58,35 +55,33 @@ class GameOverPanel(
         val buttonSpacer = Pane().apply { HBox.setHgrow(this, Priority.ALWAYS) }
 
         val continueSkatSeriesAction = actions[continueAction]
-        val continueSkatSeriesButton =
-            Button(continueSkatSeriesAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "").apply {
-                graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.PLAY, JSkatGraphicRepository.IconSize.BIG)
-                setOnAction {
-                    val event = if (continueAction == JSkatAction.CONTINUE_LOCAL_SERIES) {
-                        JSkatActionEvent(tableName, it.source)
-                    } else {
-                        JSkatActionEvent(continueAction, tableName)
-                    }
-                    continueSkatSeriesAction?.actionPerformed(event)
-                }
+        val continueSkatSeriesButton = BigActionButton.create(
+            continueSkatSeriesAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "",
+            JSkatGraphicRepository.Icon.PLAY
+        ) {
+            if (continueAction == JSkatAction.CONTINUE_LOCAL_SERIES) {
+                BigActionButton.dispatchTableCommand(continueSkatSeriesAction, tableName, it.source)
+            } else {
+                BigActionButton.dispatch(continueSkatSeriesAction, continueAction, tableName)
             }
+        }
         val additionalButton = additionalAction?.let { actionType ->
             actions[actionType]?.let { action ->
-                Button(action.getValue(AbstractJSkatAction.NAME) as? String ?: actionType.name).apply {
-                    graphic = bitmaps.getImageView(action.icon, JSkatGraphicRepository.IconSize.BIG)
-                    setOnAction {
-                        action.actionPerformed(JSkatActionEvent(actionType, tableName))
-                    }
+                BigActionButton.create(
+                    action.getValue(AbstractJSkatAction.NAME) as? String ?: actionType.name,
+                    action.icon
+                ) {
+                    BigActionButton.dispatch(action, actionType, tableName)
                 }
             }
         }
         val replayGameButton = if (showReplayGameButton && !moveCommandsToSharedActionArea) {
             val replayGameAction = actions[JSkatAction.REPLAY_GAME]
-            Button(replayGameAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "").apply {
-                graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.FIRST, JSkatGraphicRepository.IconSize.BIG)
-                setOnAction {
-                    replayGameAction?.actionPerformed(JSkatActionEvent(tableName, it.source))
-                }
+            BigActionButton.create(
+                replayGameAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "",
+                JSkatGraphicRepository.Icon.FIRST
+            ) {
+                BigActionButton.dispatchTableCommand(replayGameAction, tableName, it.source)
             }.also { actionControls[JSkatAction.REPLAY_GAME] = it }
         } else {
             null

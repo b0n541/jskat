@@ -45,8 +45,10 @@ class GameAnnouncePanel(
     private val schneiderBox = CheckBox(strings.getString("schneider"))
     private val schwarzBox = CheckBox(strings.getString("schwarz"))
 
-    val announceActionControl =
-        Button(actions[JSkatAction.ANNOUNCE_GAME]?.getValue(AbstractJSkatAction.NAME) as? String ?: "")
+    val announceActionControl = BigActionButton.create(
+        actions[JSkatAction.ANNOUNCE_GAME]?.getValue(AbstractJSkatAction.NAME) as? String ?: "",
+        JSkatGraphicRepository.Icon.PLAY
+    ) { announceGame() }
 
     private var userPickedUpSkat = false
 
@@ -88,8 +90,6 @@ class GameAnnouncePanel(
         add(schneiderBox, 0, 7)
         add(schwarzBox, 1, 7)
 
-        announceActionControl.graphic =
-            bitmaps.getImageView(JSkatGraphicRepository.Icon.PLAY, JSkatGraphicRepository.IconSize.BIG)
         announceActionControl.maxWidth = Region.USE_PREF_SIZE
 
         handBox.isDisable = true
@@ -116,9 +116,6 @@ class GameAnnouncePanel(
             }
         }
 
-        announceActionControl.setOnAction {
-            announceGame()
-        }
 
         resetPanel()
     }
@@ -222,7 +219,7 @@ class GameAnnouncePanel(
     }
 
     private fun fireAnnounceAction(announcement: GameAnnouncement) {
-        actions[JSkatAction.ANNOUNCE_GAME]?.actionPerformed(JSkatActionEvent(JSkatAction.ANNOUNCE_GAME, announcement))
+        BigActionButton.dispatch(actions[JSkatAction.ANNOUNCE_GAME], JSkatAction.ANNOUNCE_GAME, announcement)
     }
 
     fun resetPanel() {

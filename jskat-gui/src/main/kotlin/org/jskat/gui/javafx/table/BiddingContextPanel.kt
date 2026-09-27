@@ -10,7 +10,6 @@ import javafx.scene.layout.Priority
 import javafx.scene.layout.Region
 import javafx.scene.paint.Color
 import org.jskat.control.gui.action.JSkatAction
-import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.GameType
@@ -77,29 +76,22 @@ class BiddingContextPanel(
         biddingGrid.add(userBid, 0, 1, 2, 1)
         setHalignment(userBid, HPos.CENTER)
 
-        bidButton = Button(currentBidAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "").apply {
-            graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.OK, JSkatGraphicRepository.IconSize.BIG)
-            setOnAction {
+        bidButton = BigActionButton.create(
+            currentBidAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "",
+            JSkatGraphicRepository.Icon.OK
+        ) {
                 currentBidAction?.let { action ->
                     val command = if (action === holdBidAction) JSkatAction.HOLD_BID else JSkatAction.MAKE_BID
                     val source = it.source
-                    Platform.runLater {
-                        action.actionPerformed(JSkatActionEvent(command, source))
-                    }
+                    BigActionButton.dispatch(action, command, source)
                 }
-            }
         }
 
-        passButton = Button(actions[JSkatAction.PASS_BID]?.getValue(AbstractJSkatAction.NAME) as? String ?: "").apply {
-            graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.STOP, JSkatGraphicRepository.IconSize.BIG)
-            setOnAction {
-                actions[JSkatAction.PASS_BID]?.let { action ->
-                    Platform.runLater {
-                        action.actionPerformed(JSkatActionEvent(JSkatAction.PASS_BID, it.source))
-                    }
-                }
-            }
-        }
+        val passBidAction = actions[JSkatAction.PASS_BID]
+        passButton = BigActionButton.create(
+            passBidAction?.getValue(AbstractJSkatAction.NAME) as? String ?: "",
+            JSkatGraphicRepository.Icon.STOP
+        ) { BigActionButton.dispatch(passBidAction, JSkatAction.PASS_BID, it.source) }
 
         add(biddingGrid, 1, 0)
 

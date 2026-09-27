@@ -14,7 +14,7 @@ import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.JSkatApplicationData
 import org.jskat.data.iss.TablePanelStatus
 import org.jskat.gui.action.AbstractJSkatAction
-import org.jskat.gui.img.JSkatGraphicRepository
+import org.jskat.gui.javafx.table.BigActionButton
 import org.jskat.gui.javafx.table.ContextPanelType
 import org.jskat.gui.javafx.table.ContextMode
 import org.jskat.gui.javafx.table.JSkatUserPanel
@@ -77,10 +77,10 @@ class IssTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
 
     private fun createTrickActionControl(actionType: JSkatAction): Button? =
         actions[actionType]?.let { action ->
-            Button(action.getValue(AbstractJSkatAction.NAME) as? String ?: actionType.name).apply {
-                graphic = bitmaps.getImageView(action.icon, JSkatGraphicRepository.IconSize.BIG)
-                setOnAction { performIssTableAction(action, actionType, tableName) }
-            }
+            BigActionButton.create(
+                action.getValue(AbstractJSkatAction.NAME) as? String ?: actionType.name,
+                action.icon
+            ) { BigActionButton.dispatch(action, actionType, tableName) }
         }
 
     // TODO: this does similar things like SkatTablePanel.resetTableOn(event: GameStartEvent)
@@ -193,4 +193,4 @@ internal fun performIssTableAction(
     action: AbstractJSkatAction,
     actionType: JSkatAction,
     tableName: String
-) = action.actionPerformed(JSkatActionEvent(actionType, tableName))
+) = BigActionButton.dispatch(action, actionType, tableName)

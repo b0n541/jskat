@@ -12,7 +12,6 @@ import org.jskat.control.command.table.ShowCardsCommand
 import org.jskat.control.event.skatgame.*
 import org.jskat.control.event.table.*
 import org.jskat.control.gui.action.JSkatAction
-import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.JSkatOptions
 import org.jskat.data.SkatGameData
 import org.jskat.gui.action.AbstractJSkatAction
@@ -185,13 +184,11 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
 
     private fun createReplayActionControl(actionType: JSkatAction, bindEnabledState: Boolean = false): Button? =
         actions[actionType]?.let { action ->
-            Button(action.getValue(AbstractJSkatAction.NAME) as? String ?: actionType.name).apply {
-                graphic = bitmaps.getImageView(action.icon, JSkatGraphicRepository.IconSize.BIG)
-                if (bindEnabledState) {
-                    disableProperty().bind(action.enabledProperty().not())
-                }
-                setOnAction { action.actionPerformed(JSkatActionEvent(tableName, it.source)) }
-            }
+            BigActionButton.create(
+                action.getValue(AbstractJSkatAction.NAME) as? String ?: actionType.name,
+                action.icon,
+                action.enabledProperty().takeIf { bindEnabledState }
+            ) { BigActionButton.dispatchTableCommand(action, tableName, it.source) }
         }
 
     private fun createCallReAfterContraPanel(): Node {
@@ -210,20 +207,19 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
         buttonBox.alignment = Pos.CENTER
         val callReAction = actions[JSkatAction.CALL_RE]
         if (callReAction != null) {
-            val callReButton =
-                Button(callReAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.CALL_RE.name)
-            callReButton.graphic =
-                bitmaps.getImageView(JSkatGraphicRepository.Icon.OK, JSkatGraphicRepository.IconSize.BIG)
-            callReButton.setOnAction {
-                callReAction.actionPerformed(JSkatActionEvent(JSkatAction.CALL_RE, true))
+            val callReButton = BigActionButton.create(
+                callReAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.CALL_RE.name,
+                JSkatGraphicRepository.Icon.OK
+            ) {
+                BigActionButton.dispatch(callReAction, JSkatAction.CALL_RE, true)
             }
             buttonBox.children.add(callReButton)
 
-            val noReButton = Button(strings.getString("no"))
-            noReButton.graphic =
-                bitmaps.getImageView(JSkatGraphicRepository.Icon.STOP, JSkatGraphicRepository.IconSize.BIG)
-            noReButton.setOnAction {
-                callReAction.actionPerformed(JSkatActionEvent(JSkatAction.CALL_RE, false))
+            val noReButton = BigActionButton.create(
+                strings.getString("no"),
+                JSkatGraphicRepository.Icon.STOP
+            ) {
+                BigActionButton.dispatch(callReAction, JSkatAction.CALL_RE, false)
             }
             registerSharedAction(ContextPanelType.RE_AFTER_CONTRA, JSkatAction.CALL_RE, callReButton)
             registerSharedAction(ContextPanelType.RE_AFTER_CONTRA, JSkatAction.CALL_RE, noReButton)
@@ -239,18 +235,12 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
 
         val contraAction = actions[JSkatAction.CALL_CONTRA]
         if (options.isPlayContra && contraAction != null) {
-            val contraButton =
-                Button(
-                    contraAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.CALL_CONTRA.name
-                ).apply {
-                    setOnAction {
-                        contraAction.actionPerformed(JSkatActionEvent(JSkatAction.CALL_CONTRA, it.source))
-                    }
-                    graphic = JSkatGraphicRepository.INSTANCE.getImageView(
-                        contraAction.icon, JSkatGraphicRepository.IconSize.BIG
-                    )
-                    alignment = Pos.CENTER
-                }
+            val contraButton = BigActionButton.create(
+                contraAction.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.CALL_CONTRA.name,
+                contraAction.icon
+            ) {
+                BigActionButton.dispatch(contraAction, JSkatAction.CALL_CONTRA, it.source)
+            }.apply { alignment = Pos.CENTER }
             additionalActionsPanel.children.add(contraButton)
             registerSharedAction(ContextPanelType.TRICK_PLAYING, JSkatAction.CALL_CONTRA, contraButton)
         }
