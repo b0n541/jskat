@@ -41,14 +41,14 @@ class DeclaringContextPanel(
         col3.percentWidth = 25.0
         columnConstraints.addAll(col1, col2, col3)
 
-        add(announcePanel, 0, 0)
+        add(announcePanel, 2, 0)
         GridPane.setHalignment(announcePanel, HPos.CENTER)
 
         discardPanel.setAnnouncePanel(announcePanel)
         add(discardPanel, 1, 0)
 
         val blankRegion = Region()
-        add(blankRegion, 2, 0)
+        add(blankRegion, 0, 0)
     }
 
     fun resetPanel() {

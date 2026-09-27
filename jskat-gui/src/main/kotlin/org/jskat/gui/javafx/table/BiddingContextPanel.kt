@@ -59,7 +59,7 @@ class BiddingContextPanel(
         col3.percentWidth = 25.0
         columnConstraints.addAll(col1, col2, col3)
 
-        add(announcePanel, 0, 0)
+        add(announcePanel, 2, 0)
         GridPane.setHalignment(announcePanel, HPos.CENTER)
 
         // Bidding Panel (Center)
@@ -104,7 +104,7 @@ class BiddingContextPanel(
         add(biddingGrid, 1, 0)
 
         val blankRegion = Region()
-        add(blankRegion, 2, 0)
+        add(blankRegion, 0, 0)
     }
 
     fun setUserPosition(player: Player) {
