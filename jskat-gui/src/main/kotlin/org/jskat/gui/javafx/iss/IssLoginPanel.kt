@@ -14,12 +14,11 @@ import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.iss.LoginCredentials
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
-import org.jskat.gui.img.JSkatGraphicRepository.IconSize
+import org.jskat.gui.javafx.table.BigActionButton
 import org.jskat.util.JSkatResourceBundle
 
 class IssLoginPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) : VBox() {
 
-    private val bitmaps = JSkatGraphicRepository.INSTANCE
     private val strings = JSkatResourceBundle.INSTANCE
     private val loginField = TextField()
     private val passwordField = PasswordField()
@@ -98,11 +97,7 @@ class IssLoginPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) 
         action: JSkatAction,
         text: String,
         icon: JSkatGraphicRepository.Icon
-    ): Button {
-        val button = Button(text)
-        button.graphic = bitmaps.getImageView(icon, IconSize.BIG)
-        button.maxWidth = Double.MAX_VALUE
-        button.setOnAction { event ->
+    ): Button = BigActionButton.create(text, icon) { event ->
             var actionSource = if (action == JSkatAction.CONNECT_TO_ISS) {
                 LoginCredentials(loginField.text, passwordField.text)
             } else {
@@ -110,7 +105,5 @@ class IssLoginPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) 
             }
 
             actions[action]?.actionPerformed(JSkatActionEvent(action, actionSource))
-        }
-        return button
-    }
+    }.apply { maxWidth = Double.MAX_VALUE }
 }

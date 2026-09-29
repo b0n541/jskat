@@ -13,7 +13,7 @@ import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
-import org.jskat.gui.img.JSkatGraphicRepository.IconSize
+import org.jskat.gui.javafx.table.BigActionButton
 import org.jskat.util.JSkatResourceBundle
 
 class WelcomePanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) : VBox() {
@@ -113,13 +113,7 @@ class WelcomePanel(private val actions: Map<JSkatAction, AbstractJSkatAction>) :
         action: JSkatAction,
         text: String,
         icon: JSkatGraphicRepository.Icon
-    ): Button {
-        val button = Button(text)
-        button.graphic = bitmaps.getImageView(icon, IconSize.BIG)
-        button.maxWidth = Double.MAX_VALUE
-        button.setOnAction { event ->
+    ): Button = BigActionButton.create(text, icon) { event ->
             actions[action]?.actionPerformed(JSkatActionEvent(action, event.source))
-        }
-        return button
-    }
+    }.apply { maxWidth = Double.MAX_VALUE }
 }

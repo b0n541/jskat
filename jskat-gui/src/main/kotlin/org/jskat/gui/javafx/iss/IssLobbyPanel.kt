@@ -18,6 +18,7 @@ import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.control.iss.ChatMessageType
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.img.JSkatGraphicRepository
+import org.jskat.gui.javafx.table.BigActionButton
 import org.jskat.util.JSkatResourceBundle
 
 class IssLobbyPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>, private val userName: String?) :
@@ -167,15 +168,14 @@ class IssLobbyPanel(private val actions: Map<JSkatAction, AbstractJSkatAction>, 
         return table
     }
 
-    private fun createActionButton(text: String, action: JSkatAction, icon: JSkatGraphicRepository.Icon): Button {
-        val button = Button(text)
-        button.graphic = bitmaps.getImageView(icon, JSkatGraphicRepository.IconSize.BIG)
-        button.setOnAction {
+    private fun createActionButton(
+        text: String,
+        action: JSkatAction,
+        icon: JSkatGraphicRepository.Icon
+    ): Button = BigActionButton.create(text, icon) {
             val jskatAction = actions[action]
             jskatAction?.actionPerformed(JSkatActionEvent(action, it.source))
         }
-        return button
-    }
 
     fun updatePlayer(playerName: String, language: String, gamesPlayed: Long, strength: Double) {
         val existingPlayer = playerList.find { it.name.get() == playerName }
