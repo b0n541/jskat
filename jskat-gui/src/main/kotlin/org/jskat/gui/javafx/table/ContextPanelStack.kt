@@ -11,13 +11,19 @@ internal class ContextPanelStack {
     fun add(panelType: ContextPanelType, panel: Node) {
         panels.put(panelType, panel)?.let { previousPanel ->
             previousPanel.isVisible = false
+            previousPanel.isManaged = false
             pane.children.remove(previousPanel)
         }
         pane.children.add(panel)
         panel.isVisible = false
+        panel.isManaged = false
     }
 
     fun show(panelType: ContextPanelType) {
-        panels.forEach { (type, panel) -> panel.isVisible = (type == panelType) }
+        panels.forEach { (type, panel) ->
+            val isSelected = type == panelType
+            panel.isVisible = isSelected
+            panel.isManaged = isSelected
+        }
     }
 }

@@ -27,6 +27,7 @@ import org.jskat.gui.javafx.table.GameOverPanel
 import org.jskat.gui.javafx.table.ContextCompositionHost
 import org.jskat.gui.javafx.table.ScoreHistoryPlayerOrder
 import org.jskat.gui.javafx.table.SkatTableNode
+import org.jskat.util.JSkatResourceBundle
 import org.jskat.util.Player
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -96,8 +97,15 @@ class IssTablePanelTest {
                 tableName,
                 mapOf(
                     JSkatAction.START_LOCAL_SERIES to StartSkatSeriesAction(),
+                    JSkatAction.MAKE_BID to RecordingAction("Make bid"),
+                    JSkatAction.HOLD_BID to RecordingAction("Hold bid"),
+                    JSkatAction.PASS_BID to RecordingAction("Pass bid"),
+                    JSkatAction.PICK_UP_SKAT to RecordingAction("Look into skat"),
+                    JSkatAction.ANNOUNCE_GAME to RecordingAction("Announce game"),
                     JSkatAction.RESIGN to RecordingAction("Give up"),
                     JSkatAction.SHOW_CARDS to RecordingAction("Show cards"),
+                    JSkatAction.READY_TO_PLAY to RecordingAction("Ready"),
+                    JSkatAction.LEAVE_ISS_TABLE to RecordingAction("Leave table"),
                 ),
             ).also(::Scene)
         }
@@ -105,12 +113,26 @@ class IssTablePanelTest {
         try {
             tableEvents.post(SkatGameStateChangedEvent(tableName, GameState.BIDDING))
             onFxThread { Unit }
-            assertThat(sharedActionButtons(panel)).isEmpty()
+            assertThat(sharedActionButtons(panel).map(Button::getText)).containsExactly("Make bid", "Pass bid")
+
+            tableEvents.post(SkatGameStateChangedEvent(tableName, GameState.PICKING_UP_SKAT))
+            onFxThread { Unit }
+            assertThat(sharedActionButtons(panel).map(Button::getText))
+                .containsExactly(JSkatResourceBundle.INSTANCE.getString("pickUpSkat"), "Announce game")
+
+            tableEvents.post(SkatGameStateChangedEvent(tableName, GameState.DISCARDING))
+            onFxThread { Unit }
+            assertThat(sharedActionButtons(panel).map(Button::getText)).containsExactly("Announce game")
 
             tableEvents.post(SkatGameStateChangedEvent(tableName, GameState.TRICK_PLAYING))
             onFxThread { Unit }
             assertThat(sharedActionButtons(panel).map(Button::getText)).containsExactly("Give up", "Show cards")
             assertThat(contextButtons(panel).map(Button::getText)).doesNotContain("Give up", "Show cards")
+
+            tableEvents.post(SkatGameStateChangedEvent(tableName, GameState.GAME_OVER))
+            onFxThread { Unit }
+            assertThat(sharedActionButtons(panel).map(Button::getText)).containsExactly("Ready", "Leave table")
+            assertThat(trickContentButtons(panel).map(Button::getText)).doesNotContain("Ready", "Leave table")
         } finally {
             JSkatEventBus.TABLE_EVENT_BUSSES.remove(tableName)
         }

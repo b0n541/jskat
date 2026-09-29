@@ -68,7 +68,11 @@ object SharedContextRenderer {
 
     private fun actionsFor(state: ContextRenderingState): List<JSkatAction> = when (state.mode) {
         ContextMode.ISS -> when (state.gameState) {
+            GameState.BIDDING -> listOf(JSkatAction.MAKE_BID, JSkatAction.HOLD_BID, JSkatAction.PASS_BID)
+            GameState.PICKING_UP_SKAT -> listOf(JSkatAction.PICK_UP_SKAT, JSkatAction.ANNOUNCE_GAME)
+            GameState.DISCARDING, GameState.DECLARING -> listOf(JSkatAction.ANNOUNCE_GAME)
             GameState.TRICK_PLAYING -> listOf(JSkatAction.RESIGN, JSkatAction.SHOW_CARDS)
+            GameState.GAME_OVER -> listOf(JSkatAction.READY_TO_PLAY, JSkatAction.LEAVE_ISS_TABLE)
             else -> emptyList()
         }
 
