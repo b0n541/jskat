@@ -45,7 +45,7 @@ class JSkatUserPanel(
     }
 
     override fun createCardPanel(): CardPanel {
-        val panel = CardPanel(1.0, false)
+        val panel = CardPanel(1.5, false)
         panel.isHumanPlayer = true
         return panel
     }

@@ -12,7 +12,7 @@ import org.jskat.util.Player
 import java.util.*
 
 class TrickPanel(
-    private val globalScale: Double = 1.0,
+    internal val globalScale: Double = 1.0,
     private val randomPlacement: Boolean = true
 ) : Pane() {
 
