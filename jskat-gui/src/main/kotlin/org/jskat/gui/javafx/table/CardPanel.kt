@@ -141,7 +141,7 @@ class CardPanel(
 
         if (cards.isEmpty) return
 
-        fitOpponentCardsToPanel()
+        fitCardsToPanel()
 
         val sampleCard = cardViews.firstOrNull() ?: return
         val cardWidth = sampleCard.fitWidth
@@ -189,8 +189,8 @@ class CardPanel(
         }
     }
 
-    private fun fitOpponentCardsToPanel() {
-        if (isHumanPlayer || children.isEmpty() || height <= 0.0) return
+    private fun fitCardsToPanel() {
+        if (children.isEmpty() || height <= 0.0) return
 
         val sampleCard = cardViews.firstOrNull() ?: return
         val fullCardWidth = sampleCard.image.width * scaleFactor
@@ -201,9 +201,22 @@ class CardPanel(
             fullCardWidth / 2 * kotlin.math.sin(outerCardAngle) - fullCardHeight * (1 - kotlin.math.cos(outerCardAngle))
             ).coerceAtLeast(0.0)
         val outerCardBottomOverhang = fullCardWidth / 2 * kotlin.math.sin(outerCardAngle)
-        val fullHandHeight = fullCardHeight + outerCardTopOverhang + outerCardBottomOverhang +
+        val topClearance = if (isHumanPlayer) fullCardHeight * HOVER_LIFT_RATIO else 0.0
+        val fullHandHeight = fullCardHeight + topClearance + outerCardTopOverhang + outerCardBottomOverhang +
             fanArcOffset(middleCardIndex, 1.0)
-        val cardScale = (height / fullHandHeight).coerceAtMost(1.0)
+        val heightScale = if (isHumanPlayer) 1.0 else height / fullHandHeight
+        val widthScale = if (isHumanPlayer && width > 0.0) {
+            val outerCardHorizontalOverhang = (
+                fullCardHeight * kotlin.math.sin(outerCardAngle) -
+                    fullCardWidth / 2 * (1 - kotlin.math.cos(outerCardAngle))
+                ).coerceAtLeast(0.0)
+            val preferredHandWidth = fullCardWidth + fullCardWidth * FAN_CARD_GAP_RATIO * (cards.size() - 1) +
+                2 * outerCardHorizontalOverhang
+            width / preferredHandWidth
+        } else {
+            1.0
+        }
+        val cardScale = minOf(heightScale, widthScale, 1.0)
 
         cardViews.forEach { view ->
             view.fitWidth = fullCardWidth * cardScale
