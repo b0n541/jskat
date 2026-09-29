@@ -73,9 +73,25 @@ class IssPlayerInvitationDialogTest {
             .isInstanceOf(ImageView::class.java)
     }
 
-    private fun player(login: String, isAI: Boolean = false) = PlayerData().apply {
+    @Test
+    fun `available players are ordered by playing strength descending`() {
+        val dialog = onFxThread {
+            IssPlayerInvitationDialog(
+                listOf(
+                    player("Marta", strength = 1200.0),
+                    player("Anke", strength = 1800.0),
+                    player("Bernd", strength = 1500.0)
+                )
+            )
+        }
+
+        assertThat(onFxThread { availableInvitationButtons(dialog).map { it.id } })
+            .containsExactly("invite-player-Anke", "invite-player-Bernd", "invite-player-Marta")
+    }
+
+    private fun player(login: String, isAI: Boolean = false, strength: Double = 1234.56) = PlayerData().apply {
         this.login = login
-        strength = 1234.56
+        this.strength = strength
         isKIPlayer = isAI
     }
 

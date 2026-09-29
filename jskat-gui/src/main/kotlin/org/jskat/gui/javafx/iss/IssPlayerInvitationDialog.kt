@@ -54,7 +54,7 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
             })
 
             availablePlayers.children.setAll(
-                players.sortedBy { it.login }
+                players.sortedByDescending { it.strength }
                     .map { player ->
                         Button().apply {
                             id = "invite-player-${player.login}"
