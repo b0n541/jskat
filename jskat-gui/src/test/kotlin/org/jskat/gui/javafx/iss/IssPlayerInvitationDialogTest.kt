@@ -1,6 +1,5 @@
 package org.jskat.gui.javafx.iss
 
-import javafx.application.Platform
 import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.control.Button
@@ -11,10 +10,9 @@ import org.jskat.data.DesktopSavePathResolver
 import org.jskat.data.JSkatOptions
 import org.jskat.data.iss.PlayerData
 import org.jskat.gui.javafx.JavaFxTestSupport
+import org.jskat.gui.javafx.onFxThread
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 
 class IssPlayerInvitationDialogTest {
 
@@ -73,9 +71,25 @@ class IssPlayerInvitationDialogTest {
             .isInstanceOf(ImageView::class.java)
     }
 
-    private fun player(login: String, isAI: Boolean = false) = PlayerData().apply {
+    @Test
+    fun `available players are ordered by playing strength descending`() {
+        val dialog = onFxThread {
+            IssPlayerInvitationDialog(
+                listOf(
+                    player("Marta", strength = 1200.0),
+                    player("Anke", strength = 1800.0),
+                    player("Bernd", strength = 1500.0)
+                )
+            )
+        }
+
+        assertThat(onFxThread { availableInvitationButtons(dialog).map { it.id } })
+            .containsExactly("invite-player-Anke", "invite-player-Bernd", "invite-player-Marta")
+    }
+
+    private fun player(login: String, isAI: Boolean = false, strength: Double = 1234.56) = PlayerData().apply {
         this.login = login
-        strength = 1234.56
+        this.strength = strength
         isKIPlayer = isAI
     }
 
@@ -99,22 +113,4 @@ class IssPlayerInvitationDialogTest {
         }
     }
 
-    private fun <T> onFxThread(action: () -> T): T {
-        val result = arrayOfNulls<Any>(1)
-        val failure = arrayOfNulls<Throwable>(1)
-        val completed = CountDownLatch(1)
-        Platform.runLater {
-            try {
-                result[0] = action()
-            } catch (error: Throwable) {
-                failure[0] = error
-            } finally {
-                completed.countDown()
-            }
-        }
-        check(completed.await(5, TimeUnit.SECONDS)) { "Timed out waiting for the JavaFX application thread" }
-        failure[0]?.let { throw it }
-        @Suppress("UNCHECKED_CAST")
-        return result[0] as T
-    }
 }

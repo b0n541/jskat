@@ -16,6 +16,7 @@ class JSkatThemeTest {
             "-color-primary-0: #E2D9CA",
             "-fx-base: -color-primary-0",
             ".big-action-button",
+            "-fx-font-weight: normal;",
             "-fx-graphic-text-gap: 8px"
         )
     }

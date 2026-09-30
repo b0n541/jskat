@@ -80,12 +80,11 @@
 
 .big-action-button {
     -fx-font-size: 14px;
-    -fx-font-weight: bold;
+    -fx-font-weight: normal;
     -fx-padding: 8 14 8 14;
     -fx-min-height: 48px;
     -fx-background-radius: 8;
     -fx-border-radius: 8;
-    -fx-border-color: -color-secondary-2-3;
     -fx-border-width: 1;
     -fx-graphic-text-gap: 8px;
 }

@@ -59,12 +59,43 @@ class SharedContextRendererTest {
     }
 
     @Test
-    fun `does not select ISS commands outside trick play`() {
+    fun `projects ISS bidding into its applicable commands`() {
         val projection = SharedContextRenderer.project(
             ContextRenderingState(ContextMode.ISS, GameState.BIDDING)
         )
 
-        assertThat(projection.actions).isEmpty()
+        assertThat(projection.phaseContent).isEqualTo(ContextPanelType.BIDDING)
+        assertThat(projection.actions).containsExactly(
+            JSkatAction.MAKE_BID,
+            JSkatAction.HOLD_BID,
+            JSkatAction.PASS_BID
+        )
+    }
+
+    @Test
+    fun `projects ISS game over into ready and leave table`() {
+        val projection = SharedContextRenderer.project(
+            ContextRenderingState(ContextMode.ISS, GameState.GAME_OVER)
+        )
+
+        assertThat(projection.phaseContent).isEqualTo(ContextPanelType.GAME_OVER)
+        assertThat(projection.actions).containsExactly(
+            JSkatAction.READY_TO_PLAY,
+            JSkatAction.LEAVE_ISS_TABLE
+        )
+    }
+
+    @Test
+    fun `projects ISS declarer actions into the shared area`() {
+        val pickingUpSkat = SharedContextRenderer.project(
+            ContextRenderingState(ContextMode.ISS, GameState.PICKING_UP_SKAT)
+        )
+        val discarding = SharedContextRenderer.project(
+            ContextRenderingState(ContextMode.ISS, GameState.DISCARDING)
+        )
+
+        assertThat(pickingUpSkat.actions).containsExactly(JSkatAction.PICK_UP_SKAT, JSkatAction.ANNOUNCE_GAME)
+        assertThat(discarding.actions).containsExactly(JSkatAction.ANNOUNCE_GAME)
     }
 
     @Test

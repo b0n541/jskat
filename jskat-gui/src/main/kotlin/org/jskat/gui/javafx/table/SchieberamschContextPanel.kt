@@ -11,6 +11,7 @@ import org.jskat.control.gui.action.JSkatAction
 import org.jskat.control.gui.action.JSkatActionEvent
 import org.jskat.data.GameContract
 import org.jskat.gui.action.AbstractJSkatAction
+import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.Card
 import org.jskat.util.CardList
 import org.jskat.util.GameType
@@ -32,9 +33,14 @@ class SchieberamschContextPanel(
     private val grandHandPanel: GridPane
     private lateinit var grandHandButton: Button
     private lateinit var schieberamschButton: Button
-    private val schiebenButton = Button(
-        actions[JSkatAction.SCHIEBEN]?.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.SCHIEBEN.name
-    )
+    private val schiebenButton = BigActionButton.create(
+        actions[JSkatAction.SCHIEBEN]?.getValue(AbstractJSkatAction.NAME) as? String ?: JSkatAction.SCHIEBEN.name,
+        actions[JSkatAction.SCHIEBEN]?.icon ?: JSkatGraphicRepository.Icon.PLAY
+    ) {
+        actions[JSkatAction.SCHIEBEN]?.actionPerformed(
+            JSkatActionEvent(JSkatAction.SCHIEBEN, discardPanel.discardedCards)
+        )
+    }
 
     val grandHandActionControl: Button
         get() = grandHandButton
@@ -60,11 +66,6 @@ class SchieberamschContextPanel(
         columnConstraints.addAll(col1, col2, col3)
 
         grandHandPanel = createGrandHandSchiebeRamschPanel(actions)
-        schiebenButton.setOnAction {
-            actions[JSkatAction.SCHIEBEN]?.actionPerformed(
-                JSkatActionEvent(JSkatAction.SCHIEBEN, discardPanel.discardedCards)
-            )
-        }
         centerPanel.children.addAll(grandHandPanel, discardPanel)
         add(centerPanel, 1, 0)
 
@@ -79,18 +80,23 @@ class SchieberamschContextPanel(
         question.style = "-fx-font-size: 16px; -fx-font-weight: bold;"
         result.add(question, 0, 0, 2, 1)
 
-        grandHandButton = Button(strings.getString("yes"))
-        grandHandButton.setOnAction {
+        val grandHandAction = actions[JSkatAction.PLAY_GRAND_HAND]
+        grandHandButton = BigActionButton.create(
+            strings.getString("yes"), grandHandAction?.icon ?: JSkatGraphicRepository.Icon.PLAY
+        ) {
             try {
-                val contract = GameContract(GameType.GRAND).withHand()
-                actions[JSkatAction.PLAY_GRAND_HAND]?.actionPerformed(JSkatActionEvent(JSkatAction.PLAY_GRAND_HAND, contract))
+                grandHandAction?.actionPerformed(
+                    JSkatActionEvent(JSkatAction.PLAY_GRAND_HAND, GameContract(GameType.GRAND).withHand())
+                )
             } catch (e: IllegalArgumentException) {
                 log.error(e.message)
             }
         }
-        schieberamschButton = Button(strings.getString("no"))
-        schieberamschButton.setOnAction {
-            actions[JSkatAction.PLAY_SCHIEBERAMSCH]?.actionPerformed(
+        val schieberamschAction = actions[JSkatAction.PLAY_SCHIEBERAMSCH]
+        schieberamschButton = BigActionButton.create(
+            strings.getString("no"), schieberamschAction?.icon ?: JSkatGraphicRepository.Icon.PLAY
+        ) {
+            schieberamschAction?.actionPerformed(
                 JSkatActionEvent(JSkatAction.PLAY_SCHIEBERAMSCH, it.source)
             )
         }
