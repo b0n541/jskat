@@ -1,7 +1,6 @@
 package org.jskat.gui.javafx.iss
 
 import com.google.common.eventbus.EventBus
-import javafx.application.Platform
 import javafx.scene.Scene
 import javafx.scene.control.Button
 import org.assertj.core.api.Assertions.assertThat
@@ -22,6 +21,7 @@ import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.action.main.StartSkatSeriesAction
 import org.jskat.gui.img.JSkatGraphicRepository.Icon
 import org.jskat.gui.javafx.JavaFxTestSupport
+import org.jskat.gui.javafx.onFxThread
 import org.jskat.gui.javafx.table.AbstractHandPanel
 import org.jskat.gui.javafx.table.GameOverPanel
 import org.jskat.gui.javafx.table.ContextCompositionHost
@@ -31,8 +31,6 @@ import org.jskat.util.JSkatResourceBundle
 import org.jskat.util.Player
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 
 class IssTablePanelTest {
 
@@ -317,25 +315,6 @@ class IssTablePanelTest {
         val playerOrder = node.javaClass.getDeclaredField("playerOrder")
         playerOrder.isAccessible = true
         return playerOrder.get(node) as ScoreHistoryPlayerOrder
-    }
-
-    private fun <T> onFxThread(action: () -> T): T {
-        val result = arrayOfNulls<Any>(1)
-        val failure = arrayOfNulls<Throwable>(1)
-        val completed = CountDownLatch(1)
-        Platform.runLater {
-            try {
-                result[0] = action()
-            } catch (error: Throwable) {
-                failure[0] = error
-            } finally {
-                completed.countDown()
-            }
-        }
-        check(completed.await(1, TimeUnit.SECONDS))
-        failure[0]?.let { throw it }
-        @Suppress("UNCHECKED_CAST")
-        return result[0] as T
     }
 
     private class RecordingAction(name: String) : AbstractJSkatAction() {

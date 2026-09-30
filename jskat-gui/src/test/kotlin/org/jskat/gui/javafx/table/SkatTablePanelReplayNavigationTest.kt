@@ -1,7 +1,6 @@
 package org.jskat.gui.javafx.table
 
 import com.google.common.eventbus.EventBus
-import javafx.application.Platform
 import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.image.ImageView
@@ -24,14 +23,13 @@ import org.jskat.data.SkatGameData.GameState
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.action.main.StartSkatSeriesAction
 import org.jskat.gui.javafx.JavaFxTestSupport
+import org.jskat.gui.javafx.onFxThread
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.jskat.util.Card
 import org.jskat.util.CardList
 import org.jskat.util.GameVariant
 import org.jskat.util.Player
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 
 class SkatTablePanelReplayNavigationTest {
 
@@ -272,25 +270,6 @@ class SkatTablePanelReplayNavigationTest {
     private fun flushFxEvents() {
         onFxThread { Unit }
         onFxThread { Unit }
-    }
-
-    private fun <T> onFxThread(action: () -> T): T {
-        val result = arrayOfNulls<Any>(1)
-        val failure = arrayOfNulls<Throwable>(1)
-        val completed = CountDownLatch(1)
-        Platform.runLater {
-            try {
-                result[0] = action()
-            } catch (error: Throwable) {
-                failure[0] = error
-            } finally {
-                completed.countDown()
-            }
-        }
-        check(completed.await(1, TimeUnit.SECONDS))
-        failure[0]?.let { throw it }
-        @Suppress("UNCHECKED_CAST")
-        return result[0] as T
     }
 
     private class RecordingAction(name: String) : AbstractJSkatAction() {

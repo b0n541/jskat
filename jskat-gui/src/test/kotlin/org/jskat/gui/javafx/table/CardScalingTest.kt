@@ -1,6 +1,5 @@
 package org.jskat.gui.javafx.table
 
-import javafx.application.Platform
 import javafx.scene.image.ImageView
 import javafx.scene.layout.Pane
 import org.assertj.core.api.Assertions.assertThat
@@ -10,11 +9,10 @@ import org.jskat.data.JSkatOptions
 import org.jskat.gui.action.AbstractJSkatAction
 import org.jskat.gui.action.main.StartSkatSeriesAction
 import org.jskat.gui.javafx.JavaFxTestSupport
+import org.jskat.gui.javafx.onFxThread
 import org.jskat.util.Card
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 
 class CardScalingTest {
 
@@ -71,25 +69,6 @@ class CardScalingTest {
             assertThat(table.currentTrickScale()).isEqualTo(1.5)
             assertThat(table.lastTrickScale()).isEqualTo(0.6)
         }
-    }
-
-    private fun <T> onFxThread(action: () -> T): T {
-        val result = arrayOfNulls<Any>(1)
-        val failure = arrayOfNulls<Throwable>(1)
-        val completed = CountDownLatch(1)
-        Platform.runLater {
-            try {
-                result[0] = action()
-            } catch (error: Throwable) {
-                failure[0] = error
-            } finally {
-                completed.countDown()
-            }
-        }
-        check(completed.await(1, TimeUnit.SECONDS))
-        failure[0]?.let { throw it }
-        @Suppress("UNCHECKED_CAST")
-        return result[0] as T
     }
 
     private class ScaleInspectableSkatTablePanel(

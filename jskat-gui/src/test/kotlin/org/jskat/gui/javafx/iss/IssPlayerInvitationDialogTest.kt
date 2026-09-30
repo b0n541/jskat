@@ -1,6 +1,5 @@
 package org.jskat.gui.javafx.iss
 
-import javafx.application.Platform
 import javafx.scene.Node
 import javafx.scene.Parent
 import javafx.scene.control.Button
@@ -11,10 +10,9 @@ import org.jskat.data.DesktopSavePathResolver
 import org.jskat.data.JSkatOptions
 import org.jskat.data.iss.PlayerData
 import org.jskat.gui.javafx.JavaFxTestSupport
+import org.jskat.gui.javafx.onFxThread
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 
 class IssPlayerInvitationDialogTest {
 
@@ -115,22 +113,4 @@ class IssPlayerInvitationDialogTest {
         }
     }
 
-    private fun <T> onFxThread(action: () -> T): T {
-        val result = arrayOfNulls<Any>(1)
-        val failure = arrayOfNulls<Throwable>(1)
-        val completed = CountDownLatch(1)
-        Platform.runLater {
-            try {
-                result[0] = action()
-            } catch (error: Throwable) {
-                failure[0] = error
-            } finally {
-                completed.countDown()
-            }
-        }
-        check(completed.await(5, TimeUnit.SECONDS)) { "Timed out waiting for the JavaFX application thread" }
-        failure[0]?.let { throw it }
-        @Suppress("UNCHECKED_CAST")
-        return result[0] as T
-    }
 }
