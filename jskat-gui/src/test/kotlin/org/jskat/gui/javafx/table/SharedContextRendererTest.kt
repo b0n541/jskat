@@ -80,8 +80,8 @@ class SharedContextRendererTest {
 
         assertThat(projection.phaseContent).isEqualTo(ContextPanelType.GAME_OVER)
         assertThat(projection.actions).containsExactly(
-            JSkatAction.READY_TO_PLAY,
-            JSkatAction.LEAVE_ISS_TABLE
+            JSkatAction.LEAVE_ISS_TABLE,
+            JSkatAction.READY_TO_PLAY
         )
     }
 

@@ -129,7 +129,7 @@ class IssTablePanelTest {
 
             tableEvents.post(SkatGameStateChangedEvent(tableName, GameState.GAME_OVER))
             onFxThread { Unit }
-            assertThat(sharedActionButtons(panel).map(Button::getText)).containsExactly("Ready", "Leave table")
+            assertThat(sharedActionButtons(panel).map(Button::getText)).containsExactly("Leave table", "Ready")
             assertThat(trickContentButtons(panel).map(Button::getText)).doesNotContain("Ready", "Leave table")
         } finally {
             JSkatEventBus.TABLE_EVENT_BUSSES.remove(tableName)
