@@ -18,6 +18,8 @@ Build installation with multiple JARs and start scripts: `./gradlew clean instal
 
 Build installation with fat JAR and start scripts: `./gradlew clean assembleDist`
 
+On Linux, run `install-desktop.sh` from the generated installation directory to register JSkat's name and logo with the desktop environment. The entry matches the JavaFX window, so JSkat can still be started directly with `java -jar`.
+
 We build every push to develop with GitHub actions. We also build on every pull request.
 
 We develop according the GitHub flow: https://docs.github.com/en/get-started/using-github/github-flow

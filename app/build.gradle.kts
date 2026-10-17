@@ -58,6 +58,7 @@ val mainClassName = "org.jskat.JSkatKt"
 
 application {
     // Define the main class for the application.
+    applicationName = "JSkat"
     mainClass.set(mainClassName)
 }
 
