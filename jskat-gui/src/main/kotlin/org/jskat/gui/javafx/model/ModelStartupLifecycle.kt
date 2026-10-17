@@ -5,6 +5,7 @@ import javafx.geometry.Insets
 import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.layout.GridPane
+import javafx.stage.Modality
 import javafx.stage.Window
 import org.jskat.ai.ml.ModelCancellation
 import org.jskat.ai.ml.ModelDownloadProgress
@@ -130,6 +131,7 @@ class ModelStartupLifecycle(
 
         init {
             dialog.initOwner(owner)
+            dialog.initModality(Modality.APPLICATION_MODAL)
             dialog.title = "Downloading JSkat model data"
             progressBar.progress = -1.0
             val content = GridPane().apply {

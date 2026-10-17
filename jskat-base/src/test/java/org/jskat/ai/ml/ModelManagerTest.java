@@ -101,6 +101,20 @@ class ModelManagerTest extends AbstractJSkatTest {
         assertThat(Files.readString(store.resolve("active"))).isEqualTo("v1.4.0");
     }
 
+    @Test
+    void aCompleteCandidateBecomesActiveOnlyAfterVerification() throws Exception {
+        final RecordingReleaseService service = new RecordingReleaseService();
+        final ModelReleaseCandidate candidate = new ModelReleaseCandidate(service.release,
+                ModelReleaseManifest.parse(service.manifestJson));
+
+        final ModelInstallResult result = new ModelManager(store, service).install(candidate, ignored -> { });
+
+        assertThat(result.status()).isEqualTo(ModelInstallResult.Status.INSTALLED);
+        assertThat(result.inspection().isAvailable()).isTrue();
+        assertThat(Files.readString(store.resolve("active"))).isEqualTo("v1.4.0");
+        assertThat(Files.isDirectory(store.resolve("staged"))).isTrue();
+    }
+
     private static final class RecordingReleaseService implements ModelReleaseService {
         private final String manifestJson;
         private final RemoteRelease release;
