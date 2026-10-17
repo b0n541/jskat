@@ -9,6 +9,8 @@ import javafx.stage.Screen
 import javafx.stage.Stage
 import org.jskat.control.JSkatEventBus
 import org.jskat.control.JSkatMaster
+import org.jskat.ai.ml.ModelManager
+import org.jskat.gui.javafx.model.ModelStartupLifecycle
 import org.jskat.control.command.general.ExitCommand
 import org.jskat.data.JSkatOptions
 import org.jskat.data.WindowGeometry
@@ -38,8 +40,9 @@ class JSkatFX : Application() {
 
         // TODO: Replace with better approach
         val human = SwingHumanPlayer()
+        val mainWindow = JSkatMainWindowFX()
         val jskatView = JSkatViewFX(
-            JSkatMainWindowFX(),
+            mainWindow,
             human,
             JavaFxHostDocumentOpener(hostServices::showDocument),
             applicationVersion
@@ -84,6 +87,10 @@ class JSkatFX : Application() {
         stage.scene = Scene(jskatView.mainWindow, stage.width, stage.height)
 
         stage.show()
+
+        Platform.runLater {
+            ModelStartupLifecycle(ModelManager(), stage, mainWindow::updateModelInspection).start()
+        }
     }
 
     @Subscribe

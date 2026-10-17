@@ -5,6 +5,8 @@ import java.util.Set;
 public class JSkatPlayerResolver {
 
     public static final String HUMAN_PLAYER_CLASS = "org.jskat.gui.human.SwingHumanPlayer";
+    public static final String ML_PLAYER_CLASS = "org.jskat.ai.ml.MLPlayer";
+    public static final String ML_PLAYER_PRO_CLASS = "org.jskat.ai.ml.MLPlayerPro";
 
     /**
      * Gets all class names including package names of AI player implementations.
@@ -15,8 +17,12 @@ public class JSkatPlayerResolver {
         return Set.of(
                 "org.jskat.ai.rnd.AIPlayerRND",
                 "org.jskat.ai.newalgorithm.AlgorithmAI",
-                "org.jskat.ai.ml.MLPlayer",
-                "org.jskat.ai.ml.MLPlayerPro"
+                ML_PLAYER_CLASS,
+                ML_PLAYER_PRO_CLASS
         );
+    }
+
+    public static boolean isMLPlayer(final String playerType) {
+        return ML_PLAYER_CLASS.equals(playerType) || ML_PLAYER_PRO_CLASS.equals(playerType);
     }
 }

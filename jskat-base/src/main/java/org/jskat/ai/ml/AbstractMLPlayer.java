@@ -11,7 +11,6 @@ import org.jskat.util.rule.SuitRule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,56 +50,14 @@ public abstract class AbstractMLPlayer extends AbstractAIPlayer implements AutoC
     protected boolean bidCalculated = false;
 
     /**
-     * Resolves the default model path, checking multiple locations.
-     * Models are downloaded from skat-ml-models releases via Gradle task.
-     * <p>
-     * Search order:
-     * 1. System property {@code jskat.models.dir} (for fat JAR / custom deployments)
-     * 2. Project-local .jskat/models/ (downloaded by Gradle)
-     * 3-5. Parent directories (for running from submodules)
-     * 6. User home ~/.jskat/models/ (shared across projects)
-     */
-    protected static String getDefaultModelPath(String modelFileName) {
-        List<String> searchPaths = new ArrayList<>();
-
-        // 1. Explicit system property (highest priority)
-        String customDir = System.getProperty("jskat.models.dir");
-        if (customDir != null && !customDir.isEmpty()) {
-            searchPaths.add(customDir + "/" + modelFileName);
-        }
-
-        // 2-5. Project-relative paths (for development / Gradle downloads)
-        searchPaths.add(".jskat/models/" + modelFileName);
-        searchPaths.add("../.jskat/models/" + modelFileName);
-        searchPaths.add("../../.jskat/models/" + modelFileName);
-        searchPaths.add("../../../.jskat/models/" + modelFileName);
-
-        // 6. User home (shared across projects)
-        searchPaths.add(System.getProperty("user.home") + "/.jskat/models/" + modelFileName);
-
-        for (String path : searchPaths) {
-            File file = new File(path);
-            if (file.exists()) {
-                logger.info("Found model at: {}", file.getAbsolutePath());
-                return file.getAbsolutePath();
-            }
-        }
-
-        // Return project-local path as default (Gradle should have downloaded here)
-        String defaultPath = ".jskat/models/" + modelFileName;
-        logger.warn("Model not found. Run './gradlew downloadMlModels' to download " +
-                "or set -Djskat.models.dir=<path>. Trying: {}", defaultPath);
-        return defaultPath;
-    }
-
-    /**
      * Initializes shared models (bidding dense, card play transformer).
      * Subclasses should call this and then initialize their own game evaluation model.
      */
-    protected void initializeSharedModels(String biddingDensePath, String cardPlayTransformerPath) {
+    protected void initializeSharedModels(final ResolvedModelSet models) {
         try {
-            this.biddingDenseModel = new ONNXModelWrapper(biddingDensePath, ONNXModelWrapper.ModelType.BIDDING_DENSE);
-            this.cardPlayTransformerModel = new TransformerModelWrapper(cardPlayTransformerPath);
+            this.biddingDenseModel = new ONNXModelWrapper(models.biddingDense().toString(),
+                    ONNXModelWrapper.ModelType.BIDDING_DENSE);
+            this.cardPlayTransformerModel = new TransformerModelWrapper(models.cardPlayTransformer().toString());
             logger.info("Card play transformer loaded");
         } catch (OrtException | IOException e) {
             logger.error("Failed to load ML models", e);

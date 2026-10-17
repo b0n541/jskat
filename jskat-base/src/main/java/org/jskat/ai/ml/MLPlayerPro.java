@@ -31,40 +31,29 @@ public class MLPlayerPro extends AbstractMLPlayer {
     private PreSkatTransformerWrapper biddingTransformerModel;
 
     /**
-     * Creates a new ML Player Pro with default model paths.
+     * Creates an ML Player Pro from the validated artifacts selected by the model manager.
      */
-    public MLPlayerPro() {
-        this(getDefaultModelPath("bidding_dense.onnx"),
-             getDefaultModelPath("game_eval_transformer.onnx"),
-             getDefaultModelPath("card_play_transformer.onnx"),
-             getDefaultModelPath("bidding_transformer.onnx"));
-    }
-
-    /**
-     * Creates a new ML Player Pro with custom model paths.
-     */
-    public MLPlayerPro(String biddingDensePath, String gameEvalTransformerPath, String cardPlayTransformerPath,
-                       String biddingTransformerPath) {
+    public MLPlayerPro(final ResolvedModelSet models) {
         setPlayerName("MLPlayerPro");
 
         // Initialize shared models (bidding dense, card play transformer)
-        initializeSharedModels(biddingDensePath, cardPlayTransformerPath);
+        initializeSharedModels(models);
 
         // Initialize game evaluation transformer model
         try {
-            this.gameEvalTransformerModel = new CardSetEvaluatorWrapper(gameEvalTransformerPath);
+            this.gameEvalTransformerModel = new CardSetEvaluatorWrapper(models.gameEvalTransformer().toString());
         } catch (OrtException | IOException e) {
             logger.error("Failed to load game evaluation transformer model", e);
             throw new RuntimeException("Cannot initialize MLPlayerPro without game evaluation model", e);
         }
 
         // Initialize bidding transformer (optional - falls back to dense bidding model)
-        if (biddingTransformerPath != null) {
+        if (models.biddingTransformer() != null) {
             try {
-                this.biddingTransformerModel = new PreSkatTransformerWrapper(biddingTransformerPath);
+                this.biddingTransformerModel = new PreSkatTransformerWrapper(models.biddingTransformer().toString());
                 logger.info("Bidding transformer loaded - using attention-based bidding");
             } catch (OrtException | IOException e) {
-                logger.warn("Bidding transformer not found at {}, falling back to dense bidding model", biddingTransformerPath);
+                logger.warn("Bidding transformer could not be loaded, falling back to dense bidding model");
                 this.biddingTransformerModel = null;
             }
         }

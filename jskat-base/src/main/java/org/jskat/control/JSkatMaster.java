@@ -11,6 +11,10 @@ import org.jskat.control.gui.JSkatView;
 import org.jskat.control.gui.action.JSkatAction;
 import org.jskat.control.gui.action.JSkatActionEvent;
 import org.jskat.control.gui.human.AbstractHumanJSkatPlayer;
+import org.jskat.ai.ml.MLPlayerFactory;
+import org.jskat.ai.ml.ModelUnavailable;
+import org.jskat.ai.ml.PlayerCreationResult;
+import org.jskat.ai.ml.ResolvedModelSet;
 import org.jskat.control.iss.IssController;
 import org.jskat.data.GameAnnouncement;
 import org.jskat.data.JSkatApplicationData;
@@ -21,6 +25,7 @@ import org.jskat.player.JSkatPlayer;
 import org.jskat.player.JSkatPlayerResolver;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
+import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.version.VersionChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +46,7 @@ public class JSkatMaster {
 
     private final JSkatOptions options;
     private final JSkatApplicationData data;
+    private final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
     private JSkatView view;
     private final IssController issControl;
 
@@ -170,43 +176,51 @@ public class JSkatMaster {
                             final boolean unlimited,
                             final boolean onlyPlayRamsch, final int sleeps) {
 
+        startSeries(allPlayer, playerNames, numberOfRounds, unlimited, onlyPlayRamsch, sleeps, null);
+    }
+
+    /** Starts a series using the model set established by the startup lifecycle. */
+    public void startSeries(final List<String> allPlayer, final List<String> playerNames, final int numberOfRounds,
+                            final boolean unlimited,
+                            final boolean onlyPlayRamsch, final int sleeps,
+                            final ResolvedModelSet resolvedModels) {
+
         log.debug(data.getActiveTable());
 
         final SkatTable table = data.getLocalSkatTable(data.getActiveTable());
 
-        table.removePlayers();
-
+        final List<JSkatPlayer> players = new java.util.ArrayList<>();
         int playerCount = 0;
         for (final String player : allPlayer) {
             JSkatPlayer newPlayer = null;
             if (JSkatPlayerResolver.HUMAN_PLAYER_CLASS.equals(player)) {
                 newPlayer = data.getHumanPlayer(table.getName());
             } else {
-                newPlayer = createPlayer(player);
+                final PlayerCreationResult creation = MLPlayerFactory.create(player, resolvedModels);
+                if (!creation.isCreated()) {
+                    final ModelUnavailable unavailable = creation.unavailable();
+                    final String message = unavailable != null
+                            ? strings.getString("modelDataUnavailableSession")
+                            : strings.getString("modelPlayerCreationFailed");
+                    if (view != null) {
+                        view.showErrorMessage(strings.getString("cannotStartSeries"), message);
+                    }
+                    return;
+                }
+                newPlayer = creation.player();
             }
             newPlayer.setPlayerName(playerNames.get(playerCount));
-            table.placePlayer(newPlayer);
+            players.add(newPlayer);
             playerCount++;
         }
 
+        table.removePlayers();
+        players.forEach(table::placePlayer);
         table.startSkatSeries(numberOfRounds, unlimited, onlyPlayRamsch, sleeps);
     }
 
     public static JSkatPlayer createPlayer(final String player) {
-        JSkatPlayer newPlayer = null;
-        try {
-            newPlayer = (JSkatPlayer) Class.forName(player).newInstance();
-        } catch (final InstantiationException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (final IllegalAccessException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (final ClassNotFoundException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return newPlayer;
+        return MLPlayerFactory.create(player, null).player();
     }
 
     /**

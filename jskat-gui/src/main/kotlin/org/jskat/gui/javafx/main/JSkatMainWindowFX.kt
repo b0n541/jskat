@@ -33,11 +33,22 @@ import org.jskat.gui.javafx.iss.IssLobbyPanel
 import org.jskat.gui.javafx.iss.IssLoginPanel
 import org.jskat.gui.javafx.iss.IssTablePanel
 import org.jskat.gui.javafx.table.SkatSeriesStartDialog
+import org.jskat.ai.ml.ModelInspection
+import org.jskat.ai.ml.ModelUnavailable
+import org.jskat.ai.ml.ModelUnavailableReason
 import org.jskat.gui.javafx.table.SkatTableNode
 import org.jskat.gui.javafx.table.SkatTablePanel
 import org.jskat.util.JSkatResourceBundle
 
-class JSkatMainWindowFX : VBox() {
+class JSkatMainWindowFX(
+    initialModelInspection: ModelInspection = ModelInspection.unavailable(
+        ModelUnavailable(
+            ModelUnavailableReason.NO_ACTIVE_RELEASE,
+            JSkatResourceBundle.INSTANCE.getString("modelUnavailableDuringStartup"),
+            null
+        )
+    )
+) : VBox() {
 
     private val jskatMaster: JSkatMaster = JSkatMaster.INSTANCE
     private val data: JSkatApplicationData = JSkatApplicationData.INSTANCE
@@ -49,6 +60,7 @@ class JSkatMainWindowFX : VBox() {
     private val toolbar = ToolBar()
     private val toolbarVisibility = JavaFxGlobalControls.ToolbarVisibility()
     private lateinit var issLobby: IssLobbyPanel
+    private var modelInspection: ModelInspection = initialModelInspection
 
     init {
         JSkatEventBus.INSTANCE.register(this)
@@ -166,8 +178,12 @@ class JSkatMainWindowFX : VBox() {
     @Subscribe
     fun onStartSkatSeries(command: StartSkatSeriesCommand) {
         Platform.runLater {
-            SkatSeriesStartDialog(this).showAndWaitAndStartSeries()
+            SkatSeriesStartDialog(this, modelInspection).showAndWaitAndStartSeries()
         }
+    }
+
+    fun updateModelInspection(inspection: ModelInspection) {
+        modelInspection = inspection
     }
 
     @Subscribe
