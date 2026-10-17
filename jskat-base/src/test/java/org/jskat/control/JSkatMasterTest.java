@@ -70,7 +70,7 @@ public class JSkatMasterTest extends AbstractJSkatTest {
                     .findFirst()
                     .orElseThrow();
 
-            assertTrue(player.isKIPlayer());
+            assertTrue(player.isAIPlayer());
         } finally {
             JSkatApplicationData.INSTANCE.removeAvailableISSPlayer(playerName);
         }

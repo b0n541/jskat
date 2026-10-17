@@ -90,7 +90,7 @@ class IssPlayerInvitationDialogTest {
     private fun player(login: String, isAI: Boolean = false, strength: Double = 1234.56) = PlayerData().apply {
         this.login = login
         this.strength = strength
-        isKIPlayer = isAI
+        setAIPlayer(isAI)
     }
 
     private fun invitationButton(dialog: IssPlayerInvitationDialog, login: String): Button =

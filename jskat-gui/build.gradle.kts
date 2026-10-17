@@ -10,7 +10,7 @@ dependencies {
 
 javafx {
     modules = listOf("javafx.base", "javafx.fxml", "javafx.web")
-    version = "26.0.2"
+    version = "27"
 }
 
 tasks.named<Jar>("jar") {
