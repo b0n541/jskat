@@ -45,11 +45,11 @@ public class PlayerData {
         this.strength = strength;
     }
 
-    public void setKIPlayer(boolean isKIPlayer) {
+    public void setAIPlayer(boolean isKIPlayer) {
         this.isKIPlayer = isKIPlayer;
     }
 
-    public boolean isKIPlayer() {
+    public boolean isAIPlayer() {
         return isKIPlayer;
     }
 

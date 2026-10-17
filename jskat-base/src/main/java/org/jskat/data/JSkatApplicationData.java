@@ -174,9 +174,20 @@ public class JSkatApplicationData {
     }
 
     /**
+     * Checks whether an ISS player is identified as an AI player in the available-player list.
+     *
+     * @param playerName ISS login name
+     * @return {@code true} if the player is identified as an AI player
+     */
+    public synchronized boolean isAvailableISSAIPlayer(final String playerName) {
+        final PlayerData player = availableIssPlayers.get(playerName);
+        return player != null && player.isAIPlayer();
+    }
+
+    /**
      * Adds an available player on ISS
      */
-    public void updateAvailableISSPlayer(
+    synchronized public void updateAvailableISSPlayer(
             final String playerName,
             final String language,
             final long gamesPlayed,
@@ -184,7 +195,7 @@ public class JSkatApplicationData {
         final PlayerData player = availableIssPlayers.computeIfAbsent(playerName, ignored -> new PlayerData());
         player.setLogin(playerName);
         player.setLanguages(language);
-        player.setKIPlayer("-".equals(language));
+        player.setAIPlayer("-".equals(language));
         player.setGamesPlayed(gamesPlayed);
         player.setStrength(strength);
     }
@@ -203,7 +214,7 @@ public class JSkatApplicationData {
      *
      * @param player Player to be removed
      */
-    public void removeAvailableISSPlayer(final String player) {
+    synchronized public void removeAvailableISSPlayer(final String player) {
         availableIssPlayers.remove(player);
     }
 

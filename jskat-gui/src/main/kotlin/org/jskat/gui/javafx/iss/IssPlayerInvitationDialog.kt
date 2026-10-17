@@ -10,7 +10,7 @@ import javafx.scene.layout.VBox
 import org.jskat.data.iss.PlayerData
 import org.jskat.gui.img.JSkatGraphicRepository
 import org.jskat.util.JSkatResourceBundle
-import java.util.Locale
+import java.util.*
 
 class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<String>>() {
 
@@ -34,8 +34,12 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
                 invitations.getOrNull(index)?.let { player ->
                     Button(strings.getString("issInvitationOccupiedPlace", index + 1, player.login)).apply {
                         id = "invitation-place-$index"
-                        accessibleText = strings.getString("issInvitationRemovePlayerFromPlace", player.login, index + 1)
-                        graphic = bitmaps.getImageView(JSkatGraphicRepository.Icon.CLOSE, JSkatGraphicRepository.IconSize.SMALL)
+                        accessibleText =
+                            strings.getString("issInvitationRemovePlayerFromPlace", player.login, index + 1)
+                        graphic = bitmaps.getImageView(
+                            JSkatGraphicRepository.Icon.CLOSE,
+                            JSkatGraphicRepository.IconSize.SMALL
+                        )
                         contentDisplay = ContentDisplay.RIGHT
                         graphicTextGap = 10.0
                         setSlotWidth()
@@ -67,8 +71,8 @@ class IssPlayerInvitationDialog(players: Collection<PlayerData>) : Dialog<List<S
                             minHeight = PLAYER_BUTTON_HEIGHT
                             prefHeight = PLAYER_BUTTON_HEIGHT
                             maxHeight = PLAYER_BUTTON_HEIGHT
-                            isDisable = invitations.size == MAXIMUM_INVITATIONS ||
-                                (!player.isKIPlayer && player in invitations)
+                            isDisable =
+                                invitations.size == MAXIMUM_INVITATIONS || (!player.isAIPlayer && player in invitations)
                             setOnAction {
                                 invitations += player
                                 refresh()

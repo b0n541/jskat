@@ -28,6 +28,10 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Controls all ISS related actions
@@ -51,6 +55,8 @@ public class IssController {
 
     private final Map<String, SkatGameData> gameData;
     private final Map<String, IssSkatCardTransferHandler> skatCardTransferHandlers;
+    private final Map<String, Set<Player>> aiPlayersByTable;
+    private final Map<String, CompletableFuture<Void>> gameUpdateChains;
 
     /**
      * Constructor
@@ -60,8 +66,10 @@ public class IssController {
     public IssController(final JSkatMaster jskatMaster) {
 
         jskat = jskatMaster;
-        gameData = new HashMap<>();
+        gameData = new ConcurrentHashMap<>();
         skatCardTransferHandlers = new HashMap<>();
+        aiPlayersByTable = new ConcurrentHashMap<>();
+        gameUpdateChains = new HashMap<>();
 
         eventBus.register(this);
     }
@@ -305,6 +313,7 @@ public class IssController {
      * @param tableName Table name
      */
     public void leaveTable(final String tableName) {
+        aiPlayersByTable.remove(tableName);
         sendToIss(issMsg.getLeaveTableMessage(tableName));
     }
 
@@ -325,8 +334,18 @@ public class IssController {
      * @param status    New game status
      */
     public void updateISSGame(final String tableName, final GameStartInformation status) {
-        eventBus.post(new IssTableGameStartedEvent(tableName, status));
-        gameData.put(tableName, createSkatGameData(status));
+        final Set<Player> aiPlayers = ConcurrentHashMap.newKeySet();
+        for (final Player player : Player.values()) {
+            if (appData.isAvailableISSAIPlayer(status.playerNames().get(player))) {
+                aiPlayers.add(player);
+            }
+        }
+        aiPlayersByTable.put(tableName, aiPlayers);
+
+        enqueueGameUpdate(tableName, false, () -> {
+            eventBus.post(new IssTableGameStartedEvent(tableName, status));
+            gameData.put(tableName, createSkatGameData(status));
+        });
     }
 
     private static SkatGameData createSkatGameData(final GameStartInformation status) {
@@ -347,6 +366,14 @@ public class IssController {
      * @param moveInformation Move information
      */
     public void updateMove(final String tableName, final MoveInformation moveInformation) {
+        final Player movePlayer = moveInformation.getPlayer();
+        final boolean aiMove = movePlayer != null && aiPlayersByTable
+                .getOrDefault(tableName, Set.of())
+                .contains(movePlayer);
+        enqueueGameUpdate(tableName, aiMove, () -> applyMove(tableName, moveInformation));
+    }
+
+    private void applyMove(final String tableName, final MoveInformation moveInformation) {
         final SkatGameData currGame = gameData.get(tableName);
         updateGameData(currGame, moveInformation);
 
@@ -483,6 +510,10 @@ public class IssController {
      * @param newGameData Game data
      */
     public void endGame(final String tableName, final SkatGameData newGameData) {
+        enqueueGameUpdate(tableName, false, () -> applyEndGame(tableName, newGameData));
+    }
+
+    private void applyEndGame(final String tableName, final SkatGameData newGameData) {
         // If summary has ouvert but no cards, get them from live game data
         final SkatGameData liveGame = gameData.get(tableName);
         if (liveGame != null
@@ -509,6 +540,38 @@ public class IssController {
         eventBus.post(new TableGameMoveEvent(tableName, new GameFinishEvent(newGameData.getPlayerName(newGameData.getDeclarer()), newGameData.getGameSummary())));
         eventBus.post(new ShowCardsCommand(tableName, newGameData.getCardsAfterDiscard(), newGameData.getSkat()));
         gameData.put(tableName, newGameData);
+    }
+
+    /**
+     * Serializes ISS game updates per table and adds a short presentation gap before AI moves.
+     * The delayed executor keeps the ISS network reader free while preserving move order.
+     */
+    private synchronized void enqueueGameUpdate(
+            final String tableName,
+            final boolean delay,
+            final Runnable update) {
+        CompletableFuture<Void> nextUpdate = gameUpdateChains
+                .getOrDefault(tableName, CompletableFuture.completedFuture(null))
+                .handle((ignored, failure) -> null);
+
+        if (delay) {
+            nextUpdate = nextUpdate.thenCompose(ignored -> CompletableFuture.runAsync(
+                    () -> {
+                    }, CompletableFuture.delayedExecutor(200, TimeUnit.MILLISECONDS)));
+        }
+
+        final CompletableFuture<Void> queuedUpdate = nextUpdate.thenRun(update);
+        gameUpdateChains.put(tableName, queuedUpdate);
+        queuedUpdate.whenComplete((ignored, failure) -> {
+            if (failure != null) {
+                log.error("Failed to process ISS game update for table {}", tableName, failure);
+            }
+            synchronized (IssController.this) {
+                if (gameUpdateChains.get(tableName) == queuedUpdate) {
+                    gameUpdateChains.remove(tableName);
+                }
+            }
+        });
     }
 
     /**
