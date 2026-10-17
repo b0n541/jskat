@@ -1,6 +1,5 @@
 package org.jskat.gui.javafx.table
 
-import javafx.application.Platform
 import javafx.scene.control.Label
 import javafx.scene.image.Image
 import javafx.scene.image.ImageView
@@ -20,12 +19,10 @@ class BidBubblePanel(bubbleImage: Image) : StackPane() {
     }
 
     fun setBidValue(bidValue: Int) {
-        Platform.runLater {
-            if (bidValue > -1) {
-                bidLabel.text = bidValue.toString()
-            } else {
-                bidLabel.text = "X"
-            }
+        if (bidValue > -1) {
+            bidLabel.text = bidValue.toString()
+        } else {
+            bidLabel.text = "X"
         }
     }
 }

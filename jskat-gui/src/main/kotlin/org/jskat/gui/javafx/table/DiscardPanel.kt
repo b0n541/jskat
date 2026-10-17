@@ -1,6 +1,5 @@
 package org.jskat.gui.javafx.table
 
-import javafx.application.Platform
 import javafx.geometry.Pos
 import javafx.geometry.Rectangle2D
 import javafx.scene.control.Button
@@ -63,36 +62,28 @@ class DiscardPanel(
     }
 
     fun clearSkat() {
-        Platform.runLater {
-            cards.clear()
-            updateView()
-        }
+        cards.clear()
+        updateView()
     }
 
     fun addCard(card: Card) {
-        Platform.runLater {
-            if (cards.size() < maxCardCount) {
-                cards.add(card)
-                updateView()
-            }
+        if (cards.size() < maxCardCount) {
+            cards.add(card)
+            updateView()
         }
     }
 
     fun removeCard(card: Card) {
-        Platform.runLater {
-            cards.remove(card)
-            updateView()
-        }
+        cards.remove(card)
+        updateView()
     }
 
     fun resetPanel() {
-        Platform.runLater {
-            userPickedUpSkat = false
-            cards.clear()
-            updateView()
-            pickUpSkatButton.isDisable = false
-            children.clear()
-        }
+        userPickedUpSkat = false
+        cards.clear()
+        updateView()
+        pickUpSkatButton.isDisable = false
+        children.clear()
     }
 
     fun isHandFull(): Boolean {

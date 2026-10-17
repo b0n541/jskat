@@ -1,6 +1,5 @@
 package org.jskat.gui.javafx.table
 
-import javafx.application.Platform
 import javafx.geometry.HPos
 import javafx.geometry.Pos
 import javafx.scene.control.Button
@@ -139,26 +138,20 @@ class BiddingContextPanel(
 
     fun setNextBidValue(bidValue: Int) {
         currentBidAction = makeBidAction
-        Platform.runLater {
-            bidButton.text = bidValue.toString()
-        }
+        bidButton.text = bidValue.toString()
     }
 
     fun setBidValueToHold(bidValue: Int) {
         currentBidAction = holdBidAction
-        Platform.runLater {
-            bidButton.text = bidValue.toString()
-        }
+        bidButton.text = bidValue.toString()
     }
 
     fun resetPanel() {
-        Platform.runLater {
-            foreHandBidLabel?.setBidValue(0)
-            middleHandBidLabel?.setBidValue(0)
-            rearHandBidLabel?.setBidValue(0)
-            setNextBidValue(18)
-            announcePanel.resetPanel()
-        }
+        foreHandBidLabel?.setBidValue(0)
+        middleHandBidLabel?.setBidValue(0)
+        rearHandBidLabel?.setBidValue(0)
+        setNextBidValue(18)
+        announcePanel.resetPanel()
     }
 
     fun selectedGameType(): GameType? = announcePanel.selectedGameType()

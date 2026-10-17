@@ -173,15 +173,11 @@ class IssTablePanel(tableName: String, actions: Map<JSkatAction, AbstractJSkatAc
     }
 
     private fun setPlayerReadyToPlay(playerName: String, readyToPlay: Boolean) {
-        // Platform.runLater {
         super.getHandPanel(playerName)?.setReadyToPlay(readyToPlay)
-        // }
     }
 
     private fun setPlayerChatEnabled(playerName: String, chatEnabled: Boolean) {
-        // Platform.runLater {
         super.getHandPanel(playerName)?.setChatEnabled(chatEnabled)
-        // }
     }
 
     fun getChatPanel(): IssChatPanel {

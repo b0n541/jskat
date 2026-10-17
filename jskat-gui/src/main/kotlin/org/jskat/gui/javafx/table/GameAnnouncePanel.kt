@@ -1,6 +1,5 @@
 package org.jskat.gui.javafx.table
 
-import javafx.application.Platform
 import javafx.geometry.Insets
 import javafx.geometry.HPos
 import javafx.geometry.Pos
@@ -134,9 +133,7 @@ class GameAnnouncePanel(
     }
 
     private fun updateGameType(gameType: GameType) {
-        Platform.runLater {
-            userPanel.setSortGameType(gameType)
-        }
+        userPanel.setSortGameType(gameType)
 
         if (userPickedUpSkat) {
             ouvertBox.isDisable = (gameType != GameType.NULL)
@@ -163,16 +160,8 @@ class GameAnnouncePanel(
     }
 
     fun selectGameType(gameType: GameType?) {
-        val select = {
-            val toggle = gameTypeGroup.toggles.firstOrNull { it.userData == gameType }
-            gameTypeGroup.selectToggle(toggle)
-        }
-
-        if (Platform.isFxApplicationThread()) {
-            select()
-        } else {
-            Platform.runLater(select)
-        }
+        val toggle = gameTypeGroup.toggles.firstOrNull { it.userData == gameType }
+        gameTypeGroup.selectToggle(toggle)
     }
 
     private fun announceGame() {
@@ -223,29 +212,25 @@ class GameAnnouncePanel(
     }
 
     fun resetPanel() {
-        Platform.runLater {
-            selectGameType(null)
-            handBox.isSelected = true
-            ouvertBox.isSelected = false
-            schneiderBox.isSelected = false
-            schwarzBox.isSelected = false
-        }
+        selectGameType(null)
+        handBox.isSelected = true
+        ouvertBox.isSelected = false
+        schneiderBox.isSelected = false
+        schwarzBox.isSelected = false
     }
 
     fun setUserPickedUpSkat(isUserPickedUpSkat: Boolean) {
-        Platform.runLater {
-            userPickedUpSkat = isUserPickedUpSkat
-            if (isUserPickedUpSkat) {
-                handBox.isSelected = false
-                ouvertBox.isDisable = (GameType.NULL == selectedGameType())
-                schneiderBox.isDisable = true
-                schwarzBox.isDisable = true
-            } else {
-                handBox.isSelected = true
-                ouvertBox.isDisable = false
-                schneiderBox.isDisable = true
-                schwarzBox.isDisable = true
-            }
+        userPickedUpSkat = isUserPickedUpSkat
+        if (isUserPickedUpSkat) {
+            handBox.isSelected = false
+            ouvertBox.isDisable = (GameType.NULL == selectedGameType())
+            schneiderBox.isDisable = true
+            schwarzBox.isDisable = true
+        } else {
+            handBox.isSelected = true
+            ouvertBox.isDisable = false
+            schneiderBox.isDisable = true
+            schwarzBox.isDisable = true
         }
     }
 }

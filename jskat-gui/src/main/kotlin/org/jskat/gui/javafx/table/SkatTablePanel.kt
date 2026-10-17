@@ -642,7 +642,7 @@ open class SkatTablePanel(val tableName: String, protected val actions: Map<JSka
     }
 
     fun setDiscardedSkat(player: Player, skatBefore: CardList, discardedSkat: CardList) {
-        Platform.runLater {
+        runOnFxThread {
             for (card in skatBefore) {
                 takeCardFromSkat(player, card)
             }

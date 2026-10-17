@@ -1,6 +1,5 @@
 package org.jskat.gui.javafx.table
 
-import javafx.application.Platform
 import javafx.scene.image.ImageView
 import javafx.scene.layout.Pane
 import javafx.scene.paint.Color
@@ -36,37 +35,31 @@ class TrickPanel(
     }
 
     fun addCard(player: Player, card: Card) {
-        Platform.runLater {
-            positions.add(player)
-            trick.add(card)
+        positions.add(player)
+        trick.add(card)
 
-            if (randomPlacement) {
-                cardRotations.add(0.5 * rand.nextDouble() - 0.25)
-            } else {
-                cardRotations.add(0.0)
-            }
-            requestLayout()
+        if (randomPlacement) {
+            cardRotations.add(0.5 * rand.nextDouble() - 0.25)
+        } else {
+            cardRotations.add(0.0)
         }
+        requestLayout()
     }
 
     fun removeCard() {
-        Platform.runLater {
-            if (positions.isNotEmpty()) {
-                positions.removeAt(positions.size - 1)
-                trick.removeAt(trick.size - 1)
-                cardRotations.removeAt(cardRotations.size - 1)
-                requestLayout()
-            }
+        if (positions.isNotEmpty()) {
+            positions.removeAt(positions.size - 1)
+            trick.removeAt(trick.size - 1)
+            cardRotations.removeAt(cardRotations.size - 1)
+            requestLayout()
         }
     }
 
     fun clearCards() {
-        Platform.runLater {
-            positions.clear()
-            trick.clear()
-            cardRotations.clear()
-            requestLayout()
-        }
+        positions.clear()
+        trick.clear()
+        cardRotations.clear()
+        requestLayout()
     }
 
     override fun layoutChildren() {
@@ -156,12 +149,10 @@ class TrickPanel(
         get() = cardFace != jskatOptions.cardSet.cardFace
 
     fun setUserPosition(newUserPosition: Player) {
-        Platform.runLater {
-            userPosition = newUserPosition
-            leftOpponent = userPosition!!.leftNeighbor
-            rightOpponent = userPosition!!.rightNeighbor
-            requestLayout()
-        }
+        userPosition = newUserPosition
+        leftOpponent = userPosition!!.leftNeighbor
+        rightOpponent = userPosition!!.rightNeighbor
+        requestLayout()
     }
 
     companion object {
