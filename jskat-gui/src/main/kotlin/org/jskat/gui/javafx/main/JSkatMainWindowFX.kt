@@ -44,7 +44,7 @@ class JSkatMainWindowFX(
     initialModelInspection: ModelInspection = ModelInspection.unavailable(
         ModelUnavailable(
             ModelUnavailableReason.NO_ACTIVE_RELEASE,
-            "ML models were not made available during startup",
+            JSkatResourceBundle.INSTANCE.getString("modelUnavailableDuringStartup"),
             null
         )
     )

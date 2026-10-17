@@ -25,6 +25,7 @@ import org.jskat.player.JSkatPlayer;
 import org.jskat.player.JSkatPlayerResolver;
 import org.jskat.util.Card;
 import org.jskat.util.CardList;
+import org.jskat.util.JSkatResourceBundle;
 import org.jskat.util.version.VersionChecker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,7 @@ public class JSkatMaster {
 
     private final JSkatOptions options;
     private final JSkatApplicationData data;
+    private final JSkatResourceBundle strings = JSkatResourceBundle.INSTANCE;
     private JSkatView view;
     private final IssController issControl;
 
@@ -198,10 +200,10 @@ public class JSkatMaster {
                 if (!creation.isCreated()) {
                     final ModelUnavailable unavailable = creation.unavailable();
                     final String message = unavailable != null
-                            ? unavailable.message()
-                            : creation.failureMessage();
+                            ? strings.getString("modelDataUnavailableSession")
+                            : strings.getString("modelPlayerCreationFailed");
                     if (view != null) {
-                        view.showErrorMessage("Cannot start series", message);
+                        view.showErrorMessage(strings.getString("cannotStartSeries"), message);
                     }
                     return;
                 }

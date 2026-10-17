@@ -6,9 +6,9 @@ import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.layout.GridPane
 import javafx.util.Callback
-import org.jskat.control.JSkatMaster
 import org.jskat.ai.ml.ModelInspection
 import org.jskat.ai.ml.ModelUnavailableReason
+import org.jskat.control.JSkatMaster
 import org.jskat.data.JSkatOptions
 import org.jskat.player.JSkatPlayerResolver
 import org.jskat.util.JSkatResourceBundle
@@ -23,7 +23,7 @@ class SkatSeriesStartDialog(
     private val modelInspection: ModelInspection = ModelInspection.unavailable(
         org.jskat.ai.ml.ModelUnavailable(
             ModelUnavailableReason.NO_ACTIVE_RELEASE,
-            "ML models were not made available during startup",
+            JSkatResourceBundle.INSTANCE.getString("modelUnavailableDuringStartup"),
             null
         )
     )
@@ -42,6 +42,7 @@ class SkatSeriesStartDialog(
 
     private val strings = JSkatResourceBundle.INSTANCE
     private val options = JSkatOptions.instance()
+    private val ownerWindow = owner?.scene?.window
 
     private val dialog = Dialog<SeriesConfiguration>()
 
@@ -61,7 +62,7 @@ class SkatSeriesStartDialog(
         // TODO: add a different string for the dialog header
         dialog.headerText = strings.getString("startSeries")
         // Use a safe call to handle the nullable owner
-        dialog.initOwner(owner?.scene?.window)
+        dialog.initOwner(ownerWindow)
 
         dialog.dialogPane.content = createContentPane()
         setupButtons()
@@ -148,7 +149,7 @@ class SkatSeriesStartDialog(
                     title = strings.getString("startSeries")
                     headerText = null
                     contentText = unavailableReason()
-                    initOwner(dialog.dialogPane.scene?.window)
+                    initOwner(ownerWindow)
                 }.showAndWait()
                 event.consume()
             }
@@ -194,8 +195,22 @@ class SkatSeriesStartDialog(
     }
 
     private fun unavailableReason(): String =
-        modelInspection.unavailable()?.message()
-            ?: "ML models are unavailable for this session"
+        modelInspection.unavailable()?.reason()?.let { reason ->
+            strings.getString(
+                when (reason) {
+                    ModelUnavailableReason.NO_ACTIVE_RELEASE -> "modelUnavailableNoActiveRelease"
+                    ModelUnavailableReason.ACTIVE_MARKER_INVALID -> "modelUnavailableActiveMarkerInvalid"
+                    ModelUnavailableReason.ACTIVE_RELEASE_MISSING -> "modelUnavailableActiveReleaseMissing"
+                    ModelUnavailableReason.MANIFEST_MISSING -> "modelUnavailableManifestMissing"
+                    ModelUnavailableReason.MANIFEST_INVALID -> "modelUnavailableManifestInvalid"
+                    ModelUnavailableReason.UNSUPPORTED_VERSION -> "modelUnavailableUnsupportedVersion"
+                    ModelUnavailableReason.RELEASE_TAG_MISMATCH -> "modelUnavailableReleaseTagMismatch"
+                    ModelUnavailableReason.REQUIRED_FILE_MISSING -> "modelUnavailableRequiredFileMissing"
+                    ModelUnavailableReason.FILE_SIZE_MISMATCH -> "modelUnavailableFileSizeMismatch"
+                    ModelUnavailableReason.FILE_HASH_MISMATCH -> "modelUnavailableFileHashMismatch"
+                }
+            )
+        } ?: strings.getString("modelDataUnavailableSession")
 
     /**
      * Custom ListCell to display human-readable player type names.
@@ -215,8 +230,8 @@ class SkatSeriesStartDialog(
                 JSkatPlayerResolver.HUMAN_PLAYER_CLASS -> strings.getString("humanPlayer")
                 else -> item
             }
-            isDisable = !empty && item != null && JSkatPlayerResolver.isMLPlayer(item)
-                && !modelInspection.isAvailable
+            isDisable = !empty && item != null && JSkatPlayerResolver.isMLPlayer(item) && !modelInspection.isAvailable
+
             if (isDisable) {
                 tooltip = Tooltip(unavailableReason())
             }

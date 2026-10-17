@@ -2,19 +2,15 @@ package org.jskat.gui.javafx.model
 
 import javafx.application.Platform
 import javafx.geometry.Insets
-import javafx.scene.Node
 import javafx.scene.control.*
 import javafx.scene.layout.GridPane
 import javafx.stage.Modality
 import javafx.stage.Window
-import org.jskat.ai.ml.ModelCancellation
-import org.jskat.ai.ml.ModelDownloadProgress
-import org.jskat.ai.ml.ModelInspection
-import org.jskat.ai.ml.ModelInstallResult
-import org.jskat.ai.ml.ModelManager
-import org.jskat.ai.ml.ModelUpdateResult
+import org.jskat.ai.ml.*
+import org.jskat.util.JSkatResourceBundle
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicBoolean
+
 
 /** JavaFX adapter for the startup-only model lifecycle. */
 class ModelStartupLifecycle(
@@ -22,6 +18,8 @@ class ModelStartupLifecycle(
     private val owner: Window,
     private val publishInspection: (ModelInspection) -> Unit
 ) {
+
+    private val strings = JSkatResourceBundle.INSTANCE
 
     fun start() {
         val local = manager.inspectLocalAvailability()
@@ -39,61 +37,72 @@ class ModelStartupLifecycle(
             ModelUpdateResult.Status.AVAILABLE -> {
                 val candidate = result.candidate() ?: return
                 if (local.isAvailable) {
+                    val updateNow = ButtonType(strings.getString("modelUpdateNow"))
+                    val later = ButtonType(strings.getString("modelLater"))
                     val choice = Alert(Alert.AlertType.CONFIRMATION).apply {
                         initOwner(owner)
-                        title = "JSkat model update"
-                        headerText = "Model release ${candidate.manifest.version()} is available"
-                        contentText = "Update now or keep the installed release ${local.installedVersion()}?"
-                        buttonTypes.setAll(ButtonType("Update now"), ButtonType("Later"))
-                    }.showAndWait().orElse(ButtonType("Later"))
-                    if (choice.text == "Update now") {
+                        title = strings.getString("modelUpdateTitle")
+                        headerText = strings.getString("modelUpdateAvailable", candidate.manifest.version())
+                        contentText = strings.getString("modelUpdatePrompt", local.installedVersion())
+                        buttonTypes.setAll(updateNow, later)
+                    }.also { centerAlertOnOwner(it) }
+                        .showAndWait().orElse(later)
+                    if (choice == updateNow) {
                         download(candidate, local)
                     }
                 } else {
+                    val download = ButtonType(strings.getString("modelDownload"))
+                    val continueButton = ButtonType(strings.getString("modelContinue"))
                     val choice = Alert(Alert.AlertType.CONFIRMATION).apply {
                         initOwner(owner)
-                        title = "JSkat model data"
-                        headerText = "ML model data is not installed"
-                        contentText = "Download the model data now? ML player types stay disabled if you continue."
-                        buttonTypes.setAll(ButtonType("Download"), ButtonType("Continue"))
-                    }.showAndWait().orElse(ButtonType("Continue"))
-                    if (choice.text == "Download") {
+                        title = strings.getString("modelDataTitle")
+                        headerText = strings.getString("modelDataNotInstalled")
+                        contentText = strings.getString("modelDataDownloadPrompt")
+                        buttonTypes.setAll(download, continueButton)
+                    }.also { centerAlertOnOwner(it) }
+                        .showAndWait().orElse(continueButton)
+                    if (choice == download) {
                         download(candidate, local)
                     }
                 }
             }
+
             ModelUpdateResult.Status.UP_TO_DATE -> publishInspection(manager.inspectLocalAvailability())
             ModelUpdateResult.Status.UNSUPPORTED,
-            ModelUpdateResult.Status.FAILED -> showCheckFailure(local, result.message())
+            ModelUpdateResult.Status.FAILED -> showCheckFailure(local, result)
         }
     }
 
-    private fun showCheckFailure(local: ModelInspection, message: String) {
+    private fun showCheckFailure(local: ModelInspection, result: ModelUpdateResult) {
         val installed = if (local.isAvailable) {
-            "Installed model release ${local.installedVersion()} remains usable."
+            strings.getString("modelInstalledReleaseUsable", local.installedVersion())
         } else {
-            "Model data and ML players are unavailable for this session."
+            strings.getString("modelDataUnavailableSession")
         }
+        val retryButton = ButtonType(strings.getString("modelRetry"))
+        val continueButton = ButtonType(strings.getString("modelContinue"))
         val retry = Alert(Alert.AlertType.ERROR).apply {
             initOwner(owner)
-            title = "JSkat model check failed"
-            headerText = message
-            contentText = "$installed\nChoose Retry to repeat the startup check or Continue to open JSkat."
-            buttonTypes.setAll(ButtonType("Retry"), ButtonType("Continue"))
-        }.showAndWait().orElse(ButtonType("Continue"))
-        if (retry.text == "Retry") {
+            title = strings.getString("modelCheckFailedTitle")
+            headerText = unavailableMessage(result.reason())
+            contentText = strings.getString("modelCheckFailurePrompt", installed)
+            buttonTypes.setAll(retryButton, continueButton)
+        }.also { centerAlertOnOwner(it) }
+            .showAndWait().orElse(continueButton)
+        if (retry == retryButton) {
             checkAndPresent(manager.inspectLocalAvailability())
         } else {
             publishInspection(manager.inspectLocalAvailability())
         }
     }
 
-    private fun download(candidate: org.jskat.ai.ml.ModelReleaseCandidate, previous: ModelInspection) {
+    private fun download(candidate: ModelReleaseCandidate, previous: ModelInspection) {
         val progress = DownloadProgressDialog(owner)
         progress.show()
         val cancelled = AtomicBoolean(false)
         CompletableFuture.supplyAsync {
-            manager.install(candidate, { update -> Platform.runLater { progress.update(update) } },
+            manager.install(
+                candidate, { update -> Platform.runLater { progress.update(update) } },
                 ModelCancellation { cancelled.get() })
         }.thenAccept { result ->
             Platform.runLater {
@@ -103,17 +112,19 @@ class ModelStartupLifecycle(
                     ModelInstallResult.Status.CANCELLED -> publishInspection(
                         result.inspection() ?: previous
                     )
+
                     ModelInstallResult.Status.FAILED -> {
                         Alert(Alert.AlertType.ERROR).apply {
                             initOwner(owner)
-                            title = "JSkat model installation failed"
-                            headerText = result.message()
+                            title = strings.getString("modelInstallationFailedTitle")
+                            headerText = strings.getString("modelInstallationFailedTitle")
                             contentText = if (previous.isAvailable) {
-                                "Installed model release ${previous.installedVersion()} remains usable."
+                                strings.getString("modelInstalledReleaseUsable", previous.installedVersion())
                             } else {
-                                "Model data and ML players are unavailable for this session."
+                                strings.getString("modelDataUnavailableSession")
                             }
-                        }.showAndWait()
+                        }.also { centerAlertOnOwner(it) }
+                            .showAndWait()
                         publishInspection(result.inspection() ?: previous)
                     }
                 }
@@ -122,17 +133,44 @@ class ModelStartupLifecycle(
         progress.onCancel = { cancelled.set(true) }
     }
 
-    private class DownloadProgressDialog(owner: Window) {
+    private fun centerAlertOnOwner(alert: Alert) {
+        val ownerScene = owner.scene ?: return
+        alert.dialogPane.applyCss()
+        alert.dialogPane.layout()
+
+        val alertWidth = alert.dialogPane.prefWidth(-1.0)
+        val alertHeight = alert.dialogPane.prefHeight(alertWidth)
+        alert.x = owner.x + (ownerScene.width - alertWidth) / 2.0
+        alert.y = owner.y + ownerScene.y / 2.0 + (ownerScene.height - alertHeight) / 2.0
+    }
+
+    private fun unavailableMessage(reason: ModelUnavailableReason?): String = strings.getString(
+        when (reason) {
+            ModelUnavailableReason.NO_ACTIVE_RELEASE -> "modelUnavailableNoActiveRelease"
+            ModelUnavailableReason.ACTIVE_MARKER_INVALID -> "modelUnavailableActiveMarkerInvalid"
+            ModelUnavailableReason.ACTIVE_RELEASE_MISSING -> "modelUnavailableActiveReleaseMissing"
+            ModelUnavailableReason.MANIFEST_MISSING -> "modelUnavailableManifestMissing"
+            ModelUnavailableReason.MANIFEST_INVALID -> "modelUnavailableManifestInvalid"
+            ModelUnavailableReason.UNSUPPORTED_VERSION -> "modelUnavailableUnsupportedVersion"
+            ModelUnavailableReason.RELEASE_TAG_MISMATCH -> "modelUnavailableReleaseTagMismatch"
+            ModelUnavailableReason.REQUIRED_FILE_MISSING -> "modelUnavailableRequiredFileMissing"
+            ModelUnavailableReason.FILE_SIZE_MISMATCH -> "modelUnavailableFileSizeMismatch"
+            ModelUnavailableReason.FILE_HASH_MISMATCH -> "modelUnavailableFileHashMismatch"
+            null -> "modelCheckUnknownFailure"
+        }
+    )
+
+    private inner class DownloadProgressDialog(owner: Window) {
         private val dialog = Dialog<Void>()
         private val progressBar = ProgressBar()
-        private val currentFile = Label("Contacting model service…")
+        private val currentFile = Label(strings.getString("modelContactingService"))
         private val totals = Label("")
         var onCancel: (() -> Unit)? = null
 
         init {
             dialog.initOwner(owner)
             dialog.initModality(Modality.APPLICATION_MODAL)
-            dialog.title = "Downloading JSkat model data"
+            dialog.title = strings.getString("modelDownloadTitle")
             progressBar.progress = -1.0
             val content = GridPane().apply {
                 hgap = 10.0
@@ -143,9 +181,10 @@ class ModelStartupLifecycle(
                 add(totals, 0, 2)
             }
             dialog.dialogPane.content = content
-            dialog.dialogPane.buttonTypes.add(ButtonType.CANCEL)
+            val cancelButton = ButtonType(strings.getString("cancel"), ButtonBar.ButtonData.CANCEL_CLOSE)
+            dialog.dialogPane.buttonTypes.add(cancelButton)
             dialog.setOnCloseRequest { onCancel?.invoke() }
-            dialog.dialogPane.lookupButton(ButtonType.CANCEL).setOnMouseClicked { onCancel?.invoke() }
+            dialog.dialogPane.lookupButton(cancelButton).setOnMouseClicked { onCancel?.invoke() }
         }
 
         fun show() = dialog.show()
@@ -158,9 +197,14 @@ class ModelStartupLifecycle(
             } else if (progress.totalBytes() > 0) {
                 progressBar.progress = progress.downloadedBytes().toDouble() / progress.totalBytes()
             }
-            currentFile.text = progress.currentFile() ?: "Contacting model service…"
-            totals.text = "${progress.downloadedBytes()} / ${progress.totalBytes()} bytes; " +
-                "${progress.completedFiles()} / ${progress.totalFiles()} files"
+            currentFile.text = progress.currentFile() ?: strings.getString("modelContactingService")
+            totals.text = strings.getString(
+                "modelDownloadTotals",
+                progress.downloadedBytes(),
+                progress.totalBytes(),
+                progress.completedFiles(),
+                progress.totalFiles()
+            )
         }
     }
 }

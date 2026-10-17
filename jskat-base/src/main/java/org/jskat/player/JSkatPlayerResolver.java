@@ -17,8 +17,8 @@ public class JSkatPlayerResolver {
         return Set.of(
                 "org.jskat.ai.rnd.AIPlayerRND",
                 "org.jskat.ai.newalgorithm.AlgorithmAI",
-                "org.jskat.ai.ml.MLPlayer",
-                "org.jskat.ai.ml.MLPlayerPro"
+                ML_PLAYER_CLASS,
+                ML_PLAYER_PRO_CLASS
         );
     }
 
