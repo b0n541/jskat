@@ -20,15 +20,26 @@
     -color-secondary-2-4: #486760;
 
     -color-highlight: #FFBF00;
+    -color-accent: #B7D0C4;
     -color-danger: #FC2E20;
     -color-declarer-hand: #6A7D3C;
     -color-hand-panel-border: black;
 
     -fx-base: -color-primary-0;
-    -fx-accent: -color-secondary-2-0;
-    -fx-default-button: -color-secondary-2-0;
-    -fx-focus-color: -color-secondary-2-0;
-    -fx-faint-focus-color: -color-secondary-2-0-alpha;
+    -fx-accent: -color-accent;
+    -fx-default-button: -color-accent;
+    -fx-focus-color: -color-secondary-2-3;
+    -fx-faint-focus-color: #647B7644;
+    -fx-selection-bar-text: #202421;
+}
+
+.text-input {
+    -fx-highlight-fill: -color-accent;
+    -fx-highlight-text-fill: #202421;
+}
+
+.button:default {
+    -fx-text-fill: #202421;
 }
 
 .right-aligned {
