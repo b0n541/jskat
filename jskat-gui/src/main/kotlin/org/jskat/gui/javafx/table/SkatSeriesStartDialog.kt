@@ -7,6 +7,8 @@ import javafx.scene.control.*
 import javafx.scene.layout.GridPane
 import javafx.util.Callback
 import org.jskat.control.JSkatMaster
+import org.jskat.ai.ml.ModelInspection
+import org.jskat.ai.ml.ModelUnavailableReason
 import org.jskat.data.JSkatOptions
 import org.jskat.player.JSkatPlayerResolver
 import org.jskat.util.JSkatResourceBundle
@@ -16,7 +18,16 @@ import org.jskat.util.JSkatResourceBundle
  * This is a JavaFX and Kotlin replacement for the original Swing dialog.
  */
 // TODO: review whether a nullable owner makes sense, this dialog must be modal
-class SkatSeriesStartDialog(owner: Node?) {
+class SkatSeriesStartDialog(
+    owner: Node?,
+    private val modelInspection: ModelInspection = ModelInspection.unavailable(
+        org.jskat.ai.ml.ModelUnavailable(
+            ModelUnavailableReason.NO_ACTIVE_RELEASE,
+            "ML models were not made available during startup",
+            null
+        )
+    )
+) {
 
     /**
      * Data class to hold the configuration result from the dialog.
@@ -110,6 +121,9 @@ class SkatSeriesStartDialog(owner: Node?) {
             this.cellFactory = cellFactory
             this.buttonCell = PlayerTypeCell()
             selectionModel.selectFirst()
+            if (!modelInspection.isAvailable) {
+                tooltip = Tooltip(unavailableReason())
+            }
         }
 
     private fun setupButtons() {
@@ -123,6 +137,20 @@ class SkatSeriesStartDialog(owner: Node?) {
                 // In a full JavaFX app, this should be a JavaFX Alert.
                 JSkatMaster.showEmptyInputNameMessage()
                 event.consume() // Prevents the dialog from closing
+            }
+            if (!modelInspection.isAvailable && listOf(
+                    player1TypeCombo.value,
+                    player2TypeCombo.value,
+                    player3TypeCombo.value
+                ).any(JSkatPlayerResolver::isMLPlayer)
+            ) {
+                Alert(Alert.AlertType.WARNING).apply {
+                    title = strings.getString("startSeries")
+                    headerText = null
+                    contentText = unavailableReason()
+                    initOwner(dialog.dialogPane.scene?.window)
+                }.showAndWait()
+                event.consume()
             }
         }
     }
@@ -159,10 +187,15 @@ class SkatSeriesStartDialog(owner: Node?) {
                 config.numberOfRounds,
                 config.unlimited,
                 config.onlyPlayRamsch,
-                100 // Default bid value, as in the original
+                100, // Default bid value, as in the original
+                modelInspection.resolvedModelSet()
             )
         }
     }
+
+    private fun unavailableReason(): String =
+        modelInspection.unavailable()?.message()
+            ?: "ML models are unavailable for this session"
 
     /**
      * Custom ListCell to display human-readable player type names.
@@ -181,6 +214,11 @@ class SkatSeriesStartDialog(owner: Node?) {
                 "org.jskat.ai.ml.MLPlayerPro" -> strings.getString("mlPlayerPro")
                 JSkatPlayerResolver.HUMAN_PLAYER_CLASS -> strings.getString("humanPlayer")
                 else -> item
+            }
+            isDisable = !empty && item != null && JSkatPlayerResolver.isMLPlayer(item)
+                && !modelInspection.isAvailable
+            if (isDisable) {
+                tooltip = Tooltip(unavailableReason())
             }
         }
     }

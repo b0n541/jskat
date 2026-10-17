@@ -24,26 +24,18 @@ public class MLPlayer extends AbstractMLPlayer {
     private ONNXModelWrapper gameEvalDenseModel;
 
     /**
-     * Creates a new ML Player with default model paths.
+     * Creates an ML Player from the validated artifacts selected by the model manager.
      */
-    public MLPlayer() {
-        this(getDefaultModelPath("bidding_dense.onnx"),
-             getDefaultModelPath("game_eval_dense.onnx"),
-             getDefaultModelPath("card_play_transformer.onnx"));
-    }
-
-    /**
-     * Creates a new ML Player with custom model paths.
-     */
-    public MLPlayer(String biddingDensePath, String gameEvalDensePath, String cardPlayTransformerPath) {
+    public MLPlayer(final ResolvedModelSet models) {
         setPlayerName("MLPlayer");
 
         // Initialize shared models (bidding dense, card play transformer)
-        initializeSharedModels(biddingDensePath, cardPlayTransformerPath);
+        initializeSharedModels(models);
 
         // Initialize game evaluation dense model
         try {
-            this.gameEvalDenseModel = new ONNXModelWrapper(gameEvalDensePath, ONNXModelWrapper.ModelType.GAME_EVAL_DENSE);
+            this.gameEvalDenseModel = new ONNXModelWrapper(models.gameEvalDense().toString(),
+                    ONNXModelWrapper.ModelType.GAME_EVAL_DENSE);
             logger.info("MLPlayer initialized successfully");
         } catch (OrtException | IOException e) {
             logger.error("Failed to load game evaluation dense model", e);
