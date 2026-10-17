@@ -23,6 +23,14 @@ class ModelStartupLifecycle(
 ) {
 
     private val strings = JSkatResourceBundle.INSTANCE
+    private val megabyteFormat = NumberFormat.getNumberInstance(strings.locale).apply {
+        minimumFractionDigits = 1
+        maximumFractionDigits = 1
+    }
+
+    private fun formatMegabytes(bytes: Long): String = megabyteFormat.format(
+        bytes.toDouble() / (1024.0 * 1024.0)
+    )
 
     fun start() {
         val local = manager.inspectLocalAvailability()
@@ -46,7 +54,11 @@ class ModelStartupLifecycle(
                         initOwner(owner)
                         title = strings.getString("modelUpdateTitle")
                         headerText = strings.getString("modelUpdateAvailable", candidate.manifest.version())
-                        contentText = strings.getString("modelUpdatePrompt", local.installedVersion())
+                        contentText = strings.getString(
+                            "modelUpdatePrompt",
+                            local.installedVersion(),
+                            formatMegabytes(candidate.manifest.totalBytes())
+                        )
                         buttonTypes.setAll(updateNow, later)
                     }.also { centerAlertOnOwner(it) }
                         .showAndWait().orElse(later)
@@ -55,15 +67,18 @@ class ModelStartupLifecycle(
                     }
                 } else {
                     val download = ButtonType(strings.getString("modelDownload"))
-                    val continueButton = ButtonType(strings.getString("modelContinue"))
+                    val abortButton = ButtonType(strings.getString("modelAbort"))
                     val choice = Alert(Alert.AlertType.CONFIRMATION).apply {
                         initOwner(owner)
                         title = strings.getString("modelDataTitle")
                         headerText = strings.getString("modelDataNotInstalled")
-                        contentText = strings.getString("modelDataDownloadPrompt")
-                        buttonTypes.setAll(download, continueButton)
+                        contentText = strings.getString(
+                            "modelDataDownloadPrompt",
+                            formatMegabytes(candidate.manifest.totalBytes())
+                        )
+                        buttonTypes.setAll(download, abortButton)
                     }.also { centerAlertOnOwner(it) }
-                        .showAndWait().orElse(continueButton)
+                        .showAndWait().orElse(abortButton)
                     if (choice == download) {
                         download(candidate, local)
                     }
@@ -83,15 +98,15 @@ class ModelStartupLifecycle(
             strings.getString("modelDataUnavailableSession")
         }
         val retryButton = ButtonType(strings.getString("modelRetry"))
-        val continueButton = ButtonType(strings.getString("modelContinue"))
+        val abortButton = ButtonType(strings.getString("modelAbort"))
         val retry = Alert(Alert.AlertType.ERROR).apply {
             initOwner(owner)
             title = strings.getString("modelCheckFailedTitle")
             headerText = unavailableMessage(result.reason())
             contentText = strings.getString("modelCheckFailurePrompt", installed)
-            buttonTypes.setAll(retryButton, continueButton)
+            buttonTypes.setAll(retryButton, abortButton)
         }.also { centerAlertOnOwner(it) }
-            .showAndWait().orElse(continueButton)
+            .showAndWait().orElse(abortButton)
         if (retry == retryButton) {
             checkAndPresent(manager.inspectLocalAvailability())
         } else {
@@ -168,10 +183,6 @@ class ModelStartupLifecycle(
         private val progressBar = ProgressBar()
         private val currentFile = Label(strings.getString("modelContactingService"))
         private val totals = Label("")
-        private val megabyteFormat = NumberFormat.getNumberInstance(strings.locale).apply {
-            minimumFractionDigits = 1
-            maximumFractionDigits = 1
-        }
         var onCancel: (() -> Unit)? = null
 
         init {
@@ -216,9 +227,5 @@ class ModelStartupLifecycle(
                 progress.totalFiles()
             )
         }
-
-        private fun formatMegabytes(bytes: Long): String = megabyteFormat.format(
-            bytes.toDouble() / (1024.0 * 1024.0)
-        )
     }
 }
