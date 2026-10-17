@@ -3,11 +3,14 @@ package org.jskat.gui.javafx.model
 import javafx.application.Platform
 import javafx.geometry.Insets
 import javafx.scene.control.*
+import javafx.scene.layout.ColumnConstraints
 import javafx.scene.layout.GridPane
+import javafx.scene.layout.Priority
 import javafx.stage.Modality
 import javafx.stage.Window
 import org.jskat.ai.ml.*
 import org.jskat.util.JSkatResourceBundle
+import java.text.NumberFormat
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -165,17 +168,24 @@ class ModelStartupLifecycle(
         private val progressBar = ProgressBar()
         private val currentFile = Label(strings.getString("modelContactingService"))
         private val totals = Label("")
+        private val megabyteFormat = NumberFormat.getNumberInstance(strings.locale).apply {
+            minimumFractionDigits = 1
+            maximumFractionDigits = 1
+        }
         var onCancel: (() -> Unit)? = null
 
         init {
             dialog.initOwner(owner)
             dialog.initModality(Modality.APPLICATION_MODAL)
             dialog.title = strings.getString("modelDownloadTitle")
+            dialog.dialogPane.minWidth = 500.0
             progressBar.progress = -1.0
             val content = GridPane().apply {
                 hgap = 10.0
                 vgap = 10.0
                 padding = Insets(20.0)
+                columnConstraints.add(ColumnConstraints().apply { hgrow = Priority.ALWAYS })
+                progressBar.maxWidth = Double.MAX_VALUE
                 add(currentFile, 0, 0)
                 add(progressBar, 0, 1)
                 add(totals, 0, 2)
@@ -200,11 +210,15 @@ class ModelStartupLifecycle(
             currentFile.text = progress.currentFile() ?: strings.getString("modelContactingService")
             totals.text = strings.getString(
                 "modelDownloadTotals",
-                progress.downloadedBytes(),
-                progress.totalBytes(),
+                formatMegabytes(progress.downloadedBytes()),
+                formatMegabytes(progress.totalBytes()),
                 progress.completedFiles(),
                 progress.totalFiles()
             )
         }
+
+        private fun formatMegabytes(bytes: Long): String = megabyteFormat.format(
+            bytes.toDouble() / (1024.0 * 1024.0)
+        )
     }
 }
