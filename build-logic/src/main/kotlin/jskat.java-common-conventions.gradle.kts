@@ -1,7 +1,11 @@
+import org.gradle.api.artifacts.VersionCatalogsExtension
+
 plugins {
     // Apply the java Plugin to add support for Java.
     java
 }
+
+val dependencyCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -9,16 +13,16 @@ repositories {
 }
 
 dependencies {
-    implementation("org.slf4j:slf4j-api:2.0.20")
-    implementation("ch.qos.logback:logback-classic:1.6.5")
-    implementation("com.google.guava:guava:33.7.2-jre")
+    implementation(dependencyCatalog.findLibrary("slf4j-api").get())
+    implementation(dependencyCatalog.findLibrary("logback-classic").get())
+    implementation(dependencyCatalog.findLibrary("guava").get())
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:6.1.3")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:6.1.3")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.1.3")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.1.3")
-    testImplementation("org.mockito:mockito-core:5.24.0")
-    testImplementation("org.assertj:assertj-core:3.27.7")
+    testImplementation(dependencyCatalog.findLibrary("junit-jupiter-api").get())
+    testImplementation(dependencyCatalog.findLibrary("junit-jupiter-params").get())
+    testRuntimeOnly(dependencyCatalog.findLibrary("junit-jupiter-engine").get())
+    testRuntimeOnly(dependencyCatalog.findLibrary("junit-platform-launcher").get())
+    testImplementation(dependencyCatalog.findLibrary("mockito-core").get())
+    testImplementation(dependencyCatalog.findLibrary("assertj-core").get())
 }
 
 java {
