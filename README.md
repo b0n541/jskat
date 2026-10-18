@@ -4,7 +4,7 @@ You can contribute to this project by either helping to migrate the GUI to JavaF
 Bug
 fixes or other contributions are also welcome.
 
-![alt screenshot](http://jskat.org/img/jskat_0.22_bidding.png)
+![alt screenshot](http://jskat.org/img/jskat_0.24_bidding.png)
 
 License:
 
